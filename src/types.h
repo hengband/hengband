@@ -298,6 +298,7 @@ struct monster_race
 	u32b flags7;			/* Flags 7 (movement related abilities) */
 	u32b flags8;			/* Flags 8 (wilderness info) */
 	u32b flags9;			/* Flags 9 (drops info) */
+	u32b flagsr;			/* Flags R (resistances info) */
 
 	monster_blow blow[4];	/* Up to four blows per round */
 
@@ -348,7 +349,8 @@ struct monster_race
 	u32b r_flags4;			/* Observed racial flags */
 	u32b r_flags5;			/* Observed racial flags */
 	u32b r_flags6;			/* Observed racial flags */
-	u32b r_flags7;			/* Observed racial flags */
+	/* u32b r_flags7; */			/* Observed racial flags */
+	u32b r_flagsr;			/* Observed racial resistance flags */
 };
 
 
@@ -1623,6 +1625,7 @@ struct dungeon_info_type {
 	u32b mflags7;
 	u32b mflags8;
 	u32b mflags9;
+	u32b mflagsr;
 
 	char r_char[5];		/* Monster race allowed */
 	int final_object;	/* The object you'll find at the bottom */

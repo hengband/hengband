@@ -49,7 +49,7 @@
 #define H_VER_MAJOR 1
 #define H_VER_MINOR 5
 #define H_VER_PATCH 0
-#define H_VER_EXTRA 2
+#define H_VER_EXTRA 3
 
 /* Added for ZAngband */
 #define FAKE_VERSION   0
@@ -3382,21 +3382,21 @@
 #define RF3_HURT_ROCK       0x00002000  /* Hurt by rock remover */
 #define RF3_HURT_FIRE       0x00004000  /* Hurt badly by fire */
 #define RF3_HURT_COLD       0x00008000  /* Hurt badly by cold */
-#define RF3_IM_ACID         0x00010000  /* Resist acid a lot */
-#define RF3_IM_ELEC         0x00020000  /* Resist elec a lot */
-#define RF3_IM_FIRE         0x00040000  /* Resist fire a lot */
-#define RF3_IM_COLD         0x00080000  /* Resist cold a lot */
-#define RF3_IM_POIS         0x00100000  /* Resist poison a lot */
-#define RF3_RES_TELE        0x00200000  /* Resist teleportation */
-#define RF3_RES_NETH        0x00400000  /* Resist nether a lot */
-#define RF3_RES_WATE        0x00800000  /* Resist water */
-#define RF3_RES_PLAS        0x01000000  /* Resist plasma */
-#define RF3_RES_NEXU        0x02000000  /* Resist nexus */
-#define RF3_RES_DISE        0x04000000  /* Resist disenchantment */
-#define RF3_RES_ALL         0x08000000  /* Resist all */
+#define RF3_XXX16           0x00010000
+#define RF3_XXX17           0x00020000
+#define RF3_XXX18           0x00040000
+#define RF3_XXX19           0x00080000
+#define RF3_XXX20           0x00100000
+#define RF3_XXX21           0x00200000
+#define RF3_XXX22           0x00400000
+#define RF3_XXX23           0x00800000
+#define RF3_XXX24           0x01000000
+#define RF3_XXX25           0x02000000
+#define RF3_XXX26           0x04000000
+#define RF3_XXX27           0x08000000
 #define RF3_NO_FEAR         0x10000000  /* Cannot be scared */
 #define RF3_NO_STUN         0x20000000  /* Cannot be stunned */
-#define RF3_NO_CONF         0x40000000  /* Cannot be confused */
+#define RF3_NO_CONF         0x40000000  /* Cannot be confused and resist confusion */
 #define RF3_NO_SLEEP        0x80000000  /* Cannot be slept */
 
 /*
@@ -3550,7 +3550,6 @@
 /*
  * Monster drop info
  */
-
 #define RF9_DROP_CORPSE         0x00000001
 #define RF9_DROP_SKELETON       0x00000002
 #define RF9_EAT_BLIND           0x00000004
@@ -3584,16 +3583,43 @@
 #define RF9_EAT_LOSE_CHR        0x40000000
 #define RF9_EAT_DRAIN_MANA      0x80000000
 
-
 /*
- * Hack -- effective elemental and poison immunity mask
+ * Monster bit flags of racial resistances
+ * Note: Resist confusion was merged to RFR_NO_CONF
  */
-#define RF3_EFF_IM_ACID_MASK  (RF3_IM_ACID | RF3_RES_ALL)
-#define RF3_EFF_IM_ELEC_MASK  (RF3_IM_ELEC | RF3_RES_ALL)
-#define RF3_EFF_IM_FIRE_MASK  (RF3_IM_FIRE | RF3_RES_ALL)
-#define RF3_EFF_IM_COLD_MASK  (RF3_IM_COLD | RF3_RES_ALL)
-#define RF3_EFF_IM_POIS_MASK  (RF3_IM_POIS | RF3_RES_ALL)
-#define RF3_EFF_RES_NEXU_MASK (RF3_RES_NEXU | RF3_RES_ALL)
+#define RFR_IM_ACID         0x00000001  /* Resist acid */
+#define RFR_IM_ELEC         0x00000002  /* Resist elec */
+#define RFR_IM_FIRE         0x00000004  /* Resist fire */
+#define RFR_IM_COLD         0x00000008  /* Resist cold */
+#define RFR_IM_POIS         0x00000010  /* Resist poison */
+#define RFR_RES_LITE        0x00000020  /* Resist lite */
+#define RFR_RES_DARK        0x00000040  /* Resist dark */
+#define RFR_RES_NETH        0x00000080  /* Resist nether */
+#define RFR_RES_WATE        0x00000100  /* Resist water */
+#define RFR_RES_PLAS        0x00000200  /* Resist plasma */
+#define RFR_RES_SHAR        0x00000400  /* Resist shards */
+#define RFR_RES_SOUN        0x00000800  /* Resist sound */
+#define RFR_RES_CHAO        0x00001000  /* Resist chaos */
+#define RFR_RES_NEXU        0x00002000  /* Resist nexus */
+#define RFR_RES_DISE        0x00004000  /* Resist disenchantment */
+#define RFR_RES_WALL        0x00008000  /* Resist force */
+#define RFR_RES_INER        0x00010000  /* Resist inertia */
+#define RFR_RES_TIME        0x00020000  /* Resist time */
+#define RFR_RES_GRAV        0x00040000  /* Resist gravity */
+#define RFR_RES_ALL         0x00080000  /* Resist all */
+#define RFR_RES_TELE        0x00100000  /* Resist teleportation */
+#define RFR_XXX21           0x00200000
+#define RFR_XXX22           0x00400000
+#define RFR_XXX23           0x00800000
+#define RFR_XXX24           0x01000000
+#define RFR_XXX25           0x02000000
+#define RFR_XXX26           0x04000000
+#define RFR_XXX27           0x08000000
+#define RFR_XXX28           0x10000000
+#define RFR_XXX29           0x20000000
+#define RFR_XXX30           0x40000000
+#define RFR_XXX31           0x80000000
+
 
 /*
  * Hack -- choose "intelligent" spells when desperate
@@ -3765,6 +3791,18 @@
 
 #define RF7_SELF_LD_MASK \
 	(RF7_SELF_LITE_1 | RF7_SELF_LITE_2 | RF7_SELF_DARK_1 | RF7_SELF_DARK_2)
+
+/*
+ * Hack -- effective elemental and poison immunity mask
+ */
+#define RFR_EFF_IM_ACID_MASK  (RFR_IM_ACID | RFR_RES_ALL)
+#define RFR_EFF_IM_ELEC_MASK  (RFR_IM_ELEC | RFR_RES_ALL)
+#define RFR_EFF_IM_FIRE_MASK  (RFR_IM_FIRE | RFR_RES_ALL)
+#define RFR_EFF_IM_COLD_MASK  (RFR_IM_COLD | RFR_RES_ALL)
+#define RFR_EFF_IM_POIS_MASK  (RFR_IM_POIS | RFR_RES_ALL)
+#define RFR_EFF_RES_SHAR_MASK (RFR_RES_SHAR | RFR_RES_ALL)
+#define RFR_EFF_RES_CHAO_MASK (RFR_RES_CHAO | RFR_RES_ALL)
+#define RFR_EFF_RES_NEXU_MASK (RFR_RES_NEXU | RFR_RES_ALL)
 
 
 #define MR1_SINKA 0x01

@@ -966,207 +966,154 @@ static bool restrict_monster_to_dungeon(int r_idx)
 			return FALSE;
 	}
 
-	if (d_ptr->special_div == 64) return TRUE;
+	if (d_ptr->special_div >= 64) return TRUE;
 	if (summon_specific_type && !(d_ptr->flags1 & DF1_CHAMELEON)) return TRUE;
 
-	if(d_ptr->mode == DUNGEON_MODE_AND)
+	switch (d_ptr->mode)
 	{
+	case DUNGEON_MODE_AND:
 		if (d_ptr->mflags1)
 		{
-			if((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1)
+			if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1)
 				return FALSE;
 		}
 		if (d_ptr->mflags2)
 		{
-			if((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2)
+			if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2)
 				return FALSE;
 		}
 		if (d_ptr->mflags3)
 		{
-			if((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3)
+			if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3)
 				return FALSE;
 		}
 		if (d_ptr->mflags4)
 		{
-			if((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
+			if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
 				return FALSE;
 		}
 		if (d_ptr->mflags5)
 		{
-			if((d_ptr->mflags5 & r_ptr->flags5) != d_ptr->mflags5)
+			if ((d_ptr->mflags5 & r_ptr->flags5) != d_ptr->mflags5)
 				return FALSE;
 		}
 		if (d_ptr->mflags6)
 		{
-			if((d_ptr->mflags6 & r_ptr->flags6) != d_ptr->mflags6)
+			if ((d_ptr->mflags6 & r_ptr->flags6) != d_ptr->mflags6)
 				return FALSE;
 		}
 		if (d_ptr->mflags7)
 		{
-			if((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7)
+			if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7)
 				return FALSE;
 		}
 		if (d_ptr->mflags8)
 		{
-			if((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8)
+			if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8)
 				return FALSE;
 		}
 		if (d_ptr->mflags9)
 		{
-			if((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9)
+			if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9)
 				return FALSE;
 		}
-		for(a = 0; a < 5; a++)
-			if(d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char)) return FALSE;
-	}
-	else if(d_ptr->mode == DUNGEON_MODE_NAND)
-	{
-		byte ok[9 + 5], i = 0, j = 0;
+		if (d_ptr->mflagsr)
+		{
+			if ((d_ptr->mflagsr & r_ptr->flagsr) != d_ptr->mflagsr)
+				return FALSE;
+		}
+		for (a = 0; a < 5; a++)
+			if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char)) return FALSE;
 
+		return TRUE;
+
+	case DUNGEON_MODE_NAND:
 		if (d_ptr->mflags1)
 		{
-			i++;
-			if(d_ptr->mflags1 & r_ptr->flags1)
-				ok[0] = 1;
+			if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1)
+				return TRUE;
 		}
 		if (d_ptr->mflags2)
 		{
-			i++;
-			if(d_ptr->mflags2 & r_ptr->flags2)
-				ok[1] = 1;
+			if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2)
+				return TRUE;
 		}
 		if (d_ptr->mflags3)
 		{
-			i++;
-			if(d_ptr->mflags3 & r_ptr->flags3)
-				ok[2] = 1;
+			if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3)
+				return TRUE;
 		}
 		if (d_ptr->mflags4)
 		{
-			i++;
-			if(d_ptr->mflags4 & r_ptr->flags4)
-				ok[3] = 1;
+			if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
+				return TRUE;
 		}
 		if (d_ptr->mflags5)
 		{
-			i++;
-			if(d_ptr->mflags5 & r_ptr->flags5)
-				ok[4] = 1;
+			if ((d_ptr->mflags5 & r_ptr->flags5) != d_ptr->mflags5)
+				return TRUE;
 		}
 		if (d_ptr->mflags6)
 		{
-			i++;
-			if(d_ptr->mflags6 & r_ptr->flags6)
-				ok[5] = 1;
+			if ((d_ptr->mflags6 & r_ptr->flags6) != d_ptr->mflags6)
+				return TRUE;
 		}
 		if (d_ptr->mflags7)
 		{
-			i++;
-			if(d_ptr->mflags7 & r_ptr->flags7)
-				ok[6] = 1;
+			if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7)
+				return TRUE;
 		}
 		if (d_ptr->mflags8)
 		{
-			i++;
-			if(d_ptr->mflags8 & r_ptr->flags8)
-				ok[7] = 1;
+			if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8)
+				return TRUE;
 		}
 		if (d_ptr->mflags9)
 		{
-			i++;
-			if(d_ptr->mflags9 & r_ptr->flags9)
-				ok[8] = 1;
+			if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9)
+				return TRUE;
 		}
-
-		for(a = 0; a < 5; a++)
+		if (d_ptr->mflagsr)
 		{
-			if(d_ptr->r_char[a])
-			{
-				i++;
-				if (d_ptr->r_char[a] != r_ptr->d_char) ok[9 + a] = 1;
-			}
+			if ((d_ptr->mflagsr & r_ptr->flagsr) != d_ptr->mflagsr)
+				return TRUE;
 		}
+		for (a = 0; a < 5; a++)
+			if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char)) return TRUE;
 
-		j = ok[0] + ok[1] + ok[2] + ok[3] + ok[4] + ok[5] + ok[6] + ok[7] + ok[8] + ok[9] + ok[10] + ok[11] + ok[12] + ok[13];
+		return FALSE;
 
-		if(i == j) return FALSE;
-	}
-	else if(d_ptr->mode == DUNGEON_MODE_OR)
-	{
-		byte ok = FALSE, i;
-		s32b flag;
+	case DUNGEON_MODE_OR:
+		if (r_ptr->flags1 & d_ptr->mflags1) return TRUE;
+		if (r_ptr->flags2 & d_ptr->mflags2) return TRUE;
+		if (r_ptr->flags3 & d_ptr->mflags3) return TRUE;
+		if (r_ptr->flags4 & d_ptr->mflags4) return TRUE;
+		if (r_ptr->flags5 & d_ptr->mflags5) return TRUE;
+		if (r_ptr->flags6 & d_ptr->mflags6) return TRUE;
+		if (r_ptr->flags7 & d_ptr->mflags7) return TRUE;
+		if (r_ptr->flags8 & d_ptr->mflags8) return TRUE;
+		if (r_ptr->flags9 & d_ptr->mflags9) return TRUE;
+		if (r_ptr->flagsr & d_ptr->mflagsr) return TRUE;
+		for (a = 0; a < 5; a++)
+			if (d_ptr->r_char[a] == r_ptr->d_char) return TRUE;
 
-		for(i = 0; i < 32; i++)
-		{
-			flag = d_ptr->mflags1 & (1 << i);
-			if(r_ptr->flags1 & flag) ok = TRUE;
+		return FALSE;
 
-			flag = d_ptr->mflags2 & (1 << i);
-			if(r_ptr->flags2 & flag) ok = TRUE;
+	case DUNGEON_MODE_NOR:
+		if (r_ptr->flags1 & d_ptr->mflags1) return FALSE;
+		if (r_ptr->flags2 & d_ptr->mflags2) return FALSE;
+		if (r_ptr->flags3 & d_ptr->mflags3) return FALSE;
+		if (r_ptr->flags4 & d_ptr->mflags4) return FALSE;
+		if (r_ptr->flags5 & d_ptr->mflags5) return FALSE;
+		if (r_ptr->flags6 & d_ptr->mflags6) return FALSE;
+		if (r_ptr->flags7 & d_ptr->mflags7) return FALSE;
+		if (r_ptr->flags8 & d_ptr->mflags8) return FALSE;
+		if (r_ptr->flags9 & d_ptr->mflags9) return FALSE;
+		if (r_ptr->flagsr & d_ptr->mflagsr) return FALSE;
+		for (a = 0; a < 5; a++)
+			if (d_ptr->r_char[a] == r_ptr->d_char) return FALSE;
 
-			flag = d_ptr->mflags3 & (1 << i);
-			if(r_ptr->flags3 & flag) ok = TRUE;
-
-			flag = d_ptr->mflags4 & (1 << i);
-			if(r_ptr->flags4 & flag) ok = TRUE;
-
-			flag = d_ptr->mflags5 & (1 << i);
-			if(r_ptr->flags5 & flag) ok = TRUE;
-
-			flag = d_ptr->mflags6 & (1 << i);
-			if(r_ptr->flags6 & flag) ok = TRUE;
-
-			flag = d_ptr->mflags7 & (1 << i);
-			if(r_ptr->flags7 & flag) ok = TRUE;
-
-			flag = d_ptr->mflags8 & (1 << i);
-			if(r_ptr->flags8 & flag) ok = TRUE;
-
-			flag = d_ptr->mflags9 & (1 << i);
-			if(r_ptr->flags9 & flag) ok = TRUE;
-		}
-		for(a = 0; a < 5; a++)
-			if(d_ptr->r_char[a] == r_ptr->d_char) ok = TRUE;
-
-		return ok;
-	}
-	else if(d_ptr->mode == DUNGEON_MODE_NOR)
-	{
-		byte ok = TRUE, i;
-		s32b flag;
-
-		for(i = 0; i < 32; i++)
-		{
-			flag = d_ptr->mflags1 & (1 << i);
-			if(r_ptr->flags1 & flag) ok = FALSE;
-
-			flag = d_ptr->mflags2 & (1 << i);
-			if(r_ptr->flags2 & flag) ok = FALSE;
-
-			flag = d_ptr->mflags3 & (1 << i);
-			if(r_ptr->flags3 & flag) ok = FALSE;
-
-			flag = d_ptr->mflags4 & (1 << i);
-			if(r_ptr->flags4 & flag) ok = FALSE;
-
-			flag = d_ptr->mflags5 & (1 << i);
-			if(r_ptr->flags5 & flag) ok = FALSE;
-
-			flag = d_ptr->mflags6 & (1 << i);
-			if(r_ptr->flags6 & flag) ok = FALSE;
-
-			flag = d_ptr->mflags7 & (1 << i);
-			if(r_ptr->flags7 & flag) ok = FALSE;
-
-			flag = d_ptr->mflags8 & (1 << i);
-			if(r_ptr->flags8 & flag) ok = FALSE;
-
-			flag = d_ptr->mflags9 & (1 << i);
-			if(r_ptr->flags9 & flag) ok = FALSE;
-		}
-		for(a = 0; a < 5; a++)
-			if(d_ptr->r_char[a] == r_ptr->d_char) ok = FALSE;
-		return ok;
+		return TRUE;
 	}
 
 	return TRUE;
@@ -1211,7 +1158,7 @@ errr get_mon_num_prep(monster_hook_type monster_hook,
 
 			if (r_ptr->flags7 & RF7_GUARDIAN)
 				continue;
-		
+
 			/* Depth Monsters never appear out of depth */
 			if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) &&
 			    (r_ptr->level > dun_level))
@@ -1881,7 +1828,7 @@ int lore_do_probe(int r_idx)
 	if (r_ptr->r_wake != MAX_UCHAR) n++;
 	if (r_ptr->r_ignore != MAX_UCHAR) n++;
 	r_ptr->r_wake = r_ptr->r_ignore = MAX_UCHAR;
-				
+
 	/* Observe "maximal" attacks */
 	for (i = 0; i < 4; i++)
 	{
@@ -1893,9 +1840,9 @@ int lore_do_probe(int r_idx)
 			r_ptr->r_blows[i] = MAX_UCHAR;
 		}
 	}
-				
+
 	/* Maximal drops */
-	tmp_byte = 
+	tmp_byte =
 		(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
 		 ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
 		 ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
@@ -1914,11 +1861,11 @@ int lore_do_probe(int r_idx)
 		if (r_ptr->r_drop_gold != tmp_byte) n++;
 		r_ptr->r_drop_gold = tmp_byte;
 	}
-				
+
 	/* Observe many spells */
 	if (r_ptr->r_cast_spell != MAX_UCHAR) n++;
 	r_ptr->r_cast_spell = MAX_UCHAR;
-				
+
 	/* Count unknown flags */
 	for (i = 0; i < 32; i++)
 	{
@@ -1934,6 +1881,8 @@ int lore_do_probe(int r_idx)
 		    (r_ptr->flags5 & (1L << i))) n++;
 		if (!(r_ptr->r_flags6 & (1L << i)) &&
 		    (r_ptr->flags6 & (1L << i))) n++;
+		if (!(r_ptr->r_flagsr & (1L << i)) &&
+		    (r_ptr->flagsr & (1L << i))) n++;
 
 		/* r_flags7 is actually unused */
 #if 0
@@ -1949,6 +1898,7 @@ int lore_do_probe(int r_idx)
 	r_ptr->r_flags4 = r_ptr->flags4;
 	r_ptr->r_flags5 = r_ptr->flags5;
 	r_ptr->r_flags6 = r_ptr->flags6;
+	r_ptr->r_flagsr = r_ptr->flagsr;
 
 	/* r_flags7 is actually unused */
 	/* r_ptr->r_flags7 = r_ptr->flags7; */
@@ -3050,7 +3000,7 @@ bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 			/* Cannot create */
 			return (FALSE);
 		}
-		
+
 		if ((r_ptr->flags7 & (RF7_UNIQUE2)) &&
 		    (r_ptr->cur_num >= 1))
 		{
@@ -3062,7 +3012,7 @@ bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 			if (r_info[MON_BANOR].cur_num > 0) return FALSE;
 			if (r_info[MON_LUPART].cur_num > 0) return FALSE;
 		}
-		
+
 		/* Depth monsters may NOT be created out of depth, unless in Nightmare mode */
 		if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (dun_level < r_ptr->level) &&
 		    (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR))))
@@ -3072,10 +3022,10 @@ bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 		}
 	}
 
-	if(quest_number(dun_level))
+	if (quest_number(dun_level))
 	{
 		int hoge = quest_number(dun_level);
-		if((quest[hoge].type == QUEST_TYPE_KILL_LEVEL) || (quest[hoge].type == QUEST_TYPE_RANDOM))
+		if ((quest[hoge].type == QUEST_TYPE_KILL_LEVEL) || (quest[hoge].type == QUEST_TYPE_RANDOM))
 		{
 			if(r_idx == quest[hoge].r_idx)
 			{

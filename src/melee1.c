@@ -1849,7 +1849,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 			{
 				if (p_ptr->sh_fire && alive && !p_ptr->is_dead)
 				{
-					if (!(r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK))
+					if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 					{
 						int dam = damroll(2, 6);
 
@@ -1875,13 +1875,13 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					else
 					{
 						if (m_ptr->ml)
-							r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK);
+							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 					}
 				}
 
 				if (p_ptr->sh_elec && alive && !p_ptr->is_dead)
 				{
-					if (!(r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK))
+					if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
 					{
 						int dam = damroll(2, 6);
 
@@ -1907,13 +1907,13 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					else
 					{
 						if (m_ptr->ml)
-							r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK);
+							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 					}
 				}
 
 				if (p_ptr->sh_cold && alive && !p_ptr->is_dead)
 				{
-					if (!(r_ptr->flags3 & RF3_EFF_IM_COLD_MASK))
+					if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
 					{
 						int dam = damroll(2, 6);
 
@@ -1939,14 +1939,14 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					else
 					{
 						if (m_ptr->ml)
-							r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK);
+							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 					}
 				}
 
 				/* by henkma */
 				if (p_ptr->dustrobe && alive && !p_ptr->is_dead)
 				{
-					if (!(r_ptr->flags4 & RF4_BR_SHAR))
+					if (!(r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK))
 					{
 						int dam = damroll(2, 6);
 
@@ -1963,12 +1963,17 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						if (mon_take_hit(m_idx, dam, &fear,
 						    " had torn to pieces."))
 #endif
-						  
 						{
 							blinked = FALSE;
 							alive = FALSE;
 						}
 					}
+					else
+					{
+						if (m_ptr->ml)
+							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
+					}
+
 					if (is_mirror_grid(&cave[py][px])) {
 						teleport_player(10);
 					}

@@ -240,18 +240,18 @@ static cptr r_info_flags3[] =
 	"HURT_ROCK",
 	"HURT_FIRE",
 	"HURT_COLD",
-	"IM_ACID",
-	"IM_ELEC",
-	"IM_FIRE",
-	"IM_COLD",
-	"IM_POIS",
-	"RES_TELE",
-	"RES_NETH",
-	"RES_WATE",
-	"RES_PLAS",
-	"RES_NEXU",
-	"RES_DISE",
-	"RES_ALL",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
 	"NO_FEAR",
 	"NO_STUN",
 	"NO_CONF",
@@ -493,6 +493,46 @@ static cptr r_info_flags9[] =
 	"EAT_LOSE_CON",
 	"EAT_LOSE_CHR",
 	"EAT_DRAIN_MANA",
+};
+
+
+/*
+ * Monster race flags - Resistances
+ */
+static cptr r_info_flagsr[] =
+{
+	"IM_ACID",
+	"IM_ELEC",
+	"IM_FIRE",
+	"IM_COLD",
+	"IM_POIS",
+	"RES_LITE",
+	"RES_DARK",
+	"RES_NETH",
+	"RES_WATE",
+	"RES_PLAS",
+	"RES_SHAR",
+	"RES_SOUN",
+	"RES_CHAO",
+	"RES_NEXU",
+	"RES_DISE",
+	"RES_WALL",
+	"RES_INER",
+	"RES_TIME",
+	"RES_GRAV",
+	"RES_ALL",
+	"RES_TELE",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
+	"XXX",
 };
 
 
@@ -2039,6 +2079,16 @@ static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
 		}
 	}
 
+	/* Scan flagsr (resistance) */
+	for (i = 0; i < 32; i++)
+	{
+		if (streq(what, r_info_flagsr[i]))
+		{
+			r_ptr->flagsr |= (1L << i);
+			return (0);
+		}
+	}
+
 	/* Oops */
 #ifdef JP
 	msg_format("未知のモンスター・フラグ '%s'。", what);
@@ -2479,6 +2529,16 @@ static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
 		if (streq(what, r_info_flags9[i]))
 		{
 			d_ptr->mflags9 |= (1L << i);
+			return (0);
+		}
+	}
+
+	/* Scan flagsr (resistance) */
+	for (i = 0; i < 32; i++)
+	{
+		if (streq(what, r_info_flagsr[i]))
+		{
+			d_ptr->mflagsr |= (1L << i);
 			return (0);
 		}
 	}
@@ -4067,10 +4127,10 @@ void write_r_info_txt(void)
 	int i, j, z, fc, bc;
 	int dlen;
 
-	cptr flags[288];
+	cptr flags[32 * 10];
 
-	u32b f_ptr[9];
-	cptr *n_ptr[9];
+	u32b f_ptr[10];
+	cptr *n_ptr[10];
 
 	monster_race *r_ptr;
 
@@ -4136,6 +4196,7 @@ void write_r_info_txt(void)
 		f_ptr[6] = r_ptr->flags7; n_ptr[6] = r_info_flags7;
 		f_ptr[7] = r_ptr->flags8; n_ptr[7] = r_info_flags8;
 		f_ptr[8] = r_ptr->flags9; n_ptr[8] = r_info_flags9;
+		f_ptr[9] = r_ptr->flagsr; n_ptr[9] = r_info_flagsr;
 
 		/* Write New/Number/Name */
 		fprintf(fff, "N:%d:%s\n", z + 1, r_name + r_ptr->name);
@@ -4165,14 +4226,14 @@ void write_r_info_txt(void)
 		}
 
 		/* Extract the flags */
-		for (fc = 0, j = 0; j < 96; j++)
+		for (fc = 0, j = 0; j < 32 * 3; j++)
 		{
 			/* Check this flag */
 			if (f_ptr[j / 32] & (1L << (j % 32))) flags[fc++] = n_ptr[j / 32][j % 32];
 		}
 
 		/* Extract the extra flags */
-		for (j = 192; j < 288; j++)
+		for (j = 32 * 6; j < 32 * 10; j++)
 		{
 			/* Check this flag */
 			if (f_ptr[j / 32] & (1L << (j % 32))) flags[fc++] = n_ptr[j / 32][j % 32];

@@ -655,7 +655,7 @@ W:1:1:0:4:5:58
 B:CRAWL:POISON:1d5
 F:RAND_50 | RAND_25 | CAN_SWIM |
 F:STUPID | WEIRD_MIND | MULTIPLY | 
-F:ANIMAL | IM_POIS | HURT_LITE | NO_FEAR
+F:ANIMAL | IM_POIS | RES_DARK | HURT_LITE | NO_FEAR
 D:$It is a large slimy mass of worms.
 D:それはベトベトしたイモムシの大群だ。
 
@@ -667,7 +667,7 @@ I:110:3d6:2:6:10
 W:1:1:0:3:0:0
 B:GAZE:PARALYZE
 F:NEVER_MOVE | CAN_FLY | DROP_CORPSE
-F:HURT_LITE | NO_FEAR | EAT_SLEEP
+F:HURT_LITE | RES_DARK | NO_FEAR | EAT_SLEEP
 D:$A disembodied eye, floating a few feet above the ground.
 D:地面から数十センチ上に浮かんでいる体を持たない目玉だ。
 
@@ -898,7 +898,7 @@ W:2:1:0:12:6:66
 B:TOUCH:DR_MANA:1d3
 F:NEVER_MOVE | CAN_SWIM |
 F:STUPID | EMPTY_MIND | 
-F:IM_POIS | HURT_LITE | 
+F:IM_POIS | RES_DARK | HURT_LITE | 
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$Its a large pile of white flesh.
 D:それは白い肉のような物質の塊だ。
@@ -1043,7 +1043,7 @@ W:2:1:0:5:8:78
 B:CRAWL:ACID:1d6
 F:RAND_50 | RAND_25 | 
 F:STUPID | WEIRD_MIND | MULTIPLY | 
-F:ANIMAL | IM_ACID | CAN_SWIM | 
+F:ANIMAL | IM_ACID | RES_DARK | CAN_SWIM | 
 F:HURT_LITE | NO_FEAR
 D:$It is a large slimy mass of worms.
 D:それはベトベトしたイモムシの大群だ。
@@ -1071,7 +1071,7 @@ W:2:1:0:9:30:127
 B:BITE:HURT:1d5
 F:FRIENDS | 
 F:WEIRD_MIND | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:ANIMAL | HURT_LITE
+F:ANIMAL | HURT_LITE | RES_DARK
 D:$It is a black spider that moves in fits and starts.
 D:それは黒い蜘蛛で発作的に突如動き出す。
 
@@ -1166,7 +1166,7 @@ F:RAND_50 | RAND_25 | CAN_FLY |
 F:DROP_60 | DROP_90 | 
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | TAKE_ITEM | 
 F:EVIL | UNDEAD | 
-F:IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:BLINK
 D:$It is a ghastly, ghostly form.
@@ -1181,7 +1181,7 @@ W:3:1:0:13:20:73
 B:TOUCH:POISON:1d7
 F:NEVER_MOVE | CAN_SWIM |
 F:STUPID | EMPTY_MIND | 
-F:IM_POIS | HURT_LITE | 
+F:IM_POIS | RES_DARK | HURT_LITE | 
 F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_15 | 
 S:DRAIN_MANA
@@ -1350,7 +1350,7 @@ W:3:2:0:5:10:89
 B:CRAWL:LOSE_DEX:1d5
 F:RAND_50 | RAND_25 | CAN_SWIM |
 F:STUPID | WEIRD_MIND | MULTIPLY | EAT_LOSE_DEX |
-F:ANIMAL | HURT_LITE | NO_FEAR
+F:ANIMAL | HURT_LITE | RES_DARK | NO_FEAR
 D:$It is a large slimy mass of worms.
 D:それはベトベトしたイモムシの大群だ。
 
@@ -1365,7 +1365,7 @@ F:ATTR_CLEAR | CAN_SWIM |
 F:RAND_50 | RAND_25 | 
 F:STUPID | WEIRD_MIND | INVISIBLE | MULTIPLY | 
 F:ANIMAL | EAT_CONF | EAT_POISONOUS
-F:IM_POIS | HURT_LITE | NO_FEAR
+F:IM_POIS | RES_DARK | HURT_LITE | NO_FEAR
 D:$It is a disgusting mass of poisonous worms.
 D:それは毒を持った汚らわしいイモムシの大群だ。
 
@@ -1377,7 +1377,7 @@ I:110:3d6:2:6:10
 W:3:1:0:7:0:0
 B:GAZE:LOSE_STR:1d10
 F:NEVER_MOVE | CAN_FLY | DROP_CORPSE | SELF_LITE_1 |
-F:HURT_LITE | NO_FEAR | EAT_MANA | EAT_LOSE_STR
+F:HURT_LITE | RES_DARK | NO_FEAR | EAT_MANA | EAT_LOSE_STR
 S:1_IN_11 | 
 S:DRAIN_MANA
 D:$A disembodied eye, crackling with energy.
@@ -1433,7 +1433,7 @@ W:4:1:0:14:30:101
 B:TOUCH:COLD:2d5
 F:NEVER_MOVE | COLD_BLOOD | 
 F:STUPID | EMPTY_MIND | CAN_SWIM |
-F:IM_COLD | HURT_LITE | 
+F:IM_COLD | RES_DARK | HURT_LITE | 
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It's a large pile of pulsing blue flesh.
 D:それは脈打つ青い肉のような物質の塊だ。
@@ -1475,8 +1475,8 @@ I:110:5d5:20:32:30
 W:4:1:0:15:30:118
 B:HIT:HURT:1d9
 F:MALE | 
-F:FRIENDS | DROP_60 | RAND_50 | DROP_SKELETON | DROP_CORPSE
-F:OPEN_DOOR | BASH_DOOR | WILD_WOOD | EAT_POISONOUS
+F:FRIENDS | DROP_60 | RAND_50 | DROP_SKELETON | DROP_CORPSE |
+F:OPEN_DOOR | BASH_DOOR | WILD_WOOD | EAT_POISONOUS | RES_DARK |
 F:EVIL | ORC | HURT_LITE | EAT_GIVE_DEX | EAT_LOSE_STR | EAT_LOSE_CHR
 D:$A pathetic breed of tiny snaga-like creatures. They are running 
 D:$wild and screaming all the time!
@@ -1505,7 +1505,7 @@ W:4:1:0:5:20:105
 B:CRAWL:COLD:1d7
 F:RAND_50 | RAND_25 | 
 F:STUPID | WEIRD_MIND | COLD_BLOOD | MULTIPLY | 
-F:ANIMAL | IM_COLD | CAN_SWIM |
+F:ANIMAL | IM_COLD | RES_DARK | CAN_SWIM |
 F:HURT_LITE | NO_FEAR
 D:$It is a large slimy mass of worms.
 D:それはベトベトしたイモムシの大群だ。
@@ -1532,7 +1532,7 @@ I:110:5d8:20:26:40
 W:5:1:0:12:0:0
 B:HIT:HURT:1d10
 F:COLD_BLOOD | EMPTY_MIND | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is a small animated kobold skeleton.
 D:それはスモール・コボルドの骸骨に生命が吹き込まれたものだ。
@@ -1668,7 +1668,7 @@ B:TOUCH:EAT_FOOD:1d1
 F:RAND_50 | RAND_25 | 
 F:DROP_60 | DROP_90 | CAN_FLY |
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | 
-F:EVIL | UNDEAD | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | RES_NETH | NO_CONF | NO_SLEEP
 D:$It is a very ugly green ghost with a voracious appetite.
 D:それは尽きることのない旺盛な食欲を持った、緑色の醜いゴーストだ。
 
@@ -1681,7 +1681,7 @@ W:5:1:0:18:40:131
 B:TOUCH:ACID:1d4
 F:NEVER_MOVE | 
 F:STUPID | EMPTY_MIND | CAN_SWIM |
-F:IM_ACID | HURT_LITE | 
+F:IM_ACID | RES_DARK | HURT_LITE | 
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is a large pile of pulsing green flesh.
 D:それは脈打つ緑色の肉のような物質の塊だ。
@@ -1721,7 +1721,7 @@ W:5:2:0:20:0:0
 B:GAZE:UN_BONUS
 F:ATTR_MULTI | ATTR_ANY | RES_DISE | DROP_CORPSE
 F:NEVER_MOVE | CAN_FLY | EAT_MANA |
-F:HURT_LITE | NO_FEAR
+F:HURT_LITE | RES_DARK | NO_FEAR
 S:1_IN_9 | 
 S:DRAIN_MANA
 D:$A disembodied eye, crackling with magic.
@@ -1736,7 +1736,7 @@ W:5:1:0:6:80:876
 B:CRAWL:FIRE:1d9
 F:RAND_50 | RAND_25 | 
 F:STUPID | EMPTY_MIND | MULTIPLY | BASH_DOOR | 
-F:ANIMAL | IM_FIRE | CAN_SWIM |
+F:ANIMAL | IM_FIRE | RES_DARK | CAN_SWIM |
 F:HURT_LITE | NO_FEAR
 D:$It is a large slimy mass of worms.
 D:それはベトベトしたイモムシの大群だ。
@@ -1827,7 +1827,7 @@ B:TOUCH:EAT_GOLD
 F:MALE | 
 F:FRIENDS | DROP_60 | 
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | 
-F:HURT_LITE | RES_DISE | DROP_SKELETON | DROP_CORPSE
+F:HURT_LITE | RES_DARK | RES_DISE | DROP_SKELETON | DROP_CORPSE
 D:$Night dwarfs collecting new riches for their master, Alberich. 
 D:夜のドワーフで、彼らの主人アルベリヒのために富を集めている。
 
@@ -1839,7 +1839,7 @@ I:130:7d8:30:15:20
 W:6:2:0:20:0:0
 B:CRUSH:HURT:1d10
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_POIS | CAN_FLY |
+F:EVIL | UNDEAD | IM_POIS | CAN_FLY | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$Even today, nobody knows where it lurks... 
 D:今日でさえ、それがどこに潜んでいるのか誰も知らない。
@@ -1933,9 +1933,9 @@ I:110:8d8:20:32:30
 W:6:1:0:15:0:0
 B:HIT:HURT:1d9
 F:MALE | 
-F:FRIENDS | DROP_60 | WILD_ALL | DROP_SKELETON | DROP_CORPSE
+F:FRIENDS | DROP_60 | WILD_ALL | DROP_SKELETON | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | HURT_LITE
+F:EVIL | ORC | HURT_LITE | RES_DARK
 D:$He is one of the many weaker 'slave' orcs, often mistakenly known as a 
 D:$goblin.
 D:彼は多くの弱い「奴隷」のオークの一人で、しばしば間違ってゴブリンという名前
@@ -1996,7 +1996,7 @@ F:MALE |
 F:FORCE_SLEEP | 
 F:DROP_90 | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:EVIL | HURT_LITE
+F:EVIL | HURT_LITE | RES_DARK
 S:1_IN_10 | 
 S:CONF | DARKNESS | MISSILE
 D:$An elven figure with jet black skin and white hair, his eyes are large and 
@@ -2012,7 +2012,7 @@ W:7:1:0:14:0:0
 B:HIT:HURT:1d3
 B:HIT:HURT:1d3
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is an animated kobold corpse.  Flesh falls off in large chunks as it 
 D:$shambles forward. 
@@ -2029,7 +2029,7 @@ B:CLAW:HURT:1d3
 B:BITE:POISON
 F:RAND_25
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | FRIENDS |
-F:EVIL | UNDEAD | IM_POIS |
+F:EVIL | UNDEAD | IM_POIS | RES_NETH | RES_DARK |
 F:NO_CONF | NO_SLEEP | HURT_LITE
 S:1_IN_10
 S:CAUSE_1 | S_UNDEAD
@@ -2047,7 +2047,7 @@ B:CLAW:POISON:1d4
 B:CLAW:POISON:1d4
 F:OPEN_DOOR | BASH_DOOR | FRIENDS |
 F:NO_CONF | NO_SLEEP | UNDEAD | EVIL | NO_FEAR | IM_POIS
-F:IM_COLD | COLD_BLOOD | EMPTY_MIND
+F:IM_COLD | RES_NETH | COLD_BLOOD | EMPTY_MIND
 D:$Corpses awakened from their sleep by dark sorceries. 
 D:暗黒魔術により眠りを覚まされた死体だ。
 
@@ -2059,9 +2059,9 @@ I:110:11d9:20:32:30
 W:7:1:0:20:0:0
 B:HIT:HURT:1d9
 F:MALE | 
-F:FRIENDS | DROP_60 | DROP_SKELETON | DROP_CORPSE
+F:FRIENDS | DROP_60 | DROP_SKELETON | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | HURT_LITE
+F:EVIL | ORC | HURT_LITE | RES_DARK
 D:$He is often found in huge numbers in deep caves.
 D:彼はしばしば洞窟の深層に大集団で見受けられる。
 
@@ -2100,7 +2100,7 @@ I:110:5d8:2:6:10
 W:7:3:0:15:0:0
 B:GAZE:BLIND:2d7
 F:NEVER_MOVE | CAN_FLY | DROP_CORPSE
-F:HURT_LITE | NO_FEAR | EAT_BLIND
+F:HURT_LITE | RES_DARK | NO_FEAR | EAT_BLIND
 S:1_IN_7 | 
 S:DRAIN_MANA
 D:$A disembodied eye, bloodshot and nasty.
@@ -2130,7 +2130,7 @@ W:7:1:0:26:150:212
 B:TOUCH:LOSE_STR:1d6
 F:NEVER_MOVE | 
 F:STUPID | EMPTY_MIND | 
-F:HURT_LITE | CAN_SWIM |
+F:HURT_LITE | RES_DARK | CAN_SWIM |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is a large pulsating mound of red flesh.
 D:それは脈打つ赤い肉のような物質の塊だ。
@@ -2160,7 +2160,7 @@ B:TOUCH:DR_MANA:1d6
 F:RAND_50 | DROP_60 | DROP_90 | CAN_FLY |
 F:INVISIBLE | COLD_BLOOD | TAKE_ITEM | PASS_WALL | 
 F:EVIL | UNDEAD | 
-F:IM_COLD | NO_CONF | NO_SLEEP
+F:IM_COLD | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:TPORT | DRAIN_MANA
 D:$It is almost insubstantial.
@@ -2206,7 +2206,7 @@ W:8:1:0:26:0:0
 B:HIT:HURT:2d6
 F:COLD_BLOOD | EMPTY_MIND | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | ORC | UNDEAD | 
-F:IM_COLD | IM_POIS | 
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is an animated orc skeleton.
 D:それは生命を吹き込まれたオークの骸骨だ。
@@ -2301,7 +2301,7 @@ F:FORCE_MAXHP |
 F:ESCORT | 
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | CAN_SPEAK | DROP_SKELETON | DROP_CORPSE
-F:EVIL | ORC
+F:EVIL | ORC | RES_DARK
 D:$A captain of a regiment of weaker orcs, Lagduf keeps his troop in order 
 D:$with displays of excessive violence.
 D:$"I've told you twice that Gorbag's swine got to the gate first, and none 
@@ -2438,7 +2438,7 @@ B:HIT:HURT:1d11
 F:MALE | 
 F:FRIENDS | DROP_60 | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:EVIL | ORC | HURT_LITE
+F:EVIL | ORC | HURT_LITE | RES_DARK
 D:$He is a hardy well-weathered survivor.
 D:彼は困難な環境に耐えてきた生き残りのオークだ。
 
@@ -2493,7 +2493,7 @@ W:8:3:0:6:0:0
 B:CLAW:EAT_FOOD:1d2
 B:CLAW:EAT_FOOD:1d2
 B:BITE:EAT_FOOD:1d4
-F:MULTIPLY | IM_POIS | HURT_LITE | EVIL | DEMON | OPEN_DOOR | 
+F:MULTIPLY | IM_POIS | RES_DARK | HURT_LITE | EVIL | DEMON | OPEN_DOOR | 
 F:TAKE_ITEM | CAN_SWIM 
 D:$Don't splash water on them, and don't feed them after midnight!
 D:真夜中を過ぎたら水を掛けたり、餌をやってはいけない！
@@ -2624,7 +2624,7 @@ B:HIT:HURT:1d7
 B:HIT:HURT:1d7
 F:MALE | 
 F:FORCE_SLEEP | DROP_90 | WILD_WOOD | WILD_SWAMP | WILD_MOUNTAIN |
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE | RES_DARK |
 F:EVIL | ORC | HURT_LITE | EAT_GIVE_INT | EAT_LOSE_WIS | EAT_SLEEP |
 S:1_IN_8 | 
 S:BLINK | CAUSE_1 | MISSILE
@@ -2915,7 +2915,7 @@ F:MALE |
 F:FORCE_SLEEP | 
 F:ONLY_ITEM | DROP_1D2 | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | EAT_MANA | EAT_LOSE_STR | EAT_LOSE_CON |
-F:EVIL | IM_POIS | HURT_LITE
+F:EVIL | IM_POIS | RES_DARK | HURT_LITE
 S:1_IN_5 | 
 S:BLIND | CONF | MISSILE | DARKNESS | BA_POIS
 D:$A dark elven figure, dressed all in black, hurling spells at you.
@@ -2968,7 +2968,7 @@ B:CRUSH:HURT:1d8
 B:CLAW:DISEASE:1d3
 F:OPEN_DOOR | BASH_DOOR | FRIENDS | HURT_LITE |
 F:NO_CONF | NO_SLEEP | UNDEAD | EVIL | NO_FEAR | IM_POIS
-F:IM_COLD | COLD_BLOOD 
+F:IM_COLD | RES_NETH | RES_DARK | COLD_BLOOD 
 S:1_IN_12
 S:CAUSE_1 | SCARE
 D:$"...the hand of a corpse -- bloodless and skeletal, and with 
@@ -2998,7 +2998,7 @@ B:HIT:HURT:1d8
 F:MALE | 
 F:DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:EVIL | HURT_LITE | EAT_BERSERKER |
+F:EVIL | HURT_LITE | RES_DARK | EAT_BERSERKER |
 S:1_IN_12
 S:MISSILE
 D:$A dark elven figure in armour and ready with his sword.
@@ -3015,7 +3015,7 @@ W:10:1:0:30:0:0
 B:CLAW:HURT:1d6
 B:CLAW:HURT:1d6
 F:FRIENDS | WILD_WASTE | DROP_SKELETON
-F:OPEN_DOOR | BASH_DOOR | HURT_LITE | EVIL | DROP_60 | DROP_90
+F:OPEN_DOOR | BASH_DOOR | HURT_LITE | RES_DARK | EVIL | DROP_60 | DROP_90
 F:MALE
 D:$"Rough-skinned, large-eyed, large-eared, with a horrible, 
 D:$distorted resemblance to the koala bear facially, though 
@@ -3074,7 +3074,7 @@ B:HIT:HURT:1d12
 B:HIT:HURT:1d10
 F:UNIQUE | MALE | CAN_SPEAK | FORCE_MAXHP | ESCORT | WILD_ALL |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | DROP_SKELETON | DROP_CORPSE |
-F:OPEN_DOOR | BASH_DOOR | EVIL | ORC | IM_POIS | EAT_NEXUS
+F:OPEN_DOOR | BASH_DOOR | EVIL | ORC | IM_POIS | RES_DARK | EAT_NEXUS
 D:$He is a cunning and devious orc. 
 D:$"Grishnakh [was] a short crook-legged creature, very broad and with 
 D:$long arms that hung almost to the ground." 
@@ -3177,7 +3177,7 @@ B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d5
 F:FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | DROP_CORPSE |
-F:DROP_60 | BASH_DOOR | DRAGON | EAT_BLIND |
+F:DROP_60 | BASH_DOOR | DRAGON | EAT_BLIND | RES_LITE | RES_DARK
 S:1_IN_11 |
 S:CONF | SCARE | BR_LITE | BR_DARK
 D:$A small relative of the dragon that inhabits dark caves.
@@ -3326,7 +3326,7 @@ W:10:2:0:33:0:0
 B:TOUCH:DISEASE:1d6
 B:TOUCH:LOSE_CON:1d6
 F:UNDEAD | EMPTY_MIND | NO_CONF | NO_SLEEP | IM_POIS | IM_COLD | NO_FEAR |
-F:HURT_LITE | COLD_BLOOD | EVIL | NEVER_MOVE | MULTIPLY
+F:HURT_LITE | RES_NETH | RES_DARK | COLD_BLOOD | EVIL | NEVER_MOVE | MULTIPLY
 D:$A sickening mound of decaying flesh, bones, hands and so on. It seems to 
 D:$be growing.
 D:腐った肉、骨、手などの吐き気をもよおす塊だ。それは大きくなっている
@@ -3445,7 +3445,7 @@ B:HIT:HURT:1d4
 B:HIT:HURT:1d4
 F:COLD_BLOOD | EMPTY_MIND | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | ORC | UNDEAD | 
-F:IM_COLD | IM_POIS | 
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is a shambling orcish corpse leaving behind a trail of flesh.
 D:それはオークの死骸で、新鮮な肉の痕跡を追ってよろめき歩く。
@@ -3503,7 +3503,7 @@ W:12:3:0:60:200:245
 B:TOUCH:EXP_10
 F:NEVER_MOVE | 
 F:STUPID | EMPTY_MIND | SELF_LITE_1 |
-F:IM_POIS | HURT_LITE | CAN_SWIM |
+F:IM_POIS | RES_DARK | HURT_LITE | CAN_SWIM |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_11 | 
 S:DRAIN_MANA
@@ -3524,7 +3524,7 @@ W:12:4:0:6:0:0
 B:TOUCH:EXP_10
 F:RAND_50 | RAND_25 | CAN_SWIM |
 F:STUPID | WEIRD_MIND | MULTIPLY | BASH_DOOR | 
-F:ANIMAL | HURT_LITE | NO_FEAR
+F:ANIMAL | HURT_LITE | RES_DARK | NO_FEAR
 D:$It is a disgusting mass of dark worms, eating each other, the floor, 
 D:$the air, you....
 D:それは忌まわしい暗黒のイモムシの大群であり、お互いに共食いしあい、床や空気
@@ -3539,7 +3539,7 @@ W:12:4:0:7:0:0
 B:CRAWL:EXP_10
 F:RAND_50 | RAND_25 | 
 F:STUPID | WEIRD_MIND | MULTIPLY | BASH_DOOR | EVIL | CAN_SWIM |
-F:ANIMAL | HURT_LITE | NO_FEAR | KILL_WALL | COLD_BLOOD | INVISIBLE
+F:ANIMAL | HURT_LITE | RES_DARK | NO_FEAR | KILL_WALL | COLD_BLOOD | INVISIBLE
 D:$Even more disgusting dark worms, their essence that of unbeing.
 D:非存在がその本質である、ぞっとする暗黒のイモムシだ。
 
@@ -3558,7 +3558,7 @@ F:FORCE_MAXHP | WILD_ALL |
 F:ESCORT | DROP_SKELETON | DROP_CORPSE
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | EAT_POISONOUS
 F:OPEN_DOOR | BASH_DOOR | CAN_SPEAK |
-F:EVIL | ORC | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
+F:EVIL | ORC | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_DARK
 D:$A leader of a band of raiding orcs, he picks on hobbits.
 D:オークの襲撃隊の隊長で、ホビットをつけ狙っている。
 
@@ -3746,7 +3746,7 @@ F:MALE |
 F:FORCE_SLEEP | 
 F:ONLY_ITEM | DROP_1D2 | 
 F:SMART | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:EVIL | HURT_LITE | EAT_MANA |
+F:EVIL | HURT_LITE | RES_DARK | EAT_MANA |
 S:1_IN_5 | 
 S:HEAL | BLIND | CONF | CAUSE_2 | DARKNESS | MISSILE
 D:$A dark elven figure, dressed all in black, chanting curses and waiting to 
@@ -3783,7 +3783,7 @@ W:12:1:0:38:0:0
 B:HIT:HURT:1d8
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | UNDEAD | IM_COLD | 
-F:IM_POIS | 
+F:IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is an animated human skeleton.
 D:生命を吹き込まれた人間の骸骨だ。
@@ -3797,7 +3797,7 @@ W:12:1:0:34:0:0
 B:HIT:HURT:1d4
 B:HIT:HURT:1d4
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is a shambling human corpse dropping chunks of flesh behind it.
 D:肉を落としながらよろめき歩く人間の死骸だ。
@@ -3830,7 +3830,7 @@ B:TOUCH:DR_MANA:1d8
 F:FORCE_SLEEP | RAND_25 | 
 F:DROP_60 | DROP_90 | CAN_FLY |
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | 
-F:EVIL | UNDEAD | IM_COLD | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_COLD | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:TPORT | SCARE
 D:$A ghostly apparition that shrieks horribly.
@@ -3861,7 +3861,7 @@ B:TOUCH:ACID:2d6
 B:TOUCH:ACID:2d6
 F:NEVER_MOVE | 
 F:STUPID | EMPTY_MIND | COLD_BLOOD | 
-F:IM_ACID | IM_POIS | HURT_LITE | CAN_SWIM |
+F:IM_ACID | IM_POIS | RES_DARK | HURT_LITE | CAN_SWIM |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$A jelly thing.
 D:ゼリーのようなものだ。
@@ -4044,7 +4044,7 @@ B:HIT:HURT:3d4
 F:MALE | WILD_ALL | DROP_SKELETON | DROP_CORPSE
 F:FRIENDS | DROP_60 | EAT_POISONOUS |
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | HURT_LITE
+F:EVIL | ORC | HURT_LITE | RES_DARK
 S:1_IN_15
 S:SHOOT
 D:$He is a large orc with powerful arms and deep black skin.
@@ -4155,7 +4155,7 @@ B:EXPLODE:HURT:20d2
 F:MALE | 
 F:WILD_ALL | 
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | HURT_LITE
+F:EVIL | ORC | HURT_LITE | RES_DARK
 D:$He is one of the many weaker 'slave' orcs, often mistakenly known as a 
 D:$goblin. He is equipped with an explosive charge.
 D:彼は多くの弱い「奴隷」のオークの一人で
@@ -4193,7 +4193,7 @@ I:110:8d6:15:20:20
 W:14:4:0:20:0:0
 B:CRAWL:POISON:1d4
 F:NEVER_MOVE | MULTIPLY | EVIL | CAN_SWIM |
-F:IM_POIS | EMPTY_MIND | NO_FEAR |
+F:IM_POIS | EMPTY_MIND | NO_FEAR | RES_LITE
 S:1_IN_7
 S:SCARE | CONF | BR_LITE
 D:$A chaotic mass of pulsating flesh, mouths and eyes.
@@ -4302,7 +4302,7 @@ F:FORCE_MAXHP | CAN_SPEAK | DROP_SKELETON | DROP_CORPSE
 F:ESCORT | 
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | IM_COLD | IM_POIS
+F:EVIL | ORC | IM_COLD | IM_POIS | RES_DARK |
 D:$A strong orc guarding the pass of Cirith Ungol.  He is mortally afraid of 
 D:$spiders.
 D:キリス・ウンゴルの通り道を守る力の強いオークだ。彼は極度に蜘蛛を恐れている。
@@ -4372,7 +4372,7 @@ B:HIT:HURT:3d4
 F:MALE | WILD_ALL |
 F:FRIENDS | DROP_60 | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:EVIL | ORC
+F:EVIL | ORC | RES_DARK
 D:$He is a hideous deformed cross-breed with man and orc, combining man's 
 D:$strength and cunning with orcish evil.
 D:彼は人間とオークの混血でひどく醜い容貌をしている。人間の力強さとオークの邪悪
@@ -4437,7 +4437,7 @@ B:CLAW:DISEASE:2d5
 B:BUTT:HURT:3d5
 F:FORCE_MAXHP | DROP_60 | 
 F:OPEN_DOOR | BASH_DOOR | IM_COLD |
-F:EVIL | DEMON | UNDEAD | IM_POIS | NONLIVING 
+F:EVIL | DEMON | UNDEAD | IM_POIS | RES_NETH | NONLIVING 
 S:1_IN_8
 S:SCARE | S_ANT | CAUSE_2 | SLOW
 D:$An unfortunate individual, who was killed by the incurable 
@@ -4501,7 +4501,7 @@ B:BITE:HURT:1d6
 F:FORCE_SLEEP | DROP_CORPSE
 F:FRIENDS | SELF_LITE_1 | SELF_LITE_2 |
 F:BASH_DOOR | 
-F:ANIMAL
+F:ANIMAL | RES_LITE
 S:1_IN_5 | 
 S:BR_LITE
 D:$A brilliant canine form whose light hurts your eyes, even at this distance.
@@ -4517,7 +4517,7 @@ B:BITE:HURT:1d6
 F:FORCE_SLEEP | DROP_CORPSE
 F:FRIENDS | SELF_DARK_1 | SELF_DARK_2 |
 F:BASH_DOOR | HURT_LITE | 
-F:ANIMAL
+F:ANIMAL | RES_DARK
 S:1_IN_5 | 
 S:BR_DARK
 D:$A hole in the air in the shape of a huge hound.  No light falls upon its 
@@ -4533,7 +4533,7 @@ W:15:3:0:50:0:0
 B:BITE:POISON:1d3
 B:BITE:LOSE_STR:1d4
 F:UNDEAD | EVIL | IM_POIS | IM_COLD | WEIRD_MIND | NO_FEAR | CAN_FLY |
-F:NO_CONF | NO_SLEEP | DROP_60 | BASH_DOOR | FRIENDS | COLD_BLOOD
+F:RES_NETH | NO_CONF | NO_SLEEP | DROP_60 | BASH_DOOR | FRIENDS | COLD_BLOOD
 D:$A skullpack animated by necromantic spells.
 D:死霊術の呪文により動いている髑髏だ。
 
@@ -4598,7 +4598,7 @@ B:BITE:POISON:1d6
 B:BITE:POISON:1d6
 F:FRIENDS | WILD_WOOD |
 F:WEIRD_MIND | BASH_DOOR | HURT_LITE |
-F:ANIMAL | EVIL | IM_POIS | DROP_SKELETON
+F:ANIMAL | EVIL | IM_POIS | RES_DARK | DROP_SKELETON
 D:$A strong and powerful spider from Mirkwood forest.  Cunning and evil, it 
 D:$seeks to taste your juicy insides.
 D:闇の森に生息する強力な蜘蛛だ。ずる賢く邪悪で、冒険者の肉体内部の
@@ -4728,7 +4728,7 @@ B:HIT:HURT:3d4
 F:MALE | WILD_ALL |
 F:DROP_90 | 
 F:OPEN_DOOR | BASH_DOOR | ESCORT | DROP_SKELETON | DROP_CORPSE
-F:EVIL | ORC | CAN_SPEAK
+F:EVIL | ORC | RES_DARK | CAN_SPEAK
 S:1_IN_15
 S:SHOOT
 D:$An armoured orc with an air of authority.
@@ -4934,7 +4934,7 @@ B:BITE:HURT:1d6
 F:MALE | 
 F:FRIENDS | DROP_60 | WILD_WOOD | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | REGENERATE |
-F:EVIL | TROLL | HURT_LITE
+F:EVIL | TROLL | HURT_LITE | RES_DARK
 D:$He is green skinned and ugly.
 D:彼の肌は緑色で醜い。
 
@@ -5195,7 +5195,7 @@ B:HIT:HURT:3d5
 F:MALE | 
 F:FORCE_MAXHP | FRIENDS | DROP_60 | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS |
-F:EVIL | ORC | IM_POIS
+F:EVIL | ORC | IM_POIS | RES_DARK
 S:1_IN_12
 S:SHOOT
 D:$He is a cunning orc of power, as tall as a man, and stronger.  It fears 
@@ -5218,7 +5218,7 @@ F:FORCE_MAXHP |
 F:ESCORT | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | IM_POIS
+F:EVIL | ORC | IM_POIS | RES_DARK
 D:$He is an Uruk of power and great cunning.
 D:彼はかなり悪賢くて力のあるウルクだ。
 
@@ -5237,7 +5237,7 @@ F:FORCE_MAXHP |
 F:ESCORT | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | IM_POIS
+F:EVIL | ORC | IM_POIS | RES_DARK
 D:$A gruesomely ugly but cunning orc, his eyes regard you with hatred.  His 
 D:$powerful arms flex menacingly as he advances.
 D:見た目は極度に醜悪で、かなりのずる賢さを持つオークだ。彼は冒険者を憎む
@@ -5401,7 +5401,7 @@ B:BITE:HURT:1d3
 F:FORCE_SLEEP | 
 F:RAND_50 | RAND_25 | WILD_MOUNTAIN |
 F:WEIRD_MIND | BASH_DOOR | 
-F:ANIMAL | IM_FIRE | CAN_FLY
+F:ANIMAL | IM_FIRE | RES_SOUN | CAN_FLY
 S:1_IN_9 | 
 S:BR_SOUN
 D:$Large beating wings support this dazzling insect.  A loud buzzing noise 
@@ -5436,8 +5436,8 @@ B:KICK:HURT:3d3
 B:KICK:HURT:9d1
 B:BITE:HURT:6d2
 F:DROP_60 | 
-F:NO_SLEEP | NO_CONF | UNDEAD | EVIL | IM_POIS | IM_COLD | 
-F:COLD_BLOOD | HURT_LITE | CAN_SWIM | ELDRITCH_HORROR
+F:NO_SLEEP | NO_CONF | UNDEAD | EVIL | IM_POIS | IM_COLD | RES_DARK |
+F:COLD_BLOOD | HURT_LITE | RES_NETH | CAN_SWIM | ELDRITCH_HORROR
 F:BASH_DOOR | OPEN_DOOR
 D:$A repulsive being which leaps on long hind legs like a kangaroo. 
 D:$Its face is curiously human despite the absence of a nose, a 
@@ -5493,7 +5493,7 @@ F:FORCE_MAXHP |
 F:ESCORT | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS |
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | IM_POIS
+F:EVIL | ORC | IM_POIS | RES_DARK
 D:$A large and powerful orc.  He looks just like his daddy.  He is tall and 
 D:$fast, but fortunately blessed with orcish brains.
 D:大きくて力の強いオークで、その姿は父親にそっくりだ。彼は背が高くて動きも素早
@@ -5616,7 +5616,7 @@ B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
 F:FRIENDS | DROP_SKELETON | DROP_CORPSE
 F:BASH_DOOR | 
-F:ANIMAL
+F:ANIMAL | RES_SHAR
 S:1_IN_10 | 
 S:BR_SHAR
 D:$A beautiful crystalline shape does not disguise the danger this hound 
@@ -5817,7 +5817,7 @@ F:MALE |
 F:FORCE_SLEEP | 
 F:ONLY_ITEM | DROP_2D2 | DROP_SKELETON | DROP_CORPSE | EAT_BLIND |
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | HURT_LITE
+F:EVIL | HURT_LITE | RES_DARK
 S:1_IN_5 | 
 S:HASTE | BLIND | CONF | DARKNESS | BO_FIRE | BO_COLD | MISSILE
 D:$A dark elven figure in armour and radiating evil power.
@@ -5852,7 +5852,7 @@ F:FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
 F:ESCORT | EAT_POISONOUS |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | IM_POIS
+F:EVIL | ORC | IM_POIS | RES_DARK
 D:$Another of Morgoth's servants, this orc is strong and cunning.  He is ugly 
 D:$and scarred from many power struggles.
 D:モルゴスの召使いの一人で、力が強くてずる賢いオークだ。彼はやっかいな
@@ -5963,7 +5963,7 @@ F:FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
 F:ESCORT | EAT_POISONOUS |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | IM_FIRE | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | ORC | IM_FIRE | IM_COLD | IM_POIS | RES_DARK | NO_CONF | NO_SLEEP
 D:$A strong and cunning orc warrior, Lugdush sneers as he insults your mother.
 D:力が強くてずる賢いオークの戦士であるルグドゥシュは、冒険者の母を侮辱しては
 D:嘲笑する。
@@ -6044,7 +6044,7 @@ B:BITE:EXP_20:1d8
 F:DROP_90 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | ANIMAL | UNDEAD | CAN_FLY |
-F:IM_COLD | IM_POIS | 
+F:IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR | RIDING
 D:$A mummified, undead great avian creature, who now serves as 
 D:$a steed for mighty undead creatures.
@@ -6062,7 +6062,7 @@ B:HIT:HURT:2d4
 F:DROP_90 | 
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | ORC | UNDEAD | 
-F:IM_COLD | IM_POIS | 
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is an orcish figure covered in wrappings.
 D:体中を包帯で覆われたオーク型のモンスターだ。
@@ -6245,7 +6245,7 @@ F:FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
 F:ESCORT | ESCORTS | EAT_POISONOUS
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | ORC | IM_POIS
+F:EVIL | ORC | IM_POIS | RES_DARK
 D:$He is also known as the King of Khazad-dum.  His ego is renowned to be 
 D:$bigger than his head.
 D:彼はまたカザド=ドゥムの大王としても知られている。彼はとほうもない
@@ -6281,7 +6281,7 @@ F:MALE |
 F:FORCE_SLEEP | EAT_MANA | EAT_GIVE_INT | EAT_LOSE_STR | EAT_LOSE_CON |
 F:ONLY_ITEM | DROP_1D2 | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | FRIENDS
-F:EVIL | IM_POIS | HURT_LITE
+F:EVIL | IM_POIS | RES_DARK | HURT_LITE
 S:1_IN_5 | 
 S:CONF | MISSILE | DARKNESS | BO_MANA
 D:$A dark elven mage with spells of frightening destructive power.
@@ -6345,7 +6345,7 @@ B:CLAW:COLD:2d3
 B:CLAW:COLD:2d3
 F:ONLY_ITEM | DROP_90 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is a skeleton covered in frost.
 D:それは冷気に覆われた骸骨だ。
@@ -6381,7 +6381,7 @@ B:TOUCH:EXP_20
 F:FORCE_SLEEP | RAND_25 | 
 F:DROP_60 | DROP_90 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE | 
 F:NO_CONF | NO_SLEEP
 S:1_IN_10 |
 S:SCARE | DRAIN_MANA
@@ -6552,7 +6552,7 @@ B:HIT:HURT:2d4
 B:HIT:HURT:2d4
 F:ONLY_ITEM | DROP_90 | 
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is a human form encased in mouldy wrappings.
 D:それは黴びた包帯に包まれている人間型のモンスターだ。
@@ -6566,7 +6566,7 @@ W:24:2:0:150:0:0
 B:BITE:EXP_40:1d4
 B:BITE:EXP_40:1d4
 F:RAND_50 | COLD_BLOOD | REGENERATE | CAN_FLY |
-F:EVIL | ANIMAL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | ANIMAL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$An undead bat that flies at your neck hungrily.
 D:アンデッドのコウモリで、冒険者の首筋に吸い付こうと飛びかかってくる。
@@ -6624,7 +6624,7 @@ B:TOUCH:DR_MANA:2d6
 F:FEMALE | 
 F:RAND_50 | DROP_1D2 | 
 F:INVISIBLE | COLD_BLOOD | TAKE_ITEM | PASS_WALL | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:TPORT | DRAIN_MANA
 D:$It is a ghostly woman's form that wails mournfully.
@@ -6686,7 +6686,7 @@ B:GAZE:TERRIFY
 B:GAZE:PARALYZE
 B:GAZE:LOSE_STR
 F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR | NONLIVING | NEVER_MOVE |
-F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | EVIL |
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_DARK | EVIL |
 F:HURT_ROCK | HURT_LITE |
 F:NO_CONF | NO_SLEEP | NO_FEAR | RES_TELE
 S:1_IN_6 | 
@@ -6745,7 +6745,7 @@ F:MALE |
 F:FORCE_SLEEP | 
 F:ONLY_ITEM | DROP_1D2 | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | EAT_SLEEP |
-F:EVIL | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:EVIL | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
 S:HEAL | CONF | DARKNESS | 
 S:S_MONSTER | S_SPIDER | MISSILE
@@ -6764,7 +6764,7 @@ B:BITE:HURT:3d4
 F:MALE | 
 F:FRIENDS | DROP_60 | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | REGENERATE |
-F:EVIL | TROLL | HURT_LITE | HURT_ROCK
+F:EVIL | TROLL | HURT_LITE | HURT_ROCK | RES_DARK
 D:$He is a giant troll with scabrous black skin.
 D:ザラザラの黒い皮膚をした巨大なトロルだ。
 
@@ -6798,7 +6798,7 @@ B:BITE:HURT:3d4
 F:MALE | 
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_90 | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | REGENERATE |
-F:EVIL | TROLL | HURT_LITE | NO_CONF | NO_SLEEP
+F:EVIL | TROLL | HURT_LITE | RES_DARK | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:BLINK | SCARE | CAUSE_1 | MISSILE | DARKNESS
 D:$A troll who is so bright he knows how to read.
@@ -6898,7 +6898,7 @@ B:HIT:DISEASE:6d6
 B:CLAW:LOSE_CON:2d6
 B:CLAW:LOSE_CON:2d6
 F:UNIQUE | MALE | CAN_SPEAK | UNDEAD | EVIL | ESCORTS | ESCORT
-F:FORCE_MAXHP | COLD_BLOOD | IM_POIS | IM_COLD | NO_FEAR
+F:FORCE_MAXHP | COLD_BLOOD | IM_POIS | IM_COLD | RES_NETH | NO_FEAR
 F:ONLY_ITEM | DROP_90 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | RES_TELE
 S:1_IN_5 |
@@ -7020,8 +7020,8 @@ B:HIT:HURT:1d6
 B:TOUCH:EXP_20
 F:FORCE_SLEEP | 
 F:DROP_1D2 | 
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY | RES_NETH |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:SCARE | CAUSE_2 | DARKNESS
 D:$It is a tangible but ghostly form made of white fog.
@@ -7063,8 +7063,8 @@ W:26:1:0:95:1000:483
 B:CLAW:DISEASE:1d4
 B:CLAW:DISEASE:1d4
 B:BITE:PARALYZE:1d5
-F:DROP_60 | OPEN_DOOR | BASH_DOOR | CAN_SWIM |
-F:EVIL | UNDEAD | FRIENDS | IM_POIS | IM_COLD | NO_CONF | NO_SLEEP
+F:DROP_60 | OPEN_DOOR | BASH_DOOR | CAN_SWIM | RES_NETH |
+F:EVIL | UNDEAD | FRIENDS | IM_POIS | IM_COLD | NO_CONF | RES_DARK | NO_SLEEP
 F:COLD_BLOOD | HURT_LITE
 S:1_IN_9
 S:SCARE | HOLD
@@ -7255,7 +7255,7 @@ B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
 F:FRIENDS | 
 F:BASH_DOOR | 
-F:ANIMAL | NO_CONF | NO_SLEEP | DROP_SKELETON | DROP_CORPSE
+F:ANIMAL | RES_SOUN | NO_CONF | NO_SLEEP | DROP_SKELETON | DROP_CORPSE
 S:1_IN_5 | 
 S:BR_SOUN
 D:$A blurry canine form which seems to be moving as fast as the eye can 
@@ -7338,8 +7338,8 @@ B:BITE:EXP_VAMP:1d8
 B:TOUCH:DR_MANA:1d10
 F:FORCE_SLEEP | 
 F:COLD_BLOOD | DROP_60 | DROP_1D2 | 
-F:OPEN_DOOR | BASH_DOOR | REGENERATE | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:OPEN_DOOR | BASH_DOOR | REGENERATE | CAN_FLY | RES_NETH |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_9 | 
 S:TELE_TO | HOLD | SCARE | CAUSE_2 | MIND_BLAST | FORGET | DARKNESS
 D:$It is a humanoid with an aura of power.  You notice a sharp set of front 
@@ -7479,8 +7479,8 @@ B:WAIL:EXP_20
 B:WAIL:EAT_GOLD
 B:WAIL:EAT_ITEM
 F:CHAR_MULTI | COLD_BLOOD | EVIL | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING |
-F:UNDEAD | FORCE_MAXHP | IM_FIRE | IM_ELEC | IM_POIS | IM_ACID | EMPTY_MIND
-F:NEVER_MOVE
+F:UNDEAD | FORCE_MAXHP | IM_FIRE | IM_ELEC | IM_POIS | IM_ACID | EMPTY_MIND |
+F:NEVER_MOVE | RES_NETH
 S:1_IN_15
 S:S_DEMON | SHRIEK
 D:$Often found in graveyards.
@@ -7518,7 +7518,7 @@ B:CHARGE:EAT_GOLD
 F:DROP_1D2 | DROP_90 | DROP_GOOD | DROP_GREAT | ONLY_ITEM |
 F:EVIL | MALE | CAN_SPEAK | SMART | RES_TELE | CAN_SWIM | DROP_CORPSE
 F:ANIMAL | IM_POIS | NO_CONF | NO_SLEEP | FORCE_MAXHP | UNIQUE | FORCE_SLEEP
-F:EAT_INSANITY
+F:EAT_INSANITY | RES_CHAO
 S:1_IN_3
 S:SHRIEK | CONF | S_HYDRA | SLOW | BLIND | DRAIN_MANA
 S:BA_POIS | BR_CHAO | FORGET | DARKNESS | BR_NUKE
@@ -7776,7 +7776,7 @@ B:BITE:COLD:3d6
 F:MALE | 
 F:FRIENDS | DROP_60 | WILD_WASTE | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | REGENERATE |
-F:EVIL | TROLL | IM_COLD | HURT_LITE
+F:EVIL | TROLL | IM_COLD | RES_DARK | HURT_LITE
 D:$He is a white troll with powerfully clawed hands.
 D:彼は強力な爪の付いた手を持った、白いトロルだ。
 
@@ -8010,7 +8010,7 @@ B:HIT:HURT:1d6
 B:BITE:HURT:3d4
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | TROLL | UNDEAD | 
-F:IM_COLD | IM_POIS | 
+F:IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is a troll skeleton animated by dark dweomers.
 D:それは暗黒の魔術師によって生命を吹き込まれたトロルの骸骨だ。
@@ -8027,7 +8027,7 @@ B:BITE:LOSE_CON:4d6
 B:GAZE:TERRIFY
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | ANIMAL | UNDEAD | 
-F:IM_COLD | IM_POIS | 
+F:IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR | RIDING
 D:$It is the skeleton of a tyrannosaurus, animated by dark dweomers.
 D:邪悪な魔法により動いているティラノサウルスの骸骨だ。
@@ -8096,7 +8096,7 @@ F:FORCE_SLEEP | RAND_25 |
 F:ONLY_ITEM | DROP_1D2 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | UNDEAD | CAN_FLY |
-F:IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:SCARE | CAUSE_3 | DARKNESS
 D:$It is a ghostly form with eyes that haunt you.
@@ -8231,7 +8231,7 @@ B:TOUCH:DR_MANA:2d8
 F:FORCE_SLEEP | RAND_25 | DROP_60 | DROP_1D2 | 
 F:INVISIBLE | COLD_BLOOD | TAKE_ITEM | PASS_WALL | 
 F:EVIL | UNDEAD | IM_COLD | CAN_FLY |
-F:IM_POIS | NO_CONF | NO_SLEEP
+F:IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:BLIND | HOLD | DRAIN_MANA
 D:$You don't believe in them.
@@ -8303,7 +8303,7 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:ESCORT | ESCORTS | DROP_CORPSE | EAT_BLIND |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | 
 F:SMART | BASH_DOOR | 
-F:ANIMAL | EVIL | HURT_LITE | NO_CONF | NO_SLEEP
+F:ANIMAL | EVIL | HURT_LITE | NO_CONF | NO_SLEEP | RES_DARK
 S:1_IN_2 | 
 S:HEAL | BLIND | SLOW | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:TRAPS | BR_DARK
@@ -8347,8 +8347,8 @@ B:CLAW:DISEASE:3d4
 B:BITE:PARALYZE:3d5
 F:DROP_60 | OPEN_DOOR | BASH_DOOR | CAN_SWIM |
 F:DROP_1D2 | FORCE_MAXHP | ESCORT | FORCE_SLEEP |
-F:EVIL | UNDEAD | IM_POIS | IM_COLD | NO_CONF | NO_SLEEP |
-F:COLD_BLOOD | HURT_LITE
+F:EVIL | UNDEAD | IM_POIS | IM_COLD | NO_CONF | RES_DARK | NO_SLEEP |
+F:COLD_BLOOD | HURT_LITE | RES_NETH
 S:1_IN_7
 S:SCARE | HOLD | DARKNESS | S_UNDEAD | ANIM_DEAD
 D:$Flesh is falling off in chunks from this decaying abomination.
@@ -8552,7 +8552,7 @@ F:FORCE_MAXHP |
 F:ESCORT | 
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | WILD_WOOD | REGENERATE |
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:EVIL | TROLL | IM_COLD | IM_POIS | HURT_LITE | HURT_ROCK
+F:EVIL | TROLL | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | HURT_ROCK
 D:$Big, brawny, powerful and with a taste for hobbit.  He has friends called 
 D:$Bill and Tom.
 D:巨大で、筋骨たくましくて、強力で、ホビットを大好物にしている。
@@ -8572,7 +8572,7 @@ F:FORCE_MAXHP |
 F:ESCORT | 
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | WILD_WOOD | REGENERATE |
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:EVIL | TROLL | IM_COLD | IM_POIS | HURT_LITE | HURT_ROCK
+F:EVIL | TROLL | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | HURT_ROCK
 D:$Big, brawny, powerful and with a taste for hobbit.  He has friends called 
 D:$Bert and Tom.
 D:巨大で、筋骨たくましくて、強力で、ホビットを大好物にしている。
@@ -8592,7 +8592,7 @@ F:FORCE_MAXHP |
 F:ESCORT | 
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | WILD_WOOD | REGENERATE |
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:EVIL | TROLL | IM_COLD | IM_POIS | HURT_LITE | HURT_ROCK
+F:EVIL | TROLL | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | HURT_ROCK
 D:$Big, brawny, powerful and with a taste for hobbit.  He has friends called 
 D:$Bert and Bill.
 D:巨大で、筋骨たくましくて、強力で、ホビットを大好物にしている。
@@ -8611,7 +8611,7 @@ B:HIT:HURT:1d8
 F:MALE | 
 F:FRIENDS | DROP_60 | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | REGENERATE |
-F:EVIL | TROLL | IM_POIS | HURT_LITE
+F:EVIL | TROLL | IM_POIS | RES_DARK | HURT_LITE
 D:$He is a vicious monster, feared for his ferocity.
 D:彼は恐ろしい残忍さを持った邪悪なモンスターだ。
 
@@ -8669,8 +8669,8 @@ B:HIT:HURT:1d8
 B:HIT:HURT:1d8
 B:TOUCH:EXP_40
 F:FORCE_SLEEP | FRIENDS | DROP_60 | 
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY | RES_NETH |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:HOLD | SCARE | CAUSE_2 | DARKNESS
 D:$It is a ghostly nightmare of an entity.
@@ -8689,7 +8689,7 @@ B:BITE:HURT:1d5
 F:FORCE_MAXHP | 
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | TROLL | UNDEAD | 
-F:IM_COLD | IM_POIS | 
+F:IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is the animated form of a massive troll.
 D:それは屈強なトロルの骸骨に生命を吹き込んだものだ。
@@ -8705,7 +8705,7 @@ B:CLAW:HURT:1d8
 B:BITE:HURT:2d6
 F:ATTR_MULTI | ATTR_ANY | CAN_FLY | FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_2D2 | RES_DISE | OPEN_DOOR | BASH_DOOR | DROP_CORPSE |
-F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING |
+F:EVIL | DRAGON | IM_FIRE | RES_CHAO | NO_CONF | NO_SLEEP | RIDING |
 F:EAT_CONF | EAT_INSANITY
 S:1_IN_6 |
 S:SLOW | CONF | SCARE | BR_DISE | BR_CHAO
@@ -8725,7 +8725,7 @@ B:CLAW:HURT:1d8
 B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | GOOD | ONLY_ITEM | DROP_2D2 | CAN_FLY |
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DRAGON | IM_COLD | NO_CONF | NO_SLEEP |
-F:RIDING |
+F:RIDING | RES_SOUN | RES_SHAR
 S:1_IN_6 | 
 S:SLOW | CONF | SCARE | BR_SOUN | BR_SHAR
 D:$This dragon is clever and cunning.  It laughs at your puny efforts to 
@@ -8744,7 +8744,7 @@ B:CLAW:HURT:1d8
 B:BITE:HURT:2d6
 F:ATTR_MULTI | ATTR_ANY |
 F:FORCE_SLEEP | FORCE_MAXHP | 
-F:ONLY_ITEM | DROP_2D2 | RES_DISE |
+F:ONLY_ITEM | DROP_2D2 | RES_SOUN | RES_SHAR | RES_DISE | RES_CHAO |
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE
 F:DRAGON| CAN_FLY | EAT_CONF | EAT_INSANITY |
 F:IM_FIRE | IM_COLD | NO_CONF | NO_SLEEP | RIDING
@@ -8769,7 +8769,7 @@ B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | CAN_FLY |
 F:INVISIBLE | PASS_WALL |
-F:EVIL | DRAGON | NO_CONF | NO_SLEEP | RIDING
+F:EVIL | DRAGON | RES_LITE | RES_DARK | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_6 | 
 S:SLOW | CONF | SCARE | 
 S:BR_LITE | BR_DARK
@@ -8833,7 +8833,7 @@ B:CLAW:LOSE_INT:1d10
 F:FORCE_SLEEP | RAND_25 | 
 F:ONLY_ITEM | DROP_90 | DROP_2D2 | 
 F:INVISIBLE | COLD_BLOOD | TAKE_ITEM | PASS_WALL | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | CAN_FLY |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | CAN_FLY |
 F:NO_CONF | NO_SLEEP | ATTR_MULTI | ATTR_ANY |
 S:1_IN_15 | 
 S:BLIND | HOLD | DRAIN_MANA | FORGET
@@ -8855,7 +8855,7 @@ B:TOUCH:DR_MANA:2d10
 F:FORCE_SLEEP | RAND_25 | 
 F:ONLY_ITEM | DROP_90 | DROP_2D2 | CAN_FLY |
 F:COLD_BLOOD | TAKE_ITEM | PASS_WALL |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:BLIND | HOLD | DRAIN_MANA | FORGET
@@ -8878,7 +8878,7 @@ F:MALE | WILD_SHORE | WILD_SWAMP | REGENERATE |
 F:FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
 F:FRIENDS | DROP_60 | 
 F:OPEN_DOOR | BASH_DOOR | CAN_SWIM |
-F:EVIL | TROLL | IM_COLD | IM_POIS | HURT_LITE
+F:EVIL | TROLL | IM_COLD | IM_POIS | RES_DARK | HURT_LITE
 D:$He is a troll that reeks of brine.
 D:彼は海水のような匂いを発しているトロルだ。
 
@@ -8979,7 +8979,7 @@ B:GAZE:HURT:6d6
 F:RAND_50 | 
 F:EMPTY_MIND | INVISIBLE | COLD_BLOOD | 
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | CAN_FLY |
-F:EVIL | IM_COLD | IM_POIS | UNDEAD | IM_ELEC
+F:EVIL | IM_COLD | IM_POIS | UNDEAD | IM_ELEC | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING
 D:$It is impossible to define its form but its violence is legendary.
 D:その姿を定義するのは不可能なことだが、その残忍さは伝説的ですらある。
@@ -9059,7 +9059,7 @@ B:TOUCH:LOSE_DEX:2d8
 B:TOUCH:LOSE_DEX:2d8
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_1D2 | 
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE | 
 F:NO_CONF | NO_SLEEP
 S:1_IN_4 | 
 S:BLINK | TELE_TO | TELE_AWAY | BLIND | HOLD | SLOW | SCARE | 
@@ -9096,8 +9096,8 @@ B:BITE:EXP_VAMP:1d11
 B:TOUCH:DR_MANA:2d8
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:DROP_4D2 | 
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | CAN_FLY | RES_NETH |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
 S:TELE_TO | HOLD | CONF | SCARE | CAUSE_3 | MIND_BLAST | FORGET | 
 S:DARKNESS | BO_NETH
@@ -9116,8 +9116,8 @@ B:HIT:HURT:1d6
 B:HIT:HURT:1d6
 B:BITE:EXP_VAMP:1d8
 B:TOUCH:DR_MANA:2d9
-F:FORCE_SLEEP | FORCE_MAXHP | 
-F:DROP_4D2 | CAN_FLY |
+F:FORCE_SLEEP | FORCE_MAXHP |
+F:DROP_4D2 | CAN_FLY | RES_NETH | RES_DARK |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | INVISIBLE | PASS_WALL |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_6 | 
@@ -9140,7 +9140,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | NO_FEAR | EVIL | UNDEAD |
 F:COLD_BLOOD |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | RES_TELE
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:HEAL | HASTE | BLIND | SCARE | S_UNDEAD | ANIM_DEAD
@@ -9254,7 +9254,7 @@ B:CLAW:HURT:2d6
 B:BITE:HURT:1d6
 F:DROP_60 | ONLY_GOLD | EVIL | DEMON | FRIENDS | HURT_LITE |
 F:WILD_MOUNTAIN | WILD_WASTE |
-F:IM_POIS | IM_FIRE | IM_COLD | IM_ELEC | HURT_ROCK | NONLIVING 
+F:IM_POIS | IM_FIRE | IM_COLD | IM_ELEC | RES_DARK | HURT_ROCK | NONLIVING 
 S:1_IN_12
 S:BR_ELEC | BR_FIRE
 D:$A weird demon creature with a stone-like skin.
@@ -9266,7 +9266,7 @@ G:h:v
 I:120:4d5:8:13:8
 W:35:4:0:85:500:700
 F:MULTIPLY | INVISIBLE | RAND_25 | TAKE_ITEM | COLD_BLOOD |
-F:HURT_LITE | EVIL | OPEN_DOOR | MALE | HAS_LITE_1 |
+F:HURT_LITE | RES_DARK | EVIL | OPEN_DOOR | MALE | HAS_LITE_1 |
 B:TOUCH:EAT_GOLD
 B:TOUCH:EAT_ITEM
 S:1_IN_6
@@ -9344,7 +9344,7 @@ B:CLAW:LOSE_WIS:5d5
 F:FORCE_SLEEP | RAND_25 | 
 F:ONLY_ITEM | DROP_90 | DROP_2D2 | CAN_FLY |
 F:COLD_BLOOD | TAKE_ITEM | PASS_WALL |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:BLIND | DRAIN_MANA | SCARE | BO_COLD | FORGET
@@ -9367,7 +9367,7 @@ B:HIT:LOSE_STR:3d4
 F:FORCE_SLEEP | RAND_25 | 
 F:ONLY_ITEM | DROP_60 | DROP_2D2 | 
 F:TAKE_ITEM | INVISIBLE | COLD_BLOOD | PASS_WALL | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | CAN_FLY |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | CAN_FLY |
 F:NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:BLIND | HOLD | CONF | DRAIN_MANA | BO_NETH
@@ -9494,7 +9494,7 @@ B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | FRIENDS | DROP_SKELETON | DROP_CORPSE
 F:BASH_DOOR | 
-F:ANIMAL | NO_CONF | NO_SLEEP | 
+F:ANIMAL | RES_GRAV | NO_CONF | NO_SLEEP | 
 S:1_IN_5 | 
 S:BR_GRAV
 D:$Unfettered by the usual constraints of gravity, these unnatural creatures 
@@ -9538,7 +9538,7 @@ B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
 F:FORCE_SLEEP | FRIENDS | DROP_SKELETON | DROP_CORPSE
 F:BASH_DOOR | 
-F:ANIMAL | NO_CONF | NO_SLEEP
+F:ANIMAL | RES_INER | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:BR_INER
 D:$Bizarrely, this hound seems to be hardly moving at all, yet it approaches 
@@ -9559,7 +9559,7 @@ B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
 F:FRIENDS | 
 F:BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:ANIMAL | NO_CONF | NO_SLEEP
+F:ANIMAL | RES_WALL | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:BR_WALL
 D:$A deep brown shape is visible before you, its canine form strikes you with 
@@ -9583,7 +9583,7 @@ F:MALE |
 F:FORCE_MAXHP | AQUATIC |
 F:FRIENDS | DROP_60 | WILD_OCEAN | REGENERATE |
 F:OPEN_DOOR | BASH_DOOR | RES_WATE
-F:EVIL | TROLL | IM_COLD | IM_POIS | HURT_LITE
+F:EVIL | TROLL | IM_COLD | IM_POIS | RES_DARK | HURT_LITE
 D:$He is a troll that reeks of brine, close relative to water trolls.
 D:彼は海水のような匂いを発しているトロルで、水トロルの親戚だ。
 
@@ -9756,7 +9756,7 @@ B:CLAW:LOSE_WIS:1d10
 F:FORCE_SLEEP | 
 F:ONLY_ITEM | DROP_1D2 | 
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:FORGET | MIND_BLAST
 D:$An almost life-like creature which is nothing more than a phantom 
@@ -9775,8 +9775,8 @@ B:HIT:HURT:1d10
 B:TOUCH:EXP_40
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:DROP_60 | DROP_90 | 
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | HURT_LITE | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_NETH |
+F:EVIL | UNDEAD | HURT_LITE | IM_COLD | IM_POIS | RES_DARK | NO_CONF | NO_SLEEP
 S:1_IN_7 |
 S:HOLD | SCARE | CAUSE_3 | DARKNESS
 D:$A tangible but ghostly form, made of grey fog.  The air around it feels 
@@ -9793,8 +9793,8 @@ B:HIT:HURT:2d10
 B:HIT:HURT:2d10
 F:FORCE_SLEEP | FORCE_MAXHP | REGENERATE |
 F:DROP_60 | DROP_90 | 
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY |
-F:EVIL | UNDEAD | HURT_LITE | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | RES_NETH |
+F:EVIL | UNDEAD | HURT_LITE | IM_COLD | IM_POIS | RES_DARK | NO_CONF | NO_SLEEP
 S:1_IN_4|
 S:BO_FIRE
 D:$Back from the grave, to wreak vengeance upon the living. A gaunt, tall, 
@@ -9877,7 +9877,7 @@ B:BITE:HURT:2d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_60 | DROP_90 | DROP_2D2 | DROP_CORPSE | RIDING
 F:OPEN_DOOR | BASH_DOOR | WILD_MOUNTAIN |
-F:DRAGON
+F:DRAGON | RES_SOUN
 S:1_IN_11 | 
 S:SCARE | 
 S:BR_SOUN
@@ -9976,7 +9976,7 @@ B:HIT:LOSE_CON:3d4
 F:MALE | 
 F:DROP_1D2 | FRIENDS | INVISIBLE | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | HURT_LITE |
-F:EVIL | NO_CONF | NO_SLEEP
+F:EVIL | RES_DARK | NO_CONF | NO_SLEEP
 D:$A dark elven assassin, so stealthy that he is almost impossible to see.
 D:ダークエルフの暗殺者で、目では見えないくらい気配を消している。
 
@@ -10207,7 +10207,7 @@ B:HIT:HURT:2d6
 F:FORCE_MAXHP | 
 F:DROP_60 | 
 F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | TROLL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | TROLL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$It is a massive figure clothed in wrappings.  You are wary of its massive 
 D:$fists.
@@ -10246,7 +10246,7 @@ B:TOUCH:LOSE_DEX:2d10
 B:TOUCH:LOSE_DEX:2d10
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_1D2 | 
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE | 
 F:NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLINK | TELE_TO | TELE_AWAY | TELE_LEVEL |
@@ -10267,7 +10267,7 @@ B:CRUSH:HURT:10d5
 F:FORCE_SLEEP | 
 F:CAN_FLY |
 F:WEIRD_MIND | BASH_DOOR | ATTR_MULTI | ATTR_ANY |
-F:NO_CONF | NO_SLEEP | EVIL
+F:RES_CHAO | NO_CONF | NO_SLEEP | EVIL
 S:1_IN_9
 S:BR_CONF | BR_CHAO
 D:$"It had the appearance of a butterfly, but but a butterfly with 
@@ -10287,7 +10287,7 @@ I:120:35d10:90:70:10
 W:37:2:0:1000:0:0
 B:TOUCH:TIME:3d4
 B:TOUCH:TIME:3d4
-F:PASS_WALL | IM_POIS | IM_FIRE | IM_ELEC | NONLIVING | CAN_FLY |
+F:PASS_WALL | IM_POIS | IM_FIRE | IM_ELEC | RES_TIME | NONLIVING | CAN_FLY |
 F:NO_CONF | NO_SLEEP | EVIL | EMPTY_MIND | KILL_ITEM | RAND_50
 S:1_IN_7
 S:SLOW | BR_TIME |
@@ -10309,7 +10309,7 @@ B:CRUSH:PARALYZE:8d4
 B:CRUSH:PARALYZE:8d4
 B:CRUSH:PARALYZE:8d4
 F:PASS_WALL | INVISIBLE | FORCE_MAXHP | RES_DISE | 
-F:IM_POIS | IM_COLD | IM_ACID | ELDRITCH_HORROR |
+F:IM_POIS | IM_COLD | IM_ACID | RES_WALL | ELDRITCH_HORROR |
 F:NO_CONF | NO_SLEEP | EVIL | CAN_FLY |
 S:1_IN_7
 S:BR_WALL |
@@ -10516,7 +10516,7 @@ B:BITE:HURT:2d12
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN |
 F:DROP_1D2 | DROP_4D2 | CAN_FLY | DROP_CORPSE | RIDING
 F:BASH_DOOR | 
-F:DRAGON | NO_CONF | NO_SLEEP
+F:DRAGON | RES_SOUN | NO_CONF | NO_SLEEP
 S:1_IN_9 | 
 S:CONF | SCARE | 
 S:BR_SOUN
@@ -10535,7 +10535,7 @@ B:BITE:HURT:2d5
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE | RIDING
 F:ONLY_ITEM | DROP_4D2 | REFLECTING |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | CAN_FLY |
-F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP
+F:EVIL | DRAGON | IM_COLD | NO_CONF | RES_SHAR | NO_SLEEP
 S:1_IN_6 | 
 S:SLOW | CONF | SCARE | BLIND |
 S:BR_SHAR
@@ -10725,7 +10725,7 @@ B:ENGULF:HURT:5d5
 F:FORCE_SLEEP | 
 F:RAND_50 | RAND_25 | 
 F:EMPTY_MIND | BASH_DOOR | POWERFUL | CAN_FLY |
-F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |  NONLIVING
+F:RES_TIME | NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |  NONLIVING
 S:1_IN_6 | 
 S:BR_TIME
 D:$You haven't seen it yet.
@@ -10741,7 +10741,7 @@ F:ATTR_MULTI | SELF_LITE_1 | SELF_LITE_2 |
 F:FORCE_SLEEP | NEVER_BLOW | 
 F:RAND_50 | RAND_25 | CAN_FLY |
 F:EMPTY_MIND | BASH_DOOR | POWERFUL | RES_TELE |
-F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |  NONLIVING
+F:RES_LITE | NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING
 S:1_IN_4 | 
 S:BR_LITE | SHRIEK
 D:$A strange pillar of shining light that hurts your eyes.  Its shape changes 
@@ -10820,8 +10820,8 @@ B:TOUCH:EXP_80
 B:TOUCH:EXP_80
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_90 | DROP_4D2 | CAN_FLY |
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_NETH |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
 S:HOLD | SCARE | CAUSE_3 | BO_NETH
 D:$Your life force is torn from your body as this powerful unearthly being 
@@ -10884,8 +10884,8 @@ B:TOUCH:EXP_40
 B:TOUCH:EXP_40
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | 
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_NETH |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_7 | 
 S:BLIND | HOLD | SCARE | CAUSE_3 | BO_NETH
 D:$A figure that seems made of void, its strangely human shape is cloaked in 
@@ -10983,7 +10983,7 @@ B:CLAW:LOSE_DEX:4d2
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:DRAIN_MANA | BRAIN_SMASH | ANIM_DEAD 
@@ -11005,7 +11005,7 @@ B:TOUCH:EXP_80
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:ONLY_ITEM | DROP_90 | DROP_4D2 | 
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_DARK |
 F:HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
 S:BLIND | SCARE | CAUSE_3 | MIND_BLAST | DARKNESS | BO_NETH
@@ -11116,9 +11116,9 @@ B:BITE:HURT:2d12
 B:BITE:HURT:2d12
 F:UNIQUE | MALE | ATTR_MULTI | CAN_SPEAK | ATTR_ANY |
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE | SELF_LITE_2 |
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | RES_NEXU |
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | RES_NEXU | RES_SOUN |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | CAN_FLY |
-F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | 
+F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | RES_SHAR | RES_GRAV |
 F:NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_SOUN | BR_CONF | 
@@ -11257,7 +11257,7 @@ B:HIT:CONFUSE:6d6
 F:FORCE_MAXHP | 
 F:ONLY_GOLD | DROP_2D2 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP | RIDING
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP | RIDING
 D:$A fearsome skeletal horse with glowing eyes, that watch you with little 
 D:$more than a hatred of all that lives. Flying hooves don't touch the 
 D:$ground...
@@ -11275,9 +11275,9 @@ B:HIT:HURT:1d6
 B:BITE:EXP_VAMP:4d6
 B:TOUCH:DR_MANA:4d6
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
-F:DROP_60 | DROP_4D2 | 
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | RES_TELE
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | 
+F:DROP_60 | DROP_4D2 |
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | RES_TELE |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE |
 F:NO_CONF | NO_SLEEP
 S:1_IN_7 | 
 S:BLIND | HOLD | SCARE | CAUSE_3 | CAUSE_4 | DRAIN_MANA | 
@@ -11313,7 +11313,7 @@ W:40:2:0:800:0:0
 B:ENGULF:CONFUSE:8d4
 B:ENGULF:CONFUSE:8d4
 F:FORCE_SLEEP | 
-F:RAND_50 | RAND_25 | RES_NEXU | AURA_ELEC | IM_FIRE | IM_ELEC |
+F:RAND_50 | RAND_25 | RES_CHAO | RES_NEXU | AURA_ELEC | IM_FIRE | IM_ELEC |
 F:EMPTY_MIND | BASH_DOOR | POWERFUL | 
 F:CAN_FLY | ATTR_MULTI | ATTR_ANY |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING
@@ -11364,7 +11364,7 @@ F:MALE | REGENERATE | UNIQUE | CAN_SPEAK |
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:ONLY_ITEM | DROP_90 | DROP_4D2 | DROP_GOOD |
 F:SMART | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | HURT_LITE | NO_CONF | NO_SLEEP | NO_STUN
+F:EVIL | HURT_LITE | RES_DARK | NO_CONF | NO_SLEEP | NO_STUN
 S:1_IN_2 | 
 S:HEAL | TELE_TO | BLIND | CONF | CAUSE_3 | DARKNESS | FORGET | HOLD |
 S:S_MONSTER | S_MONSTERS | S_DEMON | TPORT | BA_NETH | MIND_BLAST |
@@ -11442,7 +11442,7 @@ W:40:3:0:30:0:0
 B:CRAWL:UN_BONUS:1d4
 F:RAND_50 | RES_DISE | ATTR_MULTI | CAN_SWIM |
 F:STUPID | WEIRD_MIND | MULTIPLY | BASH_DOOR | 
-F:ANIMAL | HURT_LITE | NO_FEAR | SELF_LITE_1
+F:ANIMAL | HURT_LITE | RES_DARK | NO_FEAR | SELF_LITE_1
 D:$It is a strange mass of squirming worms.  Magical energy crackles 
 D:$around its disgusting form.
 D:それはのたくる奇妙なイモムシの大群だ。この忌まわしい
@@ -11710,7 +11710,7 @@ B:BITE:HURT:5d14
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:DROP_3D2 | DROP_4D2 | CAN_FLY |
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | 
-F:DRAGON | NO_CONF | NO_SLEEP | RIDING
+F:DRAGON | RES_SOUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_6 | 
 S:BLIND | CONF | SCARE | 
 S:BR_SOUN
@@ -11729,7 +11729,7 @@ B:BITE:HURT:5d12
 F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | DROP_CORPSE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | CAN_FLY |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
-F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
+F:EVIL | DRAGON | IM_COLD | NO_CONF | RES_SHAR | NO_SLEEP | RIDING
 S:1_IN_6 | 
 S:SLOW | CONF | SCARE | 
 S:BR_SHAR
@@ -11909,7 +11909,7 @@ F:UNIQUE | MALE | CAN_SPEAK | SELF_LITE_1 |
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | POWERFUL |
 F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:EVIL | UNDEAD | HURT_COLD | IM_POIS | IM_FIRE | RES_PLAS | 
+F:EVIL | UNDEAD | HURT_COLD | IM_POIS | IM_FIRE | RES_PLAS | RES_NETH |
 F:NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:CAUSE_3 | BO_FIRE | BA_FIRE | BR_FIRE | BO_PLAS
@@ -11974,7 +11974,7 @@ F:UNIQUE | MALE | CAN_SPEAK |
 F:FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY |
-F:EVIL | UNDEAD | HURT_FIRE | IM_COLD | IM_POIS |
+F:EVIL | UNDEAD | HURT_FIRE | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP
 S:1_IN_3 |
 S:BLIND | SCARE | CAUSE_3 | BO_ACID | BO_NETH | BR_POIS |
@@ -11998,7 +11998,7 @@ F:MALE |
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
 F:ONLY_ITEM | DROP_90 | DROP_4D2 | 
 F:SMART | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | HURT_LITE | NO_CONF | NO_SLEEP
+F:EVIL | HURT_LITE | RES_DARK | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:HEAL | BLINK | TELE_TO | BLIND | CONF | CAUSE_3 | DARKNESS | 
 S:BO_ACID | BA_FIRE | BA_COLD | ANIM_DEAD 
@@ -12021,7 +12021,7 @@ B:TOUCH:LOSE_DEX:2d12
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:DRAIN_MANA | BRAIN_SMASH | 
@@ -12164,7 +12164,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | ELDRITCH_HORROR |
 F:ONLY_ITEM | DROP_1D2 |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | CAN_FLY |
 F:EVIL | DEMON | HURT_LITE | IM_POIS | 
-F:IM_FIRE | NO_CONF | NO_SLEEP
+F:IM_FIRE | RES_DARK | NO_CONF | NO_SLEEP
 S:1_IN_9 |
 S:BLIND | CONF | S_DEMON | BR_DARK
 D:$"And in the air there were great viperine creatures, 
@@ -12196,7 +12196,7 @@ B:GAZE:DR_MANA:4d6
 F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | HAS_DARK_1 |
 F:COLD_BLOOD | BASH_DOOR | 
 F:EVIL | UNDEAD | CAN_FLY |
-F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET | 
@@ -12224,7 +12224,7 @@ B:CLAW:LOSE_WIS:1d10
 F:FORCE_SLEEP | CAN_FLY |
 F:ONLY_ITEM | DROP_1D2 | POWERFUL | REGENERATE | HURT_LITE | SELF_DARK_1 |
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | FRIENDS | RES_NETH |
-F:EVIL | DEMON | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | DEMON | IM_COLD | IM_POIS | NO_CONF | RES_DARK | NO_SLEEP
 S:1_IN_8 | 
 S:BO_NETH
 D:$A mighty spirit of darkness of vaguely humanoid form.  Razor-edged claws 
@@ -12244,7 +12244,7 @@ B:BUTT:ELEC:3d6
 F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING |
 F:COLD_BLOOD | BASH_DOOR | CAN_FLY |
 F:EVIL | UNDEAD | SMART |
-F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_TELE
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
 F:ONLY_ITEM | DROP_60 | DROP_GOOD |
 F:NO_CONF | NO_SLEEP
 S:1_IN_2 |
@@ -12273,7 +12273,7 @@ F:FORCE_SLEEP |
 F:RAND_25 | FRIENDS | CAN_FLY |
 F:ONLY_ITEM | DROP_60 | 
 F:TAKE_ITEM | INVISIBLE | COLD_BLOOD | PASS_WALL | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:BLIND | HOLD | CONF | DRAIN_MANA | BO_NETH
@@ -12295,7 +12295,7 @@ B:BITE:HURT:5d12
 B:BITE:HURT:5d12
 B:BITE:HURT:5d12
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | POWERFUL | FORCE_MAXHP |
-F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | DROP_CORPSE
+F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
 F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
 S:1_IN_8
 S:BR_POIS | BR_DARK | BR_NETH
@@ -12360,7 +12360,7 @@ B:HIT:LOSE_STR:8d2
 B:HIT:LOSE_CON:8d2
 F:MALE | ATTR_MULTI | UNDEAD | EVIL | DROP_SKELETON | DROP_CORPSE
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
-F:IM_FIRE | IM_COLD | IM_ACID | IM_ELEC | IM_POIS |
+F:IM_FIRE | IM_COLD | IM_ACID | IM_ELEC | IM_POIS | RES_NETH |
 F:ONLY_ITEM | DROP_90 | DROP_4D2 | 
 F:SMART | OPEN_DOOR | BASH_DOOR | 
 F:NO_STUN | NO_CONF | NO_SLEEP |
@@ -12420,7 +12420,7 @@ F:UNIQUE | MALE | CAN_SPEAK |
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
 F:INVISIBLE | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:EVIL | UNDEAD | IM_FIRE | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_FIRE | IM_COLD | IM_POIS | RES_NETH | RES_DARK |
 F:HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLIND | HOLD | SCARE | CAUSE_3 | MIND_BLAST | BRAIN_SMASH | 
@@ -12465,7 +12465,7 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | 
 F:INVISIBLE | CAN_FLY |
 F:PASS_WALL | POWERFUL | MOVE_BODY | 
-F:DRAGON | NO_CONF | NO_SLEEP | RIDING
+F:DRAGON | RES_LITE | RES_DARK | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_5 | 
 S:BLIND | CONF | 
 S:BR_LITE | BR_DARK | BR_CONF
@@ -12489,7 +12489,7 @@ B:BITE:LOSE_STR:1d6
 F:FORCE_SLEEP | FORCE_MAXHP | ELDRITCH_HORROR |
 F:ONLY_ITEM | DROP_1D2 | NONLIVING | CAN_SWIM |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | HURT_LITE |
-F:EVIL | DEMON | IM_FIRE | NO_CONF | NO_SLEEP | RES_TELE
+F:EVIL | DEMON | IM_FIRE | RES_DARK | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_9 | 
 S:BLIND | CAUSE_2 | 
 S:S_DEMON | HEAL 
@@ -12588,7 +12588,7 @@ W:44:6:0:85:0:0
 B:TOUCH:EXP_40:1d10
 B:TOUCH:EAT_GOLD
 B:TOUCH:EAT_ITEM
-F:MULTIPLY | INVISIBLE | RAND_25 | TAKE_ITEM | COLD_BLOOD | SMART |
+F:MULTIPLY | INVISIBLE | RAND_25 | TAKE_ITEM | COLD_BLOOD | SMART | RES_DARK |
 F:HURT_LITE | EVIL | OPEN_DOOR | MALE | UNDEAD | RES_NETH | HAS_LITE_1 |
 S:1_IN_6
 S:BLINK | TPORT | TELE_TO | CAUSE_3 | ANIM_DEAD
@@ -12658,8 +12658,8 @@ B:ENGULF:LOSE_CON:4d10
 B:ENGULF:LOSE_CON:4d10
 F:FORCE_SLEEP | ELDRITCH_HORROR | PASS_WALL | FORCE_MAXHP |
 F:INVISIBLE | DROP_2D2 | DROP_4D2 | CAN_FLY | EVIL |
-F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | POWERFUL | NONLIVING |
-F:SMART | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | POWERFUL | NONLIVING | RES_WALL |
+F:SMART | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS | RES_GRAV |
 S:1_IN_4 | 
 S:BR_WALL | TELE_AWAY | BR_GRAV |
 S:S_KIN | MIND_BLAST | BLIND | BLINK
@@ -12705,7 +12705,7 @@ W:44:3:0:20000:0:0
 B:CLAW:HURT:50d1
 B:TOUCH:TIME:1d50
 B:TOUCH:TIME:1d50
-F:ESCORT | UNIQUE | IM_COLD | ELDRITCH_HORROR | RES_NETH |
+F:ESCORT | UNIQUE | IM_COLD | RES_TIME | ELDRITCH_HORROR | RES_NETH |
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | KILL_BODY | DROP_GREAT |
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
@@ -12745,7 +12745,8 @@ B:CRUSH:ACID:5d6
 B:CRUSH:ACID:5d6
 B:CRUSH:HURT:9d9
 F:REGENERATE | KILL_ITEM | CAN_SPEAK | 
-F:BASH_DOOR | EVIL | DEMON | NO_CONF | NO_FEAR | NO_SLEEP | KILL_BODY | CAN_SWIM |
+F:BASH_DOOR | EVIL | DEMON | NO_CONF | NO_FEAR | NO_SLEEP | KILL_BODY |
+F:CAN_SWIM | RES_DARK |
 F:FORCE_MAXHP | FORCE_SLEEP | HURT_LITE | POWERFUL | ELDRITCH_HORROR | 
 F:IM_ACID | IM_FIRE | RES_PLAS | IM_POIS | IM_COLD | IM_ELEC | RES_TELE
 D:$"The nightmare, plastic column of fetid, black iridescence oozed 
@@ -12786,7 +12787,7 @@ F:UNIQUE | MALE | CAN_SPEAK |
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:EVIL | UNDEAD | IM_ELEC | IM_COLD | HURT_FIRE | 
+F:EVIL | UNDEAD | IM_ELEC | IM_COLD | RES_NETH | HURT_FIRE | 
 F:IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLIND | HOLD | SCARE | CAUSE_4 | BA_FIRE | BA_NETH | ANIM_DEAD 
@@ -12873,7 +12874,7 @@ B:HIT:LOSE_STR:3d4
 F:FORCE_SLEEP | FORCE_MAXHP | RAND_25 | 
 F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | CAN_FLY |
 F:SMART | TAKE_ITEM | INVISIBLE | COLD_BLOOD | PASS_WALL | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | RES_NETH | NO_SLEEP
 S:1_IN_9 | 
 S:TELE_LEVEL | BLIND | HOLD | CONF | CAUSE_4 | DRAIN_MANA | BO_NETH | 
 S:S_UNDEAD
@@ -12970,7 +12971,7 @@ B:HIT:LOSE_STR:4d6
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | 
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | CAN_SWIM |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_TELE |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_TELE |
 F:NO_CONF | NO_SLEEP | KILL_WALL | NO_FEAR
 S:1_IN_3 | 
 S:TELE_TO | BLIND | HOLD | CONF | CAUSE_3 | DRAIN_MANA | 
@@ -13032,7 +13033,7 @@ B:HIT:EXP_80:8d6
 B:HIT:EXP_80:8d6
 F:MALE | 
 F:FORCE_MAXHP | UNIQUE_7 |
-F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | RES_TELE
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | RES_TELE | RES_DARK |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | RES_NETH | SMART |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_4 |
@@ -13083,7 +13084,7 @@ B:WAIL:TERRIFY
 B:SLASH:EXP_80:80d1
 B:SLASH:EXP_80:80d1
 B:SLASH:EXP_VAMP:8d8
-F:CHAR_MULTI | EVIL | IM_POIS | IM_COLD | IM_FIRE | RES_NETH |
+F:CHAR_MULTI | EVIL | IM_POIS | IM_COLD | IM_FIRE | RES_NETH | RES_CHAO |
 F:FORCE_SLEEP | UNIQUE | FORCE_MAXHP | CAN_FLY |
 F:COLD_BLOOD | BASH_DOOR | NONLIVING |
 F:NO_CONF | NO_SLEEP | NO_FEAR
@@ -13139,7 +13140,7 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | RES_TELE
 F:COLD_BLOOD | CAN_FLY |
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
-F:EVIL | DRAGON | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | DRAGON | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | RIDING
 S:1_IN_6 | 
 S:CONF | SCARE | 
@@ -13229,7 +13230,7 @@ B:BITE:EXP_40:2d13
 B:BITE:LOSE_STR:5d8
 B:GAZE:TERRIFY
 F:FORCE_SLEEP | FORCE_MAXHP | 
-F:EVIL | UNDEAD | ANIMAL | RES_NEXU | RES_TELE
+F:EVIL | UNDEAD | ANIMAL | RES_NETH | RES_NEXU | RES_TELE
 F:NO_CONF | NO_FEAR | NO_SLEEP | 
 F:IM_POIS | IM_ACID | IM_COLD |
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
@@ -13257,7 +13258,7 @@ B:TOUCH:LOSE_ALL:1d166
 F:FORCE_SLEEP | ELDRITCH_HORROR | NEVER_MOVE | REGENERATE |
 F:DROP_2D2 | DROP_4D2 | CAN_FLY | DROP_GOOD | ONLY_ITEM |
 F:POWERFUL | EVIL | CAN_SPEAK | UNIQUE | FORCE_MAXHP |
-F:SMART | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
+F:SMART | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS | RES_CHAO
 S:1_IN_4 | 
 S:BR_NUKE | S_DEMON | DARKNESS | S_UNDEAD | ANIM_DEAD 
 S:BR_NEXU | BR_CHAO | TELE_TO
@@ -13293,7 +13294,8 @@ B:BITE:CONFUSE:5d10
 F:FORCE_SLEEP | ELDRITCH_HORROR | PASS_WALL | UNIQUE | FORCE_MAXHP |
 F:INVISIBLE | DROP_2D2 | DROP_4D2 | CAN_FLY | DROP_GOOD | ONLY_ITEM |
 F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | POWERFUL | EVIL |
-F:SMART | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
+F:SMART | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS |
+F:RES_WALL | RES_GRAV | RES_INER
 S:1_IN_4 | 
 S:BR_WALL | TELE_AWAY | BR_GRAV | TELE_LEVEL | S_DEMON | S_UNDEAD |
 S:BRAIN_SMASH | HASTE | BLIND | BLINK | BR_INER | CAUSE_3 | CAUSE_4
@@ -13543,7 +13545,7 @@ B:BITE:HURT:8d13
 F:UNIQUE | 
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
-F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | RES_NETH |
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | RES_NETH | RES_DARK |
 F:ANIMAL | EVIL | IM_FIRE | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BR_NETH | 
@@ -13630,7 +13632,7 @@ B:BITE:LOSE_CON
 F:EVIL | DEMON | FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | SMART | NONLIVING |
-F:NO_CONF | NO_SLEEP | HURT_LITE | IM_FIRE | IM_COLD
+F:NO_CONF | NO_SLEEP | HURT_LITE | IM_FIRE | IM_COLD | RES_DARK
 S:1_IN_4 | 
 S:BLIND | CONF | BRAIN_SMASH | SCARE | ANIM_DEAD
 S:BA_NETH | FORGET | S_UNDEAD | DRAIN_MANA |
@@ -13653,8 +13655,8 @@ B:HIT:UN_BONUS:6d8
 B:HIT:DR_MANA:5d10
 F:FORCE_SLEEP | CAN_FLY |
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | 
-F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_TELE
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_TELE | RES_NETH |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_4 | 
 S:BLIND | SCARE | CAUSE_4 | BRAIN_SMASH | 
 S:BO_MANA | BO_NETH | BA_NETH | 
@@ -13722,7 +13724,7 @@ B:CLAW:HURT:3d3
 F:FORCE_SLEEP | 
 F:FRIENDS | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
-F:ANIMAL | NO_CONF | NO_SLEEP
+F:ANIMAL | RES_TIME | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:BR_TIME
 D:$You get a terrible sense of deja vu, or is it a premonition?  All at once 
@@ -13843,7 +13845,7 @@ F:UNIQUE | MALE | CAN_SPEAK |
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD | 
 F:BASH_DOOR | DROP_CORPSE
-F:EVIL | IM_FIRE | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | IM_FIRE | IM_POIS | RES_WALL | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
 S:SLOW | SHOOT | BO_MANA | BO_PLAS | BA_ELEC | 
 S:BR_WALL
@@ -13937,7 +13939,7 @@ F:UNIQUE | CAN_SPEAK | ESCORT | REGENERATE |
 F:FORCE_SLEEP | FORCE_MAXHP | ELDRITCH_HORROR |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
 F:SMART | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:EVIL |IM_ACID | IM_FIRE | IM_COLD | IM_POIS | 
+F:EVIL |IM_ACID | IM_FIRE | IM_COLD | IM_POIS | RES_DARK |
 F:HURT_LITE | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_4 | 
 S:S_UNDEAD | S_DEMON | S_MONSTER | BLINK | BA_ACID | FORGET
@@ -13978,7 +13980,7 @@ F:UNIQUE | MALE | CAN_SPEAK | ATTR_MULTI | ATTR_ANY |
 F:FORCE_SLEEP | FORCE_MAXHP | ELDRITCH_HORROR |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:EVIL | UNDEAD | IM_ACID | IM_FIRE | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_ACID | IM_FIRE | IM_COLD | IM_POIS | RES_NETH | RES_DARK |
 F:HURT_LITE | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_2 | 
 S:S_DEMON | S_UNDEAD | S_KIN | SCARE | CAUSE_3 | CAUSE_4 | ANIM_DEAD 
@@ -14062,7 +14064,7 @@ F:UNIQUE | MALE | CAN_SPEAK |
 F:FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:EVIL | UNDEAD | IM_ACID | IM_FIRE | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_ACID | IM_FIRE | IM_COLD | IM_POIS | RES_NETH | RES_DARK |
 F:HURT_LITE | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_2 | 
 S:TELE_LEVEL | BLIND | HOLD | SCARE | CAUSE_3 | CAUSE_4 | BO_MANA | 
@@ -14086,7 +14088,7 @@ W:54:3:0:8000:0:0
 B:BITE:TIME:2d12
 B:BITE:TIME:2d12
 B:CLAW:HURT:3d3
-F:FORCE_SLEEP | FRIENDS | RES_NETH |
+F:FORCE_SLEEP | FRIENDS | RES_NETH | RES_TIME |
 F:INVISIBLE | PASS_WALL | EVIL | CAN_FLY |
 F:ANIMAL | NO_CONF | NO_SLEEP
 S:1_IN_5 |
@@ -14129,7 +14131,7 @@ B:CRUSH:HURT:16d12
 F:FORCE_SLEEP | FORCE_MAXHP | AQUATIC | WILD_OCEAN |
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | SMART | RES_WATE |
-F:EVIL | IM_ELEC | NO_CONF | NO_SLEEP | IM_POIS | IM_FIRE | RIDING
+F:EVIL | IM_ELEC | NO_CONF | NO_SLEEP | IM_POIS | IM_FIRE | RES_DARK | RIDING
 S:1_IN_6 | 
 S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 |
 S:BA_WATE | DARKNESS | BR_DARK | TELE_TO 
@@ -14175,7 +14177,7 @@ B:TOUCH:LOSE_DEX:4d12
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE
 F:ONLY_ITEM | DROP_2D2 | DROP_1D2 | DROP_GOOD |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:DRAIN_MANA | BRAIN_SMASH | S_HI_UNDEAD | S_UNDEAD | FORGET |
@@ -14198,7 +14200,7 @@ B:BITE:FIRE:12d6
 B:HIT:FIRE:9d12
 B:HIT:FIRE:9d12
 F:UNIQUE | CAN_SPEAK | RES_PLAS | AURA_FIRE | SELF_LITE_1 | SELF_LITE_2 |
-F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | RES_LITE |
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | RIDING | GOOD |
 F:ANIMAL | IM_ACID | IM_FIRE | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
@@ -14223,8 +14225,8 @@ B:BITE:ACID:10d10
 F:FORCE_SLEEP | SMART | KILL_WALL | CAN_SWIM |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_FIRE | IM_COLD | IM_POIS | RES_TELE
-F:HURT_LITE | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_FIRE | IM_COLD | IM_POIS | RES_DARK | RES_TELE |
+F:HURT_LITE | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_4 | 
 S:BLIND | SCARE | BRAIN_SMASH | 
 S:BO_MANA | BO_NETH | BA_NETH | 
@@ -14304,7 +14306,7 @@ B:CRUSH:SHATTER:55d2
 B:TOUCH:LOSE_CON:1d2
 B:TOUCH:LOSE_CON:1d2
 F:IM_FIRE | RES_PLAS | IM_COLD | IM_POIS | ELDRITCH_HORROR | RES_TELE
-F:KILL_WALL | ONLY_GOLD | DROP_4D2 | DROP_2D2 | CAN_SWIM |
+F:KILL_WALL | ONLY_GOLD | DROP_4D2 | DROP_2D2 | CAN_SWIM | RES_DARK |
 F:EVIL | FORCE_MAXHP | SMART | UNIQUE
 S:1_IN_5 | 
 S:SCARE | CONF | HOLD | S_DEMON | S_KIN |
@@ -14331,7 +14333,7 @@ I:130:60d10:20:110:10
 W:55:4:0:6000:20000:749
 F:FORCE_SLEEP | FORCE_MAXHP | NEVER_MOVE | NEVER_BLOW | RES_TELE
 F:SMART | COLD_BLOOD | CAN_SWIM |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_1 | 
 S:TELE_AWAY | BLIND | CONF | SCARE | CAUSE_3 | FORGET | DARKNESS | DISPEL
@@ -14352,7 +14354,7 @@ B:GAZE:DR_MANA:5d10
 F:FORCE_SLEEP | FORCE_MAXHP | NEVER_MOVE | RES_TELE
 F:SMART | COLD_BLOOD |
 F:EVIL | UNDEAD | CAN_SWIM |
-F:IM_FIRE | IM_COLD | IM_POIS | 
+F:IM_FIRE | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_1 | 
 S:BO_MANA | BO_NETH | BA_NETH | 
@@ -14374,7 +14376,7 @@ B:BITE:LOSE_WIS:4d4
 F:FORCE_SLEEP | FORCE_MAXHP | NEVER_MOVE | RES_TELE
 F:SMART | COLD_BLOOD | 
 F:EVIL | UNDEAD | CAN_SWIM |
-F:IM_FIRE | IM_COLD | IM_POIS | 
+F:IM_FIRE | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR | SELF_LITE_1 |
 S:1_IN_1 | 
 S:SLOW | CAUSE_4 | MIND_BLAST | BRAIN_SMASH | TRAPS | BO_PLAS | 
@@ -14395,7 +14397,7 @@ F:ATTR_MULTI | ATTR_ANY |
 F:FORCE_SLEEP | NEVER_BLOW | 
 F:RAND_50 | RAND_25 | CAN_FLY |
 F:EMPTY_MIND | BASH_DOOR | POWERFUL | 
-F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |  NONLIVING
+F:RES_CHAO | NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING
 S:1_IN_6 | 
 S:BR_CHAO
 D:$Void, nothingness, spinning destructively.
@@ -14416,8 +14418,9 @@ F:FORCE_SLEEP | CAN_FLY |
 F:RAND_50 | RAND_25 | AURA_COLD | AURA_FIRE | AURA_ELEC |
 F:EMPTY_MIND | BASH_DOOR | POWERFUL | SELF_LITE_2 |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
-F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |  NONLIVING | 
-F:RES_NETH | RES_NEXU | RES_PLAS
+F:RES_LITE | RES_DARK | RES_SOUN | RES_CHAO | RES_NETH | RES_DISE |
+F:RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_PLAS | RES_NEXU | RES_SHAR |
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING | 
 S:1_IN_6 | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS | 
 S:BR_LITE | BR_DARK | BR_SOUN | BR_CONF | BR_CHAO |
@@ -14491,7 +14494,7 @@ B:HIT:CONFUSE:6d6
 F:UNIQUE | FEMALE | 
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | CAN_SPEAK | CAN_FLY |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | 
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | RES_NETH | RES_DARK |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_3 | 
 S:BLIND | HOLD | SCARE | CAUSE_3 | CAUSE_4 | DRAIN_MANA | 
@@ -14548,8 +14551,8 @@ B:BITE:EXP_80:6d6
 F:UNIQUE | ELDRITCH_HORROR | CAN_SWIM | EVIL | UNDEAD |
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | CAN_SPEAK | AURA_ELEC |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD |
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | POWERFUL | NONLIVING |
-F:IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP | RES_TELE
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | POWERFUL | NONLIVING | RES_NETH |
+F:IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_3 |
 S:BLIND | HOLD | SCARE | CAUSE_4 | DRAIN_MANA |
 S:BRAIN_SMASH | BA_WATE | S_DEMON | HASTE |
@@ -14624,7 +14627,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | CAN_SPEAK | SMART | CAN_SWIM |
 F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD |
 F:REGENERATE | KILL_ITEM | DROP_2D2 | DROP_90 | DROP_60 |
 F:BASH_DOOR | EVIL | NO_CONF | NO_SLEEP | KILL_BODY |
-F:HURT_LITE | POWERFUL | RES_NETH | NONLIVING |
+F:HURT_LITE | POWERFUL | RES_NETH | NONLIVING | RES_DARK |
 F:IM_ACID | IM_FIRE | RES_PLAS | IM_POIS | IM_COLD | IM_ELEC | RES_TELE
 S:1_IN_5 |
 S:BRAIN_SMASH | MIND_BLAST | HASTE | TPORT |
@@ -14882,7 +14885,7 @@ B:HIT:UN_BONUS:7d7
 F:FORCE_SLEEP |
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | CAN_SWIM |
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_TELE
-F:EVIL | UNDEAD | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
+F:EVIL | UNDEAD | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_DARK |
 F:HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_4 | 
 S:BLIND | SCARE | BRAIN_SMASH | 
@@ -14913,7 +14916,7 @@ F:FORCE_SLEEP | SMART | AURA_ELEC | REFLECTING | RES_TELE |
 F:ESCORT | CAN_FLY | POWERFUL | SELF_LITE_1 | SELF_LITE_2 |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD |
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | MOVE_BODY |
-F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_LITE |
 F:NO_CONF | NO_SLEEP |
 S:1_IN_2 |
 S:TELE_TO | BLIND | BO_MANA | S_ANGEL | S_KIN | INVULNER | DISPEL | PSY_SPEAR
@@ -14940,7 +14943,7 @@ B:HIT:EXP_VAMP:10d10
 F:UNIQUE | MALE | CAN_SPEAK | HAS_LITE_2 | HUMAN |
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | DROP_CORPSE |
 F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD |
-F:OPEN_DOOR | BASH_DOOR | RES_NEXU | RES_NETH | EVIL | 
+F:OPEN_DOOR | BASH_DOOR | RES_NEXU | RES_NETH | RES_CHAO | EVIL | 
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | 
 S:1_IN_4 | 
 S:BA_FIRE | BA_CHAO | CONF | TPORT | S_DEMON | BR_CHAO | BA_MANA | PSY_SPEAR
@@ -15064,7 +15067,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | SELF_DARK_2 |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | 
 F:INVISIBLE | COLD_BLOOD | TAKE_ITEM | PASS_WALL | 
 F:EVIL | UNDEAD | CAN_FLY |
-F:IM_COLD | IM_POIS | NO_CONF | NO_SLEEP | RES_TELE
+F:IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_3 |
 S:HOLD | DRAIN_MANA | BLIND | S_UNDEAD | CONF |
 S:SCARE | TELE_TO | TPORT | BRAIN_SMASH | ANIM_DEAD
@@ -15086,7 +15089,7 @@ B:CRUSH:HURT:15d15
 B:CRUSH:HURT:15d15
 F:FORCE_SLEEP | FORCE_MAXHP | AQUATIC | WILD_OCEAN |
 F:ONLY_ITEM | DROP_3D2 | DROP_GOOD | 
-F:BASH_DOOR | POWERFUL | MOVE_BODY | SMART | RES_WATE |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | SMART | RES_WATE | RES_DARK |
 F:EVIL | IM_ELEC | NO_CONF | NO_SLEEP | IM_POIS | IM_FIRE | RIDING
 S:1_IN_6 | 
 S:BLIND | CONF | SCARE | CAUSE_4 | CAUSE_3 | TELE_TO | TELE_AWAY |
@@ -15109,7 +15112,7 @@ B:TOUCH:LOSE_DEX:8d12
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE | CAN_FLY |
 F:ONLY_ITEM | DROP_4D2 | DROP_1D2 | DROP_GOOD |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | PASS_WALL |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:DRAIN_MANA | BRAIN_SMASH | S_HI_UNDEAD | S_UNDEAD | FORGET |
@@ -15163,7 +15166,7 @@ F:ATTR_MULTI | EVIL |
 F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE
 F:ONLY_ITEM | DROP_60 | DROP_90 | 
 F:BASH_DOOR | CAN_FLY | DROP_CORPSE | RIDING
-F:ANIMAL
+F:ANIMAL | RES_CHAO
 S:1_IN_5 | 
 S:CAUSE_4 | 
 S:BR_CHAO
@@ -15185,7 +15188,7 @@ F:ATTR_MULTI | ATTR_ANY | DROP_SKELETON | DROP_CORPSE
 F:FORCE_SLEEP | 
 F:FRIENDS | 
 F:BASH_DOOR | 
-F:ANIMAL | NO_CONF | NO_SLEEP
+F:ANIMAL | RES_CHAO | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:BR_CHAO
 D:$A constantly changing canine form, this hound rushes towards you as if 
@@ -15212,7 +15215,7 @@ B:HIT:CONFUSE:8d8
 F:UNIQUE | MALE | 
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | CAN_SPEAK | CAN_FLY |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
-F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | 
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | RES_NETH | RES_DARK |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_3 | 
 S:BLIND | HOLD | SCARE | CAUSE_3 | CAUSE_4 | DRAIN_MANA | 
@@ -15253,7 +15256,7 @@ B:BITE:FIRE:5d12
 B:CRUSH:HURT:6d15
 B:CRUSH:HURT:6d15
 F:FORCE_SLEEP | FORCE_MAXHP | AQUATIC | WILD_OCEAN |
-F:IM_FIRE | IM_ACID | IM_COLD | IM_POIS
+F:IM_FIRE | IM_ACID | IM_COLD | IM_POIS | RES_DARK |
 F:DRAGON | NO_CONF | NO_SLEEP | NO_FEAR | DROP_CORPSE | RIDING
 S:1_IN_9
 S:BR_FIRE | BR_ACID | BR_DARK |
@@ -15272,7 +15275,7 @@ B:CLAW:HURT:5d12
 B:CLAW:HURT:6d12
 B:BITE:HURT:8d14
 F:ATTR_MULTI | ATTR_ANY |
-F:FORCE_SLEEP | FORCE_MAXHP | RES_DISE | DROP_CORPSE
+F:FORCE_SLEEP | FORCE_MAXHP | RES_CHAO | RES_DISE | DROP_CORPSE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | CAN_FLY |
 F:EVIL | DRAGON | NO_CONF | NO_SLEEP | RIDING
@@ -15300,7 +15303,7 @@ B:BITE:HURT:8d14
 F:FORCE_SLEEP | FORCE_MAXHP | GOOD | DROP_CORPSE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | CAN_FLY |
-F:DRAGON | NO_CONF | NO_SLEEP | RIDING
+F:DRAGON | RES_SOUN | RES_SHAR | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_3 | 
 S:BLIND | CONF | SCARE | 
 S:BR_SOUN | BR_SHAR | 
@@ -15324,8 +15327,8 @@ B:CLAW:HURT:6d12
 B:BITE:HURT:8d14
 F:ATTR_MULTI | ATTR_ANY | DROP_CORPSE
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
-F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
-F:BASH_DOOR | POWERFUL | MOVE_BODY | RES_DISE |
+F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | RES_SOUN | RES_SHAR |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | RES_CHAO | RES_DISE |
 F:DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_3 | 
 S:BLIND | CONF | SCARE | 
@@ -15376,7 +15379,7 @@ B:GAZE:PARALYZE:1d20
 B:GAZE:TERRIFY:1d20
 B:GAZE:BLIND:1d20
 F:UNIQUE | MALE | CAN_SPEAK | ATTR_MULTI | 
-F:RES_DISE | RES_NEXU | CAN_FLY |
+F:RES_DISE | RES_NEXU | RES_CHAO | RES_INER | CAN_FLY |
 F:FORCE_SLEEP | FORCE_MAXHP | EVIL | SMART | DROP_CORPSE
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD |
 F:NO_SLEEP | NO_CONF | NO_STUN | IM_POIS | IM_COLD | IM_FIRE | IM_ACID
@@ -15545,7 +15548,7 @@ F:UNIQUE | MALE |
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_SPEAK | CAN_FLY | HAS_DARK_2 |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | 
-F:EVIL | UNDEAD | IM_COLD | AURA_COLD |
+F:EVIL | UNDEAD | IM_COLD | RES_NETH | AURA_COLD |
 F:IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLIND | HOLD | CONF | 
@@ -15573,7 +15576,7 @@ B:CLAW:HURT:8d12
 B:CLAW:HURT:8d12
 B:BITE:ELEC:9d15
 F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | AURA_COLD | DROP_CORPSE
-F:IM_ELEC | GOOD | CAN_FLY | SELF_LITE_1 | SELF_LITE_2 |
+F:IM_ELEC | RES_GRAV | RES_LITE | GOOD | CAN_FLY | SELF_LITE_1 | SELF_LITE_2 |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:DRAGON | NO_CONF | NO_SLEEP | RES_TELE | RIDING
@@ -15724,7 +15727,7 @@ B:HIT:LOSE_STR:4d6
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | CAN_SWIM |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | POWERFUL |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_TELE |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_TELE |
 F:NO_CONF | NO_SLEEP | KILL_WALL | NO_FEAR |
 S:1_IN_3 | 
 S:TELE_TO | BLIND | HOLD | CONF | CAUSE_3 | CAUSE_4 | DRAIN_MANA | 
@@ -15858,7 +15861,7 @@ F:ESCORT | POWERFUL |
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | UNDEAD | IM_COLD | 
-F:IM_POIS | NO_CONF | NO_SLEEP
+F:IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:BRAIN_SMASH | TRAPS | BA_MANA | 
@@ -15989,7 +15992,7 @@ F:UNIQUE | FEMALE |
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE | SELF_DARK_1 | SELF_DARK_2 |
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
 F:SMART | BASH_DOOR | 
-F:ANIMAL | EVIL | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:ANIMAL | EVIL | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:HEAL | BLIND | SLOW | CONF | SCARE | DARKNESS | BA_DARK | 
 S:BR_POIS | BR_DARK | 
@@ -16022,7 +16025,7 @@ F:UNIQUE | CAN_SPEAK | ELDRITCH_HORROR | RES_TELE
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
 F:SMART | BASH_DOOR | MOVE_BODY | NONLIVING |
-F:ANIMAL | EVIL | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:ANIMAL | EVIL | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_3 |
 S:SCARE | BLIND | CONF | HOLD | BR_POIS |
 S:DARKNESS | BA_DARK | BR_DARK | S_SPIDER | S_DEMON
@@ -16087,10 +16090,12 @@ B:BITE:HURT:2d12
 B:CLAW:HURT:3d3
 F:ATTR_MULTI | ATTR_ANY |
 F:FORCE_SLEEP | CAN_FLY |
-F:FRIENDS | RES_NETH | RES_PLAS | RES_NEXU | RES_DISE |
+F:FRIENDS |
 F:BASH_DOOR | AURA_FIRE | AURA_ELEC | AURA_COLD | DROP_CORPSE | 
 F:DROP_SKELETON | SELF_LITE_2 |
 F:ANIMAL | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
+F:RES_LITE | RES_DARK | RES_SOUN | RES_CHAO | RES_NETH | RES_DISE |
+F:RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_PLAS | RES_NEXU | RES_SHAR |
 F:NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS | 
@@ -16214,7 +16219,7 @@ F:KILL_WALL | KILL_ITEM | KILL_BODY | NO_FEAR |
 F:FORCE_SLEEP | FORCE_MAXHP | MULTIPLY | CAN_FLY |
 F:ATTR_MULTI | SHAPECHANGER | ATTR_ANY |
 F:DROP_60 | DROP_GOOD | POWERFUL | AURA_ELEC | AURA_FIRE | AURA_COLD |
-F:BASH_DOOR | IM_ELEC | IM_FIRE | RES_WATE | RES_NEXU | IM_COLD |
+F:BASH_DOOR | IM_ELEC | IM_FIRE | RES_WATE | RES_NEXU | RES_CHAO | IM_COLD |
 F:IM_POIS | IM_ACID | RES_PLAS | RES_DISE | COLD_BLOOD | NONLIVING | RAND_50
 S:1_IN_5 |
 S:BR_CHAO
@@ -16519,7 +16524,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | SMART |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
 F:EVIL | UNDEAD | 
-F:IM_COLD | IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:TELE_AWAY | BLIND | HOLD | SCARE | CAUSE_3 | BRAIN_SMASH | 
 S:BO_MANA | BA_NETH | PSY_SPEAR |
@@ -16550,7 +16555,7 @@ F:UNIQUE | CAN_SPEAK | RES_TELE | ELDRITCH_HORROR | CAN_FLY |
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | SELF_DARK_1 | SELF_DARK_2 |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:EVIL | DEMON | IM_ACID | IM_ELEC |
+F:EVIL | DEMON | IM_ACID | IM_ELEC | RES_DARK |
 F:IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:TELE_AWAY | BLIND | HOLD | SCARE | BRAIN_SMASH | 
@@ -16669,7 +16674,7 @@ F:UNIQUE | MALE | CAN_SPEAK | RES_TELE
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD | DROP_GREAT |
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
-F:EVIL | UNDEAD | IM_FIRE | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_FIRE | IM_COLD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | NO_FEAR | POWERFUL |
 S:1_IN_1 | 
 S:TELE_TO | SLOW | SCARE | CAUSE_4 | BRAIN_SMASH | 
@@ -16745,7 +16750,7 @@ F:ONLY_ITEM | DROP_1D2 | CAN_SWIM |
 F:DROP_GOOD | DROP_GREAT |
 F:CAN_SPEAK | EVIL | UNIQUE | NEVER_MOVE | FORCE_MAXHP | FORCE_SLEEP |
 F:IM_ACID | IM_POIS | IM_COLD | IM_ELEC | RES_NETH | RES_WATE | RES_NEXU 
-F:NO_FEAR | NO_CONF | NO_SLEEP | DEMON | SMART | ELDRITCH_HORROR |
+F:NO_FEAR | NO_CONF | NO_SLEEP | DEMON | SMART | ELDRITCH_HORROR | RES_CHAO |
 F:COLD_BLOOD | RES_DISE | NO_STUN
 S:1_IN_6 |
 S:S_MONSTERS | S_DEMON | S_HI_DRAGON | S_HI_UNDEAD | HEAL |
@@ -17061,7 +17066,7 @@ F:ESCORT |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD | DROP_GREAT | 
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | UNDEAD | POWERFUL |
-F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP |
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP |
 S:1_IN_3 | 
 S:TPORT | BLIND | SCARE | CAUSE_4 | BRAIN_SMASH | 
 S:BA_MANA | BO_MANA | BA_FIRE | DISPEL | PSY_SPEAR |
@@ -17132,7 +17137,7 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:RAND_25 | 
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | KILL_BODY | 
-F:ANIMAL | EVIL | IM_POIS | IM_FIRE | IM_COLD
+F:ANIMAL | EVIL | IM_POIS | IM_FIRE | IM_COLD | RES_DARK |
 S:1_IN_8 | 
 S:BR_DARK | BR_POIS | BR_COLD
 D:$The immensely huge wolf who would swallow the sun to satisfy its 
@@ -17158,7 +17163,9 @@ F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | CAN_FLY |
 F:DRAGON | GOOD | DROP_CORPSE | SELF_LITE_2 |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP |
-F:RES_NETH | RES_NEXU | RES_PLAS | RES_DISE | RES_TELE | RIDING |
+F:RES_NETH | RES_LITE | RES_DARK | RES_SOUN | RES_CHAO | RES_DISE |
+F:RES_NEXU | RES_TIME | RES_INER | RES_GRAV | RES_SHAR | RES_PLAS |
+F:RES_WALL | RES_TELE | RIDING |
 S:1_IN_3 |
 S:S_HI_DRAGON | S_DRAGON | S_KIN |
 S:BR_NUKE | BR_ACID | BR_ELEC | BR_FIRE |
@@ -17188,7 +17195,7 @@ F:UNIQUE | CAN_SPEAK | FEMALE | ELDRITCH_HORROR | AURA_ELEC | RES_TELE
 F:ATTR_MULTI | FORCE_SLEEP | FORCE_MAXHP | PASS_WALL | ATTR_ANY | 
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_90 | NONLIVING | CAN_FLY |
 F:SMART | OPEN_DOOR | BASH_DOOR | REGENERATE | DEMON | AURA_COLD 
-F:EVIL | IM_ACID | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | IM_ACID | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP | RES_CHAO
 S:1_IN_3 |
 S:BO_MANA | BRAIN_SMASH | BA_DARK | S_MONSTERS |
 S:CAUSE_4 | HEAL | BR_CHAO | BR_CONF | BR_POIS | BR_NUKE |
@@ -17321,7 +17328,7 @@ F:UNIQUE | ELDRITCH_HORROR | RES_TELE |
 F:FORCE_SLEEP | FORCE_MAXHP | DEMON | AURA_FIRE | AURA_ELEC |
 F:ATTR_MULTI | ESCORTS | ESCORT | POWERFUL | ATTR_ANY | NONLIVING |
 F:KILL_ITEM | KILL_WALL | CAN_SWIM | AURA_COLD |
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_90 | RES_DISE |
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_90 | RES_CHAO | RES_DISE |
 F:STUPID | OPEN_DOOR | BASH_DOOR | REGENERATE | EMPTY_MIND |
 F:EVIL | IM_ACID | IM_POIS | IM_FIRE | NO_CONF | NO_SLEEP
 S:1_IN_5 |
@@ -17466,7 +17473,7 @@ F:UNIQUE | CAN_SPEAK | DEMON | ELDRITCH_HORROR | NONLIVING |
 F:FORCE_SLEEP | FORCE_MAXHP | ESCORT | ESCORTS | SMART | RES_PLAS | RES_NEXU |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | REGENERATE | RES_NETH |
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_1D2 | DROP_GOOD |
-F:DROP_GREAT | RES_DISE | RES_TELE | CAN_SWIM |
+F:DROP_GREAT | RES_DISE | RES_CHAO | RES_DARK | RES_TELE | CAN_SWIM |
 F:EVIL | IM_FIRE | IM_POIS | IM_ELEC | IM_ACID | NO_CONF | NO_SLEEP |
 S:1_IN_3
 S:TPORT | SCARE | BLIND | MIND_BLAST | BRAIN_SMASH | DRAIN_MANA |
@@ -17537,8 +17544,8 @@ B:BITE:TIME:11d11
 F:UNIQUE | FORCE_SLEEP | FORCE_MAXHP | 
 F:REFLECTING | AURA_COLD | AURA_ELEC |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_3D2 | 
-F:DROP_GOOD | DROP_GREAT | RES_NETH |
-F:RES_WATE | RES_PLAS | RES_NEXU | RES_DISE |
+F:DROP_GOOD | DROP_GREAT | RES_NETH | RES_SOUN | RES_LITE | RES_INER |
+F:RES_WATE | RES_PLAS | RES_NEXU | RES_DISE | RES_TIME | RES_SHAR |
 F:SMART | KILL_BODY | POWERFUL | SELF_LITE_1 |
 F:REGENERATE | NONLIVING | CAN_FLY |
 F:GOOD | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
@@ -17686,7 +17693,7 @@ F:UNIQUE | QUESTOR | CAN_SPEAK | ATTR_MULTI | ATTR_ANY |
 F:FORCE_SLEEP | FORCE_MAXHP | FORCE_DEPTH | SELF_LITE_1 |
 F:REFLECTING | AURA_FIRE | AURA_ELEC | AURA_COLD |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2 | 
-F:DROP_GOOD | DROP_GREAT | RES_NETH |
+F:DROP_GOOD | DROP_GREAT | RES_CHAO | RES_NETH |
 F:SMART | KILL_WALL | KILL_BODY | POWERFUL |
 F:REGENERATE | NONLIVING | CAN_FLY | RIDING |
 F:EVIL | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
@@ -17742,8 +17749,8 @@ B:TOUCH:EXP_80:10d10
 F:UNIQUE | FORCE_SLEEP | NEVER_MOVE | ONLY_ITEM | DROP_90 | FORCE_MAXHP |
 F:DROP_GOOD | DROP_GREAT | REFLECTING | INVISIBLE | COLD_BLOOD | KILL_EXP |
 F:SMART | EMPTY_MIND | REGENERATE | POWERFUL | AURA_FIRE |
-F:EVIL | DEMON | NONLIVING | IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS |  
-F:RES_TELE | RES_NETH | RES_WATE | RES_PLAS | RES_NEXU | RES_DISE | 
+F:EVIL | DEMON | NONLIVING | IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS |
+F:RES_TELE | RES_NETH | RES_WATE | RES_PLAS | RES_NEXU | RES_DISE | RES_TIME |
 F:NO_FEAR | NO_CONF | NO_STUN | NO_SLEEP | 
 S:1_IN_2 | 
 S:BR_NETH | BR_TIME | BA_MANA | BO_MANA | HAND_DOOM | HEAL | 
@@ -17765,7 +17772,7 @@ B:BITE:LOSE_ALL:8d5
 F:FRIENDS | 
 F:COLD_BLOOD | EMPTY_MIND | REGENERATE | BASH_DOOR | KILL_BODY | KILL_ITEM | 
 F:ANIMAL | HURT_LITE | IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | 
-F:RES_TELE | RES_NETH | RES_DISE | 
+F:RES_TELE | RES_NETH | RES_DISE | RES_DARK |
 F:NO_FEAR | NO_CONF | NO_STUN | NO_SLEEP | 
 D:$Small brown spiders that lurk in the darkness deep underground.
 D:$  An individual would be nearly harmless, but their size allows many
@@ -17914,7 +17921,7 @@ B:CRUSH:UN_BONUS:5d12
 F:UNIQUE |
 F:ATTR_MULTI | 
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE | ANIMAL |
-F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | RES_CHAO | RES_DARK |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | CAN_SWIM | RES_WATE |
 F:EVIL | IM_FIRE | IM_COLD | IM_POIS | IM_ELEC | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
@@ -18002,7 +18009,7 @@ W:15:4:0:7:0:0
 B:EXPLODE:FIRE:5d5
 F:RAND_50 | RAND_25 | CAN_SWIM |
 F:STUPID | WEIRD_MIND | MULTIPLY | BASH_DOOR | 
-F:ANIMAL | HURT_LITE | NO_FEAR
+F:ANIMAL | HURT_LITE | RES_DARK | NO_FEAR
 D:$A seething mass of thick, glowing worms.
 D:光るイモムシの密集した沸き返る塊だ。
 
@@ -18015,7 +18022,7 @@ B:BITE:POISON:1d10
 B:CLAW:HURT:1d4
 F:DROP_60 | RAND_25 | MOVE_BODY | CAN_FLY | DROP_CORPSE |
 F:BASH_DOOR | MOVE_BODY | FRIENDS | 
-F:ANIMAL | IM_POIS
+F:ANIMAL | IM_POIS | RES_DARK
 S:1_IN_8 | 
 S:SCARE | BR_POIS | BR_DARK
 D:$Fed with horrid meats and grown to enormous size, this slavering creature 
@@ -18036,7 +18043,7 @@ F:UNIQUE | MALE |
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | CAN_SPEAK | CAN_FLY | AURA_COLD |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | DROP_GREAT |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE |
 F:NO_CONF | NO_SLEEP | RES_TELE | REFLECTING |
 S:1_IN_4 | 
 S:SCARE | S_KIN | WORLD | TELE_TO
@@ -18140,7 +18147,7 @@ F:CAN_SPEAK | UNDEAD | UNIQUE2 |
 F:FORCE_SLEEP | FORCE_MAXHP | FORCE_DEPTH |
 F:REFLECTING | AURA_FIRE | AURA_ELEC | AURA_COLD |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2 | 
-F:DROP_GOOD | DROP_GREAT | RES_NETH |
+F:DROP_GOOD | DROP_GREAT | RES_CHAO | RES_NETH |
 F:SMART | KILL_WALL | KILL_BODY | POWERFUL |
 F:REGENERATE | NONLIVING | CAN_FLY |
 F:EVIL | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
@@ -18193,7 +18200,7 @@ F:MALE |
 F:FORCE_SLEEP | FORCE_MAXHP
 F:ONLY_ITEM | DROP_90 | DROP_4D2 | 
 F:SMART | INVISIBLE | COLD_BLOOD | UNDEAD |
-F:EVIL | HURT_LITE | NO_CONF | NO_SLEEP |
+F:EVIL | HURT_LITE | RES_NETH | RES_DARK | NO_CONF | NO_SLEEP |
 S:1_IN_2 | 
 S:HEAL | BLINK | BLIND | CONF | CAUSE_3 | DARKNESS | 
 S:ANIM_DEAD | SHRIEK | TELE_AWAY | BA_DARK | DRAIN_MANA |
@@ -18246,7 +18253,7 @@ W:70:6:0:2000:0:0
 B:SHOOT:HURT:15d10
 B:EXPLODE:HURT:15d5
 F:CHAR_CLEAR | ATTR_CLEAR
-F:NEVER_MOVE | IM_POIS | NONLIVING | IM_ACID | STUPID | FORCE_MAXHP
+F:NEVER_MOVE | IM_POIS | NONLIVING | IM_ACID | RES_CHAO | STUPID | FORCE_MAXHP
 S:1_IN_3
 S:ROCKET | SHOOT | BLINK | BR_POIS | BR_CHAO | BR_NEXU
 D:$It was left here to be used against intruders.
@@ -18355,7 +18362,7 @@ B:SHOOT:HURT:7d6
 B:SPIT:COLD:10d10
 B:SPIT:COLD:10d10
 B:GAZE:BLIND
-F:EMPTY_MIND | BASH_DOOR
+F:EMPTY_MIND | BASH_DOOR | RES_LITE | RES_TIME |
 F:IM_COLD | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | FORCE_MAXHP
 S:1_IN_5
 S:BR_LITE | BA_COLD | BR_COLD | BO_ICEE | BO_COLD | BR_TIME | SHOOT
@@ -18389,7 +18396,7 @@ B:ENGULF:HURT:6d6
 B:ENGULF:HURT:6d6
 B:ENGULF:HURT:6d6
 F:FORCE_SLEEP | RAND_50 | EMPTY_MIND | BASH_DOOR | CAN_FLY |
-F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN | POWERFUL | NONLIVING
+F:RES_SHAR | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN | POWERFUL | NONLIVING
 S:1_IN_4 | 
 S:BR_SHAR
 D:$A howling blast of razor-sharp mountain fragments, kept intact by perilous 
@@ -18421,7 +18428,7 @@ B:HIT:FIRE:1d6
 B:BITE:FIRE:3d4
 F:MALE | FRIENDS | DROP_60 | DROP_SKELETON | DROP_CORPSE | SELF_LITE_1 |
 F:OPEN_DOOR | BASH_DOOR | EVIL | TROLL | HURT_LITE | REGENERATE |
-F:HURT_COLD | IM_FIRE | WILD_VOLCANO
+F:HURT_COLD | IM_FIRE | RES_DARK | WILD_VOLCANO
 D:$Fire trolls are believed to have been created by an
 D:$evil wizard trying to make forest trolls immune to
 D:$fire.
@@ -18629,12 +18636,13 @@ E:Undead devilfish
 G:l:v
 I:105:15d5:10:20:5
 W:15:4:0:75:0:0
-F:NEVER_BLOW | ATTR_MULTI | AQUATIC | INVISIBLE | NO_CONF | UNDEAD | DROP_CORPSE |
+F:NEVER_BLOW | ATTR_MULTI | AQUATIC | INVISIBLE | NO_CONF | UNDEAD |
+F:DROP_CORPSE | RES_NETH | RES_TIME |
 F:EVIL
 S:1_IN_8 |
 S:BR_NETH | BR_DISE | BR_TIME | BR_NEXU | BR_POIS
 D:$A devilfish brought back from the dead.
-D:死から蘇えったチョウチンアンコウだ。
+D:死から蘇ったチョウチンアンコウだ。
 
 #
 #(コメント)
@@ -18734,7 +18742,8 @@ E:Devilfish
 G:l:v
 I:105:11d5:10:16:5
 W:12:4:0:60:0:0
-F:NEVER_BLOW | ATTR_MULTI | AQUATIC | NO_CONF | DROP_CORPSE
+F:NEVER_BLOW | ATTR_MULTI | AQUATIC | NO_CONF | DROP_CORPSE |
+F:RES_CHAO | RES_DARK | RES_LITE | RES_SOUN | RES_TIME
 S:1_IN_9 |
 S:BR_CHAO | BR_DARK | BR_LITE | BR_SOUN | BR_DISE | BR_TIME
 D:$A disgusting fish, it has a large gaping mouth and a small lantern dangling
@@ -18773,7 +18782,7 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:ESCORT | CAN_FLY |
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
-F:EVIL | DEMON | IM_FIRE | IM_POIS |
+F:EVIL | DEMON | IM_FIRE | IM_POIS | RES_DARK |
 F:NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLIND | CONF | SCARE | 
@@ -18921,8 +18930,10 @@ F:AURA_FIRE | AURA_ELEC | OPEN_DOOR | BASH_DOOR | PASS_WALL | KILL_WALL |
 F:TAKE_ITEM | KILL_ITEM | ORC | TROLL | GIANT | DRAGON | DEMON | UNDEAD |
 F:EVIL | ANIMAL | GOOD | AURA_COLD | NONLIVING | HURT_LITE | HURT_ROCK |
 F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | HUMAN |
-F:RES_TELE | RES_NETH | RES_WATE | RES_PLAS | RES_NEXU | RES_DISE | NO_FEAR |
-F:NO_STUN | NO_CONF | NO_SLEEP | CAN_SWIM | CAN_FLY | UNIQUE2 | WILD_SHORE |
+F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN |
+F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV |
+F:RES_TELE | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP |
+F:CAN_SWIM | CAN_FLY | UNIQUE2 | WILD_SHORE |
 F:WILD_OCEAN | WILD_WASTE | WILD_WOOD | WILD_VOLCANO | WILD_MOUNTAIN |
 F:WILD_GRASS | WILD_ALL | SELF_LITE_1 | SELF_LITE_2 |
 S:1_IN_3 |
@@ -19142,7 +19153,7 @@ F:UNIQUE | MALE | CAN_SPEAK |
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | 
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_DARK |
 F:HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLIND | HOLD | SCARE | CAUSE_3 | CAUSE_4 | MIND_BLAST | 
@@ -19182,7 +19193,7 @@ B:CLAW:HURT:1d20
 B:CLAW:HURT:1d20
 F:DROP_3D2 | OPEN_DOOR | BASH_DOOR | EVIL | DRAGON | UNDEAD | 
 F:RES_NETH | RES_PLAS | RES_NEXU | RES_DISE | NO_FEAR | NO_STUN |
-F:IM_COLD | IM_POIS | 
+F:IM_COLD | IM_POIS |
 F:NO_CONF | NO_SLEEP | DROP_SKELETON | RIDING
 S:1_IN_10
 S:BR_NETH
@@ -19398,7 +19409,7 @@ B:SHOOT:HURT:3d6
 B:HIT:HURT:1d5
 B:HIT:HURT:1d5
 F:FORCE_SLEEP | DROP_1D2 | SMART | DROP_CORPSE | DROP_SKELETON |
-F:ORC | HURT_LITE | EVIL |
+F:ORC | HURT_LITE | EVIL | RES_DARK
 S:1_IN_2 |
 S:SHOOT
 
@@ -19525,7 +19536,7 @@ B:KICK:HURT:8d8
 F:UNIQUE | MALE | CAN_SPEAK | REFLECTING | HAS_LITE_2 | HUMAN |
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON |
 F:FORCE_SLEEP | FORCE_MAXHP | MOVE_BODY | TAKE_ITEM |
-F:DROP_1D2 | DROP_90 | DROP_GOOD | ONLY_ITEM | CAN_SWIM |
+F:DROP_1D2 | DROP_90 | DROP_GOOD | ONLY_ITEM | CAN_SWIM | RES_SHAR |
 F:REGENERATE | EAT_GIVE_STR | EAT_GIVE_CON | EAT_LOSE_INT | EAT_LOSE_CHR |
 S:1_IN_6 |
 S:BR_SHAR | TELE_TO
@@ -19589,7 +19600,7 @@ B:CRUSH:HURT:20d2
 F:UNIQUE | MALE | DROP_SKELETON | DROP_CORPSE | HUMAN |
 F:FORCE_SLEEP | FORCE_MAXHP | HAS_LITE_2 |
 F:DROP_2D2 | ONLY_GOLD |
-F:OPEN_DOOR | BASH_DOOR | TAKE_ITEM | MOVE_BODY |
+F:OPEN_DOOR | BASH_DOOR | TAKE_ITEM | MOVE_BODY | RES_SOUN
 S:1_IN_5 |
 S:BR_SOUN |
 D:お前のものは俺のもの。俺のものは俺のもの。
@@ -19647,7 +19658,7 @@ B:BITE:EXP_80:10d12
 F:UNIQUE | FORCE_SLEEP | FORCE_MAXHP | RES_TELE |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD |
 F:SMART | OPEN_DOOR | BASH_DOOR | CAN_FLY | POWERFUL |
-F:DRAGON | EVIL | IM_ACID | NO_CONF | NO_SLEEP |
+F:DRAGON | EVIL | IM_ACID | RES_DARK | NO_CONF | NO_SLEEP |
 F:NO_FEAR | NO_STUN | RIDING |
 S:1_IN_3 | 
 S:BRAIN_SMASH | BR_DARK | BR_NETH | BA_NETH
@@ -19667,7 +19678,7 @@ B:BITE:HURT:10d12
 F:UNIQUE | FRIENDLY | FORCE_SLEEP | FORCE_MAXHP | RES_TELE |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD |
 F:SMART | OPEN_DOOR | BASH_DOOR | CAN_FLY | POWERFUL |
-F:DRAGON | GOOD | NO_CONF | NO_SLEEP |
+F:DRAGON | GOOD | RES_SOUN | RES_LITE | NO_CONF | NO_SLEEP |
 F:NO_FEAR | NO_STUN | RIDING | SELF_LITE_2 |
 S:1_IN_3 | 
 S:BRAIN_SMASH | BR_SOUN | BR_LITE | BR_MANA
@@ -19869,7 +19880,7 @@ B:HIT:HURT:5d8
 B:HIT:CONFUSE:6d8
 F:FORCE_MAXHP | 
 F:COLD_BLOOD | OPEN_DOOR | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP |
 S:1_IN_5
 S:BLIND | HOLD | SCARE | CAUSE_4 | BO_NETH | S_UNDEAD
 D:この不吉なモンスターは自分の首を脇に抱え、死を告げにやってくる。
@@ -19957,7 +19968,7 @@ F:GOOD | DROP_GOOD | MOVE_BODY | NONLIVING | AURA_FIRE | SELF_LITE_2 |
 F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_1D2 | DROP_2D2 |
 F:OPEN_DOOR | SMART | POWERFUL | CAN_FLY |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_TELE |
-F:RES_DISE | RES_NEXU | RES_NETH |
+F:RES_DISE | RES_NEXU | RES_NETH | RES_LITE | RES_SOUN |
 F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_3 |
 S:SCARE | BRAIN_SMASH | DRAIN_MANA |
@@ -20150,6 +20161,7 @@ F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD | DROP_GREAT |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:GOOD | DRAGON | RIDING |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
+F:RES_LITE | RES_DARK | RES_SOUN | RES_SHAR | 
 S:1_IN_2 | 
 S:BLIND | CONF | SCARE | 
 S:BR_LITE | BR_DARK | BR_SOUN | BR_CONF | BR_SHAR | 
@@ -20202,7 +20214,7 @@ F:UNIQUE | MALE | CAN_SWIM | CAN_FLY |
 F:RAND_50 | RAND_25 |
 F:FORCE_MAXHP | CAN_SPEAK |
 F:ONLY_ITEM | DROP_90 | DROP_GOOD |
-F:INVISIBLE | COLD_BLOOD | PASS_WALL | 
+F:INVISIBLE | COLD_BLOOD | PASS_WALL | RES_NETH
 F:UNDEAD | NO_SLEEP
 D:$He has only three hair. He is careless, but kind, and always a bit hungry.
 D:毛が三本しかないんだよ。ずっこけなんだ優しい奴さ。
@@ -20312,7 +20324,7 @@ F:UNIQUE | MALE |
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
 F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:EVIL | UNDEAD | IM_FIRE | IM_COLD | 
+F:EVIL | UNDEAD | IM_FIRE | IM_COLD | RES_NETH | RES_DARK |
 F:IM_POIS | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLIND | HOLD | SCARE | CAUSE_3 | BA_FIRE | BA_NETH | 
@@ -20365,7 +20377,7 @@ B:HIT:HURT:2d5
 B:TOUCH:LOSE_WIS
 F:NEVER_MOVE | 
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | CAN_FLY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 D:$A lost soul of an adventurer still lingering in this world.
 D:この世に未練がある冒険者の魂のなれの果てだ。
 
@@ -20595,7 +20607,7 @@ F:UNIQUE | MALE | SMART |
 F:FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_GOLD | DROP_3D2 | DROP_4D2 |
 F:COLD_BLOOD | PASS_WALL | OPEN_DOOR | BASH_DOOR | MOVE_BODY |
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
 F:NO_STUN | NO_CONF | NO_SLEEP | RES_TELE |
 S:1_IN_3 |
 S:BLIND | HOLD | SCARE | CAUSE_3 | DARKNESS |
@@ -20727,7 +20739,7 @@ F:UNIQUE | FEMALE | CAN_SPEAK | DROP_CORPSE
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_SWIM | ELDRITCH_HORROR | HUMAN |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | 
 F:SMART | OPEN_DOOR | BASH_DOOR | SELF_LITE_2 |
-F:EVIL | IM_ACID | IM_FIRE | IM_POIS | NO_CONF | NO_SLEEP
+F:EVIL | IM_ACID | IM_FIRE | IM_POIS | RES_CHAO | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:HOLD | SCARE | CAUSE_3 | BR_CONF | BR_NETH | BR_CHAO | 
 D:$Sukarno's third wife. Her face could sink a thousand 
@@ -21062,7 +21074,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | MOVE_BODY |
 F:ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_GOOD | 
 F:SMART | TAKE_ITEM | BASH_DOOR | HAS_LITE_2 |
 F:EVIL | GIANT | ESCORT | DROP_CORPSE | 
-F:IM_FIRE | IM_COLD | IM_ACID | IM_POIS | IM_ELEC
+F:IM_FIRE | IM_COLD | IM_ACID | IM_POIS | IM_ELEC | RES_SHAR | RES_SOUN
 S:1_IN_4 |
 S:BR_FIRE | BR_COLD | BR_SHAR | BR_SOUN |
 S:S_MONSTERS | S_KIN | TELE_TO | HEAL 
@@ -21165,7 +21177,7 @@ B:HIT:HURT:2d10
 B:HIT:HURT:2d10
 F:FRIENDS | DROP_60 | DROP_CORPSE | 
 F:OPEN_DOOR | BASH_DOOR | 
-F:EVIL | GIANT | ORC | 
+F:EVIL | GIANT | ORC | RES_DARK
 D:$An unholy hybrid of ogre and orc.
 D:オーガとオークの不浄な混血だ。
 
@@ -21181,7 +21193,7 @@ B:BITE:DR_MANA:6d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_60 | DROP_4D2 |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE | RES_TELE | 
-F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE | 
 F:NO_CONF | NO_SLEEP |
 S:1_IN_3 | 
 S:BLIND | HOLD | SCARE | CAUSE_3 | CAUSE_4 | DRAIN_MANA | BA_NETH
@@ -21205,7 +21217,7 @@ F:UNIQUE | MALE | CAN_SPEAK | UNDEAD |
 F:FORCE_MAXHP | DROP_CORPSE | WILD_TOWN | WILD_ONLY |
 #F:ONLY_ITEM | DROP_90 | DROP_GOOD | FRIENDLY |
 F:OPEN_DOOR | BASH_DOOR | 
-F:NO_CONF | NO_SLEEP
+F:RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_4 |
 S:TELE_AWAY
 D:$He weighs 127 kg. He is the president of some remote country. 
@@ -21235,8 +21247,9 @@ B:SHOW:LOSE_WIS
 B:CHARGE:EAT_GOLD
 B:CHARGE:EAT_GOLD
 #F:DROP_1D2 | DROP_90 | DROP_GOOD | DROP_GREAT | ONLY_ITEM |
-F:EVIL | MALE | CAN_SPEAK | SMART | RES_TELE | CAN_SWIM | DROP_CORPSE
-F:ANIMAL | IM_POIS | NO_CONF | NO_SLEEP | FORCE_MAXHP | UNIQUE | FORCE_SLEEP
+F:EVIL | MALE | CAN_SPEAK | SMART | RES_TELE | CAN_SWIM | DROP_CORPSE |
+F:ANIMAL | IM_POIS | NO_CONF | NO_SLEEP | FORCE_MAXHP | UNIQUE | FORCE_SLEEP |
+F:RES_CHAO
 S:1_IN_3
 S:SHRIEK | CONF | S_HYDRA | SLOW | BLIND | DRAIN_MANA
 S:BA_POIS | BR_CHAO | FORGET | DARKNESS | BR_NUKE
@@ -21293,8 +21306,8 @@ B:CLAW:HURT:5d12
 B:CLAW:HURT:6d12
 B:BITE:TIME:8d14
 F:DROP_CORPSE | FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
-F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
-F:BASH_DOOR | POWERFUL | MOVE_BODY | RES_NEXU |
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | RES_TIME | RES_GRAV |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | RES_NEXU | RES_INER |
 F:DRAGON | NO_CONF | NO_SLEEP | RIDING | PASS_WALL |
 S:1_IN_3 | 
 S:TPORT | BLINK | TELE_AWAY | TELE_LEVEL | HASTE |
@@ -21315,7 +21328,7 @@ B:TOUCH:CONFUSE
 B:CRUSH:HURT:6d6
 B:CRAWL:POISON:4d4
 F:FRIENDS | ANIMAL | CAN_SWIM | WEIRD_MIND
-F:IM_POIS | NO_FEAR | RES_WATE
+F:IM_POIS | RES_DARK | NO_FEAR | RES_WATE
 S:1_IN_4 | BR_DARK
 D:地蔵大菩薩の化身である蛸法師によって呼び寄せられた蛸の大群だ。
 D:「…この時、俄かに、ごうごうと海辺が大きな音を立てて、
@@ -21373,7 +21386,7 @@ B:TOUCH:EAT_ITEM
 F:UNIQUE | MALE | CAN_FLY | RAND_25 | RAND_50
 F:FORCE_MAXHP | CAN_SPEAK | SMART | REGENERATE |
 F:NO_CONF | NO_STUN | RES_DISE | RES_NEXU 
-F:IM_ACID | IM_ELEC | IM_FIRE | IM_POIS | IM_COLD | RES_NETH 
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_POIS | IM_COLD | RES_NETH |
 F:ONLY_ITEM | DROP_90 | DROP_GOOD | DROP_GREAT |
 F:TAKE_ITEM | DROP_CORPSE |
 F:INVISIBLE | PASS_WALL | 

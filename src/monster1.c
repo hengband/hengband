@@ -158,6 +158,7 @@ static void roff_aux(int r_idx, int mode)
 	u32b		flags5;
 	u32b		flags6;
 	u32b		flags7;
+	u32b		flagsr;
 
 	byte drop_gold, drop_item;
 
@@ -179,6 +180,7 @@ static void roff_aux(int r_idx, int mode)
 	flags5 = (r_ptr->flags5 & r_ptr->r_flags5);
 	flags6 = (r_ptr->flags6 & r_ptr->r_flags6);
 	flags7 = (r_ptr->flags7 & r_ptr->flags7);
+	flagsr = (r_ptr->flagsr & r_ptr->r_flagsr);
 
 	/* cheat_know or research_mon() */
 	if (cheat_know || (mode & 0x01))
@@ -207,6 +209,7 @@ static void roff_aux(int r_idx, int mode)
 		flags4 = r_ptr->flags4;
 		flags5 = r_ptr->flags5;
 		flags6 = r_ptr->flags6;
+		flagsr = r_ptr->flagsr;
 	}
 
 
@@ -2013,180 +2016,135 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "¥æ¥Ë¡¼¥¯¡¦¥â¥ó¥¹¥¿¡¼¾¤´­";color[v
 	/* Collect immunities */
 	vn = 0;
 #ifdef JP
-	if (flags3 & RF3_IM_ACID) {vp[vn] = "»À";color[vn++] = TERM_GREEN;}
+	if (flagsr & RFR_IM_ACID) {vp[vn] = "»À";color[vn++] = TERM_GREEN;}
 #else
-	if (flags3 & RF3_IM_ACID) {vp[vn] = "acid";color[vn++] = TERM_GREEN;}
+	if (flagsr & RFR_IM_ACID) {vp[vn] = "acid";color[vn++] = TERM_GREEN;}
 #endif
 
 #ifdef JP
-	if (flags3 & RF3_IM_ELEC) {vp[vn] = "°ðºÊ";color[vn++] = TERM_BLUE;}
+	if (flagsr & RFR_IM_ELEC) {vp[vn] = "°ðºÊ";color[vn++] = TERM_BLUE;}
 #else
-	if (flags3 & RF3_IM_ELEC) {vp[vn] = "lightning";color[vn++] = TERM_BLUE;}
+	if (flagsr & RFR_IM_ELEC) {vp[vn] = "lightning";color[vn++] = TERM_BLUE;}
 #endif
 
 #ifdef JP
-	if (flags3 & RF3_IM_FIRE) {vp[vn] = "±ê";color[vn++] = TERM_RED;}
+	if (flagsr & RFR_IM_FIRE) {vp[vn] = "±ê";color[vn++] = TERM_RED;}
 #else
-	if (flags3 & RF3_IM_FIRE) {vp[vn] = "fire";color[vn++] = TERM_RED;}
+	if (flagsr & RFR_IM_FIRE) {vp[vn] = "fire";color[vn++] = TERM_RED;}
 #endif
 
 #ifdef JP
-	if (flags3 & RF3_IM_COLD) {vp[vn] = "Îäµ¤";color[vn++] = TERM_L_WHITE;}
+	if (flagsr & RFR_IM_COLD) {vp[vn] = "Îäµ¤";color[vn++] = TERM_L_WHITE;}
 #else
-	if (flags3 & RF3_IM_COLD) {vp[vn] = "cold";color[vn++] = TERM_L_WHITE;}
+	if (flagsr & RFR_IM_COLD) {vp[vn] = "cold";color[vn++] = TERM_L_WHITE;}
 #endif
 
 #ifdef JP
-	if (flags3 & RF3_IM_POIS) {vp[vn] = "ÆÇ";color[vn++] = TERM_L_GREEN;}
+	if (flagsr & RFR_IM_POIS) {vp[vn] = "ÆÇ";color[vn++] = TERM_L_GREEN;}
 #else
-	if (flags3 & RF3_IM_POIS) {vp[vn] = "poison";color[vn++] = TERM_L_GREEN;}
+	if (flagsr & RFR_IM_POIS) {vp[vn] = "poison";color[vn++] = TERM_L_GREEN;}
 #endif
-
-
-	/* Describe immunities */
-	if (vn)
-	{
-		/* Intro */
-#ifdef JP
-		hooked_roff(format("%^s¤Ï", wd_he[msex]));
-#else
-		hooked_roff(format("%^s", wd_he[msex]));
-#endif
-
-
-		/* Scan */
-		for (n = 0; n < vn; n++)
-		{
-			/* Intro */
-#ifdef JP
-			if ( n != 0 ) hooked_roff("¤È");
-#else
-			if (n == 0) hooked_roff(" resists ");
-			else if (n < vn-1) hooked_roff(", ");
-			else hooked_roff(" and ");
-#endif
-
-
-			/* Dump */
-			hook_c_roff(color[n], vp[n]);
-		}
-
-		/* End */
-#ifdef JP
-		hooked_roff("¤ÎÂÑÀ­¤ò»ý¤Ã¤Æ¤¤¤ë¡£");
-#else
-		hooked_roff(".  ");
-#endif
-
-	}
 
 
 	/* Collect resistances */
-	vn = 0;
 #ifdef JP
-if (flags4 & RF4_BR_LITE) {vp[vn] = "Á®¸÷";color[vn++] = TERM_YELLOW;}
+	if (flagsr & RFR_RES_LITE) {vp[vn] = "Á®¸÷";color[vn++] = TERM_YELLOW;}
 #else
- if (flags4 & RF4_BR_LITE) {vp[vn] = "light";color[vn++] = TERM_YELLOW;}
+	if (flagsr & RFR_RES_LITE) {vp[vn] = "light";color[vn++] = TERM_YELLOW;}
 #endif
 
 #ifdef JP
-if ((flags4 & RF4_BR_DARK) || (flags3 & RF3_ORC)) {vp[vn] = "°Å¹õ";color[vn++] = TERM_L_DARK;}
+	if (flagsr & RFR_RES_DARK) {vp[vn] = "°Å¹õ";color[vn++] = TERM_L_DARK;}
 #else
- if (flags4 & RF4_BR_DARK  || (flags3 & RF3_ORC)) {vp[vn] = "dark";color[vn++] = TERM_L_DARK;}
+	if (flagsr & RFR_RES_DARK) {vp[vn] = "dark";color[vn++] = TERM_L_DARK;}
 #endif
 
 #ifdef JP
-if (flags3 & RF3_RES_NETH) {vp[vn] = "ÃÏ¹ö";color[vn++] = TERM_L_DARK;}
+	if (flagsr & RFR_RES_NETH) {vp[vn] = "ÃÏ¹ö";color[vn++] = TERM_L_DARK;}
 #else
- if (flags3 & RF3_RES_NETH) {vp[vn] = "nether";color[vn++] = TERM_L_DARK;}
+	if (flagsr & RFR_RES_NETH) {vp[vn] = "nether";color[vn++] = TERM_L_DARK;}
 #endif
 
 #ifdef JP
-if (flags3 & RF3_RES_WATE) {vp[vn] = "¿å";color[vn++] = TERM_BLUE;}
+	if (flagsr & RFR_RES_WATE) {vp[vn] = "¿å";color[vn++] = TERM_BLUE;}
 #else
-if (flags3 & RF3_RES_WATE) {vp[vn] = "water";color[vn++] = TERM_BLUE;}
+	if (flagsr & RFR_RES_WATE) {vp[vn] = "water";color[vn++] = TERM_BLUE;}
 #endif
 
 #ifdef JP
-if (flags3 & RF3_RES_PLAS) {vp[vn] = "¥×¥é¥º¥Þ";color[vn++] = TERM_L_RED;}
+	if (flagsr & RFR_RES_PLAS) {vp[vn] = "¥×¥é¥º¥Þ";color[vn++] = TERM_L_RED;}
 #else
- if (flags3 & RF3_RES_PLAS) {vp[vn] = "plasma";color[vn++] = TERM_L_RED;}
+	if (flagsr & RFR_RES_PLAS) {vp[vn] = "plasma";color[vn++] = TERM_L_RED;}
 #endif
 
 #ifdef JP
-if (flags4 & RF4_BR_SHAR) {vp[vn] = "ÇËÊÒ";color[vn++] = TERM_L_UMBER;}
+	if (flagsr & RFR_RES_SHAR) {vp[vn] = "ÇËÊÒ";color[vn++] = TERM_L_UMBER;}
 #else
- if (flags4 & RF4_BR_SHAR) {vp[vn] = "shards";color[vn++] = TERM_L_UMBER;}
+	if (flagsr & RFR_RES_SHAR) {vp[vn] = "shards";color[vn++] = TERM_L_UMBER;}
 #endif
 
 #ifdef JP
-if (flags4 & RF4_BR_SOUN) {vp[vn] = "¹ì²»";color[vn++] = TERM_ORANGE;}
+	if (flagsr & RFR_RES_SOUN) {vp[vn] = "¹ì²»";color[vn++] = TERM_ORANGE;}
 #else
- if (flags4 & RF4_BR_SOUN) {vp[vn] = "sound";color[vn++] = TERM_ORANGE;}
+	if (flagsr & RFR_RES_SOUN) {vp[vn] = "sound";color[vn++] = TERM_ORANGE;}
 #endif
 
 #ifdef JP
-if (flags4 & RF4_BR_CONF) {vp[vn] = "º®Íð";color[vn++] = TERM_L_UMBER;}
+	if (flagsr & RFR_RES_CHAO) {vp[vn] = "¥«¥ª¥¹";color[vn++] = TERM_VIOLET;}
 #else
- if (flags4 & RF4_BR_CONF) {vp[vn] = "conf";color[vn++] = TERM_L_UMBER;}
+	if (flagsr & RFR_RES_CHAO) {vp[vn] = "chaos";color[vn++] = TERM_VIOLET;}
 #endif
 
 #ifdef JP
-if ((flags4 & RF4_BR_CHAO) || (r_idx == MON_STORMBRINGER)) {vp[vn] = "¥«¥ª¥¹";color[vn++] = TERM_VIOLET;}
+	if (flagsr & RFR_RES_NEXU) {vp[vn] = "°ø²Ìº®Íð";color[vn++] = TERM_VIOLET;}
 #else
-if ((flags4 & RF4_BR_CHAO) || (r_idx == MON_STORMBRINGER)) {vp[vn] = "chaos";color[vn++] = TERM_VIOLET;}
+	if (flagsr & RFR_RES_NEXU) {vp[vn] = "nexus";color[vn++] = TERM_VIOLET;}
 #endif
 
 #ifdef JP
-if (flags3 & RF3_RES_NEXU) {vp[vn] = "°ø²Ìº®Íð";color[vn++] = TERM_VIOLET;}
+	if (flagsr & RFR_RES_DISE) {vp[vn] = "Îô²½";color[vn++] = TERM_VIOLET;}
 #else
- if (flags3 & RF3_RES_NEXU) {vp[vn] = "nexus";color[vn++] = TERM_VIOLET;}
+	if (flagsr & RFR_RES_DISE) {vp[vn] = "disenchantment";color[vn++] = TERM_VIOLET;}
 #endif
 
 #ifdef JP
-if (flags3 & RF3_RES_DISE) {vp[vn] = "Îô²½";color[vn++] = TERM_VIOLET;}
+	if (flagsr & RFR_RES_WALL) {vp[vn] = "¥Õ¥©¡¼¥¹";color[vn++] = TERM_UMBER;}
 #else
- if (flags3 & RF3_RES_DISE) {vp[vn] = "disenchantment";color[vn++] = TERM_VIOLET;}
+	if (flagsr & RFR_RES_WALL) {vp[vn] = "force";color[vn++] = TERM_UMBER;}
 #endif
 
 #ifdef JP
-if (flags4 & RF4_BR_WALL) {vp[vn] = "¥Õ¥©¡¼¥¹";color[vn++] = TERM_UMBER;}
+	if (flagsr & RFR_RES_INER) {vp[vn] = "ÃÙÆß";color[vn++] = TERM_SLATE;}
 #else
- if (flags4 & RF4_BR_WALL) {vp[vn] = "sound";color[vn++] = TERM_UMBER;}
+	if (flagsr & RFR_RES_INER) {vp[vn] = "inertia";color[vn++] = TERM_SLATE;}
 #endif
 
 #ifdef JP
-if (flags4 & RF4_BR_INER) {vp[vn] = "ÃÙÆß";color[vn++] = TERM_SLATE;}
+	if (flagsr & RFR_RES_TIME) {vp[vn] = "»þ´ÖµÕÅ¾";color[vn++] = TERM_L_BLUE;}
 #else
- if (flags4 & RF4_BR_INER) {vp[vn] = "inertia";color[vn++] = TERM_SLATE;}
+	if (flagsr & RFR_RES_TIME) {vp[vn] = "time";color[vn++] = TERM_L_BLUE;}
 #endif
 
 #ifdef JP
-if (flags4 & RF4_BR_TIME) {vp[vn] = "»þ´ÖµÕÅ¾";color[vn++] = TERM_L_BLUE;}
+	if (flagsr & RFR_RES_GRAV) {vp[vn] = "½ÅÎÏ";color[vn++] = TERM_SLATE;}
 #else
- if (flags4 & RF4_BR_TIME) {vp[vn] = "time";color[vn++] = TERM_L_BLUE;}
+	if (flagsr & RFR_RES_GRAV) {vp[vn] = "gravity";color[vn++] = TERM_SLATE;}
 #endif
 
 #ifdef JP
-if (flags4 & RF4_BR_GRAV) {vp[vn] = "½ÅÎÏ";color[vn++] = TERM_SLATE;}
+	if (flagsr & RFR_RES_ALL) {vp[vn] = "¤¢¤é¤æ¤ë¹¶·â";color[vn++] = TERM_YELLOW;}
 #else
- if (flags4 & RF4_BR_GRAV) {vp[vn] = "gravity";color[vn++] = TERM_SLATE;}
+	if (flagsr & RFR_RES_ALL) {vp[vn] = "all";color[vn++] = TERM_YELLOW;}
 #endif
 
 #ifdef JP
-if (flags3 & RF3_RES_ALL) {vp[vn] = "¤¢¤é¤æ¤ë¹¶·â";color[vn++] = TERM_YELLOW;}
+	if ((flagsr & RFR_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "¥Æ¥ì¥Ý¡¼¥È";color[vn++] = TERM_ORANGE;}
 #else
- if (flags3 & RF3_RES_ALL) {vp[vn] = "all";color[vn++] = TERM_YELLOW;}
-#endif
-
-#ifdef JP
-if ((flags3 & RF3_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "¥Æ¥ì¥Ý¡¼¥È";color[vn++] = TERM_ORANGE;}
-#else
- if ((flags3 & RF3_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "teleportation";color[vn++] = TERM_ORANGE;}
+	if ((flagsr & RFR_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "teleportation";color[vn++] = TERM_ORANGE;}
 #endif
 
 
-	/* Describe resistances */
+	/* Describe immunities and resistances */
 	if (vn)
 	{
 		/* Intro */
@@ -2253,33 +2211,33 @@ if ((flags3 & RF3_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "¥Æ¥ì¥Ý¡
 	/* Collect non-effects */
 	vn = 0;
 #ifdef JP
-if (flags3 & RF3_NO_STUN)  {vp[vn] = "Û¯Û°¤È¤·¤Ê¤¤";color[vn++] = TERM_ORANGE;}
+	if (flags3 & RF3_NO_STUN)  {vp[vn] = "Û¯Û°¤È¤·¤Ê¤¤";color[vn++] = TERM_ORANGE;}
 #else
- if (flags3 & RF3_NO_STUN)  {vp[vn] = "stunned";color[vn++] = TERM_ORANGE;}
+	if (flags3 & RF3_NO_STUN)  {vp[vn] = "stunned";color[vn++] = TERM_ORANGE;}
 #endif
 
 #ifdef JP
-if (flags3 & RF3_NO_FEAR)  {vp[vn] = "¶²ÉÝ¤ò´¶¤¸¤Ê¤¤";color[vn++] = TERM_SLATE;}
+	if (flags3 & RF3_NO_FEAR)  {vp[vn] = "¶²ÉÝ¤ò´¶¤¸¤Ê¤¤";color[vn++] = TERM_SLATE;}
 #else
- if (flags3 & RF3_NO_FEAR)  {vp[vn] = "frightened";color[vn++] = TERM_SLATE;}
+	if (flags3 & RF3_NO_FEAR)  {vp[vn] = "frightened";color[vn++] = TERM_SLATE;}
 #endif
 
 #ifdef JP
-if (flags3 & RF3_NO_CONF)  {vp[vn] = "º®Íð¤·¤Ê¤¤";color[vn++] = TERM_L_UMBER;}
+	if (flags3 & RF3_NO_CONF)  {vp[vn] = "º®Íð¤·¤Ê¤¤";color[vn++] = TERM_L_UMBER;}
 #else
- if (flags3 & RF3_NO_CONF)  {vp[vn] = "confused";color[vn++] = TERM_L_UMBER;}
+	if (flags3 & RF3_NO_CONF)  {vp[vn] = "confused";color[vn++] = TERM_L_UMBER;}
 #endif
 
 #ifdef JP
-if (flags3 & RF3_NO_SLEEP) {vp[vn] = "Ì²¤é¤µ¤ì¤Ê¤¤";color[vn++] = TERM_BLUE;}
+	if (flags3 & RF3_NO_SLEEP) {vp[vn] = "Ì²¤é¤µ¤ì¤Ê¤¤";color[vn++] = TERM_BLUE;}
 #else
- if (flags3 & RF3_NO_SLEEP) {vp[vn] = "slept";color[vn++] = TERM_BLUE;}
+	if (flags3 & RF3_NO_SLEEP) {vp[vn] = "slept";color[vn++] = TERM_BLUE;}
 #endif
 
 #ifdef JP
-if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "¥Æ¥ì¥Ý¡¼¥È¤µ¤ì¤Ê¤¤";color[vn++] = TERM_ORANGE;}
+	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "¥Æ¥ì¥Ý¡¼¥È¤µ¤ì¤Ê¤¤";color[vn++] = TERM_ORANGE;}
 #else
- if ((flags3 & RF3_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "teleported";color[vn++] = TERM_ORANGE;}
+	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "teleported";color[vn++] = TERM_ORANGE;}
 #endif
 
 	/* Describe non-effects */
@@ -3386,7 +3344,7 @@ bool monster_lava(int r_idx)
 
 	if (!monster_dungeon(r_idx)) return FALSE;
 
-	if (((r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK) ||
+	if (((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) ||
 	     (r_ptr->flags7 & RF7_CAN_FLY)) &&
 	    !(r_ptr->flags3 & RF3_AURA_COLD))
 		return TRUE;
@@ -3546,7 +3504,7 @@ bool monster_can_cross_terrain(byte feat, monster_race *r_ptr)
 	else if ((feat == FEAT_SHAL_LAVA) ||
 	    (feat == FEAT_DEEP_LAVA))
 	{
-		if ((r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK) ||
+		if ((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) ||
 		    (r_ptr->flags7 & RF7_CAN_FLY))
 			return TRUE;
 		else
@@ -3638,7 +3596,7 @@ bool monster_can_enter(int y, int x, monster_race *r_ptr)
 	else if ((feat == FEAT_SHAL_LAVA) ||
 	    (feat == FEAT_DEEP_LAVA))
 	{
-		if ((r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK) ||
+		if ((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) ||
 		    (r_ptr->flags7 & RF7_CAN_FLY))
 			return TRUE;
 		else

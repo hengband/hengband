@@ -1505,7 +1505,7 @@ int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear)
 {
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
-	if ((r_ptr->flags3 & RF3_RES_ALL) && dam > 0)
+	if ((r_ptr->flagsr & RFR_RES_ALL) && dam > 0)
 	{
 		dam /= 100;
 		if((dam == 0) && one_in_(3)) dam = 1;

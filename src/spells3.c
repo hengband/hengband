@@ -384,7 +384,7 @@ msg_print("不思議な力がテレポートを防いだ！");
 				 * totally unkillable suckers...
 				 */
 				if ((r_ptr->flags6 & RF6_TPORT) &&
-				    !(r_ptr->flags3 & RF3_RES_TELE))
+				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
 					if (!m_ptr->csleep) teleport_to_player(tmp_m_idx, r_ptr->level);
 				}

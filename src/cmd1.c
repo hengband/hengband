@@ -463,11 +463,11 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			if (have_flag(flgs, TR_BRAND_ACID) || ((p_ptr->special_attack & (ATTACK_ACID)) && !thrown))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_ACID_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ACID_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK);
 					}
 				}
 
@@ -482,11 +482,11 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			if (have_flag(flgs, TR_BRAND_ELEC) || ((p_ptr->special_attack & (ATTACK_ELEC)) && !thrown) || (mode == HISSATSU_ELEC))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 					}
 				}
 
@@ -510,11 +510,11 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			if (have_flag(flgs, TR_BRAND_FIRE) || ((p_ptr->special_attack & (ATTACK_FIRE)) && !thrown) || (mode == HISSATSU_FIRE))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 					}
 				}
 
@@ -549,11 +549,11 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			if (have_flag(flgs, TR_BRAND_COLD) || ((p_ptr->special_attack & (ATTACK_COLD)) && !thrown) || (mode == HISSATSU_COLD))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 					}
 				}
 				/* Otherwise, take the damage */
@@ -587,11 +587,11 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			if (have_flag(flgs, TR_BRAND_POIS) || ((p_ptr->special_attack & (ATTACK_POIS)) && !thrown) || (mode == HISSATSU_POISON))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_POIS_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_POIS_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
 					}
 				}
 
@@ -2020,7 +2020,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			/* Can't backstab creatures that we can't see, right? */
 			backstab = TRUE;
 		}
-		else if ((p_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level+20)) && m_ptr->ml && !(r_ptr->flags3 & RF3_RES_ALL))
+		else if ((p_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level+20)) && m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL))
 		{
 			fuiuchi = TRUE;
 		}
@@ -2121,7 +2121,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			}
 			else success_hit = old_success_hit;
 		}
-		else if ((p_ptr->pclass == CLASS_NINJA) && ((backstab || fuiuchi) && !(r_ptr->flags3 & RF3_RES_ALL))) success_hit = TRUE;
+		else if ((p_ptr->pclass == CLASS_NINJA) && ((backstab || fuiuchi) && !(r_ptr->flagsr & RFR_RES_ALL))) success_hit = TRUE;
 		else success_hit = test_hit_norm(chance, r_ptr->ac, m_ptr->ml);
 
 		/* Test for hit */
@@ -2461,7 +2461,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					k *= mult;
 
 					/* Ouch! */
-					if (((r_ptr->flags3 & RF3_RES_ALL) ? k/100 : k) > m_ptr->hp)
+					if (((r_ptr->flagsr & RFR_RES_ALL) ? k/100 : k) > m_ptr->hp)
 					{
 #ifdef JP
 						msg_format("%sを真っ二つにした！", m_name);
@@ -2843,11 +2843,11 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 			{
 				bool resists_tele = FALSE;
 
-				if (r_ptr->flags3 & RF3_RES_TELE)
+				if (r_ptr->flagsr & RFR_RES_TELE)
 				{
 					if (r_ptr->flags1 & RF1_UNIQUE)
 					{
-						if (m_ptr->ml) r_ptr->r_flags3 |= RF3_RES_TELE;
+						if (m_ptr->ml) r_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 						msg_format("%^sには効果がなかった。", m_name);
 #else
@@ -2858,7 +2858,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 					}
 					else if (r_ptr->level > randint1(100))
 					{
-						if (m_ptr->ml) r_ptr->r_flags3 |= RF3_RES_TELE;
+						if (m_ptr->ml) r_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 						msg_format("%^sは抵抗力を持っている！", m_name);
 #else
@@ -2886,9 +2886,8 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 			else if ((chaos_effect == 5) && cave_floor_bold(y, x) &&
 				 (randint1(90) > r_ptr->level))
 			{
-				if (!(r_ptr->flags1 & RF1_UNIQUE) &&
-				    !(r_ptr->flags4 & RF4_BR_CHAO) &&
-				    !(r_ptr->flags1 & RF1_QUESTOR))
+				if (!(r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) &&
+				    !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
 				{
 					if (polymorph_monster(y, x))
 					{
@@ -2914,7 +2913,7 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 					else
 					{
 #ifdef JP
-					msg_format("%^sには効果がなかった。", m_name);
+						msg_format("%^sには効果がなかった。", m_name);
 #else
 						msg_format("%^s is unaffected.", m_name);
 #endif
@@ -3903,7 +3902,7 @@ msg_format("%sが恐怖していて制御できない。", m_name);
 		disturb(0, 0);
 	}
 
-	else if ((p_ptr->riding && !(r_info[m_list[p_ptr->riding].r_idx].flags7 & (RF7_CAN_FLY)) && !(r_info[m_list[p_ptr->riding].r_idx].flags3 & RF3_EFF_IM_FIRE_MASK)) && ((c_ptr->feat == FEAT_SHAL_LAVA) || (c_ptr->feat == FEAT_DEEP_LAVA)))
+	else if ((p_ptr->riding && !(r_info[m_list[p_ptr->riding].r_idx].flags7 & (RF7_CAN_FLY)) && !(r_info[m_list[p_ptr->riding].r_idx].flagsr & RFR_EFF_IM_FIRE_MASK)) && ((c_ptr->feat == FEAT_SHAL_LAVA) || (c_ptr->feat == FEAT_DEEP_LAVA)))
 	{
 #ifdef JP
 		msg_print("溶岩の上に行けない。");

@@ -2105,21 +2105,15 @@ bool monst_spell_monst(int m_idx)
 		/* Attempt a saving throw */
 		if ((tr_ptr->flags1 & RF1_UNIQUE) ||
 		    (tr_ptr->flags3 & RF3_NO_CONF) ||
-		    (tr_ptr->flags3 & RF3_RES_ALL) ||
+		    (tr_ptr->flagsr & RFR_RES_ALL) ||
 		    (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10))
 		{
 			/* No obvious effect */
 			if (see_both)
 			{
 				/* Memorize a flag */
-				if (tr_ptr->flags3 & (RF3_RES_ALL))
-				{
-					tr_ptr->r_flags3 |= (RF3_RES_ALL);
-				}
-				else if (tr_ptr->flags3 & (RF3_NO_CONF))
-				{
-					tr_ptr->r_flags3 |= (RF3_NO_CONF);
-				}
+				if (tr_ptr->flagsr & RFR_RES_ALL) tr_ptr->r_flagsr |= (RFR_RES_ALL);
+				if (tr_ptr->flags3 & RF3_NO_CONF) tr_ptr->r_flags3 |= (RF3_NO_CONF);
 
 #ifdef JP
 				msg_format("%^sには効果がなかった。", t_name);
@@ -2170,21 +2164,15 @@ bool monst_spell_monst(int m_idx)
 		/* Attempt a saving throw */
 		if ((tr_ptr->flags1 & RF1_UNIQUE) ||
 		    (tr_ptr->flags3 & RF3_NO_CONF) ||
-		    (tr_ptr->flags3 & RF3_RES_ALL) ||
+		    (tr_ptr->flagsr & RFR_RES_ALL) ||
 		    (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10))
 		{
 			/* No obvious effect */
 			if (see_both)
 			{
 				/* Memorize a flag */
-				if (tr_ptr->flags3 & (RF3_RES_ALL))
-				{
-					tr_ptr->r_flags3 |= (RF3_RES_ALL);
-				}
-				else if (tr_ptr->flags3 & (RF3_NO_CONF))
-				{
-					tr_ptr->r_flags3 |= (RF3_NO_CONF);
-				}
+				if (tr_ptr->flagsr & RFR_RES_ALL) tr_ptr->r_flagsr |= (RFR_RES_ALL);
+				if (tr_ptr->flags3 & RF3_NO_CONF) tr_ptr->r_flags3 |= (RF3_NO_CONF);
 
 #ifdef JP
 				msg_format("%^sには効果がなかった。", t_name);
@@ -2242,12 +2230,12 @@ bool monst_spell_monst(int m_idx)
 
 		dam = damroll(3, 8);
 		if ((randint0(100 + rlev/2) < (tr_ptr->level + 35)) ||
-		    (tr_ptr->flags3 & RF3_RES_ALL))
+		    (tr_ptr->flagsr & RFR_RES_ALL))
 		{
 			/* Memorize a flag */
-			if (tr_ptr->flags3 & (RF3_RES_ALL))
+			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flags3 |= (RF3_RES_ALL);
+				tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
@@ -2286,12 +2274,12 @@ bool monst_spell_monst(int m_idx)
 
 		dam = damroll(8, 8);
 		if ((randint0(100 + rlev/2) < (tr_ptr->level + 35)) ||
-		    (tr_ptr->flags3 & RF3_RES_ALL))
+		    (tr_ptr->flagsr & RFR_RES_ALL))
 		{
 			/* Memorize a flag */
-			if (tr_ptr->flags3 & (RF3_RES_ALL))
+			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flags3 |= (RF3_RES_ALL);
+				tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
@@ -2330,12 +2318,12 @@ bool monst_spell_monst(int m_idx)
 
 		dam = damroll(10, 15);
 		if ((randint0(100 + rlev/2) < (tr_ptr->level + 35)) ||
-		    (tr_ptr->flags3 & RF3_RES_ALL))
+		    (tr_ptr->flagsr & RFR_RES_ALL))
 		{
 			/* Memorize a flag */
-			if (tr_ptr->flags3 & (RF3_RES_ALL))
+			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flags3 |= (RF3_RES_ALL);
+				tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
@@ -2374,12 +2362,12 @@ bool monst_spell_monst(int m_idx)
 
 		dam = damroll(15, 15);
 		if (((randint0(100 + rlev/2) < (tr_ptr->level + 35)) && (m_ptr->r_idx != MON_KENSHIROU)) ||
-		    (tr_ptr->flags3 & RF3_RES_ALL))
+		    (tr_ptr->flagsr & RFR_RES_ALL))
 		{
 			/* Memorize a flag */
-			if (tr_ptr->flags3 & (RF3_RES_ALL))
+			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flags3 |= (RF3_RES_ALL);
+				tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("%^sは耐性を持っている！", t_name);
@@ -3004,12 +2992,12 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flags3 & RF3_RES_ALL))
+		if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 		{
 			/* Memorize a flag */
-			if (tr_ptr->flags3 & (RF3_RES_ALL))
+			if (tr_ptr->flagsr & RFR_RES_ALL)
 			{
-				tr_ptr->r_flags3 |= (RF3_RES_ALL);
+				tr_ptr->r_flagsr |= (RFR_RES_ALL);
 			}
 #ifdef JP
 			if (see_both) msg_format("には効果がなかった！", t_name);
@@ -3299,13 +3287,13 @@ bool monst_spell_monst(int m_idx)
 		{
 			bool resists_tele = FALSE;
 
-			if (tr_ptr->flags3 & RF3_RES_TELE)
+			if (tr_ptr->flagsr & RFR_RES_TELE)
 			{
-				if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flags3 & (RF3_RES_ALL)))
+				if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 				{
 					if (see_t)
 					{
-						tr_ptr->r_flags3 |= RF3_RES_TELE;
+						tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 						msg_format("%^sには効果がなかった。", t_name);
 #else
@@ -3320,7 +3308,7 @@ bool monst_spell_monst(int m_idx)
 				{
 					if (see_t)
 					{
-						tr_ptr->r_flags3 |= RF3_RES_TELE;
+						tr_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
 						msg_format("%^sは耐性を持っている！", t_name);
 #else

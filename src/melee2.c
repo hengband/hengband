@@ -230,7 +230,7 @@ msg_format("%^sはダメージを受けない。", m_name);
 		return;
 	}
 
-	if (r_ptr->flags3 & RF3_RES_ALL)
+	if (r_ptr->flagsr & RFR_RES_ALL)
 	{
 		if(dam > 0)
 		{
@@ -2047,7 +2047,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					/* Aura fire */
 					if ((tr_ptr->flags2 & RF2_AURA_FIRE) && m_ptr->r_idx)
 					{
-						if (!(r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK))
+						if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 						{
 							if (see_either)
 							{
@@ -2067,14 +2067,14 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						}
 						else
 						{
-							if (see_m) r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK);
+							if (see_m) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 						}
 					}
 
 					/* Aura cold */
 					if ((tr_ptr->flags3 & RF3_AURA_COLD) && m_ptr->r_idx)
 					{
-						if (!(r_ptr->flags3 & RF3_EFF_IM_COLD_MASK))
+						if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
 						{
 							if (see_either)
 							{
@@ -2094,14 +2094,14 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						}
 						else
 						{
-							if (see_m) r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK);
+							if (see_m) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 						}
 					}
 
 					/* Aura elec */
 					if ((tr_ptr->flags2 & RF2_AURA_ELEC) && m_ptr->r_idx)
 					{
-						if (!(r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK))
+						if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
 						{
 							if (see_either)
 							{
@@ -2121,7 +2121,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 						}
 						else
 						{
-							if (see_m) r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK);
+							if (see_m) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 						}
 					}
 				}
@@ -2472,9 +2472,9 @@ msg_print("少しの間悲しい気分になった。");
 	    ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE_7)) &&
 	      ((p_ptr->align > 9 && (r_ptr->flags3 & RF3_EVIL)) ||
 	      (p_ptr->align < -9 && (r_ptr->flags3 & RF3_GOOD))))
-	     || (r_ptr->flags3 & RF3_RES_ALL)))
+	     || (r_ptr->flagsr & RFR_RES_ALL)))
 	{
-			gets_angry = TRUE;
+		gets_angry = TRUE;
 	}
 
 	if (p_ptr->inside_battle) gets_angry = FALSE;
@@ -3582,6 +3582,7 @@ void process_monsters(void)
 	u32b    old_r_flags4 = 0L;
 	u32b    old_r_flags5 = 0L;
 	u32b    old_r_flags6 = 0L;
+	u32b    old_r_flagsr = 0L;
 
 	byte    old_r_blows0 = 0;
 	byte    old_r_blows1 = 0;
@@ -3611,6 +3612,7 @@ void process_monsters(void)
 		old_r_flags4 = r_ptr->r_flags4;
 		old_r_flags5 = r_ptr->r_flags5;
 		old_r_flags6 = r_ptr->r_flags6;
+		old_r_flagsr = r_ptr->r_flagsr;
 
 		/* Memorize blows */
 		old_r_blows0 = r_ptr->r_blows[0];
@@ -3759,6 +3761,7 @@ void process_monsters(void)
 			(old_r_flags4 != r_ptr->r_flags4) ||
 			(old_r_flags5 != r_ptr->r_flags5) ||
 			(old_r_flags6 != r_ptr->r_flags6) ||
+			(old_r_flagsr != r_ptr->r_flagsr) ||
 			(old_r_blows0 != r_ptr->r_blows[0]) ||
 			(old_r_blows1 != r_ptr->r_blows[1]) ||
 			(old_r_blows2 != r_ptr->r_blows[2]) ||

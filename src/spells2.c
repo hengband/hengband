@@ -6750,13 +6750,15 @@ msg_print("失敗した。");
 	m_ptr = &m_list[c_ptr->m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 
-	if (r_ptr->flags3 & RF3_RES_TELE)
+	if (r_ptr->flagsr & RFR_RES_TELE)
 	{
 #ifdef JP
 msg_print("テレポートを邪魔された！");
 #else
 		msg_print("Your teleportation is blocked!");
 #endif
+
+		if (m_ptr->ml) r_ptr->r_flagsr |= RFR_RES_TELE;
 
 		m_ptr->csleep = 0;
 		/* Failure */

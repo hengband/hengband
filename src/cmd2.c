@@ -3471,11 +3471,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if (have_flag(flgs, TR_BRAND_ACID))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_ACID_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ACID_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK);
 					}
 				}
 
@@ -3490,11 +3490,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if (have_flag(flgs, TR_BRAND_ELEC))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_ELEC_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 					}
 				}
 
@@ -3509,11 +3509,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if (have_flag(flgs, TR_BRAND_FIRE))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_FIRE_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 					}
 				}
 
@@ -3536,11 +3536,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if (have_flag(flgs, TR_BRAND_COLD))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_COLD_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 					}
 				}
 				/* Otherwise, take the damage */
@@ -3562,11 +3562,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 			if (have_flag(flgs, TR_BRAND_POIS))
 			{
 				/* Notice immunity */
-				if (r_ptr->flags3 & RF3_EFF_IM_POIS_MASK)
+				if (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)
 				{
 					if (m_ptr->ml)
 					{
-						r_ptr->r_flags3 |= (r_ptr->flags3 & RF3_EFF_IM_POIS_MASK);
+						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
 					}
 				}
 
