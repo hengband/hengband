@@ -5354,11 +5354,21 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 					get_rnd_line("death.txt", 0, death_message);
 #endif
 				}
+
+				do
+				{
 #ifdef JP
-				while (!get_string(winning_seppuku ? "¼­À¤¤Î¶ç: " : "ÃÇËöËâ¤Î¶«¤Ó: ", death_message, 1024)) ;
+					while (!get_string(winning_seppuku ? "¼­À¤¤Î¶ç: " : "ÃÇËöËâ¤Î¶«¤Ó: ", death_message, 1024)) ;
 #else
-				while (!get_string("Last word: ", death_message, 1024)) ;
+					while (!get_string("Last word: ", death_message, 1024)) ;
 #endif
+				}
+#ifdef JP
+				while (winning_seppuku && !get_check_strict("¤è¤í¤·¤¤¤Ç¤¹¤«¡©", CHECK_NO_HISTORY));
+#else
+				while (winning_seppuku && !get_check_strict("Are you sure? ", CHECK_NO_HISTORY));
+#endif
+
 				if (death_message[0] == '\0')
 				{
 #ifdef JP

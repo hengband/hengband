@@ -6113,10 +6113,18 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 	{
 		char buf[1024] = "";
 
+		do
+		{
 #ifdef JP
-		while (!get_string("*勝利*メッセージ: ", buf, sizeof buf)) ;
+			while (!get_string("*勝利*メッセージ: ", buf, sizeof buf)) ;
 #else
-		while (!get_string("*Winning* message: ", buf, sizeof buf)) ;
+			while (!get_string("*Winning* message: ", buf, sizeof buf)) ;
+#endif
+		}
+#ifdef JP
+		while (!get_check_strict("よろしいですか？", CHECK_NO_HISTORY));
+#else
+		while (!get_check_strict("Are you sure? ", CHECK_NO_HISTORY));
 #endif
 
 		if (buf[0])
