@@ -1434,7 +1434,8 @@ void map_info(int y, int x, byte *ap, char *cp)
 				c = r_ptr->x_char;
 
 				/* Normal monsters */
-				if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR | RF1_ATTR_MULTI)))
+				if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR | RF1_ATTR_MULTI))
+				    && !(r_ptr->flags2 & RF2_SHAPECHANGER))
 				{
 					/* Desired monster attr/char */
 					*ap = a;
@@ -1455,7 +1456,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 				 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
 				 * flags are always unseen.
 				 */
-				if (!(~r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)))
+				else if (!(~r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)))
 				{
 					/* Do nothing */
 				}
@@ -1487,6 +1488,16 @@ void map_info(int y, int x, byte *ap, char *cp)
 					{
 						/* Normal case */
 						*ap = a;
+
+						/* Mimics' colors vary */
+						if ((c == '\"') || (c == '!') || (c == '='))
+						{
+							if (!(r_ptr->flags1 & RF1_UNIQUE) && !use_graphics)
+							{
+								/* Use semi-random attr */
+								*ap = c_ptr->m_idx % 15 + 1;
+							}
+						}
 					}
 
 					/***  Monster's char  ***/
