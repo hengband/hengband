@@ -7281,10 +7281,10 @@ static void add_essence(int mode)
 
 				/* Print header(s) */
 #ifdef JP
-				prt("   Ç½ÎÏ(É¬Í×¥¨¥Ã¥»¥ó¥¹)          É¬Í×¿ô/½ê»ý¿ô", 1, x);
+				prt(format("   %-43s %6s/%s", "Ç½ÎÏ(É¬Í×¥¨¥Ã¥»¥ó¥¹)", "É¬Í×¿ô", "½ê»ý¿ô"), 1, x);
 
 #else
-				prt(" Ability(essence to need)        Needs/Possess", 1, x);
+				prt(format("   %-43s %6s/%s", "Ability (needed essence)", "Needs", "Possess"), 1, x);
 #endif
 				/* Print list */
 				for (ctr = 0; ctr < max_num; ctr++)
@@ -7329,27 +7329,27 @@ static void add_essence(int mode)
 						{
 						case ESSENCE_SH_FIRE:
 #ifdef JP
-							strcat(dummy, "(¾Æ´þ+ÂÑ²Ð±ê)              ");
+							strcat(dummy, "(¾Æ´þ+ÂÑ²Ð±ê)");
 #else
-							strcat(dummy, "(brand fire + res.fire)              ");
+							strcat(dummy, "(brand fire + res.fire)");
 #endif
 							if (p_ptr->magic_num1[ESSENCE_B_FIRE] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[ESSENCE_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SH_ELEC:
 #ifdef JP
-							strcat(dummy, "(ÅÅ·â+ÂÑÅÅ·â)              ");
+							strcat(dummy, "(ÅÅ·â+ÂÑÅÅ·â)");
 #else
-							strcat(dummy, "(brand elec. + res. elec.)              ");
+							strcat(dummy, "(brand elec. + res. elec.)");
 #endif
 							if (p_ptr->magic_num1[ESSENCE_B_ELEC] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[ESSENCE_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SH_COLD:
 #ifdef JP
-							strcat(dummy, "(Åà·ë+ÂÑÎäµ¤)              ");
+							strcat(dummy, "(Åà·ë+ÂÑÎäµ¤)");
 #else
-							strcat(dummy, "(brand cold + res. cold)              ");
+							strcat(dummy, "(brand cold + res. cold)");
 #endif
 							if (p_ptr->magic_num1[ESSENCE_B_COLD] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[ESSENCE_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
@@ -7381,15 +7381,13 @@ static void add_essence(int mode)
 
 					if (!able[ctr]) col = TERM_RED;
 
-					strcpy(dummy2, format("%-50s",dummy));
-
 					if (es_ptr->link != -1)
 					{
-						strcat(dummy2, format(" %d/%d",es_ptr->value, p_ptr->magic_num1[es_ptr->link]));
+						sprintf(dummy2, "%-49s %3d/%d", dummy, es_ptr->value, (int)p_ptr->magic_num1[es_ptr->link]);
 					}
 					else
 					{
-						strcat(dummy2, format(" %d/(\?\?)",es_ptr->value));
+						sprintf(dummy2, "%-49s %3d/(\?\?)", dummy, es_ptr->value);
 					}
 
 					c_prt(col, dummy2, ctr+2, x);
