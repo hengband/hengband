@@ -4293,10 +4293,20 @@
 
 
 /*
- * Determine if a "feature" is a "floor"
+ * Determine if a "feature" supports "los"
  */
 #define feat_supports_los(F) \
 	(have_flag(f_info[(F)].flags, FF_LOS))
+
+
+/*
+ * Determine if a "legal" grid supports "los"
+ */
+#define cave_los_bold(Y,X) \
+	(feat_supports_los(cave[(Y)][(X)].feat))
+
+#define cave_los_grid(C) \
+	(feat_supports_los((C)->feat))
 
 
 /*

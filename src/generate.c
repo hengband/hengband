@@ -440,13 +440,10 @@ void place_quest_monsters(void)
 				/* Find an empty grid */
 				for (l = SAFE_MAX_ATTEMPTS; l > 0; l--)
 				{
-					cave_type *c_ptr;
-
 					y = randint0(cur_hgt);
 					x = randint0(cur_wid);
-					c_ptr = &cave[y][x];
 
-					if (!cave_floor_grid(c_ptr) || c_ptr->o_idx || c_ptr->m_idx) continue;
+					if (!monster_can_enter(y, x, r_ptr, 0)) continue;
 					if (distance(y, x, py, px) < 10) continue;
 					else break;
 				}

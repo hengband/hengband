@@ -2431,7 +2431,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 				{
 					scatter(&y, &x, py, px, 4, 0);
 
-					if (!cave_floor_bold(y, x)) continue;
+					if (!have_flag(f_flags_bold(y, x), FF_PROJECT)) continue;
 
 					if (!player_bold(y, x)) break;
 				}
@@ -4401,7 +4401,7 @@ msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
 					{
 						scatter(&y, &x, py, px, 4, 0);
 
-						if (!cave_floor_bold(y, x)) continue;
+						if (!have_flag(f_flags_bold(y, x), FF_PROJECT)) continue;
 
 						if (!player_bold(y, x)) break;
 					}
@@ -6473,7 +6473,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 		{
 			bool success = FALSE;
 			if (!get_rep_dir2(&dir)) return;
-			if (cave_floor_bold(py+ddy[dir],px+ddx[dir]))
+			if (monster_can_enter(py + ddy[dir], px + ddx[dir], &r_info[o_ptr->pval], 0))
 			{
 				if (place_monster_aux(0, py + ddy[dir], px + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
 				{

@@ -2826,8 +2826,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				}
 			}
 
-			else if ((chaos_effect == 5) && cave_floor_bold(y, x) &&
-				 (randint1(90) > r_ptr->level))
+			else if ((chaos_effect == 5) && (randint1(90) > r_ptr->level))
 			{
 				if (!(r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) &&
 				    !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))

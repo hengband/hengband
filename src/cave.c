@@ -174,12 +174,12 @@ bool los(int y1, int x1, int y2, int x2)
 
 
 	/* Handle adjacent (or identical) grids */
-	if ((ax < 2) && (ay < 2)) return (TRUE);
+	if ((ax < 2) && (ay < 2)) return TRUE;
 
 
 	/* Paranoia -- require "safe" origin */
-	/* if (!in_bounds(y1, x1)) return (FALSE); */
-	/* if (!in_bounds(y2, x2)) return (FALSE); */
+	/* if (!in_bounds(y1, x1)) return FALSE; */
+	/* if (!in_bounds(y2, x2)) return FALSE; */
 
 
 	/* Directly South/North */
@@ -190,7 +190,7 @@ bool los(int y1, int x1, int y2, int x2)
 		{
 			for (ty = y1 + 1; ty < y2; ty++)
 			{
-				if (!cave_floor_bold(ty, x1)) return (FALSE);
+				if (!cave_los_bold(ty, x1)) return FALSE;
 			}
 		}
 
@@ -199,12 +199,12 @@ bool los(int y1, int x1, int y2, int x2)
 		{
 			for (ty = y1 - 1; ty > y2; ty--)
 			{
-				if (!cave_floor_bold(ty, x1)) return (FALSE);
+				if (!cave_los_bold(ty, x1)) return FALSE;
 			}
 		}
 
 		/* Assume los */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Directly East/West */
@@ -215,7 +215,7 @@ bool los(int y1, int x1, int y2, int x2)
 		{
 			for (tx = x1 + 1; tx < x2; tx++)
 			{
-				if (!cave_floor_bold(y1, tx)) return (FALSE);
+				if (!cave_los_bold(y1, tx)) return FALSE;
 			}
 		}
 
@@ -224,12 +224,12 @@ bool los(int y1, int x1, int y2, int x2)
 		{
 			for (tx = x1 - 1; tx > x2; tx--)
 			{
-				if (!cave_floor_bold(y1, tx)) return (FALSE);
+				if (!cave_los_bold(y1, tx)) return FALSE;
 			}
 		}
 
 		/* Assume los */
-		return (TRUE);
+		return TRUE;
 	}
 
 
@@ -243,7 +243,7 @@ bool los(int y1, int x1, int y2, int x2)
 	{
 		if (ay == 2)
 		{
-			if (cave_floor_bold(y1 + sy, x1)) return (TRUE);
+			if (cave_los_bold(y1 + sy, x1)) return TRUE;
 		}
 	}
 
@@ -252,7 +252,7 @@ bool los(int y1, int x1, int y2, int x2)
 	{
 		if (ax == 2)
 		{
-			if (cave_floor_bold(y1, x1 + sx)) return (TRUE);
+			if (cave_los_bold(y1, x1 + sx)) return TRUE;
 		}
 	}
 
@@ -288,7 +288,7 @@ bool los(int y1, int x1, int y2, int x2)
 		/* the LOS exactly meets the corner of a tile. */
 		while (x2 - tx)
 		{
-			if (!cave_floor_bold(ty, tx)) return (FALSE);
+			if (!cave_los_bold(ty, tx)) return FALSE;
 
 			qy += m;
 
@@ -299,7 +299,7 @@ bool los(int y1, int x1, int y2, int x2)
 			else if (qy > f2)
 			{
 				ty += sy;
-				if (!cave_floor_bold(ty, tx)) return (FALSE);
+				if (!cave_los_bold(ty, tx)) return FALSE;
 				qy -= f1;
 				tx += sx;
 			}
@@ -335,7 +335,7 @@ bool los(int y1, int x1, int y2, int x2)
 		/* the LOS exactly meets the corner of a tile. */
 		while (y2 - ty)
 		{
-			if (!cave_floor_bold(ty, tx)) return (FALSE);
+			if (!cave_los_bold(ty, tx)) return FALSE;
 
 			qx += m;
 
@@ -346,7 +346,7 @@ bool los(int y1, int x1, int y2, int x2)
 			else if (qx > f2)
 			{
 				tx += sx;
-				if (!cave_floor_bold(ty, tx)) return (FALSE);
+				if (!cave_los_bold(ty, tx)) return FALSE;
 				qx -= f1;
 				ty += sy;
 			}
@@ -360,12 +360,27 @@ bool los(int y1, int x1, int y2, int x2)
 	}
 
 	/* Assume los */
-	return (TRUE);
+	return TRUE;
 }
 
 
 
 
+
+
+/*
+ * Check for "local" illumination
+ */
+static bool check_local_illumination(int y, int x)
+{
+	/* Hack -- move towards player */
+	int yy = (y < py) ? (y + 1) : (y > py) ? (y - 1) : y;
+	int xx = (x < px) ? (x + 1) : (x > px) ? (x - 1) : x;
+
+	/* Check for "local" illumination */
+	return (cave[yy][xx].info & (CAVE_LITE | CAVE_MNLT)) ||
+	       ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW);
+}
 
 
 /*
@@ -402,44 +417,35 @@ bool los(int y1, int x1, int y2, int x2)
  */
 bool player_can_see_bold(int y, int x)
 {
-	int xx, yy;
-
 	cave_type *c_ptr;
+	s16b feat;
 
 	/* Blind players see nothing */
-	if (p_ptr->blind) return (FALSE);
+	if (p_ptr->blind) return FALSE;
 
 	/* Access the cave grid */
 	c_ptr = &cave[y][x];
 
 	/* Note that "torch-lite" yields "illumination" */
-	if (c_ptr->info & (CAVE_LITE)) return (TRUE);
+	if (c_ptr->info & (CAVE_LITE | CAVE_MNLT)) return TRUE;
 
 	/* Require line of sight to the grid */
-	if (!player_has_los_bold(y, x)) return (FALSE);
+	if (!player_has_los_bold(y, x)) return FALSE;
 
 	/* Noctovision of Ninja */
 	if (p_ptr->see_nocto) return TRUE;
 
 	/* Require "perma-lite" of the grid */
-	if (!(c_ptr->info & CAVE_MNLT) && ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)) return FALSE;
+	if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) return FALSE;
+
+	/* Feature code (applying "mimic" field) */
+	feat = get_feat_mimic(c_ptr);
 
 	/* Floors are simple */
-	if (cave_floor_bold(y, x)) return (TRUE);
-
-	/* Hack -- move towards player */
-	yy = (y < py) ? (y + 1) : (y > py) ? (y - 1) : y;
-	xx = (x < px) ? (x + 1) : (x > px) ? (x - 1) : x;
+	if (feat_supports_los(feat)) return TRUE;
 
 	/* Check for "local" illumination */
-	if ((cave[yy][xx].info & CAVE_MNLT) || ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW))
-	{
-		/* Assume the wall is really illuminated */
-		return (TRUE);
-	}
-
-	/* Assume not visible */
-	return (FALSE);
+	return check_local_illumination(y, x);
 }
 
 
@@ -1031,21 +1037,11 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 					}
 
 					/* Not glowing correctly */
-					else
+					else if (!feat_supports_los(feat) && !check_local_illumination(y, x))
 					{
-						int xx, yy;
-
-						/* Hack -- move towards player */
-						yy = (y < py) ? (y + 1) : (y > py) ? (y - 1) : y;
-						xx = (x < px) ? (x + 1) : (x > px) ? (x - 1) : x;
-
-						/* Check for "local" illumination */
-						if ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
-						{
-							/* Use a darkened colour/tile */
-							a = f_ptr->x_attr[F_LIT_DARK];
-							c = f_ptr->x_char[F_LIT_DARK];
-						}
+						/* Use a darkened colour/tile */
+						a = f_ptr->x_attr[F_LIT_DARK];
+						c = f_ptr->x_char[F_LIT_DARK];
 					}
 				}
 			}
@@ -1376,13 +1372,13 @@ void note_spot(int y, int x)
 	if (p_ptr->blind) return;
 
 	/* Analyze non-torch-lit grids */
-	if (!(c_ptr->info & (CAVE_LITE)))
+	if (!(c_ptr->info & (CAVE_LITE | CAVE_MNLT)))
 	{
 		/* Require line of sight to the grid */
 		if (!(c_ptr->info & (CAVE_VIEW))) return;
 
 		/* Require "perma-lite" of the grid */
-		if (!(c_ptr->info & CAVE_MNLT) && ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW))
+		if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 		{
 			/* Not Ninja */
 			if (!p_ptr->see_nocto) return;
@@ -1406,8 +1402,11 @@ void note_spot(int y, int x)
 	/* Hack -- memorize grids */
 	if (!(c_ptr->info & (CAVE_MARK)))
 	{
+		/* Feature code (applying "mimic" field) */
+		s16b feat = get_feat_mimic(c_ptr);
+
 		/* Memorize some "boring" grids */
-		if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_REMEMBER))
+		if (!have_flag(f_info[feat].flags, FF_REMEMBER))
 		{
 			/* Option -- memorize all torch-lit floors */
 			if (view_torch_grids &&
@@ -1426,41 +1425,17 @@ void note_spot(int y, int x)
 		}
 
 		/* Memorize normal grids */
-		else if (cave_floor_grid(c_ptr))
-		{
-			/* Memorize */
-			c_ptr->info |= (CAVE_MARK);
-		}
-
-		/* Memorize torch-lit walls */
-		else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
-		{
-			/* Memorize */
-			c_ptr->info |= (CAVE_MARK);
-		}
-
-		/* Memorize walls seen by noctovision of Ninja */
-		else if (p_ptr->see_nocto)
+		else if (feat_supports_los(feat))
 		{
 			/* Memorize */
 			c_ptr->info |= (CAVE_MARK);
 		}
 
 		/* Memorize certain non-torch-lit wall grids */
-		else
+		else if (check_local_illumination(y, x))
 		{
-			int yy, xx;
-
-			/* Hack -- move one grid towards player */
-			yy = (y < py) ? (y + 1) : (y > py) ? (y - 1) : y;
-			xx = (x < px) ? (x + 1) : (x > px) ? (x - 1) : x;
-
-			/* Check for "local" illumination */
-			if ((cave[yy][xx].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
-			{
-				/* Memorize */
-				c_ptr->info |= (CAVE_MARK);
-			}
+			/* Memorize */
+			c_ptr->info |= (CAVE_MARK);
 		}
 	}
 }
@@ -1668,6 +1643,7 @@ void prt_path(int y, int x)
 	{
 		int ny = GRID_Y(path_g[i]);
 		int nx = GRID_X(path_g[i]);
+		cave_type *c_ptr = &cave[ny][nx];
 
 		if (panel_contains(ny, nx))
 		{
@@ -1677,7 +1653,7 @@ void prt_path(int y, int x)
 			byte ta;
 			char tc;
 
-			if (cave[ny][nx].m_idx && m_list[cave[ny][nx].m_idx].ml)
+			if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)
 			{
 				/* Determine what is there */
 				map_info(ny, nx, &a, &c, &ta, &tc);
@@ -1704,7 +1680,7 @@ void prt_path(int y, int x)
 		}
 
 		/* Known Wall */
-		if ((cave[ny][nx].info & CAVE_MARK) && !cave_floor_bold(ny, nx)) break;
+		if ((c_ptr->info & CAVE_MARK) && !have_flag(f_flags_grid(c_ptr), FF_PROJECT)) break;
 
 		/* Change color */
 		if (nx == x && ny == y) default_color = TERM_L_DARK;
@@ -2373,7 +2349,7 @@ prt("お待ち下さい...", 0, 0);
  * I am thinking in terms of an algorithm that "walks" from the central point
  * out to the maximal "distance", at each point, determining the "view" code
  * (above).  For each grid not on a major axis or diagonal, the "view" code
- * depends on the "cave_floor_bold()" and "view" of exactly two other grids
+ * depends on the "cave_los_bold()" and "view" of exactly two other grids
  * (the one along the nearest diagonal, and the one next to that one, see
  * "update_view_aux()"...).
  *
@@ -2472,11 +2448,12 @@ void forget_lite(void)
  */
 #define cave_lite_hack(Y,X) \
 {\
-    if (!(cave[Y][X].info & (CAVE_LITE))) { \
-    cave[Y][X].info |= (CAVE_LITE); \
-    lite_y[lite_n] = (Y); \
-    lite_x[lite_n] = (X); \
-			    lite_n++;} \
+	if (!(cave[Y][X].info & (CAVE_LITE))) \
+	{ \
+		cave[Y][X].info |= (CAVE_LITE); \
+		lite_y[lite_n] = (Y); \
+		lite_x[lite_n++] = (X); \
+	} \
 }
 
 
@@ -2573,7 +2550,7 @@ void update_lite(void)
 	if (p >= 2)
 	{
 		/* South of the player */
-		if (cave_floor_bold(py+1, px))
+		if (cave_los_bold(py + 1, px))
 		{
 			cave_lite_hack(py+2, px);
 			cave_lite_hack(py+2, px+1);
@@ -2581,7 +2558,7 @@ void update_lite(void)
 		}
 
 		/* North of the player */
-		if (cave_floor_bold(py-1, px))
+		if (cave_los_bold(py - 1, px))
 		{
 			cave_lite_hack(py-2, px);
 			cave_lite_hack(py-2, px+1);
@@ -2589,7 +2566,7 @@ void update_lite(void)
 		}
 
 		/* East of the player */
-		if (cave_floor_bold(py, px+1))
+		if (cave_los_bold(py, px + 1))
 		{
 			cave_lite_hack(py, px+2);
 			cave_lite_hack(py+1, px+2);
@@ -2597,7 +2574,7 @@ void update_lite(void)
 		}
 
 		/* West of the player */
-		if (cave_floor_bold(py, px-1))
+		if (cave_los_bold(py, px - 1))
 		{
 			cave_lite_hack(py, px-2);
 			cave_lite_hack(py+1, px-2);
@@ -2614,25 +2591,25 @@ void update_lite(void)
 		if (p > 14) p = 14;
 
 		/* South-East of the player */
-		if (cave_floor_bold(py+1, px+1))
+		if (cave_los_bold(py + 1, px + 1))
 		{
 			cave_lite_hack(py+2, px+2);
 		}
 
 		/* South-West of the player */
-		if (cave_floor_bold(py+1, px-1))
+		if (cave_los_bold(py + 1, px - 1))
 		{
 			cave_lite_hack(py+2, px-2);
 		}
 
 		/* North-East of the player */
-		if (cave_floor_bold(py-1, px+1))
+		if (cave_los_bold(py - 1, px + 1))
 		{
 			cave_lite_hack(py-2, px+2);
 		}
 
 		/* North-West of the player */
-		if (cave_floor_bold(py-1, px-1))
+		if (cave_los_bold(py - 1, px - 1))
 		{
 			cave_lite_hack(py-2, px-2);
 		}
@@ -2743,7 +2720,7 @@ static void mon_lite_hack(int y, int x)
 	/* Want a unlit square in view of the player */
 	if ((c_ptr->info & (CAVE_MNLT | CAVE_VIEW)) != CAVE_VIEW) return;
 
-	if (!cave_floor_grid(c_ptr))
+	if (!cave_los_grid(c_ptr))
 	{
 		/* Hack XXX XXX - Is it a wall and monster not in LOS? */
 		if (mon_invis) return;
@@ -2760,11 +2737,11 @@ static void mon_lite_hack(int y, int x)
 			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
 			{
-				if (!cave_floor_bold(y, x + 1)) return;
+				if (!cave_los_bold(y, x + 1)) return;
 			}
 			else if (x > midpoint)
 			{
-				if (!cave_floor_bold(y, x - 1)) return;
+				if (!cave_los_bold(y, x - 1)) return;
 			}
 		}
 
@@ -2778,11 +2755,11 @@ static void mon_lite_hack(int y, int x)
 			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
 			{
-				if (!cave_floor_bold(y + 1, x)) return;
+				if (!cave_los_bold(y + 1, x)) return;
 			}
 			else if (y > midpoint)
 			{
-				if (!cave_floor_bold(y - 1, x)) return;
+				if (!cave_los_bold(y - 1, x)) return;
 			}
 		}
 	}
@@ -2826,7 +2803,7 @@ static void mon_dark_hack(int y, int x)
 	/* Want a unlit and undarkened square in view of the player */
 	if ((c_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW) return;
 
-	if (!cave_floor_grid(c_ptr))
+	if (!cave_los_grid(c_ptr))
 	{
 		/* Hack XXX XXX - Is it a wall and monster not in LOS? */
 		if (mon_invis) return;
@@ -2843,11 +2820,11 @@ static void mon_dark_hack(int y, int x)
 			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
 			{
-				if (!cave_floor_bold(y, x + 1)) return;
+				if (!cave_los_bold(y, x + 1)) return;
 			}
 			else if (x > midpoint)
 			{
-				if (!cave_floor_bold(y, x - 1)) return;
+				if (!cave_los_bold(y, x - 1)) return;
 			}
 		}
 
@@ -2861,11 +2838,11 @@ static void mon_dark_hack(int y, int x)
 			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
 			{
-				if (!cave_floor_bold(y + 1, x)) return;
+				if (!cave_los_bold(y + 1, x)) return;
 			}
 			else if (y > midpoint)
 			{
-				if (!cave_floor_bold(y - 1, x)) return;
+				if (!cave_los_bold(y - 1, x)) return;
 			}
 		}
 	}
@@ -2985,7 +2962,7 @@ void update_mon_lite(void)
 		if (rad >= 2)
 		{
 			/* South of the monster */
-			if (cave_floor_bold(mon_fy + 1, mon_fx))
+			if (cave_los_bold(mon_fy + 1, mon_fx))
 			{
 				add_mon_lite(mon_fy + 2, mon_fx + 1);
 				add_mon_lite(mon_fy + 2, mon_fx);
@@ -2994,7 +2971,7 @@ void update_mon_lite(void)
 				c_ptr = &cave[mon_fy + 2][mon_fx];
 
 				/* Radius 3 */
-				if ((rad == 3) && cave_floor_grid(c_ptr))
+				if ((rad == 3) && cave_los_grid(c_ptr))
 				{
 					add_mon_lite(mon_fy + 3, mon_fx + 1);
 					add_mon_lite(mon_fy + 3, mon_fx);
@@ -3003,7 +2980,7 @@ void update_mon_lite(void)
 			}
 
 			/* North of the monster */
-			if (cave_floor_bold(mon_fy - 1, mon_fx))
+			if (cave_los_bold(mon_fy - 1, mon_fx))
 			{
 				add_mon_lite(mon_fy - 2, mon_fx + 1);
 				add_mon_lite(mon_fy - 2, mon_fx);
@@ -3012,7 +2989,7 @@ void update_mon_lite(void)
 				c_ptr = &cave[mon_fy - 2][mon_fx];
 
 				/* Radius 3 */
-				if ((rad == 3) && cave_floor_grid(c_ptr))
+				if ((rad == 3) && cave_los_grid(c_ptr))
 				{
 					add_mon_lite(mon_fy - 3, mon_fx + 1);
 					add_mon_lite(mon_fy - 3, mon_fx);
@@ -3021,7 +2998,7 @@ void update_mon_lite(void)
 			}
 
 			/* East of the monster */
-			if (cave_floor_bold(mon_fy, mon_fx + 1))
+			if (cave_los_bold(mon_fy, mon_fx + 1))
 			{
 				add_mon_lite(mon_fy + 1, mon_fx + 2);
 				add_mon_lite(mon_fy, mon_fx + 2);
@@ -3030,7 +3007,7 @@ void update_mon_lite(void)
 				c_ptr = &cave[mon_fy][mon_fx + 2];
 
 				/* Radius 3 */
-				if ((rad == 3) && cave_floor_grid(c_ptr))
+				if ((rad == 3) && cave_los_grid(c_ptr))
 				{
 					add_mon_lite(mon_fy + 1, mon_fx + 3);
 					add_mon_lite(mon_fy, mon_fx + 3);
@@ -3039,7 +3016,7 @@ void update_mon_lite(void)
 			}
 
 			/* West of the monster */
-			if (cave_floor_bold(mon_fy, mon_fx - 1))
+			if (cave_los_bold(mon_fy, mon_fx - 1))
 			{
 				add_mon_lite(mon_fy + 1, mon_fx - 2);
 				add_mon_lite(mon_fy, mon_fx - 2);
@@ -3048,7 +3025,7 @@ void update_mon_lite(void)
 				c_ptr = &cave[mon_fy][mon_fx - 2];
 
 				/* Radius 3 */
-				if ((rad == 3) && cave_floor_grid(c_ptr))
+				if ((rad == 3) && cave_los_grid(c_ptr))
 				{
 					add_mon_lite(mon_fy + 1, mon_fx - 3);
 					add_mon_lite(mon_fy, mon_fx - 3);
@@ -3061,25 +3038,25 @@ void update_mon_lite(void)
 		if (rad == 3)
 		{
 			/* South-East of the monster */
-			if (cave_floor_bold(mon_fy + 1, mon_fx + 1))
+			if (cave_los_bold(mon_fy + 1, mon_fx + 1))
 			{
 				add_mon_lite(mon_fy + 2, mon_fx + 2);
 			}
 
 			/* South-West of the monster */
-			if (cave_floor_bold(mon_fy + 1, mon_fx - 1))
+			if (cave_los_bold(mon_fy + 1, mon_fx - 1))
 			{
 				add_mon_lite(mon_fy + 2, mon_fx - 2);
 			}
 
 			/* North-East of the monster */
-			if (cave_floor_bold(mon_fy - 1, mon_fx + 1))
+			if (cave_los_bold(mon_fy - 1, mon_fx + 1))
 			{
 				add_mon_lite(mon_fy - 2, mon_fx + 2);
 			}
 
 			/* North-West of the monster */
-			if (cave_floor_bold(mon_fy - 1, mon_fx - 1))
+			if (cave_los_bold(mon_fy - 1, mon_fx - 1))
 			{
 				add_mon_lite(mon_fy - 2, mon_fx - 2);
 			}
@@ -3317,8 +3294,8 @@ static bool update_view_aux(int y, int x, int y1, int x1, int y2, int x2)
 
 
 	/* Check for walls */
-	f1 = (cave_floor_grid(g1_c_ptr));
-	f2 = (cave_floor_grid(g2_c_ptr));
+	f1 = (cave_los_grid(g1_c_ptr));
+	f2 = (cave_los_grid(g2_c_ptr));
 
 	/* Totally blocked by physical walls */
 	if (!f1 && !f2) return (TRUE);
@@ -3337,7 +3314,7 @@ static bool update_view_aux(int y, int x, int y1, int x1, int y2, int x2)
 
 
 	/* Check for walls */
-	wall = (!cave_floor_grid(c_ptr));
+	wall = (!cave_los_grid(c_ptr));
 
 
 	/* Check the "ease" of visibility */
@@ -3453,7 +3430,7 @@ static bool update_view_aux(int y, int x, int y1, int x1, int y2, int x2)
  * Note also the care taken to prevent "running off the map".  The use of
  * explicit checks on the "validity" of the "diagonal", and the fact that
  * the loops are never allowed to "leave" the map, lets "update_view_aux()"
- * use the optimized "cave_floor_bold()" macro, and to avoid the overhead
+ * use the optimized "cave_los_bold()" macro, and to avoid the overhead
  * of multiple checks on the validity of grids.
  *
  * Note the "optimizations" involving the "se","sw","ne","nw","es","en",
@@ -3469,8 +3446,8 @@ static bool update_view_aux(int y, int x, int y1, int x1, int y2, int x2)
  * told not to go farther than the current strip's farthest viewable grid,
  * unless open space is still available.  This uses the "k" variable.
  *
- * Note the use of "inline" macros for efficiency.  The "cave_floor_grid()"
- * macro is a replacement for "cave_floor_bold()" which takes a pointer to
+ * Note the use of "inline" macros for efficiency.  The "cave_los_grid()"
+ * macro is a replacement for "cave_los_bold()" which takes a pointer to
  * a cave grid instead of its location.  The "cave_view_hack()" macro is a
  * chunk of code which adds the given location to the "view" array if it
  * is not already there, using both the actual location and a pointer to
@@ -3577,7 +3554,7 @@ void update_view(void)
 		c_ptr = &cave[y+d][x+d];
 		c_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(c_ptr, y+d, x+d);
-		if (!cave_floor_grid(c_ptr)) break;
+		if (!cave_los_grid(c_ptr)) break;
 	}
 
 	/* Scan south-west */
@@ -3586,7 +3563,7 @@ void update_view(void)
 		c_ptr = &cave[y+d][x-d];
 		c_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(c_ptr, y+d, x-d);
-		if (!cave_floor_grid(c_ptr)) break;
+		if (!cave_los_grid(c_ptr)) break;
 	}
 
 	/* Scan north-east */
@@ -3595,7 +3572,7 @@ void update_view(void)
 		c_ptr = &cave[y-d][x+d];
 		c_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(c_ptr, y-d, x+d);
-		if (!cave_floor_grid(c_ptr)) break;
+		if (!cave_los_grid(c_ptr)) break;
 	}
 
 	/* Scan north-west */
@@ -3604,7 +3581,7 @@ void update_view(void)
 		c_ptr = &cave[y-d][x-d];
 		c_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(c_ptr, y-d, x-d);
-		if (!cave_floor_grid(c_ptr)) break;
+		if (!cave_los_grid(c_ptr)) break;
 	}
 
 
@@ -3616,7 +3593,7 @@ void update_view(void)
 		c_ptr = &cave[y+d][x];
 		c_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(c_ptr, y+d, x);
-		if (!cave_floor_grid(c_ptr)) break;
+		if (!cave_los_grid(c_ptr)) break;
 	}
 
 	/* Initialize the "south strips" */
@@ -3628,7 +3605,7 @@ void update_view(void)
 		c_ptr = &cave[y-d][x];
 		c_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(c_ptr, y-d, x);
-		if (!cave_floor_grid(c_ptr)) break;
+		if (!cave_los_grid(c_ptr)) break;
 	}
 
 	/* Initialize the "north strips" */
@@ -3640,7 +3617,7 @@ void update_view(void)
 		c_ptr = &cave[y][x+d];
 		c_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(c_ptr, y, x+d);
-		if (!cave_floor_grid(c_ptr)) break;
+		if (!cave_los_grid(c_ptr)) break;
 	}
 
 	/* Initialize the "east strips" */
@@ -3652,7 +3629,7 @@ void update_view(void)
 		c_ptr = &cave[y][x-d];
 		c_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(c_ptr, y, x-d);
-		if (!cave_floor_grid(c_ptr)) break;
+		if (!cave_los_grid(c_ptr)) break;
 	}
 
 	/* Initialize the "west strips" */

@@ -1147,7 +1147,7 @@ msg_print("その方向にはモンスターはいません。");
 			damage *= p_ptr->num_blow[i];
 			total_damage += (damage / 100);
 		}
-		project(0, (cave_floor_bold(y, x) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+		project(0, (have_flag(f_flags_bold(y, x), FF_PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
 		break;
 	}
 	case 30:

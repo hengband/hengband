@@ -7327,7 +7327,7 @@ void wall_breaker(void)
 		{
 			scatter(&y, &x, py, px, 4, 0);
 
-			if (!cave_floor_bold(y, x)) continue;
+			if (!have_flag(f_flags_bold(y, x), FF_PROJECT)) continue;
 
 			if (!player_bold(y, x)) break;
 		}

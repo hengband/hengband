@@ -4091,7 +4091,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 			x = px;
 			y = py;
 
-			while(1)
+			while (1)
 			{
 				/* Hack -- Stop at the target */
 				if ((y == ty) && (x == tx)) break;
@@ -4104,7 +4104,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 				if (MAX_RANGE <= distance(py, px, ny, nx)) break;
 
 				/* Stopped by walls/doors */
-				if (!cave_floor_bold(ny, nx)) break;
+				if (!have_flag(f_flags_bold(ny, nx), FF_PROJECT)) break;
 
 				/* Stopped by monsters */
 				if ((dir != 5) && cave[ny][nx].m_idx != 0) break;

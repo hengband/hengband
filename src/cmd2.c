@@ -3572,7 +3572,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		mmove2(&ny, &nx, py, px, ty, tx);
 
 		/* Stopped by walls/doors */
-		if (!cave_floor_bold(ny, nx) && !cave[ny][nx].m_idx) break;
+		if (!have_flag(f_flags_bold(ny, nx), FF_PROJECT) && !cave[ny][nx].m_idx) break;
 
 		/* Advance the distance */
 		cur_dis++;
@@ -4145,7 +4145,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		mmove2(&ny[cur_dis], &nx[cur_dis], py, px, ty, tx);
 
 		/* Stopped by walls/doors */
-		if (!cave_floor_bold(ny[cur_dis], nx[cur_dis]))
+		if (!have_flag(f_flags_bold(ny[cur_dis], nx[cur_dis]), FF_PROJECT))
 		{
 			hit_wall = TRUE;
 			break;
