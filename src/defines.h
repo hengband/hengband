@@ -2833,7 +2833,7 @@
 #define CHEST_BIRD_STORM        0x0100
 #define CHEST_H_SUMMON          0x0200
 #define CHEST_RUNES_OF_EVIL     0x0400
-
+#define CHEST_ALARM             0x0800
 
 
 /*

@@ -806,6 +806,17 @@ static void chest_trap(int y, int x, s16b o_idx)
 		}
 	}
 
+	/* Aggravate monsters. */
+	if (trap & (CHEST_ALARM))
+	{
+#ifdef JP
+		msg_print("けたたましい音が鳴り響いた！");
+#else
+		msg_print("An alarm sounds!");
+#endif
+		aggravate_monsters(0);
+	}
+
 	/* Explode */
 	if ((trap & (CHEST_EXPLODE)) && o_ptr->k_idx)
 	{

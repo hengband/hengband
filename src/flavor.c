@@ -2091,6 +2091,16 @@ t = object_desc_str(t, "(邪悪なルーン)");
 
 					break;
 				}
+				case CHEST_ALARM:
+				{
+#ifdef JP
+t = object_desc_str(t, "(警報装置)");
+#else
+					t = object_desc_str(t, " (Alarm)");
+#endif
+
+					break;
+				}
 				default:
 				{
 #ifdef JP
