@@ -1353,7 +1353,7 @@ static hist_type bg[] =
 	{"あなたは悪を滅ぼすためにこの地に送られてきました。", 100, 143, 144, 80},
 	{"この目的を成し遂げるまでは休むことは許されません。", 100, 144, 0, 80},
 #else
-	{"You are of the blessed host of heaven.", 100, 142, 143, 80},
+	{"You are of the blessed host of heaven.  ", 100, 142, 143, 80},
 	{"You have been sent to earth to eradicate the wicked, ", 100, 143, 144, 80},
 	{"and shall not rest until you have succeeded.", 100, 144, 0, 80},
 #endif
