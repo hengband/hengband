@@ -2254,6 +2254,9 @@ static void toggle_keyword(text_body_type *tb, int flg)
 		
 		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
+
+		/* Text is changed */
+		tb->changed = TRUE;
 	}
 }
 
@@ -2348,6 +2351,9 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
 			
 		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
+
+		/* Text is changed */
+		tb->changed = TRUE;
 	}
 }
 
@@ -2416,6 +2422,9 @@ static void add_keyword(text_body_type *tb, int flg)
 
 		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
+
+		/* Text is changed */
+		tb->changed = TRUE;
 	}
 }
 
