@@ -6153,7 +6153,7 @@ static void cave_temp_room_unlite(void)
 /*
  * Determine how much contiguous open space this grid is next to
  */
-static int next_to_open(int cy, int cx)
+static int next_to_open(int cy, int cx, bool (*pass_bold)(int, int))
 {
 	int i;
 
@@ -6168,7 +6168,7 @@ static int next_to_open(int cy, int cx)
 		x = cx + ddx_cdd[i % 8];
 
 		/* Found a wall, break the length */
-		if (!cave_los_bold(y, x))
+		if (!pass_bold(y, x))
 		{
 			/* Track best length */
 			if (len > blen)
@@ -6188,7 +6188,7 @@ static int next_to_open(int cy, int cx)
 }
 
 
-static int next_to_walls_adj(int cy, int cx)
+static int next_to_walls_adj(int cy, int cx, bool (*pass_bold)(int, int))
 {
 	int i;
 
@@ -6201,7 +6201,7 @@ static int next_to_walls_adj(int cy, int cx)
 		y = cy + ddy_ddd[i];
 		x = cx + ddx_ddd[i];
 
-		if (!cave_los_bold(y, x)) c++;
+		if (!pass_bold(y, x)) c++;
 	}
 
 	return c;
@@ -6211,7 +6211,7 @@ static int next_to_walls_adj(int cy, int cx)
 /*
  * Aux function -- see below
  */
-static void cave_temp_room_aux(int y, int x, bool only_room)
+static void cave_temp_room_aux(int y, int x, bool only_room, bool (*pass_bold)(int, int))
 {
 	cave_type *c_ptr;
 
@@ -6241,8 +6241,8 @@ static void cave_temp_room_aux(int y, int x, bool only_room)
 		 * properly.
 		 * This leaves only a check for 6 bounding walls!
 		 */
-		if (in_bounds(y, x) && cave_los_bold(y, x) &&
-		    (next_to_walls_adj(y, x) == 6) && (next_to_open(y, x) <= 1)) return;
+		if (in_bounds(y, x) && pass_bold(y, x) &&
+		    (next_to_walls_adj(y, x, pass_bold) == 6) && (next_to_open(y, x, pass_bold) <= 1)) return;
 	}
 
 	/* Paranoia -- verify space */
@@ -6260,9 +6260,25 @@ static void cave_temp_room_aux(int y, int x, bool only_room)
 /*
  * Aux function -- see below
  */
+static bool cave_pass_lite_bold(int y, int x)
+{
+	return cave_los_bold(y, x);
+}
+
+/*
+ * Aux function -- see below
+ */
 static void cave_temp_lite_room_aux(int y, int x)
 {
-	cave_temp_room_aux(y, x, FALSE);
+	cave_temp_room_aux(y, x, FALSE, cave_pass_lite_bold);
+}
+
+/*
+ * Aux function -- see below
+ */
+static bool cave_pass_dark_bold(int y, int x)
+{
+	return have_flag(f_flags_bold(y, x), FF_PROJECT);
 }
 
 /*
@@ -6270,7 +6286,7 @@ static void cave_temp_lite_room_aux(int y, int x)
  */
 static void cave_temp_unlite_room_aux(int y, int x)
 {
-	cave_temp_room_aux(y, x, TRUE);
+	cave_temp_room_aux(y, x, TRUE, cave_pass_dark_bold);
 }
 
 
@@ -6292,7 +6308,7 @@ void lite_room(int y1, int x1)
 		x = temp_x[i], y = temp_y[i];
 
 		/* Walls get lit, but stop light */
-		if (!cave_los_bold(y, x)) continue;
+		if (!cave_pass_lite_bold(y, x)) continue;
 
 		/* Spread adjacent */
 		cave_temp_lite_room_aux(y + 1, x);
@@ -6328,7 +6344,7 @@ void unlite_room(int y1, int x1)
 		x = temp_x[i], y = temp_y[i];
 
 		/* Walls get dark, but stop darkness */
-		if (!cave_los_bold(y, x)) continue;
+		if (!cave_pass_dark_bold(y, x)) continue;
 
 		/* Spread adjacent */
 		cave_temp_unlite_room_aux(y + 1, x);
