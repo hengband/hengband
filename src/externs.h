@@ -527,6 +527,7 @@ extern errr process_pickpref_file_line(char *buf);
 extern void do_cmd_edit_autopick(void);
 
 /* birth.c */
+extern void add_history_from_pref_line(cptr t);
 extern void player_birth(void);
 extern void get_max_stats(void);
 extern void player_outfit(void);
@@ -706,6 +707,7 @@ extern errr file_character(cptr name);
 extern errr process_pref_file_command(char *buf);
 extern errr process_pref_file(cptr name);
 extern errr process_pickpref_file(cptr name);
+extern errr process_histpref_file(cptr name);
 extern void print_equippy(void);
 extern errr check_time_init(void);
 extern errr check_load_init(void);

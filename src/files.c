@@ -423,8 +423,17 @@ errr process_pref_file_command(char *buf)
 	}
 
 
+	/* Mega-Hack -- read external player's history file */
+	/* Process "H:<history>" */
+	if (buf[0] == 'H')
+	{
+		add_history_from_pref_line(buf + 2);
+		return (0);
+	}
+
+
 	/* Process "R:<num>:<a>/<c>" -- attr/char for monster races */
-	if (buf[0] == 'R')
+	else if (buf[0] == 'R')
 	{
 		if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 		{
@@ -1063,11 +1072,14 @@ static cptr process_pref_file_expr(char **sp, char *fp)
 }
 
 
+#define PREF_TYPE_NORMAL   0
+#define PREF_TYPE_PICKPREF 1
+#define PREF_TYPE_HISTPREF 2
 
 /*
  * Open the "user pref file" and parse it.
  */
-static errr process_pref_file_aux(cptr name, bool read_pickpref)
+static errr process_pref_file_aux(cptr name, bool preftype)
 {
 	FILE *fp;
 
@@ -1138,11 +1150,19 @@ static errr process_pref_file_aux(cptr name, bool read_pickpref)
 		/* Process "%:<file>" */
 		if (buf[0] == '%')
 		{
-			/* Process that file if allowed */
-			if (read_pickpref)
+  			/* Process that file if allowed */
+			switch (preftype)
+			{
+			case PREF_TYPE_PICKPREF:
 				(void)process_pickpref_file(buf + 2);
-			else
+				break;
+			case PREF_TYPE_HISTPREF:
+				(void)process_histpref_file(buf + 2);
+				break;
+			default:
 				(void)process_pref_file(buf + 2);
+				break;
+			}
 
 			/* Continue */
 			continue;
@@ -1155,8 +1175,8 @@ static errr process_pref_file_aux(cptr name, bool read_pickpref)
 		/* This is not original pref line... */
 		if (err)
 		{
-			if (!read_pickpref)
-				break;
+			if (preftype != PREF_TYPE_PICKPREF)
+  				break;
 			err = process_pickpref_file_line(buf);
 		}
 	}
@@ -1204,7 +1224,7 @@ errr process_pref_file(cptr name)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
 
 	/* Process the system pref file */
-	err1 = process_pref_file_aux(buf, FALSE);
+	err1 = process_pref_file_aux(buf, PREF_TYPE_NORMAL);
 
 	/* Stop at parser errors, but not at non-existing file */
 	if (err1 > 0) return err1;
@@ -1214,7 +1234,7 @@ errr process_pref_file(cptr name)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 	
 	/* Process the user pref file */
-	err2 = process_pref_file_aux(buf, FALSE);
+	err2 = process_pref_file_aux(buf, PREF_TYPE_NORMAL);
 
 
 	/* User file does not exist, but read system pref file */
@@ -7058,11 +7078,37 @@ errr process_pickpref_file(cptr name)
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
-	err = process_pref_file_aux(buf, TRUE);
+	err = process_pref_file_aux(buf, PREF_TYPE_PICKPREF);
 
 	/* Result */
 	return (err);
 }
+
+
+/*
+ * Process file for player's history editor.
+ */
+errr process_histpref_file(cptr name)
+{
+	char buf[1024];
+
+	errr err = 0;
+
+	/* Drop priv's */
+	safe_setuid_drop();
+
+	/* Build the filename */
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
+
+	err = process_pref_file_aux(buf, PREF_TYPE_HISTPREF);
+
+	/* Grab priv's */
+	safe_setuid_grab();
+
+	/* Result */
+	return (err);
+}
+
 
 static errr counts_seek(int fd, u32b where, bool flag)
 {

@@ -5230,6 +5230,128 @@ static bool get_chara_limits(void)
 }
 #endif
 
+static char histpref_buf[240];
+
+void add_history_from_pref_line(cptr t)
+{
+	int  line_size = strlen(t);
+	int  limit = (sizeof histpref_buf) - 1;
+	int  i;
+
+	for (i = strlen(histpref_buf); *t && (i < limit); t++)
+	{
+#ifdef JP
+		if (iskanji(*t) || isprint(*t))
+#else
+		if (isprint(*t))
+#endif
+		{
+#ifdef JP
+			if (iskanji(*t))
+			{
+				if (i + 1 >= limit) break;
+				histpref_buf[i++] = *(t++);
+			}
+#endif
+			histpref_buf[i++] = *t;
+		}
+	}
+
+	/* Terminate */
+	histpref_buf[(i < limit) ? i : limit] = '\0';
+}
+
+
+static bool do_cmd_histpref(void)
+{
+	char buf[80];
+	errr err;
+	int i, j, n;
+	char *s, *t;
+	char temp[64 * 4];
+
+#ifdef JP
+	if (!get_check("生い立ち設定ファイルをロードしますか? ")) return FALSE;
+#else
+	if (!get_check("Load background history preference file? ")) return FALSE;
+#endif
+
+	/* Init buffer */
+	histpref_buf[0] = '\0';
+
+#ifdef JP
+	sprintf(buf, "histedit-%s.prf", player_name);
+#else
+	sprintf(buf, "histpref-%s.prf", player_name);
+#endif
+	err = process_histpref_file(buf);
+
+	/* Process 'hist????.prf' if 'hist????-<name>.prf' doesn't exist */
+	if (0 > err)
+	{
+#ifdef JP
+		strcpy(buf, "histedit.prf");
+#else
+		strcpy(buf, "histpref.prf");
+#endif
+		err = process_histpref_file(buf);
+	}
+
+	if (err)
+	{
+#ifdef JP
+		msg_print("生い立ち設定ファイルの読み込みに失敗しました。");
+		msg_print("histedit.prfが見つかりません。");
+#else
+		msg_print("Failed to load background history preference.");
+		msg_print("Can't find histpref.prf");
+#endif
+		msg_print(NULL);
+
+		/* Terminate buffer */
+		histpref_buf[0] = '\0';
+		return FALSE;
+	}
+
+	/* Clear the previous history strings */
+	for (i = 0; i < 4; i++) p_ptr->history[i][0] = '\0';
+
+	/* Skip leading spaces */
+	for (s = histpref_buf; *s == ' '; s++) /* loop */;
+
+	/* Get apparent length */
+	n = strlen(s);
+
+	/* Kill trailing spaces */
+	while ((n > 0) && (s[n - 1] == ' ')) s[--n] = '\0';
+
+	roff_to_buf(s, 60, temp, sizeof(temp));
+	t = temp;
+	for (i = 0; i < 4; i++)
+	{
+		if (t[0] == 0) break;
+		else
+		{
+			strcpy(p_ptr->history[i], t);
+			t += strlen(t) + 1;
+		}
+	}
+
+	/* Turn 0 to space */
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 0; p_ptr->history[i][j]; j++) /* loop */;
+
+		for (; j < 59; j++) p_ptr->history[i][j] = ' ';
+		p_ptr->history[i][59] = '\0';
+	}
+
+	/* Terminate buffer */
+	histpref_buf[0] = '\0';
+
+	return TRUE;
+}
+
 /*
  *  Character background edit-mode
  */
@@ -5256,8 +5378,10 @@ static void edit_history(void)
 	display_player(1);
 #ifdef JP
 	c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
+	put_str("[ 2/4/6/8で移動、Enterで終了、Ctrl-Fでファイル読み込み ]", 17, 10);
 #else
 	c_put_str(TERM_L_GREEN, "(Character Background - Edit Mode)", 11, 20);
+	put_str("[ 2/4/6/8 for Move, Enter for End, Ctrl-F for Read pref ]", 17, 10);
 #endif
 
 	while (TRUE)
@@ -5325,16 +5449,39 @@ static void edit_history(void)
 		}
 		else if (c == '\r')
 		{
+			Term_erase(0, 11, 255);
+			Term_erase(0, 17, 255);
+#ifdef JP
+			put_str("(キャラクターの生い立ち - 編集済み)", 11, 20);
+#else
+			put_str("(Character Background - Edited)", 11, 20);
+#endif
 			break;
 		}
 		else if (c == ESCAPE)
 		{
+			clear_from(11);
+#ifdef JP
+			put_str("(キャラクターの生い立ち)", 11, 25);
+#else
+			put_str("(Character Background)", 11, 25);
+#endif
+
 			for (i = 0; i < 4; i++)
 			{
 				sprintf(p_ptr->history[i], "%s", old_history[i]);
 				put_str(p_ptr->history[i], i + 12, 10);
 			}
 			break;
+		}
+		else if (c == KTRL('F'))
+		{
+			if (do_cmd_histpref())
+			{
+#ifdef JP
+				if ((x > 0) && (iskanji2(p_ptr->history[y], x - 1))) x--;
+#endif
+			}
 		}
 		else if (c == '\010')
 		{
