@@ -2175,7 +2175,7 @@ void learn_spell(int monspell)
 #ifdef JP
 		msg_format("%sを学習した！", monster_powers[monspell].name);
 #else
-		msg_format("You have studyed %s!", monster_powers[monspell].name);
+		msg_format("You have learned %s!", monster_powers[monspell].name);
 #endif
 		gain_exp(monster_powers[monspell].level * monster_powers[monspell].smana);
 
