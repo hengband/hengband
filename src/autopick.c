@@ -2463,7 +2463,7 @@ void do_cmd_edit_autopick(void)
 	int old_upper = -1, old_left = -1;
 	int old_cy = -1;
 	int key = -1, old_key;
-
+        bool repeated_clearing = FALSE;
 	bool edit_mode = FALSE;
 
 	byte dirty_flags = DIRTY_ALL | DIRTY_COMMAND | DIRTY_MODE;
@@ -2833,11 +2833,26 @@ void do_cmd_edit_autopick(void)
 				break;
 			case '~':
 				if (!autopick_new_entry(entry, lines_list[cy]))
+                                {
+                                        if (old_key != key) repeated_clearing = FALSE;
+
+                                        /* Next line */
+                                        if (lines_list[cy + 1]) cy++;
+                                        cx = 0;
 					break;
+                                }
 				string_free(lines_list[cy]);
 
+                                if (old_key != key)
+                                {
+                                        if (entry->action & DONT_AUTOPICK)
+                                                repeated_clearing = TRUE;
+                                        else
+                                                repeated_clearing = FALSE;
+                                }
+
 				entry->action &= ~DO_AUTODESTROY;
-				if (entry->action & DO_AUTOPICK)
+				if (!repeated_clearing)
 				{
 					entry->action &= ~DO_AUTOPICK;
 					entry->action |= DONT_AUTOPICK;
@@ -2852,14 +2867,33 @@ void do_cmd_edit_autopick(void)
 
 				/* Now dirty */
 				dirty_line = cy;
+
+                                /* Next line */
+                                if (lines_list[cy + 1]) cy++;
+                                cx = 0;
 				break;
 			case '!':
 				if (!autopick_new_entry(entry, lines_list[cy]))
+                                {
+                                        if (old_key != key) repeated_clearing = FALSE;
+
+                                        /* Next line */
+                                        if (lines_list[cy + 1]) cy++;
+                                        cx = 0;
 					break;
+                                }
 				string_free(lines_list[cy]);
 
+                                if (old_key != key)
+                                {
+                                        if (entry->action & DO_AUTODESTROY)
+                                                repeated_clearing = TRUE;
+                                        else
+                                                repeated_clearing = FALSE;
+                                }
+
 				entry->action &= ~DONT_AUTOPICK;
-				if (entry->action & DO_AUTOPICK)
+				if (!repeated_clearing)
 				{
 					entry->action &= ~DO_AUTOPICK;
 					entry->action |= DO_AUTODESTROY;
@@ -2874,9 +2908,45 @@ void do_cmd_edit_autopick(void)
 
 				/* Now dirty */
 				dirty_line = cy;
+
+                                /* Next line */
+                                if (lines_list[cy + 1]) cy++;
+                                cx = 0;
 				break;
 			case '(':
-				key = KTRL('g');
+                                /* Toggle display on the 'M'ap */
+                                if (!autopick_new_entry(entry, lines_list[cy]))
+                                {
+                                        if (old_key != key) repeated_clearing = FALSE;
+
+                                        /* Next line */
+                                        if (lines_list[cy + 1]) cy++;
+                                        cx = 0;
+                                        break;
+                                }
+                                string_free(lines_list[cy]);
+
+                                if (old_key != key)
+                                {
+                                        if (entry->action & DO_DISPLAY)
+                                                repeated_clearing = TRUE;
+                                        else
+                                                repeated_clearing = FALSE;
+                                }
+
+				if (!repeated_clearing)
+                                        entry->action |= DO_DISPLAY;
+                                else
+                                        entry->action &= ~DO_DISPLAY;
+
+                                lines_list[cy] = autopick_line_from_entry(entry);
+
+                                /* Now dirty */
+                                dirty_line = cy;
+
+                                /* Next line */
+                                if (lines_list[cy + 1]) cy++;
+                                cx = 0;
 				break;
 			case '#':
 			case '{':
@@ -3289,18 +3359,32 @@ void do_cmd_edit_autopick(void)
 			/* Paste killed text */
 			if (strlen(yank_buf))
 			{
+                                bool ret = FALSE;
+
 				for (j = 0; yank_buf[j]; j += strlen(yank_buf + j) + 1)
 				{
-					int k = j;
+                                        if (ret && '\n' == yank_buf[j])
+                                        {
+                                                ret = FALSE;
+                                                continue;
+                                        }
 
 					/* Split current line */
 					insert_return_code(lines_list, cx, cy);
 
-					/* Paste yank buffer */
+					/* Save preceding string */
 					for(i = 0; lines_list[cy][i]; i++)
 						buf[i] = lines_list[cy][i];
-					while (yank_buf[k] && i < MAX_LINELEN)
-						buf[i++] = yank_buf[k++];
+
+					/* Paste yank buffer */
+                                        if ('\n' != yank_buf[j])
+                                        {
+                                                int k = j;
+                                                while (yank_buf[k] && i < MAX_LINELEN-1)
+                                                        buf[i++] = yank_buf[k++];
+                                                ret = TRUE;
+                                        }
+
 					buf[i] = '\0';
 
 					string_free(lines_list[cy]);
@@ -3324,41 +3408,55 @@ void do_cmd_edit_autopick(void)
 
 		case KTRL('k'):
 			/* Kill rest of line */
-			if (lines_list[cy][0] != '\0' && (uint)cx < strlen(lines_list[cy]))
-			{
-				/* Save preceding string */
-				for (i = 0; lines_list[cy][i] && i < cx; i++)
-				{
+			if ((uint)cx > strlen(lines_list[cy]))
+                                cx = (int)strlen(lines_list[cy]);
+
+                        /* Save preceding string */
+                        for (i = 0; lines_list[cy][i] && i < cx; i++)
+                        {
 #ifdef JP
-					if (iskanji(lines_list[cy][i]))
-					{
-						buf[i] = lines_list[cy][i];
-						i++;
-					}
+                                if (iskanji(lines_list[cy][i]))
+                                {
+                                        buf[i] = lines_list[cy][i];
+                                        i++;
+                                }
 #endif
-					buf[i] = lines_list[cy][i];
-				}
-				buf[i] = '\0';
+                                buf[i] = lines_list[cy][i];
+                        }
+                        buf[i] = '\0';
 
-				j = 0;
-				if (old_key == KTRL('k'))
-					while (yank_buf[j])
-						j += strlen(yank_buf + j) + 1;
+                        j = 0;
+                        if (old_key == key)
+                                while (yank_buf[j])
+                                        j += strlen(yank_buf + j) + 1;
 
-				/* Copy following to yank buffer */
-				while (lines_list[cy][i] && j < MAX_YANK - 2)
-					yank_buf[j++] = lines_list[cy][i++];
-				yank_buf[j++] = '\0';
-				yank_buf[j] = '\0';
+                        /* Copy following to yank buffer */
+                        if (lines_list[cy][i])
+                        {
+                                while (lines_list[cy][i] && j < MAX_YANK - 2)
+                                        yank_buf[j++] = lines_list[cy][i++];
+                                i = TRUE;
+                        }
+                        else
+                        {
+                                if (j < MAX_YANK - 2)
+                                        yank_buf[j++] = '\n';
+                                i = FALSE;
+                        }
+                        yank_buf[j++] = '\0';
+                        yank_buf[j] = '\0';
 
-				/* Replace current line with 'preceding string' */
-				string_free(lines_list[cy]);
-				lines_list[cy] = string_make(buf);
+                        /* Replace current line with 'preceding string' */
+                        string_free(lines_list[cy]);
+                        lines_list[cy] = string_make(buf);
 
-				/* Now dirty */
-				dirty_line = cy;
-				break;			
-			}
+                        if (i)
+                        {
+                                /* Now dirty */
+                                dirty_line = cy;
+                                break;
+                        }
+
 			/* fall through */
 		case KTRL('d'):
 		case 0x7F:
