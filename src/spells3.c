@@ -379,7 +379,7 @@ bool teleport_player_aux(int dis, bool passive, bool nonmagical)
 		cur_candidates += candidates_at[min];
 
 		/* 50% of all candidates will have an equal chance to be choosen. */
-		if (cur_candidates >= total_candidates / 2) break;
+		if (cur_candidates && (cur_candidates >= total_candidates / 2)) break;
 	}
 
 	/* Pick up a single location randomly */
@@ -393,7 +393,7 @@ bool teleport_player_aux(int dis, bool passive, bool nonmagical)
 			int d;
 
 			/* Skip illegal locations */
-			if (!cave_player_teleportable_bold(y, x, passive, FALSE)) continue;
+			if (!cave_player_teleportable_bold(y, x, passive, nonmagical)) continue;
 
 			/* Calculate distance */
 			d = distance(py, px, y, x);
