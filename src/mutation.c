@@ -3467,7 +3467,7 @@ bool mutation_power_aux(u32b power)
 				c_ptr = &cave[y][x];
 				f_ptr = &f_info[c_ptr->feat];
 
-				if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_TUNNEL))
+				if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_HURT_ROCK))
 				{
 #ifdef JP
 					msg_print("この地形は食べられない。");
@@ -3500,10 +3500,11 @@ bool mutation_power_aux(u32b power)
 				else if (have_flag(f_ptr->flags, FF_TREE))
 				{
 #ifdef JP
-					msg_print("木はあまり美味しくない！");
+					msg_print("木の味は好きじゃない！");
 #else
 					msg_print("You don't like the woody taste!");
 #endif
+					break;
 				}
 				else if (have_flag(f_ptr->flags, FF_DOOR) || have_flag(f_ptr->flags, FF_HAS_ITEM))
 				{
@@ -3524,7 +3525,7 @@ bool mutation_power_aux(u32b power)
 				}
 
 				/* Destroy the wall */
-				cave_alter_feat(y, x, FF_TUNNEL);
+				cave_alter_feat(y, x, FF_HURT_ROCK);
 
 				oy = py;
 				ox = px;
