@@ -2278,14 +2278,14 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 	{
 		/* Message */
 #ifdef JP
-		msg_print("ドアを壊した！");
+		msg_format("%sを壊した！", f_name + f_ptr->name);
 #else
-		msg_print("The door crashes open!");
+		msg_format("The %s crashes open!", f_name + f_ptr->name);
 #endif
 
 
 		/* Break down the door */
-		if (randint0(100) < 50)
+		if ((randint0(100) < 50) || (feat_state(c_ptr->feat, FF_OPEN) == c_ptr->feat))
 		{
 			cave_alter_feat(y, x, FF_BASH);
 		}
