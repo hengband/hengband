@@ -1788,7 +1788,7 @@ G:?:d
 I:70:25:0
 W:5:0:5:40
 A:5/1
-D:$It maps the neighborhood when you read it.
+D:$It maps your vicinity when you read it.
 D:それは読むと自分の周辺の地形を感知する。
 
 N:190:守りのルーン
@@ -1815,7 +1815,7 @@ G:?:d
 I:70:26:0
 W:0:0:5:15
 A:0/1
-D:$It detects all treasures in the neighborhood when you read it.
+D:$It detects all treasures in your vicinity when you read it.
 D:それは読むと自分の周辺の財宝を感知する。
 
 N:193:アイテム感知
@@ -1824,7 +1824,7 @@ G:?:d
 I:70:27:0
 W:0:0:5:15
 A:0/1
-D:$It detects all items in the neighborhood when you read it.
+D:$It detects all items in your vicinity when you read it.
 D:それは読むと自分の周辺のアイテムを感知する。
 
 N:194:トラップ感知
@@ -1833,7 +1833,7 @@ G:?:d
 I:70:28:0
 W:5:0:5:35
 A:5/1:10/1
-D:$It detects all traps in the neighborhood when you read it.
+D:$It detects all traps in your vicinity when you read it.
 D:それは読むと自分の周辺のトラップを感知する。
 
 ##### Extra ammunition #####
@@ -1867,7 +1867,7 @@ G:?:d
 I:70:29:0
 W:5:0:5:35
 A:5/1:10/1
-D:$It detects all doors and stairs in the neighborhood when you read it.
+D:$It detects all doors and stairs in your vicinity when you read it.
 D:それは読むと自分の周辺のドア・階段を感知する。
 
 N:198:獲得
@@ -1904,7 +1904,7 @@ G:?:d
 I:70:30:0
 W:1:0:5:15
 A:1/1
-D:$It detects all invisible monsters in the neighborhood when you read it.
+D:$It detects all invisible monsters in your vicinity when you read it.
 D:それは読むと自分の周辺の透明なモンスターを感知する。
 
 N:202:エキサイト・モンスター
@@ -1913,7 +1913,7 @@ G:?:d
 I:70:1:0
 W:5:0:5:0
 A:5/1
-D:$It aggravates monsters in the neighborhood when you read it.
+D:$It aggravates monsters in your vicinity when you read it.
 D:それは読むと自分の周辺のモンスターを怒らせる。
 
 N:203:トラップ創造
@@ -1941,8 +1941,8 @@ G:?:d
 I:70:52:0
 W:90:0:5:200000
 A:90/16
-D:$It creates an artifact from a nameless weapon or armour when you read it. In 
-D:$this process, extra stack of the equipment will be destroyed.
+D:$It creates an artifact from a nameless weapon or armour when you read it. 
+D:$Don't be greedy - you will get only one artifact.
 D:それは読むと無銘の武器・防具からアーティファクトを作り出す。装備品が
 D:積み重なっていた場合は1個を残して壊れる。
 
@@ -2446,8 +2446,8 @@ I:75:5:0
 W:0:0:4:0
 A:0/1
 P:0:1d1:0:0:0
-D:$You nearly faint from hunger and it paralyzes you, but it cures poison 
-D:$when you quaff it.
+D:$It makes you nearly faint from hunger and paralyzes you, 
+D:$but it cures poison when you quaff it.
 D:それは飲むと餓死寸前になり麻痺するが、毒を癒す。
 
 N:256:啓蒙
@@ -2480,7 +2480,7 @@ I:75:33:0
 W:20:0:4:100
 A:20/3
 P:0:1d1:0:0:0
-D:$It removes fear, causes you temporary berserk and heals you 30 when you 
+D:$It removes fear, causes you to go berserk and heals you 30 when you 
 D:$quaff it.
 D:それは飲むと恐怖を取り除き、一時的に狂戦士化し、体力が30回復する。
 
@@ -2937,7 +2937,7 @@ I:55:12:12
 W:10:0:50:350
 A:10/1
 P:0:1d2:0:0:0
-D:$It detects all traps in the neighborhood when you use it.
+D:$It detects all traps in your vicinity when you use it.
 D:それは使うと自分の周辺のトラップを感知する。
 
 N:301:財宝感知
@@ -2947,7 +2947,7 @@ I:55:10:19
 W:5:0:50:200
 A:5/1
 P:0:1d2:0:0:0
-D:$It detects all treasures in the neighborhood when you use it.
+D:$It detects all treasures in your vicinity when you use it.
 D:それは使うと自分の周辺の財宝を感知する。
 
 N:302:アイテム感知
@@ -2957,7 +2957,7 @@ I:55:11:15
 W:5:0:50:200
 A:5/1
 P:0:1d2:0:0:0
-D:$It detects all items in the neighborhood when you use it.
+D:$It detects all items in your vicinity when you use it.
 D:それは使うと自分の周辺のアイテムを感知する。
 
 N:303:テレポート
@@ -2997,7 +2997,7 @@ I:55:8:19
 W:5:0:50:250
 A:5/1
 P:0:1d2:0:0:0
-D:$It lights up nearby area or current room permanently when you use it.
+D:$It lights up nearby area or the current room permanently when you use it.
 D:それは使うと自分の周囲もしくは部屋全体を永久に照らす。
 
 N:307:*破壊*
@@ -3067,7 +3067,7 @@ I:55:14:16
 W:5:0:50:200
 A:5/1
 P:0:1d2:0:0:0
-D:$It detects all invisible monsters in the neighborhood when you use it.
+D:$It detects all invisible monsters in your vicinity when you use it.
 D:それは使うと自分の周辺の透明なモンスターを感知する。
 
 N:314:スピード
@@ -3097,7 +3097,7 @@ I:55:13:15
 W:10:0:50:350
 A:10/1
 P:0:1d2:0:0:0
-D:$It detects all doors and stairs in the neighborhood when you use it.
+D:$It detects all doors and stairs in your vicinity when you use it.
 D:それは使うと自分の周辺のドア・階段を感知する。
 
 N:317:解呪
@@ -3117,7 +3117,7 @@ I:55:15:14
 W:20:0:50:350
 A:20/1
 P:0:1d2:0:0:0
-D:$It detects all evil monsters in the neighborhood when you use it.
+D:$It detects all evil monsters in your vicinity when you use it.
 D:それは使うと自分の周辺の邪悪なモンスターを感知する。
 
 N:319:癒し
@@ -3227,7 +3227,7 @@ I:55:9:11
 W:20:0:50:750
 A:20/1
 P:0:1d2:0:0:0
-D:$It maps the neighborhood when you use it.
+D:$It maps your vicinity when you use it.
 D:それは使うと自分の周辺の地形を感知する。
 
 N:329:体力回復
@@ -3443,7 +3443,7 @@ I:66:1:70
 W:15:0:15:1000
 A:7/4:15/1
 P:0:1d1:0:0:0
-D:$It detects all doors and stairs in the neighborhood when you zap it.
+D:$It detects all doors and stairs in your vicinity when you zap it.
 D:それは振ると自分の周辺のドア・階段を感知する。
 
 N:352:トラップ感知
@@ -3453,7 +3453,7 @@ I:66:0:15
 W:5:0:15:100
 A:3/4:5/1
 P:0:1d1:0:0:0
-D:$It detects all traps in the neighborhood when you zap it.
+D:$It detects all traps in your vicinity when you zap it.
 D:それは振ると自分の周辺のトラップを感知する。
 
 N:353:調査
@@ -3648,7 +3648,7 @@ I:66:5:99
 W:65:0:15:10000
 A:33/16:65/4
 P:0:1d1:0:0:0
-D:$It maps the neighborhood when you zap it.
+D:$It maps your vicinity when you zap it.
 D:それは振ると自分の周辺の地形を感知する。
 
 N:372:鑑定
@@ -4162,7 +4162,7 @@ A:70/4
 P:0:1d1:0:0:0
 D:$It maps, lights permanently and detects all items on the entire level, 
 D:$increases your intelligence and wisdom, detects all traps, doors, stairs, 
-D:$treasures in the neighborhood, identifies all items in pack and gives 
+D:$treasures in your vicinity, identifies all items in pack and gives 
 D:$information about yourself when you quaff it.
 D:それは飲むとその階の地形を完全に知ることができ、その階全体が永久に照らされ、
 D:その階全体のアイテムを感知し、知能・賢さの最大値を上げ、自分の周辺の
@@ -5149,8 +5149,8 @@ G:?:d
 I:70:23:0
 W:13:0:5:3000
 A:13/10
-D:$This removes the ego or artifact status of an item. As a bonus, 
-D:$if you have a stack of them, the extras are destroyed.
+D:$This removes the ego or artifact status and all enchantment of an item. 
+D:$As a bonus, if you have a stack of them, the extras are destroyed.
 D:それは読むとアイテム1個を並のアイテムに変える。複数のアイテムがまとまって
 D:いる場合は1個を残して壊れる。
 
@@ -5810,7 +5810,7 @@ I:66:30:9
 W:30:0:10:0
 A:15/8:30/2
 P:0:1d1:0:0:0
-D:$It aggravates monsters in the neighborhood when you zap it.
+D:$It aggravates monsters in your vicinity when you zap it.
 D:それは振ると自分の周辺のモンスターを怒らせる。
 
 N:643:& #の写真
