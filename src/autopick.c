@@ -3234,6 +3234,36 @@ static void check_expression_line(text_body_type *tb, int y)
 
 
 /*
+ * Add an empty line at the last of the file
+ */
+static bool add_empty_line(text_body_type *tb)
+{
+	int k;
+
+	for (k = 0; tb->lines_list[k]; k++)
+		/* count number of lines */ ;
+
+	/* Too many lines! */
+	if (k >= MAX_LINES - 2) return FALSE;
+
+	/* The last line is already empty */
+	if (!tb->lines_list[k-1][0]) return FALSE;
+
+	/* Create new empty line */
+	tb->lines_list[k] = string_make("");
+
+	/* Expressions need re-evaluation */
+	tb->dirty_flags |= DIRTY_EXPRESSION;
+
+	/* Text is changed */
+	tb->changed = TRUE;
+
+	/* A line is added */
+	return TRUE;
+}
+
+
+/*
  * Insert return code and split the line
  */
 static bool insert_return_code(text_body_type *tb)
@@ -4398,6 +4428,91 @@ static void add_str_to_yank(text_body_type *tb, cptr str)
 }
 
 
+/*
+ * Do work for the copy editor-command
+ */
+static void copy_text_to_yank(text_body_type *tb)
+{
+	int len = strlen(tb->lines_list[tb->cy]);
+
+	/* Correct cursor location */
+	if (tb->cx > len) tb->cx = len;
+
+	/* Use single line? */
+	if (!tb->mark)
+	{
+		/* Select a single line */
+		tb->cx = 0;
+		tb->my = tb->cy;
+		tb->mx = len;
+	}
+
+	/* Kill old yank buffer */
+	kill_yank_chain(tb);
+
+
+	/* Single line case */
+	if (tb->my == tb->cy)
+	{
+		int i;
+		char buf[MAX_LINELEN];
+		int bx1 = MIN(tb->mx, tb->cx);
+		int bx2 = MAX(tb->mx, tb->cx);
+
+		/* Correct fake cursor position */
+		if (bx2 > len) bx2 = len;
+
+		/* Whole part of this line is selected */
+		if (bx1 == 0 && bx2 == len)
+		{
+			/* Copy this line */
+			add_str_to_yank(tb, tb->lines_list[tb->cy]);
+
+			/* Add end of line to the buffer */
+			add_str_to_yank(tb, "");
+		}
+
+		/* Segment of this line is selected */
+		else
+		{
+			for (i = 0; i < bx2 - bx1; i++)
+			{
+				buf[i] = tb->lines_list[tb->cy][bx1 + i];
+			}
+			buf[i] = '\0';
+
+			/* Copy this segment of line */
+			add_str_to_yank(tb, buf);
+		}
+	}
+
+	/* Multiple lines case */
+	else /* if (tb->my != tb->cy) */
+	{
+		int y;
+
+		int by1 = MIN(tb->my, tb->cy);
+		int by2 = MAX(tb->my, tb->cy);
+
+		/* Copy lines */
+		for (y = by1; y <= by2; y++)
+		{
+			/* Copy this line */
+			add_str_to_yank(tb, tb->lines_list[y]);
+		}
+
+		/* Add final end of line to the buffer */
+		add_str_to_yank(tb, "");
+	}
+
+	/* Disable selection */
+	tb->mark = 0;
+
+	/* Now dirty */
+	tb->dirty_flags |= DIRTY_ALL;
+}
+
+
 #define DESCRIPT_HGT 3
 
 /*
@@ -4425,7 +4540,12 @@ static void draw_text_editor(text_body_type *tb)
 			i++;
 			if (i == tb->cx)
 			{
-				tb->cx--;
+				/*
+				 * Move to a correct position in the
+				 * left or right
+				 */
+				if (i & 1) tb->cx--;
+				else tb->cx++;
 				break;
 			}
 		}
@@ -5052,10 +5172,28 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		if (0 < tb->cx)
 		{
 			int len;
+			int i;
 
 			tb->cx--;
 			len = strlen(tb->lines_list[tb->cy]);
 			if (len < tb->cx) tb->cx = len;
+
+#ifdef JP
+			/* Don't let cursor at second byte of kanji */
+			for (i = 0; tb->lines_list[tb->cy][i]; i++)
+			{
+				if (iskanji(tb->lines_list[tb->cy][i]))
+				{
+					i++;
+					if (i == tb->cx)
+					{
+						/* Move to the left */
+						tb->cx--;
+						break;
+					}
+				}
+			}
+#endif
 		}
 		else if (tb->cy > 0)
 		{
@@ -5066,7 +5204,17 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 	case EC_DOWN:
 		/* Next line */
-		if (tb->lines_list[tb->cy + 1]) tb->cy++;
+
+		/* Is this the last line? */
+		if (!tb->lines_list[tb->cy + 1])
+		{
+			/* Add one more empty line if possible */
+			if (!add_empty_line(tb)) break;
+		}
+
+		/* Go down */
+		tb->cy++;
+
 		break;
 
 	case EC_UP:
@@ -5086,13 +5234,19 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		len = strlen(tb->lines_list[tb->cy]);
 		if (len < tb->cx)
 		{
-			if (tb->lines_list[tb->cy + 1])
+			/* Correct the cursor position */
+			tb->cx = len;
+
+			/* Is this the last line? */
+			if (!tb->lines_list[tb->cy + 1])
 			{
-				tb->cy++;
-				tb->cx = 0;
+				/* Add one more empty line if possible */
+				if (!add_empty_line(tb)) break;
 			}
-			else
-				tb->cx = len;
+
+			/* Move to the beginning of next line */
+			tb->cy++;
+			tb->cx = 0;
 		}
 		break;
 	}
@@ -5116,8 +5270,18 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 	case EC_PGDOWN:
 		/* Page down */
-		while (tb->cy < tb->upper + tb->hgt && tb->lines_list[tb->cy + 1])
+		while (tb->cy < tb->upper + tb->hgt)
+		{
+			/* Is this the last line? */
+			if (!tb->lines_list[tb->cy + 1])
+			{
+				/* Add one more empty line if possible */
+				if (!add_empty_line(tb)) break;
+			}
+
 			tb->cy++;
+		}
+
 		tb->upper = tb->cy;
 		break;
 
@@ -5126,14 +5290,27 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		break;
 
 	case EC_BOTTOM:
-		while (tb->lines_list[tb->cy + 1])
+		while (TRUE)
+		{
+			/* Is this the last line? */
+			if (!tb->lines_list[tb->cy + 1])
+			{
+				/* Add one more empty line if possible */
+				if (!add_empty_line(tb)) break;
+			}
+
 			tb->cy++;
+		}
+
+		/* Always at the biginning of the last line */
+		tb->cx = 0;
+
 		break;
 
 	case EC_CUT:
 	{	
 		/* Copy the text first */
-		do_editor_command(tb, EC_COPY);
+		copy_text_to_yank(tb);
 
 		/* Single line case */
 		if (tb->my == tb->cy)
@@ -5186,86 +5363,34 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	}
 
 	case EC_COPY:
-	{	
-		int len = strlen(tb->lines_list[tb->cy]);
+		copy_text_to_yank(tb);
 
-		/* Correct cursor location */
-		if (tb->cx > len) tb->cx = len;
-
-		/* Use single line? */
-		if (!tb->mark)
-		{
-			/* Select a single line */
-			tb->cx = 0;
-			tb->my = tb->cy;
-			tb->mx = len;
-		}
-
-		/* Kill old yank buffer */
-		kill_yank_chain(tb);
-
-
-		/* Single line case */
+		/*
+		 * Move cursor position to the end of the selection
+		 *
+		 * Pressing ^C ^V correctly results in duplication of
+		 * the selection.
+		 */
 		if (tb->my == tb->cy)
 		{
-			int i;
-			char buf[MAX_LINELEN];
-			int bx1 = MIN(tb->mx, tb->cx);
-			int bx2 = MAX(tb->mx, tb->cx);
-
-			/* Correct fake cursor position */
-			if (bx2 > len) bx2 = len;
-
-			/* Whole part of this line is selected */
-			if (bx1 == 0 && bx2 == len)
-			{
-				/* Copy this line */
-				add_str_to_yank(tb, tb->lines_list[tb->cy]);
-
-				/* Add end of line to the buffer */
-				add_str_to_yank(tb, "");
-			}
-
-			/* Segment of this line is selected */
-			else
-			{
-				for (i = 0; i < bx2 - bx1; i++)
-				{
-					buf[i] = tb->lines_list[tb->cy][bx1 + i];
-				}
-				buf[i] = '\0';
-
-				/* Copy this segment of line */
-				add_str_to_yank(tb, buf);
-			}
+			tb->cx = MAX(tb->cx, tb->mx);
 		}
-
-		/* Multiple lines case */
-		else /* if (tb->my != tb->cy) */
+		else
 		{
-			int y;
+			tb->cy = MAX(tb->cy, tb->my);
 
-			int by1 = MIN(tb->my, tb->cy);
-			int by2 = MAX(tb->my, tb->cy);
-
-			/* Copy lines */
-			for (y = by1; y <= by2; y++)
+			/* Is this the last line? */
+			if (!tb->lines_list[tb->cy + 1])
 			{
-				/* Copy this line */
-				add_str_to_yank(tb, tb->lines_list[y]);
+				/* Add one more empty line if possible */
+				if (!add_empty_line(tb)) break;
 			}
 
-			/* Add final end of line to the buffer */
-			add_str_to_yank(tb, "");
+			/* Go down */
+			tb->cy++;
 		}
 
-		/* Disable selection */
-		tb->mark = 0;
-
-		/* Now dirty */
-		tb->dirty_flags |= DIRTY_ALL;
 		break;
-	}
 
 	case EC_PASTE:
 	{
