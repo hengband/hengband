@@ -1970,7 +1970,7 @@ msg_print("床上のアイテムが呪文を跳ね返した。");
 	return TRUE;
 }
 
-bool warding_mirror(void)
+bool place_mirror(void)
 {
 	/* XXX XXX XXX */
 	if (!cave_clean_bold(py, px))

@@ -1300,7 +1300,7 @@ static bool cast_mirror_spell(int spell)
 	/* drip of light */
 	case 1:
 	  if( number_of_mirrors() < 4 + plev/10 ){
-	    warding_mirror();
+	    place_mirror();
 	  }
 	  else {
 #ifdef JP
