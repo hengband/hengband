@@ -2810,57 +2810,62 @@ static bool target_set_accept(int y, int x)
 	/* Interesting memorized features */
 	if (c_ptr->info & (CAVE_MARK))
 	{
+                byte feat;
+
+                /* Feature code (applying "mimic" field) */
+                feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+
 		/* Notice glyphs */
 		if (c_ptr->info & CAVE_OBJECT) return (TRUE);
 
 		/* Notice the Pattern */
-		if ((c_ptr->feat <= FEAT_PATTERN_XTRA2) &&
-		    (c_ptr->feat >= FEAT_PATTERN_START))
+		if ((feat <= FEAT_PATTERN_XTRA2) &&
+		    (feat >= FEAT_PATTERN_START))
 			return (TRUE);
 
 		/* Notice doors */
-		if (c_ptr->feat == FEAT_OPEN) return (TRUE);
-		if (c_ptr->feat == FEAT_BROKEN) return (TRUE);
+		if (feat == FEAT_OPEN) return (TRUE);
+		if (feat == FEAT_BROKEN) return (TRUE);
 
 		/* Notice stairs */
-		if (c_ptr->feat == FEAT_LESS) return (TRUE);
-		if (c_ptr->feat == FEAT_MORE) return (TRUE);
-		if (c_ptr->feat == FEAT_LESS_LESS) return (TRUE);
-		if (c_ptr->feat == FEAT_MORE_MORE) return (TRUE);
+		if (feat == FEAT_LESS) return (TRUE);
+		if (feat == FEAT_MORE) return (TRUE);
+		if (feat == FEAT_LESS_LESS) return (TRUE);
+		if (feat == FEAT_MORE_MORE) return (TRUE);
 
 		/* Notice shops */
-		if ((c_ptr->feat >= FEAT_SHOP_HEAD) &&
-		    (c_ptr->feat <= FEAT_SHOP_TAIL)) return (TRUE);
+		if ((feat >= FEAT_SHOP_HEAD) &&
+		    (feat <= FEAT_SHOP_TAIL)) return (TRUE);
 
-		if (c_ptr->feat == FEAT_MUSEUM) return (TRUE);
+		if (feat == FEAT_MUSEUM) return (TRUE);
 
 		/* Notice buildings -KMW- */
-		if ((c_ptr->feat >= FEAT_BLDG_HEAD) &&
-		    (c_ptr->feat <= FEAT_BLDG_TAIL)) return (TRUE);
+		if ((feat >= FEAT_BLDG_HEAD) &&
+		    (feat <= FEAT_BLDG_TAIL)) return (TRUE);
 
 		/* Notice traps */
-		if (is_trap(c_ptr->feat)) return (TRUE);
+		if (is_trap(feat)) return (TRUE);
 
 		/* Notice doors */
-		if ((c_ptr->feat >= FEAT_DOOR_HEAD) &&
-		    (c_ptr->feat <= FEAT_DOOR_TAIL)) return (TRUE);
+		if ((feat >= FEAT_DOOR_HEAD) &&
+		    (feat <= FEAT_DOOR_TAIL)) return (TRUE);
 
 		/* Notice rubble */
 		/* I think FEAT_RUBBLEs should not be "interesting" */
 #if 0
-		if (c_ptr->feat == FEAT_RUBBLE) return (TRUE);
+		if (feat == FEAT_RUBBLE) return (TRUE);
 #endif
 		/* Notice veins with treasure */
-		if (c_ptr->feat == FEAT_MAGMA_K) return (TRUE);
-		if (c_ptr->feat == FEAT_QUARTZ_K) return (TRUE);
+		if (feat == FEAT_MAGMA_K) return (TRUE);
+		if (feat == FEAT_QUARTZ_K) return (TRUE);
 
 		/* Notice quest features */
-		if (c_ptr->feat == FEAT_QUEST_ENTER) return (TRUE);
-		if (c_ptr->feat == FEAT_QUEST_EXIT) return (TRUE);
-		if (c_ptr->feat == FEAT_QUEST_DOWN) return (TRUE);
-		if (c_ptr->feat == FEAT_QUEST_UP) return (TRUE);
-		if (c_ptr->feat == FEAT_TOWN) return (TRUE);
-		if (c_ptr->feat == FEAT_ENTRANCE) return (TRUE);
+		if (feat == FEAT_QUEST_ENTER) return (TRUE);
+		if (feat == FEAT_QUEST_EXIT) return (TRUE);
+		if (feat == FEAT_QUEST_DOWN) return (TRUE);
+		if (feat == FEAT_QUEST_UP) return (TRUE);
+		if (feat == FEAT_TOWN) return (TRUE);
+		if (feat == FEAT_ENTRANCE) return (TRUE);
 	}
 
 	/* Nope */
