@@ -391,7 +391,7 @@ FILE *my_fopen_temp(char *buf, int max)
 	int fd;
 
 	/* Prepare the buffer for mkstemp */
-	(void)strnfmt(buf, max, "%s", "/tmp/anXXXXXX");
+	strncpy(buf, "/tmp/anXXXXXX", max);
 
 	/* Secure creation of a temporary file */
 	fd = mkstemp(buf);
