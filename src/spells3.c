@@ -794,6 +794,14 @@ void teleport_level(int m_idx)
 		/* Check for quest completion */
 		check_quest_completion(m_ptr);
 
+		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
+		{
+			char m2_name[80];
+
+			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
+			do_cmd_write_nikki(NIKKI_NAMED_PET, 8, m2_name);
+		}
+
 		delete_monster_idx(m_idx);
 	}
 

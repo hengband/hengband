@@ -805,6 +805,13 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 					fprintf(fff, "%s was crushed by falling rocks.\n", note);
 #endif
 					break;
+				case 8:
+#ifdef JP
+					fprintf(fff, "%sがテレポート・レベルによって消え去った。\n", note);
+#else
+					fprintf(fff, "%s was made disappeared by teleport level.\n", note);
+#endif
+					break;
 				default:
 					fprintf(fff, "\n");
 					break;
