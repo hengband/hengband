@@ -2772,7 +2772,7 @@ t = object_desc_str(t, "(マルチ・トラップ)");
 		case TV_BOW:
 
 		/* Mega-Hack -- Extract the "base power" */
-		power = (o_ptr->sval % 10);
+		power = bow_tmul(o_ptr->sval);
 
 		/* Apply the "Extra Might" flag */
 		if (have_flag(flgs, TR_XTRA_MIGHT)) power++;
