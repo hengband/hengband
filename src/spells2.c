@@ -3548,7 +3548,7 @@ bool detect_traps(int range, bool known)
 		}
 	}
 
-	p_ptr->dtrap = TRUE;
+	if (known) p_ptr->dtrap = TRUE;
 
 	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT)) detect = FALSE;
 
