@@ -84,7 +84,7 @@ Rogue
      Craft.  All Rogues have certain limitations on which spells they
      can learn, and they do not learn new spells very quickly. Rogues
      are very good at both melee and shooting and, for them, magic is
-     secondary.  They have a class power - 'Hitand Away' - which allows
+     secondary.  They have a class power - 'Hit and Away' - which allows
      them to attack in melee and teleport away from there at once.
      Intelligence determines a Rogue's spellcasting ability.
 
@@ -487,15 +487,6 @@ duration of the spell. In other words, casting a spell which has a
 duration of 20 turns three times will not result in a duration of 60
 turns. Typically, subsequent castings will add only a small amount
 to the total duration. 
-
-
-Some monsters such as wraith or ghost is often
-floating in a wall. 
-
---- Attacking Monsters in Walls ---
-
-
-
 
 ***** <SpellTypes>
 === Spell Types ===
