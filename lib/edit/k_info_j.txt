@@ -2018,8 +2018,8 @@ G:?:d
 I:70:3:0
 W:50:0:5:0
 A:50/1
-D:$It makes your weapon in right hand (Shattered) when you read it.
-D:それは読むと右手に装備中の武器を(不良品)に変える。
+D:$It makes your weapon in strong hand (Shattered) when you read it.
+D:それは読むと利き腕に装備中の武器を(不良品)に変える。
 
 N:214:*防具強化*
 E:*Enchant Armor*
