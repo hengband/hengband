@@ -5238,7 +5238,8 @@ static void build_type13(int by0, int bx0)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
                         c_ptr = &cave[y][x];
-                        place_solid_grid(c_ptr);
+                        place_inner_grid(c_ptr);
+			c_ptr->info |= (CAVE_ROOM);
 		}
 	}
 
@@ -5247,12 +5248,10 @@ static void build_type13(int by0, int bx0)
         {
                 c_ptr = &cave[yval-2][x];
                 place_floor_grid(c_ptr);
-                c_ptr->info |= (CAVE_ROOM);
                 add_cave_info(yval-2, x, CAVE_ICKY);
 
                 c_ptr = &cave[yval+2][x];
                 place_floor_grid(c_ptr);
-                c_ptr->info |= (CAVE_ROOM);
                 add_cave_info(yval+2, x, CAVE_ICKY);
         }
 
@@ -5261,12 +5260,10 @@ static void build_type13(int by0, int bx0)
         {
                 c_ptr = &cave[yval-3][x];
                 place_floor_grid(c_ptr);
-                c_ptr->info |= (CAVE_ROOM);
                 add_cave_info(yval-3, x, CAVE_ICKY);
 
                 c_ptr = &cave[yval+3][x];
                 place_floor_grid(c_ptr);
-                c_ptr->info |= (CAVE_ROOM);
                 add_cave_info(yval+3, x, CAVE_ICKY);
         }
 
@@ -5280,34 +5277,6 @@ static void build_type13(int by0, int bx0)
                 c_ptr = &cave[y2][x];
                 place_floor_grid(c_ptr);
 	}
-
-	/* Random corridor */
-        if (one_in_(2))
-        {
-                for (y = y1; y <= yval; y++)
-                {
-                        c_ptr = &cave[y][x1];
-                        place_floor_grid(c_ptr);
-                }
-                for (y = yval; y <= y2 + 1; y++)
-                {
-                        c_ptr = &cave[y][x2];
-                        place_floor_grid(c_ptr);
-                }
-        }
-        else
-        {
-                for (y = yval; y <= y2 + 1; y++)
-                {
-                        c_ptr = &cave[y][x1];
-                        place_floor_grid(c_ptr);
-                }
-                for (y = y1; y <= yval; y++)
-                {
-                        c_ptr = &cave[y][x2];
-                        place_floor_grid(c_ptr);
-                }
-        }
 
 	/* Place the outer walls */
 	for (y = y1 - 1; y <= y2 + 1; y++)
@@ -5324,6 +5293,34 @@ static void build_type13(int by0, int bx0)
 		c_ptr = &cave[y2 + 1][x];
 		place_outer_grid(c_ptr);
 	}
+
+	/* Random corridor */
+        if (one_in_(2))
+        {
+                for (y = y1; y <= yval; y++)
+                {
+                        place_floor_bold(y, x2);
+                        place_solid_bold(y, x1-1);
+                }
+                for (y = yval; y <= y2 + 1; y++)
+                {
+                        place_floor_bold(y, x1);
+                        place_solid_bold(y, x2+1);
+                }
+        }
+        else
+        {
+                for (y = yval; y <= y2 + 1; y++)
+                {
+                        place_floor_bold(y, x1);
+                        place_solid_bold(y, x2+1);
+                }
+                for (y = y1; y <= yval; y++)
+                {
+                        place_floor_bold(y, x2);
+                        place_solid_bold(y, x1-1);
+                }
+        }
 
 	/* Place the wall open trap */
 	cave[yval][xval].mimic = cave[yval][xval].feat;
