@@ -438,6 +438,7 @@ static void sense_inventory1(void)
 			case TV_SOFT_ARMOR:
 			case TV_HARD_ARMOR:
 			case TV_DRAG_ARMOR:
+			case TV_CARD:
 			{
 				okay = TRUE;
 				break;
@@ -1174,7 +1175,8 @@ bool psychometry(void)
 	char            o_name[MAX_NLEN];
 	byte            feel;
 	cptr            q, s;
-
+        bool okay = FALSE;
+	int idx;
 
 	item_tester_no_ryoute = TRUE;
 	/* Get an item */
@@ -1200,8 +1202,37 @@ s = "調べるアイテムがありません。";
 		o_ptr = &o_list[0 - item];
 	}
 
+        /* Valid "tval" codes */
+        switch (o_ptr->tval)
+        {
+        case TV_SHOT:
+        case TV_ARROW:
+        case TV_BOLT:
+        case TV_BOW:
+        case TV_DIGGING:
+        case TV_HAFTED:
+        case TV_POLEARM:
+        case TV_SWORD:
+        case TV_BOOTS:
+        case TV_GLOVES:
+        case TV_HELM:
+        case TV_CROWN:
+        case TV_SHIELD:
+        case TV_CLOAK:
+        case TV_SOFT_ARMOR:
+        case TV_HARD_ARMOR:
+        case TV_DRAG_ARMOR:
+        case TV_CARD:
+        case TV_RING:
+        case TV_AMULET:
+        case TV_LITE:
+        case TV_FIGURINE:
+                okay = TRUE;
+                break;
+        }
+
 	/* It is fully known, no information needed */
-	if (object_known_p(o_ptr))
+	if (!okay || object_known_p(o_ptr))
 	{
 #ifdef JP
 msg_print("何も新しいことは判らなかった。");
@@ -1251,6 +1282,12 @@ msg_format("%sは%sという感じがする...",
 
 	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+
+	/* Auto-inscription/destroy */
+	idx = is_autopick(o_ptr);
+	auto_inscribe_item(item, idx);
+	if (destroy_feeling)
+                auto_destroy_item(item, idx, FALSE);
 
 	/* Something happened */
 	return (TRUE);
