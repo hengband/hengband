@@ -3060,9 +3060,6 @@ void forget_lite(void)
  * list the "nearby" grids before the more "distant" ones in the
  * array of torch-lit grids.
  *
- * We will correctly handle "large" radius lites, though currently,
- * it is impossible for the player to have more than radius 3 lite.
- *
  * We assume that "radius zero" lite is in fact no lite at all.
  *
  *     Torch     Lantern     Artifacts
@@ -3180,7 +3177,7 @@ void update_lite(void)
 		int d;
 
 		/* Paranoia -- see "LITE_MAX" */
-		if (p > 5) p = 5;
+		if (p > 11) p = 11;
 
 		/* South-East of the player */
 		if (cave_floor_bold(py+1, px+1))
