@@ -3646,7 +3646,7 @@ bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 			 ((m_ptr->sub_align & SUB_ALIGN_GOOD) &&
 			  (n_ptr->sub_align & SUB_ALIGN_EVIL)))
 		{
-			if (!(m_ptr->mflag2 & MFLAG_CHAMELEON) || !(n_ptr->mflag2 & MFLAG_CHAMELEON)) return TRUE;
+			if (!(m_ptr->mflag2 & MFLAG2_CHAMELEON) || !(n_ptr->mflag2 & MFLAG2_CHAMELEON)) return TRUE;
 		}
 	}
 

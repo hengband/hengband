@@ -702,7 +702,7 @@ void monster_death(int m_idx, bool drop_item)
 		}
 	}
 
-	if (m_ptr->mflag2 & MFLAG_CHAMELEON)
+	if (m_ptr->mflag2 & MFLAG2_CHAMELEON)
 	{
 		choose_new_monster(m_idx, TRUE, MON_CHAMELEON);
 		r_ptr = &r_info[m_ptr->r_idx];
@@ -1689,7 +1689,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 			if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
 		}
 
-		if (m_ptr->mflag2 & MFLAG_CHAMELEON)
+		if (m_ptr->mflag2 & MFLAG2_CHAMELEON)
 		{
 			/* You might have unmasked Chameleon first time */
 			r_ptr = real_r_ptr(m_ptr);
@@ -1707,11 +1707,11 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 		if (m_ptr->ml || (r_ptr->flags1 & RF1_UNIQUE))
 		{
 			/* Count kills this life */
-			if ((m_ptr->mflag2 & MFLAG_KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT)) r_info[MON_KAGE].r_pkills++;
+			if ((m_ptr->mflag2 & MFLAG2_KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT)) r_info[MON_KAGE].r_pkills++;
 			else if (r_ptr->r_pkills < MAX_SHORT) r_ptr->r_pkills++;
 
 			/* Count kills in all lives */
-			if ((m_ptr->mflag2 & MFLAG_KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT)) r_info[MON_KAGE].r_tkills++;
+			if ((m_ptr->mflag2 & MFLAG2_KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT)) r_info[MON_KAGE].r_tkills++;
 			else if (r_ptr->r_tkills < MAX_SHORT) r_ptr->r_tkills++;
 
 			/* Hack -- Auto-recall */
@@ -1951,7 +1951,7 @@ msg_format("%sを葬り去った。", m_name);
 		{
 			for (i = 0; i < MAX_KUBI; i++)
 			{
-				if ((kubi_r_idx[i] == m_ptr->r_idx) && !(m_ptr->mflag2 & MFLAG_CHAMELEON))
+				if ((kubi_r_idx[i] == m_ptr->r_idx) && !(m_ptr->mflag2 & MFLAG2_CHAMELEON))
 				{
 #ifdef JP
 msg_format("%sの首には賞金がかかっている。", m_name);
@@ -2491,7 +2491,7 @@ cptr look_mon_desc(int m_idx, u32b mode)
 	}
 
 	/* Display monster's level --- idea borrowed from ToME */
-	if (ap_r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG_KAGE))
+	if (ap_r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG2_KAGE))
 	{
 #ifdef JP
 		return format("レベル%d, %s%s%s", ap_r_ptr->level, desc, attitude, clone);
@@ -2965,7 +2965,7 @@ static void evaluate_monster_exp(char *buf, monster_type *m_ptr)
 	M_INT_SUB(exp_adv_h, exp_adv_l, p_ptr->exp, p_ptr->exp_frac);
 	if ((p_ptr->lev>=PY_MAX_LEVEL) || (p_ptr->prace == RACE_ANDROID))
 		sprintf(buf,"**");
-	else if (!ap_r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG_KAGE))
+	else if (!ap_r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG2_KAGE))
 		sprintf(buf,"??");
 	else if (M_INT_GREATER(exp_mon_h, exp_mon_l, exp_adv_h, exp_adv_l))
 		sprintf(buf,"001");

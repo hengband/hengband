@@ -5514,7 +5514,7 @@ bool polymorph_monster(int y, int x)
 
 	if (p_ptr->inside_arena || p_ptr->inside_battle) return (FALSE);
 
-	if ((p_ptr->riding == c_ptr->m_idx) || (m_ptr->mflag2 & MFLAG_KAGE)) return (FALSE);
+	if ((p_ptr->riding == c_ptr->m_idx) || (m_ptr->mflag2 & MFLAG2_KAGE)) return (FALSE);
 
 	/* Memorize the monster before polymorphing */
 	back_m = *m_ptr;
@@ -5530,7 +5530,7 @@ bool polymorph_monster(int y, int x)
 		/* Get the monsters attitude */
 		if (is_friendly(m_ptr)) mode |= PM_FORCE_FRIENDLY;
 		if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
-		if (m_ptr->mflag2 & MFLAG_NOPET) mode |= PM_NO_PET;
+		if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
 
 		/* "Kill" the "old" monster */
 		delete_monster_idx(c_ptr->m_idx);

@@ -3758,7 +3758,7 @@ bool mutation_power_aux(u32b power)
 				    !(r_ptr->flags1 & RF1_UNIQUE) &&
 				    !p_ptr->inside_arena && !p_ptr->inside_quest &&
 					(r_ptr->level < randint1(p_ptr->lev+50)) &&
-					!(m_ptr->mflag2 & MFLAG_NOGENO))
+					!(m_ptr->mflag2 & MFLAG2_NOGENO))
 				{
 					/* Delete the monster, rather than killing it. */
 					delete_monster_idx(c_ptr->m_idx);
@@ -3777,7 +3777,7 @@ bool mutation_power_aux(u32b power)
 					msg_print("Your invocation is ineffectual!");
 #endif
 
-					if (one_in_(13)) m_ptr->mflag2 |= MFLAG_NOGENO;
+					if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
 				}
 			}
 			break;

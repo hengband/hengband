@@ -178,7 +178,7 @@ monster_race *real_r_ptr(monster_type *m_ptr)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Extract real race */
-	if (m_ptr->mflag2 & MFLAG_CHAMELEON)
+	if (m_ptr->mflag2 & MFLAG2_CHAMELEON)
 	{
 		if (r_ptr->flags1 & RF1_UNIQUE)
 			return &r_info[MON_CHAMELEON_K];
@@ -1698,7 +1698,7 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 		if ((r_ptr->flags1 & RF1_UNIQUE) && !(p_ptr->image && !(mode & 0x200)))
 		{
 			/* Start with the name (thus nominative and objective) */
-			if ((m_ptr->mflag2 & MFLAG_CHAMELEON) && !(mode & 0x100))
+			if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && !(mode & 0x100))
 			{
 #ifdef JP
 				char *t;
@@ -1781,7 +1781,7 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 #endif
 		}
 
-		if ((mode & 0x200) && (m_ptr->mflag2 & MFLAG_CHAMELEON))
+		if ((mode & 0x200) && (m_ptr->mflag2 & MFLAG2_CHAMELEON))
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 			{
@@ -3171,7 +3171,7 @@ msg_print("守りのルーンが壊れた！");
 	{
 		choose_new_monster(c_ptr->m_idx, TRUE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
-		m_ptr->mflag2 |= MFLAG_CHAMELEON;
+		m_ptr->mflag2 |= MFLAG2_CHAMELEON;
 		rating++;
 
 		/* Hack - Set sub_align to neutral when the Chameleon Lord is generated as "GUARDIAN" */
@@ -3181,10 +3181,10 @@ msg_print("守りのルーンが壊れた！");
 	else if (is_kage)
 	{
 		m_ptr->ap_r_idx = MON_KAGE;
-		m_ptr->mflag2 |= MFLAG_KAGE;
+		m_ptr->mflag2 |= MFLAG2_KAGE;
 	}
 
-	if (mode & PM_NO_PET) m_ptr->mflag2 |= MFLAG_NOPET;
+	if (mode & PM_NO_PET) m_ptr->mflag2 |= MFLAG2_NOPET;
 
 	/* Not visible */
 	m_ptr->ml = FALSE;
@@ -3784,7 +3784,7 @@ bool alloc_horde(int y, int x)
 
 	m_idx = cave[y][x].m_idx;
 
-	if (m_list[m_idx].mflag2 & MFLAG_CHAMELEON) r_ptr = &r_info[m_list[m_idx].r_idx];
+	if (m_list[m_idx].mflag2 & MFLAG2_CHAMELEON) r_ptr = &r_info[m_list[m_idx].r_idx];
 	summon_kin_type = r_ptr->d_char;
 
 	for (attempts = randint1(10) + 5; attempts; attempts--)
@@ -4081,7 +4081,7 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 	if (!mon_scatter(&y, &x, m_ptr->fy, m_ptr->fx, 1))
 		return FALSE;
 
-	if (m_ptr->mflag2 & MFLAG_NOPET) mode |= PM_NO_PET;
+	if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
 
 	/* Create a new monster (awake, no groups) */
 	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE)))
@@ -4090,7 +4090,7 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 	if (clone)
 	{
 		m_list[hack_m_idx_ii].smart |= SM_CLONED;
-		m_list[hack_m_idx_ii].mflag2 |= MFLAG_NOPET;
+		m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
 	}
 
 	return TRUE;

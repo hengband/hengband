@@ -3818,7 +3818,7 @@ note = "は動けなくなった！";
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_QUESTOR) ||
 			    (r_ptr->flags3 & RF3_NO_CONF) ||
-			    (m_ptr->mflag2 & MFLAG_NOPET) ||
+			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
 			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 5))
 			{
 				/* Memorize a flag */
@@ -3837,7 +3837,7 @@ note = "には効果がなかった！";
 
 				obvious = FALSE;
 
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
@@ -3847,7 +3847,7 @@ note = "はあなたに敵意を抱いている！";
 				note = " hates you too much!";
 #endif
 
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
@@ -3905,7 +3905,7 @@ note = "は突然友好的になったようだ！";
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_QUESTOR) ||
 			  (!(r_ptr->flags3 & RF3_UNDEAD)) ||
-			    (m_ptr->mflag2 & MFLAG_NOPET) ||
+			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
 				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
@@ -3916,7 +3916,7 @@ note = "には効果がなかった！";
 #endif
 
 				obvious = FALSE;
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
@@ -3926,7 +3926,7 @@ note = "はあなたに敵意を抱いている！";
 				note = " hates you too much!";
 #endif
 
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
@@ -3980,7 +3980,7 @@ note = "は既にあなたの奴隷だ！";
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_QUESTOR) ||
 			  (!(r_ptr->flags3 & RF3_DEMON)) ||
-			    (m_ptr->mflag2 & MFLAG_NOPET) ||
+			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
 				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
@@ -3991,7 +3991,7 @@ note = "には効果がなかった！";
 #endif
 
 				obvious = FALSE;
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
@@ -4001,7 +4001,7 @@ note = "はあなたに敵意を抱いている！";
 				note = " hates you too much!";
 #endif
 
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
@@ -4056,7 +4056,7 @@ note = "は既にあなたの奴隷だ！";
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 			  (!(r_ptr->flags3 & (RF3_ANIMAL))) ||
-			    (m_ptr->mflag2 & MFLAG_NOPET) ||
+			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
 				 (r_ptr->flags3 & (RF3_NO_CONF)) ||
 				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
@@ -4075,7 +4075,7 @@ note = "には効果がなかった！";
 #endif
 
 				obvious = FALSE;
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
@@ -4085,7 +4085,7 @@ note = "はあなたに敵意を抱いている！";
 				note = " hates you too much!";
 #endif
 
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
@@ -4151,7 +4151,7 @@ msg_format("%sを見つめた。",m_name);
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
-			    (m_ptr->mflag2 & MFLAG_NOPET) ||
+			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
 				 (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) ||
 				 ((r_ptr->level+10) > randint1(dam)))
 			{
@@ -4164,7 +4164,7 @@ note = "には効果がなかった！";
 #endif
 
 				obvious = FALSE;
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
@@ -4174,7 +4174,7 @@ note = "はあなたに敵意を抱いている！";
 				note = " hates you too much!";
 #endif
 
-				if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
@@ -5346,7 +5346,7 @@ msg_format("もっと弱らせないと。");
 			}
 			else if (m_ptr->hp < randint0(nokori_hp))
 			{
-				if (m_ptr->mflag2 & MFLAG_CHAMELEON) choose_new_monster(c_ptr->m_idx, FALSE, MON_CHAMELEON);
+				if (m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(c_ptr->m_idx, FALSE, MON_CHAMELEON);
 #ifdef JP
 msg_format("%sを捕えた！",m_name);
 #else
@@ -5621,7 +5621,7 @@ note = "には効果がなかった！";
 			}
 			else
 			{
-				if ((r_ptr->level > randint0(dam)) || (m_ptr->mflag2 & MFLAG_NOGENO))
+				if ((r_ptr->level > randint0(dam)) || (m_ptr->mflag2 & MFLAG2_NOGENO))
 				{
 					dam = 0;
 					angry = TRUE;
@@ -5662,7 +5662,7 @@ note = "には効果がなかった！";
 				note = "is unaffected!";
 #endif
 				get_angry = TRUE;
-				if (one_in_(13)) m_ptr->mflag2 |= MFLAG_NOGENO;
+				if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
 			}
 			break;
 		}
@@ -5751,12 +5751,12 @@ note_dies = "は光を受けてしぼんでしまった！";
 				/* Attempt a saving throw */
 				else if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 				    (r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (m_ptr->mflag2 & MFLAG_NOPET) ||
+				    (m_ptr->mflag2 & MFLAG2_NOPET) ||
 				    (p_ptr->cursed & TRC_AGGRAVATE) ||
 					 ((r_ptr->level+10) > randint1(dam)))
 				{
 					/* Resist */
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG_NOPET;
+					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 				}
 				else
 				{

@@ -4720,7 +4720,7 @@ void aggravate_monsters(int who)
 				m_ptr->csleep = 0;
 				sleep = TRUE;
 			}
-			if (!is_pet(m_ptr)) m_ptr->mflag2 |= MFLAG_NOPET;
+			if (!is_pet(m_ptr)) m_ptr->mflag2 |= MFLAG2_NOPET;
 		}
 
 		/* Speed up monsters in line of sight */
@@ -4799,7 +4799,7 @@ while(!get_com("どの種類(文字)のモンスターを抹殺しますか: ", &typ, FALSE));
 
 		else if (player_cast && (r_ptr->level > randint0(power))) angry = TRUE;
 
-		else if (player_cast && (m_ptr->mflag2 & MFLAG_NOGENO)) angry = TRUE;
+		else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) angry = TRUE;
 
 		/* Delete the monster */
 		else delete_monster_idx(i);
@@ -4839,7 +4839,7 @@ msg_format("%^sが目を覚ました。", m_name);
 				}
 				set_hostile(m_ptr);
 			}
-			if (one_in_(13)) m_ptr->mflag2 |= MFLAG_NOGENO;
+			if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
 		}
 
 		if (player_cast)
@@ -4928,7 +4928,7 @@ bool mass_genocide(int power, int player_cast)
 
 		else if (player_cast && (r_ptr->level > randint0(power))) angry = TRUE;
 
-		else if (player_cast && (m_ptr->mflag2 & MFLAG_NOGENO)) angry = TRUE;
+		else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) angry = TRUE;
 
 		/* Delete the monster */
 		else delete_monster_idx(i);
@@ -4968,7 +4968,7 @@ msg_format("%^sが目を覚ました。", m_name);
 				}
 				set_hostile(m_ptr);
 			}
-			if (one_in_(13)) m_ptr->mflag2 |= MFLAG_NOGENO;
+			if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
 		}
 
 		if (player_cast)
@@ -5060,7 +5060,7 @@ bool mass_genocide_undead(int power, int player_cast)
 
 		else if (player_cast && (r_ptr->level > randint0(power))) angry = TRUE;
 
-		else if (player_cast && (m_ptr->mflag2 & MFLAG_NOGENO)) angry = TRUE;
+		else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) angry = TRUE;
 
 		/* Delete the monster */
 		else delete_monster_idx(i);
@@ -5100,7 +5100,7 @@ msg_format("%^sが目を覚ました。", m_name);
 				}
 				set_hostile(m_ptr);
 			}
-			if (one_in_(13)) m_ptr->mflag2 |= MFLAG_NOGENO;
+			if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
 		}
 
 		if (player_cast)
@@ -5193,8 +5193,8 @@ bool probing(void)
 
 			if (m_ptr->ap_r_idx != m_ptr->r_idx)
 			{
-				if (m_ptr->mflag2 & MFLAG_KAGE)
-					m_ptr->mflag2 &= ~(MFLAG_KAGE);
+				if (m_ptr->mflag2 & MFLAG2_KAGE)
+					m_ptr->mflag2 &= ~(MFLAG2_KAGE);
 
 				m_ptr->ap_r_idx = m_ptr->r_idx;
 				lite_spot(m_ptr->fy, m_ptr->fx);

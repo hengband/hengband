@@ -2926,11 +2926,11 @@
 #define MFLAG_SHOW      0x40    /* Monster is recently memorized */
 #define MFLAG_MARK      0x80    /* Monster is currently memorized */
 
-#define MFLAG_KAGE      0x01    /* Monster is kage */
-#define MFLAG_NOPET     0x02    /* Cannot make monster pet */
-#define MFLAG_NOGENO    0x04    /* Cannot genocide */
-#define MFLAG_CHAMELEON 0x08    /* Monster is chameleon */
-#define MFLAG_NOFLOW    0x10    /* Monster is in no_flow_by_smell mode */
+#define MFLAG2_KAGE      0x01    /* Monster is kage */
+#define MFLAG2_NOPET     0x02    /* Cannot make monster pet */
+#define MFLAG2_NOGENO    0x04    /* Cannot genocide */
+#define MFLAG2_CHAMELEON 0x08    /* Monster is chameleon */
+#define MFLAG2_NOFLOW    0x10    /* Monster is in no_flow_by_smell mode */
 
 
 /*

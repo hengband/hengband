@@ -725,7 +725,7 @@ static void rd_monster_old(monster_type *m_ptr)
 		if (m_ptr->r_idx < 0)
 		{
 			m_ptr->r_idx = (0-m_ptr->r_idx);
-			m_ptr->mflag2 |= MFLAG_KAGE;
+			m_ptr->mflag2 |= MFLAG2_KAGE;
 		}
 	}
 	else
@@ -735,7 +735,7 @@ static void rd_monster_old(monster_type *m_ptr)
 
 	if (z_older_than(11, 0, 12))
 	{
-		if (m_ptr->mflag2 & MFLAG_KAGE)
+		if (m_ptr->mflag2 & MFLAG2_KAGE)
 			m_ptr->ap_r_idx = MON_KAGE;
 	}
 

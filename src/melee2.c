@@ -963,7 +963,7 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 			if (!cave_floor_grid(c_ptr)) continue;
 
 			/* Check for "availability" (if monsters can flow) */
-			if (!(m_ptr->mflag2 & MFLAG_NOFLOW))
+			if (!(m_ptr->mflag2 & MFLAG2_NOFLOW))
 			{
 				/* Ignore grids very far from the player */
 				if (c_ptr->dist == 0) continue;
@@ -1098,7 +1098,7 @@ static bool get_moves(int m_idx, int *mm)
 	bool         done = FALSE;
 	bool         will_run = mon_will_run(m_idx);
 	cave_type	*c_ptr;
-	bool         no_flow = ((m_ptr->mflag2 & MFLAG_NOFLOW) && (cave[m_ptr->fy][m_ptr->fx].cost > 2));
+	bool         no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) && (cave[m_ptr->fy][m_ptr->fx].cost > 2));
 	bool         can_pass_wall;
 
 	/* Flow towards the player */
@@ -2291,7 +2291,7 @@ static void process_monster(int m_idx)
 		}
 	}
 
-	if ((m_ptr->mflag2 & MFLAG_CHAMELEON) && one_in_(13) && !m_ptr->csleep)
+	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !m_ptr->csleep)
 	{
 		choose_new_monster(m_idx, FALSE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
@@ -3693,7 +3693,7 @@ msg_format("%^sが%sを破壊した。", m_name, o_name);
 	 *  Try to flow by smell.
 	 */
 	if (p_ptr->no_flowed && i > 2 &&  m_ptr->target_y)
-		m_ptr->mflag2 &= ~MFLAG_NOFLOW;
+		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
 	/* If we haven't done anything, try casting a spell again */
 	if (!do_turn && !do_move && !m_ptr->monfear && !(p_ptr->riding == m_idx) && aware)
@@ -3912,7 +3912,7 @@ void process_monsters(void)
 		/* Flow by smell is allowed */
 		if (!p_ptr->no_flowed)
 		{
-			m_ptr->mflag2 &= ~MFLAG_NOFLOW;
+			m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 		}
 
 		/* Assume no move */
@@ -3936,7 +3936,7 @@ void process_monsters(void)
 #if 0 /* (cave[py][px].when == cave[fy][fx].when) is always FALSE... */
 		/* Hack -- Monsters can "smell" the player from far away */
 		/* Note that most monsters have "aaf" of "20" or so */
-		else if (!(m_ptr->mflag2 & MFLAG_NOFLOW) &&
+		else if (!(m_ptr->mflag2 & MFLAG2_NOFLOW) &&
 			(cave_floor_bold(py, px) || (cave[py][px].feat == FEAT_TREES)) &&
 			(cave[py][px].when == cave[fy][fx].when) &&
 			(cave[fy][fx].dist < MONSTER_FLOW_DEPTH) &&
@@ -3988,7 +3988,7 @@ void process_monsters(void)
 
 		/* Give up flow_by_smell when it might useless */
 		if (p_ptr->no_flowed && one_in_(3))
-			m_ptr->mflag2 |= MFLAG_NOFLOW;
+			m_ptr->mflag2 |= MFLAG2_NOFLOW;
 
 		/* Hack -- notice death or departure */
 		if (!p_ptr->playing || p_ptr->is_dead) break;
@@ -4124,7 +4124,7 @@ void monster_gain_exp(int m_idx, int s_idx)
 	if (m_idx == p_ptr->riding) new_exp = (new_exp + 1) / 2;
 	if (!dun_level) new_exp /= 5;
 	m_ptr->exp += new_exp;
-	if (m_ptr->mflag2 & MFLAG_CHAMELEON) return;
+	if (m_ptr->mflag2 & MFLAG2_CHAMELEON) return;
 
 	if (m_ptr->exp >= r_ptr->next_exp)
 	{
