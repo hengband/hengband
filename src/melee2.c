@@ -3701,7 +3701,7 @@ msg_format("%^s¤¬%s¤òÇË²õ¤·¤¿¡£", m_name, o_name);
 	}
 
 	/*
-	 *  Forward movements failed, but now recieved LOS attack!
+	 *  Forward movements failed, but now received LOS attack!
 	 *  Try to flow by smell.
 	 */
 	if (p_ptr->no_flowed && i > 2 &&  m_ptr->target_y)

@@ -1555,7 +1555,7 @@ msg_print("おめでとうございます。");
 #ifdef JP
 msg_format("%d＄を受け取った。", battle_odds);
 #else
-				msg_format("You recieved %d gold.", battle_odds);
+				msg_format("You received %d gold.", battle_odds);
 #endif
 			p_ptr->au += battle_odds;
 			}
