@@ -4906,7 +4906,7 @@ cptr spell_names[VALID_REALM][32] =
 		"Resistance",
 		"Haste Self",
 		"Walk through Wall",
-		"Pulish Shield",
+		"Polish Shield",
 		"Create Golem",
 		"Magical armor",
 
