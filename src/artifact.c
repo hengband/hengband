@@ -2396,7 +2396,7 @@ bool activate_random_artifact(object_type * o_ptr)
 			if (banish_evil(100))
 			{
 #ifdef JP
-				msg_print("アーティファクトの力が邪悪を打ち倒した！");
+				msg_print("アーティファクトの力が邪悪を打ち払った！");
 #else
 				msg_print("The power of the artifact banishes evil!");
 #endif
