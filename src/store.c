@@ -4464,9 +4464,9 @@ void do_cmd_store(void)
 {
 	int         which;
 	int         maintain_num;
-	int         tmp_chr;
 	int         i;
 	cave_type   *c_ptr;
+	bool        need_redraw_store_inv; /* To redraw missiles damage and prices in store */
 
 
 	/* Access the player grid */
@@ -4568,9 +4568,6 @@ void do_cmd_store(void)
 	{
 		/* Hack -- Clear line 1 */
 		prt("", 1, 0);
-
-		/* Hack -- Check the charisma */
-		tmp_chr = p_ptr->stat_use[A_CHR];
 
 		/* Clear */
 		clear_from(20);
@@ -4678,6 +4675,12 @@ void do_cmd_store(void)
 
 		/* Process the command */
 		store_process_command();
+
+		/*
+		 * Hack -- To redraw missiles damage and prices in store
+		 * If player's charisma changes, or if player changes a bow, PU_BONUS is set
+		 */
+		need_redraw_store_inv = (p_ptr->update & PU_BONUS) ? TRUE : FALSE;
 
 		/* Hack -- Character is still in "icky" mode */
 		character_icky = TRUE;
@@ -4788,7 +4791,8 @@ void do_cmd_store(void)
 		}
 
 		/* Hack -- Redisplay store prices if charisma changes */
-		if (tmp_chr != p_ptr->stat_use[A_CHR]) display_inventory();
+		/* Hack -- Redraw missiles damage if player changes bow */
+		if (need_redraw_store_inv) display_inventory();
 
 		/* Hack -- get kicked out of the store */
 		if (st_ptr->store_open >= turn) leave_store = TRUE;
