@@ -1985,7 +1985,7 @@ static cptr realm_jouhou[VALID_REALM] =
 
 "Demon is a very evil realm, same as Death. It provides various attack spells and devilish detection spells. at higher levels, Demon magic provides ability to dominate demons, and to polymorph yourself into a demon.",
 
-"Crusade is a realm of 'Justice'; It does have many attack spells which are mostly used for harming and banishing foul minions of evil, and these spells are not so effective for good monsters",
+"Crusade is a realm of 'Justice'; It does have many attack spells which are mostly used for harming and banishing foul minions of evil, and these spells are not so effective for good monsters.",
 
 "Music magic shows various effects as sing song. There is two type of song; the one which shows effects instantly and the other one shows effect continuously until SP runs out. But the latter type has a limit; only one song can be sing at the same time.",
 

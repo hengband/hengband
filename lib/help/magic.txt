@@ -40,19 +40,21 @@ study spells.
 
 --- Class/Realm Restrictions table ---
 
-              Life    Nature  Death   Arcane  Daemon
-Class            Sorcery  Chaos   Trump   Craft       
---------------+---+---+---+---+---+---+---+---+---+--
-Mage          |1/2|1/2|1/2|1/2|1/2|1/2|1/2|1/2|1/2| 
-Priest        | 1 | 2 | 2 | 2 | 1 | 2 | 2 | 2 | 1 | 
-Rogue         |   | 1 |   |   | 1 | 1 | 1 | 1 |   |
-Ranger        |   | 2 | 1 | 2 | 2 | 2 | 2 |   | 2 |
-Paladin       | 1 |   |   |   | 1 |   |   |   |   |
-Warrior-Mage  | 2 | 2 | 2 | 2 | 2 | 2 | 1 | 2 | 2 |
-Chaos Warrior |   |   |   | 1 |   |   |   |   | 1 |
-Monk          | 1 |   | 1 |   | 1 |   |   | 1 |   | 
-High Mage     | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
-ForceTrainer  | 1 |   | 1 |   | 1 |   |   | 1 |   |  
+               Life     Nature   Death    Arcane   Daemon
+Class              Sorcery  Chaos     Trump   Craft     Crusade  
+--------------+-----+---+---+---+-----+---+---+---+-----+-----+--
+Mage          |1/2  |1/2|1/2|1/2|1/2  |1/2|1/2|1/2|1/2  |1/2  | 
+Priest        |1/(2)| 2 | 2 | 2 |1/(2)| 2 | 2 | 2 |1/(2)|1/(2)| 
+Rogue         |     | 1 |   |   | 1   | 1 | 1 | 1 |     |     |
+Ranger        |     | 2 | 1 | 2 | 2   | 2 | 2 |   | 2   |     |
+Paladin       |     |   |   |   | 1   |   |   |   |     | 1   |
+Warrior-Mage  | 2   | 2 | 2 | 2 | 2   | 2 | 1 | 2 | 2   | 2   |
+Chaos Warrior |     |   |   | 1 |     |   |   |   | 1   |     |
+Monk          | 1   |   | 1 |   | 1   |   |   | 1 |     |     | 
+High Mage     | 1   | 1 | 1 | 1 | 1   | 1 | 1 | 1 | 1   | 1   |
+              |     |   |   |   |     |   | 1 |   |     |     |  
+              |     |   |   |   |     | 1 |   |   |     |     |  
+ForceTrainer  | 1   |   | 1 |   | 1   |   |   | 1 |     | 1   |  
 Sorcerer      |  All realms
 Red Mage      |  All realms (Lower rank spellbooks only)
 
@@ -83,11 +85,12 @@ See raceclas.tx#TheClasses [a] for more details.
 
 --- Life ---
 
-     Life magic is 'good' magic; it relies mostly on healing and
-     protective spells.  It does have a few attack spells as well, but
-     these are mostly used for harming and banishing foul minions of
-     evil, especially undead monsters.  The fail rate of Life spells
-     goes up if the caster's alignment tends towards evil.
+     Life magic is very good for healing; it relies mostly on healing,
+     protection and detection spells. Also life magic have a few
+     attack spells as well. It said that some high level spell of life
+     magic can disintegrate Undead monsters into ash.  The fail rate
+     of Life spells goes up if the caster's alignment tends towards
+     evil.
 
 
 --- Sorcery ---
@@ -204,6 +207,14 @@ See raceclas.tx#TheClasses [a] for more details.
      temporary trans- formation spells which allow caster to become a
      Demon or a Demon Lord.  The fail rate of Daemon spells goes up
      for casters aligned towards good.
+
+--- Crusade ---
+
+     Crusade is a realm of 'Justice'; It does have many attack spells
+     which are mostly used for harming and banishing foul minions of
+     evil, and these spells are not so effective for good monsters.
+     The fail rate of Crusade spells goes up if the caster's alignment
+     tends towards evil.
 
 
 

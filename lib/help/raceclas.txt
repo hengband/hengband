@@ -468,18 +468,19 @@ command("U"/"O").
     ability.  A Priest's primary stat is Wisdom since this determine
     his success at praying to his deity.
 
-    Priest can select from Life, Death, or Daemon as a first realm,
-    and choose second realm almost freely.  But two kinds of pair
-    selection - Life/Death and Life/Daemon - are not allowed.  Priests
-    can learn all spells in the selected realms, even if not as
-    efficiently as mages.  However, when learning spells, priests
+    Priest can select from Life, Death, Daemon, or Crusade as a first
+    realm, and choose second realm almost freely.  But pairs of a good
+    magic and a bad magic from these four realms are are not allowed.
+    Priests can learn all spells in the selected realms, even if not
+    as efficiently as mages.  However, when learning spells, priests
     cannot voluntarily decide which spells to study: they are rewarded
     with new prayers by their patron deities, with no money-back
-    satisfaction guarantee.  Priests which select the Life realm have
-    a class power - 'Bless Weapon' - which blesses any edged weapon to
-    be suitable for priests to wield.  Every priest which select Death
-    or Daemon realms have a class power - 'Evocation' - which damages,
-    scares and banish all monsters in sight.
+    satisfaction guarantee.  Priests which select Life realm or
+    Crusade realm have a class power - 'Bless Weapon' - which blesses
+    any edged weapon to be suitable for priests to wield.  Every
+    priest which select Death realm or Daemon realm have a class power
+    - 'Evocation' - which damages, scares and banish all monsters in
+    sight.
 
 
 --- Rogue ---
@@ -528,14 +529,15 @@ command("U"/"O").
     decent saving throw due to his divine alliance.  Wisdom determines
     a Paladin's success at praying to his deity.
 
-    Paladins can select a realm from Life and Death.  Like priests,
+    Paladins can select a realm from Crusade and Death.  Like priests,
     they cannot select which prayers to learn, but are rewarded with
     new prayers by their deities.  They can learn all spells, but not
     as fast as priests.  They detest paganism so strongly that they
     will even gain experience for destroying high-level pagan spell-
-    books: 'pagan' means Life spellbooks for a Death Paladin and all
-    spellbooks other than Life for a Life Paladin.  Depending on their
-    realm, they have a class power - 'Holy Lance' or 'Hell Lance'.
+    books: 'pagan' means Life or Crusade spellbooks for a Death
+    Paladin and all spellbooks other than Life and Crusade for a
+    Crusade Paladin.  Depending on their realm, they have a class
+    power - 'Holy Lance' or 'Hell Lance'.
 
 
 --- Warrior-Mage ---
@@ -788,16 +790,16 @@ command("U"/"O").
 
     ForceTrainer use both spellbook magic and the special spiritual
     power called the Force.  They can select a realm from Life,
-    Nature, Craft, and Death, just like Monks.  To use The Force, you
-    select it just as if it were spellbook 'w'; which means you need
-    to press 'm' and then 'w' to select the Force.  The most important
-    spell of the Force is 'Improve Force'; each time a ForceTrainer
-    activates it, their Force power becomes more powerful, and their
-    attack power in bare-handed melee fighting is increased
-    temporarily.  The strengthened Force can be released at one stroke
-    when a ForceTrainer activates some other Force spell, typically an
-    attack spell.  They have a class power - 'Clear Mind' - which
-    allows them to rapidly regenerate their mana.
+    Nature, Craft, Death, and Crusade.  To use The Force, you select
+    it just as if it were spellbook 'w'; which means you need to press
+    'm' and then 'w' to select the Force.  The most important spell of
+    the Force is 'Improve Force'; each time a ForceTrainer activates
+    it, their Force power becomes more powerful, and their attack
+    power in bare-handed melee fighting is increased temporarily.  The
+    strengthened Force can be released at one stroke when a
+    ForceTrainer activates some other Force spell, typically an attack
+    spell.  They have a class power - 'Clear Mind' - which allows them
+    to rapidly regenerate their mana.
 
 
 --- Blue-Mage ---
