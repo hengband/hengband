@@ -4,10 +4,10 @@ Please choose one of the following online help files:
 
     (a) Hengband Options                    (option.txt)
     (b) Option Set 1 - Input from keyboard  (option.txt#Input)
-    (c) Option Set 2 - Screen output        (option.txt#Output)
-    (d) Option Set 3 - Game Play            (option.txt#GamePlay)
-    (e) Option Set 4 - Disturbance          (option.txt#Disturbance)
-    (f) Option set 5 - Efficiency           (option.txt#Efficiency)
+    (c) Option Set 2 - Map Screen           (option.txt#MapScreen)
+    (d) Option set 3 - Text Display         (option.txt#TextDisplay)
+    (e) Option Set 4 - Game Play            (option.txt#GamePlay)
+    (f) Option Set 5 - Disturbance          (option.txt#Disturbance)
     (g) Option set 6 - Easy Auto-Destroyer  (option.txt#AutoDestroyer)
     (h) Option set R - Play-record          (option.txt#PlayRecord)
     (i) Option D - Base Delay Factor        (option.txt#BaseDelay)
@@ -22,10 +22,10 @@ Please choose one of the following online help files:
 
 ***** [a] option.txt
 ***** [b] option.txt#Input
-***** [c] option.txt#Output
-***** [d] option.txt#GamePlay
-***** [e] option.txt#Disturbance
-***** [f] option.txt#Efficiency
+***** [c] option.txt#MapScreen
+***** [d] option.txt#TextDisplay
+***** [e] option.txt#GamePlay
+***** [f] option.txt#Disturbance
 ***** [g] option.txt#AutoDestroyer
 ***** [h] option.txt#PlayRecord
 ***** [i] option.txt#BaseDelay

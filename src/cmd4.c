@@ -2291,28 +2291,28 @@ void do_cmd_options(void)
 
 		/* Give some choices */
 #ifdef JP
-		prt("(1)     キー入力          オプション", 2, 5);
-		prt("(2)     画面出力          オプション", 3, 5);
-		prt("(3)   ゲームプレイ        オプション", 4, 5);
-		prt("(4)   行動中止関係        オプション", 5, 5);
-		prt("(5)      効率化           オプション", 6, 5);
-		prt("(6) 簡易アイテム自動破壊  オプション", 7, 5);
-		prt("(R)    プレイ記録         オプション", 8, 5);
+		prt("(1)      キー入力        オプション", 2, 5);
+		prt("(2)     マップ画面       オプション", 3, 5);
+		prt("(3)    テキスト表示      オプション", 4, 5);
+		prt("(4)    ゲームプレイ      オプション", 5, 5);
+		prt("(5)    行動中止関係      オプション", 6, 5);
+		prt("(6)    簡易自動破壊      オプション", 7, 5);
+		prt("(R)     プレイ記録       オプション", 8, 5);
 
 		/* Special choices */
-		prt("(P) 自動拾いエディタ", 10, 5);
-		prt("(D)  基本ウェイト量", 11, 5);
+		prt("(P)  自動拾いエディタ", 10, 5);
+		prt("(D)   基本ウェイト量", 11, 5);
 		prt("(H) 低ヒットポイント警告", 12, 5);
-		prt("(M)   低魔力色閾値", 13, 5);
-		prt("(A)    自動セーブ         オプション", 14, 5);
+		prt("(M)    低魔力色閾値", 13, 5);
+		prt("(A)     自動セーブ       オプション", 14, 5);
 		/* Window flags */
-		prt("(W) ウインドウフラグ", 15, 5);
+		prt("(W)  ウインドウフラグ", 15, 5);
 #else
 		prt("(1) Input Options", 2, 5);
-		prt("(2) Output Options", 3, 5);
-		prt("(3) Game-Play Options", 4, 5);
-		prt("(4) Disturbance Options", 5, 5);
-		prt("(5) Efficiency Options", 6, 5);
+		prt("(2) Map Screen Options", 3, 5);
+		prt("(3) Text Display Options", 4, 5);
+		prt("(4) Game-Play Options", 5, 5);
+		prt("(5) Disturbance Options", 6, 5);
 		prt("(6) Easy Auto-Destroyer Options", 7, 5);
 		prt("(R) Play-record Options", 8, 5);
 		/* Special choices */
@@ -2329,7 +2329,7 @@ void do_cmd_options(void)
 		{
 			/* Birth */
 #ifdef JP
-			prt("(B)       初期            オプション (参照のみ)", 16, 5);
+			prt("(B)        初期          オプション (参照のみ)", 16, 5);
 #else
 			prt("(B) Birth Options (Browse Only)", 16, 5);
 #endif
@@ -2338,7 +2338,7 @@ void do_cmd_options(void)
 		{
 			/* Birth */
 #ifdef JP
-			prt("(B)       初期            オプション", 16, 5);
+			prt("(B)        初期          オプション", 16, 5);
 #else
 			prt("(B) Birth Options", 16, 5);
 #endif
@@ -2349,7 +2349,7 @@ void do_cmd_options(void)
 		{
 			/* Cheating */
 #ifdef JP
-			prt("(C)       詐欺            オプション", 17, 5);
+			prt("(C)        詐欺          オプション", 17, 5);
 #else
 			prt("(C) Cheating Options", 17, 5);
 #endif
@@ -2373,7 +2373,6 @@ void do_cmd_options(void)
 		/* Analyze */
 		switch (k)
 		{
-			/* General Options */
 			case '1':
 			{
 				/* Process the general options */
@@ -2386,21 +2385,31 @@ void do_cmd_options(void)
 				break;
 			}
 
-			/* General Options */
 			case '2':
 			{
 				/* Process the general options */
 #ifdef JP
-				do_cmd_options_aux(OPT_PAGE_OUTPUT, "画面出力オプション");
+				do_cmd_options_aux(OPT_PAGE_MAPSCREEN, "マップ画面オプション");
 #else
-				do_cmd_options_aux(OPT_PAGE_OUTPUT, "Output Options");
+				do_cmd_options_aux(OPT_PAGE_MAPSCREEN, "Map Screen Options");
 #endif
 
 				break;
 			}
 
-			/* Inventory Options */
 			case '3':
+			{
+				/* Spawn */
+#ifdef JP
+				do_cmd_options_aux(OPT_PAGE_TEXT, "テキスト表示オプション");
+#else
+				do_cmd_options_aux(OPT_PAGE_TEXT, "Text Display Options");
+#endif
+
+				break;
+			}
+
+			case '4':
 			{
 				/* Spawn */
 #ifdef JP
@@ -2412,8 +2421,7 @@ void do_cmd_options(void)
 				break;
 			}
 
-			/* Disturbance Options */
-			case '4':
+			case '5':
 			{
 				/* Spawn */
 #ifdef JP
@@ -2425,25 +2433,11 @@ void do_cmd_options(void)
 				break;
 			}
 
-			/* Efficiency Options */
-			case '5':
-			{
-				/* Spawn */
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_EFFICIENCY, "効率化オプション");
-#else
-				do_cmd_options_aux(OPT_PAGE_EFFICIENCY, "Efficiency Options");
-#endif
-
-				break;
-			}
-
-			/* Object auto-destruction Options */
 			case '6':
 			{
 				/* Spawn */
 #ifdef JP
-				do_cmd_options_aux(OPT_PAGE_AUTODESTROY, "簡易アイテム自動破壊オプション");
+				do_cmd_options_aux(OPT_PAGE_AUTODESTROY, "簡易自動破壊オプション");
 #else
 				do_cmd_options_aux(OPT_PAGE_AUTODESTROY, "Easy Auto-Destroyer Options");
 #endif

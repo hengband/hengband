@@ -6604,42 +6604,117 @@ option_type option_info[] =
 	"numpad_as_cursorkey",          "Use numpad keys as cursor keys in editor mode" },
 #endif
 
-	/*** Output Options ***/
+	/*** Map Screen Options ***/
 
 #ifdef JP
-	{ &depth_in_feet,               FALSE, OPT_PAGE_OUTPUT, 0, 7,
-	"depth_in_feet",                "ダンジョンの深さをフィートで表示する" },
+	{ &center_player,               FALSE, OPT_PAGE_MAPSCREEN, 5, 11,
+	"center_player",                "常にプレイヤーを中心に置く(*遅い*)" },
 #else
-	{ &depth_in_feet,               FALSE, OPT_PAGE_OUTPUT, 0, 7,
-	"depth_in_feet",                "Show dungeon level in feet" },
+	{ &center_player,               FALSE, OPT_PAGE_MAPSCREEN, 5, 11,
+	"center_player",                "Center map while walking (*slow*)" },
 #endif
 
 #ifdef JP
-	{ &show_labels,                 TRUE,  OPT_PAGE_OUTPUT, 0, 10,
-	"show_labels",                  "装備一覧で装備場所を表示する" },
+	{ &center_running,              TRUE,  OPT_PAGE_MAPSCREEN, 5, 12,
+	"center_running",               "走っている時でも中心に置く" },
 #else
-	{ &show_labels,                 TRUE,  OPT_PAGE_OUTPUT, 0, 10,
-	"show_labels",                  "Show labels in object listings" },
+	{ &center_running,              TRUE,  OPT_PAGE_MAPSCREEN, 5, 12,
+	"center_running",               "Centering even while running" },
 #endif
 
 #ifdef JP
-	{ &show_weights,                TRUE,  OPT_PAGE_OUTPUT, 0, 11,
-	"show_weights",                 "アイテム一覧で重量を表示する" },
+	{ &view_yellow_lite,            TRUE,  OPT_PAGE_MAPSCREEN, 1, 28,
+	"view_yellow_lite",             "明かりの範囲を特別な色で表示する" },
 #else
-	{ &show_weights,                TRUE,  OPT_PAGE_OUTPUT, 0, 11,
-	"show_weights",                 "Show weights in object listings" },
+	{ &view_yellow_lite,            TRUE,  OPT_PAGE_MAPSCREEN, 1, 28,
+	"view_yellow_lite",             "Use special colors for torch-lit grids" },
 #endif
 
 #ifdef JP
-	{ &show_item_graph,             TRUE,  OPT_PAGE_OUTPUT, 2, 0,
-	"show_item_graph",              "アイテムのシンボルを表示する" },
+	{ &view_bright_lite,            TRUE,  OPT_PAGE_MAPSCREEN, 1, 29,
+	"view_bright_lite",             "視界の範囲を特別な色で表示する" },
 #else
-	{ &show_item_graph,             TRUE,  OPT_PAGE_OUTPUT, 2, 0,
-	"show_item_graph",              "Show items graphics" },
+	{ &view_bright_lite,            TRUE,  OPT_PAGE_MAPSCREEN, 1, 29,
+	"view_bright_lite",             "Use special colors for 'viewable' grids" },
 #endif
 
 #ifdef JP
-	{ &plain_pickup,                FALSE, OPT_PAGE_OUTPUT, 6, 6,
+	{ &view_granite_lite,           TRUE,  OPT_PAGE_MAPSCREEN, 1, 30,
+	"view_granite_lite",            "壁を特別な色で表示する(重い)" },
+#else
+	{ &view_granite_lite,           TRUE,  OPT_PAGE_MAPSCREEN, 1, 30,
+	"view_granite_lite",            "Use special colors for wall grids (slow)" },
+#endif
+
+#ifdef JP
+	{ &view_special_lite,           TRUE,  OPT_PAGE_MAPSCREEN, 1, 31,
+	"view_special_lite",            "床を特別な色で表示する(重い)" },
+#else
+	{ &view_special_lite,           TRUE,  OPT_PAGE_MAPSCREEN, 1, 31,
+	"view_special_lite",            "Use special colors for floor grids (slow)" },
+#endif
+
+#ifdef JP
+	{ &view_reduce_view,            FALSE, OPT_PAGE_MAPSCREEN, 1, 17,
+	"view_reduce_view",             "街では視野を狭くする" },
+#else
+	{ &view_reduce_view,            FALSE, OPT_PAGE_MAPSCREEN, 1, 17,
+	"view_reduce_view",             "Reduce view-radius in town" },
+#endif
+
+#ifdef JP
+	{ &fresh_before,                TRUE,  OPT_PAGE_MAPSCREEN, 1, 23,
+	"fresh_before",                 "連続コマンド中に画面を再描画し続ける" },
+#else
+	{ &fresh_before,                TRUE,  OPT_PAGE_MAPSCREEN, 1, 23,
+	"fresh_before",                 "Flush output while continuous command" },
+#endif
+
+#ifdef JP
+	{ &fresh_after,                 FALSE, OPT_PAGE_MAPSCREEN, 1, 24,
+	"fresh_after",                  "コマンド後に画面を常に再描画し続ける" },
+#else
+	{ &fresh_after,                 FALSE, OPT_PAGE_MAPSCREEN, 1, 24,
+	"fresh_after",                  "Flush output after monster's move" },
+#endif
+
+#ifdef JP
+	{ &fresh_message,               FALSE, OPT_PAGE_MAPSCREEN, 1, 25,
+	"fresh_message",                "メッセージの後に画面を再描画する" },
+#else
+	{ &fresh_message,               FALSE, OPT_PAGE_MAPSCREEN, 1, 25,
+	"fresh_message",                "Flush output after every message" },
+#endif
+
+#ifdef JP
+	{ &hilite_player,               FALSE, OPT_PAGE_MAPSCREEN, 1, 27,
+	"hilite_player",                "プレイヤーにカーソルを合わせる" },
+#else
+	{ &hilite_player,               FALSE, OPT_PAGE_MAPSCREEN, 1, 27,
+	"hilite_player",                "Hilite the player with the cursor" },
+#endif
+
+#ifdef JP
+	{ &display_path,                FALSE, OPT_PAGE_MAPSCREEN, 2, 8,
+	"display_path",                 "魔法や矢の軌跡を表示する" },
+#else
+	{ &display_path,                FALSE, OPT_PAGE_MAPSCREEN, 2, 8,
+	"display_path",                 "Display actual path before shooting" },
+#endif
+
+
+	/*** Text Display Options ***/
+
+#ifdef JP
+	{ &plain_descriptions,          TRUE,  OPT_PAGE_TEXT, 5, 1,
+	"plain_descriptions",           "アイテムの記述を簡略にする" },
+#else
+	{ &plain_descriptions,          TRUE,  OPT_PAGE_TEXT, 5, 1,
+	"plain_descriptions",           "Plain object descriptions" },
+#endif
+
+#ifdef JP
+	{ &plain_pickup,                FALSE, OPT_PAGE_TEXT, 6, 6,
 	"plain_pickup",                 "「拾った」メッセージを簡略化する" },
 #else
 	{ &plain_pickup,                FALSE, OPT_PAGE_JAPANESE_ONLY, 6, 6,
@@ -6647,108 +6722,93 @@ option_type option_info[] =
 #endif
 
 #ifdef JP
-	{ &equippy_chars,               TRUE,  OPT_PAGE_OUTPUT, 1, 12,
+	{ &always_show_list,            TRUE,  OPT_PAGE_TEXT, 4, 0,
+	"always_show_list",             "選択時には常に一覧を表示する" },
+#else
+	{ &always_show_list,            TRUE,  OPT_PAGE_TEXT, 4, 0,
+	"always_show_list",             "Always show list when choosing items" },
+#endif
+
+#ifdef JP
+	{ &depth_in_feet,               FALSE, OPT_PAGE_TEXT, 0, 7,
+	"depth_in_feet",                "ダンジョンの深さをフィートで表示する" },
+#else
+	{ &depth_in_feet,               FALSE, OPT_PAGE_TEXT, 0, 7,
+	"depth_in_feet",                "Show dungeon level in feet" },
+#endif
+
+#ifdef JP
+	{ &show_labels,                 TRUE,  OPT_PAGE_TEXT, 0, 10,
+	"show_labels",                  "装備一覧で装備場所を表示する" },
+#else
+	{ &show_labels,                 TRUE,  OPT_PAGE_TEXT, 0, 10,
+	"show_labels",                  "Show labels in object listings" },
+#endif
+
+#ifdef JP
+	{ &show_weights,                TRUE,  OPT_PAGE_TEXT, 0, 11,
+	"show_weights",                 "アイテム一覧で重量を表示する" },
+#else
+	{ &show_weights,                TRUE,  OPT_PAGE_TEXT, 0, 11,
+	"show_weights",                 "Show weights in object listings" },
+#endif
+
+#ifdef JP
+	{ &show_item_graph,             TRUE,  OPT_PAGE_TEXT, 2, 0,
+	"show_item_graph",              "アイテムのシンボルを表示する" },
+#else
+	{ &show_item_graph,             TRUE,  OPT_PAGE_TEXT, 2, 0,
+	"show_item_graph",              "Show items graphics" },
+#endif
+
+#ifdef JP
+	{ &equippy_chars,               TRUE,  OPT_PAGE_TEXT, 1, 12,
 	"equippy_chars",                "ステータスに文字で装備を表示する" },
 #else
-	{ &equippy_chars,               TRUE,  OPT_PAGE_OUTPUT, 1, 12,
+	{ &equippy_chars,               TRUE,  OPT_PAGE_TEXT, 1, 12,
 	"equippy_chars",                "Display 'equippy' chars" },
 #endif
 
 #ifdef JP
-	{ &display_mutations,           FALSE, OPT_PAGE_OUTPUT, 5, 0,
+	{ &display_mutations,           FALSE, OPT_PAGE_TEXT, 5, 0,
 	"display_mutations",            "'C'コマンドで突然変異を表示する" },
 #else
-	{ &display_mutations,           FALSE, OPT_PAGE_OUTPUT, 5, 0,
+	{ &display_mutations,           FALSE, OPT_PAGE_TEXT, 5, 0,
 	"display_mutations",            "Display mutations in 'C'haracter Display" },
 #endif
 
 #ifdef JP
-	{ &plain_descriptions,          TRUE,  OPT_PAGE_OUTPUT, 5, 1,
-	"plain_descriptions",           "アイテムの記述を簡略にする" },
+	{ &compress_savefile,           FALSE, OPT_PAGE_TEXT, 1, 26,
+	"compress_savefile",            "セーブ・ファイル中のメッセージを圧縮する" },
 #else
-	{ &plain_descriptions,          TRUE,  OPT_PAGE_OUTPUT, 5, 1,
-	"plain_descriptions",           "Plain object descriptions" },
+	{ &compress_savefile,           FALSE, OPT_PAGE_TEXT, 1, 26,
+	"compress_savefile",            "Compress messages in savefiles" },
 #endif
 
 #ifdef JP
-	{ &center_player,               FALSE, OPT_PAGE_OUTPUT, 5, 11,
-	"center_player",                "常にプレイヤーを中心に置く(*遅い*)" },
-#else
-	{ &center_player,               FALSE, OPT_PAGE_OUTPUT, 5, 11,
-	"center_player",                "Center map while walking (*slow*)" },
-#endif
-
-#ifdef JP
-	{ &center_running,              TRUE,  OPT_PAGE_OUTPUT, 5, 12,
-	"center_running",               "走っている時でも中心に置く" },
-#else
-	{ &center_running,              TRUE,  OPT_PAGE_OUTPUT, 5, 12,
-	"center_running",               "Centering even while running" },
-#endif
-
-#ifdef JP
-	{ &view_yellow_lite,            TRUE,  OPT_PAGE_OUTPUT, 1, 28,
-	"view_yellow_lite",             "明かりの範囲を特別な色で表示する" },
-#else
-	{ &view_yellow_lite,            TRUE,  OPT_PAGE_OUTPUT, 1, 28,
-	"view_yellow_lite",             "Use special colors for torch-lit grids" },
-#endif
-
-#ifdef JP
-	{ &view_bright_lite,            TRUE,  OPT_PAGE_OUTPUT, 1, 29,
-	"view_bright_lite",             "視界の範囲を特別な色で表示する" },
-#else
-	{ &view_bright_lite,            TRUE,  OPT_PAGE_OUTPUT, 1, 29,
-	"view_bright_lite",             "Use special colors for 'viewable' grids" },
-#endif
-
-#ifdef JP
-	{ &view_granite_lite,           TRUE,  OPT_PAGE_OUTPUT, 1, 30,
-	"view_granite_lite",            "壁を特別な色で表示する(重い)" },
-#else
-	{ &view_granite_lite,           TRUE,  OPT_PAGE_OUTPUT, 1, 30,
-	"view_granite_lite",            "Use special colors for wall grids (slow)" },
-#endif
-
-#ifdef JP
-	{ &view_special_lite,           TRUE,  OPT_PAGE_OUTPUT, 1, 31,
-	"view_special_lite",            "床を特別な色で表示する(重い)" },
-#else
-	{ &view_special_lite,           TRUE,  OPT_PAGE_OUTPUT, 1, 31,
-	"view_special_lite",            "Use special colors for floor grids (slow)" },
-#endif
-
-#ifdef JP
-	{ &display_path,                FALSE, OPT_PAGE_OUTPUT, 2, 8,
-	"display_path",                 "魔法や矢の軌跡を表示する" },
-#else
-	{ &display_path,                FALSE, OPT_PAGE_OUTPUT, 2, 8,
-	"display_path",                 "Display actual path before shooting" },
-#endif
-
-#ifdef JP
-	{ &always_show_list,            TRUE,  OPT_PAGE_OUTPUT, 4, 0,
-	"always_show_list",             "選択時には常に一覧を表示する" },
-#else
-	{ &always_show_list,            TRUE,  OPT_PAGE_OUTPUT, 4, 0,
-	"always_show_list",             "Always show list at first when select items" },
-#endif
-
-#ifdef JP
-	{ &abbrev_extra,                FALSE, OPT_PAGE_OUTPUT, 2, 10,
+	{ &abbrev_extra,                FALSE, OPT_PAGE_TEXT, 2, 10,
 	"abbrev_extra",                 "アイテムに追加耐性/能力の略称を刻む" },
 #else
-	{ &abbrev_extra,                FALSE, OPT_PAGE_OUTPUT, 2, 10,
+	{ &abbrev_extra,                FALSE, OPT_PAGE_TEXT, 2, 10,
 	"abbrev_extra",                 "Describe obj's extra resistances by abbreviation" },
 #endif
 
 #ifdef JP
-	{ &abbrev_all,                  FALSE, OPT_PAGE_OUTPUT, 2, 11,
+	{ &abbrev_all,                  FALSE, OPT_PAGE_TEXT, 2, 11,
 	"abbrev_all",                   "アイテムに全ての耐性/能力の略称を刻む" },
 #else
-	{ &abbrev_all,                  FALSE, OPT_PAGE_OUTPUT, 2, 11,
+	{ &abbrev_all,                  FALSE, OPT_PAGE_TEXT, 2, 11,
 	"abbrev_all",                   "Describe obj's all resistances by abbreviation" },
 #endif
+
+#ifdef JP
+	{ &exp_need,                    FALSE, OPT_PAGE_TEXT, 2, 12,
+	"exp_need",                "次のレベルに必要な経験値を表示する" },
+#else
+	{ &exp_need,                    FALSE, OPT_PAGE_TEXT, 2, 12,
+	"exp_need",                "Show the experience needed for next level" },
+#endif
+
 
 	/*** Game-Play ***/
 
@@ -6885,6 +6945,30 @@ option_type option_info[] =
 #endif
 
 #ifdef JP
+	{ &check_abort,                 TRUE,  OPT_PAGE_DISTURBANCE, 1, 18,
+	"check_abort",                  "連続コマンドはキー入力で中断する" },
+#else
+	{ &check_abort,                 TRUE,  OPT_PAGE_DISTURBANCE, 1, 18,
+	"check_abort",                  "Check for user abort while continuous command" },
+#endif
+
+#ifdef JP
+	{ &flush_failure,               TRUE,  OPT_PAGE_DISTURBANCE, 1, 20,
+	"flush_failure",                "様々なミス発生時に入力をクリアする" },
+#else
+	{ &flush_failure,               TRUE,  OPT_PAGE_DISTURBANCE, 1, 20,
+	"flush_failure",                "Flush input on various failures" },
+#endif
+
+#ifdef JP
+	{ &flush_disturb,               FALSE, OPT_PAGE_DISTURBANCE, 1, 21,
+	"flush_disturb",                "障害発生時に入力をクリアする" },
+#else
+	{ &flush_disturb,               FALSE, OPT_PAGE_DISTURBANCE, 1, 21,
+	"flush_disturb",                "Flush input whenever disturbed" },
+#endif
+
+#ifdef JP
 	{ &disturb_move,                FALSE, OPT_PAGE_DISTURBANCE, 0, 20,
 	"disturb_move",                 "どこのモンスターが動いても行動を中止する" },
 #else
@@ -6962,88 +7046,6 @@ option_type option_info[] =
 #else
 	{ &alert_trap_detect,           FALSE, OPT_PAGE_DISTURBANCE, 0, 25,
 	"alert_trap_detect",            "Alert when leaving trap detected area" },
-#endif
-
-	/*** Efficiency ***/
-
-#ifdef JP
-	{ &view_reduce_view,            FALSE, OPT_PAGE_EFFICIENCY, 1, 17,
-	"view_reduce_view",             "街では視野を狭くする" },
-#else
-	{ &view_reduce_view,            FALSE, OPT_PAGE_EFFICIENCY, 1, 17,
-	"view_reduce_view",             "Reduce view-radius in town" },
-#endif
-
-#ifdef JP
-	{ &check_abort,                 TRUE,  OPT_PAGE_EFFICIENCY, 1, 18,
-	"check_abort",                  "連続コマンドはキー入力で中断する" },
-#else
-	{ &check_abort,                 TRUE,  OPT_PAGE_EFFICIENCY, 1, 18,
-	"check_abort",                  "Check for user abort while continuous command" },
-#endif
-
-#ifdef JP
-	{ &flush_failure,               TRUE,  OPT_PAGE_EFFICIENCY, 1, 20,
-	"flush_failure",                "様々なミス発生時に入力をクリアする" },
-#else
-	{ &flush_failure,               TRUE,  OPT_PAGE_EFFICIENCY, 1, 20,
-	"flush_failure",                "Flush input on various failures" },
-#endif
-
-#ifdef JP
-	{ &flush_disturb,               FALSE, OPT_PAGE_EFFICIENCY, 1, 21,
-	"flush_disturb",                "障害発生時に入力をクリアする" },
-#else
-	{ &flush_disturb,               FALSE, OPT_PAGE_EFFICIENCY, 1, 21,
-	"flush_disturb",                "Flush input whenever disturbed" },
-#endif
-
-#ifdef JP
-	{ &fresh_before,                TRUE,  OPT_PAGE_EFFICIENCY, 1, 23,
-	"fresh_before",                 "連続コマンド中に画面を再描画し続ける" },
-#else
-	{ &fresh_before,                TRUE,  OPT_PAGE_EFFICIENCY, 1, 23,
-	"fresh_before",                 "Flush output while continuous command" },
-#endif
-
-#ifdef JP
-	{ &fresh_after,                 FALSE, OPT_PAGE_EFFICIENCY, 1, 24,
-	"fresh_after",                  "コマンド後に画面を常に再描画し続ける" },
-#else
-	{ &fresh_after,                 FALSE, OPT_PAGE_EFFICIENCY, 1, 24,
-	"fresh_after",                  "Flush output after monster's move" },
-#endif
-
-#ifdef JP
-	{ &fresh_message,               FALSE, OPT_PAGE_EFFICIENCY, 1, 25,
-	"fresh_message",                "メッセージの後に画面を再描画する" },
-#else
-	{ &fresh_message,               FALSE, OPT_PAGE_EFFICIENCY, 1, 25,
-	"fresh_message",                "Flush output after every message" },
-#endif
-
-#ifdef JP
-	{ &compress_savefile,           FALSE, OPT_PAGE_EFFICIENCY, 1, 26,
-	"compress_savefile",            "セーブ・ファイル中のメッセージを圧縮する" },
-#else
-	{ &compress_savefile,           FALSE, OPT_PAGE_EFFICIENCY, 1, 26,
-	"compress_savefile",            "Compress messages in savefiles" },
-#endif
-
-#ifdef JP
-	{ &hilite_player,               FALSE, OPT_PAGE_EFFICIENCY, 1, 27,
-	"hilite_player",                "プレイヤーにカーソルを合わせる" },
-#else
-	{ &hilite_player,               FALSE, OPT_PAGE_EFFICIENCY, 1, 27,
-	"hilite_player",                "Hilite the player with the cursor" },
-#endif
-
-#ifdef JP
-	{ &exp_need,                    FALSE, OPT_PAGE_OUTPUT, 2, 12,
-	"exp_need",                "次のレベルに必要な経験値を表示する" },
-#else
-	{ &exp_need,                    FALSE, OPT_PAGE_OUTPUT, 2, 12,
-	"exp_need",                "Show the experience needed for next level" },
 #endif
 
 	/*** Birth Options ***/

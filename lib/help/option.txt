@@ -138,55 +138,8 @@ Use numpad keys as cursor keys in editor mode    [numpad_as_cursorkey]
     inscription, a macro action, and etc.
 
 
-***** <Output>
-=== Option set 2 -- Screen output ===
-
-***** <depth_in_feet>
-Show dungeon level in feet    [depth_in_feet]
-    Display the dungeon depth in "feet" instead of as an actual level.
-    This also affects the monster memory display.
-
-***** <show_labels>
-Show labels in object listings    [show_labels]
-    Display the "labels" for objects in the "equipment" list, and in
-    any "special" window which is displaying the "equipment". These
-    labels indicate what the player is "using" the object for, such as
-    "wielding" or "wearing" (in a given location). After you have
-    played for a while, this information is no longer useful, and can
-    be annoying.
-
-***** <show_weights>
-Show weights in object listings    [show_weights]
-    Display the weights of objects in the "inventory" and "equipment"
-    lists, and in "stores", and in any "special" window which is
-    displaying any of these lists.
-
-***** <show_item_graph>
-Show items graphics    [show_item_graph]
-    Displays small icons of the items in your "inventory" list,
-    "equipment" list and "stores".
-
-***** <equippy_chars>
-Display 'equippy' chars    [equippy_chars]
-    This option will show you a graphical representation of your worn
-    equipment on the main screen.  The 'equippy' chars will use the
-    standard symbols of the respective items.
-
-***** <display_mutations>
-Display mutations in 'C'haracter Display    [display_mutations]
-    Normally, if your character has gained mutations, they will be
-    displayed in an extra 'h' mode window under the 'C'haracter
-    Description command. Some players may wish to view mutations only
-    via the knowledge command ('~' or '|') and do not want any extra
-    screens in the Character Description: they should set this option.
-
-***** <plain_descriptions>
-Plain object descriptions    [plain_descriptions]
-    This option disables "full" names for identified 'flavored'
-    objects, in other words, if this option is not in use, an
-    identified Potion of Speed could be listed (for example) as a Blue
-    Potion of Speed. If you prefer simpler, less verbose descriptions,
-    set this option.
+***** <MapScreen>
+=== Option set 2 -- Map Screen ===
 
 ***** <center_player>
 Center map while walking (*slow*)    [center_player]
@@ -245,16 +198,113 @@ Use special colors for floor grids (slow)    [view_special_lite]
     speed of the game.  This option may not work well if the attr/char
     codes for walls/veins have been changed
 
+***** <view_reduce_view>
+Reduce view-radius in town    [view_reduce_view]
+    Reduce the "radius" of the player's "view" by half when the player
+    is in town.  This makes running faster in town, and also allows the
+    player to ignore monsters in town which are more than ten grids
+    away, which is usually safe, since none have distance attacks.
+
+***** <fresh_before>
+Flush output while continuous command    [fresh_before]
+    This option forces the game to flush all output before every
+    command. This will give you maximal information, but may slow down
+    the game somewhat. Note that this option is only useful when using
+    macros, resting, running, or repeating commands, since the output
+    is always flushed when the game is waiting for a keypress from the
+    user.
+    
+***** <fresh_after>
+Flush output after monster's move    [fresh_after]
+    This option forces the game to flush all output after not only
+    every player command, but also after every round of processing
+    monsters and objects, which will give you maximal information, but
+    may slow down the game a lot, especially on slower machines, and on
+    faster machines you normally do not have a chance to see the
+    results anyway.
+    
+***** <fresh_message>
+Flush output after every message    [fresh_message]
+    This option forces the game to flush all output after every message
+    displayed by the game.  This will give you maximal information, but
+    may slow down the game somewhat.
+
+***** <hilite_player>
+Hilite the player with the cursor    [hilite_player]
+    Place the visible cursor on the player. This looks fine on some
+    Unix machines, but horrible on most graphics machines. Note that
+    only some machines are able to *not* show the cursor, but on those
+    machines, hiding the cursor often speeds up the game and looks
+    better.
+    
 ***** <display_path>
 Display actual path before shooting    [display_path]
     When this option is set, the targeting mode will show path from
     you to current target point continuously.
 
+
+***** <TextDisplay>
+=== Option set 3 -- Text Display ===
+
+***** <plain_descriptions>
+Plain object descriptions    [plain_descriptions]
+    This option disables "full" names for identified 'flavored'
+    objects, in other words, if this option is not in use, an
+    identified Potion of Speed could be listed (for example) as a Blue
+    Potion of Speed. If you prefer simpler, less verbose descriptions,
+    set this option.
+
 ***** <always_show_list>
-Always show list at first when select items    [always_show_list]
+Always show list when choosing items    [always_show_list]
     When this option is set, all commands which lets you to choose an
     item from inventory or equipment list will automatically show list
     when activated.
+
+***** <depth_in_feet>
+Show dungeon level in feet    [depth_in_feet]
+    Display the dungeon depth in "feet" instead of as an actual level.
+    This also affects the monster memory display.
+
+***** <show_labels>
+Show labels in object listings    [show_labels]
+    Display the "labels" for objects in the "equipment" list, and in
+    any "special" window which is displaying the "equipment". These
+    labels indicate what the player is "using" the object for, such as
+    "wielding" or "wearing" (in a given location). After you have
+    played for a while, this information is no longer useful, and can
+    be annoying.
+
+***** <show_weights>
+Show weights in object listings    [show_weights]
+    Display the weights of objects in the "inventory" and "equipment"
+    lists, and in "stores", and in any "special" window which is
+    displaying any of these lists.
+
+***** <show_item_graph>
+Show items graphics    [show_item_graph]
+    Displays small icons of the items in your "inventory" list,
+    "equipment" list and "stores".
+
+***** <equippy_chars>
+Display 'equippy' chars    [equippy_chars]
+    This option will show you a graphical representation of your worn
+    equipment on the main screen.  The 'equippy' chars will use the
+    standard symbols of the respective items.
+
+***** <display_mutations>
+Display mutations in 'C'haracter Display    [display_mutations]
+    Normally, if your character has gained mutations, they will be
+    displayed in an extra 'h' mode window under the 'C'haracter
+    Description command. Some players may wish to view mutations only
+    via the knowledge command ('~' or '|') and do not want any extra
+    screens in the Character Description: they should set this option.
+
+***** <compress_savefile>
+Compress messages in savefiles    [compress_savefile]
+    Compress the savefile, by only saving the most recent "messages"
+    that the player has received. This can cut the size of the savefile
+    by a drastic amount, but will result in the loss of message
+    information.
 
 ***** [b] objects.txt#AbbrevList
 ***** <abbrev_extra>
@@ -280,9 +330,16 @@ Describe obj's all resistances by abbreviation  [abbrev_all]
     The list of abbreviations for each resistances and abilities are
     described in (objects.txt#AbbrevList [b])
 
+***** <exp_need>
+Show the experience needed for the next level    [exp_need]
+    Setting this option to yes alters the display of experience on the
+    left of the main screen to the experience needed to reach the next
+    character level, instead of the character's current total
+    experience.
+
 
 ***** <GamePlay>
-=== Option set 3 -- Game playing ===
+=== Option set 4 -- Game playing ===
 
 ***** <auto_scum>
 Auto-scum for good levels    [auto_scum]
@@ -400,7 +457,7 @@ Allow use of debug/cheat options  [allow_debug_opts]
 
 
 ***** <Disturbance>
-=== Option set 4 -- Disturbance ===
+=== Option set 5 -- Disturbance ===
 
 ***** <find_ignore_stairs>
 Run past stairs    [find_ignore_stairs]
@@ -416,6 +473,34 @@ Run past known corners    [find_cut]
     in "faster" running, but may cause you to run into a "lurking"
     monster.
 
+***** <check_abort>
+Check for user abort while continuous command    [check_abort]
+    Avoid checking to see if the user has pressed a key during resting
+    or running or repeated commands.  This not only makes the game much
+    more efficient (on many systems), but also allows the use of
+    certain obscure macro sequences, such as turning this option on,
+    resting until done, turning this option off, and casting a spell.
+    Note that the use of this option may be dangerous on certain
+    "graphic" machines. Resting for long periods of time with this
+    option set is dangerous since the resting may not stop until the
+    user takes damage from starvation.
+
+***** <flush_failure>
+Flush input on various failures    [flush_failure]
+    This option forces the game to flush all pending input whenever
+    various "failures" occur, such as failure to cast a spell, failure
+    to use a wand, etc. This is very useful if you use macros which
+    include "directional" components with commands that can fail, since
+    it will prevent you from walking towards monsters when your spells
+    fail.
+
+***** <flush_disturb>
+Flush input whenever disturbed    [flush_disturb]
+    This option forces the game to flush all pending input whenever
+    the character is "disturbed". This is useful if you use macros
+    which take time, since it will prevent you from continuing your
+    macro while being attacked by a monster.
+    
 ***** <disturb_move>
 Disturb whenever any monster moves    [disturb_move]
     Disturb the player when any monster moves, appears, or disappears.
@@ -475,91 +560,6 @@ Disturb when leaving trap detected area    [disturb_trap_detect]
 Alert when leaving trap detected area    [alert_trap_detect]
     This option alerts you with message when the player is moving out
     of the trap-detected area.
-
-
-***** <Efficiency>
-=== Option set 5 -- Efficiency ===
-
-***** <view_reduce_view>
-Reduce view-radius in town    [view_reduce_view]
-    Reduce the "radius" of the player's "view" by half when the player
-    is in town.  This makes running faster in town, and also allows the
-    player to ignore monsters in town which are more than ten grids
-    away, which is usually safe, since none have distance attacks.
-
-***** <check_abort>
-Check for user abort while continuous command    [check_abort]
-    Avoid checking to see if the user has pressed a key during resting
-    or running or repeated commands.  This not only makes the game much
-    more efficient (on many systems), but also allows the use of
-    certain obscure macro sequences, such as turning this option on,
-    resting until done, turning this option off, and casting a spell.
-    Note that the use of this option may be dangerous on certain
-    "graphic" machines. Resting for long periods of time with this
-    option set is dangerous since the resting may not stop until the
-    user takes damage from starvation.
-
-***** <flush_failure>
-Flush input on various failures    [flush_failure]
-    This option forces the game to flush all pending input whenever
-    various "failures" occur, such as failure to cast a spell, failure
-    to use a wand, etc. This is very useful if you use macros which
-    include "directional" components with commands that can fail, since
-    it will prevent you from walking towards monsters when your spells
-    fail.
-
-***** <flush_disturb>
-Flush input whenever disturbed    [flush_disturb]
-    This option forces the game to flush all pending input whenever
-    the character is "disturbed". This is useful if you use macros
-    which take time, since it will prevent you from continuing your
-    macro while being attacked by a monster.
-    
-***** <fresh_before>
-Flush output while continuous command    [fresh_before]
-    This option forces the game to flush all output before every
-    command. This will give you maximal information, but may slow down
-    the game somewhat. Note that this option is only useful when using
-    macros, resting, running, or repeating commands, since the output
-    is always flushed when the game is waiting for a keypress from the
-    user.
-    
-***** <fresh_after>
-Flush output after monster's move    [fresh_after]
-    This option forces the game to flush all output after not only
-    every player command, but also after every round of processing
-    monsters and objects, which will give you maximal information, but
-    may slow down the game a lot, especially on slower machines, and on
-    faster machines you normally do not have a chance to see the
-    results anyway.
-    
-***** <fresh_message>
-Flush output after every message    [fresh_message]
-    This option forces the game to flush all output after every message
-    displayed by the game.  This will give you maximal information, but
-    may slow down the game somewhat.
-
-***** <compress_savefile>
-Compress messages in savefiles    [compress_savefile]
-    Compress the savefile, by only saving the most recent "messages"
-    that the player has received. This can cut the size of the savefile
-    by a drastic amount, but will result in the loss of message
-    information.
-
-***** <hilite_player>
-Hilite the player with the cursor    [hilite_player]
-    Place the visible cursor on the player. This looks fine on some
-    Unix machines, but horrible on most graphics machines. Note that
-    only some machines are able to *not* show the cursor, but on those
-    machines, hiding the cursor often speeds up the game and looks
-    better.
-    
-***** <exp_need>
-Show the experience needed for the next level    [exp_need]
-    Setting this option to yes alters the display of experience on the
-    left of the main screen to the experience needed to reach the next
-    character level, instead of the character's current total
-    experience.
 
 
 ***** <AutoDestroyer>
