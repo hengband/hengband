@@ -585,8 +585,9 @@ Auto-destroyer leaves junk    [leave_junk]
 Auto-destroyer leaves items your race/class needs  [leave_special]
     This option protects specific items which are normally worthless,
     but very important for specific classes or races.  These include
-    bones for Archers, ego light source of darkness for Ninja,
-    humanoid corpses for Balrogs, etc...
+    bones for Archers, ego light sources of darkness for Ninja, Wands
+    of Heal Monster for BeastMaster and Cavalry, and humanoid corpses
+    for Balrogs, etc...
 
 
 ***** <PlayRecord>
