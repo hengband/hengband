@@ -167,7 +167,7 @@
 #ifdef JP
 #define PREF_FILE_NAME "Hengband Preferences"
 #else
-#define PREF_FILE_NAME "Angband Preferences"
+#define PREF_FILE_NAME "Hengband-E Preferences"
 #endif
 
 /*
@@ -306,11 +306,9 @@ struct term_data
 
 #endif /* ANGBAND_LITE_MAC */
 
-#ifdef JP
 	GWorldPtr		bufferPort;
 	PixMapHandle	bufferPixHndl;
 	PixMapPtr		bufferPix;
-#endif
 
 	Str15		title;
 
@@ -423,7 +421,7 @@ AEEventHandlerUPP AEH_Open_UPP;
 /*
 	Extra Sound Mode
 */
-#ifdef JP
+
 static int ext_sound = 0;
 
 #define		SND_NON		0
@@ -505,7 +503,6 @@ static int soundchoice[] = {
 static int			soundmode[8];
 
 
-#endif
 
 
 /*
@@ -764,7 +761,6 @@ static void mac_warning(cptr warning)
  */
 static void term_data_color(term_data *td, int a)
 {
-#ifdef JP
 	u16b rv, gv, bv;
 
 	RGBColor color;
@@ -784,31 +780,6 @@ static void term_data_color(term_data *td, int a)
 
 	/* Memorize color */
 	td->last = a;
-#else
-	/* Activate the color */
-	if (td->last != a)
-	{
-		u16b rv, gv, bv;
-
-		RGBColor color;
-
-		/* Extract the R,G,B data */
-		rv = angband_color_table[a][1];
-		gv = angband_color_table[a][2];
-		bv = angband_color_table[a][3];
-
-		/* Set the color */
-		color.red = (rv | (rv << 8));
-		color.green = (gv | (gv << 8));
-		color.blue = (bv | (bv << 8));
-	
-		/* Activate the color */
-		RGBForeColor(&color);
-
-		/* Memorize color */
-		td->last = a;
-	}
-#endif
 }
 
 #endif /* ANGBAND_LITE_MAC */
@@ -863,15 +834,10 @@ static void term_data_check_font(term_data *td)
 	td->tile_o_y = td->font_o_y;
 
 	/* Set default tile size */
-#ifdef JP
 	if( td->tile_wid == 0 && td->tile_hgt == 0 ){
 		td->tile_wid = td->font_wid;
 		td->tile_hgt = td->font_hgt;
 	}
-#else
-	td->tile_wid = td->font_wid;
-	td->tile_hgt = td->font_hgt;
-#endif
 
 	/* Re-activate the old window */
 	activate(old);
@@ -973,9 +939,7 @@ static void term_data_resize(term_data *td)
 	/* Actually resize the window */
 	SizeWindow(td->w, td->size_wid, td->size_hgt, 0);
 	
-#ifdef JP
 		XDDSWUpDateGWorldFromPict( td );
-#endif
 }
 
 
@@ -1025,6 +989,7 @@ static void term_data_redraw(term_data *td)
 #define kGrafHeight				8				/* Graf Size (Y) */
 
 
+
 /*
  * Forward Declare
  */
@@ -1067,7 +1032,6 @@ static void BenSWLockFrame(FrameRec *srcFrameP)
 	
 }
 
-#ifdef JP
 /*
  * Lock a frame
  */
@@ -1081,7 +1045,6 @@ static void XDDSWLockFrame( term_data *td )
 	td->bufferPixHndl = pixMapH;
 	td->bufferPix = (PixMapPtr)*(Handle)pixMapH;
 }
-#endif
 
 
 /*
@@ -1099,7 +1062,6 @@ static void BenSWUnlockFrame(FrameRec *srcFrameP)
 	
 }
 
-#ifdef JP
 /*
  * Unlock a frame
  */
@@ -1113,7 +1075,6 @@ static void XDDSWUnlockFrame( term_data *td )
 
 	td->bufferPix = NULL;
 }
-#endif
 
 static OSErr BenSWCreateGWorldFromPict(
 	GWorldPtr *pictGWorld,
@@ -1172,7 +1133,6 @@ static OSErr BenSWCreateGWorldFromPict(
 	return (0);
 }
 
-#ifdef JP
 
 static OSErr XDDSWCreateGWorldFromPict(
 	GWorldPtr *pictGWorld,
@@ -1285,7 +1245,6 @@ static OSErr XDDSWUpDateGWorldFromPict( term_data *td )
 /*	SetGWorld(saveGWorld, saveGDevice); */
 	
 }
-#endif
 
 /*
  * Init the global "frameP"
@@ -1491,7 +1450,6 @@ static void Term_init_mac(term *t)
 
 	/* Forget color */
 	td->last = -1;
-#ifdef JP
 	XDDSWCreateGWorldFromPict( &td->bufferPort, td );
 	
 	XDDSWLockFrame( td );
@@ -1500,7 +1458,6 @@ static void Term_init_mac(term *t)
 	{
 		
 	}*/
-#endif
 }
 
 
@@ -1644,7 +1601,6 @@ static errr Term_xtra_mac(int n, int v)
 			sound[0] = strlen((char*)sound + 1);
 
 			/* Obtain resource XXX XXX XXX */
-#ifdef JP
 			handle = Get1NamedResource('snd ', sound);
 			if( handle == NULL || ext_sound )
 				handle = GetNamedResource('snd ', sound);
@@ -1663,24 +1619,6 @@ static errr Term_xtra_mac(int n, int v)
 				HUnlock(handle);
 				ReleaseResource(handle);
 			}
-#else
-			handle = GetNamedResource('snd ', sound);
-
-			/* Oops */
-			if (handle)
-			{
-				/* Load and Lock */
-				LoadResource(handle);
-				HLock(handle);
-
-				/* Play sound (wait for completion) */
-				SndPlay(nil, (SndListHandle)handle, true);
-
-				/* Unlock and release */
-				HUnlock(handle);
-				ReleaseResource(handle);
-			}
-#endif
 			/* Success */
 			return (0);
 		}
@@ -1882,10 +1820,8 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 	GDHandle saveGDevice;
 	GWorldPtr saveGWorld;
 	
-#ifdef JP
 	PixMapHandle PortPix;
 	
-#endif
 
 	/* Save GWorld */
 	GetGWorld(&saveGWorld, &saveGDevice);
@@ -1900,10 +1836,9 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 	
 		/* Activate */
 		SetGWorld(td->bufferPort, nil);
-#ifdef JP
 		PortPix = GetGWorldPixMap(td->bufferPort );
 		LockPixels( PortPix );
-#endif
+
 		/* Instantiate font */
 		TextFont(td->font_id);
 		TextSize(td->font_size);
@@ -1913,10 +1848,8 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 		BackColor(blackColor);
 		ForeColor(whiteColor);
 
-#ifdef JP
 		/* Erase */
 		EraseRect(&td->bufferPort->portRect);
-#endif
 
 		use_buffer = true;
 	}
@@ -2072,9 +2005,8 @@ static errr Term_pict_mac(int x, int y, int n, const byte *ap, const char *cp)
 		destRect.top = y * td->tile_hgt + td->size_oh1;
 		destRect.bottom = destRect.top + td->tile_hgt;
 
-#ifdef JP
 		UnlockPixels( PortPix );
-#endif
+
 		/* Restore GWorld */
 		SetGWorld(saveGWorld, saveGDevice);
 		
@@ -2271,10 +2203,8 @@ static void save_prefs(void)
 		putshort(td->font_size);
 		putshort(td->font_face);
 
-#ifdef JP
 		putshort(td->tile_wid);
 		putshort(td->tile_hgt);
-#endif
 
 		putshort(td->cols);
 		putshort(td->rows);
@@ -2352,10 +2282,8 @@ static void load_prefs(void)
 		td->font_size = getshort();
 		td->font_face = getshort();
 
-#ifdef JP
 		td->tile_wid = getshort();
 		td->tile_hgt = getshort();
-#endif
 
 		td->cols = getshort();
 		td->rows = getshort();
@@ -2576,7 +2504,6 @@ static void init_windows(void)
 	Term_activate(td->t);
 }
 
-#ifdef JP
 static void init_sound( void )
 {
 	int err, i;
@@ -2784,7 +2711,6 @@ void SoundConfigDLog(void)
 
 }
 
-#endif
 
 /*
  * Exit the program
@@ -3277,6 +3203,8 @@ static void init_menubar(void)
 	AppendMenu(m, "\p-");
 	AppendMenu(m, "\parg_fiddle");
 	AppendMenu(m, "\parg_wizard");
+	AppendMenu(m, "\p-");
+	AppendMenu(m, "\psnd_setting");
 	#endif
 
 	/* Make the "TileWidth" menu */
@@ -3557,10 +3485,9 @@ static void setup_menus(void)
 	EnableItem(m, 5);
 	CheckItem(m, 5, arg_wizard);
 
-#ifdef JP
 	/* Item "SoundSetting" */
 	EnableItem(m, 7);
-#endif
+
 	/* Item "Hack" */
 	/* EnableItem(m, 9); */
 
@@ -3830,10 +3757,9 @@ static void menu(long mc)
 					td->font_face |= bold;
 				}
 
-#ifdef JP
 				/* Tile Width Hight Init */
 				td->tile_wid = td->tile_hgt = 0;
-#endif
+
 				/* Apply and Verify */
 				term_data_check_font(td);
 				term_data_check_size(td);
@@ -3858,10 +3784,9 @@ static void menu(long mc)
 					td->font_face |= extend;
 				}
 
-#ifdef JP
 				/* Tile Width Hight Init */
 				td->tile_wid = td->tile_hgt = 0;
-#endif
+
 				/* Apply and Verify */
 				term_data_check_font(td);
 				term_data_check_size(td);
@@ -3909,10 +3834,9 @@ static void menu(long mc)
 				}
 			}
 
-#ifdef JP
 			/* Tile Width Hight Init */
 			td->tile_wid = td->tile_hgt = 0;
-#endif
+
 			/* Apply and Verify */
 			term_data_check_font(td);
 			term_data_check_size(td);
@@ -3943,10 +3867,9 @@ static void menu(long mc)
 			s[s[0]+1]=0;
 			td->font_size = atoi((char*)(s+1));
 
-#ifdef JP
 			/* Tile Width Hight Init */
 			td->tile_wid = td->tile_hgt = 0;
-#endif
+
 			/* Apply and Verify */
 			term_data_check_font(td);
 			term_data_check_size(td);
@@ -4029,12 +3952,12 @@ static void menu(long mc)
 					arg_wizard = !arg_wizard;
 					break;
 				}
-#ifdef JP
+
 				case 7:
 				{
 					SoundConfigDLog();
 				}
-#endif
+
 			}
 
 			break;
@@ -5161,9 +5084,7 @@ BackColor(blackColor);
 	/* Prepare the windows */
 	init_windows();
 
-#ifdef JP
 	init_sound();
-#endif
 
 	/* Hack -- process all events */
 	while (CheckEvents(TRUE)) /* loop */;
