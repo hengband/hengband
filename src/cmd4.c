@@ -5302,6 +5302,7 @@ static cptr object_group_text[] =
 	"¥´¥ß",
 	"¶õ¤Î¥Ó¥ó",
 	"¹ü",
+	"»àÂÎ",
 	"Åá·õÎà",	/* "Swords" */
 	"Æß´ï",		/* "Blunt Weapons" */
 	"Ä¹ÊÁÉð´ï",	/* "Polearms" */
@@ -5320,6 +5321,7 @@ static cptr object_group_text[] =
 	"´§",	/* "Crowns" */
 	"¥Ö¡¼¥Ä",	/* "Boots" */
 	"ËâË¡½ñ",
+	"ºâÊõ",
 	"²¿¤«",
 #else
 	"Mushrooms",
@@ -5343,6 +5345,7 @@ static cptr object_group_text[] =
 	"Junks",
 	"Bottles",
 	"Skeletons",
+	"Corpses",
 	"Swords",
 	"Blunt Weapons",
 	"Polearms",
@@ -5361,6 +5364,7 @@ static cptr object_group_text[] =
 	"Crowns",
 	"Boots",
 	"Spellbooks",
+	"Treasure",
 	"Something",
 #endif
 	NULL
@@ -5393,6 +5397,7 @@ static byte object_group_tval[] =
 	TV_JUNK,
 	TV_BOTTLE,
 	TV_SKELETON,
+	TV_CORPSE,
 	TV_SWORD,
 	TV_HAFTED,
 	TV_POLEARM,
@@ -5411,6 +5416,7 @@ static byte object_group_tval[] =
 	TV_CROWN,
 	TV_BOOTS,
 	TV_LIFE_BOOK, /* Hack -- all spellbooks */
+	TV_GOLD,
 	0,
 	0,
 };
