@@ -1261,7 +1261,7 @@ void change_floor(void)
 				}
 			}
 
-			place_quest_monsters();
+			(void)place_quest_monsters();
 
 			/* Place some random monsters */
 			alloc_times = absence_ticks / alloc_chance;

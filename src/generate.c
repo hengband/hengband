@@ -469,7 +469,7 @@ static void try_door(int y, int x)
 
 
 /* Place quest monsters */
-void place_quest_monsters(void)
+bool place_quest_monsters(void)
 {
 	int i;
 
@@ -479,7 +479,7 @@ void place_quest_monsters(void)
 		monster_race *r_ptr;
 		u32b mode;
 		int j;
-			
+
 		if (quest[i].status != QUEST_STATUS_TAKEN ||
 		    (quest[i].type != QUEST_TYPE_KILL_LEVEL &&
 		     quest[i].type != QUEST_TYPE_RANDOM) ||
@@ -531,7 +531,7 @@ void place_quest_monsters(void)
 				}
 
 				/* Failed to place */
-				if (!l) break;
+				if (!l) return FALSE;
 
 				/* Try to place the monster */
 				if (place_monster_aux(0, y, x, quest[i].r_idx, mode))
@@ -545,8 +545,13 @@ void place_quest_monsters(void)
 					continue;
 				}
 			}
+
+			/* Failed to place */
+			if (k == SAFE_MAX_ATTEMPTS) return FALSE;
 		}
 	}
+
+	return TRUE;
 }
 
 
@@ -1003,7 +1008,7 @@ static bool cave_gen(void)
 	/* Determine the character location */
 	if (!new_player_spot()) return FALSE;
 
-	place_quest_monsters();
+	if (!place_quest_monsters()) return FALSE;
 
 	/* Basic "amount" */
 	k = (dun_level / 3);
