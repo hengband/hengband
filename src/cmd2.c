@@ -2804,8 +2804,6 @@ void do_cmd_run(void)
  */
 void do_cmd_stay(bool pickup)
 {
-	cave_type *c_ptr = &cave[py][px];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
 	u32b mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
 
 	/* Allow repeated command */
@@ -3439,6 +3437,34 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		return;
 	}
 
+	/* Start at the player */
+	y = py;
+	x = px;
+
+	/* Predict the "target" location */
+	tx = px + 99 * ddx[dir];
+	ty = py + 99 * ddy[dir];
+
+	/* Check for "target request" */
+	if ((dir == 5) && target_okay())
+	{
+		tx = target_col;
+		ty = target_row;
+	}
+
+	project_length = 0; /* reset to default */
+
+	/* Don't shoot at my feet */
+	if (tx == px && ty == py)
+	{
+		energy_use = 0;
+
+		/* project_length is already reset to 0 */
+
+		return;
+	}
+
+
 	/* Get local object */
 	q_ptr = &forge;
 
@@ -3471,23 +3497,6 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	/* Take a (partial) turn */
 	energy_use = (energy_use / thits);
 
-
-	/* Start at the player */
-	y = py;
-	x = px;
-
-	/* Predict the "target" location */
-	tx = px + 99 * ddx[dir];
-	ty = py + 99 * ddy[dir];
-
-	/* Check for "target request" */
-	if ((dir == 5) && target_okay())
-	{
-		tx = target_col;
-		ty = target_row;
-	}
-
-	project_length = 0; /* reset to default */
 
 	/* Hack -- Handle stuff */
 	handle_stuff();
