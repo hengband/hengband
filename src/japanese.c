@@ -153,8 +153,8 @@ size_t mb_strlcpy(char *dst, const char *src, size_t size)
 
 	/* Copy as many bytes as will fit */
 	while(n < size) {
-		if (iskanji(*d)) {
-			if(n + 2 >= size || !*(d+1)) break;
+		if (iskanji(*s)) {
+			if(n + 2 >= size || !*(s+1)) break;
 			*d++ = *s++;
 			*d++ = *s++;
 			n += 2;
