@@ -2396,13 +2396,15 @@ bool identify_fully_aux(object_type *o_ptr)
 	/* Extract the flags */
 	object_flags(o_ptr, &f1, &f2, &f3);
 
-	if( o_ptr->name1)
+	/* Extract the description */
 	{
-		char temp[70*20];
+		char temp[70 * 20];
 
-		roff_to_buf( a_text + a_info[ o_ptr->name1 ].text ,77-15,temp);
-		for(j=0;temp[j];j+=1+strlen(&temp[j]))
-		{ info[i]=&temp[j];i++;}
+		roff_to_buf(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) :
+		            (k_text + k_info[lookup_kind(o_ptr->tval, o_ptr->sval)].text),
+		            77 - 15, temp);
+		for (j = 0; temp[j]; j += 1 + strlen(&temp[j]))
+		{ info[i] = &temp[j]; i++;}
 	}
 
 	/* Mega-Hack -- describe activation */

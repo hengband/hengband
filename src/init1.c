@@ -1383,20 +1383,25 @@ errr parse_k_info(char *buf, header *head)
 		if (!add_name(&k_ptr->name, head, s)) return (7);
 	}
 #endif
-#if 0
 
 	/* Process 'D' for "Description" */
 	else if (buf[0] == 'D')
 	{
+#ifdef JP
+		if (buf[2] == '$')
+			return (0);
 		/* Acquire the text */
 		s = buf+2;
+#else
+		if (buf[2] != '$')
+			return (0);
+		/* Acquire the text */
+		s = buf+3;
+#endif
 
 		/* Store the text */
 		if (!add_text(&k_ptr->text, head, s)) return (7);
 	}
-
-#endif
-
 
 	/* Process 'G' for "Graphics" (one line only) */
 	else if (buf[0] == 'G')
