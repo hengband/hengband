@@ -5354,7 +5354,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 			delete_object(y, x);
 
 			/* Destroy "non-permanent" grids */
-			if (!cave_perma_bold(y, x))
+			if (!cave_perma_grid(c_ptr))
 			{
 				/* Wall (or floor) type */
 				t = randint0(200);

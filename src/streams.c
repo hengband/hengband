@@ -252,7 +252,7 @@ void build_streamer(int feat, int chance)
 				continue;
 
 			/* Do not convert permanent features */
-			if (cave_perma_grid(c_ptr)) continue;
+			if (have_flag(f_ptr->flags, FF_PERMANENT)) continue;
 
 			/* Only convert "granite" walls */
 			if (streamer_is_wall)

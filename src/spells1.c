@@ -982,14 +982,14 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 
 		case GF_LAVA_FLOW:
 		{
+			/* Ignore permanent grid */
+			if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
+
 			/* Shallow Lava */
 			if (dam == 1)
 			{
-				/* Ignore permanent grid */
-				if (cave_perma_bold(y, x)) break;
-
 				/* Ignore grid without enough space */
-				if (!cave_have_flag_bold(y, x, FF_FLOOR)) break;
+				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
 
 				/* Place a shallow lava */
 				cave_set_feat(y, x, FEAT_SHAL_LAVA);
@@ -997,9 +997,6 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 			/* Deep Lava */
 			else if (dam)
 			{
-				/* Ignore permanent grid */
-				if (cave_perma_bold(y, x)) break;
-
 				/* Place a deep lava */
 				cave_set_feat(y, x, FEAT_DEEP_LAVA);
 			}
@@ -1008,25 +1005,22 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 
 		case GF_WATER_FLOW:
 		{
+			/* Ignore permanent grid */
+			if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
+
 			/* Shallow Water */
 			if (dam == 1)
 			{
-				/* Ignore permanent grid */
-				if (cave_perma_bold(y, x)) break;
-
 				/* Ignore grid without enough space */
-				if (!cave_have_flag_bold(y, x, FF_FLOOR)) break;
+				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
 
-				/* Place a shallow lava */
+				/* Place a shallow water */
 				cave_set_feat(y, x, FEAT_SHAL_WATER);
 			}
 			/* Deep Water */
 			else if (dam)
 			{
-				/* Ignore permanent grid */
-				if (cave_perma_bold(y, x)) break;
-
-				/* Place a deep lava */
+				/* Place a deep water */
 				cave_set_feat(y, x, FEAT_DEEP_WATER);
 			}
 			break;
