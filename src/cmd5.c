@@ -5426,6 +5426,43 @@ void do_cmd_pet_dismiss(void)
 	p_ptr->update |= (PU_MON_LITE);
 }
 
+static bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
+{
+	bool p_can_enter;
+	bool old_character_xtra = character_xtra;
+	int  old_riding = p_ptr->riding;
+	bool old_riding_ryoute = p_ptr->riding_ryoute;
+	bool old_old_riding_ryoute = p_ptr->old_riding_ryoute;
+	bool old_pf_ryoute = (p_ptr->pet_extra_flags & PF_RYOUTE) ? TRUE : FALSE;
+
+	/* Hack -- prevent "icky" message */
+	character_xtra = TRUE;
+
+	if (now_riding) p_ptr->riding = c_ptr->m_idx;
+	else
+	{
+		p_ptr->riding = 0;
+		p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+		p_ptr->riding_ryoute = p_ptr->old_riding_ryoute = FALSE;
+	}
+
+	calc_bonuses();
+
+	p_can_enter = player_can_enter(c_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
+
+	p_ptr->riding = old_riding;
+	if (old_pf_ryoute) p_ptr->pet_extra_flags |= (PF_RYOUTE);
+	else p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+	p_ptr->riding_ryoute = old_riding_ryoute;
+	p_ptr->old_riding_ryoute = old_old_riding_ryoute;
+
+	calc_bonuses();
+
+	character_xtra = old_character_xtra;
+
+	return p_can_enter;
+}
+
 bool rakuba(int dam, bool force)
 {
 	int i, y, x, oy, ox;
@@ -5483,11 +5520,15 @@ bool rakuba(int dam, bool force)
 
 			c_ptr = &cave[y][x];
 
-			/* Skip non-empty grids */
-			if (cave_perma_grid(c_ptr)) continue;
-			if (!cave_empty_grid2(c_ptr)) continue;
-
 			if (c_ptr->m_idx) continue;
+
+			/* Skip non-empty grids */
+			if (!have_flag(f_flags_grid(c_ptr), FF_MOVE))
+			{
+				if (!player_can_ride_aux(c_ptr, FALSE)) continue;
+			}
+
+			if (have_flag(f_flags_grid(c_ptr), FF_PATTERN)) continue;
 
 			/* Count "safe" grids */
 			sn++;
@@ -5582,7 +5623,7 @@ bool do_riding(bool force)
 	if (p_ptr->riding)
 	{
 		/* Skip non-empty grids */
-		if (!cave_empty_bold2(y, x))
+		if (!player_can_ride_aux(c_ptr, FALSE))
 		{
 #ifdef JP
 			msg_print("¤½¤Á¤é¤Ë¤Ï¹ß¤ê¤é¤ì¤Þ¤»¤ó¡£");
@@ -5591,6 +5632,25 @@ bool do_riding(bool force)
 #endif
 			return FALSE;
 		}
+
+		if (!pattern_seq(py, px, y, x)) return FALSE;
+
+		if (c_ptr->m_idx)
+		{
+			/* Take a turn */
+			energy_use = 100;
+
+			/* Message */
+#ifdef JP
+			msg_print("¥â¥ó¥¹¥¿¡¼¤¬Î©¤Á¤Õ¤µ¤¬¤Ã¤Æ¤¤¤ë¡ª");
+#else
+			msg_print("There is a monster in the way!");
+#endif
+
+			py_attack(y, x, 0);
+			return FALSE;
+		}
+
 		p_ptr->riding = 0;
 		p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
 		p_ptr->riding_ryoute = p_ptr->old_riding_ryoute = FALSE;
@@ -5639,11 +5699,10 @@ bool do_riding(bool force)
 
 			return FALSE;
 		}
-		if (!pattern_seq(py, px, y, x))
-		{
-			return FALSE;
-		}
-		if (!player_can_enter(c_ptr->feat, CEM_P_CAN_ENTER_PATTERN))
+
+		if (!pattern_seq(py, px, y, x)) return FALSE;
+
+		if (!player_can_ride_aux(c_ptr, TRUE))
 		{
 			feature_type *f_ptr = &f_info[c_ptr->feat];
 #ifdef JP
@@ -6380,7 +6439,7 @@ strnfmt(out_val, 78, "(¥³¥Þ¥ó¥É %c-%c¡¢'*'=°ìÍ÷¡¢ESC=½ªÎ») ¥³¥Þ¥ó¥É¤òÁª¤ó¤Ç¤¯¤À¤
 
 		case PET_RIDING:
 		{
-			do_riding(FALSE);
+			(void)do_riding(FALSE);
 			break;
 		}
 
