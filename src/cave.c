@@ -870,8 +870,6 @@ void map_info(int y, int x, byte *ap, char *cp)
 	byte a;
 	byte c;
 
-	bool graf_new = (use_graphics && (strcmp(ANGBAND_GRAF, "new") == 0));
-
 	/* Get the cave */
 	c_ptr = &cave[y][x];
 
@@ -898,7 +896,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 			a = f_ptr->x_attr;
 
 			/* Special lighting effects */
-			if (view_special_lite && (!p_ptr->wild_mode) && ((a == TERM_WHITE) || graf_new))
+			if (view_special_lite && (!p_ptr->wild_mode) && ((a == TERM_WHITE) || use_lighting))
 			{
 				/* Handle "blind" */
 				if (p_ptr->blind)
@@ -910,7 +908,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 							/* Use darkened colour */
 							a = lighting_colours[a][1];
 						}
-						else if (graf_new && feat_supports_lighting(feat))
+						else if (use_lighting && feat_supports_lighting(feat))
 						{
 							/* Use a dark tile */
 							c++;
@@ -918,7 +916,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 					}
 					else
 					{
-						if (graf_new)
+						if (use_lighting)
 						{
 							/* Use a dark tile */
 							c++;
@@ -944,7 +942,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 								/* Use lightened colour */
 								a = lighting_colours[a][0];
 							}
-							else if (graf_new &&
+							else if (use_lighting &&
 								 feat_supports_lighting(feat))
 							{
 								/* Use a brightly lit tile */
@@ -956,7 +954,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 							/* Torch lite */
 							if (view_yellow_lite)
 							{
-								if (graf_new)
+								if (use_lighting)
 								{
 									/* Use a brightly lit tile */
 									c += 2;
@@ -981,7 +979,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 							/* Use darkened colour */
 							a = lighting_colours[a][1];
 						}
-						else if (graf_new && feat_supports_lighting(feat))
+						else if (use_lighting && feat_supports_lighting(feat))
 						{
 							/* Use a dark tile */
 							c++;
@@ -989,7 +987,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 					}
 					else
 					{
-						if (graf_new)
+						if (use_lighting)
 						{
 							/* Use a dark tile */
 							c++;
@@ -1015,7 +1013,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 								/* Use darkened colour */
 								a = lighting_colours[a][1];
 							}
-							else if (graf_new && feat_supports_lighting(feat))
+							else if (use_lighting && feat_supports_lighting(feat))
 							{
 								/* Use a dark tile */
 								c++;
@@ -1023,7 +1021,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 						}
 						else
 						{
-							if (graf_new)
+							if (use_lighting)
 							{
 								/* Use a dark tile */
 								c++;
@@ -1084,7 +1082,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Use darkened colour */
 						a = lighting_colours[a][1];
 					}
-					else if (graf_new && feat_supports_lighting(feat))
+					else if (use_lighting && feat_supports_lighting(feat))
 					{
 						/* Use a dark tile */
 						c++;
@@ -1095,14 +1093,14 @@ void map_info(int y, int x, byte *ap, char *cp)
 				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
 					/* Torch lite */
-					if (view_yellow_lite && !p_ptr->wild_mode && ((graf_new && feat_supports_lighting(feat)) || is_ascii_graphics(c,a)))
+					if (view_yellow_lite && !p_ptr->wild_mode && ((use_lighting && feat_supports_lighting(feat)) || is_ascii_graphics(c,a)))
 					{
 						if (is_ascii_graphics(c,a))
 						{
 							/* Use lightened colour */
 							a = lighting_colours[a][0];
 						}
-						else if (graf_new &&
+						else if (use_lighting &&
 								feat_supports_lighting(c_ptr->feat))
 						{
 							/* Use a brightly lit tile */
@@ -1112,7 +1110,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 				}
 
 				/* Handle "view_bright_lite" */
-				else if (view_bright_lite && !p_ptr->wild_mode && ((graf_new && feat_supports_lighting(feat)) || is_ascii_graphics(c,a)))
+				else if (view_bright_lite && !p_ptr->wild_mode && ((use_lighting && feat_supports_lighting(feat)) || is_ascii_graphics(c,a)))
 				{
 					/* Not viewable */
 					if (!(c_ptr->info & CAVE_VIEW))
@@ -1122,7 +1120,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 							/* Use darkened colour */
 							a = lighting_colours[a][1];
 						}
-						else if (graf_new && feat_supports_lighting(feat))
+						else if (use_lighting && feat_supports_lighting(feat))
 						{
 							/* Use a dark tile */
 							c++;
@@ -1142,13 +1140,13 @@ void map_info(int y, int x, byte *ap, char *cp)
 			}
 			/* Special lighting effects */
 			else if (view_granite_lite && !p_ptr->wild_mode &&
-			   (((a == TERM_WHITE) && !graf_new) ||
-			   (graf_new && feat_supports_lighting(c_ptr->feat))))
+			   (((a == TERM_WHITE) && !use_lighting) ||
+			   (use_lighting && feat_supports_lighting(c_ptr->feat))))
 			{
 				/* Handle "blind" */
 				if (p_ptr->blind)
 				{
-					if (graf_new)
+					if (use_lighting)
 					{
 						/* Use a dark tile */
 						c++;
@@ -1166,7 +1164,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Torch lite */
 					if (view_yellow_lite && !p_ptr->wild_mode)
 					{
-						if (graf_new)
+						if (use_lighting)
 						{
 							/* Use a brightly lit tile */
 							c += 2;
@@ -1185,7 +1183,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Not viewable */
 					if (!(c_ptr->info & CAVE_VIEW))
 					{
-						if (graf_new)
+						if (use_lighting)
 						{
 							/* Use a dark tile */
 							c++;
@@ -1200,7 +1198,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 					/* Not glowing */
 					else if (!(c_ptr->info & CAVE_GLOW))
 					{
-						if (graf_new)
+						if (use_lighting)
 						{
 							/* Use a lit tile */
 						}
@@ -1223,7 +1221,7 @@ void map_info(int y, int x, byte *ap, char *cp)
 						/* Check for "local" illumination */
 						if (!(cave[yy][xx].info & CAVE_GLOW))
 						{
-							if (graf_new)
+							if (use_lighting)
 							{
 								/* Use a lit tile */
 							}

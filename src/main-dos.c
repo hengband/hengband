@@ -1815,7 +1815,7 @@ static bool init_graphics(void)
 
 			/* Use transparent blits */
 			if (streq(ANGBAND_GRAF, "new"))
-				use_transparency = TRUE;
+				use_lighting = TRUE;
 
 			/* Select the bitmap pallete */
 			set_palette_range(tiles_pallete, 0, COLOR_OFFSET - 1, 0);

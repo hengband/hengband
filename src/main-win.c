@@ -1398,7 +1398,7 @@ static bool init_graphics(void)
 
 			ANGBAND_GRAF = "new";
 
-			use_transparency = TRUE;
+			use_lighting = TRUE;
 		}
 		else
 		{
@@ -1884,7 +1884,7 @@ static errr Term_xtra_win_react(void)
 	if (use_graphics != arg_graphics)
 	{
 		/* Switch off transparency */
-		use_transparency = FALSE;
+		use_lighting = FALSE;
 
 		/* Initialize (if needed) */
 		if (arg_graphics && !init_graphics())
