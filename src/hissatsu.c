@@ -1298,7 +1298,7 @@ msg_print("ＭＰが足りません。");
 	energy_use = 100;
 
 	/* Use some mana */
-	if (n != 25) p_ptr->csp -= spell.smana;
+	p_ptr->csp -= spell.smana;
 
 	/* Limit */
 	if (p_ptr->csp < 0) p_ptr->csp = 0;
