@@ -482,6 +482,26 @@ static bool is_favorite(object_type *o_ptr)
 
 
 /*
+ * Convert string to lower case
+ */
+static void str_tolower(char *str)
+{
+	/* Force to be lower case string */
+	for (; *str; str++)
+	{
+#ifdef JP
+		if (iskanji(*str))
+		{
+			str++;
+			continue;
+		}
+#endif
+		*str = tolower(*str);
+	}
+}
+
+
+/*
  * Get auto-picker entry from o_ptr.
  */
 static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
@@ -489,7 +509,11 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	/* Assume that object name is to be added */
 	bool name = TRUE;
 
-	entry->name = NULL;
+	char name_str[MAX_NLEN];
+
+	/* Initialize name string */
+	name_str[0] = '\0';
+
 	entry->insc = string_make(quark_str(o_ptr->inscription));
 	entry->action = DO_AUTOPICK | DO_DISPLAY;
 	entry->flag[0] = entry->flag[1] = 0L;
@@ -548,16 +572,18 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 		if (o_ptr->name2)
 		    
 		{
-			ego_item_type *e_ptr = &e_info[o_ptr->name2];
-			entry->name = string_make(e_name + e_ptr->name);
-
 			if (TV_WEAPON_BEGIN <= o_ptr->tval &&
 			    o_ptr->tval <= TV_ARMOR_END)
 			{
 				/*
 				 * Base name of ego weapons and armors
-				 * are almost meaningless.  Ignore it.
+				 * are almost meaningless.
+				 * Register the ego type only.
 				 */
+				ego_item_type *e_ptr = &e_info[o_ptr->name2];
+				strcpy(name_str, e_name + e_ptr->name);
+
+				/* Don't use the object description */
 				name = FALSE;
 			}
 
@@ -673,19 +699,15 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	else if (o_ptr->tval == TV_BOOTS)
 		ADD_FLG(FLG_BOOTS);
 
-
+	/* Prepare the object description */
 	if (name)
 	{
-		char o_name[MAX_NLEN];
-		object_desc(o_name, o_ptr, FALSE, 0);
-
-		entry->name = string_make(o_name);
+		object_desc(name_str, o_ptr, FALSE, 0);
 	}
 
-	else if (!entry->name)
-	{
-		entry->name = string_make("");
-	}
+	/* Register the name in lowercase */
+	str_tolower(name_str);
+	entry->name = string_make(name_str);
 
 	return;
 }
@@ -1269,26 +1291,6 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 
 	/* Not collecting */
 	return FALSE;
-}
-
-
-/*
- * Convert string to lower case
- */
-static void str_tolower(char *str)
-{
-	/* Force to be lower case string */
-	for (; *str; str++)
-	{
-#ifdef JP
-		if (iskanji(*str))
-		{
-			str++;
-			continue;
-		}
-#endif
-		*str = tolower(*str);
-	}
 }
 
 
@@ -5799,7 +5801,7 @@ void do_cmd_edit_autopick(void)
 #ifdef JP
 		prt("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)", 0, 0);
 #else	
-		prt("(^Q:quit, ^W:save&quit, ESC:menu, Other:input text)", 0, 0);
+		prt("(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)", 0, 0);
 #endif
 		if (!tb->mark)
 		{
