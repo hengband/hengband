@@ -2348,6 +2348,10 @@ void display_map(int *cy, int *cx)
 
 	byte tp;
 
+	byte bigma[cur_hgt+2][cur_wid+2];
+	char bigmc[cur_hgt+2][cur_wid+2];
+	byte bigmp[cur_hgt+2][cur_wid+2];
+
 	byte ma[SCREEN_HGT + 2][SCREEN_WID + 2];
 	char mc[SCREEN_HGT + 2][SCREEN_WID + 2];
 
@@ -2390,6 +2394,19 @@ void display_map(int *cy, int *cx)
 		}
 	}
 
+	for (j = 0; j < cur_hgt + 2; ++j)
+	{
+		for (i = 0; i < cur_wid + 2; ++i)
+		{
+			/* Nothing here */
+			bigma[j][i] = TERM_WHITE;
+			bigmc[j][i] = ' ';
+
+			/* No priority */
+			bigmp[j][i] = 0;
+		}
+	}
+
 	/* Fill in the map */
 	for (i = 0; i < cur_wid; ++i)
 	{
@@ -2422,16 +2439,47 @@ void display_map(int *cy, int *cx)
 				tp = 0x7f;
 			}
 
-			/* Save "best" */
-			if (mp[y][x] < tp || (mp[y][x] == tp && ((y + i) * yrat + x + j) % (xrat*yrat) == 0))
+			/* Save the char, attr and priority */
+			bigmc[j+1][i+1] = tc;
+			bigma[j+1][i+1] = ta;
+			bigmp[j+1][i+1] = tp;
+		}
+	}
+
+	for (j = 0; j < cur_hgt; ++j)
+	{
+		for (i = 0; i < cur_wid; ++i)
+		{
+			/* Location */
+			x = i / xrat + 1;
+			y = j / yrat + 1;
+
+			tc = bigmc[j+1][i+1];
+			ta = bigma[j+1][i+1];
+			tp = bigmp[j+1][i+1];
+
+			/* rare feature has more priority */
+			if (mp[y][x] == tp)
 			{
-				/* Save the char */
+				int t;
+				int cnt = 0;
+
+				for (t = 0; t < 8; t++)
+				{
+					if (tc == bigmc[j+1+ddy_cdd[t]][i+1+ddx_cdd[t]] &&
+					    ta == bigma[j+1+ddy_cdd[t]][i+1+ddx_cdd[t]])
+						cnt++;
+				}
+				if (cnt <= 4)
+					tp++;
+			}
+
+			/* Save "best" */
+			if (mp[y][x] < tp)
+			{
+				/* Save the char, attr and priority */
 				mc[y][x] = tc;
-
-				/* Save the attr */
 				ma[y][x] = ta;
-
-				/* Save priority */
 				mp[y][x] = tp;
 			}
 		}
