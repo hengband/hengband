@@ -522,8 +522,6 @@ extern s16b now_message;
 extern bool use_menu;
 
 /* autopick.c */
-extern bool autopick_new_entry(autopick_type *entry, cptr str);
-extern void autopick_free_entry(autopick_type *entry);
 extern void init_autopicker(void);
 extern errr process_pickpref_file_line(char *buf);
 extern cptr autopick_line_from_entry(autopick_type *entry);

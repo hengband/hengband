@@ -198,7 +198,7 @@
 /*
  * A function to create new entry
  */
-bool autopick_new_entry(autopick_type *entry, cptr str)
+static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_default)
 {
 	cptr insc;
 	int i;
@@ -273,6 +273,9 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 		buf[i] = c;
 	}
 	buf[i] = '\0';
+
+	/* Skip empty line unless allow_default */
+	if (!allow_default && *buf == 0) return FALSE;
 
 	/* Skip comment line */
 	if (*buf == 0 && insc) return FALSE;
@@ -423,7 +426,7 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 /*
  * A function to delete entry
  */
-void autopick_free_entry(autopick_type *entry)
+static void autopick_free_entry(autopick_type *entry)
 {
 	string_free(entry->name);
 	string_free(entry->insc);
@@ -446,7 +449,7 @@ void init_autopicker(void)
 	max_autopick = 0;
 
 	/* There is always one entry "=g" */
-	autopick_new_entry(&entry, easy_autopick_inscription);
+	autopick_new_entry(&entry, easy_autopick_inscription, TRUE);
 	autopick_list[max_autopick++] = entry;
 }
 
@@ -478,7 +481,7 @@ errr process_pickpref_file_line(char *buf)
 	}
 	buf[i] = 0;
 	
-	if (!autopick_new_entry(&entry, buf)) return 0;
+	if (!autopick_new_entry(&entry, buf, FALSE)) return 0;
 
 	/* Already has the same entry? */ 
 	for(i = 0; i < max_autopick; i++)
@@ -2193,7 +2196,7 @@ static void toggle_keyword(text_body_type *tb, int flg)
 	{
 		autopick_type an_entry, *entry = &an_entry;
 
-		if (!autopick_new_entry(entry, tb->lines_list[y]))
+		if (!autopick_new_entry(entry, tb->lines_list[y], TRUE))
 			return;
 
 		string_free(tb->lines_list[y]);
@@ -2281,7 +2284,7 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
 	{
 		int wid = 0;
 
-		if (!autopick_new_entry(entry, tb->lines_list[y])) continue;
+		if (!autopick_new_entry(entry, tb->lines_list[y], TRUE)) continue;
 
 		string_free(tb->lines_list[y]);
 
@@ -2340,7 +2343,7 @@ static void add_keyword(text_body_type *tb, int flg)
 {
 	autopick_type an_entry, *entry = &an_entry;
 
-	if (!autopick_new_entry(entry, tb->lines_list[tb->cy]))
+	if (!autopick_new_entry(entry, tb->lines_list[tb->cy], TRUE))
 		return;
 
 	/* There is the flag already */
@@ -2644,21 +2647,34 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 	while (1)
 	{
 		bool back = FALSE;
-		int i;
+		int key;
+		size_t trig_len;
 
 		/* Place cursor */
 		Term_gotoxy(col + pos, 0);
 
 		/* Get a key */
-		i = inkey();
+		key = inkey();
+
+		/* Count length of macro trigger which induced this key */
+		trig_len = strlen(inkey_macro_trigger_string);
 
 		/* HACK -- ignore macro defined on ASCII keys */
-		if (strlen(inkey_macro_trigger_string) == 1)
-			i = inkey_macro_trigger_string[0];
+		if (trig_len == 1)
+		{
+			/* Get original key */
+			key = inkey_macro_trigger_string[0];
+
+			/* Kill further macro expansion */
+			flush();
+		}
+
+		/* Delete key */
+		if (key == 0x7F) key = KTRL('d');
 
 
 		/* Analyze the key */
-		switch (i)
+		switch (key)
 		{
 		case ESCAPE:
 			return 0;
@@ -2701,7 +2717,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 
 		default:
 #ifdef JP
-			if (iskanji(i))
+			if (iskanji(key))
 			{
 				int next;
 
@@ -2709,20 +2725,20 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 				next = inkey ();
 				if (pos + 1 < MAX_NLEN)
 				{
-					buf[pos++] = i;
+					buf[pos++] = key;
 					buf[pos] = next;
 					k_flag[pos++] = 1;
 				}
 				else bell();
 			}
-			else if (pos < MAX_NLEN && isprint(i))
+			else if (pos < MAX_NLEN && isprint(key))
 			{
-				buf[pos] = i;
+				buf[pos] = key;
 				k_flag[pos++] = 0;
 			}
 			else bell();
 #else
-			if (pos < MAX_NLEN && isprint(i)) buf[pos++] = i;
+			if (pos < MAX_NLEN && isprint(key)) buf[pos++] = key;
 			else bell();
 #endif
 			break;
@@ -2776,7 +2792,7 @@ static bool search_for_object(cptr *lines_list, object_type *o_ptr, int *cxp, in
 			if (--i < 0) break;
 		}
 
-		if (!autopick_new_entry(entry, lines_list[i])) continue;
+		if (!autopick_new_entry(entry, lines_list[i], FALSE)) continue;
 
 		if (is_autopick_aux(o_ptr, entry, o_name))
 		{
@@ -3628,7 +3644,7 @@ static void draw_text_editor(text_body_type *tb)
 		}
 
 		/* Get description of an autopicker preference line */
-		else if (autopick_new_entry(entry, tb->lines_list[tb->cy]))
+		else if (autopick_new_entry(entry, tb->lines_list[tb->cy], FALSE))
 		{
 			char buf[MAX_LINELEN];
 			char temp[MAX_LINELEN];
@@ -4814,6 +4830,9 @@ void do_cmd_edit_autopick(void)
 		{
 			/* Get original key */
 			key = inkey_macro_trigger_string[0];
+
+			/* Kill further macro expansion */
+			flush();
 		}
 
 		/* Delete key */
