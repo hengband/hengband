@@ -2091,7 +2091,7 @@ static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
  * "appropriate" non-unique monsters for the nest.
  *
  * Note that the "get_mon_num()" function may (rarely) fail, in which
- * case the nest will be empty, and will not affect the level rating.
+ * case the nest will be empty.
  *
  * Note that "monster nests" will never contain "unique" monsters.
  */
@@ -2238,15 +2238,6 @@ static bool build_type5(void)
 #endif
 	}
 
-	/* Increase the level rating */
-	rating += 10;
-
-	/* (Sometimes) Cause a "special feeling" (for "Monster Nests") */
-	if ((dun_level <= 40) && (randint1(dun_level * dun_level + 50) < 300))
-	{
-		good_item_flag = TRUE;
-	}
-
 	/* Place some monsters */
 	for (y = yval - 2; y <= yval + 2; y++)
 	{
@@ -2319,7 +2310,7 @@ static bool build_type5(void)
  * "appropriate" non-unique monsters for the pit.
  *
  * Note that the "get_mon_num()" function may (rarely) fail, in which case
- * the pit will be empty, and will not effect the level rating.
+ * the pit will be empty.
  *
  * Note that "monster pits" will never contain "unique" monsters.
  */
@@ -2497,15 +2488,6 @@ static bool build_type6(void)
 			/* Message */
 			msg_print(r_name + r_info[what[i]].name);
 		}
-	}
-
-	/* Increase the level rating */
-	rating += 10;
-
-	/* (Sometimes) Cause a "special feeling" (for "Monster Pits") */
-	if ((dun_level <= 40) && (randint1(dun_level * dun_level + 50) < 300))
-	{
-		good_item_flag = TRUE;
 	}
 
 	/* Top and bottom rows */
@@ -2918,16 +2900,6 @@ static bool build_type7(void)
 	if (cheat_room) msg_format("Lesser vault (%s)", v_name + v_ptr->name);
 #endif
 
-	/* Boost the rating */
-	rating += v_ptr->rat;
-
-	/* (Sometimes) Cause a special feeling */
-	if ((dun_level <= 50) ||
-		(randint1((dun_level - 40) * (dun_level - 40) + 50) < 400))
-	{
-		good_item_flag = TRUE;
-	}
-
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
 		    v_text + v_ptr->text, xoffset, yoffset, transno);
@@ -3025,16 +2997,6 @@ static bool build_type8(void)
 #else
 	if (cheat_room) msg_format("Greater vault (%s)", v_name + v_ptr->name);
 #endif
-
-	/* Boost the rating */
-	rating += v_ptr->rat;
-
-	/* (Sometimes) Cause a special feeling */
-	if ((dun_level <= 50) ||
-	    (randint1((dun_level - 40) * (dun_level - 40) + 50) < 400))
-	{
-		good_item_flag = TRUE;
-	}
 
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
@@ -5343,16 +5305,6 @@ static bool build_type10(void)
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(&y0, &x0, ysize + 1, xsize + 1)) return FALSE;
 
-	/* Boost the rating- higher than lesser vaults and lower than greater vaults */
-	rating += 10;
-
-	/* (Sometimes) Cause a special feeling */
-	if ((dun_level <= 50) ||
-	    (randint1((dun_level - 40) * (dun_level - 40) + 1) < 400))
-	{
-		good_item_flag = TRUE;
-	}
-
 	/* Select type of vault */
 #ifdef ALLOW_CAVERNS_AND_LAKES
 	vtype = randint1(15);
@@ -5582,7 +5534,7 @@ static bool vault_aux_trapped_pit(int r_idx)
  * "appropriate" non-unique monsters for the pit.
  *
  * Note that the "get_mon_num()" function may (rarely) fail, in which case
- * the pit will be empty, and will not effect the level rating.
+ * the pit will be empty.
  *
  * Note that "monster pits" will never contain "unique" monsters.
  */
@@ -5821,15 +5773,6 @@ static bool build_type13(void)
 			/* Message */
 			msg_print(r_name + r_info[what[i]].name);
 		}
-	}
-
-	/* Increase the level rating */
-	rating += 20;
-
-	/* (Sometimes) Cause a "special feeling" (for "Monster Pits") */
-	if ((dun_level <= 40) && (randint1(dun_level * dun_level + 50) < 300))
-	{
-		good_item_flag = TRUE;
 	}
 
 	for (i = 0; placing[i][2] >= 0; i++)

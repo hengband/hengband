@@ -1393,29 +1393,6 @@ static bool level_gen(cptr *why)
 	else return TRUE;
 }
 
-static byte extract_feeling(void)
-{
-	/* Hack -- no feeling in the town */
-	if (!dun_level) return 0;
-
-	/* Hack -- Have a special feeling sometimes */
-	if (good_item_flag && !preserve_mode) return 1;
-
-	if (rating > 100) return 2;
-	if (rating > 80) return 3;
-	if (rating > 60) return 4;
-	if (rating > 40) return 5;
-	if (rating > 30) return 6;
-	if (rating > 20) return 7;
-	if (rating > 10) return 8;
-	if (rating > 0) return 9;
-
-	if((turn - old_turn) > TURNS_PER_TICK * TOWN_DAWN /2)
-		chg_virtue(V_PATIENCE, 1);
-
-	return 10;
-}
-
 
 /*
  * Wipe all unnecessary flags after cave generation
@@ -1513,12 +1490,6 @@ void clear_cave(void)
 
 	/* Reset the object generation level */
 	object_level = base_level;
-
-	/* Nothing special here yet */
-	good_item_flag = FALSE;
-
-	/* Nothing good here yet */
-	rating = 0;
 }
 
 
@@ -1529,7 +1500,7 @@ void clear_cave(void)
  */
 void generate_cave(void)
 {
-	int num, i;
+	int num;
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(dungeon_type);
@@ -1543,15 +1514,6 @@ void generate_cave(void)
 
 		/* Clear and empty the cave */
 		clear_cave();
-
-		for (i = 0; i < DUNGEON_FEAT_PROB_NUM; i++)
-		{
-			if (have_flag(f_info[d_info[dungeon_type].fill[i].feat].flags, FF_HAS_GOLD))
-			{
-				rating += 40;
-				break;
-			}
-		}
 
 		/* Build the arena -KMW- */
 		if (p_ptr->inside_arena)
@@ -1586,8 +1548,6 @@ void generate_cave(void)
 			okay = level_gen(&why);
 		}
 
-		/* Extract the feeling */
-		feeling = extract_feeling();
 
 		/* Prevent object over-flow */
 		if (o_max >= max_o_idx)

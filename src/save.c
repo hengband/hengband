@@ -750,10 +750,13 @@ static void wr_extra(void)
 	wr_byte(p_ptr->is_dead);
 
 	/* Write feeling */
-	wr_byte(feeling);
+	wr_byte(p_ptr->feeling);
+
+	/* Turn when level began */
+	wr_s32b(old_turn);
 
 	/* Turn of last "feeling" */
-	wr_s32b(old_turn);
+	wr_s32b(p_ptr->feeling_turn);
 
 	/* Current turn */
 	wr_s32b(turn);
@@ -865,7 +868,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	wr_u16b((u16b)px);
 	wr_u16b(cur_hgt);
 	wr_u16b(cur_wid);
-	wr_byte(feeling);
+	wr_byte(p_ptr->feeling);
 
 
 
@@ -1938,9 +1941,6 @@ bool load_player(void)
 
 			/* Count lives */
 			sf_lives++;
-
-			/* Forget turns */
-			turn = old_turn = 0;
 
 			/* Done */
 			return (TRUE);

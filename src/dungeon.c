@@ -3748,6 +3748,236 @@ msg_print("下に引きずり降ろされる感じがする！");
 
 
 /*
+ * Count number of adjacent monsters
+ */
+static int get_monster_crowd_number(int m_idx)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	int my = m_ptr->fy;
+	int mx = m_ptr->fx;
+	int i;
+	int count = 0;
+
+	for (i = 0; i < 7; i++)
+	{
+		int ay = my + ddy_ddd[i];
+		int ax = mx + ddx_ddd[i];
+
+		if (!in_bounds(ay, ax)) continue;
+
+		/* Count number of monsters */
+		if (cave[ay][ax].m_idx > 0) count++;
+ 	}
+
+	return count;
+}
+
+
+
+/*
+ * Dungeon rating is no longer linear
+ */
+#define RATING_BOOST(delta) (delta * delta + 50 * delta)
+
+/*
+ * Examine all monsters and unidentified objects,
+ * and get the feeling of current dungeon floor
+ */
+static byte get_dungeon_feeling(void)
+{
+	const int base = 10;
+	int rating = 0;
+	int i;
+
+	/* Hack -- no feeling in the town */
+	if (!dun_level) return 0;
+
+	/* Examine each monster */
+	for (i = 1; i < m_max; i++)
+	{
+		monster_type *m_ptr = &m_list[i];
+		monster_race *r_ptr;
+		int delta = 0;
+
+		/* Skip dead monsters */
+		if (!m_ptr->r_idx) continue;
+
+		/* Ignore pet */
+		if (is_pet(m_ptr)) continue;
+
+		r_ptr = &r_info[m_ptr->r_idx];
+
+		/* Unique monsters */
+		if (r_ptr->flags1 & (RF1_UNIQUE))
+		{
+			/* Nearly out-of-depth unique monsters */
+			if (r_ptr->level + 10 > dun_level)
+			{
+				/* Boost rating by twice delta-depth */
+				delta += (r_ptr->level + 10 - dun_level) * 2 * base;
+			}
+		}
+		else
+		{
+			/* Out-of-depth monsters */
+			if (r_ptr->level > dun_level)
+			{
+				/* Boost rating by delta-depth */
+				delta += (r_ptr->level - dun_level) * base;
+			}
+		}
+
+		/* Unusually crowded monsters get a little bit of rating boost */
+		if (r_ptr->flags1 & RF1_FRIENDS)
+		{
+			if (5 <= get_monster_crowd_number(i)) delta += 1;
+		}
+		else
+		{
+			if (2 <= get_monster_crowd_number(i)) delta += 1;
+		}
+
+
+		rating += RATING_BOOST(delta);
+	}
+
+	/* Examine each unidentified object */
+	for (i = 1; i < o_max; i++)
+	{
+		object_type *o_ptr = &o_list[i];
+		object_kind *k_ptr = &k_info[o_ptr->k_idx];
+		int delta = 0;
+
+		/* Skip dead objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Skip known objects */
+		if (object_is_known(o_ptr)) continue;
+
+		/* Skip pseudo-known objects */
+		if (o_ptr->ident & IDENT_SENSE) continue;
+
+		/* Ego objects */
+		if (object_is_ego(o_ptr))
+		{
+			ego_item_type *e_ptr = &e_info[o_ptr->name2];
+
+			delta += e_ptr->rating * base;
+		}
+
+		/* Artifacts */
+		if (object_is_artifact(o_ptr))
+		{
+			s32b cost = object_value_real(o_ptr);
+
+			delta += 10 * base;
+			if (cost > 10000L) delta += 10 * base;
+			if (cost > 50000L) delta += 10 * base;
+			if (cost > 100000L) delta += 10 * base;
+
+			/* Special feeling */
+			if (!preserve_mode) return 1;
+		}
+
+		if (o_ptr->tval == TV_DRAG_ARMOR) delta += 30 * base;
+		if (o_ptr->tval == TV_SHIELD &&
+		    o_ptr->sval == SV_DRAGON_SHIELD) delta += 5 * base;
+		if (o_ptr->tval == TV_GLOVES &&
+		    o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) delta += 5 * base;
+		if (o_ptr->tval == TV_BOOTS &&
+		    o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) delta += 5 * base;
+		if (o_ptr->tval == TV_HELM &&
+		    o_ptr->sval == SV_DRAGON_HELM) delta += 5 * base;
+		if (o_ptr->tval == TV_RING &&
+		    o_ptr->sval == SV_RING_SPEED &&
+		    !object_is_cursed(o_ptr)) delta += 25 * base;
+		if (o_ptr->tval == TV_RING &&
+		    o_ptr->sval == SV_RING_LORDLY &&
+		    !object_is_cursed(o_ptr)) delta += 15 * base;
+		if (o_ptr->tval == TV_AMULET &&
+		    o_ptr->sval == SV_AMULET_THE_MAGI &&
+		    !object_is_cursed(o_ptr)) delta += 15 * base;
+
+		/* Out-of-depth objects */
+		if (!object_is_cursed(o_ptr) && !object_is_broken(o_ptr) &&
+		    k_ptr->level > dun_level)
+		{
+			/* Rating increase */
+			delta += (k_ptr->level - dun_level) * base;
+		}
+
+		rating += RATING_BOOST(delta);
+	}
+
+
+	if (rating > RATING_BOOST(1000)) return 2;
+	if (rating > RATING_BOOST(800)) return 3;
+	if (rating > RATING_BOOST(600)) return 4;
+	if (rating > RATING_BOOST(400)) return 5;
+	if (rating > RATING_BOOST(300)) return 6;
+	if (rating > RATING_BOOST(200)) return 7;
+	if (rating > RATING_BOOST(100)) return 8;
+	if (rating > RATING_BOOST(0)) return 9;
+
+	return 10;
+}
+
+
+/*
+ * Update dungeon feeling, and announce it if changed
+ */
+static void update_dungeon_feeling(void)
+{
+	byte new_feeling;
+	int quest_num;
+	int delay;
+
+	/* No feeling on the surface */
+	if (!dun_level) return;
+
+	/* No feeling in the arena */
+	if (p_ptr->inside_battle) return;
+
+	/* Extract delay time */
+	delay = MAX(10, 150 - p_ptr->skill_fos) * (150 - dun_level) * TURNS_PER_TICK / 100;
+
+ 	/* Not yet felt anything */
+	if (turn < p_ptr->feeling_turn + delay && !cheat_xtra) return;
+
+	/* Extract quest number (if any) */
+	quest_num = quest_number(dun_level);
+
+	/* No feeling in a quest */
+	if (quest_num &&
+	    (is_fixed_quest_idx(quest_num) &&
+	     !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
+	       !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) return;
+
+
+	/* Get new dungeon feeling */
+	new_feeling = get_dungeon_feeling();
+
+	/* Remember last time updated */
+	p_ptr->feeling_turn = turn;
+
+	/* No change */
+	if (p_ptr->feeling == new_feeling) return;
+
+	/* Dungeon feeling is changed */
+	p_ptr->feeling = new_feeling;
+
+	/* Announce feeling */
+	do_cmd_feeling();
+
+	/* Update the level indicator */
+	p_ptr->redraw |= (PR_DEPTH);
+
+	/* Disturb */
+	if (disturb_minor) disturb(0, 0);
+}
+
+
+/*
  * Handle certain things once every 10 game turns
  */
 static void process_world(void)
@@ -3760,28 +3990,8 @@ static void process_world(void)
 	
 	extract_day_hour_min(&day, &hour, &min);
 
-
-	if ((turn - old_turn == (150 - dun_level) * TURNS_PER_TICK)
-	    && dun_level && !p_ptr->inside_battle)
-	{
-		int quest_num = quest_number(dun_level);
-
-		/* Get dungeon level feeling */
-		if (!(quest_num &&
-		      (is_fixed_quest_idx(quest_num) &&
-		       !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
-			 !(quest[quest_num].flags & QUEST_FLAG_PRESET)))))
-		{
-			/* Announce feeling */
-			do_cmd_feeling();
-
-			/* Update the level indicator */
-			p_ptr->redraw |= (PR_DEPTH);
-
-			/* Disturb */
-			if (disturb_minor) disturb(0, 0);
-		}
-	}
+	/* Update dungeon feeling, and announce it if changed */
+	update_dungeon_feeling();
 
 	/*** Check monster arena ***/
 	if (p_ptr->inside_battle && !p_ptr->leaving)
@@ -3855,7 +4065,7 @@ static void process_world(void)
 			p_ptr->energy_need = 0;
 			battle_monsters();
 		}
-		else if(turn - old_turn == 150*TURNS_PER_TICK)
+		else if (turn - old_turn == 150*TURNS_PER_TICK)
 		{
 #ifdef JP
 			msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");

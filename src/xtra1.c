@@ -978,24 +978,21 @@ static void prt_depth(void)
 		else (void)sprintf(depths, "Lev %d", dun_level);
 #endif
 
-		attr = TERM_SLATE;
 
 		/* Get color of level based on feeling  -JSV- */
-		if ((turn - old_turn >= (150 - dun_level) * TURNS_PER_TICK) || cheat_xtra)
+		switch (p_ptr->feeling)
 		{
-			switch (feeling)
-			{
-			case  1: attr = TERM_L_BLUE;  break; /* Special */
-			case  2: attr = TERM_VIOLET;  break; /* Horrible visions */
-			case  3: attr = TERM_RED;     break; /* Very dangerous */
-			case  4: attr = TERM_L_RED;   break; /* Very bad feeling */
-			case  5: attr = TERM_ORANGE;  break; /* Bad feeling */
-			case  6: attr = TERM_YELLOW;  break; /* Nervous */
-			case  7: attr = TERM_L_UMBER; break; /* Luck is turning */
-			case  8: attr = TERM_L_WHITE; break; /* Don't like */
-			case  9: attr = TERM_WHITE;   break; /* Reasonably safe */
-			case 10: attr = TERM_WHITE;   break; /* Boring place */
-			}
+		case  0: attr = TERM_SLATE;   break; /* Unknown */
+		case  1: attr = TERM_L_BLUE;  break; /* Special */
+		case  2: attr = TERM_VIOLET;  break; /* Horrible visions */
+		case  3: attr = TERM_RED;     break; /* Very dangerous */
+		case  4: attr = TERM_L_RED;   break; /* Very bad feeling */
+		case  5: attr = TERM_ORANGE;  break; /* Bad feeling */
+		case  6: attr = TERM_YELLOW;  break; /* Nervous */
+		case  7: attr = TERM_L_UMBER; break; /* Luck is turning */
+		case  8: attr = TERM_L_WHITE; break; /* Don't like */
+		case  9: attr = TERM_WHITE;   break; /* Reasonably safe */
+		case 10: attr = TERM_WHITE;   break; /* Boring place */
 		}
 	}
 

@@ -121,7 +121,7 @@ s16b base_level;        /* Base dungeon level */
 
 s32b turn;				/* Current game turn */
 s32b dungeon_turn;			/* Game turn in dungeon */
-s32b old_turn;			/* Turn when level began (feelings) */
+s32b old_turn;			/* Turn when level began */
 s32b old_battle;
 
 bool use_sound;			/* The "sound" mode is enabled */
@@ -361,11 +361,6 @@ s16b autosave_freq;     /* Autosave frequency */
 /*
  * Dungeon variables
  */
-
-byte feeling;			/* Most recent feeling */
-s16b rating;			/* Level's current rating */
-
-bool good_item_flag;		/* True if "Artifact" on this level */
 
 bool closing_flag;		/* Dungeon is closing */
 

@@ -4949,8 +4949,6 @@ void store_maint(int town_num, int store_num)
 {
 	int 		j;
 
-	int 	old_rating = rating;
-
 	cur_store_num = store_num;
 
 	/* Ignore home */
@@ -5021,10 +5019,6 @@ void store_maint(int town_num, int store_num)
 
 	/* Acquire some new items */
 	while (st_ptr->stock_num < j) store_create();
-
-
-	/* Hack -- Restore the rating */
-	rating = old_rating;
 }
 
 

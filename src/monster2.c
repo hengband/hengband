@@ -3050,10 +3050,6 @@ msg_print("守りのルーンが壊れた！");
 #else
 			if (cheat_hear) msg_format("Deep Unique (%s).", name);
 #endif
-
-
-			/* Boost rating by twice delta-depth */
-			rating += (r_ptr->level - dun_level) * 2;
 		}
 
 		/* Normal monsters */
@@ -3065,10 +3061,6 @@ msg_print("守りのルーンが壊れた！");
 #else
 			if (cheat_hear) msg_format("Deep Monster (%s).", name);
 #endif
-
-
-			/* Boost rating by delta-depth */
-			rating += (r_ptr->level - dun_level);
 		}
 	}
 
@@ -3151,7 +3143,6 @@ msg_print("守りのルーンが壊れた！");
 		choose_new_monster(c_ptr->m_idx, TRUE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
 		m_ptr->mflag2 |= MFLAG2_CHAMELEON;
-		rating++;
 
 		/* Hack - Set sub_align to neutral when the Chameleon Lord is generated as "GUARDIAN" */
 		if ((r_ptr->flags1 & RF1_UNIQUE) && (who <= 0))
@@ -3478,7 +3469,7 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	int old, n, i;
+	int n, i;
 	int total = 0, extra = 0;
 
 	int hack_n = 0;
@@ -3517,9 +3508,6 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 	if (total > GROUP_MAX) total = GROUP_MAX;
 
 
-	/* Save the rating */
-	old = rating;
-
 	/* Start on the monster */
 	hack_n = 1;
 	hack_x[0] = x;
@@ -3552,9 +3540,6 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 			}
 		}
 	}
-
-	/* Hack -- restore the rating */
-	rating = old;
 
 
 	/* Success */

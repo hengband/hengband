@@ -2280,7 +2280,6 @@ static byte get_random_ego(byte slot, bool good)
  *
  * Hack -- note special base damage dice boosting
  * Hack -- note special processing for weapon/digger
- * Hack -- note special rating boost for dragon scale mail
  */
 static void a_m_aux_1(object_type *o_ptr, int level, int power)
 {
@@ -2673,8 +2672,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 	{
 		case TV_DRAG_ARMOR:
 		{
-			/* Rating boost */
-			rating += 30;
 			if (one_in_(50) || (power > 2)) /* power > 2 is debug only */
 				create_artifact(o_ptr, FALSE);
 
@@ -2759,9 +2756,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 
 			if (o_ptr->sval == SV_DRAGON_SHIELD)
 			{
-				/* Rating boost */
-				rating += 5;
-
 				/* Mention the item */
 				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
@@ -2797,9 +2791,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		{
 			if (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)
 			{
-				/* Rating boost */
-				rating += 5;
-
 				/* Mention the item */
 				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
@@ -2828,9 +2819,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		{
 			if (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)
 			{
-				/* Rating boost */
-				rating += 5;
-
 				/* Mention the item */
 				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
@@ -2920,9 +2908,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		{
 			if (o_ptr->sval == SV_DRAGON_HELM)
 			{
-				/* Rating boost */
-				rating += 5;
-
 				/* Mention the item */
 				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
@@ -3010,8 +2995,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 /*
  * Apply magic to an item known to be a "ring" or "amulet"
  *
- * Hack -- note special rating boost for ring of speed
- * Hack -- note special rating boost for amulet of the magi
  * Hack -- note special "pval boost" code for ring of speed
  * Hack -- note that some items must be cursed (or blessed)
  */
@@ -3101,9 +3084,6 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						break;
 					}
 
-					/* Rating boost */
-					rating += 25;
-
 					/* Mention the item */
 					if (cheat_peek) object_mention(o_ptr);
 
@@ -3120,7 +3100,6 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 					/* Bonus to armor class */
 					o_ptr->to_a = 10 + randint1(5) + m_bonus(10, level);
-					rating += 15;
 				}
 				break;
 
@@ -3611,9 +3590,6 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 					/* gain one low ESP */
 					add_esp_weak(o_ptr, FALSE);
-
-					/* Boost the rating */
-					rating += 15;
 
 					/* Mention the item */
 					if (cheat_peek) object_mention(o_ptr);
@@ -4276,17 +4252,6 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1)) o_ptr->curse_flags |= get_curse(1, o_ptr);
 		if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2)) o_ptr->curse_flags |= get_curse(2, o_ptr);
 
-		/* Mega-Hack -- increase the rating */
-		rating += 10;
-
-		/* Mega-Hack -- increase the rating again */
-		if (a_ptr->cost > 50000L) rating += 10;
-
-		/* Mega-Hack -- increase the rating again */
-		if (a_ptr->cost > 100000L) rating += 10;
-
-		/* Set the good item flag */
-		good_item_flag = TRUE;
 
 		/* Cheat -- peek at the item */
 		if (cheat_peek) object_mention(o_ptr);
@@ -4377,8 +4342,6 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		add_flag(o_ptr->art_flags, TR_CON);
 		add_flag(o_ptr->art_flags, TR_CHR);
 	}
-
-	if (o_ptr->art_name) rating += 30;
 
 	/* Hack -- analyze ego-items */
 	else if (object_is_ego(o_ptr))
@@ -4471,9 +4434,6 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2) && (o_ptr->name2 != EGO_ATTACKS))
 				o_ptr->pval = 2;
 		}
-
-		/* Hack -- apply rating bonus */
-		rating += e_ptr->rating;
 
 		/* Cheat -- describe the item */
 		if (cheat_peek) object_mention(o_ptr);
@@ -4664,9 +4624,6 @@ bool make_object(object_type *j_ptr, u32b mode)
 	if (!object_is_cursed(j_ptr) && !object_is_broken(j_ptr) &&
 	    (obj_level > dun_level))
 	{
-		/* Rating increase */
-		rating += (obj_level - dun_level);
-
 		/* Cheat -- peek at items */
 		if (cheat_peek) object_mention(j_ptr);
 	}

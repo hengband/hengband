@@ -2001,11 +2001,20 @@ static void rd_extra(void)
 	p_ptr->is_dead = tmp8u;
 
 	/* Read "feeling" */
-	rd_byte(&tmp8u);
-	feeling = tmp8u;
+	rd_byte(&p_ptr->feeling);
 
-	/* Turn of last "feeling" */
+	/* Turn when level began */
 	rd_s32b(&old_turn);
+
+	if (h_older_than(1, 7, 0, 4))
+	{
+		p_ptr->feeling_turn = old_turn;
+	}
+	else
+	{
+		/* Turn of last "feeling" */
+		rd_s32b(&p_ptr->feeling_turn);
+	}
 
 	/* Current turn */
 	rd_s32b(&turn);
@@ -2019,6 +2028,7 @@ static void rd_extra(void)
 	if (z_older_than(11, 0, 13))
 	{
 		old_turn /= 2;
+		p_ptr->feeling_turn /= 2;
 		turn /= 2;
 		dungeon_turn /= 2;
 	}
@@ -2723,7 +2733,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_s16b(&cur_hgt);
 	rd_s16b(&cur_wid);
 
-	rd_byte(&feeling);
+	rd_byte(&p_ptr->feeling);
 
 
 

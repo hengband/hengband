@@ -1402,6 +1402,10 @@ void change_floor(void)
 	/* Remember when this level was "created" */
 	old_turn = turn;
 
+	/* No dungeon feeling yet */
+	p_ptr->feeling_turn = old_turn;
+	p_ptr->feeling = 0;
+
 	/* Clear all flags */
 	change_floor_mode = 0L;
 }

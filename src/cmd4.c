@@ -4909,9 +4909,6 @@ static cptr do_cmd_feeling_text_lucky[11] =
  */
 void do_cmd_feeling(void)
 {
-	/* Verify the feeling */
-	if (feeling > 10) feeling = 10;
-
 	/* No useful feeling in quests */
 	if (p_ptr->inside_quest && !random_quest_number(dun_level))
 	{
@@ -4966,20 +4963,13 @@ void do_cmd_feeling(void)
 	}
 
 	/* Display the feeling */
-	if (turn - old_turn >= (150 - dun_level)*TURNS_PER_TICK || cheat_xtra)
-	{
-		if (p_ptr->muta3 & MUT3_GOOD_LUCK) msg_print(do_cmd_feeling_text_lucky[feeling]);
-		else {
-					if((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON)){
-						msg_print(do_cmd_feeling_text_combat[feeling]);
-					}else
-						msg_print(do_cmd_feeling_text[feeling]);
-				}
-	}
+	if (p_ptr->muta3 & MUT3_GOOD_LUCK)
+		msg_print(do_cmd_feeling_text_lucky[p_ptr->feeling]);
+	else if (p_ptr->pseikaku == SEIKAKU_COMBAT ||
+		 inventory[INVEN_BOW].name1 == ART_CRIMSON)
+		msg_print(do_cmd_feeling_text_combat[p_ptr->feeling]);
 	else
-	{
-		msg_print(do_cmd_feeling_text[0]);
-	}
+		msg_print(do_cmd_feeling_text[p_ptr->feeling]);
 }
 
 
