@@ -3234,7 +3234,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->name2 = EGO_RING_REGEN;
 						break;
 					case 5: case 6:
-						if (k_ptr->flags3 & TR3_LITE)
+						if (k_ptr->flags3 & TR3_LITE) break;
 						o_ptr->name2 = EGO_RING_LITE;
 						break;
 					case 7: case 8:
