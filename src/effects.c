@@ -182,6 +182,7 @@ void reset_tim_flags(void)
 	p_ptr->tim_sh_fire = 0;
 	p_ptr->tim_sh_holy = 0;
 	p_ptr->tim_eyeeye = 0;
+	p_ptr->magicdef = 0;
 	p_ptr->resist_magic = 0;
 	p_ptr->tsuyoshi = 0;
 	p_ptr->kabenuke = 0;
