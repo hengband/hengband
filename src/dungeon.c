@@ -6234,9 +6234,9 @@ quit("セーブファイルが壊れています");
 		bool success;
 
 #ifdef JP
-		if (!get_check("待機していたスコア登録を今行ないますか？"))
+		if (!get_check_strict("待機していたスコア登録を今行ないますか？", CHECK_NO_HISTORY))
 #else
-		if (!get_check("Do you register score now? "))
+		if (!get_check_strict("Do you register score now? ", CHECK_NO_HISTORY))
 #endif
 			quit(0);
 
@@ -6266,9 +6266,9 @@ quit("セーブファイルが壊れています");
 		success = send_world_score(TRUE);
 
 #ifdef JP
-		if (!success && !get_check("スコア登録を諦めますか？"))
+		if (!success && !get_check_strict("スコア登録を諦めますか？", CHECK_NO_HISTORY))
 #else
-		if (!success && !get_check("Do you give up score registration? "))
+		if (!success && !get_check_strict("Do you give up score registration? ", CHECK_NO_HISTORY))
 #endif
 		{
 #ifdef JP

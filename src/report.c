@@ -485,9 +485,9 @@ errr report_score(void)
 		(void)inkey();
 		
 #ifdef JP
-		if (!get_check("もう一度接続を試みますか? "))
+		if (!get_check_strict("もう一度接続を試みますか? ", CHECK_NO_HISTORY))
 #else
-		if (!get_check("Try again? "))
+		if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
 #endif
 		{
 			err = 1;
