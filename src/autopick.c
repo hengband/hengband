@@ -1070,28 +1070,28 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** First rank spellbooks ***/
 	if (IS_FLG(FLG_FIRST))
 	{
-		before_str[before_n++] = "first one of four ";
+		before_str[before_n++] = "first one of four";
 		body_str = "spellbooks";
 	}
 
 	/*** Second rank spellbooks ***/
 	if (IS_FLG(FLG_SECOND))
 	{
-		before_str[before_n++] = "second one of four ";
+		before_str[before_n++] = "second one of four";
 		body_str = "spellbooks";
 	}
 
 	/*** Third rank spellbooks ***/
 	if (IS_FLG(FLG_THIRD))
 	{
-		before_str[before_n++] = "third one of four ";
+		before_str[before_n++] = "third one of four";
 		body_str = "spellbooks";
 	}
 
 	/*** Fourth rank spellbooks ***/
 	if (IS_FLG(FLG_FOURTH))
 	{
-		before_str[before_n++] = "fourth one of four ";
+		before_str[before_n++] = "fourth one of four";
 		body_str = "spellbooks";
 	}
 
