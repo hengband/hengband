@@ -249,7 +249,7 @@ static int read_chuukei_prf(cptr prf_name)
 	char buf[1024];
 	FILE *fp;
 
-	path_build(buf, 1024, ANGBAND_DIR_XTRA, prf_name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA, prf_name);
 	fp = my_fopen(buf, "r");
 
 	if (!fp) return (-1);
@@ -259,7 +259,7 @@ static int read_chuukei_prf(cptr prf_name)
 	server_name[0] = 0;
 	browse_delay = DEFAULT_DELAY;
 
-	while (0 == my_fgets(fp, buf, 1024))
+	while (0 == my_fgets(fp, buf, sizeof(buf)))
 	{
 		/* サーバ名 */
 		if (!strncmp(buf, "server:", 7))

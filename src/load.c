@@ -433,12 +433,12 @@ static void rd_item(object_type *o_ptr)
         rd_byte(&o_ptr->feeling);
 
 	/* Inscription */
-	rd_string(buf, 128);
+	rd_string(buf, sizeof(buf));
 
 	/* Save the inscription */
 	if (buf[0]) o_ptr->inscription = quark_add(buf);
 
-	rd_string(buf, 128);
+	rd_string(buf, sizeof(buf));
 	if (buf[0]) o_ptr->art_name = quark_add(buf);
 
 	/* The Python object */
@@ -611,7 +611,7 @@ static void rd_monster(monster_type *m_ptr)
 	}
 	else
 	{
-		rd_string(buf, 128);
+		rd_string(buf, sizeof(buf));
 		if (buf[0]) m_ptr->nickname = quark_add(buf);
 	}
 
@@ -1079,7 +1079,7 @@ static void rd_ghost(void)
 	char buf[64];
 
 	/* Strip name */
-	rd_string(buf, 64);
+	rd_string(buf, sizeof(buf));
 
 	/* Strip old data */
 	strip_bytes(60);
@@ -1122,7 +1122,7 @@ static void load_quick_start(void)
 
 	for (i = 0; i < 8; i++) rd_s16b(&previous_char.vir_types[i]);
 
-	for (i = 0; i < 4; i++) rd_string(previous_char.history[i], 60);
+	for (i = 0; i < 4; i++) rd_string(previous_char.history[i], sizeof(previous_char.history[i]));
 
 	rd_byte(&previous_char.quests);
 
@@ -1140,15 +1140,15 @@ static void rd_extra(void)
 	byte tmp8u;
 	s16b tmp16s;
 
-	rd_string(player_name, 32);
+	rd_string(player_name, sizeof(player_name));
 
-	rd_string(p_ptr->died_from, 80);
+	rd_string(p_ptr->died_from, sizeof(p_ptr->died_from));
 
 	load_quick_start();
 
 	for (i = 0; i < 4; i++)
 	{
-		rd_string(p_ptr->history[i], 60);
+		rd_string(p_ptr->history[i], sizeof(p_ptr->history[i]));
 	}
 
 	/* Class/Race/Seikaku/Gender/Spells */
@@ -1832,7 +1832,7 @@ static void rd_messages(void)
 	for (i = 0; i < num; i++)
 	{
 		/* Read the message */
-		rd_string(buf, 128);
+		rd_string(buf, sizeof(buf));
 
 		/* Save the message */
 		message_add(buf);
@@ -2828,7 +2828,7 @@ note("持ち物情報を読み込むことができません");
 	if (!z_older_than(11, 0, 9))
 	{
 		char buf[SCREEN_BUF_SIZE];
-		rd_string(buf, SCREEN_BUF_SIZE);
+		rd_string(buf, sizeof(buf));
 		if (buf[0]) screen_dump = string_make(buf);
 	}
 

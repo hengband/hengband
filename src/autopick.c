@@ -1715,11 +1715,11 @@ static cptr *read_text_lines(cptr filename, bool user)
 	{
 		/* Hack -- drop permissions */
 		safe_setuid_drop();
-		path_build(buf, 1024, ANGBAND_DIR_USER, filename);
+		path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
 	}
 	else
 	{
-		path_build(buf, 1024, ANGBAND_DIR_PREF, filename);
+		path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename);
 	}
 	
 	/* Open the file */
@@ -1731,7 +1731,7 @@ static cptr *read_text_lines(cptr filename, bool user)
 		C_MAKE(lines_list, MAX_LINES, cptr);
 
 		/* Parse it */
-		while (0 == my_fgets(fff, buf, 1024))
+		while (0 == my_fgets(fff, buf, sizeof(buf)))
 		{
 			lines_list[lines++] = string_make(buf);
 			if (lines >= MAX_LINES - 1) break;
@@ -1809,7 +1809,7 @@ static bool write_text_lines(cptr filename, cptr *lines_list)
 	safe_setuid_drop();
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, filename);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
 	
 	/* Open the file */
 	fff = my_fopen(buf, "w");
@@ -2530,8 +2530,7 @@ void do_cmd_edit_autopick(void)
                 autopick_entry_from_object(entry, &autopick_last_destroyed_object);
                 last_destroyed = autopick_line_from_entry_kill(entry);
 
-		strncpy(last_destroyed_command, format("^L \"%s\"", last_destroyed), WID_DESC+2);
-		last_destroyed_command[WID_DESC+2] = '\0';
+		my_strcpy(last_destroyed_command, format("^L \"%s\"", last_destroyed), sizeof(last_destroyed_command));
 	}
 	else
 	{

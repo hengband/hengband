@@ -1180,6 +1180,10 @@ extern byte gamma_table[256];
 extern void build_gamma_table(int gamma);
 #endif /* SUPPORT_GAMMA */
 
+extern size_t my_strcpy(char *buf, const char *src, size_t bufsize);
+extern size_t my_strcat(char *buf, const char *src, size_t bufsize);
+
+
 /* xtra1.c */
 extern bool is_daytime(void);
 extern void extract_day_hour_min(int *day, int *hour, int *min);
@@ -1482,7 +1486,6 @@ extern void jverb2( const char *in , char *out);
 extern void jverb3( const char *in , char *out);
 extern void jverb( const char *in , char *out , int flag);
 extern char* strstr_j(cptr str1, cptr str2);
-extern size_t mb_strlcpy(char *dst, const char *src, size_t size);
 extern void codeconv(char *str);
 extern bool iskanji2(cptr s, int x);
 #endif

@@ -388,7 +388,7 @@ void display_scores(int from, int to)
 	char buf[1024];
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_APEX, "scores.raw");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	/* Open the binary high score file, for reading */
 	highscore_fd = fd_open(buf, O_RDONLY);
@@ -526,40 +526,20 @@ errr top_twenty(void)
 	sprintf(the_score.max_dun, "%3d", max_dlv[dungeon_type]);
 
 	/* Save the cause of death (31 chars) */
+	if (strlen(p_ptr->died_from) >= sizeof(the_score.how))
+	{
 #ifdef JP
-#if 0
-	{
-		/* 2byte 文字を考慮しながらコピー(EUC を仮定) */
-		int cnt = 0;
-		unsigned char *d = (unsigned char*)p_ptr->died_from;
-		unsigned char *h = (unsigned char*)the_score.how;
-		while(*d && cnt < 31){
-			if(iskanji(*d)){
-				if(cnt + 2 > 31) break;
-				*h++ = *d++;
-				*h++ = *d++;
-				cnt += 2;
-			}else{
-				if(cnt + 1 > 31) break;
-				*h++ = *d++;
-				cnt++;
-			}
-		}
-		*h = '\0';
-	}
-#endif
-	if (strlen(p_ptr->died_from) >= 39)
-	{
-		mb_strlcpy(the_score.how, p_ptr->died_from, 37+1);
+		my_strcpy(the_score.how, p_ptr->died_from, sizeof(the_score.how) - 2);
 		strcat(the_score.how, "…");
+#else
+		my_strcpy(the_score.how, p_ptr->died_from, sizeof(the_score.how) - 3);
+		strcat(the_score.how, "...");
+#endif
 	}
 	else
+        {
 		strcpy(the_score.how, p_ptr->died_from);
-
-#else
-	sprintf(the_score.how, "%-.31s", p_ptr->died_from);
-#endif
-
+        }
 
 	/* Lock (for writing) the highscore file, or fail */
 	if (fd_lock(highscore_fd, F_WRLCK)) return (1);
@@ -700,7 +680,7 @@ void show_highclass(int building)
 	screen_save();
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_APEX, "scores.raw");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	highscore_fd = fd_open(buf, O_RDONLY);
 
@@ -795,7 +775,7 @@ sprintf(tmp_str,"最高の%s", race_info[race_num].title);
 	prt(tmp_str, 5, 15);
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_APEX, "scores.raw");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	highscore_fd = fd_open(buf, O_RDONLY);
 

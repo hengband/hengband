@@ -34,12 +34,12 @@ errr script_execute(char *name)
 		if (name[0] != '\0')
 		{
 			/* Build the filename */
-			path_build(buf, 1024, ANGBAND_DIR_SCRIPT, name);
+			path_build(buf, sizeof(buf), ANGBAND_DIR_SCRIPT, name);
 		}
 		else
 		{
 			/* Build the filename */
-			path_build(buf, 1024, ANGBAND_DIR_SCRIPT, "idle.py");
+			path_build(buf, sizeof(buf), ANGBAND_DIR_SCRIPT, "idle.py");
 		}
 
 		fff = my_fopen(buf, "rw");
@@ -110,7 +110,7 @@ errr init_script(void)
 	ascii_to_text(path, ANGBAND_DIR_SCRIPT);
 
 	/* Build the path to the Python modules */
-	path_build(buf, 1024, ANGBAND_DIR_SCRIPT, "python");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_SCRIPT, "python");
 
 	/* Convert the script path to a nice string */
 	ascii_to_text(path1, buf);

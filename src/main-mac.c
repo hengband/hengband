@@ -2271,7 +2271,7 @@ static int getshort(void)
 {
 	int x = 0;
 	char buf[256];
-	if (0 == my_fgets(fff, buf, 256)) x = atoi(buf);
+	if (0 == my_fgets(fff, buf, sizeof(buf))) x = atoi(buf);
 	return (x);
 }
 
@@ -2797,7 +2797,7 @@ static void init_chuukei( void )
 	char tmp[1024];
 	FILE *fp;
 	
-	path_build(path, 1024, ANGBAND_DIR_XTRA, "chuukei.txt");
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "chuukei.txt");
 
 	fp = fopen(path, "r");
 	if(!fp)
@@ -5098,9 +5098,9 @@ static void init_stuff(void)
 
 		/* Build the filename */
 		#ifdef JP
-			path_build(path, 1024, ANGBAND_DIR_FILE, "news_j.txt");
+			path_build(path, sizeof(path), ANGBAND_DIR_FILE, "news_j.txt");
 		#else
-			path_build(path, 1024, ANGBAND_DIR_FILE, "news.txt");
+			path_build(path, sizeof(path), ANGBAND_DIR_FILE, "news.txt");
 		#endif
 
 		/* Attempt to open and close that file */

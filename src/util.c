@@ -3314,28 +3314,12 @@ bool get_check_strict(cptr prompt, int mode)
 	/* Hack -- Build a "useful" prompt */
 	if (mode & CHECK_OKAY_CANCEL)
 	{
-#ifdef JP
-		/* (79-8)バイトの指定, promptが長かった場合, 
-		   (79-9)文字の後終端文字が書き込まれる.     
-		   英語の方のstrncpyとは違うので注意.
-		   elseの方の分岐も同様. --henkma
-		*/
-		mb_strlcpy(buf, prompt, 80-15);
-#else
-		strncpy(buf, prompt, 79-15);
-		buf[79-8]='\0';
-#endif
+		my_strcpy(buf, prompt, sizeof(buf)-15);
 		strcat(buf, "[(O)k/(C)ancel]");
-
 	}
 	else
 	{
-#ifdef JP
-		mb_strlcpy(buf, prompt, 80-5);
-#else
-		strncpy(buf, prompt, 79-5);
-		buf[79-5]='\0';
-#endif
+		my_strcpy(buf, prompt, sizeof(buf)-5);
 		strcat(buf, "[y/n]");
 	}
 
@@ -4910,3 +4894,95 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf)
 	return;
 }
 
+
+/*
+ * The my_strcpy() function copies up to 'bufsize'-1 characters from 'src'
+ * to 'buf' and NUL-terminates the result.  The 'buf' and 'src' strings may
+ * not overlap.
+ *
+ * my_strcpy() returns strlen(src).  This makes checking for truncation
+ * easy.  Example: if (my_strcpy(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
+ *
+ * This function should be equivalent to the strlcpy() function in BSD.
+ */
+size_t my_strcpy(char *buf, const char *src, size_t bufsize)
+{
+#ifdef JP
+
+	char *d = buf;
+	const char *s = src;
+	size_t len = 0;
+
+	/* reserve for NUL termination */
+	bufsize--;
+
+	/* Copy as many bytes as will fit */
+	while (len < bufsize)
+        {
+		if (iskanji(*s))
+                {
+			if (len + 1 >= bufsize || !*(s+1)) break;
+			*d++ = *s++;
+			*d++ = *s++;
+			len += 2;
+		}
+                else
+                {
+			*d++ = *s++;
+			len++;
+		}
+	}
+	*d = '\0';
+	while(*s++) len++;
+
+	return len;
+
+#else
+
+	size_t len = strlen(src);
+	size_t ret = len;
+
+	/* Paranoia */
+	if (bufsize == 0) return ret;
+
+	/* Truncate */
+	if (len >= bufsize) len = bufsize - 1;
+
+	/* Copy the string and terminate it */
+	(void)memcpy(buf, src, len);
+	buf[len] = '\0';
+
+	/* Return strlen(src) */
+	return ret;
+
+#endif
+}
+
+
+/*
+ * The my_strcat() tries to append a string to an existing NUL-terminated string.
+ * It never writes more characters into the buffer than indicated by 'bufsize' and
+ * NUL-terminates the buffer.  The 'buf' and 'src' strings may not overlap.
+ *
+ * my_strcat() returns strlen(buf) + strlen(src).  This makes checking for
+ * truncation easy.  Example:
+ * if (my_strcat(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
+ *
+ * This function should be equivalent to the strlcat() function in BSD.
+ */
+size_t my_strcat(char *buf, const char *src, size_t bufsize)
+{
+	size_t dlen = strlen(buf);
+
+	/* Is there room left in the buffer? */
+	if (dlen < bufsize - 1)
+	{
+		/* Append as much as possible  */
+		return (dlen + my_strcpy(buf + dlen, src, bufsize - dlen));
+	}
+	else
+	{
+		/* Return without appending */
+		return (dlen + strlen(src));
+	}
+}

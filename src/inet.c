@@ -112,7 +112,7 @@ static void set_proxy(void)
 	char tmp[8];
 #endif
 
-	path_build(buf, 1024, ANGBAND_DIR_PREF, "proxy.prf");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, "proxy.prf");
 
 	/* ファイルから設定を読む。 */
 	fp = my_fopen(buf, "r");
@@ -125,7 +125,7 @@ static void set_proxy(void)
 		return;
 	}
 
-	while (my_fgets(fp, buf, 1024)==0)
+	while (my_fgets(fp, buf, sizeof(buf))==0)
 	{
 		if (buf[0] != '#' && buf[0] != '\0') break;
 	}

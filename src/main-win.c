@@ -1419,7 +1419,7 @@ static bool init_graphics(void)
 		}
 
 		/* Access the bitmap file */
-		path_build(buf, 1024, ANGBAND_DIR_XTRA_GRAF, name);
+		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name);
 
 		/* Load the bitmap or quit */
 		if (!ReadDIB(data[0].w, buf, &infGraph))
@@ -1442,7 +1442,7 @@ static bool init_graphics(void)
 		if (arg_graphics == GRAPHICS_ADAM_BOLT)
 		{
 			/* Access the mask file */
-			path_build(buf, 1024, ANGBAND_DIR_XTRA_GRAF, "mask.bmp");
+			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask.bmp");
 
 			/* Load the bitmap or quit */
 			if (!ReadDIB(data[0].w, buf, &infMask))
@@ -1500,7 +1500,7 @@ static bool init_sound(void)
 			sprintf(wav, "%s.wav", angband_sound_name[i]);
 
 			/* Access the sound */
-			path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, wav);
+			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
 
 			/* Save the sound filename, if it exists */
 			if (check_file(buf)) sound_file[i] = string_make(buf);
@@ -1716,7 +1716,7 @@ static void term_change_font(term_data *td)
 		if (term_force_font(td, tmp))
 		{
 			/* Access the standard font file */
-			path_build(tmp, 1024, ANGBAND_DIR_XTRA_FONT, "8X13.FON");
+			path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
 
 			/* Force the use of that font */
 			(void)term_force_font(td, tmp);
@@ -2845,13 +2845,13 @@ static void init_windows(void)
 		td->tile_hgt = td->font_hgt;
 #else
 		/* Access the standard font file */
-		path_build(buf, 1024, ANGBAND_DIR_XTRA_FONT, td->font_want);
+		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_FONT, td->font_want);
 
 		/* Activate the chosen font */
 		if (term_force_font(td, buf))
 		{
 			/* Access the standard font file */
-			path_build(buf, 1024, ANGBAND_DIR_XTRA_FONT, "8X13.FON");
+			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
 
 			/* Force the use of that font */
 			(void)term_force_font(td, buf);
@@ -3373,7 +3373,7 @@ static void process_menus(WORD wCmd)
 			char buf[1024];
 
 			/* Build the filename */
-			path_build(buf, 1024, ANGBAND_DIR_APEX, "scores.raw");
+			path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 			/* Open the binary high score file, for reading */
 			highscore_fd = fd_open(buf, O_RDONLY);
@@ -3859,7 +3859,7 @@ static void process_menus(WORD wCmd)
 		{
 #ifdef HTML_HELP
 			char tmp[1024];
-			path_build(tmp, 1024, ANGBAND_DIR_XTRA_HELP, "zangband.chm");
+			path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_HELP, "zangband.chm");
 			if (check_file(tmp))
 			{
 				HtmlHelp(data[0].w, tmp, HH_DISPLAY_TOPIC, 0);
@@ -3879,7 +3879,7 @@ static void process_menus(WORD wCmd)
 #else /* HTML_HELP */
 			char buf[1024];
 			char tmp[1024];
-			path_build(tmp, 1024, ANGBAND_DIR_XTRA_HELP, "zangband.hlp");
+			path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_HELP, "zangband.hlp");
 			if (check_file(tmp))
 			{
 				sprintf(buf, "winhelp.exe %s", tmp);
@@ -4722,9 +4722,9 @@ static void init_stuff(void)
 
 	/* Build the filename */
 #ifdef JP
-	path_build(path, 1024, ANGBAND_DIR_FILE, "news_j.txt");
+	path_build(path, sizeof(path), ANGBAND_DIR_FILE, "news_j.txt");
 #else
-	path_build(path, 1024, ANGBAND_DIR_FILE, "news.txt");
+	path_build(path, sizeof(path), ANGBAND_DIR_FILE, "news.txt");
 #endif
 
 
@@ -4734,7 +4734,7 @@ static void init_stuff(void)
 
 #ifndef JP
 	/* Build the "font" path */
-	path_build(path, 1024, ANGBAND_DIR_XTRA, "font");
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "font");
 
 	/* Allocate the path */
 	ANGBAND_DIR_XTRA_FONT = string_make(path);
@@ -4743,7 +4743,7 @@ static void init_stuff(void)
 	validate_dir(ANGBAND_DIR_XTRA_FONT, TRUE);
 
 	/* Build the filename */
-	path_build(path, 1024, ANGBAND_DIR_XTRA_FONT, "8X13.FON");
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
 
 	/* Hack -- Validate the basic font */
 	validate_file(path);
@@ -4753,7 +4753,7 @@ static void init_stuff(void)
 #ifdef USE_GRAPHICS
 
 	/* Build the "graf" path */
-	path_build(path, 1024, ANGBAND_DIR_XTRA, "graf");
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
 
 	/* Allocate the path */
 	ANGBAND_DIR_XTRA_GRAF = string_make(path);
@@ -4767,7 +4767,7 @@ static void init_stuff(void)
 #ifdef USE_SOUND
 
 	/* Build the "sound" path */
-	path_build(path, 1024, ANGBAND_DIR_XTRA, "sound");
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
 
 	/* Allocate the path */
 	ANGBAND_DIR_XTRA_SOUND = string_make(path);
@@ -4780,7 +4780,7 @@ static void init_stuff(void)
 #ifdef USE_MUSIC
 
 	/* Build the "music" path */
-	path_build(path, 1024, ANGBAND_DIR_XTRA, "music");
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
 
 	/* Allocate the path */
 	ANGBAND_DIR_XTRA_MUSIC = string_make(path);
@@ -4791,7 +4791,7 @@ static void init_stuff(void)
 #endif /* USE_MUSIC */
 
 	/* Build the "help" path */
-	path_build(path, 1024, ANGBAND_DIR_XTRA, "help");
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "help");
 
 	/* Allocate the path */
 	ANGBAND_DIR_XTRA_HELP = string_make(path);

@@ -2265,7 +2265,7 @@ static void init_sound(void)
 	char dir_xtra_sound[1024];
 		
 	/* Build the "sound" path */
-	path_build(dir_xtra_sound, 1024, ANGBAND_DIR_XTRA, "sound");
+	path_build(dir_xtra_sound, sizeof(dir_xtra_sound), ANGBAND_DIR_XTRA, "sound");
 		
 	/* Prepare the sounds */
 	for (i = 1; i < SOUND_MAX; i++)
@@ -2274,7 +2274,7 @@ static void init_sound(void)
 		sprintf(wav, "%s.wav", angband_sound_name[i]);
 		
 		/* Access the sound */
-		path_build(buf, 1024, dir_xtra_sound, wav);
+		path_build(buf, sizeof(buf), dir_xtra_sound, wav);
 		
 		/* Save the sound filename, if it exists */
 		if (check_file(buf)) sound_file[i] = string_make(buf);
@@ -3209,7 +3209,7 @@ errr init_x11(int argc, char *argv[])
 	{
 	case GRAPHICS_ORIGINAL:
 		/* Try the "8x8.bmp" file */
-		path_build(filename, 1024, ANGBAND_DIR_XTRA, "graf/8x8.bmp");
+		path_build(filename, sizeof(filename), ANGBAND_DIR_XTRA, "graf/8x8.bmp");
 
 		/* Use the "8x8.bmp" file if it exists */
 		if (0 == fd_close(fd_open(filename, O_RDONLY)))
@@ -3226,7 +3226,7 @@ errr init_x11(int argc, char *argv[])
 
 	case GRAPHICS_ADAM_BOLT:
 		/* Try the "16x16.bmp" file */
-		path_build(filename, 1024, ANGBAND_DIR_XTRA, "graf/16x16.bmp");
+		path_build(filename, sizeof(filename), ANGBAND_DIR_XTRA, "graf/16x16.bmp");
 
 		/* Use the "16x16.bmp" file if it exists */
 		if (0 == fd_close(fd_open(filename, O_RDONLY)))

@@ -2080,7 +2080,7 @@ msg_print("巻物は煙を立てて消え去った！");
 		object_desc(o_name, o_ptr, TRUE, 0);
 
 		/* Build the filename */
-		path_build(buf, 1024, ANGBAND_DIR_FILE, q);
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q);
 
 		/* Peruse the help file */
 		(void)show_file(TRUE, buf, o_name, 0, 0);

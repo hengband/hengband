@@ -6273,7 +6273,7 @@ quit("セーブファイルが壊れています");
 		character_icky = TRUE;
 
 		/* Build the filename */
-		path_build(buf, 1024, ANGBAND_DIR_APEX, "scores.raw");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 		/* Open the high score file, for reading/writing */
 		highscore_fd = fd_open(buf, O_RDWR);

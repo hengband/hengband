@@ -418,9 +418,9 @@ static void roff_aux(int r_idx, int mode)
 
 		/* Build the filename */
 #ifdef JP
-path_build(buf, 1024, ANGBAND_DIR_DATA, "r_info_j.raw");
+path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "r_info_j.raw");
 #else
-		path_build(buf, 1024, ANGBAND_DIR_DATA, "r_info.raw");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "r_info.raw");
 #endif
 
 

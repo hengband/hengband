@@ -1104,7 +1104,7 @@ static errr process_pref_file_aux(cptr name, bool read_pickpref)
 	if (!fp) return (-1);
 
 	/* Process the file */
-	while (0 == my_fgets(fp, buf, 1024))
+	while (0 == my_fgets(fp, buf, sizeof(buf)))
 	{
 		/* Count lines */
 		line++;
@@ -1216,7 +1216,7 @@ errr process_pref_file(cptr name)
 	errr err1, err2;
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_PREF, name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
 
 	/* Process the system pref file */
 	err1 = process_pref_file_aux(buf, FALSE);
@@ -1229,7 +1229,7 @@ errr process_pref_file(cptr name)
 	safe_setuid_drop();
 	
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 	
 	/* Process the user pref file */
 	err2 = process_pref_file_aux(buf, FALSE);
@@ -1315,7 +1315,7 @@ errr check_time_init(void)
 
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_FILE, "time.txt");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "time.txt");
 
 	/* Open the file */
 	fp = my_fopen(buf, "r");
@@ -1327,7 +1327,7 @@ errr check_time_init(void)
 	check_time_flag = TRUE;
 
 	/* Parse the file */
-	while (0 == my_fgets(fp, buf, 80))
+	while (0 == my_fgets(fp, buf, sizeof(buf)))
 	{
 		/* Skip comments and blank lines */
 		if (!buf[0] || (buf[0] == '#')) continue;
@@ -1439,7 +1439,7 @@ errr check_load_init(void)
 
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_FILE, "load.txt");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "load.txt");
 
 	/* Open the "load" file */
 	fp = my_fopen(buf, "r");
@@ -1454,7 +1454,7 @@ errr check_load_init(void)
 	(void)gethostname(thishost, (sizeof thishost) - 1);
 
 	/* Parse it */
-	while (0 == my_fgets(fp, buf, 1024))
+	while (0 == my_fgets(fp, buf, sizeof(buf)))
 	{
 		int value;
 
@@ -4885,7 +4885,7 @@ errr file_character(cptr name, bool full)
 	safe_setuid_drop();
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
@@ -5147,7 +5147,7 @@ sprintf(caption, "ヘルプ・ファイル'%s'", name);
 
 
 		/* Build the filename */
-		path_build(path, 1024, ANGBAND_DIR_HELP, name);
+		path_build(path, sizeof(path), ANGBAND_DIR_HELP, name);
 
 		/* Open the file */
 		fff = my_fopen(path, "r");
@@ -5165,7 +5165,7 @@ sprintf(caption, "スポイラー・ファイル'%s'", name);
 
 
 		/* Build the filename */
-		path_build(path, 1024, ANGBAND_DIR_INFO, name);
+		path_build(path, sizeof(path), ANGBAND_DIR_INFO, name);
 
 		/* Open the file */
 		fff = my_fopen(path, "r");
@@ -5175,7 +5175,7 @@ sprintf(caption, "スポイラー・ファイル'%s'", name);
 	if (!fff)
 	{
 		/* Build the filename */
-		path_build(path, 1024, ANGBAND_DIR, name);
+		path_build(path, sizeof(path), ANGBAND_DIR, name);
 
 		for (i = 0; path[i]; i++)
 			if ('\\' == path[i])
@@ -5215,7 +5215,7 @@ msg_format("'%s'をオープンできません。", name);
 		char *str;
 
 		/* Read a line or stop */
-		if (my_fgets(fff, buf, 1024)) break;
+		if (my_fgets(fff, buf, sizeof(buf))) break;
 
 		/* Get a color */
 		if (prefix(buf, "#####")) str = &buf[6];
@@ -5296,7 +5296,7 @@ msg_format("'%s'をオープンできません。", name);
 		while (next < line)
 		{
 			/* Get a line */
-			if (my_fgets(fff, buf, 1024)) break;
+			if (my_fgets(fff, buf, sizeof(buf))) break;
 
 			/* Skip tags/links */
 			if (prefix(buf, "***** ")) continue;
@@ -5315,7 +5315,7 @@ msg_format("'%s'をオープンできません。", name);
 			if (!i) line = next;
 
 			/* Get a line of the file or stop */
-			if (my_fgets(fff, buf, 1024)) break;
+			if (my_fgets(fff, buf, sizeof(buf))) break;
 
 			/* Hack -- skip "special" lines */
 			if (prefix(buf, "***** ")) continue;
@@ -5638,7 +5638,7 @@ strcpy(tmp, "jhelp.hlp");
 			safe_setuid_drop();
 
 			/* Build the filename */
-			path_build(buff, 1024, ANGBAND_DIR_USER, xtmp);
+			path_build(buff, sizeof(buff), ANGBAND_DIR_USER, xtmp);
 
 			/* Hack -- Re-Open the file */
 			fff = my_fopen(path, "r");
@@ -5662,7 +5662,7 @@ msg_print("ファイルが開けません。");
 			my_fputs(ffp, xtmp, 80);
 			my_fputs(ffp, "\n", 80);
 
-			while (!my_fgets(fff, buff, 80))
+			while (!my_fgets(fff, buff, sizeof(buff)))
 				my_fputs(ffp, buff, 80);
 
 			/* Close it */
@@ -5881,7 +5881,7 @@ quit_fmt("'%s' という名前は不正なコントロールコードを含んでいます。", player_nam
 #endif /* VM */
 
 		/* Build the filename */
-		path_build(savefile, 1024, ANGBAND_DIR_SAVE, temp);
+		path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
 	}
 }
 
@@ -6236,7 +6236,7 @@ static void make_bones(void)
 			sprintf(tmp, "bone.%03d", dun_level);
 
 			/* Build the filename */
-			path_build(str, 1024, ANGBAND_DIR_BONE, tmp);
+			path_build(str, sizeof(str), ANGBAND_DIR_BONE, tmp);
 
 			/* Attempt to open the bones file */
 			fp = my_fopen(str, "r");
@@ -6312,9 +6312,9 @@ static void print_tomb(void)
 
 		/* Build the filename */
 #ifdef JP
-		path_build(buf, 1024, ANGBAND_DIR_FILE, "dead_j.txt");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "dead_j.txt");
 #else
-		path_build(buf, 1024, ANGBAND_DIR_FILE, "dead.txt");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "dead.txt");
 #endif
 
 
@@ -6327,7 +6327,7 @@ static void print_tomb(void)
 			int i = 0;
 
 			/* Dump the file to the screen */
-			while (0 == my_fgets(fp, buf, 1024))
+			while (0 == my_fgets(fp, buf, sizeof(buf)))
 			{
 				/* Display and advance */
 				put_str(buf, i++, 0);
@@ -6810,7 +6810,7 @@ void close_game(void)
 
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_APEX, "scores.raw");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	/* Open the high score file, for reading/writing */
 	highscore_fd = fd_open(buf, O_RDWR);
@@ -6989,7 +6989,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_FILE, file_name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, file_name);
 
 	/* Open the file */
 	fp = my_fopen(buf, "r");
@@ -7001,7 +7001,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 	while (TRUE)
 	{
 		/* Get a line from the file */
-		if (my_fgets(fp, buf, 1024) == 0)
+		if (my_fgets(fp, buf, sizeof(buf)) == 0)
 		{
 			/* Count the lines */
 			line_num++;
@@ -7065,7 +7065,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 	while (TRUE)
 	{
 		/* Get the line */
-		if (my_fgets(fp, buf, 1024) == 0)
+		if (my_fgets(fp, buf, sizeof(buf)) == 0)
 		{
 			/* Count the lines */
 			line_num++;
@@ -7105,7 +7105,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 
 			while(TRUE)
 			{
-				test = my_fgets(fp, buf, 1024);
+				test = my_fgets(fp, buf, sizeof(buf));
 				if(test || buf[0] != '#')
 					break;
 			}
@@ -7171,7 +7171,7 @@ errr process_pickpref_file(cptr name)
 	safe_setuid_drop();
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
 	err = process_pref_file_aux(buf, TRUE);
 
@@ -7229,9 +7229,9 @@ u32b counts_read(int where)
 	char buf[1024];
 
 #ifdef JP
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "z_info_j.raw");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info_j.raw");
 #else
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "z_info.raw");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info.raw");
 #endif
 	fd = fd_open(buf, O_RDONLY);
 
@@ -7250,9 +7250,9 @@ errr counts_write(int where, u32b count)
 	char buf[1024];
 
 #ifdef JP
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "z_info_j.raw");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info_j.raw");
 #else
-	path_build(buf, 1024, ANGBAND_DIR_DATA, "z_info.raw");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info.raw");
 #endif
 	fd = fd_open(buf, O_RDWR);
 	if (fd < 0)

@@ -1303,7 +1303,7 @@ errr init_ibm(void)
 		char buf[4096];
 
 		/* Build the filename */
-		path_build(buf, 1024, ANGBAND_DIR_XTRA, "angband.fnt");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA, "angband.fnt");
 
 		/* Open the file */
 		f = fopen(buf, "rb");

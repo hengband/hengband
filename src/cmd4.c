@@ -62,7 +62,7 @@ static void remove_auto_dump(cptr orig_file, cptr mark)
 	
 	while (1)
 	{
-		if (my_fgets(orig_fff, buf, 1024))
+		if (my_fgets(orig_fff, buf, sizeof(buf)))
 		{
 			if (between_mark)
 			{
@@ -120,7 +120,7 @@ static void remove_auto_dump(cptr orig_file, cptr mark)
 		tmp_fff = my_fopen(tmp_file, "r");
 		orig_fff = my_fopen(orig_file, "w");
 		
-		while (!my_fgets(tmp_fff, buf, 1024))
+		while (!my_fgets(tmp_fff, buf, sizeof(buf)))
 			fprintf(orig_fff, "%s\n", buf);
 		
 		my_fclose(orig_fff);
@@ -261,7 +261,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	safe_setuid_drop();
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, file_name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
@@ -793,7 +793,7 @@ static void do_cmd_disp_nikki(void)
 	safe_setuid_drop();
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, file_name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
 	if (p_ptr->pclass == CLASS_WARRIOR || p_ptr->pclass == CLASS_MONK || p_ptr->pclass == CLASS_SAMURAI || p_ptr->pclass == CLASS_BERSERKER)
 		strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-1)]);
@@ -880,7 +880,7 @@ static void do_cmd_erase_nikki(void)
 	safe_setuid_drop();
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, file_name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
 	/* Remove the file */
 	fd_kill(buf);
@@ -2501,7 +2501,7 @@ static errr macro_dump(cptr fname)
 	char buf[1024];
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, fname);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
@@ -2666,7 +2666,7 @@ static errr keymap_dump(cptr fname)
 
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, fname);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
@@ -3482,7 +3482,7 @@ void do_cmd_visuals(void)
 			if (!askfor_aux(tmp, 70)) continue;
 
 			/* Build the filename */
-			path_build(buf, 1024, ANGBAND_DIR_USER, tmp);
+			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
 			fff = open_auto_dump(buf, mark, &line_num);
@@ -3555,7 +3555,7 @@ void do_cmd_visuals(void)
 			if (!askfor_aux(tmp, 70)) continue;
 
 			/* Build the filename */
-			path_build(buf, 1024, ANGBAND_DIR_USER, tmp);
+			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
 			fff = open_auto_dump(buf, mark, &line_num);
@@ -3628,7 +3628,7 @@ void do_cmd_visuals(void)
 			if (!askfor_aux(tmp, 70)) continue;
 
 			/* Build the filename */
-			path_build(buf, 1024, ANGBAND_DIR_USER, tmp);
+			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
 			fff = open_auto_dump(buf, mark, &line_num);
@@ -4178,7 +4178,7 @@ void do_cmd_colors(void)
 			if (!askfor_aux(tmp, 70)) continue;
 
 			/* Build the filename */
-			path_build(buf, 1024, ANGBAND_DIR_USER, tmp);
+			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
 			fff = open_auto_dump(buf, mark, &line_num);
@@ -4759,7 +4759,7 @@ void do_cmd_load_screen(void)
 	safe_setuid_drop();
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, "dump.txt");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 
 	/* Append to the file */
 	fff = my_fopen(buf, "r");
@@ -4798,7 +4798,7 @@ void do_cmd_load_screen(void)
 	}
 
 	/* Get the blank line */
-	if (my_fgets(fff, buf, 1024)) okay = FALSE;
+	if (my_fgets(fff, buf, sizeof(buf))) okay = FALSE;
 
 
 	/* Dump the screen */
@@ -4827,7 +4827,7 @@ void do_cmd_load_screen(void)
 
 
 	/* Get the blank line */
-	if (my_fgets(fff, buf, 1024)) okay = FALSE;
+	if (my_fgets(fff, buf, sizeof(buf))) okay = FALSE;
 
 
 	/* Close it */
@@ -5225,7 +5225,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 		screen_save();
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, "htmldump.prf");
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
 	tmpfff = my_fopen(buf, "r");
 	if (!tmpfff) {
 		for (i = 0; html_head[i]; i++)
@@ -5233,7 +5233,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	}
 	else {
 		yomikomu = 0;
-		while (!my_fgets(tmpfff, buf, 1024)) {
+		while (!my_fgets(tmpfff, buf, sizeof(buf))) {
 			if (!yomikomu) {
 				if (strncmp(buf, tags[0], strlen(tags[0])) == 0)
 					yomikomu = 1;
@@ -5296,7 +5296,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	else {
 		rewind(tmpfff);
 		yomikomu = 0;
-		while (!my_fgets(tmpfff, buf, 1024)) {
+		while (!my_fgets(tmpfff, buf, sizeof(buf))) {
 			if (!yomikomu) {
 				if (strncmp(buf, tags[2], strlen(tags[2])) == 0)
 					yomikomu = 1;
@@ -5346,7 +5346,7 @@ static void do_cmd_save_screen_html(void)
 		return;
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_USER, tmp);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 	msg_print(NULL);
 
@@ -5440,7 +5440,7 @@ void do_cmd_save_screen(void)
 		safe_setuid_drop();
 
 		/* Build the filename */
-		path_build(buf, 1024, ANGBAND_DIR_USER, "dump.txt");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 
 		/* File type is "TEXT" */
 		FILE_TYPE(FILE_TYPE_TEXT);
@@ -7747,18 +7747,18 @@ msg_format("%d 日目,時刻は%d:%02d %sです。",
 	if (!randint0(10) || p_ptr->image)
 		{
 #ifdef JP
-		path_build(buf, 1024, ANGBAND_DIR_FILE, "timefun_j.txt");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timefun_j.txt");
 #else
-		path_build(buf, 1024, ANGBAND_DIR_FILE, "timefun.txt");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timefun.txt");
 #endif
 
 		}
 		else
 		{
 #ifdef JP
-		path_build(buf, 1024, ANGBAND_DIR_FILE, "timenorm_j.txt");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timenorm_j.txt");
 #else
-		path_build(buf, 1024, ANGBAND_DIR_FILE, "timenorm.txt");
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timenorm.txt");
 #endif
 
 		}
@@ -7770,7 +7770,7 @@ msg_format("%d 日目,時刻は%d:%02d %sです。",
 	if (!fff) return;
 
 	/* Find this time */
-	while (!my_fgets(fff, buf, 1024))
+	while (!my_fgets(fff, buf, sizeof(buf)))
 	{
 		/* Ignore comments */
 		if (!buf[0] || (buf[0] == '#')) continue;

@@ -808,7 +808,7 @@ errr init_info_txt(FILE *fp, char *buf, header *head,
 	head->text_size = 0;
 
 	/* Parse */
-	while (0 == my_fgets(fp, buf, 1024))
+	while (0 == my_fgets(fp, buf, sizeof(buf)))
 	{
 		/* Advance the line number */
 		error_line++;
@@ -3961,7 +3961,7 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 
 
 	/* Build the filename */
-	path_build(buf, 1024, ANGBAND_DIR_EDIT, name);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
 
 	/* Open the file */
 	fp = my_fopen(buf, "r");
@@ -3971,7 +3971,7 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 
 
 	/* Process the file */
-	while (0 == my_fgets(fp, buf, 1024))
+	while (0 == my_fgets(fp, buf, sizeof(buf)))
 	{
 		/* Count lines */
 		num++;
