@@ -1246,11 +1246,17 @@ errr process_pref_file(cptr name)
 	/* Stop at parser errors, but not at non-existing file */
 	if (err < 1)
 	{
+		/* Drop priv's */
+		safe_setuid_drop();
+
 		/* Build the filename */
 		path_build(buf, 1024, ANGBAND_DIR_USER, name);
 
 		/* Process the pref file */
 		err = process_pref_file_aux(buf, FALSE);
+
+		/* Grab priv's */
+		safe_setuid_grab();
 	}
 
 	/* Result */
@@ -7054,10 +7060,16 @@ errr process_pickpref_file(cptr name)
 
 	errr err = 0;
 
+	/* Drop priv's */
+	safe_setuid_drop();
+
 	/* Build the filename */
 	path_build(buf, 1024, ANGBAND_DIR_USER, name);
 
 	err = process_pref_file_aux(buf, TRUE);
+
+	/* Grab priv's */
+	safe_setuid_grab();
 
 	/* Result */
 	return (err);
