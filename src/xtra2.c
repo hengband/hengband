@@ -1968,13 +1968,13 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 
 		if ((r_ptr->flags1 & RF1_UNIQUE) && record_destroy_uniq)
 		{
-			char m_name[160];
+			char note_buf[160];
 #ifdef JP
-			sprintf(m_name, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? "(クローン)" : "");
+			sprintf(note_buf, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? "(クローン)" : "");
 #else
-			sprintf(m_name, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? "(Clone)" : "");
+			sprintf(note_buf, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? "(Clone)" : "");
 #endif
-			do_cmd_write_nikki(NIKKI_UNIQUE, 0, m_name);
+			do_cmd_write_nikki(NIKKI_UNIQUE, 0, note_buf);
 		}
 
 		/* Make a sound */

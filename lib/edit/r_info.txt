@@ -6421,7 +6421,7 @@ F:IM_FIRE | IM_COLD | NO_CONF | NO_SLEEP | RES_DARK | RES_DISE | RES_TELE
 S:1_IN_8 | 
 S:HEAL | HASTE | BO_FIRE
 D:$This tiny night dwarf is as greedy for gold as his brother, Alberich.
-D:この小さな闇のドワーフは彼の兄アルベリッヒに負けないくらい金に貪欲だ。
+D:この小さな闇のドワーフは彼の兄アルベリヒに負けないくらい金に貪欲だ。
 
 #JZ#
 #JZ#アルベリヒの息子ハーゲン

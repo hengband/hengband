@@ -125,7 +125,7 @@ N:*:Default
 #Buy a home in the dungeon, any depth you want! Contact: McDuck & Co.
 ダンジョンに家を買おう！どんな深さでも！McDuck 不動産にいますぐ連絡を！
 #They say that Alberich has forged an all-powerful Ring.
-アルベリックが全ての力の指輪を作ったらしい。
+アルベリヒが全ての力の指輪を作ったらしい。
 #A good item will not corrode.
 良いアイテムは腐食しない。
 #They say that Alberich lost the Tarnhelm after making himself invisible.
