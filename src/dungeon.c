@@ -7022,10 +7022,10 @@ prt("お待ち下さい...", 0, 0);
 			if (p_ptr->inside_arena)
 			{
 				p_ptr->inside_arena = FALSE;
-				if(p_ptr->arena_number > MAX_ARENA_MONS)
+				if (p_ptr->arena_number > MAX_ARENA_MONS)
 					p_ptr->arena_number++;
 				else
-					p_ptr->arena_number = 99;
+					p_ptr->arena_number = -1 - p_ptr->arena_number;
 				p_ptr->is_dead = FALSE;
 				p_ptr->chp = 0;
 				p_ptr->chp_frac = 0;

@@ -4305,15 +4305,29 @@ errr make_character_dump(FILE *fff)
 	fprintf(fff, "\n Num. Random Quests: %d", number_of_quests());
 #endif
 
-	if (p_ptr->arena_number == 99)
+	if (p_ptr->arena_number < 0)
 	{
+		if (p_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
+		{
 #ifdef JP
-		fprintf(fff, "\n Æ®µ»¾ì: ÇÔËÌ\n");
+			fprintf(fff, "\n Æ®µ»¾ì: ÇÔËÌ\n");
 #else
-		fprintf(fff, "\n Arena: defeated\n");
+			fprintf(fff, "\n Arena: defeated\n");
 #endif
+		}
+		else
+		{
+#ifdef JP
+			fprintf(fff, "\n Æ®µ»¾ì: %d²óÀï¤Ç%s¤ÎÁ°¤ËÇÔËÌ\n", -p_ptr->arena_number,
+				r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name);
+#else
+			fprintf(fff, "\n Arena: defeated by %s in the %d%s fight\n",
+				r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name,
+				-p_ptr->arena_number, get_ordinal_number_suffix(-p_ptr->arena_number));
+#endif
+		}
 	}
-	else if (p_ptr->arena_number > MAX_ARENA_MONS+2)
+	else if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
 	{
 #ifdef JP
 		fprintf(fff, "\n Æ®µ»¾ì: ¿¿¤Î¥Á¥ã¥ó¥Ô¥ª¥ó\n");
@@ -4321,7 +4335,7 @@ errr make_character_dump(FILE *fff)
 		fprintf(fff, "\n Arena: True Champion\n");
 #endif
 	}
-	else if (p_ptr->arena_number > MAX_ARENA_MONS-1)
+	else if (p_ptr->arena_number > MAX_ARENA_MONS - 1)
 	{
 #ifdef JP
 		fprintf(fff, "\n Æ®µ»¾ì: ¥Á¥ã¥ó¥Ô¥ª¥ó\n");
@@ -5811,7 +5825,7 @@ long total_points(void)
 	point_l /= 100;
 
 	point = (point_h << 16) + (point_l);
-	if (p_ptr->arena_number < 99)
+	if (p_ptr->arena_number >= 0)
 		point += (arena_win * arena_win * (arena_win > 29 ? 1000 : 100));
 
 	if (ironman_downward) point *= 2;

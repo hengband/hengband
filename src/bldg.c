@@ -4860,7 +4860,7 @@ msg_print("ここには建物はない。");
 	/* Don't re-init the wilderness */
 	reinit_wilderness = FALSE;
 
-	if ((which == 2) && (p_ptr->arena_number == 99))
+	if ((which == 2) && (p_ptr->arena_number < 0))
 	{
 #ifdef JP
 msg_print("「敗者に用はない。」");

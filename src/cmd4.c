@@ -332,6 +332,28 @@ static void close_auto_dump(void)
 }
 
 
+#ifndef JP
+/*
+ * Return suffix of ordinal number
+ */
+cptr get_ordinal_number_suffix(int num)
+{
+	num = ABS(num) % 100;
+	switch (num % 10)
+	{
+	case 1:
+		return (num == 11) ? "th" : "st";
+	case 2:
+		return (num == 12) ? "th" : "nd";
+	case 3:
+		return (num == 13) ? "th" : "rd";
+	default:
+		return "th";
+	}
+}
+#endif
+
+
 /*
  *   Take note to the diary.
  */
@@ -620,21 +642,20 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_ARENA:
 		{
-			if (num == 99)
+			if (num < 0)
 			{
-
 #ifdef JP
-				fprintf(fff, " %2d:%02d %20s 闘技場の%d回戦で、%sの前に敗れ去った。\n", hour, min, note_level, p_ptr->arena_number + 1, note);
+				fprintf(fff, " %2d:%02d %20s 闘技場の%d回戦で、%sの前に敗れ去った。\n", hour, min, note_level, -num, note);
 #else
-				int n =  p_ptr->arena_number + 1;
-				fprintf(fff, " %2d:%02d %20s beaten by %s in the %d%s fight.\n", hour, min, note_level, note, n, (n%10==1?"st":n%10==2?"nd":n%10==3?"rd":"th"));
+				int n = -num;
+				fprintf(fff, " %2d:%02d %20s beaten by %s in the %d%s fight.\n", hour, min, note_level, note, n, get_ordinal_number_suffix(n));
 #endif
 				break;
 			}
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s 闘技場の%d回戦(%s)に勝利した。\n", hour, min, note_level, num, note);
 #else
-			fprintf(fff, " %2d:%02d %20s won the %d%s fight (%s).\n", hour, min, note_level, num, (num%10==1?"st":num%10==2?"nd":num%10==3?"rd":"th"), note);
+			fprintf(fff, " %2d:%02d %20s won the %d%s fight (%s).\n", hour, min, note_level, num, get_ordinal_number_suffix(num), note);
 #endif
 			if (num == MAX_ARENA_MONS)
 			{

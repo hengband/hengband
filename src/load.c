@@ -1572,6 +1572,11 @@ static void rd_extra(void)
 
 	/* Read arena and rewards information */
 	rd_s16b(&p_ptr->arena_number);
+	if (h_older_than(1, 5, 0, 1))
+	{
+		/* Arena loser of previous version was marked number 99 */
+		if (p_ptr->arena_number >= 99) p_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
+	}
 	rd_s16b(&tmp16s);
 	p_ptr->inside_arena = (bool)tmp16s;
 	rd_s16b(&p_ptr->inside_quest);

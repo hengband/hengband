@@ -49,7 +49,7 @@
 #define H_VER_MAJOR 1
 #define H_VER_MINOR 5
 #define H_VER_PATCH 0
-#define H_VER_EXTRA 0
+#define H_VER_EXTRA 1
 
 /* Added for ZAngband */
 #define FAKE_VERSION   0
@@ -128,6 +128,7 @@
  * Arena constants
  */
 #define MAX_ARENA_MONS		38	/* -KMW- */
+#define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT))
 
 
 /*

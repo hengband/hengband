@@ -650,6 +650,9 @@ extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
 extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);
 
 /* cmd4.c */
+#ifndef JP
+extern cptr get_ordinal_number_suffix(int num);
+#endif
 extern errr do_cmd_write_nikki(int type, int num, cptr note);
 extern void do_cmd_nikki(void);
 extern void do_cmd_redraw(void);

@@ -5147,7 +5147,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 			msg_format("You are beaten by %s.", m_name);
 #endif
 			msg_print(NULL);
-			if (record_arena) do_cmd_write_nikki(NIKKI_ARENA, 99, m_name);
+			if (record_arena) do_cmd_write_nikki(NIKKI_ARENA, -1 - p_ptr->arena_number, m_name);
 		}
 		else
 		{

@@ -677,12 +677,11 @@ static void prt_title(void)
 	/* Winner */
 	else if (p_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
 	{
-		if ((p_ptr->arena_number > MAX_ARENA_MONS+2) && (p_ptr->arena_number < 99))
+		if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
 		{
 #ifdef JP
 			/* 英日切り替え機能 称号 */
 			p = "*真・勝利者*";
-
 #else
 			p = "*TRUEWINNER*";
 #endif
@@ -692,7 +691,6 @@ static void prt_title(void)
 #ifdef JP
 			/* 英日切り替え機能 称号 */
 			p = "***勝利者***";
-
 #else
 			p = "***WINNER***";
 #endif
