@@ -1729,6 +1729,9 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 		if (r_ptr->flags6 & RF6_HEAL) expdam = (expdam+1) * 2 / 3;
 
 		get_exp_from_mon(expdam, &exp_mon);
+
+		/* Genocided by chaos patron */
+		if (!m_ptr->r_idx) m_idx = 0;
 	}
 
 	/* Redraw (later) if needed */
@@ -1743,6 +1746,9 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 	{
 		set_superstealth(FALSE);
 	}
+
+	/* Genocided by chaos patron */
+	if (!m_idx) return TRUE;
 
 	/* Hurt it */
 	m_ptr->hp -= dam;
