@@ -2408,6 +2408,7 @@ bool identify_fully_aux(object_type *o_ptr)
 	cptr            info[128];
 	u32b flag;
 	char o_name[MAX_NLEN];
+	int wid, hgt;
 
 	/* Extract the flags */
 	object_flags(o_ptr, &f1, &f2, &f3);
@@ -3523,12 +3524,15 @@ info[i++] = "それは冷気では傷つかない。";
 	/* Save the screen */
 	screen_save();
 
+	/* Get size */
+	Term_get_size(&wid, &hgt);
+
 	/* Display Item name */
 	object_desc(o_name, o_ptr, TRUE, 3);
 	prt(format("%s", o_name), 0, 0);
 
 	/* Erase the screen */
-	for (k = 1; k < 24; k++) prt("", k, 13);
+	for (k = 1; k < hgt; k++) prt("", k, 13);
 
 	/* Label the information */
 	if ((o_ptr->tval == TV_STATUE) && (o_ptr->sval == SV_PHOTO))
@@ -3553,7 +3557,7 @@ prt("     アイテムの能力:", 1, 15);
 		prt(info[j], k++, 15);
 
 		/* Every 20 entries (lines 2 to 21), start over */
-		if ((k == 22) && (j+1 < i))
+		if ((k == hgt - 2) && (j+1 < i))
 		{
 #ifdef JP
 prt("-- 続く --", k, 15);
