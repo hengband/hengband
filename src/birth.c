@@ -1989,7 +1989,7 @@ static cptr realm_jouhou[VALID_REALM] =
 
 "Music magic shows various effects as sing song.  There is two type of song; the one which shows effects instantly and the other one shows effect continuously until SP runs out.  But the latter type has a limit; only one song can be sing at the same time.",
 
-"The books of Kendo describes various combat technique.  it need to read the books when one studys the techniques, but it doesn't need to take around the books to use the techniques after one momorizes it.  It need a weapon wielded to use the techniques."
+"The books of Kendo describe various combat techniques.  It need to read the books when one studys the techniques, but it doesn't need to take around the books to use the techniques after one memorizes it.  It need a weapon wielded to use the techniques."
 #endif
 };
 
