@@ -2834,7 +2834,7 @@ static void process_world_aux_mutation(void)
 		if (slot && !object_is_cursed(o_ptr))
 		{
 #ifdef JP
-			msg_print("武器を落してしまった！");
+			msg_print("武器を落としてしまった！");
 #else
 			msg_print("You drop your weapon!");
 #endif

@@ -3155,7 +3155,7 @@ bool monst_spell_monst(int m_idx)
 						if (see_either)
 						{
 #ifdef JP
-							msg_format("%^sが%sを掴んで空中から投げ落した。", m_name, t_name);
+							msg_format("%^sが%sを掴んで空中から投げ落とした。", m_name, t_name);
 #else
 							msg_format("%^s holds %s, and drops from the sky.", m_name, t_name);
 #endif

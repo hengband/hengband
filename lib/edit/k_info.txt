@@ -504,7 +504,7 @@ P:0:4d5:0:0:0
 F:SHOW_MODS
 D:$A giant, curved blade designed to cleave the head cleanly from the 
 D:$body.
-D:胴体から頭を綺麗に切り落す為に作られた、巨大な曲った刃を持つ剣だ。
+D:胴体から頭を綺麗に切り落とす為に作られた、巨大な曲った刃を持つ剣だ。
 
 N:41:カタナ
 E:& Katana~
@@ -818,7 +818,7 @@ P:0:4d4:0:0:0
 F:SHOW_MODS
 D:$An enormous two-handed battle axe, carried by Dwarven champions, who 
 D:$compete to see who can cleave the most orc heads.
-D:巨大な両手持ち用の戦斧だ。オークの首を落した数を競うドワーフの戦士が
+D:巨大な両手持ち用の戦斧だ。オークの首を落とした数を競うドワーフの戦士が
 D:愛用している。
 
 

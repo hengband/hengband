@@ -242,7 +242,7 @@ says, 'Give 'til it hurts!'
 #says, 'Don't force me to put an arrow in your skull...'
 「俺にお前の頭を射抜かせないでくれ...」
 #says, 'Kevin Costner has soiled my name!'
-「ケビン・コスナーは俺の名前を地に落した！」
+「ケビン・コスナーは俺の名前を地に落とした！」
 
 #N:169:Brodda, the Easterling
 #N:291:Ulfast, Son of Ulfang
@@ -1006,7 +1006,7 @@ N:*:Default lines
 #says: 'Your puny efforts make me laugh!'
 「お前の貧相な努力は片腹痛いわ！」
 #says: 'Drop dead, wimp!'
-「雑魚が！死骸を落すがいい！」
+「雑魚が！死骸を落とすがいい！」
 #says: 'You should have fled while you had the chance.'
 「チャンスがあるうちにさっさと逃げておけばいいものを」
 #screams: 'Die by my hand!'

@@ -3547,7 +3547,7 @@ msg_format("%^sが瞬時に消えた。", m_name);
 						bool fear; /* dummy */
 
 #ifdef JP
-						msg_format("%^sがあなたを掴んで空中から投げ落した。", m_name);
+						msg_format("%^sがあなたを掴んで空中から投げ落とした。", m_name);
 #else
 						msg_format("%^s holds you, and drops from the sky.", m_name);
 #endif

@@ -1096,7 +1096,7 @@ static void hit_trap(bool break_trap)
 			if (p_ptr->levitation)
 			{
 #ifdef JP
-				msg_print("落し戸を飛び越えた。");
+				msg_print("落とし戸を飛び越えた。");
 #else
 				msg_print("You fly over a trap door.");
 #endif
@@ -1105,7 +1105,7 @@ static void hit_trap(bool break_trap)
 			else
 			{
 #ifdef JP
-				msg_print("落し戸に落ちた！");
+				msg_print("落とし戸に落ちた！");
 				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 					msg_print("くっそ〜！");
 #else
@@ -1115,7 +1115,7 @@ static void hit_trap(bool break_trap)
 				sound(SOUND_FALL);
 				dam = damroll(2, 8);
 #ifdef JP
-				name = "落し戸";
+				name = "落とし戸";
 #else
 				name = "a trap door";
 #endif
@@ -1127,7 +1127,7 @@ static void hit_trap(bool break_trap)
 					do_cmd_save_game(TRUE);
 
 #ifdef JP
-				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "落し戸に落ちた");
+				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "落とし戸に落ちた");
 #else
 				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "You have fallen through a trap door!");
 #endif
@@ -1144,7 +1144,7 @@ static void hit_trap(bool break_trap)
 			if (p_ptr->levitation)
 			{
 #ifdef JP
-				msg_print("落し穴を飛び越えた。");
+				msg_print("落とし穴を飛び越えた。");
 #else
 				msg_print("You fly over a pit trap.");
 #endif
@@ -1153,14 +1153,14 @@ static void hit_trap(bool break_trap)
 			else
 			{
 #ifdef JP
-				msg_print("落し穴に落ちてしまった！");
+				msg_print("落とし穴に落ちてしまった！");
 #else
 				msg_print("You have fallen into a pit!");
 #endif
 
 				dam = damroll(2, 6);
 #ifdef JP
-				name = "落し穴";
+				name = "落とし穴";
 #else
 				name = "a pit trap";
 #endif
@@ -1175,7 +1175,7 @@ static void hit_trap(bool break_trap)
 			if (p_ptr->levitation)
 			{
 #ifdef JP
-				msg_print("トゲのある落し穴を飛び越えた。");
+				msg_print("トゲのある落とし穴を飛び越えた。");
 #else
 				msg_print("You fly over a spiked pit.");
 #endif
@@ -1184,7 +1184,7 @@ static void hit_trap(bool break_trap)
 			else
 			{
 #ifdef JP
-			msg_print("スパイクが敷かれた落し穴に落ちてしまった！");
+				msg_print("スパイクが敷かれた落とし穴に落ちてしまった！");
 #else
 				msg_print("You fall into a spiked pit!");
 #endif
@@ -1192,7 +1192,7 @@ static void hit_trap(bool break_trap)
 
 				/* Base damage */
 #ifdef JP
-				name = "落し穴";
+				name = "落とし穴";
 #else
 				name = "a pit trap";
 #endif
@@ -1210,7 +1210,7 @@ static void hit_trap(bool break_trap)
 
 
 #ifdef JP
-					name = "トゲのある落し穴";
+					name = "トゲのある落とし穴";
 #else
 					name = "a spiked pit";
 #endif
@@ -1230,7 +1230,7 @@ static void hit_trap(bool break_trap)
 			if (p_ptr->levitation)
 			{
 #ifdef JP
-				msg_print("トゲのある落し穴を飛び越えた。");
+				msg_print("トゲのある落とし穴を飛び越えた。");
 #else
 				msg_print("You fly over a spiked pit.");
 #endif
@@ -1239,7 +1239,7 @@ static void hit_trap(bool break_trap)
 			else
 			{
 #ifdef JP
-			msg_print("スパイクが敷かれた落し穴に落ちてしまった！");
+			msg_print("スパイクが敷かれた落とし穴に落ちてしまった！");
 #else
 				msg_print("You fall into a spiked pit!");
 #endif
@@ -1249,7 +1249,7 @@ static void hit_trap(bool break_trap)
 				dam = damroll(2, 6);
 
 #ifdef JP
-				name = "落し穴";
+				name = "落とし穴";
 #else
 				name = "a pit trap";
 #endif
@@ -1266,7 +1266,7 @@ static void hit_trap(bool break_trap)
 
 
 #ifdef JP
-					name = "トゲのある落し穴";
+					name = "トゲのある落とし穴";
 #else
 					name = "a spiked pit";
 #endif

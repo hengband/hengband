@@ -320,7 +320,7 @@ void do_cmd_go_down(void)
 		if (record_stair)
 		{
 #ifdef JP
-			if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "落し戸に落ちた");
+			if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "落とし戸に落ちた");
 			else do_cmd_write_nikki(NIKKI_STAIR, down_num, "階段を下りた");
 #else
 			if (fall_trap) do_cmd_write_nikki(NIKKI_STAIR, down_num, "fell through a trap door");
@@ -331,7 +331,7 @@ void do_cmd_go_down(void)
 		if (fall_trap)
 		{
 #ifdef JP
-			msg_print("わざと落し戸に落ちた。");
+			msg_print("わざと落とし戸に落ちた。");
 #else
 			msg_print("You deliberately jump through the trap door.");
 #endif
