@@ -525,8 +525,9 @@ Lu : extra light                    |P : brand pois
 Wr : provides warning               |Ca : chaotic effects
 Xm : xtra might when shooting       |V : vampiric weapon
 Xs : xtra number of shots           |Q : weapon of quake
-Ag : aggravate monsters             |S : vorpal hit
-Bs : blessed weapon                 |M : weapon of the force
+Te : random teleportaion            |S : vorpal hit
+Ag : aggravate monsters             |M : weapon of the force
+Bs : blessed weapon
 
 /* : slay evil                      /X* : *slay* evil
 /p : slay human                     /Xp : *slay* human
@@ -538,13 +539,13 @@ Bs : blessed weapon                 |M : weapon of the force
 /L : slay undead                    /XL : *slay* undead
 /Z : slay animal                    /XZ : *slay* animal
 
-~Tele : telepathy                   . : random teleportaion
-~Evil : ESP evil                    (St : sustain strength
-~Good : ESP good                    (In : sustain intelligence
-~Nolv : ESP non-living              (Wi : sustain wisdom
-~p : ESP human                      (Dx : sustain dexterity
-~D : ESP dragon                     (Cn : sustain constitution
-~o : ESP orc                        (Ch : sustain charisma
+~Tele : telepathy                   (St : sustain strength
+~Evil : ESP evil                    (In : sustain intelligence
+~Good : ESP good                    (Wi : sustain wisdom
+~Nolv : ESP non-living              (Dx : sustain dexterity
+~p : ESP human                      (Cn : sustain constitution
+~D : ESP dragon                     (Ch : sustain charisma
+~o : ESP orc
 ~T : ESP troll
 ~P : ESP giant
 ~U : ESP demon

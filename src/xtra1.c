@@ -3868,12 +3868,10 @@ void calc_bonuses(void)
 			{
 				cptr insc = quark_str(o_ptr->inscription);
 
-				if (o_ptr->inscription &&
-				    (my_strchr(insc, '.') || my_strchr(insc, '%')))
+				if (o_ptr->inscription && my_strchr(insc, '.'))
 				{
 					/*
 					 * {.} will stop random teleportation.
-					 * {%} includes '.' after conversion.
 					 */
 				}
 				else

@@ -3767,8 +3767,35 @@ msg_print("武器を落してしまった！");
 		 */
 		if ((p_ptr->cursed & TRC_TELEPORT_SELF) && one_in_(200))
 		{
+			char o_name[MAX_NLEN];
+			object_type *o_ptr;
+			int i;
+
+			/* Scan the equipment with random teleport ability */
+			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
+			{
+				u32b flgs[TR_FLAG_SIZE];
+				o_ptr = &inventory[i];
+				
+				/* Skip non-objects */
+				if (!o_ptr->k_idx) continue;
+				
+				/* Extract the item flags */
+				object_flags(o_ptr, flgs);
+				
+				if (have_flag(flgs, TR_TELEPORT)) break;
+			}
+
+			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+
 #ifdef JP
-if (get_check_strict("テレポートしますか？", CHECK_OKAY_CANCEL))
+			msg_format("%sがテレポートの能力を発動させようとしている。", o_name);
+#else
+			msg_format("Your %s is activating teleportation.", o_name);
+#endif
+
+#ifdef JP
+			if (get_check_strict("テレポートしますか？", CHECK_OKAY_CANCEL))
 #else
 			if (get_check_strict("Teleport? ", CHECK_OKAY_CANCEL))
 #endif
@@ -3776,13 +3803,22 @@ if (get_check_strict("テレポートしますか？", CHECK_OKAY_CANCEL))
 				disturb(0, 0);
 				teleport_player(50);
 			}
+			else
+			{
+#ifdef JP
+				msg_format("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。", o_name);
+#else
+				msg_format("You can inscribe {.} on your %s to disable random teleportation. ", o_name);
+#endif
+				disturb(1, 0);
+			}
 		}
 		/* Make a chainsword noise */
 		if ((p_ptr->cursed & TRC_CHAINSWORD) && one_in_(CHAINSWORD_NOISE))
 		{
 			char noise[1024];
 #ifdef JP
-if (!get_rnd_line("chainswd_j.txt", 0, noise))
+			if (!get_rnd_line("chainswd_j.txt", 0, noise))
 #else
 			if (!get_rnd_line("chainswd.txt", 0, noise))
 #endif
@@ -3822,9 +3858,9 @@ if (!get_rnd_line("chainswd_j.txt", 0, noise))
 
 				o_ptr->curse_flags |= new_curse;
 #ifdef JP
-msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
+				msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 #else
-				msg_format("There is a malignant black aura surrounding %s...", o_name);
+				msg_format("There is a malignant black aura surrounding your %s...", o_name);
 #endif
 
 				o_ptr->feeling = FEEL_NONE;
@@ -3849,9 +3885,9 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 
 				o_ptr->curse_flags |= new_curse;
 #ifdef JP
-msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
+				msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 #else
-				msg_format("There is a malignant black aura surrounding %s...", o_name);
+				msg_format("There is a malignant black aura surrounding your %s...", o_name);
 #endif
 
 				o_ptr->feeling = FEEL_NONE;
@@ -3869,9 +3905,9 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-msg_format("%sが動物を引き寄せた！", o_name);
+				msg_format("%sが動物を引き寄せた！", o_name);
 #else
-				msg_format("%s have attracted an animal!", o_name);
+				msg_format("Your %s have attracted an animal!", o_name);
 #endif
 
 				disturb(0, 0);
@@ -3886,9 +3922,9 @@ msg_format("%sが動物を引き寄せた！", o_name);
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-msg_format("%sが悪魔を引き寄せた！", o_name);
+				msg_format("%sが悪魔を引き寄せた！", o_name);
 #else
-				msg_format("%s have attracted a demon!", o_name);
+				msg_format("Your %s have attracted a demon!", o_name);
 #endif
 
 				disturb(0, 0);
@@ -3904,9 +3940,9 @@ msg_format("%sが悪魔を引き寄せた！", o_name);
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-msg_format("%sがドラゴンを引き寄せた！", o_name);
+				msg_format("%sがドラゴンを引き寄せた！", o_name);
 #else
-				msg_format("%s have attracted an animal!", o_name);
+				msg_format("Your %s have attracted an animal!", o_name);
 #endif
 
 				disturb(0, 0);
@@ -3918,7 +3954,7 @@ msg_format("%sがドラゴンを引き寄せた！", o_name);
 			{
 				disturb(0, 0);
 #ifdef JP
-msg_print("とても暗い... とても恐い！");
+				msg_print("とても暗い... とても恐い！");
 #else
 				msg_print("It's so dark... so scary!");
 #endif
@@ -3941,9 +3977,9 @@ msg_print("とても暗い... とても恐い！");
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-msg_format("%sはあなたの体力を吸収した！", o_name);
+			msg_format("%sはあなたの体力を吸収した！", o_name);
 #else
-			msg_format("%s drains HP from you!", o_name);
+			msg_format("Your %s drains HP from you!", o_name);
 #endif
 			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev*2, 100), o_name, -1);
 		}
@@ -3954,9 +3990,9 @@ msg_format("%sはあなたの体力を吸収した！", o_name);
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-msg_format("%sはあなたの魔力を吸収した！", o_name);
+			msg_format("%sはあなたの魔力を吸収した！", o_name);
 #else
-			msg_format("%s drains mana from you!", o_name);
+			msg_format("Your %s drains mana from you!", o_name);
 #endif
 			p_ptr->csp -= MIN(p_ptr->lev, 50);
 			if (p_ptr->csp < 0)
