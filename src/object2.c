@@ -2575,30 +2575,45 @@ static void dragon_resist(object_type * o_ptr)
 }
 
 
-static void add_esp_strong(object_type *o_ptr)
+static bool add_esp_strong(object_type *o_ptr)
 {
+	bool nonliv = FALSE;
+
 	switch (randint1(3))
 	{
 	case 1: add_flag(o_ptr->art_flags, TR_ESP_EVIL); break;
-	case 2: add_flag(o_ptr->art_flags, TR_ESP_NONLIVING); break;
-	case 3: add_flag(o_ptr->art_flags, TR_TELEPATHY); break;
+	case 2: add_flag(o_ptr->art_flags, TR_TELEPATHY); break;
+	case 3:	add_flag(o_ptr->art_flags, TR_ESP_NONLIVING); nonliv = TRUE; break;
 	}
+
+	return nonliv;
 }
 
 
-static void add_esp_weak(object_type *o_ptr)
+#define MAX_ESP_WEAK 9
+static void add_esp_weak(object_type *o_ptr, bool extra)
 {
-	int idx[3];
-	int n = randint1(3);
+	int i = 0;
+	int idx[MAX_ESP_WEAK];
+	int flg[MAX_ESP_WEAK];
+	int n = (extra) ? (3 + randint1(randint1(6))) : randint1(3);
+	int left = MAX_ESP_WEAK;
 
-	idx[0] = randint1(9);
+	for (i = 0; i < MAX_ESP_WEAK; i++) flg[i] = i + 1;
 
-	idx[1] = randint1(8);
-	if (idx[1] >= idx[0]) idx[1]++;
+	/* Shuffle esp flags */
+	for (i = 0; i < n; i++)
+	{
+		int k = randint0(left--);
 
-	idx[2] = randint1(7);
-	if (idx[2] >= idx[0]) idx[2]++;
-	if (idx[2] >= idx[1]) idx[2]++;
+		idx[i] = flg[k];
+
+		while (k < left)
+		{
+			flg[k] = flg[k + 1];
+			k++;
+		}
+	}
 
 	while (n--) switch (idx[n])
 	{
@@ -2874,8 +2889,8 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					switch (o_ptr->name2)
 					{
 					case EGO_TELEPATHY:
-						add_esp_strong(o_ptr);
-						add_esp_weak(o_ptr);
+						if (add_esp_strong(o_ptr)) add_esp_weak(o_ptr, TRUE);
+						else add_esp_weak(o_ptr, FALSE);
 						break;
 					case EGO_MAGI:
 					case EGO_MIGHT:
@@ -2886,7 +2901,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 						if (one_in_(3))
 						{
 							if (one_in_(2)) add_esp_strong(o_ptr);
-							else add_esp_weak(o_ptr);
+							else add_esp_weak(o_ptr, FALSE);
 						}
 						break;
 					default:/* not existing crown (wisdom,lite, etc...) */
@@ -2945,7 +2960,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 						if (one_in_(7))
 						{
 							if (one_in_(2)) add_esp_strong(o_ptr);
-							else add_esp_weak(o_ptr);
+							else add_esp_weak(o_ptr, FALSE);
 						}
 						break;
 					default:/* not existing helm (Magi, Might, etc...)*/
@@ -3600,7 +3615,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->to_a = randint1(5) + m_bonus(5, level);
 
 					/* gain one low ESP */
-					add_esp_weak(o_ptr);
+					add_esp_weak(o_ptr, FALSE);
 
 					/* Boost the rating */
 					rating += 15;
