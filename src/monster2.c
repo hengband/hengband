@@ -3263,6 +3263,9 @@ static bool place_monster_okay(int r_idx)
 			return FALSE;
 	}
 
+	if ((r_ptr->flags7 & RF7_CHAMELEON) && !(z_ptr->flags7 & RF7_CHAMELEON))
+		return FALSE;
+
 	/* Okay */
 	return (TRUE);
 }
