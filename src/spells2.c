@@ -5907,28 +5907,28 @@ msg_format("%^sは岩石に埋もれてしまった！", m_name);
 				if (t < 20)
 				{
 					/* Create granite wall */
-                                        cave_set_feat(y, x, FEAT_WALL_EXTRA);
+                                        cave_set_feat(yy, xx, FEAT_WALL_EXTRA);
 				}
 
 				/* Quartz */
 				else if (t < 70)
 				{
 					/* Create quartz vein */
-                                        cave_set_feat(y, x, FEAT_QUARTZ);
+                                        cave_set_feat(yy, xx, FEAT_QUARTZ);
 				}
 
 				/* Magma */
 				else if (t < 100)
 				{
 					/* Create magma vein */
-                                        cave_set_feat(y, x, FEAT_MAGMA);
+                                        cave_set_feat(yy, xx, FEAT_MAGMA);
 				}
 
 				/* Floor */
 				else
 				{
 					/* Create floor */
-                                        cave_set_feat(y, x, floor_type[randint0(100)]);
+                                        cave_set_feat(yy, xx, floor_type[randint0(100)]);
 				}
 			}
 		}
