@@ -387,7 +387,7 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	/* Skip empty line */
 	if (*buf == 0) return FALSE;
 
-	ptr = buf;
+	ptr = prev_ptr = buf;
         old_ptr = NULL;
 
         while (old_ptr != ptr)
@@ -3554,7 +3554,7 @@ void do_cmd_edit_autopick(void)
 				break;
 			}
 
-			for (i = j = 0; lines_list[cy][i] && i < cx; i++)
+			for (i = j = k = 0; lines_list[cy][i] && i < cx; i++)
 			{
 				k = j;
 #ifdef JP
