@@ -3309,7 +3309,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 		case SV_ROD_IDENTIFY:
 		{
 			ident = TRUE;
-			if (!ident_spell(FALSE, FALSE)) *use_charge = FALSE;
+			if (!ident_spell(FALSE, TRUE)) *use_charge = FALSE;
 			break;
 		}
 
