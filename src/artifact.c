@@ -1884,17 +1884,19 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 	if (o_ptr->tval >= TV_BOOTS)
 	{
+		/* For armors */
 		if (a_cursed) power_level = 0;
 		else if (total_flags < 15000) power_level = 1;
-		else if (total_flags < 25000) power_level = 2;
+		else if (total_flags < 35000) power_level = 2;
 		else power_level = 3;
 	}
 
 	else
 	{
+		/* For weapons */
 		if (a_cursed) power_level = 0;
 		else if (total_flags < 20000) power_level = 1;
-		else if (total_flags < 35000) power_level = 2;
+		else if (total_flags < 45000) power_level = 2;
 		else power_level = 3;
 	}
 
