@@ -1224,9 +1224,6 @@ bool change_wild_mode(void)
 
 	p_ptr->wild_mode = !p_ptr->wild_mode;
 
-	/* Clear all saved floors */
-	prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 	/* Leaving */
 	p_ptr->leaving = TRUE;
 

@@ -59,9 +59,6 @@ void do_cmd_go_up(void)
 			dun_level = 0;
 		}
 
-		/* Clear all saved floors */
-		prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 		/* Leaving */
 		p_ptr->leaving = TRUE;
 
@@ -147,14 +144,14 @@ void do_cmd_go_up(void)
 		if (c_ptr->feat == FEAT_LESS_LESS)
 		{
 			/* Create a way back */
-			prepare_change_floor_mode(CFM_UP | CFM_SHAFT);
+			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
 
 			up_num = 2;
 		}
 		else
 		{
 			/* Create a way back */
-			prepare_change_floor_mode(CFM_UP);
+			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP);
 
 			up_num = 1;
 		}
@@ -238,9 +235,6 @@ void do_cmd_go_down(void)
 			dun_level = 0;
 		}
 
-		/* Clear all saved floors */
-		prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 		/* Leaving */
 		p_ptr->leaving = TRUE;
 
@@ -291,8 +285,11 @@ void do_cmd_go_down(void)
 			p_ptr->oldpy = py;
 			dungeon_type = (byte)target_dungeon;
 
-			/* Clear all saved floors */
-			prepare_change_floor_mode(CFM_CLEAR_ALL | CFM_FIRST_FLOOR);
+			/*
+			 * Clear all saved floors
+			 * and create a first saved floor
+			 */
+			prepare_change_floor_mode(CFM_FIRST_FLOOR);
 		}
 
 		/* Hack -- take a turn */
@@ -360,19 +357,19 @@ void do_cmd_go_down(void)
 
 		if (fall_trap)
 		{
-			prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 		}
 		else
 		{
 			if (c_ptr->feat == FEAT_MORE_MORE)
 			{
 				/* Create a way back */
-				prepare_change_floor_mode(CFM_DOWN | CFM_SHAFT);
+				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
 			}
 			else
 			{
 				/* Create a way back */
-				prepare_change_floor_mode(CFM_DOWN);
+				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN);
 			}
 		}
 	}
@@ -3101,9 +3098,6 @@ void do_cmd_stay(int pickup)
 		dun_level = 0;
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
-
-		/* Clear all saved floors */
-		prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 		p_ptr->leaving = TRUE;
 	}

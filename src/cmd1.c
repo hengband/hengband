@@ -1140,7 +1140,7 @@ static void hit_trap(bool break_trap)
 #else
 				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "You have fallen through a trap door!");
 #endif
-				prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 				/* Leaving */
 				p_ptr->leaving = TRUE;
@@ -3626,9 +3626,6 @@ void move_player(int dir, int do_pickup, bool break_trap)
 				ambush_flag = FALSE;
 			}
 
-			/* Clear all saved floors */
-			prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 			p_ptr->leaving = TRUE;
 			energy_use = 100;
 
@@ -4267,9 +4264,6 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			dun_level = 0;
 			p_ptr->oldpx = 0;
 			p_ptr->oldpy = 0;
-
-			/* Clear all saved floors */
-			prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 			p_ptr->leaving = TRUE;
 		}

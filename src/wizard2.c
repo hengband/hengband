@@ -1526,7 +1526,7 @@ static void do_cmd_wiz_jump(void)
 	/* Change level */
 	dun_level = command_arg;
 
-	prepare_change_floor_mode(CFM_RAND_PLACE | CFM_CLEAR_ALL);
+	prepare_change_floor_mode(CFM_RAND_PLACE);
 
 	if (!dun_level) dungeon_type = 0;
 	p_ptr->inside_arena = FALSE;

@@ -859,7 +859,8 @@ void leave_floor(void)
 
 	/* Temporary get a floor_id (for Arena) */
 	if (!p_ptr->floor_id &&
-	    !(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL)))
+	    (change_floor_mode & CFM_SAVE_FLOORS) &&
+	    !(change_floor_mode & CFM_NO_RETURN))
 	{
 	    /* Get temporal floor_id */
 	    p_ptr->floor_id = get_new_floor_id();
@@ -931,7 +932,7 @@ void leave_floor(void)
 	}
 
 	/* Extract new dungeon level */
-	if (!(change_floor_mode & CFM_CLEAR_ALL))
+	if (change_floor_mode & CFM_SAVE_FLOORS)
 	{
 		/* Extract stair position */
 		c_ptr = &cave[py][px];
@@ -992,11 +993,11 @@ void leave_floor(void)
 		dungeon_type = 0;
 
 		/* Reach to the surface -- Clear all saved floors */
-		prepare_change_floor_mode(CFM_CLEAR_ALL);
+		change_floor_mode &= ~CFM_SAVE_FLOORS;
 	}
 
 	/* Kill some old saved floors */
-	if (change_floor_mode & CFM_CLEAR_ALL)
+	if (!(change_floor_mode & CFM_SAVE_FLOORS))
 	{
 		int i;
 
@@ -1047,7 +1048,8 @@ void leave_floor(void)
 	}
 
 	/* If you can return, you need to save previous floor */
-	if (!(change_floor_mode & (CFM_NO_RETURN | CFM_CLEAR_ALL)))
+	if ((change_floor_mode & CFM_SAVE_FLOORS) &&
+	    !(change_floor_mode & CFM_NO_RETURN))
 	{
 		/* Get out of the my way! */
 		get_out_monster();
@@ -1103,7 +1105,7 @@ void change_floor(void)
 	ambush_flag = FALSE;
 
 	/* No saved floors (On the surface etc.) */
-	if ((change_floor_mode & CFM_CLEAR_ALL) &&
+	if (!(change_floor_mode & CFM_SAVE_FLOORS) &&
 	    !(change_floor_mode & CFM_FIRST_FLOOR))
 	{
 		/* Create cave */

@@ -286,7 +286,7 @@ msg_print("君のために最強の挑戦者を用意しておいた。");
 						reset_tim_flags();
 
 						/* Save the surface floor as saved floor */
-						/* prepare_change_floor_mode(0); */
+						prepare_change_floor_mode(CFM_SAVE_FLOORS);
 
 						p_ptr->inside_arena = TRUE;
 						p_ptr->leaving = TRUE;
@@ -328,7 +328,7 @@ msg_print("ペットに乗ったままではアリーナへ入れさせてもらえなかった。");
 				reset_tim_flags();
 
 				/* Save the surface floor as saved floor */
-				/* prepare_change_floor_mode(0); */
+				prepare_change_floor_mode(CFM_SAVE_FLOORS);
 
 				p_ptr->inside_arena = TRUE;
 				p_ptr->leaving = TRUE;
@@ -2060,7 +2060,7 @@ msg_print("ＯＫ、１ゴールドでいこう。");
 			reset_tim_flags();
 
 			/* Save the surface floor as saved floor */
-			/* prepare_change_floor_mode(0); */
+			prepare_change_floor_mode(CFM_SAVE_FLOORS);
 
 			p_ptr->inside_battle = TRUE;
 			p_ptr->leaving = TRUE;
@@ -4271,9 +4271,6 @@ bool tele_town(void)
 		}
 	}
 
-	/* Clear all saved floors */
-	prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 	p_ptr->leaving = TRUE;
 	leave_bldg = TRUE;
 	p_ptr->teleport_town = TRUE;
@@ -4910,9 +4907,6 @@ msg_print("ここにはクエストの入口はない。");
 		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) dun_level = 1;
 		p_ptr->inside_quest = cave[py][px].special;
 
-		/* Clear all saved floors */
-		prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 		p_ptr->leaving = TRUE;
 	}
 }
@@ -4972,7 +4966,7 @@ prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
 	else if ((which == 2) && p_ptr->inside_arena)
 	{
 		/* Don't save the arena as saved floor */
-		prepare_change_floor_mode(CFM_NO_RETURN);
+		prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_NO_RETURN);
 
 		p_ptr->inside_arena = FALSE;
 		p_ptr->leaving = TRUE;
@@ -4988,7 +4982,7 @@ prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
 	else if (p_ptr->inside_battle)
 	{
 		/* Don't save the arena as saved floor */
-		prepare_change_floor_mode(CFM_NO_RETURN);
+		prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_NO_RETURN);
 
 		p_ptr->leaving = TRUE;
 		p_ptr->inside_battle = FALSE;
@@ -5069,9 +5063,6 @@ prt("ゲートは閉まっている。モンスターがあなたを待っている！",0,0);
 	/* Reinit wilderness to activate quests ... */
 	if (reinit_wilderness)
 	{
-		/* Clear all saved floors */
-		prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 		p_ptr->leaving = TRUE;
 	}
 

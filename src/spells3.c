@@ -598,11 +598,11 @@ void teleport_level(int m_idx)
 			if (!dun_level)
 			{
 				dun_level = d_info[dungeon_type].mindepth;
-				prepare_change_floor_mode(CFM_RAND_PLACE | CFM_CLEAR_ALL);
+				prepare_change_floor_mode(CFM_RAND_PLACE);
 			}
 			else
 			{
-				prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 			}
 
 			/* Leaving */
@@ -626,7 +626,7 @@ void teleport_level(int m_idx)
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
-			prepare_change_floor_mode(CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 			leave_quest_check();
 
@@ -650,7 +650,7 @@ void teleport_level(int m_idx)
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
-			prepare_change_floor_mode(CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 			/* Leaving */
 			p_ptr->leaving = TRUE;
@@ -673,7 +673,7 @@ void teleport_level(int m_idx)
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
-			prepare_change_floor_mode(CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 			/* Leaving */
 			p_ptr->leaving = TRUE;

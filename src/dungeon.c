@@ -679,9 +679,6 @@ msg_format("%d 階にテレポートしました。", command_arg);
 	p_ptr->inside_quest = 0;
 	energy_use = 0;
 
-	/* Clear all saved floors */
-	prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 	/* Leaving */
 	p_ptr->leaving = TRUE;
 }
@@ -4182,9 +4179,6 @@ msg_print("上に引っ張りあげられる感じがする！");
 
 				p_ptr->inside_quest = 0;
 
-				/* Clear all saved floors */
-				prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 				p_ptr->leaving = TRUE;
 			}
 			else
@@ -4233,9 +4227,6 @@ msg_print("下に引きずり降ろされる感じがする！");
 					p_ptr->oldpy = py;
 				}
 				p_ptr->wild_mode = FALSE;
-
-				/* Clear all saved floors */
-				prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 				/* Leaving */
 				p_ptr->leaving = TRUE;
@@ -4287,9 +4278,6 @@ msg_print("下に引きずり降ろされる感じがする！");
 #else
 				msg_print("The world changes!");
 #endif
-
-				/* Clear all saved floors */
-				prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 				/* Leaving */
 				p_ptr->leaving = TRUE;
@@ -6994,9 +6982,6 @@ prt("お待ち下さい...", 0, 0);
 	/* Generate a dungeon level if needed */
 	if (!character_dungeon)
 	{
-		/* Clear all saved floors */
-		prepare_change_floor_mode(CFM_CLEAR_ALL);
-
 		change_floor();
 	}
 
@@ -7124,9 +7109,6 @@ prt("お待ち下さい...", 0, 0);
 				p_ptr->chp_frac = 0;
 				p_ptr->exit_bldg = TRUE;
 				reset_tim_flags();
-
-				/* Clear all saved floors */
-				prepare_change_floor_mode(CFM_CLEAR_ALL);
 			}
 			else
 			{
@@ -7257,9 +7239,6 @@ msg_print("張りつめた大気が流れ去った...");
 
 					/* Leaving */
 					p_ptr->wild_mode = FALSE;
-
-					/* Clear all saved floors */
-					prepare_change_floor_mode(CFM_CLEAR_ALL);
 
 					p_ptr->leaving = TRUE;
 
