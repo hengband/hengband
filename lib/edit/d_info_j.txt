@@ -66,7 +66,7 @@ F:MONSTER_DIV_64
 
 N:2:イークの洞穴
 E:Yeek cave
-D:$the entrace to the cave leading to the Yeek's den
+D:$the entrance to the cave leading to the Yeek's den
 D:イークの住みかへと続く小さな洞穴
 P:48:5
 W:1:13:1:0:14:240:75:20:0x0000:0x0000

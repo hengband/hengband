@@ -18542,7 +18542,7 @@ I:110:10d15:20:34:50
 W:21:2:0:100:800:415
 B:HIT:SUPERHURT:4d8
 B:HIT:SUPERHURT:4d8
-F:RAND_25 | DROP_90 | OPEN_DOOR | BASH_DOOR | DROP_CORPSE | EVIL | MOVE_BODY
+F:RAND_25 | DROP_90 | OPEN_DOOR | BASH_DOOR | DROP_CORPSE | EVIL | GIANT | MOVE_BODY
 F:WILD_WASTE
 D:$It is a massive ogre in metal armour, a champion of its kind.
 D:金属の鎧に身を包んだ力強いオーガであり、同族の中で最も強力だ。

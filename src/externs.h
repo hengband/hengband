@@ -525,6 +525,7 @@ extern void optimize_inventry_auto_destroy(void);
 extern void auto_pickup_items(cave_type *c_ptr);
 extern void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr);
 extern void init_autopicker(void);
+extern errr process_pickpref_file_line(char *buf);
 extern void do_cmd_edit_autopick(void);
 
 /* birth.c */
@@ -1083,10 +1084,10 @@ extern int set_elec_destroy(object_type *o_ptr);
 extern int set_fire_destroy(object_type *o_ptr);
 extern int set_cold_destroy(object_type *o_ptr);
 extern int inven_damage(inven_func typ, int perc);
-extern void acid_dam(int dam, cptr kb_str, int monspell);
-extern void elec_dam(int dam, cptr kb_str, int monspell);
-extern void fire_dam(int dam, cptr kb_str, int monspell);
-extern void cold_dam(int dam, cptr kb_str, int monspell);
+extern int acid_dam(int dam, cptr kb_str, int monspell);
+extern int elec_dam(int dam, cptr kb_str, int monspell);
+extern int fire_dam(int dam, cptr kb_str, int monspell);
+extern int cold_dam(int dam, cptr kb_str, int monspell);
 extern bool rustproof(void);
 extern bool curse_armor(void);
 extern bool curse_weapon(bool force, int slot);

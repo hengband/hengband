@@ -655,9 +655,13 @@ Edit auto-picker/destroyer pref (_)
       'q'            :  Quit the editor (command mode only)
       'hjkl2468'     :  Move cursor (command mode only)
       ^B ^N ^P ^F    :  Move cursor (always)
-      ^I  : Choose an item from inventry/equipment, then insert its name
+      ^I  : Choose an item from inventry/equipment, then insert its name.
       ^S  : Rotates action (pick up / destroy / leave on floor)
       ^U  : Rotates idendify state (identified / unidentified / ...)
+      ^L  : Insert name of the last auto-destroyed item.
+      '/' : Search string, or search an item specified by ^I or ^L.
+      'n' : Search next
+      'N' : Search previous
 
 
 ***** <Help> 

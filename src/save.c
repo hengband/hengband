@@ -1665,9 +1665,6 @@ bool load_player(void)
 		/* Player is dead */
 		if (p_ptr->is_dead)
 		{
-			/* Player is no longer "dead" */
-			p_ptr->is_dead = FALSE;
-
 			/* Cheat death */
 			if (arg_wizard)
 			{
@@ -1677,6 +1674,9 @@ bool load_player(void)
 				/* Done */
 				return (TRUE);
 			}
+
+			/* Player is no longer "dead" */
+			p_ptr->is_dead = FALSE;
 
 			/* Count lives */
 			sf_lives++;

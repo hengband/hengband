@@ -1246,9 +1246,9 @@ static void hit_trap(bool break_trap)
 
 			dam = damroll(4, 6);
 #ifdef JP
-			fire_dam(dam, "炎のトラップ", -1);
+			(void)fire_dam(dam, "炎のトラップ", -1);
 #else
-			fire_dam(dam, "a fire trap", -1);
+			(void)fire_dam(dam, "a fire trap", -1);
 #endif
 
 			break;
@@ -1264,9 +1264,9 @@ static void hit_trap(bool break_trap)
 
 			dam = damroll(4, 6);
 #ifdef JP
-			acid_dam(dam, "酸のトラップ", -1);
+			(void)acid_dam(dam, "酸のトラップ", -1);
 #else
-			acid_dam(dam, "an acid trap", -1);
+			(void)acid_dam(dam, "an acid trap", -1);
 #endif
 
 			break;
@@ -2873,6 +2873,8 @@ msg_format("刃が%sの急所を貫いた！", m_name);
 					k *= mult;
 				}
 				k += (p_ptr->to_d[hand] + o_ptr->to_d);
+
+                                if (k < 0) k = 0;
 
 #ifdef JP
 				take_hit(DAMAGE_FORCE, k, "死の大鎌", -1);

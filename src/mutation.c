@@ -1021,76 +1021,82 @@ msg_print("普通になった気がする。");
 	{
 		chg_virtue(V_CHANCE, 1);
 
-		if (p_ptr->prace == RACE_VAMPIRE &&
-		  !(p_ptr->muta1 & MUT1_HYPN_GAZE) &&
-		   (randint1(10) < 7))
-		{
-			muta_class = &(p_ptr->muta1);
-			muta_which = MUT1_HYPN_GAZE;
+		/*
+		  some races are apt to gain specified mutations
+		  This should be allowed only if "choose_mut" is 0.
+		                                        --- henkma
+		*/
+		if(!choose_mut){
+			if (p_ptr->prace == RACE_VAMPIRE &&
+			  !(p_ptr->muta1 & MUT1_HYPN_GAZE) &&
+			   (randint1(10) < 7))
+			{
+				muta_class = &(p_ptr->muta1);
+				muta_which = MUT1_HYPN_GAZE;
 #ifdef JP
 muta_desc = "眼が幻惑的になった...";
 #else
-			muta_desc = "Your eyes look mesmerizing...";
+				muta_desc = "Your eyes look mesmerizing...";
 #endif
 
-		}
+			}
 
-		else if (p_ptr->prace == RACE_IMP &&
-			!(p_ptr->muta2 & MUT2_HORNS) &&
-			(randint1(10) < 7))
-		{
-			muta_class = &(p_ptr->muta2);
-			muta_which = MUT2_HORNS;
+			else if (p_ptr->prace == RACE_IMP &&
+				 !(p_ptr->muta2 & MUT2_HORNS) &&
+				 (randint1(10) < 7))
+			  {
+			  	muta_class = &(p_ptr->muta2);
+			  	muta_which = MUT2_HORNS;
 #ifdef JP
 muta_desc = "角が額から生えてきた！";
 #else
-			muta_desc = "Horns pop forth into your forehead!";
+			   	muta_desc = "Horns pop forth into your forehead!";
 #endif
 
-		}
+			}
 
-		else if (p_ptr->prace == RACE_YEEK &&
-			!(p_ptr->muta1 & MUT1_SHRIEK) &&
-			(randint1(10) < 7))
-		{
-			muta_class = &(p_ptr->muta1);
-			muta_which = MUT1_SHRIEK;
+			else if (p_ptr->prace == RACE_YEEK &&
+				!(p_ptr->muta1 & MUT1_SHRIEK) &&
+				(randint1(10) < 7))
+			{
+				muta_class = &(p_ptr->muta1);
+				muta_which = MUT1_SHRIEK;
 #ifdef JP
 muta_desc = "声質がかなり強くなった。";
 #else
-			muta_desc = "Your vocal cords get much tougher.";
+				muta_desc = "Your vocal cords get much tougher.";
 #endif
 
-		}
+			}
 
-		else if (p_ptr->prace == RACE_BEASTMAN &&
-			!(p_ptr->muta1 & MUT1_POLYMORPH) &&
-			(randint1(10) < 2))
-		{
-			muta_class = &(p_ptr->muta1);
-			muta_which = MUT1_POLYMORPH;
+			else if (p_ptr->prace == RACE_BEASTMAN &&
+				!(p_ptr->muta1 & MUT1_POLYMORPH) &&
+				(randint1(10) < 2))
+			{
+				muta_class = &(p_ptr->muta1);
+				muta_which = MUT1_POLYMORPH;
 #ifdef JP
 muta_desc = "あなたの肉体は変化できるようになった、";
 #else
-			muta_desc = "Your body seems mutable.";
+				muta_desc = "Your body seems mutable.";
 #endif
 
-		}
+			}
 
-		else if (p_ptr->prace == RACE_MIND_FLAYER &&
-			!(p_ptr->muta2 & MUT2_TENTACLES) &&
-			(randint1(10) < 7))
-		{
-			muta_class = &(p_ptr->muta2);
-			muta_which = MUT2_TENTACLES;
+			else if (p_ptr->prace == RACE_MIND_FLAYER &&
+				!(p_ptr->muta2 & MUT2_TENTACLES) &&
+				(randint1(10) < 7))
+			{
+				muta_class = &(p_ptr->muta2);
+				muta_which = MUT2_TENTACLES;
 #ifdef JP
 muta_desc = "邪悪な触手が口の周りに生えた。";
 #else
-			muta_desc = "Evil-looking tentacles sprout from your mouth.";
+				muta_desc = "Evil-looking tentacles sprout from your mouth.";
 #endif
 
+			}
 		}
-
 #ifdef JP
 msg_print("突然変異した！");
 #else

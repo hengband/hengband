@@ -167,18 +167,22 @@ void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_ACID)
 		{
 			(*f2) |= TR2_RES_ACID;
+                        (*f3) |= TR3_ACTIVATE;
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_ELEC)
 		{
 			(*f2) |= TR2_RES_ELEC;
+                        (*f3) |= TR3_ACTIVATE;
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_FIRE)
 		{
 			(*f2) |= TR2_RES_FIRE;
+                        (*f3) |= TR3_ACTIVATE;
 		}
 		else if (o_ptr->xtra3 == ESSENCE_TMP_RES_COLD)
 		{
 			(*f2) |= TR2_RES_COLD;
+                        (*f3) |= TR3_ACTIVATE;
 		}
 		else if (o_ptr->xtra3 == ESSENCE_SH_FIRE)
 		{
@@ -198,6 +202,10 @@ void object_flags(object_type *o_ptr, u32b *f1, u32b *f2, u32b *f3)
 		else if (o_ptr->xtra3 == ESSENCE_RESISTANCE)
 		{
 			(*f2) |= (TR2_RES_ACID | TR2_RES_ELEC | TR2_RES_FIRE | TR2_RES_COLD);;
+		}
+		else if (o_ptr->xtra3 == ESSENCE_EARTHQUAKE)
+		{
+                        (*f3) |= TR3_ACTIVATE;
 		}
 	}
 }
@@ -4427,7 +4435,8 @@ int show_inven(int target_item)
 
 			if (get_tag(&index, c))
 			{
-				inven_spellbook_label[i] = ' ';
+				if (inven_spellbook_label[i] == c)
+                                        inven_spellbook_label[i] = ' ';
 				inven_spellbook_label[index] = c;
 			}
 		}

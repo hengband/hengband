@@ -4261,6 +4261,9 @@ bool dec_stat(int stat, int amount, int permanent)
 		p_ptr->stat_cur[stat] = cur;
 		p_ptr->stat_max[stat] = max;
 
+                /* Redisplay the stats later */
+                p_ptr->redraw |= (PR_STATS);
+
 		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 	}
@@ -4283,6 +4286,9 @@ bool res_stat(int stat)
 
 		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
+
+                /* Redisplay the stats later */
+                p_ptr->redraw |= (PR_STATS);
 
 		/* Success */
 		return (TRUE);

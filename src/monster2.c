@@ -3124,7 +3124,7 @@ msg_print("守りのルーンが壊れた！");
 #ifdef JP
 				color = "紫色に";
 #else
-				color = "perple";
+				color = "purple";
 #endif
 			else if (r_ptr->level > p_ptr->lev + 5)
 #ifdef JP

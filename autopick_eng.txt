@@ -23,6 +23,10 @@
 #      ^I  : Choose an item from inventry/equipment, then insert its name
 #      ^S  : Rotates action (pick up / destroy / leave on floor)
 #      ^U  : Rotates idendify state (identified / unidentified / ...)
+#      ^L  : Insert name of the last auto-destroyed item.
+#      '/' : Search string, or search an item specified by ^I or ^L.
+#      'n' : Search next
+#      'N' : Search previous
 #
 #      The preference will be saved in a file named
 #      "pickpref-<<name>>.prf" in your user directory; This will be

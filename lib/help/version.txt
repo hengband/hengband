@@ -1,4 +1,55 @@
-=== History of Hengband from 1.0.7 to 1.1.0 ===
+=== History of Hengband from 1.0.7 to 1.3.0 ===
+
+  Aug. 28th, 2002  hengband 1.3.0 (Development branch) released.
+
+- Added a new room type; trapped monster pit.
+- Added object flags of various ESPs. (from Unangband and ToME)
+- Every slay flags now have corresponding *slay* flags.
+- The 'C' command display ESPs, Slays and 'other' flags on a new page.
+- Now Weaponsmiths can attach ESPs and *slay*s on equipments.
+- Inserted new-lines after first two paragraphs of monster-recall.
+- 'Experience' of Andoroid is now displayed as construction point.
+- Counting of play time will stop within the auto-picker editor.
+- Wrote quest information in character dump file.
+- Apply auto-destroy just after using Psychometry.
+- Added new command letter ';' of auto-picker/destroyer which forces
+  the game to ask if you want to pick the item up. (Thanks to Kieron)
+- The '?' key shows you contextual help while option setting and
+  character making.(from Eyangband)
+
+
+  Aug. 28th, 2002  hengband 1.2.0 (Stable branch) released.
+
+- Fixed many bugs
+- Splited version tree into two branch;
+   development version: 1.3.x and stable version: 1.2.x.
+- Introduced save-file-version which is independent from actual
+  version number of the game.
+- Placed Thorondor at level 50 of the Mountain dungeon as a master.
+- Strengthened all greater eagles very much.
+- Added new options: destroy_feeling and destroy_identify which
+  control whether auto-destroy will be applied just after pseudo
+  identify or identify.
+- Moved manual_haggle option into birth option from game option.
+- A mirror made by mirror-master will change back to original terrain
+  when the mirror is broken.
+- Added description of every spells of Magic-eater.
+- Area of Darkness spell was changed back to same as 1.1.0RC2.
+- You can use '(' and ')' key as first or last item on item selection.
+- Changed message text at climbing up to surface level.
+- Halved experience of drujs.
+- Added more descriptions of personalities on help file and character
+  making screen.
+
+Modifications for auto-picker/destroyer editor:
+- Added descriptions about function of {%} and {%all}.
+- Added search commands '/', 'n', 'N' on the editor.
+- New commands '~', '!', ';', '(' which repeatedly add or remove
+  corresponding command letter.
+- The game no longer creates pickpref-<player's name>.prf when
+  pickpref.prf is already exist.
+- Do auto-save the game at starting the editor.
+
 
   Jun. 15th, 2002  hengband 1.1.0 released.
 
@@ -883,4 +934,4 @@ Angband Version 2.7   :  1/1/95  Ben Harrison
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Hengband 1.3.0

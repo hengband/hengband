@@ -470,7 +470,7 @@ command("U"/"O").
 
     Priest can select from Life, Death, Daemon, or Crusade as a first
     realm, and choose second realm almost freely.  But pairs of a good
-    magic and a bad magic from these four realms are are not allowed.
+    magic and an evil magic from these four realms are not allowed.
     Priests can learn all spells in the selected realms, even if not
     as efficiently as mages.  However, when learning spells, priests
     cannot voluntarily decide which spells to study: they are rewarded
@@ -1217,4 +1217,4 @@ the 50th level.
 
 
 --
-Updated    : Hengband 1.1.0
+Updated    : Hengband 1.2.0

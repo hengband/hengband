@@ -109,9 +109,9 @@ of magical means.
 
 Each character has spell points, or mana, which represents how many
 spells a character can cast.  Your spell points (sometimes called
-mana) are derived from your class, level and a primary stat of your
-class.  Spell points may be regained by resting, or by a few magical
-means.
+mana) are derived from your class, level, a primary stat of your
+class, and race modifier of that stat.  Spell points may be regained
+by resting, or by a few magical means.
 
 --- Character Skills ---
 

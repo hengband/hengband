@@ -3395,7 +3395,8 @@ if (!get_rnd_line("chainswd_j.txt", 0, noise))
 			(void)activate_ty_curse(FALSE, &count);
 		}
 		/* Handle experience draining */
-		if ((p_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4))
+		if (p_ptr->prace != RACE_ANDROID && 
+			((p_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4)))
 		{
 			p_ptr->exp -= (p_ptr->lev+1)/2;
 			if (p_ptr->exp < 0) p_ptr->exp = 0;
@@ -5775,10 +5776,7 @@ static void dungeon(bool load_game)
 	character_xtra = TRUE;
 
 	/* Window stuff */
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-
-	/* Window stuff */
-	p_ptr->window |= (PW_MONSTER);
+	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
 
 	/* Redraw dungeon */
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY);
@@ -5786,14 +5784,14 @@ static void dungeon(bool load_game)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
 	/* Update stuff */
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
-	/* Calculate torch radius */
-	p_ptr->update |= (PU_TORCH);
+	/* Update lite/view */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH);
+
+	/* Update monsters */
+	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
 	/* Update stuff */
 	update_stuff();
@@ -5803,16 +5801,6 @@ static void dungeon(bool load_game)
 
 	/* Redraw stuff */
 	window_stuff();
-
-	/* Update stuff */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_DISTANCE | PU_MON_LITE);
-	p_ptr->update |= (PU_MONSTERS);/*自分で光っているモンスターの為 */
-
-	/* Update stuff */
-	update_stuff();
-
-	/* Redraw stuff */
-	redraw_stuff();
 
 	/* Leave "xtra" mode */
 	character_xtra = FALSE;
@@ -6537,7 +6525,11 @@ prt("お待ち下さい...", 0, 0);
 
 
 	/* Hack -- Enter wizard mode */
-	if (arg_wizard && enter_wizard_mode()) p_ptr->wizard = TRUE;
+	if (arg_wizard)
+        {
+                if (enter_wizard_mode()) p_ptr->wizard = TRUE;
+                else if (p_ptr->is_dead) quit("Already dead.");
+        }
 
 	/* Initialize the town-buildings if necessary */
 	if (!dun_level && !p_ptr->inside_quest)

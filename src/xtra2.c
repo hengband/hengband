@@ -516,7 +516,7 @@ msg_print("クエストを達成した！");
 						p_ptr->inside_quest = 0;
 					}
 
-					if (!quest[i].flags & QUEST_FLAG_SILENT)
+					if (!(quest[i].flags & QUEST_FLAG_SILENT))
 					{
 #ifdef JP
 msg_print("クエストを達成した！");
@@ -551,7 +551,7 @@ msg_print("クエストを達成した！");
 					quest[i].status = QUEST_STATUS_COMPLETED;
 					quest[i].complev = (byte)p_ptr->lev;
 
-					if (!quest[i].flags & QUEST_FLAG_SILENT)
+					if (!(quest[i].flags & QUEST_FLAG_SILENT))
 					{
 #ifdef JP
 msg_print("クエストを達成した！");

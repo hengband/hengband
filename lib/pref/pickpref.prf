@@ -1,5 +1,5 @@
 #
-# Sample preference of the Object Auto-picker/Destroyer
+# Sample Preference of the Object Auto-picker/Destroyer
 #
 # Important commands 
 #  a i ^Q      :  Insert mode
@@ -10,6 +10,10 @@
 #  ^I  : Choose from inventry/equipment
 #  ^S  : pick up / destroy / leave on floor
 #  ^U  : identified / unidentified / ...
+#  ^L  : Insert name of the last auto-destroyed item.
+#  '/' : Search string, or search an item specified by ^I or ^L.
+#  'n' : Search next
+#  'N' : Search previous
 #
 
 wanted corpse

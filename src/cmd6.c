@@ -3723,17 +3723,6 @@ static bool item_tester_hook_activate(object_type *o_ptr)
 	/* Check activation flag */
 	if (f3 & (TR3_ACTIVATE)) return (TRUE);
 
-	if ((o_ptr->tval > TV_CAPTURE) && o_ptr->xtra3)
-	{
-		switch(o_ptr->xtra3)
-		case ESSENCE_TMP_RES_ACID:
-		case ESSENCE_TMP_RES_ELEC:
-		case ESSENCE_TMP_RES_FIRE:
-		case ESSENCE_TMP_RES_COLD:
-		case ESSENCE_EARTHQUAKE:
-			return (TRUE);
-	}
-
 	/* Assume not */
 	return (FALSE);
 }

@@ -67,7 +67,17 @@ static object_type autopick_last_destroyed_object;
 #ifdef JP
 
 #define KEY_ALL "すべての"
+
+#ifdef MAC_MPW
+/*
+ * MEGA HACK -- MPWのバグ除け。
+ * pre-process中に「収」の字の2バイト目が勝手に消えてしまう。
+ */
+#define KEY_COLLECTING "\x8e\xfb集中の"
+#else
 #define KEY_COLLECTING "収集中の"
+#endif
+
 #define KEY_UNIDENTIFIED "未鑑定の"
 #define KEY_IDENTIFIED "鑑定済みの"
 #define KEY_STAR_IDENTIFIED "*鑑定*済みの"
@@ -387,7 +397,7 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
 	/* Skip empty line */
 	if (*buf == 0) return FALSE;
 
-	ptr = buf;
+	ptr = prev_ptr = buf;
         old_ptr = NULL;
 
         while (old_ptr != ptr)
@@ -412,7 +422,7 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
                         while (' ' == *ptr) ptr++;
 
                         /* Read number */
-                        while (isdigit(*ptr))
+                        while ('0' <= *ptr && *ptr <= '9')
                         {
                                 entry->dice = 10 * entry->dice + (*ptr - '0');
                                 ptr++;
@@ -438,7 +448,7 @@ bool autopick_new_entry(autopick_type *entry, cptr str)
                         while (' ' == *ptr) ptr++;
 
                         /* Read number */
-                        while (isdigit(*ptr))
+                        while ('0' <= *ptr && *ptr <= '9')
                         {
                                 entry->bonus = 10 * entry->bonus + (*ptr - '0');
                                 ptr++;
@@ -575,7 +585,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
                 }
         }
 
-        /*** Weapons whic dd*ds is more than nn ***/
+        /*** Weapons which dd*ds is more than nn ***/
         if (IS_FLG(FLG_MORE_THAN))
         {
                 if (o_ptr->dd * o_ptr->ds < entry->dice)
@@ -2305,6 +2315,48 @@ void init_autopicker(void)
 }
 
 
+
+/*
+ *  Process line for auto picker/destroyer.
+ */
+errr process_pickpref_file_line(char *buf)
+{
+	autopick_type entry;
+	int i;
+
+	if (max_autopick == MAX_AUTOPICK)
+		return 1;
+	
+	/* Nuke illegal char */
+	for(i = 0; buf[i]; i++)
+	{
+#ifdef JP
+		if (iskanji(buf[i]))
+		{
+			i++;
+			continue;
+		}
+#endif
+		if (isspace(buf[i]) && buf[i] != ' ')
+			break;
+	}
+	buf[i] = 0;
+	
+	if (!autopick_new_entry(&entry, buf)) return 0;
+
+	/* Already has the same entry? */ 
+	for(i = 0; i < max_autopick; i++)
+		if(!strcmp(entry.name, autopick_list[i].name)
+		   && entry.flag[0] == autopick_list[i].flag[0]
+		   && entry.flag[1] == autopick_list[i].flag[1]
+                   && entry.dice == autopick_list[i].dice
+                   && entry.bonus == autopick_list[i].bonus) return 0;
+
+	autopick_list[max_autopick++] = entry;
+	return 0;
+}
+
+
 /*
  * Get a trigger key and insert ASCII string for the trigger
  */
@@ -3554,7 +3606,7 @@ void do_cmd_edit_autopick(void)
 				break;
 			}
 
-			for (i = j = 0; lines_list[cy][i] && i < cx; i++)
+			for (i = j = k = 0; lines_list[cy][i] && i < cx; i++)
 			{
 				k = j;
 #ifdef JP
