@@ -1854,6 +1854,28 @@ bool add_auto_register(object_type *o_ptr)
 		return FALSE;
 	}
 
+	/* Known to be an artifact? */
+	if ((object_known_p(o_ptr) &&
+	     (artifact_p(o_ptr) || o_ptr->art_name)) ||
+	    ((o_ptr->ident & IDENT_SENSE) &&
+	     (o_ptr->feeling == FEEL_TERRIBLE || o_ptr->feeling == FEEL_SPECIAL)))
+	{
+		char o_name[MAX_NLEN];
+
+		/* Describe the object (with {terrible/special}) */
+		object_desc(o_name, o_ptr, TRUE, 3);
+
+		/* Message */
+#ifdef JP
+		msg_format("%sは破壊不能だ。", o_name);
+#else
+		msg_format("You cannot auto-destroy %s.", o_name);
+#endif
+
+		/* Done */
+		return FALSE;
+	}
+
 
 	if (!p_ptr->autopick_autoregister)
 	{
