@@ -1801,7 +1801,7 @@ void object_desc(char *buf, object_type *o_ptr, int pref, int mode)
                                 t=object_desc_str(t,  temp);
 		}
                 /* 伝説のアイテム */
-                else if (o_ptr->name1) {
+                else if (o_ptr->name1 && !have_flag(flgs, TR_FULL_NAME)) {
                         artifact_type *a_ptr = &a_info[o_ptr->name1];
                         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
                         if ( strncmp( (a_name + a_ptr->name), "『" , 2) != 0){
