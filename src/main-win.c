@@ -734,7 +734,11 @@ static int init_bg(void)
 
 	hBG = LoadImage(NULL, bmfile,  IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	if (!hBG) {
+#ifdef JP
 		plog_fmt("壁紙用ビットマップ '%s' を読み込めません。", bmfile);
+#else
+		plog_fmt("Can't load the bitmap file '%s'.", bmfile);
+#endif
 		use_bg = 0;
 		return 0;
 	}
