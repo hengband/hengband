@@ -3234,6 +3234,7 @@ static int i = 0;
 #define RANDOM_EGO          0x00000008
 #define RANDOM_ARTIFACT     0x00000010
 #define RANDOM_TRAP         0x00000020
+#define RANDOM_FEAT_MIMIC   0x00000040
 
 
 typedef struct dungeon_grid dungeon_grid;
@@ -3248,6 +3249,7 @@ struct dungeon_grid
 	int		trap;			/* Trap */
 	int		cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
 	int		special;		/* Reserved for special terrain info */
+	int		feat_mimic;		/* Reserved for terrain mimic info */
 	int		random;			/* Number of the random effect */
 };
 
@@ -3261,13 +3263,13 @@ static dungeon_grid letter[255];
 static errr parse_line_feature(char *buf)
 {
 	int num;
-	char *zz[9];
+	char *zz[10];
 
 
 	if (init_flags & INIT_ONLY_BUILDINGS) return (0);
 
 	/* Tokenize the line */
-	if ((num = tokenize(buf+2, 9, zz, 0)) > 1)
+	if ((num = tokenize(buf+2, 10, zz, 0)) > 1)
 	{
 		/* Letter to assign */
 		int index = zz[0][0];
@@ -3281,10 +3283,23 @@ static errr parse_line_feature(char *buf)
 		letter[index].trap = FEAT_NONE;
 		letter[index].cave_info = 0;
 		letter[index].special = 0;
+		letter[index].feat_mimic = FEAT_NONE;
 		letter[index].random = RANDOM_NONE;
 
 		switch (num)
 		{
+			/* Feature mimic */
+			case 10:
+				if ((zz[9][0] == '*') && !zz[9][1])
+				{
+					letter[index].random |= RANDOM_FEAT_MIMIC;
+				}
+				else
+				{
+					letter[index].feat_mimic = f_tag_to_index(zz[9]);
+					if (letter[index].feat_mimic < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+				}
+				/* Fall through */
 			/* Special */
 			case 9:
 				letter[index].special = atoi(zz[8]);
@@ -3628,6 +3643,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 			/* Lay down a floor */
 			c_ptr->feat = conv_dungeon_feat(letter[idx].feature);
+			c_ptr->mimic = conv_dungeon_feat(letter[idx].feat_mimic);
 
 			/* Only the features */
 			if (init_flags & INIT_ONLY_FEATURES) continue;
@@ -3702,6 +3718,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				}
 				else
 				{
+					if (c_ptr->mimic) c_ptr->feat = c_ptr->mimic;
 					place_trap(*y, *x);
 				}
 
@@ -3724,12 +3741,13 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Random trap */
 			else if (random & RANDOM_TRAP)
 			{
+				if (c_ptr->mimic) c_ptr->feat = c_ptr->mimic;
 				place_trap(*y, *x);
 			}
 			/* Hidden trap (or door) */
 			else if (letter[idx].trap)
 			{
-				c_ptr->mimic = c_ptr->feat;
+				if (!c_ptr->mimic) c_ptr->mimic = c_ptr->feat;
 				c_ptr->feat = conv_dungeon_feat(letter[idx].trap);
 			}
 			else if (object_index)
