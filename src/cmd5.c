@@ -4224,7 +4224,7 @@ msg_print("神聖な力が邪悪を打ち払った！");
 				if (cave_empty_bold2(my, mx)) break;
 			}
 			if (attempt < 0) continue;
-			summon_specific(-1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET));
+			summon_specific(-1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));
 		}
 		(void)set_hero(randint1(25) + 25, FALSE);
 		(void)set_blessed(randint1(25) + 25, FALSE);

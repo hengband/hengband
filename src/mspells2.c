@@ -3512,18 +3512,28 @@ msg_format("%^sが何かをつぶやいた。", m_name);
 			/* RF6_RAISE_DEAD */
 			case 160+15:
 			{
-				disturb(1, 0);
+				if (known)
+				{
+					if (see_either)
+					{
+						disturb(1, 0);
 #ifdef JP
-				if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+						if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
 #else
-				if (blind) msg_format("%^s mumbles.", m_name);
+						if (blind) msg_format("%^s mumbles.", m_name);
 #endif
 
 #ifdef JP
-				else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
+						else msg_format("%^sが死者復活の呪文を唱えた。", m_name);
 #else
-				else msg_format("%^s casts a spell to revive corpses.", m_name);
+						else msg_format("%^s casts a spell to revive corpses.", m_name);
 #endif
+					}
+					else
+					{
+                                                mon_fight = TRUE;
+					}
+				}
 				animate_dead(m_idx, m_ptr->fy, m_ptr->fx);
 				break;
 			}

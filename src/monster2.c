@@ -3048,7 +3048,7 @@ msg_print("守りのルーンが壊れた！");
 	  }
 	}
 
-	if (summon_specific_type == SUMMON_KNIGHTS) m_ptr->fast = 100;
+	if (mode & PM_HASTE) m_ptr->fast = 100;
 
 	if (m_ptr->mspeed > 199) m_ptr->mspeed = 199;
 
