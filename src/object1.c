@@ -6630,6 +6630,7 @@ strcat(out_val, " '/'ÁõÈ÷ÉÊ,");
 			case 'x':
 			case 'X':
 			case '\r':
+			case '\n':
 			{
 				/* Validate the item */
 				if (!get_item_okay(get_item_label))
