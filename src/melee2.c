@@ -2963,8 +2963,8 @@ msg_format("%^s%s", m_name, monmessage);
 					/* Do not bash the door */
 					may_bash = FALSE;
 
-					/* Assume no move allowed */
-					do_move = TRUE;
+					/* Take a turn */
+					do_turn = TRUE;
 				}
 
 				/* Locked doors (not jammed) */
@@ -2974,10 +2974,13 @@ msg_format("%^s%s", m_name, monmessage);
 					if (randint0(m_ptr->hp / 10) > f_ptr->power)
 					{
 						/* Unlock the door */
-						cave_alter_feat(ny, nx, FF_OPEN);
+						cave_alter_feat(ny, nx, FF_DISARM);
 
 						/* Do not bash the door */
 						may_bash = FALSE;
+
+						/* Take a turn */
+						do_turn = TRUE;
 					}
 				}
 			}
@@ -3216,7 +3219,7 @@ msg_format("%^s%s", m_name, monmessage);
 		 * to allow monsters to attack an enemy,
 		 * even if it can't enter the terrain.
 		 */
-		if (do_move && !can_cross && !did_kill_wall)
+		if (do_move && !can_cross && !did_kill_wall && !did_bash_door)
 		{
 			/* Assume no move allowed */
 			do_move = FALSE;
@@ -3313,16 +3316,12 @@ msg_format("%^s%s", m_name, monmessage);
 
 			if (is_riding_mon)
 			{
-				verify_panel();
+				/* Sound */
+				/* sound(SOUND_WALK); */
 
-				/* Update stuff */
-				p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
+				move_player_effect(FALSE, FALSE);
 
-				/* Update the monsters */
-				p_ptr->update |= (PU_DISTANCE);
-
-				/* Update sub-windows */
-				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+				if (!player_bold(ny, nx) || p_ptr->leaving) break;
 			}
 
 			/* Possible disturb */

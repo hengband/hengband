@@ -658,6 +658,7 @@ extern void carry(int pickup);
 extern bool py_attack(int y, int x, int mode);
 extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
+extern void move_player_effect(int do_pickup, bool break_trap);
 extern void move_player(int dir, int do_pickup, bool break_trap);
 extern void run_step(int dir);
 

@@ -3439,6 +3439,177 @@ bool player_can_enter(s16b feature, u16b mode)
 }
 
 
+void move_player_effect(int do_pickup, bool break_trap)
+{
+	cave_type *c_ptr = &cave[py][px];
+	feature_type *f_ptr = &f_info[c_ptr->feat];
+
+	/* Check for new panel (redraw map) */
+	verify_panel();
+
+	/* Update stuff */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
+
+	/* Update the monsters */
+	p_ptr->update |= (PU_DISTANCE);
+
+	/* Window stuff */
+	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+	/* Remove "unsafe" flag */
+	if ((!p_ptr->blind && !no_lite()) || !is_trap(c_ptr->feat)) c_ptr->info &= ~(CAVE_UNSAFE);
+
+	/* For get everything when requested hehe I'm *NASTY* */
+	if (dun_level && (d_info[dungeon_type].flags1 & DF1_FORGET)) wiz_dark();
+
+	if (p_ptr->pclass == CLASS_NINJA)
+	{
+		if (c_ptr->info & (CAVE_GLOW)) set_superstealth(FALSE);
+		else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
+	}
+
+	if ((p_ptr->action == ACTION_HAYAGAKE) && !cave_floor_bold(py, px))
+	{
+#ifdef JP
+		msg_print("ここでは素早く動けない。");
+#else
+		msg_print("You cannot run in wall.");
+#endif
+		set_action(ACTION_NONE);
+	}
+
+	/* Spontaneous Searching */
+	if ((p_ptr->skill_fos >= 50) || (0 == randint0(50 - p_ptr->skill_fos)))
+	{
+		search();
+	}
+
+	/* Continuous Searching */
+	if (p_ptr->action == ACTION_SEARCH)
+	{
+		search();
+	}
+
+	/* Handle "objects" */
+
+#ifdef ALLOW_EASY_DISARM /* TNB */
+
+	carry(do_pickup != always_pickup);
+
+#else /* ALLOW_EASY_DISARM -- TNB */
+
+	carry(do_pickup);
+
+#endif /* ALLOW_EASY_DISARM -- TNB */
+
+	/* Handle "store doors" */
+	if (have_flag(f_ptr->flags, FF_STORE))
+	{
+		/* Disturb */
+		disturb(0, 0);
+
+		energy_use = 0;
+		/* Hack -- Enter store */
+		command_new = SPECIAL_KEY_STORE;
+	}
+
+	/* Handle "building doors" -KMW- */
+	else if (have_flag(f_ptr->flags, FF_BLDG))
+	{
+		/* Disturb */
+		disturb(0, 0);
+
+		energy_use = 0;
+		/* Hack -- Enter building */
+		command_new = SPECIAL_KEY_BUILDING;
+	}
+
+	/* Handle quest areas -KMW- */
+	else if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
+	{
+		/* Disturb */
+		disturb(0, 0);
+
+		energy_use = 0;
+		/* Hack -- Enter quest level */
+		command_new = SPECIAL_KEY_QUEST;
+	}
+
+	else if (have_flag(f_ptr->flags, FF_QUEST_EXIT))
+	{
+		if (quest[p_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
+		{
+			if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, p_ptr->inside_quest, NULL);
+			quest[p_ptr->inside_quest].status = QUEST_STATUS_COMPLETED;
+			quest[p_ptr->inside_quest].complev = (byte)p_ptr->lev;
+#ifdef JP
+			msg_print("クエストを達成した！");
+#else
+			msg_print("You accomplished your quest!");
+#endif
+
+			msg_print(NULL);
+		}
+
+		leave_quest_check();
+
+		p_ptr->inside_quest = c_ptr->special;
+		dun_level = 0;
+		p_ptr->oldpx = 0;
+		p_ptr->oldpy = 0;
+
+		p_ptr->leaving = TRUE;
+	}
+
+	/* Set off a trap */
+	else if (have_flag(f_ptr->flags, FF_HIT_TRAP))
+	{
+		/* Disturb */
+		disturb(0, 0);
+
+		/* Hidden trap */
+		if (c_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET))
+		{
+			/* Message */
+#ifdef JP
+			msg_print("トラップだ！");
+#else
+			msg_print("You found a trap!");
+#endif
+
+			/* Pick a trap */
+			disclose_grid(py, px);
+		}
+
+		/* Hit the trap */
+		hit_trap(break_trap);
+	}
+
+	/* Warn when leaving trap detected region */
+	if ((disturb_trap_detect || alert_trap_detect)
+	    && p_ptr->dtrap && !(cave[py][px].info & CAVE_IN_DETECT))
+	{
+		/* No duplicate warning */
+		p_ptr->dtrap = FALSE;
+
+		/* You are just on the edge */
+		if (!(cave[py][px].info & CAVE_UNSAFE))
+		{
+			if (alert_trap_detect)
+			{
+#ifdef JP
+				msg_print("* 注意:この先はトラップの感知範囲外です！ *");
+#else
+				msg_print("*Leaving trap detect region!*");
+#endif
+			}
+
+			if (disturb_trap_detect) disturb(0, 0);
+		}
+	}
+}
+
+
 /*
  * Move player in the given direction, with the given "pickup" flag.
  *
@@ -3959,9 +4130,6 @@ void move_player(int dir, int do_pickup, bool break_trap)
 			p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
 		}
 
-		/* Remove "unsafe" flag */
-		if ((!p_ptr->blind && !no_lite()) || !is_trap(c_ptr->feat)) c_ptr->info &= ~(CAVE_UNSAFE);
-
 		if (p_ptr->riding)
 		{
 			riding_m_ptr->fy = py;
@@ -3979,172 +4147,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		/* Sound */
 		/* sound(SOUND_WALK); */
 
-		/* Check for new panel (redraw map) */
-		verify_panel();
-
-		/* For get everything when requested hehe I'm *NASTY* */
-		if (dun_level && (d_info[dungeon_type].flags1 & DF1_FORGET))
-		{
-			wiz_dark();
-		}
-
-		if ((p_ptr->pclass == CLASS_NINJA))
-		{
-			if (c_ptr->info & (CAVE_GLOW)) set_superstealth(FALSE);
-			else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
-		}
-		if ((p_ptr->action == ACTION_HAYAGAKE) && !cave_floor_bold(py, px))
-		{
-#ifdef JP
-			msg_print("ここでは素早く動けない。");
-#else
-			msg_print("You cannot run in wall.");
-#endif
-			set_action(ACTION_NONE);
-		}
-
-		/* Update stuff */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-		/* Update the monsters */
-		p_ptr->update |= (PU_DISTANCE);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-		/* Spontaneous Searching */
-		if ((p_ptr->skill_fos >= 50) ||
-		    (0 == randint0(50 - p_ptr->skill_fos)))
-		{
-			search();
-		}
-
-		/* Continuous Searching */
-		if (p_ptr->action == ACTION_SEARCH)
-		{
-			search();
-		}
-
-		/* Handle "objects" */
-
-#ifdef ALLOW_EASY_DISARM /* TNB */
-
-		carry(do_pickup != always_pickup);
-
-#else /* ALLOW_EASY_DISARM -- TNB */
-
-		carry(do_pickup);
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
-
-		/* Handle "store doors" */
-		if (have_flag(f_ptr->flags, FF_STORE))
-		{
-			/* Disturb */
-			disturb(0, 0);
-
-			energy_use = 0;
-			/* Hack -- Enter store */
-			command_new = SPECIAL_KEY_STORE;
-		}
-
-		/* Handle "building doors" -KMW- */
-		else if (have_flag(f_ptr->flags, FF_BLDG))
-		{
-			/* Disturb */
-			disturb(0, 0);
-
-			energy_use = 0;
-			/* Hack -- Enter building */
-			command_new = SPECIAL_KEY_BUILDING;
-		}
-
-		/* Handle quest areas -KMW- */
-		else if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
-		{
-			/* Disturb */
-			disturb(0, 0);
-
-			energy_use = 0;
-			/* Hack -- Enter quest level */
-			command_new = SPECIAL_KEY_QUEST;
-		}
-
-		else if (have_flag(f_ptr->flags, FF_QUEST_EXIT))
-		{
-			if (quest[p_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
-			{
-				if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, p_ptr->inside_quest, NULL);
-				quest[p_ptr->inside_quest].status = QUEST_STATUS_COMPLETED;
-				quest[p_ptr->inside_quest].complev = (byte)p_ptr->lev;
-#ifdef JP
-				msg_print("クエストを達成した！");
-#else
-				msg_print("You accomplished your quest!");
-#endif
-
-				msg_print(NULL);
-			}
-
-			leave_quest_check();
-
-			p_ptr->inside_quest = c_ptr->special;
-			dun_level = 0;
-			p_ptr->oldpx = 0;
-			p_ptr->oldpy = 0;
-
-			p_ptr->leaving = TRUE;
-		}
-
-		/* Set off a trap */
-		else if (have_flag(f_ptr->flags, FF_HIT_TRAP))
-		{
-			/* Disturb */
-			disturb(0, 0);
-
-			/* Hidden trap */
-			if (c_ptr->mimic)
-			{
-				/* Message */
-#ifdef JP
-				msg_print("トラップだ！");
-#else
-				msg_print("You found a trap!");
-#endif
-
-				/* Pick a trap */
-				disclose_grid(py, px);
-			}
-
-			/* Hit the trap */
-			hit_trap(break_trap);
-		}
-
-		/* Warn when leaving trap detected region */
-		if ((disturb_trap_detect || alert_trap_detect)
-		    && p_ptr->dtrap && !(cave[py][px].info & CAVE_IN_DETECT))
-		{
-			/* No duplicate warning */
-			p_ptr->dtrap = FALSE;
-
-			/* You are just on the edge */
-			if (!(cave[py][px].info & CAVE_UNSAFE))
-			{
-				if (alert_trap_detect)
-				{
-#ifdef JP
-					msg_print("* 注意:この先はトラップの感知範囲外です！ *");
-#else
-					msg_print("*Leaving trap detect region!*");
-#endif
-				}
-
-				if (disturb_trap_detect)
-				{
-					disturb(0, 0);
-				}
-			}
-		}
+		move_player_effect(do_pickup, break_trap);
 	}
 }
 
