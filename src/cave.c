@@ -937,7 +937,14 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 
 			if (p_ptr->wild_mode)
 			{
-				/* Do nothing */
+				/* Special lighting effects */
+				/* Handle "night" */
+				if (view_special_lite && !is_daytime())
+				{
+					/* Use a darkly darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARKDARK];
+					c = f_ptr->x_char[F_LIT_DARKDARK];
+				}
 			}
 
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
@@ -1022,8 +1029,8 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			if (p_ptr->wild_mode)
 			{
 				/* Special lighting effects */
-				/* Handle "blind" */
-				if (view_granite_lite && p_ptr->blind)
+				/* Handle "blind" or "night" */
+				if (view_granite_lite && (p_ptr->blind || !is_daytime()))
 				{
 					/* Use a darkly darkened colour/tile */
 					a = f_ptr->x_attr[F_LIT_DARKDARK];
@@ -1080,16 +1087,25 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 				/* Handle "view_bright_lite" */
 				else if (view_bright_lite)
 				{
-					/* Not viewable */
-					if (!(c_ptr->info & CAVE_VIEW))
+					/* Not glowing */
+					if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 					{
-						/* Use a darkened colour/tile */
-						a = f_ptr->x_attr[F_LIT_DARK];
-						c = f_ptr->x_char[F_LIT_DARK];
+						if (have_flag(f_ptr->flags, FF_LOS))
+						{
+							/* Use a darkly darkened colour/tile */
+							a = f_ptr->x_attr[F_LIT_DARKDARK];
+							c = f_ptr->x_char[F_LIT_DARKDARK];
+						}
+						else
+						{
+							/* Use a darkened colour/tile */
+							a = f_ptr->x_attr[F_LIT_DARK];
+							c = f_ptr->x_char[F_LIT_DARK];
+						}
 					}
 
-					/* Not glowing */
-					else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
+					/* Not viewable */
+					else if (!(c_ptr->info & CAVE_VIEW))
 					{
 						/* Use a darkened colour/tile */
 						a = f_ptr->x_attr[F_LIT_DARK];

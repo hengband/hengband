@@ -4032,7 +4032,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 	/*** Handle the wilderness/town (sunshine) ***/
 
 	/* While in town/wilderness */
-	if (!dun_level && !p_ptr->inside_quest && !p_ptr->inside_battle && !p_ptr->inside_arena && !p_ptr->wild_mode)
+	if (!dun_level && !p_ptr->inside_quest && !p_ptr->inside_battle && !p_ptr->inside_arena)
 	{
 		/* Hack -- Daybreak/Nighfall in town */
 		if (!(turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
@@ -4054,22 +4054,25 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 				msg_print("The sun has risen.");
 #endif
 
-				/* Hack -- Scan the town */
-				for (y = 0; y < cur_hgt; y++)
+				if (!p_ptr->wild_mode)
 				{
-					for (x = 0; x < cur_wid; x++)
+					/* Hack -- Scan the town */
+					for (y = 0; y < cur_hgt; y++)
 					{
-						/* Get the cave grid */
-						cave_type *c_ptr = &cave[y][x];
+						for (x = 0; x < cur_wid; x++)
+						{
+							/* Get the cave grid */
+							cave_type *c_ptr = &cave[y][x];
 
-						/* Assume lit */
-						c_ptr->info |= (CAVE_GLOW);
+							/* Assume lit */
+							c_ptr->info |= (CAVE_GLOW);
 
-						/* Hack -- Memorize lit grids if allowed */
-						if (view_perma_grids) c_ptr->info |= (CAVE_MARK);
+							/* Hack -- Memorize lit grids if allowed */
+							if (view_perma_grids) c_ptr->info |= (CAVE_MARK);
 
-						/* Hack -- Notice spot */
-						note_spot(y, x);
+							/* Hack -- Notice spot */
+							note_spot(y, x);
+						}
 					}
 				}
 			}
@@ -4086,36 +4089,39 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 				msg_print("The sun has fallen.");
 #endif
 
-				/* Hack -- Scan the town */
-				for (y = 0; y < cur_hgt; y++)
+				if (!p_ptr->wild_mode)
 				{
-					for (x = 0; x < cur_wid; x++)
+					/* Hack -- Scan the town */
+					for (y = 0; y < cur_hgt; y++)
 					{
-						/* Get the cave grid */
-						cave_type *c_ptr = &cave[y][x];
-
-						/* Feature code (applying "mimic" field) */
-						feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];
-
-						if (!is_mirror_grid(c_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
-						    !have_flag(f_ptr->flags, FF_ENTRANCE))
+						for (x = 0; x < cur_wid; x++)
 						{
-							/* Assume dark */
-							c_ptr->info &= ~(CAVE_GLOW);
+							/* Get the cave grid */
+							cave_type *c_ptr = &cave[y][x];
 
-							if (!have_flag(f_ptr->flags, FF_REMEMBER))
+							/* Feature code (applying "mimic" field) */
+							feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];
+
+							if (!is_mirror_grid(c_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
+							    !have_flag(f_ptr->flags, FF_ENTRANCE))
 							{
-								/* Forget the normal floor grid */
-								c_ptr->info &= ~(CAVE_MARK);
+								/* Assume dark */
+								c_ptr->info &= ~(CAVE_GLOW);
 
-								/* Hack -- Notice spot */
-								note_spot(y, x);
+								if (!have_flag(f_ptr->flags, FF_REMEMBER))
+								{
+									/* Forget the normal floor grid */
+									c_ptr->info &= ~(CAVE_MARK);
+
+									/* Hack -- Notice spot */
+									note_spot(y, x);
+								}
 							}
 						}
-					}
 
-					/* Glow deep lava and building entrances */
-					glow_deep_lava_and_bldg();
+						/* Glow deep lava and building entrances */
+						glow_deep_lava_and_bldg();
+					}
 				}
 			}
 
