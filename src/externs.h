@@ -863,6 +863,8 @@ extern u32b counts_read(int where);
 /* flavor.c */
 extern void get_table_name_aux(char *out_string);
 extern void get_table_name(char *out_string);
+extern void get_table_sindarin_aux(char *out_string);
+extern void get_table_sindarin(char *out_string);
 extern void flavor_init(void);
 extern char *object_desc_kosuu(char *t, object_type *o_ptr);
 extern void object_desc(char *buf, object_type *o_ptr, u32b mode);
@@ -1687,6 +1689,7 @@ extern void dump_virtues(FILE * OutFile);
 
 #ifdef JP
 /* japanese.c */
+extern void sindarin_to_kana(char *kana, const char *sindarin);
 extern void jverb1( const char *in , char *out);
 extern void jverb2( const char *in , char *out);
 extern void jverb3( const char *in , char *out);

@@ -12,6 +12,7 @@
 
 
 /* Chance of using syllables to form the name instead of the "template" files */
+#define SINDARIN_NAME   10
 #define TABLE_NAME      20
 #define A_CURSED        13
 #define WEIRD_LUCK      12
@@ -1537,7 +1538,13 @@ static void give_activation_power(object_type *o_ptr)
 
 static void get_random_name(char *return_name, bool armour, int power)
 {
-	if (randint1(100) <= TABLE_NAME)
+	int prob = randint1(100);
+
+	if (prob <= SINDARIN_NAME)
+	{
+		get_table_sindarin(return_name);
+	}
+	else if (prob <= TABLE_NAME)
 	{
 		get_table_name(return_name);
 	}
@@ -1552,35 +1559,31 @@ static void get_random_name(char *return_name, bool armour, int power)
 				{
 					case 0:
 #ifdef JP
-filename = "a_cursed_j.txt";
+						filename = "a_cursed_j.txt";
 #else
 						filename = "a_cursed.txt";
 #endif
-
 						break;
 					case 1:
 #ifdef JP
-filename = "a_low_j.txt";
+						filename = "a_low_j.txt";
 #else
 						filename = "a_low.txt";
 #endif
-
 						break;
 					case 2:
 #ifdef JP
-filename = "a_med_j.txt";
+						filename = "a_med_j.txt";
 #else
 						filename = "a_med.txt";
 #endif
-
 						break;
 					default:
 #ifdef JP
-filename = "a_high_j.txt";
+						filename = "a_high_j.txt";
 #else
 						filename = "a_high.txt";
 #endif
-
 				}
 				break;
 			default:
@@ -1588,41 +1591,37 @@ filename = "a_high_j.txt";
 				{
 					case 0:
 #ifdef JP
-filename = "w_cursed_j.txt";
+						filename = "w_cursed_j.txt";
 #else
 						filename = "w_cursed.txt";
 #endif
-
 						break;
 					case 1:
 #ifdef JP
-filename = "w_low_j.txt";
+						filename = "w_low_j.txt";
 #else
 						filename = "w_low.txt";
 #endif
-
 						break;
 					case 2:
 #ifdef JP
-filename = "w_med_j.txt";
+						filename = "w_med_j.txt";
 #else
 						filename = "w_med.txt";
 #endif
-
 						break;
 					default:
 #ifdef JP
-filename = "w_high_j.txt";
+						filename = "w_high_j.txt";
 #else
 						filename = "w_high.txt";
 #endif
-
 				}
 		}
 
 		(void)get_rnd_line(filename, artifact_bias, return_name);
 #ifdef JP
- if(return_name[0]==0)get_table_name(return_name);
+		 if (return_name[0] == 0) get_table_name(return_name);
 #endif
 	}
 }
@@ -1921,13 +1920,11 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		    || !dummy_name[0])
 		{
 			/* Cancelled */
-#if 0
 			if (one_in_(2))
 			{
-				get_table_sindarin(dummy_name);
+				get_table_sindarin_aux(dummy_name);
 			}
 			else
-#endif
 			{
 				get_table_name_aux(dummy_name);
 			}

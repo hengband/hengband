@@ -5,6 +5,106 @@
 
 #ifdef JP
 
+typedef struct convert_key convert_key;
+
+struct convert_key
+{
+	cptr key1;
+	cptr key2;
+};
+
+static const convert_key s2j_table[] = {
+	{"mb","nb"}, {"mp","np"}, {"mv","nv"}, {"mm","nm"},
+	{"x","ks"},
+	/* sindar:シンダール  parantir:パランティア  feanor:フェアノール */
+	{"ar$","a-ru$"}, {"ir$","ia$"}, {"or$","o-ru$"},
+	{"ra","ラ"}, {"ri","リ"}, {"ru","ル"}, {"re","レ"}, {"ro","ロ"},
+	{"ir","ia"}, {"ur","ua"}, {"er","ea"}, {"ar","aル"},
+	{"sha","シャ"}, {"shi","シ"}, {"shu","シュ"}, {"she","シェ"}, {"sho","ショ"},
+	{"tha","サ"}, {"thi","シ"}, {"thu","ス"}, {"the","セ"}, {"tho","ソ"},
+	{"cha","ハ"}, {"chi","ヒ"}, {"chu","フ"}, {"che","ヘ"}, {"cho","ホ"},
+	{"dha","ザ"}, {"dhi","ジ"}, {"dhu","ズ"}, {"dhe","ゼ"}, {"dho","ゾ"},
+	{"ba","バ"}, {"bi","ビ"}, {"bu","ブ"}, {"be","ベ"}, {"bo","ボ"},
+	{"ca","カ"}, {"ci","キ"}, {"cu","ク"}, {"ce","ケ"}, {"co","コ"},
+	{"da","ダ"}, {"di","ディ"}, {"du","ドゥ"}, {"de","デ"}, {"do","ド"},
+	{"fa","ファ"}, {"fi","フィ"}, {"fu","フ"}, {"fe","フェ"}, {"fo","フォ"},
+	{"ga","ガ"}, {"gi","ギ"}, {"gu","グ"}, {"ge","ゲ"}, {"go","ゴ"},
+	{"ha","ハ"}, {"hi","ヒ"}, {"hu","フ"}, {"he","ヘ"}, {"ho","ホ"},
+	{"ja","ジャ"}, {"ji","ジ"}, {"ju","ジュ"}, {"je","ジェ"}, {"jo","ジョ"},
+	{"ka","カ"}, {"ki","キ"}, {"ku","ク"}, {"ke","ケ"}, {"ko","コ"},
+	{"la","ラ"}, {"li","リ"}, {"lu","ル"}, {"le","レ"}, {"lo","ロ"},
+	{"ma","マ"}, {"mi","ミ"}, {"mu","ム"}, {"me","メ"}, {"mo","モ"},
+	{"na","ナ"}, {"ni","ニ"}, {"nu","ヌ"}, {"ne","ネ"}, {"no","ノ"},
+	{"pa","パ"}, {"pi","ピ"}, {"pu","プ"}, {"pe","ペ"}, {"po","ポ"},
+	{"qu","ク"},
+	{"sa","サ"}, {"si","シ"}, {"su","ス"}, {"se","セ"}, {"so","ソ"},
+	{"ta","タ"}, {"ti","ティ"}, {"tu","トゥ"}, {"te","テ"}, {"to","ト"},
+	{"va","ヴァ"}, {"vi","ヴィ"}, {"vu","ヴ"}, {"ve","ヴェ"}, {"vo","ヴォ"},
+	{"wa","ワ"}, {"wi","ウィ"}, {"wu","ウ"}, {"we","ウェ"}, {"wo","ウォ"},
+	{"ya","ヤ"}, {"yu","ユ"}, {"yo","ヨ"},
+	{"za","ザ"}, {"zi","ジ"}, {"zu","ズ"}, {"ze","ゼ"}, {"zo","ゾ"},
+	{"dh","ズ"}, {"ch","フ"}, {"th","ス"},
+	{"b","ブ"}, {"c","ク"}, {"d","ド"}, {"f","フ"}, {"g","グ"},
+	{"h","フ"}, {"j","ジュ"}, {"k","ク"}, {"l","ル"}, {"m","ム"},
+	{"n","ン"}, {"p","プ"}, {"q","ク"}, {"r","ル"}, {"s","ス"},
+	{"t","ト"}, {"v","ヴ"}, {"w","ウ"}, {"y","イ"},
+	{"a","ア"}, {"i","イ"}, {"u","ウ"}, {"e","エ"}, {"o","オ"},
+	{"-","ー"},
+	{NULL,NULL}
+};
+
+/* シンダリンを日本語の読みに変換する */
+void sindarin_to_kana(char *kana, const char *sindarin)
+{
+	char buf[256];
+	int idx;
+
+	sprintf(kana, "%s$", sindarin);
+	for (idx = 0; kana[idx]; idx++)
+		if (isupper(kana[idx])) kana[idx] = tolower(kana[idx]);
+
+	for (idx = 0; s2j_table[idx].key1 != NULL; idx++)
+	{
+		cptr pat1 = s2j_table[idx].key1;
+		cptr pat2 = s2j_table[idx].key2;
+		int len = strlen(pat1);
+		char *src = kana;
+		char *dest = buf;
+
+		while (*src)
+		{
+			if (strncmp(src, pat1, len) == 0)
+			{
+				strcpy(dest, pat2);
+				src += len;
+				dest += strlen(pat2);
+			}
+			else
+			{
+				if (iskanji(*src))
+				{
+					*dest = *src;
+					src++;
+					dest++;
+				}
+				*dest = *src;
+				src++;
+				dest++;
+			}
+		}
+
+		*dest = 0;
+		strcpy(kana, buf);
+	}
+
+	idx = 0;
+
+	while (kana[idx] != '$') idx++;
+
+	kana[idx] = '\0';
+}
+
+
 /*日本語動詞活用 (打つ＞打って,打ち etc) */
 
 #define CMPTAIL(y) strncmp(&in[l-strlen(y)],y,strlen(y))

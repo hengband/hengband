@@ -130,12 +130,55 @@ void get_table_name_aux(char *out_string)
 
 
 /*
- * Create a name from random parts without quotes.
+ * Create a name from random parts with quotes.
  */
 void get_table_name(char *out_string)
 {
 	char buff[80];
 	get_table_name_aux(buff);
+
+#ifdef JP
+	sprintf(out_string, "『%s』", buff);
+#else
+	sprintf(out_string, "'%s'", buff);
+#endif
+}
+
+
+/*
+ * Make random Sindarin name
+ */
+void get_table_sindarin_aux(char *out_string)
+{
+	char Syllable[80];
+#ifdef JP
+	char tmp[80];
+#endif
+
+	get_rnd_line("sname.txt", 1, Syllable);
+#ifdef JP
+	strcpy(tmp, Syllable);
+#else
+	strcpy(out_string, Syllable);
+#endif
+
+	get_rnd_line("sname.txt", 2, Syllable);
+#ifdef JP
+	strcat(tmp, Syllable);
+	sindarin_to_kana(out_string, tmp);
+#else
+	strcat(out_string, Syllable);
+#endif
+}
+
+
+/*
+ * Make random Sindarin name with quotes
+ */
+void get_table_sindarin(char *out_string)
+{
+	char buff[80];
+	get_table_sindarin_aux(buff);
 
 #ifdef JP
 	sprintf(out_string, "『%s』", buff);
