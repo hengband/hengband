@@ -339,6 +339,8 @@ static void sense_inventory1(void)
 		}
 
 		case CLASS_MINDCRAFTER:
+		case CLASS_IMITATOR:
+		case CLASS_BLUE_MAGE:
 		case CLASS_MIRROR_MASTER:
 		{
 			/* Bad sensing */
@@ -377,16 +379,6 @@ static void sense_inventory1(void)
 
 			/* Heavy sensing */
 			heavy = TRUE;
-
-			/* Done */
-			break;
-		}
-
-		case CLASS_IMITATOR:
-		case CLASS_BLUE_MAGE:
-		{
-			/* Bad sensing */
-			if (0 != randint0(55000L / (plev * plev + 40))) return;
 
 			/* Done */
 			break;
