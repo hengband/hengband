@@ -4194,6 +4194,20 @@ bool monst_spell_monst(int m_idx)
 			count += summon_specific(m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 		}
 
+		{
+			int non_unique_type = SUMMON_HI_UNDEAD;
+
+			if ((m_ptr->sub_align & (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) == (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL))
+				non_unique_type = 0;
+			else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
+				non_unique_type = SUMMON_ANGEL;
+
+			for (k = count; k < s_num_4; k++)
+			{
+				count += summon_specific(m_idx, y, x, rlev, non_unique_type, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+			}
+		}
+
 		if (known && !see_t && count)
 		{
 			mon_fight = TRUE;

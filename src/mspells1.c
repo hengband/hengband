@@ -4400,6 +4400,9 @@ msg_print("不死の者が近くに現れるのが聞こえた。");
 		/* RF6_S_UNIQUE */
 		case 160+31:
 		{
+			bool uniques_are_summoned = FALSE;
+			int non_unique_type = SUMMON_HI_UNDEAD;
+
 			disturb(1, 0);
 #ifdef JP
 if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
@@ -4417,28 +4420,26 @@ else msg_format("%^sが魔法で特別な強敵を召喚した！", m_name);
 			{
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 			}
-			if (r_ptr->flags3 & RF3_GOOD)
+
+			if (count) uniques_are_summoned = TRUE;
+
+			if ((m_ptr->sub_align & (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) == (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL))
+				non_unique_type = 0;
+			else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
+				non_unique_type = SUMMON_ANGEL;
+
+			for (k = count; k < s_num_4; k++)
 			{
-				for (k = count; k < s_num_4; k++)
-				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_ANGEL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
-				}
+				count += summon_specific(m_idx, y, x, rlev, non_unique_type, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 			}
-			else
-			{
-				for (k = count; k < s_num_4; k++)
-				{
-					count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
-				}
-			}
+
 			if (blind && count)
 			{
 #ifdef JP
-msg_print("多くの力強いものが間近に現れた音が聞こえる。");
+				msg_format("多くの%sが間近に現れた音が聞こえる。", uniques_are_summoned ? "力強いもの" : "もの");
 #else
-				msg_print("You hear many powerful things appear nearby.");
+				msg_format("You hear many %s appear nearby.", uniques_are_summoned ? "powerful things" : "things");
 #endif
-
 			}
 			break;
 		}
