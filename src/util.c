@@ -3918,7 +3918,7 @@ menu_naiyou menu_info[10][10] =
 		{"Items(other)", 4, FALSE},
 		{"Equip", 5, FALSE},
 		{"Door/Box", 6, FALSE},
-		{"Infomations", 7, FALSE},
+		{"Informations", 7, FALSE},
 		{"Options", 8, FALSE},
 		{"Other commands", 9, FALSE},
 		{"", 0, FALSE},
@@ -3945,7 +3945,7 @@ menu_naiyou menu_info[10][10] =
 		{"Target(*)", '*', TRUE},
 		{"Dig(T/^t)", 'T', TRUE},
 		{"Go up stairs(<)", '<', TRUE},
-		{"Go down staies(>)", '>', TRUE},
+		{"Go down stairs(>)", '>', TRUE},
 		{"Command pets(p)", 'p', TRUE},
 		{"Search mode ON/OFF(S/#)", 'S', TRUE}
 	},
@@ -4010,7 +4010,7 @@ menu_naiyou menu_info[10][10] =
 		{"Identify symbol(/)", '/', TRUE},
 		{"Show prev messages(^p)", KTRL('P'), TRUE},
 		{"Current time(^t/')", KTRL('T'), TRUE},
-		{"Various infomations(~)", '~', TRUE},
+		{"Various informations(~)", '~', TRUE},
 		{"Play record menu(|)", '|', TRUE},
 		{"", 0, FALSE}
 	},

@@ -524,7 +524,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 #ifdef JP
 			fprintf(fff, " %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", hour, min, note_level, name);
 #else
-			fprintf(fff, " %2d:%02d %20s completed randome quest '%s'\n", hour, min, note_level, name);
+			fprintf(fff, " %2d:%02d %20s completed random quest '%s'\n", hour, min, note_level, name);
 #endif
 			break;
 		}
