@@ -1651,7 +1651,6 @@ extern bool object_is_weapon_ammo(object_type *o_ptr);
 extern bool object_is_ammo(object_type *o_ptr);
 extern bool object_is_armour(object_type *o_ptr);
 extern bool object_is_weapon_armour_ammo(object_type *o_ptr);
-extern bool object_is_weapon_armour_ammo(object_type *o_ptr);
 extern bool object_is_melee_weapon(object_type *o_ptr);
 extern bool object_is_wearable(object_type *o_ptr);
 extern bool object_is_equipment(object_type *o_ptr);
