@@ -8899,9 +8899,9 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 				{
 					sprintf(tmp_str,
 #ifdef JP
-						"  %-40s (%2d≥¨)            -   …‘¿Ôæ°\n",
+						"  %-40s (%3d≥¨)            -   …‘¿Ôæ°\n",
 #else
-						"  %-40s (Dungeon level: %2d) - (Cancelled)\n",
+						"  %-40s (Dungeon level: %3d) - (Cancelled)\n",
 #endif
 						r_name+r_info[quest[q_idx].r_idx].name,
 						quest[q_idx].level);
@@ -8910,9 +8910,9 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 				{
 					sprintf(tmp_str,
 #ifdef JP
-						"  %-40s (%2d≥¨)            - •Ï•Ÿ•Î%2d\n",
+						"  %-40s (%3d≥¨)            - •Ï•Ÿ•Î%2d\n",
 #else
-						"  %-40s (Dungeon level: %2d) - level %2d\n",
+						"  %-40s (Dungeon level: %3d) - level %2d\n",
 #endif
 						r_name+r_info[quest[q_idx].r_idx].name,
 						quest[q_idx].level,
@@ -8923,10 +8923,10 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 			{
 				/* Print the quest info */
 #ifdef JP
-				sprintf(tmp_str, "  %-40s (¥Ì∏±≈Ÿ:%2d≥¨¡Í≈ˆ) - •Ï•Ÿ•Î%2d\n",
+				sprintf(tmp_str, "  %-40s (¥Ì∏±≈Ÿ:%3d≥¨¡Í≈ˆ) - •Ï•Ÿ•Î%2d\n",
 					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #else
-				sprintf(tmp_str, "  %-40s (Danger level: %2d)  - level %2d\n",
+				sprintf(tmp_str, "  %-40s (Danger level: %3d)  - level %2d\n",
 					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #endif
 			}
@@ -8987,10 +8987,10 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 			{
 				/* Print the quest info */
 #ifdef JP
-				sprintf(tmp_str, "  %-40s (%2d≥¨)            - •Ï•Ÿ•Î%2d\n",
+				sprintf(tmp_str, "  %-40s (%3d≥¨)            - •Ï•Ÿ•Î%2d\n",
 					r_name+r_info[quest[q_idx].r_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #else
-				sprintf(tmp_str, "  %-40s (Dungeon level: %2d) - level %2d\n",
+				sprintf(tmp_str, "  %-40s (Dungeon level: %3d) - level %2d\n",
 					r_name+r_info[quest[q_idx].r_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #endif
 			}
@@ -8998,10 +8998,10 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 			{
 				/* Print the quest info */
 #ifdef JP
-				sprintf(tmp_str, "  %-40s (¥Ì∏±≈Ÿ:%2d≥¨¡Í≈ˆ) - •Ï•Ÿ•Î%2d\n",
+				sprintf(tmp_str, "  %-40s (¥Ì∏±≈Ÿ:%3d≥¨¡Í≈ˆ) - •Ï•Ÿ•Î%2d\n",
 					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #else
-				sprintf(tmp_str, "  %-40s (Danger level: %2d)  - level %2d\n",
+				sprintf(tmp_str, "  %-40s (Danger level: %3d)  - level %2d\n",
 					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
 #endif
 			}
