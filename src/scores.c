@@ -294,22 +294,24 @@ if (mlev > clev) strcat(out_val, format(" (最高%d)", mlev));
                         else
 			if (streq(the_score.how, "ripe"))
 			{
-			  sprintf(out_val+13, "  勝利の後に引退 (%d%s)",
-				  cdun, "階");
+				sprintf(out_val+13, "  勝利の後に引退 (%d%s)",
+					cdun, "階");
 			}
 			else if (streq(the_score.how, "Seppuku"))
 			{
-			  sprintf(out_val+13, "  勝利の後に切腹 (%d%s)",
-				  cdun, "階");
+				sprintf(out_val+13, "  勝利の後に切腹 (%d%s)",
+					cdun, "階");
 			}
 			else
 			{
-			  /* Some people die outside of the dungeon */
-			  if (!cdun)
-				sprintf(out_val+13, "  地上で%sに殺された", the_score.how);
-			  else
-			      sprintf(out_val+13, "  %d階で%sに殺された",
-				      cdun, the_score.how);
+				codeconv(the_score.how);
+
+				/* Some people die outside of the dungeon */
+				if (!cdun)
+					sprintf(out_val+13, "  地上で%sに殺された", the_score.how);
+				else
+					sprintf(out_val+13, "  %d階で%sに殺された",
+						cdun, the_score.how);
 			}
 
 #else
