@@ -849,6 +849,8 @@ bool auto_destroy_item(s16b item, int autopick_idx)
 	/* Get the item (on the floor) */
 	else o_ptr = &o_list[0 - item];
 
+	/* Don't destroy an item inscribed {=g} */
+	if (is_autopick2(o_ptr)) return FALSE;
 
 	if ((autopick_idx == -1 && is_opt_confirm_destroy(o_ptr)) ||
 	    (autopick_idx >= 0 && (autopick_list[autopick_idx].action & DO_AUTODESTROY)))
@@ -923,7 +925,8 @@ void auto_pickup_items(cave_type *c_ptr)
 
 		idx = is_autopick(o_ptr);
 
-		auto_inscribe_item(this_o_idx, idx);
+		/* Item index for floor -1,-2,-3,...  */
+		auto_inscribe_item((-this_o_idx), idx);
 
 		if (is_autopick2(o_ptr) ||
 		    (idx >= 0 && (autopick_list[idx].action & DO_AUTOPICK)))
