@@ -1488,8 +1488,14 @@ static void check_music(void)
 			/* Recalculate bonuses */
 			p_ptr->update |= (PU_BONUS | PU_HP);
 
-			/* Redraw status bar */
-			p_ptr->redraw |= (PR_STATUS);
+			/* Redraw map and status bar */
+			p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+
+			/* Update monsters */
+			p_ptr->update |= (PU_MONSTERS);
+
+			/* Window stuff */
+			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
 	if (p_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
