@@ -2315,12 +2315,13 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 	{
 #ifdef JP
 		int kanji = 0;
-
+#endif
 		if (y < min.y) continue;
 		if (y > max.y) break;
 
 		for (l = 0, x = 0; x < Term->wid; x++)
 		{
+#ifdef JP
 			if (x > max.x) break;
 
 			/* Find the character. */
@@ -2339,29 +2340,21 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 			if ((2 == kanji && x == min.x) ||
 			    (1 == kanji && x == max.x))
 				c = ' ';
-
-			/* Add it. */
-			buf[l] = c;
-			l++;
-		}
 #else
-		if (y < min.y) continue;
-		if (y > max.y) break;
-
-		for (l = 0, x = 0; x < Term->wid; x++)
-		{
 			if (x > max.x) break;
+			if (x < min.x) continue;
 
 			/* Find the character. */
 			Term_what(x, y, &a, &c);
-
-			if (x < min.x) continue;
+#endif
 
 			/* Add it. */
 			buf[l] = c;
 			l++;
 		}
-#endif
+
+		/* Ignore trailing spaces */
+		while (buf[l-1] == ' ') l--;
 
 		/* Terminate all line unless it's single line. */
 		if (min.y != max.y)
