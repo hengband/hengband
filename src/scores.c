@@ -308,8 +308,7 @@ if (mlev > clev) strcat(out_val, format(" (最高%d)", mlev));
 			}
 			else
 			{
-				/* 文字コードは変わるかもしれない。 */
-				codeconv(the_score.how, TRUE);
+				codeconv(the_score.how);
 
 				/* Some people die outside of the dungeon */
 				if (!cdun)

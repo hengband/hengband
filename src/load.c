@@ -221,8 +221,7 @@ static void rd_string(char *str, int max)
 	/* Terminate */
 	str[max-1] = '\0';
 #ifdef JP
-	/* 文字コードが一度EUCでないとわかれば残りは全てSJISのはず。 */
-	codeconv(str, FALSE);
+	codeconv(str);
 #endif
 }
 
