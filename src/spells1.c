@@ -1228,7 +1228,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 		object_flags(o_ptr, flgs);
 
 		/* Check for artifact */
-		if ((artifact_p(o_ptr) || o_ptr->art_name)) is_art = TRUE;
+		if (object_is_artifact(o_ptr)) is_art = TRUE;
 
 		/* Analyze the type */
 		switch (typ)
@@ -1423,7 +1423,7 @@ note_kill = "壊れてしまった！";
 			case GF_HOLY_FIRE:
 			case GF_HELL_FIRE:
 			{
-				if (cursed_p(o_ptr))
+				if (object_is_cursed(o_ptr))
 				{
 					do_kill = TRUE;
 #ifdef JP

@@ -5433,12 +5433,12 @@ void calc_android_exp(void)
 		q_ptr->discount = 0;
 		q_ptr->curse_flags = 0L;
 
-		if (o_ptr->name1)
+		if (object_is_fixed_artifact(o_ptr))
 		{
 			level = (level + MAX(a_info[o_ptr->name1].level - 8, 5)) / 2;
 			level += MIN(20, a_info[o_ptr->name1].rarity/(a_info[o_ptr->name1].gen_flags & TRG_INSTA_ART ? 10 : 3));
 		}
-		else if (o_ptr->name2)
+		else if (object_is_ego(o_ptr))
 		{
 			level += MAX(3, (e_info[o_ptr->name2].rating - 5)/2);
 		}
@@ -5447,7 +5447,7 @@ void calc_android_exp(void)
 			s32b total_flags = flag_cost(o_ptr, o_ptr->pval);
 			int fake_level;
 
-			if (o_ptr->tval >= TV_ARMOR_BEGIN)
+			if (!object_is_weapon_ammo(o_ptr))
 			{
 				/* For armors */
 				if (total_flags < 15000) fake_level = 10;
@@ -5472,7 +5472,7 @@ void calc_android_exp(void)
 		if (value > 5000000L) value = 5000000L;
 		if ((o_ptr->tval == TV_DRAG_ARMOR) || (o_ptr->tval == TV_CARD)) level /= 2;
 
-		if (o_ptr->name1 || o_ptr->name2 || o_ptr->art_name ||
+		if (object_is_artifact(o_ptr) || object_is_ego(o_ptr) ||
 		    (o_ptr->tval == TV_DRAG_ARMOR) ||
 		    ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM)) ||
 		    ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) ||

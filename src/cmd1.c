@@ -734,7 +734,7 @@ void search(void)
 					if (!chest_traps[o_ptr->pval]) continue;
 
 					/* Identify once */
-					if (!object_known_p(o_ptr))
+					if (!object_is_known(o_ptr))
 					{
 						/* Message */
 #ifdef JP

@@ -363,13 +363,13 @@ static void rd_item_old(object_type *o_ptr)
 			o_ptr->curse_flags |= TRC_CURSED;
 			if (o_ptr->art_flags[2] & 0x40000000L) o_ptr->curse_flags |= TRC_HEAVY_CURSE;
 			if (o_ptr->art_flags[2] & 0x80000000L) o_ptr->curse_flags |= TRC_PERMA_CURSE;
-			if (o_ptr->name1)
+			if (object_is_fixed_artifact(o_ptr))
 			{
 				artifact_type *a_ptr = &a_info[o_ptr->name1];
 				if (a_ptr->gen_flags & (TRG_HEAVY_CURSE)) o_ptr->curse_flags |= TRC_HEAVY_CURSE;
 				if (a_ptr->gen_flags & (TRG_PERMA_CURSE)) o_ptr->curse_flags |= TRC_PERMA_CURSE;
 			}
-			else if (o_ptr->name2)
+			else if (object_is_ego(o_ptr))
 			{
 				ego_item_type *e_ptr = &e_info[o_ptr->name2];
 				if (e_ptr->gen_flags & (TRG_HEAVY_CURSE)) o_ptr->curse_flags |= TRC_HEAVY_CURSE;
@@ -469,7 +469,7 @@ static void rd_item_old(object_type *o_ptr)
 		rd_byte(&o_ptr->xtra3);
 		if (h_older_than(1, 3, 0, 1))
 		{
-			if (item_tester_hook_smith(o_ptr) && o_ptr->xtra3 >= 1+96)
+			if (object_is_smith(o_ptr) && o_ptr->xtra3 >= 1+96)
 				o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
 		}
 
@@ -517,7 +517,7 @@ static void rd_item_old(object_type *o_ptr)
 	}
 
 	/* Paranoia */
-	if (o_ptr->name1)
+	if (object_is_fixed_artifact(o_ptr))
 	{
 		artifact_type *a_ptr;
 
@@ -529,7 +529,7 @@ static void rd_item_old(object_type *o_ptr)
 	}
 
 	/* Paranoia */
-	if (o_ptr->name2)
+	if (object_is_ego(o_ptr))
 	{
 		ego_item_type *e_ptr;
 
@@ -1088,16 +1088,16 @@ static void home_carry(store_type *st_ptr, object_type *o_ptr)
 		if (o_ptr->tval < j_ptr->tval) continue;
 
 		/* Can happen in the home */
-		if (!object_aware_p(o_ptr)) continue;
-		if (!object_aware_p(j_ptr)) break;
+		if (!object_is_aware(o_ptr)) continue;
+		if (!object_is_aware(j_ptr)) break;
 
 		/* Objects sort by increasing sval */
 		if (o_ptr->sval < j_ptr->sval) break;
 		if (o_ptr->sval > j_ptr->sval) continue;
 
 		/* Objects in the home can be unknown */
-		if (!object_known_p(o_ptr)) continue;
-		if (!object_known_p(j_ptr)) break;
+		if (!object_is_known(o_ptr)) continue;
+		if (!object_is_known(j_ptr)) break;
 
 		/*
 		 * Hack:  otherwise identical rods sort by

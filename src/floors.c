@@ -647,7 +647,7 @@ static void update_unique_artifact(s16b cur_floor_id)
 		if (!o_ptr->k_idx) continue;
 
 		/* Memorize location of the artifact */
-		if (artifact_p(o_ptr))
+		if (object_is_fixed_artifact(o_ptr))
 		{
 			a_info[o_ptr->name1].floor_id = cur_floor_id;
 		}
@@ -912,7 +912,7 @@ void leave_floor(void)
 		if (!o_ptr->k_idx) continue;
 
 		/* Delete old memorized location of the artifact */
-		if (artifact_p(o_ptr))
+		if (object_is_fixed_artifact(o_ptr))
 		{
 			a_info[o_ptr->name1].floor_id = 0;
 		}
@@ -1241,7 +1241,7 @@ void change_floor(void)
 				if (!o_ptr->k_idx) continue;
 
 				/* Ignore non-artifact */
-				if (!artifact_p(o_ptr)) continue;
+				if (!object_is_fixed_artifact(o_ptr)) continue;
 
 				/* Appear at a different floor? */
 				if (a_info[o_ptr->name1].floor_id != new_floor_id)

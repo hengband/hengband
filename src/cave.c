@@ -561,7 +561,7 @@ bool cave_valid_bold(int y, int x)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Forbid artifact grids */
-		if ((o_ptr->art_name) || artifact_p(o_ptr)) return (FALSE);
+		if (object_is_artifact(o_ptr)) return (FALSE);
 	}
 
 	/* Accept */
@@ -596,7 +596,7 @@ bool cave_valid_grid(cave_type *c_ptr)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Forbid artifact grids */
-		if ((o_ptr->art_name) || artifact_p(o_ptr)) return (FALSE);
+		if (object_is_artifact(o_ptr)) return (FALSE);
 	}
 
 	/* Accept */

@@ -815,7 +815,7 @@ static void wiz_tweak_item(object_type *o_ptr)
 
 
 	/* Hack -- leave artifacts alone */
-	if (artifact_p(o_ptr) || o_ptr->art_name) return;
+	if (object_is_artifact(o_ptr)) return;
 
 	p = "Enter new 'pval' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->pval);
@@ -857,7 +857,7 @@ static void wiz_reroll_item(object_type *o_ptr)
 
 
 	/* Hack -- leave artifacts alone */
-	if (artifact_p(o_ptr) || o_ptr->art_name) return;
+	if (object_is_artifact(o_ptr)) return;
 
 
 	/* Get local object */
@@ -877,7 +877,7 @@ static void wiz_reroll_item(object_type *o_ptr)
 		if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, FALSE))
 		{
 			/* Preserve wizard-generated artifacts */
-			if (artifact_p(q_ptr))
+			if (object_is_fixed_artifact(q_ptr))
 			{
 				a_info[q_ptr->name1].cur_num = 0;
 				q_ptr->name1 = 0;
@@ -895,7 +895,7 @@ static void wiz_reroll_item(object_type *o_ptr)
 		}
 
 		/* Preserve wizard-generated artifacts */
-		if (artifact_p(q_ptr))
+		if (object_is_fixed_artifact(q_ptr))
 		{
 			a_info[q_ptr->name1].cur_num = 0;
 			q_ptr->name1 = 0;
@@ -945,7 +945,7 @@ static void wiz_reroll_item(object_type *o_ptr)
 				apply_magic(q_ptr, dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
 
 				/* Failed to create artifact; make a random one */
-				if (!artifact_p(q_ptr) && !q_ptr->art_name) create_artifact(q_ptr, FALSE);
+				if (!object_is_artifact(q_ptr)) create_artifact(q_ptr, FALSE);
 				break;
 			}
 		}
@@ -1005,7 +1005,7 @@ static void wiz_statistics(object_type *o_ptr)
 
 
 	/* XXX XXX XXX Mega-Hack -- allow multiple artifacts */
-	if (artifact_p(o_ptr)) a_info[o_ptr->name1].cur_num = 0;
+	if (object_is_fixed_artifact(o_ptr)) a_info[o_ptr->name1].cur_num = 0;
 
 
 	/* Interact */
@@ -1087,7 +1087,7 @@ static void wiz_statistics(object_type *o_ptr)
 
 
 			/* XXX XXX XXX Mega-Hack -- allow multiple artifacts */
-			if (artifact_p(q_ptr)) a_info[q_ptr->name1].cur_num = 0;
+			if (object_is_fixed_artifact(q_ptr)) a_info[q_ptr->name1].cur_num = 0;
 
 
 			/* Test for the same tval and sval. */
@@ -1139,7 +1139,7 @@ static void wiz_statistics(object_type *o_ptr)
 
 
 	/* Hack -- Normally only make a single artifact */
-	if (artifact_p(o_ptr)) a_info[o_ptr->name1].cur_num = 1;
+	if (object_is_fixed_artifact(o_ptr)) a_info[o_ptr->name1].cur_num = 1;
 }
 
 
@@ -1154,7 +1154,7 @@ static void wiz_quantity_item(object_type *o_ptr)
 
 
 	/* Never duplicate artifacts */
-	if (artifact_p(o_ptr) || o_ptr->art_name) return;
+	if (object_is_artifact(o_ptr)) return;
 
 	/* Store old quantity. -LM- */
 	tmp_qnt = o_ptr->number;

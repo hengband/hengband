@@ -112,7 +112,7 @@ void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 		flgs[i] = k_ptr->flags[i];
 
 	/* Artifact */
-	if (o_ptr->name1)
+	if (object_is_fixed_artifact(o_ptr))
 	{
 		artifact_type *a_ptr = &a_info[o_ptr->name1];
 
@@ -121,7 +121,7 @@ void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 	}
 
 	/* Ego-item */
-	if (o_ptr->name2)
+	if (object_is_ego(o_ptr))
 	{
 		ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
@@ -147,7 +147,7 @@ void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] |= o_ptr->art_flags[i];
 
-	if (item_tester_hook_smith(o_ptr))
+	if (object_is_smith(o_ptr))
 	{
 		int add = o_ptr->xtra3 - 1;
 
@@ -220,17 +220,17 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0;
 
-	if (!object_aware_p(o_ptr)) return;
+	if (!object_is_aware(o_ptr)) return;
 
 	/* Base object */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = k_ptr->flags[i];
 
 	/* Must be identified */
-	if (!object_known_p(o_ptr)) return;
+	if (!object_is_known(o_ptr)) return;
 
 	/* Ego-item (known basic flags) */
-	if (o_ptr->name2)
+	if (object_is_ego(o_ptr))
 	{
 		ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
@@ -255,19 +255,19 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 
 #ifdef SPOIL_ARTIFACTS
 	/* Full knowledge for some artifacts */
-	if (artifact_p(o_ptr) || o_ptr->art_name) spoil = TRUE;
+	if (object_is_artifact(o_ptr)) spoil = TRUE;
 #endif /* SPOIL_ARTIFACTS */
 
 #ifdef SPOIL_EGO_ITEMS
 	/* Full knowledge for some ego-items */
-	if (ego_item_p(o_ptr)) spoil = TRUE;
+	if (object_is_ego(o_ptr)) spoil = TRUE;
 #endif /* SPOIL_EGO_ITEMS */
 
 	/* Need full knowledge or spoilers */
 	if (spoil || (o_ptr->ident & IDENT_MENTAL))
 	{
 		/* Artifact */
-		if (o_ptr->name1)
+		if (object_is_fixed_artifact(o_ptr))
 		{
 			artifact_type *a_ptr = &a_info[o_ptr->name1];
 
@@ -280,7 +280,7 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 			flgs[i] |= o_ptr->art_flags[i];
 	}
 
-	if (item_tester_hook_smith(o_ptr))
+	if (object_is_smith(o_ptr))
 	{
 		int add = o_ptr->xtra3 - 1;
 
@@ -357,10 +357,10 @@ if (!(have_flag(flgs, TR_ACTIVATE))) return ("なし");
 	 * for art_name
 	 */
 
-	if (!(o_ptr->name1) &&
-		 !(o_ptr->name2) &&
-		 !(o_ptr->xtra1) &&
-		  (o_ptr->xtra2))
+	if (!object_is_fixed_artifact(o_ptr) &&
+	    !object_is_ego(o_ptr) &&
+	    !(o_ptr->xtra1) &&
+	    (o_ptr->xtra2))
 	{
 		switch (o_ptr->xtra2)
 		{
@@ -1865,7 +1865,7 @@ return "釣りをする : いつでも";
 
 	}
 
-	if (item_tester_hook_smith(o_ptr))
+	if (object_is_smith(o_ptr))
 	{
 		switch (o_ptr->xtra3 - 1)
 		{
@@ -1947,7 +1947,7 @@ return "ショート・テレポート : 10+d10 ターン毎";
 
 	if (o_ptr->tval == TV_RING)
 	{
-		if (o_ptr->name2)
+		if (object_is_ego(o_ptr))
 		{
 			switch (o_ptr->name2)
 			{
@@ -2118,7 +2118,7 @@ return "サンダー・ボール (100) と電撃への耐性 : 50+d50 ターン毎";
 
 	if (o_ptr->tval == TV_AMULET)
 	{
-		if (o_ptr->name2)
+		if (object_is_ego(o_ptr))
 		{
 			switch (o_ptr->name2)
 			{
@@ -2373,7 +2373,7 @@ bool screen_object(object_type *o_ptr, bool real)
 		{ info[i] = &temp[j]; i++;}
 	}
 
-	if (TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END)
+	if (object_is_equipment(o_ptr))
 	{
 		/* Descriptions of a basic equipment is just a flavor */
 		trivial_info = i;
@@ -2543,7 +2543,7 @@ info[i++] = "それは魔法抵抗力を下げる。";
 #endif
 			}
 		}
-		else if (artifact_p(o_ptr))
+		else if (object_is_fixed_artifact(o_ptr))
 		{
 #ifdef JP
 info[i++] = "それは永遠なる明かり(半径 3)を授ける。";
@@ -3566,7 +3566,7 @@ info[i++] = "それは神に祝福されている。";
 
 	}
 
-	if (cursed_p(o_ptr))
+	if (object_is_cursed(o_ptr))
 	{
 		if (o_ptr->curse_flags & TRC_PERMA_CURSE)
 		{

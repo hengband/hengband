@@ -558,8 +558,8 @@ u32b get_curse(int power, object_type *o_ptr)
 		{
 			if (new_curse & TRC_HEAVY_MASK) continue;
 		}
-		if (((o_ptr->tval < TV_WEAPON_BEGIN) || (o_ptr->tval > TV_WEAPON_END)) && (new_curse == TRC_LOW_MELEE)) continue;
-		if (((o_ptr->tval < TV_ARMOR_BEGIN) || (o_ptr->tval > TV_ARMOR_END)) && (new_curse == TRC_LOW_AC)) continue;
+		if (new_curse == TRC_LOW_MELEE && !object_is_weapon(o_ptr)) continue;
+		if (new_curse == TRC_LOW_AC && !object_is_armour(o_ptr)) continue;
 		break;
 	}
 	return new_curse;
@@ -597,7 +597,7 @@ msg_format("%sは呪いを跳ね返した！", o_name,
 	}
 
 	if ((randint1(100) <= heavy_chance) &&
-		(o_ptr->name1 || o_ptr->name2 || o_ptr->art_name))
+	    (object_is_artifact(o_ptr) || object_is_ego(o_ptr)))
 	{
 		if (!(o_ptr->curse_flags & TRC_HEAVY_CURSE))
 			changed = TRUE;
@@ -607,7 +607,7 @@ msg_format("%sは呪いを跳ね返した！", o_name,
 	}
 	else
 	{
-		if (!cursed_p(o_ptr))
+		if (!object_is_cursed(o_ptr))
 			changed = TRUE;
 		o_ptr->curse_flags |= TRC_CURSED;
 	}
@@ -3439,7 +3439,7 @@ msg_format("%^sがテレポートした。", m_name);
 				for (i=INVEN_RARM;i<INVEN_TOTAL;i++)
 				{
 					o_ptr = &inventory[i];
-					if (!cursed_p(o_ptr))
+					if (!object_is_cursed(o_ptr))
 					{
 						object_flags(o_ptr, flgs);
 

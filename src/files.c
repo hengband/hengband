@@ -1711,8 +1711,8 @@ static void display_player_middle(void)
 		o_ptr = &inventory[INVEN_RARM];
 
 		/* Hack -- add in weapon info if known */
-		if (object_known_p(o_ptr)) show_tohit += o_ptr->to_h;
-		if (object_known_p(o_ptr)) show_todam += o_ptr->to_d;
+		if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
+		if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
 
 		/* Melee attacks */
 		sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
@@ -1736,8 +1736,8 @@ static void display_player_middle(void)
 		o_ptr = &inventory[INVEN_LARM];
 
 		/* Hack -- add in weapon info if known */
-		if (object_known_p(o_ptr)) show_tohit += o_ptr->to_h;
-		if (object_known_p(o_ptr)) show_todam += o_ptr->to_d;
+		if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
+		if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
 
 		/* Melee attacks */
 		sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
@@ -1780,8 +1780,8 @@ static void display_player_middle(void)
 	show_todam = 0;
 
 	/* Apply weapon bonuses */
-	if (object_known_p(o_ptr)) show_tohit += o_ptr->to_h;
-	if (object_known_p(o_ptr)) show_todam += o_ptr->to_d;
+	if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
+	if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
 
 	if ((o_ptr->sval == SV_LIGHT_XBOW) || (o_ptr->sval == SV_HEAVY_XBOW))
 		show_tohit += p_ptr->weapon_exp[0][o_ptr->sval] / 400;
@@ -2155,7 +2155,7 @@ static void display_player_various(void)
 			/* Average damage per round */
 			if (o_ptr->k_idx)
 			{
-				if (object_known_p(o_ptr)) damage[i] += o_ptr->to_d * 100;
+				if (object_is_known(o_ptr)) damage[i] += o_ptr->to_d * 100;
 				basedam = ((o_ptr->dd + p_ptr->to_dd[i]) * (o_ptr->ds + p_ptr->to_ds[i] + 1)) * 50;
 				object_flags_known(o_ptr, flgs);
 				if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))

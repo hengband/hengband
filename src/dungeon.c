@@ -24,30 +24,30 @@ static int wild_regen = 20;
 static byte value_check_aux1(object_type *o_ptr)
 {
 	/* Artifacts */
-	if (artifact_p(o_ptr) || o_ptr->art_name)
+	if (object_is_artifact(o_ptr))
 	{
 		/* Cursed/Broken */
-		if (cursed_p(o_ptr) || broken_p(o_ptr)) return FEEL_TERRIBLE;
+		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) return FEEL_TERRIBLE;
 
 		/* Normal */
 		return FEEL_SPECIAL;
 	}
 
 	/* Ego-Items */
-	if (ego_item_p(o_ptr))
+	if (object_is_ego(o_ptr))
 	{
 		/* Cursed/Broken */
-		if (cursed_p(o_ptr) || broken_p(o_ptr)) return FEEL_WORTHLESS;
+		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) return FEEL_WORTHLESS;
 
 		/* Normal */
 		return FEEL_EXCELLENT;
 	}
 
 	/* Cursed items */
-	if (cursed_p(o_ptr)) return FEEL_CURSED;
+	if (object_is_cursed(o_ptr)) return FEEL_CURSED;
 
 	/* Broken items */
-	if (broken_p(o_ptr)) return FEEL_BROKEN;
+	if (object_is_broken(o_ptr)) return FEEL_BROKEN;
 
 	if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET)) return FEEL_AVERAGE;
 
@@ -68,16 +68,16 @@ static byte value_check_aux1(object_type *o_ptr)
 static byte value_check_aux2(object_type *o_ptr)
 {
 	/* Cursed items (all of them) */
-	if (cursed_p(o_ptr)) return FEEL_CURSED;
+	if (object_is_cursed(o_ptr)) return FEEL_CURSED;
 
 	/* Broken items (all of them) */
-	if (broken_p(o_ptr)) return FEEL_BROKEN;
+	if (object_is_broken(o_ptr)) return FEEL_BROKEN;
 
 	/* Artifacts -- except cursed/broken ones */
-	if (artifact_p(o_ptr) || o_ptr->art_name) return FEEL_UNCURSED;
+	if (object_is_artifact(o_ptr)) return FEEL_UNCURSED;
 
 	/* Ego-Items -- except cursed/broken ones */
-	if (ego_item_p(o_ptr)) return FEEL_UNCURSED;
+	if (object_is_ego(o_ptr)) return FEEL_UNCURSED;
 
 	/* Good armor bonus */
 	if (o_ptr->to_a > 0) return FEEL_UNCURSED;
@@ -101,7 +101,7 @@ static void sense_inventory_aux(int slot, bool heavy)
 	if (o_ptr->ident & (IDENT_SENSE))return;
 
 	/* It is fully known, no information needed */
-	if (object_known_p(o_ptr)) return;
+	if (object_is_known(o_ptr)) return;
 
 	/* Check for a feeling */
 	feel = (heavy ? value_check_aux1(o_ptr) : value_check_aux2(o_ptr));
@@ -1581,7 +1581,7 @@ s = "調べるアイテムがありません。";
 	}
 
 	/* It is fully known, no information needed */
-	if (object_known_p(o_ptr))
+	if (object_is_known(o_ptr))
 	{
 #ifdef JP
 msg_print("何も新しいことは判らなかった。");
@@ -2632,7 +2632,7 @@ static void process_world_aux_light(void)
 	if (o_ptr->tval == TV_LITE)
 	{
 		/* Hack -- Use some fuel (except on artifacts) */
-		if (!(artifact_p(o_ptr) || o_ptr->sval == SV_LITE_FEANOR) && (o_ptr->xtra4 > 0))
+		if (!(object_is_fixed_artifact(o_ptr) || o_ptr->sval == SV_LITE_FEANOR) && (o_ptr->xtra4 > 0))
 		{
 			/* Decrease life-span */
 			if (o_ptr->name2 == EGO_LITE_LONG)
@@ -2922,7 +2922,7 @@ static void process_world_aux_mutation(void)
 		if (o_ptr->tval == TV_LITE)
 		{
 			/* Use some fuel (except on artifacts) */
-			if (!artifact_p(o_ptr) && (o_ptr->xtra4 > 0))
+			if (!object_is_fixed_artifact(o_ptr) && (o_ptr->xtra4 > 0))
 			{
 				/* Heal the player a bit */
 				hp_player(o_ptr->xtra4 / 20);
@@ -3266,7 +3266,7 @@ static void process_world_aux_mutation(void)
 				o_ptr = &inventory[INVEN_LARM];
 				slot = INVEN_LARM;
 			}
-			if (!cursed_p(o_ptr))
+			if (!object_is_cursed(o_ptr))
 			{
 #ifdef JP
 				msg_print("武器を落してしまった！");
@@ -3539,13 +3539,13 @@ static void process_world_aux_curse(void)
 		if (o_ptr->name1 == ART_JUDGE)
 		{
 #ifdef JP
-			if (object_known_p(o_ptr))
+			if (object_is_known(o_ptr))
 				msg_print("『審判の宝石』はあなたの体力を吸収した！");
 			else
 				msg_print("なにかがあなたの体力を吸収した！");
 			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "審判の宝石", -1);
 #else
-			if (object_known_p(o_ptr))
+			if (object_is_known(o_ptr))
 				msg_print("The Jewel of Judgement drains life from you!");
 			else
 				msg_print("Something drains life from you!");

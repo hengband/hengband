@@ -2834,7 +2834,7 @@ static void calc_torch(void)
 			}
 
 			/* Artifact Lites provide permanent, bright, lite */
-			else if (artifact_p(o_ptr))
+			else if (object_is_fixed_artifact(o_ptr))
 			{
 				p_ptr->cur_lite += 3;
 			}
@@ -3877,7 +3877,7 @@ void calc_bonuses(void)
 
 		if (have_flag(flgs, TR_TELEPORT))
 		{
-			if (cursed_p(o_ptr)) p_ptr->cursed |= TRC_TELEPORT;
+			if (object_is_cursed(o_ptr)) p_ptr->cursed |= TRC_TELEPORT;
 			else
 			{
 				cptr insc = quark_str(o_ptr->inscription);
@@ -3967,7 +3967,7 @@ void calc_bonuses(void)
 		p_ptr->to_a += o_ptr->to_a;
 
 		/* Apply the mental bonuses to armor class, if known */
-		if (object_known_p(o_ptr)) p_ptr->dis_to_a += o_ptr->to_a;
+		if (object_is_known(o_ptr)) p_ptr->dis_to_a += o_ptr->to_a;
 
 		if (o_ptr->curse_flags & TRC_LOW_MELEE)
 		{
@@ -4038,7 +4038,7 @@ void calc_bonuses(void)
 		p_ptr->to_d_m += bonus_to_d;
 
 		/* Apply the mental bonuses tp hit/damage, if known */
-		if (object_known_p(o_ptr)) p_ptr->dis_to_h_b += bonus_to_h;
+		if (object_is_known(o_ptr)) p_ptr->dis_to_h_b += bonus_to_h;
 
 		/* To Melee */
 		if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !p_ptr->ryoute)
@@ -4048,7 +4048,7 @@ void calc_bonuses(void)
 			p_ptr->to_d[i-INVEN_RIGHT] += bonus_to_d;
 
 			/* Apply the mental bonuses tp hit/damage, if known */
-			if (object_known_p(o_ptr))
+			if (object_is_known(o_ptr))
 			{
 				p_ptr->dis_to_h[i-INVEN_RIGHT] += bonus_to_h;
 				p_ptr->dis_to_d[i-INVEN_RIGHT] += bonus_to_d;
@@ -4063,7 +4063,7 @@ void calc_bonuses(void)
 			p_ptr->to_d[1] += (bonus_to_d > 0) ? bonus_to_d/2 : bonus_to_d;
 
 			/* Apply the mental bonuses tp hit/damage, if known */
-			if (object_known_p(o_ptr))
+			if (object_is_known(o_ptr))
 			{
 				p_ptr->dis_to_h[0] += (bonus_to_h > 0) ? (bonus_to_h+1)/2 : bonus_to_h;
 				p_ptr->dis_to_h[1] += (bonus_to_h > 0) ? bonus_to_h/2 : bonus_to_h;
@@ -4078,7 +4078,7 @@ void calc_bonuses(void)
 			p_ptr->to_d[0] += bonus_to_d;
 
 			/* Apply the mental bonuses to hit/damage, if known */
-			if (object_known_p(o_ptr))
+			if (object_is_known(o_ptr))
 			{
 				p_ptr->dis_to_h[0] += bonus_to_h;
 				p_ptr->dis_to_d[0] += bonus_to_d;

@@ -5628,20 +5628,20 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, by
 	if (o_ptr->tval != tval) return;
 
 	/* Identified items only */
-	if (!object_known_p(o_ptr)) return;
+	if (!object_is_known(o_ptr)) return;
 
 	/*
 	 * HACK:Ring of Lordly protection and Dragon equipment
 	 * have random resistances.
 	 */
-	if (((TV_WEARABLE_BEGIN <= tval) && (tval <= TV_WEARABLE_END) && o_ptr->name2)
+	if ((object_is_wearable(o_ptr) && object_is_ego(o_ptr))
 	    || ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
 	    || ((tval == TV_RING) && (o_ptr->sval == SV_RING_LORDLY))
 	    || ((tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
 	    || ((tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
 	    || ((tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
 	    || ((tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE))
-	    || o_ptr->art_name || o_ptr->name1)
+	    || object_is_artifact(o_ptr))
 	{
 		int i = 0;
 		object_desc(o_name, o_ptr, OD_NAME_ONLY);
@@ -6328,10 +6328,10 @@ static void do_cmd_knowledge_artifacts(void)
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Ignore non-artifacts */
-				if (!artifact_p(o_ptr)) continue;
+				if (!object_is_fixed_artifact(o_ptr)) continue;
 
 				/* Ignore known items */
-				if (object_known_p(o_ptr)) continue;
+				if (object_is_known(o_ptr)) continue;
 
 				/* Note the artifact */
 				okay[o_ptr->name1] = FALSE;
@@ -6348,10 +6348,10 @@ static void do_cmd_knowledge_artifacts(void)
 		if (!o_ptr->k_idx) continue;
 
 		/* Ignore non-artifacts */
-		if (!artifact_p(o_ptr)) continue;
+		if (!object_is_fixed_artifact(o_ptr)) continue;
 
 		/* Ignore known items */
-		if (object_known_p(o_ptr)) continue;
+		if (object_is_known(o_ptr)) continue;
 
 		/* Note the artifact */
 		okay[o_ptr->name1] = FALSE;

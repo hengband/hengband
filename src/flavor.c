@@ -1414,7 +1414,7 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 		for (j = 0; j < TR_FLAG_SIZE; j++)
 			flgs[j] &= ~k_ptr->flags[j];
 
-		if (o_ptr->name1)
+		if (object_is_fixed_artifact(o_ptr))
 		{
 			artifact_type *a_ptr = &a_info[o_ptr->name1];
 					
@@ -1422,7 +1422,7 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 				flgs[j] &= ~a_ptr->flags[j];
 		}
 
-		if (o_ptr->name2)
+		if (object_is_ego(o_ptr))
 		{
 			ego_item_type *e_ptr = &e_info[o_ptr->name2];
 					
@@ -1695,10 +1695,10 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	object_flags(o_ptr, flgs);
 
 	/* See if the object is "aware" */
-	if (object_aware_p(o_ptr)) aware = TRUE;
+	if (object_is_aware(o_ptr)) aware = TRUE;
 
 	/* See if the object is "known" */
-	if (object_known_p(o_ptr)) known = TRUE;
+	if (object_is_known(o_ptr)) known = TRUE;
 
 	/* Allow flavors to be hidden when aware */
 	if (aware && ((mode & OD_NO_FLAVOR) || plain_descriptions)) flavor = FALSE;
@@ -1858,7 +1858,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			/* Known artifacts */
 			if (aware)
 			{
-				if (artifact_p(o_ptr)) break;
+				if (object_is_fixed_artifact(o_ptr)) break;
 				if (k_ptr->gen_flags & TRG_INSTA_ART) break;
 			}
 
@@ -1884,7 +1884,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			/* Known artifacts */
 			if (aware)
 			{
-				if (artifact_p(o_ptr)) break;
+				if (object_is_fixed_artifact(o_ptr)) break;
 				if (k_ptr->gen_flags & TRG_INSTA_ART) break;
 			}
 
@@ -2247,7 +2247,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	 */
 	if (known)
 	{
-		if (artifact_p(o_ptr)) t = object_desc_str(t, "↙");
+		if (object_is_fixed_artifact(o_ptr)) t = object_desc_str(t, "↙");
 		else if (o_ptr->art_name) t = object_desc_str(t, "↗");
 	}
 
@@ -2279,7 +2279,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		}
 
 		/* Hack -- The only one of its kind */
-		else if (known && (artifact_p(o_ptr) || o_ptr->art_name))
+		else if (known && object_is_artifact(o_ptr))
 		{
 			t = object_desc_str(t, "The ");
 		}
@@ -2346,7 +2346,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		}
 
 		/* Hack -- The only one of its kind */
-		else if (known && (artifact_p(o_ptr) || o_ptr->art_name))
+		else if (known && object_is_artifact(o_ptr))
 		{
 			t = object_desc_str(t, "The ");
 		}
@@ -2363,7 +2363,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	/* while (*s == '~') s++; */
 
 #ifdef JP
-	if (item_tester_hook_smith(o_ptr))
+	if (object_is_smith(o_ptr))
 	{
 		t = object_desc_str(t, format("藤殀閣%s及", player_name));
 	}
@@ -2397,7 +2397,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			}
 		}
 		/* 抩及丐月失奶氾丞 */
-		else if (o_ptr->name2)
+		else if (object_is_ego(o_ptr))
 		{
 			ego_item_type *e_ptr = &e_info[o_ptr->name2];
 			t = object_desc_str(t, e_name + e_ptr->name);
@@ -2480,7 +2480,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 				t = object_desc_str(t, "≧");
 			}
 		}
-		else if (o_ptr->name1)
+		else if (object_is_fixed_artifact(o_ptr))
 		{
 			artifact_type *a_ptr = &a_info[o_ptr->name1];
 			if (strncmp(a_name + a_ptr->name, "≦", 2) == 0)
@@ -2515,7 +2515,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		}
 	}
 #else
-	if (item_tester_hook_smith(o_ptr))
+	if (object_is_smith(o_ptr))
 	{
 		t = object_desc_str(t,format(" of %s the Smith",player_name));
 	}
@@ -2531,7 +2531,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		}
 
 		/* Grab any artifact name */
-		else if (o_ptr->name1)
+		else if (object_is_fixed_artifact(o_ptr))
 		{
 			artifact_type *a_ptr = &a_info[o_ptr->name1];
 
@@ -2542,7 +2542,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		/* Grab any ego-item name */
 		else
 		{
-			if (o_ptr->name2)
+			if (object_is_ego(o_ptr))
 			{
 				ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
@@ -2715,7 +2715,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	if (have_flag(flgs, TR_SHOW_MODS)) show_weapon = TRUE;
 
 	/* Display the item like a weapon */
-	if (item_tester_hook_smith(o_ptr) && (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+	if (object_is_smith(o_ptr) && (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
 		show_weapon = TRUE;
 
 	/* Display the item like a weapon */
@@ -2813,7 +2813,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		s16b energy_fire = bow_energy(bow_ptr->sval);
 
 		/* See if the bow is "known" - then set damage bonus */
-		if (object_known_p(bow_ptr)) avgdam += (bow_ptr->to_d * 10);
+		if (object_is_known(bow_ptr)) avgdam += (bow_ptr->to_d * 10);
 
 		/* Effect of ammo */
 		if (known) avgdam += (o_ptr->to_d * 10);
@@ -3057,7 +3057,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		}
 
 		/* Hack -- Process Lanterns/Torches */
-		if ((o_ptr->tval == TV_LITE) && (!(artifact_p(o_ptr) || (o_ptr->sval == SV_LITE_FEANOR))))
+		if ((o_ptr->tval == TV_LITE) && (!(object_is_fixed_artifact(o_ptr) || (o_ptr->sval == SV_LITE_FEANOR))))
 		{
 			/* Hack -- Turns of light for normal lites */
 #ifdef JP
@@ -3138,7 +3138,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	}
 
 	/* Note "cursed" if the item is known to be cursed */
-	else if (cursed_p(o_ptr) && (known || (o_ptr->ident & IDENT_SENSE)))
+	else if (object_is_cursed(o_ptr) && (known || (o_ptr->ident & IDENT_SENSE)))
 	{
 #ifdef JP
 		strcpy(fake_insc_buf, "熱歹木化中月");
@@ -3171,7 +3171,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	}
 
 	/* Note "tried" if the object has been tested unsuccessfully */
-	else if (!aware && object_tried_p(o_ptr))
+	else if (!aware && object_is_tried(o_ptr))
 	{
 #ifdef JP
 		strcpy(fake_insc_buf, "怳�諒�");

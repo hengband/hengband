@@ -339,7 +339,7 @@ s = "魔力を取り込めるアイテムがない。";
 	}
 
 
-	if (!object_known_p(o_ptr))
+	if (!object_is_known(o_ptr))
 	{
 #ifdef JP
 		msg_print("鑑定されていないと取り込めない。");

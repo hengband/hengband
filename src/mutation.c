@@ -3561,7 +3561,7 @@ bool mutation_power_aux(u32b power)
 					object_type *o_ptr = &inventory[i];
 
 					if (!o_ptr->k_idx) continue;
-					if (!cursed_p(o_ptr)) continue;
+					if (!object_is_cursed(o_ptr)) continue;
 
 					o_ptr->feeling = FEEL_CURSED;
 				}

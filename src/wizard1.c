@@ -1201,7 +1201,7 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 	/*
 	 * Artifact lights -- large radius light.
 	 */
-	if ((o_ptr->tval == TV_LITE) && artifact_p(o_ptr))
+	if ((o_ptr->tval == TV_LITE) && object_is_fixed_artifact(o_ptr))
 	{
 #ifdef JP
 		*misc_list++ = "±Êµ×¸÷¸»(È¾·Â3)";
@@ -1228,7 +1228,7 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 	 * being "lightly cursed".
 	 */
 
-/*	if (cursed_p(o_ptr)) */
+/*	if (object_is_cursed(o_ptr)) */
 	{
 		if (have_flag(flgs, TR_TY_CURSE))
 		{
@@ -2552,7 +2552,7 @@ static void spoil_random_artifact_aux(object_type *o_ptr, int i)
 {
 	obj_desc_list artifact;
 
-	if (!object_known_p(o_ptr) || !o_ptr->art_name
+	if (!object_is_known(o_ptr) || !o_ptr->art_name
 		|| o_ptr->tval != group_artifact[i].tval)
 		return;
 

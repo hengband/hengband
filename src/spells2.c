@@ -3828,9 +3828,8 @@ bool detect_objects_magic(int range)
 		tv = o_ptr->tval;
 
 		/* Artifacts, misc magic items, or enchanted wearables */
-		if (artifact_p(o_ptr) ||
-			ego_item_p(o_ptr) ||
-			o_ptr->art_name ||
+		if (object_is_artifact(o_ptr) ||
+			object_is_ego(o_ptr) ||
 		    (tv == TV_WHISTLE) ||
 		    (tv == TV_AMULET) ||
 			(tv == TV_RING) ||
@@ -5324,7 +5323,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 					next_o_idx = o_ptr->next_o_idx;
 
 					/* Hack -- Preserve unknown artifacts */
-					if (artifact_p(o_ptr) && (!object_known_p(o_ptr) || in_generate))
+					if (object_is_fixed_artifact(o_ptr) && (!object_is_known(o_ptr) || in_generate))
 					{
 						/* Mega-Hack -- Preserve the artifact */
 						a_info[o_ptr->name1].cur_num = 0;

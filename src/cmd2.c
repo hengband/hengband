@@ -1018,7 +1018,7 @@ static int count_chests(int *y, int *x, bool trapped)
 		if (o_ptr->pval == 0) continue;
 
 		/* No (known) traps here */
-		if (trapped && (!object_known_p(o_ptr) ||
+		if (trapped && (!object_is_known(o_ptr) ||
 			!chest_traps[o_ptr->pval])) continue;
 
 		/* OK */
@@ -1908,7 +1908,7 @@ static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
 	if (j < 2) j = 2;
 
 	/* Must find the trap first. */
-	if (!object_known_p(o_ptr))
+	if (!object_is_known(o_ptr))
 	{
 #ifdef JP
 		msg_print("トラップが見あたらない。");
@@ -3666,7 +3666,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 				else
 				{
 					/* STICK TO */
-					if (q_ptr->name1)
+					if (object_is_fixed_artifact(q_ptr))
 					{
 						char m_name[80];
 
@@ -3733,7 +3733,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 #else
 		    msg_format("The %s have gone to somewhere.", o_name);
 #endif
-		    if (q_ptr->name1)
+		    if (object_is_fixed_artifact(q_ptr))
 		      {
 			a_info[j_ptr->name1].cur_num = 0;
 		      }
@@ -3936,7 +3936,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 
 
 	/* Item is cursed */
-	if (cursed_p(o_ptr) && (item >= INVEN_RARM))
+	if (object_is_cursed(o_ptr) && (item >= INVEN_RARM))
 	{
 		/* Oops */
 #ifdef JP
@@ -4277,14 +4277,14 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		j = 100;
 
 		if (!(summon_named_creature(0, y, x, q_ptr->pval,
-					    !(cursed_p(q_ptr)) ? PM_FORCE_PET : 0L)))
+					    !(object_is_cursed(q_ptr)) ? PM_FORCE_PET : 0L)))
 #ifdef JP
 msg_print("人形は捻じ曲がり砕け散ってしまった！");
 #else
 			msg_print("The Figurine writhes and then shatters.");
 #endif
 
-		else if (cursed_p(q_ptr))
+		else if (object_is_cursed(q_ptr))
 #ifdef JP
 msg_print("これはあまり良くない気がする。");
 #else

@@ -991,7 +991,6 @@ extern void reorder_pack(void);
 extern void display_koff(int k_idx);
 extern object_type *choose_warning_item(void);
 extern bool process_warning(int xx, int yy);
-extern bool item_tester_hook_smith(object_type *o_ptr);
 extern void do_cmd_kaji(bool only_browse);
 
 /* racial.c */
@@ -1150,9 +1149,6 @@ extern void identify_pack(void);
 extern bool remove_curse(void);
 extern bool remove_all_curse(void);
 extern bool alchemy(void);
-extern bool item_tester_hook_weapon(object_type *o_ptr);
-extern bool item_tester_hook_armour(object_type *o_ptr);
-extern bool item_tester_hook_weapon_armour(object_type *o_ptr);
 extern bool enchant(object_type *o_ptr, int n, int eflag);
 extern bool enchant_spell(int num_hit, int num_dam, int num_ac);
 extern bool artifact_scroll(void);
@@ -1561,6 +1557,23 @@ extern bool easy_floor;
 /* obj_kind.c */
 extern bool object_is_potion(object_type *o_ptr);
 extern bool object_is_shoukinkubi(object_type *o_ptr);
+extern bool object_is_favorite(object_type *o_ptr);
+extern bool object_is_rare(object_type *o_ptr);
+extern bool object_is_weapon(object_type *o_ptr);
+extern bool object_is_weapon_ammo(object_type *o_ptr);
+extern bool object_is_ammo(object_type *o_ptr);
+extern bool object_is_armour(object_type *o_ptr);
+extern bool object_is_weapon_armour_ammo(object_type *o_ptr);
+extern bool object_is_weapon_armour_ammo(object_type *o_ptr);
+extern bool object_is_melee_weapon(object_type *o_ptr);
+extern bool object_is_wearable(object_type *o_ptr);
+extern bool object_is_equipment(object_type *o_ptr);
+extern bool object_refuse_enchant_weapon(object_type *o_ptr);
+extern bool object_allow_enchant_weapon(object_type *o_ptr);
+extern bool object_allow_enchant_melee_weapon(object_type *o_ptr);
+extern bool object_is_smith(object_type *o_ptr);
+extern bool object_is_artifact(object_type *o_ptr);
+extern bool object_is_nameless(object_type *o_ptr);
 
 /* wild.c */
 extern void set_floor_and_wall(byte type);

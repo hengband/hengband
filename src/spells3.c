@@ -939,7 +939,7 @@ bool apply_disenchant(int mode)
 	if (!o_ptr->k_idx) return (FALSE);
 
 	/* Disenchant equipments only -- No disenchant on monster ball */
-	if (o_ptr->tval < TV_EQUIP_BEGIN || TV_EQUIP_END < o_ptr->tval)
+	if (!object_is_weapon_armour_ammo(o_ptr))
 		return FALSE;
 
 	/* Nothing to disenchant */
@@ -955,7 +955,7 @@ bool apply_disenchant(int mode)
 
 
 	/* Artifacts have 71% chance to resist */
-	if ((artifact_p(o_ptr) || o_ptr->art_name) && (randint0(100) < 71))
+	if (object_is_artifact(o_ptr) && (randint0(100) < 71))
 	{
 		/* Message */
 #ifdef JP
@@ -1186,25 +1186,6 @@ msg_print("照明用アイテムは満タンになった。");
 }
 
 
-static bool item_tester_hook_weapon_nobow(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_HAFTED:
-		case TV_POLEARM:
-		case TV_DIGGING:
-		{
-			return (TRUE);
-		}
-		case TV_SWORD:
-		{
-			if (o_ptr->sval != SV_DOKUBARI) return (TRUE);
-		}
-	}
-
-	return (FALSE);
-}
-
 /*
  * Brand the current weapon
  */
@@ -1216,7 +1197,7 @@ void brand_weapon(int brand_type)
 
 
 	/* Assume enchant weapon */
-	item_tester_hook = item_tester_hook_weapon_nobow;
+	item_tester_hook = object_allow_enchant_melee_weapon;
 	item_tester_no_ryoute = TRUE;
 
 	/* Get an item */
@@ -1246,8 +1227,8 @@ s = "強化できる武器がない。";
 	/* you can never modify artifacts / ego-items */
 	/* you can never modify cursed items */
 	/* TY: You _can_ modify broken items (if you're silly enough) */
-	if (o_ptr->k_idx && !artifact_p(o_ptr) && !ego_item_p(o_ptr) &&
-	    !o_ptr->art_name && !cursed_p(o_ptr) &&
+	if (o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr) &&
+	    !object_is_cursed(o_ptr) &&
 	    !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) &&
 	    !((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) &&
 	    !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE)))
@@ -2051,7 +2032,7 @@ static int remove_curse_aux(int all)
 		if (!o_ptr->k_idx) continue;
 
 		/* Uncursed already */
-		if (!cursed_p(o_ptr)) continue;
+		if (!object_is_cursed(o_ptr)) continue;
 
 		/* Heavily Cursed Items need a special spell */
 		if (!all && (o_ptr->curse_flags & TRC_HEAVY_CURSE)) continue;
@@ -2249,153 +2230,12 @@ msg_format("%sを＄%d の金に変えた。", o_name, price);
 }
 
 
-
-/*
- * Hook to specify "weapon"
- */
-bool item_tester_hook_weapon(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_HAFTED:
-		case TV_POLEARM:
-		case TV_DIGGING:
-		case TV_BOW:
-		case TV_BOLT:
-		case TV_ARROW:
-		case TV_SHOT:
-		{
-			return (TRUE);
-		}
-		case TV_SWORD:
-		{
-			if (o_ptr->sval != SV_DOKUBARI) return (TRUE);
-		}
-	}
-
-	return (FALSE);
-}
-
-static bool item_tester_hook_weapon2(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_SWORD:
-		case TV_HAFTED:
-		case TV_POLEARM:
-		case TV_DIGGING:
-		case TV_BOW:
-		case TV_BOLT:
-		case TV_ARROW:
-		case TV_SHOT:
-		{
-			return (TRUE);
-		}
-	}
-
-	return (FALSE);
-}
-
-
-/*
- * Hook to specify "armour"
- */
-bool item_tester_hook_armour(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_DRAG_ARMOR:
-		case TV_HARD_ARMOR:
-		case TV_SOFT_ARMOR:
-		case TV_SHIELD:
-		case TV_CLOAK:
-		case TV_CROWN:
-		case TV_HELM:
-		case TV_BOOTS:
-		case TV_GLOVES:
-		{
-			return (TRUE);
-		}
-	}
-
-	return (FALSE);
-}
-
-
-/*
- * Check if an object is weapon or armour (but not arrow, bolt, or shot)
- */
-bool item_tester_hook_weapon_armour(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_SWORD:
-		case TV_HAFTED:
-		case TV_POLEARM:
-		case TV_DIGGING:
-		case TV_BOW:
-		case TV_BOLT:
-		case TV_ARROW:
-		case TV_SHOT:
-		case TV_DRAG_ARMOR:
-		case TV_HARD_ARMOR:
-		case TV_SOFT_ARMOR:
-		case TV_SHIELD:
-		case TV_CLOAK:
-		case TV_CROWN:
-		case TV_HELM:
-		case TV_BOOTS:
-		case TV_GLOVES:
-		{
-			return (TRUE);
-		}
-	}
-
-	return (FALSE);
-}
-
-
-/*
- * Check if an object is nameless weapon or armour
- */
-static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_SWORD:
-		case TV_HAFTED:
-		case TV_POLEARM:
-		case TV_DIGGING:
-		case TV_BOW:
-		case TV_BOLT:
-		case TV_ARROW:
-		case TV_SHOT:
-		case TV_DRAG_ARMOR:
-		case TV_HARD_ARMOR:
-		case TV_SOFT_ARMOR:
-		case TV_SHIELD:
-		case TV_CLOAK:
-		case TV_CROWN:
-		case TV_HELM:
-		case TV_BOOTS:
-		case TV_GLOVES:
-			if (o_ptr->name1 || o_ptr->art_name || o_ptr->name2 || o_ptr->xtra3)
-			{
-				if (object_known_p(o_ptr)) return FALSE;
-			}
-			return TRUE;
-	}
-
-	return FALSE;
-}
-
-
 /*
  * Break the curse of an item
  */
 static void break_curse(object_type *o_ptr)
 {
-	if (cursed_p(o_ptr) && !(o_ptr->curse_flags & TRC_PERMA_CURSE) && !(o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint0(100) < 25))
+	if (object_is_cursed(o_ptr) && !(o_ptr->curse_flags & TRC_PERMA_CURSE) && !(o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint0(100) < 25))
 	{
 #ifdef JP
 msg_print("かけられていた呪いが打ち破られた！");
@@ -2431,7 +2271,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 {
 	int     i, chance, prob;
 	bool    res = FALSE;
-	bool    a = (artifact_p(o_ptr) || o_ptr->art_name);
+	bool    a = object_is_artifact(o_ptr);
 	bool    force = (eflag & ENCH_FORCE);
 
 
@@ -2542,11 +2382,11 @@ bool enchant_spell(int num_hit, int num_dam, int num_ac)
 
 
 	/* Assume enchant weapon */
-	item_tester_hook = item_tester_hook_weapon;
+	item_tester_hook = object_allow_enchant_weapon;
 	item_tester_no_ryoute = TRUE;
 
 	/* Enchant armor if requested */
-	if (num_ac) item_tester_hook = item_tester_hook_armour;
+	if (num_ac) item_tester_hook = object_is_armour;
 
 	/* Get an item */
 #ifdef JP
@@ -2616,6 +2456,22 @@ msg_print("強化に失敗した。");
 }
 
 
+/*
+ * Check if an object is nameless weapon or armour
+ */
+static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
+{
+	/* Require weapon or armour */
+	if (!object_is_weapon_armour_ammo(o_ptr)) return FALSE;
+	
+	/* Require nameless object if the object is well known */
+	if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
+		return FALSE;
+
+	return TRUE;
+}
+
+
 bool artifact_scroll(void)
 {
 	int             item;
@@ -2626,6 +2482,7 @@ bool artifact_scroll(void)
 
 
 	item_tester_no_ryoute = TRUE;
+
 	/* Enchant weapon/armour */
 	item_tester_hook = item_tester_hook_nameless_weapon_armour;
 
@@ -2665,7 +2522,7 @@ bool artifact_scroll(void)
 		  ((o_ptr->number > 1) ? "" : "s"));
 #endif
 
-	if (o_ptr->name1 || o_ptr->art_name)
+	if (object_is_artifact(o_ptr))
 	{
 #ifdef JP
 		msg_format("%sは既に伝説のアイテムです！", o_name  );
@@ -2678,7 +2535,7 @@ bool artifact_scroll(void)
 		okay = FALSE;
 	}
 
-	else if (o_ptr->name2)
+	else if (object_is_ego(o_ptr))
 	{
 #ifdef JP
 		msg_format("%sは既に名のあるアイテムです！", o_name );
@@ -2767,7 +2624,7 @@ bool identify_item(object_type *o_ptr)
 
 	if (!(o_ptr->ident & (IDENT_MENTAL)))
 	{
-		if ((o_ptr->art_name) || (artifact_p(o_ptr)) || one_in_(5))
+		if (object_is_artifact(o_ptr) || one_in_(5))
 			chg_virtue(V_KNOWLEDGE, 1);
 	}
 
@@ -2790,7 +2647,7 @@ bool identify_item(object_type *o_ptr)
 	/* Description */
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 
-	if(record_fix_art && !old_known && artifact_p(o_ptr))
+	if(record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
 		do_cmd_write_nikki(NIKKI_ART, 0, o_name);
 	if(record_rand_art && !old_known && o_ptr->art_name)
 		do_cmd_write_nikki(NIKKI_ART, 0, o_name);
@@ -2801,14 +2658,14 @@ bool identify_item(object_type *o_ptr)
 
 static bool item_tester_hook_identify(object_type *o_ptr)
 {
-	return (bool)!object_known_p(o_ptr);
+	return (bool)!object_is_known(o_ptr);
 }
 
 static bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
 {
-	if (object_known_p(o_ptr))
+	if (object_is_known(o_ptr))
 		return FALSE;
-	return item_tester_hook_weapon_armour(o_ptr);
+	return object_is_weapon_armour_ammo(o_ptr);
 }
 
 /*
@@ -2835,7 +2692,7 @@ bool ident_spell(bool only_equip)
 	{
 		if (only_equip)
 		{
-			item_tester_hook = item_tester_hook_weapon_armour;
+			item_tester_hook = object_is_weapon_armour_ammo;
 		}
 		else
 		{
@@ -2917,7 +2774,7 @@ bool mundane_spell(bool only_equip)
 	object_type     *o_ptr;
 	cptr            q, s;
 
-	if (only_equip) item_tester_hook = item_tester_hook_weapon_armour;
+	if (only_equip) item_tester_hook = object_is_weapon_armour_ammo;
 	item_tester_no_ryoute = TRUE;
 
 	/* Get an item */
@@ -2977,14 +2834,14 @@ s = "使えるものがありません。";
 
 static bool item_tester_hook_identify_fully(object_type *o_ptr)
 {
-	return (bool)(!object_known_p(o_ptr) || !(o_ptr->ident & IDENT_MENTAL));
+	return (bool)(!object_is_known(o_ptr) || !(o_ptr->ident & IDENT_MENTAL));
 }
 
 static bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
 {
 	if (!item_tester_hook_identify_fully(o_ptr))
 		return FALSE;
-	return item_tester_hook_weapon_armour(o_ptr);
+	return object_is_weapon_armour_ammo(o_ptr);
 }
 
 /*
@@ -3008,7 +2865,7 @@ bool identify_fully(bool only_equip)
 	if (!can_get_item())
 	{
 		if (only_equip)
-			item_tester_hook = item_tester_hook_weapon_armour;
+			item_tester_hook = object_is_weapon_armour_ammo;
 		else
 			item_tester_hook = NULL;
 	}
@@ -3266,7 +3123,7 @@ s = "魔力を充填すべきアイテムがない。";
 	if (fail)
 	{
 		/* Artifacts are never destroyed. */
-		if (artifact_p(o_ptr))
+		if (object_is_fixed_artifact(o_ptr))
 		{
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 #ifdef JP
@@ -3465,8 +3322,9 @@ bool bless_weapon(void)
 	cptr            q, s;
 
 	item_tester_no_ryoute = TRUE;
-	/* Assume enchant weapon */
-	item_tester_hook = item_tester_hook_weapon2;
+
+	/* Bless only weapons */
+	item_tester_hook = object_is_weapon;
 
 	/* Get an item */
 #ifdef JP
@@ -3499,7 +3357,7 @@ s = "祝福できる武器がありません。";
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
-	if (cursed_p(o_ptr))
+	if (object_is_cursed(o_ptr))
 	{
 		if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) ||
 		    (o_ptr->curse_flags & TRC_PERMA_CURSE))
@@ -3562,7 +3420,7 @@ msg_format("%s は既に祝福されている。",
 		return TRUE;
 	}
 
-	if (!(o_ptr->art_name || o_ptr->name1 || o_ptr->name2) || one_in_(3))
+	if (!(object_is_artifact(o_ptr) || object_is_ego(o_ptr)) || one_in_(3))
 	{
 		/* Describe */
 #ifdef JP
@@ -3693,8 +3551,8 @@ s = "磨く盾がありません。";
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
-	if (o_ptr->k_idx && !artifact_p(o_ptr) && !ego_item_p(o_ptr) &&
-	    !o_ptr->art_name && !cursed_p(o_ptr) && (o_ptr->sval != SV_MIRROR_SHIELD))
+	if (o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr) &&
+	    !object_is_cursed(o_ptr) && (o_ptr->sval != SV_MIRROR_SHIELD))
 	{
 #ifdef JP
 msg_format("%sは輝いた！", o_name);
@@ -5125,7 +4983,7 @@ int inven_damage(inven_func typ, int perc)
 		if (!o_ptr->k_idx) continue;
 
 		/* Hack -- for now, skip artifacts */
-		if (artifact_p(o_ptr) || o_ptr->art_name) continue;
+		if (object_is_artifact(o_ptr)) continue;
 
 		/* Give this item slot a shot at death */
 		if ((*typ)(o_ptr))
@@ -5220,7 +5078,7 @@ static int minus_ac(void)
 	/* Nothing to damage */
 	if (!o_ptr->k_idx) return (FALSE);
 
-	if (o_ptr->tval <= TV_WEAPON_END) return (FALSE);
+	if (!object_is_armour(o_ptr)) return (FALSE);
 
 	/* No damage left to be done */
 	if (o_ptr->ac + o_ptr->to_a <= 0) return (FALSE);
@@ -5438,7 +5296,7 @@ bool rustproof(void)
 
 	item_tester_no_ryoute = TRUE;
 	/* Select a piece of armour */
-	item_tester_hook = item_tester_hook_armour;
+	item_tester_hook = object_is_armour;
 
 	/* Get an item */
 #ifdef JP
@@ -5469,7 +5327,7 @@ s = "錆止めできるものがありません。";
 
 	add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
 
-	if ((o_ptr->to_a < 0) && !cursed_p(o_ptr))
+	if ((o_ptr->to_a < 0) && !object_is_cursed(o_ptr))
 	{
 #ifdef JP
 msg_format("%sは新品同様になった！",o_name);
@@ -5519,7 +5377,7 @@ bool curse_armor(void)
 	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Attempt a saving throw for artifacts */
-	if ((o_ptr->art_name || artifact_p(o_ptr)) && (randint0(100) < 50))
+	if (object_is_artifact(o_ptr) && (randint0(100) < 50))
 	{
 		/* Cool */
 #ifdef JP
@@ -5600,7 +5458,7 @@ bool curse_weapon(bool force, int slot)
 	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Attempt a saving throw */
-	if ((artifact_p(o_ptr) || o_ptr->art_name) && (randint0(100) < 50) && !force)
+	if (object_is_artifact(o_ptr) && (randint0(100) < 50) && !force)
 	{
 		/* Cool */
 #ifdef JP
@@ -5676,11 +5534,11 @@ bool brand_bolts(void)
 		if (o_ptr->tval != TV_BOLT) continue;
 
 		/* Skip artifacts and ego-items */
-		if (o_ptr->art_name || artifact_p(o_ptr) || ego_item_p(o_ptr))
+		if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
 			continue;
 
 		/* Skip cursed/broken items */
-		if (cursed_p(o_ptr) || broken_p(o_ptr)) continue;
+		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) continue;
 
 		/* Randomize */
 		if (randint0(100) < 75) continue;
@@ -6033,7 +5891,7 @@ msg_print("吸収できる魔力がありません！");
 	if (fail)
 	{
 		/* Artifacts are never destroyed. */
-		if (artifact_p(o_ptr))
+		if (object_is_fixed_artifact(o_ptr))
 		{
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 #ifdef JP

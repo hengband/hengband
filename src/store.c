@@ -1041,8 +1041,8 @@ static void mass_produce(object_type *o_ptr)
 		case TV_DIGGING:
 		case TV_BOW:
 		{
-			if (o_ptr->art_name) break;
-			if (o_ptr->name2) break;
+			if (object_is_artifact(o_ptr)) break;
+			if (object_is_ego(o_ptr)) break;
 			if (cost <= 10L) size += damroll(3, 5);
 			if (cost <= 100L) size += damroll(3, 5);
 			break;
@@ -1168,14 +1168,11 @@ static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 	if (o_ptr->to_d != j_ptr->to_d) return (0);
 	if (o_ptr->to_a != j_ptr->to_a) return (0);
 
-	/* Require identical "artifact" names */
-	if (o_ptr->name1 != j_ptr->name1) return (0);
-
 	/* Require identical "ego-item" names */
 	if (o_ptr->name2 != j_ptr->name2) return (0);
 
-	/* Random artifacts don't stack !*/
-	if (o_ptr->art_name || j_ptr->art_name) return (0);
+	/* Artifacts don't stack! */
+	if (object_is_artifact(o_ptr) || object_is_artifact(j_ptr)) return (0);
 
 	/* Hack -- Identical art_flags! */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
@@ -1597,16 +1594,16 @@ static int home_carry(object_type *o_ptr)
 		if (o_ptr->tval < j_ptr->tval) continue;
 
 		/* Can happen in the home */
-		if (!object_aware_p(o_ptr)) continue;
-		if (!object_aware_p(j_ptr)) break;
+		if (!object_is_aware(o_ptr)) continue;
+		if (!object_is_aware(j_ptr)) break;
 
 		/* Objects sort by increasing sval */
 		if (o_ptr->sval < j_ptr->sval) break;
 		if (o_ptr->sval > j_ptr->sval) continue;
 
 		/* Objects in the home can be unknown */
-		if (!object_known_p(o_ptr)) continue;
-		if (!object_known_p(j_ptr)) break;
+		if (!object_is_known(o_ptr)) continue;
+		if (!object_is_known(j_ptr)) break;
 
 		/*
 		 * Hack:  otherwise identical rods sort by
@@ -1816,7 +1813,7 @@ static bool black_market_crap(object_type *o_ptr)
 	int 	i, j;
 
 	/* Ego items are never crap */
-	if (o_ptr->name2) return (FALSE);
+	if (object_is_ego(o_ptr)) return (FALSE);
 
 	/* Good items are never crap */
 	if (o_ptr->to_a > 0) return (FALSE);
@@ -3702,7 +3699,7 @@ static void store_sell(void)
 
 
 	/* Hack -- Cannot remove cursed items */
-	if ((item >= INVEN_RARM) && cursed_p(o_ptr))
+	if ((item >= INVEN_RARM) && object_is_cursed(o_ptr))
 	{
 		/* Oops */
 #ifdef JP
@@ -4922,7 +4919,7 @@ void store_shuffle(int which)
 		/* Get the item */
 		o_ptr = &st_ptr->stock[i];
 
-		if (!(artifact_p(o_ptr) || o_ptr->art_name))
+		if (!object_is_artifact(o_ptr))
 		{
 			/* Hack -- Sell all non-artifact old items for "half price" */
 			o_ptr->discount = 50;

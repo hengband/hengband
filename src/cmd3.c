@@ -276,7 +276,7 @@ void do_cmd_wield(void)
 #endif
 
 			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
-			if ((slot == INVEN_RARM) && !cursed_p(&inventory[INVEN_RARM]))
+			if ((slot == INVEN_RARM) && !object_is_cursed(&inventory[INVEN_RARM]))
 			{
 				object_type *or_ptr = &inventory[INVEN_RARM];
 				object_type *ol_ptr = &inventory[INVEN_LARM];
@@ -357,7 +357,7 @@ void do_cmd_wield(void)
 	}
 
 	/* Prevent wielding into a cursed slot */
-	if (cursed_p(&inventory[slot]))
+	if (object_is_cursed(&inventory[slot]))
 	{
 		/* Describe it */
 		object_desc(o_name, &inventory[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -375,8 +375,8 @@ void do_cmd_wield(void)
 		return;
 	}
 
-	if (cursed_p(o_ptr) && confirm_wear &&
-	    (object_known_p(o_ptr) || (o_ptr->ident & IDENT_SENSE)))
+	if (object_is_cursed(o_ptr) && confirm_wear &&
+	    (object_is_known(o_ptr) || (o_ptr->ident & IDENT_SENSE)))
 	{
 		char dummy[MAX_NLEN+80];
 
@@ -392,7 +392,7 @@ sprintf(dummy, "本当に%s{呪われている}を使いますか？", o_name);
 		if (!get_check(dummy)) return;
 	}
 
-	if ((o_ptr->name1 == ART_STONEMASK) && object_known_p(o_ptr) && (p_ptr->prace != RACE_VAMPIRE) && (p_ptr->prace != RACE_ANDROID))
+	if ((o_ptr->name1 == ART_STONEMASK) && object_is_known(o_ptr) && (p_ptr->prace != RACE_VAMPIRE) && (p_ptr->prace != RACE_ANDROID))
 	{
 		char dummy[MAX_NLEN+80];
 
@@ -541,7 +541,7 @@ msg_print("クエストを達成した！");
 
 
 	/* Cursed! */
-	if (cursed_p(o_ptr))
+	if (object_is_cursed(o_ptr))
 	{
 		/* Warn the player */
 #ifdef JP
@@ -683,7 +683,7 @@ void do_cmd_takeoff(void)
 
 
 	/* Item is cursed */
-	if (cursed_p(o_ptr))
+	if (object_is_cursed(o_ptr))
 	{
 		if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (p_ptr->pclass != CLASS_BERSERKER))
 		{
@@ -794,7 +794,7 @@ void do_cmd_drop(void)
 
 
 	/* Hack -- Cannot remove cursed items */
-	if ((item >= INVEN_RARM) && cursed_p(o_ptr))
+	if ((item >= INVEN_RARM) && object_is_cursed(o_ptr))
 	{
 		/* Oops */
 #ifdef JP

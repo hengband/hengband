@@ -580,21 +580,14 @@
  */
 #define SORT_R_INFO
 
-/*
- * Use a scripting language
- */
-/* #define USE_SCRIPT */
-
-#ifdef USE_SCRIPT
-/*
- * Python is statically linked into ZAngband
- */
-# define STATIC_PYTHON
-/* # define SCRIPT_OBJ_KIND */
-#endif /* USE_SCRIPT */
 
 #ifndef HAVE_CONFIG_H
+
 #ifndef MSDOS
+/*
+ * Use world score server
+ */
 #define WORLD_SCORE
 #endif
+
 #endif /* HAVE_CONFIG_H */

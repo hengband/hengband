@@ -3080,7 +3080,7 @@ bool monst_spell_monst(int m_idx)
 				u32b flgs[TR_FLAG_SIZE];
 				object_type *o_ptr = &inventory[i];
 
-				if (cursed_p(o_ptr)) continue;
+				if (object_is_cursed(o_ptr)) continue;
 
 				object_flags(o_ptr, flgs);
 

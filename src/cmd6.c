@@ -378,7 +378,7 @@ static void do_cmd_eat_food_aux(int item)
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	if (!(object_aware_p(o_ptr)))
+	if (!(object_is_aware(o_ptr)))
 	{
 		chg_virtue(V_KNOWLEDGE, -1);
 		chg_virtue(V_PATIENCE, -1);
@@ -389,7 +389,7 @@ static void do_cmd_eat_food_aux(int item)
 	if (o_ptr->tval == TV_FOOD) object_tried(o_ptr);
 
 	/* The player is now aware of the object */
-	if (ident && !object_aware_p(o_ptr))
+	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
 		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
@@ -1433,7 +1433,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	if (!(object_aware_p(o_ptr)))
+	if (!(object_is_aware(o_ptr)))
 	{
 		chg_virtue(V_PATIENCE, -1);
 		chg_virtue(V_CHANCE, 1);
@@ -1444,7 +1444,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 	object_tried(q_ptr);
 
 	/* An identification was made */
-	if (ident && !object_aware_p(q_ptr))
+	if (ident && !object_is_aware(q_ptr))
 	{
 		object_aware(q_ptr);
 		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
@@ -2192,7 +2192,7 @@ msg_print("巻物は煙を立てて消え去った！");
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	if (!(object_aware_p(o_ptr)))
+	if (!(object_is_aware(o_ptr)))
 	{
 		chg_virtue(V_PATIENCE, -1);
 		chg_virtue(V_CHANCE, 1);
@@ -2203,7 +2203,7 @@ msg_print("巻物は煙を立てて消え去った！");
 	object_tried(o_ptr);
 
 	/* An identification was made */
-	if (ident && !object_aware_p(o_ptr))
+	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
 		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
@@ -2322,7 +2322,7 @@ void do_cmd_read_scroll(void)
 	}
 
 	/* Read the scroll */
-	do_cmd_read_scroll_aux(item, object_aware_p(o_ptr));
+	do_cmd_read_scroll_aux(item, object_is_aware(o_ptr));
 }
 
 
@@ -2789,9 +2789,9 @@ static void do_cmd_use_staff_aux(int item)
 	/* Sound */
 	sound(SOUND_ZAP);
 
-	ident = staff_effect(o_ptr->sval, &use_charge, FALSE, object_aware_p(o_ptr));
+	ident = staff_effect(o_ptr->sval, &use_charge, FALSE, object_is_aware(o_ptr));
 
-	if (!(object_aware_p(o_ptr)))
+	if (!(object_is_aware(o_ptr)))
 	{
 		chg_virtue(V_PATIENCE, -1);
 		chg_virtue(V_CHANCE, 1);
@@ -2805,7 +2805,7 @@ static void do_cmd_use_staff_aux(int item)
 	object_tried(o_ptr);
 
 	/* An identification was made */
-	if (ident && !object_aware_p(o_ptr))
+	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
 		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
@@ -3241,7 +3241,7 @@ static void do_cmd_aim_wand_aux(int item)
 
 
 	/* Allow direction to be cancelled for free */
-	if (object_aware_p(o_ptr) && (o_ptr->sval == SV_WAND_HEAL_MONSTER
+	if (object_is_aware(o_ptr) && (o_ptr->sval == SV_WAND_HEAL_MONSTER
 				      || o_ptr->sval == SV_WAND_HASTE_MONSTER))
 			target_pet = TRUE;
 	if (!get_aim_dir(&dir))
@@ -3327,7 +3327,7 @@ static void do_cmd_aim_wand_aux(int item)
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	if (!(object_aware_p(o_ptr)))
+	if (!(object_is_aware(o_ptr)))
 	{
 		chg_virtue(V_PATIENCE, -1);
 		chg_virtue(V_CHANCE, 1);
@@ -3338,7 +3338,7 @@ static void do_cmd_aim_wand_aux(int item)
 	object_tried(o_ptr);
 
 	/* Apply identification */
-	if (ident && !object_aware_p(o_ptr))
+	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
 		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
@@ -3681,7 +3681,7 @@ static void do_cmd_zap_rod_aux(int item)
 
 	/* Get a direction (unless KNOWN not to need it) */
 	if (((o_ptr->sval >= SV_ROD_MIN_DIRECTION) && (o_ptr->sval != SV_ROD_HAVOC) && (o_ptr->sval != SV_ROD_AGGRAVATE) && (o_ptr->sval != SV_ROD_PESTICIDE)) ||
-	     !object_aware_p(o_ptr))
+	     !object_is_aware(o_ptr))
 	{
 		/* Get a direction, allow cancel */
 		if (!get_aim_dir(&dir)) return;
@@ -3783,7 +3783,7 @@ msg_print("そのロッドはまだ充填中です。");
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	if (!(object_aware_p(o_ptr)))
+	if (!(object_is_aware(o_ptr)))
 	{
 		chg_virtue(V_PATIENCE, -1);
 		chg_virtue(V_CHANCE, 1);
@@ -3794,7 +3794,7 @@ msg_print("そのロッドはまだ充填中です。");
 	object_tried(o_ptr);
 
 	/* Successfully determined the object function */
-	if (ident && !object_aware_p(o_ptr))
+	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
 		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
@@ -3842,7 +3842,7 @@ static bool item_tester_hook_activate(object_type *o_ptr)
 	u32b flgs[TR_FLAG_SIZE];
 
 	/* Not known */
-	if (!object_known_p(o_ptr)) return (FALSE);
+	if (!object_is_known(o_ptr)) return (FALSE);
 
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
@@ -3997,7 +3997,7 @@ static void do_cmd_activate_aux(int item)
 	lev = k_info[o_ptr->k_idx].level;
 
 	/* Hack -- use artifact level instead */
-	if (artifact_p(o_ptr)) lev = a_info[o_ptr->name1].level;
+	if (object_is_fixed_artifact(o_ptr)) lev = a_info[o_ptr->name1].level;
 	else if (o_ptr->art_name)
 	{
 		switch (o_ptr->xtra2)
@@ -4186,7 +4186,7 @@ static void do_cmd_activate_aux(int item)
 	}
 
 	/* Artifacts */
-	else if (o_ptr->name1)
+	else if (object_is_fixed_artifact(o_ptr))
 	{
 		/* Choose effect */
 		switch (o_ptr->name1)
@@ -5818,7 +5818,7 @@ msg_print("あなたの槍は電気でスパークしている...");
 		return;
 	}
 
-	if (item_tester_hook_smith(o_ptr))
+	if (object_is_smith(o_ptr))
 	{
 		switch (o_ptr->xtra3-1)
 		{
@@ -6138,7 +6138,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 
 	else if (o_ptr->tval == TV_RING)
 	{
-		if (o_ptr->name2)
+		if (object_is_ego(o_ptr))
 		{
 			bool success = TRUE;
 
@@ -6313,7 +6313,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 
 	else if (o_ptr->tval == TV_AMULET)
 	{
-		if (o_ptr->name2)
+		if (object_is_ego(o_ptr))
 		{
 			switch (o_ptr->name2)
 			{
@@ -6366,7 +6366,7 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 	else if (o_ptr->tval == TV_WHISTLE)
 	{
 #if 0
-		if (cursed_p(o_ptr))
+		if (object_is_cursed(o_ptr))
 		{
 #ifdef JP
 			msg_print("カン高い音が響き渡った。");
@@ -6624,7 +6624,7 @@ static bool item_tester_hook_use(object_type *o_ptr)
 			int i;
 
 			/* Not known */
-			if (!object_known_p(o_ptr)) return (FALSE);
+			if (!object_is_known(o_ptr)) return (FALSE);
 
 			/* HACK - only items from the equipment can be activated */
 			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)

@@ -3791,7 +3791,7 @@ s = "魔力を充填すべきアイテムがない。";
 	 * the level of the item or the number of charges.
 	 */
 	/* The item must be "known" */
-	if (!object_known_p(o_ptr))
+	if (!object_is_known(o_ptr))
 	{
 #ifdef JP
 msg_format("充填する前に鑑定されている必要があります！");
@@ -4041,7 +4041,7 @@ static void building_recharge_all(void)
 		if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD) continue;
 
 		/* need identified */
-		if (!object_known_p(o_ptr)) total_cost += 50;
+		if (!object_is_known(o_ptr)) total_cost += 50;
 
 		/* Extract the object "level" */
 		lev = k_info[o_ptr->k_idx].level;
@@ -4121,7 +4121,7 @@ static void building_recharge_all(void)
 		if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD) continue;
 
 		/* Identify it */
-		if (!object_known_p(o_ptr))
+		if (!object_is_known(o_ptr))
 		{
 			identify_item(o_ptr);
 
@@ -4654,11 +4654,11 @@ msg_print("お金が足りません！");
 		paid = compare_weapons();
 		break;
 	case BACT_ENCHANT_WEAPON:
-		item_tester_hook = item_tester_hook_melee_weapon;
+		item_tester_hook = object_allow_enchant_melee_weapon;
 		enchant_item(bcost, 1, 1, 0);
 		break;
 	case BACT_ENCHANT_ARMOR:
-		item_tester_hook = item_tester_hook_armour;
+		item_tester_hook = object_is_armour;
 		enchant_item(bcost, 0, 0, 1);
 		break;
 	case BACT_RECHARGE:

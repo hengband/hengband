@@ -992,7 +992,7 @@ bool make_attack_normal(int m_idx)
 						if (!o_ptr->k_idx) continue;
 
 						/* Skip artifacts */
-						if (artifact_p(o_ptr) || o_ptr->art_name) continue;
+						if (object_is_artifact(o_ptr)) continue;
 
 						/* Get a description */
 						object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
@@ -1130,7 +1130,7 @@ bool make_attack_normal(int m_idx)
 					if (p_ptr->is_dead) break;
 
 					/* Drain fuel */
-					if ((o_ptr->xtra4 > 0) && (!artifact_p(o_ptr)))
+					if ((o_ptr->xtra4 > 0) && (!object_is_fixed_artifact(o_ptr)))
 					{
 						/* Reduce fuel */
 						o_ptr->xtra4 -= (250 + randint1(250));
