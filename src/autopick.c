@@ -3293,8 +3293,15 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 #endif
 	int col = sizeof(prompt) - 1;
 
+	/* Prepare string buffer for edit */
 	if (*search_strp) strcpy(buf, *search_strp);
 	else buf[0] = '\0';
+
+	/* Object searching mode */
+	if (*o_handle)
+	{
+		color = TERM_L_GREEN;
+	}
 
 	/* Display prompt */
 	prt(prompt, 0, 0);
@@ -3379,7 +3386,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 		case '\n':
 		case '\r':
 		case KTRL('s'):
-			if (!pos && *o_handle) return (back ? -1 : 1);
+			if (*o_handle) return (back ? -1 : 1);
 			string_free(*search_strp);
 			*search_strp = string_make(buf);
 			*o_handle = NULL;
@@ -3470,8 +3477,20 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 			/* Get a character code */
 			c = (char)skey;
 
-			if (color == TERM_YELLOW)
+			/* Was non insert mode? */
+			if (color != TERM_WHITE)
 			{
+				/* Was object searching mode */
+				if (color == TERM_L_GREEN)
+				{
+					/* Cancel the mode */
+					*o_handle = NULL;
+
+					/* Remove indicating string */
+					string_free(*search_strp);
+					*search_strp = NULL;
+				}
+
 				/* Overwrite default string */
 				buf[0] = '\0';
 
@@ -3527,6 +3546,20 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 		} /* default: */
 
 		}
+
+		/* Object searching mode was cancelled? */
+		if (*o_handle && color != TERM_L_GREEN)
+		{
+			/* Cancel the mode */
+			*o_handle = NULL;
+
+			/* Remove indicating string */
+			buf[0] = '\0';
+			string_free(*search_strp);
+			*search_strp = NULL;
+
+		}
+
 
 	} /* while (TRUE) */
 }
@@ -5471,7 +5504,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		{
 			search_for_object(tb, tb->search_o_ptr, TRUE);
 		}
-		else if (tb->search_str)
+		else if (tb->search_str && tb->search_str[0])
 		{
 			search_for_string(tb, tb->search_str, TRUE);
 		}
@@ -5486,7 +5519,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		{
 			search_for_object(tb, tb->search_o_ptr, FALSE);
 		}
-		else if (tb->search_str)
+		else if (tb->search_str && tb->search_str[0])
 		{
 			search_for_string(tb, tb->search_str, FALSE);
 		}
