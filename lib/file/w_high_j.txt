@@ -113,6 +113,7 @@ N:15:BIAS_LAW
 『エホバの怒り』
 『ブリューナク』
 若きデルンヘルムの
+#『光の化身』(Radiant Essencd:mtg a_highとかの方がいいかもしれない)
 
 N:16:BIAS_ROGUE
 11
@@ -175,6 +176,7 @@ N:19:BIAS_RANGER
 狩人オロメの
 アンバーの王子ブレイズの
 アンバーの王子エリックの
+#『ガイアの力』(Gaea's Might:mtg)
 
 N:11:BIAS_CHR
 6

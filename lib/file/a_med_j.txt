@@ -55,7 +55,7 @@ N: 5:BIAS_ACID
 『ウーズアーマー』
 『ゼラチンキューブ』
 水鏡の
-ダイヤモンドの
+ダイアモンドの
 
 N:12:BIAS_CHAOS
 9
@@ -68,6 +68,7 @@ N:12:BIAS_CHAOS
 調和の
 セルダンの
 混世魔王の
+#『混沌のサーペントの瞳』(本物は宝石っぽい？)
 
 N:14:BIAS_NECROMANTIC
 11
@@ -99,6 +100,8 @@ N: 8:BIAS_WIS
 『聖なる宿命』
 敬虔な信者の
 祝福の地エデンの
+#『ライタスオーラ』(正義のオーラ, Righteous Aura:mtg)
+#『希望と栄光』(Hope and Glory:mtg)
 
 N:16:BIAS_ROGUE
 N: 9:BIAS_DEX
@@ -140,6 +143,8 @@ N: 6:BIAS_STR
 第六天魔王の
 悲しき巨人の
 戦神バルキリーの
+#『力の化身』(Avatar of Might:mtg)
+#『パワー・マトリクス』(Power Matrix:mtg)
 
 N:19:BIAS_RANGER
 N:10:BIAS_CON

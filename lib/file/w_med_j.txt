@@ -111,6 +111,9 @@ N:14:BIAS_NECROMANTIC
 闇の嵐の
 ヘルシング卿の
 使者スリングウェシルの
+#『終末を招く者』
+#『奈落の猛禽』(Pit Raptor:mtg)
+#『ソウル・バーン』(霊魂焼却, Soul Burn:mtg)
 
 N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
@@ -131,6 +134,8 @@ N: 8:BIAS_WIS
 『シャイニングカリバー』
 『コニャーズフォールチョン』
 英雄サラディンの
+#『ローブリンガー』(法をもたらす者, Lawbringer :mtg)
+#『ライトブリンガー』(光をもたらす者, Lightbringer :mtg)
 
 N:16:BIAS_ROGUE
 11
@@ -229,3 +234,4 @@ N:*:Default
 ダモクレスの
 アンバーの王子オズリックの
 アンバーの王子フィンドーの
+#選ばれしものの(選ばれしものの剣, Sword of the Chosen:mtg)

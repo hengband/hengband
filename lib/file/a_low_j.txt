@@ -8,6 +8,7 @@ N: 1:BIAS_ELEC
 『カミナリ親父』
 絶縁性の
 雷さまの
+#『ボルタ電池』(どんなんだっけ？)
 
 N: 2:BIAS_POIS
 10
@@ -21,6 +22,8 @@ N: 2:BIAS_POIS
 タロスの
 コボルドの
 タランチュラの
+#『BCG』(例の注射)
+#『ベラドンナの予見者』(Nightshade Seer:mtg)
 
 N: 3:BIAS_FIRE
 10
@@ -34,6 +37,8 @@ N: 3:BIAS_FIRE
 牛魔王の
 ハロウィンの
 常夏の地ハワイの
+#『魔法瓶』
+#『太陽の衣』
 
 N: 4:BIAS_COLD
 10
@@ -47,6 +52,8 @@ N: 4:BIAS_COLD
 『シベリヤ寒気団』
 『パーシャル冷蔵庫』
 母さんが夜なべした
+#『マフラー』
+#『炎の守り手』(Keeper of the Flame:mtg, FIREの方がいいかも)
 
 N: 5:BIAS_ACID
 9
@@ -59,6 +66,8 @@ N: 5:BIAS_ACID
 『ステンレス』
 『メルティング』
 『テフロンコート』
+#『氷酢酸』
+#ハロゲン水の
 
 N:14:BIAS_NECROMANTIC
 7
@@ -69,6 +78,10 @@ N:14:BIAS_NECROMANTIC
 サバトの
 恐怖の地アーカムの
 アレイスタークロウリーの
+#『常闇の刻』(Darkest Hour:mtg)
+#『冥府の契約』(Infernal Contract:mtg)
+#『黄泉からの帰還者』(Revenant:mtg)
+#『邪悪なる力』(Unholy Strength:mtg 武器の方がいいかも)
 
 N:12:BIAS_CHAOS
 7
@@ -79,6 +92,15 @@ N:12:BIAS_CHAOS
 『シャッフル』
 『トランキリティー』
 玉虫色の
+#『コッホ曲線』(自己相似図形の一種(log4/log3)次元)
+#『ストレンジ・アトラクタ』(複雑系の用語, まんまカオス用語)
+#『パズル・ボックス』(細工箱)
+#『無政府主義』
+#『次元のほころび』(Riality Ripple:mtg)
+#『蜃気楼』
+#『ゆらめく翼』(Shimmering Wings:mtg 陽炎の翼ってのとどっちがいいだろう？)
+#『時間のねじれ』(Time Warp:mtg)
+#『背信の絆』(Treacherous Ling:mtg)
 
 #N:15:BIAS_LAW
 N:13:BIAS_PRIESTLY
@@ -92,6 +114,18 @@ N: 8:BIAS_WIS
 『魂を守りてぇ』
 『熱田神宮之御守』
 座敷童子の
+#愛すべき隣人の
+#『聖なる力』(Holy Strength:mtg)
+#『天光を求める者』(Seeker of Skybreak:mtg)
+#『光の守り手』(Keeper of the Light:mtg)
+#『心の守り手』(Keeper of the Mind:mtg)
+#『ドルイドの誓い』(Oath of Druids:mtg)
+#『静寂の歌』(Song of Serenity:mtg)
+#『巫女の従者』(Oracle's Attendants:mtg ※英語でこれ使う時はsを取る)
+#『希望の化身』(Avatar of Hope:mtg)
+#『夜の戦慄』(Dread of Night:mtg)
+#『霊的焦点』(Spiritual Focus:mtg)
+#『鉄の意思』(Iron Will:mtg)
 
 N:16:BIAS_ROGUE
 N: 9:BIAS_DEX
@@ -117,6 +151,10 @@ N: 7:BIAS_INT
 マーチンの
 クイズ王の
 知ったかぶりの
+#フラクタルはカオスだと思う
+#『カフェイン』
+#『魔道師の近い』(Oath of Mages:mtg)
+#『ミューズの囁き』(Whispers of Muse:mtg)
 
 N:18:BIAS_WARRIOR
 N: 6:BIAS_STR
@@ -128,6 +166,8 @@ N: 6:BIAS_STR
 南蛮王孟獲の
 スモー戦士の
 ミノタウルスの
+#パワー・(例のアレ)
+#『肉のカーテン』(キン肉マン)
 
 N:10:BIAS_CON
 9
@@ -140,6 +180,8 @@ N:10:BIAS_CON
 体専の
 牛うなりの
 プロレスラーの
+#『肉のカーテン』(キン肉マン)
+#『アブトロニック』(身体に装着する健康器具, ELECかも)
 
 N:19:BIAS_RANGER
 9
@@ -152,6 +194,7 @@ N:19:BIAS_RANGER
 『ぷらなりあ』
 『アンモナイト』
 レッサーパンダの
+#『生命の息吹』(Breath of Life:mtg)
 
 N:11:BIAS_CHR
 10
@@ -165,6 +208,7 @@ N:11:BIAS_CHR
 『だりぃーさおりん』
 コンパニオンの
 ナルキッソスの
+#『ミニスカート』
 
 N:*:Default
 21
@@ -187,3 +231,7 @@ N:*:Default
 バラヒアの
 グルネマンツの
 トランシルバニアの
+
+
+
+
