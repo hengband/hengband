@@ -76,8 +76,7 @@ Interact with macros (@)
 Interact with visuals (%)
      Allow you to interact with visuals. You may load or save visuals
      from user pref files, or modify the attr/char mappings for the
-     monsters, objects, and terrain features. You must use the "redraw"
-     command (^R) to redraw the map after changing attr/char mappings.
+     monsters, objects, and terrain features.
 
 Interact with colors (&)
      Allow the user to interact with colors. This command only
