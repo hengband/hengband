@@ -1524,6 +1524,7 @@ s16b get_mon_num(int level)
  *   0x80 --> Assume the monster is visible
  *  0x100 --> Chameleon's true name
  *  0x200 --> Ignore hallucination, and penetrate shape change
+ *  0x400 --> Assume this monster pet waiting outside the floor
  *
  * Useful Modes:
  *   0x00 --> Full nominative name ("the kobold") or "it"
@@ -1836,6 +1837,15 @@ if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
 		if ((mode & 0x200) && m_ptr->ap_r_idx != m_ptr->r_idx)
 		{
 			strcat(desc, format("(%s)", r_name + r_info[m_ptr->r_idx].name));
+		}
+
+		if (mode & 0x400)
+		{
+#ifdef JP
+			strcat(desc,"(ÂÔµ¡Ãæ)");
+#else
+			strcat(desc,"(waiting)");
+#endif
 		}
 
 		/* Handle the Possessive as a special afterthought */

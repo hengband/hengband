@@ -2422,9 +2422,8 @@ void verify_panel(void)
 /*
  * Monster health description
  */
-cptr look_mon_desc(int m_idx, u32b mode)
+cptr look_mon_desc(monster_type *m_ptr, u32b mode)
 {
-	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 	bool         living;
 	int          perc;
@@ -3212,9 +3211,9 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			evaluate_monster_exp(acount, m_ptr);
 
 #ifdef JP
-			sprintf(out_val, "[%s]%s%s(%s)%s%s [r»× %s%s]", acount, s1, m_name, look_mon_desc(c_ptr->m_idx, 0x01), s2, s3, x_info, info);
+			sprintf(out_val, "[%s]%s%s(%s)%s%s [r»× %s%s]", acount, s1, m_name, look_mon_desc(m_ptr, 0x01), s2, s3, x_info, info);
 #else
-			sprintf(out_val, "[%s]%s%s%s%s(%s) [r, %s%s]", acount, s1, s2, s3, m_name, look_mon_desc(c_ptr->m_idx, 0x01), x_info, info);
+			sprintf(out_val, "[%s]%s%s%s%s(%s) [r, %s%s]", acount, s1, s2, s3, m_name, look_mon_desc(m_ptr, 0x01), x_info, info);
 #endif
 
 			prt(out_val, 0, 0);

@@ -6975,6 +6975,7 @@ static void do_cmd_knowledge_pets(void)
 	int             i;
 	FILE            *fff;
 	monster_type    *m_ptr;
+	char            pet_name[80];
 	int             t_friends = 0;
 	int             show_upkeep = 0;
 	char            file_name[1024];
@@ -7004,18 +7005,26 @@ static void do_cmd_knowledge_pets(void)
 		/* Calculate "upkeep" for pets */
 		if (is_pet(m_ptr))
 		{
-			char pet_name[80];
 			t_friends++;
 			monster_desc(pet_name, m_ptr, 0x88);
-			fprintf(fff, "%s (%s)", pet_name, look_mon_desc(i, 0x00));
-			if (p_ptr->riding == i)
-#ifdef JP
-				fprintf(fff, " ¾èÇÏÃæ");
-#else
-				fprintf(fff, " Riding");
-#endif
-			fprintf(fff, "\n");
+			fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00));
 		}
+	}
+
+	/* Process the waiting pets (backwards) */
+	for (i = MAX_PARTY_MON - 1; i >= 0; i--)
+	{
+		/* Access the monster */
+		m_ptr = &party_mon[i];
+
+		/* Ignore "dead" monsters */
+		if (!m_ptr->r_idx) continue;
+
+		t_friends++;
+
+		/* List waiting pets */
+		monster_desc(pet_name, m_ptr, 0x488);
+		fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00));
 	}
 
 	show_upkeep = calculate_upkeep();
