@@ -1490,6 +1490,8 @@ static void rd_extra(void)
 	rd_s32b(&p_ptr->au);
 
 	rd_s32b(&p_ptr->max_exp);
+	if (h_older_than(1, 5, 4, 1)) p_ptr->max_max_exp = p_ptr->max_exp;
+	else rd_s32b(&p_ptr->max_max_exp);
 	rd_s32b(&p_ptr->exp);
 	rd_u16b(&p_ptr->exp_frac);
 

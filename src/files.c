@@ -5984,7 +5984,7 @@ long total_points(void)
 		if(max_dlv[i] > max_dl)
 			max_dl = max_dlv[i];
 
-	point_l = (p_ptr->max_exp + (100 * max_dl));
+	point_l = (p_ptr->max_max_exp + (100 * max_dl));
 	point_h = point_l / 0x10000L;
 	point_l = point_l % 0x10000L;
 	point_h *= mult;

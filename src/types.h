@@ -990,6 +990,7 @@ struct player_type
 
 	s32b au;			/* Current Gold */
 
+	s32b max_max_exp;	/* Max max experience (only to calculate score) */
 	s32b max_exp;		/* Max experience */
 	s32b exp;			/* Cur experience */
 	u16b exp_frac;		/* Cur exp frac (times 2^16) */

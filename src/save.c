@@ -566,6 +566,7 @@ static void wr_extra(void)
 	wr_u32b(p_ptr->au);
 
 	wr_u32b(p_ptr->max_exp);
+	wr_u32b(p_ptr->max_max_exp);
 	wr_u32b(p_ptr->exp);
 	wr_u16b(p_ptr->exp_frac);
 	wr_s16b(p_ptr->lev);

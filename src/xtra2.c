@@ -28,18 +28,19 @@ void check_experience(void)
 
 	/* Hack -- lower limit */
 	if (p_ptr->exp < 0) p_ptr->exp = 0;
-
-	/* Hack -- lower limit */
 	if (p_ptr->max_exp < 0) p_ptr->max_exp = 0;
+	if (p_ptr->max_max_exp < 0) p_ptr->max_max_exp = 0;
 
 	/* Hack -- upper limit */
 	if (p_ptr->exp > PY_MAX_EXP) p_ptr->exp = PY_MAX_EXP;
-
-	/* Hack -- upper limit */
 	if (p_ptr->max_exp > PY_MAX_EXP) p_ptr->max_exp = PY_MAX_EXP;
+	if (p_ptr->max_max_exp > PY_MAX_EXP) p_ptr->max_max_exp = PY_MAX_EXP;
 
 	/* Hack -- maintain "max" experience */
 	if (p_ptr->exp > p_ptr->max_exp) p_ptr->max_exp = p_ptr->exp;
+
+	/* Hack -- maintain "max max" experience */
+	if (p_ptr->max_exp > p_ptr->max_max_exp) p_ptr->max_max_exp = p_ptr->max_exp;
 
 	/* Redraw experience */
 	p_ptr->redraw |= (PR_EXP);
