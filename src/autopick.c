@@ -5368,12 +5368,29 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/*
 		 * Move cursor position to the end of the selection
 		 *
-		 * Pressing ^C ^V correctly results in duplication of
-		 * the selection.
+		 * Pressing ^C ^V correctly duplicates the selection.
 		 */
 		if (tb->my == tb->cy)
 		{
 			tb->cx = MAX(tb->cx, tb->mx);
+
+			/*
+			 * When whole line is selected, the end of
+			 * line code is also copyed.
+			 */
+			if (!tb->lines_list[tb->cy][tb->cx])
+			{
+				/* Is this the last line? */
+				if (!tb->lines_list[tb->cy + 1])
+				{
+					/* Add one more empty line if possible */
+					if (!add_empty_line(tb)) break;
+				}
+
+				/* Go to the beginning of next line */
+				tb->cy++;
+				tb->cx = 0;
+			}
 		}
 		else
 		{
