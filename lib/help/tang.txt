@@ -119,10 +119,10 @@ Teleport Level
      ticket to safety.
 
 *Destruction*
-     this powerful spell removes everything except artifacts from the
-     area around you, blasting the surroundings and causing rock to
-     fall from the ceiling. If you're ever in deep trouble, this is the
-     safest way to escape.
+     this powerful spell removes everything (including artifacts!)
+     from the area around you, blasting the surroundings and causing
+     rock to fall from the ceiling. If you're ever in deep trouble,
+     this is the safest way to escape.
 
 --- Healing Items ---
 
