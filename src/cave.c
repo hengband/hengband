@@ -1039,7 +1039,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
 			else if (darkened_grid(c_ptr) && !p_ptr->blind)
 			{
-				if (have_flag(f_ptr->flags, FF_LOS))
+				if (have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT))
 				{
 					/* Unsafe cave grid -- idea borrowed from Unangband */
 					feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? FEAT_UNDETECTED : FEAT_NONE;
