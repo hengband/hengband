@@ -20,6 +20,7 @@
 
 /*
  * OPTION: Compile on a Macintosh (see "A-mac-h" or "A-mac-pch")
+ * Automatic for Mac MPW compilation
  */
 #ifndef MACINTOSH
 /* #define MACINTOSH */
@@ -31,6 +32,19 @@
 #ifndef WINDOWS
 /* #define WINDOWS */
 #endif
+
+/*
+ * Extract the "MAC_MPW" flag from the compiler
+ */
+#if defined(__SC__) || defined(__MRC__)
+# ifndef MACINTOSH
+#  define MACINTOSH
+# endif
+# ifndef MAC_MPW
+#  define MAC_MPW
+# endif
+#endif
+
 
 #ifdef USE_IBM
 
@@ -255,7 +269,7 @@
 /*
  * The Macintosh allows the use of a "file type" when creating a file
  */
-#if defined(MACINTOSH) && !defined(applec)
+#if defined(MACINTOSH)
 # define FILE_TYPE_TEXT 'TEXT'
 # define FILE_TYPE_DATA 'DATA'
 # define FILE_TYPE_SAVE 'SAVE'

@@ -50,9 +50,15 @@
 #include <time.h>
 
 
-#ifdef MACINTOSH
-# include <unix.h>
-#endif /* MACINTOSH */
+#if defined(MACINTOSH)
+# if defined(MAC_MPW)
+#  ifdef __STDC__
+#   undef __STDC__
+#  endif
+# else
+#  include <unix.h>
+# endif
+#endif
 
 
 #if defined(WINDOWS) || defined(MSDOS) || defined(USE_EMX)
