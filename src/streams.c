@@ -261,6 +261,56 @@ void build_streamer(int feat, int chance)
 				if (is_closed_door(c_ptr->feat)) continue;
 			}
 
+			if (c_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(feat, &r_info[m_list[c_ptr->m_idx].r_idx], 0)))
+			{
+				/* Delete the monster (if any) */
+				delete_monster(ty, tx);
+			}
+
+			if (c_ptr->o_idx && !have_flag(streamer_ptr->flags, FF_DROP))
+			{
+				s16b this_o_idx, next_o_idx = 0;
+
+				/* Scan all objects in the grid */
+				for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+				{
+					/* Acquire object */
+					object_type *o_ptr = &o_list[this_o_idx];
+
+					/* Acquire next object */
+					next_o_idx = o_ptr->next_o_idx;
+
+					/* Hack -- Preserve unknown artifacts */
+					if (object_is_fixed_artifact(o_ptr))
+					{
+						/* Mega-Hack -- Preserve the artifact */
+						a_info[o_ptr->name1].cur_num = 0;
+
+						if (cheat_peek)
+						{
+							char o_name[MAX_NLEN];
+							object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+#ifdef JP
+							msg_format("伝説のアイテム (%s) はストリーマーにより削除された。", o_name);
+#else
+							msg_format("Artifact (%s) was deleted by streamer.", o_name);
+#endif
+						}
+					}
+					else if (cheat_peek && o_ptr->art_name)
+					{
+#ifdef JP
+						msg_print("ランダム・アーティファクトの1つはストリーマーにより削除された。");
+#else
+						msg_print("One of the random artifacts was deleted by streamer.");
+#endif
+					}
+				}
+
+				/* Delete objects */
+				delete_object(ty, tx);
+			}
+
 			/* Clear previous contents, add proper vein type */
 			c_ptr->feat = feat;
 

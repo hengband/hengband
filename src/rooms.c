@@ -3446,6 +3446,7 @@ static bool hack_isnt_wall(int y, int x, int c1, int c2, int c3, int feat1, int 
 		else if (cave[y][x].feat <= c3)
 		{
 			cave[y][x].feat = feat3;
+			cave[y][x].info &= ~(CAVE_MASK);
 			cave[y][x].info |= info3;
 			return TRUE;
 		}
