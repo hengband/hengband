@@ -4050,7 +4050,11 @@ void request_command(int shopping)
 {
 	int i;
 
-	char cmd;
+	/*
+	 *  Since the 'cmd' must hold internal command key 253 and 254,
+	 *  it need to be int or byte. Not to be char.
+	 */
+	int cmd;
 
 	int mode;
 
@@ -4094,7 +4098,7 @@ void request_command(int shopping)
 			msg_print(NULL);
 
 			/* Use auto-command */
-			cmd = (unsigned char)command_new;
+			cmd = command_new;
 
 			/* Forget it */
 			command_new = 0;
