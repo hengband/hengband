@@ -1967,7 +1967,7 @@ static cptr realm_jouhou[VALID_REALM] =
 
 #else
 
-"Life is 'good' magic; it relies mostly on healing and protective spells. It does have a few attack spells as well, but these are mostly used for harming and banishing foul minions of evil. ",
+"Life magic is very good for healing; it relies mostly on healing, protection and detection spells. Also life magic have a few attack spells as well. It said that some high level spell of life magic can disintegrate Undead monsters into ash.",
 
 "Sorcery is a `meta` realm, including enchantment and general spells. It provides superb protection spells, spells to enhance your odds in combat and, most importantly, a vast selection of spells for gathering information. However, Sorcery has one weakness: it has no spells to deal direct damage to your enemies.",
 
@@ -1985,7 +1985,7 @@ static cptr realm_jouhou[VALID_REALM] =
 
 "Demon is a very evil realm, same as Death. It provides various attack spells and devilish detection spells. at higher levels, Demon magic provides ability to dominate demons, and to polymorph yourself into a demon.",
 
-"", /* nanka */
+"Crusade is a realm of 'Justice'; It does have many attack spells which are mostly used for harming and banishing foul minions of evil, and these spells are not so effective for good monsters",
 
 "Music magic shows various effects as sing song. There is two type of song; the one which shows effects instantly and the other one shows effect continuously until SP runs out. But the latter type has a limit; only one song can be sing at the same time.",
 

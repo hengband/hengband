@@ -2373,7 +2373,7 @@ bool set_tim_eyeeye(int v, bool do_dec)
 #ifdef JP
 msg_print("法の守り手になった気がした！");
 #else
-			msg_print("nanka!");
+			msg_print("You feel like a keeper of commandments!");
 #endif
 
 			notice = TRUE;
@@ -2388,7 +2388,7 @@ msg_print("法の守り手になった気がした！");
 #ifdef JP
 msg_print("懲罰を執行することができなくなった。");
 #else
-			msg_print("nanka.");
+			msg_print("You no longer feel like a keeper.");
 #endif
 
 			notice = TRUE;
