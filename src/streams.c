@@ -105,7 +105,7 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 						if (distance(ty, tx, y, x) > rand_spread(width, 1)) continue;
 
 						/* Do not convert permanent features */
-						if (cave_perma_grid(c_ptr) && !have_flag(f_flags_grid(c_ptr), FF_MOUNTAIN)) continue;
+						if (cave_perma_grid(c_ptr)) continue;
 
 						/*
 						 * Clear previous contents, add feature
@@ -250,7 +250,9 @@ void build_streamer(int feat, int chance)
 
 			if (have_flag(f_ptr->flags, FF_MOVE) && (have_flag(f_ptr->flags, FF_WATER) || have_flag(f_ptr->flags, FF_LAVA)))
 				continue;
-			if (cave_perma_grid(c_ptr) && !have_flag(f_ptr->flags, FF_MOUNTAIN)) continue;
+
+			/* Do not convert permanent features */
+			if (cave_perma_grid(c_ptr)) continue;
 
 			/* Only convert "granite" walls */
 			if (streamer_is_wall)

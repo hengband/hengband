@@ -3442,18 +3442,10 @@ bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode)
 		if ((r_ptr->flags2 & RF2_PASS_WALL) && (!(mode & CEM_RIDING) || p_ptr->pass_wall)) return TRUE;
 	}
 
-	if (!have_flag(f_ptr->flags, FF_MOVE))
-	{
-		/* Can fly over mountain on the surface */
-		if (have_flag(f_ptr->flags, FF_MOUNTAIN) && !dun_level)
-		{
-			if ((r_ptr->flags7 & RF7_CAN_FLY) || (r_ptr->flags8 & RF8_WILD_MOUNTAIN))
-				return TRUE;
-		}
+	if (!have_flag(f_ptr->flags, FF_MOVE)) return FALSE;
 
-		/* Cannot enter */
-		return FALSE;
-	}
+	/* Some monsters can walk on mountains */
+	if (have_flag(f_ptr->flags, FF_MOUNTAIN) && (r_ptr->flags8 & RF8_WILD_MOUNTAIN)) return TRUE;
 
 	if (have_flag(f_ptr->flags, FF_MUST_FLY) && !(r_ptr->flags7 & RF7_CAN_FLY)) return FALSE;
 

@@ -2430,14 +2430,9 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 	 * reduced below 0 hp by being inside a stone wall; others
 	 * WILL BE!
 	 */
-	if (!have_flag(f_ptr->flags, FF_MOVE))
+	if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
 	{
-		/* Player can walk through trees */
-		if (have_flag(f_ptr->flags, FF_MOUNTAIN) && !dun_level && p_ptr->ffall)
-		{
-			/* Do nothing */
-		}
-		else if (!IS_INVULN() && !p_ptr->wraith_form && !p_ptr->kabenuke &&
+		if (!IS_INVULN() && !p_ptr->wraith_form && !p_ptr->kabenuke &&
 		    ((p_ptr->chp > (p_ptr->lev / 5)) || !p_ptr->pass_wall))
 		{
 			cptr dam_desc;

@@ -1533,7 +1533,7 @@ msg_print("属性付加に失敗した。");
  * Non-permanent walls, trees, mountains, or doors
  */
 #define vanishable_feat(F) \
-	(have_flag((F)->flags, FF_HURT_DISI) || have_flag((F)->flags, FF_MOUNTAIN) || \
+	(have_flag((F)->flags, FF_HURT_DISI) || \
 	 have_flag((F)->flags, FF_PATTERN))
 
 /*

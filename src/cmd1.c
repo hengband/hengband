@@ -3434,17 +3434,7 @@ bool player_can_enter(s16b feature, u16b mode)
 	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && p_ptr->can_swim) return TRUE;
 	if (have_flag(f_ptr->flags, FF_CAN_PASS) && p_ptr->pass_wall) return TRUE;
 
-	if (!have_flag(f_ptr->flags, FF_MOVE))
-	{
-		/* Can fly over mountain on the surface */
-		if (have_flag(f_ptr->flags, FF_MOUNTAIN) && !dun_level)
-		{
-			if (p_ptr->ffall) return TRUE;
-		}
-
-		/* Cannot enter */
-		return FALSE;
-	}
+	if (!have_flag(f_ptr->flags, FF_MOVE)) return FALSE;
 
 	if (have_flag(f_ptr->flags, FF_MUST_FLY) && !p_ptr->ffall) return FALSE;
 
@@ -3742,9 +3732,9 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	else if (have_flag(f_ptr->flags, FF_MUST_FLY) && !p_ptr->ffall)
 	{
 #ifdef JP
-		msg_format("%sを横切ることはできません。", f_name + f_ptr->name);
+		msg_format("空を飛ばないと%sの上には行けない。", f_name + f_ptr->name);
 #else
-		msg_format("You can't cross the %s.", f_name + f_ptr->name);
+		msg_format("You need to fly to go through the %s.", f_name + f_ptr->name);
 #endif
 
 		energy_use = 0;
@@ -3752,18 +3742,6 @@ void move_player(int dir, int do_pickup, bool break_trap)
 		oktomove = FALSE;
 	}
 
-	else if (have_flag(f_ptr->flags, FF_MOUNTAIN) && (dun_level || !p_ptr->ffall))
-	{
-#ifdef JP
-		msg_print("山には登れません！");
-#else
-		msg_print("You can't climb the mountains!");
-#endif
-
-		running = 0;
-		energy_use = 0;
-		oktomove = FALSE;
-	}
 	/*
 	 * Player can move through trees and
 	 * has effective -10 speed
@@ -4173,7 +4151,7 @@ void move_player(int dir, int do_pickup, bool break_trap)
 }
 
 
-static bool use_avoid_run;
+static bool ignore_avoid_run;
 
 /*
  * Hack -- Check for a "known wall" (see below)
@@ -4204,9 +4182,10 @@ static int see_wall(int dir, int y, int x)
 
 		f_ptr = &f_info[feat];
 
-		if (use_avoid_run && have_flag(f_ptr->flags, FF_AVOID_RUN)) return TRUE;
+		if (have_flag(f_ptr->flags, FF_AVOID_RUN) && !ignore_avoid_run)
+			return TRUE;
 
-		else if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_AVOID_RUN)) return TRUE;
+		if (!have_flag(f_ptr->flags, FF_MOVE)) return TRUE;
 	}
 
 	return FALSE;
@@ -4449,7 +4428,7 @@ static void run_init(int dir)
 	row = py + ddy[dir];
 	col = px + ddx[dir];
 
-	use_avoid_run = !have_flag(f_flags_bold(row, col), FF_AVOID_RUN);
+	ignore_avoid_run = have_flag(f_flags_bold(row, col), FF_AVOID_RUN);
 
 	/* Extract cycle index */
 	i = chome[dir];
@@ -4862,7 +4841,8 @@ void run_step(int dir)
 	/* Start running */
 	if (dir)
 	{
-		use_avoid_run = FALSE;
+		/* Ignore AVOID_RUN on a first step */
+		ignore_avoid_run = TRUE;
 
 		/* Hack -- do not start silly run */
 		if (see_wall(dir, py, px))
