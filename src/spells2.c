@@ -4964,7 +4964,11 @@ bool destroy_area(int y1, int x1, int r, int full)
 			/* Hack -- Skip the epicenter */
 			if ((y == y1) && (x == x1)) continue;
 
+#if 0
 			if ((r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->flags7 & RF7_GUARDIAN) || ((m_ptr->mflag2 & MFLAG_CHAMELEON) && (r_ptr->flags1 & RF1_UNIQUE)))
+#else
+			if ((r_ptr->flags1 & RF1_QUESTOR))
+#endif
 			{
 				/* Heal the monster */
 				m_list[c_ptr->m_idx].hp = m_list[c_ptr->m_idx].maxhp;
