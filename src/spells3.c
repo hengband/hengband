@@ -519,7 +519,7 @@ void teleport_player_level(void)
 
 	/* No effect in arena or quest */
 	if (p_ptr->inside_arena || (p_ptr->inside_quest && !random_quest_number(dun_level)) ||
-	    (quest_number(dun_level) && (dun_level > 1) && ironman_downward))
+	    ((quest_number(dun_level) || (dun_level >= d_info[dungeon_type].maxdepth)) && (dun_level > 1) && ironman_downward))
 	{
 #ifdef JP
 msg_print("効果がなかった。");
