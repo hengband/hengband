@@ -5351,12 +5351,15 @@ static void pack_overflow(void)
 {
 	if (inventory[INVEN_PACK].k_idx)
 	{
-		int item = INVEN_PACK;
 		char o_name[MAX_NLEN];
 		object_type *o_ptr;
 
+		/* Is auto-destroy done? */
+		notice_stuff();
+		if (!inventory[INVEN_PACK].k_idx) return;
+
 		/* Access the slot to be dropped */
-		o_ptr = &inventory[item];
+		o_ptr = &inventory[INVEN_PACK];
 
 		/* Disturbing */
 		disturb(0, 0);
@@ -5373,18 +5376,18 @@ static void pack_overflow(void)
 
 		/* Message */
 #ifdef JP
-		msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
+		msg_format("%s(%c)を落とした。", o_name, index_to_label(INVEN_PACK));
 #else
-		msg_format("You drop %s (%c).", o_name, index_to_label(item));
+		msg_format("You drop %s (%c).", o_name, index_to_label(INVEN_PACK));
 #endif
 
 		/* Drop it (carefully) near the player */
 		(void)drop_near(o_ptr, 0, py, px);
 
 		/* Modify, Describe, Optimize */
-		inven_item_increase(item, -255);
-		inven_item_describe(item);
-		inven_item_optimize(item);
+		inven_item_increase(INVEN_PACK, -255);
+		inven_item_describe(INVEN_PACK);
+		inven_item_optimize(INVEN_PACK);
 
 		/* Handle "p_ptr->notice" */
 		notice_stuff();
