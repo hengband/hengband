@@ -5445,7 +5445,8 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 
 #ifdef ALLOW_REPEAT
 
-	static s16b prev_k_idx = 0;
+	static char prev_tag = '\0';
+	char cur_tag = '\0';
 
 #endif /* ALLOW_REPEAT */
 
@@ -5488,51 +5489,52 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 			/* Validate the item */
 			if (item_tester_okay(o_ptr))
 			{
-				bool allowed = !command_cmd || (prev_k_idx == o_ptr->k_idx);
-
-				if (!allowed)
-				{
-					allowed = get_item_allow(*cp);
-					if (allowed) prev_k_idx = o_ptr->k_idx;
-				}
-
-				/* Forget the item_tester_tval restriction */
+				/* Forget restrictions */
 				item_tester_tval = 0;
-
-				/* Forget the item_tester_hook restriction */
 				item_tester_hook = NULL;
-
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-				/* Success or aborted */
-				return allowed;
+				/* Success */
+				return TRUE;
 			}
 		}
 
 		else if ((inven && (*cp >= 0) && (*cp < INVEN_PACK)) ||
 		         (equip && (*cp >= INVEN_RARM) && (*cp < INVEN_TOTAL)))
 		{
-			/* Verify the item */
-			if (get_item_okay(*cp))
+			if (prev_tag && command_cmd)
 			{
-				bool allowed = !command_cmd || (prev_k_idx == inventory[*cp].k_idx);
-
-				if (!allowed)
+				/* Look up the tag and validate the item */
+				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN)) /* Reject */;
+				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
+				else if (!get_item_okay(k)) /* Reject */;
+				else
 				{
-					allowed = get_item_allow(*cp);
-					if (allowed) prev_k_idx = inventory[*cp].k_idx;
+					/* Accept that choice */
+					(*cp) = k;
+
+					/* Forget restrictions */
+					item_tester_tval = 0;
+					item_tester_hook = NULL;
+					command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+
+					/* Success */
+					return TRUE;
 				}
 
-				/* Forget the item_tester_tval restriction */
+				prev_tag = '\0'; /* prev_tag is no longer effective */
+			}
+
+			/* Verify the item */
+			else if (get_item_okay(*cp))
+			{
+				/* Forget restrictions */
 				item_tester_tval = 0;
-
-				/* Forget the item_tester_hook restriction */
 				item_tester_hook = NULL;
-
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-				/* Success or aborted */
-				return allowed;
+				/* Success */
+				return TRUE;
 			}
 		}
 	}
@@ -6087,6 +6089,9 @@ if (other_query_flag && !verify("本当に", k)) continue;
 				(*cp) = k;
 				item = TRUE;
 				done = TRUE;
+#ifdef ALLOW_REPEAT
+				cur_tag = which;
+#endif /* ALLOW_REPEAT */
 				break;
 			}
 
@@ -6169,6 +6174,9 @@ if (other_query_flag && !verify("本当に", k)) continue;
 					(*cp) = k;
 					item = TRUE;
 					done = TRUE;
+#ifdef ALLOW_REPEAT
+					cur_tag = which;
+#endif /* ALLOW_REPEAT */
 					break;
 				}
 
@@ -6270,13 +6278,7 @@ if (ver && !verify("本当に", k))
 	{
 #ifdef ALLOW_REPEAT
 		repeat_push(*cp);
-
-		if (command_cmd)
-		{
-			if (*cp == INVEN_FORCE) prev_k_idx = 0;
-			else if (*cp < 0) prev_k_idx = o_list[0 - (*cp)].k_idx;
-			else prev_k_idx = inventory[*cp].k_idx;
-		}
+		if (command_cmd) prev_tag = cur_tag;
 #endif /* ALLOW_REPEAT */
 
 		command_cmd = 0; /* Hack -- command_cmd is no longer effective */
@@ -6514,7 +6516,8 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 
 #ifdef ALLOW_REPEAT
 
-	static s16b prev_k_idx = 0;
+	static char prev_tag = '\0';
+	char cur_tag = '\0';
 
 	/* Get the item index */
 	if (repeat_pull(cp))
@@ -6531,62 +6534,78 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 		/* Floor item? */
 		else if (floor && (*cp < 0))
 		{
-			object_type *o_ptr;
-
-			/* Special index */
-			k = 0 - (*cp);
-
-			/* Acquire object */
-			o_ptr = &o_list[k];
-
-			/* Validate the item */
-			if (item_tester_okay(o_ptr))
+			if (prev_tag && command_cmd)
 			{
-				bool allowed = !command_cmd || (prev_k_idx == o_ptr->k_idx);
+				/* Scan all objects in the grid */
+				floor_num = scan_floor(floor_list, py, px, 0x03);
 
-				if (!allowed)
+				/* Look up the tag */
+				if (get_tag_floor(&k, prev_tag, floor_list, floor_num))
 				{
-					allowed = get_item_allow(*cp);
-					if (allowed) prev_k_idx = o_ptr->k_idx;
+					/* Accept that choice */
+					(*cp) = 0 - floor_list[k];
+
+					/* Forget restrictions */
+					item_tester_tval = 0;
+					item_tester_hook = NULL;
+					command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+
+					/* Success */
+					return TRUE;
 				}
 
-				/* Forget the item_tester_tval restriction */
+				prev_tag = '\0'; /* prev_tag is no longer effective */
+			}
+
+			/* Validate the item */
+			else if (item_tester_okay(&o_list[0 - (*cp)]))
+			{
+				/* Forget restrictions */
 				item_tester_tval = 0;
-
-				/* Forget the item_tester_hook restriction */
 				item_tester_hook = NULL;
-
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-				/* Success or aborted */
-				return allowed;
+				/* Success */
+				return TRUE;
 			}
 		}
 
 		else if ((inven && (*cp >= 0) && (*cp < INVEN_PACK)) ||
 		         (equip && (*cp >= INVEN_RARM) && (*cp < INVEN_TOTAL)))
 		{
-			/* Verify the item */
-			if (get_item_okay(*cp))
+			if (prev_tag && command_cmd)
 			{
-				bool allowed = !command_cmd || (prev_k_idx == inventory[*cp].k_idx);
-
-				if (!allowed)
+				/* Look up the tag and validate the item */
+				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN)) /* Reject */;
+				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
+				else if (!get_item_okay(k)) /* Reject */;
+				else
 				{
-					allowed = get_item_allow(*cp);
-					if (allowed) prev_k_idx = inventory[*cp].k_idx;
+					/* Accept that choice */
+					(*cp) = k;
+
+					/* Forget restrictions */
+					item_tester_tval = 0;
+					item_tester_hook = NULL;
+					command_cmd = 0; /* Hack -- command_cmd is no longer effective */
+
+					/* Success */
+					return TRUE;
 				}
 
-				/* Forget the item_tester_tval restriction */
+				prev_tag = '\0'; /* prev_tag is no longer effective */
+			}
+
+			/* Verify the item */
+			else if (get_item_okay(*cp))
+			{
+				/* Forget restrictions */
 				item_tester_tval = 0;
-
-				/* Forget the item_tester_hook restriction */
 				item_tester_hook = NULL;
-
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
-				/* Success or aborted */
-				return allowed;
+				/* Success */
+				return TRUE;
 			}
 		}
 	}
@@ -7489,6 +7508,9 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 				(*cp) = k;
 				item = TRUE;
 				done = TRUE;
+#ifdef ALLOW_REPEAT
+				cur_tag = which;
+#endif /* ALLOW_REPEAT */
 				break;
 			}
 
@@ -7597,6 +7619,9 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 						(*cp) = k;
 						item = TRUE;
 						done = TRUE;
+#ifdef ALLOW_REPEAT
+						cur_tag = which;
+#endif /* ALLOW_REPEAT */
 						break;
 					}
 				}
@@ -7612,6 +7637,9 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 						(*cp) = k;
 						item = TRUE;
 						done = TRUE;
+#ifdef ALLOW_REPEAT
+						cur_tag = which;
+#endif /* ALLOW_REPEAT */
 						break;
 					}
 				}
@@ -7727,13 +7755,7 @@ if (ver && !verify("本当に", k))
 	{
 #ifdef ALLOW_REPEAT
 		repeat_push(*cp);
-
-		if (command_cmd)
-		{
-			if (*cp == INVEN_FORCE) prev_k_idx = 0;
-			else if (*cp < 0) prev_k_idx = o_list[0 - (*cp)].k_idx;
-			else prev_k_idx = inventory[*cp].k_idx;
-		}
+		if (command_cmd) prev_tag = cur_tag;
 #endif /* ALLOW_REPEAT */
 
 		command_cmd = 0; /* Hack -- command_cmd is no longer effective */
