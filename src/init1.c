@@ -9,18 +9,13 @@
 #undef strchr
 char* _strchr(char* ptr, char ch)
 {
-  int k_flag = 0;
+	for ( ; *ptr != '\0'; ++ptr)
+	{
+		if (*ptr == ch)	return ptr;
+		if (iskanji(*ptr)) ++ptr;
+	}
 
-  for ( ; *ptr != '\0'; ++ptr)
-    if (k_flag == 0) {
-      if (*ptr == ch)
-	return ptr;
-      if (iskanji(*ptr))
-	k_flag = 1;
-    } else
-      k_flag = 0;
-
-  return NULL;
+	return NULL;
 }
 #define strchr _strchr
 #endif
