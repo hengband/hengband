@@ -2215,12 +2215,6 @@ msg_print("泥棒は笑って逃げた！");
 
 
 /*
- * Hack -- local "player stealth" value (see below)
- */
-static u32b noise = 0L;
-
-
-/*
  * Process a monster
  *
  * The monster is known to be within 100 grids of the player
@@ -2443,88 +2437,8 @@ msg_print("少しの間悲しい気分になった。");
 		}
 	}
 
-	/* Handle "sleep" */
-	if (m_ptr->csleep)
-	{
-		u32b notice = 0;
-
-		/* Hack -- handle non-aggravation */
-		if (!(p_ptr->cursed & TRC_AGGRAVATE)) notice = randint0(1024);
-
-		/* Nightmare monsters are more alert */
-		if (ironman_nightmare) notice /= 2;
-
-		/* Hack -- See if monster "notices" player */
-		if ((notice * notice * notice) <= noise)
-		{
-			/* Hack -- amount of "waking" */
-			int d = 1;
-
-			/* Wake up faster near the player */
-			if (m_ptr->cdis < 50) d = (100 / m_ptr->cdis);
-
-			/* Hack -- handle aggravation */
-			if (p_ptr->cursed & TRC_AGGRAVATE) d = m_ptr->csleep;
-
-			/* Still asleep */
-			if (m_ptr->csleep > d)
-			{
-				/* Monster wakes up "a little bit" */
-				m_ptr->csleep -= d;
-
-				/* Notice the "not waking up" */
-				if (m_ptr->ml)
-				{
-					/* Hack -- Count the ignores */
-					if (r_ptr->r_ignore < MAX_UCHAR)
-					{
-						r_ptr->r_ignore++;
-					}
-				}
-			}
-
-			/* Just woke up */
-			else
-			{
-				/* Reset sleep counter */
-				m_ptr->csleep = 0;
-
-				/* Notice the "waking up" */
-				if (m_ptr->ml)
-				{
-					char m_name[80];
-
-					/* Acquire the monster name */
-					monster_desc(m_name, m_ptr, 0);
-
-					/* Dump a message */
-#ifdef JP
-msg_format("%^sが目を覚ました。", m_name);
-#else
-					msg_format("%^s wakes up.", m_name);
-#endif
-
-
-					/* Redraw the health bar */
-					if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
-
-					if (r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2))
-						p_ptr->update |= (PU_MON_LITE);
-
-					/* Hack -- Count the wakings */
-					if (r_ptr->r_wake < MAX_UCHAR)
-					{
-						r_ptr->r_wake++;
-					}
-				}
-			}
-		}
-
-		/* Still sleeping */
-		if (m_ptr->csleep) return;
-	}
-
+	/* Handle "sleep" - Still sleeping */
+	if (m_ptr->csleep) return;
 
 	/* Handle "stun" */
 	if (m_ptr->stunned)
@@ -3670,10 +3584,6 @@ void process_monsters(void)
 	}
 
 
-	/* Hack -- calculate the "player noise" */
-	noise = (1L << (30 - p_ptr->skill_stl));
-
-
 	/* Process the monsters (backwards) */
 	for (i = m_max - 1; i >= 1; i--)
 	{
@@ -3718,7 +3628,7 @@ void process_monsters(void)
 		test = FALSE;
 
 		/* Handle "sensing radius" */
-		if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > 20 ? 20 : r_ptr->aaf) : r_ptr->aaf))
+		if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
 		{
 			/* We can "sense" the player */
 			test = TRUE;
