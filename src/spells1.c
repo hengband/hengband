@@ -8204,6 +8204,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 
 	int y1, x1;
 	int y2, x2;
+	int by, bx;
 
 	int dist_hack = 0;
 
@@ -8713,10 +8714,10 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	}
 
 	/* Save the "blast epicenter" */
-	y2 = y;
-	x2 = x;
+	by = y;
+	bx = x;
 
-	if (breath && (y1 == y2) && (x1 == x2))
+	if (breath && (y1 == by) && (x1 == bx))
 	{
 		breath = FALSE;
 		gm_rad = 1;
@@ -8757,7 +8758,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		{
 			flg &= ~(PROJECT_HIDE);
 
-			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y2, x2, (bool)(typ == GF_DISINTEGRATE), TRUE);
+			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, (bool)(typ == GF_DISINTEGRATE), TRUE);
 		}
 		else
 		{
@@ -8765,25 +8766,25 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			for (dist = 0; dist <= rad; dist++)
 			{
 				/* Scan the maximal blast area of radius "dist" */
-				for (y = y2 - dist; y <= y2 + dist; y++)
+				for (y = by - dist; y <= by + dist; y++)
 				{
-					for (x = x2 - dist; x <= x2 + dist; x++)
+					for (x = bx - dist; x <= bx + dist; x++)
 					{
 						/* Ignore "illegal" locations */
 						if (!in_bounds2(y, x)) continue;
 
 						/* Enforce a "circular" explosion */
-						if (distance(y2, x2, y, x) != dist) continue;
+						if (distance(by, bx, y, x) != dist) continue;
 
 						if (typ == GF_DISINTEGRATE)
 						{
 							/* Disintegration are stopped only by perma-walls */
-							if (!do_disintegration(y2, x2, y, x)) continue;
+							if (!do_disintegration(by, bx, y, x)) continue;
 						}
 						else
 						{
 							/* Ball explosions are stopped by walls */
-							if (!los(y2, x2, y, x)) continue;
+							if (!los(by, bx, y, x)) continue;
 						}
 
 						/* Save this grid */
@@ -8839,7 +8840,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			}
 
 			/* Hack -- center the cursor */
-			move_cursor_relative(y2, x2);
+			move_cursor_relative(by, bx);
 
 			/* Flush each "radius" seperately */
 			/*if (fresh_before)*/ Term_fresh();
@@ -8869,7 +8870,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			}
 
 			/* Hack -- center the cursor */
-			move_cursor_relative(y2, x2);
+			move_cursor_relative(by, bx);
 
 			/* Flush the explosion */
 			/*if (fresh_before)*/ Term_fresh();
@@ -8900,7 +8901,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			/* Find the closest point in the blast */
 			if (breath)
 			{
-				int d = dist_to_line(y, x, y1, x1, y2, x2);
+				int d = dist_to_line(y, x, y1, x1, by, bx);
 
 				/* Affect the grid */
 				if (project_f(who, d, y, x, dam, typ)) notice = TRUE;
@@ -8933,7 +8934,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			/* Find the closest point in the blast */
 			if (breath)
 			{
-				int d = dist_to_line(y, x, y1, x1, y2, x2);
+				int d = dist_to_line(y, x, y1, x1, by, bx);
 
 				/* Affect the object in the grid */
 				if (project_o(who, d, y, x, dam, typ)) notice = TRUE;
@@ -8961,6 +8962,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		/* Scan for monsters */
 		for (i = 0; i < grids; i++)
 		{
+			int effective_dist;
+
 			/* Hack -- Notice new "dist" values */
 			if (gm[dist + 1] == i) dist++;
 
@@ -8968,39 +8971,13 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			y = gy[i];
 			x = gx[i];
 
-			if (grids > 1)
-			{
-				/* Find the closest point in the blast */
-				if (breath)
-				{
-					int d = dist_to_line(y, x, y1, x1, y2, x2);
-
-					/* Affect the monster in the grid */
-					if ((y == y2) && (x == x2) && (y == py) && (x == px) && (flg & PROJECT_PLAYER))
-					{
-						if (project_m(who, d+1, y, x, dam, typ,flg)) notice = TRUE;
-					}
-					else if (project_m(who, d, y, x, dam, typ,flg)) notice = TRUE;
-				}
-				else
-				{
-					/* Affect the monster in the grid */
-					if ((y == y2) && (x == x2) && (y == py) && (x == px) && (flg & PROJECT_PLAYER))
-					{
-						if (!(flg & PROJECT_BEAM))
-						{
-							if (project_m(who, dist+1, y, x, dam, typ,flg)) notice = TRUE;
-						}
-					}
-					else if (project_m(who, dist, y, x, dam, typ,flg)) notice = TRUE;
-				}
-			}
-			else
+			/* A single bolt may be reflected */
+			if (grids <= 1)
 			{
 				monster_type *m_ptr = &m_list[cave[y][x].m_idx];
 				monster_race *ref_ptr = &r_info[m_ptr->r_idx];
 
-				if ((ref_ptr->flags2 & RF2_REFLECTING) && (!one_in_(10) && (flg & PROJECT_REFLECTABLE) && (!who || dist_hack > 1)))
+				if ((ref_ptr->flags2 & RF2_REFLECTING) && (flg & PROJECT_REFLECTABLE) && (!who || dist_hack > 1) && !one_in_(10))
 				{
 					byte t_y, t_x;
 					int max_attempts = 10;
@@ -9035,22 +9012,57 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 
 						ref_ptr->r_flags2 |= RF2_REFLECTING;
 					}
+
+					/* Reflected bolts randomly target either one */
 					flg &= ~(PROJECT_MONSTER | PROJECT_PLAYER);
 					if (one_in_(2)) flg |= PROJECT_MONSTER;
 					else flg |= PROJECT_PLAYER;
 
-					project(cave[y][x].m_idx, 0, t_y, t_x,  dam, typ, flg, monspell);
-				}
-				else
-				{
-					if ((y == y2) && (x == x2) && (y == py) && (x == px) && (flg & PROJECT_PLAYER))
-					{
-					}
-					else if (project_m(who, dist, y, x, dam, typ,flg)) notice = TRUE;
+					/* The bolt is reflected */
+					project(cave[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
+
+					/* Don't affect the monster any longer */
+					continue;
 				}
 			}
-		}
 
+
+			/* Find the closest point in the blast */
+			if (breath)
+			{
+				effective_dist = dist_to_line(y, x, y1, x1, by, bx);
+			}
+			else
+			{
+				effective_dist = dist;
+			}
+			
+			
+			/* Target may be the riding player */
+			if (p_ptr->riding && (y == py) && (x == px))
+			{
+				/* A beam or bolt is well aimed */
+				if ((flg & (PROJECT_BEAM | PROJECT_REFLECTABLE)) && (y == y2) && (x == x2))
+				{
+					/* Aimed on the player */
+					if (flg & PROJECT_PLAYER) continue;
+
+					/* Aimed on the mount */
+					/* The monster takes full damage */
+				}
+				
+				/* Otherwise partly affect the mount */
+				else
+				{
+					effective_dist++;
+				}
+			}
+			
+			/* Affect the monster in the grid */
+			if (project_m(who, effective_dist, y, x, dam, typ,flg)) notice = TRUE;
+		}
+		
+	
 		/* Player affected one monster (without "jumping") */
 		if (!who && (project_m_n == 1) && !jump)
 		{
@@ -9082,6 +9094,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		/* Scan for player */
 		for (i = 0; i < grids; i++)
 		{
+			int effective_dist;
+
 			/* Hack -- Notice new "dist" values */
 			if (gm[dist+1] == i) dist++;
 
@@ -9089,30 +9103,41 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 			y = gy[i];
 			x = gx[i];
 
+			/* Affect the player? */
+			if (y != py || x != px) continue;
+
 			/* Find the closest point in the blast */
 			if (breath)
 			{
-				int d = dist_to_line(y, x, y1, x1, y2, x2);
-
-				/* Affect the player */
-				if ((y == y2) && (x == x2) && (y == py) && (x == px) && (flg & PROJECT_MONSTER))
-				{
-					if (project_p(who, who_name, d+1, y, x, dam, typ, flg, monspell)) notice = TRUE;
-				}
-				else if (project_p(who, who_name, d, y, x, dam, typ, flg, monspell)) notice = TRUE;
+				effective_dist = dist_to_line(y, x, y1, x1, by, bx);
 			}
 			else
 			{
-				/* Affect the player */
-				if ((y == y2) && (x == x2) && (y == py) && (x == px) && (flg & PROJECT_MONSTER))
-				{
-					if (!((flg & PROJECT_BEAM) || (flg & PROJECT_STOP)))
-					{
-						if (project_p(who, who_name, dist+1, y, x, dam, typ, flg, monspell)) notice = TRUE;
-					}
-				}
-				else if (project_p(who, who_name, dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
+				effective_dist = dist;
 			}
+
+			/* Target may be your horse */
+			if (p_ptr->riding && (y == py) && (x == px))
+			{
+				/* A beam or bolt is well aimed */
+				if ((flg & (PROJECT_BEAM | PROJECT_REFLECTABLE)) && (y == y2) && (x == x2))
+				{
+					/* Aimed on the mount */
+					if (flg & PROJECT_MONSTER) continue;
+
+					/* Aimed on the player */
+					/* The player takes full damage */
+				}
+				
+				/* Otherwise partly affect the player */
+				else
+				{
+					effective_dist++;
+				}
+			}
+
+			/* Affect the player */
+			if (project_p(who, who_name, effective_dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
 		}
 	}
 
