@@ -3251,6 +3251,34 @@ static void display_player_other_flag_info(void)
         display_flag_aux(row+17, col, "¥«¥ª¥¹¸ú²Ì:", TR_CHAOTIC, &f, DP_WP);
         display_flag_aux(row+18, col, "ÍýÎÏ      :", TR_FORCE_WEAPON, &f, DP_WP);
 #else
+        display_flag_aux(row+ 0, col, "Slay Evil :", TR_SLAY_EVIL, &f, DP_WP);
+        display_flag_aux(row+ 0, col, "Slay Evil :", TR_KILL_EVIL, &f, (DP_WP|DP_IMM));
+        display_flag_aux(row+ 1, col, "Slay Und. :", TR_SLAY_UNDEAD, &f, DP_WP);
+        display_flag_aux(row+ 1, col, "Slay Und. :", TR_KILL_UNDEAD, &f, (DP_WP|DP_IMM));
+        display_flag_aux(row+ 2, col, "Slay Demon:", TR_SLAY_DEMON, &f, DP_WP);
+        display_flag_aux(row+ 2, col, "Slay Demon:", TR_KILL_DEMON, &f, (DP_WP|DP_IMM));
+        display_flag_aux(row+ 3, col, "Slay Drag.:", TR_SLAY_DRAGON, &f, DP_WP);
+        display_flag_aux(row+ 3, col, "Slay Drag.:", TR_KILL_DRAGON, &f, (DP_WP|DP_IMM));
+        display_flag_aux(row+ 4, col, "Slay Human:", TR_SLAY_HUMAN, &f, DP_WP);
+        display_flag_aux(row+ 4, col, "Slay Human:", TR_KILL_HUMAN, &f, (DP_WP|DP_IMM));
+        display_flag_aux(row+ 5, col, "Slay Anim.:", TR_SLAY_ANIMAL, &f, DP_WP);
+        display_flag_aux(row+ 5, col, "Slay Anim.:", TR_KILL_ANIMAL, &f, (DP_WP|DP_IMM));
+        display_flag_aux(row+ 6, col, "Slay Orc  :", TR_SLAY_ORC, &f, DP_WP);
+        display_flag_aux(row+ 6, col, "Slay Orc  :", TR_KILL_ORC, &f, (DP_WP|DP_IMM));
+        display_flag_aux(row+ 7, col, "Slay Troll:", TR_SLAY_TROLL, &f, DP_WP);
+        display_flag_aux(row+ 7, col, "Slay Troll:", TR_KILL_TROLL, &f, (DP_WP|DP_IMM));
+        display_flag_aux(row+ 8, col, "Slay Giant:", TR_SLAY_GIANT, &f, DP_WP);
+        display_flag_aux(row+ 8, col, "Slay Giant:", TR_KILL_GIANT, &f, (DP_WP|DP_IMM));
+        display_flag_aux(row+ 9, col, "Acid Brand:", TR_BRAND_ACID, &f, DP_WP);
+        display_flag_aux(row+10, col, "Elec Brand:", TR_BRAND_ELEC, &f, DP_WP);
+        display_flag_aux(row+11, col, "Fire Brand:", TR_BRAND_FIRE, &f, DP_WP);
+        display_flag_aux(row+12, col, "Cold Brand:", TR_BRAND_COLD, &f, DP_WP);
+        display_flag_aux(row+13, col, "Poison Brd:", TR_BRAND_POIS, &f, DP_WP);
+        display_flag_aux(row+14, col, "Sharpness :", TR_VORPAL, &f, DP_WP);
+        display_flag_aux(row+15, col, "Quake     :", TR_IMPACT, &f, DP_WP);
+        display_flag_aux(row+16, col, "Vampicic  :", TR_VAMPIRIC, &f, DP_WP);
+        display_flag_aux(row+17, col, "Chatic    :", TR_CHAOTIC, &f, DP_WP);
+        display_flag_aux(row+18, col, "Force Wep.:", TR_FORCE_WEAPON, &f, DP_WP);
 #endif
 
 
@@ -3283,6 +3311,25 @@ static void display_player_other_flag_info(void)
         display_flag_aux(row+17, col, "ÂÑµ×°Ý»ý  :", TR_SUST_CON, &f, 0);
         display_flag_aux(row+18, col, "Ì¥ÎÏ°Ý»ý  :", TR_SUST_CHR, &f, 0);
 #else
+        display_flag_aux(row+ 0, col, "Telepathy :", TR_TELEPATHY, &f, 0);
+        display_flag_aux(row+ 1, col, "ESP Evil  :", TR_ESP_EVIL, &f, 0);
+        display_flag_aux(row+ 2, col, "ESP Noliv.:", TR_ESP_NONLIVING, &f, 0);
+        display_flag_aux(row+ 3, col, "ESP Good  :", TR_ESP_GOOD, &f, 0);
+        display_flag_aux(row+ 4, col, "ESP Undead:", TR_ESP_UNDEAD, &f, 0);
+        display_flag_aux(row+ 5, col, "ESP Demon :", TR_ESP_DEMON, &f, 0);
+        display_flag_aux(row+ 6, col, "ESP Dragon:", TR_ESP_DRAGON, &f, 0);
+        display_flag_aux(row+ 7, col, "ESP Human :", TR_ESP_HUMAN, &f, 0);
+        display_flag_aux(row+ 8, col, "ESP Animal:", TR_ESP_ANIMAL, &f, 0);
+        display_flag_aux(row+ 9, col, "ESP Orc   :", TR_ESP_ORC, &f, 0);
+        display_flag_aux(row+10, col, "ESP Troll :", TR_ESP_TROLL, &f, 0);
+        display_flag_aux(row+11, col, "ESP Giant :", TR_ESP_GIANT, &f, 0);
+
+        display_flag_aux(row+13, col, "Sust Str  :", TR_SUST_STR, &f, 0);
+        display_flag_aux(row+14, col, "Sust Int  :", TR_SUST_INT, &f, 0);
+        display_flag_aux(row+15, col, "Sust Wis  :", TR_SUST_WIS, &f, 0);
+        display_flag_aux(row+16, col, "Sust Dex  :", TR_SUST_DEX, &f, 0);
+        display_flag_aux(row+17, col, "Sust Con  :", TR_SUST_CON, &f, 0);
+        display_flag_aux(row+18, col, "Sust Chr  :", TR_SUST_CHR, &f, 0);
 #endif
 
 
@@ -3303,7 +3350,6 @@ static void display_player_other_flag_info(void)
         display_flag_aux(row+ 4, col, "±£Ì©        :", TR_STEALTH, &f, 0);
         display_flag_aux(row+ 5, col, "Ãµº÷        :", TR_SEARCH, &f, 0);
 
-
         display_flag_aux(row+ 7, col, "¾èÇÏ        :", TR_RIDING, &f, 0);
         display_flag_aux(row+ 8, col, "ÅêÚ³        :", TR_THROW, &f, 0);
         display_flag_aux(row+ 9, col, "È¿¥Æ¥ì¥Ý¡¼¥È:", TR_NO_TELE, &f, 0);
@@ -3316,6 +3362,24 @@ static void display_player_other_flag_info(void)
         display_flag_aux(row+16, col, "È¿´¶        :", TR_AGGRAVATE, &f, 0);
         display_flag_aux(row+17, col, "ÂÀ¸Å¤Î±åÇ°  :", TR_TY_CURSE, &f, 0);
 #else
+        display_flag_aux(row+ 0, col, "Add Blows   :", TR_BLOWS, &f, 0);
+        display_flag_aux(row+ 1, col, "Add Tunnel  :", TR_TUNNEL, &f, 0);
+        display_flag_aux(row+ 2, col, "Add Infra   :", TR_INFRA, &f, 0);
+        display_flag_aux(row+ 3, col, "Add Device  :", TR_MAGIC_MASTERY, &f, 0);
+        display_flag_aux(row+ 4, col, "Add Stealth :", TR_STEALTH, &f, 0);
+        display_flag_aux(row+ 5, col, "Add Search  :", TR_SEARCH, &f, 0);
+
+        display_flag_aux(row+ 7, col, "Riding      :", TR_RIDING, &f, 0);
+        display_flag_aux(row+ 8, col, "Throw       :", TR_THROW, &f, 0);
+        display_flag_aux(row+ 9, col, "No Teleport :", TR_NO_TELE, &f, 0);
+        display_flag_aux(row+10, col, "Anti Magic  :", TR_NO_MAGIC, &f, 0);
+        display_flag_aux(row+11, col, "Econom. Mana:", TR_DEC_MANA, &f, 0);
+        display_flag_aux(row+12, col, "Warning     :", TR_WARNING, &f, 0);
+        display_flag_aux(row+13, col, "Blessed     :", TR_BLESSED, &f, 0);
+        display_flag_aux(row+14, col, "Drain Exp   :", TR_DRAIN_EXP, &f, 0);
+        display_flag_aux(row+15, col, "Rnd.Teleport:", TR_TELEPORT, &f, 0);
+        display_flag_aux(row+16, col, "Aggravate   :", TR_AGGRAVATE, &f, 0);
+        display_flag_aux(row+17, col, "TY Curse    :", TR_TY_CURSE, &f, 0);
 #endif
 
 }
@@ -3685,492 +3749,6 @@ c_put_str(TERM_L_GREEN, "Ç½ÎÏ½¤Àµ", row - 1, col);
 	}
 }
 
-
-#if 0
-/*
- * Object flag names
- */
-static cptr object_flag_names[96] =
-{
-#ifdef JP
-"+ÏÓÎÏ",
-"+ÃÎÇ½",
-"+¸­¤µ",
-"+´ïÍÑ",
-"+ÂÑµ×",
-"+Ì¥ÎÏ",
-#else
-	"Add Str",
-	"Add Int",
-	"Add Wis",
-	"Add Dex",
-	"Add Con",
-	"Add Chr",
-#endif
-
-#ifdef JP
-	"ËâÆ»¶ñ",
-
-	"ÍýÎÏ",
-#else
-	"M.Item-Mas",
-
-	"Force wep.",
-#endif
-
-#ifdef JP
-"+±£Ì©¹ÔÆ°",
-"+Ãµº÷",
-"+ÀÖ³°Àþ»ë",
-"+·¡ºï",
-"+¥¹¥Ô¡¼¥É",
-"+ÂÇ·â²ó¿ô",
-"¥«¥ª¥¹¸ú²Ì",
-"µÛ·ì",
-"Æ°Êª ÇÜÂÇ",
-"¼Ù°­ ÇÜÂÇ",
-"ÉÔ»à ÇÜÂÇ",
-"°­Ëâ ÇÜÂÇ",
-"¥ª¡¼¥¯ÇÜÂÇ",
-"¥È¥í¥ëÇÜÂÇ",
-"µð¿Í ÇÜÂÇ",
-"Î¶ ÇÜÂÇ",
-"Î¶ ÇÜÇÜÂÇ",
-"±Ô¿Ï",
-"ÃÏ¿ÌÈ¯À¸",
-"ÆÇÂ°À­¹¶·â",
-"»ÀÂ°À­¹¶·â",
-"ÅÅÂ°À­¹¶·â",
-"²ÐÂ°À­¹¶·â",
-"ÎäÂ°À­¹¶·â",
-#else
-	"Add Stea.",
-	"Add Sear.",
-	"Add Infra",
-	"Add Tun..",
-	"Add Speed",
-	"Add Blows",
-	"Chaotic",
-	"Vampiric",
-	"Slay Anim.",
-	"Slay Evil",
-	"Slay Und.",
-	"Slay Demon",
-	"Slay Orc",
-	"Slay Troll",
-	"Slay Giant",
-	"Slay Drag.",
-	"Kill Drag.",
-	"Sharpness",
-	"Impact",
-	"Poison Brd",
-	"Acid Brand",
-	"Elec Brand",
-	"Fire Brand",
-	"Cold Brand",
-#endif
-
-
-#ifdef JP
-"ÏÓÎÏ ÊÝ»ý",
-"ÃÎÇ½ ÊÝ»ý",
-"¸­¤µ ÊÝ»ý",
-"´ïÍÑ ÊÝ»ý",
-"ÂÑµ× ÊÝ»ý",
-"Ì¥ÎÏ ÊÝ»ý",
-#else
-	"Sust Str",
-	"Sust Int",
-	"Sust Wis",
-	"Sust Dex",
-	"Sust Con",
-	"Sust Chr",
-#endif
-
-	NULL,
-	NULL,
-#ifdef JP
-"Ä¶ÂÑ»À  ",
-"Ä¶ÂÑÅÅ·â",
-"Ä¶ÂÑ²Ð±ê",
-"Ä¶ÂÑÎäµ¤",
-#else
-	"Imm Acid",
-	"Imm Elec",
-	"Imm Fire",
-	"Imm Cold",
-#endif
-
-	NULL,
-#ifdef JP
-"È¿¼Í",
-"ÂÑËãáã",
-"·Ð¸³ÃÍÊÝ»ý",
-#else
-	"Reflect",
-	"Free Act",
-	"Hold Life",
-#endif
-
-#ifdef JP
-"ÂÑ»À  ",
-"ÂÑÅÅ·â",
-"ÂÑ²Ð±ê",
-"ÂÑÎäµ¤",
-"ÂÑÆÇ  ",
-"ÂÑ¶²ÉÝ",
-"ÂÑÁ®¸÷",
-"ÂÑ°Å¹õ",
-"ÂÑÌÕÌÜ",
-"ÂÑº®Íð",
-"ÂÑ¹ì²»",
-"ÂÑÇËÊÒ",
-"ÂÑÃÏ¹ö",
-"ÂÑ°øº®",
-"ÂÑ¥«¥ª",
-"ÂÑÎô²½",
-#else
-	"Res Acid",
-	"Res Elec",
-	"Res Fire",
-	"Res Cold",
-	"Res Pois",
-	"Res Fear",
-	"Res Lite",
-	"Res Dark",
-	"Res Blind",
-	"Res Conf",
-	"Res Sound",
-	"Res Shard",
-	"Res Neth",
-	"Res Nexus",
-	"Res Chaos",
-	"Res Disen",
-#endif
-
-
-
-
-#ifdef JP
-	"²Ð±ê¥ª¡¼¥é",
-
-	"ÅÅµ¤¥ª¡¼¥é",
-#else
-	"Aura Fire",
-
-	"Aura Elec",
-#endif
-
- 	NULL,
-#ifdef JP
-	"Îäµ¤¥ª¡¼¥é",
-#else
-	"Aura Cold",
-#endif
-#ifdef JP
-"ËÉ¥Æ¥ì¥Ý",
-"È¿ËâË¡",
-"¸º¾ÃÈñËâÎÏ",
-"¼Ù°­¤Ê±åÇ°",
-NULL,
-"Hide Type",
-"Show Mods",
-"¾ï»þÅÁÀâÊª",
-"ÉâÍ·",
-"¸÷¸»",
-"Æ©ÌÀ»ëÇ§",
-"¥Æ¥ì¥Ñ¥·¡¼",
-"ÃÙ¾Ã²½",
-"µÞ²óÉü",
-"¶¯ÎÏ¼Í·â",
-"¹âÂ®¼Í·â",
-"Ìµ½ý »À",
-"Ìµ½ý ÅÅ",
-"Ìµ½ý ²Ð",
-"Ìµ½ý Îä",
-"»ÏÆ°",
-"·Ð¸³µÛ¼ý",
-"¥Æ¥ì¥Ý¡¼¥È",
-"È¿´¶",
-"½ËÊ¡",
-NULL,
-NULL,
-NULL,
-#else
-	"NoTeleport",
-	"AntiMagic",
-	"DecMana",
-	"EvilCurse",
- 	NULL,
- 	"Hide Type",
-	"Show Mods",
-	"Insta Art",
-	"Levitate",
-	"Lite",
-	"See Invis",
-	"Telepathy",
-	"Digestion",
-	"Regen",
-	"Xtra Might",
-	"Xtra Shots",
-	"Ign Acid",
-	"Ign Elec",
-	"Ign Fire",
-	"Ign Cold",
-	"Activate",
-	"Drain Exp",
-	"Teleport",
-	"Aggravate",
-	"Blessed",
-	NULL,
-	NULL,
-	NULL,
-#endif
-
-};
-
-
-/*
- * Summarize resistances
- */
-static void display_player_ben(void)
-{
-	int i, x, y;
-
-	object_type *o_ptr;
-
-	u32b flgs[TR_FLAG_SIZE];
-
-	u16b b[6];
-	u16b color[6];
-
-
-	/* Reset */
-	for (i = 0; i < 6; i++) b[i] = 0;
-
-
-	/* Scan equipment */
-	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
-	{
-		/* Object */
-		o_ptr = &inventory[i];
-
-		/* Known object flags */
-		object_flags_known(o_ptr, flgs);
-
-
-		if ((prace_is_(RACE_S_FAIRY)) && (have_flag(flgs, TR_AGGRAVATE)))
-		{
-			remove_flag(flgs, TR_AGGRAVATE);
-			add_flag(flgs, TR_STEALTH);
-		}
-
-		/* Incorporate */
-		b[0] |= (flgs[0] & 0xFFFF);
-		b[1] |= (flgs[0] >> 16);
-		b[2] |= (flgs[1] & 0xFFFF);
-		b[3] |= (flgs[1] >> 16);
-		b[4] |= (flgs[2] & 0xFFFF);
-		b[5] |= (flgs[2] >> 16);
-	}
-
-
-	/* Player flags */
-	player_flags(flgs);
-
-	/* Incorporate */
-	b[0] |= (flgs[0] & 0xFFFF);
-	b[1] |= (flgs[0] >> 16);
-	b[2] |= (flgs[1] & 0xFFFF);
-	b[3] |= (flgs[1] >> 16);
-	b[4] |= (flgs[2] & 0xFFFF);
-	b[5] |= (flgs[2] >> 16);
-
-	/* Player flags */
-	tim_player_flags(flgs, FALSE);
-
-	/* Incorporate */
-	b[0] |= (flgs[0] & 0xFFFF);
-	b[1] |= (flgs[0] >> 16);
-	b[2] |= (flgs[1] & 0xFFFF);
-	b[3] |= (flgs[1] >> 16);
-	b[4] |= (flgs[2] & 0xFFFF);
-	b[5] |= (flgs[2] >> 16);
-	color[0] = (u16b)(flgs[0] & 0xFFFF);
-	color[1] = (u16b)(flgs[0] >> 16);
-	color[2] = (u16b)(flgs[1] & 0xFFFF);
-	color[3] = (u16b)(flgs[1] >> 16);
-	color[4] = (u16b)(flgs[2] & 0xFFFF);
-	color[5] = (u16b)(flgs[2] >> 16);
-
-	/* Scan cols */
-	for (x = 0; x < 6; x++)
-	{
-		/* Scan rows */
-		for (y = 0; y < 16; y++)
-		{
-			byte a = TERM_SLATE;
-			char c = '.';
-
-			cptr name = object_flag_names[16*x+y];
-
-			/* No name */
-			if (!name) continue;
-
-			/* Dump name */
-			Term_putstr(x * 13, y + 4, -1, TERM_WHITE, name);
-
-			/* Dump colon */
-			Term_putch(x * 13 + 10, y + 4, TERM_WHITE, ':');
-
-			/* Check flag */
-			if (b[x] & (1<<y))
-			{
-				if (color[x] & (1<<y))
-				{
-					a = TERM_YELLOW;
-					c = '#';
-				}
-				else
-				{
-					a = TERM_WHITE;
-					c = '+';
-				}
-			}
-
-			/* Dump flag */
-			Term_putch(x * 13 + 11, y + 4, a, c);
-		}
-	}
-}
-
-
-/*
- * Summarize resistances
- */
-static void display_player_ben_one(int mode)
-{
-	int i, n, x, y;
-
-	object_type *o_ptr;
-
-	u32b flgs[TR_FLAG_SIZE];
-
-	u16b b[13][6];
-	u16b color[6];
-
-
-	/* Scan equipment */
-	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
-	{
-		/* Index */
-		n = (i - INVEN_RARM);
-
-		/* Object */
-		o_ptr = &inventory[i];
-
-		object_flags_known(o_ptr, flgs);
-
-		if ((prace_is_(RACE_S_FAIRY)) && (have_flag(flgs, TR_AGGRAVATE)))
-		{
-			remove_flag(flgs, TR_AGGRAVATE);
-			add_flag(flgs, TR_STEALTH);
-		}
-
-		/* Incorporate */
-		b[n][0] = (u16b)(flgs[0] & 0xFFFF);
-		b[n][1] = (u16b)(flgs[0] >> 16);
-		b[n][2] = (u16b)(flgs[1] & 0xFFFF);
-		b[n][3] = (u16b)(flgs[1] >> 16);
-		b[n][4] = (u16b)(flgs[2] & 0xFFFF);
-		b[n][5] = (u16b)(flgs[2] >> 16);
-	}
-
-
-	/* Index */
-	n = 12;
-
-	/* Player flags */
-	player_flags(flgs);
-
-	/* Incorporate */
-	b[n][0] = (u16b)(flgs[0] & 0xFFFF);
-	b[n][1] = (u16b)(flgs[0] >> 16);
-	b[n][2] = (u16b)(flgs[1] & 0xFFFF);
-	b[n][3] = (u16b)(flgs[1] >> 16);
-	b[n][4] = (u16b)(flgs[2] & 0xFFFF);
-	b[n][5] = (u16b)(flgs[2] >> 16);
-
-	/* Player flags */
-	tim_player_flags(flgs, FALSE);
-
-	/* Incorporate */
-	b[n][0] |= (flgs[0] & 0xFFFF);
-	b[n][1] |= (flgs[0] >> 16);
-	b[n][2] |= (flgs[1] & 0xFFFF);
-	b[n][3] |= (flgs[1] >> 16);
-	b[n][4] |= (flgs[2] & 0xFFFF);
-	b[n][5] |= (flgs[3] >> 16);
-	color[0] = (u16b)(flgs[0] & 0xFFFF);
-	color[1] = (u16b)(flgs[0] >> 16);
-	color[2] = (u16b)(flgs[1] & 0xFFFF);
-	color[3] = (u16b)(flgs[1] >> 16);
-	color[4] = (u16b)(flgs[2] & 0xFFFF);
-	color[5] = (u16b)(flgs[2] >> 16);
-
-
-	/* Scan cols */
-	for (x = 0; x < 3; x++)
-	{
-		/* Equippy */
-		display_player_equippy(2, x * 26 + 11, 0);
-
-		/* Label */
-		Term_putstr(x * 26 + 11, 3, -1, TERM_WHITE, "abcdefghijkl@");
-
-		/* Scan rows */
-		for (y = 0; y < 16; y++)
-		{
-			cptr name = object_flag_names[48*mode+16*x+y];
-
-			/* No name */
-			if (!name) continue;
-
-			/* Dump name */
-			Term_putstr(x * 26, y + 4, -1, TERM_WHITE, name);
-
-			/* Dump colon */
-			Term_putch(x * 26 + 10, y + 4, TERM_WHITE, ':');
-
-			/* Check flags */
-			for (n = 0; n < 13; n++)
-			{
-				byte a = TERM_SLATE;
-				char c = '.';
-
-				/* Check flag */
-				if (b[n][3*mode+x] & (1<<y))
-				{
-					if ((n == 12) && (color[3*mode+x] & (1<<y)))
-					{
-						a = TERM_YELLOW;
-						c = '#';
-					}
-					else
-					{
-						a = TERM_WHITE;
-						c = '+';
-					}
-				}
-
-				/* Dump flag */
-				Term_putch(x * 26 + 11 + n, y + 4, a, c);
-			}
-		}
-	}
-}
-
-#endif
 
 /*
  * Display the character on the screen (various modes)
