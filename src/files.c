@@ -593,6 +593,11 @@ errr process_pref_file_command(char *buf)
 				return (0);
 			}
 		}
+
+		/* don't know that option. ignore it.*/
+		msg_format("Ignored wrong option %s.", buf+2);
+		msg_print(NULL);
+		return 0;
 	}
 
 	/* Process "Y:<str>" -- turn option on */
@@ -614,6 +619,11 @@ errr process_pref_file_command(char *buf)
 				return (0);
 			}
 		}
+
+		/* don't know that option. ignore it.*/
+		msg_format("Ignored wrong option %s.", buf+2);
+		msg_print(NULL);
+		return 0;
 	}
 
 	/* Process "Z:<type>:<str>" -- set spell color */
