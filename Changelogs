@@ -1,4 +1,134 @@
+2002-06-12  Takeshi Mogami  <mogami@cvs>
+
+	* src/hissatsu.c 1.11, src/load.c 1.30, src/mane.c 1.10, src/melee1.c 1.16, src/melee2.c 1.25, src/monster1.c 1.17, src/monster2.c 1.34, src/mspells1.c 1.24, src/mspells2.c 1.20, src/object2.c 1.41, src/racial.c 1.19, src/report.c 1.20, src/save.c 1.18, src/scores.c 1.7, src/spells1.c 1.24, src/spells2.c 1.37, src/spells3.c 1.39, src/types.h 1.21, src/util.c 1.28, src/variable.c 1.25, src/wild.c 1.14, src/wizard2.c 1.23, src/xtra1.c 1.41, src/xtra2.c 1.37, src/artifact.c 1.24, src/birth.c 1.41, src/cmd1.c 1.44, src/cmd2.c 1.28, src/cmd4.c 1.41, src/cmd5.c 1.34, src/dungeon.c 1.53, src/effects.c 1.24, src/externs.h 1.64, src/files.c 1.59:
+	Vanillaにならって、キャラクターの状態を表わすグローバル変数の多くを
+	p_ptr の中に移した。
+
+2002-06-11  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.39:
+	見習いパラディン(単独)とパラディンがGOODフラグを持っていなかったので追加。
+
+	* src/spells1.c 1.23:
+	聖戰を使ったとき善良なペットは判定なしで加速だけ受ける。
+
+	* src/cmd5.c 1.33, src/defines.h 1.59, src/monster2.c 1.33, src/mspells2.c 1.19:
+	敵が敵に対しての行動として死者復活を使うとき、視界範囲外でもメッセージが
+	出ていたのを修正。
+
+	* src/spells3.c 1.38:
+	赤魔道師の熟練度が正しく表示されていないのを修正。魔法の熟練度のコードを整理。
+
+	* src/externs.h 1.63, src/object1.c 1.35:
+	'm'コマンドで魔法書を選択するときラベル a) b) c) d)...を銘をに対応した
+	正しいラベル a) b)... e) f)... にした。ついでに、床上にアイテムがあるとき、
+	「'4'or'6' 床上」が間違って表示されていたバグ修正。
+
+	* src/tables.c 1.41:
+	聖なる御言葉の英語名が間違っていたのを修正。
+
+2002-06-10  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.46:
+	ファイルの先頭/終端に移動コマンド'g'/'G'追加。
+	マクロ定義挿入'm'コマンド、キー配置定義挿入'c'コマンド追加。
+
+	* lib/file/news.txt 1.10:
+	バグ報告を"heng-ml@kmc.gr.jp"へ、という風に書き変え。
+
+2002-06-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.45:
+	さっきの修正でまたエンバグしていたので 再修正。
+
+	* src/monster2.c 1.32:
+	カメレオンの処理の変更で、たぬきの処理に副作用が出てしまっていたので修正。
+
+	* src/autopick.c 1.44:
+	「アーティファクト生成の巻物」を名前に"生成の巻物"を含む★☆と認識して
+	しまっていたので、名詞型のキーワードと同様の処理に変更した。
+	つまり、「:」なしで文字列が続くときに最初の「アーティファクト」を
+	キーワードと認識しないようにした。
+
+	* src/monster2.c 1.31:
+	カメレオンの変身コード整理。get_mon_num_prep()の段階で条件を全部付けて
+	get_mon_num()の呼び出しを1回にした。
+
+2002-06-09  _nothere  <_nothere@cvs>
+
+	* src/monster2.c 1.30:
+	summon_specific_who_for_chameleonsはsummon_specific_whoの流用で問題ないようなのでそのように変更.
+
+2002-06-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/monster2.c 1.29:
+	カメレオンの変身時に変身するモンスターの選択に失敗したとき「プレイヤー」に
+	変身するバグがあるようなので修正。
+
+	* src/cmd1.c 1.43, src/cmd2.c 1.27, src/defines.h 1.58, src/dungeon.c 1.52, src/main-mac.c 1.17, src/main-win.c 1.17:
+	内部で使う特殊キーコード 255 254 253 252 をマクロで定義。
+	main-mac.cの終了メニューも特殊キーを使用するようにした。
+
+2002-06-09  _nothere  <_nothere@cvs>
+
+	* src/dungeon.c 1.51, src/main-win.c 1.16:
+	^Xにマクロを割り当てるとWindowsで[x]やメニューを使った場合などで問題が出たので, Windowsのメニューか[x]から終了させる場合は内部コード252を発行するようにした.
+
+2002-06-09  Takeshi Mogami  <mogami@cvs>
+
+	* src/cave.c 1.50:
+	マクロ等で射撃するとき、デフォルトのターゲットに実際の射程が
+	考慮されていなかったバグ修正。
+
+2002-06-08  Takeshi Mogami  <mogami@cvs>
+
+	* src/defines.h 1.57, src/externs.h 1.62, src/monster2.c 1.28, src/spells3.c 1.37, src/variable.c 1.24:
+	チェンジモンスターのときにplace_monster_one()で使っている外部変数
+	 monster_terrain_sensitive の役割を modeフラグに移した。
+
+	* src/cave.c 1.49:
+	'M'ap表示でトラップ未感知の地形の優先順位が高すぎて啓蒙した後で表示すると
+	'x'だけで潰れて見えていたのを修正。
+
+2002-06-07  Takeshi Mogami  <mogami@cvs>
+
+	* src/main-mac.c 1.16:
+	Kuwaさんより、タイルグラフィックを外部のリソースファイルとして分離。
+
+2002-06-06  Takeshi Mogami  <mogami@cvs>
+
+	* src/object1.c 1.34:
+	24個以上のアイテムが床にあるとき、num <= 23 で floor_num[num] に
+	書き込んでしまっていたので、num < 23 に修正。
+
+2002-06-05  Takeshi Mogami  <mogami@cvs>
+
+	* src/spells2.c 1.36:
+	lite_area()をZ240型とVanilla型を合体したものにした。
+
+	* src/cave.c 1.48:
+	旧タイルでトラップが間違ってlighting効果の対象になって、
+	表示がおかしくなってバグ修正。
+
+2002-06-04  Takeshi Mogami  <mogami@cvs>
+
+	* lib/pref/graf-xxx.prf 1.11:
+	老ソーサラーのタイルの設定行がバグっていたので修正。
+
+	* src/dungeon.c 1.50:
+	play-recordに日付が2回づつ入るバグ修正。実際のゲームへの影響はひとつだけ、
+	nightmareモードで12時の悪夢が2回連続で起きていた。
+
 2002-06-03  Takeshi Mogami  <mogami@cvs>
+
+	* src/autopick.c 1.43:
+	コメント文章がおかしいの修正。RC2アーカイブの方に変更する必要はなし。
+
+	* src/autopick.c 1.42:
+	optimizeを遅らせるときの処理はちゃんとできていたが、遅らせないときの処理が
+	エンバグしていたので再修正。
+
+	* Changelogs 1.47: 更新
 
 	* configure.in 1.16, lib/file/news.txt 1.9, lib/file/news_j.txt 1.9:
 	バージョンを 1.1.0 RC2 にした。
