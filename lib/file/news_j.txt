@@ -9,10 +9,10 @@
        Angband 2.7 - 2.9:    Ben Harrison (benh@phial.com)
             日本語版 1.2:    しとしん, sayu, FIRST, TeO
 
-       Old ZAngband code:    (Mr) Topi Ylinen < f1toyl@uta.fi >
-       New ZAngband code:    Robert Ruehlmann < rr9@thangorodrim.net >
+       Old ZAngband code:    (Mr) Topi Ylinen < f1toyl＠uta.fi >
+       New ZAngband code:    Robert Ruehlmann < rr9＠thangorodrim.net >
     ZAngband 2.3.0 - ???:    The ZAngband DevTeam
-       ZAngband 日本語版:    板倉充洋 < m-itakura@geocities.co.jp >
+       ZAngband 日本語版:    板倉充洋 < itakura＠users.sourceforge.net >
 
 
           変愚蛮怒: Mr.hoge (echizen＠users.sourceforge.jp) ＆ 多くの方々
