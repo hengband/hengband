@@ -1,4 +1,74 @@
+2002-03-20  Takeshi Mogami  <mogami@cvs>
+
+	* src/load.c 1.19:
+	粗悪品のACや劣化したpvalがロードすると元に戻ってしまうバグを修正。
+	アイテムのロード時にいちいち k_info、e_info、a_info から情報を読んでちゃんと
+	セーブされていたオブジェクトデータを上書きしていたが、無意味でバグの温床
+	なので、そのようなコードをまるごと削除した。
+
+	* src/dungeon.c 1.25, src/bldg.c 1.10, src/cmd6.c 1.17, src/defines.h 1.29:
+	EATER_CHARGE (= 0x10000L) 等のマクロを定義して魔道具術師のコードを整理。
+	さらに、ロッドの充填状態の数値をデノミして体力回復のロッドを99本とか持って
+	いてもオーバーフローしないようにした。
+
+	* lib/pref/graf-new.prf 1.6:
+	フェアノールのランプ、パランティア、中つ国ガイド、修正。
+
+2002-03-18  Takeshi Mogami  <mogami@cvs>
+
+	* lib/pref/graf-new.prf 1.5:
+	歌集の16x16タイルが変なのを定義されてたので削除。
+
+2002-03-17  Takeshi Mogami  <mogami@cvs>
+
+	* lib/help/jmagic.txt 1.3:
+	剣術家の型の説明を忘れていたので追加。
+
+	* lib/help/jmagic.hlp 1.2, lib/help/jmagic.txt 1.2:
+	魔法の説明を変愚蛮怒に対応。
+
+	* src/cmd6.c 1.16:
+	魔道具術師のリピートコマンドでロッドを使うコードが間違っていたので修正。
+
+2002-03-16  Takeshi Mogami  <mogami@cvs>
+
+	* lib/edit/r_info_j.txt 1.27:
+	モンスターのコードがバグったときにちょくちょく「プレイヤー」があらわれて
+	HPゲージの表示で0の割り算が起きて変愚蛮怒が落ちるので、バグがあってもいきなり
+	落ちないように、1点だけHPを与える修正。
+
+	* src/monster2.c 1.17:
+	カメレオンの王が変身に失敗して「プレイヤー」になるのを修正。
+
+2002-03-15  hoge  <hoge@cvs>
+
+	* src/object2.c 1.32, src/save.c 1.8, src/spells1.c 1.12, src/spells2.c 1.13, src/spells3.c 1.16, src/types.h 1.10, src/wizard1.c 1.14, src/wizard2.c 1.13, src/xtra1.c 1.28, configure.in 1.12, lib/edit/a_info_j.txt 1.16, lib/edit/e_info_j.txt 1.15, lib/edit/k_info_j.txt 1.15, src/artifact.c 1.18, src/cmd1.c 1.26, src/cmd2.c 1.18, src/cmd3.c 1.11, src/cmd6.c 1.15, src/defines.h 1.28, src/dungeon.c 1.24, src/effects.c 1.15, src/externs.h 1.34, src/files.c 1.40, src/init1.c 1.28, src/load.c 1.18, src/mane.c 1.6, src/melee2.c 1.17, src/mind.c 1.7, src/mspells1.c 1.17, src/mspells2.c 1.11, src/mspells3.c 1.9, src/object1.c 1.22:
+	呪いは外れないだけではなく、いろいろイヤな効果がある。
+
+2002-03-15  Takeshi Mogami  <mogami@cvs>
+
+	* src/dungeon.c 1.23, src/generate.c 1.11, src/init1.c 1.27, src/variable.c 1.15, src/wild.c 1.9, src/xtra2.c 1.25:
+	新規ゲーム開始のときのパネルの位置が変だったので、再修正。
+
+	* lib/edit/r_info_j.txt 1.26:
+	鳳凰の説明。相談の結果、文の構成をちょっとだけ修正。
+
+2002-03-15  henkma  <henkma@cvs>
+
+	* src/spells2.c 1.12: 自己分析のメッセージの修正.
+
+	* src/xtra1.c 1.27:
+	剣術家の降鬼陣でAC-50がパラメータ表示の方に現れてなかったので修正.
+	ひょっとして意図的だったりした？
+
 2002-03-13  Takeshi Mogami  <mogami@cvs>
+
+	* src/cave.c 1.26:
+	lite_spot()の使える範囲がin_bound()だったせいで画面端の
+	ボルトやボールのアニメーション後にゴミが残っていたのを修正。
+	ボルトやボールのアニメーションを全角キャラに対応。
+
+	* Changelogs 1.28: 更新
 
 	* src/xtra2.c 1.24:
 	center_player オフのときの荒野での画面切り変えがおかしかったので修正。
