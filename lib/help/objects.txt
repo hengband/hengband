@@ -493,47 +493,61 @@ meaning the extra resistance of Nether.
 
 List of abbreviations:
 
-*Ac : immune to acid                Ma : decreases mana consumption
-*El : immune to electricity         Th : suitable for throwing
-*Fi : immune to fire                Rf : reflection
-*Co : immune to cold                Fa : free action
-Ac : resistance to acid             Si : see invisible
-El : resistance to electricity      Hl : hold life
-Fi : resistance to fire             Esp : telepathy
-Co : resistance to cold             Sd : slow digestion
-Po : resistance to poison           Rg : regeneration
-Li : resistance to light            Lv : levitation
-Dk : resistance to darkness         Lu : extra light
-Sh : resistance to shards           Wr : provides warning
-Bl : resistance to blindness        Xm : xtra might when shooting
-Cf : resistance to confusion        Xs : xtra number of shots
-So : resistance to sound            Ag : aggravate monsters
-Nt : resistance to nether           Bs : blessed weapon
-Nx : resistance to nexus            (F : fiery sheath
-Ca : resistance to chaos            (E : electric sheath
-Di : resistance to disenchantment   (C : cold sheath
-Fe : resistance to fear             (M : anti-magic shell
-At : extra blows                    (T : prevent teleportation
-Sp : affects speed                  |A : brand acid
-St : affects strength               |E : brand electricity
-In : affects intelligence           |F : brand fire
-Wi : affects wisdom                 |Co : brand cold
-Dx : affects dexterity              |P : brand pois
-Cn : affects constitution           |Ca : chaotic effects
-Ch : affects charisma               |V : vampiric weapon
-Sl : affects stealth                |Q : weapon of quake
-Sr : affects searching ability      |S : vorpal hit
-If : affects infravision            |M : weapon of the force
-Dg : affects tunneling ability      /* : slay evil
-(St : sustain strength              /p : slay human
-(In : sustain intelligence          /D : kill dragon
-(Wi : sustain wisdom                /d : slay dragon
-(Dx : sustain dexterity             /o : slay orc
-(Cn : sustain constitution          /T : slay troll
-(Ch : sustain charisma              /P : slay giant
-                                    /U : slay demon
-                                    /L : slay undead
-                                    /Z : slay animal
+At : extra blows                    Ac : resistance to acid
+Sp : affects speed                  El : resistance to electricity
+St : affects strength               Fi : resistance to fire
+In : affects intelligence           Co : resistance to cold
+Wi : affects wisdom                 Po : resistance to poison
+Dx : affects dexterity              Li : resistance to light
+Cn : affects constitution           Dk : resistance to darkness
+Ch : affects charisma               Sh : resistance to shards
+Sl : affects stealth                Bl : resistance to blindness
+Sr : affects searching ability      Cf : resistance to confusion
+If : affects infravision            So : resistance to sound
+Dg : affects tunneling ability      Nt : resistance to nether
+*Ac : immune to acid                Nx : resistance to nexus
+*El : immune to electricity         Ca : resistance to chaos
+*Fi : immune to fire                Di : resistance to disenchantment
+*Co : immune to cold                Fe : resistance to fear
+
+Ma : decreases mana consumption     (F : fiery sheath
+Th : suitable for throwing          (E : electric sheath
+Rf : reflection                     (C : cold sheath
+Fa : free action                    (M : anti-magic shell
+Si : see invisible                  (T : prevent teleportation
+Hl : hold life                      |A : brand acid
+Sd : slow digestion                 |E : brand electricity
+Rg : regeneration                   |F : brand fire
+Lv : levitation                     |Co : brand cold
+Lu : extra light                    |P : brand pois
+Wr : provides warning               |Ca : chaotic effects
+Xm : xtra might when shooting       |V : vampiric weapon
+Xs : xtra number of shots           |Q : weapon of quake
+Ag : aggravate monsters             |S : vorpal hit
+Bs : blessed weapon                 |M : weapon of the force
+
+/* : slay evil                      /X* : *slay* evil
+/p : slay human                     /Xp : *slay* human
+/D : slay dragon                    /XD : *slay* dragon
+/o : slay orc                       /Xo : *slay* orc
+/T : slay troll                     /XT : *slay* troll
+/P : slay giant                     /XP : *slay* giant
+/U : slay demon                     /XU : *slay* demon
+/L : slay undead                    /XL : *slay* undead
+/Z : slay animal                    /XZ : *slay* animal
+
+~Tele : telepathy                   . : random teleportaion
+~Evil : ESP evil                    (St : sustain strength
+~Good : ESP good                    (In : sustain intelligence
+~Nolv : ESP non-living              (Wi : sustain wisdom
+~p : ESP human                      (Dx : sustain dexterity
+~D : ESP dragon                     (Cn : sustain constitution
+~o : ESP orc                        (Ch : sustain charisma
+~T : ESP troll
+~P : ESP giant
+~U : ESP demon
+~L : ESP undead
+~Z : ESP animal
 
 
 
@@ -646,6 +660,28 @@ The {#anystring} Inscription
 The {#anystring} inscription is used to make an item look like an
 artifact. For example, a Long Sword (2d5) (+10,+10) which is inscribed
 as {#of Hoge} is displayed as 'a Long Sword of Hoge (2d5) (+10,+10)'.
+
+The {!!} Inscription
+--------------------
+
+The {!!} Inscription on a rod or artifact tells the game to report you
+when the object is recharged and became activatable again.
+
+The {.} Inscription
+--------------------
+
+The {.} Inscription on a equipment which has ability of random
+teleportaion prevents the game from asking you whether you want to
+teleport or not on random chance, and the game automatically decide
+not to teleport.  But the ability of random teleportation has another
+function which allows you to follow a teleporting monster; this
+function will not be disabled.
+
+The {$} Inscription
+--------------------
+
+The {$} Inscription on a equipment which has ability of warning
+completely disables the warning ability.
 
 
 
@@ -793,7 +829,7 @@ Light Sources ('~')
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Hengband 1.3.0
 
 ***** Begin Hyperlinks
 ***** [b] option.txt#UserInterface
