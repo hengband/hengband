@@ -2027,6 +2027,9 @@ static bool make_artifact_special(object_type *o_ptr)
 	/* No artifacts in the town */
 	if (!dun_level) return (FALSE);
 
+	/* Themed object */
+	if (get_obj_num_hook) return (FALSE);
+
 	/* Check the artifact list (just the "specials") */
 	for (i = 0; i < max_a_idx; i++)
 	{
