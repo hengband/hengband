@@ -1622,6 +1622,13 @@ note(format("¤ÎÃæ", tmp16s));
 	}
 	else rd_s32b(&dungeon_turn);
 
+	if (z_older_than(11, 0, 13))
+	{
+		old_turn /= 2;
+		turn /= 2;
+		dungeon_turn /= 2;
+	}
+
 	if (z_older_than(10, 3, 13))
 	{
 		old_battle = turn;
