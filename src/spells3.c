@@ -5538,13 +5538,9 @@ bool polymorph_monster(int y, int x)
 		}
 		else
 		{
-			monster_terrain_sensitive = FALSE;
-
 			/* Placing the new monster failed */
-			place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE));
+			place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN));
 			m_list[hack_m_idx_ii] = back_m;
-
-			monster_terrain_sensitive = TRUE;
 		}
 
 		if (targeted) target_who = hack_m_idx_ii;

@@ -2573,6 +2573,7 @@
 #define PM_NO_KAGE        0x00000010
 #define PM_NO_PET         0x00000020
 #define PM_ALLOW_UNIQUE   0x00000040
+#define PM_IGNORE_TERRAIN 0x00000080
 
 
 /*

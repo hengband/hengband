@@ -479,7 +479,6 @@ extern int quest_text_line;
 extern s16b gf_color[MAX_GF];
 extern int init_flags;
 extern int highscore_fd;
-extern bool monster_terrain_sensitive;
 extern int mutant_regenerate_mod;
 extern bool easy_band;
 extern bool vanilla_town;

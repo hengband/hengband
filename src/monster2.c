@@ -2733,7 +2733,7 @@ bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	 && (cave[y][x].feat <= FEAT_PATTERN_XTRA2))
 		return (FALSE);
 
-	if (monster_terrain_sensitive &&
+	if (!(mode & PM_IGNORE_TERRAIN) &&
 	    !monster_can_cross_terrain(cave[y][x].feat, r_ptr))
 	{
 		return FALSE;

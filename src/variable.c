@@ -1125,11 +1125,6 @@ int init_flags;
  */
 int highscore_fd = -1;
 
-/*
- * Should the monster allocation fail with inappropriate terrain?
- */
-bool monster_terrain_sensitive = TRUE;
-
 int mutant_regenerate_mod = 100;
 
 /*
