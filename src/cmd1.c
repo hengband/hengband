@@ -2983,14 +2983,8 @@ bool py_attack(int y, int x, int mode)
 	    !(p_ptr->stun || p_ptr->confused || p_ptr->image ||
 	    p_ptr->shero || !m_ptr->ml))
 	{
-		if (inventory[INVEN_RARM].art_name)
-		{
-			if (inventory[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
-		}
-		if (inventory[INVEN_LARM].art_name)
-		{
-			if (inventory[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
-		}
+		if (inventory[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
+		if (inventory[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 		if (stormbringer)
 		{
 #ifdef JP
@@ -3462,16 +3456,8 @@ void move_player(int dir, int do_pickup, bool break_trap)
 	m_ptr = &m_list[c_ptr->m_idx];
 
 
-	if (inventory[INVEN_RARM].art_name)
-	{
-		if (inventory[INVEN_RARM].name1 == ART_STORMBRINGER)
-			stormbringer = TRUE;
-	}
-	else if (inventory[INVEN_LARM].art_name)
-	{
-		if (inventory[INVEN_LARM].name1 == ART_STORMBRINGER)
-			stormbringer = TRUE;
-	}
+	if (inventory[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
+	if (inventory[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 
 	/* Player can not walk through "walls"... */
 	/* unless in Shadow Form */
