@@ -1971,11 +1971,6 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 			}
 		}
 
-		if (r_ptr->flags7 & RF7_KILL_EXP)
-			get_exp_from_mon((long)m_ptr->max_maxhp*2, &exp_mon);
-		else
-			get_exp_from_mon(((long)m_ptr->max_maxhp+1L) * 9L / 10L, &exp_mon);
-
 		/* Generate treasure */
 		monster_death(m_idx, TRUE);
 		if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART))
@@ -2022,6 +2017,12 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 			/* Delete the monster */
 			delete_monster_idx(m_idx);
 		}
+
+		/* Prevent bug of chaos patron's reward */
+		if (r_ptr->flags7 & RF7_KILL_EXP)
+			get_exp_from_mon((long)m_ptr->max_maxhp*2, &exp_mon);
+		else
+			get_exp_from_mon(((long)m_ptr->max_maxhp+1L) * 9L / 10L, &exp_mon);
 
 		/* Not afraid */
 		(*fear) = FALSE;
