@@ -961,8 +961,12 @@ its own adjustments to a character's stats and abilities.
     abilities, and average constitution.  Other skills such as
     stealth, magic defense, and magical devices are weakened.  All
     "Combat" people have great respect for the legendary "Combat
-    Echizen".\ (See "Death Crimson" / Ecole Software Corp.)", "A
-    "Lazy" person has no good stats and can do no action well.
+    Echizen". (See "Death Crimson" / Ecole Software Corp.)
+
+
+--- Lazy ---
+
+    A "Lazy" person has no good stats and can do no action well.
 
 
 --- Sexy ---
