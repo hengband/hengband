@@ -1079,7 +1079,6 @@ static bool do_cmd_open_aux(int y, int x)
 	int i, j;
 
 	cave_type *c_ptr;
-        byte feat;
 
 	bool more = FALSE;
 
@@ -1090,11 +1089,10 @@ static bool do_cmd_open_aux(int y, int x)
 	/* Get requested grid */
 	c_ptr = &cave[y][x];
 
-        /* Feature code (applying "mimic" field) */
-        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+        /* Seeing true feature code (ignore mimic) */
                 
 	/* Jammed door */
-	if (feat >= FEAT_DOOR_HEAD + 0x08)
+	if (c_ptr->feat >= FEAT_DOOR_HEAD + 0x08)
 	{
 		/* Stuck */
 #ifdef JP
@@ -1106,7 +1104,7 @@ static bool do_cmd_open_aux(int y, int x)
 	}
 
 	/* Locked door */
-	else if (feat >= FEAT_DOOR_HEAD + 0x01)
+	else if (c_ptr->feat >= FEAT_DOOR_HEAD + 0x01)
 	{
 		/* Disarm factor */
 		i = p_ptr->skill_dis;
@@ -1168,7 +1166,7 @@ static bool do_cmd_open_aux(int y, int x)
 	}
 
 	/* Closed door */
-	else
+	else if (c_ptr->feat == FEAT_DOOR_HEAD)
 	{
 		/* Open the door */
 		cave_set_feat(y, x, FEAT_OPEN);
@@ -1323,10 +1321,7 @@ void do_cmd_open(void)
 static bool do_cmd_close_aux(int y, int x)
 {
 	cave_type	*c_ptr;
-        byte feat;
-
 	bool		more = FALSE;
-
 
 	/* Take a turn */
 	energy_use = 100;
@@ -1334,11 +1329,10 @@ static bool do_cmd_close_aux(int y, int x)
 	/* Get grid and contents */
 	c_ptr = &cave[y][x];
 
-        /* Feature code (applying "mimic" field) */
-        feat = c_ptr->mimic ? c_ptr->mimic : f_info[c_ptr->feat].mimic;
+        /* Seeing true feature code (ignore mimic) */
                 
 	/* Broken door */
-	if (feat == FEAT_BROKEN)
+	if (c_ptr->feat == FEAT_BROKEN)
 	{
 		/* Message */
 #ifdef JP
@@ -1350,7 +1344,7 @@ static bool do_cmd_close_aux(int y, int x)
 	}
 
 	/* Open door */
-	else
+	else if (c_ptr->feat == FEAT_OPEN)
 	{
 		/* Close the door */
 		cave_set_feat(y, x, FEAT_DOOR_HEAD + 0x00);
@@ -1594,6 +1588,19 @@ static bool do_cmd_tunnel_aux(int y, int x)
 
 	}
 
+	/* Map border (mimiccing Permanent wall) */
+	else if ((c_ptr->feat >= FEAT_PERM_EXTRA &&
+                  c_ptr->feat <= FEAT_PERM_SOLID) ||
+                 c_ptr->feat == FEAT_MOUNTAIN)
+	{
+#ifdef JP
+		msg_print("そこは掘れない!");
+#else
+		msg_print("You can't tunnel through that!");
+#endif
+
+	}
+
 	else if (feat == FEAT_TREES) /* -KMW- */
 	{
 		/* Chop Down */
@@ -1665,8 +1672,9 @@ static bool do_cmd_tunnel_aux(int y, int x)
 		bool gold = FALSE;
 		bool hard = FALSE;
 
-		/* Found gold */
-		if (feat >= FEAT_MAGMA_H) gold = TRUE;
+		/* Found gold (ignore mimic; maybe a hidden treasure) */
+		if (c_ptr->feat >= FEAT_MAGMA_H &&
+                    c_ptr->feat <= FEAT_QUARTZ_K) gold = TRUE;
 
 		/* Extract "quartz" flag XXX XXX XXX */
 		if ((feat - FEAT_MAGMA) & 0x01) hard = TRUE;
@@ -1820,13 +1828,6 @@ static bool do_cmd_tunnel_aux(int y, int x)
                 /* Occasional Search XXX XXX */
                 if (randint0(100) < 25) search();
         }
-
-	/* Notice new floor grids */
-	if (!cave_floor_bold(y, x))
-	{
-		/* Update some things */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTERS | PU_MON_LITE);
-	}
 
 	/* Result */
 	return (more);
@@ -2226,10 +2227,21 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
 	if (p_ptr->blind || no_lite()) i = i / 10;
 	if (p_ptr->confused || p_ptr->image) i = i / 10;
 
-	/* XXX XXX XXX Variable power? */
+	/* Variable power! */
 
 	/* Extract trap "power" */
-	power = 5;
+        switch (c_ptr->feat)
+        {
+        case FEAT_TRAP_OPEN:
+        case FEAT_TRAP_ARMAGEDDON:
+        case FEAT_TRAP_PIRANHA:
+                /* Special traps are very difficult to disarm */
+                power = 100;
+                break;
+        default:
+                power = 5;
+                break;
+        }
 
 	/* Extract the difficulty */
 	j = i - power;
