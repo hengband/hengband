@@ -919,8 +919,8 @@ command("U"/"O").
     gain more techniques as they gain levels.  They use no magic:
     indeed, they cannot use any magic devices or activate any
     artifacts, and cannot read scrolls.  To offset these great
-    disadvantages, Berserkers are allowed to have two important class
-    powers - 'Satisfy Hunger' and 'Recall'.
+    disadvantages, Berserkers are allowed to have an important class
+    power - 'Recall'.
 
 
 ***** <Weaponsmith>
