@@ -1,4 +1,59 @@
+2002-02-15  habu  <habu@akiru>
+
+	* src/mspells1.c, src/mspells2.c, src/mspells3.c, src/mutation.c, src/object2.c, src/racial.c, src/rooms.c, src/save.c, src/spells1.c, src/spells2.c, src/spells3.c, src/store.c, src/streams.c, src/wild.c, src/wizard2.c, src/xtra2.c, src/z-rand.c, src/z-rand.h, src/cave.c, src/cmd1.c, src/cmd2.c, src/cmd4.c, src/cmd5.c, src/cmd6.c, src/dungeon.c, src/effects.c, src/files.c, src/flavor.c, src/generate.c, src/grid.c, src/grid.h, src/hissatsu.c, src/init1.c, src/load.c, src/main-dos.c, src/mane.c, src/melee1.c, src/melee2.c, src/mind.c, src/monster1.c, src/monster2.c, src/artifact.c, src/avatar.c, src/birth.c, src/bldg.c:
+	分かりやすいように、rand_int()をrandint0()、randint()をrandint1()にすべて置き変えた。
+	この置換は簡単なので間違ってないと思う。
+
+	* src/generate.c, src/mane.c, src/melee1.c, src/melee2.c, src/monster2.c, src/mspells1.c, src/mspells2.c, src/mspells3.c, src/object2.c, src/racial.c, src/rooms.c, src/spells1.c, src/spells2.c, src/spells3.c, src/store.c, src/streams.c, src/xtra2.c, src/artifact.c, src/cave.c, src/cmd1.c, src/cmd2.c, src/cmd5.c, src/cmd6.c, src/dungeon.c, src/effects.c:
+	randint() == 1, rand_int() == 0, rand_int() == 1 を全て one_in_()に、
+	randint() != 1, rand_int() != 0, rand_int() != 1 を全て !one_in_()に置き変えた。
+	この作業中にユニークにダメージを与えた時に1/3でV_INDIVIDUALISMを-1する所の判定が&と&&を間違えているのを見つけたのでついでに直した。
+	ちゃんとできてるか不安なので、作業前の状態にone_in_prev,作業後の状態にone_in_afterというタグを付けておく。
+
+	* src/object2.c:
+	クローカーやデスソードなど、固定種類のアイテムを落とす敵を倒した時、稀に常時伝説物のアーティファクトが生成される可能性があった。この時、アイテムの候補のテーブルもクリアされない為、次のアイテム生成時に固定種類のアイテムが適用されてしまう。
+	なので、make_artifact_special()内で、get_obj_num_hookに何か関数が設定されている場合はアーティファクトが生成されないようにした。
+
+2002-02-14  Takeshi Mogami  <mogami@akiru>
+
+	* lib/edit/r_info_j.txt, src/tables.c:
+	typo deamon -> daemon
+
+	* src/effects.c:
+	再び修正。ESCを押すと叫びが "" になって、そのまま入力せずに死ぬと
+	死亡のメッセージがなくなってしまっていたので、そのときは標準のメッセージ
+	で置き変える事にした。
+
+	* src/effects.c:
+	死亡時に断末魔の叫びの入力をESCで終わらないようにした。
+
+	* src/main-mac.c:
+	8x8と16x16をメニューで切り換えられるようにした。kuwaさんより。
+
+	* src/util.c:
+	Mac版で何かファイルを読み込んだときファイルタイプを壊してしまうバグ修正。
+
+	* lib/pref/graf-mac.prf:
+	Kuwaさんより、条件分けして、8x8タイルでは graf-xxx.prf、
+	16x16タイルでは graf-new.prf を読むように。
+
 2002-02-13  Takeshi Mogami  <mogami@akiru>
+
+	* src/main-x11.c:
+	16x16を選択する追加オプション -a と 8x8の -o を追加。
+	ついでに、スクリプトで $* -- -n1 等と書いているときに
+	スクリプトに -- -a とかを与えられるように。追加オプションの
+	区切り -- が複数あらわれてもエラーを出さないようにした。
+
+	* src/init2.c, src/main-x11.c:
+	ウィンドウの数のデフォルトを8から3に変更し、セーブデータをロードせずに
+	新規にキャラクターを作ったとき、サブウィンドウ1にメッセージ履歴、
+	サブウィンドウ2に持ち物表示を割り当てるようにした。
+
+	* readme.txt:
+	make install に対応して readme.txt の更新。
+
+	* Changelogs: 更新
 
 	* src/cmd5.c:
 	ペットのターゲットを… のメニュー文字列の表示に 配列buf を使っていて、その後で
