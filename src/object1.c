@@ -3964,6 +3964,16 @@ s16b label_to_inven(int c)
 }
 
 
+/* See cmd5.c */
+extern bool select_ring_slot;
+
+
+static bool is_ring_slot(int i)
+{
+	return (i == INVEN_RIGHT) || (i == INVEN_LEFT);
+}
+
+
 /*
  * Convert a label into the index of a item in the "equip"
  * Return "-1" if the label does not indicate a real item
@@ -3977,6 +3987,8 @@ s16b label_to_equip(int c)
 
 	/* Verify the index */
 	if ((i < INVEN_RARM) || (i >= INVEN_TOTAL)) return (-1);
+
+	if (select_ring_slot) return is_ring_slot(i) ? i : -1;
 
 	/* Empty slots can never be chosen */
 	if (!inventory[i].k_idx) return (-1);
@@ -4436,7 +4448,7 @@ void display_equip(void)
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
 
 		/* Is this item "acceptable"? */
-		if (item_tester_okay(o_ptr))
+		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr))
 		{
 			/* Prepare an "index" */
 			tmp_val[0] = index_to_label(i);
@@ -4987,7 +4999,7 @@ int show_equip(int target_item)
 		o_ptr = &inventory[i];
 
 		/* Is this item acceptable? */
-		if (!item_tester_okay(o_ptr) &&
+		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr)) &&
 		    (!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
 		     item_tester_no_ryoute)) continue;
 
@@ -5306,6 +5318,8 @@ static bool get_item_okay(int i)
 	/* Illegal items */
 	if ((i < 0) || (i >= INVEN_TOTAL)) return (FALSE);
 
+	if (select_ring_slot) return is_ring_slot(i);
+
 	/* Verify the item */
 	if (!item_tester_okay(&inventory[i])) return (FALSE);
 
@@ -5522,7 +5536,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (item_tester_okay(&inventory[j])) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j])) max_equip++;
 		if (p_ptr->ryoute && !item_tester_no_ryoute) max_equip++;
 	}
 
@@ -6557,7 +6571,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (item_tester_okay(&inventory[j])) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j])) max_equip++;
 		if (p_ptr->ryoute && !item_tester_no_ryoute) max_equip++;
 	}
 

@@ -201,6 +201,8 @@ static bool item_tester_hook_melee_weapon(object_type *o_ptr)
 }
 
 
+bool select_ring_slot = FALSE;
+
 /*
  * Wield or wear a single item from the pack or floor
  */
@@ -351,23 +353,40 @@ void do_cmd_wield(void)
 
 	/* Rings */
 	case TV_RING:
+		/* Choose a ring slot */
 		if (inventory[INVEN_LEFT].k_idx && inventory[INVEN_RIGHT].k_idx)
 		{
-			/* Restrict the choices */
-			item_tester_tval = TV_RING;
-			item_tester_no_ryoute = TRUE;
-
-			/* Choose a ring from the equipment only */
 #ifdef JP
 			q = "どちらの指輪と取り替えますか?";
-			s = "おっと。";
 #else
 			q = "Replace which ring? ";
-			s = "Oops.";
+#endif
+		}
+		else
+		{
+#ifdef JP
+			q = "どちらの手に装備しますか?";
+#else
+			q = "Equip which hand? ";
+#endif
+		}
+
+#ifdef JP
+		s = "おっと。";
+#else
+		s = "Oops.";
 #endif
 
-			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
+		/* Restrict the choices */
+		select_ring_slot = TRUE;
+		item_tester_no_ryoute = TRUE;
+
+		if (!get_item(&slot, q, s, (USE_EQUIP)))
+		{
+			select_ring_slot = FALSE;
+			return;
 		}
+		select_ring_slot = FALSE;
 		break;
 	}
 
