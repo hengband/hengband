@@ -770,7 +770,7 @@ byte color_char_to_attr(char c)
 		case 'U': return (TERM_L_UMBER);
 	}
 
-	return (-1);
+	return (255);
 }
 
 
@@ -1236,7 +1236,7 @@ errr parse_f_info(char *buf, header *head)
 		tmp = color_char_to_attr(buf[4]);
 
 		/* Paranoia */
-		if (tmp < 0) return (1);
+		if (tmp > 127) return (1);
 
 		/* Save the values */
 		f_ptr->d_attr = tmp;
@@ -1421,7 +1421,7 @@ errr parse_k_info(char *buf, header *head)
 		tmp = color_char_to_attr(buf[4]);
 
 		/* Paranoia */
-		if (tmp < 0) return (1);
+		if (tmp > 127) return (1);
 
 		/* Save the values */
 		k_ptr->d_attr = tmp;
@@ -2253,7 +2253,7 @@ errr parse_r_info(char *buf, header *head)
 		tmp = color_char_to_attr(buf[4]);
 
 		/* Paranoia */
-		if (tmp < 0) return (1);
+		if (tmp > 127) return (1);
 
 		/* Save the values */
 		r_ptr->d_char = sym;
