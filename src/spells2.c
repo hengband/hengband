@@ -1812,18 +1812,18 @@ info[i++] = "あなたの回復力は非常に遅い。";
 	if (p_ptr->cursed & TRC_ADD_L_CURSE)
 	{
 #ifdef JP
-info[i++] = "あなたは..."; /* nanka */
+info[i++] = "あなたの弱い呪いは増える。"; /* 暫定的 -- henkma */
 #else
-		info[i++] = "You are ...";
+		info[i++] = "Your weak curses multiply.";
 #endif
 
 	}
 	if (p_ptr->cursed & TRC_ADD_H_CURSE)
 	{
 #ifdef JP
-info[i++] = "あなたは..."; /* nanka */
+info[i++] = "あなたの強い呪いは増える。"; /* 暫定的 -- henkma */
 #else
-		info[i++] = "You are ...";
+		info[i++] = "Your heavy curses multiply.";
 #endif
 
 	}
