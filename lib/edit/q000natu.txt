@@ -38,28 +38,28 @@ Q:12:T:棒にふったのだ。
 ?:1
 
 # Grass
-F:.:89:8
+F:.:GRASS:8
 
 # Floor with War bear
-F:a:89:8:173
+F:a:GRASS:8:173
 
 # Floor with Basilisk
-F:b:89:8:453
+F:b:GRASS:8:453
 
 # Floor with Giant spider
-F:c:89:8:175
+F:c:GRASS:8:175
 
 # Floor with Earth elemental
-F:d:89:8:525
+F:d:GRASS:8:525
 
 # Floor with Great storm wyrm
-F:e:89:8:728
+F:e:GRASS:8:728
 
 # Floor with Colossus
-F:g:89:8:558
+F:g:GRASS:8:558
 
 # Tree
-F:h:96:8
+F:h:TREE:8
 
 # Node of Nature layout 
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

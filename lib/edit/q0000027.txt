@@ -38,160 +38,160 @@ Q:1:T:この仕事はあなたには難しかったようですね。
 
 # The Monsters
 # Roper (level:27, Speed:115, XP:235, #:3)
-F:r:1:8:426
+F:r:FLOOR:8:426
 
 # Lesser Wall Monster (level:28, Speed:110, XP:600, #:5) 
-F:w:1:8:448
+F:w:FLOOR:8:448
 
 # Mithril Golem (level:30, Speed:110, XP:500, #:2)
-F:g:1:8:464
+F:g:FLOOR:8:464
 
 # Anti-Paladin (level:33, Speed:120, XP:450, #:5)
-F:a:1:8:497
+F:a:FLOOR:8:497
 
 # Master Vampire (level:34, Speed:110, XP:750, #:1) on no Teleportation grid
-F:P:1:12:520
+F:P:FLOOR:12:520
 
 # Greater Mummy (level:34, Speed:110, XP:800, #:4)
-F:M:1:8:522
+F:M:FLOOR:8:522
 
 # Eog Golem (level:35, Speed:100, XP:1200, #:2)
-F:G:1:8:530
+F:G:FLOOR:8:530
 
 # Olog  (level:35, Speed:110, XP:450, #:2)
-F:o:1:8:538
+F:o:FLOOR:8:538
 
 # Sea Troll (level:35, Speed:110, XP:440, #:6) in deep water
-F:x:83:8:544
+F:x:DEEP_WATER:8:544
 
 # Revenant (level:36, Speed:110, XP:725, #:4)
-F:R:1:8:555
+F:R:FLOOR:8:555
 
 # Raal's Tome of Destruction (level:36, Speed:120, XP:1500, #:4) on no
 # Teleportation grid
-F:m:1:12:557 
+F:m:FLOOR:12:557 
 
 # Time bomb (level:36, Speed:130, XP:50, #:6)
-F:d:1:8:567
+F:d:FLOOR:8:567
 
 # Mummified Troll (level:37, Speed:110, XP:420, #:2)
-F:O:1:8:575
+F:O:FLOOR:8:575
 
 # Crypt thing (level:37, Speed:120, XP:2000, #:1)
-F:C:1:8:577
+F:C:FLOOR:8:577
 
 # Death knight (level:38, Speed:120, XP:1111, #:2)
-F:H:1:8:597
+F:H:FLOOR:8:597
 
 # Monastic lich (level:39, Speed:120, XP:5000, #:1)
-F:l:1:8:611
+F:l:FLOOR:8:611
 
 # Vampire Lord (level:39, Speed:120, XP:1800, #:6)
-F:L:1:8:623
+F:L:FLOOR:8:623
 
 # Lesser Titan (level:40, Speed:120, XP:3500, #:2)
-F:t:1:8:634
+F:t:FLOOR:8:634
 
 # Enchantress (level:40, Speed:130, XP:2100, #:1)
-F:E:1:8:636
+F:E:FLOOR:8:636
 
 # Sorcerer (level:40, Speed:130, XP:2150, #:1)
-F:S:1:8:638
+F:S:FLOOR:8:638
 
 # Death Drake (level:40, Speed:120, XP:3500, #:1)
-F:K:1:8:643
+F:K:FLOOR:8:643
 
 # Ancient Red Dragon (level:40, Speed:120, XP:2750, #:2)
-F:N:1:8:644
+F:N:FLOOR:8:644
 
 # Fallen Angel (level:41, Speed:130, XP:15000, #:1)
-F:A:1:8:652
+F:A:FLOOR:8:652
 
 # Iron Lich (level:42, Speed:120, XP:9000, #:1)
-F:I:1:8:666
+F:I:FLOOR:8:666
 
 # DracoLich (level:46, Speed:120, XP:18000, #:1)
-F:z:1:8:701
+F:z:FLOOR:8:701
 
 # Greater Titan (level:46, Speed:120, XP:13500, #:2)
-F:Z:1:8:702
+F:Z:FLOOR:8:702
 
 # Random monster 0 levels out of depth and on no Teleportation grid
-F:5:1:12:*0
+F:5:FLOOR:12:*0
 
 # The doors and floors
 # Floor on no Teleportation grid
-F:,:1:12
+F:,:FLOOR:12
 
 # Normal floor (ToDo: prevent drops on these tiles)
-F: :1:8
+F: :FLOOR:8
 
 # Rubble on no Teleportation grid
-F:]:49:12
+F:]:RUBBLE:12
 
 # Secret door
-F:s:58:8:0:0:0:0:32
+F:s:GRANITE:8:0:0:0:0:CLOSED_DOOR
 
 # Secret door on no Teleportation grid 
-F:u:58:12:0:0:0:0:32
+F:u:GRANITE:12:0:0:0:0:CLOSED_DOOR
 
 # Door on no Teleportation grid
-F:U:32:12
+F:U:CLOSED_DOOR:12
 
 # Rubble
-F:;:49:8
+F:;:RUBBLE:8
 
 # locked door
-F:|:39:8
+F:|:LOCKED_DOOR_7:8
 
 # The Objects
 # Book of the Unicorn on no Teleportation grid
-F:c:1:12:0:332
+F:c:FLOOR:12:0:332
 
 # Pattern Sorcery on no Teleportation grid
-F:p:1:12:0:336
+F:p:FLOOR:12:0:336
 
 # Natures Gift's on no Teleportation grid
-F:n:1:12:0:381
+F:n:FLOOR:12:0:381
 
 # Chaos Channels on no Teleportation grid
-F:i:1:12:0:385
+F:i:FLOOR:12:0:385
 
 # Black channels on no Teleportation grid
-F:b:1:12:0:423
+F:b:FLOOR:12:0:423
 
 # Trumps of Doom on no Teleportation grid
-F:f:1:12:0:514
+F:f:FLOOR:12:0:514
 
 # Note of Acting Master on no Teleportation grid
-F:y:1:12:0:606
+F:y:FLOOR:12:0:606
 
 # Demonthoughts on no Teleportation grid
-F:k:1:12:0:648
+F:k:FLOOR:12:0:648
 
 # Exorcism and Dispelling on no Teleportation grid
-F:B:1:12:0:656
+F:B:FLOOR:12:0:656
 
 # *HEALING* potion
-F:Y:1:8:0:419
+F:Y:FLOOR:8:0:419
 
 # *IDENTIFY* scroll on no Teleportation grid
-F:e:1:12:0:177
+F:e:FLOOR:12:0:177
 
 # Object 0 levels out of depth
-F:h:1:8:0:*0
+F:h:FLOOR:8:0:*0
 
 # Object 0 levels out of depth on no Teleportation grid
-F:q:1:12:0:*0
+F:q:FLOOR:12:0:*0
 
 # Object 7 levels out of depth
-F:j:1:8:0:*7
+F:j:FLOOR:8:0:*7
 
 # Object 7 levels out of depth on no Teleportation grid
-F:Q:1:12:0:*7
+F:Q:FLOOR:12:0:*7
 
 # locked door on no Teleportation grid
-F:v:39:12
+F:v:LOCKED_DOOR_7:12
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

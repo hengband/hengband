@@ -52,95 +52,92 @@ Q:24:T:きっと誰もあなたに物を売ってくれないよ。
 ?:1
 
 # Trap
-F:t:1:8:0:0:0:0:*
+F:t:FLOOR:8:0:0:0:0:*
 
 # Darkness, no tele
-F:s:1:12
+F:s:FLOOR:12
 
 # Wall
-F:#:56:8
+F:#:GRANITE:8
 
 # Deep lava, no tele
-F:5:85:12
-F:6:85:12
+F:5:DEEP_LAVA:12
+F:6:DEEP_LAVA:12
 
 # Shallow lava, no tele
-F:l:86:12
+F:l:SHALLOW_LAVA:12
 
 # Software bug
-F:a:1:8:246
+F:a:FLOOR:8:246
 
 # Novice rogue
-F:b:1:8:44
-F:c:1:8:44
+F:b:FLOOR:8:44
+F:c:FLOOR:8:44
 
 # Bandit
-F:d:1:8:150
-
-# Door
-F:+:32:8
+F:d:FLOOR:8:150
 
 # Master rogue
-F:e:1:8:376
+F:e:FLOOR:8:376
 
 # Master thief
-F:f:1:8:516 
+F:f:FLOOR:8:516 
 
 # Gates himself
-F:g:1:12:732
+F:g:FLOOR:12:732
 
 # Internet Exploder
-F:h:1:8:921
+F:h:FLOOR:8:921
 
 # Internet Exploder + no tele
-F:i:1:12:921
+F:i:FLOOR:12:921
 
 # Money
-F:$:1:8:0:488
+F:$:FLOOR:8:0:488
 
 # Money + Master Thief
-F:%:1:8:516:488
+F:%:FLOOR:8:516:488
 
 # Money + Software bug
-F:&:1:8:246:488
+F:&:FLOOR:8:246:488
 
 # Junk & Cursed items
 
-#F:A:1:8:0:394
-F:A:1:8
-#F:B:1:8:0:398
-F:B:1:8
+#F:A:FLOOR:8:0:394
+F:A:FLOOR:8
+#F:B:FLOOR:8:0:398
+F:B:FLOOR:8
 
-#F:C:86:12:0:57:102
-F:C:86:12
-#F:D:86:12:0:36:102
-F:D:86:12
-#F:E:86:12:0:72:102
-F:E:86:12
+#F:C:SHALLOW_LAVA:12:0:57:102
+F:C:SHALLOW_LAVA:12
+#F:D:SHALLOW_LAVA:12:0:36:102
+F:D:SHALLOW_LAVA:12
+#F:E:SHALLOW_LAVA:12:0:72:102
+F:E:SHALLOW_LAVA:12
 
-#F:F:86:12:0:124:46
-F:F:86:12
-#F:G:86:12:0:124:45
-F:G:86:12
-#F:H:86:12:0:98:36
-F:H:86:12
-#F:I:86:12:0:99:37
-F:I:86:12
-#F:J:86:12:0:100:36
-F:J:86:12
+#F:F:SHALLOW_LAVA:12:0:124:46
+F:F:SHALLOW_LAVA:12
+#F:G:SHALLOW_LAVA:12:0:124:45
+F:G:SHALLOW_LAVA:12
+#F:H:SHALLOW_LAVA:12:0:98:36
+F:H:SHALLOW_LAVA:12
+#F:I:SHALLOW_LAVA:12:0:99:37
+F:I:SHALLOW_LAVA:12
+#F:J:SHALLOW_LAVA:12:0:100:36
+F:J:SHALLOW_LAVA:12
 
 
 # Micro$oft HQ
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 D:Xa.A......AAXtttttttttttttttttttttttttttttttttttttttttttttttttttXABAA.........X
-D:X.......B.XXXtttttXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX+XXAAAA.........X
+D:X.......B.XXXtttttXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXDXXAAAA.........X
 D:X...B...XXXttttXXXXX...........................................XXXXX..........X
 D:X.......XtttttXX....................XXXXXXXXXXX....................XX.........X
 D:X.......XtttXXX.....................XsssssssssX.....................XXX.eeeeeeX
 D:XffffffXXttXX.......................XssssgssssX.......................XX.eeeeeX
 D:XdddddXXttXX........................XsssssssssX........................XXfffffX
-D:XeeeeeXttXX.....................llllXsssssssssXllll.....................XXX+X+X
-D:XX+XX+XtXX........h..........lllllllXsssssssssXlllllll.........h.........XXtXtX
+D:XeeeeeXttXX.....................llllXsssssssssXllll.....................XXXDXDX
+D:XXDXXDXtXX........h..........lllllllXsssssssssXlllllll.........h.........XXtXtX
 D:X...XtXtX.................llllllllllXsssssssssXllllllllll.................XtXtX
 D:X...XtXtX................lllllllllllXsssssssssXlllllllllll................XtXtX
 D:X...XtXtX..............lllllllllllllXsssssssssXlllllllllllll..............XtXtX
@@ -151,7 +148,7 @@ D:X...XtXtX...........llll55ll55llllllXsssssssssXllllll55ll55llll...........XtXt
 D:X.a.XtXtX..........llllll5lll55lllllXsssssssssXlllll55lll5llllll..........XtXtX
 D:XabaXtXtX..........llllll55lll555lllXsssssssssXlll555lll55llllll..........XtXtX
 D:XdadXtXtX.........llllllll5lllll55llXsssssssssXll55lllll5llllllll.........XtXtX
-D:XX+XXtXtX.........llllllll55lllll55lXsssssssssXl55lllll55llllllll.........XtXtX
+D:XXDXXtXtX.........llllllll55lllll55lXsssssssssXl55lllll55llllllll.........XtXtX
 D:XA..XtXtX........llllllllll5llllll55XsssssssssX55llllll5llllllllll........XtXtX
 D:X.a.XtXtX........llllllllll55lllllIEXsssssssssXFJlllll55llllllllll........XtXtX
 D:Xa.aXtXtX........lllllXXXXXXXXXXXXXXXsssssssssXXXXXXXXXXXXXXXXllll........XtXtX
@@ -160,7 +157,7 @@ D:Xa.aXtXtX.......llllllXssssssssss666ssss666ssss666sssssssssssXlllll.......XtXt
 D:X.a.XtXtX.......llllllXsssssssss66s66ss66s66ss66s66ssssssssssXlllll.......XtXtX
 D:X..BXtXtX.......llllllXsssssssss66sssss66sssss66sssssssssssssXlllll.......XtXtX
 D:X...XtXtX.......llllllXsisssssss6666sss6666sss6666sssssssssisXlllll.......XtXtX
-D:XX+XXtXtX.......llllllXsssssssss66s66ss66s66ss66s66ssssssssssXlllll.......XtXtX
+D:XXDXXtXtX.......llllllXsssssssss66s66ss66s66ss66s66ssssssssssXlllll.......XtXtX
 D:X...XtXtX.......llllllXsssssssss66s66ss66s66ss66s66ssssssssssXlllll.......XtXtX
 D:X...XtXtX.......llllllXssssssssss666ssss666ssss666sssssssssssXlllll.......XtXtX
 D:X...XtXtX........lllllXssssssssssssssssssssssssssssssssssssssXllll........XtXtX
@@ -175,15 +172,15 @@ D:X.XbXtXtX...........ll55555555555555XsssssssssX55555555555555ll...........XtXt
 D:X.XbXtXtX............lllllllllllllllXXXXX#XXXXXlllllllllllllll............XtXtX
 D:XAXbXtXtX.............llllllllllllllll5lllll5llllllllllllllll.............XtXtX
 D:X.XbXtXtX.......h......lllllllllllllll55lll55lllllllllllllll....h.........XtXtX
-D:X.XbXtXtXX..............lllllllllllllll5lll5lllllllllllllll..............XX+XtX
+D:X.XbXtXtXX..............lllllllllllllll5lll5lllllllllllllll..............XXDXtX
 D:X.XbXtXtXXXX..............lllllllllllll55l55lllllllllllll..............XXX$$XtX
 D:XAXcXtXtX$$XX................lllllllllll555lllllllllll................XX$$$$XtX
 D:X.XcXtXtX$$$XXX.................lllllllll5lllllllll.................XXX$$$$$XtX
-D:X.XcXtX+XX&&$XXXX...................lllllllllll...................XXXX$&$$$$XtX
+D:X.XcXtXDXX&&$XXXX...................lllllllllll...................XXXX$&$$$$XtX
 D:X.XdXtX$$$%%%$$XXXXX.....................h.....................XXXXX$$&%%$$$XtX
 D:X.XXXtX$$$$$$$$$$$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX$$$$$$$$$$$XtX
 D:XA.AXtX$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$XtX
-D:XX+XXtXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXtX
+D:XXDXXtXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXtX
 D:X<..XtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttX
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 

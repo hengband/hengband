@@ -47,74 +47,71 @@ Q:25:T:もらってはいかがですか？
 ?:1
 
 # Trap or OOD item
-F:!:1:8:0:*10:0:0:*
+F:!:FLOOR:8:0:*10:0:0:*
 
 # Floor with a Hound of Tindalos
-F:Z:1:12:739
+F:Z:FLOOR:12:739
 
 # Floor with Raal's!
-F:?:1:8:557
+F:?:FLOOR:8:557
 
 # Floor with Ipsissimus
-F:I:1:8:571
+F:I:FLOOR:8:571
 
 # Floor with Nexus Q
-F:Q:1:8:480
+F:Q:FLOOR:8:480
 
 # Water
-F:=:83:8
+F:=:DEEP_WATER:8
 
 # Floor, no tele
-F:s:1:12
+F:s:FLOOR:12
 
 # Normal wall
-F:#:56:8
+F:#:GRANITE:8
 
 # Shadow Demon
-F:S:1:8:665
+F:S:FLOOR:8:665
 
 # Hand druj
-F:j:1:8:748
+F:j:FLOOR:8:748
 
 # Stairway to hell
-F:>:1:8:439
+F:>:FLOOR:8:439
 
 # Skeletal Tyrannos.
-F:t:1:8:466
+F:t:FLOOR:8:466
 
 # Spectral Tyrannos.
-F:T:1:8:705
+F:T:FLOOR:8:705
 
 # Trap
-F:^:1:8:0:0:0:0:*
+F:^:FLOOR:8:0:0:0:0:*
 
 # Undead Mass:
-F:m:1:8:202:0:0:0:*
+F:m:FLOOR:8:202:0:0:0:*
 
 # Spectre:
-F:C:1:8:508
+F:C:FLOOR:8:508
 
 # Vampire:
-F:V:1:8:520
-
-# Door
-F:+:32:8
+F:V:FLOOR:8:520
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-D:X..+!..+^^^m^^m^^^+...........X
+D:X..D!..D^^^m^^m^^^D...........X
 D:X..X.t.X^^^^^^^^^^X...........X
 D:X!XXXXXXXXXXXXXXXXX...........X
-D:X+X...............X.!!!!!!!!!.X
+D:XDX...............X.!!!!!!!!!.X
 D:X.................X.!XXXXXXX!.X
 D:X..XXX..........==X.!XXXXXXX!.X
 D:X.XXZX..........=IX.!!!!!!!!!.X
 D:X.XssX.====.===.=IX...........X
-D:X+X#XX.=?Q=.=Q=.=IXT..........X
-D:X..XXX+XXXX+XXX+XXXXXXXX+XXXXXX
-D:X..X^....XSSSX...Xj+^^^^^^^^+!X
+D:XDX#XX.=?Q=.=Q=.=IXT..........X
+D:X..XXXDXXXXDXXXDXXXXXXXXDXXXXXX
+D:X..X^....XSSSX...XjD^^^^^^^^D!X
 D:X..X..!..XSSSX.!.XXX^......^XXX
-D:X<.XC...CXSSSX.V.X!+^^^^^^^^+>X
+D:X<.XC...CXSSSX.V.X!D^^^^^^^^D>X
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 # Starting position

@@ -3,49 +3,49 @@
 # The City beneath the Sea
 
 # Deep water
-F:e:83:8
+F:e:DEEP_WATER:8
 
 # Shallow water
-F:f:84:8
+F:f:SHALLOW_WATER:8
 
 ?:[EQU $QUEST17 1]
 
 # Floor
-F:.:1:3
+F:.:FLOOR:3
 
 # Normal wall
-F:#:56:12
+F:#:GRANITE:12
 
 # No-tele
-F:-:1:12
+F:-:FLOOR:12
 
 # Floor + Necronomicon
-F:x:1:12:0:424
+F:x:FLOOR:12:0:424
 
 # Floor + Star-Spawn
-F:c:1:8:836
+F:c:FLOOR:8:836
 
 # Floor + Cthulhu + trap
-F:C:1:8:857:0:0:0:*
+F:C:FLOOR:8:857:0:0:0:*
 
 # Random trap or object
 # (25% chance for trap, 75% chance for object hardcoded)
-F:*:1:12:0:*:0:0:*
+F:*:FLOOR:12:0:*:0:0:*
 
 # Trap
-F:^:1:12:0:0:0:0:*
+F:^:FLOOR:12:0:0:0:0:*
 
 # Trap or an OOD item
-F:$:1:12:0:*10:0:0:*
+F:$:FLOOR:12:0:*10:0:0:*
 
 # Trap or a very OOD item
-F:!:1:12:0:*25:0:0:*
+F:!:FLOOR:12:0:*25:0:0:*
 
 # Door
-F:D:32:12
+F:D:CLOSED_DOOR:12
 
 # Granite wall
-F:%:58:12
+F:%:GRANITE:12
 
 # R'lyeh layout
 D:######################################################################################################################################################################################################

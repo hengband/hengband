@@ -46,88 +46,91 @@ Q:28:T:の魂を鎮めることは誰にも出来ません！
 ?:1
 
 # Floor, dark, no teleport
-F:,:1:12
+F:,:FLOOR:12
 
 # Deep water
-F:W:83:12
+F:W:DEEP_WATER:12
 
 # Locked door (power 6)
-F:+:39:12
+F:+:LOCKED_DOOR_7:12
 
 # Broken door
-F:':5:12
+F:':BROKEN_DOOR:12
 
 # Trap
-F:^:1:12:0:0:0:0:*
+F:^:FLOOR:12:0:0:0:0:*
 
 # Normal wall
-F:#:56
+F:#:GRANITE:12
 
 # Flor + skeleton (junk)
-F:~:1:12:0:395
+F:~:FLOOR:12:0:395
 
 # Floor + crypt creep 
-F:a:1:12:124
+F:a:FLOOR:12:124
 
 # Floor + phantom beast 
-F:b:1:12:385
+F:b:FLOOR:12:385
 
 # Floor + greater mummy 
-F:c:1:12:522
+F:c:FLOOR:12:522
 
 # Floor + grey wraith 
-F:d:1:12:554
+F:d:FLOOR:12:554
 
 # Floor + master vampire 
-F:e:1:12:520
+F:e:FLOOR:12:520
 
 # Floor + crypt thing 
-F:f:1:12:577
+F:f:FLOOR:12:577
 
 # Floor + black wraith 
-F:g:1:12:607
+F:g:FLOOR:12:607
 
 # Floor + monastic lich 
-F:h:1:12:611
+F:h:FLOOR:12:611
 
 # Floor + nether wraith 
-F:i:1:12:612
+F:i:FLOOR:12:612
 
 # Floor + vampire lord
-F:j:1:12:623
+F:j:FLOOR:12:623
 
 # Floor + master lich 
-F:k:1:12:658
+F:k:FLOOR:12:658
 
 # Floor + iron lich 
-F:l:1:12:666
+F:l:FLOOR:12:666
 
 # Floor + dread 
-F:m:1:12:667
+F:m:FLOOR:12:667
 
 # Floor + dreadmaster
-F:n:1:12:690
+F:n:FLOOR:12:690
 
 # Floor + lesser black reaver
-F:o:1:12:694
+F:o:FLOOR:12:694
 
 # Floor + demilich
-F:p:1:12:742
+F:p:FLOOR:12:742
 
 # Floor + eye druj
-F:q:1:12:749
+F:q:FLOOR:12:749
 
 # Floor + skull druj
-F:r:1:12:750
+F:r:FLOOR:12:750
 
 # Floor + shadowlord
-F:s:1:12:774
+F:s:FLOOR:12:774
 
 # Floor + archlich
-F:t:1:12:776
+F:t:FLOOR:12:776
 
 # Floor + black reaver
-F:u:1:12:798
+F:u:FLOOR:12:798
+
+# up staircase
+F:<:UP_STAIR:12
 
 # The Royal Catacoombs
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

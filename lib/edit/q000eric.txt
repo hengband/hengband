@@ -40,46 +40,46 @@ Q:15:T:失敗し、かの裏切り者が今やアンバーの最高支配者になってしまったのだ。
 ?:1
 
 # Deep water
-F:W:83:8
+F:W:DEEP_WATER:8
 
 # Tree
-F:T:96
+F:T:TREE
 
 # Normal wall
-F:#:56
+F:#:GRANITE
 
 # Floor + black knight 
-F:a:1:8:442
+F:a:FLOOR:8:442
 
 # Floor + ninja
-F:b:1:8:485
+F:b:FLOOR:8:485
 
 # Floor + Logrus master
-F:c:1:8:498
+F:c:FLOOR:8:498
 
 # Floor + death knight
-F:d:1:8:597
+F:d:FLOOR:8:597
 
 # Floor + enchantress
-F:e:1:8:636
+F:e:FLOOR:8:636
 
 # Floor + sorcerer
-F:f:1:8:638
+F:f:FLOOR:8:638
 
 # Floor + ultra-elite paladin
-F:g:1:8:699
+F:g:FLOOR:8:699
 
 # Floor + Lord of Chaos
-F:h:1:8:737
+F:h:FLOOR:8:737
 
 # Floor + Eric + item
-F:E:1:8:813:*
+F:E:FLOOR:8:813:*
 
 # Trap
-F:^:1:8:0:0:0:0:*
+F:^:FLOOR:8:0:0:0:0:*
 
 # Trap or OOD item
-F:$:1:8:0:*10:0:0:*
+F:$:FLOOR:8:0:*10:0:0:*
 
 # Eric's stronghold
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

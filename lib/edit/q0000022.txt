@@ -40,25 +40,25 @@ Q:22:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
 ?:1
 
 # Floor with Snaga
-F:a:1:8:118
+F:a:FLOOR:8:118
 
 # Floor with Hill orc
-F:b:1:8:149
+F:b:FLOOR:8:149
 
 # Floor with Orc shaman
-F:c:1:8:162
+F:c:FLOOR:8:162
 
 # Floor with Golfimbul, the Hill Orc Chief
-F:d:1:8:215
+F:d:FLOOR:8:215
 
 # Floor with Black orc
-F:e:1:8:244
+F:e:FLOOR:8:244
 
 # Floor with Orc captain
-F:f:1:8:285
+F:f:FLOOR:8:285
 
 # Floor with Snaga sapper
-F:g:1:8:251
+F:g:FLOOR:8:251
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

@@ -6,102 +6,102 @@
 ############### Additional default terrain settings ###############
 
 # Default for castle reward
-F:!:1:3
+F:!:FLOOR:3
 
 # Default for inn reward
-F:@:1:3
+F:@:FLOOR:3
 
 # Default for Quest 1 = entrance is tree
-F:z:96:3
+F:z:TREE:3
 
 # Default for Quest 18 = entrance is tree
-F:y:96:3
+F:y:TREE:3
 
 # Default for Quest 25 = entrance is stone
-F:x:63:3
+F:x:PERMANENT:3
 
 # Default for Quest 28 = entrance is stone
-F:w:63:3
+F:w:PERMANENT:3
 
 # Default for Quest 27 = entrance is grass
-F:v:89:3
+F:v:GRASS:3
 
 # Default for Quest 31 = entrance is grass
-F:s:89:3
+F:s:GRASS:3
 
 # Default for Quest 32 = entrance is stone
-F:r:63:3
+F:r:PERMANENT:3
 
 # Default for Quest 33 = entrance is stone
-F:q:63:3
+F:q:PERMANENT:3
 
 
 ############### Quest 1 - Thieves Hideout ###############
 
 # Quest 1 untaken
 ?:[EQU $QUEST1 0]
-F:b:129:3:0:0:0:0:0:1
+F:b:BUILDING_1:3:0:0:0:0:NONE:1
 
 # Quest 1 taken, entrance is quest entrance
 ?:[EQU $QUEST1 1]
-F:z:8:3:0:0:0:0:0:1
-F:b:129:3:0:0:0:0:0:1
+F:z:QUEST_ENTER:3:0:0:0:0:NONE:1
+F:b:BUILDING_1:3:0:0:0:0:NONE:1
 
 # Quest 1 completed
 ?:[EQU $QUEST1 2]
-F:b:129:3:0:0:0:0:0:1
+F:b:BUILDING_1:3:0:0:0:0:NONE:1
 
 # Quest 1 rewarding, reward is a Longsword, continue with quest 14
 ?:[EQU $QUEST1 3]
-F:b:129:3:0:0:0:0:0:14
-F:!:1:3:0:42
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
+F:!:FLOOR:3:0:42
 
 # Broad Spear
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS BeastMaster Cavalry] ]
-F:b:129:3:0:0:0:0:0:14
-F:!:1:3:0:543
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
+F:!:FLOOR:3:0:543
 
 # Set of Gauntlets
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Monk ForceTrainer] ]
-F:b:129:3:0:0:0:0:0:14
-F:!:1:3:0:126
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
+F:!:FLOOR:3:0:126
 
 # War Hammer
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Priest] ]
-F:b:129:3:0:0:0:0:0:14
-F:!:1:3:0:55
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
+F:!:FLOOR:3:0:55
 
 # Short Bow
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Archer] ]
-F:b:129:3:0:0:0:0:0:14
-F:!:1:3:0:73
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
+F:!:FLOOR:3:0:73
 
 # Broad Axe
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Weaponsmith] ]
-F:b:129:3:0:0:0:0:0:14
-F:!:1:3:0:70
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
+F:!:FLOOR:3:0:70
 
 # Ring of Warning
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Mage High-Mage Blue-Mage Sorcerer Mirror-Master] ]
-F:b:129:3:0:0:0:0:0:14
-F:!:1:3:0:618
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
+F:!:FLOOR:3:0:618
 
 # Dagger
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Ninja] ]
-F:b:129:3:0:0:0:0:0:14
-F:!:1:3:0:43
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
+F:!:FLOOR:3:0:43
 
 # Quest 1 finished, continue with quest 14
 ?:[EQU $QUEST1 4]
-F:b:129:3:0:0:0:0:0:14
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
 
 # Quest 1 failed, wait for the player to enter the castle
 ?:[EQU $QUEST1 5]
-F:b:129:3:0:0:0:0:0:1
+F:b:BUILDING_1:3:0:0:0:0:NONE:1
 
 # Quest 1 failed but done, continue with quest 14
 ?:[EQU $QUEST1 6]
-F:b:129:3:0:0:0:0:0:14
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
 
 ?:1
 
@@ -110,25 +110,25 @@ F:b:129:3:0:0:0:0:0:14
 
 # Quest 14 unfinished
 ?:[EQU $QUEST14 1]
-F:b:129:3:0:0:0:0:0:14
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
 
 # Quest 14 completed
 ?:[EQU $QUEST14 2]
-F:b:129:3:0:0:0:0:0:14
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
 
 # Quest 14 rewarding, reward is a Small Metal Shield,
 # continue with quest 25
 ?:[EQU $QUEST14 3]
-F:b:129:3:0:0:0:0:0:25
-F:!:1:3:0:130
+F:b:BUILDING_1:3:0:0:0:0:NONE:25
+F:!:FLOOR:3:0:130
 
 ?:[AND [EQU $QUEST14 3] [EQU $CLASS BeastMaster Cavalry Ninja] ]
-F:b:129:3:0:0:0:0:0:25
-F:!:1:3:0:126
+F:b:BUILDING_1:3:0:0:0:0:NONE:25
+F:!:FLOOR:3:0:126
 
 # Continue with quest 25
 ?:[EQU $QUEST14 4]
-F:b:129:3:0:0:0:0:0:25
+F:b:BUILDING_1:3:0:0:0:0:NONE:25
 
 ?:1
 
@@ -137,30 +137,30 @@ F:b:129:3:0:0:0:0:0:25
 
 # Quest 25 assigned, entrance is quest entrance
 ?:[EQU $QUEST25 1]
-F:x:8:3:0:0:0:0:0:25
-F:b:129:3:0:0:0:0:0:25
+F:x:QUEST_ENTER:3:0:0:0:0:NONE:25
+F:b:BUILDING_1:3:0:0:0:0:NONE:25
 
 # Quest 25 completed
 ?:[EQU $QUEST25 2]
-F:b:129:3:0:0:0:0:0:25
+F:b:BUILDING_1:3:0:0:0:0:NONE:25
 
 # Quest 25 rewarding, reward is Staff of Dispel Evil,
 # continue with quest 18
 ?:[EQU $QUEST25 3]
-F:b:129:3:0:0:0:0:0:18
-F:!:1:3:0:320
+F:b:BUILDING_1:3:0:0:0:0:NONE:18
+F:!:FLOOR:3:0:320
 
 # Quest 25 finished, continue with quest 18
 ?:[EQU $QUEST25 4]
-F:b:129:3:0:0:0:0:0:18
+F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
 # Quest 25 failed, wait for the player to enter the castle
 ?:[EQU $QUEST25 5]
-F:b:129:3:0:0:0:0:0:25
+F:b:BUILDING_1:3:0:0:0:0:NONE:25
 
 # Quest 25 failed but done, continue with quest 18
 ?:[EQU $QUEST25 6]
-F:b:129:3:0:0:0:0:0:18
+F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
 ?:1
 
@@ -169,22 +169,22 @@ F:b:129:3:0:0:0:0:0:18
 
 # Quest 18 assigned, entrance is quest entrance
 ?:[EQU $QUEST18 1]
-F:y:8:3:0:0:0:0:0:18
-F:b:129:3:0:0:0:0:0:18
+F:y:QUEST_ENTER:3:0:0:0:0:NONE:18
+F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
 # Quest 18 completed
 ?:[EQU $QUEST18 2]
-F:b:129:3:0:0:0:0:0:18
+F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
 # Quest 18 rewarding, reward is Ring of Poison Resistance,
 # continue with quest 28
 ?:[EQU $QUEST18 3]
-F:b:129:3:0:0:0:0:0:28
-F:!:1:3:0:143
+F:b:BUILDING_1:3:0:0:0:0:NONE:28
+F:!:FLOOR:3:0:143
 
 # Quest 18 finished, continue with quest 28
 ?:[EQU $QUEST18 4]
-F:b:129:3:0:0:0:0:0:28
+F:b:BUILDING_1:3:0:0:0:0:NONE:28
 
 ?:1
 
@@ -193,28 +193,28 @@ F:b:129:3:0:0:0:0:0:28
 
 # Quest 28 assigned, entrance is quest entrance
 ?:[EQU $QUEST28 1]
-F:w:8:3:0:0:0:0:0:28
-F:b:129:3:0:0:0:0:0:28
+F:w:QUEST_ENTER:3:0:0:0:0:NONE:28
+F:b:BUILDING_1:3:0:0:0:0:NONE:28
 
 # Quest 28 completed
 ?:[EQU $QUEST28 2]
-F:b:129:3:0:0:0:0:0:28
+F:b:BUILDING_1:3:0:0:0:0:NONE:28
 
 # Quest 28 rewarding, you don't get none, no new quest available
 ?:[EQU $QUEST28 3]
-F:b:129:3
+F:b:BUILDING_1:3
 
 # Quest 28 finished, no new quest available
 ?:[EQU $QUEST28 4]
-F:b:129:3
+F:b:BUILDING_1:3
 
 # Quest 28 failed, no new quest available
 ?:[EQU $QUEST28 5]
-F:b:129:3:0:0:0:0:0:28
+F:b:BUILDING_1:3:0:0:0:0:NONE:28
 
 # Quest 28 failed but done, no new quest available
 ?:[EQU $QUEST28 6]
-F:b:129:3
+F:b:BUILDING_1:3
 
 ?:1
 
@@ -223,34 +223,34 @@ F:b:129:3
 
 # Quest 31 untaken
 ?:[EQU $QUEST31 0]
-F:a:128:3:0:0:0:0:0:31
+F:a:BUILDING_0:3:0:0:0:0:NONE:31
 
 # Quest 31 taken, entrance is quest entrance
 ?:[EQU $QUEST31 1]
-F:s:8:3:0:0:0:0:0:31
-F:a:128:3:0:0:0:0:0:31
+F:s:QUEST_ENTER:3:0:0:0:0:NONE:31
+F:a:BUILDING_0:3:0:0:0:0:NONE:31
 
 # Quest 31 completed
 ?:[EQU $QUEST31 2]
-F:a:128:3:0:0:0:0:0:31
+F:a:BUILDING_0:3:0:0:0:0:NONE:31
 
 # Quest 31 rewarding, Ring of confusion resistance
 # continue with quest 32
 ?:[EQU $QUEST31 3]
-F:a:128:3:0:0:0:0:0:32
-F:@:1:3:0:430
+F:a:BUILDING_0:3:0:0:0:0:NONE:32
+F:@:FLOOR:3:0:430
 
 # Quest 31 finished, continue with quest 32
 ?:[EQU $QUEST31 4]
-F:a:128:3:0:0:0:0:0:32
+F:a:BUILDING_0:3:0:0:0:0:NONE:32
 
 # Quest 31 failed, wait for the player to enter the Inn
 ?:[EQU $QUEST31 5]
-F:a:128:3:0:0:0:0:0:31
+F:a:BUILDING_0:3:0:0:0:0:NONE:31
 
 # Quest 31 failed but done, continue with quest 32
 ?:[EQU $QUEST31 6]
-F:a:128:3:0:0:0:0:0:32
+F:a:BUILDING_0:3:0:0:0:0:NONE:32
 
 ?:1
 
@@ -259,30 +259,30 @@ F:a:128:3:0:0:0:0:0:32
 
 # Quest 32 taken, entrance is quest entrance
 ?:[EQU $QUEST32 1]
-F:r:8:3:0:0:0:0:0:32
-F:a:128:3:0:0:0:0:0:32
+F:r:QUEST_ENTER:3:0:0:0:0:NONE:32
+F:a:BUILDING_0:3:0:0:0:0:NONE:32
 
 # Quest 32 completed
 ?:[EQU $QUEST32 2]
-F:a:128:3:0:0:0:0:0:32
+F:a:BUILDING_0:3:0:0:0:0:NONE:32
 
 # Quest 32 rewarding, The Incandescent Light of Yeduson
 # continue with quest 27
 ?:[EQU $QUEST32 3]
-F:a:128:3:0:0:0:0:0:33
-F:@:1:3:0:0:0:1
+F:a:BUILDING_0:3:0:0:0:0:NONE:33
+F:@:FLOOR:3:0:0:0:1
 
 # Quest 32 finished, continue with quest 27
 ?:[EQU $QUEST32 4]
-F:a:128:3:0:0:0:0:0:33
+F:a:BUILDING_0:3:0:0:0:0:NONE:33
 
 # Quest 32 failed, wait for the player to enter the Inn
 ?:[EQU $QUEST32 5]
-F:a:128:3:0:0:0:0:0:32
+F:a:BUILDING_0:3:0:0:0:0:NONE:32
 
 # Quest 32 failed but done, continue with quest 27
 ?:[EQU $QUEST32 6]
-F:a:128:3:0:0:0:0:0:33
+F:a:BUILDING_0:3:0:0:0:0:NONE:33
 
 ?:1
 
@@ -291,31 +291,31 @@ F:a:128:3:0:0:0:0:0:33
 
 # Quest 33 taken, entrance is quest entrance
 ?:[EQU $QUEST33 1]
-F:q:8:3:0:0:0:0:0:33
-F:a:128:3:0:0:0:0:0:33
+F:q:QUEST_ENTER:3:0:0:0:0:NONE:33
+F:a:BUILDING_0:3:0:0:0:0:NONE:33
 
 # Quest 33 completed
 ?:[EQU $QUEST33 2]
-F:a:128:3:0:0:0:0:0:33
+F:a:BUILDING_0:3:0:0:0:0:NONE:33
 
 # Quest 33 rewarding
 # reward is The Pair of Soft Leather Boots of Shiva's Avatar
 # no new quest is available
 ?:[EQU $QUEST33 3]
-F:a:128:3:0:0:0:0:0:27
-F:@:1:3:0:0:0:63
+F:a:BUILDING_0:3:0:0:0:0:NONE:27
+F:@:FLOOR:3:0:0:0:63
 
 # Quest 33 finished, no new quest is available
 ?:[EQU $QUEST33 4]
-F:a:128:3:0:0:0:0:0:27
+F:a:BUILDING_0:3:0:0:0:0:NONE:27
 
 # Quest 33 failed, wait for the player to enter the Inn
 ?:[EQU $QUEST33 5]
-F:a:128:3:0:0:0:0:0:33
+F:a:BUILDING_0:3:0:0:0:0:NONE:33
 
 # Quest 33 failed but done, no new quest is available
 ?:[EQU $QUEST33 6]
-F:a:128:3:0:0:0:0:0:27
+F:a:BUILDING_0:3:0:0:0:0:NONE:27
 
 ?:1
 
@@ -324,153 +324,153 @@ F:a:128:3:0:0:0:0:0:27
 
 # Quest 27 assigned, entrance is quest entrance
 ?:[EQU $QUEST27 1]
-F:v:8:3:0:0:0:0:0:27
-F:a:128:3:0:0:0:0:0:27
+F:v:QUEST_ENTER:3:0:0:0:0:NONE:27
+F:a:BUILDING_0:3:0:0:0:0:NONE:27
 
 # Quest 27 completed
 ?:[EQU $QUEST27 2]
-F:a:128:3:0:0:0:0:0:27
+F:a:BUILDING_0:3:0:0:0:0:NONE:27
 
 # Quest 27 rewarding (default reward if not given one from below)
 # the Executioner's Sword 'Crisdurian'
 # continue with quest 33
 ?:[EQU $QUEST27 3]
-F:a:128:3
-F:@:1:3:0:0:0:80
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:80
 
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Weaponsmith] ]
-F:a:128:3
-F:@:1:3:0:405
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:405
 
 # Quest 27 rewarding (Tourist gets The Platinum Yendorian Express Card)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Tourist] ]
-F:a:128:3
-F:@:1:3:0:0:0:141
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:141
 
 # Quest 27 rewarding (Ranger, Archer gets The Long Bow of Bard)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Ranger Archer] ]
-F:a:128:3
-F:@:1:3:0:0:0:125
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:125
 
 # Quest 27 rewarding (Warrior, Berserker gets The Glaive of Pain)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior Berserker] ]
-F:a:128:3
-F:@:1:3:0:0:0:94
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:94
 
 # Quest 27 rewarding (BeastMaster gets The Lance of Eorlingas)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS BeastMaster] ]
-F:a:128:3
-F:@:1:3:0:0:0:100
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:100
 
 # Quest 27 rewarding (Cavalry gets GaeBolg)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Cavalry] ]
-F:a:128:3
-F:@:1:3:0:0:0:163
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:163
 
 # Quest 27 rewarding (Chaos-Warrior gets Zarcuthra)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Chaos-Warrior] ]
-F:a:128:3
-F:@:1:3:0:0:0:77
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:77
 
 # Quest 27 rewarding (Rogue gets The Sling of Buckland)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Rogue] ]
-F:a:128:3
-F:@:1:3:0:0:0:134
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:134
 
 # Quest 27 rewarding (Monk gets The Leather Jacket of Shiva's Avatar)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Monk] ]
-F:a:128:3
-F:@:1:3:0:0:0:26
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:26
 
 # Quest 27 rewarding (Ninja gets The Amulet of the Pitch Dark Night)
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Ninja] ]
-F:a:128:3
-F:@:1:3:0:0:0:215
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:215
 
 # Quest 27 rewarding (Mage, High-Mage)
 # get The Hard Leather Cap of Indra
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Mage High-Mage Sorcerer Blue-Mage] ]
-F:a:128:3
-F:@:1:3:0:0:0:33
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:33
 
 # Quest 27 rewarding (Priest, Bard, ForceTrainer)
 # get The Palantir of Westernesse
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest Bard ForceTrainer Mindcrafter] ]
-F:a:128:3
-F:@:1:3:0:0:0:15
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:15
 
 #--- this is old ---
 # Quest 27 rewarding (Magiceater, Mirror-Master)
 # get The Jewel Encrusted Crown of Numenor
 # continue with quest 33
 #?:[AND [EQU $QUEST27 3] [EQU $CLASS Magiceater Mirror-Master] ]
-#F:a:128:3
-#F:@:1:3:0:0:0:132
+#F:a:BUILDING_0:3
+#F:@:FLOOR:3:0:0:0:132
 
 # Quest 27 rewarding (Mirror-Master)
 # get The Jewel Encrusted Crown of Numenor
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Mirror-Master] ]
-F:a:128:3
-F:@:1:3:0:0:0:132
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:132
 
 # Quest 27 rewarding (Samurai)
 # get Groo
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai] ]
-F:a:128:3
-F:@:1:3:0:0:0:81
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:81
 
 # Quest 27 rewarding (crusade Paladin)
 # get the Amulet of Sacred Knights
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Paladin] [EQU $REALM1 Crusade] ]
-F:a:128:3
-F:@:1:3:0:0:0:217
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:217
 
 # Quest 27 rewarding (death Paladin)
 # get the Collar Harness of the Hell
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Paladin] [EQU $REALM1 Death] ]
-F:a:128:3
-F:@:1:3:0:0:0:218
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:218
 
 # Quest 27 rewarding (Warrior-Mage, Red-Mage, Magic-Eater )
 # get the Charmed Pendant
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior-Mage Red-Mage Magic-Eater] ]
-F:a:128:3
-F:@:1:3:0:0:0:219
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:219
 
 # Quest 27 rewarding (Imitator)
 # get the Pendant of Gogo
 # continue with quest 33
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Imitator] ]
-F:a:128:3
-F:@:1:3:0:0:0:220
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:220
 
 # Quest 27 finished, continue with quest 33
 ?:[EQU $QUEST27 4]
-F:a:128:3
+F:a:BUILDING_0:3
 
 # Quest 27 failed, wait for the player to enter the inn
 ?:[EQU $QUEST27 5]
-F:a:128:3:0:0:0:0:0:27
+F:a:BUILDING_0:3:0:0:0:0:NONE:27
 
 # Quest 27 failed but done, continue with quest 33
 ?:[EQU $QUEST27 6]
-F:a:128:3
+F:a:BUILDING_0:3
 
 ?:1
 

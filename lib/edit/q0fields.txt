@@ -42,34 +42,34 @@ Q:26:T:あなたの名誉は地に落ちてしまいました。
 ?:1
 
 # Floor with Warrior of the Dawn
-F:W:1:8:693
+F:W:FLOOR:8:693
 
 # Floor with Warrior of the Dawn, no tele
-F:w:1:12:693
+F:w:FLOOR:12:693
 
 # Floor with Mine-dog
-F:a:1:8:221
+F:a:FLOOR:8:221
 
 # Floor with Landmine
-F:b:1:8:333
+F:b:FLOOR:8:333
 
 # Floor with Timebomb
-F:c:1:8:567
+F:c:FLOOR:8:567
 
 # Floor with the boss monster
-F:M:1:12:723
+F:M:FLOOR:12:723
 
 # Trap
-F:^:1:8:0:0:0:0:*
+F:^:FLOOR:8:0:0:0:0:*
 
 # Trees
-F:T:96
+F:T:TREE
 
 # No tele
-F:s:1:12
+F:s:FLOOR:12
 
 # Wall
-F:#:56:8
+F:#:GRANITE:8
 
 
 # Dungeon layout

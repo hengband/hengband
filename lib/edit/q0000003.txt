@@ -45,7 +45,7 @@ Q:3:T:彼が二度と戻ってこないことを願いましょう。
 ?:1
 
 # Floor with Logrus Master
-F:a:1:8:498
+F:a:FLOOR:8:498
 
 # Dungeon
 D:XXXXXXXXXXXXXXX

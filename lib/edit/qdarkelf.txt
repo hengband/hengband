@@ -37,23 +37,23 @@ Q:32:T:このクエストはあなたの手におえなかったようですね。他のを試して下さい。
 
 # The Monsters
 # Dweller on the threshold (level:15, Speed:110, XP:50, #:6, Tot:300)
-F:y:1:8:263
+F:y:FLOOR:8:263
 
 # Stone Giant (level:18, Speed:110, XP:90, #:4, Tot:360)
-F:P:1:8:321
+F:P:FLOOR:8:321
 
 # Stone Golem (level:19, Speed:100, XP:100, #:4, Tot:400)
-F:g:1:8:323
+F:g:FLOOR:8:323
 
 # Stunwall (level:18, Speed:110, XP:50, #:6, Tot:300)
-F:#:1:8:326
+F:#:FLOOR:8:326
 
 # Dark eleven lord (level:20, Speed:120, XP:500, #:5, Tot:2500)
-F:h:1:8:348
+F:h:FLOOR:8:348
 
 # The doors, floors and treasures
 # Normal floor
-F: :1:8
+F: :FLOOR:8
 
 # Dungeon layout
 D:XXXXXXXXX

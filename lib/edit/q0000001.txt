@@ -38,10 +38,10 @@ Q:1:T:残りの盗賊を退治しますから、もういいですよ。
 ?:1
 
 # Floor with Novice rogue
-F:a:1:8:44
+F:a:FLOOR:8:44
 
 # Floor with Bandit
-F:b:1:8:150
+F:b:FLOOR:8:150
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXX

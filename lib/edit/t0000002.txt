@@ -5,61 +5,61 @@
 ############### Additional default terrain settings ###############
 
 # Default castle reward = floor
-F:!:1:3
+F:!:FLOOR:3
 
 # Default for Quest 2 = entrance is floor
-F:z:1:3
+F:z:FLOOR:3
 
 # Default for Quest 3 = entrance is stone
-F:y:63:3
+F:y:PERMANENT:3
 
 # Default for Quest 4 = entrance is stone
-F:x:63:3
+F:x:PERMANENT:3
 
 # Default for Quest 5 = entrance is stone
-F:w:63:3
+F:w:PERMANENT:3
 
 # Default for Quest 15 = entrance is stone
-F:v:63:3
+F:v:PERMANENT:3
 
 # Default for Quest 16 = entrance is stone
-F:u:63:3
+F:u:PERMANENT:3
 
 # Default for Quest 26 = entrance is tree
-F:t:96:3
+F:t:TREE:3
 
 
 ############### Quest 2 - The Sewer ###############
 
 # Quest 2 untaken
 ?:[EQU $QUEST2 0]
-F:b:129:3:0:0:0:0:0:2
+F:b:BUILDING_1:3:0:0:0:0:NONE:2
 
 # Quest 2 assigned, entrance is quest entrance
 ?:[EQU $QUEST2 1]
-F:z:8:3:0:0:0:0:0:2
-F:b:129:3:0:0:0:0:0:2
+F:z:QUEST_ENTER:3:0:0:0:0:NONE:2
+F:b:BUILDING_1:3:0:0:0:0:NONE:2
 
 # Quest 2 completed
 ?:[EQU $QUEST2 2]
-F:b:129:3:0:0:0:0:0:2
+F:b:BUILDING_1:3:0:0:0:0:NONE:2
 
 # Quest 2 rewarding, reward is Feanorian lamp
 ?:[EQU $QUEST2 3]
-F:b:129:3:0:0:0:0:0:3
-F:!:1:3:0:582
+F:b:BUILDING_1:3:0:0:0:0:NONE:3
+F:!:FLOOR:3:0:582
 
 # Quest 2 finished
 ?:[EQU $QUEST2 4]
-F:b:129:3:0:0:0:0:0:3
+F:b:BUILDING_1:3:0:0:0:0:NONE:3
 
 # Quest 2 failed, wait for the player to enter the castle
 ?:[EQU $QUEST2 5]
-F:b:129:3:0:0:0:0:0:2
+F:b:BUILDING_1:3:0:0:0:0:NONE:2
 
 # Quest 2 failed but done, continue with quest 3
 ?:[EQU $QUEST2 6]
-F:b:129:3:0:0:0:0:0:3
+F:b:BUILDING_1:3:0:0:0:0:NONE:3
 
 ?:1
 
@@ -67,29 +67,29 @@ F:b:129:3:0:0:0:0:0:3
 
 # Quest 3 assigned, entrance is quest entrance
 ?:[EQU $QUEST3 1]
-F:y:8:3:0:0:0:0:0:3
-F:b:129:3:0:0:0:0:0:3
+F:y:QUEST_ENTER:3:0:0:0:0:NONE:3
+F:b:BUILDING_1:3:0:0:0:0:NONE:3
 
 # Quest 3 completed
 ?:[EQU $QUEST3 2]
-F:b:129:3:0:0:0:0:0:3
+F:b:BUILDING_1:3:0:0:0:0:NONE:3
 
 # Quest 3 rewarding, reward is Rod of Disarming
 ?:[EQU $QUEST3 3]
-F:b:129:3:0:0:0:0:0:4
-F:!:1:3:0:365
+F:b:BUILDING_1:3:0:0:0:0:NONE:4
+F:!:FLOOR:3:0:365
 
 # Quest 3 finished
 ?:[EQU $QUEST3 4]
-F:b:129:3:0:0:0:0:0:4
+F:b:BUILDING_1:3:0:0:0:0:NONE:4
 
 # Quest 3 failed, wait for the player to enter the castle
 ?:[EQU $QUEST3 5]
-F:b:129:3:0:0:0:0:0:3
+F:b:BUILDING_1:3:0:0:0:0:NONE:3
 
 # Quest 3 failed but done, continue with quest 4
 ?:[EQU $QUEST3 6]
-F:b:129:3:0:0:0:0:0:4
+F:b:BUILDING_1:3:0:0:0:0:NONE:4
 
 ?:1
 
@@ -97,28 +97,28 @@ F:b:129:3:0:0:0:0:0:4
 
 # Quest 4 assigned, entrance is quest entrance
 ?:[EQU $QUEST4 1]
-F:x:8:3:0:0:0:0:0:4
-F:b:129:3:0:0:0:0:0:4
+F:x:QUEST_ENTER:3:0:0:0:0:NONE:4
+F:b:BUILDING_1:3:0:0:0:0:NONE:4
 
 # Quest 4 completed
 ?:[EQU $QUEST4 2]
-F:b:129:3:0:0:0:0:0:4
+F:b:BUILDING_1:3:0:0:0:0:NONE:4
 
 # Quest 4 rewarding, no extra reward
 ?:[EQU $QUEST4 3]
-F:b:129:3:0:0:0:0:0:5
+F:b:BUILDING_1:3:0:0:0:0:NONE:5
 
 # Quest 4 finished
 ?:[EQU $QUEST4 4]
-F:b:129:3:0:0:0:0:0:5
+F:b:BUILDING_1:3:0:0:0:0:NONE:5
 
 # Quest 4 failed, wait for the player to enter the castle
 ?:[EQU $QUEST4 5]
-F:b:129:3:0:0:0:0:0:4
+F:b:BUILDING_1:3:0:0:0:0:NONE:4
 
 # Quest 4 failed but done, continue with quest 5
 ?:[EQU $QUEST4 6]
-F:b:129:3:0:0:0:0:0:5
+F:b:BUILDING_1:3:0:0:0:0:NONE:5
 
 ?:1
 
@@ -126,29 +126,29 @@ F:b:129:3:0:0:0:0:0:5
 
 # Quest 5 assigned, entrance is quest entrance
 ?:[EQU $QUEST5 1]
-F:w:8:3:0:0:0:0:0:5
-F:b:129:3:0:0:0:0:0:5
+F:w:QUEST_ENTER:3:0:0:0:0:NONE:5
+F:b:BUILDING_1:3:0:0:0:0:NONE:5
 
 # Quest 5 completed
 ?:[EQU $QUEST5 2]
-F:b:129:3:0:0:0:0:0:5
+F:b:BUILDING_1:3:0:0:0:0:NONE:5
 
 # Quest 5 rewarding, continue with quest 26,
 # reward is cheaper *Identify* at the Library (see buildings)
 ?:[EQU $QUEST5 3]
-F:b:129:3:0:0:0:0:0:26
+F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
 # Quest 5 finished, ontinue with quest 26
 ?:[EQU $QUEST5 4]
-F:b:129:3:0:0:0:0:0:26
+F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
 # Death Paladins continue with quest 16
 ?:[AND [EQU $QUEST5 3] [AND [EQU $CLASS Paladin] [EQU $REALM1 Death] ] ]
-F:b:129:3:0:0:0:0:0:16
+F:b:BUILDING_1:3:0:0:0:0:NONE:16
 
 # Death Paladins continue with quest 16
 ?:[AND [EQU $QUEST5 4] [AND [EQU $CLASS Paladin] [EQU $REALM1 Death] ] ]
-F:b:129:3:0:0:0:0:0:16
+F:b:BUILDING_1:3:0:0:0:0:NONE:16
 
 ?:1
 
@@ -156,30 +156,30 @@ F:b:129:3:0:0:0:0:0:16
 
 # Quest 16 assigned, entrance is quest entrance
 ?:[EQU $QUEST16 1]
-F:u:8:3:0:0:0:0:0:16
-F:b:129:3:0:0:0:0:0:16
+F:u:QUEST_ENTER:3:0:0:0:0:NONE:16
+F:b:BUILDING_1:3:0:0:0:0:NONE:16
 
 # Quest 16 completed
 ?:[EQU $QUEST16 2]
-F:b:129:3:0:0:0:0:0:16
+F:b:BUILDING_1:3:0:0:0:0:NONE:16
 
 # Quest 16 rewarding, continue with quest 26,
 # reward is amulet of reflection
 ?:[EQU $QUEST16 3]
-F:b:129:3:0:0:0:0:0:26
-F:!:1:3:0:520
+F:b:BUILDING_1:3:0:0:0:0:NONE:26
+F:!:FLOOR:3:0:520
 
 # Quest 16 finished, continue with quest 26
 ?:[EQU $QUEST16 4]
-F:b:129:3:0:0:0:0:0:26
+F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
 # Quest 16 failed, wait for the player to enter the castle
 ?:[EQU $QUEST16 5]
-F:b:129:3:0:0:0:0:0:16
+F:b:BUILDING_1:3:0:0:0:0:NONE:16
 
 # Quest 16 failed but done, continue with quest 26
 ?:[EQU $QUEST16 6]
-F:b:129:3:0:0:0:0:0:26
+F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
 ?:1
 
@@ -187,30 +187,30 @@ F:b:129:3:0:0:0:0:0:26
 
 # Quest 26 assigned, entrance is quest entrance
 ?:[EQU $QUEST26 1]
-F:t:8:3:0:0:0:0:0:26
-F:b:129:3:0:0:0:0:0:26
+F:t:QUEST_ENTER:3:0:0:0:0:NONE:26
+F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
 # Quest 26 completed
 ?:[EQU $QUEST26 2]
-F:b:129:3:0:0:0:0:0:26
+F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
 # Quest 26 rewarding, continue with quest 15,
 # Reward is a Potion of Life
 ?:[EQU $QUEST26 3]
-F:b:129:3:0:0:0:0:0:15
-F:!:1:3:0:420
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:420
 
 # Quest 26 finished, continue with quest 15
 ?:[EQU $QUEST26 4]
-F:b:129:3:0:0:0:0:0:15
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
 
 # Quest 26 failed, wait for the player to enter the castle
 ?:[EQU $QUEST26 5]
-F:b:129:3:0:0:0:0:0:26
+F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
 # Quest 26 failed but done, continue with quest 15
 ?:[EQU $QUEST26 6]
-F:b:129:3:0:0:0:0:0:15
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
 
 ?:1
 
@@ -218,30 +218,30 @@ F:b:129:3:0:0:0:0:0:15
 
 # Quest 15 assigned, entrance is quest entrance
 ?:[EQU $QUEST15 1]
-F:v:8:3:0:0:0:0:0:15
-F:b:129:3:0:0:0:0:0:15
+F:v:QUEST_ENTER:3:0:0:0:0:NONE:15
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
 
 # Quest 15 completed
 ?:[EQU $QUEST15 2]
-F:b:129:3:0:0:0:0:0:15
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
 
 # Quest 15 rewarding, no new quest available,
 # Reward is potion of augmentation
 ?:[EQU $QUEST15 3]
-F:b:129:3
-F:!:1:3:0:418
+F:b:BUILDING_1:3
+F:!:FLOOR:3:0:418
 
 # Quest 15 finished, no new quest available,
 ?:[EQU $QUEST15 4]
-F:b:129:3
+F:b:BUILDING_1:3
 
 # Quest 15 failed, wait for the player to enter the castle
 ?:[EQU $QUEST15 5]
-F:b:129:3:0:0:0:0:0:15
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
 
 # Quest 15 failed but done, no new quest available,
 ?:[EQU $QUEST15 6]
-F:b:129:3
+F:b:BUILDING_1:3
 
 ?:1
 

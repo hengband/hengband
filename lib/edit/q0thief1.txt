@@ -38,26 +38,26 @@ Q:29:T:次のクエストに進め。
 
 # The Monsters
 # Lurker (level:14, Speed:110, XP:80, #:4, Tot:320)
-F:.:1:8:247
+F:.:FLOOR:8:247
 
 # Potion Mimic (level:18, Speed:110, XP:60, #:4, Tot:240)
-F:!:1:8:310
+F:!:FLOOR:8:310
 
 # Door Mimic (level:18, Speed:110, XP:70, #:12, Tot:840)
-F:+:1:8:311
+F:+:FLOOR:8:311
 
 # Chest Mimic (level:21, Speed:110, XP:70, #:4, Tot:280)
-F:~:1:8:353
+F:~:FLOOR:8:353
 
 # The doors, floors and treasures
 # Normal floor
-F: :1:8
+F: :FLOOR:8
 
 # Floor on no Teleportation grid
-F:,:1:12
+F:,:FLOOR:12
 
 # Object 10 levels out of depth
-F:O:1:8:0:*10
+F:O:FLOOR:8:0:*10
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXX

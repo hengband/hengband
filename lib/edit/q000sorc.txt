@@ -38,22 +38,22 @@ Q:10:T:棒にふったのだ。
 ?:1
 
 # Shallow water with Guardian naga
-F:a:84:8:269
+F:a:SHALLOW_WATER:8:269
 
 # Floor with Phantom warrior
-F:b:1:8:152
+F:b:FLOOR:8:152
 
 # Floor with Phantom beast
-F:c:1:8:385
+F:c:FLOOR:8:385
 
 # Shallow water with Air elemental
-F:d:84:8:526
+F:d:SHALLOW_WATER:8:526
 
 # Deep water with Great Wyrm of Many Colours
-F:e:83:8:790
+F:e:DEEP_WATER:8:790
 
 # Normal wall
-F:#:56
+F:#:GRANITE
 
 # Node of Sorcery layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

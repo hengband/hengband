@@ -8,78 +8,78 @@
 ############### Additional default terrain settings ###############
 
 # Default for reward
-F:!:1:3 
+F:!:FLOOR:3 
 
 # Default for Quest 19 = entrance is tree
-F:z:96:3
+F:z:TREE:3
 
 # Default for Quest 22 = entrance is tree
-F:y:96:3
+F:y:TREE:3
 
 # Default for Quest 23 = entrance is tree
-F:x:96:3
+F:x:TREE:3
 
 
 ############### Quest 22 - Orc Camp ###################
 
 # Quest 22 untaken
 ?:[EQU $QUEST22 0]
-F:b:129:3:0:0:0:0:0:22
+F:b:BUILDING_1:3:0:0:0:0:NONE:22
 
 # Quest 22 assigned, entrance is quest entrance
 ?:[EQU $QUEST22 1]
-F:y:8:3:0:0:0:0:0:22
-F:b:129:3:0:0:0:0:0:22
+F:y:QUEST_ENTER:3:0:0:0:0:NONE:22
+F:b:BUILDING_1:3:0:0:0:0:NONE:22
 
 # Quest 22 completed
 ?:[EQU $QUEST22 2]
-F:b:129:3:0:0:0:0:0:22
+F:b:BUILDING_1:3:0:0:0:0:NONE:22
 
 # Quest 22 rewarding, reward is Elven Cloak, continue with quest 19
 ?:[EQU $QUEST22 3]
-F:b:129:3:0:0:0:0:0:19
-F:!:1:3:0:90
+F:b:BUILDING_1:3:0:0:0:0:NONE:19
+F:!:FLOOR:3:0:90
 
 # Quest 22 finished, continue with quest 19
 ?:[EQU $QUEST22 4]
-F:b:129:3:0:0:0:0:0:19
+F:b:BUILDING_1:3:0:0:0:0:NONE:19
 
 # Quest 22 failed
 ?:[EQU $QUEST22 5]
-F:b:129:3:0:0:0:0:0:22
+F:b:BUILDING_1:3:0:0:0:0:NONE:22
 
 # Quest 22 failed but done, continue with quest 19
 ?:[EQU $QUEST22 6]
-F:b:129:3:0:0:0:0:0:19
+F:b:BUILDING_1:3:0:0:0:0:NONE:19
 
 
 ############### Quest 19 - Doom Quest 1 ###############
 
 # Quest 19 assigned, entrance is quest entrance
 ?:[EQU $QUEST19 1]
-F:z:8:3:0:0:0:0:0:19
-F:b:129:3:0:0:0:0:0:19
+F:z:QUEST_ENTER:3:0:0:0:0:NONE:19
+F:b:BUILDING_1:3:0:0:0:0:NONE:19
 
 # Quest 19 completed
 ?:[EQU $QUEST19 2]
-F:b:129:3:0:0:0:0:0:19
+F:b:BUILDING_1:3:0:0:0:0:NONE:19
 
 # Quest 19 rewarding, reward is Ring of Flames, continue with quest 23
 ?:[EQU $QUEST19 3]
-F:b:129:3:0:0:0:0:0:23
-F:!:1:3:0:146
+F:b:BUILDING_1:3:0:0:0:0:NONE:23
+F:!:FLOOR:3:0:146
 
 # Quest 19 finished, continue with quest 23
 ?:[EQU $QUEST19 4]
-F:b:129:3:0:0:0:0:0:23
+F:b:BUILDING_1:3:0:0:0:0:NONE:23
 
 # Quest 19 failed
 ?:[EQU $QUEST19 5]
-F:b:129:3:0:0:0:0:0:19
+F:b:BUILDING_1:3:0:0:0:0:NONE:19
 
 # Quest 19 failed but done, continue with quest 23
 ?:[EQU $QUEST19 6]
-F:b:129:3:0:0:0:0:0:23
+F:b:BUILDING_1:3:0:0:0:0:NONE:23
 
 ?:1
 
@@ -87,29 +87,29 @@ F:b:129:3:0:0:0:0:0:23
 
 # Quest 23 assigned, entrance is quest entrance
 ?:[EQU $QUEST23 1]
-F:x:8:3:0:0:0:0:0:23
-F:b:129:3:0:0:0:0:0:23
+F:x:QUEST_ENTER:3:0:0:0:0:NONE:23
+F:b:BUILDING_1:3:0:0:0:0:NONE:23
 
 # Quest 23 completed
 ?:[EQU $QUEST23 2]
-F:b:129:3:0:0:0:0:0:23
+F:b:BUILDING_1:3:0:0:0:0:NONE:23
 
 # Quest 23 rewarding, reward is Balance DSM, no new quest available
 ?:[EQU $QUEST23 3]
-F:b:129:3
-F:!:1:3:0:411
+F:b:BUILDING_1:3
+F:!:FLOOR:3:0:411
 
 # Quest 23 finished, no new quest available
 ?:[EQU $QUEST23 4]
-F:b:129:3
+F:b:BUILDING_1:3
 
 # Quest 23 failed
 ?:[EQU $QUEST23 5]
-F:b:129:3:0:0:0:0:0:23
+F:b:BUILDING_1:3:0:0:0:0:NONE:23
 
 # Quest 23 failed but done, no new quest available
 ?:[EQU $QUEST23 6]
-F:b:129:3
+F:b:BUILDING_1:3
 
 ?:1
 
@@ -117,11 +117,11 @@ F:b:129:3
 
 # Quest 17 not started
 #?:[EQU $QUEST17 0]
-#F:b:129:3:0:0:0:0:0:17
+#F:b:BUILDING_1:3:0:0:0:0:NONE:17
 
 # Quest 17 assigned
 #?:[EQU $QUEST17 1]
-#F:b:129:3:0:0:0:0:0:17
+#F:b:BUILDING_1:3:0:0:0:0:NONE:17
 
 #?:1
 

@@ -48,34 +48,34 @@ Q:20:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
 ?:1
 
 # Floor with Space Monster
-F:a:1:8:144
+F:a:FLOOR:8:144
 
 # Floor with Clear mushroom patch
-F:b:1:8:184
+F:b:FLOOR:8:184
 
 # Floor with Air spirit
-F:c:1:8:227
+F:c:FLOOR:8:227
 
 # Floor with Lurker
-F:d:1:8:247
+F:d:FLOOR:8:247
 
 # Floor with Clear hound
-F:e:1:8:282
+F:e:FLOOR:8:282
 
 # Floor with Stunwall
-F:f:1:8:326
+F:f:FLOOR:8:326
 
 # Floor with Landmine
-F:g:1:8:333
+F:g:FLOOR:8:333
 
 # Floor with Vampiric Mist
-F:h:1:8:365
+F:h:FLOOR:8:365
 
 # Floor with Black
-F:i:1:8:402
+F:i:FLOOR:8:402
 
 # Floor with Weird fume
-F:j:1:8:625
+F:j:FLOOR:8:625
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

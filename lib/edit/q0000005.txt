@@ -31,20 +31,20 @@ Q:5:T:今後これらの店では格安でサービスを受けられるでしょう。
 
 
 # Quest up to quest 6
-F:<:11:8:0:0:0:0:0:6
+F:<:QUEST_UP:8:0:0:0:0:NONE:6
 
 # Quest down
-F:>:10:8
+F:>:QUEST_DOWN:8
 
 # Monsters to keep the player busy ;-)
-F:1:1:8:*
+F:1:FLOOR:8:*
 
 # If quests 6 and 7 are finished then you can complete quest 5
 ?:[AND [EQU $QUEST6 4] [EQU $QUEST7 4] ]
 # Quest exit
-F:>:9:8
+F:>:QUEST_EXIT:8
 # No monsters when you leave the tower
-F:1:1:8
+F:1:FLOOR:8
 ?:1
 
 

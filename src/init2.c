@@ -268,6 +268,7 @@ cptr err_str[PARSE_ERROR_MAX] =
 	"メモリ不足",
 	"座標範囲外",
 	"引数不足",
+	"未定義地形タグ",
 #else
 	"parse error",
 	"obsolete file",
@@ -278,6 +279,7 @@ cptr err_str[PARSE_ERROR_MAX] =
 	"out of memory",
 	"coordinates out of bounds",
 	"too few arguments",
+	"undefined terrain tag",
 #endif
 
 };
@@ -532,7 +534,7 @@ static errr init_info(cptr filename, header *head,
 
 #ifdef JP
 			/* Error string */
-			oops = ((err > 0) ? err_str[err] : "未知の");
+			oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "未知の");
 
 			/* Oops */
 			msg_format("'%s.txt'ファイルの %d 行目にエラー。", filename, error_line);

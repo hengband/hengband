@@ -1720,7 +1720,7 @@ s16b f_tag_to_index(cptr str)
 	}
 
 	/* Not found */
-	return 0;
+	return -1;
 }
 
 
@@ -3020,6 +3020,8 @@ errr parse_d_info(char *buf, header *head)
 		for (i = 0; i < DUNGEON_FEAT_PROB_NUM; i++)
 		{
 			d_ptr->floor[i].feat = f_tag_to_index(zz[i * 2]);
+			if (d_ptr->floor[i].feat < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+
 			d_ptr->floor[i].percent = atoi(zz[i * 2 + 1]);
 		}
 		d_ptr->tunnel_percent = atoi(zz[DUNGEON_FEAT_PROB_NUM * 2]);
@@ -3037,12 +3039,22 @@ errr parse_d_info(char *buf, header *head)
 		for (i = 0; i < DUNGEON_FEAT_PROB_NUM; i++)
 		{
 			d_ptr->fill[i].feat = f_tag_to_index(zz[i * 2]);
+			if (d_ptr->fill[i].feat < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+
 			d_ptr->fill[i].percent = atoi(zz[i * 2 + 1]);
 		}
+
 		d_ptr->outer_wall = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2]);
+		if (d_ptr->outer_wall < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+
 		d_ptr->inner_wall = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2 + 1]);
+		if (d_ptr->inner_wall < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+
 		d_ptr->stream1 = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2 + 2]);
+		if (d_ptr->stream1 < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+
 		d_ptr->stream2 = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2 + 3]);
+		if (d_ptr->stream2 < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 	}
 
 	/* Process 'F' for "Dungeon Flags" (multiple lines) */
@@ -3215,13 +3227,14 @@ static int i = 0;
 
 
 /* Random dungeon grid effects */
-#define RANDOM_NONE         0x00
-#define RANDOM_FEATURE      0x01
-#define RANDOM_MONSTER      0x02
-#define RANDOM_OBJECT       0x04
-#define RANDOM_EGO          0x08
-#define RANDOM_ARTIFACT     0x10
-#define RANDOM_TRAP         0x20
+#define RANDOM_NONE         0x00000000
+#define RANDOM_FEATURE      0x00000001
+#define RANDOM_MONSTER      0x00000002
+#define RANDOM_OBJECT       0x00000004
+#define RANDOM_EGO          0x00000008
+#define RANDOM_ARTIFACT     0x00000010
+#define RANDOM_TRAP         0x00000020
+#define RANDOM_FEAT_MIMIC   0x00000040
 
 
 typedef struct dungeon_grid dungeon_grid;
@@ -3236,6 +3249,7 @@ struct dungeon_grid
 	int		trap;			/* Trap */
 	int		cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
 	int		special;		/* Reserved for special terrain info */
+	int		feat_mimic;		/* Reserved for terrain mimic info */
 	int		random;			/* Number of the random effect */
 };
 
@@ -3249,49 +3263,57 @@ static dungeon_grid letter[255];
 static errr parse_line_feature(char *buf)
 {
 	int num;
-	char *zz[9];
+	char *zz[10];
 
 
 	if (init_flags & INIT_ONLY_BUILDINGS) return (0);
 
 	/* Tokenize the line */
-	if ((num = tokenize(buf+2, 9, zz, 0)) > 1)
+	if ((num = tokenize(buf+2, 10, zz, 0)) > 1)
 	{
 		/* Letter to assign */
 		int index = zz[0][0];
 
 		/* Reset the info for the letter */
-		letter[index].feature = 0;
+		letter[index].feature = FEAT_NONE;
 		letter[index].monster = 0;
 		letter[index].object = 0;
 		letter[index].ego = 0;
 		letter[index].artifact = 0;
-		letter[index].trap = 0;
+		letter[index].trap = FEAT_NONE;
 		letter[index].cave_info = 0;
 		letter[index].special = 0;
-		letter[index].random = 0;
+		letter[index].feat_mimic = FEAT_NONE;
+		letter[index].random = RANDOM_NONE;
 
 		switch (num)
 		{
+			/* Feature mimic */
+			case 10:
+				if ((zz[9][0] == '*') && !zz[9][1])
+				{
+					letter[index].random |= RANDOM_FEAT_MIMIC;
+				}
+				else
+				{
+					letter[index].feat_mimic = f_tag_to_index(zz[9]);
+					if (letter[index].feat_mimic < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+				}
+				/* Fall through */
 			/* Special */
 			case 9:
 				letter[index].special = atoi(zz[8]);
 				/* Fall through */
 			/* Trap */
 			case 8:
-				if (zz[7][0] == '*')
+				if ((zz[7][0] == '*') && !zz[7][1])
 				{
 					letter[index].random |= RANDOM_TRAP;
-
-					if (zz[7][1])
-					{
-						zz[7]++;
-						letter[index].trap = atoi(zz[7]);
-					}
 				}
 				else
 				{
-					letter[index].trap = atoi(zz[7]);
+					letter[index].trap = f_tag_to_index(zz[7]);
+					if (letter[index].trap < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 				}
 				/* Fall through */
 			/* Artifact */
@@ -3299,12 +3321,7 @@ static errr parse_line_feature(char *buf)
 				if (zz[6][0] == '*')
 				{
 					letter[index].random |= RANDOM_ARTIFACT;
-
-					if (zz[6][1])
-					{
-						zz[6]++;
-						letter[index].artifact = atoi(zz[6]);
-					}
+					if (zz[6][1]) letter[index].artifact = atoi(zz[6] + 1);
 				}
 				else
 				{
@@ -3316,12 +3333,7 @@ static errr parse_line_feature(char *buf)
 				if (zz[5][0] == '*')
 				{
 					letter[index].random |= RANDOM_EGO;
-
-					if (zz[5][1])
-					{
-						zz[5]++;
-						letter[index].ego = atoi(zz[5]);
-					}
+					if (zz[5][1]) letter[index].ego = atoi(zz[5] + 1);
 				}
 				else
 				{
@@ -3333,12 +3345,7 @@ static errr parse_line_feature(char *buf)
 				if (zz[4][0] == '*')
 				{
 					letter[index].random |= RANDOM_OBJECT;
-
-					if (zz[4][1])
-					{
-						zz[4]++;
-						letter[index].object = atoi(zz[4]);
-					}
+					if (zz[4][1]) letter[index].object = atoi(zz[4] + 1);
 				}
 				else
 				{
@@ -3350,15 +3357,12 @@ static errr parse_line_feature(char *buf)
 				if (zz[3][0] == '*')
 				{
 					letter[index].random |= RANDOM_MONSTER;
-					if (zz[3][1])
-					{
-						zz[3]++;
-						letter[index].monster = atoi(zz[3]);
-					}
+					if (zz[3][1]) letter[index].monster = atoi(zz[3] + 1);
 				}
 				else if (zz[3][0] == 'c')
 				{
-					letter[index].monster = - atoi(zz[3]+1);
+					if (!zz[3][1]) return PARSE_ERROR_GENERIC;
+					letter[index].monster = - atoi(zz[3] + 1);
 				}
 				else
 				{
@@ -3371,18 +3375,14 @@ static errr parse_line_feature(char *buf)
 				/* Fall through */
 			/* Feature */
 			case 2:
-				if (zz[1][0] == '*')
+				if ((zz[1][0] == '*') && !zz[1][1])
 				{
 					letter[index].random |= RANDOM_FEATURE;
-					if (zz[1][1])
-					{
-						zz[1]++;
-						letter[index].feature = atoi(zz[1]);
-					}
 				}
 				else
 				{
-					letter[index].feature = atoi(zz[1]);
+					letter[index].feature = f_tag_to_index(zz[1]);
+					if (letter[index].feature < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 				}
 				break;
 		}
@@ -3395,7 +3395,7 @@ static errr parse_line_feature(char *buf)
 
 
 /*
- * Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid
+ * Process "B:<Index>:<Command>:..." -- Building definition
  */
 static errr parse_line_building(char *buf)
 {
@@ -3642,7 +3642,8 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			int artifact_index = letter[idx].artifact;
 
 			/* Lay down a floor */
-			c_ptr->feat = letter[idx].feature;
+			c_ptr->feat = conv_dungeon_feat(letter[idx].feature);
+			c_ptr->mimic = conv_dungeon_feat(letter[idx].feat_mimic);
 
 			/* Only the features */
 			if (init_flags & INIT_ONLY_FEATURES) continue;
@@ -3717,6 +3718,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				}
 				else
 				{
+					if (c_ptr->mimic) c_ptr->feat = c_ptr->mimic;
 					place_trap(*y, *x);
 				}
 
@@ -3739,13 +3741,14 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Random trap */
 			else if (random & RANDOM_TRAP)
 			{
+				if (c_ptr->mimic) c_ptr->feat = c_ptr->mimic;
 				place_trap(*y, *x);
 			}
 			/* Hidden trap (or door) */
 			else if (letter[idx].trap)
 			{
-				c_ptr->mimic = c_ptr->feat;
-				c_ptr->feat = letter[idx].trap;
+				if (!c_ptr->mimic) c_ptr->mimic = c_ptr->feat;
+				c_ptr->feat = conv_dungeon_feat(letter[idx].trap);
 			}
 			else if (object_index)
 			{

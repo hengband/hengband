@@ -38,20 +38,20 @@ Q:30:T:次のクエストに進め。
 
 # The Monsters
 # Death sword (level:6, Speed:130, XP:30, #:16, Tot:480)
-F:|:1:8:107
+F:|:FLOOR:8:107
 
 # Tengu (level:10, Speed:120, XP:40, #:8, Tot:320)
-F:u:1:8:194
+F:u:FLOOR:8:194
 
 # Gelatinous cube (level:16, Speed:110, XP:80, #:4, Tot:320)
-F:j:1:8:286
+F:j:FLOOR:8:286
 
 # The doors, floors and treasures
 # Floor with amulet of Anti-Teleportation
-F:":1:8:0:522
+F:":FLOOR:8:0:522
 
 # Normal floor
-F: :1:8
+F: :FLOOR:8
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXX

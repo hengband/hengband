@@ -33,49 +33,49 @@ Q:18:T:どうぞ外にある我々からの贈物を受けとって下さい。
 ?:1
 
 # Shallow water with Portuguese man-o-war
-F:a:84:8:160
+F:a:SHALLOW_WATER:8:160
 
 # Shallow water with Ixitxachitl
-F:b:84:8:220
+F:b:SHALLOW_WATER:8:220
 
 # Shallow water with giant octopus
-F:c:84:8:266
+F:c:SHALLOW_WATER:8:266
 
 # Shallow water with hammerhead
-F:d:84:8:292
+F:d:SHALLOW_WATER:8:292
 
 # Shallow water with electric eel
-F:e:84:8:346
+F:e:SHALLOW_WATER:8:346
 
-# Deep water with Great white shark
-F:f:83:8:386
+# Deep water with Great white shark on no teleportation grid
+F:f:DEEP_WATER:12:386
 
-# Deep water with Vampiric ixitxachitl
-F:g:83:8:406
+# Deep water with Vampiric ixitxachitl on no teleportation grid
+F:g:DEEP_WATER:12:406
 
-# Deep water with Giant squid
-F:h:83:8:482
+# Deep water with Giant squid on no teleportation grid
+F:h:DEEP_WATER:12:482
 
-# Deep water with Lesser kraken
-F:i:83:8:740
+# Deep water with Lesser kraken on no teleportation grid
+F:i:DEEP_WATER:12:740
 
-# Deep water with Greater kraken
-F:j:83:8:775
+# Deep water with Greater kraken on no teleportation grid
+F:j:DEEP_WATER:12:775
 
-# Steel Helm
-F:A:84:8:0:97
+# Steel Helm on no teleportation grid
+F:A:SHALLOW_WATER:12:0:97
 
-# Metal Boots
-F:B:84:8:0:93
+# Metal Boots on no teleportation grid
+F:B:SHALLOW_WATER:12:0:93
 
-# Cesti
-F:C:84:8:0:127
+# Cesti on no teleportation grid
+F:C:SHALLOW_WATER:12:0:127
 
-# Blade of Chaos
-F:E:84:8:0:36
+# Blade of Chaos on no teleportation grid
+F:E:SHALLOW_WATER:12:0:36
 
-# Quest exit
-F:<:9:8
+# Quest exit on no teleportation grid
+F:<:QUEST_EXIT:12
 
 # Dungeon
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXX

@@ -39,19 +39,19 @@ Q:19:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
 ?:1
 
 # Floor with Manes
-F:a:1:8:128
+F:a:FLOOR:8:128
 
 # Floor with Imp
-F:b:1:8:296
+F:b:FLOOR:8:296
 
 # Floor with Flying Skull
-F:c:1:8:273
+F:c:FLOOR:8:273
 
 # Floor with Arch-Vile
-F:d:1:8:357
+F:d:FLOOR:8:357
 
 # Rubble
-F:;:49:8
+F:;:RUBBLE:8
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

@@ -37,26 +37,26 @@ Q:31:T:このクエストはあなたの手におえなかったようですね。他のを試して下さい。
 
 # The Monsters
 # Vorpal bunny (level:11, Speed:120, XP:40, #:6, Tot:240)
-F:r:1:8:205
+F:r:FLOOR:8:205
 
 # Old Man Willow (level:11, Speed:110, XP:150, #:1, Tot:150)
-F:M:1:8:206
+F:M:FLOOR:8:206
 
 # Huorn (level:19, Speed:110, XP:75, #:8, Tot:600)
-F:H:1:8:329
+F:H:FLOOR:8:329
 
 # Saber-tooth tiger (level:20, Speed:120, XP:120, #:2, Tot:240)
-F:f:1:8:339
+F:f:FLOOR:8:339
 
 # Sasquatch (level:20, Speed:120, XP:180, #:6, Tot:1080)
-F:Y:1:8:343
+F:Y:FLOOR:8:343
 
 # The doors, floors and treasures
 # Normal floor
-F: :1:8
+F: :FLOOR:8
 
 # Trees
-F:T:96:1
+F:T:TREE:1
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

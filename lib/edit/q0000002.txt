@@ -35,43 +35,43 @@ Q:1:T:地元のドルイド教会に応援を頼む羽目になりましたよ。
 ?:1
 
 # Floor with Giant white rat
-F:a:1:8:86
+F:a:FLOOR:8:86
 
 # Floor with Snotling
-F:b:1:8:202
+F:b:FLOOR:8:202
 
 # Shallow water with Giang slug
-F:c:84:8:120
+F:c:SHALLOW_WATER:8:120
 
 # Floor with devilfish
-F:d:84:8:918
+F:d:SHALLOW_WATER:8:918
 
 # Floor with Wererat
-F:e:1:8:270
+F:e:FLOOR:8:270
 
 # Floor with Blue icky thing
-F:f:1:8:252
+F:f:FLOOR:8:252
 
 # Floor with Giant spider
-F:g:1:8:175
+F:g:FLOOR:8:175
 
 # Floor with Gremlin
-F:h:1:8:153
+F:h:FLOOR:8:153
 
 # Floor with Metallic green centipede
-F:i:1:8:42
+F:i:FLOOR:8:42
 
 # Floor with Nether worm mass
-F:j:1:8:213
+F:j:FLOOR:8:213
 
 # Deep water with Deep puddle
-F:k:83:8:944
+F:k:DEEP_WATER:8:944
 
 # Shallow water with Shallow puddle
-F:l:84:8:885
+F:l:SHALLOW_WATER:8:885
 
 # Deep water with White crocodile
-F:m:83:8:1044
+F:m:DEEP_WATER:8:1044
 
 # Dungeon
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

@@ -38,28 +38,28 @@ Q:11:T:棒にふったのだ。
 ?:1
 
 # Floor with Chaos spawn
-F:a:1:10:574
+F:a:FLOOR:10:574
 
 # Floor with Hell hound
-F:b:1:10:829
+F:b:FLOOR:10:829
 
 # Shallow lava with Fire elemental
-F:c:86:10:510
+F:c:SHALLOW_LAVA:10:510
 
 # Shallow lava with Magma elemental
-F:d:86:10:584
+F:d:SHALLOW_LAVA:10:584
 
 # Deep lava with Great hell wyrm
-F:e:85:10:756
+F:e:DEEP_LAVA:10:756
 
 # Deep lava
-F:l:85:2
+F:l:DEEP_LAVA:2
 
 # Shallow lava
-F:i:86:2
+F:i:SHALLOW_LAVA:2
 
 # Mountain
-F:h:97
+F:h:MOUNTAIN_WALL
 
 # Node of Chaos layout 
 D:hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh

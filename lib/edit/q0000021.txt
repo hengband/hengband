@@ -47,31 +47,31 @@ Q:21:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
 ?:1
 
 # Floor with Manes
-F:a:1:8:128
+F:a:FLOOR:8:128
 
 # Floor with Imp
-F:b:1:8:296
+F:b:FLOOR:8:296
 
 # Floor with Flying Skull
-F:c:1:8:273
+F:c:FLOOR:8:273
 
 # Floor with Arch-Vile
-F:d:1:8:357
+F:d:FLOOR:8:357
 
 # Floor with Revenant
-F:e:1:8:555
+F:e:FLOOR:8:555
 
 # Floor with Baron of Hell
-F:f:1:8:609
+F:f:FLOOR:8:609
 
 # Floor with Iron Lich
-F:g:1:8:666
+F:g:FLOOR:8:666
 
 # Floor with Maulotaur
-F:h:1:8:723
+F:h:FLOOR:8:723
 
 # Floor with Hell Knight
-F:i:1:8:731
+F:i:FLOOR:8:731
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

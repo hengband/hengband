@@ -43,60 +43,60 @@ Q:4:T:のにとても役に立ったでしょうに。
 
 ?:[EQU $RANDOM4 0]
 # Floor with "Sting"
-F:a:1:8:0:0:0:88
+F:a:FLOOR:8:0:0:0:88
 
 # Floor with "Small sword"
-F:b:1:8:0:46
+F:b:FLOOR:8:0:46
 
 # Floor with "Small sword"
-F:c:1:8:0:46
+F:c:FLOOR:8:0:46
 
 # Floor with "Small sword"
-F:d:1:8:0:46
+F:d:FLOOR:8:0:46
 
 ?:[EQU $RANDOM4 1]
 # Floor with "Small sword"
-F:a:1:8:0:46
+F:a:FLOOR:8:0:46
 
 # Floor with "Sting"
-F:b:1:8:0:0:0:88
+F:b:FLOOR:8:0:0:0:88
 
 # Floor with "Small sword"
-F:c:1:8:0:46
+F:c:FLOOR:8:0:46
 
 # Floor with "Small sword"
-F:d:1:8:0:46
+F:d:FLOOR:8:0:46
 
 ?:[EQU $RANDOM4 2]
 # Floor with "Small sword"
-F:a:1:8:0:46
+F:a:FLOOR:8:0:46
 
 # Floor with "Small sword"
-F:b:1:8:0:46
+F:b:FLOOR:8:0:46
 
 # Floor with "Sting"
-F:c:1:8:0:0:0:88
+F:c:FLOOR:8:0:0:0:88
 
 # Floor with "Small sword"
-F:d:1:8:0:46
+F:d:FLOOR:8:0:46
 
 ?:[EQU $RANDOM4 3]
 # Floor with "Small sword"
-F:a:1:8:0:46
+F:a:FLOOR:8:0:46
 
 # Floor with "Small sword"
-F:b:1:8:0:46
+F:b:FLOOR:8:0:46
 
 # Floor with "Small sword"
-F:c:1:8:0:46
+F:c:FLOOR:8:0:46
 
 # Floor with "Sting"
-F:d:1:8:0:0:0:88
+F:d:FLOOR:8:0:0:0:88
 
 ?:1
 
 # Random monster 7 levels out of depth and on no Teleportation grid
-F:5:1:12:*8
+F:5:FLOOR:12:*8
 
 # Dungeon
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

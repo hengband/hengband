@@ -37,34 +37,31 @@ Q:16:T:一体誰が我ら死の騎士団を恐がるというのだ！消えろ！今すぐ！
 ?:1
 
 # Grass
-F:;:89
-
-# Deep water
-F:W:83:8
+F:;:GRASS
 
 # Tree
-F:T:96
+F:T:TREE
 
 # Normal wall
-F:#:56
+F:#:GRANITE
 
 # Floor + prayer books
-F:1:1:8:0:330
-F:2:1:8:0:331
-F:3:1:8:0:332
-F:4:1:8:0:333
+F:1:FLOOR:8:0:330
+F:2:FLOOR:8:0:331
+F:3:FLOOR:8:0:332
+F:4:FLOOR:8:0:333
 
 # Floor + novice priest
-F:p:1:8:45
+F:p:FLOOR:8:45
 
 # Floor + priest
-F:P:1:8:225
+F:P:FLOOR:8:225
 
 # Floor + novice paladin
-F:l:1:8:97
+F:l:FLOOR:8:97
 
 # Floor + ultra-elite paladin
-F:L:1:8:699
+F:L:FLOOR:8:699
 
 # Castle Montsalvat
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

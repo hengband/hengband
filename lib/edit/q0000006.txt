@@ -9,16 +9,16 @@ Q:$6:Q:6:0:0:0:30:0:0:0:3
 Q:6:Q:6:0:0:0:30:0:0:0:3
 
 # Floor with monster 9 levels out of deep as long as the quest is uncompleted
-F:1:1:8
+F:1:FLOOR:8
 ?:[EQU $QUEST6 1]
-F:1:1:8:*9
+F:1:FLOOR:8:*9
 ?:1
 
 # Quest down to quest 5
-F:>:10:8:0:0:0:0:0:5
+F:>:QUEST_DOWN:8:0:0:0:0:NONE:5
 
 # Quest up to quest 7
-F:<:11:8:0:0:0:0:0:7
+F:<:QUEST_UP:8:0:0:0:0:NONE:7
 
 # Dungeon
 D:XXXXXXXXX

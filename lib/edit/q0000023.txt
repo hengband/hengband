@@ -54,19 +54,19 @@ Q:23:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
 ?:1
 
 # Floor with Quylthulg
-F:a:1:8:342
+F:a:FLOOR:8:342
 
 # Floor with Rotting quylthulg
-F:b:1:8:633
+F:b:FLOOR:8:633
 
 # Floor with Demonic quylthulg
-F:c:1:8:727
+F:c:FLOOR:8:727
 
 # Floor with Draconic quylthulg
-F:d:1:8:759
+F:d:FLOOR:8:759
 
 # Floor with Master quylthulg 
-F:e:1:8:800
+F:e:FLOOR:8:800
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
