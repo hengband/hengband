@@ -3722,13 +3722,16 @@ void display_spell_list(void)
 	/* Erase window */
 	clear_from(0);
 
-	/* Warriors are illiterate */
-	if (!mp_ptr->spell_book) return;
+	/* They have too many spells to list */
 	if (p_ptr->pclass == CLASS_SORCERER) return;
 	if (p_ptr->pclass == CLASS_RED_MAGE) return;
 
-	/* Mindcrafter spell-list */
-	if ((p_ptr->pclass == CLASS_MINDCRAFTER) || (p_ptr->pclass == CLASS_FORCETRAINER))
+	/* mind.c type classes */
+	if ((p_ptr->pclass == CLASS_MINDCRAFTER) ||
+	    (p_ptr->pclass == CLASS_BERSERKER) ||
+	    (p_ptr->pclass == CLASS_NINJA) ||
+	    (p_ptr->pclass == CLASS_MIRROR_MASTER) ||
+	    (p_ptr->pclass == CLASS_FORCETRAINER))
 	{
 		int             i;
 		int             y = 1;
@@ -3740,6 +3743,7 @@ void display_spell_list(void)
 		char            comment[80];
 		char            psi_desc[80];
 		int             use_mind;
+		bool use_hp = FALSE;
 
 		/* Display a list of spells */
 		prt("", y, x);
@@ -3753,9 +3757,12 @@ put_str("Lv   MP 失率 効果", y, x + 35);
 
 		switch(p_ptr->pclass)
 		{
-			case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER;break;
-			case CLASS_FORCETRAINER:          use_mind = MIND_KI;break;
-			default:                use_mind = 0;break;
+		case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER;break;
+		case CLASS_FORCETRAINER:          use_mind = MIND_KI;break;
+		case CLASS_BERSERKER: use_mind = MIND_BERSERKER; use_hp = TRUE; break;
+		case CLASS_MIRROR_MASTER: use_mind = MIND_MIRROR_MASTER; break;
+		case CLASS_NINJA: use_mind = MIND_NINJUTSU; use_hp = TRUE; break;
+		default:                use_mind = 0;break;
 		}
 
 		/* Dump the spells */
@@ -3776,11 +3783,23 @@ put_str("Lv   MP 失率 効果", y, x + 35);
 			/* Reduce failure rate by INT/WIS adjustment */
 			chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 
-			/* Not enough mana to cast */
-			if (spell.mana_cost > p_ptr->csp)
+			if (!use_hp)
 			{
-				chance += 5 * (spell.mana_cost - p_ptr->csp);
-				a = TERM_ORANGE;
+				/* Not enough mana to cast */
+				if (spell.mana_cost > p_ptr->csp)
+				{
+					chance += 5 * (spell.mana_cost - p_ptr->csp);
+					a = TERM_ORANGE;
+				}
+			}
+			else
+			{
+				/* Not enough hp to cast */
+				if (spell.mana_cost > p_ptr->chp)
+				{
+					chance += 100;
+					a = TERM_RED;
+				}
 			}
 
 			/* Extract the minimum failure rate */
@@ -3808,6 +3827,9 @@ put_str("Lv   MP 失率 効果", y, x + 35);
 		}
 		return;
 	}
+
+	/* Cannot read spellbooks */
+	if (REALM_NONE == p_ptr->realm1) return;
 
 	/* Normal spellcaster with books */
 
