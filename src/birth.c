@@ -17,12 +17,14 @@
  * system may have problems because the user can't stop the
  * autoroller for this number of rolls.
  */
-#define AUTOROLLER_STEP		25L
+#define AUTOROLLER_STEP 5431L
 
 /*
  * Define this to cut down processor use while autorolling
  */
-/*#define AUTOROLLER_DELAY*/
+#if 0
+#  define AUTOROLLER_DELAY
+#endif
 
 /*
  * Maximum number of tries for selection of a proper quest monster
@@ -1940,11 +1942,6 @@ static char realm_subinfo[VALID_REALM][41] =
 
 
 /*
- * Current stats
- */
-static s16b stat_use[6];
-
-/*
  * Autoroll limit
  */
 static s16b stat_limit[6];
@@ -2526,49 +2523,52 @@ static int adjust_stat(int value, int amount, int auto_roll)
  */
 static void get_stats(void)
 {
-	int		i, j;
-
-	int		bonus;
-
-	int		dice[18];
-
-
 	/* Roll and verify some stats */
 	while (TRUE)
 	{
-		/* Roll some dice */
-		for (j = i = 0; i < 18; i++)
-		{
-			/* Roll the dice */
-			dice[i] = randint1(3 + i % 3);
+		int i;
+		int sum = 0;
 
-			/* Collect the maximum */
-			j += dice[i];
+		/* Roll some dice */
+		for (i = 0; i < 2; i++)
+		{
+			s32b tmp = randint0(60*60*60);
+			int val;
+
+			/* Extract 5 + 1d3 + 1d4 + 1d5 */
+			val = 5 + 3;
+			val += tmp % 3; tmp /= 3;
+			val += tmp % 4; tmp /= 4;
+			val += tmp % 5; tmp /= 5;
+
+			/* Save that value */
+			sum += val;
+			p_ptr->stat_cur[3*i] = p_ptr->stat_max[3*i] = val;
+
+			/* Extract 5 + 1d3 + 1d4 + 1d5 */
+			val = 5 + 3;
+			val += tmp % 3; tmp /= 3;
+			val += tmp % 4; tmp /= 4;
+			val += tmp % 5; tmp /= 5;
+
+			/* Save that value */
+			sum += val;
+			p_ptr->stat_cur[3*i+1] = p_ptr->stat_max[3*i+1] = val;
+
+			/* Extract 5 + 1d3 + 1d4 + 1d5 */
+			val = 5 + 3;
+			val += tmp % 3; tmp /= 3;
+			val += tmp % 4; tmp /= 4;
+			val += tmp;
+
+			/* Save that value */
+			sum += val;
+			p_ptr->stat_cur[3*i+2] = p_ptr->stat_max[3*i+2] = val;
 		}
 
 		/* Verify totals */
-		if ((j > 42) && (j < 57)) break;
+		if ((sum > 42+5*6) && (sum < 57+5*6)) break;
 		/* 57 was 54... I hate 'magic numbers' :< TY */
-	}
-
-	/* Acquire the stats */
-	for (i = 0; i < 6; i++)
-	{
-		/* Extract 5 + 1d3 + 1d4 + 1d5 */
-		j = 5 + dice[3*i] + dice[3*i+1] + dice[3*i+2];
-
-		/* Save that value */
-		p_ptr->stat_max[i] = j;
-
-		/* Obtain a "bonus" for "race" and "class" and "seikaku"*/
-		bonus = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
-
-		/* Start fully healed */
-		p_ptr->stat_cur[i] = p_ptr->stat_max[i];
-
-		/* Efficiency -- Apply the racial/class bonuses */
-		/* stat_use[i] = modify_stat_value(p_ptr->stat_max[i], bonus); */
-		stat_use[i] = p_ptr->stat_max[i];
 	}
 }
 
@@ -3006,10 +3006,10 @@ static void get_money(void)
 	for (i = 0; i < 6; i++)
 	{
 		/* Mega-Hack -- reduce gold for high stats */
-		if (stat_use[i] >= 18 + 50) gold -= 300;
-		else if (stat_use[i] >= 18 + 20) gold -= 200;
-		else if (stat_use[i] > 18) gold -= 150;
-		else gold -= (stat_use[i] - 8) * 10;
+		if (p_ptr->stat_max[i] >= 18 + 50) gold -= 300;
+		else if (p_ptr->stat_max[i] >= 18 + 20) gold -= 200;
+		else if (p_ptr->stat_max[i] > 18) gold -= 150;
+		else gold -= (p_ptr->stat_max[i] - 8) * 10;
 	}
 
 	/* Minimum 100 gold */
@@ -3050,7 +3050,7 @@ static void birth_put_stats(void)
 			j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
 
 			/* Obtain the current stat */
-			m = adjust_stat(stat_use[i], j, TRUE);
+			m = adjust_stat(p_ptr->stat_max[i], j, TRUE);
 
 			/* Put the stat */
 			cnv_stat(m, buf);
@@ -3059,7 +3059,16 @@ static void birth_put_stats(void)
 			/* Put the percent */
 			if (stat_match[i])
 			{
-				p = 1000L * stat_match[i] / auto_round;
+				if (stat_match[i] > 1000000L)
+				{
+					/* Prevent overflow */
+					p = stat_match[i] / (auto_round / 1000L);
+				}
+				else
+				{
+					p = 1000L * stat_match[i] / auto_round;
+				}
+			
 				attr = (p < 100) ? TERM_YELLOW : TERM_L_GREEN;
 				sprintf(buf, "%3d.%d%%", p/10, p%10);
 				c_put_str(attr, buf, 3+i, col+13);
@@ -5755,7 +5764,7 @@ static bool player_birth_aux(void)
 			auto_round++;
 
 			/* Hack -- Prevent overflow */
-			if (auto_round >= 1000000L)
+			if (auto_round >= 1000000000L)
 			{
 				auto_round = 1;
 
@@ -5774,7 +5783,7 @@ static bool player_birth_aux(void)
 				for (i = 0; i < 6; i++)
 				{
 					/* This stat is okay */
-					if (stat_use[i] >= stat_limit[i])
+					if (p_ptr->stat_max[i] >= stat_limit[i])
 					{
 						stat_match[i]++;
 					}
@@ -5819,7 +5828,7 @@ static bool player_birth_aux(void)
 
 #ifdef AUTOROLLER_DELAY
 				/* Delay 1/10 second */
-				if (flag) Term_xtra(TERM_XTRA_DELAY, 100);
+				if (flag) Term_xtra(TERM_XTRA_DELAY, 10);
 #endif
 
 				/* Make sure they see everything */
