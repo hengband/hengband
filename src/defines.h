@@ -2206,8 +2206,8 @@
 #define SV_RING_SUSTAIN_STR             10
 #define SV_RING_SUSTAIN_INT             11
 #define SV_RING_SUSTAIN_WIS             12
-#define SV_RING_SUSTAIN_DEX             13
-#define SV_RING_SUSTAIN_CON             14
+#define SV_RING_SUSTAIN_CON             13
+#define SV_RING_SUSTAIN_DEX             14
 #define SV_RING_SUSTAIN_CHR             15
 #define SV_RING_PROTECTION              16
 #define SV_RING_ACID                    17
