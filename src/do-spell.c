@@ -931,7 +931,8 @@ static void cast_meteor(int dam, int rad)
 
 			if (d >= 9) continue;
 
-			if (!in_bounds(y, x) || !projectable(py, px, y, x)) continue;
+			if (!in_bounds(y, x) || !projectable(py, px, y, x)
+			    || !cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
 			/* Valid position */
 			break;
