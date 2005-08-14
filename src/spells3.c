@@ -267,6 +267,9 @@ bool cave_player_teleportable_bold(int y, int x, u32b mode)
 
 	if (c_ptr->m_idx && (c_ptr->m_idx != p_ptr->riding)) return FALSE;
 
+	/* don't teleport on a trap. */
+	if (have_flag(f_ptr->flags, FF_HIT_TRAP)) return FALSE;
+
 	if (!(mode & TELEPORT_PASSIVE))
 	{
 		if (!player_can_enter(c_ptr->feat, 0)) return FALSE;
@@ -285,10 +288,6 @@ bool cave_player_teleportable_bold(int y, int x, u32b mode)
 			if (!p_ptr->levitation) return FALSE;
 		}
 
-		if (have_flag(f_ptr->flags, FF_HIT_TRAP))
-		{
-			if (!is_known_trap(c_ptr) || !trap_can_be_ignored(c_ptr->feat)) return FALSE;
-		}
 	}
 
 	return TRUE;
