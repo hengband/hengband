@@ -1034,7 +1034,7 @@ errr init_info_txt(FILE *fp, char *buf, header *head,
 	/* Prepare the "fake" stuff */
 	head->name_size = 0;
 	head->text_size = 0;
-	head->tag_size = 1;
+	head->tag_size = 0;
 
 	/* Parse */
 	while (0 == my_fgets(fp, buf, 1024))
