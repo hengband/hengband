@@ -7358,7 +7358,7 @@ static void drain_essence(void)
 	int i, item;
 	int dec = 4;
 	bool observe = FALSE;
-	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
+	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2, old_timeout;
 	u32b old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
 	object_type *o_ptr;
 	cptr            q, s;
@@ -7426,6 +7426,7 @@ static void drain_essence(void)
 	old_dd = o_ptr->dd;
 	old_pval = o_ptr->pval;
 	old_name2 = o_ptr->name2;
+	old_timeout = o_ptr->timeout;
 	if (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE)) dec--;
 	if (have_flag(old_flgs, TR_AGGRAVATE)) dec--;
 	if (have_flag(old_flgs, TR_NO_TELE)) dec--;
@@ -7446,6 +7447,7 @@ static void drain_essence(void)
 	o_ptr->next_o_idx=next_o_idx;
 	o_ptr->marked=marked;
 	o_ptr->number = number;
+	if (o_ptr->tval == TV_DRAG_ARMOR) o_ptr->timeout = old_timeout;
 	if (item >= 0) p_ptr->total_weight += (o_ptr->weight*o_ptr->number - weight*number);
 	o_ptr->ident |= (IDENT_MENTAL);
 	object_aware(o_ptr);
