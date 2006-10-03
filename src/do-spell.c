@@ -11058,7 +11058,11 @@ static cptr do_hissatsu_spell(int spell, int mode)
 					/* Move the player */
 					if (!move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) break;
 				}
-	
+				else
+				{
+					break;
+				}
+
 				/* -more- */
 				if (i < 2) msg_print(NULL);
 			}
