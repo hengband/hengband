@@ -2103,16 +2103,26 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	else if (mode == HISSATSU_COLD) num_blow = p_ptr->num_blow[hand]+2;
 	else num_blow = p_ptr->num_blow[hand];
 
+	/* Hack -- DOKUBARI always hit once */
+	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) num_blow = 1;
+
 	/* Attack once for each legal blow */
 	while ((num++ < num_blow) && !p_ptr->is_dead)
 	{
 		if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) || (mode == HISSATSU_KYUSHO))
 		{
+			int n = 1;
+
 			if (p_ptr->migite && p_ptr->hidarite)
 			{
-				success_hit = one_in_(2);
+				n *= 2;
 			}
-			else success_hit = TRUE;
+			if (mode == HISSATSU_3DAN)
+			{
+				n *= 2;
+			}
+
+			success_hit = one_in_(n);
 		}
 		else if (mode == HISSATSU_MAJIN)
 		{
