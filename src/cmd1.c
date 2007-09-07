@@ -1986,7 +1986,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	char            m_name[80];
 
 	bool            success_hit = FALSE;
-	bool            old_success_hit = FALSE;
 	bool            backstab = FALSE;
 	bool            vorpal_cut = FALSE;
 	int             chaos_effect = 0;
@@ -2124,18 +2123,14 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
 			success_hit = one_in_(n);
 		}
-		else if (mode == HISSATSU_MAJIN)
-		{
-			if (num == 1)
-			{
-				if (one_in_(2))
-					success_hit = FALSE;
-				old_success_hit = success_hit;
-			}
-			else success_hit = old_success_hit;
-		}
 		else if ((p_ptr->pclass == CLASS_NINJA) && ((backstab || fuiuchi) && !(r_ptr->flagsr & RFR_RES_ALL))) success_hit = TRUE;
 		else success_hit = test_hit_norm(chance, r_ptr->ac, m_ptr->ml);
+
+		if (mode == HISSATSU_MAJIN)
+		{
+			if (one_in_(2))
+				success_hit = FALSE;
+		}
 
 		/* Test for hit */
 		if (success_hit)
