@@ -1471,7 +1471,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 				set_food(p_ptr->food + ((o_ptr->pval) / 20));
 				break;
 			case RACE_ANDROID:
-				if (o_ptr->tval == TV_FLASK)
+				if (q_ptr->tval == TV_FLASK)
 				{
 #ifdef JP
 					msg_print("オイルを補給した。");
