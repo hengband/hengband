@@ -6274,7 +6274,7 @@ msg_print("生命力が体から吸い取られた気がする！");
 	{
 		if (!who)
 		{
-			if (!projectable(m_ptr->fy, m_ptr->fx, py, px) && !(flg & PROJECT_NO_HANGEKI))
+			if (!(flg & PROJECT_NO_HANGEKI))
 			{
 				set_target(m_ptr, monster_target_y, monster_target_x);
 			}

@@ -3707,10 +3707,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 #endif
 
 					}
-					if (!projectable(m_ptr->fy, m_ptr->fx, py, px))
-					{
-						set_target(m_ptr, py, px);
-					}
+					set_target(m_ptr, py, px);
 				}
 			}
 
