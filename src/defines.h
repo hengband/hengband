@@ -527,7 +527,7 @@
 /*
  * Random energy
  */
-#define ENERGY_NEED() (randnor(100, 31))
+#define ENERGY_NEED() (randnor(100, 25))
 
 
 /*
