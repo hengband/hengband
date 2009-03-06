@@ -1434,7 +1434,7 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 	int             ap_cnt;
 	int             ac, rlev, pt;
 	char            m_name[80], t_name[80];
-	char            temp[80];
+	char            temp[MAX_NLEN];
 	bool            blinked;
 	bool            explode = FALSE, touched = FALSE, fear = FALSE;
 	int             y_saver = t_ptr->fy;
