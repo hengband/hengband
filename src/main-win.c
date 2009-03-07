@@ -76,7 +76,7 @@
 
 
 #ifdef WINDOWS
-
+#include <windows.h>
 #include <direct.h>
 
 /*
@@ -196,7 +196,9 @@
 /*
  * This may need to be removed for some compilers XXX XXX XXX
  */
+#if 0
 #define STRICT
+#endif
 
 /*
  * Exclude parts of WINDOWS.H that are not needed
@@ -574,6 +576,14 @@ static COLORREF win_clr[256];
  * Flag for macro trigger with dump ASCII
  */
 static bool Term_no_press = FALSE;
+
+/*
+ * Copy and paste
+ */
+static bool mouse_down = FALSE;
+static bool paint_rect = FALSE;
+static int mousex = 0, mousey = 0;
+static int oldx, oldy;
 
 
 /*
@@ -1926,6 +1936,28 @@ static void term_data_redraw(term_data *td)
 }
 
 
+void Term_inversed_area(HWND hWnd, int x, int y, int w, int h)
+{
+	HDC hdc;
+	HPEN oldPen;
+	HBRUSH myBrush, oldBrush;
+
+	term_data *td = (term_data *)GetWindowLong(hWnd, 0);
+	int tx = td->size_ow1 + x * td->tile_wid;
+	int ty = td->size_oh1 + y * td->tile_hgt;
+	int tw = w * td->tile_wid - 1;
+	int th = h * td->tile_hgt - 1;
+
+	hdc = GetDC(hWnd);
+	myBrush = CreateSolidBrush(RGB(255, 255, 255));
+	oldBrush = SelectObject(hdc, myBrush);
+	oldPen = SelectObject(hdc, GetStockObject(NULL_PEN) );
+
+	PatBlt(hdc, tx, ty, tw, th, PATINVERT);
+
+	SelectObject(hdc, oldBrush);
+	SelectObject(hdc, oldPen);
+}
 
 
 
@@ -4336,6 +4368,124 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 		{
 			if (Term_no_press) Term_no_press = FALSE;
 			else Term_keypress(wParam);
+			return 0;
+		}
+
+		case WM_LBUTTONDOWN:
+		{
+			mousex = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
+			mousey = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
+			mouse_down = TRUE;
+			oldx = mousex;
+			oldy = mousey;
+			return 0;
+		}
+
+		case WM_LBUTTONUP:
+		{
+			HGLOBAL hGlobal;
+			LPSTR lpStr;
+			int i, j, sz;
+			int dx = abs(oldx - mousex) + 1;
+			int dy = abs(oldy - mousey) + 1;
+			int ox = (oldx > mousex) ? mousex : oldx;
+			int oy = (oldy > mousey) ? mousey : oldy;
+
+			mouse_down = FALSE;
+			paint_rect = FALSE;
+
+#ifdef JP
+			sz = (dx + 3) * dy;
+#else
+			sz = (dx + 2) * dy;
+#endif
+			hGlobal = GlobalAlloc(GHND, sz + 1);
+			if (hGlobal == NULL) return 0;
+			lpStr = (LPSTR)GlobalLock(hGlobal);
+
+			for (i = 0; i < dy; i++)
+			{
+#ifdef JP
+				char *s;
+				char **scr = data[0].t.scr->c;
+
+				C_MAKE(s, (dx + 1), char);
+				strncpy(s, &scr[oy + i][ox], dx);
+
+				if (ox > 0)
+				{
+					if (iskanji(scr[oy + i][ox - 1])) s[0] = ' ';
+				}
+
+				if (ox + dx < data[0].cols)
+				{
+					if (iskanji(scr[oy + i][ox + dx - 1])) s[dx - 1] = ' ';
+				}
+
+				for (j = 0; j < dx; j++)
+				{
+					if (s[j] == 127) s[j] = '#';
+					*lpStr++ = s[j];
+				}
+#else
+				for (j = 0; j < dx; j++)
+				{
+					*lpStr++ = data[0].t.scr->c[oy + i][ox + j];
+				}
+#endif
+				if (dy > 1)
+				{
+					*lpStr++ = '\r';
+					*lpStr++ = '\n';
+				}
+			}
+
+			GlobalUnlock(hGlobal);
+			if (OpenClipboard(hWnd) == 0)
+			{
+				GlobalFree(hGlobal);
+				return 0;
+			}
+			EmptyClipboard();
+			SetClipboardData(CF_TEXT, hGlobal);
+			CloseClipboard();
+
+			Term_redraw();
+
+			return 0;
+		}
+
+		case WM_MOUSEMOVE:
+		{
+			if (mouse_down)
+			{
+				int dx, dy;
+				int cx = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
+				int cy = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
+				int ox, oy;
+
+				if (paint_rect)
+				{
+					dx = abs(oldx - mousex) + 1;
+					dy = abs(oldy - mousey) + 1;
+					ox = (oldx > mousex) ? mousex : oldx;
+					oy = (oldy > mousey) ? mousey : oldy;
+					Term_inversed_area(hWnd, ox, oy, dx, dy);
+				}
+				else
+				{
+					paint_rect = TRUE;
+				}
+
+				dx = abs(cx - mousex) + 1;
+				dy = abs(cy - mousey) + 1;
+				ox = (cx > mousex) ? mousex : cx;
+				oy = (cy > mousey) ? mousey : cy;
+				Term_inversed_area(hWnd, ox, oy, dx, dy);
+
+				oldx = cx;
+				oldy = cy;
+			}
 			return 0;
 		}
 
