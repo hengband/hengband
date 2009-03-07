@@ -708,6 +708,9 @@ extern bool move_player_effect(int ny, int nx, u32b mpe_mode);
 extern bool trap_can_be_ignored(int feat);
 extern void move_player(int dir, bool do_pickup, bool break_trap);
 extern void run_step(int dir);
+#ifdef TRAVEL
+extern void travel_step(void);
+#endif
 
 /* cmd2.c */
 extern void do_cmd_go_up(void);
@@ -728,6 +731,9 @@ extern void do_cmd_fire(void);
 extern void do_cmd_fire_aux(int item, object_type *j_ptr);
 extern void do_cmd_throw(void);
 extern bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken);
+#ifdef TRAVEL
+extern void do_cmd_travel(void);
+#endif
 
 /* cmd3.c */
 extern void do_cmd_inven(void);
@@ -1724,3 +1730,7 @@ extern void flush_ringbuf(void);
 extern void prepare_chuukei_hooks(void);
 #endif
 
+#ifdef TRAVEL
+/* for travel */
+extern travel_type travel;
+#endif

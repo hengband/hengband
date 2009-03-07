@@ -1287,3 +1287,8 @@ bool chuukei_client;
 char *server_name;
 int server_port;
 #endif
+
+#ifdef TRAVEL
+/* for travel */
+travel_type travel;
+#endif

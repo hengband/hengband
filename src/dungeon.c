@@ -5310,6 +5310,14 @@ msg_print("アリーナが魔法を吸収した！");
 			break;
 		}
 
+#ifdef TRAVEL
+		case '`':
+		{
+			do_cmd_travel();
+			break;
+		}
+#endif
+
 		/* Hack -- Unknown command */
 		default:
 		{
@@ -5790,6 +5798,15 @@ msg_print("中断しました。");
 			/* Take a step */
 			run_step(0);
 		}
+
+#ifdef TRAVEL
+		/* Traveling */
+		else if (travel.run)
+		{
+			/* Take a step */
+			travel_step();
+		}
+#endif
 
 		/* Repeated command */
 		else if (command_rep)

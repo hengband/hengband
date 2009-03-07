@@ -4990,3 +4990,152 @@ void run_step(int dir)
 		disturb(0, 0);
 	}
 }
+
+
+#ifdef TRAVEL
+/*
+ * Test for traveling
+ */
+static bool travel_test(void)
+{
+	int prev_dir, new_dir, check_dir = 0;
+	int row, col;
+	int i, max;
+	bool stop = TRUE;
+	cave_type *c_ptr;
+
+	/* Where we came from */
+	prev_dir = find_prevdir;
+
+	/* Range of newly adjacent grids */
+	max = (prev_dir & 0x01) + 1;
+
+	for (i = 0; i < 8; i++)
+	{
+		if (travel.cost[py+ddy_ddd[i]][px+ddx_ddd[i]] < travel.cost[py][px]) stop = FALSE;
+	}
+
+	if (stop) return (TRUE);
+
+	/* break run when leaving trap detected region */
+	if ((disturb_trap_detect || alert_trap_detect)
+	    && p_ptr->dtrap && !(cave[py][px].info & CAVE_IN_DETECT))
+	{
+		/* No duplicate warning */
+		p_ptr->dtrap = FALSE;
+
+		/* You are just on the edge */
+		if (!(cave[py][px].info & CAVE_UNSAFE))
+		{
+			if (alert_trap_detect)
+			{
+#ifdef JP
+				msg_print("* 注意:この先はトラップの感知範囲外です！ *");
+#else
+				msg_print("*Leaving trap detect region!*");
+#endif
+			}
+
+			if (disturb_trap_detect)
+			{
+				/* Break Run */
+				return(TRUE);
+			}
+		}
+	}
+
+	/* Cannot travel when blind */
+	if (p_ptr->blind || no_lite())
+	{
+#ifdef JP
+		msg_print("目が見えない！");
+#else
+		msg_print("You cannot see!");
+#endif
+		return (TRUE);
+	}
+
+	/* Look at every newly adjacent square. */
+	for (i = -max; i <= max; i++)
+	{
+		/* New direction */
+		new_dir = cycle[chome[prev_dir] + i];
+
+		/* New location */
+		row = py + ddy[new_dir];
+		col = px + ddx[new_dir];
+
+		/* Access grid */
+		c_ptr = &cave[row][col];
+
+
+		/* Visible monsters abort running */
+		if (c_ptr->m_idx)
+		{
+			monster_type *m_ptr = &m_list[c_ptr->m_idx];
+
+			/* Visible monster */
+			if (m_ptr->ml) return (TRUE);
+		}
+	}
+
+	/* Failure */
+	return (FALSE);
+}
+
+
+/*
+ * Travel command
+ */
+void travel_step(void)
+{
+	int i;
+	int dir = travel.dir;
+	int old_run = travel.run;
+
+	find_prevdir = dir;
+
+	/* disturb */
+	if (travel_test())
+	{
+		if (travel.run == 255)
+		{
+#ifdef JP
+			msg_print("道筋が見つかりません！");
+#else
+			msg_print("No route is found!");
+#endif
+		}
+		disturb(0, 0);
+		return;
+	}
+
+	energy_use = 100;
+
+	for (i = 1; i <= 9; i++)
+	{
+		if (i == 5) continue;
+
+		if (travel.cost[py+ddy[i]][px+ddx[i]] < travel.cost[py+ddy[dir]][px+ddx[dir]])
+		{
+			dir = i;
+		}
+	}
+
+	/* Close door */
+	if (!easy_open && is_closed_door(cave[py+ddy[dir]][px+ddx[dir]].feat))
+	{
+		disturb(0, 0);
+		return;
+	}
+
+	travel.dir = dir;
+	move_player(dir, always_pickup, easy_disarm);
+	travel.run = old_run;
+
+	if ((py == travel.y) && (px == travel.x))
+		travel.run = 0;
+	else
+		travel.run--;
+}
+#endif

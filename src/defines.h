@@ -5468,3 +5468,8 @@ extern int PlayerUID;
  */
 #define SCROBJ_FAKE_OBJECT  0x00000001
 #define SCROBJ_FORCE_DETAIL 0x00000002
+
+/*
+ * For travel command (auto run)
+ */
+#define TRAVEL

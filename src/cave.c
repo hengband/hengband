@@ -5044,6 +5044,20 @@ void disturb(int stop_search, int unused_flag)
 		p_ptr->update |= (PU_FLOW);
 	}
 
+#ifdef TRAVEL
+	if (travel.run)
+	{
+		/* Cancel */
+		travel.run = 0;
+
+		/* Check for new panel if appropriate */
+		if (center_player && !center_running) verify_panel();
+
+		/* Calculate torch radius */
+		p_ptr->update |= (PU_TORCH);
+	}
+#endif
+
 	/* Flush the input if requested */
 	if (flush_disturb) flush();
 }

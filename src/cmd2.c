@@ -4488,3 +4488,170 @@ void do_cmd_throw(void)
 {
 	do_cmd_throw_aux(1, FALSE, 0);
 }
+
+
+#ifdef TRAVEL
+/*
+ * Hack: travel command
+ */
+#define TRAVEL_UNABLE 9999
+
+static int flow_head = 0;
+static int flow_tail = 0;
+static s16b temp2_x[MAX_SHORT];
+static s16b temp2_y[MAX_SHORT];
+
+/* Hack: forget the "flow" information */
+void forget_travel_flow(void)
+{
+	int x, y;
+
+	/* Check the entire dungeon */
+	for (y = 0; y < cur_hgt; y++)
+	{
+		for (x = 0; x < cur_wid; x++)
+		{
+			/* Forget the old data */
+			travel.cost[y][x] = TRAVEL_UNABLE;
+		}
+	}
+}
+
+static bool travel_flow_aux(int y, int x, int n, bool wall)
+{
+	cave_type *c_ptr = &cave[y][x];
+	feature_type *f_ptr = &f_info[c_ptr->feat];
+	int old_head = flow_head;
+
+	n = n % TRAVEL_UNABLE;
+
+	/* Ignore out of bounds */
+	if (!in_bounds(y, x)) return wall;
+
+	/* Ignore "pre-stamped" entries */
+	if (travel.cost[y][x] != TRAVEL_UNABLE) return wall;
+
+	/* Ignore "walls" and "rubble" (include "secret doors") */
+	if (have_flag(f_ptr->flags, FF_WALL) ||
+		have_flag(f_ptr->flags, FF_CAN_DIG) ||
+		(have_flag(f_ptr->flags, FF_DOOR) && cave[y][x].mimic) ||
+		(!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation))
+	{
+		if (!wall) return wall;
+	}
+	else
+	{
+		wall = FALSE;
+	}
+
+	/* Save the flow cost */
+	travel.cost[y][x] = n;
+	if (wall) travel.cost[y][x] += TRAVEL_UNABLE;
+
+	/* Enqueue that entry */
+	temp2_y[flow_head] = y;
+	temp2_x[flow_head] = x;
+
+	/* Advance the queue */
+	if (++flow_head == MAX_SHORT) flow_head = 0;
+
+	/* Hack -- notice overflow by forgetting new entry */
+	if (flow_head == flow_tail) flow_head = old_head;
+
+	return wall;
+}
+
+
+static void travel_flow(int ty, int tx)
+{
+	int x, y, d;
+	bool wall = FALSE;
+	feature_type *f_ptr = &f_info[cave[ty][tx].feat];
+
+	/* Reset the "queue" */
+	flow_head = flow_tail = 0;
+
+	if (!have_flag(f_ptr->flags, FF_MOVE)) wall = TRUE;
+
+	/* Add the player's grid to the queue */
+	wall = travel_flow_aux(ty, tx, 0, wall);
+
+	/* Now process the queue */
+	while (flow_head != flow_tail)
+	{
+		/* Extract the next entry */
+		y = temp2_y[flow_tail];
+		x = temp2_x[flow_tail];
+
+		/* Forget that entry */
+		if (++flow_tail == MAX_SHORT) flow_tail = 0;
+
+		/* Add the "children" */
+		for (d = 0; d < 8; d++)
+		{
+			/* Add that child if "legal" */
+			wall = travel_flow_aux(y + ddy_ddd[d], x + ddx_ddd[d], travel.cost[y][x] + 1, wall);
+		}
+	}
+
+	/* Forget the flow info */
+	flow_head = flow_tail = 0;
+}
+
+void do_cmd_travel(void)
+{
+	int x, y, i;
+	int dx, dy, sx, sy;
+	feature_type *f_ptr;
+
+	if (!tgt_pt(&x, &y)) return;
+
+	if ((x == px) && (y == py))
+	{
+#ifdef JP
+		msg_print("すでにそこにいます！");
+#else
+		msg_print("You are already there!!");
+#endif
+		return;
+	}
+
+	f_ptr = &f_info[cave[y][x].feat];
+
+	if ((cave[y][x].info & CAVE_MARK) &&
+		(have_flag(f_ptr->flags, FF_WALL) ||
+			have_flag(f_ptr->flags, FF_CAN_DIG) ||
+			(have_flag(f_ptr->flags, FF_DOOR) && cave[y][x].mimic)))
+	{
+#ifdef JP
+		msg_print("そこには行くことができません！");
+#else
+		msg_print("You cannot travel there!");
+#endif
+		return;
+	}
+
+	travel.x = x;
+	travel.y = y;
+
+	forget_travel_flow();
+	travel_flow(y, x);
+
+	/* Travel till 255 steps */
+	travel.run = 255;
+
+	/* Paranoia */
+	travel.dir = 0;
+
+	/* Decides first direction */
+	dx = abs(px - x);
+	dy = abs(py - y);
+	sx = ((x == px) || (dx < dy)) ? 0 : ((x > px) ? 1 : -1);
+	sy = ((y == py) || (dy < dx)) ? 0 : ((y > py) ? 1 : -1);
+
+	for (i = 1; i <= 9; i++)
+	{
+		if ((sx == ddx[i]) && (sy == ddy[i])) travel.dir = i;
+	}
+}
+#endif

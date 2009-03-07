@@ -1689,3 +1689,17 @@ typedef struct
 	s16b jammed[MAX_LJ_DOORS];
 	s16b num_jammed;
 } door_type;
+
+
+#ifdef TRAVEL
+/*
+ *  A structure type for travel command
+ */
+typedef struct {
+	int run;
+	int cost[MAX_HGT][MAX_WID];
+	int x;
+	int y;
+	int dir;
+} travel_type;
+#endif
