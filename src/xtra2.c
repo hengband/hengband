@@ -5620,12 +5620,85 @@ msg_format("「あー、あー、答えは %d/%d。質問は何？」", type, effect);
 
 
 /*
+ * XAngband: determine if a given location is "interesting"
+ * based on target_set_accept function.
+ */
+static bool tgt_pt_accept(int y, int x)
+{
+	cave_type *c_ptr;
+
+	/* Bounds */
+	if (!(in_bounds(y, x))) return (FALSE);
+
+	/* Player grid is always interesting */
+	if ((y == py) && (x == px)) return (TRUE);
+
+	/* Handle hallucination */
+	if (p_ptr->image) return (FALSE);
+
+	/* Examine the grid */
+	c_ptr = &cave[y][x];
+
+	/* Interesting memorized features */
+	if (c_ptr->info & (CAVE_MARK))
+	{
+		/* Notice stairs */
+		if (cave_have_flag_grid(c_ptr, FF_LESS)) return (TRUE);
+		if (cave_have_flag_grid(c_ptr, FF_MORE)) return (TRUE);
+
+		/* Notice quest features */
+		if (cave_have_flag_grid(c_ptr, FF_QUEST_ENTER)) return (TRUE);
+		if (cave_have_flag_grid(c_ptr, FF_QUEST_EXIT)) return (TRUE);
+	}
+
+	/* Nope */
+	return (FALSE);
+}
+
+
+/*
+ * XAngband: Prepare the "temp" array for "tget_pt"
+ * based on target_set_prepare funciton.
+ */
+static void tgt_pt_prepare(void)
+{
+	int y, x;
+
+	/* Reset "temp" array */
+	temp_n = 0;
+
+	if (!expand_list) return;
+
+	/* Scan the current panel */
+	for (y = 1; y < cur_hgt; y++)
+	{
+		for (x = 1; x < cur_wid; x++)
+		{
+			/* Require "interesting" contents */
+			if (!tgt_pt_accept(y, x)) continue;
+
+			/* Save the location */
+			temp_x[temp_n] = x;
+			temp_y[temp_n] = y;
+			temp_n++;
+		}
+	}
+
+	/* Target the nearest monster for shooting */
+	ang_sort_comp = ang_sort_comp_distance;
+	ang_sort_swap = ang_sort_swap_distance;
+
+	/* Sort the positions */
+	ang_sort(temp_x, temp_y, temp_n);
+}
+
+/*
  * old -- from PsiAngband.
  */
 bool tgt_pt(int *x_ptr, int *y_ptr)
 {
 	char ch = 0;
-	int d, x, y;
+	int d, x, y, n;
 	bool success = FALSE;
 
 	int wid, hgt;
@@ -5636,8 +5709,14 @@ bool tgt_pt(int *x_ptr, int *y_ptr)
 	x = px;
 	y = py;
 
+	if (expand_list) 
+	{
+		tgt_pt_prepare();
+		n = 0;
+	}
+
 #ifdef JP
-msg_print("場所を選んでスペースキーを押して下さい。");
+	msg_print("場所を選んでスペースキーを押して下さい。");
 #else
 	msg_print("Select a point and press space.");
 #endif
@@ -5665,6 +5744,71 @@ msg_print("場所を選んでスペースキーを押して下さい。");
 			else success = TRUE;
 
 			break;
+
+		/* XAngband: Move cursor to stairs */
+		case '>':
+		case '<':
+			if (expand_list && temp_n)
+			{
+				int dx, dy;
+				int cx = (panel_col_min + panel_col_max) / 2;
+				int cy = (panel_row_min + panel_row_max) / 2;
+
+				n++;
+
+				while(n < temp_n)	/* Skip stairs which have defferent distance */
+				{
+					cave_type *c_ptr = &cave[temp_y[n]][temp_x[n]];
+
+					if (ch == '>')
+					{
+						if (cave_have_flag_grid(c_ptr, FF_LESS) ||
+							cave_have_flag_grid(c_ptr, FF_QUEST_ENTER))
+							n++;
+						else
+							break;
+					}
+					else /* if (ch == '<') */
+					{
+						if (cave_have_flag_grid(c_ptr, FF_MORE) ||
+							cave_have_flag_grid(c_ptr, FF_QUEST_EXIT))
+							n++;
+						else
+							break;
+					}
+				}
+
+				if (n == temp_n)	/* Loop out taget list */
+				{
+					n = 0;
+					y = py;
+					x = px;
+					verify_panel();	/* Move cursor to player */
+
+					/* Update stuff */
+					p_ptr->update |= (PU_MONSTERS);
+
+					/* Redraw map */
+					p_ptr->redraw |= (PR_MAP);
+
+					/* Window stuff */
+					p_ptr->window |= (PW_OVERHEAD);
+
+					/* Handle stuff */
+					handle_stuff();
+				}
+				else	/* move cursor to next stair and change panel */
+				{
+					y = temp_y[n];
+					x = temp_x[n];
+
+					dy = 2 * (y - cy) / hgt;
+					dx = 2 * (x - cx) / wid;
+					if (dy || dx) change_panel(dy, dx);
+				}
+			}
+			break;
+
 		default:
 			/* Look up the direction */
 			d = get_keymap_dir(ch);
