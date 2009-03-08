@@ -4334,6 +4334,87 @@ static void dump_aux_class_special(FILE *fff)
 			fprintf(fff, p[i]);
 		}
 	}
+	else if (p_ptr->pclass == CLASS_MAGIC_EATER)
+	{
+		char s[EATER_EXT][MAX_NLEN];
+		int tval, ext, k_idx;
+		int i, magic_num;
+
+#ifdef JP
+		fprintf(fff, "\n\n  [取り込んだ魔法道具]\n");
+#else
+		fprintf(fff, "\n\n  [Magic devices eaten]\n");
+#endif
+
+		for (ext = 0; ext < 3; ext++)
+		{
+			int eat_num = 0;
+
+			/* Dump an extent name */
+			switch (ext)
+			{
+			case 0:
+				tval = TV_STAFF;
+#ifdef JP
+				fprintf(fff, "\n[杖]\n");
+#else
+				fprintf(fff, "\n[Staffs]\n");
+#endif
+				break;
+			case 1:
+				tval = TV_WAND;
+#ifdef JP
+				fprintf(fff, "\n[魔法棒]\n");
+#else
+				fprintf(fff, "\n[Wands]\n");
+#endif
+				break;
+			case 2:
+				tval = TV_ROD;
+#ifdef JP
+				fprintf(fff, "\n[ロッド]\n");
+#else
+				fprintf(fff, "\n[Rods]\n");
+#endif
+				break;
+			}
+
+			/* Get magic device names that were eaten */
+			for (i = 0; i < EATER_EXT; i++)
+			{
+				int idx = EATER_EXT * ext + i;
+
+				magic_num = p_ptr->magic_num2[idx];
+				if (!magic_num) continue;
+
+				k_idx = lookup_kind(tval, i);
+				if (!k_idx) continue;
+				sprintf(s[eat_num], "%23s (%2d)", (k_name + k_info[k_idx].name), magic_num);
+				eat_num++;
+			}
+
+			/* Dump magic devices in this extent */
+			if (eat_num > 0)
+			{
+				for (i = 0; i < eat_num; i++)
+				{
+					fputs(s[i], fff);
+					if (i % 3 < 2) fputs("    ", fff);
+					else fputs("\n", fff);
+				}
+
+				if (i % 3 > 0) fputs("\n", fff);
+			}
+			else /* Not found */
+			{
+#ifdef JP
+				fputs("  (なし)\n", fff);
+#else
+				fputs("  (none)\n", fff);
+#endif
+			}
+		}
+	}
 }
 
 
