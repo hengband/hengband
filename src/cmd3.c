@@ -407,8 +407,10 @@ void do_cmd_wield(void)
 		return;
 	}
 
-	if (object_is_cursed(o_ptr) && confirm_wear &&
-	    (object_is_known(o_ptr) || (o_ptr->ident & IDENT_SENSE)))
+	if (confirm_wear &&
+		((object_is_cursed(o_ptr) && object_is_known(o_ptr)) ||
+		((o_ptr->ident & IDENT_SENSE) &&
+			(FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED))))
 	{
 		char dummy[MAX_NLEN+80];
 
