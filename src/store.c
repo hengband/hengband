@@ -12,14 +12,14 @@
 
 #include "angband.h"
 
+#define MIN_STOCK 12
 
-#ifdef JP
-/* 下の方から移動してきました */
 static int cur_store_num = 0;
 static int store_top = 0;
+static int store_bottom = 0;
+static int xtra_stock = 0;
 static store_type *st_ptr = NULL;
 static owner_type *ot_ptr = NULL;
-#endif
 static s16b old_town_num = 0;
 static s16b inner_town_num = 0;
 #define RUMOR_CHANCE 8
@@ -615,41 +615,10 @@ static void purchase_analyze(s32b price, s32b value, s32b guess)
 
 
 
-
-
-#ifdef JP
-/* 日本語版の場合は上の方に移動してあります */
-#else
-/*
- * We store the current "store number" here so everyone can access it
- */
-static int cur_store_num = 7;
-
-/*
- * We store the current "store page" here so everyone can access it
- */
-static int store_top = 0;
-
-/*
- * We store the current "store pointer" here so everyone can access it
- */
-static store_type *st_ptr = NULL;
-
-/*
- * We store the current "owner type" here so everyone can access it
- */
-static owner_type *ot_ptr = NULL;
-#endif
-
 /*
  * We store the current "store feat" here so everyone can access it
  */
 static int cur_store_feat;
-
-
-
-
-
 
 
 /*
@@ -2222,10 +2191,10 @@ static void display_entry(int pos)
 	o_ptr = &st_ptr->stock[pos];
 
 	/* Get the "offset" */
-	i = (pos % 12);
+	i = (pos % store_bottom);
 
 	/* Label it, clear the line --(-- */
-	(void)sprintf(out_val, "%c) ", I2A(i));
+	(void)sprintf(out_val, "%c) ", ((i > 25) ? toupper(I2A(i - 26)) : I2A(i)));
 	prt(out_val, i+6, 0);
 
 	cur_col = 3;
@@ -2356,7 +2325,7 @@ static void display_inventory(void)
 	int i, k;
 
 	/* Display the next 12 items */
-	for (k = 0; k < 12; k++)
+	for (k = 0; k < store_bottom; k++)
 	{
 		/* Do not display "dead" items */
 		if (store_top + k >= st_ptr->stock_num) break;
@@ -2366,7 +2335,7 @@ static void display_inventory(void)
 	}
 
 	/* Erase the extra lines and the "more" prompt */
-	for (i = k; i < 13; i++) prt("", i + 6, 0);
+	for (i = k; i < store_bottom + 1; i++) prt("", i + 6, 0);
 
 	/* Assume "no current page" */
 #ifdef JP
@@ -2377,7 +2346,7 @@ static void display_inventory(void)
 
 
 	/* Visual reminder of "more items" */
-	if (st_ptr->stock_num > 12)
+	if (st_ptr->stock_num > store_bottom)
 	{
 		/* Show "more" reminder (after the last item) */
 #ifdef JP
@@ -2390,9 +2359,9 @@ static void display_inventory(void)
 		/* Indicate the "current page" */
 		/* Trailing spaces are to display (Page xx) and (Page x) */
 #ifdef JP
-		put_str(format("(%dページ)  ", store_top/12 + 1), 5, 20);
+		put_str(format("(%dページ)  ", store_top/store_bottom + 1), 5, 20);
 #else
-		put_str(format("(Page %d)  ", store_top/12 + 1), 5, 20);
+		put_str(format("(Page %d)  ", store_top/store_bottom + 1), 5, 20);
 #endif
 
 	}
@@ -2407,14 +2376,14 @@ static void store_prt_gold(void)
 	char out_val[64];
 
 #ifdef JP
-	prt("手持ちのお金: ", 19, 53);
+	prt("手持ちのお金: ", 19 + xtra_stock, 53);
 #else
-	prt("Gold Remaining: ", 19, 53);
+	prt("Gold Remaining: ", 19 + xtra_stock, 53);
 #endif
 
 
 	sprintf(out_val, "%9ld", (long)p_ptr->au);
-	prt(out_val, 19, 68);
+	prt(out_val, 19 + xtra_stock, 68);
 }
 
 
@@ -2549,8 +2518,8 @@ static void display_store(void)
 static int get_stock(int *com_val, cptr pmt, int i, int j)
 {
 	char	command;
-
 	char	out_val[160];
+	char	lo, hi;
 
 #ifdef ALLOW_REPEAT /* TNB */
 
@@ -2575,13 +2544,15 @@ static int get_stock(int *com_val, cptr pmt, int i, int j)
 	*com_val = (-1);
 
 	/* Build the prompt */
+	lo = I2A(i);
+	hi = (j > 25) ? toupper(I2A(j - 26)) : I2A(j);
 #ifdef JP
 	(void)sprintf(out_val, "(%s:%c-%c, ESCで中断) %s",
 		(((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) ? "アイテム" : "商品"), 
-				  I2A(i), I2A(j), pmt);
+				  lo, hi, pmt);
 #else
 	(void)sprintf(out_val, "(Items %c-%c, ESC to exit) %s",
-				  I2A(i), I2A(j), pmt);
+				  lo, hi, pmt);
 #endif
 
 
@@ -2594,7 +2565,12 @@ static int get_stock(int *com_val, cptr pmt, int i, int j)
 		if (!get_com(out_val, &command, FALSE)) break;
 
 		/* Convert */
-		k = (islower(command) ? A2I(command) : -1);
+		if (islower(command))
+			k = A2I(command);
+		else if (isupper(command))
+			k = A2I(tolower(command)) + 26;
+		else
+			k = -1;
 
 		/* Legal responses */
 		if ((k >= i) && (k <= j))
@@ -3346,7 +3322,6 @@ static void store_purchase(void)
 
 	char out_val[160];
 
-
 	if (cur_store_num == STORE_MUSEUM)
 	{
 #ifdef JP
@@ -3382,7 +3357,7 @@ static void store_purchase(void)
 	i = (st_ptr->stock_num - store_top);
 
 	/* And then restrict it to the current page */
-	if (i > 12) i = 12;
+	if (i > store_bottom) i = store_bottom;
 
 	/* Prompt */
 #ifdef JP
@@ -4070,7 +4045,7 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 			/* Re-display if item is now in store */
 			if (item_pos >= 0)
 			{
-				store_top = (item_pos / 12) * 12;
+				store_top = (item_pos / store_bottom) * store_bottom;
 				display_inventory();
 			}
 		}
@@ -4134,7 +4109,7 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 		/* Update store display */
 		if (item_pos >= 0)
 		{
-			store_top = (item_pos / 12) * 12;
+			store_top = (item_pos / store_bottom) * store_bottom;
 			display_inventory();
 		}
 	}
@@ -4167,7 +4142,7 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 		/* Update store display */
 		if (item_pos >= 0)
 		{
-			store_top = (item_pos / 12) * 12;
+			store_top = (item_pos / store_bottom) * store_bottom;
 			display_inventory();
 		}
 	}
@@ -4406,7 +4381,7 @@ static void store_process_command(void)
 		/* 1 ページ戻るコマンド: 我が家のページ数が多いので重宝するはず By BUG */
 		case '-':
 		{
-			if (st_ptr->stock_num <= 12) {
+			if (st_ptr->stock_num <= store_bottom) {
 #ifdef JP
 				msg_print("これで全部です。");
 #else
@@ -4414,11 +4389,11 @@ static void store_process_command(void)
 #endif
 			}
 			else{
-				store_top -= 12;
+				store_top -= store_bottom;
 				if ( store_top < 0 )
-					store_top = ((st_ptr->stock_num - 1 )/12) * 12;
+					store_top = ((st_ptr->stock_num - 1 )/store_bottom) * store_bottom;
 				if ( (cur_store_num == STORE_HOME) && (powerup_home == FALSE) )
-					if ( store_top >= 12 ) store_top = 12;
+					if ( store_top >= store_bottom ) store_top = store_bottom;
 				display_inventory();
 			}
 			break;
@@ -4427,7 +4402,7 @@ static void store_process_command(void)
 		/* Browse */
 		case ' ':
 		{
-			if (st_ptr->stock_num <= 12)
+			if (st_ptr->stock_num <= store_bottom)
 			{
 #ifdef JP
 				msg_print("これで全部です。");
@@ -4438,7 +4413,7 @@ static void store_process_command(void)
 			}
 			else
 			{
-				store_top += 12;
+				store_top += store_bottom;
 				/*
 				 * 隠しオプション(powerup_home)がセットされていないときは
 				 * 我が家では 2 ページまでしか表示しない
@@ -4772,7 +4747,14 @@ void do_cmd_store(void)
 	int         i;
 	cave_type   *c_ptr;
 	bool        need_redraw_store_inv; /* To redraw missiles damage and prices in store */
+	int w, h;
 
+	/* Get term size */
+	Term_get_size(&w, &h);
+
+	/* Calculate stocks per 1 page */
+	xtra_stock = MIN(14+26, ((h > 24) ? (h - 24) : 0));
+	store_bottom = MIN_STOCK + xtra_stock;
 
 	/* Access the player grid */
 	c_ptr = &cave[py][px];
@@ -4875,26 +4857,26 @@ void do_cmd_store(void)
 		prt("", 1, 0);
 
 		/* Clear */
-		clear_from(20);
+		clear_from(20 + xtra_stock);
 
 
 		/* Basic commands */
 #ifdef JP
-		prt(" ESC) 建物から出る", 21, 0);
+		prt(" ESC) 建物から出る", 21 + xtra_stock, 0);
 #else
-		prt(" ESC) Exit from Building.", 21, 0);
+		prt(" ESC) Exit from Building.", 21 + xtra_stock, 0);
 #endif
 
 
 		/* Browse if necessary */
-		if (st_ptr->stock_num > 12)
+		if (st_ptr->stock_num > store_bottom)
 		{
 #ifdef JP
-			prt(" -)前ページ", 22, 0);
-			prt(" スペース) 次ページ", 23, 0);
+			prt(" -)前ページ", 22 + xtra_stock, 0);
+			prt(" スペース) 次ページ", 23 + xtra_stock, 0);
 #else
-			prt(" -) Previous page", 22, 0);
-			prt(" SPACE) Next page", 23, 0);
+			prt(" -) Previous page", 22 + xtra_stock, 0);
+			prt(" SPACE) Next page", 23 + xtra_stock, 0);
 #endif
 
 		}
@@ -4903,13 +4885,13 @@ void do_cmd_store(void)
 		if (cur_store_num == STORE_HOME)
 		{
 #ifdef JP
-			prt("g) アイテムを取る", 21, 27);
-			prt("d) アイテムを置く", 22, 27);
-			prt("x) 家のアイテムを調べる", 23,27);
+			prt("g) アイテムを取る", 21 + xtra_stock, 27);
+			prt("d) アイテムを置く", 22 + xtra_stock, 27);
+			prt("x) 家のアイテムを調べる", 23 + xtra_stock, 27);
 #else
-			prt("g) Get an item.", 21, 27);
-			prt("d) Drop an item.", 22, 27);
-			prt("x) eXamine an item in the home.", 23,27);
+			prt("g) Get an item.", 21 + xtra_stock, 27);
+			prt("d) Drop an item.", 22 + xtra_stock, 27);
+			prt("x) eXamine an item in the home.", 23 + xtra_stock, 27);
 #endif
 		}
 
@@ -4917,13 +4899,13 @@ void do_cmd_store(void)
 		else if (cur_store_num == STORE_MUSEUM)
 		{
 #ifdef JP
-			prt("d) アイテムを置く", 21, 27);
-			prt("r) アイテムの展示をやめる", 22, 27);
-			prt("x) 博物館のアイテムを調べる", 23, 27);
+			prt("d) アイテムを置く", 21 + xtra_stock, 27);
+			prt("r) アイテムの展示をやめる", 22 + xtra_stock, 27);
+			prt("x) 博物館のアイテムを調べる", 23 + xtra_stock, 27);
 #else
-			prt("d) Drop an item.", 21, 27);
-			prt("r) order to Remove an item.", 22, 27);
-			prt("x) eXamine an item in the museum.", 23, 27);
+			prt("d) Drop an item.", 21 + xtra_stock, 27);
+			prt("r) order to Remove an item.", 22 + xtra_stock, 27);
+			prt("x) eXamine an item in the museum.", 23 + xtra_stock, 27);
 #endif
 		}
 
@@ -4931,46 +4913,46 @@ void do_cmd_store(void)
 		else
 		{
 #ifdef JP
-			prt("p) 商品を買う", 21, 30);
-			prt("s) アイテムを売る", 22, 30);
-			prt("x) 商品を調べる", 23,30);
+			prt("p) 商品を買う", 21 + xtra_stock, 30);
+			prt("s) アイテムを売る", 22 + xtra_stock, 30);
+			prt("x) 商品を調べる", 23 + xtra_stock,30);
 #else
-			prt("p) Purchase an item.", 21, 30);
-			prt("s) Sell an item.", 22, 30);
-			prt("x) eXamine an item in the shop", 23,30);
+			prt("p) Purchase an item.", 21 + xtra_stock, 30);
+			prt("s) Sell an item.", 22 + xtra_stock, 30);
+			prt("x) eXamine an item in the shop", 23 + xtra_stock,30);
 #endif
 		}
 
 #ifdef JP
 		/* 基本的なコマンドの追加表示 */
 
-		prt("i/e) 持ち物/装備の一覧", 21, 56);
+		prt("i/e) 持ち物/装備の一覧", 21 + xtra_stock, 56);
 
 		if (rogue_like_commands)
 		{
-			prt("w/T) 装備する/はずす", 22, 56);
+			prt("w/T) 装備する/はずす", 22 + xtra_stock, 56);
 		}
 		else
 		{
-			prt("w/t) 装備する/はずす", 22, 56);
+			prt("w/t) 装備する/はずす", 22 + xtra_stock, 56);
 		}
 #else
-		prt("i/e) Inventry/Equipment list", 21, 56);
+		prt("i/e) Inventry/Equipment list", 21 + xtra_stock, 56);
 
 		if (rogue_like_commands)
 		{
-			prt("w/T) Wear/Take off equipment", 22, 56);
+			prt("w/T) Wear/Take off equipment", 22 + xtra_stock, 56);
 		}
 		else
 		{
-			prt("w/t) Wear/Take off equipment", 22, 56);
+			prt("w/t) Wear/Take off equipment", 22 + xtra_stock, 56);
 		}
 #endif
 		/* Prompt */
 #ifdef JP
-		prt("コマンド:", 20, 0);
+		prt("コマンド:", 20 + xtra_stock, 0);
 #else
-		prt("You may: ", 20, 0);
+		prt("You may: ", 20 + xtra_stock, 0);
 #endif
 
 
