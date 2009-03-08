@@ -5060,6 +5060,8 @@ static cptr monster_group_text[] =
 #ifdef JP
 	"ユニーク",	/* "Uniques" */
 	"乗馬可能なモンスター",	/* "Riding" */
+	"賞金首", /* "Wanted */
+	"アンバーの王族", /* "Ambertite" */
 	"アリ",
 	"コウモリ",
 	"ムカデ",
@@ -5119,6 +5121,8 @@ static cptr monster_group_text[] =
 #else
 	"Uniques",
 	"Ridable monsters",
+	"Wanted monsters",
+	"Ambertite",
 	"Ant",
 	"Bat",
 	"Centipede",
@@ -5188,6 +5192,8 @@ static cptr monster_group_char[] =
 {
 	(char *) -1L,
 	(char *) -2L,
+	(char *) -3L,
+	(char *) -4L,
 	"a",
 	"b",
 	"c",
@@ -5293,6 +5299,13 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
 	/* XXX Hack -- Check if this is the "Riding" group */
 	bool grp_riding = (monster_group_char[grp_cur] == (char *) -2L);
 
+	/* XXX Hack -- Check if this is the "Wanted" group */
+	bool grp_wanted = (monster_group_char[grp_cur] == (char *) -3L);
+
+	/* XXX Hack -- Check if this is the "Amberite" group */
+	bool grp_amberite = (monster_group_char[grp_cur] == (char *) -4L);
+
+
 	/* Check every race */
 	for (i = 0; i < max_r_idx; i++)
 	{
@@ -5313,6 +5326,27 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
 		else if (grp_riding)
 		{
 			if (!(r_ptr->flags7 & RF7_RIDING)) continue;
+		}
+
+		else if (grp_wanted)
+		{
+			bool wanted = FALSE;
+			int j;
+			for (j = 0; j < MAX_KUBI; j++)
+			{
+				if (kubi_r_idx[j] == i || kubi_r_idx[j] - 10000 == i ||
+					(p_ptr->today_mon && p_ptr->today_mon == i))
+				{
+					wanted = TRUE;
+					break;
+				}
+			}
+			if (!wanted) continue;
+		}
+
+		else if (grp_amberite)
+		{
+			if (!(r_ptr->flags3 & RF3_AMBERITE)) continue;
 		}
 
 		else
