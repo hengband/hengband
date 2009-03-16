@@ -2328,6 +2328,55 @@ static void do_cmd_options_win(void)
 
 
 
+#define OPT_NUM 15
+
+static struct opts
+{
+	char key;
+	cptr name;
+	int row;
+}
+option_fields[OPT_NUM] =
+{
+#ifdef JP
+	{ '1', "    キー入力     オプション", 3 },
+	{ '2', "   マップ画面    オプション", 4 },
+	{ '3', "  テキスト表示   オプション", 5 },
+	{ '4', "  ゲームプレイ   オプション", 6 },
+	{ '5', "  行動中止関係   オプション", 7 },
+	{ '6', "  簡易自動破壊   オプション", 8 },
+	{ 'r', "   プレイ記録    オプション", 9 },
+
+	{ 'p', "自動拾いエディタ", 11 },
+	{ 'd', " 基本ウェイト量 ", 12 },
+	{ 'h', "低ヒットポイント", 13 },
+	{ 'm', "  低魔力色閾値  ", 14 },
+	{ 'a', "   自動セーブ    オプション", 15 },
+	{ 'w', "ウインドウフラグ", 16 },
+
+	{ 'b', "      初期       オプション (参照のみ)", 18 },
+	{ 'c', "      詐欺       オプション", 19 },
+#else
+	{ '1', "Input Options", 3 },
+	{ '2', "Map Screen Options", 4 },
+	{ '3', "Text Display Options", 5 },
+	{ '4', "Game-Play Options", 6 },
+	{ '5', "Disturbance Options", 7 },
+	{ '6', "Easy Auto-Destroyer Options", 8 },
+	{ 'r', "Play record Options", 9 },
+
+	{ 'p', "Auto-picker/destroyer editor", 11 },
+	{ 'd', "Base Delay Factor", 12 },
+	{ 'h', "Hitpoint Warning", 13 },
+	{ 'm', "Mana Color Threshold", 14 },
+	{ 'a', "Autosave Options", 15 },
+	{ 'w', "Window Flags", 16 },
+
+	{ 'b', "Birth Options (Browse Only)", 18 },
+	{ 'c', "Cheat Options", 19 },
+#endif
+};
+
 
 /*
  * Set or unset various options.
@@ -2337,8 +2386,9 @@ static void do_cmd_options_win(void)
  */
 void do_cmd_options(void)
 {
-	int k;
-
+	char k;
+	int i, d, skey;
+	int y = 0;
 
 	/* Save the screen */
 	screen_save();
@@ -2346,6 +2396,11 @@ void do_cmd_options(void)
 	/* Interact */
 	while (1)
 	{
+		int n = OPT_NUM;
+
+		/* Does not list cheat option when cheat option is off */
+		if (!p_ptr->noscore && !allow_debug_opts) n--;
+
 		/* Clear screen */
 		Term_clear();
 
@@ -2353,87 +2408,58 @@ void do_cmd_options(void)
 #ifdef JP
 		prt("[ オプションの設定 ]", 1, 0);
 #else
-		prt("Options", 1, 0);
+		prt("TinyAngband options", 1, 0);
 #endif
 
-
-		/* Give some choices */
-#ifdef JP
-		prt("(1)      キー入力        オプション", 2, 5);
-		prt("(2)     マップ画面       オプション", 3, 5);
-		prt("(3)    テキスト表示      オプション", 4, 5);
-		prt("(4)    ゲームプレイ      オプション", 5, 5);
-		prt("(5)    行動中止関係      オプション", 6, 5);
-		prt("(6)    簡易自動破壊      オプション", 7, 5);
-		prt("(R)     プレイ記録       オプション", 8, 5);
-
-		/* Special choices */
-		prt("(P)  自動拾いエディタ", 10, 5);
-		prt("(D)   基本ウェイト量", 11, 5);
-		prt("(H) 低ヒットポイント警告", 12, 5);
-		prt("(M)    低魔力色閾値", 13, 5);
-		prt("(A)     自動セーブ       オプション", 14, 5);
-		/* Window flags */
-		prt("(W)  ウインドウフラグ", 15, 5);
-#else
-		prt("(1) Input Options", 2, 5);
-		prt("(2) Map Screen Options", 3, 5);
-		prt("(3) Text Display Options", 4, 5);
-		prt("(4) Game-Play Options", 5, 5);
-		prt("(5) Disturbance Options", 6, 5);
-		prt("(6) Easy Auto-Destroyer Options", 7, 5);
-		prt("(R) Play-record Options", 8, 5);
-		/* Special choices */
-		prt("(P) Auto-picker/destroyer editor", 10, 5);
-		prt("(D) Base Delay Factor", 11, 5);
-		prt("(H) Hitpoint Warning", 12, 5);
-		prt("(M) Mana Color Threshold", 13, 5);
-		prt("(A) Autosave Options", 14, 5);
-		/* Window flags */
-		prt("(W) Window Flags", 15, 5);
-#endif
-
-		if (!p_ptr->wizard || !allow_debug_opts)
+		while(1)
 		{
-			/* Birth */
+			/* Give some choices */
+			for (i = 0; i < n; i++)
+			{
+				byte a = TERM_WHITE;
+				if (i == y) a = TERM_L_BLUE;
+				Term_putstr(5, option_fields[i].row, -1, a, 
+					format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name));
+			}
+
 #ifdef JP
-			prt("(B)        初期          オプション (参照のみ)", 16, 5);
+			prt("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", 21, 0);
 #else
-			prt("(B) Birth Options (Browse Only)", 16, 5);
+			prt("Move to <dir>, Select to Enter, Cancel to ESC, ? to help: ", 21, 0);
 #endif
+
+			/* Get command */
+			skey = inkey_special(TRUE);
+			if (!(skey & SKEY_MASK)) k = (char)skey;
+			else k = 0;
+
+			/* Exit */
+			if (k == ESCAPE) break;
+
+			if (my_strchr("\n\r ", k))
+			{
+				k = option_fields[y].key;
+				break;
+			}
+
+			for (i = 0; i < n; i++)
+			{
+				if (tolower(k) == option_fields[i].key) break;
+			}
+
+			/* Command is found */
+			if (i < n) break;
+
+			/* Hack -- browse help */
+			if (k == '?') break;
+
+			/* Move cursor */
+			d = 0;
+			if (skey == SKEY_UP) d = 8;
+			if (skey == SKEY_DOWN) d = 2;
+			y = (y + ddy[d] + n) % n;
+			if (!d) bell();
 		}
-		else
-		{
-			/* Birth */
-#ifdef JP
-			prt("(B)        初期          オプション", 16, 5);
-#else
-			prt("(B) Birth Options", 16, 5);
-#endif
-		}
-
-
-		if (p_ptr->noscore || allow_debug_opts)
-		{
-			/* Cheating */
-#ifdef JP
-			prt("(C)        詐欺          オプション", 17, 5);
-#else
-			prt("(C) Cheating Options", 17, 5);
-#endif
-		}
-
-
-		/* Prompt */
-#ifdef JP
-		prt("コマンド:", 19, 0);
-#else
-		prt("Command: ", 19, 0);
-#endif
-
-
-		/* Get command */
-		k = inkey();
 
 		/* Exit */
 		if (k == ESCAPE) break;
@@ -2449,7 +2475,6 @@ void do_cmd_options(void)
 #else
 				do_cmd_options_aux(OPT_PAGE_INPUT, "Input Options");
 #endif
-
 				break;
 			}
 
@@ -2461,7 +2486,6 @@ void do_cmd_options(void)
 #else
 				do_cmd_options_aux(OPT_PAGE_MAPSCREEN, "Map Screen Options");
 #endif
-
 				break;
 			}
 
@@ -2473,7 +2497,6 @@ void do_cmd_options(void)
 #else
 				do_cmd_options_aux(OPT_PAGE_TEXT, "Text Display Options");
 #endif
-
 				break;
 			}
 
@@ -2485,7 +2508,6 @@ void do_cmd_options(void)
 #else
 				do_cmd_options_aux(OPT_PAGE_GAMEPLAY, "Game-Play Options");
 #endif
-
 				break;
 			}
 
@@ -2497,7 +2519,6 @@ void do_cmd_options(void)
 #else
 				do_cmd_options_aux(OPT_PAGE_DISTURBANCE, "Disturbance Options");
 #endif
-
 				break;
 			}
 
@@ -2535,7 +2556,6 @@ void do_cmd_options(void)
 #else
 				do_cmd_options_aux(OPT_PAGE_BIRTH, (!p_ptr->wizard || !allow_debug_opts) ? "Birth Options(browse only)" : "Birth Options((*)s effect score)");
 #endif
-
 				break;
 			}
 
@@ -2555,7 +2575,6 @@ void do_cmd_options(void)
 #else
 				do_cmd_options_cheat("Cheaters never win");
 #endif
-
 				break;
 			}
 
@@ -2567,7 +2586,6 @@ void do_cmd_options(void)
 #else
 				do_cmd_options_autosave("Autosave");
 #endif
-
 				break;
 			}
 
@@ -2597,12 +2615,12 @@ void do_cmd_options(void)
 			case 'd':
 			{
 				/* Prompt */
+				clear_from(18);
 #ifdef JP
 				prt("コマンド: 基本ウェイト量", 19, 0);
 #else
 				prt("Command: Base Delay Factor", 19, 0);
 #endif
-
 
 				/* Get a new value */
 				while (1)
@@ -2645,12 +2663,12 @@ void do_cmd_options(void)
 			case 'h':
 			{
 				/* Prompt */
+				clear_from(18);
 #ifdef JP
 				prt("コマンド: 低ヒットポイント警告", 19, 0);
 #else
 				prt("Command: Hitpoint Warning", 19, 0);
 #endif
-
 
 				/* Get a new value */
 				while (1)
@@ -2692,12 +2710,12 @@ void do_cmd_options(void)
 			case 'm':
 			{
 				/* Prompt */
+				clear_from(18);
 #ifdef JP
 				prt("コマンド: 低魔力色閾値", 19, 0);
 #else
 				prt("Command: Mana Color Threshold", 19, 0);
 #endif
-
 
 				/* Get a new value */
 				while (1)
