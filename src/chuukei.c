@@ -28,7 +28,11 @@
 #define MAX_HOSTNAME 256
 #define RINGBUF_SIZE 1024*1024
 #define FRESH_QUEUE_SIZE 4096
+#ifdef WINDOWS
+#define WAIT 100
+#else
 #define WAIT 100*1000 /* ブラウズ側のウエイト(us単位) */
+#endif
 #define DEFAULT_DELAY 50
 #define RECVBUF_SIZE 1024
 
@@ -92,8 +96,6 @@ static void disable_chuukei_server(void)
 {
 	term *t = angband_term[0];
 
-	if (!chuukei_server) return;
-
 	chuukei_server = FALSE;
 
 	t->xtra_hook = old_xtra_hook;
@@ -105,7 +107,7 @@ static void disable_chuukei_server(void)
 
 
 /* ANSI Cによればstatic変数は0で初期化されるが一応初期化する */
-static errr init_chuukei(void)
+static errr init_buffer(void)
 {
 	fresh_queue.next = fresh_queue.tail = 0;
 	ring.wptr = ring.rptr = ring.inlen = 0;
@@ -209,7 +211,7 @@ void flush_ringbuf(void)
 		if (result <= 0)
 		{
 			/* サーバとの接続断？ */
-			disable_chuukei_server();
+			if (chuukei_server) disable_chuukei_server();
 
 			prt("サーバとの接続が切断されました。", 0, 0);
 			inkey();
@@ -239,7 +241,7 @@ void flush_ringbuf(void)
 		if (result <= 0)
 		{
 			/* サーバとの接続断？ */
-			disable_chuukei_server();
+			if (chuukei_server) disable_chuukei_server();
 
 			prt("サーバとの接続が切断されました。", 0, 0);
 			inkey();
@@ -320,7 +322,7 @@ int connect_chuukei_server(char *prf_name)
 		return (-1);
 	}
 
-	if (init_chuukei() < 0)
+	if (init_buffer() < 0)
 	{
 		printf("Malloc error\n");
 		return (-1);
@@ -385,7 +387,7 @@ int connect_chuukei_server(char *prf_name)
 		return (-1);
 	}
 	
-	init_chuukei();
+	init_buffer();
 	
 	printf("server = %s\nport = %d\n", server_name, server_port);
 
@@ -508,7 +510,11 @@ static errr send_text_to_chuukei_server(int x, int y, int len, byte col, cptr st
 	}
 	else if(string_is_repeat(buf2, len))
 	{
-		sprintf(buf, "n%c%c%c%c%c", x+1, y+1, len, col, buf2[0]);
+		int i;
+		for (i = len; i > 0; i -= 127)
+		{
+			sprintf(buf, "n%c%c%c%c%c", x+1, y+1, MIN(i, 127), col, buf2[0]);
+		}
 	}
 	else
 	{
@@ -655,6 +661,7 @@ static int read_sock(void)
 
 	/* 前回残ったデータの後につづけて配信サーバからデータ受信 */
 	recv_bytes = recv(sd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes, 0);
+
 	if (recv_bytes <= 0)
 		return -1;
 
@@ -729,6 +736,23 @@ static bool get_nextbuf(char *buf)
 	return (TRUE);
 }
 
+/* プレイホストのマップが大きいときクライアントのマップもリサイズする */
+static void update_term_size(int x, int y, int len)
+{
+	int ox, oy;
+	int nx, ny;
+	Term_get_size(&ox, &oy);
+	nx = ox;
+	ny = oy;
+
+	/* 横方向のチェック */
+	if (x + len > ox) nx = x + len;
+	/* 縦方向のチェック */
+	if (y + 1 > oy) ny = y + 1;
+
+	if (nx != ox || ny != oy) Term_resize(nx, ny);
+}
+
 static bool flush_ringbuf_client(void)
 {
 	char buf[1024];
@@ -745,7 +769,7 @@ static bool flush_ringbuf_client(void)
 		char id;
 		int x, y, len, col;
 		int i;
-		char tmp1, tmp2, tmp3, tmp4;
+		unsigned char tmp1, tmp2, tmp3, tmp4;
 		char *mesg;
 
 		sscanf(buf, "%c%c%c%c%c", &id, &tmp1, &tmp2, &tmp3, &tmp4);
@@ -766,6 +790,7 @@ static bool flush_ringbuf_client(void)
 #ifdef SJIS
 			euc2sjis(mesg);
 #endif
+			update_term_size(x, y, len);
 			(void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
 			strncpy(&Term->scr->c[y][x], mesg, len);
 			for (i = x; i < x+len; i++)
@@ -780,6 +805,7 @@ static bool flush_ringbuf_client(void)
 				mesg[i] = mesg[0];
 			}
 			mesg[i] = '\0';
+			update_term_size(x, y, len);
 			(void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
 			strncpy(&Term->scr->c[y][x], mesg, len);
 			for (i = x; i < x+len; i++)
@@ -789,12 +815,14 @@ static bool flush_ringbuf_client(void)
 			break;
 
 		case 's': /* 一文字 */
+			update_term_size(x, y, 1);
 			(void)((*angband_term[0]->text_hook)(x, y, 1, (byte)col, mesg));
 			strncpy(&Term->scr->c[y][x], mesg, 1);
 			Term->scr->a[y][x] = col;
 			break;
 
 		case 'w':
+			update_term_size(x, y, len);
 			(void)((*angband_term[0]->wipe_hook)(x, y, len));
 			break;
 
@@ -804,9 +832,11 @@ static bool flush_ringbuf_client(void)
 			break;
 
 		case 'c':
+			update_term_size(x, y, 1);
 			(void)((*angband_term[0]->curs_hook)(x, y));
 			break;
 		case 'C':
+			update_term_size(x, y, 1);
 			(void)((*angband_term[0]->bigcurs_hook)(x, y));
 			break;
 		}
