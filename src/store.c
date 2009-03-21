@@ -3660,7 +3660,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 				else if (st_ptr->stock_num != i)
 				{
 					/* Pick the correct screen */
-					if (store_top >= st_ptr->stock_num) store_top -= 12;
+					if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
 
 					/* Redraw everything */
 					display_inventory();
@@ -3739,7 +3739,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 			if (st_ptr->stock_num == 0) store_top = 0;
 
 			/* Nothing left on that screen */
-			else if (store_top >= st_ptr->stock_num) store_top -= 12;
+			else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
 
 			/* Redraw everything */
 			display_inventory();
@@ -4199,7 +4199,7 @@ static void store_examine(void)
 	i = (st_ptr->stock_num - store_top);
 
 	/* And then restrict it to the current page */
-	if (i > 12) i = 12;
+	if (i > store_bottom) i = store_bottom;
 
 	/* Prompt */
 #ifdef JP
@@ -4282,7 +4282,7 @@ static void museum_remove_object(void)
 	i = st_ptr->stock_num - store_top;
 
 	/* And then restrict it to the current page */
-	if (i > 12) i = 12;
+	if (i > store_bottom) i = store_bottom;
 
 	/* Prompt */
 #ifdef JP
@@ -4330,7 +4330,7 @@ static void museum_remove_object(void)
 	if (st_ptr->stock_num == 0) store_top = 0;
 
 	/* Nothing left on that screen */
-	else if (store_top >= st_ptr->stock_num) store_top -= 12;
+	else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
 
 	/* Redraw everything */
 	display_inventory();
@@ -5070,7 +5070,7 @@ void do_cmd_store(void)
 				/* Redraw the home */
 				if (item_pos >= 0)
 				{
-					store_top = (item_pos / 12) * 12;
+					store_top = (item_pos / store_bottom) * store_bottom;
 					display_inventory();
 				}
 			}
