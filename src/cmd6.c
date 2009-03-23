@@ -4197,7 +4197,7 @@ static void do_cmd_activate_aux(int item)
 			case ART_GALADRIEL:
 			{
 #ifdef JP
-				msg_print("玻瑠瓶から澄んだ光があふれ出た...");
+				msg_print("玻璃瓶から澄んだ光があふれ出た...");
 #else
 				msg_print("The phial wells with clear light...");
 #endif
