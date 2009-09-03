@@ -1236,6 +1236,7 @@ return "傷の治癒(4d8) : 3+d3 ターン毎";
 
 		}
 		case ART_BRAND:
+		case ART_HELLFIRE:
 		{
 #ifdef JP
 return "刃先のファイア・ボルト : 999 ターン毎";
@@ -1851,6 +1852,14 @@ return "魔力復活: 777 ターン毎";
 			return "restore mana every 777 turns";
 #endif
 
+		}
+		case ART_AESCULAPIUS:
+		{
+#ifdef JP
+			return "全ステータスと経験値復活 : 750 ターン毎";
+#else
+			return "restore stats and life levels every 750 turns";
+#endif
 		}
 	}
 

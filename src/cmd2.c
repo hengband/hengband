@@ -2923,6 +2923,18 @@ static int breakage_chance(object_type *o_ptr)
 {
 	int archer_bonus = (p_ptr->pclass == CLASS_ARCHER ? (p_ptr->lev-1)/7 + 4: 0);
 
+	/* Examine the snipe type */
+	if (snipe_type)
+	{
+		if (snipe_type == SP_KILL_WALL) return (100);
+		if (snipe_type == SP_EXPLODE) return (100);
+		if (snipe_type == SP_PIERCE) return (100);
+		if (snipe_type == SP_FINAL) return (100);
+		if (snipe_type == SP_NEEDLE) return (100);
+		if (snipe_type == SP_EVILNESS) return (40);
+		if (snipe_type == SP_HOLYNESS) return (40);
+	}
+
 	/* Examine the item type */
 	switch (o_ptr->tval)
 	{
@@ -3316,6 +3328,9 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 		}
 	}
 
+	/* Sniper */
+	if (snipe_type) mult = tot_dam_aux_snipe(mult, m_ptr);
+
 	/* Return the total damage */
 	return (tdam * mult / 10);
 }
@@ -3352,7 +3367,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 void do_cmd_fire_aux(int item, object_type *j_ptr)
 {
 	int dir;
-	int j, y, x, ny, nx, ty, tx, prev_y, prev_x;
+	int i, j, y, x, ny, nx, ty, tx, prev_y, prev_x;
 	int tdam, tdis, thits, tmul;
 	int bonus, chance;
 	int cur_dis, visible;
@@ -3381,9 +3396,11 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		o_ptr = &o_list[0 - item];
 	}
 
+	/* Sniper - Cannot shot a single arrow twice */
+	if ((snipe_type == SP_DOUBLE) && (o_ptr->number < 2)) snipe_type = SP_NONE;
+
 	/* Describe the object */
 	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
-
 
 	/* Use the proper number of shots */
 	thits = p_ptr->num_fire;
@@ -3413,10 +3430,18 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	tdam *= tmul;
 	tdam /= 100;
 
+	/* Get extra damage from concentration */
+	if (p_ptr->concent) tdam = boost_concentration_damage(tdam);
+
 	/* Base range */
-	tdis = 10 + tmul/40;
+	tdis = 13 + tmul/80;
 	if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW))
-		tdis -= 5;
+	{
+		if (p_ptr->concent)
+			tdis -= (5 - (p_ptr->concent + 1) / 2);
+		else
+			tdis -= 5;
+	}
 
 	project_length = tdis + 1;
 
@@ -3425,14 +3450,12 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	{
 		energy_use = 0;
 
+		if (snipe_type == SP_AWAY) snipe_type = SP_NONE;
+
 		/* need not to reset project_length (already did)*/
 
 		return;
 	}
-
-	/* Start at the player */
-	y = py;
-	x = px;
 
 	/* Predict the "target" location */
 	tx = px + 99 * ddx[dir];
@@ -3458,6 +3481,21 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	}
 
 
+	/* Take a (partial) turn */
+	energy_use = (energy_use / thits);
+	is_fired = TRUE;
+
+	/* Sniper - Difficult to shot twice at 1 turn */
+	if (snipe_type == SP_DOUBLE)  p_ptr->concent = (p_ptr->concent + 1) / 2;
+
+	/* Sniper - Repeat shooting when double shots */
+	for (i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++)
+	{
+
+	/* Start at the player */
+	y = py;
+	x = px;
+
 	/* Get local object */
 	q_ptr = &forge;
 
@@ -3482,14 +3520,8 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		floor_item_optimize(0 - item);
 	}
 
-
 	/* Sound */
 	sound(SOUND_SHOOT);
-
-
-	/* Take a (partial) turn */
-	energy_use = (energy_use / thits);
-
 
 	/* Hack -- Handle stuff */
 	handle_stuff();
@@ -3498,9 +3530,14 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	prev_y = y;
 	prev_x = x;
 
+	/* The shot does not hit yet */
+	hit_body = FALSE;
+
 	/* Travel until stopped */
 	for (cur_dis = 0; cur_dis <= tdis; )
 	{
+		cave_type *c_ptr;
+
 		/* Hack -- Stop at the target */
 		if ((y == ty) && (x == tx)) break;
 
@@ -3509,12 +3546,48 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		nx = x;
 		mmove2(&ny, &nx, py, px, ty, tx);
 
+		/* Shatter Arrow */
+		if (snipe_type == SP_KILL_WALL)
+		{
+			c_ptr = &cave[ny][nx];
+
+			if (cave_have_flag_grid(c_ptr, FF_HURT_ROCK) && !c_ptr->m_idx)
+			{
+#ifdef JP
+				if (c_ptr->info & (CAVE_MARK)) msg_print("岩が砕け散った。");
+#else
+				if (c_ptr->info & (CAVE_MARK)) msg_print("Wall rocks were shattered.");
+#endif
+				/* Forget the wall */
+				c_ptr->info &= ~(CAVE_MARK);
+
+				p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
+
+				/* Destroy the wall */
+				cave_alter_feat(ny, nx, FF_HURT_ROCK);
+
+				hit_body = TRUE;
+				break;
+			}
+		}
+
 		/* Stopped by walls/doors */
 		if (!cave_have_flag_bold(ny, nx, FF_PROJECT) && !cave[ny][nx].m_idx) break;
 
 		/* Advance the distance */
 		cur_dis++;
 
+		/* Sniper */
+		if (snipe_type == SP_LITE)
+		{
+			cave[ny][nx].info |= (CAVE_GLOW);
+
+			/* Notice */
+			note_spot(ny, nx);
+
+			/* Redraw */
+			lite_spot(ny, nx);
+		}
 
 		/* The player can see the (on screen) missile */
 		if (panel_contains(ny, nx) && player_can_see_bold(ny, nx))
@@ -3538,6 +3611,37 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 			Term_xtra(TERM_XTRA_DELAY, msec);
 		}
 
+		/* Sniper */
+		if (snipe_type == SP_KILL_TRAP)
+		{
+			if (is_trap(cave[ny][nx].feat))
+			{
+				if (player_can_see_bold(ny, nx))
+				{
+#ifdef JP
+					msg_print("まばゆい閃光が走った！");
+#else
+					msg_print("There is a bright flash of light!");
+#endif
+					cave[ny][nx].info &= ~(CAVE_UNSAFE);
+				}
+
+				cave_alter_feat(ny, nx, FF_DISARM);
+			}
+		}
+
+		/* Sniper */
+		if (snipe_type == SP_EVILNESS)
+		{
+			cave[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
+
+			/* Notice */
+			note_spot(ny, nx);
+
+			/* Redraw */
+			lite_spot(ny, nx);
+		}
+
 		/* Save the old location */
 		prev_y = y;
 		prev_x = x;
@@ -3550,6 +3654,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		/* Monster here, Try to hit it */
 		if (cave[y][x].m_idx)
 		{
+			int armour;
 			cave_type *c_ptr = &cave[y][x];
 
 			monster_type *m_ptr = &m_list[c_ptr->m_idx];
@@ -3593,8 +3698,16 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 				}
 			}
 
+			/* Some shots have hit bonus */
+			armour = r_ptr->ac;
+			if (p_ptr->concent)
+			{
+				armour *= (10 - p_ptr->concent);
+				armour /= 10;
+			}
+
 			/* Did we hit it (penalize range) */
-			if (test_hit_fire(chance - cur_dis, r_ptr->ac, m_ptr->ml))
+			if (test_hit_fire(chance - cur_dis, armour, m_ptr->ml))
 			{
 				bool fear = FALSE;
 
@@ -3635,15 +3748,37 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 					}
 				}
 
-				/* Apply special damage XXX XXX XXX */
-				tdam = tot_dam_aux_shot(q_ptr, tdam, m_ptr);
-				tdam = critical_shot(q_ptr->weight, q_ptr->to_h, tdam);
+				if (snipe_type == SP_NEEDLE)
+				{
+					if ((randint1(randint1(r_ptr->level / (3 + p_ptr->concent)) + (8 - p_ptr->concent)) == 1)
+						&& !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))
+					{
+						char m_name[80];
 
-				/* No negative damage */
-				if (tdam < 0) tdam = 0;
+						/* Get "the monster" or "it" */
+						monster_desc(m_name, m_ptr, 0);
 
-				/* Modify the damage */
-				tdam = mon_damage_mod(m_ptr, tdam, FALSE);
+						tdam = m_ptr->hp + 1;
+#ifdef JP
+						msg_format("%sの急所に突き刺さった！", m_name);
+#else
+						msg_format("Your shot sticked on a fatal spot of %s!", m_name);
+#endif
+					}
+					else tdam = 1;
+				}
+				else
+				{
+					/* Apply special damage XXX XXX XXX */
+					tdam = tot_dam_aux_shot(q_ptr, tdam, m_ptr);
+					tdam = critical_shot(q_ptr->weight, q_ptr->to_h, tdam);
+
+					/* No negative damage */
+					if (tdam < 0) tdam = 0;
+
+					/* Modify the damage */
+					tdam = mon_damage_mod(m_ptr, tdam, FALSE);
+				}
 
 				/* Complex message */
 				if (p_ptr->wizard || cheat_xtra)
@@ -3656,6 +3791,28 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 						   tdam, m_ptr->hp);
 #endif
 
+				}
+
+				/* Sniper */
+				if (snipe_type == SP_EXPLODE)
+				{
+					u16b flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
+
+					sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
+					project(0, ((p_ptr->concent + 1) / 2 + 1), ny, nx, tdam, GF_MISSILE, flg, -1);
+					break;
+				}
+
+				/* Sniper */
+				if (snipe_type == SP_HOLYNESS)
+				{
+					cave[ny][nx].info |= (CAVE_GLOW);
+
+					/* Notice */
+					note_spot(ny, nx);
+
+					/* Redraw */
+					lite_spot(ny, nx);
 				}
 
 				/* Hit the monster, check for death */
@@ -3707,8 +3864,64 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 #endif
 
 					}
+
 					set_target(m_ptr, py, px);
+
+					/* Sniper */
+					if (snipe_type == SP_RUSH)
+					{
+						int n = randint1(5) + 3;
+						int m_idx = c_ptr->m_idx;
+
+						for ( ; cur_dis <= tdis; )
+						{
+							int ox = nx;
+							int oy = ny;
+
+							if (!n) break;
+
+							/* Calculate the new location (see "project()") */
+							mmove2(&ny, &nx, py, px, ty, tx);
+
+							/* Stopped by wilderness boundary */
+							if (!in_bounds2(ny, nx)) break;
+
+							/* Stopped by walls/doors */
+							if (!player_can_enter(cave[ny][nx].feat, 0)) break;
+
+							/* Stopped by monsters */
+							if (!cave_empty_bold(ny, nx)) break;
+
+							cave[ny][nx].m_idx = m_idx;
+							cave[oy][ox].m_idx = 0;
+
+							m_ptr->fx = nx;
+							m_ptr->fy = ny;
+
+							/* Update the monster (new location) */
+							update_mon(c_ptr->m_idx, TRUE);
+
+							lite_spot(ny, nx);
+							lite_spot(oy, ox);
+
+							Term_fresh();
+							Term_xtra(TERM_XTRA_DELAY, msec);
+
+							x = nx;
+							y = ny;
+							cur_dis++;
+							n--;
+						}
+					}
 				}
+			}
+
+			/* Sniper */
+			if (snipe_type == SP_PIERCE)
+			{
+				if(p_ptr->concent < 1) break;
+				p_ptr->concent--;
+				continue;
 			}
 
 			/* Stop looking */
@@ -3767,6 +3980,12 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		/* Drop (or break) near that location */
 		(void)drop_near(q_ptr, j, prev_y, prev_x);
 	}
+
+	/* Sniper - Repeat shooting when double shots */
+	}
+
+	/* Sniper - Loose his/her concentration after any shot */
+	if (p_ptr->concent) reset_concentration(FALSE);
 }
 
 
@@ -3775,6 +3994,8 @@ void do_cmd_fire(void)
 	int item;
 	object_type *j_ptr;
 	cptr q, s;
+
+	is_fired = FALSE;	/* not fired yet */
 
 	/* Get the "bow" (if any) */
 	j_ptr = &inventory[INVEN_BOW];
@@ -3828,6 +4049,24 @@ void do_cmd_fire(void)
 
 	/* Fire the item */
 	do_cmd_fire_aux(item, j_ptr);
+
+	if (!is_fired || p_ptr->pclass != CLASS_SNIPER) return;
+
+	/* Sniper actions after some shootings */
+	if (snipe_type == SP_AWAY)
+	{
+		teleport_player(10 + (p_ptr->concent * 2), 0L);
+	}
+	if (snipe_type == SP_FINAL)
+	{
+#ifdef JP
+		msg_print("射撃の反動が体を襲った。");
+#else
+		msg_print("A reactionary of shooting attacked you. ");
+#endif
+		(void)set_slow(p_ptr->slow + randint0(7) + 7, FALSE);
+		(void)set_stun(p_ptr->stun + randint1(25));
+	}
 }
 
 

@@ -25,7 +25,7 @@ OBJS = \
 	do-spell.o store.o birth.o load.o \
 	wizard1.o wizard2.o grid.o streams.o rooms.o \
 	generate.o dungeon.o init1.o init2.o \
-	effects.o racial.o \
+	effects.o racial.o snipe.c \
 	artifact.o autopick.o mutation.o flavor.o spells3.o \
 	mspells1.o mspells2.o scores.o mind.o mane.o hissatsu.o \
 	bldg.o obj_kind.o wild.o avatar.o japanese.o mspells3.o \

@@ -1679,6 +1679,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 				warrior_artifact_bias = 25;
 				break;
 			case CLASS_RANGER:
+			case CLASS_SNIPER:
 				artifact_bias = BIAS_RANGER;
 				warrior_artifact_bias = 30;
 				break;

@@ -548,6 +548,9 @@ msg_print("あなたは混乱した！");
 				p_ptr->action = ACTION_NONE;
 			}
 
+			/* Sniper */
+			if (p_ptr->concent) reset_concentration(TRUE);
+
 			notice = TRUE;
 			p_ptr->counter = FALSE;
 			chg_virtue(V_HARMONY, -1);
@@ -754,6 +757,9 @@ msg_print("体が麻痺してしまった！");
 			msg_print("You are paralyzed!");
 #endif
 
+			/* Sniper */
+			if (p_ptr->concent) reset_concentration(TRUE);
+
 			p_ptr->counter = FALSE;
 			notice = TRUE;
 		}
@@ -823,6 +829,9 @@ msg_print("ワーオ！何もかも虹色に見える！");
 #else
 			msg_print("Oh, wow! Everything looks so cosmic now!");
 #endif
+
+			/* Sniper */
+			if (p_ptr->concent) reset_concentration(TRUE);
 
 			p_ptr->counter = FALSE;
 			notice = TRUE;
@@ -3609,6 +3618,9 @@ msg_print("割れるような頭痛がする。");
 			p_ptr->redraw |= (PR_STATUS);
 			p_ptr->action = ACTION_NONE;
 		}
+
+		/* Sniper */
+		if (p_ptr->concent) reset_concentration(TRUE);
 
 		/* Notice */
 		notice = TRUE;

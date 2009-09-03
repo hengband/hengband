@@ -2391,7 +2391,8 @@ void update_mon(int m_idx, bool full)
 			}
 
 			/* Basic telepathy */
-			else if (p_ptr->telepathy)
+			/* Snipers get telepathy when they concentrate deeper */
+			else if ((p_ptr->telepathy) || (p_ptr->concent >= CONCENT_TELE_THRESHOLD))
 			{
 				/* Empty mind, no telepathy */
 				if (r_ptr->flags2 & (RF2_EMPTY_MIND))
@@ -2527,6 +2528,13 @@ void update_mon(int m_idx, bool full)
 		{
 			bool do_invisible = FALSE;
 			bool do_cold_blood = FALSE;
+
+			/* Snipers can see targets in darkness when they concentrate deeper */
+			if (p_ptr->concent >= CONCENT_RADAR_THRESHOLD)
+			{
+				/* Easy to see */
+				easy = flag = TRUE;
+			}
 
 			/* Use "infravision" */
 			if (d <= p_ptr->see_infra)

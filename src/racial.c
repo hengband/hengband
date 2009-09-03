@@ -969,6 +969,7 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 		}
 		case CLASS_RANGER:
+		case CLASS_SNIPER:
 		{
 #ifdef JP
 			msg_print("敵を調査した...");
@@ -2260,6 +2261,7 @@ strcpy(power_desc[num].name, "ヒット＆アウェイ");
 		break;
 	}
 	case CLASS_RANGER:
+	case CLASS_SNIPER:
 	{
 #ifdef JP
 strcpy(power_desc[num].name, "モンスター調査");

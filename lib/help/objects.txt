@@ -263,6 +263,7 @@ Table 1 - Pseudo-Id ability of the Classes
     Weaponsmith        Strong     Very Fast     Slow
     Mirror-Master      Weak       Medium        Very Fast
     Ninja              Strong     Fast          Slow
+    Sniper             Strong     Medium        Impossible
 
 
 When you pseudo-id an item, it will be inscribed (see below [e]) with

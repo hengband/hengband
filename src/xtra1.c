@@ -490,7 +490,8 @@ static void prt_status(void)
 	if (p_ptr->tim_invis) ADD_FLG(BAR_SENSEUNSEEN);
 
 	/* Timed esp */
-	if (IS_TIM_ESP()) ADD_FLG(BAR_TELEPATHY);
+	if (IS_TIM_ESP() ||
+		(p_ptr->concent >= CONCENT_TELE_THRESHOLD)) ADD_FLG(BAR_TELEPATHY);
 
 	/* Timed regenerate */
 	if (p_ptr->tim_regen) ADD_FLG(BAR_REGENERATION);
@@ -4739,6 +4740,14 @@ void calc_bonuses(void)
 			{
 				p_ptr->num_fire += (p_ptr->lev * 4);
 			}
+
+			/* Snipers love Cross bows */
+			if ((p_ptr->pclass == CLASS_SNIPER) &&
+				(p_ptr->tval_ammo == TV_BOLT))
+			{
+				p_ptr->to_h_b += (10 + (p_ptr->lev / 5));
+				p_ptr->dis_to_h_b += (10 + (p_ptr->lev / 5));
+			}
 		}
 	}
 
@@ -4867,8 +4876,9 @@ void calc_bonuses(void)
 				case CLASS_FORCETRAINER:
 					num = 4; wgt = 60; mul = 2; break;
 
-				/* Mirror Master */
+				/* Mirror Master, Sniper */
 				case CLASS_MIRROR_MASTER:
+				case CLASS_SNIPER:
 					num = 3; wgt = 100; mul = 3; break;
 
 				/* Ninja */

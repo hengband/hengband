@@ -75,6 +75,7 @@ There are eleven class-specific magics (or techniques):
 - Smithery            (for Weaponsmith)
 - Mirror-magic        (for Mirror Master)
 - Ninjutsu            (for Ninja)
+- Shooting            (for Sniper)
 
 See raceclas.txt#TheClasses [a] for more details.
 

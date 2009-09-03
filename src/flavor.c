@@ -2377,6 +2377,10 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		/* Launcher multiplier */
 		avgdam *= tmul;
 		avgdam /= (100 * 10);
+
+		/* Get extra damage from concentration */
+		if (p_ptr->concent) avgdam = boost_concentration_damage(avgdam);
+
 		if (avgdam < 0) avgdam = 0;
 
 		/* Display (shot damage/ avg damage) */

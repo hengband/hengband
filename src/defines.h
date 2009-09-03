@@ -75,7 +75,7 @@
  */
 #define H_VER_MAJOR 1
 #define H_VER_MINOR 7
-#define H_VER_PATCH 0
+#define H_VER_PATCH 1
 #define H_VER_EXTRA 6
 
 
@@ -195,7 +195,7 @@
 /*
  * Maximum number of player "class" types (see "table.c", etc)
  */
-#define MAX_CLASS            27
+#define MAX_CLASS            28
 
 #define MAX_SEIKAKU          12
 
@@ -904,6 +904,7 @@
 #define CLASS_SMITH             24
 #define CLASS_MIRROR_MASTER     25
 #define CLASS_NINJA             26
+#define CLASS_SNIPER            27
 
 #define SEIKAKU_FUTUU	 0
 #define SEIKAKU_CHIKARA	 1
@@ -1515,6 +1516,7 @@
 #define ART_GOTHMOG             212
 #define ART_JIZO                213
 #define ART_FUNDIN              214
+#define ART_AESCULAPIUS         225
 
 /* Bows */
 #define ART_BELTHRONDING        124
@@ -1525,6 +1527,8 @@
 #define ART_YOICHI              148
 #define ART_HARAD               180
 #define ART_NAMAKE_BOW          182
+#define ART_ROBIN_HOOD          221
+#define ART_HELLFIRE            222
 
 /* Arrows */
 #define ART_BARD_ARROW          153
@@ -5473,3 +5477,24 @@ extern int PlayerUID;
  * For travel command (auto run)
  */
 #define TRAVEL
+
+/* Sniper */
+#define SP_NONE          0
+#define SP_LITE          1
+#define SP_AWAY          2
+#define SP_FIRE          3
+#define SP_KILL_WALL     4
+#define SP_COLD          5
+#define SP_KILL_TRAP     6
+#define SP_ELEC          7
+#define SP_PIERCE        8
+#define SP_RUSH          9
+#define SP_DOUBLE        10
+#define SP_EXPLODE       11
+#define SP_EVILNESS      12
+#define SP_HOLYNESS      13
+#define SP_FINAL         14
+#define SP_NEEDLE        15
+
+#define CONCENT_RADAR_THRESHOLD 2
+#define CONCENT_TELE_THRESHOLD  5

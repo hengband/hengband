@@ -88,14 +88,18 @@ s16b critical_shot(int weight, int plus, int dam)
 	int i, k;
 
 	/* Extract "shot" power */
-	i = (weight + ((p_ptr->to_h_b + plus) * 4) + (p_ptr->lev * 2));
+	i = ((p_ptr->to_h_b + plus) * 4) + (p_ptr->lev * 2);
+
+	/* Snipers can shot more critically with crossbows */
+	if (p_ptr->concent) i += ((i * p_ptr->concent) / 5);
+	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
 
 	/* Critical hit */
 	if (randint1(5000) <= i)
 	{
-		k = weight + randint1(500);
+		k = weight * randint1(500);
 
-		if (k < 500)
+		if (k < 900)
 		{
 #ifdef JP
 			msg_print("手ごたえがあった！");
@@ -103,9 +107,9 @@ s16b critical_shot(int weight, int plus, int dam)
 			msg_print("It was a good hit!");
 #endif
 
-			dam = 2 * dam + 5;
+			dam += (dam / 2);
 		}
-		else if (k < 1000)
+		else if (k < 1350)
 		{
 #ifdef JP
 			msg_print("かなりの手ごたえがあった！");
@@ -113,7 +117,7 @@ s16b critical_shot(int weight, int plus, int dam)
 			msg_print("It was a great hit!");
 #endif
 
-			dam = 2 * dam + 10;
+			dam *= 2;
 		}
 		else
 		{
@@ -123,7 +127,7 @@ s16b critical_shot(int weight, int plus, int dam)
 			msg_print("It was a superb hit!");
 #endif
 
-			dam = 3 * dam + 15;
+			dam *= 3;
 		}
 	}
 

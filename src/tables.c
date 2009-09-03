@@ -2841,7 +2841,7 @@ player_race race_info[MAX_RACES] =
 		72,  6, 180, 25,
 		66,  4, 150, 20,
 		0,
-		0x7FFFFFF,
+		0xFFFFFFF,
 	},
 	{
 #ifdef JP
@@ -2856,7 +2856,7 @@ player_race race_info[MAX_RACES] =
 		66,  6, 130, 15,
 		62,  6, 100, 10,
 		2,
-		0x677E7FF,
+		0xE77E7FF,
 	},
 	{
 #ifdef JP
@@ -2871,7 +2871,7 @@ player_race race_info[MAX_RACES] =
 		60,  4, 100,  6,
 		54,  4, 80,  6,
 		3,
-		0x677E75B,
+		0xE77E75B,
 
 	},
 	{
@@ -2887,7 +2887,7 @@ player_race race_info[MAX_RACES] =
 		36,  3, 60,  3,
 		33,  3, 50,  3,
 		4,
-		0x76FFC0B,
+		0xF6FFC0B,
 	},
 	{
 #ifdef JP
@@ -2902,7 +2902,7 @@ player_race race_info[MAX_RACES] =
 		42,  3, 90,  6,
 		39,  3, 75,  3,
 		4,
-		0x767D60F,
+		0xF67D60F,
 	},
 	{
 #ifdef JP
@@ -2932,7 +2932,7 @@ player_race race_info[MAX_RACES] =
 		66,  1, 150,  5,
 		62,  1, 120,  5,
 		3,
-		0x5D8818D,
+		0xDD8818D,
 	},
 	{
 #ifdef JP
@@ -2962,7 +2962,7 @@ player_race race_info[MAX_RACES] =
 		82, 5, 190, 20,
 		78,  6, 180, 15,
 		0,
-		0x7FFF7FF,
+		0xFFFF7FF,
 	},
 	{
 #ifdef JP
@@ -2977,7 +2977,7 @@ player_race race_info[MAX_RACES] =
 		90, 10, 190, 20,
 		82, 10, 180, 15,
 		4,
-		0x777E75B,
+		0xF77E75B,
 	},
 	{
 #ifdef JP
@@ -3022,7 +3022,7 @@ player_race race_info[MAX_RACES] =
 		100,10, 255, 65,
 		80, 10, 240, 64,
 		3,
-		0x0880011,
+		0x8880011,
 	},
 	{
 #ifdef JP
@@ -3127,7 +3127,7 @@ player_race race_info[MAX_RACES] =
 		60,  4, 100,  6,
 		54,  4, 80,  6,
 		5,
-		0x677C7DF,
+		0xE77C7DF,
 	},
 	{
 #ifdef JP
@@ -3172,7 +3172,7 @@ player_race race_info[MAX_RACES] =
 		68,  1, 150,  5,
 		64,  1, 120,  5,
 		3,
-		0x6B537CB,
+		0xDB537CB,
 	},
 	{
 #ifdef JP
@@ -3338,7 +3338,7 @@ player_race race_info[MAX_RACES] =
 		82, 5, 190, 20,
 		78,  6, 180, 15,
 		0,
-		0x7FFF7FF,
+		0xFFFF7FF,
 	},
 	{
 #ifdef JP
@@ -3352,7 +3352,7 @@ player_race race_info[MAX_RACES] =
 		 80,  8, 90, 20,
 		 73,  8, 80, 15,
 		  4,
-		0x633C7DF,
+		0xE33C7DF,
 	},
 	{
 #ifdef JP
@@ -3367,7 +3367,7 @@ player_race race_info[MAX_RACES] =
 		48,  6, 150, 25,
 		44,  4, 130, 20,
 		0,
-		0x418B7AD,
+		0xC18B7AD,
 	},
 	{
 #ifdef JP
@@ -3714,6 +3714,18 @@ player_class class_info[MAX_CLASS] =
 		15, 10, 10, 0,  0,  0, 25,18,
 		2,  20, 40
 	},
+
+	{
+#ifdef JP
+		"•π• •§•—°º",
+#endif
+		"Sniper",
+
+		{ 2, -1, -1, 2, 1, 0},
+		25, 24, 28, 5, 32, 18, 35,  72,
+		12, 10, 10, 0,  0,  0, 12,  28,
+		2, 20, 40,
+	},
 };
 
 player_seikaku seikaku_info[MAX_SEIKAKU] =
@@ -4041,6 +4053,7 @@ s32b realm_choices1[MAX_CLASS] =
 	(CH_NONE),				/* Weaponsmith */
 	(CH_NONE),				/* Mirror-master */
 	(CH_NONE),				/* Ninja */
+	(CH_NONE),				/* Sniper */
 };
 
 
@@ -4083,6 +4096,7 @@ s32b realm_choices2[MAX_CLASS] =
 	(CH_NONE),				/* Weaponsmith */
 	(CH_NONE),				/* Mirror-master */
 	(CH_NONE),				/* Ninja */
+	(CH_NONE),				/* Sniper */
 };
 
 
@@ -4607,6 +4621,20 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"∞≈ª¶º‘",
 		"ª‡§Œƒπ§≠œ”",
 	},
+
+	/* Sniper */
+	{
+		"ø∑ª≤ º",
+		" ºªŒ",
+		"Õ√ º",
+		"∏≈ª≤ º",
+		"∑ıªŒ",
+		"∆ÆªŒ",
+		"±—Õ∫",
+		"√Àºﬂ",
+		"«Ïºﬂ",
+		"ŒŒºÁ",
+	},
 };
 
 #else
@@ -4988,6 +5016,20 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Shadowstrike",
 		"Assassinator",
 		"Death Lord",
+	},
+
+	/* Sniper */
+	{
+		"Rookie",
+		"Soldier",
+		"Mercenary",
+		"Veteran",
+		"Swordsman",
+		"Champion",
+		"Hero",
+		"Baron",
+		"Duke",
+		"Lord",
 	},
 };
 #endif

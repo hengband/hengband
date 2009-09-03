@@ -313,6 +313,7 @@ static void sense_inventory1(void)
 		}
 
 		case CLASS_PALADIN:
+		case CLASS_SNIPER:
 		{
 			/* Bad sensing */
 			if (0 != randint0(77777L / (plev * plev + 40))) return;
@@ -476,6 +477,7 @@ static void sense_inventory2(void)
 		case CLASS_SAMURAI:
 		case CLASS_CAVALRY:
 		case CLASS_BERSERKER:
+		case CLASS_SNIPER:
 		{
 			return;
 		}
@@ -4385,6 +4387,10 @@ static void process_command(void)
 
 	now_message = 0;
 
+	/* Sniper */
+	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->concent))
+		reset_concent = TRUE;
+
 	/* Parse the command */
 	switch (command_cmd)
 	{
@@ -4765,6 +4771,8 @@ msg_print("ウィザードモード突入。");
 				do_cmd_kaji(TRUE);
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 				do_cmd_magic_eater(TRUE);
+			else if (p_ptr->pclass == CLASS_SNIPER)
+				do_cmd_snipe_browse();
 			else do_cmd_browse();
 			break;
 		}
@@ -4871,6 +4879,8 @@ msg_print("ウィザードモード突入。");
 						do_cmd_cast_learned();
 					else if (p_ptr->pclass == CLASS_SMITH)
 						do_cmd_kaji(FALSE);
+					else if (p_ptr->pclass == CLASS_SNIPER)
+						do_cmd_snipe();
 					else
 						do_cmd_cast();
 				}
@@ -6017,6 +6027,9 @@ msg_print("中断しました。");
 			world_player = FALSE;
 			break;
 		}
+
+		/* Sniper */
+		if (energy_use && reset_concent) reset_concentration(TRUE);
 
 		/* Handle "leaving" */
 		if (p_ptr->leaving) break;

@@ -1734,3 +1734,16 @@ extern void prepare_chuukei_hooks(void);
 /* for travel */
 extern travel_type travel;
 #endif
+
+/* variable.c (for snipers) */
+extern int snipe_type;
+extern bool reset_concent;   /* Concentration reset flag */
+extern bool is_fired;
+
+/* sniper.c */
+extern void reset_concentration(bool msg);
+extern void display_snipe_list(void);
+extern int tot_dam_aux_snipe (int mult, monster_type *m_ptr);
+extern void do_cmd_snipe(void);
+extern void do_cmd_snipe_browse(void);
+extern int boost_concentration_damage(int tdam);

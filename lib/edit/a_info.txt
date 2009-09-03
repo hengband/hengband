@@ -974,7 +974,8 @@ E:of Tuor
 I:35:6:4
 W:40:40:5:50000
 P:6:0d0:0:0:12
-F:STEALTH | FREE_ACT | IM_ACID | SEE_INVIS
+F:STEALTH | FREE_ACT | IM_ACID | SEE_INVIS |
+F:RES_DARK | RES_LITE | XTRA_H_RES
 D:$From the ruin of Gondolin did Tuor escape, through secret ways and travail, 
 D:$shielded by his cloak from a multitude of hostile eyes.
 D:海統べるウルモより授かりし王者の衣に身を包み、
@@ -3229,7 +3230,7 @@ P:8:1d1:-1:0:64
 F:AGGRAVATE | SUST_CHR | CHR
 D:なんとゴツゴツとした鎧だこと。
 
-N:201:『青龍の霊息』
+N:201:『青龍の霊鱗』
 E:'Elemental of Ching-Rong'
 I:38:2:0
 W:80:9:300:200000
@@ -3489,3 +3490,153 @@ F:INT | WIS | DEX |
 F:SEE_INVIS | LITE |
 F:INSTA_ART
 
+N:221:森の狩人ロビンフッドの
+E:of Robin Hood
+I:19:12:2
+W:20:15:30:50000
+P:0:2d1:15:17:0
+F:DEX | CHR | STEALTH |
+F:XTRA_MIGHT | HIDE_TYPE | SHOW_MODS | XTRA_H_RES
+D:$This is of Robin Hood who live in the deep forest.
+D:シャーウッドの森に住む義賊ロビン・フッドの弓だ。
+
+# from Slash'EM
+N:222:『ヘルファイア』
+E:of 'Hellfire'
+I:19:23:4
+W:30:15:110:60000
+P:0:2d1:15:17:0
+F:STR | INFRA | RES_FIRE | SH_FIRE |
+F:ACTIVATE | HIDE_TYPE | SHOW_MODS
+D:$This crossbow gives flame energy to bolts which it fires.
+D:この燃えるような色のクロスボウは、発射するボルトに炎の力を
+D:与えることができる。
+
+N:223:名射手ウィリアム・テルの
+E:of Wilhelm Tell
+I:19:23:4
+W:35:30:110:50000
+P:0:0d0:40:13:0
+F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
+D:$With this crossbow, Swiss hero Tell shot an apple exactly 
+D:$though it was on his son's head, and then he defeated evil 
+D:$magistrate Gessler.
+D:スイスの英雄ウィリアム・テルの使ったクロスボウだ。
+D:彼は我が子の頭の上のリンゴを正確に撃ち抜き、民衆を苦しめる
+D:悪代官ゲスラーを打ち破った。
+
+N:224:名射手ウィリアム・テルの
+E:of Wilhelm Tell
+I:18:1:0
+W:35:35:2:5000
+P:0:6d5:20:16:0
+F:KILL_HUMAN
+D:$It is said that this bolt sticked onto the heart of Gessler 
+D:$when Wilhelm Tell shot it.
+D:かつてウィリアム・テルが撃ち放った1本のクロスボウの矢だ。
+D:悪代官ゲスラーの命を正確に奪ったという。
+
+#JX#
+N:225:アスクレピオスの
+E:of Aesculapius
+I:21:14:3
+W:40:45:160:300000
+P:0:2d11:15:15:5
+F:WIS | CHR | BLESSED | LITE | ACTIVATE |
+F:SEE_INVIS | FREE_ACT | HOLD_LIFE | REGEN | SLOW_DIGEST |
+F:VAMPIRIC | SLAY_ANIMAL | SLAY_DRAGON | SLAY_HUMAN |
+F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT |
+F:RES_POIS | RES_CONF | RES_CHAOS |
+D:$This is the staff of Aesculapius, who is a greek god of 
+D:$the medicine.
+D:これは、医学の神アスクレピオスの奇跡の六尺棒だ。
+D:どんな怪我もたちまち癒してしまう。
+
+#JX#
+N:226:幽体ドラゴン・スケイルメイル
+E:Spectral Dragon Scale Mail
+I:38:3:0
+W:75:30:100:350000
+P:40:2d4:-2:0:20
+F:SH_COLD | RES_COLD | RES_POIS | RES_CONF | RES_FEAR |
+F:RES_NETHER | RES_NEXUS | RES_DISEN |
+F:SEE_INVIS | HOLD_LIFE | LEVITATION |
+F:CURSED | HEAVY_CURSE | DRAIN_EXP | FULL_NAME
+D:$A white transparent dragon scale mail which was made from
+D:$the tortured soul of a once powerful wyrm.
+D:このドラゴンの鱗鎧は、かつて強大な力を誇っていたワイアーム
+D:の怨霊の鱗から作られたものだ。うっすらと白く透き通っている。
+
+N:227:『降妖宝杖』
+E:of Sha Wujing
+I:22:14:2
+W:30:30:175:100000
+P:0:3d7:12:10:0
+F:BLESSED | STR | WIS |
+F:SLAY_EVIL | SLAY_UNDEAD | KILL_DEMON |
+F:SEE_INVIS | REGEN | INFRA |
+F:RES_ACID | RES_COLD | RES_DARK | RES_FEAR
+D:$This lajatang looks like a staff because it has only a 
+D:$blade which looks like a half moon. Sha Wujing helped a 
+D:$long journy of Tang Sanzang with it.
+D:河童の妖怪沙悟浄の使った武器だ。三日月状の刃が棒の先端につ
+D:いているため、錫杖のように見える。悟浄はこの武器を手に三蔵
+D:法師の旅を助けた。
+
+N:228:殺人鬼エルミの
+E:of Elmi the Murder
+I:22:1:2
+W:15:10:60:50000
+P:0:3d5:5:19:0
+F:DEX | STEALTH | HIDE_TYPE | FORCE_WEAPON |
+F:KILL_HUMAN | VORPAL | SEE_INVIS |
+D:$This is a hatchet of Elmi who was a horrible muder of 
+D:$Raffnor.
+D:ラフノール中を震え上がらせた殺人鬼エルミの使った手斧だ。
+D:ラフノールはこの殺人鬼を捕らえるために、20人以上の行者
+D:(エスパー)を投入したという。「この手口には見覚えがある…」
+D:(聖悠紀「超人ロック『光の剣』」)
+
+N:229:『太郎太刀』
+E:'Taro Dachi'
+I:23:27:4
+W:40:25:300:120000
+P:0:9d4:0:0:-5
+F:STR | RES_FEAR | VORPAL |
+F:SLAY_HUMAN | SLAY_ORC | SLAY_TROLL | SLAY_GIANT
+D:$Asakura's captain Naotaka Magara defeated a lot of soldiers
+D:$with this large katana.
+D:刀身五尺三寸の長くて重い太刀だ。朝倉家家臣真柄直隆は、この
+D:大きな太刀を手にして多くの敵兵の命を奪いさった。その強さゆ
+D:えに敵陣に突っ込みすぎたという。
+
+N:230:手品師の
+E:of Magician
+I:23:1:0
+W:1:1:5:3000
+P:0:1d1:0:0:0
+D:$This dagger can not injure someone almostly.
+D:このダガーは人を傷つけることはないだろう。
+
+N:231:暗殺者荊軻の
+E:of Jing Ke
+I:23:6:1
+W:15:15:20:50000
+P:0:2d5:-2:13:0
+F:DEX | BLOWS | SPEED | HIDE_TYPE |
+F:BRAND_COLD | BRAND_POIS | VORPAL | RES_FEAR
+D:猛毒の刃を持つ鋭い匕首だ。斬られればたちまち死に至るだろう。
+D:燕の刺客荊軻は、この匕首を用いて秦の始皇帝の暗殺を試みた。
+D:いまもその執念が宿る。
+D:「其人雖已歿　千載有餘情」(陶淵明「詠荊軻」)
+
+N:232:農夫マゴットの
+E:of Maggot
+I:22:3:1
+W:10:4:70:10000
+P:0:2d3:7:9:0
+F:STR | DEX | RES_FIRE | RES_LITE | VORPAL |
+D:$This is farmer Maggot's sickle. He left it behind on his 
+D:$farm.
+D:これは農夫マゴットの農作業用の鎌だ。どうやら農場に置き忘れ
+D:てしまったようだ。

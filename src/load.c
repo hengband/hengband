@@ -1783,7 +1783,7 @@ static void rd_extra(void)
 	/* More info */
 	strip_bytes(8);
 	rd_s16b(&p_ptr->sc);
-	strip_bytes(2);
+	rd_s16b(&p_ptr->concent);
 
 	/* Read the flags */
 	strip_bytes(2); /* Old "rest" */

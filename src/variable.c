@@ -1292,3 +1292,8 @@ int server_port;
 /* for travel */
 travel_type travel;
 #endif
+
+/* for snipers */
+int snipe_type = SP_NONE;
+bool reset_concent = FALSE;   /* Concentration reset flag */
+bool is_fired = FALSE;

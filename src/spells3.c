@@ -3942,6 +3942,13 @@ void display_spell_list(void)
 	if (p_ptr->pclass == CLASS_SORCERER) return;
 	if (p_ptr->pclass == CLASS_RED_MAGE) return;
 
+	/* Snipers */
+	if (p_ptr->pclass == CLASS_SNIPER)
+	{
+		display_snipe_list();
+		return;
+	}
+
 	/* mind.c type classes */
 	if ((p_ptr->pclass == CLASS_MINDCRAFTER) ||
 	    (p_ptr->pclass == CLASS_BERSERKER) ||

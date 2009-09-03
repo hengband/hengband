@@ -323,7 +323,7 @@ Special Notes:
       Tourist, Imitator, BeastMaster, Sorcerer, Archer,
       Magic-Eater, Bard, Red-Mage, Samurai, ForceTrainer,
       Blue-Mage, Cavalry, Berserker, Weaponsmith, Mirror-Master,
-      Ninja
+      Ninja, Sniper
 
     $PLAYER
      Returns player name.

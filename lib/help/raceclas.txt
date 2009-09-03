@@ -988,6 +988,21 @@ command("U"/"O").
     extremely fast.
 
 
+***** <Sniper>
+--- Sniper ---
+    Snipers are specialists in marksmanship, but not like archers who 
+    fire off arrow after arrow in swift succession.  They don't just
+    increase accuracy and power of shots by concentration, they can use
+    fearsome archery techniques.  
+
+    What they require is powerful bows or crossbows, good quality 
+    ammunition and the fortitude to bear up without flinching under 
+    any situation.  
+
+    Snipers know their enemies well and can shoot them from the shadows.
+    They have no time for magic.
+
+
 
 ***** <ThePersonalities>
 === The Personality ===
@@ -1175,6 +1190,7 @@ Berserker      +8   -20  -20  +4   +4   -5      +11        +60%
 Weaponsmith    +3   -1   -1   +1   +0   -1      +6         +30%
 Mirror-Master  -2   +3   +1   -1   -2   +1      +2         +30%
 Ninja          +0   -1   -1   +3   +2   -1      +2         +20%
+Sniper         +2   -1   -1   +2   +1   +0      +2         +20%
 
 
 --- Table 3 - Personality Statistic Bonus Table ---
@@ -1276,6 +1292,7 @@ Berserker      -inf   -inf   -inf   -inf  -inf  -inf  120+50 -inf
 Weaponsmith    30+10  28+10  28+10   1    20    10    60+21  45+15
 Mirror-Master  30+10  33+11  40+12   3    14    16    34+6   30+10
 Ninja          45+15  24+10  36+10   8    48    32    70+25  66+18
+Sniper         25+12  24+10  28+10   5    32    18    35+12  72+28
 
 For character classes, there are two figures: the first figure is the
 base level of the ability, while the second figure is the bonus that
@@ -1307,4 +1324,4 @@ the 50th level.
 
 
 --
-Updated    : Hengband 1.3.2
+Updated    : Hengband 1.7.0

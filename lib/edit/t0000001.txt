@@ -88,6 +88,11 @@ F:!:FLOOR:3:0:618
 F:b:BUILDING_1:3:0:0:0:0:NONE:14
 F:!:FLOOR:3:0:43
 
+# Light Cross Bow
+?:[AND [EQU $QUEST1 3] [EQU $CLASS Sniper] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:14
+F:!:FLOOR:3:0:75
+
 # Quest 1 finished, continue with quest 14
 ?:[EQU $QUEST1 4]
 F:b:BUILDING_1:3:0:0:0:0:NONE:14
@@ -402,6 +407,11 @@ F:@:FLOOR:3:0:0:0:219
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Imitator] ]
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:220
+
+# Quest 27 rewarding (Sniper gets the Cloak of Tuor)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Sniper] ]
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:50
 
 # Quest 27 finished, no new quest is available
 ?:[EQU $QUEST27 4]

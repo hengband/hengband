@@ -553,7 +553,7 @@ $CLASS
    Chaos-Warrior, Monk, Mindcrafter, High-Mage, Tourist, Imitator,
    BeastMaster, Sorcerer, Archer, Magic-Eater, Bard, Red-Mage,
    Samurai, ForceTrainer, Blue-Mage, Cavalry, Berserker, Weaponsmith,
-   Mirror-Master, Ninja
+   Mirror-Master, Ninja, Sniper
    のどれか
 
 $PLAYER

@@ -20718,23 +20718,22 @@ S:BR_COLD
 D:$A demon small in stature whose face you can't help but love.
 D:憎めない顔をした小柄な悪魔だ。
 
-#
-#ブロッダのコピー
-#
 N:1030:南蛮王『孟獲』
 E:Meng Huo, the King of Southerings
 G:p:o
-I:110:25d10:20:25:20
-W:12:2:0:100:0:0
+I:110:38d10:20:50:20
+W:18:2:0:250:0:0
 B:HIT:HURT:1d15
 B:HIT:HURT:1d15
 B:HIT:HURT:1d15
 B:HIT:HURT:1d15
 F:UNIQUE | MALE | EVIL | HAS_LITE_2 | HUMAN |
 F:FORCE_MAXHP | CAN_SPEAK | WILD_ALL | DROP_SKELETON | DROP_CORPSE
-F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | ESCORT |
 F:OPEN_DOOR | BASH_DOOR
-D:$He is a king of southerings. He was arrested by Zhuge Liang 7 times.
+S:1_IN_10 |
+S:S_KIN
+D:$He is the king of Nanman. He was arrested by Zhuge Liang 7 times.
 D:南蛮の王。諸葛亮に七度擒にされる。
 
 N:1031:金色の怪人『ワッハマン』
@@ -21502,3 +21501,108 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | EAT_POISONOUS
 F:OPEN_DOOR | BASH_DOOR | CAN_SPEAK |
 F:EVIL | ORC | IM_POIS | RES_DARK
 
+#
+#ブロッダのコピー
+#
+N:1073:孟獲の弟『孟優』
+E:Meng You, the Brother of Meng Huo
+G:p:o
+I:110:25d10:20:25:20
+W:12:2:0:100:0:0
+B:HIT:HURT:1d15
+B:HIT:HURT:1d15
+B:HIT:HURT:1d15
+B:HIT:HURT:1d15
+F:UNIQUE | MALE | EVIL | HAS_LITE_2 | HUMAN |
+F:FORCE_MAXHP | CAN_SPEAK | WILD_ALL | DROP_SKELETON | DROP_CORPSE |
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
+F:OPEN_DOOR | BASH_DOOR
+D:$He is a junior brother of king of southerings Meng Huo.
+D:南蛮王孟獲の弟だ。武勇には多少の自信がある。
+
+N:1074:火の神『祝融』
+E:Lady Zhurong, the Avater of Flame Spirit
+G:p:R
+I:115:24d11:20:45:20
+W:14:2:0:150:0:0
+B:HIT:HURT:1d12
+B:HIT:HURT:1d12
+B:HIT:FIRE:1d15
+F:UNIQUE | FEMALE | EVIL | HAS_LITE_2 | HUMAN | IM_FIRE |
+F:FORCE_MAXHP | CAN_SPEAK | WILD_ALL | DROP_SKELETON | DROP_CORPSE |
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR |
+S:1_IN_9
+S:SHRIEK
+D:$She is the wife of king Meng Huo. She is called as the avater of 
+D:$flame spirit.
+D:南蛮王孟獲の妻だ。彼女は火の神の化身と言われている。
+D:その武勇を侮るな。
+
+N:1075:南蛮人『帯来洞主』
+E:Dailai Dongzhu, the Captain of Southerings
+G:p:u
+I:110:22d10:20:35:20
+W:10:2:0:100:0:0
+B:HIT:HURT:1d10
+B:HIT:HURT:1d10
+B:HIT:HURT:1d10
+B:HIT:HURT:1d10
+F:UNIQUE | MALE | EVIL | HAS_LITE_2 | HUMAN |
+F:FORCE_MAXHP | CAN_SPEAK | WILD_ALL | DROP_SKELETON | DROP_CORPSE |
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR
+S:1_IN_5 |
+S:SHOOT
+D:$He is one of the captains of Nanman.
+D:$He comes to help his sister and her husband Meng Huo.
+D:南蛮王孟獲の援軍として現れた南蛮の将だ。孟獲の義理の弟にあたる。
+
+N:1076:禿竜洞主『朶思大王』
+E:King Duosi, the Chief of Southerings
+G:p:v
+I:110:25d10:20:45:20
+W:11:2:0:150:0:0
+B:HIT:HURT:1d10
+B:HIT:HURT:1d10
+B:HIT:HURT:1d10
+F:UNIQUE | MALE | EVIL | HAS_LITE_2 | HUMAN |
+F:FORCE_MAXHP | CAN_SPEAK | WILD_ALL | DROP_SKELETON | DROP_CORPSE |
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR
+S:1_IN_5 |
+S:BA_POIS | BLINK
+D:$He is the best wise man of Nanman. His intelligence afflicted 
+D:$the enemy.
+D:南蛮随一の知恵者と言われる有力領主だ。彼の知略は蜀軍を苦しめた。
+
+N:1077:南蛮の酋長『木鹿大王』
+E:King Mulu, the Chief of Southerings
+G:p:g
+I:110:35d10:20:45:20
+W:16:2:0:250:0:0
+B:HIT:HURT:1d13
+B:HIT:HURT:1d13
+B:HIT:HURT:1d15
+B:HIT:HURT:1d15
+F:UNIQUE | MALE | EVIL | HAS_LITE_2 | HUMAN |
+F:FORCE_MAXHP | CAN_SPEAK | DROP_SKELETON | DROP_CORPSE |
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR
+S:1_IN_6 |
+S:S_ANT | S_SPIDER
+D:$He is one of chiefs of Nanman. He is also good beast master.
+D:南蛮を支配する酋長の一人だ。彼の動物軍団には孟獲も絶大な信頼を寄せる。
+D:ただしカラクリは嫌いだ。
+
+N:1078:烏戈国王『兀突骨』
+E:Wutugu, the Chief of Southerings
+G:P:u
+I:110:35d10:20:60:20
+W:17:2:0:250:0:0
+B:HIT:HURT:2d20
+B:HIT:HURT:2d20
+F:UNIQUE | MALE | EVIL | HAS_LITE_2 | HUMAN |
+F:FORCE_MAXHP | CAN_SPEAK | DROP_SKELETON | DROP_CORPSE |
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR |
+F:IM_ACID | IM_ELEC | IM_POIS | HURT_FIRE |
+D:$This giant man is the king of southern Nanman. It is said that 
+D:$he is about 10 feet tall. His army has hard rattan armor.
+D:南蛮の南にある烏戈国を支配する王で、その身の丈は12尺と言われている。
+D:彼の誇る藤甲兵は水も刃もはじく。ただし燃えやすい。
