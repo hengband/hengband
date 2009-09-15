@@ -230,7 +230,7 @@
 #          Half-Giant, Half-Titan, Cyclops, Yeek, Klackon, Kobold,
 #          Nibelung, Dark-Elf, Draconian, Mindflayer, Imp, Golem,
 #          Skeleton, Zombie, Vampire, Spectre, Sprite, Beastman, Ent,
-#          Archon, Balrog, Dunadan, Shadow-Fairy, Kuta, Android,
+#          Archon, Balrog, Dunadan, Shadow-Fairy, Kutar, Android,
 #          のどれか
 #        $CLASS
 #          職業を英語名で返す。
@@ -248,13 +248,16 @@
 #        $REALM1
 #          第１魔法領域を英語名で返す。
 #          none, Life, Sorcery, Nature, Chaos, Death, Trump, Arcane,
-#          Craft, Daemon, Crusade, Music, Kendo
+#          Craft, Daemon, Crusade, Music, Kendo, Hex
 #          のどれか。魔法書を使えない場合は none になる。
 #        $REALM2
 #          第２魔法領域を英語名で返す。第２領域を使えない場合は none になる。
 #        $LEVEL
 #          プレイヤーのレベルを２桁の文字列で返す。
 #          "01","09","10","50" 等
+#        $MONEY
+#          プレイヤーの所持金を９桁の文字列で返す。
+#          "000012345" 等
 #
 #------------------------------------------------------------------
 #

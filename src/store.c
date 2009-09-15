@@ -630,7 +630,7 @@ static byte rgold_adj[MAX_RACES][MAX_RACES] =
 	/*Hum, HfE, Elf,  Hal, Gno, Dwa, HfO, HfT, Dun, HiE, Barbarian,
 	 HfOg, HGn, HTn, Cyc, Yek, Klc, Kbd, Nbl, DkE, Drc, Mind Flayer,
 	 Imp,  Glm, Skl, Zombie, Vampire, Spectre, Fairy, Beastman, Ent,
-	 Angel, Demon, Kuta*/
+	 Angel, Demon, Kutar */
 
 	/* Human */
 	{ 100, 105, 105, 110, 113, 115, 120, 125, 100, 105, 100,
@@ -842,7 +842,7 @@ static byte rgold_adj[MAX_RACES][MAX_RACES] =
 	  110, 110, 112, 122, 110, 110, 110, 115, 110, 120, 120,
 	  110, 101, 115, 110 },
 
-	/* Kuta */
+	/* Kutar */
 	{ 110, 110, 105, 105, 110, 115, 115, 115, 110, 105, 110,
 	  115, 115, 115, 115, 115, 115, 115, 115, 115, 115, 115,
 	  115, 115, 125, 125, 125, 125, 105, 115, 105,  95, 140,
@@ -990,6 +990,7 @@ static void mass_produce(object_type *o_ptr)
 		case TV_CRUSADE_BOOK:
 		case TV_MUSIC_BOOK:
 		case TV_HISSATSU_BOOK:
+		case TV_HEX_BOOK:
 		{
 			if (cost <= 50L) size += damroll(2, 3);
 			if (cost <= 500L) size += damroll(1, 3);
@@ -1461,6 +1462,7 @@ static bool store_will_buy(object_type *o_ptr)
 				case TV_CRAFT_BOOK:
 				case TV_DAEMON_BOOK:
 				case TV_MUSIC_BOOK:
+				case TV_HEX_BOOK:
 				case TV_AMULET:
 				case TV_RING:
 				case TV_STAFF:
@@ -1497,6 +1499,7 @@ static bool store_will_buy(object_type *o_ptr)
 				case TV_DAEMON_BOOK:
 				case TV_CRUSADE_BOOK:
 				case TV_MUSIC_BOOK:
+				case TV_HEX_BOOK:
 					break;
 				default:
 					return (FALSE);
@@ -4831,6 +4834,8 @@ void do_cmd_store(void)
 	/* No automatic command */
 	command_new = 0;
 
+	/* Do not expand macros */
+	get_com_no_macros = TRUE;
 
 	/* Save the store number */
 	cur_store_num = which;
@@ -5102,6 +5107,8 @@ void do_cmd_store(void)
 	/* Hack -- Cancel "see" mode */
 	command_see = FALSE;
 
+	/* Allow expanding macros */
+	get_com_no_macros = FALSE;
 
 	/* Flush messages XXX XXX XXX */
 	msg_print(NULL);

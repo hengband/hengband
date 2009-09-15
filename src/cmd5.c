@@ -1145,6 +1145,23 @@ void do_cmd_cast(void)
 		return;
 	}
 
+	/* Hex */
+	if (p_ptr->realm1 == REALM_HEX)
+	{
+		if (hex_spell_fully())
+		{
+			bool flag = FALSE;
+#ifdef JP
+			msg_print("これ以上新しい呪文を詠唱することはできない。");
+#else
+			msg_print("Can not spell new spells more.");
+#endif
+			flush();
+			if (p_ptr->lev >= 35) flag = stop_hex_spell();
+			if (!flag) return;
+		}
+	}
+
 	if (p_ptr->pclass == CLASS_FORCETRAINER)
 	{
 		if (player_has_no_spellbooks())
@@ -1237,6 +1254,20 @@ void do_cmd_cast(void)
 
 	use_realm = tval2realm(o_ptr->tval);
 
+	/* Hex */
+	if (use_realm == REALM_HEX)
+	{
+		if (hex_spelling(spell))
+		{
+#ifdef JP
+			msg_print("その呪文はすでに詠唱中だ。");
+#else
+			msg_print("You are already casting it.");
+#endif
+			return;
+		}
+	}
+
 	if (!is_magic(use_realm))
 	{
 		s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
@@ -1309,6 +1340,9 @@ msg_format("%sをうまく唱えられなかった！", prayer);
 			break;
 		case REALM_CRUSADE:
 			if (randint1(100) < chance) chg_virtue(V_JUSTICE, -1);
+			break;
+		case REALM_HEX:
+			if (randint1(100) < chance) chg_virtue(V_COMPASSION, -1);
 			break;
 		default:
 			if (randint1(100) < chance) chg_virtue(V_KNOWLEDGE, -1);
@@ -1431,6 +1465,12 @@ msg_print("An infernal sound echoed.");
 				chg_virtue(V_NATURE, 1);
 				chg_virtue(V_HARMONY, 1);
 				break;
+			case REALM_HEX:
+				chg_virtue(V_JUSTICE, -1);
+				chg_virtue(V_FAITH, -1);
+				chg_virtue(V_HONOUR, -1);
+				chg_virtue(V_COMPASSION, -1);
+				break;
 			default:
 				chg_virtue(V_KNOWLEDGE, 1);
 				break;
@@ -1465,6 +1505,12 @@ msg_print("An infernal sound echoed.");
 		case REALM_NATURE:
 			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_NATURE, 1);
 			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_HARMONY, 1);
+			break;
+		case REALM_HEX:
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_JUSTICE, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_FAITH, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_HONOUR, -1);
+			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(V_COMPASSION, -1);
 			break;
 		}
 		if (mp_ptr->spell_xtra & MAGIC_GAIN_EXP)
@@ -1539,6 +1585,9 @@ msg_print("精神を集中しすぎて気を失ってしまった！");
 			break;
 		case REALM_CRUSADE:
 			chg_virtue(V_JUSTICE, -10);
+			break;
+		case REALM_HEX:
+			chg_virtue(V_COMPASSION, 10);
 			break;
 		default:
 			chg_virtue(V_KNOWLEDGE, -10);

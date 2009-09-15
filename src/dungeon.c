@@ -2676,6 +2676,7 @@ static void process_world_aux_mutation(void)
 		msg_print(NULL);
 		set_food(PY_FOOD_WEAK);
 		if (music_singing_any()) stop_singing();
+		if (hex_spelling_any()) stop_hex_spell_all();
 	}
 
 	if ((p_ptr->muta2 & MUT2_WALK_SHAD) &&
@@ -5313,6 +5314,13 @@ msg_print("アリーナが魔法を吸収した！");
 			break;
 		}
 
+		/* Record/stop "Movie" */
+		case ']':
+		{
+			prepare_movie_hooks();
+			break;
+		}
+
 		/* Make random artifact list */
 		case KTRL('V'):
 		{
@@ -5666,6 +5674,10 @@ msg_print("中断しました。");
 
 	/* Handle the player song */
 	if (!load) check_music();
+
+	/* Hex - Handle the hex spells */
+	if (!load) check_hex();
+	if (!load) revenge_spell();
 
 	load = FALSE;
 
@@ -6563,6 +6575,13 @@ void play_game(bool new_game)
 		prepare_chuukei_hooks();
 	}
 #endif
+
+	if (browsing_movie)
+	{
+		reset_visuals();
+		browse_movie();
+		return;
+	}
 
 	hack_mutation = FALSE;
 

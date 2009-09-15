@@ -429,7 +429,7 @@ by the racial/class power command ("U"/"O").
     itself, the advantage will be lost).
 
 
-***** <Kuta>
+***** <Kutar>
 --- Kutar ---
 
     A Kutar is an expressionless animal-like living creature.  The
@@ -687,6 +687,8 @@ command("U"/"O").
     failure rates of the spells in their speciality realm.  They have
     a class power - 'Eat Magic' - which absorbs mana from wands,
     staves, or rods.
+
+    And then, only High-Mages are able to cast Hex spells.
 
 
 ***** <Tourist>
@@ -1324,4 +1326,4 @@ the 50th level.
 
 
 --
-Updated    : Hengband 1.7.0
+Updated    : Hengband 1.7.2

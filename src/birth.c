@@ -1967,8 +1967,9 @@ static cptr realm_jouhou[VALID_REALM] =
 
 "歌集は、歌によって効果を発揮する魔法です。魔法と同様、使った時に効果のあるものと、歌い続けることによって持続して効果を発揮するものがあります。後者の場合は、MPの続く限り効果を発揮することができますが、同時に歌える歌は1つだけという制限もあります。",
 
-"武芸の書は、様々な戦闘の技について書かれています。この本は技を覚えるときに読む必要がありますが、一度覚えた技は使うのに本を持つ必要はありません。技を使うときには必ず武器を装備していなければいけません。"
+"武芸の書は、様々な戦闘の技について書かれています。この本は技を覚えるときに読む必要がありますが、一度覚えた技は使うのに本を持つ必要はありません。技を使うときには必ず武器を装備していなければいけません。",
 
+"呪術は忌むべき領域です。複数の呪いの言葉を歌のように紡ぎながら詠唱します。多くの呪文は詠唱し続けることによって効果が持続されます。呪文には相手の行動を束縛するもの、ダメージを与えるもの、攻撃に対して反撃するものが多くあります。"
 #else
 
 "Life magic is very good for healing; it relies mostly on healing, protection and detection spells.  Also life magic have a few attack spells as well.  It said that some high level spell of life magic can disintegrate Undead monsters into ash.",
@@ -1993,7 +1994,9 @@ static cptr realm_jouhou[VALID_REALM] =
 
 "Music magic shows various effects as sing song.  There is two type of song; the one which shows effects instantly and the other one shows effect continuously until SP runs out.  But the latter type has a limit; only one song can be sing at the same time.",
 
-"The books of Kendo describe about various combat techniques.  When learning new techniques, you are required to carry the books, but once you memorizes them, you don't have to carry them.  When using a technique, wielding a weapon is required."
+"The books of Kendo describe about various combat techniques.  When learning new techniques, you are required to carry the books, but once you memorizes them, you don't have to carry them.  When using a technique, wielding a weapon is required.",
+
+"Hex is a very terrible realm. Spells gives continual effects when they are spelled continually like songs. Spells may obstract monsters' actions, may deal damages in sight, may revenge against enemies."
 #endif
 };
 
@@ -2011,7 +2014,8 @@ static char realm_subinfo[VALID_REALM][41] =
 "攻撃と防御の両面に優れています",
 "邪悪な怪物に対する攻撃に優れています",
 "様々な魔法効果を持った歌を歌います",
-"打撃攻撃に特殊能力を付加します"
+"打撃攻撃に特殊能力を付加します",
+"敵を邪魔しつつ復讐を狙います"
 #else
 "Good at detection and healing.",
 "Utility and protective spells.",
@@ -2024,7 +2028,8 @@ static char realm_subinfo[VALID_REALM][41] =
 "Good at both offence and defence.",
 "Destroys evil creatures.",
 "Song with magical effects.",
-"Special attacks on melee."
+"Special attacks on melee.",
+"Good at obstacle and revenge."
 #endif
 };
 
@@ -2150,6 +2155,11 @@ static byte choose_realm(s32b choices, int *count)
 		(*count)++;
 		auto_select = REALM_HISSATSU;
 	}
+	if (choices & CH_HEX)
+	{
+		(*count)++;
+		auto_select = REALM_HEX;
+	}
 
 	clear_from(10);
 
@@ -2180,10 +2190,10 @@ static byte choose_realm(s32b choices, int *count)
 #endif
 
 	cs = 0;
-	for (i = 0; i<16; i++)
+	for (i = 0; i<32; i++)
 	{
 		/* Analize realms */
-		if (choices & (1 << i))
+		if (choices & (1L << i))
 		{
 			if (p_ptr->realm1 == i+1)
 			{
@@ -2239,7 +2249,7 @@ static byte choose_realm(s32b choices, int *count)
 				c_put_str(TERM_L_BLUE, realm_names[picks[cs]], 3, 40);
 				put_str(": Characteristic", 3, 40+strlen(realm_names[picks[cs]]));
 #endif
-				put_str(realm_subinfo[picks[cs]-1], 4, 40);
+				put_str(realm_subinfo[technic2magic(picks[cs])-1], 4, 40);
 			}
 			c_put_str(TERM_YELLOW, cur, 12 + (cs/5), 2 + 15 * (cs%5));
 			os = cs;
@@ -2971,7 +2981,7 @@ static void get_history(void)
 			chart = 148;
 			break;
 		}
-		case RACE_KUTA:
+		case RACE_KUTAR:
 		{
 			chart = 154;
 			break;

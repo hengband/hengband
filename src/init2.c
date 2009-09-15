@@ -1382,6 +1382,11 @@ static byte store_table[MAX_STORES][STORE_CHOICES][2] =
 		{ TV_MUSIC_BOOK, 0 },
 		{ TV_MUSIC_BOOK, 1 },
 		{ TV_MUSIC_BOOK, 1 },
+
+		{ TV_HEX_BOOK, 0 },
+		{ TV_HEX_BOOK, 0 },
+		{ TV_HEX_BOOK, 1 },
+		{ TV_HEX_BOOK, 1 },
 	},
 
 	{

@@ -752,6 +752,17 @@ bool monst_spell_monst(int m_idx)
 		return (TRUE);
 	}
 
+	/* Hex: Anti Magic Barrier */
+	if (!spell_is_inate(thrown_spell) && magic_barrier(m_idx))
+	{
+#ifdef JP
+		if (see_m) msg_format("反魔法バリアが%^sの呪文をかき消した。", m_name);
+#else
+		if (see_m) msg_format("Anti magic barrier cancels the spell which %^s casts.");
+#endif
+		return (TRUE);
+	}
+
 	can_remember = is_original_ap_and_seen(m_ptr);
 
 	switch (thrown_spell)
@@ -3109,32 +3120,56 @@ bool monst_spell_monst(int m_idx)
 
 	/* RF6_BLINK */
 	case 160+4:
-		if (see_m)
+		if (teleport_barrier(m_idx))
 		{
+			if (see_m)
+			{
 #ifdef JP
-			msg_format("%^sが瞬時に消えた。", m_name);
+				msg_format("魔法のバリアが%^sのテレポートを邪魔した。", m_name);
 #else
-			msg_format("%^s blinks away.", m_name);
+				msg_format("Magic barrier obstructs teleporting of %^s.", m_name);
 #endif
-
+			}
 		}
-
-		teleport_away(m_idx, 10, 0L);
-
+		else
+		{
+			if (see_m)
+			{
+#ifdef JP
+				msg_format("%^sが瞬時に消えた。", m_name);
+#else
+				msg_format("%^s blinks away.", m_name);
+#endif
+			}
+			teleport_away(m_idx, 10, 0L);
+		}
 		break;
 
 	/* RF6_TPORT */
 	case 160+5:
-		if (see_m)
+		if (teleport_barrier(m_idx))
 		{
+			if (see_m)
+			{
 #ifdef JP
-			msg_format("%^sがテレポートした。", m_name);
+				msg_format("魔法のバリアが%^sのテレポートを邪魔した。", m_name);
 #else
-			msg_format("%^s teleports away.", m_name);
+				msg_format("Magic barrier obstructs teleporting of %^s.", m_name);
 #endif
+			}
 		}
-
-		teleport_away_followable(m_idx);
+		else
+		{
+			if (see_m)
+			{
+#ifdef JP
+				msg_format("%^sがテレポートした。", m_name);
+#else
+				msg_format("%^s teleports away.", m_name);
+#endif
+			}
+			teleport_away_followable(m_idx);
+		}
 		break;
 
 	/* RF6_WORLD */

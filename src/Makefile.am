@@ -14,7 +14,7 @@ hengband_SOURCES = \
 	store.c birth.c load.c \
 	wizard1.c wizard2.c grid.c streams.c rooms.c \
 	generate.c dungeon.c init1.c init2.c \
-	effects.c racial.c inet.c report.c snipe.c \
+	effects.c racial.c inet.c report.c snipe.c hex.c \
 	artifact.c autopick.c mutation.c flavor.c spells3.c \
 	mspells1.c mspells2.c scores.c mind.c mane.c hissatsu.c \
 	bldg.c obj_kind.c wild.c avatar.c japanese.c mspells3.c \

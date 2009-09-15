@@ -3087,6 +3087,14 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 		get_bloody_moon_flags(o_ptr);
 	}
 
+	if (o_ptr->name1 == ART_HEAVENLY_MAIDEN)
+	{
+		if (p_ptr->psex != SEX_FEMALE)
+		{
+			add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+		}
+	}
+
 	if (a_ptr->gen_flags & (TRG_XTRA_POWER)) give_power = TRUE;
 	if (a_ptr->gen_flags & (TRG_XTRA_H_RES)) give_resistance = TRUE;
 	if (a_ptr->gen_flags & (TRG_XTRA_RES_OR_POWER))

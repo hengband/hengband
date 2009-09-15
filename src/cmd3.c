@@ -922,7 +922,8 @@ static bool high_level_book(object_type *o_ptr)
 	    (o_ptr->tval == TV_CRAFT_BOOK) ||
 	    (o_ptr->tval == TV_DAEMON_BOOK) ||
 	    (o_ptr->tval == TV_CRUSADE_BOOK) ||
-	    (o_ptr->tval == TV_MUSIC_BOOK))
+	    (o_ptr->tval == TV_MUSIC_BOOK) ||
+		(o_ptr->tval == TV_HEX_BOOK))
 	{
 		if (o_ptr->sval > 1)
 			return TRUE;

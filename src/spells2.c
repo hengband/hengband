@@ -528,7 +528,7 @@ sprintf(Dummy, "あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d 
 
 			info[i++] = Dummy;
 			break;
-		case RACE_KUTA:
+		case RACE_KUTAR:
 			if (plev > 19)
 #ifdef JP
 info[i++] = "あなたは d20+30 ターンの間横に伸びることができる。(15 MP)";
@@ -3850,6 +3850,7 @@ bool detect_objects_magic(int range)
 			(tv == TV_CRUSADE_BOOK) ||
 			(tv == TV_MUSIC_BOOK) ||
 			(tv == TV_HISSATSU_BOOK) ||
+			(tv == TV_HEX_BOOK) ||
 		    ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0)))
 		{
 			/* Memorize the item */

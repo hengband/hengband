@@ -11399,6 +11399,1205 @@ static cptr do_hissatsu_spell(int spell, int mode)
 }
 
 
+/* Hex */
+static bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
+{
+	switch (o_ptr->tval)
+	{
+		case TV_SWORD:
+		case TV_HAFTED:
+		case TV_POLEARM:
+		case TV_DIGGING:
+		{
+			return (TRUE);
+		}
+	}
+
+	return (FALSE);
+}
+
+static bool item_tester_hook_cursed(object_type *o_ptr)
+{
+	return (bool)(object_is_cursed(o_ptr));
+}
+
+static cptr do_hex_spell(int spell, int mode)
+{
+	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
+	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
+	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
+	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
+	bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
+	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
+
+	bool add = TRUE;
+
+	int plev = p_ptr->lev;
+	int power;
+
+	switch (spell)
+	{
+	/*** 1st book (0-7) ***/
+	case 0:
+#ifdef JP
+		if (name) return "邪なる祝福";
+		if (desc) return "祝福により攻撃精度と防御力が上がる。";
+#else
+		if (name) return "Evily blessing";
+		if (desc) return "Attempts to increase +to_hit of a weapon and AC";
+#endif
+		if (cast)
+		{
+			if (!p_ptr->blessed)
+			{
+#ifdef JP
+				msg_print("高潔な気分になった！");
+#else
+				msg_print("You feel righteous!");
+#endif
+			}
+		}
+		if (stop)
+		{
+			if (!p_ptr->blessed)
+			{
+#ifdef JP
+				msg_print("高潔な気分が消え失せた。");
+#else
+				msg_print("The prayer has expired.");
+#endif
+			}
+		}
+		break;
+
+	case 1:
+#ifdef JP
+		if (name) return "軽傷の治癒";
+		if (desc) return "HPや傷を少し回復させる。";
+#else
+		if (name) return "Cure light wounds";
+		if (desc) return "Heals cut and HP a little.";
+#endif
+		if (info) return info_heal(1, 10, 0);
+		if (cast)
+		{
+#ifdef JP
+			msg_print("気分が良くなってくる。");
+#else
+			msg_print("You feel better and better.");
+#endif
+		}
+		if (cast || cont)
+		{
+			hp_player(damroll(1, 10));
+			set_cut(p_ptr->cut - 10);
+		}
+		break;
+
+	case 2:
+#ifdef JP
+		if (name) return "悪魔のオーラ";
+		if (desc) return "炎のオーラを身にまとい、回復速度が速くなる。";
+#else
+		if (name) return "Demonic aura";
+		if (desc) return "Gives fire aura and regeneration.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("体が炎のオーラで覆われた。");
+#else
+			msg_print("You have enveloped by fiery aura!");
+#endif
+		}
+		if (stop)
+		{
+#ifdef JP
+			msg_print("炎のオーラが消え去った。");
+#else
+			msg_print("Fiery aura disappeared.");
+#endif
+		}
+		break;
+
+	case 3:
+#ifdef JP
+		if (name) return "悪臭霧";
+		if (desc) return "視界内のモンスターに微弱量の毒のダメージを与える。";
+#else
+		if (name) return "Stinking mist";
+		if (desc) return "Deals few damages of poison to all monsters in your sight.";
+#endif
+		power = plev / 2 + 5;
+		if (info) return info_damage(1, power, 0);
+		if (cast || cont)
+		{
+			project_hack(GF_POIS, randint1(power));
+		}
+		break;
+
+	case 4:
+#ifdef JP
+		if (name) return "腕力強化";
+		if (desc) return "術者の腕力を上昇させる。";
+#else
+		if (name) return "Extra might";
+		if (desc) return "Attempts to increase your strength.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("何だか力が湧いて来る。");
+#else
+			msg_print("You feel you get stronger.");
+#endif
+		}
+		break;
+
+	case 5:
+#ifdef JP
+		if (name) return "武器呪縛";
+		if (desc) return "装備している武器を呪う。";
+#else
+		if (name) return "Curse weapon";
+		if (desc) return "Curses your weapon.";
+#endif
+		if (cast)
+		{
+			int item;
+			char *q, *s;
+			char o_name[MAX_NLEN];
+			object_type *o_ptr;
+			u32b f[TR_FLAG_SIZE];
+
+			item_tester_hook = item_tester_hook_weapon_except_bow;
+#ifdef JP
+			q = "どれを呪いますか？";
+			s = "武器を装備していない。";
+#else
+			q = "Which weapon do you curse?";
+			s = "You wield no weapons.";
+#endif
+
+			if (!get_item(&item, q, s, (USE_EQUIP))) return FALSE;
+
+			o_ptr = &inventory[item];
+			object_desc(o_name, o_ptr, OD_NAME_ONLY);
+			object_flags(o_ptr, f);
+
+#ifdef JP
+			if (!get_check(format("本当に %s を呪いますか？", o_name))) return FALSE;
+#else
+			if (!get_check(format("Do you curse %s, really？", o_name))) return FALSE;
+#endif
+
+			if (!one_in_(3) &&
+				(object_is_artifact(o_ptr) || have_flag(f, TR_BLESSED)))
+			{
+#ifdef JP
+				msg_format("%s は呪いを跳ね返した。", o_name);
+#else
+				msg_format("%s resists the effect.", o_name);
+#endif
+				if (one_in_(3))
+				{
+					if (o_ptr->to_d > 0)
+					{
+						o_ptr->to_d -= randint1(3) % 2;
+						if (o_ptr->to_d < 0) o_ptr->to_d = 0;
+					}
+					if (o_ptr->to_h > 0)
+					{
+						o_ptr->to_h -= randint1(3) % 2;
+						if (o_ptr->to_h < 0) o_ptr->to_h = 0;
+					}
+					if (o_ptr->to_a > 0)
+					{
+						o_ptr->to_a -= randint1(3) % 2;
+						if (o_ptr->to_a < 0) o_ptr->to_a = 0;
+					}
+#ifdef JP
+					msg_format("%s は劣化してしまった。", o_name);
+#else
+					msg_format("Your %s was disenchanted!", o_name);
+#endif
+				}
+			}
+			else
+			{
+				int power = 0;
+#ifdef JP
+				msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
+#else
+				msg_format("A terrible black aura blasts your %s!", o_name);
+#endif
+				o_ptr->curse_flags |= (TRC_CURSED);
+
+				if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
+				{
+
+					if (one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+					if (one_in_(666))
+					{
+						o_ptr->curse_flags |= (TRC_TY_CURSE);
+						if (one_in_(666)) o_ptr->curse_flags |= (TRC_PERMA_CURSE);
+
+						add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+						add_flag(o_ptr->art_flags, TR_VORPAL);
+						add_flag(o_ptr->art_flags, TR_VAMPIRIC);
+#ifdef JP
+						msg_print("血だ！血だ！血だ！");
+#else
+						msg_print("Blood, Blood, Blood!");
+#endif
+						power = 2;
+					}
+				}
+
+				o_ptr->curse_flags |= get_curse(power, o_ptr);
+			}
+
+			p_ptr->update |= (PU_BONUS);
+			add = FALSE;
+		}
+		break;
+
+	case 6:
+#ifdef JP
+		if (name) return "邪悪感知";
+		if (desc) return "周囲の邪悪なモンスターを感知する。";
+#else
+		if (name) return "Evil detection";
+		if (desc) return "Detects evil monsters.";
+#endif
+		if (info) return info_range(MAX_SIGHT);
+		if (cast)
+		{
+#ifdef JP
+			msg_print("邪悪な生物の存在を感じ取ろうとした。");
+#else
+			msg_print("You attend to the presence of evil creatures.");
+#endif
+		}
+		break;
+
+	case 7:
+#ifdef JP
+		if (name) return "我慢";
+		if (desc) return "数ターン攻撃を耐え、受けたダメージの1/5を魔力の球として放つ。";
+#else
+		if (name) return "Patience";
+		if (desc) return "Fires strong mana ball after patient any damage while few turns.";
+#endif
+		power = MIN(200, (p_ptr->magic_num1[2] * 2));
+		if (info) return info_damage(0, 0, power);
+		if (cast)
+		{
+			int a = 3 - (p_ptr->pspeed - 100) / 10;
+			int r = 3 + randint1(3) + MAX(0, MIN(3, a));
+
+			if (p_ptr->magic_num2[2] > 0)
+			{
+#ifdef JP
+				msg_print("すでに我慢をしている。");
+#else
+				msg_print("You are already patienting.");
+#endif
+				return NULL;
+			}
+
+			p_ptr->magic_num2[1] = 1;
+			p_ptr->magic_num2[2] = r;
+			p_ptr->magic_num1[2] = 0;
+#ifdef JP
+			msg_print("じっと耐えることにした。");
+#else
+			msg_print("You decide to patient all damages.");
+#endif
+			add = FALSE;
+		}
+		if (cont)
+		{
+			int rad = 2 + (power / 50);
+
+			p_ptr->magic_num2[2]--;
+
+			if ((p_ptr->magic_num2[2] <= 0) || (power >= 200))
+			{
+#ifdef JP
+				msg_print("我慢が解かれた！");
+#else
+				msg_print("Time for end of patioence!");
+#endif
+				if (power)
+				{
+					project(0, rad, py, px, power, GF_HELL_FIRE,
+						(PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+				}
+				if (p_ptr->wizard)
+				{
+#ifdef JP
+					msg_format("%d点のダメージを返した。", power);
+#else
+					msg_format("You return %d damages.", power);
+#endif
+				}
+				p_ptr->magic_num1[2] = 0;
+			}
+		}
+		break;
+
+	/*** 2nd book (8-15) ***/
+	case 8:
+#ifdef JP
+		if (name) return "氷の鎧";
+		if (desc) return "氷のオーラを身にまとい、防御力が上昇する。";
+#else
+		if (name) return "Ice armor";
+		if (desc) return "Gives fire aura and bonus to AC.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("体が氷の鎧で覆われた。");
+#else
+			msg_print("You have enveloped by ice armor!");
+#endif
+		}
+		if (stop)
+		{
+#ifdef JP
+			msg_print("氷の鎧が消え去った。");
+#else
+			msg_print("Ice armor disappeared.");
+#endif
+		}
+		break;
+
+	case 9:
+#ifdef JP
+		if (name) return "重傷の治癒";
+		if (desc) return "体力や傷を多少回復させる。";
+#else
+		if (name) return "Cure serious wounds";
+		if (desc) return "Heals cut and HP more.";
+#endif
+		if (info) return info_heal(2, 10, 0);
+		if (cast)
+		{
+#ifdef JP
+			msg_print("気分が良くなってくる。");
+#else
+			msg_print("You feel better and better.");
+#endif
+		}
+		if (cast || cont)
+		{
+			hp_player(damroll(2, 10));
+			set_cut((p_ptr->cut / 2) - 10);
+		}
+		break;
+
+	case 10:
+#ifdef JP
+		if (name) return "薬品吸入";
+		if (desc) return "呪文詠唱を中止することなく、薬の効果を得ることができる。";
+#else
+		if (name) return "Inhail potion";
+		if (desc) return "Quaffs a potion without canceling of casting a spell.";
+#endif
+		if (cast)
+		{
+			p_ptr->magic_num1[0] |= (1L << HEX_INHAIL);
+			do_cmd_quaff_potion();
+			p_ptr->magic_num1[0] &= ~(1L << HEX_INHAIL);
+			add = FALSE;
+		}
+		break;
+
+	case 11:
+#ifdef JP
+		if (name) return "吸血霧";
+		if (desc) return "視界内のモンスターに微弱量の生命力吸収のダメージを与える。与えたダメージの分、体力が回復する。";
+#else
+		if (name) return "Vampiric mist";
+		if (desc) return "Deals few dameges of drain life to all monsters in your sight.";
+#endif
+		power = (plev / 2) + 5;
+		if (info) return info_damage(1, power, 0);
+		if (cast || cont)
+		{
+			project_hack(GF_OLD_DRAIN, randint1(power));
+		}
+		break;
+
+	case 12:
+#ifdef JP
+		if (name) return "魔剣化";
+		if (desc) return "武器の攻撃力を上げる。切れ味を得、呪いに応じて与えるダメージが上昇し、善良なモンスターに対するダメージが2倍になる。";
+#else
+		if (name) return "Swords to runeswords";
+		if (desc) return "Gives vorpal ability to your weapon. Increases damages by your weapon acccording to curse of your weapon.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("あなたの武器が黒く輝いた。");
+#else
+			if (!empty_hands(FALSE))
+				msg_print("Your weapons glow bright black.");
+			else
+				msg_print("Your weapon glows bright black.");
+#endif
+		}
+		if (stop)
+		{
+#ifdef JP
+			msg_print("武器の輝きが消え去った。");
+#else
+			msg_format("Brightness of weapon%s disappeared.", (empty_hands(FALSE)) ? "" : "s");
+#endif
+		}
+		break;
+
+	case 13:
+#ifdef JP
+		if (name) return "混乱の手";
+		if (desc) return "攻撃した際モンスターを混乱させる。";
+#else
+		if (name) return "Touch of confusion";
+		if (desc) return "Confuses a monster when you attack.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("あなたの手が赤く輝き始めた。");
+#else
+			msg_print("Your hands glow bright red.");
+#endif
+		}
+		if (stop)
+		{
+#ifdef JP
+			msg_print("手の輝きがなくなった。");
+#else
+			msg_print("Brightness on your hands disappeard.");
+#endif
+		}
+		break;
+
+	case 14:
+#ifdef JP
+		if (name) return "肉体強化";
+		if (desc) return "術者の腕力、器用さ、耐久力を上昇させる。攻撃回数の上限を 1 増加させる。";
+#else
+		if (name) return "Building up";
+		if (desc) return "Attempts to increases your strength, dexterity and constitusion.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("身体が強くなった気がした。");
+#else
+			msg_print("You feel your body is developed more now.");
+#endif
+		}
+		break;
+
+	case 15:
+#ifdef JP
+		if (name) return "反テレポート結界";
+		if (desc) return "視界内のモンスターのテレポートを阻害するバリアを張る。";
+#else
+		if (name) return "Anti teleport barrier";
+		if (desc) return "Obstructs all teleportations by monsters in your sight.";
+#endif
+		power = plev * 3 / 2;
+		if (info) return info_power(power);
+		if (cast)
+		{
+#ifdef JP
+			msg_print("テレポートを防ぐ呪いをかけた。");
+#else
+			msg_print("You feel anyone can not teleport except you.");
+#endif
+		}
+		break;
+
+	/*** 3rd book (16-23) ***/
+	case 16:
+#ifdef JP
+		if (name) return "衝撃のクローク";
+		if (desc) return "電気のオーラを身にまとい、動きが速くなる。";
+#else
+		if (name) return "Cloak of shock";
+		if (desc) return "Gives lightning aura and a bonus to speed.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("体が稲妻のオーラで覆われた。");
+#else
+			msg_print("You have enveloped by electrical aura!");
+#endif
+		}
+		if (stop)
+		{
+#ifdef JP
+			msg_print("稲妻のオーラが消え去った。");
+#else
+			msg_print("Electrical aura disappeared.");
+#endif
+		}
+		break;
+
+	case 17:
+#ifdef JP
+		if (name) return "致命傷の治癒";
+		if (desc) return "体力や傷を回復させる。";
+#else
+		if (name) return "Cure critical wounds";
+		if (desc) return "Heals cut and HP greatry.";
+#endif
+		if (info) return info_heal(4, 10, 0);
+		if (cast)
+		{
+#ifdef JP
+			msg_print("気分が良くなってくる。");
+#else
+			msg_print("You feel better and better.");
+#endif
+		}
+		if (cast || cont)
+		{
+			hp_player(damroll(4, 10));
+			set_stun(0);
+			set_cut(0);
+			set_poisoned(0);
+		}
+		break;
+
+	case 18:
+#ifdef JP
+		if (name) return "呪力封入";
+		if (desc) return "魔法の道具に魔力を再充填する。";
+#else
+		if (name) return "Recharging";
+		if (desc) return "Recharges a magic device.";
+#endif
+		power = plev * 2;
+		if (info) return info_power(power);
+		if (cast)
+		{
+			if (!recharge(power)) return NULL;
+			add = FALSE;
+		}
+		break;
+
+	case 19:
+#ifdef JP
+		if (name) return "死者復活";
+		if (desc) return "死体を蘇らせてペットにする。";
+#else
+		if (name) return "Animate Dead";
+		if (desc) return "Raises corpses and skeletons from dead.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("死者への呼びかけを始めた。");
+#else
+			msg_print("You start to call deads.!");
+#endif
+		}
+		if (cast || cont)
+		{
+			animate_dead(0, py, px);
+		}
+		break;
+
+	case 20:
+#ifdef JP
+		if (name) return "防具呪縛";
+		if (desc) return "装備している防具に呪いをかける。";
+#else
+		if (name) return "Curse armor";
+		if (desc) return "Curse a piece of armour that you wielding.";
+#endif
+		if (cast)
+		{
+			int item;
+			char *q, *s;
+			char o_name[MAX_NLEN];
+			object_type *o_ptr;
+			u32b f[TR_FLAG_SIZE];
+
+			item_tester_hook = object_is_armour;
+#ifdef JP
+			q = "どれを呪いますか？";
+			s = "防具を装備していない。";
+#else
+			q = "Which piece of armour do you curse?";
+			s = "You wield no piece of armours.";
+#endif
+
+			if (!get_item(&item, q, s, (USE_EQUIP))) return FALSE;
+
+			o_ptr = &inventory[item];
+			object_desc(o_name, o_ptr, OD_NAME_ONLY);
+			object_flags(o_ptr, f);
+
+#ifdef JP
+			if (!get_check(format("本当に %s を呪いますか？", o_name))) return FALSE;
+#else
+			if (!get_check(format("Do you curse %s, really？", o_name))) return FALSE;
+#endif
+
+			if (!one_in_(3) &&
+				(object_is_artifact(o_ptr) || have_flag(f, TR_BLESSED)))
+			{
+#ifdef JP
+				msg_format("%s は呪いを跳ね返した。", o_name);
+#else
+				msg_format("%s resists the effect.", o_name);
+#endif
+				if (one_in_(3))
+				{
+					if (o_ptr->to_d > 0)
+					{
+						o_ptr->to_d -= randint1(3) % 2;
+						if (o_ptr->to_d < 0) o_ptr->to_d = 0;
+					}
+					if (o_ptr->to_h > 0)
+					{
+						o_ptr->to_h -= randint1(3) % 2;
+						if (o_ptr->to_h < 0) o_ptr->to_h = 0;
+					}
+					if (o_ptr->to_a > 0)
+					{
+						o_ptr->to_a -= randint1(3) % 2;
+						if (o_ptr->to_a < 0) o_ptr->to_a = 0;
+					}
+#ifdef JP
+					msg_format("%s は劣化してしまった。", o_name);
+#else
+					msg_format("Your %s was disenchanted!", o_name);
+#endif
+				}
+			}
+			else
+			{
+				int power = 0;
+#ifdef JP
+				msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
+#else
+				msg_format("A terrible black aura blasts your %s!", o_name);
+#endif
+				o_ptr->curse_flags |= (TRC_CURSED);
+
+				if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
+				{
+
+					if (one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+					if (one_in_(666))
+					{
+						o_ptr->curse_flags |= (TRC_TY_CURSE);
+						if (one_in_(666)) o_ptr->curse_flags |= (TRC_PERMA_CURSE);
+
+						add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+						add_flag(o_ptr->art_flags, TR_RES_POIS);
+						add_flag(o_ptr->art_flags, TR_RES_DARK);
+						add_flag(o_ptr->art_flags, TR_RES_NETHER);
+#ifdef JP
+						msg_print("血だ！血だ！血だ！");
+#else
+						msg_print("Blood, Blood, Blood!");
+#endif
+						power = 2;
+					}
+				}
+
+				o_ptr->curse_flags |= get_curse(power, o_ptr);
+			}
+
+			p_ptr->update |= (PU_BONUS);
+			add = FALSE;
+		}
+		break;
+
+	case 21:
+#ifdef JP
+		if (name) return "影のクローク";
+		if (desc) return "影のオーラを身にまとい、敵に影のダメージを与える。";
+#else
+		if (name) return "Cloak of shadow";
+		if (desc) return "Gives aura of shadow.";
+#endif
+		if (cast)
+		{
+			object_type *o_ptr = &inventory[INVEN_OUTER];
+
+			if (!o_ptr->k_idx)
+			{
+#ifdef JP
+				msg_print("クロークを身につけていない！");
+#else
+				msg_print("You don't ware any cloak.");
+#endif
+				return NULL;
+			}
+			else if (!object_is_cursed(o_ptr))
+			{
+#ifdef JP
+				msg_print("クロークは呪われていない！");
+#else
+				msg_print("Your cloak is not cursed.");
+#endif
+				return NULL;
+			}
+			else
+			{
+#ifdef JP
+				msg_print("影のオーラを身にまとった。");
+#else
+				msg_print("You have enveloped by shadow aura!");
+#endif
+			}
+		}
+		if (cont)
+		{
+			object_type *o_ptr = &inventory[INVEN_OUTER];
+
+			if (!o_ptr->k_idx) do_spell(REALM_HEX, spell, SPELL_STOP);
+			if (!object_is_cursed(o_ptr)) do_spell(REALM_HEX, spell, SPELL_STOP);
+		}
+		if (stop)
+		{
+#ifdef JP
+			msg_print("影のオーラが消え去った。");
+#else
+			msg_print("Shadow aura disappeared.");
+#endif
+		}
+		break;
+
+	case 22:
+#ifdef JP
+		if (name) return "苦痛を魔力に";
+		if (desc) return "視界内のモンスターに精神ダメージ与え、魔力を吸い取る。";
+#else
+		if (name) return "Pains to mana";
+		if (desc) return "Deals psychic damages to all monsters in sight, and drains some mana.";
+#endif
+		power = plev * 3 / 2;
+		if (info) return info_damage(1, power, 0);
+		if (cast || cont)
+		{
+			project_hack(GF_PSI_DRAIN, randint1(power));
+		}
+		break;
+
+	case 23:
+#ifdef JP
+		if (name) return "目には目を";
+		if (desc) return "打撃や魔法で受けたダメージを、攻撃元のモンスターにも与える。";
+#else
+		if (name) return "Eye for an eye";
+		if (desc) return "Returns same damage which you got to the monster which damaged you.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("復讐したい欲望にかられた。");
+#else
+			msg_print("You wish strongly you want to revenge anything.");
+#endif
+		}
+		break;
+
+	/*** 4th book (24-31) ***/
+	case 24:
+#ifdef JP
+		if (name) return "反増殖結界";
+		if (desc) return "その階の増殖するモンスターの増殖を阻止する。";
+#else
+		if (name) return "Anti multiply barrier";
+		if (desc) return "Obstructs all multiplying by monsters in entire floor.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("増殖を阻止する呪いをかけた。");
+#else
+			msg_print("You feel anyone can not already multiply.");
+#endif
+		}
+		break;
+
+	case 25:
+#ifdef JP
+		if (name) return "生命力復活";
+		if (desc) return "経験値を徐々に復活し、減少した能力値を回復させる。";
+#else
+		if (name) return "Restore life";
+		if (desc) return "Restores life energy and status.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("生命力が戻り始めた。");
+#else
+			msg_print("You feel your life energy starting to return.");
+#endif
+		}
+		if (cast || cont)
+		{
+			bool flag = FALSE;
+			int d = (p_ptr->max_exp - p_ptr->exp);
+			int r = (p_ptr->exp / 20);
+			int i;
+
+			if (d > 0)
+			{
+				if (d < r)
+					p_ptr->exp = p_ptr->max_exp;
+				else
+					p_ptr->exp += r;
+
+				/* Check the experience */
+				check_experience();
+
+				flag = TRUE;
+			}
+			for (i = A_STR; i < 6; i ++)
+			{
+				if (p_ptr->stat_cur[i] < p_ptr->stat_max[i])
+				{
+					if (p_ptr->stat_cur[i] < 18)
+						p_ptr->stat_cur[i]++;
+					else
+						p_ptr->stat_cur[i] += 10;
+
+					if (p_ptr->stat_cur[i] > p_ptr->stat_max[i])
+						p_ptr->stat_cur[i] = p_ptr->stat_max[i];
+
+					/* Recalculate bonuses */
+					p_ptr->update |= (PU_BONUS);
+
+					flag = TRUE;
+				}
+			}
+
+			if (!flag)
+			{
+#ifdef JP
+				msg_format("%sの呪文の詠唱をやめた。", do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
+#else
+				msg_format("Finish casting '%^s'.", do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
+#endif
+				p_ptr->magic_num1[0] &= ~(1L << HEX_RESTORE);
+				if (cont) p_ptr->magic_num2[0]--;
+				if (p_ptr->magic_num2) p_ptr->action = ACTION_NONE;
+
+				/* Redraw status */
+				p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+				p_ptr->redraw |= (PR_EXTRA);
+
+				return "";
+			}
+		}
+		break;
+
+	case 26:
+#ifdef JP
+		if (name) return "呪力吸収";
+		if (desc) return "呪われた武器の呪いを吸収して魔力を回復する。";
+#else
+		if (name) return "Drain curse power";
+		if (desc) return "Drains curse on your weapon and heals SP a little.";
+#endif
+		if (cast)
+		{
+			int item;
+			char *s, *q;
+			u32b f[TR_FLAG_SIZE];
+			object_type *o_ptr;
+
+			item_tester_hook = item_tester_hook_cursed;
+#ifdef JP
+			q = "どの装備品から吸収しますか？";
+			s = "呪われたアイテムを装備していない。";
+#else
+			q = "Which cursed equipment do you drain mana from?";
+			s = "You have no cursed equipment.";
+#endif
+
+			if (!get_item(&item, q, s, (USE_EQUIP))) return FALSE;
+
+			o_ptr = &inventory[item];
+			object_flags(o_ptr, f);
+
+			p_ptr->csp += (p_ptr->lev / 5) + randint1(p_ptr->lev / 5);
+			if (have_flag(f, TR_TY_CURSE) || (o_ptr->curse_flags & TRC_TY_CURSE)) p_ptr->csp += randint1(5);
+			if (p_ptr->csp > p_ptr->msp) p_ptr->csp = p_ptr->msp;
+
+			if (o_ptr->curse_flags & TRC_PERMA_CURSE)
+			{
+				/* Nothing */
+			}
+			else if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
+			{
+				if (one_in_(7))
+				{
+#ifdef JP
+					msg_print("呪いを全て吸い取った。");
+#else
+					msg_print("Heavy curse vanished away.");
+#endif
+					o_ptr->curse_flags = 0L;
+				}
+			}
+			else if ((o_ptr->curse_flags & (TRC_CURSED)) && one_in_(3))
+			{
+#ifdef JP
+				msg_print("呪いを全て吸い取った。");
+#else
+				msg_print("Curse vanished away.");
+#endif
+				o_ptr->curse_flags = 0L;
+			}
+
+			add = FALSE;
+		}
+		break;
+
+	case 27:
+#ifdef JP
+		if (name) return "吸血の刃";
+		if (desc) return "吸血属性で攻撃する。";
+#else
+		if (name) return "Swords to vampires";
+		if (desc) return "Gives vampiric ability to your weapon.";
+#endif
+		if (cast)
+		{
+#ifdef JP
+			msg_print("武器の渇望が消え去った。");
+#else
+			msg_format("Thirsty of weapon%s disappeared.", (empty_hands(FALSE)) ? "" : "s");
+#endif
+		}
+		if (stop)
+		{
+#ifdef JP
+			msg_print("あなたの武器が血を欲している。");
+#else
+			if (!empty_hands(FALSE))
+				msg_print("Your weapons want more blood now.");
+			else
+				msg_print("Your weapon wants more blood now.");
+#endif
+		}
+		break;
+
+	case 28:
+#ifdef JP
+		if (name) return "朦朧の言葉";
+		if (desc) return "視界内のモンスターを朦朧とさせる。";
+#else
+		if (name) return "Word of stun";
+		if (desc) return "Stuns all monsters in your sight.";
+#endif
+		power = plev * 4;
+		if (info) return info_power(power);
+		if (cast || cont)
+		{
+			stun_monsters(power);
+		}
+		break;
+
+	case 29:
+#ifdef JP
+		if (name) return "影移動";
+		if (desc) return "モンスターの隣のマスに瞬間移動する。";
+#else
+		if (name) return "Moving into shadow";
+		if (desc) return "Teleports you close to a monster.";
+#endif
+		if (cast)
+		{
+			int i, y, x, dir;
+			bool flag;
+
+			for (i = 0; i < 3; i++)
+			{
+				if (!tgt_pt(&x, &y)) return FALSE;
+
+				flag = FALSE;
+
+				for (dir = 0; dir < 8; dir++)
+				{
+					int dy = y + ddy_ddd[dir];
+					int dx = x + ddx_ddd[dir];
+					if (dir == 5) continue;
+					if(cave[dy][dx].m_idx) flag = TRUE;
+				}
+
+				if (!cave_empty_bold(y, x) || (cave[y][x].info & CAVE_ICKY) ||
+					(distance(y, x, py, px) > plev + 2))
+				{
+#ifdef JP
+					msg_print("そこには移動できない。");
+#else
+					msg_print("Can not teleport to there.");
+#endif
+					continue;
+				}
+				break;
+			}
+
+			if (flag && randint0(plev * plev / 2))
+			{
+				teleport_player_to(y, x, 0L);
+			}
+			else
+			{
+#ifdef JP
+				msg_print("おっと！");
+#else
+				msg_print("Oops!");
+#endif
+				teleport_player(30, 0L);
+			}
+
+			add = FALSE;
+		}
+		break;
+
+	case 30:
+#ifdef JP
+		if (name) return "反魔法結界";
+		if (desc) return "視界内のモンスターの魔法を阻害するバリアを張る。";
+#else
+		if (name) return "Anti magic barrier";
+		if (desc) return "Obstructs all magic spell of monsters in your sight.";
+#endif
+		power = plev * 3 / 2;
+		if (info) return info_power(power);
+		if (cast)
+		{
+#ifdef JP
+			msg_print("魔法を防ぐ呪いをかけた。");
+#else
+			msg_print("You feel anyone can not cast spells except you.");
+#endif
+		}
+		break;
+
+	case 31:
+#ifdef JP
+		if (name) return "復讐の宣告";
+		if (desc) return "数ターン後に、それまで受けたダメージに応じた威力の魔法の弾を、対象のモンスターがその時いた位置に放つ。";
+#else
+		if (name) return "Revenge sentence";
+		if (desc) return "Fires magic ball to revenge after few turns.";
+#endif
+		power = p_ptr->magic_num1[2];
+		if (info) return info_damage(0, 0, power);
+		if (cast)
+		{
+			int r;
+			int a = 3 - (p_ptr->pspeed - 100) / 10;
+			r = 1 + randint1(2) + MAX(0, MIN(3, a));
+
+			if (p_ptr->magic_num2[2] > 0)
+			{
+#ifdef JP
+				msg_print("すでに復讐は宣告済みだ。");
+#else
+				msg_print("You already pronounced your revenge.");
+#endif
+				return NULL;
+			}
+
+			p_ptr->magic_num2[1] = 2;
+			p_ptr->magic_num2[2] = r;
+#ifdef JP
+			msg_format("あなたは復讐を宣告した。あと %d ターン。", r);
+#else
+			msg_format("You pronounce your revenge. %d turns left.", r);
+#endif
+			add = FALSE;
+		}
+		if (cont)
+		{
+			p_ptr->magic_num2[2]--;
+
+			if (p_ptr->magic_num2[2] <= 0)
+			{
+				int dir;
+
+				if (power)
+				{
+					command_dir = 0;
+
+					do
+					{
+#ifdef JP
+						msg_print("復讐の時だ！");
+#else
+						msg_print("Time to revenge!");
+#endif
+					}
+					while (!get_aim_dir(&dir));
+
+					fire_ball(GF_HELL_FIRE, dir, power, 1);
+
+					if (p_ptr->wizard)
+					{
+#ifdef JP
+						msg_format("%d点のダメージを返した。", power);
+#else
+						msg_format("You return %d damages.", power);
+#endif
+					}
+				}
+				else
+				{
+#ifdef JP
+					msg_print("復讐する気が失せた。");
+#else
+					msg_print("You are not a mood to revenge.");
+#endif
+				}
+				p_ptr->magic_num1[2] = 0;
+			}
+		}
+		break;
+	}
+
+	/* start casting */
+	if ((cast) && (add))
+	{
+		/* add spell */
+		p_ptr->magic_num1[0] |= 1L << (spell);
+		p_ptr->magic_num2[0]++;
+
+		if (p_ptr->action != ACTION_SPELL) set_action(ACTION_SPELL);
+	}
+
+	/* Redraw status */
+	if (!info)
+	{
+		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+		p_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
+	}
+
+	return "";
+}
+
+
 /*
  * Do everything for each spell
  */
@@ -11418,6 +12617,7 @@ cptr do_spell(int realm, int spell, int mode)
 	case REALM_CRUSADE:  return do_crusade_spell(spell, mode);
 	case REALM_MUSIC:    return do_music_spell(spell, mode);
 	case REALM_HISSATSU: return do_hissatsu_spell(spell, mode);
+	case REALM_HEX:      return do_hex_spell(spell, mode);
 	}
 
 	return NULL;

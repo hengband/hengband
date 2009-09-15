@@ -5672,6 +5672,18 @@ K:661:0xB6/0x81
 # a Diamond Amulet
 K:662:0xB6/0x88
 
+# [Handbook of Hex]
+K:663:0xA3/0x92
+
+# [High Curse]
+K:664:0xA3/0x92
+
+# [Curse and Spelling]
+K:665:0xA3/0x93
+
+# [Forbidden Cursebook]
+K:666:0xA3/0x93
+
 
 # Load the special player pictures
 %:xtra-xxx.prf

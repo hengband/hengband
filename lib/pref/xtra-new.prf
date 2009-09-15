@@ -84,7 +84,7 @@ R:0:0/0x96
 R:0:0/0x81
 ?:[EQU $RACE Shadow-Fairy]
 R:0:0/0x86
-?:[EQU $RACE Kuta]
+?:[EQU $RACE Kutar]
 R:0:0/0x91
 ?:[EQU $RACE Android]
 R:0:0/0x97
@@ -145,4 +145,5 @@ R:0:0x92/0
 R:0:0x93/0
 ?:[EQU $CLASS Ninja]
 R:0:0x95/0
-
+?:[EQU $CLASS Sniper]
+R:0:0x96/0

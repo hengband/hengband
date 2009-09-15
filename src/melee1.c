@@ -2062,6 +2062,65 @@ msg_format("%sは体力を回復したようだ。", m_name);
 							r_ptr->r_flagsr |= RFR_RES_ALL;
 					}
 				}
+
+				if (hex_spelling(HEX_SHADOW_CLOAK) && alive && !p_ptr->is_dead)
+				{
+					int dam = 1;
+					object_type *o_ptr = &inventory[INVEN_RARM];
+
+					if (!(r_ptr->flagsr & RFR_RES_ALL || r_ptr->flagsr & RFR_RES_DARK))
+					{
+						if (o_ptr->k_idx)
+						{
+							int basedam = ((o_ptr->dd + p_ptr->to_dd[0]) * (o_ptr->ds + p_ptr->to_ds[0] + 1));
+							dam = basedam / 2 + o_ptr->to_d + p_ptr->to_d[0];
+						}
+
+						/* Cursed armor makes damages doubled */
+						o_ptr = &inventory[INVEN_BODY];
+						if ((o_ptr->k_idx) && object_is_cursed(o_ptr)) dam *= 2;
+
+						/* Modify the damage */
+						dam = mon_damage_mod(m_ptr, dam, FALSE);
+
+#ifdef JP
+						msg_format("影のオーラが%^sに反撃した！", m_name);
+						if (mon_take_hit(m_idx, dam, &fear, "は倒れた。"))
+#else
+						msg_format("Enveloped shadows attack %^s.", m_name);
+
+						if (mon_take_hit(m_idx, dam, &fear, " is destroyed."))
+#endif
+						{
+							blinked = FALSE;
+							alive = FALSE;
+						}
+						else /* monster does not dead */
+						{
+							int j;
+							int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+							int typ[4][2] = {
+								{ INVEN_HEAD, GF_OLD_CONF },
+								{ INVEN_LARM,  GF_OLD_SLEEP },
+								{ INVEN_HANDS, GF_TURN_ALL },
+								{ INVEN_FEET, GF_OLD_SLOW }
+							};
+
+							/* Some cursed armours gives an extra effect */
+							for (j = 0; j < 4; j++)
+							{
+								o_ptr = &inventory[typ[j][0]];
+								if ((o_ptr->k_idx) && object_is_cursed(o_ptr) && object_is_armour(o_ptr))
+									project(0, 0, m_ptr->fy, m_ptr->fx, (p_ptr->lev * 2), typ[j][1], flg, -1);
+							}
+						}
+					}
+					else
+					{
+						if (is_original_ap_and_seen(m_ptr))
+							r_ptr->r_flagsr |= (RFR_RES_ALL | RFR_RES_DARK);
+					}
+				}
 			}
 		}
 
@@ -2143,7 +2202,11 @@ msg_format("%^sから落ちてしまった！", m_name);
 		}
 	}
 
-	if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
+	/* Hex - revenge damage stored */
+	revenge_store(get_damage);
+
+	if ((p_ptr->tim_eyeeye || hex_spelling(HEX_EYE_FOR_EYE))
+		&& get_damage > 0 && !p_ptr->is_dead)
 	{
 #ifdef JP
 		msg_format("攻撃が%s自身を傷つけた！", m_name);
@@ -2156,9 +2219,8 @@ msg_format("%^sから落ちてしまった！", m_name);
 		msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
 #endif
 		project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
-		set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
+		if (p_ptr->tim_eyeeye) set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
 	}
-
 
 	if ((p_ptr->counter || (p_ptr->special_defense & KATA_MUSOU)) && alive && !p_ptr->is_dead && m_ptr->ml && (p_ptr->csp > 7))
 	{
@@ -2181,13 +2243,23 @@ msg_format("%^sから落ちてしまった！", m_name);
 	/* Blink away */
 	if (blinked && alive && !p_ptr->is_dead)
 	{
+		if (teleport_barrier(m_idx))
+		{
 #ifdef JP
-		msg_print("泥棒は笑って逃げた！");
+			msg_print("泥棒は笑って逃げ...ようとしたがバリアに防がれた。");
 #else
-		msg_print("The thief flees laughing!");
+			msg_print("The thief flees laughing...? But magic barrier obstructs it.");
 #endif
-
-		teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
+		}
+		else
+		{
+#ifdef JP
+			msg_print("泥棒は笑って逃げた！");
+#else
+			msg_print("The thief flees laughing!");
+#endif
+			teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
+		}
 	}
 
 

@@ -3299,6 +3299,13 @@ int calc_mutant_regenerate_mod(void)
 }
 
 
+void mutation_stop_mouth()
+{
+	if (music_singing_any()) stop_singing();
+	if (hex_spelling_any()) stop_hex_spell_all();
+}
+
+
 bool mutation_power_aux(u32b power)
 {
 	int     dir = 0;
@@ -3309,7 +3316,7 @@ bool mutation_power_aux(u32b power)
 	{
 		case MUT1_SPIT_ACID:
 			if (!get_aim_dir(&dir)) return FALSE;
-			if (music_singing_any()) stop_singing();
+			mutation_stop_mouth();
 #ifdef JP
 			msg_print("酸を吐きかけた...");
 #else
@@ -3321,7 +3328,7 @@ bool mutation_power_aux(u32b power)
 
 		case MUT1_BR_FIRE:
 			if (!get_aim_dir(&dir)) return FALSE;
-			if (music_singing_any()) stop_singing();
+			mutation_stop_mouth();
 #ifdef JP
 			msg_print("あなたは火炎のブレスを吐いた...");
 #else
@@ -3395,7 +3402,7 @@ bool mutation_power_aux(u32b power)
 				x = px + ddx[dir];
 				c_ptr = &cave[y][x];
 
-				if (music_singing_any()) stop_singing();
+				mutation_stop_mouth();
 
 				if (!(c_ptr->m_idx))
 				{
@@ -3448,12 +3455,12 @@ bool mutation_power_aux(u32b power)
 			break;
 
 		case MUT1_SMELL_MET:
-			if (music_singing_any()) stop_singing();
+			mutation_stop_mouth();
 			(void)detect_treasure(DETECT_RAD_DEFAULT);
 			break;
 
 		case MUT1_SMELL_MON:
-			if (music_singing_any()) stop_singing();
+			mutation_stop_mouth();
 			(void)detect_monsters_normal(DETECT_RAD_DEFAULT);
 			break;
 
@@ -3474,7 +3481,7 @@ bool mutation_power_aux(u32b power)
 				f_ptr = &f_info[c_ptr->feat];
 				mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
-				if (music_singing_any()) stop_singing();
+				mutation_stop_mouth();
 
 				if (!have_flag(mimic_f_ptr->flags, FF_HURT_ROCK))
 				{
@@ -3562,7 +3569,7 @@ bool mutation_power_aux(u32b power)
 			break;
 
 		case MUT1_SHRIEK:
-			if (music_singing_any()) stop_singing();
+			mutation_stop_mouth();
 			(void)fire_ball(GF_SOUND, 0, 2 * lvl, 8);
 			(void)aggravate_monsters(0);
 			break;

@@ -882,6 +882,14 @@ static int racial_aux(power_desc_type *pd_ptr)
 }
 
 
+
+void ratial_stop_mouth()
+{
+	if (music_singing_any()) stop_singing();
+	if (hex_spelling_any()) stop_hex_spell_all();
+}
+
+
 static bool cmd_racial_power_aux(s32b command)
 {
 	s16b        plev = p_ptr->lev;
@@ -917,8 +925,15 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			break;
 		}
-		case CLASS_MAGE:
 		case CLASS_HIGH_MAGE:
+		if (p_ptr->realm1 == REALM_HEX)
+		{
+			bool retval = stop_hex_spell();
+			if (retval) energy_use = 10;
+			return (retval);
+		}
+		case CLASS_MAGE:
+		/* case CLASS_HIGH_MAGE: */
 		case CLASS_SORCERER:
 		{
 			if (!eat_magic(p_ptr->lev * 2)) return FALSE;
@@ -1408,7 +1423,7 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
 			if (!get_aim_dir(&dir)) return FALSE;
-			if (music_singing_any()) stop_singing();
+			ratial_stop_mouth();
 #ifdef JP
 			msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"));
 #else
@@ -1439,7 +1454,7 @@ static bool cmd_racial_power_aux(s32b command)
 				x = px + ddx[dir];
 				c_ptr = &cave[y][x];
 
-				if (music_singing_any()) stop_singing();
+				ratial_stop_mouth();
 
 				if (!c_ptr->m_idx)
 				{
@@ -1646,7 +1661,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_YEEK:
 			if (!get_aim_dir(&dir)) return FALSE;
-			if (music_singing_any()) stop_singing();
+			ratial_stop_mouth();
 #ifdef JP
 			msg_print("身の毛もよだつ叫び声を上げた！");
 #else
@@ -1658,7 +1673,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_KLACKON:
 			if (!get_aim_dir(&dir)) return FALSE;
-			if (music_singing_any()) stop_singing();
+			ratial_stop_mouth();
 #ifdef JP
 			msg_print("酸を吐いた。");
 #else
@@ -1899,7 +1914,7 @@ static bool cmd_racial_power_aux(s32b command)
 					}
 				}
 
-				if (music_singing_any()) stop_singing();
+				ratial_stop_mouth();
 
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた。", Type_desc);
@@ -1983,7 +1998,7 @@ static bool cmd_racial_power_aux(s32b command)
 				x = px + ddx[dir];
 				c_ptr = &cave[y][x];
 
-				if (music_singing_any()) stop_singing();
+				ratial_stop_mouth();
 
 				if (!c_ptr->m_idx)
 				{
@@ -2035,7 +2050,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_SPECTRE:
 			if (!get_aim_dir(&dir)) return FALSE;
-			if (music_singing_any()) stop_singing();
+			ratial_stop_mouth();
 #ifdef JP
 			msg_print("あなたはおどろおどろしい叫び声をあげた！");
 #else
@@ -2060,7 +2075,7 @@ static bool cmd_racial_power_aux(s32b command)
 			{
 				int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
 				if (!get_aim_dir(&dir)) return FALSE;
-				if (music_singing_any()) stop_singing();
+				ratial_stop_mouth();
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"));
 #else
@@ -2071,7 +2086,7 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			break;
 
-		case RACE_KUTA:
+		case RACE_KUTAR:
 			(void)set_tsubureru(randint1(20) + 30, FALSE);
 			break;
 
@@ -2196,8 +2211,23 @@ strcpy(power_desc[num].name, "剣の舞い");
 		power_desc[num++].number = -3;
 		break;
 	}
-	case CLASS_MAGE:
 	case CLASS_HIGH_MAGE:
+	if (p_ptr->realm1 == REALM_HEX)
+	{
+#ifdef JP
+		strcpy(power_desc[num].name, "詠唱をやめる");
+#else
+		strcpy(power_desc[num].name, "Stop spelling");
+#endif
+		power_desc[num].level = 1;
+		power_desc[num].cost = 0;
+		power_desc[num].stat = A_INT;
+		power_desc[num].fail = 0;
+		power_desc[num++].number = -3;
+		break;
+	}
+	case CLASS_MAGE:
+	/* case CLASS_HIGH_MAGE: */
 	case CLASS_SORCERER:
 	{
 #ifdef JP
@@ -3028,7 +3058,7 @@ sprintf(power_desc[num].name, "地獄/火炎のブレス (ダメージ %d)", lvl * 3);
 			power_desc[num].fail = 20;
 			power_desc[num++].number = -1;
 			break;
-		case RACE_KUTA:
+		case RACE_KUTAR:
 #ifdef JP
 strcpy(power_desc[num].name, "横に伸びる");
 #else

@@ -1091,6 +1091,9 @@ bool change_wild_mode(void)
 	p_ptr->oldpx = px;
 	p_ptr->oldpy = py;
 
+	/* Cancel hex spelling */
+	if (hex_spelling_any()) stop_hex_spell_all();
+
 	/* Cancel any special action */
 	set_action(ACTION_NONE);
 

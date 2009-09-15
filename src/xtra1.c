@@ -323,7 +323,20 @@ static void prt_stat(int stat)
 #define BAR_SUPERSTEALTH 50
 #define BAR_RECALL 51
 #define BAR_ALTER 52
-
+#define BAR_SHCOLD 53
+#define BAR_SHELEC 54
+#define BAR_SHSHADOW 55
+#define BAR_MIGHT 56
+#define BAR_BUILD 57
+#define BAR_ANTIMULTI 58
+#define BAR_ANTITELE 59
+#define BAR_ANTIMAGIC 60
+#define BAR_PATIENCE 61
+#define BAR_REVENGE 62
+#define BAR_RUNESWORD 63
+#define BAR_VAMPILIC 64
+#define BAR_CURE 65
+#define BAR_ESP_EVIL 66
 
 static struct {
 	byte attr;
@@ -385,6 +398,21 @@ static struct {
 	{TERM_YELLOW, "±£", "Ä¶±£Ì©"},
 	{TERM_WHITE, "µ¢", "µ¢´Ô"},
 	{TERM_WHITE, "¸½", "¸½¼ÂÊÑÍÆ"},
+	/* Hex */
+	{TERM_WHITE, "¥ª", "É¹¥ª¡¼¥é"},
+	{TERM_BLUE, "¥ª", "ÅÅ¥ª¡¼¥é"},
+	{TERM_L_DARK, "¥ª", "±Æ¥ª¡¼¥é"},
+	{TERM_YELLOW, "ÏÓ", "ÏÓÎÏ¶¯²½"},
+	{TERM_RED, "Æù", "ÆùÂÎ¶¯²½"},
+	{TERM_L_DARK, "¿£", "È¿Áý¿£"},
+	{TERM_ORANGE, "¥Æ", "È¿¥Æ¥ì¥Ý"},
+	{TERM_RED, "Ëâ", "È¿ËâË¡"},
+	{TERM_SLATE, "²æ", "²æËý"},
+	{TERM_SLATE, "Àë", "Àë¹ð"},
+	{TERM_L_DARK, "·õ", "Ëâ·õ²½"},
+	{TERM_RED, "µÛ", "µÛ·ìÂÇ·â"},
+	{TERM_WHITE, "²ó", "²óÉü"},
+	{TERM_L_DARK, "´¶", "¼Ù°­´¶ÃÎ"},
 	{0, NULL, NULL}
 };
 #else
@@ -442,6 +470,21 @@ static struct {
 	{TERM_YELLOW, "Stlt", "Stealth"},
 	{TERM_WHITE, "Rc", "Recall"},
 	{TERM_WHITE, "Al", "Alter"},
+	/* Hex */
+	{TERM_WHITE, "SCo", "SCold"},
+	{TERM_BLUE, "SEl", "SElec"},
+	{TERM_L_DARK, "SSh", "SShadow"},
+	{TERM_YELLOW, "EMi", "ExMight"},
+	{TERM_RED, "Bu", "BuildUp"},
+	{TERM_L_DARK, "AMl", "AntiMulti"},
+	{TERM_ORANGE, "AT", "AntiTele"},
+	{TERM_RED, "AM", "AntiMagic"},
+	{TERM_SLATE, "Pa", "Patience"},
+	{TERM_SLATE, "Rv", "Revenge"},
+	{TERM_L_DARK, "Rs", "RuneSword"},
+	{TERM_RED, "Vm", "Vampiric"},
+	{TERM_WHITE, "Cu", "Cure"},
+	{TERM_L_DARK, "ET", "EvilTele"},
 	{0, NULL, NULL}
 };
 #endif
@@ -455,7 +498,7 @@ static struct {
  */
 static void prt_status(void)
 {
-	u32b bar_flags[2];
+	u32b bar_flags[3];
 	int wid, hgt, row_statbar, max_col_statbar;
 	int i, col = 0, num = 0;
 	int space = 2;
@@ -466,7 +509,7 @@ static void prt_status(void)
 
 	Term_erase(0, row_statbar, max_col_statbar);
 
-	bar_flags[0] = bar_flags[1] = 0L;
+	bar_flags[0] = bar_flags[1] = bar_flags[2] = 0L;
 
 	/* Tsuyoshi  */
 	if (p_ptr->tsuyoshi) ADD_FLG(BAR_TSUYOSHI);
@@ -490,8 +533,7 @@ static void prt_status(void)
 	if (p_ptr->tim_invis) ADD_FLG(BAR_SENSEUNSEEN);
 
 	/* Timed esp */
-	if (IS_TIM_ESP() ||
-		(p_ptr->concent >= CONCENT_TELE_THRESHOLD)) ADD_FLG(BAR_TELEPATHY);
+	if (IS_TIM_ESP()) ADD_FLG(BAR_TELEPATHY);
 
 	/* Timed regenerate */
 	if (p_ptr->tim_regen) ADD_FLG(BAR_REGENERATION);
@@ -599,6 +641,35 @@ static void prt_status(void)
 
 	/* An Eye for an Eye */
 	if (p_ptr->tim_eyeeye) ADD_FLG(BAR_EYEEYE);
+
+	/* Hex spells */
+	if (p_ptr->realm1 == REALM_HEX)
+	{
+		if (hex_spelling(HEX_BLESS)) ADD_FLG(BAR_BLESSED);
+		if (hex_spelling(HEX_DEMON_AURA)) { ADD_FLG(BAR_SHFIRE); ADD_FLG(BAR_REGENERATION); }
+		if (hex_spelling(HEX_XTRA_MIGHT)) ADD_FLG(BAR_MIGHT);
+		if (hex_spelling(HEX_DETECT_EVIL)) ADD_FLG(BAR_ESP_EVIL);
+		if (hex_spelling(HEX_ICE_ARMOR)) ADD_FLG(BAR_SHCOLD);
+		if (hex_spelling(HEX_RUNESWORD)) ADD_FLG(BAR_RUNESWORD);
+		if (hex_spelling(HEX_BUILDING)) ADD_FLG(BAR_BUILD);
+		if (hex_spelling(HEX_ANTI_TELE)) ADD_FLG(BAR_ANTITELE);
+		if (hex_spelling(HEX_SHOCK_CLOAK)) ADD_FLG(BAR_SHELEC);
+		if (hex_spelling(HEX_SHADOW_CLOAK)) ADD_FLG(BAR_SHSHADOW);
+		if (hex_spelling(HEX_CONFUSION)) ADD_FLG(BAR_ATTKCONF);
+		if (hex_spelling(HEX_EYE_FOR_EYE)) ADD_FLG(BAR_EYEEYE);
+		if (hex_spelling(HEX_ANTI_MULTI)) ADD_FLG(BAR_ANTIMULTI);
+		if (hex_spelling(HEX_VAMP_BLADE)) ADD_FLG(BAR_VAMPILIC);
+		if (hex_spelling(HEX_ANTI_MAGIC)) ADD_FLG(BAR_ANTIMAGIC);
+		if (hex_spelling(HEX_CURE_LIGHT) ||
+			hex_spelling(HEX_CURE_SERIOUS) ||
+			hex_spelling(HEX_CURE_CRITICAL)) ADD_FLG(BAR_CURE);
+
+		if (p_ptr->magic_num2[2])
+		{
+			if (p_ptr->magic_num2[1] == 1) ADD_FLG(BAR_PATIENCE);
+			if (p_ptr->magic_num2[1] == 2) ADD_FLG(BAR_REVENGE);
+		}
+	}
 
 	/* Calcurate length */
 	for (i = 0; bar[i].sstr; i++)
@@ -1237,6 +1308,15 @@ sprintf(text, "  %2d", command_rep);
 				strcpy(text, "Â®¶î");
 #else
 				strcpy(text, "Fast");
+#endif
+				break;
+			}
+			case ACTION_SPELL:
+			{
+#ifdef JP
+				strcpy(text, "±Ó¾§");
+#else
+				strcpy(text, "Spel");
 #endif
 				break;
 			}
@@ -2744,6 +2824,10 @@ static void calc_hitpoints(void)
 	if (p_ptr->shero && (p_ptr->pclass != CLASS_BERSERKER)) mhp += 30;
 	if (p_ptr->tsuyoshi) mhp += 50;
 
+	/* Factor in the hex spell settings */
+	if (hex_spelling(HEX_XTRA_MIGHT)) mhp += 15;
+	if (hex_spelling(HEX_BUILDING)) mhp += 60;
+
 	/* New maximum hitpoints */
 	if (p_ptr->mhp != mhp)
 	{
@@ -3545,7 +3629,7 @@ void calc_bonuses(void)
 		case RACE_S_FAIRY:
 			p_ptr->levitation = TRUE;
 			break;
-		case RACE_KUTA:
+		case RACE_KUTAR:
 			p_ptr->resist_conf = TRUE;
 			break;
 		case RACE_ANDROID:
@@ -4211,6 +4295,49 @@ void calc_bonuses(void)
 	{
 		p_ptr->to_a += 10 + (p_ptr->lev * 2 / 5);
 		p_ptr->dis_to_a += 10 + (p_ptr->lev * 2 / 5);
+	}
+
+	/* Hex bonuses */
+	if (p_ptr->realm1 == REALM_HEX)
+	{
+		if (hex_spelling_any()) p_ptr->skill_stl -= (1 + p_ptr->magic_num2[0]);
+		if (hex_spelling(HEX_DETECT_EVIL)) p_ptr->esp_evil = TRUE;
+		if (hex_spelling(HEX_XTRA_MIGHT)) p_ptr->stat_add[A_STR] += 4;
+		if (hex_spelling(HEX_BUILDING))
+		{
+			p_ptr->stat_add[A_STR] += 4;
+			p_ptr->stat_add[A_DEX] += 4;
+			p_ptr->stat_add[A_CON] += 4;
+		}
+		if (hex_spelling(HEX_DEMON_AURA))
+		{
+			p_ptr->sh_fire = TRUE;
+			p_ptr->regenerate = TRUE;
+		}
+		if (hex_spelling(HEX_ICE_ARMOR))
+		{
+			p_ptr->sh_cold = TRUE; 
+			p_ptr->to_a += 30;
+			p_ptr->dis_to_a += 30;
+		}
+		if (hex_spelling(HEX_SHOCK_CLOAK))
+		{
+			p_ptr->sh_elec = TRUE;
+			new_speed += 3;
+		}
+		for (i = INVEN_RARM; i <= INVEN_FEET; i++)
+		{
+			int ac = 0;
+			o_ptr = &inventory[i];
+			if (!o_ptr->k_idx) continue;
+			if (!object_is_armour(o_ptr)) continue;
+			if (!object_is_cursed(o_ptr)) continue;
+			ac += 5;
+			if (o_ptr->curse_flags & TRC_HEAVY_CURSE) ac += 7;
+			if (o_ptr->curse_flags & TRC_PERMA_CURSE) ac += 13;
+			p_ptr->to_a += ac;
+			p_ptr->dis_to_a += ac;
+		}
 	}
 
 	/* Calculate stats */
@@ -4886,6 +5013,9 @@ void calc_bonuses(void)
 					num = 4; wgt = 20; mul = 1; break;
 			}
 
+			/* Hex - extra mights gives +1 bonus to max blows */
+			if (hex_spelling(HEX_XTRA_MIGHT) || hex_spelling(HEX_BUILDING)) { num++; wgt /= 2; mul += 2; }
+
 			/* Enforce a minimum "weight" (tenth pounds) */
 			div = ((o_ptr->weight < wgt) ? wgt : o_ptr->weight);
 
@@ -4987,6 +5117,23 @@ void calc_bonuses(void)
 				/* Reduce the mental bonuses */
 				p_ptr->dis_to_h[i] -= 30;
 				p_ptr->dis_to_d[i] -= 10;
+			}
+		}
+		/* Hex bonuses */
+		if (p_ptr->realm1 == REALM_HEX)
+		{
+			if (object_is_cursed(o_ptr))
+			{
+				if (o_ptr->curse_flags & (TRC_CURSED)) { p_ptr->to_h[i] += 5; p_ptr->dis_to_h[i] += 5; }
+				if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) { p_ptr->to_h[i] += 7; p_ptr->dis_to_h[i] += 7; }
+				if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) { p_ptr->to_h[i] += 13; p_ptr->dis_to_h[i] += 13; }
+				if (o_ptr->curse_flags & (TRC_TY_CURSE)) { p_ptr->to_h[i] += 5; p_ptr->dis_to_h[i] += 5; }
+				if (hex_spelling(HEX_RUNESWORD))
+				{
+					if (o_ptr->curse_flags & (TRC_CURSED)) { p_ptr->to_d[i] += 5; p_ptr->dis_to_d[i] += 5; }
+					if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) { p_ptr->to_d[i] += 7; p_ptr->dis_to_d[i] += 7; }
+					if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) { p_ptr->to_d[i] += 13; p_ptr->dis_to_d[i] += 13; }
+				}
 			}
 		}
 		if (p_ptr->riding)

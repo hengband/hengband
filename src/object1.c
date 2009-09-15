@@ -1182,6 +1182,7 @@ return "ドア/トラップ粉砕 : 10 ターン毎";
 		}
 		case ART_AVAVIR:
 		case ART_MAGATAMA:
+		case ART_HEAVENLY_MAIDEN:
 		{
 #ifdef JP
 return "帰還の詔 : 200 ターン毎";

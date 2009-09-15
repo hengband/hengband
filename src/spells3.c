@@ -4295,9 +4295,19 @@ s16b spell_chance(int spell, int use_realm)
 
 	chance = mod_spell_chance_1(chance);
 
-	if ((use_realm == REALM_NATURE) && ((p_ptr->align > 50) || (p_ptr->align < -50))) chance += penalty;
-	if (((use_realm == REALM_LIFE) || (use_realm == REALM_CRUSADE)) && (p_ptr->align < -20)) chance += penalty;
-	if (((use_realm == REALM_DEATH) || (use_realm == REALM_DAEMON)) && (p_ptr->align > 20)) chance += penalty;
+	/* Goodness or evilness gives a penalty to failure rate */
+	switch (use_realm)
+	{
+	case REALM_NATURE:
+		if ((p_ptr->align > 50) || (p_ptr->align < -50)) chance += penalty;
+		break;
+	case REALM_LIFE: case REALM_CRUSADE:
+		if (p_ptr->align < -20) chance += penalty;
+		break;
+	case REALM_DEATH: case REALM_DAEMON: case REALM_HEX:
+		if (p_ptr->align > 20) chance += penalty;
+		break;
+	}
 
 	/* Minimum failure rate */
 	if (chance < minfail) chance = minfail;
@@ -4707,6 +4717,7 @@ bool hates_fire(object_type *o_ptr)
 		case TV_CRUSADE_BOOK:
 		case TV_MUSIC_BOOK:
 		case TV_HISSATSU_BOOK:
+		case TV_HEX_BOOK:
 		{
 			return (TRUE);
 		}
@@ -6000,7 +6011,7 @@ bool summon_kin_player(int level, int y, int x, u32b mode)
 			case RACE_NIBELUNG:
 			case RACE_DARK_ELF:
 			case RACE_MIND_FLAYER:
-			case RACE_KUTA:
+			case RACE_KUTAR:
 			case RACE_S_FAIRY:
 				summon_kin_type = 'h';
 				break;

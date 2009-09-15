@@ -543,7 +543,7 @@ $RACE
    Amberite, High-Elf, Barbarian, Half-Ogre, Half-Giant, Half-Titan,
    Cyclops, Yeek, Klackon, Kobold, Nibelung, Dark-Elf, Draconian,
    Mindflayer, Imp, Golem, Skeleton, Zombie, Vampire, Spectre, Sprite,
-   Beastman, Ent, Archon, Balrog, Dunadan, Shadow-Fairy, Kuta,
+   Beastman, Ent, Archon, Balrog, Dunadan, Shadow-Fairy, Kutar,
    Android
    のどれか
 
@@ -564,7 +564,7 @@ $PLAYER
 $REALM1
    魔法領域を英語名で返す。
    Life, Sorcery, Nature, Chaos, Death, Trump Arcane, Craft, Daemon,
-   Crusade, Music, Kendo
+   Crusade, Music, Kendo, Hex
    のどれか
 
 $REALM2
@@ -574,6 +574,9 @@ $LEVEL
    プレイヤーのレベルを２桁の文字列で返す。
    "01","09","10","50" 等
 
+$MONEY
+   プレイヤーの所持金を９桁の文字列で返す。
+   "000012345" 等
 
 ---  ファイルの挿入の書式  ---
 

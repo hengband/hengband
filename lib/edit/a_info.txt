@@ -3640,3 +3640,62 @@ D:$This is farmer Maggot's sickle. He left it behind on his
 D:$farm.
 D:これは農夫マゴットの農作業用の鎌だ。どうやら農場に置き忘れ
 D:てしまったようだ。
+
+N:233:『天女の羽衣』
+E:of the Heavenly Maiden
+I:35:5:4
+W:50:3:0:45000
+P:0:0d0:0:0:20
+F:CHR | LEVITATION | SEE_INVIS | FREE_ACT | ACTIVATE |
+F:RES_COLD | RES_ELEC | XTRA_H_RES | XTRA_POWER
+D:$This is a heavenly cloak of the maiden which was stolen 
+D:$by a man, when she was having a bath at a lake with her 
+D:$friend maidens.
+D:豫章新喩縣男子，見田中有六七女，皆衣毛衣，不知是鳥。
+D:匍匐往得其一女所解毛衣，取藏之，即往就諸鳥。
+D:諸鳥各飛去，一鳥獨不得去。男子取以為婦。生三女。
+D:其母后使女問父，知衣在積稻下，得之，衣而飛去，後復以迎三女，
+D:女亦得飛去。(捜神記)
+
+N:234:源義経の
+E:of Yositsune
+I:32:8:2
+W:50:20:60:96000
+P:7:1d2:0:0:8
+F:DEX | CON | CHR | SEARCH | INFRA | HIDE_TYPE |
+F:RES_FEAR | RES_BLIND | RES_SOUND |
+F:WARNING | ESP_HUMAN |
+D:$This is Yositsune's kabuto. It defended his head against 
+D:$many arrows and blades from his ememies.
+D:源氏の勇者源義経の飾りのついた星兜だ。義経はこれをかぶり、
+D:平氏からの刃や矢の攻撃を防いだ。
+
+N:235:源義経の
+E:of Yositsune
+I:37:14:2
+W:50:20:200:192000
+P:17:1d4:0:0:28
+F:DEX | SPEED | STEALTH | HIDE_TYPE |
+F:FREE_ACT | REGEN | SLOW_DIGEST |
+F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC | RES_CONF |
+F:RES_CHAOS | RES_NEXUS |
+D:$This is the haramakido of Yositsune who is the best brave 
+D:$warrior of Genji. You can feel his agility and dexterity, 
+D:$when you put it on.
+D:源義経の赤糸威胴丸鎧だ。義経はこれを着て舟から舟へと飛び移
+D:った。身につけると彼の身軽さと器用さを感じることができる。
+
+N:236:畠山重忠の赤糸威
+E:of the Bando Musha
+I:37:16:2
+W:45:15:320:90000
+P:24:1d4:5:5:20
+F:STR | CON | CHR | HIDE_TYPE | SHOW_MODS |
+F:RES_ACID | RES_COLD | RES_ELEC | RES_BLIND | RES_DISEN |
+F:RES_FEAR | XTRA_H_RES
+D:$This is Shigetada Hatakeyama's O-yoroi. He is brave, wise 
+D:$and honest warrior, so he was called the best model of 
+D:$eastern samurai. This O-yoroi is majestical like him.
+D:知勇兼備の武者畠山重忠の赤糸威大鎧だ。清廉潔白をもって知ら
+D:れた重忠は「坂東武士の鑑」と称された。この大鎧は、あたかも
+D:彼がここにいるかのように威風堂々としている。

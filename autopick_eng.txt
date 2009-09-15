@@ -247,12 +247,15 @@
 #        $REALM1
 #         Returns player's first magic realm
 #          none, Life, Sorcery, Nature, Chaos, Death, Trump, Arcane,
-#          Craft, Daemon, Crusade, Music, Kendo
+#          Craft, Daemon, Crusade, Music, Kendo, Hex
 #        $REALM2
 #         Returns player's second magic realm
 #        $LEVEL
 #         Returns player level as two-character string.
 #          Ex. "01","09","10","50" etc.
+#        $MONEY
+#         Returns player money as 9 character string.
+#         Ex. "000012345" etc.
 #
 #------------------------------------------------------------------
 #

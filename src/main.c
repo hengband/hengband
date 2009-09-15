@@ -521,6 +521,13 @@ int main(int argc, char *argv[])
 			}
 #endif
 
+			case 'x':
+			{
+				if (!argv[i][2]) goto usage;
+				prepare_browse_movie(&argv[i][2]);
+				break;
+			}			
+
 			case '-':
 			{
 				argv[i] = argv[0];

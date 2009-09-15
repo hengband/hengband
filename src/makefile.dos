@@ -39,7 +39,7 @@ OBJS = \
 	do-spell.o store.o birth.o load.o \
 	wizard1.o wizard2.o grid.o streams.o rooms.o \
 	generate.o dungeon.o init1.o init2.o \
-	effects.o racial.o snipe.o \
+	effects.o racial.o snipe.o hex.o \
 	artifact.o autopick.o mutation.o flavor.o spells3.o \
 	mspells1.o mspells2.o scores.o mind.o mane.o hissatsu.o \
 	bldg.o obj_kind.o wild.o avatar.o japanese.o mspells3.o \
@@ -125,6 +125,7 @@ generate.o: generate.c $(INCS) generate.h grid.h rooms.h streams.h
 grid.o: grid.c $(INCS) grid.h generate.h
 rooms.o: rooms.c $(INCS) grid.h rooms.h generate.h
 streams.o: streams.c $(INCS) grid.h generate.h
+hex.o: hex.c $(INCS)
 init1.o: init1.c $(INCS)
 init2.o: init2.c $(INCS)
 load.o: load.c $(INCS)
@@ -167,4 +168,4 @@ mane.o: mane.c $(INCS)
 hissatsu.o: hissatsu.c $(INCS)
 japanese.o: japanese.c $(INCS)
 main-ibm.o: main-ibm.c $(INCS)
-
+chuukei.o: chuukei.c $(INCS)

@@ -181,6 +181,9 @@ static s16b get_realm_virtues(byte realm)
 	case REALM_CRUSADE:
 		if (virtue_number(V_JUSTICE)) return V_HONOUR;
 		else return V_JUSTICE;
+	case REALM_HEX:
+		if (virtue_number(V_COMPASSION)) return V_JUSTICE;
+		else return V_COMPASSION;
 	};
 
 	return 0;
@@ -330,7 +333,7 @@ void get_virtues(void)
 	case RACE_HALF_TROLL: case RACE_BARBARIAN:
 		p_ptr->vir_types[i++] = V_VALOUR;
 		break;
-	case RACE_HIGH_ELF: case RACE_KUTA:
+	case RACE_HIGH_ELF: case RACE_KUTAR:
 		p_ptr->vir_types[i++] = V_VITALITY;
 		break;
 	case RACE_HALF_GIANT: case RACE_GOLEM: case RACE_ANGEL: case RACE_DEMON:

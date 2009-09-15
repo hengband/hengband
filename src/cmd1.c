@@ -461,6 +461,18 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 					mult *= 3;
 			}
 
+			/* Hex - Slay Good (Runesword) */
+			if (hex_spelling(HEX_RUNESWORD) &&
+			    (r_ptr->flags3 & RF3_GOOD))
+			{
+				if (is_original_ap_and_seen(m_ptr))
+				{
+					r_ptr->r_flags3 |= RF3_GOOD;
+				}
+
+				if (mult < 20) mult = 20;
+			}
+
 			/* Brand (Acid) */
 			if (have_flag(flgs, TR_BRAND_ACID) || ((p_ptr->special_attack & (ATTACK_ACID)) && !thrown))
 			{
@@ -2196,7 +2208,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			}
 
 			/* Vampiric drain */
-			if ((have_flag(flgs, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN))
+			if ((have_flag(flgs, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN) || hex_spelling(HEX_VAMP_BLADE))
 			{
 				/* Only drain "living" monsters */
 				if (monster_living(r_ptr))
@@ -2205,7 +2217,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					can_drain = FALSE;
 			}
 
-			if ((have_flag(flgs, TR_VORPAL)) && (randint1(vorpal_chance*3/2) == 1) && !zantetsu_mukou)
+			if ((have_flag(flgs, TR_VORPAL) || hex_spelling(HEX_RUNESWORD)) && (randint1(vorpal_chance*3/2) == 1) && !zantetsu_mukou)
 				vorpal_cut = TRUE;
 			else vorpal_cut = FALSE;
 
@@ -2698,6 +2710,9 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					{
 						drain_heal = damroll(2, drain_result / 6);
 
+						/* Hex */
+						if (hex_spelling(HEX_VAMP_BLADE)) drain_heal *= 2;
+
 						if (cheat_xtra)
 						{
 #ifdef JP
@@ -2747,7 +2762,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			drain_result = 0;
 
 			/* Confusion attack */
-			if ((p_ptr->special_attack & ATTACK_CONFUSE) || (chaos_effect == 3) || (mode == HISSATSU_CONF))
+			if ((p_ptr->special_attack & ATTACK_CONFUSE) || (chaos_effect == 3) || (mode == HISSATSU_CONF) || hex_spelling(HEX_CONFUSION))
 			{
 				/* Cancel glowing hands */
 				if (p_ptr->special_attack & ATTACK_CONFUSE)

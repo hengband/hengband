@@ -89,6 +89,15 @@ void set_action(int typ)
 #endif
 				break;
 			}
+			case ACTION_SPELL:
+			{
+#ifdef JP
+				msg_print("呪文の詠唱を中断した。");
+#else
+				msg_print("You stopped spelling all spells.");
+#endif
+				break;
+			}
 		}
 	}
 
@@ -287,14 +296,19 @@ void dispel_player(void)
 #endif
 	}
 
-	if (music_singing_any())
+	if (music_singing_any() || hex_spelling_any())
 	{
+#ifdef JP
+		cptr str = (music_singing_any()) ? "歌" : "呪文";
+#else
+		cptr str = (music_singing_any()) ? "singing" : "spelling";
+#endif
 		p_ptr->magic_num1[1] = p_ptr->magic_num1[0];
 		p_ptr->magic_num1[0] = 0;
 #ifdef JP
-		msg_print("歌が途切れた。");
+		msg_format("%sが途切れた。", str);
 #else
-		msg_print("Your singing is interrupted.");
+		msg_format("Your %s is interrupted.", str);
 #endif
 		p_ptr->action = ACTION_NONE;
 
@@ -551,6 +565,9 @@ msg_print("あなたは混乱した！");
 			/* Sniper */
 			if (p_ptr->concent) reset_concentration(TRUE);
 
+			/* Hex */
+			if (hex_spelling_any()) stop_hex_spell_all();
+
 			notice = TRUE;
 			p_ptr->counter = FALSE;
 			chg_virtue(V_HARMONY, -1);
@@ -759,6 +776,9 @@ msg_print("体が麻痺してしまった！");
 
 			/* Sniper */
 			if (p_ptr->concent) reset_concentration(TRUE);
+
+			/* Hex */
+			if (hex_spelling_any()) stop_hex_spell_all();
 
 			p_ptr->counter = FALSE;
 			notice = TRUE;
@@ -3621,6 +3641,9 @@ msg_print("割れるような頭痛がする。");
 
 		/* Sniper */
 		if (p_ptr->concent) reset_concentration(TRUE);
+
+		/* Hex */
+		if (hex_spelling_any()) stop_hex_spell_all();
 
 		/* Notice */
 		notice = TRUE;

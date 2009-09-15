@@ -654,6 +654,7 @@ static tval_desc tvals[] =
 	{ TV_CRUSADE_BOOK,      "Crusade Spellbook"},
 	{ TV_MUSIC_BOOK,        "Music Spellbook"      },
 	{ TV_HISSATSU_BOOK,     "Book of Kendo" },
+	{ TV_HEX_BOOK,          "Hex Spellbook"        },
 	{ TV_PARCHMENT,         "Parchment" },
 	{ TV_WHISTLE,           "Whistle"	},
 	{ TV_SPIKE,             "Spikes"               },

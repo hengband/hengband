@@ -2477,6 +2477,18 @@ K:661:0x87/0x83
 # a Diamond Amulet
 K:662:0x87/0x80
 
+# [Handbook of Hex]
+K:663:0x8D/0x88
+
+# [Heigh Curse]
+K:664:0x8D/0x89
+
+# [Curse and Spelling]
+K:665:0x8D/0x8A
+
+# [Forbidden Cursebook]
+K:666:0x8D/0x8B
+
 
 ##### Monster attr/char definitions #####
 

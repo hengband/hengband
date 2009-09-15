@@ -182,6 +182,7 @@ extern bool inkey_base;
 extern bool inkey_xtra;
 extern bool inkey_scan;
 extern bool inkey_flag;
+extern bool get_com_no_macros;
 extern s16b coin_type;
 extern bool opening_chest;
 extern bool shimmer_monsters;
@@ -1730,6 +1731,12 @@ extern void flush_ringbuf(void);
 extern void prepare_chuukei_hooks(void);
 #endif
 
+extern void prepare_movie_hooks(void);
+extern void prepare_browse_movie_aux(cptr filename);
+extern void prepare_browse_movie(cptr filename);
+extern void browse_movie(void);
+extern bool browsing_movie;
+
 #ifdef TRAVEL
 /* for travel */
 extern travel_type travel;
@@ -1740,10 +1747,22 @@ extern int snipe_type;
 extern bool reset_concent;   /* Concentration reset flag */
 extern bool is_fired;
 
-/* sniper.c */
+/* snipe.c */
 extern void reset_concentration(bool msg);
 extern void display_snipe_list(void);
 extern int tot_dam_aux_snipe (int mult, monster_type *m_ptr);
 extern void do_cmd_snipe(void);
 extern void do_cmd_snipe_browse(void);
 extern int boost_concentration_damage(int tdam);
+
+/* hex.c */
+extern bool stop_hex_spell_all(void);
+extern bool stop_hex_spell(void);
+extern void check_hex(void);
+extern bool hex_spell_fully(void);
+extern void revenge_spell();
+extern void revenge_store(int dam);
+extern bool teleport_barrier(int m_idx);
+extern bool magic_barrier(int m_idx);
+extern bool multiply_barrier(int m_idx);
+

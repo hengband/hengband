@@ -3626,7 +3626,10 @@ bool get_com(cptr prompt, char *command, bool z_escape)
 	prt(prompt, 0, 0);
 
 	/* Get a key */
-	*command = inkey_special(FALSE);
+	if (get_com_no_macros)
+		*command = inkey_special(FALSE);
+	else
+		*command = inkey();
 
 	/* Clear the prompt */
 	prt("", 0, 0);

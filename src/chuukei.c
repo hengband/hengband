@@ -2,12 +2,14 @@
 
 #include "angband.h"
 
-#ifdef CHUUKEI
-
 #include <stdio.h>
 #include <stdarg.h>
 #include <ctype.h>
+#ifdef WINDOWS
+#include <windows.h>
+#endif
 
+#ifdef CHUUKEI
 #if defined(WINDOWS)
 #include <winsock.h>
 #elif defined(MACINTOSH)
@@ -26,6 +28,8 @@
 #endif
 
 #define MAX_HOSTNAME 256
+#endif
+
 #define RINGBUF_SIZE 1024*1024
 #define FRESH_QUEUE_SIZE 4096
 #ifdef WINDOWS
@@ -40,10 +44,15 @@ static int sd; /* ソケットのファイルディスクリプタ */
 static long epoch_time;  /* バッファ開始時刻 */
 static long time_diff;   /* プレイ側との時間のずれ(これを見ながらディレイを調整していく) */
 static int browse_delay; /* 表示するまでの時間(100ms単位)(この間にラグを吸収する) */
+#ifdef CHUUKEI
 static int server_port;
 static char server_name[MAX_HOSTNAME];
+#endif
 
+static int movie_fd;
+static int movie_mode;
 
+#ifdef CHUUKEI
 #ifdef WINDOWS
 #define close closesocket
 #endif
@@ -52,7 +61,7 @@ static char server_name[MAX_HOSTNAME];
 static InetSvcRef inet_services = nil;
 static EndpointRef ep			= kOTInvalidEndpointRef;
 #endif
-
+#endif
 /* 描画する時刻を覚えておくキュー構造体 */
 static struct
 {
@@ -91,20 +100,18 @@ static errr (*old_bigcurs_hook)(int x, int y);
 static errr (*old_wipe_hook)(int x, int y, int n);
 static errr (*old_text_hook)(int x, int y, int n, byte a, cptr s);
 
-
 static void disable_chuukei_server(void)
 {
 	term *t = angband_term[0];
-
+#ifdef CHUUKEI
 	chuukei_server = FALSE;
-
+#endif /* CHUUKEI */
 	t->xtra_hook = old_xtra_hook;
 	t->curs_hook = old_curs_hook;
 	t->bigcurs_hook = old_bigcurs_hook;
 	t->wipe_hook = old_wipe_hook;
 	t->text_hook = old_text_hook;
 }
-
 
 /* ANSI Cによればstatic変数は0で初期化されるが一応初期化する */
 static errr init_buffer(void)
@@ -140,9 +147,20 @@ static errr insert_ringbuf(char *buf)
 	int len;
 	len = strlen(buf) + 1; /* +1は終端文字分 */
 
+	if (movie_mode)
+	{
+		fd_write(movie_fd, buf, len);
+#ifdef CHUUKEI
+		if (!chuukei_server) return 0;
+#else
+		return 0;
+#endif
+	}
+
 	/* バッファをオーバー */
 	if (ring.inlen + len >= RINGBUF_SIZE)
 	{
+#ifdef CHUUKEI
 		if (chuukei_server) disable_chuukei_server();
 		else chuukei_client = FALSE;
 
@@ -150,7 +168,7 @@ static errr insert_ringbuf(char *buf)
 		inkey();
 
 		close(sd);
-
+#endif
 		return (-1);
 	}
 
@@ -177,6 +195,7 @@ static errr insert_ringbuf(char *buf)
 	return (0);
 }
 
+#ifdef CHUUKEI
 void flush_ringbuf(void)
 {
 #ifndef MACINTOSH
@@ -258,6 +277,7 @@ void flush_ringbuf(void)
 	}
 #endif
 }
+
 
 static int read_chuukei_prf(cptr prf_name)
 {
@@ -471,7 +491,7 @@ int connect_chuukei_server(char *prf_name)
 
 #endif
 }
-
+#endif /* CHUUKEI */
 
 /* strが同じ文字の繰り返しかどうか調べる */
 static bool string_is_repeat(char *str, int len)
@@ -609,6 +629,91 @@ void prepare_chuukei_hooks(void)
 }
 
 
+/*
+ * Prepare z-term hooks to call send_*_to_chuukei_server()'s
+ */
+void prepare_movie_hooks(void)
+{
+	char buf[1024];
+	char tmp[80];
+
+	if (movie_mode)
+	{
+		movie_mode = 0;
+#ifdef CHUUKEI
+		if (!chuukei_server) disable_chuukei_server();
+#else
+		disable_chuukei_server();
+#endif
+		fd_close(movie_fd);
+#ifdef JP
+		msg_print("録画を終了しました。");
+#else
+		msg_print("Stopped recording.");
+#endif
+	}
+	else
+	{
+		sprintf(tmp, "%s.amv", player_base);
+#ifdef JP
+		if (get_string("ムービー記録ファイル: ", tmp, 80))
+#else
+		if (get_string("Movie file name: ", tmp, 80))
+#endif
+		{
+			int fd;
+
+			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
+
+			fd = fd_open(buf, O_RDONLY);
+
+			/* Existing file */
+			if (fd >= 0)
+			{
+				char out_val[160];
+
+				/* Close the file */
+				(void)fd_close(fd);
+
+				/* Build query */
+#ifdef JP
+				(void)sprintf(out_val, "現存するファイルに上書きしますか? (%s)", buf);
+#else
+				(void)sprintf(out_val, "Replace existing file %s? ", buf);
+#endif
+
+				/* Ask */
+				if (!get_check(out_val)) return;
+
+				movie_fd = fd_open(buf, O_WRONLY | O_TRUNC);
+			}
+			else
+			{
+				movie_fd = fd_make(buf, 0644);
+			}
+
+			if (!movie_fd)
+			{
+#ifdef JP
+				msg_print("ファイルを開けません！");
+#else
+				msg_print("Can not open file.");
+#endif
+				return;
+			}
+
+			movie_mode = 1;
+#ifdef CHUUKEI
+			if (!chuukei_server) prepare_chuukei_hooks();
+#else
+			prepare_chuukei_hooks();
+#endif
+			do_cmd_redraw();
+		}
+	}
+}
+
+#ifdef CHUUKEI
 static int handle_timestamp_data(int timestamp)
 {
 	long current_time = get_current_time();
@@ -651,7 +756,35 @@ static int handle_timestamp_data(int timestamp)
 	/* Success */
 	return 0;
 }
+#endif /* CHUUKEI */
 
+static int handle_movie_timestamp_data(int timestamp)
+{
+	static int initialized = FALSE;
+
+	/* 描画キューは空かどうか？ */
+	if (!initialized)
+	{
+		/* バッファリングし始めの時間を保存しておく */
+		epoch_time = get_current_time();
+		epoch_time += browse_delay;
+		epoch_time -= timestamp;
+		//time_diff = current_time - timestamp;
+		initialized = TRUE;
+	}
+
+	/* 描画キューに保存し、保存位置を進める */
+	fresh_queue.time[fresh_queue.tail] = timestamp;
+	fresh_queue.tail ++;
+
+	/* キューの最後尾に到達したら先頭に戻す */
+	fresh_queue.tail %= FRESH_QUEUE_SIZE;
+
+	/* Success */
+	return 0;
+}
+
+#ifdef CHUUKEI
 static int read_sock(void)
 {
 	static char recv_buf[RECVBUF_SIZE];
@@ -677,6 +810,48 @@ static int read_sock(void)
 			   描画キューに保存する処理を呼ぶ */
 			if ((recv_buf[0] == 'd') &&
 			    (handle_timestamp_data(atoi(recv_buf + 1)) < 0))
+				return -1;
+
+			/* 受信データを保存 */
+			if (insert_ringbuf(recv_buf) < 0) 
+				return -1;
+
+			/* 次のデータ移行をrecv_bufの先頭に移動 */
+			memmove(recv_buf, recv_buf + i + 1, remain_bytes - i - 1);
+
+			remain_bytes -= (i+1);
+			i = 0;
+		}
+	}
+
+	return 0;
+}
+#endif
+
+static int read_movie_file(void)
+{
+	static char recv_buf[RECVBUF_SIZE];
+	static int remain_bytes = 0;
+	int recv_bytes;
+	int i;
+
+	recv_bytes = read(movie_fd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes);
+
+	if (recv_bytes <= 0)
+		return -1;
+
+	/* 前回残ったデータ量に今回読んだデータ量を追加 */
+	remain_bytes += recv_bytes;
+
+	for (i = 0; i < remain_bytes; i ++)
+	{
+		/* データのくぎり('\0')を探す */
+		if (recv_buf[i] == '\0')
+		{
+			/* 'd'で始まるデータ(タイムスタンプ)の場合は
+			   描画キューに保存する処理を呼ぶ */
+			if ((recv_buf[0] == 'd') &&
+			    (handle_movie_timestamp_data(atoi(recv_buf + 1)) < 0))
 				return -1;
 
 			/* 受信データを保存 */
@@ -847,6 +1022,7 @@ static bool flush_ringbuf_client(void)
 	return (TRUE);
 }
 
+#ifdef CHUUKEI
 void browse_chuukei()
 {
 #ifndef MACINTOSH
@@ -918,5 +1094,46 @@ void browse_chuukei()
 	}
 #endif /*MACINTOSH*/
 }
-
 #endif /* CHUUKEI */
+
+void prepare_browse_movie_aux(cptr filename)
+{
+	movie_fd = fd_open(filename, O_RDONLY);
+	
+	browsing_movie = TRUE;
+
+	init_buffer();
+}
+
+void prepare_browse_movie(cptr filename)
+{
+	char buf[1024];
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
+
+	prepare_browse_movie_aux(buf);
+}
+
+void browse_movie(void)
+{
+	Term_clear();
+	Term_fresh();
+	Term_xtra(TERM_XTRA_REACT, 0);
+
+	while (read_movie_file() == 0)
+	{
+		while (fresh_queue.next != fresh_queue.tail)
+		{
+			if (!flush_ringbuf_client())
+			{
+				Term_xtra(TERM_XTRA_FLUSH, 0);
+
+				/* ソケットにデータが来ているかどうか調べる */
+#ifdef WINDOWS
+				Sleep(WAIT);
+#else
+				usleep(WAIT);
+#endif
+			}
+		}
+	}
+}

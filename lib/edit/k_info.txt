@@ -6317,3 +6317,37 @@ G:":w
 I:40:28:0
 W:50:0:2:55555
 F:INSTA_ART
+
+N:663:[¼ö½ÑÆþÌç]
+E:[Handbook of Hex]
+G:?:v
+I:107:0:0
+W:10:0:30:100
+A:10/1
+P:0:1d1:0:0:0
+
+N:664:[¾åµé¼öË¡]
+E:[High Curse]
+G:?:v
+I:107:1:0
+W:20:0:30:1000
+A:20/1
+P:0:1d1:0:0:0
+
+N:665:[±åº¨¼öÇû]
+E:[Curse and Spelling]
+G:?:D
+I:107:2:0
+W:50:0:30:25000
+A:50/1
+P:0:1d1:0:0:0
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:666:[¶Ø¼öË¡ÂçÁ´]
+E:[Forbidden Cursebook]
+G:?:D
+I:107:3:0
+W:90:0:30:100000
+A:90/3
+P:0:1d1:0:0:0
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD

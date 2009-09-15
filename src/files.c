@@ -822,7 +822,7 @@ cptr process_pref_file_expr(char **sp, char *fp)
 	char b2 = ']';
 
 	char f = ' ';
-	static char tmp[8];
+	static char tmp[10];
 
 	/* Initial */
 	s = (*sp);
@@ -1073,6 +1073,13 @@ cptr process_pref_file_expr(char **sp, char *fp)
 					v = "1";
 				else
 					v = "0";
+			}
+
+			/* Money */
+			else if (streq(b+1, "MONEY"))
+			{
+				sprintf(tmp, "%09d", p_ptr->au);
+				v = tmp;
 			}
 		}
 
@@ -2547,7 +2554,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 	case RACE_S_FAIRY:
 		add_flag(flgs, TR_LEVITATION);
 		break;
-	case RACE_KUTA:
+	case RACE_KUTAR:
 		add_flag(flgs, TR_RES_CONF);
 		break;
 	case RACE_ANDROID:
@@ -2778,6 +2785,18 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_SUST_DEX);
 		add_flag(flgs, TR_SUST_CON);
 		add_flag(flgs, TR_SUST_CHR);
+	}
+
+	/* Hex bonuses */
+	if (p_ptr->realm1 == REALM_HEX)
+	{
+		if (hex_spelling(HEX_DEMON_AURA))
+		{
+			add_flag(flgs, TR_SH_FIRE);
+			add_flag(flgs, TR_REGEN);
+		}
+		if (hex_spelling(HEX_ICE_ARMOR)) add_flag(flgs, TR_SH_COLD);
+		if (hex_spelling(HEX_SHOCK_CLOAK)) add_flag(flgs, TR_SH_ELEC);
 	}
 }
 

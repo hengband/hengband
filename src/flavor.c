@@ -34,6 +34,7 @@ static bool object_easy_know(int i)
 		case TV_CRUSADE_BOOK:
 		case TV_MUSIC_BOOK:
 		case TV_HISSATSU_BOOK:
+		case TV_HEX_BOOK:
 		{
 			return (TRUE);
 		}
@@ -450,6 +451,7 @@ char *object_desc_kosuu(char *t, object_type *o_ptr)
       case  TV_CRUSADE_BOOK:
       case  TV_MUSIC_BOOK:
       case  TV_HISSATSU_BOOK:
+	  case TV_HEX_BOOK:
       {
 	  t = object_desc_str(t, "ºý");
 	  break;
@@ -1736,6 +1738,20 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			basenm = "& Éð·Ý¤Î½ñ%";
 #else
 			basenm = "Book~ of Kendo %";
+#endif
+
+			break;
+		}
+
+		case TV_HEX_BOOK:
+		{
+#ifdef JP
+			basenm = "¼ö½Ñ¤ÎËâË¡½ñ%";
+#else
+			if (mp_ptr->spell_book == TV_LIFE_BOOK)
+				basenm = "& Book~ of Crusade Magic %";
+			else
+				basenm = "& Crusade Spellbook~ %";
 #endif
 
 			break;

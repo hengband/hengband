@@ -2834,6 +2834,9 @@ void do_cmd_rest(void)
 		stop_singing();
 	}
 
+	/* Hex */
+	if (hex_spelling_any()) stop_hex_spell_all();
+
 	/* Prompt for time if needed */
 	if (command_arg <= 0)
 	{
@@ -3381,6 +3384,8 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 	char o_name[MAX_NLEN];
 
+	u16b path_g[512];	/* For calcuration of path length */
+
 	int msec = delay_factor * delay_factor * delay_factor;
 
 	/* STICK TO */
@@ -3467,6 +3472,9 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		tx = target_col;
 		ty = target_row;
 	}
+
+	/* Get projection path length */
+	tdis = project_path(path_g, project_length, py, px, ty, tx, PROJECT_PATH|PROJECT_THRU) - 1;
 
 	project_length = 0; /* reset to default */
 
@@ -3614,20 +3622,8 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		/* Sniper */
 		if (snipe_type == SP_KILL_TRAP)
 		{
-			if (is_trap(cave[ny][nx].feat))
-			{
-				if (player_can_see_bold(ny, nx))
-				{
-#ifdef JP
-					msg_print("まばゆい閃光が走った！");
-#else
-					msg_print("There is a bright flash of light!");
-#endif
-					cave[ny][nx].info &= ~(CAVE_UNSAFE);
-				}
-
-				cave_alter_feat(ny, nx, FF_DISARM);
-			}
+			project(0, 0, ny, nx, 0, GF_KILL_TRAP,
+				(PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM), -1);
 		}
 
 		/* Sniper */

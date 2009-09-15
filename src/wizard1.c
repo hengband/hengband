@@ -197,6 +197,7 @@ static grouper group_item[] =
 	{ TV_CRUSADE_BOOK,  "ËâË¡½ñ (ÇË¼Ù)" },
 	{ TV_MUSIC_BOOK,    "²Î½¸" },
 	{ TV_HISSATSU_BOOK, "Éð·Ý¤Î½ñ" },
+	{ TV_HEX_BOOK,      "ËâË¡½ñ (¼ö½Ñ)" },
 #else
 	{ TV_LIFE_BOOK,     "Books (Life)" },
 	{ TV_SORCERY_BOOK,  "Books (Sorcery)" },
@@ -210,6 +211,7 @@ static grouper group_item[] =
 	{ TV_CRUSADE_BOOK,  "Books (Crusade)" },
 	{ TV_MUSIC_BOOK,    "Song Books" },
 	{ TV_HISSATSU_BOOK, "Books (Kendo)" },
+	{ TV_HEX_BOOK,      "Books (Hex)" },
 #endif
 
 #ifdef JP

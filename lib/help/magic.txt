@@ -76,6 +76,7 @@ There are eleven class-specific magics (or techniques):
 - Mirror-magic        (for Mirror Master)
 - Ninjutsu            (for Ninja)
 - Shooting            (for Sniper)
+- Hex                 (for High-Mage)
 
 See raceclas.txt#TheClasses [a] for more details.
 
@@ -227,6 +228,13 @@ See raceclas.txt#TheClasses [a] for more details.
      The fail rate of Crusade spells goes up if the caster's alignment
      tends towards evil.
 
+***** <Hex>
+--- Hex ---
+
+     Hex is a realm of 'Curse'; It is technics rather than magics, and
+     casted continually like a songs. Most of spells give terrible
+     effects during they are spelled. The fail rate of Daemon spells
+     goes up for casters aligned towards good.
 
 
 ***** <CastingSpells>
@@ -350,7 +358,7 @@ inscriptions).
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.1.0
+Updated    : Hengband 1.7.2
 
 
 ***** [a] raceclas.txt#TheClasses

@@ -1090,11 +1090,15 @@ void do_cmd_nikki(void)
 		prt("(2) 文章を記録する", 5, 5);
 		prt("(3) 直前に入手又は鑑定したものを記録する", 6, 5);
 		prt("(4) 記録を消去する", 7, 5);
+
+		prt("(R) プレイ動画を記録する/中止する", 9, 5);
 #else
 		prt("(1) Display your record", 4, 5);
 		prt("(2) Add record", 5, 5);
 		prt("(3) Record item you last get/identify", 6, 5);
 		prt("(4) Delete your record", 7, 5);
+
+		prt("(R) Record playing movie / or stop it", 9, 5);
 #endif
 
 
@@ -1126,6 +1130,10 @@ void do_cmd_nikki(void)
 		case '4':
 			do_cmd_erase_nikki();
 			break;
+		case 'r': case 'R':
+			screen_load();
+			prepare_movie_hooks();
+			return;
 		default: /* Unknown option */
 			bell();
 		}
@@ -5589,7 +5597,7 @@ static int collect_objects(int grp_cur, int object_idx[], byte mode)
 		if (TV_LIFE_BOOK == group_tval)
 		{
 			/* Hack -- All spell books */
-			if (TV_LIFE_BOOK <= k_ptr->tval && k_ptr->tval <= TV_HISSATSU_BOOK)
+			if (TV_LIFE_BOOK <= k_ptr->tval && k_ptr->tval <= TV_HEX_BOOK)
 			{
 				/* Add the object */
 				object_idx[object_cnt++] = i;
