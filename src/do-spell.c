@@ -11685,10 +11685,10 @@ static cptr do_hex_spell(int spell, int mode)
 	case 7:
 #ifdef JP
 		if (name) return "我慢";
-		if (desc) return "数ターン攻撃を耐え、受けたダメージの1/5を魔力の球として放つ。";
+		if (desc) return "数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。";
 #else
 		if (name) return "Patience";
-		if (desc) return "Fires strong mana ball after patient any damage while few turns.";
+		if (desc) return "Bursts hell fire strongly after patients any damage while few turns.";
 #endif
 		power = MIN(200, (p_ptr->magic_num1[2] * 2));
 		if (info) return info_damage(0, 0, power);
