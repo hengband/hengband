@@ -12388,20 +12388,20 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("Éð´ï¤Î³éË¾¤¬¾Ã¤¨µî¤Ã¤¿¡£");
-#else
-			msg_format("Thirsty of weapon%s disappeared.", (empty_hands(FALSE)) ? "" : "s");
-#endif
-		}
-		if (stop)
-		{
-#ifdef JP
 			msg_print("¤¢¤Ê¤¿¤ÎÉð´ï¤¬·ì¤òÍß¤·¤Æ¤¤¤ë¡£");
 #else
 			if (!empty_hands(FALSE))
 				msg_print("Your weapons want more blood now.");
 			else
 				msg_print("Your weapon wants more blood now.");
+#endif
+		}
+		if (stop)
+		{
+#ifdef JP
+			msg_print("Éð´ï¤Î³éË¾¤¬¾Ã¤¨µî¤Ã¤¿¡£");
+#else
+			msg_format("Thirsty of weapon%s disappeared.", (empty_hands(FALSE)) ? "" : "s");
 #endif
 		}
 		break;
