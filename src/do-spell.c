@@ -12169,8 +12169,13 @@ static cptr do_hex_spell(int spell, int mode)
 		{
 			object_type *o_ptr = &inventory[INVEN_OUTER];
 
-			if (!o_ptr->k_idx) do_spell(REALM_HEX, spell, SPELL_STOP);
-			if (!object_is_cursed(o_ptr)) do_spell(REALM_HEX, spell, SPELL_STOP);
+			if ((!o_ptr->k_idx) || (!object_is_cursed(o_ptr)))
+			{
+				do_spell(REALM_HEX, spell, SPELL_STOP);
+				p_ptr->magic_num1[0] &= ~(1L << spell);
+				p_ptr->magic_num2[0]--;
+				if (!p_ptr->magic_num2[0]) set_action(ACTION_NONE);
+			}
 		}
 		if (stop)
 		{
