@@ -12503,10 +12503,10 @@ static cptr do_hex_spell(int spell, int mode)
 	case 31:
 #ifdef JP
 		if (name) return "復讐の宣告";
-		if (desc) return "数ターン後に、それまで受けたダメージに応じた威力の魔法の弾を、対象のモンスターがその時いた位置に放つ。";
+		if (desc) return "数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。";
 #else
 		if (name) return "Revenge sentence";
-		if (desc) return "Fires magic ball to revenge after few turns.";
+		if (desc) return "Fires  a ball of hell fire to try revenging after few turns.";
 #endif
 		power = p_ptr->magic_num1[2];
 		if (info) return info_damage(0, 0, power);
