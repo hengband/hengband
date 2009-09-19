@@ -11743,6 +11743,10 @@ static cptr do_hex_spell(int spell, int mode)
 					msg_format("You return %d damages.", power);
 #endif
 				}
+
+				/* Reset */
+				p_ptr->magic_num2[1] = 0;
+				p_ptr->magic_num2[2] = 0;
 				p_ptr->magic_num1[2] = 0;
 			}
 		}
