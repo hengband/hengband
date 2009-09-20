@@ -1518,7 +1518,7 @@ D:$An utterly perfect, cleanly chiseled sword, with a edge that effortlessly
 D:$ slices rock and bone and spells to render the wearer lithe and nimble. It
 D:$ is combat incarnate.
 D:シンダール語で「誉の鋼」を意味する美しい完全無欠の刀だ。
-D:の刃は岩や骨を苦もなく切り裂き、
+D:その刃は岩や骨を苦もなく切り裂き、
 D:手にする者にしなやかで敏捷な動作を授ける魔法が込められている。
 D:それはまさに戦いの化身だ。
 
@@ -3150,7 +3150,7 @@ F:SLAY_ORC | SLAY_TROLL | RES_FIRE
 D:$A blade of Elendil that was broken by his fall as the battled Sauron upon
 D:$ the steps of Barad-Dur.
 D:「金はすべて光るとは限らぬ、
-D:放浪する者すべてが、まよう者ではない
+D:放浪する者すべてが、まよう者ではない。
 D:年ふるも、強きは枯れぬ、
 D:深き根に、霜は届かぬ。
 D:灰の中から火はよみがえり、
@@ -3238,8 +3238,8 @@ P:40:2d4:-3:0:30
 F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC |
 F:RES_DARK | RES_CONF | RES_POIS |
 F:FREE_ACT | SEE_INVIS | ACTIVATE
-D:玄武，白虎，朱雀とともに四獣と呼ばれる青龍の鱗鎧を
-D:身に纏えば，神の如き守護の力が得られる。
+D:玄武、白虎、朱雀とともに四獣と呼ばれる青龍の鱗鎧を
+D:身に纏えば、神の如き守護の力が得られる。
 
 N:202:『天の沼矛』
 E:'Ama-no-NumaHoko'
@@ -3317,7 +3317,7 @@ F:STR | SLAY_EVIL | SLAY_DEMON | BRAND_ELEC |
 F:RES_ELEC | RES_FIRE | RES_NETHER |
 F:LITE | SEE_INVIS | SHOW_MODS | ACTIVATE
 D:天地魔界のバランスを保つ使命を持つ竜の騎士に代々伝わる
-D:オリハルコンの剣で，竜騎将バランが所有している。
+D:オリハルコンの剣で、竜騎将バランが所有している。
 
 N:208:『イージス・ファング』
 E:'Aegis Fang'
