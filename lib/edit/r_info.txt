@@ -21606,3 +21606,69 @@ D:$This giant man is the king of southern Nanman. It is said that
 D:$he is about 10 feet tall. His army has hard rattan armor.
 D:南蛮の南にある烏戈国を支配する王で、その身の丈は12尺と言われている。
 D:彼の誇る藤甲兵は水も刃もはじく。ただし燃えやすい。
+
+N:1079:『見えざるピンクのユニコーン』
+E:Invisible Pink Unicorn
+G:q:v
+I:140:67d89:77:123:1
+W:67:3:0:34567:0:0
+B:KICK:CONFUSE:9d9
+B:KICK:CONFUSE:9d9
+B:BUTT:HURT:8d8
+B:BITE:UN_BONUS:7d7
+F:UNIQUE | FEMALE | GOOD | EVIL | NONLIVING | RIDING |
+F:FORCE_MAXHP | OPEN_DOOR | BASH_DOOR | INVISIBLE |
+F:ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_2D2 |
+F:SMART | REGENERATE |
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_POIS | IM_COLD | NO_CONF | NO_SLEEP |
+F:RES_LITE | RES_DARK | RES_NETH | RES_CHAO | RES_NEXU |
+S:1_IN_3 |
+S:BLINK | HEAL | SHRIEK | SCARE | CONF | BLIND |
+S:DARKNESS | FORGET | MIND_BLAST | BRAIN_SMASH |
+D:$"Invisible Pink Unicorns are beings of great spiritual power. 
+D:$We know this because they are capable of being invisible 
+D:$and pink at the same time. Like all religions, the Faith 
+D:$of the Invisible Pink Unicorns is based upon both logic 
+D:$and faith. We have faith that they are pink; we logically 
+D:$know that they are invisible because we can't see them." 
+D:$(Steve Eley)
+D:「見えざるピンクのユニコーン達は偉大なるスピリチュアルパワ
+D:ーの存在である。我々は彼女らが目に見えないと同時にピンク色
+D:で存在することが出来るがゆえにそれを承知している。すべての
+D:宗教と同様、見えざるピンクのユニコーンの教義は論理と信仰に
+D:基づいている。我々は彼女らがピンクであると信じている。我々
+D:は、我々が彼女らを見ることができないから見えないのだと論理
+D:的に知っている。」
+D:(スティーヴ・イーリー)
+
+N:1080:『空飛ぶスパゲッティ・モンスター』
+E:Flying Spaghetti Monsterism
+G:,:y
+B:HIT:HURT:10d10
+I:125:91d111:40:111:40
+W:70:3:0:45678:0:0
+F:UNIQUE | GOOD | NONLIVING | CAN_FLY | FORCE_MAXHP |
+F:RAND_25 | SMART | PASS_WALL |
+F:NO_CONF | NO_SLEEP | NO_STUN |
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
+F:RES_NETH | RES_CHAO |
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | DROP_GREAT
+S:1_IN_4
+S:BLINK | TPORT | SLOW | CONF | HOLD | TELE_TO |
+S:BRAIN_SMASH | BA_WATE | BA_CHAO | BR_NEXU | BR_CONF |
+S:S_MONSTERS |
+D:$"I think we can all look forward to the time when these 
+D:$three theories are given equal time in our science 
+D:$classrooms across the country, and eventually the world; 
+D:$One third time for Intelligent Design, one third time for 
+D:$Flying Spaghetti Monsterism, and one third time for logical 
+D:$conjecture based on overwhelming observable evidence." 
+D:$(Bobby Henderson)
+D:この世界を創造したと言われる、空飛ぶスバゲッティの絡み合っ
+D:たような何かだ。
+D:「私は国中の、そしていつかは世界中の科学の時間にこの三つの
+D:理論がどれも等しく教えられるのを楽しみにできると思います。
+D:三分の一はインテリジェントデザインのため、三分の一はスパゲ
+D:ッティモンスター教のため、三分の一は圧倒的な量の観察可能な
+D:証拠に基づく論理的推論のため」
+D:(ボビー・ヘンダーソン)
