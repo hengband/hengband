@@ -2368,6 +2368,18 @@ static void display_inventory(void)
 #endif
 
 	}
+
+	if (cur_store_num == STORE_HOME || cur_store_num == STORE_MUSEUM)
+	{
+		k = st_ptr->stock_size;
+
+		if (cur_store_num == STORE_HOME && !powerup_home) k /= 10;
+#ifdef JP
+		put_str(format("アイテム数:  %4d/%4d", st_ptr->stock_num, k), 19 + xtra_stock, 27);
+#else
+		put_str(format("Objects:  %4d/%4d", st_ptr->stock_num, k), 19 + xtra_stock, 30);
+#endif
+	}
 }
 
 
