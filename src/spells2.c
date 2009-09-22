@@ -588,8 +588,9 @@ info[i++] = "あなたはランダムな方向に対して数回攻撃することができる。(75 MP)";
 #endif
 			}
 			break;
-		case CLASS_MAGE:
 		case CLASS_HIGH_MAGE:
+			if (p_ptr->realm1 == REALM_HEX) break;
+		case CLASS_MAGE:
 		case CLASS_SORCERER:
 			if (plev > 24)
 			{
