@@ -21642,7 +21642,7 @@ D:的に知っている。」
 D:(スティーヴ・イーリー)
 
 N:1080:『空飛ぶスパゲッティ・モンスター』
-E:Flying Spaghetti Monsterism
+E:Flying Spaghetti Monster
 G:,:y
 B:HIT:HURT:10d10
 I:125:91d111:40:111:40
@@ -21664,7 +21664,7 @@ D:$One third time for Intelligent Design, one third time for
 D:$Flying Spaghetti Monsterism, and one third time for logical 
 D:$conjecture based on overwhelming observable evidence." 
 D:$(Bobby Henderson)
-D:この世界を創造したと言われる、空飛ぶスバゲッティの絡み合っ
+D:この世界を創造したと言われる、空飛ぶスパゲッティの絡み合っ
 D:たような何かだ。
 D:「私は国中の、そしていつかは世界中の科学の時間にこの三つの
 D:理論がどれも等しく教えられるのを楽しみにできると思います。
