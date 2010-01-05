@@ -2392,7 +2392,7 @@ void update_mon(int m_idx, bool full)
 
 			/* Basic telepathy */
 			/* Snipers get telepathy when they concentrate deeper */
-			else if ((p_ptr->telepathy) || (p_ptr->concent >= CONCENT_TELE_THRESHOLD))
+			else if (p_ptr->telepathy)
 			{
 				/* Empty mind, no telepathy */
 				if (r_ptr->flags2 & (RF2_EMPTY_MIND))

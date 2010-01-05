@@ -102,6 +102,9 @@ static bool snipe_concentrate(void)
 
 	reset_concent = FALSE;
 
+	/* Recalculate bonuses */
+	p_ptr->update |= (PU_BONUS);
+
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Update the monsters */
@@ -123,6 +126,9 @@ void reset_concentration(bool msg)
 
 	p_ptr->concent = 0;
 	reset_concent = FALSE;
+
+	/* Recalculate bonuses */
+	p_ptr->update |= (PU_BONUS);
 
 	p_ptr->redraw |= (PR_STATUS);
 
