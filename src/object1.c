@@ -4424,7 +4424,7 @@ void display_inven(void)
 		Term_erase(3+n, i, 255);
 
 		/* Display the weight if needed */
-		if (show_weights && o_ptr->weight)
+		if (show_weights)
 		{
 			int wgt = o_ptr->weight * o_ptr->number;
 #ifdef JP
@@ -4516,7 +4516,7 @@ void display_equip(void)
 		Term_erase(3+n, i - INVEN_RARM, 255);
 
 		/* Display the weight (if needed) */
-		if (show_weights && o_ptr->weight)
+		if (show_weights)
 		{
 			int wgt = o_ptr->weight * o_ptr->number;
 #ifdef JP
