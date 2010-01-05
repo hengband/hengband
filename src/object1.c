@@ -2363,6 +2363,7 @@ bool screen_object(object_type *o_ptr, u32b mode)
 
 	u32b flgs[TR_FLAG_SIZE];
 
+	char temp[70 * 20];
 	cptr            info[128];
 	char o_name[MAX_NLEN];
 	int wid, hgt;
@@ -2374,8 +2375,6 @@ bool screen_object(object_type *o_ptr, u32b mode)
 
 	/* Extract the description */
 	{
-		char temp[70 * 20];
-
 		roff_to_buf(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) :
 			    (k_text + k_info[o_ptr->k_idx].text),
 			    77 - 15, temp, sizeof(temp));
