@@ -7348,7 +7348,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 			if (fuzzy) msg_print("You are hit by something sharp and cold!");
 #endif
 
-			cold_dam(dam, killer, monspell);
+			get_damage = cold_dam(dam, killer, monspell);
 			if (!CHECK_MULTISHADOW())
 			{
 				if (!p_ptr->resist_shard)
