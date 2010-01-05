@@ -1058,12 +1058,6 @@ static void mass_produce(object_type *o_ptr)
 				if (cost < 1601L) size += damroll(1, 5);
 				else if (cost < 3201L) size += damroll(1, 3);
 			}
-
-			/* Ensure that mass-produced rods and wands get the correct pvals. */
-			if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
-			{
-				o_ptr->pval *= size;
-			}
 			break;
 		}
 	}
@@ -1111,6 +1105,12 @@ msg_print("ランダムアーティファクトは値引きなし。");
 
 	/* Save the total pile size */
 	o_ptr->number = size - (size * discount / 100);
+
+	/* Ensure that mass-produced rods and wands get the correct pvals. */
+	if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
+	{
+		o_ptr->pval *= o_ptr->number;
+	}
 }
 
 
