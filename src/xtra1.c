@@ -1350,7 +1350,7 @@ static void prt_speed(void)
 	row_speed = hgt + ROW_SPEED;
 
 	/* Hack -- Visually "undo" the Search Mode Slowdown */
-	if (p_ptr->action == ACTION_SEARCH) i += 10;
+	if (p_ptr->action == ACTION_SEARCH && !p_ptr->lightspeed) i += 10;
 
 	/* Fast */
 	if (i > 110)
