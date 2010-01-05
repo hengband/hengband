@@ -985,6 +985,8 @@ bool set_lightspeed(int v, bool do_dec)
 
 	if (p_ptr->is_dead) return FALSE;
 
+	if (p_ptr->wild_mode) v = 0;
+
 	/* Open */
 	if (v)
 	{
