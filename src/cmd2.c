@@ -3371,7 +3371,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 {
 	int dir;
 	int i, j, y, x, ny, nx, ty, tx, prev_y, prev_x;
-	int tdam, tdis, thits, tmul;
+	int tdam_base, tdis, thits, tmul;
 	int bonus, chance;
 	int cur_dis, visible;
 
@@ -3414,7 +3414,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	tdis = 10;
 
 	/* Base damage from thrown object plus launcher bonus */
-	tdam = damroll(o_ptr->dd, o_ptr->ds) + o_ptr->to_d + j_ptr->to_d;
+	tdam_base = damroll(o_ptr->dd, o_ptr->ds) + o_ptr->to_d + j_ptr->to_d;
 
 	/* Actually "fire" the object */
 	bonus = (p_ptr->to_h_b + o_ptr->to_h + j_ptr->to_h);
@@ -3432,11 +3432,8 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	tmul = tmul * (100 + (int)(adj_str_td[p_ptr->stat_ind[A_STR]]) - 128);
 
 	/* Boost the damage */
-	tdam *= tmul;
-	tdam /= 100;
-
-	/* Get extra damage from concentration */
-	if (p_ptr->concent) tdam = boost_concentration_damage(tdam);
+	tdam_base *= tmul;
+	tdam_base /= 100;
 
 	/* Base range */
 	tdis = 13 + tmul/80;
@@ -3706,6 +3703,10 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 			if (test_hit_fire(chance - cur_dis, armour, m_ptr->ml))
 			{
 				bool fear = FALSE;
+				int tdam = tdam_base;
+
+				/* Get extra damage from concentration */
+				if (p_ptr->concent) tdam = boost_concentration_damage(tdam);
 
 				/* Handle unseen monster */
 				if (!visible)
