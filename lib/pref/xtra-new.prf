@@ -19,7 +19,7 @@ R:0:0/0x81
 R:0:0x92/0x82
 ?:[EQU $RACE Hobbit]
 R:0:0/0x83
-?:[EQU $RACE Gnome
+?:[EQU $RACE Gnome]
 R:0:0/0x84
 ?:[EQU $RACE Dwarf]
 R:0:0/0x85
