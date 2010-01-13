@@ -233,6 +233,9 @@ static void shuffle_flavors(byte tval)
 		k1_ptr->flavor = k2_ptr->flavor;
 		k2_ptr->flavor = tmp;
 	}
+
+	/* Free an array for a list of k_idx */
+	C_KILL(k_idx_list, max_k_idx, s16b);
 }
 
 /*
