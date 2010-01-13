@@ -870,7 +870,11 @@ errr process_autopick_file_command(char *buf)
 		   && entry->flag[0] == autopick_list[i].flag[0]
 		   && entry->flag[1] == autopick_list[i].flag[1]
 		   && entry->dice == autopick_list[i].dice
-		   && entry->bonus == autopick_list[i].bonus) return 0;
+		   && entry->bonus == autopick_list[i].bonus)
+		{
+			autopick_free_entry(entry);
+			return 0;
+		}
 
 	add_autopick_list(entry);
 	return 0;
