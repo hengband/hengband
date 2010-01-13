@@ -520,6 +520,9 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！");
 			floor_item_charges(0 - item);
 		}
 
+		/* Window stuff */
+		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+
 		/* Don't eat a staff/wand itself */
 		return;
 	}
