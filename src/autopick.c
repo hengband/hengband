@@ -3711,6 +3711,8 @@ static void search_for_object(text_body_type *tb, object_type *o_ptr, bool forwa
 
 	while (TRUE)
 	{
+		bool match;
+
 		/* End of list? */
 		if (forward)
 		{
@@ -3725,8 +3727,9 @@ static void search_for_object(text_body_type *tb, object_type *o_ptr, bool forwa
 		if (!autopick_new_entry(entry, tb->lines_list[i], FALSE)) continue;
 
 		/* Does this line match to the object? */
-		if (!is_autopick_aux(o_ptr, entry, o_name)) continue;
-
+		match = is_autopick_aux(o_ptr, entry, o_name);
+		autopick_free_entry(entry);
+		if (!match)	continue;
 
 		/* Found a line but it's inactive */
 		if (tb->states[i] & LSTAT_BYPASS)
@@ -6324,6 +6327,7 @@ void do_cmd_edit_autopick(void)
 
 	free_text_lines(tb->lines_list);
 
+	string_free(tb->search_str);
 	string_free(tb->last_destroyed);
 
 	/* Destroy string chain */
