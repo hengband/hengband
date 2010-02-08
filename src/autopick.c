@@ -688,6 +688,8 @@ static void autopick_free_entry(autopick_type *entry)
 {
 	string_free(entry->name);
 	string_free(entry->insc);
+	entry->name = NULL;
+	entry->insc = NULL;
 }
 
 
