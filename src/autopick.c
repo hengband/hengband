@@ -210,7 +210,7 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 	cptr prev_ptr, ptr, old_ptr;
 	int prev_flg;
 
-	if (str[1] == ':') switch (str[0])
+	if (str[0] && str[1] == ':') switch (str[0])
 	{
 	case '?': case '%':
 	case 'A': case 'P': case 'C':
@@ -4792,7 +4792,7 @@ static void draw_text_editor(text_body_type *tb)
 			str1 = "This line is a comment.";
 #endif
 		}
-		else if (tb->lines_list[tb->cy][1] == ':')
+		else if (tb->lines_list[tb->cy][0] && tb->lines_list[tb->cy][1] == ':')
 		{
 			switch(tb->lines_list[tb->cy][0])
 			{
