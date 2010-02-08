@@ -4623,12 +4623,12 @@ static void draw_text_editor(text_body_type *tb)
 			/* Parse the expr */
 			v = process_pref_file_expr(&ss, &f);
 
-			/* Cannot use string_free() because the string was "destroyed" */
-			C_FREE(s_keep, s_len + 1, char);
-
 			/* Set flag */
 			if (streq(v, "0")) state |= LSTAT_BYPASS;
 			else state &= ~LSTAT_BYPASS;
+
+			/* Cannot use string_free() because the string was "destroyed" */
+			C_FREE(s_keep, s_len + 1, char);
 
 			/* Re-update this line's state */
 			tb->states[y] = state | LSTAT_EXPRESSION;
