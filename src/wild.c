@@ -926,8 +926,11 @@ static void init_terrain_table(int terrain, s16b feat_global, cptr fmt, ...)
 		}
 	}
 
-	feat = terrain_table[terrain][cur];
-	for (; cur < MAX_FEAT_IN_TERRAIN; cur++) terrain_table[terrain][cur] = feat;
+	/* Paranoia */
+	if (cur < MAX_FEAT_IN_TERRAIN)
+	{
+		plog_fmt("Too few parameters");
+	}
 
 	/* End the varargs stuff */
 	va_end(vp);
