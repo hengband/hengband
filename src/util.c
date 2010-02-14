@@ -5221,26 +5221,29 @@ size_t my_strcpy(char *buf, const char *src, size_t bufsize)
 	const char *s = src;
 	size_t len = 0;
 
-	/* reserve for NUL termination */
-	bufsize--;
+	if (bufsize > 0) {
+		/* reserve for NUL termination */
+		bufsize--;
 
-	/* Copy as many bytes as will fit */
-	while (len < bufsize)
-	{
-		if (iskanji(*s))
+		/* Copy as many bytes as will fit */
+		while (*s && (len < bufsize))
 		{
-			if (len + 1 >= bufsize || !*(s+1)) break;
-			*d++ = *s++;
-			*d++ = *s++;
-			len += 2;
+			if (iskanji(*s))
+			{
+				if (len + 1 >= bufsize || !*(s+1)) break;
+				*d++ = *s++;
+				*d++ = *s++;
+				len += 2;
+			}
+			else
+			{
+				*d++ = *s++;
+				len++;
+			}
 		}
-		else
-		{
-			*d++ = *s++;
-			len++;
-		}
+		*d = '\0';
 	}
-	*d = '\0';
+
 	while(*s++) len++;
 
 	return len;
