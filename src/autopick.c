@@ -219,6 +219,7 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 
 	entry->flag[0] = entry->flag[1] = 0L;
 	entry->dice = 0;
+	entry->bonus = 0;
 
 	act = DO_AUTOPICK | DO_DISPLAY;
 	while (TRUE)
