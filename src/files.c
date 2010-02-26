@@ -4127,11 +4127,7 @@ static void dump_aux_display_player(FILE *fff)
 		fprintf(fff, "%s\n", buf);
 	}
 
-	for (i = 0; (unsigned int) i < (p_ptr->count / 80); i++)
-		fprintf(fff, " ");
 	fprintf(fff, "\n");
-	for (i = 0; (unsigned int) i < (p_ptr->count % 80); i++)
-		fprintf(fff, " ");
 }
 
 
