@@ -4571,10 +4571,21 @@ bool process_the_world(int num, int who, bool vs_player)
 
 void monster_gain_exp(int m_idx, int s_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	monster_race *s_ptr = &r_info[s_idx];
+	monster_type *m_ptr;
+	monster_race *r_ptr;
+	monster_race *s_ptr;
 	int new_exp;
+
+	/* Paranoia */
+	if (m_idx <= 0 || s_idx <= 0) return;
+
+	m_ptr = &m_list[m_idx];
+
+	/* Paranoia -- Skip dead monsters */
+	if (!m_ptr->r_idx) return;
+
+	r_ptr = &r_info[m_ptr->r_idx];
+	s_ptr = &r_info[s_idx];
 
 	if (p_ptr->inside_battle) return;
 

@@ -6026,7 +6026,7 @@ note = "には効果がなかった。";
 				}
 			}
 
-			monster_gain_exp(who, m_ptr->r_idx);
+			if (who > 0) monster_gain_exp(who, m_ptr->r_idx);
 
 			/* Generate treasure, etc */
 			monster_death(c_ptr->m_idx, FALSE);
