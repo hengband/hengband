@@ -1440,7 +1440,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	if (!(object_is_aware(o_ptr)))
+	if (!(object_is_aware(q_ptr)))
 	{
 		chg_virtue(V_PATIENCE, -1);
 		chg_virtue(V_CHANCE, 1);
@@ -1467,7 +1467,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 		switch (p_ptr->prace)
 		{
 			case RACE_VAMPIRE:
-				(void)set_food(p_ptr->food + (o_ptr->pval / 10));
+				(void)set_food(p_ptr->food + (q_ptr->pval / 10));
 				break;
 			case RACE_SKELETON:
 				/* Do nothing */
@@ -1476,7 +1476,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 			case RACE_ZOMBIE:
 			case RACE_DEMON:
 			case RACE_SPECTRE:
-				set_food(p_ptr->food + ((o_ptr->pval) / 20));
+				set_food(p_ptr->food + ((q_ptr->pval) / 20));
 				break;
 			case RACE_ANDROID:
 				if (q_ptr->tval == TV_FLASK)
@@ -1490,7 +1490,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 				}
 				else
 				{
-					set_food(p_ptr->food + ((o_ptr->pval) / 20));
+					set_food(p_ptr->food + ((q_ptr->pval) / 20));
 				}
 				break;
 			case RACE_ENT:
@@ -1499,22 +1499,22 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 #else
 				msg_print("You are moistened.");
 #endif
-				set_food(MIN(p_ptr->food + o_ptr->pval + MAX(0, o_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
+				set_food(MIN(p_ptr->food + q_ptr->pval + MAX(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
 				break;
 			default:
-				(void)set_food(p_ptr->food + o_ptr->pval);
+				(void)set_food(p_ptr->food + q_ptr->pval);
 				break;
 		}
 		break;
 	case MIMIC_DEMON:
 	case MIMIC_DEMON_LORD:
-		set_food(p_ptr->food + ((o_ptr->pval) / 20));
+		set_food(p_ptr->food + ((q_ptr->pval) / 20));
 		break;
 	case MIMIC_VAMPIRE:
-		(void)set_food(p_ptr->food + (o_ptr->pval / 10));
+		(void)set_food(p_ptr->food + (q_ptr->pval / 10));
 		break;
 	default:
-		(void)set_food(p_ptr->food + o_ptr->pval);
+		(void)set_food(p_ptr->food + q_ptr->pval);
 		break;
 	}
 }
