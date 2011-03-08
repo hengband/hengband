@@ -87,6 +87,7 @@ void set_action(int typ)
 #else
 				msg_print("You are no longer walking extremely fast.");
 #endif
+				energy_use = 100;
 				break;
 			}
 			case ACTION_SPELL:

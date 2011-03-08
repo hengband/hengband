@@ -711,7 +711,7 @@ void do_cmd_eat_food(void)
 static void do_cmd_quaff_potion_aux(int item)
 {
 	int         ident, lev;
-	object_type	*o_ptr;
+	object_type *o_ptr;
 	object_type forge;
 	object_type *q_ptr;
 

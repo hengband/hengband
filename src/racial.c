@@ -1407,11 +1407,35 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_NINJA:
 		{
-			if (p_ptr->action == ACTION_HAYAGAKE) set_action(ACTION_NONE);
-			else set_action(ACTION_HAYAGAKE);
+			if (p_ptr->action == ACTION_HAYAGAKE)
+			{
+				set_action(ACTION_NONE);
+			}
+			else
+			{
+				cave_type *c_ptr = &cave[py][px];
+				feature_type *f_ptr = &f_info[c_ptr->feat];
+
+				if (!have_flag(f_ptr->flags, FF_PROJECT) ||
+				    (!p_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP)))
+				{
+#ifdef JP
+					msg_print("ここでは素早く動けない。");
+#else
+					msg_print("You cannot run in here.");
+#endif
+				}
+				else
+				{
+					set_action(ACTION_HAYAGAKE);
+				}
+			}
+
+
 			energy_use = 0;
 			break;
 		}
+
 		}
 	}
 	else if (p_ptr->mimic_form)
