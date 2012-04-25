@@ -55,9 +55,9 @@
  *   "(FAKE_VER_MAJOR-10).(FAKE_VER_MINOR).(FAKE_VER_PATCH)".
  */
 #define FAKE_VERSION   0
-#define FAKE_VER_MAJOR 11
-#define FAKE_VER_MINOR 7
-#define FAKE_VER_PATCH 2
+#define FAKE_VER_MAJOR 12
+#define FAKE_VER_MINOR 0
+#define FAKE_VER_PATCH 0
 
 
 /*
