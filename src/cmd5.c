@@ -1105,6 +1105,8 @@ void do_cmd_cast(void)
 
 	cptr q, s;
 
+	bool over_exerted = FALSE;
+
 	/* Require spell ability */
 	if (!p_ptr->realm1 && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE))
 	{
@@ -1307,9 +1309,16 @@ msg_format("その%sを%sのに十分なマジックポイントがない。",prayer,
 
 	}
 
-
 	/* Spell failure chance */
 	chance = spell_chance(spell, use_realm);
+
+	/* Sufficient mana */
+	if (need_mana <= p_ptr->csp)
+	{
+		/* Use some mana */
+		p_ptr->csp -= need_mana;
+	}
+	else over_exerted = TRUE;
 
 	/* Failed spell */
 	if (randint0(100) < chance)
@@ -1542,15 +1551,9 @@ msg_print("An infernal sound echoed.");
 	/* Take a turn */
 	energy_use = 100;
 
-	/* Sufficient mana */
-	if (need_mana <= p_ptr->csp)
-	{
-		/* Use some mana */
-		p_ptr->csp -= need_mana;
-	}
 
 	/* Over-exert the player */
-	else
+	if(over_exerted)
 	{
 		int oops = need_mana;
 
