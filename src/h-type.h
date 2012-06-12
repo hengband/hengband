@@ -1,6 +1,8 @@
 /* File: h-type.h */
 
+#ifdef C99
 #include <stdint.h>
+#endif
 
 #ifndef INCLUDED_H_TYPE_H
 #define INCLUDED_H_TYPE_H
@@ -115,12 +117,29 @@ typedef unsigned long huge;
 
 
 /* Signed/Unsigned 16 bit value */
+#ifdef C99
 typedef int16_t s16b;
 typedef uint16_t u16b;
+#else
+typedef signed short s16b;
+typedef unsigned short u16b;
+#endif
 
 /* Signed/Unsigned 32 bit value */
-typedef int32_t s32b;
-typedef uint32_t u32b;
+#ifdef C99
+
+#ifdef L64 /* 64 bit longs */
+typedef signed int s32b;
+typedef unsigned int u32b;
+#else
+typedef signed long s32b;
+typedef unsigned long u32b;
+#endif
+
+#else
+typedef signed long s32b;
+typedef unsigned long u32b;
+#endif
 
 
 
