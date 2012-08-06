@@ -2645,8 +2645,7 @@ static errr Term_text_win(int x, int y, int n, byte a, const char *s)
 				rc.right += td->tile_wid;
 			} else {
 				/* Dump the text */
-				ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc,
-				       s+i, 1, NULL);
+				ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s+i, 1, NULL);
 
 				/* Advance */
 				rc.left += td->tile_wid;

@@ -1263,31 +1263,23 @@ s16b get_mon_num(int level)
 	alloc_entry		*table = alloc_race_table;
 
 	int pls_kakuritu, pls_level;
-	int hoge=mysqrt(level*10000L);
+	int hoge = mysqrt(level*10000L);
 
 	if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
-	if ((dungeon_turn > hoge*(TURNS_PER_TICK*500L)) && !level)
-	{
-		pls_kakuritu = MAX(2, NASTY_MON-((dungeon_turn/(TURNS_PER_TICK*2500L)-hoge/10)));
-		pls_level = MIN(8,3 + dungeon_turn/(TURNS_PER_TICK*20000L)-hoge/40);
-	}
-	else
-	{
-		pls_kakuritu = NASTY_MON;
-		pls_level = 2;
-	}
+	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((dungeon_turn / (TURNS_PER_TICK * 2500L) - hoge / 10)));
+	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + dungeon_turn / (TURNS_PER_TICK * 20000L) - hoge / 40);
 
 	if (d_info[dungeon_type].flags1 & DF1_MAZE)
 	{
-		pls_kakuritu = MIN(pls_kakuritu/2, pls_kakuritu-10);
+		pls_kakuritu = MIN(pls_kakuritu / 2, pls_kakuritu - 10);
 		if (pls_kakuritu < 2) pls_kakuritu = 2;
 		pls_level += 2;
 		level += 3;
 	}
 
 	/* Boost the level */
-	if ((level > 0) && !p_ptr->inside_battle && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
+	if (!p_ptr->inside_battle && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
 	{
 		/* Nightmare mode allows more out-of depth monsters */
 		if (ironman_nightmare && !randint0(pls_kakuritu))
@@ -1301,7 +1293,7 @@ s16b get_mon_num(int level)
 			if (!randint0(pls_kakuritu))
 			{
 				/* Pick a level bonus */
-				int d = MIN(5, level/10) + pls_level;
+				int d = MIN(5, level / 10) + pls_level;
 
 				/* Boost the level */
 				level += d;
@@ -1311,14 +1303,13 @@ s16b get_mon_num(int level)
 			if (!randint0(pls_kakuritu))
 			{
 				/* Pick a level bonus */
-				int d = MIN(5, level/10) + pls_level;
+				int d = MIN(5, level / 10) + pls_level;
 
 				/* Boost the level */
 				level += d;
 			}
 		}
 	}
-
 
 	/* Reset total */
 	total = 0L;

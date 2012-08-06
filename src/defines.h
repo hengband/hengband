@@ -632,7 +632,9 @@
  * during the creation of a monsters (see "get_mon_num()" in "monster.c").
  * Lower values yield harder monsters more often.
  */
-#define NASTY_MON       50              /* 1/chance of inflated monster level */
+#define NASTY_MON_BASE     50              /* 1/chance of inflated monster level */
+#define NASTY_MON_MAX      3
+#define NASTY_MON_PLUS_MAX 20
 
 /* 1/x chance of hurting even if invulnerable! */
 #define PENETRATE_INVULNERABILITY 13
