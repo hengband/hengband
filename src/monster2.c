@@ -1253,13 +1253,9 @@ static int mysqrt(int n)
 s16b get_mon_num(int level)
 {
 	int			i, j, p;
-
 	int			r_idx;
-
 	long		value, total;
-
 	monster_race	*r_ptr;
-
 	alloc_entry		*table = alloc_race_table;
 
 	int pls_kakuritu, pls_level;
@@ -1268,7 +1264,7 @@ s16b get_mon_num(int level)
 	if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
 	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((dungeon_turn / (TURNS_PER_TICK * 2500L) - hoge / 10)));
-	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + dungeon_turn / (TURNS_PER_TICK * 20000L) - hoge / 40);
+	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + dungeon_turn / (TURNS_PER_TICK * 20000L) - hoge / 40 + MIN(5, level / 10)) ;
 
 	if (d_info[dungeon_type].flags1 & DF1_MAZE)
 	{
@@ -1293,20 +1289,7 @@ s16b get_mon_num(int level)
 			if (!randint0(pls_kakuritu))
 			{
 				/* Pick a level bonus */
-				int d = MIN(5, level / 10) + pls_level;
-
-				/* Boost the level */
-				level += d;
-			}
-
-			/* Occasional "nasty" monster */
-			if (!randint0(pls_kakuritu))
-			{
-				/* Pick a level bonus */
-				int d = MIN(5, level / 10) + pls_level;
-
-				/* Boost the level */
-				level += d;
+				level += pls_level;
 			}
 		}
 	}
@@ -1362,7 +1345,6 @@ s16b get_mon_num(int level)
 	/* No legal monsters */
 	if (total <= 0) return (0);
 
-
 	/* Pick a monster */
 	value = randint0(total);
 
@@ -1375,7 +1357,6 @@ s16b get_mon_num(int level)
 		/* Decrement */
 		value = value - table[i].prob3;
 	}
-
 
 	/* Power boost */
 	p = randint0(100);
