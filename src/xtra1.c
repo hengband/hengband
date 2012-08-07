@@ -2098,7 +2098,7 @@ static void calc_spells(void)
 {
 	int			i, j, k, levels;
 	int			num_allowed;
-	int                     num_boukyaku = 0;
+	int         num_boukyaku = 0;
 
 	magic_type		*s_ptr;
 	int which;
@@ -2401,7 +2401,7 @@ static void calc_spells(void)
 			/* Count it */
 			k++;
 		}
-		if (k>32) k = 32;
+		if (k > 32) k = 32;
 		if ((p_ptr->new_spells > k) && ((mp_ptr->spell_book == TV_LIFE_BOOK) || (mp_ptr->spell_book == TV_HISSATSU_BOOK))) p_ptr->new_spells = k;
 	}
 

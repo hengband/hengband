@@ -1980,7 +1980,21 @@ msg_print("ダンジョンが揺れた...");
 
 		case SV_SCROLL_SPELL:
 		{
-			if ((p_ptr->pclass == CLASS_WARRIOR) || (p_ptr->pclass == CLASS_IMITATOR) || (p_ptr->pclass == CLASS_MINDCRAFTER) || (p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_ARCHER) || (p_ptr->pclass == CLASS_MAGIC_EATER) || (p_ptr->pclass == CLASS_RED_MAGE) || (p_ptr->pclass == CLASS_SAMURAI) || (p_ptr->pclass == CLASS_BLUE_MAGE) || (p_ptr->pclass == CLASS_CAVALRY) || (p_ptr->pclass == CLASS_BERSERKER) || (p_ptr->pclass == CLASS_SMITH) || (p_ptr->pclass == CLASS_MIRROR_MASTER) || (p_ptr->pclass == CLASS_NINJA)) break;
+			if ((p_ptr->pclass == CLASS_WARRIOR) ||
+				(p_ptr->pclass == CLASS_IMITATOR) ||
+				(p_ptr->pclass == CLASS_MINDCRAFTER) ||
+				(p_ptr->pclass == CLASS_SORCERER) ||
+				(p_ptr->pclass == CLASS_ARCHER) ||
+				(p_ptr->pclass == CLASS_MAGIC_EATER) ||
+				(p_ptr->pclass == CLASS_RED_MAGE) ||
+				(p_ptr->pclass == CLASS_SAMURAI) ||
+				(p_ptr->pclass == CLASS_BLUE_MAGE) ||
+				(p_ptr->pclass == CLASS_CAVALRY) ||
+				(p_ptr->pclass == CLASS_BERSERKER) ||
+				(p_ptr->pclass == CLASS_SMITH) ||
+				(p_ptr->pclass == CLASS_MIRROR_MASTER) ||
+				(p_ptr->pclass == CLASS_NINJA) ||
+				(p_ptr->pclass == CLASS_SNIPER)) break;
 			p_ptr->add_spells++;
 			p_ptr->update |= (PU_SPELLS);
 			ident = TRUE;
