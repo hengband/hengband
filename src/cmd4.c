@@ -7347,9 +7347,9 @@ static void do_cmd_knowledge_kill_count(void)
 #endif
 		else
 #ifdef JP
-			fprintf(fff,"あなたは%ld体の敵を倒している。\n\n", Total);
+			fprintf(fff,"あなたは%ld体の敵を倒している。\n\n", (long int)Total);
 #else
-			fprintf(fff,"You have defeated %ld %s.\n\n", Total, (Total == 1) ? "enemy" : "enemies");
+			fprintf(fff,"You have defeated %ld %s.\n\n", (long int)Total, (Total == 1) ? "enemy" : "enemies");
 #endif
 	}
 
@@ -7429,10 +7429,10 @@ static void do_cmd_knowledge_kill_count(void)
 
 	fprintf(fff,"----------------------------------------------\n");
 #ifdef JP
-	fprintf(fff,"    合計: %lu 体を倒した。\n", Total);
+	fprintf(fff,"    合計: %lu 体を倒した。\n", (unsigned long int)Total);
 #else
 	fprintf(fff,"   Total: %lu creature%s killed.\n",
-		Total, (Total == 1 ? "" : "s"));
+		(unsigned long int)Total, (Total == 1 ? "" : "s"));
 #endif
 
 

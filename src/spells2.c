@@ -109,9 +109,9 @@ sprintf(Dummy, "現在の体力ランク : %d/100", percent);
 	info[i++] = "";
 
 #ifdef JP
-	sprintf(Dummy, "現在の属性 : %s(%ld)", your_alignment(), p_ptr->align);
+	sprintf(Dummy, "現在の属性 : %s(%ld)", your_alignment(), (long int)p_ptr->align);
 #else
-	sprintf(Dummy, "Your alighnment : %s(%ld)", your_alignment(), p_ptr->align);
+	sprintf(Dummy, "Your alighnment : %s(%ld)", your_alignment(), (long int)p_ptr->align);
 #endif
 	strcpy(buf[1], Dummy);
 	info[i++] = buf[1];

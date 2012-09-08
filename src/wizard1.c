@@ -2402,7 +2402,7 @@ static void spoil_mon_evol(cptr fname)
 #endif
 		for (n = 1; r_ptr->next_exp; n++)
 		{
-			fprintf(fff, "%*s-(%ld)-> ", n * 2, "", r_ptr->next_exp);
+			fprintf(fff, "%*s-(%ld)-> ", n * 2, "", (long int)r_ptr->next_exp);
 			fprintf(fff, "[%d]: ", r_ptr->next_r_idx);
 			r_ptr = &r_info[r_ptr->next_r_idx];
 #ifdef JP

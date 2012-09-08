@@ -322,7 +322,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 	case 11: sprintf(p, " %s%dd6", s_dam, plev / 2);  break;
 	case 12: sprintf(p, " %sd%d+%d", s_dam, plev * 3, plev * 3); break;
 #ifdef JP
-	case 13: sprintf(p, " 行動:%ld回", (p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
+	case 13: sprintf(p, " 行動:%ld回", (long int)(p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
 #else
 	case 13: sprintf(p, " %ld acts.", (p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
 #endif

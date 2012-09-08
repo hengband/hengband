@@ -46,8 +46,8 @@ void do_cmd_inven(void)
 
 #ifdef JP
 	sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
-	    lbtokg1(p_ptr->total_weight) , lbtokg2(p_ptr->total_weight) ,
-	    (p_ptr->total_weight * 100) / weight_limit());
+	    (int)lbtokg1(p_ptr->total_weight) , (int)lbtokg2(p_ptr->total_weight) ,
+	    (long int)((p_ptr->total_weight * 100) / weight_limit()));
 #else
 	sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ",
 	    (int)(p_ptr->total_weight / 10), (int)(p_ptr->total_weight % 10),
@@ -120,12 +120,12 @@ void do_cmd_equip(void)
 	/* Build a prompt */
 #ifdef JP
 	sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
-	    lbtokg1(p_ptr->total_weight) , lbtokg2(p_ptr->total_weight) ,
-	    (p_ptr->total_weight * 100) / weight_limit());
+	    (int)lbtokg1(p_ptr->total_weight) , (int)lbtokg2(p_ptr->total_weight) ,
+	    (long int)((p_ptr->total_weight * 100) / weight_limit()));
 #else
 	sprintf(out_val, "Equipment: carrying %d.%d pounds (%ld%% of capacity). Command: ",
 	    (int)(p_ptr->total_weight / 10), (int)(p_ptr->total_weight % 10),
-	    (p_ptr->total_weight * 100) / weight_limit());
+	    (long int)((p_ptr->total_weight * 100) / weight_limit()));
 #endif
 
 

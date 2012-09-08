@@ -932,7 +932,7 @@ static void prt_hp(void)
 	put_str("HP", ROW_CURHP, COL_CURHP);
 
 	/* 現在のヒットポイント */
-	sprintf(tmp, "%4ld", p_ptr->chp);
+	sprintf(tmp, "%4ld", (long int)p_ptr->chp);
 
 	if (p_ptr->chp >= p_ptr->mhp)
 	{
@@ -953,7 +953,7 @@ static void prt_hp(void)
 	put_str( "/", ROW_CURHP, COL_CURHP + 7 );
 
 	/* 最大ヒットポイント */
-	sprintf(tmp, "%4ld", p_ptr->mhp);
+	sprintf(tmp, "%4ld", (long int)p_ptr->mhp);
 	color = TERM_L_GREEN;
 
 	c_put_str(color, tmp, ROW_CURHP, COL_CURHP + 8 );
@@ -983,7 +983,7 @@ static void prt_sp(void)
 #endif
 
 	/* 現在のマジックポイント */
-	sprintf(tmp, "%4ld", p_ptr->csp);
+	sprintf(tmp, "%4ld", (long int)p_ptr->csp);
 
 	if (p_ptr->csp >= p_ptr->msp)
 	{
@@ -1004,7 +1004,7 @@ static void prt_sp(void)
 	put_str( "/", ROW_CURSP, COL_CURSP + 7 );
 
 	/* 最大マジックポイント */
-	sprintf(tmp, "%4ld", p_ptr->msp);
+	sprintf(tmp, "%4ld", (long int)p_ptr->msp);
 	color = TERM_L_GREEN;
 
 	c_put_str(color, tmp, ROW_CURSP, COL_CURSP + 8);

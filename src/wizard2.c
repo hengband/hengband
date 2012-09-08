@@ -1040,7 +1040,7 @@ static void wiz_statistics(object_type *o_ptr)
 			break;
 		}
 
-		sprintf(tmp_val, "%ld", test_roll);
+		sprintf(tmp_val, "%ld", (long int)test_roll);
 		if (get_string(p, tmp_val, 10)) test_roll = atol(tmp_val);
 		test_roll = MAX(1, test_roll);
 
