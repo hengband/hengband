@@ -127,15 +127,8 @@ typedef unsigned short u16b;
 
 /* Signed/Unsigned 32 bit value */
 #ifdef C99
-
-#ifdef L64 /* 64 bit longs */
-typedef signed int s32b;
-typedef unsigned int u32b;
-#else
-typedef signed long s32b;
-typedef unsigned long u32b;
-#endif
-
+typedef int32_t s32b;
+typedef uint32_t u32b;
 #else
 typedef signed long s32b;
 typedef unsigned long u32b;
