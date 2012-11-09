@@ -21672,3 +21672,38 @@ D:三分の一はインテリジェントデザインのため、三分の一はスパゲ
 D:ッティモンスター教のため、三分の一は圧倒的な量の観察可能な
 D:証拠に基づく論理的推論のため」
 D:(ボビー・ヘンダーソン)
+
+N:1081:チャージマン『研』
+E:Ken, the Charge Man
+G:p:y
+I:120:14d14:20:30:20
+W:9:10:0:150:0:0
+B:SHOOT:HURT:5d6
+B:HIT:HURT:1d6
+B:HIT:HURT:1d6
+B:HIT:HURT:1d6
+F:UNIQUE | MALE | FORCE_SLEEP | FORCE_MAXHP | CAN_SPEAK | HUMAN |
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | DROP_GREAT | WILD_WOOD |
+F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | EVIL | DROP_SKELETON | DROP_CORPSE
+S:1_IN_4
+S:SHOOT | BLINK
+D:アルファガン、ビジュームベルト、スカイロッドなどの破壊兵器を所持し、
+D:毎日のようにジュラル星人を大量虐殺している小学生だ。 
+D:「チャージマン！殺してやる！」「それは僕が言う言葉だ！」
+D:（『チャージマン研！』アニメ第３６話・『戦慄!悪魔の病院』）
+
+N:1082:ジュラル星人
+E:Alien Jural
+G:h:v
+I:105:3d6:10:10:10
+W:5:8:0:20:0:0
+B:SHOOT:HURT:1d5
+B:HIT:HURT:1d4
+B:HIT:HURT:1d4
+F:DROP_90 | OPEN_DOOR | BASH_DOOR | FRIENDS | DROP_CORPSE |
+F:WILD_WOOD | HAS_LITE_1 |
+S:1_IN_6
+S:SHOOT
+D:彼等の文明は地球より５００年進んでいるそうだ。
+D:「これから毎日家を焼こうぜ」
+D:（『チャージマン研！』アニメ第２５話・『雄一少年を救え！』）

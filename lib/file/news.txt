@@ -1,6 +1,6 @@
 
                   ****************************************
-                  **           Hengband 2.0.0           **
+                  **           Hengband 2.1.0           **
                   ****************************************
 
           Based on Moria:   Copyright (c) 1985 Robert Alan Koeneke
