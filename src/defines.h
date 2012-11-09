@@ -149,7 +149,7 @@
 /*
  * Arena constants
  */
-#define MAX_ARENA_MONS		38	/* -KMW- */
+#define MAX_ARENA_MONS		40	/* -KMW- */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT))
 
 
@@ -4874,6 +4874,7 @@ extern int PlayerUID;
 #define MON_BEGGAR        12
 #define MON_LEPER         13
 #define MON_BLACK_MARKET  14
+#define MON_LION_HEART    19
 #define MON_GHB           39
 #define MON_NOV_PRIEST    45
 #define MON_GRIP          53
@@ -5115,6 +5116,7 @@ extern int PlayerUID;
 #define MON_LOUSY         1063
 #define MON_JIZOTAKO      1065
 #define MON_TANUKI        1067
+#define MON_HATOPOPPO     1083
 
 /* Maximum "Nazguls" number */
 #define MAX_NAZGUL_NUM 5

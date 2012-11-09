@@ -1170,6 +1170,7 @@ arena_type arena_info[MAX_ARENA_MONS + 2] =
 {
 	{ MON_NOBORTA,       0,         0                             },
 	{ MON_MORI_TROLL,    0,         0                             },
+	{ MON_LION_HEART,    0,         0                             },
 	{ MON_TIGER,         0,         0                             },
 	{ MON_DRUID,         0,         0                             },
 	{ MON_HILL_GIANT,    TV_POTION, SV_POTION_SPEED               },
