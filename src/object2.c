@@ -2583,7 +2583,7 @@ static bool add_esp_strong(object_type *o_ptr)
 }
 
 
-#define MAX_ESP_WEAK 9
+#define MAX_ESP_WEAK 10
 static void add_esp_weak(object_type *o_ptr, bool extra)
 {
 	int i = 0;
@@ -2619,6 +2619,7 @@ static void add_esp_weak(object_type *o_ptr, bool extra)
 	case 7: add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
 	case 8: add_flag(o_ptr->art_flags, TR_ESP_HUMAN); break;
 	case 9: add_flag(o_ptr->art_flags, TR_ESP_GOOD); break;
+	case 10: add_flag(o_ptr->art_flags, TR_ESP_UNIQUE); break;
 	}
 }
 

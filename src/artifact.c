@@ -129,17 +129,18 @@ void one_dragon_ele_resistance(object_type *o_ptr)
  */
 void one_low_esp(object_type *o_ptr)
 {
-	switch (randint1(9))
+	switch (randint1(10))
 	{
-	case 1: add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);   break;
-	case 2: add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);   break;
-	case 3: add_flag(o_ptr->art_flags, TR_ESP_DEMON);   break;
-	case 4: add_flag(o_ptr->art_flags, TR_ESP_ORC);   break;
-	case 5: add_flag(o_ptr->art_flags, TR_ESP_TROLL);   break;
-	case 6: add_flag(o_ptr->art_flags, TR_ESP_GIANT);   break;
-	case 7: add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
-	case 8: add_flag(o_ptr->art_flags, TR_ESP_HUMAN);   break;
-	case 9: add_flag(o_ptr->art_flags, TR_ESP_GOOD);   break;
+	case 1:  add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);   break;
+	case 2:  add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);   break;
+	case 3:  add_flag(o_ptr->art_flags, TR_ESP_DEMON);   break;
+	case 4:  add_flag(o_ptr->art_flags, TR_ESP_ORC);   break;
+	case 5:  add_flag(o_ptr->art_flags, TR_ESP_TROLL);   break;
+	case 6:  add_flag(o_ptr->art_flags, TR_ESP_GIANT);   break;
+	case 7:  add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
+	case 8:  add_flag(o_ptr->art_flags, TR_ESP_HUMAN);   break;
+	case 9:  add_flag(o_ptr->art_flags, TR_ESP_GOOD);   break;
+	case 10: add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);   break;
 	}
 }
 
@@ -995,6 +996,11 @@ static void random_misc(object_type * o_ptr)
 				break;
 			case 8:
 				add_flag(o_ptr->art_flags, TR_ESP_GOOD);
+				if (!artifact_bias && one_in_(3))
+					artifact_bias = BIAS_LAW;
+				break;
+			case 9:
+				add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
 				if (!artifact_bias && one_in_(3))
 					artifact_bias = BIAS_LAW;
 				break;

@@ -3264,49 +3264,49 @@ static void display_player_other_flag_info(void)
 	row = 3;
 	col = col + 12 + 7;
 
-	display_player_equippy(row-2, col+12, 0);
-	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+12);
+	display_player_equippy(row-2, col+13, 0);
+	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+13);
 
 #ifdef JP
-	display_flag_aux(row+ 0, col, "テレパシー:", TR_TELEPATHY, &f, 0);
-	display_flag_aux(row+ 1, col, "邪悪ESP   :", TR_ESP_EVIL, &f, 0);
-	display_flag_aux(row+ 2, col, "無生物ESP :", TR_ESP_NONLIVING, &f, 0);
-	display_flag_aux(row+ 3, col, "善良ESP   :", TR_ESP_GOOD, &f, 0);
-	display_flag_aux(row+ 4, col, "不死ESP   :", TR_ESP_UNDEAD, &f, 0);
-	display_flag_aux(row+ 5, col, "悪魔ESP   :", TR_ESP_DEMON, &f, 0);
-	display_flag_aux(row+ 6, col, "龍ESP     :", TR_ESP_DRAGON, &f, 0);
-	display_flag_aux(row+ 7, col, "人間ESP   :", TR_ESP_HUMAN, &f, 0);
-	display_flag_aux(row+ 8, col, "動物ESP   :", TR_ESP_ANIMAL, &f, 0);
-	display_flag_aux(row+ 9, col, "オークESP :", TR_ESP_ORC, &f, 0);
-	display_flag_aux(row+10, col, "トロルESP :", TR_ESP_TROLL, &f, 0);
-	display_flag_aux(row+11, col, "巨人ESP   :", TR_ESP_GIANT, &f, 0);
-
-	display_flag_aux(row+13, col, "腕力維持  :", TR_SUST_STR, &f, 0);
-	display_flag_aux(row+14, col, "知力維持  :", TR_SUST_INT, &f, 0);
-	display_flag_aux(row+15, col, "賢さ維持  :", TR_SUST_WIS, &f, 0);
-	display_flag_aux(row+16, col, "器用維持  :", TR_SUST_DEX, &f, 0);
-	display_flag_aux(row+17, col, "耐久維持  :", TR_SUST_CON, &f, 0);
-	display_flag_aux(row+18, col, "魅力維持  :", TR_SUST_CHR, &f, 0);
+	display_flag_aux(row+ 0, col, "テレパシー :", TR_TELEPATHY, &f, 0);
+	display_flag_aux(row+ 1, col, "邪悪ESP    :", TR_ESP_EVIL, &f, 0);
+	display_flag_aux(row+ 2, col, "無生物ESP  :", TR_ESP_NONLIVING, &f, 0);
+	display_flag_aux(row+ 3, col, "善良ESP    :", TR_ESP_GOOD, &f, 0);
+	display_flag_aux(row+ 4, col, "不死ESP    :", TR_ESP_UNDEAD, &f, 0);
+	display_flag_aux(row+ 5, col, "悪魔ESP    :", TR_ESP_DEMON, &f, 0);
+	display_flag_aux(row+ 6, col, "龍ESP      :", TR_ESP_DRAGON, &f, 0);
+	display_flag_aux(row+ 7, col, "人間ESP    :", TR_ESP_HUMAN, &f, 0);
+	display_flag_aux(row+ 8, col, "動物ESP    :", TR_ESP_ANIMAL, &f, 0);
+	display_flag_aux(row+ 9, col, "オークESP  :", TR_ESP_ORC, &f, 0);
+	display_flag_aux(row+10, col, "トロルESP  :", TR_ESP_TROLL, &f, 0);
+	display_flag_aux(row+11, col, "巨人ESP    :", TR_ESP_GIANT, &f, 0);
+	display_flag_aux(row+12, col, "ユニークESP:", TR_ESP_UNIQUE, &f, 0);
+	display_flag_aux(row+13, col, "腕力維持   :", TR_SUST_STR, &f, 0);
+	display_flag_aux(row+14, col, "知力維持   :", TR_SUST_INT, &f, 0);
+	display_flag_aux(row+15, col, "賢さ維持   :", TR_SUST_WIS, &f, 0);
+	display_flag_aux(row+16, col, "器用維持   :", TR_SUST_DEX, &f, 0);
+	display_flag_aux(row+17, col, "耐久維持   :", TR_SUST_CON, &f, 0);
+	display_flag_aux(row+18, col, "魅力維持   :", TR_SUST_CHR, &f, 0);
 #else
-	display_flag_aux(row+ 0, col, "Telepathy :", TR_TELEPATHY, &f, 0);
-	display_flag_aux(row+ 1, col, "ESP Evil  :", TR_ESP_EVIL, &f, 0);
-	display_flag_aux(row+ 2, col, "ESP Noliv.:", TR_ESP_NONLIVING, &f, 0);
-	display_flag_aux(row+ 3, col, "ESP Good  :", TR_ESP_GOOD, &f, 0);
-	display_flag_aux(row+ 4, col, "ESP Undead:", TR_ESP_UNDEAD, &f, 0);
-	display_flag_aux(row+ 5, col, "ESP Demon :", TR_ESP_DEMON, &f, 0);
-	display_flag_aux(row+ 6, col, "ESP Dragon:", TR_ESP_DRAGON, &f, 0);
-	display_flag_aux(row+ 7, col, "ESP Human :", TR_ESP_HUMAN, &f, 0);
-	display_flag_aux(row+ 8, col, "ESP Animal:", TR_ESP_ANIMAL, &f, 0);
-	display_flag_aux(row+ 9, col, "ESP Orc   :", TR_ESP_ORC, &f, 0);
-	display_flag_aux(row+10, col, "ESP Troll :", TR_ESP_TROLL, &f, 0);
-	display_flag_aux(row+11, col, "ESP Giant :", TR_ESP_GIANT, &f, 0);
-
-	display_flag_aux(row+13, col, "Sust Str  :", TR_SUST_STR, &f, 0);
-	display_flag_aux(row+14, col, "Sust Int  :", TR_SUST_INT, &f, 0);
-	display_flag_aux(row+15, col, "Sust Wis  :", TR_SUST_WIS, &f, 0);
-	display_flag_aux(row+16, col, "Sust Dex  :", TR_SUST_DEX, &f, 0);
-	display_flag_aux(row+17, col, "Sust Con  :", TR_SUST_CON, &f, 0);
-	display_flag_aux(row+18, col, "Sust Chr  :", TR_SUST_CHR, &f, 0);
+	display_flag_aux(row+ 0, col, "Telepathy  :", TR_TELEPATHY, &f, 0);
+	display_flag_aux(row+ 1, col, "ESP Evil   :", TR_ESP_EVIL, &f, 0);
+	display_flag_aux(row+ 2, col, "ESP Noliv. :", TR_ESP_NONLIVING, &f, 0);
+	display_flag_aux(row+ 3, col, "ESP Good   :", TR_ESP_GOOD, &f, 0);
+	display_flag_aux(row+ 4, col, "ESP Undead :", TR_ESP_UNDEAD, &f, 0);
+	display_flag_aux(row+ 5, col, "ESP Demon  :", TR_ESP_DEMON, &f, 0);
+	display_flag_aux(row+ 6, col, "ESP Dragon :", TR_ESP_DRAGON, &f, 0);
+	display_flag_aux(row+ 7, col, "ESP Human  :", TR_ESP_HUMAN, &f, 0);
+	display_flag_aux(row+ 8, col, "ESP Animal :", TR_ESP_ANIMAL, &f, 0);
+	display_flag_aux(row+ 9, col, "ESP Orc    :", TR_ESP_ORC, &f, 0);
+	display_flag_aux(row+10, col, "ESP Troll  :", TR_ESP_TROLL, &f, 0);
+	display_flag_aux(row+11, col, "ESP Giant  :", TR_ESP_GIANT, &f, 0);
+	display_flag_aux(row+12, col, "ESP Unique :", TR_ESP_UNIQUE, &f, 0);
+	display_flag_aux(row+13, col, "Sust Str   :", TR_SUST_STR, &f, 0);
+	display_flag_aux(row+14, col, "Sust Int   :", TR_SUST_INT, &f, 0);
+	display_flag_aux(row+15, col, "Sust Wis   :", TR_SUST_WIS, &f, 0);
+	display_flag_aux(row+16, col, "Sust Dex   :", TR_SUST_DEX, &f, 0);
+	display_flag_aux(row+17, col, "Sust Con   :", TR_SUST_CON, &f, 0);
+	display_flag_aux(row+18, col, "Sust Chr   :", TR_SUST_CHR, &f, 0);
 #endif
 
 
