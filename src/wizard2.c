@@ -118,8 +118,19 @@ static bool wiz_dimension_door(void)
  * Create the artifact of the specified number -- DAN
  *
  */
-static void wiz_create_named_art(int a_idx)
+static void wiz_create_named_art(void)
 {
+	char tmp_val[80];
+	int a_idx;
+
+	/* Query */
+	if (!get_string("Artifact ID:", tmp_val, 3)) return;
+
+	/* Extract */
+	a_idx = atoi(tmp_val);
+	if(a_idx < 0) a_idx = 0;
+	if(a_idx >= max_a_idx) a_idx = 0; 
+
 	/* Create the artifact */
 	(void)create_named_art(a_idx, py, px);
 
@@ -1928,7 +1939,7 @@ void do_cmd_debug(void)
 
 	/* Create a named artifact */
 	case 'C':
-		wiz_create_named_art(command_arg);
+		wiz_create_named_art();
 		break;
 
 	/* Detect everything */
