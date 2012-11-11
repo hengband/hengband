@@ -120,7 +120,7 @@ static bool wiz_dimension_door(void)
  */
 static void wiz_create_named_art(void)
 {
-	char tmp_val[80];
+	char tmp_val[10] = "";
 	int a_idx;
 
 	/* Query */
