@@ -4749,7 +4749,7 @@ void forget_travel_flow(void)
 		{
 			/* Forget the old data */
 			travel.cost[y][x] = TRAVEL_UNABLE;
-		}
+		}	
 	}
 }
 

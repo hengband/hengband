@@ -5332,6 +5332,10 @@ msg_print("アリーナが魔法を吸収した！");
 		case '`':
 		{
 			if (!p_ptr->wild_mode) do_cmd_travel();
+			if (p_ptr->special_defense & KATA_MUSOU)
+			{
+				set_action(ACTION_NONE);
+			}
 			break;
 		}
 #endif
