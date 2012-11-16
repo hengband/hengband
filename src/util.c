@@ -2455,7 +2455,7 @@ void message_add(cptr str)
 		}
 
 		/* Limit the multiplier to 1000 */
-		if (buf && streq(buf, str) && (j < 1000))
+		if (streq(buf, str) && (j < 1000))
 		{
 			j++;
 
