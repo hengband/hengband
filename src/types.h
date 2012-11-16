@@ -1512,7 +1512,7 @@ typedef struct tag_type tag_type;
 struct tag_type
 {
 	int     tag;
-	void    *pointer;
+	int     index;
 };
 
 typedef bool (*monster_hook_type)(int r_idx);

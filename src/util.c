@@ -4853,14 +4853,9 @@ static void swap(tag_type *a, tag_type *b)
 {
 	tag_type temp;
 
-	temp.tag = a->tag;
-	temp.pointer = a->pointer;
-
-	a->tag = b->tag;
-	a->pointer = b->pointer;
-
-	b->tag = temp.tag;
-	b->pointer = temp.pointer;
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }
 
 
