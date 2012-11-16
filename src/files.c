@@ -4346,7 +4346,7 @@ static void dump_aux_class_special(FILE *fff)
 
 		for (i=0;i<=col;i++)
 		{
-			fprintf(fff, p[i]);
+			fputs(p[i], fff);
 		}
 	}
 	else if (p_ptr->pclass == CLASS_MAGIC_EATER)
