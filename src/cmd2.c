@@ -4119,7 +4119,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		set_action(ACTION_NONE);
 	}
 
-	if (shuriken)
+	if (shuriken >= 0)
 	{
 		item = shuriken;
 	}
@@ -4238,7 +4238,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 	/* Max distance of 10-18 */
 	if (tdis > mul) tdis = mul;
 
-	if (shuriken)
+	if (shuriken >= 0)
 	{
 		ty = randint0(101)-50+py;
 		tx = randint0(101)-50+px;
@@ -4722,7 +4722,7 @@ msg_print("これはあまり良くない気がする。");
  */
 void do_cmd_throw(void)
 {
-	do_cmd_throw_aux(1, FALSE, 0);
+	do_cmd_throw_aux(1, FALSE, -1);
 }
 
 

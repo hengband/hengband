@@ -10280,7 +10280,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
     
 		if (cast)
 		{
-			if (!do_cmd_throw_aux(1, TRUE, 0)) return NULL;
+			if (!do_cmd_throw_aux(1, TRUE, -1)) return NULL;
 		}
 		break;
 
