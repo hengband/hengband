@@ -1078,7 +1078,7 @@ cptr process_pref_file_expr(char **sp, char *fp)
 			/* Money */
 			else if (streq(b+1, "MONEY"))
 			{
-				sprintf(tmp, "%09d", p_ptr->au);
+				sprintf(tmp, "%09ld", p_ptr->au);
 				v = tmp;
 			}
 		}
