@@ -12,6 +12,34 @@
 
 #include "angband.h"
 
+bool confirm_leave_level(bool down_stair)
+{
+	quest_type *q_ptr = &quest[p_ptr->inside_quest];
+
+	/* Confirm leaving from once only quest */
+	if (confirm_quest && p_ptr->inside_quest &&
+	    (q_ptr->type == QUEST_TYPE_RANDOM ||
+	     (q_ptr->flags & QUEST_FLAG_ONCE &&
+						q_ptr->status != QUEST_STATUS_COMPLETED) ||
+		 (q_ptr->flags & QUEST_FLAG_TOWER &&
+						((q_ptr->status != QUEST_STATUS_STAGE_COMPLETED) ||
+						 (down_stair && (quest[QUEST_TOWER1].status != QUEST_STATUS_COMPLETED))))))
+	{
+#ifdef JP
+		msg_print("この階を一度去ると二度と戻って来られません。");
+		if (get_check("本当にこの階を去りますか？")) return TRUE;
+#else
+		msg_print("You can't come back here once you leave this floor.");
+		if (get_check("Really leave this floor? ")) return TRUE;
+#endif
+	}
+	else
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
 
 /*
  * Go up one level
@@ -46,6 +74,10 @@ void do_cmd_go_up(void)
 	/* Quest up stairs */
 	if (have_flag(f_ptr->flags, FF_QUEST))
 	{
+		/* Cancel the command */
+		if (!confirm_leave_level(FALSE)) return;
+	
+		
 		/* Success */
 #ifdef JP
 		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
@@ -88,26 +120,7 @@ void do_cmd_go_up(void)
 	}
 	else
 	{
-		quest_type *q_ptr = &quest[p_ptr->inside_quest];
-
-		/* Confirm leaving from once only quest */
-		if (confirm_quest && p_ptr->inside_quest &&
-		    (q_ptr->type == QUEST_TYPE_RANDOM ||
-		     (q_ptr->flags & QUEST_FLAG_ONCE &&
-		      q_ptr->status != QUEST_STATUS_COMPLETED)))
-		{
-#ifdef JP
-			msg_print("この階を一度去ると二度と戻って来られません。");
-			if (get_check("本当にこの階を去りますか？")) go_up = TRUE;
-#else
-			msg_print("You can't come back here once you leave this floor.");
-			if (get_check("Really leave this floor? ")) go_up = TRUE;
-#endif
-		}
-		else
-		{
-			go_up = TRUE;
-		}
+		go_up = confirm_leave_level(FALSE);
 	}
 
 	/* Cancel the command */
@@ -228,6 +241,9 @@ void do_cmd_go_down(void)
 	/* Quest down stairs */
 	else if (have_flag(f_ptr->flags, FF_QUEST))
 	{
+		/* Confirm Leaving */
+		if(!confirm_leave_level(TRUE)) return;
+		
 #ifdef JP
 		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print("なんだこの階段は！");
@@ -237,8 +253,8 @@ void do_cmd_go_down(void)
 			msg_print("You enter the down staircase.");
 #endif
 
-
 		leave_quest_check();
+		leave_tower_check();
 
 		p_ptr->inside_quest = c_ptr->special;
 

@@ -9217,7 +9217,9 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 
 	for (i = 1; i < max_quests; i++)
 	{
-		if ((quest[i].status == QUEST_STATUS_TAKEN) || (quest[i].status == QUEST_STATUS_COMPLETED))
+		if ((quest[i].status == QUEST_STATUS_TAKEN) ||
+			((quest[i].status == QUEST_STATUS_STAGE_COMPLETED) && (quest[i].type == QUEST_TYPE_TOWER)) ||
+			(quest[i].status == QUEST_STATUS_COMPLETED))
 		{
 			/* Set the quest number temporary */
 			int old_quest = p_ptr->inside_quest;
@@ -9246,7 +9248,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 			{
 				char note[80] = "\0";
 
-				if (quest[i].status == QUEST_STATUS_TAKEN)
+				if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_STAGE_COMPLETED)
 				{
 					switch (quest[i].type)
 					{
@@ -9301,6 +9303,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 						break;
 
 					case QUEST_TYPE_KILL_ALL:
+					case QUEST_TYPE_TOWER:
 #ifdef JP
 						sprintf(note," - 全てのモンスターを倒す。");
 #else

@@ -1173,6 +1173,11 @@ void leave_quest_check(void)
 	{
 		quest[leaving_quest].status = QUEST_STATUS_FAILED;
 		quest[leaving_quest].complev = (byte)p_ptr->lev;
+		if(quest[leaving_quest].type == QUEST_TYPE_TOWER)
+		{
+			quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
+			quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;
+		}
 		if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
 		{
 			r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
@@ -1184,6 +1189,23 @@ void leave_quest_check(void)
 		}
 		else if (record_fix_quest)
 			do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
+	}
+						
+}
+
+void leave_tower_check(void)
+{
+	leaving_quest = p_ptr->inside_quest;
+	/* Check for Tower Quest */
+	if (leaving_quest &&
+		(quest[leaving_quest].type == QUEST_TYPE_TOWER) &&
+		(quest[QUEST_TOWER1].status != QUEST_STATUS_COMPLETED))
+	{
+		if(quest[leaving_quest].type == QUEST_TYPE_TOWER)
+		{
+			quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
+			quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;
+		}
 	}
 }
 
@@ -3290,6 +3312,7 @@ msg_print("上に引っ張りあげられる感じがする！");
 				dungeon_type = 0;
 
 				leave_quest_check();
+				leave_tower_check();
 
 				p_ptr->inside_quest = 0;
 

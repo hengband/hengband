@@ -143,6 +143,9 @@
 /* Check is the quest index is "fixed" */
 #define is_fixed_quest_idx(Q_IDX) (((Q_IDX) < MIN_RANDOM_QUEST) || ((Q_IDX) > MAX_RANDOM_QUEST))
 
+#define QUEST_TOWER1         5
+#define QUEST_TOWER2         6
+#define QUEST_TOWER3         7
 #define QUEST_OBERON         8
 #define QUEST_SERPENT        9
 
@@ -4601,13 +4604,14 @@ extern int PlayerUID;
 /*
  * Quest status
  */
-#define QUEST_STATUS_UNTAKEN         0
-#define QUEST_STATUS_TAKEN           1
-#define QUEST_STATUS_COMPLETED       2
-#define QUEST_STATUS_REWARDED        3
-#define QUEST_STATUS_FINISHED        4
-#define QUEST_STATUS_FAILED          5
-#define QUEST_STATUS_FAILED_DONE     6
+#define QUEST_STATUS_UNTAKEN              0
+#define QUEST_STATUS_TAKEN                1
+#define QUEST_STATUS_COMPLETED            2
+#define QUEST_STATUS_REWARDED             3
+#define QUEST_STATUS_FINISHED             4
+#define QUEST_STATUS_FAILED               5
+#define QUEST_STATUS_FAILED_DONE          6
+#define QUEST_STATUS_STAGE_COMPLETED      7
 
 /*
  * Quest type
@@ -4619,6 +4623,7 @@ extern int PlayerUID;
 #define QUEST_TYPE_KILL_NUMBER               5
 #define QUEST_TYPE_KILL_ALL                  6
 #define QUEST_TYPE_RANDOM                    7
+#define QUEST_TYPE_TOWER                     8
 
 /*
  * Initialization flags
@@ -4635,6 +4640,7 @@ extern int PlayerUID;
 #define QUEST_FLAG_SILENT  0x01 /* no messages fro completion */
 #define QUEST_FLAG_PRESET  0x02 /* quest is outside the main dungeon */
 #define QUEST_FLAG_ONCE    0x04 /* quest is marked finished after leaving */
+#define QUEST_FLAG_TOWER   0x08 /* Tower quest is special */
 
 /*
  * Available graphic modes

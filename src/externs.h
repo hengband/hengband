@@ -714,6 +714,7 @@ extern void travel_step(void);
 #endif
 
 /* cmd2.c */
+extern bool confirm_leave_level(bool down_stair);
 extern void do_cmd_go_up(void);
 extern void do_cmd_go_down(void);
 extern void do_cmd_search(void);
@@ -819,6 +820,7 @@ extern cptr do_spell(int realm, int spell, int mode);
 
 /* dungeon.c */
 extern void leave_quest_check(void);
+extern void leave_tower_check(void);
 extern void extract_option_vars(void);
 extern void determine_bounty_uniques(void);
 extern void determine_today_mon(bool conv_old);

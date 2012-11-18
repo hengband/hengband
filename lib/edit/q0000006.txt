@@ -2,40 +2,32 @@
 
 # Name
 Q:$6:N:The Tower 2
-Q:6:N:Εγ£²
+Q:6:N:“ƒ
 
 # Definition
-Q:$6:Q:6:0:0:0:30:0:0:0:3
-Q:6:Q:6:0:0:0:30:0:0:0:3
+Q:$6:Q:8:0:0:0:40:0:0:0:11
+Q:6:Q:8:0:0:0:40:0:0:0:11
 
 # Floor with monster 9 levels out of deep as long as the quest is uncompleted
-F:1:FLOOR:8
-?:[EQU $QUEST6 1]
 F:1:FLOOR:8:*9
-?:1
 
-# Quest down to quest 5
-F:>:QUEST_DOWN:8:0:0:0:0:NONE:5
+# Quest down to Town
+F:>:QUEST_DOWN:8
 
 # Quest up to quest 7
 F:<:QUEST_UP:8:0:0:0:0:NONE:7
 
 # Dungeon
 D:XXXXXXXXX
-D:X......1X
+D:X.1.....X
 D:X.XXXXX.X
-D:X.X..1X.X
+D:X.X..1X1X
 D:X.X.X.X.X
 D:X.X>X.X.X
 D:X.XXX.X.X
-D:X1....X<X
+D:X.1...X<X
 D:XXXXXXXXX
 
 # Starting position when coming from level 1 of the tower (quest 5)
 ?:[EQU $LEAVING_QUEST 5]
 P:5:3
-
-# Starting position when coming from level 3 of the tower (quest 7)
-?:[EQU $LEAVING_QUEST 7]
-P:7:7
-

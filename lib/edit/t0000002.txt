@@ -134,11 +134,12 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:5
 F:b:BUILDING_1:3:0:0:0:0:NONE:5
 
 # Quest 5 rewarding, continue with quest 26,
-# reward is cheaper *Identify* at the Library (see buildings)
+# reward is cheaper *Identify* at the Library (see buildings) and Ring of Poison Resistance
 ?:[EQU $QUEST5 3]
 F:b:BUILDING_1:3:0:0:0:0:NONE:26
+F:!:FLOOR:3:0:143
 
-# Quest 5 finished, ontinue with quest 26
+# Quest 5 finished, continue with quest 26
 ?:[EQU $QUEST5 4]
 F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
