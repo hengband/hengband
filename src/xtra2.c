@@ -1512,6 +1512,9 @@ msg_print("地面に落とされた。");
 	if (is_pet(m_ptr) || p_ptr->inside_battle || p_ptr->inside_arena)
 		number = 0; /* Pets drop no stuff */
 	if (!drop_item && (r_ptr->d_char != '$')) number = 0;
+	
+	if((r_ptr->flags2 & (RF2_MULTIPLY)) && (r_ptr->r_pkills > 1024))
+		number = 0; /* Limit of Multiply monster drop */
 
 	/* Hack -- handle creeping coins */
 	coin_type = force_coin;
