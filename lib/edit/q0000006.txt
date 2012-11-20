@@ -8,8 +8,15 @@ Q:6:N:“ƒ
 Q:$6:Q:8:0:0:0:40:0:0:0:11
 Q:6:Q:8:0:0:0:40:0:0:0:11
 
-# Floor with monster 9 levels out of deep as long as the quest is uncompleted
-F:1:FLOOR:8:*9
+# Random Monsters Levels +10
+F:1:FLOOR:8:*10
+
+# Nexious fume
+F:2:FLOOR:8:884
+
+# Mature green dragon
+F:d:FLOOR:8:561
+
 
 # Quest down to Town
 F:>:QUEST_DOWN:8
@@ -21,11 +28,11 @@ F:<:QUEST_UP:8:0:0:0:0:NONE:7
 D:XXXXXXXXX
 D:X.1.....X
 D:X.XXXXX.X
-D:X.X..1X1X
+D:X.X..1XdX
 D:X.X.X.X.X
-D:X.X>X.X.X
+D:X1X>X.X.X
 D:X.XXX.X.X
-D:X.1...X<X
+D:X.2...X<X
 D:XXXXXXXXX
 
 # Starting position when coming from level 1 of the tower (quest 5)

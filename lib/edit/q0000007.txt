@@ -8,21 +8,31 @@ Q:7:N:“ƒ
 Q:$7:Q:8:0:0:0:40:0:0:0:11
 Q:7:Q:8:0:0:0:40:0:0:0:11
 
-# Floor with monster 11 levels out of deep as long as the quest is uncompleted
-F:@:FLOOR:8:*11
+# Shrieker
+F:@:FLOOR:8:40
+
+# Nexious fume
+F:2:FLOOR:8:884
+
+# Mature green dragon
+F:d:FLOOR:8:561
+
+# Ancient green dragon
+F:D:FLOOR:8:618
+
 
 # Quest stairs down to Town
 F:>:QUEST_DOWN:8
 
 # Dungeon
 D:XXXXXXXXX
-D:X......@X
-D:X.@.....X
+D:XD.2...@X
 D:X.......X
-D:X..@....X
-D:X.......X
-D:X.......X
-D:X@.....>X
+D:X.2...d.X
+D:X@...d.@X
+D:X...d...X
+D:X..d....X
+D:X@..@..>X
 D:XXXXXXXXX
 
 # Starting position when coming from level 2 of the tower (quest 6)

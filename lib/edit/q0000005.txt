@@ -54,16 +54,22 @@ F:<:QUEST_UP:8:0:0:0:0:NONE:6
 # Quest down
 F:>:QUEST_DOWN:8
 
-# Monsters to keep the player busy ;-)
-F:1:FLOOR:8:*5
+# Random Monsters
+F:1:FLOOR:8:*
+
+# Nexious fume
+F:2:FLOOR:8:884
+
+# Young green dragon
+F:d:FLOOR:8:461
 
 # Dungeon
 D:XXXXXXXXXXX
-D:X>........X
+D:X>.....1..X
 D:XXXXXXXXX.X
-D:X.....1.X.X
+D:X.....d.X.X
 D:X.XXXXX.X.X
-D:X1X<XXX.X1X
+D:X1X<XXX.X2X
 D:X.X.....X.X
 D:X.XXXXXXX.X
 D:X.....1...X
