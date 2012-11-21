@@ -74,10 +74,10 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:3
 ?:[EQU $QUEST3 2]
 F:b:BUILDING_1:3:0:0:0:0:NONE:3
 
-# Quest 3 rewarding, reward is Rod of Disarming
+# Quest 3 rewarding, reward is Stuff of Speed
 ?:[EQU $QUEST3 3]
 F:b:BUILDING_1:3:0:0:0:0:NONE:4
-F:!:FLOOR:3:0:365
+F:!:FLOOR:3:0:314
 
 # Quest 3 finished
 ?:[EQU $QUEST3 4]

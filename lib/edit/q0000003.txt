@@ -47,11 +47,14 @@ Q:3:T:彼が二度と戻ってこないことを願いましょう。
 # Floor with Logrus Master
 F:a:FLOOR:8:498
 
+# Object 10 levels out of depth
+F:O:FLOOR:8:0:*10
+
 # Dungeon
 D:XXXXXXXXXXXXXXX
-D:X.............X
+D:X........O.O..X
 D:X.........a...X
-D:X.............X
+D:X........O.O..X
 D:X....XXXXXXXXXX
 D:X.............X
 D:X.............X
