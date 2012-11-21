@@ -23,9 +23,9 @@ Q:25:T:我々はその家に住み着いている悪霊を退治してくれる人を探しています。
 ?:[EQU $QUEST25 3]
 Q:$25:T:Well done, indeed! Our citizens can finally sigh in relief.
 Q:$25:T:As a reward, we would like to give you something that will
-Q:$25:T:help you banish the forces of evil even more efficiently!
+Q:$25:T:help you sence enemy even more efficiently!
 Q:25:T:本当に良くやってくれました！我々住民はようやく安心することが出来ます。
-Q:25:T:お礼として、邪悪な者どもを更に効果的に退散させることができるアイテムを
+Q:25:T:お礼として、邪悪な者どもを更に効果的に感知することができるアイテムを
 Q:25:T:差し上げます。
 ?:1
 
@@ -94,8 +94,11 @@ F:m:FLOOR:8:202:0:0:0:*
 # Spectre:
 F:C:FLOOR:8:508
 
-# Vampire:
-F:V:FLOOR:8:520
+# Vampire Lord:
+F:V:FLOOR:8:623
+
+# Dreadmaster:
+F:G:FLOOR:8:690
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -110,7 +113,7 @@ D:X.XssX.====.===.=IX...........X
 D:XDX#XX.=?Q=.=Q=.=IXT..........X
 D:X..XXXDXXXXDXXXDXXXXXXXXDXXXXXX
 D:X..X^....XSSSX...XjD^^^^^^^^D!X
-D:X..X..!..XSSSX.!.XXX^......^XXX
+D:X..X..!..XSSSX.!.XXX^...G..^XXX
 D:X<.XC...CXSSSX.V.X!D^^^^^^^^D>X
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 

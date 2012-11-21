@@ -146,11 +146,11 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:25
 ?:[EQU $QUEST25 2]
 F:b:BUILDING_1:3:0:0:0:0:NONE:25
 
-# Quest 25 rewarding, reward is Staff of Dispel Evil,
+# Quest 25 rewarding, reward is Amulet of Telepathy,
 # continue with quest 28
 ?:[EQU $QUEST25 3]
 F:b:BUILDING_1:3:0:0:0:0:NONE:28
-F:!:FLOOR:3:0:320
+F:!:FLOOR:3:0:587
 
 # Quest 25 finished, continue with quest 28
 ?:[EQU $QUEST25 4]
