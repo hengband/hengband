@@ -2171,151 +2171,66 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "ゴブリンのヒストーア",       20000,  250,  150,  10,   5,  RACE_HALF_ORC},
 		{ "フェレンギ人クアーク",           30000,  250,  150,  10,   5,  RACE_HUMAN},
 		{ "公正なる(?)トッピ",                     30000,  250,  150,  10,   5,  RACE_ELF},
+		{ "死人ヴァッサ",             20000,  250, 150, 10,  5, RACE_ZOMBIE},
+		{ "裏切り者カイン",          20000,  250, 150, 10,  5, RACE_VAMPIRE},
+		{ "ブボニカス",          30000,  250, 150, 10,  5, RACE_BEASTMAN},
+		{ "コープスライト",           30000,  250, 150, 10,  5, RACE_SPECTRE},
+		{ "血に飢えしパリッシュ",                 20000,  250, 150, 10,  5, RACE_VAMPIRE},
+		{ "ヴァイル",          20000,  250, 150, 10,  5, RACE_SKELETON},
+		{ "信頼のプレンティス",          30000,  250, 150, 10,  5, RACE_SKELETON},
+		{ "人間殺しのグリエラ",           30000,  250, 150, 10,  5, RACE_IMP},
+		{ "エンジェル",                 20000,  250, 150, 10,  5, RACE_VAMPIRE},
+		{ "水膨れフロツァム",          20000,  250, 150, 10,  5, RACE_ZOMBIE},
+		{ "ニーヴァル",          30000,  250, 150, 10,  5, RACE_VAMPIRE},
+		{ "明るいアナスタシア",           30000,  250, 150, 10,  5, RACE_SPECTRE},
+		{ "死霊術師チャリティー", 20000,  250, 150, 10,  5, RACE_DARK_ELF},
+		{ "ボクサーのプグナシオス",          20000,  250, 150, 10,  5, RACE_HALF_ORC},
+		{ "幸運なフットソア",          30000,  250, 150, 10,  5, RACE_BEASTMAN},
+		{ "光指のシドリア",           30000,  250, 150, 10,  5, RACE_HUMAN},
+		{ "手品師リアソー",                 20000,  250, 150, 10,  5, RACE_HOBBIT},
+		{ "やりくり上手のジャナッカ",          20000,  250, 150, 10,  5, RACE_GNOME},
+		{ "悪党シーナ",          30000,  250, 150, 10,  5, RACE_GNOME},
+		{ "大爪アルニッキ",           30000,  250, 150, 10,  5, RACE_DRACONIAN},
+		{ "貧乏チャエアンド",                 20000,  250, 150, 10,  5, RACE_HUMAN},
+		{ "山賊アファードーフ",          20000,  250, 150, 10,  5, RACE_BARBARIAN},
+		{ "強欲ラザクスル",          30000,  250, 150, 10,  5, RACE_MIND_FLAYER},
+		{ "ファラレウィン",           30000,  250, 150, 10,  5, RACE_SPRITE},
+		{ "しわしわヴォスール",                 20000,  250, 150, 10,  5, RACE_NIBELUNG},
+		{ "ハンサムなアラオード",          20000,  250, 150, 10,  5, RACE_AMBERITE},
+		{ "負け犬セラドフリド",          30000,  250, 150, 10,  5, RACE_HUMAN},
+		{ "片足のエルーロ",           30000,  250, 150, 10,  5, RACE_HALF_OGRE},
 #else
 		{ "Gary Gygaz",                 20000,  250, 150, 10,  5, RACE_HALF_TROLL},
 		{ "Histor the Goblin",          20000,  250, 150, 10,  5, RACE_HALF_ORC},
 		{ "Quark the Ferengi",          30000,  250, 150, 10,  5, RACE_DWARF},
 		{ "Topi the Fair(?)",           30000,  250, 150, 10,  5, RACE_HUMAN},
-#endif
-
-#ifdef JP
-{ "死人ヴァッサ",             20000,  250, 150, 10,  5, RACE_ZOMBIE},
-#else
 		{ "Vhassa the Dead",             20000,  250, 150, 10,  5, RACE_ZOMBIE},
-#endif
-#ifdef JP
-{ "裏切り者カイン",          20000,  250, 150, 10,  5, RACE_VAMPIRE},
-#else
 		{ "Kyn the Treacherous",          20000,  250, 150, 10,  5, RACE_VAMPIRE},
-#endif
-#ifdef JP
-{ "ブボニカス",          30000,  250, 150, 10,  5, RACE_BEASTMAN},
-#else
 		{ "Bubonicus",          30000,  250, 150, 10,  5, RACE_BEASTMAN},
-#endif
-#ifdef JP
-{ "コープスライト",           30000,  250, 150, 10,  5, RACE_SPECTRE},
-#else
 		{ "Corpselight",           30000,  250, 150, 10,  5, RACE_SPECTRE},
-#endif
-#ifdef JP
-{ "血に飢えしパリッシュ",                 20000,  250, 150, 10,  5, RACE_VAMPIRE},
-#else
 		{ "Parrish the Bloodthirsty",                 20000,  250, 150, 10,  5, RACE_VAMPIRE},
-#endif
-#ifdef JP
-{ "ヴァイル",          20000,  250, 150, 10,  5, RACE_SKELETON},
-#else
 		{ "Vile",          20000,  250, 150, 10,  5, RACE_SKELETON},
-#endif
-#ifdef JP
-{ "信頼のプレンティス",          30000,  250, 150, 10,  5, RACE_SKELETON},
-#else
 		{ "Prentice the Trusted",          30000,  250, 150, 10,  5, RACE_SKELETON},
-#endif
-#ifdef JP
-{ "人間殺しのグリエラ",           30000,  250, 150, 10,  5, RACE_IMP},
-#else
 		{ "Griella Humanslayer",           30000,  250, 150, 10,  5, RACE_IMP},
-#endif
-#ifdef JP
-{ "エンジェル",                 20000,  250, 150, 10,  5, RACE_VAMPIRE},
-#else
 		{ "Angel",                 20000,  250, 150, 10,  5, RACE_VAMPIRE},
-#endif
-#ifdef JP
-{ "水膨れフロツァム",          20000,  250, 150, 10,  5, RACE_ZOMBIE},
-#else
 		{ "Flotsam the Bloated",          20000,  250, 150, 10,  5, RACE_ZOMBIE},
-#endif
-#ifdef JP
-{ "ニーヴァル",          30000,  250, 150, 10,  5, RACE_VAMPIRE},
-#else
 		{ "Nieval",          30000,  250, 150, 10,  5, RACE_VAMPIRE},
-#endif
-#ifdef JP
-{ "明るいアナスタシア",           30000,  250, 150, 10,  5, RACE_SPECTRE},
-#else
 		{ "Anastasia the Luminous",           30000,  250, 150, 10,  5, RACE_SPECTRE},
-#endif
-#ifdef JP
-{ "死霊術師チャリティー", 20000,  250, 150, 10,  5, RACE_DARK_ELF},
-#else
 		{ "Charity the Necromancer", 20000,  250, 150, 10,  5, RACE_DARK_ELF},
-#endif
-#ifdef JP
-{ "ボクサーのプグナシオス",          20000,  250, 150, 10,  5, RACE_HALF_ORC},
-#else
 		{ "Pugnacious the Pugilist",          20000,  250, 150, 10,  5, RACE_HALF_ORC},
-#endif
-#ifdef JP
-{ "幸運なフットソア",          30000,  250, 150, 10,  5, RACE_BEASTMAN},
-#else
 		{ "Footsore the Lucky",          30000,  250, 150, 10,  5, RACE_BEASTMAN},
-#endif
-#ifdef JP
-{ "光指のシドリア",           30000,  250, 150, 10,  5, RACE_HUMAN},
-#else
 		{ "Sidria Lighfingered",           30000,  250, 150, 10,  5, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "手品師リアソー",                 20000,  250, 150, 10,  5, RACE_HOBBIT},
-#else
 		{ "Riatho the Juggler",                 20000,  250, 150, 10,  5, RACE_HOBBIT},
-#endif
-#ifdef JP
-{ "やりくり上手のジャナッカ",          20000,  250, 150, 10,  5, RACE_GNOME},
-#else
 		{ "Janaaka the Shifty",          20000,  250, 150, 10,  5, RACE_GNOME},
-#endif
-#ifdef JP
-{ "悪党シーナ",          30000,  250, 150, 10,  5, RACE_GNOME},
-#else
 		{ "Cina the Rogue",          30000,  250, 150, 10,  5, RACE_GNOME},
-#endif
-#ifdef JP
-{ "大爪アルニッキ",           30000,  250, 150, 10,  5, RACE_DRACONIAN},
-#else
 		{ "Arunikki Greatclaw",           30000,  250, 150, 10,  5, RACE_DRACONIAN},
-#endif
-#ifdef JP
-{ "貧乏チャエアンド",                 20000,  250, 150, 10,  5, RACE_HUMAN},
-#else
 		{ "Chaeand the Poor",                 20000,  250, 150, 10,  5, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "山賊アファードーフ",          20000,  250, 150, 10,  5, RACE_BARBARIAN},
-#else
 		{ "Afardorf the Brigand",          20000,  250, 150, 10,  5, RACE_BARBARIAN},
-#endif
-#ifdef JP
-{ "強欲ラザクスル",          30000,  250, 150, 10,  5, RACE_MIND_FLAYER},
-#else
 		{ "Lathaxl the Greedy",          30000,  250, 150, 10,  5, RACE_MIND_FLAYER},
-#endif
-#ifdef JP
-{ "ファラレウィン",           30000,  250, 150, 10,  5, RACE_SPRITE},
-#else
 		{ "Falarewyn",           30000,  250, 150, 10,  5, RACE_SPRITE},
-#endif
-#ifdef JP
-{ "しわしわヴォスール",                 20000,  250, 150, 10,  5, RACE_NIBELUNG},
-#else
 		{ "Vosur the Wrinkled",                 20000,  250, 150, 10,  5, RACE_NIBELUNG},
-#endif
-#ifdef JP
-{ "ハンサムなアラオード",          20000,  250, 150, 10,  5, RACE_AMBERITE},
-#else
 		{ "Araord the Handsome",          20000,  250, 150, 10,  5, RACE_AMBERITE},
-#endif
-#ifdef JP
-{ "負け犬セラドフリド",          30000,  250, 150, 10,  5, RACE_HUMAN},
-#else
 		{ "Theradfrid the Loser",          30000,  250, 150, 10,  5, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "片足のエルーロ",           30000,  250, 150, 10,  5, RACE_HALF_OGRE},
-#else
 		{ "One-Legged Eroolo",           30000,  250, 150, 10,  5, RACE_HALF_OGRE},
 #endif
 	},
