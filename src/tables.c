@@ -1706,151 +1706,66 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "パラディンのガンナー",       10000,  185,  110,   5,  23,  RACE_HUMAN},
 		{ "選ばれしトリン",                     25000,  180,  107,   6,  20,  RACE_ELF},
 		{ "賢明なるサラストロ",                     30000,  185,  109,   5,  15,  RACE_DWARF},
+		{ "パーシヴァル卿",           25000,  180, 107,  6, 20, RACE_HIGH_ELF},
+		{ "神聖なるアセナス",          30000,  185, 109,  5, 15, RACE_HUMAN},
+		{ "マッキノン",         10000,   175, 109,  6, 15, RACE_HUMAN},
+		{ "謹み婦人",         15000,  185, 110,  5, 23, RACE_HIGH_ELF},
+		{ "ドルイドのハシュニック",           25000,  180, 107,  6, 20, RACE_HOBBIT},
+		{ "フィナク",          30000,  185, 109,  5, 15, RACE_YEEK},
+		{ "クリキック",         10000,   175, 109,  6, 15, RACE_KLACKON},
+		{ "荒くれ者モリヴァル",         15000,  185, 110,  5, 23, RACE_ELF},
+		{ "暗きホシャック",           25000,  180, 107,  6, 20, RACE_IMP},
+		{ "賢者アタール",          30000,  185, 109,  5, 15, RACE_HUMAN},
+		{ "清きイベニッド",         10000,   175, 109,  6, 15, RACE_HUMAN},
+		{ "エリディシュ",         15000,  185, 110,  5, 23, RACE_HALF_TROLL},
+		{ "呪術師ヴルドゥシュ",           25000,  180, 107,  6, 20, RACE_HALF_OGRE},
+		{ "狂戦士ハオブ",          30000,  185, 109,  5, 15, RACE_BARBARIAN},
+		{ "若きプルーグディシュ",         10000,   175, 109,  6, 15, RACE_HALF_OGRE},
+		{ "きちがいラムワイズ",         15000,  185, 110,  5, 23, RACE_YEEK},
+		{ "有徳者ムワート",           25000,  180, 107,  6, 20, RACE_KOBOLD},
+		{ "弱虫ダードバード",          30000,  185, 109,  5, 15, RACE_SPECTRE},
+		{ "質素なルードヴィヒ",         5000,   175,  109,   6,  15,  RACE_HUMAN},
+		{ "パラディンのガンナー",       10000,  185,  110,   5,  23,  RACE_HUMAN},
+		{ "選ばれしトリン",                     25000,  180,  107,   6,  20,  RACE_ELF},
+		{ "賢明なるサラストロ",                     30000,  185,  109,   5,  15,  RACE_DWARF},
+		{ "パーシヴァル卿",           25000,  180, 107,  6, 20, RACE_HIGH_ELF},
+		{ "神聖なるアセナス",          30000,  185, 109,  5, 15, RACE_HUMAN},
+		{ "マッキノン",         10000,   175, 109,  6, 15, RACE_HUMAN},
+		{ "謹み婦人",         15000,  185, 110,  5, 23, RACE_HIGH_ELF},
+		{ "ドルイドのハシュニック",           25000,  180, 107,  6, 20, RACE_HOBBIT},
+		{ "フィナク",          30000,  185, 109,  5, 15, RACE_YEEK},
 #else
 		{ "Ludwig the Humble",          5000,   175, 109,  6, 15, RACE_DWARF},
 		{ "Gunnar the Paladin",         10000,  185, 110,  5, 23, RACE_HALF_TROLL},
 		{ "Torin the Chosen",           25000,  180, 107,  6, 20, RACE_HIGH_ELF},
 		{ "Sarastro the Wise",          30000,  185, 109,  5, 15, RACE_HUMAN},
-#endif
-
-#ifdef JP
-{ "パーシヴァル卿",           25000,  180, 107,  6, 20, RACE_HIGH_ELF},
-#else
 		{ "Sir Parsival the Pure",           25000,  180, 107,  6, 20, RACE_HIGH_ELF},
-#endif
-#ifdef JP
-{ "神聖なるアセナス",          30000,  185, 109,  5, 15, RACE_HUMAN},
-#else
 		{ "Asenath the Holy",          30000,  185, 109,  5, 15, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "マッキノン",         10000,   175, 109,  6, 15, RACE_HUMAN},
-#else
 		{ "McKinnon",         10000,   175, 109,  6, 15, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "謹み婦人",         15000,  185, 110,  5, 23, RACE_HIGH_ELF},
-#else
 		{ "Mistress Chastity",         15000,  185, 110,  5, 23, RACE_HIGH_ELF},
-#endif
-#ifdef JP
-{ "ドルイドのハシュニック",           25000,  180, 107,  6, 20, RACE_HOBBIT},
-#else
 		{ "Hashnik the Druid",           25000,  180, 107,  6, 20, RACE_HOBBIT},
-#endif
-#ifdef JP
-{ "フィナク",          30000,  185, 109,  5, 15, RACE_YEEK},
-#else
 		{ "Finak",          30000,  185, 109,  5, 15, RACE_YEEK},
-#endif
-#ifdef JP
-{ "クリキック",         10000,   175, 109,  6, 15, RACE_KLACKON},
-#else
 		{ "Krikkik",         10000,   175, 109,  6, 15, RACE_KLACKON},
-#endif
-#ifdef JP
-{ "荒くれ者モリヴァル",         15000,  185, 110,  5, 23, RACE_ELF},
-#else
 		{ "Morival the Wild",         15000,  185, 110,  5, 23, RACE_ELF},
-#endif
-#ifdef JP
-{ "暗きホシャック",           25000,  180, 107,  6, 20, RACE_IMP},
-#else
 		{ "Hoshak the Dark",           25000,  180, 107,  6, 20, RACE_IMP},
-#endif
-#ifdef JP
-{ "賢者アタール",          30000,  185, 109,  5, 15, RACE_HUMAN},
-#else
 		{ "Atal the Wise",          30000,  185, 109,  5, 15, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "清きイベニッド",         10000,   175, 109,  6, 15, RACE_HUMAN},
-#else
 		{ "Ibenidd the Chaste",         10000,   175, 109,  6, 15, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "エリディシュ",         15000,  185, 110,  5, 23, RACE_HALF_TROLL},
-#else
 		{ "Eridish",         15000,  185, 110,  5, 23, RACE_HALF_TROLL},
-#endif
-#ifdef JP
-{ "呪術師ヴルドゥシュ",           25000,  180, 107,  6, 20, RACE_HALF_OGRE},
-#else
 		{ "Vrudush the Shaman",           25000,  180, 107,  6, 20, RACE_HALF_OGRE},
-#endif
-#ifdef JP
-{ "狂戦士ハオブ",          30000,  185, 109,  5, 15, RACE_BARBARIAN},
-#else
 		{ "Haob the Berserker",          30000,  185, 109,  5, 15, RACE_BARBARIAN},
-#endif
-#ifdef JP
-{ "若きプルーグディシュ",         10000,   175, 109,  6, 15, RACE_HALF_OGRE},
-#else
 		{ "Proogdish the Youthfull",         10000,   175, 109,  6, 15, RACE_HALF_OGRE},
-#endif
-#ifdef JP
-{ "きちがいラムワイズ",         15000,  185, 110,  5, 23, RACE_YEEK},
-#else
 		{ "Lumwise the Mad",         15000,  185, 110,  5, 23, RACE_YEEK},
-#endif
-#ifdef JP
-{ "有徳者ムワート",           25000,  180, 107,  6, 20, RACE_KOBOLD},
-#else
 		{ "Muirt the Virtuous",           25000,  180, 107,  6, 20, RACE_KOBOLD},
-#endif
-#ifdef JP
-{ "弱虫ダードバード",          30000,  185, 109,  5, 15, RACE_SPECTRE},
-#else
 		{ "Dardobard the Weak",          30000,  185, 109,  5, 15, RACE_SPECTRE},
-#endif
-#ifdef JP
-{ "質素なルードヴィヒ",          5000,   175, 109,  6, 15, RACE_DWARF},
-#else
 		{ "Ludwig the Humble",          5000,   175, 109,  6, 15, RACE_DWARF},
-#endif
-#ifdef JP
-{ "パラディンのガンナー",         10000,  185, 110,  5, 23, RACE_HALF_TROLL},
-#else
 		{ "Gunnar the Paladin",         10000,  185, 110,  5, 23, RACE_HALF_TROLL},
-#endif
-#ifdef JP
-{ "選ばれしトリン",           25000,  180, 107,  6, 20, RACE_HIGH_ELF},
-#else
 		{ "Torin the Chosen",           25000,  180, 107,  6, 20, RACE_HIGH_ELF},
-#endif
-#ifdef JP
-{ "賢明なるサラストロ",          30000,  185, 109,  5, 15, RACE_HUMAN},
-#else
 		{ "Sarastro the Wise",          30000,  185, 109,  5, 15, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "清きパーシヴァル卿",           25000,  180, 107,  6, 20, RACE_HIGH_ELF},
-#else
 		{ "Sir Parsival the Pure",           25000,  180, 107,  6, 20, RACE_HIGH_ELF},
-#endif
-#ifdef JP
-{ "神聖なるアセナス",          30000,  185, 109,  5, 15, RACE_HUMAN},
-#else
 		{ "Asenath the Holy",          30000,  185, 109,  5, 15, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "マッキノン",         10000,   175, 109,  6, 15, RACE_HUMAN},
-#else
 		{ "McKinnon",         10000,   175, 109,  6, 15, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "謹み婦人",         15000,  185, 110,  5, 23, RACE_HIGH_ELF},
-#else
 		{ "Mistress Chastity",         15000,  185, 110,  5, 23, RACE_HIGH_ELF},
-#endif
-#ifdef JP
-{ "ドルイド ハシュニック",           25000,  180, 107,  6, 20, RACE_HOBBIT},
-#else
 		{ "Hashnik the Druid",           25000,  180, 107,  6, 20, RACE_HOBBIT},
-#endif
-#ifdef JP
-{ "フィナク",        15000,  200, 110,  7,  8, RACE_BARBARIAN},
-#else
 		{ "Finak",          30000,  185, 109,  5, 15, RACE_YEEK},
 #endif
 	},
@@ -1861,155 +1776,73 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "カオスのウィズル",   10000,  190,  110,   6,   8,  RACE_HOBBIT},
 		{ "強欲ミダス",              15000,  200,  116,   6,   9,  RACE_GNOME},
 		{ "貧弱ジャ=ファー",                   15000,  220,  111,   4,   9,  RACE_ELF},/*FIRST*/
-#else
-		{ "Mauser the Chemist",         10000,  190, 111,  5,  8, RACE_HALF_ELF},
-		{ "Wizzle the Chaotic",         10000,  190, 110,  6,  8, RACE_HOBBIT},
-		{ "Midas the Greedy",           15000,  200, 116,  6,  9, RACE_GNOME},
-		{ "Ja-Far the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
-#endif
+		{ "カカルラカカル",           15000,  200, 116,  6,  9, RACE_KLACKON},
+		{ "錬金術師ジャル=エス",       15000,  220, 111,  4,  9, RACE_ELF},
+		{ "用心深いファネラス",         10000,  190, 111,  5,  8, RACE_DWARF},
+		{ "キチガイのルンシー",         10000,  190, 110,  6,  8, RACE_HUMAN},
+		{ "グランブルワース",           15000,  200, 116,  6,  9, RACE_GNOME},
+		{ "フリッター",       15000,  220, 111,  4,  9, RACE_SPRITE},
+		{ "ザリルス",         10000,  190, 111,  5,  8, RACE_HUMAN},
+		{ "古きエグバート",         10000,  190, 110,  6,  8, RACE_DWARF},
+		{ "誇り高きヴァリンドラ",           15000,  200, 116,  6,  9, RACE_HIGH_ELF},
+		{ "錬金術師タエン",       15000,  220, 111,  4,  9, RACE_HUMAN},
+		{ "巧言カイド",         10000,  190, 111,  5,  8, RACE_VAMPIRE},
+		{ "暗きフリア",         10000,  190, 110,  6,  8, RACE_NIBELUNG},
+		{ "質素なドムリ",           15000,  200, 116,  6,  9, RACE_DWARF},
+		{ "魔の子ヤァジュッカ",       15000,  220, 111,  4,  9, RACE_IMP},
+		{ "薬草師ジェララルドール",         10000,  190, 111,  5,  8, RACE_HIGH_ELF},
+		{ "賢者オレラルダン",         10000,  190, 110,  6,  8, RACE_BARBARIAN},
+		{ "デモニシストのフゾグロ",           15000,  200, 116,  6,  9, RACE_IMP},
+		{ "錬金術師ドゥリアシュ",       15000,  220, 111,  4,  9, RACE_HALF_ORC},
+		{ "強者ネリア",         10000,  190, 111,  5,  8, RACE_CYCLOPS},
+		{ "辛口リグナス",         10000,  190, 110,  6,  8, RACE_HALF_ORC},
+		{ "ティルバ",           15000,  200, 116,  6,  9, RACE_HOBBIT},
+		{ "金持ちミリルドリック",       15000,  220, 111,  4,  9, RACE_HUMAN},
 
-#ifdef JP
-	{ "カカルラカカル",           15000,  200, 116,  6,  9, RACE_KLACKON},
-#else
-	{ "Kakalrakakal",           15000,  200, 116,  6,  9, RACE_KLACKON},
-#endif
-#ifdef JP
-	{ "錬金術師ジャル=エス",       15000,  220, 111,  4,  9, RACE_ELF},
-#else
-	{ "Jal-Eth the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
-#endif
-#ifdef JP
-{ "用心深いファネラス",         10000,  190, 111,  5,  8, RACE_DWARF},
-#else
-		{ "Fanelath the Cautious",         10000,  190, 111,  5,  8, RACE_DWARF},
-#endif
-#ifdef JP
-{ "キチガイのルンシー",         10000,  190, 110,  6,  8, RACE_HUMAN},
-#else
-		{ "Runcie the Insane",         10000,  190, 110,  6,  8, RACE_HUMAN},
-#endif
-#ifdef JP
-	{ "グランブルワース",           15000,  200, 116,  6,  9, RACE_GNOME},
-#else
-	{ "Grumbleworth",           15000,  200, 116,  6,  9, RACE_GNOME},
-#endif
-#ifdef JP
-	{ "フリッター",       15000,  220, 111,  4,  9, RACE_SPRITE},
-#else
-	{ "Flitter",       15000,  220, 111,  4,  9, RACE_SPRITE},
-#endif
-#ifdef JP
-{ "ザリルス",         10000,  190, 111,  5,  8, RACE_HUMAN},
-#else
-		{ "Xarillus",         10000,  190, 111,  5,  8, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "古きエグバート",         10000,  190, 110,  6,  8, RACE_DWARF},
-#else
-		{ "Egbert the Old",         10000,  190, 110,  6,  8, RACE_DWARF},
-#endif
-#ifdef JP
-	{ "誇り高きヴァリンドラ",           15000,  200, 116,  6,  9, RACE_HIGH_ELF},
-#else
-	{ "Valindra the Proud",           15000,  200, 116,  6,  9, RACE_HIGH_ELF},
-#endif
-#ifdef JP
-	{ "錬金術師タエン",       15000,  220, 111,  4,  9, RACE_HUMAN},
-#else
-	{ "Taen the Alchemist",       15000,  220, 111,  4,  9, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "巧言カイド",         10000,  190, 111,  5,  8, RACE_VAMPIRE},
-#else
-		{ "Cayd the Sweet",         10000,  190, 111,  5,  8, RACE_VAMPIRE},
-#endif
-#ifdef JP
-{ "暗きフリア",         10000,  190, 110,  6,  8, RACE_NIBELUNG},
-#else
-		{ "Fulir the Dark",         10000,  190, 110,  6,  8, RACE_NIBELUNG},
-#endif
-#ifdef JP
-	{ "質素なドムリ",           15000,  200, 116,  6,  9, RACE_DWARF},
-#else
-	{ "Domli the Humble",           15000,  200, 116,  6,  9, RACE_DWARF},
-#endif
-#ifdef JP
-	{ "魔の子ヤァジュッカ",       15000,  220, 111,  4,  9, RACE_IMP},
-#else
-	{ "Yaarjukka Demonspawn",       15000,  220, 111,  4,  9, RACE_IMP},
-#endif
-#ifdef JP
-{ "薬草師ジェララルドール",         10000,  190, 111,  5,  8, RACE_HIGH_ELF},
-#else
-		{ "Gelaraldor the Herbmaster",         10000,  190, 111,  5,  8, RACE_HIGH_ELF},
-#endif
-#ifdef JP
-{ "賢者オレラルダン",         10000,  190, 110,  6,  8, RACE_BARBARIAN},
-#else
-		{ "Olelaldan the Wise",         10000,  190, 110,  6,  8, RACE_BARBARIAN},
-#endif
-#ifdef JP
-	{ "デモニシストのフゾグロ",           15000,  200, 116,  6,  9, RACE_IMP},
-#else
-	{ "Fthoglo the Demonicist",           15000,  200, 116,  6,  9, RACE_IMP},
-#endif
-#ifdef JP
-	{ "錬金術師ドゥリアシュ",       15000,  220, 111,  4,  9, RACE_HALF_ORC},
-#else
-	{ "Dridash the Alchemist",       15000,  220, 111,  4,  9, RACE_HALF_ORC},
-#endif
-#ifdef JP
-{ "強者ネリア",         10000,  190, 111,  5,  8, RACE_CYCLOPS},
-#else
-		{ "Nelir the Strong",         10000,  190, 111,  5,  8, RACE_CYCLOPS},
-#endif
-#ifdef JP
-{ "辛口リグナス",         10000,  190, 110,  6,  8, RACE_HALF_ORC},
-#else
-		{ "Lignus the Pungent",         10000,  190, 110,  6,  8, RACE_HALF_ORC},
-#endif
-#ifdef JP
-	{ "ティルバ",           15000,  200, 116,  6,  9, RACE_HOBBIT},
-#else
-	{ "Tilba",           15000,  200, 116,  6,  9, RACE_HOBBIT},
-#endif
-#ifdef JP
-	{ "金持ちミリルドリック",       15000,  220, 111,  4,  9, RACE_HUMAN},
-#else
-	{ "Myrildric the Wealthy",       15000,  220, 111,  4,  9, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "科学者マウザー",         10000,  190, 111,  5,  8, RACE_HALF_ELF},
+		{ "科学者マウザー",         10000,  190, 111,  5,  8, RACE_HALF_ELF},
+		{ "カオスのウィズル",         10000,  190, 110,  6,  8, RACE_HOBBIT},
+		{ "強欲ミダス",           15000,  200, 116,  6,  9, RACE_GNOME},
+		{ "錬金術師ジャ=ファー",       15000,  220, 111,  4,  9, RACE_ELF},
+		{ "カカルラカカル",           15000,  200, 116,  6,  9, RACE_KLACKON},
+		{ "錬金術師ジャル=エス",       15000,  220, 111,  4,  9, RACE_ELF},
 #else
 		{ "Mauser the Chemist",         10000,  190, 111,  5,  8, RACE_HALF_ELF},
-#endif
-#ifdef JP
-{ "カオスのウィズル",         10000,  190, 110,  6,  8, RACE_HOBBIT},
-#else
 		{ "Wizzle the Chaotic",         10000,  190, 110,  6,  8, RACE_HOBBIT},
-#endif
-#ifdef JP
-{ "強欲ミダス",           15000,  200, 116,  6,  9, RACE_GNOME},
-#else
 		{ "Midas the Greedy",           15000,  200, 116,  6,  9, RACE_GNOME},
-#endif
-#ifdef JP
-{ "錬金術師ジャ=ファー",       15000,  220, 111,  4,  9, RACE_ELF},
-#else
 		{ "Ja-Far the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
+		{ "Kakalrakakal",           15000,  200, 116,  6,  9, RACE_KLACKON},
+		{ "Jal-Eth the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
+		{ "Fanelath the Cautious",         10000,  190, 111,  5,  8, RACE_DWARF},
+		{ "Runcie the Insane",         10000,  190, 110,  6,  8, RACE_HUMAN},
+		{ "Grumbleworth",           15000,  200, 116,  6,  9, RACE_GNOME},
+		{ "Flitter",       15000,  220, 111,  4,  9, RACE_SPRITE},
+		{ "Xarillus",         10000,  190, 111,  5,  8, RACE_HUMAN},
+		{ "Egbert the Old",         10000,  190, 110,  6,  8, RACE_DWARF},
+		{ "Valindra the Proud",           15000,  200, 116,  6,  9, RACE_HIGH_ELF},
+		{ "Taen the Alchemist",       15000,  220, 111,  4,  9, RACE_HUMAN},
+		{ "Cayd the Sweet",         10000,  190, 111,  5,  8, RACE_VAMPIRE},
+		{ "Fulir the Dark",         10000,  190, 110,  6,  8, RACE_NIBELUNG},
+		{ "Domli the Humble",           15000,  200, 116,  6,  9, RACE_DWARF},
+		{ "Yaarjukka Demonspawn",       15000,  220, 111,  4,  9, RACE_IMP},
+		{ "Gelaraldor the Herbmaster",         10000,  190, 111,  5,  8, RACE_HIGH_ELF},
+		{ "Olelaldan the Wise",         10000,  190, 110,  6,  8, RACE_BARBARIAN},
+		{ "Fthoglo the Demonicist",           15000,  200, 116,  6,  9, RACE_IMP},
+		{ "Dridash the Alchemist",       15000,  220, 111,  4,  9, RACE_HALF_ORC},
+		{ "Nelir the Strong",         10000,  190, 111,  5,  8, RACE_CYCLOPS},
+		{ "Lignus the Pungent",         10000,  190, 110,  6,  8, RACE_HALF_ORC},
+		{ "Tilba",           15000,  200, 116,  6,  9, RACE_HOBBIT},
+		{ "Myrildric the Wealthy",       15000,  220, 111,  4,  9, RACE_HUMAN},
+
+		{ "Mauser the Chemist",         10000,  190, 111,  5,  8, RACE_HALF_ELF},
+		{ "Wizzle the Chaotic",         10000,  190, 110,  6,  8, RACE_HOBBIT},
+		{ "Midas the Greedy",           15000,  200, 116,  6,  9, RACE_GNOME},
+		{ "Ja-Far the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
+		{ "Kakalrakakal",           15000,  200, 116,  6,  9, RACE_KLACKON},
+		{ "Jal-Eth the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
 #endif
-#ifdef JP
-	{ "カカルラカカル",           15000,  200, 116,  6,  9, RACE_KLACKON},
-#else
-	{ "Kakalrakakal",           15000,  200, 116,  6,  9, RACE_KLACKON},
-#endif
-#ifdef JP
-	{ "錬金術師ジャル=エス",       15000,  220, 111,  4,  9, RACE_ELF},
-#else
-	{ "Jal-Eth the Alchemist",       15000,  220, 111,  4,  9, RACE_ELF},
-#endif
-	},
-	{
+		},
+
+		{
 		/* Magic Shop - 23 unique names */
 #ifdef JP
 		{ "ソーサラーのロ=パン",       20000,  200,  110,   7,   8,  RACE_HALF_ELF},
