@@ -340,6 +340,39 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 	prt(r, row, col);
 }
 
+static void do_cmd_wiz_reset_class(void)
+{
+	int tmp_int;
+	char tmp_val[160];
+	char ppp[80];
+
+	/* Prompt */
+	sprintf(ppp, "Class (0-%d): ", MAX_CLASS - 1);
+
+	/* Default */
+	sprintf(tmp_val, "%d", p_ptr->pclass);
+
+	/* Query */
+	if (!get_string(ppp, tmp_val, 2)) return;
+
+	/* Extract */
+	tmp_int = atoi(tmp_val);
+
+	/* Verify */
+	if (tmp_int < 0 || tmp_int >= MAX_CLASS) return;
+
+	/* Save it */
+	p_ptr->pclass = tmp_int;
+
+	/* Redraw inscription */
+	p_ptr->window |= (PW_PLAYER);
+
+	/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
+	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+
+	update_stuff();
+}
+
 
 /*
  * Hack -- Teleport to the target
@@ -2020,6 +2053,11 @@ void do_cmd_debug(void)
 	/* Mutation */
 	case 'M':
 		(void)gain_random_mutation(command_arg);
+		break;
+
+	/* Reset Class */
+	case 'R':
+		(void)do_cmd_wiz_reset_class();
 		break;
 
 	/* Specific reward */

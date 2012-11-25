@@ -4687,7 +4687,6 @@ msg_print("あなたは混乱している。");
 	return (TRUE);
 }
 
-
 void gain_level_reward(int chosen_reward)
 {
 	object_type *q_ptr;
