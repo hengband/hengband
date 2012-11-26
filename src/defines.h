@@ -152,7 +152,7 @@
 /*
  * Arena constants
  */
-#define MAX_ARENA_MONS		40	/* -KMW- */
+#define MAX_ARENA_MONS		39	/* -KMW- */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT))
 
 
