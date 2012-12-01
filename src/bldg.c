@@ -281,7 +281,14 @@ msg_print("君のために最強の挑戦者を用意しておいた。");
 #else
 					if (get_check("Do you fight? "))
 #endif
-					{
+					{	
+#ifdef JP
+                        msg_print("死ぬがよい。");
+#else
+					    msg_print("Die, maggots.");
+#endif
+						msg_print(NULL);
+					
 						p_ptr->exit_bldg = FALSE;
 						reset_tim_flags();
 

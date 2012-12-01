@@ -152,7 +152,7 @@
 /*
  * Arena constants
  */
-#define MAX_ARENA_MONS		39	/* -KMW- */
+#define MAX_ARENA_MONS		41	/* -KMW- */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT))
 
 
@@ -4905,6 +4905,7 @@ extern int PlayerUID;
 #define MON_BLUE_HORROR   189
 #define MON_GOLD_COINS    195
 #define MON_VORPAL_BUNNY  205
+#define MON_MASTER_YEEK   224
 #define MON_PRIEST        225
 #define MON_D_ELF_PRIEST  226
 #define MON_TIGER         230
@@ -4916,9 +4917,13 @@ extern int PlayerUID;
 #define MON_UMBER_HULK    283
 #define MON_ORC_CAPTAIN   285
 #define MON_BERSERKER     293
+#define MON_IMP           296
 #define MON_SHAGRAT       314
 #define MON_GORBAG        315
 #define MON_STONE_GIANT   321
+#define MON_LIZARD_KING   332
+#define MON_WYVERN        334
+#define MON_SABRE_TIGER   339
 #define MON_D_ELF_LORD    348
 #define MON_FIRE_VOR      354
 #define MON_WATER_VOR     355
@@ -4938,6 +4943,7 @@ extern int PlayerUID;
 #define MON_GWAIHIR       410
 #define MON_ANGEL         417
 #define MON_ADAMANT_COINS 423
+#define MON_COLBRAN       435
 #define MON_SPIRIT_NAGA   436
 #define MON_GACHAPIN      441
 #define MON_BASILISK      453
@@ -4947,6 +4953,7 @@ extern int PlayerUID;
 #define MON_SHADOW_DRAKE  471
 #define MON_GHOST         477
 #define MON_OGRE_SHAMAN   479
+#define MON_GHOUL_KING    483
 #define MON_NINJA         485
 #define MON_BICLOPS       490
 #define MON_IVORY_MONK    492
@@ -4973,11 +4980,14 @@ extern int PlayerUID;
 #define MON_MANDOR        598
 #define MON_SHIM_VOR      600
 #define MON_SERAPH        605
+#define MON_BARON_HELL    609
 #define MON_KAVLAX        616
 #define MON_ETTIN         621
 #define MON_VAMPIRE_LORD  623
 #define MON_JUBJUB        640
+#define MON_G_C_DRAKE     646
 #define MON_CLUB_DEMON    648
+#define MON_F_ANGEL       652
 #define MON_D_ELF_SORC    657
 #define MON_MASTER_LICH   658
 #define MON_RINALDO       660
@@ -4987,12 +4997,14 @@ extern int PlayerUID;
 #define MON_JACK_SHADOWS  670
 #define MON_LLOIGOR       682
 #define MON_DREADMASTER   690
+#define MON_DROLEM        691
 #define MON_DAWN          693
 #define MON_NAZGUL        696
 #define MON_SMAUG         697
 #define MON_STORMBRINGER  698
 #define MON_ULTRA_PALADIN 699
 #define MON_G_TITAN       702
+#define MON_S_TYRANNO     705
 #define MON_FAFNER        712
 #define MON_G_BALROG      720
 #define MON_TIME_HOUND    725
@@ -5014,6 +5026,7 @@ extern int PlayerUID;
 #define MON_BRAND         773
 #define MON_SHADOWLORD    774
 #define MON_ARCHLICH      776
+#define MON_JABBERWOCK    778
 #define MON_CHAOS_HOUND   779
 #define MON_ULT_BEHOLDER  781
 #define MON_SHAMBLER      786
@@ -5068,8 +5081,10 @@ extern int PlayerUID;
 #define MON_D_ELF_SHADE   886
 #define MON_MANA_HOUND    887
 #define MON_VENOM_WYRM    890
+#define MON_TROLL_KING    894
 #define MON_BAZOOKER      896
 #define MON_SHARD_VOR     897
+#define MON_ELF_LORD      900
 #define MON_MASTER_MYS    916
 #define MON_G_MASTER_MYS  917
 #define MON_IE            921
@@ -5115,11 +5130,14 @@ extern int PlayerUID;
 #define MON_CHAMELEON     1040
 #define MON_CHAMELEON_K   1041
 #define MON_TOPAZ_MONK    1047
+#define MON_M_MINDCRAFTER 1056
+#define MON_ELDER_VAMPIRE 1058
 #define MON_NOBORTA       1059
 #define MON_MORI_TROLL    1060
 #define MON_BARNEY        1061
 #define MON_GROO          1062
 #define MON_LOUSY         1063
+#define MON_WYRM_SPACE    1064
 #define MON_JIZOTAKO      1065
 #define MON_TANUKI        1067
 #define MON_HATOPOPPO     1083
