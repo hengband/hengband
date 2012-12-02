@@ -335,11 +335,6 @@ F:@:FLOOR:3:0:0:0:125
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:94
 
-# Quest 27 rewarding (BeastMaster gets The Lance of Eorlingas)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS BeastMaster] ]
-F:a:BUILDING_0:3
-F:@:FLOOR:3:0:0:0:100
-
 # Quest 27 rewarding (Cavalry gets GaeBolg)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Cavalry] ]
 F:a:BUILDING_0:3
@@ -365,15 +360,15 @@ F:@:FLOOR:3:0:0:0:26
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:215
 
-# Quest 27 rewarding (Mage, High-Mage, Sorcerer and Blue-Mage
+# Quest 27 rewarding (Mage, High-Mage, Sorcerer, Blue-Mage and Mindcrafter
 # get The Hard Leather Cap of Indra)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Mage High-Mage Sorcerer Blue-Mage] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Mage High-Mage Sorcerer Blue-Mage Mindcrafter] ]
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:33
 
 # Quest 27 rewarding (Priest, Bard and ForceTrainer
 # get The Palantir of Westernesse)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest Bard ForceTrainer Mindcrafter] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest Bard ForceTrainer] ]
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:15
 
@@ -382,8 +377,8 @@ F:@:FLOOR:3:0:0:0:15
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:132
 
-# Quest 27 rewarding (Samurai gets The Katana 'Aglarang')
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai] ]
+# Quest 27 rewarding (Samurai, Warrior-Mage and Red-Mage gets The Katana 'Aglarang')
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai Warrior-Mage Red-Mage] ]
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:81
 
@@ -397,9 +392,9 @@ F:@:FLOOR:3:0:0:0:217
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:218
 
-# Quest 27 rewarding (Warrior-Mage, Red-Mage and Magic-Eater
+# Quest 27 rewarding (BeastMaster  and Magic-Eater 
 # get The Charmed Pendant)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior-Mage Red-Mage Magic-Eater] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Magic-Eater BeastMaster] ]
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:219
 
