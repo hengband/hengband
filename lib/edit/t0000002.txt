@@ -143,12 +143,27 @@ F:!:FLOOR:3:0:143
 ?:[EQU $QUEST5 4]
 F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
+# Quest 5 failed , wait for the player to enter the castle
+?:[EQU $QUEST5 5]
+F:b:BUILDING_1:3:0:0:0:0:NONE:5
+
+# Quest 5 failed but done, continue with quest 26
+?:[EQU $QUEST5 6]
+F:b:BUILDING_1:3:0:0:0:0:NONE:26
+
 # Death Paladins continue with quest 16
 ?:[AND [EQU $QUEST5 3] [AND [EQU $CLASS Paladin] [EQU $REALM1 Death] ] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:16
+F:!:FLOOR:3:0:143
 
 # Death Paladins continue with quest 16
 ?:[AND [EQU $QUEST5 4] [AND [EQU $CLASS Paladin] [EQU $REALM1 Death] ] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:16
+
+?:[AND [EQU $QUEST5 5] [AND [EQU $CLASS Paladin] [EQU $REALM1 Death] ] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:5
+
+?:[AND [EQU $QUEST5 6] [AND [EQU $CLASS Paladin] [EQU $REALM1 Death] ] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:16
 
 ?:1
