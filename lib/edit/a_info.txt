@@ -3716,3 +3716,46 @@ P:0:4d6:15:15:0
 F:RIDING | WARNING | SLAY_EVIL | KILL_DEMON | ESP_DEMON
 D:なんだ、またこの役立たずの剣か。おや？ちょっと待てよ……
 
+
+# The Light Crossbow 'Wiizapper' (x3)
+N:239:『ウィザッパー』
+E:'Wiizapper'
+I:19:23:4
+W:30:10:110:77777
+P:0:1d1:13:13:0
+F:INFRA | DEX | XTRA_SHOTS | LITE |
+F:SEE_INVIS | WARNING |
+F:HIDE_TYPE | SHOW_MODS
+D:$The white light crossbow that the fighter Link, wearing green clothes,
+D:$bought for training of shooting.'Enjoy shootings at the living room.'
+D:$(Nintendo)
+D:緑の服の戦士リンクがボウガンのトレーニングのために購入した
+D:と言われる軽くて白いクロスボウだ。「リビングで射撃を楽しむ」
+D:(Nintendo)
+
+# The Heavy Crossbow 'Lion Slayer' (x5)
+N:240:『獅子殺し』
+E:'Lion Slayer'
+I:19:24:2
+W:40:30:200:119929
+P:0:4d1:19:19:0
+F:STR | CON | XTRA_MIGHT |
+F:RES_FEAR | XTRA_POWER |
+F:HIDE_TYPE | SHOW_MODS
+D:$This heavily heavy Crossbow shines black uncannily.
+D:$The shot also breaks the Lion Heart.
+D:この不気味に黒光るクロスボウはずっしりと重い。その一撃は獅子の心をも砕く。
+
+# The Heavy Crossbow of Guanzi (x4)
+N:241:管子の
+I:19:24:3
+W:40:20:200:99999
+P:0:4d1:10:15:0
+F:INT | WIS | SUST_INT | SUST_WIS | MAGIC_MASTERY | XTRA_SHOTS |
+F:RES_CONF | RES_NEXUS | FREE_ACT |
+F:HIDE_TYPE | SHOW_MODS
+D:$This is Guan Zhong's heavy crossbow for assassinating.
+D:$He took prime minister's post of Qi, although he failed to
+D:$take the life of the prince of Qi.
+D:斉の管仲が暗殺用に用いた重い弩だ。公子小白を射抜くことはできなかった
+D:が、後に斉の宰相の座を見事に射止めた。
