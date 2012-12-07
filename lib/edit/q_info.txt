@@ -71,7 +71,10 @@
 #?:[EQU $QUEST_NUMBER 17]
 #%:q000lyeh.txt
 
-# Quest #18 was removed
+# Quest #18 was returned!
+# Water Cave
+?:[EQU $QUEST_NUMBER 18]
+%:q00water.txt
 
 # Doom Quest 1
 ?:[EQU $QUEST_NUMBER 19]
