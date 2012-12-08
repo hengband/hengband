@@ -109,6 +109,9 @@ void do_cmd_go_up(void)
 
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
+		
+		/* Hack -- take a turn */
+		energy_use = 100;
 
 		/* End the command */
 		return;
@@ -275,6 +278,10 @@ void do_cmd_go_down(void)
 
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
+		
+		
+        /* Hack -- take a turn */
+        energy_use = 100;
 	}
 
 	else
