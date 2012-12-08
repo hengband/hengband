@@ -2,7 +2,7 @@
 
 # Name
 Q:$7:N:The Tower 3
-Q:7:N:“ƒ
+Q:7:N:Εγ
 
 # Definition
 Q:$7:Q:8:0:0:0:40:0:0:0:11
