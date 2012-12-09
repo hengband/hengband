@@ -1234,160 +1234,75 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 /*
    Raistlin は dragonlance の powerful wizard 。
    Rincewind the Chicken は Terry Pratchett の Discworld の登場人物 上記のパロディ？、
+	{ "憶病者ラストリン",       200,    175,  108,   4,  12,  RACE_HUMAN},
+	{ "Raistlin the Chicken",       200,    175, 108,  4, 12, RACE_HUMAN},
  */
 
 #ifdef JP
 		{ "フレンドリーなビルボ",       200,    170,  108,   5,  15,  RACE_HOBBIT},
-/*                { "憶病者ラストリン",       200,    175,  108,   4,  12,  RACE_HUMAN},  */
 		{ "憶病者リンスウィンド",       200,    175,  108,   4,  12,  RACE_HUMAN}, 
 		{ "背の低いサルタン",             300,    170,  107,   5,  15,  RACE_GNOME},
 		{ "ハンサムなライア=エル",      300,    165,  107,   6,  18,  RACE_ELF},
+{ "親切なファリルマウエン",         250,    170, 108,  5, 15, RACE_HOBBIT},
+{ "臆病者ヴォワラン",       500,    175, 108,  4, 12, RACE_HUMAN},
+{ "チビのエラシュナク",          750,    170, 107,  5, 15, RACE_BEASTMAN},
+{ "ハンサムなグラッグ",        1000,    165, 107,  6, 18, RACE_HALF_TITAN},
+{ "ケチなフォロビア",         250,    170, 108,  5, 15, RACE_HUMAN},
+{ "馬鹿のエリス",       500,    175, 108,  4, 12, RACE_HUMAN},
+{ "腹ペコのフィルバート",          750,    170, 107,  5, 15, RACE_VAMPIRE},
+{ "スナーグル・サシグア",        1000,    165, 107,  6, 18, RACE_MIND_FLAYER},
+{ "長死きエロワーズ",         250,    170, 108,  5, 15, RACE_SPECTRE},
+{ "ノロマのフンディ",       500,    175, 108,  4, 12, RACE_ZOMBIE},
+{ "グランサス",          750,    170, 107,  5, 15, RACE_SKELETON},
+{ "丁寧なロラックス",        1000,    165, 107,  6, 18, RACE_VAMPIRE},
+{ "ブッチ",         250,    170, 108,  5, 15, RACE_HALF_ORC},
+{ "美しきエルベレス",       500,    175, 108,  4, 12, RACE_HIGH_ELF},
+{ "こそこそサーレス",          750,    170, 107,  5, 15, RACE_GNOME},
+{ "ナーロック",        1000,    165, 107,  6, 18, RACE_DWARF},
+{ "チビのヘイネッカ",         250,    170, 108,  5, 15, RACE_GNOME},
+{ "きちがいロワラン",       500,    175, 108,  4, 12, RACE_HALF_GIANT},
+{ "毒息のウート",          750,    170, 107,  5, 15, RACE_DRACONIAN},
+{ "でぶっちょアラァカ",        1000,    165, 107,  6, 18, RACE_DRACONIAN},
+{ "低能なプーゴー",         250,    170, 108,  5, 15, RACE_BEASTMAN},
+{ "フェロールフィリアン",       500,    175, 108,  4, 12, RACE_ELF},
+{ "年寄りマロカ",          750,    170, 107,  5, 15, RACE_GNOME},
+{ "勇敢なサシン",        1000,    165, 107,  6, 18, RACE_HALF_GIANT},
+{ "田舎者アビエマール",         250,    170, 108,  5, 15, RACE_HUMAN},
+{ "貧乏なハーク",       500,    175, 108,  4, 12, RACE_HALF_ORC},
+{ "みじめなソアリン",          750,    170, 107,  5, 15, RACE_ZOMBIE},
+{ "質素なメルラ",        1000,    165, 107,  6, 18, RACE_ELF},
 #else
 		{ "Bilbo the Friendly",         200,    170, 108,  5, 15, RACE_HOBBIT},
-/*		{ "Raistlin the Chicken",       200,    175, 108,  4, 12, RACE_HUMAN}, */
 		{ "Rincewind the Chicken",       200,    175, 108,  4, 12, RACE_HUMAN},
 		{ "Sultan the Midget",          300,    170, 107,  5, 15, RACE_GNOME},
 		{ "Lyar-el the Comely",         300,    165, 107,  6, 18, RACE_ELF},
-#endif
-
-#ifdef JP
-{ "親切なファリルマウエン",         250,    170, 108,  5, 15, RACE_HOBBIT},
-#else
 		{ "Falilmawen the Friendly",         250,    170, 108,  5, 15, RACE_HOBBIT},
-#endif
-#ifdef JP
-{ "臆病者ヴォワラン",       500,    175, 108,  4, 12, RACE_HUMAN},
-#else
 		{ "Voirin the Cowardly",       500,    175, 108,  4, 12, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "チビのエラシュナク",          750,    170, 107,  5, 15, RACE_BEASTMAN},
-#else
 		{ "Erashnak the Midget",          750,    170, 107,  5, 15, RACE_BEASTMAN},
-#endif
-#ifdef JP
-{ "ハンサムなグラッグ",        1000,    165, 107,  6, 18, RACE_HALF_TITAN},
-#else
 		{ "Grug the Comely",        1000,    165, 107,  6, 18, RACE_HALF_TITAN},
-#endif
-#ifdef JP
-{ "ケチなフォロビア",         250,    170, 108,  5, 15, RACE_HUMAN},
-#else
 		{ "Forovir the Cheap",         250,    170, 108,  5, 15, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "馬鹿のエリス",       500,    175, 108,  4, 12, RACE_HUMAN},
-#else
 		{ "Ellis the Fool",       500,    175, 108,  4, 12, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "腹ペコのフィルバート",          750,    170, 107,  5, 15, RACE_VAMPIRE},
-#else
 		{ "Filbert the Hungry",          750,    170, 107,  5, 15, RACE_VAMPIRE},
-#endif
-#ifdef JP
-{ "スナーグル・サシグア",        1000,    165, 107,  6, 18, RACE_MIND_FLAYER},
-#else
 		{ "Fthnargl Psathiggua",        1000,    165, 107,  6, 18, RACE_MIND_FLAYER},
-#endif
-#ifdef JP
-{ "長死きエロワーズ",         250,    170, 108,  5, 15, RACE_SPECTRE},
-#else
 		{ "Eloise Long-Dead",         250,    170, 108,  5, 15, RACE_SPECTRE},
-#endif
-#ifdef JP
-{ "ノロマのフンディ",       500,    175, 108,  4, 12, RACE_ZOMBIE},
-#else
 		{ "Fundi the Slow",       500,    175, 108,  4, 12, RACE_ZOMBIE},
-#endif
-#ifdef JP
-{ "グランサス",          750,    170, 107,  5, 15, RACE_SKELETON},
-#else
 		{ "Granthus",          750,    170, 107,  5, 15, RACE_SKELETON},
-#endif
-#ifdef JP
-{ "丁寧なロラックス",        1000,    165, 107,  6, 18, RACE_VAMPIRE},
-#else
 		{ "Lorax the Suave",        1000,    165, 107,  6, 18, RACE_VAMPIRE},
-#endif
-#ifdef JP
-{ "ブッチ",         250,    170, 108,  5, 15, RACE_HALF_ORC},
-#else
 		{ "Butch",         250,    170, 108,  5, 15, RACE_HALF_ORC},
-#endif
-#ifdef JP
-{ "美しきエルベレス",       500,    175, 108,  4, 12, RACE_HIGH_ELF},
-#else
 		{ "Elbereth the Beautiful",       500,    175, 108,  4, 12, RACE_HIGH_ELF},
-#endif
-#ifdef JP
-{ "こそこそサーレス",          750,    170, 107,  5, 15, RACE_GNOME},
-#else
 		{ "Sarleth the Sneaky",          750,    170, 107,  5, 15, RACE_GNOME},
-#endif
-#ifdef JP
-{ "ナーロック",        1000,    165, 107,  6, 18, RACE_DWARF},
-#else
 		{ "Narlock",        1000,    165, 107,  6, 18, RACE_DWARF},
-#endif
-#ifdef JP
-{ "チビのヘイネッカ",         250,    170, 108,  5, 15, RACE_GNOME},
-#else
 		{ "Haneka the Small",         250,    170, 108,  5, 15, RACE_GNOME},
-#endif
-#ifdef JP
-{ "きちがいロワラン",       500,    175, 108,  4, 12, RACE_HALF_GIANT},
-#else
 		{ "Loirin the Mad",       500,    175, 108,  4, 12, RACE_HALF_GIANT},
-#endif
-#ifdef JP
-{ "毒息のウート",          750,    170, 107,  5, 15, RACE_DRACONIAN},
-#else
 		{ "Wuto Poisonbreath",          750,    170, 107,  5, 15, RACE_DRACONIAN},
-#endif
-#ifdef JP
-{ "でぶっちょアラァカ",        1000,    165, 107,  6, 18, RACE_DRACONIAN},
-#else
 		{ "Araaka the Rotund",        1000,    165, 107,  6, 18, RACE_DRACONIAN},
-#endif
-#ifdef JP
-{ "低能なプーゴー",         250,    170, 108,  5, 15, RACE_BEASTMAN},
-#else
 		{ "Poogor the Dumb",         250,    170, 108,  5, 15, RACE_BEASTMAN},
-#endif
-#ifdef JP
-{ "フェロールフィリアン",       500,    175, 108,  4, 12, RACE_ELF},
-#else
 		{ "Felorfiliand",       500,    175, 108,  4, 12, RACE_ELF},
-#endif
-#ifdef JP
-{ "年寄りマロカ",          750,    170, 107,  5, 15, RACE_GNOME},
-#else
 		{ "Maroka the Aged",          750,    170, 107,  5, 15, RACE_GNOME},
-#endif
-#ifdef JP
-{ " 勇敢なサシン",        1000,    165, 107,  6, 18, RACE_HALF_GIANT},
-#else
 		{ "Sasin the Bold",        1000,    165, 107,  6, 18, RACE_HALF_GIANT},
-#endif
-#ifdef JP
-{ "田舎者アビエマール",         250,    170, 108,  5, 15, RACE_HUMAN},
-#else
 		{ "Abiemar the Peasant",         250,    170, 108,  5, 15, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "貧乏なハーク",       500,    175, 108,  4, 12, RACE_HALF_ORC},
-#else
 		{ "Hurk the Poor",       500,    175, 108,  4, 12, RACE_HALF_ORC},
-#endif
-#ifdef JP
-{ "みじめなソアリン",          750,    170, 107,  5, 15, RACE_ZOMBIE},
-#else
 		{ "Soalin the Wretched",          750,    170, 107,  5, 15, RACE_ZOMBIE},
-#endif
-#ifdef JP
-{ "質素なメルラ",        1000,    165, 107,  6, 18, RACE_ELF},
-#else
 		{ "Merulla the Humble",        1000,    165, 107,  6, 18, RACE_ELF},
 #endif
 	},
@@ -1398,155 +1313,71 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
 		{ "頑固者ダーグ=ロウ",  10000,  190,  111,   4,   9,  RACE_HUMAN},
 		{ "賢者デカド",                 25000,  200,  112,   4,  10,  RACE_DUNADAN},
 		{ "鍛冶屋のウィーランド",   30000,  200,  112,   4,   5,  RACE_DWARF},
+{ "醜悪コン=ダー",           10000,   210, 115,  5,  7, RACE_HALF_ORC},
+{ "頑固者ダーグ=ロウ",          15000,  190, 111,  4,  9, RACE_HUMAN},
+{ "ハンサムなデカド",            25000,  200, 112,  4, 10, RACE_AMBERITE},
+	{ "エロー・ドラゴンスケイル",          30000,  200, 112,  4,  5, RACE_ELF},
+{ "デリカトス",           10000,   210, 115,  5,  7, RACE_SPRITE},
+{ "巨大なグルース",          15000,  190, 111,  4,  9, RACE_HALF_GIANT},
+{ "アニムス",            25000,  200, 112,  4, 10, RACE_GOLEM},
+	{ "マルヴァス",          30000,  200, 112,  4,  5, RACE_HALF_TITAN},
+{ "セラクシス",           10000,   210, 115,  5,  7, RACE_ZOMBIE},
+{ "デス・チル",          5000,  190, 111,  4,  9, RACE_SPECTRE},
+{ "微かなドリオス",            25000,  200, 112,  4, 10, RACE_SPECTRE},
+	{ "冷たいバスリック",          30000,  200, 112,  4,  5, RACE_VAMPIRE},
+{ "冷酷ヴェンジェラ",           10000,   210, 115,  5,  7, RACE_HALF_TROLL},
+{ "強者ウィラナ",          15000,  190, 111,  4,  9, RACE_HUMAN},
+{ "ヨジョ二世",            25000,  200, 112,  4, 10, RACE_DWARF},
+	{ "優しいラナラー",          30000,  200, 112,  4,  5, RACE_AMBERITE},
+{ "不浄のホルバグ",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
+{ "テレパスのエレレン",          15000,  190, 111,  4,  9, RACE_DARK_ELF},
+{ "イスドリリアス",            25000,  200, 112,  4, 10, RACE_SPRITE},
+	{ "一つ目ヴェグナー",          5000,  200, 112,  4,  5, RACE_CYCLOPS},
+{ "混沌のロディッシュ",           10000,   210, 115,  5,  7, RACE_BEASTMAN},
+{ "剣豪ヘジン",          15000,  190, 111,  4,  9, RACE_NIBELUNG},
+{ "ずる屋のエルベレリス",           10000,  200, 112,  4, 10, RACE_DARK_ELF},
+	{ "インプのザサス",          30000,  200, 112,  4,  5, RACE_IMP},
+{ "醜悪コン=ダー",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
+{ "頑固者ダーグ=ロウ",          10000,  190, 111,  4,  9, RACE_HUMAN},
+{ "ハンサムなデカド",            25000,  200, 112,  4, 10, RACE_AMBERITE},
+{ "鍛冶屋のウィーランド",          30000,  200, 112,  4,  5, RACE_DWARF},
 #else
 		{ "Kon-Dar the Ugly",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
 		{ "Darg-Low the Grim",          10000,  190, 111,  4,  9, RACE_HUMAN},
 		{ "Decado the Handsome",            25000,  200, 112,  4, 10, RACE_DUNADAN},
 		{ "Wieland the Smith",          30000,  200, 112,  4,  5, RACE_DWARF},
-#endif
-
-#ifdef JP
-{ "醜悪コン=ダー",           10000,   210, 115,  5,  7, RACE_HALF_ORC},
-#else
 		{ "Kon-Dar the Ugly",           10000,   210, 115,  5,  7, RACE_HALF_ORC},
-#endif
-#ifdef JP
-{ "頑固者ダーグ=ロウ",          15000,  190, 111,  4,  9, RACE_HUMAN},
-#else
 		{ "Darg-Low the Grim",          15000,  190, 111,  4,  9, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "ハンサムなデカド",            25000,  200, 112,  4, 10, RACE_AMBERITE},
-#else
 		{ "Decado the Handsome",            25000,  200, 112,  4, 10, RACE_AMBERITE},
-#endif
-#ifdef JP
-	{ "エロー・ドラゴンスケイル",          30000,  200, 112,  4,  5, RACE_ELF},
-#else
 	{ "Elo Dragonscale",          30000,  200, 112,  4,  5, RACE_ELF},
-#endif
-#ifdef JP
-{ "デリカトス",           10000,   210, 115,  5,  7, RACE_SPRITE},
-#else
 		{ "Delicatus",           10000,   210, 115,  5,  7, RACE_SPRITE},
-#endif
-#ifdef JP
-{ "巨大なグルース",          15000,  190, 111,  4,  9, RACE_HALF_GIANT},
-#else
 		{ "Gruce the Huge",          15000,  190, 111,  4,  9, RACE_HALF_GIANT},
-#endif
-#ifdef JP
-{ "アニムス",            25000,  200, 112,  4, 10, RACE_GOLEM},
-#else
 		{ "Animus",            25000,  200, 112,  4, 10, RACE_GOLEM},
-#endif
-#ifdef JP
-	{ "マルヴァス",          30000,  200, 112,  4,  5, RACE_HALF_TITAN},
-#else
 	{ "Malvus",          30000,  200, 112,  4,  5, RACE_HALF_TITAN},
-#endif
-#ifdef JP
-{ "セラクシス",           10000,   210, 115,  5,  7, RACE_ZOMBIE},
-#else
 		{ "Selaxis",           10000,   210, 115,  5,  7, RACE_ZOMBIE},
-#endif
-#ifdef JP
-{ "デス・チル",          5000,  190, 111,  4,  9, RACE_SPECTRE},
-#else
 		{ "Deathchill",          5000,  190, 111,  4,  9, RACE_SPECTRE},
-#endif
-#ifdef JP
-{ "微かなドリオス",            25000,  200, 112,  4, 10, RACE_SPECTRE},
-#else
 		{ "Drios the Faint",            25000,  200, 112,  4, 10, RACE_SPECTRE},
-#endif
-#ifdef JP
-	{ "冷たいバスリック",          30000,  200, 112,  4,  5, RACE_VAMPIRE},
-#else
 	{ "Bathric the Cold",          30000,  200, 112,  4,  5, RACE_VAMPIRE},
-#endif
-#ifdef JP
-{ "冷酷ヴェンジェラ",           10000,   210, 115,  5,  7, RACE_HALF_TROLL},
-#else
 		{ "Vengella the Cruel",           10000,   210, 115,  5,  7, RACE_HALF_TROLL},
-#endif
-#ifdef JP
-{ "強者ウィラナ",          15000,  190, 111,  4,  9, RACE_HUMAN},
-#else
 		{ "Wyrana the Mighty",          15000,  190, 111,  4,  9, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "ヨジョ二世",            25000,  200, 112,  4, 10, RACE_DWARF},
-#else
 		{ "Yojo II",            25000,  200, 112,  4, 10, RACE_DWARF},
-#endif
-#ifdef JP
-	{ "優しいラナラー",          30000,  200, 112,  4,  5, RACE_AMBERITE},
-#else
 	{ "Ranalar the Sweet",          30000,  200, 112,  4,  5, RACE_AMBERITE},
-#endif
-#ifdef JP
-{ "不浄のホルバグ",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
-#else
 		{ "Horbag the Unclean",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
-#endif
-#ifdef JP
-{ "テレパスのエレレン",          15000,  190, 111,  4,  9, RACE_DARK_ELF},
-#else
 		{ "Elelen the Telepath",          15000,  190, 111,  4,  9, RACE_DARK_ELF},
-#endif
-#ifdef JP
-{ "イスドリリアス",            25000,  200, 112,  4, 10, RACE_SPRITE},
-#else
 		{ "Isedrelias",            25000,  200, 112,  4, 10, RACE_SPRITE},
-#endif
-#ifdef JP
-	{ "一つ目ヴェグナー",          5000,  200, 112,  4,  5, RACE_CYCLOPS},
-#else
 	{ "Vegnar One-eye",          5000,  200, 112,  4,  5, RACE_CYCLOPS},
-#endif
-#ifdef JP
-{ "混沌のロディッシュ",           10000,   210, 115,  5,  7, RACE_BEASTMAN},
-#else
 		{ "Rodish the Chaotic",           10000,   210, 115,  5,  7, RACE_BEASTMAN},
-#endif
-#ifdef JP
-{ "剣豪ヘジン",          15000,  190, 111,  4,  9, RACE_NIBELUNG},
-#else
 		{ "Hesin Swordmaster",          15000,  190, 111,  4,  9, RACE_NIBELUNG},
-#endif
-#ifdef JP
-{ "ずる屋のエルベレリス",           10000,  200, 112,  4, 10, RACE_DARK_ELF},
-#else
 		{ "Elvererith the Cheat",           10000,  200, 112,  4, 10, RACE_DARK_ELF},
-#endif
-#ifdef JP
-	{ "インプのザサス",          30000,  200, 112,  4,  5, RACE_IMP},
-#else
 	{ "Zzathath the Imp",          30000,  200, 112,  4,  5, RACE_IMP},
-#endif
-#ifdef JP
-{ "醜悪コン=ダー",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
-#else
 		{ "Kon-Dar the Ugly",           5000,   210, 115,  5,  7, RACE_HALF_ORC},
-#endif
-#ifdef JP
-{ "頑固者ダーグ=ロウ",          10000,  190, 111,  4,  9, RACE_HUMAN},
-#else
 		{ "Darg-Low the Grim",          10000,  190, 111,  4,  9, RACE_HUMAN},
-#endif
-#ifdef JP
-{ "ハンサムなデカド",            25000,  200, 112,  4, 10, RACE_AMBERITE},
-#else
 		{ "Decado the Handsome",            25000,  200, 112,  4, 10, RACE_AMBERITE},
-#endif
-#ifdef JP
-{ "鍛冶屋のウィーランド",          30000,  200, 112,  4,  5, RACE_DWARF},
-#else
 		{ "Wieland the Smith",          30000,  200, 112,  4,  5, RACE_DWARF},
 #endif
 	},
-	{
+
+		{
 		/* Weapon Smith - 28 unique names */
 #ifdef JP
 		{ "残忍なるアーノルド",        5000,   210,  115,   6,   6,  RACE_HALF_TROLL},
