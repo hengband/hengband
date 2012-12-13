@@ -523,6 +523,7 @@ static grouper group_artifact[] =
 	{ TV_DIGGING,           "シャベル/つるはし" },
 	{ TV_BOW,               "飛び道具" },
 	{ TV_ARROW,             "矢" },
+	{ TV_BOLT,              NULL },
 
 	{ TV_SOFT_ARMOR,        "鎧" },
 	{ TV_HARD_ARMOR,        NULL },
@@ -546,6 +547,7 @@ static grouper group_artifact[] =
 	{ TV_DIGGING,           "Shovels/Picks" },
 	{ TV_BOW,               "Bows" },
 	{ TV_ARROW,             "Ammo" },
+	{ TV_BOLT,              NULL },
 
 	{ TV_SOFT_ARMOR,        "Body Armor" },
 	{ TV_HARD_ARMOR,        NULL },
