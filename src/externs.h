@@ -1385,6 +1385,7 @@ extern void window_stuff(void);
 extern void handle_stuff(void);
 extern s16b empty_hands(bool riding_control);
 extern bool heavy_armor(void);
+extern void print_monster_list(int x, int y, int max_lines);
 
 
 /* effects.c */
@@ -1476,6 +1477,7 @@ extern void ang_sort(vptr u, vptr v, int n);
 extern bool target_able(int m_idx);
 extern bool target_okay(void);
 extern bool target_set(int mode);
+extern void target_set_prepare_look();
 extern bool get_aim_dir(int *dp);
 extern bool get_hack_dir(int *dp);
 extern bool get_rep_dir(int *dp, bool under);

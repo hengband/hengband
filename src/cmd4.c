@@ -2605,8 +2605,9 @@ void do_cmd_options(void)
 				do_cmd_options_win();
 				p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL |
 						  PW_PLAYER | PW_MESSAGE | PW_OVERHEAD |
-						  PW_MONSTER | PW_OBJECT | PW_SNAPSHOT |
-						  PW_BORG_1 | PW_BORG_2 | PW_DUNGEON);
+							PW_MONSTER | PW_OBJECT | PW_SNAPSHOT |
+							PW_BORG_1 | PW_BORG_2 | PW_DUNGEON   |
+							PW_MONSTER_LIST);
 				break;
 			}
 

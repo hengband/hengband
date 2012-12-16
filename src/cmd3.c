@@ -1749,6 +1749,11 @@ void do_cmd_target(void)
  */
 void do_cmd_look(void)
 {
+	/*TEST*/
+	p_ptr->window |= PW_MONSTER_LIST;
+	window_stuff();
+	/*TEST*/
+
 	/* Look around */
 	if (target_set(TARGET_LOOK))
 	{

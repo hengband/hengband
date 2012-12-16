@@ -3075,6 +3075,9 @@ static void target_set_prepare(int mode)
 		temp_x[1] = tmp;
 	}
 }
+void target_set_prepare_look(){
+	target_set_prepare(TARGET_LOOK);
+}
 
 
 /*
@@ -3814,6 +3817,8 @@ bool target_set(int mode)
 	cave_type		*c_ptr;
 
 	int wid, hgt;
+	
+	bool first_look = (mode&TARGET_LOOK)!=0;
 
 
 	/* Get size */
@@ -3868,9 +3873,25 @@ strcpy(info, "q止 p自 o現 +次 -前");
 #endif
 
 			}
-
+			
+			/* if first look, show monster list */
+			if(first_look){
+				int w,h;
+				Term_get_size(&w, &h);
+				print_monster_list(13, 1, h-3);//-3 = -1(top) -2(bottom)
+				//first_look = FALSE;
+			}
+			
 			/* Describe and Prompt */
-			while (!(query = target_set_aux(y, x, mode, info)));
+			while (TRUE){
+				query = target_set_aux(y, x, mode, info);
+				if(first_look){
+					p_ptr->redraw |= PR_MAP;
+					handle_stuff();
+					first_look = FALSE;
+				}
+				if(query)break;
+			}
 
 			/* Cancel tracking */
 			/* health_track(0); */

@@ -1792,6 +1792,153 @@ static void fix_inven(void)
 }
 
 
+/*
+ * Print monster info in line
+ * nnn X LV name
+ *  nnn : number or unique(U) or wanted unique(W)
+ *  X   : symbol of monster
+ *  LV  : monster lv if known
+ *  name: name of monster
+ */
+static void print_monster_line(int x, int y, monster_type* m_ptr, int n_same){
+	char buf[256];
+	int i;
+	int r_idx = m_ptr->ap_r_idx;
+	monster_race* r_ptr = &r_info[r_idx];
+ 
+	Term_gotoxy(x, y);
+	if(!r_ptr)return;
+	//Number of 'U'nique
+	if(r_ptr->flags1&RF1_UNIQUE){//unique
+		bool is_kubi = FALSE;
+		for(i=0;i<MAX_KUBI;i++){
+			if(kubi_r_idx[i] == r_idx){
+				is_kubi = TRUE;
+				break;
+			}
+		}
+		Term_addstr(-1, TERM_WHITE, is_kubi?"  W":"  U");
+	}else{
+		sprintf(buf, "%3d", n_same);
+		Term_addstr(-1, TERM_WHITE, buf);
+	}
+	//symbol
+	Term_addstr(-1, TERM_WHITE, " ");
+	//Term_add_bigch(r_ptr->d_attr, r_ptr->d_char);
+	//Term_addstr(-1, TERM_WHITE, "/");
+	Term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
+	//LV
+	if (r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG2_KAGE)){
+		sprintf(buf, " %2d", r_ptr->level);
+	}else{
+		strcpy(buf, " ??");
+	}
+	Term_addstr(-1, TERM_WHITE, buf);
+	//name
+	sprintf(buf, " %s ", r_name+r_ptr->name);
+	Term_addstr(-1, TERM_WHITE, buf);
+ 
+	//Term_addstr(-1, TERM_WHITE, look_mon_desc(m_ptr, 0));
+}
+
+ /*
+	max_lines : 最大何行描画するか．
+*/
+void print_monster_list(int x, int y, int max_lines){
+	int line = y;
+	monster_type* last_mons = NULL;
+	monster_type* m_ptr = NULL;
+	int n_same = 0;
+	int i;
+
+	for(i=0;i<temp_n;i++){
+		cave_type* c_ptr = &cave[temp_y[i]][temp_x[i]];
+		if(!c_ptr->m_idx || !m_list[c_ptr->m_idx].ml)continue;//no mons or cannot look
+		m_ptr = &m_list[c_ptr->m_idx];
+		if(is_pet(m_ptr))continue;//pet
+		if(!m_ptr->r_idx)continue;//dead?
+		{
+			int r_idx = m_ptr->ap_r_idx;
+			monster_race* r_ptr = &r_info[r_idx];
+			cptr name = (r_name + r_ptr->name);
+			cptr ename = (r_name + r_ptr->name);
+			/*
+			//ミミック類や「それ」等は、一覧に出てはいけない
+			if(r_ptr->flags1&RF1_CHAR_CLEAR)continue;
+			if((r_ptr->flags1&RF1_NEVER_MOVE)&&(r_ptr->flags2&RF2_CHAR_MULTI))continue;
+			//『ヌル』は、一覧に出てはいけない
+			if((strcmp(name, "生ける虚無『ヌル』")==0)||
+			   (strcmp(ename, "Null the Living Void")==0))continue;
+			//"金無垢の指輪"は、一覧に出てはいけない
+			if((strcmp(name, "金無垢の指輪")==0)||
+				(strcmp(ename, "Plain Gold Ring")==0))continue;
+			*/
+		}
+
+		//ソート済みなので同じモンスターは連続する．これを利用して同じモンスターをカウント，まとめて表示する．
+		if(!last_mons){//先頭モンスター
+			last_mons = m_ptr;
+			n_same = 1;
+			continue;
+		}
+		//same race?
+		if(last_mons->ap_r_idx == m_ptr->ap_r_idx){
+			n_same++;
+			continue;//表示処理を次に回す
+		}
+		//print last mons info
+		print_monster_line(x, line++, last_mons, n_same);
+		n_same = 1;
+		last_mons = m_ptr;
+		if(line-y-1==max_lines){//残り1行
+			break;
+		}
+	}
+	if(line-y-1==max_lines && i!=temp_n){
+		Term_gotoxy(x, line);
+		Term_addstr(-1, TERM_WHITE, "-- and more --");
+	}else{
+		if(last_mons)print_monster_line(x, line++, last_mons, n_same);
+	}
+}
+/*
+ * Hack -- display monster list in sub-windows
+ */
+static void fix_monster_list(void)
+{
+	int j;
+	int w, h;
+
+	/* Scan windows */
+	for (j = 0; j < 8; j++)
+	{
+		term *old = Term;
+
+		/* No window */
+		if (!angband_term[j]) continue;
+
+		/* No relevant flags */
+		if (!(window_flag[j] & (PW_MONSTER_LIST))) continue;
+
+		/* Activate */
+		Term_activate(angband_term[j]);
+		Term_get_size(&w, &h);
+
+		Term_clear();
+
+		target_set_prepare_look();//モンスター一覧を生成，ソート
+		print_monster_list(0, 0, h);
+
+		/* Fresh */
+		Term_fresh();
+
+		/* Restore */
+		Term_activate(old);
+	}
+}
+
+
+
 
 /*
  * Hack -- display equipment in sub-windows
@@ -6146,7 +6293,14 @@ void window_stuff(void)
 		p_ptr->window &= ~(PW_PLAYER);
 		fix_player();
 	}
-
+	
+	/* Display monster list */
+	if (p_ptr->window & (PW_MONSTER_LIST))
+	{
+		p_ptr->window &= ~(PW_MONSTER_LIST);
+		fix_monster_list();
+	}
+	
 	/* Display overhead view */
 	if (p_ptr->window & (PW_MESSAGE))
 	{

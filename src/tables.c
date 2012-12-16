@@ -4756,8 +4756,13 @@ cptr window_flag_desc[32] =
 #else
 	"Display character",
 #endif
+		
+#ifdef JP
+	"視界内のモンスター表示",
+#else
+	"Display monsters in sight",
+#endif		
 
-	NULL,
 	NULL,
 #ifdef JP
 	"メッセージ",
