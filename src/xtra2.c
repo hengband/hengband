@@ -3818,9 +3818,6 @@ bool target_set(int mode)
 
 	int wid, hgt;
 	
-	bool first_look = (mode&TARGET_LOOK)!=0;
-
-
 	/* Get size */
 	get_screen_size(&wid, &hgt);
 
@@ -3874,22 +3871,9 @@ strcpy(info, "q止 p自 o現 +次 -前");
 
 			}
 			
-			/* if first look, show monster list */
-			if(first_look){
-				int w,h;
-				Term_get_size(&w, &h);
-				print_monster_list(13, 1, h-3);//-3 = -1(top) -2(bottom)
-				//first_look = FALSE;
-			}
-			
 			/* Describe and Prompt */
 			while (TRUE){
 				query = target_set_aux(y, x, mode, info);
-				if(first_look){
-					p_ptr->redraw |= PR_MAP;
-					handle_stuff();
-					first_look = FALSE;
-				}
 				if(query)break;
 			}
 
