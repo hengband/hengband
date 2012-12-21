@@ -157,10 +157,10 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:3
 ?:[EQU $QUEST3 2]
 F:b:BUILDING_1:3:0:0:0:0:NONE:3
 
-# Quest 3 rewarding, reward is Staff of Teleportation
+# Quest 3 rewarding, reward is Stuff of Speed
 ?:[EQU $QUEST3 3]
 F:b:BUILDING_1:3:0:0:0:0:NONE:4
-F:!:FLOOR:3:0:365
+F:!:FLOOR:3:0:314
 
 # Quest 3 finished
 ?:[EQU $QUEST3 4]
@@ -216,16 +216,26 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:5
 ?:[EQU $QUEST5 2]
 F:b:BUILDING_1:3:0:0:0:0:NONE:5
 
-# Quest 5 rewarding, continue with quest 27
-# reward is cheaper *Identify* at the Library (see buildings)
+# Quest 5 rewarding, continue with quest 27,
+# reward is cheaper *Identify* at the Library (see buildings) and Ring of Poison Resistance
 ?:[EQU $QUEST5 3]
 F:b:BUILDING_1:3:0:0:0:0:NONE:27
+F:!:FLOOR:3:0:143
 
 # Quest 5 finished, continue with quest 27
 ?:[EQU $QUEST5 4]
 F:b:BUILDING_1:3:0:0:0:0:NONE:27
 
+# Quest 5 failed , wait for the player to enter the castle
+?:[EQU $QUEST5 5]
+F:b:BUILDING_1:3:0:0:0:0:NONE:5
+
+# Quest 5 failed but done, continue with quest 27
+?:[EQU $QUEST5 6]
+F:b:BUILDING_1:3:0:0:0:0:NONE:27
+
 ?:1
+
 
 ############### Quest 27 - The Old Castle ###############
 
@@ -264,11 +274,6 @@ F:!:FLOOR:3:0:0:0:125
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:94
 
-# Quest 27 rewarding (BeastMaster gets The Lance of Eorlingas)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS BeastMaster] ]
-F:b:BUILDING_1:3:0:0:0:0:NONE:15
-F:!:FLOOR:3:0:0:0:100
-
 # Quest 27 rewarding (Cavalry gets GaeBolg)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Cavalry] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
@@ -294,15 +299,15 @@ F:!:FLOOR:3:0:0:0:26
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:215
 
-# Quest 27 rewarding (Mage, High-Mage, Sorcerer and Blue-Mage
+# Quest 27 rewarding (Mage, High-Mage, Sorcerer, Blue-Mage and Mindcrafter
 # get The Hard Leather Cap of Indra)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Mage High-Mage Sorcerer Blue-Mage] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Mage High-Mage Sorcerer Blue-Mage Mindcrafter] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:33
 
 # Quest 27 rewarding (Priest, Bard and ForceTrainer
 # get The Palantir of Westernesse)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest Bard ForceTrainer Mindcrafter] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest Bard ForceTrainer] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:15
 
@@ -311,8 +316,8 @@ F:!:FLOOR:3:0:0:0:15
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:132
 
-# Quest 27 rewarding (Samurai gets The Katana 'Aglarang')
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai] ]
+# Quest 27 rewarding (Samurai, Warrior-Mage and Red-Mage gets The Katana 'Aglarang')
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai Warrior-Mage Red-Mage] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:81
 
@@ -326,9 +331,9 @@ F:!:FLOOR:3:0:0:0:217
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:218
 
-# Quest 27 rewarding (Warrior-Mage, Red-Mage and Magic-Eater
+# Quest 27 rewarding (BeastMaster  and Magic-Eater 
 # get The Charmed Pendant)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior-Mage Red-Mage Magic-Eater] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Magic-Eater BeastMaster] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:219
 
@@ -336,6 +341,11 @@ F:!:FLOOR:3:0:0:0:219
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Imitator] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:220
+
+# Quest 27 rewarding (Sniper gets the Cloak of Tuor)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Sniper] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:0:0:50
 
 # Quest 27 finished, continue with quest 15
 ?:[EQU $QUEST27 4]
@@ -350,7 +360,6 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:27
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 
 ?:1
-
 
 #################### Quest 15 - Eric's Stronghold ####################
 
