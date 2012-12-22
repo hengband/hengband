@@ -4927,7 +4927,7 @@ msg_print("あなたは変化の訪れを感じた...");
 	if ((power > randint0(20)) && one_in_(3) && (p_ptr->prace != RACE_ANDROID))
 	{
 		char effect_msg[80] = "";
-		int new_race, expfact, goalexpfact;
+		int new_race;
 
 		/* Some form of racial polymorph... */
 		power -= 10;
@@ -5018,21 +5018,11 @@ msg_print("奇妙なくらい普通になった気がする。");
 
 		}
 
-		/*
-		 * Restrict the race choices by exp penalty so
-		 * weak polymorph always means weak race
-		 */
-		if (power < 0)
-			goalexpfact = 100;
-		else
-			goalexpfact = 100 + 3 * randint0(power);
-
 		do
 		{
 			new_race = randint0(MAX_RACES);
-			expfact = race_info[new_race].r_exp;
 		}
-		while (((new_race == p_ptr->prace) && (expfact > goalexpfact)) || (new_race == RACE_ANDROID));
+		while ((new_race == p_ptr->prace) || (new_race == RACE_ANDROID));
 
 		change_race(new_race, effect_msg);
 	}
