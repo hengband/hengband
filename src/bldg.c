@@ -3183,6 +3183,7 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	/* Get the flags of the weapon */
 	object_flags(o_ptr, flgs);
 	
+	/* Vorpal Hit*/
 	if ((have_flag(flgs, TR_VORPAL) || hex_spelling(HEX_RUNESWORD)))
 	{
 		if((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
@@ -3193,6 +3194,11 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 		{
 			mult = mult*11/9;
 		}
+		#ifdef JP
+			compare_weapon_aux2(o_ptr, blow, r++, col, 1*mult, "ÀÚ¤ìÌ£:", TERM_L_RED);
+		#else
+			compare_weapon_aux2(o_ptr, blow, r++, col, 1*mult, "Vorpal:", TERM_L_RED);
+		#endif
 	}	
 	
 	if ((p_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
