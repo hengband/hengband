@@ -3133,6 +3133,62 @@ static void town_history(void)
 }
 
 
+static s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool dokubari)
+{
+	int i, num, tmp;
+	
+	if(dokubari) return dam;
+	
+	i = weight + (meichuu * 3 + plus * 5) + (p_ptr->lev * 3);
+	num=0;
+	
+	if(i<400)	num += (2 * dam + 5) * (400 - i);
+	if (i<700) num += (2 * dam + 10) * (700 - MIN(700, MAX(400, i)));
+	if (i > (700-650) && weight<900) num += (3 * dam + 15) * (900 - MIN(900, MAX(700, i)));
+	if (i > (900-650) && weight<1300) num += (3 * dam + 20) * (1300 - MIN(1300, MAX(900, i)));
+	if (i > (1300-650)) num += (7 * dam / 2 + 25) * (i+650-1300);
+	
+	num /= 650;
+	if(p_ptr->pclass == CLASS_NINJA)
+	{
+		num *= i;
+		num /= 4444;
+		tmp = (4444 - i) * dam;
+		tmp /= 4444;
+		num += tmp;
+	}
+	else
+	{
+		num *= i;
+		num /= 5000;
+		tmp = (5000 - i) * dam;
+		tmp /= 5000;
+		num += tmp;
+	}
+	return num;
+}
+
+static s16b calc_slaydam(int dam, int mult, int div, bool force)
+{
+	int tmp;
+	if(force)
+	{
+		tmp = dam * 60;
+		tmp *= mult * 3 / 2;
+		tmp /= div;
+		tmp += dam * 60 * 2;
+		tmp /= 60;
+	}
+	else
+	{
+		tmp = dam * 60;
+		tmp *= mult; 
+		tmp /= div;
+		tmp /= 60;
+	}
+	return tmp;
+}
+
 /*
  * Display the damage figure of an object
  * (used by compare_weapon_aux1)
@@ -3140,29 +3196,22 @@ static void town_history(void)
  * Only accurate for the current weapon, because it includes
  * the current +dam of the player.
  */
-static void compare_weapon_aux2(object_type *o_ptr, int numblows,
-				int r, int c, int mult, cptr attr,
-				byte color)
+static void compare_weapon_aux2(int r, int c, int mindam, int maxdam, cptr attr, byte color)
 {
 	char tmp_str[80];
 
-	/* Effective dices */
-	int eff_dd = o_ptr->dd + p_ptr->to_dd[0];
-	int eff_ds = o_ptr->ds + p_ptr->to_ds[0];
 
 	/* Print the intro text */
 	c_put_str(color, attr, r, c);
 
 	/* Calculate the min and max damage figures */
 #ifdef JP
-sprintf(tmp_str, "１ターン: %d-%d ダメージ",
+	sprintf(tmp_str, "１ターン: %d-%d ダメージ",
 #else
 	sprintf(tmp_str, "Attack: %d-%d damage",
 #endif
-
-	    (numblows * (mult * eff_dd / 60 + o_ptr->to_d + p_ptr->to_d[0])),
-	    (numblows * (mult * eff_ds * eff_dd / 60 + o_ptr->to_d + p_ptr->to_d[0])));
-
+			mindam, maxdam);
+	
 	/* Print the damage */
 	put_str(tmp_str, r, c + 8);
 }
@@ -3179,141 +3228,554 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	int mult = 60;
 	u32b flgs[TR_FLAG_SIZE];
 	int blow = p_ptr->num_blow[0];
+	bool force = FALSE;
+	bool dokubari = FALSE;
+	
+	/* Effective dices */
+	int eff_dd = o_ptr->dd + p_ptr->to_dd[0];
+	int eff_ds = o_ptr->ds + p_ptr->to_ds[0];
+	
+	int mindice = eff_dd;
+	int maxdice = eff_ds * eff_dd;
+	int mindam = 0;
+	int maxdam = 0;
+	int slaydice_min = 0;
+	int slaydice_max = 0;
+	int critdice_min = 0;
+	int critdice_max = 0;
+	int vorpal_mult = 1;
+	int vorpal_div = 1;
+	
 
 	/* Get the flags of the weapon */
 	object_flags(o_ptr, flgs);
+	
+	if((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) dokubari = TRUE;
+	
+	
+	/* Show Critical Damage*/
+	critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, mindice, p_ptr->to_h[0], dokubari);
+	critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, maxdice, p_ptr->to_h[0], dokubari);
+	
+	mindam = blow * (critdice_min+ o_ptr->to_d + p_ptr->to_d[0]);
+	maxdam = blow * (critdice_max+ o_ptr->to_d + p_ptr->to_d[0]);
+	
+#ifdef JP
+	compare_weapon_aux2(r++, col, mindam, maxdam, "会心:", TERM_L_RED);
+#else
+	compare_weapon_aux2(r++, col, mindam, maxdam, "Critical:", TERM_L_RED);
+#endif
 	
 	/* Vorpal Hit*/
 	if ((have_flag(flgs, TR_VORPAL) || hex_spelling(HEX_RUNESWORD)))
 	{
 		if((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
 		{
-			mult = mult*5/3;
+			vorpal_mult = 5;
+			vorpal_div = 3;
 		}
 		else
 		{
-			mult = mult*11/9;
+			vorpal_mult = 11;
+			vorpal_div = 9;
 		}
+		
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, mindice, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, maxdice, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		
 		#ifdef JP
-			compare_weapon_aux2(o_ptr, blow, r++, col, 1*mult, "切れ味:", TERM_L_RED);
+			compare_weapon_aux2(r++, col, mindam, maxdam, "切れ味:", TERM_L_RED);
 		#else
-			compare_weapon_aux2(o_ptr, blow, r++, col, 1*mult, "Vorpal:", TERM_L_RED);
+			compare_weapon_aux2(r++, col, mindam, maxdam, "Vorpal:", TERM_L_RED);
 		#endif
 	}	
 	
 	if ((p_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 	{
+		force = TRUE;
+		
+		slaydice_min = calc_slaydam(mindice, 1, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 1, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		
 		/* Print the relevant lines */
 #ifdef JP
-		compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "理力:", TERM_L_BLUE);
-		if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult*3/2+2*mult, "動物:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "動物:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2*3/2+2*mult, "邪悪:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult*3/2+2*mult, "邪悪:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult*3/2+2*mult, "人間:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "人間:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "不死:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "不死:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "悪魔:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "悪魔:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "オーク:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "オーク:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "トロル:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "トロル:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "巨人:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "巨人:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "竜:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "竜:", TERM_YELLOW);
-		if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "酸属性:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "電属性:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "炎属性:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "冷属性:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "毒属性:", TERM_RED);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "理力:", TERM_L_BLUE);
 #else
-		compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "Force  :", TERM_L_BLUE);
-		if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult*3/2+2*mult, "Animals:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Animals:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2*3/2+2*mult, "Evil:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult*3/2+2*mult, "Evil:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult*3/2+2*mult, "Human:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Human:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Undead:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Undead:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Demons:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Demons:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Orcs:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Orcs:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Trolls:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Trolls:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Giants:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Giants:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Dragons:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Dragons:", TERM_YELLOW);
-		if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Acid:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Elec:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Fire:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Cold:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Poison:", TERM_RED);
-#endif
-		
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Force  :", TERM_L_BLUE);
+#endif		
 	}
-	else
-	{
 		
 	/* Print the relevant lines */
 #ifdef JP
-		if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "動物:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "動物:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "邪悪:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult, "邪悪:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "人間:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "人間:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "不死:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "不死:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "悪魔:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "悪魔:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "オーク:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "オーク:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "トロル:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "トロル:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "巨人:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "巨人:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "竜:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "竜:", TERM_YELLOW);
-		if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "酸属性:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "電属性:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "炎属性:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "冷属性:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "毒属性:", TERM_RED);
-#else
-		if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "Animals:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Animals:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "Evil:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult, "Evil:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "Human:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Human:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Undead:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Undead:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Demons:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Demons:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Orcs:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Orcs:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Trolls:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Trolls:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Giants:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Giants:", TERM_YELLOW);
-		if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Dragons:", TERM_YELLOW);
-			else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Dragons:", TERM_YELLOW);
-		if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Acid:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Elec:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Fire:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Cold:", TERM_RED);
-		if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Poison:", TERM_RED);
-#endif
-
+	if (have_flag(flgs, TR_KILL_ANIMAL))
+	{
+		slaydice_min = calc_slaydam(mindice, 4, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 4, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "動物:", TERM_YELLOW);
 	}
-
+	else if (have_flag(flgs, TR_SLAY_ANIMAL)) 
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "動物:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_EVIL))
+	{	
+		slaydice_min = calc_slaydam(mindice, 7, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 7, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "邪悪:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_EVIL))
+	{	
+		slaydice_min = calc_slaydam(mindice, 2, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 2, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "邪悪:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_HUMAN))
+	{	
+		slaydice_min = calc_slaydam(mindice, 4, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 4, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "人間:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_HUMAN))
+	{	
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "人間:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_UNDEAD))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "不死:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_UNDEAD)) 
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "不死:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_DEMON))
+	{	
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "悪魔:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_DEMON))
+	{	
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "悪魔:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_ORC))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "オーク:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_ORC))
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "オーク:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_TROLL))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "トロル:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_TROLL))
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "トロル:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_GIANT))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "巨人:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_GIANT))
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "巨人:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_DRAGON))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "竜:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_DRAGON))
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "竜:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_BRAND_ACID))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "酸属性:", TERM_RED);
+	}
+	if (have_flag(flgs, TR_BRAND_ELEC))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "電属性:", TERM_RED);
+	}
+	if (have_flag(flgs, TR_BRAND_FIRE))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "炎属性:", TERM_RED);
+	}
+	if (have_flag(flgs, TR_BRAND_COLD))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "冷属性:", TERM_RED);
+	}
+	if (have_flag(flgs, TR_BRAND_POIS))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "毒属性:", TERM_RED);
+	}
+#else
+	if (have_flag(flgs, TR_KILL_ANIMAL))
+	{
+		slaydice_min = calc_slaydam(mindice, 4, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 4, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Animals:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_ANIMAL)) 
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Animals:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_EVIL))
+	{	
+		slaydice_min = calc_slaydam(mindice, 7, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 7, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Evil:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_EVIL))
+	{	
+		slaydice_min = calc_slaydam(mindice, 2, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 2, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Evil:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_HUMAN))
+	{	
+		slaydice_min = calc_slaydam(mindice, 4, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 4, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Human:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_HUMAN))
+	{	
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Human:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_UNDEAD))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Undead:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_UNDEAD)) 
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Undead:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_DEMON))
+	{	
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Demons:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_DEMON))
+	{	
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Demons:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_ORC))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Orcs:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_ORC))
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Orcs:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_TROLL))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Trolls:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_TROLL))
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Trolls:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_GIANT))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Giants:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_GIANT))
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Giants:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_KILL_DRAGON))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Dragons:", TERM_YELLOW);
+	}
+	else if (have_flag(flgs, TR_SLAY_DRAGON))
+	{
+		slaydice_min = calc_slaydam(mindice, 3, 1, force);
+		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Dragons:", TERM_YELLOW);
+	}
+	if (have_flag(flgs, TR_BRAND_ACID))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Acid:", TERM_RED);
+	}
+	if (have_flag(flgs, TR_BRAND_ELEC))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Elec:", TERM_RED);
+	}
+	if (have_flag(flgs, TR_BRAND_FIRE))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Fire:", TERM_RED);
+	}
+	if (have_flag(flgs, TR_BRAND_COLD))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Cold:", TERM_RED);
+	}
+	if (have_flag(flgs, TR_BRAND_POIS))
+	{
+		slaydice_min = calc_slaydam(mindice, 5, 2, force);
+		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
+		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
+		compare_weapon_aux2(r++, col, mindam, maxdam, "Poison:", TERM_RED);
+	}
+#endif
+	
 }
 
 static int hit_chance(int to_h, int ac)
