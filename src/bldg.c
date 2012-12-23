@@ -3179,69 +3179,134 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	int mult = 60;
 	u32b flgs[TR_FLAG_SIZE];
 	int blow = p_ptr->num_blow[0];
-	bool print_force_weapon = FALSE;
 
 	/* Get the flags of the weapon */
 	object_flags(o_ptr, flgs);
-
+	
+	if ((have_flag(flgs, TR_VORPAL) || hex_spelling(HEX_RUNESWORD)))
+	{
+		if((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
+		{
+			mult = mult*5/3;
+		}
+		else
+		{
+			mult = mult*11/9;
+		}
+	}	
+	
 	if ((p_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 	{
-		mult = mult * 7 / 2;
-		print_force_weapon = TRUE;
+		
+		/* Print the relevant lines */
+#ifdef JP
+		compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "理力:", TERM_L_BLUE);
+		if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult*3/2+2*mult, "動物:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "動物:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2*3/2+2*mult, "邪悪:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult*3/2+2*mult, "邪悪:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult*3/2+2*mult, "人間:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "人間:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "不死:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "不死:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "悪魔:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "悪魔:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "オーク:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "オーク:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "トロル:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "トロル:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "巨人:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "巨人:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "竜:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "竜:", TERM_YELLOW);
+		if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "酸属性:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "電属性:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "炎属性:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "冷属性:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "毒属性:", TERM_RED);
+#else
+		compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "Force  :", TERM_L_BLUE);
+		if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult*3/2+2*mult, "Animals:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Animals:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2*3/2+2*mult, "Evil:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult*3/2+2*mult, "Evil:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult*3/2+2*mult, "Human:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Human:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Undead:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Undead:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Demons:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Demons:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Orcs:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Orcs:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Trolls:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Trolls:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Giants:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Giants:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult*3/2+2*mult, "Dragons:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult*3/2+2*mult, "Dragons:", TERM_YELLOW);
+		if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Acid:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Elec:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Fire:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Cold:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2*3/2+2*mult, "Poison:", TERM_RED);
+#endif
+		
 	}
-
+	else
+	{
+		
 	/* Print the relevant lines */
 #ifdef JP
-	if (print_force_weapon)     compare_weapon_aux2(o_ptr, blow, r++, col, 1*mult, "理力:", TERM_L_BLUE);
-	if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "動物:", TERM_YELLOW);
-	 else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "動物:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "邪悪:", TERM_YELLOW);
-	 else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult, "邪悪:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "人間:", TERM_YELLOW);
-	 else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "人間:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "不死:", TERM_YELLOW);
-	 else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "不死:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "悪魔:", TERM_YELLOW);
-	 else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "悪魔:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "オーク:", TERM_YELLOW);
-	 else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "オーク:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "トロル:", TERM_YELLOW);
-	 else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "トロル:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "巨人:", TERM_YELLOW);
-	 else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "巨人:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "竜:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "竜:", TERM_YELLOW);
-	if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "酸属性:", TERM_RED);
-	if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "電属性:", TERM_RED);
-	if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "炎属性:", TERM_RED);
-	if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "冷属性:", TERM_RED);
-	if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "毒属性:", TERM_RED);
+		if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "動物:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "動物:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "邪悪:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult, "邪悪:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "人間:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "人間:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "不死:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "不死:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "悪魔:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "悪魔:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "オーク:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "オーク:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "トロル:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "トロル:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "巨人:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "巨人:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "竜:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "竜:", TERM_YELLOW);
+		if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "酸属性:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "電属性:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "炎属性:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "冷属性:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "毒属性:", TERM_RED);
 #else
-	if (print_force_weapon)     compare_weapon_aux2(o_ptr, blow, r++, col, 1*mult, "Force  :", TERM_L_BLUE);
-	if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "Animals:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Animals:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "Evil:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult, "Evil:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "Human:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Human:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Undead:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Undead:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Demons:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Demons:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Orcs:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Orcs:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Trolls:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Trolls:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Giants:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Giants:", TERM_YELLOW);
-	if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Dragons:", TERM_YELLOW);
-	else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Dragons:", TERM_YELLOW);
-	if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Acid:", TERM_RED);
-	if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Elec:", TERM_RED);
-	if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Fire:", TERM_RED);
-	if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Cold:", TERM_RED);
-	if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Poison:", TERM_RED);
+		if (have_flag(flgs, TR_KILL_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "Animals:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_ANIMAL)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Animals:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 7*mult/2, "Evil:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_EVIL))   compare_weapon_aux2(o_ptr, blow, r++, col, 2*mult, "Evil:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 4*mult, "Human:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_HUMAN))   compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Human:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Undead:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_UNDEAD)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Undead:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Demons:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_DEMON))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Demons:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Orcs:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_ORC))    compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Orcs:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Trolls:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_TROLL))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Trolls:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Giants:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_GIANT))  compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Giants:", TERM_YELLOW);
+		if (have_flag(flgs, TR_KILL_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult, "Dragons:", TERM_YELLOW);
+			else if (have_flag(flgs, TR_SLAY_DRAGON)) compare_weapon_aux2(o_ptr, blow, r++, col, 3*mult, "Dragons:", TERM_YELLOW);
+		if (have_flag(flgs, TR_BRAND_ACID))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Acid:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_ELEC))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Elec:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_FIRE))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Fire:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_COLD))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Cold:", TERM_RED);
+		if (have_flag(flgs, TR_BRAND_POIS))  compare_weapon_aux2(o_ptr, blow, r++, col, 5*mult/2, "Poison:", TERM_RED);
 #endif
+
+	}
 
 }
 
