@@ -3135,34 +3135,30 @@ static void town_history(void)
 
 static s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool dokubari)
 {
-	int i, num, tmp;
+	long i, num;
 	
 	if(dokubari) return dam;
 	
 	i = weight + (meichuu * 3 + plus * 5) + (p_ptr->lev * 3);
 	num=0;
 	
-	if(i<400)	num += (2 * dam + 5) * (400 - i);
-	if (i<700) num += (2 * dam + 10) * (700 - MIN(700, MAX(400, i)));
-	if (i > (700-650) && weight<900) num += (3 * dam + 15) * (900 - MIN(900, MAX(700, i)));
-	if (i > (900-650) && weight<1300) num += (3 * dam + 20) * (1300 - MIN(1300, MAX(900, i)));
-	if (i > (1300-650)) num += (7 * dam / 2 + 25) * (i+650-1300);
+	if (i < 400)						num += (2 * dam + 5) * (400 - i);
+	if (i < 700)						num += (2 * dam + 10) * (700 - MAX(400, i));
+	if (i > (700-650) && weight<900)	num += (3 * dam + 15) * (900 - MAX(700, i));
+	if (i > (900-650) && weight<1300)	num += (3 * dam + 20) * (1300 - MAX(900, i));
+	if (i > (1300-650))					num += (7 * dam / 2 + 25) * (i - (1300-650));
 	
 	if(p_ptr->pclass == CLASS_NINJA)
 	{
 		num *= i;
+		num += (4444 - i) * dam * 650;
 		num /= 4444;
-		tmp = (4444 - i) * dam * 650;
-		tmp /= 4444;
-		num += tmp;
 	}
 	else
 	{
 		num *= i;
+		num += (5000 - i) * dam * 650;
 		num /= 5000;
-		tmp = (5000 - i) * dam * 650;
-		tmp /= 5000;
-		num += tmp;
 	}
 	num /= 650;
 	
