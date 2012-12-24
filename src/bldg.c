@@ -3171,8 +3171,8 @@ static s16b calc_slaydam(int dam, int mult, int div, bool force)
 	if(force)
 	{
 		tmp = dam * 60;
-		tmp *= mult * 3 / 2;
-		tmp /= div;
+		tmp *= mult * 3;
+		tmp /= div * 2;
 		tmp += dam * 60 * 2;
 		tmp /= 60;
 	}
