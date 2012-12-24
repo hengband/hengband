@@ -3148,12 +3148,11 @@ static s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool d
 	if (i > (900-650) && weight<1300) num += (3 * dam + 20) * (1300 - MIN(1300, MAX(900, i)));
 	if (i > (1300-650)) num += (7 * dam / 2 + 25) * (i+650-1300);
 	
-	num /= 650;
 	if(p_ptr->pclass == CLASS_NINJA)
 	{
 		num *= i;
 		num /= 4444;
-		tmp = (4444 - i) * dam;
+		tmp = (4444 - i) * dam * 650;
 		tmp /= 4444;
 		num += tmp;
 	}
@@ -3161,10 +3160,12 @@ static s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool d
 	{
 		num *= i;
 		num /= 5000;
-		tmp = (5000 - i) * dam;
+		tmp = (5000 - i) * dam * 650;
 		tmp /= 5000;
 		num += tmp;
 	}
+	num /= 650;
+	
 	return num;
 }
 
