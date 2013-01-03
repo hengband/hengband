@@ -1607,11 +1607,17 @@ errr Term_fresh(void)
 			{
 				(void)((*Term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx], &ota, &otc));
 			}
-
-			/* Hack -- restore the actual character */
-			else if (old_aa[tx] || Term->always_text)
-			{
-				(void)((*Term->text_hook)(tx, ty, csize, (unsigned char) (old_aa[tx] & 0xf), &old_cc[tx]));
+			
+			/*
+			 * Hack -- restore the actual character
+			 * 元の文字の描画範囲がカーソルより小さいと、
+			 * 上書きされなかった部分がゴミとして残る。
+			 * wipe_hook でカーソルを消去して text_hook で書き直す。
+			 */
+ 			else if (old_aa[tx] || Term->always_text)
+ 			{
+				(void)((*Term->wipe_hook)(tx, ty, 1));
+ 				(void)((*Term->text_hook)(tx, ty, csize, (unsigned char) (old_aa[tx] & 0xf), &old_cc[tx]));
 			}
 
 			/* Hack -- erase the grid */
