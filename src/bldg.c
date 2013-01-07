@@ -3135,18 +3135,19 @@ static void town_history(void)
 
 static s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool dokubari)
 {
-	long i, num;
+	long i,k, num;
 	
 	if(dokubari) return dam;
 	
 	i = weight + (meichuu * 3 + plus * 5) + (p_ptr->lev * 3);
+	k = weight;
 	num=0;
 	
-	if (i < 400)						num += (2 * dam + 5) * (400 - i);
-	if (i < 700)						num += (2 * dam + 10) * (700 - MAX(400, i));
-	if (i > (700-650) && i < 900)		num += (3 * dam + 15) * (900 - MAX(700, i));
-	if (i > (900-650) && i < 1300)		num += (3 * dam + 20) * (1300 - MAX(900, i));
-	if (i > (1300-650))					num += (7 * dam / 2 + 25) * (i - (1300-650));
+	if (k < 400)						num += (2 * dam + 5) * (400 - k);
+	if (k < 700)						num += (2 * dam + 10) * (MIN(700, k+650) - MAX(400, k));
+	if (k > (700-650) && k < 900)		num += (3 * dam + 15) * (MIN(900, k+650) - MAX(700, k));
+	if (k > (900-650) && k < 1300)		num += (3 * dam + 20) * (MIN(1300, k+650) - MAX(900, k));
+	if (k > (1300-650))					num += (7 * dam / 2 + 25) * MIN(650, k-(1300-650));
 	
 	if(p_ptr->pclass == CLASS_NINJA)
 	{
