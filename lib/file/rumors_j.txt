@@ -1,4 +1,10 @@
-N:*:Default
+N:1:Excellent
+R:ARTIFACT:*:{Name}というお宝が地下にはあるそうだ。
+R:MONSTER:*:{Name}というモンスターがいるらしい。
+R:DUNGEON:1:{Name}の場所はココだ： -続く-
+R:TOWN:*:{Name}という街に行ったことはあるかい？
+
+N:0:Default
 海を泳ぎ山を登った所にある町は他の町とは一味違うぞ。
 アイテムを惜しむな、命こそ惜しめ。
 #700

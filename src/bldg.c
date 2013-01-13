@@ -2925,15 +2925,7 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 
 		case BACT_RUMORS: /* Listen for rumors */
 			{
-				char Rumor[1024];
-
-#ifdef JP
-				if (!get_rnd_line_jonly("rumors_j.txt", 0, Rumor, 10))
-#else
-				if (!get_rnd_line("rumors.txt", 0, Rumor))
-#endif
-
-					msg_format("%s", Rumor);
+				display_rumor(TRUE);
 				break;
 			}
 	}

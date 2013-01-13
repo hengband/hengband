@@ -324,19 +324,11 @@ static void say_comment_1(void)
 	if (one_in_(RUMOR_CHANCE))
 	{
 #ifdef JP
-msg_print("店主は耳うちした:");
+		msg_print("店主は耳うちした:");
 #else
 		msg_print("The shopkeeper whispers something into your ear:");
 #endif
-
-
-#ifdef JP
-if (!get_rnd_line_jonly("rumors_j.txt", 0, rumour, 10))
-#else
-		if (!get_rnd_line("rumors.txt", 0, rumour))
-#endif
-
-			msg_print(rumour);
+		display_rumor(TRUE);
 	}
 }
 

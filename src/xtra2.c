@@ -6260,3 +6260,185 @@ int spell_exp_level(int spell_exp)
 	else if (spell_exp < SPELL_EXP_MASTER) return EXP_LEVEL_EXPERT;
 	else return EXP_LEVEL_MASTER;
 }
+
+
+/*
+ * Display a rumor and apply its effects
+ */
+
+int rumor_num(char *zz, int max_idx)
+{
+	if (strcmp(zz, "*") == 0) return randint1(max_idx - 1);
+	return atoi(zz);
+}
+
+cptr rumor_bind_name(char *base, cptr fullname)
+{
+	char buf[1024];
+	char *s;
+
+	if (strlen(base) + strlen(fullname) > sizeof(buf) - 1)
+	{
+		return "Too long.";
+	}
+
+	if (s = strstr(base, "{Name}"))
+	{
+		s[0] = '\0';
+		strcpy(buf, base);
+		strcat(buf, fullname);
+		strcat(buf, s + 6);
+	}
+	else
+	{
+		strcpy(buf, base);
+	}
+
+	return buf;
+}
+
+void display_rumor(bool ex)
+{
+	bool err;
+	int section = 0;
+	char Rumor[1024];
+
+	if (ex)
+	{
+		if (randint0(3) == 0) section = 1;
+	}
+
+#ifdef JP
+	err = get_rnd_line_jonly("rumors_j.txt", section, Rumor, 10);
+	if (err) strcpy(Rumor, "嘘の噂もある。");
+#else
+	err = get_rnd_line("rumors.txt", section, Rumor);
+	if (err) strcpy(Rumor, "Some rumors are wrong.");
+#endif
+
+	err = TRUE;
+
+	if (strncmp(Rumor, "R:", 2) == 0)
+	{
+		char *zz[4];
+		cptr rumor_msg = NULL;
+		cptr rumor_eff = NULL;
+		char fullname[1024] = "";
+
+		if (tokenize(Rumor + 2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
+		{
+			if (strcmp(zz[0], "ARTIFACT") == 0)
+			{
+				int a_idx, k_idx;
+				object_type forge;
+				object_type *q_ptr = &forge;
+				artifact_type *a_ptr;
+
+				while (1)
+				{
+					a_idx = rumor_num(zz[1], max_a_idx);
+
+					a_ptr = &a_info[a_idx];
+					if (a_ptr->name) break;
+				}
+
+				k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+				object_prep(q_ptr, k_idx);
+				q_ptr->name1 = a_idx;
+				q_ptr->ident = IDENT_STORE;
+				object_desc(fullname, q_ptr, OD_NAME_ONLY);
+			}
+			else if  (strcmp(zz[0], "MONSTER") == 0)
+			{
+				int r_idx;
+				monster_race *r_ptr;
+
+				while(1)
+				{
+					r_idx = rumor_num(zz[1], max_r_idx);
+					r_ptr = &r_info[r_idx];
+					if (r_ptr->name) break;
+				}
+
+#ifdef JP
+				strcpy(fullname, r_name + r_ptr->name);
+#else
+				strcpy(fullname, r_name + r_ptr->E_name);
+#endif
+
+				/* Remember this monster */
+				if (!r_ptr->r_sights)
+				{
+					r_ptr->r_sights++;
+				}
+			}
+			else if  (strcmp(zz[0], "DUNGEON") == 0)
+			{
+				int d_idx;
+				dungeon_info_type *d_ptr;
+
+				while (1)
+				{
+					d_idx = rumor_num(zz[1], max_d_idx);
+					d_ptr = &d_info[d_idx];
+					if (d_ptr->name) break;
+				}
+
+				strcpy(fullname, d_name + d_ptr->name);
+
+				if (!max_dlv[d_idx])
+				{
+					max_dlv[d_idx] = d_ptr->mindepth;
+#ifdef JP
+					rumor_eff = format("%sに帰還できるようになった。", fullname);
+#else
+					rumor_eff = format("You can recall to %s.", fullname);
+#endif
+				}
+			}
+			else if  (strcmp(zz[0], "TOWN") == 0)
+			{
+				int t_idx;
+				s32b visit;
+
+				while(1)
+				{
+					t_idx = rumor_num(zz[1], NO_TOWN);
+					if (town[t_idx].name) break;
+				}
+
+				strcpy(fullname, town[t_idx].name);
+
+				visit = (1L << (t_idx - 1));
+				if ((t_idx != SECRET_TOWN) && !(p_ptr->visit & visit))
+				{
+					p_ptr->visit |= visit;
+#ifdef JP
+					rumor_eff = format("%sに行ったことがある気がする。", fullname);
+#else
+					rumor_eff = format("You feel you have been to %s.", fullname);
+#endif
+				}
+			}
+
+			rumor_msg = rumor_bind_name(zz[2], fullname);
+			msg_print(rumor_msg);
+			if (rumor_eff) 
+			{
+				msg_print(NULL);
+				msg_print(rumor_eff);
+			}
+			err = FALSE;
+		}
+	/* error */
+#ifdef JP
+		if (err) msg_print("この情報は間違っている。");
+#else
+		if (err) msg_print("This information is wrong.");
+#endif
+	}
+			else
+	{
+		msg_format("%s", Rumor);
+	}
+}
