@@ -4371,6 +4371,16 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		if (e_ptr->gen_flags & (TRG_XTRA_D_RES)) one_dragon_ele_resistance(o_ptr);
 		if (e_ptr->gen_flags & (TRG_XTRA_L_RES)) one_lordly_high_resistance(o_ptr);
 		if (e_ptr->gen_flags & (TRG_XTRA_RES)) one_resistance(o_ptr);
+		if (e_ptr->gen_flags & (TRG_XTRA_DICE))
+		{
+			do
+			{
+				o_ptr->dd++;
+			}
+			while (one_in_(o_ptr->dd));
+
+			if (o_ptr->dd > 9) o_ptr->dd = 9;
+		}
 
 		/* Hack -- apply extra penalties if needed */
 		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))

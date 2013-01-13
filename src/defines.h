@@ -3375,6 +3375,7 @@
 #define TRG_RANDOM_CURSE0       0x00002000L     /* Item is Random Cursed */
 #define TRG_RANDOM_CURSE1       0x00004000L     /* Item is Random Cursed */
 #define TRG_RANDOM_CURSE2       0x00008000L     /* Item is Random Cursed */
+#define TRG_XTRA_DICE           0x00010000L     /* Extra dice */
 
 
 #define MAX_CURSE 17
