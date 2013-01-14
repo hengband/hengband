@@ -6272,12 +6272,12 @@ int rumor_num(char *zz, int max_idx)
 	return atoi(zz);
 }
 
-cptr rumor_bind_name(char *base, cptr fullname)
+cptr rumor_bind_name(char *base, cptr fullname, int n)
 {
-	char buf[1024];
+	char *buf = (char *)malloc(n);
 	char *s;
 
-	if (strlen(base) + strlen(fullname) > sizeof(buf) - 1)
+	if (strlen(base) + strlen(fullname) > (n - 1))
 	{
 		return "Too long.";
 	}
@@ -6421,7 +6421,7 @@ void display_rumor(bool ex)
 				}
 			}
 
-			rumor_msg = rumor_bind_name(zz[2], fullname);
+			rumor_msg = rumor_bind_name(zz[2], fullname, 1024);
 			msg_print(rumor_msg);
 			if (rumor_eff) 
 			{
