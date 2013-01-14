@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(src/main.c)
+AC_INIT(hengband, 2.1.1)
 
-AM_CONFIG_HEADER(src/autoconf.h)
-
-AM_INIT_AUTOMAKE(hengband, 1.7.2)
+AC_CONFIG_HEADERS(src/autoconf.h)
+AC_CONFIG_SRCDIR(src/main.c)
+AM_INIT_AUTOMAKE
 
 AC_ARG_WITH(setgid,
 [  --with-setgid=NAME      install hengband as group NAME],
