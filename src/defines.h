@@ -3856,7 +3856,7 @@
 #define RF4_RIDING_MASK \
 	(RF4_SHRIEK)
 
-#define RF5_RIDING_MASK 0L
+#define RF5_RIDING_MASK 0UL
 
 #define RF6_RIDING_MASK \
 	(RF6_BLINK | RF6_TPORT | RF6_TRAPS | RF6_DARKNESS | RF6_SPECIAL)
@@ -3873,15 +3873,15 @@
 	 RF5_BO_NETH | RF5_BO_WATE | RF5_BO_MANA | RF5_BO_PLAS | \
 	 RF5_BO_ICEE | RF5_MISSILE)
 
-#define RF6_BOLT_MASK 0L
+#define RF6_BOLT_MASK 0UL
 
 /*
  * Hack -- "beam" spells that may hurt fellow monsters
  * Currently "beam" spells are included in "attack"
  */
-#define RF4_BEAM_MASK 0L
+#define RF4_BEAM_MASK 0UL
 
-#define RF5_BEAM_MASK 0L
+#define RF5_BEAM_MASK 0UL
 
 #define RF6_BEAM_MASK (RF6_PSY_SPEAR)
 
@@ -3912,7 +3912,7 @@
 #define RF5_BIG_BALL_MASK \
 	(RF5_BA_LITE | RF5_BA_DARK | RF5_BA_WATE | RF5_BA_MANA)
 
-#define RF6_BIG_BALL_MASK 0L
+#define RF6_BIG_BALL_MASK 0UL
 
 /*
  * Hack -- "breath" spells that may hurt friends
@@ -3926,17 +3926,17 @@
 	 RF4_BR_GRAV | RF4_BR_PLAS | RF4_BR_WALL | RF4_BR_MANA | \
 	 RF4_BR_NUKE | RF4_BR_DISI)
 
-#define RF5_BREATH_MASK 0L
+#define RF5_BREATH_MASK 0UL
 
-#define RF6_BREATH_MASK 0L
+#define RF6_BREATH_MASK 0UL
 
 /*
  * Hack -- "summon" spells
  * Currently "summon" spells are included in "intelligent" and "indirect"
  */
-#define RF4_SUMMON_MASK 0L
+#define RF4_SUMMON_MASK 0UL
 
-#define RF5_SUMMON_MASK 0L
+#define RF5_SUMMON_MASK 0UL
 
 #define RF6_SUMMON_MASK \
 	(RF6_S_KIN | RF6_S_CYBER | RF6_S_MONSTER | RF6_S_MONSTERS | RF6_S_ANT | \
