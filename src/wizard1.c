@@ -1328,7 +1328,7 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 #ifdef JP
 	sprintf(misc_desc, "レベル %u, 希少度 %u, %d.%d kg, ＄%ld",
 		a_ptr->level, a_ptr->rarity,
-		lbtokg1(a_ptr->weight), lbtokg2(a_ptr->weight), a_ptr->cost);
+		lbtokg1(a_ptr->weight), lbtokg2(a_ptr->weight), (long int)a_ptr->cost);
 #else
 	sprintf(misc_desc, "Level %u, Rarity %u, %d.%d lbs, %ld Gold",
 		a_ptr->level, a_ptr->rarity,
