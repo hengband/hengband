@@ -6276,7 +6276,8 @@ cptr rumor_bind_name(char *base, cptr fullname)
 {
 	char *s, *v;
 
-	if (s = strstr(base, "{Name}"))
+	s = strstr(base, "{Name}");
+	if (s)
 	{
 		s[0] = '\0';
 		v = format("%s%s%s", base, fullname, (s + 6));
