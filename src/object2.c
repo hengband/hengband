@@ -2583,43 +2583,31 @@ static bool add_esp_strong(object_type *o_ptr)
 }
 
 
-#define MAX_ESP_WEAK 10
 static void add_esp_weak(object_type *o_ptr, bool extra)
 {
-	int i = 0;
-	int idx[MAX_ESP_WEAK];
-	int flg[MAX_ESP_WEAK];
-	int n = (extra) ? (3 + randint1(randint1(6))) : randint1(3);
-	int left = MAX_ESP_WEAK;
+	int i;
+	u32b weak_esp_list[] = {
+		TR_ESP_ANIMAL,
+		TR_ESP_UNDEAD,
+		TR_ESP_DEMON,
+		TR_ESP_ORC,
+		TR_ESP_TROLL,
+		TR_ESP_GIANT,
+		TR_ESP_DRAGON,
+		TR_ESP_HUMAN,
+		TR_ESP_GOOD,
+		TR_ESP_UNIQUE,
+	};
+	const int MAX_ESP_WEAK = sizeof(weak_esp_list) / sizeof(weak_esp_list[0]);
+	const int add_count = MIN(MAX_ESP_WEAK, (extra) ? (3 + randint1(randint1(6))) : randint1(3));
 
-	for (i = 0; i < MAX_ESP_WEAK; i++) flg[i] = i + 1;
-
-	/* Shuffle esp flags */
-	for (i = 0; i < n; i++)
+	/* Add unduplicated weak esp flags randomly */
+	for (i = 0; i < add_count; ++ i)
 	{
-		int k = randint0(left--);
+		int choice = rand_range(i, MAX_ESP_WEAK - 1);
 
-		idx[i] = flg[k];
-
-		while (k < left)
-		{
-			flg[k] = flg[k + 1];
-			k++;
-		}
-	}
-
-	while (n--) switch (idx[n])
-	{
-	case 1: add_flag(o_ptr->art_flags, TR_ESP_ANIMAL); break;
-	case 2: add_flag(o_ptr->art_flags, TR_ESP_UNDEAD); break;
-	case 3: add_flag(o_ptr->art_flags, TR_ESP_DEMON); break;
-	case 4: add_flag(o_ptr->art_flags, TR_ESP_ORC); break;
-	case 5: add_flag(o_ptr->art_flags, TR_ESP_TROLL); break;
-	case 6: add_flag(o_ptr->art_flags, TR_ESP_GIANT); break;
-	case 7: add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
-	case 8: add_flag(o_ptr->art_flags, TR_ESP_HUMAN); break;
-	case 9: add_flag(o_ptr->art_flags, TR_ESP_GOOD); break;
-	case 10: add_flag(o_ptr->art_flags, TR_ESP_UNIQUE); break;
+		add_flag(o_ptr->art_flags, weak_esp_list[choice]);
+		weak_esp_list[choice] = weak_esp_list[i];
 	}
 }
 
