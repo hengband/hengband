@@ -291,6 +291,7 @@ bool monst_spell_monst(int m_idx)
 	u32b u_mode = 0L;
 	int s_num_6 = (easy_band ? 2 : 6);
 	int s_num_4 = (easy_band ? 1 : 4);
+	int rad = 0; //For elemental balls
 
 	byte spell[96], num = 0;
 
@@ -1931,9 +1932,17 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		dam = (randint1(rlev * 3) + 15) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-		monst_breath_monst(m_idx, y, x, GF_ACID, dam, 2, FALSE, MS_BALL_ACID, learnable);
-
+		if (r_ptr->flags2 & RF2_POWERFUL)
+		{
+			rad = 4;
+			dam = (rlev * 4) + 50 + damroll(10, 10);
+		}
+		else
+		{
+			rad = 2;
+			dam = (randint1(rlev * 3) + 15);
+		}
+		monst_breath_monst(m_idx, y, x, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, learnable);
 		break;
 
 	/* RF5_BA_ELEC */
@@ -1969,9 +1978,17 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		dam = (randint1(rlev * 3 / 2) + 8) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-		monst_breath_monst(m_idx, y, x, GF_ELEC, dam, 2, FALSE, MS_BALL_ELEC, learnable);
-
+		if (r_ptr->flags2 & RF2_POWERFUL)
+		{
+			rad = 4;
+			dam = (rlev * 4) + 50 + damroll(10, 10);
+		}
+		else
+		{
+			rad = 2;
+			dam = (randint1(rlev * 3 / 2) + 8);
+		}
+		monst_breath_monst(m_idx, y, x, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, learnable);
 		break;
 
 	/* RF5_BA_FIRE */
@@ -2024,9 +2041,17 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		dam = (randint1(rlev * 7 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-		monst_breath_monst(m_idx, y, x, GF_FIRE, dam, 2, FALSE, MS_BALL_FIRE, learnable);
-
+		if (r_ptr->flags2 & RF2_POWERFUL)
+		{
+			rad = 4;
+			dam = (rlev * 4) + 50 + damroll(10, 10);
+		}
+		else
+		{
+			rad = 2;
+			dam = (randint1(rlev * 7 / 2) + 10);
+		}
+		monst_breath_monst(m_idx, y, x, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, learnable);
 		break;
 
 	/* RF5_BA_COLD */
@@ -2062,9 +2087,17 @@ bool monst_spell_monst(int m_idx)
 			}
 		}
 
-		dam = (randint1(rlev * 3 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-		monst_breath_monst(m_idx, y, x, GF_COLD, dam, 2, FALSE, MS_BALL_COLD, learnable);
-
+		if (r_ptr->flags2 & RF2_POWERFUL)
+		{
+			rad = 4;
+			dam = (rlev * 4) + 50 + damroll(10, 10);
+		}
+		else
+		{
+			rad = 2;
+			dam = (randint1(rlev * 3 / 2) + 10);
+		}
+		monst_breath_monst(m_idx, y, x, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, learnable);
 		break;
 
 	/* RF5_BA_POIS */

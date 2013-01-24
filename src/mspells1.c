@@ -1310,6 +1310,7 @@ bool make_attack_spell(int m_idx)
 	u32b mode = 0L;
 	int s_num_6 = (easy_band ? 2 : 6);
 	int s_num_4 = (easy_band ? 1 : 4);
+	int rad = 0; //For elemental spells
 
 	/* Target location */
 	int x = px;
@@ -2348,19 +2349,23 @@ else msg_format("%^sが分解のブレスを吐いた。", m_name);
 		{
 			disturb(1, 0);
 #ifdef JP
-if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+			if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+			else msg_format("%^sがアシッド・ボールの呪文を唱えた。", m_name);
 #else
 			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sがアシッド・ボールの呪文を唱えた。", m_name);
-#else
 			else msg_format("%^s casts an acid ball.", m_name);
 #endif
-
-			dam = (randint1(rlev * 3) + 15) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-			breath(y, x, m_idx, GF_ACID, dam, 2, FALSE, MS_BALL_ACID, learnable);
+			if (r_ptr->flags2 & RF2_POWERFUL)
+			{
+				rad = 4;
+				dam = (rlev * 4) + 50 + damroll(10, 10);
+			}
+			else
+			{
+				rad = 2;
+				dam = (randint1(rlev * 3) + 15);
+			}
+			breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, learnable);
 			update_smart_learn(m_idx, DRS_ACID);
 			break;
 		}
@@ -2368,21 +2373,26 @@ else msg_format("%^sがアシッド・ボールの呪文を唱えた。", m_name);
 		/* RF5_BA_ELEC */
 		case 128+1:
 		{
+			int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 4 : 2;
 			disturb(1, 0);
 #ifdef JP
-if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+			if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+			else msg_format("%^sがサンダー・ボールの呪文を唱えた。", m_name);
 #else
 			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sがサンダー・ボールの呪文を唱えた。", m_name);
-#else
 			else msg_format("%^s casts a lightning ball.", m_name);
 #endif
-
-			dam = (randint1(rlev * 3 / 2) + 8) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-			breath(y, x, m_idx, GF_ELEC, dam, 2, FALSE, MS_BALL_ELEC, learnable);
+			if (r_ptr->flags2 & RF2_POWERFUL)
+			{
+				rad = 4;
+				dam = (rlev * 4) + 50 + damroll(10, 10);
+			}
+			else
+			{
+				rad = 2;
+				dam = (randint1(rlev * 3 / 2) + 8);
+			}
+			breath(y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, learnable);
 			update_smart_learn(m_idx, DRS_ELEC);
 			break;
 		}
@@ -2390,6 +2400,7 @@ else msg_format("%^sがサンダー・ボールの呪文を唱えた。", m_name);
 		/* RF5_BA_FIRE */
 		case 128+2:
 		{
+			int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 4 : 2;
 			disturb(1, 0);
 
 			if (m_ptr->r_idx == MON_ROLENTO)
@@ -2409,20 +2420,25 @@ else msg_format("%^sがサンダー・ボールの呪文を唱えた。", m_name);
 			else
 			{
 #ifdef JP
-if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+				if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+				else msg_format("%^sがファイア・ボールの呪文を唱えた。", m_name);
 #else
 				if (blind) msg_format("%^s mumbles.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sがファイア・ボールの呪文を唱えた。", m_name);
-#else
 				else msg_format("%^s casts a fire ball.", m_name);
 #endif
 			}
 
-			dam = (randint1(rlev * 7 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-			breath(y, x, m_idx, GF_FIRE, dam, 2, FALSE, MS_BALL_FIRE, learnable);
+			if (r_ptr->flags2 & RF2_POWERFUL)
+			{
+				rad = 4;
+				dam = (rlev * 4) + 50 + damroll(10, 10);
+			}
+			else
+			{
+				rad = 2;
+				dam = (randint1(rlev * 7 / 2) + 10);
+			}
+			breath(y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, learnable);
 			update_smart_learn(m_idx, DRS_FIRE);
 			break;
 		}
@@ -2430,21 +2446,26 @@ else msg_format("%^sがファイア・ボールの呪文を唱えた。", m_name);
 		/* RF5_BA_COLD */
 		case 128+3:
 		{
+			int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 4 : 2;
 			disturb(1, 0);
 #ifdef JP
-if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+			if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
+			else msg_format("%^sがアイス・ボールの呪文を唱えた。", m_name);
 #else
 			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sがアイス・ボールの呪文を唱えた。", m_name);
-#else
 			else msg_format("%^s casts a frost ball.", m_name);
 #endif
-
-			dam = (randint1(rlev * 3 / 2) + 10) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-			breath(y, x, m_idx, GF_COLD, dam, 2, FALSE, MS_BALL_COLD, learnable);
+			if (r_ptr->flags2 & RF2_POWERFUL)
+			{
+				rad = 4;
+				dam = (rlev * 4) + 50 + damroll(10, 10);
+			}
+			else
+			{
+				rad = 2;
+				dam = (randint1(rlev * 3 / 2) + 10);
+			}
+			breath(y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, learnable);
 			update_smart_learn(m_idx, DRS_COLD);
 			break;
 		}
