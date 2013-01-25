@@ -3906,7 +3906,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 		/* Process "Q:<q_index>:N:<name>" -- quest name */
 		else if (zz[1][0] == 'N')
 		{
-			if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT))
+			if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY))
 			{
 				strcpy(q_ptr->name, zz[2]);
 			}

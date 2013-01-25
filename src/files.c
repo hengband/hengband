@@ -3887,7 +3887,7 @@ void display_player(int mode)
 				{
 					/* Get the quest text */
 					/* Bewere that INIT_ASSIGN resets the cur_num. */
-					init_flags = INIT_ASSIGN;
+					init_flags = INIT_NAME_ONLY;
 
 					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
@@ -3927,7 +3927,7 @@ void display_player(int mode)
 					quest_text_line = 0;
 
 					/* Get the quest text */
-					init_flags = INIT_SHOW_TEXT;
+					init_flags = INIT_NAME_ONLY;
 
 					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 

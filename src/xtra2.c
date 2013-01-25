@@ -3639,7 +3639,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			p_ptr->inside_quest = c_ptr->special;
 
 			/* Get the quest text */
-			init_flags = INIT_SHOW_TEXT;
+			init_flags = INIT_NAME_ONLY;
 
 			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 

@@ -2937,7 +2937,7 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 /*
  * Display quest information
  */
-static void get_questinfo(int questnum)
+static void get_questinfo(int questnum, bool do_init)
 {
 	int     i;
 	int     old_quest;
@@ -2957,7 +2957,8 @@ static void get_questinfo(int questnum)
 	p_ptr->inside_quest = questnum;
 
 	/* Get the quest text */
-	init_flags = INIT_SHOW_TEXT | INIT_ASSIGN;
+	init_flags = INIT_SHOW_TEXT;
+	if (do_init) init_flags |= INIT_ASSIGN;
 
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
@@ -3018,14 +3019,14 @@ put_str("今のところクエストはありません。", 8, 0);
 		/* Rewarded quest */
 		q_ptr->status = QUEST_STATUS_REWARDED;
 
-		get_questinfo(q_index);
+		get_questinfo(q_index, FALSE);
 
 		reinit_wilderness = TRUE;
 	}
 	/* Failed quest */
 	else if (q_ptr->status == QUEST_STATUS_FAILED)
 	{
-		get_questinfo(q_index);
+		get_questinfo(q_index, FALSE);
 
 		/* Mark quest as done (but failed) */
 		q_ptr->status = QUEST_STATUS_FAILED_DONE;
@@ -3098,7 +3099,7 @@ msg_format("クエスト: %sを %d体倒す", name,q_ptr->max_num);
 		}
 		else
 		{
-			get_questinfo(q_index);
+			get_questinfo(q_index, TRUE);
 		}
 	}
 }

@@ -386,7 +386,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		p_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
 
 		/* Get the quest text */
-		init_flags = INIT_ASSIGN;
+		init_flags = INIT_NAME_ONLY;
 
 		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
@@ -9424,7 +9424,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 				p_ptr->inside_quest = q_idx;
 
 				/* Get the quest */
-				init_flags = INIT_ASSIGN;
+				init_flags = INIT_NAME_ONLY;
 
 				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
@@ -9516,7 +9516,7 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 				p_ptr->inside_quest = q_idx;
 
 				/* Get the quest text */
-				init_flags = INIT_ASSIGN;
+				init_flags = INIT_NAME_ONLY;
 
 				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
