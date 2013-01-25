@@ -3409,10 +3409,14 @@ static errr parse_line_feature(char *buf)
 				{
 					if (p_ptr->inside_quest)
 					{
-						artifact_type *a_ptr = &a_info[quest[p_ptr->inside_quest].k_idx];
-						if (!(a_ptr->gen_flags & TRG_INSTA_ART))
+						int a_idx = quest[p_ptr->inside_quest].k_idx;
+						if (a_idx)
 						{
-							letter[index].object = lookup_kind(a_ptr->tval, a_ptr->sval);
+							artifact_type *a_ptr = &a_info[a_idx];
+							if (!(a_ptr->gen_flags & TRG_INSTA_ART))
+							{
+								letter[index].object = lookup_kind(a_ptr->tval, a_ptr->sval);
+							}
 						}
 					}
 				}
@@ -3921,6 +3925,38 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			return (0);
 		}
 
+		else if (zz[1][0] == 'R')
+		{
+			if (init_flags & INIT_ASSIGN)
+			{
+				int idx, count = 0;
+				int reward_idx = 0;
+
+				for (idx = 2; idx < num; idx++)
+				{
+					int a_idx = atoi(zz[idx]);
+					if (a_idx < 1) continue;
+					if (a_info[a_idx].cur_num > 0) continue;
+					count++;
+					if (one_in_(count)) reward_idx = a_idx;
+				}
+
+				if (reward_idx)
+				{
+					/* Set quest's rewarding artifact */
+					q_ptr->k_idx = reward_idx;
+					a_info[reward_idx].gen_flags |= TRG_QUESTITEM;
+				}
+				else
+				{
+					/* Change a quest type to KILL_ALL when all artifact of reward list are got */
+					q_ptr->type = QUEST_TYPE_KILL_ALL;
+				}
+			}
+
+			return (0);
+		}
+
 		/* Process "Q:<q_index>:N:<name>" -- quest name */
 		else if (zz[1][0] == 'N')
 		{
@@ -4370,6 +4406,14 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 			else if (streq(b+1, "LEAVING_QUEST"))
 			{
 				sprintf(tmp, "%d", leaving_quest);
+				v = tmp;
+			}
+
+			/* Quest type */
+			else if (prefix(b+1, "QUEST_TYPE"))
+			{
+				/* "QUEST_TYPE" uses a special parameter to determine the type of the quest */
+				sprintf(tmp, "%d", quest[atoi(b+11)].type);
 				v = tmp;
 			}
 
