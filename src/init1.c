@@ -3374,6 +3374,13 @@ static errr parse_line_feature(char *buf)
 					letter[index].random |= RANDOM_ARTIFACT;
 					if (zz[6][1]) letter[index].artifact = atoi(zz[6] + 1);
 				}
+				else if (zz[6][0] == '!')
+				{
+					if (p_ptr->inside_quest)
+					{
+						letter[index].artifact = quest[p_ptr->inside_quest].k_idx;
+					}
+				}
 				else
 				{
 					letter[index].artifact = atoi(zz[6]);
@@ -3397,6 +3404,17 @@ static errr parse_line_feature(char *buf)
 				{
 					letter[index].random |= RANDOM_OBJECT;
 					if (zz[4][1]) letter[index].object = atoi(zz[4] + 1);
+				}
+				else if (zz[4][0] == '!')
+				{
+					if (p_ptr->inside_quest)
+					{
+						artifact_type *a_ptr = &a_info[quest[p_ptr->inside_quest].k_idx];
+						if (!(a_ptr->gen_flags & TRG_INSTA_ART))
+						{
+							letter[index].object = lookup_kind(a_ptr->tval, a_ptr->sval);
+						}
+					}
 				}
 				else
 				{

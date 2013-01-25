@@ -41,66 +41,22 @@ Q:4:T:しまったんでしょうな。とても残念です。『つらぬき丸』はこの街から悪を一掃す
 Q:4:T:のにとても役に立ったでしょうに。
 ?:1
 
-?:[EQU $RANDOM4 0]
 # Floor with "Sting"
-F:a:FLOOR:8:0:0:0:88
+F:a:FLOOR:8:0:0:0:!
 
 # Floor with "Small sword"
-F:b:FLOOR:8:0:46
-
-# Floor with "Small sword"
-F:c:FLOOR:8:0:46
-
-# Floor with "Small sword"
-F:d:FLOOR:8:0:46
-
-?:[EQU $RANDOM4 1]
-# Floor with "Small sword"
-F:a:FLOOR:8:0:46
-
-# Floor with "Sting"
-F:b:FLOOR:8:0:0:0:88
-
-# Floor with "Small sword"
-F:c:FLOOR:8:0:46
-
-# Floor with "Small sword"
-F:d:FLOOR:8:0:46
-
-?:[EQU $RANDOM4 2]
-# Floor with "Small sword"
-F:a:FLOOR:8:0:46
-
-# Floor with "Small sword"
-F:b:FLOOR:8:0:46
-
-# Floor with "Sting"
-F:c:FLOOR:8:0:0:0:88
-
-# Floor with "Small sword"
-F:d:FLOOR:8:0:46
-
-?:[EQU $RANDOM4 3]
-# Floor with "Small sword"
-F:a:FLOOR:8:0:46
-
-# Floor with "Small sword"
-F:b:FLOOR:8:0:46
-
-# Floor with "Small sword"
-F:c:FLOOR:8:0:46
-
-# Floor with "Sting"
-F:d:FLOOR:8:0:0:0:88
-
-?:1
+F:b:FLOOR:8:0:!
 
 # Random monster 7 levels out of depth and on no Teleportation grid
 F:5:FLOOR:12:*8
 
 # Dungeon
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+?:[EQU $RANDOM4 0]
 D:XXXXXXXXXXXXXXXXXXXXX..9a*.....XXXXXXXXXXXXXXXXXXXXX
+?:[NOT [EQU $RANDOM4 0]]
+D:XXXXXXXXXXXXXXXXXXXXX..9b*.....XXXXXXXXXXXXXXXXXXXXX
+?:1
 D:XXXXXXXXXXXXXXXXXX...5............XXXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXXX........*.......XXXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXX..........*.*.....XXXXXXXXXXXXXXXXX
@@ -116,8 +72,15 @@ D:XXXXX.....*....XXXXXXXXXX..XXXXXXXXXX..........XXXXX
 D:XX....5..*...*....XXXXXXX..XXXXXXX5..............*XX
 D:XX............5..5XXXXXXX..XXXXXXX.....%..........XX
 D:X......5...%.......XXXXX....XXXXX..5....%..5.....*9X
-D:X*........%........D.....<......D........%........dX
+?:[EQU $RANDOM4 1]
+D:X*........%........D.....<......D........%........aX
+?:[NOT [EQU $RANDOM4 1]]
+D:X*........%........D.....<......D........%........bX
+?:[EQU $RANDOM4 2]
+D:Xa...5.....%..5....D............D...5.....%.......*X
+?:[NOT [EQU $RANDOM4 2]]
 D:Xb...5.....%..5....D............D...5.....%.......*X
+?:1
 D:X9..........%......XXXXX....XXXXX........%.........X
 D:XX......5........5XXXXXXX..XXXXXXX....5...........XX
 D:XX................XXXXXXX..XXXXXXX........5.......XX
@@ -133,9 +96,12 @@ D:XXXXXXXXXXXXXXXXX.....5............XXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXX..................XXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXXX.5..............XXXXXXXXXXXXXXXXXX
 D:XXXXXXXXXXXXXXXXXX................XXXXXXXXXXXXXXXXXX
-D:XXXXXXXXXXXXXXXXXXXXX.....*c9..XXXXXXXXXXXXXXXXXXXXX
+?:[EQU $RANDOM4 3]
+D:XXXXXXXXXXXXXXXXXXXXX.....*a9..XXXXXXXXXXXXXXXXXXXXX
+?:[NOT [EQU $RANDOM4 3]]
+D:XXXXXXXXXXXXXXXXXXXXX.....*b9..XXXXXXXXXXXXXXXXXXXXX
+?:1
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 # Starting position
 P:16:25
-
