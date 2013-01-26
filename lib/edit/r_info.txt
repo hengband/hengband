@@ -21801,3 +21801,28 @@ S:1_IN_2
 S:BRAIN_SMASH
 D:惑星チロンに生息する蝗のように飛び回るマインドウォームの亜種。
 D:(シド・マイヤーズ・アルファ・ケンタウリ)
+
+N:1088:三上山の『大ムカデ』
+E:Great Centipede of Mt. Mikamisan
+G:c:D
+I:120:50d100:20:150:10
+W:44:3:0:15000:0:0
+B:BITE:POISON:13d13
+B:CRUSH:HURT:13d13
+B:CRUSH:HURT:13d13
+B:CRUSH:SHATTER:15d15
+F:FORCE_MAXHP | UNIQUE | EVIL | ANIMAL | EMPTY_MIND |
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_CORPSE |
+F:OPEN_DOOR | BASH_DOOR | CAN_SWIM | KILL_ITEM | KILL_BODY |
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | REFLECTING |
+F:IM_ACID | IM_FIRE | IM_POIS | RES_DARK | RES_NETH |
+F:RES_PLAS | RES_SHAR | RES_SOUN | RES_WALL | RES_DISE | RES_GRAV |
+S:1_IN_4
+S:SHRIEK | S_KIN
+D:$Huge centipede living in Mt. Mikamisan.
+D:$Its long body can wrap round Mt. Mikamisan seven and a half times.
+D:近江国三上山に棲み、琵琶湖の魚を喰らい竜神一族を苦しめた
+D:巨大なムカデだ。その大きさは三上山を七巻半もする。
+D:俵藤太秀郷の矢を跳ね返し、彼を慌てさせた。
+D:「三上山を七巻半と聞けばすごいが、鉢巻にはちょいと足りない。」
+D:(落語「矢橋船」)
