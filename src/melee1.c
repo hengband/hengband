@@ -1795,7 +1795,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 					}
 					else
 					{
-						if (set_slow((p_ptr->slow + 3 + randint1(rlev / 4)), FALSE))
+						if (set_slow((p_ptr->slow + 4 + randint0(rlev / 10)), FALSE))
 						{
 							obvious = TRUE;
 						}
