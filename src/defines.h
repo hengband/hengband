@@ -3499,6 +3499,8 @@
 #define RBE_EXP_VAMP    31
 #define RBE_DR_MANA     32
 #define RBE_SUPERHURT   33
+#define RBE_INERTIA     34
+#define RBE_STUN        35
 
 
 /*** Monster flag values (hard-coded) ***/

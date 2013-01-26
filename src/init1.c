@@ -123,6 +123,8 @@ static cptr r_info_blow_effect[] =
 	"EXP_VAMP",
 	"DR_MANA",
 	"SUPERHURT",
+	"INERTIA",
+	"STUN",
 	NULL
 };
 

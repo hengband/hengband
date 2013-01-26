@@ -1942,6 +1942,14 @@ act = "%sにむかって歌った。";
 				effect_type = BLOW_EFFECT_TYPE_HEAL;
 				break;
 
+			case RBE_INERTIA:
+				pt = GF_INERTIA;
+				break;
+
+			case RBE_STUN:
+				pt = GF_SOUND;
+				break;
+
 			default:
 				pt = 0;
 				break;

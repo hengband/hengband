@@ -1126,7 +1126,7 @@ bool make_attack_normal(int m_idx)
 					if ((o_ptr->xtra4 > 0) && (!object_is_fixed_artifact(o_ptr)))
 					{
 						/* Reduce fuel */
-						o_ptr->xtra4 -= (250 + randint1(250));
+						o_ptr->xtra4 -= (s16b)(250 + randint1(250));
 						if (o_ptr->xtra4 < 1) o_ptr->xtra4 = 1;
 
 						/* Notice */
@@ -1778,6 +1778,50 @@ msg_format("%sは体力を回復したようだ。", m_name);
 
 					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_MANA);
+
+					break;
+				}
+				case RBE_INERTIA:
+				{
+					/* Take damage */
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+
+					if (p_ptr->is_dead) break;
+
+					/* Decrease speed */
+					if (CHECK_MULTISHADOW())
+					{
+						/* Do nothing */
+					}
+					else
+					{
+						if (set_slow((p_ptr->slow + 3 + randint1(rlev / 4)), FALSE))
+						{
+							obvious = TRUE;
+						}
+					}
+
+					break;
+				}
+				case RBE_STUN:
+				{
+					/* Take damage */
+					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+
+					if (p_ptr->is_dead) break;
+
+					/* Decrease speed */
+					if (p_ptr->resist_sound || CHECK_MULTISHADOW())
+					{
+						/* Do nothing */
+					}
+					else
+					{
+						if (set_stun(p_ptr->stun + 10 + randint1(r_ptr->level / 4)))
+						{
+							obvious = TRUE;
+						}
+					}
 
 					break;
 				}

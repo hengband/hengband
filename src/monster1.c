@@ -2857,6 +2857,13 @@ case RBE_DR_MANA:  q = "呺恘毛疇丹"; break;
 			case RBE_DR_MANA:  q = "drain mana force"; break;
 #endif
 
+#ifdef JP
+			case RBE_INERTIA:  q = "蛹簧今六月"; break;
+			case RBE_STUN:     q = "菛菾午今六月"; break;
+#else
+			case RBE_INERTIA:  q = "slow"; break;
+			case RBE_STUN:     q = "stun"; break;
+#endif
 		}
 
 
