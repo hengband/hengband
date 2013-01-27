@@ -9,8 +9,8 @@ Q:$4:Q:3:0:0:0:30:0:0:0:6
 Q:4:Q:3:0:0:0:30:0:0:0:6
 
 # Random Reward (can set less than 30 items)
-Q:$4:R:88:76:90:93:155:101:102:106:113:114:118:119:167:208:213
-Q:4:R:88:76:90:93:155:101:102:106:113:114:118:119:167:208:213
+Q:$4:R:88:76:90:93:98:101:102:103:105:106:113:114:116:118:119:128:145:155:167:208:213:228
+Q:4:R:88:76:90:93:98:101:102:103:105:106:113:114:116:118:119:128:145:155:167:208:213:228
 
 # Description for quest
 ?:[AND [LEQ $QUEST4 2] [EQU $QUEST_TYPE4 3]]
@@ -60,11 +60,11 @@ Q:$4:T:Too bad, we can not get back the vault forever......?
 Q:$4:T:なんてことだ…もう蔵を取り戻す術はないのか…？
 ?:1
 
-# Floor with rewarding artifact e.g."Sting"
-F:a:FLOOR:8:0:0:0:!
+# No-teleport Floor with rewarding artifact e.g."Sting" 
+F:a:FLOOR:12:0:0:0:!
 
-# Floor with base object of artifact e.g."Small sword"
-F:b:FLOOR:8:0:!
+# No-teleport with base object of artifact e.g."Small sword"
+F:b:FLOOR:12:0:!
 
 # Random monster 7 levels out of depth and on no Teleportation grid
 F:5:FLOOR:12:*8
