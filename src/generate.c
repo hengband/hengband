@@ -1188,8 +1188,17 @@ static void arena_gen(void)
 
 	build_arena();
 
-	place_monster_aux(0, py + 5, px, arena_info[p_ptr->arena_number].r_idx,
-	    (PM_NO_KAGE | PM_NO_PET));
+	if(!place_monster_aux(0, py + 5, px, arena_info[p_ptr->arena_number].r_idx, (PM_NO_KAGE | PM_NO_PET)))
+	{
+		p_ptr->exit_bldg = TRUE;
+		p_ptr->arena_number++;
+#ifdef JP
+		msg_print("相手は欠場した。あなたの不戦勝だ。");
+#else
+		msg_print("The enemy is unable appear. You won by default.");
+#endif
+	}
+
 }
 
 
