@@ -1688,7 +1688,7 @@ I:23:8:2
 W:20:15:75:100000
 P:0:1d6:7:8:0
 F:STR | DEX | CON | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC |
-F:FREE_ACT | RES_LITE | LITE | SEE_INVIS | SHOW_MODS | XTRA_H_RES | QUESTITEM |
+F:FREE_ACT | RES_LITE | LITE | SEE_INVIS | SHOW_MODS | XTRA_H_RES |
 F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$"I will give you a name, and I shall call you Sting."  The perfect size 
 D:$for Bilbo, and stamped forever by the courage he found in Mirkwood, this 
@@ -2263,10 +2263,12 @@ D:攻撃を退ける山々の力を喚起する。
 N:118:『ナル=イ=バギル』
 E:'Nar-i-vagil'
 I:21:3:3
-W:20:18:150:70000
-P:0:1d9:10:20:0
-F:INT | HIDE_TYPE |
-F:SLAY_ANIMAL | BRAND_FIRE | RES_FIRE | SHOW_MODS | LITE
+W:20:20:150:70000
+P:0:1d9:10:20:5
+F:STR | INT | SEARCH | HIDE_TYPE | EASY_SPELL | SH_FIRE | LITE |
+F:KILL_ANIMAL | BRAND_FIRE | BRAND_ELEC | FORCE_WEAPON |
+F:RES_FIRE | XTRA_H_RES | HOLD_LIFE | ESP_ANIMAL |
+F:SEE_INVIS | FREE_ACT | SLOW_DIGEST | BLESSED | SHOW_MODS |
 D:$Named for a fiery star and set with gems of great worth binding mystic 
 D:$virtues of protection and thought.
 D:燃える星と名付けられ、守りと思慮の神秘的な力を封じた高価な宝石が付いている。
@@ -2278,10 +2280,11 @@ D:燃える星と名付けられ、守りと思慮の神秘的な力を封じた高価な宝石が付いている。
 N:119:『エリリル』
 E:'Eriril'
 I:21:3:4
-W:20:18:150:20000
+W:20:20:150:40000
 P:0:1d9:3:5:0
-F:INT | WIS | HIDE_TYPE |
-F:SLAY_EVIL | RES_LITE | LITE | SEE_INVIS | ACTIVATE | SHOW_MODS
+F:INT | WIS | CHR | MAGIC_MASTERY | HIDE_TYPE |
+F:SUST_CON | DEC_MANA | WARNING | LITE | SEE_INVIS |
+F:SLAY_EVIL | RES_FEAR | RES_LITE | RES_BLIND | ACTIVATE | SHOW_MODS
 D:$The radiant golden staff of an Istari of legend, this wizard's companion 
 D:$grants keen sight and the knowledge of many hidden things.
 D:「秀でし輝き」を意味する名を持つ、伝説のイスタリの黄金に輝くスタッフだ。
