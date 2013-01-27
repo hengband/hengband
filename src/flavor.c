@@ -2307,7 +2307,24 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		case TV_HAFTED:
 		case TV_POLEARM:
 		case TV_SWORD:
-		case TV_DIGGING:
+	    case TV_DIGGING:
+		
+		/* In Vault Quest, hide the dice of target weapon. */
+		if (!known && p_ptr->inside_quest)
+		{
+			int a_idx = quest[p_ptr->inside_quest].k_idx;
+			if (a_idx)
+			{
+				artifact_type *a_ptr = &a_info[a_idx];
+				if (!(a_ptr->gen_flags & TRG_INSTA_ART))
+				{
+					if((o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval))
+					{
+						break;
+					}
+				}
+			}
+		}
 
 		/* Append a "damage" string */
 		t = object_desc_chr(t, ' ');
