@@ -9277,14 +9277,23 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 						break;
 
 					case QUEST_TYPE_FIND_ARTIFACT:
-						strcpy(name, a_name + a_info[quest[i].k_idx].name);
+						if (quest[i].k_idx)
+						{
+							artifact_type *a_ptr = &a_info[quest[i].k_idx];
+							object_type forge;
+							object_type *q_ptr = &forge;
+							int k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+							object_prep(q_ptr, k_idx);
+							q_ptr->name1 = quest[i].k_idx;
+							q_ptr->ident = IDENT_STORE;
+							object_desc(name, q_ptr, OD_NAME_ONLY);
+						}
 #ifdef JP
-						sprintf(note," - %sを見つけ出す。", name);
+						sprintf(note,"\n   - %sを見つけ出す。", name);
 #else
-						sprintf(note," - Find out %s.", name);
+						sprintf(note,"\n   - Find out %s.", name);
 #endif
 						break;
-
 					case QUEST_TYPE_FIND_EXIT:
 #ifdef JP
 						sprintf(note," - 探索する。");
