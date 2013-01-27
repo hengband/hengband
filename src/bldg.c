@@ -5467,7 +5467,7 @@ void do_cmd_bldg(void)
 	}
 	else if ((which == 2) && p_ptr->inside_arena)
 	{
-		if (!p_ptr->exit_bldg)
+		if (!p_ptr->exit_bldg && m_cnt > 0)
 		{
 #ifdef JP
 			prt("ゲートは閉まっている。モンスターがあなたを待っている！", 0, 0);
