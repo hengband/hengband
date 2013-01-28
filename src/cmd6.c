@@ -4153,8 +4153,12 @@ static void do_cmd_activate_aux(int item)
 	/* Sound */
 	sound(SOUND_ZAP);
 
+	if (o_ptr->name1)
+	{
+		if (!o_ptr->xtra2) o_ptr->xtra2 = a_info[o_ptr->name1].act_idx;
+	}
 
-	if (o_ptr->art_name && o_ptr->xtra2)
+	if ((o_ptr->name1 || o_ptr->art_name) && o_ptr->xtra2)
 	{
 		(void)activate_random_artifact(o_ptr);
 
@@ -4171,6 +4175,7 @@ static void do_cmd_activate_aux(int item)
 		/* Choose effect */
 		switch (o_ptr->name1)
 		{
+#if 0
 			case ART_GALADRIEL:
 			{
 #ifdef JP
@@ -4183,7 +4188,7 @@ static void do_cmd_activate_aux(int item)
 				o_ptr->timeout = randint0(10) + 10;
 				break;
 			}
-
+#endif
 			case ART_ELENDIL:
 			{
 #ifdef JP

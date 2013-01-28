@@ -1972,12 +1972,14 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 }
 
 
-bool activate_random_artifact(object_type * o_ptr)
+bool activate_random_artifact(object_type *o_ptr)
 {
 	int plev = p_ptr->lev;
 	int k, dir, dummy = 0;
 
-	if (!o_ptr->art_name) return FALSE; /* oops? */
+	/* Paranoia */
+	if (!have_flag(o_ptr->art_flags, TR_ACTIVATE)) return FALSE;
+	if (!o_ptr->xtra2) return FALSE;
 
 	/* Activate for attack */
 	switch (o_ptr->xtra2)
