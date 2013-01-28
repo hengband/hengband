@@ -1173,24 +1173,35 @@ void leave_quest_check(void)
 	{
 		quest[leaving_quest].status = QUEST_STATUS_FAILED;
 		quest[leaving_quest].complev = (byte)p_ptr->lev;
-		if(quest[leaving_quest].type == QUEST_TYPE_TOWER)
+
+		/* Additional settings */
+		switch (quest[leaving_quest].type)
 		{
+		case QUEST_TYPE_TOWER:
 			quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
 			quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;
-		}
-		if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
-		{
+			break;
+		case QUEST_TYPE_FIND_ARTIFACT:
+			remove_flag(a_info[quest[leaving_quest].type].flags, TRG_QUESTITEM);
+			break;
+		case QUEST_TYPE_RANDOM:
 			r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
-			if (record_rand_quest)
-				do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
 
 			/* Floor of random quest will be blocked */
 			prepare_change_floor_mode(CFM_NO_RETURN);
+			break;
 		}
-		else if (record_fix_quest)
-			do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
+
+		/* Record finishing a quest */
+		if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
+		{
+			if (record_rand_quest) do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
+		}
+		else
+		{
+			if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
+		}
 	}
-						
 }
 
 void leave_tower_check(void)
