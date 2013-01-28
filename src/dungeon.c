@@ -1182,7 +1182,7 @@ void leave_quest_check(void)
 			quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;
 			break;
 		case QUEST_TYPE_FIND_ARTIFACT:
-			remove_flag(a_info[quest[leaving_quest].type].flags, TRG_QUESTITEM);
+			a_info[quest[leaving_quest].type].gen_flags &= ~(TRG_QUESTITEM);
 			break;
 		case QUEST_TYPE_RANDOM:
 			r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
