@@ -2409,6 +2409,77 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
+		case ACT_BIZARRE:
+		{
+#ifdef JP
+			msg_format("%sは漆黒に輝いた...", name);
+#else
+			msg_format("The %s glows intensely black...", name);
+#endif
+			if (!get_aim_dir(&dir)) return FALSE;
+			ring_of_power(dir);
+			o_ptr->timeout = randint0(450) + 450;
+			break;
+		}
+
+		case ACT_CAST_BA_STAR:
+		{
+			int num = damroll(5, 3);
+			int y, x;
+			int attempts;
+#ifdef JP
+			msg_format("%sが稲妻で覆われた...", name);
+#else
+			msg_format("The %s is surrounded by lightning...", name);
+#endif
+			for (k = 0; k < num; k++)
+			{
+				attempts = 1000;
+
+				while (attempts--)
+				{
+					scatter(&y, &x, py, px, 4, 0);
+
+					if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
+
+					if (!player_bold(y, x)) break;
+				}
+
+				project(0, 3, y, x, 150, GF_ELEC,
+							(PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+			}
+
+			o_ptr->timeout = 1000;
+			break;
+		}
+
+		case ACT_BLADETURNER:
+		{
+			if (!get_aim_dir(&dir)) return FALSE;
+#ifdef JP
+			msg_print("あなたはエレメントのブレスを吐いた。");
+#else
+			msg_print("You breathe the elements.");
+#endif
+			fire_ball(GF_MISSILE, dir, 300, 4);
+#ifdef JP
+			msg_print("鎧が様々な色に輝いた...");
+#else
+			msg_print("Your armor glows many colours...");
+#endif
+			(void)set_afraid(0);
+			(void)set_hero(randint1(50) + 50, FALSE);
+			(void)hp_player(10);
+			(void)set_blessed(randint1(50) + 50, FALSE);
+			(void)set_oppose_acid(randint1(50) + 50, FALSE);
+			(void)set_oppose_elec(randint1(50) + 50, FALSE);
+			(void)set_oppose_fire(randint1(50) + 50, FALSE);
+			(void)set_oppose_cold(randint1(50) + 50, FALSE);
+			(void)set_oppose_pois(randint1(50) + 50, FALSE);
+			o_ptr->timeout = 400;
+			break;
+		}
+
 		/* Activate for other offensive action */
 
 		case ACT_CONFUSE:
@@ -2684,6 +2755,44 @@ bool activate_random_artifact(object_type *o_ptr)
 					msg_print("A group of hounds appear as your enemy!");
 #endif
 
+			}
+
+			o_ptr->timeout = 300 + randint1(150);
+			break;
+		}
+
+		case ACT_SUMMON_DAWN:
+		{
+#ifdef JP
+			msg_print("暁の師団を召喚した。");
+#else
+			msg_print("You summon the Legion of the Dawn.");
+#endif
+			(void)summon_specific(-1, py, px, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
+			o_ptr->timeout = 500 + randint1(500);
+			break;
+		}
+
+		case ACT_SUMMON_OCTOPUS:
+		{
+			u32b mode = PM_ALLOW_GROUP;
+			bool pet = !one_in_(5);
+			if (pet) mode |= PM_FORCE_PET;
+
+			if (summon_named_creature(0, py, px, MON_JIZOTAKO, mode))
+			{
+				if (pet)
+#ifdef JP
+					msg_print("蛸があなたの下僕として出現した。");
+#else
+					msg_print("A group of octopuses appear as your servant.");
+#endif
+				else
+#ifdef JP
+					msg_print("蛸はあなたを睨んでいる！");
+#else
+					msg_print("A group of octopuses appear as your enemy!");
+#endif
 			}
 
 			o_ptr->timeout = 300 + randint1(150);
@@ -3218,32 +3327,6 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
-		case ACT_TELEKINESIS:
-		{
-			if (!get_aim_dir(&dir)) return FALSE;
-#ifdef JP
-			msg_format("%sを伸ばした。", name);
-#else
-			msg_format("You stretched your %s.", name);
-#endif
-			fetch(dir, 500, TRUE);
-			o_ptr->timeout = randint0(25) + 25;
-			break;
-		}
-
-		/* Unique activation */
-		case ACT_BRAND_FIRE_BOLTS:
-		{
-#ifdef JP
-			msg_format("%sが深紅に輝いた...", name);
-#else
-			msg_format("Your %s glows deep red...", name);
-#endif
-			(void)brand_bolts();
-			o_ptr->timeout = 999;
-			break;
-		}
-
 		case ACT_JUDGE:
 		{
 #ifdef JP
@@ -3277,16 +3360,16 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
-		case ACT_BIZARRE:
+		case ACT_TELEKINESIS:
 		{
-#ifdef JP
-			msg_format("%sは漆黒に輝いた...", name);
-#else
-			msg_format("The %s glows intensely black...", name);
-#endif
 			if (!get_aim_dir(&dir)) return FALSE;
-			ring_of_power(dir);
-			o_ptr->timeout = randint0(450) + 450;
+#ifdef JP
+			msg_format("%sを伸ばした。", name);
+#else
+			msg_format("You stretched your %s.", name);
+#endif
+			fetch(dir, 500, TRUE);
+			o_ptr->timeout = randint0(25) + 25;
 			break;
 		}
 
@@ -3321,6 +3404,193 @@ bool activate_random_artifact(object_type *o_ptr)
 				}
 			}
 			o_ptr->timeout = 200;
+			break;
+		}
+
+		case ACT_ESCAPE:
+		{
+			switch (randint1(13))
+			{
+			case 1: case 2: case 3: case 4: case 5:
+				teleport_player(10, 0L);
+				break;
+			case 6: case 7: case 8: case 9: case 10:
+				teleport_player(222, 0L);
+				break;
+			case 11: case 12:
+				(void)stair_creation();
+				break;
+			default:
+#ifdef JP
+				if (get_check("この階を去りますか？"))
+#else
+				if (get_check("Leave this level? "))
+#endif
+				{
+					if (autosave_l) do_cmd_save_game(TRUE);
+
+					/* Leaving */
+					p_ptr->leaving = TRUE;
+				}
+			}
+			o_ptr->timeout = 35;
+			break;
+		}
+
+		case ACT_DISP_CURSE_XTRA:
+		{
+#ifdef JP
+			msg_format("%sが真実を照らし出す...", name);
+#else
+			msg_format("The %s exhibits the truth...", name);
+#endif
+			if (remove_all_curse())
+			{
+#ifdef JP
+				msg_print("誰かに見守られているような気がする。");
+#else
+				msg_print("You feel as if someone is watching over you.");
+#endif
+			}
+			(void)probing();
+			break;
+		}
+
+		case ACT_BRAND_FIRE_BOLTS:
+		{
+#ifdef JP
+			msg_format("%sが深紅に輝いた...", name);
+#else
+			msg_format("Your %s glows deep red...", name);
+#endif
+			(void)brand_bolts();
+			o_ptr->timeout = 999;
+			break;
+		}
+
+		case ACT_RECHARGE_XTRA:
+		{
+#ifdef JP
+			msg_format("%sが白く輝いた．．．", name);
+#else
+			msg_format("The %s gleams with blinding light...", name);
+#endif
+			if (!recharge(1000)) return FALSE;
+			o_ptr->timeout = 200;
+			break;
+		}
+
+		case ACT_LORE:
+		{
+#ifdef JP
+			msg_print("石が隠された秘密を写し出した．．．");
+#else
+			msg_print("The stone reveals hidden mysteries...");
+#endif
+			if (!ident_spell(FALSE)) return FALSE;
+
+			if (mp_ptr->spell_book)
+			{
+				/* Sufficient mana */
+				if (20 <= p_ptr->csp)
+				{
+					/* Use some mana */
+					p_ptr->csp -= 20;
+				}
+
+				/* Over-exert the player */
+				else
+				{
+					int oops = 20 - p_ptr->csp;
+
+					/* No mana left */
+					p_ptr->csp = 0;
+					p_ptr->csp_frac = 0;
+
+					/* Message */
+#ifdef JP
+					msg_print("石を制御できない！");
+#else
+					msg_print("You are too weak to control the stone!");
+#endif
+					/* Hack -- Bypass free action */
+					(void)set_paralyzed(p_ptr->paralyzed +
+						randint1(5 * oops + 1));
+
+					/* Confusing. */
+					(void)set_confused(p_ptr->confused +
+						randint1(5 * oops + 1));
+				}
+
+				/* Redraw mana */
+				p_ptr->redraw |= (PR_MANA);
+			}
+#ifdef JP
+			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), "危険な秘密", -1);
+#else
+			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), "perilous secrets", -1);
+#endif
+			/* Confusing. */
+			if (one_in_(5)) (void)set_confused(p_ptr->confused +
+				randint1(10));
+
+			/* Exercise a little care... */
+			if (one_in_(20))
+#ifdef JP
+				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "危険な秘密", -1);
+#else
+				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "perilous secrets", -1);
+#endif
+			o_ptr->timeout = 0;
+			break;
+		}
+
+		case ACT_SHIKOFUMI:
+		{
+#ifdef JP
+			msg_print("力強く四股を踏んだ。");
+#else
+			msg_print("You stamp. (as if you are in a ring.)");
+#endif
+			(void)set_afraid(0);
+			(void)set_hero(randint1(20) + 20, FALSE);
+			dispel_evil(p_ptr->lev * 3);
+			o_ptr->timeout = 100 + randint1(100);
+			break;
+		}
+
+		/* Unique activation */
+		case ACT_FISHING:
+		{
+			int x, y;
+
+			if (!get_rep_dir2(&dir)) return FALSE;
+			y = py+ddy[dir];
+			x = px+ddx[dir];
+			tsuri_dir = dir;
+			if (!cave_have_flag_bold(y, x, FF_WATER))
+			{
+#ifdef JP
+				msg_print("そこは水辺ではない。");
+#else
+				msg_print("There is no fishing place.");
+#endif
+				return FALSE;
+			}
+			else if (cave[y][x].m_idx)
+			{
+				char m_name[80];
+				monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
+#ifdef JP
+				msg_format("%sが邪魔だ！", m_name);
+#else
+				msg_format("%^s is stand in your way.", m_name);
+#endif
+				energy_use = 0;
+				return FALSE;
+			}
+			set_action(ACTION_FISH);
+			p_ptr->redraw |= (PR_STATE);
 			break;
 		}
 

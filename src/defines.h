@@ -1803,7 +1803,10 @@
 #define ACT_BA_MANA             31
 #define ACT_PESTICIDE           32
 #define ACT_BLINDING_LIGHT      33
-/* 34 - 50 unused */
+#define ACT_BIZARRE             34
+#define ACT_CAST_BA_STAR        35
+#define ACT_BLADETURNER         36
+/* 33 - 50 unused */
 #define ACT_CONFUSE             51
 #define ACT_SLEEP               52
 #define ACT_QUAKE               53
@@ -1824,6 +1827,8 @@
 #define ACT_SUMMON_DEMON        73
 #define ACT_SUMMON_UNDEAD       74
 #define ACT_SUMMON_HOUND        75
+#define ACT_SUMMON_DAWN         76
+#define ACT_SUMMON_OCTOPUS      77
 /* 76 - 80 unused */
 #define ACT_CHOIR_SINGS         80
 #define ACT_CURE_LW             81
@@ -1868,13 +1873,17 @@
 #define ACT_DIM_DOOR            124
 #define ACT_TELEPORT            125
 #define ACT_RECALL              126
-#define ACT_TELEKINESIS         127
-#define ACT_DETECT_UNIQUE       128
+#define ACT_JUDGE               127
+#define ACT_TELEKINESIS         128
+#define ACT_DETECT_UNIQUE       129
+#define ACT_ESCAPE              130
+#define ACT_DISP_CURSE_XTRA     131
+#define ACT_BRAND_FIRE_BOLTS    132
+#define ACT_RECHARGE_XTRA       133
+#define ACT_LORE                134
+#define ACT_SHIKOFUMI           135
 /* 127 -> unused */
-
-#define ACT_BRAND_FIRE_BOLTS    253
-#define ACT_JUDGE               254
-#define ACT_BIZARRE             255
+#define ACT_FISHING             200
 
 
 /*** Object "tval" and "sval" codes ***/

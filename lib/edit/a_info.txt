@@ -100,6 +100,7 @@ D:小さな水晶の瓶で、ガラドリエルの泉に映った
 D:エアレンディルの星(シルマリル)の光が閉じ込めてある。
 D:その不滅の光はあらゆる暗闇を追い払う。
 
+
 # The Star of Elendil
 
 #J0# (コメント)
@@ -121,6 +122,7 @@ D:$The shining Star of the West, a famed heirloom of Elendil's house.
 D:輝く『西方国の星』で、エレンディルの家系に伝わる家宝だ。
 D:銀の鎖に白い宝石がついている。
 
+
 # The Arkenstone of Thrain -> JoJ
 # Was +2 WIS/DEX
 
@@ -138,6 +140,7 @@ D:$ deeply related to creation of this universe.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.3-10)
 D:金の鎖に取り付けられた、この宇宙の創世に深い関わりを持つ真紅の宝石。
 D:（R.ゼラズニイ、真世界アンバーシリーズ 3〜10巻）
+
 
 # The Amulet of Carlammas
 
@@ -176,6 +179,7 @@ D:$A fiery circle of bronze, with mighty spells to ward off evil.
 D:ブロンズの燃えるような首飾りで、邪悪な者をかわして退散させる
 D:強力な呪文が込められている。
 
+
 # The Amulet of Ingwe
 
 #J0# (コメント)
@@ -199,6 +203,7 @@ D:ヴァラールの島に渡り中つ国に戻ることのなかった
 D:ヴァンヤール族の上級王イングウェの家系伝来の家宝。
 D:イングウェに対抗できる邪悪なものはいなかった。
 
+
 # The Necklace of the Dwarves
 
 N:6:ドワーフの
@@ -217,6 +222,7 @@ D:山の中の鍛冶場で長い間鎚を打ってきた
 D:頑強なドワーフの職人魂がしっかりと宿っており、
 D:蜘蛛の糸のように身に付ける者にフィットする。
 
+
 # The Incandescent Light of Yeduson
 # Thomas Alva Yeduson the "Wizard of Menlo Park"
 # patented 1,093 inventions.
@@ -234,6 +240,7 @@ D:$Thomas Alva Yeduson the "Wizard of Menlo Park"
 D:$patented 1,093 inventions.  
 D:$Inventor of the incandescent lightbulb.
 D:「非常に進んだ科学は魔術と見分けがつかない。」
+
 
 # The Ring of Barahir -> Frakir
 
@@ -255,6 +262,7 @@ D:普段は目に見えないが脈動して危険を知らせてくれる。装備するものが
 D:命ずると形を変えて敵の首を締めることができる。
 D:（R.ゼラズニイ、真世界アンバーシリーズ 6〜10巻）
 
+
 # The Ring of Tulkas
 
 #J0# (コメント)
@@ -271,6 +279,7 @@ F:STR | DEX | CON | HIDE_TYPE | ACTIVATE | SPEED | INSTA_ART
 U:XTRA_SPEED
 D:$The treasure of Tulkas, most fleet and wrathful of the Valar.
 D:ヴァラールの中でも最も素早くかつ勇猛なトゥルカスの宝だ。
+
 
 # The Ring of Power (Narya)
 
@@ -290,6 +299,7 @@ D:$Sauron.
 D:炎のように輝くルビーがはめられた火の指輪で、
 D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
 #D:中つ国ではキアダンとガンダルフが所有していた。
+
 
 # The Ring of Power (Nenya)
 
@@ -311,6 +321,7 @@ D:冷気の凝縮した真っ白な宝石がはめられた指輪だ。
 D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
 #D:中つ国ではガラドリエルが所有していた。
 
+
 # The Ring of Power (Vilya)
 
 N:12:《ヴィルヤ》という
@@ -331,6 +342,7 @@ D:$from Sauron.
 D:星の様に輝く透き通ったサファイアの指輪だ。
 D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
 #D:中つ国ではエルロンドが所有していた。
+
 
 # The Ring of Power (The One Ring)
 
@@ -359,6 +371,7 @@ D:重厚な金の指輪で、モルドールの忌まわしい言葉でルーン文字が
 D:刻んである。このイシルドゥアの禍の力はあまりにも強大なので、
 D:普通の者はそれを身に付けるだけで歪められ支配されてしまう。
 
+
 N:14:《アホヤ》という
 E:of Cower (Darnya)
 I:45:50:-5
@@ -376,6 +389,7 @@ D:安っぽい金メッキの指輪で、へけけな言葉でルーン文字が
 D:刻んである。このわけわからん禍の力はあまりにも強大なので、
 D:普通の者はそれを身に付けるだけで歪められ支配されてしまう。
 
+
 N:15:パランティアの石
 E:Palantir~ of Westernesse
 I:39:8:3
@@ -389,6 +403,7 @@ D:$for rapid communication between distant lands.
 D:この白く輝く不滅の水晶球は、古くはヌメノールの歴代の王に、
 D:後にはエレンディルをはじめとする流浪の民によって、離れた土地の間の
 D:高速通信に用いられた「遠望」の石だ。
+
 
 N:16:『クリムゾン』
 E:'Crimson'
@@ -407,16 +422,19 @@ D:使った銃−クリムゾンが越前を助け、そして、たたかうごとに、
 D:クリムゾンはより強力な武器へと進化していった。―」(デスク
 D:リムゾン，エコールソフトウェア)
 
+
 N:17:知識の
 E:of Lore
 I:39:7:0
 W:15:12:15:20000
 P:0:1d1:0:0:0
 F:ACTIVATE | INSTA_ART
+U:LORE
 D:$A great emerald that fills your mind with images of knowledge and dreadful 
 D:$understanding as you stare into its depths.
 D:この大きなエメラルドの中の緑の深淵をのぞき込む時、
 D:あなたの精神は知識の心象と恐るべき理解によって満たされる。
+
 
 N:18:ファラミアの
 E:of Faramir
@@ -431,6 +449,7 @@ D:$A slim neckpiece of True-silver, with quiet spells of Ithilien to aid and
 D:$protect the wearer.
 D:「まことの銀」で作られた首飾りで、身に付ける者を助けて守るイシリエン
 D:の静かな魔法が秘められている。
+
 
 # The Adamantite Plate Mail 'Soulkeeper'
 
@@ -471,6 +490,7 @@ D:邪悪なものを退け頑強さを増す
 D:ルーン文字が表面に深く刻まれている。
 D:かつてサウロンから指輪を奪うのに成功したエレンディルの息子イシルドゥア
 D:が身に付けていた。
+
 
 # The Metal Brigandine Armour of the Rohirrim
 
@@ -531,6 +551,7 @@ D:$  from all evils. (W.R.Wagner, 'Parsifal')
 D:聖杯守護の騎士パルジファルの息子、ローエングリンの輝く鎧だ。
 D:身に付ける者はあらゆる邪悪なものを退け聖杯の加護を得る。
 D:(ワーグナー、「パルジファル」)
+
 
 # The Mithril Plate Mail of Celeborn -> Julian
 
@@ -1658,6 +1679,7 @@ F:SLAY_EVIL | BRAND_ELEC | SLAY_DEMON | FREE_ACT | RES_ELEC |
 F:RES_LITE | LITE | SEE_INVIS | SHOW_MODS | ACTIVATE | SPEED |
 F:SUST_CON | SUST_STR | SUST_INT | SUST_WIS | RES_DARK |
 F:RES_DISEN | RES_FEAR | BLOWS
+U:ESCAPE
 D:$The day sword included mana of Trump, which is a companion to
 D:$ the night sword Grayswandir.
 D:夜の剣グレイスワンダーと対をなす昼の剣で、トランプの魔力が込められている。
@@ -2164,6 +2186,7 @@ F:ACTIVATE | LITE | BRAND_FIRE | FREE_ACT | RES_FIRE | INFRA | RIDING |
 F:SLAY_EVIL | SLAY_DRAGON | SLAY_UNDEAD | SLAY_DEMON | VORPAL |
 F:CHR | SUST_CHR | RES_FEAR | RES_LITE | RES_BLIND | REGEN | SHOW_MODS |
 F:XTRA_RES_OR_POWER
+U:SUMMON_DAWN
 D:$Forged in the farthest East by a race of mighty spellcasters, this 
 D:$shiny pale sword gleams with the rays of rising sun as you invoke 
 D:$its power of commanding legions of powerful immortal warriors...
@@ -2481,6 +2504,11 @@ F:STEALTH | DEX | RES_NETHER | RES_DISEN | RES_FEAR |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | ACTIVATE |
 F:SLAY_EVIL | SLAY_ANIMAL | SLAY_DEMON | SLAY_DRAGON |
 F:SEE_INVIS | REGEN | BLESSED | LITE | SHOW_MODS
+U:ESCAPE
+D:$One of the three imperial spiritual artifacts of Japan.
+D:$Susanoo found this tsurugi at Izumo, then Yamato Takeru
+D:$got and used for conquesting Japan.
+D:$It guards its owner from many dangers by its spiritual power.
 D:三種の神器の一つ。出雲の国で素戔嗚尊(すさのおのみこと)により
 D:見出され、後に日本武尊(やまとたけるのみこと)の剣となる。
 D:使う者を様々な危機から守る霊力が備わっている。
@@ -2503,6 +2531,7 @@ P:40:2d4:-4:0:25
 F:RES_FIRE | RES_COLD | RES_POIS | RES_LITE | RES_DARK | RES_ACID |
 F:LITE | SEE_INVIS | AGGRAVATE | FREE_ACT | IM_ELEC |
 F:ACTIVATE
+U:CAST_BA_STAR
 D:$A massive suit of heavy dragon scales deeply saturated with many colors.  
 D:$It throbs with angry energies, and you feel the raw elemental might of 
 D:$untamed Lightning as you put it on.
@@ -2526,6 +2555,7 @@ F:RES_NETHER | RES_NEXUS | RES_CHAOS | RES_LITE | RES_DARK |
 F:RES_SHARDS | RES_SOUND | RES_DISEN | RES_BLIND | RES_CONF |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD |
 F:ACTIVATE
+U:BLADETURNER
 D:$A suit of adamant, set with scales of every color, surrounded in a nimbus 
 D:$of perfectly untramelled yet inextricably intermingled and utterly mastered 
 D:$powers elemental and ethereal.
@@ -2685,6 +2715,7 @@ F:STR | INT | WIS | DEX | CON | CHR | SPEED | STEALTH | HIDE_TYPE |
 F:ACTIVATE | HOLD_LIFE | FREE_ACT | SEE_INVIS | TELEPATHY |
 F:LEVITATION | SLOW_DIGEST | REGEN | SEARCH | LITE | WARNING |
 F:INSTA_ART | QUESTITEM | FULL_NAME
+U:RECHARGE_XTRA
 D:$Yaaaaaaaaay! Platinum card of Yendorian Express!!!
 D:$Wait a minute, you can not pay any more with this card.
 D:$You must think other way of using it.
@@ -2878,6 +2909,7 @@ I:22:40:0
 W:10:150:30:10000
 P:0:1d1:0:0:0
 F:ACTIVATE | INSTA_ART
+U:FISHING
 D:太公望はこの釣り竿を用いて釣りを楽しむのが日課であったが、
 D:結局は彼自身が周の文王に釣られてしまったのであった。
 
@@ -3434,6 +3466,7 @@ W:20:10:60:50000
 P:4:0d0:0:0:0
 F:STR | CON | SUST_STR | SUST_CON |
 F:RES_FEAR | FREE_ACT | ACTIVATE
+U:SHIKOFUMI
 D:遥か東の国のスモー戦士が身につける正装だ。
 D:その豪華な宝飾は力強さを感じさせる。
 
@@ -3559,6 +3592,7 @@ W:35:40:70:125000
 P:0:1d7:8:8:8
 F:STR | WIS | BLOWS | TUNNEL | ACTIVATE | RES_ACID | RES_ELEC
 F:REGEN | FREE_ACT | BRAND_ELEC | BLESSED | XTRA_H_RES
+U:SUMMON_OCTOPUS
 D:その昔、蛸を引き連れて岸和田の地を守るために戦かったという
 D:蛸法師こと地蔵大菩薩の化身が使っていた六環の錫杖だ。
 D:「…その時。一人の法師がどこからともなく現れて、何万という敵に飛びかかり、
@@ -3618,6 +3652,7 @@ F:STR | WIS | HIDE_TYPE |
 F:RES_CONF | RES_CHAOS | BLESSED | 
 F:SEE_INVIS | FREE_ACT | REGEN | HOLD_LIFE | ACTIVATE |
 F:INSTA_ART
+U:DISP_CURSE_XTRA
 D:これを身につけたプレイヤーは呪いをはね返すことができる。
 
 N:218:地獄の

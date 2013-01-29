@@ -434,6 +434,12 @@ cptr item_activation(object_type *o_ptr)
 				return "害虫の駆除 : 55+d55ターン毎";
 			case ACT_BLINDING_LIGHT:
 				return "眩しい光 : 250 ターン毎";
+			case ACT_BIZARRE:
+				return "信じ難いこと : 450+d450 ターン毎";
+			case ACT_CAST_BA_STAR:
+				return "スター・ボール・ダスト(150) : 1000 ターン毎";
+			case ACT_BLADETURNER:
+				return "エレメントのブレス (300), 士気高揚、祝福、耐性";
 			case ACT_CONFUSE:
 				return "パニック・モンスター : 15 ターン毎";
 			case ACT_SLEEP:
@@ -450,6 +456,7 @@ cptr item_activation(object_type *o_ptr)
 				return "抹殺 : 500 ターン毎";
 			case ACT_MASS_GENO:
 				return "周辺抹殺 : 1000 ターン毎";
+
 			case ACT_CHARM_ANIMAL:
 				return "動物魅了 : 200 ターン毎";
 			case ACT_CHARM_UNDEAD:
@@ -470,6 +477,13 @@ cptr item_activation(object_type *o_ptr)
 				return "悪魔召喚 : 666+d333 ターン毎";
 			case ACT_SUMMON_UNDEAD:
 				return "アンデッド召喚 : 666+d333 ターン毎";
+			case ACT_SUMMON_HOUND:
+				return "ハウンド召喚 : 300+d150 ターン毎";
+			case ACT_SUMMON_DAWN:
+				return "暁の師団召喚 : 500+d500 ターン毎";
+			case ACT_SUMMON_OCTOPUS:
+				return "蛸の大群召喚 : 300+d150ターン毎";
+
 			case ACT_CHOIR_SINGS:
 				return "回復 (777)、癒し、士気高揚 : 300 ターン毎";
 			case ACT_CURE_LW:
@@ -542,18 +556,28 @@ cptr item_activation(object_type *o_ptr)
 				return "テレポート (range 100) : 25 ターン毎";
 			case ACT_RECALL:
 				return "帰還の詔 : 200 ターン毎";
+			case ACT_JUDGE:
+				return "体力と引き替えに千里眼と帰還 : 20+d20 ターン毎";
 			case ACT_TELEKINESIS:
 				return "物体を引き寄せる(重量25kgまで) : 25+d25ターン毎";
 			case ACT_DETECT_UNIQUE:
 				return "この階にいるユニークモンスターを表示 : 200ターン毎";
-
-			/* Unique activation */
+			case ACT_ESCAPE:
+				return "逃走 : 35 ターン毎";
+			case ACT_DISP_CURSE_XTRA:
+				return "*解呪*と調査: いつでも";
 			case ACT_BRAND_FIRE_BOLTS:
 				return "刃先のファイア・ボルト : 999 ターン毎";
-			case ACT_JUDGE:
-				return "体力と引き替えに千里眼と帰還 : 20+d20 ターン毎";
-			case ACT_BIZARRE:
-				return "信じ難いこと : 450+d450 ターン毎";
+			case ACT_RECHARGE_XTRA:
+				return "魔力充填 : 200 ターン毎";
+			case ACT_LORE:
+				return "危険を伴う鑑定 : いつでも";
+			case ACT_SHIKOFUMI:
+				return "四股踏み : 100+d100ターン毎";
+
+			/* Unique activation */
+			case ACT_FISHING:
+				return "釣りをする : いつでも";
 
 			default:
 				return "未定義";
@@ -626,6 +650,13 @@ cptr item_activation(object_type *o_ptr)
 				return "dispel small life every 55+d55 turns";
 			case ACT_BLINDING_LIGHT:
 				return "blinding light every 250 turns";
+			case ACT_BIZARRE:
+				return "bizarre things every 450+d450 turns";
+			case ACT_CAST_BA_STAR:
+				return "cast star balls (150) every 1000 turns";
+			case ACT_BLADETURNER:
+				return "breathe elements (300), hero, bless, and resistance";
+
 			case ACT_CONFUSE:
 				return "confuse monster every 15 turns";
 			case ACT_SLEEP:
@@ -642,6 +673,7 @@ cptr item_activation(object_type *o_ptr)
 				return "genocide every 500 turns";
 			case ACT_MASS_GENO:
 				return "mass genocide every 1000 turns";
+
 			case ACT_CHARM_ANIMAL:
 				return "charm animal every 200 turns";
 			case ACT_CHARM_UNDEAD:
@@ -662,6 +694,13 @@ cptr item_activation(object_type *o_ptr)
 				return "summon demon every 666+d333 turns";
 			case ACT_SUMMON_UNDEAD:
 				return "summon undead every 666+d333 turns";
+			case ACT_SUMMON_HOUND:
+				return "summon hound every 300+d150 turns";
+			case ACT_SUMMON_DAWN:
+				return "summon the Legion of the Dawn every 500+d500 turns";
+			case ACT_SUMMON_OCTOPUS:
+				return "summon octopus every 300+d150 turns";
+
 			case ACT_CHOIR_SINGS:
 				return "heal 777 hit points, curing and heloism every 300 turns";
 			case ACT_CURE_LW:
@@ -746,16 +785,26 @@ cptr item_activation(object_type *o_ptr)
 				return "word of recall every 200 turns";
 			case ACT_TELEKINESIS:
 				return "a telekinesis (500 lb) every 25+d25 turns";
-			case ACT_DETECT_UNIQUE:
-				return "list of the uniques on the level every 200 turns";
-
-			/* Unique activation */
-			case ACT_BRAND_FIRE_BOLTS:
-				return "fire branding of bolts every 999 turns";
 			case ACT_JUDGE:
 				return "clairvoyance and recall, draining you every 20+d20 turns";
-			case ACT_BIZARRE:
-				return "bizarre things every 450+d450 turns";
+			case ACT_DETECT_UNIQUE:
+				return "list of the uniques on the level every 200 turns";
+			case ACT_ESCAPE:
+				return "a getaway every 35 turns";
+			case ACT_DISP_CURSE_XTRA:
+				return "dispel curse and probing every turn";
+			case ACT_BRAND_FIRE_BOLTS:
+				return "fire branding of bolts every 999 turns";
+			case ACT_RECHARGE_XTRA:
+				return "recharge item every 200 turns";
+			case ACT_LORE:
+				return "perilous identify every turn";
+			case ACT_SHIKOFUMI:
+				return "shiko every 100+d100 turns";
+
+			/* Unique activation */
+			case ACT_FISHING:
+				return "fishing : every time";
 
 			default:
 				return "something undefined";
@@ -766,14 +815,6 @@ cptr item_activation(object_type *o_ptr)
 	/* Some artifacts can be activated */
 	switch (o_ptr->name1)
 	{
-		case ART_DAWN:
-		{
-#ifdef JP
-			return "暁の師団召喚 : 500+d500 ターン毎";
-#else
-			return "summon the Legion of the Dawn every 500+d500 turns";
-#endif
-		}
 		case ART_CRIMSON:
 		{
 #ifdef JP
@@ -782,53 +823,12 @@ cptr item_activation(object_type *o_ptr)
 			return "fire! every 15 turns";
 #endif
 		}
-		case ART_KUSANAGI:
-		case ART_WEREWINDLE:
-		{
-#ifdef JP
-			return "逃走 : 35 ターン毎";
-#else
-			return "a getaway every 35 turns";
-#endif
-		}
-		case ART_RAZORBACK:
-		{
-#ifdef JP
-			return "スター・ボール・ダスト(150) : 1000 ターン毎";
-#else
-			return "star balls (150) every 1000 turns";
-#endif
-		}
-		case ART_BLADETURNER:
-		{
-#ifdef JP
-			return "エレメントのブレス (300), 士気高揚、祝福、耐性";
-#else
-			return "breathe elements (300), hero, bless, and resistance";
-#endif
-		}
-		case ART_STONE_LORE:
-		{
-#ifdef JP
-			return "危険を伴う鑑定 : いつでも";
-#else
-			return "perilous identify every turn";
-#endif
-		}
 		case ART_BOROMIR:
 		{
 #ifdef JP
 			return "モンスター恐慌 : 40+d40ターン毎";
 #else
 			return "frighten monsters every 40+d40 turns";
-#endif
-		}
-		case ART_YENDOR:
-		{
-#ifdef JP
-			return "魔力充填 : 200 ターン毎";
-#else
-			return "recharge item every 200 turns";
 #endif
 		}
 		case ART_MURAMASA:
@@ -864,51 +864,6 @@ cptr item_activation(object_type *o_ptr)
 #endif
 
 		}
-		case ART_KESHO:
-		{
-#ifdef JP
-			return "四股踏み : 100+d100ターン毎";
-#else
-			return "shiko every 100+d100 turns";
-#endif
-
-		}
-		case ART_MOOK:
-		{
-#ifdef JP
-			return "冷気の耐性 : 40+d40ターン毎";
-#else
-			return "resist cold every 40+d40 turns";
-#endif
-
-		}
-		case ART_JIZO:
-		{
-#ifdef JP
-			return "蛸の大群召喚 : 300+d150ターン毎";
-#else
-			return "summon octopus every 300+d150 turns";
-#endif
-		}
-		case ART_SACRED_KNIGHTS:
-		{
-#ifdef JP
-			return "*解呪*と調査: いつでも";
-#else
-			return "dispel curse and probing every turn";
-#endif
-
-		}
-	}
-
-
-	if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_TSURIZAO))
-	{
-#ifdef JP
-		return "釣りをする : いつでも";
-#else
-		return "fishing : every time";
-#endif
 	}
 
 	if (object_is_smith(o_ptr))
