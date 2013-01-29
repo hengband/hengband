@@ -1815,6 +1815,8 @@
 #define ACT_BANISH_EVIL         56
 #define ACT_GENOCIDE            57
 #define ACT_MASS_GENO           58
+#define ACT_SCARE_AREA          59
+#define ACT_AGGRAVATE           60
 /* 59 - 64 unused */
 #define ACT_CHARM_ANIMAL        65
 #define ACT_CHARM_UNDEAD        66
@@ -1883,8 +1885,11 @@
 #define ACT_LORE                134
 #define ACT_SHIKOFUMI           135
 /* 127 -> unused */
-#define ACT_FISHING             200
-
+#define ACT_FISHING             251
+#define ACT_INROU               252
+#define ACT_MURAMASA            253
+#define ACT_BLOODY_MOON         254
+#define ACT_CRIMSON             255
 
 /*** Object "tval" and "sval" codes ***/
 

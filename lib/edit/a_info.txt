@@ -412,6 +412,7 @@ W:60:150:100:100000
 P:0:0d0:20:20:0
 F:SPEED | STEALTH | RES_NETHER |
 F:ACTIVATE | SHOW_MODS | INSTA_ART | XTRA_POWER | XTRA_H_RES
+U:CRIMSON
 D:$"-- In there, the whole town had turned into monsters' nest.
 D:$ This gun gotten by Echizen unexpectedly, 'Crimson', helped
 D:$ him in his missions, and it evolved into greater weapon
@@ -2739,6 +2740,7 @@ P:0:0d0:0:8:0
 F:SHOW_MODS | HIDE_TYPE | 
 F:SUST_STR | RES_FEAR | ACTIVATE | 
 F:INSTA_ART
+U:SCARE_AREA
 D:$A massive golden torque, made of innumerable strands of gold and steel 
 D:$intermingled, with great golden hounds set at either end.
 D:黄金と黒鋼の無数のより糸で編み上げられた重厚な金の首飾りで、
@@ -2752,6 +2754,7 @@ P:0:10d5:0:0:-20
 F:HIDE_TYPE | BLOWS | VORPAL | VAMPIRIC | SLAY_HUMAN |
 F:SHOW_MODS | SPEED | ACTIVATE | RES_DISEN | NO_TELE |
 F:DRAIN_EXP | AGGRAVATE | RES_DARK | RES_NETHER | TY_CURSE |
+U:MURAMASA
 D:$Muramasa the legendaly bracksmith forged this sword 'Muramasa'.
 D:$ It always wants more blood thirstily, although it already
 D:$ drained blood from many person.
@@ -2994,6 +2997,7 @@ I:40:20:2
 W:30:80:3:100000
 F:INT | WIS | CHR | SEARCH | INFRA | SEE_INVIS | ACTIVATE |
 F:HIDE_TYPE | INSTA_ART
+U:INROU
 D:毎週月曜日の20:45に絶大な力を発揮するらしい。
 
 N:167:『噛尾刀』
@@ -3031,6 +3035,7 @@ I:21:4:3
 W:25:5:15:808
 P:0:1d2:-3:-7:6
 F:SEARCH | ACTIVATE | SHOW_MODS | HIDE_TYPE
+U:AGGRAVATE
 D:角柱二本の互いの端が、細い縄で結ばれている。
 D:武器としては見るからに貧相だが、 防火をその任とする衛士たちが使った、
 D:由緒正しい武器だといわれている。
@@ -3405,6 +3410,7 @@ I:22:30:2
 W:70:12:250:180000
 P:0:8d4:8:8:8
 F:ACTIVATE | SHOW_MODS
+U:BLOODY_MOON
 
 N:200:ダ
 E:'Dasai'

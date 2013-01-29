@@ -456,7 +456,11 @@ cptr item_activation(object_type *o_ptr)
 				return "抹殺 : 500 ターン毎";
 			case ACT_MASS_GENO:
 				return "周辺抹殺 : 1000 ターン毎";
-
+			case ACT_SCARE_AREA:
+				return "モンスター恐慌 : 40+d40ターン毎";
+			case ACT_AGGRAVATE:
+				if (o_ptr->name1 == ART_HYOUSIGI) return "拍子木を打ちならす : いつでも";
+				return "モンスターを怒らせる : いつでも";
 			case ACT_CHARM_ANIMAL:
 				return "動物魅了 : 200 ターン毎";
 			case ACT_CHARM_UNDEAD:
@@ -578,6 +582,14 @@ cptr item_activation(object_type *o_ptr)
 			/* Unique activation */
 			case ACT_FISHING:
 				return "釣りをする : いつでも";
+			case ACT_INROU:
+				return "例のアレ : 150+d150 ターン毎";
+			case ACT_MURAMASA:
+				return "腕力の上昇 : 確率50%で壊れる";
+			case ACT_BLOODY_MOON:
+				return "属性変更 : 3333 ターン毎";
+			case ACT_CRIMSON:
+				return "ファイア！ : 15 ターン毎";
 
 			default:
 				return "未定義";
@@ -673,6 +685,11 @@ cptr item_activation(object_type *o_ptr)
 				return "genocide every 500 turns";
 			case ACT_MASS_GENO:
 				return "mass genocide every 1000 turns";
+			case ACT_SCARE_AREA:
+				return "frighten monsters every 40+d40 turns";
+			case ACT_AGGRAVATE:
+				if (o_ptr->name1 == ART_HYOUSIGI) return "beat wooden clappers every turn";
+				return "aggravete monsters every turn";
 
 			case ACT_CHARM_ANIMAL:
 				return "charm animal every 200 turns";
@@ -805,6 +822,14 @@ cptr item_activation(object_type *o_ptr)
 			/* Unique activation */
 			case ACT_FISHING:
 				return "fishing : every time";
+			case ACT_INROU:
+				return "reveal your identity every 150+d150 turns";
+			case ACT_MURAMASA:
+				return "increase STR (destroyed 50%)";
+			case ACT_BLOODY_MOON:
+				return "change zokusei every 3333 turns";
+			case ACT_CRIMSON:
+				return "fire! every 15 turns";
 
 			default:
 				return "something undefined";
@@ -815,55 +840,13 @@ cptr item_activation(object_type *o_ptr)
 	/* Some artifacts can be activated */
 	switch (o_ptr->name1)
 	{
-		case ART_CRIMSON:
-		{
+		/* Nothing */
+	default:
 #ifdef JP
-			return "ファイア！ : 15 ターン毎";
+		return "未定義";
 #else
-			return "fire! every 15 turns";
+		return "something undefined";
 #endif
-		}
-		case ART_BOROMIR:
-		{
-#ifdef JP
-			return "モンスター恐慌 : 40+d40ターン毎";
-#else
-			return "frighten monsters every 40+d40 turns";
-#endif
-		}
-		case ART_MURAMASA:
-		{
-#ifdef JP
-			return "腕力の上昇 : 確率50%で壊れる";
-#else
-			return "increase STR (destroyed 50%)";
-#endif
-		}
-		case ART_INROU:
-		{
-#ifdef JP
-			return "例のアレ : 150+d150 ターン毎";
-#else
-			return "reveal your identity every 150+d150 turns";
-#endif
-		}
-		case ART_HYOUSIGI:
-		{
-#ifdef JP
-			return "拍子木を打ちならす : いつでも";
-#else
-			return "beat wooden clappers every turn";
-#endif
-		}
-		case ART_BLOOD:
-		{
-#ifdef JP
-			return "属性変更 : 3333 ターン毎";
-#else
-			return "change zokusei every 3333 turns";
-#endif
-
-		}
 	}
 
 	if (object_is_smith(o_ptr))
