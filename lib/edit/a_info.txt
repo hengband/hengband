@@ -199,7 +199,6 @@ D:ヴァラールの島に渡り中つ国に戻ることのなかった
 D:ヴァンヤール族の上級王イングウェの家系伝来の家宝。
 D:イングウェに対抗できる邪悪なものはいなかった。
 
-
 # The Necklace of the Dwarves
 
 N:6:ドワーフの
@@ -217,7 +216,6 @@ D:たくさんのヴァリノールの宝石で飾られた金の首飾りだ。
 D:山の中の鍛冶場で長い間鎚を打ってきた
 D:頑強なドワーフの職人魂がしっかりと宿っており、
 D:蜘蛛の糸のように身に付ける者にフィットする。
-
 
 # The Incandescent Light of Yeduson
 # Thomas Alva Yeduson the "Wizard of Menlo Park"
@@ -246,6 +244,7 @@ I:45:32:1
 W:50:40:2:75000
 F:STR | INT | WIS | DEX | CON | CHR | STEALTH | HIDE_TYPE |
 F:RES_POIS | ACTIVATE | SEE_INVIS | SEARCH | WARNING | INSTA_ART
+U:DRAIN_1
 D:$This bracelet has its own will, which was created by Marlin
 D:$ the prince of chaos. It is  invisible but it sometimes
 D:$ ripples to warn owner's dangers. It can morph to strangle
@@ -272,7 +271,6 @@ F:STR | DEX | CON | HIDE_TYPE | ACTIVATE | SPEED | INSTA_ART
 U:XTRA_SPEED
 D:$The treasure of Tulkas, most fleet and wrathful of the Valar.
 D:ヴァラールの中でも最も素早くかつ勇猛なトゥルカスの宝だ。
-
 
 # The Ring of Power (Narya)
 
@@ -378,20 +376,19 @@ D:安っぽい金メッキの指輪で、へけけな言葉でルーン文字が
 D:刻んである。このわけわからん禍の力はあまりにも強大なので、
 D:普通の者はそれを身に付けるだけで歪められ支配されてしまう。
 
-
 N:15:パランティアの石
 E:Palantir~ of Westernesse
 I:39:8:3
 W:60:50:10:60000
 P:0:1d1:0:0:0
 F:WIS | CHR | ACTIVATE | TELEPATHY | INSTA_ART | FULL_NAME
+U:DETECT_UNIQUE
 D:$A shining white ball of unbreakable crystal, the ancient palantiri, 
 D:$or 'far-watchers', were used by kings of Numenor and later by the Exiles 
 D:$for rapid communication between distant lands. 
 D:この白く輝く不滅の水晶球は、古くはヌメノールの歴代の王に、
 D:後にはエレンディルをはじめとする流浪の民によって、離れた土地の間の
 D:高速通信に用いられた「遠望」の石だ。
-
 
 N:16:『クリムゾン』
 E:'Crimson'
@@ -409,7 +406,6 @@ D:「―そこは街全体が魔物の住処と化していた。そのとき思わず
 D:使った銃−クリムゾンが越前を助け、そして、たたかうごとに、
 D:クリムゾンはより強力な武器へと進化していった。―」(デスク
 D:リムゾン，エコールソフトウェア)
-
 
 N:17:知識の
 E:of Lore
@@ -430,6 +426,7 @@ P:0:0d0:12:0:0
 F:STEALTH | SHOW_MODS | HIDE_TYPE |
 F:RES_CONF | SUST_DEX | ACTIVATE |
 F:INSTA_ART
+U:PESTICIDE
 D:$A slim neckpiece of True-silver, with quiet spells of Ithilien to aid and 
 D:$protect the wearer.
 D:「まことの銀」で作られた首飾りで、身に付ける者を助けて守るイシリエン
@@ -527,6 +524,7 @@ F:STEALTH | WIS | INT | SEE_INVIS |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS |
 F:HOLD_LIFE | RES_NETHER | RES_DARK | RES_FEAR |
 F:ACTIVATE
+U:CHOIR_SINGS
 D:$The shining armor of Lohengrin the son of Parsifal.
 D:$ If you wears it, the holy grail gives to you the devine protection
 D:$  from all evils. (W.R.Wagner, 'Parsifal')
@@ -2394,7 +2392,7 @@ P:0:2d5:10:6:8
 F:WIS | INFRA | HIDE_TYPE | BLESSED |
 F:BRAND_COLD | SLAY_ORC | RES_COLD | RES_LITE | LITE | REGEN |
 F:ACTIVATE | SHOW_MODS | XTRA_H_RES
-U:DRAIN_1
+U:DRAIN_2
 D:$Wielded by the High Priest of Meneltarma, this great mace gleams coldly as 
 D:$though moonlit, and it can strike as mighty a blow spiritually as 
 D:$physically.
@@ -2454,6 +2452,7 @@ I:19:23:10
 W:50:25:110:100000
 P:0:0d0:10:14:0
 F:SPEED | RES_FIRE | XTRA_MIGHT | ACTIVATE | SHOW_MODS | XTRA_RES_OR_POWER
+U:BRAND_FIRE_BOLTS
 D:$Magic power of this crossbow of Brand the prince of Amber will enable
 D:$ you to move faster.
 D:トランプの魔力を自分の物にし、新たな宇宙を創造しようとした
@@ -2572,6 +2571,7 @@ W:30:30:180:120000
 P:0:2d6:10:12:2
 F:CON | BLOWS | HIDE_TYPE | BRAND_ACID | SHOW_MODS
 F:SLAY_TROLL | SLAY_DEMON | ACTIVATE
+U:HELO_SPEED
 D:$"Hurin [...] wielded the axe two-handed, and it is sung that the axe
 D:$ smoked in the black blood of the troll-guard of Gothmog, until it withered,
 D:$ and each time that he slew Hurin cried 'Aure entuluva! Day shall come
@@ -2642,6 +2642,7 @@ W:70:4:100:65000
 P:10:1d2:0:0:20
 F:LITE | CHR | RES_ELEC | RES_ACID | HIDE_TYPE | REFLECT |
 F:SUST_WIS | SUST_CHR | ACTIVATE
+U:BLINDING_LIGHT
 D:$The legendary shield of Gil-Galad, who fought his way to the gates of
 D:$ the Dark Tower, and with whom came light even to Gorgoroth.
 D:ノルドールの最後の上級王、ギル=ガラドの伝説の盾だ。彼はバラド=ドゥアの門まで
@@ -2899,6 +2900,9 @@ P:0:4d9:6:23:10
 F:STR | DEX | HIDE_TYPE | SEARCH | FREE_ACT | SLAY_HUMAN |
 F:SLAY_TROLL | SLAY_GIANT | SLAY_ANIMAL | SLAY_ORC | RES_FIRE | RES_COLD |
 F:RES_ELEC | RES_ACID | RES_FEAR | SHOW_MODS | RIDING
+D:$Because of very superb sharpness such as dragon flies are 
+D:$cut which perches on the tip of this spear, it is called
+D:$'Tonbo giri' which means 'dragon fry cutter'. 
 D:徳川四天王の１人本多忠勝の愛用の槍だ。
 D:その切れ味は穂先に止まった蜻蛉が切れて落ちるほどである。
 
@@ -2908,6 +2912,10 @@ I:21:2:1
 W:8:5:30:18000
 P:0:1d6:16:13:0
 F:INT | WIS | LEVITATION | SHOW_MODS | ACTIVATE | SEE_INVIS
+U:TELEKINESIS
+D:$This is the whip of the famous archaeologist Prof. Jones.
+D:あの著名な考古学者ジョーンズ博士のムチだ。
+D:必ずや、スーパーアクションを可能にするだろう。
 
 # The Spear 'GaeBolg'
 N:163:『ガエボルグ』
@@ -3001,6 +3009,7 @@ I:21:7:3
 W:40:5:100:808
 P:0:1d7:-5:10:3
 F:STR | CHR | RES_FIRE | ACTIVATE | 
+U:HELO
 D:消火作業にあたって、士気を鼓舞すべく振りたてられた杖だ。
 D:杖の先に隊のマーク入りの円盤があり、その下側から
 D:長い帯状の飾りが幾本ものびている。
@@ -3205,6 +3214,7 @@ W:50:6:160:90000
 P:10:1d6:0:0:20
 F:LITE | RES_BLIND | RES_DARK | RES_NETHER | RES_ELEC | RES_FIRE |
 F:ACTIVATE | ESP_GOOD
+U:CURING
 D:$A shining shield, once borne by the great mariner Earendil, "scored with 
 D:$runes to keep all wounds and harm from him".
 D:かつて偉大なる船乗りエアレンディルが身に付けていた輝く盾だ。
@@ -3433,6 +3443,7 @@ I:35:3:0
 W:20:20:30:50000
 P:3:0d0:0:0:20
 F:RES_COLD | RES_ACID | RES_CHAOS | LEVITATION | ACTIVATE
+U:RESIST_COLD
 D:ガチャピンと対をなす赤い獣の毛皮のクロークだ。
 
 # 金属製ラメラー・アーマー『バテレン鎧』
@@ -3470,6 +3481,7 @@ P:0:3d3:11:22:0
 F:STR | DEX | CHR | TUNNEL | BLESSED |
 F:SLAY_EVIL | SLAY_DRAGON | SLAY_ORC | SLAY_GIANT | SLAY_DEMON |
 F:RES_COLD | SEE_INVIS | RES_FEAR | REGEN
+U:HELO
 D:バトルハンマー氏族のドワーフの長にして、伝説の都ミスリル・ホールの王、
 D:ブルーノー・バトルハンマーの生涯最高傑作だ。
 D:「なるほどね」ドリッズドは、ハンマーをブルーノーに返した。
@@ -3629,6 +3641,7 @@ F:INT | CHR | INFRA | SEARCH | HIDE_TYPE | FULL_NAME |
 F:SEE_INVIS | FREE_ACT | SLOW_DIGEST | REGEN | LITE | WARNING |
 F:SH_FIRE | SH_ELEC | SH_COLD | ACTIVATE |
 F:INSTA_ART
+U:CURE_MANA_FULL
 
 N:220:ものまねの始祖ゴゴの
 E:of Gogo
@@ -3657,6 +3670,7 @@ W:30:15:110:60000
 P:0:2d1:15:17:0
 F:STR | INFRA | RES_FIRE | SH_FIRE |
 F:ACTIVATE | HIDE_TYPE | SHOW_MODS
+U:BRAND_FIRE_BOLTS
 D:$This crossbow gives flame energy to bolts which it fires.
 D:この燃えるような色のクロスボウは、発射するボルトに炎の力を
 D:与えることができる。

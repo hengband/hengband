@@ -387,7 +387,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BA_FIRE_1:
 				return "ファイア・ボール (72) : 9+d9 ターン毎";
 			case ACT_DRAIN_1:
-				return "生命力吸収 (90) : 70 ターン毎";
+				return "窒息攻撃(100) : 100+d100 ターン毎";
 			case ACT_BA_COLD_2:
 				return "アイス・ボール (100) : 12+d12 ターン毎";
 			case ACT_BA_ELEC_2:
@@ -430,6 +430,10 @@ cptr item_activation(object_type *o_ptr)
 				return "暗黒の嵐(250) : 150+d150 ターン毎";
 			case ACT_BA_MANA:
 				return "魔力の嵐(400) : 250+d250ターン毎";
+			case ACT_PESTICIDE:
+				return "害虫の駆除 : 55+d55ターン毎";
+			case ACT_BLINDING_LIGHT:
+				return "眩しい光 : 250 ターン毎";
 			case ACT_CONFUSE:
 				return "パニック・モンスター : 15 ターン毎";
 			case ACT_SLEEP:
@@ -466,6 +470,8 @@ cptr item_activation(object_type *o_ptr)
 				return "悪魔召喚 : 666+d333 ターン毎";
 			case ACT_SUMMON_UNDEAD:
 				return "アンデッド召喚 : 666+d333 ターン毎";
+			case ACT_CHOIR_SINGS:
+				return "回復 (777)、癒し、士気高揚 : 300 ターン毎";
 			case ACT_CURE_LW:
 				return "恐怖除去/体力回復(30) : 10 ターン毎";
 			case ACT_CURE_MW:
@@ -480,6 +486,10 @@ cptr item_activation(object_type *o_ptr)
 				return "体力回復(700) : 250 ターン毎";
 			case ACT_CURE_1000:
 				return "体力回復(1000) : 888 ターン毎";
+			case ACT_CURING:
+				return "癒し : 100ターン毎";
+			case ACT_CURE_MANA_FULL:
+				return "魔力復活: 777 ターン毎";
 			case ACT_ESP:
 				return "テレパシー (期間 25+d30) : 200 ターン毎";
 			case ACT_BERSERK:
@@ -496,6 +506,10 @@ cptr item_activation(object_type *o_ptr)
 				return "幽体化 (期間 level/2 + d(level/2)) : 1000 ターン毎";
 			case ACT_INVULN:
 				return "無敵化 (期間 8+d8) : 1000 ターン毎";
+			case ACT_HELO:
+				return "士気高揚 : 30+d30ターン毎";
+			case ACT_HELO_SPEED:
+				return "士気高揚, スピード(50+d50ターン) : 100+d200 ターン毎";
 			case ACT_LIGHT:
 				return "イルミネーション : 10+d10 ターン毎";
 			case ACT_MAP_LIGHT:
@@ -528,8 +542,14 @@ cptr item_activation(object_type *o_ptr)
 				return "テレポート (range 100) : 25 ターン毎";
 			case ACT_RECALL:
 				return "帰還の詔 : 200 ターン毎";
+			case ACT_TELEKINESIS:
+				return "物体を引き寄せる(重量25kgまで) : 25+d25ターン毎";
+			case ACT_DETECT_UNIQUE:
+				return "この階にいるユニークモンスターを表示 : 200ターン毎";
 
 			/* Unique activation */
+			case ACT_BRAND_FIRE_BOLTS:
+				return "刃先のファイア・ボルト : 999 ターン毎";
 			case ACT_JUDGE:
 				return "体力と引き替えに千里眼と帰還 : 20+d20 ターン毎";
 			case ACT_BIZARRE:
@@ -559,7 +579,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BA_FIRE_1:
 				return "ball of fire (72) every 9+d9 turns";
 			case ACT_DRAIN_1:
-				return "drain life (90) every 70 turns";
+				return "a strangling attack (100) every 100+d100 turns";
 			case ACT_BA_COLD_2:
 				return "ball of cold (100) every 12+d12 turns";
 			case ACT_BA_ELEC_2:
@@ -602,6 +622,10 @@ cptr item_activation(object_type *o_ptr)
 				return "darkness storm (250) every 150+d150 turns";
 			case ACT_BA_MANA:
 				return "a mana storm every 250+d250 turns";
+			case ACT_PESTICIDE:
+				return "dispel small life every 55+d55 turns";
+			case ACT_BLINDING_LIGHT:
+				return "blinding light every 250 turns";
 			case ACT_CONFUSE:
 				return "confuse monster every 15 turns";
 			case ACT_SLEEP:
@@ -638,6 +662,8 @@ cptr item_activation(object_type *o_ptr)
 				return "summon demon every 666+d333 turns";
 			case ACT_SUMMON_UNDEAD:
 				return "summon undead every 666+d333 turns";
+			case ACT_CHOIR_SINGS:
+				return "heal 777 hit points, curing and heloism every 300 turns";
 			case ACT_CURE_LW:
 				return "remove fear and heal 30 hp every 10 turns";
 			case ACT_CURE_MW:
@@ -652,6 +678,10 @@ cptr item_activation(object_type *o_ptr)
 				return "heal 700 hit points every 250 turns";
 			case ACT_CURE_1000:
 				return "heal 1000 hit points every 888 turns";
+			case ACT_CURING:
+				return "curing every 100 turns";
+			case ACT_CURE_MANA_FULL:
+				return "restore mana every 777 turns";
 			case ACT_ESP:
 				return "telepathy (dur 25+d30) every 200 turns";
 			case ACT_BERSERK:
@@ -668,6 +698,20 @@ cptr item_activation(object_type *o_ptr)
 				return "wraith form (dur level/2 + d(level/2)) every 1000 turns";
 			case ACT_INVULN:
 				return "invulnerability (dur 8+d8) every 1000 turns";
+			case ACT_HELO:
+				return "heroism every 30+d30 turns";
+			case ACT_HELO_SPEED:
+				return "hero and +10 to speed (50) every 100+200d turns";
+			case ACT_RESIST_ACID:
+				return "resist acid (dur 20+d20) every 40+d40 turns";
+			case ACT_RESIST_FIRE:
+				return "resist fire (dur 20+d20) every 40+d40 turns";
+			case ACT_RESIST_COLD:
+				return "resist cold (dur 20+d20) every 40+d40 turns";
+			case ACT_RESIST_ELEC:
+				return "resist thunder (dur 20+d20) every 40+d40 turns";
+			case ACT_RESIST_POIS:
+				return "resist poison (dur 20+d20) every 40+d40 turns";
 			case ACT_LIGHT:
 				return "light area (dam 2d15) every 10+d10 turns";
 			case ACT_MAP_LIGHT:
@@ -700,8 +744,14 @@ cptr item_activation(object_type *o_ptr)
 				return "teleport (range 100) every 25 turns";
 			case ACT_RECALL:
 				return "word of recall every 200 turns";
+			case ACT_TELEKINESIS:
+				return "a telekinesis (500 lb) every 25+d25 turns";
+			case ACT_DETECT_UNIQUE:
+				return "list of the uniques on the level every 200 turns";
 
 			/* Unique activation */
+			case ACT_BRAND_FIRE_BOLTS:
+				return "fire branding of bolts every 999 turns";
 			case ACT_JUDGE:
 				return "clairvoyance and recall, draining you every 20+d20 turns";
 			case ACT_BIZARRE:
@@ -722,15 +772,6 @@ cptr item_activation(object_type *o_ptr)
 			return "暁の師団召喚 : 500+d500 ターン毎";
 #else
 			return "summon the Legion of the Dawn every 500+d500 turns";
-#endif
-		}
-		case ART_BRAND:
-		case ART_HELLFIRE:
-		{
-#ifdef JP
-			return "刃先のファイア・ボルト : 999 ターン毎";
-#else
-			return "fire branding of bolts every 999 turns";
 #endif
 		}
 		case ART_CRIMSON:
@@ -766,22 +807,6 @@ cptr item_activation(object_type *o_ptr)
 			return "breathe elements (300), hero, bless, and resistance";
 #endif
 		}
-		case ART_FRAKIR:
-		{
-#ifdef JP
-			return "窒息攻撃(100) : 100+d100 ターン毎";
-#else
-			return "a strangling attack (100) every 100+d100 turns";
-#endif
-		}
-		case ART_PALANTIR:
-		{
-#ifdef JP
-			return "この階にいるユニークモンスターを表示 : 200ターン毎";
-#else
-			return "list of the uniques on the level every 200 turns";
-#endif
-		}
 		case ART_STONE_LORE:
 		{
 #ifdef JP
@@ -790,36 +815,12 @@ cptr item_activation(object_type *o_ptr)
 			return "perilous identify every turn";
 #endif
 		}
-		case ART_FARAMIR:
-		{
-#ifdef JP
-			return "害虫の駆除 : 55+d55ターン毎";
-#else
-			return "dispel small life every 55+d55 turns";
-#endif
-		}
 		case ART_BOROMIR:
 		{
 #ifdef JP
 			return "モンスター恐慌 : 40+d40ターン毎";
 #else
 			return "frighten monsters every 40+d40 turns";
-#endif
-		}
-		case ART_HURIN:
-		{
-#ifdef JP
-			return "士気高揚, スピード(50+d50ターン) : 100+d200 ターン毎";
-#else
-			return "hero and +10 to speed (50) every 100+200d turns";
-#endif
-		}
-		case ART_GIL_GALAD:
-		{
-#ifdef JP
-			return "眩しい光 : 250 ターン毎";
-#else
-			return "blinding light every 250 turns";
 #endif
 		}
 		case ART_YENDOR:
@@ -838,14 +839,6 @@ cptr item_activation(object_type *o_ptr)
 			return "increase STR (destroyed 50%)";
 #endif
 		}
-		case ART_JONES:
-		{
-#ifdef JP
-			return "物体を引き寄せる(重量25kgまで) : 25+d25ターン毎";
-#else
-			return "a telekinesis (500 lb) every 25+d25 turns";
-#endif
-		}
 		case ART_INROU:
 		{
 #ifdef JP
@@ -860,23 +853,6 @@ cptr item_activation(object_type *o_ptr)
 			return "拍子木を打ちならす : いつでも";
 #else
 			return "beat wooden clappers every turn";
-#endif
-		}
-		case ART_MATOI:
-		case ART_AEGISFANG:
-		{
-#ifdef JP
-			return "士気高揚 : 30+d30ターン毎";
-#else
-			return "heroism every 30+d30 turns";
-#endif
-		}
-		case ART_EARENDIL:
-		{
-#ifdef JP
-			return "癒し : 100ターン毎";
-#else
-			return "curing every 100 turns";
 #endif
 		}
 		case ART_BLOOD:
@@ -920,15 +896,6 @@ cptr item_activation(object_type *o_ptr)
 			return "*解呪*と調査: いつでも";
 #else
 			return "dispel curse and probing every turn";
-#endif
-
-		}
-		case ART_CHARMED:
-		{
-#ifdef JP
-			return "魔力復活: 777 ターン毎";
-#else
-			return "restore mana every 777 turns";
 #endif
 
 		}

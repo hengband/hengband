@@ -4159,7 +4159,7 @@ static void do_cmd_activate_aux(int item)
 		if (!o_ptr->xtra2) o_ptr->xtra2 = a_info[o_ptr->name1].act_idx;
 	}
 
-	if ((o_ptr->name1 || o_ptr->art_name) && o_ptr->xtra2)
+	if (object_is_artifact(o_ptr) && o_ptr->xtra2)
 	{
 		(void)activate_random_artifact(o_ptr);
 
@@ -4176,20 +4176,6 @@ static void do_cmd_activate_aux(int item)
 		/* Choose effect */
 		switch (o_ptr->name1)
 		{
-			case ART_FRAKIR:
-			{
-#ifdef JP
-				msg_print("あなたはフラキアに敵を締め殺すよう命じた。");
-#else
-				msg_print("You order Frakir to strangle your opponent.");
-#endif
-
-				if (!get_aim_dir(&dir)) return;
-				if (drain_life(dir, 100))
-				o_ptr->timeout = randint0(100) + 100;
-				break;
-			}
-
 			case ART_RAZORBACK:
 			{
 				int num = damroll(5, 3);
@@ -4250,26 +4236,6 @@ static void do_cmd_activate_aux(int item)
 				break;
 			}
 
-			case ART_LOHENGRIN:
-			{
-#ifdef JP
-				msg_print("天国の歌が聞こえる...");
-#else
-				msg_print("A heavenly choir sings...");
-#endif
-				(void)set_poisoned(0);
-				(void)set_cut(0);
-				(void)set_stun(0);
-				(void)set_confused(0);
-				(void)set_blind(0);
-				(void)set_afraid(0);
-				(void)set_hero(randint1(25) + 25, FALSE);
-				(void)hp_player(777);
-				o_ptr->timeout = 300;
-				break;
-			}
-
-
 			case ART_KUSANAGI:
 			case ART_WEREWINDLE:
 			{
@@ -4286,11 +4252,10 @@ static void do_cmd_activate_aux(int item)
 					break;
 				default:
 #ifdef JP
-if (get_check("この階を去りますか？"))
+					if (get_check("この階を去りますか？"))
 #else
 					if (get_check("Leave this level? "))
 #endif
-
 					{
 						if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -4311,19 +4276,6 @@ if (get_check("この階を去りますか？"))
 #endif
 				(void)summon_specific(-1, py, px, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
 				o_ptr->timeout = 500 + randint1(500);
-				break;
-			}
-
-			case ART_BRAND:
-			case ART_HELLFIRE:
-			{
-#ifdef JP
-				msg_print("クロスボウが深紅に輝いた...");
-#else
-				msg_print("Your crossbow glows deep red...");
-#endif
-				(void)brand_bolts();
-				o_ptr->timeout = 999;
 				break;
 			}
 
@@ -4369,42 +4321,6 @@ if (get_check("この階を去りますか？"))
 				o_ptr->timeout = 15;
 				break;
 			}
-			case ART_PALANTIR:
-			{
-				monster_type *m_ptr;
-				monster_race *r_ptr;
-				int i;
-
-#ifdef JP
-				msg_print("奇妙な場所が頭の中に浮かんだ．．．");
-#else
-				msg_print("Some strange places show up in your mind. And you see ...");
-#endif
-
-				/* Process the monsters (backwards) */
-				for (i = m_max - 1; i >= 1; i--)
-				{
-					/* Access the monster */
-					m_ptr = &m_list[i];
-
-					/* Ignore "dead" monsters */
-					if (!m_ptr->r_idx) continue;
-
-					r_ptr = &r_info[m_ptr->r_idx];
-
-					if(r_ptr->flags1 & RF1_UNIQUE)
-					{
-#ifdef JP
-						msg_format("%s． ",r_name + r_ptr->name);
-#else
-						msg_format("%s. ",r_name + r_ptr->name);
-#endif
-					}
-				}
-				o_ptr->timeout = 200;
-				break;
-			}
-
 			case ART_STONE_LORE:
 			{
 #ifdef JP
@@ -4486,40 +4402,6 @@ if (get_check("この階を去りますか？"))
 				o_ptr->timeout = randint0(40) + 40;
 				break;
 			}
-
-			case ART_FARAMIR:
-			{
-#ifdef JP
-				msg_print("あなたは害虫を一掃した。");
-#else
-				msg_print("You exterminate small life.");
-#endif
-				(void)dispel_monsters(4);
-				o_ptr->timeout = randint0(55) + 55;
-				break;
-			}
-
-			case ART_HURIN:
-			{
-				(void)set_fast(randint1(50) + 50, FALSE);
-				hp_player(10);
-				set_afraid(0);
-				set_hero(randint1(50) + 50, FALSE);
-				o_ptr->timeout = randint0(200) + 100;
-				break;
-			}
-			case ART_GIL_GALAD:
-			{
-#ifdef JP
-				msg_print("シールドが眩しい光で輝いた．．．");
-#else
-				msg_print("Your shield gleams with blinding light...");
-#endif
-				fire_ball(GF_LITE, 0, 300, 6);
-				confuse_monsters(3 * p_ptr->lev / 2);
-				o_ptr->timeout = 250;
-				break;
-			}
 			case ART_YENDOR:
 			{
 #ifdef JP
@@ -4590,20 +4472,6 @@ if (get_check("この階を去りますか？"))
 				p_ptr->redraw |= (PR_STATE);
 				break;
 			}
-			case ART_JONES:
-			{
-				if (!get_aim_dir(&dir)) return;
-#ifdef JP
-				msg_print("ムチを伸ばした。");
-#else
-				msg_print("You stretched your whip.");
-#endif
-
-				fetch(dir, 500, TRUE);
-				o_ptr->timeout = randint0(25) + 25;
-				break;
-			}
-
 			case ART_INROU:
 			{
 				int count = 0, i;
@@ -4683,38 +4551,6 @@ if (get_check("この階を去りますか？"))
 				aggravate_monsters(0);
 				break;
 			}
-
-			case ART_MATOI:
-			case ART_AEGISFANG:
-			{
-				(void)set_afraid(0);
-				set_hero(randint1(25)+25, FALSE);
-				hp_player(10);
-				o_ptr->timeout = randint0(30) + 30;
-				break;
-			}
-
-			case ART_EARENDIL:
-			{
-				(void)set_poisoned(0);
-				(void)set_confused(0);
-				(void)set_blind(0);
-				(void)set_stun(0);
-				(void)set_cut(0);
-				(void)set_image(0);
-
-				o_ptr->timeout = 100;
-				break;
-			}
-
-			case ART_BOLISHOI:
-			{
-				if (!get_aim_dir(&dir)) return;
-				(void)charm_animal(dir, p_ptr->lev);
-
-				o_ptr->timeout = 200;
-				break;
-			}
 			case ART_BLOOD:
 			{
 #ifdef JP
@@ -4741,17 +4577,6 @@ if (get_check("この階を去りますか？"))
 				o_ptr->timeout = 100 + randint1(100);
 				break;
 			}
-			case ART_MOOK:
-			{
-#ifdef JP
-				msg_print("クロークが白く輝いた...");
-#else
-				msg_print("Your cloak grows white.");
-#endif
-				(void)set_oppose_cold(randint1(20) + 20, FALSE);
-				o_ptr->timeout = 40 + randint1(40);
-				break;
-			}
 			case ART_JIZO:
 			{
 				u32b mode = PM_ALLOW_GROUP;
@@ -4764,16 +4589,14 @@ if (get_check("この階を去りますか？"))
 #ifdef JP
 						msg_print("蛸があなたの下僕として出現した。");
 #else
-					msg_print("A group of octopuses appear as your servant.");
+						msg_print("A group of octopuses appear as your servant.");
 #endif
-
 					else
 #ifdef JP
 						msg_print("蛸はあなたを睨んでいる！");
 #else
 						msg_print("A group of octopuses appear as your enemy!");
 #endif
-
 				}
 
 				o_ptr->timeout = 300 + randint1(150);
@@ -4796,51 +4619,6 @@ if (get_check("この階を去りますか？"))
 #endif
 				}
 				(void)probing();
-				break;
-			}
-			case ART_CHARMED:
-			{
-#ifdef JP
-				msg_print("ペンダントが青白く光った．．．");
-#else
-				msg_print("Your pendant glows pale...");
-#endif
-				if (p_ptr->pclass == CLASS_MAGIC_EATER)
-				{
-					int i;
-					for (i = 0; i < EATER_EXT*2; i++)
-					{
-						p_ptr->magic_num1[i] += (p_ptr->magic_num2[i] < 10) ? EATER_CHARGE * 3 : p_ptr->magic_num2[i]*EATER_CHARGE/3;
-						if (p_ptr->magic_num1[i] > p_ptr->magic_num2[i]*EATER_CHARGE) p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
-					}
-					for (; i < EATER_EXT*3; i++)
-					{
-						int k_idx = lookup_kind(TV_ROD, i-EATER_EXT*2);
-						p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
-						if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
-					}
-#ifdef JP
-					msg_print("頭がハッキリとした。");
-#else
-					msg_print("You feel your head clear.");
-#endif
-					p_ptr->window |= (PW_PLAYER);
-				}
-				else if (p_ptr->csp < p_ptr->msp)
-				{
-					p_ptr->csp = p_ptr->msp;
-					p_ptr->csp_frac = 0;
-#ifdef JP
-					msg_print("頭がハッキリとした。");
-#else
-					msg_print("You feel your head clear.");
-#endif
-
-					p_ptr->redraw |= (PR_MANA);
-					p_ptr->window |= (PW_PLAYER);
-					p_ptr->window |= (PW_SPELL);
-				}
-				o_ptr->timeout = 777;
 				break;
 			}
 		}
