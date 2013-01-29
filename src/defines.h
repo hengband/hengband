@@ -1785,7 +1785,7 @@
 #define ACT_DRAIN_2             13
 #define ACT_VAMPIRE_1           14
 #define ACT_BO_MISS_2           15
-#define ACT_BA_FIRE_2           16
+#define ACT_BA_FIRE_3           16
 #define ACT_BA_COLD_3           17
 #define ACT_BA_ELEC_3           18
 #define ACT_WHIRLWIND           19
@@ -1795,7 +1795,13 @@
 #define ACT_DISP_EVIL           23
 #define ACT_BA_MISS_3           24
 #define ACT_DISP_GOOD           25
-/* 26 - 50 unused */
+#define ACT_BO_MANA             26
+#define ACT_BA_FIRE_2           27
+#define ACT_BA_WATER            28
+#define ACT_BA_STAR             29
+#define ACT_BA_DARK             30
+#define ACT_BA_MANA             31
+/* 27 - 50 unused */
 #define ACT_CONFUSE             51
 #define ACT_SLEEP               52
 #define ACT_QUAKE               53
@@ -1815,7 +1821,8 @@
 #define ACT_SUMMON_ELEMENTAL    72
 #define ACT_SUMMON_DEMON        73
 #define ACT_SUMMON_UNDEAD       74
-/* 75 - 80 unused */
+#define ACT_SUMMON_HOUND        75
+/* 76 - 80 unused */
 #define ACT_CURE_LW             81
 #define ACT_CURE_MW             82
 #define ACT_CURE_POISON         83
@@ -1850,6 +1857,10 @@
 #define ACT_TELEPORT            125
 #define ACT_RECALL              126
 /* 127 -> unused */
+
+#define ACT_JUDGE               254
+#define ACT_BIZARRE             255
+
 
 /*** Object "tval" and "sval" codes ***/
 

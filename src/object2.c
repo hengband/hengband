@@ -1048,10 +1048,11 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 		else if (type == ACT_DRAIN_1) total += 500;
 		else if (type == ACT_BA_COLD_2) total += 1250;
 		else if (type == ACT_BA_ELEC_2) total += 1500;
+		else if (type == ACT_BA_FIRE_2) total += 1500;
 		else if (type == ACT_DRAIN_2) total += 750;
 		else if (type == ACT_VAMPIRE_1) total += 1000;
 		else if (type == ACT_BO_MISS_2) total += 1000;
-		else if (type == ACT_BA_FIRE_2) total += 1750;
+		else if (type == ACT_BA_FIRE_3) total += 1750;
 		else if (type == ACT_BA_COLD_3) total += 2500;
 		else if (type == ACT_BA_ELEC_3) total += 2500;
 		else if (type == ACT_WHIRLWIND) total += 7500;
@@ -1060,6 +1061,11 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 		else if (type == ACT_ROCKET) total += 5000;
 		else if (type == ACT_DISP_EVIL) total += 4000;
 		else if (type == ACT_DISP_GOOD) total += 3500;
+		else if (type == ACT_BO_MANA) total += 1500;
+		else if (type == ACT_BA_WATER) total += 2000;
+		else if (type == ACT_BA_STAR) total += 2200;
+		else if (type == ACT_BA_DARK) total += 2200;
+		else if (type == ACT_BA_MANA) total += 2500;
 		else if (type == ACT_BA_MISS_3) total += 5000;
 		else if (type == ACT_CONFUSE) total += 500;
 		else if (type == ACT_SLEEP) total += 750;

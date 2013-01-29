@@ -366,6 +366,8 @@ cptr item_activation(object_type *o_ptr)
 		switch (o_ptr->xtra2)
 		{
 #ifdef JP
+			/* General activation */
+
 			case ACT_SUNLIGHT:
 				return "太陽光線 : 10 ターン毎";
 			case ACT_BO_MISS_1:
@@ -381,27 +383,27 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BO_FIRE_1:
 				return "ファイア・ボルト(9d8) : 8+d8 ターン毎";
 			case ACT_BA_COLD_1:
-				return "アイス・ボール (48) : 400 ターン毎";
+				return "アイス・ボール (48) : 6+d6 ターン毎";
 			case ACT_BA_FIRE_1:
-				return "ファイア・ボール (72) : 400 ターン毎";
+				return "ファイア・ボール (72) : 9+d9 ターン毎";
 			case ACT_DRAIN_1:
-				return "生命力吸収 (100) : 100+d100 ターン毎";
+				return "生命力吸収 (90) : 70 ターン毎";
 			case ACT_BA_COLD_2:
-				return "アイス・ボール (100) : 300 ターン毎";
+				return "アイス・ボール (100) : 12+d12 ターン毎";
 			case ACT_BA_ELEC_2:
-				return "サンダー・ボール (100) : 500 ターン毎";
+				return "サンダー・ボール (100) : 12+d12 ターン毎";
 			case ACT_DRAIN_2:
 				return "生命力吸収(120) : 400 ターン毎";
 			case ACT_VAMPIRE_1:
 				return "吸血ドレイン (3*50) : 400 ターン毎";
 			case ACT_BO_MISS_2:
 				return "矢 (150) : 90+d90 ターン毎";
-			case ACT_BA_FIRE_2:
-				return "巨大ファイア・ボール (120) : 225+d225 ターン毎";
+			case ACT_BA_FIRE_3:
+				return "巨大ファイア・ボール (300) : 225+d225 ターン毎";
 			case ACT_BA_COLD_3:
-				return "巨大アイス・ボール (200) : 325+d325 ターン毎";
+				return "巨大アイス・ボール (400) : 325+d325 ターン毎";
 			case ACT_BA_ELEC_3:
-				return "巨大サンダー・ボール (250) : 425+d425 ターン毎";
+				return "巨大サンダー・ボール (500) : 425+d425 ターン毎";
 			case ACT_WHIRLWIND:
 				return "カマイタチ : 250 ターン毎";
 			case ACT_VAMPIRE_2:
@@ -411,11 +413,23 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_ROCKET:
 				return "ロケット (120+level) : 400 ターン毎";
 			case ACT_DISP_EVIL:
-				return "邪悪退散 (x5) : 300+d300 ターン毎";
+				return "邪悪退散 (x5) : 100+d100 ターン毎";
 			case ACT_BA_MISS_3:
 				return "エレメントのブレス (300) : 500 ターン毎";
 			case ACT_DISP_GOOD:
-				return "善良退散 (x5) : 300+d300 ターン毎";
+				return "善良退散 (x5) : 100+d100 ターン毎";
+			case ACT_BO_MANA:
+				return "魔法の矢(150) : 90+d90 ターン毎";
+			case ACT_BA_FIRE_2:
+				return "巨大ファイア・ボール(120) : 15 ターン毎";
+			case ACT_BA_WATER:
+				return "ウォーター・ボール(200) : 250 ターン毎";
+			case ACT_BA_STAR:
+				return "巨大スター・ボール(200) : 200+d200 ターン毎";
+			case ACT_BA_DARK:
+				return "暗黒の嵐(250) : 150+d150 ターン毎";
+			case ACT_BA_MANA:
+				return "魔力の嵐(400) : 250+d250ターン毎";
 			case ACT_CONFUSE:
 				return "パニック・モンスター : 15 ターン毎";
 			case ACT_SLEEP:
@@ -433,7 +447,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_MASS_GENO:
 				return "周辺抹殺 : 1000 ターン毎";
 			case ACT_CHARM_ANIMAL:
-				return "動物魅了 : 300 ターン毎";
+				return "動物魅了 : 200 ターン毎";
 			case ACT_CHARM_UNDEAD:
 				return "アンデッド従属 : 333 ターン毎";
 			case ACT_CHARM_OTHER:
@@ -471,9 +485,9 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BERSERK:
 				return "士気高揚と祝福 (期間 50+d50) : 100+d100 ターン毎";
 			case ACT_PROT_EVIL:
-				return "対邪悪結界 (期間 level*3 + d25) : 225+d225 ターン毎";
+				return "対邪悪結界 (期間 level*3 + d25) : 200+d200 ターン毎";
 			case ACT_RESIST_ALL:
-				return "全耐性 (期間 40+d40) : 200 ターン毎";
+				return "全耐性 (期間 20+d20) : 111 ターン毎";
 			case ACT_SPEED:
 				return "加速 (期間 20+d20) : 250 ターン毎";
 			case ACT_XTRA_SPEED:
@@ -489,9 +503,9 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DETECT_ALL:
 				return "全感知 : 55+d55 ターン毎";
 			case ACT_DETECT_XTRA:
-				return "全感知、探索、*鑑定* : 1000 ターン毎";
+				return "全感知、探索、*鑑定* : 100 ターン毎";
 			case ACT_ID_FULL:
-				return "*鑑定* : 750 ターン毎";
+				return "*鑑定* : 75 ターン毎";
 			case ACT_ID_PLAIN:
 				return "鑑定 : 10 ターン毎";
 			case ACT_RUNE_EXPLO:
@@ -503,7 +517,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DEST_DOOR:
 				return "ドア破壊 : 10 ターン毎";
 			case ACT_STONE_MUD:
-				return "岩石溶解 : 5 ターン毎";
+				return "岩石溶解 : 3 ターン毎";
 			case ACT_RECHARGE:
 				return "魔力充填 : 70 ターン毎";
 			case ACT_ALCHEMY:
@@ -511,12 +525,21 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DIM_DOOR:
 				return "次元の扉 : 100 ターン毎";
 			case ACT_TELEPORT:
-				return "テレポート (range 100) : 45 ターン毎";
+				return "テレポート (range 100) : 25 ターン毎";
 			case ACT_RECALL:
 				return "帰還の詔 : 200 ターン毎";
+
+			/* Unique activation */
+			case ACT_JUDGE:
+				return "体力と引き替えに千里眼と帰還 : 20+d20 ターン毎";
+			case ACT_BIZARRE:
+				return "信じ難いこと : 450+d450 ターン毎";
+
 			default:
 				return "未定義";
 #else
+			/* General activation */
+
 			case ACT_SUNLIGHT:
 				return "beam of sunlight every 10 turns";
 			case ACT_BO_MISS_1:
@@ -532,15 +555,15 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BO_FIRE_1:
 				return "fire bolt (9d8) every 8+d8 turns";
 			case ACT_BA_COLD_1:
-				return "ball of cold (48) every 400 turns";
+				return "ball of cold (48) every 6+d6 turns";
 			case ACT_BA_FIRE_1:
-				return "ball of fire (72) every 400 turns";
+				return "ball of fire (72) every 9+d9 turns";
 			case ACT_DRAIN_1:
-				return "drain life (100) every 100+d100 turns";
+				return "drain life (90) every 70 turns";
 			case ACT_BA_COLD_2:
-				return "ball of cold (100) every 300 turns";
+				return "ball of cold (100) every 12+d12 turns";
 			case ACT_BA_ELEC_2:
-				return "ball of lightning (100) every 500 turns";
+				return "ball of lightning (100) every 12+d12 turns";
 			case ACT_DRAIN_2:
 				return "drain life (120) every 400 turns";
 			case ACT_VAMPIRE_1:
@@ -548,11 +571,11 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BO_MISS_2:
 				return "arrows (150) every 90+d90 turns";
 			case ACT_BA_FIRE_2:
-				return "fire ball (120) every 225+d225 turns";
+				return "fire ball (300) every 225+d225 turns";
 			case ACT_BA_COLD_3:
-				return "ball of cold (200) every 325+d325 turns";
+				return "ball of cold (400) every 325+d325 turns";
 			case ACT_BA_ELEC_3:
-				return "ball of lightning (250) every 425+d425 turns";
+				return "ball of lightning (500) every 425+d425 turns";
 			case ACT_WHIRLWIND:
 				return "whirlwind attack every 250 turns";
 			case ACT_VAMPIRE_2:
@@ -562,11 +585,23 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_ROCKET:
 				return "launch rocket (120+level) every 400 turns";
 			case ACT_DISP_EVIL:
-				return "dispel evil (x5) every 300+d300 turns";
+				return "dispel evil (x5) every 100+d100 turns";
 			case ACT_BA_MISS_3:
 				return "elemental breath (300) every 500 turns";
 			case ACT_DISP_GOOD:
-				return "dispel good (x5) every 300+d300 turns";
+				return "dispel good (x5) every 100+d100 turns";
+			case ACT_BO_MANA:
+				return "a magical arrow (150) every 90+d90 turns";
+			case ACT_BA_FIRE_2:
+				return "large fire ball (120) every 15 turns";
+			case ACT_BA_WATER:
+				return "water ball (200) every 250 turns";
+			case ACT_BA_STAR:
+				return "large star ball (200) every 200+d200 turns";
+			case ACT_BA_DARK:
+				return "darkness storm (250) every 150+d150 turns";
+			case ACT_BA_MANA:
+				return "a mana storm every 250+d250 turns";
 			case ACT_CONFUSE:
 				return "confuse monster every 15 turns";
 			case ACT_SLEEP:
@@ -584,7 +619,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_MASS_GENO:
 				return "mass genocide every 1000 turns";
 			case ACT_CHARM_ANIMAL:
-				return "charm animal every 300 turns";
+				return "charm animal every 200 turns";
 			case ACT_CHARM_UNDEAD:
 				return "enslave undead every 333 turns";
 			case ACT_CHARM_OTHER:
@@ -622,13 +657,13 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BERSERK:
 				return "heroism and blessed (dur 50+d50) every 100+d100 turns";
 			case ACT_PROT_EVIL:
-				return "protect evil (dur level*3 + d25) every 225+d225 turns";
+				return "protect evil (dur level*3 + d25) every 200+d200 turns";
 			case ACT_RESIST_ALL:
-				return "resist elements (dur 40+d40) every 200 turns";
+				return "resist elements (dur 20+d20) every 111 turns";
 			case ACT_SPEED:
-				return "speed (dur 20+d20) every 250 turns";
+				return "speed (dur 20+d20) every 100+d100 turns";
 			case ACT_XTRA_SPEED:
-				return "speed (dur 75+d75) every 200+d200 turns";
+				return "speed (dur 75+d75) every 100+d100 turns";
 			case ACT_WRAITH:
 				return "wraith form (dur level/2 + d(level/2)) every 1000 turns";
 			case ACT_INVULN:
@@ -640,9 +675,9 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DETECT_ALL:
 				return "detection every 55+d55 turns";
 			case ACT_DETECT_XTRA:
-				return "detection, probing and identify true every 1000 turns";
+				return "detection, probing and identify true every 100 turns";
 			case ACT_ID_FULL:
-				return "identify true every 750 turns";
+				return "identify true every 75 turns";
 			case ACT_ID_PLAIN:
 				return "identify spell every 10 turns";
 			case ACT_RUNE_EXPLO:
@@ -654,7 +689,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DEST_DOOR:
 				return "destroy doors every 10 turns";
 			case ACT_STONE_MUD:
-				return "stone to mud every 5 turns";
+				return "stone to mud every 3 turns";
 			case ACT_RECHARGE:
 				return "recharging every 70 turns";
 			case ACT_ALCHEMY:
@@ -662,9 +697,16 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DIM_DOOR:
 				return "dimension door every 100 turns";
 			case ACT_TELEPORT:
-				return "teleport (range 100) every 45 turns";
+				return "teleport (range 100) every 25 turns";
 			case ACT_RECALL:
 				return "word of recall every 200 turns";
+
+			/* Unique activation */
+			case ACT_JUDGE:
+				return "clairvoyance and recall, draining you every 20+d20 turns";
+			case ACT_BIZARRE:
+				return "bizarre things every 450+d450 turns";
+
 			default:
 				return "something undefined";
 #endif
@@ -677,118 +719,65 @@ cptr item_activation(object_type *o_ptr)
 		case ART_DAWN:
 		{
 #ifdef JP
-return "暁の師団召喚 : 500+d500 ターン毎";
+			return "暁の師団召喚 : 500+d500 ターン毎";
 #else
 			return "summon the Legion of the Dawn every 500+d500 turns";
 #endif
-
-		}
-		case ART_FIRESTAR:
-		{
-#ifdef JP
-return "巨大ファイア・ボール(72) : 100 ターン毎";
-#else
-			return "large fire ball (72) every 100 turns";
-#endif
-
-		}
-		case ART_GOTHMOG:
-		{
-#ifdef JP
-return "巨大ファイア・ボール(120) : 15 ターン毎";
-#else
-			return "large fire ball (120) every 15 turns";
-#endif
-
 		}
 		case ART_BRAND:
 		case ART_HELLFIRE:
 		{
 #ifdef JP
-return "刃先のファイア・ボルト : 999 ターン毎";
+			return "刃先のファイア・ボルト : 999 ターン毎";
 #else
 			return "fire branding of bolts every 999 turns";
 #endif
-
 		}
 		case ART_CRIMSON:
 		{
 #ifdef JP
-return "ファイア！ : 15 ターン毎";
+			return "ファイア！ : 15 ターン毎";
 #else
 			return "fire! every 15 turns";
 #endif
-
 		}
 		case ART_KUSANAGI:
 		case ART_WEREWINDLE:
 		{
 #ifdef JP
-return "逃走 : 35 ターン毎";
+			return "逃走 : 35 ターン毎";
 #else
 			return "a getaway every 35 turns";
 #endif
-
-		}
-		case ART_FINGOLFIN:
-		{
-#ifdef JP
-return "魔法の矢(150) : 90+d90 ターン毎";
-#else
-			return "a magical arrow (150) every 90+d90 turns";
-#endif
-
 		}
 		case ART_RAZORBACK:
 		{
 #ifdef JP
-return "スター・ボール(150) : 1000 ターン毎";
+			return "スター・ボール・ダスト(150) : 1000 ターン毎";
 #else
-			return "star ball (150) every 1000 turns";
+			return "star balls (150) every 1000 turns";
 #endif
-
 		}
 		case ART_BLADETURNER:
 		{
 #ifdef JP
-return "エレメントのブレス (300), 士気高揚、祝福、耐性";
+			return "エレメントのブレス (300), 士気高揚、祝福、耐性";
 #else
 			return "breathe elements (300), hero, bless, and resistance";
 #endif
-
-		}
-		case ART_JUDGE:
-		{
-#ifdef JP
-return "体力と引き替えに千里眼と帰還 : 20+d20 ターン毎";
-#else
-			return "clairvoyance and recall, draining you every 20+d20 turns";
-#endif
-
 		}
 		case ART_FRAKIR:
 		{
 #ifdef JP
-return "窒息攻撃(100) : 100+d100 ターン毎";
+			return "窒息攻撃(100) : 100+d100 ターン毎";
 #else
 			return "a strangling attack (100) every 100+d100 turns";
 #endif
-
-		}
-		case ART_POWER:
-		case ART_AHO:
-		{
-#ifdef JP
-return "信じ難いこと : 450+d450 ターン毎";
-#else
-			return "bizarre things every 450+d450 turns";
-#endif
-
 		}
 		case ART_PALANTIR:
 		{
 #ifdef JP
-return "この階にいるユニークモンスターを表示 : 200ターン毎";
+			return "この階にいるユニークモンスターを表示 : 200ターン毎";
 #else
 			return "list of the uniques on the level every 200 turns";
 #endif
@@ -796,7 +785,7 @@ return "この階にいるユニークモンスターを表示 : 200ターン毎";
 		case ART_STONE_LORE:
 		{
 #ifdef JP
-return "危険を伴う鑑定 : いつでも";
+			return "危険を伴う鑑定 : いつでも";
 #else
 			return "perilous identify every turn";
 #endif
@@ -804,7 +793,7 @@ return "危険を伴う鑑定 : いつでも";
 		case ART_FARAMIR:
 		{
 #ifdef JP
-return "害虫の駆除 : 55+d55ターン毎";
+			return "害虫の駆除 : 55+d55ターン毎";
 #else
 			return "dispel small life every 55+d55 turns";
 #endif
@@ -812,23 +801,15 @@ return "害虫の駆除 : 55+d55ターン毎";
 		case ART_BOROMIR:
 		{
 #ifdef JP
-return "モンスター恐慌 : 40+d40ターン毎";
+			return "モンスター恐慌 : 40+d40ターン毎";
 #else
 			return "frighten monsters every 40+d40 turns";
-#endif
-		}
-		case ART_ICANUS:
-		{
-#ifdef JP
-return "魔力の矢(120) : 120+d120 ターン毎";
-#else
-			return "a mana bolt (120) every 120+d120 turns";
 #endif
 		}
 		case ART_HURIN:
 		{
 #ifdef JP
-return "士気高揚, スピード(50+d50ターン) : 100+d200 ターン毎";
+			return "士気高揚, スピード(50+d50ターン) : 100+d200 ターン毎";
 #else
 			return "hero and +10 to speed (50) every 100+200d turns";
 #endif
@@ -836,7 +817,7 @@ return "士気高揚, スピード(50+d50ターン) : 100+d200 ターン毎";
 		case ART_GIL_GALAD:
 		{
 #ifdef JP
-return "眩しい光 : 250 ターン毎";
+			return "眩しい光 : 250 ターン毎";
 #else
 			return "blinding light every 250 turns";
 #endif
@@ -844,7 +825,7 @@ return "眩しい光 : 250 ターン毎";
 		case ART_YENDOR:
 		{
 #ifdef JP
-return "魔力充填 : 200 ターン毎";
+			return "魔力充填 : 200 ターン毎";
 #else
 			return "recharge item every 200 turns";
 #endif
@@ -852,114 +833,65 @@ return "魔力充填 : 200 ターン毎";
 		case ART_MURAMASA:
 		{
 #ifdef JP
-return "腕力の上昇 : 確率50%で壊れる";
+			return "腕力の上昇 : 確率50%で壊れる";
 #else
 			return "increase STR (destroyed 50%)";
-#endif
-		}
-		case ART_FLY_STONE:
-		{
-#ifdef JP
-return "魔力の嵐(400) : 250+d250ターン毎";
-#else
-			return "a mana storm every 250+d250 turns";
 #endif
 		}
 		case ART_JONES:
 		{
 #ifdef JP
-return "物体を引き寄せる(重量25kgまで) : 25+d25ターン毎";
+			return "物体を引き寄せる(重量25kgまで) : 25+d25ターン毎";
 #else
 			return "a telekinesis (500 lb) every 25+d25 turns";
 #endif
 		}
-		case ART_ARRYU:
-		{
-#ifdef JP
-return "ハウンド召喚 : 300+d150ターン毎";
-#else
-			return "summon hound every 300+d150 turns";
-#endif
-		}
-		case ART_GAEBOLG:
-		{
-#ifdef JP
-return "巨大スター・ボール(200) : 200+d200 ターン毎";
-#else
-			return "large star ball (200) every 200+d200 turns";
-#endif
-
-		}
 		case ART_INROU:
 		{
 #ifdef JP
-return "例のアレ : 150+d150 ターン毎";
+			return "例のアレ : 150+d150 ターン毎";
 #else
 			return "reveal your identity every 150+d150 turns";
 #endif
-
 		}
 		case ART_HYOUSIGI:
 		{
 #ifdef JP
-return "拍子木を打ちならす : いつでも";
+			return "拍子木を打ちならす : いつでも";
 #else
 			return "beat wooden clappers every turn";
 #endif
-
 		}
 		case ART_MATOI:
 		case ART_AEGISFANG:
 		{
 #ifdef JP
-return "士気高揚 : 30+d30ターン毎";
+			return "士気高揚 : 30+d30ターン毎";
 #else
 			return "heroism every 30+d30 turns";
 #endif
-
 		}
-
 		case ART_EARENDIL:
 		{
 #ifdef JP
-return "癒し : 100ターン毎";
+			return "癒し : 100ターン毎";
 #else
 			return "curing every 100 turns";
 #endif
-
-		}
-
-		case ART_ARUNRUTH:
-		{
-#ifdef JP
-return "アイス・ボルト(12d8) : 50 ターン毎";
-#else
-			return "frost bolt (12d8) every 50 turns";
-#endif
-
 		}
 		case ART_BLOOD:
 		{
 #ifdef JP
-return "属性変更 : 3333 ターン毎";
+			return "属性変更 : 3333 ターン毎";
 #else
 			return "change zokusei every 3333 turns";
-#endif
-
-		}
-		case ART_NUMAHOKO:
-		{
-#ifdef JP
-return "ウォーター・ボール(200) : 250 ターン毎";
-#else
-			return "water ball (200) every 250 turns";
 #endif
 
 		}
 		case ART_KESHO:
 		{
 #ifdef JP
-return "四股踏み : 100+d100ターン毎";
+			return "四股踏み : 100+d100ターン毎";
 #else
 			return "shiko every 100+d100 turns";
 #endif
@@ -968,7 +900,7 @@ return "四股踏み : 100+d100ターン毎";
 		case ART_MOOK:
 		{
 #ifdef JP
-return "冷気の耐性 : 40+d40ターン毎";
+			return "冷気の耐性 : 40+d40ターン毎";
 #else
 			return "resist cold every 40+d40 turns";
 #endif
@@ -977,25 +909,15 @@ return "冷気の耐性 : 40+d40ターン毎";
 		case ART_JIZO:
 		{
 #ifdef JP
-return "蛸の大群召喚 : 300+d150ターン毎";
+			return "蛸の大群召喚 : 300+d150ターン毎";
 #else
 			return "summon octopus every 300+d150 turns";
 #endif
 		}
-		case ART_NIGHT:
-		case ART_HELL:
-		{
-#ifdef JP
-return "暗黒の嵐(250) : 150+d150 ターン毎";
-#else
-			return "darkness storm (250) every 150+d150 turns";
-#endif
-
-		}
 		case ART_SACRED_KNIGHTS:
 		{
 #ifdef JP
-return "*解呪*と調査: いつでも";
+			return "*解呪*と調査: いつでも";
 #else
 			return "dispel curse and probing every turn";
 #endif
@@ -1004,7 +926,7 @@ return "*解呪*と調査: いつでも";
 		case ART_CHARMED:
 		{
 #ifdef JP
-return "魔力復活: 777 ターン毎";
+			return "魔力復活: 777 ターン毎";
 #else
 			return "restore mana every 777 turns";
 #endif
@@ -1016,11 +938,10 @@ return "魔力復活: 777 ターン毎";
 	if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_TSURIZAO))
 	{
 #ifdef JP
-return "釣りをする : いつでも";
+		return "釣りをする : いつでも";
 #else
 		return "fishing : every time";
 #endif
-
 	}
 
 	if (object_is_smith(o_ptr))

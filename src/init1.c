@@ -837,7 +837,7 @@ struct k_info_activation_flag
 	{ "DRAIN_2", ACT_DRAIN_2 },
 	{ "VAMPIRE_1", ACT_VAMPIRE_1 },
 	{ "BO_MISS_2", ACT_BO_MISS_2 },
-	{ "BA_FIRE_2", ACT_BA_FIRE_2 },
+	{ "BA_FIRE_3", ACT_BA_FIRE_3 },
 	{ "BA_COLD_3", ACT_BA_COLD_3 },
 	{ "BA_ELEC_3", ACT_BA_ELEC_3 },
 	{ "WHIRLWIND", ACT_WHIRLWIND },
@@ -847,6 +847,12 @@ struct k_info_activation_flag
 	{ "DISP_EVIL", ACT_DISP_EVIL },
 	{ "BA_MISS_3", ACT_BA_MISS_3 },
 	{ "DISP_GOOD", ACT_DISP_GOOD },
+	{ "BO_MANA", ACT_BO_MANA },
+	{ "BA_FIRE_2", ACT_BA_FIRE_2 },
+	{ "BA_WATER", ACT_BA_WATER },
+	{ "BA_STAR", ACT_BA_STAR },
+	{ "BA_DARK", ACT_BA_DARK },
+	{ "BA_MANA", ACT_BA_MANA },
 
 	{ "CONFUSE", ACT_CONFUSE },
 	{ "SLEEP", ACT_SLEEP },
@@ -867,6 +873,7 @@ struct k_info_activation_flag
 	{ "SUMMON_ELEMENTAL", ACT_SUMMON_ELEMENTAL },
 	{ "SUMMON_DEMON", ACT_SUMMON_DEMON },
 	{ "SUMMON_UNDEAD", ACT_SUMMON_UNDEAD },
+	{ "SUMMON_HOUND", ACT_SUMMON_HOUND },
 
 	{ "CURE_LW", ACT_CURE_LW },
 	{ "CURE_MW", ACT_CURE_MW },
@@ -901,6 +908,9 @@ struct k_info_activation_flag
 	{ "DIM_DOOR", ACT_DIM_DOOR },
 	{ "TELEPORT", ACT_TELEPORT },
 	{ "RECALL", ACT_RECALL },
+
+	{ "JUDGE", ACT_JUDGE },
+	{ "BIZARRE", ACT_BIZARRE },
 
 	{ NULL, 0 }
 };

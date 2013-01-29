@@ -132,6 +132,7 @@ W:70:90:5:150000
 P:0:1d1:0:0:0
 F:ACTIVATE | SEE_INVIS | HOLD_LIFE | RES_CONF | RES_CHAOS |
 F:INSTA_ART | SPEED | WIS | INT
+U:JUDGE
 D:$This crimson jewelry which is chained with a gold chain is
 D:$ deeply related to creation of this universe.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.3-10)
@@ -348,6 +349,7 @@ F:SUST_STR | SUST_DEX | SUST_CON |
 F:SUST_INT | SUST_WIS | SUST_CHR |
 F:INSTA_ART | XTRA_POWER | XTRA_H_RES |
 F:ESP_DEMON | ESP_UNDEAD
+U:BIZARRE
 D:$"One Ring to rule them all, One Ring to find them, One Ring to bring 
 D:$them all and in the darkness bind them."  Made of massive gold, and 
 D:$set with runes in the foul speech of Mordor, Isildur's Bane possesses 
@@ -368,6 +370,7 @@ F:STR | INT | WIS | DEX | CON | CHR | SPEED | HIDE_TYPE |
 F:ACTIVATE | CURSED | HEAVY_CURSE | PERMA_CURSE |
 F:AGGRAVATE | DRAIN_EXP | TY_CURSE |
 F:INSTA_ART
+U:BIZARRE
 D:$Adorned, showy gilding, 
 D:$set with runes in the strange speech of Heheh, with power so great that it 
 D:$inevitably twists and masters any earthly being who wears it.
@@ -1148,6 +1151,7 @@ W:40:15:40:110000
 P:5:1d1:10:10:20
 F:DEX | HIDE_TYPE |
 F:FREE_ACT | RES_ACID | ACTIVATE | SHOW_MODS | XTRA_POWER
+U:BO_MANA
 D:$The hand-sheathing of Fingolfin, warrior-king of Elves and Men, who gave 
 D:$Morgoth seven mighty wounds and pain that will last forever.
 D:フェアノール亡き後中つ国のノルドールを率いて冥王と戦った
@@ -2253,6 +2257,7 @@ I:21:12:0
 W:20:15:150:35000
 P:0:2d6:5:7:2
 F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE
+U:BA_FIRE_2
 D:$A famed battle-lord of old with a ruddy head, colored as embers are that
 D:$ can yet rise up in wrath.
 D:大きなルビーの球が鎖の先に付けられた、古の名高き戦鎚だ。
@@ -2389,7 +2394,7 @@ P:0:2d5:10:6:8
 F:WIS | INFRA | HIDE_TYPE | BLESSED |
 F:BRAND_COLD | SLAY_ORC | RES_COLD | RES_LITE | LITE | REGEN |
 F:ACTIVATE | SHOW_MODS | XTRA_H_RES
-U:DRAIN_2
+U:DRAIN_1
 D:$Wielded by the High Priest of Meneltarma, this great mace gleams coldly as 
 D:$though moonlit, and it can strike as mighty a blow spiritually as 
 D:$physically.
@@ -2537,6 +2542,7 @@ P:2:0d0:0:0:20
 F:INT | WIS | SEARCH | HIDE_TYPE | LEVITATION | ACTIVATE 
 F:SUST_INT | SUST_WIS | FREE_ACT | SEE_INVIS | DEC_MANA |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
+U:BO_MANA
 D:$The robe of the great wizard Gandalf, also known as Incanus in the 
 D:$lands of the South. It is proof against elements, for neither the 
 D:$heat of the South, nor the ice of the North, nor the acidy pits of Dol 
@@ -2754,6 +2760,7 @@ I:39:9:2
 W:60:60:10:60000
 P:0:1d1:0:0:0
 F:INT | CHR | SPEED | ACTIVATE | LEVITATION | HOLD_LIFE | INSTA_ART
+U:BA_MANA
 D:浮遊の力を与えてくれる青く仄光る宝石だ。
 
 N:148:『与一の弓』
@@ -2912,6 +2919,7 @@ F:STR | DEX | HIDE_TYPE | THROW |
 F:BRAND_ELEC | SLAY_EVIL | SLAY_GIANT |
 F:RES_ELEC | RES_LITE | RES_DARK |
 F:LITE | SEE_INVIS | RES_BLIND | SHOW_MODS | RIDING
+U:BA_STAR
 D:ケルトの英雄クーフーリンの、海竜の骨から削られた長槍だ。
 D:つねに目映く発せられるその閃光は敵の目をくらまし、
 D:逆に所有者の視力を守る。
@@ -2927,6 +2935,7 @@ F:SLAY_DRAGON | SLAY_DEMON | SLAY_ANIMAL | FREE_ACT | HOLD_LIFE |
 F:RES_COLD | RES_NEXUS |
 F:SEE_INVIS | SLOW_DIGEST | REGEN | ACTIVATE | 
 F:BLESSED | SHOW_MODS | RIDING | ESP_ANIMAL
+U:SUMMON_HOUND
 D:仙名を清源妙道真君、神仙族きっての武神である二郎真君の三尖刀だ。
 D:彼は悪竜や魔神、自然の妖魔を多数討伐した。
 
@@ -3167,6 +3176,7 @@ F:DEX | HIDE_TYPE |
 F:SLAY_DEMON | SLAY_ORC | FREE_ACT | RES_COLD | LEVITATION | 
 F:SLOW_DIGEST | ACTIVATE | SHOW_MODS |
 F:ESP_ORC | ESP_TROLL | ESP_GIANT | ESP_DEMON
+U:BA_COLD_2
 D:$The beautiful sword of Thingol, justly named "King's Ire".  It glistens
 D:$ icy enough to freeze the hearts of demons, and you feel supple and
 D:$ lightfooted as you clasp its hilt of gold and silver inlay.
@@ -3383,6 +3393,7 @@ F:WIS | CHR | SUST_WIS | SUST_CHR | HIDE_TYPE |
 F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD |
 F:RES_ACID | RES_COLD | RES_BLIND | RES_CHAOS |
 F:LITE | ACTIVATE | BLESSED | SEE_INVIS | SHOW_MODS
+U:BA_WATER
 D:「是に天つ神、諸の命以ちて、伊邪那岐命、伊邪那美命、
 D:二柱の神に、『是の多陀用弊流国を修め理り固め成せ。』
 D:と詔りて、天の沼矛を賜ひて、言依さし賜ひき。故、二柱
@@ -3523,6 +3534,7 @@ F:HEAVY_CURSE | CURSED | AGGRAVATE |
 F:BRAND_FIRE | IM_FIRE | RES_ELEC | RES_DARK | LITE
 F:SLAY_ANIMAL | SLAY_ORC | SLAY_TROLL | SLAY_GIANT | 
 F:ACTIVATE | SHOW_MODS
+U:BA_FIRE_2
 D:$With this unbearably bright whip of flame, the Balrog Gothmog has become
 D:$ known for never having lost in combat.
 D:この正視するもかなわぬ眩い炎のムチをひとたび手に取れば、
@@ -3566,6 +3578,7 @@ P:0:0d0:0:0:5
 F:STEALTH | SEARCH | HIDE_TYPE | SEE_INVIS |
 F:RES_DARK | ACTIVATE | LITE |
 F:INSTA_ART
+U:BA_DARK
 D:漆黒の宝玉がつけられた頸飾りだ。
 D:身に付けると自分が暗闇の中にいるのを感じる。
 
@@ -3604,6 +3617,7 @@ F:INT | WIS | CHR | STEALTH | SPEED | HIDE_TYPE |
 F:RES_DARK | RES_NETHER |
 F:SEE_INVIS | AGGRAVATE | ESP_UNDEAD | ACTIVATE |
 F:INSTA_ART
+U:BA_DARK
 D:地獄の囚人を拘束する首輪だ。多くの囚人の怨念が込められている。
 
 N:219:帯魔力ペンダント
