@@ -837,17 +837,13 @@ cptr item_activation(object_type *o_ptr)
 		}
 	}
 
+#if 0
 	/* Some artifacts can be activated */
 	switch (o_ptr->name1)
 	{
 		/* Nothing */
-	default:
-#ifdef JP
-		return "Ì¤ÄêµÁ";
-#else
-		return "something undefined";
-#endif
 	}
+#endif
 
 	if (object_is_smith(o_ptr))
 	{
