@@ -1048,10 +1048,11 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 		else if (type == ACT_DRAIN_1) total += 500;
 		else if (type == ACT_BA_COLD_2) total += 1250;
 		else if (type == ACT_BA_ELEC_2) total += 1500;
+		else if (type == ACT_BA_FIRE_2) total += 1500;
 		else if (type == ACT_DRAIN_2) total += 750;
 		else if (type == ACT_VAMPIRE_1) total += 1000;
 		else if (type == ACT_BO_MISS_2) total += 1000;
-		else if (type == ACT_BA_FIRE_2) total += 1750;
+		else if (type == ACT_BA_FIRE_3) total += 1750;
 		else if (type == ACT_BA_COLD_3) total += 2500;
 		else if (type == ACT_BA_ELEC_3) total += 2500;
 		else if (type == ACT_WHIRLWIND) total += 7500;
@@ -1060,6 +1061,11 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 		else if (type == ACT_ROCKET) total += 5000;
 		else if (type == ACT_DISP_EVIL) total += 4000;
 		else if (type == ACT_DISP_GOOD) total += 3500;
+		else if (type == ACT_BO_MANA) total += 1500;
+		else if (type == ACT_BA_WATER) total += 2000;
+		else if (type == ACT_BA_STAR) total += 2200;
+		else if (type == ACT_BA_DARK) total += 2200;
+		else if (type == ACT_BA_MANA) total += 2500;
 		else if (type == ACT_BA_MISS_3) total += 5000;
 		else if (type == ACT_CONFUSE) total += 500;
 		else if (type == ACT_SLEEP) total += 750;
@@ -1079,6 +1085,8 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 		else if (type == ACT_SUMMON_ELEMENTAL) total += 15000;
 		else if (type == ACT_SUMMON_DEMON) total += 20000;
 		else if (type == ACT_SUMMON_UNDEAD) total += 20000;
+		else if (type == ACT_SUMMON_HOUND) total += 15000;
+		else if (type == ACT_CHOIR_SINGS) total += 20000;
 		else if (type == ACT_CURE_LW) total += 500;
 		else if (type == ACT_CURE_MW) total += 750;
 		else if (type == ACT_CURE_POISON) total += 1000;
@@ -1086,14 +1094,23 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 		else if (type == ACT_REST_ALL) total += 15000;
 		else if (type == ACT_CURE_700) total += 10000;
 		else if (type == ACT_CURE_1000) total += 15000;
+		else if (type == ACT_CURING) total += 5000;
+		else if (type == ACT_CURE_MANA_FULL) total += 20000;
 		else if (type == ACT_ESP) total += 1500;
 		else if (type == ACT_BERSERK) total += 800;
 		else if (type == ACT_PROT_EVIL) total += 5000;
 		else if (type == ACT_RESIST_ALL) total += 5000;
 		else if (type == ACT_SPEED) total += 15000;
 		else if (type == ACT_XTRA_SPEED) total += 25000;
+		else if (type == ACT_RESIST_ACID) total += 2000;
+		else if (type == ACT_RESIST_FIRE) total += 2000;
+		else if (type == ACT_RESIST_COLD) total += 2000;
+		else if (type == ACT_RESIST_ELEC) total += 2000;
+		else if (type == ACT_RESIST_POIS) total += 2000;
 		else if (type == ACT_WRAITH) total += 25000;
 		else if (type == ACT_INVULN) total += 25000;
+		else if (type == ACT_HELO) total += 500;
+		else if (type == ACT_HELO_SPEED) total += 20000;
 		else if (type == ACT_LIGHT) total += 150;
 		else if (type == ACT_MAP_LIGHT) total += 500;
 		else if (type == ACT_DETECT_ALL) total += 1000;
@@ -1110,6 +1127,8 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 		else if (type == ACT_DIM_DOOR) total += 10000;
 		else if (type == ACT_TELEPORT) total += 2000;
 		else if (type == ACT_RECALL) total += 7500;
+		else if (type == ACT_TELEKINESIS) total += 5500;
+		else if (type == ACT_BRAND_FIRE_BOLTS) total += 20000;
 	}
 
 	return total;
@@ -4233,6 +4252,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		o_ptr->to_h = a_ptr->to_h;
 		o_ptr->to_d = a_ptr->to_d;
 		o_ptr->weight = a_ptr->weight;
+		o_ptr->xtra2 = a_ptr->act_idx;
 
 		/* Hack -- extract the "broken" flag */
 		if (!a_ptr->cost) o_ptr->ident |= (IDENT_BROKEN);

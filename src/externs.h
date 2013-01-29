@@ -1264,6 +1264,7 @@ extern int fire_dam(int dam, cptr kb_str, int monspell);
 extern int cold_dam(int dam, cptr kb_str, int monspell);
 extern bool rustproof(void);
 extern bool curse_armor(void);
+extern bool curse_weapon_object(bool force, object_type *o_ptr);
 extern bool curse_weapon(bool force, int slot);
 extern bool brand_bolts(void);
 extern bool polymorph_monster(int y, int x);

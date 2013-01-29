@@ -200,6 +200,8 @@ struct artifact_type
 	byte max_num;		/* Unused (should be "1") */
 
 	s16b floor_id;          /* Leaved on this location last time */
+
+	byte act_idx;		/* Activative ability index */
 };
 
 
@@ -231,6 +233,8 @@ struct ego_item_type
 	u32b flags[TR_FLAG_SIZE];	/* Ego-Item Flags */
 
 	u32b gen_flags;		/* flags for generate */
+
+	byte act_idx;		/* Activative ability index */
 };
 
 
@@ -527,10 +531,10 @@ struct object_type
 	byte name2;			/* Ego-Item type, if any */
 
 	byte xtra1;			/* Extra info type (now unused) */
-	byte xtra2;			/* Extra info index */
-	byte xtra3;			/* Extra info */
-	s16b xtra4;			/* Extra info */
-	s16b xtra5;			/* Extra info */
+	byte xtra2;			/* Extra info activation index */
+	byte xtra3;			/* Extra info for weaponsmith */
+	s16b xtra4;			/* Extra info fuel or captured monster's current HP */
+	s16b xtra5;			/* Extra info captured monster's max HP */
 
 	s16b to_h;			/* Plusses to hit */
 	s16b to_d;			/* Plusses to damage */

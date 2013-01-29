@@ -1483,6 +1483,7 @@ static void give_activation_power(object_type *o_ptr)
 			case ACT_REST_LIFE:
 				chance = 66;
 				break;
+			case ACT_BA_FIRE_3:
 			case ACT_BA_COLD_3:
 			case ACT_BA_ELEC_3:
 			case ACT_WHIRLWIND:
@@ -1972,12 +1973,14 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 }
 
 
-bool activate_random_artifact(object_type * o_ptr)
+bool activate_random_artifact(object_type *o_ptr)
 {
 	int plev = p_ptr->lev;
 	int k, dir, dummy = 0;
+	cptr name = k_name + k_info[o_ptr->k_idx].name;
 
-	if (!o_ptr->art_name) return FALSE; /* oops? */
+	/* Paranoia */
+	if (!o_ptr->xtra2) return FALSE;
 
 	/* Activate for attack */
 	switch (o_ptr->xtra2)
@@ -1990,7 +1993,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("A line of sunlight appears.");
 #endif
-
 			(void)lite_line(dir);
 			o_ptr->timeout = 10;
 			break;
@@ -2003,7 +2005,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows extremely brightly...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_MISSILE, dir, damroll(2, 6));
 			o_ptr->timeout = 2;
@@ -2017,7 +2018,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It throbs deep green...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_POIS, dir, 12, 3);
 			o_ptr->timeout = randint0(4) + 4;
@@ -2031,7 +2031,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It is covered in sparks...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ELEC, dir, damroll(4, 8));
 			o_ptr->timeout = randint0(5) + 5;
@@ -2045,7 +2044,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It is covered in acid...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ACID, dir, damroll(5, 8));
 			o_ptr->timeout = randint0(6) + 6;
@@ -2059,7 +2057,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It is covered in frost...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_COLD, dir, damroll(6, 8));
 			o_ptr->timeout = randint0(7) + 7;
@@ -2073,7 +2070,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It is covered in fire...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_FIRE, dir, damroll(9, 8));
 			o_ptr->timeout = randint0(8) + 8;
@@ -2087,10 +2083,9 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It is covered in frost...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_COLD, dir, 48, 2);
-			o_ptr->timeout = 400;
+			o_ptr->timeout = randint0(6) + 6;
 			break;
 		}
 
@@ -2101,21 +2096,19 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows an intense red...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_FIRE, dir, 72, 2);
-			o_ptr->timeout = 400;
+			o_ptr->timeout = randint0(9) + 9;
 			break;
 		}
 
 		case ACT_DRAIN_1:
 		{
 #ifdef JP
-			msg_print("それは黒く輝いた...");
+			msg_format("あなたは%sに敵を締め殺すよう命じた。", name);
 #else
-			msg_print("It glows black...");
+			msg_format("You order the %s to strangle your opponent.", name);
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			if (drain_life(dir, 100))
 			o_ptr->timeout = randint0(100) + 100;
@@ -2129,10 +2122,9 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows an intense blue...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_COLD, dir, 100, 2);
-			o_ptr->timeout = 300;
+			o_ptr->timeout = randint0(12) + 12;
 			break;
 		}
 
@@ -2143,10 +2135,22 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It crackles with electricity...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_ELEC, dir, 100, 3);
-			o_ptr->timeout = 500;
+			o_ptr->timeout = randint0(12) + 12;
+			break;
+		}
+
+		case ACT_BA_FIRE_2:
+		{
+#ifdef JP
+			msg_format("%sから炎が吹き出した...", name);
+#else
+			msg_format("The %s rages in fire...", name);
+#endif
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_FIRE, dir, 120, 3);
+			o_ptr->timeout = 15;
 			break;
 		}
 
@@ -2157,7 +2161,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows black...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			drain_life(dir, 120);
 			o_ptr->timeout = 400;
@@ -2183,23 +2186,21 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It grows magical spikes...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ARROW, dir, 150);
 			o_ptr->timeout = randint0(90) + 90;
 			break;
 		}
 
-		case ACT_BA_FIRE_2:
+		case ACT_BA_FIRE_3:
 		{
 #ifdef JP
 			msg_print("深赤色に輝いている...");
 #else
 			msg_print("It glows deep red...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_FIRE, dir, 120, 3);
+			fire_ball(GF_FIRE, dir, 300, 3);
 			o_ptr->timeout = randint0(225) + 225;
 			break;
 		}
@@ -2211,9 +2212,8 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows bright white...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_COLD, dir, 200, 3);
+			fire_ball(GF_COLD, dir, 400, 3);
 			o_ptr->timeout = randint0(325) + 325;
 			break;
 		}
@@ -2225,9 +2225,8 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows deep blue...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_ELEC, dir, 250, 3);
+			fire_ball(GF_ELEC, dir, 500, 3);
 			o_ptr->timeout = randint0(425) + 425;
 			break;
 		}
@@ -2278,7 +2277,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows in scintillating colours...");
 #endif
-
 			call_chaos();
 			o_ptr->timeout = 350;
 			break;
@@ -2292,7 +2290,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("You launch a rocket!");
 #endif
-
 			fire_ball(GF_ROCKET, dir, 250 + plev*3, 2);
 			o_ptr->timeout = 400;
 			break;
@@ -2305,22 +2302,8 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It floods the area with goodness...");
 #endif
-
 			dispel_evil(p_ptr->lev * 5);
-			o_ptr->timeout = randint0(300) + 300;
-			break;
-		}
-
-		case ACT_DISP_GOOD:
-		{
-#ifdef JP
-			msg_print("邪悪な雰囲気が充満した...");
-#else
-			msg_print("It floods the area with evil...");
-#endif
-
-			dispel_good(p_ptr->lev * 5);
-			o_ptr->timeout = randint0(300) + 300;
+			o_ptr->timeout = randint0(100) + 100;
 			break;
 		}
 
@@ -2332,9 +2315,168 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("You breathe the elements.");
 #endif
-
 			fire_ball(GF_MISSILE, dir, 300, 4);
 			o_ptr->timeout = 500;
+			break;
+		}
+
+		case ACT_DISP_GOOD:
+		{
+#ifdef JP
+			msg_print("邪悪な雰囲気が充満した...");
+#else
+			msg_print("It floods the area with evil...");
+#endif
+			dispel_good(p_ptr->lev * 5);
+			o_ptr->timeout = randint0(100) + 100;
+			break;
+		}
+
+		case ACT_BO_MANA:
+		{
+#ifdef JP
+			msg_format("%sに魔法のトゲが現れた...", name);
+#else
+			msg_format("The %s grows magical spikes...", name);
+#endif
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_bolt(GF_ARROW, dir, 150);
+			o_ptr->timeout = randint0(90) + 90;
+			break;
+		}
+
+		case ACT_BA_WATER:
+		{
+#ifdef JP
+			msg_format("%sが深い青色に鼓動している...", name);
+#else
+			msg_format("The %s throbs deep blue...", name);
+#endif
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_WATER, dir, 200, 3);
+			o_ptr->timeout = 250;
+			break;
+		}
+
+		case ACT_BA_DARK:
+		{
+#ifdef JP
+			msg_format("%sが深い闇に覆われた...", name);
+#else
+			msg_format("The %s is coverd in pitch-darkness...", name);
+#endif
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_DARK, dir, 250, 4);
+			o_ptr->timeout = randint0(150) + 150;
+			break;
+		}
+
+		case ACT_BA_MANA:
+		{
+#ifdef JP
+			msg_format("%sが青白く光った．．．", name);
+#else
+			msg_format("The %s glows pale...", name);
+#endif
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_MANA, dir, 400, 4);
+			o_ptr->timeout = randint0(250) + 250;
+			break;
+		}
+
+		case ACT_PESTICIDE:
+		{
+#ifdef JP
+			msg_print("あなたは害虫を一掃した。");
+#else
+			msg_print("You exterminate small life.");
+#endif
+			(void)dispel_monsters(4);
+			o_ptr->timeout = randint0(55) + 55;
+			break;
+		}
+
+		case ACT_BLINDING_LIGHT:
+		{
+#ifdef JP
+			msg_format("%sが眩しい光で輝いた...", name);
+#else
+			msg_format("The %s gleams with blinding light...", name);
+#endif
+			fire_ball(GF_LITE, 0, 300, 6);
+			confuse_monsters(3 * p_ptr->lev / 2);
+			o_ptr->timeout = 250;
+			break;
+		}
+
+		case ACT_BIZARRE:
+		{
+#ifdef JP
+			msg_format("%sは漆黒に輝いた...", name);
+#else
+			msg_format("The %s glows intensely black...", name);
+#endif
+			if (!get_aim_dir(&dir)) return FALSE;
+			ring_of_power(dir);
+			o_ptr->timeout = randint0(450) + 450;
+			break;
+		}
+
+		case ACT_CAST_BA_STAR:
+		{
+			int num = damroll(5, 3);
+			int y, x;
+			int attempts;
+#ifdef JP
+			msg_format("%sが稲妻で覆われた...", name);
+#else
+			msg_format("The %s is surrounded by lightning...", name);
+#endif
+			for (k = 0; k < num; k++)
+			{
+				attempts = 1000;
+
+				while (attempts--)
+				{
+					scatter(&y, &x, py, px, 4, 0);
+
+					if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
+
+					if (!player_bold(y, x)) break;
+				}
+
+				project(0, 3, y, x, 150, GF_ELEC,
+							(PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+			}
+
+			o_ptr->timeout = 1000;
+			break;
+		}
+
+		case ACT_BLADETURNER:
+		{
+			if (!get_aim_dir(&dir)) return FALSE;
+#ifdef JP
+			msg_print("あなたはエレメントのブレスを吐いた。");
+#else
+			msg_print("You breathe the elements.");
+#endif
+			fire_ball(GF_MISSILE, dir, 300, 4);
+#ifdef JP
+			msg_print("鎧が様々な色に輝いた...");
+#else
+			msg_print("Your armor glows many colours...");
+#endif
+			(void)set_afraid(0);
+			(void)set_hero(randint1(50) + 50, FALSE);
+			(void)hp_player(10);
+			(void)set_blessed(randint1(50) + 50, FALSE);
+			(void)set_oppose_acid(randint1(50) + 50, FALSE);
+			(void)set_oppose_elec(randint1(50) + 50, FALSE);
+			(void)set_oppose_fire(randint1(50) + 50, FALSE);
+			(void)set_oppose_cold(randint1(50) + 50, FALSE);
+			(void)set_oppose_pois(randint1(50) + 50, FALSE);
+			o_ptr->timeout = 400;
 			break;
 		}
 
@@ -2347,7 +2489,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows in scintillating colours...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			confuse_monster(dir, 20);
 			o_ptr->timeout = 15;
@@ -2361,7 +2502,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows deep blue...");
 #endif
-
 			sleep_monsters_touch();
 			o_ptr->timeout = 55;
 			break;
@@ -2398,7 +2538,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 				msg_print("The power of the artifact banishes evil!");
 #endif
-
 			}
 			o_ptr->timeout = 250 + randint1(250);
 			break;
@@ -2411,7 +2550,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows deep blue...");
 #endif
-
 			(void)symbol_genocide(200, TRUE);
 			o_ptr->timeout = 500;
 			break;
@@ -2424,9 +2562,44 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It lets out a long, shrill note...");
 #endif
-
 			(void)mass_genocide(200, TRUE);
 			o_ptr->timeout = 1000;
+			break;
+		}
+
+		case ACT_SCARE_AREA:
+		{
+			if (music_singing_any()) stop_singing();
+			if (hex_spelling_any()) stop_hex_spell_all();
+#ifdef JP
+			msg_print("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!");
+#else
+			msg_print("You wind a mighty blast; your enemies tremble!");
+#endif
+			(void)turn_monsters((3 * p_ptr->lev / 2) + 10);
+			o_ptr->timeout = randint0(40) + 40;
+			break;
+		}
+
+		case ACT_AGGRAVATE:
+		{
+			if (o_ptr->name1 == ART_HYOUSIGI)
+			{
+#ifdef JP
+				msg_print("拍子木を打った。");
+#else
+				msg_print("You beat Your wooden clappers.");
+#endif
+			}
+			else
+			{
+#ifdef JP
+				msg_format("%sは不快な物音を立てた。", name);
+#else
+				msg_format("The %s sounds an unpleasant noise.", name);
+#endif
+			}
+			aggravate_monsters(0);
 			break;
 		}
 
@@ -2435,15 +2608,15 @@ bool activate_random_artifact(object_type * o_ptr)
 		case ACT_CHARM_ANIMAL:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			(void)charm_animal(dir, plev);
-			o_ptr->timeout = 300;
+			(void)charm_animal(dir, plev * 2);
+			o_ptr->timeout = 200;
 			break;
 		}
 
 		case ACT_CHARM_UNDEAD:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			(void)control_one_undead(dir, plev);
+			(void)control_one_undead(dir, plev * 2);
 			o_ptr->timeout = 333;
 			break;
 		}
@@ -2451,7 +2624,7 @@ bool activate_random_artifact(object_type * o_ptr)
 		case ACT_CHARM_OTHER:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			(void)charm_monster(dir, plev);
+			(void)charm_monster(dir, plev * 2);
 			o_ptr->timeout = 400;
 			break;
 		}
@@ -2484,7 +2657,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("You summon a phantasmal servant.");
 #endif
-
 			(void)summon_specific(-1, py, px, dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			o_ptr->timeout = 200 + randint1(200);
 			break;
@@ -2506,22 +2678,18 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 				msg_print("An elemental materializes...");
 #endif
-
-
 				if (pet)
 #ifdef JP
 					msg_print("あなたに服従しているようだ。");
 #else
 					msg_print("It seems obedient to you.");
 #endif
-
 				else
 #ifdef JP
 					msg_print("それをコントロールできなかった！");
 #else
 					msg_print("You fail to control it!");
 #endif
-
 			}
 
 			o_ptr->timeout = 750;
@@ -2544,21 +2712,18 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 				msg_print("The area fills with a stench of sulphur and brimstone.");
 #endif
-
 				if (pet)
 #ifdef JP
 					msg_print("「ご用でございますか、ご主人様」");
 #else
 					msg_print("'What is thy bidding... Master?'");
 #endif
-
 				else
 #ifdef JP
 					msg_print("「NON SERVIAM! Wretch! お前の魂を頂くぞ！」");
 #else
 					msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'");
 #endif
-
 			}
 
 			o_ptr->timeout = 666 + randint1(333);
@@ -2584,28 +2749,112 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 				msg_print("Cold winds begin to blow around you, carrying with them the stench of decay...");
 #endif
-
 				if (pet)
 #ifdef JP
 					msg_print("古えの死せる者共があなたに仕えるため土から甦った！");
 #else
 					msg_print("Ancient, long-dead forms arise from the ground to serve you!");
 #endif
-
 				else
 #ifdef JP
 					msg_print("死者が甦った。眠りを妨げるあなたを罰するために！");
 #else
 					msg_print("'The dead arise... to punish you for disturbing them!'");
 #endif
-
 			}
 
 			o_ptr->timeout = 666 + randint1(333);
 			break;
 		}
 
+		case ACT_SUMMON_HOUND:
+		{
+			u32b mode = PM_ALLOW_GROUP;
+			bool pet = !one_in_(5);
+			if (pet) mode |= PM_FORCE_PET;
+			else mode |= PM_NO_PET;
+
+			if (summon_specific((pet ? -1 : 0), py, px, ((p_ptr->lev * 3) / 2), SUMMON_HOUND, mode))
+			{
+
+				if (pet)
+#ifdef JP
+					msg_print("ハウンドがあなたの下僕として出現した。");
+#else
+				msg_print("A group of hounds appear as your servant.");
+#endif
+
+				else
+#ifdef JP
+					msg_print("ハウンドはあなたに牙を向けている！");
+#else
+					msg_print("A group of hounds appear as your enemy!");
+#endif
+
+			}
+
+			o_ptr->timeout = 300 + randint1(150);
+			break;
+		}
+
+		case ACT_SUMMON_DAWN:
+		{
+#ifdef JP
+			msg_print("暁の師団を召喚した。");
+#else
+			msg_print("You summon the Legion of the Dawn.");
+#endif
+			(void)summon_specific(-1, py, px, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
+			o_ptr->timeout = 500 + randint1(500);
+			break;
+		}
+
+		case ACT_SUMMON_OCTOPUS:
+		{
+			u32b mode = PM_ALLOW_GROUP;
+			bool pet = !one_in_(5);
+			if (pet) mode |= PM_FORCE_PET;
+
+			if (summon_named_creature(0, py, px, MON_JIZOTAKO, mode))
+			{
+				if (pet)
+#ifdef JP
+					msg_print("蛸があなたの下僕として出現した。");
+#else
+					msg_print("A group of octopuses appear as your servant.");
+#endif
+				else
+#ifdef JP
+					msg_print("蛸はあなたを睨んでいる！");
+#else
+					msg_print("A group of octopuses appear as your enemy!");
+#endif
+			}
+
+			o_ptr->timeout = 300 + randint1(150);
+			break;
+		}
+
 		/* Activate for healing */
+
+		case ACT_CHOIR_SINGS:
+		{
+#ifdef JP
+			msg_print("天国の歌が聞こえる...");
+#else
+			msg_print("A heavenly choir sings...");
+#endif
+			(void)set_poisoned(0);
+			(void)set_cut(0);
+			(void)set_stun(0);
+			(void)set_confused(0);
+			(void)set_blind(0);
+			(void)set_afraid(0);
+			(void)set_hero(randint1(25) + 25, FALSE);
+			(void)hp_player(777);
+			o_ptr->timeout = 300;
+			break;
+		}
 
 		case ACT_CURE_LW:
 		{
@@ -2622,7 +2871,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It radiates deep purple...");
 #endif
-
 			hp_player(damroll(4, 8));
 			(void)set_cut((p_ptr->cut / 2) - 50);
 			o_ptr->timeout = randint0(3) + 3;
@@ -2636,7 +2884,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows deep blue...");
 #endif
-
 			(void)set_afraid(0);
 			(void)set_poisoned(0);
 			o_ptr->timeout = 5;
@@ -2650,7 +2897,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows a deep red...");
 #endif
-
 			restore_level();
 			o_ptr->timeout = 450;
 			break;
@@ -2663,7 +2909,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows a deep green...");
 #endif
-
 			(void)do_res_stat(A_STR);
 			(void)do_res_stat(A_INT);
 			(void)do_res_stat(A_WIS);
@@ -2679,16 +2924,11 @@ bool activate_random_artifact(object_type * o_ptr)
 		{
 #ifdef JP
 			msg_print("深青色に輝いている...");
-#else
-			msg_print("It glows deep blue...");
-#endif
-
-#ifdef JP
 			msg_print("体内に暖かい鼓動が感じられる...");
 #else
+			msg_print("It glows deep blue...");
 			msg_print("You feel a warm tingling inside...");
 #endif
-
 			(void)hp_player(700);
 			(void)set_cut(0);
 			o_ptr->timeout = 250;
@@ -2699,19 +2939,77 @@ bool activate_random_artifact(object_type * o_ptr)
 		{
 #ifdef JP
 			msg_print("白く明るく輝いている...");
-#else
-			msg_print("It glows a bright white...");
-#endif
-
-#ifdef JP
 			msg_print("ひじょうに気分がよい...");
 #else
+			msg_print("It glows a bright white...");
 			msg_print("You feel much better...");
 #endif
-
 			(void)hp_player(1000);
 			(void)set_cut(0);
 			o_ptr->timeout = 888;
+			break;
+		}
+
+		case ACT_CURING:
+		{
+#ifdef JP
+			msg_format("%sの優しさに癒される...", name);
+#else
+			msg_format("the %s cures you affectionately ...", name);
+#endif
+			(void)set_poisoned(0);
+			(void)set_confused(0);
+			(void)set_blind(0);
+			(void)set_stun(0);
+			(void)set_cut(0);
+			(void)set_image(0);
+
+			o_ptr->timeout = 100;
+			break;
+		}
+
+		case ACT_CURE_MANA_FULL:
+		{
+#ifdef JP
+			msg_format("%sが青白く光った．．．", name);
+#else
+			msg_format("The %s glows pale...", name);
+#endif
+			if (p_ptr->pclass == CLASS_MAGIC_EATER)
+			{
+				int i;
+				for (i = 0; i < EATER_EXT*2; i++)
+				{
+					p_ptr->magic_num1[i] += (p_ptr->magic_num2[i] < 10) ? EATER_CHARGE * 3 : p_ptr->magic_num2[i]*EATER_CHARGE/3;
+					if (p_ptr->magic_num1[i] > p_ptr->magic_num2[i]*EATER_CHARGE) p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
+				}
+				for (; i < EATER_EXT*3; i++)
+				{
+					int k_idx = lookup_kind(TV_ROD, i-EATER_EXT*2);
+					p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
+					if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
+				}
+#ifdef JP
+				msg_print("頭がハッキリとした。");
+#else
+				msg_print("You feel your head clear.");
+#endif
+				p_ptr->window |= (PW_PLAYER);
+			}
+			else if (p_ptr->csp < p_ptr->msp)
+			{
+				p_ptr->csp = p_ptr->msp;
+				p_ptr->csp_frac = 0;
+#ifdef JP
+				msg_print("頭がハッキリとした。");
+#else
+				msg_print("You feel your head clear.");
+#endif
+				p_ptr->redraw |= (PR_MANA);
+				p_ptr->window |= (PW_PLAYER);
+				p_ptr->window |= (PW_SPELL);
+			}
+			o_ptr->timeout = 777;
 			break;
 		}
 
@@ -2736,14 +3034,13 @@ bool activate_random_artifact(object_type * o_ptr)
 		case ACT_PROT_EVIL:
 		{
 #ifdef JP
-			msg_print("鋭い音が流れ出た...");
+			msg_format("%sから鋭い音が流れ出た...", name);
 #else
-			msg_print("It lets out a shrill wail...");
+			msg_format("The %s lets out a shrill wail...", name);
 #endif
-
 			k = 3 * p_ptr->lev;
 			(void)set_protevil(randint1(25) + k, FALSE);
-			o_ptr->timeout = randint0(225) + 225;
+			o_ptr->timeout = randint0(200) + 200;
 			break;
 		}
 
@@ -2754,7 +3051,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows many colours...");
 #endif
-
 			(void)set_oppose_acid(randint1(40) + 40, FALSE);
 			(void)set_oppose_elec(randint1(40) + 40, FALSE);
 			(void)set_oppose_fire(randint1(40) + 40, FALSE);
@@ -2771,9 +3067,8 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows bright green...");
 #endif
-
 			(void)set_fast(randint1(20) + 20, FALSE);
-			o_ptr->timeout = 250;
+			o_ptr->timeout = randint0(100) + 100;
 			break;
 		}
 
@@ -2784,9 +3079,8 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows brightly...");
 #endif
-
 			(void)set_fast(randint1(75) + 75, FALSE);
-			o_ptr->timeout = randint0(200) + 200;
+			o_ptr->timeout = randint0(100) + 100;
 			break;
 		}
 
@@ -2804,16 +3098,94 @@ bool activate_random_artifact(object_type * o_ptr)
 			break;
 		}
 
+		case ACT_HELO:
+		{
+			(void)set_afraid(0);
+			set_hero(randint1(25)+25, FALSE);
+			hp_player(10);
+			o_ptr->timeout = randint0(30) + 30;
+			break;
+		}
+
+		case ACT_HELO_SPEED:
+		{
+			(void)set_fast(randint1(50) + 50, FALSE);
+			hp_player(10);
+			set_afraid(0);
+			set_hero(randint1(50) + 50, FALSE);
+			o_ptr->timeout = randint0(200) + 100;
+			break;
+		}
+
+		case ACT_RESIST_ACID:
+		{
+#ifdef JP
+			msg_format("%sが黒く輝いた...", name);
+#else
+			msg_format("The %s grows black.", name);
+#endif
+			(void)set_oppose_acid(randint1(20) + 20, FALSE);
+			o_ptr->timeout = 40 + randint1(40);
+			break;
+		}
+
+		case ACT_RESIST_FIRE:
+		{
+#ifdef JP
+			msg_format("%sが赤く輝いた...", name);
+#else
+			msg_format("The %s grows red.", name);
+#endif
+			(void)set_oppose_fire(randint1(20) + 20, FALSE);
+			o_ptr->timeout = 40 + randint1(40);
+			break;
+		}
+
+		case ACT_RESIST_COLD:
+		{
+#ifdef JP
+			msg_format("%sが白く輝いた...", name);
+#else
+			msg_format("The %s grows white.", name);
+#endif
+			(void)set_oppose_cold(randint1(20) + 20, FALSE);
+			o_ptr->timeout = 40 + randint1(40);
+			break;
+		}
+
+		case ACT_RESIST_ELEC:
+		{
+#ifdef JP
+			msg_format("%sが青く輝いた...", name);
+#else
+			msg_format("The %s grows blue.", name);
+#endif
+			(void)set_oppose_cold(randint1(20) + 20, FALSE);
+			o_ptr->timeout = 40 + randint1(40);
+			break;
+		}
+
+		case ACT_RESIST_POIS:
+		{
+#ifdef JP
+			msg_format("%sが緑に輝いた...", name);
+#else
+			msg_format("The %s grows green.", name);
+#endif
+			(void)set_oppose_cold(randint1(20) + 20, FALSE);
+			o_ptr->timeout = 40 + randint1(40);
+			break;
+		}
+
 		/* Activate for general purpose effect (detection etc.) */
 
 		case ACT_LIGHT:
 		{
 #ifdef JP
-			msg_print("澄んだ光があふれ出た...");
+			msg_format("%sから澄んだ光があふれ出た...", name);
 #else
-			msg_print("It wells with clear light...");
+			msg_format("The %s wells with clear light...", name);
 #endif
-
 			lite_area(damroll(2, 15), 3);
 			o_ptr->timeout = randint0(10) + 10;
 			break;
@@ -2826,7 +3198,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It shines brightly...");
 #endif
-
 			map_area(DETECT_RAD_MAP);
 			lite_area(damroll(2, 15), 3);
 			o_ptr->timeout = randint0(50) + 50;
@@ -2837,16 +3208,11 @@ bool activate_random_artifact(object_type * o_ptr)
 		{
 #ifdef JP
 			msg_print("白く明るく輝いている...");
-#else
-			msg_print("It glows bright white...");
-#endif
-
-#ifdef JP
 			msg_print("心にイメージが浮かんできた...");
 #else
+			msg_print("It glows bright white...");
 			msg_print("An image forms in your mind...");
 #endif
-
 			detect_all(DETECT_RAD_DEFAULT);
 			o_ptr->timeout = randint0(55) + 55;
 			break;
@@ -2859,11 +3225,10 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows brightly...");
 #endif
-
 			detect_all(DETECT_RAD_DEFAULT);
 			probing();
 			identify_fully(FALSE);
-			o_ptr->timeout = 1000;
+			o_ptr->timeout = 100;
 			break;
 		}
 
@@ -2874,9 +3239,8 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows yellow...");
 #endif
-
 			identify_fully(FALSE);
-			o_ptr->timeout = 750;
+			o_ptr->timeout = 75;
 			break;
 		}
 
@@ -2894,7 +3258,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows bright red...");
 #endif
-
 			explosive_rune();
 			o_ptr->timeout = 200;
 			break;
@@ -2907,7 +3270,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows light blue...");
 #endif
-
 			warding_glyph();
 			o_ptr->timeout = 400;
 			break;
@@ -2927,7 +3289,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows bright red...");
 #endif
-
 			destroy_doors_touch();
 			o_ptr->timeout = 10;
 			break;
@@ -2940,10 +3301,9 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It pulsates...");
 #endif
-
 			if (!get_aim_dir(&dir)) return FALSE;
 			wall_to_mud(dir);
-			o_ptr->timeout = 5;
+			o_ptr->timeout = 3;
 			break;
 		}
 
@@ -2961,7 +3321,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It glows bright yellow...");
 #endif
-
 			(void)alchemy();
 			o_ptr->timeout = 500;
 			break;
@@ -2974,7 +3333,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("You open a dimensional gate. Choose a destination.");
 #endif
-
 			if (!dimension_door()) return FALSE;
 			o_ptr->timeout = 100;
 			break;
@@ -2988,9 +3346,8 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_print("It twists space around you...");
 #endif
-
 			teleport_player(100, 0L);
-			o_ptr->timeout = 45;
+			o_ptr->timeout = 25;
 			break;
 		}
 
@@ -3006,6 +3363,432 @@ bool activate_random_artifact(object_type * o_ptr)
 			break;
 		}
 
+		case ACT_JUDGE:
+		{
+#ifdef JP
+			msg_format("%sは赤く明るく光った！", name);
+#else
+			msg_format("The %s flashes bright red!", name);
+#endif
+			chg_virtue(V_KNOWLEDGE, 1);
+			chg_virtue(V_ENLIGHTEN, 1);
+			wiz_lite(FALSE);
+#ifdef JP
+			msg_format("%sはあなたの体力を奪った...", name);
+			take_hit(DAMAGE_LOSELIFE, damroll(3,8), "審判の宝石", -1);
+#else
+			msg_format("The %s drains your vitality...", name);
+			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "the Jewel of Judgement", -1);
+#endif
+			(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
+			(void)detect_doors(DETECT_RAD_DEFAULT);
+			(void)detect_stairs(DETECT_RAD_DEFAULT);
+#ifdef JP
+			if (get_check("帰還の力を使いますか？"))
+#else
+			if (get_check("Activate recall? "))
+#endif
+			{
+				(void)word_of_recall();
+			}
+
+			o_ptr->timeout = randint0(20) + 20;
+			break;
+		}
+
+		case ACT_TELEKINESIS:
+		{
+			if (!get_aim_dir(&dir)) return FALSE;
+#ifdef JP
+			msg_format("%sを伸ばした。", name);
+#else
+			msg_format("You stretched your %s.", name);
+#endif
+			fetch(dir, 500, TRUE);
+			o_ptr->timeout = randint0(25) + 25;
+			break;
+		}
+
+		case ACT_DETECT_UNIQUE:
+		{
+			int i;
+			monster_type *m_ptr;
+			monster_race *r_ptr;
+#ifdef JP
+			msg_print("奇妙な場所が頭の中に浮かんだ．．．");
+#else
+			msg_print("Some strange places show up in your mind. And you see ...");
+#endif
+			/* Process the monsters (backwards) */
+			for (i = m_max - 1; i >= 1; i--)
+			{
+				/* Access the monster */
+				m_ptr = &m_list[i];
+
+				/* Ignore "dead" monsters */
+				if (!m_ptr->r_idx) continue;
+
+				r_ptr = &r_info[m_ptr->r_idx];
+
+				if(r_ptr->flags1 & RF1_UNIQUE)
+				{
+#ifdef JP
+					msg_format("%s． ",r_name + r_ptr->name);
+#else
+					msg_format("%s. ",r_name + r_ptr->name);
+#endif
+				}
+			}
+			o_ptr->timeout = 200;
+			break;
+		}
+
+		case ACT_ESCAPE:
+		{
+			switch (randint1(13))
+			{
+			case 1: case 2: case 3: case 4: case 5:
+				teleport_player(10, 0L);
+				break;
+			case 6: case 7: case 8: case 9: case 10:
+				teleport_player(222, 0L);
+				break;
+			case 11: case 12:
+				(void)stair_creation();
+				break;
+			default:
+#ifdef JP
+				if (get_check("この階を去りますか？"))
+#else
+				if (get_check("Leave this level? "))
+#endif
+				{
+					if (autosave_l) do_cmd_save_game(TRUE);
+
+					/* Leaving */
+					p_ptr->leaving = TRUE;
+				}
+			}
+			o_ptr->timeout = 35;
+			break;
+		}
+
+		case ACT_DISP_CURSE_XTRA:
+		{
+#ifdef JP
+			msg_format("%sが真実を照らし出す...", name);
+#else
+			msg_format("The %s exhibits the truth...", name);
+#endif
+			if (remove_all_curse())
+			{
+#ifdef JP
+				msg_print("誰かに見守られているような気がする。");
+#else
+				msg_print("You feel as if someone is watching over you.");
+#endif
+			}
+			(void)probing();
+			break;
+		}
+
+		case ACT_BRAND_FIRE_BOLTS:
+		{
+#ifdef JP
+			msg_format("%sが深紅に輝いた...", name);
+#else
+			msg_format("Your %s glows deep red...", name);
+#endif
+			(void)brand_bolts();
+			o_ptr->timeout = 999;
+			break;
+		}
+
+		case ACT_RECHARGE_XTRA:
+		{
+#ifdef JP
+			msg_format("%sが白く輝いた．．．", name);
+#else
+			msg_format("The %s gleams with blinding light...", name);
+#endif
+			if (!recharge(1000)) return FALSE;
+			o_ptr->timeout = 200;
+			break;
+		}
+
+		case ACT_LORE:
+		{
+#ifdef JP
+			msg_print("石が隠された秘密を写し出した．．．");
+#else
+			msg_print("The stone reveals hidden mysteries...");
+#endif
+			if (!ident_spell(FALSE)) return FALSE;
+
+			if (mp_ptr->spell_book)
+			{
+				/* Sufficient mana */
+				if (20 <= p_ptr->csp)
+				{
+					/* Use some mana */
+					p_ptr->csp -= 20;
+				}
+
+				/* Over-exert the player */
+				else
+				{
+					int oops = 20 - p_ptr->csp;
+
+					/* No mana left */
+					p_ptr->csp = 0;
+					p_ptr->csp_frac = 0;
+
+					/* Message */
+#ifdef JP
+					msg_print("石を制御できない！");
+#else
+					msg_print("You are too weak to control the stone!");
+#endif
+					/* Hack -- Bypass free action */
+					(void)set_paralyzed(p_ptr->paralyzed +
+						randint1(5 * oops + 1));
+
+					/* Confusing. */
+					(void)set_confused(p_ptr->confused +
+						randint1(5 * oops + 1));
+				}
+
+				/* Redraw mana */
+				p_ptr->redraw |= (PR_MANA);
+			}
+#ifdef JP
+			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), "危険な秘密", -1);
+#else
+			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), "perilous secrets", -1);
+#endif
+			/* Confusing. */
+			if (one_in_(5)) (void)set_confused(p_ptr->confused +
+				randint1(10));
+
+			/* Exercise a little care... */
+			if (one_in_(20))
+#ifdef JP
+				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "危険な秘密", -1);
+#else
+				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "perilous secrets", -1);
+#endif
+			o_ptr->timeout = 0;
+			break;
+		}
+
+		case ACT_SHIKOFUMI:
+		{
+#ifdef JP
+			msg_print("力強く四股を踏んだ。");
+#else
+			msg_print("You stamp. (as if you are in a ring.)");
+#endif
+			(void)set_afraid(0);
+			(void)set_hero(randint1(20) + 20, FALSE);
+			dispel_evil(p_ptr->lev * 3);
+			o_ptr->timeout = 100 + randint1(100);
+			break;
+		}
+
+		/* Unique activation */
+		case ACT_FISHING:
+		{
+			int x, y;
+
+			if (!get_rep_dir2(&dir)) return FALSE;
+			y = py+ddy[dir];
+			x = px+ddx[dir];
+			tsuri_dir = dir;
+			if (!cave_have_flag_bold(y, x, FF_WATER))
+			{
+#ifdef JP
+				msg_print("そこは水辺ではない。");
+#else
+				msg_print("There is no fishing place.");
+#endif
+				return FALSE;
+			}
+			else if (cave[y][x].m_idx)
+			{
+				char m_name[80];
+				monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
+#ifdef JP
+				msg_format("%sが邪魔だ！", m_name);
+#else
+				msg_format("%^s is stand in your way.", m_name);
+#endif
+				energy_use = 0;
+				return FALSE;
+			}
+			set_action(ACTION_FISH);
+			p_ptr->redraw |= (PR_STATE);
+			break;
+		}
+
+		case ACT_INROU:
+		{
+			int count = 0, i;
+			monster_type *m_ptr;
+#ifndef JP
+			cptr kakusan = "";
+#endif
+			if (summon_named_creature(0, py, px, MON_SUKE, PM_FORCE_PET))
+			{
+#ifdef JP
+				msg_print("『助さん』が現れた。");
+#else
+				msg_print("Suke-san apperars.");
+				kakusan = "Suke-san";
+#endif
+				count++;
+			}
+			if (summon_named_creature(0, py, px, MON_KAKU, PM_FORCE_PET))
+			{
+#ifdef JP
+				msg_print("『格さん』が現れた。");
+#else
+				msg_print("Kaku-san appears.");
+				kakusan = "Kaku-san";
+#endif
+				count++;
+			}
+			if (!count)
+			{
+				for (i = m_max - 1; i > 0; i--)
+				{
+					m_ptr = &m_list[i];
+					if (!m_ptr->r_idx) continue;
+					if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
+					if (!los(m_ptr->fy, m_ptr->fx, py, px)) continue;
+					if (!projectable(m_ptr->fy, m_ptr->fx, py, px)) continue;
+					count++;
+					break;
+				}
+			}
+
+			if (count)
+			{
+#ifdef JP
+				msg_print("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」");
+#else
+				msg_format("%^s says 'WHO do you think this person is! Bow your head, down your knees!'", kakusan);
+#endif
+				sukekaku = TRUE;
+				stun_monsters(120);
+				confuse_monsters(120);
+				turn_monsters(120);
+				stasis_monsters(120);
+				sukekaku = FALSE;
+			}
+			else
+			{
+#ifdef JP
+				msg_print("しかし、何も起きなかった。");
+#else
+				msg_print("Nothing happen.");
+#endif
+			}
+			o_ptr->timeout = randint0(150) + 150;
+			break;
+		}
+
+		case ACT_MURAMASA:
+		{
+			/* Only for Muramasa */
+			if (o_ptr->name1 != ART_MURAMASA) return FALSE;
+#ifdef JP
+			if (get_check("本当に使いますか？"))
+#else
+			if (get_check("Are you sure?!"))
+#endif
+			{
+#ifdef JP
+				msg_print("村正が震えた．．．");
+#else
+				msg_print("The Muramasa pulsates...");
+#endif
+				do_inc_stat(A_STR);
+				if (one_in_(2))
+				{
+#ifdef JP
+					msg_print("村正は壊れた！");
+#else
+					msg_print("The Muramasa is destroyed!");
+#endif
+					curse_weapon_object(TRUE, o_ptr);
+				}
+			}
+			break;
+		}
+
+		case ACT_BLOODY_MOON:
+		{
+			/* Only for Bloody Moon */
+			if (o_ptr->name1 != ART_BLOOD) return FALSE;
+#ifdef JP
+			msg_print("鎌が明るく輝いた...");
+#else
+			msg_print("Your scythe glows brightly!");
+#endif
+			get_bloody_moon_flags(o_ptr);
+			o_ptr->timeout = 3333;
+			if (p_ptr->prace == RACE_ANDROID) calc_android_exp();
+			p_ptr->update |= (PU_BONUS | PU_HP);
+			break;
+		}
+
+		case ACT_CRIMSON:
+		{
+			int num = 1;
+			int i;
+			int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+			int tx, ty;
+
+			/* Only for Crimson */
+			if (o_ptr->name1 != ART_CRIMSON) return FALSE;
+
+#ifdef JP
+			msg_print("せっかくだから『クリムゾン』をぶっぱなすぜ！");
+#else
+			msg_print("I'll fire CRIMSON! SEKKAKUDAKARA!");
+#endif
+
+			if (!get_aim_dir(&dir)) return FALSE;
+
+			/* Use the given direction */
+			tx = px + 99 * ddx[dir];
+			ty = py + 99 * ddy[dir];
+
+			/* Hack -- Use an actual "target" */
+			if ((dir == 5) && target_okay())
+			{
+				tx = target_col;
+				ty = target_row;
+			}
+
+			if (p_ptr->pclass == CLASS_ARCHER)
+			{
+				/* Extra shot at level 10 */
+				if (p_ptr->lev >= 10) num++;
+
+				/* Extra shot at level 30 */
+				if (p_ptr->lev >= 30) num++;
+
+				/* Extra shot at level 45 */
+				if (p_ptr->lev >= 45) num++;
+			}
+
+			for (i = 0; i < num; i++)
+				project(0, p_ptr->lev/20+1, ty, tx, p_ptr->lev*p_ptr->lev*6/50, GF_ROCKET, flg, -1);
+			o_ptr->timeout = 15;
+			break;
+		}
+
 		default:
 		{
 #ifdef JP
@@ -3013,7 +3796,6 @@ bool activate_random_artifact(object_type * o_ptr)
 #else
 			msg_format("Unknown activation effect: %d.", o_ptr->xtra2);
 #endif
-
 			return FALSE;
 		}
 	}
@@ -3160,6 +3942,7 @@ bool create_named_art(int a_idx, int y, int x)
 	q_ptr->to_h = a_ptr->to_h;
 	q_ptr->to_d = a_ptr->to_d;
 	q_ptr->weight = a_ptr->weight;
+	q_ptr->xtra2 = a_ptr->act_idx;
 
 	/* Hack -- extract the "cursed" flag */
 	if (a_ptr->gen_flags & TRG_CURSED) q_ptr->curse_flags |= (TRC_CURSED);

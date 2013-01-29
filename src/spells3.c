@@ -5298,21 +5298,13 @@ msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 /*
  * Curse the players weapon
  */
-bool curse_weapon(bool force, int slot)
+bool curse_weapon_object(bool force, object_type *o_ptr)
 {
 	int i;
-
-	object_type *o_ptr;
-
 	char o_name[MAX_NLEN];
-
-
-	/* Curse the weapon */
-	o_ptr = &inventory[slot];
 
 	/* Nothing to curse */
 	if (!o_ptr->k_idx) return (FALSE);
-
 
 	/* Describe */
 	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
@@ -5322,13 +5314,12 @@ bool curse_weapon(bool force, int slot)
 	{
 		/* Cool */
 #ifdef JP
-msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！",
-"恐怖の暗黒オーラ", "武器", o_name);
+		msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！",
+				"恐怖の暗黒オーラ", "武器", o_name);
 #else
 		msg_format("A %s tries to %s, but your %s resists the effects!",
-			   "terrible black aura", "surround your weapon", o_name);
+				"terrible black aura", "surround your weapon", o_name);
 #endif
-
 	}
 
 	/* not artifact or failed save... */
@@ -5336,11 +5327,10 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！",
 	{
 		/* Oops */
 #ifdef JP
-if (!force) msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
+		if (!force) msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 #else
 		if (!force) msg_format("A terrible black aura blasts your %s!", o_name);
 #endif
-
 		chg_virtue(V_ENCHANT, -5);
 
 		/* Shatter the weapon */
@@ -5355,7 +5345,6 @@ if (!force) msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 
 		for (i = 0; i < TR_FLAG_SIZE; i++)
 			o_ptr->art_flags[i] = 0;
-
 
 		/* Curse it */
 		o_ptr->curse_flags = TRC_CURSED;
@@ -5375,6 +5364,12 @@ if (!force) msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
 
 	/* Notice */
 	return (TRUE);
+}
+
+bool curse_weapon(bool force, int slot)
+{
+	/* Curse the weapon */
+	return curse_weapon_object(force, &inventory[slot]);
 }
 
 

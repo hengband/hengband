@@ -1785,7 +1785,7 @@
 #define ACT_DRAIN_2             13
 #define ACT_VAMPIRE_1           14
 #define ACT_BO_MISS_2           15
-#define ACT_BA_FIRE_2           16
+#define ACT_BA_FIRE_3           16
 #define ACT_BA_COLD_3           17
 #define ACT_BA_ELEC_3           18
 #define ACT_WHIRLWIND           19
@@ -1795,7 +1795,18 @@
 #define ACT_DISP_EVIL           23
 #define ACT_BA_MISS_3           24
 #define ACT_DISP_GOOD           25
-/* 26 - 50 unused */
+#define ACT_BO_MANA             26
+#define ACT_BA_FIRE_2           27
+#define ACT_BA_WATER            28
+#define ACT_BA_STAR             29
+#define ACT_BA_DARK             30
+#define ACT_BA_MANA             31
+#define ACT_PESTICIDE           32
+#define ACT_BLINDING_LIGHT      33
+#define ACT_BIZARRE             34
+#define ACT_CAST_BA_STAR        35
+#define ACT_BLADETURNER         36
+/* 33 - 50 unused */
 #define ACT_CONFUSE             51
 #define ACT_SLEEP               52
 #define ACT_QUAKE               53
@@ -1804,6 +1815,8 @@
 #define ACT_BANISH_EVIL         56
 #define ACT_GENOCIDE            57
 #define ACT_MASS_GENO           58
+#define ACT_SCARE_AREA          59
+#define ACT_AGGRAVATE           60
 /* 59 - 64 unused */
 #define ACT_CHARM_ANIMAL        65
 #define ACT_CHARM_UNDEAD        66
@@ -1815,7 +1828,11 @@
 #define ACT_SUMMON_ELEMENTAL    72
 #define ACT_SUMMON_DEMON        73
 #define ACT_SUMMON_UNDEAD       74
-/* 75 - 80 unused */
+#define ACT_SUMMON_HOUND        75
+#define ACT_SUMMON_DAWN         76
+#define ACT_SUMMON_OCTOPUS      77
+/* 76 - 80 unused */
+#define ACT_CHOIR_SINGS         80
 #define ACT_CURE_LW             81
 #define ACT_CURE_MW             82
 #define ACT_CURE_POISON         83
@@ -1823,7 +1840,9 @@
 #define ACT_REST_ALL            85
 #define ACT_CURE_700            86
 #define ACT_CURE_1000           87
-/* 88 - 90 unused */
+#define ACT_CURING              88
+#define ACT_CURE_MANA_FULL      89
+/* 90 unused */
 #define ACT_ESP                 91
 #define ACT_BERSERK             92
 #define ACT_PROT_EVIL           93
@@ -1832,7 +1851,14 @@
 #define ACT_XTRA_SPEED          96
 #define ACT_WRAITH              97
 #define ACT_INVULN              98
-/* 99 - 110 unused */
+#define ACT_HELO                99
+#define ACT_HELO_SPEED          100
+#define ACT_RESIST_ACID         101
+#define ACT_RESIST_FIRE         102
+#define ACT_RESIST_COLD         103
+#define ACT_RESIST_ELEC         104
+#define ACT_RESIST_POIS         105
+/* 106 - 110 unused */
 #define ACT_LIGHT               111
 #define ACT_MAP_LIGHT           112
 #define ACT_DETECT_ALL          113
@@ -1849,7 +1875,21 @@
 #define ACT_DIM_DOOR            124
 #define ACT_TELEPORT            125
 #define ACT_RECALL              126
+#define ACT_JUDGE               127
+#define ACT_TELEKINESIS         128
+#define ACT_DETECT_UNIQUE       129
+#define ACT_ESCAPE              130
+#define ACT_DISP_CURSE_XTRA     131
+#define ACT_BRAND_FIRE_BOLTS    132
+#define ACT_RECHARGE_XTRA       133
+#define ACT_LORE                134
+#define ACT_SHIKOFUMI           135
 /* 127 -> unused */
+#define ACT_FISHING             251
+#define ACT_INROU               252
+#define ACT_MURAMASA            253
+#define ACT_BLOODY_MOON         254
+#define ACT_CRIMSON             255
 
 /*** Object "tval" and "sval" codes ***/
 
