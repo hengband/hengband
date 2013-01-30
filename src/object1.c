@@ -528,6 +528,17 @@ cptr item_activation(object_type *o_ptr)
 				return "士気高揚 : 30+d30ターン毎";
 			case ACT_HELO_SPEED:
 				return "士気高揚, スピード(50+d50ターン) : 100+d200 ターン毎";
+			case ACT_RESIST_ACID:
+				return "酸への耐性 (期間 20+d20) : 40+d40 ターン毎";
+			case ACT_RESIST_FIRE:
+				return "火炎への耐性 (期間 20+d20) : 40+d40 ターン毎";
+			case ACT_RESIST_COLD:
+				return "冷気への耐性 (期間 20+d20) : 40+d40 ターン毎";
+			case ACT_RESIST_ELEC:
+				return "電撃への耐性 (期間 20+d20) : 40+d40 ターン毎";
+			case ACT_RESIST_POIS:
+				return "毒への耐性 (期間 20+d20) : 40+d40 ターン毎";
+
 			case ACT_LIGHT:
 				return "イルミネーション : 10+d10 ターン毎";
 			case ACT_MAP_LIGHT:
@@ -768,6 +779,7 @@ cptr item_activation(object_type *o_ptr)
 				return "resist thunder (dur 20+d20) every 40+d40 turns";
 			case ACT_RESIST_POIS:
 				return "resist poison (dur 20+d20) every 40+d40 turns";
+
 			case ACT_LIGHT:
 				return "light area (dam 2d15) every 10+d10 turns";
 			case ACT_MAP_LIGHT:
