@@ -814,139 +814,6 @@ static cptr k_info_gen_flags[] =
 };
 
 /*
- * Activate flags
- */
-struct k_info_activation_flag
-{
-	cptr flag;
-	byte index;
-} k_info_activation_flags[] =
-{
-	{ "SUNLIGHT", ACT_SUNLIGHT },
-	{ "BO_MISS_1", ACT_BO_MISS_1 },
-	{ "BA_POIS_1", ACT_BA_POIS_1 },
-	{ "BO_ELEC_1", ACT_BO_ELEC_1 },
-	{ "BO_ACID_1", ACT_BO_ACID_1 },
-	{ "BO_COLD_1", ACT_BO_COLD_1 },
-	{ "BO_FIRE_1", ACT_BO_FIRE_1 },
-	{ "BA_COLD_1", ACT_BA_COLD_1 },
-	{ "BA_FIRE_1", ACT_BA_FIRE_1 },
-	{ "DRAIN_1", ACT_DRAIN_1 },
-	{ "BA_COLD_2", ACT_BA_COLD_2 },
-	{ "BA_ELEC_2", ACT_BA_ELEC_2 },
-	{ "DRAIN_2", ACT_DRAIN_2 },
-	{ "VAMPIRE_1", ACT_VAMPIRE_1 },
-	{ "BO_MISS_2", ACT_BO_MISS_2 },
-	{ "BA_FIRE_3", ACT_BA_FIRE_3 },
-	{ "BA_COLD_3", ACT_BA_COLD_3 },
-	{ "BA_ELEC_3", ACT_BA_ELEC_3 },
-	{ "WHIRLWIND", ACT_WHIRLWIND },
-	{ "VAMPIRE_2", ACT_VAMPIRE_2 },
-	{ "CALL_CHAOS", ACT_CALL_CHAOS },
-	{ "ROCKET", ACT_ROCKET },
-	{ "DISP_EVIL", ACT_DISP_EVIL },
-	{ "BA_MISS_3", ACT_BA_MISS_3 },
-	{ "DISP_GOOD", ACT_DISP_GOOD },
-	{ "BO_MANA", ACT_BO_MANA },
-	{ "BA_FIRE_2", ACT_BA_FIRE_2 },
-	{ "BA_WATER", ACT_BA_WATER },
-	{ "BA_STAR", ACT_BA_STAR },
-	{ "BA_DARK", ACT_BA_DARK },
-	{ "BA_MANA", ACT_BA_MANA },
-	{ "PESTICIDE", ACT_PESTICIDE },
-	{ "BLINDING_LIGHT", ACT_BLINDING_LIGHT },
-	{ "BIZARRE", ACT_BIZARRE },
-	{ "CAST_BA_STAR", ACT_CAST_BA_STAR },
-	{ "BLADETURNER", ACT_BLADETURNER },
-
-	{ "CONFUSE", ACT_CONFUSE },
-	{ "SLEEP", ACT_SLEEP },
-	{ "QUAKE", ACT_QUAKE },
-	{ "TERROR", ACT_TERROR },
-	{ "TELE_AWAY", ACT_TELE_AWAY },
-	{ "BANISH_EVIL", ACT_BANISH_EVIL },
-	{ "GENOCIDE", ACT_GENOCIDE },
-	{ "MASS_GENO", ACT_MASS_GENO },
-	{ "SCARE_AREA", ACT_SCARE_AREA },
-	{ "AGGRAVATE", ACT_AGGRAVATE },
-
-	{ "CHARM_ANIMAL", ACT_CHARM_ANIMAL },
-	{ "CHARM_UNDEAD", ACT_CHARM_UNDEAD },
-	{ "CHARM_OTHER", ACT_CHARM_OTHER },
-	{ "CHARM_ANIMALS", ACT_CHARM_ANIMALS },
-	{ "CHARM_OTHERS", ACT_CHARM_OTHERS },
-	{ "SUMMON_ANIMAL", ACT_SUMMON_ANIMAL },
-	{ "SUMMON_PHANTOM", ACT_SUMMON_PHANTOM },
-	{ "SUMMON_ELEMENTAL", ACT_SUMMON_ELEMENTAL },
-	{ "SUMMON_DEMON", ACT_SUMMON_DEMON },
-	{ "SUMMON_UNDEAD", ACT_SUMMON_UNDEAD },
-	{ "SUMMON_HOUND", ACT_SUMMON_HOUND },
-	{ "SUMMON_DAWN", ACT_SUMMON_DAWN },
-	{ "SUMMON_OCTOPUS", ACT_SUMMON_OCTOPUS },
-
-	{ "CHOIR_SINGS", ACT_CHOIR_SINGS },
-	{ "CURE_LW", ACT_CURE_LW },
-	{ "CURE_MW", ACT_CURE_MW },
-	{ "CURE_POISON", ACT_CURE_POISON },
-	{ "REST_LIFE", ACT_REST_LIFE },
-	{ "REST_ALL", ACT_REST_ALL },
-	{ "CURE_700", ACT_CURE_700 },
-	{ "CURE_1000", ACT_CURE_1000 },
-	{ "CURING", ACT_CURING },
-	{ "CURE_MANA_FULL", ACT_CURE_MANA_FULL },
-
-	{ "ESP", ACT_ESP },
-	{ "BERSERK", ACT_BERSERK },
-	{ "PROT_EVIL", ACT_PROT_EVIL },
-	{ "RESIST_ALL", ACT_RESIST_ALL },
-	{ "SPEED", ACT_SPEED },
-	{ "XTRA_SPEED", ACT_XTRA_SPEED },
-	{ "WRAITH", ACT_WRAITH },
-	{ "INVULN", ACT_INVULN },
-	{ "HELO", ACT_HELO },
-	{ "HELO_SPEED", ACT_HELO_SPEED },
-	{ "RESIST_ACID", ACT_RESIST_ACID },
-	{ "RESIST_FIRE", ACT_RESIST_ACID },
-	{ "RESIST_COLD", ACT_RESIST_ACID },
-	{ "RESIST_ELEC", ACT_RESIST_ACID },
-	{ "RESIST_POIS", ACT_RESIST_ACID },
-
-	{ "LIGHT", ACT_LIGHT },
-	{ "MAP_LIGHT", ACT_MAP_LIGHT },
-	{ "DETECT_ALL", ACT_DETECT_ALL },
-	{ "DETECT_XTRA", ACT_DETECT_XTRA },
-	{ "ID_FULL", ACT_ID_FULL },
-	{ "ID_PLAIN", ACT_ID_PLAIN },
-	{ "RUNE_EXPLO", ACT_RUNE_EXPLO },
-	{ "RUNE_PROT", ACT_RUNE_PROT },
-	{ "SATIATE", ACT_SATIATE },
-	{ "DEST_DOOR", ACT_DEST_DOOR },
-	{ "STONE_MUD", ACT_STONE_MUD },
-	{ "RECHARGE", ACT_RECHARGE },
-	{ "ALCHEMY", ACT_ALCHEMY },
-	{ "DIM_DOOR", ACT_DIM_DOOR },
-	{ "TELEPORT", ACT_TELEPORT },
-	{ "RECALL", ACT_RECALL },
-	{ "JUDGE", ACT_JUDGE },
-	{ "TELEKINESIS", ACT_TELEKINESIS },
-	{ "DETECT_UNIQUE", ACT_DETECT_UNIQUE },
-	{ "ESCAPE", ACT_ESCAPE },
-	{ "DISP_CURSE_XTRA", ACT_DISP_CURSE_XTRA },
-	{ "BRAND_FIRE_BOLTS", ACT_BRAND_FIRE_BOLTS },
-	{ "RECHARGE_XTRA", ACT_RECHARGE_XTRA },
-	{ "LORE", ACT_LORE },
-	{ "SHIKOFUMI", ACT_SHIKOFUMI },
-
-	{ "FISHING", ACT_FISHING },
-	{ "INROU", ACT_INROU },
-	{ "MURAMASA", ACT_MURAMASA },
-	{ "BLOODY_MOON", ACT_BLOODY_MOON },
-	{ "CRIMSON", ACT_CRIMSON },
-
-	{ NULL, 0 }
-};
-
-/*
  * Dungeon flags
  */
 static cptr d_info_flags1[] =
@@ -2279,11 +2146,11 @@ static byte grab_one_activation_flag(cptr what)
 
 	for (i = 0; ; i++)
 	{
-		if (k_info_activation_flags[i].flag == NULL) break;
+		if (activation_info[i].flag == NULL) break;
 
-		if (streq(what, k_info_activation_flags[i].flag))
+		if (streq(what, activation_info[i].flag))
 		{
-			return k_info_activation_flags[i].index;
+			return activation_info[i].index;
 		}
 	}
 

@@ -1709,3 +1709,10 @@ typedef struct {
 	int dir;
 } travel_type;
 #endif
+
+typedef struct {
+	cptr flag;
+	byte index;
+	byte level;
+	s32b value;
+} activation_type;

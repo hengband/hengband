@@ -117,6 +117,7 @@ extern cptr monster_powers_short[MAX_MONSPELLS];
 extern cptr ident_info[];
 extern mbe_info_type mbe_info[];
 extern byte feature_action_flags[FF_FLAG_MAX];
+extern activation_type activation_info[];
 
 /* variable.c */
 extern cptr copyright[5];
