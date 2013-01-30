@@ -2331,12 +2331,11 @@ D:攻撃を退ける山々の力を喚起する。
 N:118:『ナル=イ=バギル』
 E:'Nar-i-vagil'
 I:21:3:3
-W:20:20:150:70000
+W:30:20:150:100000
 P:0:1d9:10:20:5
-F:STR | INT | SEARCH | HIDE_TYPE | EASY_SPELL | SH_FIRE | LITE |
-F:KILL_ANIMAL | BRAND_FIRE | BRAND_ELEC | FORCE_WEAPON |
-F:RES_FIRE | XTRA_H_RES | HOLD_LIFE | ESP_ANIMAL |
-F:SEE_INVIS | FREE_ACT | SLOW_DIGEST | BLESSED | SHOW_MODS |
+F:INT | SEARCH | HIDE_TYPE | EASY_SPELL | SH_FIRE | LITE |
+F:KILL_ANIMAL | BRAND_FIRE | FORCE_WEAPON | ESP_ANIMAL |
+F:RES_FIRE | HOLD_LIFE | SEE_INVIS | FREE_ACT | SLOW_DIGEST | SHOW_MODS |
 D:$Named for a fiery star and set with gems of great worth binding mystic 
 D:$virtues of protection and thought.
 D:燃える星と名付けられ、守りと思慮の神秘的な力を封じた高価な宝石が付いている。
