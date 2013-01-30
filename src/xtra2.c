@@ -2381,6 +2381,24 @@ bool change_panel(int dy, int dx)
 	return (FALSE);
 }
 
+bool change_panel_xy(int y, int x)
+{
+	int dy = 0, dx = 0;
+	int wid, hgt;
+
+	/* Get size */
+	get_screen_size(&wid, &hgt);
+
+	if (y < panel_row_min) dy = -1;
+	if (y > panel_row_max) dy = 1;
+	if (x < panel_col_min) dx = -1;
+	if (x > panel_col_max) dx = 1;
+
+	if (!dy && !dx) return (FALSE);
+
+	return change_panel(dy, dx);
+}
+
 
 /*
  * Given an row (y) and col (x), this routine detects when a move
@@ -3018,14 +3036,32 @@ static bool target_set_accept(int y, int x)
 static void target_set_prepare(int mode)
 {
 	int y, x;
+	int min_hgt, max_hgt, min_wid, max_wid;
+
+	if (mode & TARGET_KILL)
+	{
+		/* Inner range */
+		min_hgt = MAX((py - MAX_RANGE), 0);
+		max_hgt = MIN((py + MAX_RANGE), cur_hgt - 1);
+		min_wid = MAX((px - MAX_RANGE), 0);
+		max_wid = MIN((px + MAX_RANGE), cur_wid - 1);
+	}
+	else /* not targetting */
+	{
+		/* Inner panel */
+		min_hgt = panel_row_min;
+		max_hgt = panel_row_max;
+		min_wid = panel_col_min;
+		max_wid = panel_col_max;
+	}
 
 	/* Reset "temp" array */
 	temp_n = 0;
 
 	/* Scan the current panel */
-	for (y = panel_row_min; y <= panel_row_max; y++)
+	for (y = min_hgt; y <= max_hgt; y++)
 	{
-		for (x = panel_col_min; x <= panel_col_max; x++)
+		for (x = min_wid; x <= max_wid; x++)
 		{
 			cave_type *c_ptr;
 
@@ -3843,6 +3879,9 @@ bool target_set(int mode)
 		{
 			y = temp_y[m];
 			x = temp_x[m];
+
+			/* Set forcus */
+			change_panel_xy(y, x);
 
 			if (!(mode & TARGET_LOOK)) prt_path(y, x);
 
