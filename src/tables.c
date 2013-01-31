@@ -6658,6 +6658,27 @@ byte feature_action_flags[FF_FLAG_MAX] =
 
 
 /*
+ * Define flags, effect type, name for dragon breath activation
+ */
+dragonbreath_type dragonbreath_info[] = {
+	{ TR_RES_ACID, GF_ACID, _("»À", "acid") },
+	{ TR_RES_ELEC, GF_ELEC, _("ÅÅ·â", "lightning") },
+	{ TR_RES_FIRE, GF_FIRE, _("²Ð±ê", "fire") },
+	{ TR_RES_COLD, GF_COLD, _("Îäµ¤", "cold") },
+	{ TR_RES_POIS, GF_POIS, _("ÆÇ", "poison") },
+	{ TR_RES_LITE, GF_LITE, _("Á®¸÷", "light") },
+	{ TR_RES_DARK, GF_DARK, _("°Å¹õ", "dark") },
+	{ TR_RES_SHARDS, GF_SHARDS, _("ÇËÊÒ", "shard") },
+	{ TR_RES_CONF, GF_CONFUSION, _("º®Íð", "confusion") },
+	{ TR_RES_SOUND, GF_SOUND, _("¹ì²»", "sound") },
+	{ TR_RES_NEXUS, GF_NEXUS, _("°ø²Ìº®Íð", "nexus") },
+	{ TR_RES_NETHER, GF_NETHER, _("ÃÏ¹ö", "nether") },
+	{ TR_RES_CHAOS, GF_CHAOS, _("¥«¥ª¥¹", "chaos") },
+	{ TR_RES_DISEN, GF_DISENCHANT, _("Îô²½", "disenchant") },
+	{ 0, 0, NULL }
+};
+
+/*
  * Define flags, levels, values of activations
  */
 activation_type activation_info[] =
@@ -6686,7 +6707,7 @@ activation_type activation_info[] =
 	{ "CALL_CHAOS", ACT_CALL_CHAOS, 70, 5000, {350, 0} },
 	{ "ROCKET", ACT_ROCKET, 70, 5000, {400, 0} },
 	{ "DISP_EVIL", ACT_DISP_EVIL, 50, 4000, {100, 100} },
-	{ "BA_MISS_3", ACT_BA_MISS_3, 50, 1500, {500, 0} },
+	{ "BA_MISS_3", ACT_BA_MISS_3, 50, 1500, {200, 200} },
 	{ "DISP_GOOD", ACT_DISP_GOOD, 50, 3500, {100, 100} },
 	{ "BO_MANA", ACT_BO_MANA, 40, 1500, {90, 90} },
 	{ "BA_WATER", ACT_BA_WATER, 50, 2000, {250, 0} },
@@ -6701,6 +6722,7 @@ activation_type activation_info[] =
 	{ "BA_ACID_1", ACT_BA_ACID_1, 30, 1000, {12, 12} },
 	{ "BR_FIRE", ACT_BR_FIRE, 50, 5000, {-1, 0} },
 	{ "BR_COLD", ACT_BR_COLD, 50, 5000, {-1, 0} },
+	{ "BR_DRAGON", ACT_BR_DRAGON, 70, 10000, { 200, 200 } },
 
 	{ "CONFUSE", ACT_CONFUSE, 10, 500, {15, 0} },
 	{ "SLEEP", ACT_SLEEP, 10, 750, {55, 0} },

@@ -1593,6 +1593,7 @@ W:35:0:2:3000
 A:50/1
 P:0:0d0:0:0:15
 F:RES_ELEC | IGNORE_ELEC | ACTIVATE
+U:RESIST_ELEC
 
 N:136:スピード:緑柱石の
 E:Speed:Beryl
@@ -1683,6 +1684,7 @@ W:35:0:2:3000
 A:50/1
 P:0:0d0:0:0:15
 F:RES_FIRE | IGNORE_FIRE | ACTIVATE
+U:RESIST_FIRE
 
 N:147:酸:ジャスパーの
 E:Acid:Jasper
@@ -1692,6 +1694,7 @@ W:35:0:2:3000
 A:50/1
 P:0:0d0:0:0:15
 F:RES_ACID | IGNORE_ACID | ACTIVATE
+U:RESIST_ACID
 
 N:148:氷:青瑠璃の
 E:Ice:Lapis Lazuli
@@ -1701,6 +1704,7 @@ W:35:0:2:3000
 A:50/1
 P:0:0d0:0:0:15
 F:RES_COLD | IGNORE_COLD | ACTIVATE
+U:RESIST_COLD
 
 N:149:苦悩:クジャク石の
 E:Woe:Malachite
@@ -4217,6 +4221,7 @@ A:60/8
 P:40:2d4:-2:0:10
 F:RES_ACID |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of utterly black scales, against which no metal or wood can rest.
 D:木や金属が耐えられないかのような漆黒の鱗鎧だ。
 
@@ -4229,6 +4234,7 @@ A:40/8
 P:40:2d4:-2:0:10
 F:RES_ELEC |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of scales as blue as sapphires, emitting eerie sparks and flashes as 
 D:$you move about in it.
 D:着た者が動くと不気味な稲妻と光を放つ、サファイアのように青い鱗鎧だ。
@@ -4242,6 +4248,7 @@ A:50/8
 P:40:2d4:-2:0:10
 F:RES_COLD |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of scales, coldly gleaming in frosty white.  A shiver runs down 
 D:$through your spine even as you look at it.
 D:冷淡な白に冷たくきらめく鱗鎧だ。それを見る時、背筋が寒くなる。
@@ -4255,6 +4262,7 @@ A:80/8
 P:40:2d4:-2:0:10
 F:RES_FIRE |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of scales, with all the reds of every fire ever lit.  The scar 
 D:$tissue from an old burn aches as you put this armour on.
 D:常に燃える炎に赤く彩られた鱗鎧だ。これを着ると古い火傷跡が痛む。
@@ -4268,6 +4276,7 @@ A:70/8
 P:40:2d4:-2:0:10
 F:RES_POIS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 #D:$A suit of scales, glistening in sickly green, out from which falls the 
 #D:$skeleton of a rat who touched it and died in agony.
 #D:病的な緑に光る鱗鎧で、それに触れたネズミは苦痛に死んで白骨化する。
@@ -4283,6 +4292,7 @@ A:100/16
 P:40:2d4:-2:0:10
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of scales that throbs with angry energies; it takes all your energy 
 D:$to master the Elements fighting an endless war trapped inside.
 D:怒りのエネルギーに脈打つ鱗鎧で、鎧の中に捕らわれ永遠に戦い続けるエレメント達
@@ -4298,6 +4308,7 @@ A:65/16
 P:40:2d4:-2:0:10
 F:RES_LITE | RES_DARK |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 
 N:407:ロードラゴン・スケイルメイル
 E:Law Dragon Scale Mail~
@@ -4308,6 +4319,7 @@ A:80/16
 P:40:2d4:-2:0:10
 F:RES_SOUND | RES_SHARDS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of scales in stern blue and silver.  You feel the slightest tremor 
 D:$as you touch it, like massed trumpets heard and cyclones felt from afar.
 D:厳粛な青と銀の鱗鎧だ。それに触れると、トランペットの集団の演奏が聞こえるか
@@ -4322,6 +4334,7 @@ A:55/8
 P:40:2d4:-2:0:10
 F:RES_CONF |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of scales, gleaming in rich engraved bronze.  The more you look at 
 D:$the the maze of whorls and lines that close inspection reveal on its 
 D:$surface, the less sense you are able to make of them.
@@ -4337,6 +4350,7 @@ A:65/8
 P:40:2d4:-2:0:10
 F:RES_SOUND |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of scales in mirror-like gold.  You hear nothing unusual as you 
 D:$wear this armour, yet your ears ache as though in the midst of a 
 D:$cacophony.
@@ -4352,6 +4366,7 @@ A:75/16
 P:40:2d4:-2:0:10
 F:RES_CHAOS | RES_DISEN |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of scales.  Every shape, in every color imaginable, riot and 
 D:$contend upon its surface as you stare in fascination.
 D:鱗鎧だ。魅惑されて見つめると、その表面で想像できる限りの色をとる様々な形
@@ -4366,6 +4381,7 @@ A:90/16
 P:40:2d4:-2:0:10
 F:RES_CHAOS | RES_DISEN | RES_SOUND | RES_SHARDS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BR_DRAGON
 D:$A suit of scales.  Featureless grey to casual inspection, yet a closer 
 D:$look reveals patterns within patterns of iridescence that throb with 
 D:$leashed energies bound as though by chains of adamant.
@@ -4383,6 +4399,7 @@ F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC | RES_POIS |
 F:RES_NETHER | RES_NEXUS | RES_CHAOS | RES_LITE | RES_DARK |
 F:RES_SHARDS | RES_SOUND | RES_DISEN | RES_CONF |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+U:BA_MISS_3
 D:$A suit with scales of every color, surrounded in a nimbus of perfectly 
 D:$untramelled yet inextricably intermingled and utterly mastered powers 
 D:$elemental and ethereal.

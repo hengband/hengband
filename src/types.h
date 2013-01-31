@@ -153,6 +153,8 @@ struct object_kind
 	bool aware;			/* The player is "aware" of the item's effects */
 
 	bool tried;			/* The player has "tried" one of the items */
+
+	byte act_idx;		/* Activative ability index */
 };
 
 
@@ -1720,3 +1722,9 @@ typedef struct {
 		int dice;
 	} timeout;
 } activation_type;
+
+typedef struct {
+	int flag;
+	int type;
+	cptr name;
+} dragonbreath_type;

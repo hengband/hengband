@@ -1989,6 +1989,47 @@ static const activation_type* find_activation_info(const object_type *o_ptr)
 	return NULL;
 }
 
+
+/* Dragon breath activation */
+static bool activate_dragon_breath(object_type *o_ptr)
+{
+	u32b flgs[4]; /* for resistance flags */
+	int type[20];
+	cptr name[20];
+	int i, dir, t, n = 0;
+
+	if (!get_aim_dir(&dir)) return FALSE;
+
+	object_flags(o_ptr, flgs);
+
+	for (i = 0; dragonbreath_info[i].flag != 0; i++)
+	{
+		if (have_flag(flgs, dragonbreath_info[i].flag))
+		{
+			type[n] = dragonbreath_info[i].type;
+			name[n] = dragonbreath_info[i].name;
+			n++;
+		}
+	}
+
+	/* Paranoia */
+	if (n == 0) return FALSE;
+
+	/* Stop speaking */
+	if (music_singing_any()) stop_singing();
+	if (hex_spelling_any()) stop_hex_spell_all();
+	t = randint0(n);
+#ifdef JP
+	msg_format("あなたは%sのブレスを吐いた。", name[t]);
+#else
+	msg_format("You breathe %s.", name[n]);
+#endif
+	fire_ball(type[t], dir, 250, -4);
+
+	return TRUE;
+}
+
+
 bool activate_random_artifact(object_type *o_ptr)
 {
 	int plev = p_ptr->lev;
@@ -2307,7 +2348,7 @@ bool activate_random_artifact(object_type *o_ptr)
 #else
 			msg_print("You breathe the elements.");
 #endif
-			fire_ball(GF_MISSILE, dir, 300, 4);
+			fire_ball(GF_MISSILE, dir, 300, -4);
 			break;
 		}
 
@@ -2443,7 +2484,7 @@ bool activate_random_artifact(object_type *o_ptr)
 #else
 			msg_print("You breathe the elements.");
 #endif
-			fire_ball(GF_MISSILE, dir, 300, 4);
+			fire_ball(GF_MISSILE, dir, 300, -4);
 #ifdef JP
 			msg_print("鎧が様々な色に輝いた...");
 #else
@@ -2485,6 +2526,11 @@ bool activate_random_artifact(object_type *o_ptr)
 			{
 				(void)set_oppose_cold(randint1(20) + 20, FALSE);
 			}
+			break;
+		}
+		case ACT_BR_DRAGON:
+		{
+			if (!activate_dragon_breath(o_ptr)) return FALSE;
 			break;
 		}
 
@@ -3093,6 +3139,11 @@ bool activate_random_artifact(object_type *o_ptr)
 #else
 			msg_format("The %s grows black.", name);
 #endif
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
+			{
+				if (!get_aim_dir(&dir)) return FALSE;
+				fire_ball(GF_ACID, dir, 100, 2);
+			}
 			(void)set_oppose_acid(randint1(20) + 20, FALSE);
 			break;
 		}
@@ -3104,6 +3155,11 @@ bool activate_random_artifact(object_type *o_ptr)
 #else
 			msg_format("The %s grows red.", name);
 #endif
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+			{
+				if (!get_aim_dir(&dir)) return FALSE;
+				fire_ball(GF_FIRE, dir, 100, 2);
+			}
 			(void)set_oppose_fire(randint1(20) + 20, FALSE);
 			break;
 		}
@@ -3115,6 +3171,11 @@ bool activate_random_artifact(object_type *o_ptr)
 #else
 			msg_format("The %s grows white.", name);
 #endif
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+			{
+				if (!get_aim_dir(&dir)) return FALSE;
+				fire_ball(GF_COLD, dir, 100, 2);
+			}
 			(void)set_oppose_cold(randint1(20) + 20, FALSE);
 			break;
 		}
@@ -3126,6 +3187,11 @@ bool activate_random_artifact(object_type *o_ptr)
 #else
 			msg_format("The %s grows blue.", name);
 #endif
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
+			{
+				if (!get_aim_dir(&dir)) return FALSE;
+				fire_ball(GF_ELEC, dir, 100, 2);
+			}
 			(void)set_oppose_elec(randint1(20) + 20, FALSE);
 			break;
 		}

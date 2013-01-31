@@ -1846,6 +1846,40 @@ static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
 	return (1);
 }
 
+/*
+ * Grab one activation index flag
+ */
+static byte grab_one_activation_flag(cptr what)
+{
+	int i;
+
+	for (i = 0; ; i++)
+	{
+		if (activation_info[i].flag == NULL) break;
+
+		if (streq(what, activation_info[i].flag))
+		{
+			return activation_info[i].index;
+		}
+	}
+
+	i = atoi(what);
+	 if (i > 0)
+	 {
+		 return ((byte) i);
+	 }
+
+	/* Oops */
+#ifdef JP
+	msg_format("未知の発動・フラグ '%s'。", what);
+#else
+	msg_format("Unknown activation flag '%s'.", what);
+#endif
+
+	/* Error */
+	return (0);
+}
+
 
 /*
  * Initialize the "k_info" array, by parsing an ascii "template" file
@@ -2073,6 +2107,21 @@ errr parse_k_info(char *buf, header *head)
 		k_ptr->to_a =  ta;
 	}
 
+	/* Hack -- Process 'U' for activation index */
+	else if (buf[0] == 'U')
+	{
+		byte n;
+		n = grab_one_activation_flag(buf + 2);
+		if (n > 0)
+		{
+			k_ptr->act_idx = n;
+		}
+		else
+		{
+			return (5);
+		}
+	}
+
 	/* Hack -- Process 'F' for flags */
 	else if (buf[0] == 'F')
 	{
@@ -2137,40 +2186,6 @@ static errr grab_one_artifact_flag(artifact_type *a_ptr, cptr what)
 
 	/* Error */
 	return (1);
-}
-
-/*
- * Grab one activation index flag
- */
-static byte grab_one_activation_flag(cptr what)
-{
-	int i;
-
-	for (i = 0; ; i++)
-	{
-		if (activation_info[i].flag == NULL) break;
-
-		if (streq(what, activation_info[i].flag))
-		{
-			return activation_info[i].index;
-		}
-	}
-
-	i = atoi(what);
-	 if (i > 0)
-	 {
-		 return ((byte) i);
-	 }
-
-	/* Oops */
-#ifdef JP
-	msg_format("未知の発動・フラグ '%s'。", what);
-#else
-	msg_format("Unknown activation flag '%s'.", what);
-#endif
-
-	/* Error */
-	return (0);
 }
 
 

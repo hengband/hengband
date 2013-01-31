@@ -3941,6 +3941,7 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
 	return w1 <= w2;
 }
 
+
 /*
  * Activate a wielded object.  Wielded objects never stack.
  * And even if they did, activatable objects never stack.
@@ -4053,7 +4054,8 @@ static void do_cmd_activate_aux(int item)
 	}
 
 	/* Some lights need enough fuel for activation */
-	if (!o_ptr->xtra4 && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
+	if (!o_ptr->xtra4 && (o_ptr->tval == TV_FLASK) &&
+		((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
 	{
 #ifdef JP
 		msg_print("燃料がない。");
@@ -4123,7 +4125,8 @@ static void do_cmd_activate_aux(int item)
 	}
 
 	/* Activate object */
-	if (o_ptr->xtra2 && (object_is_artifact(o_ptr) || object_is_ego(o_ptr)))
+	/* if (o_ptr->xtra2 && (object_is_artifact(o_ptr) || object_is_ego(o_ptr))) */
+	if (o_ptr->xtra2)
 	{
 		(void)activate_random_artifact(o_ptr);
 
@@ -4134,276 +4137,7 @@ static void do_cmd_activate_aux(int item)
 		return;
 	}
 
-	/* Hack -- Dragon Scale Mail can be activated as well */
-	if (o_ptr->tval == TV_DRAG_ARMOR)
-	{
-		/* Get a direction for breathing (or abort) */
-		if (!get_aim_dir(&dir)) return;
-
-		if (music_singing_any()) stop_singing();
-		if (hex_spelling_any()) stop_hex_spell_all();
-
-		/* Branch on the sub-type */
-		switch (o_ptr->sval)
-		{
-			case SV_DRAGON_BLUE:
-			{
-#ifdef JP
-				msg_print("あなたは稲妻のブレスを吐いた。");
-#else
-				msg_print("You breathe lightning.");
-#endif
-
-				fire_ball(GF_ELEC, dir, 100, -2);
-				o_ptr->timeout = randint0(150) + 150;
-				break;
-			}
-
-			case SV_DRAGON_WHITE:
-			{
-#ifdef JP
-				msg_print("あなたは冷気のブレスを吐いた。");
-#else
-				msg_print("You breathe frost.");
-#endif
-
-				fire_ball(GF_COLD, dir, 110, -2);
-				o_ptr->timeout = randint0(150) + 150;
-				break;
-			}
-
-			case SV_DRAGON_BLACK:
-			{
-#ifdef JP
-				msg_print("あなたは酸のブレスを吐いた。");
-#else
-				msg_print("You breathe acid.");
-#endif
-
-				fire_ball(GF_ACID, dir, 130, -2);
-				o_ptr->timeout = randint0(150) + 150;
-				break;
-			}
-
-			case SV_DRAGON_GREEN:
-			{
-#ifdef JP
-				msg_print("あなたは毒ガスのブレスを吐いた。");
-#else
-				msg_print("You breathe poison gas.");
-#endif
-
-				fire_ball(GF_POIS, dir, 150, -2);
-				o_ptr->timeout = randint0(180) + 180;
-				break;
-			}
-
-			case SV_DRAGON_RED:
-			{
-#ifdef JP
-				msg_print("あなたは火炎のブレスを吐いた。");
-#else
-				msg_print("You breathe fire.");
-#endif
-
-				fire_ball(GF_FIRE, dir, 200, -2);
-				o_ptr->timeout = randint0(200) + 200;
-				break;
-			}
-
-			case SV_DRAGON_MULTIHUED:
-			{
-				chance = randint0(5);
-#ifdef JP
-				msg_format("あなたは%sのブレスを吐いた。",
-					   ((chance == 1) ? "稲妻" :
-					    ((chance == 2) ? "冷気" :
-					     ((chance == 3) ? "酸" :
-					      ((chance == 4) ? "毒ガス" : "火炎")))));
-#else
-				msg_format("You breathe %s.",
-					   ((chance == 1) ? "lightning" :
-					    ((chance == 2) ? "frost" :
-					     ((chance == 3) ? "acid" :
-					      ((chance == 4) ? "poison gas" : "fire")))));
-#endif
-
-				fire_ball(((chance == 1) ? GF_ELEC :
-					   ((chance == 2) ? GF_COLD :
-					    ((chance == 3) ? GF_ACID :
-					     ((chance == 4) ? GF_POIS : GF_FIRE)))),
-					  dir, 250, -2);
-				o_ptr->timeout = randint0(200) + 200;
-				break;
-			}
-
-			case SV_DRAGON_BRONZE:
-			{
-#ifdef JP
-				msg_print("あなたは混乱のブレスを吐いた。");
-#else
-				msg_print("You breathe confusion.");
-#endif
-
-				fire_ball(GF_CONFUSION, dir, 120, -2);
-				o_ptr->timeout = randint0(180) + 180;
-				break;
-			}
-
-			case SV_DRAGON_GOLD:
-			{
-#ifdef JP
-				msg_print("あなたは轟音のブレスを吐いた。");
-#else
-				msg_print("You breathe sound.");
-#endif
-
-				fire_ball(GF_SOUND, dir, 130, -2);
-				o_ptr->timeout = randint0(180) + 180;
-				break;
-			}
-
-			case SV_DRAGON_CHAOS:
-			{
-				chance = randint0(2);
-#ifdef JP
-				msg_format("あなたは%sのブレスを吐いた。",
-					   ((chance == 1 ? "カオス" : "劣化")));
-#else
-				msg_format("You breathe %s.",
-					   ((chance == 1 ? "chaos" : "disenchantment")));
-#endif
-
-				fire_ball((chance == 1 ? GF_CHAOS : GF_DISENCHANT),
-					  dir, 220, -2);
-				o_ptr->timeout = randint0(200) + 200;
-				break;
-			}
-
-			case SV_DRAGON_LAW:
-			{
-				chance = randint0(2);
-#ifdef JP
-				msg_format("あなたは%sのブレスを吐いた。",
-					   ((chance == 1 ? "轟音" : "破片")));
-#else
-				msg_format("You breathe %s.",
-					   ((chance == 1 ? "sound" : "shards")));
-#endif
-
-				fire_ball((chance == 1 ? GF_SOUND : GF_SHARDS),
-					  dir, 230, -2);
-				o_ptr->timeout = randint0(200) + 200;
-				break;
-			}
-
-			case SV_DRAGON_BALANCE:
-			{
-				chance = randint0(4);
-#ifdef JP
-				msg_format("あなたは%sのブレスを吐いた",
-					   ((chance == 1) ? "カオス" :
-					    ((chance == 2) ? "劣化" :
-					     ((chance == 3) ? "轟音" : "破片"))));
-#else
-				msg_format("You breathe %s.",
-					   ((chance == 1) ? "chaos" :
-					    ((chance == 2) ? "disenchantment" :
-					     ((chance == 3) ? "sound" : "shards"))));
-#endif
-
-				fire_ball(((chance == 1) ? GF_CHAOS :
-					   ((chance == 2) ? GF_DISENCHANT :
-					    ((chance == 3) ? GF_SOUND : GF_SHARDS))),
-					  dir, 250, -2);
-				o_ptr->timeout = randint0(200) + 200;
-				break;
-			}
-
-			case SV_DRAGON_SHINING:
-			{
-				chance = randint0(2);
-#ifdef JP
-				msg_format("あなたは%sのブレスを吐いた。",
-					   ((chance == 0 ? "閃光" : "暗黒")));
-#else
-				msg_format("You breathe %s.",
-					   ((chance == 0 ? "light" : "darkness")));
-#endif
-
-				fire_ball((chance == 0 ? GF_LITE : GF_DARK), dir, 200, -2);
-				o_ptr->timeout = randint0(200) + 200;
-				break;
-			}
-
-			case SV_DRAGON_POWER:
-			{
-#ifdef JP
-msg_print("あなたはエレメントのブレスを吐いた。");
-#else
-				msg_print("You breathe the elements.");
-#endif
-
-				fire_ball(GF_MISSILE, dir, 300, -3);
-				o_ptr->timeout = randint0(200) + 200;
-				break;
-			}
-		}
-
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		/* Success */
-		return;
-	}
-
-	else if (o_ptr->tval == TV_RING)
-	{
-		/* Get a direction for breathing (or abort) */
-		if (!get_aim_dir(&dir)) return;
-
-		switch (o_ptr->sval)
-		{
-			case SV_RING_ACID:
-			{
-				fire_ball(GF_ACID, dir, 100, 2);
-				(void)set_oppose_acid(randint1(20) + 20, FALSE);
-				o_ptr->timeout = randint0(50) + 50;
-				break;
-			}
-
-			case SV_RING_ICE:
-			{
-				fire_ball(GF_COLD, dir, 100, 2);
-				(void)set_oppose_cold(randint1(20) + 20, FALSE);
-				o_ptr->timeout = randint0(50) + 50;
-				break;
-			}
-
-			case SV_RING_FLAMES:
-			{
-				fire_ball(GF_FIRE, dir, 100, 2);
-				(void)set_oppose_fire(randint1(20) + 20, FALSE);
-				o_ptr->timeout = randint0(50) + 50;
-				break;
-			}
-
-			case SV_RING_ELEC:
-			{
-				fire_ball(GF_ELEC, dir, 100, 2);
-				(void)set_oppose_elec(randint1(20) + 20, FALSE);
-				o_ptr->timeout = randint0(50) + 50;
-				break;
-			}
-		}
-
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		/* Success */
-		return;
-	}
-
+	/* Special items */
 	else if (o_ptr->tval == TV_WHISTLE)
 	{
 		if (music_singing_any()) stop_singing();

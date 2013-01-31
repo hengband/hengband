@@ -1809,6 +1809,7 @@
 #define ACT_BA_ACID_1           37
 #define ACT_BR_FIRE             38
 #define ACT_BR_COLD             39
+#define ACT_BR_DRAGON           40
 /* 33 - 50 unused */
 #define ACT_CONFUSE             51
 #define ACT_SLEEP               52

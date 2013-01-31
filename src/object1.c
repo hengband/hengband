@@ -330,12 +330,37 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 }
 
 
+cptr item_activation_dragon_breath(object_type *o_ptr)
+{
+	static char desc[256];
+	u32b flgs[4]; /* for resistance flags */
+	int i, n = 0;
+
+	object_flags(o_ptr, flgs);
+	strcpy(desc, _("", "breath "));
+
+	for (i = 0; dragonbreath_info[i].flag != 0; i++)
+	{
+		if (have_flag(flgs, dragonbreath_info[i].flag))
+		{
+			if (n > 0) strcat(desc, _("、", ", "));
+			strcat(desc, dragonbreath_info[i].name);
+			n++;
+		}
+	}
+
+	strcat(desc, _("のブレス(250) : 200+d200 ターン毎"," every 200+d200 turns"));
+
+	return (desc);
+}
+
 /*
  * Determine the "Activation" (if any) for an artifact
  * Return a string, or NULL for "no activation"
  */
 cptr item_activation(object_type *o_ptr)
 {
+	static char *buf[256];
 	u32b flgs[TR_FLAG_SIZE];
 
 	/* Extract the flags */
@@ -403,8 +428,9 @@ cptr item_activation(object_type *o_ptr)
 		if (!o_ptr->xtra2) o_ptr->xtra2 = e_info[o_ptr->name2].act_idx;
 	}
 
-	if ((object_is_artifact(o_ptr) || object_is_ego(o_ptr)) &&
-		(o_ptr->xtra2))
+	/* Get an explain of an activation */
+	/* if ((object_is_artifact(o_ptr) || object_is_ego(o_ptr)) && (o_ptr->xtra2)) */
+	if (o_ptr->xtra2)
 	{
 		switch (o_ptr->xtra2)
 		{
@@ -458,7 +484,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DISP_EVIL:
 				return "邪悪退散(x5) : 100+d100 ターン毎";
 			case ACT_BA_MISS_3:
-				return "エレメントのブレス(300) : 500 ターン毎";
+				return "エレメントのブレス(300) : 200+d200 ターン毎";
 			case ACT_DISP_GOOD:
 				return "善良退散(x5) : 100+d100 ターン毎";
 			case ACT_BO_MANA:
@@ -493,6 +519,8 @@ cptr item_activation(object_type *o_ptr)
 				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
 					return "冷気のブレス (200) と冷気への耐性 : 200 ターン毎";
 				return "冷気のブレス (200) : 250 ターン毎";
+			case ACT_BR_DRAGON:
+				return item_activation_dragon_breath(o_ptr);
 
 			case ACT_CONFUSE:
 				return "パニック・モンスター : 15 ターン毎";
@@ -584,12 +612,20 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_HELO_SPEED:
 				return "士気高揚, スピード(期間 50+d50ターン) : 100+d200 ターン毎";
 			case ACT_RESIST_ACID:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
+					return "アシッド・ボール (100) と酸への耐性 : 40+d40 ターン毎";
 				return "酸への耐性(期間 20+d20) : 40+d40 ターン毎";
 			case ACT_RESIST_FIRE:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+					return "ファイア・ボール (100) と火への耐性 : 40+d40 ターン毎";
 				return "火炎への耐性(期間 20+d20) : 40+d40 ターン毎";
 			case ACT_RESIST_COLD:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+					return "アイス・ボール (100) と冷気への耐性 : 40+d40 ターン毎";
 				return "冷気への耐性(期間 20+d20) : 40+d40 ターン毎";
 			case ACT_RESIST_ELEC:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
+					return "サンダー・ボール (100) と電撃への耐性 : 40+d40 ターン毎";
 				return "電撃への耐性(期間 20+d20) : 40+d40 ターン毎";
 			case ACT_RESIST_POIS:
 				return "毒への耐性(期間 20+d20) : 40+d40 ターン毎";
@@ -715,7 +751,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DISP_EVIL:
 				return "dispel evil (x5) every 100+d100 turns";
 			case ACT_BA_MISS_3:
-				return "elemental breath (300) every 500 turns";
+				return "elemental breath (300) every 200+d200 turns";
 			case ACT_DISP_GOOD:
 				return "dispel good (x5) every 100+d100 turns";
 			case ACT_BO_MANA:
@@ -750,6 +786,8 @@ cptr item_activation(object_type *o_ptr)
 				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
 					return "breath of cold (200) and resist cold every 200 turns";
 				return "cold breath (200) every 250 turns";
+			case ACT_BR_DRAGON:
+				return item_activation_dragon_breath(o_ptr);
 
 			case ACT_CONFUSE:
 				return "confuse monster every 15 turns";
@@ -842,12 +880,20 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_HELO_SPEED:
 				return "hero and +10 to speed (50) every 100+200d turns";
 			case ACT_RESIST_ACID:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
+					return "ball of acid (100) and resist acid every 40+d40 turns";
 				return "resist acid (dur 20+d20) every 40+d40 turns";
 			case ACT_RESIST_FIRE:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+					return "ball of fire (100) and resist fire every 40+d40 turns";
 				return "resist fire (dur 20+d20) every 40+d40 turns";
 			case ACT_RESIST_COLD:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+					return "ball of cold (100) and resist cold every 40+d40 turns";
 				return "resist cold (dur 20+d20) every 40+d40 turns";
 			case ACT_RESIST_ELEC:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
+					return "ball of elec (100) and resist elec every 40+d40 turns";
 				return "resist thunder (dur 20+d20) every 40+d40 turns";
 			case ACT_RESIST_POIS:
 				return "resist poison (dur 20+d20) every 40+d40 turns";
@@ -927,43 +973,7 @@ cptr item_activation(object_type *o_ptr)
 		}
 	}
 
-	if (o_ptr->tval == TV_RING)
-	{
-		switch (o_ptr->sval)
-		{
-			case SV_RING_FLAMES:
-#ifdef JP
-return "ファイア・ボール (100) と火への耐性 : 50+d50 ターン毎";
-#else
-				return "ball of fire (100) and resist fire every 50+d50 turns";
-#endif
-
-			case SV_RING_ICE:
-#ifdef JP
-return "アイス・ボール (100) と冷気への耐性 : 50+d50 ターン毎";
-#else
-				return "ball of cold (100) and resist cold every 50+d50 turns";
-#endif
-
-			case SV_RING_ACID:
-#ifdef JP
-return "アシッド・ボール (100) と酸への耐性 : 50+d50 ターン毎";
-#else
-				return "ball of acid (100) and resist acid every 50+d50 turns";
-#endif
-
-			case SV_RING_ELEC:
-#ifdef JP
-return "サンダー・ボール (100) と電撃への耐性 : 50+d50 ターン毎";
-#else
-				return "ball of elec (100) and resist elec every 50+d50 turns";
-#endif
-
-			default:
-				return NULL;
-		}
-	}
-
+	/* Special items */
 	if (o_ptr->tval == TV_WHISTLE)
 	{
 #ifdef JP
@@ -982,143 +992,12 @@ return "モンスターを捕える、又は解放する。";
 #endif
 	}
 
-	/* Require dragon scale mail */
-#ifdef JP
-if (o_ptr->tval != TV_DRAG_ARMOR) return ("奇妙な光");
-#else
-	if (o_ptr->tval != TV_DRAG_ARMOR) return ("a strange glow");
-#endif
-
-
-	/* Branch on the sub-type */
-	switch (o_ptr->sval)
-	{
-		case SV_DRAGON_BLUE:
-		{
-#ifdef JP
-return "稲妻のブレス(100) : 150+d150 ターン毎";
-#else
-			return "breathe lightning (100) every 150+d150 turns";
-#endif
-
-		}
-		case SV_DRAGON_WHITE:
-		{
-#ifdef JP
-return "冷気のブレス(110) : 150+d150 ターン毎";
-#else
-			return "breathe frost (110) every 150+d150 turns";
-#endif
-
-		}
-		case SV_DRAGON_BLACK:
-		{
-#ifdef JP
-return "酸のブレス(130) : 150+d150 ターン毎";
-#else
-			return "breathe acid (130) every 150+d150 turns";
-#endif
-
-		}
-		case SV_DRAGON_GREEN:
-		{
-#ifdef JP
-return "毒のガスのブレス(150) : 180+d180 ターン毎";
-#else
-			return "breathe poison gas (150) every 180+d180 turns";
-#endif
-
-		}
-		case SV_DRAGON_RED:
-		{
-#ifdef JP
-return "火炎のブレス(200) : 200+d200 ターン毎";
-#else
-			return "breathe fire (200) every 200+d200 turns";
-#endif
-
-		}
-		case SV_DRAGON_MULTIHUED:
-		{
-#ifdef JP
-return "万色のブレス(250) : 200+d200 ターン毎";
-#else
-			return "breathe multi-hued (250) every 200+d200 turns";
-#endif
-
-		}
-		case SV_DRAGON_BRONZE:
-		{
-#ifdef JP
-return "混乱のブレス(120) : 180+d180 ターン毎";
-#else
-			return "breathe confusion (120) every 180+d180 turns";
-#endif
-
-		}
-		case SV_DRAGON_GOLD:
-		{
-#ifdef JP
-return "轟音のブレス(130) : 180+d180 ターン毎";
-#else
-			return "breathe sound (130) every 180+d180 turns";
-#endif
-
-		}
-		case SV_DRAGON_CHAOS:
-		{
-#ifdef JP
-return "カオス/劣化のブレス(220) : 200+d200 ターン毎";
-#else
-			return "breathe chaos/disenchant (220) every 200+d200 turns";
-#endif
-
-		}
-		case SV_DRAGON_LAW:
-		{
-#ifdef JP
-return "轟音/破片のブレス(230) : 200+d200 ターン毎";
-#else
-			return "breathe sound/shards (230) every 200+d200 turns";
-#endif
-
-		}
-		case SV_DRAGON_BALANCE:
-		{
-#ifdef JP
-return "バランスのブレス (250) 200+d200 ターン毎";
-#else
-			return "breathe balance (250) every 200+d200 turns";
-#endif
-
-		}
-		case SV_DRAGON_SHINING:
-		{
-#ifdef JP
-return "閃光/暗黒のブレス(200) : 200+d200 ターン毎";
-#else
-			return "breathe light/darkness (200) every 200+d200 turns";
-#endif
-
-		}
-		case SV_DRAGON_POWER:
-		{
-#ifdef JP
-return "エレメントのブレス(300) : 200+d200 ターン毎";
-#else
-			return "breathe the elements (300) every 200+d200 turns";
-#endif
-
-		}
-	}
-
 	/* Oops */
 #ifdef JP
-return "空気の息";
+	return "何も起きない";
 #else
-	return "breathe air";
+	return "Nothing";
 #endif
-
 }
 
 
