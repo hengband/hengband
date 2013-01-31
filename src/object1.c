@@ -423,9 +423,13 @@ cptr item_activation(object_type *o_ptr)
 	{
 		if (!o_ptr->xtra2) o_ptr->xtra2 = a_info[o_ptr->name1].act_idx;
 	}
-	if (object_is_ego(o_ptr))
+	else if (object_is_ego(o_ptr))
 	{
 		if (!o_ptr->xtra2) o_ptr->xtra2 = e_info[o_ptr->name2].act_idx;
+	}
+	else
+	{
+		if (!o_ptr->xtra2) o_ptr->xtra2 = k_info[o_ptr->k_idx].act_idx;
 	}
 
 	/* Get an explain of an activation */
