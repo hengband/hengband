@@ -2636,7 +2636,7 @@ info[i++] = "それは回復力を弱める。";
 #endif
 
 	}
-	if (o_ptr->curse_flags & TRC_ADD_L_CURSE)
+	if ((o_ptr->curse_flags & TRC_ADD_L_CURSE) || have_flag(flgs, TR_ADD_L_CURSE))
 	{
 #ifdef JP
 info[i++] = "それは弱い呪いを増やす。";
@@ -2645,7 +2645,7 @@ info[i++] = "それは弱い呪いを増やす。";
 #endif
 
 	}
-	if (o_ptr->curse_flags & TRC_ADD_H_CURSE)
+	if ((o_ptr->curse_flags & TRC_ADD_H_CURSE) || have_flag(flgs, TR_ADD_H_CURSE))
 	{
 #ifdef JP
 info[i++] = "それは強力な呪いを増やす。";

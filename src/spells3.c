@@ -3532,6 +3532,8 @@ s = "祝福できる武器がありません。";
 	if (object_is_cursed(o_ptr))
 	{
 		if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) ||
+			have_flag(flgs, TR_ADD_L_CURSE) ||
+			have_flag(flgs, TR_ADD_H_CURSE) ||
 		    (o_ptr->curse_flags & TRC_PERMA_CURSE))
 		{
 #ifdef JP

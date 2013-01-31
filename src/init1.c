@@ -748,8 +748,8 @@ static cptr k_info_flags[] =
 	"TELEPORT",
 	"AGGRAVATE",
 	"BLESSED",
-	"XXX3",
-	"XXX4",
+	"XXX3", /* Fake flag for Smith */
+	"XXX4", /* Fake flag for Smith */
 	"XXX5",
 
 	"KILL_ANIMAL",
@@ -774,6 +774,8 @@ static cptr k_info_flags[] =
 	"ESP_UNIQUE",
 	"FULL_NAME",
 	"FIXED_FLAVOR",
+	"ADD_L_CURSE",
+	"ADD_H_CURSE",
 };
 
 

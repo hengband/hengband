@@ -1499,6 +1499,17 @@ static object_type *choose_cursed_obj_name(u32b flag)
 			choices[number] = i;
 			number++;
 		}
+		else if ((flag == TRC_ADD_L_CURSE) || (flag == TRC_ADD_H_CURSE))
+		{
+			u32b cf = (flag == TRC_ADD_L_CURSE) ? TR_ADD_L_CURSE : TR_ADD_H_CURSE;
+			u32b flgs[4];
+			object_flags(o_ptr, flgs);
+			if (have_flag(flgs, cf))
+			{
+				choices[number] = i;
+				number++;
+			}
+		}
 	}
 
 	/* Choice one of them */
@@ -2882,7 +2893,6 @@ static void process_world_aux_mutation(void)
 		}
 	}
 }
-
 
 /*
  * Handle curse effects once every 10 game turns

@@ -646,6 +646,8 @@ static flag_insc_table flag_insc_misc[] =
 	{ "ÅÜ", "Ag", TR_AGGRAVATE, -1 },
 	{ "½Ë", "Bs", TR_BLESSED, -1 },
 	{ "´÷", "Ty", TR_TY_CURSE, -1 },
+	{ "¼ö", "C-", TR_ADD_L_CURSE, -1 },
+	{ "ëÇ", "C+", TR_ADD_H_CURSE, -1 },
 	{ NULL, NULL, 0, -1 }
 };
 
@@ -805,6 +807,8 @@ static flag_insc_table flag_insc_misc[] =
 	{ "Ag", TR_AGGRAVATE, -1 },
 	{ "Bs", TR_BLESSED, -1 },
 	{ "Ty", TR_TY_CURSE, -1 },
+	{ "C-", TR_ADD_L_CURSE, -1 },
+	{ "C+", TR_ADD_H_CURSE, -1 },
 	{ NULL, 0, -1 }
 };
 

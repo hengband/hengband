@@ -1027,6 +1027,8 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 	}
 	if (have_flag(flgs, TR_AGGRAVATE)) total -= 10000;
 	if (have_flag(flgs, TR_BLESSED)) total += 750;
+	if (o_ptr->curse_flags & TR_ADD_L_CURSE) total -= 5000;
+	if (o_ptr->curse_flags & TR_ADD_H_CURSE) total -= 12500;
 	if (o_ptr->curse_flags & TRC_CURSED) total -= 5000;
 	if (o_ptr->curse_flags & TRC_HEAVY_CURSE) total -= 12500;
 	if (o_ptr->curse_flags & TRC_PERMA_CURSE) total -= 15000;
@@ -7362,6 +7364,8 @@ static void drain_essence(void)
 	old_name2 = o_ptr->name2;
 	old_timeout = o_ptr->timeout;
 	if (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE)) dec--;
+	if (have_flag(old_flgs, TR_ADD_L_CURSE)) dec--;
+	if (have_flag(old_flgs, TR_ADD_H_CURSE)) dec--;
 	if (have_flag(old_flgs, TR_AGGRAVATE)) dec--;
 	if (have_flag(old_flgs, TR_NO_TELE)) dec--;
 	if (have_flag(old_flgs, TR_DRAIN_EXP)) dec--;

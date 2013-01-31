@@ -845,21 +845,21 @@ static const flag_desc misc_flags3_desc[] =
 	{ TR_SH_COLD,            "冷気オーラ" },
 	{ TR_NO_TELE,            "反テレポート" },
 	{ TR_NO_MAGIC,           "反魔法" },
-	{ TR_LEVITATION,            "浮遊" },
+	{ TR_LEVITATION,         "浮遊" },
 	{ TR_SEE_INVIS,          "可視透明" },
 	{ TR_TELEPATHY,          "テレパシー" },
-	{ TR_ESP_ANIMAL,             "動物感知" },
-	{ TR_ESP_UNDEAD,             "不死感知" },
-	{ TR_ESP_DEMON,              "悪魔感知" },
-	{ TR_ESP_ORC,                "オーク感知" },
-	{ TR_ESP_TROLL,              "トロル感知" },
-	{ TR_ESP_GIANT,              "巨人感知" },
-	{ TR_ESP_DRAGON,             "ドラゴン感知" },
-	{ TR_ESP_HUMAN,              "人間感知" },
-	{ TR_ESP_EVIL,               "邪悪感知" },
-	{ TR_ESP_GOOD,               "善良感知" },
-	{ TR_ESP_NONLIVING,          "無生物感知" },
-	{ TR_ESP_UNIQUE,             "ユニーク感知" },
+	{ TR_ESP_ANIMAL,         "動物感知" },
+	{ TR_ESP_UNDEAD,         "不死感知" },
+	{ TR_ESP_DEMON,          "悪魔感知" },
+	{ TR_ESP_ORC,            "オーク感知" },
+	{ TR_ESP_TROLL,          "トロル感知" },
+	{ TR_ESP_GIANT,          "巨人感知" },
+	{ TR_ESP_DRAGON,         "ドラゴン感知" },
+	{ TR_ESP_HUMAN,          "人間感知" },
+	{ TR_ESP_EVIL,           "邪悪感知" },
+	{ TR_ESP_GOOD,           "善良感知" },
+	{ TR_ESP_NONLIVING,      "無生物感知" },
+	{ TR_ESP_UNIQUE,         "ユニーク感知" },
 	{ TR_SLOW_DIGEST,        "遅消化" },
 	{ TR_REGEN,              "急速回復" },
 	{ TR_WARNING,            "警告" },
@@ -878,6 +878,18 @@ static const flag_desc misc_flags3_desc[] =
 	{ TR_LEVITATION,            "Levitation" },
 	{ TR_SEE_INVIS,          "See Invisible" },
 	{ TR_TELEPATHY,          "ESP" },
+	{ TR_ESP_ANIMAL,         "Sense Animal" },
+	{ TR_ESP_UNDEAD,         "Sense Undead" },
+	{ TR_ESP_DEMON,          "Sense Demon" },
+	{ TR_ESP_ORC,            "Sense Orc" },
+	{ TR_ESP_TROLL,          "Sense Troll" },
+	{ TR_ESP_GIANT,          "Sense Giant" },
+	{ TR_ESP_DRAGON,         "Sense Dragon" },
+	{ TR_ESP_HUMAN,          "Sense Human" },
+	{ TR_ESP_EVIL,           "Sense Evil" },
+	{ TR_ESP_GOOD,           "Sense Good" },
+	{ TR_ESP_NONLIVING,      "Sense Nonliving" },
+	{ TR_ESP_UNIQUE,         "Sense Unique" },
 	{ TR_SLOW_DIGEST,        "Slow Digestion" },
 	{ TR_REGEN,              "Regeneration" },
 	{ TR_WARNING,            "Warning" },
@@ -1268,6 +1280,22 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 			*misc_list++ = "呪い";
 #else
 			*misc_list++ = "Cursed";
+#endif
+		}
+		if (have_flag(flgs, TR_ADD_L_CURSE))
+		{
+#ifdef JP
+			*misc_list++ = "呪いを増やす";
+#else
+			*misc_list++ = "Cursing";
+#endif
+		}
+		if (have_flag(flgs, TR_ADD_H_CURSE))
+		{
+#ifdef JP
+			*misc_list++ = "強力な呪いを増やす";
+#else
+			*misc_list++ = "Heavily Cursing";
 #endif
 		}
 	}

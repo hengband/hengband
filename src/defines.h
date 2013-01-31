@@ -3394,8 +3394,10 @@
 #define TR_ESP_UNIQUE          115
 #define TR_FULL_NAME           116
 #define TR_FIXED_FLAVOR        117
+#define TR_ADD_L_CURSE         118
+#define TR_ADD_H_CURSE         119
 
-#define TR_FLAG_MAX            118
+#define TR_FLAG_MAX            120
 #define TR_FLAG_SIZE           4
 
 

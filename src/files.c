@@ -3005,6 +3005,8 @@ static void display_flag_aux(int row, int col, cptr header,
 		/* Check flags */
 		if (mode & DP_CURSE)
 		{
+			if ((mode & DP_CURSE) && (have_flag(flgs, TR_ADD_L_CURSE) || have_flag(flgs, TR_ADD_H_CURSE)))
+				c_put_str(TERM_L_DARK, "+", row, col);
 			if ((mode & DP_CURSE) && (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE)))
 				c_put_str(TERM_WHITE, "+", row, col);
 			if ((mode & DP_CURSE) && (o_ptr->curse_flags & TRC_PERMA_CURSE))
