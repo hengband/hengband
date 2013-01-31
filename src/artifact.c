@@ -3768,14 +3768,20 @@ bool activate_random_artifact(object_type *o_ptr)
 	}
 
 	/* Set activation timeout */
-        act_ptr = find_activation_info(o_ptr);
+	act_ptr = find_activation_info(o_ptr);
 
-        if (act_ptr->timeout.constant >= 0) {
+	if (!act_ptr) {
+		/* Maybe forgot adding information to activation_info table ? */
+		msg_format("Activation information is not found: %d.", o_ptr->xtra2);
+		return FALSE;
+	}
+
+	if (act_ptr->timeout.constant >= 0) {
 		o_ptr->timeout = act_ptr->timeout.constant;
 		if (act_ptr->timeout.dice > 0) {
 			o_ptr->timeout += randint1(act_ptr->timeout.dice);
 		}
-        } else {
+	} else {
 		/* Activations that have special timeout */
 		switch (o_ptr->xtra2) {
 		case ACT_BR_FIRE:
@@ -3792,9 +3798,9 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		default:
 			msg_format("Special timeout is not implemented: %d.", o_ptr->xtra2);
-			break;
+			return FALSE;
 		}
-        }
+	}
 
 	return TRUE;
 }
