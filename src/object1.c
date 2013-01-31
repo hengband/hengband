@@ -482,7 +482,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_CAST_BA_STAR:
 				return "スター・ボール・ダスト(150) : 1000 ターン毎";
 			case ACT_BLADETURNER:
-				return "エレメントのブレス(300), 士気高揚、祝福、耐性";
+				return "エレメントのブレス(300), 士気高揚、祝福、耐性 : 400 ターン毎";
 			case ACT_BA_ACID_1:
 				return "アシッド・ボール(100) : 12+d12 ターン毎";
 			case ACT_BR_FIRE:
@@ -739,7 +739,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_CAST_BA_STAR:
 				return "cast star balls (150) every 1000 turns";
 			case ACT_BLADETURNER:
-				return "breathe elements (300), hero, bless, and resistance";
+				return "breathe elements (300), hero, bless, and resistance every 400 turns";
 			case ACT_BA_ACID_1:
 				return "ball of acid (100) every 12+d12 turns";
 			case ACT_BR_FIRE:
