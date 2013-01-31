@@ -4404,58 +4404,6 @@ msg_print("あなたはエレメントのブレスを吐いた。");
 		return;
 	}
 
-	else if (o_ptr->tval == TV_AMULET)
-	{
-		if (object_is_ego(o_ptr))
-		{
-			switch (o_ptr->name2)
-			{
-			case EGO_AMU_IDENT:
-				if (!ident_spell(FALSE)) return;
-				o_ptr->timeout = 10;
-				break;
-			case EGO_AMU_CHARM:
-				if (!get_aim_dir(&dir)) return;
-				charm_monster(dir, MAX(20, p_ptr->lev));
-				o_ptr->timeout = 200;
-				break;
-			case EGO_AMU_JUMP:
-				teleport_player(10, 0L);
-				o_ptr->timeout = randint0(10) + 10;
-				break;
-			case EGO_AMU_TELEPORT:
-				teleport_player(100, 0L);
-				o_ptr->timeout = randint0(50) + 50;
-				break;
-			case EGO_AMU_D_DOOR:
-				(void)dimension_door();
-				o_ptr->timeout = 200;
-				break;
-			case EGO_AMU_RES_FIRE_:
-				(void)set_oppose_fire(randint1(20) + 20, FALSE);
-				o_ptr->timeout = randint0(50) + 50;
-				break;
-			case EGO_AMU_RES_COLD_:
-				(void)set_oppose_cold(randint1(20) + 20, FALSE);
-				o_ptr->timeout = randint0(50) + 50;
-				break;
-			case EGO_AMU_RES_ELEC_:
-				(void)set_oppose_elec(randint1(20) + 20, FALSE);
-				o_ptr->timeout = randint0(50) + 50;
-				break;
-			case EGO_AMU_RES_ACID_:
-				(void)set_oppose_acid(randint1(20) + 20, FALSE);
-				o_ptr->timeout = randint0(50) + 50;
-				break;
-			case EGO_AMU_DETECTION:
-				detect_all(DETECT_RAD_DEFAULT);
-				o_ptr->timeout = randint0(55)+55;
-				break;
-			}
-		}
-		return;
-	}
-
 	else if (o_ptr->tval == TV_WHISTLE)
 	{
 		if (music_singing_any()) stop_singing();

@@ -3197,7 +3197,7 @@ bool activate_random_artifact(object_type *o_ptr)
 #else
 			msg_format("The %s grows blue.", name);
 #endif
-			(void)set_oppose_cold(randint1(20) + 20, FALSE);
+			(void)set_oppose_elec(randint1(20) + 20, FALSE);
 			o_ptr->timeout = 40 + randint1(40);
 			break;
 		}
@@ -3209,7 +3209,7 @@ bool activate_random_artifact(object_type *o_ptr)
 #else
 			msg_format("The %s grows green.", name);
 #endif
-			(void)set_oppose_cold(randint1(20) + 20, FALSE);
+			(void)set_oppose_pois(randint1(20) + 20, FALSE);
 			o_ptr->timeout = 40 + randint1(40);
 			break;
 		}
