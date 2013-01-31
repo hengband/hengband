@@ -2018,12 +2018,9 @@ static bool activate_dragon_breath(object_type *o_ptr)
 	/* Stop speaking */
 	if (music_singing_any()) stop_singing();
 	if (hex_spelling_any()) stop_hex_spell_all();
+
 	t = randint0(n);
-#ifdef JP
-	msg_format("あなたは%sのブレスを吐いた。", name[t]);
-#else
-	msg_format("You breathe %s.", name[n]);
-#endif
+	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), name[t]);
 	fire_ball(type[t], dir, 250, -4);
 
 	return TRUE;
