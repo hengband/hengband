@@ -4012,7 +4012,6 @@ static void do_cmd_activate_aux(int item)
 #else
 		msg_print("It shows no reaction.");
 #endif
-
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -4038,7 +4037,6 @@ static void do_cmd_activate_aux(int item)
 #else
 		msg_print("You failed to activate it properly.");
 #endif
-
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -4051,10 +4049,20 @@ static void do_cmd_activate_aux(int item)
 #else
 		msg_print("It whines, glows and fades...");
 #endif
-
 		return;
 	}
 
+	/* Some lights need enough fuel for activation */
+	if (!o_ptr->xtra4 && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
+	{
+#ifdef JP
+		msg_print("Ç³ÎÁ¤¬¤Ê¤¤¡£");
+#else
+		msg_print("It has no fuel.");
+#endif
+		energy_use = 0;
+		return;
+	}
 
 	/* Activate the artifact */
 #ifdef JP
@@ -4067,39 +4075,7 @@ static void do_cmd_activate_aux(int item)
 	/* Sound */
 	sound(SOUND_ZAP);
 
-	if (o_ptr->name1)
-	{
-		if (!o_ptr->xtra2) o_ptr->xtra2 = a_info[o_ptr->name1].act_idx;
-	}
-
-	if (object_is_artifact(o_ptr) && o_ptr->xtra2)
-	{
-		(void)activate_random_artifact(o_ptr);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		/* Success */
-		return;
-	}
-
-	/* Artifacts */
-	else if (object_is_fixed_artifact(o_ptr))
-	{
-		/* Choose effect */
-		switch (o_ptr->name1)
-		{
-		default:
-			break;
-		}
-
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		/* Done */
-		return;
-	}
-
+	/* Give priority to weaponsmith's essential activations */
 	if (object_is_smith(o_ptr))
 	{
 		switch (o_ptr->xtra3-1)
@@ -4136,67 +4112,27 @@ static void do_cmd_activate_aux(int item)
 		}
 	}
 
-
-	if (o_ptr->name2 == EGO_TRUMP)
+	/* Paranoia - Set activation index for older save data */
+	if (object_is_fixed_artifact(o_ptr))
 	{
-		teleport_player(100, 0L);
-		o_ptr->timeout = 50 + randint1(50);
+		if (!o_ptr->xtra2) o_ptr->xtra2 = a_info[o_ptr->name1].act_idx;
+	}
+	if (object_is_ego(o_ptr))
+	{
+		if (!o_ptr->xtra2) o_ptr->xtra2 = e_info[o_ptr->name2].act_idx;
+	}
+
+	/* Activate object */
+	if (o_ptr->xtra2 && (object_is_artifact(o_ptr) || object_is_ego(o_ptr)))
+	{
+		(void)activate_random_artifact(o_ptr);
 
 		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
-		/* Done */
+		/* Success */
 		return;
 	}
-
-
-	if (o_ptr->name2 == EGO_LITE_ILLUMINATION)
-	{
-		if (!o_ptr->xtra4 && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
-		{
-#ifdef JP
-			msg_print("Ç³ÎÁ¤¬¤Ê¤¤¡£");
-#else
-			msg_print("It has no fuel.");
-#endif
-			energy_use = 0;
-			return;
-		}
-		lite_area(damroll(2, 15), 3);
-		o_ptr->timeout = randint0(10) + 10;
-
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		return;
-	}
-
-
-	if (o_ptr->name2 == EGO_EARTHQUAKES)
-	{
-		earthquake(py, px, 5);
-		o_ptr->timeout = 100 + randint1(100);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		/* Done */
-		return;
-	}
-
-
-	if (o_ptr->name2 == EGO_JUMP)
-	{
-		teleport_player(10, 0L);
-		o_ptr->timeout = 10 + randint1(10);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		/* Done */
-		return;
-	}
-
 
 	/* Hack -- Dragon Scale Mail can be activated as well */
 	if (o_ptr->tval == TV_DRAG_ARMOR)

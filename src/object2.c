@@ -4306,6 +4306,9 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 			if (o_ptr->dd > 9) o_ptr->dd = 9;
 		}
 
+		/* Hack -- apply activatin index if needed */
+		if (e_ptr->act_idx) o_ptr->xtra2 = e_ptr->act_idx;
+
 		/* Hack -- apply extra penalties if needed */
 		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
 		{

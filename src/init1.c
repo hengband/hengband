@@ -2539,6 +2539,21 @@ errr parse_e_info(char *buf, header *head)
 		e_ptr->max_pval = pv;
 	}
 
+	/* Hack -- Process 'U' for activation index */
+	else if (buf[0] == 'U')
+	{
+		byte n;
+		n = grab_one_activation_flag(buf + 2);
+		if (n > 0)
+		{
+			e_ptr->act_idx = n;
+		}
+		else
+		{
+			return (5);
+		}
+	}
+
 	/* Hack -- Process 'F' for flags */
 	else if (buf[0] == 'F')
 	{

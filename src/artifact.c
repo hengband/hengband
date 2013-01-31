@@ -2511,7 +2511,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_QUAKE:
 		{
-			earthquake(py, px, 10);
+			earthquake(py, px, 5);
 			o_ptr->timeout = 50;
 			break;
 		}
@@ -3594,6 +3594,13 @@ bool activate_random_artifact(object_type *o_ptr)
 			(void)set_hero(randint1(20) + 20, FALSE);
 			dispel_evil(p_ptr->lev * 3);
 			o_ptr->timeout = 100 + randint1(100);
+			break;
+		}
+
+		case ACT_PHASE_DOOR:
+		{
+			teleport_player(10, 0L);
+			o_ptr->timeout = 10 + randint1(10);
 			break;
 		}
 

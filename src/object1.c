@@ -355,9 +355,52 @@ cptr item_activation(object_type *o_ptr)
 	 * for art_name
 	 */
 
+	/* Give priority to weaponsmith's essential activations */
+	if (object_is_smith(o_ptr))
+	{
+		switch (o_ptr->xtra3 - 1)
+		{
+		case ESSENCE_TMP_RES_ACID:
+#ifdef JP
+			return "酸への耐性 : 50+d50ターン毎";
+#else
+			return "resist acid every 50+d50 turns";
+#endif
+		case ESSENCE_TMP_RES_ELEC:
+#ifdef JP
+			return "電撃への耐性 : 50+d50ターン毎";
+#else
+			return "resist elec every 50+d50 turns";
+#endif
+		case ESSENCE_TMP_RES_FIRE:
+#ifdef JP
+			return "火への耐性 : 50+d50ターン毎";
+#else
+			return "resist fire every 50+d50 turns";
+#endif
+		case ESSENCE_TMP_RES_COLD:
+#ifdef JP
+			return "冷気への耐性 : 50+d50ターン毎";
+#else
+			return "resist cold every 50+d50 turns";
+#endif
+		case TR_IMPACT:
+#ifdef JP
+			return "地震 : 100+d100 ターン毎";
+#else
+			return "earthquake every 100+d100 turns";
+#endif
+		}
+	}
+
+	/* Paranoia - Set activation index for older save data */
 	if (object_is_fixed_artifact(o_ptr))
 	{
 		if (!o_ptr->xtra2) o_ptr->xtra2 = a_info[o_ptr->name1].act_idx;
+	}
+	if (object_is_ego(o_ptr))
+	{
+		if (!o_ptr->xtra2) o_ptr->xtra2 = e_info[o_ptr->name2].act_idx;
 	}
 
 	if ((object_is_artifact(o_ptr) || object_is_ego(o_ptr)) &&
@@ -373,7 +416,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BO_MISS_1:
 				return "マジック・ミサイル(2d6) : 2 ターン毎";
 			case ACT_BA_POIS_1:
-				return "悪臭雲 (12) : 4+d4 ターン毎";
+				return "悪臭雲(12) : 4+d4 ターン毎";
 			case ACT_BO_ELEC_1:
 				return "サンダー・ボルト(4d8) : 5+d5 ターン毎";
 			case ACT_BO_ACID_1:
@@ -383,41 +426,41 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BO_FIRE_1:
 				return "ファイア・ボルト(9d8) : 8+d8 ターン毎";
 			case ACT_BA_COLD_1:
-				return "アイス・ボール (48) : 6+d6 ターン毎";
+				return "アイス・ボール(48) : 6+d6 ターン毎";
 			case ACT_BA_FIRE_1:
-				return "ファイア・ボール (72) : 9+d9 ターン毎";
+				return "ファイア・ボール(72) : 9+d9 ターン毎";
 			case ACT_DRAIN_1:
 				return "窒息攻撃(100) : 100+d100 ターン毎";
 			case ACT_BA_COLD_2:
-				return "アイス・ボール (100) : 12+d12 ターン毎";
+				return "アイス・ボール(100) : 12+d12 ターン毎";
 			case ACT_BA_ELEC_2:
-				return "サンダー・ボール (100) : 12+d12 ターン毎";
+				return "サンダー・ボール(100) : 12+d12 ターン毎";
 			case ACT_DRAIN_2:
 				return "生命力吸収(120) : 400 ターン毎";
 			case ACT_VAMPIRE_1:
-				return "吸血ドレイン (3*50) : 400 ターン毎";
+				return "吸血ドレイン(3*50) : 400 ターン毎";
 			case ACT_BO_MISS_2:
-				return "矢 (150) : 90+d90 ターン毎";
+				return "矢(150) : 90+d90 ターン毎";
 			case ACT_BA_FIRE_3:
-				return "巨大ファイア・ボール (300) : 225+d225 ターン毎";
+				return "巨大ファイア・ボール(300) : 225+d225 ターン毎";
 			case ACT_BA_COLD_3:
-				return "巨大アイス・ボール (400) : 325+d325 ターン毎";
+				return "巨大アイス・ボール(400) : 325+d325 ターン毎";
 			case ACT_BA_ELEC_3:
-				return "巨大サンダー・ボール (500) : 425+d425 ターン毎";
+				return "巨大サンダー・ボール(500) : 425+d425 ターン毎";
 			case ACT_WHIRLWIND:
 				return "カマイタチ : 250 ターン毎";
 			case ACT_VAMPIRE_2:
-				return "吸血ドレイン (3*100) : 400 ターン毎";
+				return "吸血ドレイン(3*100) : 400 ターン毎";
 			case ACT_CALL_CHAOS:
 				return "混沌召来 : 350 ターン毎"; /*nuke me*/
 			case ACT_ROCKET:
-				return "ロケット (120+level) : 400 ターン毎";
+				return "ロケット(120+レベル) : 400 ターン毎";
 			case ACT_DISP_EVIL:
-				return "邪悪退散 (x5) : 100+d100 ターン毎";
+				return "邪悪退散(x5) : 100+d100 ターン毎";
 			case ACT_BA_MISS_3:
-				return "エレメントのブレス (300) : 500 ターン毎";
+				return "エレメントのブレス(300) : 500 ターン毎";
 			case ACT_DISP_GOOD:
-				return "善良退散 (x5) : 100+d100 ターン毎";
+				return "善良退散(x5) : 100+d100 ターン毎";
 			case ACT_BO_MANA:
 				return "魔法の矢(150) : 90+d90 ターン毎";
 			case ACT_BA_FIRE_2:
@@ -439,15 +482,15 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_CAST_BA_STAR:
 				return "スター・ボール・ダスト(150) : 1000 ターン毎";
 			case ACT_BLADETURNER:
-				return "エレメントのブレス (300), 士気高揚、祝福、耐性";
+				return "エレメントのブレス(300), 士気高揚、祝福、耐性";
 			case ACT_CONFUSE:
 				return "パニック・モンスター : 15 ターン毎";
 			case ACT_SLEEP:
 				return "周囲のモンスターを眠らせる : 55 ターン毎";
 			case ACT_QUAKE:
-				return "地震 (半径 10) : 50 ターン毎";
+				return "地震 : 50 ターン毎";
 			case ACT_TERROR:
-				return "恐慌 : 3 * (level+10) ターン毎";
+				return "恐慌 : 3*(レベル+10) ターン毎";
 			case ACT_TELE_AWAY:
 				return "テレポート・アウェイ : 150 ターン毎";
 			case ACT_BANISH_EVIL:
@@ -459,7 +502,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_SCARE_AREA:
 				return "モンスター恐慌 : 40+d40ターン毎";
 			case ACT_AGGRAVATE:
-				if (o_ptr->name1 == ART_HYOUSIGI) return "拍子木を打ちならす : いつでも";
+				if(o_ptr->name1 == ART_HYOUSIGI) return "拍子木を打ちならす : いつでも";
 				return "モンスターを怒らせる : いつでも";
 			case ACT_CHARM_ANIMAL:
 				return "動物魅了 : 200 ターン毎";
@@ -489,7 +532,7 @@ cptr item_activation(object_type *o_ptr)
 				return "蛸の大群召喚 : 300+d150ターン毎";
 
 			case ACT_CHOIR_SINGS:
-				return "回復 (777)、癒し、士気高揚 : 300 ターン毎";
+				return "回復(777)、癒し、士気高揚 : 300 ターン毎";
 			case ACT_CURE_LW:
 				return "恐怖除去/体力回復(30) : 10 ターン毎";
 			case ACT_CURE_MW:
@@ -509,35 +552,35 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_CURE_MANA_FULL:
 				return "魔力復活: 777 ターン毎";
 			case ACT_ESP:
-				return "テレパシー (期間 25+d30) : 200 ターン毎";
+				return "テレパシー(期間 25+d30) : 200 ターン毎";
 			case ACT_BERSERK:
-				return "士気高揚と祝福 (期間 50+d50) : 100+d100 ターン毎";
+				return "士気高揚と祝福(期間 50+d50) : 100+d100 ターン毎";
 			case ACT_PROT_EVIL:
-				return "対邪悪結界 (期間 level*3 + d25) : 200+d200 ターン毎";
+				return "対邪悪結界(期間 3*レベル+d25) : 200+d200 ターン毎";
 			case ACT_RESIST_ALL:
-				return "全耐性 (期間 20+d20) : 111 ターン毎";
+				return "全耐性(期間 20+d20) : 111 ターン毎";
 			case ACT_SPEED:
-				return "加速 (期間 20+d20) : 250 ターン毎";
+				return "加速(期間 20+d20) : 250 ターン毎";
 			case ACT_XTRA_SPEED:
-				return "加速 (期間 75+d75) : 200+d200 ターン毎";
+				return "加速(期間 75+d75) : 200+d200 ターン毎";
 			case ACT_WRAITH:
-				return "幽体化 (期間 level/2 + d(level/2)) : 1000 ターン毎";
+				return "幽体化(期間 (レベル/2)+d(レベル/2)) : 1000 ターン毎";
 			case ACT_INVULN:
-				return "無敵化 (期間 8+d8) : 1000 ターン毎";
+				return "無敵化(期間 8+d8) : 1000 ターン毎";
 			case ACT_HELO:
 				return "士気高揚 : 30+d30ターン毎";
 			case ACT_HELO_SPEED:
-				return "士気高揚, スピード(50+d50ターン) : 100+d200 ターン毎";
+				return "士気高揚, スピード(期間 50+d50ターン) : 100+d200 ターン毎";
 			case ACT_RESIST_ACID:
-				return "酸への耐性 (期間 20+d20) : 40+d40 ターン毎";
+				return "酸への耐性(期間 20+d20) : 40+d40 ターン毎";
 			case ACT_RESIST_FIRE:
-				return "火炎への耐性 (期間 20+d20) : 40+d40 ターン毎";
+				return "火炎への耐性(期間 20+d20) : 40+d40 ターン毎";
 			case ACT_RESIST_COLD:
-				return "冷気への耐性 (期間 20+d20) : 40+d40 ターン毎";
+				return "冷気への耐性(期間 20+d20) : 40+d40 ターン毎";
 			case ACT_RESIST_ELEC:
-				return "電撃への耐性 (期間 20+d20) : 40+d40 ターン毎";
+				return "電撃への耐性(期間 20+d20) : 40+d40 ターン毎";
 			case ACT_RESIST_POIS:
-				return "毒への耐性 (期間 20+d20) : 40+d40 ターン毎";
+				return "毒への耐性(期間 20+d20) : 40+d40 ターン毎";
 
 			case ACT_LIGHT:
 				return "イルミネーション : 10+d10 ターン毎";
@@ -568,7 +611,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DIM_DOOR:
 				return "次元の扉 : 100 ターン毎";
 			case ACT_TELEPORT:
-				return "テレポート (range 100) : 25 ターン毎";
+				return "テレポート : 25 ターン毎";
 			case ACT_RECALL:
 				return "帰還の詔 : 200 ターン毎";
 			case ACT_JUDGE:
@@ -588,7 +631,9 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_LORE:
 				return "危険を伴う鑑定 : いつでも";
 			case ACT_SHIKOFUMI:
-				return "四股踏み : 100+d100ターン毎";
+				return "四股踏み : 100+d100 ターン毎";
+			case ACT_PHASE_DOOR:
+				return "ショート・テレポート : 10 ターン毎";
 
 			/* Unique activation */
 			case ACT_FISHING:
@@ -685,7 +730,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_SLEEP:
 				return "sleep nearby monsters every 55 turns";
 			case ACT_QUAKE:
-				return "earthquake (rad 10) every 50 turns";
+				return "earthquake every 50 turns";
 			case ACT_TERROR:
 				return "terror every 3 * (level+10) turns";
 			case ACT_TELE_AWAY:
@@ -809,7 +854,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_DIM_DOOR:
 				return "dimension door every 100 turns";
 			case ACT_TELEPORT:
-				return "teleport (range 100) every 25 turns";
+				return "teleport every 25 turns";
 			case ACT_RECALL:
 				return "word of recall every 200 turns";
 			case ACT_TELEKINESIS:
@@ -830,6 +875,8 @@ cptr item_activation(object_type *o_ptr)
 				return "perilous identify every turn";
 			case ACT_SHIKOFUMI:
 				return "shiko every 100+d100 turns";
+			case ACT_PHASE_DOOR:
+				return "blink every 10 turns";
 
 			/* Unique activation */
 			case ACT_FISHING:
@@ -847,94 +894,6 @@ cptr item_activation(object_type *o_ptr)
 				return "something undefined";
 #endif
 		}
-	}
-
-#if 0
-	/* Some artifacts can be activated */
-	switch (o_ptr->name1)
-	{
-		/* Nothing */
-	}
-#endif
-
-	if (object_is_smith(o_ptr))
-	{
-		switch (o_ptr->xtra3 - 1)
-		{
-		case ESSENCE_TMP_RES_ACID:
-#ifdef JP
-			return "酸への耐性 : 50+d50ターン毎";
-#else
-			return "resist acid every 50+d50 turns";
-#endif
-
-		case ESSENCE_TMP_RES_ELEC:
-#ifdef JP
-			return "電撃への耐性 : 50+d50ターン毎";
-#else
-			return "resist elec every 50+d50 turns";
-#endif
-
-		case ESSENCE_TMP_RES_FIRE:
-#ifdef JP
-			return "火への耐性 : 50+d50ターン毎";
-#else
-			return "resist fire every 50+d50 turns";
-#endif
-
-		case ESSENCE_TMP_RES_COLD:
-#ifdef JP
-			return "冷気への耐性 : 50+d50ターン毎";
-#else
-			return "resist cold every 50+d50 turns";
-#endif
-
-		case TR_IMPACT:
-#ifdef JP
-			return "地震 : 100+d100 ターン毎";
-#else
-			return "earthquake every 100+d100 turns";
-#endif
-		}
-	}
-
-	if (o_ptr->name2 == EGO_TRUMP)
-	{
-#ifdef JP
-return "テレポート : 50+d50 ターン毎";
-#else
-		return "teleport every 50+d50 turns";
-#endif
-
-	}
-
-	if (o_ptr->name2 == EGO_LITE_ILLUMINATION)
-	{
-#ifdef JP
-return "イルミネーション : 10+d10 ターン毎";
-#else
-			return "illumination every 10+d10 turns";
-#endif
-	}
-
-	else if (o_ptr->name2 == EGO_EARTHQUAKES)
-	{
-#ifdef JP
-return "地震 : 100+d100 ターン毎";
-#else
-		return "earthquake every 100+d100 turns";
-#endif
-
-	}
-
-	else if (o_ptr->name2 == EGO_JUMP)
-	{
-#ifdef JP
-return "ショート・テレポート : 10+d10 ターン毎";
-#else
-		return "blink every 10+d10 turns";
-#endif
-
 	}
 
 	if (o_ptr->tval == TV_RING)

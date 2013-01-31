@@ -1884,6 +1884,7 @@
 #define ACT_RECHARGE_XTRA       133
 #define ACT_LORE                134
 #define ACT_SHIKOFUMI           135
+#define ACT_PHASE_DOOR          136
 /* 127 -> unused */
 #define ACT_FISHING             251
 #define ACT_INROU               252
