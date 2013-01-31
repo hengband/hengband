@@ -1715,4 +1715,8 @@ typedef struct {
 	byte index;
 	byte level;
 	s32b value;
+	struct {
+		int constant;
+		int dice;
+	} timeout;
 } activation_type;
