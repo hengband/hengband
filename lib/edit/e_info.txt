@@ -1009,6 +1009,7 @@ X:27:10
 W:5:0:0:300
 C:0:0:0:0
 F:ACTIVATE
+U:HELO
 
 N:151:誚暀及
 E:and Slaying
@@ -1028,6 +1029,7 @@ X:27:5
 W:2:0:0:200
 C:0:0:0:0
 F:ACTIVATE
+U:BO_MISS_1
 
 N:154:紹梓及泫及
 E:and Fire bolt
@@ -1035,6 +1037,7 @@ X:27:5
 W:10:0:0:700
 C:0:0:0:0
 F:ACTIVATE
+U:BO_FIRE_1
 
 N:155:挕竣及泫及
 E:and Frost bolt
@@ -1042,6 +1045,7 @@ X:27:5
 W:9:0:0:600
 C:0:0:0:0
 F:ACTIVATE
+U:BO_COLD_1
 
 N:156:齬猾及泫及
 E:and Lightning bolt
@@ -1049,6 +1053,7 @@ X:27:5
 W:7:0:0:400
 C:0:0:0:0
 F:ACTIVATE
+U:BO_ELEC_1
 
 N:157:鄙及泫及
 E:and Acid bolt
@@ -1056,6 +1061,7 @@ X:27:5
 W:8:0:0:500
 C:0:0:0:0
 F:ACTIVATE
+U:BO_ACID_1
 
 N:158:呺恘及泫及
 E:and Mana bolt
@@ -1063,6 +1069,7 @@ X:27:10
 W:50:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
+U:BO_MANA
 
 N:159:紹萄及
 E:and Fire ball
@@ -1070,6 +1077,7 @@ X:27:10
 W:40:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
+U:BA_FIRE_1
 
 N:160:皮伉扒□玉及
 E:and Blizzard
@@ -1077,6 +1085,7 @@ X:27:10
 W:40:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
+U:BA_COLD_2
 
 N:161:俖萄及
 E:and Ball Lightning
@@ -1084,6 +1093,7 @@ X:27:10
 W:40:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
+U:BA_ELEC_2
 
 N:162:鄙及萄及
 E:and Acid ball
@@ -1091,6 +1101,7 @@ X:27:10
 W:40:0:0:1500
 C:0:0:0:0
 F:ACTIVATE
+U:BA_ACID_1
 
 N:163:呺恘及勀及
 E:and Mana Storm
@@ -1098,6 +1109,7 @@ X:27:25
 W:100:0:0:8000
 C:0:0:0:0
 F:ACTIVATE
+U:BA_MANA
 
 N:164:玉仿打件及紹梓及
 E:and Dragon's Flame
@@ -1105,6 +1117,7 @@ X:27:20
 W:70:0:0:5000
 C:0:0:0:0
 F:ACTIVATE
+U:BR_FIRE
 
 N:165:玉仿打件及挕竣及
 E:and Dragon's Frost
@@ -1112,6 +1125,7 @@ X:27:20
 W:70:0:0:5000
 C:0:0:0:0
 F:ACTIVATE
+U:BR_COLD
 
 N:166:わ蟾笛簧及
 E:and Haste
@@ -1119,6 +1133,7 @@ X:27:20
 W:90:0:0:30000
 C:0:0:0:0
 F:ACTIVATE
+U:SPEED
 
 N:167:飧爵銜及
 E:of Berserker
@@ -1126,6 +1141,7 @@ X:27:15
 W:30:0:0:2000
 C:0:0:0:0
 F:ACTIVATE
+U:BERSERK
 
 N:168:潤諦及
 E:of Hunter
@@ -1160,6 +1176,7 @@ X:27:5
 W:30:0:0:1000
 C:0:0:0:0
 F:ACTIVATE
+U:DETECT_ALL_MONS
 
 N:173:レ太及
 E:and Stealth
@@ -1174,6 +1191,7 @@ X:27:10
 W:45:0:0:2000
 C:0:0:0:0
 F:ACTIVATE
+U:TELE_AWAY
 
 N:175:擎蘸及
 E:and Accuracy
@@ -1214,6 +1232,7 @@ X:27:30
 W:100:0:0:50000
 C:0:0:15:0
 F:ACTIVATE
+U:ULTIMATE_RESIST
 
 N:181:煩董襖著璋及
 E:and Experience Drain

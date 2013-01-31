@@ -1806,6 +1806,9 @@
 #define ACT_BIZARRE             34
 #define ACT_CAST_BA_STAR        35
 #define ACT_BLADETURNER         36
+#define ACT_BA_ACID_1           37
+#define ACT_BR_FIRE             38
+#define ACT_BR_COLD             39
 /* 33 - 50 unused */
 #define ACT_CONFUSE             51
 #define ACT_SLEEP               52
@@ -1885,6 +1888,8 @@
 #define ACT_LORE                134
 #define ACT_SHIKOFUMI           135
 #define ACT_PHASE_DOOR          136
+#define ACT_DETECT_ALL_MONS     137
+#define ACT_ULTIMATE_RESIST     138
 /* 127 -> unused */
 #define ACT_FISHING             251
 #define ACT_INROU               252

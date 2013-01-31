@@ -2381,8 +2381,8 @@ bool activate_random_artifact(object_type *o_ptr)
 			msg_format("The %s glows pale...", name);
 #endif
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_MANA, dir, 400, 4);
-			o_ptr->timeout = randint0(250) + 250;
+			fire_ball(GF_MANA, dir, 250, 4);
+			o_ptr->timeout = randint0(150) + 150;
 			break;
 		}
 
@@ -2479,6 +2479,38 @@ bool activate_random_artifact(object_type *o_ptr)
 			(void)set_oppose_cold(randint1(50) + 50, FALSE);
 			(void)set_oppose_pois(randint1(50) + 50, FALSE);
 			o_ptr->timeout = 400;
+			break;
+		}
+		case ACT_BA_ACID_1:
+		{
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_ACID, dir, 100, 2);
+			o_ptr->timeout = randint0(12) + 12;
+			break;
+		}
+
+		case ACT_BR_FIRE:
+		{
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_FIRE, dir, 200, -2);
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+			{
+				(void)set_oppose_fire(randint1(20) + 20, FALSE);
+				o_ptr->timeout = 200;
+			}
+			else o_ptr->timeout = 250;
+			break;
+		}
+		case ACT_BR_COLD:
+		{
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_COLD, dir, 200, -2);
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+			{
+				(void)set_oppose_cold(randint1(20) + 20, FALSE);
+				o_ptr->timeout = 200;
+			}
+			else o_ptr->timeout = 250;
 			break;
 		}
 
@@ -3027,9 +3059,12 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_BERSERK:
 		{
 			(void)set_afraid(0);
+			(void)set_shero(randint1(25) + 25, FALSE);
+			o_ptr->timeout = randint0(75)+75;
+			/* (void)set_afraid(0);
 			(void)set_hero(randint1(50) + 50, FALSE);
 			(void)set_blessed(randint1(50) + 50, FALSE);
-			o_ptr->timeout = 100 + randint1(100);
+			o_ptr->timeout = 100 + randint1(100); */
 			break;
 		}
 
@@ -3603,6 +3638,32 @@ bool activate_random_artifact(object_type *o_ptr)
 			o_ptr->timeout = 10 + randint1(10);
 			break;
 		}
+
+		case ACT_DETECT_ALL_MONS:
+		{
+			(void)detect_monsters_invis(255);
+			(void)detect_monsters_normal(255);
+			o_ptr->timeout = 150;
+			break;
+		}
+
+		case ACT_ULTIMATE_RESIST:
+		{
+			int v = randint1(25)+25;
+			(void)set_afraid(0);
+			(void)set_hero(v, FALSE);
+			(void)hp_player(10);
+			(void)set_blessed(v, FALSE);
+			(void)set_oppose_acid(v, FALSE);
+			(void)set_oppose_elec(v, FALSE);
+			(void)set_oppose_fire(v, FALSE);
+			(void)set_oppose_cold(v, FALSE);
+			(void)set_oppose_pois(v, FALSE);
+			(void)set_ultimate_res(v, FALSE);
+			o_ptr->timeout = 777;
+			break;
+		}
+
 
 		/* Unique activation */
 		case ACT_FISHING:

@@ -472,7 +472,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BA_DARK:
 				return "暗黒の嵐(250) : 150+d150 ターン毎";
 			case ACT_BA_MANA:
-				return "魔力の嵐(400) : 250+d250ターン毎";
+				return "魔力の嵐(250) : 150+d150 ターン毎";
 			case ACT_PESTICIDE:
 				return "害虫の駆除 : 55+d55ターン毎";
 			case ACT_BLINDING_LIGHT:
@@ -483,6 +483,17 @@ cptr item_activation(object_type *o_ptr)
 				return "スター・ボール・ダスト(150) : 1000 ターン毎";
 			case ACT_BLADETURNER:
 				return "エレメントのブレス(300), 士気高揚、祝福、耐性";
+			case ACT_BA_ACID_1:
+				return "アシッド・ボール(100) : 12+d12 ターン毎";
+			case ACT_BR_FIRE:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+					return "火炎のブレス (200) と火への耐性 : 200 ターン毎";
+				return "火炎のブレス (200) : 250 ターン毎";
+			case ACT_BR_COLD:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+					return "冷気のブレス (200) と冷気への耐性 : 200 ターン毎";
+				return "冷気のブレス (200) : 250 ターン毎";
+
 			case ACT_CONFUSE:
 				return "パニック・モンスター : 15 ターン毎";
 			case ACT_SLEEP:
@@ -502,8 +513,8 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_SCARE_AREA:
 				return "モンスター恐慌 : 40+d40ターン毎";
 			case ACT_AGGRAVATE:
-				if(o_ptr->name1 == ART_HYOUSIGI) return "拍子木を打ちならす : いつでも";
-				return "モンスターを怒らせる : いつでも";
+				if(o_ptr->name1 != ART_HYOUSIGI) return "モンスターを怒らせる : いつでも";
+				return "拍子木を打ちならす : いつでも";
 			case ACT_CHARM_ANIMAL:
 				return "動物魅了 : 200 ターン毎";
 			case ACT_CHARM_UNDEAD:
@@ -554,7 +565,8 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_ESP:
 				return "テレパシー(期間 25+d30) : 200 ターン毎";
 			case ACT_BERSERK:
-				return "士気高揚と祝福(期間 50+d50) : 100+d100 ターン毎";
+				/* return "士気高揚と祝福(期間 50+d50) : 100+d100 ターン毎"; */
+				return "狂戦士化(25+d25ターン) : 75+d75 ターン毎";
 			case ACT_PROT_EVIL:
 				return "対邪悪結界(期間 3*レベル+d25) : 200+d200 ターン毎";
 			case ACT_RESIST_ALL:
@@ -634,6 +646,10 @@ cptr item_activation(object_type *o_ptr)
 				return "四股踏み : 100+d100 ターン毎";
 			case ACT_PHASE_DOOR:
 				return "ショート・テレポート : 10 ターン毎";
+			case ACT_DETECT_ALL_MONS:
+				return "全モンスター感知 : 150 ターン毎";
+			case ACT_ULTIMATE_RESIST:
+				return "士気高揚、祝福、究極の耐性 : 777 ターン毎";
 
 			/* Unique activation */
 			case ACT_FISHING:
@@ -713,7 +729,7 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_BA_DARK:
 				return "darkness storm (250) every 150+d150 turns";
 			case ACT_BA_MANA:
-				return "a mana storm every 250+d250 turns";
+				return "a mana storm (250) every 150+d150 turns";
 			case ACT_PESTICIDE:
 				return "dispel small life every 55+d55 turns";
 			case ACT_BLINDING_LIGHT:
@@ -724,6 +740,16 @@ cptr item_activation(object_type *o_ptr)
 				return "cast star balls (150) every 1000 turns";
 			case ACT_BLADETURNER:
 				return "breathe elements (300), hero, bless, and resistance";
+			case ACT_BA_ACID_1:
+				return "ball of acid (100) every 12+d12 turns";
+			case ACT_BR_FIRE:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+					return "breath of fire (200) and resist fire every 200 turns";
+				return "fire breath (200) every 250 turns";
+			case ACT_BR_COLD:
+				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+					return "breath of cold (200) and resist cold every 200 turns";
+				return "cold breath (200) every 250 turns";
 
 			case ACT_CONFUSE:
 				return "confuse monster every 15 turns";
@@ -797,7 +823,8 @@ cptr item_activation(object_type *o_ptr)
 			case ACT_ESP:
 				return "telepathy (dur 25+d30) every 200 turns";
 			case ACT_BERSERK:
-				return "heroism and blessed (dur 50+d50) every 100+d100 turns";
+				/* return "heroism and blessed (dur 50+d50) every 100+d100 turns"; */
+				return "berserk (25+d25 turns) every 75+d75 turns";
 			case ACT_PROT_EVIL:
 				return "protect evil (dur level*3 + d25) every 200+d200 turns";
 			case ACT_RESIST_ALL:
@@ -877,6 +904,10 @@ cptr item_activation(object_type *o_ptr)
 				return "shiko every 100+d100 turns";
 			case ACT_PHASE_DOOR:
 				return "blink every 10 turns";
+			case ACT_DETECT_ALL_MONS:
+				return "detect all monsters every 150 turns";
+			case ACT_ULTIMATE_RESIST:
+				return "hero, bless, and ultimate resistance every 777 turns";
 
 			/* Unique activation */
 			case ACT_FISHING:
@@ -898,140 +929,6 @@ cptr item_activation(object_type *o_ptr)
 
 	if (o_ptr->tval == TV_RING)
 	{
-		if (object_is_ego(o_ptr))
-		{
-			switch (o_ptr->name2)
-			{
-			case EGO_RING_HERO:
-#ifdef JP
-return "士気高揚 : 100+d100ターン毎";
-#else
-				return "heroism every 100+d100 turns";
-#endif
-			case EGO_RING_MAGIC_MIS:
-#ifdef JP
-return "マジック・ミサイル(2d6) : 2 ターン毎";
-#else
-			return "magic missile (2d6) every 2 turns";
-#endif
-			case EGO_RING_FIRE_BOLT:
-#ifdef JP
-return "ファイア・ボルト(9d8) : 8+d8 ターン毎";
-#else
-			return "fire bolt (9d8) every 8+d8 turns";
-#endif
-			case EGO_RING_COLD_BOLT:
-#ifdef JP
-return "アイス・ボルト(6d8) : 7+d7 ターン毎";
-#else
-				return "frost bolt (6d8) every 7+d7 turns";
-#endif
-			case EGO_RING_ELEC_BOLT:
-#ifdef JP
-return "サンダー・ボルト(4d8) : 5+d5 ターン毎";
-#else
-				return "lightning bolt (4d8) every 5+d5 turns";
-#endif
-			case EGO_RING_ACID_BOLT:
-#ifdef JP
-return "アシッド・ボルト(5d8) : 6+d6 ターン毎";
-#else
-				return "acid bolt (5d8) every 6+d6 turns";
-#endif
-			case EGO_RING_MANA_BOLT:
-#ifdef JP
-return "魔力の矢(120) : 120+d120 ターン毎";
-#else
-			return "a mana bolt (120) every 120+d120 turns";
-#endif
-			case EGO_RING_FIRE_BALL:
-#ifdef JP
-return "ファイア・ボール (100) : 80+d80 ターン毎";
-#else
-				return "fire ball (100) every 80+d80 turns";
-#endif
-			case EGO_RING_COLD_BALL:
-#ifdef JP
-return "アイス・ボール (100) : 80+d80 ターン毎";
-#else
-				return "cold ball (100) every 80+d80 turns";
-#endif
-			case EGO_RING_ELEC_BALL:
-#ifdef JP
-return "サンダー・ボール (100) : 80+d80 ターン毎";
-#else
-				return "elec ball (100) every 80+d80 turns";
-#endif
-			case EGO_RING_ACID_BALL:
-#ifdef JP
-return "アシッド・ボール (100) : 80+d80 ターン毎";
-#else
-				return "acid ball (100) every 80+d80 turns";
-#endif
-			case EGO_RING_MANA_BALL:
-#ifdef JP
-return "魔力の嵐 (250) : 300 ターン毎";
-#else
-				return "mana storm (250) every 300 turns";
-#endif
-			case EGO_RING_DRAGON_F:
-				if (o_ptr->sval == SV_RING_FLAMES)
-#ifdef JP
-return "火炎のブレス (200) と火への耐性 : 200 ターン毎";
-#else
-					return "breath of fire (200) and resist fire every 200 turns";
-#endif
-				else
-#ifdef JP
-return "火炎のブレス (200) : 250 ターン毎";
-#else
-					return "fire breath (200) every 250 turns";
-#endif
-			case EGO_RING_DRAGON_C:
-				if (o_ptr->sval == SV_RING_ICE)
-#ifdef JP
-return "冷気のブレス (200) と冷気への耐性 : 200 ターン毎";
-#else
-					return "breath of cold (200) and resist cold every 200 turns";
-#endif
-				else
-#ifdef JP
-return "冷気のブレス (200) : 250 ターン毎";
-#else
-					return "cold breath (200) every 250 turns";
-#endif
-			case EGO_RING_M_DETECT:
-#ifdef JP
-return "全モンスター感知 : 150 ターン毎";
-#else
-				return "detect all monsters every 150 turns";
-#endif
-			case EGO_RING_D_SPEED:
-#ifdef JP
-return "スピード(15+d30ターン) : 100 ターン毎";
-#else
-				return "haste self (15+d30 turns) every 100 turns";
-#endif
-			case EGO_RING_BERSERKER:
-#ifdef JP
-return "狂戦士化(25+d25ターン) : 75+d75 ターン毎";
-#else
-				return "berserk (25+d25 turns) every 75+d75 turns";
-#endif
-			case EGO_RING_TELE_AWAY:
-#ifdef JP
-return "テレポート・アウェイ : 150 ターン毎";
-#else
-			return "teleport away every 150 turns";
-#endif
-			case EGO_RING_TRUE:
-#ifdef JP
-return "士気高揚、祝福、究極の耐性 : 777 ターン毎";
-#else
-			return "hero, bless, and ultimate resistance every 777 turns";
-#endif
-			}
-		}
 		switch (o_ptr->sval)
 		{
 			case SV_RING_FLAMES:
