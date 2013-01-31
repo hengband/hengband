@@ -5626,3 +5626,12 @@ extern int PlayerUID;
 #define HEX_SHADOW_MOVE      29
 #define HEX_ANTI_MAGIC       30
 #define HEX_REVENGE          31
+
+/*
+  Language selection macro
+*/
+#ifdef JP
+#define _(JAPANESE,ENGLISH) (JAPANESE)
+#else
+#define _(JAPANESE,ENGLISH) (ENGLISH)
+#endif
