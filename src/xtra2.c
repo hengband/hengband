@@ -6392,11 +6392,7 @@ void display_rumor(bool ex)
 					if (r_ptr->name) break;
 				}
 
-#ifdef JP
 				strcpy(fullname, r_name + r_ptr->name);
-#else
-				strcpy(fullname, r_name + r_ptr->E_name);
-#endif
 
 				/* Remember this monster */
 				if (!r_ptr->r_sights)
