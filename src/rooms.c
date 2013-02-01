@@ -52,12 +52,14 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP_PIT */
 	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP     */
 	{{  0,  0,  0,  0,  1,  1,  1,  2,  2,  2,  2}, 40}, /*GLASS    */
+	{{  1,  1,  1,  1,  1,  1,  1,  2,  2,  3,  3},  1}, /*ARCADE   */
 };
 
 
 /* Build rooms in descending order of difficulty. */
 static byte room_build_order[ROOM_T_MAX] = {
 	ROOM_T_GREATER_VAULT,
+	ROOM_T_ARCADE,
 	ROOM_T_RANDOM_VAULT,
 	ROOM_T_LESSER_VAULT,
 	ROOM_T_TRAP_PIT,
@@ -475,6 +477,8 @@ static bool find_space(int *y, int *x, int height, int width)
  *  12 -- crypts
  *  13 -- trapped monster pits
  *  14 -- trapped room
+ *  15 -- glass room
+ *  16 -- underground arcade
  */
 
 
@@ -4250,8 +4254,8 @@ static void build_bubble_vault(int x0, int y0, int xsize, int ysize)
 	if (cheat_room) msg_print("Bubble Vault");
 
 	/* Allocate center of bubbles */
-	center[0].x = randint1(xsize - 3) + 1;
-	center[0].y = randint1(ysize - 3) + 1;
+	center[0].x = (byte)randint1(xsize - 3) + 1;
+	center[0].y = (byte)randint1(ysize - 3) + 1;
 
 	for (i = 1; i < BUBBLENUM; i++)
 	{
@@ -6262,6 +6266,301 @@ static bool build_type15(void)
 }
 
 
+/* Create a new floor room with optional light */
+void generate_room_floor(int y1, int x1, int y2, int x2, int light)
+{
+	int y, x;
+	
+	cave_type *c_ptr;
+
+	for (y = y1; y <= y2; y++)
+	{
+		for (x = x1; x <= x2; x++)
+		{
+			/* Point to grid */
+			c_ptr = &cave[y][x];
+			place_floor_grid(c_ptr);
+			c_ptr->info |= (CAVE_ROOM);
+			if (light) c_ptr->info |= (CAVE_GLOW);
+		}
+	}
+}
+
+void generate_fill_perm_bold(int y1, int x1, int y2, int x2)
+{
+	int y, x;
+
+	for (y = y1; y <= y2; y++)
+	{
+		for (x = x1; x <= x2; x++)
+		{
+			/* Point to grid */
+			place_extra_perm_bold(y, x);
+		}
+	}
+}
+
+/* Minimum & maximum town size */
+#define MIN_TOWN_WID ((MAX_WID / 3) / 2)
+#define MIN_TOWN_HGT ((MAX_HGT / 3) / 2)
+#define MAX_TOWN_WID ((MAX_WID / 3) * 2 / 3)
+#define MAX_TOWN_HGT ((MAX_HGT / 3) * 2 / 3)
+
+/* Struct for build underground buildings */
+typedef struct
+{
+	int y0, x0; /* North-west corner (relative) */
+	int y1, x1; /* South-east corner (relative) */
+}
+ugbldg_type;
+
+ugbldg_type *ugbldg;
+
+/*
+ * Precalculate buildings' location of underground arcade
+ */
+static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
+{
+	int i, y, x, center_y, center_x, tmp, attempt = 10000;
+	int max_bldg_hgt = 3 * town_hgt / MAX_TOWN_HGT;
+	int max_bldg_wid = 5 * town_wid / MAX_TOWN_WID;
+	ugbldg_type *cur_ugbldg;
+	bool **ugarcade_used, abort;
+
+	/* Allocate "ugarcade_used" array (2-dimension) */
+	C_MAKE(ugarcade_used, town_hgt, bool *);
+	C_MAKE(*ugarcade_used, town_hgt * town_wid, bool);
+	for (y = 1; y < town_hgt; y++) ugarcade_used[y] = *ugarcade_used + y * town_wid;
+
+	/* Calculate building locations */
+	for (i = 0; i < n; i++)
+	{
+		cur_ugbldg = &ugbldg[i];
+		(void)WIPE(cur_ugbldg, ugbldg_type);
+
+		do
+		{
+			/* Find the "center" of the store */
+			center_y = rand_range(2, town_hgt - 3);
+			center_x = rand_range(2, town_wid - 3);
+
+			/* Determine the store boundaries */
+			tmp = center_y - randint1(max_bldg_hgt);
+			cur_ugbldg->y0 = MAX(tmp, 1);
+			tmp = center_x - randint1(max_bldg_wid);
+			cur_ugbldg->x0 = MAX(tmp, 1);
+			tmp = center_y + randint1(max_bldg_hgt);
+			cur_ugbldg->y1 = MIN(tmp, town_hgt - 2);
+			tmp = center_x + randint1(max_bldg_wid);
+			cur_ugbldg->x1 = MIN(tmp, town_wid - 2);
+
+			/* Scan this building's area */
+			for (abort = FALSE, y = cur_ugbldg->y0; (y <= cur_ugbldg->y1) && !abort; y++)
+			{
+				for (x = cur_ugbldg->x0; x <= cur_ugbldg->x1; x++)
+				{
+					if (ugarcade_used[y][x])
+					{
+						abort = TRUE;
+						break;
+					}
+				}
+			}
+
+			attempt--;
+		}
+		while (abort && attempt); /* Accept this building if no overlapping */
+
+		/* Failed to generate underground arcade */
+		if (!attempt) break;
+
+		/*
+		 * Mark to ugarcade_used[][] as "used"
+		 * Note: Building-adjacent grids are included for preventing
+		 * connected bulidings.
+		 */
+		for (y = cur_ugbldg->y0 - 1; y <= cur_ugbldg->y1 + 1; y++)
+		{
+			for (x = cur_ugbldg->x0 - 1; x <= cur_ugbldg->x1 + 1; x++)
+			{
+				ugarcade_used[y][x] = TRUE;
+			}
+		}
+	}
+
+	/* Free "ugarcade_used" array (2-dimension) */
+	C_KILL(*ugarcade_used, town_hgt * town_wid, bool);
+	C_KILL(ugarcade_used, town_hgt, bool *);
+
+	/* If i < n, generation is not allowed */
+	return i == n;
+}
+
+/*
+ * Actually create buildings
+ * Note: ltcy and ltcx indicate "left top corner".
+ */
+static void build_stores(int ltcy, int ltcx, int stores[], int n)
+{
+	int i, j, y, x;
+	ugbldg_type *cur_ugbldg;
+
+	for (i = 0; i < n; i++)
+	{
+		cur_ugbldg = &ugbldg[i];
+
+		/* Generate new room */
+		generate_room_floor(
+			ltcy + cur_ugbldg->y0 - 2, ltcx + cur_ugbldg->x0 - 2,
+			ltcy + cur_ugbldg->y1 + 2, ltcx + cur_ugbldg->x1 + 2,
+			FALSE);
+	}
+
+	for (i = 0; i < n; i++)
+	{
+		cur_ugbldg = &ugbldg[i];
+
+		/* Build an invulnerable rectangular building */
+		generate_fill_perm_bold(
+			ltcy + cur_ugbldg->y0, ltcx + cur_ugbldg->x0,
+			ltcy + cur_ugbldg->y1, ltcx + cur_ugbldg->x1);
+
+		/* Pick a door direction (S,N,E,W) */
+		switch (randint0(4))
+		{
+		/* Bottom side */
+		case 0:
+			y = cur_ugbldg->y1;
+			x = rand_range(cur_ugbldg->x0, cur_ugbldg->x1);
+			break;
+
+		/* Top side */
+		case 1:
+			y = cur_ugbldg->y0;
+			x = rand_range(cur_ugbldg->x0, cur_ugbldg->x1);
+			break;
+
+		/* Right side */
+		case 2:
+			y = rand_range(cur_ugbldg->y0, cur_ugbldg->y1);
+			x = cur_ugbldg->x1;
+			break;
+
+		/* Left side */
+		default:
+			y = rand_range(cur_ugbldg->y0, cur_ugbldg->y1);
+			x = cur_ugbldg->x0;
+			break;
+		}
+
+		for (j = 0; j < max_f_idx; j++)
+		{
+			if (have_flag(f_info[j].flags, FF_STORE))
+			{
+				if (f_info[j].subtype == stores[i]) break;
+			}
+		}
+
+		/* Clear previous contents, add a store door */
+		if (j < max_f_idx)
+		{
+			cave_set_feat(ltcy + y, ltcx + x, j);
+
+			/* Init store */
+			store_init(NO_TOWN, stores[i]);
+		}
+	}
+}
+
+
+/*
+ * Type 16 -- Underground Arcade
+ *
+ * Town logic flow for generation of new town
+ * Originally from Vanilla 3.0.3
+ *
+ * We start with a fully wiped cave of normal floors.
+ *
+ * Note that town_gen_hack() plays games with the R.N.G.
+ *
+ * This function does NOT do anything about the owners of the stores,
+ * nor the contents thereof.  It only handles the physical layout.
+ */
+static bool build_type16(void)
+{
+	int stores[] =
+	{
+		STORE_GENERAL, STORE_ARMOURY, STORE_WEAPON, STORE_TEMPLE,
+		STORE_ALCHEMIST, STORE_MAGIC, STORE_BLACK, STORE_BOOK,
+	};
+	int n = sizeof stores / sizeof (int);
+	int i, y, x, y1, x1, yval, xval;
+	int town_hgt = rand_range(MIN_TOWN_HGT, MAX_TOWN_HGT);
+	int town_wid = rand_range(MIN_TOWN_WID, MAX_TOWN_WID);
+	bool prevent_bm = FALSE;
+
+	/* Hack -- If already exist black market, prevent building */
+	for (y = 0; (y < cur_hgt) && !prevent_bm; y++)
+	{
+		for (x = 0; x < cur_wid; x++)
+		{
+			if (cave[y][x].feat == FF_STORE)
+			{
+				prevent_bm = (f_info[cave[y][x].feat].subtype == STORE_BLACK);
+				break;
+			}
+		}
+	}
+	for (i = 0; i < n; i++)
+	{
+		if ((stores[i] == STORE_BLACK) && prevent_bm) stores[i] = stores[--n];
+	}
+	if (!n) return FALSE;
+
+	/* Allocate buildings array */
+	C_MAKE(ugbldg, n, ugbldg_type);
+
+	/* If cannot build stores, abort */
+	if (!precalc_ugarcade(town_hgt, town_wid, n))
+	{
+		/* Free buildings array */
+		C_KILL(ugbldg, n, ugbldg_type);
+		return FALSE;
+	}
+
+	/* Find and reserve some space in the dungeon.  Get center of room. */
+	if (!find_space(&yval, &xval, town_hgt + 4, town_wid + 4))
+	{
+		/* Free buildings array */
+		C_KILL(ugbldg, n, ugbldg_type);
+		return FALSE;
+	}
+
+	/* Get top left corner */
+	y1 = yval - (town_hgt / 2);
+	x1 = xval - (town_wid / 2);
+
+	/* Generate new room */
+	generate_room_floor(
+		y1 + town_hgt / 3, x1 + town_wid / 3,
+		y1 + town_hgt * 2 / 3, x < x1 + town_wid * 2 / 3, FALSE);
+
+	/* Build stores */
+	build_stores(y1, x1, stores, n);
+
+#ifdef JP
+	if (cheat_room) msg_print("ÃÏ²¼³¹");
+#else
+	if (cheat_room) msg_print("Underground Arcade");
+#endif
+
+	/* Free buildings array */
+	C_KILL(ugbldg, n, ugbldg_type);
+
+	return TRUE;
+}
+
+
 /*
  * Attempt to build a room of the given type at the given block
  *
@@ -6289,6 +6588,7 @@ static bool room_build(int typ)
 	case ROOM_T_TRAP_PIT:      return build_type13();
 	case ROOM_T_TRAP:          return build_type14();
 	case ROOM_T_GLASS:         return build_type15();
+	case ROOM_T_ARCADE:        return build_type16();
 	}
 
 	/* Paranoia */
@@ -6388,6 +6688,10 @@ bool generate_rooms(void)
 		prob_list[ROOM_T_GLASS] = 0;
 	}
 
+	if (!(d_info[dungeon_type].flags1 & DF1_ARCADE))
+	{
+		prob_list[ROOM_T_ARCADE] = 0;
+	}
 
 	/*
 	 * Initialize number of rooms,
@@ -6428,6 +6732,7 @@ bool generate_rooms(void)
 		case ROOM_T_LESSER_VAULT:
 		case ROOM_T_TRAP_PIT:
 		case ROOM_T_GLASS:
+		case ROOM_T_ARCADE:
 
 			/* Large room */
 			i -= 2;
@@ -6484,6 +6789,13 @@ bool generate_rooms(void)
 						room_num[ROOM_T_NEST] = 0;
 						room_num[ROOM_T_TRAP_PIT] = 0;
 					}
+					break;
+
+				case ROOM_T_ARCADE:
+
+					/* Avoid double-town */
+					room_num[ROOM_T_ARCADE] = 0;
+					break;
 				}
 			}
 		}

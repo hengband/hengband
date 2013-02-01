@@ -832,7 +832,7 @@ static cptr d_info_flags1[] =
 	"GLASS_DOOR",
 	"CAVE",
 	"CAVERN",
-	"XXX",
+	"ARCADE",
 	"XXX",
 	"XXX",
 	"XXX",

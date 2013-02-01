@@ -5327,7 +5327,7 @@ extern int PlayerUID;
 #define DF1_GLASS_DOOR          0x00000200L
 #define DF1_CAVE                0x00000400L
 #define DF1_CAVERN              0x00000800L
-#define DF1_XXX12               0x00001000L
+#define DF1_ARCADE              0x00001000L
 #define DF1_XXX13               0x00002000L
 #define DF1_XXX14               0x00004000L
 #define DF1_XXX15               0x00008000L

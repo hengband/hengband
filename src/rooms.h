@@ -42,8 +42,9 @@
 #define ROOM_T_TRAP_PIT      12	 /* Trapped monster pit */
 #define ROOM_T_TRAP          13	 /* Piranha/Armageddon trap room */
 #define ROOM_T_GLASS         14	 /* Glass room */
+#define ROOM_T_ARCADE        15  /* Arcade */
 
-#define ROOM_T_MAX 15
+#define ROOM_T_MAX 16
 
 
 /*
