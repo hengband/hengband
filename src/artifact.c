@@ -1975,7 +1975,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 }
 
 
-static const activation_type* find_activation_info(const object_type *o_ptr)
+const activation_type* find_activation_info(const object_type *o_ptr)
 {
 	const activation_type* p;
 

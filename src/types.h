@@ -1721,6 +1721,7 @@ typedef struct {
 		int constant;
 		int dice;
 	} timeout;
+	cptr desc;
 } activation_type;
 
 typedef struct {

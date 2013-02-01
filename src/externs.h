@@ -1522,6 +1522,7 @@ extern void one_resistance(object_type *o_ptr);
 extern void one_ability(object_type *o_ptr);
 extern bool create_artifact(object_type *o_ptr, bool a_scroll);
 extern bool activate_random_artifact(object_type * o_ptr);
+extern const activation_type* find_activation_info(const object_type *o_ptr);
 extern void get_bloody_moon_flags(object_type *o_ptr);
 extern void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr);
 extern bool create_named_art(int a_idx, int y, int x);

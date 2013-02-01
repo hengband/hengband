@@ -330,7 +330,7 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 }
 
 
-cptr item_activation_dragon_breath(object_type *o_ptr)
+static cptr item_activation_dragon_breath(object_type *o_ptr)
 {
 	static char desc[256];
 	u32b flgs[4]; /* for resistance flags */
@@ -349,9 +349,100 @@ cptr item_activation_dragon_breath(object_type *o_ptr)
 		}
 	}
 
-	strcat(desc, _("のブレス(250) : 200+d200 ターン毎"," every 200+d200 turns"));
+	strcat(desc, _("のブレス(250)", ""));
 
 	return (desc);
+}
+
+static cptr item_activation_aux(object_type *o_ptr)
+{
+	static char activation_detail[256];
+	cptr desc;
+	char timeout[32];
+	int constant, dice;
+	const activation_type* act_ptr = find_activation_info(o_ptr);
+
+	if (!act_ptr) return _("未定義", "something undefined");
+
+	desc = act_ptr->desc;
+
+	/* Overwrite description if it is special */
+	switch (o_ptr->xtra2) {
+	case ACT_BR_FIRE:
+		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+			desc = _("火炎のブレス (200) と火への耐性", "breath of fire (200) and resist fire");
+		break;
+	case ACT_BR_COLD:
+		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+			desc = _("冷気のブレス (200) と冷気への耐性", "breath of cold (200) and resist cold");
+		break;
+	case ACT_BR_DRAGON:
+		desc = item_activation_dragon_breath(o_ptr);
+		break;
+	case ACT_AGGRAVATE:
+		if (o_ptr->name1 == ART_HYOUSIGI)
+			desc = _("拍子木を打ちならす", "beat wooden clappers");
+		break;
+	case ACT_RESIST_ACID:
+		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
+			desc = _("アシッド・ボール (100) と酸への耐性", "ball of acid (100) and resist acid");
+		break;
+	case ACT_RESIST_FIRE:
+		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+			desc = _("ファイア・ボール (100) と火への耐性", "ball of fire (100) and resist fire");
+		break;
+	case ACT_RESIST_COLD:
+		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+			desc = _("アイス・ボール (100) と冷気への耐性", "ball of cold (100) and resist cold");
+		break;
+	case ACT_RESIST_ELEC:
+		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
+			desc = _("サンダー・ボール (100) と電撃への耐性", "ball of elec (100) and resist elec");
+		break;
+	}
+
+	/* Timeout description */
+	constant = act_ptr->timeout.constant;
+	dice = act_ptr->timeout.dice;
+	if (constant == 0 && dice == 0) {
+		/* We can activate it every turn */
+		strcpy(timeout, _("いつでも", "every turn"));
+	} else if (constant < 0) {
+		/* Activations that have special timeout */
+		switch (o_ptr->xtra2) {
+		case ACT_BR_FIRE:
+			sprintf(timeout, _("%d ターン毎", "every %d turns"),
+				((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250);
+			break;
+		case ACT_BR_COLD:
+			sprintf(timeout, _("%d ターン毎", "every %d turns"),
+				((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE)) ? 200 : 250);
+			break;
+		case ACT_TERROR:
+			strcpy(timeout, _("3*(レベル+10) ターン毎", "every 3 * (level+10) turns"));
+			break;
+		case ACT_MURAMASA:
+			strcpy(timeout, _("確率50%で壊れる", "(destroyed 50%)"));
+			break;
+		default:
+			strcpy(timeout, "undefined");
+			break;
+		}
+	} else {
+		/* Normal timeout activations */
+		char constant_str[16], dice_str[16];
+		sprintf(constant_str, "%d", constant);
+		sprintf(dice_str, "d%d", dice);
+		sprintf(timeout, _("%s%s%s ターン毎", "every %s%s%s turns"),
+			(constant > 0) ? constant_str : "",
+			(constant > 0 && dice > 0) ? "+" : "",
+			(dice > 0) ? dice_str : "");
+	}
+
+	/* Build detail activate description */
+	sprintf(activation_detail, _("%s : %s", "%s %s"), desc, timeout);
+
+	return activation_detail;
 }
 
 /*
@@ -360,7 +451,6 @@ cptr item_activation_dragon_breath(object_type *o_ptr)
  */
 cptr item_activation(object_type *o_ptr)
 {
-	static char *buf[256];
 	u32b flgs[TR_FLAG_SIZE];
 
 	/* Extract the flags */
@@ -436,545 +526,7 @@ cptr item_activation(object_type *o_ptr)
 	/* if ((object_is_artifact(o_ptr) || object_is_ego(o_ptr)) && (o_ptr->xtra2)) */
 	if (o_ptr->xtra2)
 	{
-		switch (o_ptr->xtra2)
-		{
-#ifdef JP
-			/* General activation */
-
-			case ACT_SUNLIGHT:
-				return "太陽光線 : 10 ターン毎";
-			case ACT_BO_MISS_1:
-				return "マジック・ミサイル(2d6) : 2 ターン毎";
-			case ACT_BA_POIS_1:
-				return "悪臭雲(12) : 4+d4 ターン毎";
-			case ACT_BO_ELEC_1:
-				return "サンダー・ボルト(4d8) : 5+d5 ターン毎";
-			case ACT_BO_ACID_1:
-				return "アシッド・ボルト(5d8) : 6+d6 ターン毎";
-			case ACT_BO_COLD_1:
-				return "アイス・ボルト(6d8) : 7+d7 ターン毎";
-			case ACT_BO_FIRE_1:
-				return "ファイア・ボルト(9d8) : 8+d8 ターン毎";
-			case ACT_BA_COLD_1:
-				return "アイス・ボール(48) : 6+d6 ターン毎";
-			case ACT_BA_FIRE_1:
-				return "ファイア・ボール(72) : 9+d9 ターン毎";
-			case ACT_DRAIN_1:
-				return "窒息攻撃(100) : 100+d100 ターン毎";
-			case ACT_BA_COLD_2:
-				return "アイス・ボール(100) : 12+d12 ターン毎";
-			case ACT_BA_ELEC_2:
-				return "サンダー・ボール(100) : 12+d12 ターン毎";
-			case ACT_DRAIN_2:
-				return "生命力吸収(120) : 400 ターン毎";
-			case ACT_VAMPIRE_1:
-				return "吸血ドレイン(3*50) : 400 ターン毎";
-			case ACT_BO_MISS_2:
-				return "矢(150) : 90+d90 ターン毎";
-			case ACT_BA_FIRE_3:
-				return "巨大ファイア・ボール(300) : 225+d225 ターン毎";
-			case ACT_BA_COLD_3:
-				return "巨大アイス・ボール(400) : 325+d325 ターン毎";
-			case ACT_BA_ELEC_3:
-				return "巨大サンダー・ボール(500) : 425+d425 ターン毎";
-			case ACT_WHIRLWIND:
-				return "カマイタチ : 250 ターン毎";
-			case ACT_VAMPIRE_2:
-				return "吸血ドレイン(3*100) : 400 ターン毎";
-			case ACT_CALL_CHAOS:
-				return "混沌召来 : 350 ターン毎"; /*nuke me*/
-			case ACT_ROCKET:
-				return "ロケット(120+レベル) : 400 ターン毎";
-			case ACT_DISP_EVIL:
-				return "邪悪退散(x5) : 100+d100 ターン毎";
-			case ACT_BA_MISS_3:
-				return "エレメントのブレス(300) : 200+d200 ターン毎";
-			case ACT_DISP_GOOD:
-				return "善良退散(x5) : 100+d100 ターン毎";
-			case ACT_BO_MANA:
-				return "魔法の矢(150) : 90+d90 ターン毎";
-			case ACT_BA_FIRE_2:
-				return "巨大ファイア・ボール(120) : 15 ターン毎";
-			case ACT_BA_WATER:
-				return "ウォーター・ボール(200) : 250 ターン毎";
-			case ACT_BA_STAR:
-				return "巨大スター・ボール(200) : 200+d200 ターン毎";
-			case ACT_BA_DARK:
-				return "暗黒の嵐(250) : 150+d150 ターン毎";
-			case ACT_BA_MANA:
-				return "魔力の嵐(250) : 150+d150 ターン毎";
-			case ACT_PESTICIDE:
-				return "害虫の駆除 : 55+d55ターン毎";
-			case ACT_BLINDING_LIGHT:
-				return "眩しい光 : 250 ターン毎";
-			case ACT_BIZARRE:
-				return "信じ難いこと : 450+d450 ターン毎";
-			case ACT_CAST_BA_STAR:
-				return "スター・ボール・ダスト(150) : 1000 ターン毎";
-			case ACT_BLADETURNER:
-				return "エレメントのブレス(300), 士気高揚、祝福、耐性 : 400 ターン毎";
-			case ACT_BA_ACID_1:
-				return "アシッド・ボール(100) : 12+d12 ターン毎";
-			case ACT_BR_FIRE:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-					return "火炎のブレス (200) と火への耐性 : 200 ターン毎";
-				return "火炎のブレス (200) : 250 ターン毎";
-			case ACT_BR_COLD:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-					return "冷気のブレス (200) と冷気への耐性 : 200 ターン毎";
-				return "冷気のブレス (200) : 250 ターン毎";
-			case ACT_BR_DRAGON:
-				return item_activation_dragon_breath(o_ptr);
-
-			case ACT_CONFUSE:
-				return "パニック・モンスター : 15 ターン毎";
-			case ACT_SLEEP:
-				return "周囲のモンスターを眠らせる : 55 ターン毎";
-			case ACT_QUAKE:
-				return "地震 : 50 ターン毎";
-			case ACT_TERROR:
-				return "恐慌 : 3*(レベル+10) ターン毎";
-			case ACT_TELE_AWAY:
-				return "テレポート・アウェイ : 150 ターン毎";
-			case ACT_BANISH_EVIL:
-				return "邪悪消滅 : 250+d250 ターン毎";
-			case ACT_GENOCIDE:
-				return "抹殺 : 500 ターン毎";
-			case ACT_MASS_GENO:
-				return "周辺抹殺 : 1000 ターン毎";
-			case ACT_SCARE_AREA:
-				return "モンスター恐慌 : 40+d40ターン毎";
-			case ACT_AGGRAVATE:
-				if(o_ptr->name1 != ART_HYOUSIGI) return "モンスターを怒らせる : いつでも";
-				return "拍子木を打ちならす : いつでも";
-			case ACT_CHARM_ANIMAL:
-				return "動物魅了 : 200 ターン毎";
-			case ACT_CHARM_UNDEAD:
-				return "アンデッド従属 : 333 ターン毎";
-			case ACT_CHARM_OTHER:
-				return "モンスター魅了 : 400 ターン毎";
-			case ACT_CHARM_ANIMALS:
-				return "動物友和 : 500 ターン毎";
-			case ACT_CHARM_OTHERS:
-				return "周辺魅了 : 750 ターン毎";
-			case ACT_SUMMON_ANIMAL:
-				return "動物召喚 : 200+d300 ターン毎";
-			case ACT_SUMMON_PHANTOM:
-				return "幻霊召喚 : 200+d200 ターン毎";
-			case ACT_SUMMON_ELEMENTAL:
-				return "エレメンタル召喚 : 750 ターン毎";
-			case ACT_SUMMON_DEMON:
-				return "悪魔召喚 : 666+d333 ターン毎";
-			case ACT_SUMMON_UNDEAD:
-				return "アンデッド召喚 : 666+d333 ターン毎";
-			case ACT_SUMMON_HOUND:
-				return "ハウンド召喚 : 300+d150 ターン毎";
-			case ACT_SUMMON_DAWN:
-				return "暁の師団召喚 : 500+d500 ターン毎";
-			case ACT_SUMMON_OCTOPUS:
-				return "蛸の大群召喚 : 300+d150ターン毎";
-
-			case ACT_CHOIR_SINGS:
-				return "回復(777)、癒し、士気高揚 : 300 ターン毎";
-			case ACT_CURE_LW:
-				return "恐怖除去/体力回復(30) : 10 ターン毎";
-			case ACT_CURE_MW:
-				return "傷回復(4d8) : 3+d3 ターン毎";
-			case ACT_CURE_POISON:
-				return "恐怖除去/毒消し : 5 ターン毎";
-			case ACT_REST_LIFE:
-				return "経験値復活 : 450 ターン毎";
-			case ACT_REST_ALL:
-				return "全ステータスと経験値復活 : 750 ターン毎";
-			case ACT_CURE_700:
-				return "体力回復(700) : 250 ターン毎";
-			case ACT_CURE_1000:
-				return "体力回復(1000) : 888 ターン毎";
-			case ACT_CURING:
-				return "癒し : 100ターン毎";
-			case ACT_CURE_MANA_FULL:
-				return "魔力復活: 777 ターン毎";
-			case ACT_ESP:
-				return "テレパシー(期間 25+d30) : 200 ターン毎";
-			case ACT_BERSERK:
-				/* return "士気高揚と祝福(期間 50+d50) : 100+d100 ターン毎"; */
-				return "狂戦士化(25+d25ターン) : 75+d75 ターン毎";
-			case ACT_PROT_EVIL:
-				return "対邪悪結界(期間 3*レベル+d25) : 200+d200 ターン毎";
-			case ACT_RESIST_ALL:
-				return "全耐性(期間 20+d20) : 111 ターン毎";
-			case ACT_SPEED:
-				return "加速(期間 20+d20) : 250 ターン毎";
-			case ACT_XTRA_SPEED:
-				return "加速(期間 75+d75) : 200+d200 ターン毎";
-			case ACT_WRAITH:
-				return "幽体化(期間 (レベル/2)+d(レベル/2)) : 1000 ターン毎";
-			case ACT_INVULN:
-				return "無敵化(期間 8+d8) : 1000 ターン毎";
-			case ACT_HELO:
-				return "士気高揚 : 30+d30ターン毎";
-			case ACT_HELO_SPEED:
-				return "士気高揚, スピード(期間 50+d50ターン) : 100+d200 ターン毎";
-			case ACT_RESIST_ACID:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
-					return "アシッド・ボール (100) と酸への耐性 : 40+d40 ターン毎";
-				return "酸への耐性(期間 20+d20) : 40+d40 ターン毎";
-			case ACT_RESIST_FIRE:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-					return "ファイア・ボール (100) と火への耐性 : 40+d40 ターン毎";
-				return "火炎への耐性(期間 20+d20) : 40+d40 ターン毎";
-			case ACT_RESIST_COLD:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-					return "アイス・ボール (100) と冷気への耐性 : 40+d40 ターン毎";
-				return "冷気への耐性(期間 20+d20) : 40+d40 ターン毎";
-			case ACT_RESIST_ELEC:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
-					return "サンダー・ボール (100) と電撃への耐性 : 40+d40 ターン毎";
-				return "電撃への耐性(期間 20+d20) : 40+d40 ターン毎";
-			case ACT_RESIST_POIS:
-				return "毒への耐性(期間 20+d20) : 40+d40 ターン毎";
-
-			case ACT_LIGHT:
-				return "イルミネーション : 10+d10 ターン毎";
-			case ACT_MAP_LIGHT:
-				return "魔法の地図と光 : 50+d50 ターン毎";
-			case ACT_DETECT_ALL:
-				return "全感知 : 55+d55 ターン毎";
-			case ACT_DETECT_XTRA:
-				return "全感知、探索、*鑑定* : 100 ターン毎";
-			case ACT_ID_FULL:
-				return "*鑑定* : 75 ターン毎";
-			case ACT_ID_PLAIN:
-				return "鑑定 : 10 ターン毎";
-			case ACT_RUNE_EXPLO:
-				return "爆発のルーン : 200 ターン毎";
-			case ACT_RUNE_PROT:
-				return "守りのルーン : 400 ターン毎";
-			case ACT_SATIATE:
-				return "空腹充足 : 200 ターン毎";
-			case ACT_DEST_DOOR:
-				return "ドア破壊 : 10 ターン毎";
-			case ACT_STONE_MUD:
-				return "岩石溶解 : 3 ターン毎";
-			case ACT_RECHARGE:
-				return "魔力充填 : 70 ターン毎";
-			case ACT_ALCHEMY:
-				return "錬金術 : 500 ターン毎";
-			case ACT_DIM_DOOR:
-				return "次元の扉 : 100 ターン毎";
-			case ACT_TELEPORT:
-				return "テレポート : 25 ターン毎";
-			case ACT_RECALL:
-				return "帰還の詔 : 200 ターン毎";
-			case ACT_JUDGE:
-				return "体力と引き替えに千里眼と帰還 : 20+d20 ターン毎";
-			case ACT_TELEKINESIS:
-				return "物体を引き寄せる(重量25kgまで) : 25+d25ターン毎";
-			case ACT_DETECT_UNIQUE:
-				return "この階にいるユニークモンスターを表示 : 200ターン毎";
-			case ACT_ESCAPE:
-				return "逃走 : 35 ターン毎";
-			case ACT_DISP_CURSE_XTRA:
-				return "*解呪*と調査: いつでも";
-			case ACT_BRAND_FIRE_BOLTS:
-				return "刃先のファイア・ボルト : 999 ターン毎";
-			case ACT_RECHARGE_XTRA:
-				return "魔力充填 : 200 ターン毎";
-			case ACT_LORE:
-				return "危険を伴う鑑定 : いつでも";
-			case ACT_SHIKOFUMI:
-				return "四股踏み : 100+d100 ターン毎";
-			case ACT_PHASE_DOOR:
-				return "ショート・テレポート : 10 ターン毎";
-			case ACT_DETECT_ALL_MONS:
-				return "全モンスター感知 : 150 ターン毎";
-			case ACT_ULTIMATE_RESIST:
-				return "士気高揚、祝福、究極の耐性 : 777 ターン毎";
-
-			/* Unique activation */
-			case ACT_FISHING:
-				return "釣りをする : いつでも";
-			case ACT_INROU:
-				return "例のアレ : 150+d150 ターン毎";
-			case ACT_MURAMASA:
-				return "腕力の上昇 : 確率50%で壊れる";
-			case ACT_BLOODY_MOON:
-				return "属性変更 : 3333 ターン毎";
-			case ACT_CRIMSON:
-				return "ファイア！ : 15 ターン毎";
-
-			default:
-				return "未定義";
-#else
-			/* General activation */
-
-			case ACT_SUNLIGHT:
-				return "beam of sunlight every 10 turns";
-			case ACT_BO_MISS_1:
-				return "magic missile (2d6) every 2 turns";
-			case ACT_BA_POIS_1:
-				return "stinking cloud (12) every 4+d4 turns";
-			case ACT_BO_ELEC_1:
-				return "lightning bolt (4d8) every 5+d5 turns";
-			case ACT_BO_ACID_1:
-				return "acid bolt (5d8) every 6+d6 turns";
-			case ACT_BO_COLD_1:
-				return "frost bolt (6d8) every 7+d7 turns";
-			case ACT_BO_FIRE_1:
-				return "fire bolt (9d8) every 8+d8 turns";
-			case ACT_BA_COLD_1:
-				return "ball of cold (48) every 6+d6 turns";
-			case ACT_BA_FIRE_1:
-				return "ball of fire (72) every 9+d9 turns";
-			case ACT_DRAIN_1:
-				return "a strangling attack (100) every 100+d100 turns";
-			case ACT_BA_COLD_2:
-				return "ball of cold (100) every 12+d12 turns";
-			case ACT_BA_ELEC_2:
-				return "ball of lightning (100) every 12+d12 turns";
-			case ACT_DRAIN_2:
-				return "drain life (120) every 400 turns";
-			case ACT_VAMPIRE_1:
-				return "vampiric drain (3*50) every 400 turns";
-			case ACT_BO_MISS_2:
-				return "arrows (150) every 90+d90 turns";
-			case ACT_BA_FIRE_2:
-				return "fire ball (300) every 225+d225 turns";
-			case ACT_BA_COLD_3:
-				return "ball of cold (400) every 325+d325 turns";
-			case ACT_BA_ELEC_3:
-				return "ball of lightning (500) every 425+d425 turns";
-			case ACT_WHIRLWIND:
-				return "whirlwind attack every 250 turns";
-			case ACT_VAMPIRE_2:
-				return "vampiric drain (3*100) every 400 turns";
-			case ACT_CALL_CHAOS:
-				return "call chaos every 350 turns";
-			case ACT_ROCKET:
-				return "launch rocket (120+level) every 400 turns";
-			case ACT_DISP_EVIL:
-				return "dispel evil (x5) every 100+d100 turns";
-			case ACT_BA_MISS_3:
-				return "elemental breath (300) every 200+d200 turns";
-			case ACT_DISP_GOOD:
-				return "dispel good (x5) every 100+d100 turns";
-			case ACT_BO_MANA:
-				return "a magical arrow (150) every 90+d90 turns";
-			case ACT_BA_FIRE_2:
-				return "large fire ball (120) every 15 turns";
-			case ACT_BA_WATER:
-				return "water ball (200) every 250 turns";
-			case ACT_BA_STAR:
-				return "large star ball (200) every 200+d200 turns";
-			case ACT_BA_DARK:
-				return "darkness storm (250) every 150+d150 turns";
-			case ACT_BA_MANA:
-				return "a mana storm (250) every 150+d150 turns";
-			case ACT_PESTICIDE:
-				return "dispel small life every 55+d55 turns";
-			case ACT_BLINDING_LIGHT:
-				return "blinding light every 250 turns";
-			case ACT_BIZARRE:
-				return "bizarre things every 450+d450 turns";
-			case ACT_CAST_BA_STAR:
-				return "cast star balls (150) every 1000 turns";
-			case ACT_BLADETURNER:
-				return "breathe elements (300), hero, bless, and resistance every 400 turns";
-			case ACT_BA_ACID_1:
-				return "ball of acid (100) every 12+d12 turns";
-			case ACT_BR_FIRE:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-					return "breath of fire (200) and resist fire every 200 turns";
-				return "fire breath (200) every 250 turns";
-			case ACT_BR_COLD:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-					return "breath of cold (200) and resist cold every 200 turns";
-				return "cold breath (200) every 250 turns";
-			case ACT_BR_DRAGON:
-				return item_activation_dragon_breath(o_ptr);
-
-			case ACT_CONFUSE:
-				return "confuse monster every 15 turns";
-			case ACT_SLEEP:
-				return "sleep nearby monsters every 55 turns";
-			case ACT_QUAKE:
-				return "earthquake every 50 turns";
-			case ACT_TERROR:
-				return "terror every 3 * (level+10) turns";
-			case ACT_TELE_AWAY:
-				return "teleport away every 200 turns";
-			case ACT_BANISH_EVIL:
-				return "banish evil every 250+d250 turns";
-			case ACT_GENOCIDE:
-				return "genocide every 500 turns";
-			case ACT_MASS_GENO:
-				return "mass genocide every 1000 turns";
-			case ACT_SCARE_AREA:
-				return "frighten monsters every 40+d40 turns";
-			case ACT_AGGRAVATE:
-				if (o_ptr->name1 == ART_HYOUSIGI) return "beat wooden clappers every turn";
-				return "aggravete monsters every turn";
-
-			case ACT_CHARM_ANIMAL:
-				return "charm animal every 200 turns";
-			case ACT_CHARM_UNDEAD:
-				return "enslave undead every 333 turns";
-			case ACT_CHARM_OTHER:
-				return "charm monster every 400 turns";
-			case ACT_CHARM_ANIMALS:
-				return "animal friendship every 500 turns";
-			case ACT_CHARM_OTHERS:
-				return "mass charm every 750 turns";
-			case ACT_SUMMON_ANIMAL:
-				return "summon animal every 200+d300 turns";
-			case ACT_SUMMON_PHANTOM:
-				return "summon phantasmal servant every 200+d200 turns";
-			case ACT_SUMMON_ELEMENTAL:
-				return "summon elemental every 750 turns";
-			case ACT_SUMMON_DEMON:
-				return "summon demon every 666+d333 turns";
-			case ACT_SUMMON_UNDEAD:
-				return "summon undead every 666+d333 turns";
-			case ACT_SUMMON_HOUND:
-				return "summon hound every 300+d150 turns";
-			case ACT_SUMMON_DAWN:
-				return "summon the Legion of the Dawn every 500+d500 turns";
-			case ACT_SUMMON_OCTOPUS:
-				return "summon octopus every 300+d150 turns";
-
-			case ACT_CHOIR_SINGS:
-				return "heal 777 hit points, curing and heloism every 300 turns";
-			case ACT_CURE_LW:
-				return "remove fear and heal 30 hp every 10 turns";
-			case ACT_CURE_MW:
-				return "heal 4d8 and wounds every 3+d3 turns";
-			case ACT_CURE_POISON:
-				return "remove fear and cure poison every 5 turns";
-			case ACT_REST_LIFE:
-				return "restore life levels every 450 turns";
-			case ACT_REST_ALL:
-				return "restore stats and life levels every 750 turns";
-			case ACT_CURE_700:
-				return "heal 700 hit points every 250 turns";
-			case ACT_CURE_1000:
-				return "heal 1000 hit points every 888 turns";
-			case ACT_CURING:
-				return "curing every 100 turns";
-			case ACT_CURE_MANA_FULL:
-				return "restore mana every 777 turns";
-			case ACT_ESP:
-				return "telepathy (dur 25+d30) every 200 turns";
-			case ACT_BERSERK:
-				/* return "heroism and blessed (dur 50+d50) every 100+d100 turns"; */
-				return "berserk (25+d25 turns) every 75+d75 turns";
-			case ACT_PROT_EVIL:
-				return "protect evil (dur level*3 + d25) every 200+d200 turns";
-			case ACT_RESIST_ALL:
-				return "resist elements (dur 20+d20) every 111 turns";
-			case ACT_SPEED:
-				return "speed (dur 20+d20) every 100+d100 turns";
-			case ACT_XTRA_SPEED:
-				return "speed (dur 75+d75) every 100+d100 turns";
-			case ACT_WRAITH:
-				return "wraith form (dur level/2 + d(level/2)) every 1000 turns";
-			case ACT_INVULN:
-				return "invulnerability (dur 8+d8) every 1000 turns";
-			case ACT_HELO:
-				return "heroism every 30+d30 turns";
-			case ACT_HELO_SPEED:
-				return "hero and +10 to speed (50) every 100+200d turns";
-			case ACT_RESIST_ACID:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
-					return "ball of acid (100) and resist acid every 40+d40 turns";
-				return "resist acid (dur 20+d20) every 40+d40 turns";
-			case ACT_RESIST_FIRE:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-					return "ball of fire (100) and resist fire every 40+d40 turns";
-				return "resist fire (dur 20+d20) every 40+d40 turns";
-			case ACT_RESIST_COLD:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-					return "ball of cold (100) and resist cold every 40+d40 turns";
-				return "resist cold (dur 20+d20) every 40+d40 turns";
-			case ACT_RESIST_ELEC:
-				if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
-					return "ball of elec (100) and resist elec every 40+d40 turns";
-				return "resist thunder (dur 20+d20) every 40+d40 turns";
-			case ACT_RESIST_POIS:
-				return "resist poison (dur 20+d20) every 40+d40 turns";
-
-			case ACT_LIGHT:
-				return "light area (dam 2d15) every 10+d10 turns";
-			case ACT_MAP_LIGHT:
-				return "light (dam 2d15) & map area every 50+d50 turns";
-			case ACT_DETECT_ALL:
-				return "detection every 55+d55 turns";
-			case ACT_DETECT_XTRA:
-				return "detection, probing and identify true every 100 turns";
-			case ACT_ID_FULL:
-				return "identify true every 75 turns";
-			case ACT_ID_PLAIN:
-				return "identify spell every 10 turns";
-			case ACT_RUNE_EXPLO:
-				return "explosive rune every 200 turns";
-			case ACT_RUNE_PROT:
-				return "rune of protection every 400 turns";
-			case ACT_SATIATE:
-				return "satisfy hunger every 200 turns";
-			case ACT_DEST_DOOR:
-				return "destroy doors every 10 turns";
-			case ACT_STONE_MUD:
-				return "stone to mud every 3 turns";
-			case ACT_RECHARGE:
-				return "recharging every 70 turns";
-			case ACT_ALCHEMY:
-				return "alchemy every 500 turns";
-			case ACT_DIM_DOOR:
-				return "dimension door every 100 turns";
-			case ACT_TELEPORT:
-				return "teleport every 25 turns";
-			case ACT_RECALL:
-				return "word of recall every 200 turns";
-			case ACT_TELEKINESIS:
-				return "a telekinesis (500 lb) every 25+d25 turns";
-			case ACT_JUDGE:
-				return "clairvoyance and recall, draining you every 20+d20 turns";
-			case ACT_DETECT_UNIQUE:
-				return "list of the uniques on the level every 200 turns";
-			case ACT_ESCAPE:
-				return "a getaway every 35 turns";
-			case ACT_DISP_CURSE_XTRA:
-				return "dispel curse and probing every turn";
-			case ACT_BRAND_FIRE_BOLTS:
-				return "fire branding of bolts every 999 turns";
-			case ACT_RECHARGE_XTRA:
-				return "recharge item every 200 turns";
-			case ACT_LORE:
-				return "perilous identify every turn";
-			case ACT_SHIKOFUMI:
-				return "shiko every 100+d100 turns";
-			case ACT_PHASE_DOOR:
-				return "blink every 10 turns";
-			case ACT_DETECT_ALL_MONS:
-				return "detect all monsters every 150 turns";
-			case ACT_ULTIMATE_RESIST:
-				return "hero, bless, and ultimate resistance every 777 turns";
-
-			/* Unique activation */
-			case ACT_FISHING:
-				return "fishing : every time";
-			case ACT_INROU:
-				return "reveal your identity every 150+d150 turns";
-			case ACT_MURAMASA:
-				return "increase STR (destroyed 50%)";
-			case ACT_BLOODY_MOON:
-				return "change zokusei every 3333 turns";
-			case ACT_CRIMSON:
-				return "fire! every 15 turns";
-
-			default:
-				return "something undefined";
-#endif
-		}
+		return item_activation_aux(o_ptr);
 	}
 
 	/* Special items */
