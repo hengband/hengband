@@ -6930,7 +6930,7 @@ static void do_cmd_knowledge_spell_exp(void)
 	int i = 0, spell_exp, exp_level;
 
 	FILE *fff;
-	magic_type *s_ptr;
+	const magic_type *s_ptr;
 
 	char file_name[1024];
 

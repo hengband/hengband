@@ -18,41 +18,41 @@
 /*
  * Global array for looping through the "keypad directions"
  */
-s16b ddd[9] =
+const s16b ddd[9] =
 { 2, 8, 6, 4, 3, 1, 9, 7, 5 };
 
 /*
  * Global arrays for converting "keypad direction" into offsets
  */
-s16b ddx[10] =
+const s16b ddx[10] =
 { 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 };
 
-s16b ddy[10] =
+const s16b ddy[10] =
 { 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 };
 
 /*
  * Global arrays for optimizing "ddx[ddd[i]]" and "ddy[ddd[i]]"
  */
-s16b ddx_ddd[9] =
+const s16b ddx_ddd[9] =
 { 0, 0, 1, -1, 1, -1, 1, -1, 0 };
 
-s16b ddy_ddd[9] =
+const s16b ddy_ddd[9] =
 { 1, -1, 0, 0, 1, 1, -1, -1, 0 };
 
 
 /*
  * Circular keypad direction array
  */
-s16b cdd[8] =
+const s16b cdd[8] =
 { 2, 3, 6, 9, 8, 7, 4, 1 };
 
 /*
  * Global arrays for optimizing "ddx[cdd[i]]" and "ddy[cdd[i]]"
  */
-s16b ddx_cdd[8] =
+const s16b ddx_cdd[8] =
 { 0, 1, 1, 1, 0, -1, -1, -1 };
 
-s16b ddy_cdd[8] =
+const s16b ddy_cdd[8] =
 { 1, 1, 0, -1, -1, -1, 0, 1 };
 
 
@@ -61,7 +61,7 @@ s16b ddy_cdd[8] =
  * Global array for converting numbers to uppercase hecidecimal digit
  * This array can also be used to convert a number to an octal digit
  */
-char hexsym[16] =
+const char hexsym[16] =
 {
 	'0', '1', '2', '3', '4', '5', '6', '7',
 	'8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
@@ -71,7 +71,7 @@ char hexsym[16] =
 /*
  * Global array for converting numbers to a logical list symbol
  */
-char listsym[] =
+const char listsym[] =
 {
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -85,13 +85,13 @@ char listsym[] =
 /*
  * Encode the screen colors
  */
-cptr color_char = "dwsorgbuDWvyRGBU";
+const cptr color_char = "dwsorgbuDWvyRGBU";
 
 
 /*
  * Stat Table (INT/WIS) -- Number of half-spells per level
  */
-byte adj_mag_study[] =
+const byte adj_mag_study[] =
 {
 	0	/* 3 */,
 	0	/* 4 */,
@@ -137,7 +137,7 @@ byte adj_mag_study[] =
 /*
  * Stat Table (INT/WIS) -- extra 1/4-mana-points per level
  */
-byte adj_mag_mana[] =
+const byte adj_mag_mana[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -183,7 +183,7 @@ byte adj_mag_mana[] =
 /*
  * Stat Table (INT/WIS) -- Minimum failure rate (percentage)
  */
-byte adj_mag_fail[] =
+const byte adj_mag_fail[] =
 {
 	99      /* 3 */,
 	99      /* 4 */,
@@ -229,7 +229,7 @@ byte adj_mag_fail[] =
 /*
  * Stat Table (INT/WIS) -- Various things
  */
-byte adj_mag_stat[] =
+const byte adj_mag_stat[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -275,7 +275,7 @@ byte adj_mag_stat[] =
 /*
  * Stat Table (CHR) -- payment percentages
  */
-byte adj_chr_gold[] =
+const byte adj_chr_gold[] =
 {
 	130     /* 3 */,
 	125     /* 4 */,
@@ -321,7 +321,7 @@ byte adj_chr_gold[] =
 /*
  * Stat Table (INT) -- Magic devices
  */
-byte adj_int_dev[] =
+const byte adj_int_dev[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -367,7 +367,7 @@ byte adj_int_dev[] =
 /*
  * Stat Table (WIS) -- Saving throw
  */
-byte adj_wis_sav[] =
+const byte adj_wis_sav[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -413,7 +413,7 @@ byte adj_wis_sav[] =
 /*
  * Stat Table (DEX) -- disarming
  */
-byte adj_dex_dis[] =
+const byte adj_dex_dis[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -459,7 +459,7 @@ byte adj_dex_dis[] =
 /*
  * Stat Table (INT) -- disarming
  */
-byte adj_int_dis[] =
+const byte adj_int_dis[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -505,7 +505,7 @@ byte adj_int_dis[] =
 /*
  * Stat Table (DEX) -- bonus to ac (plus 128)
  */
-byte adj_dex_ta[] =
+const byte adj_dex_ta[] =
 {
 	128 + -4    /*  3 */,
 	128 + -3    /*  4 */,
@@ -551,7 +551,7 @@ byte adj_dex_ta[] =
 /*
  * Stat Table (STR) -- bonus to dam (plus 128)
  */
-byte adj_str_td[] =
+const byte adj_str_td[] =
 {
 	128 + -2    /*  3 */,
 	128 + -2    /*  4 */,
@@ -597,7 +597,7 @@ byte adj_str_td[] =
 /*
  * Stat Table (DEX) -- bonus to hit (plus 128)
  */
-byte adj_dex_th[] =
+const byte adj_dex_th[] =
 {
 	128 + -3        /* 3 */,
 	128 + -2        /* 4 */,
@@ -643,7 +643,7 @@ byte adj_dex_th[] =
 /*
  * Stat Table (STR) -- bonus to hit (plus 128)
  */
-byte adj_str_th[] =
+const byte adj_str_th[] =
 {
 	128 + -3        /* 3 */,
 	128 + -2        /* 4 */,
@@ -689,7 +689,7 @@ byte adj_str_th[] =
 /*
  * Stat Table (STR) -- weight limit in deca-pounds
  */
-byte adj_str_wgt[] =
+const byte adj_str_wgt[] =
 {
 	10      /* 3 */,
 	11      /* 4 */,
@@ -735,7 +735,7 @@ byte adj_str_wgt[] =
 /*
  * Stat Table (STR) -- weapon weight limit in pounds
  */
-byte adj_str_hold[] =
+const byte adj_str_hold[] =
 {
 	4       /* 3 */,
 	5       /* 4 */,
@@ -781,7 +781,7 @@ byte adj_str_hold[] =
 /*
  * Stat Table (STR) -- digging value
  */
-byte adj_str_dig[] =
+const byte adj_str_dig[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -827,7 +827,7 @@ byte adj_str_dig[] =
 /*
  * Stat Table (STR) -- help index into the "blow" table
  */
-byte adj_str_blow[] =
+const byte adj_str_blow[] =
 {
 	3       /* 3 */,
 	4       /* 4 */,
@@ -873,7 +873,7 @@ byte adj_str_blow[] =
 /*
  * Stat Table (DEX) -- index into the "blow" table
  */
-byte adj_dex_blow[] =
+const byte adj_dex_blow[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -919,7 +919,7 @@ byte adj_dex_blow[] =
 /*
  * Stat Table (DEX) -- chance of avoiding "theft" and "falling"
  */
-byte adj_dex_safe[] =
+const byte adj_dex_safe[] =
 {
 	0       /* 3 */,
 	1       /* 4 */,
@@ -965,7 +965,7 @@ byte adj_dex_safe[] =
 /*
  * Stat Table (CON) -- base regeneration rate
  */
-byte adj_con_fix[] =
+const byte adj_con_fix[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -1011,7 +1011,7 @@ byte adj_con_fix[] =
 /*
  * Stat Table (CON) -- extra 1/4-hitpoints per level (plus 128)
  */
-byte adj_con_mhp[] =
+const byte adj_con_mhp[] =
 {
 	128 + -8        /* 3 */,
 	128 + -6        /* 4 */,
@@ -1057,7 +1057,7 @@ byte adj_con_mhp[] =
 /*
  * Stat Table (CHR) -- charm
  */
-byte adj_chr_chm[] =
+const byte adj_chr_chm[] =
 {
 	0       /* 3 */,
 	0       /* 4 */,
@@ -1145,7 +1145,7 @@ byte adj_chr_chm[] =
  * The player gets "blows_table[P][D]" blows/round, as shown below,
  * up to a maximum of "num" blows/round, plus any "bonus" blows/round.
  */
-byte blows_table[12][12] =
+const byte blows_table[12][12] =
 {
 	/* P/D */
 	/*      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11+ */
@@ -1166,7 +1166,7 @@ byte blows_table[12][12] =
 };
 
 
-arena_type arena_info[MAX_ARENA_MONS + 2] =
+const arena_type arena_info[MAX_ARENA_MONS + 2] =
 {
 	{ MON_NOBORTA,       TV_AMULET, SV_AMULET_ADORNMENT           },
 	{ MON_MORI_TROLL,    TV_FOOD,   SV_FOOD_PINT_OF_WINE          },
@@ -1227,7 +1227,7 @@ arena_type arena_info[MAX_ARENA_MONS + 2] =
  * I want to do 50k owners, but the purse is currently s16b. Perhaps
  * we should just store 1/10th of the purse?
  */
-owner_type owners[MAX_STORES][MAX_OWNERS] =
+const owner_type owners[MAX_STORES][MAX_OWNERS] =
 {
 	{
 		/* General store - 32 unique names */
@@ -1976,7 +1976,7 @@ owner_type owners[MAX_STORES][MAX_OWNERS] =
  * the (compiled out) small random energy boost code.  It may
  * also tend to cause more "clumping" at high speeds.
  */
-byte extract_energy[200] =
+const byte extract_energy[200] =
 {
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -2006,7 +2006,7 @@ byte extract_energy[200] =
 /*
  * Base experience levels, may be adjusted up for race and/or class
  */
-s32b player_exp[PY_MAX_LEVEL] =
+const s32b player_exp[PY_MAX_LEVEL] =
 {
 	10,
 	25,
@@ -2061,7 +2061,7 @@ s32b player_exp[PY_MAX_LEVEL] =
 };
 
 
-s32b player_exp_a[PY_MAX_LEVEL] =
+const s32b player_exp_a[PY_MAX_LEVEL] =
 {
 	20,
 	50,
@@ -2122,7 +2122,7 @@ s32b player_exp_a[PY_MAX_LEVEL] =
  *      Title,
  *      Winner
  */
-player_sex sex_info[MAX_SEXES] =
+const player_sex sex_info[MAX_SEXES] =
 {
 	{
 #ifdef JP
@@ -2156,7 +2156,7 @@ player_sex sex_info[MAX_SEXES] =
  *      infra,
  *      class-choices
  */
-player_race race_info[MAX_RACES] =
+const player_race race_info[MAX_RACES] =
 {
 	{
 #ifdef JP
@@ -2726,7 +2726,7 @@ player_race race_info[MAX_RACES] =
  *      x_dis, x_dev, x_sav, x_stl, x_srh, x_fos, x_thn, x_thb,
  *      HD, Exp, pet_upkeep_div
  */
-player_class class_info[MAX_CLASS] =
+const player_class class_info[MAX_CLASS] =
 {
 	{
 #ifdef JP
@@ -3058,7 +3058,7 @@ player_class class_info[MAX_CLASS] =
 	},
 };
 
-player_seikaku seikaku_info[MAX_SEIKAKU] =
+const player_seikaku seikaku_info[MAX_SEIKAKU] =
 {
 	{
 #ifdef JP
@@ -3183,7 +3183,7 @@ player_seikaku seikaku_info[MAX_SEIKAKU] =
 
 
 
-player_race mimic_info[] =
+const player_race mimic_info[] =
 {
 	{
 #ifdef JP
@@ -3249,7 +3249,7 @@ player_race mimic_info[] =
 
 
 
-magic_type technic_info[NUM_TECHNIC][32] =
+const magic_type technic_info[NUM_TECHNIC][32] =
 {
 	{
 		/* Music */
@@ -3374,7 +3374,7 @@ magic_type technic_info[NUM_TECHNIC][32] =
  * Zangband uses this array instead of the spell flags table, as there
  * are 5 realms of magic, each with 4 spellbooks and 8 spells per book -- TY
  */
-u32b fake_spell_flags[4]=
+const u32b fake_spell_flags[4]=
 {
 	0x000000ff,
 	0x0000ff00,
@@ -3383,7 +3383,7 @@ u32b fake_spell_flags[4]=
 };
 
 
-s32b realm_choices1[MAX_CLASS] =
+const s32b realm_choices1[MAX_CLASS] =
 {
 	(CH_NONE),				/* Warrior */
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
@@ -3426,7 +3426,7 @@ s32b realm_choices1[MAX_CLASS] =
 };
 
 
-s32b realm_choices2[MAX_CLASS] =
+const s32b realm_choices2[MAX_CLASS] =
 {
 	(CH_NONE),                              /* Warrior */
 	(CH_LIFE | CH_SORCERY | CH_NATURE |
@@ -3470,7 +3470,7 @@ s32b realm_choices2[MAX_CLASS] =
 
 
 #ifdef JP
-cptr realm_names[] =
+const cptr realm_names[] =
 {
 	"魔法なし",
 	"生命",
@@ -3496,9 +3496,9 @@ cptr realm_names[] =
 #endif
 
 #ifdef JP
-cptr E_realm_names[]
+const cptr E_realm_names[]
 #else
-cptr realm_names[]
+const cptr realm_names[]
 #endif
 = {
 	"none",
@@ -3531,7 +3531,7 @@ cptr realm_names[]
  * The "pval" of a chest determines the quality of its treasure
  * Note that disarming a trap on a chest also removes the lock.
  */
-int chest_traps[64] =
+const int chest_traps[64] =
 {
 	0,                                      /* 0 == empty */
 	(CHEST_POISON),
@@ -3607,7 +3607,7 @@ int chest_traps[64] =
  * needs only ten titles total.
  */
 #ifdef JP
-cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
+const cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 {
 	/* Warrior */
 	{
@@ -4009,7 +4009,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 };
 
 #else
-cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
+const cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 {
 	/* Warrior */
 	{
@@ -4405,7 +4405,7 @@ cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 };
 #endif
 
-monster_power monster_powers[MAX_MONSPELLS] =
+const monster_power monster_powers[MAX_MONSPELLS] =
 {
 /* level,  smana,  %fail,  manedam,  %manefail,  use_stat, name */
 #ifdef JP
@@ -4607,7 +4607,7 @@ monster_power monster_powers[MAX_MONSPELLS] =
 };
 
 
-cptr monster_powers_short[MAX_MONSPELLS] = {
+const cptr monster_powers_short[MAX_MONSPELLS] = {
 #ifdef JP
 
 	"叫ぶ", "何か", "魔力消去", "ロケット", "射撃", "何か", "何か", "何か",
@@ -4649,7 +4649,7 @@ cptr monster_powers_short[MAX_MONSPELLS] = {
 /*
  * Hack -- the "basic" color names (see "TERM_xxx")
  */
-cptr color_names[16] =
+const cptr color_names[16] =
 {
 #ifdef JP
 	"黒",
@@ -4693,7 +4693,7 @@ cptr color_names[16] =
 /*
  * Abbreviations of healthy stats
  */
-cptr stat_names[6] =
+const cptr stat_names[6] =
 {
 #ifdef JP
 	"腕力 :", "知能 :", "賢さ :", "器用 :", "耐久 :", "魅力 :"
@@ -4706,7 +4706,7 @@ cptr stat_names[6] =
 /*
  * Abbreviations of damaged stats
  */
-cptr stat_names_reduced[6] =
+const cptr stat_names_reduced[6] =
 {
 #ifdef JP
 	"腕力x:", "知能x:", "賢さx:", "器用x:", "耐久x:", "魅力x:"
@@ -4731,7 +4731,7 @@ cptr stat_names_reduced[6] =
  * The "ctrl-g" command (or pseudo-command) should perhaps grab a snapshot
  * of the main screen into any interested windows.
  */
-cptr window_flag_desc[32] =
+const cptr window_flag_desc[32] =
 {
 #ifdef JP
 	"持ち物/装備一覧",
@@ -4837,7 +4837,7 @@ cptr window_flag_desc[32] =
  * Available Options
  *
  */
-option_type option_info[] =
+const option_type option_info[] =
 {
 	/*** Input Options ***/
 
@@ -5783,7 +5783,7 @@ option_type option_info[] =
 
 
 #ifdef JP
-cptr chaos_patrons[MAX_PATRON] =
+const cptr chaos_patrons[MAX_PATRON] =
 {
 	"スローター",
 	"マベロード",
@@ -5806,7 +5806,7 @@ cptr chaos_patrons[MAX_PATRON] =
 	"カイン"
 };
 #else
-cptr chaos_patrons[MAX_PATRON] =
+const cptr chaos_patrons[MAX_PATRON] =
 {
 	"Slortar",
 	"Mabelode",
@@ -5831,7 +5831,7 @@ cptr chaos_patrons[MAX_PATRON] =
 #endif
 
 
-int chaos_stats[MAX_PATRON] =
+const int chaos_stats[MAX_PATRON] =
 {
 	A_CON,  /* Slortar */
 	A_CON,  /* Mabelode */
@@ -5857,7 +5857,7 @@ int chaos_stats[MAX_PATRON] =
 
 
 
-int chaos_rewards[MAX_PATRON][20] =
+const int chaos_rewards[MAX_PATRON][20] =
 {
 	/* Slortar the Old: */
 	{
@@ -5989,7 +5989,7 @@ int chaos_rewards[MAX_PATRON][20] =
 	}
 };
 
-martial_arts ma_blows[MAX_MA] =
+const martial_arts ma_blows[MAX_MA] =
 {
 #ifdef JP
 	{ "%sを殴った。",                          1, 0, 1, 5, 0 },
@@ -6031,7 +6031,7 @@ martial_arts ma_blows[MAX_MA] =
 
 };
 
-int monk_ave_damage[PY_MAX_LEVEL+1][3] =
+const int monk_ave_damage[PY_MAX_LEVEL+1][3] =
 {
   {0, 0, 0},
   {249, 249, 249},
@@ -6090,7 +6090,7 @@ int monk_ave_damage[PY_MAX_LEVEL+1][3] =
  * Table of game-generated inscriptions (indexed by the defines in
  * defines.h). -- RG
  */
-cptr game_inscriptions[] =
+const cptr game_inscriptions[] =
 {
 	NULL,            /* FEEL_NONE */
 #ifdef JP
@@ -6117,7 +6117,7 @@ cptr game_inscriptions[] =
 
 };
 
-kamae kamae_shurui[MAX_KAMAE] =
+const kamae kamae_shurui[MAX_KAMAE] =
 {
 #ifdef JP
 	{"玄武", 25, ""},
@@ -6132,7 +6132,7 @@ kamae kamae_shurui[MAX_KAMAE] =
 #endif
 };
 
-kamae kata_shurui[MAX_KATA] =
+const kamae kata_shurui[MAX_KATA] =
 {
 #ifdef JP
 	{"居合", 25, ""},
@@ -6147,7 +6147,7 @@ kamae kata_shurui[MAX_KATA] =
 #endif
 };
 
-cptr exp_level_str[5]=
+const cptr exp_level_str[5]=
 #ifdef JP
 {"[初心者]", "[入門者]", "[熟練者]", "[エキスパート]", "[達人]"};
 #else
@@ -6156,7 +6156,7 @@ cptr exp_level_str[5]=
 
 /* Weird melee attack types when hallucinating */
 #ifdef JP
-cptr silly_attacks[MAX_SILLY_ATTACK] =
+const cptr silly_attacks[MAX_SILLY_ATTACK] =
 {
 	"に小便をかけられた。",
 	"があなたの回りを3回回ってワンと言った。",
@@ -6202,7 +6202,7 @@ cptr silly_attacks[MAX_SILLY_ATTACK] =
 };
 
 /* Note: %s for strfmt() */
-cptr silly_attacks2[MAX_SILLY_ATTACK] =
+const cptr silly_attacks2[MAX_SILLY_ATTACK] =
 {
 	"%sに小便をかけた。",
 	"%sの回りを3回回ってワンと言った。",
@@ -6247,7 +6247,7 @@ cptr silly_attacks2[MAX_SILLY_ATTACK] =
 	"言った。「変愚蛮怒、絶賛公開中！」",
 };
 #else
-cptr silly_attacks[MAX_SILLY_ATTACK] =
+const cptr silly_attacks[MAX_SILLY_ATTACK] =
 {
 	"smothers",
 	"hugs",
@@ -6291,7 +6291,7 @@ cptr silly_attacks[MAX_SILLY_ATTACK] =
  * The table of "symbol info" -- each entry is a string of the form
  * "X:desc" where "X" is the trigger, and "desc" is the "info".
  */
-cptr ident_info[] =
+const cptr ident_info[] =
 {
 #ifdef JP
 	" :暗闇",
@@ -6494,7 +6494,7 @@ cptr ident_info[] =
 /*
  * The table of monsters' blow effects
  */
-mbe_info_type mbe_info[] =
+const mbe_info_type mbe_info[] =
 {
 	{  0, 0,             }, /* None      */
 	{ 60, GF_MISSILE,    }, /* HURT      */
@@ -6536,7 +6536,7 @@ mbe_info_type mbe_info[] =
 /*
  * The table of features' actions
  */
-byte feature_action_flags[FF_FLAG_MAX] =
+const byte feature_action_flags[FF_FLAG_MAX] =
 {
 	0, /* LOS */
 	0, /* PROJECT */
@@ -6660,7 +6660,7 @@ byte feature_action_flags[FF_FLAG_MAX] =
 /*
  * Define flags, effect type, name for dragon breath activation
  */
-dragonbreath_type dragonbreath_info[] = {
+const dragonbreath_type dragonbreath_info[] = {
 	{ TR_RES_ACID, GF_ACID, _("酸", "acid") },
 	{ TR_RES_ELEC, GF_ELEC, _("電撃", "lightning") },
 	{ TR_RES_FIRE, GF_FIRE, _("火炎", "fire") },
@@ -6681,7 +6681,7 @@ dragonbreath_type dragonbreath_info[] = {
 /*
  * Define flags, levels, values of activations
  */
-activation_type activation_info[] =
+const activation_type activation_info[] =
 {
 	{ "SUNLIGHT", ACT_SUNLIGHT, 10, 250, {10, 0},
 	  _("太陽光線", "beam of sunlight") },

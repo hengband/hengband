@@ -1848,7 +1848,7 @@ static void do_cmd_dump_options(void)
 	/* Check for exist option bits */
 	for (i = 0; option_info[i].o_desc; i++)
 	{
-		option_type *ot_ptr = &option_info[i];
+		const option_type *ot_ptr = &option_info[i];
 		if (ot_ptr->o_var) exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
 	}
 
@@ -1864,7 +1864,7 @@ static void do_cmd_dump_options(void)
 		{
 			if (exist[i][j])
 			{
-				option_type *ot_ptr = &option_info[exist[i][j] - 1];
+				const option_type *ot_ptr = &option_info[exist[i][j] - 1];
 				fprintf(fff, "  %d -  %02d (%4d) %s\n",
 				        i, j, ot_ptr->o_page, ot_ptr->o_text);
 			}

@@ -2225,7 +2225,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			{
 				int special_effect = 0, stun_effect = 0, times = 0, max_times;
 				int min_level = 1;
-				martial_arts *ma_ptr = &ma_blows[0], *old_ptr = &ma_blows[0];
+				const martial_arts *ma_ptr = &ma_blows[0], *old_ptr = &ma_blows[0];
 				int resist_stun = 0;
 				int weight = 8;
 

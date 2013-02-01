@@ -16,7 +16,7 @@
 /*
  * Hack -- Link a copyright message into the executable
  */
-cptr copyright[5] =
+const cptr copyright[5] =
 {
 	"Copyright (c) 1989 James E. Wilson, Robert A. Keoneke",
 	"",
@@ -543,7 +543,7 @@ term *angband_term[8];
 /*
  * Standard window names
  */
-char angband_term_name[8][16] =
+const char angband_term_name[8][16] =
 {
 	"Hengband",
 	"Term-1",
@@ -583,7 +583,7 @@ byte angband_color_table[256][4] =
 /*
  * Standard sound names
  */
-char angband_sound_name[SOUND_MAX][16] =
+const char angband_sound_name[SOUND_MAX][16] =
 {
 	"",
 	"hit",
@@ -776,11 +776,11 @@ player_type *p_ptr = &p_body;
  * Pointer to the player tables
  * (sex, race, class, magic)
  */
-player_sex *sp_ptr;
-player_race *rp_ptr;
-player_class *cp_ptr;
-player_seikaku *ap_ptr;
-player_magic *mp_ptr;
+const player_sex *sp_ptr;
+const player_race *rp_ptr;
+const player_class *cp_ptr;
+const player_seikaku *ap_ptr;
+const player_magic *mp_ptr;
 
 
 /*

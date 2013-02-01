@@ -61,7 +61,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 	byte        spells[64];
 	bool        flag, redraw, okay;
 	char        choice;
-	magic_type  *s_ptr;
+	const magic_type  *s_ptr;
 	char        out_val[160];
 	cptr        p;
 #ifdef JP
@@ -1101,7 +1101,7 @@ void do_cmd_cast(void)
 
 	object_type	*o_ptr;
 
-	magic_type	*s_ptr;
+	const magic_type *s_ptr;
 
 	cptr q, s;
 

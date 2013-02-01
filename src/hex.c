@@ -126,7 +126,7 @@ bool stop_hex_spell(void)
    Called from dungeon.c */
 void check_hex(void)
 {
-	magic_type *s_ptr;
+	const magic_type *s_ptr;
 	int spell;
 	s32b need_mana;
 	u32b need_mana_frac;

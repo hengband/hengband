@@ -2247,7 +2247,7 @@ static void calc_spells(void)
 	int			num_allowed;
 	int         num_boukyaku = 0;
 
-	magic_type		*s_ptr;
+	const magic_type	*s_ptr;
 	int which;
 	int bonus = 0;
 
@@ -3185,7 +3185,7 @@ void calc_bonuses(void)
 	bool            easy_2weapon = FALSE;
 	bool            riding_levitation = FALSE;
 	s16b this_o_idx, next_o_idx = 0;
-	player_race *tmp_rp_ptr;
+	const player_race *tmp_rp_ptr;
 
 	/* Save the old vision stuff */
 	bool old_telepathy = p_ptr->telepathy;
@@ -5878,25 +5878,25 @@ msg_print("バランスがとれるようになった。");
 #if 0
 	if (have_dd_s && ((p_ptr->realm1 == REALM_SORCERY) || (p_ptr->realm2 == REALM_SORCERY) || (p_ptr->pclass == CLASS_SORCERER)))
 	{
-		magic_type *s_ptr = &mp_ptr->info[REALM_SORCERY-1][SPELL_DD_S];
+		const magic_type *s_ptr = &mp_ptr->info[REALM_SORCERY-1][SPELL_DD_S];
 		if (p_ptr->lev >= s_ptr->slevel) p_ptr->no_flowed = TRUE;
 	}
 
 	if (have_dd_t && ((p_ptr->realm1 == REALM_TRUMP) || (p_ptr->realm2 == REALM_TRUMP) || (p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE)))
 	{
-		magic_type *s_ptr = &mp_ptr->info[REALM_TRUMP-1][SPELL_DD_T];
+		const magic_type *s_ptr = &mp_ptr->info[REALM_TRUMP-1][SPELL_DD_T];
 		if (p_ptr->lev >= s_ptr->slevel) p_ptr->no_flowed = TRUE;
 	}
 #endif
 	if (have_sw && ((p_ptr->realm1 == REALM_NATURE) || (p_ptr->realm2 == REALM_NATURE) || (p_ptr->pclass == CLASS_SORCERER)))
 	{
-		magic_type *s_ptr = &mp_ptr->info[REALM_NATURE-1][SPELL_SW];
+		const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE-1][SPELL_SW];
 		if (p_ptr->lev >= s_ptr->slevel) p_ptr->no_flowed = TRUE;
 	}
 
 	if (have_kabe && ((p_ptr->realm1 == REALM_CRAFT) || (p_ptr->realm2 == REALM_CRAFT) || (p_ptr->pclass == CLASS_SORCERER)))
 	{
-		magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT-1][SPELL_KABE];
+		const magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT-1][SPELL_KABE];
 		if (p_ptr->lev >= s_ptr->slevel) p_ptr->no_flowed = TRUE;
 	}
 }

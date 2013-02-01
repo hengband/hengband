@@ -1407,7 +1407,7 @@ static void recharged_notice(object_type *o_ptr)
 
 static void check_music(void)
 {
-	magic_type *s_ptr;
+	const magic_type *s_ptr;
 	int spell;
 	s32b need_mana;
 	u32b need_mana_frac;

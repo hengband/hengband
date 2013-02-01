@@ -19,7 +19,7 @@ static int store_top = 0;
 static int store_bottom = 0;
 static int xtra_stock = 0;
 static store_type *st_ptr = NULL;
-static owner_type *ot_ptr = NULL;
+static const owner_type *ot_ptr = NULL;
 static s16b old_town_num = 0;
 static s16b inner_town_num = 0;
 #define RUMOR_CHANCE 8

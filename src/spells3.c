@@ -3932,7 +3932,7 @@ void display_spell_list(void)
 	int             i, j;
 	int             y, x;
 	int             m[9];
-	magic_type      *s_ptr;
+	const magic_type *s_ptr;
 	char            name[80];
 	char            out_val[160];
 
@@ -4236,7 +4236,7 @@ int mod_spell_chance_2(int chance)
 s16b spell_chance(int spell, int use_realm)
 {
 	int             chance, minfail;
-	magic_type      *s_ptr;
+	const magic_type *s_ptr;
 	int             need_mana;
 	int penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
 
@@ -4342,7 +4342,7 @@ s16b spell_chance(int spell, int use_realm)
  */
 bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 {
-	magic_type *s_ptr;
+	const magic_type *s_ptr;
 
 	/* Access the spell */
 	if (!is_magic(use_realm))
@@ -4389,7 +4389,7 @@ bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 void print_spells(int target_spell, byte *spells, int num, int y, int x, int use_realm)
 {
 	int             i, spell, exp_level, increment = 64;
-	magic_type      *s_ptr;
+	const magic_type *s_ptr;
 	cptr            comment;
 	char            info[80];
 	char            out_val[160];
