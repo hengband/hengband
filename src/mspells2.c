@@ -59,8 +59,8 @@ static void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int
  */
 static void monst_bolt_monst(int m_idx, int y, int x, int typ, int dam_hp, int monspell, bool learnable)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-
+	int flg = PROJECT_STOP | PROJECT_KILL;
+	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
 	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 

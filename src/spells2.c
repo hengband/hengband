@@ -6682,7 +6682,8 @@ bool project_hook(int typ, int dir, int dam, int flg)
  */
 bool fire_bolt(int typ, int dir, int dam)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
+	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
+	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
 	return (project_hook(typ, dir, dam, flg));
 }
 

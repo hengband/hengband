@@ -484,7 +484,8 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool friend)
  */
 static void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER | PROJECT_REFLECTABLE;
+	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER;
+	if (typ != GF_ARROW) flg  |= PROJECT_REFLECTABLE;
 
 	/* Target the player with a bolt attack */
 	(void)project(m_idx, 0, py, px, dam_hp, typ, flg, (learnable ? monspell : -1));
