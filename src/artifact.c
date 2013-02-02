@@ -3651,7 +3651,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			o_ptr = &o_list[o_idx];
 
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
-			msg_format(_("%sを脱ぎ捨てた。", "You cast off %d."), o_name);
+			msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
 
 			/* Get effects */
 			msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
