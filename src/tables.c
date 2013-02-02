@@ -6921,6 +6921,8 @@ const activation_type activation_info[] =
 	{ "ULTIMATE_RESIST", ACT_ULTIMATE_RESIST, 90, 20000, {777, 0},
 	  _("ªŒµ§π‚Õ»°¢ΩÀ °°¢µÊ∂À§Œ¬—¿≠", "hero, bless, and ultimate resistance") },
 
+	{ "CAST_OFF", ACT_CAST_OFF, 30, 15000, {100, 0},
+	  _("√¶∞·§»æÆ±ß√Ë«≥æ∆", "cast it off and cosmic heroism") },
 	{ "FISHING", ACT_FISHING, 0, 100, {0, 0},
 	  _("ƒ‡§Í§Ú§π§Î", "fishing") },
 	{ "INROU", ACT_INROU, 40, 15000, {150, 150},

@@ -1892,6 +1892,7 @@
 #define ACT_DETECT_ALL_MONS     137
 #define ACT_ULTIMATE_RESIST     138
 /* 127 -> unused */
+#define ACT_CAST_OFF            250
 #define ACT_FISHING             251
 #define ACT_INROU               252
 #define ACT_MURAMASA            253

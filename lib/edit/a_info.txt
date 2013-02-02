@@ -3977,3 +3977,20 @@ D:$The flame shaped magic sword of Renaud de Montauban.
 D:$It can cut up an enemy's armor easily.
 D:ルノー・ド・モントバーンの魔法の剣だ。刀身が炎のように
 D:波打っている。敵の鎧を容易く切り裂くことができる。
+
+# The Bronze Dragon Scale Mail 'Dragon Cloth'
+N:243:『ドラゴン・クロス』
+E:'Dragon Cloth'
+I:38:14:0
+W:30:0:3:100000
+P:20:1d4:0:0:0
+F:RES_ACID | RES_COLD | RES_FIRE | RES_ELEC | RES_FEAR | RES_CONF |
+F:RES_NETHER | SEE_INVIS | REGEN | ACTIVATE
+U:CAST_OFF
+D:$A suit of scales, gleaming in rich engraved bronze. It shapes like
+D:$a green dragon if putting its parts together. You can feel a cosmo
+D:$of Draco when you wear it.
+D:飛流直下三千尺と謳われる廬山の大瀑布によって鍛え上げられた青銅の鎧だ。
+D:伝説のアテナの守護戦士が身にまとい、アテナに降りかかる数々の危機を救
+D:ったと言われる。パーツを組み立てると緑龍の形に組みあがる。
+D:身にまとうと龍星座の小宇宙を感じることができる。
