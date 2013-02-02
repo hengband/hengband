@@ -441,7 +441,7 @@ extern u32b window_mask[8];
 extern term *angband_term[8];
 extern const char angband_term_name[8][16];
 extern byte angband_color_table[256][4];
-extern const char angband_sound_name[SOUND_MAX][16];
+extern const cptr angband_sound_name[SOUND_MAX];
 extern cave_type *cave[MAX_HGT];
 extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 extern s16b max_floor_id;

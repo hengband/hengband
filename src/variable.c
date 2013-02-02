@@ -583,9 +583,9 @@ byte angband_color_table[256][4] =
 /*
  * Standard sound names
  */
-const char angband_sound_name[SOUND_MAX][16] =
+const cptr angband_sound_name[SOUND_MAX] =
 {
-	"",
+	"dummy",
 	"hit",
 	"miss",
 	"flee",
