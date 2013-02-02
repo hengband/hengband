@@ -959,17 +959,22 @@ static void regenmana(int percent)
 
 /*
  * Regenerate magic
+ * regen_amount: PY_REGEN_NORMAL * 2 (if resting) * 2 (if having regenarate)
  */
-static void regenmagic(int percent)
+static void regenmagic(int regen_amount)
 {
-	s32b        new_mana;
+	s32b new_mana;
 	int i;
+	int dev = 30;
+	int mult = (dev + adj_mag_mana[p_ptr->stat_ind[A_INT]]); /* x1 to x2 speed bonus for recharging */
 
 	for (i = 0; i < EATER_EXT*2; i++)
 	{
 		if (!p_ptr->magic_num2[i]) continue;
 		if (p_ptr->magic_num1[i] == ((long)p_ptr->magic_num2[i] << 16)) continue;
-		new_mana = ((long)p_ptr->magic_num2[i]+adj_mag_mana[A_INT]+13) * percent / 8;
+
+		/* Increase remaining charge number like float value */
+		new_mana = (regen_amount * mult * ((long)p_ptr->magic_num2[i] + 13)) / (dev * 8);
 		p_ptr->magic_num1[i] += new_mana;
 
 		/* Check maximum charge */
@@ -983,7 +988,12 @@ static void regenmagic(int percent)
 	{
 		if (!p_ptr->magic_num1[i]) continue;
 		if (!p_ptr->magic_num2[i]) continue;
-		p_ptr->magic_num1[i] -= (long)(p_ptr->magic_num2[i] * (adj_mag_mana[A_INT] + 10)) * EATER_ROD_CHARGE/16;
+
+		/* Decrease remaining period for charging */
+		new_mana = (regen_amount * mult * ((long)p_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) / (dev * 16); 
+		p_ptr->magic_num1[i] -= new_mana;
+
+		/* Check minimum remaining period for charging */
 		if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 		wild_regen = 20;
 	}
