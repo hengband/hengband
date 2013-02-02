@@ -3963,3 +3963,17 @@ D:$He took prime minister's post of Qi, although he failed to
 D:$take the life of the prince of Qi.
 D:斉の管仲が暗殺用に用いた重い弩だ。公子小白を射抜くことはできなかった
 D:が、後に斉の宰相の座を見事に射止めた。
+
+# The Flamberge 'Fusberta'
+N:242:『フスベルタ』
+E:'Fusberta'
+I:23:26:1
+W:40:20:230:90000
+P:0:3d7:13:21:0
+F:DEX | CHR | SUST_DEX | SUST_CHR | BLOWS | LITE |
+F:VORPAL | BRAND_FIRE | RES_FEAR | RES_FIRE | RES_LITE |
+F:REGEN | BLESSED | RIDING | SHOW_MODS
+D:$The flame shaped magic sword of Renaud de Montauban.
+D:$It can cut up an enemy's armor easily.
+D:ルノー・ド・モントバーンの魔法の剣だ。刀身が炎のように
+D:波打っている。敵の鎧を容易く切り裂くことができる。
