@@ -3982,7 +3982,7 @@ D:波打っている。敵の鎧を容易く切り裂くことができる。
 N:243:『ドラゴン・クロス』
 E:'Dragon Cloth'
 I:38:14:0
-W:30:0:3:100000
+W:30:3:100:100000
 P:20:1d4:0:0:0
 F:RES_ACID | RES_COLD | RES_FIRE | RES_ELEC | RES_FEAR | RES_CONF |
 F:RES_NETHER | SEE_INVIS | REGEN | ACTIVATE
