@@ -1197,6 +1197,7 @@ static bool cmd_racial_power_aux(s32b command)
 			if (command == -3) {
 				if (!gain_magic()) return FALSE;
 			} else if (command == -4) {
+				if (!can_do_cmd_cast()) return FALSE;
 				if (!do_cmd_magic_eater(FALSE, TRUE)) return FALSE;
 			}
 			break;
