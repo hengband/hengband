@@ -4825,7 +4825,7 @@ msg_print("ウィザードモード突入。");
 			else if (p_ptr->pclass == CLASS_SMITH)
 				do_cmd_kaji(TRUE);
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
-				do_cmd_magic_eater(TRUE);
+				do_cmd_magic_eater(TRUE, FALSE);
 			else if (p_ptr->pclass == CLASS_SNIPER)
 				do_cmd_snipe_browse();
 			else do_cmd_browse();
@@ -4927,7 +4927,7 @@ msg_print("ウィザードモード突入。");
 					else if (p_ptr->pclass == CLASS_IMITATOR)
 						do_cmd_mane(FALSE);
 					else if (p_ptr->pclass == CLASS_MAGIC_EATER)
-						do_cmd_magic_eater(FALSE);
+						do_cmd_magic_eater(FALSE, FALSE);
 					else if (p_ptr->pclass == CLASS_SAMURAI)
 						do_cmd_hissatsu();
 					else if (p_ptr->pclass == CLASS_BLUE_MAGE)

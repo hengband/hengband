@@ -2048,7 +2048,7 @@ bool activate_random_artifact(object_type *o_ptr)
 #else
 			msg_print("A line of sunlight appears.");
 #endif
-			(void)lite_line(dir);
+			(void)lite_line(dir, damroll(6, 8));
 			break;
 		}
 
@@ -3319,7 +3319,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			msg_print("It pulsates...");
 #endif
 			if (!get_aim_dir(&dir)) return FALSE;
-			wall_to_mud(dir);
+			wall_to_mud(dir, 20 + randint1(30));
 			break;
 		}
 

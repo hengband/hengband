@@ -1054,7 +1054,7 @@ static bool cmd_racial_power_aux(s32b command)
 #else
 			msg_print("You glare nearby monsters...");
 #endif
-			slow_monsters();
+			slow_monsters(p_ptr->lev);
 			stun_monsters(p_ptr->lev * 4);
 			confuse_monsters(p_ptr->lev * 4);
 			turn_monsters(p_ptr->lev * 4);
@@ -1194,7 +1194,11 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_MAGIC_EATER:
 		{
-			if (!gain_magic()) return FALSE;
+			if (command == -3) {
+				if (!gain_magic()) return FALSE;
+			} else if (command == -4) {
+				if (!do_cmd_magic_eater(FALSE, TRUE)) return FALSE;
+			}
 			break;
 		}
 		case CLASS_BARD:
@@ -1659,7 +1663,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_HALF_GIANT:
 			if (!get_aim_dir(&dir)) return FALSE;
-			(void)wall_to_mud(dir);
+			(void)wall_to_mud(dir, 20 + randint1(30));
 			break;
 
 		case RACE_HALF_TITAN:
@@ -2092,7 +2096,7 @@ static bool cmd_racial_power_aux(s32b command)
 #endif
 
 			if (plev < 25) sleep_monsters_touch();
-			else (void)sleep_monsters();
+			else (void)sleep_monsters(plev);
 			break;
 
 		case RACE_DEMON:
@@ -2540,6 +2544,13 @@ strcpy(power_desc[num].name, "魔力の取り込み");
 		power_desc[num].stat = A_INT;
 		power_desc[num].fail = 0;
 		power_desc[num++].number = -3;
+
+		strcpy(power_desc[num].name, _("強力発動", "Powerful Activation"));
+		power_desc[num].level = 10;
+		power_desc[num].cost = 10 + (lvl - 10) / 2;
+		power_desc[num].stat = A_INT;
+		power_desc[num].fail = 0;
+		power_desc[num++].number = -4;
 		break;
 	}
 	case CLASS_BARD:

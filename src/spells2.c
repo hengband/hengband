@@ -4485,17 +4485,17 @@ bool speed_monsters(void)
 /*
  * Slow monsters
  */
-bool slow_monsters(void)
+bool slow_monsters(int power)
 {
-	return (project_hack(GF_OLD_SLOW, p_ptr->lev));
+	return (project_hack(GF_OLD_SLOW, power));
 }
 
 /*
  * Sleep monsters
  */
-bool sleep_monsters(void)
+bool sleep_monsters(int power)
 {
-	return (project_hack(GF_OLD_SLEEP, p_ptr->lev));
+	return (project_hack(GF_OLD_SLEEP, power));
 }
 
 
@@ -6719,10 +6719,10 @@ bool fire_bolt_or_beam(int prob, int typ, int dir, int dam)
 /*
  * Some of the old functions
  */
-bool lite_line(int dir)
+bool lite_line(int dir, int dam)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
-	return (project_hook(GF_LITE_WEAK, dir, damroll(6, 8), flg));
+	return (project_hook(GF_LITE_WEAK, dir, dam, flg));
 }
 
 
@@ -6733,10 +6733,10 @@ bool drain_life(int dir, int dam)
 }
 
 
-bool wall_to_mud(int dir)
+bool wall_to_mud(int dir, int dam)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-	return (project_hook(GF_KILL_WALL, dir, 20 + randint1(30), flg));
+	return (project_hook(GF_KILL_WALL, dir, dam, flg));
 }
 
 
@@ -6768,24 +6768,24 @@ bool heal_monster(int dir, int dam)
 }
 
 
-bool speed_monster(int dir)
+bool speed_monster(int dir, int power)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_SPEED, dir, p_ptr->lev, flg));
+	return (project_hook(GF_OLD_SPEED, dir, power, flg));
 }
 
 
-bool slow_monster(int dir)
+bool slow_monster(int dir, int power)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_SLOW, dir, p_ptr->lev, flg));
+	return (project_hook(GF_OLD_SLOW, dir, power, flg));
 }
 
 
-bool sleep_monster(int dir)
+bool sleep_monster(int dir, int power)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_SLEEP, dir, p_ptr->lev, flg));
+	return (project_hook(GF_OLD_SLEEP, dir, power, flg));
 }
 
 
@@ -6815,10 +6815,10 @@ bool stun_monster(int dir, int plev)
 }
 
 
-bool poly_monster(int dir)
+bool poly_monster(int dir, int power)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	bool tester = (project_hook(GF_OLD_POLY, dir, p_ptr->lev, flg));
+	bool tester = (project_hook(GF_OLD_POLY, dir, power, flg));
 	if (tester)
 		chg_virtue(V_CHANCE, 1);
 	return(tester);
@@ -6846,10 +6846,10 @@ bool death_ray(int dir, int plev)
 }
 
 
-bool teleport_monster(int dir)
+bool teleport_monster(int dir, int distance)
 {
 	int flg = PROJECT_BEAM | PROJECT_KILL;
-	return (project_hook(GF_AWAY_ALL, dir, MAX_SIGHT * 5, flg));
+	return (project_hook(GF_AWAY_ALL, dir, distance, flg));
 }
 
 /*
@@ -6905,6 +6905,11 @@ bool destroy_doors_touch(void)
 	return (project(0, 1, py, px, 0, GF_KILL_DOOR, flg, -1));
 }
 
+bool disarm_traps_touch(void)
+{
+	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	return (project(0, 1, py, px, 0, GF_KILL_TRAP, flg, -1));
+}
 
 bool sleep_monsters_touch(void)
 {

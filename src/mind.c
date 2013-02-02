@@ -1349,7 +1349,7 @@ msg_format("There are too many mirrors to control!");
 	/* illusion light */
 	case 14:
 	  tmp = is_mirror_grid(&cave[py][px]) ? 4 : 3;
-	  slow_monsters();
+	  slow_monsters(plev);
 	  stun_monsters(plev*tmp);
 	  confuse_monsters(plev*tmp);
 	  turn_monsters(plev*tmp);

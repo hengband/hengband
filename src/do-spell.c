@@ -277,15 +277,15 @@ static void cast_wonder(int dir)
 	}
 
 	if (die < 8) clone_monster(dir);
-	else if (die < 14) speed_monster(dir);
+	else if (die < 14) speed_monster(dir, plev);
 	else if (die < 26) heal_monster(dir, damroll(4, 6));
-	else if (die < 31) poly_monster(dir);
+	else if (die < 31) poly_monster(dir, plev);
 	else if (die < 36)
 		fire_bolt_or_beam(beam_chance() - 10, GF_MISSILE, dir,
 				  damroll(3 + ((plev - 1) / 5), 4));
 	else if (die < 41) confuse_monster(dir, plev);
 	else if (die < 46) fire_ball(GF_POIS, dir, 20 + (plev / 2), 3);
-	else if (die < 51) (void)lite_line(dir);
+	else if (die < 51) (void)lite_line(dir, damroll(6, 8));
 	else if (die < 56)
 		fire_bolt_or_beam(beam_chance() - 10, GF_ELEC, dir,
 				  damroll(3 + ((plev - 5) / 4), 8));
@@ -320,8 +320,8 @@ static void cast_wonder(int dir)
 	else /* RARE */
 	{
 		dispel_monsters(150);
-		slow_monsters();
-		sleep_monsters();
+		slow_monsters(plev);
+		sleep_monsters(plev);
 		hp_player(300);
 	}
 }
@@ -396,7 +396,7 @@ static void cast_invoke_spirits(int dir)
 	}
 	else if (die < 31)
 	{
-		poly_monster(dir);
+		poly_monster(dir, plev);
 	}
 	else if (die < 36)
 	{
@@ -413,7 +413,7 @@ static void cast_invoke_spirits(int dir)
 	}
 	else if (die < 51)
 	{
-		(void)lite_line(dir);
+		(void)lite_line(dir, damroll(6, 8));
 	}
 	else if (die < 56)
 	{
@@ -478,8 +478,8 @@ static void cast_invoke_spirits(int dir)
 	else
 	{ /* RARE */
 		dispel_monsters(150);
-		slow_monsters();
-		sleep_monsters();
+		slow_monsters(plev);
+		sleep_monsters(plev);
 		hp_player(300);
 	}
 
@@ -2046,7 +2046,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				sleep_monster(dir);
+				sleep_monster(dir, plev);
 			}
 		}
 		break;
@@ -2128,7 +2128,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				slow_monster(dir);
+				slow_monster(dir, plev);
 			}
 		}
 		break;
@@ -2149,7 +2149,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 			if (cast)
 			{
-				sleep_monsters();
+				sleep_monsters(plev);
 			}
 		}
 		break;
@@ -2836,7 +2836,7 @@ static cptr do_nature_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				wall_to_mud(dir);
+				wall_to_mud(dir, 20 + randint1(30));
 			}
 		}
 		break;
@@ -2937,7 +2937,7 @@ static cptr do_nature_spell(int spell, int mode)
 				msg_print("A line of sunlight appears.");
 #endif
 
-				lite_line(dir);
+				lite_line(dir, damroll(6, 8));
 			}
 		}
 		break;
@@ -2958,7 +2958,7 @@ static cptr do_nature_spell(int spell, int mode)
 
 			if (cast)
 			{
-				slow_monsters();
+				slow_monsters(plev);
 			}
 		}
 		break;
@@ -3810,7 +3810,7 @@ static cptr do_chaos_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				poly_monster(dir);
+				poly_monster(dir, plev);
 			}
 		}
 		break;
@@ -4333,7 +4333,7 @@ static cptr do_death_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				sleep_monster(dir);
+				sleep_monster(dir, plev);
 			}
 		}
 		break;
@@ -5354,7 +5354,7 @@ static cptr do_trump_spell(int spell, int mode)
 
 				if (!result) return NULL;
 
-				speed_monster(dir);
+				speed_monster(dir, plev);
 			}
 		}
 		break;
@@ -6412,7 +6412,7 @@ static cptr do_arcane_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				wall_to_mud(dir);
+				wall_to_mud(dir, 20 + randint1(30));
 			}
 		}
 		break;
@@ -6442,7 +6442,7 @@ static cptr do_arcane_spell(int spell, int mode)
 				msg_print("A line of light appears.");
 #endif
 
-				lite_line(dir);
+				lite_line(dir, damroll(6, 8));
 			}
 		}
 		break;
@@ -8888,7 +8888,7 @@ static cptr do_crusade_spell(int spell, int mode)
 			{
 				project(0, 1, py, px, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
 				dispel_monsters(d_dam);
-				slow_monsters();
+				slow_monsters(plev);
 				stun_monsters(power);
 				confuse_monsters(power);
 				turn_monsters(power);
@@ -8995,7 +8995,7 @@ static cptr do_music_spell(int spell, int mode)
 
 			if (cont)
 			{
-				slow_monsters();
+				slow_monsters(plev);
 			}
 		}
 		break;
@@ -9801,8 +9801,8 @@ static cptr do_music_spell(int spell, int mode)
 
 			if (cont)
 			{
-				slow_monsters();
-				sleep_monsters();
+				slow_monsters(plev);
+				sleep_monsters(plev);
 			}
 		}
 

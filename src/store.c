@@ -4548,7 +4548,7 @@ static void store_process_command(void)
 			else if (p_ptr->pclass == CLASS_SMITH)
 				do_cmd_kaji(TRUE);
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
-				do_cmd_magic_eater(TRUE);
+				do_cmd_magic_eater(TRUE, FALSE);
 			else if (p_ptr->pclass == CLASS_SNIPER)
 				do_cmd_snipe_browse();
 			else do_cmd_browse();

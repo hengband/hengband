@@ -2306,10 +2306,12 @@ void do_cmd_read_scroll(void)
 }
 
 
-static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
+static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, bool known)
 {
 	int k;
 	int ident = FALSE;
+	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
+	int detect_rad = powerful ? DETECT_RAD_DEFAULT * 3 / 2 : DETECT_RAD_DEFAULT;
 
 	/* Analyze the staff */
 	switch (sval)
@@ -2320,7 +2322,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 			{
 				if (set_blind(p_ptr->blind + 3 + randint1(5))) ident = TRUE;
 			}
-			if (unlite_area(10, 3)) ident = TRUE;
+			if (unlite_area(10, (powerful ? 6 : 3))) ident = TRUE;
 			break;
 		}
 
@@ -2338,7 +2340,8 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 
 		case SV_STAFF_SUMMONING:
 		{
-			for (k = 0; k < randint1(4); k++)
+			const int times = randint1(powerful ? 8 : 4);
+			for (k = 0; k < times; k++)
 			{
 				if (summon_specific(0, py, px, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
@@ -2350,21 +2353,26 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 
 		case SV_STAFF_TELEPORTATION:
 		{
-			teleport_player(100, 0L);
+			teleport_player((powerful ? 150 : 100), 0L);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_IDENTIFY:
 		{
-			if (!ident_spell(FALSE)) *use_charge = FALSE;
+			if (powerful) {
+				if (!identify_fully(FALSE)) *use_charge = FALSE;
+			} else {
+				if (!ident_spell(FALSE)) *use_charge = FALSE;
+			}
 			ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_REMOVE_CURSE:
 		{
-			if (remove_curse())
+			bool result = powerful ? remove_all_curse() : remove_curse();
+			if (result)
 			{
 				if (magic)
 				{
@@ -2416,7 +2424,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 					if (!player_bold(y, x)) break;
 				}
 
-				project(0, 0, y, x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
+				project(0, 0, y, x, damroll(6 + lev / 8, 10), GF_LITE_WEAK,
 						  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
 			}
 			ident = TRUE;
@@ -2425,58 +2433,63 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 
 		case SV_STAFF_LITE:
 		{
-			if (lite_area(damroll(2, 8), 2)) ident = TRUE;
+			if (lite_area(damroll(2, 8), (powerful ? 4 : 2))) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_MAPPING:
 		{
-			map_area(DETECT_RAD_MAP);
+			map_area(powerful ? DETECT_RAD_MAP * 3 / 2 : DETECT_RAD_MAP);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_DETECT_GOLD:
 		{
-			if (detect_treasure(DETECT_RAD_DEFAULT)) ident = TRUE;
-			if (detect_objects_gold(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_treasure(detect_rad)) ident = TRUE;
+			if (detect_objects_gold(detect_rad)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_DETECT_ITEM:
 		{
-			if (detect_objects_normal(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_objects_normal(detect_rad)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_DETECT_TRAP:
 		{
-			if (detect_traps(DETECT_RAD_DEFAULT, known)) ident = TRUE;
+			if (detect_traps(detect_rad, known)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_DETECT_DOOR:
 		{
-			if (detect_doors(DETECT_RAD_DEFAULT)) ident = TRUE;
-			if (detect_stairs(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_doors(detect_rad)) ident = TRUE;
+			if (detect_stairs(detect_rad)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_DETECT_INVIS:
 		{
-			if (detect_monsters_invis(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_monsters_invis(detect_rad)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_DETECT_EVIL:
 		{
-			if (detect_monsters_evil(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_monsters_evil(detect_rad)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_CURE_LIGHT:
 		{
-			if (hp_player(damroll(2, 8))) ident = TRUE;
+			if (hp_player(damroll((powerful ? 4 : 2), 8))) ident = TRUE;
+			if (powerful) {
+				if (set_blind(0)) ident = TRUE;
+				if (set_poisoned(0)) ident = TRUE;
+				if (set_cut(p_ptr->cut - 10)) ident = TRUE;
+			}
 			if (set_shero(0,TRUE)) ident = TRUE;
 			break;
 		}
@@ -2495,7 +2508,7 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 
 		case SV_STAFF_HEALING:
 		{
-			if (hp_player(300)) ident = TRUE;
+			if (hp_player(powerful ? 500 : 300)) ident = TRUE;
 			if (set_stun(0)) ident = TRUE;
 			if (set_cut(0)) ident = TRUE;
 			if (set_shero(0,TRUE)) ident = TRUE;
@@ -2526,19 +2539,19 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 
 		case SV_STAFF_SLEEP_MONSTERS:
 		{
-			if (sleep_monsters()) ident = TRUE;
+			if (sleep_monsters(lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_SLOW_MONSTERS:
 		{
-			if (slow_monsters()) ident = TRUE;
+			if (slow_monsters(lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_SPEED:
 		{
-			if (set_fast(randint1(30) + 15, FALSE)) ident = TRUE;
+			if (set_fast(randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
 			break;
 		}
 
@@ -2551,20 +2564,20 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 
 		case SV_STAFF_DISPEL_EVIL:
 		{
-			if (dispel_evil(80)) ident = TRUE;
+			if (dispel_evil(powerful ? 120 : 80)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_POWER:
 		{
-			if (dispel_monsters(150)) ident = TRUE;
+			if (dispel_monsters(powerful ? 225 : 150)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_HOLINESS:
 		{
-			if (dispel_evil(150)) ident = TRUE;
-			k = 3 * p_ptr->lev;
+			if (dispel_evil(powerful ? 225 : 150)) ident = TRUE;
+			k = 3 * lev;
 			if (set_protevil((magic ? 0 : p_ptr->protevil) + randint1(25) + k, FALSE)) ident = TRUE;
 			if (set_poisoned(0)) ident = TRUE;
 			if (set_afraid(0)) ident = TRUE;
@@ -2576,14 +2589,14 @@ static int staff_effect(int sval, bool *use_charge, bool magic, bool known)
 
 		case SV_STAFF_GENOCIDE:
 		{
-			(void)symbol_genocide((magic ? p_ptr->lev + 50 : 200), TRUE);
+			(void)symbol_genocide((magic ? lev + 50 : 200), TRUE);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_EARTHQUAKES:
 		{
-			if (earthquake(py, px, 10))
+			if (earthquake(py, px, (powerful ? 15 : 10)))
 				ident = TRUE;
 			else
 #ifdef JP
@@ -2598,7 +2611,7 @@ msg_print("ダンジョンが揺れた。");
 
 		case SV_STAFF_DESTRUCTION:
 		{
-			if (destroy_area(py, px, 13 + randint0(5), FALSE))
+			if (destroy_area(py, px, (powerful ? 18 : 13) + randint0(5), FALSE))
 				ident = TRUE;
 
 			break;
@@ -2619,8 +2632,8 @@ msg_print("ダンジョンが揺れた。");
 #else
 			msg_print("Mighty magics rend your enemies!");
 #endif
-			project(0, 5, py, px,
-				(randint1(200) + 300) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+			project(0, (powerful ? 7 : 5), py, px,
+				(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 			if ((p_ptr->pclass != CLASS_MAGE) && (p_ptr->pclass != CLASS_HIGH_MAGE) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_MAGIC_EATER) && (p_ptr->pclass != CLASS_BLUE_MAGE))
 			{
 #ifdef JP
@@ -2769,7 +2782,7 @@ static void do_cmd_use_staff_aux(int item)
 	/* Sound */
 	sound(SOUND_ZAP);
 
-	ident = staff_effect(o_ptr->sval, &use_charge, FALSE, object_is_aware(o_ptr));
+	ident = staff_effect(o_ptr->sval, &use_charge, FALSE, FALSE, object_is_aware(o_ptr));
 
 	if (!(object_is_aware(o_ptr)))
 	{
@@ -2876,9 +2889,11 @@ void do_cmd_use_staff(void)
 }
 
 
-static int wand_effect(int sval, int dir, bool magic)
+static int wand_effect(int sval, int dir, bool powerful, bool magic)
 {
 	int ident = FALSE;
+	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
+	int rad = powerful ? 3 : 2;
 
 	/* XXX Hack -- Wand of wonder can do anything before it */
 	if (sval == SV_WAND_WONDER)
@@ -2908,13 +2923,14 @@ static int wand_effect(int sval, int dir, bool magic)
 	{
 		case SV_WAND_HEAL_MONSTER:
 		{
-			if (heal_monster(dir, damroll(10, 10))) ident = TRUE;
+			int dam = damroll((powerful ? 20 : 10), 10);
+			if (heal_monster(dir, dam)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_HASTE_MONSTER:
 		{
-			if (speed_monster(dir)) ident = TRUE;
+			if (speed_monster(dir, lev)) ident = TRUE;
 			break;
 		}
 
@@ -2926,143 +2942,148 @@ static int wand_effect(int sval, int dir, bool magic)
 
 		case SV_WAND_TELEPORT_AWAY:
 		{
-			if (teleport_monster(dir)) ident = TRUE;
+			int distance = MAX_SIGHT * (powerful ? 8 : 5);
+			if (teleport_monster(dir, distance)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_DISARMING:
 		{
 			if (disarm_trap(dir)) ident = TRUE;
+			if (powerful && disarm_traps_touch()) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_TRAP_DOOR_DEST:
 		{
 			if (destroy_door(dir)) ident = TRUE;
+			if (powerful && destroy_doors_touch()) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_STONE_TO_MUD:
 		{
-			if (wall_to_mud(dir)) ident = TRUE;
+			int dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
+			if (wall_to_mud(dir, dam)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_LITE:
 		{
+			int dam = damroll((powerful ? 12 : 6), 8);
 #ifdef JP
 			msg_print("青く輝く光線が放たれた。");
 #else
 			msg_print("A line of blue shimmering light appears.");
 #endif
 
-			(void)lite_line(dir);
+			(void)lite_line(dir, dam);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_SLEEP_MONSTER:
 		{
-			if (sleep_monster(dir)) ident = TRUE;
+			if (sleep_monster(dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_SLOW_MONSTER:
 		{
-			if (slow_monster(dir)) ident = TRUE;
+			if (slow_monster(dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_CONFUSE_MONSTER:
 		{
-			if (confuse_monster(dir, p_ptr->lev)) ident = TRUE;
+			if (confuse_monster(dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_FEAR_MONSTER:
 		{
-			if (fear_monster(dir, p_ptr->lev)) ident = TRUE;
+			if (fear_monster(dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_DRAIN_LIFE:
 		{
-			if (drain_life(dir, 80 + p_ptr->lev)) ident = TRUE;
+			if (drain_life(dir, 80 + lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_POLYMORPH:
 		{
-			if (poly_monster(dir)) ident = TRUE;
+			if (poly_monster(dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_STINKING_CLOUD:
 		{
-			fire_ball(GF_POIS, dir, 12 + p_ptr->lev / 4, 2);
+			fire_ball(GF_POIS, dir, 12 + lev / 4, rad);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_MAGIC_MISSILE:
 		{
-			fire_bolt_or_beam(20, GF_MISSILE, dir, damroll(2 + p_ptr->lev / 10, 6));
+			fire_bolt_or_beam(20, GF_MISSILE, dir, damroll(2 + lev / 10, 6));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_ACID_BOLT:
 		{
-			fire_bolt_or_beam(20, GF_ACID, dir, damroll(6 + p_ptr->lev / 7, 8));
+			fire_bolt_or_beam(20, GF_ACID, dir, damroll(6 + lev / 7, 8));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_CHARM_MONSTER:
 		{
-			if (charm_monster(dir, MAX(20, p_ptr->lev)))
+			if (charm_monster(dir, MAX(20, lev)))
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_FIRE_BOLT:
 		{
-			fire_bolt_or_beam(20, GF_FIRE, dir, damroll(7 + p_ptr->lev / 6, 8));
+			fire_bolt_or_beam(20, GF_FIRE, dir, damroll(7 + lev / 6, 8));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_COLD_BOLT:
 		{
-			fire_bolt_or_beam(20, GF_COLD, dir, damroll(5 + p_ptr->lev / 8, 8));
+			fire_bolt_or_beam(20, GF_COLD, dir, damroll(5 + lev / 8, 8));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_ACID_BALL:
 		{
-			fire_ball(GF_ACID, dir, 60 + 3 * p_ptr->lev / 4, 2);
+			fire_ball(GF_ACID, dir, 60 + 3 * lev / 4, rad);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_ELEC_BALL:
 		{
-			fire_ball(GF_ELEC, dir, 40 + 3 * p_ptr->lev / 4, 2);
+			fire_ball(GF_ELEC, dir, 40 + 3 * lev / 4, rad);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_FIRE_BALL:
 		{
-			fire_ball(GF_FIRE, dir, 70 + 3 * p_ptr->lev / 4, 2);
+			fire_ball(GF_FIRE, dir, 70 + 3 * lev / 4, rad);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_COLD_BALL:
 		{
-			fire_ball(GF_COLD, dir, 50 + 3 * p_ptr->lev / 4, 2);
+			fire_ball(GF_COLD, dir, 50 + 3 * lev / 4, rad);
 			ident = TRUE;
 			break;
 		}
@@ -3080,52 +3101,50 @@ static int wand_effect(int sval, int dir, bool magic)
 
 		case SV_WAND_DRAGON_FIRE:
 		{
-			fire_ball(GF_FIRE, dir, 200, -3);
+			fire_ball(GF_FIRE, dir, (powerful ? 300 : 200), -3);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_DRAGON_COLD:
 		{
-			fire_ball(GF_COLD, dir, 180, -3);
+			fire_ball(GF_COLD, dir, (powerful ? 270 : 180), -3);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_DRAGON_BREATH:
 		{
+			int dam;
+			int typ;
+
 			switch (randint1(5))
 			{
 				case 1:
-				{
-					fire_ball(GF_ACID, dir, 240, -3);
+					dam = 240;
+					typ = GF_ACID;
 					break;
-				}
-
 				case 2:
-				{
-					fire_ball(GF_ELEC, dir, 210, -3);
+					dam = 210;
+					typ = GF_ELEC;
 					break;
-				}
-
 				case 3:
-				{
-					fire_ball(GF_FIRE, dir, 240, -3);
+					dam = 240;
+					typ = GF_FIRE;
 					break;
-				}
-
 				case 4:
-				{
-					fire_ball(GF_COLD, dir, 210, -3);
+					dam = 210;
+					typ = GF_COLD;
 					break;
-				}
-
 				default:
-				{
-					fire_ball(GF_POIS, dir, 180, -3);
+					dam = 180;
+					typ = GF_POIS;
 					break;
-				}
 			}
+
+			if (powerful) dam = (dam * 3) / 2;
+
+			fire_ball(typ, dir, dam, -3);
 
 			ident = TRUE;
 			break;
@@ -3133,7 +3152,7 @@ static int wand_effect(int sval, int dir, bool magic)
 
 		case SV_WAND_DISINTEGRATE:
 		{
-			fire_ball(GF_DISINTEGRATE, dir, 200 + randint1(p_ptr->lev * 2), 2);
+			fire_ball(GF_DISINTEGRATE, dir, 200 + randint1(lev * 2), rad);
 			ident = TRUE;
 			break;
 		}
@@ -3146,21 +3165,21 @@ msg_print("ロケットを発射した！");
 			msg_print("You launch a rocket!");
 #endif
 
-			fire_rocket(GF_ROCKET, dir, 250 + p_ptr->lev * 3, 2);
+			fire_rocket(GF_ROCKET, dir, 250 + lev * 3, rad);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_STRIKING:
 		{
-			fire_bolt(GF_METEOR, dir, damroll(15 + p_ptr->lev / 3, 13));
+			fire_bolt(GF_METEOR, dir, damroll(15 + lev / 3, 13));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_GENOCIDE:
 		{
-			fire_ball_hide(GF_GENOCIDE, dir, magic ? p_ptr->lev + 50 : 250, 0);
+			fire_ball_hide(GF_GENOCIDE, dir, magic ? lev + 50 : 250, 0);
 			ident = TRUE;
 			break;
 		}
@@ -3302,7 +3321,7 @@ static void do_cmd_aim_wand_aux(int item)
 	/* Sound */
 	sound(SOUND_ZAP);
 
-	ident = wand_effect(o_ptr->sval, dir, FALSE);
+	ident = wand_effect(o_ptr->sval, dir, FALSE, FALSE);
 
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
@@ -3374,9 +3393,12 @@ void do_cmd_aim_wand(void)
 }
 
 
-static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
+static int rod_effect(int sval, int dir, bool *use_charge, bool powerful, bool magic)
 {
 	int ident = FALSE;
+	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
+	int detect_rad = powerful ? DETECT_RAD_DEFAULT * 3 / 2 : DETECT_RAD_DEFAULT;
+	int rad = powerful ? 3 : 2;
 
 	/* Unused */
 	(void)magic;
@@ -3386,20 +3408,24 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 	{
 		case SV_ROD_DETECT_TRAP:
 		{
-			if (detect_traps(DETECT_RAD_DEFAULT, (bool)(dir ? FALSE : TRUE))) ident = TRUE;
+			if (detect_traps(detect_rad, (bool)(dir ? FALSE : TRUE))) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_DETECT_DOOR:
 		{
-			if (detect_doors(DETECT_RAD_DEFAULT)) ident = TRUE;
-			if (detect_stairs(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_doors(detect_rad)) ident = TRUE;
+			if (detect_stairs(detect_rad)) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_IDENTIFY:
 		{
-			if (!ident_spell(FALSE)) *use_charge = FALSE;
+			if (powerful) {
+				if (!identify_fully(FALSE)) *use_charge = FALSE;
+			} else {
+				if (!ident_spell(FALSE)) *use_charge = FALSE;
+			}
 			ident = TRUE;
 			break;
 		}
@@ -3413,20 +3439,20 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 
 		case SV_ROD_ILLUMINATION:
 		{
-			if (lite_area(damroll(2, 8), 2)) ident = TRUE;
+			if (lite_area(damroll(2, 8), (powerful ? 4 : 2))) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_MAPPING:
 		{
-			map_area(DETECT_RAD_MAP);
+			map_area(powerful ? DETECT_RAD_MAP * 3 / 2 : DETECT_RAD_MAP);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_DETECTION:
 		{
-			detect_all(DETECT_RAD_DEFAULT);
+			detect_all(detect_rad);
 			ident = TRUE;
 			break;
 		}
@@ -3452,7 +3478,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 
 		case SV_ROD_HEALING:
 		{
-			if (hp_player(500)) ident = TRUE;
+			if (hp_player(powerful ? 750 : 500)) ident = TRUE;
 			if (set_stun(0)) ident = TRUE;
 			if (set_cut(0)) ident = TRUE;
 			if (set_shero(0,TRUE)) ident = TRUE;
@@ -3473,117 +3499,120 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 
 		case SV_ROD_SPEED:
 		{
-			if (set_fast(randint1(30) + 15, FALSE)) ident = TRUE;
+			if (set_fast(randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_PESTICIDE:
 		{
-			if (dispel_monsters(4)) ident = TRUE;
+			if (dispel_monsters(powerful ? 8 : 4)) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_TELEPORT_AWAY:
 		{
-			if (teleport_monster(dir)) ident = TRUE;
+			int distance = MAX_SIGHT * (powerful ? 8 : 5);
+			if (teleport_monster(dir, distance)) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_DISARMING:
 		{
 			if (disarm_trap(dir)) ident = TRUE;
+			if (powerful && disarm_traps_touch()) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_LITE:
 		{
+			int dam = damroll((powerful ? 12 : 6), 8);
 #ifdef JP
 			msg_print("青く輝く光線が放たれた。");
 #else
 			msg_print("A line of blue shimmering light appears.");
 #endif
 
-			(void)lite_line(dir);
+			(void)lite_line(dir, dam);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_SLEEP_MONSTER:
 		{
-			if (sleep_monster(dir)) ident = TRUE;
+			if (sleep_monster(dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_SLOW_MONSTER:
 		{
-			if (slow_monster(dir)) ident = TRUE;
+			if (slow_monster(dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_DRAIN_LIFE:
 		{
-			if (drain_life(dir, 70 + 3 * p_ptr->lev / 2)) ident = TRUE;
+			if (drain_life(dir, 70 + 3 * lev / 2)) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_POLYMORPH:
 		{
-			if (poly_monster(dir)) ident = TRUE;
+			if (poly_monster(dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_ACID_BOLT:
 		{
-			fire_bolt_or_beam(10, GF_ACID, dir, damroll(6 + p_ptr->lev / 7, 8));
+			fire_bolt_or_beam(10, GF_ACID, dir, damroll(6 + lev / 7, 8));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_ELEC_BOLT:
 		{
-			fire_bolt_or_beam(10, GF_ELEC, dir, damroll(4 + p_ptr->lev / 9, 8));
+			fire_bolt_or_beam(10, GF_ELEC, dir, damroll(4 + lev / 9, 8));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_FIRE_BOLT:
 		{
-			fire_bolt_or_beam(10, GF_FIRE, dir, damroll(7 + p_ptr->lev / 6, 8));
+			fire_bolt_or_beam(10, GF_FIRE, dir, damroll(7 + lev / 6, 8));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_COLD_BOLT:
 		{
-			fire_bolt_or_beam(10, GF_COLD, dir, damroll(5 + p_ptr->lev / 8, 8));
+			fire_bolt_or_beam(10, GF_COLD, dir, damroll(5 + lev / 8, 8));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_ACID_BALL:
 		{
-			fire_ball(GF_ACID, dir, 60 + p_ptr->lev, 2);
+			fire_ball(GF_ACID, dir, 60 + lev, rad);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_ELEC_BALL:
 		{
-			fire_ball(GF_ELEC, dir, 40 + p_ptr->lev, 2);
+			fire_ball(GF_ELEC, dir, 40 + lev, rad);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_FIRE_BALL:
 		{
-			fire_ball(GF_FIRE, dir, 70 + p_ptr->lev, 2);
+			fire_ball(GF_FIRE, dir, 70 + lev, rad);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_ROD_COLD_BALL:
 		{
-			fire_ball(GF_COLD, dir, 50 + p_ptr->lev, 2);
+			fire_ball(GF_COLD, dir, 50 + lev, rad);
 			ident = TRUE;
 			break;
 		}
@@ -3597,7 +3626,8 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool magic)
 
 		case SV_ROD_STONE_TO_MUD:
 		{
-			if (wall_to_mud(dir)) ident = TRUE;
+			int dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
+			if (wall_to_mud(dir, dam)) ident = TRUE;
 			break;
 		}
 
@@ -3755,7 +3785,7 @@ msg_print("そのロッドはまだ充填中です。");
 	/* Sound */
 	sound(SOUND_ZAP);
 
-	ident = rod_effect(o_ptr->sval, dir, &use_charge, FALSE);
+	ident = rod_effect(o_ptr->sval, dir, &use_charge, FALSE, FALSE);
 
 	/* Increase the timeout by the rod kind's pval. -LM- */
 	if (use_charge) o_ptr->timeout += k_ptr->pval;
@@ -5049,7 +5079,7 @@ static int select_magic_eater(bool only_browse)
 /*
  *  Use eaten rod, wand or staff
  */
-void do_cmd_magic_eater(bool only_browse)
+bool do_cmd_magic_eater(bool only_browse, bool powerful)
 {
 	int item, chance, level, k_idx, tval, sval;
 	bool use_charge = TRUE;
@@ -5063,14 +5093,14 @@ msg_print("混乱していて唱えられない！");
 		msg_print("You are too confused!");
 #endif
 
-		return;
+		return FALSE;
 	}
 
 	item = select_magic_eater(only_browse);
 	if (item == -1)
 	{
 		energy_use = 0;
-		return;
+		return FALSE;
 	}
 	if (item >= EATER_EXT*2) {tval = TV_ROD;sval = item - EATER_EXT*2;}
 	else if (item >= EATER_EXT) {tval = TV_WAND;sval = item - EATER_EXT;}
@@ -5110,7 +5140,7 @@ msg_print("呪文をうまく唱えられなかった！");
 			chg_virtue(V_CHANCE,-1);
 		energy_use = 100;
 
-		return;
+		return TRUE;
 	}
 	else
 	{
@@ -5119,19 +5149,19 @@ msg_print("呪文をうまく唱えられなかった！");
 		if (tval == TV_ROD)
 		{
 			if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
-				if (!get_aim_dir(&dir)) return;
-			rod_effect(sval, dir, &use_charge, TRUE);
-			if (!use_charge) return;
+				if (!get_aim_dir(&dir)) return FALSE;
+			rod_effect(sval, dir, &use_charge, powerful, TRUE);
+			if (!use_charge) return FALSE;
 		}
 		else if (tval == TV_WAND)
 		{
-			if (!get_aim_dir(&dir)) return;
-			wand_effect(sval, dir, TRUE);
+			if (!get_aim_dir(&dir)) return FALSE;
+			wand_effect(sval, dir, powerful, TRUE);
 		}
 		else
 		{
-			staff_effect(sval, &use_charge, TRUE, TRUE);
-			if (!use_charge) return;
+			staff_effect(sval, &use_charge, powerful, TRUE, TRUE);
+			if (!use_charge) return FALSE;
 		}
 		if (randint1(100) < chance)
 			chg_virtue(V_CHANCE,1);
@@ -5139,4 +5169,6 @@ msg_print("呪文をうまく唱えられなかった！");
 	energy_use = 100;
 	if (tval == TV_ROD) p_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
 	else p_ptr->magic_num1[item] -= EATER_CHARGE;
+
+        return TRUE;
 }
