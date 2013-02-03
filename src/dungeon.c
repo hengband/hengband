@@ -3327,13 +3327,10 @@ static void process_world_aux_movement(void)
 			disturb(0, 0);
 
 			/* Determine the level */
-			if (dun_level || p_ptr->inside_quest)
+			if (dun_level || p_ptr->inside_quest || p_ptr->enter_dungeon)
 			{
-#ifdef JP
-msg_print("上に引っ張りあげられる感じがする！");
-#else
-				msg_print("You feel yourself yanked upwards!");
-#endif
+				msg_print(_("上に引っ張りあげられる感じがする！",
+							"You feel yourself yanked upwards!"));
 
 				if (dungeon_type) p_ptr->recall_dungeon = dungeon_type;
 				if (record_stair)
@@ -3351,11 +3348,8 @@ msg_print("上に引っ張りあげられる感じがする！");
 			}
 			else
 			{
-#ifdef JP
-msg_print("下に引きずり降ろされる感じがする！");
-#else
-				msg_print("You feel yourself yanked downwards!");
-#endif
+				msg_print(_("下に引きずり降ろされる感じがする！",
+							"You feel yourself yanked downwards!"));
 
 				dungeon_type = p_ptr->recall_dungeon;
 
