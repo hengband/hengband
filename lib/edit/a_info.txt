@@ -1522,8 +1522,9 @@ E:'Gurthang'
 I:23:25:2
 W:30:30:200:100000
 P:0:3d6:13:17:0
-F:STR | HIDE_TYPE | XTRA_RES_OR_POWER |
-F:KILL_DRAGON | SLAY_TROLL | FREE_ACT | SLOW_DIGEST | REGEN | SHOW_MODS
+F:STR | HIDE_TYPE | XTRA_RES_OR_POWER | VORPAL |
+F:KILL_DRAGON | SLAY_ORC | SLAY_TROLL | SLAY_GIANT | SLAY_HUMAN | SLAY_ANIMAL | 
+F:FREE_ACT | SLOW_DIGEST | REGEN | SHOW_MODS
 D:$A giant sword once wielded by mighty Turin, and a great dragonbane which 
 D:$bathed in Glaurung's blood:  but beware, it will drink the blood of those 
 D:$who wield it eventually.
@@ -3001,8 +3002,8 @@ D:毎週月曜日の20:45に絶大な力を発揮するらしい。
 
 N:167:『噛尾刀』
 E:'Tailbiter'
-I:23:16:1
-W:20:20:150:35000
+I:23:16:2
+W:20:30:150:35000
 P:0:2d5:18:9:0
 F:CON | SEARCH | BLOWS |
 F:SLAY_EVIL | KILL_DRAGON | ESP_DRAGON |
