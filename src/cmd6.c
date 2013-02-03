@@ -4648,13 +4648,15 @@ static int select_magic_eater(bool only_browse)
 			prt(format(" %s 杖", (menu_line == 1) ? "》" : "  "), 2, 14);
 			prt(format(" %s 魔法棒", (menu_line == 2) ? "》" : "  "), 3, 14);
 			prt(format(" %s ロッド", (menu_line == 3) ? "》" : "  "), 4, 14);
-			prt("どの種類の魔法を使いますか？", 0, 0);
 #else
 			prt(format(" %s staff", (menu_line == 1) ? "> " : "  "), 2, 14);
 			prt(format(" %s wand", (menu_line == 2) ? "> " : "  "), 3, 14);
 			prt(format(" %s rod", (menu_line == 3) ? "> " : "  "), 4, 14);
-			prt("Which type of magic do you use?", 0, 0);
 #endif
+
+			if (only_browse) prt(_("どの種類の魔法を見ますか？", "Which type of magic do you browse?"), 0, 0);
+			else prt(_("どの種類の魔法を使いますか？", "Which type of magic do you use?"), 0, 0);
+
 			choice = inkey();
 			switch(choice)
 			{
@@ -4740,11 +4742,10 @@ static int select_magic_eater(bool only_browse)
 	flag = FALSE;
 
 	/* Build a prompt */
-#ifdef JP
-(void) strnfmt(out_val, 78, "('*'で一覧, ESCで中断) どの魔力を使いますか？");
-#else
-	(void)strnfmt(out_val, 78, "(*=List, ESC=exit) Use which power? ");
-#endif
+	if (only_browse) strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を見ますか？",
+											"(*=List, ESC=exit) Browse which power? "));
+	else strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を使いますか？",
+								"(*=List, ESC=exit) Use which power? "));
 	
 	/* Save the screen */
 	screen_save();
@@ -5050,13 +5051,7 @@ static int select_magic_eater(bool only_browse)
 				prt(&temp[j], line, 10);
 				line++;
 			}
-	
-#ifdef JP
-			prt("何かキーを押して下さい。",0,0);
-#else
-			prt("Hit any key.",0,0);
-#endif
-			(void)inkey();
+
 			continue;
 		}
 
