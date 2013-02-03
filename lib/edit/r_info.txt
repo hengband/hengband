@@ -320,7 +320,7 @@ D:丸い赤ら顔のずんぐりしたホビットが、姿を現しました。
 D:「マゴットじいさんがどうしたっていうんです？」と、ピピンがたずねました。
 D:「あのひとはブランディバック一族のだれとでも仲良くやってますよ。むろん、
 D:黙ってじいさんの土地に入ってくるやつらには、ひどく怖い存在だし、獰猛な犬も
-D:飼ってるけど---だけど、このあたりに住んでいれば,庄境にも近いし、よそより
+D:飼ってるけど---だけど、このあたりに住んでいれば、庄境にも近いし、よそより
 D:用心してかからなきゃならないわけですよ。」
 D:（J.R.R.トールキン、瀬田貞二・田中明子訳 新版指輪物語） 
 
@@ -1238,7 +1238,7 @@ W:3:1:0:9:40:187
 B:BITE:HURT:13d1
 F:FRIENDS | AQUATIC | ANIMAL | WILD_ALL | RES_WATE
 D:$Bloodthirsty fish who can smell your blood from a great distance.
-D:この血に飢えた魚はあなたの血の匂いを遠くからかぎ分ける。
+D:この血に飢えた魚はあなたの血の匂いを遠くから嗅ぎ分ける。
 
 #J0#
 N:71:ブラック・ナーガ
@@ -1465,7 +1465,7 @@ F:RAND_25 |
 F:MULTIPLY | 
 F:ANIMAL
 D:$It is a very vicious rodent.
-D:それはひじょうに凶暴な齧歯類の生物だ。
+D:それは非常に凶暴な齧歯類の生物だ。
 
 #JZ#
 #JZ#(コメント)訳は 紫月閑丸さん
@@ -2310,7 +2310,7 @@ D:$of ours got out.  Lagduf and Muzgash ran through, but they were shot."
 D:ラグドゥフは弱いオークの部隊を指揮する隊長で、過剰な暴力を示すことで
 D:部隊の統制を保っている。
 D:「お前さんには二度も話してるぜ、ゴルバグの豚どものほうが先に門を出たとね、
-D:そしておれたちほうはだれも出ちゃおらんとね。ラグドゥフとムズガッシュの野郎が
+D:そしておれたちのほうはだれも出ちゃおらんとね。ラグドゥフとムズガッシュの野郎が
 D:駆け抜けたが、二人とも矢で射たれた。」
 D:（J.R.R.トールキン、瀬田貞二・田中明子訳 新版指輪物語） 
 
@@ -2369,7 +2369,7 @@ W:8:2:0:28:0:0
 B:HIT:TERRIFY:1d5
 F:PASS_WALL | NO_CONF | NO_SLEEP | NONLIVING | IM_ACID | RES_DARK | CAN_FLY
 D:$A black hole in the fabric of reality. 
-D:現実という生地にあいた黒い穴だ。
+D:現実という生地に空いた黒い穴だ。
 
 #JZ#
 N:145:空飛ぶ人喰い猿
@@ -2511,7 +2511,7 @@ B:BITE:HURT:1d5
 F:OPEN_DOOR | BASH_DOOR | WILD_MOUNTAIN | DROP_CORPSE
 F:ANIMAL | IM_COLD
 D:$A large white figure covered in shaggy fur.
-D:けむくじゃらの大きな白いモンスターだ。
+D:毛むくじゃらの大きな白いモンスターだ。
 
 #J0#
 N:155:充血ベトベト
@@ -2650,7 +2650,7 @@ S:BR_ELEC
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a pale blue.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
-D:光に慣れていず、うろこは薄い青色をしてる。
+D:光に慣れておらず、鱗は薄い青色をしてる。
 
 #J0#
 N:164:ベビー・ホワイト・ドラゴン
@@ -2670,7 +2670,7 @@ S:BR_COLD
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a pale white.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
-D:光に慣れていず、うろこは薄い白色をしている。
+D:光に慣れておらず、鱗は薄い白色をしている。
 
 #J0#
 N:165:ベビー・グリーン・ドラゴン
@@ -2690,7 +2690,7 @@ S:BR_POIS
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a sickly green.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
-D:光に慣れていず、うろこは病的な緑色をしている。
+D:光に慣れておらず、鱗は病的な緑色をしている。
 
 #J0#
 N:166:ベビー・ブラック・ドラゴン
@@ -2710,7 +2710,7 @@ S:BR_ACID
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a dull black.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
-D:光に慣れていず、うろこは鈍い黒色をしている。
+D:光に慣れておらず、鱗は鈍い黒色をしている。
 
 #J0#
 N:167:ベビー・レッド・ドラゴン
@@ -2730,7 +2730,7 @@ S:BR_FIRE
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a pale red.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
-D:光に慣れていず、うろこは薄い赤色をしている。
+D:光に慣れておらず、鱗は薄い赤色をしている。
 
 #J0#
 N:168:巨大赤アリ
@@ -2975,7 +2975,7 @@ S:1_IN_12
 S:CAUSE_1 | SCARE
 D:$"...the hand of a corpse -- bloodless and skeletal, and with 
 D:$impossibly long, cracked nails."
-D:「グラーキ」のトゲによって作られたアンデッドモンスター。
+D:「グラーキ」の刺によって作られたアンデッドモンスター。
 D:元は人間だったため、従者になって間も無いうちは何とか人間に見えるが、時間
 D:が経つと腐敗してくる。
 D:ほとんどがグラーキの一部となっており、
@@ -3004,7 +3004,7 @@ F:EVIL | HURT_LITE | RES_DARK | EAT_BERSERKER |
 S:1_IN_12
 S:MISSILE
 D:$A dark elven figure in armour and ready with his sword.
-D:鎧を身にまとったダークエルフで、常にソードをかまえている。
+D:鎧を身にまとったダークエルフで、常に剣をかまえている。
 
 #JZ#
 #JZ#Ｈ・Ｐ・ラヴクラフト＆オーガスト・ダーレスの「破風の窓」に登場。
@@ -3123,7 +3123,7 @@ F:FRIENDS |
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | DEMON | IM_FIRE | NO_FEAR | NO_CONF
 D:$An ugly screaming little demon servant of Tzeentch.
-D:ティーンチのしもべの、叫ぶ醜い小型の悪魔だ。
+D:<ティーンチ>のしもべの、叫ぶ醜い小型の悪魔だ。
 
 #J0#
 N:190:毛むくじゃらモルド
@@ -3309,7 +3309,7 @@ D:$a point of some sort."
 D:アンバーの王女フィオナが他の世界（影）から呼び寄せた怪物。
 D:「かれらの姿には何となく異常なところがあった。
 D:一つには、六人とも全部、一様に血走った目をしていた。ひどく真赤な目だったが、
-D:かえらにとっては、それが正常な状態であるらしかった。
+D:かれらにとっては、それが正常な状態であるらしかった。
 D:また、全員のすべての指に関節が一つずつ余計にあり、手の甲に鋭く前にカーブした
 D:蹴爪のようなものがあった。みな顎がひどく張っていた。
 D:一人の口をこじ開けて見ると、歯が四十四本あり、大部分が人間の歯より長く、
@@ -3374,7 +3374,7 @@ S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales shimmering with a hint of colour.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
-D:光に慣れていず、うろこは微かな色に輝いている。
+D:光に慣れておらず、鱗は微かな色に輝いている。
 
 #JZ#
 N:205:ヴォーパル・バニー
@@ -4020,7 +4020,7 @@ F:EVIL | DEMON | IM_FIRE | NO_FEAR | NO_CONF
 S:1_IN_8
 S:CONF | SCARE
 D:$An ugly screaming little demon servant of Tzeentch.
-D:ティーンチのしもべの、叫ぶ醜い小型の悪魔だ。
+D:<ティーンチ>のしもべの、叫ぶ醜い小型の悪魔だ。
 
 #JZ#
 N:243:クローカー
@@ -4227,7 +4227,7 @@ F:DROP_60 | WILD_MOUNTAIN | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | EAT_GIVE_STR
 F:EVIL | GIANT | MALE
 D:$A ten foot tall humanoid with powerful muscles.
-D:それは背の高さが 3 メートルもある、ひじょうに屈強な人間型のモンスターだ。
+D:それは背の高さが 3 メートルもある、非常に屈強な人間型のモンスターだ。
 
 #Note! Flesh golem's CAN_SWIM is a tribute to Shelley...
 
@@ -4762,7 +4762,7 @@ D:$It is a strange, vast gelatinous structure that assumes cubic proportions
 D:$as it lines all four walls of the corridors it patrols.  Through its 
 D:$transparent jelly structure you can see treasures it has engulfed, and a 
 D:$few corpses as well.
-D:それは立方形をした奇妙で巨大なゼリー状の構造物で、部屋の
+D:それは立方体の形をした奇妙で巨大なゼリー状の構造物で、部屋の
 D:四方の壁に沿って並んでいる。その透明な体の中には、飲み込まれた財宝と
 D:いくらかの死骸を見て取ることができる。
 
@@ -5575,7 +5575,7 @@ F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | DRAGON |
 F:WILD_WOOD | WILD_MOUNTAIN | DROP_SKELETON | DROP_CORPSE |
 F:ANIMAL | EVIL | RIDING | EAT_POISONOUS
 D:$A fast-moving and deadly dragonian animal. Beware its poisonous sting!
-D:それは素早く動く危険なドラゴンのような生き物だ、
+D:それは素早く動く危険なドラゴンのような生き物だ。
 D:その毒爪には気をつけろ！
 
 #JZ#
@@ -5671,7 +5671,7 @@ F:BASH_DOOR | WILD_WOOD | WILD_GRASS |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | EAT_SPEED
 D:$A fierce and dangerous cat, its huge tusks and sharp claws would lacerate 
 D:$even the strongest armour.
-D:どう猛で危険なネコであり、その巨大な牙と鋭い爪は最強の鎧でさえも切り
+D:獰猛で危険なネコであり、その巨大な牙と鋭い爪は最強の鎧でさえも切り
 D:裂いてしまう。
 
 #J0#
@@ -5711,7 +5711,7 @@ S:1_IN_10 |
 S:BR_FIRE
 D:$It is a strange concoction of lion, dragon and goat.  It looks very odd 
 D:$but very avoidable.
-D:ライオンとドラゴンと山羊が混じったような奇妙な生物だ。ひじょうに変わった
+D:ライオンとドラゴンと山羊が混じったような奇妙な生物だ。非常に変わった
 D:外見をしていて、近寄りがたい雰囲気がある。
 
 #J0#
@@ -5776,7 +5776,7 @@ F:RAND_25 | FORCE_MAXHP | RES_WATE
 F:ANIMAL | AQUATIC | WILD_ALL |
 D:$Although it looks like a fish and lives in water, it is in fact 
 D:$a mammal. And it is huge!
-D:それは水の中にすんでいるので魚のように見えるが 
+D:それは水の中にすんでいるので魚のように見えるが
 D:実際は哺乳類だ、それもとても巨大な！
 
 #JZ#
@@ -5792,7 +5792,7 @@ B:TOUCH:ELEC:2d7
 F:AQUATIC | ANIMAL | RAND_25 | IM_ELEC | RES_WATE | WILD_ALL |
 D:$This cute little serpentine creature can create a deadly voltage. 
 D:$Better watch out!
-D:この小さな曲がりくねった生き物は致命的な電圧を発する事が出来る。 
+D:この小さな曲がりくねった生き物は致命的な電圧を発する事が出来る。
 D:触らないほうがいいぞ！
 
 #J0#
@@ -6179,7 +6179,7 @@ F:FORCE_SLEEP | RES_TELE
 F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:NO_FEAR | NO_CONF | NO_SLEEP | NONLIVING
 D:$It looks like a huge spiked roller, moving on its own towards you.
-D:トゲのついた巨大なローラーのように見え、転がりながらあなたに向かってくる。
+D:刺のついた巨大なローラーのように見え、転がりながらあなたに向かってくる。
 
 #J0#
 N:369:巨大黄サソリ
@@ -6814,7 +6814,7 @@ F:EVIL | TROLL | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:BLINK | SCARE | CAUSE_1 | MISSILE | DARKNESS
 D:$A troll who is so bright he knows how to read.
-D:字の読み方を知っているというひじょうに賢いトロルだ。
+D:字の読み方を知っているという非常に賢いトロルだ。
 
 #J0#
 N:404:大長虫
@@ -7197,7 +7197,7 @@ D:$A powerful troll form.  Venom drips from its needlelike claws.
 D:屈強なトロルで、その針の様な爪からは毒液がしたたり落ちている。
 
 #JZ#
-N:425:<ティーンチ>の火炎悪魔
+N:425:<<ティーンチ>>の火炎悪魔
 E:Flamer of Tzeentch
 G:,:R
 I:110:60d15:10:70:20
@@ -7210,7 +7210,7 @@ F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING
 S:1_IN_3 | 
 S:BO_FIRE | BA_FIRE
 D:$It looks like an inverted mushroom, with two flexible arms.
-D:変化と混沌の神<ティーンチ>の下僕だ。
+D:変化と混沌の神<<ティーンチ>>の下僕だ。
 D:逆さになったキノコに似ていて、二本の柔軟な腕がある。
 
 #JZ#
@@ -7712,7 +7712,7 @@ F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:NO_FEAR | NO_CONF | NO_SLEEP | NONLIVING | RES_SHAR | RES_TELE
 D:$It looks like a huge spiked roller. It was designed to keep this dungeon 
 D:$clean, and you are the biggest spot of dirt in sight.
-D:巨大なトゲのついたローラーのようだ。このダンジョンをきれいに保つよう
+D:巨大な刺のついたローラーのようだ。このダンジョンをきれいに保つよう
 D:作られている。そしてあなたは一番大きなゴミと見なされている。
 
 #JZ#
@@ -7772,7 +7772,7 @@ S:1_IN_8
 S:BR_POIS
 D:$An evil reptile whose eyes stare deeply at you and 
 D:$makes your soul wilt!
-D:愚かな冒険者を餌食にする邪悪の爬虫類だ。その目に深く睨まれると魂がしぼんで
+D:愚かな冒険者を餌食にする邪悪な爬虫類だ。その目に深く睨まれると魂がしぼんで
 D:いくかのようだ。
 
 #J0#
@@ -7908,7 +7908,7 @@ S:BR_ELEC
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$deep blue in hue.  Sparks crackle along its length.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
-D:まだ柔らかいそのうろこは深い青色をしていて、全身から火花を発している。
+D:まだ柔らかいその鱗は深い青色をしていて、全身から火花を発している。
 
 #J0#
 N:460:ヤング・ホワイト・ドラゴン
@@ -7929,7 +7929,7 @@ S:BR_COLD
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$frosty white in hue.  Icy blasts of cold air come from it as it breathes.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
-D:まだ柔らかいそのうろこは青白い色をしてる。それが息を吐くと突き刺すような
+D:まだ柔らかいその鱗は青白い色をしている。それが息を吐くと突き刺すような
 D:冷気がやってくる。
 
 #J0#
@@ -7951,7 +7951,7 @@ S:BR_POIS
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$deep green in hue.  Foul gas seeps through its scales.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
-D:まだ柔らかいそのうろこは深い緑色をしている。不潔なガスがそのうろこからしみ
+D:まだ柔らかいその鱗は深い緑色をしている。不潔なガスがその鱗からしみ
 D:出ている。
 
 #J0#
@@ -7973,7 +7973,7 @@ S:BR_CONF
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$rich bronze hue, and its shape masks its true form.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
-D:まだ柔らかいそのうろこは豊かな青銅色をしている。
+D:まだ柔らかいその鱗は豊かな青銅色をしている。
 
 N:463:アクラシュ
 E:Aklash
@@ -8079,7 +8079,7 @@ D:$An agent of supernatural being, Thorondor is the lord of eagles.
 #D:ソロンドールは超自然的な存在の使いで、大鷲たちの王だ。
 D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
 D:マイアールと同じ魂を持っていると言われる。
-D:ソロンドールは全ての大鷲のうちで最初に現われた者であり、最強かつ最大の王だ。
+D:ソロンドールは全ての大鷲のうちで最初に現れた者であり、最強かつ最大の王だ。
 D:その巨大な体を前にすればモルゴスの卑小な召使い達は逃げ惑うことしか出来無い。
 
 #J0#
@@ -8199,7 +8199,7 @@ S:1_IN_8 |
 S:BR_POIS
 D:$A bull whose skin is made of steel plates. Watch out for its 
 D:$deadly breath!
-D:鋼板のようた堅い皮膚を持った牛のようなモンスターだ。
+D:鋼板のような堅い皮膚を持った牛のようなモンスターだ。
 D:危険なブレスに注意しろ!
 
 #JZ#
@@ -8298,7 +8298,7 @@ F:NO_CONF | NO_SLEEP | NO_FEAR | RES_TELE
 S:1_IN_1 | 
 S:BLINK | TELE_AWAY
 D:$It is a very unstable, strange pulsing mound of flesh.
-D:それはひじょうに不安定で奇妙な脈打つ肉の塊だ。
+D:それは非常に不安定で奇妙な脈打つ肉の塊だ。
 
 #J0#
 N:481:闇の蜘蛛『シェロブ』
@@ -8325,7 +8325,7 @@ D:$brood of Ungoliant the Unlight.  Her poison is legendary, as is her ego,
 D:$which may be her downfall.  She used to guard the pass through Cirith 
 D:$Ungol, but has not been seen there for many eons.
 D:シェロブは巨大に肥え太った蜘蛛で、ウンゴリアントの闇の一族であったと
-D:言われている。その毒の恐ろしさは伝説的で、また自我の強さも伝説的あったが、
+D:言われている。その毒の恐ろしさは伝説的で、また自我の強さも伝説的であったが、
 D:それがシェロブの没落を導いたに違いない。シェロブはかつてキリス・ウンゴル
 D:の通り道の番人であったが、長い間その姿を見た者はいない。
 
@@ -8668,7 +8668,7 @@ D:カオスの達人で、ログルスを操る能力により怖れられている。
 #J0#
 #J0#
 #J0#(コメント)
-#J0# これについては他のワイト(grave wight, forest wigth, emperor wight) との統一
+#J0# これについては他のワイト(grave wight, forest wigtht, emperor wight) との統一
 #J0# から塚ワイトとしている。塚人とすると他を「墓人」「森人」などとしなければ
 #J0# 統一がとれなくなるから。
 #J0#
@@ -8938,7 +8938,7 @@ S:HEAL | HASTE | BLIND | SCARE | MIND_BLAST | BO_FIRE |
 S:S_MONSTERS
 D:$It is an angel moving very quickly, wielding a holy war hammer and casting 
 D:$a volley of powerful spells in your direction.
-D:それはひじょうに動きの速い天使で、聖なるウォーハンマーを手に持ち、
+D:それは非常に動きの速い天使で、聖なるウォーハンマーを手に持ち、
 D:強力な呪文を立て続けに唱えてくる。
 
 #J0#
@@ -9252,7 +9252,7 @@ S:1_IN_6 |
 S:BR_FIRE
 D:$Doom drakes are trained firedrakes, always moving in pairs, looking 
 D:$for a battle.
-D:ドゥームドレイクは訓練されたファイアドレイクで、常に対になって行動し
+D:ドゥーム・ドレイクは訓練されたファイア・ドレイクで、常に対になって行動し
 D:獲物を求めている。
 
 #JZ#
@@ -9581,7 +9581,7 @@ D:$powerful blow as it stalks towards you.
 #D:その力はあまりに強いためにほとんど物理的な力とかわりがない。
 #D:それが忍び寄ってくると、ダンジョンの床がまるで何かに叩かれたようにゆがむ。
 D:深い褐色の何かの形が目の前に浮かんでいる。
-D:その犬のような形があなたに触れるとあたかも物体が当ったかのような衝撃を受ける。
+D:その犬のような形があなたに触れるとあたかも物体が当たったかのような衝撃を受ける。
 D:それが"歩く"時、ダンジョンの床がまるで強い打撃を受けたようにへこむのが見える。
 
 
@@ -9642,7 +9642,7 @@ S:BR_ACID
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$darkest black hue.  Acid drips from its body.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
-D:まだ柔らかいそのうろこは深い黒色をしている。体からは酸がしたたり落ちている。
+D:まだ柔らかいその鱗は深い黒色をしている。体からは酸がしたたり落ちている。
 
 #J0#
 N:547:ムーマク
@@ -9688,7 +9688,7 @@ S:1_IN_10 |
 S:SCARE |
 S:BR_COLD
 D:$A large dragon, scales gleaming bright white.
-D:大きなドラゴンで、微かにきらめく白色のうろこを持っている。
+D:大きなドラゴンで、微かにきらめく白色の鱗を持っている。
 
 #J0#
 N:550:ゾーン
@@ -9817,7 +9817,7 @@ D:$Back from the grave, to wreak vengeance upon the living. A gaunt, tall,
 D:$skeletal figure wearing a ruined plate mail.
 D:生ける者たちへ復讐するために墓から甦った亡霊だ。
 D:気味の悪い、背の高い骸骨の姿で
-D:壊れたプレートメールを身につけている。
+D:壊れたプレートメイルを身につけている。
 
 #J0#
 N:556:ヤング万色ドラゴン
@@ -9840,7 +9840,7 @@ S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$It has a form that legends are made of.  Beautiful scales of shimmering 
 D:$and magical colours cover it.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
-D:全身が魔法のように美しく輝くうろこに覆われている。
+D:全身が魔法のように美しく輝く鱗に覆われている。
 
 #JZ#
 N:557:ラアルの破壊集大成
@@ -9900,7 +9900,7 @@ S:BR_SOUN
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$tarnished gold hue, and light is reflected from its form.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
-D:まだ柔らかいそのうろこは曇った金色をしていて、全身で光を反射している。
+D:まだ柔らかいその鱗は曇った金色をしていて、全身で光を反射している。
 
 #J0#
 N:560:ブルー・ドラゴン
@@ -9919,7 +9919,7 @@ S:1_IN_9 |
 S:SCARE | 
 S:BR_ELEC
 D:$A large dragon, scales tinted deep blue.
-D:大きなドラゴンで、深く淡い青色のうろこを持っている。
+D:大きなドラゴンで、深く淡い青色の鱗を持っている。
 
 #J0#
 N:561:グリーン・ドラゴン
@@ -9938,7 +9938,7 @@ S:1_IN_9 |
 S:SCARE | 
 S:BR_POIS
 D:$A large dragon, scales tinted deep green.
-D:大きなドラゴンで、深く淡い緑色のうろこを持っている。
+D:大きなドラゴンで、深く淡い緑色の鱗を持っている。
 
 #J0#
 N:562:ブロンズ・ドラゴン
@@ -9957,7 +9957,7 @@ S:1_IN_9 |
 S:CONF | SCARE | 
 S:BR_CONF
 D:$A large dragon with scales of rich bronze.
-D:大きなドラゴンで、豊かな青銅色のうろこを持っている。
+D:大きなドラゴンで、豊かな青銅色の鱗を持っている。
 
 #J0#
 N:563:ヤング・レッド・ドラゴン
@@ -9978,7 +9978,7 @@ S:BR_FIRE
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$deepest red hue.  Heat radiates from its form.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
-D:まだ柔らかいそのうろこは深い赤色をしていて、全身から熱を発している。
+D:まだ柔らかいその鱗は深い赤色をしていて、全身から熱を発している。
 
 #JZ#
 N:564:ナイトブレード
@@ -10519,7 +10519,7 @@ S:1_IN_9 |
 S:CONF | SCARE | 
 S:BR_FIRE
 D:$A large dragon, scales tinted deep red.
-D:大きなドラゴンで、深く淡い赤色のうろこを持っている。
+D:大きなドラゴンで、深く淡い赤色の鱗を持っている。
 
 #J0#
 N:590:ゴールド・ドラゴン
@@ -10538,7 +10538,7 @@ S:1_IN_9 |
 S:CONF | SCARE | 
 S:BR_SOUN
 D:$A large dragon with scales of gleaming gold.
-D:大きなドラゴンで、微かに金色に輝くうろこを持っている。
+D:大きなドラゴンで、微かに金色に輝く鱗を持っている。
 
 #J0#
 N:591:クリスタル・ドレイク
@@ -10578,7 +10578,7 @@ S:1_IN_9 |
 S:SCARE | 
 S:BR_ACID
 D:$A large dragon, with scales of deepest black.
-D:大きなドラゴンで、漆黒のうろこを持っている。
+D:大きなドラゴンで、漆黒の鱗を持っている。
 
 #J0#
 N:593:万色ドラゴン
@@ -10599,7 +10599,7 @@ S:1_IN_5 |
 S:BLIND | CONF | SCARE | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$A large dragon, scales shimmering many colours.
-D:大きなドラゴンで、うろこが様々な色に輝いている。
+D:大きなドラゴンで、鱗が様々な色に輝いている。
 
 #JZ#
 N:594:空飛ぶ鯨
@@ -10623,7 +10623,7 @@ D:星々からやってきた非常に知能の高い鯨だ。
 #JZ#父なるダゴン（デイゴン）
 #JZ#Ｈ・Ｐ・ラヴクラフトの「ダゴン」に登場し、「インスマウスの影」
 #JZ#でも言及されています。
-#JZ#古代ペリシテ人にも崇拝されていた半人半魚の神で。クトゥルフに
+#JZ#古代ペリシテ人にも崇拝されていた半人半魚の神で、クトゥルフに
 #JZ#仕える深きものどもの総帥的存在です。 by 久留さん
 #JZ#引用は久留さん、解説は NeSYS さんによる
 N:595:父なる『ダゴン』
@@ -10725,7 +10725,7 @@ S:BO_FIRE | BO_COLD | HOLD | BO_MANA | S_MONSTER
 S:TRAPS | BO_ICEE | HEAL | BO_PLAS | BA_CHAO
 D:$Mandor is one of the greatest Logrus Masters, a formidable magician.
 D:マンドールは混沌の宮廷きっての伊達男であるが、
-D:最強のログルス使いの一人でもあり、手ごわい魔法使いだ。
+D:最強のログルス使いの一人でもあり、手強い魔法使いだ。
 D:「僕はそのトランプを取り出し、そこに描かれている青い目と、
 D:純白の厚い髪を頂いた若く、厳しく、かすかに鋭い表情を見つめた。
 D:彼は全身黒ずくめで、艶のあるぴっちりしたジャケットから白い襟と袖が
@@ -10906,7 +10906,7 @@ F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_7 | 
 S:BLIND | HOLD | SCARE | CAUSE_3 | BO_NETH
 D:$A figure that seems made of void, its strangely human shape is cloaked in 
-D:$shadow.  It reaches out at you.
+D:$shadow. It reaches out at you.
 D:影をまとった人間のような姿で、真空でできているかのような奇妙な外見
 D:をしている。それは冒険者の方に手をさしのべている。
 
@@ -11142,7 +11142,7 @@ S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_SOUN | BR_CONF |
 S:BR_SHAR | BR_GRAV | BR_NEXU
 D:$A large dragon with a selection of heads, all shouting and arguing as they 
 D:$look for prey, but each with its own deadly breath weapon.
-D:多くの首を使い分ける巨大なドラゴンだ。獲物を探しているときは首どうしが
+D:多くの首を使い分ける巨大なドラゴンだ。獲物を探しているときは首同士が
 D:叫んだり言い争いをしたりしているが、ひとたび攻撃になれば、どの首も恐るべき
 D:ブレスを吐いてくる。
 
@@ -11408,7 +11408,7 @@ D:$was six hands higher than any other horse I had ever seen, and his
 D:$eyes were the dead color of a Weimaraner dog's and his coat was all 
 D:$gray and his hooves looked like polished steel. He raced along like 
 D:$the wind..."
-D:明けの明星号はいかなる馬よりも強くて速い。
+D:明の明星号はいかなる馬よりも強くて速い。
 D:「明けの明星号はぼくが見たどの馬よりも、手尺にして四つぶり高く、目は
 D:ワイマール犬の目のようにどんよりした色で、毛皮は全体に灰色で、
 D:ひずめは磨き上げた鋼鉄のように見えた。かれは風のように疾走する…」
@@ -12193,8 +12193,8 @@ D:彼らは我々の住む次元と隣接した次元との間に存在している。
 D:素早く動き回り、大きな喉声を発して会話する。
 D:非常に高い知性を持っており、人間の言葉を話す事も出来るようだ。
 D:強い光に弱く、太陽光から逃れる習性がある。
-D:日中ではせいぜい２，３時間しか耐えられない。
-D:ニャルラトテップによく仕え、猟犬として活躍する事が多い。
+D:日中ではせいぜい２、３時間しか耐えられない。
+D:ナイアルラトホテップによく仕え、猟犬として活躍する事が多い。
 D:（ダーレス「暗黒の儀式」）
 
 #J0#
@@ -12779,7 +12779,7 @@ D:もともと知性は低かったが、次第に主人である「古のもの」を模倣するようにな
 D:り、反抗して滅ぼした。
 D:「悪臭放つ虹色に輝く悪夢じみた可塑性のある柱が... 原形質の泡の無
 D:定形の塊が、自らかすかに輝き、わたくしたちに向かいあう、トンネル
-D:を満たす前部のいたることこに、緑がかった光を放つ疣のような何万も
+D:を満たす前部のいたることろに、緑がかった光を放つ疣のような何万も
 D:の一時的な眼を構成したり消したりしながら、あわてふためくペンギン
 D:たちを押しつぶし、同類とともに邪悪にもすべてをとりさったなめらか
 D:な床をずるずるすべってきたのだった。なおも不気味な嘲笑うような声
@@ -12951,7 +12951,7 @@ D:$His scales are covered with frost, and his breath sends a shower of ice
 D:$into the air.
 D:太古の賢明なるドラゴンであるスカサは、長い年月を通してその知能に磨きをかけて
 D:きた。
-D:彼のうろこは冷気で覆われていて、そのブレスは空気中に氷のシャワーを
+D:彼の鱗は冷気で覆われていて、そのブレスは空気中に氷のシャワーを
 D:まき散らす。
 
 #JZ#
@@ -13414,7 +13414,7 @@ D:冒険者にとって幸運なことに、それは動くことができない。
 #JZ#竜のファフナー
 #JZ#リヒャルト・ヴァーグナーの楽劇「ニーベルングの指環」に登場した
 #JZ#巨人です。
-#JZ#魔法の指環をめぐって兄弟のファゾルトにを殺し、竜に変身してその
+#JZ#魔法の指環をめぐって兄弟のファゾルトを殺し、竜に変身してその
 #JZ#財宝を守っていましたが、ジークフリードに退治されました。 by 久留さん
 N:712:竜の『ファフナー』
 E:Fafner the Dragon
@@ -13820,7 +13820,7 @@ D:$form.  Deep blue scales reflect the flashes and highlight the creature's
 D:$great muscles.  It regards you with contempt.
 D:力に満ちた巨大なドラゴンだ。その山のような体の回りには嵐が巻き起こり、稲妻
 D:が光っている。
-D:深い青色のうろこが光を反射して、この生物の隆々たる筋肉を浮き彫りにしている。
+D:深い青色の鱗が光を反射して、この生物の隆々たる筋肉を浮き彫りにしている。
 D:それは冒険者を軽蔑すべき者とみなしている。
 
 #JZ#
@@ -13868,7 +13868,7 @@ S:BR_WALL
 D:$A fearsome bull-headed demon, Baphomet swings a mighty axe as he curses 
 D:$all that defy him.
 D:牛の頭を持った恐るべきデーモンであるバフォメットは、刃向かう者に呪い
-D:の言葉を吐きかけながら大きなアックスを振り回している。
+D:の言葉を吐きかけながら大きな斧を振り回している。
 
 #JZ#
 N:731:地獄の騎士
@@ -14088,7 +14088,7 @@ S:BA_FIRE | BA_COLD | BA_NETH | ANIM_DEAD |
 S:S_UNDEAD | S_KIN
 D:$A warrior-king of the East.  Khamul is a powerful opponent, his skill in 
 D:$combat awesome and his form twisted by evil cunning.
-D:東方の戦士の王であるカルムはやっかいな強敵であり、その戦闘能力には恐るべき
+D:東方の戦士の王であるカムルはやっかいな強敵であり、その戦闘能力には恐るべき
 D:ものがある。その姿は邪悪なずる賢さでねじ曲がっている。
 
 #JZ#
@@ -14277,7 +14277,7 @@ S:TELE_AWAY | FORGET
 D:$The most powerful of Tzeentch's servitors. This demon looks like 
 D:$a huge bird-creature, with the head of a predatory bird and 
 D:$fantastically multi-coloured wings. 
-D:混沌の魔神<ティーンチ>の最も強力な手下だ。この悪魔は巨大な鳥のようで、
+D:混沌の魔神<<ティーンチ>>の最も強力な手下だ。この悪魔は巨大な鳥のようで、
 D:頭部は肉食の猛禽類、羽根は幻想的な虹色に彩られている。
 D:（TRPG ウォーハンマー）
 
@@ -14576,7 +14576,7 @@ S:BRAIN_SMASH | BA_WATE | S_DEMON | HASTE |
 S:TPORT | TELE_AWAY | TELE_TO | HEAL | BR_DARK | BR_NETH
 D:$Its form is partially that of a 
 D:$reptile, partially that of a gigantic octopus. It will destroy you.
-D:ヒヤデス星団のセラエノという星に棲む旧支配者。
+D:ヒアデス星団のセラエノという星に棲む旧支配者。
 D:アルデバランの近く、「黒きハリ湖」に棲むとも言われる。
 D:謎めいた部分も多く、姿形については様々な異論がある。
 D:ハスターに乗り移られた死体は膨らんで鱗に覆われたようになり、
@@ -14882,7 +14882,7 @@ D:「形がないというのではないが、その形はあまりに入り組んでいるため、
 D:目で確認することは不可能でした。いくつもの半球形のものと輝く金属
 D:とが、長いプラスチックの棒で連結されています。棒がぼやけた灰色を
 D:しているので、遠近がわかりにくくなっていて、半球形のものも金属も
-D:棒も、たっだ平板なかたまりのように見えました。その固まりから、適
+D:棒も、ただ平板なかたまりのように見えました。その固まりから、適
 D:当な方向に筒が何本も突き出しています。何かの拍子に、彼は棒の間か
 D:ら輝く目がこちらを見ているような、異様な気配を感じました。しかし、
 D:よく見つめてみると、棒の間にあるのはただ空間だけでした」
@@ -15167,7 +15167,7 @@ D:$these things with even half the perfection and completeness
 D:$that mark their incarnation in the peerless and softly gliding 
 D:$cat?"
 D:「美しさ−冷静さ−超然とした態度−落ち着き−尊大さ−飼い慣らし得ない
-D:支配者的風格−静かに滑るように歩む猫。このような完全無欠さ半分でも
+D:支配者的風格−静かに滑るように歩む猫。このような完全無欠さの半分でも
 D:備えた生き物がほかにいるだろうか？」
 
 #JZ#
@@ -15450,7 +15450,7 @@ D:$face, from which rose three yellow eyes on thin stalks. Around
 D:$the underside of the body were many white pyramids, presumably 
 D:$used for locomotion. The diameter of the body must have been 
 D:$at least ten feet at its least wide..."
-D:「楕円形の体から、無数の細い尖ったトゲが突き出ている。トゲはいろ
+D:「楕円形の体から、無数の細い尖った刺が突き出ている。刺はいろ
 D:いろな色の入り交じった金属製である。楕円のとがっていない方の端に、
 D:厚い唇のついた丸い口がついていて、その口がちょうど顔のまん中に
 D:あたる。フワフワしたスポンジのような顔である。顔からは３本の細い
@@ -15822,7 +15822,7 @@ S:BLINK | TELE_TO |
 S:S_HI_DRAGON
 D:$A massive mound of scaled flesh, throbbing and pulsating with multi-hued 
 D:$light.
-D:うろこが付いた強力な肉塊だ。それは脈動し、鼓動しながら様々な色に
+D:鱗が付いた強力な肉塊だ。それは脈動し、鼓動しながら様々な色に
 D:変化している。
 
 #J0#
@@ -16020,7 +16020,7 @@ D:$immense proportions.  She is surrounded by a cloud of Unlight as she sucks
 D:$in all living light into her bloated body.  She is always ravenously 
 D:$hungry and would even eat herself to avoid starvation.  She is rumoured to 
 D:$have a foul and deadly breath.
-D:この広大で見るも恐ろしい空虚な存在は、巨大な蜘蛛のような姿をしてる。
+D:この広大で見るも恐ろしい空虚な存在は、巨大な蜘蛛のような姿をしいてる。
 D:彼女は光なき闇で覆われており、全ての光をその膨れた腹に吸い込んでしまう。
 D:彼女は常に飢えきっており、飢餓を避けるためには自分の体でさえも食べようと
 D:する。彼女は不潔で忌まわしいブレスを吐くと言われている。
@@ -16423,7 +16423,7 @@ S:S_HI_UNDEAD | S_HI_DRAGON
 D:$A huge seething mass of flesh with a rudimentary intelligence, the Emperor 
 D:$Quylthulg changes colours in front of your eyes.  Pulsating first one 
 D:$colour then the next, it knows only it must bring help to protect itself.
-D:クイルスルグの帝王は沸騰してるかのような巨大な肉の塊で、初歩的な知能を持って
+D:クイルスルグの帝王は沸騰しているかのような巨大な肉の塊で、初歩的な知能を持って
 D:いる。それは脈打つ度に様々な色に変化している。それは身を守るためには
 D:とにかく助けを呼ぶことしか知らない。
 
@@ -16659,7 +16659,7 @@ D:『クトゥルー４』、青心社文庫、p.105)
 
 #JZ#
 #JZ#ジュリアンは九王子で、アンバーの周りのアーデンの森を
-#JZ#護る。角笛をもち、ヘルハウンドというどう猛な猟犬を
+#JZ#護る。角笛をもち、ヘルハウンドという獰猛な猟犬を
 #JZ#従えている。 by 藤岡さん
 N:829:ジュリアンのヘルハウンド
 E:Hell hound of Julian
@@ -16676,7 +16676,7 @@ F:ANIMAL | EVIL | IM_FIRE
 S:1_IN_5 | 
 S:BR_FIRE
 D:$It is a giant dog that glows with heat.  Flames pour from its nostrils.
-D:アンバーの周りのアーデンの森を護るジュリアンが従えているどう猛な猟犬。
+D:アンバーの周りのアーデンの森を護るジュリアンが従えている獰猛な猟犬。
 D:熱を発して輝く巨大な犬で、火炎がその鼻孔からしたたっている。
 
 #J0#
@@ -17126,7 +17126,7 @@ D:$chaos forever beyond the nethermost outposts of space and time!"
 D:次元裂け目の間に住む、時間と空間を超越した神。
 D:姿を現わす時には、たくさんの玉虫色の球の集合体の姿をしている。
 D:玉は絶え間なく形を変えたり、お互いに接近したり離れたりを繰り返している。
-D:その大きさはまちまちで、驚くほど巨大になったり、人間と代わらないほどにな
+D:その大きさはまちまちで、驚くほど巨大になったり、人間と変わらないほどにな
 D:ったりする。
 D:ネクロノミコンによれば、「過去・現在・未来はすべてヨグ=ソトートの中で一
 D:つである」とある。
@@ -17735,7 +17735,7 @@ D:知られるその片目を奪いとった。この宝石を使って『ドワーキン』が
 D:「パターン」を描き、その影として無限の世界が生まれたのである。
 D:いまや秩序と混沌のバランスが崩れ、「パターン」は損傷を受け、
 D:全ての「影」の世界がサーペントに吸収されようとしている。
-D:この動きを止めなければ、我々の知る世界は終りを告げ、
+D:この動きを止めなければ、我々の知る世界は終わりを告げ、
 D:全てが原初の混沌に帰してしまうだろう。
 
 N:863:量子ドット
@@ -17891,7 +17891,7 @@ D:$  Fast on land or in water - and a hell of a lot of little legs
 D:$ on each side."
 D:<三日戦争>により廃虚と化した地球で、放射能により突然変異した怪物。
 D:「そうですね……頭はワニに似ていて、あれよりは大きい。
-D:体長は約四十フィート。大きなビーチボールのるうに丸まってしまう
+D:体長は約四十フィート。大きなビーチボールのように丸まってしまう
 D:ことができる。水陸ともに敏捷に動き---腹の両側に小さな足がうじゃうじゃ---」
 D:（ロジャー・ゼラズニイ、小尾芙佐訳「わが名はコンラッド」早川書房、p.93）
 
@@ -18021,7 +18021,7 @@ S:BA_COLD | BO_ICEE | BO_WATE | BA_ELEC
 D:$The dungeon shakes as an enormous troll-form thunders into view, hurling 
 D:$ice and lightning in every direction.  It is thirty feet tall, has six 
 D:$heads, and is enraged at your impudence.
-D:ダンジョンを揺るがし、この巨大なトロルは氷と稲光を撒き散らしながらやって来る。
+D:ダンジョンを揺るがすこの巨大なトロルは、氷と稲光を撒き散らしながらやって来る。
 D:身の丈１０メートル、六つの頭をもつこの怪物はあなたの厚かましさに怒り狂っている。
 
 N:876:不安定イモムシの大群
@@ -18085,7 +18085,7 @@ F:KILL_WALL | CAN_SWIM | DROP_CORPSE | MOVE_BODY |
 F:FORCE_MAXHP | ONLY_GOLD | DROP_2D2 | DROP_3D2 |
 S:1_IN_3
 S:SPECIAL
-D:怒りに狂った王蟲の群は障気をまき散らしながら突進してくる。
+D:怒りに狂った王蟲の群は瘴気をまき散らしながら突進してくる。
 
 N:880:時を統べる者『リチャード・ウォン』
 E:Richard Wong, Master of Time
@@ -18515,7 +18515,7 @@ F:NO_SLEEP | NO_FEAR | DROP_CORPSE
 S:1_IN_4 |
 S:DARKNESS | BO_ACID | HOLD
 D:$A kraken with a tough, scaly hide.
-D:うろこ状の皮膚を持った頑丈なクラーケンだ。
+D:鱗状の皮膚を持った頑丈なクラーケンだ。
 
 N:904:混沌おばけキノコ
 E:Chaos mushroom
@@ -18652,7 +18652,7 @@ S:1_IN_1
 S:MISSILE
 D:$A metallic ball floating in the air, that turns to track you with evil
 D:$intent.
-D:空中に浮ぶ金属製の宝珠だ。邪悪な意思を持ち、常にあなたに攻撃の狙いを付けている。
+D:空中に浮かぶ金属製の宝珠だ。邪悪な意思を持ち、常にあなたに攻撃の狙いを付けている。
 
 N:913:アンデッド・チョウチンアンコウ
 E:Undead devilfish
@@ -19617,7 +19617,7 @@ F:OPEN_DOOR | GOOD | CAN_SWIM | CAN_FLY |
 F:NO_CONF | NO_SLEEP | FRIENDLY | TAKE_ITEM |
 S:1_IN_4 |
 S:BA_FIRE | HASTE | HOLD | CONF | BLIND
-D:断じてマリオの類似品ではない！(本人主張)。
+D:断じてマリオの類似品ではない！(本人主張)
 
 N:967:ガキ大将『ジャイアン』
 E:Jaian, the Boss of the Kids
@@ -19940,7 +19940,7 @@ B:BITE:POISON:1d10
 F:FORCE_SLEEP | DROP_CORPSE | ANIMAL |
 F:BASH_DOOR | WILD_MOUNTAIN |
 D:頭がサル、胴はタヌキ、尾はヘビ、手足はトラで、鳴き声はトラツグミに
-D:似ていたという奇妙な生物だ。ひじょうに変わった
+D:似ていたという奇妙な生物だ。非常に変わった
 D:外見をしていて、近寄りがたい雰囲気がある。
 
 N:985:ユニコーン
@@ -20100,7 +20100,7 @@ S:1_IN_6 |
 S:BO_WATE | BA_WATE | BLINK | S_MONSTER
 D:$The marid are said to be born of the ocean, 
 D:$with currents as their muscles and pearls as their teeth.
-D:マリードは水の属性を持つジンだ。それは海で生れ、その筋肉は潮流から、
+D:マリードは水の属性を持つジンだ。それは海で生まれ、その筋肉は潮流から、
 D:その歯は真珠から作られたと言われている。
 
 N:995:狼の族長
@@ -20140,7 +20140,7 @@ S:1_IN_6 |
 S:HEAL | BLIND | CONF | CAUSE_2 | MIND_BLAST
 D:$This dwarf became so obsessed by gold that Morgoth tricked him into 
 D:$betraying his friends.
-D:このドワーフはお金に対する欲望がひじょうに強い。モルゴスはそこにつけ込んで
+D:このドワーフはお金に対する欲望が非常に強い。モルゴスはそこにつけ込んで
 D:彼の友人達を誘拐させた。
 
 N:997:チォコヴォ
