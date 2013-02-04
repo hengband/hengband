@@ -1625,7 +1625,6 @@ static bool make_fake_artifact(object_type *o_ptr, int name1)
 	o_ptr->to_h = a_ptr->to_h;
 	o_ptr->to_d = a_ptr->to_d;
 	o_ptr->weight = a_ptr->weight;
-	o_ptr->xtra2 = a_ptr->act_idx;
 
 	/* Success */
 	return (TRUE);

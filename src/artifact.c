@@ -1924,6 +1924,9 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		/* Mark the item as fully known */
 		o_ptr->ident |= (IDENT_MENTAL);
 
+		/* For being treated as random artifact in screen_object() */
+		o_ptr->art_name = quark_add("");
+
 		(void)screen_object(o_ptr, 0L);
 
 		if (!get_string(ask_msg, dummy_name, sizeof dummy_name)
@@ -1975,12 +1978,31 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 }
 
 
-const activation_type* find_activation_info(const object_type *o_ptr)
+int activation_index(object_type *o_ptr)
 {
+	if (object_is_fixed_artifact(o_ptr))
+	{
+		return a_info[o_ptr->name1].act_idx;
+	}
+	if (object_is_ego(o_ptr))
+	{
+		return e_info[o_ptr->name2].act_idx;
+	}
+	if (!object_is_random_artifact(o_ptr))
+	{
+		return k_info[o_ptr->k_idx].act_idx;
+	}
+
+	return o_ptr->xtra2;
+}
+
+const activation_type* find_activation_info(object_type *o_ptr)
+{
+	const int index = activation_index(o_ptr);
 	const activation_type* p;
 
 	for (p = activation_info; p->flag != NULL; ++ p) {
-		if (p->index == o_ptr->xtra2)
+		if (p->index == index)
 		{
 			return p;
 		}
@@ -2032,13 +2054,17 @@ bool activate_random_artifact(object_type *o_ptr)
 	int plev = p_ptr->lev;
 	int k, dir, dummy = 0;
 	cptr name = k_name + k_info[o_ptr->k_idx].name;
-	const activation_type* act_ptr;
+	const activation_type* const act_ptr = find_activation_info(o_ptr);
 
 	/* Paranoia */
-	if (!o_ptr->xtra2) return FALSE;
+	if (!act_ptr) {
+		/* Maybe forgot adding information to activation_info table ? */
+		msg_print("Activation information is not found.");
+		return FALSE;
+	}
 
 	/* Activate for attack */
-	switch (o_ptr->xtra2)
+	switch (act_ptr->index)
 	{
 		case ACT_SUNLIGHT:
 		{
@@ -3866,23 +3892,15 @@ bool activate_random_artifact(object_type *o_ptr)
 		default:
 		{
 #ifdef JP
-			msg_format("Unknown activation effect: %d.", o_ptr->xtra2);
+			msg_format("Unknown activation effect: %d.", act_ptr->index);
 #else
-			msg_format("Unknown activation effect: %d.", o_ptr->xtra2);
+			msg_format("Unknown activation effect: %d.", act_ptr->index);
 #endif
 			return FALSE;
 		}
 	}
 
 	/* Set activation timeout */
-	act_ptr = find_activation_info(o_ptr);
-
-	if (!act_ptr) {
-		/* Maybe forgot adding information to activation_info table ? */
-		msg_format("Activation information is not found: %d.", o_ptr->xtra2);
-		return FALSE;
-	}
-
 	if (act_ptr->timeout.constant >= 0) {
 		o_ptr->timeout = act_ptr->timeout.constant;
 		if (act_ptr->timeout.dice > 0) {
@@ -3890,7 +3908,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		}
 	} else {
 		/* Activations that have special timeout */
-		switch (o_ptr->xtra2) {
+		switch (act_ptr->index) {
 		case ACT_BR_FIRE:
 			o_ptr->timeout = ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250;
 			break;
@@ -3904,7 +3922,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			/* Nothing to do */
 			break;
 		default:
-			msg_format("Special timeout is not implemented: %d.", o_ptr->xtra2);
+			msg_format("Special timeout is not implemented: %d.", act_ptr->index);
 			return FALSE;
 		}
 	}
@@ -4051,7 +4069,6 @@ bool create_named_art(int a_idx, int y, int x)
 	q_ptr->to_h = a_ptr->to_h;
 	q_ptr->to_d = a_ptr->to_d;
 	q_ptr->weight = a_ptr->weight;
-	q_ptr->xtra2 = a_ptr->act_idx;
 
 	/* Hack -- extract the "cursed" flag */
 	if (a_ptr->gen_flags & TRG_CURSED) q_ptr->curse_flags |= (TRC_CURSED);

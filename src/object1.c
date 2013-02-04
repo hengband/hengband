@@ -360,14 +360,14 @@ static cptr item_activation_aux(object_type *o_ptr)
 	cptr desc;
 	char timeout[32];
 	int constant, dice;
-	const activation_type* act_ptr = find_activation_info(o_ptr);
+	const activation_type* const act_ptr = find_activation_info(o_ptr);
 
 	if (!act_ptr) return _("未定義", "something undefined");
 
 	desc = act_ptr->desc;
 
 	/* Overwrite description if it is special */
-	switch (o_ptr->xtra2) {
+	switch (act_ptr->index) {
 	case ACT_BR_FIRE:
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
 			desc = _("火炎のブレス (200) と火への耐性", "breath of fire (200) and resist fire");
@@ -409,7 +409,7 @@ static cptr item_activation_aux(object_type *o_ptr)
 		strcpy(timeout, _("いつでも", "every turn"));
 	} else if (constant < 0) {
 		/* Activations that have special timeout */
-		switch (o_ptr->xtra2) {
+		switch (act_ptr->index) {
 		case ACT_BR_FIRE:
 			sprintf(timeout, _("%d ターン毎", "every %d turns"),
 				((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250);
@@ -508,23 +508,8 @@ cptr item_activation(object_type *o_ptr)
 		}
 	}
 
-	/* Paranoia - Set activation index for older save data */
-	if (object_is_fixed_artifact(o_ptr))
-	{
-		if (!o_ptr->xtra2) o_ptr->xtra2 = a_info[o_ptr->name1].act_idx;
-	}
-	else if (object_is_ego(o_ptr))
-	{
-		if (!o_ptr->xtra2) o_ptr->xtra2 = e_info[o_ptr->name2].act_idx;
-	}
-	else
-	{
-		if (!o_ptr->xtra2) o_ptr->xtra2 = k_info[o_ptr->k_idx].act_idx;
-	}
-
 	/* Get an explain of an activation */
-	/* if ((object_is_artifact(o_ptr) || object_is_ego(o_ptr)) && (o_ptr->xtra2)) */
-	if (o_ptr->xtra2)
+	if (activation_index(o_ptr))
 	{
 		return item_activation_aux(o_ptr);
 	}

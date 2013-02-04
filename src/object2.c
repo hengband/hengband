@@ -1036,14 +1036,9 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 	/* Also, give some extra for activatable powers... */
 	if (o_ptr->art_name && (have_flag(o_ptr->art_flags, TR_ACTIVATE)))
 	{
-		int i;
-		for (i = 0; activation_info[i].flag != NULL; i++)
-		{
-			if (activation_info[i].index == o_ptr->xtra2)
-			{
-				total += activation_info[i].value;
-				break;
-			}
+		const activation_type* const act_ptr = find_activation_info(o_ptr);
+		if (act_ptr) {
+			total += act_ptr->value;
 		}
 	}
 

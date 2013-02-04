@@ -4009,16 +4009,11 @@ static void do_cmd_activate_aux(int item)
 
 	/* Hack -- use artifact level instead */
 	if (object_is_fixed_artifact(o_ptr)) lev = a_info[o_ptr->name1].level;
-	else if (o_ptr->art_name)
+	else if (object_is_random_artifact(o_ptr))
 	{
-		int i;
-		for (i = 0; activation_info[i].flag != NULL; i++)
-		{
-			if (activation_info[i].index == o_ptr->xtra2)
-			{
-				lev = activation_info[i].level;
-				break;
-			}
+		const activation_type* const act_ptr = find_activation_info(o_ptr);
+		if (act_ptr) {
+			lev = act_ptr->level;
 		}
 	}
 	else if (((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET)) && o_ptr->name2) lev = e_info[o_ptr->name2].level;
@@ -4144,23 +4139,8 @@ static void do_cmd_activate_aux(int item)
 		}
 	}
 
-	/* Paranoia - Set activation index for older save data */
-	if (object_is_fixed_artifact(o_ptr))
-	{
-		if (!o_ptr->xtra2) o_ptr->xtra2 = a_info[o_ptr->name1].act_idx;
-	}
-	else if (object_is_ego(o_ptr))
-	{
-		if (!o_ptr->xtra2) o_ptr->xtra2 = e_info[o_ptr->name2].act_idx;
-	}
-	else
-	{
-		if (!o_ptr->xtra2) o_ptr->xtra2 = k_info[o_ptr->k_idx].act_idx;
-	}
-
 	/* Activate object */
-	/* if (o_ptr->xtra2 && (object_is_artifact(o_ptr) || object_is_ego(o_ptr))) */
-	if (o_ptr->xtra2)
+	if (activation_index(o_ptr))
 	{
 		(void)activate_random_artifact(o_ptr);
 
