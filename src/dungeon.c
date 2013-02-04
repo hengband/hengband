@@ -990,7 +990,8 @@ static void regenmagic(int regen_amount)
 		if (!p_ptr->magic_num2[i]) continue;
 
 		/* Decrease remaining period for charging */
-		new_mana = (regen_amount * mult * ((long)p_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) / (dev * 16); 
+		new_mana = (regen_amount * mult * ((s32b)p_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE)
+					/ (dev * 16 * PY_REGEN_NORMAL);
 		p_ptr->magic_num1[i] -= new_mana;
 
 		/* Check minimum remaining period for charging */
@@ -998,8 +999,6 @@ static void regenmagic(int regen_amount)
 		wild_regen = 20;
 	}
 }
-
-
 
 
 
