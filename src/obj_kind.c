@@ -307,6 +307,17 @@ bool object_is_artifact(object_type *o_ptr)
 
 
 /*
+ * Check if an object is random artifact
+ */
+bool object_is_random_artifact(object_type *o_ptr)
+{
+	if (object_is_artifact(o_ptr) && !object_is_fixed_artifact(o_ptr)) return TRUE;
+
+	return FALSE;
+}
+
+
+/*
  * Check if an object is neither artifact, ego, nor 'smith' object
  */
 bool object_is_nameless(object_type *o_ptr)
