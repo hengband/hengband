@@ -869,9 +869,10 @@ static void regenhp(int percent)
 /*
  * Regenerate mana points
  */
-static void regenmana(int percent)
+static void regenmana(int upkeep_factor, int regen_amount)
 {
 	s32b old_csp = p_ptr->csp;
+	s32b regen_rate = regen_amount * 100 - upkeep_factor * PY_REGEN_NORMAL;
 
 	/*
 	 * Excess mana will decay 32 times faster than normal
@@ -898,11 +899,11 @@ static void regenmana(int percent)
 	}
 
 	/* Regenerating mana (unless the player has excess mana) */
-	else if (percent > 0)
+	else if (regen_rate > 0)
 	{
 		/* (percent/100) is the Regen factor in unit (1/2^16) */
 		s32b new_mana = 0;
-		u32b new_mana_frac = (p_ptr->msp * percent / 100 + PY_REGEN_MNBASE);
+		u32b new_mana_frac = (p_ptr->msp * regen_rate / 100 + PY_REGEN_MNBASE);
 
 		/* Convert the unit (1/2^16) to (1/2^32) */
 		s64b_LSHIFT(new_mana, new_mana_frac, 16);
@@ -920,11 +921,11 @@ static void regenmana(int percent)
 
 
 	/* Reduce mana (even when the player has excess mana) */
-	if (percent < 0)
+	if (regen_rate < 0)
 	{
 		/* PY_REGEN_NORMAL is the Regen factor in unit (1/2^16) */
 		s32b reduce_mana = 0;
-		u32b reduce_mana_frac = (p_ptr->msp * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
+		u32b reduce_mana_frac = (p_ptr->msp * (-1) * regen_rate / 100 + PY_REGEN_MNBASE);
 
 		/* Convert the unit (1/2^16) to (1/2^32) */
 		s64b_LSHIFT(reduce_mana, reduce_mana_frac, 16);
@@ -990,8 +991,7 @@ static void regenmagic(int regen_amount)
 		if (!p_ptr->magic_num2[i]) continue;
 
 		/* Decrease remaining period for charging */
-		new_mana = (regen_amount * mult * ((s32b)p_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE)
-					/ (dev * 16 * PY_REGEN_NORMAL);
+		new_mana = (regen_amount * mult * ((long)p_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) / (dev * 16); 
 		p_ptr->magic_num1[i] -= new_mana;
 
 		/* Check minimum remaining period for charging */
@@ -999,6 +999,8 @@ static void regenmagic(int regen_amount)
 		wild_regen = 20;
 	}
 }
+
+
 
 
 
@@ -1534,7 +1536,6 @@ static void process_world_aux_hp_and_sp(void)
 	feature_type *f_ptr = &f_info[cave[py][px].feat];
 	bool cave_no_regen = FALSE;
 	int upkeep_factor = 0;
-	int upkeep_regen;
 
 	/* Default regeneration */
 	int regen_amount = PY_REGEN_NORMAL;
@@ -1873,8 +1874,7 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 	}
 
 	/* Regenerate the mana */
-	upkeep_regen = (100 - upkeep_factor) * regen_amount;
-	regenmana(upkeep_regen);
+	regenmana(upkeep_factor, regen_amount);
 
 
 	/* Recharge magic eater's power */
