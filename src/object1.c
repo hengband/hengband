@@ -463,51 +463,6 @@ cptr item_activation(object_type *o_ptr)
 	if (!(have_flag(flgs, TR_ACTIVATE))) return ("nothing");
 #endif
 
-	/*
-	 * We need to deduce somehow that it is a random artifact -- one
-	 * problem: It could be a random artifact which has NOT YET received
-	 * a name. Thus we eliminate other possibilities instead of checking
-	 * for art_name
-	 */
-
-	/* Give priority to weaponsmith's essential activations */
-	if (object_is_smith(o_ptr))
-	{
-		switch (o_ptr->xtra3 - 1)
-		{
-		case ESSENCE_TMP_RES_ACID:
-#ifdef JP
-			return "鄙尺及覲嶺 : 50+d50正□件咍";
-#else
-			return "resist acid every 50+d50 turns";
-#endif
-		case ESSENCE_TMP_RES_ELEC:
-#ifdef JP
-			return "齬猾尺及覲嶺 : 50+d50正□件咍";
-#else
-			return "resist elec every 50+d50 turns";
-#endif
-		case ESSENCE_TMP_RES_FIRE:
-#ifdef JP
-			return "紹尺及覲嶺 : 50+d50正□件咍";
-#else
-			return "resist fire every 50+d50 turns";
-#endif
-		case ESSENCE_TMP_RES_COLD:
-#ifdef JP
-			return "挕竣尺及覲嶺 : 50+d50正□件咍";
-#else
-			return "resist cold every 50+d50 turns";
-#endif
-		case TR_IMPACT:
-#ifdef JP
-			return "譁覦 : 100+d100 正□件咍";
-#else
-			return "earthquake every 100+d100 turns";
-#endif
-		}
-	}
-
 	/* Get an explain of an activation */
 	if (activation_index(o_ptr))
 	{

@@ -4102,43 +4102,6 @@ static void do_cmd_activate_aux(int item)
 	/* Sound */
 	sound(SOUND_ZAP);
 
-	/* Give priority to weaponsmith's essential activations */
-	if (object_is_smith(o_ptr))
-	{
-		switch (o_ptr->xtra3-1)
-		{
-		case ESSENCE_TMP_RES_ACID:
-			(void)set_oppose_acid(randint1(20) + 20, FALSE);
-			o_ptr->timeout = randint0(50) + 50;
-			return;
-
-		case ESSENCE_TMP_RES_ELEC:
-			(void)set_oppose_elec(randint1(20) + 20, FALSE);
-			o_ptr->timeout = randint0(50) + 50;
-			return;
-
-		case ESSENCE_TMP_RES_FIRE:
-			(void)set_oppose_fire(randint1(20) + 20, FALSE);
-			o_ptr->timeout = randint0(50) + 50;
-			return;
-
-		case ESSENCE_TMP_RES_COLD:
-			(void)set_oppose_cold(randint1(20) + 20, FALSE);
-			o_ptr->timeout = randint0(50) + 50;
-			return;
-
-		case TR_IMPACT:
-			earthquake(py, px, 5);
-			o_ptr->timeout = 100 + randint1(100);
-			
-			/* Window stuff */
-			p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-			/* Done */
-			return;
-		}
-	}
-
 	/* Activate object */
 	if (activation_index(o_ptr))
 	{

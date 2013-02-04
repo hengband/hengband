@@ -1980,6 +1980,19 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 int activation_index(object_type *o_ptr)
 {
+	/* Give priority to weaponsmith's essential activations */
+	if (object_is_smith(o_ptr))
+	{
+		switch (o_ptr->xtra3-1)
+		{
+		case ESSENCE_TMP_RES_ACID: return ACT_RESIST_ACID;
+		case ESSENCE_TMP_RES_ELEC: return ACT_RESIST_ELEC;
+		case ESSENCE_TMP_RES_FIRE: return ACT_RESIST_FIRE;
+		case ESSENCE_TMP_RES_COLD: return ACT_RESIST_COLD;
+		case TR_IMPACT: return ACT_QUAKE;
+		}
+	}
+
 	if (object_is_fixed_artifact(o_ptr))
 	{
 		return a_info[o_ptr->name1].act_idx;
