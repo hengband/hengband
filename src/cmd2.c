@@ -95,6 +95,11 @@ void do_cmd_go_up(void)
 		/* Activate the quest */
 		if (!quest[p_ptr->inside_quest].status)
 		{
+			if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+			{
+				init_flags = INIT_ASSIGN;
+				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+			}
 			quest[p_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
 
@@ -264,6 +269,11 @@ void do_cmd_go_down(void)
 		/* Activate the quest */
 		if (!quest[p_ptr->inside_quest].status)
 		{
+			if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+			{
+				init_flags = INIT_ASSIGN;
+				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+			}
 			quest[p_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
 
