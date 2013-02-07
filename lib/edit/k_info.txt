@@ -6368,3 +6368,12 @@ W:90:0:30:100000
 A:90/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:667:誰得:云邪 麻 螺彌
+E:Amusement:unjah marlami
+G:?:w
+I:70:55:0
+W:20:0:5:100
+A:20/6
+D:$It creates one amuzing item when you read it.
+D:それは読むと誰の得なのかわからないものを1個作り出す。

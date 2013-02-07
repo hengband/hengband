@@ -2474,6 +2474,7 @@
 #define SV_SCROLL_ARTIFACT              52
 #define SV_SCROLL_RESET_RECALL          53
 #define SV_SCROLL_SUMMON_KIN            54
+#define SV_SCROLL_AMUSEMENT             55
 
 /* The "sval" codes for TV_POTION */
 #define SV_POTION_WATER                  0

@@ -5192,6 +5192,116 @@ void acquirement(int y1, int x1, int num, bool great, bool known)
 }
 
 
+/*
+ * Scatter some "amusing" objects near the player
+ */
+
+#define AMS_NOTHING   0x00 //No restriction
+#define AMS_NO_UNIQUE 0x01 //Don't make the amusing object of uniques
+#define AMS_FIXED_ART 0x02 //Make a fixed artifact based on the amusing object
+
+typedef struct
+{
+	int tval;
+	int sval;
+	int prob;
+	byte flag;
+} amuse_type;
+
+amuse_type amuse_info[] =
+{
+	{ TV_BOTTLE, SV_ANY, 3, AMS_NOTHING },
+	{ TV_JUNK, SV_ANY, 3, AMS_NOTHING },
+	{ TV_SPIKE, SV_ANY, 3, AMS_NOTHING },
+	{ TV_STATUE, SV_ANY, 30, AMS_NOTHING },
+	{ TV_CORPSE, SV_ANY, 9, AMS_NO_UNIQUE },
+	{ TV_SKELETON, SV_ANY, 20, AMS_NO_UNIQUE },
+	{ TV_FIGURINE, SV_ANY, 5, AMS_NO_UNIQUE },
+	{ TV_PARCHMENT, SV_ANY, 1, AMS_NOTHING },
+	{ TV_POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, //Fishing Pole of Taikobo
+	{ TV_SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, //Broken Dagger of Magician
+	{ TV_SWORD, SV_BROKEN_DAGGER, 5, AMS_NOTHING },
+	{ TV_SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING },
+	{ TV_SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
+
+	{ 0, 0, 0 }
+};
+
+void amusement(int y1, int x1, int num, bool known)
+{
+	object_type *i_ptr;
+	object_type object_type_body;
+	int n, t = 0;
+
+	for (n = 0; amuse_info[n].tval != 0; n++)
+	{
+		t += amuse_info[n].prob;
+	}
+
+	/* Acquirement */
+	while (num)
+	{
+		int i, k_idx, a_idx = 0;
+		int r = randint0(t);
+		bool insta_art, fixed_art;
+
+		for (i = 0; ; i++)
+		{
+			r -= amuse_info[i].prob;
+			if (r <= 0) break;
+		}
+
+		/* Get local object */
+		i_ptr = &object_type_body;
+
+		/* Wipe the object */
+		object_wipe(i_ptr);
+
+		/* Wipe the object */
+		k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
+
+		/* Search an artifact index if need */
+		insta_art = (k_info[k_idx].gen_flags & TRG_INSTA_ART);
+		fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
+
+		if (insta_art || fixed_art)
+		{
+			for (a_idx = 1; a_idx < max_a_idx; a_idx++)
+			{
+				if (insta_art && !(a_info[a_idx].gen_flags & TRG_INSTA_ART)) continue;
+				if (a_info[a_idx].tval != k_info[k_idx].tval) continue;
+				if (a_info[a_idx].sval != k_info[k_idx].sval) continue;
+				if (a_info[a_idx].cur_num > 0) continue;
+				break;
+			}
+
+			if (a_idx >= max_a_idx) continue;
+		}
+
+		/* Make an object (if possible) */
+		object_prep(i_ptr, k_idx);
+		if (a_idx) i_ptr->name1 = a_idx;
+		apply_magic(i_ptr, 1, AM_NO_FIXED_ART);
+
+		if (amuse_info[r].flag & AMS_NO_UNIQUE)
+		{
+			if (r_info[i_ptr->pval].flags1 & RF1_UNIQUE) continue;
+		}
+
+		if (known)
+		{
+			object_aware(i_ptr);
+			object_known(i_ptr);
+		}
+
+		/* Drop the object */
+		(void)drop_near(i_ptr, -1, y1, x1);
+
+		num--;
+	}
+}
+
+
 #define MAX_NORMAL_TRAPS 18
 
 /* See init_feat_variables() in init2.c */

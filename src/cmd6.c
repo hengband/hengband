@@ -2108,6 +2108,13 @@ take_hit(DAMAGE_NOESCAPE, 111+randint1(111), "ログルスの巻物", -1);
 			if (!reset_recall()) used_up = FALSE;
 			break;
 		}
+
+		case SV_SCROLL_AMUSEMENT:
+		{
+			ident = TRUE;
+			amusement(py, px, 1, FALSE);
+			break;
+		}
 	}
 	}
 	else if (o_ptr->name1 == ART_GHB)
