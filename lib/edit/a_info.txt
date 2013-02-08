@@ -3238,7 +3238,7 @@ E:'Paurnimmen'
 I:31:2:1
 W:10:20:25:13000
 P:2:1d1:0:0:15
-F:WIS | RES_COLD | EASY_SPELL | ACTIVATE
+F:INT | RES_COLD | EASY_SPELL | ACTIVATE
 U:BO_COLD_1
 D:$A set of handgear so icy as to be able to fire frost bolts.
 D:シンダール語で「白き拳」を意味する名を持つこの籠手は常に
