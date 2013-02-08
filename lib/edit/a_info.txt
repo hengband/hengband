@@ -1092,10 +1092,10 @@ D:放つことができる。
 #J0# ???, Ko
 N:54:『パウアハッハ』
 E:'Paurhach'
-I:31:2:0
+I:31:2:1
 W:10:20:25:15000
 P:2:1d1:0:0:15
-F:RES_FIRE | ACTIVATE
+F:STR | RES_FIRE | MAGIC_MASTERY | ACTIVATE
 U:BO_FIRE_1
 D:$A firey set of gauntlets that can even shoot fire from the user's 
 D:$hands. 
@@ -1119,10 +1119,10 @@ D:並外れた強靭さを持つアンバーの王子コーウィンのガントレットだ。
 #J0# ???, Ko
 N:56:『パウラエゲン』
 E:'Pauraegen'
-I:31:2:0
+I:31:2:1
 W:10:20:25:11000
 P:2:1d1:0:0:15
-F:RES_ELEC | ACTIVATE
+F:DEX | RES_ELEC | LITE | ACTIVATE
 U:BO_ELEC_1
 D:$A set of handgear with sparks surrounding it, able to fire 
 D:$bolts of electricity.
@@ -1134,10 +1134,10 @@ D:火花を散らしていて、電撃の矢を放つことができる。
 #J0# ???, Ko
 N:57:『パウアネン』
 E:'Paurnen'
-I:31:2:0
+I:31:2:1
 W:10:20:25:12000
 P:2:1d1:0:0:15
-F:RES_ACID | ACTIVATE
+F:WIS | RES_ACID | FREE_ACT | ACTIVATE
 U:BO_ACID_1
 D:$A set of handgear so corrosive that it may fire bolts of acid.
 D:シンダール語で「水の拳」を意味する名を持つこの籠手は常に
@@ -3235,10 +3235,10 @@ D:その柄を手にすれば、しなやかな身のこなしと軽やかな足取を感じられるだろう。
 # ???, Ko
 N:185:『パウアニンメン』
 E:'Paurnimmen'
-I:31:2:0
+I:31:2:1
 W:10:20:25:13000
 P:2:1d1:0:0:15
-F:RES_COLD | ACTIVATE
+F:WIS | RES_COLD | EASY_SPELL | ACTIVATE
 U:BO_COLD_1
 D:$A set of handgear so icy as to be able to fire frost bolts.
 D:シンダール語で「白き拳」を意味する名を持つこの籠手は常に
