@@ -3910,17 +3910,24 @@ static bool item_tester_hook_ammo(object_type *o_ptr)
  * Copies the weapons to compare into the weapon-slot and
  * compares the values for both weapons.
  */
-static bool compare_weapons(void)
+static int compare_weapons(int bcost)
 {
+	int i, n;
 	int item, item2;
-	object_type *o1_ptr, *o2_ptr;
+	object_type *o_ptr[2];
 	object_type orig_weapon;
 	object_type *i_ptr;
 	cptr q, s;
 	int row = 2;
+	int wid = 38, mgn = 2;
 	bool old_character_xtra = character_xtra;
+	char ch;
+	int total = 0;
+	int cost = 0; /* First time no price */
 
+	/* Save the screen */
 	screen_save();
+
 	/* Clear the screen */
 	clear_bldg(0, 22);
 
@@ -3928,115 +3935,105 @@ static bool compare_weapons(void)
 	i_ptr = &inventory[INVEN_RARM];
 	object_copy(&orig_weapon, i_ptr);
 
-	item_tester_no_ryoute = TRUE;
 	/* Only compare melee weapons */
+	item_tester_no_ryoute = TRUE;
 	item_tester_hook = item_tester_hook_melee_weapon;
 
 	/* Get the first weapon */
-#ifdef JP
-q = "第一の武器は？";
-s = "比べるものがありません。";
-#else
-	q = "What is your first weapon? ";
-	s = "You have nothing to compare.";
-#endif
+	q = _("第一の武器は？", "What is your first weapon? ");
+	s = _("比べるものがありません。", "You have nothing to compare.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN)))
 	{
 		screen_load();
-		return (FALSE);
+		return (0);
 	}
 
 	/* Get the item (in the pack) */
-	o1_ptr = &inventory[item];
+	o_ptr[0] = &inventory[item];
+	n = 1;
+	total = bcost;
 
-	/* Clear the screen */
-	clear_bldg(0, 22);
+	while (TRUE)
+	{
+		/* Clear the screen */
+		clear_bldg(0, 22);
 
-	item_tester_no_ryoute = TRUE;
-	/* Only compare melee weapons */
-	item_tester_hook = item_tester_hook_melee_weapon;
+		/* Only compare melee weapons */
+		item_tester_no_ryoute = TRUE;
+		item_tester_hook = item_tester_hook_melee_weapon;
 
-	/* Get the second weapon */
+		/* Hack -- prevent "icky" message */
+		character_xtra = TRUE;
+
+		/* Diaplay selected weapon's infomation */
+		for (i = 0; i < n; i++)
+		{
+			int col = (wid * i + mgn);
+
+			/* Copy i-th weapon into the weapon slot (if it's not already there) */
+			if (o_ptr[i] != i_ptr) object_copy(i_ptr, o_ptr[i]);
+
+			/* Get the new values */
+			calc_bonuses();
+
+			/* List the new values */
+			list_weapon(o_ptr[i], row, col);
+			compare_weapon_aux1(o_ptr[i], col, row + 8);
+		}
+
+		character_xtra = old_character_xtra;
+
 #ifdef JP
-q = "第二の武器は？";
-s = "比べるものがありません。";
+		put_str(format("[ 比較対象: 's'で変更 ($%d) ]", cost), 1, (wid + mgn));
+		put_str("(一番高いダメージが適用されます。複数の倍打効果は足し算されません。)", row + 4, 0);
+		prt("現在の技量から判断すると、あなたの武器は以下のような威力を発揮します:", 0, 0);
 #else
-	q = "What is your second weapon? ";
-	s = "You have nothing to compare.";
+		put_str(format("[ 's' Select secondary weapon($%d) ]", cost), row + 1, (wid * i + mgn));
+		put_str("(Only highest damage applies per monster. Special damage not cumulative.)", row + 4, 0);
+		prt("Based on your current abilities, here is what your weapons will do", 0, 0);
 #endif
 
-	if (!get_item(&item2, q, s, (USE_EQUIP | USE_INVEN)))
-	{
-		screen_load();
-		return (FALSE);
+		flush();
+		ch = inkey();
+
+		if (ch == 's')
+		{
+			if (total + cost > p_ptr->au)
+			{
+				msg_print(_("お金が足りません！", "You don't have enough money!"));
+				msg_print(NULL);
+				continue;
+			}
+
+			q = _("第二の武器は？", "What is your second weapon? ");
+			s = _("比べるものがありません。", "You have nothing to compare.");
+
+			/* Get the second weapon */
+			if (!get_item(&item2, q, s, (USE_EQUIP | USE_INVEN))) continue;
+
+			total += cost;
+			cost = bcost / 2;
+
+			/* Get the item (in the pack) */
+			o_ptr[1] = &inventory[item2];
+			n = 2;
+		}
+		else
+		{
+			break;
+		}
 	}
-
-	/* Get the item (in the pack) */
-	o2_ptr = &inventory[item2];
-
-	/* Clear the screen */
-	clear_bldg(0, 22);
-
-	/* Copy first weapon into the weapon slot (if it's not already there) */
-	if (o1_ptr != i_ptr)
-		object_copy(i_ptr, o1_ptr);
-
-	/* Hack -- prevent "icky" message */
-	character_xtra = TRUE;
-
-	/* Get the new values */
-	calc_bonuses();
-
-	character_xtra = old_character_xtra;
-
-	/* List the new values */
-	list_weapon(o1_ptr, row, 2);
-	compare_weapon_aux1(o1_ptr, 2, row + 8);
-
-	/* Copy second weapon into the weapon slot (if it's not already there) */
-	if (o2_ptr != i_ptr)
-		object_copy(i_ptr, o2_ptr);
-	else
-		object_copy(i_ptr, &orig_weapon);
-
-	/* Hack -- prevent "icky" message */
-	character_xtra = TRUE;
-
-	/* Get the new values */
-	calc_bonuses();
-
-	character_xtra = old_character_xtra;
-
-	/* List the new values */
-	list_weapon(o2_ptr, row, 40);
-	compare_weapon_aux1(o2_ptr, 40, row + 8);
 
 	/* Copy back the original weapon into the weapon slot */
 	object_copy(i_ptr, &orig_weapon);
 
 	/* Reset the values for the old weapon */
 	calc_bonuses();
-
-#ifdef JP
-put_str("(一番高いダメージが適用されます。複数の倍打効果は足し算されません。)", row + 4, 0);
-#else
-	put_str("(Only highest damage applies per monster. Special damage not cumulative.)", row + 4, 0);
-#endif
-
-#ifdef JP
-msg_print("現在の技量から判断すると、あなたの武器は以下のような威力を発揮します:");
-#else
-	msg_print("Based on your current abilities, here is what your weapons will do");
-#endif
-
-
-	flush();
-	(void)inkey();
 	screen_load();
 
 	/* Done */
-	return (TRUE);
+	return (total);
 }
 
 
@@ -5192,7 +5189,8 @@ msg_print("お金が足りません！");
 		paid = research_mon();
 		break;
 	case BACT_COMPARE_WEAPONS:
-		paid = compare_weapons();
+		paid = TRUE;
+		bcost = compare_weapons(bcost);
 		break;
 	case BACT_ENCHANT_WEAPON:
 		item_tester_hook = object_allow_enchant_melee_weapon;
