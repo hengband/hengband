@@ -4141,6 +4141,311 @@ static bool eval_ac(int iAC)
 
 
 /*
+ * Hook to specify "broken weapon"
+ */
+static bool item_tester_hook_broken_weapon(object_type *o_ptr)
+{
+ 	if (o_ptr->tval != TV_SWORD) return FALSE;
+
+	switch (o_ptr->sval)
+	{
+	case SV_BROKEN_DAGGER:
+	case SV_BROKEN_SWORD:
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static void give_one_ability_of_object(object_type *to_ptr, object_type *from_ptr)
+{
+	int i, n = 0;
+	int idx = 0;
+	int cand[TR_FLAG_MAX];
+	u32b to_flgs[TR_FLAG_SIZE];
+	u32b from_flgs[TR_FLAG_SIZE];
+
+	object_flags(to_ptr, to_flgs);
+	object_flags(from_ptr, from_flgs);
+
+	for (i = 0; i < TR_FLAG_MAX; i++)
+	{
+		switch (i)
+		{
+		case TR_IGNORE_ACID:
+		case TR_IGNORE_ELEC:
+		case TR_IGNORE_FIRE:
+		case TR_IGNORE_COLD:
+		case TR_ACTIVATE:
+		case TR_RIDING:
+		case TR_THROW:
+		case TR_SHOW_MODS:
+		case TR_HIDE_TYPE:
+		case TR_ES_ATTACK:
+		case TR_ES_AC:
+		case TR_FULL_NAME:
+		case TR_FIXED_FLAVOR:
+			break;
+		default:
+			if (have_flag(from_flgs, i) && !have_flag(to_flgs, i)) cand[n++] = i;
+		}
+	}
+
+	if (n > 0)
+	{
+		int bmax;
+		int tr_idx = cand[randint0(n)];
+		add_flag(to_ptr->art_flags, tr_idx);
+		if (is_pval_flag(tr_idx)) to_ptr->pval = MAX(to_ptr->pval, 1);
+		bmax = MIN(3, MAX(1, 40 / (to_ptr->dd * to_ptr->ds)));
+		if (tr_idx == TR_BLOWS) to_ptr->pval = MIN(to_ptr->pval, bmax);
+		if (tr_idx == TR_SPEED) to_ptr->pval = MIN(to_ptr->pval, 4);
+	}
+
+	return;
+}
+
+/*
+ * Repair broken weapon
+ */
+static int repair_broken_weapon_aux(int bcost)
+{
+	s32b cost;
+	int item, mater;
+	object_type *o_ptr, *mo_ptr; /* broken weapon and material weapon */
+	object_kind *k_ptr;
+	int i, k_idx, tr_idx, dd_bonus, ds_bonus;
+	char basenm[MAX_NLEN];
+	cptr q, s; /* For get_item prompt */
+
+	prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), 4, 2);
+	prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), 5, 2);
+
+	/* Get an item */
+	q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
+	s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
+
+	/* Only forge broken weapons */
+	item_tester_hook = item_tester_hook_broken_weapon;
+
+	if (!get_item(&item, q, s, (USE_INVEN | USE_EQUIP))) return (0);
+
+	/* Get the item (in the pack) */
+	o_ptr = &inventory[item];
+
+	/* It is worthless */
+	if (!object_is_ego(o_ptr) && !object_is_artifact(o_ptr))
+	{
+		msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
+		return (0);
+	}
+
+	/* They are too many */
+	if (o_ptr->number > 1)
+	{
+		msg_format(_("一度に複数を修復することはできません！", "They are too many to repair at once!"));
+		return (0);
+	}
+
+	/* Get an item */
+	q = _("材料となる武器は？", "Which weapon for material? ");
+	s = _("材料となる武器がありません。", "You have no material to repair.");
+
+	/* Only forge broken weapons */
+	item_tester_hook = item_tester_hook_melee_weapon;
+
+	if (!get_item(&mater, q, s, (USE_INVEN | USE_EQUIP))) return (0);
+	if (mater == item)
+	{
+		msg_print(_("クラインの壷じゃない！", "This is not a klein bottle!"));
+		return (0);
+	}
+
+	/* Get the item (in the pack) */
+	mo_ptr = &inventory[mater];
+
+	/* Get the value of one of the items (except curses) */
+	cost = bcost + object_value_real(o_ptr) * 2;
+
+#ifdef JP
+	if (!get_check(format("＄%dかかりますがよろしいですか？ ", cost))) return (0);
+#else
+	if (!get_check(format("Costs %d gold, okay? ", cost))) return (0);
+#endif
+
+	/* Check if the player has enough money */
+	if (p_ptr->au < cost)
+	{
+		object_desc(basenm, o_ptr, OD_NAME_ONLY);
+		msg_format(_("%sを修復するだけのゴールドがありません！",
+			"You do not have the gold to repair %s!"), basenm);
+		msg_print(NULL);
+		return (0);
+	}
+
+	if (o_ptr->sval == SV_BROKEN_DAGGER)
+	{
+		int i, n = 1;
+
+		for (i = 1; i < max_k_idx; i++)
+		{
+			object_type forge;
+			object_kind *k_ptr = &k_info[i];
+
+			if (k_ptr->tval != TV_SWORD) continue;
+			if ((k_ptr->sval == SV_BROKEN_DAGGER) ||
+				(k_ptr->sval == SV_BROKEN_SWORD) ||
+				(k_ptr->sval == SV_DOKUBARI)) continue;
+			if (k_ptr->weight > 99) continue;
+
+			if (one_in_(n)) 
+			{
+				k_idx = i;
+				n++;
+			}
+		}
+	}
+	else /* TV_BROKEN_SWORD */
+	{
+		/* Repair to a sword or sometimes material's type weapon */
+		int tval = (one_in_(5) ? TV_SWORD : mo_ptr->tval);
+
+		while(1)
+		{
+			object_kind *ck_ptr;
+
+			k_idx = lookup_kind(tval, SV_ANY);
+			ck_ptr = &k_info[k_idx];
+
+			if (tval == TV_SWORD)
+			{
+				if ((ck_ptr->sval == SV_BROKEN_DAGGER) ||
+					(ck_ptr->sval == SV_BROKEN_SWORD) ||
+					(ck_ptr->sval == SV_DIAMOND_EDGE) ||
+					(ck_ptr->sval == SV_DOKUBARI)) continue;
+			}
+			if (tval == TV_POLEARM)
+			{
+				if ((ck_ptr->sval == SV_DEATH_SCYTHE) ||
+					(ck_ptr->sval == SV_TSURIZAO)) continue;
+			}
+			if (tval == TV_HAFTED)
+			{
+				if ((ck_ptr->sval == SV_GROND) ||
+					(ck_ptr->sval == SV_WIZSTAFF) ||
+					(ck_ptr->sval == SV_NAMAKE_HAMMER)) continue;
+			}
+
+			break;
+		}
+	}
+
+	/* Calculate dice bonuses */
+	dd_bonus = o_ptr->dd - k_info[o_ptr->k_idx].dd;
+	ds_bonus = o_ptr->ds - k_info[o_ptr->k_idx].ds;
+	dd_bonus += mo_ptr->dd - k_info[mo_ptr->k_idx].dd;
+	ds_bonus += mo_ptr->ds - k_info[mo_ptr->k_idx].ds;
+
+	/* Change base object */
+	k_ptr = &k_info[k_idx];
+	o_ptr->k_idx = k_idx;
+	o_ptr->weight = k_ptr->weight;
+	o_ptr->tval = k_ptr->tval;
+	o_ptr->sval = k_ptr->sval;
+	o_ptr->dd = k_ptr->dd;
+	o_ptr->ds = k_ptr->ds;
+
+	/* Dice up */
+	if (dd_bonus)
+	{
+		o_ptr->dd++;
+		for (i = 0; i < dd_bonus; i++)
+		{
+			if (one_in_(o_ptr->dd)) o_ptr->dd++;
+		}
+	}
+	if (ds_bonus)
+	{
+		o_ptr->ds++;
+		for (i = 0; i < ds_bonus; i++)
+		{
+			if (one_in_(o_ptr->ds)) o_ptr->ds++;
+		}
+	}
+
+	/* Add one random ability from material weapon */
+	give_one_ability_of_object(o_ptr, mo_ptr);
+
+	/* Add to-dam, to-hit and to-ac from material weapon */
+	o_ptr->to_d += MAX(0, (mo_ptr->to_d / 3));
+	o_ptr->to_h += MAX(0, (mo_ptr->to_h / 3));
+	o_ptr->to_a += MAX(0, (mo_ptr->to_a));
+
+	if ((o_ptr->name1 == ART_NARSIL) ||
+		(object_is_random_artifact(o_ptr) && one_in_(1)) ||
+		(object_is_ego(o_ptr) && one_in_(7)))
+	{
+		/* Forge it */
+		if (object_is_ego(o_ptr))
+		{
+			add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
+			add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
+		}
+
+		/* Add one random ability from material weapon */
+		give_one_ability_of_object(o_ptr, mo_ptr);
+
+		/* Add one random activation */
+		if (!activation_index(o_ptr)) one_activation(o_ptr);
+
+		/* Narsil */
+		if (o_ptr->name1 == ART_NARSIL)
+		{
+			one_high_resistance(o_ptr);
+			one_ability(o_ptr);
+		}
+
+		msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptionally."));
+	}
+
+	object_desc(basenm, o_ptr, OD_NAME_ONLY);
+#ifdef JP
+	msg_format("＄%dで%sに修復しました。", cost, basenm);
+#else
+	msg_format("Repaired into %s for %d gold.", basenm, cost);
+#endif
+	msg_print(NULL);
+
+	/* Remove BROKEN flag */
+	o_ptr->ident &= ~(IDENT_BROKEN);
+
+	/* Add repaired flag */
+	o_ptr->discount = 99;
+
+	/* Decrease material object */
+	inven_item_increase(mater, -1);
+	inven_item_optimize(mater);
+
+	/* Copyback */
+	p_ptr->update |= PU_BONUS;
+	handle_stuff();
+
+	/* Something happened */
+	return (cost);
+}
+
+static int repair_broken_weapon(int bcost)
+{
+	int cost;
+
+	screen_save();
+	cost = repair_broken_weapon_aux(bcost);
+	screen_load();
+	return cost;
+}
+
+
+/*
  * Enchant item
  */
 static bool enchant_item(int cost, int to_hit, int to_dam, int to_ac)
@@ -5370,6 +5675,10 @@ msg_print("お金が足りません！");
 		break;
 	case BACT_EVAL_AC:
 		paid = eval_ac(p_ptr->dis_ac + p_ptr->dis_to_a);
+		break;
+	case BACT_BROKEN_WEAPON:
+		paid = TRUE;
+		bcost = repair_broken_weapon(bcost);
 		break;
 	}
 
