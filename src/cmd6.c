@@ -2115,6 +2115,13 @@ take_hit(DAMAGE_NOESCAPE, 111+randint1(111), "ログルスの巻物", -1);
 			amusement(py, px, 1, FALSE);
 			break;
 		}
+
+		case SV_SCROLL_STAR_AMUSEMENT:
+		{
+			ident = TRUE;
+			amusement(py, px,  randint1(2) + 1, FALSE);
+			break;
+		}
 	}
 	}
 	else if (o_ptr->name1 == ART_GHB)

@@ -5196,9 +5196,11 @@ void acquirement(int y1, int x1, int num, bool great, bool known)
  * Scatter some "amusing" objects near the player
  */
 
-#define AMS_NOTHING   0x00 //No restriction
-#define AMS_NO_UNIQUE 0x01 //Don't make the amusing object of uniques
-#define AMS_FIXED_ART 0x02 //Make a fixed artifact based on the amusing object
+#define AMS_NOTHING   0x00 /* No restriction */
+#define AMS_NO_UNIQUE 0x01 /* Don't make the amusing object of uniques */
+#define AMS_FIXED_ART 0x02 /* Make a fixed artifact based on the amusing object */
+#define AMS_MULTIPLE  0x04 /* Drop 1-3 objects for one type */
+#define AMS_PILE      0x08 /* Drop 1-99 pile objects for one type */
 
 typedef struct
 {
@@ -5210,17 +5212,17 @@ typedef struct
 
 amuse_type amuse_info[] =
 {
-	{ TV_BOTTLE, SV_ANY, 3, AMS_NOTHING },
-	{ TV_JUNK, SV_ANY, 3, AMS_NOTHING },
-	{ TV_SPIKE, SV_ANY, 3, AMS_NOTHING },
-	{ TV_STATUE, SV_ANY, 30, AMS_NOTHING },
-	{ TV_CORPSE, SV_ANY, 9, AMS_NO_UNIQUE },
-	{ TV_SKELETON, SV_ANY, 20, AMS_NO_UNIQUE },
+	{ TV_BOTTLE, SV_ANY, 5, AMS_NOTHING },
+	{ TV_JUNK, SV_ANY, 3, AMS_MULTIPLE },
+	{ TV_SPIKE, SV_ANY, 10, AMS_PILE },
+	{ TV_STATUE, SV_ANY, 20, AMS_NOTHING },
+	{ TV_CORPSE, SV_ANY, 15, AMS_NO_UNIQUE },
+	{ TV_SKELETON, SV_ANY, 10, AMS_NO_UNIQUE },
 	{ TV_FIGURINE, SV_ANY, 5, AMS_NO_UNIQUE },
 	{ TV_PARCHMENT, SV_ANY, 1, AMS_NOTHING },
 	{ TV_POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, //Fishing Pole of Taikobo
 	{ TV_SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, //Broken Dagger of Magician
-	{ TV_SWORD, SV_BROKEN_DAGGER, 5, AMS_NOTHING },
+	{ TV_SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING },
 	{ TV_SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING },
 	{ TV_SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
 
@@ -5260,6 +5262,9 @@ void amusement(int y1, int x1, int num, bool known)
 		/* Wipe the object */
 		k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
 
+		/* Paranoia - reroll if nothing */
+		if (!k_idx) continue;
+
 		/* Search an artifact index if need */
 		insta_art = (k_info[k_idx].gen_flags & TRG_INSTA_ART);
 		fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
@@ -5288,11 +5293,17 @@ void amusement(int y1, int x1, int num, bool known)
 			if (r_info[i_ptr->pval].flags1 & RF1_UNIQUE) continue;
 		}
 
+		if (amuse_info[r].flag & AMS_MULTIPLE) i_ptr->number = randint1(3);
+		if (amuse_info[r].flag & AMS_PILE) i_ptr->number = randint1(99);
+
 		if (known)
 		{
 			object_aware(i_ptr);
 			object_known(i_ptr);
 		}
+
+		/* Paranoia - reroll if nothing */
+		if (!(i_ptr->k_idx)) continue;
 
 		/* Drop the object */
 		(void)drop_near(i_ptr, -1, y1, x1);
