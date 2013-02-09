@@ -4217,9 +4217,14 @@ static int repair_broken_weapon_aux(int bcost)
 	int i, k_idx, tr_idx, dd_bonus, ds_bonus;
 	char basenm[MAX_NLEN];
 	cptr q, s; /* For get_item prompt */
+	int row = 7;
 
-	prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), 4, 2);
-	prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), 5, 2);
+	/* Clear screen */
+	clear_bldg(0, 22);
+
+	/* Notice */
+	prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
+	prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row+1, 2);
 
 	/* Get an item */
 	q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
@@ -4247,6 +4252,10 @@ static int repair_broken_weapon_aux(int bcost)
 		return (0);
 	}
 
+	/* Display item name */
+	object_desc(basenm, o_ptr, OD_NAME_ONLY);
+	prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row+3, 2);
+
 	/* Get an item */
 	q = _("材料となる武器は？", "Which weapon for material? ");
 	s = _("材料となる武器がありません。", "You have no material to repair.");
@@ -4263,6 +4272,10 @@ static int repair_broken_weapon_aux(int bcost)
 
 	/* Get the item (in the pack) */
 	mo_ptr = &inventory[mater];
+
+	/* Display item name */
+	object_desc(basenm, mo_ptr, OD_NAME_ONLY);
+	prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row+4, 2);
 
 	/* Get the value of one of the items (except curses) */
 	cost = bcost + object_value_real(o_ptr) * 2;
