@@ -4321,7 +4321,7 @@ static int repair_broken_weapon_aux(int bcost)
 	else /* TV_BROKEN_SWORD */
 	{
 		/* Repair to a sword or sometimes material's type weapon */
-		int tval = (one_in_(5) ? TV_SWORD : mo_ptr->tval);
+		int tval = (one_in_(5) ? mo_ptr->tval : TV_SWORD);
 
 		while(1)
 		{
@@ -4367,6 +4367,11 @@ static int repair_broken_weapon_aux(int bcost)
 	o_ptr->sval = k_ptr->sval;
 	o_ptr->dd = k_ptr->dd;
 	o_ptr->ds = k_ptr->ds;
+
+	/* Copy base object's ability */
+	for (i = 0; i < TR_FLAG_SIZE; i++) o_ptr->art_flags[i] |= k_ptr->flags[i];
+	if (k_ptr->pval) o_ptr->pval = MAX(o_ptr->pval, randint1(k_ptr->pval));
+	if (have_flag(k_ptr->flags, TR_ACTIVATE)) o_ptr->xtra2 = k_ptr->act_idx;
 
 	/* Dice up */
 	if (dd_bonus)
