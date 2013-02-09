@@ -4374,7 +4374,7 @@ static int repair_broken_weapon_aux(int bcost)
 	if (have_flag(k_ptr->flags, TR_ACTIVATE)) o_ptr->xtra2 = k_ptr->act_idx;
 
 	/* Dice up */
-	if (dd_bonus)
+	if (dd_bonus > 0)
 	{
 		o_ptr->dd++;
 		for (i = 0; i < dd_bonus; i++)
@@ -4382,7 +4382,7 @@ static int repair_broken_weapon_aux(int bcost)
 			if (one_in_(o_ptr->dd)) o_ptr->dd++;
 		}
 	}
-	if (ds_bonus)
+	if (ds_bonus > 0)
 	{
 		o_ptr->ds++;
 		for (i = 0; i < ds_bonus; i++)
