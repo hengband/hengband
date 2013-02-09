@@ -7606,19 +7606,12 @@ static void drain_essence(void)
 	}
 	if (!observe)
 	{
-#ifdef JP
-		msg_print("エッセンスは抽出できませんでした。");
-#else
-		msg_print("You were not able to extract any essence.");
-#endif
+		msg_print(_("エッセンスは抽出できませんでした。", "You were not able to extract any essence."));
 	}
 	else
 	{
-#ifdef JP
-		msg_print("抽出したエッセンス:");
-#else
-		msg_print("Extracted essences:");
-#endif
+		msg_print(_("抽出したエッセンス:", "Extracted essences:"));
+
 		for (i = 0; essence_name[i]; i++)
 		{
 			if (!essence_name[i][0]) continue;
@@ -7627,9 +7620,12 @@ static void drain_essence(void)
 			p_ptr->magic_num1[i] += drain_value[i];
 			p_ptr->magic_num1[i] = MIN(20000, p_ptr->magic_num1[i]);
 			msg_print(NULL);
-			msg_format("%s...%d", essence_name[i], drain_value[i]);
+			msg_format("%s...%d%s", essence_name[i], drain_value[i], _("。", ". "));
 		}
 	}
+
+	/* Apply autodestroy/inscription to the drained item */
+	autopick_alter_item(item, TRUE);
 
 	/* Combine the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
