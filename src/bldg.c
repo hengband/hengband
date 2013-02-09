@@ -4187,7 +4187,10 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 		case TR_FIXED_FLAVOR:
 			break;
 		default:
-			if (have_flag(from_flgs, i) && !have_flag(to_flgs, i)) cand[n++] = i;
+			if (have_flag(from_flgs, i) && !have_flag(to_flgs, i))
+			{
+				if (!(is_pval_flag(i) && (from_ptr->pval < 1))) cand[n++] = i;
+			}
 		}
 	}
 
@@ -4379,7 +4382,7 @@ static int repair_broken_weapon_aux(int bcost)
 		o_ptr->dd++;
 		for (i = 0; i < dd_bonus; i++)
 		{
-			if (one_in_(o_ptr->dd)) o_ptr->dd++;
+			if (one_in_(o_ptr->dd + i)) o_ptr->dd++;
 		}
 	}
 	if (ds_bonus > 0)
@@ -4387,8 +4390,15 @@ static int repair_broken_weapon_aux(int bcost)
 		o_ptr->ds++;
 		for (i = 0; i < ds_bonus; i++)
 		{
-			if (one_in_(o_ptr->ds)) o_ptr->ds++;
+			if (one_in_(o_ptr->ds + i)) o_ptr->ds++;
 		}
+	}
+
+	/* */
+	if (have_flag(k_ptr->flags, TR_BLOWS))
+	{
+		int bmax = MIN(3, MAX(1, 40 / (o_ptr->dd * o_ptr->ds)));
+		o_ptr->pval = MIN(o_ptr->pval, bmax);
 	}
 
 	/* Add one random ability from material weapon */
