@@ -3980,7 +3980,13 @@ static int compare_weapons(int bcost)
 			/* List the new values */
 			list_weapon(o_ptr[i], row, col);
 			compare_weapon_aux1(o_ptr[i], col, row + 8);
+
+			/* Copy back the original weapon into the weapon slot */
+			object_copy(i_ptr, &orig_weapon);
 		}
+
+		/* Reset the values for the old weapon */
+		calc_bonuses();
 
 		character_xtra = old_character_xtra;
 
@@ -4025,11 +4031,7 @@ static int compare_weapons(int bcost)
 		}
 	}
 
-	/* Copy back the original weapon into the weapon slot */
-	object_copy(i_ptr, &orig_weapon);
-
-	/* Reset the values for the old weapon */
-	calc_bonuses();
+	/* Restore the screen */
 	screen_load();
 
 	/* Done */
