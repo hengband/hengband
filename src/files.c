@@ -2078,13 +2078,14 @@ static cptr likert(int x, int y)
  */
 static void display_player_various(void)
 {
-	int         tmp, damage[2], blows1, blows2, i, basedam;
+	int         tmp, damage[2], to_h[2], blows1, blows2, i, basedam;
 	int			xthn, xthb, xfos, xsrh;
 	int			xdis, xdev, xsav, xstl;
 	cptr		desc;
 	int         muta_att = 0;
 	u32b flgs[TR_FLAG_SIZE];
 	int		shots, shot_frac;
+	bool dokubari;
 
 	object_type		*o_ptr;
 
@@ -2159,9 +2160,19 @@ static void display_player_various(void)
 			/* Average damage per round */
 			if (o_ptr->k_idx)
 			{
-				if (object_is_known(o_ptr)) damage[i] += o_ptr->to_d * 100;
+				to_h[i] = 0;
+				dokubari = FALSE;				
+				
+				if((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) dokubari = TRUE;
+				if (object_is_known(o_ptr))
+				{ 
+					damage[i] += o_ptr->to_d * 100;
+					to_h[i] += o_ptr->to_h;
+				}
 				basedam = ((o_ptr->dd + p_ptr->to_dd[i]) * (o_ptr->ds + p_ptr->to_ds[i] + 1)) * 50;
 				object_flags_known(o_ptr, flgs);
+								
+				basedam = calc_expext_cirt(o_ptr->weight, to_h[i], basedam, p_ptr->dis_to_h[i], dokubari);
 				if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 				{
 					/* vorpal blade */

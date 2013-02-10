@@ -3126,7 +3126,7 @@ static void town_history(void)
 }
 
 
-static s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool dokubari)
+s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool dokubari)
 {
 	long i,k, num;
 	
