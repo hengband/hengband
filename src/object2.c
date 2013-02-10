@@ -5215,10 +5215,10 @@ amuse_type amuse_info[] =
 	{ TV_BOTTLE, SV_ANY, 5, AMS_NOTHING },
 	{ TV_JUNK, SV_ANY, 3, AMS_MULTIPLE },
 	{ TV_SPIKE, SV_ANY, 10, AMS_PILE },
-	{ TV_STATUE, SV_ANY, 20, AMS_NOTHING },
+	{ TV_STATUE, SV_ANY, 15, AMS_NOTHING },
 	{ TV_CORPSE, SV_ANY, 15, AMS_NO_UNIQUE },
 	{ TV_SKELETON, SV_ANY, 10, AMS_NO_UNIQUE },
-	{ TV_FIGURINE, SV_ANY, 5, AMS_NO_UNIQUE },
+	{ TV_FIGURINE, SV_ANY, 10, AMS_NO_UNIQUE },
 	{ TV_PARCHMENT, SV_ANY, 1, AMS_NOTHING },
 	{ TV_POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, //Fishing Pole of Taikobo
 	{ TV_SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, //Broken Dagger of Magician
@@ -5288,13 +5288,13 @@ void amusement(int y1, int x1, int num, bool known)
 		if (a_idx) i_ptr->name1 = a_idx;
 		apply_magic(i_ptr, 1, AM_NO_FIXED_ART);
 
-		if (amuse_info[r].flag & AMS_NO_UNIQUE)
+		if (amuse_info[i].flag & AMS_NO_UNIQUE)
 		{
 			if (r_info[i_ptr->pval].flags1 & RF1_UNIQUE) continue;
 		}
 
-		if (amuse_info[r].flag & AMS_MULTIPLE) i_ptr->number = randint1(3);
-		if (amuse_info[r].flag & AMS_PILE) i_ptr->number = randint1(99);
+		if (amuse_info[i].flag & AMS_MULTIPLE) i_ptr->number = randint1(3);
+		if (amuse_info[i].flag & AMS_PILE) i_ptr->number = randint1(99);
 
 		if (known)
 		{
