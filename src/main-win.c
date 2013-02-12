@@ -1233,8 +1233,10 @@ static void load_prefs_aux(int i)
 	char sec_name[128];
 	char tmp[1024];
 
-	int wid, hgt;
-
+	int wid, hgt, posx, posy;
+	int dispx = GetSystemMetrics( SM_CXVIRTUALSCREEN);
+	int dispy = GetSystemMetrics( SM_CYVIRTUALSCREEN);
+	
 	/* Make section name */
 	sprintf(sec_name, "Term-%d", i);
 
@@ -1296,8 +1298,10 @@ static void load_prefs_aux(int i)
 	}
 
 	/* Window position */
-	td->pos_x = GetPrivateProfileInt(sec_name, "PositionX", td->pos_x, ini_file);
-	td->pos_y = GetPrivateProfileInt(sec_name, "PositionY", td->pos_y, ini_file);
+	posx = GetPrivateProfileInt(sec_name, "PositionX", posx, ini_file);
+	posy = GetPrivateProfileInt(sec_name, "PositionY", posy, ini_file);
+	td->pos_x = MIN(MAX(0, posx), dispx-128);
+	td->pos_y = MIN(MAX(0, posy), dispy-128);
 
 	/* Window Z position */
 	if (i > 0)
