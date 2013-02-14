@@ -873,6 +873,7 @@ extern errr counts_write(int where, u32b count);
 extern u32b counts_read(int where);
 
 /* flavor.c */
+extern bool object_is_quest_target(object_type *o_ptr);
 extern void get_table_name_aux(char *out_string);
 extern void get_table_name(char *out_string);
 extern void get_table_sindarin_aux(char *out_string);

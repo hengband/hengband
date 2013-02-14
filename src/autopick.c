@@ -1061,6 +1061,12 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 		/* Require boosted dice */
 		if ((o_ptr->dd == k_ptr->dd) && (o_ptr->ds == k_ptr->ds))
 			return FALSE;
+		
+		/* In Vault Quest, Dice must be hide.*/
+		if(!object_is_known(o_ptr) && object_is_quest_target(o_ptr))
+		{
+			return FALSE;
+		}
 	}
 
 	/*** Weapons which dd*ds is more than nn ***/
