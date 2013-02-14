@@ -1236,6 +1236,8 @@ static void load_prefs_aux(int i)
 	int wid, hgt, posx, posy;
 	int dispx = GetSystemMetrics( SM_CXVIRTUALSCREEN);
 	int dispy = GetSystemMetrics( SM_CYVIRTUALSCREEN);
+	posx=0;
+	posy=0;
 	
 	/* Make section name */
 	sprintf(sec_name, "Term-%d", i);
