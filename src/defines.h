@@ -75,7 +75,7 @@
  */
 #define H_VER_MAJOR 2
 #define H_VER_MINOR 1
-#define H_VER_PATCH 1
+#define H_VER_PATCH 2
 #define H_VER_EXTRA 0
 
 

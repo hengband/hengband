@@ -5483,6 +5483,34 @@ static void pack_overflow(void)
 	}
 }
 
+/*
+ * process the effects per 100 energy at player speed.
+ */
+static void process_upkeep_with_speed(void)
+{
+	/* Give the player some energy */
+	if (!load && p_ptr->enchant_energy_need > 0 && !p_ptr->leaving)
+	{
+		p_ptr->enchant_energy_need -= SPEED_TO_ENERGY(p_ptr->pspeed);
+	}
+	
+	/* No turn yet */
+	if (p_ptr->enchant_energy_need > 0) return;
+	
+	while (p_ptr->enchant_energy_need <= 0)
+	{
+		/* Handle the player song */
+		if (!load) check_music();
+
+		/* Hex - Handle the hex spells */
+		if (!load) check_hex();
+		if (!load) revenge_spell();
+		
+		/* There is some randomness of needed energy */
+		p_ptr->enchant_energy_need += ENERGY_NEED();
+	}
+}
+
 
 /*
  * Process the player
@@ -5723,14 +5751,7 @@ msg_print("中断しました。");
 		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
 	}
-
-	/* Handle the player song */
-	if (!load) check_music();
-
-	/* Hex - Handle the hex spells */
-	if (!load) check_hex();
-	if (!load) revenge_spell();
-
+	
 	load = FALSE;
 
 	/* Fast */
@@ -6318,9 +6339,11 @@ msg_print("試合開始！");
 		/* Hack -- Compress the object list occasionally */
 		if (o_cnt + 32 < o_max) compact_objects(0);
 
-
+		
 		/* Process the player */
 		process_player();
+		
+		process_upkeep_with_speed();
 
 		/* Handle "p_ptr->notice" */
 		notice_stuff();

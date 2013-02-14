@@ -1796,6 +1796,10 @@ static void rd_extra(void)
 	rd_s16b(&p_ptr->energy_need);
 	if (z_older_than(11, 0, 13))
 		p_ptr->energy_need = 100 - p_ptr->energy_need;
+	if (z_older_than(12, 1, 20))
+		p_ptr->enchant_energy_need = 0;
+	else
+		rd_s16b(&p_ptr->enchant_energy_need);
 
 	rd_s16b(&p_ptr->fast);
 	rd_s16b(&p_ptr->slow);

@@ -9349,6 +9349,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cont)
 			{
 				project_hack(GF_PSI, damroll(dice, sides));
+				energy_use += 10;
 			}
 		}
 
@@ -9459,6 +9460,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cont)
 			{
 				confuse_monsters(power);
+				energy_use += 10;
 			}
 		}
 
@@ -9495,6 +9497,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cont)
 			{
 				project_hack(GF_SOUND, damroll(dice, sides));
+				energy_use += 10;
 			}
 		}
 
@@ -9768,6 +9771,7 @@ static cptr do_music_spell(int spell, int mode)
 			{
 				dispel_monsters(randint1(m_sides));
 				dispel_evil(randint1(e_sides));
+				energy_use += 10;
 			}
 		}
 		break;
@@ -9803,6 +9807,7 @@ static cptr do_music_spell(int spell, int mode)
 			{
 				slow_monsters(plev);
 				sleep_monsters(plev);
+				energy_use += 10;
 			}
 		}
 
@@ -9932,6 +9937,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cont)
 			{
 				stasis_monsters(power);
+				energy_use += 10;
 			}
 		}
 
@@ -10023,6 +10029,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cont)
 			{
 				dispel_monsters(damroll(dice, sides));
+				energy_use += 10;
 			}
 		}
 		break;
@@ -11534,6 +11541,10 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast || cont)
 		{
 			project_hack(GF_POIS, randint1(power));
+			if(cont)
+			{
+				energy_use += 10;
+			}
 		}
 		break;
 
@@ -11833,6 +11844,10 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast || cont)
 		{
 			project_hack(GF_OLD_DRAIN, randint1(power));
+			if(cont)
+			{
+				energy_use += 10;
+			}
 		}
 		break;
 
@@ -12423,6 +12438,10 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast || cont)
 		{
 			stun_monsters(power);
+			if(cont)
+			{
+				energy_use += 10;
+			}
 		}
 		break;
 

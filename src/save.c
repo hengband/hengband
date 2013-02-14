@@ -680,6 +680,7 @@ static void wr_extra(void)
 	wr_s16b(0);     /* old "food_digested" */
 	wr_s16b(0);     /* old "protection" */
 	wr_s16b(p_ptr->energy_need);
+	wr_s16b(p_ptr->enchant_energy_need);
 	wr_s16b(p_ptr->fast);
 	wr_s16b(p_ptr->slow);
 	wr_s16b(p_ptr->afraid);

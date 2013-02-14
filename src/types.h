@@ -1082,6 +1082,7 @@ struct player_type
 	byte recall_dungeon;      /* Dungeon set to be recalled */
 
 	s16b energy_need;	  /* Energy needed for next move */
+	s16b enchant_energy_need;	  /* Energy needed for next upkeep effect	 */
 
 	s16b food;		  /* Current nutrition */
 
