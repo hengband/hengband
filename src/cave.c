@@ -5003,10 +5003,12 @@ void object_kind_track(int k_idx)
  *
  * All disturbance cancels repeated commands, resting, and running.
  */
-void disturb(int stop_search, int unused_flag)
+void disturb(int stop_search, int stop_travel)
 {
+#ifndef TRAVEL
 	/* Unused */
-	unused_flag = unused_flag;
+	stop_travel = stop_travel;
+#endif
 
 	/* Cancel auto-commands */
 	/* command_new = 0; */
@@ -5045,7 +5047,7 @@ void disturb(int stop_search, int unused_flag)
 	}
 
 #ifdef TRAVEL
-	if (travel.run)
+	if (stop_travel < 1)
 	{
 		/* Cancel */
 		travel.run = 0;

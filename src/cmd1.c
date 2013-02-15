@@ -5150,11 +5150,11 @@ void travel_step(void)
 
 	travel.dir = dir;
 	move_player(dir, always_pickup, easy_disarm);
-	travel.run = old_run;
+	/* travel.run = old_run; */
 
 	if ((py == travel.y) && (px == travel.x))
 		travel.run = 0;
-	else
+	else if (travel.run > 0)
 		travel.run--;
 }
 #endif

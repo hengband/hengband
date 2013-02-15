@@ -1705,11 +1705,11 @@ typedef struct
  *  A structure type for travel command
  */
 typedef struct {
-	int run;
+	int run; /* Remaining grid number */
 	int cost[MAX_HGT][MAX_WID];
-	int x;
-	int y;
-	int dir;
+	int x; /* Target X */
+	int y; /* Target Y */
+	int dir; /* Running direction */
 } travel_type;
 #endif
 
