@@ -2633,7 +2633,7 @@
 #define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT)
 
 /* Used only after cave generation */
-#define CAVE_XXXX1      0x0200
+#define CAVE_KNOWN      0x0200    /* Directly viewed or map detected flag */
 #define CAVE_NOTE       0x0400    /* Flag for delayed visual update (needs note_spot()) */
 #define CAVE_REDRAW     0x0800    /* Flag for delayed visual update (needs lite_spot()) */
 #define CAVE_OBJECT     0x1000    /* Mirror, glyph, etc. */

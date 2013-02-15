@@ -3357,7 +3357,7 @@ void forget_view(void)
 #define cave_view_hack(C,Y,X) \
 {\
     if (!((C)->info & (CAVE_VIEW))){\
-    (C)->info |= (CAVE_VIEW); \
+    (C)->info |= (CAVE_VIEW | CAVE_KNOWN); \
     view_y[view_n] = (Y); \
     view_x[view_n] = (X); \
     view_n++;}\
@@ -4304,6 +4304,9 @@ void map_area(int range)
 
 			c_ptr = &cave[y][x];
 
+			/* Memorize terrain of the grid */
+			c_ptr->info |= (CAVE_KNOWN);
+
 			/* Feature code (applying "mimic" field) */
 			feat = get_feat_mimic(c_ptr);
 			f_ptr = &f_info[feat];
@@ -4392,6 +4395,9 @@ void wiz_lite(bool ninja)
 		{
 			cave_type *c_ptr = &cave[y][x];
 
+			/* Memorize terrain of the grid */
+			c_ptr->info |= (CAVE_KNOWN);
+
 			/* Feature code (applying "mimic" field) */
 			feat = get_feat_mimic(c_ptr);
 			f_ptr = &f_info[feat];
@@ -4471,7 +4477,7 @@ void wiz_dark(void)
 			cave_type *c_ptr = &cave[y][x];
 
 			/* Process the grid */
-			c_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT);
+			c_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
 			c_ptr->info |= (CAVE_UNSAFE);
 		}
 	}
@@ -4504,6 +4510,9 @@ void wiz_dark(void)
 		/* Forget the object */
 		o_ptr->marked &= OM_TOUCHED;
 	}
+
+	/* Forget travel route when we have forgotten map */
+	forget_travel_flow();
 
 	/* Mega-Hack -- Forget the view and lite */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);

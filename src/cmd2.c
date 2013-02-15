@@ -4805,6 +4805,9 @@ static bool travel_flow_aux(int y, int x, int n, bool wall)
 	/* Ignore "pre-stamped" entries */
 	if (travel.cost[y][x] != TRAVEL_UNABLE) return wall;
 
+	/* Ignore unknown grid */
+	if (!(c_ptr->info & CAVE_KNOWN)) return wall;
+
 	/* Ignore "walls" and "rubble" (include "secret doors") */
 	if (have_flag(f_ptr->flags, FF_WALL) ||
 		have_flag(f_ptr->flags, FF_CAN_DIG) ||

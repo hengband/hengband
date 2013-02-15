@@ -716,6 +716,7 @@ extern void travel_step(void);
 #endif
 
 /* cmd2.c */
+extern void forget_travel_flow(void);
 extern bool confirm_leave_level(bool down_stair);
 extern void do_cmd_go_up(void);
 extern void do_cmd_go_down(void);

@@ -5107,7 +5107,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 			/* Lose light and knowledge */
-			c_ptr->info &= ~(CAVE_MARK | CAVE_GLOW);
+			c_ptr->info &= ~(CAVE_MARK | CAVE_GLOW | CAVE_KNOWN);
 
 			if (!in_generate) /* Normal */
 			{
@@ -5419,7 +5419,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE);
 
 			/* Lose light and knowledge */
-			c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK);
+			c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK | CAVE_KNOWN);
 
 			/* Skip the epicenter */
 			if (!dx && !dy) continue;
