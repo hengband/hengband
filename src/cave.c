@@ -2540,7 +2540,7 @@ void forget_lite(void)
 {\
 	if (!(cave[Y][X].info & (CAVE_LITE))) \
 	{ \
-		cave[Y][X].info |= (CAVE_LITE); \
+		cave[Y][X].info |= (CAVE_LITE | CAVE_KNOWN); \
 		lite_y[lite_n] = (Y); \
 		lite_x[lite_n++] = (X); \
 	} \
@@ -3357,7 +3357,8 @@ void forget_view(void)
 #define cave_view_hack(C,Y,X) \
 {\
     if (!((C)->info & (CAVE_VIEW))){\
-    (C)->info |= (CAVE_VIEW | CAVE_KNOWN); \
+    (C)->info |= (CAVE_VIEW); \
+    if ((C)->info & (CAVE_GLOW)) (C)->info |= (CAVE_KNOWN); \
     view_y[view_n] = (Y); \
     view_x[view_n] = (X); \
     view_n++;}\
