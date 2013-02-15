@@ -6370,7 +6370,7 @@ msg_print("自動セーブ中");
 	else
 	{
 		/* Disturb the player */
-		disturb(1, 0);
+		disturb(1, 1);
 	}
 
 	/* Clear messages */
@@ -7311,7 +7311,7 @@ void exit_game_panic(void)
 	prt("", 0, 0);
 
 	/* Hack -- turn off some things */
-	disturb(1, 0);
+	disturb(1, 1);
 
 	/* Mega-Hack -- Delay death */
 	if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;

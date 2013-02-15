@@ -5047,7 +5047,7 @@ void disturb(int stop_search, int stop_travel)
 	}
 
 #ifdef TRAVEL
-	if (stop_travel < 1)
+	if (stop_travel)
 	{
 		/* Cancel */
 		travel.run = 0;

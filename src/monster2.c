@@ -2600,7 +2600,7 @@ void update_mon(int m_idx, bool full)
 			if (disturb_near && (projectable(m_ptr->fy, m_ptr->fx, py, px) && projectable(py, px, m_ptr->fy, m_ptr->fx)))
 			{
 				if (disturb_pets || is_hostile(m_ptr))
-					disturb(1, 0);
+					disturb(1, 1);
 			}
 		}
 	}
@@ -2625,7 +2625,7 @@ void update_mon(int m_idx, bool full)
 			if (do_disturb)
 			{
 				if (disturb_pets || is_hostile(m_ptr))
-					disturb(1, 0);
+					disturb(1, 1);
 			}
 		}
 	}
@@ -2644,7 +2644,7 @@ void update_mon(int m_idx, bool full)
 			if (do_disturb)
 			{
 				if (disturb_pets || is_hostile(m_ptr))
-					disturb(1, 0);
+					disturb(1, 1);
 			}
 		}
 	}
@@ -2662,7 +2662,7 @@ void update_mon(int m_idx, bool full)
 			if (do_disturb)
 			{
 				if (disturb_pets || is_hostile(m_ptr))
-					disturb(1, 0);
+					disturb(1, 1);
 			}
 		}
 	}

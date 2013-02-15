@@ -6875,7 +6875,7 @@ bool process_warning(int xx, int yy)
 			else strcpy(o_name, "body"); /* Warning ability without item */
 			msg_format("Your %s pulsates sharply!", o_name);
 #endif
-			disturb(0, 0);
+			disturb(0, 1);
 #ifdef JP
 			return get_check("本当にこのまま進むか？");
 #else
@@ -6899,7 +6899,7 @@ bool process_warning(int xx, int yy)
 		else strcpy(o_name, "body"); /* Warning ability without item */
 		msg_format("Your %s pulsates!", o_name);
 #endif
-		disturb(0, 0);
+		disturb(0, 1);
 #ifdef JP
 		return get_check("本当にこのまま進むか？");
 #else

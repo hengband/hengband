@@ -712,7 +712,7 @@ void search(void)
 #endif
 
 					/* Disturb */
-					disturb(0, 0);
+					disturb(0, 1);
 				}
 
 				/* Secret door */
@@ -954,7 +954,7 @@ void carry(bool pickup)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Hack -- disturb */
-		disturb(0, 0);
+		disturb(0, 1);
 
 		/* Pick up gold */
 		if (o_ptr->tval == TV_GOLD)
@@ -1100,7 +1100,7 @@ static void hit_trap(bool break_trap)
 #endif
 
 	/* Disturb the player */
-	disturb(0, 0);
+	disturb(0, 1);
 
 	cave_alter_feat(y, x, FF_HIT_TRAP);
 
@@ -3089,7 +3089,7 @@ bool py_attack(int y, int x, int mode)
 	char            m_name[80];
 
 	/* Disturb the player */
-	disturb(0, 0);
+	disturb(0, 1);
 
 	energy_use = 100;
 
@@ -3611,7 +3611,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 	if (have_flag(f_ptr->flags, FF_STORE))
 	{
 		/* Disturb */
-		disturb(0, 0);
+		disturb(0, 1);
 
 		energy_use = 0;
 		/* Hack -- Enter store */
@@ -3622,7 +3622,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 	else if (have_flag(f_ptr->flags, FF_BLDG))
 	{
 		/* Disturb */
-		disturb(0, 0);
+		disturb(0, 1);
 
 		energy_use = 0;
 		/* Hack -- Enter building */
@@ -3633,7 +3633,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 	else if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 	{
 		/* Disturb */
-		disturb(0, 0);
+		disturb(0, 1);
 
 		energy_use = 0;
 		/* Hack -- Enter quest level */
@@ -3670,7 +3670,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 	else if (have_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING))
 	{
 		/* Disturb */
-		disturb(0, 0);
+		disturb(0, 1);
 
 		/* Hidden trap */
 		if (c_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET))
@@ -3711,7 +3711,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 #endif
 			}
 
-			if (disturb_trap_detect) disturb(0, 0);
+			if (disturb_trap_detect) disturb(0, 1);
 		}
 	}
 
@@ -3972,7 +3972,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 #endif
 			energy_use = 0;
 			oktomove = FALSE;
-			disturb(0, 0);
+			disturb(0, 1);
 		}
 		else if (MON_MONFEAR(riding_m_ptr))
 		{
@@ -3988,12 +3988,12 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			msg_format("%^s is too scared to control.", m_name);
 #endif
 			oktomove = FALSE;
-			disturb(0, 0);
+			disturb(0, 1);
 		}
 		else if (p_ptr->riding_ryoute)
 		{
 			oktomove = FALSE;
-			disturb(0, 0);
+			disturb(0, 1);
 		}
 		else if (have_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY))
 		{
@@ -4014,7 +4014,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 #endif
 			energy_use = 0;
 			oktomove = FALSE;
-			disturb(0, 0);
+			disturb(0, 1);
 		}
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
@@ -4025,7 +4025,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 #endif
 			energy_use = 0;
 			oktomove = FALSE;
-			disturb(0, 0);
+			disturb(0, 1);
 		}
 		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 		{
@@ -4036,7 +4036,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 #endif
 			energy_use = 0;
 			oktomove = FALSE;
-			disturb(0, 0);
+			disturb(0, 1);
 		}
 
 		if (oktomove && MON_STUNNED(riding_m_ptr) && one_in_(2))
@@ -4049,7 +4049,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			msg_format("You cannot control stunned %s!",m_name);
 #endif
 			oktomove = FALSE;
-			disturb(0, 0);
+			disturb(0, 1);
 		}
 	}
 
@@ -4103,9 +4103,6 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		cptr name = f_name + mimic_f_ptr->name;
 
 		oktomove = FALSE;
-
-		/* Disturb the player */
-		disturb(0, 0);
 
 		/* Notice things in the dark */
 		if (!(c_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
@@ -4176,6 +4173,9 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			}
 		}
 
+		/* Disturb the player */
+		disturb(0, 1);
+
 		/* Sound */
 		if (!boundary_floor(c_ptr, f_ptr, mimic_f_ptr)) sound(SOUND_HITWALL);
 	}
@@ -4189,7 +4189,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		}
 
 		/* To avoid a loop with running */
-		disturb(0, 0);
+		disturb(0, 1);
 
 		oktomove = FALSE;
 	}
@@ -5110,7 +5110,6 @@ void travel_step(void)
 {
 	int i;
 	int dir = travel.dir;
-	int old_run = travel.run;
 
 	find_prevdir = dir;
 
@@ -5125,7 +5124,7 @@ void travel_step(void)
 			msg_print("No route is found!");
 #endif
 		}
-		disturb(0, 0);
+		disturb(0, 1);
 		return;
 	}
 
@@ -5144,13 +5143,12 @@ void travel_step(void)
 	/* Close door */
 	if (!easy_open && is_closed_door(cave[py+ddy[dir]][px+ddx[dir]].feat))
 	{
-		disturb(0, 0);
+		disturb(0, 1);
 		return;
 	}
 
 	travel.dir = dir;
 	move_player(dir, always_pickup, easy_disarm);
-	/* travel.run = old_run; */
 
 	if ((py == travel.y) && (px == travel.x))
 		travel.run = 0;

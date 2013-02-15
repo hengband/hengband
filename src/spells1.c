@@ -1782,7 +1782,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 #endif
 
 
-	if (p_ptr->riding && (c_ptr->m_idx == p_ptr->riding)) disturb(1, 0);
+	if (p_ptr->riding && (c_ptr->m_idx == p_ptr->riding)) disturb(1, 1);
 
 	/* Analyze the damage type */
 	switch (typ)
@@ -6424,7 +6424,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 		project(0, 0, t_y, t_x, dam, typ, (PROJECT_STOP|PROJECT_KILL|PROJECT_REFLECTABLE), monspell);
 
-		disturb(1, 0);
+		disturb(1, 1);
 		return TRUE;
 	}
 
@@ -7743,7 +7743,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 
 	/* Disturb */
-	disturb(1, 0);
+	disturb(1, 1);
 
 
 	if ((p_ptr->special_defense & NINJA_KAWARIMI) && dam && who && (who != p_ptr->riding))

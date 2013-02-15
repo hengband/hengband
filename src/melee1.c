@@ -253,7 +253,7 @@ bool make_attack_normal(int m_idx)
 		if (!effect || check_hit(power, rlev, MON_STUNNED(m_ptr)))
 		{
 			/* Always disturbing */
-			disturb(1, 0);
+			disturb(1, 1);
 
 
 			/* Hack -- Apply "protection from evil" */
@@ -2191,7 +2191,7 @@ msg_format("%sは体力を回復したようだ。", m_name);
 				if (m_ptr->ml)
 				{
 					/* Disturbing */
-					disturb(1, 0);
+					disturb(1, 1);
 
 					/* Message */
 #ifdef JP

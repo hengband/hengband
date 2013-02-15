@@ -387,8 +387,7 @@ bool set_mimic(int v, int p, bool do_dec)
 		return (FALSE);
 
 	/* Disturb */
-	if (disturb_state)
-		disturb(0, 0);
+	if (disturb_state) disturb(0, 1);
 
 	/* Redraw title */
 	p_ptr->redraw |= (PR_BASIC | PR_STATUS);
@@ -884,7 +883,7 @@ msg_print("やっとはっきりと物が見えるようになった。");
 	if (!notice) return (FALSE);
 
 	/* Disturb */
-	if (disturb_state) disturb(0, 0);
+	if (disturb_state) disturb(0, 1);
 
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
@@ -5118,7 +5117,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 	if (damage_type != DAMAGE_USELIFE)
 	{
 		/* Disturb */
-		disturb(1, 0);
+		disturb(1, 1);
 		if (auto_more)
 		{
 			now_damaged = TRUE;

@@ -212,7 +212,7 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 	/* Wake it up */
 	(void)set_monster_csleep(m_idx, 0);
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
+	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 1);
 
 	if (MON_INVULNER(m_ptr) && randint0(PENETRATE_INVULNERABILITY))
 	{
@@ -1477,7 +1477,7 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 		mon_fight = TRUE;
 	}
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
+	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 1);
 
 	/* Scan through all four blows */
 	for (ap_cnt = 0; ap_cnt < 4; ap_cnt++)
@@ -1706,7 +1706,7 @@ act = "%sに唾を吐いた。";
 
 			case RBM_EXPLODE:
 				{
-					if (see_either) disturb(1, 0);
+					if (see_either) disturb(1, 1);
 #ifdef JP
 act = "爆発した。";
 #else
@@ -2402,7 +2402,7 @@ static void process_monster(int m_idx)
 				msg_format("%^s seems to be in so much pain, and trying to escape from your restriction.", m_name);
 #endif
 				riding_pinch++;
-				disturb(1, 0);
+				disturb(1, 1);
 			}
 			else
 			{
@@ -3355,7 +3355,7 @@ msg_format("%^s%s", m_name, monmessage);
 			{
 				/* Disturb */
 				if (is_hostile(m_ptr))
-					disturb(0, 0);
+					disturb(0, 1);
 			}
 
 			/* Take or Kill objects on the floor */

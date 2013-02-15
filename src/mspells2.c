@@ -737,12 +737,12 @@ bool monst_spell_monst(int m_idx)
 	/* Can the player be aware of this attack? */
 	known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
+	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 1);
 
 	/* Check for spell failure (inate attacks never fail) */
 	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2))))
 	{
-		disturb(1, 0);
+		disturb(1, 1);
 		/* Message */
 #ifdef JP
 		if (see_m) msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
@@ -825,7 +825,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -917,7 +917,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -958,7 +958,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -999,7 +999,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1040,7 +1040,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1080,7 +1080,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1121,7 +1121,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1162,7 +1162,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1203,7 +1203,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1244,7 +1244,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1285,7 +1285,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (m_ptr->r_idx == MON_JAIAN)
 #ifdef JP
@@ -1332,7 +1332,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1373,7 +1373,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1414,7 +1414,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1455,7 +1455,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1496,7 +1496,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1537,7 +1537,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1578,7 +1578,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (m_ptr->r_idx == MON_BOTEI)
 #ifdef JP
@@ -1625,7 +1625,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1666,7 +1666,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1706,7 +1706,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1747,7 +1747,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1786,7 +1786,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1826,7 +1826,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1865,7 +1865,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1905,7 +1905,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1951,7 +1951,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -1997,7 +1997,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (m_ptr->r_idx == MON_ROLENTO)
 				{
@@ -2060,7 +2060,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -2106,7 +2106,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -2144,7 +2144,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -2182,7 +2182,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -2226,7 +2226,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -2264,7 +2264,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -2550,7 +2550,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (blind)
 				{
@@ -3135,7 +3135,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_m)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 #ifdef JP
 				msg_format("%sは無傷の球の呪文を唱えた。", m_name);
 #else
@@ -3229,7 +3229,7 @@ bool monst_spell_monst(int m_idx)
 			{
 				if (see_either)
 				{
-					disturb(1, 0);
+					disturb(1, 1);
 
 #ifdef JP
 					msg_format("%^sは手榴弾をばらまいた。", m_name);
@@ -3624,7 +3624,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 #ifdef JP
 				if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
 #else
@@ -3651,7 +3651,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 				if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
 				{
@@ -3770,7 +3770,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sがサイバーデーモンを召喚した！", m_name);
@@ -3807,7 +3807,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法で仲間を召喚した！", m_name);
@@ -3837,7 +3837,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法でモンスターを召喚した！", m_name);
@@ -3870,7 +3870,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法でアリを召喚した。", m_name);
@@ -3903,7 +3903,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法でクモを召喚した。", m_name);
@@ -3936,7 +3936,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法でハウンドを召喚した。", m_name);
@@ -3969,7 +3969,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法でヒドラを召喚した。", m_name);
@@ -4002,7 +4002,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法で天使を召喚した！", m_name);
@@ -4044,7 +4044,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法で混沌の宮廷からデーモンを召喚した！", m_name);
@@ -4077,7 +4077,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%sが魔法でアンデッドを召喚した。", m_name);
@@ -4110,7 +4110,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法でドラゴンを召喚した！", m_name);
@@ -4143,7 +4143,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%sが魔法でアンデッドを召喚した。", m_name);
@@ -4176,7 +4176,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法で古代ドラゴンを召喚した！", m_name);
@@ -4209,7 +4209,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sがアンバーの王族を召喚した！", m_name);
@@ -4242,7 +4242,7 @@ bool monst_spell_monst(int m_idx)
 		{
 			if (see_either)
 			{
-				disturb(1, 0);
+				disturb(1, 1);
 
 #ifdef JP
 				msg_format("%^sが魔法で特別な強敵を召喚した！", m_name);
