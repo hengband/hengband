@@ -1295,7 +1295,7 @@ extern void quest_discovery(int q_idx);
 extern int quest_number(int level);
 extern int random_quest_number(int level);
 extern bool tele_town(void);
-extern s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool dokubari);
+extern s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari);
 
 /* util.c */
 extern errr path_parse(char *buf, int max, cptr file);

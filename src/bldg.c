@@ -3126,7 +3126,7 @@ static void town_history(void)
 }
 
 
-s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool dokubari)
+s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari)
 {
 	u32b i,k, num;
 	
@@ -3137,24 +3137,24 @@ s16b calc_expext_cirt(int weight, int plus, int dam, s16b meichuu, bool dokubari
 	num=0;
 	
 	if (k < 400)						num += (2 * dam + 5) * (400 - k);
-	if (k < 700)						num += (2 * dam + 10) * (MIN(700, k+650) - MAX(400, k));
-	if (k > (700-650) && k < 900)		num += (3 * dam + 15) * (MIN(900, k+650) - MAX(700, k));
-	if (k > (900-650) && k < 1300)		num += (3 * dam + 20) * (MIN(1300, k+650) - MAX(900, k));
-	if (k > (1300-650))					num += (7 * dam / 2 + 25) * MIN(650, k-(1300-650));
+	if (k < 700)						num += (2 * dam + 10) * (MIN(700, k + 650) - MAX(400, k));
+	if (k > (700 - 650) && k < 900)		num += (3 * dam + 15) * (MIN(900, k + 650) - MAX(700, k));
+	if (k > (900 - 650) && k < 1300)		num += (3 * dam + 20) * (MIN(1300, k + 650) - MAX(900, k));
+	if (k > (1300 - 650))					num += (7 * dam / 2 + 25) * MIN(650, k - (1300 - 650));
 	
+	num /= 650;
 	if(p_ptr->pclass == CLASS_NINJA)
 	{
 		num *= i;
-		num += (4444 - i) * dam * 650;
+		num += (4444 - i) * dam;
 		num /= 4444;
 	}
 	else
 	{
 		num *= i;
-		num += (5000 - i) * dam * 650;
+		num += (5000 - i) * dam;
 		num /= 5000;
 	}
-	num /= 650;
 	
 	return num;
 }
@@ -3245,8 +3245,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	
 	
 	/* Show Critical Damage*/
-	critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, mindice, p_ptr->to_h[0], dokubari);
-	critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, maxdice, p_ptr->to_h[0], dokubari);
+	critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, mindice, p_ptr->to_h[0], dokubari);
+	critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, maxdice, p_ptr->to_h[0], dokubari);
 	
 	mindam = blow * (critdice_min+ o_ptr->to_d + p_ptr->to_d[0]);
 	maxdam = blow * (critdice_max+ o_ptr->to_d + p_ptr->to_d[0]);
@@ -3271,8 +3271,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 			vorpal_div = 9;
 		}
 		
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, mindice, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, maxdice, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, mindice, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, maxdice, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		
@@ -3289,8 +3289,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 		
 		slaydice_min = calc_slaydam(mindice, 1, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 1, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		
@@ -3308,8 +3308,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 4, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 4, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Æ°Êª:", TERM_YELLOW);
@@ -3318,8 +3318,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Æ°Êª:", TERM_YELLOW);
@@ -3328,8 +3328,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 7, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 7, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "¼Ù°­:", TERM_YELLOW);
@@ -3338,8 +3338,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 2, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 2, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "¼Ù°­:", TERM_YELLOW);
@@ -3348,8 +3348,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 4, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 4, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "¿Í´Ö:", TERM_YELLOW);
@@ -3358,8 +3358,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "¿Í´Ö:", TERM_YELLOW);
@@ -3368,8 +3368,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "ÉÔ»à:", TERM_YELLOW);
@@ -3378,8 +3378,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "ÉÔ»à:", TERM_YELLOW);
@@ -3388,8 +3388,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "°­Ëâ:", TERM_YELLOW);
@@ -3398,8 +3398,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "°­Ëâ:", TERM_YELLOW);
@@ -3408,8 +3408,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "¥ª¡¼¥¯:", TERM_YELLOW);
@@ -3418,8 +3418,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "¥ª¡¼¥¯:", TERM_YELLOW);
@@ -3428,8 +3428,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "¥È¥í¥ë:", TERM_YELLOW);
@@ -3438,8 +3438,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "¥È¥í¥ë:", TERM_YELLOW);
@@ -3448,8 +3448,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "µð¿Í:", TERM_YELLOW);
@@ -3458,8 +3458,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "µð¿Í:", TERM_YELLOW);
@@ -3468,8 +3468,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Îµ:", TERM_YELLOW);
@@ -3478,8 +3478,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Îµ:", TERM_YELLOW);
@@ -3488,8 +3488,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "»ÀÂ°À­:", TERM_RED);
@@ -3498,8 +3498,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "ÅÅÂ°À­:", TERM_RED);
@@ -3508,8 +3508,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "±êÂ°À­:", TERM_RED);
@@ -3518,8 +3518,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "ÎäÂ°À­:", TERM_RED);
@@ -3528,8 +3528,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "ÆÇÂ°À­:", TERM_RED);
@@ -3539,8 +3539,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 4, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 4, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Animals:", TERM_YELLOW);
@@ -3549,8 +3549,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Animals:", TERM_YELLOW);
@@ -3559,8 +3559,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 7, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 7, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Evil:", TERM_YELLOW);
@@ -3569,8 +3569,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 2, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 2, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Evil:", TERM_YELLOW);
@@ -3579,8 +3579,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 4, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 4, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Human:", TERM_YELLOW);
@@ -3589,8 +3589,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Human:", TERM_YELLOW);
@@ -3599,8 +3599,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Undead:", TERM_YELLOW);
@@ -3609,8 +3609,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Undead:", TERM_YELLOW);
@@ -3619,8 +3619,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Demons:", TERM_YELLOW);
@@ -3629,8 +3629,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{	
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Demons:", TERM_YELLOW);
@@ -3639,8 +3639,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Orcs:", TERM_YELLOW);
@@ -3649,8 +3649,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Orcs:", TERM_YELLOW);
@@ -3659,8 +3659,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Trolls:", TERM_YELLOW);
@@ -3669,8 +3669,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Trolls:", TERM_YELLOW);
@@ -3679,8 +3679,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Giants:", TERM_YELLOW);
@@ -3689,8 +3689,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Giants:", TERM_YELLOW);
@@ -3699,8 +3699,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Dragons:", TERM_YELLOW);
@@ -3709,8 +3709,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 3, 1, force);
 		slaydice_max = calc_slaydam(maxdice, 3, 1, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Dragons:", TERM_YELLOW);
@@ -3719,8 +3719,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Acid:", TERM_RED);
@@ -3729,8 +3729,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Elec:", TERM_RED);
@@ -3739,8 +3739,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Fire:", TERM_RED);
@@ -3749,8 +3749,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Cold:", TERM_RED);
@@ -3759,8 +3759,8 @@ static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 	{
 		slaydice_min = calc_slaydam(mindice, 5, 2, force);
 		slaydice_max = calc_slaydam(maxdice, 5, 2, force);
-		critdice_min = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
-		critdice_max = calc_expext_cirt(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
+		critdice_min = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_min, p_ptr->to_h[0], dokubari);
+		critdice_max = calc_expect_crit(o_ptr->weight, o_ptr->to_h, slaydice_max, p_ptr->to_h[0], dokubari);
 		mindam = blow * (calc_slaydam(critdice_min, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		maxdam = blow * (calc_slaydam(critdice_max, vorpal_mult, vorpal_div, FALSE) + o_ptr->to_d + p_ptr->to_d[0]);
 		compare_weapon_aux2(r++, col, mindam, maxdam, "Poison:", TERM_RED);
