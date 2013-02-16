@@ -9296,9 +9296,9 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 						break;
 					case QUEST_TYPE_FIND_EXIT:
 #ifdef JP
-						sprintf(note," - 探索する。");
+						sprintf(note," - 出口に到達する。");
 #else
-						sprintf(note," - Search.");
+						sprintf(note," - Reach to Exit.");
 #endif
 						break;
 
