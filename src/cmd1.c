@@ -5015,26 +5015,19 @@ void run_step(int dir)
 /*
  * Test for traveling
  */
-static bool travel_test(void)
+static int travel_test(int prev_dir)
 {
-	int prev_dir, new_dir, check_dir = 0;
-	int row, col;
+	int new_dir = 0;
 	int i, max;
-	bool stop = TRUE;
-	cave_type *c_ptr;
+	const cave_type *c_ptr;
+	int cost;
 
-	/* Where we came from */
-	prev_dir = find_prevdir;
-
-	/* Range of newly adjacent grids */
-	max = (prev_dir & 0x01) + 1;
-
-	for (i = 0; i < 8; i++)
+	/* Cannot travel when blind */
+	if (p_ptr->blind || no_lite())
 	{
-		if (travel.cost[py+ddy_ddd[i]][px+ddx_ddd[i]] < travel.cost[py][px]) stop = FALSE;
+		msg_print(_("目が見えない！", "You cannot see!"));
+		return (0);
 	}
-
-	if (stop) return (TRUE);
 
 	/* break run when leaving trap detected region */
 	if ((disturb_trap_detect || alert_trap_detect)
@@ -5058,35 +5051,26 @@ static bool travel_test(void)
 			if (disturb_trap_detect)
 			{
 				/* Break Run */
-				return(TRUE);
+				return (0);
 			}
 		}
 	}
 
-	/* Cannot travel when blind */
-	if (p_ptr->blind || no_lite())
-	{
-#ifdef JP
-		msg_print("目が見えない！");
-#else
-		msg_print("You cannot see!");
-#endif
-		return (TRUE);
-	}
+	/* Range of newly adjacent grids */
+	max = (prev_dir & 0x01) + 1;
 
 	/* Look at every newly adjacent square. */
 	for (i = -max; i <= max; i++)
 	{
 		/* New direction */
-		new_dir = cycle[chome[prev_dir] + i];
+		int dir = cycle[chome[prev_dir] + i];
 
 		/* New location */
-		row = py + ddy[new_dir];
-		col = px + ddx[new_dir];
+		int row = py + ddy[dir];
+		int col = px + ddx[dir];
 
 		/* Access grid */
 		c_ptr = &cave[row][col];
-
 
 		/* Visible monsters abort running */
 		if (c_ptr->m_idx)
@@ -5094,12 +5078,36 @@ static bool travel_test(void)
 			monster_type *m_ptr = &m_list[c_ptr->m_idx];
 
 			/* Visible monster */
-			if (m_ptr->ml) return (TRUE);
+			if (m_ptr->ml) return (0);
+		}
+
+	}
+
+	/* Travel cost of current grid */
+	cost = travel.cost[py][px];
+
+	/* Determine travel direction */
+	for (i = 1; i<= 9; ++ i) {
+		if (travel.cost[py+ddy[i]][px+ddx[i]] < cost)
+		{
+			new_dir = i;
+			cost = travel.cost[py+ddy[i]][px+ddx[i]];
 		}
 	}
 
-	/* Failure */
-	return (FALSE);
+	if (!new_dir) return (0);
+
+	/* Access newly move grid */
+	c_ptr = &cave[py+ddy[new_dir]][px+ddx[new_dir]];
+
+	/* Close door abort traveling */
+	if (!easy_open && is_closed_door(c_ptr->feat)) return (0);
+
+	/* Visible and unignorable trap abort tarveling */
+	if (!c_ptr->mimic && !trap_can_be_ignored(c_ptr->feat)) return (0);
+
+	/* Move new grid */
+	return (new_dir);
 }
 
 
@@ -5108,13 +5116,11 @@ static bool travel_test(void)
  */
 void travel_step(void)
 {
-	int i;
-	int dir = travel.dir;
-
-	find_prevdir = dir;
+	/* Get travel direction */
+	travel.dir = travel_test(travel.dir);
 
 	/* disturb */
-	if (travel_test())
+	if (!travel.dir)
 	{
 		if (travel.run == 255)
 		{
@@ -5130,25 +5136,7 @@ void travel_step(void)
 
 	energy_use = 100;
 
-	for (i = 1; i <= 9; i++)
-	{
-		if (i == 5) continue;
-
-		if (travel.cost[py+ddy[i]][px+ddx[i]] < travel.cost[py+ddy[dir]][px+ddx[dir]])
-		{
-			dir = i;
-		}
-	}
-
-	/* Close door */
-	if (!easy_open && is_closed_door(cave[py+ddy[dir]][px+ddx[dir]].feat))
-	{
-		disturb(0, 1);
-		return;
-	}
-
-	travel.dir = dir;
-	move_player(dir, always_pickup, easy_disarm);
+	move_player(travel.dir, always_pickup, FALSE);
 
 	if ((py == travel.y) && (px == travel.x))
 		travel.run = 0;
