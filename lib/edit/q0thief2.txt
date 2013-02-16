@@ -37,14 +37,17 @@ Q:30:T:次のクエストに進め。
 ?:1
 
 # The Monsters
-# Death sword (level:6, Speed:130, XP:30, #:16, Tot:480)
-F:|:FLOOR:8:107
+# Death sword (level:6, Speed:130, XP:30, #:16, Tot:480) with object 10 levels out of depth.
+F:|:FLOOR:8:107:*10
+
+# Death sword (level:6, Speed:130, XP:30, #:16, Tot:480) with object 1 levels out of depth.
+F:1:FLOOR:8:107:*1
 
 # Tengu (level:10, Speed:120, XP:40, #:8, Tot:320)
 F:u:FLOOR:8:194
 
-# Gelatinous cube (level:16, Speed:110, XP:80, #:4, Tot:320)
-F:j:FLOOR:8:286
+# Gelatinous cube (level:16, Speed:110, XP:80, #:4, Tot:320) on no-teleport grid.
+F:j:FLOOR:12:286
 
 # The doors, floors and treasures
 # Floor with amulet of Anti-Teleportation
@@ -52,26 +55,31 @@ F:":FLOOR:8:0:522
 
 # Normal floor
 F: :FLOOR:8
+# Floor prohibits Teleport
+F:x:FLOOR:12
+
+# Alarm Traps
+F:^:TRAP_ALARM:12
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXX
-D:X                   X
-D:X j               j X
-D:X  %%%%%%DDD%%%%%%  X
-D:X  %             %  X
-D:X  %  | u | u |  %  X
-D:X  %             %  X
-D:X  %  u | | | u  %  X
-D:X  %             %  X
-D:X  %  | | " | |  %  X
-D:X  %             %  X
-D:X  %  u | | | u  %  X
-D:X  %             %  X
-D:X  %  | u | u |  %  X
-D:X  %             %  X
-D:X  %%%%%%%%%%%%%%%  X
-D:X j               j X
-D:X         <         X
+D:XxxxxxxxxxxxxxxxxxxxX
+D:Xxjxxxxx^^^^^xxxxxjxX
+D:Xxx%%%%%%DDD%%%%%%xxX
+D:Xxx%             %xxX
+D:Xxx%  | u | u |  %xxX
+D:Xxx%             %xxX
+D:Xxx%  u 1 1 1 u  %xxX
+D:Xxx%             %xxX
+D:Xxx%  | 1 " 1 |  %xxX
+D:Xxx%             %xxX
+D:Xxx%  u 1 1 1 u  %xxX
+D:Xxx%             %xxX
+D:Xxx%  | u | u |  %xxX
+D:Xxx%             %xxX
+D:Xxx%%%%%%%%%%%%%%%xxX
+D:Xxjxxxxxx^^^xxxxxxjxX
+D:Xxxxxxxxx^<^xxxxxxxxX
 D:XXXXXXXXXXXXXXXXXXXXX
 
 # Starting position
