@@ -5087,11 +5087,13 @@ static int travel_test(int prev_dir)
 	cost = travel.cost[py][px];
 
 	/* Determine travel direction */
-	for (i = 1; i<= 9; ++ i) {
-		if (travel.cost[py+ddy[i]][px+ddx[i]] < cost)
+	for (i = 0; i < 8; ++ i) {
+		int dir_cost = travel.cost[py+ddy_ddd[i]][px+ddx_ddd[i]];
+
+		if (dir_cost < cost)
 		{
-			new_dir = i;
-			cost = travel.cost[py+ddy[i]][px+ddx[i]];
+			new_dir = ddd[i];
+			cost = dir_cost;
 		}
 	}
 
