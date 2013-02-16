@@ -4786,27 +4786,61 @@ void forget_travel_flow(void)
 		for (x = 0; x < cur_wid; x++)
 		{
 			/* Forget the old data */
-			travel.cost[y][x] = TRAVEL_UNABLE;
+			travel.cost[y][x] = MAX_SHORT;
 		}	
 	}
 }
 
-static bool travel_flow_aux(int y, int x, int n, bool wall)
+static int travel_flow_cost(int y, int x)
+{
+	feature_type *f_ptr = &f_info[cave[y][x].feat];
+	int cost = 1;
+
+	/* Avoid obstacles (ex. trees) */
+	if (have_flag(f_ptr->flags, FF_AVOID_RUN)) cost += 1;
+
+	/* Water */
+	if (have_flag(f_ptr->flags, FF_WATER))
+	{
+		if (have_flag(f_ptr->flags, FF_DEEP) && !p_ptr->levitation) cost += 5;
+	}
+
+	/* Lava */
+	if (have_flag(f_ptr->flags, FF_LAVA))
+	{
+		int lava = 2;
+		if (!p_ptr->resist_fire) lava *= 2;
+		if (!p_ptr->levitation) lava *= 2;
+		if (have_flag(f_ptr->flags, FF_DEEP)) lava *= 2;
+
+		cost += lava;
+	}
+
+	/* Detected traps and doors */
+	if (cave[y][x].info & (CAVE_MARK))
+	{
+		if (have_flag(f_ptr->flags, FF_DOOR)) cost += 1;
+		if (have_flag(f_ptr->flags, FF_TRAP)) cost += 10;
+	}
+
+	return (cost);
+}
+
+static void travel_flow_aux(int y, int x, int n, bool wall)
 {
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	int old_head = flow_head;
-
-	n = n % TRAVEL_UNABLE;
+	int add_cost = 1;
+	int base_cost = (n % TRAVEL_UNABLE);
+	int from_wall = (n / TRAVEL_UNABLE);
+	int cost;
 
 	/* Ignore out of bounds */
-	if (!in_bounds(y, x)) return wall;
-
-	/* Ignore "pre-stamped" entries */
-	if (travel.cost[y][x] != TRAVEL_UNABLE) return wall;
+	if (!in_bounds(y, x)) return;
 
 	/* Ignore unknown grid */
-	if (!(c_ptr->info & CAVE_KNOWN)) return wall;
+	if (!(c_ptr->info & CAVE_KNOWN)) return;
 
 	/* Ignore "walls" and "rubble" (include "secret doors") */
 	if (have_flag(f_ptr->flags, FF_WALL) ||
@@ -4814,16 +4848,21 @@ static bool travel_flow_aux(int y, int x, int n, bool wall)
 		(have_flag(f_ptr->flags, FF_DOOR) && cave[y][x].mimic) ||
 		(!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation))
 	{
-		if (!wall) return wall;
+		if (!wall || !from_wall) return;
+		add_cost += TRAVEL_UNABLE;
 	}
 	else
 	{
-		wall = FALSE;
+		add_cost = travel_flow_cost(y, x);
 	}
 
+	cost = base_cost + add_cost;
+
+	/* Ignore lower cost entries */
+	if (travel.cost[y][x] <= cost) return;
+
 	/* Save the flow cost */
-	travel.cost[y][x] = n;
-	if (wall) travel.cost[y][x] += TRAVEL_UNABLE;
+	travel.cost[y][x] = cost;
 
 	/* Enqueue that entry */
 	temp2_y[flow_head] = y;
@@ -4835,7 +4874,7 @@ static bool travel_flow_aux(int y, int x, int n, bool wall)
 	/* Hack -- notice overflow by forgetting new entry */
 	if (flow_head == flow_tail) flow_head = old_head;
 
-	return wall;
+	return;
 }
 
 
@@ -4843,15 +4882,16 @@ static void travel_flow(int ty, int tx)
 {
 	int x, y, d;
 	bool wall = FALSE;
-	feature_type *f_ptr = &f_info[cave[ty][tx].feat];
+	feature_type *f_ptr = &f_info[cave[py][px].feat];
 
 	/* Reset the "queue" */
 	flow_head = flow_tail = 0;
 
+	/* is player in the wall? */
 	if (!have_flag(f_ptr->flags, FF_MOVE)) wall = TRUE;
 
-	/* Add the player's grid to the queue */
-	wall = travel_flow_aux(ty, tx, 0, wall);
+	/* Start at the target grid */
+	travel_flow_aux(ty, tx, 0, wall);
 
 	/* Now process the queue */
 	while (flow_head != flow_tail)
@@ -4863,11 +4903,14 @@ static void travel_flow(int ty, int tx)
 		/* Forget that entry */
 		if (++flow_tail == MAX_SHORT) flow_tail = 0;
 
+		/* Ignore too far entries */
+		//if (distance(ty, tx, y, x) > 100) continue;
+
 		/* Add the "children" */
 		for (d = 0; d < 8; d++)
 		{
 			/* Add that child if "legal" */
-			wall = travel_flow_aux(y + ddy_ddd[d], x + ddx_ddd[d], travel.cost[y][x] + 1, wall);
+			travel_flow_aux(y + ddy_ddd[d], x + ddx_ddd[d], travel.cost[y][x], wall);
 		}
 	}
 

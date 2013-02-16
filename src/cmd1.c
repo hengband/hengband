@@ -954,7 +954,7 @@ void carry(bool pickup)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Hack -- disturb */
-		disturb(0, 1);
+		disturb(0, 0);
 
 		/* Pick up gold */
 		if (o_ptr->tval == TV_GOLD)
@@ -5154,5 +5154,8 @@ void travel_step(void)
 		travel.run = 0;
 	else if (travel.run > 0)
 		travel.run--;
+
+	/* Travel Delay */
+	Term_xtra(TERM_XTRA_DELAY, delay_factor);
 }
 #endif
