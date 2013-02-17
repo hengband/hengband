@@ -4839,8 +4839,8 @@ static void travel_flow_aux(int y, int x, int n, bool wall)
 	/* Ignore out of bounds */
 	if (!in_bounds(y, x)) return;
 
-	/* Ignore unknown grid */
-	if (!(c_ptr->info & CAVE_KNOWN)) return;
+	/* Ignore unknown grid except in wilderness */
+	if (dun_level > 0 && !(c_ptr->info & CAVE_KNOWN)) return;
 
 	/* Ignore "walls" and "rubble" (include "secret doors") */
 	if (have_flag(f_ptr->flags, FF_WALL) ||
