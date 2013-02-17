@@ -254,6 +254,9 @@ static term_data data[MAX_TERM_DATA];
 #endif
 
 
+#include <locale.h>
+
+
 /*
  * XXX XXX Hack -- POSIX uses "O_NONBLOCK" instead of "O_NDELAY"
  *
@@ -1204,6 +1207,8 @@ errr init_gcu(int argc, char *argv[])
    (void)argc;
    (void)argv;
 
+
+   setlocale(LC_ALL, "");
 
 #ifdef USE_SOUND
 
