@@ -2338,7 +2338,7 @@ void init_angband(void)
 	}
 
 	/* Flush it */
-	Term_fresh();
+	Term_flush();
 
 
 	/*** Verify (or create) the "high score" file ***/
