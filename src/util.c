@@ -1792,10 +1792,10 @@ static char inkey_aux(void)
 		else
 		{
 			/* Increase "wait" */
-			w += 10;
+			w += 1;
 
 			/* Excessive delay */
-			if (w >= 100) break;
+			if (w >= 10) break;
 
 			/* Delay */
 			Term_xtra(TERM_XTRA_DELAY, w);
