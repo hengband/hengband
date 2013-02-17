@@ -272,12 +272,13 @@ static void shuffle_flavors(byte tval)
 void flavor_init(void)
 {
 	int i;
+	u32b state_backup[4];
 
-	/* Hack -- Use the "simple" RNG */
-	Rand_quick = TRUE;
+	/* Hack -- Backup the RNG state */
+	Rand_state_backup(state_backup);
 
 	/* Hack -- Induce consistant flavors */
-	Rand_value = seed_flavor;
+	Rand_state_init(seed_flavor);
 
 
 	/* Initialize flavor index of each object by itself */
@@ -320,8 +321,8 @@ void flavor_init(void)
 	shuffle_flavors(TV_SCROLL);
 
 
-	/* Hack -- Use the "complex" RNG */
-	Rand_quick = FALSE;
+	/* Hack -- Restore the RNG state */
+	Rand_state_restore(state_backup);
 
 	/* Analyze every object */
 	for (i = 1; i < max_k_idx; i++)

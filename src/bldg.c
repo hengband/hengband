@@ -1349,17 +1349,8 @@ sprintf(tmp_str, "現在の掛け金:     %9ld", (long int)wager);
 
 			prt(tmp_str, 21, 2);
 
-			/* Prevent savefile-scumming of the casino */
-/*			Rand_quick = TRUE; */
-			Rand_value = time(NULL);
-
 			do
 			{
-#ifdef JP /* Prevent random seed cracking of the casino */
-				clock_t clk;
-				clk = clock();
-				Rand_value *= clk;
-#endif
 				p_ptr->au -= wager;
 				switch (cmd)
 				{
@@ -1644,9 +1635,6 @@ msg_print("おい！金が足りないじゃないか！ここから出て行け！");
 					break;
 				}
 			} while ((again == 'y') || (again == 'Y'));
-
-			/* Switch back to complex RNG */
-			Rand_quick = FALSE;
 
 			prt("", 18, 37);
 			if (p_ptr->au >= oldgold)

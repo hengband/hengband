@@ -160,6 +160,7 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 	int x1, y1;
 	int table_size = sizeof(terrain_table[0]) / sizeof(s16b);
 	int roughness = 1; /* The roughness of the level. */
+	u32b state_backup[4];
 
 	/* Unused */
 	(void)border;
@@ -181,11 +182,11 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 	}
 
 
-	/* Hack -- Use the "simple" RNG */
-	Rand_quick = TRUE;
+	/* Hack -- Backup the RNG state */
+	Rand_state_backup(state_backup);
 
-	/* Hack -- Induce consistant town layout */
-	Rand_value = seed;
+	/* Hack -- Induce consistant flavors */
+	Rand_state_init(seed);
 
 	if (!corner)
 	{
@@ -242,8 +243,8 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 		cave[MAX_HGT - 2][MAX_WID - 2].feat = terrain_table[terrain][cave[MAX_HGT - 2][MAX_WID - 2].feat];
 	}
 
-	/* Use the complex RNG */
-	Rand_quick = FALSE;
+	/* Hack -- Restore the RNG state */
+	Rand_state_restore(state_backup);
 }
 
 
@@ -357,12 +358,13 @@ static void generate_area(int y, int x, bool border, bool corner)
 	if (wilderness[y][x].entrance && !wilderness[y][x].town && (p_ptr->total_winner || !(d_info[wilderness[y][x].entrance].flags1 & DF1_WINNER)))
 	{
 		int dy, dx;
+		u32b state_backup[4];
 
-		/* Hack -- Use the "simple" RNG */
-		Rand_quick = TRUE;
+		/* Hack -- Backup the RNG state */
+		Rand_state_backup(state_backup);
 
-		/* Hack -- Induce consistant town layout */
-		Rand_value = wilderness[y][x].seed;
+		/* Hack -- Induce consistant flavors */
+		Rand_state_init(wilderness[y][x].seed);
 
 		dy = rand_range(6, cur_hgt - 6);
 		dx = rand_range(6, cur_wid - 6);
@@ -370,8 +372,8 @@ static void generate_area(int y, int x, bool border, bool corner)
 		cave[dy][dx].feat = feat_entrance;
 		cave[dy][dx].special = wilderness[y][x].entrance;
 
-		/* Use the complex RNG */
-		Rand_quick = FALSE;
+		/* Hack -- Restore the RNG state */
+		Rand_state_restore(state_backup);
 	}
 }
 

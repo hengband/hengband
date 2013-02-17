@@ -6636,6 +6636,7 @@ void play_game(bool new_game)
 {
 	int i;
 	bool load_game = TRUE;
+	bool init_random_seed = FALSE;
 
 #ifdef CHUUKEI
 	if (chuukei_client)
@@ -6783,7 +6784,7 @@ quit("セーブファイルが壊れています");
 		character_dungeon = FALSE;
 
 		/* Prepare to init the RNG */
-		Rand_quick = TRUE;
+		init_random_seed = TRUE;
 
 		/* Initialize the saved floors data */
 		init_saved_floors(FALSE);
@@ -6804,7 +6805,7 @@ quit("セーブファイルが壊れています");
 	}
 
 	/* Init the RNG */
-	if (Rand_quick)
+	if (init_random_seed)
 	{
 		u32b seed;
 
@@ -6818,10 +6819,7 @@ quit("セーブファイルが壊れています");
 
 #endif
 
-		/* Use the complex RNG */
-		Rand_quick = FALSE;
-
-		/* Seed the "complex" RNG */
+		/* Seed the RNG */
 		Rand_state_init(seed);
 	}
 
