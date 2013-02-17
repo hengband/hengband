@@ -73,7 +73,12 @@ u16b Rand_place;
 /*
  * Current "state" table for the "complex" RNG
  */
-u32b Rand_state[RAND_DEG];
+u32b Rand_state[RAND_DEG] = {
+	123456789,
+	362436069,
+	521288629,
+	88675123,
+};
 
 
 /*
@@ -81,26 +86,12 @@ u32b Rand_state[RAND_DEG];
  */
 void Rand_state_init(u32b seed)
 {
-	int i, j;
+	int i;
 
-	/* Seed the table */
-	Rand_state[0] = seed;
-
-	/* Propagate the seed */
-	for (i = 1; i < RAND_DEG; i++) Rand_state[i] = LCRNG(Rand_state[i-1]);
-
-	/* Cycle the table ten times per degree */
-	for (i = 0; i < RAND_DEG * 10; i++)
-	{
-		/* Acquire the next index */
-		j = Rand_place + 1;
-		if (j == RAND_DEG) j = 0;
-
-		/* Update the table, extract an entry */
-		Rand_state[j] += Rand_state[Rand_place];
-
-		/* Advance the index */
-		Rand_place = j;
+	/* Initialize Xorshift Algorithm RNG */
+	for (i = 1; i <= 4; ++ i) {
+		seed = 1812433253UL * (seed ^ (seed >> 30)) + i;
+		Rand_state[i-1] = seed;
 	}
 }
 
@@ -123,12 +114,12 @@ s32b Rand_div(u32b m)
 	/* Hack -- simple case */
 	if (m <= 1) return (0);
 
-	/* Partition size */
-	n = (0x10000000 / m);
-
 	/* Use a simple RNG */
 	if (Rand_quick)
 	{
+		/* Partition size */
+		n = (0x10000000 / m);
+
 		/* Wait for it */
 		while (1)
 		{
@@ -146,27 +137,16 @@ s32b Rand_div(u32b m)
 	/* Use a complex RNG */
 	else
 	{
-		/* Wait for it */
-		while (1)
-		{
-			int j;
+		/* Xorshift Algorithm RNG */
+		u32b t = Rand_state[0] ^ (Rand_state[0] << 11);
 
-			/* Acquire the next index */
-			j = Rand_place + 1;
-			if (j == RAND_DEG) j = 0;
+		Rand_state[0] = Rand_state[1];
+		Rand_state[1] = Rand_state[2];
+		Rand_state[2] = Rand_state[3];
 
-			/* Update the table, extract an entry */
-			r = (Rand_state[j] += Rand_state[Rand_place]);
+		Rand_state[3] = (Rand_state[3] ^ (Rand_state[3] >> 19)) ^ (t ^ (t >> 8));
 
-			/* Hack -- extract a 28-bit "random" number */
-			r = (r >> 4) / n;
-
-			/* Advance the index */
-			Rand_place = j;
-
-			/* Done */
-			if (r < m) break;
-		}
+		r = Rand_state[3] % m;
 	}
 
 	/* Use the value */
