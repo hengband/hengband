@@ -597,7 +597,6 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			if (p_ptr->pclass == CLASS_SAMURAI)
 			{
 				mult = mult_hissatsu(mult, flgs, m_ptr, mode);
-plog(format("mult = %d", mult));
 			}
 
 			if ((p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
