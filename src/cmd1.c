@@ -303,11 +303,11 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 				const struct slay_table_t* p = &slay_table[i];
 
 				if ((have_flag(flgs, p->slay_flag)) &&
-				    (*(u32b*)(((void*)r_ptr) + p->flag_offset) & p->affect_race_flag))
+				    (*(u32b*)(((char*)r_ptr) + p->flag_offset) & p->affect_race_flag))
 				{
 					if (is_original_ap_and_seen(m_ptr))
 					{
-						*(u32b*)(((void*)r_ptr) + p->r_flag_offset) |= p->affect_race_flag;
+						*(u32b*)(((char*)r_ptr) + p->r_flag_offset) |= p->affect_race_flag;
 					}
 
 					if (mult < p->slay_mult) mult = p->slay_mult;
