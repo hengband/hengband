@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
+#include <stddef.h>
 
 
 #if defined(NeXT)

@@ -211,6 +211,47 @@ s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
 
 
 
+static const struct slay_table_t {
+	int slay_flag;
+	u32b affect_race_flag;
+	int slay_mult;
+	size_t flag_offset;
+	size_t r_flag_offset;
+} slay_table[] = {
+#define OFFSET(X) offsetof(struct monster_race, flags3)
+	{TR_SLAY_ANIMAL, RF3_ANIMAL, 25, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_KILL_ANIMAL, RF3_ANIMAL, 40, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_SLAY_EVIL,   RF3_EVIL,   20, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_KILL_EVIL,   RF3_EVIL,   35, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_SLAY_HUMAN,  RF2_HUMAN,  25, OFFSET(flags2), OFFSET(r_flags2)},
+	{TR_KILL_HUMAN,  RF2_HUMAN,  40, OFFSET(flags2), OFFSET(r_flags2)},
+	{TR_SLAY_UNDEAD, RF3_UNDEAD, 30, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_KILL_UNDEAD, RF3_UNDEAD, 50, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_SLAY_DEMON,  RF3_DEMON,  30, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_KILL_DEMON,  RF3_DEMON,  50, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_SLAY_ORC,    RF3_ORC,    30, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_KILL_ORC,    RF3_ORC,    50, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_SLAY_TROLL,  RF3_TROLL,  30, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_KILL_TROLL,  RF3_TROLL,  50, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_SLAY_GIANT,  RF3_GIANT,  30, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_KILL_GIANT,  RF3_GIANT,  50, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_SLAY_DRAGON, RF3_DRAGON, 30, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_KILL_DRAGON, RF3_DRAGON, 50, OFFSET(flags3), OFFSET(r_flags3)},
+#undef OFFSET
+};
+
+static const struct brand_table_t {
+	int brand_flag;
+	u32b resist_mask;
+	u32b hurt_flag;
+} brand_table[] = {
+	{TR_BRAND_ACID, RFR_EFF_IM_ACID_MASK, 0U           },
+	{TR_BRAND_ELEC, RFR_EFF_IM_ELEC_MASK, 0U           },
+	{TR_BRAND_FIRE, RFR_EFF_IM_FIRE_MASK, RF3_HURT_FIRE},
+	{TR_BRAND_COLD, RFR_EFF_IM_COLD_MASK, RF3_HURT_COLD},
+	{TR_BRAND_POIS, RFR_EFF_IM_POIS_MASK, 0U           },
+};
+
 /*
  * Extract the "total damage" from a given object hitting a given monster.
  *
@@ -254,224 +295,28 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 		case TV_DIGGING:
 		case TV_LITE:
 		{
-			/* Slay Animal */
-			if ((have_flag(flgs, TR_SLAY_ANIMAL)) &&
-			    (r_ptr->flags3 & RF3_ANIMAL))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_ANIMAL;
-				}
+			int i;
 
-				if (mult < 25) mult = 25;
+			/* Slaying */
+			for (i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++ i)
+			{
+				const struct slay_table_t* p = &slay_table[i];
+
+				if ((have_flag(flgs, p->slay_flag)) &&
+				    (*(u32b*)(((void*)r_ptr) + p->flag_offset) & p->affect_race_flag))
+				{
+					if (is_original_ap_and_seen(m_ptr))
+					{
+						*(u32b*)(((void*)r_ptr) + p->r_flag_offset) |= p->affect_race_flag;
+					}
+
+					if (mult < p->slay_mult) mult = p->slay_mult;
+				}
 			}
 
-			/* Execute Animal */
-			if ((have_flag(flgs, TR_KILL_ANIMAL)) &&
-			    (r_ptr->flags3 & RF3_ANIMAL))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_ANIMAL;
-				}
-
-				if (mult < 40) mult = 40;
-			}
-
-			/* Slay Evil */
-			if ((have_flag(flgs, TR_SLAY_EVIL)) &&
-			    (r_ptr->flags3 & RF3_EVIL))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_EVIL;
-				}
-
-				if (mult < 20) mult = 20;
-			}
-
-			/* Execute Evil */
-			if ((have_flag(flgs, TR_KILL_EVIL)) &&
-			    (r_ptr->flags3 & RF3_EVIL))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_EVIL;
-				}
-
-				if (mult < 35) mult = 35;
-			}
-
-			/* Slay Human */
-			if ((have_flag(flgs, TR_SLAY_HUMAN)) &&
-			    (r_ptr->flags2 & RF2_HUMAN))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags2 |= RF2_HUMAN;
-				}
-
-				if (mult < 25) mult = 25;
-			}
-
-			/* Execute Human */
-			if ((have_flag(flgs, TR_KILL_HUMAN)) &&
-			    (r_ptr->flags2 & RF2_HUMAN))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags2 |= RF2_HUMAN;
-				}
-
-				if (mult < 40) mult = 40;
-			}
-
-			/* Slay Undead */
-			if ((have_flag(flgs, TR_SLAY_UNDEAD)) &&
-			    (r_ptr->flags3 & RF3_UNDEAD))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_UNDEAD;
-				}
-
-				if (mult < 30) mult = 30;
-			}
-
-			/* Execute Undead */
-			if ((have_flag(flgs, TR_KILL_UNDEAD)) &&
-			    (r_ptr->flags3 & RF3_UNDEAD))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_UNDEAD;
-				}
-
-				if (mult < 50) mult = 50;
-			}
-
-			/* Slay Demon */
-			if ((have_flag(flgs, TR_SLAY_DEMON)) &&
-			    (r_ptr->flags3 & RF3_DEMON))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_DEMON;
-				}
-
-				if (mult < 30) mult = 30;
-			}
-
-			/* Execute Demon */
-			if ((have_flag(flgs, TR_KILL_DEMON)) &&
-			    (r_ptr->flags3 & RF3_DEMON))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_DEMON;
-				}
-
-				if (mult < 50) mult = 50;
-			}
-
-			/* Slay Orc */
-			if ((have_flag(flgs, TR_SLAY_ORC)) &&
-			    (r_ptr->flags3 & RF3_ORC))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_ORC;
-				}
-
-				if (mult < 30) mult = 30;
-			}
-
-			/* Execute Orc */
-			if ((have_flag(flgs, TR_KILL_ORC)) &&
-			    (r_ptr->flags3 & RF3_ORC))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_ORC;
-				}
-
-				if (mult < 50) mult = 50;
-			}
-
-			/* Slay Troll */
-			if ((have_flag(flgs, TR_SLAY_TROLL)) &&
-			    (r_ptr->flags3 & RF3_TROLL))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_TROLL;
-				}
-
-				if (mult < 30) mult = 30;
-			}
-
-			/* Execute Troll */
-			if ((have_flag(flgs, TR_KILL_TROLL)) &&
-			    (r_ptr->flags3 & RF3_TROLL))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_TROLL;
-				}
-
-				if (mult < 50) mult = 50;
-			}
-
-			/* Slay Giant */
-			if ((have_flag(flgs, TR_SLAY_GIANT)) &&
-			    (r_ptr->flags3 & RF3_GIANT))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_GIANT;
-				}
-
-				if (mult < 30) mult = 30;
-			}
-
-			/* Execute Giant */
-			if ((have_flag(flgs, TR_KILL_GIANT)) &&
-			    (r_ptr->flags3 & RF3_GIANT))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_GIANT;
-				}
-
-				if (mult < 50) mult = 50;
-			}
-
-			/* Slay Dragon  */
-			if ((have_flag(flgs, TR_SLAY_DRAGON)) &&
-			    (r_ptr->flags3 & RF3_DRAGON))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_DRAGON;
-				}
-
-				if (mult < 30) mult = 30;
-			}
-
-			/* Execute Dragon */
-			if ((have_flag(flgs, TR_KILL_DRAGON)) &&
-			    (r_ptr->flags3 & RF3_DRAGON))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_DRAGON;
-				}
-
-				if (mult < 50) mult = 50;
-
-				if ((o_ptr->name1 == ART_NOTHUNG) && (m_ptr->r_idx == MON_FAFNER))
-					mult *= 3;
-			}
+			/* Hack -- The Nothung cause special damage to Fafner */
+			if ((o_ptr->name1 == ART_NOTHUNG) && (m_ptr->r_idx == MON_FAFNER))
+				mult = 150;
 
 			/* Hex - Slay Good (Runesword) */
 			if (hex_spelling(HEX_RUNESWORD) &&
@@ -485,113 +330,32 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 				if (mult < 20) mult = 20;
 			}
 
-			/* Brand (Acid) */
-			if (have_flag(flgs, TR_BRAND_ACID))
+			/* Elemental Brand */
+			for (i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++ i)
 			{
-				/* Notice immunity */
-				if (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)
+				const struct brand_table_t* p = &brand_table[i];
+
+				if (have_flag(flgs, p->brand_flag))
 				{
-					if (is_original_ap_and_seen(m_ptr))
+					/* Notice immunity */
+					if (r_ptr->flagsr & p->resist_mask)
 					{
-						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK);
+						if (is_original_ap_and_seen(m_ptr))
+						{
+							r_ptr->r_flagsr |= (r_ptr->flagsr & p->resist_mask);
+						}
 					}
-				}
 
-				/* Otherwise, take the damage */
-				else
-				{
-					if (mult < 25) mult = 25;
-				}
-			}
-
-			/* Brand (Elec) */
-			if (have_flag(flgs, TR_BRAND_ELEC))
-			{
-				/* Notice immunity */
-				if (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)
-				{
-					if (is_original_ap_and_seen(m_ptr))
-					{
-						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
-					}
-				}
-
-				/* Otherwise, take the damage */
-				else
-				{
-					if (mult < 25) mult = 25;
-				}
-			}
-
-			/* Brand (Fire) */
-			if (have_flag(flgs, TR_BRAND_FIRE))
-			{
-				/* Notice immunity */
-				if (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)
-				{
-					if (is_original_ap_and_seen(m_ptr))
-					{
-						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
-					}
-				}
-
-				/* Otherwise, take the damage */
-				else
-				{
-					if (r_ptr->flags3 & RF3_HURT_FIRE)
+					/* Otherwise, take the damage */
+					else if (r_ptr->flags3 & p->hurt_flag)
 					{
 						if (mult < 50) mult = 50;
 						if (is_original_ap_and_seen(m_ptr))
 						{
-							r_ptr->r_flags3 |= RF3_HURT_FIRE;
+							r_ptr->r_flags3 |= p->hurt_flag;
 						}
 					}
 					else if (mult < 25) mult = 25;
-				}
-			}
-
-			/* Brand (Cold) */
-			if (have_flag(flgs, TR_BRAND_COLD))
-			{
-				/* Notice immunity */
-				if (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)
-				{
-					if (is_original_ap_and_seen(m_ptr))
-					{
-						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
-					}
-				}
-				/* Otherwise, take the damage */
-				else
-				{
-					if (r_ptr->flags3 & RF3_HURT_COLD)
-					{
-						if (mult < 50) mult = 50;
-						if (is_original_ap_and_seen(m_ptr))
-						{
-							r_ptr->r_flags3 |= RF3_HURT_COLD;
-						}
-					}
-					else if (mult < 25) mult = 25;
-				}
-			}
-
-			/* Brand (Poison) */
-			if (have_flag(flgs, TR_BRAND_POIS))
-			{
-				/* Notice immunity */
-				if (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)
-				{
-					if (is_original_ap_and_seen(m_ptr))
-					{
-						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
-					}
-				}
-
-				/* Otherwise, take the damage */
-				else
-				{
-					if (mult < 25) mult = 25;
 				}
 			}
 
