@@ -3360,7 +3360,7 @@
 #define TR_WARNING             72     /* Warning */
 #define TR_HIDE_TYPE           73     /* Hide "pval" description */
 #define TR_SHOW_MODS           74     /* Always show Tohit/Todam */
-#define TR_XXX1                75     /* XXX1 */
+#define TR_SLAY_GOOD           75
 #define TR_LEVITATION             76     /* Feather Falling */
 #define TR_LITE                77     /* Permanent Light */
 #define TR_SEE_INVIS           78     /* See Invisible */
@@ -3380,7 +3380,7 @@
 #define TR_BLESSED             92     /* Item is Blessed */
 #define TR_ES_ATTACK           93     /* Fake flag for Smith */
 #define TR_ES_AC               94     /* Fake flag for Smith */
-#define TR_XXX5                95
+#define TR_KILL_GOOD           95
 
 #define TR_KILL_ANIMAL         96
 #define TR_KILL_EVIL           97

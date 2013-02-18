@@ -730,7 +730,7 @@ static cptr k_info_flags[] =
 	"WARNING",
 	"HIDE_TYPE",
 	"SHOW_MODS",
-	"XXX1",
+	"SLAY_GOOD",
 	"LEVITATION",
 	"LITE",
 	"SEE_INVIS",
@@ -750,7 +750,7 @@ static cptr k_info_flags[] =
 	"BLESSED",
 	"XXX3", /* Fake flag for Smith */
 	"XXX4", /* Fake flag for Smith */
-	"XXX5",
+	"KILL_GOOD",
 
 	"KILL_ANIMAL",
 	"KILL_EVIL",

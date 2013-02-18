@@ -223,6 +223,8 @@ static const struct slay_table_t {
 	{TR_KILL_ANIMAL, RF3_ANIMAL, 40, OFFSET(flags3), OFFSET(r_flags3)},
 	{TR_SLAY_EVIL,   RF3_EVIL,   20, OFFSET(flags3), OFFSET(r_flags3)},
 	{TR_KILL_EVIL,   RF3_EVIL,   35, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_SLAY_GOOD,   RF3_GOOD,   20, OFFSET(flags3), OFFSET(r_flags3)},
+	{TR_KILL_GOOD,   RF3_GOOD,   35, OFFSET(flags3), OFFSET(r_flags3)},
 	{TR_SLAY_HUMAN,  RF2_HUMAN,  25, OFFSET(flags2), OFFSET(r_flags2)},
 	{TR_KILL_HUMAN,  RF2_HUMAN,  40, OFFSET(flags2), OFFSET(r_flags2)},
 	{TR_SLAY_UNDEAD, RF3_UNDEAD, 30, OFFSET(flags3), OFFSET(r_flags3)},
@@ -283,6 +285,9 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 		if (p_ptr->special_attack & (ATTACK_POIS)) add_flag(flgs, TR_BRAND_POIS);
 	}
 
+	/* Hex - Slay Good (Runesword) */
+	if (hex_spelling(HEX_RUNESWORD)) add_flag(flgs, TR_SLAY_GOOD);
+
 	/* Some "weapons" and "ammo" do extra damage */
 	switch (o_ptr->tval)
 	{
@@ -317,18 +322,6 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			/* Hack -- The Nothung cause special damage to Fafner */
 			if ((o_ptr->name1 == ART_NOTHUNG) && (m_ptr->r_idx == MON_FAFNER))
 				mult = 150;
-
-			/* Hex - Slay Good (Runesword) */
-			if (hex_spelling(HEX_RUNESWORD) &&
-			    (r_ptr->flags3 & RF3_GOOD))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_GOOD;
-				}
-
-				if (mult < 20) mult = 20;
-			}
 
 			/* Elemental Brand */
 			for (i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++ i)
