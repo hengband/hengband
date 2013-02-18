@@ -231,6 +231,16 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
+	if (!thrown)
+	{
+		/* Magical Swords */
+		if (p_ptr->special_attack & (ATTACK_ACID)) add_flag(flgs, TR_BRAND_ACID);
+		if (p_ptr->special_attack & (ATTACK_COLD)) add_flag(flgs, TR_BRAND_COLD);
+		if (p_ptr->special_attack & (ATTACK_ELEC)) add_flag(flgs, TR_BRAND_ELEC);
+		if (p_ptr->special_attack & (ATTACK_FIRE)) add_flag(flgs, TR_BRAND_FIRE);
+		if (p_ptr->special_attack & (ATTACK_POIS)) add_flag(flgs, TR_BRAND_POIS);
+	}
+
 	/* Some "weapons" and "ammo" do extra damage */
 	switch (o_ptr->tval)
 	{
@@ -474,7 +484,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			}
 
 			/* Brand (Acid) */
-			if (have_flag(flgs, TR_BRAND_ACID) || ((p_ptr->special_attack & (ATTACK_ACID)) && !thrown))
+			if (have_flag(flgs, TR_BRAND_ACID))
 			{
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)
@@ -493,7 +503,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			}
 
 			/* Brand (Elec) */
-			if (have_flag(flgs, TR_BRAND_ELEC) || ((p_ptr->special_attack & (ATTACK_ELEC)) && !thrown) || (mode == HISSATSU_ELEC))
+			if (have_flag(flgs, TR_BRAND_ELEC))
 			{
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)
@@ -505,15 +515,6 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 				}
 
 				/* Otherwise, take the damage */
-				else if ((have_flag(flgs, TR_BRAND_ELEC) || ((p_ptr->special_attack & (ATTACK_ELEC)) && !thrown)) && (mode == HISSATSU_ELEC))
-				{
-					if (mult < 70) mult = 70;
-				}
-				else if (mode == HISSATSU_ELEC)
-				{
-					if (mult < 50) mult = 50;
-				}
-
 				else
 				{
 					if (mult < 25) mult = 25;
@@ -521,7 +522,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			}
 
 			/* Brand (Fire) */
-			if (have_flag(flgs, TR_BRAND_FIRE) || ((p_ptr->special_attack & (ATTACK_FIRE)) && !thrown) || (mode == HISSATSU_FIRE))
+			if (have_flag(flgs, TR_BRAND_FIRE))
 			{
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)
@@ -533,18 +534,6 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 				}
 
 				/* Otherwise, take the damage */
-				else if ((have_flag(flgs, TR_BRAND_FIRE) || ((p_ptr->special_attack & (ATTACK_FIRE)) && !thrown)) && (mode == HISSATSU_FIRE))
-				{
-					if (r_ptr->flags3 & RF3_HURT_FIRE)
-					{
-						if (mult < 70) mult = 70;
-						if (is_original_ap_and_seen(m_ptr))
-						{
-							r_ptr->r_flags3 |= RF3_HURT_FIRE;
-						}
-					}
-					else if (mult < 35) mult = 35;
-				}
 				else
 				{
 					if (r_ptr->flags3 & RF3_HURT_FIRE)
@@ -560,7 +549,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			}
 
 			/* Brand (Cold) */
-			if (have_flag(flgs, TR_BRAND_COLD) || ((p_ptr->special_attack & (ATTACK_COLD)) && !thrown) || (mode == HISSATSU_COLD))
+			if (have_flag(flgs, TR_BRAND_COLD))
 			{
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)
@@ -571,18 +560,6 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 					}
 				}
 				/* Otherwise, take the damage */
-				else if ((have_flag(flgs, TR_BRAND_COLD) || ((p_ptr->special_attack & (ATTACK_COLD)) && !thrown)) && (mode == HISSATSU_COLD))
-				{
-					if (r_ptr->flags3 & RF3_HURT_COLD)
-					{
-						if (mult < 70) mult = 70;
-						if (is_original_ap_and_seen(m_ptr))
-						{
-							r_ptr->r_flags3 |= RF3_HURT_COLD;
-						}
-					}
-					else if (mult < 35) mult = 35;
-				}
 				else
 				{
 					if (r_ptr->flags3 & RF3_HURT_COLD)
@@ -598,7 +575,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 			}
 
 			/* Brand (Poison) */
-			if (have_flag(flgs, TR_BRAND_POIS) || ((p_ptr->special_attack & (ATTACK_POIS)) && !thrown) || (mode == HISSATSU_POISON))
+			if (have_flag(flgs, TR_BRAND_POIS))
 			{
 				/* Notice immunity */
 				if (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)
@@ -610,48 +587,19 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 				}
 
 				/* Otherwise, take the damage */
-				else if ((have_flag(flgs, TR_BRAND_POIS) || ((p_ptr->special_attack & (ATTACK_POIS)) && !thrown)) && (mode == HISSATSU_POISON))
-				{
-					if (mult < 35) mult = 35;
-				}
 				else
 				{
 					if (mult < 25) mult = 25;
 				}
 			}
-			if ((mode == HISSATSU_ZANMA) && !monster_living(r_ptr) && (r_ptr->flags3 & RF3_EVIL))
+
+			/* Hissatsu */
+			if (p_ptr->pclass == CLASS_SAMURAI)
 			{
-				if (mult < 15) mult = 25;
-				else if (mult < 50) mult = MIN(50, mult+20);
+				mult = mult_hissatsu(mult, flgs, m_ptr, mode);
+plog(format("mult = %d", mult));
 			}
-			if (mode == HISSATSU_UNDEAD)
-			{
-				if (r_ptr->flags3 & RF3_UNDEAD)
-				{
-					if (is_original_ap_and_seen(m_ptr))
-					{
-						r_ptr->r_flags3 |= RF3_UNDEAD;
-					}
-					if (mult == 10) mult = 70;
-					else if (mult < 140) mult = MIN(140, mult+60);
-				}
-				if (mult == 10) mult = 40;
-				else if (mult < 60) mult = MIN(60, mult+30);
-			}
-			if ((mode == HISSATSU_SEKIRYUKA) && p_ptr->cut && monster_living(r_ptr))
-			{
-				int tmp = MIN(100, MAX(10, p_ptr->cut / 10));
-				if (mult < tmp) mult = tmp;
-			}
-			if ((mode == HISSATSU_HAGAN) && (r_ptr->flags3 & RF3_HURT_ROCK))
-			{
-				if (is_original_ap_and_seen(m_ptr))
-				{
-					r_ptr->r_flags3 |= RF3_HURT_ROCK;
-				}
-				if (mult == 10) mult = 40;
-				else if (mult < 60) mult = 60;
-			}
+
 			if ((p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 			{
 				p_ptr->csp -= (1+(o_ptr->dd * o_ptr->ds / 5));

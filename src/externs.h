@@ -1564,6 +1564,7 @@ extern void hissatsu_info(char *p, int power);
 extern void do_cmd_hissatsu(void);
 extern void do_cmd_hissatsu_browse(void);
 extern void do_cmd_gain_hissatsu(void);
+extern s16b mult_hissatsu(int mult, u32b *flgs, monster_type *m_ptr, int mode);
 
 /* mutation.c */
 extern int count_bits(u32b x);
