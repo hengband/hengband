@@ -218,7 +218,7 @@ static const struct slay_table_t {
 	size_t flag_offset;
 	size_t r_flag_offset;
 } slay_table[] = {
-#define OFFSET(X) offsetof(struct monster_race, flags3)
+#define OFFSET(X) offsetof(struct monster_race, X)
 	{TR_SLAY_ANIMAL, RF3_ANIMAL, 25, OFFSET(flags3), OFFSET(r_flags3)},
 	{TR_KILL_ANIMAL, RF3_ANIMAL, 40, OFFSET(flags3), OFFSET(r_flags3)},
 	{TR_SLAY_EVIL,   RF3_EVIL,   20, OFFSET(flags3), OFFSET(r_flags3)},
