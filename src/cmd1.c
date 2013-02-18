@@ -230,6 +230,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
+	torch_flags(o_ptr, flgs); /* torches has secret flags */
 
 	if (!thrown)
 	{
@@ -251,6 +252,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 		case TV_POLEARM:
 		case TV_SWORD:
 		case TV_DIGGING:
+		case TV_LITE:
 		{
 			/* Slay Animal */
 			if ((have_flag(flgs, TR_SLAY_ANIMAL)) &&

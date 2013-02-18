@@ -8615,3 +8615,41 @@ void do_cmd_kaji(bool only_browse)
 		case 5: add_essence(10);break;
 	}
 }
+
+
+/*
+ * Torches have special abilities when they are flaming.
+ */
+void torch_flags(object_type *o_ptr, u32b *flgs)
+{
+	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
+	{
+		if (o_ptr->xtra4 > 0)
+		{
+			add_flag(flgs, TR_BRAND_FIRE);
+			add_flag(flgs, TR_KILL_UNDEAD);
+			add_flag(flgs, TR_THROW);
+		}
+	}
+}
+
+void torch_dice(object_type *o_ptr, int *dd, int *ds)
+{
+	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
+	{
+		if (o_ptr->xtra4 > 0)
+		{
+			(*dd) = 2;
+			(*ds) = 4;
+		}
+	}
+}
+
+void torch_lost_fuel(object_type *o_ptr)
+{
+	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
+	{
+		o_ptr->xtra4 -= (FUEL_TORCH / 25);
+		if (o_ptr->xtra4 < 0) o_ptr->xtra4;
+	}
+}

@@ -4129,7 +4129,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 	int i, j, y, x, ty, tx, prev_y, prev_x;
 	int ny[19], nx[19];
 	int chance, tdam, tdis;
-	int mul, div;
+	int mul, div, dd, ds;
 	int cur_dis, visible;
 
 	object_type forge;
@@ -4250,6 +4250,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 
 	/* Extract the thrown object's flags. */
 	object_flags(q_ptr, flgs);
+	torch_flags(q_ptr, flgs);
 
 	/* Distribute the charges of rods/wands between the stacks */
 	distribute_charges(o_ptr, q_ptr, 1);
@@ -4464,7 +4465,10 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 				}
 
 				/* Hack -- Base damage from thrown object */
-				tdam = damroll(q_ptr->dd, q_ptr->ds);
+				dd = q_ptr->dd;
+				ds = q_ptr->ds;
+				torch_dice(q_ptr, &dd, &ds); /* throwing a torch */
+				tdam = damroll(dd, ds);
 				/* Apply special damage XXX XXX XXX */
 				tdam = tot_dam_aux(q_ptr, tdam, m_ptr, 0, TRUE);
 				tdam = critical_shot(q_ptr->weight, q_ptr->to_h, tdam);
@@ -4553,6 +4557,9 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 			break;
 		}
 	}
+
+	/* decrease toach's fuel */
+	if (hit_body) torch_lost_fuel(q_ptr);
 
 	/* Chance of breakage (during attacks) */
 	j = (hit_body ? breakage_chance(q_ptr) : 0);
