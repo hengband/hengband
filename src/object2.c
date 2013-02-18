@@ -8639,8 +8639,8 @@ void torch_dice(object_type *o_ptr, int *dd, int *ds)
 	{
 		if (o_ptr->xtra4 > 0)
 		{
-			(*dd) = 2;
-			(*ds) = 4;
+			(*dd) = 1;
+			(*ds) = 6;
 		}
 	}
 }
