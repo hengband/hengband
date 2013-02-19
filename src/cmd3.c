@@ -465,25 +465,7 @@ sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいですか？", o_name);
 		slot = need_switch_wielding;
 	}
 
-	/* Check if completed a quest */
-	for (i = 0; i < max_quests; i++)
-	{
-		if ((quest[i].type == QUEST_TYPE_FIND_ARTIFACT) &&
-		    (quest[i].status == QUEST_STATUS_TAKEN) &&
-		    (quest[i].k_idx == o_ptr->name1))
-		{
-			if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
-			quest[i].status = QUEST_STATUS_COMPLETED;
-			quest[i].complev = (byte)p_ptr->lev;
-#ifdef JP
-msg_print("クエストを達成した！");
-#else
-			msg_print("You completed the quest!");
-#endif
-
-			msg_print(NULL);
-		}
-	}
+	check_find_art_quest_completion(o_ptr);
 
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{

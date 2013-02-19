@@ -1472,7 +1472,9 @@ extern bool set_superstealth(bool set);
 
 /* xtra2.c */
 extern void check_experience(void);
+extern void complete_quest(int quest_num);
 extern void check_quest_completion(monster_type *m_ptr);
+extern void check_find_art_quest_completion(object_type *o_ptr);
 extern cptr extract_note_dies(monster_race *r_ptr);
 extern void monster_death(int m_idx, bool drop_item);
 extern bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note);

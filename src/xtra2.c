@@ -377,12 +377,55 @@ static bool kind_is_hafted(int k_idx)
 }
 
 
+void complete_quest(int quest_num)
+{
+	switch (quest[quest_num].type)
+	{
+	case QUEST_TYPE_RANDOM:
+		if (record_rand_quest) do_cmd_write_nikki(NIKKI_RAND_QUEST_C, quest_num, NULL);
+		break;
+	default:
+		if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, quest_num, NULL);
+		break;
+	}
+
+	quest[quest_num].status = QUEST_STATUS_COMPLETED;
+	quest[quest_num].complev = (byte)p_ptr->lev;
+
+	if (!(quest[quest_num].flags & QUEST_FLAG_SILENT))
+	{
+		msg_print(_("クエストを達成した！", "You just completed your quest!"));
+		msg_print(NULL);
+	}
+}
+
+static int count_all_hostile_monsters(void)
+{
+	int x, y;
+	int number_mon = 0;
+
+	for (x = 0; x < cur_wid; ++ x)
+	{
+		for (y = 0; y < cur_hgt; ++ y)
+		{
+			int m_idx = cave[y][x].m_idx;
+
+			if (m_idx > 0 && is_hostile(&m_list[m_idx]))
+			{
+				++ number_mon;
+			}
+		}
+	}
+
+	return number_mon;
+}
+
 /*
  * Check for "Quest" completion when a quest monster is killed or charmed.
  */
 void check_quest_completion(monster_type *m_ptr)
 {
-	int i, j, y, x, ny, nx, i2, j2;
+	int i, j, y, x, ny, nx;
 
 	int quest_num;
 
@@ -453,21 +496,7 @@ void check_quest_completion(monster_type *m_ptr)
 
 				if (quest[i].cur_num >= quest[i].num_mon)
 				{
-					if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
-					/* completed quest */
-					quest[i].status = QUEST_STATUS_COMPLETED;
-					quest[i].complev = (byte)p_ptr->lev;
-
-					if (!(quest[i].flags & QUEST_FLAG_SILENT))
-					{
-#ifdef JP
-msg_print("クエストを達成した！");
-#else
-						msg_print("You just completed your quest!");
-#endif
-
-						msg_print(NULL);
-					}
+					complete_quest(i);
 
 					quest[i].cur_num = 0;
 				}
@@ -475,36 +504,17 @@ msg_print("クエストを達成した！");
 			}
 			case QUEST_TYPE_KILL_ALL:
 			{
-				int number_mon = 0;
-
 				if (!is_hostile(m_ptr)) break;
 
-				/* Count all hostile monsters */
-				for (i2 = 0; i2 < cur_wid; ++i2)
-					for (j2 = 0; j2 < cur_hgt; j2++)
-						if (cave[j2][i2].m_idx > 0)
-							if (is_hostile(&m_list[cave[j2][i2].m_idx])) 
-								number_mon++;
-
-				if ((number_mon - 1) == 0)
+				if (count_all_hostile_monsters() == 1)
 				{
-					if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
-					/* completed */
 					if (quest[i].flags & QUEST_FLAG_SILENT)
 					{
 						quest[i].status = QUEST_STATUS_FINISHED;
 					}
 					else
 					{
-						quest[i].status = QUEST_STATUS_COMPLETED;
-						quest[i].complev = (byte)p_ptr->lev;
-#ifdef JP
-msg_print("クエストを達成した！");
-#else
-						msg_print("You just completed your quest!");
-#endif
-
-						msg_print(NULL);
+						complete_quest(i);
 					}
 				}
 				break;
@@ -520,26 +530,12 @@ msg_print("クエストを達成した！");
 
 				if (quest[i].cur_num >= quest[i].max_num)
 				{
-					if (record_fix_quest && (quest[i].type == QUEST_TYPE_KILL_LEVEL)) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
-					if (record_rand_quest && (quest[i].type == QUEST_TYPE_RANDOM)) do_cmd_write_nikki(NIKKI_RAND_QUEST_C, i, NULL);
-					/* completed quest */
-					quest[i].status = QUEST_STATUS_COMPLETED;
-					quest[i].complev = (byte)p_ptr->lev;
+					complete_quest(i);
+
 					if (!(quest[i].flags & QUEST_FLAG_PRESET))
 					{
 						create_stairs = TRUE;
 						p_ptr->inside_quest = 0;
-					}
-
-					if (!(quest[i].flags & QUEST_FLAG_SILENT))
-					{
-#ifdef JP
-msg_print("クエストを達成した！");
-#else
-						msg_print("You just completed your quest!");
-#endif
-
-						msg_print(NULL);
 					}
 
 					/* Finish the two main quests without rewarding */
@@ -561,57 +557,25 @@ msg_print("クエストを達成した！");
 				quest[i].cur_num++;
 				if (quest[i].cur_num >= quest[i].max_num)
 				{
-					if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
-					 /* completed quest */
-					quest[i].status = QUEST_STATUS_COMPLETED;
-					quest[i].complev = (byte)p_ptr->lev;
-
-					if (!(quest[i].flags & QUEST_FLAG_SILENT))
-					{
-#ifdef JP
-msg_print("クエストを達成した！");
-#else
-						msg_print("You just completed your quest!");
-#endif
-
-						msg_print(NULL);
-					}
+					complete_quest(i);
 					quest[i].cur_num = 0;
 				}
 				break;
 			}
 			case QUEST_TYPE_TOWER:
 			{
-				int number_mon = 0;
-
 				if (!is_hostile(m_ptr)) break;
 
-				/* Count all hostile monsters */
-				for (i2 = 0; i2 < cur_wid; ++i2)
-					for (j2 = 0; j2 < cur_hgt; j2++)
-						if (cave[j2][i2].m_idx > 0)
-							if (is_hostile(&m_list[cave[j2][i2].m_idx])) 
-								number_mon++;
-
-				if ((number_mon - 1) == 0)
+				if (count_all_hostile_monsters() == 1)
 				{
-					if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_C, i, NULL);
-					
 					quest[i].status = QUEST_STATUS_STAGE_COMPLETED;
-					/* completed */
+
 					if((quest[QUEST_TOWER1].status == QUEST_STATUS_STAGE_COMPLETED) &&
 					   (quest[QUEST_TOWER2].status == QUEST_STATUS_STAGE_COMPLETED) &&
 					   (quest[QUEST_TOWER3].status == QUEST_STATUS_STAGE_COMPLETED))
 					{
-						quest[QUEST_TOWER1].status = QUEST_STATUS_COMPLETED;
-						quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;;
-							
-#ifdef JP
-msg_print("クエストを達成した！");
-#else
-						msg_print("You just completed your quest!");
-#endif
-						msg_print(NULL);
+
+						complete_quest(QUEST_TOWER1);
 					}
 				}
 				break;
@@ -669,6 +633,21 @@ msg_print("魔法の階段が現れた...");
 	}
 }
 
+
+void check_find_art_quest_completion(object_type *o_ptr)
+{
+	int i;
+	/* Check if completed a quest */
+	for (i = 0; i < max_quests; i++)
+	{
+		if ((quest[i].type == QUEST_TYPE_FIND_ARTIFACT) &&
+		    (quest[i].status == QUEST_STATUS_TAKEN) &&
+			   (quest[i].k_idx == o_ptr->name1))
+		{
+			complete_quest(i);
+		}
+	}
+}
 
 /*
  * Return monster death string
