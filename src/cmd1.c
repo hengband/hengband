@@ -395,14 +395,76 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 /*
  * Search for hidden things
  */
-void search(void)
+static void discover_hidden_things(int y, int x)
 {
-	int y, x, chance;
-
 	s16b this_o_idx, next_o_idx = 0;
 
 	cave_type *c_ptr;
 
+	/* Access the grid */
+	c_ptr = &cave[y][x];
+
+	/* Invisible trap */
+	if (c_ptr->mimic && is_trap(c_ptr->feat))
+	{
+		/* Pick a trap */
+		disclose_grid(y, x);
+
+		/* Message */
+		msg_print(_("トラップを発見した。", "You have found a trap."));
+
+		/* Disturb */
+		disturb(0, 1);
+	}
+
+	/* Secret door */
+	if (is_hidden_door(c_ptr))
+	{
+		/* Message */
+		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
+
+		/* Disclose */
+		disclose_grid(y, x);
+
+		/* Disturb */
+		disturb(0, 0);
+	}
+
+	/* Scan all objects in the grid */
+	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	{
+		object_type *o_ptr;
+
+		/* Acquire object */
+		o_ptr = &o_list[this_o_idx];
+
+		/* Acquire next object */
+		next_o_idx = o_ptr->next_o_idx;
+
+		/* Skip non-chests */
+		if (o_ptr->tval != TV_CHEST) continue;
+
+		/* Skip non-trapped chests */
+		if (!chest_traps[o_ptr->pval]) continue;
+
+		/* Identify once */
+		if (!object_is_known(o_ptr))
+		{
+			/* Message */
+			msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
+
+			/* Know the trap */
+			object_known(o_ptr);
+
+			/* Notice it */
+			disturb(0, 0);
+		}
+	}
+}
+
+void search(void)
+{
+	int i, chance;
 
 	/* Start with base search ability */
 	chance = p_ptr->skill_srh;
@@ -412,85 +474,12 @@ void search(void)
 	if (p_ptr->confused || p_ptr->image) chance = chance / 10;
 
 	/* Search the nearby grids, which are always in bounds */
-	for (y = (py - 1); y <= (py + 1); y++)
+	for (i = 0; i < 9; ++ i)
 	{
-		for (x = (px - 1); x <= (px + 1); x++)
+		/* Sometimes, notice things */
+		if (randint0(100) < chance)
 		{
-			/* Sometimes, notice things */
-			if (randint0(100) < chance)
-			{
-				/* Access the grid */
-				c_ptr = &cave[y][x];
-
-				/* Invisible trap */
-				if (c_ptr->mimic && is_trap(c_ptr->feat))
-				{
-					/* Pick a trap */
-					disclose_grid(y, x);
-
-					/* Message */
-#ifdef JP
-					msg_print("トラップを発見した。");
-#else
-					msg_print("You have found a trap.");
-#endif
-
-					/* Disturb */
-					disturb(0, 1);
-				}
-
-				/* Secret door */
-				if (is_hidden_door(c_ptr))
-				{
-					/* Message */
-#ifdef JP
-					msg_print("隠しドアを発見した。");
-#else
-					msg_print("You have found a secret door.");
-#endif
-
-					/* Disclose */
-					disclose_grid(y, x);
-
-					/* Disturb */
-					disturb(0, 0);
-				}
-
-				/* Scan all objects in the grid */
-				for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
-				{
-					object_type *o_ptr;
-
-					/* Acquire object */
-					o_ptr = &o_list[this_o_idx];
-
-					/* Acquire next object */
-					next_o_idx = o_ptr->next_o_idx;
-
-					/* Skip non-chests */
-					if (o_ptr->tval != TV_CHEST) continue;
-
-					/* Skip non-trapped chests */
-					if (!chest_traps[o_ptr->pval]) continue;
-
-					/* Identify once */
-					if (!object_is_known(o_ptr))
-					{
-						/* Message */
-#ifdef JP
-						msg_print("箱に仕掛けられたトラップを発見した！");
-#else
-						msg_print("You have discovered a trap on the chest!");
-#endif
-
-						/* Know the trap */
-						object_known(o_ptr);
-
-						/* Notice it */
-						disturb(0, 0);
-					}
-				}
-			}
+			discover_hidden_things(py + ddy_ddd[i], px + ddx_ddd[i]);
 		}
 	}
 }
