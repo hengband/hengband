@@ -211,49 +211,110 @@ s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
 
 
 
-static const struct slay_table_t {
-	int slay_flag;
-	u32b affect_race_flag;
-	int slay_mult;
-	size_t flag_offset;
-	size_t r_flag_offset;
-} slay_table[] = {
-#define OFFSET(X) offsetof(struct monster_race, X)
-	{TR_SLAY_ANIMAL, RF3_ANIMAL, 25, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_KILL_ANIMAL, RF3_ANIMAL, 40, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_SLAY_EVIL,   RF3_EVIL,   20, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_KILL_EVIL,   RF3_EVIL,   35, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_SLAY_GOOD,   RF3_GOOD,   20, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_KILL_GOOD,   RF3_GOOD,   35, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_SLAY_HUMAN,  RF2_HUMAN,  25, OFFSET(flags2), OFFSET(r_flags2)},
-	{TR_KILL_HUMAN,  RF2_HUMAN,  40, OFFSET(flags2), OFFSET(r_flags2)},
-	{TR_SLAY_UNDEAD, RF3_UNDEAD, 30, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_KILL_UNDEAD, RF3_UNDEAD, 50, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_SLAY_DEMON,  RF3_DEMON,  30, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_KILL_DEMON,  RF3_DEMON,  50, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_SLAY_ORC,    RF3_ORC,    30, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_KILL_ORC,    RF3_ORC,    50, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_SLAY_TROLL,  RF3_TROLL,  30, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_KILL_TROLL,  RF3_TROLL,  50, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_SLAY_GIANT,  RF3_GIANT,  30, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_KILL_GIANT,  RF3_GIANT,  50, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_SLAY_DRAGON, RF3_DRAGON, 30, OFFSET(flags3), OFFSET(r_flags3)},
-	{TR_KILL_DRAGON, RF3_DRAGON, 50, OFFSET(flags3), OFFSET(r_flags3)},
+static int mult_slaying(int mult, const u32b* flgs, const monster_type* m_ptr)
+{
+	static const struct slay_table_t {
+		int slay_flag;
+		u32b affect_race_flag;
+		int slay_mult;
+		size_t flag_offset;
+		size_t r_flag_offset;
+	} slay_table[] = {
+#define OFFSET(X) offsetof(monster_race, X)
+		{TR_SLAY_ANIMAL, RF3_ANIMAL, 25, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_KILL_ANIMAL, RF3_ANIMAL, 40, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_SLAY_EVIL,   RF3_EVIL,   20, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_KILL_EVIL,   RF3_EVIL,   35, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_SLAY_GOOD,   RF3_GOOD,   20, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_KILL_GOOD,   RF3_GOOD,   35, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_SLAY_HUMAN,  RF2_HUMAN,  25, OFFSET(flags2), OFFSET(r_flags2)},
+		{TR_KILL_HUMAN,  RF2_HUMAN,  40, OFFSET(flags2), OFFSET(r_flags2)},
+		{TR_SLAY_UNDEAD, RF3_UNDEAD, 30, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_KILL_UNDEAD, RF3_UNDEAD, 50, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_SLAY_DEMON,  RF3_DEMON,  30, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_KILL_DEMON,  RF3_DEMON,  50, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_SLAY_ORC,    RF3_ORC,    30, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_KILL_ORC,    RF3_ORC,    50, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_SLAY_TROLL,  RF3_TROLL,  30, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_KILL_TROLL,  RF3_TROLL,  50, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_SLAY_GIANT,  RF3_GIANT,  30, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_KILL_GIANT,  RF3_GIANT,  50, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_SLAY_DRAGON, RF3_DRAGON, 30, OFFSET(flags3), OFFSET(r_flags3)},
+		{TR_KILL_DRAGON, RF3_DRAGON, 50, OFFSET(flags3), OFFSET(r_flags3)},
 #undef OFFSET
-};
+	};
+	int i;
+	monster_race* r_ptr = &r_info[m_ptr->r_idx];
 
-static const struct brand_table_t {
-	int brand_flag;
-	u32b resist_mask;
-	u32b hurt_flag;
-} brand_table[] = {
-	{TR_BRAND_ACID, RFR_EFF_IM_ACID_MASK, 0U           },
-	{TR_BRAND_ELEC, RFR_EFF_IM_ELEC_MASK, 0U           },
-	{TR_BRAND_FIRE, RFR_EFF_IM_FIRE_MASK, RF3_HURT_FIRE},
-	{TR_BRAND_COLD, RFR_EFF_IM_COLD_MASK, RF3_HURT_COLD},
-	{TR_BRAND_POIS, RFR_EFF_IM_POIS_MASK, 0U           },
-};
+	for (i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++ i)
+	{
+		const struct slay_table_t* p = &slay_table[i];
 
+		if ((have_flag(flgs, p->slay_flag)) &&
+		    (*(u32b*)(((char*)r_ptr) + p->flag_offset) & p->affect_race_flag))
+		{
+			if (is_original_ap_and_seen(m_ptr))
+			{
+				*(u32b*)(((char*)r_ptr) + p->r_flag_offset) |= p->affect_race_flag;
+			}
+
+			mult = MAX(mult, p->slay_mult);
+		}
+	}
+
+	return mult;
+}
+
+static int mult_brand(int mult, const u32b* flgs, const monster_type* m_ptr)
+{
+	static const struct brand_table_t {
+		int brand_flag;
+		u32b resist_mask;
+		u32b hurt_flag;
+	} brand_table[] = {
+		{TR_BRAND_ACID, RFR_EFF_IM_ACID_MASK, 0U           },
+		{TR_BRAND_ELEC, RFR_EFF_IM_ELEC_MASK, 0U           },
+		{TR_BRAND_FIRE, RFR_EFF_IM_FIRE_MASK, RF3_HURT_FIRE},
+		{TR_BRAND_COLD, RFR_EFF_IM_COLD_MASK, RF3_HURT_COLD},
+		{TR_BRAND_POIS, RFR_EFF_IM_POIS_MASK, 0U           },
+	};
+	int i;
+	monster_race* r_ptr = &r_info[m_ptr->r_idx];
+
+	for (i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++ i)
+	{
+		const struct brand_table_t* p = &brand_table[i];
+
+		if (have_flag(flgs, p->brand_flag))
+		{
+			/* Notice immunity */
+			if (r_ptr->flagsr & p->resist_mask)
+			{
+				if (is_original_ap_and_seen(m_ptr))
+				{
+					r_ptr->r_flagsr |= (r_ptr->flagsr & p->resist_mask);
+				}
+			}
+
+			/* Otherwise, take the damage */
+			else if (r_ptr->flags3 & p->hurt_flag)
+			{
+				if (is_original_ap_and_seen(m_ptr))
+				{
+					r_ptr->r_flags3 |= p->hurt_flag;
+				}
+
+				mult = MAX(mult, 50);
+			}
+			else
+			{
+				mult = MAX(mult, 25);
+			}
+		}
+	}
+
+	return mult;
+}
 /*
  * Extract the "total damage" from a given object hitting a given monster.
  *
@@ -266,8 +327,6 @@ static const struct brand_table_t {
 s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bool thrown)
 {
 	int mult = 10;
-
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	u32b flgs[TR_FLAG_SIZE];
 
@@ -300,57 +359,11 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 		case TV_DIGGING:
 		case TV_LITE:
 		{
-			int i;
-
 			/* Slaying */
-			for (i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++ i)
-			{
-				const struct slay_table_t* p = &slay_table[i];
-
-				if ((have_flag(flgs, p->slay_flag)) &&
-				    (*(u32b*)(((char*)r_ptr) + p->flag_offset) & p->affect_race_flag))
-				{
-					if (is_original_ap_and_seen(m_ptr))
-					{
-						*(u32b*)(((char*)r_ptr) + p->r_flag_offset) |= p->affect_race_flag;
-					}
-
-					if (mult < p->slay_mult) mult = p->slay_mult;
-				}
-			}
-
-			/* Hack -- The Nothung cause special damage to Fafner */
-			if ((o_ptr->name1 == ART_NOTHUNG) && (m_ptr->r_idx == MON_FAFNER))
-				mult = 150;
+			mult = mult_slaying(mult, flgs, m_ptr);
 
 			/* Elemental Brand */
-			for (i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++ i)
-			{
-				const struct brand_table_t* p = &brand_table[i];
-
-				if (have_flag(flgs, p->brand_flag))
-				{
-					/* Notice immunity */
-					if (r_ptr->flagsr & p->resist_mask)
-					{
-						if (is_original_ap_and_seen(m_ptr))
-						{
-							r_ptr->r_flagsr |= (r_ptr->flagsr & p->resist_mask);
-						}
-					}
-
-					/* Otherwise, take the damage */
-					else if (r_ptr->flags3 & p->hurt_flag)
-					{
-						if (mult < 50) mult = 50;
-						if (is_original_ap_and_seen(m_ptr))
-						{
-							r_ptr->r_flags3 |= p->hurt_flag;
-						}
-					}
-					else if (mult < 25) mult = 25;
-				}
-			}
+			mult = mult_brand(mult, flgs, m_ptr);
 
 			/* Hissatsu */
 			if (p_ptr->pclass == CLASS_SAMURAI)
@@ -358,12 +371,17 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 				mult = mult_hissatsu(mult, flgs, m_ptr, mode);
 			}
 
+			/* Force Weapon */
 			if ((p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 			{
 				p_ptr->csp -= (1+(o_ptr->dd * o_ptr->ds / 5));
 				p_ptr->redraw |= (PR_MANA);
 				mult = mult * 3 / 2 + 20;
 			}
+
+			/* Hack -- The Nothung cause special damage to Fafner */
+			if ((o_ptr->name1 == ART_NOTHUNG) && (m_ptr->r_idx == MON_FAFNER))
+				mult = 150;
 			break;
 		}
 	}
