@@ -136,6 +136,10 @@
 ?:[EQU $QUEST_NUMBER 33]
 %:q0clone0.txt
 
+# Locked Room Murder Case
+?:[EQU $QUEST_NUMBER 34]
+%:q0dumpwitness.txt
+
 # Random quests (always adressed with number 40)
 ?:[EQU $QUEST_NUMBER 40]
 %:q_random.txt

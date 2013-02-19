@@ -26,6 +26,10 @@ F:w:PERMANENT:3
 # Default for Quest 27 = entrance is grass
 F:v:GRASS:3
 
+
+# Default for Quest 34 = entrance is stone
+F:A:PERMANENT:3
+
 # Default for Quest 31 = entrance is grass
 F:s:GRASS:3
 
@@ -229,11 +233,49 @@ F:b:BUILDING_1:3
 ?:1
 
 
-############### Quest 31 - Old Man Willow Quest ###############
+############### Quest 34 - Locked Room Murder Case ###############
 
-# Quest 31 untaken
-?:[EQU $QUEST31 0]
+# Quest 34 untaken
+?:[EQU $QUEST34 0]
+F:a:BUILDING_0:3:0:0:0:0:NONE:34
+
+# Quest 34 taken, entrance is quest entrance
+?:[EQU $QUEST34 1]
+F:A:QUEST_ENTER:3:0:0:0:0:NONE:34
+F:a:BUILDING_0:3:0:0:0:0:NONE:34
+
+# Quest 34 completed
+?:[EQU $QUEST34 2]
+F:a:BUILDING_0:3:0:0:0:0:NONE:34
+
+# Quest 34 rewarding, Ring of Warning
+# continue with quest 31
+?:[EQU $QUEST34 3]
 F:a:BUILDING_0:3:0:0:0:0:NONE:31
+F:@:FLOOR:3:0:618
+
+# Light Crossbow
+?:[AND [EQU $QUEST34 3] [EQU $CLASS Mage High-Mage Blue-Mage Sorcerer Mirror-Master] ]
+F:a:BUILDING_0:3:0:0:0:0:NONE:31
+F:@:FLOOR:3:0:75
+
+
+# Quest 34 finished, continue with quest 31
+?:[EQU $QUEST34 4]
+F:a:BUILDING_0:3:0:0:0:0:NONE:31
+
+# Quest 34 failed, wait for the player to enter the Inn
+?:[EQU $QUEST34 5]
+F:a:BUILDING_0:3:0:0:0:0:NONE:34
+
+# Quest 34 failed but done, continue with quest 31
+?:[EQU $QUEST34 6]
+F:a:BUILDING_0:3:0:0:0:0:NONE:31
+
+?:1
+
+
+############### Quest 31 - Old Man Willow Quest ###############
 
 # Quest 31 taken, entrance is quest entrance
 ?:[EQU $QUEST31 1]
@@ -538,7 +580,7 @@ D:#TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTWWWTTTTTTTTTTTTTTTTTTTTTTTT--.,WW##........####
 D:#TTTTTTTTTTTTTTTTTTTTTTTTTTTTTWTTTTTTTTTTTTTTTTTTTTTTTTT----.,WW##....................................#########....................##WW,.--TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT#
 D:#TTTTTTTTTTTTTTTTTTTTTTTTTTTTTWTTTTTTTTTTTTTTTTTTTTTTTTTT---.,WW##.............###########.........................................##WW,.---TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT#
 D:#TTTTTTTTTTTTTTTTTTTTTTTTTTTWWTTTTTTTTTTTTTTTTTTTTTTTTTTT---.,WW##....##x##....###########....###0###...................####.......##WW,.----TTTTTTTTTTTTTTTTTT..................TTTTTTTTTTTTTTTTTTTT#
-D:#TTTTTTTTTTTTTTTTTTTTTTTTTWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTT---.,WW##....#####....#####7#####....#######.....###q###.......###8.......##WW,.----TTTTT.............TTTTTTTTTTTTTTTTTT.TTTTTTTTTTTTTTTTTTT#
+D:#TTTTTTTTTTTTTTTTTTTTTTTTTWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTT---.,WW##....#####....#####7#####....#######.....###Aq##.......###8.......##WW,.----TTTTT.............TTTTTTTTTTTTTTTTTT.TTTTTTTTTTTTTTTTTTT#
 D:#TTTTTTTTTTTTTTTTTTTTTTTWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT---.,WW##....#####...................#######.....###r###.......####.......##WW,..........TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.TTTTTTTTTTTTTTTTTT#
 D:#TTTTTTTTTTTTTTTTTTTWWWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT---.,W###.................................................................###W,.----TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.TTTTTTTTTTTTTTTTT#
 D:#TTTTTTTTTTTTTTTTTTWTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT----.,W#######################################################################W,.---TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.TTTTTTTTTTTTTTTT#
@@ -598,9 +640,13 @@ P:16:176
 
 # Starting position when coming from quest 32
 ?:[EQU $LEAVING_QUEST 32]
-P:47:109
+P:47:108
 
 # Starting position when coming from quest 33
 ?:[EQU $LEAVING_QUEST 33]
+P:44:109
+
+# Starting position when coming from quest 34
+?:[EQU $LEAVING_QUEST 34]
 P:44:109
 
