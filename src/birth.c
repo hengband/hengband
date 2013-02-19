@@ -2000,7 +2000,7 @@ static cptr realm_jouhou[VALID_REALM] =
 #endif
 };
 
-static char realm_subinfo[VALID_REALM][41] =
+static cptr realm_subinfo[VALID_REALM] =
 {
 #ifdef JP
 "感知と防御と回復に優れています",
