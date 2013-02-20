@@ -6346,7 +6346,7 @@ void display_rumor(bool ex)
 	{
 		char *zz[4];
 		cptr rumor_msg = NULL;
-		cptr rumor_eff = NULL;
+		cptr rumor_eff_format = NULL;
 		char fullname[1024] = "";
 
 		if (tokenize(Rumor + 2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
@@ -6409,11 +6409,7 @@ void display_rumor(bool ex)
 				if (!max_dlv[d_idx])
 				{
 					max_dlv[d_idx] = d_ptr->mindepth;
-#ifdef JP
-					rumor_eff = format("%sに帰還できるようになった。", fullname);
-#else
-					rumor_eff = format("You can recall to %s.", fullname);
-#endif
+					rumor_eff_format = _("%sに帰還できるようになった。", "You can recall to %s.");
 				}
 			}
 			else if  (strcmp(zz[0], "TOWN") == 0)
@@ -6433,20 +6429,16 @@ void display_rumor(bool ex)
 				if ((t_idx != SECRET_TOWN) && !(p_ptr->visit & visit))
 				{
 					p_ptr->visit |= visit;
-#ifdef JP
-					rumor_eff = format("%sに行ったことがある気がする。", fullname);
-#else
-					rumor_eff = format("You feel you have been to %s.", fullname);
-#endif
+					rumor_eff_format = _("%sに行ったことがある気がする。", "You feel you have been to %s.");
 				}
 			}
 
 			rumor_msg = rumor_bind_name(zz[2], fullname);
 			msg_print(rumor_msg);
-			if (rumor_eff) 
+			if (rumor_eff_format)
 			{
 				msg_print(NULL);
-				msg_print(rumor_eff);
+				msg_format(rumor_eff_format, fullname);
 			}
 			err = FALSE;
 		}
