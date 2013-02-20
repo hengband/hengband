@@ -126,7 +126,6 @@ bool stop_hex_spell(void)
    Called from dungeon.c */
 void check_hex(void)
 {
-	const magic_type *s_ptr;
 	int spell;
 	s32b need_mana;
 	u32b need_mana_frac;
@@ -155,6 +154,7 @@ void check_hex(void)
 	{
 		if (hex_spelling(spell))
 		{
+			const magic_type *s_ptr;
 			s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
 			need_mana += mod_need_mana(s_ptr->smana, spell, REALM_HEX);
 		}
@@ -206,7 +206,11 @@ void check_hex(void)
 	/* Gain experiences of spelling spells */
 	for (spell = 0; spell < 32; spell++)
 	{
+		const magic_type *s_ptr;
+
 		if (!hex_spelling(spell)) continue;
+
+		s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
 
 		if (p_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
 			p_ptr->spell_exp[spell] += 5;
