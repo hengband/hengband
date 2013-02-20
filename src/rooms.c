@@ -6804,7 +6804,7 @@ bool generate_rooms(void)
 		if (!remain) break;
 	}
 
-	if (rooms_built < 1) return FALSE;
+	if (rooms_built < 2) return FALSE;
 
 	if (cheat_room)
 	{
