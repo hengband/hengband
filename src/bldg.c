@@ -4293,9 +4293,11 @@ static int repair_broken_weapon_aux(int bcost)
 	{
 		int i, n = 1;
 
+		/* Suppress compiler warning */
+		k_idx = 0;
+
 		for (i = 1; i < max_k_idx; i++)
 		{
-			object_type forge;
 			object_kind *k_ptr = &k_info[i];
 
 			if (k_ptr->tval != TV_SWORD) continue;

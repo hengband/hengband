@@ -2204,10 +2204,9 @@ static byte choose_realm(s32b choices, int *count)
 			}
 			if (p_ptr->realm2 == i+1)
 				cs = n;
-			if (n < 26)
-				sym[n] = I2A(n);
-			else
-				sym[n] = ('A' + n - 26);
+
+			sym[n] = I2A(n);
+
 			sprintf(buf, "%c%c %s", sym[n], p2, realm_names[i+1]);
 			put_str(buf, 12 + (n/5), 2 + 15 * (n%5));
 			picks[n++] = i+1;

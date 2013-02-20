@@ -64,11 +64,12 @@ typedef struct {
 static int Vasprintf(char **buf, const char *fmt, va_list ap)
 {
 	int ret;
+	static char static_buf[8192];
 
-	*buf = malloc(1024);
+	*buf = static_buf;
 
 #if defined(HAVE_VSNPRINTF)
-	ret = vsnprintf(*buf, 1024, fmt, ap);
+	ret = vsnprintf(*buf, sizeof(static_buf), fmt, ap);
 #else
 	ret = vsprintf(*buf, fmt, ap);
 #endif
@@ -127,10 +128,10 @@ static int buf_sprintf(BUF *buf, const char *fmt, ...)
 	va_list	ap;
 
 	va_start(ap, fmt);
-	vasprintf(&tmpbuf, fmt, ap);
+	ret = vasprintf(&tmpbuf, fmt, ap);
 	va_end(ap);
 
-	if(!tmpbuf) return -1;
+	if (ret < 0) return -1;
 
 #if ('\r' == 0x0a && '\n' == 0x0d)
 	{

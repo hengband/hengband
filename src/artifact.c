@@ -189,7 +189,7 @@ void one_ability(object_type *o_ptr)
  */
 void one_activation(object_type *o_ptr)
 {
-	int type;
+	int type = 0;
 	int chance = 0;
 
 	while (randint1(100) >= chance)

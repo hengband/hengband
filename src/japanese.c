@@ -107,7 +107,7 @@ void sindarin_to_kana(char *kana, const char *sindarin)
 
 /*日本語動詞活用 (打つ＞打って,打ち etc) */
 
-#define CMPTAIL(y) strncmp(&in[l-strlen(y)],y,strlen(y))
+#define CMPTAIL(y) strncmp(&in[l-(int)strlen(y)],y,strlen(y))
 
 /* 殴る,蹴る＞殴り,蹴る */
 void jverb1( const char *in , char *out){

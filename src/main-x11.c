@@ -2878,9 +2878,8 @@ static errr Term_xtra_x11_sound(int v)
 	if (!sound_file[v]) return (1);
 	
 	sprintf(buf,"./playwave.sh %s\n", sound_file[v]);
-	system(buf);
 	
-	return (0);
+	return (system(buf) < 0);
 	
 }
 #endif /* USE_SOUND */
