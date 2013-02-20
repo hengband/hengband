@@ -190,11 +190,8 @@ void set_proxy(char *default_url, int default_port)
 int soc_write(int sd, char *buf, size_t sz)
 {
 #ifndef MACINTOSH
-#ifndef WINDOWS
-	write(sd, buf, sz);
-#else
 	int nleft, nwritten;
-	
+
 	nleft = sz;
 
 	while (nleft > 0) {
@@ -204,7 +201,6 @@ int soc_write(int sd, char *buf, size_t sz)
 		nleft -= nwritten;
 		buf += nwritten;
 	}
-#endif
 #else /* !MACINTOSH */
 
 	OTResult bytesSent;
