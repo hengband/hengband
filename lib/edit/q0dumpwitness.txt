@@ -74,14 +74,14 @@ F:?:FLOOR:8:0:186
 D:XXXXXXXXXXXXXXXXXXXXXX
 D:X...................<X
 D:X...........X++++++X.X
-D:X...........X0&~~~&X.X
+D:X...........X0~~~~~X.X
 D:X.XXXX++++XXXX4444XX.X
 D:X.X    %           X.X
 D:X.+   3 3     %    +.X
 D:X.+ 3         3(   +.X
 D:X.X  XXDXXXXX % %  +.X
 D:X.X  X %2~X|D    3 +.X
-D:X.X  XXDX&X&2      X.X
+D:X.X  XXDX&X~2      X.X
 D:X.1  X??X|X~D%!!   X.X
 D:XXXXXXXXXXXXXXXXXXXXXX
 
