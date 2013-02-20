@@ -6543,7 +6543,7 @@ static bool build_type16(void)
 	/* Generate new room */
 	generate_room_floor(
 		y1 + town_hgt / 3, x1 + town_wid / 3,
-		y1 + town_hgt * 2 / 3, x < x1 + town_wid * 2 / 3, FALSE);
+		y1 + town_hgt * 2 / 3, x1 + town_wid * 2 / 3, FALSE);
 
 	/* Build stores */
 	build_stores(y1, x1, stores, n);
