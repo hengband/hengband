@@ -8650,6 +8650,6 @@ void torch_lost_fuel(object_type *o_ptr)
 	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
 	{
 		o_ptr->xtra4 -= (FUEL_TORCH / 25);
-		if (o_ptr->xtra4 < 0) o_ptr->xtra4;
+		if (o_ptr->xtra4 < 0) o_ptr->xtra4 = 0;
 	}
 }
