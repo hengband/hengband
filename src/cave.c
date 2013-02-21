@@ -1528,6 +1528,9 @@ void note_spot(int y, int x)
 			c_ptr->info |= (CAVE_MARK);
 		}
 	}
+
+	/* Memorize terrain of the grid */
+	c_ptr->info |= (CAVE_KNOWN);
 }
 
 
@@ -2540,7 +2543,7 @@ void forget_lite(void)
 {\
 	if (!(cave[Y][X].info & (CAVE_LITE))) \
 	{ \
-		cave[Y][X].info |= (CAVE_LITE | CAVE_KNOWN); \
+		cave[Y][X].info |= (CAVE_LITE); \
 		lite_y[lite_n] = (Y); \
 		lite_x[lite_n++] = (X); \
 	} \
@@ -3358,7 +3361,6 @@ void forget_view(void)
 {\
     if (!((C)->info & (CAVE_VIEW))){\
     (C)->info |= (CAVE_VIEW); \
-    if ((C)->info & (CAVE_GLOW)) (C)->info |= (CAVE_KNOWN); \
     view_y[view_n] = (Y); \
     view_x[view_n] = (X); \
     view_n++;}\
