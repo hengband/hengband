@@ -100,10 +100,10 @@ F:E:SHALLOW_WATER:12:0:36
 F:O:SHALLOW_WATER:12:0:*10
 
 # MAGMA VEIN
-F:#:MAGMA_VEIN:12
+F:#:MAGMA_VEIN_ON_SHALLOW_WATER:12
 
 #RUBBLE
-F:%:RUBBLE:12
+F:%:RUBBLE_ON_SHALLOW_WATER:12
 
 # no-tele Shallow water
 F:.:SHALLOW_WATER:12
@@ -132,9 +132,9 @@ D:X.#...#...#.XmmX~#~~~#~~~X~X
 D:X.XX...#...#.XX~c~~~#~~~XX~X
 D:X.X..b..#.....~~~~~#~~g~~X~X
 D:X.XX%....f....~~~~f~~~~XXX~X
-D:XX.hX.n.....XXX%X~X~~X~Xh~XX
-D:X.XXXXX.XXXXXXEn%X%X~%XXXX~X
-D:XX.OOkX#o~~n%CXjXnXh#XiAB%XX
+D:XX.hX.n.....XXX#X~X~~X~Xh~XX
+D:X.XXXXX.XXXXXXEn%X%X~#XXXX~X
+D:XX.OOkX#o~~n#CXjXnXh#XiAB#XX
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 # Starting position
