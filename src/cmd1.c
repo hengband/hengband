@@ -494,7 +494,7 @@ void search(void)
  */
 void py_pickup_aux(int o_idx)
 {
-	int slot, i;
+	int slot;
 
 #ifdef JP
 /*

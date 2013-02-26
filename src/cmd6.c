@@ -1580,7 +1580,6 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 {
 	int         k, used_up, ident, lev;
 	object_type *o_ptr;
-	char        Rumor[1024];
 
 
 	/* Get the item (in the pack) */
@@ -3998,7 +3997,7 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
  */
 static void do_cmd_activate_aux(int item)
 {
-	int         k, dir, lev, chance, fail;
+	int         dir, lev, chance, fail;
 	object_type *o_ptr;
 	bool success;
 

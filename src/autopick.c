@@ -829,10 +829,10 @@ static void add_autopick_list(autopick_type *entry)
 		C_MAKE(autopick_list, max_max_autopick, autopick_type);
 
 		/* Copy from old list to new list */
-		C_COPY(autopick_list, old_autopick_list, old_max_max_autopick, autopick_type);
+		(void)C_COPY(autopick_list, old_autopick_list, old_max_max_autopick, autopick_type);
 
 		/* Kill old list */
-		C_FREE(old_autopick_list, old_max_max_autopick, autopick_type);
+		C_KILL(old_autopick_list, old_max_max_autopick, autopick_type);
 	}
 
 	/* Add one line */
@@ -1614,7 +1614,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 	}
 
 	/* Record name of destroyed item */
-	COPY(&autopick_last_destroyed_object, o_ptr, object_type);
+	(void)COPY(&autopick_last_destroyed_object, o_ptr, object_type);
 
 	/* Destroy Later */
 	o_ptr->marked |= OM_AUTODESTROY;
@@ -2989,7 +2989,7 @@ static void free_text_lines(cptr *lines_list)
 		string_free(lines_list[lines]);
 
 	/* free list of pointers */
-	C_FREE((char **)lines_list, MAX_LINES, char *);
+	C_KILL(lines_list, MAX_LINES, cptr);
 }
 
 
@@ -4640,7 +4640,7 @@ static void draw_text_editor(text_body_type *tb)
 			else state &= ~LSTAT_BYPASS;
 
 			/* Cannot use string_free() because the string was "destroyed" */
-			C_FREE(s_keep, s_len + 1, char);
+			C_KILL(s_keep, s_len + 1, char);
 
 			/* Re-update this line's state */
 			tb->states[y] = state | LSTAT_EXPRESSION;

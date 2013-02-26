@@ -1858,11 +1858,11 @@ void print_monster_list(int x, int y, int max_lines){
 		if(is_pet(m_ptr))continue;//pet
 		if(!m_ptr->r_idx)continue;//dead?
 		{
+			/*
 			int r_idx = m_ptr->ap_r_idx;
 			monster_race* r_ptr = &r_info[r_idx];
 			cptr name = (r_name + r_ptr->name);
 			cptr ename = (r_name + r_ptr->name);
-			/*
 			//ミミック類や「それ」等は、一覧に出てはいけない
 			if(r_ptr->flags1&RF1_CHAR_CLEAR)continue;
 			if((r_ptr->flags1&RF1_NEVER_MOVE)&&(r_ptr->flags2&RF2_CHAR_MULTI))continue;

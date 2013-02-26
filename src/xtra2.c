@@ -1746,7 +1746,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 	int         i;
 	int         expdam;
 
-	COPY(&exp_mon, m_ptr, monster_type);
+	(void)COPY(&exp_mon, m_ptr, monster_type);
 	if (!(r_ptr->flags7 & RF7_KILL_EXP))
 	{
 		expdam = (m_ptr->hp > dam) ? dam : m_ptr->hp;

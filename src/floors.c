@@ -371,7 +371,7 @@ static void preserve_pet(void)
 		else
 		{
 			/* Preserve the mount */
-			COPY(&party_mon[0], m_ptr, monster_type);
+			(void)COPY(&party_mon[0], m_ptr, monster_type);
 
 			/* Delete from this floor */
 			delete_monster_idx(p_ptr->riding);
@@ -422,7 +422,7 @@ static void preserve_pet(void)
 				}
 			}
 
-			COPY(&party_mon[num], &m_list[i], monster_type);
+			(void)COPY(&party_mon[num], &m_list[i], monster_type);
 
 			num++;
 
@@ -615,7 +615,7 @@ static void place_pet(void)
 	}
 
 	/* For accuracy of precalc_cur_num_of_pet() */
-	C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
+	(void)C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
 }
 
 

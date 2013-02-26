@@ -8635,8 +8635,8 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int d
 	byte char_old[F_LIT_MAX];
 	byte *cur_attr_ptr, *cur_char_ptr;
 
-	C_WIPE(attr_old, F_LIT_MAX, byte);
-	C_WIPE(char_old, F_LIT_MAX, byte);
+	(void)C_WIPE(attr_old, F_LIT_MAX, byte);
+	(void)C_WIPE(char_old, F_LIT_MAX, byte);
 
 	/* Get size */
 	Term_get_size(&wid, &hgt);

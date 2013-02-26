@@ -306,8 +306,6 @@ static cptr comment_6[MAX_COMMENT_6] =
  */
 static void say_comment_1(void)
 {
-	char rumour[1024];
-
 #ifdef JP
 	/* ブラックマーケットのときは別のメッセージを出す */
 	if ( cur_store_num == STORE_BLACK ) {

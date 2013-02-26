@@ -2900,7 +2900,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	}
 
 	/* Free the "template" array */
-	C_FREE(template, limit, cave_template_type);
+	C_KILL(template, limit, cave_template_type);
 
 
 	/*** Objects ***/
@@ -3496,7 +3496,7 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 		/* Quest 18 was removed */
 		if (h_older_than(1, 7, 0, 6))
 		{
-			WIPE(&quest[OLD_QUEST_WATER_CAVE], quest_type);
+			(void)WIPE(&quest[OLD_QUEST_WATER_CAVE], quest_type);
 			quest[OLD_QUEST_WATER_CAVE].status = QUEST_STATUS_UNTAKEN;
 		}
 

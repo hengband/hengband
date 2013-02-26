@@ -3204,7 +3204,6 @@ static void compare_weapon_aux2(int r, int c, int mindam, int maxdam, cptr attr,
  */
 static void compare_weapon_aux1(object_type *o_ptr, int col, int r)
 {
-	int mult = 60;
 	u32b flgs[TR_FLAG_SIZE];
 	int blow = p_ptr->num_blow[0];
 	bool force = FALSE;
@@ -4150,7 +4149,6 @@ static bool item_tester_hook_broken_weapon(object_type *o_ptr)
 static void give_one_ability_of_object(object_type *to_ptr, object_type *from_ptr)
 {
 	int i, n = 0;
-	int idx = 0;
 	int cand[TR_FLAG_MAX];
 	u32b to_flgs[TR_FLAG_SIZE];
 	u32b from_flgs[TR_FLAG_SIZE];
@@ -4207,7 +4205,7 @@ static int repair_broken_weapon_aux(int bcost)
 	int item, mater;
 	object_type *o_ptr, *mo_ptr; /* broken weapon and material weapon */
 	object_kind *k_ptr;
-	int i, k_idx, tr_idx, dd_bonus, ds_bonus;
+	int i, k_idx, dd_bonus, ds_bonus;
 	char basenm[MAX_NLEN];
 	cptr q, s; /* For get_item prompt */
 	int row = 7;

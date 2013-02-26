@@ -2135,33 +2135,33 @@ void display_map(int *cy, int *cx)
 	for (y = 0; y < (hgt + 2); y++)
 	{
 		/* Free one row each array */
-		C_FREE(ma[y], (wid + 2), byte);
-		C_FREE(mc[y], (wid + 2), char);
-		C_FREE(mp[y], (wid + 2), byte);
-		C_FREE(match_autopick_yx[y], (wid + 2), int);
-		C_FREE(object_autopick_yx[y], (wid + 2), object_type **);
+		C_KILL(ma[y], (wid + 2), byte);
+		C_KILL(mc[y], (wid + 2), char);
+		C_KILL(mp[y], (wid + 2), byte);
+		C_KILL(match_autopick_yx[y], (wid + 2), int);
+		C_KILL(object_autopick_yx[y], (wid + 2), object_type *);
 	}
 
 	/* Free each line map */
-	C_FREE(ma, (hgt + 2), byte_ptr);
-	C_FREE(mc, (hgt + 2), char_ptr);
-	C_FREE(mp, (hgt + 2), byte_ptr);
-	C_FREE(match_autopick_yx, (hgt + 2), sint_ptr);
-	C_FREE(object_autopick_yx, (hgt + 2), object_type **);
+	C_KILL(ma, (hgt + 2), byte_ptr);
+	C_KILL(mc, (hgt + 2), char_ptr);
+	C_KILL(mp, (hgt + 2), byte_ptr);
+	C_KILL(match_autopick_yx, (hgt + 2), sint_ptr);
+	C_KILL(object_autopick_yx, (hgt + 2), object_type **);
 
 	/* Free each line map */
 	for (y = 0; y < (cur_hgt + 2); y++)
 	{
 		/* Free one row each array */
-		C_FREE(bigma[y], (cur_wid + 2), byte);
-		C_FREE(bigmc[y], (cur_wid + 2), char);
-		C_FREE(bigmp[y], (cur_wid + 2), byte);
+		C_KILL(bigma[y], (cur_wid + 2), byte);
+		C_KILL(bigmc[y], (cur_wid + 2), char);
+		C_KILL(bigmp[y], (cur_wid + 2), byte);
 	}
 
 	/* Free each line map */
-	C_FREE(bigma, (cur_hgt + 2), byte_ptr);
-	C_FREE(bigmc, (cur_hgt + 2), char_ptr);
-	C_FREE(bigmp, (cur_hgt + 2), byte_ptr);
+	C_KILL(bigma, (cur_hgt + 2), byte_ptr);
+	C_KILL(bigmc, (cur_hgt + 2), char_ptr);
+	C_KILL(bigmp, (cur_hgt + 2), byte_ptr);
 }
 
 

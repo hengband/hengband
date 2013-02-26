@@ -948,8 +948,8 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 				/* Re-allocate the "template" array */
 				C_MAKE(template, max_num_temp + 255, cave_template_type);
-				C_COPY(template, old_template, max_num_temp, cave_template_type);
-				C_FREE(old_template, max_num_temp, cave_template_type);
+				(void)C_COPY(template, old_template, max_num_temp, cave_template_type);
+				C_KILL(old_template, max_num_temp, cave_template_type);
 				max_num_temp += 255;
 			}
 
@@ -1058,7 +1058,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 
 	/* Free the "template" array */
-	C_FREE(template, max_num_temp, cave_template_type);
+	C_KILL(template, max_num_temp, cave_template_type);
 
 
 	/*** Dump objects ***/

@@ -500,7 +500,6 @@ int tot_dam_aux_snipe (int mult, monster_type *m_ptr)
  */
 static bool cast_sniper_spell(int spell)
 {
-	bool flag = FALSE;
 	object_type *o_ptr = &inventory[INVEN_BOW];
 
 	if (o_ptr->tval != TV_BOW)
@@ -558,9 +557,6 @@ static bool cast_sniper_spell(int spell)
 void do_cmd_snipe(void)
 {
 	int             n = 0;
-	int             plev = p_ptr->lev;
-	int             old_chp = p_ptr->chp;
-	snipe_power     spell;
 	bool            cast;
 
 
@@ -599,8 +595,6 @@ void do_cmd_snipe(void)
 
 	/* get power */
 	if (!get_snipe_power(&n, FALSE)) return;
-
-	spell = snipe_powers[n];
 
 	sound(SOUND_SHOOT);
 

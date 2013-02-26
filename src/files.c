@@ -4016,7 +4016,7 @@ void display_player(int mode)
  */
 static void dump_aux_display_player(FILE *fff)
 {
-	int x, y, i;
+	int x, y;
 	byte a;
 	char c;
 	char		buf[1024];

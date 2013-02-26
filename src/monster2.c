@@ -369,7 +369,7 @@ static void compact_monsters_aux(int i1, int i2)
 	}
 
 	/* Structure copy */
-	COPY(&m_list[i2], &m_list[i1], monster_type);
+	(void)COPY(&m_list[i2], &m_list[i1], monster_type);
 
 	/* Wipe the hole */
 	(void)WIPE(&m_list[i1], monster_type);

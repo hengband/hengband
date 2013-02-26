@@ -2585,7 +2585,7 @@ static void load_prev_data(bool swap)
 	/*** Save the previous data ***/
 	if (swap)
 	{
-		COPY(&previous_char, &temp, birther);
+		(void)COPY(&previous_char, &temp, birther);
 	}
 }
 
@@ -4753,7 +4753,7 @@ static bool get_player_seikaku(void)
 static bool get_stat_limits(void)
 {
 	int i, j, m, cs, os;
-	int mval[6], cval[6];
+	int cval[6];
 	char c;
 	char buf[80], cur[80];
 	char inp[80];
@@ -4788,9 +4788,6 @@ static bool get_stat_limits(void)
 
 		/* Obtain the "maximal" stat */
 		m = adjust_stat(17, j);
-
-		/* Save the maximum */
-		mval[i] = m;
 
 		/* Above 18 */
 		if (m > 18)

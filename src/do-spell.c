@@ -11427,7 +11427,6 @@ static cptr do_hex_spell(int spell, int mode)
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
-	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
 	bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
 	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
 
