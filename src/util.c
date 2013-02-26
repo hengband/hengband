@@ -661,7 +661,19 @@ errr fd_copy(cptr file, cptr what)
 	/* Copy */
 	while ((read_num = read(src_fd, buf, 1024)) > 0)
 	{
-		write(dst_fd, buf, read_num);
+		int write_num = 0;
+		while (write_num < read_num)
+		{
+			int ret = write(dst_fd, buf + write_num, read_num - write_num);
+			if (ret < 0) {
+				/* Close files */
+				fd_close(src_fd);
+				fd_close(dst_fd);
+
+				return ret;
+			}
+			write_num += ret;
+		}
 	}
 
 	/* Close files */
