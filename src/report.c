@@ -58,26 +58,6 @@ typedef struct {
 
 #define	BUFSIZE	(65536)
 
-#ifndef HAVE_VASPRINTF
-#define vasprintf	Vasprintf
-
-static int Vasprintf(char **buf, const char *fmt, va_list ap)
-{
-	int ret;
-	static char static_buf[8192];
-
-	*buf = static_buf;
-
-#if defined(HAVE_VSNPRINTF)
-	ret = vsnprintf(*buf, sizeof(static_buf), fmt, ap);
-#else
-	ret = vsprintf(*buf, fmt, ap);
-#endif
-	return ret;
-}
-
-#endif /* ifndef HAVE_VASPRINTF */ 
-
 static BUF* buf_new(void)
 {
 	BUF *p;
@@ -124,11 +104,15 @@ static int buf_append(BUF *buf, const char *data, size_t size)
 static int buf_sprintf(BUF *buf, const char *fmt, ...)
 {
 	int		ret;
-	char	*tmpbuf;
+	char	tmpbuf[8192];
 	va_list	ap;
 
 	va_start(ap, fmt);
-	ret = vasprintf(&tmpbuf, fmt, ap);
+#if defined(HAVE_VSNPRINTF)
+	ret = vsnprintf(tmpbuf, sizeof(tmpbuf), fmt, ap);
+#else
+	ret = vsprintf(tmpbuf, fmt, ap);
+#endif
 	va_end(ap);
 
 	if (ret < 0) return -1;
@@ -154,8 +138,6 @@ static int buf_sprintf(BUF *buf, const char *fmt, ...)
 #endif
 
 	ret = buf_append(buf, tmpbuf, strlen(tmpbuf));
-
-	free(tmpbuf);
 
 	return ret;
 }
