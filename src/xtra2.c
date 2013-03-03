@@ -1696,6 +1696,20 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
 			s64b_RSHIFT(new_exp, new_exp_frac, 2);
 		}
 	}
+	
+	/* Special penalty for rest_and_shoot exp scum */
+	if ((m_ptr->dealt_damage > m_ptr->max_maxhp) && (m_ptr->hp >= 0))
+	{
+		int over_damage = m_ptr->dealt_damage / m_ptr->max_maxhp;
+		if (over_damage > 32) over_damage = 32;
+
+		while (over_damage--)
+		{
+			/* 9/10 for once */
+			s64b_mul(&new_exp, &new_exp_frac, 0, 9);
+			s64b_div(&new_exp, &new_exp_frac, 0, 10);
+		}
+	}
 
 	/* Finally multiply base experience point of the monster */
 	s64b_mul(&new_exp, &new_exp_frac, 0, r_ptr->mexp);
@@ -1745,12 +1759,12 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 	bool        innocent = TRUE, thief = FALSE;
 	int         i;
 	int         expdam;
+	int			dealt_damage;
 
 	(void)COPY(&exp_mon, m_ptr, monster_type);
 	if (!(r_ptr->flags7 & RF7_KILL_EXP))
 	{
 		expdam = (m_ptr->hp > dam) ? dam : m_ptr->hp;
-		if (r_ptr->flags6 & RF6_HEAL) expdam = (expdam+1) * 2 / 3;
 
 		get_exp_from_mon(expdam, &exp_mon);
 
@@ -1773,6 +1787,9 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 
 	/* Genocided by chaos patron */
 	if (!m_idx) return TRUE;
+	
+	/* Remember dealt_damage before this attack*/
+	dealt_damage = m_ptr->dealt_damage;
 
 	/* Hurt it */
 	m_ptr->hp -= dam;
@@ -2138,9 +2155,17 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 
 		/* Prevent bug of chaos patron's reward */
 		if (r_ptr->flags7 & RF7_KILL_EXP)
+		{
 			get_exp_from_mon((long)exp_mon.max_maxhp*2, &exp_mon);
+		}
 		else
-			get_exp_from_mon(((long)exp_mon.max_maxhp+1L) * 9L / 10L, &exp_mon);
+		{
+			u32b destroy_exp = exp_mon.max_maxhp + 1;
+			/* Add remained exp*/
+			if(dealt_damage < m_ptr->maxhp)
+				destroy_exp += m_ptr->maxhp - dealt_damage;
+			get_exp_from_mon(destroy_exp, &exp_mon);
+		}
 
 		/* Not afraid */
 		(*fear) = FALSE;

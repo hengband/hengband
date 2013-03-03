@@ -591,7 +591,7 @@ struct monster_type
 	s16b hp;		/* Current Hit points */
 	s16b maxhp;		/* Max Hit points */
 	s16b max_maxhp;		/* Max Max Hit points */
-	s16b dealt_damage;		/* Sum of damages dealt by player */
+	u32b dealt_damage;		/* Sum of damages dealt by player */
 
 	s16b mtimed[MAX_MTIMED];	/* Timed status counter */
 

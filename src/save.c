@@ -215,7 +215,7 @@ static void wr_monster(monster_type *m_ptr)
 	wr_s16b(m_ptr->hp);
 	wr_s16b(m_ptr->maxhp);
 	wr_s16b(m_ptr->max_maxhp);
-	wr_s16b(m_ptr->dealt_damage);
+	wr_u32b(m_ptr->dealt_damage);
 	
 
 	/* Monster race index of its appearance */

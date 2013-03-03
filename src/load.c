@@ -840,7 +840,7 @@ static void rd_monster(monster_type *m_ptr)
 	}
 	else
 	{
-		rd_s16b(&m_ptr->dealt_damage); 
+		rd_u32b(&m_ptr->dealt_damage); 
 	}
 
 	/* Monster race index of its appearance */
