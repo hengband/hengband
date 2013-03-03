@@ -703,6 +703,15 @@ static void rd_monster_old(monster_type *m_ptr)
 	{
 		rd_s16b(&m_ptr->max_maxhp);
 	}
+	if(h_older_than(2, 1, 2, 1))
+	{
+		m_ptr->dealt_damage = 0;
+	}
+	else
+	{
+		rd_s16b(&m_ptr->dealt_damage); 
+	}
+	
 	rd_s16b(&m_ptr->mtimed[MTIMED_CSLEEP]);
 	rd_byte(&m_ptr->mspeed);
 	if (z_older_than(10, 4, 2))
@@ -825,6 +834,14 @@ static void rd_monster(monster_type *m_ptr)
 	rd_s16b(&m_ptr->hp);
 	rd_s16b(&m_ptr->maxhp);
 	rd_s16b(&m_ptr->max_maxhp);
+	if(h_older_than(2, 1, 2, 1))
+	{
+		m_ptr->dealt_damage = 0;
+	}
+	else
+	{
+		rd_s16b(&m_ptr->dealt_damage); 
+	}
 
 	/* Monster race index of its appearance */
 	if (flags & SAVE_MON_AP_R_IDX) rd_s16b(&m_ptr->ap_r_idx);

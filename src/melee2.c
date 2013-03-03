@@ -4641,6 +4641,9 @@ void monster_gain_exp(int m_idx, int s_idx)
 		}
 		m_ptr->maxhp = m_ptr->max_maxhp;
 		m_ptr->hp = old_hp * m_ptr->maxhp / old_maxhp;
+		
+		/* dealt damage is 0 at initial*/
+		m_ptr->dealt_damage = 0;
 
 		/* Extract the monster base speed */
 		m_ptr->mspeed = get_mspeed(r_ptr);

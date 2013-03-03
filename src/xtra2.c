@@ -1776,6 +1776,14 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 
 	/* Hurt it */
 	m_ptr->hp -= dam;
+	
+	m_ptr->dealt_damage += dam;
+	if(m_ptr->dealt_damage > m_ptr->max_maxhp * 100) m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
+	if (p_ptr->wizard)
+	{
+		msg_format( _("合計%d/%dのダメージを与えた。","You do %d (out of %d) damage."),
+					m_ptr->dealt_damage, m_ptr->maxhp);
+	}
 
 	/* It is dead now */
 	if (m_ptr->hp < 0)

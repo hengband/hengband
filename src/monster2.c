@@ -2867,6 +2867,9 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	m_ptr->maxhp = (long)(m_ptr->maxhp * m_ptr->max_maxhp) / oldmaxhp;
 	if (m_ptr->maxhp < 1) m_ptr->maxhp = 1;
 	m_ptr->hp = (long)(m_ptr->hp * m_ptr->max_maxhp) / oldmaxhp;
+	
+	/* reset dealt_damage */
+	m_ptr->dealt_damage = 0;
 }
 
 
@@ -3245,6 +3248,10 @@ msg_print("守りのルーンが壊れた！");
 	if (m_ptr->r_idx == MON_WOUNDED_BEAR)
 		m_ptr->hp = m_ptr->maxhp / 2;
 	else m_ptr->hp = m_ptr->maxhp;
+	
+	
+	/* dealt damage is 0 at initial*/
+	m_ptr->dealt_damage = 0;
 
 
 	/* Extract the monster base speed */

@@ -76,7 +76,7 @@
 #define H_VER_MAJOR 2
 #define H_VER_MINOR 1
 #define H_VER_PATCH 2
-#define H_VER_EXTRA 0
+#define H_VER_EXTRA 1
 
 
 #define ANGBAND_2_8_1

@@ -7061,6 +7061,7 @@ prt("お待ち下さい...", 0, 0);
 		m_ptr->maxhp = r_ptr->hdice*(r_ptr->hside+1)/2;
 		m_ptr->max_maxhp = m_ptr->maxhp;
 		m_ptr->hp = r_ptr->hdice*(r_ptr->hside+1)/2;
+		m_ptr->dealt_damage = 0;
 		m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
 	}
 
