@@ -5423,6 +5423,22 @@ int inkey_special(bool numpad_cursor)
 		{TRUE, "KP_1]", SKEY_BOTTOM},
 		{FALSE, NULL, 0},
 	};
+
+	static const struct {
+		cptr keyname;
+		int keycode;
+	} gcu_special_key_list[] = {
+		{"A", SKEY_UP},
+		{"B", SKEY_DOWN},
+		{"C", SKEY_RIGHT},
+		{"D", SKEY_LEFT},
+		{"1~", SKEY_TOP},
+		{"4~", SKEY_BOTTOM},
+		{"5~", SKEY_PGUP},
+		{"6~", SKEY_PGDOWN},
+		{NULL, 0},
+	};
+
 	char buf[1024];
 	cptr str = buf;
 	char key;
@@ -5508,6 +5524,19 @@ int inkey_special(bool numpad_cursor)
 
 			/* Return special key code and modifier flags */
 			return (skey | modifier);
+		}
+	}
+
+	if (prefix(str, "\\e["))
+	{
+		str += 3;
+
+		for (i = 0; gcu_special_key_list[i].keyname; i++)
+		{
+			if (streq(str, gcu_special_key_list[i].keyname))
+			{
+				return gcu_special_key_list[i].keycode;
+			}
 		}
 	}
 
