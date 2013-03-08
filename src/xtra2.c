@@ -5869,25 +5869,16 @@ bool tgt_pt(int *x_ptr, int *y_ptr)
 
 				n++;
 
-				while(n < temp_n)	/* Skip stairs which have defferent distance */
+				/* Skip stairs which have defferent distance */
+				for (; n < temp_n; ++ n)
 				{
 					cave_type *c_ptr = &cave[temp_y[n]][temp_x[n]];
 
-					if (ch == '>')
+					if (cave_have_flag_grid(c_ptr, FF_STAIRS) &&
+					    cave_have_flag_grid(c_ptr, ch == '>' ? FF_MORE : FF_LESS))
 					{
-						if (cave_have_flag_grid(c_ptr, FF_LESS) ||
-							cave_have_flag_grid(c_ptr, FF_QUEST_ENTER))
-							n++;
-						else
-							break;
-					}
-					else /* if (ch == '<') */
-					{
-						if (cave_have_flag_grid(c_ptr, FF_MORE) ||
-							cave_have_flag_grid(c_ptr, FF_QUEST_EXIT))
-							n++;
-						else
-							break;
+						/* Found */
+						break;
 					}
 				}
 
