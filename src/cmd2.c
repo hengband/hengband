@@ -4794,8 +4794,10 @@ void forget_travel_flow(void)
 		{
 			/* Forget the old data */
 			travel.cost[y][x] = MAX_SHORT;
-		}	
+		}
 	}
+
+	travel.y = travel.x = 0;
 }
 
 static int travel_flow_cost(int y, int x)
@@ -4931,7 +4933,13 @@ void do_cmd_travel(void)
 	int dx, dy, sx, sy;
 	feature_type *f_ptr;
 
-	if (!tgt_pt(&x, &y)) return;
+	if (travel.x != 0 && travel.y != 0 &&
+	    get_check(_("トラベルを継続しますか？", "Do you continue to travel?")))
+	{
+		y = travel.y;
+		x = travel.x;
+	}
+	else if (!tgt_pt(&x, &y)) return;
 
 	if ((x == px) && (y == py))
 	{
@@ -4958,11 +4966,11 @@ void do_cmd_travel(void)
 		return;
 	}
 
-	travel.x = x;
-	travel.y = y;
-
 	forget_travel_flow();
 	travel_flow(y, x);
+
+	travel.x = x;
+	travel.y = y;
 
 	/* Travel till 255 steps */
 	travel.run = 255;

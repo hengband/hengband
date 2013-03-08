@@ -4817,6 +4817,7 @@ void travel_step(void)
 #else
 			msg_print("No route is found!");
 #endif
+			travel.y = travel.x = 0;
 		}
 		disturb(0, 1);
 		return;
@@ -4827,7 +4828,10 @@ void travel_step(void)
 	move_player(travel.dir, always_pickup, FALSE);
 
 	if ((py == travel.y) && (px == travel.x))
+	{
 		travel.run = 0;
+		travel.y = travel.x = 0;
+	}
 	else if (travel.run > 0)
 		travel.run--;
 

@@ -1389,6 +1389,9 @@ void change_floor(void)
 	/* Place preserved pet monsters */
 	place_pet();
 
+	/* Reset travel target place */
+	forget_travel_flow();
+
 	/* Hack -- maintain unique and artifacts */
 	update_unique_artifact(new_floor_id);
 
