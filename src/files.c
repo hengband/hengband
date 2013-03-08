@@ -2980,15 +2980,14 @@ static void display_flag_aux(int row, int col, cptr header,
 	int     i;
 	bool    vuln = FALSE;
 	int max_i;
+	byte header_color = TERM_L_DARK;
+	int header_col = col;
 
 	if (have_flag(f->player_vuln, flag1) &&
 	    !(have_flag(f->known_obj_imm, flag1) ||
 	      have_flag(f->player_imm, flag1) ||
 	      have_flag(f->tim_player_imm, flag1)))
 		vuln = TRUE;
-
-	/* Header */
-	if (!(mode & DP_IMM)) c_put_str(TERM_WHITE, header, row, col);
 
 	/* Advance */
 	col += strlen(header) + 1;
@@ -3016,18 +3015,30 @@ static void display_flag_aux(int row, int col, cptr header,
 		/* Check flags */
 		if (mode & DP_CURSE)
 		{
-			if ((mode & DP_CURSE) && (have_flag(flgs, TR_ADD_L_CURSE) || have_flag(flgs, TR_ADD_H_CURSE)))
+			if (have_flag(flgs, TR_ADD_L_CURSE) || have_flag(flgs, TR_ADD_H_CURSE))
+			{
 				c_put_str(TERM_L_DARK, "+", row, col);
-			if ((mode & DP_CURSE) && (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE)))
+				header_color = TERM_WHITE;
+			}
+			if (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE))
+			{
 				c_put_str(TERM_WHITE, "+", row, col);
-			if ((mode & DP_CURSE) && (o_ptr->curse_flags & TRC_PERMA_CURSE))
+				header_color = TERM_WHITE;
+			}
+			if (o_ptr->curse_flags & TRC_PERMA_CURSE)
+			{
 				c_put_str(TERM_WHITE, "*", row, col);
+				header_color = TERM_WHITE;
+			}
 		}
 		else
 		{
 			if (have_flag(flgs, flag1))
+			{
 				c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE),
 					  (mode & DP_IMM) ? "*" : "+", row, col);
+				header_color = TERM_WHITE;
+			}
 		}
 
 		/* Advance */
@@ -3035,23 +3046,50 @@ static void display_flag_aux(int row, int col, cptr header,
 	}
 
 	/* Assume that player flag is already written */
-	if (mode & DP_IMM) return;
+	if (mode & DP_IMM)
+	{
+		if (header_color != TERM_L_DARK)
+		{
+			/* Overwrite Header Color */
+			c_put_str(header_color, header, row, header_col);
+		}
+		return;
+	}
 
 	/* Default */
 	c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 
 	/* Player flags */
-	if (have_flag(f->player_flags, flag1)) c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
+	if (have_flag(f->player_flags, flag1))
+	{
+		c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
+		header_color = TERM_WHITE;
+	}
 
 	/* Timed player flags */
-	if (have_flag(f->tim_player_flags, flag1)) c_put_str((byte)(vuln ? TERM_ORANGE : TERM_YELLOW), "#", row, col);
+	if (have_flag(f->tim_player_flags, flag1))
+	{
+		c_put_str((byte)(vuln ? TERM_ORANGE : TERM_YELLOW), "#", row, col);
+		header_color = TERM_WHITE;
+	}
 
 	/* Immunity */
-	if (have_flag(f->tim_player_imm, flag1)) c_put_str(TERM_YELLOW, "*", row, col);
-	if (have_flag(f->player_imm, flag1)) c_put_str(TERM_WHITE, "*", row, col);
+	if (have_flag(f->tim_player_imm, flag1))
+	{
+		c_put_str(TERM_YELLOW, "*", row, col);
+		header_color = TERM_WHITE;
+	}
+	if (have_flag(f->player_imm, flag1))
+	{
+		c_put_str(TERM_WHITE, "*", row, col);
+		header_color = TERM_WHITE;
+	}
 
 	/* Vulnerability */
 	if (vuln) c_put_str(TERM_RED, "v", row, col + 1);
+
+	/* Header */
+	c_put_str(header_color, header, row, header_col);
 }
 
 
