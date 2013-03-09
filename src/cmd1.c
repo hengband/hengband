@@ -775,6 +775,112 @@ static int check_hit(int power)
 
 
 
+static void hit_trap_pit(int trap_feat_type)
+{
+	int dam;
+	cptr trap_name = "";
+	cptr spike_name = "";
+
+	switch (trap_feat_type)
+	{
+	case TRAP_PIT:
+		trap_name = _("落とし穴", "a pit trap");
+		break;
+	case TRAP_SPIKED_PIT:
+		trap_name = _("スパイクが敷かれた落とし穴", "a spiked pit");
+		spike_name = _("スパイク", "spikes");
+		break;
+	case TRAP_POISON_PIT:
+		trap_name = _("スパイクが敷かれた落とし穴", "a spiked pit");
+		spike_name = _("毒を塗られたスパイク", "poisonous spikes");
+		break;
+	default:
+		return;
+	}
+
+	if (p_ptr->levitation)
+	{
+		msg_format(_("%sを飛び越えた。", "You fly over %s."), trap_name);
+		return;
+	}
+
+	msg_format(_("%sに落ちてしまった！", "You have fallen into %s!"), trap_name);
+
+	/* Base damage */
+	dam = damroll(2, 6);
+
+	/* Extra spike damage */
+	if ((trap_feat_type == TRAP_SPIKED_PIT || trap_feat_type == TRAP_POISON_PIT) &&
+	    one_in_(2))
+	{
+		msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
+
+		dam = dam * 2;
+		(void)set_cut(p_ptr->cut + randint1(dam));
+
+		if (trap_feat_type == TRAP_POISON_PIT) {
+			if (p_ptr->resist_pois || IS_OPPOSE_POIS())
+			{
+				msg_print(_("しかし毒の影響はなかった！", "The poison does not affect you!"));
+			}
+			else
+			{
+				dam = dam * 2;
+				(void)set_poisoned(p_ptr->poisoned + randint1(dam));
+			}
+		}
+	}
+
+	/* Take the damage */
+	take_hit(DAMAGE_NOESCAPE, dam, trap_name, -1);
+}
+
+static bool hit_trap_dart(void)
+{
+	bool hit = FALSE;
+
+	if (check_hit(125))
+	{
+		msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
+
+		take_hit(DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"), -1);
+
+		if (!CHECK_MULTISHADOW()) hit = TRUE;
+	}
+	else
+	{
+		msg_print(_("小さなダーツが飛んできた！が、運良く当たらなかった。", "A small dart barely misses you."));
+	}
+
+	return hit;
+}
+
+static void hit_trap_lose_stat(int stat)
+{
+	if (hit_trap_dart())
+	{
+		do_dec_stat(stat);
+	}
+}
+
+static void hit_trap_slow(void)
+{
+	if (hit_trap_dart())
+	{
+		set_slow(p_ptr->slow + randint0(20) + 20, FALSE);
+	}
+}
+
+static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*set_status)(int turn), int turn)
+{
+	msg_print(trap_message);
+
+	if (!resist)
+	{
+		set_status(turn);
+	}
+}
+
 /*
  * Handle player hitting a real trap
  */
@@ -851,162 +957,10 @@ static void hit_trap(bool break_trap)
 		}
 
 		case TRAP_PIT:
-		{
-			if (p_ptr->levitation)
-			{
-#ifdef JP
-				msg_print("落とし穴を飛び越えた。");
-#else
-				msg_print("You fly over a pit trap.");
-#endif
-
-			}
-			else
-			{
-#ifdef JP
-				msg_print("落とし穴に落ちてしまった！");
-#else
-				msg_print("You have fallen into a pit!");
-#endif
-
-				dam = damroll(2, 6);
-#ifdef JP
-				name = "落とし穴";
-#else
-				name = "a pit trap";
-#endif
-
-				take_hit(DAMAGE_NOESCAPE, dam, name, -1);
-			}
-			break;
-		}
-
 		case TRAP_SPIKED_PIT:
-		{
-			if (p_ptr->levitation)
-			{
-#ifdef JP
-				msg_print("トゲのある落とし穴を飛び越えた。");
-#else
-				msg_print("You fly over a spiked pit.");
-#endif
-
-			}
-			else
-			{
-#ifdef JP
-				msg_print("スパイクが敷かれた落とし穴に落ちてしまった！");
-#else
-				msg_print("You fall into a spiked pit!");
-#endif
-
-
-				/* Base damage */
-#ifdef JP
-				name = "落とし穴";
-#else
-				name = "a pit trap";
-#endif
-
-				dam = damroll(2, 6);
-
-				/* Extra spike damage */
-				if (randint0(100) < 50)
-				{
-#ifdef JP
-					msg_print("スパイクが刺さった！");
-#else
-					msg_print("You are impaled!");
-#endif
-
-
-#ifdef JP
-					name = "トゲのある落とし穴";
-#else
-					name = "a spiked pit";
-#endif
-
-					dam = dam * 2;
-					(void)set_cut(p_ptr->cut + randint1(dam));
-				}
-
-				/* Take the damage */
-				take_hit(DAMAGE_NOESCAPE, dam, name, -1);
-			}
-			break;
-		}
-
 		case TRAP_POISON_PIT:
 		{
-			if (p_ptr->levitation)
-			{
-#ifdef JP
-				msg_print("トゲのある落とし穴を飛び越えた。");
-#else
-				msg_print("You fly over a spiked pit.");
-#endif
-
-			}
-			else
-			{
-#ifdef JP
-			msg_print("スパイクが敷かれた落とし穴に落ちてしまった！");
-#else
-				msg_print("You fall into a spiked pit!");
-#endif
-
-
-				/* Base damage */
-				dam = damroll(2, 6);
-
-#ifdef JP
-				name = "落とし穴";
-#else
-				name = "a pit trap";
-#endif
-
-
-				/* Extra spike damage */
-				if (randint0(100) < 50)
-				{
-#ifdef JP
-					msg_print("毒を塗られたスパイクが刺さった！");
-#else
-					msg_print("You are impaled on poisonous spikes!");
-#endif
-
-
-#ifdef JP
-					name = "トゲのある落とし穴";
-#else
-					name = "a spiked pit";
-#endif
-
-
-					dam = dam * 2;
-					(void)set_cut(p_ptr->cut + randint1(dam));
-
-					if (p_ptr->resist_pois || IS_OPPOSE_POIS())
-					{
-#ifdef JP
-						msg_print("しかし毒の影響はなかった！");
-#else
-						msg_print("The poison does not affect you!");
-#endif
-
-					}
-
-					else
-					{
-						dam = dam * 2;
-						(void)set_poisoned(p_ptr->poisoned + randint1(dam));
-					}
-				}
-
-				/* Take the damage */
-				take_hit(DAMAGE_NOESCAPE, dam, name, -1);
-			}
-
+			hit_trap_pit(trap_feat_type);
 			break;
 		}
 
@@ -1088,170 +1042,52 @@ static void hit_trap(bool break_trap)
 
 		case TRAP_SLOW:
 		{
-			if (check_hit(125))
-			{
-#ifdef JP
-				msg_print("小さなダーツが飛んできて刺さった！");
-#else
-				msg_print("A small dart hits you!");
-#endif
-
-				dam = damroll(1, 4);
-#ifdef JP
-				take_hit(DAMAGE_ATTACK, dam, "ダーツの罠", -1);
-#else
-				take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
-#endif
-
-				if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr->slow + randint0(20) + 20, FALSE);
-			}
-			else
-			{
-#ifdef JP
-				msg_print("小さなダーツが飛んできた！が、運良く当たらなかった。");
-#else
-				msg_print("A small dart barely misses you.");
-#endif
-
-			}
+			hit_trap_slow();
 			break;
 		}
 
 		case TRAP_LOSE_STR:
 		{
-			if (check_hit(125))
-			{
-#ifdef JP
-				msg_print("小さなダーツが飛んできて刺さった！");
-#else
-				msg_print("A small dart hits you!");
-#endif
-
-				dam = damroll(1, 4);
-#ifdef JP
-				take_hit(DAMAGE_ATTACK, dam, "ダーツの罠", -1);
-#else
-				take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
-#endif
-
-				if (!CHECK_MULTISHADOW()) (void)do_dec_stat(A_STR);
-			}
-			else
-			{
-#ifdef JP
-				msg_print("小さなダーツが飛んできた！が、運良く当たらなかった。");
-#else
-				msg_print("A small dart barely misses you.");
-#endif
-
-			}
+			hit_trap_lose_stat(A_STR);
 			break;
 		}
 
 		case TRAP_LOSE_DEX:
 		{
-			if (check_hit(125))
-			{
-#ifdef JP
-				msg_print("小さなダーツが飛んできて刺さった！");
-#else
-				msg_print("A small dart hits you!");
-#endif
-
-				dam = damroll(1, 4);
-#ifdef JP
-				take_hit(DAMAGE_ATTACK, dam, "ダーツの罠", -1);
-#else
-				take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
-#endif
-
-				if (!CHECK_MULTISHADOW()) (void)do_dec_stat(A_DEX);
-			}
-			else
-			{
-#ifdef JP
-				msg_print("小さなダーツが飛んできた！が、運良く当たらなかった。");
-#else
-				msg_print("A small dart barely misses you.");
-#endif
-
-			}
+			hit_trap_lose_stat(A_DEX);
 			break;
 		}
 
 		case TRAP_LOSE_CON:
 		{
-			if (check_hit(125))
-			{
-#ifdef JP
-				msg_print("小さなダーツが飛んできて刺さった！");
-#else
-				msg_print("A small dart hits you!");
-#endif
-
-				dam = damroll(1, 4);
-#ifdef JP
-				take_hit(DAMAGE_ATTACK, dam, "ダーツの罠", -1);
-#else
-				take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
-#endif
-
-				if (!CHECK_MULTISHADOW()) (void)do_dec_stat(A_CON);
-			}
-			else
-			{
-#ifdef JP
-				msg_print("小さなダーツが飛んできた！が、運良く当たらなかった。");
-#else
-				msg_print("A small dart barely misses you.");
-#endif
-
-			}
+			hit_trap_lose_stat(A_CON);
 			break;
 		}
 
 		case TRAP_BLIND:
 		{
-#ifdef JP
-			msg_print("黒いガスに包み込まれた！");
-#else
-			msg_print("A black gas surrounds you!");
-#endif
-
-			if (!p_ptr->resist_blind)
-			{
-				(void)set_blind(p_ptr->blind + randint0(50) + 25);
-			}
+			hit_trap_set_abnormal_status(
+				_("黒いガスに包み込まれた！", "A black gas surrounds you!"),
+				p_ptr->resist_blind,
+				set_blind, p_ptr->blind + randint0(50) + 25);
 			break;
 		}
 
 		case TRAP_CONFUSE:
 		{
-#ifdef JP
-			msg_print("きらめくガスに包み込まれた！");
-#else
-			msg_print("A gas of scintillating colors surrounds you!");
-#endif
-
-			if (!p_ptr->resist_conf)
-			{
-				(void)set_confused(p_ptr->confused + randint0(20) + 10);
-			}
+			hit_trap_set_abnormal_status(
+				_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
+				p_ptr->resist_conf,
+				set_confused, p_ptr->confused + randint0(20) + 10);
 			break;
 		}
 
 		case TRAP_POISON:
 		{
-#ifdef JP
-			msg_print("刺激的な緑色のガスに包み込まれた！");
-#else
-			msg_print("A pungent green gas surrounds you!");
-#endif
-
-			if (!p_ptr->resist_pois && !IS_OPPOSE_POIS())
-			{
-				(void)set_poisoned(p_ptr->poisoned + randint0(20) + 10);
-			}
+			hit_trap_set_abnormal_status(
+				_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
+				p_ptr->resist_pois || IS_OPPOSE_POIS(),
+				set_poisoned, p_ptr->poisoned + randint0(20) + 10);
 			break;
 		}
 
