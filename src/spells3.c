@@ -4989,7 +4989,7 @@ msg_format("%sがダメージを受けた！", o_name);
 /*
  * Hurt the player with Acid
  */
-int acid_dam(int dam, cptr kb_str, int monspell)
+int acid_dam(int dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -5010,7 +5010,7 @@ int acid_dam(int dam, cptr kb_str, int monspell)
 	if (p_ptr->resist_acid) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (!CHECK_MULTISHADOW())
+	if (aura || !CHECK_MULTISHADOW())
 	{
 		if ((!(double_resist || p_ptr->resist_acid)) &&
 		    one_in_(HURT_CHANCE))
@@ -5021,10 +5021,10 @@ int acid_dam(int dam, cptr kb_str, int monspell)
 	}
 
 	/* Take damage */
-	get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
-	if (!(double_resist && p_ptr->resist_acid))
+	if (!aura && !(double_resist && p_ptr->resist_acid))
 		inven_damage(set_acid_destroy, inv);
 	return get_damage;
 }
@@ -5033,7 +5033,7 @@ int acid_dam(int dam, cptr kb_str, int monspell)
 /*
  * Hurt the player with electricity
  */
-int elec_dam(int dam, cptr kb_str, int monspell)
+int elec_dam(int dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -5055,15 +5055,18 @@ int elec_dam(int dam, cptr kb_str, int monspell)
 	if (p_ptr->resist_elec) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if ((!(double_resist || p_ptr->resist_elec)) &&
-	    one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
-		(void)do_dec_stat(A_DEX);
+	if (aura || !CHECK_MULTISHADOW())
+	{
+		if ((!(double_resist || p_ptr->resist_elec)) &&
+		    one_in_(HURT_CHANCE))
+			(void)do_dec_stat(A_DEX);
+	}
 
 	/* Take damage */
-	get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
-	if (!(double_resist && p_ptr->resist_elec))
+	if (!aura && !(double_resist && p_ptr->resist_elec))
 		inven_damage(set_elec_destroy, inv);
 
 	return get_damage;
@@ -5073,7 +5076,7 @@ int elec_dam(int dam, cptr kb_str, int monspell)
 /*
  * Hurt the player with Fire
  */
-int fire_dam(int dam, cptr kb_str, int monspell)
+int fire_dam(int dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -5095,15 +5098,18 @@ int fire_dam(int dam, cptr kb_str, int monspell)
 	if (p_ptr->resist_fire) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if ((!(double_resist || p_ptr->resist_fire)) &&
-	    one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
-		(void)do_dec_stat(A_STR);
+	if (aura || !CHECK_MULTISHADOW())
+	{
+		if ((!(double_resist || p_ptr->resist_fire)) &&
+		    one_in_(HURT_CHANCE))
+			(void)do_dec_stat(A_STR);
+	}
 
 	/* Take damage */
-	get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
-	if (!(double_resist && p_ptr->resist_fire))
+	if (!aura && !(double_resist && p_ptr->resist_fire))
 		inven_damage(set_fire_destroy, inv);
 
 	return get_damage;
@@ -5113,7 +5119,7 @@ int fire_dam(int dam, cptr kb_str, int monspell)
 /*
  * Hurt the player with Cold
  */
-int cold_dam(int dam, cptr kb_str, int monspell)
+int cold_dam(int dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -5134,15 +5140,18 @@ int cold_dam(int dam, cptr kb_str, int monspell)
 	if (p_ptr->resist_cold) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if ((!(double_resist || p_ptr->resist_cold)) &&
-	    one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
-		(void)do_dec_stat(A_STR);
+	if (aura || !CHECK_MULTISHADOW())
+	{
+		if ((!(double_resist || p_ptr->resist_cold)) &&
+		    one_in_(HURT_CHANCE))
+			(void)do_dec_stat(A_STR);
+	}
 
 	/* Take damage */
-	get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
-	if (!(double_resist && p_ptr->resist_cold))
+	if (!aura && !(double_resist && p_ptr->resist_cold))
 		inven_damage(set_cold_destroy, inv);
 
 	return get_damage;

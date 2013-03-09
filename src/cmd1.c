@@ -1014,9 +1014,9 @@ static void hit_trap(bool break_trap)
 
 			dam = damroll(4, 6);
 #ifdef JP
-			(void)fire_dam(dam, "炎のトラップ", -1);
+			(void)fire_dam(dam, "炎のトラップ", -1, FALSE);
 #else
-			(void)fire_dam(dam, "a fire trap", -1);
+			(void)fire_dam(dam, "a fire trap", -1, FALSE);
 #endif
 
 			break;
@@ -1032,9 +1032,9 @@ static void hit_trap(bool break_trap)
 
 			dam = damroll(4, 6);
 #ifdef JP
-			(void)acid_dam(dam, "酸のトラップ", -1);
+			(void)acid_dam(dam, "酸のトラップ", -1, FALSE);
 #else
-			(void)acid_dam(dam, "an acid trap", -1);
+			(void)acid_dam(dam, "an acid trap", -1, FALSE);
 #endif
 
 			break;
@@ -1256,90 +1256,40 @@ msg_print("まばゆい閃光が走った！");
 }
 
 
-static void touch_zap_player(monster_type *m_ptr)
+static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
+				 int (*dam_func)(int dam, cptr kb_str, int monspell, bool aura), cptr message)
 {
-	int aura_damage = 0;
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (r_ptr->flags2 & RF2_AURA_FIRE)
+	if ((atoffset(u32b, r_ptr, flags_offset) & aura_flag) && !immune)
 	{
-		if (!p_ptr->immune_fire)
+		char mon_name[80];
+		int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
+
+		/* Hack -- Get the "died from" name */
+		monster_desc(mon_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+
+		msg_print(message);
+
+		dam_func(aura_damage, mon_name, -1, TRUE);
+
+		if (is_original_ap_and_seen(m_ptr))
 		{
-			char aura_dam[80];
-
-			aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
-
-			/* Hack -- Get the "died from" name */
-			monster_desc(aura_dam, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-
-#ifdef JP
-			msg_print("突然とても熱くなった！");
-#else
-			msg_print("You are suddenly very hot!");
-#endif
-
-			if (prace_is_(RACE_ENT)) aura_damage += aura_damage / 3;
-			if (IS_OPPOSE_FIRE()) aura_damage = (aura_damage + 2) / 3;
-			if (p_ptr->resist_fire) aura_damage = (aura_damage + 2) / 3;
-
-			take_hit(DAMAGE_NOESCAPE, aura_damage, aura_dam, -1);
-			if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= RF2_AURA_FIRE;
-			handle_stuff();
+			atoffset(u32b, r_ptr, r_flags_offset) |= aura_flag;
 		}
+
+		handle_stuff();
 	}
+}
 
-	if (r_ptr->flags3 & RF3_AURA_COLD)
-	{
-		if (!p_ptr->immune_cold)
-		{
-			char aura_dam[80];
-
-			aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
-
-			/* Hack -- Get the "died from" name */
-			monster_desc(aura_dam, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-
-#ifdef JP
-			msg_print("突然とても寒くなった！");
-#else
-			msg_print("You are suddenly very cold!");
-#endif
-
-			if (IS_OPPOSE_COLD()) aura_damage = (aura_damage + 2) / 3;
-			if (p_ptr->resist_cold) aura_damage = (aura_damage + 2) / 3;
-
-			take_hit(DAMAGE_NOESCAPE, aura_damage, aura_dam, -1);
-			if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_AURA_COLD;
-			handle_stuff();
-		}
-	}
-
-	if (r_ptr->flags2 & RF2_AURA_ELEC)
-	{
-		if (!p_ptr->immune_elec)
-		{
-			char aura_dam[80];
-
-			aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
-
-			/* Hack -- Get the "died from" name */
-			monster_desc(aura_dam, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-
-			if (prace_is_(RACE_ANDROID)) aura_damage += aura_damage / 3;
-			if (IS_OPPOSE_ELEC()) aura_damage = (aura_damage + 2) / 3;
-			if (p_ptr->resist_elec) aura_damage = (aura_damage + 2) / 3;
-
-#ifdef JP
-			msg_print("電撃をくらった！");
-#else
-			msg_print("You get zapped!");
-#endif
-
-			take_hit(DAMAGE_NOESCAPE, aura_damage, aura_dam, -1);
-			if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= RF2_AURA_ELEC;
-			handle_stuff();
-		}
-	}
+static void touch_zap_player(monster_type *m_ptr)
+{
+	touch_zap_player_aux(m_ptr, p_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
+			     fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
+	touch_zap_player_aux(m_ptr, p_ptr->immune_cold, offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
+			     cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));
+	touch_zap_player_aux(m_ptr, p_ptr->immune_elec, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
+			     elec_dam, _("電撃をくらった！", "You get zapped!"));
 }
 
 

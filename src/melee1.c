@@ -1163,7 +1163,7 @@ bool make_attack_normal(int m_idx)
 
 
 					/* Special damage */
-					get_damage += acid_dam(damage, ddesc, -1);
+					get_damage += acid_dam(damage, ddesc, -1, FALSE);
 
 					/* Hack -- Update AC */
 					update_stuff();
@@ -1189,7 +1189,7 @@ bool make_attack_normal(int m_idx)
 
 
 					/* Special damage */
-					get_damage += elec_dam(damage, ddesc, -1);
+					get_damage += elec_dam(damage, ddesc, -1, FALSE);
 
 					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_ELEC);
@@ -1212,7 +1212,7 @@ bool make_attack_normal(int m_idx)
 
 
 					/* Special damage */
-					get_damage += fire_dam(damage, ddesc, -1);
+					get_damage += fire_dam(damage, ddesc, -1, FALSE);
 
 					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_FIRE);
@@ -1235,7 +1235,7 @@ bool make_attack_normal(int m_idx)
 
 
 					/* Special damage */
-					get_damage += cold_dam(damage, ddesc, -1);
+					get_damage += cold_dam(damage, ddesc, -1, FALSE);
 
 					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_COLD);
