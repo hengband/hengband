@@ -251,11 +251,11 @@ static int mult_slaying(int mult, const u32b* flgs, const monster_type* m_ptr)
 		const struct slay_table_t* p = &slay_table[i];
 
 		if ((have_flag(flgs, p->slay_flag)) &&
-		    (*(u32b*)(((char*)r_ptr) + p->flag_offset) & p->affect_race_flag))
+		    (atoffset(u32b, r_ptr, p->flag_offset) & p->affect_race_flag))
 		{
 			if (is_original_ap_and_seen(m_ptr))
 			{
-				*(u32b*)(((char*)r_ptr) + p->r_flag_offset) |= p->affect_race_flag;
+				atoffset(u32b, r_ptr, p->r_flag_offset) |= p->affect_race_flag;
 			}
 
 			mult = MAX(mult, p->slay_mult);
