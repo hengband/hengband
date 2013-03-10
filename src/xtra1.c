@@ -5145,18 +5145,18 @@ void calc_bonuses(void)
 				case CLASS_SORCERER:
 					num = 1; wgt = 1; mul = 1; break;
 
-				/* Archer, Bard */
+				/* Archer, Bard, Sniper */
 				case CLASS_ARCHER:
 				case CLASS_BARD:
+				case CLASS_SNIPER:
 					num = 4; wgt = 70; mul = 2; break;
 
 				/* ForceTrainer */
 				case CLASS_FORCETRAINER:
 					num = 4; wgt = 60; mul = 2; break;
 
-				/* Mirror Master, Sniper */
+				/* Mirror Master */
 				case CLASS_MIRROR_MASTER:
-				case CLASS_SNIPER:
 					num = 3; wgt = 100; mul = 3; break;
 
 				/* Ninja */
