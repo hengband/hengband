@@ -24,7 +24,10 @@ bool test_hit_fire(int chance, int ac, int vis)
 
 	/* Percentile dice */
 	k = randint0(100);
-
+	
+	/* Snipers with high-concentration reduce instant miss percentage.*/
+	k += p_ptr->concent;
+	
 	/* Hack -- Instant miss or hit */
 	if (k < 10) return (k < 5);
 

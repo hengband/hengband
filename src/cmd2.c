@@ -3733,8 +3733,8 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 			armour = r_ptr->ac;
 			if (p_ptr->concent)
 			{
-				armour *= (10 - p_ptr->concent);
-				armour /= 10;
+				armour *= (8 - p_ptr->concent);
+				armour /= 8;
 			}
 
 			/* Did we hit it (penalize range) */
