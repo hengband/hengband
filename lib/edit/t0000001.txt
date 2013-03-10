@@ -477,10 +477,10 @@ F:@:FLOOR:3:0:0:0:219
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:220
 
-# Quest 27 rewarding (Sniper gets the Cloak of Tuor)
+# Quest 27 rewarding (Sniper gets The Heavy Crossbow 'Lion Slayer')
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Sniper] ]
 F:a:BUILDING_0:3
-F:@:FLOOR:3:0:0:0:50
+F:@:FLOOR:3:0:0:0:240
 
 # Quest 27 finished, no new quest is available
 ?:[EQU $QUEST27 4]
