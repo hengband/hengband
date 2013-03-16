@@ -3860,7 +3860,8 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 				else
 				{
 					/* STICK TO */
-					if (object_is_fixed_artifact(q_ptr))
+					if (object_is_fixed_artifact(q_ptr) &&
+						(p_ptr->pclass != CLASS_SNIPER || p_ptr->concent == 0))
 					{
 						char m_name[80];
 
