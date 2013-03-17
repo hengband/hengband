@@ -3116,13 +3116,16 @@ static void town_history(void)
 
 s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari)
 {
-	u32b i,k, num;
+	u32b k, num;
+	int i;
 	
 	if(dokubari) return dam;
 	
 	i = weight + (meichuu * 3 + plus * 5) + (p_ptr->lev * 3);
+	if (i < 0) i = 0;
+	
 	k = weight;
-	num=0;
+	num = 0;
 	
 	if (k < 400)						num += (2 * dam + 5) * (400 - k);
 	if (k < 700)						num += (2 * dam + 10) * (MIN(700, k + 650) - MAX(400, k));
