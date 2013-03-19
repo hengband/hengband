@@ -3113,6 +3113,46 @@ static void town_history(void)
 	screen_load();
 }
 
+s16b calc_expect_crit_shot(int weight, int plus, int dam)
+{
+	u32b num;
+	int i, k, crit;
+
+	/* Extract "shot" power */
+	i = ((p_ptr->to_h_b + plus) * 4) + (p_ptr->lev * 2);
+
+	/* Snipers can shot more critically with crossbows */
+	if (p_ptr->concent) i += ((i * p_ptr->concent) / 5);
+	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
+	
+	if (i < 0) i = 0;
+	
+	k = 0;
+	num = 0;
+	
+	crit = MIN(500, 900/weight);
+	num += dam * 3 /2 * crit;
+	k = crit;
+	
+	crit = MIN(500, 1350/weight);
+	crit -= k;
+	num += dam * 2 * crit;
+	k += crit;
+	
+	if(k < 500)
+	{
+		crit = 500 - k;
+		num += dam * 3 * crit;
+	}
+	
+	num /= 500;
+	
+	num *= i;
+	num += (5000 - i) * dam;
+	num /= 5000;
+	
+	return num;
+}
 
 s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari)
 {

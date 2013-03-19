@@ -2432,14 +2432,21 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 
 		/* Get extra damage from concentration */
 		if (p_ptr->concent) avgdam = boost_concentration_damage(avgdam);
-
+		
 		if (avgdam < 0) avgdam = 0;
 
-		/* Display (shot damage/ avg damage) */
+		/* Display (shot damage/ shot damage with critical/ avg damage with critical) */
 		t = object_desc_chr(t, ' ');
 		t = object_desc_chr(t, p1);
+		
+		/* Damage with no-crit */
 		t = object_desc_num(t, avgdam);
-		t = object_desc_chr(t, '/');
+		t = object_desc_str(t, "/shot, ");
+		
+		/* Apply Expect damage of Critical */
+		avgdam = calc_expect_crit_shot(o_ptr->weight, o_ptr->to_h, avgdam);
+		t = object_desc_num(t, avgdam);
+		t = object_desc_str(t, "/crit, ");
 
 		if (p_ptr->num_fire == 0)
 		{
@@ -2451,6 +2458,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			avgdam *= (p_ptr->num_fire * 100);
 			avgdam /= energy_fire;
 			t = object_desc_num(t, avgdam);
+			t = object_desc_str(t, "/turn");
 		}
 
 		t = object_desc_chr(t, p2);
