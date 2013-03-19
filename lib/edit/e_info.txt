@@ -830,13 +830,13 @@ N:108:強力射の
 E:of Extra Might
 X:26:20
 W:0:18:0:10000
-C:2:4:0:0
+C:2:5:0:0
 F:XTRA_MIGHT | XTRA_RES
 
 N:109:強速射の
 E:of Extra Shots
 X:26:20
-C:4:2:0:0
+C:5:2:0:0
 W:0:18:0:10000
 F:XTRA_SHOTS
 
