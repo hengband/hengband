@@ -86,17 +86,20 @@ bool test_hit_norm(int chance, int ac, int vis)
  * Critical hits (from objects thrown by player)
  * Factor in item weight, total plusses, and player level.
  */
-s16b critical_shot(int weight, int plus, int dam)
+s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
 {
 	int i, k;
-
+	
 	/* Extract "shot" power */
-	i = ((p_ptr->to_h_b + plus) * 4) + (p_ptr->lev * 2);
-
+	i = p_ptr->to_h_b * 4 + plus_ammo + (p_ptr->lev * 2);
+	
 	/* Snipers can shot more critically with crossbows */
 	if (p_ptr->concent) i += ((i * p_ptr->concent) / 5);
 	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
-
+	
+	/* Good bow makes more critical */
+	i += MAX(0, plus_bow - 15) * 4 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
+	
 	/* Critical hit */
 	if (randint1(5000) <= i)
 	{

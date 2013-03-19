@@ -2444,7 +2444,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		t = object_desc_str(t, "/shot, ");
 		
 		/* Apply Expect damage of Critical */
-		avgdam = calc_expect_crit_shot(o_ptr->weight, o_ptr->to_h, avgdam);
+		avgdam = calc_expect_crit_shot(o_ptr->weight, o_ptr->to_h, bow_ptr->to_h, avgdam);
 		t = object_desc_num(t, avgdam);
 		t = object_desc_str(t, "/crit, ");
 

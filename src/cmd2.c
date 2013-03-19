@@ -3806,7 +3806,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 				{
 					/* Apply special damage XXX XXX XXX */
 					tdam = tot_dam_aux_shot(q_ptr, tdam, m_ptr);
-					tdam = critical_shot(q_ptr->weight, q_ptr->to_h, tdam);
+					tdam = critical_shot(q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
 
 					/* No negative damage */
 					if (tdam < 0) tdam = 0;
@@ -4472,7 +4472,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 				tdam = damroll(dd, ds);
 				/* Apply special damage XXX XXX XXX */
 				tdam = tot_dam_aux(q_ptr, tdam, m_ptr, 0, TRUE);
-				tdam = critical_shot(q_ptr->weight, q_ptr->to_h, tdam);
+				tdam = critical_shot(q_ptr->weight, q_ptr->to_h, 0, tdam);
 				if (q_ptr->to_d > 0)
 					tdam += q_ptr->to_d;
 				else

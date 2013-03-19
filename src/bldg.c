@@ -3113,17 +3113,20 @@ static void town_history(void)
 	screen_load();
 }
 
-s16b calc_expect_crit_shot(int weight, int plus, int dam)
+s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 {
 	u32b num;
 	int i, k, crit;
 
 	/* Extract "shot" power */
-	i = ((p_ptr->to_h_b + plus) * 4) + (p_ptr->lev * 2);
-
+	i = p_ptr->to_h_b * 4 + plus_ammo + (p_ptr->lev * 2);
+	
 	/* Snipers can shot more critically with crossbows */
 	if (p_ptr->concent) i += ((i * p_ptr->concent) / 5);
 	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
+	
+	/* Good bow makes more critical */
+	i += MAX(0, plus_bow - 15) * 4 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
 	
 	if (i < 0) i = 0;
 	
