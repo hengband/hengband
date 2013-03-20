@@ -399,10 +399,10 @@ F:@:FLOOR:3:0:405
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:141
 
-# Quest 27 rewarding (Ranger and Archer get The Long Bow of Bard)
+# Quest 27 rewarding (Ranger and Archer get The Long Bow of Yoichi)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Ranger Archer] ]
 F:a:BUILDING_0:3
-F:@:FLOOR:3:0:0:0:125
+F:@:FLOOR:3:0:0:0:148
 
 # Quest 27 rewarding (Warrior and Berserker get The Glaive of Pain)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior Berserker] ]
@@ -477,10 +477,10 @@ F:@:FLOOR:3:0:0:0:219
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:220
 
-# Quest 27 rewarding (Sniper gets The Heavy Crossbow 'Lion Slayer')
+# Quest 27 rewarding (Sniper gets The Light Crossbow of Wilhelm Tell)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Sniper] ]
 F:a:BUILDING_0:3
-F:@:FLOOR:3:0:0:0:240
+F:@:FLOOR:3:0:0:0:223
 
 # Quest 27 finished, no new quest is available
 ?:[EQU $QUEST27 4]
