@@ -2479,6 +2479,17 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			avgdam /= energy_fire;
 			t = object_desc_num(t, avgdam);
 			t = object_desc_str(t, show_ammo_detail ? "/turn" : "");
+			
+			if(show_ammo_crit_ratio)
+			{
+				int percent = calc_crit_ratio_shot(o_ptr->weight, o_ptr->to_h, bow_ptr->to_h, avgdam);
+				
+				t = object_desc_chr(t, '/');
+				t = object_desc_num(t, percent / 100);
+				t = object_desc_chr(t, '.');
+				t = object_desc_num(t, percent % 100);
+				t = object_desc_str(t, show_ammo_detail ? "% crit" : "%");
+			}
 		}
 
 		t = object_desc_chr(t, p2);

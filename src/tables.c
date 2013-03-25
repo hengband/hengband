@@ -5000,6 +5000,9 @@ const option_type option_info[] =
 		
 	{ &show_ammo_no_crit,           FALSE, OPT_PAGE_TEXT, 2, 15,
 	"show_ammo_no_crit",            _("会心を考慮しない場合の矢弾のダメージを表示する", "Show ammo damage with no critical") },
+
+	{ &show_ammo_crit_ratio,           FALSE, OPT_PAGE_TEXT, 2, 16,
+	"show_ammo_crit_ratio",            _("矢弾の会心発生率を表示する", "Show critical ratio of ammo") },
 		
 
 	/*** Game-Play ***/

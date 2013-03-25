@@ -3113,11 +3113,11 @@ static void town_history(void)
 	screen_load();
 }
 
-s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
+/* critical happens at i / 10000 */
+s16b calc_crit_ratio_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 {
-	u32b num;
-	int i, k, crit;
-
+	int i;
+	
 	/* Extract "shot" power */
 	i = p_ptr->to_h_b * 4 + plus_ammo + (p_ptr->lev * 2);
 	
@@ -3129,6 +3129,15 @@ s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 	i += MAX(0, plus_bow - 15) * 4 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
 	
 	if (i < 0) i = 0;
+	
+	return i * 2;
+}
+
+s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
+{
+	u32b num;
+	int i, k, crit;
+	i = calc_crit_ratio_shot(weight, plus_ammo, plus_bow, dam);
 	
 	k = 0;
 	num = 0;
@@ -3151,8 +3160,8 @@ s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 	num /= 500;
 	
 	num *= i;
-	num += (5000 - i) * dam;
-	num /= 5000;
+	num += (10000 - i) * dam;
+	num /= 10000;
 	
 	return num;
 }

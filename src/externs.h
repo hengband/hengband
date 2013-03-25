@@ -284,6 +284,7 @@ extern bool exp_need;	/* Show the experience needed for next level */
 extern bool ignore_unview;	/* Ignore whenever any monster does */
 extern bool show_ammo_detail;	/* Show Description of ammo damage */
 extern bool show_ammo_no_crit;	/* Show No-crit damage of ammo */
+extern bool show_ammo_crit_ratio;	/* Show critical ratio of ammo */
 
 
 /*** Game-Play Options ***/
@@ -1301,6 +1302,7 @@ extern void quest_discovery(int q_idx);
 extern int quest_number(int level);
 extern int random_quest_number(int level);
 extern bool tele_town(void);
+extern s16b calc_crit_ratio_shot(int weight, int plus_ammo,int plus_bow, int dam);
 extern s16b calc_expect_crit_shot(int weight, int plus_ammo,int plus_bow, int dam);
 extern s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari);
 
