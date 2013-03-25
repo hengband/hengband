@@ -2370,7 +2370,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		
 		int fire_rate = calc_num_fire(o_ptr);
 		/* Show Fire rate */
-		if (fire_rate != 0 && power > 0)
+		if (fire_rate != 0 && power > 0 && known)
 		{	
 			fire_rate = bow_energy(o_ptr->sval) / fire_rate;
 			
@@ -2454,15 +2454,20 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		t = object_desc_chr(t, ' ');
 		t = object_desc_chr(t, p1);
 		
-		/* Damage with no-crit */
-		t = object_desc_num(t, avgdam);
-		t = object_desc_str(t, "/shot, ");
+		if(show_ammo_no_crit)
+		{
+			/* Damage with no-crit */
+			t = object_desc_num(t, avgdam);
+			t = object_desc_str(t, show_ammo_detail ? "/shot " : "/");
+		}
 		
 		/* Apply Expect damage of Critical */
 		avgdam = calc_expect_crit_shot(o_ptr->weight, o_ptr->to_h, bow_ptr->to_h, avgdam);
 		t = object_desc_num(t, avgdam);
-		t = object_desc_str(t, "/crit, ");
-
+		
+		t = show_ammo_no_crit ? object_desc_str(t, show_ammo_detail ? "/crit " : "/")
+							  : object_desc_str(t, show_ammo_detail ? "/shot " : "/");
+	
 		if (p_ptr->num_fire == 0)
 		{
 			t = object_desc_chr(t, '0');
@@ -2473,7 +2478,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			avgdam *= (p_ptr->num_fire * 100);
 			avgdam /= energy_fire;
 			t = object_desc_num(t, avgdam);
-			t = object_desc_str(t, "/turn");
+			t = object_desc_str(t, show_ammo_detail ? "/turn" : "");
 		}
 
 		t = object_desc_chr(t, p2);

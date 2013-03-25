@@ -306,6 +306,9 @@ bool preserve_mode;	/* Preserve artifacts (*) */
 bool autoroller;	/* Allow use of autoroller for stats (*) */
 bool autochara;	/* Autoroll for weight, height and social status */
 bool powerup_home;	/* Increase capacity of your home (*) */
+bool show_ammo_detail;	/* Show Description of ammo damage */
+bool show_ammo_no_crit;	/* Show No-crit damage of ammo */
+
 
 
 /*** Easy Object Auto-Destroyer ***/

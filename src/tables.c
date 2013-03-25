@@ -4994,6 +4994,13 @@ const option_type option_info[] =
 
 	{ &ignore_unview,               FALSE, OPT_PAGE_TEXT, 2, 13,
 	"ignore_unview",                _("視界外のモンスターの行動を表示しない", "Ignore whenever any monster does") },
+	
+	{ &show_ammo_detail,            TRUE, OPT_PAGE_TEXT, 2, 14,
+	"show_ammo_detail",             _("矢弾のダメージの説明を表示する", "Show description of ammo damage") },
+		
+	{ &show_ammo_no_crit,           FALSE, OPT_PAGE_TEXT, 2, 15,
+	"show_ammo_no_crit",            _("会心を考慮しない場合の矢弾のダメージを表示する", "Show ammo damage with no critical") },
+		
 
 	/*** Game-Play ***/
 
