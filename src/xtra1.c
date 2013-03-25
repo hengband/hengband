@@ -3146,6 +3146,120 @@ bool buki_motteruka(int i)
 	return ((inventory[i].k_idx && object_is_melee_weapon(&inventory[i])) ? TRUE : FALSE);
 }
 
+bool is_heavy_shoot(object_type *o_ptr)
+{
+	int hold = adj_str_hold[p_ptr->stat_ind[A_STR]];
+	/* It is hard to carholdry a heavy bow */
+	return (hold < o_ptr->weight / 10);
+}
+
+int bow_tval_ammo(object_type *o_ptr)
+{
+	/* Analyze the launcher */
+	switch (o_ptr->sval)
+	{
+		case SV_SLING:
+		{
+			return TV_SHOT;
+		}
+
+		case SV_SHORT_BOW:
+		case SV_LONG_BOW:
+		case SV_NAMAKE_BOW:
+		{
+			return TV_ARROW;
+		}
+
+		case SV_LIGHT_XBOW:
+		case SV_HEAVY_XBOW:
+		{
+			return TV_BOLT;
+		}
+		case SV_CRIMSON:
+		{
+			return TV_NO_AMMO;
+		}
+	}
+	
+	return 0;
+}
+
+/* calcurate the fire rate of target object */
+s16b calc_num_fire(object_type *o_ptr)
+{
+	int extra_shots = 0;
+	int i;
+	int num = 0;
+	int tval_ammo = bow_tval_ammo(o_ptr);
+	object_type *q_ptr;
+	u32b flgs[TR_FLAG_SIZE];
+	
+	/* Scan the usable inventory */
+	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	{
+		q_ptr = &inventory[i];
+
+		/* Skip non-objects */
+		if (!q_ptr->k_idx) continue;
+		
+		/* Do not apply current equip */
+		if (i == INVEN_BOW) continue;
+
+		/* Extract the item flags */
+		object_flags(q_ptr, flgs);
+
+		/* Boost shots */
+		if (have_flag(flgs, TR_XTRA_SHOTS)) extra_shots++;
+	}
+	
+	object_flags(o_ptr, flgs);
+	if (have_flag(flgs, TR_XTRA_SHOTS)) extra_shots++;
+	
+	if (o_ptr->k_idx && !is_heavy_shoot(o_ptr))
+	{
+		num = 100;
+		/* Extra shots */
+		num += (extra_shots * 100);
+
+		/* Hack -- Rangers love Bows */
+		if ((p_ptr->pclass == CLASS_RANGER) && 
+					(tval_ammo == TV_ARROW))
+		{
+			num += (p_ptr->lev * 4);
+		}
+
+		if ((p_ptr->pclass == CLASS_CAVALRY) &&
+		    (tval_ammo == TV_ARROW))
+		{
+			num += (p_ptr->lev * 3);
+		}
+
+		if (p_ptr->pclass == CLASS_ARCHER)
+		{
+			if (tval_ammo == TV_ARROW)
+				num += ((p_ptr->lev * 5)+50);
+			else if ((tval_ammo == TV_BOLT) || (tval_ammo == TV_SHOT))
+				num += (p_ptr->lev * 4);
+		}
+
+		/*
+		 * Addendum -- also "Reward" high level warriors,
+		 * with _any_ missile weapon -- TY
+		 */
+		if (p_ptr->pclass == CLASS_WARRIOR &&
+		   (tval_ammo <= TV_BOLT) &&
+		   (tval_ammo >= TV_SHOT))
+		{
+			num += (p_ptr->lev * 2);
+		}
+		if ((p_ptr->pclass == CLASS_ROGUE) &&
+		    (tval_ammo == TV_SHOT))
+		{
+			num += (p_ptr->lev * 4);
+		}
+	}
+	return num;
+}
 
 /*
  * Calculate the players current "state", taking into account
@@ -3174,7 +3288,6 @@ void calc_bonuses(void)
 	int             default_hand = 0;
 	int             empty_hands_status = empty_hands(TRUE);
 	int             extra_blows[2];
-	int             extra_shots;
 	object_type     *o_ptr;
 	u32b flgs[TR_FLAG_SIZE];
 	bool            omoi = FALSE;
@@ -3212,7 +3325,7 @@ void calc_bonuses(void)
 
 
 	/* Clear extra blows/shots */
-	extra_blows[0] = extra_blows[1] = extra_shots = 0;
+	extra_blows[0] = extra_blows[1] = 0;
 
 	/* Clear the stat modifiers */
 	for (i = 0; i < 6; i++) p_ptr->stat_add[i] = 0;
@@ -4115,9 +4228,6 @@ void calc_bonuses(void)
 		/* Hack -- cause earthquakes */
 		if (have_flag(flgs, TR_IMPACT)) p_ptr->impact[(i == INVEN_RARM) ? 0 : 1] = TRUE;
 
-		/* Boost shots */
-		if (have_flag(flgs, TR_XTRA_SHOTS)) extra_shots++;
-
 		/* Various flags */
 		if (have_flag(flgs, TR_AGGRAVATE))   p_ptr->cursed |= TRC_AGGRAVATE;
 		if (have_flag(flgs, TR_DRAIN_EXP))   p_ptr->cursed |= TRC_DRAIN_EXP;
@@ -4927,97 +5037,25 @@ void calc_bonuses(void)
 	/* Examine the "current bow" */
 	o_ptr = &inventory[INVEN_BOW];
 
-
-	/* Assume not heavy */
-	p_ptr->heavy_shoot = FALSE;
-
 	/* It is hard to carholdry a heavy bow */
-	if (hold < o_ptr->weight / 10)
+	p_ptr->heavy_shoot = is_heavy_shoot(o_ptr);
+	if (p_ptr->heavy_shoot)
 	{
 		/* Hard to wield a heavy bow */
 		p_ptr->to_h_b  += 2 * (hold - o_ptr->weight / 10);
 		p_ptr->dis_to_h_b  += 2 * (hold - o_ptr->weight / 10);
-
-		/* Heavy Bow */
-		p_ptr->heavy_shoot = TRUE;
 	}
-
 
 	/* Compute "extra shots" if needed */
 	if (o_ptr->k_idx)
 	{
-		/* Analyze the launcher */
-		switch (o_ptr->sval)
-		{
-			case SV_SLING:
-			{
-				p_ptr->tval_ammo = TV_SHOT;
-				break;
-			}
-
-			case SV_SHORT_BOW:
-			case SV_LONG_BOW:
-			case SV_NAMAKE_BOW:
-			{
-				p_ptr->tval_ammo = TV_ARROW;
-				break;
-			}
-
-			case SV_LIGHT_XBOW:
-			case SV_HEAVY_XBOW:
-			{
-				p_ptr->tval_ammo = TV_BOLT;
-				break;
-			}
-			case SV_CRIMSON:
-			{
-				p_ptr->tval_ammo = TV_NO_AMMO;
-				break;
-			}
-		}
+		p_ptr->tval_ammo = bow_tval_ammo(o_ptr);
 
 		/* Apply special flags */
 		if (o_ptr->k_idx && !p_ptr->heavy_shoot)
 		{
 			/* Extra shots */
-			p_ptr->num_fire += (extra_shots * 100);
-
-			/* Hack -- Rangers love Bows */
-			if ((p_ptr->pclass == CLASS_RANGER) &&
-			    (p_ptr->tval_ammo == TV_ARROW))
-			{
-				p_ptr->num_fire += (p_ptr->lev * 4);
-			}
-
-			if ((p_ptr->pclass == CLASS_CAVALRY) &&
-			    (p_ptr->tval_ammo == TV_ARROW))
-			{
-				p_ptr->num_fire += (p_ptr->lev * 3);
-			}
-
-			if (p_ptr->pclass == CLASS_ARCHER)
-			{
-				if (p_ptr->tval_ammo == TV_ARROW)
-					p_ptr->num_fire += ((p_ptr->lev * 5)+50);
-				else if ((p_ptr->tval_ammo == TV_BOLT) || (p_ptr->tval_ammo == TV_SHOT))
-					p_ptr->num_fire += (p_ptr->lev * 4);
-			}
-
-			/*
-			 * Addendum -- also "Reward" high level warriors,
-			 * with _any_ missile weapon -- TY
-			 */
-			if (p_ptr->pclass == CLASS_WARRIOR &&
-			   (p_ptr->tval_ammo <= TV_BOLT) &&
-			   (p_ptr->tval_ammo >= TV_SHOT))
-			{
-				p_ptr->num_fire += (p_ptr->lev * 2);
-			}
-			if ((p_ptr->pclass == CLASS_ROGUE) &&
-			    (p_ptr->tval_ammo == TV_SHOT))
-			{
-				p_ptr->num_fire += (p_ptr->lev * 4);
-			}
+			p_ptr->num_fire = calc_num_fire(o_ptr);
 
 			/* Snipers love Cross bows */
 			if ((p_ptr->pclass == CLASS_SNIPER) &&

@@ -2367,7 +2367,22 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		t = object_desc_chr(t, 'x');
 		t = object_desc_num(t, power);
 		t = object_desc_chr(t, p2);
-
+		
+		int fire_rate = calc_num_fire(o_ptr);
+		/* Show Fire rate */
+		if (fire_rate != 0 && power > 0)
+		{	
+			fire_rate = bow_energy(o_ptr->sval) / fire_rate;
+			
+			t = object_desc_chr(t, ' ');
+			t = object_desc_chr(t, p1);			
+			t = object_desc_num(t,  fire_rate/100);
+			t = object_desc_chr(t,  '.');
+			t = object_desc_num(t,  fire_rate%100);
+			t = object_desc_str(t, "turn");
+			t = object_desc_chr(t, p2);
+		}
+		
 		/* All done */
 		break;
 	}
