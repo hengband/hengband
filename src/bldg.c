@@ -3117,10 +3117,16 @@ static void town_history(void)
 s16b calc_crit_ratio_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 {
 	int i;
+	object_type *j_ptr =  &inventory[INVEN_BOW];
 	
 	/* Extract "shot" power */
-	i = p_ptr->to_h_b * 4 + plus_ammo + (p_ptr->lev * 2);
+	i = p_ptr->to_h_b + plus_ammo;
 	
+	if (p_ptr->tval_ammo == TV_BOLT)
+		i = (p_ptr->skill_thb + (p_ptr->weapon_exp[0][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
+	else
+		i = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + i) * BTH_PLUS_ADJ);
+
 	/* Snipers can shot more critically with crossbows */
 	if (p_ptr->concent) i += ((i * p_ptr->concent) / 5);
 	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
@@ -3130,7 +3136,7 @@ s16b calc_crit_ratio_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 	
 	if (i < 0) i = 0;
 	
-	return i * 2;
+	return i * 5 / 3;
 }
 
 s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)

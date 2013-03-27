@@ -89,9 +89,16 @@ bool test_hit_norm(int chance, int ac, int vis)
 s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
 {
 	int i, k;
+	object_type *j_ptr =  &inventory[INVEN_BOW];
 	
 	/* Extract "shot" power */
-	i = p_ptr->to_h_b * 4 + plus_ammo + (p_ptr->lev * 2);
+	i = p_ptr->to_h_b + plus_ammo;
+	
+	if (p_ptr->tval_ammo == TV_BOLT)
+		i = (p_ptr->skill_thb + (p_ptr->weapon_exp[0][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
+	else
+		i = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + i) * BTH_PLUS_ADJ);
+
 	
 	/* Snipers can shot more critically with crossbows */
 	if (p_ptr->concent) i += ((i * p_ptr->concent) / 5);
@@ -101,7 +108,7 @@ s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
 	i += MAX(0, plus_bow - 15) * 4 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
 	
 	/* Critical hit */
-	if (randint1(5000) <= i)
+	if (randint1(6000) <= i)
 	{
 		k = weight * randint1(500);
 
