@@ -1234,6 +1234,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	cptr            modstr = "";
 
 	int             power;
+	int				fire_rate;
 
 	bool            aware = FALSE;
 	bool            known = FALSE;
@@ -2368,7 +2369,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		t = object_desc_num(t, power);
 		t = object_desc_chr(t, p2);
 		
-		int fire_rate = calc_num_fire(o_ptr);
+		fire_rate = calc_num_fire(o_ptr);
 		/* Show Fire rate */
 		if (fire_rate != 0 && power > 0 && known)
 		{	
@@ -2482,7 +2483,9 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			
 			if(show_ammo_crit_ratio)
 			{
-				int percent = calc_crit_ratio_shot(o_ptr->weight, o_ptr->to_h, bow_ptr->to_h, avgdam);
+				int percent = calc_crit_ratio_shot(o_ptr->weight, 
+						known ? o_ptr->to_h : 0, 
+						object_is_known(bow_ptr) ? bow_ptr->to_h : 0, avgdam);
 				
 				t = object_desc_chr(t, '/');
 				t = object_desc_num(t, percent / 100);
