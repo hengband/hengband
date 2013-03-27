@@ -1602,8 +1602,8 @@ static struct
 	{29, 10, 21, "£È£Ð"},
 	{29, 11, 21, "£Í£Ð"},
 	{29, 20, 21, "¥×¥ì¥¤»þ´Ö"},
-	{53, 10, -1, "ÂÇ·â¹¶·â  :"},
-	{53, 11, -1, "¼Í·â¹¶·â  :"},
+	{53, 10, -1, "ÂÇ·âÌ¿Ãæ  :"},
+	{53, 11, -1, "¼Í·âÌ¿Ãæ  :"},
 	{53, 12, -1, "ËâË¡ËÉ¸æ  :"},
 	{53, 13, -1, "±£Ì©¹ÔÆ°  :"},
 	{53, 15, -1, "ÃÎ³Ð      :"},
@@ -1719,7 +1719,9 @@ static void display_player_melee_bonus(int hand, int hand_entry)
 	/* Hack -- add in weapon info if known */
 	if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
 	if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
-
+	
+	show_tohit += p_ptr->skill_thn / BTH_PLUS_ADJ;
+	
 	/* Melee attacks */
 	sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
 
@@ -1791,7 +1793,9 @@ static void display_player_middle(void)
 		show_tohit += p_ptr->weapon_exp[0][o_ptr->sval] / 400;
 	else
 		show_tohit += (p_ptr->weapon_exp[0][o_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200;
-
+	
+	show_tohit += p_ptr->skill_thb / BTH_PLUS_ADJ;
+	
 	/* Range attacks */
 	display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
 
