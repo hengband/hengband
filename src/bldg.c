@@ -3179,7 +3179,7 @@ s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari
 	
 	if(dokubari) return dam;
 	
-	i = weight + (meichuu * 3 + plus * 5) + (p_ptr->lev * 3);
+	i = (weight + (meichuu * 3 + plus * 5) + p_ptr->skill_thn);
 	if (i < 0) i = 0;
 	
 	k = weight;

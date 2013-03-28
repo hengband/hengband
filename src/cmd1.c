@@ -152,14 +152,14 @@ s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
 /*
  * Critical hits (by player)
  *
- * Factor in weapon weight, total plusses, player level.
+ * Factor in weapon weight, total plusses, player melee bonus
  */
 s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
 {
 	int i, k;
-
+	
 	/* Extract "blow" power */
-	i = (weight + (meichuu * 3 + plus * 5) + (p_ptr->lev * 3));
+	i = (weight + (meichuu * 3 + plus * 5) + p_ptr->skill_thn);
 
 	/* Chance */
 	if ((randint1((p_ptr->pclass == CLASS_NINJA) ? 4444 : 5000) <= i) || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN))
