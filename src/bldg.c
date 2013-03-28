@@ -3132,11 +3132,11 @@ s16b calc_crit_ratio_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
 	
 	/* Good bow makes more critical */
-	i += MAX(0, plus_bow - 15) * 4 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
+	i += plus_bow * 8 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
 	
 	if (i < 0) i = 0;
 	
-	return i * 5 / 3;
+	return i;
 }
 
 s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)

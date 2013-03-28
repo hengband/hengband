@@ -105,10 +105,10 @@ s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
 	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
 	
 	/* Good bow makes more critical */
-	i += MAX(0, plus_bow - 15) * 4 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
+	i += plus_bow * 8 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
 	
 	/* Critical hit */
-	if (randint1(6000) <= i)
+	if (randint1(10000) <= i)
 	{
 		k = weight * randint1(500);
 
