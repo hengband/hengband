@@ -507,7 +507,7 @@ static cptr r_info_flags7[] =
 	"SELF_LITE_2",
 	"GUARDIAN",
 	"CHAMELEON",
-	"KILL_EXP",
+	"XXXX4XXX",
 	"TANUKI",
 	"HAS_DARK_1",
 	"SELF_DARK_1",

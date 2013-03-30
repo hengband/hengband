@@ -1762,16 +1762,14 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 	int			dealt_damage;
 
 	(void)COPY(&exp_mon, m_ptr, monster_type);
-	if (!(r_ptr->flags7 & RF7_KILL_EXP))
-	{
-		expdam = (m_ptr->hp > dam) ? dam : m_ptr->hp;
+	
+	expdam = (m_ptr->hp > dam) ? dam : m_ptr->hp;
 
-		get_exp_from_mon(expdam, &exp_mon);
+	get_exp_from_mon(expdam, &exp_mon);
 
-		/* Genocided by chaos patron */
-		if (!m_ptr->r_idx) m_idx = 0;
-	}
-
+	/* Genocided by chaos patron */
+	if (!m_ptr->r_idx) m_idx = 0;
+	
 	/* Redraw (later) if needed */
 	if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 	if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
@@ -2153,19 +2151,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 			delete_monster_idx(m_idx);
 		}
 
-		/* Prevent bug of chaos patron's reward */
-		if (r_ptr->flags7 & RF7_KILL_EXP)
-		{
-			get_exp_from_mon((long)exp_mon.max_maxhp*2, &exp_mon);
-		}
-		else
-		{
-			u32b destroy_exp = exp_mon.max_maxhp + 1;
-			/* Add remained exp*/
-			if(dealt_damage < m_ptr->maxhp)
-				destroy_exp += m_ptr->maxhp - dealt_damage;
-			get_exp_from_mon(destroy_exp, &exp_mon);
-		}
+		get_exp_from_mon((long)exp_mon.max_maxhp*2, &exp_mon);
 
 		/* Not afraid */
 		(*fear) = FALSE;
