@@ -1320,6 +1320,9 @@ msg_format("その%sを%sのに十分なマジックポイントがない。",prayer,
 	}
 	else over_exerted = TRUE;
 
+	/* Redraw mana */
+	p_ptr->redraw |= (PR_MANA);
+
 	/* Failed spell */
 	if (randint0(100) < chance)
 	{
@@ -1614,9 +1617,6 @@ msg_print("体を悪くしてしまった！");
 			(void)dec_stat(A_CON, 15 + randint1(10), perm);
 		}
 	}
-
-	/* Redraw mana */
-	p_ptr->redraw |= (PR_MANA);
 
 	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
