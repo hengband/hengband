@@ -1343,6 +1343,7 @@ static bool wr_savefile_new(void)
 		wr_s16b(quest[i].level);
 
 		wr_byte(quest[i].complev);
+		wr_u32b(quest[i].comptime);
 
 		/* Save quest status if quest is running */
 		if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_COMPLETED || !is_fixed_quest_idx(i))

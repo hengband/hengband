@@ -3443,6 +3443,14 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 				{
 					rd_byte(&quest[i].complev);
 				}
+				if(h_older_than(2, 1, 2, 2))
+				{
+					quest[i].comptime = 0;
+				}
+				else
+				{
+					rd_u32b(&quest[i].comptime);
+				}
 
 				/* Load quest status if quest is running */
 				if ((quest[i].status == QUEST_STATUS_TAKEN) ||

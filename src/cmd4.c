@@ -9453,37 +9453,31 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 				if (quest[q_idx].complev == 0)
 				{
 					sprintf(tmp_str,
-#ifdef JP
-						"  %-40s (%3d≥¨)            -   …‘¿Ôæ°\n",
-#else
-						"  %-40s (Dungeon level: %3d) - (Cancelled)\n",
-#endif
+						_("  %-40s (%3d≥¨)            -   …‘¿Ôæ°\n", 
+						  "  %-40s (Dungeon level: %3d) - (Cancelled)\n") ,
 						r_name+r_info[quest[q_idx].r_idx].name,
 						quest[q_idx].level);
 				}
 				else
 				{
-					sprintf(tmp_str,
-#ifdef JP
-						"  %-40s (%3d≥¨)            - •Ï•Ÿ•Î%2d\n",
-#else
-						"  %-40s (Dungeon level: %3d) - level %2d\n",
-#endif
+					sprintf(tmp_str, 
+						_("  %-40s (%3d≥¨)            - •Ï•Ÿ•Î%2d - %02d:%02d:%02d\n",
+						  "  %-40s (Dungeon level: %3d) - level %2d - %02d:%02d:%02d\n") ,
 						r_name+r_info[quest[q_idx].r_idx].name,
 						quest[q_idx].level,
-						quest[q_idx].complev);
+						quest[q_idx].complev,
+						quest[q_idx].comptime/(60*60), (quest[q_idx].comptime/60)%60, quest[q_idx].comptime%60);
+
 				}
 			}
 			else
 			{
 				/* Print the quest info */
-#ifdef JP
-				sprintf(tmp_str, "  %-40s (¥Ì∏±≈Ÿ:%3d≥¨¡Í≈ˆ) - •Ï•Ÿ•Î%2d\n",
-					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
-#else
-				sprintf(tmp_str, "  %-40s (Danger  level: %3d) - level %2d\n",
-					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
-#endif
+				
+				sprintf(tmp_str, 
+						_("  %-40s (¥Ì∏±≈Ÿ:%3d≥¨¡Í≈ˆ) - •Ï•Ÿ•Î%2d - %02d:%02d:%02d\n",
+						  "  %-40s (Danger  level: %3d) - level %2d - %02d:%02d:%02d\n") ,
+					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev, quest[q_idx].comptime/(60*60), (quest[q_idx].comptime/60)%60, quest[q_idx].comptime%60);
 			}
 
 			fputs(tmp_str, fff);
@@ -9541,24 +9535,19 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 			if (!is_fixed_quest_idx(q_idx) && quest[q_idx].r_idx)
 			{
 				/* Print the quest info */
-#ifdef JP
-				sprintf(tmp_str, "  %-40s (%3d≥¨)            - •Ï•Ÿ•Î%2d\n",
-					r_name+r_info[quest[q_idx].r_idx].name, quest[q_idx].level, quest[q_idx].complev);
-#else
-				sprintf(tmp_str, "  %-40s (Dungeon level: %3d) - level %2d\n",
-					r_name+r_info[quest[q_idx].r_idx].name, quest[q_idx].level, quest[q_idx].complev);
-#endif
+				sprintf(tmp_str, 
+						_("  %-40s (%3d≥¨)            - •Ï•Ÿ•Î%2d - %02d:%02d:%02d\n",
+						  "  %-40s (Dungeon level: %3d) - level %2d - %02d:%02d:%02d\n"),
+					r_name+r_info[quest[q_idx].r_idx].name, quest[q_idx].level, quest[q_idx].complev, quest[q_idx].comptime/(60*60), (quest[q_idx].comptime/60)%60, quest[q_idx].comptime%60);
 			}
 			else
 			{
 				/* Print the quest info */
-#ifdef JP
-				sprintf(tmp_str, "  %-40s (¥Ì∏±≈Ÿ:%3d≥¨¡Í≈ˆ) - •Ï•Ÿ•Î%2d\n",
-					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
-#else
-				sprintf(tmp_str, "  %-40s (Danger  level: %3d) - level %2d\n",
-					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev);
-#endif
+				update_playtime();
+				sprintf(tmp_str, 
+						_("  %-40s (¥Ì∏±≈Ÿ:%3d≥¨¡Í≈ˆ) - •Ï•Ÿ•Î%2d - %02d:%02d:%02d\n",
+						  "  %-40s (Danger  level: %3d) - level %2d - %02d:%02d:%02d\n"),
+					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev, quest[q_idx].comptime/(60*60), (quest[q_idx].comptime/60)%60, quest[q_idx].comptime%60);
 			}
 			fputs(tmp_str, fff);
 		}

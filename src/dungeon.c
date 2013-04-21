@@ -1185,6 +1185,8 @@ void leave_quest_check(void)
 	{
 		quest[leaving_quest].status = QUEST_STATUS_FAILED;
 		quest[leaving_quest].complev = (byte)p_ptr->lev;
+		update_playtime();
+		quest[leaving_quest].comptime = playtime;
 
 		/* Additional settings */
 		switch (quest[leaving_quest].type)
@@ -3411,6 +3413,8 @@ static void process_world_aux_movement(void)
 						{
 							quest[i].status = QUEST_STATUS_FAILED;
 							quest[i].complev = (byte)p_ptr->lev;
+							update_playtime();
+							quest[leaving_quest].comptime = playtime;
 							r_info[quest[i].r_idx].flags1 &= ~(RF1_QUESTOR);
 						}
 					}

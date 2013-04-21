@@ -3240,6 +3240,7 @@ static void player_wipe(void)
 		quest[i].level = 0;
 		quest[i].r_idx = 0;
 		quest[i].complev = 0;
+		quest[i].comptime = 0;
 	}
 
 	/* No weight */

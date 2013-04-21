@@ -391,6 +391,8 @@ void complete_quest(int quest_num)
 
 	quest[quest_num].status = QUEST_STATUS_COMPLETED;
 	quest[quest_num].complev = (byte)p_ptr->lev;
+	update_playtime();
+	quest[quest_num].comptime = playtime;
 
 	if (!(quest[quest_num].flags & QUEST_FLAG_SILENT))
 	{

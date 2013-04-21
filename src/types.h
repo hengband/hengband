@@ -705,6 +705,7 @@ struct quest_type
 	byte dungeon;           /* quest dungeon */
 
 	byte complev;           /* player level (complete) */
+	u32b comptime;          /* quest clear time*/
 };
 
 
