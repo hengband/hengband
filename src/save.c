@@ -1335,26 +1335,28 @@ static bool wr_savefile_new(void)
 
 	for (i = 0; i < max_quests; i++)
 	{
+		quest_type* const q_ptr = &quest[i];
+
 		/* Save status for every quest */
-		wr_s16b(quest[i].status);
+		wr_s16b(q_ptr->status);
 
 		/* And the dungeon level too */
 		/* (prevents problems with multi-level quests) */
-		wr_s16b(quest[i].level);
+		wr_s16b(q_ptr->level);
 
-		wr_byte(quest[i].complev);
-		wr_u32b(quest[i].comptime);
+		wr_byte(q_ptr->complev);
+		wr_u32b(q_ptr->comptime);
 
 		/* Save quest status if quest is running */
-		if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_COMPLETED || !is_fixed_quest_idx(i))
+		if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_COMPLETED || !is_fixed_quest_idx(i))
 		{
-			wr_s16b(quest[i].cur_num);
-			wr_s16b(quest[i].max_num);
-			wr_s16b(quest[i].type);
-			wr_s16b(quest[i].r_idx);
-			wr_s16b(quest[i].k_idx);
-			wr_byte(quest[i].flags);
-			wr_byte(quest[i].dungeon);
+			wr_s16b(q_ptr->cur_num);
+			wr_s16b(q_ptr->max_num);
+			wr_s16b(q_ptr->type);
+			wr_s16b(q_ptr->r_idx);
+			wr_s16b(q_ptr->k_idx);
+			wr_byte(q_ptr->flags);
+			wr_byte(q_ptr->dungeon);
 		}
 	}
 

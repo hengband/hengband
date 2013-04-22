@@ -1179,41 +1179,45 @@ void leave_quest_check(void)
 	leaving_quest = p_ptr->inside_quest;
 
 	/* Leaving an 'only once' quest marks it as failed */
-	if (leaving_quest &&
-	    ((quest[leaving_quest].flags & QUEST_FLAG_ONCE)  || (quest[leaving_quest].type == QUEST_TYPE_RANDOM)) &&
-	    (quest[leaving_quest].status == QUEST_STATUS_TAKEN))
-	{
-		quest[leaving_quest].status = QUEST_STATUS_FAILED;
-		quest[leaving_quest].complev = (byte)p_ptr->lev;
-		update_playtime();
-		quest[leaving_quest].comptime = playtime;
-
-		/* Additional settings */
-		switch (quest[leaving_quest].type)
+	if (leaving_quest)
+	{	
+		quest_type* const q_ptr = &quest[leaving_quest];
+		
+	    if(((q_ptr->flags & QUEST_FLAG_ONCE)  || (q_ptr->type == QUEST_TYPE_RANDOM)) &&
+	       (q_ptr->status == QUEST_STATUS_TAKEN))
 		{
-		case QUEST_TYPE_TOWER:
-			quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
-			quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;
-			break;
-		case QUEST_TYPE_FIND_ARTIFACT:
-			a_info[quest[leaving_quest].k_idx].gen_flags &= ~(TRG_QUESTITEM);
-			break;
-		case QUEST_TYPE_RANDOM:
-			r_info[quest[leaving_quest].r_idx].flags1 &= ~(RF1_QUESTOR);
+			q_ptr->status = QUEST_STATUS_FAILED;
+			q_ptr->complev = (byte)p_ptr->lev;
+			update_playtime();
+			q_ptr->comptime = playtime;
 
-			/* Floor of random quest will be blocked */
-			prepare_change_floor_mode(CFM_NO_RETURN);
-			break;
-		}
+			/* Additional settings */
+			switch (q_ptr->type)
+			{
+			  case QUEST_TYPE_TOWER:
+				quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
+				quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;
+				break;
+			  case QUEST_TYPE_FIND_ARTIFACT:
+				a_info[q_ptr->k_idx].gen_flags &= ~(TRG_QUESTITEM);
+				break;
+			  case QUEST_TYPE_RANDOM:
+				r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
 
-		/* Record finishing a quest */
-		if (quest[leaving_quest].type == QUEST_TYPE_RANDOM)
-		{
-			if (record_rand_quest) do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
-		}
-		else
-		{
-			if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
+				/* Floor of random quest will be blocked */
+				prepare_change_floor_mode(CFM_NO_RETURN);
+				break;
+			}
+
+			/* Record finishing a quest */
+			if (q_ptr->type == QUEST_TYPE_RANDOM)
+			{
+				if (record_rand_quest) do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
+			}
+			else
+			{
+				if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
+			}
 		}
 	}
 }
@@ -3407,15 +3411,18 @@ static void process_world_aux_movement(void)
 
 					for (i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
 					{
-						if ((quest[i].type == QUEST_TYPE_RANDOM) &&
-						    (quest[i].status == QUEST_STATUS_TAKEN) &&
-						    (quest[i].level < dun_level))
+						quest_type* const q_ptr = &quest[i];
+
+						
+						if ((q_ptr->type == QUEST_TYPE_RANDOM) &&
+						    (q_ptr->status == QUEST_STATUS_TAKEN) &&
+						    (q_ptr->level < dun_level))
 						{
-							quest[i].status = QUEST_STATUS_FAILED;
-							quest[i].complev = (byte)p_ptr->lev;
+							q_ptr->status = QUEST_STATUS_FAILED;
+							q_ptr->complev = (byte)p_ptr->lev;
 							update_playtime();
-							quest[leaving_quest].comptime = playtime;
-							r_info[quest[i].r_idx].flags1 &= ~(RF1_QUESTOR);
+							q_ptr->comptime = playtime;
+							r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
 						}
 					}
 				}

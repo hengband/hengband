@@ -9422,8 +9422,9 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 	for (i = 1; i < max_quests; i++)
 	{
 		int q_idx = quest_num[i];
+		quest_type* const q_ptr = &quest[q_idx];
 
-		if (quest[q_idx].status == QUEST_STATUS_FINISHED)
+		if (q_ptr->status == QUEST_STATUS_FINISHED)
 		{
 			if (is_fixed_quest_idx(q_idx))
 			{
@@ -9441,32 +9442,32 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 				p_ptr->inside_quest = old_quest;
 
 				/* No info from "silent" quests */
-				if (quest[q_idx].flags & QUEST_FLAG_SILENT) continue;
+				if (q_ptr->flags & QUEST_FLAG_SILENT) continue;
 			}
 
 			total++;
 
-			if (!is_fixed_quest_idx(q_idx) && quest[q_idx].r_idx)
+			if (!is_fixed_quest_idx(q_idx) && q_ptr->r_idx)
 			{
 				/* Print the quest info */
 
-				if (quest[q_idx].complev == 0)
+				if (q_ptr->complev == 0)
 				{
 					sprintf(tmp_str,
 						_("  %-40s (%3d³¬)            -   ÉÔÀï¾¡\n", 
 						  "  %-40s (Dungeon level: %3d) - (Cancelled)\n") ,
-						r_name+r_info[quest[q_idx].r_idx].name,
-						quest[q_idx].level);
+						r_name+r_info[q_ptr->r_idx].name,
+						q_ptr->level);
 				}
 				else
 				{
 					sprintf(tmp_str, 
 						_("  %-40s (%3d³¬)            - ¥ì¥Ù¥ë%2d - %02d:%02d:%02d\n",
 						  "  %-40s (Dungeon level: %3d) - level %2d - %02d:%02d:%02d\n") ,
-						r_name+r_info[quest[q_idx].r_idx].name,
-						quest[q_idx].level,
-						quest[q_idx].complev,
-						quest[q_idx].comptime/(60*60), (quest[q_idx].comptime/60)%60, quest[q_idx].comptime%60);
+						r_name+r_info[q_ptr->r_idx].name,
+						q_ptr->level,
+						q_ptr->complev,
+						q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
 
 				}
 			}
@@ -9477,7 +9478,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 				sprintf(tmp_str, 
 						_("  %-40s (´í¸±ÅÙ:%3d³¬ÁêÅö) - ¥ì¥Ù¥ë%2d - %02d:%02d:%02d\n",
 						  "  %-40s (Danger  level: %3d) - level %2d - %02d:%02d:%02d\n") ,
-					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev, quest[q_idx].comptime/(60*60), (quest[q_idx].comptime/60)%60, quest[q_idx].comptime%60);
+					q_ptr->name, q_ptr->level, q_ptr->complev, q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
 			}
 
 			fputs(tmp_str, fff);
@@ -9508,8 +9509,9 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 	for (i = 1; i < max_quests; i++)
 	{
 		int q_idx = quest_num[i];
+		quest_type* const q_ptr = &quest[q_idx];
 
-		if ((quest[q_idx].status == QUEST_STATUS_FAILED_DONE) || (quest[q_idx].status == QUEST_STATUS_FAILED))
+		if ((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED))
 		{
 			if (is_fixed_quest_idx(q_idx))
 			{
@@ -9527,18 +9529,18 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 				p_ptr->inside_quest = old_quest;
 
 				/* No info from "silent" quests */
-				if (quest[q_idx].flags & QUEST_FLAG_SILENT) continue;
+				if (q_ptr->flags & QUEST_FLAG_SILENT) continue;
 			}
 
 			total++;
 
-			if (!is_fixed_quest_idx(q_idx) && quest[q_idx].r_idx)
+			if (!is_fixed_quest_idx(q_idx) && q_ptr->r_idx)
 			{
 				/* Print the quest info */
 				sprintf(tmp_str, 
 						_("  %-40s (%3d³¬)            - ¥ì¥Ù¥ë%2d - %02d:%02d:%02d\n",
 						  "  %-40s (Dungeon level: %3d) - level %2d - %02d:%02d:%02d\n"),
-					r_name+r_info[quest[q_idx].r_idx].name, quest[q_idx].level, quest[q_idx].complev, quest[q_idx].comptime/(60*60), (quest[q_idx].comptime/60)%60, quest[q_idx].comptime%60);
+					r_name+r_info[q_ptr->r_idx].name, q_ptr->level, q_ptr->complev, q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
 			}
 			else
 			{
@@ -9547,7 +9549,7 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 				sprintf(tmp_str, 
 						_("  %-40s (´í¸±ÅÙ:%3d³¬ÁêÅö) - ¥ì¥Ù¥ë%2d - %02d:%02d:%02d\n",
 						  "  %-40s (Danger  level: %3d) - level %2d - %02d:%02d:%02d\n"),
-					quest[q_idx].name, quest[q_idx].level, quest[q_idx].complev, quest[q_idx].comptime/(60*60), (quest[q_idx].comptime/60)%60, quest[q_idx].comptime%60);
+					q_ptr->name, q_ptr->level, q_ptr->complev, q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
 			}
 			fputs(tmp_str, fff);
 		}

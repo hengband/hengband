@@ -379,7 +379,9 @@ static bool kind_is_hafted(int k_idx)
 
 void complete_quest(int quest_num)
 {
-	switch (quest[quest_num].type)
+	quest_type* const q_ptr = &quest[quest_num];
+
+	switch (q_ptr->type)
 	{
 	case QUEST_TYPE_RANDOM:
 		if (record_rand_quest) do_cmd_write_nikki(NIKKI_RAND_QUEST_C, quest_num, NULL);
@@ -389,12 +391,12 @@ void complete_quest(int quest_num)
 		break;
 	}
 
-	quest[quest_num].status = QUEST_STATUS_COMPLETED;
-	quest[quest_num].complev = (byte)p_ptr->lev;
+	q_ptr->status = QUEST_STATUS_COMPLETED;
+	q_ptr->complev = (byte)p_ptr->lev;
 	update_playtime();
-	quest[quest_num].comptime = playtime;
+	q_ptr->comptime = playtime;
 
-	if (!(quest[quest_num].flags & QUEST_FLAG_SILENT))
+	if (!(q_ptr->flags & QUEST_FLAG_SILENT))
 	{
 		msg_print(_("クエストを達成した！", "You just completed your quest!"));
 		msg_print(NULL);
@@ -442,42 +444,44 @@ void check_quest_completion(monster_type *m_ptr)
 	x = m_ptr->fx;
 
 	/* Inside a quest */
-	quest_num = p_ptr->inside_quest;
+	quest_num = p_ptr->inside_quest;		
 
 	/* Search for an active quest on this dungeon level */
 	if (!quest_num)
 	{
 		for (i = max_quests - 1; i > 0; i--)
 		{
+			quest_type* const q_ptr = &quest[i];
+			
 			/* Quest is not active */
-			if (quest[i].status != QUEST_STATUS_TAKEN)
+			if (q_ptr->status != QUEST_STATUS_TAKEN)
 				continue;
 
 			/* Quest is not a dungeon quest */
-			if (quest[i].flags & QUEST_FLAG_PRESET)
+			if (q_ptr->flags & QUEST_FLAG_PRESET)
 				continue;
 
 			/* Quest is not on this level */
-			if ((quest[i].level != dun_level) &&
-			    (quest[i].type != QUEST_TYPE_KILL_ANY_LEVEL))
+			if ((q_ptr->level != dun_level) &&
+			    (q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL))
 				continue;
 
 			/* Not a "kill monster" quest */
-			if ((quest[i].type == QUEST_TYPE_FIND_ARTIFACT) ||
-			    (quest[i].type == QUEST_TYPE_FIND_EXIT))
+			if ((q_ptr->type == QUEST_TYPE_FIND_ARTIFACT) ||
+			    (q_ptr->type == QUEST_TYPE_FIND_EXIT))
 				continue;
 
 			/* Interesting quest */
-			if ((quest[i].type == QUEST_TYPE_KILL_NUMBER) ||
-			    (quest[i].type == QUEST_TYPE_TOWER) ||
-			    (quest[i].type == QUEST_TYPE_KILL_ALL))
+			if ((q_ptr->type == QUEST_TYPE_KILL_NUMBER) ||
+			    (q_ptr->type == QUEST_TYPE_TOWER) ||
+			    (q_ptr->type == QUEST_TYPE_KILL_ALL))
 				break;
 
 			/* Interesting quest */
-			if (((quest[i].type == QUEST_TYPE_KILL_LEVEL) ||
-			     (quest[i].type == QUEST_TYPE_KILL_ANY_LEVEL) ||
-			     (quest[i].type == QUEST_TYPE_RANDOM)) &&
-			     (quest[i].r_idx == m_ptr->r_idx))
+			if (((q_ptr->type == QUEST_TYPE_KILL_LEVEL) ||
+			     (q_ptr->type == QUEST_TYPE_KILL_ANY_LEVEL) ||
+			     (q_ptr->type == QUEST_TYPE_RANDOM)) &&
+			     (q_ptr->r_idx == m_ptr->r_idx))
 				break;
 		}
 
@@ -489,18 +493,19 @@ void check_quest_completion(monster_type *m_ptr)
 	{
 		/* Current quest */
 		i = quest_num;
+		quest_type* const q_ptr = &quest[i];
 
-		switch (quest[i].type)
+		switch (q_ptr->type)
 		{
 			case QUEST_TYPE_KILL_NUMBER:
 			{
-				quest[i].cur_num++;
+				q_ptr->cur_num++;
 
-				if (quest[i].cur_num >= quest[i].num_mon)
+				if (q_ptr->cur_num >= q_ptr->num_mon)
 				{
 					complete_quest(i);
 
-					quest[i].cur_num = 0;
+					q_ptr->cur_num = 0;
 				}
 				break;
 			}
@@ -510,9 +515,9 @@ void check_quest_completion(monster_type *m_ptr)
 
 				if (count_all_hostile_monsters() == 1)
 				{
-					if (quest[i].flags & QUEST_FLAG_SILENT)
+					if (q_ptr->flags & QUEST_FLAG_SILENT)
 					{
-						quest[i].status = QUEST_STATUS_FINISHED;
+						q_ptr->status = QUEST_STATUS_FINISHED;
 					}
 					else
 					{
@@ -525,16 +530,16 @@ void check_quest_completion(monster_type *m_ptr)
 			case QUEST_TYPE_RANDOM:
 			{
 				/* Only count valid monsters */
-				if (quest[i].r_idx != m_ptr->r_idx)
+				if (q_ptr->r_idx != m_ptr->r_idx)
 					break;
 
-				quest[i].cur_num++;
+				q_ptr->cur_num++;
 
-				if (quest[i].cur_num >= quest[i].max_num)
+				if (q_ptr->cur_num >= q_ptr->max_num)
 				{
 					complete_quest(i);
 
-					if (!(quest[i].flags & QUEST_FLAG_PRESET))
+					if (!(q_ptr->flags & QUEST_FLAG_PRESET))
 					{
 						create_stairs = TRUE;
 						p_ptr->inside_quest = 0;
@@ -543,24 +548,24 @@ void check_quest_completion(monster_type *m_ptr)
 					/* Finish the two main quests without rewarding */
 					if ((i == QUEST_OBERON) || (i == QUEST_SERPENT))
 					{
-						quest[i].status = QUEST_STATUS_FINISHED;
+						q_ptr->status = QUEST_STATUS_FINISHED;
 					}
 
-					if (quest[i].type == QUEST_TYPE_RANDOM)
+					if (q_ptr->type == QUEST_TYPE_RANDOM)
 					{
 						reward = TRUE;
-						quest[i].status = QUEST_STATUS_FINISHED;
+						q_ptr->status = QUEST_STATUS_FINISHED;
 					}
 				}
 				break;
 			}
 			case QUEST_TYPE_KILL_ANY_LEVEL:
 			{
-				quest[i].cur_num++;
-				if (quest[i].cur_num >= quest[i].max_num)
+				q_ptr->cur_num++;
+				if (q_ptr->cur_num >= q_ptr->max_num)
 				{
 					complete_quest(i);
-					quest[i].cur_num = 0;
+					q_ptr->cur_num = 0;
 				}
 				break;
 			}
@@ -570,7 +575,7 @@ void check_quest_completion(monster_type *m_ptr)
 
 				if (count_all_hostile_monsters() == 1)
 				{
-					quest[i].status = QUEST_STATUS_STAGE_COMPLETED;
+					q_ptr->status = QUEST_STATUS_STAGE_COMPLETED;
 
 					if((quest[QUEST_TOWER1].status == QUEST_STATUS_STAGE_COMPLETED) &&
 					   (quest[QUEST_TOWER2].status == QUEST_STATUS_STAGE_COMPLETED) &&

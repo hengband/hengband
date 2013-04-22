@@ -3432,56 +3432,58 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 		{
 			if (i < max_quests)
 			{
-				rd_s16b(&quest[i].status);
-				rd_s16b(&quest[i].level);
+				quest_type* const q_ptr = &quest[i];
+				
+				rd_s16b(&q_ptr->status);
+				rd_s16b(&q_ptr->level);
 
 				if (z_older_than(11, 0, 6))
 				{
-					quest[i].complev = 0;
+					q_ptr->complev = 0;
 				}
 				else
 				{
-					rd_byte(&quest[i].complev);
+					rd_byte(&q_ptr->complev);
 				}
 				if(h_older_than(2, 1, 2, 2))
 				{
-					quest[i].comptime = 0;
+					q_ptr->comptime = 0;
 				}
 				else
 				{
-					rd_u32b(&quest[i].comptime);
+					rd_u32b(&q_ptr->comptime);
 				}
 
 				/* Load quest status if quest is running */
-				if ((quest[i].status == QUEST_STATUS_TAKEN) ||
-				    (!z_older_than(10, 3, 14) && (quest[i].status == QUEST_STATUS_COMPLETED)) ||
+				if ((q_ptr->status == QUEST_STATUS_TAKEN) ||
+				    (!z_older_than(10, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED)) ||
 				    (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load))))
 				{
-					rd_s16b(&quest[i].cur_num);
-					rd_s16b(&quest[i].max_num);
-					rd_s16b(&quest[i].type);
+					rd_s16b(&q_ptr->cur_num);
+					rd_s16b(&q_ptr->max_num);
+					rd_s16b(&q_ptr->type);
 
 					/* Load quest monster index */
-					rd_s16b(&quest[i].r_idx);
+					rd_s16b(&q_ptr->r_idx);
 
-					if ((quest[i].type == QUEST_TYPE_RANDOM) && (!quest[i].r_idx))
+					if ((q_ptr->type == QUEST_TYPE_RANDOM) && (!q_ptr->r_idx))
 					{
 						determine_random_questor(&quest[i]);
 					}
 
 					/* Load quest item index */
-					rd_s16b(&quest[i].k_idx);
+					rd_s16b(&q_ptr->k_idx);
 
-					if (quest[i].k_idx)
-						a_info[quest[i].k_idx].gen_flags |= TRG_QUESTITEM;
+					if (q_ptr->k_idx)
+						a_info[q_ptr->k_idx].gen_flags |= TRG_QUESTITEM;
 
-					rd_byte(&quest[i].flags);
+					rd_byte(&q_ptr->flags);
 
 					if (z_older_than(10, 3, 11))
 					{
-						if (quest[i].flags & QUEST_FLAG_PRESET)
+						if (q_ptr->flags & QUEST_FLAG_PRESET)
 						{
-							quest[i].dungeon = 0;
+							q_ptr->dungeon = 0;
 						}
 						else
 						{
@@ -3494,12 +3496,12 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 					}
 					else
 					{
-						rd_byte(&quest[i].dungeon);
+						rd_byte(&q_ptr->dungeon);
 					}
 					/* Mark uniques */
-					if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_UNTAKEN)
-						if (r_info[quest[i].r_idx].flags1 & RF1_UNIQUE)
-							r_info[quest[i].r_idx].flags1 |= RF1_QUESTOR;
+					if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_UNTAKEN)
+						if (r_info[q_ptr->r_idx].flags1 & RF1_UNIQUE)
+							r_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
 				}
 			}
 			/* Ignore the empty quests from old versions */

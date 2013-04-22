@@ -3232,15 +3232,17 @@ static void player_wipe(void)
 	/* Wipe the quests */
 	for (i = 0; i < max_quests; i++)
 	{
-		quest[i].status = QUEST_STATUS_UNTAKEN;
+		quest_type* const q_ptr = &quest[i];
+		
+		q_ptr->status = QUEST_STATUS_UNTAKEN;
 
-		quest[i].cur_num = 0;
-		quest[i].max_num = 0;
-		quest[i].type = 0;
-		quest[i].level = 0;
-		quest[i].r_idx = 0;
-		quest[i].complev = 0;
-		quest[i].comptime = 0;
+		q_ptr->cur_num = 0;
+		q_ptr->max_num = 0;
+		q_ptr->type = 0;
+		q_ptr->level = 0;
+		q_ptr->r_idx = 0;
+		q_ptr->complev = 0;
+		q_ptr->comptime = 0;
 	}
 
 	/* No weight */
