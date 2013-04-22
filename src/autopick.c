@@ -2847,7 +2847,7 @@ static cptr *read_text_lines(cptr filename)
  */
 static void prepare_default_pickpref(void)
 {
-	static char *messages[] = {
+	const cptr messages[] = {
 #ifdef JP
 		"あなたは「自動拾いエディタ」を初めて起動しました。",
 		"自動拾いのユーザー設定ファイルがまだ書かれていないので、",

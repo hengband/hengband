@@ -11565,7 +11565,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 			int item;
-			char *q, *s;
+			cptr q, s;
 			char o_name[MAX_NLEN];
 			object_type *o_ptr;
 			u32b f[TR_FLAG_SIZE];
@@ -12031,7 +12031,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 			int item;
-			char *q, *s;
+			cptr q, s;
 			char o_name[MAX_NLEN];
 			object_type *o_ptr;
 			u32b f[TR_FLAG_SIZE];
@@ -12328,7 +12328,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 			int item;
-			char *s, *q;
+			cptr s, q;
 			u32b f[TR_FLAG_SIZE];
 			object_type *o_ptr;
 

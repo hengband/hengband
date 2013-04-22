@@ -5557,7 +5557,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 		/* Take some damage */
 		if (damage)
 		{
-			char *killer;
+			cptr killer;
 
 			if (m_idx)
 			{
