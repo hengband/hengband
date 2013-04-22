@@ -82,7 +82,7 @@ static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 	int grid_n = 0;
 	u16b grid_g[512];
 
-	bool friend = is_pet(m_ptr);
+	bool is_friend = is_pet(m_ptr);
 
 	/* Check the projection path */
 	grid_n = project_path(grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
@@ -97,14 +97,14 @@ static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 
 		if (y == y2 && x == x2)
 			hit2 = TRUE;
-		else if (friend && cave[y][x].m_idx > 0 &&
+		else if (is_friend && cave[y][x].m_idx > 0 &&
 			 !are_enemies(m_ptr, &m_list[cave[y][x].m_idx]))
 		{
 			/* Friends don't shoot friends */
 			return FALSE;
 		}
 
-		if (friend && player_bold(y, x))
+		if (is_friend && player_bold(y, x))
 			return FALSE;
 	}
 	if (!hit2)
@@ -112,7 +112,7 @@ static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 	return TRUE;
 }
 
-static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool friend)
+static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool is_friend)
 {
 	/* Must be the same as projectable() */
 
@@ -215,7 +215,7 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 	}
 
 	if (!hit2) return FALSE;
-	if (friend && hityou) return FALSE;
+	if (is_friend && hityou) return FALSE;
 
 	return TRUE;
 }

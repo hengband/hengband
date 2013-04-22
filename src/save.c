@@ -855,7 +855,7 @@ static void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b)
  */
 static void wr_saved_floor(saved_floor_type *sf_ptr)
 {
-	cave_template_type *template;
+	cave_template_type *templates;
 	u16b max_num_temp;
 	u16b num_temp = 0;
 	int dummy_why;
@@ -918,7 +918,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	max_num_temp = 255;
 
 	/* Allocate the "template" array */
-	C_MAKE(template, max_num_temp, cave_template_type);
+	C_MAKE(templates, max_num_temp, cave_template_type);
 
 	/* Extract template array */
 	for (y = 0; y < cur_hgt; y++)
@@ -929,13 +929,13 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 			for (i = 0; i < num_temp; i++)
 			{
-				if (template[i].info == c_ptr->info &&
-				    template[i].feat == c_ptr->feat &&
-				    template[i].mimic == c_ptr->mimic &&
-				    template[i].special == c_ptr->special)
+				if (templates[i].info == c_ptr->info &&
+				    templates[i].feat == c_ptr->feat &&
+				    templates[i].mimic == c_ptr->mimic &&
+				    templates[i].special == c_ptr->special)
 				{
 					/* Same terrain is exist */
-					template[i].occurrence++;
+					templates[i].occurrence++;
 					break;
 				}
 			}
@@ -946,21 +946,21 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 			/* If the max_num_temp is too small, increase it. */
 			if (num_temp >= max_num_temp)
 			{
-				cave_template_type *old_template = template;
+				cave_template_type *old_template = templates;
 
 				/* Re-allocate the "template" array */
-				C_MAKE(template, max_num_temp + 255, cave_template_type);
-				(void)C_COPY(template, old_template, max_num_temp, cave_template_type);
+				C_MAKE(templates, max_num_temp + 255, cave_template_type);
+				(void)C_COPY(templates, old_template, max_num_temp, cave_template_type);
 				C_KILL(old_template, max_num_temp, cave_template_type);
 				max_num_temp += 255;
 			}
 
 			/* Add new template */
-			template[num_temp].info = c_ptr->info;
-			template[num_temp].feat = c_ptr->feat;
-			template[num_temp].mimic = c_ptr->mimic;
-			template[num_temp].special = c_ptr->special;
-			template[num_temp].occurrence = 1;
+			templates[num_temp].info = c_ptr->info;
+			templates[num_temp].feat = c_ptr->feat;
+			templates[num_temp].mimic = c_ptr->mimic;
+			templates[num_temp].special = c_ptr->special;
+			templates[num_temp].occurrence = 1;
 
 			/* Increase number of template */
 			num_temp++;
@@ -972,7 +972,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	ang_sort_swap = ang_sort_swap_cave_temp;
 
 	/* Sort by occurrence */
-	ang_sort(template, &dummy_why, num_temp);
+	ang_sort(templates, &dummy_why, num_temp);
 
 
 	/*** Dump templates ***/
@@ -983,7 +983,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	/* Dump the templates */
 	for (i = 0; i < num_temp; i++)
 	{
-		cave_template_type *ct_ptr = &template[i];
+		cave_template_type *ct_ptr = &templates[i];
 
 		/* Dump it */
 		wr_u16b(ct_ptr->info);
@@ -1009,10 +1009,10 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 			for (i = 0; i < num_temp; i++)
 			{
-				if (template[i].info == c_ptr->info &&
-				    template[i].feat == c_ptr->feat &&
-				    template[i].mimic == c_ptr->mimic &&
-				    template[i].special == c_ptr->special)
+				if (templates[i].info == c_ptr->info &&
+				    templates[i].feat == c_ptr->feat &&
+				    templates[i].mimic == c_ptr->mimic &&
+				    templates[i].special == c_ptr->special)
 					break;
 			}
 
@@ -1060,7 +1060,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 
 	/* Free the "template" array */
-	C_KILL(template, max_num_temp, cave_template_type);
+	C_KILL(templates, max_num_temp, cave_template_type);
 
 
 	/*** Dump objects ***/

@@ -1518,7 +1518,7 @@ extern int spell_exp_level(int spell_exp);
 extern void display_rumor(bool ex);
 
 /* mspells1.c */
-extern bool clean_shot(int y1, int x1, int y2, int x2, bool friend);
+extern bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend);
 extern bool summon_possible(int y1, int x1);
 extern bool raise_possible(monster_type *m_ptr);
 extern bool dispel_check(int m_idx);

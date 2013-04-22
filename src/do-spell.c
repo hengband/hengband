@@ -11136,17 +11136,17 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		if (cast)
 		{
 			const int mana_cost_per_monster = 8;
-			bool new = TRUE;
+			bool is_new = TRUE;
 			bool mdeath;
 
 			do
 			{
 				if (!rush_attack(&mdeath)) break;
-				if (new)
+				if (is_new)
 				{
 					/* Reserve needed mana point */
 					p_ptr->csp -= technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;
-					new = FALSE;
+					is_new = FALSE;
 				}
 				else
 					p_ptr->csp -= mana_cost_per_monster;
@@ -11159,7 +11159,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			}
 			while (p_ptr->csp > mana_cost_per_monster);
 
-			if (new) return NULL;
+			if (is_new) return NULL;
 	
 			/* Restore reserved mana */
 			p_ptr->csp += technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;

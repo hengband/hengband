@@ -3826,10 +3826,10 @@ bool alloc_guardian(bool def_val)
 	{
 		int oy;
 		int ox;
-		int try = 4000;
+		int try_count = 4000;
 
 		/* Find a good position */
-		while (try)
+		while (try_count)
 		{
 			/* Get a random spot */
 			oy = randint1(cur_hgt - 4) + 2;
@@ -3842,8 +3842,8 @@ bool alloc_guardian(bool def_val)
 				if (place_monster_aux(0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) return TRUE;
 			}
 
-			/* One less try */
-			try--;
+			/* One less try count */
+			try_count--;
 		}
 
 		return FALSE;

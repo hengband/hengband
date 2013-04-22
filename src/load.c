@@ -2750,7 +2750,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	u32b tmp32u;
 	u16b limit;
 
-	cave_template_type *template;
+	cave_template_type *templates;
 
 
 	/*** Wipe all cave ***/
@@ -2817,12 +2817,12 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_u16b(&limit);
 
 	/* Allocate the "template" array */
-	C_MAKE(template, limit, cave_template_type);
+	C_MAKE(templates, limit, cave_template_type);
 
 	/* Read the templates */
 	for (i = 0; i < limit; i++)
 	{
-		cave_template_type *ct_ptr = &template[i];
+		cave_template_type *ct_ptr = &templates[i];
 
 		/* Read it */
 		rd_u16b(&ct_ptr->info);
@@ -2870,10 +2870,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 			cave_type *c_ptr = &cave[y][x];
 
 			/* Extract cave data */
-			c_ptr->info = template[id].info;
-			c_ptr->feat = template[id].feat;
-			c_ptr->mimic = template[id].mimic;
-			c_ptr->special = template[id].special;
+			c_ptr->info = templates[id].info;
+			c_ptr->feat = templates[id].feat;
+			c_ptr->mimic = templates[id].mimic;
+			c_ptr->special = templates[id].special;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
@@ -2917,7 +2917,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	}
 
 	/* Free the "template" array */
-	C_KILL(template, limit, cave_template_type);
+	C_KILL(templates, limit, cave_template_type);
 
 
 	/*** Objects ***/
