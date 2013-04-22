@@ -295,128 +295,128 @@ void mindcraft_info(char *p, int use_mind, int power)
 	cptr s_dur = "dur ";
 	cptr s_range = "range ";
 #endif
-  int plev = p_ptr->lev;
+	int plev = p_ptr->lev;
 
-  strcpy(p, "");
+	strcpy(p, "");
 
-  switch (use_mind)
-    {
-    case MIND_MINDCRAFTER:
-      switch (power)
+	switch (use_mind)
 	{
-	case 0:  break;
-	case 1:  sprintf(p, " %s%dd%d", s_dam, 3 + ((plev - 1) / 4), 3 + plev/15); break;
-	case 2:  sprintf(p, " %s10", s_range); break;
-	case 3:  sprintf(p, " %s%d", s_range, plev * 5);  break;
-	case 4:  break;
-	case 5: sprintf(p, " %s%dd8", s_dam, 8 + ((plev - 5) / 4));  break;
-	case 6:  sprintf(p, " %s%d", s_dur, plev);  break;
-	case 7:  break;
-	case 8:  sprintf(p, (plev < 25 ? " %s%d" : " %sd%d"), s_dam, (plev < 25 ? plev * 3 / 2 : plev * ((plev - 5) / 10 + 1))); break;
-	case 9:  sprintf(p, " %s10+d%d", s_dur, plev * 3 / 2);  break;
+	case MIND_MINDCRAFTER:
+		switch (power)
+		{
+		case 0:  break;
+		case 1:  sprintf(p, " %s%dd%d", s_dam, 3 + ((plev - 1) / 4), 3 + plev/15); break;
+		case 2:  sprintf(p, " %s10", s_range); break;
+		case 3:  sprintf(p, " %s%d", s_range, plev * 5);  break;
+		case 4:  break;
+		case 5: sprintf(p, " %s%dd8", s_dam, 8 + ((plev - 5) / 4));  break;
+		case 6:  sprintf(p, " %s%d", s_dur, plev);  break;
+		case 7:  break;
+		case 8:  sprintf(p, (plev < 25 ? " %s%d" : " %sd%d"), s_dam, (plev < 25 ? plev * 3 / 2 : plev * ((plev - 5) / 10 + 1))); break;
+		case 9:  sprintf(p, " %s10+d%d", s_dur, plev * 3 / 2);  break;
 #ifdef JP
-	case 10: sprintf(p, " 最大重量:%d.%dkg", lbtokg1(plev * 15),lbtokg2(plev * 15));  break;
+		case 10: sprintf(p, " 最大重量:%d.%dkg", lbtokg1(plev * 15),lbtokg2(plev * 15));  break;
 #else
-	case 10: sprintf(p, " max wgt %d", plev * 15);  break;
+		case 10: sprintf(p, " max wgt %d", plev * 15);  break;
 #endif
-	case 11: sprintf(p, " %s%dd6", s_dam, plev / 2);  break;
-	case 12: sprintf(p, " %sd%d+%d", s_dam, plev * 3, plev * 3); break;
+		case 11: sprintf(p, " %s%dd6", s_dam, plev / 2);  break;
+		case 12: sprintf(p, " %sd%d+%d", s_dam, plev * 3, plev * 3); break;
 #ifdef JP
-	case 13: sprintf(p, " 行動:%ld回", (long int)(p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
+		case 13: sprintf(p, " 行動:%ld回", (long int)(p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
 #else
-	case 13: sprintf(p, " %ld acts.", (p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
+		case 13: sprintf(p, " %ld acts.", (p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
 #endif
-	}
-      break;
-    case MIND_KI:
-      {
-	int boost = p_ptr->magic_num1[0];
-
-	if (heavy_armor()) boost /= 2;
-
-	switch (power)
-	  {
-	  case 0:  sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5) + boost / 12); break;
-	  case 1:  break;
-	  case 2:  sprintf(p, " %s%d+d30", s_dur, 30 + boost / 5); break;
-	  case 3:  sprintf(p, " %s%dd5", s_dam, 5 + ((plev - 1) / 5) + boost / 10); break;
-	  case 4:  sprintf(p, " %s%d+d20", s_dur, 20 + boost / 5); break;
-	  case 5:  break;
-	  case 6:  sprintf(p, " %s%d+d%d", s_dur, 15 + boost / 7, plev / 2); break;
-	  case 7:  sprintf(p, " %s%dd8", s_dam, 8 + ((plev - 5) / 5) + boost / 12); break;
-	  case 8:  sprintf(p, " %s10d6+%d", s_dam, plev * 3 / 2 + boost * 3 / 5); break;
-	  case 9:  break;
-#ifdef JP
-	  case 10: sprintf(p, " 最大%d体", 1+boost/100); break;
-#else
-	  case 10: sprintf(p, " max %d", 1+boost/100); break;
-#endif
-	  case 11: sprintf(p, " %s%d", s_dam, 100 + plev + boost); break;
-	  case 12: sprintf(p, " %s%dd15", s_dam, 10 + plev / 2 + boost * 3 / 10); break;
-#ifdef JP
-	  case 13: sprintf(p, " 行動:%d+d16回", 16+boost/20); break;
-#else
-	  case 13: sprintf(p, " %d+d16 acts", 16+boost/20); break;
-#endif
-	  }
-	break;
-      case MIND_MIRROR_MASTER:
+		}
+		break;
+	case MIND_KI:
 	{
-	  switch (power)
-	    {
-	    case 0:  break;
-	    case 1:  break;
-	    case 2:  sprintf(p, " %s%dd4", s_dam,  3 + ((plev - 1) / 5) ); break;
-	    case 3:  sprintf(p, " %s10", s_range); break;
-	    case 4:  break;
-	    case 5:  sprintf(p, " %s%d", s_range, plev *5); break;
-	    case 6:  sprintf(p, " %s20+d20", s_dur);  break;
-	    case 7:  break;
-	    case 8:  sprintf(p, " %s%dd8", s_dam, 8+((plev -5)/4) ); break;
-	    case 9:  break;
-	    case 10: sprintf(p, " %s%dd8", s_dam, 11+(plev-5)/4 ); break;
-	    case 11: break;
-	    case 12: sprintf(p, " %s20+d20", s_dur);  break;
-	    case 13: sprintf(p, " %s150+d%d", s_dam, plev*2 ); break;
-	    case 14: break;
-	    case 15: break;
-	    case 16: sprintf(p, " %s%d", s_range, plev/2 +10); break;
-	    case 17: break;
-	    case 18: sprintf(p, " %s6+d6", s_dur);  break;
-	    case 19: sprintf(p, " %s%d", s_dam, plev*11+5 ); break;
-	    case 20: sprintf(p, " %s4+d4", s_dur);  break;
-	    }
-	  break;
+		int boost = p_ptr->magic_num1[0];
+
+		if (heavy_armor()) boost /= 2;
+
+		switch (power)
+		{
+		case 0:  sprintf(p, " %s%dd4", s_dam, 3 + ((plev - 1) / 5) + boost / 12); break;
+		case 1:  break;
+		case 2:  sprintf(p, " %s%d+d30", s_dur, 30 + boost / 5); break;
+		case 3:  sprintf(p, " %s%dd5", s_dam, 5 + ((plev - 1) / 5) + boost / 10); break;
+		case 4:  sprintf(p, " %s%d+d20", s_dur, 20 + boost / 5); break;
+		case 5:  break;
+		case 6:  sprintf(p, " %s%d+d%d", s_dur, 15 + boost / 7, plev / 2); break;
+		case 7:  sprintf(p, " %s%dd8", s_dam, 8 + ((plev - 5) / 5) + boost / 12); break;
+		case 8:  sprintf(p, " %s10d6+%d", s_dam, plev * 3 / 2 + boost * 3 / 5); break;
+		case 9:  break;
+#ifdef JP
+		case 10: sprintf(p, " 最大%d体", 1+boost/100); break;
+#else
+		case 10: sprintf(p, " max %d", 1+boost/100); break;
+#endif
+		case 11: sprintf(p, " %s%d", s_dam, 100 + plev + boost); break;
+		case 12: sprintf(p, " %s%dd15", s_dam, 10 + plev / 2 + boost * 3 / 10); break;
+#ifdef JP
+		case 13: sprintf(p, " 行動:%d+d16回", 16+boost/20); break;
+#else
+		case 13: sprintf(p, " %d+d16 acts", 16+boost/20); break;
+#endif
+		}
+		break;
 	}
-      case MIND_NINJUTSU:
+	case MIND_MIRROR_MASTER:
 	{
-	  switch (power)
-	    {
-	    case 0:  break;
-	    case 1:  break;
-	    case 2:  sprintf(p, " %s10", s_range); break;
-	    case 3:  break;
-	    case 4:  sprintf(p, " %s%d", s_range , plev *5); break;
-	    case 5:  sprintf(p, " %s30", s_range); break;
-	    case 6:  break;
-	    case 7:  break;
-	    case 8:  sprintf(p, " %s20+d20", s_dur);  break;
-	    case 9:  sprintf(p, " %s%d", s_dam, (50+plev)/2 ); break;
-	    case 10: break;
-	    case 11: break;
-	    case 12: break;
-	    case 13: break;
-	    case 14: break;
-	    case 15: break;
-	    case 16: sprintf(p, " %s%d+d%d", s_dur, plev/2, plev/2);  break;
-	    case 17: sprintf(p, " %s%d*3", s_dam, (75+plev*2/3)/2 ); break;
-	    case 18: sprintf(p, " %s%dd10", s_dam, 6+plev/8 ); break;
-	    case 19: sprintf(p, " %s6+d6", s_dur);  break;
-	    }
-	  break;
+		switch (power)
+		{
+		case 0:  break;
+		case 1:  break;
+		case 2:  sprintf(p, " %s%dd4", s_dam,  3 + ((plev - 1) / 5) ); break;
+		case 3:  sprintf(p, " %s10", s_range); break;
+		case 4:  break;
+		case 5:  sprintf(p, " %s%d", s_range, plev *5); break;
+		case 6:  sprintf(p, " %s20+d20", s_dur);  break;
+		case 7:  break;
+		case 8:  sprintf(p, " %s%dd8", s_dam, 8+((plev -5)/4) ); break;
+		case 9:  break;
+		case 10: sprintf(p, " %s%dd8", s_dam, 11+(plev-5)/4 ); break;
+		case 11: break;
+		case 12: sprintf(p, " %s20+d20", s_dur);  break;
+		case 13: sprintf(p, " %s150+d%d", s_dam, plev*2 ); break;
+		case 14: break;
+		case 15: break;
+		case 16: sprintf(p, " %s%d", s_range, plev/2 +10); break;
+		case 17: break;
+		case 18: sprintf(p, " %s6+d6", s_dur);  break;
+		case 19: sprintf(p, " %s%d", s_dam, plev*11+5 ); break;
+		case 20: sprintf(p, " %s4+d4", s_dur);  break;
+		}
+		break;
 	}
-      }
-    }
+	case MIND_NINJUTSU:
+	{
+		switch (power)
+		{
+		case 0:  break;
+		case 1:  break;
+		case 2:  sprintf(p, " %s10", s_range); break;
+		case 3:  break;
+		case 4:  sprintf(p, " %s%d", s_range , plev *5); break;
+		case 5:  sprintf(p, " %s30", s_range); break;
+		case 6:  break;
+		case 7:  break;
+		case 8:  sprintf(p, " %s20+d20", s_dur);  break;
+		case 9:  sprintf(p, " %s%d", s_dam, (50+plev)/2 ); break;
+		case 10: break;
+		case 11: break;
+		case 12: break;
+		case 13: break;
+		case 14: break;
+		case 15: break;
+		case 16: sprintf(p, " %s%d+d%d", s_dur, plev/2, plev/2);  break;
+		case 17: sprintf(p, " %s%d*3", s_dam, (75+plev*2/3)/2 ); break;
+		case 18: sprintf(p, " %s%dd10", s_dam, 6+plev/8 ); break;
+		case 19: sprintf(p, " %s6+d6", s_dur);  break;
+		}
+		break;
+	}
+	}
 }
 
   /*
