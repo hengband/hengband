@@ -342,6 +342,8 @@ bool record_danger;	/* Record hitpoint warning */
 bool record_arena;	/* Record arena victories */
 bool record_ident;	/* Record first identified items */
 bool record_named_pet;	/* Record informations of named pets */
+char record_o_name[MAX_NLEN];
+s32b record_turn;
 
 
 /* Cheating options */
@@ -1011,50 +1013,6 @@ bool (*get_obj_num_hook)(int k_idx);
 bool monk_armour_aux;
 bool monk_notify_aux;
 
-#ifdef ALLOW_EASY_OPEN /* TNB */
-bool easy_open;
-#endif /* ALLOW_EASY_OPEN -- TNB */
-
-#ifdef ALLOW_EASY_DISARM /* TNB */
-bool easy_disarm;
-#endif /* ALLOW_EASY_DISARM -- TNB */
-
-#ifdef ALLOW_EASY_FLOOR /* TNB */
-bool easy_floor;
-#endif /* ALLOW_EASY_FLOOR -- TNB */
-
-bool use_command;
-bool center_player;
-bool center_running;
-
-/* Auto-destruction options */
-bool destroy_items;
-bool destroy_feeling;
-bool destroy_identify;
-bool leave_worth;
-bool leave_equip;
-bool leave_wanted;
-bool leave_corpse;
-bool leave_junk;
-bool leave_chest;
-bool leave_special;
-
-/* Nikki */
-bool record_fix_art;
-bool record_rand_art;
-bool record_destroy_uniq;
-bool record_fix_quest;
-bool record_rand_quest;
-bool record_maxdepth;
-bool record_stair;
-bool record_buy;
-bool record_sell;
-bool record_danger;
-bool record_arena;
-bool record_ident;
-bool record_named_pet;
-char record_o_name[MAX_NLEN];
-s32b record_turn;
 
 /*
  * Wilderness
