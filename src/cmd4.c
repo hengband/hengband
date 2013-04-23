@@ -9405,12 +9405,75 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 }
 
 
+static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
+{
+	char tmp_str[120];
+	char playtime_str[16];
+	quest_type* const q_ptr = &quest[q_idx];
+
+	if (is_fixed_quest_idx(q_idx))
+	{
+		/* Set the quest number temporary */
+		int old_quest = p_ptr->inside_quest;
+
+		p_ptr->inside_quest = q_idx;
+
+		/* Get the quest */
+		init_flags = INIT_NAME_ONLY;
+
+		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+
+		/* Reset the old quest number */
+		p_ptr->inside_quest = old_quest;
+
+		/* No info from "silent" quests */
+		if (q_ptr->flags & QUEST_FLAG_SILENT) return FALSE;
+	}
+
+	strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d",
+		q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
+
+	if (!is_fixed_quest_idx(q_idx) && q_ptr->r_idx)
+	{
+		/* Print the quest info */
+		if (q_ptr->complev == 0)
+		{
+			sprintf(tmp_str,
+				_("  %-40s (%3d³¬)            -   ÉÔÀï¾¡\n",
+				  "  %-40s (Dungeon level: %3d) - (Cancelled)\n") ,
+				r_name+r_info[q_ptr->r_idx].name,
+				q_ptr->level);
+		}
+		else
+		{
+			sprintf(tmp_str,
+				_("  %-40s (%3d³¬)            - ¥ì¥Ù¥ë%2d - %s\n",
+				  "  %-40s (Dungeon level: %3d) - level %2d - %s\n") ,
+				r_name+r_info[q_ptr->r_idx].name,
+				q_ptr->level,
+				q_ptr->complev,
+				playtime_str);
+		}
+	}
+	else
+	{
+		/* Print the quest info */
+		sprintf(tmp_str,
+			_("  %-40s (´í¸±ÅÙ:%3d³¬ÁêÅö) - ¥ì¥Ù¥ë%2d - %s\n",
+			  "  %-40s (Danger  level: %3d) - level %2d - %s\n") ,
+			q_ptr->name, q_ptr->level, q_ptr->complev, playtime_str);
+	}
+
+	fputs(tmp_str, fff);
+
+	return TRUE;
+}
+
 /*
  * Print all finished quests
  */
 void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 {
-	char tmp_str[120];
 	int i;
 	int total = 0;
 
@@ -9424,64 +9487,10 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 		int q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
-		if (q_ptr->status == QUEST_STATUS_FINISHED)
+		if (q_ptr->status == QUEST_STATUS_FINISHED &&
+		    do_cmd_knowledge_quests_aux(fff, q_idx))
 		{
-			if (is_fixed_quest_idx(q_idx))
-			{
-				/* Set the quest number temporary */
-				int old_quest = p_ptr->inside_quest;
-
-				p_ptr->inside_quest = q_idx;
-
-				/* Get the quest */
-				init_flags = INIT_NAME_ONLY;
-
-				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
-
-				/* Reset the old quest number */
-				p_ptr->inside_quest = old_quest;
-
-				/* No info from "silent" quests */
-				if (q_ptr->flags & QUEST_FLAG_SILENT) continue;
-			}
-
-			total++;
-
-			if (!is_fixed_quest_idx(q_idx) && q_ptr->r_idx)
-			{
-				/* Print the quest info */
-
-				if (q_ptr->complev == 0)
-				{
-					sprintf(tmp_str,
-						_("  %-40s (%3d³¬)            -   ÉÔÀï¾¡\n", 
-						  "  %-40s (Dungeon level: %3d) - (Cancelled)\n") ,
-						r_name+r_info[q_ptr->r_idx].name,
-						q_ptr->level);
-				}
-				else
-				{
-					sprintf(tmp_str, 
-						_("  %-40s (%3d³¬)            - ¥ì¥Ù¥ë%2d - %02d:%02d:%02d\n",
-						  "  %-40s (Dungeon level: %3d) - level %2d - %02d:%02d:%02d\n") ,
-						r_name+r_info[q_ptr->r_idx].name,
-						q_ptr->level,
-						q_ptr->complev,
-						q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
-
-				}
-			}
-			else
-			{
-				/* Print the quest info */
-				
-				sprintf(tmp_str, 
-						_("  %-40s (´í¸±ÅÙ:%3d³¬ÁêÅö) - ¥ì¥Ù¥ë%2d - %02d:%02d:%02d\n",
-						  "  %-40s (Danger  level: %3d) - level %2d - %02d:%02d:%02d\n") ,
-					q_ptr->name, q_ptr->level, q_ptr->complev, q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
-			}
-
-			fputs(tmp_str, fff);
+			++ total;
 		}
 	}
 #ifdef JP
@@ -9497,7 +9506,6 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
  */
 void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 {
-	char tmp_str[120];
 	int i;
 	int total = 0;
 
@@ -9511,47 +9519,10 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 		int q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
-		if ((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED))
+		if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) &&
+		    do_cmd_knowledge_quests_aux(fff, q_idx))
 		{
-			if (is_fixed_quest_idx(q_idx))
-			{
-				/* Set the quest number temporary */
-				int old_quest = p_ptr->inside_quest;
-
-				p_ptr->inside_quest = q_idx;
-
-				/* Get the quest text */
-				init_flags = INIT_NAME_ONLY;
-
-				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
-
-				/* Reset the old quest number */
-				p_ptr->inside_quest = old_quest;
-
-				/* No info from "silent" quests */
-				if (q_ptr->flags & QUEST_FLAG_SILENT) continue;
-			}
-
-			total++;
-
-			if (!is_fixed_quest_idx(q_idx) && q_ptr->r_idx)
-			{
-				/* Print the quest info */
-				sprintf(tmp_str, 
-						_("  %-40s (%3d³¬)            - ¥ì¥Ù¥ë%2d - %02d:%02d:%02d\n",
-						  "  %-40s (Dungeon level: %3d) - level %2d - %02d:%02d:%02d\n"),
-					r_name+r_info[q_ptr->r_idx].name, q_ptr->level, q_ptr->complev, q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
-			}
-			else
-			{
-				/* Print the quest info */
-				update_playtime();
-				sprintf(tmp_str, 
-						_("  %-40s (´í¸±ÅÙ:%3d³¬ÁêÅö) - ¥ì¥Ù¥ë%2d - %02d:%02d:%02d\n",
-						  "  %-40s (Danger  level: %3d) - level %2d - %02d:%02d:%02d\n"),
-					q_ptr->name, q_ptr->level, q_ptr->complev, q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
-			}
-			fputs(tmp_str, fff);
+			++ total;
 		}
 	}
 #ifdef JP
