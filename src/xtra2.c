@@ -429,7 +429,7 @@ static int count_all_hostile_monsters(void)
  */
 void check_quest_completion(monster_type *m_ptr)
 {
-	int i, j, y, x, ny, nx;
+	int y, x;
 
 	int quest_num;
 
@@ -449,6 +449,8 @@ void check_quest_completion(monster_type *m_ptr)
 	/* Search for an active quest on this dungeon level */
 	if (!quest_num)
 	{
+		int i;
+
 		for (i = max_quests - 1; i > 0; i--)
 		{
 			quest_type* const q_ptr = &quest[i];
@@ -492,8 +494,7 @@ void check_quest_completion(monster_type *m_ptr)
 	if (quest_num && (quest[quest_num].status == QUEST_STATUS_TAKEN))
 	{
 		/* Current quest */
-		i = quest_num;
-		quest_type* const q_ptr = &quest[i];
+		quest_type* const q_ptr = &quest[quest_num];
 
 		switch (q_ptr->type)
 		{
@@ -503,7 +504,7 @@ void check_quest_completion(monster_type *m_ptr)
 
 				if (q_ptr->cur_num >= q_ptr->num_mon)
 				{
-					complete_quest(i);
+					complete_quest(quest_num);
 
 					q_ptr->cur_num = 0;
 				}
@@ -521,7 +522,7 @@ void check_quest_completion(monster_type *m_ptr)
 					}
 					else
 					{
-						complete_quest(i);
+						complete_quest(quest_num);
 					}
 				}
 				break;
@@ -537,7 +538,7 @@ void check_quest_completion(monster_type *m_ptr)
 
 				if (q_ptr->cur_num >= q_ptr->max_num)
 				{
-					complete_quest(i);
+					complete_quest(quest_num);
 
 					if (!(q_ptr->flags & QUEST_FLAG_PRESET))
 					{
@@ -546,7 +547,7 @@ void check_quest_completion(monster_type *m_ptr)
 					}
 
 					/* Finish the two main quests without rewarding */
-					if ((i == QUEST_OBERON) || (i == QUEST_SERPENT))
+					if ((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT))
 					{
 						q_ptr->status = QUEST_STATUS_FINISHED;
 					}
@@ -564,7 +565,7 @@ void check_quest_completion(monster_type *m_ptr)
 				q_ptr->cur_num++;
 				if (q_ptr->cur_num >= q_ptr->max_num)
 				{
-					complete_quest(i);
+					complete_quest(quest_num);
 					q_ptr->cur_num = 0;
 				}
 				break;
@@ -593,6 +594,8 @@ void check_quest_completion(monster_type *m_ptr)
 	/* Create a magical staircase */
 	if (create_stairs)
 	{
+		int ny, nx;
+
 		/* Stagger around */
 		while (cave_perma_bold(y, x) || cave[y][x].o_idx || (cave[y][x].info & CAVE_OBJECT) )
 		{
@@ -623,7 +626,9 @@ msg_print("魔法の階段が現れた...");
 	 */
 	if (reward)
 	{
-		for (j = 0; j < (dun_level / 15)+1; j++)
+		int i;
+
+		for (i = 0; i < (dun_level / 15)+1; i++)
 		{
 			/* Get local object */
 			q_ptr = &forge;
