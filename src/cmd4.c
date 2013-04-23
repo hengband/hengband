@@ -9439,10 +9439,10 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
 		if (q_ptr->complev == 0)
 		{
 			sprintf(tmp_str,
-				_("  %-40s (%3d³¬)            -   ÉÔÀï¾¡\n",
-				  "  %-40s (Dungeon level: %3d) - (Cancelled)\n") ,
+				_("  %-40s (%3d³¬)            -   ÉÔÀï¾¡ - %s\n",
+				  "  %-40s (Dungeon level: %3d) - Unearned - %s\n") ,
 				r_name+r_info[q_ptr->r_idx].name,
-				q_ptr->level);
+				q_ptr->level, playtime_str);
 		}
 		else
 		{

@@ -6051,6 +6051,9 @@ void quest_discovery(int q_idx)
 #endif
 			/* The unique is already dead */
 			quest[q_idx].status = QUEST_STATUS_FINISHED;
+			q_ptr->complev = 0;
+			update_playtime();
+			q_ptr->comptime = playtime;
 		}
 		else
 		{
@@ -6065,7 +6068,7 @@ void quest_discovery(int q_idx)
 	{
 		/* Normal monsters */
 #ifdef JP
-msg_format("注意しろ！この階は%d体の%sによって守られている！", q_num, name);
+		msg_format("注意しろ！この階は%d体の%sによって守られている！", q_num, name);
 #else
 		plural_aux(name);
 		msg_format("Be warned, this level is guarded by %d %s!", q_num, name);
