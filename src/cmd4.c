@@ -9439,16 +9439,16 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
 		if (q_ptr->complev == 0)
 		{
 			sprintf(tmp_str,
-				_("  %-40s (%3d³¬)            -   ÉÔÀï¾¡ - %s\n",
-				  "  %-40s (Dungeon level: %3d) - Unearned - %s\n") ,
+				_("  %-35s (%3d³¬)            -   ÉÔÀï¾¡ - %s\n",
+				  "  %-35s (Dungeon level: %3d) - Unearned - %s\n") ,
 				r_name+r_info[q_ptr->r_idx].name,
 				q_ptr->level, playtime_str);
 		}
 		else
 		{
 			sprintf(tmp_str,
-				_("  %-40s (%3d³¬)            - ¥ì¥Ù¥ë%2d - %s\n",
-				  "  %-40s (Dungeon level: %3d) - level %2d - %s\n") ,
+				_("  %-35s (%3d³¬)            - ¥ì¥Ù¥ë%2d - %s\n",
+				  "  %-35s (Dungeon level: %3d) - level %2d - %s\n") ,
 				r_name+r_info[q_ptr->r_idx].name,
 				q_ptr->level,
 				q_ptr->complev,
@@ -9459,8 +9459,8 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
 	{
 		/* Print the quest info */
 		sprintf(tmp_str,
-			_("  %-40s (´í¸±ÅÙ:%3d³¬ÁêÅö) - ¥ì¥Ù¥ë%2d - %s\n",
-			  "  %-40s (Danger  level: %3d) - level %2d - %s\n") ,
+			_("  %-35s (´í¸±ÅÙ:%3d³¬ÁêÅö) - ¥ì¥Ù¥ë%2d - %s\n",
+			  "  %-35s (Danger  level: %3d) - level %2d - %s\n") ,
 			q_ptr->name, q_ptr->level, q_ptr->complev, playtime_str);
 	}
 
