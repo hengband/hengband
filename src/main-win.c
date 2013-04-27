@@ -5339,6 +5339,19 @@ static void init_stuff(void)
 	/* validate_dir(ANGBAND_DIR_XTRA_HELP); */
 }
 
+bool is_already_running()
+{
+	bool result = FALSE;
+	HANDLE hMutex;
+
+	hMutex = CreateMutex(NULL, TRUE, VERSION_NAME);
+	if (GetLastError() == ERROR_ALREADY_EXISTS)
+	{
+		result = TRUE;
+	}
+	return result;
+}
+
 
 int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		       LPSTR lpCmdLine, int nCmdShow)
@@ -5354,6 +5367,17 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 
 	/* Save globally */
 	hInstance = hInst;
+	
+	
+	/* Prevent multiple run */
+	if (is_already_running())
+	{
+		MessageBox(NULL,
+				_("変愚蛮怒はすでに起動しています。", "Hengband is already running."), 
+				_("エラー！", "Error") ,
+				MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+		return FALSE;
+	}
 
 	/* Initialize */
 	if (hPrevInst == NULL)
