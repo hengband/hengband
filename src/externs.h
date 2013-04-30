@@ -1405,6 +1405,7 @@ extern void handle_stuff(void);
 extern s16b empty_hands(bool riding_control);
 extern bool heavy_armor(void);
 extern void print_monster_list(int x, int y, int max_lines);
+extern void update_playtime(void);
 
 
 /* effects.c */

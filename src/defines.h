@@ -4434,14 +4434,6 @@
 #define get_feat_mimic(C) \
 	(f_info[(C)->mimic ? (C)->mimic : (C)->feat].mimic)
 
-#define update_playtime() \
-{\
-	u32b tmp;\
-	tmp = time(NULL);\
-	playtime += (tmp - start_time);\
-	start_time = tmp;\
-}
-
 /*
  * Hack -- Prepare to use the "Secure" routines
  */

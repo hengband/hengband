@@ -6430,3 +6430,14 @@ bool heavy_armor(void)
 
 	return (monk_arm_wgt > (100 + (p_ptr->lev * 4)));
 }
+
+void update_playtime(void)
+{
+	/* Check if the game has started */
+	if (start_time != 0)
+	{
+		u32b tmp = time(NULL);
+		playtime += (tmp - start_time);
+		start_time = tmp;
+	}
+}
