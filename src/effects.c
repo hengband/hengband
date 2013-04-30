@@ -5212,8 +5212,6 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
 
-	handle_stuff();
-
 	if (damage_type != DAMAGE_GENO && p_ptr->chp == 0)
 	{
 		chg_virtue(V_SACRIFICE, 1);
@@ -5234,6 +5232,8 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 		sound(SOUND_DEATH);
 
 		chg_virtue(V_SACRIFICE, 10);
+
+		handle_stuff();
 
 		/* Leaving */
 		p_ptr->leaving = TRUE;
@@ -5471,6 +5471,8 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 		/* Dead */
 		return damage;
 	}
+
+	handle_stuff();
 
 	/* Hitpoint warning */
 	if (p_ptr->chp < warning)
