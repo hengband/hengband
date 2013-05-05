@@ -21825,3 +21825,24 @@ D:巨大なムカデだ。その大きさは三上山を七巻半もする。
 D:俵藤太秀郷の矢を跳ね返し、彼を慌てさせた。
 D:「三上山を七巻半と聞けばすごいが、鉢巻にはちょいと足りない。」
 D:(落語「矢橋船」)
+
+N:1089:『ジュラルの魔王』
+E:The Witch-King of Jural
+G:h:s
+I:112:12d12:25:25:25
+W:9:3:0:100:0:0
+B:SHOOT:HURT:1d12
+B:HIT:HURT:1d10
+B:HIT:HURT:1d10
+F:UNIQUE | MALE | CAN_SPEAK |
+F:FORCE_MAXHP |
+F:ESCORT | ESCORTS | DROP_SKELETON | DROP_CORPSE |
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | 
+F:OPEN_DOOR | BASH_DOOR
+S:1_IN_2
+S:SHOOT | SHRIEK
+D:環境の悪化したジュラル星に変わる新天地を求め、
+D:地球侵略を企てるジュラル星人の統率者だ。
+D:「諸君、今から命令をすりゅ！地球の子供達をかたっぱしからとらえて君! 」
+D:（『チャージマン研！』アニメ第１話・『危機!!子供宇宙ステーション』）
+
