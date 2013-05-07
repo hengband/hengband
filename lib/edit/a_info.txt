@@ -3995,3 +3995,24 @@ D:飛流直下三千尺と謳われる廬山の大瀑布によって鍛え上げられた青銅の鎧だ。
 D:伝説のアテナの守護戦士が身にまとい、アテナに降りかかる数々の危機を救
 D:ったと言われる。パーツを組み立てると緑龍の形に組みあがる。
 D:身にまとうと龍星座の小宇宙を感じることができる。
+
+N:244:『ヴァンパイア・キラー』
+E:'Vampire Killer'
+I:21:2:3
+W:8:35:50:220000
+P:0:5d6:15:21:0
+F:LEVITATION | SHOW_MODS | ACTIVATE | DEX | CON
+F:SLAY_EVIL | BRAND_FIRE | SLAY_DEMON | KILL_UNDEAD |
+F:FREE_ACT | RES_NETHER | HOLD_LIFE | SEE_INVIS | REGEN |
+F:ESP_UNDEAD | ESP_DEMON | DRAIN_EXP
+U:GRAND_CROSS
+D:この聖なる鞭は、錬金術師の知恵と乙女の代償によって生み出され、
+D:退魔の血族ベルモンド家代々の手で振るわれてきた。
+D:その力は邪悪な夜の一族に対する呪詛そのものであり、
+D:汚れた魂を過たず撃ち滅ぼすだろう。
+D:$This holy whip was generated with wise of a alchemist and a maiden's
+D:$sacrifice, wielded by Belmond family, the vampire hunters.
+D:$That power is indeed curse of evil household of night
+D:$and vanish the poisonous souls.
+
+

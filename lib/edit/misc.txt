@@ -25,7 +25,7 @@ M:V:129
 M:F:255
 
 # Maximum number of artifacts in a_info.txt
-M:A:244
+M:A:245
 
 # Maximum number of ego-items in e_info.txt
 M:E:255

@@ -6373,6 +6373,8 @@ const activation_type activation_info[] =
 	{ "CRIMSON", ACT_CRIMSON, 0, 50000, {15, 0},
 	  _("ファイア！", "fire!") },
 
+	{ "GRAND_CROSS", ACT_GRAND_CROSS, 30, 15000, {100, 200},
+	  _("グランド・クロス", "grand cross") },
 	{ NULL, 0, 0, 0, {0, 0},
 	  "" }
 };

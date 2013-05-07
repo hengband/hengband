@@ -3740,6 +3740,12 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
+		case ACT_GRAND_CROSS:
+		{
+			msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
+			project(0, 8, py, px, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+		}
+
 		case ACT_FISHING:
 		{
 			int x, y;
