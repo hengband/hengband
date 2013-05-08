@@ -3999,7 +3999,7 @@ D:身にまとうと龍星座の小宇宙を感じることができる。
 N:244:『ヴァンパイア・キラー』
 E:'Vampire Killer'
 I:21:2:3
-W:8:35:50:220000
+W:8:50:55:220000
 P:0:5d6:15:21:0
 F:LEVITATION | SHOW_MODS | ACTIVATE | DEX | CON
 F:SLAY_EVIL | BRAND_FIRE | SLAY_DEMON | KILL_UNDEAD |
@@ -4015,4 +4015,18 @@ D:$sacrifice, wielded by Belmond family, the vampire hunters.
 D:$That power is indeed curse of evil household of night
 D:$and vanish the poisonous souls.
 
-
+N:245:運命のオーブ
+E:The Orb of Fate 
+I:39:10:3
+W:70:70:15:45000
+P:0:1d1:0:0:20
+F:WIS | CON | WARNING | ACTIVATE | FULL_NAME
+U:TELEPORT_LEVEL
+D:「運命のオーブを持っていきなさい。わたしは運命のオーブから
+D:人間の手に触れてはならぬ未来を告げる力を取り除きました。
+D:しかしながら運命のオーブの他の力は，あなたの思い通りに
+D:してかまいません。
+D:あなたはチュールの名のもとイェンダーの魔除けを探さねばなりません。
+D:あなたの進む道がチュールの導きにより開かれますように。
+D:わたしの妹よ」
+D:(ノルン，JNethack)

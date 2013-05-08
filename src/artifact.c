@@ -3744,6 +3744,18 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
 			project(0, 8, py, px, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+			break;
+		}
+
+		case ACT_TELEPORT_LEVEL:
+		{
+#ifdef JP
+			if (!get_check("本当に他の階にテレポートしますか？")) return FALSE;
+#else
+			if (!get_check("Are you sure? (Teleport Level)")) return FALSE;
+#endif
+			teleport_level(0);
+			break;
 		}
 
 		case ACT_FISHING:

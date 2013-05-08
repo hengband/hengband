@@ -6388,3 +6388,12 @@ W:20:0:5:500
 A:60/8
 D:$It creates some amuzing item when you read it.
 D:それは読むと誰の得なのかわからないものを複数作り出す。
+
+N:669:オーブ
+E:& Orb~
+G:*:W
+I:39:10:0
+W:60:0:10:55000
+P:0:1d1:0:0:0
+F:INSTA_ART
+

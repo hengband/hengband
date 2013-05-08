@@ -1291,7 +1291,7 @@
 #define ART_PALANTIR             15
 #define ART_STONE_LORE           17
 #define ART_FLY_STONE            147
-
+#define ART_ORB_OF_FATE          245 
 /* Amulets */
 #define ART_CARLAMMAS            4
 #define ART_INGWE                5
@@ -1892,6 +1892,7 @@
 #define ACT_DETECT_ALL_MONS     137
 #define ACT_ULTIMATE_RESIST     138
 /* 127 -> unused */
+#define ACT_TELEPORT_LEVEL      248
 #define ACT_GRAND_CROSS         249
 #define ACT_CAST_OFF            250
 #define ACT_FISHING             251

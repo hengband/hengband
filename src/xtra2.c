@@ -1333,8 +1333,16 @@ msg_print("地面に落とされた。");
 			break;
 
 		case MON_SURTUR:
-			a_idx = ART_TWILIGHT;
-			chance = 66;
+			if (!one_in_(3))
+			{
+				a_idx = ART_TWILIGHT;
+				chance = 100;
+			}
+			else
+			{
+				a_idx = ART_ORB_OF_FATE;
+				chance = 100;
+			}
 			break;
 
 		case MON_SARUMAN:

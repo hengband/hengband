@@ -6373,8 +6373,10 @@ const activation_type activation_info[] =
 	{ "CRIMSON", ACT_CRIMSON, 0, 50000, {15, 0},
 	  _("ファイア！", "fire!") },
 
-	{ "GRAND_CROSS", ACT_GRAND_CROSS, 30, 15000, {100, 200},
+	{ "GRAND_CROSS", ACT_GRAND_CROSS, 30, 15000, {250, 200},
 	  _("グランド・クロス", "grand cross") },
+	{ "TELEPORT_LEVEL", ACT_TELEPORT_LEVEL, 10, 1500, {100, 200},
+	  _("テレポート・レベル", "teleort level") },
 	{ NULL, 0, 0, 0, {0, 0},
 	  "" }
 };
