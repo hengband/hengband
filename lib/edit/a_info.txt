@@ -3999,7 +3999,7 @@ D:身にまとうと龍星座の小宇宙を感じることができる。
 N:244:『ヴァンパイア・キラー』
 E:'Vampire Killer'
 I:21:2:3
-W:8:50:55:220000
+W:50:55:75:220000
 P:0:5d6:15:21:0
 F:LEVITATION | SHOW_MODS | ACTIVATE | DEX | CON
 F:SLAY_EVIL | BRAND_FIRE | SLAY_DEMON | KILL_UNDEAD |
