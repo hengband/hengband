@@ -3758,6 +3758,21 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
+		case ACT_STRAIN_HASTE:
+		{
+			int t;
+#ifdef JP
+			msg_format("%sはあなたの体力を奪った...", name);
+			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "加速した疲労", -1);
+#else
+			msg_format("The %s drains your vitality...", name);
+			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "the strain of haste", -1);
+#endif
+			t = 25 + randint1(25);
+			(void)set_fast(p_ptr->fast + t, FALSE);
+			break;
+		}
+
 		case ACT_FISHING:
 		{
 			int x, y;
@@ -4066,6 +4081,20 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 		if (p_ptr->psex != SEX_FEMALE)
 		{
 			add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+		}
+	}
+
+	if (o_ptr->name1 == ART_MILIM)
+	{
+		if (p_ptr->pseikaku == SEIKAKU_SEXY)
+		{
+			o_ptr->pval = 3;
+			add_flag(o_ptr->art_flags, TR_STR);
+			add_flag(o_ptr->art_flags, TR_INT);
+			add_flag(o_ptr->art_flags, TR_WIS);
+			add_flag(o_ptr->art_flags, TR_DEX);
+			add_flag(o_ptr->art_flags, TR_CON);
+			add_flag(o_ptr->art_flags, TR_CHR);
 		}
 	}
 

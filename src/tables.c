@@ -6373,6 +6373,8 @@ const activation_type activation_info[] =
 	{ "CRIMSON", ACT_CRIMSON, 0, 50000, {15, 0},
 	  _("ファイア！", "fire!") },
 
+	{ "STRAIN_HASTE", ACT_STRAIN_HASTE, 10, 1000, {120, 100},
+	  _("体力と引き換えに加速", "haste with strain") },
 	{ "GRAND_CROSS", ACT_GRAND_CROSS, 30, 15000, {250, 200},
 	  _("グランド・クロス", "grand cross") },
 	{ "TELEPORT_LEVEL", ACT_TELEPORT_LEVEL, 10, 1500, {100, 200},

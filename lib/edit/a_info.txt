@@ -4030,3 +4030,15 @@ D:あなたはチュールの名のもとイェンダーの魔除けを探さねばなりません。
 D:あなたの進む道がチュールの導きにより開かれますように。
 D:わたしの妹よ」
 D:(ノルン，JNethack)
+
+N:246:戦乙女ミリムの
+E:of Milim the Valkyrie
+I:36:50:0
+W:60:2:60:80000
+P:0:0d0:5:5:20
+F:SUST_CHR | SUST_CON |
+F:RES_SOUND | RES_DISEN | REFLECT | FREE_ACT | ACTIVATE
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | AGGRAVATE
+U:STRAIN_HASTE
+D:ドワーフの姫、鋼鉄参謀ユーミルの研究の成果だ。
+D:超振動クリスタルが高い防御力をもたらしているらしい。

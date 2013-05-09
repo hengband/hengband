@@ -1342,6 +1342,7 @@
 #define ART_GHB                 192
 #define ART_DASAI               200
 #define ART_KESHO               204
+#define ART_MILIM               246
 
 /* Shields */
 #define ART_THORIN              30
@@ -1892,6 +1893,7 @@
 #define ACT_DETECT_ALL_MONS     137
 #define ACT_ULTIMATE_RESIST     138
 /* 127 -> unused */
+#define ACT_STRAIN_HASTE        247
 #define ACT_TELEPORT_LEVEL      248
 #define ACT_GRAND_CROSS         249
 #define ACT_CAST_OFF            250
