@@ -20304,7 +20304,7 @@ B:SHOOT:HURT:9d6
 B:HIT:HURT:10d8
 B:HIT:HURT:10d8
 F:MALE | FRIENDS | OPEN_DOOR | BASH_DOOR |
-F:GOOD | DROP_SKELETON | DROP_CORPSE | SMART |
+F:ONLY_ITEM | DROP_1D2 | GOOD | DROP_SKELETON | DROP_CORPSE | SMART |
 F:IM_ACID | IM_COLD | RES_WATE | RES_NETH |
 S:1_IN_2 |
 S:SHOOT
@@ -21861,3 +21861,19 @@ D:「ボルガ博士、あなたは殺されたんです。
 D:その頭の中に爆弾を仕掛けられて、今のあなたは人間ロボットなんだ！」
 D:（『チャージマン研！』アニメ第３５話・『頭の中にダイナマイト』）
 
+#J0#
+N:1091:グウィンの黒騎士
+E:Black knight of Gwyn
+G:p:s
+I:125:60d30:25:130:10
+W:43:3:0:3400:15000:0
+B:HIT:HURT:8d6
+B:HIT:HURT:10d5
+B:HIT:HURT:10d5
+B:HIT:HURT:12d10
+F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_CHAO | MALE | HUMAN |
+F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | NO_FEAR | NO_CONF
+F:OPEN_DOOR | BASH_DOOR | 
+F:IM_FIRE | IM_POIS | HAS_LITE_1 |
+D:太陽の光の王グウィンの火継ぎの輝きに焼かれ、灰となった神代の騎士だ。
+D:以来、彼らは世界を彷徨い歩く存在となった。
