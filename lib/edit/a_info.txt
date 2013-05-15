@@ -4042,3 +4042,15 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | AGGRAVATE
 U:STRAIN_HASTE
 D:ドワーフの姫、鋼鉄参謀ユーミルの研究の成果だ。
 D:超振動クリスタルが高い防御力をもたらしているらしい。
+
+N:247:『薔薇棘鞭刃』
+E:Rose
+I:21:2:2
+W:30:20:60:70000
+P:0:3d8:20:12:0
+F:SHOW_MODS | VORPAL |
+F:SPEED | DEX | CHR | SLAY_DEMON | SLAY_ORC | SLAY_TROLL |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:「綺麗なバラには、棘があるのさ」とある妖狐が愛用していた茨の鞭だ。
+
+
