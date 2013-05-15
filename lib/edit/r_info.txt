@@ -21853,7 +21853,7 @@ G:t:w
 I:120:3d10:10:150:12
 W:0:10:0:200:0:0
 B:EXPLODE:SHATTER:15d8
-F:GOOD | DROP_GREAT | ONLY_ITEM | DROP_90 | FORCE_MAXHP |
+F:GOOD | DROP_GOOD | DROP_GREAT | ONLY_ITEM | DROP_90 | FORCE_MAXHP |
 F:UNIQUE | EMPTY_MIND | WILD_TOWN |
 F:OPEN_DOOR | BASH_DOOR | NONLIVING | RES_TELE
 D:ジュラル星人の魔の手により爆弾を頭に仕込まれた西ドイツの科学者だ。
@@ -21902,7 +21902,8 @@ G:I:b
 I:120:70d50:50:64:50
 W:48:6:0:5000:0:0
 F:FORCE_SLEEP | CAN_FLY | WEIRD_MIND | BASH_DOOR | RAND_50
-F:RES_CHAO | NO_CONF | ONLY_ITEM | DROP_90 | DROP_GREAT | NEVER_BLOW
+F:RES_CHAO | NO_CONF | ONLY_ITEM | DROP_90 |
+F:DROP_GOOD | DROP_GREAT | NEVER_BLOW
 S:1_IN_2
 S:BO_MANA | BR_MANA
 D:この青く輝く巨大な蝶は、鱗を持たぬ白竜シースの手によって生み出された。
@@ -21928,5 +21929,30 @@ D:各世界で作用する火薬を生産し、現代地球の銃器で利用できる手法を確立した。
 D:彼はその武器を自らを絶対の神と崇める世界の民に与えて、軍隊を組織している。
 D:その自動小銃の砲口は、前近代的な忠義の軍隊を粉々に消し飛ばすだろう。
 
+N:1095:スナガ『ムズガッシュ』
+E:Muzgash, the Snaga
+G:o:u
+I:110:18d9:20:30:30
+W:8:2:0:80:0:0
+B:SHOOT:HURT:2d10
+B:HIT:HURT:2d4
+B:HIT:HURT:2d4
+B:HIT:HURT:2d4
+F:UNIQUE | MALE | 
+F:FORCE_MAXHP | 
+F:ESCORT | ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
+F:OPEN_DOOR | BASH_DOOR | CAN_SPEAK | DROP_SKELETON | DROP_CORPSE
+F:EVIL | ORC | RES_DARK
+S:1_IN_3 |
+S:SHOOT
+D:$A captain of a regiment of weaker orcs, 
+D:$Muzgash schemes promotion by flattety to his superiors.
+D:$"I've told you twice that Gorbag's swine got to the gate first, and none 
+D:$of ours got out.  Lagduf and Muzgash ran through, but they were shot." 
+D:ムズガッシュは弱いオークの部隊を指揮する隊長で、上役にへつらい出世を企んでいる。
+D:「お前さんには二度も話してるぜ、ゴルバグの豚どものほうが先に門を出たとね、
+D:そしておれたちのほうはだれも出ちゃおらんとね。ラグドゥフとムズガッシュの野郎が
+D:駆け抜けたが、二人とも矢で射たれた。」
+D:（J.R.R.トールキン、瀬田貞二・田中明子訳 新版指輪物語） 
 
 
