@@ -1560,7 +1560,7 @@
 #define EGO_DWARVEN             10
 #define EGO_PERMANENCE          11
 #define EGO_YOIYAMI             12
-/* xxx */
+#define EGO_URUKISH             13
 /* xxx */
 /* xxx */
 

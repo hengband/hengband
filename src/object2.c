@@ -2648,6 +2648,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 							add_flag(o_ptr->art_flags, TR_RES_POIS);
 						break;
 					case EGO_ELVENKIND:
+					case EGO_URUKISH:
 						break;
 					case EGO_DWARVEN:
 						if (o_ptr->tval != TV_HARD_ARMOR)
