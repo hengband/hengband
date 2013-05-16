@@ -1234,6 +1234,8 @@ void leave_tower_check(void)
 		{
 			quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
 			quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;
+			update_playtime();
+			quest[QUEST_TOWER1].comptime = playtime;
 		}
 	}
 }
