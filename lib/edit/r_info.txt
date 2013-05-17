@@ -21955,4 +21955,21 @@ D:そしておれたちのほうはだれも出ちゃおらんとね。ラグドゥフとムズガッシュの野郎が
 D:駆け抜けたが、二人とも矢で射たれた。」
 D:（J.R.R.トールキン、瀬田貞二・田中明子訳 新版指輪物語） 
 
+#JZ#
+N:1096:濃尾無双『岩本虎眼』
+E:Kogan Iwamoto, the peerless swordsman of Nobi
+G:p:o
+I:122:165d11:18:75:5
+W:42:5:0:10000:0:0
+B:SLASH:BLIND:10d10
+B:SLASH:SUPERHURT:17d4
+B:SLASH:SUPERHURT:14d4
+B:SLASH:SUPERHURT:13d4
+F:UNIQUE | MALE | WEIRD_MIND | HUMAN |
+F:FORCE_MAXHP | WILD_ALL | DROP_CORPSE | KILL_BODY
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD |
+F:OPEN_DOOR | BASH_DOOR | NO_CONF | NO_FEAR
+D:「あの君さまはいつが盛りよな」この老剣士は今、正気でも曖昧でもなく、
+D:敵であろうと味方であろうと、間合いに入った者全てを斬る魔神と化している。
+
 
