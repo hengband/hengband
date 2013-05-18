@@ -4053,4 +4053,14 @@ F:SPEED | DEX | CHR | SLAY_DEMON | SLAY_ORC | SLAY_TROLL |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:「綺麗なバラには、棘があるのさ」とある妖狐が愛用していた茨の鞭だ。
 
+N:248:『虎殺七丁念仏』
+E:'Toragoroshi-Nanacho-Nenbutsu'
+I:23:20:3
+W:40:30:120:65000
+P:0:6d4:11:23:-15
+F:VORPAL | HIDE_TYPE | SHOW_MODS | AGGRAVATE | KILL_HUMAN | KILL_ANIMAL
+D:辻斬りにあった乞食坊主が切られたことにすら気づかず、
+D:念仏を唱えながら七丁も歩いた後に絶命したという妖刀だ。
+D:持ち主に災いをもたらすと言われ、その主たる所有者であった
+D:岩本虎眼の死により「虎殺」の銘が加えられた。
 

@@ -1429,6 +1429,12 @@ msg_print("地面に落とされた。");
 			a_idx = ART_ROBIN_HOOD;
 			chance = 5;
 			break;
+
+		case MON_KOGAN:
+			a_idx = ART_NANACHO;
+			chance = 80;
+			break;
+
 		}
 
 		if ((a_idx > 0) && ((randint0(100) < chance) || p_ptr->wizard))
