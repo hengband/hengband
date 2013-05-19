@@ -3198,12 +3198,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_ACID:
 		{
-#ifdef JP
-			msg_format("%sが辊く当いた...", name);
-#else
-			msg_format("The %s grows black.", name);
-#endif
-			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
+			msg_format(_("%sが辊く当いた...", "The %s grows black."), name);
+			if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID)) || (o_ptr->name2 == EGO_BRAND_ACID))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				fire_ball(GF_ACID, dir, 100, 2);
@@ -3214,12 +3210,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_FIRE:
 		{
-#ifdef JP
-			msg_format("%sが乐く当いた...", name);
-#else
-			msg_format("The %s grows red.", name);
-#endif
-			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+			msg_format(_("%sが乐く当いた...","The %s grows red."), name);
+			if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) || (o_ptr->name2 == EGO_BRAND_FIRE))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				fire_ball(GF_FIRE, dir, 100, 2);
@@ -3230,12 +3222,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_COLD:
 		{
-#ifdef JP
-			msg_format("%sが球く当いた...", name);
-#else
-			msg_format("The %s grows white.", name);
-#endif
-			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+			msg_format(_("%sが球く当いた...","The %s grows white.") , name);
+			if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE)) || (o_ptr->name2 == EGO_BRAND_COLD))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				fire_ball(GF_COLD, dir, 100, 2);
@@ -3246,12 +3234,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_ELEC:
 		{
-#ifdef JP
-			msg_format("%sが滥く当いた...", name);
-#else
-			msg_format("The %s grows blue.", name);
-#endif
-			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
+			msg_format(_("%sが滥く当いた...", "The %s grows blue."), name);
+			if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC)) || (o_ptr->name2 == EGO_BRAND_ELEC))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				fire_ball(GF_ELEC, dir, 100, 2);
@@ -3262,11 +3246,13 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_POIS:
 		{
-#ifdef JP
-			msg_format("%sが涡に当いた...", name);
-#else
-			msg_format("The %s grows green.", name);
-#endif
+			msg_format(_("%sが涡に当いた...", "The %s grows green."), name);
+			if (o_ptr->name2 == EGO_BRAND_POIS)
+			{
+				if (!get_aim_dir(&dir)) return FALSE;
+				fire_ball(GF_POIS, dir, 100, 2);
+			}
+			
 			(void)set_oppose_pois(randint1(20) + 20, FALSE);
 			break;
 		}

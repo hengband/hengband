@@ -384,20 +384,24 @@ static cptr item_activation_aux(object_type *o_ptr)
 			desc = _("拍子木を打ちならす", "beat wooden clappers");
 		break;
 	case ACT_RESIST_ACID:
-		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
+		if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID)) || (o_ptr->name2 == EGO_BRAND_ACID))
 			desc = _("アシッド・ボール (100) と酸への耐性", "ball of acid (100) and resist acid");
 		break;
 	case ACT_RESIST_FIRE:
-		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
+		if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) || (o_ptr->name2 == EGO_BRAND_FIRE))
 			desc = _("ファイア・ボール (100) と火への耐性", "ball of fire (100) and resist fire");
 		break;
 	case ACT_RESIST_COLD:
-		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
+		if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE)) || (o_ptr->name2 == EGO_BRAND_COLD))
 			desc = _("アイス・ボール (100) と冷気への耐性", "ball of cold (100) and resist cold");
 		break;
 	case ACT_RESIST_ELEC:
-		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
+		if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC)) || (o_ptr->name2 == EGO_BRAND_ELEC))
 			desc = _("サンダー・ボール (100) と電撃への耐性", "ball of elec (100) and resist elec");
+		break;
+	case ACT_RESIST_POIS:
+		if (o_ptr->name2 == EGO_BRAND_POIS)
+			desc = _("悪臭雲 (100) と毒への耐性", "ball of poison (100) and resist elec");
 		break;
 	}
 
