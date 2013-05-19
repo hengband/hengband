@@ -1649,7 +1649,7 @@
 #define EGO_XXX_5               84
 #define EGO_XXX_6               85
 #define EGO_XXX_7               86
-#define EGO_XXX_8               87
+#define EGO_WEIRD               87
 #define EGO_KILL_ANIMAL         88
 #define EGO_KILL_EVIL           89
 #define EGO_KILL_UNDEAD         90
@@ -1663,7 +1663,7 @@
 #define EGO_TRUMP               98
 #define EGO_PATTERN             99
 #define EGO_DIGGING             100
-#define EGO_XXX_9               101
+#define EGO_DEMON               101
 #define EGO_MORGUL              102
 #define EGO_KILL_HUMAN          103
 

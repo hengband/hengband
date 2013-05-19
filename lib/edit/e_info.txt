@@ -650,63 +650,74 @@ U:QUAKE
 # 84
 # 85
 # 86
-# 87
+
+
+N:87:(妖刀)
+E:(Weird Weapon)
+X:24:30
+W:0:40:0:0
+C:20:20:0:3
+F:INT | WIS | VORPAL | VAMPIRIC | SLAY_DRAGON |
+F:SLAY_ANIMAL | SLAY_ORC | SLAY_TROLL | SLAY_GIANT |
+F:DRAIN_EXP | AGGRAVATE | 
+F:HEAVY_CURSE | CURSED | XTRA_DICE
+
 
 # The "Kill" brands (8)
 
 N:88:アニマルスレイヤーの
 E:of Slay Animal
 X:24:10
-W:0:90:0:6000
+W:0:40:0:6000
 C:0:0:0:3
 F:INT | KILL_ANIMAL | REGEN | ESP_ANIMAL
 
 N:89:滅邪の
 E:of Slay Evil
 X:24:15
-W:0:90:0:5000
+W:0:40:0:5000
 C:0:0:0:3
 F:WIS | SLAY_EVIL | BLESSED | RES_FEAR | ESP_EVIL
 
 N:90:アンデッドスレイヤーの
 E:of Slay Undead
 X:24:12
-W:0:90:0:8000
+W:0:40:0:8000
 C:0:0:0:3
 F:WIS | KILL_UNDEAD | SEE_INVIS | RES_NETHER | ESP_UNDEAD
 
 N:91:デーモンスレイヤーの
 E:of Slay Demon
 X:24:10
-W:0:90:0:5000
+W:0:40:0:5000
 C:0:0:0:3
 F:INT | KILL_DEMON | ESP_DEMON | RES_FIRE
 
 N:92:オークスレイヤーの
 E:of Slay Orc
 X:24:10
-W:0:60:0:5000
+W:0:30:0:5000
 C:0:0:0:3
 F:DEX | INFRA | KILL_ORC | ESP_ORC | RES_DARK
 
 N:93:トロルスレイヤーの
 E:of Slay Troll
 X:24:10
-W:0:60:0:5000
+W:0:30:0:5000
 C:0:0:0:3
 F:STR | KILL_TROLL | ESP_TROLL | REGEN
 
 N:94:ジャイアントスレイヤーの
 E:of Slay Giant
 X:24:10
-W:0:60:0:5000
+W:0:30:0:5000
 C:0:0:0:3
 F:STR | KILL_GIANT | ESP_GIANT | FREE_ACT
 
 N:95:ドラゴンスレイヤーの
 E:of Slay Dragon
 X:24:20
-W:0:90:0:7000
+W:0:40:0:7000
 C:0:0:0:3
 F:CON | SLAY_DRAGON | KILL_DRAGON | XTRA_E_RES | XTRA_D_RES | ESP_DRAGON
 
@@ -756,6 +767,13 @@ F:TUNNEL | BRAND_ACID |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #101 removed slay human -- too weak
+N:101:(悪魔)
+E:(Demonic)
+X:24:25
+W:0:30:0:15000
+C:6:6:-20:4
+F:INT | BRAND_FIRE |  
+F:RES_FIRE | RES_NETHER | SEE_INVIS | ESP_DEMON | XTRA_DICE
 
 N:102:モルグルの
 E:of Morgul
@@ -770,7 +788,7 @@ F:RANDOM_CURSE2 | XTRA_DICE
 N:103:人喰いの
 E:of Slay Human
 X:24:10
-W:0:60:0:5000
+W:0:40:0:5000
 C:0:0:0:3
 F:DEX | STEALTH |  KILL_HUMAN | ESP_HUMAN | RES_FEAR
 

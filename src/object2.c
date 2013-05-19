@@ -2395,6 +2395,12 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					if (one_in_(5))
 						add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
 					break;
+				case EGO_DEMON:
+					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_CHAOTIC);
+					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_BLOWS);
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
+					if (one_in_(6)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);					
+					break;
 				}
 
 				if (!o_ptr->art_name)
@@ -2413,11 +2419,26 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				/* Roll for ego-item */
 				if (randint0(MAX_DEPTH) < level)
 				{
-					o_ptr->name2 = get_random_ego(INVEN_RARM, FALSE);
+					while(1)
+					{
+						o_ptr->name2 = get_random_ego(INVEN_RARM, FALSE);
+						if (o_ptr->name2 == EGO_WEIRD && o_ptr->tval != TV_SWORD)
+						{
+							continue;
+						}
+						break;
+					}
 					switch (o_ptr->name2)
 					{
 					case EGO_MORGUL:
 						if (one_in_(6)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
+					case EGO_WEIRD:
+						if (one_in_(4)) add_flag(o_ptr->art_flags, TR_BRAND_POIS);
+						if (one_in_(4)) add_flag(o_ptr->art_flags, TR_RES_NETHER);
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+						if (one_in_(6)) add_flag(o_ptr->art_flags, TR_NO_TELE);
+						if (one_in_(6)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
+						if (one_in_(6)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
 					}
 				}
 			}
@@ -4359,6 +4380,19 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 					o_ptr->pval++;
 					if ((lev > 60) && one_in_(3) && ((o_ptr->dd*(o_ptr->ds+1)) < 15)) o_ptr->pval++;
 				}
+				else if (o_ptr->name2 == EGO_DEMON)
+				{
+					o_ptr->curse_flags |= (TRC_CURSED);
+					if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+					if(have_flag(o_ptr->art_flags, TR_BLOWS))
+					{
+						o_ptr->pval += randint1(2);
+					}
+					else
+					{
+						o_ptr->pval += randint1(e_ptr->max_pval);
+					}
+				}
 				else if (o_ptr->name2 == EGO_ATTACKS)
 				{
 					o_ptr->pval = randint1(e_ptr->max_pval*lev/100+1);
@@ -4386,7 +4420,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 
 		/* Cheat -- describe the item */
 		if (cheat_peek) object_mention(o_ptr);
-
+		
 		/* Done */
 		return;
 	}
