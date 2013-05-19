@@ -2662,6 +2662,16 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 							o_ptr->ac = k_info[o_ptr->k_idx].ac + 5;
 							break;
 						}
+					case EGO_DRUID:
+						if (o_ptr->tval != TV_SOFT_ARMOR)
+						{
+							okay_flag = FALSE;
+							break;
+						}
+						else
+						{
+							break;
+						}
 					}
 
 					if (okay_flag)

@@ -1554,7 +1554,7 @@
 /* Body Armor */
 #define EGO_XXXX1               4
 #define EGO_XXXX2               5
-#define EGO_XXXX3               6
+#define EGO_DRUID               6
 #define EGO_OLOG                7
 #define EGO_RESISTANCE          8
 #define EGO_ELVENKIND           9

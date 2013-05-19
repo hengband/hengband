@@ -63,11 +63,18 @@ V:2.8.1
 
 # 4 (unused)
 # 5 (unused)
-# 6 (unused)
+
+N:6:ドルイドの
+E:of Druid
+X:31:10
+W:0:18:0:1500
+C:0:0:12:3
+F:WIS |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | XTRA_E_RES | XTRA_H_RES 
 
 N:7:オログの
 E:of Olog-hai
-X:31:5
+X:31:10
 W:0:18:0:1500
 C:3:7:10:3
 F:STR |
@@ -94,7 +101,7 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | XTRA_H_RES
 
 N:10:ドワーフの
 E:of Dwarven
-X:31:5
+X:31:10
 W:0:18:0:1500
 C:0:0:15:3
 F:CON |
