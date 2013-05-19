@@ -1642,14 +1642,14 @@
 #define EGO_CHAOTIC             77
 #define EGO_SHARPNESS           78
 #define EGO_EARTHQUAKES         79
-#define EGO_SLAY_ANIMAL         80
-#define EGO_SLAY_EVIL           81
-#define EGO_SLAY_UNDEAD         82
-#define EGO_SLAY_DEMON          83
-#define EGO_SLAY_ORC            84
-#define EGO_SLAY_TROLL          85
-#define EGO_SLAY_GIANT          86
-#define EGO_SLAY_DRAGON         87
+#define EGO_XXX_1               80
+#define EGO_XXX_2               81
+#define EGO_XXX_3               82
+#define EGO_XXX_4               83
+#define EGO_XXX_5               84
+#define EGO_XXX_6               85
+#define EGO_XXX_7               86
+#define EGO_XXX_8               87
 #define EGO_KILL_ANIMAL         88
 #define EGO_KILL_EVIL           89
 #define EGO_KILL_UNDEAD         90
@@ -1663,7 +1663,7 @@
 #define EGO_TRUMP               98
 #define EGO_PATTERN             99
 #define EGO_DIGGING             100
-#define EGO_SLAY_HUMAN          101
+#define EGO_XXX_9               101
 #define EGO_MORGUL              102
 #define EGO_KILL_HUMAN          103
 

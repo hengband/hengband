@@ -1425,7 +1425,7 @@ act = "は人間の血を求めている！";
 			act = "seems to be looking for humans!";
 #endif
 
-			o_ptr->name2 = EGO_SLAY_HUMAN;
+			o_ptr->name2 = EGO_KILL_HUMAN;
 			break;
 		case 15:
 #ifdef JP
@@ -1452,7 +1452,7 @@ act = "は邪悪なる怪物を求めている！";
 			act = "seems to be looking for evil monsters!";
 #endif
 
-			o_ptr->name2 = EGO_SLAY_EVIL;
+			o_ptr->name2 = EGO_KILL_EVIL;
 			break;
 		case 12:
 #ifdef JP
@@ -1461,7 +1461,7 @@ act = "は異世界の住人の肉体を求めている！";
 			act = "seems to be looking for demons!";
 #endif
 
-			o_ptr->name2 = EGO_SLAY_DEMON;
+			o_ptr->name2 = EGO_KILL_DEMON;
 			break;
 		case 11:
 #ifdef JP
@@ -1470,7 +1470,7 @@ act = "は屍を求めている！";
 			act = "seems to be looking for undead!";
 #endif
 
-			o_ptr->name2 = EGO_SLAY_UNDEAD;
+			o_ptr->name2 = EGO_KILL_UNDEAD;
 			break;
 		case 10:
 #ifdef JP
@@ -1479,7 +1479,7 @@ act = "は動物の血を求めている！";
 			act = "seems to be looking for animals!";
 #endif
 
-			o_ptr->name2 = EGO_SLAY_ANIMAL;
+			o_ptr->name2 = EGO_KILL_ANIMAL;
 			break;
 		case 9:
 #ifdef JP
@@ -1488,7 +1488,7 @@ act = "はドラゴンの血を求めている！";
 			act = "seems to be looking for dragons!";
 #endif
 
-			o_ptr->name2 = EGO_SLAY_DRAGON;
+			o_ptr->name2 = EGO_KILL_DRAGON;
 			break;
 		case 8:
 #ifdef JP
@@ -1497,7 +1497,7 @@ act = "はトロルの血を求めている！";
 			act = "seems to be looking for troll!s";
 #endif
 
-			o_ptr->name2 = EGO_SLAY_TROLL;
+			o_ptr->name2 = EGO_KILL_TROLL;
 			break;
 		case 7:
 #ifdef JP
@@ -1506,7 +1506,7 @@ act = "はオークの血を求めている！";
 			act = "seems to be looking for orcs!";
 #endif
 
-			o_ptr->name2 = EGO_SLAY_ORC;
+			o_ptr->name2 = EGO_KILL_ORC;
 			break;
 		case 6:
 #ifdef JP
@@ -1515,7 +1515,7 @@ act = "は巨人の血を求めている！";
 			act = "seems to be looking for giants!";
 #endif
 
-			o_ptr->name2 = EGO_SLAY_GIANT;
+			o_ptr->name2 = EGO_KILL_GIANT;
 			break;
 		case 5:
 #ifdef JP
