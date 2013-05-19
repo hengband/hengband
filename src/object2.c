@@ -2660,8 +2660,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 						{
 							o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
 							o_ptr->ac = k_info[o_ptr->k_idx].ac + 5;
-							if (one_in_(4))
-								add_flag(o_ptr->art_flags, TR_CON);
 							break;
 						}
 					}
