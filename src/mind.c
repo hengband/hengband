@@ -1482,25 +1482,8 @@ static bool cast_berserk_spell(int spell)
 		earthquake(py, px, 8+randint0(5));
 		break;
 	case 4:
-	{
-		cave_type       *c_ptr;
-		monster_type    *m_ptr;
-
-		for (dir = 0; dir < 8; dir++)
-		{
-			y = py + ddy_ddd[dir];
-			x = px + ddx_ddd[dir];
-			c_ptr = &cave[y][x];
-
-			/* Get the monster */
-			m_ptr = &m_list[c_ptr->m_idx];
-
-			/* Hack -- attack monsters */
-			if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
-				py_attack(y, x, 0);
-		}
+		massacre(py, px);
 		break;
-	}
 	default:
 #ifdef JP
 msg_print("¤Ê¤Ë¡©");

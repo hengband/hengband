@@ -6098,3 +6098,25 @@ bool summon_kin_player(int level, int y, int x, u32b mode)
 	}	
 	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
 }
+
+void massacre(int py, int px)
+{
+	int x, y;
+	cave_type       *c_ptr;
+	monster_type    *m_ptr;
+	int dir;
+
+	for (dir = 0; dir < 8; dir++)
+	{
+		y = py + ddy_ddd[dir];
+		x = px + ddx_ddd[dir];
+		c_ptr = &cave[y][x];
+
+		/* Get the monster */
+		m_ptr = &m_list[c_ptr->m_idx];
+
+		/* Hack -- attack monsters */
+		if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
+			py_attack(y, x, 0);
+	}
+}
