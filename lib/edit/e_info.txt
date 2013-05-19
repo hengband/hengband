@@ -59,29 +59,19 @@ V:2.8.1
 
 ### Body Armor ###
 
-N:4:耐酸の
-E:of Resist Acid
-X:31:16
-W:0:12:0:1000
-F:RES_ACID | IGNORE_ACID
+# Single - Elemental Ego remaked as of Dwarven / of Olog
 
-N:5:耐電の
-E:of Resist Lightning
-X:31:10
-W:0:12:0:400
-F:RES_ELEC | IGNORE_ELEC
+# 4 (unused)
+# 5 (unused)
+# 6 (unused)
 
-N:6:耐火の
-E:of Resist Fire
-X:31:14
-W:0:9:0:800
-F:RES_FIRE | IGNORE_FIRE
-
-N:7:耐冷の
-E:of Resist Cold
-X:31:12
-W:0:9:0:600
-F:RES_COLD | IGNORE_COLD
+N:7:オログの
+E:of Olog-hai
+X:31:5
+W:0:18:0:1500
+C:3:7:10:3
+F:STR |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | XTRA_E_RES
 
 N:8:全耐性の
 E:of Resistance
@@ -102,13 +92,13 @@ F:STEALTH |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | 
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | XTRA_H_RES
 
-N:10:(ドワーフ)
-E:(Dwarven)
+N:10:ドワーフの
+E:of Dwarven
 X:31:5
 W:0:18:0:1500
-C:0:0:12:3
-F:STR |
-F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+C:0:0:15:3
+F:CON |
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | XTRA_E_RES
 
 # OnePower
 
@@ -137,7 +127,7 @@ N:13:ウルクの
 E:of Uruk-hai
 X:31:25
 W:0:22:0:13000
-C:7:7:5:0
+C:5:5:5:0
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | SHOW_MODS
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | XTRA_H_RES
 

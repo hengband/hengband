@@ -1552,10 +1552,10 @@
 /* xxx */
 
 /* Body Armor */
-#define EGO_RESIST_ACID         4
-#define EGO_RESIST_ELEC         5
-#define EGO_RESIST_FIRE         6
-#define EGO_RESIST_COLD         7
+#define EGO_XXXX1               4
+#define EGO_XXXX2               5
+#define EGO_XXXX3               6
+#define EGO_OLOG                7
 #define EGO_RESISTANCE          8
 #define EGO_ELVENKIND           9
 #define EGO_DWARVEN             10
