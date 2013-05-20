@@ -21972,4 +21972,23 @@ F:OPEN_DOOR | BASH_DOOR | NO_CONF | NO_FEAR
 D:「あの君さまはいつが盛りよな」この老剣士は今、正気でも曖昧でもなく、
 D:敵であろうと味方であろうと、間合いに入った者全てを斬る魔神と化している。
 
+#J0#
+N:1097:ヤング・クイックシルバー・ドラゴン
+E:Young quicksilver dragon
+G:d:s
+I:115:28d10:20:90:150
+W:33:2:0:900:0:0
+B:CLAW:HURT:1d12
+B:CLAW:HURT:1d12
+B:BITE:HURT:2d12
+B:BITE:HURT:2d12
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
+F:DROP_60 | DROP_90 | DROP_2D2 | DROP_CORPSE | RIDING
+F:OPEN_DOOR | BASH_DOOR | WILD_MOUNTAIN |
+F:DRAGON
+S:1_IN_8 | BLIND 
+D:$It has a form that legends are made of.
+D:$Its glossy body wriggles and go into a liquid state.
+D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
+D:その光沢のある肉体は液状にうごめいていて、変幻自在に形を変えている。
 
