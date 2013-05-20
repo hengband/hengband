@@ -1018,6 +1018,8 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 	if (have_flag(flgs, TR_IGNORE_COLD)) total += 100;
 	if (have_flag(flgs, TR_ACTIVATE)) total += 100;
 	if (have_flag(flgs, TR_DRAIN_EXP)) total -= 12500;
+	if (have_flag(flgs, TR_DRAIN_HP)) total -= 12500;
+	if (have_flag(flgs, TR_DRAIN_MANA)) total -= 12500;
 	if (have_flag(flgs, TR_TELEPORT))
 	{
 		if (object_is_cursed(o_ptr))
@@ -2398,10 +2400,21 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
 					break;
 				case EGO_DEMON:
+					if (one_in_(3)){
+						add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
+					}
+					else if(one_in_(2))
+					{
+						add_flag(o_ptr->art_flags, TR_DRAIN_HP);
+					}
+					else
+					{
+						add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+					}
+					
 					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_CHAOTIC);
 					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_BLOWS);
-					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
-					if (one_in_(6)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);					
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
 					break;
 				}
 
@@ -7536,6 +7549,8 @@ static void drain_essence(void)
 	if (have_flag(old_flgs, TR_AGGRAVATE)) dec--;
 	if (have_flag(old_flgs, TR_NO_TELE)) dec--;
 	if (have_flag(old_flgs, TR_DRAIN_EXP)) dec--;
+	if (have_flag(old_flgs, TR_DRAIN_HP)) dec--;
+	if (have_flag(old_flgs, TR_DRAIN_MANA)) dec--;
 	if (have_flag(old_flgs, TR_TY_CURSE)) dec--;
 
 	iy = o_ptr->iy;

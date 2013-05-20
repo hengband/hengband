@@ -3411,8 +3411,10 @@
 #define TR_FIXED_FLAVOR        117
 #define TR_ADD_L_CURSE         118
 #define TR_ADD_H_CURSE         119
+#define TR_DRAIN_HP            120
+#define TR_DRAIN_MANA          121
 
-#define TR_FLAG_MAX            120
+#define TR_FLAG_MAX            122
 #define TR_FLAG_SIZE           4
 
 

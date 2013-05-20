@@ -1222,11 +1222,7 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 	 */
 	if ((o_ptr->tval == TV_LITE) && object_is_fixed_artifact(o_ptr))
 	{
-#ifdef JP
-		*misc_list++ = "±Êµ×¸÷¸»(È¾·Â3)";
-#else
-		*misc_list++ = "Permanent Light(3)";
-#endif
+		*misc_list++ = _("±Êµ×¸÷¸»(È¾·Â3)", "Permanent Light(3)");
 	}
 
 	/*
@@ -1234,11 +1230,7 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 	 */
 	if (have_flag(flgs, TR_LITE))
 	{
-#ifdef JP
-		*misc_list++ = "±Êµ×¸÷¸»(È¾·Â1)";
-#else
-		*misc_list++ = "Permanent Light(1)";
-#endif
+		*misc_list++ = _("±Êµ×¸÷¸»(È¾·Â1)", "Permanent Light(1)");
 	}
 
 	/*
@@ -1251,52 +1243,28 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 	{
 		if (have_flag(flgs, TR_TY_CURSE))
 		{
-#ifdef JP
-			*misc_list++ = "ÂÀ¸Å¤Î±åÇ°";
-#else
-			*misc_list++ = "Ancient Curse";
-#endif
+			*misc_list++ = _("ÂÀ¸Å¤Î±åÇ°", "Ancient Curse");
 		}
 		if (o_ptr->curse_flags & TRC_PERMA_CURSE)
 		{
-#ifdef JP
-			*misc_list++ = "±Ê±ó¤Î¼ö¤¤";
-#else
-			*misc_list++ = "Permanently Cursed";
-#endif
+			*misc_list++ = _("±Ê±ó¤Î¼ö¤¤", "Permanently Cursed");
 		}
 		else if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 		{
-#ifdef JP
-			*misc_list++ = "¶¯ÎÏ¤Ê¼ö¤¤";
-#else
-			*misc_list++ = "Heavily Cursed";
-#endif
+			*misc_list++ = _("¶¯ÎÏ¤Ê¼ö¤¤", "Heavily Cursed");
 		}
 /*		else */
 		else if (o_ptr->curse_flags & TRC_CURSED)
 		{
-#ifdef JP
-			*misc_list++ = "¼ö¤¤";
-#else
-			*misc_list++ = "Cursed";
-#endif
+			*misc_list++ = _("¼ö¤¤", "Cursed");
 		}
 		if (have_flag(flgs, TR_ADD_L_CURSE))
 		{
-#ifdef JP
-			*misc_list++ = "¼ö¤¤¤òÁý¤ä¤¹";
-#else
-			*misc_list++ = "Cursing";
-#endif
+			*misc_list++ = _("¼ö¤¤¤òÁý¤ä¤¹", "Cursing");
 		}
 		if (have_flag(flgs, TR_ADD_H_CURSE))
 		{
-#ifdef JP
-			*misc_list++ = "¶¯ÎÏ¤Ê¼ö¤¤¤òÁý¤ä¤¹";
-#else
-			*misc_list++ = "Heavily Cursing";
-#endif
+			*misc_list++ = _("¶¯ÎÏ¤Ê¼ö¤¤¤òÁý¤ä¤¹", "Heavily Cursing");
 		}
 	}
 

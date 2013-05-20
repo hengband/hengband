@@ -776,6 +776,8 @@ static cptr k_info_flags[] =
 	"FIXED_FLAVOR",
 	"ADD_L_CURSE",
 	"ADD_H_CURSE",
+	"DRAIN_HP",
+	"DRAIN_MANA",
 };
 
 

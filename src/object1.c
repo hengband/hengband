@@ -1767,156 +1767,71 @@ info[i++] = "それは呪われている。";
 
 	if ((have_flag(flgs, TR_TY_CURSE)) || (o_ptr->curse_flags & TRC_TY_CURSE))
 	{
-#ifdef JP
-info[i++] = "それは太古の禍々しい怨念が宿っている。";
-#else
-		info[i++] = "It carries an ancient foul curse.";
-#endif
-
+		info[i++] = _("それは太古の禍々しい怨念が宿っている。", "It carries an ancient foul curse.");
 	}
 	if ((have_flag(flgs, TR_AGGRAVATE)) || (o_ptr->curse_flags & TRC_AGGRAVATE))
 	{
-#ifdef JP
-info[i++] = "それは付近のモンスターを怒らせる。";
-#else
-		info[i++] = "It aggravates nearby creatures.";
-#endif
-
+		info[i++] = _("それは付近のモンスターを怒らせる。", "It aggravates nearby creatures.");
 	}
 	if ((have_flag(flgs, TR_DRAIN_EXP)) || (o_ptr->curse_flags & TRC_DRAIN_EXP))
 	{
-#ifdef JP
-info[i++] = "それは経験値を吸い取る。";
-#else
-		info[i++] = "It drains experience.";
-#endif
-
+		info[i++] = _("それは経験値を吸い取る。", "It drains experience.");
 	}
 	if (o_ptr->curse_flags & TRC_SLOW_REGEN)
 	{
-#ifdef JP
-info[i++] = "それは回復力を弱める。";
-#else
-		info[i++] = "It slows your regenerative powers.";
-#endif
-
+		info[i++] = _("それは回復力を弱める。", "It slows your regenerative powers.");
 	}
 	if ((o_ptr->curse_flags & TRC_ADD_L_CURSE) || have_flag(flgs, TR_ADD_L_CURSE))
 	{
-#ifdef JP
-info[i++] = "それは弱い呪いを増やす。";
-#else
-		info[i++] = "It adds weak curses.";
-#endif
-
+		info[i++] = _("それは弱い呪いを増やす。","It adds weak curses.");
 	}
 	if ((o_ptr->curse_flags & TRC_ADD_H_CURSE) || have_flag(flgs, TR_ADD_H_CURSE))
 	{
-#ifdef JP
-info[i++] = "それは強力な呪いを増やす。";
-#else
-		info[i++] = "It adds heavy curses.";
-#endif
-
+		info[i++] = _("それは強力な呪いを増やす。","It adds heavy curses.");
 	}
 	if (o_ptr->curse_flags & TRC_CALL_ANIMAL)
 	{
-#ifdef JP
-info[i++] = "それは動物を呼び寄せる。";
-#else
-		info[i++] = "It attracts animals.";
-#endif
-
+		info[i++] = _("それは動物を呼び寄せる。", "It attracts animals.");
 	}
 	if (o_ptr->curse_flags & TRC_CALL_DEMON)
 	{
-#ifdef JP
-info[i++] = "それは悪魔を呼び寄せる。";
-#else
-		info[i++] = "It attracts demons.";
-#endif
-
+		info[i++] = _("それは悪魔を呼び寄せる。", "It attracts demons.");
 	}
 	if (o_ptr->curse_flags & TRC_CALL_DRAGON)
 	{
-#ifdef JP
-info[i++] = "それはドラゴンを呼び寄せる。";
-#else
-		info[i++] = "It attracts dragons.";
-#endif
-
+		info[i++] = _("それはドラゴンを呼び寄せる。", "It attracts dragons.");
 	}
 	if (o_ptr->curse_flags & TRC_COWARDICE)
 	{
-#ifdef JP
-info[i++] = "それは恐怖感を引き起こす。";
-#else
-		info[i++] = "It makes you subject to cowardice.";
-#endif
-
+		info[i++] = _("それは恐怖感を引き起こす。", "It makes you subject to cowardice.");
 	}
 	if ((have_flag(flgs, TR_TELEPORT)) || (o_ptr->curse_flags & TRC_TELEPORT))
 	{
-#ifdef JP
-info[i++] = "それはランダムなテレポートを引き起こす。";
-#else
-		info[i++] = "It induces random teleportation.";
-#endif
-
+		info[i++] = _("それはランダムなテレポートを引き起こす。", "It induces random teleportation.");
 	}
 	if (o_ptr->curse_flags & TRC_LOW_MELEE)
 	{
-#ifdef JP
-info[i++] = "それは攻撃を外しやすい。";
-#else
-		info[i++] = "It causes you to miss blows.";
-#endif
-
+		info[i++] = _("それは攻撃を外しやすい。", "It causes you to miss blows.");
 	}
 	if (o_ptr->curse_flags & TRC_LOW_AC)
 	{
-#ifdef JP
-info[i++] = "それは攻撃を受けやすい。";
-#else
-		info[i++] = "It helps your enemies' blows.";
-#endif
-
+		info[i++] = _("それは攻撃を受けやすい。", "It helps your enemies' blows.");
 	}
 	if (o_ptr->curse_flags & TRC_LOW_MAGIC)
 	{
-#ifdef JP
-info[i++] = "それは魔法を唱えにくくする。";
-#else
-		info[i++] = "It encumbers you while spellcasting.";
-#endif
-
+		info[i++] = _("それは魔法を唱えにくくする。", "It encumbers you while spellcasting.");
 	}
 	if (o_ptr->curse_flags & TRC_FAST_DIGEST)
 	{
-#ifdef JP
-info[i++] = "それはあなたの新陳代謝を速くする。";
-#else
-		info[i++] = "It speeds your metabolism.";
-#endif
-
+		info[i++] = _("それはあなたの新陳代謝を速くする。", "It speeds your metabolism.");
 	}
-	if (o_ptr->curse_flags & TRC_DRAIN_HP)
+	if ((have_flag(flgs, TR_DRAIN_HP)) || (o_ptr->curse_flags & TRC_DRAIN_HP))
 	{
-#ifdef JP
-info[i++] = "それはあなたの体力を吸い取る。";
-#else
-		info[i++] = "It drains you.";
-#endif
-
+		info[i++] = _("それはあなたの体力を吸い取る。", "It drains you.");
 	}
-	if (o_ptr->curse_flags & TRC_DRAIN_MANA)
+	if ((have_flag(flgs, TR_DRAIN_MANA)) || (o_ptr->curse_flags & TRC_DRAIN_MANA))
 	{
-#ifdef JP
-info[i++] = "それはあなたの魔力を吸い取る。";
-#else
-		info[i++] = "It drains your mana.";
-#endif
-
+		info[i++] = _("それはあなたの魔力を吸い取る。", "It drains your mana.");
 	}
 
 	/* Describe about this kind of object instead of THIS fake object */

@@ -317,6 +317,8 @@ static void curse_artifact(object_type * o_ptr)
 	if (one_in_(3)) add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
 	if (one_in_(6)) add_flag(o_ptr->art_flags, TR_ADD_L_CURSE);
 	if (one_in_(9)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
+	if (one_in_(9)) add_flag(o_ptr->art_flags, TR_DRAIN_HP);
+	if (one_in_(9)) add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
 	if (one_in_(2)) add_flag(o_ptr->art_flags, TR_TELEPORT);
 	else if (one_in_(3)) add_flag(o_ptr->art_flags, TR_NO_TELE);
 

@@ -1519,9 +1519,17 @@ static object_type *choose_cursed_obj_name(u32b flag)
 			choices[number] = i;
 			number++;
 		}
-		else if ((flag == TRC_ADD_L_CURSE) || (flag == TRC_ADD_H_CURSE))
+		else if ((flag == TRC_ADD_L_CURSE) || (flag == TRC_ADD_H_CURSE) || 
+					(flag == TRC_DRAIN_HP) || (flag == TRC_DRAIN_MANA) )
 		{
-			u32b cf = (flag == TRC_ADD_L_CURSE) ? TR_ADD_L_CURSE : TR_ADD_H_CURSE;
+			u32b cf;
+			switch (flag)
+			{
+			  case TRC_ADD_L_CURSE	: cf = TR_ADD_L_CURSE; break;
+			  case TRC_ADD_H_CURSE	: cf = TR_ADD_H_CURSE; break;
+			  case TRC_DRAIN_HP		: cf = TR_DRAIN_HP; break;
+			  default 				: cf = TR_DRAIN_MANA; break;
+			}
 			u32b flgs[4];
 			object_flags(o_ptr, flgs);
 			if (have_flag(flgs, cf))
