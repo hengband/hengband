@@ -21988,7 +21988,7 @@ F:OPEN_DOOR | BASH_DOOR | WILD_MOUNTAIN |
 F:DRAGON
 S:1_IN_8 | BLIND 
 D:$It has a form that legends are made of.
-D:$Its glossy body wriggles and go into a liquid state.
+D:$Its glossy body wriggles and goes into a liquid state.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
 D:その光沢のある肉体は液状にうごめいていて、変幻自在に形を変えている。
 
