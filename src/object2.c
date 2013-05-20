@@ -2318,6 +2318,8 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						continue;
 					if (o_ptr->name2 == EGO_EARTHQUAKES && o_ptr->tval != TV_HAFTED)
 						continue;
+					if (o_ptr->name2 == EGO_WEIRD && o_ptr->tval != TV_SWORD)
+						continue;
 					break;
 				}
 
