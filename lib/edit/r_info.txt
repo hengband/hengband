@@ -21977,7 +21977,7 @@ N:1097:ヤング・クイックシルバー・ドラゴン
 E:Young quicksilver dragon
 G:d:s
 I:115:28d10:20:90:150
-W:33:2:0:900:0:0
+W:33:2:0:900:5500:1098
 B:CLAW:HURT:1d12
 B:CLAW:HURT:1d12
 B:BITE:HURT:2d12
@@ -21991,4 +21991,23 @@ D:$It has a form that legends are made of.
 D:$Its glossy body wriggles and goes into a liquid state.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
 D:その光沢のある肉体は液状にうごめいていて、変幻自在に形を変えている。
+
+#J0#
+N:1098:クイックシルバー・ドラゴン
+E:Mature quicksilver dragon
+G:d:s
+I:120:54d10:20:110:150
+W:39:3:0:1500:0:0
+B:CLAW:HURT:3d4
+B:CLAW:SUPERHURT:2d11
+B:BITE:HURT:3d12
+B:BITE:HURT:3d12
+F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN |
+F:DROP_1D2 | DROP_4D2 | CAN_FLY | DROP_CORPSE | RIDING
+F:BASH_DOOR | 
+F:DRAGON | NO_CONF | NO_SLEEP | NO_FEAR
+S:1_IN_4 
+S:BLIND
+D:$A large dragon with scales of wriggling silver.
+D:大きなドラゴンで、銀色にうごめく鱗を持っている。
 
