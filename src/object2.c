@@ -4385,6 +4385,11 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 				if (e_ptr->max_to_a > 127)
 					o_ptr->to_a -= randint1(256-e_ptr->max_to_a);
 				else o_ptr->to_a += randint1(e_ptr->max_to_a);
+				
+				if((o_ptr->name2 == EGO_PROTECTION) || (o_ptr->name2 == EGO_S_PROTECTION))
+				{
+					o_ptr->to_a = MAX(o_ptr->to_a, 15);
+				}
 			}
 
 			/* Hack -- obtain pval */

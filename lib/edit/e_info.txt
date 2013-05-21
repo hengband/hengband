@@ -193,6 +193,12 @@ W:0:18:0:8000
 C:0:0:5:0
 F:RES_LITE | RES_DARK
 
+N:238:¼é¤ê¤Î
+E:of Protection
+X:25:20
+W:0:18:0:600
+C:0:0:15:0
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 ### Crowns and Helms ###
 
@@ -325,7 +331,7 @@ N:40:¼é¤ê¤Î
 E:of Protection
 X:32:10
 W:0:5:0:500
-C:0:0:10:0
+C:0:0:18:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #J0#
@@ -1473,4 +1479,6 @@ X:27:0
 W:29:0:0:0
 C:0:0:0:3
 F:WIS | CHR | CURSED | HEAVY_CURSE
+
+# MAX 238
 
