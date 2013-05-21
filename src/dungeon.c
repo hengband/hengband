@@ -1523,6 +1523,8 @@ static object_type *choose_cursed_obj_name(u32b flag)
 					(flag == TRC_DRAIN_HP) || (flag == TRC_DRAIN_MANA) )
 		{
 			u32b cf;
+			u32b flgs[4];
+			object_flags(o_ptr, flgs);
 			switch (flag)
 			{
 			  case TRC_ADD_L_CURSE	: cf = TR_ADD_L_CURSE; break;
@@ -1530,8 +1532,6 @@ static object_type *choose_cursed_obj_name(u32b flag)
 			  case TRC_DRAIN_HP		: cf = TR_DRAIN_HP; break;
 			  default 				: cf = TR_DRAIN_MANA; break;
 			}
-			u32b flgs[4];
-			object_flags(o_ptr, flgs);
 			if (have_flag(flgs, cf))
 			{
 				choices[number] = i;
