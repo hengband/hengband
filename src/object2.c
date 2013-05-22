@@ -4400,11 +4400,34 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 				if (e_ptr->max_to_a > 127)
 					o_ptr->to_a -= randint1(256-e_ptr->max_to_a);
 				else o_ptr->to_a += randint1(e_ptr->max_to_a);
-				
-				if((o_ptr->name2 == EGO_PROTECTION) || (o_ptr->name2 == EGO_S_PROTECTION))
+			}
+			
+			/* Accuracy ego must have high to_h */
+			if(o_ptr->name2 == EGO_ACCURACY)
+			{
+				while(o_ptr->to_h < o_ptr->to_d + 10)
 				{
-					o_ptr->to_a = MAX(o_ptr->to_a, 15);
+					o_ptr->to_h += 5;
+					o_ptr->to_d -= 5;
 				}
+				o_ptr->to_h = MAX(o_ptr->to_h, 15);
+			}
+			
+			/* Accuracy ego must have high to_h */
+			if(o_ptr->name2 == EGO_VELOCITY)
+			{
+				while(o_ptr->to_d < o_ptr->to_h + 10)
+				{
+					o_ptr->to_d += 5;
+					o_ptr->to_h -= 5;
+				}
+				o_ptr->to_d = MAX(o_ptr->to_d, 15);
+			}
+			
+			/* Protection ego must have high to_a */
+			if((o_ptr->name2 == EGO_PROTECTION) || (o_ptr->name2 == EGO_S_PROTECTION))
+			{
+				o_ptr->to_a = MAX(o_ptr->to_a, 15);
 			}
 
 			/* Hack -- obtain pval */
