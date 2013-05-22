@@ -1574,6 +1574,7 @@
 #define EGO_REFLECTION          21
 #define EGO_NIGHT_DAY           22
 #define EGO_S_PROTECTION        238
+#define EGO_S_DWARVEN           239
 
 /* Crowns and Helms */
 #define EGO_DARK                23
@@ -1771,7 +1772,7 @@
 #define EGO_AMU_GREAT           235
 #define EGO_AMU_DETECTION       236
 #define EGO_AMU_NAIVETY         237
-// MAX 238
+// MAX 239
 
 /* Activation effects for random artifacts */
 #define ACT_SUNLIGHT            1

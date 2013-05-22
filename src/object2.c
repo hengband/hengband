@@ -2737,7 +2737,17 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					create_artifact(o_ptr, FALSE);
 					break;
 				}
-				o_ptr->name2 = get_random_ego(INVEN_LARM, TRUE);
+				
+				while(1)
+				{
+					o_ptr->name2 = get_random_ego(INVEN_LARM, TRUE);
+					if (o_ptr->sval != SV_SMALL_METAL_SHIELD && o_ptr->sval != SV_LARGE_METAL_SHIELD 
+								&& o_ptr->name2 == EGO_S_DWARVEN)
+					{
+						continue;
+					}
+					break;
+				}
 				
 				switch (o_ptr->name2)
 				{
@@ -2748,6 +2758,11 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				case EGO_REFLECTION:
 					if (o_ptr->sval == SV_MIRROR_SHIELD)
 						o_ptr->name2 = 0;
+					break;
+					
+				case EGO_S_DWARVEN:
+					o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
+					o_ptr->ac = k_info[o_ptr->k_idx].ac + 3;
 					break;
 				}
 			}
