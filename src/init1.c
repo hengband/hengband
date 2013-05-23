@@ -800,7 +800,7 @@ static cptr k_info_gen_flags[] =
 	"RANDOM_CURSE1",
 	"RANDOM_CURSE2",
 	"XTRA_DICE",
-	"XXX",
+	"POWERFUL",
 	"XXX",
 	"XXX",
 	"XXX",

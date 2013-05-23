@@ -2400,6 +2400,8 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
 					break;
 				case EGO_DEMON:
+					
+					if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
 					if (one_in_(3)){
 						add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
 					}
@@ -4375,7 +4377,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		if (e_ptr->act_idx) o_ptr->xtra2 = e_ptr->act_idx;
 
 		/* Hack -- apply extra penalties if needed */
-		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
+		if ((object_is_cursed(o_ptr) || object_is_broken(o_ptr)) && !(e_ptr->gen_flags & (TRG_POWERFUL)))
 		{
 			/* Hack -- obtain bonuses */
 			if (e_ptr->max_to_h) o_ptr->to_h -= randint1(e_ptr->max_to_h);
@@ -4447,8 +4449,6 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 				}
 				else if (o_ptr->name2 == EGO_DEMON)
 				{
-					o_ptr->curse_flags |= (TRC_CURSED);
-					if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
 					if(have_flag(o_ptr->art_flags, TR_BLOWS))
 					{
 						o_ptr->pval += randint1(2);
