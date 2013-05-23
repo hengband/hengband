@@ -1552,7 +1552,7 @@
 /* xxx */
 
 /* Body Armor */
-#define EGO_XXXX1               4
+#define EGO_A_MORGUL            4
 #define EGO_XXXX2               5
 #define EGO_DRUID               6
 #define EGO_OLOG                7

@@ -2447,6 +2447,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					{
 					case EGO_MORGUL:
 						if (one_in_(6)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
+						if (one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
 					case EGO_WEIRD:
 						if (one_in_(4)) add_flag(o_ptr->art_flags, TR_BRAND_POIS);
 						if (one_in_(4)) add_flag(o_ptr->art_flags, TR_RES_NETHER);
@@ -2679,39 +2680,45 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 
 					switch (o_ptr->name2)
 					{
-					case EGO_RESISTANCE:
-						if (one_in_(4))
-							add_flag(o_ptr->art_flags, TR_RES_POIS);
-						break;
-					case EGO_ELVENKIND:
-					case EGO_URUKISH:
-						break;
-					case EGO_DWARVEN:
+					  case EGO_DWARVEN:
 						if (o_ptr->tval != TV_HARD_ARMOR)
 						{
 							okay_flag = FALSE;
 							break;
 						}
-						else
-						{
-							o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
-							o_ptr->ac = k_info[o_ptr->k_idx].ac + 5;
-							break;
-						}
-					case EGO_DRUID:
+					  case EGO_DRUID:
 						if (o_ptr->tval != TV_SOFT_ARMOR)
 						{
 							okay_flag = FALSE;
 							break;
 						}
-						else
-						{
-							break;
-						}
+					  default:
+						break;
 					}
 
 					if (okay_flag)
 						break;
+				}
+				switch (o_ptr->name2)
+				{
+				  case EGO_RESISTANCE:
+					if (one_in_(4))
+						add_flag(o_ptr->art_flags, TR_RES_POIS);
+						break;
+				  case EGO_DWARVEN:
+					o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
+					o_ptr->ac = k_info[o_ptr->k_idx].ac + 5;
+					break;
+				  case EGO_A_MORGUL:
+					if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+					if(one_in_(6)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
+					if(one_in_(4)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
+					if(one_in_(4)) add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+					if(one_in_(6)) add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+					if(one_in_(6)) add_flag(o_ptr->art_flags, TR_NO_TELE);
+					break;
+				  default:
+					break;
 				}
 			}
 
@@ -4467,6 +4474,8 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 				{
 					o_ptr->pval += randint1(e_ptr->max_pval);
 				}
+				
+				
 			}
 			if ((o_ptr->name2 == EGO_SPEED) && (lev < 50))
 			{
