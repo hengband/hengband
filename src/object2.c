@@ -2689,23 +2689,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 							okay_flag = FALSE;
 							break;
 						}
-					  case EGO_A_DEMON:
-						if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-						one_in_(3) ? 
-							add_flag(o_ptr->art_flags, TR_DRAIN_EXP) :
-							one_in_(2) ?
-								add_flag(o_ptr->art_flags, TR_DRAIN_HP) :
-								add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
-						
-						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_ADD_L_CURSE);
-						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
-						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_HP);
-						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
-						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
-						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
-						
-						break;
 					  default:
 						break;
 					}
@@ -2722,6 +2705,23 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 				  case EGO_DWARVEN:
 					o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
 					o_ptr->ac = k_info[o_ptr->k_idx].ac + 5;
+					break;
+					
+				  case EGO_A_DEMON:
+					if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+					one_in_(3) ? 
+						add_flag(o_ptr->art_flags, TR_DRAIN_EXP) :
+						one_in_(2) ?
+							add_flag(o_ptr->art_flags, TR_DRAIN_HP) :
+							add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+						
+					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_ADD_L_CURSE);
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_HP);
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
 					break;
 				  case EGO_A_MORGUL:
 					if (one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
