@@ -2402,17 +2402,12 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 				case EGO_DEMON:
 					
 					if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-					if (one_in_(3)){
-						add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
-					}
-					else if(one_in_(2))
-					{
-						add_flag(o_ptr->art_flags, TR_DRAIN_HP);
-					}
-					else
-					{
-						add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
-					}
+					one_in_(3) ? 
+						add_flag(o_ptr->art_flags, TR_DRAIN_EXP) :
+						one_in_(2) ?
+							add_flag(o_ptr->art_flags, TR_DRAIN_HP) :
+							add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+						
 					
 					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_CHAOTIC);
 					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_BLOWS);
@@ -2694,6 +2689,23 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 							okay_flag = FALSE;
 							break;
 						}
+					  case EGO_A_DEMON:
+						if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+						one_in_(3) ? 
+							add_flag(o_ptr->art_flags, TR_DRAIN_EXP) :
+							one_in_(2) ?
+								add_flag(o_ptr->art_flags, TR_DRAIN_HP) :
+								add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+						
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_ADD_L_CURSE);
+						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
+						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_HP);
+						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
+						if (one_in_(5)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
+						
+						break;
 					  default:
 						break;
 					}
@@ -2712,12 +2724,12 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					o_ptr->ac = k_info[o_ptr->k_idx].ac + 5;
 					break;
 				  case EGO_A_MORGUL:
-					if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-					if(one_in_(6)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
-					if(one_in_(4)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
-					if(one_in_(4)) add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-					if(one_in_(6)) add_flag(o_ptr->art_flags, TR_NO_MAGIC);
-					if(one_in_(6)) add_flag(o_ptr->art_flags, TR_NO_TELE);
+					if (one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+					if (one_in_(6)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
+					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
+					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+					if (one_in_(6)) add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+					if (one_in_(6)) add_flag(o_ptr->art_flags, TR_NO_TELE);
 					break;
 				  default:
 					break;
@@ -4469,6 +4481,10 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 				{
 					o_ptr->pval = randint1(e_ptr->max_pval);
 					if (o_ptr->sval == SV_ELVEN_CLOAK) o_ptr->pval += randint1(2);
+				}
+				else if (o_ptr->name2 == EGO_A_DEMON || o_ptr->name2 == EGO_DRUID || o_ptr->name2 == EGO_OLOG)
+				{
+					o_ptr->pval = randint1(e_ptr->max_pval);
 				}
 				else
 				{
