@@ -1579,8 +1579,7 @@
 /* Crowns and Helms */
 #define EGO_DARK                23
 #define EGO_BRILLIANCE          24
-//#define EGO_INTELLIGENCE        24
-//#define EGO_WISDOM              25
+#define EGO_H_PROTECTION        25
 //#define EGO_BEAUTY              26
 #define EGO_MAGI                27
 #define EGO_MIGHT               28

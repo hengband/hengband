@@ -246,7 +246,14 @@ C:0:0:0:2
 W:0:18:0:500
 F:INT | WIS | CHR |  SUST_INT | SUST_WIS | SUST_CHR
 
-#25, 26 unused
+N:25:¼é¤ê¤Î
+E:of Brilliance
+X:33:20
+C:0:0:15:0
+W:0:20:0:2000
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+#26 unused
 
 # OneAbility
 

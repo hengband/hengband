@@ -2936,6 +2936,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					case EGO_LITE:
 					case EGO_DARK:
 					case EGO_INFRAVISION:
+					case EGO_H_PROTECTION:
 						break;
 					case EGO_SEEING:
 						if (one_in_(7))
@@ -4444,7 +4445,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 			}
 			
 			/* Protection ego must have high to_a */
-			if((o_ptr->name2 == EGO_PROTECTION) || (o_ptr->name2 == EGO_S_PROTECTION))
+			if((o_ptr->name2 == EGO_PROTECTION) || (o_ptr->name2 == EGO_S_PROTECTION) || (o_ptr->name2 == EGO_H_PROTECTION))
 			{
 				o_ptr->to_a = MAX(o_ptr->to_a, 15);
 			}
