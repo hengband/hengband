@@ -2112,22 +2112,14 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_SUNLIGHT:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-#ifdef JP
-			msg_print("太陽光線が放たれた。");
-#else
-			msg_print("A line of sunlight appears.");
-#endif
+			msg_print(_("太陽光線が放たれた。", "A line of sunlight appears."));
 			(void)lite_line(dir, damroll(6, 8));
 			break;
 		}
 
 		case ACT_BO_MISS_1:
 		{
-#ifdef JP
-			msg_print("それは眩しいくらいに明るく輝いている...");
-#else
-			msg_print("It glows extremely brightly...");
-#endif
+			msg_print(_("それは眩しいくらいに明るく輝いている...", "It glows extremely brightly..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_MISSILE, dir, damroll(2, 6));
 			break;
@@ -2135,11 +2127,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_POIS_1:
 		{
-#ifdef JP
-			msg_print("それは濃緑色に脈動している...");
-#else
-			msg_print("It throbs deep green...");
-#endif
+			msg_print(_("それは濃緑色に脈動している...","It throbs deep green..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_POIS, dir, 12, 3);
 			break;
@@ -2147,11 +2135,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_ELEC_1:
 		{
-#ifdef JP
-			msg_print("それは火花に覆われた...");
-#else
-			msg_print("It is covered in sparks...");
-#endif
+			msg_print(_("それは火花に覆われた...", "It is covered in sparks..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ELEC, dir, damroll(4, 8));
 			break;
@@ -2159,11 +2143,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_ACID_1:
 		{
-#ifdef JP
-			msg_print("それは酸に覆われた...");
-#else
-			msg_print("It is covered in acid...");
-#endif
+			msg_print(_("それは酸に覆われた...","It is covered in acid..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ACID, dir, damroll(5, 8));
 			break;
@@ -2171,11 +2151,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_COLD_1:
 		{
-#ifdef JP
-			msg_print("それは霜に覆われた...");
-#else
-			msg_print("It is covered in frost...");
-#endif
+			msg_print(_("それは霜に覆われた...","It is covered in frost..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_COLD, dir, damroll(6, 8));
 			break;
@@ -2183,11 +2159,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_FIRE_1:
 		{
-#ifdef JP
-			msg_print("それは炎に覆われた...");
-#else
-			msg_print("It is covered in fire...");
-#endif
+			msg_print(_("それは炎に覆われた...","It is covered in fire..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_FIRE, dir, damroll(9, 8));
 			break;
@@ -2195,83 +2167,103 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_COLD_1:
 		{
-#ifdef JP
-			msg_print("それは霜に覆われた...");
-#else
-			msg_print("It is covered in frost...");
-#endif
+			msg_print(_("それは霜に覆われた...","It is covered in frost..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_COLD, dir, 48, 2);
+			break;
+		}
+		
+		case ACT_BA_COLD_2:
+		{
+			msg_print(_("それは青く激しく輝いた...", "It glows an intense blue..."));
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_COLD, dir, 100, 2);
+			break;
+		}
+		
+		case ACT_BA_COLD_3:
+		{
+			msg_print(_("明るく白色に輝いている...", "It glows bright white..."));
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_COLD, dir, 400, 3);
 			break;
 		}
 
 		case ACT_BA_FIRE_1:
 		{
-#ifdef JP
-			msg_print("それは赤く激しく輝いた...");
-#else
-			msg_print("It glows an intense red...");
-#endif
+			msg_print(_("それは赤く激しく輝いた...","It glows an intense red..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_FIRE, dir, 72, 2);
 			break;
 		}
-
+		
+		case ACT_BA_FIRE_2:
+		{
+			msg_format(_("%sから炎が吹き出した...", "The %s rages in fire..."), name);
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_FIRE, dir, 120, 3);
+			break;
+		}
+		
+		case ACT_BA_FIRE_3:
+		{
+			msg_print(_("深赤色に輝いている...", "It glows deep red..."));
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_FIRE, dir, 300, 3);
+			break;
+		}
+		
+		case ACT_BA_FIRE_4:
+		{
+			msg_print(_("それは赤く激しく輝いた...","It glows an intense red..."));
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_FIRE, dir, 100, 2);
+			break;
+		}
+		
+		case ACT_BA_ELEC_2:
+		{
+			msg_print(_("電気がパチパチ音を立てた...","It crackles with electricity..."));
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_ELEC, dir, 100, 3);
+			break;
+		}
+		
+		case ACT_BA_ELEC_3:
+		{
+			msg_print(_("深青色に輝いている...", "It glows deep blue..."));
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_ELEC, dir, 500, 3);
+			break;
+		}
+		
+		case ACT_BA_ACID_1:
+		{
+			msg_print(_("それは黒く激しく輝いた...","It glows an intense black..."));
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_ACID, dir, 100, 2);
+			break;
+		}
+		
+		case ACT_BA_NUKE_1:
+		{
+			msg_print(_("それは緑に激しく輝いた...","It glows an intense green..."));
+			if (!get_aim_dir(&dir)) return FALSE;
+			fire_ball(GF_NUKE, dir, 100, 2);
+			break;
+		}
+		
 		case ACT_DRAIN_1:
 		{
-#ifdef JP
-			msg_format("あなたは%sに敵を締め殺すよう命じた。", name);
-#else
-			msg_format("You order the %s to strangle your opponent.", name);
-#endif
+			msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			if (drain_life(dir, 100))
 			break;
 		}
 
-		case ACT_BA_COLD_2:
-		{
-#ifdef JP
-			msg_print("それは青く激しく輝いた...");
-#else
-			msg_print("It glows an intense blue...");
-#endif
-			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_COLD, dir, 100, 2);
-			break;
-		}
-
-		case ACT_BA_ELEC_2:
-		{
-#ifdef JP
-			msg_print("電気がパチパチ音を立てた...");
-#else
-			msg_print("It crackles with electricity...");
-#endif
-			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_ELEC, dir, 100, 3);
-			break;
-		}
-
-		case ACT_BA_FIRE_2:
-		{
-#ifdef JP
-			msg_format("%sから炎が吹き出した...", name);
-#else
-			msg_format("The %s rages in fire...", name);
-#endif
-			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_FIRE, dir, 120, 3);
-			break;
-		}
-
 		case ACT_DRAIN_2:
 		{
-#ifdef JP
-			msg_print("黒く輝いている...");
-#else
-			msg_print("It glows black...");
-#endif
+			msg_print(_("黒く輝いている...", "It glows black..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			drain_life(dir, 120);
 			break;
@@ -2290,49 +2282,9 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_MISS_2:
 		{
-#ifdef JP
-			msg_print("魔法のトゲが現れた...");
-#else
-			msg_print("It grows magical spikes...");
-#endif
+			msg_print(_("魔法のトゲが現れた...", "It grows magical spikes..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ARROW, dir, 150);
-			break;
-		}
-
-		case ACT_BA_FIRE_3:
-		{
-#ifdef JP
-			msg_print("深赤色に輝いている...");
-#else
-			msg_print("It glows deep red...");
-#endif
-			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_FIRE, dir, 300, 3);
-			break;
-		}
-
-		case ACT_BA_COLD_3:
-		{
-#ifdef JP
-			msg_print("明るく白色に輝いている...");
-#else
-			msg_print("It glows bright white...");
-#endif
-			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_COLD, dir, 400, 3);
-			break;
-		}
-
-		case ACT_BA_ELEC_3:
-		{
-#ifdef JP
-			msg_print("深青色に輝いている...");
-#else
-			msg_print("It glows deep blue...");
-#endif
-			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_ELEC, dir, 500, 3);
 			break;
 		}
 
@@ -2374,11 +2326,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CALL_CHAOS:
 		{
-#ifdef JP
-			msg_print("様々な色の火花を発している...");
-#else
-			msg_print("It glows in scintillating colours...");
-#endif
+			msg_print(_("様々な色の火花を発している...","It glows in scintillating colours..."));
 			call_chaos();
 			break;
 		}
@@ -2386,22 +2334,14 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_ROCKET:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-#ifdef JP
-			msg_print("ロケットを発射した！");
-#else
-			msg_print("You launch a rocket!");
-#endif
+			msg_print(_("ロケットを発射した！", "You launch a rocket!"));
 			fire_ball(GF_ROCKET, dir, 250 + plev*3, 2);
 			break;
 		}
 
 		case ACT_DISP_EVIL:
 		{
-#ifdef JP
-			msg_print("神聖な雰囲気が充満した...");
-#else
-			msg_print("It floods the area with goodness...");
-#endif
+			msg_print(_("神聖な雰囲気が充満した...", "It floods the area with goodness..."));
 			dispel_evil(p_ptr->lev * 5);
 			break;
 		}
@@ -2409,33 +2349,21 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_BA_MISS_3:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-#ifdef JP
-			msg_print("あなたはエレメントのブレスを吐いた。");
-#else
-			msg_print("You breathe the elements.");
-#endif
+			msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
 			fire_ball(GF_MISSILE, dir, 300, -4);
 			break;
 		}
 
 		case ACT_DISP_GOOD:
 		{
-#ifdef JP
-			msg_print("邪悪な雰囲気が充満した...");
-#else
-			msg_print("It floods the area with evil...");
-#endif
+			msg_print(_("邪悪な雰囲気が充満した...", "It floods the area with evil..."));
 			dispel_good(p_ptr->lev * 5);
 			break;
 		}
 
 		case ACT_BO_MANA:
 		{
-#ifdef JP
-			msg_format("%sに魔法のトゲが現れた...", name);
-#else
-			msg_format("The %s grows magical spikes...", name);
-#endif
+			msg_format(_("%sに魔法のトゲが現れた...", "The %s grows magical spikes..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ARROW, dir, 150);
 			break;
@@ -2443,11 +2371,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_WATER:
 		{
-#ifdef JP
-			msg_format("%sが深い青色に鼓動している...", name);
-#else
-			msg_format("The %s throbs deep blue...", name);
-#endif
+			msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_WATER, dir, 200, 3);
 			break;
@@ -2455,11 +2379,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_DARK:
 		{
-#ifdef JP
-			msg_format("%sが深い闇に覆われた...", name);
-#else
-			msg_format("The %s is coverd in pitch-darkness...", name);
-#endif
+			msg_format(_("%sが深い闇に覆われた...","The %s is coverd in pitch-darkness..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_DARK, dir, 250, 4);
 			break;
@@ -2467,11 +2387,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_MANA:
 		{
-#ifdef JP
-			msg_format("%sが青白く光った．．．", name);
-#else
-			msg_format("The %s glows pale...", name);
-#endif
+			msg_format(_("%sが青白く光った．．．", "The %s glows pale..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_MANA, dir, 250, 4);
 			break;
@@ -2479,22 +2395,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_PESTICIDE:
 		{
-#ifdef JP
-			msg_print("あなたは害虫を一掃した。");
-#else
-			msg_print("You exterminate small life.");
-#endif
+			msg_print(_("あなたは害虫を一掃した。","You exterminate small life."));
 			(void)dispel_monsters(4);
 			break;
 		}
 
 		case ACT_BLINDING_LIGHT:
 		{
-#ifdef JP
-			msg_format("%sが眩しい光で輝いた...", name);
-#else
-			msg_format("The %s gleams with blinding light...", name);
-#endif
+			msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name);
 			fire_ball(GF_LITE, 0, 300, 6);
 			confuse_monsters(3 * p_ptr->lev / 2);
 			break;
@@ -2502,11 +2410,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BIZARRE:
 		{
-#ifdef JP
-			msg_format("%sは漆黒に輝いた...", name);
-#else
-			msg_format("The %s glows intensely black...", name);
-#endif
+			msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			ring_of_power(dir);
 			break;
@@ -2517,11 +2421,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			int num = damroll(5, 3);
 			int y, x;
 			int attempts;
-#ifdef JP
-			msg_format("%sが稲妻で覆われた...", name);
-#else
-			msg_format("The %s is surrounded by lightning...", name);
-#endif
+			msg_format(_("%sが稲妻で覆われた...","The %s is surrounded by lightning..."), name);
 			for (k = 0; k < num; k++)
 			{
 				attempts = 1000;
@@ -2545,17 +2445,9 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_BLADETURNER:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-#ifdef JP
-			msg_print("あなたはエレメントのブレスを吐いた。");
-#else
-			msg_print("You breathe the elements.");
-#endif
+			msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
 			fire_ball(GF_MISSILE, dir, 300, -4);
-#ifdef JP
-			msg_print("鎧が様々な色に輝いた...");
-#else
-			msg_print("Your armor glows many colours...");
-#endif
+			msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
 			(void)set_afraid(0);
 			(void)set_hero(randint1(50) + 50, FALSE);
 			(void)hp_player(10);
@@ -2565,12 +2457,6 @@ bool activate_random_artifact(object_type *o_ptr)
 			(void)set_oppose_fire(randint1(50) + 50, FALSE);
 			(void)set_oppose_cold(randint1(50) + 50, FALSE);
 			(void)set_oppose_pois(randint1(50) + 50, FALSE);
-			break;
-		}
-		case ACT_BA_ACID_1:
-		{
-			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_ACID, dir, 100, 2);
 			break;
 		}
 
@@ -2604,11 +2490,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CONFUSE:
 		{
-#ifdef JP
-			msg_print("様々な色の火花を発している...");
-#else
-			msg_print("It glows in scintillating colours...");
-#endif
+			msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			confuse_monster(dir, 20);
 			break;
@@ -2616,11 +2498,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SLEEP:
 		{
-#ifdef JP
-			msg_print("深青色に輝いている...");
-#else
-			msg_print("It glows deep blue...");
-#endif
+			msg_print(_("深青色に輝いている...", "It glows deep blue..."));
 			sleep_monsters_touch();
 			break;
 		}
@@ -2648,33 +2526,21 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			if (banish_evil(100))
 			{
-#ifdef JP
-				msg_print("アーティファクトの力が邪悪を打ち払った！");
-#else
-				msg_print("The power of the artifact banishes evil!");
-#endif
+				msg_print(_("アーティファクトの力が邪悪を打ち払った！", "The power of the artifact banishes evil!"));
 			}
 			break;
 		}
 
 		case ACT_GENOCIDE:
 		{
-#ifdef JP
-			msg_print("深青色に輝いている...");
-#else
-			msg_print("It glows deep blue...");
-#endif
+			msg_print(_("深青色に輝いている...", "It glows deep blue..."));
 			(void)symbol_genocide(200, TRUE);
 			break;
 		}
 
 		case ACT_MASS_GENO:
 		{
-#ifdef JP
-			msg_print("ひどく鋭い音が流れ出た...");
-#else
-			msg_print("It lets out a long, shrill note...");
-#endif
+			msg_print(_("ひどく鋭い音が流れ出た...", "It lets out a long, shrill note..."));
 			(void)mass_genocide(200, TRUE);
 			break;
 		}
@@ -2683,11 +2549,8 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			if (music_singing_any()) stop_singing();
 			if (hex_spelling_any()) stop_hex_spell_all();
-#ifdef JP
-			msg_print("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!");
-#else
-			msg_print("You wind a mighty blast; your enemies tremble!");
-#endif
+			msg_print(_("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!",
+					"You wind a mighty blast; your enemies tremble!"));
 			(void)turn_monsters((3 * p_ptr->lev / 2) + 10);
 			break;
 		}
@@ -2696,19 +2559,11 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			if (o_ptr->name1 == ART_HYOUSIGI)
 			{
-#ifdef JP
-				msg_print("拍子木を打った。");
-#else
-				msg_print("You beat Your wooden clappers.");
-#endif
+				msg_print(_("拍子木を打った。", "You beat Your wooden clappers."));
 			}
 			else
 			{
-#ifdef JP
-				msg_format("%sは不快な物音を立てた。", name);
-#else
-				msg_format("The %s sounds an unpleasant noise.", name);
-#endif
+				msg_format(_("%sは不快な物音を立てた。","The %s sounds an unpleasant noise."), name);
 			}
 			aggravate_monsters(0);
 			break;
@@ -2757,11 +2612,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SUMMON_PHANTOM:
 		{
-#ifdef JP
-			msg_print("幻霊を召喚した。");
-#else
-			msg_print("You summon a phantasmal servant.");
-#endif
+			msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
 			(void)summon_specific(-1, py, px, dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			break;
 		}
@@ -2777,23 +2628,11 @@ bool activate_random_artifact(object_type *o_ptr)
 
 			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_ELEMENTAL, mode))
 			{
-#ifdef JP
-				msg_print("エレメンタルが現れた...");
-#else
-				msg_print("An elemental materializes...");
-#endif
+				msg_print(_("エレメンタルが現れた...", "An elemental materializes..."));
 				if (pet)
-#ifdef JP
-					msg_print("あなたに服従しているようだ。");
-#else
-					msg_print("It seems obedient to you.");
-#endif
+					msg_print(_("あなたに服従しているようだ。", "It seems obedient to you."));
 				else
-#ifdef JP
-					msg_print("それをコントロールできなかった！");
-#else
-					msg_print("You fail to control it!");
-#endif
+					msg_print(_("それをコントロールできなかった！", "You fail to control it!"));
 			}
 
 			break;
@@ -2810,23 +2649,11 @@ bool activate_random_artifact(object_type *o_ptr)
 
 			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_DEMON, mode))
 			{
-#ifdef JP
-				msg_print("硫黄の悪臭が充満した。");
-#else
-				msg_print("The area fills with a stench of sulphur and brimstone.");
-#endif
+				msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 				if (pet)
-#ifdef JP
-					msg_print("「ご用でございますか、ご主人様」");
-#else
-					msg_print("'What is thy bidding... Master?'");
-#endif
+					msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
 				else
-#ifdef JP
-					msg_print("「NON SERVIAM! Wretch! お前の魂を頂くぞ！」");
-#else
-					msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'");
-#endif
+					msg_print(_("「NON SERVIAM! Wretch! お前の魂を頂くぞ！」", "'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
 			}
 
 			break;
@@ -2846,23 +2673,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), type, mode))
 			{
-#ifdef JP
-				msg_print("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...");
-#else
-				msg_print("Cold winds begin to blow around you, carrying with them the stench of decay...");
-#endif
+				msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
+						"Cold winds begin to blow around you, carrying with them the stench of decay..."));
 				if (pet)
-#ifdef JP
-					msg_print("古えの死せる者共があなたに仕えるため土から甦った！");
-#else
-					msg_print("Ancient, long-dead forms arise from the ground to serve you!");
-#endif
+				msg_print(_("古えの死せる者共があなたに仕えるため土から甦った！",
+						"Ancient, long-dead forms arise from the ground to serve you!"));
 				else
-#ifdef JP
-					msg_print("死者が甦った。眠りを妨げるあなたを罰するために！");
-#else
-					msg_print("'The dead arise... to punish you for disturbing them!'");
-#endif
+				msg_print(_("死者が甦った。眠りを妨げるあなたを罰するために！",
+						"'The dead arise... to punish you for disturbing them!'"));
 			}
 
 			break;
@@ -2879,19 +2697,11 @@ bool activate_random_artifact(object_type *o_ptr)
 			{
 
 				if (pet)
-#ifdef JP
-					msg_print("ハウンドがあなたの下僕として出現した。");
-#else
-				msg_print("A group of hounds appear as your servant.");
-#endif
-
+					msg_print(_("ハウンドがあなたの下僕として出現した。",
+						"A group of hounds appear as your servant."));
 				else
-#ifdef JP
-					msg_print("ハウンドはあなたに牙を向けている！");
-#else
-					msg_print("A group of hounds appear as your enemy!");
-#endif
-
+					msg_print(_("ハウンドはあなたに牙を向けている！",
+						"A group of hounds appear as your enemy!"));
 			}
 
 			break;
@@ -2899,11 +2709,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SUMMON_DAWN:
 		{
-#ifdef JP
-			msg_print("暁の師団を召喚した。");
-#else
-			msg_print("You summon the Legion of the Dawn.");
-#endif
+			msg_print(_("暁の師団を召喚した。","You summon the Legion of the Dawn."));
 			(void)summon_specific(-1, py, px, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			break;
 		}
@@ -2917,17 +2723,9 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (summon_named_creature(0, py, px, MON_JIZOTAKO, mode))
 			{
 				if (pet)
-#ifdef JP
-					msg_print("蛸があなたの下僕として出現した。");
-#else
-					msg_print("A group of octopuses appear as your servant.");
-#endif
+					msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servant."));
 				else
-#ifdef JP
-					msg_print("蛸はあなたを睨んでいる！");
-#else
-					msg_print("A group of octopuses appear as your enemy!");
-#endif
+					msg_print(_("蛸はあなたを睨んでいる！", "A group of octopuses appear as your enemy!"));
 			}
 
 			break;
@@ -2937,11 +2735,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CHOIR_SINGS:
 		{
-#ifdef JP
-			msg_print("天国の歌が聞こえる...");
-#else
-			msg_print("A heavenly choir sings...");
-#endif
+			msg_print(_("天国の歌が聞こえる...", "A heavenly choir sings..."));
 			(void)set_poisoned(0);
 			(void)set_cut(0);
 			(void)set_stun(0);
@@ -2962,11 +2756,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_MW:
 		{
-#ifdef JP
-			msg_print("深紫色の光を発している...");
-#else
-			msg_print("It radiates deep purple...");
-#endif
+			msg_print(_("深紫色の光を発している...", "It radiates deep purple..."));
 			hp_player(damroll(4, 8));
 			(void)set_cut((p_ptr->cut / 2) - 50);
 			break;
@@ -2974,11 +2764,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_POISON:
 		{
-#ifdef JP
-			msg_print("深青色に輝いている...");
-#else
-			msg_print("It glows deep blue...");
-#endif
+			msg_print(_("深青色に輝いている...", "It glows deep blue..."));
 			(void)set_afraid(0);
 			(void)set_poisoned(0);
 			break;
@@ -2986,22 +2772,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_REST_LIFE:
 		{
-#ifdef JP
-			msg_print("深紅に輝いている...");
-#else
-			msg_print("It glows a deep red...");
-#endif
+			msg_print(_("深紅に輝いている...", "It glows a deep red..."));
 			restore_level();
 			break;
 		}
 
 		case ACT_REST_ALL:
 		{
-#ifdef JP
-			msg_print("濃緑色に輝いている...");
-#else
-			msg_print("It glows a deep green...");
-#endif
+			msg_print(_("濃緑色に輝いている...", "It glows a deep green..."));
 			(void)do_res_stat(A_STR);
 			(void)do_res_stat(A_INT);
 			(void)do_res_stat(A_WIS);
@@ -3014,13 +2792,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_700:
 		{
-#ifdef JP
-			msg_print("深青色に輝いている...");
-			msg_print("体内に暖かい鼓動が感じられる...");
-#else
-			msg_print("It glows deep blue...");
-			msg_print("You feel a warm tingling inside...");
-#endif
+			msg_print(_("深青色に輝いている...","It glows deep blue..."));
+			msg_print(_("体内に暖かい鼓動が感じられる...","You feel a warm tingling inside..."));
 			(void)hp_player(700);
 			(void)set_cut(0);
 			break;
@@ -3028,13 +2801,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_1000:
 		{
-#ifdef JP
-			msg_print("白く明るく輝いている...");
-			msg_print("ひじょうに気分がよい...");
-#else
-			msg_print("It glows a bright white...");
-			msg_print("You feel much better...");
-#endif
+			msg_print(_("白く明るく輝いている...","It glows a bright white..."));
+			msg_print(_("ひじょうに気分がよい...","You feel much better..."));
 			(void)hp_player(1000);
 			(void)set_cut(0);
 			break;
@@ -3042,11 +2810,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURING:
 		{
-#ifdef JP
-			msg_format("%sの優しさに癒される...", name);
-#else
-			msg_format("the %s cures you affectionately ...", name);
-#endif
+			msg_format(_("%sの優しさに癒される...", "the %s cures you affectionately ..."), name);
 			(void)set_poisoned(0);
 			(void)set_confused(0);
 			(void)set_blind(0);
@@ -3059,11 +2823,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_MANA_FULL:
 		{
-#ifdef JP
-			msg_format("%sが青白く光った．．．", name);
-#else
-			msg_format("The %s glows pale...", name);
-#endif
+			msg_format(_("%sが青白く光った．．．","The %s glows pale..."), name);
 			if (p_ptr->pclass == CLASS_MAGIC_EATER)
 			{
 				int i;
@@ -3078,22 +2838,14 @@ bool activate_random_artifact(object_type *o_ptr)
 					p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
 					if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 				}
-#ifdef JP
-				msg_print("頭がハッキリとした。");
-#else
-				msg_print("You feel your head clear.");
-#endif
+				msg_print(_("頭がハッキリとした。", "You feel your head clear."));
 				p_ptr->window |= (PW_PLAYER);
 			}
 			else if (p_ptr->csp < p_ptr->msp)
 			{
 				p_ptr->csp = p_ptr->msp;
 				p_ptr->csp_frac = 0;
-#ifdef JP
-				msg_print("頭がハッキリとした。");
-#else
-				msg_print("You feel your head clear.");
-#endif
+				msg_print(_("頭がハッキリとした。", "You feel your head clear."));
 				p_ptr->redraw |= (PR_MANA);
 				p_ptr->window |= (PW_PLAYER);
 				p_ptr->window |= (PW_SPELL);
@@ -3122,11 +2874,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_PROT_EVIL:
 		{
-#ifdef JP
-			msg_format("%sから鋭い音が流れ出た...", name);
-#else
-			msg_format("The %s lets out a shrill wail...", name);
-#endif
+			msg_format(_("%sから鋭い音が流れ出た...", "The %s lets out a shrill wail..."), name);
 			k = 3 * p_ptr->lev;
 			(void)set_protevil(randint1(25) + k, FALSE);
 			break;
@@ -3134,11 +2882,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_ALL:
 		{
-#ifdef JP
-			msg_print("様々な色に輝いている...");
-#else
-			msg_print("It glows many colours...");
-#endif
+			msg_print(_("様々な色に輝いている...", "It glows many colours..."));
 			(void)set_oppose_acid(randint1(40) + 40, FALSE);
 			(void)set_oppose_elec(randint1(40) + 40, FALSE);
 			(void)set_oppose_fire(randint1(40) + 40, FALSE);
@@ -3149,22 +2893,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SPEED:
 		{
-#ifdef JP
-			msg_print("明るく緑色に輝いている...");
-#else
-			msg_print("It glows bright green...");
-#endif
+			msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
 			(void)set_fast(randint1(20) + 20, FALSE);
 			break;
 		}
 
 		case ACT_XTRA_SPEED:
 		{
-#ifdef JP
-			msg_print("明るく輝いている...");
-#else
-			msg_print("It glows brightly...");
-#endif
+			msg_print(_("明るく輝いている...", "It glows brightly..."));
 			(void)set_fast(randint1(75) + 75, FALSE);
 			break;
 		}
@@ -3201,7 +2937,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_RESIST_ACID:
 		{
 			msg_format(_("%sが黒く輝いた...", "The %s grows black."), name);
-			if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID)) || (o_ptr->name2 == EGO_BRAND_ACID))
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				fire_ball(GF_ACID, dir, 100, 2);
@@ -3213,7 +2949,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_RESIST_FIRE:
 		{
 			msg_format(_("%sが赤く輝いた...","The %s grows red."), name);
-			if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) || (o_ptr->name2 == EGO_BRAND_FIRE))
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				fire_ball(GF_FIRE, dir, 100, 2);
@@ -3225,7 +2961,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_RESIST_COLD:
 		{
 			msg_format(_("%sが白く輝いた...","The %s grows white.") , name);
-			if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE)) || (o_ptr->name2 == EGO_BRAND_COLD))
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				fire_ball(GF_COLD, dir, 100, 2);
@@ -3237,7 +2973,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_RESIST_ELEC:
 		{
 			msg_format(_("%sが青く輝いた...", "The %s grows blue."), name);
-			if (((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC)) || (o_ptr->name2 == EGO_BRAND_ELEC))
+			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				fire_ball(GF_ELEC, dir, 100, 2);
@@ -3249,12 +2985,6 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_RESIST_POIS:
 		{
 			msg_format(_("%sが緑に輝いた...", "The %s grows green."), name);
-			if (o_ptr->name2 == EGO_BRAND_POIS)
-			{
-				if (!get_aim_dir(&dir)) return FALSE;
-				fire_ball(GF_POIS, dir, 100, 2);
-			}
-			
 			(void)set_oppose_pois(randint1(20) + 20, FALSE);
 			break;
 		}
