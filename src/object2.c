@@ -2932,9 +2932,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 
 					switch (o_ptr->name2)
 					{
-					case EGO_INTELLIGENCE:
-					case EGO_WISDOM:
-					case EGO_BEAUTY:
+					case EGO_BRILLIANCE:
 					case EGO_LITE:
 					case EGO_DARK:
 					case EGO_INFRAVISION:

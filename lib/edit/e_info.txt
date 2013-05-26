@@ -237,26 +237,16 @@ X:33:6
 W:0:18:0:800
 F:LITE | RES_DARK
 
-N:24:知能の
-E:of Intelligence
+# intelligence, wisdom, beauty -> combined to brilliance
+
+N:24:知性の
+E:of Brilliance
 X:33:13
 C:0:0:0:2
 W:0:18:0:500
-F:INT | SUST_INT
+F:INT | WIS | CHR |  SUST_INT | SUST_WIS | SUST_CHR
 
-N:25:賢明の
-E:of Wisdom
-X:33:13
-W:0:18:0:500
-C:0:0:0:2
-F:WIS | SUST_WIS
-
-N:26:美貌の
-E:of Beauty
-X:33:8
-W:0:18:0:1000
-C:0:0:0:4
-F:CHR | SUST_CHR
+#25, 26 unused
 
 # OneAbility
 
@@ -325,33 +315,24 @@ X:33:0
 W:0:36:0:0
 F:TELEPORT
 
-N:36:無知の
-E:of Stupidity
-X:33:0
-C:0:0:0:5
-W:0:18:0:0
-F:INT
+# Stupidity, Naviety, Ugliness -> combined to Fool
 
-N:37:愚鈍の
-E:of Naivety
-X:33:0
-C:0:0:0:5
-W:0:18:0:0
-F:WIS
-
-N:38:醜悪の
-E:of Ugliness
+N:36:道化師の
+E:of Fool
 X:33:0
 C:0:0:0:5
 W:0:36:0:0
-F:CHR
+F:INT | WIS | CHR | CURSED
+
+#37 unused
+#38 unused
 
 N:39:疾病の
 E:of Sickliness
 X:33:0
 C:0:0:0:5
 W:0:36:0:0
-F:STR | DEX | CON
+F:STR | DEX | CON | CURSED
 
 
 ### Cloaks ###
