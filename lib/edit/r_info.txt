@@ -22030,4 +22030,21 @@ S:BLIND
 D:$It's a huge dragon having kaleidoscopic form with cold blazing.
 D:冷たい輝きと共に変幻自在の姿を見せる巨大なドラゴンだ。
 
+#J0#
+N:1100:甲鱗のワーム
+E:Scaled wurm
+G:w:G
+I:110:66d101:10:66:66
+W:88:2:0:30000:0:0
+B:BITE:HURT:7d77
+F:DROP_CORPSE | FORCE_MAXHP
+F:DROP_GOOD | DROP_3D2 | DROP_4D2
+D:氷河期のあいだに繁栄を極めたこのワームは、キイェルドーの
+D:ありとあらゆる人々にとって恐怖の的だった。その巨体と狂暴な性格が
+D:呼び起こした悪夢は数知れない―甲鱗のワームはまさに、
+D:氷河期の災厄の象徴だった。
+D:$Flourishing during the Ice Age, these Wurms were 
+D:$the bane of all Kjeldorans. Their great size and ferocity made 
+D:$them the subject of countless nightmares- 
+D:$they embodied the worst of the Ice Age
 
