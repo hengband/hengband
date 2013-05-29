@@ -3458,6 +3458,14 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
+		case ACT_FALLING_STAR:
+		{
+			msg_print(_("あなたは妖刀に魅入られた…", "You are enchanted by cursed blade..."));
+			msg_print(_("「狂ほしく 血のごとき 月はのぼれり 秘めおきし 魔剣 いずこぞや」", "'Behold the blade arts.'"));
+			massacre(py, px);
+			break;
+		}
+
 		case ACT_GRAND_CROSS:
 		{
 			msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));

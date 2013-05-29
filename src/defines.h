@@ -1899,6 +1899,7 @@
 #define ACT_DETECT_ALL_MONS     137
 #define ACT_ULTIMATE_RESIST     138
 /* 127 -> unused */
+#define ACT_FALLING_STAR        246
 #define ACT_STRAIN_HASTE        247
 #define ACT_TELEPORT_LEVEL      248
 #define ACT_GRAND_CROSS         249
