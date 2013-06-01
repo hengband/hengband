@@ -331,7 +331,13 @@ C:0:0:0:5
 W:0:36:0:0
 F:INT | WIS | CHR | CURSED
 
-#37 unused
+N:37:バジリスクの
+E:of Basilisk
+X:33:20
+C:0:0:0:8
+W:0:36:0:10000
+F:INFRA | RES_POIS | FREE_ACT
+
 #38 unused
 
 N:39:疾病の

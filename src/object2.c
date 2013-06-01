@@ -2881,6 +2881,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					case EGO_MIGHT:
 					case EGO_REGENERATION:
 					case EGO_LORDLINESS:
+					case EGO_BASILISK:
 						break;
 					case EGO_SEEING:
 						if (one_in_(3))
