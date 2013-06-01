@@ -302,7 +302,8 @@ N:32:光の
 E:of Light
 X:33:6
 W:0:18:0:500
-F:LITE | RES_LITE
+F:LITE | RES_LITE | ACTIVATE
+U:LIGHT
 
 N:33:テレパシーの
 E:of Telepathy
@@ -320,7 +321,8 @@ N:35:テレポートの
 E:of Teleportation
 X:33:0
 W:0:36:0:0
-F:TELEPORT
+F:TELEPORT | ACTIVATE
+U:TELEPORT
 
 # Stupidity, Naviety, Ugliness -> combined to Fool
 
