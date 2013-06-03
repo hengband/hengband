@@ -5684,6 +5684,12 @@ K:665:0xA3/0x93
 # [Forbidden Cursebook]
 K:666:0xA3/0x93
 
+# a Scroll titled "unjah marlami"
+K:667:0x86/0x82
+
+# a Scroll titled "bandeo nagmurkho"
+K:668:0x86/0x82
+
 
 # Load the special player pictures
 %:xtra-xxx.prf
