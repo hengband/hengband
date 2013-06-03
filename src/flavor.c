@@ -1780,9 +1780,9 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			basenm = "¼ö½Ñ¤ÎËâË¡½ñ%";
 #else
 			if (mp_ptr->spell_book == TV_LIFE_BOOK)
-				basenm = "& Book~ of Crusade Magic %";
+				basenm = "& Book~ of Hex Magic %";
 			else
-				basenm = "& Crusade Spellbook~ %";
+				basenm = "& Hex Spellbook~ %";
 #endif
 
 			break;
