@@ -1777,7 +1777,6 @@ void do_cmd_pet_dismiss(void)
 	{
 		bool delete_this;
 		char friend_name[80];
-		char buf[80];
 		bool kakunin;
 
 		/* Access the monster */
@@ -1795,14 +1794,9 @@ void do_cmd_pet_dismiss(void)
 
 			/* Hack -- handle stuff */
 			handle_stuff();
-
-#ifdef JP
-			sprintf(buf, "%sを放しますか？ [Yes/No/Unnamed (%d体)]", friend_name, max_pet - i);
-#else
-			sprintf(buf, "Dismiss %s? [Yes/No/Unnamed (%d remain)]", friend_name, max_pet - i);
-#endif
-			prt(buf, 0, 0);
-
+			
+			msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%d体)]","Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, max_pet - i);
+			
 			if (m_ptr->ml)
 				move_cursor_relative(m_ptr->fy, m_ptr->fx);
 
@@ -1816,12 +1810,9 @@ void do_cmd_pet_dismiss(void)
 
 					if (kakunin)
 					{
-#ifdef JP
-						sprintf(buf, "本当によろしいですか？ (%s) ", friend_name);
-#else
-						sprintf(buf, "Are you sure? (%s) ", friend_name);
-#endif
-						if (!get_check(buf))
+						msg_format(_("本当によろしいですか？ (%s) ","Are you sure? (%s) "), friend_name);
+						ch = inkey();
+						if (ch != 'Y' && ch != 'y')
 							delete_this = FALSE;
 					}
 					break;
@@ -1852,11 +1843,7 @@ void do_cmd_pet_dismiss(void)
 
 			if (pet_ctr == p_ptr->riding)
 			{
-#ifdef JP
-				msg_format("%sから降りた。", friend_name);
-#else
-				msg_format("You have got off %s. ", friend_name);
-#endif
+				msg_format(_("%sから降りた。","You have got off %s. "), friend_name);
 
 				p_ptr->riding = 0;
 
@@ -1866,12 +1853,7 @@ void do_cmd_pet_dismiss(void)
 			}
 
 			/* HACK : Add the line to message buffer */
-#ifdef JP
-			sprintf(buf, "%s を放した。", friend_name);
-#else
-			sprintf(buf, "Dismissed %s.", friend_name);
-#endif
-			message_add(buf);
+			msg_format(_("%s を放した。","Dismissed %s."), friend_name);
 			p_ptr->window |= (PW_MESSAGE);
 			window_stuff();
 
