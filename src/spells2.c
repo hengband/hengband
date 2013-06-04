@@ -1771,490 +1771,221 @@ info[i++] = "あなたは幻覚を見ている。";
 	}
 	if (p_ptr->cursed & TRC_TY_CURSE)
 	{
-#ifdef JP
-info[i++] = "あなたは邪悪な怨念に包まれている。";
-#else
-		info[i++] = "You carry an ancient foul curse.";
-#endif
-
+		info[i++] = _("あなたは邪悪な怨念に包まれている。", "You carry an ancient foul curse.");
 	}
 	if (p_ptr->cursed & TRC_AGGRAVATE)
 	{
-#ifdef JP
-info[i++] = "あなたはモンスターを怒らせている。";
-#else
-		info[i++] = "You aggravate monsters.";
-#endif
-
+		info[i++] = _("あなたはモンスターを怒らせている。", "You aggravate monsters.");
 	}
 	if (p_ptr->cursed & TRC_DRAIN_EXP)
 	{
-#ifdef JP
-info[i++] = "あなたは経験値を吸われている。";
-#else
-		info[i++] = "You are drained.";
-#endif
-
+		info[i++] = _("あなたは経験値を吸われている。", "You are drained.");
 	}
 	if (p_ptr->cursed & TRC_SLOW_REGEN)
 	{
-#ifdef JP
-info[i++] = "あなたの回復力は非常に遅い。";
-#else
-		info[i++] = "You regenerate slowly.";
-#endif
-
+		info[i++] = _("あなたの回復力は非常に遅い。", "You regenerate slowly.");
 	}
 	if (p_ptr->cursed & TRC_ADD_L_CURSE)
 	{
-#ifdef JP
-info[i++] = "あなたの弱い呪いは増える。"; /* 暫定的 -- henkma */
-#else
-		info[i++] = "Your weak curses multiply.";
-#endif
-
+		info[i++] = _("あなたの弱い呪いは増える。","Your weak curses multiply."); /* 暫定的 -- henkma */
 	}
 	if (p_ptr->cursed & TRC_ADD_H_CURSE)
 	{
-#ifdef JP
-info[i++] = "あなたの強い呪いは増える。"; /* 暫定的 -- henkma */
-#else
-		info[i++] = "Your heavy curses multiply.";
-#endif
-
+		info[i++] = _("あなたの強い呪いは増える。","Your heavy curses multiply."); /* 暫定的 -- henkma */
 	}
 	if (p_ptr->cursed & TRC_CALL_ANIMAL)
 	{
-#ifdef JP
-info[i++] = "あなたは動物に狙われている。";
-#else
-		info[i++] = "You attract animals.";
-#endif
-
+		info[i++] = _("あなたは動物に狙われている。", "You attract animals.");
 	}
 	if (p_ptr->cursed & TRC_CALL_DEMON)
 	{
-#ifdef JP
-info[i++] = "あなたは悪魔に狙われている。";
-#else
-		info[i++] = "You attract demons.";
-#endif
-
+		info[i++] = _("あなたは悪魔に狙われている。", "You attract demons.");
 	}
 	if (p_ptr->cursed & TRC_CALL_DRAGON)
 	{
-#ifdef JP
-info[i++] = "あなたはドラゴンに狙われている。";
-#else
-		info[i++] = "You attract dragons.";
-#endif
-
+		info[i++] = _("あなたはドラゴンに狙われている。", "You attract dragons.");
 	}
 	if (p_ptr->cursed & TRC_COWARDICE)
 	{
-#ifdef JP
-info[i++] = "あなたは時々臆病になる。";
-#else
-		info[i++] = "You are subject to cowardice.";
-#endif
-
+		info[i++] = _("あなたは時々臆病になる。", "You are subject to cowardice.");
 	}
 	if (p_ptr->cursed & TRC_TELEPORT)
 	{
-#ifdef JP
-info[i++] = "あなたの位置はひじょうに不安定だ。";
-#else
-		info[i++] = "Your position is very uncertain.";
-#endif
-
+		info[i++] = _("あなたの位置はひじょうに不安定だ。", "Your position is very uncertain.");
 	}
 	if (p_ptr->cursed & TRC_LOW_MELEE)
 	{
-#ifdef JP
-info[i++] = "あなたの武器は攻撃を外しやすい。";
-#else
-		info[i++] = "Your weapon causes you to miss blows.";
-#endif
-
+		info[i++] = _("あなたの武器は攻撃を外しやすい。", "Your weapon causes you to miss blows.");
 	}
 	if (p_ptr->cursed & TRC_LOW_AC)
 	{
-#ifdef JP
-info[i++] = "あなたは攻撃を受けやすい。";
-#else
-		info[i++] = "You are subject to be hit.";
-#endif
-
+		info[i++] = _("あなたは攻撃を受けやすい。", "You are subject to be hit.");
 	}
 	if (p_ptr->cursed & TRC_LOW_MAGIC)
 	{
-#ifdef JP
-info[i++] = "あなたは魔法を失敗しやすい。";
-#else
-		info[i++] = "You are subject to fail spellcasting.";
-#endif
-
+		info[i++] = _("あなたは魔法を失敗しやすい。", "You are subject to fail spellcasting.");
 	}
 	if (p_ptr->cursed & TRC_FAST_DIGEST)
 	{
-#ifdef JP
-info[i++] = "あなたはすぐお腹がへる。";
-#else
-		info[i++] = "You have a good appetite.";
-#endif
-
+		info[i++] = _("あなたはすぐお腹がへる。", info[i++] = "You have a good appetite.");
 	}
 	if (p_ptr->cursed & TRC_DRAIN_HP)
 	{
-#ifdef JP
-info[i++] = "あなたは体力を吸われている。";
-#else
-		info[i++] = "You are drained.";
-#endif
-
+		info[i++] = _("あなたは体力を吸われている。", "You are drained.");
 	}
 	if (p_ptr->cursed & TRC_DRAIN_MANA)
 	{
-#ifdef JP
-info[i++] = "あなたは魔力を吸われている。";
-#else
-		info[i++] = "You brain is drained.";
-#endif
-
+		info[i++] = _("あなたは魔力を吸われている。", "You brain is drained.");
 	}
 	if (IS_BLESSED())
 	{
-#ifdef JP
-info[i++] = "あなたは高潔さを感じている。";
-#else
-		info[i++] = "You feel rightous.";
-#endif
-
+		info[i++] = _("あなたは高潔さを感じている。", "You feel rightous.");
 	}
 	if (IS_HERO())
 	{
-#ifdef JP
-info[i++] = "あなたはヒーロー気分だ。";
-#else
-		info[i++] = "You feel heroic.";
-#endif
-
+		info[i++] = _("あなたはヒーロー気分だ。", "You feel heroic.");
 	}
 	if (p_ptr->shero)
 	{
-#ifdef JP
-info[i++] = "あなたは戦闘狂だ。";
-#else
-		info[i++] = "You are in a battle rage.";
-#endif
-
+		info[i++] = _("あなたは戦闘狂だ。", "You are in a battle rage.");
 	}
 	if (p_ptr->protevil)
 	{
-#ifdef JP
-info[i++] = "あなたは邪悪なる存在から守られている。";
-#else
-		info[i++] = "You are protected from evil.";
-#endif
-
+		info[i++] = _("あなたは邪悪なる存在から守られている。", "You are protected from evil.");
 	}
 	if (p_ptr->shield)
 	{
-#ifdef JP
-info[i++] = "あなたは神秘のシールドで守られている。";
-#else
-		info[i++] = "You are protected by a mystic shield.";
-#endif
-
+		info[i++] = _("あなたは神秘のシールドで守られている。", "You are protected by a mystic shield.");
 	}
 	if (IS_INVULN())
 	{
-#ifdef JP
-info[i++] = "あなたは現在傷つかない。";
-#else
-		info[i++] = "You are temporarily invulnerable.";
-#endif
-
+		info[i++] = _("あなたは現在傷つかない。", "You are temporarily invulnerable.");
 	}
 	if (p_ptr->wraith_form)
 	{
-#ifdef JP
-info[i++] = "あなたは一時的に幽体化している。";
-#else
-		info[i++] = "You are temporarily incorporeal.";
-#endif
-
+		info[i++] = _("あなたは一時的に幽体化している。", "You are temporarily incorporeal.");
 	}
 	if (p_ptr->special_attack & ATTACK_CONFUSE)
 	{
-#ifdef JP
-info[i++] = "あなたの手は赤く輝いている。";
-#else
-		info[i++] = "Your hands are glowing dull red.";
-#endif
-
+		info[i++] = _("あなたの手は赤く輝いている。", "Your hands are glowing dull red.");
 	}
 	if (p_ptr->special_attack & ATTACK_FIRE)
 	{
-#ifdef JP
-info[i++] = "あなたの手は火炎に覆われている。";
-#else
-		info[i++] = "You can strike the enemy with flame.";
-#endif
-
+		info[i++] = _("あなたの手は火炎に覆われている。", "You can strike the enemy with flame.");
 	}
 	if (p_ptr->special_attack & ATTACK_COLD)
 	{
-#ifdef JP
-info[i++] = "あなたの手は冷気に覆われている。";
-#else
-		info[i++] = "You can strike the enemy with cold.";
-#endif
-
+		info[i++] = _("あなたの手は冷気に覆われている。", "You can strike the enemy with cold.");
 	}
 	if (p_ptr->special_attack & ATTACK_ACID)
 	{
-#ifdef JP
-info[i++] = "あなたの手は酸に覆われている。";
-#else
-		info[i++] = "You can strike the enemy with acid.";
-#endif
-
+		info[i++] = _("あなたの手は酸に覆われている。", "You can strike the enemy with acid.");
 	}
 	if (p_ptr->special_attack & ATTACK_ELEC)
 	{
-#ifdef JP
-info[i++] = "あなたの手は電撃に覆われている。";
-#else
-		info[i++] = "You can strike the enemy with electoric shock.";
-#endif
-
+		info[i++] = _("あなたの手は電撃に覆われている。", "You can strike the enemy with electoric shock.");
 	}
 	if (p_ptr->special_attack & ATTACK_POIS)
 	{
-#ifdef JP
-info[i++] = "あなたの手は毒に覆われている。";
-#else
-		info[i++] = "You can strike the enemy with poison.";
-#endif
-
+		info[i++] = _("あなたの手は毒に覆われている。", "You can strike the enemy with poison.");
 	}
 	switch (p_ptr->action)
 	{
 		case ACTION_SEARCH:
-#ifdef JP
-info[i++] = "あなたはひじょうに注意深く周囲を見渡している。";
-#else
-			info[i++] = "You are looking around very carefully.";
-#endif
+			info[i++] = _("あなたはひじょうに注意深く周囲を見渡している。", "You are looking around very carefully.");
 			break;
 	}
 	if (p_ptr->new_spells)
 	{
-#ifdef JP
-info[i++] = "あなたは呪文や祈りを学ぶことができる。";
-#else
-		info[i++] = "You can learn some spells/prayers.";
-#endif
-
+		info[i++] = _("あなたは呪文や祈りを学ぶことができる。", "You can learn some spells/prayers.");
 	}
 	if (p_ptr->word_recall)
 	{
-#ifdef JP
-info[i++] = "あなたはすぐに帰還するだろう。";
-#else
-		info[i++] = "You will soon be recalled.";
-#endif
-
+		info[i++] = _("あなたはすぐに帰還するだろう。", "You will soon be recalled.");
 	}
 	if (p_ptr->alter_reality)
 	{
-#ifdef JP
-		info[i++] = "あなたはすぐにこの世界を離れるだろう。";
-#else
-		info[i++] = "You will soon be altered.";
-#endif
-
+		info[i++] = _("あなたはすぐにこの世界を離れるだろう。", "You will soon be altered.");
 	}
 	if (p_ptr->see_infra)
 	{
-#ifdef JP
-info[i++] = "あなたの瞳は赤外線に敏感である。";
-#else
-		info[i++] = "Your eyes are sensitive to infrared light.";
-#endif
-
+		info[i++] = _("あなたの瞳は赤外線に敏感である。", "Your eyes are sensitive to infrared light.");
 	}
 	if (p_ptr->see_inv)
 	{
-#ifdef JP
-info[i++] = "あなたは透明なモンスターを見ることができる。";
-#else
-		info[i++] = "You can see invisible creatures.";
-#endif
-
+		info[i++] = _("あなたは透明なモンスターを見ることができる。", "You can see invisible creatures.");
 	}
 	if (p_ptr->levitation)
 	{
-#ifdef JP
-info[i++] = "あなたは飛ぶことができる。";
-#else
-		info[i++] = "You can fly.";
-#endif
-
+		info[i++] = _("あなたは飛ぶことができる。", "You can fly.");
 	}
 	if (p_ptr->free_act)
 	{
-#ifdef JP
-info[i++] = "あなたは麻痺知らずの効果を持っている。";
-#else
-		info[i++] = "You have free action.";
-#endif
-
+		info[i++] = _("あなたは麻痺知らずの効果を持っている。", "You have free action.");
 	}
 	if (p_ptr->regenerate)
 	{
-#ifdef JP
-info[i++] = "あなたは素早く体力を回復する。";
-#else
-		info[i++] = "You regenerate quickly.";
-#endif
-
+		info[i++] = _("あなたは素早く体力を回復する。", "You regenerate quickly.");
 	}
 	if (p_ptr->slow_digest)
 	{
-#ifdef JP
-info[i++] = "あなたは食欲が少ない。";
-#else
-		info[i++] = "Your appetite is small.";
-#endif
-
+		info[i++] = _("あなたは食欲が少ない。", "Your appetite is small.");
 	}
 	if (p_ptr->telepathy)
 	{
-#ifdef JP
-info[i++] = "あなたはテレパシー能力を持っている。";
-#else
-		info[i++] = "You have ESP.";
-#endif
-
+		info[i++] = _("あなたはテレパシー能力を持っている。", "You have ESP.");
 	}
 	if (p_ptr->esp_animal)
 	{
-#ifdef JP
-info[i++] = "あなたは自然界の生物の存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense natural creatures.";
-#endif
-
+		info[i++] = _("あなたは自然界の生物の存在を感じる能力を持っている。", "You sense natural creatures.");
 	}
 	if (p_ptr->esp_undead)
 	{
-#ifdef JP
-info[i++] = "あなたはアンデッドの存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense undead.";
-#endif
-
+		info[i++] = _("あなたはアンデッドの存在を感じる能力を持っている。", "You sense undead.");
 	}
 	if (p_ptr->esp_demon)
 	{
-#ifdef JP
-info[i++] = "あなたは悪魔の存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense demons.";
-#endif
-
+		info[i++] = _("あなたは悪魔の存在を感じる能力を持っている。", "You sense demons.");
 	}
 	if (p_ptr->esp_orc)
 	{
-#ifdef JP
-info[i++] = "あなたはオークの存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense orcs.";
-#endif
-
+		info[i++] = _("あなたはオークの存在を感じる能力を持っている。", "You sense orcs.");
 	}
 	if (p_ptr->esp_troll)
 	{
-#ifdef JP
-info[i++] = "あなたはトロルの存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense trolls.";
-#endif
-
+		info[i++] = _("あなたはトロルの存在を感じる能力を持っている。", "You sense trolls.");
 	}
 	if (p_ptr->esp_giant)
 	{
-#ifdef JP
-info[i++] = "あなたは巨人の存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense giants.";
-#endif
-
+		info[i++] = _("あなたは巨人の存在を感じる能力を持っている。", "You sense giants.");
 	}
 	if (p_ptr->esp_dragon)
 	{
-#ifdef JP
-info[i++] = "あなたはドラゴンの存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense dragons.";
-#endif
-
+		info[i++] = _("あなたはドラゴンの存在を感じる能力を持っている。", "You sense dragons.");
 	}
 	if (p_ptr->esp_human)
 	{
-#ifdef JP
-info[i++] = "あなたは人間の存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense humans.";
-#endif
-
+		info[i++] = _("あなたは人間の存在を感じる能力を持っている。", "You sense humans.");
 	}
 	if (p_ptr->esp_evil)
 	{
-#ifdef JP
-info[i++] = "あなたは邪悪な生き物の存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense evil creatures.";
-#endif
-
+		info[i++] = _("あなたは邪悪な生き物の存在を感じる能力を持っている。", "You sense evil creatures.");
 	}
 	if (p_ptr->esp_good)
 	{
-#ifdef JP
-info[i++] = "あなたは善良な生き物の存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense good creatures.";
-#endif
-
+		info[i++] = _("あなたは善良な生き物の存在を感じる能力を持っている。", "You sense good creatures.");
 	}
 	if (p_ptr->esp_nonliving)
 	{
-#ifdef JP
-info[i++] = "あなたは活動する無生物体の存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense non-living creatures.";
-#endif
-
+		info[i++] = _("あなたは活動する無生物体の存在を感じる能力を持っている。", "You sense non-living creatures.");
 	}
 	if (p_ptr->esp_unique)
 	{
-#ifdef JP
-info[i++] = "あなたは特別な強敵の存在を感じる能力を持っている。";
-#else
-		info[i++] = "You sense unique monsters.";
-#endif
-
+		info[i++] = _("あなたは特別な強敵の存在を感じる能力を持っている。", "You sense unique monsters.");
 	}
 	if (p_ptr->hold_life)
 	{
-#ifdef JP
-info[i++] = "あなたは自己の生命力をしっかりと維持する。";
-#else
-		info[i++] = "You have a firm hold on your life force.";
-#endif
-
+		info[i++] = _("あなたは自己の生命力をしっかりと維持する。", "You have a firm hold on your life force.");
 	}
 	if (p_ptr->reflect)
 	{
@@ -2282,226 +2013,106 @@ info[i++] = "あなたは自己の生命力をしっかりと維持する。";
 	}
 	if (p_ptr->anti_magic)
 	{
-#ifdef JP
-info[i++] = "あなたは反魔法シールドに包まれている。";
-#else
-		info[i++] = "You are surrounded by an anti-magic shell.";
-#endif
-
+		info[i++] = _("あなたは反魔法シールドに包まれている。", "You are surrounded by an anti-magic shell.");
 	}
 	if (p_ptr->anti_tele)
 	{
-#ifdef JP
-info[i++] = "あなたはテレポートできない。";
-#else
-		info[i++] = "You cannot teleport.";
-#endif
-
+		info[i++] = _("あなたはテレポートできない。", "You cannot teleport.");
 	}
 	if (p_ptr->lite)
 	{
-#ifdef JP
-info[i++] = "あなたの身体は光っている。";
-#else
-		info[i++] = "You are carrying a permanent light.";
-#endif
-
+		info[i++] = _("あなたの身体は光っている。", "You are carrying a permanent light.");
 	}
 	if (p_ptr->warning)
 	{
-#ifdef JP
-info[i++] = "あなたは行動の前に危険を察知することができる。";
-#else
-		info[i++] = "You will be warned before dangerous actions.";
-#endif
-
+		info[i++] = _("あなたは行動の前に危険を察知することができる。", "You will be warned before dangerous actions.");
 	}
 	if (p_ptr->dec_mana)
 	{
-#ifdef JP
-info[i++] = "あなたは少ない消費魔力で魔法を唱えることができる。";
-#else
-		info[i++] = "You can cast spells with fewer mana points.";
-#endif
-
+		info[i++] = _("あなたは少ない消費魔力で魔法を唱えることができる。", "You can cast spells with fewer mana points.");
 	}
 	if (p_ptr->easy_spell)
 	{
-#ifdef JP
-info[i++] = "あなたは低い失敗率で魔法を唱えることができる。";
-#else
-		info[i++] = "Fail rate of your magic is decreased.";
-#endif
-
+		info[i++] = _("あなたは低い失敗率で魔法を唱えることができる。", "Fail rate of your magic is decreased.");
 	}
 	if (p_ptr->heavy_spell)
 	{
-#ifdef JP
-info[i++] = "あなたは高い失敗率で魔法を唱えなければいけない。";
-#else
-		info[i++] = "Fail rate of your magic is increased.";
-#endif
-
+		info[i++] = _("あなたは高い失敗率で魔法を唱えなければいけない。", "Fail rate of your magic is increased.");
 	}
 	if (p_ptr->mighty_throw)
 	{
-#ifdef JP
-info[i++] = "あなたは強く物を投げる。";
-#else
-		info[i++] = "You can throw objects powerfully.";
-#endif
-
+		info[i++] = _("あなたは強く物を投げる。", "You can throw objects powerfully.");
 	}
 
 	if (p_ptr->immune_acid)
 	{
-#ifdef JP
-info[i++] = "あなたは酸に対する完全なる免疫を持っている。";
-#else
-		info[i++] = "You are completely immune to acid.";
-#endif
-
+		info[i++] = _("あなたは酸に対する完全なる免疫を持っている。", "You are completely immune to acid.");
 	}
 	else if (p_ptr->resist_acid && IS_OPPOSE_ACID())
 	{
-#ifdef JP
-info[i++] = "あなたは酸への強力な耐性を持っている。";
-#else
-		info[i++] = "You resist acid exceptionally well.";
-#endif
-
+		info[i++] = _("あなたは酸への強力な耐性を持っている。", "You resist acid exceptionally well.");
 	}
 	else if (p_ptr->resist_acid || IS_OPPOSE_ACID())
 	{
-#ifdef JP
-info[i++] = "あなたは酸への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to acid.";
-#endif
-
+		info[i++] = _("あなたは酸への耐性を持っている。", "You are resistant to acid.");
 	}
 
 	if (p_ptr->immune_elec)
 	{
-#ifdef JP
-info[i++] = "あなたは電撃に対する完全なる免疫を持っている。";
-#else
-		info[i++] = "You are completely immune to lightning.";
-#endif
-
+		info[i++] = _("あなたは電撃に対する完全なる免疫を持っている。", "You are completely immune to lightning.");
 	}
 	else if (p_ptr->resist_elec && IS_OPPOSE_ELEC())
 	{
-#ifdef JP
-info[i++] = "あなたは電撃への強力な耐性を持っている。";
-#else
-		info[i++] = "You resist lightning exceptionally well.";
-#endif
-
+		info[i++] = _("あなたは電撃への強力な耐性を持っている。", "You resist lightning exceptionally well.");
 	}
 	else if (p_ptr->resist_elec || IS_OPPOSE_ELEC())
 	{
-#ifdef JP
-info[i++] = "あなたは電撃への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to lightning.";
-#endif
-
+		info[i++] = _("あなたは電撃への耐性を持っている。", "You are resistant to lightning.");
 	}
 
 	if (prace_is_(RACE_ANDROID) && !p_ptr->immune_elec)
 	{
-#ifdef JP
-info[i++] = "あなたは電撃に弱い。";
-#else
-		info[i++] = "You are susceptible to damage from lightning.";
-#endif
-
+		info[i++] = _("あなたは電撃に弱い。", "You are susceptible to damage from lightning.");
 	}
 
 	if (p_ptr->immune_fire)
 	{
-#ifdef JP
-info[i++] = "あなたは火に対する完全なる免疫を持っている。";
-#else
-		info[i++] = "You are completely immune to fire.";
-#endif
-
+		info[i++] = _("あなたは火に対する完全なる免疫を持っている。", "You are completely immune to fire.");
 	}
 	else if (p_ptr->resist_fire && IS_OPPOSE_FIRE())
 	{
-#ifdef JP
-info[i++] = "あなたは火への強力な耐性を持っている。";
-#else
-		info[i++] = "You resist fire exceptionally well.";
-#endif
-
+		info[i++] = _("あなたは火への強力な耐性を持っている。", "You resist fire exceptionally well.");
 	}
 	else if (p_ptr->resist_fire || IS_OPPOSE_FIRE())
 	{
-#ifdef JP
-info[i++] = "あなたは火への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to fire.";
-#endif
-
+		info[i++] = _("あなたは火への耐性を持っている。", "You are resistant to fire.");
 	}
 
 	if (prace_is_(RACE_ENT) && !p_ptr->immune_fire)
 	{
-#ifdef JP
-info[i++] = "あなたは火に弱い。";
-#else
-		info[i++] = "You are susceptible to damage from fire.";
-#endif
-
+		info[i++] = _("あなたは火に弱い。", "You are susceptible to damage from fire.");
 	}
 
 	if (p_ptr->immune_cold)
 	{
-#ifdef JP
-info[i++] = "あなたは冷気に対する完全なる免疫を持っている。";
-#else
-		info[i++] = "You are completely immune to cold.";
-#endif
-
+		info[i++] = _("あなたは冷気に対する完全なる免疫を持っている。", "You are completely immune to cold.");
 	}
 	else if (p_ptr->resist_cold && IS_OPPOSE_COLD())
 	{
-#ifdef JP
-info[i++] = "あなたは冷気への強力な耐性を持っている。";
-#else
-		info[i++] = "You resist cold exceptionally well.";
-#endif
-
+		info[i++] = _("あなたは冷気への強力な耐性を持っている。", "You resist cold exceptionally well.");
 	}
 	else if (p_ptr->resist_cold || IS_OPPOSE_COLD())
 	{
-#ifdef JP
-info[i++] = "あなたは冷気への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to cold.";
-#endif
-
+		info[i++] = _("あなたは冷気への耐性を持っている。", "You are resistant to cold.");
 	}
 
 	if (p_ptr->resist_pois && IS_OPPOSE_POIS())
 	{
-#ifdef JP
-info[i++] = "あなたは毒への強力な耐性を持っている。";
-#else
-		info[i++] = "You resist poison exceptionally well.";
-#endif
-
+		info[i++] = _("あなたは毒への強力な耐性を持っている。", "You resist poison exceptionally well.");
 	}
 	else if (p_ptr->resist_pois || IS_OPPOSE_POIS())
 	{
-#ifdef JP
-info[i++] = "あなたは毒への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to poison.";
-#endif
-
+		info[i++] = _("あなたは毒への耐性を持っている。", "You are resistant to poison.");
 	}
 
 	if (p_ptr->resist_lite)
