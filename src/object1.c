@@ -1648,30 +1648,15 @@ info[i++] = "それは危険に対して警告を発する。";
 	}
 	if (have_flag(flgs, TR_REFLECT))
 	{
-#ifdef JP
-info[i++] = "それは矢やボルトを反射する。";
-#else
-		info[i++] = "It reflects bolts and arrows.";
-#endif
-
+		info[i++] = _("それは矢の呪文を反射する。", "It reflects bolt spells.");
 	}
 	if (have_flag(flgs, TR_SH_FIRE))
 	{
-#ifdef JP
-info[i++] = "それは炎のバリアを張る。";
-#else
-		info[i++] = "It produces a fiery sheath.";
-#endif
-
+		info[i++] = _("それは炎のバリアを張る。", "It produces a fiery sheath.");
 	}
 	if (have_flag(flgs, TR_SH_ELEC))
 	{
-#ifdef JP
-info[i++] = "それは電気のバリアを張る。";
-#else
-		info[i++] = "It produces an electric sheath.";
-#endif
-
+		info[i++] = _("それは電気のバリアを張る。", "It produces an electric sheath.");
 	}
 	if (have_flag(flgs, TR_SH_COLD))
 	{

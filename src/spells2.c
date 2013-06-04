@@ -2258,57 +2258,27 @@ info[i++] = "あなたは自己の生命力をしっかりと維持する。";
 	}
 	if (p_ptr->reflect)
 	{
-#ifdef JP
-info[i++] = "あなたは矢やボルトを反射する。";
-#else
-		info[i++] = "You reflect arrows and bolts.";
-#endif
-
+		info[i++] = _("あなたは矢の呪文を反射する。", "You reflect bolt spells.");
 	}
 	if (p_ptr->sh_fire)
 	{
-#ifdef JP
-info[i++] = "あなたは炎のオーラに包まれている。";
-#else
-		info[i++] = "You are surrounded with a fiery aura.";
-#endif
-
+		info[i++] = _("あなたは炎のオーラに包まれている。", "You are surrounded with a fiery aura.");
 	}
 	if (p_ptr->sh_elec)
 	{
-#ifdef JP
-info[i++] = "あなたは電気に包まれている。";
-#else
-		info[i++] = "You are surrounded with electricity.";
-#endif
-
+		info[i++] = _("あなたは電気に包まれている。", "You are surrounded with electricity.");
 	}
 	if (p_ptr->sh_cold)
 	{
-#ifdef JP
-info[i++] = "あなたは冷気のオーラに包まれている。";
-#else
-		info[i++] = "You are surrounded with an aura of coldness.";
-#endif
-
+		info[i++] = _("あなたは冷気のオーラに包まれている。", "You are surrounded with an aura of coldness.");
 	}
 	if (p_ptr->tim_sh_holy)
 	{
-#ifdef JP
-info[i++] = "あなたは聖なるオーラに包まれている。";
-#else
-		info[i++] = "You are surrounded with a holy aura.";
-#endif
-
+		info[i++] = _("あなたは聖なるオーラに包まれている。", "You are surrounded with a holy aura.");
 	}
 	if (p_ptr->tim_sh_touki)
 	{
-#ifdef JP
-info[i++] = "あなたは闘気のオーラに包まれている。";
-#else
-		info[i++] = "You are surrounded with a energy aura.";
-#endif
-
+		info[i++] = _("あなたは闘気のオーラに包まれている。", "You are surrounded with a energy aura.");
 	}
 	if (p_ptr->anti_magic)
 	{
