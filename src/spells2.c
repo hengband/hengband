@@ -1827,7 +1827,7 @@ info[i++] = "あなたは幻覚を見ている。";
 	}
 	if (p_ptr->cursed & TRC_FAST_DIGEST)
 	{
-		info[i++] = _("あなたはすぐお腹がへる。", info[i++] = "You have a good appetite.");
+		info[i++] = _("あなたはすぐお腹がへる。", "You have a good appetite.");
 	}
 	if (p_ptr->cursed & TRC_DRAIN_HP)
 	{
@@ -2117,141 +2117,67 @@ info[i++] = "あなたは幻覚を見ている。";
 
 	if (p_ptr->resist_lite)
 	{
-#ifdef JP
-info[i++] = "あなたは閃光への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to bright light.";
-#endif
-
+		info[i++] = _("あなたは閃光への耐性を持っている。", "You are resistant to bright light.");
 	}
 
 	if (prace_is_(RACE_VAMPIRE) || prace_is_(RACE_S_FAIRY) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
-#ifdef JP
-info[i++] = "あなたは閃光に弱い。";
-#else
-		info[i++] = "You are susceptible to damage from bright light.";
-#endif
-
+		info[i++] = _("あなたは閃光に弱い。", "You are susceptible to damage from bright light.");
 	}
 
 	if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE) || p_ptr->wraith_form)
 	{
-#ifdef JP
-info[i++] = "あなたは暗黒に対する完全なる免疫を持っている。";
-#else
-		info[i++] = "You are completely immune to darkness.";
-#endif
+		info[i++] = _("あなたは暗黒に対する完全なる免疫を持っている。", "You are completely immune to darkness.");
 	}
 
 	else if (p_ptr->resist_dark)
 	{
-#ifdef JP
-info[i++] = "あなたは暗黒への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to darkness.";
-#endif
-
+		info[i++] = _("あなたは暗黒への耐性を持っている。", "You are resistant to darkness.");
 	}
 	if (p_ptr->resist_conf)
 	{
-#ifdef JP
-info[i++] = "あなたは混乱への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to confusion.";
-#endif
-
+		info[i++] = _("あなたは混乱への耐性を持っている。", "You are resistant to confusion.");
 	}
 	if (p_ptr->resist_sound)
 	{
-#ifdef JP
-info[i++] = "あなたは音波の衝撃への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to sonic attacks.";
-#endif
-
+		info[i++] = _("あなたは音波の衝撃への耐性を持っている。", "You are resistant to sonic attacks.");
 	}
 	if (p_ptr->resist_disen)
 	{
-#ifdef JP
-info[i++] = "あなたは劣化への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to disenchantment.";
-#endif
-
+		info[i++] = _("あなたは劣化への耐性を持っている。", "You are resistant to disenchantment.");
 	}
 	if (p_ptr->resist_chaos)
 	{
-#ifdef JP
-info[i++] = "あなたはカオスの力への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to chaos.";
-#endif
-
+		info[i++] = _("あなたはカオスの力への耐性を持っている。", "You are resistant to chaos.");
 	}
 	if (p_ptr->resist_shard)
 	{
-#ifdef JP
-info[i++] = "あなたは破片の攻撃への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to blasts of shards.";
-#endif
-
+		info[i++] = _("あなたは破片の攻撃への耐性を持っている。", "You are resistant to blasts of shards.");
 	}
 	if (p_ptr->resist_nexus)
 	{
-#ifdef JP
-info[i++] = "あなたは因果混乱の攻撃への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to nexus attacks.";
-#endif
-
+		info[i++] = _("あなたは因果混乱の攻撃への耐性を持っている。", "You are resistant to nexus attacks.");
 	}
 
 	if (prace_is_(RACE_SPECTRE))
 	{
-#ifdef JP
-info[i++] = "あなたは地獄の力を吸収できる。";
-#else
-		info[i++] = "You can drain nether forces.";
-#endif
-
+		info[i++] = _("あなたは地獄の力を吸収できる。", "You can drain nether forces.");
 	}
 	else if (p_ptr->resist_neth)
 	{
-#ifdef JP
-info[i++] = "あなたは地獄の力への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to nether forces.";
-#endif
-
+		info[i++] = _("あなたは地獄の力への耐性を持っている。", "You are resistant to nether forces.");
 	}
 	if (p_ptr->resist_fear)
 	{
-#ifdef JP
-info[i++] = "あなたは全く恐怖を感じない。";
-#else
-		info[i++] = "You are completely fearless.";
-#endif
-
+		info[i++] = _("あなたは全く恐怖を感じない。", "You are completely fearless.");
 	}
 	if (p_ptr->resist_blind)
 	{
-#ifdef JP
-info[i++] = "あなたの目は盲目への耐性を持っている。";
-#else
-		info[i++] = "Your eyes are resistant to blindness.";
-#endif
-
+		info[i++] = _("あなたの目は盲目への耐性を持っている。", "Your eyes are resistant to blindness.");
 	}
 	if (p_ptr->resist_time)
 	{
-#ifdef JP
-info[i++] = "あなたは時間逆転への耐性を持っている。";
-#else
-		info[i++] = "You are resistant to time.";
-#endif
-
+		info[i++] = _("あなたは時間逆転への耐性を持っている。", "You are resistant to time.");
 	}
 
 	if (p_ptr->sustain_str)
