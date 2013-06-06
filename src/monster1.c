@@ -1702,77 +1702,25 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 
 	/* Collect special abilities. */
 	vn = 0;
-#ifdef JP
-	if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) { vp[vn] = "ダンジョンを照らす";     color[vn++] = TERM_WHITE; }
-#else
-	if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) { vp[vn] = "illuminate the dungeon"; color[vn++] = TERM_WHITE; }
-#endif
-
-#ifdef JP
-	if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) { vp[vn] = "ダンジョンを暗くする";   color[vn++] = TERM_L_DARK; }
-#else
-	if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) { vp[vn] = "darken the dungeon";     color[vn++] = TERM_L_DARK; }
-#endif
-
-#ifdef JP
-	if (flags2 & RF2_OPEN_DOOR) { vp[vn] = "ドアを開ける"; color[vn++] = TERM_WHITE; }
-#else
-	if (flags2 & RF2_OPEN_DOOR) { vp[vn] = "open doors"; color[vn++] = TERM_WHITE; }
-#endif
-
-#ifdef JP
-	if (flags2 & RF2_BASH_DOOR) { vp[vn] = "ドアを打ち破る"; color[vn++] = TERM_WHITE; }
-#else
-	if (flags2 & RF2_BASH_DOOR) { vp[vn] = "bash down doors"; color[vn++] = TERM_WHITE; }
-#endif
-
-#ifdef JP
-	if (flags2 & RF2_PASS_WALL) { vp[vn] = "壁をすり抜ける"; color[vn++] = TERM_WHITE; }
-#else
-	if (flags2 & RF2_PASS_WALL) { vp[vn] = "pass through walls"; color[vn++] = TERM_WHITE; }
-#endif
-
-#ifdef JP
-	if (flags2 & RF2_KILL_WALL) { vp[vn] = "壁を掘り進む"; color[vn++] = TERM_WHITE; }
-#else
-	if (flags2 & RF2_KILL_WALL) { vp[vn] = "bore through walls"; color[vn++] = TERM_WHITE; }
-#endif
-
-#ifdef JP
-	if (flags2 & RF2_MOVE_BODY) { vp[vn] = "弱いモンスターを押しのける"; color[vn++] = TERM_WHITE; }
-#else
-	if (flags2 & RF2_MOVE_BODY) { vp[vn] = "push past weaker monsters"; color[vn++] = TERM_WHITE; }
-#endif
-
-#ifdef JP
-	if (flags2 & RF2_KILL_BODY) { vp[vn] = "弱いモンスターを倒す"; color[vn++] = TERM_WHITE; }
-#else
-	if (flags2 & RF2_KILL_BODY) { vp[vn] = "destroy weaker monsters"; color[vn++] = TERM_WHITE; }
-#endif
-
-#ifdef JP
-	if (flags2 & RF2_TAKE_ITEM) { vp[vn] = "アイテムを拾う"; color[vn++] = TERM_WHITE; }
-#else
-	if (flags2 & RF2_TAKE_ITEM) { vp[vn] = "pick up objects"; color[vn++] = TERM_WHITE; }
-#endif
-
-#ifdef JP
-	if (flags2 & RF2_KILL_ITEM) { vp[vn] = "アイテムを壊す"; color[vn++] = TERM_WHITE; }
-#else
-	if (flags2 & RF2_KILL_ITEM) { vp[vn] = "destroy objects"; color[vn++] = TERM_WHITE; }
-#endif
+	if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) { vp[vn] = _("ダンジョンを照らす", "illuminate the dungeon");     color[vn++] = TERM_WHITE; }
+	if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) { vp[vn] = _("ダンジョンを暗くする", "darken the dungeon");   color[vn++] = TERM_L_DARK; }
+	if (flags2 & RF2_OPEN_DOOR) { vp[vn] = _("ドアを開ける", "open doors"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_BASH_DOOR) { vp[vn] = _("ドアを打ち破る", "bash down doors"); color[vn++] = TERM_WHITE; }
+	if (flags7 & RF7_CAN_FLY)  { vp[vn] = _("空を飛ぶ", "fly"); color[vn++] = TERM_WHITE; }
+	if (flags7 & RF7_CAN_SWIM)   { vp[vn] = _("水を渡る", "swim"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_PASS_WALL) { vp[vn] = _("壁をすり抜ける", "pass through walls"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_KILL_WALL) { vp[vn] = _("壁を掘り進む", "bore through walls"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_MOVE_BODY) { vp[vn] = _("弱いモンスターを押しのける", "push past weaker monsters"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_KILL_BODY) { vp[vn] = _("弱いモンスターを倒す", "destroy weaker monsters"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_TAKE_ITEM) { vp[vn] = _("アイテムを拾う", "pick up objects"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_KILL_ITEM) { vp[vn] = _("アイテムを壊す", "destroy objects"); color[vn++] = TERM_WHITE; }
 
 
 	/* Describe special abilities. */
 	if (vn)
 	{
 		/* Intro */
-#ifdef JP
-		hooked_roff(format("%^sは", wd_he[msex]));
-#else
-		hooked_roff(format("%^s", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
@@ -1798,96 +1746,52 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		}
 
 		/* End */
-#ifdef JP
-		hooked_roff("ことができる。");
-#else
-		hooked_roff(".  ");
-#endif
+		hooked_roff(_("ことができる。", ".  "));
 
 	}
-
+	
+	/* Aquatic */
+	if (flags7 & RF7_AQUATIC)
+	{
+		hooked_roff(format(_("%^sは水中に棲んでいる。", "%^s lives in water.  "), wd_he[msex]));
+	}
 
 	/* Describe special abilities. */
 	if (flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2))
 	{
-#ifdef JP
-		hooked_roff(format("%^sは光っている。", wd_he[msex]));
-#else
-		hooked_roff(format("%^s is shining.  ", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sは光っている。", "%^s is shining.  "), wd_he[msex]));
 	}
 	if (flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2))
 	{
-#ifdef JP
-		hook_c_roff(TERM_L_DARK, format("%^sは暗黒に包まれている。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_L_DARK, format("%^s is surrounded by darkness.  ", wd_he[msex]));
-#endif
-
+		hook_c_roff(TERM_L_DARK, format(_("%^sは暗黒に包まれている。", "%^s is surrounded by darkness.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_INVISIBLE)
 	{
-#ifdef JP
-		hooked_roff(format("%^sは透明で目に見えない。", wd_he[msex]));
-#else
-		hooked_roff(format("%^s is invisible.  ", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sは透明で目に見えない。", "%^s is invisible.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_COLD_BLOOD)
 	{
-#ifdef JP
-		hooked_roff(format("%^sは冷血動物である。", wd_he[msex]));
-#else
-		hooked_roff(format("%^s is cold blooded.  ", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sは冷血動物である。", "%^s is cold blooded.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_EMPTY_MIND)
 	{
-#ifdef JP
-		hooked_roff(format("%^sはテレパシーでは感知できない。", wd_he[msex]));
-#else
-		hooked_roff(format("%^s is not detected by telepathy.  ", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sはテレパシーでは感知できない。", "%^s is not detected by telepathy.  "), wd_he[msex]));
 	}
 	else if (flags2 & RF2_WEIRD_MIND)
 	{
-#ifdef JP
-		hooked_roff(format("%^sはまれにテレパシーで感知できる。", wd_he[msex]));
-#else
-		hooked_roff(format("%^s is rarely detected by telepathy.  ", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sはまれにテレパシーで感知できる。", "%^s is rarely detected by telepathy.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_MULTIPLY)
 	{
-#ifdef JP
-		hook_c_roff(TERM_L_UMBER, format("%^sは爆発的に増殖する。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_L_UMBER, format("%^s breeds explosively.  ", wd_he[msex]));
-#endif
-
+		hook_c_roff(TERM_L_UMBER, format(_("%^sは爆発的に増殖する。", "%^s breeds explosively.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_REGENERATE)
 	{
-#ifdef JP
-		hook_c_roff(TERM_L_WHITE, format("%^sは素早く体力を回復する。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_L_WHITE, format("%^s regenerates quickly.  ", wd_he[msex]));
-#endif
-
+		hook_c_roff(TERM_L_WHITE, format(_("%^sは素早く体力を回復する。", "%^s regenerates quickly.  "), wd_he[msex]));
 	}
 	if (flags7 & RF7_RIDING)
 	{
-#ifdef JP
-		hook_c_roff(TERM_SLATE, format("%^sに乗ることができる。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_SLATE, format("%^s is suitable for riding.  ", wd_he[msex]));
-#endif
-
+		hook_c_roff(TERM_SLATE, format(_("%^sに乗ることができる。", "%^s is suitable for riding.  "), wd_he[msex]));
 	}
 
 
