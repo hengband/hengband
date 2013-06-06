@@ -2828,6 +2828,23 @@ errr parse_r_info(char *buf, header *head)
 		r_ptr->next_r_idx = nextmon;
 	}
 
+	/* Process 'R' for "Reinforcement" (up to six lines) */
+	else if (buf[0] == 'R')
+	{
+		int id, ds, dd;
+		/* Find the next empty blow slot (if any) */
+		for (i = 0; i < 6; i++) if (r_ptr->reinforce_id[i] == 0) break;
+
+		/* Oops, no more slots */
+		if (i == 6) return (1);
+
+		/* Scan for the values */
+		if (3 != sscanf(buf+2, "%d:%dd%d", &id, &dd, &ds)) return (1);
+		r_ptr->reinforce_id[i] = id;
+		r_ptr->reinforce_dd[i] = dd;
+		r_ptr->reinforce_ds[i] = ds;
+	}
+
 	/* Process 'B' for "Blows" (up to four lines) */
 	else if (buf[0] == 'B')
 	{

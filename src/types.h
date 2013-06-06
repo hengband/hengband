@@ -329,6 +329,9 @@ struct monster_race
 	u32b flagsr;			/* Flags R (resistances info) */
 
 	monster_blow blow[4];	/* Up to four blows per round */
+	u16b reinforce_id[6];
+	u16b reinforce_dd[6];
+	u16b reinforce_ds[6];
 
 	s16b next_r_idx;
 	u32b next_exp;
