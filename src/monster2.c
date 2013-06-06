@@ -3660,7 +3660,7 @@ static bool place_monster_okay(int r_idx)
  */
 bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 {
-	int             i;
+	int             i, j, n;
 	monster_race    *r_ptr = &r_info[r_idx];
 
 	if (!(mode & PM_NO_KAGE) && one_in_(333))
@@ -3669,11 +3669,23 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 	/* Place one monster, or fail */
 	if (!place_monster_one(who, y, x, r_idx, mode)) return (FALSE);
 
-
 	/* Require the "group" flag */
 	if (!(mode & PM_ALLOW_GROUP)) return (TRUE);
 
 	place_monster_m_idx = hack_m_idx_ii;
+
+	/* Reinforcement */
+	for(i = 0; i < 6; i++)
+	{
+		if(!r_ptr->reinforce_id[i]) break;
+		n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);
+		for(j = 0; j < n; j++)
+		{
+			int nx, ny, z, d = 7;
+			scatter(&ny, &nx, y, x, d, 0);
+			(void)place_monster_one(place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
+		}
+	}
 
 	/* Friends for certain monsters */
 	if (r_ptr->flags1 & (RF1_FRIENDS))
@@ -3681,7 +3693,6 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 		/* Attempt to place a group */
 		(void)place_monster_group(who, y, x, r_idx, mode);
 	}
-
 
 	/* Escorts for certain monsters */
 	if (r_ptr->flags1 & (RF1_ESCORT))

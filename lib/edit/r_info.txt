@@ -15547,6 +15547,7 @@ S:1_IN_3 |
 S:SCARE | BLIND | CONF | TPORT | BLINK | TELE_AWAY | TELE_TO
 S:TRAPS | CAUSE_4 | BA_POIS | S_DEMON
 S:S_MONSTERS | PSY_SPEAR
+R:201:8d10
 D:$She is beautiful and deadly. "...I have always been very fond of Fiona. 
 D:$She is certainly the loveliest, most civilized of (all Amberites)."
 D:彼女は美しく、また危険な存在でもある。「…フィオナの事はとても好きだ。
@@ -15623,6 +15624,8 @@ F:OPEN_DOOR | BASH_DOOR |
 S:1_IN_4 |
 S:TPORT | TELE_TO | SHOOT | SHRIEK | SCARE | DARKNESS |
 S:S_ANT | S_SPIDER | S_HOUND | S_HYDRA | TRAPS | BO_WATE | BO_ELEC
+R:151:1d6
+R:829:5d10
 D:$Julian is at home in wild woodlands. He enjoys hunting a challenging 
 D:$prey: you. "Julian, dark hair hanging long, blue eyes containing neither 
 D:$passion nor compassion. He was dressed completely in scaled white armor, 
