@@ -1367,7 +1367,7 @@ msg_print("地面に落とされた。");
 
 		case MON_GOEMON:
 			a_idx = ART_ZANTETSU;
-			chance = 75;
+			chance = 100;
 			break;
 
 		case MON_HAGEN:

@@ -18,9 +18,13 @@
  * Determine if the player "hits" a monster (normal combat).
  * Note -- Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_fire(int chance, int ac, int vis)
+bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 {
-	int k;
+	int k, ac;
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	
+	ac = r_ptr->ac;
+	if(m_ptr->r_idx == MON_GOEMON && !MON_CSLEEP(m_ptr)) ac *= 3;
 
 	/* Percentile dice */
 	k = randint0(100);
@@ -41,7 +45,18 @@ bool test_hit_fire(int chance, int ac, int vis)
 	if (!vis) chance = (chance + 1) / 2;
 
 	/* Power competes against armor */
-	if (randint0(chance) < (ac * 3 / 4)) return (FALSE);
+	if (randint0(chance) < (ac * 3 / 4))
+	{
+		if(m_ptr->r_idx == MON_GOEMON && !MON_CSLEEP(m_ptr))
+		{
+			char m_name[80];
+			
+			/* Extract monster name */
+			monster_desc(m_name, m_ptr, 0);
+			msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name, o_name);
+		}
+		return (FALSE);
+	}
 
 	/* Assume hit */
 	return (TRUE);

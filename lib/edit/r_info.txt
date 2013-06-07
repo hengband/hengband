@@ -8795,7 +8795,7 @@ N:505:°ÿ¿–¿Ó∏ﬁ±¶±“ÃÁ°Ÿ
 E:Ishikawa Goemon
 G:p:W
 I:120:13d113:20:70:50
-W:33:7:0:2000:0:0
+W:36:7:0:2000:0:0
 B:SLASH:HURT:9d1
 B:SLASH:HURT:6d5
 B:SLASH:HURT:25d1

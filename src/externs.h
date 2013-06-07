@@ -699,7 +699,7 @@ extern void disturb(int stop_search, int flush_output);
 extern void glow_deep_lava_and_bldg(void);
 
 /* cmd1.c */
-extern bool test_hit_fire(int chance, int ac, int vis);
+extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
 extern bool test_hit_norm(int chance, int ac, int vis);
 extern s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam);
 extern s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode);
