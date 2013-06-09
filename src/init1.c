@@ -785,8 +785,18 @@ static cptr k_info_flags[] =
 	"LITE_M2",
 	"LITE_M3",
 	"LITE_FUEL",
+	
+	"CALL_ANIMAL",
+	"CALL_DEMON",
+	"CALL_DRAGON",
+	"CALL_UNDEAD",
+	"COWARDICE",
+	"LOW_MELEE",
+	"LOW_AC",
+	"LOW_MAGIC",
+	"FAST_DIGEST",
+	"SLOW_REGEN",
 };
-
 
 static cptr k_info_gen_flags[] =
 {

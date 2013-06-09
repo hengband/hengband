@@ -76,7 +76,7 @@
 #define H_VER_MAJOR 2
 #define H_VER_MINOR 1
 #define H_VER_PATCH 2
-#define H_VER_EXTRA 2
+#define H_VER_EXTRA 3
 
 
 #define ANGBAND_2_8_1
@@ -3373,6 +3373,7 @@
 #define TR_SHOW_MODS           74     /* Always show Tohit/Todam */
 #define TR_SLAY_GOOD           75
 #define TR_LEVITATION          76     /* Feather Falling */
+#define TR_LITE_1              77     /* Light Radius 1*/
 #define TR_SEE_INVIS           78     /* See Invisible */
 #define TR_TELEPATHY           79     /* Telepathy */
 #define TR_SLOW_DIGEST         80     /* Item slows down digestion */
@@ -3418,8 +3419,6 @@
 #define TR_ADD_H_CURSE         119
 #define TR_DRAIN_HP            120
 #define TR_DRAIN_MANA          121
-
-#define TR_LITE_1              77     /* Light Radius 1*/
 #define TR_LITE_2			   122
 #define TR_LITE_3			   123
 #define TR_LITE_M1			   124    /* Permanent decrease Light Area (-1) */
@@ -3427,7 +3426,18 @@
 #define TR_LITE_M3			   126    /* Permanent decrease Light Area (-1) */
 #define TR_LITE_FUEL		   127	  /* Lights need Fuels */
 
-#define TR_FLAG_MAX            128
+#define TR_CALL_ANIMAL         128
+#define TR_CALL_DEMON          129
+#define TR_CALL_DRAGON         130
+#define TR_CALL_UNDEAD         131
+#define TR_COWARDICE           132
+#define TR_LOW_MELEE           133
+#define TR_LOW_AC              134
+#define TR_LOW_MAGIC           135
+#define TR_FAST_DIGEST         136
+#define TR_SLOW_REGEN          137
+
+#define TR_FLAG_MAX            138
 #define TR_FLAG_SIZE           4
 
 
@@ -3474,6 +3484,7 @@
 #define TRC_FAST_DIGEST         0x00040000L
 #define TRC_DRAIN_HP            0x00080000L
 #define TRC_DRAIN_MANA          0x00100000L
+#define TRC_CALL_UNDEAD         0x00200000L
 
 #define TRC_TELEPORT_SELF       0x00000001L
 #define TRC_CHAINSWORD          0x00000002L

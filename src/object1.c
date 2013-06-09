@@ -1672,19 +1672,23 @@ info[i++] = "それは呪われている。";
 	{
 		info[i++] = _("それは強力な呪いを増やす。","It adds heavy curses.");
 	}
-	if (o_ptr->curse_flags & TRC_CALL_ANIMAL)
+	if ((have_flag(flgs, TR_CALL_ANIMAL)) || (o_ptr->curse_flags & TRC_CALL_ANIMAL))
 	{
 		info[i++] = _("それは動物を呼び寄せる。", "It attracts animals.");
 	}
-	if (o_ptr->curse_flags & TRC_CALL_DEMON)
+	if ((have_flag(flgs, TR_CALL_DEMON)) || (o_ptr->curse_flags & TRC_CALL_DEMON))
 	{
 		info[i++] = _("それは悪魔を呼び寄せる。", "It attracts demons.");
 	}
-	if (o_ptr->curse_flags & TRC_CALL_DRAGON)
+	if ((have_flag(flgs, TR_CALL_DRAGON)) || (o_ptr->curse_flags & TRC_CALL_DRAGON))
 	{
 		info[i++] = _("それはドラゴンを呼び寄せる。", "It attracts dragons.");
 	}
-	if (o_ptr->curse_flags & TRC_COWARDICE)
+	if ((have_flag(flgs, TR_CALL_UNDEAD)) || (o_ptr->curse_flags & TRC_CALL_UNDEAD))
+	{
+		info[i++] = _("それは死霊を呼び寄せる。", "It attracts undeads.");
+	}
+	if ((have_flag(flgs, TR_COWARDICE)) ||  (o_ptr->curse_flags & TRC_COWARDICE))
 	{
 		info[i++] = _("それは恐怖感を引き起こす。", "It makes you subject to cowardice.");
 	}
@@ -1692,19 +1696,19 @@ info[i++] = "それは呪われている。";
 	{
 		info[i++] = _("それはランダムなテレポートを引き起こす。", "It induces random teleportation.");
 	}
-	if (o_ptr->curse_flags & TRC_LOW_MELEE)
+	if ((have_flag(flgs, TR_LOW_MELEE)) || o_ptr->curse_flags & TRC_LOW_MELEE)
 	{
 		info[i++] = _("それは攻撃を外しやすい。", "It causes you to miss blows.");
 	}
-	if (o_ptr->curse_flags & TRC_LOW_AC)
+	if ((have_flag(flgs, TR_LOW_AC)) || (o_ptr->curse_flags & TRC_LOW_AC))
 	{
 		info[i++] = _("それは攻撃を受けやすい。", "It helps your enemies' blows.");
 	}
-	if (o_ptr->curse_flags & TRC_LOW_MAGIC)
+	if ((have_flag(flgs, TR_LOW_MAGIC)) || (o_ptr->curse_flags & TRC_LOW_MAGIC))
 	{
 		info[i++] = _("それは魔法を唱えにくくする。", "It encumbers you while spellcasting.");
 	}
-	if (o_ptr->curse_flags & TRC_FAST_DIGEST)
+	if ((have_flag(flgs, TR_FAST_DIGEST)) || (o_ptr->curse_flags & TRC_FAST_DIGEST))
 	{
 		info[i++] = _("それはあなたの新陳代謝を速くする。", "It speeds your metabolism.");
 	}
