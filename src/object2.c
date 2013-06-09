@@ -2957,7 +2957,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					switch (o_ptr->name2)
 					{
 					case EGO_BRILLIANCE:
-					case EGO_LITE:
 					case EGO_DARK:
 					case EGO_INFRAVISION:
 					case EGO_H_PROTECTION:
@@ -2968,6 +2967,10 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 							if (one_in_(2)) add_esp_strong(o_ptr);
 							else add_esp_weak(o_ptr, FALSE);
 						}
+						break;
+					case EGO_LITE:
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_LITE_1);
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_LITE_2);
 						break;
 					default:/* not existing helm (Magi, Might, etc...)*/
 						ok_flag = FALSE;
