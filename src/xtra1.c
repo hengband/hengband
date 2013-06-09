@@ -3085,7 +3085,7 @@ static void calc_torch(void)
 			/* does this item glow? */
 			if (have_flag(flgs, TR_LITE))
 			{
-				if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name1 == ART_NIGHT)) p_ptr->cur_lite--;
+				if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) p_ptr->cur_lite--;
 				else p_ptr->cur_lite++;
 			}
 		}

@@ -2901,8 +2901,26 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 
 			/* Very cursed */
 			else if (power < -1)
-			{
-				o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
+			{	
+				while (1)
+				{
+					bool ok_flag = TRUE;
+					o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
+
+					switch (o_ptr->name2)
+					{
+					  case EGO_ANCIENT_CURSE:
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_NO_TELE);
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_DRAIN_HP);
+						if (one_in_(3)) add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+						break;
+					}
+					if (ok_flag)
+						break; /* while (1) */
+				}
 			}
 
 			break;
@@ -2957,7 +2975,19 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			/* Very cursed */
 			else if (power < -1)
 			{
-				o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
+				while (1)
+				{
+					bool ok_flag = TRUE;
+					o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
+
+					switch (o_ptr->name2)
+					{
+					  case EGO_ANCIENT_CURSE:
+						ok_flag = FALSE;
+					}
+					if (ok_flag)
+						break; /* while (1) */
+				}
 			}
 			break;
 		}

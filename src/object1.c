@@ -1479,28 +1479,14 @@ info[i++] = "それは宙に浮くことを可能にする。";
 	}
 	if (have_flag(flgs, TR_LITE))
 	{
-		if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name1 == ART_NIGHT))
-#ifdef JP
-info[i++] = "それは明かりの半径を狭める(半径に-1)。";
-#else
-			info[i++] = "It decreases radius of your light source by 1.";
-#endif
+		if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT))
+			info[i++] = _("それは明かりの半径を狭める(半径に-1)。" , "It decreases radius of your light source by 1.");
 		else
-#ifdef JP
-info[i++] = "それは永遠の明かりを授ける(半径に+1)。";
-#else
-			info[i++] = "It provides permanent light. (radius +1)";
-#endif
-
+			info[i++] = _("それは永遠の明かりを授ける(半径に+1)。", "It provides permanent light. (radius +1)");
 	}
 	if (have_flag(flgs, TR_SEE_INVIS))
 	{
-#ifdef JP
-info[i++] = "それは透明なモンスターを見ることを可能にする。";
-#else
-		info[i++] = "It allows you to see invisible monsters.";
-#endif
-
+		info[i++] = _("それは透明なモンスターを見ることを可能にする。", "It allows you to see invisible monsters.");
 	}
 	if (have_flag(flgs, TR_TELEPATHY))
 	{

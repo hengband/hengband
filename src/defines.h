@@ -1592,7 +1592,7 @@
 #define EGO_TELEPORTATION       35
 #define EGO_FOOL                36
 #define EGO_BASILISK            37
-//#define EGO_UGLINESS            38
+#define EGO_ANCIENT_CURSE       38
 #define EGO_SICKLINESS          39
 
 /* Cloaks */
