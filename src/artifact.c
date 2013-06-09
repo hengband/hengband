@@ -170,7 +170,7 @@ void one_ability(object_type *o_ptr)
 	switch (randint0(10))
 	{
 	case 0: add_flag(o_ptr->art_flags, TR_LEVITATION);     break;
-	case 1: add_flag(o_ptr->art_flags, TR_LITE);        break;
+	case 1: add_flag(o_ptr->art_flags, TR_LITE_1);        break;
 	case 2: add_flag(o_ptr->art_flags, TR_SEE_INVIS);   break;
 	case 3: add_flag(o_ptr->art_flags, TR_WARNING);     break;
 	case 4: add_flag(o_ptr->art_flags, TR_SLOW_DIGEST); break;
@@ -936,9 +936,9 @@ static void random_misc(object_type * o_ptr)
 		break;
 
 	case BIAS_FIRE:
-		if (!(have_flag(o_ptr->art_flags, TR_LITE)))
+		if (!(have_flag(o_ptr->art_flags, TR_LITE_1)))
 		{
-			add_flag(o_ptr->art_flags, TR_LITE); /* Freebie */
+			add_flag(o_ptr->art_flags, TR_LITE_1); /* Freebie */
 		}
 		break;
 	}
@@ -989,7 +989,7 @@ static void random_misc(object_type * o_ptr)
 			break;
 		case 10:
 		case 11:
-			add_flag(o_ptr->art_flags, TR_LITE);
+			add_flag(o_ptr->art_flags, TR_LITE_1);
 			break;
 		case 12:
 		case 13:

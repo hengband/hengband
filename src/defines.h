@@ -3372,8 +3372,7 @@
 #define TR_HIDE_TYPE           73     /* Hide "pval" description */
 #define TR_SHOW_MODS           74     /* Always show Tohit/Todam */
 #define TR_SLAY_GOOD           75
-#define TR_LEVITATION             76     /* Feather Falling */
-#define TR_LITE                77     /* Permanent Light */
+#define TR_LEVITATION          76     /* Feather Falling */
 #define TR_SEE_INVIS           78     /* See Invisible */
 #define TR_TELEPATHY           79     /* Telepathy */
 #define TR_SLOW_DIGEST         80     /* Item slows down digestion */
@@ -3420,7 +3419,15 @@
 #define TR_DRAIN_HP            120
 #define TR_DRAIN_MANA          121
 
-#define TR_FLAG_MAX            122
+#define TR_LITE_1              77     /* Light Radius 1*/
+#define TR_LITE_2			   122
+#define TR_LITE_3			   123
+#define TR_LITE_M1			   124    /* Permanent decrease Light Area (-1) */
+#define TR_LITE_M2			   125    /* Permanent decrease Light Area (-1) */
+#define TR_LITE_M3			   126    /* Permanent decrease Light Area (-1) */
+#define TR_LITE_FUEL		   127	  /* Lights need Fuels */
+
+#define TR_FLAG_MAX            128
 #define TR_FLAG_SIZE           4
 
 

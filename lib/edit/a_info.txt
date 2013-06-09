@@ -92,7 +92,7 @@ E:of Galadriel
 I:39:4:1
 W:30:1:10:10000
 P:0:1d1:0:0:0
-F:ACTIVATE | SEARCH | INSTA_ART
+F:ACTIVATE | SEARCH | INSTA_ART | LITE_3 | 
 U:LIGHT
 D:$A small crystal phial, with the light of Earendil's Star contained inside.  
 D:$Its light is imperishable, and near it darkness cannot endure.
@@ -116,7 +116,7 @@ E:of Elendil
 I:39:5:1
 W:50:25:5:32500
 P:0:1d1:0:0:0
-F:ACTIVATE | SEE_INVIS | HOLD_LIFE | INSTA_ART | SPEED
+F:ACTIVATE | SEE_INVIS | HOLD_LIFE | INSTA_ART | SPEED | LITE_3 |
 U:MAP_LIGHT
 D:$The shining Star of the West, a famed heirloom of Elendil's house.
 D:輝く『西方国の星』で、エレンディルの家系に伝わる家宝だ。
@@ -132,7 +132,7 @@ E:of Judgement
 I:39:6:3
 W:70:90:5:150000
 P:0:1d1:0:0:0
-F:ACTIVATE | SEE_INVIS | HOLD_LIFE | RES_CONF | RES_CHAOS |
+F:ACTIVATE | SEE_INVIS | HOLD_LIFE | RES_CONF | RES_CHAOS | LITE_3 | 
 F:INSTA_ART | SPEED | WIS | INT
 U:JUDGE
 D:$This crimson jewelry which is chained with a gold chain is
@@ -234,7 +234,7 @@ E:of Yeduson
 I:39:3:3
 W:40:20:5:20000
 P:0:1d1:0:0:0
-F:INSTA_ART | INFRA | SH_FIRE | SH_ELEC
+F:INSTA_ART | INFRA | SH_FIRE | SH_ELEC | LITE_3 |
 D:$The Incandescent Light of Yeduson 
 D:$Thomas Alva Yeduson the "Wizard of Menlo Park" 
 D:$patented 1,093 inventions.  
@@ -395,7 +395,7 @@ E:Palantir~ of Westernesse
 I:39:8:3
 W:60:50:10:60000
 P:0:1d1:0:0:0
-F:WIS | CHR | ACTIVATE | TELEPATHY | INSTA_ART | FULL_NAME
+F:WIS | CHR | ACTIVATE | TELEPATHY | INSTA_ART | FULL_NAME | LITE_3 | 
 U:DETECT_UNIQUE
 D:$A shining white ball of unbreakable crystal, the ancient palantiri, 
 D:$or 'far-watchers', were used by kings of Numenor and later by the Exiles 
@@ -429,7 +429,7 @@ E:of Lore
 I:39:7:0
 W:15:12:15:20000
 P:0:1d1:0:0:0
-F:ACTIVATE | INSTA_ART
+F:ACTIVATE | INSTA_ART | LITE_3 |
 U:LORE
 D:$A great emerald that fills your mind with images of knowledge and dreadful 
 D:$understanding as you stare into its depths.
@@ -2794,7 +2794,7 @@ E:of Laputa
 I:39:9:2
 W:60:60:10:60000
 P:0:1d1:0:0:0
-F:INT | CHR | SPEED | ACTIVATE | LEVITATION | HOLD_LIFE | INSTA_ART
+F:INT | CHR | SPEED | ACTIVATE | LEVITATION | HOLD_LIFE | INSTA_ART | LITE_3 | 
 U:BA_MANA
 D:浮遊の力を与えてくれる青く仄光る宝石だ。
 
@@ -3628,7 +3628,7 @@ I:40:24:4
 W:50:150:2:50000
 P:0:0d0:0:0:5
 F:STEALTH | SEARCH | HIDE_TYPE | SEE_INVIS |
-F:RES_DARK | ACTIVATE | LITE |
+F:RES_DARK | ACTIVATE | LITE_M1 |
 F:INSTA_ART
 U:BA_DARK
 D:漆黒の宝玉がつけられた頸飾りだ。
@@ -4020,7 +4020,7 @@ E:The Orb of Fate
 I:39:10:3
 W:70:70:15:45000
 P:0:1d1:0:0:20
-F:WIS | CON | WARNING | ACTIVATE | FULL_NAME
+F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 |
 U:TELEPORT_LEVEL
 D:「運命のオーブを持っていきなさい。わたしは運命のオーブから
 D:人間の手に触れてはならぬ未来を告げる力を取り除きました。

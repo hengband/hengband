@@ -2377,7 +2377,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 			add_flag(flgs, TR_HOLD_LIFE);
 			add_flag(flgs, TR_RES_DARK);
 			add_flag(flgs, TR_RES_NETHER);
-			if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE);
+			if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE_1);
 			add_flag(flgs, TR_RES_POIS);
 			add_flag(flgs, TR_RES_COLD);
 			add_flag(flgs, TR_SEE_INVIS);
@@ -2525,7 +2525,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_HOLD_LIFE);
 		add_flag(flgs, TR_RES_DARK);
 		add_flag(flgs, TR_RES_NETHER);
-		if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE);
+		if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE_1);
 		add_flag(flgs, TR_RES_POIS);
 		add_flag(flgs, TR_RES_COLD);
 		break;
@@ -2606,7 +2606,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		if (p_ptr->muta3 & MUT3_FIRE_BODY)
 		{
 			add_flag(flgs, TR_SH_FIRE);
-			add_flag(flgs, TR_LITE);
+			add_flag(flgs, TR_LITE_1);
 		}
 
 		if (p_ptr->muta3 & MUT3_WINGS)
@@ -2642,7 +2642,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_BLIND);
 		add_flag(flgs, TR_RES_CONF);
 		add_flag(flgs, TR_HOLD_LIFE);
-		if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE);
+		if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE_1);
 		if (p_ptr->lev > 9)
 			add_flag(flgs, TR_SPEED);
 	}
@@ -2684,7 +2684,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_SH_ELEC);
 		add_flag(flgs, TR_SH_COLD);
 		add_flag(flgs, TR_LEVITATION);
-		add_flag(flgs, TR_LITE);
+		add_flag(flgs, TR_LITE_1);
 		add_flag(flgs, TR_SEE_INVIS);
 		add_flag(flgs, TR_TELEPATHY);
 		add_flag(flgs, TR_SLOW_DIGEST);
@@ -2789,7 +2789,7 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_SH_ELEC);
 		add_flag(flgs, TR_SH_COLD);
 		add_flag(flgs, TR_LEVITATION);
-		add_flag(flgs, TR_LITE);
+		add_flag(flgs, TR_LITE_1);
 		add_flag(flgs, TR_SEE_INVIS);
 		add_flag(flgs, TR_TELEPATHY);
 		add_flag(flgs, TR_SLOW_DIGEST);
@@ -3208,7 +3208,7 @@ display_flag_aux(row+4, col, "·Ù¹ð      :", TR_WARNING, &f, 0);
 display_flag_aux(row+5, col, "ÃÙ¾Ã²½    :", TR_SLOW_DIGEST, &f, 0);
 display_flag_aux(row+6, col, "µÞ²óÉü    :", TR_REGEN, &f, 0);
 display_flag_aux(row+7, col, "ÉâÍ·      :", TR_LEVITATION, &f, 0);
-display_flag_aux(row+8, col, "±Ê±ó¸÷¸»  :", TR_LITE, &f, 0);
+display_flag_aux(row+8, col, "±Ê±ó¸÷¸»  :", TR_LITE_1, &f, 0);
 display_flag_aux(row+9, col, "¼ö¤¤      :", 0, &f, DP_CURSE);
 #else
 	display_flag_aux(row+0, col, "Speed     :", TR_SPEED, &f, 0);
@@ -3219,7 +3219,7 @@ display_flag_aux(row+9, col, "¼ö¤¤      :", 0, &f, DP_CURSE);
 	display_flag_aux(row+5, col, "SlowDigest:", TR_SLOW_DIGEST, &f, 0);
 	display_flag_aux(row+6, col, "Regene.   :", TR_REGEN, &f, 0);
 	display_flag_aux(row+7, col, "Levitation:", TR_LEVITATION, &f, 0);
-	display_flag_aux(row+8, col, "Perm Lite :", TR_LITE, &f, 0);
+	display_flag_aux(row+8, col, "Perm Lite :", TR_LITE_1, &f, 0);
 	display_flag_aux(row+9, col, "Cursed    :", 0, &f, DP_CURSE);
 #endif
 

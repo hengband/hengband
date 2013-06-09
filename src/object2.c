@@ -991,7 +991,12 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 	if (have_flag(flgs, TR_HIDE_TYPE)) total += 0;
 	if (have_flag(flgs, TR_SHOW_MODS)) total += 0;
 	if (have_flag(flgs, TR_LEVITATION)) total += 1250;
-	if (have_flag(flgs, TR_LITE)) total += 1250;
+	if (have_flag(flgs, TR_LITE_1)) total += 1500;
+	if (have_flag(flgs, TR_LITE_2)) total += 2500;
+	if (have_flag(flgs, TR_LITE_3)) total += 4000;
+	if (have_flag(flgs, TR_LITE_M1)) total -= 1500;
+	if (have_flag(flgs, TR_LITE_M2)) total -= 2500;
+	if (have_flag(flgs, TR_LITE_M3)) total -= 4000;
 	if (have_flag(flgs, TR_SEE_INVIS)) total += 2000;
 	if (have_flag(flgs, TR_TELEPATHY)) total += 20000;
 	if (have_flag(flgs, TR_ESP_ANIMAL)) total += 1000;
@@ -3355,7 +3360,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->name2 = EGO_RING_REGEN;
 						break;
 					case 5: case 6:
-						if (have_flag(k_ptr->flags, TR_LITE)) break;
+						if (have_flag(k_ptr->flags, TR_LITE_1)) break;
 						o_ptr->name2 = EGO_RING_LITE;
 						break;
 					case 7: case 8:
@@ -7164,7 +7169,7 @@ static essence_type essence_info[] =
 	{TR_NO_MAGIC, "È¿ËâË¡", 3, TR_NO_MAGIC, 15},
 	{TR_WARNING, "·Ù¹ð", 3, TR_WARNING, 20},
 	{TR_LEVITATION, "ÉâÍ·", 3, TR_LEVITATION, 20},
-	{TR_LITE, "±Êµ×¸÷¸»", 3, TR_LITE, 15},
+	{TR_LITE_1, "±Êµ×¸÷¸»", 3, TR_LITE_1, 15},
 	{TR_SEE_INVIS, "²Ä»ëÆ©ÌÀ", 3, TR_SEE_INVIS, 20},
 	{TR_TELEPATHY, "¥Æ¥ì¥Ñ¥·¡¼", 6, TR_TELEPATHY, 15},
 	{TR_SLOW_DIGEST, "ÃÙ¾Ã²½", 3, TR_SLOW_DIGEST, 15},
@@ -7273,7 +7278,7 @@ static essence_type essence_info[] =
 	{TR_NO_MAGIC, "anti magic", 3, TR_NO_MAGIC, 15},
 	{TR_WARNING, "warning", 3, TR_WARNING, 20},
 	{TR_LEVITATION, "levitation", 3, TR_LEVITATION, 20},
-	{TR_LITE, "permanent light", 3, TR_LITE, 15},
+	{TR_LITE_1, "permanent light", 3, TR_LITE_1, 15},
 	{TR_SEE_INVIS, "see invisible", 3, TR_SEE_INVIS, 20},
 	{TR_TELEPATHY, "telepathy", 6, TR_TELEPATHY, 15},
 	{TR_SLOW_DIGEST, "slow digestion", 3, TR_SLOW_DIGEST, 15},

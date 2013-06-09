@@ -1208,6 +1208,8 @@ static void analyze_sustains(object_type *o_ptr, cptr *sustain_list)
 static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 {
 	u32b flgs[TR_FLAG_SIZE];
+	int rad;
+	char desc[256];
 
 	object_flags(o_ptr, flgs);
 
@@ -1218,20 +1220,29 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 				     N_ELEMENTS(misc_flags3_desc));
 
 	/*
-	 * Artifact lights -- large radius light.
-	 */
-	if ((o_ptr->tval == TV_LITE) && object_is_fixed_artifact(o_ptr))
-	{
-		*misc_list++ = _("±Êµ×¸÷¸»(È¾·Â3)", "Permanent Light(3)");
-	}
-
-	/*
 	 * Glowing artifacts -- small radius light.
-	 */
-	if (have_flag(flgs, TR_LITE))
+	*/	
+	rad = 0;
+	if (have_flag(flgs, TR_LITE_1))  rad += 1;
+	if (have_flag(flgs, TR_LITE_2))  rad += 2;
+	if (have_flag(flgs, TR_LITE_3))  rad += 3;
+	if (have_flag(flgs, TR_LITE_M1)) rad -= 1;
+	if (have_flag(flgs, TR_LITE_M2)) rad -= 2;
+	if (have_flag(flgs, TR_LITE_M3)) rad -= 3;
+	
+	if(o_ptr->name2 == EGO_LITE_SHINE) rad++;
+		
+	if (have_flag(flgs, TR_LITE_FUEL))
 	{
-		*misc_list++ = _("±Êµ×¸÷¸»(È¾·Â1)", "Permanent Light(1)");
+		if(rad > 0) sprintf(desc, _("¤½¤ì¤ÏÇ³ÎÁÊäµë¤Ë¤è¤Ã¤ÆÌÀ¤«¤ê(È¾·Â %d)¤ò¼ø¤±¤ë¡£", "It provides light (radius %d) when fueled."), rad);	
 	}
+	else
+	{
+		if(rad > 0) sprintf(desc, _("±Êµ×¸÷¸»(È¾·Â %d)", "Permanent Light(radius %d)"), rad);	
+		if(rad < 0) sprintf(desc, _("±Êµ×¸÷¸»(È¾·Â-%d)¡£", "Permanent Light(radius -%d)"), -rad);
+	}
+	
+	if(rad != 0) *misc_list++ = desc;	
 
 	/*
 	 * Handle cursed objects here to avoid redundancies such as noting

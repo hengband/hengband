@@ -3686,6 +3686,7 @@ G:~:u
 I:39:0:4000
 W:1:0:30:2
 A:1/1
+F:LITE | LITE_FUEL
 P:0:1d1:0:0:0
 
 N:347:真鍮のランタン
@@ -3695,7 +3696,7 @@ I:39:1:7500
 W:3:0:50:35
 A:3/1
 P:0:1d1:0:0:0
-F:IGNORE_FIRE
+F:IGNORE_FIRE | LITE_2 | LITE_FUEL
 
 N:348:油つぼ
 E:& Flask~ of oil
@@ -5639,7 +5640,7 @@ I:39:2:0
 W:15:40:60:450
 A:15/1
 P:0:1d1:0:0:0
-F:IGNORE_FIRE
+F:IGNORE_FIRE | LITE_2
 
 N:583:岩石溶解:アダマンタイトの
 E:Stone to Mud:Adamantite

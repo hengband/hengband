@@ -778,6 +778,13 @@ static cptr k_info_flags[] =
 	"ADD_H_CURSE",
 	"DRAIN_HP",
 	"DRAIN_MANA",
+	
+	"LITE_2",
+	"LITE_3",
+	"LITE_M1",
+	"LITE_M2",
+	"LITE_M3",
+	"LITE_FUEL",
 };
 
 

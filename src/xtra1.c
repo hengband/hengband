@@ -3027,69 +3027,28 @@ static void calc_torch(void)
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		o_ptr = &inventory[i];
-
-		/* Examine actual lites */
-		if ((i == INVEN_LITE) && (o_ptr->k_idx) && (o_ptr->tval == TV_LITE))
+		/* Skip empty slots */
+		if (!o_ptr->k_idx) continue;
+		
+		if (o_ptr->name2 == EGO_LITE_SHINE) p_ptr->cur_lite++;
+		
+		/* Need Fuels */
+		if (o_ptr->name2 != EGO_LITE_DARKNESS)
 		{
-			if (o_ptr->name2 == EGO_LITE_DARKNESS)
-			{
-				if (o_ptr->sval == SV_LITE_TORCH)
-				{
-					p_ptr->cur_lite -= 1;
-				}
-
-				/* Lanterns (with fuel) provide more lite */
-				else if (o_ptr->sval == SV_LITE_LANTERN)
-				{
-					p_ptr->cur_lite -= 2;
-				}
-
-				else if (o_ptr->sval == SV_LITE_FEANOR)
-				{
-					p_ptr->cur_lite -= 3;
-				}
-			}
-			/* Torches (with fuel) provide some lite */
-			else if ((o_ptr->sval == SV_LITE_TORCH) && (o_ptr->xtra4 > 0))
-			{
-				p_ptr->cur_lite += 1;
-			}
-
-			/* Lanterns (with fuel) provide more lite */
-			else if ((o_ptr->sval == SV_LITE_LANTERN) && (o_ptr->xtra4 > 0))
-			{
-				p_ptr->cur_lite += 2;
-			}
-
-			else if (o_ptr->sval == SV_LITE_FEANOR)
-			{
-				p_ptr->cur_lite += 2;
-			}
-
-			/* Artifact Lites provide permanent, bright, lite */
-			else if (object_is_fixed_artifact(o_ptr))
-			{
-				p_ptr->cur_lite += 3;
-			}
-
-			if (o_ptr->name2 == EGO_LITE_SHINE) p_ptr->cur_lite++;
-		}
-		else
-		{
-			/* Skip empty slots */
-			if (!o_ptr->k_idx) continue;
-
-			/* Extract the flags */
-			object_flags(o_ptr, flgs);
-
-			/* does this item glow? */
-			if (have_flag(flgs, TR_LITE))
-			{
-				if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) p_ptr->cur_lite--;
-				else p_ptr->cur_lite++;
-			}
+			if((o_ptr->sval == SV_LITE_TORCH) && !(o_ptr->xtra4 > 0)) break;
+			if((o_ptr->sval == SV_LITE_LANTERN) && !(o_ptr->xtra4 > 0)) break;
 		}
 
+		/* Extract the flags */
+		object_flags(o_ptr, flgs);
+
+		/* calc the lite_radius */
+		if (have_flag(flgs, TR_LITE_1)) p_ptr->cur_lite += 1;
+		if (have_flag(flgs, TR_LITE_2)) p_ptr->cur_lite += 2;
+		if (have_flag(flgs, TR_LITE_3)) p_ptr->cur_lite += 3;
+		if (have_flag(flgs, TR_LITE_M1)) p_ptr->cur_lite -= 1;
+		if (have_flag(flgs, TR_LITE_M2)) p_ptr->cur_lite -= 2;
+		if (have_flag(flgs, TR_LITE_M3)) p_ptr->cur_lite -= 3;
 	}
 
 	/* max radius is 14 (was 5) without rewriting other code -- */

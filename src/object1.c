@@ -514,6 +514,8 @@ bool screen_object(object_type *o_ptr, u32b mode)
 	cptr            info[128];
 	char o_name[MAX_NLEN];
 	int wid, hgt;
+	int rad;
+	char desc[256];
 
 	int trivial_info = 0;
 
@@ -671,120 +673,36 @@ info[i++] = "それは魔法抵抗力を下げる。";
 	}
 	
 	/* Hack -- describe lite's */
-	if (o_ptr->tval == TV_LITE)
+	
+	if (o_ptr->name2 == EGO_LITE_DARKNESS) info[i++] = _("それは全く光らない。", "It provides no light.");
+	
+	rad = 0;
+	if (have_flag(flgs, TR_LITE_1))  rad += 1;
+	if (have_flag(flgs, TR_LITE_2))  rad += 2;
+	if (have_flag(flgs, TR_LITE_3))  rad += 3;
+	if (have_flag(flgs, TR_LITE_M1)) rad -= 1;
+	if (have_flag(flgs, TR_LITE_M2)) rad -= 2;
+	if (have_flag(flgs, TR_LITE_M3)) rad -= 3;
+	
+	if(o_ptr->name2 == EGO_LITE_SHINE) rad++;
+		
+	if (have_flag(flgs, TR_LITE_FUEL))
 	{
-		if (o_ptr->name2 == EGO_LITE_DARKNESS)
-		{
-#ifdef JP
-			info[i++] = "それは全く光らない。";
-#else
-			info[i++] = "It provides no light.";
-#endif
-
-			if (o_ptr->sval == SV_LITE_FEANOR)
-			{
-#ifdef JP
-				info[i++] = "それは明かりの半径を狭める(半径に-3)。";
-#else
-				info[i++] = "It decreases radius of light source by 3.";
-#endif
-			}
-			else if (o_ptr->sval == SV_LITE_LANTERN)
-			{
-#ifdef JP
-				info[i++] = "それは明かりの半径を狭める(半径に-2)。";
-#else
-				info[i++] = "It decreases radius of light source by 2.";
-#endif
-			}
-			else
-			{
-#ifdef JP
-				info[i++] = "それは明かりの半径を狭める(半径に-1)。";
-#else
-				info[i++] = "It decreases radius of light source by 1.";
-#endif
-			}
-		}
-		else if (object_is_fixed_artifact(o_ptr))
-		{
-#ifdef JP
-info[i++] = "それは永遠なる明かり(半径 3)を授ける。";
-#else
-			info[i++] = "It provides light (radius 3) forever.";
-#endif
-
-		}
-		else if (o_ptr->name2 == EGO_LITE_SHINE)
-		{
-			if (o_ptr->sval == SV_LITE_FEANOR)
-			{
-#ifdef JP
-info[i++] = "それは永遠なる明かり(半径 3)を授ける。";
-#else
-				info[i++] = "It provides light (radius 3) forever.";
-#endif
-
-			}
-			else if (o_ptr->sval == SV_LITE_LANTERN)
-			{
-#ifdef JP
-info[i++] = "それは燃料補給によって明かり(半径 3)を授ける。";
-#else
-				info[i++] = "It provides light (radius 3) when fueled.";
-#endif
-
-			}
-			else
-			{
-#ifdef JP
-info[i++] = "それは燃料補給によって明かり(半径 2)を授ける。";
-#else
-				info[i++] = "It provides light (radius 2) when fueled.";
-#endif
-
-			}
-		}
-		else
-		{
-			if (o_ptr->sval == SV_LITE_FEANOR)
-			{
-#ifdef JP
-info[i++] = "それは永遠なる明かり(半径 2)を授ける。";
-#else
-				info[i++] = "It provides light (radius 2) forever.";
-#endif
-
-			}
-			else if (o_ptr->sval == SV_LITE_LANTERN)
-			{
-#ifdef JP
-info[i++] = "それは燃料補給によって明かり(半径 2)を授ける。";
-#else
-				info[i++] = "It provides light (radius 2) when fueled.";
-#endif
-
-			}
-			else
-			{
-#ifdef JP
-info[i++] = "それは燃料補給によって明かり(半径 1)を授ける。";
-#else
-				info[i++] = "It provides light (radius 1) when fueled.";
-#endif
-
-			}
-		}
-		if (o_ptr->name2 == EGO_LITE_LONG)
-		{
-#ifdef JP
-info[i++] = "それは長いターン明かりを授ける。";
-#else
-			info[i++] = "It provides light for much longer time.";
-#endif
-		}
+		if(rad > 0) sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), rad);	
 	}
+	else
+	{
+		if(rad > 0) sprintf(desc, _("それは永遠なる明かり(半径 %d)を授ける。", "It provides light (radius %d) forever."), rad);	
+		if(rad < 0) sprintf(desc, _("それは明かりの半径を狭める(半径に-%d)。", "It decreases radius of light source by %d."), -rad);
+	}
+	
+	if(rad != 0) info[i++] = desc;
 
+	
+	if (o_ptr->name2 == EGO_LITE_LONG)
+	{
+		info[i++] = _("それは長いターン明かりを授ける。", "It provides light for much longer time.");
+	}
 
 	/* And then describe it fully */
 
@@ -1477,13 +1395,7 @@ info[i++] = "それは宙に浮くことを可能にする。";
 #endif
 
 	}
-	if (have_flag(flgs, TR_LITE))
-	{
-		if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT))
-			info[i++] = _("それは明かりの半径を狭める(半径に-1)。" , "It decreases radius of your light source by 1.");
-		else
-			info[i++] = _("それは永遠の明かりを授ける(半径に+1)。", "It provides permanent light. (radius +1)");
-	}
+		
 	if (have_flag(flgs, TR_SEE_INVIS))
 	{
 		info[i++] = _("それは透明なモンスターを見ることを可能にする。", "It allows you to see invisible monsters.");

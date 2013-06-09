@@ -428,7 +428,7 @@ static void rd_item_old(object_type *o_ptr)
 			switch (o_ptr->xtra2 % 8)
 			{
 			case 0: add_flag(o_ptr->art_flags, TR_LEVITATION);     break;
-			case 1: add_flag(o_ptr->art_flags, TR_LITE);        break;
+			case 1: add_flag(o_ptr->art_flags, TR_LITE_1);        break;
 			case 2: add_flag(o_ptr->art_flags, TR_SEE_INVIS);   break;
 			case 3: add_flag(o_ptr->art_flags, TR_WARNING);     break;
 			case 4: add_flag(o_ptr->art_flags, TR_SLOW_DIGEST); break;
@@ -660,6 +660,54 @@ static void rd_item(object_type *o_ptr)
 		o_ptr->art_name = quark_add(buf);
 	}
 	else o_ptr->art_name = 0;
+	
+	if(h_older_than(2,1,2,3))
+	{
+		u32b flgs[TR_FLAG_SIZE];
+		object_flags(o_ptr, flgs);
+		
+		if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT))
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_M1);
+			remove_flag(o_ptr->art_flags, TR_LITE_1);
+			remove_flag(o_ptr->art_flags, TR_LITE_2);
+			remove_flag(o_ptr->art_flags, TR_LITE_3);
+		}
+		
+		if (o_ptr->name2 == EGO_LITE_DARKNESS)
+		{
+			if (o_ptr->sval == SV_LITE_TORCH)
+			{
+				add_flag(o_ptr->art_flags, TR_LITE_M1);
+			}
+			else if (o_ptr->sval == SV_LITE_LANTERN)
+			{
+				add_flag(o_ptr->art_flags, TR_LITE_M2);
+			}
+			else if (o_ptr->sval == SV_LITE_FEANOR)
+			{
+				add_flag(o_ptr->art_flags, TR_LITE_M3);
+			}
+		}
+		else if (o_ptr->sval == SV_LITE_TORCH)
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_1);
+			add_flag(o_ptr->art_flags, TR_LITE_FUEL);
+		}
+		else if (o_ptr->sval == SV_LITE_LANTERN)
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_2);
+			add_flag(o_ptr->art_flags, TR_LITE_FUEL);	
+		}
+		else if (o_ptr->sval == SV_LITE_FEANOR)
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_2);
+		}
+		else if ((o_ptr->tval == TV_LITE) && object_is_fixed_artifact(o_ptr))
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_3);
+		}
+	}
 }
 
 
