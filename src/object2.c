@@ -2417,6 +2417,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_CHAOTIC);
 					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_BLOWS);
 					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_CALL_DEMON);
 					break;
 				}
 
@@ -2727,6 +2728,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
 					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
 					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
+					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_CALL_DEMON);
 					break;
 				  case EGO_A_MORGUL:
 					if (one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);

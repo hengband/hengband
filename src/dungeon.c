@@ -1519,8 +1519,20 @@ static object_type *choose_cursed_obj_name(u32b flag)
 			choices[number] = i;
 			number++;
 		}
-		else if ((flag == TRC_ADD_L_CURSE) || (flag == TRC_ADD_H_CURSE) || 
-					(flag == TRC_DRAIN_HP) || (flag == TRC_DRAIN_MANA) )
+		else if ((flag == TRC_ADD_L_CURSE) || 
+					(flag == TRC_ADD_H_CURSE) || 
+					(flag == TRC_DRAIN_HP) || 
+					(flag == TRC_DRAIN_MANA) || 
+					(flag == TRC_CALL_ANIMAL) || 
+					(flag == TRC_CALL_DEMON) || 
+					(flag == TRC_CALL_DRAGON) || 
+					(flag == TRC_CALL_UNDEAD) || 
+					(flag == TRC_COWARDICE) || 
+					(flag == TRC_LOW_MELEE) || 
+					(flag == TRC_LOW_AC) || 
+					(flag == TRC_LOW_MAGIC) || 
+					(flag == TRC_FAST_DIGEST) || 
+					(flag == TRC_SLOW_REGEN) )
 		{
 			u32b cf;
 			u32b flgs[4];
@@ -1530,7 +1542,18 @@ static object_type *choose_cursed_obj_name(u32b flag)
 			  case TRC_ADD_L_CURSE	: cf = TR_ADD_L_CURSE; break;
 			  case TRC_ADD_H_CURSE	: cf = TR_ADD_H_CURSE; break;
 			  case TRC_DRAIN_HP		: cf = TR_DRAIN_HP; break;
-			  default 				: cf = TR_DRAIN_MANA; break;
+			  case TRC_DRAIN_MANA	: cf = TR_DRAIN_MANA; break;
+			  case TRC_CALL_ANIMAL	: cf = TR_CALL_ANIMAL; break;
+			  case TRC_CALL_DEMON	: cf = TR_CALL_DEMON; break;
+			  case TRC_CALL_DRAGON	: cf = TR_CALL_DRAGON; break;
+			  case TRC_CALL_UNDEAD	: cf = TR_CALL_UNDEAD; break;
+			  case TRC_COWARDICE	: cf = TR_COWARDICE; break;
+			  case TRC_LOW_MELEE	: cf = TR_LOW_MELEE; break;
+			  case TRC_LOW_AC		: cf = TR_LOW_AC; break;
+			  case TRC_LOW_MAGIC	: cf = TR_LOW_MAGIC; break;
+			  case TRC_FAST_DIGEST	: cf = TR_FAST_DIGEST; break;
+			  case TRC_SLOW_REGEN	: cf = TR_SLOW_REGEN; break;
+			  default 				: break;
 			}
 			if (have_flag(flgs, cf))
 			{
