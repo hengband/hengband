@@ -112,6 +112,7 @@ static void wr_item(object_type *o_ptr)
 	if (o_ptr->art_flags[1]) flags |= SAVE_ITEM_ART_FLAGS1;
 	if (o_ptr->art_flags[2]) flags |= SAVE_ITEM_ART_FLAGS2;
 	if (o_ptr->art_flags[3]) flags |= SAVE_ITEM_ART_FLAGS3;
+	if (o_ptr->art_flags[4]) flags |= SAVE_ITEM_ART_FLAGS4;
 	if (o_ptr->curse_flags) flags |= SAVE_ITEM_CURSE_FLAGS;
 	if (o_ptr->held_m_idx) flags |= SAVE_ITEM_HELD_M_IDX;
 	if (o_ptr->xtra1) flags |= SAVE_ITEM_XTRA1;

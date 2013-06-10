@@ -622,6 +622,8 @@ static void rd_item(object_type *o_ptr)
 	else o_ptr->art_flags[2] = 0;
 	if (flags & SAVE_ITEM_ART_FLAGS3) rd_u32b(&o_ptr->art_flags[3]);
 	else o_ptr->art_flags[3] = 0;
+	if (flags & SAVE_ITEM_ART_FLAGS4) rd_u32b(&o_ptr->art_flags[4]);
+	else o_ptr->art_flags[4] = 0;
 
 	if (flags & SAVE_ITEM_CURSE_FLAGS) rd_u32b(&o_ptr->curse_flags);
 	else o_ptr->curse_flags = 0;
