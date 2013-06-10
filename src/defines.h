@@ -3438,7 +3438,7 @@
 #define TR_SLOW_REGEN          137
 
 #define TR_FLAG_MAX            138
-#define TR_FLAG_SIZE           4
+#define TR_FLAG_SIZE           5
 
 
 #define TRG_INSTA_ART           0x00000001L     /* Item must be an artifact */
