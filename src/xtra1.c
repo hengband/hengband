@@ -3035,8 +3035,11 @@ static void calc_torch(void)
 		/* Need Fuels */
 		if (o_ptr->name2 != EGO_LITE_DARKNESS)
 		{
-			if((o_ptr->sval == SV_LITE_TORCH) && !(o_ptr->xtra4 > 0)) break;
-			if((o_ptr->sval == SV_LITE_LANTERN) && !(o_ptr->xtra4 > 0)) break;
+			if (o_ptr->tval == TV_LITE)
+			{
+				if((o_ptr->sval == SV_LITE_TORCH) && !(o_ptr->xtra4 > 0)) continue;
+				if((o_ptr->sval == SV_LITE_LANTERN) && !(o_ptr->xtra4 > 0)) continue;
+			}
 		}
 
 		/* Extract the flags */
