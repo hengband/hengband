@@ -1025,6 +1025,16 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 	if (have_flag(flgs, TR_DRAIN_EXP)) total -= 12500;
 	if (have_flag(flgs, TR_DRAIN_HP)) total -= 12500;
 	if (have_flag(flgs, TR_DRAIN_MANA)) total -= 12500;
+	if (have_flag(flgs, TR_CALL_ANIMAL)) total -= 12500;
+	if (have_flag(flgs, TR_CALL_DEMON)) total -= 10000;
+	if (have_flag(flgs, TR_CALL_DRAGON)) total -= 10000;
+	if (have_flag(flgs, TR_CALL_UNDEAD)) total -= 10000;
+	if (have_flag(flgs, TR_COWARDICE)) total -= 5000;
+	if (have_flag(flgs, TR_LOW_MELEE)) total -= 5000;
+	if (have_flag(flgs, TR_LOW_AC)) total -= 5000;
+	if (have_flag(flgs, TR_LOW_MAGIC)) total -= 15000;
+	if (have_flag(flgs, TR_FAST_DIGEST)) total -= 10000;
+	if (have_flag(flgs, TR_SLOW_REGEN)) total -= 10000;
 	if (have_flag(flgs, TR_TELEPORT))
 	{
 		if (object_is_cursed(o_ptr))
@@ -7659,8 +7669,18 @@ static void drain_essence(void)
 	if (have_flag(old_flgs, TR_DRAIN_EXP)) dec--;
 	if (have_flag(old_flgs, TR_DRAIN_HP)) dec--;
 	if (have_flag(old_flgs, TR_DRAIN_MANA)) dec--;
+	if (have_flag(old_flgs, TR_CALL_ANIMAL)) dec--;
+	if (have_flag(old_flgs, TR_CALL_DEMON)) dec--;
+	if (have_flag(old_flgs, TR_CALL_DRAGON)) dec--;
+	if (have_flag(old_flgs, TR_CALL_UNDEAD)) dec--;
+	if (have_flag(old_flgs, TR_COWARDICE)) dec--;
+	if (have_flag(old_flgs, TR_LOW_MELEE)) dec--;
+	if (have_flag(old_flgs, TR_LOW_AC)) dec--;
+	if (have_flag(old_flgs, TR_LOW_MAGIC)) dec--;
+	if (have_flag(old_flgs, TR_FAST_DIGEST)) dec--;
+	if (have_flag(old_flgs, TR_SLOW_REGEN)) dec--;
 	if (have_flag(old_flgs, TR_TY_CURSE)) dec--;
-
+	
 	iy = o_ptr->iy;
 	ix = o_ptr->ix;
 	next_o_idx = o_ptr->next_o_idx;
