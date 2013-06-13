@@ -333,7 +333,7 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 static cptr item_activation_dragon_breath(object_type *o_ptr)
 {
 	static char desc[256];
-	u32b flgs[4]; /* for resistance flags */
+	u32b flgs[TR_FLAG_SIZE]; /* for resistance flags */
 	int i, n = 0;
 
 	object_flags(o_ptr, flgs);

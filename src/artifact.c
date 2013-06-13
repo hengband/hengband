@@ -2058,7 +2058,7 @@ const activation_type* find_activation_info(object_type *o_ptr)
 /* Dragon breath activation */
 static bool activate_dragon_breath(object_type *o_ptr)
 {
-	u32b flgs[4]; /* for resistance flags */
+	u32b flgs[TR_FLAG_SIZE]; /* for resistance flags */
 	int type[20];
 	cptr name[20];
 	int i, dir, t, n = 0;

@@ -1535,7 +1535,7 @@ static object_type *choose_cursed_obj_name(u32b flag)
 					(flag == TRC_SLOW_REGEN) )
 		{
 			u32b cf;
-			u32b flgs[4];
+			u32b flgs[TR_FLAG_SIZE];
 			object_flags(o_ptr, flgs);
 			switch (flag)
 			{
