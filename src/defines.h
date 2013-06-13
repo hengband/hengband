@@ -1606,6 +1606,7 @@
 #define EGO_AURA_ELEC           47
 #define EGO_AURA_COLD          128
 #define EGO_BAT                129
+#define EGO_NAZGUL             240
 
 /* Gloves */
 #define EGO_FREE_ACTION         48
@@ -1772,7 +1773,7 @@
 #define EGO_AMU_GREAT           235
 #define EGO_AMU_DETECTION       236
 #define EGO_AMU_NAIVETY         237
-// MAX 239
+// MAX 240
 
 /* Activation effects for random artifacts */
 #define ACT_SUNLIGHT            1

@@ -3047,6 +3047,14 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					o_ptr->to_d -= 6;
 					o_ptr->to_h -= 6;
 					break;
+				  case EGO_NAZGUL:
+					o_ptr->to_d -= 3;
+					o_ptr->to_h -= 3;
+					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_COWARDICE);
+					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_CALL_UNDEAD);
+					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_SLOW_REGEN);
+					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
+					break;
 				}
 
 			}
