@@ -160,6 +160,7 @@ static void wr_item(object_type *o_ptr)
 	if (flags & SAVE_ITEM_ART_FLAGS1) wr_u32b(o_ptr->art_flags[1]);
 	if (flags & SAVE_ITEM_ART_FLAGS2) wr_u32b(o_ptr->art_flags[2]);
 	if (flags & SAVE_ITEM_ART_FLAGS3) wr_u32b(o_ptr->art_flags[3]);
+	if (flags & SAVE_ITEM_ART_FLAGS4) wr_u32b(o_ptr->art_flags[4]);
 
 	if (flags & SAVE_ITEM_CURSE_FLAGS) wr_u32b(o_ptr->curse_flags);
 
