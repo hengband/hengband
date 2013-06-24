@@ -2742,11 +2742,11 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 					break;
 				  case EGO_A_MORGUL:
 					if (one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-					if (one_in_(6)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
+					if (one_in_(9)) add_flag(o_ptr->art_flags, TR_TY_CURSE);
 					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
-					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-					if (one_in_(6)) add_flag(o_ptr->art_flags, TR_NO_MAGIC);
-					if (one_in_(6)) add_flag(o_ptr->art_flags, TR_NO_TELE);
+					if (one_in_(6)) add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+					if (one_in_(9)) add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+					if (one_in_(9)) add_flag(o_ptr->art_flags, TR_NO_TELE);
 					break;
 				  default:
 					break;
