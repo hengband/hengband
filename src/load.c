@@ -663,7 +663,7 @@ static void rd_item(object_type *o_ptr)
 	}
 	else o_ptr->art_name = 0;
 	
-	if(h_older_than(2,1,2,3))
+	if(h_older_than(2,1,2,4))
 	{
 		u32b flgs[TR_FLAG_SIZE];
 		object_flags(o_ptr, flgs);

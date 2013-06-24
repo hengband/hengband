@@ -3968,6 +3968,19 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 				{
 				case EGO_LITE_DARKNESS:
 					o_ptr->xtra4 = 0;
+					
+					if (o_ptr->sval == SV_LITE_TORCH)
+					{
+						add_flag(o_ptr->art_flags, TR_LITE_M1);
+					}
+					else if (o_ptr->sval == SV_LITE_LANTERN)
+					{
+						add_flag(o_ptr->art_flags, TR_LITE_M2);
+					}
+					else if (o_ptr->sval == SV_LITE_FEANOR)
+					{
+						add_flag(o_ptr->art_flags, TR_LITE_M3);
+					}
 					break;
 				}
 			}

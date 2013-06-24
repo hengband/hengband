@@ -3016,7 +3016,7 @@ static void calc_hitpoints(void)
  */
 static void calc_torch(void)
 {
-	int i;
+	int i, rad;
 	object_type *o_ptr;
 	u32b flgs[TR_FLAG_SIZE];
 
@@ -3046,12 +3046,15 @@ static void calc_torch(void)
 		object_flags(o_ptr, flgs);
 
 		/* calc the lite_radius */
-		if (have_flag(flgs, TR_LITE_1)) p_ptr->cur_lite += 1;
-		if (have_flag(flgs, TR_LITE_2)) p_ptr->cur_lite += 2;
-		if (have_flag(flgs, TR_LITE_3)) p_ptr->cur_lite += 3;
-		if (have_flag(flgs, TR_LITE_M1)) p_ptr->cur_lite -= 1;
-		if (have_flag(flgs, TR_LITE_M2)) p_ptr->cur_lite -= 2;
-		if (have_flag(flgs, TR_LITE_M3)) p_ptr->cur_lite -= 3;
+		
+		rad = 0;
+		if (have_flag(flgs, TR_LITE_1) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 1;
+		if (have_flag(flgs, TR_LITE_2) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 2;
+		if (have_flag(flgs, TR_LITE_3) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 3;
+		if (have_flag(flgs, TR_LITE_M1)) rad -= 1;
+		if (have_flag(flgs, TR_LITE_M2)) rad -= 2;
+		if (have_flag(flgs, TR_LITE_M3)) rad -= 3;
+		p_ptr->cur_lite += rad;
 	}
 
 	/* max radius is 14 (was 5) without rewriting other code -- */

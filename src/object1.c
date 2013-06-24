@@ -677,16 +677,16 @@ info[i++] = "それは魔法抵抗力を下げる。";
 	if (o_ptr->name2 == EGO_LITE_DARKNESS) info[i++] = _("それは全く光らない。", "It provides no light.");
 	
 	rad = 0;
-	if (have_flag(flgs, TR_LITE_1))  rad += 1;
-	if (have_flag(flgs, TR_LITE_2))  rad += 2;
-	if (have_flag(flgs, TR_LITE_3))  rad += 3;
+	if (have_flag(flgs, TR_LITE_1) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 1;
+	if (have_flag(flgs, TR_LITE_2) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 2;
+	if (have_flag(flgs, TR_LITE_3) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 3;
 	if (have_flag(flgs, TR_LITE_M1)) rad -= 1;
 	if (have_flag(flgs, TR_LITE_M2)) rad -= 2;
 	if (have_flag(flgs, TR_LITE_M3)) rad -= 3;
 	
 	if(o_ptr->name2 == EGO_LITE_SHINE) rad++;
 		
-	if (have_flag(flgs, TR_LITE_FUEL))
+	if (have_flag(flgs, TR_LITE_FUEL) && o_ptr->name2 != EGO_LITE_DARKNESS)
 	{
 		if(rad > 0) sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), rad);	
 	}
