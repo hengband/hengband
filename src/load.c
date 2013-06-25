@@ -675,39 +675,49 @@ static void rd_item(object_type *o_ptr)
 			remove_flag(o_ptr->art_flags, TR_LITE_2);
 			remove_flag(o_ptr->art_flags, TR_LITE_3);
 		}
-		
-		if (o_ptr->name2 == EGO_LITE_DARKNESS)
+		else if (o_ptr->name2 == EGO_LITE_DARKNESS)
 		{
-			if (o_ptr->sval == SV_LITE_TORCH)
+			if (o_ptr->tval =- TV_LITE)
 			{
+				if (o_ptr->sval == SV_LITE_TORCH)
+				{
+					add_flag(o_ptr->art_flags, TR_LITE_M1);
+				}
+				else if (o_ptr->sval == SV_LITE_LANTERN)
+				{
+					add_flag(o_ptr->art_flags, TR_LITE_M2);
+				}
+				else if (o_ptr->sval == SV_LITE_FEANOR)
+				{
+					add_flag(o_ptr->art_flags, TR_LITE_M3);
+				}
+			}
+			else
+			{
+				/* Paranoia */
 				add_flag(o_ptr->art_flags, TR_LITE_M1);
+			}
+		}
+		else if (o_ptr->tval == TV_LITE)
+		{
+			if (object_is_fixed_artifact(o_ptr))
+			{
+				add_flag(o_ptr->art_flags, TR_LITE_3);
+			}
+			else if (o_ptr->sval == SV_LITE_TORCH)
+			{
+				add_flag(o_ptr->art_flags, TR_LITE_1);
+				add_flag(o_ptr->art_flags, TR_LITE_FUEL);
 			}
 			else if (o_ptr->sval == SV_LITE_LANTERN)
 			{
-				add_flag(o_ptr->art_flags, TR_LITE_M2);
+				add_flag(o_ptr->art_flags, TR_LITE_2);
+				add_flag(o_ptr->art_flags, TR_LITE_FUEL);	
 			}
 			else if (o_ptr->sval == SV_LITE_FEANOR)
 			{
-				add_flag(o_ptr->art_flags, TR_LITE_M3);
+				add_flag(o_ptr->art_flags, TR_LITE_2);
 			}
-		}
-		else if (o_ptr->sval == SV_LITE_TORCH)
-		{
-			add_flag(o_ptr->art_flags, TR_LITE_1);
-			add_flag(o_ptr->art_flags, TR_LITE_FUEL);
-		}
-		else if (o_ptr->sval == SV_LITE_LANTERN)
-		{
-			add_flag(o_ptr->art_flags, TR_LITE_2);
-			add_flag(o_ptr->art_flags, TR_LITE_FUEL);	
-		}
-		else if (o_ptr->sval == SV_LITE_FEANOR)
-		{
-			add_flag(o_ptr->art_flags, TR_LITE_2);
-		}
-		else if ((o_ptr->tval == TV_LITE) && object_is_fixed_artifact(o_ptr))
-		{
-			add_flag(o_ptr->art_flags, TR_LITE_3);
 		}
 	}
 }
