@@ -677,7 +677,7 @@ static void rd_item(object_type *o_ptr)
 		}
 		else if (o_ptr->name2 == EGO_LITE_DARKNESS)
 		{
-			if (o_ptr->tval =- TV_LITE)
+			if (o_ptr->tval == TV_LITE)
 			{
 				if (o_ptr->sval == SV_LITE_TORCH)
 				{
