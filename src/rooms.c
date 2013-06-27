@@ -6295,7 +6295,7 @@ void generate_fill_perm_bold(int y1, int x1, int y2, int x2)
 		for (x = x1; x <= x2; x++)
 		{
 			/* Point to grid */
-			place_extra_perm_bold(y, x);
+			place_inner_perm_bold(y, x);
 		}
 	}
 }
