@@ -94,7 +94,7 @@ E:of Olog-hai
 X:31:10
 W:0:10:0:1500
 C:3:7:10:3
-F:STR |
+F:STR | SHOW_MODS |
 F:XTRA_E_RES
 
 N:8:Á´ÂÑÀ­¤Î
