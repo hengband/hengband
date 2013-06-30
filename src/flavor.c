@@ -640,6 +640,11 @@ static flag_insc_table flag_insc_misc[] =
 	{ "≥Ë", "Rg", TR_REGEN, -1 },
 	{ "…‚", "Lv", TR_LEVITATION, -1 },
 	{ "Ã¿", "Lu", TR_LITE_1, -1 },
+	{ "Ã¿", "Lu", TR_LITE_2, -1 },
+	{ "Ã¿", "Lu", TR_LITE_3, -1 },
+	{ "∞«", "Dl", TR_LITE_M1, -1 },
+	{ "∞«", "Dl", TR_LITE_M2, -1 },
+	{ "∞«", "Dl", TR_LITE_M3, -1 },
 	{ "∑Ÿ", "Wr", TR_WARNING, -1 },
 	{ "«‹", "Xm", TR_XTRA_MIGHT, -1 },
 	{ "ºÕ", "Xs", TR_XTRA_SHOTS, -1 },
@@ -801,6 +806,11 @@ static flag_insc_table flag_insc_misc[] =
 	{ "Rg", TR_REGEN, -1 },
 	{ "Lv", TR_LEVITATION, -1 },
 	{ "Lu", TR_LITE_1, -1 },
+	{ "Lu", TR_LITE_2, -1 },
+	{ "Lu", TR_LITE_3, -1 },
+	{ "Dl", TR_LITE_M1, -1 },
+	{ "Dl", TR_LITE_M2, -1 },
+	{ "Dl", TR_LITE_M3, -1 },
 	{ "Wr", TR_WARNING, -1 },
 	{ "Xm", TR_XTRA_MIGHT, -1 },
 	{ "Xs", TR_XTRA_SHOTS, -1 },
@@ -953,7 +963,6 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
-
 	/* Remove obvious flags */
 	if (!all)
 	{
@@ -981,6 +990,19 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 		}
 	}
 
+	/* Remove lite flags when this is a dark lite object */
+	if (have_dark_flag(flgs))
+	{
+		if (have_flag(flgs, TR_LITE_1)) remove_flag(flgs, TR_LITE_1);
+		if (have_flag(flgs, TR_LITE_2)) remove_flag(flgs, TR_LITE_2);
+		if (have_flag(flgs, TR_LITE_3)) remove_flag(flgs, TR_LITE_3);
+	}
+	else if (have_lite_flag(flgs))
+	{
+		add_flag(flgs, TR_LITE_1);
+		if (have_flag(flgs, TR_LITE_2)) remove_flag(flgs, TR_LITE_2);
+		if (have_flag(flgs, TR_LITE_3)) remove_flag(flgs, TR_LITE_3);
+	}
 
 	/* Plusses */
 	if (have_flag_of(flag_insc_plus, flgs))
