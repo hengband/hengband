@@ -3035,6 +3035,19 @@ static void display_flag_aux(int row, int col, cptr header,
 				header_color = TERM_WHITE;
 			}
 		}
+		else if (flag1 == TR_LITE_1)
+		{
+			if (have_flag(flgs, TR_LITE_M1) || have_flag(flgs, TR_LITE_M2) || have_flag(flgs, TR_LITE_M3))
+			{
+				c_put_str(TERM_L_DARK, "+", row, col);
+				header_color = TERM_WHITE;
+			}
+			else if (have_flag(flgs, TR_LITE_1) || have_flag(flgs, TR_LITE_2) || have_flag(flgs, TR_LITE_3))
+			{
+				c_put_str(TERM_WHITE, "+", row, col);
+				header_color = TERM_WHITE;
+			}
+		}
 		else
 		{
 			if (have_flag(flgs, flag1))
