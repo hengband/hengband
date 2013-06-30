@@ -1231,7 +1231,7 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 	if (have_flag(flgs, TR_LITE_M3)) rad -= 3;
 	
 	if(o_ptr->name2 == EGO_LITE_SHINE) rad++;
-		
+
 	if (have_flag(flgs, TR_LITE_FUEL))
 	{
 		if(rad > 0) sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), rad);	
@@ -1241,8 +1241,8 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 		if(rad > 0) sprintf(desc, _("永久光源(半径 %d)", "Permanent Light(radius %d)"), rad);	
 		if(rad < 0) sprintf(desc, _("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), -rad);
 	}
-	
-	if(rad != 0) *misc_list++ = desc;	
+
+	if(rad != 0) *misc_list++ = quark_str(quark_add(desc));
 
 	/*
 	 * Handle cursed objects here to avoid redundancies such as noting
