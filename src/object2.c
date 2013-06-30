@@ -7223,6 +7223,8 @@ static essence_type essence_info[] =
 	{TR_WARNING, "·Ù¹ð", 3, TR_WARNING, 20},
 	{TR_LEVITATION, "ÉâÍ·", 3, TR_LEVITATION, 20},
 	{TR_LITE_1, "±Êµ×¸÷¸»", 3, TR_LITE_1, 15},
+	{TR_LITE_2, "", 0, -2, 0},
+	{TR_LITE_3, "", 0, -2, 0},
 	{TR_SEE_INVIS, "²Ä»ëÆ©ÌÀ", 3, TR_SEE_INVIS, 20},
 	{TR_TELEPATHY, "¥Æ¥ì¥Ñ¥·¡¼", 6, TR_TELEPATHY, 15},
 	{TR_SLOW_DIGEST, "ÃÙ¾Ã²½", 3, TR_SLOW_DIGEST, 15},
@@ -7332,6 +7334,8 @@ static essence_type essence_info[] =
 	{TR_WARNING, "warning", 3, TR_WARNING, 20},
 	{TR_LEVITATION, "levitation", 3, TR_LEVITATION, 20},
 	{TR_LITE_1, "permanent light", 3, TR_LITE_1, 15},
+	{TR_LITE_2, "", 0, -2, 0},
+	{TR_LITE_3, "", 0, -2, 0},
 	{TR_SEE_INVIS, "see invisible", 3, TR_SEE_INVIS, 20},
 	{TR_TELEPATHY, "telepathy", 6, TR_TELEPATHY, 15},
 	{TR_SLOW_DIGEST, "slow digestion", 3, TR_SLOW_DIGEST, 15},
@@ -7775,6 +7779,14 @@ static void drain_essence(void)
 			{
 				drain_value[TR_BRAND_COLD] += 10;
 				drain_value[TR_RES_COLD] += 10;
+			}
+			else if (es_ptr->add == TR_LITE_2)
+			{
+				drain_value[TR_LITE_1] += 20;
+			}
+			else if (es_ptr->add == TR_LITE_3)
+			{
+				drain_value[TR_LITE_1] += 30;
 			}
 		}
 	}
