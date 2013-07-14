@@ -181,7 +181,7 @@ static void roff_aux(int r_idx, int mode)
 
 	for(n = 0; n < 6; n++)
 	{
-		if(r_ptr->reinforce_id) reinforce = TRUE;
+		if(r_ptr->reinforce_id[n] > 0) reinforce = TRUE;
 	}
 
 	/* cheat_know or research_mon() */
