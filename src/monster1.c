@@ -146,6 +146,7 @@ static void roff_aux(int r_idx, int mode)
 
 	bool            breath = FALSE;
 	bool            magic = FALSE;
+	bool            reinforce = FALSE;
 
 	u32b		flags1;
 	u32b		flags2;
@@ -177,6 +178,11 @@ static void roff_aux(int r_idx, int mode)
 	flags6 = (r_ptr->flags6 & r_ptr->r_flags6);
 	flags7 = (r_ptr->flags7 & r_ptr->flags7);
 	flagsr = (r_ptr->flagsr & r_ptr->r_flagsr);
+
+	for(n = 0; n < 6; n++)
+	{
+		if(r_ptr->reinforce_id) reinforce = TRUE;
+	}
 
 	/* cheat_know or research_mon() */
 	if (cheat_know || (mode & 0x01))
@@ -879,15 +885,72 @@ else                            hooked_roff("モンスター");
 	}
 
 	/* Describe escorts */
-	if ((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS))
+	if ((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS) || reinforce)
 	{
 #ifdef JP
 		hooked_roff(format("%^sは通常護衛を伴って現れる。",
 #else
 		hooked_roff(format("%^s usually appears with escorts.  ",
 #endif
-
 			    wd_he[msex]));
+
+		if(reinforce)
+		{
+#ifdef JP
+			hooked_roff("護衛の構成は");
+			if((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS))
+			{
+				hooked_roff("少なくとも");
+			}
+#else
+			hooked_roff("These escorts");
+			if((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS))
+			{
+				hooked_roff(" at the least");
+			}
+			hooked_roff(" contain ");
+#endif			
+			for(n = 0; n < 6; n++)
+			{
+#ifdef JP
+				if(r_ptr->reinforce_id[n] && r_ptr->reinforce_dd[n] && r_ptr->reinforce_ds[n])
+				{
+					monster_race *rf_ptr = &r_info[r_ptr->reinforce_id[n]];
+					if(rf_ptr->flags1 & RF1_UNIQUE)
+					{
+						hooked_roff(format("、%s", r_name + rf_ptr->name));
+					}
+					else
+					{
+						hooked_roff(format("、 %dd%d 体の%s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n],
+							r_name + rf_ptr->name));
+					}
+				}
+#else
+				if(r_ptr->reinforce_id[n] && r_ptr->reinforce_dd[n] && r_ptr->reinforce_ds[n])
+				{
+					monster_race *rf_ptr = &r_info[r_ptr->reinforce_id[n]];
+					if(rf_ptr->flags1 & RF1_UNIQUE)
+					{
+						hooked_roff(format(", %s", r_name + rf_ptr->name));
+					}
+					else
+					{
+						bool plural = (r_ptr->reinforce_dd[n] * r_ptr->reinforce_ds[n] > 1);
+						char name[80];
+						strcpy(name, r_name + rf_ptr->name);
+						if(plural) plural_aux(name);
+						hooked_roff(format(",%dd%d %s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n], name));
+					}
+				}
+#endif
+			}
+#ifdef JP
+			hooked_roff("で成り立っている。");
+#else
+			hooked_roff(".");
+#endif
+		}
 	}
 
 	/* Describe friends */
