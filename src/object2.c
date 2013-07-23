@@ -4337,6 +4337,14 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		o_ptr->weight = a_ptr->weight;
 		o_ptr->xtra2 = a_ptr->act_idx;
 
+		if (o_ptr->name1 == ART_MILIM)
+		{
+		    if(p_ptr->pseikaku == SEIKAKU_SEXY)
+		    {
+			o_ptr->pval = 3;
+		    }
+		}
+
 		/* Hack -- extract the "broken" flag */
 		if (!a_ptr->cost) o_ptr->ident |= (IDENT_BROKEN);
 
