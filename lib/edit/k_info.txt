@@ -1,32 +1,32 @@
 # File: k_info.txt
-#JZ# Zangband ÆüËÜ¸ìÌõ: ÈÄÁÒ
-#JZ# ¡Ö#J0#¡×¤Ç»Ï¤Ş¤ë¥³¥á¥ó¥È¤ÏÆüËÜ¸ìÈÄ Angband ¤Î¤·¤È¤·¤ó¤µ¤ó¤Ë¤è¤ë
-#JZ# ¤â¤Î¤Ç¡¢¡Ö#JZ#¡×¤Ç»Ï¤Ş¤ë¥³¥á¥ó¥È¤ÏÆüËÜ¸ìÈÇ Zangband ¤Ç¿·¤¿¤Ë
-#JZ# ²Ã¤ï¤Ã¤¿¹àÌÜ¤Ç¤¹¡£ÆüËÜ¸ì¥¢¥ó¥°¥Ğ¥ó¥ÉÆ±ÍÍ¡¢»ä¡ÊÈÄÁÒ¡Ë°Ê³°¤ÎÊı¤Î
-#JZ# ¥³¥á¥ó¥È¤Ë¤Ï¤½¤ÎÊı¤ÎÌ¾Á°¤òµ­ºÜ¤·¤Æ¤¤¤Ş¤¹¡£
+#JZ# Zangband “ú–{Œê–ó: ”Â‘q
+#JZ# u#J0#v‚Ån‚Ü‚éƒRƒƒ“ƒg‚Í“ú–{Œê”Â Angband ‚Ì‚µ‚Æ‚µ‚ñ‚³‚ñ‚É‚æ‚é
+#JZ# ‚à‚Ì‚ÅAu#JZ#v‚Ån‚Ü‚éƒRƒƒ“ƒg‚Í“ú–{Œê”Å Zangband ‚ÅV‚½‚É
+#JZ# ‰Á‚í‚Á‚½€–Ú‚Å‚·B“ú–{ŒêƒAƒ“ƒOƒoƒ“ƒh“¯—lA„i”Â‘qjˆÈŠO‚Ì•û‚Ì
+#JZ# ƒRƒƒ“ƒg‚É‚Í‚»‚Ì•û‚Ì–¼‘O‚ğ‹LÚ‚µ‚Ä‚¢‚Ü‚·B
 #JZ#
-#JZ# ¡ô¡ô¡ô °Ê²¼¤ÏÆüËÜ¸ìÈÇ Angband ¤Ë¤¢¤ë¥³¥á¥ó¥È¤Ç¤¹ ¡ô¡ô¡ô
-#J0# ÆüËÜ¸ìÌõ¤ÈÆüËÜ¸ìÈÇÀ½ºî : ¤·¤È¤·¤ó
+#JZ# ””” ˆÈ‰º‚Í“ú–{Œê”Å Angband ‚É‚ ‚éƒRƒƒ“ƒg‚Å‚· ”””
+#J0# “ú–{Œê–ó‚Æ“ú–{Œê”Å»ì : ‚µ‚Æ‚µ‚ñ
 #J0#
-#J0# ÆüËÜ¸ìÈÇ¤Ç¤Ï¥ª¥ê¥¸¥Ê¥ë¤ÈÈæ³Ó¤·¤ÆÀßÄê¹àÌÜ¤¬°ì¤ÄÁı¤¨¤Æ¤¤¤Ş¤¹¡£
-#J0# "E:" °Ê²¼¤Î¹Ô¤¬¤½¤¦¤Ç¡¢¤³¤³¤Ë¤Ï±Ñ¸ìÌ¾¤¬µ­½Ò¤µ¤ì¤Ş¤¹¡£
+#J0# “ú–{Œê”Å‚Å‚ÍƒIƒŠƒWƒiƒ‹‚Æ”äŠr‚µ‚Äİ’è€–Ú‚ªˆê‚Â‘‚¦‚Ä‚¢‚Ü‚·B
+#J0# "E:" ˆÈ‰º‚Ìs‚ª‚»‚¤‚ÅA‚±‚±‚É‚Í‰pŒê–¼‚ª‹Lq‚³‚ê‚Ü‚·B
 #J0#
-#J0# ¥¢¥¤¥Æ¥àÌ¾¤ÎËİÌõ¤Ë¤¢¤¿¤Ã¤Æ¤ÏÂ¿¤¯¤ÎÊı¤Ë¤¿¤¤¤Ø¤ó¤ªÀ¤ÏÃ¤Ë¤Ê¤ê¤Ş¤·¤¿¡£
+#J0# ƒAƒCƒeƒ€–¼‚Ì–|–ó‚É‚ ‚½‚Á‚Ä‚Í‘½‚­‚Ì•û‚É‚½‚¢‚Ö‚ñ‚¨¢˜b‚É‚È‚è‚Ü‚µ‚½B
 #J0#
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0# Éğ´ï¤äËÉ¶ñ¤Ë¤â¿§¡¹¤ÈÆÉ¤ßÊı¤¬¤¢¤ë¤è¤¦¤Ç¤¹¤¬¡¢´ğËÜÅª¤Ë "name.doc" ¤Î
-#J0# ¼¹É®¼Ô¤Ç¤¢¤ë VOLKO ¤µ¤ó¤ÎÆÉ¤ßÊı¤Ë½¾¤¤¤Ş¤·¤¿¡£
+#J0# •Ší‚â–h‹ï‚É‚àFX‚Æ“Ç‚İ•û‚ª‚ ‚é‚æ‚¤‚Å‚·‚ªAŠî–{“I‚É "name.doc" ‚Ì
+#J0# ·•MÒ‚Å‚ ‚é VOLKO ‚³‚ñ‚Ì“Ç‚İ•û‚É]‚¢‚Ü‚µ‚½B
 #J0#
-#J0# ´ğËÜÅª¤Ë restore ¤È¤¤¤¦Ã±¸ì¤Ë¤Ï¡ÖÉü³è¡×¤È¤¤¤¦Ìõ¤ò¤¢¤Æ¤Æ¡¢¤½¤ì°Ê³°¤Î²óÉü·Ï
-#J0# ¤ÎÃ±¸ì¤Ë¤Ï¡Ö²óÉü¡×¤È¤¤¤¦Ìõ¤ò¤¢¤Æ¤Æ¤¤¤Ş¤¹¡£restore ¤â¡Ö²óÉü¡×¤Ç¤âÎÉ¤¤¤Î¤Ç¤¹
-#J0# ¤¬¡¢restore ¤ò¤¹¤ë¥¢¥¤¥Æ¥à¤Ï¡Ö¸µ¤Î¾õÂÖ¤ËÌá¤¹¡×¤È¤¤¤¦¸ú²Ì¤¬¤¢¤ë¤Î¤Ç¡¢¤½¤ì
-#J0# ¤ò¼¨º¶¤¹¤ë¸ÀÍÕ¤È¤·¤Æ¡ÖÉü³è¡×¤òÁª¤Ó¤Ş¤·¤¿¡£
+#J0# Šî–{“I‚É restore ‚Æ‚¢‚¤’PŒê‚É‚Íu•œŠˆv‚Æ‚¢‚¤–ó‚ğ‚ ‚Ä‚ÄA‚»‚êˆÈŠO‚Ì‰ñ•œŒn
+#J0# ‚Ì’PŒê‚É‚Íu‰ñ•œv‚Æ‚¢‚¤–ó‚ğ‚ ‚Ä‚Ä‚¢‚Ü‚·Brestore ‚àu‰ñ•œv‚Å‚à—Ç‚¢‚Ì‚Å‚·
+#J0# ‚ªArestore ‚ğ‚·‚éƒAƒCƒeƒ€‚ÍuŒ³‚Ìó‘Ô‚É–ß‚·v‚Æ‚¢‚¤Œø‰Ê‚ª‚ ‚é‚Ì‚ÅA‚»‚ê
+#J0# ‚ğ¦´‚·‚éŒ¾—t‚Æ‚µ‚Äu•œŠˆv‚ğ‘I‚Ñ‚Ü‚µ‚½B
 #J0#
-#J0# identify ¤È¤¤¤¦Ã±¸ì¤ÏÂ¾¤ÎÆüËÜ¸ìÈÇ¥í¡¼¥°¥é¥¤¥¯¤Ç¤Ï¡Ö¼±ÊÌ¡×¤È¤¤¤¦Ìõ¤¬»È
-#J0# ¤ï¤ì¤Æ¤¤¤ë¾ì¹ç¤¬Â¿¤¤¤Î¤Ç¤¹¤¬¡¢identify ¤Î¸ú²Ì¤Ï¥¢¥¤¥Æ¥à¤ÎÀµ³Î¤ÊÌ¾¾Î¤ä¸ú
-#J0# ²Ì¤òÌÀ¤é¤«¤Ë¤¹¤ë¤â¤Î¤Ç¤¹¤Î¤Ç¡¢¡Ö´ÕÄê¡×¤ÎÊı¤¬Ê·°Ïµ¤¤¬¶á¤¤¤È¹Í¤¨¤Æ¤½¤¦¤·
-#J0# ¤Ş¤·¤¿¡£Â¾¤Î¥í¡¼¥°¥é¥¤¥¯¤È°Û¤Ê¤Ã¤Æ¤·¤Ş¤Ã¤Æ¤¤¤ë¤³¤È¤Ïµ¤¤Ë¤Ê¤ê¤Ş¤¹¤¬¡£
+#J0# identify ‚Æ‚¢‚¤’PŒê‚Í‘¼‚Ì“ú–{Œê”Åƒ[ƒOƒ‰ƒCƒN‚Å‚Íu¯•Êv‚Æ‚¢‚¤–ó‚ªg
+#J0# ‚í‚ê‚Ä‚¢‚éê‡‚ª‘½‚¢‚Ì‚Å‚·‚ªAidentify ‚ÌŒø‰Ê‚ÍƒAƒCƒeƒ€‚Ì³Šm‚È–¼Ì‚âŒø
+#J0# ‰Ê‚ğ–¾‚ç‚©‚É‚·‚é‚à‚Ì‚Å‚·‚Ì‚ÅAuŠÓ’èv‚Ì•û‚ª•µˆÍ‹C‚ª‹ß‚¢‚Æl‚¦‚Ä‚»‚¤‚µ
+#J0# ‚Ü‚µ‚½B‘¼‚Ìƒ[ƒOƒ‰ƒCƒN‚ÆˆÙ‚È‚Á‚Ä‚µ‚Ü‚Á‚Ä‚¢‚é‚±‚Æ‚Í‹C‚É‚È‚è‚Ü‚·‚ªB
 
 
 # This file is used to initialize the "lib/raw/k_info.raw" file, which is
@@ -100,86 +100,86 @@ V:2.8.1
 
 ##### Something special #####
 
-N:0:²¿¤«
+N:0:‰½‚©
 E:something
 G:&:w
 
 
 ##### Mushrooms #####
 
-N:1:ÌÕÌÜ:ÀÄ¤¤
+N:1:–Ó–Ú:Â‚¢
 E:Blindness:Blue
 G:,:b
 I:80:1:500
 W:5:0:1:0
 A:5/1
 D:$It blinds you when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤ÈÌÕÌÜ¤Ë¤Ê¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ–Ó–Ú‚É‚È‚éB
 
-N:2:¶²Éİ:¹õ¤¤
+N:2:‹°•|:•‚¢
 E:Paranoia:Black
 G:,:D
 I:80:2:500
 W:5:0:1:0
 A:5/1
 D:$It scares you when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤È¶²Éİ¤¹¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ‹°•|‚·‚éB
 
-N:3:º®Íğ:¹õÈÃ¤Î
+N:3:¬—:•”Á‚Ì
 E:Confusion:Black Spotted
 G:,:D
 I:80:3:500
 W:5:0:1:0
 A:5/1
 D:$It confuses you when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤Èº®Íğ¤¹¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ¬—‚·‚éB
 
-N:4:¸¸³Ğ:Ãã¿§¤Î
+N:4:Œ¶Šo:’ƒF‚Ì
 E:Hallucination:Brown
 G:,:u
 I:80:4:500
 W:10:0:1:0
 A:10/1
 D:$It makes you hallucinate when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤È¸¸³Ğ¤Ë¿¯¤µ¤ì¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚ÆŒ¶Šo‚ÉN‚³‚ê‚éB
 
-N:5:ÆÇ¾Ã¤·:·²ÀÄ¤Î
+N:5:“ÅÁ‚µ:ŒQÂ‚Ì
 E:Cure Poison:Dark Blue
 G:,:b
 I:80:12:500
 W:10:0:1:60
 A:10/1
 D:$It cures poison when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤ÈÆÇ¤òÌş¤¹¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ“Å‚ğ–ü‚·B
 
-N:6:ÌÕÌÜ¼£Ìş:¿¼ÎĞ¤Î
+N:6:–Ó–Ú¡–ü:[—Î‚Ì
 E:Cure Blindness:Dark Green
 G:,:g
 I:80:13:500
 W:10:0:1:50
 A:10/1
 D:$It cures blindness when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤ÈÌÕÌÜ¤òÌş¤¹¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ–Ó–Ú‚ğ–ü‚·B
 
-N:7:¶²Éİ½üµî:¹È¿§¤Î
+N:7:‹°•|œ‹:gF‚Ì
 E:Cure Paranoia:Dark Red
 G:,:r
 I:80:14:500
 W:10:0:1:25
 A:10/1
 D:$It removes fear when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤È¶²Éİ¤ò¼è¤ê½ü¤¯¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ‹°•|‚ğæ‚èœ‚­B
 
-N:8:º®ÍğÃ¦½Ğ:²«¿§¤¤
+N:8:¬—’Eo:‰©F‚¢
 E:Cure Confusion:Yellow
 G:,:y
 I:80:15:500
 W:10:0:1:50
 A:10/1
 D:$It cures confusion when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤Èº®Íğ¤«¤éÎ©¤ÁÄ¾¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ¬—‚©‚ç—§‚¿’¼‚éB
 
-N:9:ÀÈ¼å:Âİ¤à¤·¤¿
+N:9:Æã:‘Û‚Ş‚µ‚½
 E:Weakness:Furry
 G:,:W
 I:80:6:500
@@ -187,9 +187,9 @@ W:10:0:1:0
 A:10/1
 P:0:5d5:0:0:0
 D:$You take 6d6 damage and it decreases your strength when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤È6d6¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¡¢ÏÓÎÏ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ6d6‚Ìƒ_ƒ[ƒW‚ğó‚¯A˜r—Í‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:10:ÉÂ¼å:ÎĞ¤Î
+N:10:•aã:—Î‚Ì
 E:Unhealth:Green
 G:,:g
 I:80:10:500
@@ -197,45 +197,45 @@ W:15:0:1:50
 A:15/1
 P:0:10d10:0:0:0
 D:$You take 10d10 damage and it decreases your constitution when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤È10d10¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¡¢ÂÑµ×ÎÏ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ10d10‚Ìƒ_ƒ[ƒW‚ğó‚¯A‘Ï‹v—Í‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:11:ÂÑµ×ÎÏÉü³è:¥°¥ì¡¼¤Î
+N:11:‘Ï‹v—Í•œŠˆ:ƒOƒŒ[‚Ì
 E:Restore Constitution:Grey
 G:,:s
 I:80:18:500
 W:20:0:1:350
 A:20/1
 D:$It restores your constitution when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤ÈÂÑµ×ÎÏ¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ‘Ï‹v—Í‚ª‰ñ•œ‚·‚éB
 
-N:12:Á´Éü³è:¶õ¿§¤Î
+N:12:‘S•œŠˆ:‹óF‚Ì
 E:Restoring:Light Blue
 G:,:B
 I:80:19:500
 W:20:0:1:1000
 A:20/8:30/4:40/1
 D:$It restores all your stats when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤ÈÁ´¥¹¥Æ¡¼¥¿¥¹¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ‘SƒXƒe[ƒ^ƒX‚ª‰ñ•œ‚·‚éB
 
-N:13:ÌµÃÎ:²«ÎĞ¤Î
+N:13:–³’m:‰©—Î‚Ì
 E:Stupidity:Light Green
 G:,:G
 I:80:8:500
 W:15:0:1:0
 A:15/1
 D:$You take 8d8 damage and it decreases your intelligence when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤È8d8¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¡¢ÃÎÇ½¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ8d8‚Ìƒ_ƒ[ƒW‚ğó‚¯A’m”\‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:14:¶òÆß:¥¹¥ß¥ì¿§¤Î
+N:14:‹ğ“İ:ƒXƒ~ƒŒF‚Ì
 E:Naivety:Violet
 G:,:v
 I:80:9:500
 W:15:0:1:0
 A:15/1
 D:$You take 8d8 damage and it decreases your wisdom when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤È8d8¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¡¢¸­¤µ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ8d8‚Ìƒ_ƒ[ƒW‚ğó‚¯AŒ«‚³‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:15:ÆÇ:ÀÖ¤¤
+N:15:“Å:Ô‚¢
 E:Poison:Red
 G:,:r
 I:80:0:500
@@ -243,9 +243,9 @@ W:5:0:1:0
 A:5/1:5/1
 P:0:4d4:0:0:0
 D:$It poisons you when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤ÈÆÇ¤ËËÁ¤µ¤ì¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ“Å‚É–`‚³‚ê‚éB
 
-N:16:ÉÂµ¤:¤Í¤Ğ¤Í¤Ğ¤·¤¿
+N:16:•a‹C:‚Ë‚Î‚Ë‚Î‚µ‚½
 E:Sickness:Slimy
 G:,:s
 I:80:7:500
@@ -253,27 +253,27 @@ W:10:0:1:0
 A:10/1
 P:0:4d4:0:0:0
 D:$You take 6d6 damage and it decreases your constitution when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤È6d6¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¡¢ÂÑµ×ÎÏ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ6d6‚Ìƒ_ƒ[ƒW‚ğó‚¯A‘Ï‹v—Í‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:17:Ëãáã:²«³ì¿§¤Î
+N:17:–ƒáƒ:‰©ŠŒF‚Ì
 E:Paralysis:Tan
 G:,:U
 I:80:5:500
 W:20:0:1:0
 A:20/1
 D:$It paralyzes you when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤ÈËãáã¤¹¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ–ƒáƒ‚·‚éB
 
-N:18:ÏÓÎÏÉü³è:Çò¤¤
+N:18:˜r—Í•œŠˆ:”’‚¢
 E:Restore Strength:White
 G:,:w
 I:80:17:500
 W:20:0:1:350
 A:20/1
 D:$It restores your strength when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤ÈÏÓÎÏ¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ˜r—Í‚ª‰ñ•œ‚·‚éB
 
-N:19:¼ÀÉÂ:ÇòÈÃ¤Î
+N:19:¾•a:”’”Á‚Ì
 E:Disease:White Spotted
 G:,:w
 I:80:11:500
@@ -281,20 +281,20 @@ W:20:0:1:50
 A:20/1
 P:0:10d10:0:0:0
 D:$You take 10d10 damage and it decreases your strength when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤È10d10¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¡¢ÏÓÎÏ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ10d10‚Ìƒ_ƒ[ƒW‚ğó‚¯A˜r—Í‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:20:½Å½ı¤Î¼£Ìş:¤·¤ï¤·¤ï¤Î
+N:20:d‚Ì¡–ü:‚µ‚í‚µ‚í‚Ì
 E:Cure Serious Wounds:Wrinkled
 G:,:u
 I:80:16:500
 W:15:0:2:75
 A:15/1
 D:$It heals you 4d8 when you eat it.
-D:¤½¤ì¤Ï¿©¤Ù¤ë¤ÈÂÎÎÏ¤¬4d8²óÉü¤¹¤ë¡£
+D:‚»‚ê‚ÍH‚×‚é‚Æ‘Ì—Í‚ª4d8‰ñ•œ‚·‚éB
 
 ##### Normal Food #####
 
-N:21:¿©ÎÁ
+N:21:H—¿
 E:& Ration~ of Food
 G:,:U
 I:80:35:5000
@@ -302,38 +302,38 @@ W:0:0:10:3
 A:0/1:5/1:10/1:20/1
 D:$This nutritious but fairly bland food is 
 D:$familiar to anyone contemplating long journeys.
-D:±ÉÍÜ¤Ï¤¢¤ë¤¬Ì£µ¤¤Ê¤¤¤³¤Î¿©ÎÁ¤ÏÄ¹Î¹¤ò¹Í¤¨¤ëËÁ¸±¼Ô¤ËÎÉ¤¯¹ç¤¦¡£
+D:‰h—{‚Í‚ ‚é‚ª–¡‹C‚È‚¢‚±‚ÌH—¿‚Í’·—·‚ğl‚¦‚é–`Œ¯Ò‚É—Ç‚­‡‚¤B
 
-N:22:¥Ó¥¹¥±¥Ã¥È
+N:22:ƒrƒXƒPƒbƒg
 E:& Hard Biscuit~
 G:,:U
 I:80:32:500
 W:0:0:2:1
 D:$Twice-cooked for good keeping qualities, this lump of bread is as hard as a 
 D:$rock and about as tasty.
-D:Æü»ı¤Á¤òÎÉ¤¯¤¹¤ë°Ù¤ËÆóÅÙ¾Æ¤­¤·¤¿´¥¥Ñ¥ó¤Î°ì¼ï¤À¡£
-D:´ä¤Î¤è¤¦¤Ë¸Ç¤¯¡¢Ì£¤â¤À¤¤¤¿¤¤¤½¤ÎÄøÅÙ¡£
+D:“ú‚¿‚ğ—Ç‚­‚·‚éˆ×‚É“ñ“xÄ‚«‚µ‚½Š£ƒpƒ“‚Ìˆêí‚¾B
+D:Šâ‚Ì‚æ‚¤‚ÉŒÅ‚­A–¡‚à‚¾‚¢‚½‚¢‚»‚Ì’ö“xB
 
-#"¼¯Æù"¤Ï¸íÌõ
-N:23:´¥¤·Æù
+#"­“÷"‚ÍŒë–ó
+N:23:Š£‚µ“÷
 E:& Strip~ of Venison
 G:,:u
 I:80:33:1500
 W:0:0:2:2
 D:$A strip of jerked beef that seems never to spoil.
-D:ÎÉ¤¯´¥Áç¤µ¤»¤¿Æù¡£·è¤·¤ÆÉå¤ë»ö¤¬Ìµ¤µ¤½¤¦¤À¡£
+D:—Ç‚­Š£‘‡‚³‚¹‚½“÷BŒˆ‚µ‚Ä•…‚é–‚ª–³‚³‚»‚¤‚¾B
 
-N:24:¥¹¥é¥¤¥à¥â¥ë¥É
+N:24:ƒXƒ‰ƒCƒ€ƒ‚ƒ‹ƒh
 E:& Slime Mold~
 G:,:g
 I:80:36:3000
 W:1:0:5:2
 A:1/1
 D:$An utterly hideous fungal growth.  It is strangely appealing...
-D:¤¾¤Ã¤È¤¹¤ë¤è¤¦¤Ê¶İÎà¤Î¸Ç¤Ş¤ê¤À¡£¤Ê¤¼¤«¿©Íß¤ò»É·ã¤¹¤ë¡Ä¡£
+D:‚¼‚Á‚Æ‚·‚é‚æ‚¤‚È‹Û—Ş‚ÌŒÅ‚Ü‚è‚¾B‚È‚º‚©H—~‚ğhŒƒ‚·‚écB
 
 #waybread now fully satisfies the player, instead of increasing the food count.
-N:25:¥¨¥ë¥Õ¤Î¹ÔÎÈ
+N:25:ƒGƒ‹ƒt‚Ìs—Æ
 E:& Piece~ of Elvish Waybread
 G:,:B
 I:80:37:7500
@@ -341,30 +341,30 @@ W:5:0:3:30
 A:5/1:10/1
 D:$Small golden-brown wafers wrapped in silven leaves.  Made with elvish art, 
 D:$it sustains life where nothing else can.
-D:¶ä¿§¤ÎÍÕ¤ËÊñ¤Ş¤ì¤¿¾®¤µ¤Ê»³¿á¿§¤ÎÇö¾Æ¤­²Û»Ò¤ÎÂ«¤À¡£¥¨¥ë¥Õ¤Îµ»¤Çºî¤é¤ì¡¢
-D:¤½¤Î¼¢ÍÜ¤ÏÂ¾¤Ë¿©¤ÙÊª¤¬²¿¤âÌµ¤¯¤È¤â¿ô½µ´Ö¤â¤Î´ÖÀ¸Ì¿¤ò°İ»ı¤¹¤ëÄø¤Ç¤¢¤ë¡£
+D:‹âF‚Ì—t‚É•ï‚Ü‚ê‚½¬‚³‚ÈRF‚Ì”–Ä‚«‰Ùq‚Ì‘©‚¾BƒGƒ‹ƒt‚Ì‹Z‚Åì‚ç‚êA
+D:‚»‚Ì —{‚Í‘¼‚ÉH‚×•¨‚ª‰½‚à–³‚­‚Æ‚à”TŠÔ‚à‚ÌŠÔ¶–½‚ğˆÛ‚·‚é’ö‚Å‚ ‚éB
 
-N:26:¹âµé¥¨¡¼¥ë
+N:26:‚‹‰ƒG[ƒ‹
 E:& Pint~ of Fine Ale
 G:,:y
 I:80:38:500
 W:0:0:5:1
 D:$Made from the barley of Eriador, and brewed to golden perfection.
-D:¥¨¥ê¥¢¥É¡¼¥ë¤ÎÂçÇş¤ò¾úÂ¤¤·¡¢¶â¿§¤Ë¤Ê¤ë¤Ş¤Ç½ÏÀ®¤µ¤»¤¿¤â¤Î¤À¡£
+D:ƒGƒŠƒAƒh[ƒ‹‚Ì‘å”‚ğø‘¢‚µA‹àF‚É‚È‚é‚Ü‚Ån¬‚³‚¹‚½‚à‚Ì‚¾B
 
-N:27:¹âµé¥ï¥¤¥ó
+N:27:‚‹‰ƒƒCƒ“
 E:& Pint~ of Fine Wine
 G:,:r
 I:80:39:1000
 W:0:0:10:2
 D:$A heady wine, almost as good as that served at the Green Dragon at Bywater.
-D:¥Ù¥¤¥¦¥©¡¼¥¿¡¼¤ÎÎĞÎµÅ¡¤Ç½Ğ¤ë¤Î¤ÈÆ±¤¸¤¯¤é¤¤¼Á¤ÎÎÉ¤¤¡¢
-D:¥¢¥ë¥³¡¼¥ëÅÙ¤Î¹â¤¤¥ï¥¤¥ó¤À¡£
+D:ƒxƒCƒEƒH[ƒ^[‚Ì—Î—³“@‚Åo‚é‚Ì‚Æ“¯‚¶‚­‚ç‚¢¿‚Ì—Ç‚¢A
+D:ƒAƒ‹ƒR[ƒ‹“x‚Ì‚‚¢ƒƒCƒ“‚¾B
 
 ##### Extra digger #####
 
 #JZ#
-N:28:ÀïÆ®ÍÑ¤Ä¤ë¤Ï¤·
+N:28:í“¬—p‚Â‚é‚Í‚µ
 E:& Mattock~
 G:\:D
 I:20:7:2
@@ -376,7 +376,7 @@ F:SHOW_MODS | TUNNEL
 ##### Edged Weapons #####
 
 #JZ#
-N:29:ÌîÂÀÅá
+N:29:–ì‘¾“
 E:& No-dachi~
 G:|:W
 I:23:27:0
@@ -385,7 +385,7 @@ A:35/3
 P:0:5d4:0:0:0
 F:SHOW_MODS
 
-N:30:ÀŞ¤ì¤¿¥À¥¬¡¼
+N:30:Ü‚ê‚½ƒ_ƒK[
 E:& Broken Dagger~
 G:|:D
 I:23:1:0
@@ -394,7 +394,7 @@ A:0/1
 P:0:1d1:-2:-4:0
 F:SHOW_MODS
 
-N:31:¥Ğ¥¹¥¿¡¼¥É¡¦¥½¡¼¥É
+N:31:ƒoƒXƒ^[ƒhEƒ\[ƒh
 E:& Bastard Sword~
 G:|:W
 I:23:21:0
@@ -404,9 +404,9 @@ P:0:3d4:0:0:0
 F:SHOW_MODS
 D:$Also known as the hand-and-a-half blade.  A larger-than-normal straight-
 D:$sided sword with two cutting edges.
-D:ÊÒ¼êÈ¾·õ¤È¤â¸Æ¤Ğ¤ì¤ë¡£ÄÌ¾ï¤Î¥í¥ó¥°¥½¡¼¥É¤è¤ê¤âÄ¹¤¤Î¾¿Ï¤ÎÄ¾Åá¤À¡£
+D:•Ğè”¼Œ•‚Æ‚àŒÄ‚Î‚ê‚éB’Êí‚Ìƒƒ“ƒOƒ\[ƒh‚æ‚è‚à’·‚¢—¼n‚Ì’¼“‚¾B
 
-N:32:¥·¥ß¥¿¡¼
+N:32:ƒVƒ~ƒ^[
 E:& Scimitar~
 G:|:W
 I:23:18:0
@@ -415,9 +415,9 @@ A:10/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
 D:$A single-edged slashing sword with a blade like a crescent.
-D:»Â¤ëÍÑÅÓ¤ËÆÃ²½¤·¤¿»°Æü·î¤Î¤è¤¦¤ÊÅá¿È¤ò»ı¤ÄÊÒ¿Ï¤Î·õ¤À¡£
+D:a‚é—p“r‚É“Á‰»‚µ‚½O“úŒ‚Ì‚æ‚¤‚È“g‚ğ‚Â•Ğn‚ÌŒ•‚¾B
 
-N:33:¥¿¥ë¥ï¡¼¥ë
+N:33:ƒ^ƒ‹ƒ[ƒ‹
 E:& Tulwar~
 G:|:W
 I:23:15:0
@@ -426,7 +426,7 @@ A:5/1
 P:0:2d4:0:0:0
 F:SHOW_MODS | RIDING
 
-N:34:¥Ö¥í¡¼¥É¡¦¥½¡¼¥É
+N:34:ƒuƒ[ƒhEƒ\[ƒh
 E:& Broad Sword~
 G:|:W
 I:23:16:0
@@ -435,9 +435,9 @@ A:10/1:15/1
 P:0:2d5:0:0:0
 F:SHOW_MODS | RIDING
 D:$A heavy, double-edged sword with a strong grip.
-D:½Å¤¯¹­¤¤Åá¿È¤È´è¾æ¤ÊÊÁ¤ò»ı¤Ã¤¿Î¾¿Ï¤ÎÄ¾Åá¤À¡£
+D:d‚­L‚¢“g‚ÆŠæä‚È•¿‚ğ‚Á‚½—¼n‚Ì’¼“‚¾B
 
-N:35:¥·¥ç¡¼¥È¡¦¥½¡¼¥É
+N:35:ƒVƒ‡[ƒgEƒ\[ƒh
 E:& Short Sword~
 G:|:W
 I:23:10:0
@@ -446,9 +446,9 @@ A:5/1
 P:0:1d7:0:0:0
 F:SHOW_MODS
 D:$A short thrusting sword.
-D:¼ç¤ËÆÍ¤¯ÍÑÅÓ¤ËÍÑ¤¤¤ëÃ»¤¤·õ¤À¡£
+D:å‚É“Ë‚­—p“r‚É—p‚¢‚é’Z‚¢Œ•‚¾B
 
-N:36:¥«¥ª¥¹¡¦¥Ö¥ì¡¼¥É
+N:36:ƒJƒIƒXEƒuƒŒ[ƒh
 E:& Blade~ of Chaos
 G:|:v
 I:23:30:0
@@ -458,10 +458,10 @@ P:0:6d5:0:0:0
 F:RES_CHAOS | SHOW_MODS
 D:$This inconstant weapon revels in disorder, hacking and slashing your foes 
 D:$with bloodthirsty glee.
-D:ÀéÊÑËü²½¤Î»Ñ¤ò»ı¤Ä¤³¤ÎÉğ´ï¤Ïº®ÆÙ¤ÎÎÏ¤Ë¤è¤Ã¤ÆÅ¨¤òÀÚ¤ê¹ï¤ß¡¢
-D:»¦Ù¤¤Ë¤Õ¤±¤ë»ö¤Ë»ÄÇ¦¤Ê´î¤Ó¤ò´¶¤¸¤Æ¤¤¤ë¡£
+D:ç•Ï–œ‰»‚Ìp‚ğ‚Â‚±‚Ì•Ší‚Í¬“×‚Ì—Í‚É‚æ‚Á‚Ä“G‚ğØ‚è‚İA
+D:EC‚É‚Ó‚¯‚é–‚Éc”E‚ÈŠì‚Ñ‚ğŠ´‚¶‚Ä‚¢‚éB
 
-N:37:¥°¥ì¡¼¥È¡¦¥½¡¼¥É
+N:37:ƒOƒŒ[ƒgEƒ\[ƒh
 E:& Two-Handed Sword~
 G:|:W
 I:23:25:0
@@ -470,9 +470,9 @@ A:30/1:40/1
 P:0:3d6:0:0:0
 F:SHOW_MODS
 D:$A great, double-edged broadsword which few can wield in one hand.
-D:Èó¾ï¤ËÂç¤­¤ÊÎ¾¿Ï¤ÎÄ¾Åá¤Ç¡¢¤³¤ì¤òÊÒ¼ê¤Ç»ı¤Æ¤ë¼Ô¤Ï¤Û¤È¤ó¤É¤¤¤Ê¤¤¡£
+D:”ñí‚É‘å‚«‚È—¼n‚Ì’¼“‚ÅA‚±‚ê‚ğ•Ğè‚Å‚Ä‚éÒ‚Í‚Ù‚Æ‚ñ‚Ç‚¢‚È‚¢B
 
-N:38:¥Ş¥ó¡¦¥´¡¼¥·¥å
+N:38:ƒ}ƒ“EƒS[ƒVƒ…
 E:& Main Gauche~
 G:|:W
 I:23:5:0
@@ -481,9 +481,9 @@ A:3/1
 P:0:1d5:0:0:0
 F:SHOW_MODS
 D:$A short thrusting blade with a large guard, primarily used in duels.
-D:·ı¤òËÉ¸æ¤¹¤ëÂç¤­¤ÊÄ×¤ò»ı¤ÄÃ»¤¤·õ¡£¼ç¤Ë·èÆ®¤ÇËÉ¸æÍÑ¤ÎÃ»·õ¤È¤·¤ÆÍÑ¤¤¤é¤ì¤ë¡£
+D:Œ‚ğ–hŒä‚·‚é‘å‚«‚È’Õ‚ğ‚Â’Z‚¢Œ•Bå‚ÉŒˆ“¬‚Å–hŒä—p‚Ì’ZŒ•‚Æ‚µ‚Ä—p‚¢‚ç‚ê‚éB
 
-N:39:¥«¥Ã¥È¥é¥¹
+N:39:ƒJƒbƒgƒ‰ƒX
 E:& Cutlass~
 G:|:W
 I:23:12:0
@@ -492,9 +492,9 @@ A:5/1
 P:0:1d7:0:0:0
 F:SHOW_MODS
 D:$A large, curved chopper with a basket hilt, well known to seamen.
-D:Âç¤­¤Ê¶Ê¤Ã¤¿Åá¿È¤È¼ê¤ò¥«¥Ğ¡¼¤¹¤ëÌÖ¾õ¤ÎÊÁ¤òÈ÷¤¨¤¿·õ¤À¡£Á¥°÷¤ËÎÉ¤¯ÍÑ¤¤¤é¤ì¤ë¡£
+D:‘å‚«‚È‹È‚Á‚½“g‚Æè‚ğƒJƒo[‚·‚é–Ôó‚Ì•¿‚ğ”õ‚¦‚½Œ•‚¾B‘Dˆõ‚É—Ç‚­—p‚¢‚ç‚ê‚éB
 
-N:40:¼óÀÚ¤ê¥½¡¼¥É
+N:40:ñØ‚èƒ\[ƒh
 E:& Executioner's Sword~
 G:|:r
 I:23:28:0
@@ -504,9 +504,9 @@ P:0:4d5:0:0:0
 F:SHOW_MODS
 D:$A giant, curved blade designed to cleave the head cleanly from the 
 D:$body.
-D:Æ¹ÂÎ¤«¤éÆ¬¤òåºÎï¤ËÀÚ¤êÍî¤È¤¹°Ù¤Ëºî¤é¤ì¤¿¡¢µğÂç¤Ê¶Ê¤Ã¤¿¿Ï¤ò»ı¤Ä·õ¤À¡£
+D:“·‘Ì‚©‚ç“ª‚ğãY—í‚ÉØ‚è—‚Æ‚·ˆ×‚Éì‚ç‚ê‚½A‹‘å‚È‹È‚Á‚½n‚ğ‚ÂŒ•‚¾B
 
-N:41:¥«¥¿¥Ê
+N:41:ƒJƒ^ƒi
 E:& Katana~
 G:|:W
 I:23:20:0
@@ -516,9 +516,9 @@ P:0:3d4:0:0:0
 F:SHOW_MODS
 D:$A slightly curved long-handled slashing sword with a single-edged 
 D:$blade and a chisel tip.
-D:Ä¹¤¤ÊÁ¤ÈÈùÌ¯¤Ë¶Ê¤Ã¤¿¿Ï¤ò»ı¤ÄÀÚ¤ìÌ£¤ËÍ¥¤ì¤¿ÊÒ¿Ï¤Î·õ¤À¡£
+D:’·‚¢•¿‚Æ”÷–­‚É‹È‚Á‚½n‚ğ‚ÂØ‚ê–¡‚É—D‚ê‚½•Ğn‚ÌŒ•‚¾B
 
-N:42:¥í¥ó¥°¡¦¥½¡¼¥É
+N:42:ƒƒ“ƒOEƒ\[ƒh
 E:& Long Sword~
 G:|:W
 I:23:17:0
@@ -528,9 +528,9 @@ P:0:2d5:0:0:0
 F:SHOW_MODS | RIDING
 D:$A long, straight, two-edged blade, with two hand guards projecting out from 
 D:$the hilt to form a perfect cross.
-D:½½»ú¤Î·Á¤Ë2ËÜ¤ÎÊÁ¤¬ÉÕ¤¤¤¿Ä¹¤¤Î¾¿Ï¤ÎÄ¾Åá¤À¡£
+D:\š‚ÌŒ`‚É2–{‚Ì•¿‚ª•t‚¢‚½’·‚¢—¼n‚Ì’¼“‚¾B
 
-N:43:¥À¥¬¡¼
+N:43:ƒ_ƒK[
 E:& Dagger~
 G:|:W
 I:23:4:0
@@ -539,9 +539,9 @@ A:0/1:5/1:10/1:20/1
 P:0:1d4:0:0:0
 F:SHOW_MODS
 D:$A two-edged knife with a sharp point.
-D:ÀèÃ¼¤¬±Ô¤¤Î¾¿Ï¤ÎÃ»·õ¤À¡£
+D:æ’[‚ª‰s‚¢—¼n‚Ì’ZŒ•‚¾B
 
-N:44:¥ì¥¤¥Ô¥¢
+N:44:ƒŒƒCƒsƒA
 E:& Rapier~
 G:|:W
 I:23:7:0
@@ -550,9 +550,9 @@ A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
 D:$A long, thin thrusting blade, mainly used in duels.
-D:ÆÍ¤­¤ËÍÑ¤¤¤ëÄ¹¤¯ºÙ¤¤Åá¿È¤ò»ı¤Ä·õ¡£¼ç¤Ë·èÆ®¤ËÍÑ¤¤¤é¤ì¤ë¡£
+D:“Ë‚«‚É—p‚¢‚é’·‚­×‚¢“g‚ğ‚ÂŒ•Bå‚ÉŒˆ“¬‚É—p‚¢‚ç‚ê‚éB
 
-N:45:¥µ¡¼¥Ù¥ë
+N:45:ƒT[ƒxƒ‹
 E:& Sabre~
 G:|:W
 I:23:11:0
@@ -562,9 +562,9 @@ P:0:1d7:0:0:0
 F:SHOW_MODS | RIDING
 D:$A light, somewhat curved blade that can be used to thrust or slash; familiar 
 D:$to horseman and duelists alike.
-D:·Ú¤¤¾¯¤·¶Ê¤Ã¤¿¿Ï¤ò»ı¤Á¡¢ÀÚ¤ë»ö¤âÆÍ¤¯»ö¤â¤Ç¤­¤ë¡£ÇÏ¾åµÚ¤Ó·èÆ®¤Ë¤ª¤¤¤Æ¤è¤¯»È¤ï¤ì¤ë¡£
+D:Œy‚¢­‚µ‹È‚Á‚½n‚ğ‚¿AØ‚é–‚à“Ë‚­–‚à‚Å‚«‚éB”nã‹y‚ÑŒˆ“¬‚É‚¨‚¢‚Ä‚æ‚­g‚í‚ê‚éB
 
-N:46:¥¹¥â¡¼¥ë¡¦¥½¡¼¥É
+N:46:ƒXƒ‚[ƒ‹Eƒ\[ƒh
 E:& Small Sword~
 G:|:W
 I:23:8:0
@@ -573,9 +573,9 @@ A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
 D:$A smaller version of the longsword, perfectly sized for Hobbits.
-D:¥í¥ó¥°¥½¡¼¥É¤ò¾¯¤·Ã»¤¯¤·¤¿¤è¤¦¤Ê·õ¤À¡£¥Û¥Ó¥Ã¥È¤Ë¤Ô¤Ã¤¿¤ê¤Î¥µ¥¤¥º¤À¡£
+D:ƒƒ“ƒOƒ\[ƒh‚ğ­‚µ’Z‚­‚µ‚½‚æ‚¤‚ÈŒ•‚¾Bƒzƒrƒbƒg‚É‚Ò‚Á‚½‚è‚ÌƒTƒCƒY‚¾B
 
-N:47:ÀŞ¤ì¤¿·õ
+N:47:Ü‚ê‚½Œ•
 E:& Broken Sword~
 G:|:D
 I:23:2:0
@@ -584,11 +584,11 @@ A:0/1
 P:0:1d2:-2:-4:0
 F:SHOW_MODS
 D:$Above the hilt, a foot of steel rises, ending in a jagged edge.
-D:ÊÁ¤Î¾å¤Ç¥®¥¶¥®¥¶¤ËÀŞ¤ì¤Æ¤¤¤ë¡£
+D:•¿‚Ìã‚ÅƒMƒUƒMƒU‚ÉÜ‚ê‚Ä‚¢‚éB
 
 ##### Hafted Weapons #####
 
-N:48:º¿¤Ä¤­Å´µå
+N:48:½‚Â‚«“S‹…
 E:& Ball-and-Chain~
 G:\:D
 I:21:6:0
@@ -597,9 +597,9 @@ A:20/1
 P:0:2d4:0:0:0
 F:SHOW_MODS | RIDING
 D:$A weighty iron ball, suspended by a chain from a sturdy oaken handle.
-D:´è¾æ¤ÊÌÚÀ½¤Î¥Ï¥ó¥É¥ë¤Ë¡¢½Å¤¤Å´¤Î¥Ü¡¼¥ë¤¬º¿¤Ç·Ò¤Ã¤Æ¤¤¤ë¡£
+D:Šæä‚È–Ø»‚Ìƒnƒ“ƒhƒ‹‚ÉAd‚¢“S‚Ìƒ{[ƒ‹‚ª½‚ÅŒq‚Á‚Ä‚¢‚éB
 
-N:49:¥à¥Á
+N:49:ƒ€ƒ`
 E:& Whip~
 G:\:D
 I:21:2:0
@@ -609,9 +609,9 @@ P:0:1d6:0:0:0
 F:SHOW_MODS
 D:$A heavy whip, this thick coil is thrown from the shoulder and can 
 D:$knock down a large man.
-D:½Å¤¤ÊÜ¤À¡£¤­¤Ä¤¯´¬¤¤¤¿¤³¤ÎÊÜ¤ò¸ª¤Î¾å¤«¤é¿¶¤ê²¼¤í¤¹¤ÈÂç¤ÎÃË¤Ç¤âÂÇ¤ÁÅİ¤¹»ö¤¬¤Ç¤­¤ë¡£
+D:d‚¢•Ú‚¾B‚«‚Â‚­Šª‚¢‚½‚±‚Ì•Ú‚ğŒ¨‚Ìã‚©‚çU‚è‰º‚ë‚·‚Æ‘å‚Ì’j‚Å‚à‘Å‚¿“|‚·–‚ª‚Å‚«‚éB
 
-N:50:¥Õ¥ì¥¤¥ë
+N:50:ƒtƒŒƒCƒ‹
 E:& Flail~
 G:\:D
 I:21:13:0
@@ -621,9 +621,9 @@ P:0:2d6:0:0:0
 F:SHOW_MODS | RIDING
 D:$Two heavy bars of wood connected by a short link of chain, capable of 
 D:$delivering crushing blows.
-D:2ËÜ¤Î½Å¤¤ÌÚÀ½¤ÎËÀ¤òÃ»¤¤º¿¤Ç·Ò¤²¤¿Êª¤À¡£ÂĞ¾İ¤òÃ¡¤­ÄÙ¤¹°Ù¤ËÍÑ¤¤¤ë¡£
+D:2–{‚Ìd‚¢–Ø»‚Ì–_‚ğ’Z‚¢½‚ÅŒq‚°‚½•¨‚¾B‘ÎÛ‚ğ’@‚«’×‚·ˆ×‚É—p‚¢‚éB
 
-N:51:¥Ø¥ô¥£¡¦¥Õ¥ì¥¤¥ë
+N:51:ƒwƒ”ƒBEƒtƒŒƒCƒ‹
 E:& Two-Handed Flail~
 G:\:y
 I:21:18:0
@@ -633,9 +633,9 @@ P:0:3d6:0:0:0
 F:SHOW_MODS
 D:$Two great bars of wood connected by a massive chain, needing two hands 
 D:$to properly wield.
-D:2ËÜ¤ÎÈó¾ï¤ËÂç¤­¤ÊÌÚÀ½¤ÎËÀ¤ò½Å¤¤º¿¤Ç·Ñ¤¤¤Ç¤¢¤ë¡£¤¦¤Ş¤¯ÍÑ¤¤¤ë¤¿¤á¤Ë¤ÏÎ¾¼ê¤¬É¬Í×¤À¡£
+D:2–{‚Ì”ñí‚É‘å‚«‚È–Ø»‚Ì–_‚ğd‚¢½‚ÅŒp‚¢‚Å‚ ‚éB‚¤‚Ü‚­—p‚¢‚é‚½‚ß‚É‚Í—¼è‚ª•K—v‚¾B
 
-N:52:¥â¡¼¥Ë¥ó¥°¡¦¥¹¥¿¡¼
+N:52:ƒ‚[ƒjƒ“ƒOEƒXƒ^[
 E:& Morning Star~
 G:\:D
 I:21:12:0
@@ -644,9 +644,9 @@ A:10/1
 P:0:2d6:0:0:0
 F:SHOW_MODS
 D:$A war club with an spiked iron ball on the head.
-D:À±·¿¤Î¥È¥²¤¬ÆÍ¤­½Ğ¤¿Å´µå¤¬ÀèÃ¼¤ËÉÕ¤¤¤¿ÛşËÀ¤À¡£
+D:¯Œ^‚ÌƒgƒQ‚ª“Ë‚«o‚½“S‹…‚ªæ’[‚É•t‚¢‚½–_‚¾B
 
-N:53:¥á¥¤¥¹
+N:53:ƒƒCƒX
 E:& Mace~
 G:\:D
 I:21:5:0
@@ -655,9 +655,9 @@ A:5/1
 P:0:2d4:0:0:0
 F:SHOW_MODS
 D:$A war club with an iron head, usually flanged.
-D:Å´µå¡¢¤Ş¤¿¤ÏÄ×ÉÕ¤­¤ÎÂ¿ÌÌÂÎ·Á¤ÎÅ´²ô¤¬ÀèÃ¼¤ËÉÕ¤¤¤¿ÛşËÀ¤À¡£
+D:“S‹…A‚Ü‚½‚Í’Õ•t‚«‚Ì‘½–Ê‘ÌŒ`‚Ì“S‰ò‚ªæ’[‚É•t‚¢‚½–_‚¾B
 
-N:54:¥¯¥©¡¼¥¿¡¼¥¹¥¿¥Ã¥Õ
+N:54:ƒNƒH[ƒ^[ƒXƒ^ƒbƒt
 E:& Quarterstaff~
 G:\:U
 I:21:3:0
@@ -667,10 +667,10 @@ P:0:1d9:0:0:0
 F:SHOW_MODS
 D:$Six feet of oak which can be wielded in both hands to give a drubbing or 
 D:$block one.
-D:2¥á¡¼¥È¥ëÄøÅÙ¤ÎÄ¹¤µ¤ÎÌÚÀ½¤Î¾ó¤À¡£
-D:Î¾¼ê¤Ç»ı¤Ã¤ÆÂÇ¤ÁÉÕ¤±¤¿¤ê¹¶·â¤ò¼õ¤±»ß¤á¤ë°Ù¤ËÍÑ¤¤¤é¤ì¤ë¡£
+D:2ƒ[ƒgƒ‹’ö“x‚Ì’·‚³‚Ì–Ø»‚Ìñ‚¾B
+D:—¼è‚Å‚Á‚Ä‘Å‚¿•t‚¯‚½‚èUŒ‚‚ğó‚¯~‚ß‚éˆ×‚É—p‚¢‚ç‚ê‚éB
 
-N:55:¥¦¥©¡¼¡¦¥Ï¥ó¥Ş¡¼
+N:55:ƒEƒH[Eƒnƒ“ƒ}[
 E:& War Hammer~
 G:\:D
 I:21:8:0
@@ -679,9 +679,9 @@ A:5/1
 P:0:3d3:0:0:0
 F:SHOW_MODS | RIDING
 D:$A mallet with a tapered head and a long handle.
-D:Ä¹¤¤¥Ï¥ó¥É¥ë¤¬¤¢¤ê¡¢Àè¤ÎÀí¤Ã¤¿ÄÈ¤¬ÀèÃ¼¤«¤éÄ¾³Ñ¤ËÉÕ¤­½Ğ¤¿·Á¤ò¤·¤Æ¤¤¤ë¡£
+D:’·‚¢ƒnƒ“ƒhƒ‹‚ª‚ ‚èAæ‚Ìë‚Á‚½’Æ‚ªæ’[‚©‚ç’¼Šp‚É•t‚«o‚½Œ`‚ğ‚µ‚Ä‚¢‚éB
 
-N:56:±ôµÍ¤á¥á¥¤¥¹
+N:56:‰”‹l‚ßƒƒCƒX
 E:& Lead-Filled Mace~
 G:\:D
 I:21:15:0
@@ -691,9 +691,9 @@ P:0:3d4:0:0:0
 F:SHOW_MODS
 D:$A heavy war club topped with a mass of lead-filled steel, capable of 
 D:$landing crushing blows.
-D:½Å¤¤ÛşËÀ¤ÎÀè¤Ë±ô¤òµÍ¤á¤¿¹İÅ´¤Î½Å¤ê¤ò·Ò¤²¤Æ¤¢¤ë¡£ÂĞ¾İ¤òÃ¡¤­ÄÙ¤¹°Ù¤ËÍÑ¤¤¤ë¡£
+D:d‚¢–_‚Ìæ‚É‰”‚ğ‹l‚ß‚½|“S‚Ìd‚è‚ğŒq‚°‚Ä‚ ‚éB‘ÎÛ‚ğ’@‚«’×‚·ˆ×‚É—p‚¢‚éB
 
-N:57:Ê´ºÕ¤Î¥á¥¤¥¹
+N:57:•²Ó‚ÌƒƒCƒX
 E:& Mace~ of Disruption
 G:\:v
 I:21:20:0
@@ -703,9 +703,9 @@ P:0:5d8:0:0:0
 F:SLAY_UNDEAD | SHOW_MODS
 D:$A giant's weapon, enchanted with shattering power that breaks bones, bodies, 
 D:$and spirit.
-D:µğ¿Í¤ÎÉğ´ï¤Ç¤¢¤ê¡¢Áê¼ê¤Î¹ü¤ò¡¢ÂÎ¤ò¡¢¤½¤·¤ÆÀº¿À¤ò¤âÊ´ºÕ¤¹¤ëËâË¡¤¬³İ¤±¤é¤ì¤Æ¤¤¤ë¡£
+D:‹l‚Ì•Ší‚Å‚ ‚èA‘Šè‚Ìœ‚ğA‘Ì‚ğA‚»‚µ‚Ä¸_‚ğ‚à•²Ó‚·‚é–‚–@‚ªŠ|‚¯‚ç‚ê‚Ä‚¢‚éB
 
-N:58:¥ë¥Ä¥§¥ë¥ó¡¦¥Ï¥ó¥Ş¡¼
+N:58:ƒ‹ƒcƒFƒ‹ƒ“Eƒnƒ“ƒ}[
 E:& Lucerne Hammer~
 G:/:B
 I:22:12:0
@@ -716,7 +716,7 @@ F:SHOW_MODS
 
 ##### Polearms #####
 
-N:59:¥Ó¡¼¥¯¥É¡¦¥¢¥Ã¥¯¥¹
+N:59:ƒr[ƒNƒhEƒAƒbƒNƒX
 E:& Beaked Axe~
 G:/:s
 I:22:10:0
@@ -725,9 +725,9 @@ A:15/1
 P:0:2d6:0:0:0
 F:SHOW_MODS
 D:$A narrow axe head opposed by a crow's beak, mounted on an oaken shaft.
-D:ÌÚÀ½¤ÎÊÁ¤Ë¡¢ÇØ¤¬±¨¤Î¥¯¥Á¥Ğ¥·¤òÌÏ¤·¤¿ÆÍµ¯¤Ë¤Ê¤Ã¤¿·Á¤ÎÉı¤¬¶¹¤¤Éà¤¬ÉÕ¤¤¤Æ¤¤¤ë¡£
+D:–Ø»‚Ì•¿‚ÉA”w‚ª‰G‚ÌƒNƒ`ƒoƒV‚ğ–Í‚µ‚½“Ë‹N‚É‚È‚Á‚½Œ`‚Ì•‚ª‹·‚¢•€‚ª•t‚¢‚Ä‚¢‚éB
 
-N:60:¥°¥ì¥¤¥Ö
+N:60:ƒOƒŒƒCƒu
 E:& Glaive~
 G:/:s
 I:22:13:0
@@ -737,10 +737,10 @@ P:0:2d6:0:0:0
 F:SHOW_MODS | RIDING
 D:$A reinforced wooden pole eight feet long, topped by a massive knife blade 
 D:$that can can be used to thrust or chop.
-D:2.5¥á¡¼¥È¥ëÄø¤ÎÊä¶¯¤µ¤ì¤¿ÌÚÀ½¤ÎËÀ¤ÎÀèÃ¼¤ËÂç¤­¤Ê¥Ê¥¤¥Õ¤Î¿Ï¤¬¿¿¤ÃÄ¾¤ËÉÕ¤¤¤Æ¤¤¤ë¡£
-D:ÀÚ¤êÎö¤¯»ö¤âÉÕ¤­»É¤¹»ö¤â¤Ç¤­¤ë¡£
+D:2.5ƒ[ƒgƒ‹’ö‚Ì•â‹­‚³‚ê‚½–Ø»‚Ì–_‚Ìæ’[‚É‘å‚«‚ÈƒiƒCƒt‚Ìn‚ª^‚Á’¼‚É•t‚¢‚Ä‚¢‚éB
+D:Ø‚è—ô‚­–‚à•t‚«h‚·–‚à‚Å‚«‚éB
 
-N:61:¥Ï¥ë¥Ù¥ë¥È
+N:61:ƒnƒ‹ƒxƒ‹ƒg
 E:& Halberd~
 G:/:s
 I:22:15:0
@@ -750,10 +750,10 @@ P:0:3d5:0:0:0
 F:SHOW_MODS
 D:$The most successful of the polearms, the halberd has a long haft mounted 
 D:$with a heavy axe blade and opposing spike, and topped by a thrusting spine.
-D:Ä¹¤¤´È¤Ë½Å¤¤Éà¤Î¿Ï¤È¤½¤ÎÈ¿ÂĞÂ¦¤Ë¥¹¥Ñ¥¤¥¯¤¬ÉÕ¤­¡¢¤µ¤é¤Ë´È¤ÎÀèÃ¼¤ËÉÕ¤­»É¤¹°Ù¤Î
-D:ÊæÀè¤¬ÉÕ¤¤¤Æ¤¤¤ë¡£ºÇ¤â´°À®¤µ¤ì¤¿¥¿¥¤¥×¤Î´È¾õÉğ´ï¤Ç¤¢¤ë¡£
+D:’·‚¢ŠÆ‚Éd‚¢•€‚Ìn‚Æ‚»‚Ì”½‘Î‘¤‚ÉƒXƒpƒCƒN‚ª•t‚«A‚³‚ç‚ÉŠÆ‚Ìæ’[‚É•t‚«h‚·ˆ×‚Ì
+D:•äæ‚ª•t‚¢‚Ä‚¢‚éBÅ‚àŠ®¬‚³‚ê‚½ƒ^ƒCƒv‚ÌŠÆó•Ší‚Å‚ ‚éB
 
-N:62:¥ª¥¦¥ë¡¦¥Ñ¥¤¥¯
+N:62:ƒIƒEƒ‹EƒpƒCƒN
 E:& Awl-Pike~
 G:/:s
 I:22:4:0
@@ -762,7 +762,7 @@ A:10/1
 P:0:1d8:0:0:0
 F:SHOW_MODS
 
-N:63:¥Ñ¥¤¥¯
+N:63:ƒpƒCƒN
 E:& Pike~
 G:/:s
 I:22:8:0
@@ -771,9 +771,9 @@ A:15/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
 D:$A long, heavy spear with an iron head and reinforced shaft.
-D:Êä¶¯¤µ¤ì¤¿ÊÁ¤ËÅ´¤ÎÊæÀè¤¬ÉÕ¤¤¤¿¡¢Èó¾ï¤ËÄ¹¤¯½Å¤¤Áä¤À¡£
+D:•â‹­‚³‚ê‚½•¿‚É“S‚Ì•äæ‚ª•t‚¢‚½A”ñí‚É’·‚­d‚¢‘„‚¾B
 
-N:64:¥¹¥Ô¥¢
+N:64:ƒXƒsƒA
 E:& Spear~
 G:/:s
 I:22:2:0
@@ -783,10 +783,10 @@ P:0:1d6:0:0:0
 F:SHOW_MODS | RIDING
 D:$The basic polearm, with a double-edged knife mounted on a light shaft.  
 D:$This weapon can be thrown effectively.
-D:ºÇ¤â´ğËÜÅª¤Ê´È¾õÉğ´ï¤À¡£·Ú¤¯Ä¹¤¤´È¤ÎÀè¤ËÀí¤Ã¤¿Î¾¿Ï¤ÎÊæÀè¤¬ÉÕ¤¤¤Æ¤¤¤Æ¡¢
-D:ÆÍ¤­»É¤¹¤Î¤ËÅ¬¤·¤Æ¤¤¤ë¡£
+D:Å‚àŠî–{“I‚ÈŠÆó•Ší‚¾BŒy‚­’·‚¢ŠÆ‚Ìæ‚Éë‚Á‚½—¼n‚Ì•äæ‚ª•t‚¢‚Ä‚¢‚ÄA
+D:“Ë‚«h‚·‚Ì‚É“K‚µ‚Ä‚¢‚éB
 
-N:65:¥È¥é¥¤¥Ç¥ó¥È
+N:65:ƒgƒ‰ƒCƒfƒ“ƒg
 E:& Trident~
 G:/:y
 I:22:5:0
@@ -795,9 +795,9 @@ A:5/1
 P:0:1d8:0:0:0
 F:SHOW_MODS | RIDING
 D:$A three-pronged spear, originally for catching fish.
-D:»°Ëô¤ÎÁä¤Ç¡¢¸µÍè¤Ïµû¤òÊá¤ë¤Î¤ËÍÑ¤¤¤é¤ì¤Æ¤¤¤¿¡£
+D:O–”‚Ì‘„‚ÅAŒ³—ˆ‚Í‹›‚ğ•ß‚é‚Ì‚É—p‚¢‚ç‚ê‚Ä‚¢‚½B
 
-N:66:¥é¥ó¥¹
+N:66:ƒ‰ƒ“ƒX
 E:& Lance~
 G:/:s
 I:22:20:0
@@ -805,10 +805,10 @@ W:10:0:300:230
 A:10/1
 P:0:2d8:0:0:0
 F:SHOW_MODS | RIDING
-D:Âç¤­¤¯Ä¹¤¤±ß¿í·Á¤ÎÊæÀè¤ò»ı¤Ã¤¿Áä¤À¡£
-D:ÇÏ¾å¤Ç¹½¤¨¤ÆÆÍ·â¤¹¤ë°Ù¤Ëºî¤é¤ì¤Æ¤¤¤ë¡£
+D:‘å‚«‚­’·‚¢‰~Œ`‚Ì•äæ‚ğ‚Á‚½‘„‚¾B
+D:”nã‚Å\‚¦‚Ä“ËŒ‚‚·‚éˆ×‚Éì‚ç‚ê‚Ä‚¢‚éB
 
-N:67:¥°¥ì¡¼¥È¡¦¥¢¥Ã¥¯¥¹
+N:67:ƒOƒŒ[ƒgEƒAƒbƒNƒX
 E:& Great Axe~
 G:/:s
 I:22:25:0
@@ -818,11 +818,11 @@ P:0:4d4:0:0:0
 F:SHOW_MODS
 D:$An enormous two-handed battle axe, carried by Dwarven champions, who 
 D:$compete to see who can cleave the most orc heads.
-D:µğÂç¤ÊÎ¾¼ê»ı¤ÁÍÑ¤ÎÀïÉà¤À¡£¥ª¡¼¥¯¤Î¼ó¤òÍî¤È¤·¤¿¿ô¤ò¶¥¤¦¥É¥ï¡¼¥Õ¤ÎÀï»Î¤¬
-D:°¦ÍÑ¤·¤Æ¤¤¤ë¡£
+D:‹‘å‚È—¼è‚¿—p‚Ìí•€‚¾BƒI[ƒN‚Ìñ‚ğ—‚Æ‚µ‚½”‚ğ‹£‚¤ƒhƒ[ƒt‚Ìím‚ª
+D:ˆ¤—p‚µ‚Ä‚¢‚éB
 
 
-N:68:¥Ğ¥È¥ë¡¦¥¢¥Ã¥¯¥¹
+N:68:ƒoƒgƒ‹EƒAƒbƒNƒX
 E:& Battle Axe~
 G:/:s
 I:22:22:0
@@ -831,9 +831,9 @@ A:15/1
 P:0:2d8:0:0:0
 F:SHOW_MODS
 D:$A double-bladed axe.  Very popular among Dwarves.
-D:Éı¹­¤ÎÎ¾¿Ï¤ÎÉà¤À¡£¥É¥ï¡¼¥Õ¤Ë¤è¤¯ÍÑ¤¤¤é¤ì¤ë¡£
+D:•L‚Ì—¼n‚Ì•€‚¾Bƒhƒ[ƒt‚É‚æ‚­—p‚¢‚ç‚ê‚éB
 
-N:69:¥í¥Ã¥Û¥¢¡¼¥Ğ¡¼¡¦¥¢¥Ã¥¯¥¹
+N:69:ƒƒbƒzƒA[ƒo[EƒAƒbƒNƒX
 E:& Lochaber Axe~
 G:/:D
 I:22:28:0
@@ -842,7 +842,7 @@ A:45/1
 P:0:3d8:0:0:0
 F:SHOW_MODS
 
-N:70:¥Ö¥í¡¼¥É¡¦¥¢¥Ã¥¯¥¹
+N:70:ƒuƒ[ƒhEƒAƒbƒNƒX
 E:& Broad Axe~
 G:/:s
 I:22:11:0
@@ -851,9 +851,9 @@ A:15/1
 P:0:2d6:0:0:0
 F:SHOW_MODS
 D:$A simple, single-bladed war axe capable of chopping though limbs or armour.
-D:Ã±½ã¤Êºî¤ê¤ÎÊÒ¿Ï¤ÎÀïÉà¤Ç¡¢ÂĞ¾İ¤ÎÆ¹ÂÎ¤ä³»¤òÀÚÃÇ¤¹¤ë°ÒÎÏ¤¬¤¢¤ë¡£
+D:’Pƒ‚Èì‚è‚Ì•Ğn‚Ìí•€‚ÅA‘ÎÛ‚Ì“·‘Ì‚âŠZ‚ğØ’f‚·‚éˆĞ—Í‚ª‚ ‚éB
 
-N:71:Âç³ù
+N:71:‘åŠ™
 E:& Scythe~
 G:/:s
 I:22:17:0
@@ -863,10 +863,10 @@ P:0:5d3:0:0:0
 F:SHOW_MODS
 D:$The long crescent blade stands out from the handle of this polearm, and 
 D:$it is swung with two hands to harvest grain or blood.
-D:Ä¹¤¤»°Æü·î·¿¤Î¿Ï¤¬Ä¹¤¤ÊÁ¤ÎÀèÃ¼¤ËÆÍ¤±¤é¤ì¤Æ¤¤¤ë¡£
-D:Î¾¼ê¤Ë»ı¤Ã¤Æ¹òÊª¡¢¤Ş¤¿¤ÏÀ¸Ì¿¤ò´£¤ê¼è¤ë°Ù¤ËÍÑ¤¤¤é¤ì¤ë¡Ä¡£
+D:’·‚¢O“úŒŒ^‚Ìn‚ª’·‚¢•¿‚Ìæ’[‚É“Ë‚¯‚ç‚ê‚Ä‚¢‚éB
+D:—¼è‚É‚Á‚Ä’•¨A‚Ü‚½‚Í¶–½‚ğŠ¡‚èæ‚éˆ×‚É—p‚¢‚ç‚ê‚écB
 
-N:72:ÀÚ¤êÎö¤­¤ÎÂç³ù
+N:72:Ø‚è—ô‚«‚Ì‘åŠ™
 E:& Scythe~ of Slicing
 G:/:r
 I:22:30:0
@@ -876,12 +876,12 @@ P:0:8d4:0:0:0
 F:SHOW_MODS | RIDING
 D:$A reaper's weapon, the long blade almost hums in anticipation of the 
 D:$blood it will spill.
-D:»à¿À¤ÎÉğ´ï¤Ç¤¢¤ë¡£¤½¤ÎÄ¹¤¤¿Ï¤ÏÎ®·ì¤Î´üÂÔ¤Ë´¿´î¤ÎÀ¼¤ò¾å¤²¤Æ¤¤¤ë¤«¤Î¤è¤¦¤À¡£
+D:€_‚Ì•Ší‚Å‚ ‚éB‚»‚Ì’·‚¢n‚Í—¬ŒŒ‚ÌŠú‘Ò‚ÉŠ½Šì‚Ìº‚ğã‚°‚Ä‚¢‚é‚©‚Ì‚æ‚¤‚¾B
 
 
 ##### Bows, Crossbows, Slings #####
 
-N:73:¥·¥ç¡¼¥È¡¦¥Ü¥¦
+N:73:ƒVƒ‡[ƒgEƒ{ƒE
 E:& Short Bow~
 G:}:U
 I:19:12:0
@@ -889,9 +889,9 @@ W:3:0:30:50
 A:3/1
 F:SHOW_MODS
 D:$The traditional hunter's weapon, this light bow is easily drawn.
-D:ÅÁÅıÅª¤Ë¼í¿Í¤ËÍÑ¤¤¤é¤ì¤ëÉğ´ï¤À¡£¤³¤Î·Ú¤¤µİ¤Ï´ÊÃ±¤Ë°ú¤¯»ö¤¬¤Ç¤­¤ë¡£
+D:“`““I‚Éël‚É—p‚¢‚ç‚ê‚é•Ší‚¾B‚±‚ÌŒy‚¢‹|‚ÍŠÈ’P‚Éˆø‚­–‚ª‚Å‚«‚éB
 
-N:74:¥í¥ó¥°¡¦¥Ü¥¦
+N:74:ƒƒ“ƒOEƒ{ƒE
 E:& Long Bow~
 G:}:U
 I:19:13:0
@@ -900,9 +900,9 @@ A:30/2:40/2
 F:SHOW_MODS
 D:$As tall as a man, the longbow can drive an arrow through the heaviest 
 D:$armour.
-D:¿Í¤Î¿ÈÄ¹Äø¤ÎÄ¹¤µ¤Îµİ¤À¡£¸ü¤¤Å´À½¤Î³»¤Ç¤â´ÓÄÌ¤¹¤ëÄø¤Î°ÒÎÏ¤ò»ı¤Ä¡£
+D:l‚Ìg’·’ö‚Ì’·‚³‚Ì‹|‚¾BŒú‚¢“S»‚ÌŠZ‚Å‚àŠÑ’Ê‚·‚é’ö‚ÌˆĞ—Í‚ğ‚ÂB
 
-N:75:¥é¥¤¥È¡¦¥¯¥í¥¹¥Ü¥¦
+N:75:ƒ‰ƒCƒgEƒNƒƒXƒ{ƒE
 E:& Light Crossbow~
 G:}:s
 I:19:23:0
@@ -911,10 +911,10 @@ A:10/1
 F:SHOW_MODS
 D:$A mechanical bow made of wood, it is cocked to augment the strength of 
 D:$its wielder.
-D:¹İÅ´À½¤Î¸¹¤ò¤¢¤é¤«¤¸¤á°ú¤¤¤Æ¤ª¤­¡¢µ¡³£¼°¤Î°ú¤­¶â¤ò°ú¤¯¤À¤±¤ÇÌğ¤òÈ¯¼Í
-D:¤¹¤ë»ö¤¬¤Ç¤­¤ë¡£¥·¥ç¡¼¥È¡¦¥Ü¥¦¤ä¥í¥ó¥°¡¦¥Ü¥¦¤ËÈæ¤Ù¤Æ°·¤¤¤¬´ÊÃ±¤ÊÉğ´ï¤À¡£
+D:|“S»‚ÌŒ·‚ğ‚ ‚ç‚©‚¶‚ßˆø‚¢‚Ä‚¨‚«A‹@ŠB®‚Ìˆø‚«‹à‚ğˆø‚­‚¾‚¯‚Å–î‚ğ”­Ë
+D:‚·‚é–‚ª‚Å‚«‚éBƒVƒ‡[ƒgEƒ{ƒE‚âƒƒ“ƒOEƒ{ƒE‚É”ä‚×‚Äˆµ‚¢‚ªŠÈ’P‚È•Ší‚¾B
 
-N:76:¥Ø¥ô¥£¡¦¥¯¥í¥¹¥Ü¥¦
+N:76:ƒwƒ”ƒBEƒNƒƒXƒ{ƒE
 E:& Heavy Crossbow~
 G:}:s
 I:19:24:0
@@ -924,12 +924,12 @@ F:SHOW_MODS
 # Not all heavy crossbow is the arbalest with a crank!
 #D:$The arbalest is so powerful it has to be reinforced with metal and 
 #D:$requires a crank to be cocked.
-D:¹İÅ´À½¤Î¸¹¤ò¤¢¤é¤«¤¸¤á°ú¤¤¤Æ¤ª¤­¡¢µ¡³£¼°¤Î°ú¤­¶â¤ò°ú¤¯¤À¤±¤ÇÌğ¤òÈ¯¼Í
-D:¤¹¤ë»ö¤¬¤Ç¤­¤ë¡£¥·¥ç¡¼¥È¡¦¥Ü¥¦¤ä¥í¥ó¥°¡¦¥Ü¥¦¤ËÈæ¤Ù¤Æ°·¤¤¤¬´ÊÃ±¤ÊÉğ´ï¤À¡£
-D:¥Ø¥ô¥£¡¦¥¯¥í¥¹¥Ü¥¦¤Ï¥é¥¤¥È¡¦¥¯¥í¥¹¥Ü¥¦¤ËÈæ¤Ù¤Æ°ÒÎÏ¤Ï¶¯¤¤¤¬¡¢
-D:¸¹¤ò°ú¤¯¤Î¤ËÄ¹¤¤»ş´Ö¤¬¤«¤«¤Ã¤Æ¤·¤Ş¤¦¡£
+D:|“S»‚ÌŒ·‚ğ‚ ‚ç‚©‚¶‚ßˆø‚¢‚Ä‚¨‚«A‹@ŠB®‚Ìˆø‚«‹à‚ğˆø‚­‚¾‚¯‚Å–î‚ğ”­Ë
+D:‚·‚é–‚ª‚Å‚«‚éBƒVƒ‡[ƒgEƒ{ƒE‚âƒƒ“ƒOEƒ{ƒE‚É”ä‚×‚Äˆµ‚¢‚ªŠÈ’P‚È•Ší‚¾B
+D:ƒwƒ”ƒBEƒNƒƒXƒ{ƒE‚Íƒ‰ƒCƒgEƒNƒƒXƒ{ƒE‚É”ä‚×‚ÄˆĞ—Í‚Í‹­‚¢‚ªA
+D:Œ·‚ğˆø‚­‚Ì‚É’·‚¢ŠÔ‚ª‚©‚©‚Á‚Ä‚µ‚Ü‚¤B
 
-N:77:¥¹¥ê¥ó¥°
+N:77:ƒXƒŠƒ“ƒO
 E:& Sling~
 G:}:u
 I:19:2:0
@@ -938,13 +938,13 @@ A:1/1
 F:SHOW_MODS
 D:$A loop of leather and cords able to hurl stones or shot with tremendous 
 D:$velocity.
-D:Ä¹¤¤É³¤ÎÃæ´Ö¤Ë¤¢¤ë³×À½¤ÎÀĞ¼õ¤±ÉôÊ¬¤ËÀĞ¤òÊñ¤ß¡¢¤³¤ì¤ò¿¶¤ê²ó¤¹Àª¤¤¤Ç
-D:ÀĞ¤òÈô¤Ğ¤¹Éğ´ï¤À¡£¸¶»ÏÅª¤Ê¹½Â¤¤À¤¬°ÒÎÏ¤Ï¤¢¤ë¡£
+D:’·‚¢•R‚Ì’†ŠÔ‚É‚ ‚éŠv»‚ÌÎó‚¯•”•ª‚ÉÎ‚ğ•ï‚İA‚±‚ê‚ğU‚è‰ñ‚·¨‚¢‚Å
+D:Î‚ğ”ò‚Î‚·•Ší‚¾BŒ´n“I‚È\‘¢‚¾‚ªˆĞ—Í‚Í‚ ‚éB
 
 
 ##### Missiles #####
 
-N:78:Ìğ
+N:78:–î
 E:& Arrow~
 G:{:U
 I:17:1:0
@@ -953,9 +953,9 @@ A:3/1:15/1
 P:0:1d4:0:0:0
 F:SHOW_MODS
 D:$A standard clothyard arrow, straight and cleanly fletched.
-D:¤¿¤¯¤ß¤Ë±©¤¬ÉÕ¤±¤é¤ì¤¿¿¿¤ÃÄ¾¤ÊÉ¸½àÅª¤ÊÌğ¤À¡£
+D:‚½‚­‚İ‚É‰H‚ª•t‚¯‚ç‚ê‚½^‚Á’¼‚È•W€“I‚È–î‚¾B
 
-N:79:ÄÉÈø¤ÎÌğ
+N:79:’Ç”ö‚Ì–î
 E:& Seeker Arrow~
 G:{:G
 I:17:2:0
@@ -966,10 +966,10 @@ F:SHOW_MODS
 F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
 D:$Carved from a rare wood, this arrow is inscribed with fell runes and 
 D:$fletched with eagle feathers.
-D:´õ¾¯¤Ê¼ïÎà¤ÎÌÚºà¤«¤éÀÚ¤ê½Ğ¤µ¤ì¡¢ÏÉ¤Î±©¤òÉÕ¤±¡¢
-D:°ÒÎÏ¤ò¹â¤á¤ë¥ë¡¼¥ó¤ò¹ï¤Ş¤ì¤¿Ìğ¤À¡£
+D:Šó­‚Èí—Ş‚Ì–ØŞ‚©‚çØ‚èo‚³‚êA˜h‚Ì‰H‚ğ•t‚¯A
+D:ˆĞ—Í‚ğ‚‚ß‚éƒ‹[ƒ“‚ğ‚Ü‚ê‚½–î‚¾B
 
-N:80:¥¯¥í¥¹¥Ü¥¦¤ÎÌğ
+N:80:ƒNƒƒXƒ{ƒE‚Ì–î
 E:& Bolt~
 G:{:s
 I:18:1:0
@@ -978,9 +978,9 @@ A:3/1:25/1
 P:0:1d5:0:0:0
 F:SHOW_MODS
 D:$A short, heavy arrow shot from a crossbow.
-D:È¯¼Í»ş¤Î¶¯¤¤Éé²Ù¤ËÂÑ¤¨¤ë¤è¤¦¤Ëºî¤é¤ì¤¿Ã»¤¯½Å¤¤¥¯¥í¥¹¥Ü¥¦ÍÑ¤ÎÌğ¤À¡£
+D:”­Ë‚Ì‹­‚¢•‰‰×‚É‘Ï‚¦‚é‚æ‚¤‚Éì‚ç‚ê‚½’Z‚­d‚¢ƒNƒƒXƒ{ƒE—p‚Ì–î‚¾B
 
-N:81:ÄÉÈø¥¯¥í¥¹¥Ü¥¦¤ÎÌğ
+N:81:’Ç”öƒNƒƒXƒ{ƒE‚Ì–î
 E:& Seeker Bolt~
 G:{:B
 I:18:2:0
@@ -990,9 +990,9 @@ P:0:6d5:0:0:0
 F:SHOW_MODS
 F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
 D:$A mighty quarrel, bound about with battle magics.
-D:°ÒÎÏ¤ò¹â¤á¤ëËâË¡¤¬³İ¤±¤é¤ì¤¿¶¯ÎÏ¤Ê¥¯¥í¥¹¥Ü¥¦ÍÑ¤ÎÌğ¤À¡£
+D:ˆĞ—Í‚ğ‚‚ß‚é–‚–@‚ªŠ|‚¯‚ç‚ê‚½‹­—Í‚ÈƒNƒƒXƒ{ƒE—p‚Ì–î‚¾B
 
-N:82:´İ¤¤¾®ÀĞ
+N:82:ŠÛ‚¢¬Î
 E:& Rounded Pebble~
 G:{:s
 I:16:0:0
@@ -1001,7 +1001,7 @@ A:0/1
 P:0:1d2:0:0:0
 F:SHOW_MODS
 
-N:83:Å´ÃÆ
+N:83:“S’e
 E:& Iron Shot~
 G:{:s
 I:16:1:0
@@ -1010,12 +1010,12 @@ A:3/1
 P:0:1d3:0:0:0
 F:SHOW_MODS
 #D:$A grapestone-shaped slug of lead, the right heft for hurling from a sling.
-#D:¥¹¥ê¥ó¥°¤ÇÅê¤²¤ë¤Î¤ËÅ¬¤·¤¿½Å¤µ¤Î¡¢ÉòÆº¤ÎÎ³¤Î¤è¤¦¤Ê±ô¤Î²ô¤À¡£
+#D:ƒXƒŠƒ“ƒO‚Å“Š‚°‚é‚Ì‚É“K‚µ‚½d‚³‚ÌA•’“¸‚Ì—±‚Ì‚æ‚¤‚È‰”‚Ì‰ò‚¾B
 
 
 ##### Shovels and Picks #####
 
-N:84:¥·¥ã¥Ù¥ë
+N:84:ƒVƒƒƒxƒ‹
 E:& Shovel~
 G:\:s
 I:20:1:1
@@ -1024,9 +1024,9 @@ A:5/16
 P:0:1d2:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A compact and sturdy spade.
-D:¾®·¿¤Ç´è¾æ¤Ê¥·¥ã¥Ù¥ë¤À¡£
+D:¬Œ^‚ÅŠæä‚ÈƒVƒƒƒxƒ‹‚¾B
 
-N:85:¥Î¡¼¥à¤Î¥·¥ã¥Ù¥ë
+N:85:ƒm[ƒ€‚ÌƒVƒƒƒxƒ‹
 E:& Gnomish Shovel~
 G:\:G
 I:20:2:2
@@ -1035,9 +1035,9 @@ A:20/4
 P:0:1d2:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A small spade forged of steel with gnomish craftmanship.
-D:¥Î¡¼¥à¤Î¿¦¿Í¤Ë¤è¤Ã¤Æºî¤é¤ì¤¿¹İÅ´À½¤Î¥·¥ã¥Ù¥ë¤À¡£
+D:ƒm[ƒ€‚ÌEl‚É‚æ‚Á‚Äì‚ç‚ê‚½|“S»‚ÌƒVƒƒƒxƒ‹‚¾B
 
-N:86:¥É¥ï¡¼¥Õ¤Î¥·¥ã¥Ù¥ë
+N:86:ƒhƒ[ƒt‚ÌƒVƒƒƒxƒ‹
 E:& Dwarven Shovel~
 G:\:B
 I:20:3:3
@@ -1047,10 +1047,10 @@ P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A broad shovel, fit for the strong shoulders of a dwarf.  It bears runes 
 D:$of delving and no ordinary rock can resist it.
-D:¥É¥ï¡¼¥Õ¤Î¶¯ÎÏ¤Ê¸ª¤Ë¤Á¤ç¤¦¤ÉÎÉ¤¤Éı¹­¤Î¥·¥ã¥Ù¥ë¤À¡£
-D:ºÎ·¡ÎÏ¤ò¹â¤á¤ë¥ë¡¼¥ó¤òÂÓ¤Ó¡¢ÉáÄÌ¤Î´ä¤Ê¤é¤Ğ¤É¤ó¤ÊÊª¤Ç¤â·¡¤ê¿Ê¤à»ö¤¬¤Ç¤­¤ë¡£
+D:ƒhƒ[ƒt‚Ì‹­—Í‚ÈŒ¨‚É‚¿‚å‚¤‚Ç—Ç‚¢•L‚ÌƒVƒƒƒxƒ‹‚¾B
+D:ÌŒ@—Í‚ğ‚‚ß‚éƒ‹[ƒ“‚ğ‘Ñ‚ÑA•’Ê‚ÌŠâ‚È‚ç‚Î‚Ç‚ñ‚È•¨‚Å‚àŒ@‚èi‚Ş–‚ª‚Å‚«‚éB
 
-N:87:¤Ä¤ë¤Ï¤·
+N:87:‚Â‚é‚Í‚µ
 E:& Pick~
 G:\:s
 I:20:4:1
@@ -1060,9 +1060,9 @@ P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A heavy mining tool with a long, slightly curved head that tapers 
 D:$to chisel points on both ends.
-D:½Å¤¤ºÎ·¡ÍÑ¤ÎÆ»¶ñ¤Ç¡¢ÈùÌ¯¤Ë¶Ê¤Ã¤¿Æ¬Éô¤ÎÎ¾Ã¼¤ËÀÚÀè¤¬ÉÕ¤¤¤Æ¤¤¤ë¡£
+D:d‚¢ÌŒ@—p‚Ì“¹‹ï‚ÅA”÷–­‚É‹È‚Á‚½“ª•”‚Ì—¼’[‚ÉØæ‚ª•t‚¢‚Ä‚¢‚éB
 
-N:88:¥ª¡¼¥¯¤Î¤Ä¤ë¤Ï¤·
+N:88:ƒI[ƒN‚Ì‚Â‚é‚Í‚µ
 E:& Orcish Pick~
 G:\:g
 I:20:5:2
@@ -1072,9 +1072,9 @@ P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A crude, ugly, but effective pickaxe.  Made in enormous quantities for 
 D:$the slave-mines of Durthang.
-D:ÁÆ»¨¤Ç½¹¤¤ºî¤ê¤À¤¬¡¢¼ÂÍÑÅª¤Ê¤Ä¤ë¤Ï¤·¤À¡£
+D:‘eG‚ÅX‚¢ì‚è‚¾‚ªAÀ—p“I‚È‚Â‚é‚Í‚µ‚¾B
 
-N:89:¥É¥ï¡¼¥Õ¤Î¤Ä¤ë¤Ï¤·
+N:89:ƒhƒ[ƒt‚Ì‚Â‚é‚Í‚µ
 E:& Dwarven Pick~
 G:\:b
 I:20:6:3
@@ -1084,11 +1084,11 @@ P:0:1d4:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A short but sturdy pick, like those that delved deep Moria, with runes to 
 D:$break the sinews of mountains.
-D:¥â¥ê¥¢¤Î¿¼Éô¤ÎºÎ·¡¤Ë»È¤ï¤ì¤Æ¤¤¤¿¤Î¤ÈÆ±ÍÍ¤Ê¡¢Ã»¤¯´è¾æ¤Ê¤Ä¤ë¤Ï¤·¤À¡£
+D:ƒ‚ƒŠƒA‚Ì[•”‚ÌÌŒ@‚Ég‚í‚ê‚Ä‚¢‚½‚Ì‚Æ“¯—l‚ÈA’Z‚­Šæä‚È‚Â‚é‚Í‚µ‚¾B
 
 ##### Armor #####
 #JZ#
-N:90:¥¨¥ë¥Õ¤Î¥¯¥í¡¼¥¯
+N:90:ƒGƒ‹ƒt‚ÌƒNƒ[ƒN
 E:& Elven Cloak~
 G:(:G
 I:35:2:1
@@ -1099,10 +1099,10 @@ F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
 F:STEALTH | SEARCH
 D:$A mantle made of curious silken material by the Galadrim that wondrously 
 D:$takes on the hues and shapes of its surroundings.
-D:ÉÔ»×µÄ¤Ê¸¨¤Î¤è¤¦¤ÊÁÇºà¤Çºî¤é¤ì¤¿³°Åå¤À¡£
-D:¤½¤ÎÁÇºà¤Ï¼ş¤ê¤Î·Ê¿§¤Î¿§¤È·Á¤ò±Ç¤·½Ğ¤·¡¢ÃåÍÑ¼Ô¤ò±£¤¹¸ú²Ì¤¬¤¢¤ë¡£
+D:•sv‹c‚ÈŒ¦‚Ì‚æ‚¤‚È‘fŞ‚Åì‚ç‚ê‚½ŠO“…‚¾B
+D:‚»‚Ì‘fŞ‚Íü‚è‚ÌŒiF‚ÌF‚ÆŒ`‚ğ‰f‚µo‚µA’…—pÒ‚ğ‰B‚·Œø‰Ê‚ª‚ ‚éB
 
-N:91:Æğ³×¥Ö¡¼¥Ä
+N:91:“îŠvƒu[ƒc
 E:& Pair~ of Soft Leather Boots
 G:]:U
 I:30:2:0
@@ -1110,10 +1110,10 @@ W:3:0:20:7
 A:3/1
 P:2:1d1:0:0:0
 D:$These are calf-high boots of flexible leather, laced from heel to calf.
-D:¤Õ¤¯¤é¤Ï¤®¤Î¹â¤µ¤Ş¤Ç¤Î½ÀÆğ¤Ê³×¤Î¥Ö¡¼¥Ä¤À¡£
-D:ìû¤«¤é¤Õ¤¯¤é¤Ï¤®¤Ş¤Ç·ë¤ÓÉ³¤¬ÉÕ¤¤¤Æ¤¤¤ë¡£
+D:‚Ó‚­‚ç‚Í‚¬‚Ì‚‚³‚Ü‚Å‚Ì_“î‚ÈŠv‚Ìƒu[ƒc‚¾B
+D:æù‚©‚ç‚Ó‚­‚ç‚Í‚¬‚Ü‚ÅŒ‹‚Ñ•R‚ª•t‚¢‚Ä‚¢‚éB
 
-N:92:¹Å³×¥Ö¡¼¥Ä
+N:92:dŠvƒu[ƒc
 E:& Pair~ of Hard Leather Boots
 G:]:U
 I:30:3:0
@@ -1121,9 +1121,9 @@ W:5:0:40:12
 A:5/1
 P:3:1d1:0:0:0
 D:$A set of sturdy leather boots that will last many weary miles.
-D:Ä¹¤¤Î¹Ï©¤Ç¤âÎÉ¤¯Êİ¤Ä¾æÉ×¤Ê³×À½¤Î¥Ö¡¼¥Ä¤À¡£
+D:’·‚¢—·˜H‚Å‚à—Ç‚­•Û‚Âä•v‚ÈŠv»‚Ìƒu[ƒc‚¾B
 
-N:93:Å´ÉÆÄì¤Î·¤
+N:93:“S•e’ê‚ÌŒC
 E:& Pair~ of Metal Shod Boots
 G:]:s
 I:30:6:0
@@ -1132,9 +1132,9 @@ A:20/1
 P:6:1d1:0:0:0
 D:$A set of double-lined leather boots, with toes and heels reinforced with 
 D:$iron.
-D:Æó½Å¤Î³×À½¥Ö¡¼¥Ä¤Ç¡¢ìû¤ÈÄŞÀè¤¬Å´¤ÇÊä¶¯¤µ¤ì¤Æ¤¤¤ë¡£
+D:“ñd‚ÌŠv»ƒu[ƒc‚ÅAæù‚Æ’Üæ‚ª“S‚Å•â‹­‚³‚ê‚Ä‚¢‚éB
 
-N:94:¹Å³×Ë¹»Ò
+N:94:dŠv–Xq
 E:& Hard Leather Cap~
 G:]:u
 I:32:2:0
@@ -1142,9 +1142,9 @@ W:3:0:15:12
 A:3/1
 P:2:0d0:0:0:0
 D:$A padded skullcap of boiled leather.
-D:¼Ñ¸Ç¤á¤¿³×À½¤ÎµÍ¤áÊªÆş¤ê¤ÎË¹»Ò¤À¡£
+D:ÏŒÅ‚ß‚½Šv»‚Ì‹l‚ß•¨“ü‚è‚Ì–Xq‚¾B
 
-N:95:¶âÂ°Ë¹»Ò
+N:95:‹à‘®–Xq
 E:& Metal Cap~
 G:]:s
 I:32:3:0
@@ -1152,9 +1152,9 @@ W:10:0:20:30
 A:10/1
 P:3:1d1:0:0:0
 D:$A pot-helm of steel that protects the skull.
-D:Æ¬Éô¤òÊİ¸î¤¹¤ë¹İÅ´¤ÎË¹»Ò¤À¡£
+D:“ª•”‚ğ•ÛŒì‚·‚é|“S‚Ì–Xq‚¾B
 
-N:96:Å´¥Ø¥ë¥á¥Ã¥È
+N:96:“Sƒwƒ‹ƒƒbƒg
 E:& Iron Helm~
 G:]:s
 I:32:5:0
@@ -1162,9 +1162,9 @@ W:20:0:75:75
 A:20/1
 P:5:1d3:0:0:0
 D:$A mighty helmet of heavy iron, completely enclosing the head.
-D:Æ¬Éô¤ò´°Á´¤ËÊ¤¤¦Å´À½¤Î¥Ø¥ë¥á¥Ã¥È¤À¡£
+D:“ª•”‚ğŠ®‘S‚É•¢‚¤“S»‚Ìƒwƒ‹ƒƒbƒg‚¾B
 
-N:97:¹İÅ´¥Ø¥ë¥á¥Ã¥È
+N:97:|“Sƒwƒ‹ƒƒbƒg
 E:& Steel Helm~
 G:]:W
 I:32:6:0
@@ -1173,9 +1173,9 @@ A:40/1
 P:6:1d3:0:0:0
 D:$This great helm covers the head and shoulders with plates of steel and a 
 D:$curtain of mail.
-D:¹İÅ´ÈÄ¤Èº¿¤«¤¿¤Ó¤é¤òÁÈ¤ß¹ç¤ï¤»¤Æ¡¢Æ¬Éô¤«¤é¸ª¤Ş¤Ç¤ò´°Á´¤ËÊ¤¤¦ËÉ¶ñ¤À¡£
+D:|“S”Â‚Æ½‚©‚½‚Ñ‚ç‚ğ‘g‚İ‡‚í‚¹‚ÄA“ª•”‚©‚çŒ¨‚Ü‚Å‚ğŠ®‘S‚É•¢‚¤–h‹ï‚¾B
 
-N:98:Å´´§
+N:98:“SŠ¥
 E:& Iron Crown~
 G:]:s
 I:33:10:0
@@ -1184,9 +1184,9 @@ A:40/1
 P:0:1d1:0:0:0
 D:$A plain band of iron, crowned with iron spikes.  It is a tyrant's 
 D:$symbol.
-D:Å´¤Î´Ä¤ËÅ´¤ÎÆÍµ¯¤Ç¾ş¤ê¤¬ÉÕ¤±¤é¤ì¤¿´§¤À¡£·¯¼ç¤Î°õ¤Ç¤¢¤ë¡£
+D:“S‚ÌŠÂ‚É“S‚Ì“Ë‹N‚Åü‚è‚ª•t‚¯‚ç‚ê‚½Š¥‚¾BŒNå‚Ìˆó‚Å‚ ‚éB
 
-N:99:¶â¤Î´§
+N:99:‹à‚ÌŠ¥
 E:& Golden Crown~
 G:]:y
 I:33:11:0
@@ -1196,10 +1196,10 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID
 D:$An elegant golden circlet, with slender spines thrusting upward. 
 D:$It looks like it should be resting over the brow of a king.
-D:´ö¤Ä¤â¤ÎºÙ¤¤ÆÍµ¯¤¬¾å¸ş¤­¤ËÉÕ¤¤¤¿Í¥²í¤Ê¶â¤ÎÆ¬¾ş¤ê¡£
-D:²¦¤Î³Û¤ËÁê±ş¤·¤¤Êª¤Ë¸«¤¨¤ë¡£
+D:Šô‚Â‚à‚Ì×‚¢“Ë‹N‚ªãŒü‚«‚É•t‚¢‚½—D‰ë‚È‹à‚Ì“ªü‚èB
+D:‰¤‚ÌŠz‚É‘Š‰‚µ‚¢•¨‚ÉŒ©‚¦‚éB
 
-N:100:Êõ´§
+N:100:•óŠ¥
 E:& Jewel Encrusted Crown~
 G:]:v
 I:33:12:0
@@ -1209,9 +1209,9 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID
 D:$An elaboratedly decorated crown of massive gold, studded with a rainbow 
 D:$of gems and jewels; worthy of an emperor.
-D:Àº¹ª¤Ë¾ş¤êÉÕ¤±¤é¤ì¤¿½Å¸ü¤Ê¶â¤Î´§¤ËÍÍ¡¹¤ÊÊõÀĞ¤¬Æú¿§¤Ë¤Á¤ê¤Ğ¤á¤é¤ì¤Æ¤¤¤ë¡£
+D:¸I‚Éü‚è•t‚¯‚ç‚ê‚½dŒú‚È‹à‚ÌŠ¥‚É—lX‚È•óÎ‚ª“øF‚É‚¿‚è‚Î‚ß‚ç‚ê‚Ä‚¢‚éB
 
-N:101:¥í¡¼¥Ö
+N:101:ƒ[ƒu
 E:& Robe~
 G:(:b
 I:36:2:0
@@ -1219,9 +1219,9 @@ W:1:0:20:4
 A:1/1:50/1
 P:2:0d0:0:0:0
 D:$A practical garment of thick wool or velvet, draping from neck to heels.
-D:¼ó¤«¤éìû¤Ş¤Ç¤òÊ¤¤¦¡¢¥Ó¥í¡¼¥É¤Ş¤¿¤ÏÌÊÀ½¤Î¼ÂÍÑÅª¤Ê°áÉş¤À¡£
+D:ñ‚©‚çæù‚Ü‚Å‚ğ•¢‚¤Aƒrƒ[ƒh‚Ü‚½‚Í–È»‚ÌÀ—p“I‚Èˆß•‚¾B
 
-N:102:±ø¤ì¤¿¥Ü¥íÉş
+N:102:‰˜‚ê‚½ƒ{ƒ•
 E:& Filthy Rag~
 G:(:D
 I:36:1:0
@@ -1230,10 +1230,10 @@ A:0/1
 P:1:0d0:0:0:-1
 D:$This tattered rag appears to once have been a robe, but has been patched 
 D:$and re-patched so many times that you can't be sure.
-D:¤³¤Î¤Ü¤í¤­¤ì¤Ï¸µ¡¹¤Ï¥í¡¼¥Ö¤À¤Ã¤¿Êª¤Î¤è¤¦¤À¤¬¡¢
-D:¤¢¤Ş¤ê¤Ë¤â·Ñ¤®¤Ï¤®¤À¤é¤±¤Ç¤è¤¯È½ÊÌ¤Ç¤­¤Ê¤¤¡£
+D:‚±‚Ì‚Ú‚ë‚«‚ê‚ÍŒ³X‚Íƒ[ƒu‚¾‚Á‚½•¨‚Ì‚æ‚¤‚¾‚ªA
+D:‚ ‚Ü‚è‚É‚àŒp‚¬‚Í‚¬‚¾‚ç‚¯‚Å‚æ‚­”»•Ê‚Å‚«‚È‚¢B
 
-N:103:Æğ³×¤è¤í¤¤
+N:103:“îŠv‚æ‚ë‚¢
 E:Soft Leather Armour~
 G:(:U
 I:36:4:0
@@ -1241,9 +1241,9 @@ W:3:0:80:18
 A:3/1
 P:4:0d0:0:0:0
 D:$A cuirass of pliable leather with a thicker leather jack.
-D:¤·¤Ê¤ä¤«¤Ê³×¤ÎÆ¹Åö¤Æ¤ËÇö¤¤³×¥¸¥ã¥±¥Ã¥È¤¬ÉÕ¤¤¤¿³»¤À¡£
+D:‚µ‚È‚â‚©‚ÈŠv‚Ì“·“–‚Ä‚É”–‚¢ŠvƒWƒƒƒPƒbƒg‚ª•t‚¢‚½ŠZ‚¾B
 
-N:104:ÉÆÉÕÆğ³×¤è¤í¤¤
+N:104:•e•t“îŠv‚æ‚ë‚¢
 E:Soft Studded Leather~
 G:(:U
 I:36:5:0
@@ -1251,9 +1251,9 @@ W:3:0:90:35
 A:3/1
 P:5:1d1:0:0:0
 D:$A cuirass of pliable leather studded with metal rivets.
-D:Â¿¿ô¤Î¶âÂ°À½¤ÎÉÆ¤ÇÊä¶¯¤µ¤ì¤¿¤·¤Ê¤ä¤«¤Ê³×¤ÎÆ¹Åö¤Æ¤À¡£
+D:‘½”‚Ì‹à‘®»‚Ì•e‚Å•â‹­‚³‚ê‚½‚µ‚È‚â‚©‚ÈŠv‚Ì“·“–‚Ä‚¾B
 
-N:105:¹Å³×¤è¤í¤¤
+N:105:dŠv‚æ‚ë‚¢
 E:Hard Leather Armour~
 G:(:U
 I:36:6:0
@@ -1261,9 +1261,9 @@ W:5:0:100:150
 A:5/1
 P:6:1d1:-1:0:0
 D:$A boiled leather cuirass and shoulder plates.
-D:¼Ñ¸Ç¤á¤¿³×À½¤ÎÆ¹Åö¤Æ¤È¸ªÅö¤Æ¤¬ÉÕ¤¤¤¿³»¤À¡£
+D:ÏŒÅ‚ß‚½Šv»‚Ì“·“–‚Ä‚ÆŒ¨“–‚Ä‚ª•t‚¢‚½ŠZ‚¾B
 
-N:106:ÉÆÉÕ¹Å³×¤è¤í¤¤
+N:106:•e•tdŠv‚æ‚ë‚¢
 E:Hard Studded Leather~
 G:(:U
 I:36:7:0
@@ -1272,9 +1272,9 @@ A:10/1
 P:7:1d2:-1:0:0
 D:$A strong leather breastplate and shoulder guards over a sleeved shirt 
 D:$of cured leather covered with iron studs.
-D:Â¿¿ô¤Î¶âÂ°À½¤ÎÉÆ¤ÇÊä¶¯¤·¤¿³×À½¤Î¥·¥ã¥Ä¤Ë¼Ñ¸Ç¤á¤¿³×À½¤ÎÆ¹Åö¤Æ¤È¸ªÅö¤Æ¤¬ÉÕ¤¤¤¿³»¤À¡£
+D:‘½”‚Ì‹à‘®»‚Ì•e‚Å•â‹­‚µ‚½Šv»‚ÌƒVƒƒƒc‚ÉÏŒÅ‚ß‚½Šv»‚Ì“·“–‚Ä‚ÆŒ¨“–‚Ä‚ª•t‚¢‚½ŠZ‚¾B
 
-N:107:³×À½¥¹¥±¥¤¥ë¡¦¥á¥¤¥ë
+N:107:Šv»ƒXƒPƒCƒ‹EƒƒCƒ‹
 E:Leather Scale Mail~
 G:(:U
 I:36:11:0
@@ -1283,9 +1283,9 @@ A:15/1
 P:11:1d1:-1:0:0
 D:$A tunic and skirt sewn with thick, overlapping scales of hardened 
 D:$leather.
-D:³×À½¤Î¥·¥ã¥Ä¤Ë¼Ñ¸Ç¤á¤¿³×À½¤ÎÎÚ¤Î¤è¤¦¤Ê·Á¤ÎÉôÉÊ¤òÂ¿¿ôË¥¤¤ÉÕ¤±¤Æ¤¢¤ë³»¤À¡£
+D:Šv»‚ÌƒVƒƒƒc‚ÉÏŒÅ‚ß‚½Šv»‚Ì—Ø‚Ì‚æ‚¤‚ÈŒ`‚Ì•”•i‚ğ‘½”–D‚¢•t‚¯‚Ä‚ ‚éŠZ‚¾B
 
-N:108:¶âÂ°À½¥¹¥±¥¤¥ë¡¦¥á¥¤¥ë
+N:108:‹à‘®»ƒXƒPƒCƒ‹EƒƒCƒ‹
 E:Metal Scale Mail~
 G:[:s
 I:37:3:0
@@ -1294,9 +1294,9 @@ A:25/1
 P:13:1d4:-2:0:0
 D:$A heavy shirt of overlapping steel scales backed by leather, with 
 D:$matching skirt and sleeves.
-D:³×À½¤ÎÂµÉÕ¤­¥·¥ã¥Ä¤Ë¹İÅ´À½¤ÎÎÚ¤Î¤è¤¦¤Ê·Á¤ÎÉôÉÊ¤òÂ¿¿ôË¥¤¤ÉÕ¤±¤Æ¤¢¤ë³»¤À¡£
+D:Šv»‚Ì‘³•t‚«ƒVƒƒƒc‚É|“S»‚Ì—Ø‚Ì‚æ‚¤‚ÈŒ`‚Ì•”•i‚ğ‘½”–D‚¢•t‚¯‚Ä‚ ‚éŠZ‚¾B
 
-N:109:º¿¤«¤¿¤Ó¤é
+N:109:½‚©‚½‚Ñ‚ç
 E:Chain Mail~
 G:[:s
 I:37:4:0
@@ -1306,10 +1306,10 @@ P:14:1d4:-2:0:0
 D:$A sleeved hauberk of interlocking steel rings, well padded with leather.  
 D:$Chain mail takes skill to make, but offers good protection and relatively 
 D:$low weight.
-D:¹İÅ´¤ÎÎØ¤¬³ú¤ß¹ç¤Ã¤¿ÂµÉÕ¤­¤Îº¿¤«¤¿¤Ó¤é¤Ç¡¢³×¤¬Åö¤Æ¤é¤ì¤Æ¤¤¤ë¡£
-D:º¿¤«¤¿¤Ó¤é¤òºî¤ë¤Ë¤Ï½ÏÎı¤òÍ×¤¹¤ë¤¬¡¢¹â¤¤ËÉ¸æÎÏ¤ò»ı¤ÁÈæ³ÓÅª¤Ë·ÚÎÌ¤Ë»Å¾å¤¬¤ë¡£
+D:|“S‚Ì—Ö‚ªŠš‚İ‡‚Á‚½‘³•t‚«‚Ì½‚©‚½‚Ñ‚ç‚ÅAŠv‚ª“–‚Ä‚ç‚ê‚Ä‚¢‚éB
+D:½‚©‚½‚Ñ‚ç‚ğì‚é‚É‚Ín—û‚ğ—v‚·‚é‚ªA‚‚¢–hŒä—Í‚ğ‚¿”äŠr“I‚ÉŒy—Ê‚Édã‚ª‚éB
 
-N:110:»¬¤Ó¤¿º¿¤«¤¿¤Ó¤é
+N:110:K‚Ñ‚½½‚©‚½‚Ñ‚ç
 E:Rusty Chain Mail~
 G:[:r
 I:37:1:0
@@ -1318,14 +1318,14 @@ A:25/1
 P:14:1d4:-5:0:-8
 D:$Each link of this suit is brittle with rust, and the corroded rings 
 D:$are stiff and weakened.
-D:¤³¤Î³»¤Î³ÆÉô¤Î·Ñ¤®ÌÜ¤Ï»¬¤ÇÀÈ¤¯¤Ê¤Ã¤Æ¤ª¤ê¡¢µà¤Á¤¿º¿¤ÎÎØ¤Ï¸Ç¤Ş¤Ã¤Æ¤·¤Ş¤¤¼å¤Ş¤Ã
-D:¤Æ¤¤¤ë¡£
+D:‚±‚ÌŠZ‚ÌŠe•”‚ÌŒp‚¬–Ú‚ÍK‚ÅÆ‚­‚È‚Á‚Ä‚¨‚èA‹€‚¿‚½½‚Ì—Ö‚ÍŒÅ‚Ü‚Á‚Ä‚µ‚Ü‚¢ã‚Ü‚Á
+D:‚Ä‚¢‚éB
 
-# "hauberk"¤Ï¸µ¤Î°ÕÌ£¤Ï(ÂµÌµ¤·¤Î)Æ¹³»¤ò»Ø¤¹¸ÀÍÕ¡£ ¤è¤¯º¿¤«¤¿¤Ó¤é¤Çºî¤é
-# ¤ì¤¿¤Î¤Ç¸å¤ËÅ¾¤¸¤Æhauberk¤È¸À¤¨¤Ğº¿¤«¤¿¤Ó¤é¤ÎÆ¹³»¡¢¤µ¤é¤Ë¤Ïº¿¤«¤¿¤Ó
-# ¤éÁ´ÈÌ¤ò¤â»Ø¤¹¤è¤¦¤Ë¤Ê¤Ã¤¿¤¬¡¢¤³¤³¤Ç¤Ï¡Öº¿¤«¤¿¤Ó¤é¤ÎÆ¹³»¡×¤Î°ÕÌ£¤Ç»È
-# ¤ï¤ì¤Æ¤¤¤ë¤È»×¤ï¤ì¤ë¡£ Mogami
-N:111:½Åº¿¤«¤¿¤Ó¤é
+# "hauberk"‚ÍŒ³‚ÌˆÓ–¡‚Í(‘³–³‚µ‚Ì)“·ŠZ‚ğw‚·Œ¾—tB ‚æ‚­½‚©‚½‚Ñ‚ç‚Åì‚ç
+# ‚ê‚½‚Ì‚ÅŒã‚É“]‚¶‚Ähauberk‚ÆŒ¾‚¦‚Î½‚©‚½‚Ñ‚ç‚Ì“·ŠZA‚³‚ç‚É‚Í½‚©‚½‚Ñ
+# ‚ç‘S”Ê‚ğ‚àw‚·‚æ‚¤‚É‚È‚Á‚½‚ªA‚±‚±‚Å‚Íu½‚©‚½‚Ñ‚ç‚Ì“·ŠZv‚ÌˆÓ–¡‚Åg
+# ‚í‚ê‚Ä‚¢‚é‚Æv‚í‚ê‚éB Mogami
+N:111:d½‚©‚½‚Ñ‚ç
 E:Augmented Chain Mail~
 G:[:s
 I:37:6:0
@@ -1335,11 +1335,11 @@ P:16:1d4:-2:0:0
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, 
 D:$strategically reinforced at vital locations with a second layer 
 D:$of chain, all over a layer of heavy padding.
-D:³ú¤ß¹ç¤Ã¤¿¹İÅ´¤ÎÎØ¤Ç¤Ç¤­¤¿º¿¤«¤¿¤Ó¤é¤ÎÆ¹³»¤ÈæúÅö¤Æ¤ÈÂµ¤Ç¤¢¤ê¡¢
-D:2ËçÌÜ¤Îº¿¤ÎÁØ¤Ç½ÅÍ×¤ÊÉôÊ¬¤òÀïÎ¬Åª¤ËÊä¶¯¤·¤Æ¤ª¤ê¡¢
-D:»ê¤ë½ê¤Ë½Å¤¤µÍ¤áÊª¤ÎÁØ¤¬¤¢¤ë¡£
+D:Šš‚İ‡‚Á‚½|“S‚Ì—Ö‚Å‚Å‚«‚½½‚©‚½‚Ñ‚ç‚Ì“·ŠZ‚Æãø“–‚Ä‚Æ‘³‚Å‚ ‚èA
+D:2–‡–Ú‚Ì½‚Ì‘w‚Åd—v‚È•”•ª‚ğí—ª“I‚É•â‹­‚µ‚Ä‚¨‚èA
+D:Š‚éŠ‚Éd‚¢‹l‚ß•¨‚Ì‘w‚ª‚ ‚éB
 
-N:112:¶¯²½º¿¤«¤¿¤Ó¤é
+N:112:‹­‰»½‚©‚½‚Ñ‚ç
 E:Bar Chain Mail~
 G:[:s
 I:37:8:0
@@ -1347,7 +1347,7 @@ W:35:0:280:1020
 A:35/1
 P:18:1d4:-2:0:0
 
-N:113:¶âÂ°À½¥Ö¥ê¥¬¥ó¥À¥¤¥ó¡¦¥¢¡¼¥Ş¡¼
+N:113:‹à‘®»ƒuƒŠƒKƒ“ƒ_ƒCƒ“EƒA[ƒ}[
 E:Metal Brigandine Armour~
 G:[:s
 I:37:9:0
@@ -1355,7 +1355,7 @@ W:35:0:290:1100
 A:35/1
 P:19:1d4:-3:0:0
 
-N:114:¥Ñ¡¼¥·¥ã¥ë¡¦¥×¥ì¡¼¥È¡¦¥á¥¤¥ë
+N:114:ƒp[ƒVƒƒƒ‹EƒvƒŒ[ƒgEƒƒCƒ‹
 E:Partial Plate Armour~
 G:[:W
 I:37:12:0
@@ -1363,9 +1363,9 @@ W:45:0:260:1200
 A:45/1
 P:22:1d6:-3:0:0
 D:$A steel corselet and vambraces over a skirt and leggings of chain.
-D:¹İÅ´À½¤ÎÆ¹³»¤Ç¤¢¤ê¡¢¥¹¥«¡¼¥È¤Î¾åÉô¤Ë¤ÏÏÓ³»¤¬¤¢¤ê¡¢º¿¤ÎæúÅö¤Æ¤ò»ı¤Ä¡£
+D:|“S»‚Ì“·ŠZ‚Å‚ ‚èAƒXƒJ[ƒg‚Ìã•”‚É‚Í˜rŠZ‚ª‚ ‚èA½‚Ìãø“–‚Ä‚ğ‚ÂB
 
-N:115:¶âÂ°À½¥é¥á¥é¡¼¡¦¥¢¡¼¥Ş¡¼
+N:115:‹à‘®»ƒ‰ƒƒ‰[EƒA[ƒ}[
 E:Metal Lamellar Armour~
 G:[:W
 I:37:13:0
@@ -1373,7 +1373,7 @@ W:45:0:340:1150
 A:45/1
 P:23:1d6:-3:0:0
 
-N:116:¥Õ¥ë¡¦¥×¥ì¡¼¥È¡¦¥á¥¤¥ë
+N:116:ƒtƒ‹EƒvƒŒ[ƒgEƒƒCƒ‹
 E:Full Plate Armour~
 G:[:W
 I:37:15:0
@@ -1382,10 +1382,10 @@ A:45/1
 P:25:2d4:-3:0:0
 D:$A full suit of carefully fitted plates, with hinged joints backed 
 D:$by chain, and light padding underneath.
-D:Ç°Æş¤ê¤ËÂÎ¤Ë¹ç¤ï¤»¤¿Å´ÈÄÀ½¤ÎÁ´¿È³»¤Ç¤¢¤ê¡¢¤Á¤ç¤¦¤Ä¤¬¤¤¤Ç·Ò¤¬¤Ã¤¿ÉôÊ¬¤ÎÎ¢¤Ï
-D:º¿¤Ç¼é¤é¤ì¡¢³»¤ÎÎ¢¤Ë¤Ï·Ú¤¤µÍ¤áÊª¤¬¤¢¤ë¡£
+D:”O“ü‚è‚É‘Ì‚É‡‚í‚¹‚½“S”Â»‚Ì‘SgŠZ‚Å‚ ‚èA‚¿‚å‚¤‚Â‚ª‚¢‚ÅŒq‚ª‚Á‚½•”•ª‚Ì— ‚Í
+D:½‚Åç‚ç‚êAŠZ‚Ì— ‚É‚ÍŒy‚¢‹l‚ß•¨‚ª‚ ‚éB
 
-N:117:¶¯²½¥×¥ì¡¼¥È¡¦¥¢¡¼¥Ş¡¼
+N:117:‹­‰»ƒvƒŒ[ƒgEƒA[ƒ}[
 E:Ribbed Plate Armour~
 G:[:W
 I:37:18:0
@@ -1393,7 +1393,7 @@ W:50:0:380:1500
 A:50/1
 P:28:2d4:-3:0:0
 
-N:118:¥¢¥À¥Ş¥ó¥¿¥¤¥ÈÀ½¥×¥ì¡¼¥È¡¦¥á¥¤¥ë
+N:118:ƒAƒ_ƒ}ƒ“ƒ^ƒCƒg»ƒvƒŒ[ƒgEƒƒCƒ‹
 E:Adamantite Plate Mail~
 G:[:G
 I:37:30:0
@@ -1403,10 +1403,10 @@ P:40:2d4:-4:0:0
 F:IGNORE_ACID
 D:$Adamantite, hard as diamonds, forms this exquisite suit; nothing else 
 D:$in Middle Earth gives as much protection.
-D:¥À¥¤¥¢¥â¥ó¥É¤Î¤è¤¦¤Ë¹Å¤¤¥¢¥À¥Ş¥ó¥¿¥¤¥È¤Ç¤Ç¤­¤¿Àº¹ª¤ÇÈş¤·¤¤³»¤Ç¤¢¤ê¡¢
-D:¤³¤ì¤Û¤É¤ÎËÉ¸æ¤ò¤â¤¿¤é¤¹³»¤ÏÃæ¤Ä¹ñ¤Ë¤ÏÂ¾¤ËÂ¸ºß¤·¤Ê¤¤¡£
+D:ƒ_ƒCƒAƒ‚ƒ“ƒh‚Ì‚æ‚¤‚Éd‚¢ƒAƒ_ƒ}ƒ“ƒ^ƒCƒg‚Å‚Å‚«‚½¸I‚Å”ü‚µ‚¢ŠZ‚Å‚ ‚èA
+D:‚±‚ê‚Ù‚Ç‚Ì–hŒä‚ğ‚à‚½‚ç‚·ŠZ‚Í’†‚Â‘‚É‚Í‘¼‚É‘¶İ‚µ‚È‚¢B
 
-N:119:¥ß¥¹¥ê¥ëÀ½¥×¥ì¡¼¥È¡¦¥á¥¤¥ë
+N:119:ƒ~ƒXƒŠƒ‹»ƒvƒŒ[ƒgEƒƒCƒ‹
 E:Mithril Plate Mail~
 G:[:B
 I:37:25:0
@@ -1416,10 +1416,10 @@ P:35:2d4:-3:0:0
 F:IGNORE_ACID
 D:$A shimmering suit of true-silver, forged long ago by dwarven smiths of 
 D:$legend.  It gleams with purest white as you gaze upon it.
-D:ÍÚ¤«¤Ê¤ëÀÎ¤ËÅÁÀâ¤Î¥É¥ï¡¼¥Õ¤ÎÃÃÌê»Õ¤ËÃÃ¤¨¤é¤ì¤¿¡¢µ±¤¯¤Ş¤³¤È¤Î¶ä¤Î³»¤À¡£
-D:¶Å»ë¤¹¤ë¤È½ãÇò¤Ë¤­¤é¤á¤¯¡£
+D:—y‚©‚È‚éÌ‚É“`à‚Ìƒhƒ[ƒt‚Ì’b–èt‚É’b‚¦‚ç‚ê‚½A‹P‚­‚Ü‚±‚Æ‚Ì‹â‚ÌŠZ‚¾B
+D:‹Ã‹‚·‚é‚Æƒ”’‚É‚«‚ç‚ß‚­B
 
-N:120:¥ß¥¹¥ê¥ëÀ½º¿¤«¤¿¤Ó¤é
+N:120:ƒ~ƒXƒŠƒ‹»½‚©‚½‚Ñ‚ç
 E:Mithril Chain Mail~
 G:[:B
 I:37:20:0
@@ -1429,10 +1429,10 @@ P:28:1d4:-1:0:0
 F:IGNORE_ACID
 D:$Rare and wondrous is chain mail made of true-silver, for it offers more 
 D:$protection for the weight than any other armour.
-D:ËÜÅö¤Ë´õ¾¯¤Ç¶Ã¤¯¤Ù¤­¤Ş¤³¤È¤Î¶äÀ½¤Îº¿¤«¤¿¤Ó¤é¤Ç¤¢¤ê¡¢Â¾¤Î³»¤ËÈæ¤Ù¤Æ¤â¤½¤Î
-D:·Ú¤µ¤Ë¤·¤Æ¤è¤ê¹â¤¤ËÉ¸æ¤òÍ¿¤¨¤ë¡£
+D:–{“–‚ÉŠó­‚Å‹Á‚­‚×‚«‚Ü‚±‚Æ‚Ì‹â»‚Ì½‚©‚½‚Ñ‚ç‚Å‚ ‚èA‘¼‚ÌŠZ‚É”ä‚×‚Ä‚à‚»‚Ì
+D:Œy‚³‚É‚µ‚Ä‚æ‚è‚‚¢–hŒä‚ğ—^‚¦‚éB
 
-N:121:Æó½Åº¿¤«¤¿¤Ó¤é
+N:121:“ñd½‚©‚½‚Ñ‚ç
 E:Double Chain Mail~
 G:[:s
 I:37:7:0
@@ -1443,7 +1443,7 @@ P:16:1d4:-2:0:0
 
 # This shield does not belong here
 
-N:122:¥ß¥é¡¼¡¦¥·¡¼¥ë¥É
+N:122:ƒ~ƒ‰[EƒV[ƒ‹ƒh
 E:& Mirror Shield~
 G:[:B
 I:34:10:0
@@ -1453,12 +1453,12 @@ P:10:1d1:0:0:10
 F:IGNORE_ACID | REFLECT
 #D:$A shield of purest white, made of mithril, engraved with runes to keep 
 #D:$all hurt and harm from you.
-#D:½ı¤È´í¸±¤«¤é¼é¤é¤ì¤ë¤è¤¦¤Ë¥ë¡¼¥óÊ¸»ú¤¬¹ï¤Ş¤ì¤¿¥ß¥¹¥ê¥ëÀ½¤Î½ãÇò¤Î½â¤À¡£
+#D:‚ÆŠëŒ¯‚©‚çç‚ç‚ê‚é‚æ‚¤‚Éƒ‹[ƒ“•¶š‚ª‚Ü‚ê‚½ƒ~ƒXƒŠƒ‹»‚Ìƒ”’‚Ì‚‚¾B
 
 
 ### The Cloaks ###
 
-N:123:¥¯¥í¡¼¥¯
+N:123:ƒNƒ[ƒN
 E:& Cloak~
 G:(:g
 I:35:1:0
@@ -1466,9 +1466,9 @@ W:1:0:10:3
 A:1/1:20/1
 P:1:0d0:0:0:0
 D:$A traveller's sturdy outer garment.
-D:ËÁ¸±¼ÔÍÑ¤Î¾æÉ×¤Ê³°Åå¤À¡£
+D:–`Œ¯Ò—p‚Ìä•v‚ÈŠO“…‚¾B
 
-N:124:±Æ¤Î¥¯¥í¡¼¥¯
+N:124:‰e‚ÌƒNƒ[ƒN
 E:& Shadow Cloak~
 G:(:D
 I:35:6:0
@@ -1477,12 +1477,12 @@ A:75/5
 P:6:0d0:0:0:4
 F:RES_DARK | RES_LITE
 D:$A midnight-hued cloak that wreathes the wearer in folds of shadow.
-D:ÃåÍÑ¼Ô¤ò±Æ¤ÎÁØ¤ÇÊñ¤ß¹ş¤à°ÇÌë¤Î¿§¤Î¥¯¥í¡¼¥¯¤À¡£
+D:’…—pÒ‚ğ‰e‚Ì‘w‚Å•ï‚İ‚ŞˆÅ–é‚ÌF‚ÌƒNƒ[ƒN‚¾B
 
 
 ### The Gloves ###
 
-N:125:³×¥°¥í¡¼¥Ö
+N:125:ŠvƒOƒ[ƒu
 E:& Set~ of Leather Gloves
 G:]:U
 I:31:1:0
@@ -1490,9 +1490,9 @@ W:1:0:5:3
 A:1/1
 P:1:0d0:0:0:0
 D:$Leather hand protection, with an open palm for gripping weapons.
-D:³×À½¤Î¼ê¹Ã¤Ç¡¢¼ê¤Î¤Ò¤é¤ÏÉğ´ï¤ò°®¤ë¤¿¤á¤Ë³«¤¤¤Æ¤¤¤ë¡£
+D:Šv»‚Ìèb‚ÅAè‚Ì‚Ğ‚ç‚Í•Ší‚ğˆ¬‚é‚½‚ß‚ÉŠJ‚¢‚Ä‚¢‚éB
 
-N:126:¥¬¥ó¥È¥ì¥Ã¥È
+N:126:ƒKƒ“ƒgƒŒƒbƒg
 E:& Set~ of Gauntlets
 G:]:U
 I:31:2:0
@@ -1500,9 +1500,9 @@ W:10:0:25:35
 A:10/1
 P:2:1d1:0:0:0
 D:$A set of gloves that completely covers the hand and wrist in steel plating.
-D:¼ê¤È¼ê¼ó¤ò¹İÅ´ÈÄ¤Ç´°Á´¤ËÊ¤¤¦¥°¥í¡¼¥Ö¤À¡£
+D:è‚Æèñ‚ğ|“S”Â‚ÅŠ®‘S‚É•¢‚¤ƒOƒ[ƒu‚¾B
 
-N:127:¥»¥¹¥¿¥¹
+N:127:ƒZƒXƒ^ƒX
 E:& Set~ of Cesti
 G:]:W
 I:31:5:0
@@ -1510,12 +1510,12 @@ W:50:0:40:100
 A:50/1
 P:5:1d1:0:0:0
 D:$A massive set of hand sheathings, bound with steel and thrice-cured leather.
-D:½Å¸ü¤Ê¼ê¤ÎÊ¤¤¤¤Ç¡¢¹İÅ´¤È¤·¤Ã¤«¤ê¼Ñ¸Ç¤á¤¿³×¤ÇÇû¤Ã¤Æ¤¢¤ë¡£
+D:dŒú‚Èè‚Ì•¢‚¢‚ÅA|“S‚Æ‚µ‚Á‚©‚èÏŒÅ‚ß‚½Šv‚Å”›‚Á‚Ä‚ ‚éB
 
 
 ### The shields ###
 
-N:128:³×À½¥¹¥â¡¼¥ë¡¦¥·¡¼¥ë¥É
+N:128:Šv»ƒXƒ‚[ƒ‹EƒV[ƒ‹ƒh
 E:& Small Leather Shield~
 G:):U
 I:34:2:0
@@ -1523,9 +1523,9 @@ W:3:0:50:15
 A:3/1
 P:3:1d1:0:0:0
 D:$A circular shield of cured animal hide stretched over layered wooden strips.
-D:¼Ñ¸Ç¤á¤¿Æ°Êª¤Î³×¤ò½Å¤Í¤¿¾®¤µ¤ÊÌÚ¤ÎÈÄ¤¤¤Ã¤Ñ¤¤¤Ë¿­¤Ğ¤·¤Æºî¤Ã¤¿´İ¤¤½â¤À¡£
+D:ÏŒÅ‚ß‚½“®•¨‚ÌŠv‚ğd‚Ë‚½¬‚³‚È–Ø‚Ì”Â‚¢‚Á‚Ï‚¢‚ÉL‚Î‚µ‚Äì‚Á‚½ŠÛ‚¢‚‚¾B
 
-N:129:³×À½¥é¡¼¥¸¡¦¥·¡¼¥ë¥É
+N:129:Šv»ƒ‰[ƒWEƒV[ƒ‹ƒh
 E:& Large Leather Shield~
 G:):U
 I:34:4:0
@@ -1534,9 +1534,9 @@ A:15/1
 P:6:1d2:0:0:0
 D:$A large oval shield made of layered wooden strips with a thick leather 
 D:$covering.
-D:½Å¤Í¤¿ÌÚ¤ÎÈÄ¤ò¸ü¤¤³×¤ÇÊ¤¤Ã¤¿Âç¤­¤ÊÂÊ±ß·Á¤Î½â¤À¡£
+D:d‚Ë‚½–Ø‚Ì”Â‚ğŒú‚¢Šv‚Å•¢‚Á‚½‘å‚«‚È‘È‰~Œ`‚Ì‚‚¾B
 
-N:130:¶âÂ°À½¥¹¥â¡¼¥ë¡¦¥·¡¼¥ë¥É
+N:130:‹à‘®»ƒXƒ‚[ƒ‹EƒV[ƒ‹ƒh
 E:& Small Metal Shield~
 G:):s
 I:34:3:0
@@ -1544,9 +1544,9 @@ W:10:0:65:40
 A:10/1
 P:5:1d2:0:0:0
 D:$A round shield of wood reinforced with metal rims and central disk.
-D:¶âÂ°¤Î±ïºà¤ÈÃæ¿´¤Î±ßÈ×¤Ç¶¯²½¤·¤¿±ß·Á¤ÎÌÚ¤Î½â¤À¡£
+D:‹à‘®‚Ì‰Ş‚Æ’†S‚Ì‰~”Õ‚Å‹­‰»‚µ‚½‰~Œ`‚Ì–Ø‚Ì‚‚¾B
 
-N:131:¶âÂ°À½¥é¡¼¥¸¡¦¥·¡¼¥ë¥É
+N:131:‹à‘®»ƒ‰[ƒWEƒV[ƒ‹ƒh
 E:& Large Metal Shield~
 G:):s
 I:34:5:0
@@ -1555,13 +1555,13 @@ A:30/1
 P:8:1d3:0:0:0
 D:$An oval shield of wood covered by leather and rimmed with metal.  A large 
 D:$iron shield boss offers excellent hand protection.
-D:³×¤ÇÊ¤¤Ã¤¿ÌÚ¤ÎÈÄ¤ò¶âÂ°¤Ç±ï¼è¤Ã¤¿ÂÊ±ß·Á¤Î½â¤À¡£½â¤ÎÂç¤­¤ÊÅ´¤ÎÆÍµ¯¤ÏÁÇÀ²¤é¤·¤¤
-D:ÏÓ¤ÎËÉ¸æ¤ò¤â¤¿¤é¤¹¡£
+D:Šv‚Å•¢‚Á‚½–Ø‚Ì”Â‚ğ‹à‘®‚Å‰æ‚Á‚½‘È‰~Œ`‚Ì‚‚¾B‚‚Ì‘å‚«‚È“S‚Ì“Ë‹N‚Í‘f°‚ç‚µ‚¢
+D:˜r‚Ì–hŒä‚ğ‚à‚½‚ç‚·B
 
 
 ##### Rings #####
 
-N:132:ÏÓÎÏ:¶âÎĞÀĞ¤Î
+N:132:˜r—Í:‹à—ÎÎ‚Ì
 E:Strength:Alexandrite
 G:=:g
 I:45:24:0
@@ -1569,7 +1569,7 @@ W:30:0:2:500
 A:30/1
 F:STR | HIDE_TYPE
 
-N:133:´ïÍÑ¤µ:¥¢¥á¥¸¥¹¥È¤Î
+N:133:Ší—p‚³:ƒAƒƒWƒXƒg‚Ì
 E:Dexterity:Amethyst
 G:=:v
 I:45:26:0
@@ -1577,7 +1577,7 @@ W:30:0:2:500
 A:30/1
 F:DEX | HIDE_TYPE
 
-N:134:ÂÑµ×ÎÏ:¥¢¥¯¥¢¥Ş¥ê¥ó¤Î
+N:134:‘Ï‹v—Í:ƒAƒNƒAƒ}ƒŠƒ“‚Ì
 E:Constitution:Aquamarine
 G:=:B
 I:45:27:0
@@ -1585,7 +1585,7 @@ W:30:0:2:500
 A:30/1
 F:CON | HIDE_TYPE
 
-N:135:ÅÅ·â:¤á¤Î¤¦¤Î
+N:135:“dŒ‚:‚ß‚Ì‚¤‚Ì
 E:Lightning:Azurite
 G:=:B
 I:45:25:0
@@ -1595,7 +1595,7 @@ P:0:0d0:0:0:15
 F:RES_ELEC | IGNORE_ELEC | ACTIVATE
 U:RESIST_ELEC
 
-N:136:¥¹¥Ô¡¼¥É:ÎĞÃìÀĞ¤Î
+N:136:ƒXƒs[ƒh:—Î’ŒÎ‚Ì
 E:Speed:Beryl
 G:=:G
 I:45:31:0
@@ -1603,7 +1603,7 @@ W:80:0:2:50000
 A:80/1
 F:SPEED | HIDE_TYPE
 
-N:137:Ãµº÷:·ì¶Ì¿ï¤Î
+N:137:’Tõ:ŒŒ‹Ê‚Ì
 E:Searching:Bloodstone
 G:=:r
 I:45:23:0
@@ -1611,7 +1611,7 @@ W:5:0:2:250
 A:5/1
 F:SEARCH | HIDE_TYPE
 
-N:138:¥Æ¥ì¥İ¡¼¥È:Êı²òÀĞ¤Î
+N:138:ƒeƒŒƒ|[ƒg:•û‰ğÎ‚Ì
 E:Teleportation:Calcite
 G:=:w
 I:45:4:0
@@ -1619,7 +1619,7 @@ W:5:0:2:250
 A:5/1
 F:TELEPORT | CURSED
 
-N:139:ÃÙ¾Ã²½:ÀÖ¤á¤Î¤¦¤Î
+N:139:’xÁ‰»:Ô‚ß‚Ì‚¤‚Ì
 E:Slow Digestion:Carnelian
 G:=:r
 I:45:6:0
@@ -1627,7 +1627,7 @@ W:5:0:2:250
 A:5/255
 F:SLOW_DIGEST
 
-N:140:ÂÑ²Ğ:¹Ë¶Ì¤Î
+N:140:‘Ï‰Î:j‹Ê‚Ì
 E:Resist Fire:Corundum
 G:=:s
 I:45:8:0
@@ -1635,7 +1635,7 @@ W:10:0:2:250
 A:10/1
 F:RES_FIRE | IGNORE_FIRE
 
-N:141:ÂÑÎä:¥À¥¤¥¢¥â¥ó¥É¤Î
+N:141:‘Ï—â:ƒ_ƒCƒAƒ‚ƒ“ƒh‚Ì
 E:Resist Cold:Diamond
 G:=:w
 I:45:9:0
@@ -1644,7 +1644,7 @@ A:10/1
 F:RES_COLD | IGNORE_COLD
 
 #JZ#
-N:142:ÉâÍ·:¥¨¥á¥é¥ë¥É¤Î
+N:142:•‚—V:ƒGƒƒ‰ƒ‹ƒh‚Ì
 E:Levitation:Emerald
 G:=:g
 I:45:7:0
@@ -1652,7 +1652,7 @@ W:5:0:2:200
 A:5/1
 F:LEVITATION
 
-N:143:ÂÑÆÇ:¥Û¥¿¥ëÀĞ¤Î
+N:143:‘Ï“Å:ƒzƒ^ƒ‹Î‚Ì
 E:Poison Resistance:Fluorite
 G:=:G
 I:45:20:0
@@ -1660,7 +1660,7 @@ W:40:0:2:16000
 A:40/2
 F:RES_POIS
 
-N:144:ËãáãÃÎ¤é¤º:¥¬¡¼¥Í¥Ã¥È¤Î
+N:144:–ƒáƒ’m‚ç‚¸:ƒK[ƒlƒbƒg‚Ì
 E:Free Action:Garnet
 G:=:r
 I:45:21:0
@@ -1668,7 +1668,7 @@ W:20:0:2:1500
 A:20/1
 F:FREE_ACT
 
-N:145:ÀÈ¼å:¸æ±ÆÀĞ¤Î
+N:145:Æã:Œä‰eÎ‚Ì
 E:Weakness:Granite
 G:=:D
 I:45:2:-5
@@ -1676,7 +1676,7 @@ W:5:0:2:0
 A:5/1
 F:CURSED | STR | HIDE_TYPE
 
-N:146:²Ğ±ê:¤Ò¤¹¤¤¤Î
+N:146:‰Î‰Š:‚Ğ‚·‚¢‚Ì
 E:Flames:Jade
 G:=:G
 I:45:18:0
@@ -1686,7 +1686,7 @@ P:0:0d0:0:0:15
 F:RES_FIRE | IGNORE_FIRE | ACTIVATE
 U:RESIST_FIRE
 
-N:147:»À:¥¸¥ã¥¹¥Ñ¡¼¤Î
+N:147:_:ƒWƒƒƒXƒp[‚Ì
 E:Acid:Jasper
 G:=:u
 I:45:17:0
@@ -1696,7 +1696,7 @@ P:0:0d0:0:0:15
 F:RES_ACID | IGNORE_ACID | ACTIVATE
 U:RESIST_ACID
 
-N:148:É¹:ÀÄÎÜÍş¤Î
+N:148:•X:Â—Ú—‚Ì
 E:Ice:Lapis Lazuli
 G:=:b
 I:45:19:0
@@ -1706,7 +1706,7 @@ P:0:0d0:0:0:15
 F:RES_COLD | IGNORE_COLD | ACTIVATE
 U:RESIST_COLD
 
-N:149:¶ìÇº:¥¯¥¸¥ã¥¯ÀĞ¤Î
+N:149:‹ê”Y:ƒNƒWƒƒƒNÎ‚Ì
 E:Woe:Malachite
 G:=:g
 I:45:0:-5
@@ -1715,7 +1715,7 @@ A:50/1
 F:CURSED | TELEPORT | WIS | CHR | HIDE_TYPE
 F:RANDOM_CURSE0
 
-N:150:ÌµÃÎ:ÂçÍıÀĞ¤Î
+N:150:–³’m:‘å—Î‚Ì
 E:Stupidity:Marble
 G:=:w
 I:45:3:-5
@@ -1723,7 +1723,7 @@ W:5:0:2:0
 A:5/1
 F:CURSED | INT | HIDE_TYPE
 
-N:151:¥À¥á¡¼¥¸:¥à¡¼¥ó¥¹¥È¡¼¥ó¤Î
+N:151:ƒ_ƒ[ƒW:ƒ€[ƒ“ƒXƒg[ƒ“‚Ì
 E:Damage:Moonstone
 G:=:W
 I:45:29:0
@@ -1731,7 +1731,7 @@ W:20:0:2:500
 P:0:0d0:0:1:0
 A:20/1
 
-N:152:ÀºÅÙ:¼Ê¤á¤Î¤¦¤Î
+N:152:¸“x:È‚ß‚Ì‚¤‚Ì
 E:Accuracy:Onyx
 G:=:R
 I:45:28:0
@@ -1739,14 +1739,14 @@ W:20:0:2:500
 P:0:0d0:1:0:0
 A:20/1
 
-N:153:¼é¤ê:¥ª¥Ñ¡¼¥ë¤Î
+N:153:ç‚è:ƒIƒp[ƒ‹‚Ì
 E:Protection:Opal
 G:=:W
 I:45:16:0
 W:10:0:2:500
 A:10/1
 
-N:154:¥¨¥­¥µ¥¤¥È¡¦¥â¥ó¥¹¥¿¡¼:¿¿¼î¤Î
+N:154:ƒGƒLƒTƒCƒgEƒ‚ƒ“ƒXƒ^[:^ì‚Ì
 E:Aggravate Monster:Pearl
 G:=:w
 I:45:1:0
@@ -1754,7 +1754,7 @@ W:5:0:2:0
 A:5/1
 F:CURSED | AGGRAVATE
 
-N:155:Æ©ÌÀÊªÂÎ´¶ÃÎ:¿å¾½¤Î
+N:155:“§–¾•¨‘ÌŠ´’m:…»‚Ì
 E:See Invisible:Quartz
 G:=:W
 I:45:22:0
@@ -1762,7 +1762,7 @@ W:30:0:2:340
 A:30/1
 F:SEE_INVIS
 
-N:156:ÏÓÎÏ°İ»ı:ÀĞ±Ñ´ä¤Î
+N:156:˜r—ÍˆÛ:Î‰pŠâ‚Ì
 E:Sustain Strength:Quartzite
 G:=:W
 I:45:10:0
@@ -1770,7 +1770,7 @@ W:30:0:2:750
 A:30/1
 F:SUST_STR
 
-N:157:ÃÎÇ½°İ»ı:¥¶¥¯¥íÀĞ¤Î
+N:157:’m”\ˆÛ:ƒUƒNƒÎ‚Ì
 E:Sustain Intelligence:Rhodonite
 G:=:R
 I:45:11:0
@@ -1778,7 +1778,7 @@ W:30:0:2:600
 A:30/1
 F:SUST_INT
 
-N:158:¸­¤µ°İ»ı:¥ë¥Ó¡¼¤Î
+N:158:Œ«‚³ˆÛ:ƒ‹ƒr[‚Ì
 E:Sustain Wisdom:Ruby
 G:=:r
 I:45:12:0
@@ -1786,7 +1786,7 @@ W:30:0:2:600
 A:30/1
 F:SUST_WIS
 
-N:159:ÂÑµ×ÎÏ°İ»ı:¥µ¥Õ¥¡¥¤¥¢¤Î
+N:159:‘Ï‹v—ÍˆÛ:ƒTƒtƒ@ƒCƒA‚Ì
 E:Sustain Constitution:Sapphire
 G:=:b
 I:45:13:0
@@ -1794,7 +1794,7 @@ W:30:0:2:750
 A:30/1
 F:SUST_CON
 
-N:160:´ïÍÑ¤µ°İ»ı:¸×ÌÜÀĞ¤Î
+N:160:Ší—p‚³ˆÛ:ŒÕ–ÚÎ‚Ì
 E:Sustain Dexterity:Tiger Eye
 G:=:y
 I:45:14:0
@@ -1802,7 +1802,7 @@ W:30:0:2:750
 A:30/1
 F:SUST_DEX
 
-N:161:Ì¥ÎÏ°İ»ı:¥È¥Ñ¡¼¥º¤Î
+N:161:–£—ÍˆÛ:ƒgƒp[ƒY‚Ì
 E:Sustain Charisma:Topaz
 G:=:y
 I:45:15:0
@@ -1810,7 +1810,7 @@ W:30:0:2:500
 A:30/1
 F:SUST_CHR
 
-N:162:»¦Ù¤:¥È¥ë¥³ÀĞ¤Î
+N:162:EC:ƒgƒ‹ƒRÎ‚Ì
 E:Slaying:Turquoise
 G:=:B
 I:45:30:0
@@ -1822,7 +1822,7 @@ F:SHOW_MODS
 ##### Amulets #####
 
 #JZ#
-N:163:ÃÎÀ­:àèàá¤Î
+N:163:’m«:àæàß‚Ì
 E:Brilliance:Amber
 G:":y
 I:40:6:0
@@ -1830,7 +1830,7 @@ W:50:0:3:5000
 A:50/4
 F:INT | WIS | CHR | SUST_INT | SUST_WIS | SUST_CHR | HIDE_TYPE
 
-N:164:Ì¥ÎÏ:Î®ÌÚ¤Î
+N:164:–£—Í:—¬–Ø‚Ì
 E:Charisma:Driftwood
 G:":U
 I:40:7:0
@@ -1838,7 +1838,7 @@ W:20:0:3:500
 A:20/1
 F:CHR | HIDE_TYPE
 
-N:165:Ãµº÷:¥µ¥ó¥´¤Î
+N:165:’Tõ:ƒTƒ“ƒS‚Ì
 E:Searching:Coral
 G:":w
 I:40:5:0
@@ -1846,7 +1846,7 @@ W:30:0:3:600
 A:30/4
 F:SEARCH | HIDE_TYPE
 
-N:166:¥Æ¥ì¥İ¡¼¥È:¤á¤Î¤¦¤Î
+N:166:ƒeƒŒƒ|[ƒg:‚ß‚Ì‚¤‚Ì
 E:Teleportation:Agate
 G:":W
 I:40:1:0
@@ -1854,7 +1854,7 @@ W:15:0:3:250
 A:15/1
 F:TELEPORT | CURSED
 
-N:167:ÃÙ¾Ã²½:¾İ²ç¤Î
+N:167:’xÁ‰»:Û‰å‚Ì
 E:Slow Digestion:Ivory
 G:":w
 I:40:3:0
@@ -1862,7 +1862,7 @@ W:15:0:3:200
 A:15/255
 F:SLOW_DIGEST
 
-N:168:ÂÑ»À:¹õÍËÀĞ¤Î
+N:168:‘Ï_:•—jÎ‚Ì
 E:Resist Acid:Obsidian
 G:":D
 I:40:4:0
@@ -1870,7 +1870,7 @@ W:20:0:3:300
 A:20/1
 F:RES_ACID | IGNORE_ACID
 
-N:169:Áõ¾ş:¹ü¤Î
+N:169:‘•ü:œ‚Ì
 E:Adornment:Bone
 G:":w
 I:40:2:0
@@ -1880,7 +1880,7 @@ A:15/1
 ##### Extra armor #####
 
 #JZ#
-N:170:Æó½Å¥ê¥ó¥°¥á¥¤¥ë
+N:170:“ñdƒŠƒ“ƒOƒƒCƒ‹
 E:Double Ring Mail~
 G:[:s
 I:37:5:0
@@ -1890,7 +1890,7 @@ P:15:1d4:-2:0:0
 
 ##### Additional amulets #####
 
-N:171:¸­¼Ô:¿¿ï«¤Î
+N:171:Œ«Ò:^èJ‚Ì
 E:the Magi:Brass
 G:":U
 I:40:8:0
@@ -1900,7 +1900,7 @@ P:0:0d0:0:0:3
 F:FREE_ACT | SEE_INVIS | SEARCH | INFRA |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:172:ÇË²õ:ÀÄÆ¼¤Î
+N:172:”j‰ó:Â“º‚Ì
 E:Destruction:Bronze
 G:":U
 I:40:0:-5
@@ -1914,63 +1914,63 @@ F:HIDE_TYPE | RANDOM_CURSE2
 
 ##### Scrolls #####
 
-N:173:Éğ´ïÌ¿ÃæÎ¨¾å¾º:¿Ô»´ µÛ Á¿µ¯
+N:173:•Ší–½’†—¦ã¸:sS ‹z ‘^‹N
 E:Enchant Weapon To-Hit:mipay sun
 G:?:w
 I:70:17:0
 W:15:0:5:250
 A:15/1
 D:$It increases a weapon's to-hit when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÉğ´ï¤ÎÌ¿Ãæ½¤Àµ¤ò¶¯²½¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ•Ší‚Ì–½’†C³‚ğ‹­‰»‚·‚éB
 
-N:174:Éğ´ï¥À¥á¡¼¥¸Áı²Ã:¸¸²£ ¿ÔÆ» ËüÊÑ
+N:174:•Šíƒ_ƒ[ƒW‘‰Á:Œ¶‰¡ s“¹ –œ•Ï
 E:Enchant Weapon To-Dam:batuni blaame
 G:?:w
 I:70:18:0
 W:15:0:5:250
 A:15/1
 D:$It increases a weapon's to-dam when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÉğ´ï¤Î¥À¥á¡¼¥¸½¤Àµ¤ò¶¯²½¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ•Ší‚Ìƒ_ƒ[ƒWC³‚ğ‹­‰»‚·‚éB
 
-N:175:ËÉ¶ñ¶¯²½:É÷µ¯ Ê»¼Ø ÍÑ
+N:175:–h‹ï‹­‰»:•—‹N •¹Ö —p
 E:Enchant Armor:rolsan triple
 G:?:w
 I:70:16:0
 W:15:0:5:250
 A:15/1
 D:$It increases an armour's to-AC when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈËÉ¶ñ¤ÎAC½¤Àµ¤ò¶¯²½¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ–h‹ï‚ÌACC³‚ğ‹­‰»‚·‚éB
 
-N:176:´ÕÄê:Éğ°ì ¼±ÃÇ ÇÆß¸
+N:176:ŠÓ’è:•ˆê ¯’f ”eàW
 E:Identify:temeep aks el
 G:?:w
 I:70:12:0
 W:1:0:5:50
 A:1/1:5/1:10/1:30/1
 D:$It identifies an item when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È1¸Ä¤Î¥¢¥¤¥Æ¥à¤ò´ÕÄê¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ1ŒÂ‚ÌƒAƒCƒeƒ€‚ğŠÓ’è‚·‚éB
 
-N:177:*´ÕÄê*:Åá ÌÄ ¸Î¸¸
+N:177:*ŠÓ’è*:“ –Â ŒÌŒ¶
 E:*Identify*:triapp trolpet
 G:?:w
 I:70:13:0
 W:30:0:5:1500
 A:30/2:50/2:80/2:100/2
 D:$It reveals all information about an item when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È1¸Ä¤Î¥¢¥¤¥Æ¥à¤ÎÇ½ÎÏ¤ò´°Á´¤ËÃÎ¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ1ŒÂ‚ÌƒAƒCƒeƒ€‚Ì”\—Í‚ğŠ®‘S‚É’m‚éB
 
 #JZ#
-N:178:±½:ÃÀ Æù ÍÑÎµ
+N:178:‰\:’_ “÷ —p—³
 E:Rumour:an gan nagblaa
 G:?:w
 I:70:51:0
 W:1:0:5:10
 A:1/1
 D:$A rumor is in it.
-D:¤½¤ì¤Ë¤Ï±½¤¬½ñ¤«¤ì¤Æ¤¤¤ë¡£
+D:‚»‚ê‚É‚Í‰\‚ª‘‚©‚ê‚Ä‚¢‚éB
 
 #JZ#
-N:179:¥í¥°¥ë¥¹:»î ¶õÍÛ ¿Ô²½
+N:179:ƒƒOƒ‹ƒX: ‹ó—z s‰»
 E:Logrus:comp turs
 G:?:w
 I:70:50:0
@@ -1980,29 +1980,29 @@ F:IGNORE_FIRE | IGNORE_ACID | IGNORE_COLD | IGNORE_ELEC
 D:$It produces a huge chaos ball (damage of core: 1000) centered on you when 
 D:$you read it. If you don't have resistance to chaos, you take 111+d111 
 D:$damage.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÃæ¿´Éô¥À¥á¡¼¥¸1000¤ÎµğÂç¤Ê¥«¥ª¥¹¤Îµå¤ò¼«Ê¬¤òÃæ¿´¤È¤·¤Æ
-D:È¯À¸¤¹¤ë¡£¥«¥ª¥¹ÂÑÀ­¤¬¤Ê¤±¤ì¤Ğ¼«Ê¬¤â111+d111¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ’†S•”ƒ_ƒ[ƒW1000‚Ì‹‘å‚ÈƒJƒIƒX‚Ì‹…‚ğ©•ª‚ğ’†S‚Æ‚µ‚Ä
+D:”­¶‚·‚éBƒJƒIƒX‘Ï«‚ª‚È‚¯‚ê‚Î©•ª‚à111+d111‚Ìƒ_ƒ[ƒW‚ğó‚¯‚éB
 
-N:180:²ò¼ö:î½ °Ç²Î ¿È²½
+N:180:‰ğô:ç» ˆÅ‰Ì g‰»
 E:Remove Curse:byti sne
 G:?:w
 I:70:14:0
 W:10:0:5:100
 A:10/2:20/1
 D:$It removes normal curses from equipped items when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÁõÈ÷¤·¤Æ¤¤¤ë¥¢¥¤¥Æ¥à¤Ë¤«¤«¤Ã¤¿¼å¤¤¼ö¤¤¤ò²ò¤¯¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ‘•”õ‚µ‚Ä‚¢‚éƒAƒCƒeƒ€‚É‚©‚©‚Á‚½ã‚¢ô‚¢‚ğ‰ğ‚­B
 
-N:181:¸÷:¶å Èôç¥ ò³ÌÌ
+N:181:Œõ:‹ã ”òäD é±–Ê
 E:Light:misat dernin
 G:?:w
 I:70:24:0
 W:0:0:5:15
 A:0/1:3/1:10/1
 D:$It lights up nearby area or the current room permanently when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼ş°Ï¤â¤·¤¯¤ÏÉô²°Á´ÂÎ¤ò±Êµ×¤Ë¾È¤é¤¹¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚ÌüˆÍ‚à‚µ‚­‚Í•”‰®‘S‘Ì‚ğ‰i‹v‚ÉÆ‚ç‚·B
 
 #JZ#
-N:182:±ê:»àË× ´°¸å Î¾
+N:182:‰Š:€–v Š®Œã —¼
 E:Fire:onip batsat
 G:?:w
 I:70:48:0
@@ -2011,10 +2011,10 @@ A:50/4
 F:IGNORE_FIRE
 D:$It produces a huge fire ball (damage of core: 666) centered on you when you 
 D:$read it. If you don't have resistance to fire, you take 50+d50 damage.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÃæ¿´Éô¥À¥á¡¼¥¸666¤ÎµğÂç¤Ê±ê¤Îµå¤ò¼«Ê¬¤òÃæ¿´¤È¤·¤ÆÈ¯À¸¤¹¤ë¡£
-D:²Ğ±êÂÑÀ­¤¬¤Ê¤±¤ì¤Ğ¼«Ê¬¤â50+d50¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ’†S•”ƒ_ƒ[ƒW666‚Ì‹‘å‚È‰Š‚Ì‹…‚ğ©•ª‚ğ’†S‚Æ‚µ‚Ä”­¶‚·‚éB
+D:‰Î‰Š‘Ï«‚ª‚È‚¯‚ê‚Î©•ª‚à50+d50‚Ìƒ_ƒ[ƒW‚ğó‚¯‚éB
 
-N:183:É¹:Å¾ À© Ë¥¿Ô
+N:183:•X:“] § –Ds
 E:Ice:shu urfor
 G:?:w
 I:70:49:0
@@ -2023,112 +2023,112 @@ A:75/6
 F:IGNORE_COLD
 D:$It produces a huge ice ball (damage of core: 777) centered on you when you 
 D:$read it. If you don't have resistance to cold, you take 100+d100 damage.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÃæ¿´Éô¥À¥á¡¼¥¸777¤ÎµğÂç¤Ê¶Ë´¨¤Îµå¤ò¼«Ê¬¤òÃæ¿´¤È¤·¤ÆÈ¯À¸¤¹¤ë¡£
-D:Îäµ¤ÂÑÀ­¤¬¤Ê¤±¤ì¤Ğ¼«Ê¬¤â100+d100¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ’†S•”ƒ_ƒ[ƒW777‚Ì‹‘å‚È‹ÉŠ¦‚Ì‹…‚ğ©•ª‚ğ’†S‚Æ‚µ‚Ä”­¶‚·‚éB
+D:—â‹C‘Ï«‚ª‚È‚¯‚ê‚Î©•ª‚à100+d100‚Ìƒ_ƒ[ƒW‚ğó‚¯‚éB
 
-N:184:¥µ¥â¥ó¡¦¥â¥ó¥¹¥¿¡¼:µ¯Éğ áØ ÍÛæÆ
+N:184:ƒTƒ‚ƒ“Eƒ‚ƒ“ƒXƒ^[:‹N• áw —zãÄ
 E:Summon Monster:binvom cosmung
 G:?:w
 I:70:4:0
 W:1:0:5:0
 A:1/1
 D:$It summons several monsters as enemies when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÊ£¿ô¤Î¥â¥ó¥¹¥¿¡¼¤òÅ¨¤È¤·¤Æ¾¤´­¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ•¡”‚Ìƒ‚ƒ“ƒXƒ^[‚ğ“G‚Æ‚µ‚Ä¢Š«‚·‚éB
 
-N:185:¥·¥ç¡¼¥È¡¦¥Æ¥ì¥İ¡¼¥È:¸¸¼ı Ë¥ Íî²ç
+N:185:ƒVƒ‡[ƒgEƒeƒŒƒ|[ƒg:Œ¶û –D —‰å
 E:Phase Door:ankh sanfu bit
 G:?:w
 I:70:8:0
 W:1:0:5:15
 A:1/1
 D:$It teleports you a short distance when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¶áµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ‹ß‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB
 
-N:186:¥Æ¥ì¥İ¡¼¥È:Âç Èø²Î ÃÀÄÅ
+N:186:ƒeƒŒƒ|[ƒg:‘å ”ö‰Ì ’_’Ã
 E:Teleportation:arzemi zunag
 G:?:w
 I:70:9:0
 W:10:0:5:40
 A:10/1
 D:$It teleports you a long distance when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È±óµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ‰“‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB
 
-N:187:¥Æ¥ì¥İ¡¼¥È¡¦¥ì¥Ù¥ë:Äê¸Î ¸Ş²¹ ²½ÌÄ
+N:187:ƒeƒŒƒ|[ƒgEƒŒƒxƒ‹:’èŒÌ ŒÜ‰· ‰»–Â
 E:Teleport Level:bie xuxuval
 G:?:w
 I:70:10:0
 W:20:0:5:50
 A:20/1
 D:$It teleports you one dungeon level up or down immediately when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È½Ö»ş¤Ë¾å¤«²¼¤Î³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æu‚Éã‚©‰º‚ÌŠK‚ÉƒeƒŒƒ|[ƒg‚·‚éB
 
-N:188:¥Ñ¥Ë¥Ã¥¯¡¦¥â¥ó¥¹¥¿¡¼:·Ú Åİ Àä¼À ²Æ
+N:188:ƒpƒjƒbƒNEƒ‚ƒ“ƒXƒ^[:Œy “| â¾ ‰Ä
 E:Monster Confusion:blaata arze
 G:?:w
 I:70:36:0
 W:5:0:5:30
 A:5/1
 D:$You can confuse monster you hit just for once when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È1ÅÙ¤À¤±¥â¥ó¥¹¥¿¡¼¤òÂÇ·â¤Çº®Íğ¤µ¤»¤é¤ì¤ë¤è¤¦¤Ë¤Ê¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ1“x‚¾‚¯ƒ‚ƒ“ƒXƒ^[‚ğ‘ÅŒ‚‚Å¬—‚³‚¹‚ç‚ê‚é‚æ‚¤‚É‚È‚éB
 
-N:189:ËâË¡¤ÎÃÏ¿Ş:±¢Î¾ ç¥ ¿À Ëü
+N:189:–‚–@‚Ì’n}:‰A—¼ äD _ –œ
 E:Magic Mapping:rea fri elip
 G:?:w
 I:70:25:0
 W:5:0:5:40
 A:5/1
 D:$It maps your vicinity when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼şÊÕ¤ÎÃÏ·Á¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ìü•Ó‚Ì’nŒ`‚ğŠ´’m‚·‚éB
 
-N:190:¼é¤ê¤Î¥ë¡¼¥ó:¼Â ¿·²ç ¼ÙÇ¦
+N:190:ç‚è‚Ìƒ‹[ƒ“:À V‰å ×”E
 E:Rune of Protection:sef unag famur
 G:?:w
 I:70:38:0
 W:50:0:5:500
 A:50/4:90/2
 D:$It creates a glyph on the floor you stand when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤ÎÂ­¸µ¤Î¾²¤Ë²óÈò¤ÎÄ¦Áü¤òºî¤ê½Ğ¤¹¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ì‘«Œ³‚Ì°‚É‰ñ”ğ‚Ì’¤‘œ‚ğì‚èo‚·B
 
-N:191:*²ò¼ö*:¿©ÃÏ Â¡Â¡ î½ÃÎ
+N:191:*‰ğô*:H’n ‘Ÿ‘Ÿ ç»’m
 E:*Remove Curse*:bluju wex blu
 G:?:w
 I:70:15:0
 W:50:0:5:4000
 A:50/2:75/2
 D:$It removes normal and heavy curses from equipped items when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÁõÈ÷¤·¤Æ¤¤¤ë¥¢¥¤¥Æ¥à¤Ë¤«¤«¤Ã¤¿¼å¤¤¼ö¤¤¤È½Å¤¤¼ö¤¤¤ò²ò¤¯¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ‘•”õ‚µ‚Ä‚¢‚éƒAƒCƒeƒ€‚É‚©‚©‚Á‚½ã‚¢ô‚¢‚Æd‚¢ô‚¢‚ğ‰ğ‚­B
 
-N:192:ºâÊõ´¶ÃÎ:µ¯Å¾ »îÇÆ Ìø
+N:192:à•óŠ´’m:‹N“] ”e –ö
 E:Treasure Detection:ner fidtri
 G:?:w
 I:70:26:0
 W:0:0:5:15
 A:0/1
 D:$It detects all treasures in your vicinity when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼şÊÕ¤ÎºâÊõ¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ìü•Ó‚Ìà•ó‚ğŠ´’m‚·‚éB
 
-N:193:¥¢¥¤¥Æ¥à´¶ÃÎ:ÇÆ½½ ²£Ç½ ¹ñ½ã
+N:193:ƒAƒCƒeƒ€Š´’m:”e\ ‰¡”\ ‘ƒ
 E:Object Detection:for mic rol
 G:?:w
 I:70:27:0
 W:0:0:5:15
 A:0/1
 D:$It detects all items in your vicinity when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼şÊÕ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ìü•Ó‚ÌƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB
 
-N:194:¥È¥é¥Ã¥×´¶ÃÎ:ò³»Í ¸åÎ¾ ·ç½Ä
+N:194:ƒgƒ‰ƒbƒvŠ´’m:é±l Œã—¼ Œ‡c
 E:Trap Detection:sri nelgun
 G:?:w
 I:70:28:0
 W:5:0:5:35
 A:5/1:10/1
 D:$It detects all traps in your vicinity when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼şÊÕ¤Î¥È¥é¥Ã¥×¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ìü•Ó‚Ìƒgƒ‰ƒbƒv‚ğŠ´’m‚·‚éB
 
 ##### Extra ammunition #####
 
 #JZ#
-N:195:Â«Ìğ
+N:195:‘©–î
 E:& Sheaf Arrow~
 G:{:o
 I:17:1:0
@@ -2138,7 +2138,7 @@ P:0:2d4:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:196:¥ß¥¹¥ê¥ë¤ÎÃÆ
+N:196:ƒ~ƒXƒŠƒ‹‚Ì’e
 E:& Mithril Shot~
 G:{:B
 I:16:2:0
@@ -2150,34 +2150,34 @@ F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
 
 ##### Additional scrolls #####
 
-N:197:¥É¥¢/³¬ÃÊ´¶ÃÎ:¼· ÍğÇ½ ¶½Èô
+N:197:ƒhƒA/ŠK’iŠ´’m:µ —”\ ‹»”ò
 E:Door/Stair Location:sehsat ulkab
 G:?:w
 I:70:29:0
 W:5:0:5:35
 A:5/1:10/1
 D:$It detects all doors and stairs in your vicinity when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼şÊÕ¤Î¥É¥¢¡¦³¬ÃÊ¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ìü•Ó‚ÌƒhƒAEŠK’i‚ğŠ´’m‚·‚éB
 
-N:198:³ÍÆÀ:ÃÀÅ· ¾¨ÌÌ Åá²£
+N:198:Šl“¾:’_“V ¦–Ê “‰¡
 E:Acquirement:klinej ere
 G:?:w
 I:70:46:0
 W:20:0:5:100000
 A:20/8
 D:$It creates one great item when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È1¸Ä¤Î¹âµé¤Ê¥¢¥¤¥Æ¥à¤òºî¤ê½Ğ¤¹¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ1ŒÂ‚Ì‚‹‰‚ÈƒAƒCƒeƒ€‚ğì‚èo‚·B
 
-N:199:*³ÍÆÀ*:Æş áØòµ ½ã°Ç
+N:199:*Šl“¾*:“ü áwé³ ƒˆÅ
 E:*Acquirement*:snetrol uni
 G:?:w
 I:70:47:0
 W:60:0:5:200000
 A:60/16
 D:$It creates some great items when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÊ£¿ô¤Î¹âµé¤Ê¥¢¥¤¥Æ¥à¤òºî¤ê½Ğ¤¹¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ•¡”‚Ì‚‹‰‚ÈƒAƒCƒeƒ€‚ğì‚èo‚·B
 
-N:200:¼şÊÕËõ»¦:°áÊÑ »î»à òµ
+N:200:ü•Ó–•E:ˆß•Ï € é³
 E:Mass Genocide:trolsee mex
 G:?:w
 I:70:45:0
@@ -2185,46 +2185,46 @@ W:50:0:5:1000
 A:50/4:100/4
 D:$It eliminates all nearby monsters, exhausting you.  
 D:$Powerful or unique monsters may be able to resist.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼ş°Ï¤Î¥â¥ó¥¹¥¿¡¼¤ò¸½ºß¤Î³¬¤«¤é¾Ã¤·µî¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚ÌüˆÍ‚Ìƒ‚ƒ“ƒXƒ^[‚ğŒ»İ‚ÌŠK‚©‚çÁ‚µ‹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB
 
-N:201:Æ©ÌÀÊªÂÎ´¶ÃÎ:Ìµ ÆüæÆ »´ò³
+N:201:“§–¾•¨‘ÌŠ´’m:–³ “úãÄ Sé±
 E:Detect Invisible:stafoo lechi
 G:?:w
 I:70:30:0
 W:1:0:5:15
 A:1/1
 D:$It detects all invisible monsters in your vicinity when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼şÊÕ¤ÎÆ©ÌÀ¤Ê¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ìü•Ó‚Ì“§–¾‚Èƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB
 
-N:202:¥¨¥­¥µ¥¤¥È¡¦¥â¥ó¥¹¥¿¡¼:¸Ş»´ ÎµÅ· ¼Â¿¹
+N:202:ƒGƒLƒTƒCƒgEƒ‚ƒ“ƒXƒ^[:ŒÜS —³“V ÀX
 E:Aggravate Monster:itemar habyt
 G:?:w
 I:70:1:0
 W:5:0:5:0
 A:5/1
 D:$It aggravates monsters in your vicinity when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼şÊÕ¤Î¥â¥ó¥¹¥¿¡¼¤òÅÜ¤é¤»¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ìü•Ó‚Ìƒ‚ƒ“ƒXƒ^[‚ğ“{‚ç‚¹‚éB
 
-N:203:¥È¥é¥Ã¥×ÁÏÂ¤:Ê¸Ì£ Åİòµ î½
+N:203:ƒgƒ‰ƒbƒv‘n‘¢:•¶–¡ “|é³ ç»
 E:Trap Creation:wahx our gre
 G:?:w
 I:70:7:0
 W:10:0:5:0
 A:10/1
 D:$It creates traps on the squares adjacent to you when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤ÈÎÙÀÜ¤¹¤ë¾²¤Ë¥È¥é¥Ã¥×¤òºî¤ê½Ğ¤¹¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Æ—×Ú‚·‚é°‚Éƒgƒ‰ƒbƒv‚ğì‚èo‚·B
 
-N:204:¥È¥é¥Ã¥×/¥É¥¢ÇË²õ:¼ıÀ¸ °ì Íğ
+N:204:ƒgƒ‰ƒbƒv/ƒhƒA”j‰ó:û¶ ˆê —
 E:Trap/Door Destruction:erk bieklis
 G:?:w
 I:70:39:0
 W:10:0:5:50
 A:10/1
 D:$It destroys traps on the floors adjacent to you when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤ÈÎÙÀÜ¤¹¤ë¥È¥é¥Ã¥×¤ä¥É¥¢¤òÇË²õ¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Æ—×Ú‚·‚éƒgƒ‰ƒbƒv‚âƒhƒA‚ğ”j‰ó‚·‚éB
 
 #JZ#
-N:205:¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®:²½¶å °õÀ© ¹ÔÈ¬
+N:205:ƒA[ƒeƒBƒtƒ@ƒNƒg¶¬:‰»‹ã ˆó§ s”ª
 E:Artifact Creation:engsno argsan
 G:?:w
 I:70:52:0
@@ -2232,20 +2232,20 @@ W:90:0:5:200000
 A:90/16
 D:$It creates an artifact from a nameless weapon or armour when you read it. 
 D:$Don't be greedy - you will get only one artifact.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÌµÌÃ¤ÎÉğ´ï¡¦ËÉ¶ñ¤«¤é¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤òºî¤ê½Ğ¤¹¡£ÁõÈ÷ÉÊ¤¬
-D:ÀÑ¤ß½Å¤Ê¤Ã¤Æ¤¤¤¿¾ì¹ç¤Ï1¸Ä¤ò»Ä¤·¤Æ²õ¤ì¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ–³–Á‚Ì•ŠíE–h‹ï‚©‚çƒA[ƒeƒBƒtƒ@ƒNƒg‚ğì‚èo‚·B‘•”õ•i‚ª
+D:Ï‚İd‚È‚Á‚Ä‚¢‚½ê‡‚Í1ŒÂ‚ğc‚µ‚Ä‰ó‚ê‚éB
 
-N:206:ËâÎÏ½¼Å¶:Íğ´° º¬²Æ î½µ´
+N:206:–‚—Í[“U:—Š® ª‰Ä ç»‹S
 E:Recharging:klis glenash
 G:?:w
 I:70:22:0
 W:40:0:5:200
 A:40/1
 D:$It recharges wands, staffs or rods when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈËâË¡ËÀ/¾ó¤Î½¼Å¶¿ô¤ò²óÉü¤µ¤»¤¿¤ê, ½¼Å¶Ãæ¤Î¥í¥Ã¥É¤Î½¼Å¶»ş´Ö¤ò
-D:½Ì¤á¤¿¤ê¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ–‚–@–_/ñ‚Ì[“U”‚ğ‰ñ•œ‚³‚¹‚½‚è, [“U’†‚Ìƒƒbƒh‚Ì[“UŠÔ‚ğ
+D:k‚ß‚½‚è‚·‚éB
 
-N:207:Ëõ»¦:Æ¬ °ì²ó Ê¹ ³Î
+N:207:–•E:“ª ˆê‰ñ •· Šm
 E:Genocide:ashval paylech
 G:?:w
 I:70:44:0
@@ -2253,117 +2253,117 @@ W:40:0:5:750
 A:40/4:80/4
 D:$It eliminates an entire class of monster, exhausting you.  
 D:$Powerful or unique monsters may resist.
-D:¤½¤ì¤ÏÆÉ¤à¤È»ØÄê¤·¤¿Ê¸»ú¤Î¥â¥ó¥¹¥¿¡¼¤ò¸½ºß¤Î³¬¤«¤é¾Ã¤·µî¤ë¡£Äñ¹³¤µ¤ì¤ë¤È
-D:Ìµ¸ú¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æw’è‚µ‚½•¶š‚Ìƒ‚ƒ“ƒXƒ^[‚ğŒ»İ‚ÌŠK‚©‚çÁ‚µ‹‚éB’ïR‚³‚ê‚é‚Æ
+D:–³ŒøB
 
-N:208:°Å°Ç:¹üÆ° Ê¸Ú¼ ÍåÈø
+N:208:ˆÃˆÅ:œ“® •¶º —…”ö
 E:Darkness:fapay doea
 G:?:w
 I:70:0:0
 W:1:0:5:0
 A:1/1
 D:$It darkens nearby area or current room and blinds you when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼ş°Ï¤â¤·¤¯¤ÏÉô²°Á´ÂÎ¤¬°Å°Ç¤ËÊñ¤Ş¤ì¡¢ÌÕÌÜ¤Ë¤Ê¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚ÌüˆÍ‚à‚µ‚­‚Í•”‰®‘S‘Ì‚ªˆÃˆÅ‚É•ï‚Ü‚êA–Ó–Ú‚É‚È‚éB
 
-N:209:ÂĞ¼Ù°­·ë³¦:Æ¬¿¹ ÃÏÄ· ¿¿¹ü
+N:209:‘Î×ˆ«Œ‹ŠE:“ªX ’n’µ ^œ
 E:Protection from Evil:sefeng danod
 G:?:w
 I:70:37:0
 W:30:0:5:250
 A:30/1
 D:$It gives temporary protection from lesser evil creatures when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È°ì»şÅª¤Ë¼å¤¤¼Ù°­¤Ê¼Ô¤Î¹¶·â¤ò²óÈò¤·¤ä¤¹¤¯¤Ê¤ë·ë³¦¤òÄ¥¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æˆê“I‚Éã‚¢×ˆ«‚ÈÒ‚ÌUŒ‚‚ğ‰ñ”ğ‚µ‚â‚·‚­‚È‚éŒ‹ŠE‚ğ’£‚éB
 
-N:210:¶õÊ¢½¼Â­:ÂåÉ÷ ·ÚÃÏ ´¶¸Î
+N:210:‹ó• [‘«:‘ã•— Œy’n Š´ŒÌ
 E:Satisfy Hunger:kli ing tadalf
 G:?:w
 I:70:32:0
 W:5:0:5:10
 D:$It satisfies hunger when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈËşÊ¢¤Ë¤Ê¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ–• ‚É‚È‚éB
 
-N:211:¥¢¥ó¥Ç¥Ã¥ÉÂà»¶:Ê¹ ÃÏ Âà¿§
+N:211:ƒAƒ“ƒfƒbƒh‘ŞU:•· ’n ‘ŞF
 E:Dispel Undead:wah snofoo
 G:?:w
 I:70:42:0
 W:40:0:5:200
 A:40/1
 D:$It does 80 damage to all undead monsters in sight when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È»ë³¦Æâ¤Î¥¢¥ó¥Ç¥Ã¥É¤Î¥â¥ó¥¹¥¿¡¼¤Ë80¤Î¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ‹ŠE“à‚ÌƒAƒ“ƒfƒbƒh‚Ìƒ‚ƒ“ƒXƒ^[‚É80‚Ìƒ_ƒ[ƒW‚ğ—^‚¦‚éB
 
-N:212:*Éğ´ï¶¯²½*:ÉğË× ´°ÆÇ È¬²ó
+N:212:*•Ší‹­‰»*:•–v Š®“Å ”ª‰ñ
 E:*Enchant Weapon*:vlytox
 G:?:w
 I:70:21:0
 W:50:0:5:1000
 A:50/1
 D:$It increases a weapon's to-hit and to-dam when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÉğ´ï¤ÎÌ¿Ãæ½¤Àµ¤È¥À¥á¡¼¥¸½¤Àµ¤ò¶¯²½¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ•Ší‚Ì–½’†C³‚Æƒ_ƒ[ƒWC³‚ğ‹­‰»‚·‚éB
 
-N:213:Éğ´ï¼öÇû:ÃÎÄÅ Íå¿§ ¹¤
+N:213:•Šíô”›:’m’Ã —…F C
 E:Curse Weapon:prokaks wahish
 G:?:w
 I:70:3:0
 W:50:0:5:0
 A:50/1
 D:$It makes your wielding weapon (Shattered) when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÁõÈ÷Ãæ¤ÎÉğ´ï¤ò(ÉÔÎÉÉÊ)¤ËÊÑ¤¨¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ‘•”õ’†‚Ì•Ší‚ğ(•s—Ç•i)‚É•Ï‚¦‚éB
 
-N:214:*ËÉ¶ñ¶¯²½*:½Ğ»´ ÂÎ Ì¤¹ç
+N:214:*–h‹ï‹­‰»*:oS ‘Ì –¢‡
 E:*Enchant Armor*:klimon bieder
 G:?:w
 I:70:20:0
 W:50:0:5:1000
 A:50/1
 D:$It increases an armour's to-ac powerfully when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈËÉ¶ñ¤ÎAC½¤Àµ¤òÊ£¿ô²ó¶¯²½¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ–h‹ï‚ÌACC³‚ğ•¡”‰ñ‹­‰»‚·‚éB
 
-N:215:ËÉ¶ñ¼öÇû:²ç´¶ Åİ ÃÀ
+N:215:–h‹ïô”›:‰åŠ´ “| ’_
 E:Curse Armor:alacre re org
 G:?:w
 I:70:2:0
 W:50:0:5:0
 A:50/1
 D:$It makes your current armour (Blasted) when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÃå¤Æ¤¤¤ë³»¤ò(ÁÆ°­ÉÊ)¤ËÊÑ¤¨¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ’…‚Ä‚¢‚éŠZ‚ğ(‘eˆ«•i)‚É•Ï‚¦‚éB
 
-N:216:¥µ¥â¥ó¡¦¥¢¥ó¥Ç¥Ã¥É:ÆÇÁ´ æÆ´° ¿Ê»ö
+N:216:ƒTƒ‚ƒ“EƒAƒ“ƒfƒbƒh:“Å‘S ãÄŠ® i–
 E:Summon Undead:umgar danri
 G:?:w
 I:70:5:0
 W:15:0:5:0
 A:15/1
 D:$It summons several undead monsters as enemies when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÊ£¿ô¤Î¥¢¥ó¥Ç¥Ã¥É¤Î¥â¥ó¥¹¥¿¡¼¤òÅ¨¤È¤·¤Æ¾¤´­¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ•¡”‚ÌƒAƒ“ƒfƒbƒh‚Ìƒ‚ƒ“ƒXƒ^[‚ğ“G‚Æ‚µ‚Ä¢Š«‚·‚éB
 
-N:217:Å··Ã:ÃÇ½Ä ½ã Àäº¬
+N:217:“VŒb:’fc ƒ âª
 E:Blessing:ooder dokrog
 G:?:w
 I:70:33:0
 W:1:0:5:15
 A:1/1
 D:$It blesses you temporarily when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È°ì»şÅª¤Ë½ËÊ¡¤µ¤ì¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æˆê“I‚Éj•Ÿ‚³‚ê‚éB
 
-N:218:À»¾§²Î:²Ğ²ó ÀäÃÀ Ìø
+N:218:¹¥‰Ì:‰Î‰ñ â’_ –ö
 E:Holy Chant:nihum khomar
 G:?:w
 I:70:34:0
 W:10:0:5:40
 A:10/1
 D:$It blesses you temporarily when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È°ì»şÅª¤Ë½ËÊ¡¤µ¤ì¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æˆê“I‚Éj•Ÿ‚³‚ê‚éB
 
-N:219:À»µ§¸À:Åá À¸Æ° ÈøÆÇ
+N:219:¹‹FŒ¾:“ ¶“® ”ö“Å
 E:Holy Prayer:wexab jahnag
 G:?:w
 I:70:35:0
 W:25:0:5:80
 A:25/1
 D:$It blesses you temporarily when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È°ì»şÅª¤Ë½ËÊ¡¤µ¤ì¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æˆê“I‚Éj•Ÿ‚³‚ê‚éB
 
-N:220:µ¢´Ô¤Î¾Û:Á´ ÄÅÍğ µ¯µ¯
+N:220:‹AŠÒ‚ÌÙ:‘S ’Ã— ‹N‹N
 E:Word of Recall:re ab evssna
 G:?:w
 I:70:11:0
@@ -2371,21 +2371,21 @@ W:5:0:5:150
 A:5/1
 D:$It recalls you to the town, or back into the dungeon you have entered when 
 D:$you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÃÏ¾å¤Ë¤¤¤ë»ş¤Ï¹Ô¤Ã¤¿¤³¤È¤Î¤¢¤ë¥À¥ó¥¸¥ç¥ó¤ÎºÇ¿¼³¬¤Ø¡¢
-D:¥À¥ó¥¸¥ç¥ó¤Ë¤¤¤ë»ş¤ÏÃÏ¾å¤Ø¤È°ÜÆ°¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ’nã‚É‚¢‚é‚Ís‚Á‚½‚±‚Æ‚Ì‚ ‚éƒ_ƒ“ƒWƒ‡ƒ“‚ÌÅ[ŠK‚ÖA
+D:ƒ_ƒ“ƒWƒ‡ƒ“‚É‚¢‚é‚Í’nã‚Ö‚ÆˆÚ“®‚·‚éB
 
-N:221:*ÇË²õ*:ò´¸Î Åá Ì¿ Ä¾
+N:221:*”j‰ó*:é²ŒÌ “ –½ ’¼
 E:*Destruction*:denmung ishbul
 G:?:w
 I:70:41:0
 W:40:0:5:250
 A:40/1
 D:$It destroys everything nearby you when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼şÊÕ¤ÎÁ´¤Æ¤Î¤â¤Î¤òÇË²õ¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ìü•Ó‚Ì‘S‚Ä‚Ì‚à‚Ì‚ğ”j‰ó‚·‚éB
 
 ##### Potions #####
 
-N:222:¥¹¥é¥¤¥à¥â¥ë¥É¥¸¥å¡¼¥¹:¤è¤É¤ó¤ÀÎĞ¤Î
+N:222:ƒXƒ‰ƒCƒ€ƒ‚ƒ‹ƒhƒWƒ…[ƒX:‚æ‚Ç‚ñ‚¾—Î‚Ì
 E:Slime Mold Juice:Icky Green
 G:!:g
 I:75:2:400
@@ -2394,9 +2394,9 @@ A:0/1
 P:0:1d1:0:0:0
 F:FIXED_FLAVOR
 D:$It tastes weird.
-D:¤½¤ì¤ÏÉÔµ¤Ì£¤ÊÌ£¤Î¤¹¤ë¥¸¥å¡¼¥¹¤Ç¤¢¤ë¡£
+D:‚»‚ê‚Í•s‹C–¡‚È–¡‚Ì‚·‚éƒWƒ…[ƒX‚Å‚ ‚éB
 
-N:223:¥ê¥ó¥´¥¸¥å¡¼¥¹:ÇöÃã¿§¤Î
+N:223:ƒŠƒ“ƒSƒWƒ…[ƒX:”–’ƒF‚Ì
 E:Apple Juice:Light Brown
 G:!:U
 I:75:1:250
@@ -2405,9 +2405,9 @@ A:0/1
 P:0:1d1:0:0:0
 F:FIXED_FLAVOR
 D:$It tastes sweet.
-D:¤½¤ì¤Ï´Å¤¯¤Æ¥µ¥Ã¥Ñ¥ê¤·¤Æ¤¤¤ë¥¸¥å¡¼¥¹¤Ç¤¢¤ë¡£
+D:‚»‚ê‚ÍŠÃ‚­‚ÄƒTƒbƒpƒŠ‚µ‚Ä‚¢‚éƒWƒ…[ƒX‚Å‚ ‚éB
 
-N:224:¿å:Æ©ÌÀ¤Ê
+N:224:…:“§–¾‚È
 E:Water:Clear
 G:!:w
 I:75:0:200
@@ -2416,9 +2416,9 @@ A:0/1
 P:0:1d1:0:0:0
 F:FIXED_FLAVOR
 D:$It is just water.
-D:¤½¤ì¤Ï¤¿¤À¤Î¿å¤Ç¤¢¤ë¡£
+D:‚»‚ê‚Í‚½‚¾‚Ì…‚Å‚ ‚éB
 
-N:225:ÏÓÎÏ:º°ÊË¤Î
+N:225:˜r—Í:®•É‚Ì
 E:Strength:Azure
 G:!:B
 I:75:48:0
@@ -2426,9 +2426,9 @@ W:20:0:4:30000
 A:20/8:30/4:80/4
 P:0:1d1:0:0:0
 D:$It increases your strength when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÏÓÎÏ¤ÎºÇÂçÃÍ¤¬¾å¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ˜r—Í‚ÌÅ‘å’l‚ªã‚ª‚éB
 
-N:226:ÀÈ¼å:ÀÄ¤¤
+N:226:Æã:Â‚¢
 E:Weakness:Blue
 G:!:b
 I:75:16:0
@@ -2436,9 +2436,9 @@ W:3:0:4:0
 A:3/1
 P:0:3d12:0:0:0
 D:$It decreases your strength when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÏÓÎÏ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ˜r—Í‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:227:ÏÓÎÏÉü³è:ÀÄÈÃ¤Î
+N:227:˜r—Í•œŠˆ:Â”Á‚Ì
 E:Restore Strength:Blue Speckled
 G:!:b
 I:75:42:0
@@ -2446,9 +2446,9 @@ W:25:0:4:300
 A:25/1
 P:0:1d1:0:0:0
 D:$It restores your strength when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÏÓÎÏ¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ˜r—Í‚ª‰ñ•œ‚·‚éB
 
-N:228:ÃÎÇ½:¹õ¤¤
+N:228:’m”\:•‚¢
 E:Intelligence:Black
 G:!:D
 I:75:49:0
@@ -2456,9 +2456,9 @@ W:20:0:4:30000
 A:20/8:30/4:80/4
 P:0:1d1:0:0:0
 D:$It increases your intellingence when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÃÎÇ½¤ÎºÇÂçÃÍ¤¬¾å¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ’m”\‚ÌÅ‘å’l‚ªã‚ª‚éB
 
-N:229:ÌµÃÎ:Ãã¿§¤Î
+N:229:–³’m:’ƒF‚Ì
 E:Stupidity:Brown
 G:!:u
 I:75:17:0
@@ -2466,9 +2466,9 @@ W:20:0:4:0
 A:20/1
 P:0:1d1:0:0:0
 D:$It decreases your intelligence when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÃÎÇ½¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ’m”\‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:230:ÃÎÇ½Éü³è:ÃãÈÃ¤Î
+N:230:’m”\•œŠˆ:’ƒ”Á‚Ì
 E:Restore Intelligence:Brown Speckled
 G:!:u
 I:75:43:0
@@ -2476,9 +2476,9 @@ W:25:0:4:300
 A:25/1
 P:0:1d1:0:0:0
 D:$It restores your intelligence when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÃÎÇ½¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ’m”\‚ª‰ñ•œ‚·‚éB
 
-N:231:¸­¤µ:Ë¢¤À¤Ã¤¿
+N:231:Œ«‚³:–A‚¾‚Á‚½
 E:Wisdom:Bubbling
 G:!:W
 I:75:50:0
@@ -2486,9 +2486,9 @@ W:20:0:4:30000
 A:20/8:30/4:80/4
 P:0:1d1:0:0:0
 D:$It increases your wisdom when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¸­¤µ¤ÎºÇÂçÃÍ¤¬¾å¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŒ«‚³‚ÌÅ‘å’l‚ªã‚ª‚éB
 
-N:232:¶òÆß:Çö²«ÎĞ¿§¤Î
+N:232:‹ğ“İ:”–‰©—ÎF‚Ì
 E:Naivety:Chartreuse
 G:!:G
 I:75:18:0
@@ -2496,9 +2496,9 @@ W:20:0:4:0
 A:20/1
 P:0:1d1:0:0:0
 D:$It decreases your wisdom when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¸­¤µ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŒ«‚³‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:233:¸­¤µÉü³è:Âù¤Ã¤¿
+N:233:Œ«‚³•œŠˆ:‘÷‚Á‚½
 E:Restore Wisdom:Cloudy
 G:!:w
 I:75:44:0
@@ -2506,9 +2506,9 @@ W:25:0:4:300
 A:25/1
 P:0:1d1:0:0:0
 D:$It restores your wisdom when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¸­¤µ¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŒ«‚³‚ª‰ñ•œ‚·‚éB
 
-N:234:Ì¥ÎÏ:Æ¼ÈÃ¤Î
+N:234:–£—Í:“º”Á‚Ì
 E:Charisma:Copper Speckled
 G:!:U
 I:75:53:0
@@ -2516,9 +2516,9 @@ W:20:0:4:4000
 A:10/8:20/4:70/4
 P:0:1d1:0:0:0
 D:$It increases your charisma when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÌ¥ÎÏ¤ÎºÇÂçÃÍ¤¬¾å¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ–£—Í‚ÌÅ‘å’l‚ªã‚ª‚éB
 
-N:235:½¹°­:¹È¿§¤Î
+N:235:Xˆ«:gF‚Ì
 E:Ugliness:Crimson
 G:!:r
 I:75:21:0
@@ -2526,9 +2526,9 @@ W:20:0:4:0
 A:20/1
 P:0:1d1:0:0:0
 D:$It decreases your charisma when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÌ¥ÎÏ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ–£—Í‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:236:Ì¥ÎÏÉü³è:¥·¥¢¥ó¿§¤Î
+N:236:–£—Í•œŠˆ:ƒVƒAƒ“F‚Ì
 E:Restore Charisma:Cyan
 G:!:B
 I:75:47:0
@@ -2536,9 +2536,9 @@ W:20:0:4:300
 A:20/1
 P:0:1d1:0:0:0
 D:$It restores your charisma when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÌ¥ÎÏ¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ–£—Í‚ª‰ñ•œ‚·‚éB
 
-N:237:Ìş¤·:·²ÀÄ¿§¤Î
+N:237:–ü‚µ:ŒQÂF‚Ì
 E:Curing:Dark Blue
 G:!:b
 I:75:61:100
@@ -2547,12 +2547,12 @@ A:18/1:40/1
 P:0:1d1:0:0:0
 D:$It heals you 50 and cures blindness, poison, confusion, stunning, cuts 
 D:$and hallucination when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÎÎÏ¤¬50²óÉü¤·¡¢ÌÕÌÜ¡¦ÆÇ¡¦º®Íğ¡¦Û¯Û°¡¦ÀÚ¤ê½ı¡¦¸¸³Ğ¤òÌş¤¹¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ì—Í‚ª50‰ñ•œ‚µA–Ó–ÚE“ÅE¬—ENOEØ‚èEŒ¶Šo‚ğ–ü‚·B
 
 # Note! Invulnerability decreases your food...
 
 #JZ#
-N:238:ÌµÅ¨:¿¼¤¤ÎĞ¤Î
+N:238:–³“G:[‚¢—Î‚Ì
 E:Invulnerability:Dark Green
 G:!:g
 I:75:62:-2500
@@ -2560,10 +2560,10 @@ W:90:0:4:100000
 A:90/9
 P:0:1d1:0:0:0
 D:$You get invulnerable temporarily when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È°ì»şÅª¤ËÌµÅ¨²½¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æˆê“I‚É–³“G‰»‚·‚éB
 
 #JZ#
-N:239:¿·À¸:¿¼¤¤ÀÖ¿§¤Î
+N:239:V¶:[‚¢ÔF‚Ì
 E:New Life:Dark Red
 G:!:r
 I:75:63:100
@@ -2572,10 +2572,10 @@ A:30/8
 P:0:1d1:0:0:0
 D:$It changes your life rating and max of all your stats and cures all 
 D:$mutations when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¼«Ê¬¤ÎÀ¸Ì¿ÎÏ¥é¥ó¥¯¤äÁ´¥¹¥Æ¡¼¥¿¥¹¤Î¸Â³¦¤¬ºî¤êÄ¾¤µ¤ì¡¢
-D:Á´¤Æ¤ÎÆÍÁ³ÊÑ°Û¤¬¾Ã¤¨¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ©•ª‚Ì¶–½—Íƒ‰ƒ“ƒN‚â‘SƒXƒe[ƒ^ƒX‚ÌŒÀŠE‚ªì‚è’¼‚³‚êA
+D:‘S‚Ä‚Ì“Ë‘R•ÏˆÙ‚ªÁ‚¦‚éB
 
-N:240:½Å½ı¤Î¼£Ìş:¶âÈÃ¤Î
+N:240:d‚Ì¡–ü:‹à”Á‚Ì
 E:Cure Serious Wounds:Gold Speckled
 G:!:y
 I:75:35:100
@@ -2584,9 +2584,9 @@ A:3/1
 P:0:1d1:0:0:0
 D:$It heals you 4d8, cures blindness, confusion and berserk and reduces cuts 
 D:$when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÎÎÏ¤¬4d8²óÉü¤·¡¢ÌÕÌÜ¡¦º®Íğ¡¦¶¸Àï»Î²½¤òÌş¤·¡¢ÀÚ¤ê½ı¤òÏÂ¤é¤²¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ì—Í‚ª4d8‰ñ•œ‚µA–Ó–ÚE¬—E‹¶ím‰»‚ğ–ü‚µAØ‚è‚ğ˜a‚ç‚°‚éB
 
-N:241:Ã×Ì¿½ı¤Î¼£Ìş:³¥¿§¤Î
+N:241:’v–½‚Ì¡–ü:ŠDF‚Ì
 E:Cure Critical Wounds:Gray
 G:!:s
 I:75:36:100
@@ -2595,9 +2595,9 @@ A:5/1
 P:0:1d1:0:0:0
 D:$It heals you 6d8 and cures blindness, confusion, poison, stunned, cuts and 
 D:$berserk when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÎÎÏ¤¬6d8²óÉü¤·¡¢ÌÕÌÜ¡¦º®Íğ¡¦ÆÇ¡¦Û¯Û°¡¦ÀÚ¤ê½ı¡¦¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ì—Í‚ª6d8‰ñ•œ‚µA–Ó–ÚE¬—E“ÅENOEØ‚èE‹¶ím‰»‚ğ–ü‚·B
 
-N:242:ÂÎÎÏ²óÉü:³¥ÈÃ¤Î
+N:242:‘Ì—Í‰ñ•œ:ŠD”Á‚Ì
 E:Healing:Gray Speckled
 G:!:s
 I:75:37:200
@@ -2606,9 +2606,9 @@ A:15/1:30/1:60/1:80/1
 P:0:1d1:0:0:0
 D:$It heals you 300 and cures blindness, confusion, poison, stunned, cuts and 
 D:$berserk when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÎÎÏ¤¬300²óÉü¤·¡¢ÌÕÌÜ¡¦º®Íğ¡¦ÆÇ¡¦Û¯Û°¡¦ÀÚ¤ê½ı¡¦¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ì—Í‚ª300‰ñ•œ‚µA–Ó–ÚE¬—E“ÅENOEØ‚èE‹¶ím‰»‚ğ–ü‚·B
 
-N:243:ÂÑµ×ÎÏ:ÎĞ¿§¤Î
+N:243:‘Ï‹v—Í:—ÎF‚Ì
 E:Constitution:Green
 G:!:g
 I:75:52:0
@@ -2616,9 +2616,9 @@ W:20:0:4:30000
 A:20/8:30/4:80/4
 P:0:1d1:0:0:0
 D:$It increases your constitution when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÑµ×ÎÏ¤ÎºÇÂçÃÍ¤¬¾å¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ï‹v—Í‚ÌÅ‘å’l‚ªã‚ª‚éB
 
-N:244:·Ğ¸³:ÎĞÈÃ¤Î
+N:244:ŒoŒ±:—Î”Á‚Ì
 E:Experience:Green Speckled
 G:!:g
 I:75:59:0
@@ -2626,9 +2626,9 @@ W:65:0:4:25000
 A:65/1
 P:0:1d1:0:0:0
 D:$You gain experience half of your experience (max: 100000) when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¸½ºß¤Î·Ğ¸³ÃÍ¤ÎÈ¾Ê¬(100000¤òÄ¶¤¨¤Ê¤¤)¤Î·Ğ¸³¤òÆÀ¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŒ»İ‚ÌŒoŒ±’l‚Ì”¼•ª(100000‚ğ’´‚¦‚È‚¢)‚ÌŒoŒ±‚ğ“¾‚éB
 
-N:245:Ì²¤ê:¤Ü¤ä¤±¤¿¿§¤Î
+N:245:–°‚è:‚Ú‚â‚¯‚½F‚Ì
 E:Sleep:Hazy
 G:!:W
 I:75:11:100
@@ -2636,9 +2636,9 @@ W:0:0:4:0
 A:0/1
 P:0:1d1:0:0:0
 D:$It paralyzes you when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈËãáã¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ–ƒáƒ‚·‚éB
 
-N:246:ÌÕÌÜ:Íõ¿§¤Î
+N:246:–Ó–Ú:—•F‚Ì
 E:Blindness:Indigo
 G:!:v
 I:75:7:0
@@ -2646,10 +2646,10 @@ W:0:0:4:0
 A:0/1
 P:0:1d1:0:0:0
 D:$It blinds you when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÌÕÌÜ¤Ë¤Ê¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ–Ó–Ú‚É‚È‚éB
 
 #JZ#
-N:247:¿ì¤ÃÊ§¤¤:Çö¤¤ÀÄ¿§¤Î
+N:247:Œ‚Á•¥‚¢:”–‚¢ÂF‚Ì
 E:Booze:Light Blue
 G:!:B
 I:75:9:50
@@ -2658,9 +2658,9 @@ A:0/1
 P:0:1d1:0:0:0
 D:$It confuses and hallucinates you when you quaff it. If you are a monk, 
 D:$you may be a drunken master.
-D:¤½¤ì¤Ï°û¤à¤Èº®Íğ¤·¡¢¸¸³Ğ¤Ë¿¯¤µ¤ì¤ë¡£½¤¹ÔÁÎ¤¬°û¤à¤È¿ì·ı¤ò»È¤¨¤ë¤é¤·¤¤¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ¬—‚µAŒ¶Šo‚ÉN‚³‚ê‚éBCs‘m‚ªˆù‚Ş‚ÆŒŒ‚ğg‚¦‚é‚ç‚µ‚¢B
 
-N:248:ÆÇ:Çö¤¤ÎĞ¿§¤Î
+N:248:“Å:”–‚¢—ÎF‚Ì
 E:Poison:Light Green
 G:!:G
 I:75:6:0
@@ -2668,9 +2668,9 @@ W:3:0:4:0
 A:3/1
 P:0:1d1:0:0:0
 D:$It poisons you when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÆÇ¤ËËÁ¤µ¤ì¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ“Å‚É–`‚³‚ê‚éB
 
-N:249:¥¹¥Ô¡¼¥É:¥Ş¥¼¥ó¥¿¿§¤Î
+N:249:ƒXƒs[ƒh:ƒ}ƒ[ƒ“ƒ^F‚Ì
 E:Speed:Magenta
 G:!:r
 I:75:29:0
@@ -2678,9 +2678,9 @@ W:1:0:4:75
 A:1/1:40/1:60/1
 P:0:1d1:0:0:0
 D:$It hastes you temporarily when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È°ì»şÅª¤Ë²ÃÂ®¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æˆê“I‚É‰Á‘¬‚·‚éB
 
-N:250:¤Î¤í¤Ş:ÀÄ¤¯µ±¤¯
+N:250:‚Ì‚ë‚Ü:Â‚­‹P‚­
 E:Slowness:Metallic Blue
 G:!:b
 I:75:4:50
@@ -2688,9 +2688,9 @@ W:1:0:4:0
 A:1/1
 P:0:1d1:0:0:0
 D:$It slows you down temporarily when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È°ì»şÅª¤Ë¸ºÂ®¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æˆê“I‚ÉŒ¸‘¬‚·‚éB
 
-N:251:´ïÍÑ¤µ:ÀÖ¤¯µ±¤¯
+N:251:Ší—p‚³:Ô‚­‹P‚­
 E:Dexterity:Metallic Red
 G:!:r
 I:75:51:0
@@ -2698,9 +2698,9 @@ W:20:0:4:30000
 A:20/8:30/4:80/4
 P:0:1d1:0:0:0
 D:$It increases your dexterity when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È´ïÍÑ¤µ¤ÎºÇÂçÃÍ¤¬¾å¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŠí—p‚³‚ÌÅ‘å’l‚ªã‚ª‚éB
 
-N:252:´ïÍÑ¤µÉü³è:ÎĞ¤Ëµ±¤¯
+N:252:Ší—p‚³•œŠˆ:—Î‚É‹P‚­
 E:Restore Dexterity:Metallic Green
 G:!:g
 I:75:45:0
@@ -2708,9 +2708,9 @@ W:25:0:4:300
 A:25/1
 P:0:1d1:0:0:0
 D:$It restores your dexterity when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È´ïÍÑ¤µ¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŠí—p‚³‚ª‰ñ•œ‚·‚éB
 
-N:253:ÂÑµ×ÎÏÉü³è:»ç¤Ëµ±¤¯
+N:253:‘Ï‹v—Í•œŠˆ:‡‚É‹P‚­
 E:Restore Constitution:Metallic Purple
 G:!:v
 I:75:46:0
@@ -2718,9 +2718,9 @@ W:25:0:4:300
 A:25/1
 P:0:1d1:0:0:0
 D:$It restores your constitution when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÑµ×ÎÏ¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ï‹v—Í‚ª‰ñ•œ‚·‚éB
 
-N:254:µ­²±ÁÓ¼º:¥ª¥ì¥ó¥¸¿§¤Î
+N:254:‹L‰¯‘r¸:ƒIƒŒƒ“ƒWF‚Ì
 E:Lose Memories:Orange
 G:!:o
 I:75:13:0
@@ -2728,9 +2728,9 @@ W:10:0:4:0
 A:10/1
 P:0:1d1:0:0:0
 D:$You lose experience when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¸½ºß¤Î·Ğ¸³ÃÍ¤ò¼º¤¦¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŒ»İ‚ÌŒoŒ±’l‚ğ¸‚¤B
 
-N:255:±ö¿å:¥ª¥ì¥ó¥¸ÈÃ¤Î
+N:255:‰–…:ƒIƒŒƒ“ƒW”Á‚Ì
 E:Salt Water:Orange Speckled
 G:!:o
 I:75:5:0
@@ -2739,9 +2739,9 @@ A:0/1
 P:0:1d1:0:0:0
 D:$It makes you nearly faint from hunger and paralyzes you, 
 D:$but it cures poison when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È²î»àÀ£Á°¤Ë¤Ê¤êËãáã¤¹¤ë¤¬¡¢ÆÇ¤òÌş¤¹¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‰ì€¡‘O‚É‚È‚è–ƒáƒ‚·‚é‚ªA“Å‚ğ–ü‚·B
 
-N:256:·¼ÌØ:¥Ô¥ó¥¯¿§¤Î
+N:256:Œ[–Ö:ƒsƒ“ƒNF‚Ì
 E:Enlightenment:Pink
 G:!:R
 I:75:56:0
@@ -2750,10 +2750,10 @@ A:25/1:50/1:100/1
 P:0:1d1:0:0:0
 D:$It maps, lights permanently and detects all items on the entire level when 
 D:$you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¤½¤Î³¬¤ÎÃÏ·Á¤ò´°Á´¤ËÃÎ¤ë¤³¤È¤¬¤Ç¤­¡¢¤½¤Î³¬Á´ÂÎ¤¬±Êµ×¤Ë
-D:¾È¤é¤µ¤ì¡¢¤½¤Î³¬¤ÎÁ´¤Æ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‚»‚ÌŠK‚Ì’nŒ`‚ğŠ®‘S‚É’m‚é‚±‚Æ‚ª‚Å‚«A‚»‚ÌŠK‘S‘Ì‚ª‰i‹v‚É
+D:Æ‚ç‚³‚êA‚»‚ÌŠK‚Ì‘S‚Ä‚ÌƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB
 
-N:257:¥Ò¡¼¥í¡¼:¥Ô¥ó¥¯ÈÃ¤Î
+N:257:ƒq[ƒ[:ƒsƒ“ƒN”Á‚Ì
 E:Heroism:Pink Speckled
 G:!:R
 I:75:32:0
@@ -2762,9 +2762,9 @@ A:1/1
 P:0:1d1:0:0:0
 D:$It removes fear, causes you temporary heroism and heals you 10 when you 
 D:$quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¶²Éİ¤ò¼è¤ê½ü¤­¡¢°ì»şÅª¤Ë¥Ò¡¼¥í¡¼µ¤Ê¬¤Ë¤Ê¤ê¡¢ÂÎÎÏ¤¬10²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‹°•|‚ğæ‚èœ‚«Aˆê“I‚Éƒq[ƒ[‹C•ª‚É‚È‚èA‘Ì—Í‚ª10‰ñ•œ‚·‚éB
 
-N:258:¶¸Àï»Î²½:¹õ³ì¿§¤Î
+N:258:‹¶ím‰»:•ŠŒF‚Ì
 E:Berserk Strength:Puce
 G:!:v
 I:75:33:0
@@ -2773,9 +2773,9 @@ A:20/3
 P:0:1d1:0:0:0
 D:$It removes fear, causes you to go berserk and heals you 30 when you 
 D:$quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¶²Éİ¤ò¼è¤ê½ü¤­¡¢°ì»şÅª¤Ë¶¸Àï»Î²½¤·¡¢ÂÎÎÏ¤¬30²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‹°•|‚ğæ‚èœ‚«Aˆê“I‚É‹¶ím‰»‚µA‘Ì—Í‚ª30‰ñ•œ‚·‚éB
 
-N:259:¶²¤¤¤â¤ÎÃÎ¤é¤º:»ç¿§¤Î
+N:259:‹°‚¢‚à‚Ì’m‚ç‚¸:‡F‚Ì
 E:Boldness:Purple
 G:!:v
 I:75:28:0
@@ -2783,9 +2783,9 @@ W:1:0:4:10
 A:1/1
 P:0:1d1:0:0:0
 D:$It removes fear when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¶²Éİ¤ò¼è¤ê½ü¤¯¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‹°•|‚ğæ‚èœ‚­B
 
-N:260:·Ğ¸³ÃÍÉü³è:ÀÖ¤¤
+N:260:ŒoŒ±’l•œŠˆ:Ô‚¢
 E:Restore Life Levels:Red
 G:!:r
 I:75:41:0
@@ -2793,9 +2793,9 @@ W:40:0:4:400
 A:40/1
 P:0:1d1:0:0:0
 D:$It restores your experience when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È·Ğ¸³ÃÍ¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŒoŒ±’l‚ª‰ñ•œ‚·‚éB
 
-N:261:ÂÑ²Ğ:ÀÖÈÃ¤Î
+N:261:‘Ï‰Î:Ô”Á‚Ì
 E:Resist Heat:Red Speckled
 G:!:r
 I:75:30:0
@@ -2804,9 +2804,9 @@ A:1/1
 P:0:1d1:0:0:0
 D:$You get temporary resistance to fire when you quaff it. This resistance 
 D:$is cumulative with equipment.
-D:¤½¤ì¤Ï°û¤à¤È°ì»şÅª¤Ë²Ğ±ê¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æˆê“I‚É‰Î‰Š‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB
 
-N:262:ÂÑÎä:¶äÈÃ¤Î
+N:262:‘Ï—â:‹â”Á‚Ì
 E:Resist Cold:Silver Speckled
 G:!:W
 I:75:31:0
@@ -2815,9 +2815,9 @@ A:1/1
 P:0:1d1:0:0:0
 D:$You get temporary resistance to cold when you quaff it. This resistance 
 D:$is cumulative with equipment.
-D:¤½¤ì¤Ï°û¤à¤È°ì»şÅª¤ËÎäµ¤¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æˆê“I‚É—â‹C‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB
 
-N:263:Æ©ÌÀÊªÂÎ´¶ÃÎ:±ì¤Ã¤¿
+N:263:“§–¾•¨‘ÌŠ´’m:‰Œ‚Á‚½
 E:Detect Invisible:Smoky
 G:!:D
 I:75:25:0
@@ -2825,9 +2825,9 @@ W:3:0:4:50
 A:3/1
 P:0:1d1:0:0:0
 D:$It gives temporary see invisible when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È°ì»şÅª¤ËÆ©ÌÀ¤Ê¤â¤Î¤¬¸«¤¨¤ëÇ½ÎÏ¤òÆÀ¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æˆê“I‚É“§–¾‚È‚à‚Ì‚ªŒ©‚¦‚é”\—Í‚ğ“¾‚éB
 
-N:264:¸ºÆÇ:Üô¿§¤Î
+N:264:Œ¸“Å:òF‚Ì
 E:Slow Poison:Tangerine
 G:!:o
 I:75:26:0
@@ -2835,9 +2835,9 @@ W:1:0:4:25
 A:1/1
 P:0:1d1:0:0:0
 D:$It reduces poison when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÆÇ¤òÏÂ¤é¤²¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ“Å‚ğ˜a‚ç‚°‚éB
 
-N:265:²òÆÇ:¥¹¥ß¥ì¿§¤Î
+N:265:‰ğ“Å:ƒXƒ~ƒŒF‚Ì
 E:Neutralize Poison:Violet
 G:!:v
 I:75:27:0
@@ -2845,9 +2845,9 @@ W:5:0:4:75
 A:5/1
 P:0:1d1:0:0:0
 D:$It cures poison when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÆÇ¤òÌş¤¹¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ“Å‚ğ–ü‚·B
 
-N:266:ËâÎÏÉü³è:¼ë¿§¤Î
+N:266:–‚—Í•œŠˆ:éF‚Ì
 E:Restore Mana:Vermilion
 G:!:r
 I:75:40:0
@@ -2856,10 +2856,10 @@ A:25/2:40/2:60/2:90/2
 P:0:1d1:0:0:0
 D:$It restores mana to full and cures berserk when you quaff it.
 D:$MagicEaters restore their charges up to 1/3 of full charge.
-D:¤½¤ì¤Ï°û¤à¤ÈËâÎÏ¤¬ºÇÂç¤Ş¤Ç²óÉü¤·¡¢¶¸Àï»Î²½¤òÌş¤¹¡£
-D:ËâÆ»¶ñ½Ñ»Õ¤Î¾ì¹ç¡¢»ÈÍÑ²ó¿ô¤¬ºÇÂç»ÈÍÑ²ó¿ô¤Î1/3¤À¤±²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ–‚—Í‚ªÅ‘å‚Ü‚Å‰ñ•œ‚µA‹¶ím‰»‚ğ–ü‚·B
+D:–‚“¹‹ïpt‚Ìê‡Ag—p‰ñ”‚ªÅ‘åg—p‰ñ”‚Ì1/3‚¾‚¯‰ñ•œ‚·‚éB
 
-N:267:ÀÖ³°Àş»ëÎÏ:Çò¤¤
+N:267:ÔŠOü‹—Í:”’‚¢
 E:Infra-vision:White
 G:!:w
 I:75:24:0
@@ -2867,10 +2867,10 @@ W:3:0:4:20
 A:3/1
 P:0:1d1:0:0:0
 D:$It gives temporary infravision when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È°ì»şÅª¤ËÀÖ³°Àş»ëÎÏ¤ò¶¯¤á¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æˆê“I‚ÉÔŠOü‹—Í‚ğ‹­‚ß‚éB
 
 #JZ#
-N:268:ÂÑÀ­:²«¿§¤¤
+N:268:‘Ï«:‰©F‚¢
 E:Resistance:Yellow
 G:!:y
 I:75:60:100
@@ -2880,15 +2880,15 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$You get temporary resistances to elements and poison when you quaff it. 
 D:$These resistances is cumulative with equipment.
-D:¤½¤ì¤Ï°û¤à¤È°ì»şÅª¤Ë»À¡¦ÅÅ·â¡¦²Ğ±ê¡¦Îäµ¤¡¦ÆÇ¤ÎÂÑÀ­¤òÆÀ¤ë¡£
-D:ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æˆê“I‚É_E“dŒ‚E‰Î‰ŠE—â‹CE“Å‚Ì‘Ï«‚ğ“¾‚éB
+D:‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB
 
 
 ##### Wands #####
 # Note : some of the old wands have been taken higher (low level characters
 # really need them and they used to be higher in earlier versions...)
 
-N:269:¸÷:¥¢¥ë¥ß¤Î
+N:269:Œõ:ƒAƒ‹ƒ~‚Ì
 E:Light:Aluminum
 G:-:B
 I:65:7:17
@@ -2896,10 +2896,10 @@ W:3:0:10:200
 A:3/1
 P:0:1d1:0:0:0
 D:$It fires a line of light when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¸÷Àş¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚ÆŒõü‚ğ•ú‚ÂB
 
 #JZ#
-N:270:²û½À:ÃòÅ´¤Î
+N:270:‰ù_:’’“S‚Ì
 E:Tame Monster:Cast Iron
 G:-:D
 I:65:17:9
@@ -2907,9 +2907,9 @@ W:30:0:10:1500
 A:30/2
 P:0:1d1:0:0:0
 D:$It charms a monster into your pet when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ¥Î»¤·¤Æ¥Ú¥Ã¥È¤Ë¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–£—¹‚µ‚Äƒyƒbƒg‚É‚·‚éB
 
-N:271:¥¢¥¤¥¹¡¦¥Ü¥ë¥È:¥¯¥í¥à¤Î
+N:271:ƒAƒCƒXEƒ{ƒ‹ƒg:ƒNƒƒ€‚Ì
 E:Frost Bolts:Chromium
 G:-:w
 I:65:19:12
@@ -2917,9 +2917,9 @@ W:20:0:10:800
 A:20/1
 P:0:1d1:0:0:0
 D:$It fires a bolt or beam of cold (damage: (5+level/8)d8) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸(5+¥ì¥Ù¥ë/8)d8¤ÎÎäµ¤¤ÎÌğ¤Ş¤¿¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW(5+ƒŒƒxƒ‹/8)d8‚Ì—â‹C‚Ì–î‚Ü‚½‚Íƒr[ƒ€‚ğ•ú‚ÂB
 
-N:272:¥Õ¥¡¥¤¥¢¡¦¥Ü¥ë¥È:Æ¼¤Î
+N:272:ƒtƒ@ƒCƒAEƒ{ƒ‹ƒg:“º‚Ì
 E:Fire Bolts:Copper
 G:-:U
 I:65:18:15
@@ -2927,10 +2927,10 @@ W:30:0:10:1000
 A:30/1
 P:0:1d1:0:0:0
 D:$It fires a bolt or beam of fire (damage: (7+level/6)d8) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸(7+¥ì¥Ù¥ë/6)d8¤Î²Ğ±ê¤ÎÌğ¤Ş¤¿¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW(7+ƒŒƒxƒ‹/6)d8‚Ì‰Î‰Š‚Ì–î‚Ü‚½‚Íƒr[ƒ€‚ğ•ú‚ÂB
 
 # More common now...
-N:273:´äÀĞÍÏ²ò:¶â¤Î
+N:273:ŠâÎ—n‰ğ:‹à‚Ì
 E:Stone to Mud:Gold
 G:-:y
 I:65:6:12
@@ -2938,9 +2938,9 @@ W:10:0:10:300
 A:10/1:40/1
 P:0:1d1:0:0:0
 D:$It turns a door, rock, wall square to mud when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥É¥¢¤ä´äÀĞ¤äÊÉ¤òÍÏ¤«¤¹¡£
+D:‚»‚ê‚Íg‚¤‚ÆƒhƒA‚âŠâÎ‚â•Ç‚ğ—n‚©‚·B
 
-N:274:¥Á¥§¥ó¥¸¡¦¥â¥ó¥¹¥¿¡¼:Å´¤Î
+N:274:ƒ`ƒFƒ“ƒWEƒ‚ƒ“ƒXƒ^[:“S‚Ì
 E:Polymorph:Iron
 G:-:s
 I:65:13:15
@@ -2948,9 +2948,9 @@ W:20:0:10:400
 A:20/1
 P:0:1d1:0:0:0
 D:$It changes a monster into another when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤òÊÑ¿È¤µ¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğ•Ïg‚³‚¹‚éB
 
-N:275:²óÉü¥â¥ó¥¹¥¿¡¼:¥Ş¥°¥Í¥·¥¦¥à¤Î
+N:275:‰ñ•œƒ‚ƒ“ƒXƒ^[:ƒ}ƒOƒlƒVƒEƒ€‚Ì
 E:Heal Monster:Magnesium
 G:-:W
 I:65:0:6
@@ -2958,9 +2958,9 @@ W:2:0:10:0
 A:2/1
 P:0:1d1:0:0:0
 D:$It heals a monster when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤ÎÂÎÎÏ¤ò²óÉü¤µ¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚Ì‘Ì—Í‚ğ‰ñ•œ‚³‚¹‚éB
 
-N:276:¥¹¥Ô¡¼¥É¡¦¥â¥ó¥¹¥¿¡¼:¥â¥ê¥Ö¥Ç¥ó¤Î
+N:276:ƒXƒs[ƒhEƒ‚ƒ“ƒXƒ^[:ƒ‚ƒŠƒuƒfƒ“‚Ì
 E:Haste Monster:Molybdenum
 G:-:W
 I:65:1:6
@@ -2968,9 +2968,9 @@ W:20:0:10:1
 A:20/1
 P:0:1d1:0:0:0
 D:$It hastes a monster when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤ò²ÃÂ®¤µ¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğ‰Á‘¬‚³‚¹‚éB
 
-N:277:¥¹¥í¥¦¡¦¥â¥ó¥¹¥¿¡¼:¥Ë¥Ã¥±¥ë¤Î
+N:277:ƒXƒƒEEƒ‚ƒ“ƒXƒ^[:ƒjƒbƒPƒ‹‚Ì
 E:Slow Monster:Nickel
 G:-:U
 I:65:9:17
@@ -2978,9 +2978,9 @@ W:5:0:10:500
 A:2/1
 P:0:1d1:0:0:0
 D:$It slows a monster down when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤ò¸ºÂ®¤µ¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğŒ¸‘¬‚³‚¹‚éB
 
-N:278:¥Ñ¥Ë¥Ã¥¯¡¦¥â¥ó¥¹¥¿¡¼:»¬¤Ó¤¿
+N:278:ƒpƒjƒbƒNEƒ‚ƒ“ƒXƒ^[:K‚Ñ‚½
 E:Confuse Monster:Rusty
 G:-:r
 I:65:10:15
@@ -2988,9 +2988,9 @@ W:5:0:10:500
 A:3/1
 P:0:1d1:0:0:0
 D:$It confuses a monster when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤òº®Íğ¤µ¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğ¬—‚³‚¹‚éB
 
-N:279:¥¹¥ê¡¼¥×¡¦¥â¥ó¥¹¥¿¡¼:¶ä¤Î
+N:279:ƒXƒŠ[ƒvEƒ‚ƒ“ƒXƒ^[:‹â‚Ì
 E:Sleep Monster:Silver
 G:-:W
 I:65:8:16
@@ -2998,9 +2998,9 @@ W:5:0:10:500
 A:5/1
 P:0:1d1:0:0:0
 D:$It puts a monster to sleep when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ²¤é¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–°‚ç‚¹‚éB
 
-N:280:À¸Ì¿ÎÏµÛ¼ı:¹İÅ´¤Î
+N:280:¶–½—Í‹zû:|“S‚Ì
 E:Drain Life:Steel
 G:-:W
 I:65:12:7
@@ -3008,9 +3008,9 @@ W:50:0:10:1200
 A:50/1
 P:0:1d1:0:0:0
 D:$It fires a bolt of drain life (damage: 80+level) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸80+¥ì¥Ù¥ë¤ÎÀ¸Ì¿ÎÏ¤òºï¤ëÌğ¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW80+ƒŒƒxƒ‹‚Ì¶–½—Í‚ğí‚é–î‚ğ•ú‚ÂB
 
-N:281:¥È¥é¥Ã¥×/¥É¥¢ÇË²õ:¥Ö¥ê¥­¤Î
+N:281:ƒgƒ‰ƒbƒv/ƒhƒA”j‰ó:ƒuƒŠƒL‚Ì
 E:Trap/Door Destruction:Tin
 G:-:W
 I:65:5:15
@@ -3018,9 +3018,9 @@ W:10:0:10:100
 A:10/1
 P:0:1d1:0:0:0
 D:$It fires a beam destroys all traps and doors on the line when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥È¥é¥Ã¥×¤ä¥É¥¢¤òÇË²õ¤¹¤ë¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒgƒ‰ƒbƒv‚âƒhƒA‚ğ”j‰ó‚·‚éƒr[ƒ€‚ğ•ú‚ÂB
 
-N:282:¥Ş¥¸¥Ã¥¯¡¦¥ß¥µ¥¤¥ë:¥Á¥¿¥ó¤Î
+N:282:ƒ}ƒWƒbƒNEƒ~ƒTƒCƒ‹:ƒ`ƒ^ƒ“‚Ì
 E:Magic Missile:Titanium
 G:-:w
 I:65:15:17
@@ -3028,9 +3028,9 @@ W:2:0:10:200
 A:2/1
 P:0:1d1:0:0:0
 D:$It fires a bolt or beam of magic (damage: (2+level/10)d6) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸(2+¥ì¥Ù¥ë/10)d6¤ÎËâË¡¤ÎÌğ¤Ş¤¿¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW(2+ƒŒƒxƒ‹/10)d6‚Ì–‚–@‚Ì–î‚Ü‚½‚Íƒr[ƒ€‚ğ•ú‚ÂB
 
-N:283:¥¯¥í¡¼¥ó¡¦¥â¥ó¥¹¥¿¡¼:¥¿¥ó¥°¥¹¥Æ¥ó¤Î
+N:283:ƒNƒ[ƒ“Eƒ‚ƒ“ƒXƒ^[:ƒ^ƒ“ƒOƒXƒeƒ“‚Ì
 E:Clone Monster:Tungsten
 G:-:w
 I:65:2:6
@@ -3038,10 +3038,10 @@ W:15:0:10:0
 A:15/1
 P:0:1d1:0:0:0
 D:$It clones a monster when you use it. Unique monsters are not cloned.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤Î¥¯¥í¡¼¥ó¤òºî¤ê½Ğ¤¹¡£¥æ¥Ë¡¼¥¯¡¦
-D:¥â¥ó¥¹¥¿¡¼¤Ë¤ÏÌµ¸ú¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ÌƒNƒ[ƒ“‚ğì‚èo‚·Bƒ†ƒj[ƒNE
+D:ƒ‚ƒ“ƒXƒ^[‚É‚Í–³ŒøB
 
-N:284:¶²¹²¥â¥ó¥¹¥¿¡¼:¥¸¥ë¥³¥ó¤Î
+N:284:‹°Qƒ‚ƒ“ƒXƒ^[:ƒWƒ‹ƒRƒ“‚Ì
 E:Scare Monster:Zirconium
 G:-:W
 I:65:11:9
@@ -3049,9 +3049,9 @@ W:10:0:10:500
 A:10/4
 P:0:1d1:0:0:0
 D:$It scares a monster when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤ò¶²Éİ¤µ¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğ‹°•|‚³‚¹‚éB
 
-N:285:¥Æ¥ì¥İ¡¼¥È¡¦¥¢¥¦¥§¥¤:°¡±ô¤Î
+N:285:ƒeƒŒƒ|[ƒgEƒAƒEƒFƒC:ˆŸ‰”‚Ì
 E:Teleport Other:Zinc
 G:-:W
 I:65:3:12
@@ -3059,9 +3059,9 @@ W:20:0:10:350
 A:20/1
 P:0:1d1:0:0:0
 D:$It fires a beam teleports all monsters on the line when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ‚ƒ“ƒXƒ^[‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éƒr[ƒ€‚ğ•ú‚ÂB
 
-N:286:¥È¥é¥Ã¥×²ò½ü:Æ¼¥á¥Ã¥­¤Î
+N:286:ƒgƒ‰ƒbƒv‰ğœ:“ºƒƒbƒL‚Ì
 E:Disarming:Copper-Plated
 G:-:U
 I:65:4:10
@@ -3069,9 +3069,9 @@ W:20:0:10:700
 A:20/1
 P:0:1d1:0:0:0
 D:$It fires a beam destroys all traps on the line when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥È¥é¥Ã¥×¤òÇË²õ¤¹¤ë¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒgƒ‰ƒbƒv‚ğ”j‰ó‚·‚éƒr[ƒ€‚ğ•ú‚ÂB
 
-N:287:¥µ¥ó¥À¡¼¡¦¥Ü¡¼¥ë:¶â¥á¥Ã¥­¤Î
+N:287:ƒTƒ“ƒ_[Eƒ{[ƒ‹:‹àƒƒbƒL‚Ì
 E:Lightning Balls:Gold-Plated
 G:-:y
 I:65:21:13
@@ -3080,9 +3080,9 @@ A:35/1
 P:0:1d1:0:0:0
 F:IGNORE_ELEC
 D:$It fires a ball of lightning (damage: 40+3*level/4) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸40+3*¥ì¥Ù¥ë/4¤ÎÅÅ·â¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW40+3*ƒŒƒxƒ‹/4‚Ì“dŒ‚‚Ì‹…‚ğ•ú‚ÂB
 
-N:288:¥¢¥¤¥¹¡¦¥Ü¡¼¥ë:¶ä¥á¥Ã¥­¤Î
+N:288:ƒAƒCƒXEƒ{[ƒ‹:‹âƒƒbƒL‚Ì
 E:Cold Balls:Silver-Plated
 G:-:W
 I:65:23:9
@@ -3091,9 +3091,9 @@ A:40/1
 P:0:1d1:0:0:0
 F:IGNORE_COLD
 D:$It fires a ball of cold (damage: 50+3*level/4) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸50+3*¥ì¥Ù¥ë/4¤ÎÎäµ¤¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW50+3*ƒŒƒxƒ‹/4‚Ì—â‹C‚Ì‹…‚ğ•ú‚ÂB
 
-N:289:¥Õ¥¡¥¤¥¢¡¦¥Ü¡¼¥ë:¥¹¥º¥á¥Ã¥­¤Î
+N:289:ƒtƒ@ƒCƒAEƒ{[ƒ‹:ƒXƒYƒƒbƒL‚Ì
 E:Fire Balls:Tin-Plated
 G:-:W
 I:65:22:7
@@ -3102,9 +3102,9 @@ A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_FIRE
 D:$It fires a ball of fire (damage: 70+3*level/4) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸70+3*¥ì¥Ù¥ë/4¤Î²Ğ±ê¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW70+3*ƒŒƒxƒ‹/4‚Ì‰Î‰Š‚Ì‹…‚ğ•ú‚ÂB
 
-N:290:°­½­±À:°¡±ô¥á¥Ã¥­¤Î
+N:290:ˆ«L‰_:ˆŸ‰”ƒƒbƒL‚Ì
 E:Stinking Cloud:Zinc-Plated
 G:-:W
 I:65:14:15
@@ -3112,9 +3112,9 @@ W:5:0:10:400
 A:5/1
 P:0:1d1:0:0:0
 D:$It fires a ball of poison (damage: 12+level/4) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸12+¥ì¥Ù¥ë/4¤ÎÆÇ¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW12+ƒŒƒxƒ‹/4‚Ì“Å‚Ì‹…‚ğ•ú‚ÂB
 
-N:291:¥¢¥·¥Ã¥É¡¦¥Ü¡¼¥ë:¥ß¥¹¥ê¥ë¤Î
+N:291:ƒAƒVƒbƒhEƒ{[ƒ‹:ƒ~ƒXƒŠƒ‹‚Ì
 E:Acid Balls:Mithril
 G:-:B
 I:65:20:8
@@ -3123,9 +3123,9 @@ A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID
 D:$It fires a ball of acid (damage: 60+3*level/4) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸60+3*¥ì¥Ù¥ë/4¤Î»À¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW60+3*ƒŒƒxƒ‹/4‚Ì_‚Ì‹…‚ğ•ú‚ÂB
 
-N:292:Ææ:ÀÄÆ¼¤Î
+N:292:“ä:Â“º‚Ì
 E:Wonder:Bronze
 G:-:U
 I:65:24:24
@@ -3134,12 +3134,12 @@ A:3/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$It effects uncertainly when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È²¿¤¬µ¯¤³¤ë¤«¤ï¤«¤é¤Ê¤¤¡£
+D:‚»‚ê‚Íg‚¤‚Æ‰½‚ª‹N‚±‚é‚©‚í‚©‚ç‚È‚¢B
 
 ##### Extra ammunition #####
 
 #JZ#
-N:293:ºÙÌğ
+N:293:×–î
 E:& Flight Arrow~
 G:{:y
 I:17:1:0
@@ -3150,7 +3150,7 @@ F:SHOW_MODS
 
 ##### Additional wands #####
 
-N:294:¥¢¥·¥Ã¥É¡¦¥Ü¥ë¥È:¿¿ï«¤Î
+N:294:ƒAƒVƒbƒhEƒ{ƒ‹ƒg:^èJ‚Ì
 E:Acid Bolts:Brass
 G:-:U
 I:65:16:15
@@ -3158,9 +3158,9 @@ W:30:0:10:950
 A:30/1
 P:0:1d1:0:0:0
 D:$It fires a bolt or beam of acid (damage: (6+level/7)d8) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸(6+¥ì¥Ù¥ë/7)d8¤Î»À¤ÎÌğ¤Ş¤¿¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW(6+ƒŒƒxƒ‹/7)d8‚Ì_‚Ì–î‚Ü‚½‚Íƒr[ƒ€‚ğ•ú‚ÂB
 
-N:295:¥É¥é¥´¥ó¤Î²Ğ±ê:¥×¥é¥Á¥Ê¤Î
+N:295:ƒhƒ‰ƒSƒ“‚Ì‰Î‰Š:ƒvƒ‰ƒ`ƒi‚Ì
 E:Dragon's Flame:Platinum
 G:-:w
 I:65:26:5
@@ -3169,9 +3169,9 @@ A:50/4
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$It breathes fire (damage: 200) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸200¤Î²Ğ±ê¤Î¥Ö¥ì¥¹¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW200‚Ì‰Î‰Š‚ÌƒuƒŒƒX‚ğ•ú‚ÂB
 
-N:296:¥É¥é¥´¥ó¤ÎÎäµ¤:±ô¤Î
+N:296:ƒhƒ‰ƒSƒ“‚Ì—â‹C:‰”‚Ì
 E:Dragon's Frost:Lead
 G:-:s
 I:65:27:5
@@ -3180,9 +3180,9 @@ A:50/4
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$It breathes cold (damage: 180) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸180¤ÎÎäµ¤¤Î¥Ö¥ì¥¹¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW180‚Ì—â‹C‚ÌƒuƒŒƒX‚ğ•ú‚ÂB
 
-N:297:¥É¥é¥´¥ó¡¦¥Ö¥ì¥¹:±ô¥á¥Ã¥­¤Î
+N:297:ƒhƒ‰ƒSƒ“EƒuƒŒƒX:‰”ƒƒbƒL‚Ì
 E:Dragon's Breath:Lead-Plated
 G:-:s
 I:65:28:5
@@ -3192,11 +3192,11 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$It breathes acid (damage: 240), lightning (damage: 210), fire (damage: 
 D:$240), cold (damage: 210) or poison (damage: 180) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸240¤Î»À¤Î¥Ö¥ì¥¹¡¢¥À¥á¡¼¥¸210¤ÎÅÅ·â¤Î¥Ö¥ì¥¹¡¢
-D:¥À¥á¡¼¥¸240¤Î²Ğ±ê¤Î¥Ö¥ì¥¹¡¢¥À¥á¡¼¥¸210¤ÎÎäµ¤¤Î¥Ö¥ì¥¹¡¢
-D:¥À¥á¡¼¥¸180¤ÎÆÇ¤Î¥Ö¥ì¥¹¤Î¤¤¤º¤ì¤«¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW240‚Ì_‚ÌƒuƒŒƒXAƒ_ƒ[ƒW210‚Ì“dŒ‚‚ÌƒuƒŒƒXA
+D:ƒ_ƒ[ƒW240‚Ì‰Î‰Š‚ÌƒuƒŒƒXAƒ_ƒ[ƒW210‚Ì—â‹C‚ÌƒuƒŒƒXA
+D:ƒ_ƒ[ƒW180‚Ì“Å‚ÌƒuƒŒƒX‚Ì‚¢‚¸‚ê‚©‚ğ•ú‚ÂB
 
-N:298:Ê¬²ò:¾İ²ç¤Î
+N:298:•ª‰ğ:Û‰å‚Ì
 E:Disintegrate:Ivory
 G:-:w
 I:65:25:4
@@ -3205,10 +3205,10 @@ A:60/4
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$It fires a ball of disintegration (damage: 200+d(level*2)) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸200+d(¥ì¥Ù¥ë*2)¤ÎÊ¬²ò¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW200+d(ƒŒƒxƒ‹*2)‚Ì•ª‰ğ‚Ì‹…‚ğ•ú‚ÂB
 
 #JZ#
-N:299:¥í¥±¥Ã¥È:¥¢¥À¥Ş¥ó¥¿¥¤¥È¤Î
+N:299:ƒƒPƒbƒg:ƒAƒ_ƒ}ƒ“ƒ^ƒCƒg‚Ì
 E:Rockets:Adamantite
 G:-:v
 I:65:29:4
@@ -3217,13 +3217,13 @@ A:75/4
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$It fires a rocket (damage: 250+level*3) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸250+¥ì¥Ù¥ë*3¤Î¥í¥±¥Ã¥È¤òÈ¯¼Í¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW250+ƒŒƒxƒ‹*3‚ÌƒƒPƒbƒg‚ğ”­Ë‚·‚éB
 
 
 
 ##### Staffs #####
 
-N:300:¥È¥é¥Ã¥×´¶ÃÎ:¥İ¥×¥é¤Î
+N:300:ƒgƒ‰ƒbƒvŠ´’m:ƒ|ƒvƒ‰‚Ì
 E:Trap Location:Aspen
 G:_:U
 I:55:12:12
@@ -3231,9 +3231,9 @@ W:10:0:50:350
 A:10/1
 P:0:1d2:0:0:0
 D:$It detects all traps in your vicinity when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼şÊÕ¤Î¥È¥é¥Ã¥×¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚Ìü•Ó‚Ìƒgƒ‰ƒbƒv‚ğŠ´’m‚·‚éB
 
-N:301:ºâÊõ´¶ÃÎ:¥Ğ¥ë¥µ¤Î
+N:301:à•óŠ´’m:ƒoƒ‹ƒT‚Ì
 E:Treasure Location:Balsa
 G:_:U
 I:55:10:19
@@ -3241,9 +3241,9 @@ W:5:0:50:200
 A:5/1
 P:0:1d2:0:0:0
 D:$It detects all treasures in your vicinity when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼şÊÕ¤ÎºâÊõ¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚Ìü•Ó‚Ìà•ó‚ğŠ´’m‚·‚éB
 
-N:302:¥¢¥¤¥Æ¥à´¶ÃÎ:¥Ğ¥ó¥ä¥ó¤Î
+N:302:ƒAƒCƒeƒ€Š´’m:ƒoƒ“ƒ„ƒ“‚Ì
 E:Object Location:Banyan
 G:_:U
 I:55:11:15
@@ -3251,9 +3251,9 @@ W:5:0:50:200
 A:5/1
 P:0:1d2:0:0:0
 D:$It detects all items in your vicinity when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼şÊÕ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚Ìü•Ó‚ÌƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB
 
-N:303:¥Æ¥ì¥İ¡¼¥È:¥«¥Ğ¤Î
+N:303:ƒeƒŒƒ|[ƒg:ƒJƒo‚Ì
 E:Teleportation:Birch
 G:_:U
 I:55:4:10
@@ -3261,9 +3261,9 @@ W:20:0:50:2000
 A:20/1
 P:0:1d2:0:0:0
 D:$It teleports you a long distance when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È±óµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ‰“‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB
 
-N:304:ÃÏ¿Ì:À¾ÍÎ¥¹¥®¤Î
+N:304:’nk:¼—mƒXƒM‚Ì
 E:Earthquakes:Cedar
 G:_:U
 I:55:28:9
@@ -3271,9 +3271,9 @@ W:40:0:50:350
 A:40/1
 P:0:1d2:0:0:0
 D:$It causes a earthquake nearby you when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼ş°Ï¤ËÃÏ¿Ì¤òµ¯¤³¤¹¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚ÌüˆÍ‚É’nk‚ğ‹N‚±‚·B
 
-N:305:¾¤´­:ÛØ¤Î
+N:305:¢Š«:w‚Ì
 E:Summoning:Cottonwood
 G:_:U
 I:55:3:5
@@ -3281,9 +3281,9 @@ W:10:0:50:0
 A:10/1:50/1
 P:0:1d2:0:0:0
 D:$It summons several monsters as enemies when you use it.
-D:¤½¤ì¤Ï»È¤¦¤ÈÊ£¿ô¤Î¥â¥ó¥¹¥¿¡¼¤òÅ¨¤È¤·¤Æ¾¤´­¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ•¡”‚Ìƒ‚ƒ“ƒXƒ^[‚ğ“G‚Æ‚µ‚Ä¢Š«‚·‚éB
 
-N:306:¸÷:¥¤¥È¥¹¥®¤Î
+N:306:Œõ:ƒCƒgƒXƒM‚Ì
 E:Light:Cypress
 G:_:U
 I:55:8:19
@@ -3291,9 +3291,9 @@ W:5:0:50:250
 A:5/1
 P:0:1d2:0:0:0
 D:$It lights up nearby area or the current room permanently when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼ş°Ï¤â¤·¤¯¤ÏÉô²°Á´ÂÎ¤ò±Êµ×¤Ë¾È¤é¤¹¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚ÌüˆÍ‚à‚µ‚­‚Í•”‰®‘S‘Ì‚ğ‰i‹v‚ÉÆ‚ç‚·B
 
-N:307:*ÇË²õ*:¥ß¥º¥­¤Î
+N:307:*”j‰ó*:ƒ~ƒYƒL‚Ì
 E:*Destruction*:Dogwood
 G:_:U
 I:55:29:5
@@ -3301,9 +3301,9 @@ W:50:0:50:2500
 A:50/1
 P:0:1d2:0:0:0
 D:$It destroys everything nearby you when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼şÊÕ¤ÎÁ´¤Æ¤Î¤â¤Î¤òÇË²õ¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚Ìü•Ó‚Ì‘S‚Ä‚Ì‚à‚Ì‚ğ”j‰ó‚·‚éB
 
-N:308:¥¹¥¿¡¼¥é¥¤¥È:¥Ë¥ì¤Î
+N:308:ƒXƒ^[ƒ‰ƒCƒg:ƒjƒŒ‚Ì
 E:Starlight:Elm
 G:_:U
 I:55:7:12
@@ -3311,9 +3311,9 @@ W:20:0:50:800
 A:20/1
 P:0:1d2:0:0:0
 D:$It fires a line of light directed randomly for 5d3 times when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥é¥ó¥À¥à¤ÊÊı¸ş¤Ø¤Î¸÷Àş¤ò5d3²óÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚Ö‚ÌŒõü‚ğ5d3‰ñ•ú‚ÂB
 
-N:309:¥¹¥Ô¡¼¥É¡¦¥â¥ó¥¹¥¿¡¼:¥æ¡¼¥«¥ê¤Î
+N:309:ƒXƒs[ƒhEƒ‚ƒ“ƒXƒ^[:ƒ†[ƒJƒŠ‚Ì
 E:Haste Monsters:Eucalyptus
 G:_:U
 I:55:2:12
@@ -3321,9 +3321,9 @@ W:10:0:50:0
 A:10/1
 P:0:1d2:0:0:0
 D:$It hastes all monsters in sight when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤ò²ÃÂ®¤µ¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ‹ŠE“à‚Ìƒ‚ƒ“ƒXƒ^[‚ğ‰Á‘¬‚³‚¹‚éB
 
-N:310:¥¹¥í¥¦¡¦¥â¥ó¥¹¥¿¡¼:¥Ä¥¬¤Î
+N:310:ƒXƒƒEEƒ‚ƒ“ƒXƒ^[:ƒcƒK‚Ì
 E:Slow Monsters:Hemlock
 G:_:U
 I:55:21:12
@@ -3331,9 +3331,9 @@ W:10:0:50:800
 A:10/1
 P:0:1d2:0:0:0
 D:$It slows all monsters in sight down when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤ò¸ºÂ®¤µ¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ‹ŠE“à‚Ìƒ‚ƒ“ƒXƒ^[‚ğŒ¸‘¬‚³‚¹‚éB
 
-N:311:¥¹¥ê¡¼¥×¡¦¥â¥ó¥¹¥¿¡¼:¥Ö¥Ê¤Î
+N:311:ƒXƒŠ[ƒvEƒ‚ƒ“ƒXƒ^[:ƒuƒi‚Ì
 E:Sleep Monsters:Hickory
 G:_:U
 I:55:20:12
@@ -3341,9 +3341,9 @@ W:10:0:50:700
 A:10/1
 P:0:1d2:0:0:0
 D:$It puts all monsters in sight to sleep when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ²¤é¤»¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ‹ŠE“à‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–°‚ç‚¹‚éB
 
-N:312:·Ú½ı¤Î¼£Ìş:¹õÃÉ¤Î
+N:312:Œy‚Ì¡–ü:•’h‚Ì
 E:Cure Light Wounds:Ironwood
 G:_:u
 I:55:16:12
@@ -3351,9 +3351,9 @@ W:5:0:50:350
 A:5/1
 P:0:1d2:0:0:0
 D:$It heals you 2d8 and cures berserk when you use it.
-D:¤½¤ì¤Ï»È¤¦¤ÈÂÎÎÏ¤¬2d8²óÉü¤·¡¢¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚Íg‚¤‚Æ‘Ì—Í‚ª2d8‰ñ•œ‚µA‹¶ím‰»‚ğ–ü‚·B
 
-N:313:Æ©ÌÀÊªÂÎ´¶ÃÎ:¥¢¥«¥·¥¢¤Î
+N:313:“§–¾•¨‘ÌŠ´’m:ƒAƒJƒVƒA‚Ì
 E:Detect Invisible:Locust
 G:_:U
 I:55:14:16
@@ -3361,9 +3361,9 @@ W:5:0:50:200
 A:5/1
 P:0:1d2:0:0:0
 D:$It detects all invisible monsters in your vicinity when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼şÊÕ¤ÎÆ©ÌÀ¤Ê¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚Ìü•Ó‚Ì“§–¾‚Èƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB
 
-N:314:¥¹¥Ô¡¼¥É:¥Ş¥Û¥¬¥Ë¡¼¤Î
+N:314:ƒXƒs[ƒh:ƒ}ƒzƒKƒj[‚Ì
 E:Speed:Mahogany
 G:_:u
 I:55:22:8
@@ -3371,9 +3371,9 @@ W:40:0:50:1000
 A:40/1
 P:0:1d2:0:0:0
 D:$It hastes you temporarily when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È°ì»şÅª¤Ë²ÃÂ®¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æˆê“I‚É‰Á‘¬‚·‚éB
 
-N:315:¤Î¤í¤Ş:¥«¥¨¥Ç¤Î
+N:315:‚Ì‚ë‚Ü:ƒJƒGƒf‚Ì
 E:Slowness:Maple
 G:_:U
 I:55:1:10
@@ -3381,9 +3381,9 @@ W:40:0:50:0
 A:40/1
 P:0:1d2:0:0:0
 D:$It slows you down temporarily when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È°ì»şÅª¤Ë¸ºÂ®¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æˆê“I‚ÉŒ¸‘¬‚·‚éB
 
-N:316:¥É¥¢/³¬ÃÊ´¶ÃÎ:¥¯¥ï¤Î
+N:316:ƒhƒA/ŠK’iŠ´’m:ƒNƒ‚Ì
 E:Door/Stair Location:Mulberry
 G:_:U
 I:55:13:15
@@ -3391,9 +3391,9 @@ W:10:0:50:350
 A:10/1
 P:0:1d2:0:0:0
 D:$It detects all doors and stairs in your vicinity when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼şÊÕ¤Î¥É¥¢¡¦³¬ÃÊ¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚Ìü•Ó‚ÌƒhƒAEŠK’i‚ğŠ´’m‚·‚éB
 
-N:317:²ò¼ö:¥«¥·¤Î
+N:317:‰ğô:ƒJƒV‚Ì
 E:Remove Curse:Oak
 G:_:U
 I:55:6:8
@@ -3401,9 +3401,9 @@ W:40:0:50:500
 A:40/1
 P:0:1d2:0:0:0
 D:$It removes normal curses from equipped items when you use it.
-D:¤½¤ì¤Ï»È¤¦¤ÈÁõÈ÷¤·¤Æ¤¤¤ë¥¢¥¤¥Æ¥à¤Ë¤«¤«¤Ã¤¿¼å¤¤¼ö¤¤¤ò²ò¤¯¡£
+D:‚»‚ê‚Íg‚¤‚Æ‘•”õ‚µ‚Ä‚¢‚éƒAƒCƒeƒ€‚É‚©‚©‚Á‚½ã‚¢ô‚¢‚ğ‰ğ‚­B
 
-N:318:¼Ù°­Â¸ºß´¶ÃÎ:¾¾¤Î
+N:318:×ˆ«‘¶İŠ´’m:¼‚Ì
 E:Detect Evil:Pine
 G:_:U
 I:55:15:14
@@ -3411,9 +3411,9 @@ W:20:0:50:350
 A:20/1
 P:0:1d2:0:0:0
 D:$It detects all evil monsters in your vicinity when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼şÊÕ¤Î¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚Ìü•Ó‚Ì×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB
 
-N:319:Ìş¤·:¿ù¤Î
+N:319:–ü‚µ:™‚Ì
 E:Curing:Redwood
 G:_:r
 I:55:17:8
@@ -3422,9 +3422,9 @@ A:25/1
 P:0:1d2:0:0:0
 D:$It cures blindness, poison, confusion, stunned, cuts, hallucination and 
 D:$berserk when you use it.
-D:¤½¤ì¤Ï»È¤¦¤ÈÌÕÌÜ¡¦ÆÇ¡¦º®Íğ¡¦Û¯Û°¡¦ÀÚ¤ê½ı¡¦¸¸³Ğ¡¦¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚Íg‚¤‚Æ–Ó–ÚE“ÅE¬—ENOEØ‚èEŒ¶ŠoE‹¶ím‰»‚ğ–ü‚·B
 
-N:320:¼Ù°­Â¸ºßÂà»¶:»çÃÉ¤Î
+N:320:×ˆ«‘¶İ‘ŞU:‡’h‚Ì
 E:Dispel Evil:Rosewood
 G:_:r
 I:55:24:8
@@ -3432,9 +3432,9 @@ W:50:0:50:1200
 A:50/1
 P:0:1d2:0:0:0
 D:$It does 80 damage to all evil monsters in sight when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È»ë³¦Æâ¤Î¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤Ë80¤Î¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ‹ŠE“à‚Ì×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚É80‚Ìƒ_ƒ[ƒW‚ğ—^‚¦‚éB
 
-N:321:Ä´ºº:¥¨¥¾¥Ş¥Ä¤Î
+N:321:’²¸:ƒGƒ]ƒ}ƒc‚Ì
 E:Probing:Spruce
 G:_:U
 I:55:23:9
@@ -3443,10 +3443,10 @@ A:30/1
 P:0:1d2:0:0:0
 D:$It probes all monsters' alignment, HP, AC, speed, current experience and 
 D:$true character in sight when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤ÎÂ°À­¡¦HP¡¦AC¡¦¥¹¥Ô¡¼¥É¡¦¸½ºß¤Î·Ğ¸³ÃÍ¡¦ÀµÂÎ¤ò
-D:É½¼¨¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ‹ŠE“à‚Ìƒ‚ƒ“ƒXƒ^[‚Ì‘®«EHPEACEƒXƒs[ƒhEŒ»İ‚ÌŒoŒ±’lE³‘Ì‚ğ
+D:•\¦‚·‚éB
 
-N:322:°Å°Ç:¥¤¥Á¥¸¥¯¤Î
+N:322:ˆÃˆÅ:ƒCƒ`ƒWƒN‚Ì
 E:Darkness:Sycamore
 G:_:U
 I:55:0:10
@@ -3454,9 +3454,9 @@ W:5:0:50:0
 A:5/1:50/1
 P:0:1d2:0:0:0
 D:$It darkens nearby area or current room and blinds you when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼ş°Ï¤â¤·¤¯¤ÏÉô²°Á´ÂÎ¤¬°Å°Ç¤ËÊñ¤Ş¤ì¡¢ÌÕÌÜ¤Ë¤Ê¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚ÌüˆÍ‚à‚µ‚­‚Í•”‰®‘S‘Ì‚ªˆÃˆÅ‚É•ï‚Ü‚êA–Ó–Ú‚É‚È‚éB
 
-N:323:Ëõ»¦:¥Á¡¼¥¯¤Î
+N:323:–•E:ƒ`[ƒN‚Ì
 E:Genocide:Teak
 G:_:U
 I:55:27:4
@@ -3465,10 +3465,10 @@ A:75/5
 P:0:1d2:0:0:0
 D:$It eliminates an entire class of monster, exhausting you.  
 D:$Powerful or unique monsters may resist.
-D:¤½¤ì¤Ï»È¤¦¤È»ØÄê¤·¤¿Ê¸»ú¤Î¥â¥ó¥¹¥¿¡¼¤ò¸½ºß¤Î³¬¤«¤é¾Ã¤·µî¤ë¡£Äñ¹³¤µ¤ì¤ë¤È
-D:Ìµ¸ú¡£
+D:‚»‚ê‚Íg‚¤‚Æw’è‚µ‚½•¶š‚Ìƒ‚ƒ“ƒXƒ^[‚ğŒ»İ‚ÌŠK‚©‚çÁ‚µ‹‚éB’ïR‚³‚ê‚é‚Æ
+D:–³ŒøB
 
-N:324:ÎÏ:¥¯¥ë¥ß¤Î
+N:324:—Í:ƒNƒ‹ƒ~‚Ì
 E:Power:Walnut
 G:_:u
 I:55:25:5
@@ -3476,9 +3476,9 @@ W:70:0:50:4000
 A:70/2
 P:0:1d2:0:0:0
 D:$It does 150 damage to all monsters in sight when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤Ë150¤Î¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ‹ŠE“à‚Ìƒ‚ƒ“ƒXƒ^[‚É150‚Ìƒ_ƒ[ƒW‚ğ—^‚¦‚éB
 
-N:325:¸­¼Ô:¥ä¥É¥ê¥®¤Î
+N:325:Œ«Ò:ƒ„ƒhƒŠƒM‚Ì
 E:the Magi:Mistletoe
 G:_:g
 I:55:19:5
@@ -3487,9 +3487,9 @@ A:100/255
 P:0:1d2:0:0:0
 D:$It restores mana to full, restores your intelligence and cures berserk when 
 D:$you use it.
-D:¤½¤ì¤Ï»È¤¦¤ÈËâÎÏ¤¬ºÇÂç¤Ş¤Ç²óÉü¤·¡¢ÃÎÇ½¤ò²óÉü¤·¡¢¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚Íg‚¤‚Æ–‚—Í‚ªÅ‘å‚Ü‚Å‰ñ•œ‚µA’m”\‚ğ‰ñ•œ‚µA‹¶ím‰»‚ğ–ü‚·B
 
-N:326:´ÕÄê:¥µ¥ó¥¶¥·¤Î
+N:326:ŠÓ’è:ƒTƒ“ƒUƒV‚Ì
 E:Perception:Hawthorn
 G:_:U
 I:55:5:21
@@ -3497,9 +3497,9 @@ W:10:0:50:400
 A:10/1
 P:0:1d2:0:0:0
 D:$It identifies an item when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È1¸Ä¤Î¥¢¥¤¥Æ¥à¤ò´ÕÄê¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ1ŒÂ‚ÌƒAƒCƒeƒ€‚ğŠÓ’è‚·‚éB
 
-N:327:À»¾ô:Ãİ¤Î
+N:327:¹ò:’|‚Ì
 E:Holiness:Bamboo
 G:_:U
 I:55:26:5
@@ -3509,11 +3509,11 @@ P:0:1d2:0:0:0
 D:$It does 150 damage to all evil monsters in sight, gives temporary 
 D:$protection from lesser evil creature, cures poison, stuuned, cuts, removes 
 D:$fear and heals you 50 when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È»ë³¦Æâ¤Î¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤Ë150¤Î¥À¥á¡¼¥¸¤òÍ¿¤¨¡¢
-D:°ì»şÅª¤Ë¼å¤¤¼Ù°­¤Ê¼Ô¤Î¹¶·â¤ò²óÈò¤·¤ä¤¹¤¯¤Ê¤ë·ë³¦¤òÄ¥¤ê¡¢
-D:ÆÇ¡¦Û¯Û°¡¦ÀÚ¤ê½ı¤òÌş¤·¡¢¶²Éİ¤ò¼è¤ê½ü¤­¡¢ÂÎÎÏ¤¬50²óÉü¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ‹ŠE“à‚Ì×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚É150‚Ìƒ_ƒ[ƒW‚ğ—^‚¦A
+D:ˆê“I‚Éã‚¢×ˆ«‚ÈÒ‚ÌUŒ‚‚ğ‰ñ”ğ‚µ‚â‚·‚­‚È‚éŒ‹ŠE‚ğ’£‚èA
+D:“ÅENOEØ‚è‚ğ–ü‚µA‹°•|‚ğæ‚èœ‚«A‘Ì—Í‚ª50‰ñ•œ‚·‚éB
 
-N:328:¼şÊÕ´¶ÃÎ:¶ä¤Î
+N:328:ü•ÓŠ´’m:‹â‚Ì
 E:Enlightenment:Silver
 G:_:W
 I:55:9:11
@@ -3521,9 +3521,9 @@ W:20:0:50:750
 A:20/1
 P:0:1d2:0:0:0
 D:$It maps your vicinity when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼şÊÕ¤ÎÃÏ·Á¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚Ìü•Ó‚Ì’nŒ`‚ğŠ´’m‚·‚éB
 
-N:329:ÂÎÎÏ²óÉü:¥ë¡¼¥ó¤Î
+N:329:‘Ì—Í‰ñ•œ:ƒ‹[ƒ“‚Ì
 E:Healing:Runed
 G:_:u
 I:55:18:4
@@ -3531,13 +3531,13 @@ W:70:0:50:5000
 A:70/2
 P:0:1d2:0:0:0
 D:$It heals you 300 and cures stunned, cuts and berserk when you use it.
-D:¤½¤ì¤Ï»È¤¦¤ÈÂÎÎÏ¤¬300²óÉü¤·¡¢Û¯Û°¡¦ÀÚ¤ê½ı¡¦¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚Íg‚¤‚Æ‘Ì—Í‚ª300‰ñ•œ‚µANOEØ‚èE‹¶ím‰»‚ğ–ü‚·B
 
 
 ##### Basic Books #####
 
 #JZ#
-N:330:[°ìÈÌµ§Åø]
+N:330:[ˆê”Ê‹F“˜]
 E:[Book of Common Prayer]
 G:?:W
 I:90:0:0
@@ -3546,7 +3546,7 @@ A:10/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:331:[¾åµéµ§Åø]
+N:331:[ã‹‰‹F“˜]
 E:[High Mass]
 G:?:W
 I:90:1:0
@@ -3555,7 +3555,7 @@ A:20/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:332:[°ì³Ñ½Ã¤Î½ñ]
+N:332:[ˆêŠpb‚Ì‘]
 E:[Book of the Unicorn]
 G:?:w
 I:90:2:0
@@ -3565,7 +3565,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:333:[À»ÇÕ¤Î²Ã¸î]
+N:333:[¹”t‚Ì‰ÁŒì]
 E:[Blessings of the Grail]
 G:?:w
 I:90:3:0
@@ -3575,7 +3575,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:334:[ÆşÌç½ñ]
+N:334:[“ü–å‘]
 E:[Beginner's Handbook]
 G:?:B
 I:91:0:0
@@ -3584,7 +3584,7 @@ A:10/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:335:[Àç¿Í¤Î½ñ]
+N:335:[ål‚Ì‘]
 E:[Master Sorcerer's Handbook]
 G:?:B
 I:91:1:0
@@ -3593,7 +3593,7 @@ A:20/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:336:[ÌæÍÍÀç½Ñ]
+N:336:[–ä—låp]
 E:[Pattern Sorcery]
 G:?:b
 I:91:2:0
@@ -3603,7 +3603,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:337:[ÎÏ¤ÎËâÆ»½ñ]
+N:337:[—Í‚Ì–‚“¹‘]
 E:[Grimoire of Power]
 G:?:b
 I:91:3:0
@@ -3614,7 +3614,7 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 ##### Chests #####
 
-N:338:¾®¤µ¤ÊÌÚ¤ÎÈ¢
+N:338:¬‚³‚È–Ø‚Ì” 
 E:& Small wooden chest~
 G:&:o
 I:7:1:0
@@ -3622,7 +3622,7 @@ W:5:0:250:20
 A:5/2
 P:0:2d3:0:0:0
 
-N:339:Âç¤­¤ÊÌÚ¤ÎÈ¢
+N:339:‘å‚«‚È–Ø‚Ì” 
 E:& Large wooden chest~
 G:&:U
 I:7:5:0
@@ -3630,7 +3630,7 @@ W:15:0:500:60
 A:15/2
 P:0:2d5:0:0:0
 
-N:340:¾®¤µ¤ÊÅ´¤ÎÈ¢
+N:340:¬‚³‚È“S‚Ì” 
 E:& Small iron chest~
 G:&:D
 I:7:2:0
@@ -3638,7 +3638,7 @@ W:25:0:300:100
 A:25/2
 P:0:2d4:0:0:0
 
-N:341:Âç¤­¤ÊÅ´¤ÎÈ¢
+N:341:‘å‚«‚È“S‚Ì” 
 E:& Large iron chest~
 G:&:s
 I:7:6:0
@@ -3646,7 +3646,7 @@ W:35:0:1000:150
 A:35/2
 P:0:2d6:0:0:0
 
-N:342:¾®¤µ¤Ê¹İÅ´¤ÎÈ¢
+N:342:¬‚³‚È|“S‚Ì” 
 E:& Small steel chest~
 G:&:s
 I:7:3:0
@@ -3654,7 +3654,7 @@ W:45:0:500:200
 A:45/2
 P:0:2d4:0:0:0
 
-N:343:Âç¤­¤Ê¹İÅ´¤ÎÈ¢
+N:343:‘å‚«‚È|“S‚Ì” 
 E:& Large steel chest~
 G:&:W
 I:7:7:0
@@ -3662,7 +3662,7 @@ W:55:0:1000:250
 A:55/2
 P:0:2d6:0:0:0
 
-N:344:¤¢¤Ğ¤«¤ì¤¿È¢
+N:344:‚ ‚Î‚©‚ê‚½” 
 E:& Ruined chest~
 G:&:u
 I:7:0:0
@@ -3672,7 +3672,7 @@ A:75/2
 
 ##### Various Stuff #####
 
-N:345:Å´¤Î¤¯¤µ¤Ó
+N:345:“S‚Ì‚­‚³‚Ñ
 E:& Iron Spike~
 G:~:W
 I:5:0:0
@@ -3680,7 +3680,7 @@ W:1:0:10:1
 A:1/1
 P:0:1d1:0:0:0
 
-N:346:¾¾ÌÀ
+N:346:¼–¾
 E:& Wooden Torch~
 G:~:u
 I:39:0:4000
@@ -3689,7 +3689,7 @@ A:1/1
 F:LITE | LITE_FUEL
 P:0:1d1:0:0:0
 
-N:347:¿¿ï«¤Î¥é¥ó¥¿¥ó
+N:347:^èJ‚Ìƒ‰ƒ“ƒ^ƒ“
 E:& Brass Lantern~
 G:~:U
 I:39:1:7500
@@ -3698,7 +3698,7 @@ A:3/1
 P:0:1d1:0:0:0
 F:IGNORE_FIRE | LITE_2 | LITE_FUEL
 
-N:348:Ìı¤Ä¤Ü
+N:348:–û‚Â‚Ú
 E:& Flask~ of oil
 G:!:y
 I:77:0:7500
@@ -3706,7 +3706,7 @@ W:1:0:10:3
 A:1/1
 P:0:2d6:0:0:0
 
-N:349:¶õ¤Î¥Ó¥ó
+N:349:‹ó‚Ìƒrƒ“
 E:& Empty Bottle~
 G:!:w
 I:2:1:0
@@ -3720,7 +3720,7 @@ P:0:1d1:0:0:0
 ##### Here are the Rods #####
 
 #JZ#
-N:350:²õÌÇ:¥¢¥ë¥ß¤Î
+N:350:‰ó–Å:ƒAƒ‹ƒ~‚Ì
 E:Havoc:Aluminum
 G:-:B
 I:66:28:250
@@ -3728,9 +3728,9 @@ W:100:0:15:150000
 A:50/32:100/8
 P:0:1d1:0:0:0
 D:$It is capable of firing almost anything, at random.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥é¥ó¥À¥à¤Ê1Â°À­¤Ç¥é¥ó¥À¥à¤Ê¹¶·â¤ò¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ‰ƒ“ƒ_ƒ€‚È1‘®«‚Åƒ‰ƒ“ƒ_ƒ€‚ÈUŒ‚‚ğ‚·‚éB
 
-N:351:¥É¥¢/³¬ÃÊ´¶ÃÎ:ÃòÅ´¤Î
+N:351:ƒhƒA/ŠK’iŠ´’m:’’“S‚Ì
 E:Door/Stair Location:Cast Iron
 G:-:D
 I:66:1:70
@@ -3738,9 +3738,9 @@ W:15:0:15:1000
 A:7/4:15/1
 P:0:1d1:0:0:0
 D:$It detects all doors and stairs in your vicinity when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¼«Ê¬¤Î¼şÊÕ¤Î¥É¥¢¡¦³¬ÃÊ¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ©•ª‚Ìü•Ó‚ÌƒhƒAEŠK’i‚ğŠ´’m‚·‚éB
 
-N:352:¥È¥é¥Ã¥×´¶ÃÎ:¥¯¥í¥à¤Î
+N:352:ƒgƒ‰ƒbƒvŠ´’m:ƒNƒƒ€‚Ì
 E:Trap Location:Chromium
 G:-:w
 I:66:0:15
@@ -3748,9 +3748,9 @@ W:5:0:15:100
 A:3/4:5/1
 P:0:1d1:0:0:0
 D:$It detects all traps in your vicinity when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¼«Ê¬¤Î¼şÊÕ¤Î¥È¥é¥Ã¥×¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ©•ª‚Ìü•Ó‚Ìƒgƒ‰ƒbƒv‚ğŠ´’m‚·‚éB
 
-N:353:Ä´ºº:Æ¼¤Î
+N:353:’²¸:“º‚Ì
 E:Probing:Copper
 G:-:U
 I:66:7:50
@@ -3759,10 +3759,10 @@ A:20/16:40/4
 P:0:1d1:0:0:0
 D:$It probes all monsters' alignment, HP, AC, speed, current experience and 
 D:$true character in sight when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤ÎÂ°À­¡¦HP¡¦AC¡¦¥¹¥Ô¡¼¥É¡¦¸½ºß¤Î·Ğ¸³ÃÍ¡¦ÀµÂÎ¤ò
-D:É½¼¨¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ‹ŠE“à‚Ìƒ‚ƒ“ƒXƒ^[‚Ì‘®«EHPEACEƒXƒs[ƒhEŒ»İ‚ÌŒoŒ±’lE³‘Ì‚ğ
+D:•\¦‚·‚éB
 
-N:354:µ¢´Ô:¶â¤Î
+N:354:‹AŠÒ:‹à‚Ì
 E:Recall:Gold
 G:-:y
 I:66:3:60
@@ -3771,10 +3771,10 @@ A:15/16:30/4
 P:0:1d1:0:0:0
 D:$It recalls you to the town, or back into the dungeon you have entered when 
 D:$you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤ÈÃÏ¾å¤Ë¤¤¤ë»ş¤Ï¹Ô¤Ã¤¿¤³¤È¤Î¤¢¤ë¥À¥ó¥¸¥ç¥ó¤ÎºÇ¿¼³¬¤Ø¡¢
-D:¥À¥ó¥¸¥ç¥ó¤Ë¤¤¤ë»ş¤ÏÃÏ¾å¤Ø¤È°ÜÆ°¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ’nã‚É‚¢‚é‚Ís‚Á‚½‚±‚Æ‚Ì‚ ‚éƒ_ƒ“ƒWƒ‡ƒ“‚ÌÅ[ŠK‚ÖA
+D:ƒ_ƒ“ƒWƒ‡ƒ“‚É‚¢‚é‚Í’nã‚Ö‚ÆˆÚ“®‚·‚éB
 
-N:355:¥¤¥ë¥ß¥Í¡¼¥·¥ç¥ó:Å´¤Î
+N:355:ƒCƒ‹ƒ~ƒl[ƒVƒ‡ƒ“:“S‚Ì
 E:Illumination:Iron
 G:-:s
 I:66:4:16
@@ -3782,9 +3782,9 @@ W:12:0:15:1000
 A:6/4:12/1
 P:0:1d1:0:0:0
 D:$It lights up nearby area or current room permanently when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¼«Ê¬¤Î¼ş°Ï¤â¤·¤¯¤ÏÉô²°Á´ÂÎ¤ò±Êµ×¤Ë¾È¤é¤¹¡£
+D:‚»‚ê‚ÍU‚é‚Æ©•ª‚ÌüˆÍ‚à‚µ‚­‚Í•”‰®‘S‘Ì‚ğ‰i‹v‚ÉÆ‚ç‚·B
 
-N:356:¸÷:¥Ş¥°¥Í¥·¥¦¥à¤Î
+N:356:Œõ:ƒ}ƒOƒlƒVƒEƒ€‚Ì
 E:Light:Magnesium
 G:-:W
 I:66:15:9
@@ -3792,9 +3792,9 @@ W:10:0:15:500
 A:5/4:10/1
 P:0:1d1:0:0:0
 D:$It fires a line of light when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¸÷Àş¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚ÆŒõü‚ğ•ú‚ÂB
 
-N:357:¥µ¥ó¥À¡¼¡¦¥Ü¥ë¥È:¥â¥ê¥Ö¥Ç¥ó¤Î
+N:357:ƒTƒ“ƒ_[Eƒ{ƒ‹ƒg:ƒ‚ƒŠƒuƒfƒ“‚Ì
 E:Lightning Bolts:Molybdenum
 G:-:W
 I:66:21:11
@@ -3803,9 +3803,9 @@ A:10/4:20/1
 P:0:1d1:0:0:0
 D:$It fires a bolt or beam of lightning (damage: (4+level/9)d8) when you zap 
 D:$it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥À¥á¡¼¥¸(4+¥ì¥Ù¥ë/9)d8¤ÎÅÅ·â¤ÎÌğ¤Ş¤¿¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ_ƒ[ƒW(4+ƒŒƒxƒ‹/9)d8‚Ì“dŒ‚‚Ì–î‚Ü‚½‚Íƒr[ƒ€‚ğ•ú‚ÂB
 
-N:358:¥¢¥¤¥¹¡¦¥Ü¥ë¥È:¥Ë¥Ã¥±¥ë¤Î
+N:358:ƒAƒCƒXEƒ{ƒ‹ƒg:ƒjƒbƒPƒ‹‚Ì
 E:Frost Bolts:Nickel
 G:-:U
 I:66:23:13
@@ -3813,9 +3813,9 @@ W:25:0:15:2500
 A:13/4:25/1
 P:0:1d1:0:0:0
 D:$It fires a bolt or beam of cold (damage: (5+level/8)d8) when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥À¥á¡¼¥¸(5+¥ì¥Ù¥ë/8)d8¤ÎÎäµ¤¤ÎÌğ¤Ş¤¿¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ_ƒ[ƒW(5+ƒŒƒxƒ‹/8)d8‚Ì—â‹C‚Ì–î‚Ü‚½‚Íƒr[ƒ€‚ğ•ú‚ÂB
 
-N:359:¥Õ¥¡¥¤¥¢¡¦¥Ü¥ë¥È:»¬¤Ó¤¿
+N:359:ƒtƒ@ƒCƒAEƒ{ƒ‹ƒg:K‚Ñ‚½
 E:Fire Bolts:Rusty
 G:-:r
 I:66:22:15
@@ -3823,9 +3823,9 @@ W:30:0:15:3000
 A:15/4:30/1
 P:0:1d1:0:0:0
 D:$It fires a bolt or beam of fire (damage: (7+level/6)d8) when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥À¥á¡¼¥¸(7+¥ì¥Ù¥ë/6)d8¤Î²Ğ±ê¤ÎÌğ¤Ş¤¿¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ_ƒ[ƒW(7+ƒŒƒxƒ‹/6)d8‚Ì‰Î‰Š‚Ì–î‚Ü‚½‚Íƒr[ƒ€‚ğ•ú‚ÂB
 
-N:360:¥Á¥§¥ó¥¸¡¦¥â¥ó¥¹¥¿¡¼:¶ä¤Î
+N:360:ƒ`ƒFƒ“ƒWEƒ‚ƒ“ƒXƒ^[:‹â‚Ì
 E:Polymorph:Silver
 G:-:W
 I:66:19:25
@@ -3833,9 +3833,9 @@ W:35:0:15:1200
 A:18/4:35/1
 P:0:1d1:0:0:0
 D:$It changes a monster into another when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤òÊÑ¿È¤µ¤»¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğ•Ïg‚³‚¹‚éB
 
-N:361:¥¹¥í¥¦¡¦¥â¥ó¥¹¥¿¡¼:¹İÅ´¤Î
+N:361:ƒXƒƒEEƒ‚ƒ“ƒXƒ^[:|“S‚Ì
 E:Slow Monster:Steel
 G:-:W
 I:66:17:20
@@ -3843,9 +3843,9 @@ W:30:0:15:1500
 A:15/4:30/1
 P:0:1d1:0:0:0
 D:$It slows a monster down when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤ò¸ºÂ®¤µ¤»¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğŒ¸‘¬‚³‚¹‚éB
 
-N:362:¥¹¥ê¡¼¥×¡¦¥â¥ó¥¹¥¿¡¼:¥Ö¥ê¥­¤Î
+N:362:ƒXƒŠ[ƒvEƒ‚ƒ“ƒXƒ^[:ƒuƒŠƒL‚Ì
 E:Sleep Monster:Tin
 G:-:W
 I:66:16:18
@@ -3853,9 +3853,9 @@ W:30:0:15:1500
 A:15/4:30/1
 P:0:1d1:0:0:0
 D:$It puts a monster to sleep when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ²¤é¤»¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–°‚ç‚¹‚éB
 
-N:363:À¸Ì¿ÎÏµÛ¼ı:¥Á¥¿¥ó¤Î
+N:363:¶–½—Í‹zû:ƒ`ƒ^ƒ“‚Ì
 E:Drain Life:Titanium
 G:-:w
 I:66:18:23
@@ -3863,9 +3863,9 @@ W:75:0:15:3600
 A:38/16:75/4
 P:0:1d1:0:0:0
 D:$It fires a bolt of drain life (damage: 70+3*level/2) when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥À¥á¡¼¥¸70+3*¥ì¥Ù¥ë/2¤ÎÀ¸Ì¿ÎÏ¤òºï¤ëÌğ¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ_ƒ[ƒW70+3*ƒŒƒxƒ‹/2‚Ì¶–½—Í‚ğí‚é–î‚ğ•ú‚ÂB
 
-N:364:¥Æ¥ì¥İ¡¼¥È¡¦¥¢¥¦¥§¥¤:¥¿¥ó¥°¥¹¥Æ¥ó¤Î
+N:364:ƒeƒŒƒ|[ƒgEƒAƒEƒFƒC:ƒ^ƒ“ƒOƒXƒeƒ“‚Ì
 E:Teleport Other:Tungsten
 G:-:w
 I:66:13:25
@@ -3873,9 +3873,9 @@ W:45:0:15:1400
 A:23/8:45/2
 P:0:1d1:0:0:0
 D:$It fires a beam teleports all monsters on the line when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ‚ƒ“ƒXƒ^[‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éƒr[ƒ€‚ğ•ú‚ÂB
 
-N:365:¥È¥é¥Ã¥×²ò½ü:¥¸¥ë¥³¥ó¤Î
+N:365:ƒgƒ‰ƒbƒv‰ğœ:ƒWƒ‹ƒRƒ“‚Ì
 E:Disarming:Zirconium
 G:-:W
 I:66:14:22
@@ -3883,9 +3883,9 @@ W:35:0:15:2100
 A:18/4:35/1
 P:0:1d1:0:0:0
 D:$It fires a beam destroys all traps on the line when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥È¥é¥Ã¥×¤òÇË²õ¤¹¤ë¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒgƒ‰ƒbƒv‚ğ”j‰ó‚·‚éƒr[ƒ€‚ğ•ú‚ÂB
 
-N:366:¥µ¥ó¥À¡¼¡¦¥Ü¡¼¥ë:°¡±ô¤Î
+N:366:ƒTƒ“ƒ_[Eƒ{[ƒ‹:ˆŸ‰”‚Ì
 E:Lightning Balls:Zinc
 G:-:W
 I:66:25:23
@@ -3893,9 +3893,9 @@ W:55:0:15:4000
 A:28/4:55/1
 P:0:1d1:0:0:0
 D:$It fires a ball of lightning (damage: 40+level) when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥À¥á¡¼¥¸40+¥ì¥Ù¥ë¤ÎÅÅ·â¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ_ƒ[ƒW40+ƒŒƒxƒ‹‚Ì“dŒ‚‚Ì‹…‚ğ•ú‚ÂB
 
-N:367:¥¢¥¤¥¹¡¦¥Ü¡¼¥ë:Æ¼¥á¥Ã¥­¤Î
+N:367:ƒAƒCƒXEƒ{[ƒ‹:“ºƒƒbƒL‚Ì
 E:Cold Balls:Copper-Plated
 G:-:U
 I:66:27:25
@@ -3903,9 +3903,9 @@ W:60:0:15:4500
 A:30/4:60/1
 P:0:1d1:0:0:0
 D:$It fires a ball of cold (damage: 50+level) when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥À¥á¡¼¥¸50+¥ì¥Ù¥ë¤ÎÎäµ¤¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ_ƒ[ƒW50+ƒŒƒxƒ‹‚Ì—â‹C‚Ì‹…‚ğ•ú‚ÂB
 
-N:368:¥Õ¥¡¥¤¥¢¡¦¥Ü¡¼¥ë:¶â¥á¥Ã¥­¤Î
+N:368:ƒtƒ@ƒCƒAEƒ{[ƒ‹:‹àƒƒbƒL‚Ì
 E:Fire Balls:Gold-Plated
 G:-:y
 I:66:26:30
@@ -3913,9 +3913,9 @@ W:75:0:15:5000
 A:38/4:75/1
 P:0:1d1:0:0:0
 D:$It fires a ball of fire (damage: 70+level) when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥À¥á¡¼¥¸70+¥ì¥Ù¥ë¤Î²Ğ±ê¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ_ƒ[ƒW70+ƒŒƒxƒ‹‚Ì‰Î‰Š‚Ì‹…‚ğ•ú‚ÂB
 
-N:369:¥¢¥·¥Ã¥É¡¦¥Ü¡¼¥ë:¶ä¥á¥Ã¥­¤Î
+N:369:ƒAƒVƒbƒhEƒ{[ƒ‹:‹âƒƒbƒL‚Ì
 E:Acid Balls:Silver-Plated
 G:-:W
 I:66:24:27
@@ -3923,9 +3923,9 @@ W:70:0:15:5500
 A:35/4:70/1
 P:0:1d1:0:0:0
 D:$It fires a ball of acid (damage: 60+level) when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥À¥á¡¼¥¸60+¥ì¥Ù¥ë¤Î»À¤Îµå¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ_ƒ[ƒW60+ƒŒƒxƒ‹‚Ì_‚Ì‹…‚ğ•ú‚ÂB
 
-N:370:¥¢¥·¥Ã¥É¡¦¥Ü¥ë¥È:¥¹¥º¥á¥Ã¥­¤Î
+N:370:ƒAƒVƒbƒhEƒ{ƒ‹ƒg:ƒXƒYƒƒbƒL‚Ì
 E:Acid Bolts:Tin-Plated
 G:-:W
 I:66:20:12
@@ -3933,9 +3933,9 @@ W:40:0:15:3500
 A:20/4:40/1
 P:0:1d1:0:0:0
 D:$It fires a bolt or beam of acid (damage: (6+level/7)d8) when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥À¥á¡¼¥¸(6+¥ì¥Ù¥ë/7)d8¤Î»À¤ÎÌğ¤Ş¤¿¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£
+D:‚»‚ê‚ÍU‚é‚Æƒ_ƒ[ƒW(6+ƒŒƒxƒ‹/7)d8‚Ì_‚Ì–î‚Ü‚½‚Íƒr[ƒ€‚ğ•ú‚ÂB
 
-N:371:¼şÊÕ´¶ÃÎ:°¡±ô¥á¥Ã¥­¤Î
+N:371:ü•ÓŠ´’m:ˆŸ‰”ƒƒbƒL‚Ì
 E:Enlightenment:Zinc-Plated
 G:-:W
 I:66:5:99
@@ -3943,9 +3943,9 @@ W:65:0:15:10000
 A:33/16:65/4
 P:0:1d1:0:0:0
 D:$It maps your vicinity when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¼«Ê¬¤Î¼şÊÕ¤ÎÃÏ·Á¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ©•ª‚Ìü•Ó‚Ì’nŒ`‚ğŠ´’m‚·‚éB
 
-N:372:´ÕÄê:¥ß¥¹¥ê¥ë¤Î
+N:372:ŠÓ’è:ƒ~ƒXƒŠƒ‹‚Ì
 E:Perception:Mithril
 G:-:B
 I:66:2:10
@@ -3953,9 +3953,9 @@ W:35:0:15:13000
 A:25/32:50/8
 P:0:1d1:0:0:0
 D:$It identifies an item when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È1¸Ä¤Î¥¢¥¤¥Æ¥à¤ò´ÕÄê¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ1ŒÂ‚ÌƒAƒCƒeƒ€‚ğŠÓ’è‚·‚éB
 
-N:373:Ìş¤·:ÀÄÆ¼¤Î
+N:373:–ü‚µ:Â“º‚Ì
 E:Curing:Bronze
 G:-:U
 I:66:8:99
@@ -3964,9 +3964,9 @@ A:33/32:65/8
 P:0:1d1:0:0:0
 D:$It cures blindness, poison, confusion, stunned, cuts, hallucination and 
 D:$berserk when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤ÈÌÕÌÜ¡¦ÆÇ¡¦º®Íğ¡¦Û¯Û°¡¦ÀÚ¤ê½ı¡¦¸¸³Ğ¡¦¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚ÍU‚é‚Æ–Ó–ÚE“ÅE¬—ENOEØ‚èEŒ¶ŠoE‹¶ím‰»‚ğ–ü‚·B
 
-N:374:ÂÎÎÏ²óÉü:¿¿ï«¤Î
+N:374:‘Ì—Í‰ñ•œ:^èJ‚Ì
 E:Healing:Brass
 G:-:U
 I:66:9:999
@@ -3974,9 +3974,9 @@ W:80:0:15:20000
 A:40/32:80/8
 P:0:1d1:0:0:0
 D:$It heals you 500 and cures stunned, cuts and berserk when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤ÈÂÎÎÏ¤¬500²óÉü¤·¡¢Û¯Û°¡¦ÀÚ¤ê½ı¡¦¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚ÍU‚é‚Æ‘Ì—Í‚ª500‰ñ•œ‚µANOEØ‚èE‹¶ím‰»‚ğ–ü‚·B
 
-N:375:Á´´¶ÃÎ:¥×¥é¥Á¥Ê¤Î
+N:375:‘SŠ´’m:ƒvƒ‰ƒ`ƒi‚Ì
 E:Detection:Platinum
 G:-:w
 I:66:6:99
@@ -3985,10 +3985,10 @@ A:15/32:30/8
 P:0:1d1:0:0:0
 D:$It detects all traps, doors, stairs, treasures, items and monsters in the 
 D:$neighborhood when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¼«Ê¬¤Î¼şÊÕ¤Î¥È¥é¥Ã¥×¡¦¥É¥¢¡¦³¬ÃÊ¡¦ºâÊõ¡¦¥¢¥¤¥Æ¥à¡¦
-D:¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ©•ª‚Ìü•Ó‚Ìƒgƒ‰ƒbƒvEƒhƒAEŠK’iEà•óEƒAƒCƒeƒ€E
+D:ƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB
 
-N:376:Á´Éü³è:±ô¤Î
+N:376:‘S•œŠˆ:‰”‚Ì
 E:Restoration:Lead
 G:-:s
 I:66:10:999
@@ -3996,9 +3996,9 @@ W:80:0:15:25000
 A:40/64:80/16
 P:0:1d1:0:0:0
 D:$It restores experience and all your stats when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È·Ğ¸³ÃÍ¤ÈÁ´¥¹¥Æ¡¼¥¿¥¹¤¬²óÉü¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚ÆŒoŒ±’l‚Æ‘SƒXƒe[ƒ^ƒX‚ª‰ñ•œ‚·‚éB
 
-N:377:¥¹¥Ô¡¼¥É:±ô¥á¥Ã¥­¤Î
+N:377:ƒXƒs[ƒh:‰”ƒƒbƒL‚Ì
 E:Speed:Lead-Plated
 G:-:s
 I:66:11:99
@@ -4006,10 +4006,10 @@ W:60:0:15:50000
 A:48/64:95/16
 P:0:1d1:0:0:0
 D:$It hastes you temporarily when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È°ì»şÅª¤Ë²ÃÂ®¤¹¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æˆê“I‚É‰Á‘¬‚·‚éB
 
 #JZ#
-N:378:³²Ãî¶î½ü:¾İ²ç¤Î
+N:378:ŠQ’‹ìœ:Û‰å‚Ì
 E:Pesticide:Ivory
 G:-:w
 I:66:12:2
@@ -4017,12 +4017,12 @@ W:3:0:15:1000
 A:13/8:25/2
 P:0:1d1:0:0:0
 D:$It does 4 damage to all monsters in sight when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤Ë4¤Î¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ‹ŠE“à‚Ìƒ‚ƒ“ƒXƒ^[‚É4‚Ìƒ_ƒ[ƒW‚ğ—^‚¦‚éB
 
 ##### Special Books (note resistances) #####
 
 #JZ#
-N:379:[ÌîÀ­¤Î¾¤´­]
+N:379:[–ì«‚Ì¢Š«]
 E:[Call of the Wild]
 G:?:G
 I:92:0:0
@@ -4031,7 +4031,7 @@ A:10/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:380:[¼«Á³¤ÎÈë½Ñ]
+N:380:[©‘R‚Ì”ép]
 E:[Nature Mastery]
 G:?:G
 I:92:1:0
@@ -4040,7 +4040,7 @@ A:20/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:381:[¼«Á³¤Î·Ã¤ß]
+N:381:[©‘R‚ÌŒb‚İ]
 E:[Nature's Gifts]
 G:?:g
 I:92:2:0
@@ -4050,7 +4050,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:382:[¼«Á³¤Î¶¼°Ò]
+N:382:[©‘R‚Ì‹ºˆĞ]
 E:[Nature's Wrath]
 G:?:g
 I:92:3:0
@@ -4060,7 +4060,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:383:[¥«¥ª¥¹¤ÎÄ§]
+N:383:[ƒJƒIƒX‚Ì’¥]
 E:[Sign of Chaos]
 G:?:R
 I:93:0:0
@@ -4069,7 +4069,7 @@ A:10/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:384:[¥«¥ª¥¹Èë½Ñ]
+N:384:[ƒJƒIƒX”ép]
 E:[Chaos Mastery]
 G:?:R
 I:93:1:0
@@ -4078,7 +4078,7 @@ A:20/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:385:[¥«¥ª¥¹ËâÆ³]
+N:385:[ƒJƒIƒX–‚“±]
 E:[Chaos Channels]
 G:?:r
 I:93:2:0
@@ -4088,7 +4088,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:386:[¥Ï¥ë¥Ş¥²¥É¥óÂçÁ´]
+N:386:[ƒnƒ‹ƒ}ƒQƒhƒ“‘å‘S]
 E:[Armageddon Tome]
 G:?:r
 I:93:3:0
@@ -4098,7 +4098,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:387:[°Å¹õµ§Åø]
+N:387:[ˆÃ•‹F“˜]
 E:[Black Prayers]
 G:?:D
 I:94:0:0
@@ -4107,7 +4107,7 @@ A:10/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:388:[°Å¹õÂçÀ®]
+N:388:[ˆÃ•‘å¬]
 E:[Black Mass]
 G:?:D
 I:94:1:0
@@ -4118,7 +4118,7 @@ P:0:1d1:0:0:0
 
 ##### Junk #####
 
-N:389:Æ«´ï¤Î¤«¤±¤é
+N:389:“©Ší‚Ì‚©‚¯‚ç
 E:& Shard~ of Pottery
 G:~:r
 I:3:3:0
@@ -4126,7 +4126,7 @@ W:0:0:5:0
 A:0/1
 P:0:1d1:0:0:0
 
-N:390:ÀŞ¤ì¤¿ËÀ
+N:390:Ü‚ê‚½–_
 E:& Broken Stick~
 G:~:r
 I:3:6:0
@@ -4137,7 +4137,7 @@ P:0:1d1:0:0:0
 
 ##### Skeletons #####
 
-N:391:Æ¬³¸¹ü¤ÎÇËÊÒ
+N:391:“ªŠWœ‚Ì”j•Ğ
 E:& Broken Skull~
 G:~:w
 I:1:1:0
@@ -4145,7 +4145,7 @@ W:0:0:1:0
 A:0/1
 P:0:1d1:0:0:0
 
-N:392:¹ü¤ÎÇËÊÒ
+N:392:œ‚Ì”j•Ğ
 E:& Broken Bone~
 G:~:w
 I:1:2:0
@@ -4153,7 +4153,7 @@ W:0:0:2:0
 A:0/1
 P:0:1d1:0:0:0
 
-N:393:¸¤¤Î¹ü
+N:393:Œ¢‚Ìœ
 E:& Canine Skeleton~
 G:~:w
 I:1:4:0
@@ -4161,7 +4161,7 @@ W:1:0:10:0
 A:1/1
 P:0:1d1:0:0:0
 
-N:394:¥Í¥º¥ß¤Î¹ü
+N:394:ƒlƒYƒ~‚Ìœ
 E:& Rodent Skeleton~
 G:~:w
 I:1:3:0
@@ -4169,7 +4169,7 @@ W:1:0:10:0
 A:1/1
 P:0:1d1:0:0:0
 
-N:395:¿Í´Ö¤Î¹ü
+N:395:lŠÔ‚Ìœ
 E:& Human Skeleton~
 G:~:w
 I:1:8:0
@@ -4177,7 +4177,7 @@ W:5:0:60:0
 A:5/1
 P:0:1d2:0:0:0
 
-N:396:¥É¥ï¡¼¥Õ¤Î¹ü
+N:396:ƒhƒ[ƒt‚Ìœ
 E:& Dwarf Skeleton~
 G:~:w
 I:1:7:0
@@ -4185,7 +4185,7 @@ W:5:0:50:0
 A:5/1
 P:0:1d2:0:0:0
 
-N:397:¥¨¥ë¥Õ¤Î¹ü
+N:397:ƒGƒ‹ƒt‚Ìœ
 E:& Elf Skeleton~
 G:~:w
 I:1:6:0
@@ -4193,7 +4193,7 @@ W:5:0:40:0
 A:5/1
 P:0:1d2:0:0:0
 
-N:398:¥Î¡¼¥à¤Î¹ü
+N:398:ƒm[ƒ€‚Ìœ
 E:& Gnome Skeleton~
 G:~:w
 I:1:5:0
@@ -4204,7 +4204,7 @@ P:0:1d2:0:0:0
 ##### Additional weapon #####
 
 #JZ#
-N:399:¥°¥ì¡¼¥È¡¦¥Ï¥ó¥Ş¡¼
+N:399:ƒOƒŒ[ƒgEƒnƒ“ƒ}[
 E:& Great Hammer~
 G:\:D
 I:21:19:0
@@ -4215,7 +4215,7 @@ F:SHOW_MODS
 
 ##### Dragon Scale Mail #####
 
-N:400:¥Ö¥é¥Ã¥¯¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:400:ƒuƒ‰ƒbƒNƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Black Dragon Scale Mail~
 G:[:s
 I:38:1:0
@@ -4226,9 +4226,9 @@ F:RES_ACID |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 U:BR_DRAGON
 D:$A suit of utterly black scales, against which no metal or wood can rest.
-D:ÌÚ¤ä¶âÂ°¤¬ÂÑ¤¨¤é¤ì¤Ê¤¤¤«¤Î¤è¤¦¤Ê¼¿¹õ¤ÎÎÚ³»¤À¡£
+D:–Ø‚â‹à‘®‚ª‘Ï‚¦‚ç‚ê‚È‚¢‚©‚Ì‚æ‚¤‚È½•‚Ì—ØŠZ‚¾B
 
-N:401:¥Ö¥ë¡¼¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:401:ƒuƒ‹[ƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Blue Dragon Scale Mail~
 G:[:b
 I:38:2:0
@@ -4240,9 +4240,9 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 U:BR_DRAGON
 D:$A suit of scales as blue as sapphires, emitting eerie sparks and flashes as 
 D:$you move about in it.
-D:Ãå¤¿¼Ô¤¬Æ°¤¯¤ÈÉÔµ¤Ì£¤Ê°ğºÊ¤È¸÷¤òÊü¤Ä¡¢¥µ¥Õ¥¡¥¤¥¢¤Î¤è¤¦¤ËÀÄ¤¤ÎÚ³»¤À¡£
+D:’…‚½Ò‚ª“®‚­‚Æ•s‹C–¡‚ÈˆîÈ‚ÆŒõ‚ğ•ú‚ÂAƒTƒtƒ@ƒCƒA‚Ì‚æ‚¤‚ÉÂ‚¢—ØŠZ‚¾B
 
-N:402:¥Û¥ï¥¤¥È¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:402:ƒzƒƒCƒgƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:White Dragon Scale Mail~
 G:[:w
 I:38:3:0
@@ -4254,9 +4254,9 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 U:BR_DRAGON
 D:$A suit of scales, coldly gleaming in frosty white.  A shiver runs down 
 D:$through your spine even as you look at it.
-D:ÎäÃ¸¤ÊÇò¤ËÎä¤¿¤¯¤­¤é¤á¤¯ÎÚ³»¤À¡£¤½¤ì¤ò¸«¤ë»ş¡¢ÇØ¶Ú¤¬´¨¤¯¤Ê¤ë¡£
+D:—â’W‚È”’‚É—â‚½‚­‚«‚ç‚ß‚­—ØŠZ‚¾B‚»‚ê‚ğŒ©‚éA”w‹Ø‚ªŠ¦‚­‚È‚éB
 
-N:403:¥ì¥Ã¥É¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:403:ƒŒƒbƒhƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Red Dragon Scale Mail~
 G:[:r
 I:38:4:0
@@ -4268,9 +4268,9 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 U:BR_DRAGON
 D:$A suit of scales, with all the reds of every fire ever lit.  The scar 
 D:$tissue from an old burn aches as you put this armour on.
-D:¾ï¤ËÇ³¤¨¤ë±ê¤ËÀÖ¤¯ºÌ¤é¤ì¤¿ÎÚ³»¤À¡£¤³¤ì¤òÃå¤ë¤È¸Å¤¤²Ğ½ıÀ×¤¬ÄË¤à¡£
+D:í‚É”R‚¦‚é‰Š‚ÉÔ‚­Ê‚ç‚ê‚½—ØŠZ‚¾B‚±‚ê‚ğ’…‚é‚ÆŒÃ‚¢‰ÎÕ‚ª’É‚ŞB
 
-N:404:¥°¥ê¡¼¥ó¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:404:ƒOƒŠ[ƒ“ƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Green Dragon Scale Mail~
 G:[:g
 I:38:5:0
@@ -4282,11 +4282,11 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 U:BR_DRAGON
 #D:$A suit of scales, glistening in sickly green, out from which falls the 
 #D:$skeleton of a rat who touched it and died in agony.
-#D:ÉÂÅª¤ÊÎĞ¤Ë¸÷¤ëÎÚ³»¤Ç¡¢¤½¤ì¤Ë¿¨¤ì¤¿¥Í¥º¥ß¤Ï¶ìÄË¤Ë»à¤ó¤ÇÇò¹ü²½¤¹¤ë¡£
+#D:•a“I‚È—Î‚ÉŒõ‚é—ØŠZ‚ÅA‚»‚ê‚ÉG‚ê‚½ƒlƒYƒ~‚Í‹ê’É‚É€‚ñ‚Å”’œ‰»‚·‚éB
 D:$A suit of scales, glistening in sickly green.
-D:ÉÂÅª¤ÊÎĞ¤Ë¸÷¤ëÎÚ³»¤À¡£
+D:•a“I‚È—Î‚ÉŒõ‚é—ØŠZ‚¾B
 
-N:405:Ëü¿§¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:405:–œFƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Multi-Hued Dragon Scale Mail~
 G:[:v
 I:38:6:0
@@ -4298,11 +4298,11 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 U:BR_DRAGON
 D:$A suit of scales that throbs with angry energies; it takes all your energy 
 D:$to master the Elements fighting an endless war trapped inside.
-D:ÅÜ¤ê¤Î¥¨¥Í¥ë¥®¡¼¤ËÌ®ÂÇ¤ÄÎÚ³»¤Ç¡¢³»¤ÎÃæ¤ËÊá¤é¤ï¤ì±Ê±ó¤ËÀï¤¤Â³¤±¤ë¥¨¥ì¥á¥ó¥ÈÃ£
-D:¤ò»ÙÇÛ¤¹¤ë¤¿¤á¤ËÃå¤ë¼Ô¤ÎÎÏÁ´¤Æ¤òÍÑ¤¤¤ë¡£
+D:“{‚è‚ÌƒGƒlƒ‹ƒM[‚É–¬‘Å‚Â—ØŠZ‚ÅAŠZ‚Ì’†‚É•ß‚ç‚í‚ê‰i‰“‚Éí‚¢‘±‚¯‚éƒGƒŒƒƒ“ƒg’B
+D:‚ğx”z‚·‚é‚½‚ß‚É’…‚éÒ‚Ì—Í‘S‚Ä‚ğ—p‚¢‚éB
 
 #JZ#
-N:406:¥É¥é¥´¥ó¥â¥É¥­¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:406:ƒhƒ‰ƒSƒ“ƒ‚ƒhƒLEƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Pseudo Dragon Scale Mail~
 G:[:v
 I:38:10:0
@@ -4313,7 +4313,7 @@ F:RES_LITE | RES_DARK |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 U:BR_DRAGON
 
-N:407:¥í¡¼¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:407:ƒ[ƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Law Dragon Scale Mail~
 G:[:B
 I:38:12:0
@@ -4325,10 +4325,10 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 U:BR_DRAGON
 D:$A suit of scales in stern blue and silver.  You feel the slightest tremor 
 D:$as you touch it, like massed trumpets heard and cyclones felt from afar.
-D:¸·½Í¤ÊÀÄ¤È¶ä¤ÎÎÚ³»¤À¡£¤½¤ì¤Ë¿¨¤ì¤ë¤È¡¢¥È¥é¥ó¥Ú¥Ã¥È¤Î½¸ÃÄ¤Î±éÁÕ¤¬Ê¹¤³¤¨¤ë¤«
-D:±óÊı¤«¤é¤ÎÎµ´¬¤ò´¶¤¸¤ë¤«¤Î¤è¤¦¤Ë¤´¤¯Èù¤«¤Ê¿¶Æ°¤ò´¶¤¸¤ë¡£
+D:Œµl‚ÈÂ‚Æ‹â‚Ì—ØŠZ‚¾B‚»‚ê‚ÉG‚ê‚é‚ÆAƒgƒ‰ƒ“ƒyƒbƒg‚ÌW’c‚Ì‰‰‘t‚ª•·‚±‚¦‚é‚©
+D:‰“•û‚©‚ç‚Ì—³Šª‚ğŠ´‚¶‚é‚©‚Ì‚æ‚¤‚É‚²‚­”÷‚©‚ÈU“®‚ğŠ´‚¶‚éB
 
-N:408:¥Ö¥í¥ó¥º¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:408:ƒuƒƒ“ƒYƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Bronze Dragon Scale Mail~
 G:[:U
 I:38:14:0
@@ -4341,10 +4341,10 @@ U:BR_DRAGON
 D:$A suit of scales, gleaming in rich engraved bronze.  The more you look at 
 D:$the the maze of whorls and lines that close inspection reveal on its 
 D:$surface, the less sense you are able to make of them.
-D:ìÔÂô¤ËÄ¦¹ï¤µ¤ì¤¿ÀÄÆ¼¤¬¤­¤é¤á¤¯ÎÚ³»¤À¡£¶á¤Å¤¤¤Æ¸«¤ë¤È³»¤ÎÉ½ÌÌ¤Ë¸½¤ì¤ë±²¤ÈÀş¤Î
-D:ÌÂµÜ¤ò¸«¤ì¤Ğ¸«¤ë¤Û¤É¡¢¤É¤¦¤ä¤Ã¤Æ¤½¤ì¤é¤¬¤Ç¤­¤Æ¤¤¤ë¤Î¤«¤ï¤«¤é¤Ê¤¯¤Ê¤ë¡£
+D:æÒ‘ò‚É’¤‚³‚ê‚½Â“º‚ª‚«‚ç‚ß‚­—ØŠZ‚¾B‹ß‚Ã‚¢‚ÄŒ©‚é‚ÆŠZ‚Ì•\–Ê‚ÉŒ»‚ê‚é‰Q‚Æü‚Ì
+D:–À‹{‚ğŒ©‚ê‚ÎŒ©‚é‚Ù‚ÇA‚Ç‚¤‚â‚Á‚Ä‚»‚ê‚ç‚ª‚Å‚«‚Ä‚¢‚é‚Ì‚©‚í‚©‚ç‚È‚­‚È‚éB
 
-N:409:¥´¡¼¥ë¥É¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:409:ƒS[ƒ‹ƒhƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Gold Dragon Scale Mail~
 G:[:y
 I:38:16:0
@@ -4357,10 +4357,10 @@ U:BR_DRAGON
 D:$A suit of scales in mirror-like gold.  You hear nothing unusual as you 
 D:$wear this armour, yet your ears ache as though in the midst of a 
 D:$cacophony.
-D:¶À¤Î¤è¤¦¤Ê¶â¤ÎÎÚ³»¤À¡£ÉÔ¶¨ÏÂ²»¤ÎÃæ¤Ë¤¤¤ë¤«¤Î¤è¤¦¤Ë¼ª¤¬ÄË¤¯¤Ê¤ê¡¢¤³¤Î³»¤òÃå¤ë
-D:¤È°Û¾ï¤Ê¤Ş¤Ç¤Ë²¿¤âÊ¹¤³¤¨¤Ê¤¯¤Ê¤ë¡£
+D:‹¾‚Ì‚æ‚¤‚È‹à‚Ì—ØŠZ‚¾B•s‹¦˜a‰¹‚Ì’†‚É‚¢‚é‚©‚Ì‚æ‚¤‚É¨‚ª’É‚­‚È‚èA‚±‚ÌŠZ‚ğ’…‚é
+D:‚ÆˆÙí‚È‚Ü‚Å‚É‰½‚à•·‚±‚¦‚È‚­‚È‚éB
 
-N:410:¥«¥ª¥¹¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:410:ƒJƒIƒXƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Chaos Dragon Scale Mail~
 G:[:v
 I:38:18:0
@@ -4372,10 +4372,10 @@ F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 U:BR_DRAGON
 D:$A suit of scales.  Every shape, in every color imaginable, riot and 
 D:$contend upon its surface as you stare in fascination.
-D:ÎÚ³»¤À¡£Ì¥ÏÇ¤µ¤ì¤Æ¸«¤Ä¤á¤ë¤È¡¢¤½¤ÎÉ½ÌÌ¤ÇÁÛÁü¤Ç¤­¤ë¸Â¤ê¤Î¿§¤ò¤È¤ëÍÍ¡¹¤Ê·Á
-D:¤¹¤Ù¤Æ¤¬ÍğÉñ¤·Áè¤¦¡£
+D:—ØŠZ‚¾B–£˜f‚³‚ê‚ÄŒ©‚Â‚ß‚é‚ÆA‚»‚Ì•\–Ê‚Å‘z‘œ‚Å‚«‚éŒÀ‚è‚ÌF‚ğ‚Æ‚é—lX‚ÈŒ`
+D:‚·‚×‚Ä‚ª—•‘‚µ‘ˆ‚¤B
 
-N:411:¥Ğ¥é¥ó¥¹¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:411:ƒoƒ‰ƒ“ƒXƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Balance Dragon Scale Mail~
 G:[:v
 I:38:20:0
@@ -4388,10 +4388,10 @@ U:BR_DRAGON
 D:$A suit of scales.  Featureless grey to casual inspection, yet a closer 
 D:$look reveals patterns within patterns of iridescence that throb with 
 D:$leashed energies bound as though by chains of adamant.
-D:ÎÚ³»¤À¡£²¿µ¤¤Ê¤¯¸«¤ë¤ÈÊ¿ËŞ¤Ê³¥¿§¤À¤¬¡¢¶á¤Å¤¤¤Æ¤è¤¯¸«¤ë¤È¥¢¥À¥Ş¥ó¥¿¥¤¥È¤Îº¿¤Î
-D:¤è¤¦¤Ê¤â¤Î¤ËÇû¤é¤ì¤¿¥¨¥Í¥ë¥®¡¼¤¬Ì®ÂÇ¤ÄÆú¿§¤ÎÌæÍÍ¤ÎÃæ¤Ë¤âÌæÍÍ¤¬¸½¤ì¤ë¡£
+D:—ØŠZ‚¾B‰½‹C‚È‚­Œ©‚é‚Æ•½–}‚ÈŠDF‚¾‚ªA‹ß‚Ã‚¢‚Ä‚æ‚­Œ©‚é‚ÆƒAƒ_ƒ}ƒ“ƒ^ƒCƒg‚Ì½‚Ì
+D:‚æ‚¤‚È‚à‚Ì‚É”›‚ç‚ê‚½ƒGƒlƒ‹ƒM[‚ª–¬‘Å‚Â“øF‚Ì–ä—l‚Ì’†‚É‚à–ä—l‚ªŒ»‚ê‚éB
 
-N:412:¥Ñ¥ï¡¼¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:412:ƒpƒ[ƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Power Dragon Scale Mail~
 G:[:v
 I:38:30:0
@@ -4406,13 +4406,13 @@ U:BA_MISS_3
 D:$A suit with scales of every color, surrounded in a nimbus of perfectly 
 D:$untramelled yet inextricably intermingled and utterly mastered powers 
 D:$elemental and ethereal.
-D:¤¹¤Ù¤Æ¤Î¿§¤ò»ı¤ÄÎÚ³»¤Ç¡¢´°Á´¤Ê¼«Í³¤Ç¤¢¤ê¤Ê¤¬¤éÌ©ÀÜ¤Ëº®¤¶¤ê¹ç¤¤´°Á´¤Ë»ÙÇÛ¤µ¤ì
-D:¤¿¸µÁÇ¤ÈÅ·¾å³¦¤ÎÎÏ¤Î¸å¸÷¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¡£
+D:‚·‚×‚Ä‚ÌF‚ğ‚Â—ØŠZ‚ÅAŠ®‘S‚È©—R‚Å‚ ‚è‚È‚ª‚ç–§Ú‚É¬‚´‚è‡‚¢Š®‘S‚Éx”z‚³‚ê
+D:‚½Œ³‘f‚Æ“VãŠE‚Ì—Í‚ÌŒãŒõ‚É•ï‚Ü‚ê‚Ä‚¢‚éB
 
 ## PDSM has been restored to (almost) its former glory in Zangband
 
 #JZ#
-N:413:¥É¥é¥´¥ó¡¦¥Ø¥ë¥à
+N:413:ƒhƒ‰ƒSƒ“Eƒwƒ‹ƒ€
 E:& Dragon Helm~
 G:]:G
 I:32:7:0
@@ -4422,10 +4422,10 @@ P:8:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 D:$A dragon-winged great helm, glowing in all the colors of the rainbow.  
 D:$It grants resistance to the elements.
-D:¥É¥é¥´¥ó¤ÎÍã¾ş¤ê¤Î¤¢¤ëÂç¤­¤Ê³õ¤Ç¡¢Æú¿§¤Ëµ±¤¯¡£¸µÁÇ¤Ø¤ÎÂÑÀ­¤òÊİ¾Ú¤¹¤ë¡£
+D:ƒhƒ‰ƒSƒ“‚Ì—ƒü‚è‚Ì‚ ‚é‘å‚«‚ÈŠ•‚ÅA“øF‚É‹P‚­BŒ³‘f‚Ö‚Ì‘Ï«‚ğ•ÛØ‚·‚éB
 
 #JZ#
-N:414:¥É¥é¥´¥ó¡¦¥·¡¼¥ë¥É
+N:414:ƒhƒ‰ƒSƒ“EƒV[ƒ‹ƒh
 E:& Dragon Shield~
 G:[:G
 I:34:6:0
@@ -4436,7 +4436,7 @@ F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
 ##### Extra potions #####
 
-N:415:»à:»çÈÃ¤Î
+N:415:€:‡”Á‚Ì
 E:Death:Violet Speckled
 G:!:v
 I:75:23:0
@@ -4444,9 +4444,9 @@ W:55:0:4:0
 A:55/4
 P:0:20d20:0:0:0
 D:$You take 5000 damage when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È5000¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ5000‚Ìƒ_ƒ[ƒW‚ğó‚¯‚éB
 
-N:416:ÇËÌÇ:»É·ã½­¤Î¤¹¤ë
+N:416:”j–Å:hŒƒL‚Ì‚·‚é
 E:Ruination:Pungent
 G:!:R
 I:75:15:0
@@ -4455,9 +4455,9 @@ A:40/8
 P:0:20d20:0:0:0
 D:$You take 10d10 damage and it decreases all your stats permanently when you 
 D:$quaff it.
-D:¤½¤ì¤Ï°û¤à¤È10d10¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¡¢Á´¥¹¥Æ¡¼¥¿¥¹¤ÎºÇÂçÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ10d10‚Ìƒ_ƒ[ƒW‚ğó‚¯A‘SƒXƒe[ƒ^ƒX‚ÌÅ‘å’l‚ª‰º‚ª‚éB
 
-N:417:ÇúÈ¯:¤è¤É¤ó¤ÀÀÖ¤Î
+N:417:”š”­:‚æ‚Ç‚ñ‚¾Ô‚Ì
 E:Detonations:Clotted Red
 G:!:r
 I:75:22:0
@@ -4465,9 +4465,9 @@ W:60:0:4:10000
 A:60/8
 P:0:25d25:0:0:0
 D:$You take 50d20 damage and stuns and cuts you when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È50d20¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¡¢Û¯Û°¤ÈÀÚ¤ê½ı¤ò¼õ¤±¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ50d20‚Ìƒ_ƒ[ƒW‚ğó‚¯ANO‚ÆØ‚è‚ğó‚¯‚éB
 
-N:418:Áı¶¯:¥É¥í¥É¥í¤Î
+N:418:‘‹­:ƒhƒƒhƒ‚Ì
 E:Augmentation:Viscous Pink
 G:!:R
 I:75:55:0
@@ -4475,9 +4475,9 @@ W:40:0:4:150000
 A:40/16
 P:0:1d1:0:0:0
 D:$It increases all your stats when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÁ´¥¹¥Æ¡¼¥¿¥¹¤ÎºÇÂçÃÍ¤¬¾å¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘SƒXƒe[ƒ^ƒX‚ÌÅ‘å’l‚ªã‚ª‚éB
 
-N:419:*ÂÎÎÏ²óÉü*:¤Í¤Ğ¤Ã¤¿²«¿§¤Î
+N:419:*‘Ì—Í‰ñ•œ*:‚Ë‚Î‚Á‚½‰©F‚Ì
 E:*Healing*:Oily Yellow
 G:!:y
 I:75:38:0
@@ -4486,9 +4486,9 @@ A:40/4:60/2:80/1
 P:0:1d1:0:0:0
 D:$It heals you 1200 and cures blindness, confusion, poison, stunned, cuts and 
 D:$berserk when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÎÎÏ¤¬1200²óÉü¤·¡¢ÌÕÌÜ¡¦º®Íğ¡¦ÆÇ¡¦Û¯Û°¡¦ÀÚ¤ê½ı¡¦¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ì—Í‚ª1200‰ñ•œ‚µA–Ó–ÚE¬—E“ÅENOEØ‚èE‹¶ím‰»‚ğ–ü‚·B
 
-N:420:À¸Ì¿:°ÅÎĞ¿§¤Î
+N:420:¶–½:ˆÃ—ÎF‚Ì
 E:Life:Gloopy Green
 G:!:g
 I:75:39:0
@@ -4498,10 +4498,10 @@ P:0:1d1:0:0:0
 D:$It heals you 5000, restores experience and all your stats and cures 
 D:$blindness, confusion, poison, hallucination, stunned, cuts and berserk 
 D:$when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÎÎÏ¤¬5000²óÉü¤·¡¢·Ğ¸³ÃÍ¤ÈÁ´¥¹¥Æ¡¼¥¿¥¹¤ò²óÉü¤·¡¢ÌÕÌÜ¡¦º®Íğ¡¦ÆÇ¡¦
-D:¸¸³Ğ¡¦Û¯Û°¡¦ÀÚ¤ê½ı¡¦¶¸Àï»Î²½¤òÌş¤¹¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ì—Í‚ª5000‰ñ•œ‚µAŒoŒ±’l‚Æ‘SƒXƒe[ƒ^ƒX‚ğ‰ñ•œ‚µA–Ó–ÚE¬—E“ÅE
+D:Œ¶ŠoENOEØ‚èE‹¶ím‰»‚ğ–ü‚·B
 
-N:421:¼«¸ÊÊ¬ÀÏ:µ±¤¯
+N:421:©ŒÈ•ªÍ:‹P‚­
 E:Self Knowledge:Shimmering
 G:!:v
 I:75:58:0
@@ -4509,9 +4509,9 @@ W:40:0:4:2000
 A:40/1
 P:0:1d1:0:0:0
 D:$It gives information about yourself when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¼«Ê¬¤Ë¤Ä¤¤¤Æ¤Î¾ğÊó¤òÆÀ¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ©•ª‚É‚Â‚¢‚Ä‚Ìî•ñ‚ğ“¾‚éB
 
-N:422:*·¼ÌØ*:²«ÈÃ¤Î
+N:422:*Œ[–Ö*:‰©”Á‚Ì
 E:*Enlightenment*:Yellow Speckled
 G:!:y
 I:75:57:0
@@ -4522,13 +4522,13 @@ D:$It maps, lights permanently and detects all items on the entire level,
 D:$increases your intelligence and wisdom, detects all traps, doors, stairs, 
 D:$treasures in your vicinity, identifies all items in pack and gives 
 D:$information about yourself when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È¤½¤Î³¬¤ÎÃÏ·Á¤ò´°Á´¤ËÃÎ¤ë¤³¤È¤¬¤Ç¤­¡¢¤½¤Î³¬Á´ÂÎ¤¬±Êµ×¤Ë¾È¤é¤µ¤ì¡¢
-D:¤½¤Î³¬Á´ÂÎ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤·¡¢ÃÎÇ½¡¦¸­¤µ¤ÎºÇÂçÃÍ¤ò¾å¤²¡¢¼«Ê¬¤Î¼şÊÕ¤Î
-D:¥È¥é¥Ã¥×¡¦¥É¥¢¡¦³¬ÃÊ¡¦ºâÊõ¤ò´¶ÃÎ¤·¡¢»ı¤ÁÊªÁ´¤Æ¤ò´ÕÄê¤·¡¢¼«Ê¬¤Ë¤Ä¤¤¤Æ¤Î¾ğÊó¤ò
-D:ÆÀ¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‚»‚ÌŠK‚Ì’nŒ`‚ğŠ®‘S‚É’m‚é‚±‚Æ‚ª‚Å‚«A‚»‚ÌŠK‘S‘Ì‚ª‰i‹v‚ÉÆ‚ç‚³‚êA
+D:‚»‚ÌŠK‘S‘Ì‚ÌƒAƒCƒeƒ€‚ğŠ´’m‚µA’m”\EŒ«‚³‚ÌÅ‘å’l‚ğã‚°A©•ª‚Ìü•Ó‚Ì
+D:ƒgƒ‰ƒbƒvEƒhƒAEŠK’iEà•ó‚ğŠ´’m‚µA‚¿•¨‘S‚Ä‚ğŠÓ’è‚µA©•ª‚É‚Â‚¢‚Ä‚Ìî•ñ‚ğ
+D:“¾‚éB
 
 #JZ#
-N:423:[°Å¹õËâÆ³]
+N:423:[ˆÃ•–‚“±]
 E:[Black Channels]
 G:?:v
 I:94:2:0
@@ -4538,7 +4538,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:424:[¥Í¥¯¥í¥Î¥ß¥³¥ó]
+N:424:[ƒlƒNƒƒmƒ~ƒRƒ“]
 E:[Necronomicon]
 G:?:v
 I:94:3:0
@@ -4548,7 +4548,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:425:¶²¤ìÃÎ¤é¤º:¥¸¥ë¥³¥ó¤Î
+N:425:‹°‚ê’m‚ç‚¸:ƒWƒ‹ƒRƒ“‚Ì
 E:Fear Resistance:Zircon
 G:=:U
 I:45:38:0
@@ -4557,7 +4557,7 @@ A:10/2
 F:RES_FEAR
 
 #JZ#
-N:426:ÂÑ¸÷ÂÑ°Å:¥×¥é¥Á¥Ê¤Î
+N:426:‘ÏŒõ‘ÏˆÃ:ƒvƒ‰ƒ`ƒi‚Ì
 E:Light and Darkness Resistance:Platinum
 G:=:w
 I:45:39:0
@@ -4566,7 +4566,7 @@ A:30/2
 F:RES_LITE | RES_DARK
 
 #JZ#
-N:427:ÂÑÃÏ¹ö:ÀÄÆ¼¤Î
+N:427:‘Ï’n–:Â“º‚Ì
 E:Nether Resistance:Bronze
 G:=:U
 I:45:40:0
@@ -4575,7 +4575,7 @@ A:34/2
 F:RES_NETHER | HOLD_LIFE
 
 #JZ#
-N:428:ÂÑ°ø²Ìº®Íğ:¶â¤Î
+N:428:‘Ïˆö‰Ê¬—:‹à‚Ì
 E:Nexus Resistance:Gold
 G:=:y
 I:45:41:0
@@ -4584,7 +4584,7 @@ A:24/2
 F:RES_NEXUS
 
 #JZ#
-N:429:ÂÑ¹ì²»:¹õÍËÀĞ¤Î
+N:429:‘ÏŒ‰¹:•—jÎ‚Ì
 E:Sound Resistance:Obsidian
 G:=:D
 I:45:42:0
@@ -4593,7 +4593,7 @@ A:26/2
 F:RES_SOUND
 
 #JZ#
-N:430:ÂÑº®Íğ:¶ä¤Î
+N:430:‘Ï¬—:‹â‚Ì
 E:Confusion Resistance:Silver
 G:=:W
 I:45:43:0
@@ -4602,7 +4602,7 @@ A:22/2
 F:RES_CONF
 
 #JZ#
-N:431:ÂÑÇËÊÒ:¤Ù¤Ã¹Ã¤Î
+N:431:‘Ï”j•Ğ:‚×‚Áb‚Ì
 E:Shard Resistance:Tortoise Shell
 G:=:g
 I:45:44:0
@@ -4611,7 +4611,7 @@ A:25/2
 F:RES_SHARDS
 
 #JZ#
-N:432:ÂÑÎô²½:¥ß¥¹¥ê¥ë¤Î
+N:432:‘Ï—ò‰»:ƒ~ƒXƒŠƒ‹‚Ì
 E:Disenchantment Resistance:Mithril
 G:=:B
 I:45:45:0
@@ -4620,7 +4620,7 @@ A:90/10
 F:RES_DISEN
 
 #JZ#
-N:433:ÂÑ¥«¥ª¥¹:¹õ¶Ì¤Î
+N:433:‘ÏƒJƒIƒX:•‹Ê‚Ì
 E:Chaos Resistance:Jet
 G:=:D
 I:45:46:0
@@ -4629,7 +4629,7 @@ A:50/2
 F:RES_CHAOS | RES_CONF
 
 #JZ#
-N:434:ÂÑÌÕÌÜ:º§Ìó
+N:434:‘Ï–Ó–Ú:¥–ñ
 E:Blindness Resistance:Engagement
 G:=:y
 I:45:47:0
@@ -4638,7 +4638,7 @@ A:60/2
 F:RES_BLIND
 
 #JZ#
-N:435:²¦¼Ô¤Î²Ã¸î:¥¢¥À¥Ş¥ó¥¿¥¤¥È¤Î
+N:435:‰¤Ò‚Ì‰ÁŒì:ƒAƒ_ƒ}ƒ“ƒ^ƒCƒg‚Ì
 E:Lordly Protection:Adamantite
 G:=:v
 I:45:48:0
@@ -4647,7 +4647,7 @@ A:100/8
 F:RES_DISEN | RES_POIS | HOLD_LIFE | FREE_ACT
 
 #JZ#
-N:436:ÄÉ²Ã¹¶·â:¿Ë¶â¤Î
+N:436:’Ç‰ÁUŒ‚:j‹à‚Ì
 E:Extra Attacks:Wire
 G:=:u
 I:45:49:0
@@ -4655,7 +4655,7 @@ W:50:0:2:100000
 A:50/2
 F:BLOWS
 
-N:437:·Ú½ı¤Î¼£Ìş:¶â¿§¤Î
+N:437:Œy‚Ì¡–ü:‹àF‚Ì
 E:Cure Light Wounds:Gold
 G:!:y
 I:75:34:50
@@ -4664,9 +4664,9 @@ A:0/1:1/1:3/1
 P:0:1d1:0:0:0
 D:$It heals you 2d8, cures blindness and berserk and reduces cuts when you 
 D:$quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÎÎÏ¤¬2d8²óÉü¤·¡¢ÌÕÌÜ¡¦¶¸Àï»Î²½¤òÌş¤·¡¢ÀÚ¤ê½ı¤òÏÂ¤é¤²¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ì—Í‚ª2d8‰ñ•œ‚µA–Ó–ÚE‹¶ím‰»‚ğ–ü‚µAØ‚è‚ğ˜a‚ç‚°‚éB
 
-N:438:ÉÔ´ïÍÑ:°­½­¤Î¤¹¤ë
+N:438:•sŠí—p:ˆ«L‚Ì‚·‚é
 E:Clumsiness:Stinking
 G:!:u
 I:75:19:0
@@ -4674,9 +4674,9 @@ W:5:0:4:0
 A:5/1
 P:0:1d1:0:0:0
 D:$It decreases your dexterity when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤È´ïÍÑ¤µ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŠí—p‚³‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
-N:439:ÉÂµ¤:¾İ²ç¿§¤Î
+N:439:•a‹C:Û‰åF‚Ì
 E:Sickliness:Ivory White
 G:!:w
 I:75:20:0
@@ -4684,7 +4684,7 @@ W:10:0:4:0
 A:10/1
 P:0:1d1:0:0:0
 D:$It decreases your constitution when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÂÑµ×ÎÏ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ‘Ï‹v—Í‚ÌŒ»İ’l‚ª‰º‚ª‚éB
 
 ##### Items 440 to 444 reserved (old "fake" objects) #####
 
@@ -4705,109 +4705,109 @@ D:¤½¤ì¤Ï°û¤à¤ÈÂÑµ×ÎÏ¤Î¸½ºßÃÍ¤¬²¼¤¬¤ë¡£
 
 ##### And here starts the gold/gems #####
 
-N:480:Æ¼²ô
+N:480:“º‰ò
 E:copper
 G:$:u
 I:127:1:0
 W:1:0:0:3
 
-N:481:Æ¼²ô
+N:481:“º‰ò
 E:copper
 G:$:u
 I:127:2:0
 W:1:0:0:4
 
-N:482:Æ¼²ô
+N:482:“º‰ò
 E:copper
 G:$:u
 I:127:3:0
 W:1:0:0:5
 
-N:483:¶ä²ô
+N:483:‹â‰ò
 E:silver
 G:$:s
 I:127:4:0
 W:1:0:0:6
 
-N:484:¶ä²ô
+N:484:‹â‰ò
 E:silver
 G:$:s
 I:127:5:0
 W:1:0:0:7
 
-N:485:¶ä²ô
+N:485:‹â‰ò
 E:silver
 G:$:s
 I:127:6:0
 W:1:0:0:8
 
-N:486:¥¬¡¼¥Í¥Ã¥È
+N:486:ƒK[ƒlƒbƒg
 E:garnets
 G:$:r
 I:127:7:0
 W:1:0:0:9
 
-N:487:¥¬¡¼¥Í¥Ã¥È
+N:487:ƒK[ƒlƒbƒg
 E:garnets
 G:$:r
 I:127:8:0
 W:1:0:0:10
 
-N:488:¶â²ô
+N:488:‹à‰ò
 E:gold
 G:$:y
 I:127:9:0
 W:1:0:0:12
 
-N:489:¶â²ô
+N:489:‹à‰ò
 E:gold
 G:$:y
 I:127:10:0
 W:1:0:0:14
 
-N:490:¶â²ô
+N:490:‹à‰ò
 E:gold
 G:$:y
 I:127:11:0
 W:1:0:0:16
 
-N:491:¥ª¥Ñ¡¼¥ë
+N:491:ƒIƒp[ƒ‹
 E:opals
 G:$:W
 I:127:12:0
 W:1:0:0:18
 
-N:492:¥µ¥Õ¥¡¥¤¥¢
+N:492:ƒTƒtƒ@ƒCƒA
 E:sapphires
 G:$:b
 I:127:13:0
 W:1:0:0:20
 
-N:493:¥ë¥Ó¡¼
+N:493:ƒ‹ƒr[
 E:rubies
 G:$:r
 I:127:14:0
 W:1:0:0:24
 
-N:494:¥À¥¤¥ä¥â¥ó¥É
+N:494:ƒ_ƒCƒ„ƒ‚ƒ“ƒh
 E:diamonds
 G:$:w
 I:127:15:0
 W:1:0:0:28
 
-N:495:¥¨¥á¥é¥ë¥É
+N:495:ƒGƒƒ‰ƒ‹ƒh
 E:emeralds
 G:$:g
 I:127:16:0
 W:1:0:0:32
 
-N:496:¥ß¥¹¥ê¥ë
+N:496:ƒ~ƒXƒŠƒ‹
 E:mithril
 G:$:B
 I:127:17:0
 W:1:0:0:40
 
-N:497:¥¢¥À¥Ş¥ó¥¿¥¤¥È
+N:497:ƒAƒ_ƒ}ƒ“ƒ^ƒCƒg
 E:adamantite
 G:$:G
 I:127:18:0
@@ -4820,7 +4820,7 @@ W:1:0:0:80
 # without being turned into artifacts.  This simplifies the
 # code for "killing the winner monster".
 
-N:498:Ì½³¦¤ÎÂçÅ´¾ó
+N:498:–»ŠE‚Ì‘å“Sñ
 E:& Mighty Hammer~
 G:\:D
 I:21:50:0
@@ -4828,7 +4828,7 @@ W:15:0:200:1000
 P:0:3d9:0:0:0
 F:SHOW_MODS | INSTA_ART | RIDING
 
-N:499:Æ²¡¹¤¿¤ëÅ´´§
+N:499:“°X‚½‚é“SŠ¥
 E:& Massive Iron Crown~
 G:]:D
 I:33:50:0
@@ -4865,7 +4865,7 @@ F:INSTA_ART
 
 # The Phial of Galadriel -- see artifact list
 
-N:500:ààÍşÉÓ
+N:500:àŞ—•r
 E:& Phial~
 G:!:y
 I:39:4:0
@@ -4875,7 +4875,7 @@ F:INSTA_ART
 
 # The Star of Elendil -- see artifact list
 
-N:501:À±
+N:501:¯
 E:& Star~
 G:*:y
 I:39:5:0
@@ -4886,7 +4886,7 @@ F:INSTA_ART
 # The Arkenstone of Thrain -- replaced with Jewel of Judgement
 
 #JZ#
-N:502:ÊõÀĞ
+N:502:•óÎ
 E:& Jewel~
 G:*:R
 I:39:6:0
@@ -4897,7 +4897,7 @@ F:INSTA_ART
 
 # The Amulet of Carlammas -- see artifact list
 
-N:503:¥¢¥ß¥å¥ì¥Ã¥È:¤·¤í¤á¤Î
+N:503:ƒAƒ~ƒ…ƒŒƒbƒg:‚µ‚ë‚ß‚Ì
 E:& Amulet~:Pewter
 G:":s
 I:40:10:0
@@ -4906,7 +4906,7 @@ F:INSTA_ART
 
 # The Amulet of Ingwe -- see artifact list
 
-N:504:¥¢¥ß¥å¥ì¥Ã¥È:¤Ù¤Ã¹Ã¤Î
+N:504:ƒAƒ~ƒ…ƒŒƒbƒg:‚×‚Áb‚Ì
 E:& Amulet~:Tortoise Shell
 G:":g
 I:40:11:0
@@ -4915,7 +4915,7 @@ F:INSTA_ART
 
 # The Necklace of the Dwarves -- see artifact list
 
-N:505:ğô¾ş¤ê:¶â¤Î
+N:505:èòü‚è:‹à‚Ì
 E:& Necklace~:Golden
 G:":y
 I:40:12:0
@@ -4925,7 +4925,7 @@ F:INSTA_ART
 
 # The Ring of Barahir -- see artifact list
 
-N:506:»ØÎØ:¥Ç¥£¥ê¥·¥¦¥à¤Î
+N:506:w—Ö:ƒfƒBƒŠƒVƒEƒ€‚Ì
 E:& Ring~:Dilithium
 G:=:W
 I:45:32:0
@@ -4934,7 +4934,7 @@ F:INSTA_ART
 
 # The Ring of Tulkas -- see artifact list
 
-N:507:»ØÎØ:ÌÚ¤Î
+N:507:w—Ö:–Ø‚Ì
 E:& Ring~:Wooden
 G:=:u
 I:45:33:0
@@ -4943,7 +4943,7 @@ F:INSTA_ART
 
 # The Ring of Power (Narya) -- see artifact list
 
-N:508:ÎÏ¤Î»ØÎØ:¼Ø¤Î
+N:508:—Í‚Ìw—Ö:Ö‚Ì
 E:& Ring~:Serpent
 G:=:g
 I:45:34:0
@@ -4952,7 +4952,7 @@ F:INSTA_ART
 
 # The Ring of Power (Nenya) -- see artifact list
 
-N:509:ÎÏ¤Î»ØÎØ:·ëº§
+N:509:—Í‚Ìw—Ö:Œ‹¥
 E:& Ring~:Wedding
 G:=:y
 I:45:35:0
@@ -4961,7 +4961,7 @@ F:INSTA_ART
 
 # The Ring of Power (Vilya) -- see artifact list
 
-N:510:ÎÏ¤Î»ØÎØ:¿¿ï«¤Î
+N:510:—Í‚Ìw—Ö:^èJ‚Ì
 E:& Ring~:Brass
 G:=:o
 I:45:36:0
@@ -4970,7 +4970,7 @@ F:INSTA_ART
 
 # The Ring of Power (The One Ring) -- see artifact list
 
-N:511:ÎÏ¤Î»ØÎØ:¶âÌµ¹¤¤Î
+N:511:—Í‚Ìw—Ö:‹à–³C‚Ì
 E:& Ring~:Plain Gold
 G:=:y
 I:45:37:0
@@ -4983,7 +4983,7 @@ F:INSTA_ART | FIXED_FLAVOR
 # Trump Spellbooks
 
 #JZ#
-N:512:[¾¤´­¤È´ñ½Ñ]
+N:512:[¢Š«‚ÆŠïp]
 E:[Conjurings & Tricks]
 G:?:o
 I:95:0:0
@@ -4992,7 +4992,7 @@ A:10/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:513:[ËüÊª¤Î¥Ç¥Ã¥­]
+N:513:[–œ•¨‚ÌƒfƒbƒL]
 E:[Deck of Many Things]
 G:?:o
 I:95:1:0
@@ -5001,7 +5001,7 @@ A:20/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:514:[±¿Ì¿¤ÎÀÚ»¥]
+N:514:[‰^–½‚ÌØD]
 E:[Trumps of Doom]
 G:?:u
 I:95:2:0
@@ -5011,7 +5011,7 @@ P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:515:[¥Õ¥¡¥¤¥Ö¡¦¥¨¡¼¥¹]
+N:515:[ƒtƒ@ƒCƒuEƒG[ƒX]
 E:[Five Aces]
 G:?:u
 I:95:3:0
@@ -5023,7 +5023,7 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 # Arcane Spellbooks
 
 #JZ#
-N:516:[½é¿´¼Ô¶µËÜ]
+N:516:[‰SÒ‹³–{]
 E:[Cantrips for Beginners]
 G:?:s
 I:96:0:0
@@ -5032,7 +5032,7 @@ A:10/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:517:[¾®Èë½Ñ]
+N:517:[¬”ép]
 E:[Minor Arcana]
 G:?:s
 I:96:1:0
@@ -5041,7 +5041,7 @@ A:15/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:518:[ÂçÈë½Ñ]
+N:518:[‘å”ép]
 E:[Major Arcana]
 G:?:s
 I:96:2:0
@@ -5050,7 +5050,7 @@ A:20/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:519:[Èë½ÑÂçÁ´]
+N:519:[”ép‘å‘S]
 E:[Manual of Mastery]
 G:?:s
 I:96:3:0
@@ -5059,7 +5059,7 @@ A:25/1
 P:0:1d1:0:0:0
 
 #JZ#
-N:520:È¿¼Í:ÎÜÍş¤Î
+N:520:”½Ë:—Ú—‚Ì
 E:Reflection:Azure
 G:":B
 I:40:9:0
@@ -5071,7 +5071,7 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 #521 and 522 cannot have EASY_KNOW because they may be cursed
 
 #JZ#
-N:521:È¿ËâË¡:¿å¾½¤Î
+N:521:”½–‚–@:…»‚Ì
 E:Anti-Magic:Crystal
 G:":B
 I:40:13:0
@@ -5081,7 +5081,7 @@ F:NO_MAGIC
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 #JZ#
-N:522:È¿¥Æ¥ì¥İ¡¼¥È:¶ä¤Î
+N:522:”½ƒeƒŒƒ|[ƒg:‹â‚Ì
 E:Anti-Teleportation:Silver
 G:":W
 I:40:14:0
@@ -5093,7 +5093,7 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 #523 cannot have EASY_KNOW because it can get random resistances
 
 #JZ#
-N:523:ÂÑÀ­:Æ¼¤Î
+N:523:‘Ï«:“º‚Ì
 E:Resistance:Copper
 G:":U
 I:40:15:0
@@ -5105,7 +5105,7 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 ##### New arms #####
 
 #JZ#
-N:524:¥Ä¥ô¥¡¥¤¥Ï¥ó¥À¡¼
+N:524:ƒcƒ”ƒ@ƒCƒnƒ“ƒ_[
 E:& Zweihander~
 G:|:w
 I:23:29:0
@@ -5115,7 +5115,7 @@ P:0:4d6:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:525:Ã»Åá
+N:525:’Z“
 E:& Tanto~
 G:|:W
 I:23:6:0
@@ -5125,7 +5125,7 @@ P:0:1d5:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:526:¥¹¥×¥ê¥ó¥È¡¦¥á¥¤¥ë
+N:526:ƒXƒvƒŠƒ“ƒgEƒƒCƒ‹
 E:Splint Mail~
 G:[:D
 I:37:10:0
@@ -5134,7 +5134,7 @@ A:35/1
 P:19:1d4:-2:0:0
 
 #JZ#
-N:527:ÅöÀ¤¶ñÂ­
+N:527:“–¢‹ï‘«
 E:Do-maru~
 G:[:s
 I:37:11:0
@@ -5143,7 +5143,7 @@ A:40/2
 P:20:1d4:-2:0:0
 
 #JZ#
-N:528:»°ºµÁä
+N:528:O³‘„
 E:& Trifurcate Spear~
 G:/:o
 I:22:26:0
@@ -5153,7 +5153,7 @@ P:0:2d9:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:529:»°ÀáÛş
+N:529:Oß
 E:& Three Piece Rod~
 G:\:u
 I:21:11:0
@@ -5163,7 +5163,7 @@ P:0:3d3:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:530:Âç³»
+N:530:‘åŠZ
 E:O-yoroi~
 G:[:D
 I:37:16:0
@@ -5172,7 +5172,7 @@ A:45/2
 P:24:1d4:-2:0:0
 
 #JZ#
-N:531:ÌÓÈé¤Î¥¯¥í¡¼¥¯
+N:531:–Ñ”ç‚ÌƒNƒ[ƒN
 E:& Fur Cloak~
 G:(:W
 I:35:3:0
@@ -5181,7 +5181,7 @@ A:20/2:30/2
 P:3:0d0:0:0:0
 
 #JZ#
-N:532:¥é¥¸¥ã¥¿¥ó
+N:532:ƒ‰ƒWƒƒƒ^ƒ“
 E:& Lajatang~
 G:/:s
 I:22:14:0
@@ -5191,7 +5191,7 @@ P:0:2d7:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:533:¥Ï¥Á¥§¥Ã¥È
+N:533:ƒnƒ`ƒFƒbƒg
 E:& Hatchet~
 G:/:s
 I:22:1:0
@@ -5203,7 +5203,7 @@ F:SHOW_MODS
 ##### New armor #####
 
 #JZ#
-N:535:¥µ¥¤Èé¤è¤í¤¤
+N:535:ƒTƒC”ç‚æ‚ë‚¢
 E:Rhino Hide Armour~
 G:(:s
 I:36:8:0
@@ -5212,7 +5212,7 @@ A:15/1
 P:8:1d1:-1:0:0
 
 #JZ#
-N:536:Èé¥¸¥ã¥±¥Ã¥È
+N:536:”çƒWƒƒƒPƒbƒg
 E:& Leather Jacket~
 G:(:U
 I:36:12:0
@@ -5223,7 +5223,7 @@ P:12:1d2:-1:0:0
 ##### New weapons #####
 
 #JZ#
-N:537:³ù
+N:537:Š™
 E:& Sickle~
 G:/:s
 I:22:3:0
@@ -5233,7 +5233,7 @@ P:0:2d3:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:538:Å´ËÀ
+N:538:“S–_
 E:& Tetsubo~
 G:\:u
 I:21:16:0
@@ -5243,7 +5243,7 @@ P:0:2d7:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:539:¥Ì¥ó¥Á¥ã¥¯
+N:539:ƒkƒ“ƒ`ƒƒƒN
 E:& Nunchaku~
 G:\:u
 I:21:4:0
@@ -5253,7 +5253,7 @@ P:0:2d3:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:540:Ï»¼ÜËÀ
+N:540:˜ZÚ–_
 E:& Bo Staff~
 G:\:U
 I:21:14:0
@@ -5263,7 +5263,7 @@ P:0:1d11:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:541:¼â¾ó
+N:541:àñ
 E:& Jo Staff~
 G:\:U
 I:21:7:0
@@ -5273,7 +5273,7 @@ P:0:1d7:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:542:ÛşËÀ
+N:542:–_
 E:& Club~
 G:\:u
 I:21:1:0
@@ -5283,7 +5283,7 @@ P:0:1d4:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:543:¥Ö¥í¡¼¥É¡¦¥¹¥Ô¥¢
+N:543:ƒuƒ[ƒhEƒXƒsƒA
 E:& Broad Spear~
 G:/:w
 I:22:7:0
@@ -5293,7 +5293,7 @@ P:0:1d9:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:544:¥¯¥©¥Ô¥¹
+N:544:ƒNƒHƒsƒX
 E:& Khopesh~
 G:|:W
 I:23:14:0
@@ -5303,7 +5303,7 @@ P:0:2d4:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:545:¥Õ¥é¥ó¥Ù¥ë¥¸¥å
+N:545:ƒtƒ‰ƒ“ƒxƒ‹ƒWƒ…
 E:& Flamberge~
 G:|:W
 I:23:26:0
@@ -5313,7 +5313,7 @@ P:0:3d7:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:546:¥¯¥ì¥¤¥â¥¢
+N:546:ƒNƒŒƒCƒ‚ƒA
 E:& Claymore~
 G:|:W
 I:23:23:0
@@ -5323,7 +5323,7 @@ P:0:2d8:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:547:¥¨¥¹¥Ñ¥É¥ó
+N:547:ƒGƒXƒpƒhƒ“
 E:& Espadon~
 G:|:W
 I:23:24:0
@@ -5333,7 +5333,7 @@ P:0:2d9:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:548:ÀÄÎ¶Åá
+N:548:Â—´“
 E:& Falchion~
 G:|:W
 I:23:22:0
@@ -5343,7 +5343,7 @@ P:0:4d5:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:549:ÏÆº¹¤·
+N:549:˜e·‚µ
 E:& Wakizashi~
 G:|:W
 I:23:13:0
@@ -5353,7 +5353,7 @@ P:0:2d4:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:550:ÆåÅá
+N:550:“ã“
 E:& Naginata~
 G:/:s
 I:22:9:0
@@ -5363,7 +5363,7 @@ P:0:2d6:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:551:¥Õ¥©¥·¥ã¡¼¥ë
+N:551:ƒtƒHƒVƒƒ[ƒ‹
 E:& Fauchard~
 G:/:s
 I:22:6:0
@@ -5373,7 +5373,7 @@ P:0:1d10:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:552:¥®¥¶¥ë¥à
+N:552:ƒMƒUƒ‹ƒ€
 E:& Guisarme~
 G:/:s
 I:22:16:0
@@ -5383,7 +5383,7 @@ P:0:2d5:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:553:¥Ø¥ô¥£¡¦¥é¥ó¥¹
+N:553:ƒwƒ”ƒBEƒ‰ƒ“ƒX
 E:& Heavy Lance~
 G:/:s
 I:22:29:0
@@ -5393,7 +5393,7 @@ P:0:4d8:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:554:¥Ğ¥¼¥é¡¼¥É
+N:554:ƒoƒ[ƒ‰[ƒh
 E:& Basillard~
 G:|:w
 I:23:9:0
@@ -5403,7 +5403,7 @@ P:0:1d8:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:555:Ç¦¼ÔÅá
+N:555:”EÒ“
 E:& Ninjato~
 G:|:s
 I:23:19:0
@@ -5413,7 +5413,7 @@ P:0:1d9:0:0:0
 F:SHOW_MODS
 
 #JZ#
-N:556:¥ê¥ó¥°¡¦¥á¥¤¥ë
+N:556:ƒŠƒ“ƒOEƒƒCƒ‹
 E:Ring Mail~
 G:[:s
 I:37:2:0
@@ -5422,7 +5422,7 @@ A:20/1
 P:12:1d4:-2:0:0
 
 #JZ#
-N:557:ËÉ¸îÉş
+N:557:–hŒì•
 E:Cord Armour~
 G:(:y
 I:36:9:0
@@ -5431,7 +5431,7 @@ A:7/1
 P:6:1d1:0:0:0
 
 #JZ#
-N:558:»æ¹Ã
+N:558:†b
 E:Paper Armour~
 G:(:w
 I:36:3:0
@@ -5440,7 +5440,7 @@ A:7/2
 P:4:1d1:0:0:0
 
 #JZ#
-N:559:¸üÉÛ¤è¤í¤¤
+N:559:Œú•z‚æ‚ë‚¢
 E:Padded Armour~
 G:(:y
 I:36:10:0
@@ -5449,7 +5449,7 @@ A:5/1
 P:5:1d1:0:0:0
 
 #JZ#
-N:560:À±³õ
+N:560:¯Š•
 E:& Kabuto~
 G:]:D
 I:32:8:0
@@ -5458,7 +5458,7 @@ A:50/3
 P:7:1d2:0:0:0
 
 #JZ#
-N:561:ÈéÀĞ¤è¤í¤¤
+N:561:”çÎ‚æ‚ë‚¢
 E:Stone and Hide Armour~
 G:(:U
 I:36:15:0
@@ -5467,7 +5467,7 @@ A:35/7
 P:15:1d1:-1:0:0
 
 #JZ#
-N:562:¿Ø³Ş
+N:562:wŠ}
 E:& Jingasa~
 G:]:s
 I:32:4:0
@@ -5476,7 +5476,7 @@ A:16/2
 P:4:1d2:0:0:0
 
 #JZ#
-N:563:Æ¹´İ
+N:563:“·ŠÛ
 E:Haramakido~
 G:[:D
 I:37:14:0
@@ -5484,7 +5484,7 @@ W:32:0:280:920
 A:32/2
 P:17:1d4:-2:0:0
 
-N:564:ÇòÇ®Åô
+N:564:”’”M“”
 E:& Incandescent Light~
 G:!:y
 I:39:3:0
@@ -5492,7 +5492,7 @@ W:20:10:5:20000
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:565:¥À¥¤¥ä¥â¥ó¥É¡¦¥¨¥Ã¥¸
+N:565:ƒ_ƒCƒ„ƒ‚ƒ“ƒhEƒGƒbƒW
 E:& Diamond Edge~
 G:|:w
 I:23:31:4
@@ -5501,7 +5501,7 @@ A:90/16
 P:0:7d5:10:10:0
 F:SHOW_MODS | VORPAL | TUNNEL
 
-N:566:ËŞÍÇ:Æ°µ¯ ¿ÀÍî Ï»ò´
+N:566:–}—f:“®‹N _— ˜Zé²
 E:Mundanity:danseh nejood
 G:?:w
 I:70:23:0
@@ -5509,10 +5509,10 @@ W:13:0:5:3000
 A:13/10
 D:$This removes the ego or artifact status and all enchantment of an item. 
 D:$As a bonus, if you have a stack of them, the extras are destroyed.
-D:¤½¤ì¤ÏÆÉ¤à¤È¥¢¥¤¥Æ¥à1¸Ä¤òÊÂ¤Î¥¢¥¤¥Æ¥à¤ËÊÑ¤¨¤ë¡£Ê£¿ô¤Î¥¢¥¤¥Æ¥à¤¬¤Ş¤È¤Ş¤Ã¤Æ
-D:¤¤¤ë¾ì¹ç¤Ï1¸Ä¤ò»Ä¤·¤Æ²õ¤ì¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚ÆƒAƒCƒeƒ€1ŒÂ‚ğ•À‚ÌƒAƒCƒeƒ€‚É•Ï‚¦‚éB•¡”‚ÌƒAƒCƒeƒ€‚ª‚Ü‚Æ‚Ü‚Á‚Ä
+D:‚¢‚éê‡‚Í1ŒÂ‚ğc‚µ‚Ä‰ó‚ê‚éB
 
-N:567:#¤Î¿Í·Á
+N:567:#‚ÌlŒ`
 E:& Magical Figurine~ of #
 G:`:b
 I:8:0:0
@@ -5520,7 +5520,7 @@ W:32:0:50:100
 A:15/6:30/3:65/1
 P:0:1d1:0:0:0
 
-N:568:#¤ÎÌÚ¤ÎÁü
+N:568:#‚Ì–Ø‚Ì‘œ
 E:& Wooden Statue~ of #
 G:`:u
 I:9:0:0
@@ -5528,7 +5528,7 @@ W:5:0:200:75
 A:5/3
 P:0:1d1:0:0:0
 
-N:569:#¤ÎÇ´ÅÚÁü
+N:569:#‚Ì”S“y‘œ
 E:& Clay Statue~ of #
 G:`:U
 I:9:1:0
@@ -5536,7 +5536,7 @@ W:10:0:500:50
 A:10/3
 P:0:1d1:0:0:0
 
-N:570:#¤ÎÀĞÁü
+N:570:#‚ÌÎ‘œ
 E:& Stone Statue~ of #
 G:`:s
 I:9:2:0
@@ -5544,7 +5544,7 @@ W:15:0:500:100
 A:15/3
 P:0:1d1:0:0:0
 
-N:571:#¤ÎÅ´¤ÎÁü
+N:571:#‚Ì“S‚Ì‘œ
 E:& Iron Statue~ of #
 G:`:D
 I:9:3:0
@@ -5552,7 +5552,7 @@ W:20:0:500:200
 A:20/3
 P:0:1d1:0:0:0
 
-N:572:#¤ÎÆ¼Áü
+N:572:#‚Ì“º‘œ
 E:& Copper Statue~ of #
 G:`:o
 I:9:4:0
@@ -5560,7 +5560,7 @@ W:25:0:500:500
 A:25/3
 P:0:1d1:0:0:0
 
-N:573:#¤Î¶ä¤ÎÁü
+N:573:#‚Ì‹â‚Ì‘œ
 E:& Silver Statue~ of #
 G:`:W
 I:9:5:0
@@ -5568,7 +5568,7 @@ W:30:0:500:1000
 A:30/3
 P:0:1d1:0:0:0
 
-N:574:#¤Î¶â¤ÎÁü
+N:574:#‚Ì‹à‚Ì‘œ
 E:& Golden Statue~ of #
 G:`:y
 I:9:6:0
@@ -5576,7 +5576,7 @@ W:40:0:500:2500
 A:40/3
 P:0:1d1:0:0:0
 
-N:575:#¤Î¾İ²ç¤ÎÁü
+N:575:#‚ÌÛ‰å‚Ì‘œ
 E:& Ivory Statue~ of #
 G:`:w
 I:9:7:0
@@ -5584,7 +5584,7 @@ W:45:0:500:2000
 A:45/3
 P:0:1d1:0:0:0
 
-N:576:#¤Î¥ß¥¹¥ê¥ëÁü
+N:576:#‚Ìƒ~ƒXƒŠƒ‹‘œ
 E:& Mithril Statue~ of #
 G:`:B
 I:9:8:0
@@ -5592,7 +5592,7 @@ W:80:0:500:10000
 A:80/3
 P:0:1d1:0:0:0
 
-N:577:#¤ÎÁõ¾ş¤µ¤ì¤¿Áü
+N:577:#‚Ì‘•ü‚³‚ê‚½‘œ
 E:& Ornate Statue~ of #
 G:`:v
 I:9:9:0
@@ -5600,7 +5600,7 @@ W:50:0:500:5000
 A:50/3
 P:0:1d1:0:0:0
 
-N:578:¤Î¹ü
+N:578:‚Ìœ
 E:Skeleton~
 G:~:w
 I:10:0:0
@@ -5608,7 +5608,7 @@ W:1:0:20:0
 A:1/2
 P:0:1d1:0:0:0
 
-N:579:¤Î»àÂÎ
+N:579:‚Ì€‘Ì
 E:Corpse~
 G:~:d
 I:10:1:0
@@ -5616,7 +5616,7 @@ W:1:0:40:0
 A:1/2
 P:0:1d1:0:0:0
 
-N:580:£Ô¥·¥ã¥Ä
+N:580:‚sƒVƒƒƒc
 E:& T-shirt~
 G:~:w
 I:36:0:0
@@ -5624,7 +5624,7 @@ W:1:0:10:0
 A:1/255
 P:1:1d1:0:0:0
 
-N:581:Ëâ½Ñ»Õ¤Î¾ó
+N:581:–‚pt‚Ìñ
 E:& Wizardstaff~
 G:\:y
 I:21:21:0
@@ -5633,7 +5633,7 @@ A:25/4
 P:0:1d2:0:0:0
 F:SHOW_MODS | DEC_MANA
 
-N:582:¥Õ¥§¥¢¥Î¡¼¥ë¤Î¥é¥ó¥×
+N:582:ƒtƒFƒAƒm[ƒ‹‚Ìƒ‰ƒ“ƒv
 E:& Feanorian Lamp~
 G:~:o
 I:39:2:0
@@ -5642,7 +5642,7 @@ A:15/1
 P:0:1d1:0:0:0
 F:IGNORE_FIRE | LITE_2
 
-N:583:´äÀĞÍÏ²ò:¥¢¥À¥Ş¥ó¥¿¥¤¥È¤Î
+N:583:ŠâÎ—n‰ğ:ƒAƒ_ƒ}ƒ“ƒ^ƒCƒg‚Ì
 E:Stone to Mud:Adamantite
 G:-:v
 I:66:29:25
@@ -5650,10 +5650,10 @@ W:40:0:10:3000
 A:20/12:40/3
 P:0:1d1:0:0:0
 D:$It turns a door, rock and wall square to mud when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¥É¥¢¤ä´äÀĞ¤äÊÉ¤òÍÏ¤«¤¹¡£
+D:‚»‚ê‚ÍU‚é‚ÆƒhƒA‚âŠâÎ‚â•Ç‚ğ—n‚©‚·B
 
 #JZ#
-N:584:¥É¥é¥´¥ó¡¦¥°¥í¡¼¥Ö
+N:584:ƒhƒ‰ƒSƒ“EƒOƒ[ƒu
 E:& Set~ of Dragon Gloves
 G:]:G
 I:31:3:0
@@ -5663,7 +5663,7 @@ P:4:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
 #JZ#
-N:585:¥É¥é¥´¥óÈé¤Î·¤
+N:585:ƒhƒ‰ƒSƒ“”ç‚ÌŒC
 E:& Pair~ of Dragon Boots
 G:]:G
 I:30:4:0
@@ -5672,14 +5672,14 @@ A:60/5
 P:5:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
-N:586:Éå¤ì¤Î»ØÎØ:¶âÍ­¹¤¤Î
+N:586:•…‚ê‚Ìw—Ö:‹à—LC‚Ì
 E:& Ring~:Plain Goldarn
 G:=:y
 I:45:50:0
 W:100:0:2:0
 F:INSTA_ART | FIXED_FLAVOR
 
-N:587:¥Æ¥ì¥Ñ¥·¡¼:ÒÄ¤Î
+N:587:ƒeƒŒƒpƒV[:™Â‚Ì
 E:Telepathy:Swastika
 G:":v
 I:40:16:0
@@ -5688,14 +5688,14 @@ A:60/4
 F:TELEPATHY
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:588:¿Ê²½¤¹¤ë½Æ
+N:588:i‰»‚·‚ée
 E:& Gun~
 G:}:r
 I:19:50:0
 W:15:0:100:1000
 F:SHOW_MODS | INSTA_ART
 
-N:589:ÀĞ
+N:589:Î
 E:& Crystal Ball~
 G:*:y
 I:39:8:0
@@ -5703,7 +5703,7 @@ W:60:0:10:60000
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:590:ÀĞ
+N:590:Î
 E:& Stone~
 G:*:R
 I:39:7:0
@@ -5711,14 +5711,14 @@ W:15:0:5:60000
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:591:¥¢¥ß¥å¥ì¥Ã¥È:¥×¥é¥Á¥Ê¤Î
+N:591:ƒAƒ~ƒ…ƒŒƒbƒg:ƒvƒ‰ƒ`ƒi‚Ì
 E:& Amulet~:Platinum
 G:":w
 I:40:17:0
 W:30:0:3:25000
 F:INSTA_ART
 
-N:592:ÆÇ¿Ë
+N:592:“Åj
 E:& Poison Needle~
 G:|:g
 I:23:32:0
@@ -5728,7 +5728,7 @@ P:0:1d1:0:0:0
 F:SHOW_MODS
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:593:¥â¥ó¥¹¥¿¡¼¡¦¥Ü¡¼¥ë#
+N:593:ƒ‚ƒ“ƒXƒ^[Eƒ{[ƒ‹#
 E:& Capture Ball#
 G:~:B
 I:11:0:0
@@ -5737,7 +5737,7 @@ A:15/4
 P:0:1d1:0:0:0
 F:ACTIVATE
 
-N:594:»à¤ÎÂç³ù
+N:594:€‚Ì‘åŠ™
 E:& Death Scythe~ 
 G:/:R
 I:22:50:0
@@ -5750,7 +5750,7 @@ F:SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT | SLAY_ORC |
 F:BRAND_FIRE | BRAND_ELEC | BRAND_COLD | BRAND_ACID | BRAND_POIS |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | RIDING
 
-N:595:¥Í¥ª¡¦¤Ä¤è¤·¥¹¥Ú¥·¥ã¥ë:¶õ¿§¤Î
+N:595:ƒlƒIE‚Â‚æ‚µƒXƒyƒVƒƒƒ‹:‹óF‚Ì
 E:Neo-Tsuyoshi Special:Sky Blue
 G:!:B
 I:75:64:0
@@ -5760,10 +5760,10 @@ P:0:1d1:0:0:0
 D:$It cures hallucination and increases your strength and constitution 
 D:$temporarily when you quaff it but your strength and constitution decrease 
 D:$permanently than before when the effect expires.
-D:¤½¤ì¤Ï°û¤à¤È¸¸³Ğ¤òÌş¤·¡¢°ì»şÅª¤ËÏÓÎÏ¤ÈÂÑµ×ÎÏ¤¬¾å¤¬¤ë¤¬¡¢¸ú²Ì¤¬ÀÚ¤ì¤ë¤È
-D:ÏÓÎÏ¤ÈÂÑµ×ÎÏ¤ÎºÇÂçÃÍ¤¬°û¤àÁ°¤è¤ê¤â²¼¤¬¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚ÆŒ¶Šo‚ğ–ü‚µAˆê“I‚É˜r—Í‚Æ‘Ï‹v—Í‚ªã‚ª‚é‚ªAŒø‰Ê‚ªØ‚ê‚é‚Æ
+D:˜r—Í‚Æ‘Ï‹v—Í‚ÌÅ‘å’l‚ªˆù‚Ş‘O‚æ‚è‚à‰º‚ª‚éB
 
-N:596:ÄÉ²Ã¼Í·â:¥¹¥«¥é¥Ù¤Î
+N:596:’Ç‰ÁËŒ‚:ƒXƒJƒ‰ƒx‚Ì
 E:Extra Shots:Scarab
 G:=:G
 I:45:51:0
@@ -5771,14 +5771,14 @@ W:50:0:2:20000
 A:50/2
 F:XTRA_SHOTS
 
-N:597:¥¨¥¯¥¹¥×¥ì¥¹¥«¡¼¥É
+N:597:ƒGƒNƒXƒvƒŒƒXƒJ[ƒh
 E:& Card
 G:~:G
 I:50:0:0
 W:1:0:2:1000
 F:INSTA_ART
 
-N:598:Ç½ÎÏ°İ»ı:»¬¤Ó¤¿
+N:598:”\—ÍˆÛ:K‚Ñ‚½
 E:Sustaining:Rusty
 G:=:r
 I:45:52:0
@@ -5786,7 +5786,7 @@ W:60:0:2:10000
 A:60/5
 F:SUST_STR | SUST_INT | SUST_WIS | SUST_DEX | SUST_CON | SUST_CHR
 
-N:599:¾ÃÈñËâÎÏ¸º¾¯:¹İÅ´¤Î
+N:599:Á”ï–‚—ÍŒ¸­:|“S‚Ì
 E:Mana:Steel
 G:=:W
 I:45:53:0
@@ -5794,7 +5794,7 @@ W:80:0:2:30000
 A:80/8
 F:DEC_MANA
 
-N:600:¼öÊ¸:Âç¾¨ ¿¿µÛ ²ó
+N:600:ô•¶:‘å¦ ^‹z ‰ñ
 E:Spell:nin xuxucre
 G:?:w
 I:70:43:0
@@ -5802,26 +5802,26 @@ W:10:0:5:1000
 A:10/8
 D:$It increases the number you can study spells when you read. If you are the 
 D:$class can't study or don't need to study, it effects none.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼öÊ¸¤ò1¤Ä³Ø½¬¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤ë¡£
-D:³Ø½¬¤Ç¤­¤Ê¤¤¡¢¤Ş¤¿¤Ï³Ø½¬¤¹¤ëÉ¬Í×¤Î¤Ê¤¤¿¦¶È¤Ç¤Ï²¿¤âµ¯¤­¤Ê¤¤¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æô•¶‚ğ1‚ÂŠwK‚Å‚«‚é‚æ‚¤‚É‚È‚éB
+D:ŠwK‚Å‚«‚È‚¢A‚Ü‚½‚ÍŠwK‚·‚é•K—v‚Ì‚È‚¢E‹Æ‚Å‚Í‰½‚à‹N‚«‚È‚¢B
 
-N:601:¥Ú¥Ã¥È¾¤´­:ÉğÌÄ ¶õ ¿À¹ç
+N:601:ƒyƒbƒg¢Š«:•–Â ‹ó _‡
 E:Summon Pet:he proktab
 G:?:w
 I:70:6:0
 W:30:0:5:1000
 A:30/2
 D:$It summons a monster as your pet when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È1ÂÎ¤Î¥Ú¥Ã¥È¤ò¾¤´­¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ1‘Ì‚Ìƒyƒbƒg‚ğ¢Š«‚·‚éB
 
-N:602:¶â¤Î¼ó¾ş¤ê:»¬¤Ó¤¿
+N:602:‹à‚Ìñü‚è:K‚Ñ‚½
 E:& Torque~:Rusty
 G:":r
 I:40:18:0
 W:30:0:3:25000
 F:INSTA_ART
 
-N:603:¤Ä¤è¤·¥¹¥Ú¥·¥ã¥ë:¶ä¿§¤Î
+N:603:‚Â‚æ‚µƒXƒyƒVƒƒƒ‹:‹âF‚Ì
 E:Tsuyoshi Special:Silver
 G:!:w
 I:75:65:0
@@ -5830,9 +5830,9 @@ A:10/2
 P:0:1d1:0:0:0
 D:$It decreases your strength and constitution permanently and makes you hallucinate 
 D:$when you quaff it.
-D:¤½¤ì¤Ï°û¤à¤ÈÏÓÎÏ¤ÈÂÑµ×ÎÏ¤ÎºÇÂçÃÍ¤¬²¼¤¬¤ê¡¢¸¸³Ğ¤Ë¿¯¤µ¤ì¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ˜r—Í‚Æ‘Ï‹v—Í‚ÌÅ‘å’l‚ª‰º‚ª‚èAŒ¶Šo‚ÉN‚³‚ê‚éB
 
-N:604:[¿·Äï»ÒÍÑ¶µËÜ]
+N:604:[V’íq—p‹³–{]
 E:[Handbook for Pupils]
 G:?:y
 I:97:0:0
@@ -5840,7 +5840,7 @@ W:10:0:30:100
 A:10/1
 P:0:1d1:0:0:0
 
-N:605:[Í­ÃÊ¼Ô¤Ø¤ÎÆ»]
+N:605:[—L’iÒ‚Ö‚Ì“¹]
 E:[Grade Holder's Book]
 G:?:y
 I:97:1:0
@@ -5848,7 +5848,7 @@ W:20:0:30:1000
 A:20/1
 P:0:1d1:0:0:0
 
-N:606:[»ÕÈÏÂå¤Î½ñ]
+N:606:[t”Í‘ã‚Ì‘]
 E:[Note of Acting Master]
 G:?:U
 I:97:2:0
@@ -5857,7 +5857,7 @@ A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:607:[¸ç¤ê¤Î½ñ]
+N:607:[Œå‚è‚Ì‘]
 E:[Spiritual Enlightenment]
 G:?:U
 I:97:3:0
@@ -5866,7 +5866,7 @@ A:90/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:608:»à¿ÍÊÖ¤·:¶â¿§¤Î
+N:608:€l•Ô‚µ:‹àF‚Ì
 E:Animate Dead:Golden
 G:_:y
 I:55:30:8
@@ -5875,9 +5875,9 @@ A:35/1
 P:0:1d2:0:0:0
 D:$It raises corpses and skeletons nearby you from dead and makes them your 
 D:$pet when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¼«Ê¬¤Î¼ş°Ï¤Î»àÂÎ¤ä¹ü¤òÀ¸¤­ÊÖ¤é¤»¤Æ¥Ú¥Ã¥È¤Ë¤¹¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ©•ª‚ÌüˆÍ‚Ì€‘Ì‚âœ‚ğ¶‚«•Ô‚ç‚¹‚Äƒyƒbƒg‚É‚·‚éB
 
-N:609:ÀĞ
+N:609:Î
 E:& Levitation Stone~
 G:*:B
 I:39:9:0
@@ -5885,14 +5885,14 @@ W:60:0:10:60000
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:610:¸û¶Ì:¶Ê¤¬¤Ã¤¿
+N:610:Œù‹Ê:‹È‚ª‚Á‚½
 E:& Bead~:Curved
 G:":g
 I:40:19:0
 W:60:0:3:90000
 F:INSTA_ART
 
-N:611:Å·¾å¤Î¥¯¥í¡¼¥¯
+N:611:“Vã‚ÌƒNƒ[ƒN
 E:& Ethereal Cloak~
 G:(:W
 I:35:5:0
@@ -5902,10 +5902,10 @@ P:0:0d0:0:0:10
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD 
 D:$This unearthly, completely transparent body mantle folds and drapes in 
 D:$iridescent patterns around you.  It weighs absolutely nothing.
-D:¤³¤ÎÀ¤¤ÎÊª¤Ç¤Ï¤Ê¤¤¡¢¤³¤Î´°Á´¤ËÆ©ÌÀ¤Ê³°Åå¤ÏÃå¤ë¼Ô¤òÆúÌÏÍÍ¤ÇÊñ¤ß¾ş¤ë¡£
-D:¤½¤ì¤Ï´°Á´¤Ë½Å¤µ¤¬¤Ê¤¤¡£
+D:‚±‚Ì¢‚Ì•¨‚Å‚Í‚È‚¢A‚±‚ÌŠ®‘S‚É“§–¾‚ÈŠO“…‚Í’…‚éÒ‚ğ“ø–Í—l‚Å•ï‚İü‚éB
+D:‚»‚ê‚ÍŠ®‘S‚Éd‚³‚ª‚È‚¢B
 
-N:612:¶À
+N:612:‹¾
 E:& Mirror~
 G:*:b
 I:34:50:0
@@ -5913,7 +5913,7 @@ W:65:0:50:10000
 P:0:1d1:0:0:10
 F:IGNORE_ACID | REFLECT | INSTA_ART
 
-N:613:Ìğ
+N:613:–î
 E:& Black Arrow~
 G:{:U
 I:17:10:0
@@ -5921,7 +5921,7 @@ W:35:0:2:1
 P:0:1d4:0:0:0
 F:INSTA_ART | SHOW_MODS
 
-N:614:´í¤Ê¤¤¿åÃå
+N:614:Šë‚È‚¢…’…
 E:Sexy Swimsuit
 G:(:v
 I:36:50:0
@@ -5930,7 +5930,7 @@ A:30/64
 P:0:0d0:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | AGGRAVATE
 
-N:615:Äà¤ê´È
+N:615:’Ş‚èŠÆ
 E:& Fishingpole~
 G:/:B
 I:22:40:0
@@ -5938,14 +5938,14 @@ W:10:0:30:30
 P:0:1d1:0:0:0
 F:INSTA_ART
 
-N:616:°õäÆ:¥É¥é¥´¥ó¤ÎÄŞ¤Î
+N:616:ˆóâÄ:ƒhƒ‰ƒSƒ“‚Ì’Ü‚Ì
 E:& Inro~:Dragon's claw
 G:":G
 I:40:20:0
 W:50:0:3:100000
 F:INSTA_ART
 
-N:617:ÆÍÁ³ÊÑ°Û:ÀÖÆ¼¿§¤Î
+N:617:“Ë‘R•ÏˆÙ:Ô“ºF‚Ì
 E:Polymorph:Bronze
 G:!:r
 I:75:66:0
@@ -5953,9 +5953,9 @@ W:50:0:4:5000
 A:50/4
 P:0:1d1:0:0:0
 D:$It mutates you when you quaff it. Rarely it cures all mutations.
-D:¤½¤ì¤Ï°û¤à¤ÈÆÍÁ³ÊÑ°Û¤òµ¯¤³¤¹¡£µ©¤ËÁ´¤Æ¤ÎÆÍÁ³ÊÑ°Û¤¬¾Ã¤¨¤ë¡£
+D:‚»‚ê‚Íˆù‚Ş‚Æ“Ë‘R•ÏˆÙ‚ğ‹N‚±‚·B‹H‚É‘S‚Ä‚Ì“Ë‘R•ÏˆÙ‚ªÁ‚¦‚éB
 
-N:618:·Ù¹ğ:¥¿¥ó¥¶¥Ê¥¤¥È¤Î
+N:618:Œx:ƒ^ƒ“ƒUƒiƒCƒg‚Ì
 E:Warning:Tanzanite
 G:=:B
 I:45:54:0
@@ -5963,7 +5963,7 @@ W:10:0:2:200
 A:10/2
 F:WARNING
 
-N:619:¹İÅ´¤Î¥¯¥í¥¹¥Ü¥¦¤ÎÌğ
+N:619:|“S‚ÌƒNƒƒXƒ{ƒE‚Ì–î
 E:& Steel Bolt~
 G:{:w
 I:18:1:0
@@ -5972,7 +5972,7 @@ A:25/4:50/2:60/2
 P:0:3d5:0:0:0
 F:SHOW_MODS
 
-N:620:¤ª¤â¤Á¤ã¤Î¥«¥ó¥Å¥á
+N:620:‚¨‚à‚¿‚á‚ÌƒJƒ“ƒdƒ
 E:& Can~ of Toys
 G:&:y
 I:7:50:0
@@ -5980,28 +5980,28 @@ W:1:0:50:500000
 A:1/255
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:621:ËÀ
+N:621:–_
 E:& Stick~
 G:\:y
 I:21:63:0
 W:1:0:333:1000000
 F:INSTA_ART
 
-N:622:µİ
+N:622:‹|
 E:& Yumi~
 G:}:y
 I:19:63:0
 W:1:0:50:1000000
 F:INSTA_ART
 
-N:623:Éş
+N:623:•
 E:Clothes~
 G:(:y
 I:36:63:0
 W:1:0:10:1000000
 F:INSTA_ART
 
-N:624:ÃÎÇ½:¿ô¼î¤Î
+N:624:’m”\:”ì‚Ì
 E:Intelligence:Rosary
 G:":G
 I:40:21:0
@@ -6009,7 +6009,7 @@ W:20:0:3:500
 A:20/1
 F:INT | HIDE_TYPE
 
-N:625:¸­¤µ:¤Ò¤¹¤¤¤Î
+N:625:Œ«‚³:‚Ğ‚·‚¢‚Ì
 E:Wisdom:Jade
 G:":g
 I:40:22:0
@@ -6017,7 +6017,7 @@ W:20:0:3:500
 A:20/1
 F:WIS | HIDE_TYPE
 
-N:626:ÆùÂÎ¶¯²½:Æğ¶Ì¤Î
+N:626:“÷‘Ì‹­‰»:“î‹Ê‚Ì
 E:Reinforce Muscle:Nephrite
 G:=:g
 I:45:55:0
@@ -6025,7 +6025,7 @@ W:50:0:2:5000
 A:50/4
 F:STR | DEX | CON | HIDE_TYPE
 
-N:627:¥Ê¥¤¥È¡¦¥·¡¼¥ë¥É
+N:627:ƒiƒCƒgEƒV[ƒ‹ƒh
 E:& Knight's Shield~
 G:):W
 I:34:7:0
@@ -6033,7 +6033,7 @@ W:40:0:160:250
 A:40/2
 P:10:1d6:0:0:0
 
-N:628:¾×·â:¥¤¥ê¥Â¥¦¥à¤Î
+N:628:ÕŒ‚:ƒCƒŠƒaƒEƒ€‚Ì
 E:Striking:Uridium
 G:-:R
 I:65:30:6
@@ -6042,9 +6042,9 @@ A:65/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$It fires a bolt of meteor (damage: (15+level/3)d13) when you use it.
-D:¤½¤ì¤Ï»È¤¦¤È¥À¥á¡¼¥¸(15+¥ì¥Ù¥ë/3)d13¤Îğ¨ÀĞ¤ÎÌğ¤òÊü¤Ä¡£
+D:‚»‚ê‚Íg‚¤‚Æƒ_ƒ[ƒW(15+ƒŒƒxƒ‹/3)d13‚Ìè¦Î‚Ì–î‚ğ•ú‚ÂB
 
-N:629:ËâÎÏ¤ÎÍò:¥È¥Í¥ê¥³¤Î
+N:629:–‚—Í‚Ì—’:ƒgƒlƒŠƒR‚Ì
 E:Mana Storm:Ashen
 G:_:s
 I:55:31:5
@@ -6055,20 +6055,20 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$It produces a huge mana ball (damage of core: (300+d200)*2) centered on you 
 D:$when you use it. If you are neither mage, high-mage, sorcerer, magiceater 
 D:$nor blue-mage, you take 50 damage.
-D:¤½¤ì¤Ï»È¤¦¤ÈÃæ¿´Éô¥À¥á¡¼¥¸(300+d200)*2¤ÎµğÂç¤Ê½ã¿è¤ÊËâÎÏ¤Îµå¤ò¼«Ê¬¤ò
-D:Ãæ¿´¤È¤·¤ÆÈ¯À¸¤¹¤ë¡£¥á¥¤¥¸¡¢¥Ï¥¤=¥á¥¤¥¸¡¢¥¹¥Ú¥ë¥Ş¥¹¥¿¡¼¡¢ËâÆ»¶ñ½Ñ»Õ¡¢
-D:ÀÄËâÆ»»Õ¤Ç¤Ê¤±¤ì¤Ğ¼«Ê¬¤â50¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¤ë¡£
+D:‚»‚ê‚Íg‚¤‚Æ’†S•”ƒ_ƒ[ƒW(300+d200)*2‚Ì‹‘å‚Èƒˆ‚È–‚—Í‚Ì‹…‚ğ©•ª‚ğ
+D:’†S‚Æ‚µ‚Ä”­¶‚·‚éBƒƒCƒWAƒnƒC=ƒƒCƒWAƒXƒyƒ‹ƒ}ƒXƒ^[A–‚“¹‹ïptA
+D:Â–‚“¹t‚Å‚È‚¯‚ê‚Î©•ª‚à50‚Ìƒ_ƒ[ƒW‚ğó‚¯‚éB
 
-N:630:¥Õ¥í¥¢¡¦¥ê¥»¥Ã¥È:Ê»²½ Ëüºø ÁÏÃÀ
+N:630:ƒtƒƒAEƒŠƒZƒbƒg:•¹‰» –œö ‘n’_
 E:Reset Recall:unjah blu comp
 G:?:w
 I:70:53:0
 W:20:0:5:500
 A:20/3
 D:$It resets the dungeon level for recall spell when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¥À¥ó¥¸¥ç¥ó¤Îµ¢´Ô³¬¤òÅşÃ£¤·¤¿ÈÏ°ÏÆâ¤ÇÀßÄê¤Ç¤­¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æƒ_ƒ“ƒWƒ‡ƒ“‚Ì‹AŠÒŠK‚ğ“’B‚µ‚½”ÍˆÍ“à‚Åİ’è‚Å‚«‚éB
 
-N:631:[¸«½¬¤¤¶µËÜ]
+N:631:[Œ©K‚¢‹³–{]
 E:[Apprentice Handbook]
 G:?:W
 I:105:0:0
@@ -6076,7 +6076,7 @@ W:10:0:30:100
 A:10/1
 P:0:1d1:0:0:0
 
-N:632:[»í¿Í³Ú¶Ê½¸]
+N:632:[lŠy‹ÈW]
 E:[Minstrel's Music]
 G:?:W
 I:105:1:0
@@ -6084,7 +6084,7 @@ W:20:0:30:1000
 A:20/1
 P:0:1d1:0:0:0
 
-N:633:[¥ê¥ô¥§¥ó¥Ç¥ë¤ÎÃ¨¶×]
+N:633:[ƒŠƒ”ƒFƒ“ƒfƒ‹‚Ì’G‹Õ]
 E:[Harps of Rivendell]
 G:?:w
 I:105:2:0
@@ -6093,7 +6093,7 @@ A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:634:[¥Ù¥ì¥ê¥¢¥ó¥É¤Î»í]
+N:634:[ƒxƒŒƒŠƒAƒ“ƒh‚Ì]
 E:[Lays of Beleriand]
 G:?:w
 I:105:3:0
@@ -6102,7 +6102,7 @@ A:90/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:635:È»¤Î·õ
+N:635:”¹‚ÌŒ•
 E:& Falcon Sword~
 G:|:y
 I:23:33:1
@@ -6112,7 +6112,7 @@ P:0:1d6:0:0:0
 F:SHOW_MODS | BLOWS
 
 #JP#
-N:636:ËÁ¸±¼Ô¤Î¤¿¤á¤ÎÃæ¤Ä¹ñ¥¬¥¤¥É
+N:636:–`Œ¯Ò‚Ì‚½‚ß‚Ì’†‚Â‘ƒKƒCƒh
 E:Adventurer's guide to Middle Earth
 G:?:o
 I:69:0:0
@@ -6120,7 +6120,7 @@ W:0:0:5:1
 A:0/255
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:637:[Éğ·İ½ôÉè]
+N:637:[•Œ|”•ˆ]
 E:[Bugei Shofu]
 G:?:o
 I:106:0:0
@@ -6128,7 +6128,7 @@ W:10:0:30:100
 A:10/1
 P:0:1d1:0:0:0
 
-N:638:[ÌøÀ¸Éğ·İÄ¢]
+N:638:[–ö¶•Œ|’ ]
 E:[Yagyuu Bugeichou]
 G:?:o
 I:106:1:0
@@ -6136,7 +6136,7 @@ W:20:0:30:1000
 A:20/1
 P:0:1d1:0:0:0
 
-N:639:[¸ŞÎØ½ñ]
+N:639:[ŒÜ—Ö‘]
 E:[Gorinnosho]
 G:?:u
 I:106:2:0
@@ -6145,7 +6145,7 @@ A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:640:[ËÌÃ¤°ìÅáÎ®³§ÅÁ]
+N:640:[–k’Cˆê“—¬ŠF“`]
 E:[Hokusin Ittouryuu Kaiden]
 G:?:u
 I:106:3:0
@@ -6154,7 +6154,7 @@ A:90/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:641:¾ÃÌÇ:Ï»³Ñ·Á¤Î
+N:641:Á–Å:˜ZŠpŒ`‚Ì
 E:Annihilation:Hexagonal
 G:-:r
 I:65:31:4
@@ -6163,9 +6163,9 @@ A:60/4
 P:0:1d1:0:0:0
 D:$It removes a monster from current dungeon level unless resisted when you 
 D:$use it.
-D:¤½¤ì¤Ï»È¤¦¤È1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤ò¸½ºß¤Î³¬¤«¤é¾Ã¤·µî¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£
+D:‚»‚ê‚Íg‚¤‚Æ1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğŒ»İ‚ÌŠK‚©‚çÁ‚µ‹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB
 
-N:642:È¿´¶:¥¤¥ê¥Â¥¦¥à¤Î
+N:642:”½Š´:ƒCƒŠƒaƒEƒ€‚Ì
 E:Aggravate Monster:Uridium
 G:-:R
 I:66:30:9
@@ -6173,9 +6173,9 @@ W:30:0:10:0
 A:15/8:30/2
 P:0:1d1:0:0:0
 D:$It aggravates monsters in your vicinity when you zap it.
-D:¤½¤ì¤Ï¿¶¤ë¤È¼«Ê¬¤Î¼şÊÕ¤Î¥â¥ó¥¹¥¿¡¼¤òÅÜ¤é¤»¤ë¡£
+D:‚»‚ê‚ÍU‚é‚Æ©•ª‚Ìü•Ó‚Ìƒ‚ƒ“ƒXƒ^[‚ğ“{‚ç‚¹‚éB
 
-N:643:#¤Î¼Ì¿¿
+N:643:#‚ÌÊ^
 E:& Photograph~ of #
 G:~:s
 I:9:50:0
@@ -6183,7 +6183,7 @@ W:0:0:1:0
 A:0/255
 P:0:1d1:0:0:0
 
-N:644:ËâË¡Æ»¶ñ»ÙÇÛ:¥ß¥¹¥ê¥ë¤Î
+N:644:–‚–@“¹‹ïx”z:ƒ~ƒXƒŠƒ‹‚Ì
 E:Magic Device Mastery:Mithril
 G:":B
 I:40:23:0
@@ -6191,7 +6191,7 @@ W:35:0:3:1000
 A:35/4
 F:MAGIC_MASTERY | HIDE_TYPE
 
-N:645:¥í¡¼¥Ö
+N:645:ƒ[ƒu
 E:& Robe~
 G:(:D
 I:36:60:0
@@ -6199,7 +6199,7 @@ W:1:0:20:4
 A:1/255
 P:0:0d0:0:0:0
 
-N:646:[°ÇÌë¤Î¼ö¤¤]
+N:646:[ˆÅ–é‚Ìô‚¢]
 E:[Dark Incantations]
 G:?:R
 I:98:0:0
@@ -6207,7 +6207,7 @@ W:10:0:30:100
 A:10/1
 P:0:1d1:0:0:0
 
-N:647:[ÉÔµà¤Îµ·¼°]
+N:647:[•s‹€‚Ì‹V®]
 E:[Immortal Rituals]
 G:?:R
 I:98:1:0
@@ -6215,7 +6215,7 @@ W:20:0:30:1000
 A:20/1
 P:0:1d1:0:0:0
 
-N:648:[°­Ëâ¤Î±ÃÃÎ]
+N:648:[ˆ«–‚‚Ì‰b’m]
 E:[Demonthoughts]
 G:?:r
 I:98:2:0
@@ -6224,7 +6224,7 @@ A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:649:[¹å²Ğ¤ÎËâ½ñ]
+N:649:[…‰Î‚Ì–‚‘]
 E:[Hellfire Tome]
 G:?:r
 I:98:3:0
@@ -6233,16 +6233,16 @@ A:90/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:650:±ç·³:Åá²½ ½Ä Éğò´
+N:650:‰‡ŒR:“‰» c •é²
 E:Summon Kin:bulther valish
 G:?:w
 I:70:54:0
 W:30:0:5:1000
 A:30/2
 D:$It summons a monster corresponds to your race as your pet when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤È¼«Ê¬¤Î¼ïÂ²¤ËÂĞ±ş¤·¤¿¥â¥ó¥¹¥¿¡¼1ÂÎ¤ò¥Ú¥Ã¥È¤È¤·¤Æ¾¤´­¤¹¤ë¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ©•ª‚Ìí‘°‚É‘Î‰‚µ‚½ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğƒyƒbƒg‚Æ‚µ‚Ä¢Š«‚·‚éB
 
-N:651:ËâË¡¤ÎÅ«
+N:651:–‚–@‚Ì“J
 E:& Magic Whistle~
 G:~:o
 I:4:1:0
@@ -6250,14 +6250,14 @@ W:15:0:3:1000
 A:15/2
 F:ACTIVATE
 
-N:652:¥¢¥ß¥å¥ì¥Ã¥È:¥ë¥Ó¡¼¤Î
+N:652:ƒAƒ~ƒ…ƒŒƒbƒg:ƒ‹ƒr[‚Ì
 E:& Amulet~:Ruby
 G:":r
 I:40:24:0
 W:50:0:3:25000
 F:INSTA_ART
 
-N:653:¹õÁõÂ«
+N:653:•‘•‘©
 E:Black Clothes
 G:(:D
 I:36:13:1
@@ -6266,7 +6266,7 @@ A:40/4
 P:4:1d1:0:0:12
 F:STEALTH | IGNORE_FIRE
 
-N:654:[ÅÌÄïÆÉËÜ]
+N:654:[“k’í“Ç–{]
 E:[Rites of Initiation]
 G:?:W
 I:99:0:0
@@ -6274,7 +6274,7 @@ W:10:0:30:100
 A:10/1
 P:0:1d1:0:0:0
 
-N:655:[Àï½Ñ»ØÆî]
+N:655:[ípw“ì]
 E:[Ways of War]
 G:?:W
 I:99:1:0
@@ -6282,7 +6282,7 @@ W:20:0:30:1000
 A:20/1
 P:0:1d1:0:0:0
 
-N:656:[ÂàËâÊ§¼Ù]
+N:656:[‘Ş–‚•¥×]
 E:[Exorcism and Dispelling]
 G:?:w
 I:99:2:0
@@ -6291,7 +6291,7 @@ A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:657:[Å·¿ÀÅÜÈ³]
+N:657:[“V_“{”±]
 E:[Wrath of God]
 G:?:w
 I:99:3:0
@@ -6300,45 +6300,45 @@ A:95/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:658:¾ó:·î·Ë¼ù¤Î
+N:658:ñ:ŒŒj÷‚Ì
 E:& Staff~:Gnarled
 G:_:s
 I:55:32:20
 W:1:0:50:20
 P:0:1d2:0:0:0
 D:$It does nothing when you use it.
-D:¤½¤ì¤Ï»È¤Ã¤Æ¤â²¿¤âµ¯¤³¤é¤Ê¤¤¡£
+D:‚»‚ê‚Íg‚Á‚Ä‚à‰½‚à‹N‚±‚ç‚È‚¢B
 F:FULL_NAME
 
-N:659:¼ó¾ş¤ê:¥¨¥á¥é¥ë¥É¤Î
+N:659:ñü‚è:ƒGƒƒ‰ƒ‹ƒh‚Ì
 E:& Amulet~:Emerald
 G:":g
 I:40:25:0
 W:50:0:2:77777
 F:INSTA_ART
 
-N:660:¼óÎØ:¥µ¥Õ¥¡¥¤¥¢¤Î
+N:660:ñ—Ö:ƒTƒtƒ@ƒCƒA‚Ì
 E:& Collar Harness~:Sapphire
 G:":b
 I:40:26:0
 W:50:0:30:66666
 F:INSTA_ART
 
-N:661:¥Ú¥ó¥À¥ó¥È:¥¬¡¼¥Í¥Ã¥È¤Î
+N:661:ƒyƒ“ƒ_ƒ“ƒg:ƒK[ƒlƒbƒg‚Ì
 E:& Pendant~:Garnet
 G:":r
 I:40:27:0
 W:50:0:2:100000
 F:INSTA_ART
 
-N:662:¥Ú¥ó¥À¥ó¥È:¥À¥¤¥¢¥â¥ó¥É¤Î
+N:662:ƒyƒ“ƒ_ƒ“ƒg:ƒ_ƒCƒAƒ‚ƒ“ƒh‚Ì
 E:& Pendant~:Diamond
 G:":w
 I:40:28:0
 W:50:0:2:55555
 F:INSTA_ART
 
-N:663:[¼ö½ÑÆşÌç]
+N:663:[ôp“ü–å]
 E:[Handbook of Hex]
 G:?:v
 I:107:0:0
@@ -6346,7 +6346,7 @@ W:10:0:30:100
 A:10/1
 P:0:1d1:0:0:0
 
-N:664:[¾åµé¼öË¡]
+N:664:[ã‹‰ô–@]
 E:[High Curse]
 G:?:v
 I:107:1:0
@@ -6354,7 +6354,7 @@ W:20:0:30:1000
 A:20/1
 P:0:1d1:0:0:0
 
-N:665:[±åº¨¼öÇû]
+N:665:[‰…¦ô”›]
 E:[Curse and Spelling]
 G:?:D
 I:107:2:0
@@ -6363,7 +6363,7 @@ A:50/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:666:[¶Ø¼öË¡ÂçÁ´]
+N:666:[‹Öô–@‘å‘S]
 E:[Forbidden Cursebook]
 G:?:D
 I:107:3:0
@@ -6372,25 +6372,25 @@ A:90/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
-N:667:Ã¯ÆÀ:±¾¼Ù Ëã Íæ×½
+N:667:’N“¾:‰]× –ƒ —†œ\
 E:Amusement:unjah marlami
 G:?:w
 I:70:55:0
 W:20:0:5:100
 A:20/6
 D:$It creates one amuzing item when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÃ¯¤ÎÆÀ¤Ê¤Î¤«¤ï¤«¤é¤Ê¤¤¤â¤Î¤ò1¸Äºî¤ê½Ğ¤¹¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ’N‚Ì“¾‚È‚Ì‚©‚í‚©‚ç‚È‚¢‚à‚Ì‚ğ1ŒÂì‚èo‚·B
 
-N:668:*Ã¯ÆÀ*:ÈÔÅÜ Æá Ì³¸Î
+N:668:*’N“¾*:”Ò“{ “ß –±ŒÌ
 E:*Amusement*:bandeo nagmurkho
 G:?:w
 I:70:56:0
 W:20:0:5:500
 A:60/8
 D:$It creates some amuzing item when you read it.
-D:¤½¤ì¤ÏÆÉ¤à¤ÈÃ¯¤ÎÆÀ¤Ê¤Î¤«¤ï¤«¤é¤Ê¤¤¤â¤Î¤òÊ£¿ôºî¤ê½Ğ¤¹¡£
+D:‚»‚ê‚Í“Ç‚Ş‚Æ’N‚Ì“¾‚È‚Ì‚©‚í‚©‚ç‚È‚¢‚à‚Ì‚ğ•¡”ì‚èo‚·B
 
-N:669:¥ª¡¼¥Ö
+N:669:ƒI[ƒu
 E:& Orb~
 G:*:W
 I:39:10:0
@@ -6398,3 +6398,9 @@ W:60:0:10:55000
 P:0:1d1:0:0:0
 F:INSTA_ART
 
+N:670:j
+E:& Needle
+G:|:w
+I:40:29:0
+W:70:0:3:75000
+F:INSTA_ART
