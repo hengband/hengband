@@ -7400,7 +7400,7 @@ static essence_type essence_info[] =
  *  Essense names for Weapon smith
  */
 #ifdef JP
-static cptr essence_name[] = 
+cptr essence_name[] = 
 {
 	"осно",
 	"цнг╫",

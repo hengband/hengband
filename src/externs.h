@@ -1079,6 +1079,7 @@ extern void do_cmd_kaji(bool only_browse);
 extern void torch_flags(object_type *o_ptr, u32b *flgs);
 extern void torch_dice(object_type *o_ptr, int *dd, int *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
+extern cptr essence_name[];
 
 /* racial.c */
 extern bool gain_magic(void);
