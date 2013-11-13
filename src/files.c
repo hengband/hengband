@@ -5025,16 +5025,37 @@ static void dump_aux_realm_history(FILE *fff)
  */
 static void dump_aux_virtues(FILE *fff)
 {
-#ifdef JP
-	fprintf(fff, "\n\n  [プレイヤーの徳]\n\n");
-#else
-	fprintf(fff, "\n\n  [Virtues]\n\n");
-#endif
+	int v_nr, percent;
 
 #ifdef JP
-	fprintf(fff, "属性 : %s\n", your_alignment());
+	fprintf(fff, "\n\n  [自分に関する情報]\n\n");
 #else
-	fprintf(fff, "Your alighnment : %s\n", your_alignment());
+	fprintf(fff, "\n\n  [HP-rate & Max stat & Virtues]\n\n");
+#endif
+
+	percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
+		(2 * p_ptr->hitdie +
+		((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
+
+#ifdef JP
+		if (p_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "現在の体力ランク : %d/100\n\n", percent);
+		else fprintf(fff, "現在の体力ランク : ???\n\n");
+		fprintf(fff, "能力の最大値\n");
+#else
+		if (p_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "Your current Life Rating is %d/100.\n\n", percent);
+		else fprintf(fff, "Your current Life Rating is ???.\n\n");
+		fprintf(fff, "Limits of maximum stats\n");
+#endif
+		for (v_nr = 0; v_nr < 6; v_nr++)
+		{
+			if ((p_ptr->knowledge & KNOW_STAT) || p_ptr->stat_max[v_nr] == p_ptr->stat_max_max[v_nr]) fprintf(fff, "%s 18/%d\n", stat_names[v_nr], p_ptr->stat_max_max[v_nr]-18);
+			else fprintf(fff, "%s ???\n", stat_names[v_nr]);
+		}
+
+#ifdef JP
+	fprintf(fff, "\n属性 : %s\n", your_alignment());
+#else
+	fprintf(fff, "\nYour alighnment : %s\n", your_alignment());
 #endif
 
 	fprintf(fff, "\n");
