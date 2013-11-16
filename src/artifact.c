@@ -3791,6 +3791,14 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 		}
 	}
 
+	if (o_ptr->name1 == ART_ROBINTON)
+	{
+		if (p_ptr->pclass == CLASS_BARD)
+		{
+			add_flag(o_ptr->art_flags, TR_DEC_MANA);
+		}
+	}
+
 	if (o_ptr->name1 == ART_XIAOLONG)
 	{
 		if (p_ptr->pclass == CLASS_MONK)

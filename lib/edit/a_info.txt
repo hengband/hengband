@@ -1,36 +1,36 @@
 # File: a_info.txt
-#JZ# Zangband ÆüËÜ¸ìÌõ: ÈÄÁÒ
-#JZ# ¡Ö#J0#¡×¤Ç»Ï¤Þ¤ë¥³¥á¥ó¥È¤ÏÆüËÜ¸ìÈÄ Angband ¤Î¤·¤È¤·¤ó¤µ¤ó¤Ë¤è¤ë
-#JZ# ¤â¤Î¤Ç¡¢¡Ö#JZ#¡×¤Ç»Ï¤Þ¤ë¥³¥á¥ó¥È¤ÏÆüËÜ¸ìÈÇ Zangband ¤Ç¿·¤¿¤Ë
-#JZ# ²Ã¤ï¤Ã¤¿¹àÌÜ¤Ç¤¹¡£ÆüËÜ¸ì¥¢¥ó¥°¥Ð¥ó¥ÉÆ±ÍÍ¡¢»ä¡ÊÈÄÁÒ¡Ë°Ê³°¤ÎÊý¤Î
-#JZ# ¥³¥á¥ó¥È¤Ë¤Ï¤½¤ÎÊý¤ÎÌ¾Á°¤òµ­ºÜ¤·¤Æ¤¤¤Þ¤¹¡£
+#JZ# Zangband “ú–{Œê–ó: ”Â‘q
+#JZ# u#J0#v‚ÅŽn‚Ü‚éƒRƒƒ“ƒg‚Í“ú–{Œê”Â Angband ‚Ì‚µ‚Æ‚µ‚ñ‚³‚ñ‚É‚æ‚é
+#JZ# ‚à‚Ì‚ÅAu#JZ#v‚ÅŽn‚Ü‚éƒRƒƒ“ƒg‚Í“ú–{Œê”Å Zangband ‚ÅV‚½‚É
+#JZ# ‰Á‚í‚Á‚½€–Ú‚Å‚·B“ú–{ŒêƒAƒ“ƒOƒoƒ“ƒh“¯—lAŽ„i”Â‘qjˆÈŠO‚Ì•û‚Ì
+#JZ# ƒRƒƒ“ƒg‚É‚Í‚»‚Ì•û‚Ì–¼‘O‚ð‹LÚ‚µ‚Ä‚¢‚Ü‚·B
 #JZ#
-#JZ# ¡ô¡ô¡ô °Ê²¼¤ÏÆüËÜ¸ìÈÇ Angband ¤Ë¤¢¤ë¥³¥á¥ó¥È¤Ç¤¹ ¡ô¡ô¡ô
-#J0# ÆüËÜ¸ìÌõ¤ÈÆüËÜ¸ìÈÇÀ½ºî : ¤·¤È¤·¤ó
+#JZ# ””” ˆÈ‰º‚Í“ú–{Œê”Å Angband ‚É‚ ‚éƒRƒƒ“ƒg‚Å‚· ”””
+#J0# “ú–{Œê–ó‚Æ“ú–{Œê”Å»ì : ‚µ‚Æ‚µ‚ñ
 #J0#
-#J0# ÆüËÜ¸ìÈÇ¤Ç¤Ï¥ª¥ê¥¸¥Ê¥ë¤ÈÈæ³Ó¤·¤ÆÀßÄê¹àÌÜ¤¬°ì¤ÄÁý¤¨¤Æ¤¤¤Þ¤¹¡£
+#J0# “ú–{Œê”Å‚Å‚ÍƒIƒŠƒWƒiƒ‹‚Æ”äŠr‚µ‚ÄÝ’è€–Ú‚ªˆê‚Â‘‚¦‚Ä‚¢‚Ü‚·B
 #J0#
 #J0#
-#J0# ËÝÌõ¤ËºÝ¤·¤Æ¤Ê¤ë¤Ù¤¯»ñÎÁ¤ò³ÎÇ§¤¹¤ë¤è¤¦¤Ë¤·¤Þ¤·¤¿¡£
-#J0# p.--  ¤È¤¢¤ë¤Î¤Ï¡Ö¥È¡¼¥ë¥­¥ó»ØÎØÊª¸ì¼­Åµ¡×¤Ç¤Î¥Ú¡¼¥¸¿ô¡¢
-#J0# wp. --¤È¤¢¤ë¤Î¤Ï¡Ö¿·Ìõ»ØÎØÊª¸ìÄÉÊäÊÔ¡×¤Ç¤Î¥Ú¡¼¥¸¿ô¤ò¤¢¤é¤ï¤·¤Þ¤¹¡£
-#J0# Ko -- ¤È¤¢¤ë¤Î¤Ï¾®ÎÓ·ò°ì¤µ¤ó¤Ë¶µ¤¨¤Æ¤â¤é¤Ã¤¿¤â¤Î¤Ç¤¹¡£
-#J0# ??? --¤È¤¢¤ë¤Î¤ÏÄ´¤Ù¤¬¤Ä¤«¤Ê¤«¤Ã¤¿¤â¤Î¤Ç¤¹¡£
+#J0# –|–ó‚ÉÛ‚µ‚Ä‚È‚é‚×‚­Ž‘—¿‚ðŠm”F‚·‚é‚æ‚¤‚É‚µ‚Ü‚µ‚½B
+#J0# p.--  ‚Æ‚ ‚é‚Ì‚Íuƒg[ƒ‹ƒLƒ“Žw—Ö•¨ŒêŽ«“Tv‚Å‚Ìƒy[ƒW”A
+#J0# wp. --‚Æ‚ ‚é‚Ì‚ÍuV–óŽw—Ö•¨Œê’Ç•â•Òv‚Å‚Ìƒy[ƒW”‚ð‚ ‚ç‚í‚µ‚Ü‚·B
+#J0# Ko -- ‚Æ‚ ‚é‚Ì‚Í¬—ÑŒ’ˆê‚³‚ñ‚É‹³‚¦‚Ä‚à‚ç‚Á‚½‚à‚Ì‚Å‚·B
+#J0# ??? --‚Æ‚ ‚é‚Ì‚Í’²‚×‚ª‚Â‚©‚È‚©‚Á‚½‚à‚Ì‚Å‚·B
 #J0#
-#J0# ÅÁÀâ¤Î¥¢¥¤¥Æ¥à¤ÎËÝÌõ¤Ë´Ø¤·¤Æ¤Ï ÅÔ¡¹ÌÜ¤µ¤È¤· ¤µ¤ó¤ËÂçÊÑ¤ªÀ¤ÏÃ¤Ë¤Ê¤ê¤Þ¤·¤¿¡£
+#J0# “`à‚ÌƒAƒCƒeƒ€‚Ì–|–ó‚ÉŠÖ‚µ‚Ä‚Í “sX–Ú‚³‚Æ‚µ ‚³‚ñ‚É‘å•Ï‚¨¢˜b‚É‚È‚è‚Ü‚µ‚½B
 #J0#
-#J0# ½ê¡¹¤Ë¤¢¤ë¥³¥á¥ó¥È¤Ï ¾®ÎÓ ¤µ¤ó¤È ÅÔ¡¹ÌÜ¤µ¤È¤· ¤µ¤ó¤Î¤â¤Î¤Ç¤¹¡£¤«¤Ã¤³Æâ¤ËÈ¯
-#J0# ¸À¼Ô¤òµ­ºÜ¤·¤Þ¤·¤¿¡£
+#J0# ŠX‚É‚ ‚éƒRƒƒ“ƒg‚Í ¬—Ñ ‚³‚ñ‚Æ “sX–Ú‚³‚Æ‚µ ‚³‚ñ‚Ì‚à‚Ì‚Å‚·B‚©‚Á‚±“à‚É”­
+#J0# Œ¾ŽÒ‚ð‹LÚ‚µ‚Ü‚µ‚½B
 #J0#
-#J0#¡Ö¥³¥á¥ó¥È¡×¤Ç¸¡º÷¤Ç¤­¤Þ¤¹¡£
+#J0#uƒRƒƒ“ƒgv‚ÅŒŸõ‚Å‚«‚Ü‚·B
 #J0#
-#J0# (¥²¡¼¥àÃæ¤Ç¤Î²èÌÌ½ÐÎÏ)
+#J0# (ƒQ[ƒ€’†‚Å‚Ì‰æ–Êo—Í)
 #J0#
-#J0# ¡Ø¡Ù¤Ç°Ï¤Þ¤ì¤¿Ì¾Á°¤Ï¥¢¥¤¥Æ¥àÌ¾¤Î¸å¤Ë¤Ä¤­¤Þ¤¹¡£
-#J0#      ex) ¥¹¥â¡¼¥ë¡¦¥½¡¼¥É¡Ø¤Ä¤é¤Ì¤­´Ý¡Ù
+#J0# wx‚ÅˆÍ‚Ü‚ê‚½–¼‘O‚ÍƒAƒCƒeƒ€–¼‚ÌŒã‚É‚Â‚«‚Ü‚·B
+#J0#      ex) ƒXƒ‚[ƒ‹Eƒ\[ƒhw‚Â‚ç‚Ê‚«ŠÛx
 #J0#                         ~~~~~~~~~~~~~~
-#J0# ¤½¤ì°Ê³°¤Ï¥¢¥¤¥Æ¥àÌ¾¤ÎÁ°¤Ë¤Ä¤­¤Þ¤¹¡£
-#J0#      ex) ¥¹¥é¥¤¥ó¤Î¥¢¡¼¥±¥óÀÐ
+#J0# ‚»‚êˆÈŠO‚ÍƒAƒCƒeƒ€–¼‚Ì‘O‚É‚Â‚«‚Ü‚·B
+#J0#      ex) ƒXƒ‰ƒCƒ“‚ÌƒA[ƒPƒ“Î
 #J0#          ~~~~~~~~~~
 
 # This file is used to initialize the "lib/raw/a_info.raw" file, which
@@ -87,7 +87,7 @@ V:2.8.1
 
 # The Phial of Galadriel
 
-N:1:¥¬¥é¥É¥ê¥¨¥ë¤Î
+N:1:ƒKƒ‰ƒhƒŠƒGƒ‹‚Ì
 E:of Galadriel
 I:39:4:1
 W:30:1:10:10000
@@ -96,22 +96,22 @@ F:ACTIVATE | SEARCH | INSTA_ART | LITE_3 |
 U:LIGHT
 D:$A small crystal phial, with the light of Earendil's Star contained inside.  
 D:$Its light is imperishable, and near it darkness cannot endure.
-D:¾®¤µ¤Ê¿å¾½¤ÎÉÓ¤Ç¡¢¥¬¥é¥É¥ê¥¨¥ë¤ÎÀô¤Ë±Ç¤Ã¤¿
-D:¥¨¥¢¥ì¥ó¥Ç¥£¥ë¤ÎÀ±(¥·¥ë¥Þ¥ê¥ë)¤Î¸÷¤¬ÊÄ¤¸¹þ¤á¤Æ¤¢¤ë¡£
-D:¤½¤ÎÉÔÌÇ¤Î¸÷¤Ï¤¢¤é¤æ¤ë°Å°Ç¤òÄÉ¤¤Ê§¤¦¡£
+D:¬‚³‚È…»‚Ì•r‚ÅAƒKƒ‰ƒhƒŠƒGƒ‹‚Ìò‚É‰f‚Á‚½
+D:ƒGƒAƒŒƒ“ƒfƒBƒ‹‚Ì¯(ƒVƒ‹ƒ}ƒŠƒ‹)‚ÌŒõ‚ª•Â‚¶ž‚ß‚Ä‚ ‚éB
+D:‚»‚Ì•s–Å‚ÌŒõ‚Í‚ ‚ç‚ä‚éˆÃˆÅ‚ð’Ç‚¢•¥‚¤B
 
 
 # The Star of Elendil
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0# (ÅÔ¡¹ÌÜ)
-#J0#¡öa_info.txt¤òÆÉ¤Þ¤»¤ÆÄº¤­¤Þ¤·¤¿¤¬¡¢¡Ø¾¯¤·¤Ç¤â¿Æ¤·¤ß¤¬¤ï¤¯¤è¤¦¤ËÆüËÜ¸ì²½¤ä
-#J0#¡Ö²¦¡×¤Ê¤É¤ò¤¤¤ì¤¿¤ê¤È¤·¤Æ¤ß¤Þ¤·¤¿¡£¡Ù¤È¤Î»ö¤Ç¤·¤¿¤¬¡¢¤½¤ì¤Ê¤é¤³¤¦¤¹¤Ù¤­¤À
-#J0#¤È»×¤¤¤Þ¤¹(¥¨¥ì¥ó¥Ç¥£¥ë¤Ï¾æ¹â¤­¥¨¥ì¥ó¥Ç¥£¥ë¤È¸Æ¤Ð¤ì¤¿)¡£³§¤ËÉÕ¤¤¤Æ¤¤¤ë¡Ø²¦¡Ù
-#J0#¤È±¾¤¦¸ª½ñ¤­¤è¤ê¤Ï¿Æ¤·¤ß¤¬¤ï¤¯¤È»×¤¤¤Þ¤¹(¾Ð)¡£
+#J0# (“sX–Ú)
+#J0#–a_info.txt‚ð“Ç‚Ü‚¹‚Ä’¸‚«‚Ü‚µ‚½‚ªAw­‚µ‚Å‚àe‚µ‚Ý‚ª‚í‚­‚æ‚¤‚É“ú–{Œê‰»‚â
+#J0#u‰¤v‚È‚Ç‚ð‚¢‚ê‚½‚è‚Æ‚µ‚Ä‚Ý‚Ü‚µ‚½Bx‚Æ‚ÌŽ–‚Å‚µ‚½‚ªA‚»‚ê‚È‚ç‚±‚¤‚·‚×‚«‚¾
+#J0#‚ÆŽv‚¢‚Ü‚·(ƒGƒŒƒ“ƒfƒBƒ‹‚Íä‚‚«ƒGƒŒƒ“ƒfƒBƒ‹‚ÆŒÄ‚Î‚ê‚½)BŠF‚É•t‚¢‚Ä‚¢‚éw‰¤x
+#J0#‚Æ‰]‚¤Œ¨‘‚«‚æ‚è‚Íe‚µ‚Ý‚ª‚í‚­‚ÆŽv‚¢‚Ü‚·(Î)B
 #J0#
-N:2:¾æ¹â¤­¥¨¥ì¥ó¥Ç¥£¥ë¤Î
+N:2:ä‚‚«ƒGƒŒƒ“ƒfƒBƒ‹‚Ì
 E:of Elendil
 I:39:5:1
 W:50:25:5:32500
@@ -119,15 +119,15 @@ P:0:1d1:0:0:0
 F:ACTIVATE | SEE_INVIS | HOLD_LIFE | INSTA_ART | SPEED | LITE_3 |
 U:MAP_LIGHT
 D:$The shining Star of the West, a famed heirloom of Elendil's house.
-D:µ±¤¯¡ØÀ¾Êý¹ñ¤ÎÀ±¡Ù¤Ç¡¢¥¨¥ì¥ó¥Ç¥£¥ë¤Î²È·Ï¤ËÅÁ¤ï¤ë²ÈÊõ¤À¡£
-D:¶ä¤Îº¿¤ËÇò¤¤ÊõÀÐ¤¬¤Ä¤¤¤Æ¤¤¤ë¡£
+D:‹P‚­w¼•û‘‚Ì¯x‚ÅAƒGƒŒƒ“ƒfƒBƒ‹‚Ì‰ÆŒn‚É“`‚í‚é‰Æ•ó‚¾B
+D:‹â‚Ì½‚É”’‚¢•óÎ‚ª‚Â‚¢‚Ä‚¢‚éB
 
 
 # The Arkenstone of Thrain -> JoJ
 # Was +2 WIS/DEX
 
-#JZ# ¥¢¥ó¥Ð¡¼¥·¥ê¡¼¥º¤Ë½Ð¤Æ¤¯¤ë½ÅÍ×¥¢¥¤¥Æ¥à
-N:3:¿³È½¤Î
+#JZ# ƒAƒ“ƒo[ƒVƒŠ[ƒY‚Éo‚Ä‚­‚éd—vƒAƒCƒeƒ€
+N:3:R”»‚Ì
 E:of Judgement
 I:39:6:3
 W:70:90:5:150000
@@ -138,57 +138,57 @@ U:JUDGE
 D:$This crimson jewelry which is chained with a gold chain is
 D:$ deeply related to creation of this universe.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.3-10)
-D:¶â¤Îº¿¤Ë¼è¤êÉÕ¤±¤é¤ì¤¿¡¢¤³¤Î±§Ãè¤ÎÁÏÀ¤¤Ë¿¼¤¤´Ø¤ï¤ê¤ò»ý¤Ä¿¿¹È¤ÎÊõÀÐ¡£
-D:¡ÊR.¥¼¥é¥º¥Ë¥¤¡¢¿¿À¤³¦¥¢¥ó¥Ð¡¼¥·¥ê¡¼¥º 3¡Á10´¬¡Ë
+D:‹à‚Ì½‚ÉŽæ‚è•t‚¯‚ç‚ê‚½A‚±‚Ì‰F’ˆ‚Ì‘n¢‚É[‚¢ŠÖ‚í‚è‚ðŽ‚Â^g‚Ì•óÎB
+D:iR.ƒ[ƒ‰ƒYƒjƒCA^¢ŠEƒAƒ“ƒo[ƒVƒŠ[ƒY 3`10Šªj
 
 
 # The Amulet of Carlammas
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0#(¾®ÎÓ)
-#J0# > > >The Amulet of Carlammas         ¥«¥ë¥é¥ó¥Þ¥¹¢ª¥«¥ë¥é¥Þ¥¹
-#J0# > > >'Belegennon'                    ¥Ù¥ì¥²¥ó¥Î¥ó¢ª¥Ù¥ì¥²¥Î¥ó
-#J0# > > >'Holhenneth'                    ¥Û¥ë¥Ø¥ó¥Í¥¹¢ª¥Û¥ë¥Ø¥Í¥¹
-#J0# > > >'Cammithrim'                    ¥«¥ó¥ß¥¹¥ê¥à¢ª¥«¥ß¥¹¥ê¥à
-#J0# > > >'Paurnimmen'                    ¥Ñ¥¦¥ë¥Ë¥ó¥á¥ó¢ª¥Ñ¥¦¥¢¥Ë¥á¥ó
+#J0#(¬—Ñ)
+#J0# > > >The Amulet of Carlammas         ƒJƒ‹ƒ‰ƒ“ƒ}ƒX¨ƒJƒ‹ƒ‰ƒ}ƒX
+#J0# > > >'Belegennon'                    ƒxƒŒƒQƒ“ƒmƒ“¨ƒxƒŒƒQƒmƒ“
+#J0# > > >'Holhenneth'                    ƒzƒ‹ƒwƒ“ƒlƒX¨ƒzƒ‹ƒwƒlƒX
+#J0# > > >'Cammithrim'                    ƒJƒ“ƒ~ƒXƒŠƒ€¨ƒJƒ~ƒXƒŠƒ€
+#J0# > > >'Paurnimmen'                    ƒpƒEƒ‹ƒjƒ“ƒƒ“¨ƒpƒEƒAƒjƒƒ“
 #J0# > 
-#J0# > ¤¢¤È¤Ç¡¤¹Í¤¨Ä¾¤·¤Æ¤ß¤¿¤ó¤À¤±¤É¡¤-mm- ¤ä -nn- ¤Ã¤Æ¡¤¥·¥ó¥À¥ê¥ó¸ì¤Ç
-#J0# > ½Å²»¤Ë¤Ê¤Ã¤¿¤«¡¤Ã±²»¤Ë¤Ê¤Ã¤¿¤«¡¤¤Á¤ç¤Ã¤Èº£¼«¿®¤¬¤Ê¤¤¤Ç¤¹¡¥¤Ò¤ç¤Ã¤È
-#J0# > ¤·¤¿¤é¡Ö¥«¥ë¥é¥ó¥Þ¥¹¡×¤ÎÊý¤¬¸¶²»¤Ë¶á¤¤¤«¤âÃÎ¤ì¤Þ¤»¤ó¡¥Ä´¤Ù¤Æ¤ª¤­¤Þ
-#J0# > ¤¹¡¥¥µ¥¦¥í¥ó¤ÎÊÌÌ¾"Annatar"¤Ï¡Ö¥¢¥Ê¥¿¡¼¥ë¡×¤ÈÆÉ¤ó¤À¤Ï¤º¤Ç¤¹¤¬¡Ä¡¥
-#J0# > ¤Á¤Ê¤ß¤Ë¾å¤Î£µ¤Ä¤ÏÊª¸ìÃæ¤Ç¤Ï¸«¤¿¤³¤È¤Ê¤¤¤Ç¤¹¡¥
+#J0# > ‚ ‚Æ‚ÅCl‚¦’¼‚µ‚Ä‚Ý‚½‚ñ‚¾‚¯‚ÇC-mm- ‚â -nn- ‚Á‚ÄCƒVƒ“ƒ_ƒŠƒ“Œê‚Å
+#J0# > d‰¹‚É‚È‚Á‚½‚©C’P‰¹‚É‚È‚Á‚½‚©C‚¿‚å‚Á‚Æ¡Ž©M‚ª‚È‚¢‚Å‚·D‚Ð‚å‚Á‚Æ
+#J0# > ‚µ‚½‚çuƒJƒ‹ƒ‰ƒ“ƒ}ƒXv‚Ì•û‚ªŒ´‰¹‚É‹ß‚¢‚©‚à’m‚ê‚Ü‚¹‚ñD’²‚×‚Ä‚¨‚«‚Ü
+#J0# > ‚·DƒTƒEƒƒ“‚Ì•Ê–¼"Annatar"‚ÍuƒAƒiƒ^[ƒ‹v‚Æ“Ç‚ñ‚¾‚Í‚¸‚Å‚·‚ªcD
+#J0# > ‚¿‚È‚Ý‚Éã‚Ì‚T‚Â‚Í•¨Œê’†‚Å‚ÍŒ©‚½‚±‚Æ‚È‚¢‚Å‚·D
 #J0#
-#J0# Ä´¤Ù¤Æ¤­¤Þ¤·¤¿¡¥½Å¤Ê¤Ã¤Æ¤ë»Ò²»¤Ï¥·¥ó¥À¥ê¥ó¸ì¤Ç¤Ï½Å²»¤Ë¤Ê¤ë¤è¤¦¤Ç¤¹¡¥
-#J0# ¡Ö¥«¥ë¥é¥ó¥Þ¥¹¡×
-#J0# ¡Ö¥Ù¥ì¥²¥ó¥Î¥ó¡×
-#J0# ¡Ö¥Û¥ë¥Ø¥ó¥Í¥¹¡×
-#J0# ¡Ö¥«¥ó¥ß¥¹¥ê¥à¡×
-#J0# ¡Ö¥Ñ¥¦¥¢¥Ë¥ó¥á¥ó¡×
-#J0# ¤Ç¤è¤¤¤è¤¦¤Ç¤·¤¿¡¥µ­²±¤·¤Æ¤¤¤¿»ñÎÁ¤¬´Ö°ã¤Ã¤Æ¤¤¤¿¤è¤¦¤Ç¤¹¡¥
-#J0# ¼ºÎé¤·¤Þ¤·¤¿¡¥
-#J0# # ¤Ã¤Æ¤³¤È¤Ï¥·¥ë¥Þ¥ê¥ë¥ê¥ª¥ó¤ÎËÝÌõ¼Ô¤¬´Ö°ã¤¨¤¿¤Î¤«¤Ê¤¢¡©
+#J0# ’²‚×‚Ä‚«‚Ü‚µ‚½Dd‚È‚Á‚Ä‚éŽq‰¹‚ÍƒVƒ“ƒ_ƒŠƒ“Œê‚Å‚Íd‰¹‚É‚È‚é‚æ‚¤‚Å‚·D
+#J0# uƒJƒ‹ƒ‰ƒ“ƒ}ƒXv
+#J0# uƒxƒŒƒQƒ“ƒmƒ“v
+#J0# uƒzƒ‹ƒwƒ“ƒlƒXv
+#J0# uƒJƒ“ƒ~ƒXƒŠƒ€v
+#J0# uƒpƒEƒAƒjƒ“ƒƒ“v
+#J0# ‚Å‚æ‚¢‚æ‚¤‚Å‚µ‚½D‹L‰¯‚µ‚Ä‚¢‚½Ž‘—¿‚ªŠÔˆá‚Á‚Ä‚¢‚½‚æ‚¤‚Å‚·D
+#J0# Ž¸—ç‚µ‚Ü‚µ‚½D
+#J0# # ‚Á‚Ä‚±‚Æ‚ÍƒVƒ‹ƒ}ƒŠƒ‹ƒŠƒIƒ“‚Ì–|–óŽÒ‚ªŠÔˆá‚¦‚½‚Ì‚©‚È‚ H
 #J0#
-N:4:¥«¥ë¥é¥ó¥Þ¥¹¤Î
+N:4:ƒJƒ‹ƒ‰ƒ“ƒ}ƒX‚Ì
 E:of Carlammas
 I:40:10:2
 W:50:30:3:60000
 F:CON | HIDE_TYPE | ACTIVATE | RES_FIRE | INSTA_ART
 U:PROT_EVIL
 D:$A fiery circle of bronze, with mighty spells to ward off evil.
-D:¥Ö¥í¥ó¥º¤ÎÇ³¤¨¤ë¤è¤¦¤Ê¼ó¾þ¤ê¤Ç¡¢¼Ù°­¤Ê¼Ô¤ò¤«¤ï¤·¤ÆÂà»¶¤µ¤»¤ë
-D:¶¯ÎÏ¤Ê¼öÊ¸¤¬¹þ¤á¤é¤ì¤Æ¤¤¤ë¡£
+D:ƒuƒƒ“ƒY‚Ì”R‚¦‚é‚æ‚¤‚ÈŽñü‚è‚ÅAŽ×ˆ«‚ÈŽÒ‚ð‚©‚í‚µ‚Ä‘ÞŽU‚³‚¹‚é
+D:‹­—Í‚ÈŽô•¶‚ªž‚ß‚ç‚ê‚Ä‚¢‚éB
 
 
 # The Amulet of Ingwe
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# p.308
-#J0# (ÅÔ¡¹ÌÜ)
-#J0#¡ö¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì¤Ë½¾¤¦¡£¥¨¥ì¥ó¥Ç¥£¥ë¤ÈÆ±¤¸ÍýÍ³¤Ç¤¹¡£
+#J0# (“sX–Ú)
+#J0#–ƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê‚É]‚¤BƒGƒŒƒ“ƒfƒBƒ‹‚Æ“¯‚¶——R‚Å‚·B
 #J0#
-N:5:¾åµé²¦¥¤¥ó¥°¥¦¥§¤Î
+N:5:ã‹‰‰¤ƒCƒ“ƒOƒEƒF‚Ì
 E:of Ingwe
 I:40:11:3
 W:65:50:3:90000
@@ -199,14 +199,14 @@ F:INSTA_ART
 U:DISP_EVIL
 D:$The ancient heirloom of Ingwe, high lord of the Vanyar, against whom nothing 
 D:$of evil could stand. 
-D:¥ô¥¡¥é¡¼¥ë¤ÎÅç¤ËÅÏ¤êÃæ¤Ä¹ñ¤ËÌá¤ë¤³¤È¤Î¤Ê¤«¤Ã¤¿
-D:¥ô¥¡¥ó¥ä¡¼¥ëÂ²¤Î¾åµé²¦¥¤¥ó¥°¥¦¥§¤Î²È·ÏÅÁÍè¤Î²ÈÊõ¡£
-D:¥¤¥ó¥°¥¦¥§¤ËÂÐ¹³¤Ç¤­¤ë¼Ù°­¤Ê¤â¤Î¤Ï¤¤¤Ê¤«¤Ã¤¿¡£
+D:ƒ”ƒ@ƒ‰[ƒ‹‚Ì“‡‚É“n‚è’†‚Â‘‚É–ß‚é‚±‚Æ‚Ì‚È‚©‚Á‚½
+D:ƒ”ƒ@ƒ“ƒ„[ƒ‹‘°‚Ìã‹‰‰¤ƒCƒ“ƒOƒEƒF‚Ì‰ÆŒn“`—ˆ‚Ì‰Æ•óB
+D:ƒCƒ“ƒOƒEƒF‚É‘ÎR‚Å‚«‚éŽ×ˆ«‚È‚à‚Ì‚Í‚¢‚È‚©‚Á‚½B
 
 
 # The Necklace of the Dwarves
 
-N:6:¥É¥ï¡¼¥Õ¤Î
+N:6:ƒhƒ[ƒt‚Ì
 E:of the Dwarves
 I:40:12:3
 W:70:70:3:75000
@@ -216,11 +216,11 @@ D:$The Nauglamir; a carencet of gold set with a multitude of shining gems of
 D:$Valinor, accenting a radiant Silmaril.  The sturdy spirits of Dwarvish 
 D:$craftsmen who labored long in mountain smithies lie within it still, and 
 D:$as gossamer it rests upon the bearer.
-D:»¸Á³¤Èµ±¤¯¥·¥ë¥Þ¥ê¥ë¤È¡¢¤½¤ì¤ò°ú¤­Î©¤¿¤»¤ë
-D:¤¿¤¯¤µ¤ó¤Î¥ô¥¡¥ê¥Î¡¼¥ë¤ÎÊõÀÐ¤Ç¾þ¤é¤ì¤¿¶â¤Î¼ó¾þ¤ê¤À¡£
-D:»³¤ÎÃæ¤ÎÃÃÌê¾ì¤ÇÄ¹¤¤´ÖÄÊ¤òÂÇ¤Ã¤Æ¤­¤¿
-D:´è¶¯¤Ê¥É¥ï¡¼¥Õ¤Î¿¦¿Íº²¤¬¤·¤Ã¤«¤ê¤È½É¤Ã¤Æ¤ª¤ê¡¢
-D:ÃØéá¤Î»å¤Î¤è¤¦¤Ë¿È¤ËÉÕ¤±¤ë¼Ô¤Ë¥Õ¥£¥Ã¥È¤¹¤ë¡£
+D:ŽW‘R‚Æ‹P‚­ƒVƒ‹ƒ}ƒŠƒ‹‚ÆA‚»‚ê‚ðˆø‚«—§‚½‚¹‚é
+D:‚½‚­‚³‚ñ‚Ìƒ”ƒ@ƒŠƒm[ƒ‹‚Ì•óÎ‚Åü‚ç‚ê‚½‹à‚ÌŽñü‚è‚¾B
+D:ŽR‚Ì’†‚Ì’b–èê‚Å’·‚¢ŠÔ’È‚ð‘Å‚Á‚Ä‚«‚½
+D:Šæ‹­‚Èƒhƒ[ƒt‚ÌEl°‚ª‚µ‚Á‚©‚è‚Æh‚Á‚Ä‚¨‚èA
+D:’wå‚ÌŽ…‚Ì‚æ‚¤‚Ég‚É•t‚¯‚éŽÒ‚ÉƒtƒBƒbƒg‚·‚éB
 
 
 # The Incandescent Light of Yeduson
@@ -229,7 +229,7 @@ D:ÃØéá¤Î»å¤Î¤è¤¦¤Ë¿È¤ËÉÕ¤±¤ë¼Ô¤Ë¥Õ¥£¥Ã¥È¤¹¤ë¡£
 # inventor of the incandescent lightbulb
 # Default reward for The Dark Elven Lords Quest
 
-N:7:¥ñ¥Å¥½¥ó¤Î
+N:7:ƒ‘ƒdƒ\ƒ“‚Ì
 E:of Yeduson
 I:39:3:3
 W:40:20:5:20000
@@ -239,13 +239,13 @@ D:$The Incandescent Light of Yeduson
 D:$Thomas Alva Yeduson the "Wizard of Menlo Park" 
 D:$patented 1,093 inventions.  
 D:$Inventor of the incandescent lightbulb.
-D:¡ÖÈó¾ï¤Ë¿Ê¤ó¤À²Ê³Ø¤ÏËâ½Ñ¤È¸«Ê¬¤±¤¬¤Ä¤«¤Ê¤¤¡£¡×
+D:u”ñí‚Éi‚ñ‚¾‰ÈŠw‚Í–‚p‚ÆŒ©•ª‚¯‚ª‚Â‚©‚È‚¢Bv
 
 
 # The Ring of Barahir -> Frakir
 
 #JZ#
-N:8:¡Ô¥Õ¥é¥­¥¢¡Õ¤È¤¤¤¦
+N:8:sƒtƒ‰ƒLƒAt‚Æ‚¢‚¤
 E:'Frakir'
 I:45:32:1
 W:50:40:2:75000
@@ -257,33 +257,33 @@ D:$ the prince of chaos. It is  invisible but it sometimes
 D:$ ripples to warn owner's dangers. It can morph to strangle
 D:$ enemy's neck, if owner commands to it.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.6-10)
-D:º®ÆÙ¤Î²¦»Ò¥Þ¡¼¥ê¥ó¤¬¥í¥°¥ë¥¹¤«¤éÀ¸¤ß½Ð¤·¤¿°Õ»×¤ò»ý¤Ã¤¿ÏÓÎØ¤À¡£
-D:ÉáÃÊ¤ÏÌÜ¤Ë¸«¤¨¤Ê¤¤¤¬Ì®Æ°¤·¤Æ´í¸±¤òÃÎ¤é¤»¤Æ¤¯¤ì¤ë¡£ÁõÈ÷¤¹¤ë¤â¤Î¤¬
-D:Ì¿¤º¤ë¤È·Á¤òÊÑ¤¨¤ÆÅ¨¤Î¼ó¤òÄù¤á¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-D:¡ÊR.¥¼¥é¥º¥Ë¥¤¡¢¿¿À¤³¦¥¢¥ó¥Ð¡¼¥·¥ê¡¼¥º 6¡Á10´¬¡Ë
+D:¬“×‚Ì‰¤Žqƒ}[ƒŠƒ“‚ªƒƒOƒ‹ƒX‚©‚ç¶‚Ýo‚µ‚½ˆÓŽv‚ðŽ‚Á‚½˜r—Ö‚¾B
+D:•’i‚Í–Ú‚ÉŒ©‚¦‚È‚¢‚ª–¬“®‚µ‚ÄŠëŒ¯‚ð’m‚ç‚¹‚Ä‚­‚ê‚éB‘•”õ‚·‚é‚à‚Ì‚ª
+D:–½‚¸‚é‚ÆŒ`‚ð•Ï‚¦‚Ä“G‚ÌŽñ‚ð’÷‚ß‚é‚±‚Æ‚ª‚Å‚«‚éB
+D:iR.ƒ[ƒ‰ƒYƒjƒCA^¢ŠEƒAƒ“ƒo[ƒVƒŠ[ƒY 6`10Šªj
 
 
 # The Ring of Tulkas
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# p.343
-#J0# (ÅÔ¡¹ÌÜ)
-#J0#¡ö¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì¤è¤ê¡£¥¨¥¢¥ì¥ó¥Ç¥£¥ë¤Î¹à¤ÈÆ±¤¸ÍýÍ³¤Ç¤¹¡£
+#J0# (“sX–Ú)
+#J0#–ƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê‚æ‚èBƒGƒAƒŒƒ“ƒfƒBƒ‹‚Ì€‚Æ“¯‚¶——R‚Å‚·B
 #J0#
-N:9:Í¦ÌÔ¤Ê¤ë¥È¥¥¥ë¥«¥¹¤Î
+N:9:—E–Ò‚È‚éƒgƒDƒ‹ƒJƒX‚Ì
 E:of Tulkas
 I:45:33:4
 W:70:90:2:175000
 F:STR | DEX | CON | HIDE_TYPE | ACTIVATE | SPEED | INSTA_ART
 U:XTRA_SPEED
 D:$The treasure of Tulkas, most fleet and wrathful of the Valar.
-D:¥ô¥¡¥é¡¼¥ë¤ÎÃæ¤Ç¤âºÇ¤âÁÇÁá¤¯¤«¤ÄÍ¦ÌÔ¤Ê¥È¥¥¥ë¥«¥¹¤ÎÊõ¤À¡£
+D:ƒ”ƒ@ƒ‰[ƒ‹‚Ì’†‚Å‚àÅ‚à‘f‘‚­‚©‚Â—E–Ò‚ÈƒgƒDƒ‹ƒJƒX‚Ì•ó‚¾B
 
 
 # The Ring of Power (Narya)
 
-N:10:¡Ô¥Ê¥ë¥ä¡Õ¤È¤¤¤¦
+N:10:sƒiƒ‹ƒ„t‚Æ‚¢‚¤
 E:of Power (Narya)
 I:45:34:1
 W:70:100:2:100000
@@ -296,14 +296,14 @@ U:BA_FIRE_2
 D:$The Ring of Fire, set with a ruby that glows like flame.  Narya is one 
 D:$of the three Rings of Power created by the Elves and hidden by them from 
 D:$Sauron.
-D:±ê¤Î¤è¤¦¤Ëµ±¤¯¥ë¥Ó¡¼¤¬¤Ï¤á¤é¤ì¤¿²Ð¤Î»ØÎØ¤Ç¡¢
-D:¥¨¥ë¥Õ¤Ë¤è¤êºî¤é¤ì¥µ¥¦¥í¥ó¤«¤é±£¤µ¤ì¤¿»°¤Ä¤ÎÎÏ¤Î»ØÎØ¤Î¤¦¤Á¤Î°ì¤Ä¤À¡£
-#D:Ãæ¤Ä¹ñ¤Ç¤Ï¥­¥¢¥À¥ó¤È¥¬¥ó¥À¥ë¥Õ¤¬½êÍ­¤·¤Æ¤¤¤¿¡£
+D:‰Š‚Ì‚æ‚¤‚É‹P‚­ƒ‹ƒr[‚ª‚Í‚ß‚ç‚ê‚½‰Î‚ÌŽw—Ö‚ÅA
+D:ƒGƒ‹ƒt‚É‚æ‚èì‚ç‚êƒTƒEƒƒ“‚©‚ç‰B‚³‚ê‚½ŽO‚Â‚Ì—Í‚ÌŽw—Ö‚Ì‚¤‚¿‚Ìˆê‚Â‚¾B
+#D:’†‚Â‘‚Å‚ÍƒLƒAƒ_ƒ“‚ÆƒKƒ“ƒ_ƒ‹ƒt‚ªŠ—L‚µ‚Ä‚¢‚½B
 
 
 # The Ring of Power (Nenya)
 
-N:11:¡Ô¥Í¥ó¥ä¡Õ¤È¤¤¤¦
+N:11:sƒlƒ“ƒ„t‚Æ‚¢‚¤
 E:of Power (Nenya)
 I:45:35:2
 W:80:140:2:200000
@@ -317,14 +317,14 @@ U:BA_COLD_3
 D:$The Ring of Adamant, with a pure white stone as centerpiece.  Nenya is one 
 D:$of the three Rings of Power created by the Elves and hidden by them from 
 D:$Sauron.
-D:Îäµ¤¤Î¶Å½Ì¤·¤¿¿¿¤ÃÇò¤ÊÊõÀÐ¤¬¤Ï¤á¤é¤ì¤¿»ØÎØ¤À¡£
-D:¥¨¥ë¥Õ¤Ë¤è¤êºî¤é¤ì¥µ¥¦¥í¥ó¤«¤é±£¤µ¤ì¤¿»°¤Ä¤ÎÎÏ¤Î»ØÎØ¤Î¤¦¤Á¤Î°ì¤Ä¤À¡£
-#D:Ãæ¤Ä¹ñ¤Ç¤Ï¥¬¥é¥É¥ê¥¨¥ë¤¬½êÍ­¤·¤Æ¤¤¤¿¡£
+D:—â‹C‚Ì‹Ãk‚µ‚½^‚Á”’‚È•óÎ‚ª‚Í‚ß‚ç‚ê‚½Žw—Ö‚¾B
+D:ƒGƒ‹ƒt‚É‚æ‚èì‚ç‚êƒTƒEƒƒ“‚©‚ç‰B‚³‚ê‚½ŽO‚Â‚Ì—Í‚ÌŽw—Ö‚Ì‚¤‚¿‚Ìˆê‚Â‚¾B
+#D:’†‚Â‘‚Å‚ÍƒKƒ‰ƒhƒŠƒGƒ‹‚ªŠ—L‚µ‚Ä‚¢‚½B
 
 
 # The Ring of Power (Vilya)
 
-N:12:¡Ô¥ô¥£¥ë¥ä¡Õ¤È¤¤¤¦
+N:12:sƒ”ƒBƒ‹ƒ„t‚Æ‚¢‚¤
 E:of Power (Vilya)
 I:45:36:3
 W:90:170:2:300000
@@ -339,14 +339,14 @@ D:$The Ring of Sapphire, with clear blue gems that shine like stars,
 D:$glittering untouchable despite all that Morgoth ever wrought.  Vilya is 
 D:$one of the three Rings of Power created by the Elves and hidden by them 
 D:$from Sauron.
-D:À±¤ÎÍÍ¤Ëµ±¤¯Æ©¤­ÄÌ¤Ã¤¿¥µ¥Õ¥¡¥¤¥¢¤Î»ØÎØ¤À¡£
-D:¥¨¥ë¥Õ¤Ë¤è¤êºî¤é¤ì¥µ¥¦¥í¥ó¤«¤é±£¤µ¤ì¤¿»°¤Ä¤ÎÎÏ¤Î»ØÎØ¤Î¤¦¤Á¤Î°ì¤Ä¤À¡£
-#D:Ãæ¤Ä¹ñ¤Ç¤Ï¥¨¥ë¥í¥ó¥É¤¬½êÍ­¤·¤Æ¤¤¤¿¡£
+D:¯‚Ì—l‚É‹P‚­“§‚«’Ê‚Á‚½ƒTƒtƒ@ƒCƒA‚ÌŽw—Ö‚¾B
+D:ƒGƒ‹ƒt‚É‚æ‚èì‚ç‚êƒTƒEƒƒ“‚©‚ç‰B‚³‚ê‚½ŽO‚Â‚Ì—Í‚ÌŽw—Ö‚Ì‚¤‚¿‚Ìˆê‚Â‚¾B
+#D:’†‚Â‘‚Å‚ÍƒGƒ‹ƒƒ“ƒh‚ªŠ—L‚µ‚Ä‚¢‚½B
 
 
 # The Ring of Power (The One Ring)
 
-N:13:¡Ô°ì¤Ä¤Î»ØÎØ¡Õ¤È¤¤¤¦
+N:13:sˆê‚Â‚ÌŽw—Öt‚Æ‚¢‚¤
 E:of Power (The One Ring)
 I:45:37:5
 W:100:255:2:5000000
@@ -365,14 +365,14 @@ D:$them all and in the darkness bind them."  Made of massive gold, and
 D:$set with runes in the foul speech of Mordor, Isildur's Bane possesses 
 D:$powers so great that it inevitably twists and masters any earthly being 
 D:$who wears it.
-D:¡Ö°ì¤Ä¤Î»ØÎØ¤ÏÁ´¤Æ¤òÅý¤Ù¡¢°ì¤Ä¤Î»ØÎØ¤Ï¤¹¤Ù¤Æ¤ò¸«¤Ä¤±¡¢
-D:°ì¤Ä¤Î»ØÎØ¤Ï¤¹¤Ù¤Æ¤òÊá¤¨¤Æ¤¯¤é¤ä¤ß¤Î¤Ê¤«¤Ë¤Ä¤Ê¤®¤È¤á¤ë¡£¡×
-D:½Å¸ü¤Ê¶â¤Î»ØÎØ¤Ç¡¢¥â¥ë¥É¡¼¥ë¤Î´÷¤Þ¤ï¤·¤¤¸ÀÍÕ¤Ç¥ë¡¼¥óÊ¸»ú¤¬
-D:¹ï¤ó¤Ç¤¢¤ë¡£¤³¤Î¥¤¥·¥ë¥É¥¥¥¢¤Î²Ò¤ÎÎÏ¤Ï¤¢¤Þ¤ê¤Ë¤â¶¯Âç¤Ê¤Î¤Ç¡¢
-D:ÉáÄÌ¤Î¼Ô¤Ï¤½¤ì¤ò¿È¤ËÉÕ¤±¤ë¤À¤±¤ÇÏÄ¤á¤é¤ì»ÙÇÛ¤µ¤ì¤Æ¤·¤Þ¤¦¡£
+D:uˆê‚Â‚ÌŽw—Ö‚Í‘S‚Ä‚ð“‚×Aˆê‚Â‚ÌŽw—Ö‚Í‚·‚×‚Ä‚ðŒ©‚Â‚¯A
+D:ˆê‚Â‚ÌŽw—Ö‚Í‚·‚×‚Ä‚ð•ß‚¦‚Ä‚­‚ç‚â‚Ý‚Ì‚È‚©‚É‚Â‚È‚¬‚Æ‚ß‚éBv
+D:dŒú‚È‹à‚ÌŽw—Ö‚ÅAƒ‚ƒ‹ƒh[ƒ‹‚ÌŠõ‚Ü‚í‚µ‚¢Œ¾—t‚Åƒ‹[ƒ“•¶Žš‚ª
+D:‚ñ‚Å‚ ‚éB‚±‚ÌƒCƒVƒ‹ƒhƒDƒA‚Ì‰Ð‚Ì—Í‚Í‚ ‚Ü‚è‚É‚à‹­‘å‚È‚Ì‚ÅA
+D:•’Ê‚ÌŽÒ‚Í‚»‚ê‚ðg‚É•t‚¯‚é‚¾‚¯‚Å˜c‚ß‚ç‚êŽx”z‚³‚ê‚Ä‚µ‚Ü‚¤B
 
 
-N:14:¡Ô¥¢¥Û¥ä¡Õ¤È¤¤¤¦
+N:14:sƒAƒzƒ„t‚Æ‚¢‚¤
 E:of Cower (Darnya)
 I:45:50:-5
 W:100:100:2:0
@@ -385,12 +385,12 @@ U:BIZARRE
 D:$Adorned, showy gilding, 
 D:$set with runes in the strange speech of Heheh, with power so great that it 
 D:$inevitably twists and masters any earthly being who wears it.
-D:°Â¤Ã¤Ý¤¤¶â¥á¥Ã¥­¤Î»ØÎØ¤Ç¡¢¤Ø¤±¤±¤Ê¸ÀÍÕ¤Ç¥ë¡¼¥óÊ¸»ú¤¬
-D:¹ï¤ó¤Ç¤¢¤ë¡£¤³¤Î¤ï¤±¤ï¤«¤é¤ó²Ò¤ÎÎÏ¤Ï¤¢¤Þ¤ê¤Ë¤â¶¯Âç¤Ê¤Î¤Ç¡¢
-D:ÉáÄÌ¤Î¼Ô¤Ï¤½¤ì¤ò¿È¤ËÉÕ¤±¤ë¤À¤±¤ÇÏÄ¤á¤é¤ì»ÙÇÛ¤µ¤ì¤Æ¤·¤Þ¤¦¡£
+D:ˆÀ‚Á‚Û‚¢‹àƒƒbƒL‚ÌŽw—Ö‚ÅA‚Ö‚¯‚¯‚ÈŒ¾—t‚Åƒ‹[ƒ“•¶Žš‚ª
+D:‚ñ‚Å‚ ‚éB‚±‚Ì‚í‚¯‚í‚©‚ç‚ñ‰Ð‚Ì—Í‚Í‚ ‚Ü‚è‚É‚à‹­‘å‚È‚Ì‚ÅA
+D:•’Ê‚ÌŽÒ‚Í‚»‚ê‚ðg‚É•t‚¯‚é‚¾‚¯‚Å˜c‚ß‚ç‚êŽx”z‚³‚ê‚Ä‚µ‚Ü‚¤B
 
 
-N:15:¥Ñ¥é¥ó¥Æ¥£¥¢¤ÎÀÐ
+N:15:ƒpƒ‰ƒ“ƒeƒBƒA‚ÌÎ
 E:Palantir~ of Westernesse
 I:39:8:3
 W:60:50:10:60000
@@ -400,12 +400,12 @@ U:DETECT_UNIQUE
 D:$A shining white ball of unbreakable crystal, the ancient palantiri, 
 D:$or 'far-watchers', were used by kings of Numenor and later by the Exiles 
 D:$for rapid communication between distant lands. 
-D:¤³¤ÎÇò¤¯µ±¤¯ÉÔÌÇ¤Î¿å¾½µå¤Ï¡¢¸Å¤¯¤Ï¥Ì¥á¥Î¡¼¥ë¤ÎÎòÂå¤Î²¦¤Ë¡¢
-D:¸å¤Ë¤Ï¥¨¥ì¥ó¥Ç¥£¥ë¤ò¤Ï¤¸¤á¤È¤¹¤ëÎ®Ï²¤ÎÌ±¤Ë¤è¤Ã¤Æ¡¢Î¥¤ì¤¿ÅÚÃÏ¤Î´Ö¤Î
-D:¹âÂ®ÄÌ¿®¤ËÍÑ¤¤¤é¤ì¤¿¡Ö±óË¾¡×¤ÎÀÐ¤À¡£
+D:‚±‚Ì”’‚­‹P‚­•s–Å‚Ì…»‹…‚ÍAŒÃ‚­‚Íƒkƒƒm[ƒ‹‚Ì—ð‘ã‚Ì‰¤‚ÉA
+D:Œã‚É‚ÍƒGƒŒƒ“ƒfƒBƒ‹‚ð‚Í‚¶‚ß‚Æ‚·‚é—¬˜Q‚Ì–¯‚É‚æ‚Á‚ÄA—£‚ê‚½“y’n‚ÌŠÔ‚Ì
+D:‚‘¬’ÊM‚É—p‚¢‚ç‚ê‚½u‰“–]v‚ÌÎ‚¾B
 
 
-N:16:¡Ø¥¯¥ê¥à¥¾¥ó¡Ù
+N:16:wƒNƒŠƒ€ƒ]ƒ“x
 E:'Crimson'
 I:19:50:4
 W:60:150:100:100000
@@ -418,13 +418,13 @@ D:$ This gun gotten by Echizen unexpectedly, 'Crimson', helped
 D:$ him in his missions, and it evolved into greater weapon
 D:$ after his every battle. --"
 D:$(Ecole Software, 'DEATH CRIMSON')
-D:¡Ö¡½¤½¤³¤Ï³¹Á´ÂÎ¤¬ËâÊª¤Î½»½è¤È²½¤·¤Æ¤¤¤¿¡£¤½¤Î¤È¤­»×¤ï¤º
-D:»È¤Ã¤¿½Æ¡Ý¥¯¥ê¥à¥¾¥ó¤¬±ÛÁ°¤ò½õ¤±¡¢¤½¤·¤Æ¡¢¤¿¤¿¤«¤¦¤´¤È¤Ë¡¢
-D:¥¯¥ê¥à¥¾¥ó¤Ï¤è¤ê¶¯ÎÏ¤ÊÉð´ï¤Ø¤È¿Ê²½¤·¤Æ¤¤¤Ã¤¿¡£¡½¡×(¥Ç¥¹¥¯
-D:¥ê¥à¥¾¥ó¡¤¥¨¥³¡¼¥ë¥½¥Õ¥È¥¦¥§¥¢)
+D:u\‚»‚±‚ÍŠX‘S‘Ì‚ª–‚•¨‚ÌZˆ‚Æ‰»‚µ‚Ä‚¢‚½B‚»‚Ì‚Æ‚«Žv‚í‚¸
+D:Žg‚Á‚½e|ƒNƒŠƒ€ƒ]ƒ“‚ª‰z‘O‚ð•‚¯A‚»‚µ‚ÄA‚½‚½‚©‚¤‚²‚Æ‚ÉA
+D:ƒNƒŠƒ€ƒ]ƒ“‚Í‚æ‚è‹­—Í‚È•Ší‚Ö‚Æi‰»‚µ‚Ä‚¢‚Á‚½B\v(ƒfƒXƒN
+D:ƒŠƒ€ƒ]ƒ“CƒGƒR[ƒ‹ƒ\ƒtƒgƒEƒFƒA)
 
 
-N:17:ÃÎ¼±¤Î
+N:17:’mŽ¯‚Ì
 E:of Lore
 I:39:7:0
 W:15:12:15:20000
@@ -433,11 +433,11 @@ F:ACTIVATE | INSTA_ART | LITE_3 |
 U:LORE
 D:$A great emerald that fills your mind with images of knowledge and dreadful 
 D:$understanding as you stare into its depths.
-D:¤³¤ÎÂç¤­¤Ê¥¨¥á¥é¥ë¥É¤ÎÃæ¤ÎÎÐ¤Î¿¼Ê¥¤ò¤Î¤¾¤­¹þ¤à»þ¡¢
-D:¤¢¤Ê¤¿¤ÎÀº¿À¤ÏÃÎ¼±¤Î¿´¾Ý¤È¶²¤ë¤Ù¤­Íý²ò¤Ë¤è¤Ã¤ÆËþ¤¿¤µ¤ì¤ë¡£
+D:‚±‚Ì‘å‚«‚ÈƒGƒƒ‰ƒ‹ƒh‚Ì’†‚Ì—Î‚Ì[•£‚ð‚Ì‚¼‚«ž‚ÞŽžA
+D:‚ ‚È‚½‚Ì¸_‚Í’mŽ¯‚ÌSÛ‚Æ‹°‚é‚×‚«—‰ð‚É‚æ‚Á‚Ä–ž‚½‚³‚ê‚éB
 
 
-N:18:¥Õ¥¡¥é¥ß¥¢¤Î
+N:18:ƒtƒ@ƒ‰ƒ~ƒA‚Ì
 E:of Faramir
 I:40:17:3
 W:30:60:2:20000
@@ -448,16 +448,16 @@ F:INSTA_ART
 U:PESTICIDE
 D:$A slim neckpiece of True-silver, with quiet spells of Ithilien to aid and 
 D:$protect the wearer.
-D:¡Ö¤Þ¤³¤È¤Î¶ä¡×¤Çºî¤é¤ì¤¿¼ó¾þ¤ê¤Ç¡¢¿È¤ËÉÕ¤±¤ë¼Ô¤ò½õ¤±¤Æ¼é¤ë¥¤¥·¥ê¥¨¥ó
-D:¤ÎÀÅ¤«¤ÊËâË¡¤¬Èë¤á¤é¤ì¤Æ¤¤¤ë¡£
+D:u‚Ü‚±‚Æ‚Ì‹âv‚Åì‚ç‚ê‚½Žñü‚è‚ÅAg‚É•t‚¯‚éŽÒ‚ð•‚¯‚ÄŽç‚éƒCƒVƒŠƒGƒ“
+D:‚ÌÃ‚©‚È–‚–@‚ª”é‚ß‚ç‚ê‚Ä‚¢‚éB
 
 
 # The Adamantite Plate Mail 'Soulkeeper'
 
-#J0# ÆüËÜ¸ì²½, Ko
-#J0#N:19:¡Øº²ÊÝ»ý¼Ô¡Ù
-#J0#N:19:¡Ø¼é¸îº²¡Ù
-N:19:¡Øº²¤Î¼é¤ê¼ê¡Ù
+#J0# “ú–{Œê‰», Ko
+#J0#N:19:w°•ÛŽŽÒx
+#J0#N:19:wŽçŒì°x
+N:19:w°‚ÌŽç‚èŽèx
 E:'Soulkeeper'
 I:37:30:2
 W:75:9:420:200000
@@ -469,15 +469,15 @@ U:CURE_1000
 D:$A suit of imperishable adamant, with conquerable strength to endure evil 
 D:$and disruptive magics, that protects the life force of its wearer like 
 D:$nothing else can.
-D:±Ê±óÉÔÌÇ¤Î¥¢¥À¥Þ¥ó¥¿¥¤¥È¤Çºî¤é¤ì¤¿³»¤Ç¡¢¤¢¤é¤æ¤ë
-D:¼Ù°­¤ÊÎÏ¤äÇË²õÅª¤ÊËâË¡¤òÄ·¤ÍÊÖ¤¹ÎîÎÏ¤òÈë¤á¡¢
-D:ÃåÍÑ¼Ô¤ÎÀ¸Ì¿ÎÏ¤ò¼é¤ë¤³¤È¤Ë¤«¤±¤Æ¤Ï²¿Êª¤Ë¤âÍ¥¤ë¡£
+D:‰i‰“•s–Å‚ÌƒAƒ_ƒ}ƒ“ƒ^ƒCƒg‚Åì‚ç‚ê‚½ŠZ‚ÅA‚ ‚ç‚ä‚é
+D:Ž×ˆ«‚È—Í‚â”j‰ó“I‚È–‚–@‚ð’µ‚Ë•Ô‚·—ì—Í‚ð”é‚ßA
+D:’…—pŽÒ‚Ì¶–½—Í‚ðŽç‚é‚±‚Æ‚É‚©‚¯‚Ä‚Í‰½•¨‚É‚à—D‚éB
 
 
 # The Full Plate Armour of Isildur
 
 #J0# wp.273
-N:20:¥¤¥·¥ë¥É¥¥¥¢¤Î
+N:20:ƒCƒVƒ‹ƒhƒDƒA‚Ì
 E:of Isildur
 I:37:15:2
 W:30:3:300:50000
@@ -486,39 +486,39 @@ F:CON | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
 F:RES_SOUND | RES_CONF | RES_NEXUS
 D:$A gleaming steel suit covering the wearer from neck to foot, with runes of 
 D:$warding and stability deeply engraved into its surface.
-D:ÁõÈ÷¤¹¤ë¼Ô¤Î¼ó¤«¤éÂ­¤Þ¤Ç¤ò¥«¥Ð¡¼¤¹¤ëµ±¤¯¹ÝÅ´¤Î³»¤Ç¡¢
-D:¼Ù°­¤Ê¤â¤Î¤òÂà¤±´è¶¯¤µ¤òÁý¤¹
-D:¥ë¡¼¥óÊ¸»ú¤¬É½ÌÌ¤Ë¿¼¤¯¹ï¤Þ¤ì¤Æ¤¤¤ë¡£
-D:¤«¤Ä¤Æ¥µ¥¦¥í¥ó¤«¤é»ØÎØ¤òÃ¥¤¦¤Î¤ËÀ®¸ù¤·¤¿¥¨¥ì¥ó¥Ç¥£¥ë¤ÎÂ©»Ò¥¤¥·¥ë¥É¥¥¥¢
-D:¤¬¿È¤ËÉÕ¤±¤Æ¤¤¤¿¡£
+D:‘•”õ‚·‚éŽÒ‚ÌŽñ‚©‚ç‘«‚Ü‚Å‚ðƒJƒo[‚·‚é‹P‚­|“S‚ÌŠZ‚ÅA
+D:Ž×ˆ«‚È‚à‚Ì‚ð‘Þ‚¯Šæ‹­‚³‚ð‘‚·
+D:ƒ‹[ƒ“•¶Žš‚ª•\–Ê‚É[‚­‚Ü‚ê‚Ä‚¢‚éB
+D:‚©‚Â‚ÄƒTƒEƒƒ“‚©‚çŽw—Ö‚ð’D‚¤‚Ì‚É¬Œ÷‚µ‚½ƒGƒŒƒ“ƒfƒBƒ‹‚Ì‘§ŽqƒCƒVƒ‹ƒhƒDƒA
+D:‚ªg‚É•t‚¯‚Ä‚¢‚½B
 
 
 # The Metal Brigandine Armour of the Rohirrim
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# wp.245, p.237
 #J0#
-#J0# (¤·¤È¤·¤ó¤Î¥³¥á¥ó¥È)
-#J0# > ¤Ç¡¢¸ÇÍ­Ì¾»ì´Ø·¸¤Ê¤Î¤Ç¤¹¤¬¡¢Îã¤¨¤Ð
-#J0# > of the Rohirrim                 ¥í¥Ò¥¢¥ê¥à¢ª¥í¥Ò¥ê¥à
-#J0# > ¤Ç¤¹¤¬¡¢¤³¤ì¤Ï°ÊÁ°Â¾¤ÎÊý¤«¤é¤â¡Ö¥í¥Ò¥ê¥à¡×¤À¡¢¤È»ØÅ¦¤µ¤ì¤¿¤Î
-#J0# > ¤Ç¤¹¤¬¡¢¿·ÈÇ»ØÎØÊª¸ìÄÉÊäÊÔ p.245 ¤Ç¤Ï¡Ö¥í¥Ò¥¢¥ê¥à¡×¤È¤Ê¤Ã¤Æ
-#J0# > ¤¤¤Þ¤¹¡£¤Ç¡¢¤½¤ì¤òÅÁ¤¨¤¿¤é¡¢¤É¤¦¤âËÝÌõ¼Ô¤Ë¤è¤Ã¤Æ¿§¡¹¤È
-#J0# > °ã¤¦¤³¤È¤¬È½ÌÀ¤·¤Þ¤·¤¿¡£¤¹¤´¤¤¤Î¤Ë¤Ê¤ë¤È£µ¡¢£¶¼ïÎà¤¯¤é¤¤
-#J0# > ÆÉ¤ßÊý¤¬¤¢¤Ã¤¿¤ê(^_^;¡£¤É¤¦¤¹¤ë¤Ù¤­¤«¼«Ê¬¤Ç¤âÈ½ÃÇ¤¬¤Ä¤­¤Þ
-#J0# > ¤»¤ó¤Ç¤·¤¿¤Î¤Ç¡¢°ì±þ¿·ÈÇ»ØÎØÊª¸ìÄÉÊäÊÔ¤ÎÆÉ¤ßÊý¤Ë¤·¤Æ¤ª¤­
-#J0# > ¤Þ¤·¤¿¡£¶ñÂÎÅª¤Ë¤Ï¡Ö¥ë¥·¥¢¥ó¡×¤È¤«¡Ö¥ª¥í¥ê¥ó¡×¤È¤«¤¬
-#J0# > ¤½¤¦¤À¤È»×¤¤¤Þ¤¹¡£
+#J0# (‚µ‚Æ‚µ‚ñ‚ÌƒRƒƒ“ƒg)
+#J0# > ‚ÅAŒÅ—L–¼ŽŒŠÖŒW‚È‚Ì‚Å‚·‚ªA—á‚¦‚Î
+#J0# > of the Rohirrim                 ƒƒqƒAƒŠƒ€¨ƒƒqƒŠƒ€
+#J0# > ‚Å‚·‚ªA‚±‚ê‚ÍˆÈ‘O‘¼‚Ì•û‚©‚ç‚àuƒƒqƒŠƒ€v‚¾A‚ÆŽw“E‚³‚ê‚½‚Ì
+#J0# > ‚Å‚·‚ªAV”ÅŽw—Ö•¨Œê’Ç•â•Ò p.245 ‚Å‚ÍuƒƒqƒAƒŠƒ€v‚Æ‚È‚Á‚Ä
+#J0# > ‚¢‚Ü‚·B‚ÅA‚»‚ê‚ð“`‚¦‚½‚çA‚Ç‚¤‚à–|–óŽÒ‚É‚æ‚Á‚ÄFX‚Æ
+#J0# > ˆá‚¤‚±‚Æ‚ª”»–¾‚µ‚Ü‚µ‚½B‚·‚²‚¢‚Ì‚É‚È‚é‚Æ‚TA‚UŽí—Þ‚­‚ç‚¢
+#J0# > “Ç‚Ý•û‚ª‚ ‚Á‚½‚è(^_^;B‚Ç‚¤‚·‚é‚×‚«‚©Ž©•ª‚Å‚à”»’f‚ª‚Â‚«‚Ü
+#J0# > ‚¹‚ñ‚Å‚µ‚½‚Ì‚ÅAˆê‰žV”ÅŽw—Ö•¨Œê’Ç•â•Ò‚Ì“Ç‚Ý•û‚É‚µ‚Ä‚¨‚«
+#J0# > ‚Ü‚µ‚½B‹ï‘Ì“I‚É‚Íuƒ‹ƒVƒAƒ“v‚Æ‚©uƒIƒƒŠƒ“v‚Æ‚©‚ª
+#J0# > ‚»‚¤‚¾‚ÆŽv‚¢‚Ü‚·B
 #J0#
-#J0# (¾®ÎÓ¤µ¤ó¤Î¥³¥á¥ó¥È)
-#J0# »ä¤Ï¿·ÈÇ¤ÏÆÉ¤ó¤Ç¤Ê¤¤¤â¤Î¤Ç(^_^)¡¥
+#J0# (¬—Ñ‚³‚ñ‚ÌƒRƒƒ“ƒg)
+#J0# Ž„‚ÍV”Å‚Í“Ç‚ñ‚Å‚È‚¢‚à‚Ì‚Å(^_^)D
 #J0#
-#J0# ¼ÂºÝ¤Î¡Ö¥í¥Ò¥ê¥à¡×¡Ö¥ë¥·¥¨¥ó¡×¡Ö¥ª¥í¡¼¥ê¥ó¡×¤È¡Ö¥í¥Ò¥¢¥ê¥à¡×¡Ö¥ë¥·
-#J0# ¥¢¥ó¡×¡Ö¥ª¥í¥ê¥ó¡×¤Î°ã¤¤¤Ï¡¤ÆüËÜ¸ì¤Ç½ñ¤¯¤ÈÂç¤­¤¤¤±¤É¡¤²»¤È¤·¤Æ¤ÏÈù
-#J0# Ì¯¤Ç¡¤±Ñ¹ñ¿Í¤¬Ê¹¤¤¤Æ¤âÊ¹¤­ÍÍ¤ÇÊÑ¤ï¤Ã¤ÆÍè¤ë¤È»×¤¤¤Þ¤¹¡¥
+#J0# ŽÀÛ‚ÌuƒƒqƒŠƒ€vuƒ‹ƒVƒGƒ“vuƒIƒ[ƒŠƒ“v‚ÆuƒƒqƒAƒŠƒ€vuƒ‹ƒV
+#J0# ƒAƒ“vuƒIƒƒŠƒ“v‚Ìˆá‚¢‚ÍC“ú–{Œê‚Å‘‚­‚Æ‘å‚«‚¢‚¯‚ÇC‰¹‚Æ‚µ‚Ä‚Í”÷
+#J0# –­‚ÅC‰p‘l‚ª•·‚¢‚Ä‚à•·‚«—l‚Å•Ï‚í‚Á‚Ä—ˆ‚é‚ÆŽv‚¢‚Ü‚·D
 #J0#
-N:21:¥í¥Ò¥¢¥ê¥à¤Î
+N:21:ƒƒqƒAƒŠƒ€‚Ì
 E:of the Rohirrim
 I:37:9:2
 W:30:3:200:30000
@@ -528,15 +528,15 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_CONF | RES_SOUND
 D:$Small metal plates cover an inner layer of sturdy canvas, and both bear 
 D:$scenes of hunting and war.  You feel the spirit of Eorl the Young, matchless 
 D:$in combat, around you as you put his armour on.
-D:¾®¤µ¤ÊÅ´ÈÄ¤¬ËãÉÛ¤Î²¼ÃÏ¤òÈï¤¦Æó½Å¤Î³»¤Ç¡¢ÁÐÊý¤Ë¼í¤ê¤ÈÀï¤Î¸÷·Ê¤¬ÉÁ¤«¤ì¤Æ¤¤¤ë¡£
-D:¤³¤Î³»¤ò¿È¤ËÉÕ¤±¤ë¤È¡¢Æ®¤¤¤ÇÉé¤±ÃÎ¤é¤º¤À¤Ã¤¿¥í¡¼¥Ï¥ó½éÂå¤Î²¦¡¢
-D:ÀÄÇ¯²¦¥¨¥ª¥ë¤Îº²¤ò´¶¤¸¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+D:¬‚³‚È“S”Â‚ª–ƒ•z‚Ì‰º’n‚ð”í‚¤“ñd‚ÌŠZ‚ÅA‘o•û‚ÉŽë‚è‚Æí‚ÌŒõŒi‚ª•`‚©‚ê‚Ä‚¢‚éB
+D:‚±‚ÌŠZ‚ðg‚É•t‚¯‚é‚ÆA“¬‚¢‚Å•‰‚¯’m‚ç‚¸‚¾‚Á‚½ƒ[ƒnƒ“‰‘ã‚Ì‰¤A
+D:Â”N‰¤ƒGƒIƒ‹‚Ì°‚ðŠ´‚¶‚é‚±‚Æ‚ª‚Å‚«‚éB
 
 
 # The Mithril Chain Mail 'Belegennon' -> of Lohengrin
 
-#JZ# ¥ï¡¼¥°¥Ê¡¼
-N:22:µ³»Î¥í¡¼¥¨¥ó¥°¥ê¥ó¤Î
+#JZ# ƒ[ƒOƒi[
+N:22:‹RŽmƒ[ƒGƒ“ƒOƒŠƒ“‚Ì
 E:of Lohengrin
 I:37:20:4
 W:40:9:150:135000
@@ -549,15 +549,15 @@ U:CHOIR_SINGS
 D:$The shining armor of Lohengrin the son of Parsifal.
 D:$ If you wears it, the holy grail gives to you the devine protection
 D:$  from all evils. (W.R.Wagner, 'Parsifal')
-D:À»ÇÕ¼é¸î¤Îµ³»Î¥Ñ¥ë¥¸¥Õ¥¡¥ë¤ÎÂ©»Ò¡¢¥í¡¼¥¨¥ó¥°¥ê¥ó¤Îµ±¤¯³»¤À¡£
-D:¿È¤ËÉÕ¤±¤ë¼Ô¤Ï¤¢¤é¤æ¤ë¼Ù°­¤Ê¤â¤Î¤òÂà¤±À»ÇÕ¤Î²Ã¸î¤òÆÀ¤ë¡£
-D:(¥ï¡¼¥°¥Ê¡¼¡¢¡Ö¥Ñ¥ë¥¸¥Õ¥¡¥ë¡×)
+D:¹”tŽçŒì‚Ì‹RŽmƒpƒ‹ƒWƒtƒ@ƒ‹‚Ì‘§ŽqAƒ[ƒGƒ“ƒOƒŠƒ“‚Ì‹P‚­ŠZ‚¾B
+D:g‚É•t‚¯‚éŽÒ‚Í‚ ‚ç‚ä‚éŽ×ˆ«‚È‚à‚Ì‚ð‘Þ‚¯¹”t‚Ì‰ÁŒì‚ð“¾‚éB
+D:(ƒ[ƒOƒi[Auƒpƒ‹ƒWƒtƒ@ƒ‹v)
 
 
 # The Mithril Plate Mail of Celeborn -> Julian
 
 #JZ#
-N:23:¥¢¡¼¥Ç¥ó¤Î¿¹¤Î¼ç¥¸¥å¥ê¥¢¥ó¤Î
+N:23:ƒA[ƒfƒ“‚ÌX‚ÌŽåƒWƒ…ƒŠƒAƒ“‚Ì
 E:of Julian
 I:37:3:4
 W:40:15:250:120000
@@ -567,40 +567,40 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK |
 F:RES_DISEN | XTRA_H_RES | ACTIVATE | ESP_ANIMAL
 U:GENOCIDE
 D:$The silver armor of Julian who defends the forest of Arden.
-D:¿¿À¤³¦¥¢¥ó¥Ð¡¼¤Î¥¢¡¼¥Ç¥ó¤Î¿¹¤ò¼é¤ë¥¸¥å¥ê¥¢¥ó¤Î¶ä¤Î³»¤À¡£
+D:^¢ŠEƒAƒ“ƒo[‚ÌƒA[ƒfƒ“‚ÌX‚ðŽç‚éƒWƒ…ƒŠƒAƒ“‚Ì‹â‚ÌŠZ‚¾B
 
 
 # The Chain Mail of Arvedui
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#¡ö´ðËÜÅª¤ËÌ¾¤Ë¤Ï¸ª½ñ¤­¤òÉÕ¤±¤Æ¤¤¤ë¤è¤¦¤Ç¤¹¤·¡¢¥¢¥ë¥ô¥§¥É¥¥¥¤¤Ï¥¢¥ë¥Î¡¼¥ë¤Î
-#J0#ºÇ¸å¤Î²¦(¿·ÈÇÄÉÊäÊÔp15,p21)¤Ê¤Î¤Ç¡£
+#J0#(“sX–Ú)
+#J0#–Šî–{“I‚É–¼‚É‚ÍŒ¨‘‚«‚ð•t‚¯‚Ä‚¢‚é‚æ‚¤‚Å‚·‚µAƒAƒ‹ƒ”ƒFƒhƒDƒC‚ÍƒAƒ‹ƒm[ƒ‹‚Ì
+#J0#ÅŒã‚Ì‰¤(V”Å’Ç•â•Òp15,p21)‚È‚Ì‚ÅB
 #J0#
-N:24:¥¢¥ë¥ô¥§¥É¥¥¥¤²¦¤Î
+N:24:ƒAƒ‹ƒ”ƒFƒhƒDƒC‰¤‚Ì
 E:of Arvedui
 I:37:4:2
 W:20:3:220:32000
 P:14:1d4:-2:0:15
 F:STR | CHR | HIDE_TYPE | XTRA_H_RES |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_SHARDS | RES_NEXUS
-D:¥¤¥·¥ë¥É¥¥¥¢¤ÎËöêã¤Ç¤¢¤ê¡¢¥¢¥ó¥°¥Þ¡¼¥ëËâ¹ñ¤ÈÀï¤Ã¤¿
-D:ËÌÊý²¦Ä«¥¢¥ë¥»¥À¥¤¥ó¹ñ¤ÎºÇ¸å¤Î²¦¥¢¥ë¥ô¥§¥É¥¥¥¤¤¬¿È¤ËÉÕ¤±¤Æ¤¤¤¿º¿Öé»Ò¤À¡£
-D:¤³¤ì¤òÁõÈ÷¤¹¤ë¼Ô¤Ï¤«¤Î²¦¤ÎÇ¡¤­ÎÏ¶¯¤µ¤ò´¶¤¸¤ë¡£
+D:ƒCƒVƒ‹ƒhƒDƒA‚Ì––åá‚Å‚ ‚èAƒAƒ“ƒOƒ}[ƒ‹–‚‘‚Æí‚Á‚½
+D:–k•û‰¤’©ƒAƒ‹ƒZƒ_ƒCƒ“‘‚ÌÅŒã‚Ì‰¤ƒAƒ‹ƒ”ƒFƒhƒDƒC‚ªg‚É•t‚¯‚Ä‚¢‚½½›çŽq‚¾B
+D:‚±‚ê‚ð‘•”õ‚·‚éŽÒ‚Í‚©‚Ì‰¤‚Ì”@‚«—Í‹­‚³‚ðŠ´‚¶‚éB
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, well padded 
 D:$with leather. You feel strong and tall as Arvedui, last king of Arnor, 
 D:$as you put it on.
-#D:ÂÎ¤Ë¥Õ¥£¥Ã¥È¤¹¤ë¤è¤¦Èé¤ÎµÍ¤áÊª¤ò¤·¤¿¡¢Å´¤ÎÎØ¤òÊÔ¤ó¤À
-#D:º¿Öé»Ò¤È¶ñÂ­¤È¸ªÅö¤«¤é¤Ê¤ë¡£
-#D:¤³¤ì¤òÁõÈ÷¤¹¤ë¼Ô¤Ï¥¢¥ë¥Î¡¼¥ë¤ÎºÇ¸å¤Î²¦¥¢¥ë¥ô¥§¥É¥¥¥¤¤Î¤è¤¦¤Ê
-#D:ÎÏ¶¯¤µ¤ò´¶¤¸¤ë
+#D:‘Ì‚ÉƒtƒBƒbƒg‚·‚é‚æ‚¤”ç‚Ì‹l‚ß•¨‚ð‚µ‚½A“S‚Ì—Ö‚ð•Ò‚ñ‚¾
+#D:½›çŽq‚Æ‹ï‘«‚ÆŒ¨“–‚©‚ç‚È‚éB
+#D:‚±‚ê‚ð‘•”õ‚·‚éŽÒ‚ÍƒAƒ‹ƒm[ƒ‹‚ÌÅŒã‚Ì‰¤ƒAƒ‹ƒ”ƒFƒhƒDƒC‚Ì‚æ‚¤‚È
+#D:—Í‹­‚³‚ðŠ´‚¶‚é
 
 
 # The Augmented Chain Mail of Caspanion
 
 #J0# ???
-N:25:¥«¥¹¥Ñ¥Ë¥ª¥ó¤Î
+N:25:ƒJƒXƒpƒjƒIƒ“‚Ì
 E:of Caspanion
 I:37:6:3
 W:25:9:270:40000
@@ -611,15 +611,15 @@ U:DEST_DOOR
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, strategically 
 D:$reinforced at vital locations with a second layer of chain.  Magics to 
 D:$enhance body and mind lie within, and no door can bar the wearer's path.
-D:½ÅÍ×¤ÊÉôÊ¬¤¬Æó½Å¤Ë¤Ê¤Ã¤¿¡¢¼ê¤ÈÂ­¤â¥«¥Ð¡¼¤¹¤ëº¿Öé»Ò¤À¡£
-D:Àº¿À¤ÈÆùÂÎ¤ò¶¯²½¤¹¤ëËâË¡¤¬¤«¤«¤Ã¤Æ¤ª¤ê¡¢¤¤¤«¤Ê¤ë¾ã³²¤â
-D:ÃåÍÑ¼Ô¤ÎÆ»¤òË¸¤²¤ë¤³¤È¤Ï½ÐÍè¤Ê¤¤¡£
+D:d—v‚È•”•ª‚ª“ñd‚É‚È‚Á‚½AŽè‚Æ‘«‚àƒJƒo[‚·‚é½›çŽq‚¾B
+D:¸_‚Æ“÷‘Ì‚ð‹­‰»‚·‚é–‚–@‚ª‚©‚©‚Á‚Ä‚¨‚èA‚¢‚©‚È‚éáŠQ‚à
+D:’…—pŽÒ‚Ì“¹‚ð–W‚°‚é‚±‚Æ‚Ío—ˆ‚È‚¢B
 
 
 # The Leather Jacket 'of Shiva's Avatar'
 # A reward for 'The Old Castle' quest
 
-N:26:¥·¥ô¥¡¤Î²½¿È¤Î
+N:26:ƒVƒ”ƒ@‚Ì‰»g‚Ì
 E:of Shiva's Avatar
 I:36:12:1
 W:30:50:120:100000
@@ -628,14 +628,14 @@ F:BLOWS | RES_SHARDS | HOLD_LIFE | SLOW_DIGEST |
 F:SUST_STR | SUST_DEX | SUST_CON | SUST_INT | SUST_WIS | SUST_CHR |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
 D:$The leather armor which has a power of Shiva the god of destruction.
-D:¥Ò¥ó¥º¡¼¶µ¤ÎºÇ¹â¿À¤ÏÁÏÂ¤¤Î¿À¥Ö¥é¥Õ¥Þ¥ó¡¢°Ý»ý¤Î¿À¥ô¥£¥·¥å¥Ì¡¢
-D:¤½¤·¤ÆÇË²õ¿À¥·¥ô¥¡¤À¡£¤³¤ì¤Ï¤½¤ÎÃæ¤Ç¤âºÇ¤â¶¯ÎÏ¤Ê¥·¥ô¥¡¤ÎÎÏ¤¬½É¤Ã¤¿
-D:³»¤À¡£
+D:ƒqƒ“ƒY[‹³‚ÌÅ‚_‚Í‘n‘¢‚Ì_ƒuƒ‰ƒtƒ}ƒ“AˆÛŽ‚Ì_ƒ”ƒBƒVƒ…ƒkA
+D:‚»‚µ‚Ä”j‰ó_ƒVƒ”ƒ@‚¾B‚±‚ê‚Í‚»‚Ì’†‚Å‚àÅ‚à‹­—Í‚ÈƒVƒ”ƒ@‚Ì—Í‚ªh‚Á‚½
+D:ŠZ‚¾B
 
 # The Soft Leather Armour 'Hithlomir'
 
 #J0# ???, Ko
-N:27:¡Ø¥Ò¥¹¥í¥ß¥¢¡Ù
+N:27:wƒqƒXƒƒ~ƒAx
 E:'Hithlomir'
 I:36:4:4
 W:20:3:80:45000
@@ -643,13 +643,13 @@ P:4:0d0:0:0:20
 F:STEALTH | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK | XTRA_H_RES
 D:$Familar with the secret ways hidden in darkness, this leather cuirass is 
 D:$truly more than it appears.
-D:¡ÖÌ¸¤ÎÊõÀÐ¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä¡¢¤³¤Î³×¤ÎÆ¹³»¤Ï¡¢
-D:°Å°Ç¤Ë±£¤ì¤ëÈëÌ©¤Î¼êÃÊ¤Ë¡¢¤½¤Î¸«¤«¤±¤è¤ê¤âÍÚ¤«¤ËÅ¬¤·¤Æ¤¤¤ë¡£
+D:u–¶‚Ì•óÎv‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚ÂA‚±‚ÌŠv‚Ì“·ŠZ‚ÍA
+D:ˆÃˆÅ‚É‰B‚ê‚é”é–§‚ÌŽè’i‚ÉA‚»‚ÌŒ©‚©‚¯‚æ‚è‚à—y‚©‚É“K‚µ‚Ä‚¢‚éB
 
 # The Leather Scale Mail 'Thalkettoth'
 
 #J0# ???
-N:28:¡Ø¥µ¥ë¥±¥Ã¥È¥¹¡Ù
+N:28:wƒTƒ‹ƒPƒbƒgƒXx
 E:'Thalkettoth'
 I:36:11:3
 W:20:3:60:25000
@@ -657,8 +657,8 @@ P:11:1d1:-1:0:25
 F:DEX | HIDE_TYPE | RES_ACID | RES_SHARDS | XTRA_H_RES
 D:$An amazingly light tunic and skirt sewn with thick, overlapping scales of 
 D:$hardened leather whose wearer moves with agility and assurance.
-D:¹Å¤¯¤·¤¿³×À½¤ÎÎÚ¤ò¸ü¤¯Ê¤¤¦¤è¤¦¤ËË¥¤¤ÉÕ¤±¤¿¶Ã¤¯¤Û¤É·Ú¤¤³»¤Ç¤¢¤ê¡¢
-D:Ãå¤ë¼Ô¤Ëµ¡ÉÒ¤µ¤È¼«¿®¤òÍ¿¤¨¤ë¡£
+D:d‚­‚µ‚½Šv»‚Ì—Ø‚ðŒú‚­•¢‚¤‚æ‚¤‚É–D‚¢•t‚¯‚½‹Á‚­‚Ù‚ÇŒy‚¢ŠZ‚Å‚ ‚èA
+D:’…‚éŽÒ‚É‹@•q‚³‚ÆŽ©M‚ð—^‚¦‚éB
 
 
 #  Artifact 29 is unused
@@ -666,7 +666,7 @@ D:Ãå¤ë¼Ô¤Ëµ¡ÉÒ¤µ¤È¼«¿®¤òÍ¿¤¨¤ë¡£
 
 # The Small Metal Shield of Thorin
 
-N:30:¥È¡¼¥ê¥ó²¦¤Î
+N:30:ƒg[ƒŠƒ“‰¤‚Ì
 E:of Thorin
 I:34:3:4
 W:40:12:65:120000
@@ -675,18 +675,18 @@ F:STR | CON | HIDE_TYPE | FREE_ACT | IM_ACID | RES_SOUND | RES_CHAOS
 F:XTRA_H_RES
 D:$Invoking the strength and endurance of Thorin, King under the Mountain, 
 D:$this little metal shield is proof against the Element of Earth.
-D:»³¤Î²¼¤Î²¦¥È¡¼¥ê¥ó¡¦¥ª¡¼¥±¥ó¥·¡¼¥ë¥É¤Î¶¯¤µ¤È´è¾æ¤µ¤ò¼õ¤±·Ñ¤¤¤À
-D:¤³¤Î¾®¤µ¤Ê¶âÂ°¤Î½â¤Ï¡¢ÃÏ¤Î¥¨¥ì¥á¥ó¥È¤ËÂÐ¤¹¤ë´°Á´¤ÊËÉ¸æ¤ò²ÄÇ½¤Ë¤¹¤ë¡£
+D:ŽR‚Ì‰º‚Ì‰¤ƒg[ƒŠƒ“EƒI[ƒPƒ“ƒV[ƒ‹ƒh‚Ì‹­‚³‚ÆŠæä‚³‚ðŽó‚¯Œp‚¢‚¾
+D:‚±‚Ì¬‚³‚È‹à‘®‚Ì‚‚ÍA’n‚ÌƒGƒŒƒƒ“ƒg‚É‘Î‚·‚éŠ®‘S‚È–hŒä‚ð‰Â”\‚É‚·‚éB
 
 
 # The Large Leather Shield of Celegorm
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#¡ö¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì¤è¤ê
+#J0#(“sX–Ú)
+#J0#–ƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê‚æ‚è
 #J0#
-N:31:¶âÈ±¤Î¥±¥ì¥´¥ë¥à¤Î
+N:31:‹à”¯‚ÌƒPƒŒƒSƒ‹ƒ€‚Ì
 E:of Celegorm
 I:34:4:0
 W:30:3:60:30000
@@ -695,22 +695,22 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_LITE | RES_DARK | XTRA_H_RES
 D:$This shield emblazoned with a multitude of creatures not seen for ages 
 D:$once protected Celegorm, lord of Himlad; around it lies a mystic balance  
 D:$that contains the conflicts of the elements.
-D:¤¤¤Þ¤Ç¤Ï¸«¤é¤ì¤Ê¤¯¤Ê¤Ã¤¿¿ô¡¹¤ÎÅÁÀâ¤ÎÀ¸¤­Êª¤Î
-D:Áõ¾þ¤¬»Ü¤µ¤ì¤¿¤³¤Î½â¤Ï¡¢¤«¤Ä¤Æ¥Ò¥à¥é¥É¤Î²¦¥±¥ì¥´¥ë¥à¤ò
-D:¼é¤Ã¤Æ¤¤¤¿¡£ÃÏ¿å²ÐÉ÷¤Î¥¨¥ì¥á¥ó¥È¤Î¤»¤á¤®¹ç¤¤¤òÆâÊñ¤·¡¢
-D:¤½¤ì¤é¤Î¿ÀÈëÅª¤Ê¥Ð¥é¥ó¥¹¤òÊÝ¤Ã¤Æ¤¤¤ë¡£
+D:‚¢‚Ü‚Å‚ÍŒ©‚ç‚ê‚È‚­‚È‚Á‚½”X‚Ì“`à‚Ì¶‚«•¨‚Ì
+D:‘•ü‚ªŽ{‚³‚ê‚½‚±‚Ì‚‚ÍA‚©‚Â‚Äƒqƒ€ƒ‰ƒh‚Ì‰¤ƒPƒŒƒSƒ‹ƒ€‚ð
+D:Žç‚Á‚Ä‚¢‚½B’n…‰Î•—‚ÌƒGƒŒƒƒ“ƒg‚Ì‚¹‚ß‚¬‡‚¢‚ð“à•ï‚µA
+D:‚»‚ê‚ç‚Ì_”é“I‚Èƒoƒ‰ƒ“ƒX‚ð•Û‚Á‚Ä‚¢‚éB
 
 
 # The Large Metal Shield of Anarion
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#¡ö¥¤¥·¥ë¥É¥¥¥¢¤Ë¡Ø²¦¡Ù¤òÉÕ¤±¤Ê¤¤¤Ê¤é¥¢¥Ê¥ê¥ª¥ó¤Ë¤âÉÕ¤±¤ë¤Ù¤­¤Ç¤Ï¤Ê¤¤¤Ç¤·¤ç
-#J0#¤¦(¥¢¥Ê¥ê¥ª¥ó¤Ï¥¤¥·¥ë¥É¥¥¥¢¤ÎÄï)¡£¥¤¥·¥ë¥É¥¥¥¢¤È¥¢¥Ê¥ê¥ª¥ó¤ÏÆó¿Í¤Ç¥´¥ó¥É¡¼
-#J0#¥ë(¥ª¥ë¥®¥ê¥¢¥¹)¤òÅý¼£¤·¤Æ¤¤¤¿¤·¡¢²¦¤È±¾¤¦¸ª½ñ¤­¤ÏÁ´Á³½Ð¤Æ¤­¤Æ¤¤¤Ê¤¤¤Î¤Ç¡£
+#J0#(“sX–Ú)
+#J0#–ƒCƒVƒ‹ƒhƒDƒA‚Éw‰¤x‚ð•t‚¯‚È‚¢‚È‚çƒAƒiƒŠƒIƒ“‚É‚à•t‚¯‚é‚×‚«‚Å‚Í‚È‚¢‚Å‚µ‚å
+#J0#‚¤(ƒAƒiƒŠƒIƒ“‚ÍƒCƒVƒ‹ƒhƒDƒA‚Ì’í)BƒCƒVƒ‹ƒhƒDƒA‚ÆƒAƒiƒŠƒIƒ“‚Í“ñl‚ÅƒSƒ“ƒh[
+#J0#ƒ‹(ƒIƒ‹ƒMƒŠƒAƒX)‚ð“Ž¡‚µ‚Ä‚¢‚½‚µA‰¤‚Æ‰]‚¤Œ¨‘‚«‚Í‘S‘Ro‚Ä‚«‚Ä‚¢‚È‚¢‚Ì‚ÅB
 #J0#
-N:32:¥¢¥Ê¥ê¥ª¥ó¤Î
+N:32:ƒAƒiƒŠƒIƒ“‚Ì
 E:of Anarion
 I:34:5:0
 W:40:9:120:160000
@@ -719,28 +719,28 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | SUST_STR | SUST_INT |
 F:SUST_WIS | SUST_DEX | SUST_CON | SUST_CHR | XTRA_H_RES
 D:$The great metal-bound shield of Anarion, son of Elendil, who Sauron found 
 D:$himself powerless to wither or diminish.
-D:¤«¤Ä¤Æ¥µ¥¦¥í¥ó¤ÈÍ¦´º¤ËÀï¤Ã¤¿
-D:¥¨¥ì¥ó¥Ç¥£¥ë¤ÎÂ©»Ò¥¢¥Ê¥ê¥ª¥ó¤Î¶âÂ°¤Î½â¤À¡£
+D:‚©‚Â‚ÄƒTƒEƒƒ“‚Æ—EŠ¸‚Éí‚Á‚½
+D:ƒGƒŒƒ“ƒfƒBƒ‹‚Ì‘§ŽqƒAƒiƒŠƒIƒ“‚Ì‹à‘®‚Ì‚‚¾B
 
 
 # A reward for 'The Old Castle' quest
 
-#JZ#¥Ù¥ó¥¸¥ã¥ß¥ó ¥Õ¥é¥ó¥¯¥ê¥ó¡¢¤ä¤À¤è¤¥¤½¤ó¤Ê¤Î¡£
-#JZ#¥¼¥é¥º¥Ë¥¤¤Î¡Ö¸÷¤Î²¦¡×¤«¤é°Ê²¼¤Î¤è¤¦¤ËÊÑ¹¹¡£Íë¤ÎÁä¥ô¥¡¥¸¥å¥é¤ò
-#JZ#»ý¤Ã¤Æ¤¤¤ë¡£
-N:33:¥¤¥ó¥É¥é¤Î
+#JZ#ƒxƒ“ƒWƒƒƒ~ƒ“ ƒtƒ‰ƒ“ƒNƒŠƒ“A‚â‚¾‚æ‚£‚»‚ñ‚È‚ÌB
+#JZ#ƒ[ƒ‰ƒYƒjƒC‚ÌuŒõ‚Ì‰¤v‚©‚çˆÈ‰º‚Ì‚æ‚¤‚É•ÏXB—‹‚Ì‘„ƒ”ƒ@ƒWƒ…ƒ‰‚ð
+#JZ#Ž‚Á‚Ä‚¢‚éB
+N:33:ƒCƒ“ƒhƒ‰‚Ì
 E:of Indra
 I:32:2:5
 W:30:50:15:100000
 P:2:0d0:0:0:18
 F:INT | WIS | CHR | SUST_INT | SUST_WIS | SUST_CHR | RES_BLIND | IM_ELEC
 D:$This is the helm of Indra the god of thunderstorms.
-D:Íë¿À¥¤¥ó¥É¥é¤Î³õ¤À¡£
+D:—‹_ƒCƒ“ƒhƒ‰‚ÌŠ•‚¾B
 
 # The Massive Iron Crown of Morgoth
 
 #JZ#
-N:34:º®ÆÙ¤Î
+N:34:¬“×‚Ì
 E:of Chaos
 I:33:50:125
 W:100:1:20:10000000
@@ -752,19 +752,19 @@ F:LITE | SEE_INVIS | TELEPATHY |
 F:CURSED | HEAVY_CURSE | PERMA_CURSE | NO_TELE | INSTA_ART | QUESTITEM
 D:$The crown existed from before creation of the universe, and is
 D:$ the symbol of the throne in the court of chaos.
-D:±§Ãè¤ÎÁÏÀ¤°ÊÁ°¤«¤éÂ¸ºß¤·¤Æ¤¤¤¿º®ÆÙ¤ÎµÜÄî¤Ë¤ª¤¤¤Æ²¦°Ì¤ò¾ÝÄ§¤¹¤ë
-D:²¦´§¤À¡£
+D:‰F’ˆ‚Ì‘n¢ˆÈ‘O‚©‚ç‘¶Ý‚µ‚Ä‚¢‚½¬“×‚Ì‹{’ì‚É‚¨‚¢‚Ä‰¤ˆÊ‚ðÛ’¥‚·‚é
+D:‰¤Š¥‚¾B
 
 # The Iron Crown of Beruthiel
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#¡öÎ¹¤ÎÃç´Ö²¼´¬(»ä¤ÏÊ¸¸ËÈÇ¤·¤«»ý¤Ã¤Æ¤¤¤Ê¤¤¤Î¤Ç¥Ú¡¼¥¸¿ô¤Ï¾Ê¤­¤Þ¤¹)¡¢¥â¥ê¥¢¹£
-#J0#Æ»Æâ¤Ç¥¢¥é¥´¥ë¥ó¤ÎÂæ»ì¤Ë¡Ø¥Ù¥ë¥·¥¨¥ë²¦ÈÞ¡Ù¤È±¾¤¦¸ÀÍÕ¤¬½Ð¤Æ¤­¤Þ¤¹¡£¥¹¥Ý¥¤¥é
-#J0#¤Ç¤â²¦ÈÞ(½÷²¦¡©)¤È¤Ê¤Ã¤Æ¤ª¤ê¤Þ¤¹¤Î¤Ç¡£
+#J0#(“sX–Ú)
+#J0#–—·‚Ì’‡ŠÔ‰ºŠª(Ž„‚Í•¶ŒÉ”Å‚µ‚©Ž‚Á‚Ä‚¢‚È‚¢‚Ì‚Åƒy[ƒW”‚ÍÈ‚«‚Ü‚·)Aƒ‚ƒŠƒAB
+#J0#“¹“à‚ÅƒAƒ‰ƒSƒ‹ƒ“‚Ì‘äŽŒ‚Éwƒxƒ‹ƒVƒGƒ‹‰¤”Üx‚Æ‰]‚¤Œ¾—t‚ªo‚Ä‚«‚Ü‚·BƒXƒ|ƒCƒ‰
+#J0#‚Å‚à‰¤”Ü(—‰¤H)‚Æ‚È‚Á‚Ä‚¨‚è‚Ü‚·‚Ì‚ÅB
 #J0#
-N:35:¥Ù¥ë¥·¥¨¥ë²¦ÈÞ¤Î
+N:35:ƒxƒ‹ƒVƒGƒ‹‰¤”Ü‚Ì
 E:of Beruthiel
 I:33:10:-25
 W:40:12:20:0
@@ -774,14 +774,14 @@ F:FREE_ACT | SEE_INVIS | TELEPATHY | CURSED | XTRA_POWER
 D:$The midnight-hued steel circlet of the sorceress-queen Beruthiel, which 
 D:$grants extraordinary powers of sight and awareness at a terrible physical 
 D:$cost.
-D:ËâË¡»È¤¤¤Î½÷²¦¥Ù¥ë¥·¥¨¥ë²¦ÈÞ¤Î¡¢¿¿ÌëÃæ¤Î¿§¤ò¤·¤¿¥µ¡¼¥¯¥ì¥Ã¥È¤À¡£
-D:¶²¤í¤·¤¯Âç¤­¤ÊÆùÂÎÅªÂå½þ¤È°ú¤­ÂØ¤¨¤ËÂî±Û¤·¤¿´ãÎÏ¤ÈÃÎ³Ð¤ò¼ø¤±¤ë¡£
+D:–‚–@Žg‚¢‚Ì—‰¤ƒxƒ‹ƒVƒGƒ‹‰¤”Ü‚ÌA^–é’†‚ÌF‚ð‚µ‚½ƒT[ƒNƒŒƒbƒg‚¾B
+D:‹°‚ë‚µ‚­‘å‚«‚È“÷‘Ì“I‘ãž‚Æˆø‚«‘Ö‚¦‚É‘ì‰z‚µ‚½Šá—Í‚Æ’mŠo‚ðŽö‚¯‚éB
 
 
 # The Hard Leather Cap of Thranduil
 
 #J0# wp.261
-N:36:¥¹¥é¥ó¥É¥¥¥¤¥ë²¦¤Î
+N:36:ƒXƒ‰ƒ“ƒhƒDƒCƒ‹‰¤‚Ì
 E:of Thranduil
 I:32:2:2
 W:20:2:15:50000
@@ -789,14 +789,14 @@ P:2:0d0:0:0:10
 F:INT | WIS | HIDE_TYPE | RES_BLIND | TELEPATHY | XTRA_H_RES
 D:$The hunting cap of King Thranduil, to whose ears come all the secrets of 
 D:$his forest domain.
-D:¥ì¥´¥é¥¹¤ÎÉã¤Ç¤¢¤ê¡¢ÎÎÅÚ¤Î¿¹¤Î¤¢¤é¤æ¤ë»ö¤òÃÎ¤ë¥¹¥é¥ó¥É¥¦¥£¥ë²¦
-D:¤Î¥Ï¥ó¥Æ¥£¥ó¥°Ë¹¤À¡£
+D:ƒŒƒSƒ‰ƒX‚Ì•ƒ‚Å‚ ‚èA—Ì“y‚ÌX‚Ì‚ ‚ç‚ä‚éŽ–‚ð’m‚éƒXƒ‰ƒ“ƒhƒEƒBƒ‹‰¤
+D:‚Ìƒnƒ“ƒeƒBƒ“ƒO–X‚¾B
 
 
 # The Metal Cap of Thengel
 
 #J0# wp.261
-N:37:¥»¥ó¥²¥ë²¦¤Î
+N:37:ƒZƒ“ƒQƒ‹‰¤‚Ì
 E:of Thengel
 I:32:3:3
 W:10:2:20:22000
@@ -805,18 +805,18 @@ F:WIS | CHR | HIDE_TYPE
 D:$A ridged helmet made of steel, and embossed with scenes of valor in fine-
 D:$engraved silver.  It grants the wearer nobility, clearness of thought and 
 D:$understanding.
-D:²«¶â´Û¤Î²¦¥»¥ª¥Ç¥ó¤ÎÉã¥»¥ó¥²¥ë¤¬¿È¤ËÉÕ¤±¤Æ¤¤¤¿
-D:Ãæ±û¤ÎÀí¤Ã¤¿Å´³õ¤Ç¡¢ÉðÍ¦¤ò¼¨¤¹³¨¤¬ÁÇÀ²¤é¤·¤¤¶äºÙ¹©¤Ë¤è¤Ã¤Æ
-D:Éâ¤­Ä¦¤ê¤Ë¤µ¤ì¤Æ¤¤¤ë¡£¤³¤Î³õ¤Ï¿È¤ËÉÕ¤±¤ë¼Ô¤Ë¹âµ®¤µ¤ÈÃÎ¸«¤È¤ò¼ø¤±¤ë¡£
+D:‰©‹àŠÙ‚Ì‰¤ƒZƒIƒfƒ“‚Ì•ƒƒZƒ“ƒQƒ‹‚ªg‚É•t‚¯‚Ä‚¢‚½
+D:’†‰›‚Ìë‚Á‚½“SŠ•‚ÅA•—E‚ðŽ¦‚·ŠG‚ª‘f°‚ç‚µ‚¢‹â×H‚É‚æ‚Á‚Ä
+D:•‚‚«’¤‚è‚É‚³‚ê‚Ä‚¢‚éB‚±‚ÌŠ•‚Íg‚É•t‚¯‚éŽÒ‚É‚‹M‚³‚Æ’mŒ©‚Æ‚ðŽö‚¯‚éB
 
 
 # The Steel Helm of Hammerhand
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0# KOHKO-P ¤µ¤ó¤Ë¶µ¤ï¤ê¤Þ¤·¤¿¡£
+#J0# KOHKO-P ‚³‚ñ‚É‹³‚í‚è‚Ü‚µ‚½B
 #J0#
-N:38:ÄÈ¼ê²¦¤Î
+N:38:’ÆŽè‰¤‚Ì
 E:of Hammerhand
 I:32:6:3
 W:20:2:60:45000
@@ -824,20 +824,20 @@ P:6:1d3:0:0:20
 F:STR | DEX | CON | HIDE_TYPE | RES_ACID | RES_NEXUS
 D:$A great helm as steady as the heroes of the Westdike. Mighty were the 
 D:$blows of Helm, the Hammerhand!
-D:²¦²È¤òÉî¿«¤·¤¿¼Ô¤òÁÇ¼ê¤Î·èÆ®¤Ç
-D:²¥¤ê»¦¤·¡¢ÄÊ¼ê²¦¤È¸Æ¤Ð¤ì¤¿¥í¡¼¥Ï¥óÂè¶åÂå¹ñ²¦¤Î´è¶¯¤Ê¥°¥ì¡¼¥È¥Ø¥ë¥à¤À¡£
+D:‰¤‰Æ‚ð•ŽJ‚µ‚½ŽÒ‚ð‘fŽè‚ÌŒˆ“¬‚Å
+D:‰£‚èŽE‚µA’ÈŽè‰¤‚ÆŒÄ‚Î‚ê‚½ƒ[ƒnƒ“‘æ‹ã‘ã‘‰¤‚ÌŠæ‹­‚ÈƒOƒŒ[ƒgƒwƒ‹ƒ€‚¾B
 
 
 # The _DRAGON_ Helm of Dor-Lomin
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0# (ÅÔ¡¹ÌÜ)
-#J0#¡ö¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì¤Ç¤ÏÁ´¤Æ¡Ø¥É¥ë¡á¥í¡¼¥ß¥ó¡Ù¤ÈÉ½µ­¤µ¤ì¤Æ¤¤¤Þ¤¹¡£¹¹¤Ë¡¢¸¶ºî
-#J0#Ãæ¤Ç¤ÏÂçÂÎ¤³¤Î¤è¤¦¤Ë¡ØÎµ¤Î³õ¡Ù¤È½ñ¤«¤ì¤Æ¤¤¤¿¤Î¤Ç¡¢¡Ö¾¯¤·¤Ç¤â¿Æ¤·¤ß¤¬¤ï¤¯¤è
-#J0#¤¦¤Ë¡×ÆüËÜ¸ì²½¤µ¤ì¤ë¤Î¤Ê¤é¤³¤¦¤¹¤Ù¤­¤À¤È»×¤¤¤Þ¤¹¡£
+#J0# (“sX–Ú)
+#J0#–ƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê‚Å‚Í‘S‚Äwƒhƒ‹ƒ[ƒ~ƒ“x‚Æ•\‹L‚³‚ê‚Ä‚¢‚Ü‚·BX‚ÉAŒ´ì
+#J0#’†‚Å‚Í‘å‘Ì‚±‚Ì‚æ‚¤‚Éw—³‚ÌŠ•x‚Æ‘‚©‚ê‚Ä‚¢‚½‚Ì‚ÅAu­‚µ‚Å‚àe‚µ‚Ý‚ª‚í‚­‚æ
+#J0#‚¤‚Év“ú–{Œê‰»‚³‚ê‚é‚Ì‚È‚ç‚±‚¤‚·‚×‚«‚¾‚ÆŽv‚¢‚Ü‚·B
 #J0#
-N:39:¥É¥ë=¥í¡¼¥ß¥ó¤Î
+N:39:ƒhƒ‹=ƒ[ƒ~ƒ“‚Ì
 E:of Dor-Lomin
 I:32:7:4
 W:70:12:75:300000
@@ -848,14 +848,14 @@ F:LITE | SEE_INVIS | TELEPATHY | ACTIVATE
 U:TERROR
 D:$The legendary dragon helm of Turin Turambar, a object of dread to the 
 D:$servants of Morgoth.
-D:¥È¥¥¡¼¥ê¥ó¡¦¥È¥¥¥é¥ó¥Ð¡¼¥ë¤ÎÅÁÀâ¤ÎÎµ³õ¤Ç¡¢¥â¥ë¥´¥¹¤Î¼ê²¼¤É¤â
-D:¤Ë¤È¤Ã¤Æ¤Ï¶²ÉÝ¤ÎÂÐ¾Ý¤Ç¤¢¤ë¡£
+D:ƒgƒD[ƒŠƒ“EƒgƒDƒ‰ƒ“ƒo[ƒ‹‚Ì“`à‚Ì—³Š•‚ÅAƒ‚ƒ‹ƒSƒX‚ÌŽè‰º‚Ç‚à
+D:‚É‚Æ‚Á‚Ä‚Í‹°•|‚Ì‘ÎÛ‚Å‚ ‚éB
 
 
 # The Iron Helm 'Holhenneth'
 
 #J0# ???
-N:40:¡Ø¥Û¥ë¥Ø¥ó¥Í¥¹¡Ù
+N:40:wƒzƒ‹ƒwƒ“ƒlƒXx
 E:'Holhenneth'
 I:32:5:2
 W:20:5:75:100000
@@ -864,14 +864,14 @@ F:INT | WIS | SEARCH | HIDE_TYPE | RES_BLIND | SEE_INVIS | ACTIVATE
 U:DETECT_ALL
 D:$A famous helm of forged iron granting extraordinary powers of mind and 
 D:$awareness. 
-D:ÊÂ³°¤ì¤¿Àº¿ÀÎÏ¤ÈÃÎ³Ð¤È¤ò¼ø¤±¤ë¡¢ÃÃÅ´À½¤ÎÌ¾¹â¤¤³õ¤À¡£
-D:¤½¤ÎÌ¾¤Ï¥·¥ó¥À¡¼¥ë¸ì¤Ç¡ÖÌ©¤«¤Ê¤ëÌÜ¤Î³õ¡×¤ò°ÕÌ£¤¹¤ë¡£
+D:•ÀŠO‚ê‚½¸_—Í‚Æ’mŠo‚Æ‚ðŽö‚¯‚éA’b“S»‚Ì–¼‚‚¢Š•‚¾B
+D:‚»‚Ì–¼‚ÍƒVƒ“ƒ_[ƒ‹Œê‚Åu–§‚©‚È‚é–Ú‚ÌŠ•v‚ðˆÓ–¡‚·‚éB
 
 
 # The Iron Helm of Gorlim -> Terror Mask (for warriors only...)
 
 #JZ#
-N:41:¡Ø¶²ÉÝ¤Î²¾ÌÌ¡Ù
+N:41:w‹°•|‚Ì‰¼–Êx
 E:'Terror Mask'
 I:32:5:-1
 W:50:3:75:200000
@@ -883,14 +883,14 @@ F:TELEPORT
 U:TERROR
 D:$This is terrible, scary, fearful, dreadful, bloodcurding, hair-rising
 D:$ frightening mask.
-D:¤Ê¤ó¤È¤â¶²¤í¤·¤¤¡¢ÉÔµ¤Ì£¤Ç¡¢¤ª¤É¤í¤ª¤É¤í¤·¤¯¡¢È±¤¬µÕÎ©¤Á¡¢·ì¤âÅà¤ê¡¢
-D:¤¾¤Ã¤È¤·¤ÆÄ»È©¤¬Î©¤Ä¤è¤¦¤Ê²¾ÌÌ¤À¡£
-D:²¾ÌÌ¤Î±ü¤ÎÆ·¤ËâË¤Þ¤ì¤ì¤Ð¡¢ÉÝ¤¯¤ÆÆ¨¤²½Ð¤µ¤º¤Ë¤Ï¤¤¤é¤ì¤Ê¤¤¡£
+D:‚È‚ñ‚Æ‚à‹°‚ë‚µ‚¢A•s‹C–¡‚ÅA‚¨‚Ç‚ë‚¨‚Ç‚ë‚µ‚­A”¯‚ª‹t—§‚¿AŒŒ‚à“€‚èA
+D:‚¼‚Á‚Æ‚µ‚Ä’¹”§‚ª—§‚Â‚æ‚¤‚È‰¼–Ê‚¾B
+D:‰¼–Ê‚Ì‰œ‚Ì“µ‚ÉáÉ‚Ü‚ê‚ê‚ÎA•|‚­‚Ä“¦‚°o‚³‚¸‚É‚Í‚¢‚ç‚ê‚È‚¢B
 
 # The Golden Crown of Gondor -> Amber
 
 #JZ#
-N:42:¿¿À¤³¦¥¢¥ó¥Ð¡¼¤Î
+N:42:^¢ŠEƒAƒ“ƒo[‚Ì
 E:of Amber
 I:33:11:3
 W:40:40:30:125000
@@ -902,17 +902,17 @@ F:XTRA_POWER | XTRA_H_RES
 U:CURE_700
 D:$The gold grown which is decorated with much jewerly is the symbol
 D:$ of the throne of Amber. Princes of Amber scrambled for it violently.
-D:¥¢¥ó¥Ð¡¼¤Î²¦°Ì¤Î¾ÝÄ§¤Ç¤¢¤ë¡¢Â¿¿ô¤ÎÊõÀÐ¤Ç¾þ¤é¤ì¤¿¶â¤Î²¦´§¤À¡£
-D:¤³¤ì¤ò¤á¤°¤Ã¤Æ¹üÆù¤ÎÁè¤¤¤¬²¦»Ò¤¿¤Á¤Î´Ö¤Ç·«¤ê¹­¤²¤é¤ì¤¿¡£
+D:ƒAƒ“ƒo[‚Ì‰¤ˆÊ‚ÌÛ’¥‚Å‚ ‚éA‘½”‚Ì•óÎ‚Åü‚ç‚ê‚½‹à‚Ì‰¤Š¥‚¾B
+D:‚±‚ê‚ð‚ß‚®‚Á‚Äœ“÷‚Ì‘ˆ‚¢‚ª‰¤Žq‚½‚¿‚ÌŠÔ‚ÅŒJ‚èL‚°‚ç‚ê‚½B
 
 
 # The Cloak of Houdini
 # Escape Artist and Spiritualist
 # A reward for 'The Old Castle' quest
 
-#JZ#°úÅÄÅ·¹¶¤Î¤è¤¦¤Ê¿Í¤é¤·¤¤¡£¤ä¤À¤è¤¦¡£
-#JZ#¥¼¥é¥º¥Ë¥¤¤Î¡Ö±Æ¤Î¥¸¥ã¥Ã¥¯¡×¤«¤é
-N:43:±Æ¤Î¥¸¥ã¥Ã¥¯¤Î
+#JZ#ˆø“c“VU‚Ì‚æ‚¤‚Èl‚ç‚µ‚¢B‚â‚¾‚æ‚¤B
+#JZ#ƒ[ƒ‰ƒYƒjƒC‚Ìu‰e‚ÌƒWƒƒƒbƒNv‚©‚ç
+N:43:‰e‚ÌƒWƒƒƒbƒN‚Ì
 E:of Jack of Shadows
 I:35:1:7
 W:30:20:10:100000
@@ -921,14 +921,14 @@ F:STEALTH | SEARCH | FREE_ACT | SEE_INVIS | HOLD_LIFE | TELEPATHY
 D:$The cloak of Jack of Shadows. He is one of the kings who rule
 D:$ night side of the earth at which rotetion stopped.
 D:$(R.Zelazny, 'Jack of Shadows')
-D:¼«Å¾¤¬»ß¤Þ¤Ã¤¿ÃÏµå¤ÇÌë¤ÎÀ¤³¦¤ò»ÙÇÛ¤¹¤ë²¦¤Î°ì¿Í¡¢
-D:Å¥ËÀ¤Î²¦¤Ç¤¢¤ëÉÔ»à¿È¤Î¡Ø±Æ¤Î¥¸¥ã¥Ã¥¯¡Ù¤Î¥¯¥í¡¼¥¯¤À¡£
-D:¡ÊR.¥¼¥é¥º¥Ë¥¤¡Ö±Æ¤Î¥¸¥ã¥Ã¥¯¡×¡Ë
+D:Ž©“]‚ªŽ~‚Ü‚Á‚½’n‹…‚Å–é‚Ì¢ŠE‚ðŽx”z‚·‚é‰¤‚ÌˆêlA
+D:“D–_‚Ì‰¤‚Å‚ ‚é•sŽ€g‚Ìw‰e‚ÌƒWƒƒƒbƒNx‚ÌƒNƒ[ƒN‚¾B
+D:iR.ƒ[ƒ‰ƒYƒjƒCu‰e‚ÌƒWƒƒƒbƒNvj
 
 # The Cloak 'Colluin'
 
 #J0# ???
-N:44:¡Ø¥³¥ë¥¤¥ó¡Ù
+N:44:wƒRƒ‹ƒCƒ“x
 E:'Colluin'
 I:35:1:0
 W:5:45:10:80000
@@ -937,13 +937,13 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS | ACTIVATE
 U:RESIST_ALL
 D:$A cape worn by a hero from Valinor, a land utterly beyond the strife 
 D:$of Elements.
-D:ÀºÎîÃ£¤¬Áè¤¦±²Ãæ¤ÎÃÏ¥ô¥¡¥ê¥Î¡¼¥ë¤Î±ÑÍº¤¬¿È¤ËÉÕ¤±¤Æ¤¤¤¿¥Þ¥ó¥È¤À¡£
+D:¸—ì’B‚ª‘ˆ‚¤‰Q’†‚Ì’nƒ”ƒ@ƒŠƒm[ƒ‹‚Ì‰p—Y‚ªg‚É•t‚¯‚Ä‚¢‚½ƒ}ƒ“ƒg‚¾B
 
 
 # The Cloak 'Holcolleth'
 
 #J0# ???
-N:45:¡Ø¥Û¥ë¥³¥ë¥ì¥¹¡Ù
+N:45:wƒzƒ‹ƒRƒ‹ƒŒƒXx
 E:'Holcolleth'
 I:35:2:2
 W:20:15:5:43000
@@ -953,19 +953,19 @@ U:SLEEP
 D:$This elven-grey mantle possesses great powers of tranquility and of 
 D:$concealment, and grants the wearer the knowledge and understanding of 
 D:$the Sindar.
-D:ÀÅ¼ä¤È±£Ì©¤Î°ÎÂç¤Ê¤ëÎÏ¤ò»ý¤Ä¥¨¥ë¥Õ¤Î³¥¿§¤Î³°Åå¤Ç¤¢¤ê¡¢ÃåÍÑ¼Ô¤Ë¤Ï¥·¥ó¥À¡¼¥ë¤Î
-D:ÃÎ¼±¤È»×Î¸¤òÍ¿¤¨¤ë¡£
+D:ÃŽâ‚Æ‰B–§‚ÌˆÌ‘å‚È‚é—Í‚ðŽ‚ÂƒGƒ‹ƒt‚ÌŠDF‚ÌŠO“…‚Å‚ ‚èA’…—pŽÒ‚É‚ÍƒVƒ“ƒ_[ƒ‹‚Ì
+D:’mŽ¯‚ÆŽv—¶‚ð—^‚¦‚éB
 
 
 # The Cloak of Thingol
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# wp.262 p.334
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#¡ö¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì¤è¤ê
+#J0#(“sX–Ú)
+#J0#–ƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê‚æ‚è
 #J0#
-N:46:³¥¿§¥Þ¥ó¥È²¦¥·¥ó¥´¥ë¤Î
+N:46:ŠDFƒ}ƒ“ƒg‰¤ƒVƒ“ƒSƒ‹‚Ì
 E:of Thingol
 I:35:1:3
 W:10:90:10:45000
@@ -975,19 +975,19 @@ F:FREE_ACT | RES_ACID | RES_FIRE | RES_COLD | ACTIVATE
 U:RECHARGE
 D:$A sable-hued cloak, with glowing elven-runes to restore magic showing calm 
 D:$and clear as moonlight on still water.
-D:È¾Æ©ÌÀ¤Ç¿¿¼î¤Î¤è¤¦¤Ê³¥¿§¤Î¥¯¥í¡¼¥¯¤Ç¡¢ËâÎÏ¤òÈë¤á¤¿µ±¤¯¥¨¥ë¥Õ¤Î¥ë¡¼¥óÊ¸»ú¤¬
-D:¿åÌÌ¤Ë±Ç¤Ã¤¿·î¤Î¤´¤È¤¯¡¢ÀÅ¤«¤Ë¤½¤·¤Æ¤Ï¤Ã¤­¤ê¤ÈÉâ¤«¤Ó¾å¤¬¤Ã¤Æ¤¤¤ë¡£
+D:”¼“§–¾‚Å^Žì‚Ì‚æ‚¤‚ÈŠDF‚ÌƒNƒ[ƒN‚ÅA–‚—Í‚ð”é‚ß‚½‹P‚­ƒGƒ‹ƒt‚Ìƒ‹[ƒ“•¶Žš‚ª
+D:…–Ê‚É‰f‚Á‚½ŒŽ‚Ì‚²‚Æ‚­AÃ‚©‚É‚»‚µ‚Ä‚Í‚Á‚«‚è‚Æ•‚‚©‚Ñã‚ª‚Á‚Ä‚¢‚éB
 
 
 # The Cloak of Thorongil
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# wp.260
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#¡ö»ØÎØÊª¸ìÄÉÊäÊÔ¤è¤ê
+#J0#(“sX–Ú)
+#J0#–Žw—Ö•¨Œê’Ç•â•Ò‚æ‚è
 #J0#
-N:47:Âç¾­¥½¥í¥ó¥®¥ë¤Î
+N:47:‘å«ƒ\ƒƒ“ƒMƒ‹‚Ì
 E:of Thorongil
 I:35:1:0
 W:5:20:10:13000
@@ -996,16 +996,16 @@ F:FREE_ACT | RES_ACID | SEE_INVIS
 D:$A cloak of shimmering green and brown that grants sight beyond sight and 
 D:$shakes off holding magics, worn by Aragorn son of Arathorn in his youth 
 D:$as he adventured under the name of Thorongil.
-D:¤³¤ÎÎÐ¤ÈÃã¿§¤Îµ±¤¯¥¯¥í¡¼¥¯¤Ï¤«¤Ä¤Æ
-D:¥´¥ó¥É¡¼¥ë¤ÎÆ¬¤Ç¤¢¤ê¡¢³¤¤ËÎ¦¤ËÉðÍ¦¤òÃÚ¤»¤Æ¤¤¤¿
-D:±Ô¤¤ÌÜ¤Î¼ã¤­¥¢¥é¥´¥ë¥ó¤¬
-D:¿È¤ËÉÕ¤±¤Æ¤¤¤¿¤â¤Î¤À¡£
+D:‚±‚Ì—Î‚Æ’ƒF‚Ì‹P‚­ƒNƒ[ƒN‚Í‚©‚Â‚Ä
+D:ƒSƒ“ƒh[ƒ‹‚Ì“ª‚Å‚ ‚èAŠC‚É—¤‚É•—E‚ð’y‚¹‚Ä‚¢‚½
+D:‰s‚¢–Ú‚ÌŽá‚«ƒAƒ‰ƒSƒ‹ƒ“‚ª
+D:g‚É•t‚¯‚Ä‚¢‚½‚à‚Ì‚¾B
 
 
 # The Cloak 'Colannon'
 
 #J0# ???
-N:48:¡Ø¥³¥é¥ó¥Î¥ó¡Ù
+N:48:wƒRƒ‰ƒ“ƒmƒ“x
 E:'Colannon'
 I:35:1:3
 W:3:10:10:15000
@@ -1015,12 +1015,12 @@ U:TELEPORT
 D:$A crystal-blue cape of fine silk worn by a silent messenger of 
 D:$the forces of Law. Somehow, its wearer is always able to escape 
 D:$trouble.
-D:Ãá½ø¤ÎÀªÎÏ¤ÎÀÅ¤«¤Ê¤ë»È¼Ô¤¬Ãå¤Æ¤¤¤¿¡¢º°ÊË¤Î¸¨¤Î¥Þ¥ó¥È¤À¡£
+D:’˜‚Ì¨—Í‚ÌÃ‚©‚È‚éŽgŽÒ‚ª’…‚Ä‚¢‚½A®•É‚ÌŒ¦‚Ìƒ}ƒ“ƒg‚¾B
 
 # The Shadow Cloak of Luthien
 
 #J0# p.369, wp.246
-N:49:¥ë¥·¥¨¥ó²¦½÷¤Î
+N:49:ƒ‹ƒVƒGƒ“‰¤—‚Ì
 E:of Luthien
 I:35:6:2
 W:40:40:5:80000
@@ -1033,15 +1033,15 @@ D:$The opaque midnight folds, inset with a multitude of tiny diamonds, of
 D:$this cloak swirl around you and you feel a hint, a fragment of the 
 D:$knowledge and power to restore that lay in Luthien, the most beautiful 
 D:$being that ever knew death.
-D:¼«¤é±Ê±ó¤Î¼÷Ì¿¤ò¼êÊü¤·¡¢
-D:»à¤òÆ¨¤ì¤¨¤Ì¼ÔÃ£¤ÎÆâ¤Ç¤ÏºÇ¤âÈþ¤·¤¤¼Ô¤È¤Ê¤Ã¤¿¥ë¥·¥¨¥ó²¦½÷¤Î¥¯¥í¡¼¥¯¤Ï¡¢
-D:¤¿¤Ê¤Ó¤¯¼¿¹õ¤Î°Ç¤òÌµ¿ô¤Î¾®¤µ¤Ê¥À¥¤¥¢¥â¥ó¥É¤¬¾þ¤Ã¤Æ¤¤¤ë¡£
-D:¿È¤ËÉÕ¤±¤ë¼Ô¤Ï²¦½÷¤ÎÃÎ¼±¤ÈÎÏ¤¬¼«¤é¤ÎÆâ¤ËÁÉ¤Ã¤Æ¤¯¤ë¤Î¤ò´¶¤¸¤ë¡£
+D:Ž©‚ç‰i‰“‚ÌŽõ–½‚ðŽè•ú‚µA
+D:Ž€‚ð“¦‚ê‚¦‚ÊŽÒ’B‚Ì“à‚Å‚ÍÅ‚à”ü‚µ‚¢ŽÒ‚Æ‚È‚Á‚½ƒ‹ƒVƒGƒ“‰¤—‚ÌƒNƒ[ƒN‚ÍA
+D:‚½‚È‚Ñ‚­Ž½•‚ÌˆÅ‚ð–³”‚Ì¬‚³‚Èƒ_ƒCƒAƒ‚ƒ“ƒh‚ªü‚Á‚Ä‚¢‚éB
+D:g‚É•t‚¯‚éŽÒ‚Í‰¤—‚Ì’mŽ¯‚Æ—Í‚ªŽ©‚ç‚Ì“à‚É‘h‚Á‚Ä‚­‚é‚Ì‚ðŠ´‚¶‚éB
 
 # The Shadow Cloak of Tuor
 
 #J0# p.342
-N:50:¥È¥¥¥ª¥ë¤Î
+N:50:ƒgƒDƒIƒ‹‚Ì
 E:of Tuor
 I:35:6:4
 W:40:40:5:50000
@@ -1050,10 +1050,10 @@ F:STEALTH | FREE_ACT | IM_ACID | SEE_INVIS |
 F:RES_DARK | RES_LITE | XTRA_H_RES
 D:$From the ruin of Gondolin did Tuor escape, through secret ways and travail, 
 D:$shielded by his cloak from a multitude of hostile eyes.
-D:³¤Åý¤Ù¤ë¥¦¥ë¥â¤è¤ê¼ø¤«¤ê¤·²¦¼Ô¤Î°á¤Ë¿È¤òÊñ¤ß¡¢
-D:¥È¥¥¥ª¥ë¤Ï¥´¥ó¥É¡¼¥ê¥ó¤ÎÇÑÔÒ¤è¤ê
-D:´öÀé¤ÎÅ¨¤ÎÌÜ¤ò¤«¤¤¤¯¤°¤êÈë¤µ¤ì¤¿¤ëÏ©¤Ë¤Æ
-D:Æ¨¤²¤ª¤ª¤»¤¿¤ê¡£
+D:ŠC“‚×‚éƒEƒ‹ƒ‚‚æ‚èŽö‚©‚è‚µ‰¤ŽÒ‚Ìˆß‚Ég‚ð•ï‚ÝA
+D:ƒgƒDƒIƒ‹‚ÍƒSƒ“ƒh[ƒŠƒ“‚Ì”pšÐ‚æ‚è
+D:Šôç‚Ì“G‚Ì–Ú‚ð‚©‚¢‚­‚®‚è”é‚³‚ê‚½‚é˜H‚É‚Ä
+D:“¦‚°‚¨‚¨‚¹‚½‚èB
 
 # Artifact 51 is unused
 
@@ -1061,20 +1061,20 @@ D:Æ¨¤²¤ª¤ª¤»¤¿¤ê¡£
 # The Set of Leather Gloves 'Cambeleg'
 
 #J0# ???
-N:52:¡Ø¥«¥ó¥Ù¥ì¥°¡Ù
+N:52:wƒJƒ“ƒxƒŒƒOx
 E:'Cambeleg'
 I:31:1:2
 W:10:6:5:36000
 P:1:0d0:8:8:15
 F:STR | CON | HIDE_TYPE | FREE_ACT | SHOW_MODS
 D:$A hero's handgear that lends great prowess in battle.
-D:¡Ö¹ä¤­¾¸¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä¡¢¤³¤Î±ÑÍº¤Î¼ê¹Ã¤Ï¡¢
-D:Àï¤¤¤Ë¤ª¤±¤ë°ÎÂç¤Ê¤ëÉðÍ¦¤ò¤â¤¿¤é¤¹¡£
+D:u„‚«¶v‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚ÂA‚±‚Ì‰p—Y‚ÌŽèb‚ÍA
+D:í‚¢‚É‚¨‚¯‚éˆÌ‘å‚È‚é•—E‚ð‚à‚½‚ç‚·B
 
 # The Set of Leather Gloves 'Cammithrim'
 
 #J0# ???, Ko
-N:53:¡Ø¥«¥ó¥ß¥¹¥ê¥à¡Ù
+N:53:wƒJƒ“ƒ~ƒXƒŠƒ€x
 E:'Cammithrim'
 I:31:1:0
 W:10:3:5:30000
@@ -1083,14 +1083,14 @@ F:FREE_ACT | RES_LITE | SUST_CON | LITE | ACTIVATE
 U:BO_MISS_1
 D:$These gloves glow so brightly as to light the way for their owner and cast 
 D:$magical bolts with great frequency.
-D:¤³¤ÎÏ¶¼ê¤Ï»ÈÍÑ¼Ô¤ÎÆ»¤ò¾È¤é¤¹¤Û¤ÉÌÀ¤ë¤¯µ±¤­¡¢Èó¾ï¤ËÃ»¤¤¼þ´ü¤ÇËâË¡¤ÎÌð¤ò
-D:Êü¤Ä¤³¤È¤¬¤Ç¤­¤ë¡£
+D:‚±‚Ì˜UŽè‚ÍŽg—pŽÒ‚Ì“¹‚ðÆ‚ç‚·‚Ù‚Ç–¾‚é‚­‹P‚«A”ñí‚É’Z‚¢ŽüŠú‚Å–‚–@‚Ì–î‚ð
+D:•ú‚Â‚±‚Æ‚ª‚Å‚«‚éB
 
 
 # The Set of Gauntlets 'Paurhach'
 
 #J0# ???, Ko
-N:54:¡Ø¥Ñ¥¦¥¢¥Ï¥Ã¥Ï¡Ù
+N:54:wƒpƒEƒAƒnƒbƒnx
 E:'Paurhach'
 I:31:2:1
 W:10:20:25:15000
@@ -1099,25 +1099,25 @@ F:STR | RES_FIRE | MAGIC_MASTERY | ACTIVATE
 U:BO_FIRE_1
 D:$A firey set of gauntlets that can even shoot fire from the user's 
 D:$hands. 
-D:¥·¥ó¥À¡¼¥ë¸ì¤Ç¡ÖÄ·¤Í¤ë±ê¤Î·ý¡×¤ÎÌ¾¤ò»ý¤Ä¤³¤ÎÏ¶¼ê¤Ï±ê¤Ë
-D:Êñ¤Þ¤ì¤Æ¤ª¤ê¡¢¿È¤ËÉÕ¤±¤ë¼Ô¤Ï²Ð¤Îµå¤ò·â¤Á½Ð¤¹¤³¤È¤â½ÐÍè¤ë¡£
+D:ƒVƒ“ƒ_[ƒ‹Œê‚Åu’µ‚Ë‚é‰Š‚ÌŒv‚Ì–¼‚ðŽ‚Â‚±‚Ì˜UŽè‚Í‰Š‚É
+D:•ï‚Ü‚ê‚Ä‚¨‚èAg‚É•t‚¯‚éŽÒ‚Í‰Î‚Ì‹…‚ðŒ‚‚¿o‚·‚±‚Æ‚ào—ˆ‚éB
 
 
 # The Set of Gauntlets 'Paurnimmen' -> of Corwin
 
 #JZ#
-N:55:¥¢¥ô¥¡¥í¥ó¤Î¼ç¥³¡¼¥¦¥£¥ó¤Î
+N:55:ƒAƒ”ƒ@ƒƒ“‚ÌŽåƒR[ƒEƒBƒ“‚Ì
 E:of Corwin
 I:31:2:4
 W:10:40:25:43000
 P:2:1d1:0:0:15
 F:SUST_CON | CON | REGEN | RES_COLD
-D:ÊÂ³°¤ì¤¿¶¯¿Ù¤µ¤ò»ý¤Ä¥¢¥ó¥Ð¡¼¤Î²¦»Ò¥³¡¼¥¦¥£¥ó¤Î¥¬¥ó¥È¥ì¥Ã¥È¤À¡£
+D:•ÀŠO‚ê‚½‹­x‚³‚ðŽ‚ÂƒAƒ“ƒo[‚Ì‰¤ŽqƒR[ƒEƒBƒ“‚ÌƒKƒ“ƒgƒŒƒbƒg‚¾B
 
 # The Set of Gauntlets 'Pauraegen'
 
 #J0# ???, Ko
-N:56:¡Ø¥Ñ¥¦¥é¥¨¥²¥ó¡Ù
+N:56:wƒpƒEƒ‰ƒGƒQƒ“x
 E:'Pauraegen'
 I:31:2:1
 W:10:20:25:11000
@@ -1126,13 +1126,13 @@ F:DEX | RES_ELEC | LITE | ACTIVATE
 U:BO_ELEC_1
 D:$A set of handgear with sparks surrounding it, able to fire 
 D:$bolts of electricity.
-D:¥·¥ó¥À¡¼¥ë¸ì¤Ç¡Ö±Ô¤­·ý¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä¤³¤ÎäÆ¼ê¤Ï¾ï¤Ë
-D:²Ð²Ö¤ò»¶¤é¤·¤Æ¤¤¤Æ¡¢ÅÅ·â¤ÎÌð¤òÊü¤Ä¤³¤È¤¬¤Ç¤­¤ë¡£
+D:ƒVƒ“ƒ_[ƒ‹Œê‚Åu‰s‚«Œv‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚Â‚±‚ÌâÄŽè‚Íí‚É
+D:‰Î‰Ô‚ðŽU‚ç‚µ‚Ä‚¢‚ÄA“dŒ‚‚Ì–î‚ð•ú‚Â‚±‚Æ‚ª‚Å‚«‚éB
 
 # The Set of Gauntlets 'Paurnen'
 
 #J0# ???, Ko
-N:57:¡Ø¥Ñ¥¦¥¢¥Í¥ó¡Ù
+N:57:wƒpƒEƒAƒlƒ“x
 E:'Paurnen'
 I:31:2:1
 W:10:20:25:12000
@@ -1140,13 +1140,13 @@ P:2:1d1:0:0:15
 F:WIS | RES_ACID | FREE_ACT | ACTIVATE
 U:BO_ACID_1
 D:$A set of handgear so corrosive that it may fire bolts of acid.
-D:¥·¥ó¥À¡¼¥ë¸ì¤Ç¡Ö¿å¤Î·ý¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä¤³¤ÎäÆ¼ê¤Ï¾ï¤Ë
-D:»À¤Ç¤Æ¤«¤Ã¤Æ¤¤¤Æ¡¢»À¤ÎÌð¤òÊü¤Ä¤³¤È¤¬¤Ç¤­¤ë¡£
+D:ƒVƒ“ƒ_[ƒ‹Œê‚Åu…‚ÌŒv‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚Â‚±‚ÌâÄŽè‚Íí‚É
+D:Ž_‚Å‚Ä‚©‚Á‚Ä‚¢‚ÄAŽ_‚Ì–î‚ð•ú‚Â‚±‚Æ‚ª‚Å‚«‚éB
 
 # The Set of Gauntlets 'Camlost' -> of Thanos
 
-#JZ# ??? ¥«¥×¥³¥ó ¥Þ¡¼¥ô¥§¥ë¥¹¡¼¥Ñ¡¼¥Ò¡¼¥í¡¼¥º¤Ë½Ð¤Æ¤ëÅÛ¡©
-N:58:¥µ¥Î¥¹¤Î
+#JZ# ??? ƒJƒvƒRƒ“ ƒ}[ƒ”ƒFƒ‹ƒX[ƒp[ƒq[ƒ[ƒY‚Éo‚Ä‚é“zH
+N:58:ƒTƒmƒX‚Ì
 E:of Thanos
 I:31:2:2
 W:10:20:25:0
@@ -1158,13 +1158,13 @@ F:RANDOM_CURSE1
 
 # The Set of Cesti of Fingolfin
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# p.354
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#¡ö¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì¤è¤ê¡£
+#J0#(“sX–Ú)
+#J0#–ƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê‚æ‚èB
 #J0#
-N:59:¾åµé²¦¥Õ¥£¥ó¥´¥ë¥Õ¥£¥ó¤Î
+N:59:ã‹‰‰¤ƒtƒBƒ“ƒSƒ‹ƒtƒBƒ“‚Ì
 E:of Fingolfin
 I:31:5:4
 W:40:15:40:110000
@@ -1174,21 +1174,21 @@ F:FREE_ACT | RES_ACID | ACTIVATE | SHOW_MODS | XTRA_POWER
 U:BO_MANA
 D:$The hand-sheathing of Fingolfin, warrior-king of Elves and Men, who gave 
 D:$Morgoth seven mighty wounds and pain that will last forever.
-D:¥Õ¥§¥¢¥Î¡¼¥ëË´¤­¸åÃæ¤Ä¹ñ¤Î¥Î¥ë¥É¡¼¥ë¤òÎ¨¤¤¤ÆÌ½²¦¤ÈÀï¤Ã¤¿
-D:¾åµé²¦¥Õ¥£¥ó¥´¥ë¥Õ¥£¥ó¤ÎÏ¶¼ê¤À¡£Èà¤Ï¤¿¤À°ì¿Í¤Ç¥â¥ë¥´¥¹¤Ë
-D:Àï¤¤¤òÄ©¤ß¡¢¤½¤ÎÂÎ¤Ë±Ê±ó¤ËÄË¤ßÂ³¤±¤ëÈ¬¤Ä¤Î½ý¤ò¹ï¤ß¤Ä¤±¤¿¡£
+D:ƒtƒFƒAƒm[ƒ‹–S‚«Œã’†‚Â‘‚Ìƒmƒ‹ƒh[ƒ‹‚ð—¦‚¢‚Ä–»‰¤‚Æí‚Á‚½
+D:ã‹‰‰¤ƒtƒBƒ“ƒSƒ‹ƒtƒBƒ“‚Ì˜UŽè‚¾B”Þ‚Í‚½‚¾ˆêl‚Åƒ‚ƒ‹ƒSƒX‚É
+D:í‚¢‚ð’§‚ÝA‚»‚Ì‘Ì‚É‰i‰“‚É’É‚Ý‘±‚¯‚é”ª‚Â‚Ì‚ð‚Ý‚Â‚¯‚½B
 
 # The Pair of Hard Leather Boots of Feanor
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# p.356
-#J0#(ÅÔ¡¹ÌÜ)
-#J0# ¥Õ¥§¥¢¥Î¡¼¥ë²¦»Ò¤Î ¢ª ¥Õ¥§¥¢¥Î¡¼¥ë²¦¤Î
-#J0#¡ö¡Ø²¦»Ò¡Ù¤È¸À¤¦¤Ê¤é¡Ø²¦¡Ù¤È¸À¤¦¤Û¤¦¤¬Å¬Åö¤Ç¤·¤ç¤¦¡£Î®ëó¤Î¥Î¥ë¥É¡¼¥ë¤Î»Ø´ø
-#J0#¤ò¼è¤Ã¤¿¤Î¤Ç¤¹¤«¤é¡£
+#J0#(“sX–Ú)
+#J0# ƒtƒFƒAƒm[ƒ‹‰¤Žq‚Ì ¨ ƒtƒFƒAƒm[ƒ‹‰¤‚Ì
+#J0#–w‰¤Žqx‚ÆŒ¾‚¤‚È‚çw‰¤x‚ÆŒ¾‚¤‚Ù‚¤‚ª“K“–‚Å‚µ‚å‚¤B—¬æ“‚Ìƒmƒ‹ƒh[ƒ‹‚ÌŽwŠö
+#J0#‚ðŽæ‚Á‚½‚Ì‚Å‚·‚©‚çB
 #J0#
-N:60:¥Õ¥§¥¢¥Î¡¼¥ë²¦¤Î
+N:60:ƒtƒFƒAƒm[ƒ‹‰¤‚Ì
 E:of Feanor
 I:30:3:15
 W:40:120:40:300000
@@ -1199,15 +1199,15 @@ U:SPEED
 D:$This wondrous pair of leather boots once sped Feanor, creator of the 
 D:$Simarils and the mightiest of the Eldar, along the Grinding Ice and to 
 D:$Middle Earth at last. 
-D:¤³¤ÎÁÇÀ²¤é¤·¤¤Èé·¤¤Ï¡¢¥·¥ë¥Þ¥ê¥ë¤ÎÀ¸¤ß¤Î¿Æ¤Ç¤¢¤ê¡¢¤«¤Ä¤ÆºÇ¶¯¤Î¥¨¥ë¥À¡¼¥ë
-D:¤Ç¤¢¤Ã¤¿¥Õ¥§¥¢¥Î¡¼¥ë¤ÎðêÂÌÅ·¤Î·¤¤Ç¡¢¥â¥ë¥´¥¹¤Ë
-D:ÎìÂ°¤µ¤»¤é¤ì¤¿Ãæ¤Ä¹ñ¤òÃ¥¤¤ÊÖ¤¹Èà¤Î±ÑÍºÅªÄ©Àï¤Î½õ¤±¤È¤Ê¤Ã¤¿¡£
+D:‚±‚Ì‘f°‚ç‚µ‚¢”çŒC‚ÍAƒVƒ‹ƒ}ƒŠƒ‹‚Ì¶‚Ý‚Ìe‚Å‚ ‚èA‚©‚Â‚ÄÅ‹­‚ÌƒGƒ‹ƒ_[ƒ‹
+D:‚Å‚ ‚Á‚½ƒtƒFƒAƒm[ƒ‹‚Ìèè‘Ê“V‚ÌŒC‚ÅAƒ‚ƒ‹ƒSƒX‚É
+D:—ê‘®‚³‚¹‚ç‚ê‚½’†‚Â‘‚ð’D‚¢•Ô‚·”Þ‚Ì‰p—Y“I’§í‚Ì•‚¯‚Æ‚È‚Á‚½B
 
 
 # The Pair of Soft Leather Boots 'Dal-i-thalion' -> of Flora
 
 #JZ#
-N:61:¥¢¥ó¥Ð¡¼¤Î²¦½÷¥Õ¥í¡¼¥é¤Î
+N:61:ƒAƒ“ƒo[‚Ì‰¤—ƒtƒ[ƒ‰‚Ì
 E:of Flora
 I:30:2:5
 W:10:25:20:70000
@@ -1215,21 +1215,21 @@ P:2:1d1:0:0:15
 U:CURE_POISON
 F:DEX | HIDE_TYPE | CHR | SUST_CHR | ACTIVATE | FREE_ACT |
 F:RES_NETHER | RES_CHAOS | SUST_CON
-D:¥Õ¥í¡¼¥é¤Ï¤Û¤È¤ó¤É¤Î»þ´Ö¥¢¥ó¥Ð¡¼¤ÎµÜÅÂ¤òÎ¥¤ì¤Æ¤¤¤Æ¡¢
-D:±Æ¤ÎÀ¤³¦¤Ç¿·¤·¤¤¥Ü¡¼¥¤¥Õ¥ì¥ó¥É¤ò¸«¤Ä¤±¤Æ¤Ï³Ú¤·¤ó¤Ç¤¤¤ë¡£
-D:Èà½÷¤Î¥Ö¡¼¥Ä¤Ë¤Ï¿È¤ËÉÕ¤±¤¿¼Ô¤òÌ¥ÎÏÅª¤Ë¸«¤»¤ëËâË¡¤¬¤«¤«¤Ã¤Æ¤¤¤ë¡£
+D:ƒtƒ[ƒ‰‚Í‚Ù‚Æ‚ñ‚Ç‚ÌŽžŠÔƒAƒ“ƒo[‚Ì‹{“a‚ð—£‚ê‚Ä‚¢‚ÄA
+D:‰e‚Ì¢ŠE‚ÅV‚µ‚¢ƒ{[ƒCƒtƒŒƒ“ƒh‚ðŒ©‚Â‚¯‚Ä‚ÍŠy‚µ‚ñ‚Å‚¢‚éB
+D:”Þ—‚Ìƒu[ƒc‚É‚Íg‚É•t‚¯‚½ŽÒ‚ð–£—Í“I‚ÉŒ©‚¹‚é–‚–@‚ª‚©‚©‚Á‚Ä‚¢‚éB
 
 # The Pair of Metal Shod Boots of Thror
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# wp.261
-#J0#(ÅÔ¡¹ÌÜ)
-#J0# ¥¹¥í¡¼¥ë²¦»Ò¤Î ¢ª ¥¹¥í¡¼¥ë²¦¤Î
-#J0#¡ö¥¹¥í¡¼¥ë¤Ï¥É¥¥¥ê¥ó²È¤ò·Ñ¾µ¤·¤Æ¤¤¤Þ¤¹¡£¤Ç¤¹¤«¤é¤³¤ì¤â¡Ø²¦¡Ù¤È¤¹¤ë¤Ù¤­¤Ç¤·¤ç
-#J0#¤¦¡£
+#J0#(“sX–Ú)
+#J0# ƒXƒ[ƒ‹‰¤Žq‚Ì ¨ ƒXƒ[ƒ‹‰¤‚Ì
+#J0#–ƒXƒ[ƒ‹‚ÍƒhƒDƒŠƒ“‰Æ‚ðŒp³‚µ‚Ä‚¢‚Ü‚·B‚Å‚·‚©‚ç‚±‚ê‚àw‰¤x‚Æ‚·‚é‚×‚«‚Å‚µ‚å
+#J0#‚¤B
 #J0#
-N:62:¥¹¥í¡¼¥ë²¦¤Î
+N:62:ƒXƒ[ƒ‹‰¤‚Ì
 E:of Thror
 I:30:6:3
 W:30:25:80:85000
@@ -1238,33 +1238,33 @@ F:STR | CON | HIDE_TYPE | SPEED | XTRA_H_RES
 D:$Sturdy footwear of leather and steel as enduring as the long-suffering 
 D:$Dwarven King-in-exile who wore them.  Of dwarven make, the wearer of 
 D:$these boots will be completely at home in the mountains.
-D:¥¹¥Þ¥¦¥°¤Î½±Íè¤Ë¤è¤êÎ®Ï²¤Î¿È¤È¤Ê¤Ã¤¿¥À¥¤¥ó°ìÀ¤¤ÎÀ¤·Ñ¤®¡¢
-D:¥É¥ï¡¼¥Õ²¦¥¹¥í¡¼¥ë¤ÎÅ´¤ÈÈé¤Ç½ÐÍè¤¿·¤¤Ç¡¢
-D:»ý¤Á¼ç¤Î´è¶¯¤µ¤ò¼õ¤±·Ñ¤¤¤Ç¤¤¤ë¡£
+D:ƒXƒ}ƒEƒO‚ÌP—ˆ‚É‚æ‚è—¬˜Q‚Ìg‚Æ‚È‚Á‚½ƒ_ƒCƒ“ˆê¢‚Ì¢Œp‚¬A
+D:ƒhƒ[ƒt‰¤ƒXƒ[ƒ‹‚Ì“S‚Æ”ç‚Åo—ˆ‚½ŒC‚ÅA
+D:Ž‚¿Žå‚ÌŠæ‹­‚³‚ðŽó‚¯Œp‚¢‚Å‚¢‚éB
 
 
 # The Pair of Soft Leather Boots of Shiva's Avatar
 # Default reward for The Cloning Pits
 
-N:63:¥·¥ô¥¡¤Î²½¿È¤Î
+N:63:ƒVƒ”ƒ@‚Ì‰»g‚Ì
 E:of Shiva's Avatar
 I:30:2:4
 W:30:20:20:100000
 P:4:1d1:5:5:16
 F:SPEED | DEX | SUST_DEX | RES_NEXUS | FREE_ACT | LEVITATION
 D:$The boots has an agility of Shiva the god of destruction.
-D:ÇË²õ¿À¥·¥ô¥¡¤ÎÎÏ¤ò»ý¤Ã¤¿³×¤Î·¤¤À¡£
+D:”j‰ó_ƒVƒ”ƒ@‚Ì—Í‚ðŽ‚Á‚½Šv‚ÌŒC‚¾B
 
 
 # The Main Gauche of Maedhros
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0#
-#J0# (ÅÔ¡¹ÌÜ)
-#J0#¡ö¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì¤è¤ê¡£
+#J0# (“sX–Ú)
+#J0#–ƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê‚æ‚èB
 #J0#
-N:64:¾æ¹â¤­¥Þ¥¨¥º¥í¥¹¤Î
+N:64:ä‚‚«ƒ}ƒGƒYƒƒX‚Ì
 E:of Maedhros
 I:23:5:3
 W:15:30:30:62500
@@ -1275,14 +1275,14 @@ F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$A short thrusting blade with a large guard worn by Maedhros the Tall, 
 D:$eldest son of Feanor, and wielded with his left hand after the loss of 
 D:$his right hand in the pits of Thangorodrim.
-D:Àè¤¬Àí¤Ã¤¿Ã»·õ¤Ç¡¢¥Õ¥§¥¢¥Î¡¼¥ë¤ÎÄ¹»Ò¤Ç¤¢¤ë¾æ¹â¤­¥Þ¥¨¥º¥í¥¹
-D:¤¬»È¤Ã¤Æ¤¤¤¿¤â¤Î¤À¡£Èà¤Ï¥µ¥ó¥´¥í¥É¥ê¥à¤«¤éµß½Ð¤µ¤ì¤¿ºÝ¤Ë±¦¼ê¤ò
-D:¼º¤Ã¤¿¤¬¡¢¸å¤Ëº¸¼ê¤Ç°ÊÁ°¤è¤ê¹ª¤ß¤Ë·õ¤òÁà¤Ã¤¿¤È¤¤¤¦¡£
+D:æ‚ªë‚Á‚½’ZŒ•‚ÅAƒtƒFƒAƒm[ƒ‹‚Ì’·Žq‚Å‚ ‚éä‚‚«ƒ}ƒGƒYƒƒX
+D:‚ªŽg‚Á‚Ä‚¢‚½‚à‚Ì‚¾B”Þ‚ÍƒTƒ“ƒSƒƒhƒŠƒ€‚©‚ç‹~o‚³‚ê‚½Û‚É‰EŽè‚ð
+D:Ž¸‚Á‚½‚ªAŒã‚É¶Žè‚ÅˆÈ‘O‚æ‚èI‚Ý‚ÉŒ•‚ð‘€‚Á‚½‚Æ‚¢‚¤B
 
 # The Dagger 'Angrist' -> of Caine
 
 #JZ#
-N:65:±¢ËÅ²È¥±¥¤¥ó¤Î
+N:65:‰A–d‰ÆƒPƒCƒ“‚Ì
 E:of Caine
 I:23:4:4
 W:20:80:12:125000
@@ -1291,12 +1291,12 @@ F:DEX | HIDE_TYPE | STEALTH | SEARCH | SLAY_HUMAN |
 F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | BRAND_POIS |
 F:FREE_ACT | RES_DARK | SUST_DEX | SEE_INVIS | SHOW_MODS | THROW
 D:$The dagger of Caine the leader of Amber fleets.
-D:¥¢¥ó¥Ð¡¼¤Î´ÏÂâ¤ò»Ø´ø¤¹¤ë¥±¥¤¥ó¤Î¥À¥¬¡¼¤À¡£
+D:ƒAƒ“ƒo[‚ÌŠÍ‘à‚ðŽwŠö‚·‚éƒPƒCƒ“‚Ìƒ_ƒK[‚¾B
 
 # The Dagger 'Narthanc'
 
 #J0# ???
-N:66:¡Ø¥Ê¥ë¥µ¥ó¥¯¡Ù
+N:66:wƒiƒ‹ƒTƒ“ƒNx
 E:'Narthanc'
 I:23:4:0
 W:4:10:12:12000
@@ -1304,13 +1304,13 @@ P:0:1d4:4:6:0
 F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE | THROW | XTRA_H_RES
 U:BO_FIRE_1
 D:$A fiery dagger finely balanced for deadly throws.
-D:¡Ö±ë¤Î²ç¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä¤³¤ÎÇ³¤¨À¹¤ëÃ»·õ¤Ï¡¢
-D:¤½¤Î¿Ï¤«¤é±ë¤ÎÌð¤òíþ¤é¤»¤ëÎÏ¤ò¤â¤Ä¡£
+D:u‰‹‚Ì‰åv‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚Â‚±‚Ì”R‚¦·‚é’ZŒ•‚ÍA
+D:‚»‚Ìn‚©‚ç‰‹‚Ì–î‚ðçž‚ç‚¹‚é—Í‚ð‚à‚ÂB
 
 # The Dagger 'Nimthanc'
 
 #J0# ???
-N:67:¡Ø¥Ë¥à¥µ¥ó¥¯¡Ù
+N:67:wƒjƒ€ƒTƒ“ƒNx
 E:'Nimthanc'
 I:23:4:0
 W:3:10:12:11000
@@ -1318,14 +1318,14 @@ P:0:1d4:4:6:0
 F:BRAND_COLD | RES_COLD | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
 U:BO_COLD_1
 D:$A frosty dagger finely balanced for deadly throws.
-D:¡ÖÇò¤­²ç¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä¤³¤ÎÃ»·õ¤ÏÉ¬»¦¤ÎÎäµ¤¤ò¤â¤Ã¤Æ
-D:Å¨¤òÅà¤Æ¤Ä¤«¤»¡¢¿Ï¤«¤é¤ÏÉ¹¤ÎÌð¤òíþ¤é¤»¤ëÎÏ¤ò¤â¤Ä¡£
+D:u”’‚«‰åv‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚Â‚±‚Ì’ZŒ•‚Í•KŽE‚Ì—â‹C‚ð‚à‚Á‚Ä
+D:“G‚ð“€‚Ä‚Â‚©‚¹An‚©‚ç‚Í•X‚Ì–î‚ðçž‚ç‚¹‚é—Í‚ð‚à‚ÂB
 
 
 # The Dagger 'Dethanc'
 
 #J0# ???
-N:68:¡Ø¥Ç¥µ¥ó¥¯¡Ù
+N:68:wƒfƒTƒ“ƒNx
 E:'Dethanc'
 I:23:4:0
 W:5:10:12:13000
@@ -1333,13 +1333,13 @@ P:0:1d4:4:6:0
 F:BRAND_ELEC | RES_ELEC | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
 U:BO_ELEC_1
 D:$A dagger covered in sparks and finely balanced for deadly throws.
-D:¡Ö¹õ¤Î²ç¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä¡¢¤³¤ÎÃ»·õ¤ÏÍë¸÷¤ËÊ¤¤ï¤ì¡¢
-D:¤½¤Î¿Ï¤«¤éÍë¤ÎÌð¤òíþ¤é¤»¤ëÎÏ¤ò¤â¤Ä¡£
+D:u•‚Ì‰åv‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚ÂA‚±‚Ì’ZŒ•‚Í—‹Œõ‚É•¢‚í‚êA
+D:‚»‚Ìn‚©‚ç—‹‚Ì–î‚ðçž‚ç‚¹‚é—Í‚ð‚à‚ÂB
 
 # The Dagger of Rilia
 
 #J0# ???
-N:69:¥ê¥ê¥¢¤Î
+N:69:ƒŠƒŠƒA‚Ì
 E:of Rilia
 I:23:4:0
 W:5:40:12:35000
@@ -1348,15 +1348,15 @@ F:SLAY_ORC | RES_POIS | RES_DISEN | ACTIVATE | SHOW_MODS | BRAND_POIS | THROW
 U:BA_POIS_1
 D:$A large stiletto dagger that glistens with odorless poison, to which the 
 D:$wearer seems oddly immune.
-D:¥·¥ó¥À¡¼¥ë¸ì¤Ç¡ÖÃÏ¹ö¤Îµ±¤­¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä
-D:Âç·¿¤Î¥À¥¬¡¼¤Ç¡¢ÆÇ¤Çµ±¤¤¤Æ¤¤¤ë¤¬
-D:ÁõÈ÷¤¹¤ë¤â¤Î¤Ï²¿¸Î¤«ÆÇ¤Î±Æ¶Á¤ò¼õ¤±¤Ê¤¤¡£
+D:ƒVƒ“ƒ_[ƒ‹Œê‚Åu’n–‚Ì‹P‚«v‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚Â
+D:‘åŒ^‚Ìƒ_ƒK[‚ÅA“Å‚Å‹P‚¢‚Ä‚¢‚é‚ª
+D:‘•”õ‚·‚é‚à‚Ì‚Í‰½ŒÌ‚©“Å‚Ì‰e‹¿‚ðŽó‚¯‚È‚¢B
 
 
 # The Dagger 'Belangil' -> of Fiona
 
 #JZ#
-N:70:½÷Ëâ½Ñ»Õ¥Õ¥£¥ª¥Ê¤Î
+N:70:—–‚pŽtƒtƒBƒIƒi‚Ì
 E:of Fiona
 I:23:4:2
 W:10:40:12:50000
@@ -1367,13 +1367,13 @@ F:ACTIVATE | SHOW_MODS | BRAND_POIS | THROW
 U:BA_COLD_1
 D:$Fiona is good at plots and magic although she has
 D:$ devilish charm.
-D:¾®°­ËâÅªÌ¥ÎÏ¤ò¤Õ¤ê¤Þ¤¯¥Õ¥£¥ª¥Ê¤Ï¡¢¸«¤«¤±¤Ë¤è¤é¤º
-D:ºöÎ¬¤ÈËâË¡¤ËÄ¹¤±¤Æ¤¤¤ë¡£
+D:¬ˆ«–‚“I–£—Í‚ð‚Ó‚è‚Ü‚­ƒtƒBƒIƒi‚ÍAŒ©‚©‚¯‚É‚æ‚ç‚¸
+D:ô—ª‚Æ–‚–@‚É’·‚¯‚Ä‚¢‚éB
 
 # The Bastard Sword 'Calris'
 
 #J0# ???
-N:71:¡Ø¥«¥ë¥ê¥¹¡Ù
+N:71:wƒJƒ‹ƒŠƒXx
 E:'Calris'
 I:23:21:5
 W:30:15:140:100000
@@ -1384,16 +1384,16 @@ F:AGGRAVATE | CURSED | HEAVY_CURSE | SHOW_MODS
 D:$This sword has runes of power incused on its ornate hint, and a single 
 D:$blood channel that gleams coldly blue as you grasp this mighty weapon of 
 D:$peril.
-D:Áõ¾þ¤µ¤ì¤¿ÊÁ¤ËÎÏ¤Î¥ë¡¼¥óÊ¸»ú¤¬¹ï¤Þ¤ì¡¢Åá¿È¤Î·ìÄÌ¤·¤Ï
-D:Îä¤¿¤¤ÀÄ¿§¤Ëµ±¤¤¤Æ¤¤¤ë¡£Çò±ê¤Î¥Ð¥ë¥í¥°¡Ø¥ë¥ó¥´¥ë¥·¥ó¡Ù¤Î
-D:·õ¤Ç¤¢¤ê¡¢¥É¥é¥´¥ó¤òÍÆ°×¤¯Áò¤ë¤Û¤É¤Î·õ¤À¡£
+D:‘•ü‚³‚ê‚½•¿‚É—Í‚Ìƒ‹[ƒ“•¶Žš‚ª‚Ü‚êA“g‚ÌŒŒ’Ê‚µ‚Í
+D:—â‚½‚¢ÂF‚É‹P‚¢‚Ä‚¢‚éB”’‰Š‚Ìƒoƒ‹ƒƒOwƒ‹ƒ“ƒSƒ‹ƒVƒ“x‚Ì
+D:Œ•‚Å‚ ‚èAƒhƒ‰ƒSƒ“‚ð—eˆÕ‚­‘’‚é‚Ù‚Ç‚ÌŒ•‚¾B
 
 
 # The Broad Sword 'Arunruth' -> 'Grayswandir'
 
-#JZ# ¥¢¥ó¥Ð¡¼¥·¥ê¡¼¥ºÁ°È¾¤Ç¼ç¿Í¸ø¥³¡¼¥¦¥£¥ó¤Î»ý¤Ã¤Æ¤¤¤ë¶ä¤Î¥µ¡¼¥Ù¥ë
-#JZ# ·î¤Î¸÷¤ÇÃÃ¤¨¤é¤ì¤¿¡£
-N:72:¡Ø¥°¥ì¥¤¥¹¥ï¥ó¥À¡¼¡Ù
+#JZ# ƒAƒ“ƒo[ƒVƒŠ[ƒY‘O”¼‚ÅŽålŒöƒR[ƒEƒBƒ“‚ÌŽ‚Á‚Ä‚¢‚é‹â‚ÌƒT[ƒxƒ‹
+#JZ# ŒŽ‚ÌŒõ‚Å’b‚¦‚ç‚ê‚½B
+N:72:wƒOƒŒƒCƒXƒƒ“ƒ_[x
 E:'Grayswandir'
 I:23:11:4
 W:20:45:50:125000
@@ -1407,27 +1407,27 @@ F:SLOW_DIGEST | SHOW_MODS | HIDE_TYPE | BLESSED | RIDING
 D:$The silver sable forged by moonlights, which Corwin the prince of
 D:$ Amber wielded. It shows contrasts between silver and black like
 D:$ its owner does.
-D:¥¢¥ó¥Ð¡¼¤Î²¦»Ò¥³¡¼¥¦¥£¥ó¤¬»È¤Ã¤Æ¤¤¤¿¡¢·î¤Î¸÷¤Ë¤è¤ê
-D:ÃÃ¤¨¤é¤ì¤¿¶ä¤Î¥µ¡¼¥Ù¥ë¡£»ý¤Á¼ç¤ÈÆ±¤¸¤¯¹õ¤È¶ä¤Î¥³¥ó¥È¥é¥¹¥È
-D:¤ò¸«¤»¤ë¡£
-D:¡Ö¥°¥ì¥¤¥¹¥ï¥ó¥À¡¼¤Ë¤Ï<¥Ñ¥¿¡¼¥ó>¤Î°ìÉô¤¬Ê£À½¤µ¤ì¤Æ¤ë¤È
-D:»×¤Ã¤Æ¤¿¤ó¤À¤±¤É¡£¡×¡Ö¤½¤ì¤ÏÂ¿Ê¬¡¢µÕ¤À¤Ê¡£¡×
-D:¡Ê¥í¥¸¥ã¡¼¡¦¥¼¥é¥º¥Ë¥¤¡¢¥¢¥ó¥Ð¡¼£±£°¡Öº®ÆÙ¤Î²¦»Ò¡×¡Ë
+D:ƒAƒ“ƒo[‚Ì‰¤ŽqƒR[ƒEƒBƒ“‚ªŽg‚Á‚Ä‚¢‚½AŒŽ‚ÌŒõ‚É‚æ‚è
+D:’b‚¦‚ç‚ê‚½‹â‚ÌƒT[ƒxƒ‹BŽ‚¿Žå‚Æ“¯‚¶‚­•‚Æ‹â‚ÌƒRƒ“ƒgƒ‰ƒXƒg
+D:‚ðŒ©‚¹‚éB
+D:uƒOƒŒƒCƒXƒƒ“ƒ_[‚É‚Í<ƒpƒ^[ƒ“>‚Ìˆê•”‚ª•¡»‚³‚ê‚Ä‚é‚Æ
+D:Žv‚Á‚Ä‚½‚ñ‚¾‚¯‚ÇBvu‚»‚ê‚Í‘½•ªA‹t‚¾‚ÈBv
+D:iƒƒWƒƒ[Eƒ[ƒ‰ƒYƒjƒCAƒAƒ“ƒo[‚P‚Ou¬“×‚Ì‰¤Žqvj
 
 
 # The Broad Sword 'Glamdring'
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0#
-#J0# (ÅÔ¡¹ÌÜ)
-#J0#¡Ø¤Ê¤°¤ê´Ý¡Ù ¢ª ¡Ø¥°¥é¥à¥É¥ê¥ó¥°¡Ù
-#J0#¡ö¡Ø¤Ê¤°¤ê´Ý¡Ù¤Ï¥ª¡¼¥¯¤¿¤Á¤¬ÆÉ¤ó¤Ç¤¤¤¿Ì¾¤Ç¡¢·è¤·¤ÆÀµ¼°¤ÊÌ¾¤Ç¤Ï¤¢¤ê¤Þ¤»¤ó¡£
-#J0#¥Û¥Ó¥Ã¥È¤ÎËÁ¸±¤Ç¤â»ØÎØÊª¸ì¤Ç¤â¤º¤Ã¤È¡Ø¥°¥é¥à¥É¥ê¥ó¥°¡Ù¤ÈÉ½µ­¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢
-#J0#¤³¤¦¤¹¤Ù¤­¤Ç¤¹¡£
+#J0# (“sX–Ú)
+#J0#w‚È‚®‚èŠÛx ¨ wƒOƒ‰ƒ€ƒhƒŠƒ“ƒOx
+#J0#–w‚È‚®‚èŠÛx‚ÍƒI[ƒN‚½‚¿‚ª“Ç‚ñ‚Å‚¢‚½–¼‚ÅAŒˆ‚µ‚Ä³Ž®‚È–¼‚Å‚Í‚ ‚è‚Ü‚¹‚ñB
+#J0#ƒzƒrƒbƒg‚Ì–`Œ¯‚Å‚àŽw—Ö•¨Œê‚Å‚à‚¸‚Á‚ÆwƒOƒ‰ƒ€ƒhƒŠƒ“ƒOx‚Æ•\‹L‚³‚ê‚Ä‚¢‚é‚Ì‚ÅA
+#J0#‚±‚¤‚·‚×‚«‚Å‚·B
 #J0#
-#J0#N:73:¡Ø¤Ê¤°¤ê´Ý¡Ù
-N:73:¡Ø¥°¥é¥à¥É¥ê¥ó¥°¡Ù
+#J0#N:73:w‚È‚®‚èŠÛx
+N:73:wƒOƒ‰ƒ€ƒhƒŠƒ“ƒOx
 E:'Glamdring'
 I:23:16:1
 W:20:20:150:40000
@@ -1438,16 +1438,16 @@ F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER |
 F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$This fiery, shining blade earned its sobriquet "Foe-Hammer" from dying orcs 
 D:$who dared to come near hidden Gondolin.
-D:¤³¤ÎÇ³¤¨¤ë¤è¤¦¤Ëµ±¤¯·õ¤Ï¡Ø¥ª¥ë¥¯¥ê¥¹¥È¡Ù¤ÈÂÐ¤òÀ®¤·¡¢
-D:±£¤ì²¦¹ñ¥´¥ó¥É¡¼¥ê¥ó¤Ë´º¤¨¤Æ¿¯Æþ¤·»¦¤µ¤ì¤¿¥ª¡¼¥¯¤¿¤Á¤«¤é
-D:¡Ö¤Ê¤°¤ê´Ý¡×¤È¤¤¤¦µØÌ¾¤ò¼ø¤«¤Ã¤¿¡£¥È¥í¥ë¤ÎÁã¤Ç¥Ó¥ë¥Ü¤¿¤Á¤Ë¤è¤ê
-D:È¯¸«¤µ¤ì¡¢¤½¤ì°Ê¹ß¥¬¥ó¥À¥ë¥Õ¤ÎÊª¤È¤Ê¤ë¡£
+D:‚±‚Ì”R‚¦‚é‚æ‚¤‚É‹P‚­Œ•‚ÍwƒIƒ‹ƒNƒŠƒXƒgx‚Æ‘Î‚ð¬‚µA
+D:‰B‚ê‰¤‘ƒSƒ“ƒh[ƒŠƒ“‚ÉŠ¸‚¦‚ÄN“ü‚µŽE‚³‚ê‚½ƒI[ƒN‚½‚¿‚©‚ç
+D:u‚È‚®‚èŠÛv‚Æ‚¢‚¤‹w–¼‚ðŽö‚©‚Á‚½Bƒgƒƒ‹‚Ì‘ƒ‚Åƒrƒ‹ƒ{‚½‚¿‚É‚æ‚è
+D:”­Œ©‚³‚êA‚»‚êˆÈ~ƒKƒ“ƒ_ƒ‹ƒt‚Ì•¨‚Æ‚È‚éB
 
 
 # The Broad Sword 'Aeglin' -> 'Nothung'
 
-#JZ# ¥ï¡¼¥°¥Ê¡¼:¥¸¡¼¥°¥Õ¥ê¡¼¥É¤¬Î¶¥Õ¥¡¥Õ¥Ê¡¼¤òÅÝ¤¹·õ
-N:74:¡Ø¥Î¡¼¥È¥¥¥ó¥°¡Ù
+#JZ# ƒ[ƒOƒi[:ƒW[ƒOƒtƒŠ[ƒh‚ª—´ƒtƒ@ƒtƒi[‚ð“|‚·Œ•
+N:74:wƒm[ƒgƒDƒ“ƒOx
 E:'Nothung'
 I:23:16:4
 W:20:90:150:95000
@@ -1458,43 +1458,43 @@ F:SLOW_DIGEST | SHOW_MODS | RIDING
 D:$The sword of Sigurd which is alos called Balmung or Gram.
 D:$ He slashed the anvil of Mime's blacksmith and used to
 D:$ kill the dragon Fafnir.
-D:¡Ö¥Î¡¼¥È¥¥¥ó¥°¤µ¡¢¤½¤ÎÌ¾¤Ï¡£¥ô¥©¡¼¥¿¥ó¤¬¤È¤Í¤ê¤³¤Î´´
-D:¤ËÆÍ¤­Î©¤Æ¤¿·õ¤À¡£¤½¤ì¤ò°ú¤­È´¤¯¤³¤È¤Î¤Ç¤­
-D:¤¿¼Ô¤À¤±¤¬¡¢¤ï¤¬¤â¤Î¤È¤·¤¦¤ë¤ï¤±¤À¡£¡×
-D:(¥ê¥Ò¥ã¥ë¥È¡¦¥ï¡¼¥°¥Ê¡¼¡¢¹â¶¶¹¯Ìé¡¦¹â¶¶íìÌõ¡Ö¥¸¡¼¥°¥Õ¥ê¡¼¥É¡×,¿·½ñ´Û)
-D:¡Ö¸«¤è¡¢¤³¤ì¤¬¥¸¡¼¥°¥Õ¥ê¡¼¥É¤Î·õ¤ÎÀÚ¤ìÌ£¤À¡ª¡×¤½¤¦¤¤¤Ã¤ÆÈà¤Ï
-D:¥ß¡¼¥á¤ÎÃÃÌê¾ì¤Î¶â¾²¤ò¿¿¤ÃÆó¤Ä¤ËÃ¡¤­ÀÚ¤Ã¤¿¡£¤½¤Î·õ¤ÇÈà¤Ï
-D:Î¶¥Õ¥¡¥Õ¥Ê¡¼¤òÅË¤Ã¤¿¤Î¤À¤Ã¤¿¡£
+D:uƒm[ƒgƒDƒ“ƒO‚³A‚»‚Ì–¼‚ÍBƒ”ƒH[ƒ^ƒ“‚ª‚Æ‚Ë‚è‚±‚ÌŠ²
+D:‚É“Ë‚«—§‚Ä‚½Œ•‚¾B‚»‚ê‚ðˆø‚«”²‚­‚±‚Æ‚Ì‚Å‚«
+D:‚½ŽÒ‚¾‚¯‚ªA‚í‚ª‚à‚Ì‚Æ‚µ‚¤‚é‚í‚¯‚¾Bv
+D:(ƒŠƒqƒƒƒ‹ƒgEƒ[ƒOƒi[A‚‹´N–çE‚‹´çŒ–óuƒW[ƒOƒtƒŠ[ƒhv,V‘ŠÙ)
+D:uŒ©‚æA‚±‚ê‚ªƒW[ƒOƒtƒŠ[ƒh‚ÌŒ•‚ÌØ‚ê–¡‚¾Iv‚»‚¤‚¢‚Á‚Ä”Þ‚Í
+D:ƒ~[ƒ‚Ì’b–èê‚Ì‹à°‚ð^‚Á“ñ‚Â‚É’@‚«Ø‚Á‚½B‚»‚ÌŒ•‚Å”Þ‚Í
+D:—´ƒtƒ@ƒtƒi[‚ð“j‚Á‚½‚Ì‚¾‚Á‚½B
 
 # The Broad Sword 'Orcrist'
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# wp.218
-#J0# ÆüËÜ¸ì
+#J0# “ú–{Œê
 #J0#
-#J0# >(¤·¤È¤·¤ó¤Î¥³¥á¥ó¥È)
-#J0# > ¤¢¤È¤Ï¡Ö¤«¤ß¤Ä¤­´Ý¡×¤È¤«¤â¤½¤¦¤Ç¤¹¤¬¡¢¤È¤Ë¤«¤¯»ØÎØ´Ø·¸¤ÎÃÎ¼±¤¬¤Ê¤¤¤È
-#J0# > ¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È´Ø·¸¤Ï¥«¥¿¥«¥Ê¤ÎÍåÎó¤Ç¿Æ¤·¤ß¤¬¤Ò¤¸¤ç¤¦¤Ë¤ï¤­¤Ë¤¯¤¤
-#J0# > ¤È¤¤¤¦·çÅÀ¤¬¤¢¤ê¤Þ¤¹¡£¤½¤ì¤ÇËÝÌõ¤Ï japanese.doc ¤Ç½ñ¤¤¤¿¤è¤¦¤Ë
-#J0# > Ã¯¤Ç¤âÊ¬¤«¤ê°×¤¤¤È¤¤¤¦¥Ý¥ê¥·¡¼¤Ç¤·¤¿¤Î¤Ç¡¢¾¯¤·¤Ç¤â¿Æ¤·¤ß¤¬¤ï¤¯¤è¤¦
-#J0# > ¤ËÆüËÜ¸ì²½¤ä¡Ö²¦¡×¤Ê¤É¤ò¤¤¤ì¤¿¤ê¤È¤·¤Æ¤ß¤Þ¤·¤¿¡£¤Ç¤â¤É¤¦¤â»ØÎØ
-#J0# > ¥Õ¥¡¥ó¤Ë¤ÏÉÔÉ¾¤Î¤è¤¦¤Ç(^_^;¡£¤É¤Á¤é¤Ë¤â¹¥É¾¤È¤¤¤¦¤Î¤Ï¤à¤º¤«¤·¤¤¤Ç¤¹¤Í(^_^;
+#J0# >(‚µ‚Æ‚µ‚ñ‚ÌƒRƒƒ“ƒg)
+#J0# > ‚ ‚Æ‚Íu‚©‚Ý‚Â‚«ŠÛv‚Æ‚©‚à‚»‚¤‚Å‚·‚ªA‚Æ‚É‚©‚­Žw—ÖŠÖŒW‚Ì’mŽ¯‚ª‚È‚¢‚Æ
+#J0# > ƒA[ƒeƒBƒtƒ@ƒNƒgŠÖŒW‚ÍƒJƒ^ƒJƒi‚Ì—…—ñ‚Åe‚µ‚Ý‚ª‚Ð‚¶‚å‚¤‚É‚í‚«‚É‚­‚¢
+#J0# > ‚Æ‚¢‚¤Œ‡“_‚ª‚ ‚è‚Ü‚·B‚»‚ê‚Å–|–ó‚Í japanese.doc ‚Å‘‚¢‚½‚æ‚¤‚É
+#J0# > ’N‚Å‚à•ª‚©‚èˆÕ‚¢‚Æ‚¢‚¤ƒ|ƒŠƒV[‚Å‚µ‚½‚Ì‚ÅA­‚µ‚Å‚àe‚µ‚Ý‚ª‚í‚­‚æ‚¤
+#J0# > ‚É“ú–{Œê‰»‚âu‰¤v‚È‚Ç‚ð‚¢‚ê‚½‚è‚Æ‚µ‚Ä‚Ý‚Ü‚µ‚½B‚Å‚à‚Ç‚¤‚àŽw—Ö
+#J0# > ƒtƒ@ƒ“‚É‚Í•s•]‚Ì‚æ‚¤‚Å(^_^;B‚Ç‚¿‚ç‚É‚àD•]‚Æ‚¢‚¤‚Ì‚Í‚Þ‚¸‚©‚µ‚¢‚Å‚·‚Ë(^_^;
 #J0#
-#J0# (¾®ÎÓ¤µ¤ó¤Î¥³¥á¥ó¥È)
-#J0# ¡Ö¤«¤ß¤Ä¤­´Ý¡×¤Î¼åÅÀ¤Ï¡Ö¥«¥Ã¥³ÎÉ¤¯¤Ê¤¤¡×¤³¤È¤Ê¤ó¤Ç¤¹¤Í¡¥(;_;)
-#J0# # ¥ª¡¼¥¯¸ì¤¸¤ã¤·¤ç¤¦¤¬¤Ê¤¤¤«¡¥
-#J0# ¤Ç¤â¡Ö¤Ä¤é¤Ì¤­´Ý¡×¤ÏSting¤è¤ê¡Ö¤Ä¤é¤Ì¤­´Ý¡×¤ÎÊý¤¬¤¤¤¤¤Ç¤·¤ç¤¦¤Í¡¥
-#J0# Çº¤ó¤Ç²¼¤µ¤ì¡¥(^_^)
+#J0# (¬—Ñ‚³‚ñ‚ÌƒRƒƒ“ƒg)
+#J0# u‚©‚Ý‚Â‚«ŠÛv‚ÌŽã“_‚ÍuƒJƒbƒR—Ç‚­‚È‚¢v‚±‚Æ‚È‚ñ‚Å‚·‚ËD(;_;)
+#J0# # ƒI[ƒNŒê‚¶‚á‚µ‚å‚¤‚ª‚È‚¢‚©D
+#J0# ‚Å‚àu‚Â‚ç‚Ê‚«ŠÛv‚ÍSting‚æ‚èu‚Â‚ç‚Ê‚«ŠÛv‚Ì•û‚ª‚¢‚¢‚Å‚µ‚å‚¤‚ËD
+#J0# ”Y‚ñ‚Å‰º‚³‚êD(^_^)
 #J0#
-#J0# (ÅÔ¡¹ÌÜ)
-#J0#¡Ø¤«¤ß¤Ä¤­´Ý¡Ù ¢ª ¡Ø¥ª¥ë¥¯¥ê¥¹¥È¡Ù
-#J0#¡ö¤³¤ì¤â¥°¥é¥à¥É¥ê¥ó¥°¤ÈÆ±¤¸ÍýÍ³¤Ç¤¹¡£¥ª¡¼¥¯¤´¤È¤­¤ÎÉÔ¿è¤Ê¸Æ¤ÓÌ¾¤òÅö¤Æ¤Ï¤á
-#J0#¤ë¤Ê¤ÉÈô¤ó¤Ç¤â¤Ê¤¤¡ª¡¡a_info.txt¤ÏÆÉ¤Þ¤»¤ÆÄº¤­¤Þ¤·¤¿¤¬¡¢¤³¤ì¤À¤±¤Ï¾ù¤ì¤Þ¤»
-#J0#¤ó(¾Ð)¡£
+#J0# (“sX–Ú)
+#J0#w‚©‚Ý‚Â‚«ŠÛx ¨ wƒIƒ‹ƒNƒŠƒXƒgx
+#J0#–‚±‚ê‚àƒOƒ‰ƒ€ƒhƒŠƒ“ƒO‚Æ“¯‚¶——R‚Å‚·BƒI[ƒN‚²‚Æ‚«‚Ì•sˆ‚ÈŒÄ‚Ñ–¼‚ð“–‚Ä‚Í‚ß
+#J0#‚é‚È‚Ç”ò‚ñ‚Å‚à‚È‚¢I@a_info.txt‚Í“Ç‚Ü‚¹‚Ä’¸‚«‚Ü‚µ‚½‚ªA‚±‚ê‚¾‚¯‚Í÷‚ê‚Ü‚¹
+#J0#‚ñ(Î)B
 #J0#
-#J0#N:75:¡Ø¤«¤ß¤Ä¤­´Ý¡Ù
-N:75:¡Ø¥ª¥ë¥¯¥ê¥¹¥È¡Ù
+#J0#N:75:w‚©‚Ý‚Â‚«ŠÛx
+N:75:wƒIƒ‹ƒNƒŠƒXƒgx
 E:'Orcrist'
 I:23:16:3
 W:20:20:150:40000
@@ -1504,20 +1504,20 @@ F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER |
 F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$This coldly gleaming blade is called simply "Biter", by orcs who came to 
 D:$know its power all too well.
-D:¤³¤ÎÎä¤¿¤¯µ±¤¯·õ¤Ï¡Ø¥°¥é¥à¥É¥ê¥ó¥°¡Ù¤ÈÂÐ¤òÀ®¤·¡¢¥ª¡¼¥¯¤¿¤Á¤«¤é¤Ï
-D:¡Ö¤«¤ß¤Ä¤­´Ý¡×¤È¸Æ¤Ð¤ì¤ÆÈó¾ï¤Ë¶²¤ì¤é¤ì¤Æ¤¤¤ë¡£¥È¥í¥ë¤ÎÁã¤Ç¥Ó¥ë¥Ü¤¿¤Á¤Ë¤è¤ê
-D:È¯¸«¤µ¤ì¡¢¤½¤ì°Ê¹ß¥É¥ï¡¼¥Õ¤Î²¦¥È¡¼¥ê¥ó¡¦¥ª¡¼¥±¥ó¥·¡¼¥ë¥É¤ÎÊª¤È¤Ê¤ë¡£
+D:‚±‚Ì—â‚½‚­‹P‚­Œ•‚ÍwƒOƒ‰ƒ€ƒhƒŠƒ“ƒOx‚Æ‘Î‚ð¬‚µAƒI[ƒN‚½‚¿‚©‚ç‚Í
+D:u‚©‚Ý‚Â‚«ŠÛv‚ÆŒÄ‚Î‚ê‚Ä”ñí‚É‹°‚ê‚ç‚ê‚Ä‚¢‚éBƒgƒƒ‹‚Ì‘ƒ‚Åƒrƒ‹ƒ{‚½‚¿‚É‚æ‚è
+D:”­Œ©‚³‚êA‚»‚êˆÈ~ƒhƒ[ƒt‚Ì‰¤ƒg[ƒŠƒ“EƒI[ƒPƒ“ƒV[ƒ‹ƒh‚Ì•¨‚Æ‚È‚éB
 
 
 # The Two-Handed Sword 'Gurthang'
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0#
-#J0# (ÅÔ¡¹ÌÜ)
-#J0#¡ö¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì¤Ç¤Ï¤³¤Î¤è¤¦¤ËÉ½µ­¤µ¤ì¤Æ¤¤¤Þ¤¹¡£
+#J0# (“sX–Ú)
+#J0#–ƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê‚Å‚Í‚±‚Ì‚æ‚¤‚É•\‹L‚³‚ê‚Ä‚¢‚Ü‚·B
 #J0#
-N:76:¡Ø¥°¥¢¥µ¥ó¥°¡Ù
+N:76:wƒOƒAƒTƒ“ƒOx
 E:'Gurthang'
 I:23:25:2
 W:30:30:200:100000
@@ -1528,15 +1528,15 @@ F:FREE_ACT | SLOW_DIGEST | REGEN | SHOW_MODS
 D:$A giant sword once wielded by mighty Turin, and a great dragonbane which 
 D:$bathed in Glaurung's blood:  but beware, it will drink the blood of those 
 D:$who wield it eventually.
-D:°ÎÂç¤Ê¤ë±ÑÍº¥È¥¥¡¼¥ê¥ó¤Î¹õ¤­Âç·õ¤Ç¡¢ÈæÎà¤Ê¤­ÅËÎ¶¤Î·õ¤À¡£
-D:¤«¤Ä¤ÆÎ¶¤ÎÁÄ¥°¥é¥¦¥ë¥ó¥°¤Î·ì¤ËÍá¤·¤¿¤³¤Î¿Ï¤Ë¡¢¤¤¤«¤Ê¤ë¥ï¥¤¥¢¡¼¥à¤¬
-D:ÂÑ¤¨¤ë¤³¤È¤¬¤Ç¤­¤è¤¦¡£
+D:ˆÌ‘å‚È‚é‰p—YƒgƒD[ƒŠƒ“‚Ì•‚«‘åŒ•‚ÅA”ä—Þ‚È‚«“j—´‚ÌŒ•‚¾B
+D:‚©‚Â‚Ä—´‚Ì‘cƒOƒ‰ƒEƒ‹ƒ“ƒO‚ÌŒŒ‚É—‚µ‚½‚±‚Ìn‚ÉA‚¢‚©‚È‚éƒƒCƒA[ƒ€‚ª
+D:‘Ï‚¦‚é‚±‚Æ‚ª‚Å‚«‚æ‚¤B
 
 
 # The Two-Handed Sword 'Zarcuthra'
 
 #J0# ???
-N:77:¡Ø¥¶¥ë¥¯¥¹¥é¡Ù
+N:77:wƒUƒ‹ƒNƒXƒ‰x
 E:'Zarcuthra'
 I:23:25:4
 W:30:180:250:205000
@@ -1549,14 +1549,14 @@ F:SHOW_MODS
 D:$Dark and deadly runes stand stark against the naked steel of this awesome 
 D:$weapon, and you feel a stunning power of slaying and rending as you 
 D:$slowly approach.
-D:¶²ÉÝ¤Î¹õ¤¤¥ë¡¼¥óÊ¸»ú¤¬¹Ý¤Î¿Ï¿È¤Ë¤¯¤Ã¤­¤ê¤ÈÉâ¤«¤Ó¾å¤¬¤Ã¤Æ¤¤¤ë
-D:¶²¤ë¤Ù¤­·õ¡£Å¨¤Ë¶áÉÕ¤¯¤Ë¤Ä¤ì·ã¤·¤¤»¦Ù¤¤Î¥¨¥Í¥ë¥®¡¼¤òÈ¯¤¹¤ë¡£
+D:‹°•|‚Ì•‚¢ƒ‹[ƒ“•¶Žš‚ª|‚Ìng‚É‚­‚Á‚«‚è‚Æ•‚‚©‚Ñã‚ª‚Á‚Ä‚¢‚é
+D:‹°‚é‚×‚«Œ•B“G‚É‹ß•t‚­‚É‚Â‚êŒƒ‚µ‚¢ŽEC‚ÌƒGƒlƒ‹ƒM[‚ð”­‚·‚éB
 
 
 # The Two-Handed Sword 'Mormegil' -> Twilight
 
-#JZ# ±ê¤Îµð¿Í¥¹¥ë¥È¤¬À¤³¦¤Ë²Ð¤òÊü¤Ã¤¿Ç³¤¨¤ë·õ
-N:78:¡Ø¿À¡¹¤Î²«ºª¡Ù
+#JZ# ‰Š‚Ì‹lƒXƒ‹ƒg‚ª¢ŠE‚É‰Î‚ð•ú‚Á‚½”R‚¦‚éŒ•
+N:78:w_X‚Ì‰©¨x
 E:'Twilight'
 I:23:25:10
 W:30:15:250:0
@@ -1566,12 +1566,12 @@ F:AGGRAVATE | CURSED | HEAVY_CURSE | SHOW_MODS | TY_CURSE | LITE
 F:RANDOM_CURSE2
 D:$The flame sword with which Surtr set fire all over the world
 D:$ at Ragnarok.
-D:ËÌ²¤¿ÀÏÃ¤Ë¤ª¤¤¤Æ±ê¤Îµð¿Í¥¹¥ë¥È¤¬À¤³¦¤Ë²Ð¤òÊü¤Ã¤¿Ç³¤¨¤ë·õ¤À¡£
+D:–k‰¢_˜b‚É‚¨‚¢‚Ä‰Š‚Ì‹lƒXƒ‹ƒg‚ª¢ŠE‚É‰Î‚ð•ú‚Á‚½”R‚¦‚éŒ•‚¾B
 
 # The Cutlass 'Gondricam'
 
 #J0# ???
-N:79:¡Ø¥´¥ó¥É¥ê¥«¥à¡Ù
+N:79:wƒSƒ“ƒhƒŠƒJƒ€x
 E:'Gondricam'
 I:23:12:3
 W:20:8:110:28000
@@ -1582,14 +1582,14 @@ F:SEE_INVIS | REGEN | SHOW_MODS
 D:$Famed sea-defender of Lebennin.  A short, slightly curved chopping blade 
 D:$with a perfect edge shining cleanly in the sun, an object of hate to the 
 D:$men of Umbar who met it in combat.
-D:Ì¾¹â¤­¥ì¥Ù¥ó¥Ë¥ó¤Î³¤¤Î¼é¸î¼Ô¤À¡£ÍÛ¸÷¤Ëµ±¤¯´°àú¤Ê¿Ï¤Ï¡¢¥¦¥ó¥Ð¡¼¥ë
-D:¤Î³¤Â±Ã£¤ÎÁþ°­¤ÎÅª¤Ç¤¢¤Ã¤¿¡£
+D:–¼‚‚«ƒŒƒxƒ“ƒjƒ“‚ÌŠC‚ÌŽçŒìŽÒ‚¾B—zŒõ‚É‹P‚­Š®àø‚Èn‚ÍAƒEƒ“ƒo[ƒ‹
+D:‚ÌŠC‘¯’B‚Ì‘žˆ«‚Ì“I‚Å‚ ‚Á‚½B
 
 
 # The Executioner's Sword 'Crisdurian'
 
 #J0# ???
-N:80:¡Ø¥¯¥ê¥¹¥É¥¥¥ê¥¢¥ó¡Ù
+N:80:wƒNƒŠƒXƒhƒDƒŠƒAƒ“x
 E:'Crisdurian'
 I:23:28:0
 W:40:15:260:111000
@@ -1599,13 +1599,13 @@ F:SLAY_HUMAN | SLAY_ORC | SEE_INVIS | SHOW_MODS | VORPAL | BRAND_POIS
 D:$A giant's weapon, with a long blade tall and straight thrusting out from a 
 D:$massive double-pronged hint.  On its blade are written doomspells against 
 D:$both the living and undead.
-D:½Å¸ü¤ÊÆóËô¤ÎÊÁ¤«¤é¿¿¤Ã¤¹¤°ÆÍ¤­½Ð¤¿Ä¹¤¤Åá¿È¤ò»ý¤Äµð¿Í¤ÎÉð´ï¤À¡£
-D:Åá¿È¤Ë¤ÏÀ¸¤±¤ë¼Ô¤ÈÉÔ»à¤Î¼Ô¤ÎÁÐÊý¤Ë¤È¤Ã¤Æ¤ÎÇËÌÇ¤Î¼öÊ¸¤¬¹ï¤Þ¤ì¤Æ¤¤¤ë¡£
+D:dŒú‚È“ñ–”‚Ì•¿‚©‚ç^‚Á‚·‚®“Ë‚«o‚½’·‚¢“g‚ðŽ‚Â‹l‚Ì•Ší‚¾B
+D:“g‚É‚Í¶‚¯‚éŽÒ‚Æ•sŽ€‚ÌŽÒ‚Ì‘o•û‚É‚Æ‚Á‚Ä‚Ì”j–Å‚ÌŽô•¶‚ª‚Ü‚ê‚Ä‚¢‚éB
 
 
 # The Katana 'Aglarang'
 
-N:81:¡Ø¥¢¥°¥é¥é¥ó¥°¡Ù
+N:81:wƒAƒOƒ‰ƒ‰ƒ“ƒOx
 E:'Aglarang'
 I:23:20:2
 W:50:25:50:150000
@@ -1615,16 +1615,16 @@ F:SUST_DEX | SHOW_MODS | SPEED
 D:$An utterly perfect, cleanly chiseled sword, with a edge that effortlessly
 D:$ slices rock and bone and spells to render the wearer lithe and nimble. It
 D:$ is combat incarnate.
-D:¥·¥ó¥À¡¼¥ë¸ì¤Ç¡ÖÍÀ¤Î¹Ý¡×¤ò°ÕÌ£¤¹¤ëÈþ¤·¤¤´°Á´Ìµ·ç¤ÎÅá¤À¡£
-D:¤½¤Î¿Ï¤Ï´ä¤ä¹ü¤ò¶ì¤â¤Ê¤¯ÀÚ¤êÎö¤­¡¢
-D:¼ê¤Ë¤¹¤ë¼Ô¤Ë¤·¤Ê¤ä¤«¤ÇÉÒ¾¹¤ÊÆ°ºî¤ò¼ø¤±¤ëËâË¡¤¬¹þ¤á¤é¤ì¤Æ¤¤¤ë¡£
-D:¤½¤ì¤Ï¤Þ¤µ¤ËÀï¤¤¤Î²½¿È¤À¡£
+D:ƒVƒ“ƒ_[ƒ‹Œê‚Åu—_‚Ì|v‚ðˆÓ–¡‚·‚é”ü‚µ‚¢Š®‘S–³Œ‡‚Ì“‚¾B
+D:‚»‚Ìn‚ÍŠâ‚âœ‚ð‹ê‚à‚È‚­Ø‚è—ô‚«A
+D:Žè‚É‚·‚éŽÒ‚É‚µ‚È‚â‚©‚Å•q·‚È“®ì‚ðŽö‚¯‚é–‚–@‚ªž‚ß‚ç‚ê‚Ä‚¢‚éB
+D:‚»‚ê‚Í‚Ü‚³‚Éí‚¢‚Ì‰»g‚¾B
 
 
 # The Long Sword 'Ringil'
 
 #J0# ???
-N:82:¡Ø¥ê¥ó¥®¥ë¡Ù
+N:82:wƒŠƒ“ƒMƒ‹x
 E:'Ringil'
 I:23:17:10
 W:20:120:130:300000
@@ -1637,18 +1637,18 @@ U:BA_COLD_2
 D:$The weapon of Fingolfin, High King of the Noldor; it shines like a column 
 D:$of ice lit by light unquenchable.  Morgoth came but unwillingly to meet it 
 D:$of old; his lame foot will remind him of its might should be meet it again.
-D:¥Î¥ë¥É¡¼¥ë¤Î¾åµé²¦¥Õ¥£¥ó¥´¥ë¥Õ¥£¥ó¤ÎÉð´ï¡£É¹¤ÎÃì¤ÎÇ¡¤¯µ±¤¤¤Æ¤¤¤ë¡£
-D:¤«¤Ä¤Æ¥â¥ë¥´¥¹¤Ï´ü¤»¤º¤·¤Æ¤³¤Î·õ¤ËÂÐÖµ¤·¿¼¤¤½ý¤ò
-D:¹ï¤ß¹þ¤Þ¤ì¤¿¡£Èà¤Ï¤³¤Î·õ¤ÎÎÏ¤òºÆ¤Ó»×¤¤ÃÎ¤ë¤³¤È¤Ë¤Ê¤ë¤À¤í¤¦¡£
+D:ƒmƒ‹ƒh[ƒ‹‚Ìã‹‰‰¤ƒtƒBƒ“ƒSƒ‹ƒtƒBƒ“‚Ì•ŠíB•X‚Ì’Œ‚Ì”@‚­‹P‚¢‚Ä‚¢‚éB
+D:‚©‚Â‚Äƒ‚ƒ‹ƒSƒX‚ÍŠú‚¹‚¸‚µ‚Ä‚±‚ÌŒ•‚É‘Î›³‚µ[‚¢‚ð
+D:‚Ýž‚Ü‚ê‚½B”Þ‚Í‚±‚ÌŒ•‚Ì—Í‚ðÄ‚ÑŽv‚¢’m‚é‚±‚Æ‚É‚È‚é‚¾‚ë‚¤B
 
 
 # The Long Sword 'Anduril'
 
 #J0# wp.219
-#J0# ÆüËÜ¸ì
-#J0#N:83:¡ØÀ¾¤Î±ë¡Ù
-#J0#N:83:¡Ø¥Ê¥ë¥·¥ë¡Ù
-N:83:¡Ø¥¢¥ó¥É¥¥¥ê¥ë¡Ù
+#J0# “ú–{Œê
+#J0#N:83:w¼‚Ì‰‹x
+#J0#N:83:wƒiƒ‹ƒVƒ‹x
+N:83:wƒAƒ“ƒhƒDƒŠƒ‹x
 E:'Anduril'
 I:23:17:4
 W:20:40:130:80000
@@ -1661,17 +1661,17 @@ D:$The famed "Flame of the West", the sword that was broken and is forged
 D:$again.  It glows with the essence of fire, its wearer is mighty in combat, 
 D:$and no creature of Sauron can withstand it.  It will never be stained or 
 D:$broken even in defeat.
-D:Ì¾¹â¤­¡ÖÀ¾Êý¤Î±ë¡×¤Ç¤¢¤ê¡¢
-D:ÀÞ¤ì¤¿¤ë·õ¤È¤·¤Æ¤âÃÎ¤é¤ì¤ë¤³¤Î·õ¤Ï¡¢¥¨¥ì¥ó¥Ç¥£¥ë¤¬ÅÝ¤ì¤ë¤Î¤È
-D:¶¡¤ËÀÞ¤ì¤¿¤¬¡¢°ì¤Ä¤Î»ØÎØ¤¬È¯¸«¤µ¤ì¤¿¸å
-D:ÃÃ¤¨Ä¾¤µ¤ì¥¢¥é¥´¥ë¥ó¤Î¤â¤Î¤È¤Ê¤Ã¤¿¡£
-D:±ë¤Îµ¤¤Ë¤è¤êµ±¤¯¤³¤Î·õ¤Ï¿¶¤ë¤¦¼Ô¤ò¶¯¤¯¤·¡¢¥µ¥¦¥í¥ó¤Î¤¤¤«¤Ê¤ë
-D:¼ê²¼¤â¤½¤Î¿Ï¤ËÂÑ¤¨¤ë¤³¤È¤Ï¤Ç¤­¤Ê¤¤¡£
+D:–¼‚‚«u¼•û‚Ì‰‹v‚Å‚ ‚èA
+D:Ü‚ê‚½‚éŒ•‚Æ‚µ‚Ä‚à’m‚ç‚ê‚é‚±‚ÌŒ•‚ÍAƒGƒŒƒ“ƒfƒBƒ‹‚ª“|‚ê‚é‚Ì‚Æ
+D:‹Ÿ‚ÉÜ‚ê‚½‚ªAˆê‚Â‚ÌŽw—Ö‚ª”­Œ©‚³‚ê‚½Œã
+D:’b‚¦’¼‚³‚êƒAƒ‰ƒSƒ‹ƒ“‚Ì‚à‚Ì‚Æ‚È‚Á‚½B
+D:‰‹‚Ì‹C‚É‚æ‚è‹P‚­‚±‚ÌŒ•‚ÍU‚é‚¤ŽÒ‚ð‹­‚­‚µAƒTƒEƒƒ“‚Ì‚¢‚©‚È‚é
+D:Žè‰º‚à‚»‚Ìn‚É‘Ï‚¦‚é‚±‚Æ‚Í‚Å‚«‚È‚¢B
 
 # The Long Sword 'Anguirel' -> Werewindle
 
-#JZ# ¥¢¥ó¥Ð¡¼¸åÈ¾¤Ç¤¢¤ë¿Í¤¬»È¤¦¤é¤·¤¤
-N:84:¡Ø¥ï¡¼¥¦¥£¥ó¥É¥ë¡Ù
+#JZ# ƒAƒ“ƒo[Œã”¼‚Å‚ ‚él‚ªŽg‚¤‚ç‚µ‚¢
+N:84:wƒ[ƒEƒBƒ“ƒhƒ‹x
 E:'Werewindle'
 I:23:17:2
 W:20:40:130:120000
@@ -1684,18 +1684,18 @@ F:RES_DISEN | RES_FEAR | BLOWS
 U:ESCAPE
 D:$The day sword included mana of Trump, which is a companion to
 D:$ the night sword Grayswandir.
-D:Ìë¤Î·õ¥°¥ì¥¤¥¹¥ï¥ó¥À¡¼¤ÈÂÐ¤ò¤Ê¤¹Ãë¤Î·õ¤Ç¡¢¥È¥é¥ó¥×¤ÎËâÎÏ¤¬¹þ¤á¤é¤ì¤Æ¤¤¤ë¡£
-D:¡Ö¤½¤ì¤Ï²«¶â¤ÎÁÇÀ²¤é¤·¤¤ÂÇ½Ð¤·ÌÏÍÍ¤¬»Ü¤µ¤ì¤¿¡¢Ä¹¤¤Ç»ÎÐ¿§¤Î¾ä¤À¤Ã¤¿¡£
-D:¤½¤³¤«¤éÆÍ¤­½Ð¤Æ¤¤¤ë·õ¤ÎÊÁ¤Ï¶â¥á¥Ã¥­¤µ¤ì¤Æ¤¤¤ë¤é¤·¤¯¡¢ÊÁÆ¬¤Ë¤Ï
-D:ÁÇÀ²¤é¤·¤¤¥¨¥á¥é¥ë¥É¤¬¼è¤êÉÕ¤±¤é¤ì¤Æ¤¤¤¿¡£ËÍ¤Ï·õ¤ò¼ê¤Ë¼è¤êÈ¾¤Ð¤Þ¤ÇÈ´¤¤¤Æ¤ß¤¿¡£
-D:¡ÄÅá¿È¤Ë¤Ïµ±¤¯ÌÏÍÍ¤¬ÉÁ¤«¤ì¤Æ¤¤¤¿¡£¤½¤ÎÌÏÍÍ¤Ï---¤½¤¦¤À¡¢ <¥Ñ¥¿¡¼¥ó>¤Î°ìÉô¤À¡£
-D:¥°¥ì¥¤¥¹¥ï¥ó¥À¡¼¤ÎÌÏÍÍ¤Ï<¥Ñ¥¿¡¼¥ó>¤Îµ¯ÅÀÉÕ¶á¤Î°ìÉôÊ¬¤À¤Ã¤¿¤¬¡¢¤³¤ì¤Ï½ªÅÀ¤ÎÉôÊ¬¤À¡£¡×
-D:¡ÊR.¥¼¥é¥º¥Ë¥¤¡¢¿¿À¤³¦¥¢¥ó¥Ð¡¼£¹¡Ö±Æ¤Îµ³»Î¡×¡Ë
+D:–é‚ÌŒ•ƒOƒŒƒCƒXƒƒ“ƒ_[‚Æ‘Î‚ð‚È‚·’‹‚ÌŒ•‚ÅAƒgƒ‰ƒ“ƒv‚Ì–‚—Í‚ªž‚ß‚ç‚ê‚Ä‚¢‚éB
+D:u‚»‚ê‚Í‰©‹à‚Ì‘f°‚ç‚µ‚¢‘Åo‚µ–Í—l‚ªŽ{‚³‚ê‚½A’·‚¢”Z—ÎF‚Ìâ‚¾‚Á‚½B
+D:‚»‚±‚©‚ç“Ë‚«o‚Ä‚¢‚éŒ•‚Ì•¿‚Í‹àƒƒbƒL‚³‚ê‚Ä‚¢‚é‚ç‚µ‚­A•¿“ª‚É‚Í
+D:‘f°‚ç‚µ‚¢ƒGƒƒ‰ƒ‹ƒh‚ªŽæ‚è•t‚¯‚ç‚ê‚Ä‚¢‚½B–l‚ÍŒ•‚ðŽè‚ÉŽæ‚è”¼‚Î‚Ü‚Å”²‚¢‚Ä‚Ý‚½B
+D:c“g‚É‚Í‹P‚­–Í—l‚ª•`‚©‚ê‚Ä‚¢‚½B‚»‚Ì–Í—l‚Í---‚»‚¤‚¾A <ƒpƒ^[ƒ“>‚Ìˆê•”‚¾B
+D:ƒOƒŒƒCƒXƒƒ“ƒ_[‚Ì–Í—l‚Í<ƒpƒ^[ƒ“>‚Ì‹N“_•t‹ß‚Ìˆê•”•ª‚¾‚Á‚½‚ªA‚±‚ê‚ÍI“_‚Ì•”•ª‚¾Bv
+D:iR.ƒ[ƒ‰ƒYƒjƒCA^¢ŠEƒAƒ“ƒo[‚Xu‰e‚Ì‹RŽmvj
 
 # The Long Sword 'Elvagil'-> 'Chainsword'
 
-#JZ# ¥¸¥§¥¤¥½¥ó¤Ç¤¹¤Í
-N:85:¡Ø¥Á¥§¥ó¥½¡¼¡Ù
+#JZ# ƒWƒFƒCƒ\ƒ“‚Å‚·‚Ë
+N:85:wƒ`ƒFƒ“ƒ\[x
 E:'Chainsword'
 I:23:16:-2
 W:50:50:130:66666
@@ -1705,13 +1705,13 @@ F:SLAY_HUMAN | SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS |
 F:ESP_ORC | ESP_TROLL | ESP_HUMAN
 D:$Take care! This sword will make you a murderer if you wield it.
 D:$ Do you hear cries of this sword that want more blood thirstily?
-D:»ý¤Ã¤¿¼Ô¤ò»¦Ù¤¥Þ¥·¡¼¥ó¤ËÊÑ¤¨¤ë¼ö¤ï¤ì¤¿·õ¤À¡£¤¢¤Ê¤¿¤Ë¤Ï¤³¤Î·õ¤Î
-D:·ì¤Ëµ²¤¨¤¿¶«¤Ó¤¬Ê¹¤³¤¨¤ë¤À¤í¤¦¡£
+D:Ž‚Á‚½ŽÒ‚ðŽECƒ}ƒV[ƒ“‚É•Ï‚¦‚éŽô‚í‚ê‚½Œ•‚¾B‚ ‚È‚½‚É‚Í‚±‚ÌŒ•‚Ì
+D:ŒŒ‚É‹Q‚¦‚½‹©‚Ñ‚ª•·‚±‚¦‚é‚¾‚ë‚¤B
 
 # The Rapier 'Forasgil'
 
 #J0# ???
-N:86:¡Ø¥Õ¥©¥é¥¹¥®¥ë¡Ù
+N:86:wƒtƒHƒ‰ƒXƒMƒ‹x
 E:'Forasgil'
 I:23:7:0
 W:15:8:40:15000
@@ -1719,13 +1719,13 @@ P:0:1d6:12:19:0
 F:SLAY_ANIMAL | BRAND_COLD | RES_COLD | RES_LITE | LITE | SHOW_MODS
 D:$A slender, tapered blade whose wielder strikes icy blows with deadly 
 D:$accuracy.
-D:ºÙ¿È¤ÇÀè¤¬ºÙ¤¤·õ¤Ç¤¢¤ê¡¢»ÈÍÑ¼Ô¤Ï¶²¤ë¤Ù¤­Àµ³Î¤µ¤ÇÅà¤Æ¤Ä¤¯¹¶·â¤ò·«¤ê½Ð¤¹¡£
+D:×g‚Åæ‚ª×‚¢Œ•‚Å‚ ‚èAŽg—pŽÒ‚Í‹°‚é‚×‚«³Šm‚³‚Å“€‚Ä‚Â‚­UŒ‚‚ðŒJ‚èo‚·B
 
 
 # The Sabre 'Careth Asdriag'
 
 #J0# ???
-N:87:¡Ø¥«¥ì¥¹¡¦¥¢¥¹¥É¥ê¥¢¥°¡Ù
+N:87:wƒJƒŒƒXEƒAƒXƒhƒŠƒAƒOx
 E:'Careth Asdriag'
 I:23:11:1
 W:15:8:50:25000
@@ -1734,13 +1734,13 @@ F:BLOWS | SLAY_DRAGON | SLAY_ANIMAL | SLAY_TROLL | SLAY_GIANT | SLAY_HUMAN |
 F:SLAY_ORC | SHOW_MODS | RIDING
 D:$An heirloom of the Lords of Rhun far to the east, and a name of 
 D:$dismay to creatures natural and unnatural.
-D:ÍÚ¤«Åì¤Î¹ñ¥ê¥å¥ó¤Î¹ëÃÀ¤Ê²¦¤Î°ìÂ²¤ËÅÁ¤ï¤ë²ÈÊõ¤Ç¡¢
-D:¤½¤ÎÌ¾¤Ï¤¢¤é¤æ¤ëÀ¸¤­Êª¤Ë¤È¤Ã¤ÆÀäË¾¤ò°ÕÌ£¤¹¤ë¡£
+D:—y‚©“Œ‚Ì‘ƒŠƒ…ƒ“‚Ì‹’_‚È‰¤‚Ìˆê‘°‚É“`‚í‚é‰Æ•ó‚ÅA
+D:‚»‚Ì–¼‚Í‚ ‚ç‚ä‚é¶‚«•¨‚É‚Æ‚Á‚Äâ–]‚ðˆÓ–¡‚·‚éB
 
 # The Small Sword 'Sting'
 
-#J0# ÆüËÜ¸ì
-N:88:¡Ø¤Ä¤é¤Ì¤­´Ý¡Ù
+#J0# “ú–{Œê
+N:88:w‚Â‚ç‚Ê‚«ŠÛx
 E:'Sting'
 I:23:8:2
 W:20:15:75:100000
@@ -1752,16 +1752,16 @@ D:$"I will give you a name, and I shall call you Sting."  The perfect size
 D:$for Bilbo, and stamped forever by the courage he found in Mirkwood, this 
 D:$sturdy little blade grants the wearer combat prowess and survival 
 D:$abilities they did not know they had.
-D:¡Ö¤ª¤Þ¤¨¤ËÌ¾¤Þ¤¨¤ò¤Ä¤±¤Æ¤ä¤í¤¦¡ª¤è¤·¡¤¤Ä¤é¤Ì¤­´Ý¤È¤è¤Ü¤¦¡£¡×
-D:¥Ó¥ë¥Ü¤Ë¤È¤Ã¤ÆÃúÅÙÎÉ¤¤Âç¤­¤µ¤À¤Ã¤¿¤³¤ÎÃ»·õ¤Ë¤Ï¡¢
-D:Èà¤¬°Ç¤Î¿¹¤Ç¾¡¤Á¤È¤Ã¤¿Í¦µ¤¤¬±Ê±ó¤Ë¹ï¤ß¹þ¤Þ¤ì¤Æ¤¤¤ë¡£
-D:¤³¤Î¾æÉ×¤Ç¾®¤µ¤Ê·õ¤Ï»ÈÍÑ¼Ô¤Î
-D:Æâ¤Ê¤ëÍ¦µ¤¤È»îÎý¤òÀÚ¤ê¤Ì¤±¤ëÎÏ¤ò¸Æ¤Ó³Ð¤Þ¤¹¡£
+D:u‚¨‚Ü‚¦‚É–¼‚Ü‚¦‚ð‚Â‚¯‚Ä‚â‚ë‚¤I‚æ‚µC‚Â‚ç‚Ê‚«ŠÛ‚Æ‚æ‚Ú‚¤Bv
+D:ƒrƒ‹ƒ{‚É‚Æ‚Á‚Ä’š“x—Ç‚¢‘å‚«‚³‚¾‚Á‚½‚±‚Ì’ZŒ•‚É‚ÍA
+D:”Þ‚ªˆÅ‚ÌX‚ÅŸ‚¿‚Æ‚Á‚½—E‹C‚ª‰i‰“‚É‚Ýž‚Ü‚ê‚Ä‚¢‚éB
+D:‚±‚Ìä•v‚Å¬‚³‚ÈŒ•‚ÍŽg—pŽÒ‚Ì
+D:“à‚È‚é—E‹C‚ÆŽŽ—û‚ðØ‚è‚Ê‚¯‚é—Í‚ðŒÄ‚ÑŠo‚Ü‚·B
 
 # The Scimitar 'Haradekket' -> Soulsword
 
 #JZ# ???
-N:89:¡Ø¥½¥¦¥ë¥½¡¼¥É¡Ù
+N:89:wƒ\ƒEƒ‹ƒ\[ƒhx
 E:'Soulsword'
 I:23:18:2
 W:20:20:130:111111
@@ -1772,13 +1772,13 @@ F:RES_CHAOS | RES_DISEN | RES_NEXUS | RES_NETHER | HOLD_LIFE |
 F:SHOW_MODS | XTRA_RES_OR_POWER
 D:$This sword will help you to kill your evil enemies and will protect
 D:$ your soul from many evils.
-D:º²¤ò¼é¤ëÎÏ¤ò»ý¤Ä¿ÀÈëÅª¤Ê·õ¤À¡£°ìÅÙ¼ê¤Ë¤¹¤ì¤Ð¡¢¼Ù°­¤ÊÅ¨¤ËÂÇ¤Á¾¡¤Ä
-D:¤³¤È¤âÍÆ°×¤È¤Ê¤ë¤À¤í¤¦¡£
+D:°‚ðŽç‚é—Í‚ðŽ‚Â_”é“I‚ÈŒ•‚¾Bˆê“xŽè‚É‚·‚ê‚ÎAŽ×ˆ«‚È“G‚É‘Å‚¿Ÿ‚Â
+D:‚±‚Æ‚à—eˆÕ‚Æ‚È‚é‚¾‚ë‚¤B
 
 # The Short Sword Gilettar -> of Merlin
 
-#JZ#¥¢¥ó¥Ð¡¼¥·¥ê¡¼¥º¸åÈ¾¤Î¼ç¿Í¸ø¡£
-N:90:º®ÆÙ¤Î²¦»Ò¥Þ¡¼¥ê¥ó¤Î
+#JZ#ƒAƒ“ƒo[ƒVƒŠ[ƒYŒã”¼‚ÌŽålŒöB
+N:90:¬“×‚Ì‰¤Žqƒ}[ƒŠƒ“‚Ì
 E:of Merlin
 I:23:10:2
 W:20:8:80:35000
@@ -1789,16 +1789,16 @@ D:$Merlin the prince of chaos hates carrying a heavy sword, so he invokes
 D:$ a power of chaos to take his sword from another dimension when he
 D:$ needs. This sword is also one of such things.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.6-10)
-D:ÃÏµåÊë¤é¤·¤ÎÄ¹¤¤¥Þ¡¼¥ê¥ó¤Ï¸½Âå¤Ã»Ò¤é¤·¤¯½Å¤¯Ä¹¤¤·õ¤ò»ý¤ÁÊâ¤¯¤Î¤¬·ù¤¤¤Ç¡¢
-D:É¬Í×¤Ê»þ¥«¥ª¥¹¤ÎÎÏ¤Ç·õ¤ò°ÛÀ¤³¦¤«¤é¼è¤ê´ó¤»¤ë¡£¤³¤Î·õ¤â¤½¤¦¤·¤¿Êª¤Î
-D:°ì¤Ä¤À¡£¡ÊR.¥¼¥é¥º¥Ë¥¤¡¢¿¿À¤³¦¥¢¥ó¥Ð¡¼¥·¥ê¡¼¥º 6-10 ´¬¡Ë
+D:’n‹…•é‚ç‚µ‚Ì’·‚¢ƒ}[ƒŠƒ“‚ÍŒ»‘ã‚ÁŽq‚ç‚µ‚­d‚­’·‚¢Œ•‚ðŽ‚¿•à‚­‚Ì‚ªŒ™‚¢‚ÅA
+D:•K—v‚ÈŽžƒJƒIƒX‚Ì—Í‚ÅŒ•‚ðˆÙ¢ŠE‚©‚çŽæ‚èŠñ‚¹‚éB‚±‚ÌŒ•‚à‚»‚¤‚µ‚½•¨‚Ì
+D:ˆê‚Â‚¾BiR.ƒ[ƒ‰ƒYƒjƒCA^¢ŠEƒAƒ“ƒo[ƒVƒŠ[ƒY 6-10 Šªj
 
 # The Blade of Chaos 'Doomcaller'
 # Was (-5) CON | HIDE_TYPE, +0 armor
 
-#J0# ÆüËÜ¸ì²½, Ko
-#J0#N:91:¡Ø°­±¿¾·Ã×¼Ô¡Ù
-N:91:¡ØºÒ¤¤¤ò¾·¤¯¼Ô¡Ù
+#J0# “ú–{Œê‰», Ko
+#J0#N:91:wˆ«‰^µ’vŽÒx
+N:91:wÐ‚¢‚ðµ‚­ŽÒx
 E:'Doomcaller'
 I:23:30:0
 W:70:25:180:250000
@@ -1810,15 +1810,15 @@ F:SLAY_HUMAN | CHAOTIC | VORPAL | BRAND_FIRE | BRAND_POIS | LITE
 D:$This weapon of wrath, cursed with a violent anger, dives hungrily 
 D:$into the flesh of its enemies. It gathers shadows of death into its 
 D:$owner as they inflict wounds that will never heal.
-D:·ì¤Ëµ²¤¨¤¿ÀïÆ®¶¸¤Ë¤è¤êÃÃ¤¨¤é¤ì¤¿¤³¤ÎÅÜ¤ê¤Î·õ¤Ï
-D:Å¨¤ÎÆùÂÎ¤ËìÅÍß¤Ë¿©¤¤¹þ¤à¡£
+D:ŒŒ‚É‹Q‚¦‚½í“¬‹¶‚É‚æ‚è’b‚¦‚ç‚ê‚½‚±‚Ì“{‚è‚ÌŒ•‚Í
+D:“G‚Ì“÷‘Ì‚ÉæÃ—~‚ÉH‚¢ž‚ÞB
 
 
 # The Long Sword 'Vorpal Blade'
 
-#JZ#¥¸¥ã¥Ð¡¼¥¦¥©¥Ã¥­¡¼¤ÎÆüËÜ¸ìÌõ¤Ç¤Ï¡Ø¤±¤·¤Ë¤°¤Î·õ¡Ù/¡Ø¤Þ¤­¤ì¤â¤Ê¤®¤Ê·õ¡Ù
-#JZ#¤·¤«¤·¤½¤ì¤¸¤ãÊ¬¤«¤é¤Ê¤¤¤Î¤Ç±Ñ¸ì¤Î¤Þ¤Þ¤Ë
-N:92:¡Ø¥ô¥©¡¼¥Ñ¥ë¥Ö¥ì¡¼¥É¡Ù
+#JZ#ƒWƒƒƒo[ƒEƒHƒbƒL[‚Ì“ú–{Œê–ó‚Å‚Íw‚¯‚µ‚É‚®‚ÌŒ•x/w‚Ü‚«‚ê‚à‚È‚¬‚ÈŒ•x
+#JZ#‚µ‚©‚µ‚»‚ê‚¶‚á•ª‚©‚ç‚È‚¢‚Ì‚Å‰pŒê‚Ì‚Ü‚Ü‚É
+N:92:wƒ”ƒH[ƒpƒ‹ƒuƒŒ[ƒhx
 E:'Vorpal Blade'
 I:23:17:2
 W:50:240:150:250000
@@ -1827,18 +1827,18 @@ F:VORPAL | SLAY_EVIL | HIDE_TYPE |
 F:FREE_ACT | LITE | SEE_INVIS | SLOW_DIGEST | REGEN | SPEED | STR | DEX
 D:$"One, two! One, two!  And through, and through, the vorpal blade 
 D:$went snicker-snack!"
-D:¡Ö¤Þ¤­¤ì¤â¤Ê¤®¤Ê·õ¤ÎÀÚ¤ìÌ£¤Þ¤®¤ì¤Ê¤·¡ª¡×
-D:¡ÊL.¥­¥ã¥í¥ë¡¢ÌøÀ¥¾°µªÌõ ¥¸¥ã¥Ð¥¦¥©¥Ã¥­¡¼¡Ë
+D:u‚Ü‚«‚ê‚à‚È‚¬‚ÈŒ•‚ÌØ‚ê–¡‚Ü‚¬‚ê‚È‚µIv
+D:iL.ƒLƒƒƒƒ‹A–ö£®‹I–ó ƒWƒƒƒoƒEƒHƒbƒL[j
 
 # The Beaked Axe of Theoden
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# wp.261
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#¡öÄÉÊäÊÔ¤è¤ê¡£
+#J0#(“sX–Ú)
+#J0#–’Ç•â•Ò‚æ‚èB
 #J0#
-N:93:¹¹Àµ¤»¤ë¥»¥ª¥Ç¥ó²¦¤Î
+N:93:X³‚¹‚éƒZƒIƒfƒ“‰¤‚Ì
 E:of Theoden
 I:22:10:3
 W:20:30:120:40000
@@ -1849,15 +1849,15 @@ U:DRAIN_2
 D:$The narrow axe head of this weapon, finely balanced by a crow's beak, 
 D:$would pierce even the armour of Smaug, and its wielder becomes aware of 
 D:$the minds of their enemies.
-D:Àï¤¤¤ò·è°Õ¤·¤¿²«¶â´Û¤Î²¦¥»¥ª¥Ç¥ó¤¬¼ê¤Ë¤È¤Ã¤¿¤³¤Î±Ô¤¤Éà¤Ï¡¢
-D:¥¹¥Þ¥¦¥°¤Î¹Å¤¤ÎÚ¤Ç¤µ¤¨´Ó¤­ÄÌ¤·
-D:Å¨¤ÎÀº¿À¤òÌµËÉÈ÷¤Ë»¯¤±½Ð¤µ¤»¤ë¡£
+D:í‚¢‚ðŒˆˆÓ‚µ‚½‰©‹àŠÙ‚Ì‰¤ƒZƒIƒfƒ“‚ªŽè‚É‚Æ‚Á‚½‚±‚Ì‰s‚¢•€‚ÍA
+D:ƒXƒ}ƒEƒO‚Ìd‚¢—Ø‚Å‚³‚¦ŠÑ‚«’Ê‚µ
+D:“G‚Ì¸_‚ð–³–h”õ‚ÉŽN‚¯o‚³‚¹‚éB
 
 
 # The Glaive of Pain
 
-#J0# ÆüËÜ¸ì²½, Ko
-N:94:¶ìÄË¤Î
+#J0# “ú–{Œê‰», Ko
+N:94:‹ê’É‚Ì
 E:of Pain
 I:22:13:0
 W:30:25:190:50000
@@ -1866,13 +1866,13 @@ F:SHOW_MODS | RIDING
 D:$The massive chopper that crowns this glaive glows blood-red and black; 
 D:$fell spells of annihilation swirl and dance as you swing death's myrmidon 
 D:$down.
-D:¤³¤Î¥°¥ì¥¤¥Ö¤ËÉÕ¤±¤é¤ì¤¿µðÂç¤ÊÀÚ¤êÎö¤­¿Ï¤Ï·ì¤ÎÀÖ¤È¹õ¿§¤Îµ±¤­¤òÊü¤Ä¡£
-D:¤³¤Î»à¤ÎÍÑ¿´ËÀ¤ò¿¶¤ê¹ß¤í¤¹»þ¡¢Æâ¤Ë½É¤ë²Ò¡¹¤·¤¤ÇË²õ¤ÎËâÎÏ¤¬±²´¬¤¤¤ÆÍÙ¤ë¡£
+D:‚±‚ÌƒOƒŒƒCƒu‚É•t‚¯‚ç‚ê‚½‹‘å‚ÈØ‚è—ô‚«n‚ÍŒŒ‚ÌÔ‚Æ•F‚Ì‹P‚«‚ð•ú‚ÂB
+D:‚±‚ÌŽ€‚Ì—pS–_‚ðU‚è~‚ë‚·ŽžA“à‚Éh‚é‰ÐX‚µ‚¢”j‰ó‚Ì–‚—Í‚ª‰QŠª‚¢‚Ä—x‚éB
 
 # The Halberd 'Osondir'
 
 #J0# ???
-N:95:¡Ø¥ª¥½¥ó¥Ç¥£¥¢¡Ù
+N:95:wƒIƒ\ƒ“ƒfƒBƒAx
 E:'Osondir'
 I:22:15:3
 W:20:8:190:22000
@@ -1882,14 +1882,14 @@ F:BRAND_FIRE | SLAY_UNDEAD | SLAY_GIANT | RES_FIRE | RES_SOUND |
 F:LEVITATION | SEE_INVIS | SHOW_MODS | LITE
 D:$Lordly and tall did Osondir stand against the wrath of giants, and 
 D:$clear-eyed in barrows fell, wielding a halberd glowing ruby red.
-D:µð¿Í¤ÎÅÜ¤ê¤ËÎ©¤Á¸þ¤«¤¦¤è¤¦¤Ë¥ª¥½¥ó¥Ç¥£¥¢¤ÏÆ²¡¹¤È¤·¤Æ¹â¤¯¡¢
-D:¹½¤¨¤ë¥Ï¥ë¥Ù¥ë¥È¤Ï¥ë¥Ó¡¼¿§¤Ëµ±¤­¡¢ÄÍ»³¤ÎÃæ¤Ç¤â»ëÎÏ¤òË¸¤²¤Ê¤¤¡£
+D:‹l‚Ì“{‚è‚É—§‚¿Œü‚©‚¤‚æ‚¤‚ÉƒIƒ\ƒ“ƒfƒBƒA‚Í“°X‚Æ‚µ‚Ä‚‚­A
+D:\‚¦‚éƒnƒ‹ƒxƒ‹ƒg‚Íƒ‹ƒr[F‚É‹P‚«A’ËŽR‚Ì’†‚Å‚àŽ‹—Í‚ð–W‚°‚È‚¢B
 
 
 # The Pike 'Til-i-arc'
 
 #J0# ???
-N:96:¡Ø¥Æ¥£¥ë=¥¤=¥¢¥ë¥¯¡Ù
+N:96:wƒeƒBƒ‹=ƒC=ƒAƒ‹ƒNx
 E:'Til-i-arc'
 I:22:8:2
 W:20:15:160:32000
@@ -1899,14 +1899,14 @@ F:BRAND_COLD | BRAND_FIRE | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT |
 F:RES_FIRE | RES_COLD | SUST_INT | SLOW_DIGEST | SHOW_MODS | LITE
 D:$Within this long thrusting spear lie the spirits of frost giants and fire 
 D:$demons, who war forever, trapped by magely spells.  
-D:¤³¤ÎÎ¾¼ê»ý¤Á¤ÎÄ¹Áä¤ÎÃæ¤Ë¤Ï
-D:É¹¤Îµð¿Í¤È±ê¤Î°­Ëâ¤ÎÆó¤Ä¤Îº²¤¬ËâË¡¤Ë¤è¤ê
-D:Éõ°õ¤µ¤ì¤Æ¤¤¤Æ±Ê±ó¤ËÁè¤Ã¤Æ¤¤¤ë¡£
+D:‚±‚Ì—¼ŽèŽ‚¿‚Ì’·‘„‚Ì’†‚É‚Í
+D:•X‚Ì‹l‚Æ‰Š‚Ìˆ«–‚‚Ì“ñ‚Â‚Ì°‚ª–‚–@‚É‚æ‚è
+D:••ˆó‚³‚ê‚Ä‚¢‚Ä‰i‰“‚É‘ˆ‚Á‚Ä‚¢‚éB
 
 # The Spear 'Aeglos' -> Runespear (of Odin)
 
-#JZ#¥ª¡¼¥Ç¥£¥ó¤ÎÁä¡£¤Á¤ã¤ó¤ÈÌ¾Á°¤¬¤¢¤ê¤Þ¤¹¡£
-N:97:¡Ø¥°¥ó¥°¥Ë¥ë¡Ù
+#JZ#ƒI[ƒfƒBƒ“‚Ì‘„B‚¿‚á‚ñ‚Æ–¼‘O‚ª‚ ‚è‚Ü‚·B
+N:97:wƒOƒ“ƒOƒjƒ‹x
 E:'Runespear'
 I:22:7:4
 W:15:50:100:180000
@@ -1918,19 +1918,19 @@ F:SLOW_DIGEST | ACTIVATE | BLESSED | SHOW_MODS | LITE | RIDING
 U:BA_ELEC_2
 D:$The spear which Odin created from a branch of the world tree.
 D:$It is craved magical runes.
-D:¼ç¿À¥ª¡¼¥Ç¥£¥ó¤¬À¤³¦¼ù¤Î»Þ¤«¤éºî¤ê¾å¤²¤¿Áä¤Ç¡¢ËâÎÏ¤ò¹þ¤á¤¿
-D:¥ë¡¼¥óÊ¸»ú¤¬¹ï¤Þ¤ì¤Æ¤¤¤ë¡£¡ÊËÌ²¤¿ÀÏÃ¡Ë
+D:Žå_ƒI[ƒfƒBƒ“‚ª¢ŠEŽ÷‚ÌŽ}‚©‚çì‚èã‚°‚½‘„‚ÅA–‚—Í‚ðž‚ß‚½
+D:ƒ‹[ƒ“•¶Žš‚ª‚Ü‚ê‚Ä‚¢‚éBi–k‰¢_˜bj
 
 # The Spear of Orome -> Destiny
 
-#JZ#Ä¾ÀÜ¤Î¤â¤È¤Í¤¿¤Ï¥ï¡¼¥°¥Ê¡¼¤Î¥ª¥Ú¥é¡Ö¥Ñ¥ë¥¸¥Õ¥¡¥ë¡×
-#JZ#¤½¤Î¥â¥Á¡¼¥Õ¤È¤Ê¤Ã¤¿¤Î¤Ï¥¢¡¼¥µ¡¼²¦ÅÁÀâ¡£
-#JZ#¥±¥ë¥È¿ÀÏÃ¤Î¸÷¤ÎÁä¤È¡¢¥­¥ê¥¹¥È¤ò»É¤·¤¿¥í¥ó¥®¥Ì¥¹¤ÎÁä¤¬
-#JZ#Æ±°ì»ë¤µ¤ì¤Æ¡ÖÀ»Áä¡×¤È¤Ê¤Ã¤¿¡£¤Þ¤¿¥­¥ê¥¹¥È¤Î·ì¤ò¼õ¤±¤¿ÇÕ¤¬
-#JZ#À»ÇÕ(Holy Grail)¡£¤³¤Î¡Ö±¿Ì¿¤ÎÁä¡×¤ò¼ê¤Ë¤·¤¿¼Ô¤ÏÀ¤³¦¤ò
-#JZ#»ÙÇÛ¤¹¤ë¤È¤¤¤ï¤ì¡¢¥Ò¥È¥é¡¼¤¬É¬»à¤ÇÃµ¤·¤¿¤Î¤ÏÍ­Ì¾¤ÊÏÃ¡£
-#JZ#¤³¤³¤Ç¤Ï¥¨¥ô¥¡¥ó¤Ê¤ó¤È¤«¤ÇÍ­Ì¾¤Ë¤Ê¤Ã¤¿Ì¾Á°¤ò»È¤Ã¤¿¡£
-N:98:¡Ø¥í¥ó¥®¥Ì¥¹¡Ù
+#JZ#’¼Ú‚Ì‚à‚Æ‚Ë‚½‚Íƒ[ƒOƒi[‚ÌƒIƒyƒ‰uƒpƒ‹ƒWƒtƒ@ƒ‹v
+#JZ#‚»‚Ìƒ‚ƒ`[ƒt‚Æ‚È‚Á‚½‚Ì‚ÍƒA[ƒT[‰¤“`àB
+#JZ#ƒPƒ‹ƒg_˜b‚ÌŒõ‚Ì‘„‚ÆAƒLƒŠƒXƒg‚ðŽh‚µ‚½ƒƒ“ƒMƒkƒX‚Ì‘„‚ª
+#JZ#“¯ˆêŽ‹‚³‚ê‚Äu¹‘„v‚Æ‚È‚Á‚½B‚Ü‚½ƒLƒŠƒXƒg‚ÌŒŒ‚ðŽó‚¯‚½”t‚ª
+#JZ#¹”t(Holy Grail)B‚±‚Ìu‰^–½‚Ì‘„v‚ðŽè‚É‚µ‚½ŽÒ‚Í¢ŠE‚ð
+#JZ#Žx”z‚·‚é‚Æ‚¢‚í‚êAƒqƒgƒ‰[‚ª•KŽ€‚Å’T‚µ‚½‚Ì‚Í—L–¼‚È˜bB
+#JZ#‚±‚±‚Å‚ÍƒGƒ”ƒ@ƒ“‚È‚ñ‚Æ‚©‚Å—L–¼‚É‚È‚Á‚½–¼‘O‚ðŽg‚Á‚½B
+N:98:wƒƒ“ƒMƒkƒXx
 E:of Destiny
 I:22:7:4
 W:15:40:100:80000
@@ -1942,13 +1942,13 @@ F:LITE | SEE_INVIS | ACTIVATE | BLESSED | SHOW_MODS | RIDING
 U:STONE_MUD
 D:$It is said that the person wielding this spear which is known as
 D:$ the Holy Lance can rule all over the world.
-D:À»·õÅÁÀâ¤Ë¤ª¤¤¤ÆÀ»Áä¤È¤·¤ÆÃÎ¤é¤ì¤Æ¤¤¤ë¤³¤ÎÁä¤ò»ý¤Ä¼Ô¤Ï
-D:À¤³¦¤ò»ÙÇÛ¤¹¤ë¤È¸À¤ï¤ì¤Æ¤¤¤ë¡£¡Ê¥ï¡¼¥°¥Ê¡¼¡¢¡Ö¥Ñ¥ë¥¸¥Õ¥¡¥ë¡×Â¾¡Ë
+D:¹Œ•“`à‚É‚¨‚¢‚Ä¹‘„‚Æ‚µ‚Ä’m‚ç‚ê‚Ä‚¢‚é‚±‚Ì‘„‚ðŽ‚ÂŽÒ‚Í
+D:¢ŠE‚ðŽx”z‚·‚é‚ÆŒ¾‚í‚ê‚Ä‚¢‚éBiƒ[ƒOƒi[Auƒpƒ‹ƒWƒtƒ@ƒ‹v‘¼j
 
 # The Spear 'Nimloth' -> Hagen
 
-#JZ# ¥ï¡¼¥°¥Ê¡¼
-N:99:¥Ï¡¼¥²¥ó¤Î
+#JZ# ƒ[ƒOƒi[
+N:99:ƒn[ƒQƒ“‚Ì
 E:of Hagen
 I:22:2:3
 W:15:12:50:30000
@@ -1957,18 +1957,18 @@ F:STEALTH | RES_DARK | INFRA | SPEED | RIDING |
 F:BRAND_COLD | SLAY_UNDEAD | RES_COLD | SEE_INVIS | SHOW_MODS | THROW
 D:$The spear of Hagen on which Sigurd took the oath that it kills him 
 D:$when he tell a lie.
-D:¥Ï¡¼¥²¥ó¤¬¿Ê¤ß½Ð¤¿¡£
-D:¡Ö¤ï¤¿¤·¤ÎÁä¤ò¤É¤¦¤¾¡£¤³¤ÎÊæÀè¤¬ÀÀ¤¤¤Î¾Ú¿Í¤È¤Ê¤ê¤Þ¤·¤ç¤¦¡£¡×
-D:¥¸¡¼¥°¥Õ¥ê¡¼¥É¤È¥Ï¡¼¥²¥ó¤ò°Ï¤ó¤Ç²ÈÍè¤¿¤Á¤ÏÎØ¤òºî¤Ã¤¿¡£
-D:¥Ï¡¼¥²¥ó¤¬Áä¤ò¤«¤Þ¤¨¤ë¤È¡¢¥¸¡¼¥°¥Õ¥ê¡¼¥É¤Ï¤½¤ÎÊæÀè¤Ë±¦¼ê¤Î»Ø¤òÆóËÜ
-D:¤Î¤»¤Æ¡¢¡Öµ±¤¯Áä¤è¡ªÀ»¤Ê¤ëÉð´ï¤è¡ª¤È¤³¤·¤¨¤ÎÀÀ¤¤¤ËÎÏ¤òÂß¤·¤¿¤Þ¤¨¡ª
-D:¤­¤é¤á¤¯ÀÚ¤ÃÀè¤Ë¤«¤±¤ÆÀÀ¤¦¡£¤â¤·¤Ü¤¯¤¬¿¿¼Â¤òµ¶¤ë¤Ê¤é¡¢¤â¤·¤Ü¤¯¤¬»à¤Ë
-D:ÃÍ¤¹¤ë¤Ê¤é¡¢Áä¤è¡¢¤ª¤Þ¤¨¤¬¤³¤Î¿´Â¡¤Ë°ì·â¤òÍ¿¤¨¤Æ¤¯¤ì¡£¡Ä¡×
-D:(¥ê¥Ò¥ã¥ë¥È¡¦¥ï¡¼¥°¥Ê¡¼¡¢¹â¶¶¹¯Ìé¡¦¹â¶¶íìÌõ¡Ö¿À¡¹¤Î²«ºª¡×,¿·½ñ´Û)
+D:ƒn[ƒQƒ“‚ªi‚Ýo‚½B
+D:u‚í‚½‚µ‚Ì‘„‚ð‚Ç‚¤‚¼B‚±‚Ì•äæ‚ª¾‚¢‚ÌØl‚Æ‚È‚è‚Ü‚µ‚å‚¤Bv
+D:ƒW[ƒOƒtƒŠ[ƒh‚Æƒn[ƒQƒ“‚ðˆÍ‚ñ‚Å‰Æ—ˆ‚½‚¿‚Í—Ö‚ðì‚Á‚½B
+D:ƒn[ƒQƒ“‚ª‘„‚ð‚©‚Ü‚¦‚é‚ÆAƒW[ƒOƒtƒŠ[ƒh‚Í‚»‚Ì•äæ‚É‰EŽè‚ÌŽw‚ð“ñ–{
+D:‚Ì‚¹‚ÄAu‹P‚­‘„‚æI¹‚È‚é•Ší‚æI‚Æ‚±‚µ‚¦‚Ì¾‚¢‚É—Í‚ð‘Ý‚µ‚½‚Ü‚¦I
+D:‚«‚ç‚ß‚­Ø‚Áæ‚É‚©‚¯‚Ä¾‚¤B‚à‚µ‚Ú‚­‚ª^ŽÀ‚ð‹U‚é‚È‚çA‚à‚µ‚Ú‚­‚ªŽ€‚É
+D:’l‚·‚é‚È‚çA‘„‚æA‚¨‚Ü‚¦‚ª‚±‚ÌS‘Ÿ‚ÉˆêŒ‚‚ð—^‚¦‚Ä‚­‚êBcv
+D:(ƒŠƒqƒƒƒ‹ƒgEƒ[ƒOƒi[A‚‹´N–çE‚‹´çŒ–óu_X‚Ì‰©¨v,V‘ŠÙ)
 
 # The Lance of Eorlingas
 
-N:100:¥¨¥ª¥ë²È¤Î
+N:100:ƒGƒIƒ‹‰Æ‚Ì
 E:of Eorlingas
 I:22:20:3
 W:20:33:360:100000
@@ -1978,14 +1978,14 @@ F:SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS | RIDING
 D:$"Forth Eorlingas!". To the field of Cormallen came Eorl the Young 
 D:$to save beleaguered Gondor, and from his lance fled massive trolls 
 D:$and dire wolves.
-D:¡Ö¿Ê¤á¡¢¥¨¥ª¥ë¤Î»Ò¤é¤è¡ª¡×Êñ°Ï¤µ¤ì¤¿¥´¥ó¥É¡¼¥ë¤òµß¤¦¤¿¤á¡¢
-D:ÀÄÇ¯²¦¥¨¥ª¥ë¤Ï¥³¥ë¥Þ¥ë¥ì¥ó¤Î¹ÓÌî¤Ø¤ÈÅþÍè¤·¡¢Èà¤Î¥é¥ó¥¹¤ÏàØÌÔ¤Ê¤ë¥È¥í¥ë
-D:¤ÈËâÏµ¤¿¤Á¤òÇÔÁö¤µ¤»¤¿¡£
+D:ui‚ßAƒGƒIƒ‹‚ÌŽq‚ç‚æIv•ïˆÍ‚³‚ê‚½ƒSƒ“ƒh[ƒ‹‚ð‹~‚¤‚½‚ßA
+D:Â”N‰¤ƒGƒIƒ‹‚ÍƒRƒ‹ƒ}ƒ‹ƒŒƒ“‚Ìr–ì‚Ö‚Æ“ž—ˆ‚µA”Þ‚Ìƒ‰ƒ“ƒX‚ÍàÖ–Ò‚È‚éƒgƒƒ‹
+D:‚Æ–‚˜T‚½‚¿‚ð”s‘–‚³‚¹‚½B
 
 # The Great Axe of Durin
 
 #J0# p.342 wp.258
-N:101:ÉÔ»à¥É¥¥¥ê¥ó¤Î
+N:101:•sŽ€ƒhƒDƒŠƒ“‚Ì
 E:of Durin
 I:22:25:3
 W:30:90:230:150000
@@ -1996,16 +1996,16 @@ F:RES_ACID | RES_FIRE | RES_LITE | RES_DARK | RES_CHAOS | SHOW_MODS
 D:$The twin massive axe heads of this ancient demon's dread gleam with 
 D:$mithril inlay, which tell sagas of endurance, invoking the powers of 
 D:$Khazad-dum to protect the wearer and slay all evils found underground.
-D:ÂÀ¸Å¤Î°­ËâÃ£¤¬¶²¤ì¤¿¤³¤ÎÂç¿¶¤ê¤ÊÎ¾¿Ï¤ÎÉàÆ¬¤Ï¥ß¥¹¥ê¥ë¤ÎºÙ¹©
-D:¤Ë¤è¤êµ±¤¤¤Æ¤¤¤ë¡£¤½¤Î±Ê¤­Ç¦ÂÑ¤ÎÎò»Ë¤òÊª¸ì¤ëµ±¤­¤Ï
-D:¥«¥¶¥É=¥É¥¥¥à¤ÎÎÏ¤ò¸Æ¤Ó³Ð¤Þ¤·¡¢»ý¤Ä¼Ô¤ò¸î¤êÃÏ²¼¤ËÀø¤à¼Ù°­¤Ê
-D:¼Ô¶¦¤òÂÇ¤ÁÅÝ¤¹¡£
+D:‘¾ŒÃ‚Ìˆ«–‚’B‚ª‹°‚ê‚½‚±‚Ì‘åU‚è‚È—¼n‚Ì•€“ª‚Íƒ~ƒXƒŠƒ‹‚Ì×H
+D:‚É‚æ‚è‹P‚¢‚Ä‚¢‚éB‚»‚Ì‰i‚«”E‘Ï‚Ì—ðŽj‚ð•¨Œê‚é‹P‚«‚Í
+D:ƒJƒUƒh=ƒhƒDƒ€‚Ì—Í‚ðŒÄ‚ÑŠo‚Ü‚µAŽ‚ÂŽÒ‚ðŒì‚è’n‰º‚Éö‚ÞŽ×ˆ«‚È
+D:ŽÒ‹¤‚ð‘Å‚¿“|‚·B
 
 
 # The Great Axe of Eonwe
 
 #J0# p.312, Ko
-N:102:´ú¼ê¥¨¥ª¥ó¥¦¥§¤Î
+N:102:ŠøŽèƒGƒIƒ“ƒEƒF‚Ì
 E:of Eonwe
 I:22:25:2
 W:30:120:230:200000
@@ -2018,16 +2018,16 @@ U:MASS_GENO
 D:$The axe of Eonwe, leader of the Hosts of the West before the gates of 
 D:$Thangorodrim, strikes with icy wrath at the undead, disperses hosts of 
 D:$evil at a word, and grants Maia-like powers of body and mind.
-D:À¾Êý¤ÎÃÏ¤«¤éÃæ¤Ä¹ñ¤ËÅÏ¤ê¡¢¥µ¥ó¥´¥í¥É¥ê¥à¤ÎÌç¤Ë½¸·ë¤·¤¿·³Àª
-D:¤òÎ¨¤¤¤ë¥Þ¥¤¥¢¡¢´ú¼ê¥¨¥ª¥ó¥¦¥§¤ÎÉà¤À¡£¤³¤ÎÉð´ï¤ÏÉ¹¤ÎÇ¡¤­
-D:µ¤Àª¤Ç¥¢¥ó¥Ç¥Ã¥É¤ò
-D:ÂÇ¤ÁÅÝ¤·¡¢¤¿¤À°ì¸À¤Î¸ÀÍÕ¤Ç¼Ù°­¤Ê·³Àª¤òÄÉ¤¤»¶¤é¤¹¤³¤È¤¬½ÐÍè¤ë¡£
-D:¤½¤·¤Æ¿´¿ÈÎ¾ÌÌ¤Ë±÷¤¤¤Æ»ý¤Ä¼Ô¤Ë¥Þ¥¤¥¢¤ÎÇ¡¤­ÎÏ¤ò¼ø¤±¤ë¡£
+D:¼•û‚Ì’n‚©‚ç’†‚Â‘‚É“n‚èAƒTƒ“ƒSƒƒhƒŠƒ€‚Ì–å‚ÉWŒ‹‚µ‚½ŒR¨
+D:‚ð—¦‚¢‚éƒ}ƒCƒAAŠøŽèƒGƒIƒ“ƒEƒF‚Ì•€‚¾B‚±‚Ì•Ší‚Í•X‚Ì”@‚«
+D:‹C¨‚ÅƒAƒ“ƒfƒbƒh‚ð
+D:‘Å‚¿“|‚µA‚½‚¾ˆêŒ¾‚ÌŒ¾—t‚ÅŽ×ˆ«‚ÈŒR¨‚ð’Ç‚¢ŽU‚ç‚·‚±‚Æ‚ªo—ˆ‚éB
+D:‚»‚µ‚ÄSg—¼–Ê‚É‰—‚¢‚ÄŽ‚ÂŽÒ‚Éƒ}ƒCƒA‚Ì”@‚«—Í‚ðŽö‚¯‚éB
 
 # The Battle Axe of Balli Stonehand
 
 #J0# ???
-N:103:ÀÐ¤Î¼ê¥Ð¥ê¤Î
+N:103:Î‚ÌŽèƒoƒŠ‚Ì
 E:of Balli Stonehand
 I:22:22:3
 W:30:15:170:90000
@@ -2038,14 +2038,14 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_BLIND | LEVITATION |
 F:SEE_INVIS | REGEN | SHOW_MODS
 D:$The twin blades of this weapon were forged in Belegost, and powerful forces 
 D:$to resist and endure lie ready for he who shall wield it once more.
-D:¸Å¤Î¥Ù¥ì¥´¥¹¥È¤ÎÅÁÀâ¤Î¥É¥ï¡¼¥ÕÃÃÌê¡¢ÀÐ¤Î¼ê¥Ð¥ê¤¬ÃÃ¤¨¤¿Î¾¿Ï¤ÎÉà¤À¡£
-D:¤½¤Î¶¯ÎÏ¤ÊÎîÎÏ¤Ïº£¤âÁ´¤¯¿ê¤¨¤Æ¤ª¤é¤º¡¢ºÆ¤Ó¼ê¤Ë¤¹¤ë¼Ô¤Ë´è¶¯¤µ¤È
-D:ÍÍ¡¹¤Ê¹¶·â¤Ø¤ÎËÉ¸æ¤òÍ¿¤¨¤Æ¤¯¤ì¤ë¤À¤í¤¦¡£
+D:ŒÃ‚ÌƒxƒŒƒSƒXƒg‚Ì“`à‚Ìƒhƒ[ƒt’b–èAÎ‚ÌŽèƒoƒŠ‚ª’b‚¦‚½—¼n‚Ì•€‚¾B
+D:‚»‚Ì‹­—Í‚È—ì—Í‚Í¡‚à‘S‚­Š‚¦‚Ä‚¨‚ç‚¸AÄ‚ÑŽè‚É‚·‚éŽÒ‚ÉŠæ‹­‚³‚Æ
+D:—lX‚ÈUŒ‚‚Ö‚Ì–hŒä‚ð—^‚¦‚Ä‚­‚ê‚é‚¾‚ë‚¤B
 
 # The Battle Axe 'Lotharang'
 
 #J0# ???
-N:104:¡Ø¥í¥µ¥é¥ó¥°¡Ù
+N:104:wƒƒTƒ‰ƒ“ƒOx
 E:'Lotharang'
 I:22:22:1
 W:30:15:170:21000
@@ -2055,12 +2055,12 @@ F:SLAY_TROLL | SLAY_ORC | ACTIVATE | SHOW_MODS
 U:CURE_MW
 D:$A superbly crafted double-bladed axe that slays the creatures of earth and 
 D:$allows rapid recovery from their blows.
-D:¥¢¥ë¥Î¡¼¥ë¤ÎÌîÉú¤ÎÆ¬ÎÎ¥±¥ë¥µ¥¤¥ó¤¬»È¤Ã¤Æ¤¤¤¿¡¢
-D:ÁÇÀ²¤é¤·¤¤ºî¤ê¤ÎÎ¾¿Ï¤ÎÀïÉà¡£
+D:ƒAƒ‹ƒm[ƒ‹‚Ì–ì•š‚Ì“ª—ÌƒPƒ‹ƒTƒCƒ“‚ªŽg‚Á‚Ä‚¢‚½A
+D:‘f°‚ç‚µ‚¢ì‚è‚Ì—¼n‚Ìí•€B
 
 # The Lochaber Axe 'Mundwine' -> of the Dwarves
 
-N:105:¥É¥ï¡¼¥Õ¤Î
+N:105:ƒhƒ[ƒt‚Ì
 E:of the Dwarves
 I:22:28:10
 W:30:8:250:80000
@@ -2071,31 +2071,31 @@ F:SHOW_MODS
 D:$A massive axe with twin razor-sharp heads, so large that it usually 
 D:$requires two hands to wield, intricately engraved in gold with spells 
 D:$to ward off the elements and smite evil.
-D:ÄæÅá¤Î¤è¤¦¤Ë±Ô¤¤2Ëç¤Î¿Ï¤ò»ý¤Ä½Å¸ü¤ÊÉà¤Ç¡¢¤½¤ÎÂç¤­¤µ¸Î¹½¤¨¤ë¤Î¤Ë¤·¤Ð¤·¤ÐÎ¾¼ê
-D:¤¬É¬Í×¤Ë¤Ê¤ë¤¬¡¢¸µÁÇ¤ÎÎÏ¤òËÉ¤®¼Ù°­¤òÂÇ¤ÁÅÝ¤¹¼öÊ¸¤¬¶â¤ÇÊ£»¨¤Ë¹ï¤Þ¤ì¤Æ¤¤¤ë¡£
+D:’ä“‚Ì‚æ‚¤‚É‰s‚¢2–‡‚Ìn‚ðŽ‚ÂdŒú‚È•€‚ÅA‚»‚Ì‘å‚«‚³ŒÌ\‚¦‚é‚Ì‚É‚µ‚Î‚µ‚Î—¼Žè
+D:‚ª•K—v‚É‚È‚é‚ªAŒ³‘f‚Ì—Í‚ð–h‚¬Ž×ˆ«‚ð‘Å‚¿“|‚·Žô•¶‚ª‹à‚Å•¡ŽG‚É‚Ü‚ê‚Ä‚¢‚éB
 
 
 # The Broad Axe 'Barukkheled'
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0#
-#J0#(¾®ÎÓ)
-#J0# > >'Barukkheled'                   ¥Ð¥ë¥Ã¥¯¥Ø¥ì¥É¢ª¥Ð¥ë¥¯¥±¥ì¥É
-#J0# ¤³¤Á¤é¤Ï¥¯¥º¥É¥¥¥ë¸ì¤«°Å¹õ¸ì¤Ç¤¹¤Í¡¥¤Ò¤ç¤Ã¤È¤·¤¿¤é¡¤¡Ö¥Ð¥ë¥Ã¥±¥ì¥É¡×
-#J0# ¤«¤âÃÎ¤ì¤Ê¤¤¡¥¤³¤Á¤é¤âº£ÅÙÄ´¤Ù¤Æ¤ª¤­¤Þ¤¹¡¥
-#J0# ¤Á¤Ê¤ß¤Ë¤³¤ì¤âÊª¸ìÃæ¤Ç¤Ï¸«¤¿¤³¤È¤Ê¤¤¤Ç¤¹¡¥"Kheled"¤È¤¤¤¦¤Î¤Ï¥¯¥º¥É¥¥
-#J0# ¥ë¸ì¤Ç¡Ö¸Ð¡×¤é¤·¤¤¡¥"Bar-"¤Ï¡ÖÀÖ¡×¤À¤Ã¤¿¤«¤Ê¡Ä¼«¿®¤Ê¤¤¤ä¡¥
+#J0#(¬—Ñ)
+#J0# > >'Barukkheled'                   ƒoƒ‹ƒbƒNƒwƒŒƒh¨ƒoƒ‹ƒNƒPƒŒƒh
+#J0# ‚±‚¿‚ç‚ÍƒNƒYƒhƒDƒ‹Œê‚©ˆÃ•Œê‚Å‚·‚ËD‚Ð‚å‚Á‚Æ‚µ‚½‚çCuƒoƒ‹ƒbƒPƒŒƒhv
+#J0# ‚©‚à’m‚ê‚È‚¢D‚±‚¿‚ç‚à¡“x’²‚×‚Ä‚¨‚«‚Ü‚·D
+#J0# ‚¿‚È‚Ý‚É‚±‚ê‚à•¨Œê’†‚Å‚ÍŒ©‚½‚±‚Æ‚È‚¢‚Å‚·D"Kheled"‚Æ‚¢‚¤‚Ì‚ÍƒNƒYƒhƒD
+#J0# ƒ‹Œê‚ÅuŒÎv‚ç‚µ‚¢D"Bar-"‚ÍuÔv‚¾‚Á‚½‚©‚ÈcŽ©M‚È‚¢‚âD
 #J0#
-#J0# ¤³¤ì¤â¡¤Baruk + Kheled ¤À¤È¤·¤¿¤é¡¤¥¯¥º¥É¥¥¥ë¸ì¤Ç¡Ö¥Ð¥ë¥¯¥Ø¥ì¥É¡×
-#J0# ¤Ç¤·¤ç¤¦¤Í¡¥
+#J0# ‚±‚ê‚àCBaruk + Kheled ‚¾‚Æ‚µ‚½‚çCƒNƒYƒhƒDƒ‹Œê‚Åuƒoƒ‹ƒNƒwƒŒƒhv
+#J0# ‚Å‚µ‚å‚¤‚ËD
 #J0#
-#J0# ´Ö°ã¤¤¡¥
-#J0# Khuzdul¸ì¤Ç¤ÎKh¤ÎÈ¯²»¤Ï¡Ö¥¯¡×¤Ë¶á¤¤²»¤Ê¤Î¤Ç¡¤
-#J0# ¡Ö¥Ð¥ë¥¯¥±¥ì¥É¡×¤Þ¤¿¤Ï¡Ö¥Ð¥ë¥±¥ì¥É¡×¤À¤È»×¤¤¤Þ¤¹¡¥
-#J0# ¤Ç¤â¡Ö¥Ð¥ë¥Ã¥±¥ì¥É¡×¤Î²ÄÇ½À­¤Ï¼Î¤ÆÀÚ¤ì¤Þ¤»¤ó¡¥
+#J0# ŠÔˆá‚¢D
+#J0# KhuzdulŒê‚Å‚ÌKh‚Ì”­‰¹‚ÍuƒNv‚É‹ß‚¢‰¹‚È‚Ì‚ÅC
+#J0# uƒoƒ‹ƒNƒPƒŒƒhv‚Ü‚½‚Íuƒoƒ‹ƒPƒŒƒhv‚¾‚ÆŽv‚¢‚Ü‚·D
+#J0# ‚Å‚àuƒoƒ‹ƒbƒPƒŒƒhv‚Ì‰Â”\«‚ÍŽÌ‚ÄØ‚ê‚Ü‚¹‚ñD
 #J0#
-N:106:¡Ø¥Ð¥ë¥¯¥±¥ì¥É¡Ù
+N:106:wƒoƒ‹ƒNƒPƒŒƒhx
 E:'Barukkheled'
 I:22:11:3
 W:20:8:130:50000
@@ -2105,15 +2105,15 @@ F:SLAY_EVIL | SLAY_TROLL | SLAY_GIANT | SLAY_ORC |
 F:SEE_INVIS | SHOW_MODS
 D:$A royal heirloom of the southern coast, strong in combat against evil 
 D:$creatures of the earth.
-D:¥É¥ï¡¼¥Õ¤Î¸ÀÍÕ¤Ç¡Ö¶À¤ÎÉà¡×¤ò°ÕÌ£¤¹¤ë¤³¤ÎÉà¤Ï¡¢
-D:ÆîÊý¤Î¥É¥ï¡¼¥Õ¤Î²¦²È¤ËÅÁ¤ï¤ë²ÈÊõ¤À¡£ÃÏ¤ËÀø¤à¼Ù°­¤Ê
-D:À¸¤­Êª¤Ë¶¯ÎÏ¤Ê°ÒÎÏ¤òÈ¯´ø¤¹¤ë¡£
+D:ƒhƒ[ƒt‚ÌŒ¾—t‚Åu‹¾‚Ì•€v‚ðˆÓ–¡‚·‚é‚±‚Ì•€‚ÍA
+D:“ì•û‚Ìƒhƒ[ƒt‚Ì‰¤‰Æ‚É“`‚í‚é‰Æ•ó‚¾B’n‚Éö‚ÞŽ×ˆ«‚È
+D:¶‚«•¨‚É‹­—Í‚ÈˆÐ—Í‚ð”­Šö‚·‚éB
 
 
 # The Trident of Wrath
 
-#J0# ÆüËÜ¸ì, Ko
-N:107:Ê°ÅÜ¤Î
+#J0# “ú–{Œê, Ko
+N:107:•®“{‚Ì
 E:of Wrath
 I:22:26:2
 W:35:12:300:90000
@@ -2124,21 +2124,21 @@ F:BLESSED | SHOW_MODS | RIDING
 D:$A massive triple-pronged spear, so great it normally requires two hands to 
 D:$wield, evoking the spirit of Osse who with it pierced legions of 
 D:$evil and undead.
-D:»°ËÜ¤ÎÀÚÀè¤¬¤¢¤ëÂç¿¶¤ê¤ÊÁä¤Ç¡¢¤«¤Ä¤Æ¤³¤ÎÁä¤ò¼ê¤Ë¼Ù°­¤Ê¼Ô¶¦¤ä
-D:Ì½³¦¤Î¼Ô¶¦¤Î·³Àª¤ò»É¤·´Ó¤¤¤¿¥ª¥¹¥»¤ÎÎîÎÏ¤ò½É¤·¤Æ¤¤¤ë¡£
+D:ŽO–{‚ÌØæ‚ª‚ ‚é‘åU‚è‚È‘„‚ÅA‚©‚Â‚Ä‚±‚Ì‘„‚ðŽè‚ÉŽ×ˆ«‚ÈŽÒ‹¤‚â
+D:–»ŠE‚ÌŽÒ‹¤‚ÌŒR¨‚ðŽh‚µŠÑ‚¢‚½ƒIƒXƒZ‚Ì—ì—Í‚ðh‚µ‚Ä‚¢‚éB
 
 
 # The Trident of Ulmo
 
-#J0# (¥³¥á¥ó¥È)
+#J0# (ƒRƒƒ“ƒg)
 #J0#
 #J0# p.309
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#³¤²¦¥¦¥ë¥â¤Î ¢ª ¿å¤Î²¦¥¦¥ë¥â¤Î
-#J0#¡ö¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì¤è¤ê¡£¥ª¥í¥á¤Ï¤¢¤é¤æ¤ë¿å¤ÎÎ®¤ì¤Î»ÙÇÛ¼Ô¤Ç¤¹¡£³¤¤À¤±¤Ç¤Ï¤¢
-#J0#¤ê¤Þ¤»¤ó¡£¸¶ºîÃæ¤â¤³¤Î¤è¤¦¤ËÉ½µ­¤µ¤ì¤Æ¤¤¤Þ¤¹¡£
+#J0#(“sX–Ú)
+#J0#ŠC‰¤ƒEƒ‹ƒ‚‚Ì ¨ …‚Ì‰¤ƒEƒ‹ƒ‚‚Ì
+#J0#–ƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê‚æ‚èBƒIƒƒ‚Í‚ ‚ç‚ä‚é…‚Ì—¬‚ê‚ÌŽx”zŽÒ‚Å‚·BŠC‚¾‚¯‚Å‚Í‚ 
+#J0#‚è‚Ü‚¹‚ñBŒ´ì’†‚à‚±‚Ì‚æ‚¤‚É•\‹L‚³‚ê‚Ä‚¢‚Ü‚·B
 #J0#
-N:108:¿å¤Î²¦¥¦¥ë¥â¤Î
+N:108:…‚Ì‰¤ƒEƒ‹ƒ‚‚Ì
 E:of Ulmo
 I:22:5:4
 W:30:90:70:120000
@@ -2151,15 +2151,15 @@ U:TELE_AWAY
 D:$The awesome weapon of the Vala Ulmo, Lord of Waters. Mightest of all the 
 D:$powers of good save Manwe himself, Ulmo laughs in scorn at the dread powers 
 D:$of the undead, and is utterly in command of the element of water.
-D:¿å¤Î²¦¤Ç¤¢¤ë¥ô¥¡¥é¡¢¥¦¥ë¥â¤Î¶²¤í¤·¤¤Éð´ï¡£¥Þ¥ó¥¦¥§¼«¿È¤ò½ü¤±¤Ð
-D:Á±¤­ÀªÎÏ¤ÎÆâ¤ÇºÇ¶¯¤Ç¤¢¤ë¥¦¥ë¥â¤Ï¡¢¥¢¥ó¥Ç¥Ã¥É¤Î¶²¤ë¤Ù¤­ÎÏ¤µ¤¨
-D:ÓÞ¾Ð¤¤¡¢»À¤Î¥¨¥ì¥á¥ó¥È¤Îµæ¶ËÅª»ÙÇÛÎÏ¤ò»ý¤Ä¡£
+D:…‚Ì‰¤‚Å‚ ‚éƒ”ƒ@ƒ‰AƒEƒ‹ƒ‚‚Ì‹°‚ë‚µ‚¢•ŠíBƒ}ƒ“ƒEƒFŽ©g‚ðœ‚¯‚Î
+D:‘P‚«¨—Í‚Ì“à‚ÅÅ‹­‚Å‚ ‚éƒEƒ‹ƒ‚‚ÍAƒAƒ“ƒfƒbƒh‚Ì‹°‚é‚×‚«—Í‚³‚¦
+D:š}Î‚¢AŽ_‚ÌƒGƒŒƒƒ“ƒg‚Ì‹†‹É“IŽx”z—Í‚ðŽ‚ÂB
 
 
 # The Scythe 'Avavir'
 
 #J0# ???
-N:109:¡Ø¥¢¥ô¥¡¥Ó¥¢¡Ù
+N:109:wƒAƒ”ƒ@ƒrƒAx
 E:'Avavir'
 I:22:17:3
 W:40:8:250:18000
@@ -2171,15 +2171,15 @@ U:RECALL
 D:$With elemental powers whose struggles turn this weapon red and purest 
 D:$white, this shining reaper bears within it a power of going forth and 
 D:$returning.
-D:Æâ¤ËÈë¤á¤¿·ã¤·¤¤¥¨¥ì¥á¥ó¥È¤ÎÎÏ¤ÇÇòÇ®¤·¤Æ¤¤¤ëÂç³ù¤Ç¡¢¥À¥ó¥¸¥ç¥ó¤ò
-D:¹Ô¤­Íè¤¹¤ëÇ½ÎÏ¤ò»ý¤Ã¤Æ¤¤¤ë¡£
+D:“à‚É”é‚ß‚½Œƒ‚µ‚¢ƒGƒŒƒƒ“ƒg‚Ì—Í‚Å”’”M‚µ‚Ä‚¢‚é‘åŠ™‚ÅAƒ_ƒ“ƒWƒ‡ƒ“‚ð
+D:s‚«—ˆ‚·‚é”\—Í‚ðŽ‚Á‚Ä‚¢‚éB
 
 
 # The Long Sword of the Dawn
 
-#JZ# M.¥à¥¢¥³¥Ã¥¯¤Î¥¨¥¿¡¼¥Ê¥ë¡¦¥Á¥ã¥ó¥Ô¥ª¥ó¥·¥ê¡¼¥º¤¬½ÐÅµ
-#JZ# Ìõ¤Ï G.P.S. ¤µ¤ó
-N:110:¡Ø¶Ç¤Î·õ¡Ù
+#JZ# M.ƒ€ƒAƒRƒbƒN‚ÌƒGƒ^[ƒiƒ‹Eƒ`ƒƒƒ“ƒsƒIƒ“ƒVƒŠ[ƒY‚ªo“T
+#JZ# –ó‚Í G.P.S. ‚³‚ñ
+N:110:w‹Å‚ÌŒ•x
 E:of the Dawn
 I:23:17:3
 W:40:120:130:250000
@@ -2192,8 +2192,8 @@ U:SUMMON_DAWN
 D:$Forged in the farthest East by a race of mighty spellcasters, this 
 D:$shiny pale sword gleams with the rays of rising sun as you invoke 
 D:$its power of commanding legions of powerful immortal warriors...
-D:¥Û¡¼¥¯¥à¡¼¥ó¤Î»ý¤Ä¹õ¤Î·õ¡¢¡Ø¶Ç¤Î·õ¡Ù¤Ïé¬é¯¿§¤Î¸÷¤òÊü¤Á¡¢
-D:°ÛÀ¤³¦¤è¤ê¡Ø¶Ç¤Î·³ÃÄ¡Ù¤ò¾¤½¸¤¹¤ëÎÏ¤¬¤¢¤ë¡£
+D:ƒz[ƒNƒ€[ƒ“‚ÌŽ‚Â•‚ÌŒ•Aw‹Å‚ÌŒ•x‚ÍåKåNF‚ÌŒõ‚ð•ú‚¿A
+D:ˆÙ¢ŠE‚æ‚èw‹Å‚ÌŒR’cx‚ð¢W‚·‚é—Í‚ª‚ ‚éB
 
 
 # The Mighty Hammer 'Grond'
@@ -2202,7 +2202,7 @@ D:°ÛÀ¤³¦¤è¤ê¡Ø¶Ç¤Î·³ÃÄ¡Ù¤ò¾¤½¸¤¹¤ëÎÏ¤¬¤¢¤ë¡£
 # Note that it takes 18/200 strength to wield Grond correctly
 
 #J0# Note that it takes 18/200 strength to wield Grond correctly
-N:111:¡Ø¥°¥í¥ó¥É¡Ù
+N:111:wƒOƒƒ“ƒhx
 E:'Grond'
 I:21:50:0
 W:100:1:1000:500000
@@ -2213,14 +2213,14 @@ F:RES_COLD | SEE_INVIS | TELEPATHY | AGGRAVATE | SHOW_MODS | INSTA_ART |
 F:SLAY_HUMAN | RIDING | QUESTITEM
 D:$The mighty Hammer of the Underworld, blackened by doomspells of shattering, 
 D:$whose wielder holds the lives of all Morgoth's servants in his hand.
-D:¤¢¤é¤æ¤ëÊª¤òÊ´ºÕ¤¹¤ë°Å¹õËâË¡¤Ë¤è¤ê¹õ¤¯µ±¤¯
-D:Ì½³¦¤ÎÂçÅ´¾ó¤Ç¡¢¤³¤ì¤ò¼ê¤Ë¤¹¤ë¼Ô¤Ï¥â¥ë¥´¥¹¤ÎÁ´¤Æ¤Î¼ê²¼¤ÎÌ¿¤â¤Þ¤¿
-D:¼êÃæ¤Ë¼ý¤á¤ë¡£
+D:‚ ‚ç‚ä‚é•¨‚ð•²Ó‚·‚éˆÃ•–‚–@‚É‚æ‚è•‚­‹P‚­
+D:–»ŠE‚Ì‘å“Sñ‚ÅA‚±‚ê‚ðŽè‚É‚·‚éŽÒ‚Íƒ‚ƒ‹ƒSƒX‚Ì‘S‚Ä‚ÌŽè‰º‚Ì–½‚à‚Ü‚½
+D:Žè’†‚ÉŽû‚ß‚éB
 
 
 # The Flail 'Totila'
 
-N:112:¡Ø¥È¥Æ¥£¥é¡Ù
+N:112:wƒgƒeƒBƒ‰x
 E:'Totila'
 I:21:13:2
 W:20:8:150:55000
@@ -2231,14 +2231,14 @@ F:SHOW_MODS | LITE | RIDING
 U:CONFUSE
 D:$A flail whose head befuddles those who stare as you whirl it around, and 
 D:$becomes a fiery comet as you bring it down. 
-D:¤³¤Î¥Õ¥ì¥¤¥ë¤ÏÀèÃ¼¤ò¿¶¤ê²ó¤¹¤³¤È¤Ç¸«¤ë¤â¤Î¤òÏÇ¤ï¤»¤ë¡£¤½¤·¤Æ
-D:¿¶¤ê¹ß¤í¤»¤Ð±ê¤ÎÎ®À±¤È¤Ê¤Ã¤ÆÅ¨¤òÂÇ¤Ä¡£
+D:‚±‚ÌƒtƒŒƒCƒ‹‚Íæ’[‚ðU‚è‰ñ‚·‚±‚Æ‚ÅŒ©‚é‚à‚Ì‚ð˜f‚í‚¹‚éB‚»‚µ‚Ä
+D:U‚è~‚ë‚¹‚Î‰Š‚Ì—¬¯‚Æ‚È‚Á‚Ä“G‚ð‘Å‚ÂB
 
 
 # The Two-Handed Flail 'Thunderfist'
 
-#J0# ÆüËÜ¸ì²½
-N:113:¡Ø°ðºÊ¤Î·ý¡Ù
+#J0# “ú–{Œê‰»
+N:113:wˆîÈ‚ÌŒx
 E:'Thunderfist'
 I:21:18:4
 W:45:38:300:160000
@@ -2249,15 +2249,15 @@ F:RES_ELEC | RES_FIRE | RES_DARK | SHOW_MODS | LITE
 D:$The long-lost weapon of Kzurin, Dwarven champion of ancient Belegost, 
 D:$with runes of strength in its handle, and flames and sparks that roar and 
 D:$crackle around its massive head.
-D:¸Å¤Î¥Ù¥ì¥´¥¹¥È¤ÇÌ¾¤òÃÚ¤»¤¿¥É¥ï¡¼¥Õ¤Î±ÑÍº¡¢¥¯¥º¡¼¥ê¥ó¤ÎÉð´ï¤Ç
-D:Ä¹¤¯¼º¤ï¤ì¤Æ¤¤¤¿¤â¤Î¤À¡£ÊÁ¤ËÎÏ¤Î¥ë¡¼¥óÊ¸»ú¤¬¹ï¤Þ¤ì¡¢½Å¸ü¤ÊÀèÃ¼Éô¤Ë¤Ï
-D:±ê¤È²Ð²Ö¤¬¹ì¡¹¤È²»¤òÎ©¤Æ±²´¬¤¤¤Æ¤¤¤ë¡£
+D:ŒÃ‚ÌƒxƒŒƒSƒXƒg‚Å–¼‚ð’y‚¹‚½ƒhƒ[ƒt‚Ì‰p—YAƒNƒY[ƒŠƒ“‚Ì•Ší‚Å
+D:’·‚­Ž¸‚í‚ê‚Ä‚¢‚½‚à‚Ì‚¾B•¿‚É—Í‚Ìƒ‹[ƒ“•¶Žš‚ª‚Ü‚êAdŒú‚Èæ’[•”‚É‚Í
+D:‰Š‚Æ‰Î‰Ô‚ªŒX‚Æ‰¹‚ð—§‚Ä‰QŠª‚¢‚Ä‚¢‚éB
 
 
 # The Morning Star 'Bloodspike'
 
-#J0# ÆüËÜ¸ì²½
-N:114:¡Ø·ìÎ®¤Î»É¡Ù
+#J0# “ú–{Œê‰»
+N:114:wŒŒ—¬‚ÌŽhx
 E:'Bloodspike'
 I:21:12:4
 W:20:30:150:50000
@@ -2267,14 +2267,14 @@ F:SLAY_ANIMAL | SLAY_TROLL | SLAY_ORC | RES_NEXUS | SEE_INVIS |
 F:SHOW_MODS
 D:$You feel strong and firm of foot as you whip the chain-suspended spiked orb 
 D:$around - and bathe it in the blood of your foes.
-D:º¿¤Ç¤Ä¤Ê¤¬¤ì¤¿»ÉÉÕ¤­¤Îµå¤ò¿¶¤ê²ó¤¹»þ¶¯¤¯¤·¤Ã¤«¤ê¤È¤·¤¿Â­¼è¤ê¤ò´¶¤¸¡¢
-D:Å´µå¤ÏÅ¨¤Î·ì¤Ë¿»¤«¤ë¡£
+D:½‚Å‚Â‚È‚ª‚ê‚½Žh•t‚«‚Ì‹…‚ðU‚è‰ñ‚·Žž‹­‚­‚µ‚Á‚©‚è‚Æ‚µ‚½‘«Žæ‚è‚ðŠ´‚¶A
+D:“S‹…‚Í“G‚ÌŒŒ‚ÉZ‚©‚éB
 
 
 # The Morning Star 'Firestar'
 
-#J0# ÆüËÜ¸ì²½
-N:115:¡Ø±ë¤ÎÀ±¡Ù
+#J0# “ú–{Œê‰»
+N:115:w‰‹‚Ì¯x
 E:'Firestar'
 I:21:12:0
 W:20:15:150:35000
@@ -2283,14 +2283,14 @@ F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE
 U:BA_FIRE_2
 D:$A famed battle-lord of old with a ruddy head, colored as embers are that
 D:$ can yet rise up in wrath.
-D:Âç¤­¤Ê¥ë¥Ó¡¼¤Îµå¤¬º¿¤ÎÀè¤ËÉÕ¤±¤é¤ì¤¿¡¢¸Å¤ÎÌ¾¹â¤­ÀïÄÊ¤À¡£
-D:¤½¤Î¿¿¹È¤Îµ±¤­¤ÏÅ¨¤Ë¿¶¤ê²¼¤í¤µ¤ì¤ì¤Ð¡¢±Ê¤­»þ¤ò·Ð¤¿º£¤Ç¤â
-D:ßú²Ð¤ÎÇ¡¤¯ºÆ¤ÓÅÜ¤ê¤ËÇ³¤¨¾å¤¬¤ë¡£
+D:‘å‚«‚Èƒ‹ƒr[‚Ì‹…‚ª½‚Ìæ‚É•t‚¯‚ç‚ê‚½AŒÃ‚Ì–¼‚‚«í’È‚¾B
+D:‚»‚Ì^g‚Ì‹P‚«‚Í“G‚ÉU‚è‰º‚ë‚³‚ê‚ê‚ÎA‰i‚«Žž‚ðŒo‚½¡‚Å‚à
+D:àš‰Î‚Ì”@‚­Ä‚Ñ“{‚è‚É”R‚¦ã‚ª‚éB
 
 
 # The Mace 'Taratol'
 
-N:116:¡Ø¥¿¥é¥È¥ë¡Ù
+N:116:wƒ^ƒ‰ƒgƒ‹x
 E:'Taratol'
 I:21:5:0
 W:20:15:200:50000
@@ -2300,15 +2300,15 @@ U:SPEED
 D:$A great ridged mace that calls around you a nimbus of living lightning; 
 D:$you remain utterly untouched even as fat sparks arc around your 
 D:$fingers and eyebrows. 
-D:»ý¤Ä¼Ô¤ò·ã¤·¤¤ÅÅ¸÷¤ÇÊñ¤àÂç¤­¤Ê³ÑÄÊ¤À¡£
-D:¶¯Îõ¤Ê¥¹¥Ñ¡¼¥¯¤¬»Ø¤äÈý¤Î´Ö¤Ç²Ð²Ö¤ò»¶¤é¤»¤ë¤¬
-D:¼ê¤Ë¤·¤Æ¤¤¤ë¼Ô¤ÏÁ´¤¯±Æ¶Á¤ò¼õ¤±¤Ê¤¤¡£
+D:Ž‚ÂŽÒ‚ðŒƒ‚µ‚¢“dŒõ‚Å•ï‚Þ‘å‚«‚ÈŠp’È‚¾B
+D:‹­—ó‚ÈƒXƒp[ƒN‚ªŽw‚â”û‚ÌŠÔ‚Å‰Î‰Ô‚ðŽU‚ç‚¹‚é‚ª
+D:Žè‚É‚µ‚Ä‚¢‚éŽÒ‚Í‘S‚­‰e‹¿‚ðŽó‚¯‚È‚¢B
 
 
 # The War Hammer of Aule
 
 #J0# p.304, Ko
-N:117:ÃÃÌê¤Î»Ê¥¢¥¦¥ì¤Î
+N:117:’b–è‚ÌŽiƒAƒEƒŒ‚Ì
 E:of Aule
 I:21:8:4
 W:40:75:120:250000
@@ -2320,16 +2320,16 @@ F:SEE_INVIS | SHOW_MODS | XTRA_POWER | XTRA_H_RES
 D:$The wondrous hammer of Aule, creator of the wise Dwarven lords of old.  
 D:$It bears magics of demolishing that no serpent or demon can withstand, and 
 D:$invokes the strength of mountains to ward off the tumult of the elements.
-D:¼«¤é¤ÎÃÎ·Ã¤ò¼ø¤±¤ë¤¿¤á¡¢¥¤¥ë¥ô¥¡¥¿¡¼¥ë¤Î°Õ¤ËÇØ¤¤¤ÆÌ©¤«¤Ë¼·¿Í¤Î
-D:¥É¥ï¡¼¥Õ¤ÎÉãÁÄ¤òÃÂÀ¸¤µ¤»¤¿¥ô¥¡¥é¡¢ÃÃÌê¤Î»Ê¥¢¥¦¥ì¤ÎÁÇÀ²¤é¤·¤¤¥Ï¥ó¥Þ¡¼
-D:¤À¡£¤½¤ÎËâÎÏ¤Ï¤¢¤é¤æ¤ëÎ¶¤ä°­Ëâ¤òÊ´ºÕ¤·¡¢ÃÏ¿å²ÐÉ÷¤Î¥¨¥ì¥á¥ó¥È¤Î
-D:¹¶·â¤òÂà¤±¤ë»³¡¹¤ÎÎÏ¤ò´­µ¯¤¹¤ë¡£
+D:Ž©‚ç‚Ì’mŒb‚ðŽö‚¯‚é‚½‚ßAƒCƒ‹ƒ”ƒ@ƒ^[ƒ‹‚ÌˆÓ‚É”w‚¢‚Ä–§‚©‚ÉŽµl‚Ì
+D:ƒhƒ[ƒt‚Ì•ƒ‘c‚ð’a¶‚³‚¹‚½ƒ”ƒ@ƒ‰A’b–è‚ÌŽiƒAƒEƒŒ‚Ì‘f°‚ç‚µ‚¢ƒnƒ“ƒ}[
+D:‚¾B‚»‚Ì–‚—Í‚Í‚ ‚ç‚ä‚é—´‚âˆ«–‚‚ð•²Ó‚µA’n…‰Î•—‚ÌƒGƒŒƒƒ“ƒg‚Ì
+D:UŒ‚‚ð‘Þ‚¯‚éŽRX‚Ì—Í‚ðŠ«‹N‚·‚éB
 
 
 # The Quarterstaff 'Nar-i-vagil'
 
 #J0# ???
-N:118:¡Ø¥Ê¥ë=¥¤=¥Ð¥®¥ë¡Ù
+N:118:wƒiƒ‹=ƒC=ƒoƒMƒ‹x
 E:'Nar-i-vagil'
 I:21:3:3
 W:30:20:150:100000
@@ -2339,13 +2339,13 @@ F:KILL_ANIMAL | BRAND_FIRE | FORCE_WEAPON | ESP_ANIMAL |
 F:RES_FIRE | HOLD_LIFE | SEE_INVIS | FREE_ACT | SLOW_DIGEST | SHOW_MODS |
 D:$Named for a fiery star and set with gems of great worth binding mystic 
 D:$virtues of protection and thought.
-D:Ç³¤¨¤ëÀ±¤ÈÌ¾ÉÕ¤±¤é¤ì¡¢¼é¤ê¤È»×Î¸¤Î¿ÀÈëÅª¤ÊÎÏ¤òÉõ¤¸¤¿¹â²Á¤ÊÊõÀÐ¤¬ÉÕ¤¤¤Æ¤¤¤ë¡£
+D:”R‚¦‚é¯‚Æ–¼•t‚¯‚ç‚êAŽç‚è‚ÆŽv—¶‚Ì_”é“I‚È—Í‚ð••‚¶‚½‚‰¿‚È•óÎ‚ª•t‚¢‚Ä‚¢‚éB
 
 
 # The Quarterstaff 'Eriril'
 
 #J0# ???
-N:119:¡Ø¥¨¥ê¥ê¥ë¡Ù
+N:119:wƒGƒŠƒŠƒ‹x
 E:'Eriril'
 I:21:21:4
 W:20:5:40:80000
@@ -2356,14 +2356,14 @@ F:SLAY_EVIL | RES_FEAR | RES_LITE | RES_BLIND | ACTIVATE | SHOW_MODS
 U:ID_PLAIN
 D:$The radiant golden staff of an Istari of legend, this wizard's companion 
 D:$grants keen sight and the knowledge of many hidden things.
-D:¡Ö½¨¤Ç¤·µ±¤­¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä¡¢ÅÁÀâ¤Î¥¤¥¹¥¿¥ê¤Î²«¶â¤Ëµ±¤¯¥¹¥¿¥Ã¥Õ¤À¡£
-D:¤³¤ÎËâË¡»È¤ÎÍ§¤Ï¡¢Â¿¤¯¤Î±£¤µ¤ì¤¿Êª»ö¤ËÂÐ¤¹¤ë¡¢±Ô¤¤»ëÅÀ¤ÈÁ¯ÌÀ¤ÊÃÎ¼±¤ò
-D:¤â¤¿¤é¤¹¡£
+D:uG‚Å‚µ‹P‚«v‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚ÂA“`à‚ÌƒCƒXƒ^ƒŠ‚Ì‰©‹à‚É‹P‚­ƒXƒ^ƒbƒt‚¾B
+D:‚±‚Ì–‚–@Žg‚Ì—F‚ÍA‘½‚­‚Ì‰B‚³‚ê‚½•¨Ž–‚É‘Î‚·‚éA‰s‚¢Ž‹“_‚Æ‘N–¾‚È’mŽ¯‚ð
+D:‚à‚½‚ç‚·B
 
 # The Quarterstaff of Olorin -> Gandalf
 
 #JZ#
-N:120:¸­¼Ô¥¬¥ó¥À¥ë¥Õ¤Î
+N:120:Œ«ŽÒƒKƒ“ƒ_ƒ‹ƒt‚Ì
 E:of Gandalf
 I:21:21:4
 W:50:30:40:140000
@@ -2377,15 +2377,15 @@ D:$The staff of the great wizard Gandalf.
 D:$It is tall and sturdy, with rough-hewn runes that invoke the element of 
 D:$Earth, and which strikes down all creatures who live in the shadow of 
 D:$mountains.
-D:¥¬¥ó¥À¥ë¥Õ¤¬¤«¤Ä¤Æ»È¤Ã¤Æ¤¤¤¿Ä¹¤¯¾æÉ×¤Ê¾ó¡£Àá¤¯¤ìÎ©¤Ã¤¿É½ÌÌ¤Ë¤Ï
-D:ÃÏ¤Î¥¨¥ì¥á¥ó¥È¤ÎÎÏ¤ò¸Æ¤Óµ¯¤³¤¹¹Óºï¤ê¤Ê¥ë¡¼¥óÊ¸»ú¤¬¹ï¤Þ¤ì¡¢
-D:±Æ¤ËÀ¸¤­¤ë¼Ô¤Ï¤½¤ÎÂÇ·â¤ËÂÑ¤¨¤ë¤³¤È¤Ï½ÐÍè¤Ê¤¤¡£
+D:ƒKƒ“ƒ_ƒ‹ƒt‚ª‚©‚Â‚ÄŽg‚Á‚Ä‚¢‚½’·‚­ä•v‚ÈñBß‚­‚ê—§‚Á‚½•\–Ê‚É‚Í
+D:’n‚ÌƒGƒŒƒƒ“ƒg‚Ì—Í‚ðŒÄ‚Ñ‹N‚±‚·rí‚è‚Èƒ‹[ƒ“•¶Žš‚ª‚Ü‚êA
+D:‰e‚É¶‚«‚éŽÒ‚Í‚»‚Ì‘ÅŒ‚‚É‘Ï‚¦‚é‚±‚Æ‚Ío—ˆ‚È‚¢B
 
 
 # The Mace of Disruption 'Deathwreaker'
 
-#J0# ÆüËÜ¸ì²½
-N:121:¡Ø»à¤ÎÉü½²¼Ô¡Ù
+#J0# “ú–{Œê‰»
+N:121:wŽ€‚Ì•œQŽÒx
 E:'Deathwreaker'
 I:21:20:6
 W:80:38:400:444444
@@ -2399,16 +2399,16 @@ D:$the might of giants within you as you heft it.  As you grip the handle
 D:$of ebony and steel, coronas of fire blaze and mighty spells to preserve 
 D:$magic activate around you.  You wield the Fear of Dragons and the Despair 
 D:$of the Undead!
-D:ÄêÌ¿¤Î¼Ô¤ÎÎÏ¤òÍÚ¤«¤Ë±Û¤¨¤¿½Å¤µ¤ò»ý¤ÄÉð´ï¤À¤¬¡¢
-D:¼ê¤Ë¤¹¤ì¤Ðµð¿Í¤ÎÎÏ¤¬Í¯¤­¾å¤¬¤Ã¤Æ¤¯¤ë¤Î¤¬´¶¤¸¤é¤ì¤ë¡£
-D:¹õÃÉ¤ÈÅ´¤Çºî¤é¤ì¤¿¤½¤ÎÊÁ¤òÄÏ¤à»þ¡¢±ë¤¬Ç³¤¨Î©¤Ã¤ÆÈë¤á¤é¤ì¤¿
-D:ËâË¡¤¬Â©¤ò¿á¤­ÊÖ¤·ÂÎ¤òÊñ¤ß¹þ¤à¡£¤½¤Î¼ê¤Ë°®¤é¤ì¤Æ¤¤¤ë¤Î¤Ï
-D:¡ÖÎ¶¤É¤â¤Î°ÚÉÝ¡×¤Ç¤¢¤ê¡ÖË´¼Ô¶¦¤ÎÀäË¾¡×¤Ê¤Î¤À¡ª
+D:’è–½‚ÌŽÒ‚Ì—Í‚ð—y‚©‚É‰z‚¦‚½d‚³‚ðŽ‚Â•Ší‚¾‚ªA
+D:Žè‚É‚·‚ê‚Î‹l‚Ì—Í‚ª—N‚«ã‚ª‚Á‚Ä‚­‚é‚Ì‚ªŠ´‚¶‚ç‚ê‚éB
+D:•’h‚Æ“S‚Åì‚ç‚ê‚½‚»‚Ì•¿‚ð’Í‚ÞŽžA‰‹‚ª”R‚¦—§‚Á‚Ä”é‚ß‚ç‚ê‚½
+D:–‚–@‚ª‘§‚ð‚«•Ô‚µ‘Ì‚ð•ï‚Ýž‚ÞB‚»‚ÌŽè‚Éˆ¬‚ç‚ê‚Ä‚¢‚é‚Ì‚Í
+D:u—´‚Ç‚à‚ÌˆØ•|v‚Å‚ ‚èu–SŽÒ‹¤‚Ìâ–]v‚È‚Ì‚¾I
 
 # The Lucerne Hammer 'Turmil'
 
 #J0# ???
-N:122:¡Ø¥È¥¥¥¢¥ß¥ë¡Ù
+N:122:wƒgƒDƒAƒ~ƒ‹x
 E:'Turmil'
 I:22:12:4
 W:20:15:120:30000
@@ -2420,26 +2420,26 @@ U:DRAIN_2
 D:$Wielded by the High Priest of Meneltarma, this great mace gleams coldly as 
 D:$though moonlit, and it can strike as mighty a blow spiritually as 
 D:$physically.
-D:¥á¥Í¥ë¥¿¥ë¥Þ¤Î¹âÁÎ¤¬»È¤Ã¤Æ¤¤¤¿ÂçÄÊ¤Ç¡¢·î¤Î¸÷¤Î¤è¤¦¤ËÎä¤¿¤¯µ±¤¤¤Æ¤¤¤ë¡£
-D:¤½¤ÎÂÇ·â¤ÏÅ¨¤ÎÆùÂÎ¤À¤±¤Ç¤Ê¤¯Àº¿À¤ò¤âÂÇ¤ÁºÕ¤¯¤³¤È¤¬¤Ç¤­¤ë¡£
+D:ƒƒlƒ‹ƒ^ƒ‹ƒ}‚Ì‚‘m‚ªŽg‚Á‚Ä‚¢‚½‘å’È‚ÅAŒŽ‚ÌŒõ‚Ì‚æ‚¤‚É—â‚½‚­‹P‚¢‚Ä‚¢‚éB
+D:‚»‚Ì‘ÅŒ‚‚Í“G‚Ì“÷‘Ì‚¾‚¯‚Å‚È‚­¸_‚ð‚à‘Å‚¿Ó‚­‚±‚Æ‚ª‚Å‚«‚éB
 
 
 # The Executioner's Sword 'Slayer'
 
-N:123:¡Ø¥¹¥ì¥¤¥ä¡¼¡Ù
+N:123:wƒXƒŒƒCƒ„[x
 E:'Slayer'
 I:23:28:2
 W:30:60:260:200000
 P:0:4d5:15:15:0
 F:BLOWS | VAMPIRIC | HOLD_LIFE | SLAY_UNDEAD | SLAY_EVIL | SLAY_HUMAN |
 F:REGEN | RES_FEAR | RES_BLIND | SLOW_DIGEST | SHOW_MODS
-D:¿ô¤¨ÀÚ¤ì¤Ê¤¤¤Û¤É¤Î¼ó¤òÍî¤È¤·¤Æ¤­¤¿¤³¤Î·ì¤Ëµ²¤¨¤¿¿Ï¤Ï
-D:Å¨¤Î·ì¤Èº²¤òµÛ¤Ã¤Æ¼ê¤Ë¤¹¤ë¼Ô¤ÎÂÎ¤òÌþ¤¹¡£
+D:”‚¦Ø‚ê‚È‚¢‚Ù‚Ç‚ÌŽñ‚ð—Ž‚Æ‚µ‚Ä‚«‚½‚±‚ÌŒŒ‚É‹Q‚¦‚½n‚Í
+D:“G‚ÌŒŒ‚Æ°‚ð‹z‚Á‚ÄŽè‚É‚·‚éŽÒ‚Ì‘Ì‚ð–ü‚·B
 
 # The Long Bow 'Belthronding'
 
 #J0# ???
-N:124:¡Ø¥Ù¥ë¥¹¥í¥ó¥Ç¥£¥ó¥°¡Ù
+N:124:wƒxƒ‹ƒXƒƒ“ƒfƒBƒ“ƒOx
 E:'Belthronding'
 I:19:13:3
 W:40:20:40:60000
@@ -2447,14 +2447,14 @@ P:0:0d0:20:22:0
 F:DEX | STEALTH | HIDE_TYPE | RES_DISEN | XTRA_SHOTS | SHOW_MODS
 D:$The great bow of Beleg Cuthalion, made of black yew and strung with elven 
 D:$hair that faintly shimmers a pale clear gold.
-D:°ÎÂç¤Ê¤ë¥Ù¥ì¥°¡¦¥¯¡¼¥µ¥ê¥ª¥ó¤Î¹õ¤¤¤Á¤¤¤ÎµÝ¤Ç¡¢
-D:Ã¸¤¤¶â¿§¤Îµ±¤­¤òÈù¤«¤ËÊü¤Ä¥¨¥ë¥Õ¤ÎÈ±¤ò¸¹¤ËÄ¥¤Ã¤Æ¤¢¤ë¡£
+D:ˆÌ‘å‚È‚éƒxƒŒƒOEƒN[ƒTƒŠƒIƒ“‚Ì•‚¢‚¿‚¢‚Ì‹|‚ÅA
+D:’W‚¢‹àF‚Ì‹P‚«‚ð”÷‚©‚É•ú‚ÂƒGƒ‹ƒt‚Ì”¯‚ðŒ·‚É’£‚Á‚Ä‚ ‚éB
 
 
 # The Long Bow of Bard
 
 #J0# p.350
-N:125:¼Í¼ê¥Ð¥ë¥É²¦¤Î
+N:125:ŽËŽèƒoƒ‹ƒh‰¤‚Ì
 E:of Bard
 I:19:13:3
 W:30:20:40:40000
@@ -2462,15 +2462,15 @@ P:0:0d0:17:19:0
 F:DEX | HIDE_TYPE | FREE_ACT | XTRA_MIGHT | SHOW_MODS
 D:$The great yew bow of grim-faced Bard, who shot the mightiest arrow that 
 D:$songs record.
-D:¸å¤Ë²¦¤È¤Ê¤ë¸Ð¤Î³¹¤Î±¢µ¤ÌÌ¥Ð¥ë¥É¤¬Îµ¤ò¼ÍÈ´¤¤¤¿ÅÁÀâ¤Î¤¤¤Á¤¤¤ÎµÝ¤À¡£
-D:Èà¤¬Î¶¤ò¼ÍÈ´¤¤¤¿Ìð¤Ï²Î¤Ë±´¤ï¤ì¸ì¤ê·Ñ¤¬¤ì¤Æ¤¤¤ë¡£
+D:Œã‚É‰¤‚Æ‚È‚éŒÎ‚ÌŠX‚Ì‰A‹C–Êƒoƒ‹ƒh‚ª—³‚ðŽË”²‚¢‚½“`à‚Ì‚¢‚¿‚¢‚Ì‹|‚¾B
+D:”Þ‚ª—´‚ðŽË”²‚¢‚½–î‚Í‰Ì‚É‰S‚í‚êŒê‚èŒp‚ª‚ê‚Ä‚¢‚éB
 
 
 # The Light Crossbow 'Cubragol' -> of Brand
 
-#JZ#¥Ð¥ë¥É¤ÎÂ¹¤ÇÃ«¤Î¹ñ¤Î»°ÂåÌÜ¤Î²¦¡£»ØÎØÀïÁè¤ÇÀï»à¤¹¤ë¡£
-#JZ#¤«¤È»×¤Ã¤¿¤±¤É¥¢¥ó¥Ð¡¼¤Î²¦»Ò¤Ç¤·¤ç¤¦¤Í¡£
-N:126:¶¸µ¤¤ÎÌ´ÁÛ²È¥Ö¥é¥ó¥É¤Î
+#JZ#ƒoƒ‹ƒh‚Ì‘·‚Å’J‚Ì‘‚ÌŽO‘ã–Ú‚Ì‰¤BŽw—Öí‘ˆ‚ÅíŽ€‚·‚éB
+#JZ#‚©‚ÆŽv‚Á‚½‚¯‚ÇƒAƒ“ƒo[‚Ì‰¤Žq‚Å‚µ‚å‚¤‚ËB
+N:126:‹¶‹C‚Ì–²‘z‰Æƒuƒ‰ƒ“ƒh‚Ì
 E:of Brand
 I:19:23:10
 W:50:25:110:100000
@@ -2479,12 +2479,12 @@ F:SPEED | RES_FIRE | XTRA_MIGHT | ACTIVATE | SHOW_MODS | XTRA_RES_OR_POWER
 U:BRAND_FIRE_BOLTS
 D:$Magic power of this crossbow of Brand the prince of Amber will enable
 D:$ you to move faster.
-D:¥È¥é¥ó¥×¤ÎËâÎÏ¤ò¼«Ê¬¤ÎÊª¤Ë¤·¡¢¿·¤¿¤Ê±§Ãè¤òÁÏÂ¤¤·¤è¤¦¤È¤·¤¿
-D:¥¢¥ó¥Ð¡¼¤Î²¦»Ò¥Ö¥é¥ó¥É¤¬»È¤Ã¤Æ¤¤¤¿¥¯¥í¥¹¥Ü¥¦¤À¡£
-D:¤½¤ÎËâÎÏ¤Ë¤è¤êÁõÈ÷¤¹¤ë¤â¤Î¤ÏÈó¾ï¤ËÁÇÁá¤¯¹ÔÆ°¤Ç¤­¤ë¡£
+D:ƒgƒ‰ƒ“ƒv‚Ì–‚—Í‚ðŽ©•ª‚Ì•¨‚É‚µAV‚½‚È‰F’ˆ‚ð‘n‘¢‚µ‚æ‚¤‚Æ‚µ‚½
+D:ƒAƒ“ƒo[‚Ì‰¤Žqƒuƒ‰ƒ“ƒh‚ªŽg‚Á‚Ä‚¢‚½ƒNƒƒXƒ{ƒE‚¾B
+D:‚»‚Ì–‚—Í‚É‚æ‚è‘•”õ‚·‚é‚à‚Ì‚Í”ñí‚É‘f‘‚­s“®‚Å‚«‚éB
 
 
-N:127:¥Ò¥à¥ê¥ó¥°¤Î
+N:127:ƒqƒ€ƒŠƒ“ƒO‚Ì
 E:of Himring
 I:36:6:0
 W:25:6:100:35000
@@ -2493,10 +2493,10 @@ F:RES_CHAOS | RES_NETHER | RES_POIS | SH_COLD | ACTIVATE
 U:PROT_EVIL
 D:$Contained within this studded cuirass of pliable leather is the memory of 
 D:$unvanquished Himring, defiant fortress surrounded by the legions of Morgoth.
-D:½ÀÆð¤Ê³×¤Çºî¤é¤ì¤¿¤³¤ÎÆ¹³»¤Ë¤Ï¡¢¥â¥ë¥´¥¹¤Î·³Àª¤ËÊñ°Ï¤µ¤ì¤Æ¤â
-D:Í¦´º¤ËÆ®¤¤È´¤¤¤¿ÉÔÍî¤ÎÍ×ºÉ¥Ò¥à¥ê¥ó¥°¤Îµ­²±¤¬¹ï¤ß¹þ¤Þ¤ì¤Æ¤¤¤ë¡£
+D:_“î‚ÈŠv‚Åì‚ç‚ê‚½‚±‚Ì“·ŠZ‚É‚ÍAƒ‚ƒ‹ƒSƒX‚ÌŒR¨‚É•ïˆÍ‚³‚ê‚Ä‚à
+D:—EŠ¸‚É“¬‚¢”²‚¢‚½•s—Ž‚Ì—vÇƒqƒ€ƒŠƒ“ƒO‚Ì‹L‰¯‚ª‚Ýž‚Ü‚ê‚Ä‚¢‚éB
 
-N:128:¡ØÁðÆåÇ··õ¡Ù
+N:128:w‘“ã”VŒ•x
 E:'Kusanagi-no-tsurugi'
 I:23:20:3
 W:50:20:120:123456
@@ -2510,21 +2510,21 @@ D:$One of the three imperial spiritual artifacts of Japan.
 D:$Susanoo found this tsurugi at Izumo, then Yamato Takeru
 D:$got and used for conquesting Japan.
 D:$It guards its owner from many dangers by its spiritual power.
-D:»°¼ï¤Î¿À´ï¤Î°ì¤Ä¡£½Ð±À¤Î¹ñ¤ÇÁÇØýÓËÂº(¤¹¤µ¤Î¤ª¤Î¤ß¤³¤È)¤Ë¤è¤ê
-D:¸«½Ð¤µ¤ì¡¢¸å¤ËÆüËÜÉðÂº(¤ä¤Þ¤È¤¿¤±¤ë¤Î¤ß¤³¤È)¤Î·õ¤È¤Ê¤ë¡£
-D:»È¤¦¼Ô¤òÍÍ¡¹¤Ê´íµ¡¤«¤é¼é¤ëÎîÎÏ¤¬È÷¤ï¤Ã¤Æ¤¤¤ë¡£
+D:ŽOŽí‚Ì_Ší‚Ìˆê‚ÂBo‰_‚Ì‘‚Å‘fœûšj‘¸(‚·‚³‚Ì‚¨‚Ì‚Ý‚±‚Æ)‚É‚æ‚è
+D:Œ©o‚³‚êAŒã‚É“ú–{•‘¸(‚â‚Ü‚Æ‚½‚¯‚é‚Ì‚Ý‚±‚Æ)‚ÌŒ•‚Æ‚È‚éB
+D:Žg‚¤ŽÒ‚ð—lX‚ÈŠë‹@‚©‚çŽç‚é—ì—Í‚ª”õ‚í‚Á‚Ä‚¢‚éB
 
 # The Multi-Hued Dragon Scale Mail 'Razorback'
 # Was (-2) INT | WIS | STEALTH | HIDE_TYPE, (-3) to hit, 30 pounds (?)
 
-#J0# ÆüËÜ¸ì²½
-#J0# (¥³¥á¥ó¥È)
+#J0# “ú–{Œê‰»
+#J0# (ƒRƒƒ“ƒg)
 #J0#
-#J0#(ÅÔ¡¹ÌÜ)
-#J0#¡öRazorback¤Ë¤Ï1.¤Ê¤¬¤¹¤¯¤¸¤é 2.ÌîÀ¸¤ÎÆÚ 3.¤È¤¬¤Ã¤¿ÇØ ¤È±¾¤¦°ÕÌ£¤¬¤¢¤ë¤½¤¦
-#J0#¤Ç¤¹¡£¤È¤¬¤Ã¤¿ÇØ¡Á¥¹¥Æ¥´¥µ¥¦¥ë¥¹¤È±¾¤¦¤³¤È¤Ç¡¢¤³¤¦¤¤¤¦É÷¤Ë¤·¤Æ¤ß¤Þ¤·¤¿(¾Ð)¡£
+#J0#(“sX–Ú)
+#J0#–Razorback‚É‚Í1.‚È‚ª‚·‚­‚¶‚ç 2.–ì¶‚Ì“Ø 3.‚Æ‚ª‚Á‚½”w ‚Æ‰]‚¤ˆÓ–¡‚ª‚ ‚é‚»‚¤
+#J0#‚Å‚·B‚Æ‚ª‚Á‚½”w`ƒXƒeƒSƒTƒEƒ‹ƒX‚Æ‰]‚¤‚±‚Æ‚ÅA‚±‚¤‚¢‚¤•—‚É‚µ‚Ä‚Ý‚Ü‚µ‚½(Î)B
 #J0#
-N:129:¡Ø·õÎµ¤Î³»¡Ù
+N:129:wŒ•—³‚ÌŠZx
 E:'Razorback'
 I:38:6:0
 W:90:9:500:400000
@@ -2536,16 +2536,16 @@ U:CAST_BA_STAR
 D:$A massive suit of heavy dragon scales deeply saturated with many colors.  
 D:$It throbs with angry energies, and you feel the raw elemental might of 
 D:$untamed Lightning as you put it on.
-D:ÍÍ¡¹¤Ê¿§ºÌ¤¬¶Å½Ì¤·¤¿½Å¸ü¤Ê¥É¥é¥´¥ó¤ÎÎÚ¤Çºî¤é¤ì¤¿³»¤À¡£
-D:ÅÜ¤ê¤Î¥¨¥Í¥ë¥®¡¼¤òÌ®ÂÇ¤Á¡¢Ãå¤ë¤â¤Î¤Ï
-D:¹Ó¡¹¤·¤¤°ð¸÷¤Î¥¨¥Í¥ë¥®¡¼¤òÄ¾¤Ë´¶¤¸¤ë¡£
+D:—lX‚ÈFÊ‚ª‹Ãk‚µ‚½dŒú‚Èƒhƒ‰ƒSƒ“‚Ì—Ø‚Åì‚ç‚ê‚½ŠZ‚¾B
+D:“{‚è‚ÌƒGƒlƒ‹ƒM[‚ð–¬‘Å‚¿A’…‚é‚à‚Ì‚Í
+D:rX‚µ‚¢ˆîŒõ‚ÌƒGƒlƒ‹ƒM[‚ð’¼‚ÉŠ´‚¶‚éB
 
 
 # The Power Dragon Scale Mail 'Bladeturner'
 # Was (-3) DEX | HIDE_TYPE, (-4) to hit, 50 pounds (?)
 
-#J0# ÆüËÜ¸ì²½
-N:130:¡ØÅáÊÖ¤·¡Ù
+#J0# “ú–{Œê‰»
+N:130:w“•Ô‚µx
 E:'Bladeturner'
 I:38:30:0
 W:95:3:600:500000
@@ -2560,11 +2560,11 @@ U:BLADETURNER
 D:$A suit of adamant, set with scales of every color, surrounded in a nimbus 
 D:$of perfectly untramelled yet inextricably intermingled and utterly mastered 
 D:$powers elemental and ethereal.
-D:¤¢¤é¤æ¤ë¿§ºÌ¤ÎÎÚ¤ËÈï¤ï¤ì¤¿¥¢¥À¥Þ¥ó¥¿¥¤¥È¤Î³»¤Ç¡¢´°àú¤Ë¥³¥ó¥È¥í¡¼¥ë¤µ¤ì¤¿
-D:ÃÏ¡¢¿å¡¢²Ð¡¢É÷¤ª¤è¤ÓÎîÅª¤ÊÎÏ¤¬Ä´ÏÂ¤·
-D:ÞÕÁ³°ìÂÎ¤È¤Ê¤ê¡¢µ±¤¯¸î¸÷¤È¤Ê¤Ã¤Æ¤³¤Î³»¤òÊñ¤ó¤Ç¤¤¤ë¡£
+D:‚ ‚ç‚ä‚éFÊ‚Ì—Ø‚É”í‚í‚ê‚½ƒAƒ_ƒ}ƒ“ƒ^ƒCƒg‚ÌŠZ‚ÅAŠ®àø‚ÉƒRƒ“ƒgƒ[ƒ‹‚³‚ê‚½
+D:’nA…A‰ÎA•—‚¨‚æ‚Ñ—ì“I‚È—Í‚ª’²˜a‚µ
+D:ŸÓ‘Rˆê‘Ì‚Æ‚È‚èA‹P‚­ŒìŒõ‚Æ‚È‚Á‚Ä‚±‚ÌŠZ‚ð•ï‚ñ‚Å‚¢‚éB
 
-N:131:¥¤¥ó¥«¥Ì¥¹¤Î
+N:131:ƒCƒ“ƒJƒkƒX‚Ì
 E:of Incanus
 I:36:2:3
 W:50:40:20:100000
@@ -2578,11 +2578,11 @@ D:$lands of the South. It is proof against elements, for neither the
 D:$heat of the South, nor the ice of the North, nor the acidy pits of Dol 
 D:$Guldur were able to hold back the defiant Maia in the pursuit of 
 D:$his mission 
-D:ÆîÊý¤Ç¤Ï¥¤¥ó¥«¥Ì¥¹¤ÎÌ¾¤ÇÃÎ¤é¤ì¤ëÂç¸­¼Ô¥¬¥ó¥À¥ë¥Õ¤Î¥í¡¼¥Ö¤À¡£ÍÍ¡¹¤Ê¥¨¥ì¥á¥ó¥È
-D:¤«¤é¿È¤ò¸î¤ë¤³¤Î¥í¡¼¥Ö¤Î¤ª¤«¤²¤Ç¡¢Æî¤ÎÇ®½ë¡¢ËÌ¤ÎÉ¹·ë¡¢¥É¥ë¡¦¥°¥ë¥É¥¥¥¢¤Î
-D:»À¤Î¾Â¤Ç¤µ¤¨¤â¡¢¤«¤ÎÄ©ÀïÅª¤Ê¥Þ¥¤¥¢¤ÎÇ¤Ì³¤òË¸¤²¤ë»ö¤Ï¤Ê¤«¤Ã¤¿¤Î¤À¡£
+D:“ì•û‚Å‚ÍƒCƒ“ƒJƒkƒX‚Ì–¼‚Å’m‚ç‚ê‚é‘åŒ«ŽÒƒKƒ“ƒ_ƒ‹ƒt‚Ìƒ[ƒu‚¾B—lX‚ÈƒGƒŒƒƒ“ƒg
+D:‚©‚çg‚ðŒì‚é‚±‚Ìƒ[ƒu‚Ì‚¨‚©‚°‚ÅA“ì‚Ì”M‹A–k‚Ì•XŒ‹Aƒhƒ‹EƒOƒ‹ƒhƒDƒA‚Ì
+D:Ž_‚ÌÀ‚Å‚³‚¦‚àA‚©‚Ì’§í“I‚Èƒ}ƒCƒA‚Ì”C–±‚ð–W‚°‚éŽ–‚Í‚È‚©‚Á‚½‚Ì‚¾B
 
-N:132:¥Ì¥á¥Î¡¼¥ë¤Î
+N:132:ƒkƒƒm[ƒ‹‚Ì
 E:of Numenor
 I:33:12:3
 W:60:15:40:50000
@@ -2592,10 +2592,10 @@ F:RES_SHARDS | RES_SOUND | RES_LITE |
 F:LITE |
 D:$A crown of massive gold, set with wondrous jewels of thought and warding,
 D:$ worn by the kings of ancient Numenor.
-D:¸Å¤Î¥Ì¥á¥Î¡¼¥ë¤Î²¦Ã£¤¬ÍÑ¤¤¤Æ¤¤¤¿½Å¸ü¤Ê²«¶â¤Î²¦´§¤Ç¡¢
-D:ÃÎ·Ã¤ò¼ø¤±Å¨¤òÂà¤±¤ëÁÇÀ²¤é¤·¤¤ÊõÀÐ¤¬¼è¤ê¤Ä¤±¤é¤ì¤Æ¤¤¤ë¡£
+D:ŒÃ‚Ìƒkƒƒm[ƒ‹‚Ì‰¤’B‚ª—p‚¢‚Ä‚¢‚½dŒú‚È‰©‹à‚Ì‰¤Š¥‚ÅA
+D:’mŒb‚ðŽö‚¯“G‚ð‘Þ‚¯‚é‘f°‚ç‚µ‚¢•óÎ‚ªŽæ‚è‚Â‚¯‚ç‚ê‚Ä‚¢‚éB
 
-N:133:¥Õ¡¼¥ê¥ó²¦¤Î
+N:133:ƒt[ƒŠƒ“‰¤‚Ì
 E:of Hurin
 I:22:10:3
 W:30:30:180:120000
@@ -2608,15 +2608,15 @@ D:$ smoked in the black blood of the troll-guard of Gothmog, until it withered,
 D:$ and each time that he slew Hurin cried 'Aure entuluva! Day shall come
 D:$ again!'. Seventy times he uttered that cry, but they took him at last
 D:$ alive, by the command of Morgoth..."
-D:¡ÖºÇ¸å¤Ë¤¿¤À°ì¿Í¥Õ¡¼¥ê¥ó¤¬»Ä¤Ã¤¿¡£¤«¤ì¤Ï½â¤ò¼Î¤Æ¡¢Î¾¼ê¤Ë
-D:îè¤òÄÏ¤ó¤Ç¿¶¤ê²ó¤·¤¿¡£îè¤Ï¥´¥º¥â¥°¤ò¸î±Ò¤¹¤ë¥È¥í¥ë¤¿¤Á¤Î
-D:¹õ¤¤·ì¤òÎ®¤¹ÅÙ¤Ë·ì±ì¤ò¾å¤²¡¢¥Õ¡¼¥ê¥ó¤Ï°ì¿Í»Â¤ëËè¤Ë¡Ö¥¢¥¦
-D:¥ì¡¡¥¨¥ó¥È¥¥¥ë¥ô¥¡¡ª¡¡ÃëºÆ¤ÓÍè¤é¤ó¡ª¡×¤È¶«¤ó¤À¤È²Î¤Ë²Î¤ï
-D:¤ì¤Æ¤¤¤ë¡£¼·½½ÅÙÈà¤Ï¤³¤Î¶«¤Ó¤ò¾å¤²¤¿¡£¤·¤«¤·¿ë¤Ë¤«¤ì¤Ï¥â
-D:¥ë¥´¥¹¤ÎÌ¿Îá¤Ë¤è¤êÀ¸¤­¤Ê¤¬¤éÊá¤é¤¨¤é¤ì¤¿¡£¡×
-D:(J.R.R.¥È¡¼¥ë¥­¥ó¡¢ÅÄÃæÌÀ»ÒÌõ¡¢¥·¥ë¥Þ¥ê¥ë¤ÎÊª¸ì)
+D:uÅŒã‚É‚½‚¾ˆêlƒt[ƒŠƒ“‚ªŽc‚Á‚½B‚©‚ê‚Í‚‚ðŽÌ‚ÄA—¼Žè‚É
+D:çæ‚ð’Í‚ñ‚ÅU‚è‰ñ‚µ‚½Bçæ‚ÍƒSƒYƒ‚ƒO‚ðŒì‰q‚·‚éƒgƒƒ‹‚½‚¿‚Ì
+D:•‚¢ŒŒ‚ð—¬‚·“x‚ÉŒŒ‰Œ‚ðã‚°Aƒt[ƒŠƒ“‚ÍˆêlŽa‚é–ˆ‚ÉuƒAƒE
+D:ƒŒ@ƒGƒ“ƒgƒDƒ‹ƒ”ƒ@I@’‹Ä‚Ñ—ˆ‚ç‚ñIv‚Æ‹©‚ñ‚¾‚Æ‰Ì‚É‰Ì‚í
+D:‚ê‚Ä‚¢‚éBŽµ\“x”Þ‚Í‚±‚Ì‹©‚Ñ‚ðã‚°‚½B‚µ‚©‚µ‹‚É‚©‚ê‚Íƒ‚
+D:ƒ‹ƒSƒX‚Ì–½—ß‚É‚æ‚è¶‚«‚È‚ª‚ç•ß‚ç‚¦‚ç‚ê‚½Bv
+D:(J.R.R.ƒg[ƒ‹ƒLƒ“A“c’†–¾Žq–óAƒVƒ‹ƒ}ƒŠƒ‹‚Ì•¨Œê)
 
-N:134:¥Ð¥Ã¥¯¶¿¤Î
+N:134:ƒoƒbƒN‹½‚Ì
 E:of Buckland
 I:19:2:3
 W:40:35:20:50000
@@ -2625,10 +2625,10 @@ F:SPEED | XTRA_MIGHT |
 F:RES_FEAR | RES_BLIND | RES_CONF | SHOW_MODS | XTRA_RES_OR_POWER
 D:$A sling granting extraordinary clarity of mind amidst darkness and 
 D:$confusion, and which hurls shot with deadly speed.
-D:¤³¤Î¥¹¥ê¥ó¥°¤Ï°Å°Ç¤Èº®Íð¤Î¤¿¤ÀÃæ¤Ë±÷¤¤¤Æ¤µ¤¨¶Ã¤¯¤Û¤ÉÌÀÚò¤Ê»×¹Í¤ò²ÄÇ½¤Ë¤·¡¢
-D:ÃÆ¤ò¶²¤í¤·¤¯¶¯ÎÏ¤Ë·â¤Ä¤³¤È¤¬¤Ç¤­¤ë¡£
+D:‚±‚ÌƒXƒŠƒ“ƒO‚ÍˆÃˆÅ‚Æ¬—‚Ì‚½‚¾’†‚É‰—‚¢‚Ä‚³‚¦‹Á‚­‚Ù‚Ç–¾ð‚ÈŽvl‚ð‰Â”\‚É‚µA
+D:’e‚ð‹°‚ë‚µ‚­‹­—Í‚ÉŒ‚‚Â‚±‚Æ‚ª‚Å‚«‚éB
 
-N:135:¥É¥ï¡¼¥Õ²¦¥¢¥¶¥¬¥ë¤Î
+N:135:ƒhƒ[ƒt‰¤ƒAƒUƒKƒ‹‚Ì
 E:of Azaghal
 I:23:5:0
 W:15:30:30:40000
@@ -2638,12 +2638,12 @@ D:$At the Nirnaeth the Dwarves stayed the onslaught of Glaurung, and
 D:$Azaghal their lord drove this short blade into the drake's belly before 
 D:$he was trampled underfoot. The black blood of the Father of Dragons 
 D:$now serves as a rememberance for all dragons that come near it. 
-D:¤«¤Ä¤Æ¡¢¥Ë¥¢¥Ê¥¤¥¹¤Ë¤ª¤¤¤Æ¥É¥ï¡¼¥ÕÃ£¤¬¥°¥é¥¦¥ë¥ó¥°¤ÎÌÔ¹¶·â¤ò
-D:¿©¤¤»ß¤á¤ëºÝ¡¢¥¢¥¶¥¬¥ë²¦¤Ï¼ÙÎµ¤ËÆ§¤ßÄÙ¤µ¤ì¤ëÑëÆá¡¢¤³¤ÎÃ»¤¤¿Ï¤ò
-D:Îµ¤ÎÊ¢Éô¤ËÆÍ¤­»É¤·¤¿¡£¤³¤Î¿Ï¤Ë»Ä¤ëÎµ¤ÎÁÄ¤Î¹õ¤­·ì¤Ï¶á¤Å¤¯Á´¤Æ¤Î
-D:¥É¥é¥´¥ó¤Ë¤«¤Ä¤Æ¤Î¶²ÉÝ¤ò»×¤¤µ¯¤³¤µ¤»¤ë¤Î¤Ç¤¢¤ë¡£
+D:‚©‚Â‚ÄAƒjƒAƒiƒCƒX‚É‚¨‚¢‚Äƒhƒ[ƒt’B‚ªƒOƒ‰ƒEƒ‹ƒ“ƒO‚Ì–ÒUŒ‚‚ð
+D:H‚¢Ž~‚ß‚éÛAƒAƒUƒKƒ‹‰¤‚ÍŽ×—³‚É“¥‚Ý’×‚³‚ê‚é™‹“ßA‚±‚Ì’Z‚¢n‚ð
+D:—³‚Ì• •”‚É“Ë‚«Žh‚µ‚½B‚±‚Ìn‚ÉŽc‚é—³‚Ì‘c‚Ì•‚«ŒŒ‚Í‹ß‚Ã‚­‘S‚Ä‚Ì
+D:ƒhƒ‰ƒSƒ“‚É‚©‚Â‚Ä‚Ì‹°•|‚ðŽv‚¢‹N‚±‚³‚¹‚é‚Ì‚Å‚ ‚éB
 
-N:136:¡Ø¥ß¥å¥ë¥Ë¡¼¥ë¡Ù
+N:136:wƒ~ƒ…ƒ‹ƒj[ƒ‹x
 E:'Mjollnir'
 I:21:8:4
 W:30:30:150:100000
@@ -2651,22 +2651,22 @@ P:0:5d3:3:15:0
 F:BRAND_ELEC | IM_ELEC | STR | DEX | THROW | SLAY_GIANT
 D:$The famous throwing hammer of the Norse god Thor, it crackles with 
 D:$lightning as you swing it at your opponents. 
-D:¤³¤ÎÍ­Ì¾¤ÊÅê¤²¥Ï¥ó¥Þ¡¼¤ÏËÌ²¤¤Î¿À¥È¡¼¥ë¤Î¤â¤Î¤Ç¡¢Å¨¤ËÂÐ¤·¤Æ¿¶¤ë¤¨¤Ð¡¢
-D:°ðºÊ¤È¤È¤â¤ËÍëÌÄ¤¬¶Á¤­¤ï¤¿¤ë¡£
+D:‚±‚Ì—L–¼‚È“Š‚°ƒnƒ“ƒ}[‚Í–k‰¢‚Ì_ƒg[ƒ‹‚Ì‚à‚Ì‚ÅA“G‚É‘Î‚µ‚ÄU‚é‚¦‚ÎA
+D:ˆîÈ‚Æ‚Æ‚à‚É—‹–Â‚ª‹¿‚«‚í‚½‚éB
 
-N:137:¡Ø¥´¥ë¥ó¡¦¥Î¥ô¥¡¡Ù
+N:137:wƒSƒ‹ƒ“Eƒmƒ”ƒ@x
 E:'Goln Nova'
 I:23:16:2
 W:30:50:150:100000
 P:0:2d5:15:15:0
 F:STR | DEX | HIDE_TYPE | FORCE_WEAPON |
 F:SHOW_MODS | RIDING | KILL_DEMON
-D:¤«¤Ä¤ÆËâÆ³ÅÔ»Ô¥µ¥¤¥é¡¼¥°¤òÇË²õ¤Ä¤¯¤·¤¿Ëâ½Ã¡¢¥¶¥Ê¥Ã¥Õ¥¡¡¼¡£
-D:¤½¤ì¤òÌÇ¤Ü¤·¤¿¤È¤¤¤ï¤ì¤ë¤Î¤¬¡¢¤³¤ÎÅÁÀâ¤ÎÉð´ï¤Ç¤¢¤ë¡£
-D:»ý¤Ä¼Ô¤Î¡¢°Õ»×¤ÎÎÏ¤ò¿Ï¤ÈÀ®¤·¤Æ¡¢ËâÂ²¤¹¤é¤âÎ¾ÃÇ¤¹¤ë¡£
-D:(¿Àºä°ì¡¢¥¹¥ì¥¤¥ä¡¼¥º5¡ÖÇò¶ä¤ÎËâ½Ã¡×)
+D:‚©‚Â‚Ä–‚“±“sŽsƒTƒCƒ‰[ƒO‚ð”j‰ó‚Â‚­‚µ‚½–‚bAƒUƒiƒbƒtƒ@[B
+D:‚»‚ê‚ð–Å‚Ú‚µ‚½‚Æ‚¢‚í‚ê‚é‚Ì‚ªA‚±‚Ì“`à‚Ì•Ší‚Å‚ ‚éB
+D:Ž‚ÂŽÒ‚ÌAˆÓŽv‚Ì—Í‚ðn‚Æ¬‚µ‚ÄA–‚‘°‚·‚ç‚à—¼’f‚·‚éB
+D:(_âˆêAƒXƒŒƒCƒ„[ƒY5u”’‹â‚Ì–‚bv)
 
-N:138:¾åµé²¦¥®¥ë=¥¬¥é¥É¤Î
+N:138:ã‹‰‰¤ƒMƒ‹=ƒKƒ‰ƒh‚Ì
 E:of Gil-Galad
 I:34:10:4
 W:70:4:100:65000
@@ -2676,12 +2676,12 @@ F:SUST_WIS | SUST_CHR | ACTIVATE
 U:BLINDING_LIGHT
 D:$The legendary shield of Gil-Galad, who fought his way to the gates of
 D:$ the Dark Tower, and with whom came light even to Gorgoroth.
-D:¥Î¥ë¥É¡¼¥ë¤ÎºÇ¸å¤Î¾åµé²¦¡¢¥®¥ë=¥¬¥é¥É¤ÎÅÁÀâ¤Î½â¤À¡£Èà¤Ï¥Ð¥é¥É=¥É¥¥¥¢¤ÎÌç¤Þ¤Ç
-D:Å¨¤òÆ¤¤ÁÇË¤Ã¤Æ¿Ê¤ß¡¢¥´¥ë¥´¥í¥¹¤ÎÃÏ¤Ë¤µ¤¨¸÷¤ò¤â¤¿¤é¤·¤¿¡£
-D:¡ÖÅ·¤¬¹­Ìî¤ÎÌµ¿ô¤ÎÀ±¤Ï¡¢
-D:¤½¤Î¶ä¤Î½â¤Ë¡¢±Ç¤ê¤¿¤ê¡£¡×
+D:ƒmƒ‹ƒh[ƒ‹‚ÌÅŒã‚Ìã‹‰‰¤AƒMƒ‹=ƒKƒ‰ƒh‚Ì“`à‚Ì‚‚¾B”Þ‚Íƒoƒ‰ƒh=ƒhƒDƒA‚Ì–å‚Ü‚Å
+D:“G‚ð“¢‚¿”j‚Á‚Äi‚ÝAƒSƒ‹ƒSƒƒX‚Ì’n‚É‚³‚¦Œõ‚ð‚à‚½‚ç‚µ‚½B
+D:u“V‚ªL–ì‚Ì–³”‚Ì¯‚ÍA
+D:‚»‚Ì‹â‚Ì‚‚ÉA‰f‚è‚½‚èBv
 
-N:139:¡Ø¥¦¥£¥ó¥Ö¥í¥¦¥º¡Ù
+N:139:wƒEƒBƒ“ƒuƒƒEƒYx
 E:'Winblows'
 I:21:13:-4
 W:30:20:500:0
@@ -2691,10 +2691,10 @@ F:SHOW_MODS | CHAOTIC | IMPACT | SPEED
 F:RANDOM_CURSE0
 D:$This is disruptive heave thing made by Micro$oft.
 D:$It will bring many troubles to its user.
-D:¥Þ¥¤¥¯¥í¥ó¥Õ¥È¤Ë¤è¤Ã¤Æºî¤é¤ì¤¿¤â¤Î¤Ç¡¢½Å¤¯¤ÆÇË²õÎÏ¤¬¤¢¤ë¡£
-D:»ÈÍÑ¤¹¤ë¼Ô¤ËºÒ¤¤¤ò¤â¤¿¤é¤¹¡£
+D:ƒ}ƒCƒNƒƒ“ƒtƒg‚É‚æ‚Á‚Äì‚ç‚ê‚½‚à‚Ì‚ÅAd‚­‚Ä”j‰ó—Í‚ª‚ ‚éB
+D:Žg—p‚·‚éŽÒ‚ÉÐ‚¢‚ð‚à‚½‚ç‚·B
 
-N:140:¡Ø¥·¥ë¥Ð¡¼¥Á¥ã¥ê¥ª¥Ã¥Ä¡Ù
+N:140:wƒVƒ‹ƒo[ƒ`ƒƒƒŠƒIƒbƒcx
 E:'Silver Chariot'
 I:23:7:2
 W:30:15:75:100000
@@ -2703,11 +2703,11 @@ F:DEX | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_DEMON |
 F:FREE_ACT | SEE_INVIS | SHOW_MODS | RES_DARK | RES_DISEN | SPEED
 D:$The silver light sabre of Polnareff's stand Silver Chariot.
 D:$It can pierce enemies rapidly.
-D:¥Ý¥ë¥Ê¥ì¥Õ¤Î¥¹¥¿¥ó¥É¡Ö¥·¥ë¥Ð¡¼¥Á¥ã¥ê¥ª¥Ã¥Ä¡×¤¬¼ê¤Ë¤·¤Æ¤¤¤¿
-D:·ÚÎÌ¤Î¥µ¡¼¥Ù¥ë¤À¡£°ì½Ö¤Ë¤·¤ÆÅ¨¤ËÌµ¿ô¤ÎÉ÷·ê¤ò¤¢¤±¤ë¤³¤È¤¬¤Ç
-D:¤­¤ë¤Ï¤º¤À¥Ã¡ª
+D:ƒ|ƒ‹ƒiƒŒƒt‚ÌƒXƒ^ƒ“ƒhuƒVƒ‹ƒo[ƒ`ƒƒƒŠƒIƒbƒcv‚ªŽè‚É‚µ‚Ä‚¢‚½
+D:Œy—Ê‚ÌƒT[ƒxƒ‹‚¾Bˆêu‚É‚µ‚Ä“G‚É–³”‚Ì•—ŒŠ‚ð‚ ‚¯‚é‚±‚Æ‚ª‚Å
+D:‚«‚é‚Í‚¸‚¾ƒbI
 
-N:141:¥×¥é¥Á¥Ê¥¤¥§¥ó¥À¡¼°õ¥¨¥¯¥¹¥×¥ì¥¹¥«¡¼¥É
+N:141:ƒvƒ‰ƒ`ƒiƒCƒFƒ“ƒ_[ˆóƒGƒNƒXƒvƒŒƒXƒJ[ƒh
 E:& Platinum Yendorian Express Card~
 I:50:0:3
 W:127:1:2:1000000
@@ -2720,19 +2720,19 @@ U:RECHARGE_XTRA
 D:$Yaaaaaaaaay! Platinum card of Yendorian Express!!!
 D:$Wait a minute, you can not pay any more with this card.
 D:$You must think other way of using it.
-D:¶â¿§¤Ë¸÷¤êµ±¤¯¥¤¥§¥ó¥À¡¼°õ¤Î¥×¥é¥Á¥Ê¥«¡¼¥É¤À¡£
-D:¤Þ¤ë¤Ç²¯ËüÄ¹¼Ô¤Ë¤Ê¤Ã¤¿µ¤Ê¬¤¬¤¹¤ë¡£¸ÂÅÙ³Û¤Þ¤Ç»È¤¤¹þ¤â¤¦¡£
+D:‹àF‚ÉŒõ‚è‹P‚­ƒCƒFƒ“ƒ_[ˆó‚Ìƒvƒ‰ƒ`ƒiƒJ[ƒh‚¾B
+D:‚Ü‚é‚Å‰­–œ’·ŽÒ‚É‚È‚Á‚½‹C•ª‚ª‚·‚éBŒÀ“xŠz‚Ü‚ÅŽg‚¢ž‚à‚¤B
 
-N:142:¡Ø¥¦¥©¡¼¥Ñ¥ë¥Ö¥ì¡¼¥É¡Ù
+N:142:wƒEƒH[ƒpƒ‹ƒuƒŒ[ƒhx
 E:'Worpal Blade'
 I:23:17:2
 W:50:5:150:100
 P:0:5d5:32:32:0
 F:TY_CURSE | AGGRAVATE | DRAIN_EXP | INFRA | NO_TELE | NO_MAGIC | HIDE_TYPE
 D:$It is a look-alike for the strongest sword!
-D:ºÇ¶¯¤Î·õ¤È¤½¤Ã¤¯¤ê¤À¡£
+D:Å‹­‚ÌŒ•‚Æ‚»‚Á‚­‚è‚¾B
 
-N:143:¥Ü¥í¥ß¥¢¤Î
+N:143:ƒ{ƒƒ~ƒA‚Ì
 E:of Boromir
 I:40:18:2
 W:30:60:2:25000
@@ -2743,10 +2743,10 @@ F:INSTA_ART
 U:SCARE_AREA
 D:$A massive golden torque, made of innumerable strands of gold and steel 
 D:$intermingled, with great golden hounds set at either end.
-D:²«¶â¤È¹õ¹Ý¤ÎÌµ¿ô¤Î¤è¤ê»å¤ÇÊÔ¤ß¾å¤²¤é¤ì¤¿½Å¸ü¤Ê¶â¤Î¼ó¾þ¤ê¤Ç¡¢
-D:Âç¤­¤Ê¶â¤ÎÎÄ¸¤¤ÎÁõ¾þ¤¬Î¾Ã¼¤Ë¼è¤êÉÕ¤±¤é¤ì¤Æ¤¤¤ë¡£
+D:‰©‹à‚Æ•|‚Ì–³”‚Ì‚æ‚èŽ…‚Å•Ò‚Ýã‚°‚ç‚ê‚½dŒú‚È‹à‚ÌŽñü‚è‚ÅA
+D:‘å‚«‚È‹à‚Ì—ÂŒ¢‚Ì‘•ü‚ª—¼’[‚ÉŽæ‚è•t‚¯‚ç‚ê‚Ä‚¢‚éB
 
-N:144:¡ØÂ¼Àµ¡Ù
+N:144:w‘º³x
 E:'Muramasa'
 I:23:20:2
 W:60:200:200:1000000
@@ -2758,12 +2758,12 @@ U:MURAMASA
 D:$Muramasa the legendaly bracksmith forged this sword 'Muramasa'.
 D:$ It always wants more blood thirstily, although it already
 D:$ drained blood from many person.
-D:¡ÖËâÊª¤ËÁø¤¦¤Æ¤ÏËâÊª¤ò»Â¤ê¡¢¿À¤ËÁø¤¦¤Æ¤Ï¿À¤ò»Â¤ë¡£¡×
-D:ÅÁÀâ¤ÎÅá¾¢Â¼Àµ¤¬Á´¿ÈÁ´Îî¤ò¹þ¤á¤ÆÃÃ¤¨¤¿¤³¤ÎÍÅÅá¤Ï
-D:¿ô¤¨ÀÚ¤ì¤Ê¤¤¿Í´Ö¤Î·ì¤òÓµ¤Ã¤Æ¤­¤¿¡£¤½¤Î¿Ï¤Ï
-D:·ì¤Ëµ²¤¨¡¢¾ï¤Ë³ÍÊª¤òµá¤á¤Æ¤¤¤ë¡£
+D:u–‚•¨‚É‘˜‚¤‚Ä‚Í–‚•¨‚ðŽa‚èA_‚É‘˜‚¤‚Ä‚Í_‚ðŽa‚éBv
+D:“`à‚Ì“ ‘º³‚ª‘Sg‘S—ì‚ðž‚ß‚Ä’b‚¦‚½‚±‚Ì—d“‚Í
+D:”‚¦Ø‚ê‚È‚¢lŠÔ‚ÌŒŒ‚ðšT‚Á‚Ä‚«‚½B‚»‚Ìn‚Í
+D:ŒŒ‚É‹Q‚¦Aí‚ÉŠl•¨‚ð‹‚ß‚Ä‚¢‚éB
 
-N:145:¡ØÎ¶Áè¸×ò¬¡Ù
+N:145:w—´‘ˆŒÕéªx
 E:of Xiaolong
 I:21:4:3
 W:45:14:30:100000
@@ -2772,12 +2772,12 @@ F:STEALTH | SUST_STR | SUST_DEX | SUST_CON |
 F:SPEED | RES_FIRE | BRAND_FIRE |
 F:SLAY_ANIMAL | SLAY_DRAGON | RES_FEAR | FREE_ACT |
 F:REGEN | SHOW_MODS | HIDE_TYPE
-D:ÅÁÀâ¤Î³ÊÆ®²È¤ÎÎîÎÏ¤¬½É¤Ã¤¿¶¯ÎÏ¤Ê¥Ì¥ó¥Á¥ã¥¯¤À¡£
-D:·ýË¡¤òÁà¤ë¼Ô¤¬¼ê¤Ë¤¹¤ì¤Ð¼«¤é¤ÎÂÎ¤Î°ìÉô¤Î¤è¤¦¤Ë
-D:Áà¤ë¤³¤È¤¬¤Ç¤­¡¢ÁÇ¼ê¤Î»þ¤ÈÆ±¤¸¤¯¤é¤¤ÁÇÁá¤¤¹¶·â¤¬
-D:²ÄÇ½¤À¡£
+D:“`à‚ÌŠi“¬‰Æ‚Ì—ì—Í‚ªh‚Á‚½‹­—Í‚Èƒkƒ“ƒ`ƒƒƒN‚¾B
+D:Œ–@‚ð‘€‚éŽÒ‚ªŽè‚É‚·‚ê‚ÎŽ©‚ç‚Ì‘Ì‚Ìˆê•”‚Ì‚æ‚¤‚É
+D:‘€‚é‚±‚Æ‚ª‚Å‚«A‘fŽè‚ÌŽž‚Æ“¯‚¶‚­‚ç‚¢‘f‘‚¢UŒ‚‚ª
+D:‰Â”\‚¾B
 
-N:146:¡ØÀÐ²¾ÌÌ¡Ù
+N:146:wÎ‰¼–Êx
 E:'Stone Mask'
 I:32:5:3
 W:60:66:75:0
@@ -2787,29 +2787,29 @@ F:RES_CONF | RES_NETHER | RES_COLD | RES_POIS | RES_DARK | RES_FEAR |
 F:SEE_INVIS | ACTIVATE | DRAIN_EXP |
 F:SH_COLD | HOLD_LIFE | LEVITATION | REGEN
 U:TERROR
-D:ÁõÈ÷¤·¤¿¼Ô¤òµÛ·ìµ´¤ËÊÑ¤¨¤Æ¤·¤Þ¤¦¤È¤¤¤¦¥Ç¥£¥ª¤ÎÀÐ²¾ÌÌ¤À¡£
+D:‘•”õ‚µ‚½ŽÒ‚ð‹zŒŒ‹S‚É•Ï‚¦‚Ä‚µ‚Ü‚¤‚Æ‚¢‚¤ƒfƒBƒI‚ÌÎ‰¼–Ê‚¾B
 
-N:147:Èô¹Ô
+N:147:”òs
 E:of Laputa
 I:39:9:2
 W:60:60:10:60000
 P:0:1d1:0:0:0
 F:INT | CHR | SPEED | ACTIVATE | LEVITATION | HOLD_LIFE | INSTA_ART | LITE_3 | 
 U:BA_MANA
-D:ÉâÍ·¤ÎÎÏ¤òÍ¿¤¨¤Æ¤¯¤ì¤ëÀÄ¤¯Ð¼¸÷¤ëÊõÀÐ¤À¡£
+D:•‚—V‚Ì—Í‚ð—^‚¦‚Ä‚­‚ê‚éÂ‚­˜ºŒõ‚é•óÎ‚¾B
 
-N:148:¡ØÍ¿°ì¤ÎµÝ¡Ù
+N:148:w—^ˆê‚Ì‹|x
 E:of Yoichi
 I:19:13:4
 W:35:30:40:30000
 P:0:0d0:40:13:0
 F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
-D:¡ÖÍ¿°ìÅ­¤ò¼è¤Ä¤ÆÈÖ¤Ò¡¢Ç½¤Ä°ú¤¤¤Æ¤Ò¤ä¤¦¤ÈÊü¤Ä¡£¾®Ê¼¤È¤¤¤Õ¾ò¡¢
-D:½½ÆóÂ«»°Éú¡¢µÝ¤Ï¤Ä¤è¤·¡¢Å­¤Ï±º¶Á¤¯¤Û¤É¤ËÄ¹ÌÄ¤·¤Æ¡¢²á¤¿¤ºÀð¤Î
-D:Í×¤®¤Ï°ìÀ£¤Ð¤«¤êÃÖ¤¤¤Æ¡¢¤Ò¤¤¤Õ¤Ä¤È¤¾¼ÍÀÚ¤Ä¤¿¤ë¡£¡×(Ê¿²ÈÊª¸ì)¡£
-D:Æá¿ÜÍ¿°ì¤ÎµÝ¤ÏÁÀ¤¤¤ò³°¤¹»ö¤Ï¤Ê¤¤¡£
+D:u—^ˆê“L‚ðŽæ‚Â‚Ä”Ô‚ÐA”\‚Âˆø‚¢‚Ä‚Ð‚â‚¤‚Æ•ú‚ÂB¬•º‚Æ‚¢‚ÓðA
+D:\“ñ‘©ŽO•šA‹|‚Í‚Â‚æ‚µA“L‚Í‰Y‹¿‚­‚Ù‚Ç‚É’·–Â‚µ‚ÄA‰ß‚½‚¸î‚Ì
+D:—v‚¬‚Íˆê¡‚Î‚©‚è’u‚¢‚ÄA‚Ð‚¢‚Ó‚Â‚Æ‚¼ŽËØ‚Â‚½‚éBv(•½‰Æ•¨Œê)B
+D:“ß{—^ˆê‚Ì‹|‚Í‘_‚¢‚ðŠO‚·Ž–‚Í‚È‚¢B
 
-N:149:È¬¼Ü
+N:149:”ªŽÚ
 E:'Yasaka-no-Magatama'
 I:40:19:3
 W:65:50:3:90000
@@ -2819,15 +2819,15 @@ F:RES_FIRE | RES_COLD | RES_ELEC |
 F:INSTA_ART
 U:RECALL
 
-N:150:¡Ø»ÂÅ´·õ¡Ù
+N:150:wŽa“SŒ•x
 E:'Zantetsuken'
 I:23:20:2
 W:30:25:120:80000
 P:0:10d4:17:21:0
 F:STR | DEX | VORPAL | TUNNEL | SHOW_MODS
-D:¹Ý¤ò¤âÀÚ¤êÎö¤¯¡¢ÀÚ¤ìÌ£È´·²¤ÎÆüËÜÅá¤À¡£
+D:|‚ð‚àØ‚è—ô‚­AØ‚ê–¡”²ŒQ‚Ì“ú–{“‚¾B
 
-N:151:È¬Ó¡
+N:151:”ªš@
 E:'Yata-no-Kagami'
 I:34:50:3
 W:65:65:50:150000
@@ -2836,17 +2836,17 @@ F:INSTA_ART | ACTIVATE | SEE_INVIS | REFLECT | LITE | INFRA |
 F:INT | WIS | TELEPATHY | HOLD_LIFE | HIDE_TYPE
 U:DISP_EVIL
 
-N:152:ÉðÂ¢Ë·ÊÛ·Ä¤Î
+N:152:•‘ –V•ÙŒc‚Ì
 E:of Benkei
 I:22:9:4
 W:40:20:400:98765
 P:0:3d6:5:23:5
 F:STR | CON | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_TROLL | RES_FEAR |
 F:FREE_ACT | REGEN | SHOW_MODS
-D:¸å¤ËµÁ·Ð¤Ë»Å¤¨¤¿²øÁÎ¡¦ÉðÂ¢Ë·ÊÛ·Ä¤Ï¡¢¤³¤ÎÂçÆåÅá¤òÆÀÊª¤ËÉðÎÏ¤ò¿¶¤ë¤¤¡¢
-D:¸Þ¾òÂç¶¶¤Î¾å¤Ç999ËÜ¤ÎÅá¤ò¼í¤Ã¤¿¡£
+D:Œã‚É‹`Œo‚ÉŽd‚¦‚½‰ö‘mE•‘ –V•ÙŒc‚ÍA‚±‚Ì‘å“ã“‚ð“¾•¨‚É•—Í‚ðU‚é‚¢A
+D:ŒÜð‘å‹´‚Ìã‚Å999–{‚Ì“‚ðŽë‚Á‚½B
 
-N:153:¼Í¼ê¥Ð¥ë¥É²¦¤Î¹õ¤¤
+N:153:ŽËŽèƒoƒ‹ƒh‰¤‚Ì•‚¢
 E:of Bard
 I:17:10:0
 W:35:35:2:5000
@@ -2854,12 +2854,12 @@ P:0:8d4:30:19:0
 F:KILL_DRAGON | INSTA_ART | SHOW_MODS
 D:$Dealiest of arrows, imbued with elemental strength, this shaft is 
 D:$feared especially by the wyrmkin.
-D:¸å¤Ë²¦¤È¤Ê¤ë¸Ð¤Î³¹¤Î±¢µ¤ÌÌ¥Ð¥ë¥É¤¬Î¶¤ò¼ÍÈ´¤¤¤¿ÅÁÀâ¤Î¹õ¤¤Ìð¤À¡£
-D:Èà¤¬Î¶¤ò¼ÍÈ´¤¤¤¿¤³¤ÎÌð¤Ï²Î¤Ë±´¤ï¤ì¸ì¤ê·Ñ¤¬¤ì¤Æ¤¤¤ë¡£
+D:Œã‚É‰¤‚Æ‚È‚éŒÎ‚ÌŠX‚Ì‰A‹C–Êƒoƒ‹ƒh‚ª—´‚ðŽË”²‚¢‚½“`à‚Ì•‚¢–î‚¾B
+D:”Þ‚ª—´‚ðŽË”²‚¢‚½‚±‚Ì–î‚Í‰Ì‚É‰S‚í‚êŒê‚èŒp‚ª‚ê‚Ä‚¢‚éB
 
 # The Blade of Chaos 'Soulcrusher'
 
-N:154:¡Ø¥½¥¦¥ë¥¯¥é¥Ã¥·¥å¡Ù
+N:154:wƒ\ƒEƒ‹ƒNƒ‰ƒbƒVƒ…x
 E:'Soulcrusher'
 I:23:30:4
 W:70:25:180:250000
@@ -2871,7 +2871,7 @@ F:CHAOTIC | CURSED | HEAVY_CURSE | LITE
 
 # The Long Sword of Falis
 
-N:155:»ê¹â¿À¥Õ¥¡¥ê¥¹¤Î
+N:155:ŽŠ‚_ƒtƒ@ƒŠƒX‚Ì
 E:of Falis
 I:23:17:5
 W:70:25:130:80000
@@ -2880,7 +2880,7 @@ F:KILL_DEMON | STR | KILL_EVIL | KILL_UNDEAD | BRAND_FIRE | KILL_TROLL |
 F:KILL_ORC | FREE_ACT | RES_FIRE | RES_ACID | RES_COLD | RES_ELEC | 
 F:SUST_STR | SEE_INVIS | SHOW_MODS | LITE | BLESSED
 
-N:156:¡Ø¥Õ¥é¥ó¥Æ¥ó¥°¡Ù
+N:156:wƒtƒ‰ƒ“ƒeƒ“ƒOx
 E:'Hrunting'
 I:23:25:4
 W:30:90:250:100000
@@ -2888,17 +2888,17 @@ P:0:4d6:13:21:0
 F:STR | HIDE_TYPE |
 F:VORPAL | SLAY_DRAGON | KILL_GIANT |
 F:FREE_ACT | LITE | LEVITATION | SHOW_MODS
-D:¹äÎÏÌµÁÐ¤Î¥Ç¥ó¥Þ¡¼¥¯¤Î±ÑÍº²¦¥Ù¡¼¥ª¥¦¥ë¥Õ¤¬µð¿ÍÂ²¤«¤éÃ¥¤¤¡¢
-D:ºÇ¸å¤ÎÀï¤¤¤Ç¤Ï¤³¤Î·õ¤Ë¤è¤Ã¤ÆÎµ¤òÂà¼£¤·¤¿¡£
+D:„—Í–³‘o‚Ìƒfƒ“ƒ}[ƒN‚Ì‰p—Y‰¤ƒx[ƒIƒEƒ‹ƒt‚ª‹l‘°‚©‚ç’D‚¢A
+D:ÅŒã‚Ìí‚¢‚Å‚Í‚±‚ÌŒ•‚É‚æ‚Á‚Ä—³‚ð‘ÞŽ¡‚µ‚½B
 
-N:157:¡ØÇ¡°Õ¶âèáËÀ½Å°ìËü»°Àé¸ÞÉ´¶Ô¡Ù
+N:157:w”@ˆÓ‹àäß–_dˆê–œŽOçŒÜ•S‹Òx
 E:'Nyoi-bou'
 I:21:16:5
 W:80:70:500:300000
 P:0:7d7:5:25:10
 F:STR | SLAY_EVIL | SEE_INVIS | RIDING
 
-N:158:¥¢¥Ì¥Ó¥¹¿À¤Î
+N:158:ƒAƒkƒrƒX_‚Ì
 E:of Anubis
 I:23:20:4
 W:30:90:120:200000
@@ -2906,28 +2906,28 @@ P:0:3d4:28:22:-30
 F:DEX | CHAOTIC | CURSED | HEAVY_CURSE | TUNNEL | AGGRAVATE | BLOWS |
 F:RES_CONF | RES_CHAOS | RES_FEAR | RES_DISEN | NO_TELE
 
-N:159:ÂÀ¸øË¾¤Î
+N:159:‘¾Œö–]‚Ì
 E:of Taikobo
 I:22:40:0
 W:10:150:30:10000
 P:0:1d1:0:0:0
 F:ACTIVATE | INSTA_ART
 U:FISHING
-D:ÂÀ¸øË¾¤Ï¤³¤ÎÄà¤ê´È¤òÍÑ¤¤¤ÆÄà¤ê¤ò³Ú¤·¤à¤Î¤¬Æü²Ý¤Ç¤¢¤Ã¤¿¤¬¡¢
-D:·ë¶É¤ÏÈà¼«¿È¤¬¼þ¤ÎÊ¸²¦¤ËÄà¤é¤ì¤Æ¤·¤Þ¤Ã¤¿¤Î¤Ç¤¢¤Ã¤¿¡£
+D:‘¾Œö–]‚Í‚±‚Ì’Þ‚èŠÆ‚ð—p‚¢‚Ä’Þ‚è‚ðŠy‚µ‚Þ‚Ì‚ª“ú‰Û‚Å‚ ‚Á‚½‚ªA
+D:Œ‹‹Ç‚Í”ÞŽ©g‚ªŽü‚Ì•¶‰¤‚É’Þ‚ç‚ê‚Ä‚µ‚Ü‚Á‚½‚Ì‚Å‚ ‚Á‚½B
 
 #The Long Sword 'Gurenki'
-N:160:¡Ø¹ÈÏ¡É±¡Ù
+N:160:wg˜@•Px
 E:'Gurenki'
 I:23:17:2
 W:60:150:130:100000
 P:0:4d5:-10:25:0
 F:VORPAL | VAMPIRIC | SLAY_EVIL | KILL_DEMON | ESP_DEMON |
 F:AGGRAVATE | LITE | CON 
-D:Èà½÷¤Ï»Ë¾åºÇ¶¯¤ÎÇËÍÅÅá¤À¡£
-D:¼ë¶â¤Ëµ±¤¯Åá¿È¤ÇËâÀ­¤Î¿´Â¡¤ò¤Ä¤é¤Ì¤­¡¢¤½¤ÎÌ¿¤ò¿©¤Ù¤Ä¤¯¤¹¡£
+D:”Þ—‚ÍŽjãÅ‹­‚Ì”j—d“‚¾B
+D:Žé‹à‚É‹P‚­“g‚Å–‚«‚ÌS‘Ÿ‚ð‚Â‚ç‚Ê‚«A‚»‚Ì–½‚ðH‚×‚Â‚­‚·B
 
-N:161:¡ØéñéÙÀÚ¡Ù
+N:161:wå‘åxØx
 E:'Tonbo giri'
 I:22:7:3
 W:35:70:350:250000
@@ -2938,10 +2938,10 @@ F:RES_ELEC | RES_ACID | RES_FEAR | SHOW_MODS | RIDING
 D:$Because of very superb sharpness such as dragon flies are 
 D:$cut which perches on the tip of this spear, it is called
 D:$'Tonbo giri' which means 'dragon fry cutter'. 
-D:ÆÁÀî»ÍÅ·²¦¤Î£±¿ÍËÜÂ¿Ãé¾¡¤Î°¦ÍÑ¤ÎÁä¤À¡£
-D:¤½¤ÎÀÚ¤ìÌ£¤ÏÊæÀè¤Ë»ß¤Þ¤Ã¤¿éñéÙ¤¬ÀÚ¤ì¤ÆÍî¤Á¤ë¤Û¤É¤Ç¤¢¤ë¡£
+D:“¿ìŽl“V‰¤‚Ì‚Pl–{‘½’‰Ÿ‚Ìˆ¤—p‚Ì‘„‚¾B
+D:‚»‚ÌØ‚ê–¡‚Í•äæ‚ÉŽ~‚Ü‚Á‚½å‘åx‚ªØ‚ê‚Ä—Ž‚¿‚é‚Ù‚Ç‚Å‚ ‚éB
 
-N:162:¥¸¥ç¡¼¥ó¥ºÇî»Î¤Î
+N:162:ƒWƒ‡[ƒ“ƒY”ŽŽm‚Ì
 E:of Dr. Jones
 I:21:2:1
 W:8:5:30:18000
@@ -2949,11 +2949,11 @@ P:0:1d6:16:13:0
 F:INT | WIS | LEVITATION | SHOW_MODS | ACTIVATE | SEE_INVIS
 U:TELEKINESIS
 D:$This is the whip of the famous archaeologist Prof. Jones.
-D:¤¢¤ÎÃøÌ¾¤Ê¹Í¸Å³Ø¼Ô¥¸¥ç¡¼¥ó¥ºÇî»Î¤Î¥à¥Á¤À¡£
-D:É¬¤º¤ä¡¢¥¹¡¼¥Ñ¡¼¥¢¥¯¥·¥ç¥ó¤ò²ÄÇ½¤Ë¤¹¤ë¤À¤í¤¦¡£
+D:‚ ‚Ì’˜–¼‚ÈlŒÃŠwŽÒƒWƒ‡[ƒ“ƒY”ŽŽm‚Ìƒ€ƒ`‚¾B
+D:•K‚¸‚âAƒX[ƒp[ƒAƒNƒVƒ‡ƒ“‚ð‰Â”\‚É‚·‚é‚¾‚ë‚¤B
 
 # The Spear 'GaeBolg'
-N:163:¡Ø¥¬¥¨¥Ü¥ë¥°¡Ù
+N:163:wƒKƒGƒ{ƒ‹ƒOx
 E:'GaeBolg'
 I:22:2:4
 W:45:90:80:150000
@@ -2963,12 +2963,12 @@ F:BRAND_ELEC | SLAY_EVIL | SLAY_GIANT |
 F:RES_ELEC | RES_LITE | RES_DARK |
 F:LITE | SEE_INVIS | RES_BLIND | SHOW_MODS | RIDING
 U:BA_STAR
-D:¥±¥ë¥È¤Î±ÑÍº¥¯¡¼¥Õ¡¼¥ê¥ó¤Î¡¢³¤Îµ¤Î¹ü¤«¤éºï¤é¤ì¤¿Ä¹Áä¤À¡£
-D:¤Ä¤Í¤ËÌÜ±Ç¤¯È¯¤»¤é¤ì¤ë¤½¤ÎÁ®¸÷¤ÏÅ¨¤ÎÌÜ¤ò¤¯¤é¤Þ¤·¡¢
-D:µÕ¤Ë½êÍ­¼Ô¤Î»ëÎÏ¤ò¼é¤ë¡£
+D:ƒPƒ‹ƒg‚Ì‰p—YƒN[ƒt[ƒŠƒ“‚ÌAŠC—³‚Ìœ‚©‚çí‚ç‚ê‚½’·‘„‚¾B
+D:‚Â‚Ë‚É–Ú‰f‚­”­‚¹‚ç‚ê‚é‚»‚Ì‘MŒõ‚Í“G‚Ì–Ú‚ð‚­‚ç‚Ü‚µA
+D:‹t‚ÉŠ—LŽÒ‚ÌŽ‹—Í‚ðŽç‚éB
 
 # The Trident of Arryu-Chien-Kun
-N:164:¸²À»ÆóÏº¿¿·¯¤Î
+N:164:Œ°¹“ñ˜Y^ŒN‚Ì
 E:of Arryu-Chien-Kun
 I:22:5:2
 W:30:45:70:120000
@@ -2979,10 +2979,10 @@ F:RES_COLD | RES_NEXUS |
 F:SEE_INVIS | SLOW_DIGEST | REGEN | ACTIVATE | 
 F:BLESSED | SHOW_MODS | RIDING | ESP_ANIMAL
 U:SUMMON_HOUND
-D:ÀçÌ¾¤òÀ¶¸»Ì¯Æ»¿¿·¯¡¢¿ÀÀçÂ²¤­¤Ã¤Æ¤ÎÉð¿À¤Ç¤¢¤ëÆóÏº¿¿·¯¤Î»°ÀíÅá¤À¡£
-D:Èà¤Ï°­Îµ¤äËâ¿À¡¢¼«Á³¤ÎÍÅËâ¤òÂ¿¿ôÆ¤È²¤·¤¿¡£
+D:å–¼‚ð´Œ¹–­“¹^ŒNA_å‘°‚«‚Á‚Ä‚Ì•_‚Å‚ ‚é“ñ˜Y^ŒN‚ÌŽOë“‚¾B
+D:”Þ‚Íˆ«—³‚â–‚_AŽ©‘R‚Ì—d–‚‚ð‘½”“¢”°‚µ‚½B
 
-N:165:¥¬¥é¥¹¤Î·¤
+N:165:ƒKƒ‰ƒX‚ÌŒC
 E:Pair~ of Glass Slippers
 I:30:2:-3
 W:40:40:20:40000
@@ -2991,16 +2991,16 @@ F:DEX | HIDE_TYPE | SUST_CHR | STEALTH | SPEED |
 F:RES_LITE | RES_DARK | RES_NEXUS |
 F:RES_NETHER | RES_CHAOS | LITE | FULL_NAME
 
-N:166:¿å¸Í²«Ìç¤Î
+N:166:…ŒË‰©–å‚Ì
 E:of Mito Koumon
 I:40:20:2
 W:30:80:3:100000
 F:INT | WIS | CHR | SEARCH | INFRA | SEE_INVIS | ACTIVATE |
 F:HIDE_TYPE | INSTA_ART
 U:INROU
-D:Ëè½µ·îÍËÆü¤Î20:45¤ËÀäÂç¤ÊÎÏ¤òÈ¯´ø¤¹¤ë¤é¤·¤¤¡£
+D:–ˆTŒŽ—j“ú‚Ì20:45‚Éâ‘å‚È—Í‚ð”­Šö‚·‚é‚ç‚µ‚¢B
 
-N:167:¡Ø³úÈøÅá¡Ù
+N:167:wŠš”ö“x
 E:'Tailbiter'
 I:23:16:2
 W:20:30:150:35000
@@ -3008,14 +3008,14 @@ P:0:2d5:18:9:0
 F:CON | SEARCH | BLOWS |
 F:SLAY_EVIL | KILL_DRAGON | ESP_DRAGON |
 F:SHOW_MODS
-D:¡Ö¡Ä¤½¤ÎÌ¾¤âÍ­Ì¾¤Ê¥«¥¦¥Ç¥£¥â¥ë¥À¥¯¥¹·õ¡¢¤Ä¤Þ¤êÊª¸ì¤ÎËÜ¤Ê¤É
-D:¤Ç¤ª¤Ê¤¸¤ß¤Î¡¢¤¢¤ÎÂ¯¤Ë¤¤¤ï¤æ¤ë³úÈøÅá¤Ç¤¢¤ë¤¾¡£¡ÄÎµ¤¬£µ¥Þ¥¤
-D:¥ë°ÊÆâ¤Ë¶áÉÕ¤¯¤È¡¢¤µ¤ä¤ÎÃæ¤Ë¤Ï¤ª¤µ¤Þ¤Ã¤Æ¤¤¤Ê¤¤¤Î¤¸¤ã¡£¤³¤ì
-D:¤¬Í¦¼Ô¤Î¼ê¤Ë¤Ë¤®¤é¤ì¤ì¤Ð¡¢¤¤¤«¤Ê¤ëÎµ¤â¤¿¤Á¤¦¤Á¤Ï¤Ç¤­¤ó¤È¤¤
-D:¤¦·õ¤¸¤ã¤¾¡£¡×
-D:(J.R.R.¥È¡¼¥ë¥­¥ó¡¢µÈÅÄ¿·°ìÌõ¡¢ÇÀÉ×¥¸¥ã¥¤¥ë¥º¤ÎËÁ¸±)
+D:uc‚»‚Ì–¼‚à—L–¼‚ÈƒJƒEƒfƒBƒ‚ƒ‹ƒ_ƒNƒXŒ•A‚Â‚Ü‚è•¨Œê‚Ì–{‚È‚Ç
+D:‚Å‚¨‚È‚¶‚Ý‚ÌA‚ ‚Ì‘­‚É‚¢‚í‚ä‚éŠš”ö“‚Å‚ ‚é‚¼Bc—³‚ª‚Tƒ}ƒC
+D:ƒ‹ˆÈ“à‚É‹ß•t‚­‚ÆA‚³‚â‚Ì’†‚É‚Í‚¨‚³‚Ü‚Á‚Ä‚¢‚È‚¢‚Ì‚¶‚áB‚±‚ê
+D:‚ª—EŽÒ‚ÌŽè‚É‚É‚¬‚ç‚ê‚ê‚ÎA‚¢‚©‚È‚é—³‚à‚½‚¿‚¤‚¿‚Í‚Å‚«‚ñ‚Æ‚¢
+D:‚¤Œ•‚¶‚á‚¼Bv
+D:(J.R.R.ƒg[ƒ‹ƒLƒ“A‹g“cVˆê–óA”_•vƒWƒƒƒCƒ‹ƒY‚Ì–`Œ¯)
 
-N:168:ÇÀÉ×¥¸¥ã¥¤¥ë¥º¤Î
+N:168:”_•vƒWƒƒƒCƒ‹ƒY‚Ì
 E:of Giles
 I:37:2:-2
 W:20:20:200:30000
@@ -3023,36 +3023,36 @@ P:12:1d4:-2:0:18
 F:STEALTH | 
 F:RES_FIRE | RES_CHAOS | RES_NEXUS | RES_COLD
 F:HIDE_TYPE
-D:¡Ö¤à¤«¤·Æî¤Î¹ñ¤«¤é¤ê¤Ã¤Ñ¤ÊËÜÊª¤Îº¿¤«¤¿¤Ó¤é¤òÇã¤¨¤Ê¤«¤Ã¤¿
-D:¼Ô¤Ï¡¢³×¤Î¥·¥ã¥Ä¤ËÅ´¤ÎÎØ¤òË¥¤¤ÉÕ¤±¤Æ¡¢¤½¤ì¤Ç¤¬¤Þ¤ó¤·¤¿¤È
-D:¤¤¤¦¤³¤È¤òÊ¹¤¤¤¿¤³¤È¤¬¤¢¤ë¡£¤Ò¤È¤Ä¤½¤Î¼ê¤Ç¤ä¤Ã¤Æ¤ß¤ë¤³¤È
-D:¤Ë¤¹¤ë¤«¡ª¡×
-D:(J.R.R.¥È¡¼¥ë¥­¥ó¡¢µÈÅÄ¿·°ìÌõ¡¢ÇÀÉ×¥¸¥ã¥¤¥ë¥º¤ÎËÁ¸±)
+D:u‚Þ‚©‚µ“ì‚Ì‘‚©‚ç‚è‚Á‚Ï‚È–{•¨‚Ì½‚©‚½‚Ñ‚ç‚ð”ƒ‚¦‚È‚©‚Á‚½
+D:ŽÒ‚ÍAŠv‚ÌƒVƒƒƒc‚É“S‚Ì—Ö‚ð–D‚¢•t‚¯‚ÄA‚»‚ê‚Å‚ª‚Ü‚ñ‚µ‚½‚Æ
+D:‚¢‚¤‚±‚Æ‚ð•·‚¢‚½‚±‚Æ‚ª‚ ‚éB‚Ð‚Æ‚Â‚»‚ÌŽè‚Å‚â‚Á‚Ä‚Ý‚é‚±‚Æ
+D:‚É‚·‚é‚©Iv
+D:(J.R.R.ƒg[ƒ‹ƒLƒ“A‹g“cVˆê–óA”_•vƒWƒƒƒCƒ‹ƒY‚Ì–`Œ¯)
 
-N:169:¡ØÇï»ÒÌÚ¡Ù
+N:169:w”Žq–Øx
 E:'Hyousi-gi'
 I:21:4:3
 W:25:5:15:808
 P:0:1d2:-3:-7:6
 F:SEARCH | ACTIVATE | SHOW_MODS | HIDE_TYPE
 U:AGGRAVATE
-D:³ÑÃìÆóËÜ¤Î¸ß¤¤¤ÎÃ¼¤¬¡¢ºÙ¤¤Æì¤Ç·ë¤Ð¤ì¤Æ¤¤¤ë¡£
-D:Éð´ï¤È¤·¤Æ¤Ï¸«¤ë¤«¤é¤ËÉÏÁê¤À¤¬¡¢ ËÉ²Ð¤ò¤½¤ÎÇ¤¤È¤¹¤ë±Ò»Î¤¿¤Á¤¬»È¤Ã¤¿¡¢
-D:Í³½ïÀµ¤·¤¤Éð´ï¤À¤È¤¤¤ï¤ì¤Æ¤¤¤ë¡£
+D:Šp’Œ“ñ–{‚ÌŒÝ‚¢‚Ì’[‚ªA×‚¢“ê‚ÅŒ‹‚Î‚ê‚Ä‚¢‚éB
+D:•Ší‚Æ‚µ‚Ä‚ÍŒ©‚é‚©‚ç‚É•n‘Š‚¾‚ªA –h‰Î‚ð‚»‚Ì”C‚Æ‚·‚é‰qŽm‚½‚¿‚ªŽg‚Á‚½A
+D:—R³‚µ‚¢•Ší‚¾‚Æ‚¢‚í‚ê‚Ä‚¢‚éB
 
-N:170:¡ØÅ»¡Ù
+N:170:w“Zx
 E:'Matoi'
 I:21:7:3
 W:40:5:100:808
 P:0:1d7:-5:10:3
 F:STR | CHR | RES_FIRE | ACTIVATE | 
 U:HELO
-D:¾Ã²Ðºî¶È¤Ë¤¢¤¿¤Ã¤Æ¡¢»Îµ¤¤ò¸ÝÉñ¤¹¤Ù¤¯¿¶¤ê¤¿¤Æ¤é¤ì¤¿¾ó¤À¡£
-D:¾ó¤ÎÀè¤ËÂâ¤Î¥Þ¡¼¥¯Æþ¤ê¤Î±ßÈ×¤¬¤¢¤ê¡¢¤½¤Î²¼Â¦¤«¤é
-D:Ä¹¤¤ÂÓ¾õ¤Î¾þ¤ê¤¬´öËÜ¤â¤Î¤Ó¤Æ¤¤¤ë¡£
-D:¤³¤Î¾ó¤ÏÂâ¤Î¾ÝÄ§¤Ç¤¢¤ê¡¢ºÇ¤âÍ¦µ¤¤¢¤ë¤â¤Î¤¬°·¤¦¤È¤µ¤ì¤¿¡£
+D:Á‰Îì‹Æ‚É‚ ‚½‚Á‚ÄAŽm‹C‚ðŒÛ•‘‚·‚×‚­U‚è‚½‚Ä‚ç‚ê‚½ñ‚¾B
+D:ñ‚Ìæ‚É‘à‚Ìƒ}[ƒN“ü‚è‚Ì‰~”Õ‚ª‚ ‚èA‚»‚Ì‰º‘¤‚©‚ç
+D:’·‚¢‘Ñó‚Ìü‚è‚ªŠô–{‚à‚Ì‚Ñ‚Ä‚¢‚éB
+D:‚±‚Ìñ‚Í‘à‚ÌÛ’¥‚Å‚ ‚èAÅ‚à—E‹C‚ ‚é‚à‚Ì‚ªˆµ‚¤‚Æ‚³‚ê‚½B
 
-N:171:ÆóÅ·°ìÎ®³«ÁÄµÜËÜÉðÂ¢¤Î
+N:171:“ñ“Vˆê—¬ŠJ‘c‹{–{•‘ ‚Ì
 E:of Musashi
 I:23:20:3
 W:50:15:120:60000
@@ -3060,10 +3060,10 @@ P:0:3d4:28:17:0
 F:DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
 D:$It is the katana of the famed creator of the dual sword technique, 
 D:$Miyamoto Musashi, and wielded with his right hand in combat.
-D:Ì¾¹â¤­ÆóÅ·°ìÎ®¤ÎÁÏ»Ï¼Ô¡¢µÜËÜÉðÂ¢¤¬»È¤Ã¤Æ¤¤¤¿ÂçÅá¤À¡£
-D:Àï¤¤¤Ë¤ª¤¤¤Æ¤Ï±¦¤ËÂçÅá¡¢º¸¤Ë¾®Åá¤ò»ý¤Ã¤Æ¿¶¤ë¤Ã¤¿¤È¤¤¤¦¡£
+D:–¼‚‚«“ñ“Vˆê—¬‚Ì‘nŽnŽÒA‹{–{•‘ ‚ªŽg‚Á‚Ä‚¢‚½‘å“‚¾B
+D:í‚¢‚É‚¨‚¢‚Ä‚Í‰E‚É‘å“A¶‚É¬“‚ðŽ‚Á‚ÄU‚é‚Á‚½‚Æ‚¢‚¤B
 
-N:172:ÆóÅ·°ìÎ®³«ÁÄµÜËÜÉðÂ¢¤Î
+N:172:“ñ“Vˆê—¬ŠJ‘c‹{–{•‘ ‚Ì
 E:of Musashi
 I:23:13:3
 W:50:5:90:60000
@@ -3071,46 +3071,46 @@ P:0:2d4:28:17:0
 F:DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
 D:$It is the wakizashi of the famed creator of the dual sword technique, 
 D:$Miyamoto Musashi, and wielded with his left hand in combat.
-D:Ì¾¹â¤­ÆóÅ·°ìÎ®¤ÎÁÏ»Ï¼Ô¡¢µÜËÜÉðÂ¢¤¬»È¤Ã¤Æ¤¤¤¿¾®Åá¤À¡£
-D:Àï¤¤¤Ë¤ª¤¤¤Æ¤Ï±¦¤ËÂçÅá¡¢º¸¤Ë¾®Åá¤ò»ý¤Ã¤Æ¿¶¤ë¤Ã¤¿¤È¤¤¤¦¡£
+D:–¼‚‚«“ñ“Vˆê—¬‚Ì‘nŽnŽÒA‹{–{•‘ ‚ªŽg‚Á‚Ä‚¢‚½¬“‚¾B
+D:í‚¢‚É‚¨‚¢‚Ä‚Í‰E‚É‘å“A¶‚É¬“‚ðŽ‚Á‚ÄU‚é‚Á‚½‚Æ‚¢‚¤B
 
-N:173:¡Ø¿ÀÈ³¤ÎÅ´µå¡Ù
+N:173:w_”±‚Ì“S‹…x
 E:'Iron ball'
 I:21:6:-6
 W:45:40:666:66666
 P:0:25d4:-30:0:20
 F:SPEED | STEALTH | WIS | IMPACT | SHOW_MODS | HIDE_TYPE |
 F:CURSED | HEAVY_CURSE
-D:ÉÔ¿®¿´¼Ô¤ÎÂ­¤Ë¤¯¤¯¤ê¤Ä¤±¤é¤ì¡¢¤½¤ÎÆ°¤­¤òÁË³²¤¹¤ë¡£
-D:½Å¤¤¤¬Éð´ï¤È¤·¤Æ¤â»È¤¨¤Ê¤¤»ö¤Ï¤Ê¤¤¡£
+D:•sMSŽÒ‚Ì‘«‚É‚­‚­‚è‚Â‚¯‚ç‚êA‚»‚Ì“®‚«‚ð‘jŠQ‚·‚éB
+D:d‚¢‚ª•Ší‚Æ‚µ‚Ä‚àŽg‚¦‚È‚¢Ž–‚Í‚È‚¢B
 
-#±Ñ¸ìÌ¾¤ÏÅ¬Åö¤Ç¤¹¡£¥¨¥ë¥ê¥Ã¥¯¥µ¡¼¥¬£¸¡Öé¬é¯¤ÎÉü½²¡×¤è¤ê¡£
-N:174:¡Ø¤¹¤Ð¤ä¤­»É¡Ù
+#‰pŒê–¼‚Í“K“–‚Å‚·BƒGƒ‹ƒŠƒbƒNƒT[ƒK‚WuåKåN‚Ì•œQv‚æ‚èB
+N:174:w‚·‚Î‚â‚«Žhx
 E:'Quickthorn'
 I:23:7:3
 W:30:15:55:75000
 P:0:1d7:27:9:0
 F:DEX | BLOWS | SLAY_DEMON | RIDING
 F:FREE_ACT | SEE_INVIS | SHOW_MODS | RES_CHAOS | RES_DISEN |
-D:Éü½²¤Î¤¿¤á¡¢»°»ÐËå¤òÃµ¤·¤Æ»þ´ÖÎ®¤òÎ¹¤¹¤ë¡ãé¬é¯¡ä¤È¸Æ¤Ð¤ì¤ë½÷À­¤Î·õ¤À¡£
-D:¶²¤ë¤Ù¤­Â®ÅÙ¤ÈÁÀ¤¤¤ò¤Ï¤º¤µ¤ÌÀµ³Î¤µ¤òÈë¤á¤Æ¤¤¤ë¡£
-D:¡Ø¾®¤µ¤­»É¡Ù¤ÈÂÐ¤òÀ®¤·¤Æ¤¤¤ë¡£
+D:•œQ‚Ì‚½‚ßAŽOŽo–…‚ð’T‚µ‚ÄŽžŠÔ—¬‚ð—·‚·‚éƒåKåN„‚ÆŒÄ‚Î‚ê‚é—«‚ÌŒ•‚¾B
+D:‹°‚é‚×‚«‘¬“x‚Æ‘_‚¢‚ð‚Í‚¸‚³‚Ê³Šm‚³‚ð”é‚ß‚Ä‚¢‚éB
+D:w¬‚³‚«Žhx‚Æ‘Î‚ð¬‚µ‚Ä‚¢‚éB
 
-#±Ñ¸ìÌ¾¤ÏÅ¬Åö¤Ç¤¹¡£¥¨¥ë¥ê¥Ã¥¯¥µ¡¼¥¬£¸¡Öé¬é¯¤ÎÉü½²¡×¤è¤ê¡£
-N:175:¡Ø¾®¤µ¤­»É¡Ù
+#‰pŒê–¼‚Í“K“–‚Å‚·BƒGƒ‹ƒŠƒbƒNƒT[ƒK‚WuåKåN‚Ì•œQv‚æ‚èB
+N:175:w¬‚³‚«Žhx
 E:'Littlethorn'
 I:23:5:3
 W:20:6:30:22500
 P:0:1d5:18:6:0
 F:INT | CHR | REGEN | SLAY_EVIL |
 F:RES_NEXUS | FREE_ACT | SEE_INVIS | SHOW_MODS |
-D:Éü½²¤Î¤¿¤á¡¢»°»ÐËå¤òÃµ¤·¤Æ»þ´ÖÎ®¤òÎ¹¤¹¤ë¡ãé¬é¯¡ä¤È¸Æ¤Ð¤ì¤ë½÷À­¤Î·õ¤À¡£
-D:¡Ø¤¹¤Ð¤ä¤­»É¡Ù¤ÈÂÐ¤òÀ®¤·¤Æ¤¤¤ë¡£
+D:•œQ‚Ì‚½‚ßAŽOŽo–…‚ð’T‚µ‚ÄŽžŠÔ—¬‚ð—·‚·‚éƒåKåN„‚ÆŒÄ‚Î‚ê‚é—«‚ÌŒ•‚¾B
+D:w‚·‚Î‚â‚«Žhx‚Æ‘Î‚ð¬‚µ‚Ä‚¢‚éB
 
-#N:*:¡Ø¥«¥ì¥¤¥É¥¦¥ë¥Õ¡Ù
-#N:*:¡Ø¥«¥é¥É¥ô¥©¥ë¥Ò¡Ù
-#N:*:¡Ø¥­¥ã¥ê¥Ð¡¼¥ó¡Ù
-N:176:¡Ø¥¨¥¯¥¹¥«¥ê¥Ð¡¼¡Ù
+#N:*:wƒJƒŒƒCƒhƒEƒ‹ƒtx
+#N:*:wƒJƒ‰ƒhƒ”ƒHƒ‹ƒqx
+#N:*:wƒLƒƒƒŠƒo[ƒ“x
+N:176:wƒGƒNƒXƒJƒŠƒo[x
 E:'Excalibur'
 I:23:17:3
 W:50:180:130:300000
@@ -3120,30 +3120,30 @@ F:VORPAL | TUNNEL | RIDING |
 F:SLAY_EVIL | SLAY_UNDEAD | SLAY_DEMON |
 F:RES_SHARDS | RES_FEAR | BLESSED | HOLD_LIFE | 
 F:SEE_INVIS | WARNING | SHOW_MODS
-D:¡ÖÍÅÀº¶¿¤Ë¤ÆÃÃ¤¨¤é¤ì¤·²æ¤Ï¤¤¤ä¹â¤­¿Ï¤Ê¤ê¤Æ¡¢Áê±þ¤·¤­²¦¤ÎÐÐÅá¤È¤Ê¤é¤ó¡×
-D:¡Ê¥È¥Þ¥¹¡¦¥Þ¥í¥ê¡¼¡¢¥¢¡¼¥µ¡¼²¦¤Î»à¡Ë
+D:u—d¸‹½‚É‚Ä’b‚¦‚ç‚ê‚µ‰ä‚Í‚¢‚â‚‚«n‚È‚è‚ÄA‘Š‰ž‚µ‚«‰¤‚Ì˜Î“‚Æ‚È‚ç‚ñv
+D:iƒgƒ}ƒXEƒ}ƒƒŠ[AƒA[ƒT[‰¤‚ÌŽ€j
 
-N:177:¡Ø¥¨¥¯¥¹¥«¥ê¥Ñ¡¼¡Ù
+N:177:wƒGƒNƒXƒJƒŠƒp[x
 E:'Excalipur'
 I:23:17:-3
 W:50:30:130:0
 P:0:5d5:-50:-50:-5
 F:WIS | CHR | 
 F:TY_CURSE | AGGRAVATE | DRAIN_EXP | SHOW_MODS | THROW
-D:¡Ö¤Ê¤ó¤À¤³¤ì¤Ï¡ªºÇ¶¯¤Î·õ¤¸¤ã¤Ê¤¤¤Î¤«¡ª¡©¡×
-D:¡ÊFINAL FANTASY V¡Ë
+D:u‚È‚ñ‚¾‚±‚ê‚ÍIÅ‹­‚ÌŒ•‚¶‚á‚È‚¢‚Ì‚©IHv
+D:iFINAL FANTASY Vj
 
-N:178:²øÎÏ¥µ¥à¥½¥ó¤Î
+N:178:‰ö—ÍƒTƒ€ƒ\ƒ“‚Ì
 E:of Samson
 I:21:1:3
 W:10:20:50:40000
 P:0:2d4:8:10:0
 F:STR | CON | RES_FEAR | SEE_INVIS | SLAY_EVIL | SLAY_UNDEAD
-D:²øÎÏ¥µ¥à¥½¥ó¤¬¥Ú¥ë¥·¥¢¿ÍÊ¼»Î¤ÎÊñ°Ï¤ò·â¤ÁÇË¤Ã¤¿¤È¤­¤Ë»È¤Ã¤Æ¤¤¤¿
-D:ÛþËÀ¡£¹ü¤Ç¤Ç¤­¤Æ¤¤¤ë¤¿¤á¤Ë·Ú¤¯¡¢¤½¤ÎÀ»¤Ê¤ëÎÏ¤Ï¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼
-D:¤òÂÇ¤ÁÊ§¤¦¡£
+D:‰ö—ÍƒTƒ€ƒ\ƒ“‚ªƒyƒ‹ƒVƒAl•ºŽm‚Ì•ïˆÍ‚ðŒ‚‚¿”j‚Á‚½‚Æ‚«‚ÉŽg‚Á‚Ä‚¢‚½
+D:žž–_Bœ‚Å‚Å‚«‚Ä‚¢‚é‚½‚ß‚ÉŒy‚­A‚»‚Ì¹‚È‚é—Í‚ÍŽ×ˆ«‚Èƒ‚ƒ“ƒXƒ^[
+D:‚ð‘Å‚¿•¥‚¤B
 
-N:179:¡Ø¥¨¥¯¥¹¥«¥ê¥Ð¡¼¡¦¥¸¥å¥Ë¥¢¡Ù
+N:179:wƒGƒNƒXƒJƒŠƒo[EƒWƒ…ƒjƒAx
 E:'Excalibur Jr.'
 I:23:8:2
 W:35:15:80:60000
@@ -3152,11 +3152,11 @@ F:BLOWS
 F:SLAY_UNDEAD | SLAY_DRAGON | SLAY_ANIMAL |
 F:RES_FIRE | RES_FEAR | BLESSED | 
 F:SLOW_DIGEST | SHOW_MODS
-D:¤«¤ÎÊõ·õ¥¨¥¯¥¹¥«¥ê¥Ð¡¼¤Ë»÷¤¿ºî¤ê¤Î¡¢¾¯¤·¾®·¿¤Î·õ¤À¡£
-D:¼«Ê¬¤Î¤³¤È¤ò¡ÖE.J.¡×¤È¸Æ¤Ó¡¢¤´¤¯¤¿¤Þ¤ËÏÃ¤â¤¹¤ë¡£
-D:ÃØéá¤ÈÂÐÖµ¤¹¤ë¤È¡¢¶²¤ì¤Î¤¢¤Þ¤ê¥×¥ê¥ó¤Î¤è¤¦¤Ë¤×¤ë¤×¤ë¤È¿Ì¤¨¤ë¡£
+D:‚©‚Ì•óŒ•ƒGƒNƒXƒJƒŠƒo[‚ÉŽ—‚½ì‚è‚ÌA­‚µ¬Œ^‚ÌŒ•‚¾B
+D:Ž©•ª‚Ì‚±‚Æ‚ðuE.J.v‚ÆŒÄ‚ÑA‚²‚­‚½‚Ü‚É˜b‚à‚·‚éB
+D:’wå‚Æ‘Î›³‚·‚é‚ÆA‹°‚ê‚Ì‚ ‚Ü‚èƒvƒŠƒ“‚Ì‚æ‚¤‚É‚Õ‚é‚Õ‚é‚Æk‚¦‚éB
 
-N:180:¥Ï¥é¥É¤Î
+N:180:ƒnƒ‰ƒh‚Ì
 E:of Harad
 I:19:24:-2
 W:60:120:200:35000
@@ -3165,10 +3165,10 @@ F:WIS | STEALTH | XTRA_SHOTS | XTRA_MIGHT | AGGRAVATE | RES_LITE | RES_DARK |
 F:HIDE_TYPE | SHOW_MODS | TY_CURSE
 D:$A great brazen arbalest with arms of gleaming steel shooting quarrels with 
 D:$speed and power for those brave enough to risk betrayal.
-D:Î¢ÀÚ¤ê¤Î´í¸±¤òËÁ¤¹Í¦µ¤¤Î¤¢¤ë¼Ô¤¬ÍÑ¤¤¤ë¿¿ï«À½¤ÎÂç¤­¤Ê×¸µÝ¤Ç¤¢¤ê¡¢¥¢¡¼¥à¤Ë
-D:Ä¥¤é¤ì¤¿µ±¤¯¹ÝÅ´À½¤Î¸¹¤«¤é¤Ï¹âÂ®¤«¤ÄÎÏ¶¯¤¤Ìð¤¬Êü¤¿¤ì¤ë¡£
+D:— Ø‚è‚ÌŠëŒ¯‚ð–`‚·—E‹C‚Ì‚ ‚éŽÒ‚ª—p‚¢‚é^èJ»‚Ì‘å‚«‚ÈœW‹|‚Å‚ ‚èAƒA[ƒ€‚É
+D:’£‚ç‚ê‚½‹P‚­|“S»‚ÌŒ·‚©‚ç‚Í‚‘¬‚©‚Â—Í‹­‚¢–î‚ª•ú‚½‚ê‚éB
 
-N:181:Å¬Åö¤Ê
+N:181:“K“–‚È
 E:of halfheart
 I:21:63:7
 W:127:1:50:1000000
@@ -3179,9 +3179,9 @@ F:SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT | SLAY_ORC | WARNING |
 F:IM_FIRE | RES_SHARDS | RES_FEAR | TUNNEL | INFRA | SEARCH | REFLECT |
 F:LITE | TELEPATHY | REGEN | BRAND_FIRE | BRAND_COLD | BRAND_POIS |
 F:SLAY_HUMAN | HIDE_TYPE | SHOW_MODS | RIDING | QUESTITEM | INSTA_ART
-D:¤Ê¤ó¤È¤¤¤¦¤«Å¬Åö¤Ëºî¤é¤ì¤¿ËÀ¤À¡£
+D:‚È‚ñ‚Æ‚¢‚¤‚©“K“–‚Éì‚ç‚ê‚½–_‚¾B
 
-N:182:¤¤¤¤¤«¤²¤ó¤Ê
+N:182:‚¢‚¢‚©‚°‚ñ‚È
 E:of irresponsibility
 I:19:63:7
 W:127:1:50:1000000
@@ -3190,9 +3190,9 @@ F:SPEED | INT | WIS | SUST_INT | SUST_WIS | XTRA_SHOTS | XTRA_MIGHT |
 F:DEC_MANA |
 F:RES_DARK | RES_LITE | RES_DISEN | RES_BLIND | IM_COLD | SLOW_DIGEST |
 F:HIDE_TYPE | SHOW_MODS | QUESTITEM | INSTA_ART
-D:¤¹¤´¤¯¤¤¤¤¤«¤²¤ó¤Êºî¤ê¤ÎµÝ¤À¡£
+D:‚·‚²‚­‚¢‚¢‚©‚°‚ñ‚Èì‚è‚Ì‹|‚¾B
 
-N:183:¤ä¤ëµ¤¤Î¤Ê¤¤
+N:183:‚â‚é‹C‚Ì‚È‚¢
 E:of idler
 I:36:63:7
 W:127:1:10:1000000
@@ -3201,19 +3201,19 @@ F:STEALTH | CON | CHR | SUST_CON | SUST_CHR | IM_ELEC | RES_ACID |
 F:RES_CONF | RES_SOUND | RES_NETHER | RES_NEXUS | RES_CHAOS |
 F:SH_FIRE | SH_ELEC | SH_COLD | RES_POIS | HOLD_LIFE | LEVITATION |
 F:HIDE_TYPE | SHOW_MODS | QUESTITEM | INSTA_ART
-D:¤É¤¦¸«¤Æ¤â¤ä¤ëµ¤¤Î¤Ê¤¤´¶¤¸¤ÎÉþ¤À¡£
+D:‚Ç‚¤Œ©‚Ä‚à‚â‚é‹C‚Ì‚È‚¢Š´‚¶‚Ì•ž‚¾B
 
 # The Broad Sword 'Arunruth'
 
-# (¥³¥á¥ó¥È)
+# (ƒRƒƒ“ƒg)
 #
 #
-# (¾®ÎÓ)
-# ¤³¤ì¤Ï¡¤Ê¸»ú¤É¤ª¤ê¤À¤È¡Ö¥¢¥ë¥ó¥ë¡¼¥¹¡×¤Ê¤ó¤À¤±¤É¡¤¥·¥ë¥Þ¥ê¥ë¥ê¥ª¥ó
-# ¤Ë½Ð¤Æ¤¯¤ë·õ¤ÏËÜÅö¤Ï'Aranruth'¡¥¥·¥ó¥´¥ë²¦¤ÈÂå¡¹¤Î¥Ì¥á¥Î¡¼¥ë¤Î²¦¤Î
-# ·õ¤Ç¤¹¡¥¤¿¤Ö¤ó¸µ¤Î¥½¡¼¥¹¤¬ÄÖ¤ê¤ò´Ö°ã¤¨¤Á¤ã¤Ã¤¿¤ó¤À¤è¤Í¡¥
+# (¬—Ñ)
+# ‚±‚ê‚ÍC•¶Žš‚Ç‚¨‚è‚¾‚ÆuƒAƒ‹ƒ“ƒ‹[ƒXv‚È‚ñ‚¾‚¯‚ÇCƒVƒ‹ƒ}ƒŠƒ‹ƒŠƒIƒ“
+# ‚Éo‚Ä‚­‚éŒ•‚Í–{“–‚Í'Aranruth'DƒVƒ“ƒSƒ‹‰¤‚Æ‘ãX‚Ìƒkƒƒm[ƒ‹‚Ì‰¤‚Ì
+# Œ•‚Å‚·D‚½‚Ô‚ñŒ³‚Ìƒ\[ƒX‚ª’Ô‚è‚ðŠÔˆá‚¦‚¿‚á‚Á‚½‚ñ‚¾‚æ‚ËD
 #
-N:184:¡Ø¥¢¥é¥ó¥ë¡¼¥¹¡Ù
+N:184:wƒAƒ‰ƒ“ƒ‹[ƒXx
 E:'Aranruth'
 I:23:16:4
 W:20:45:150:50000
@@ -3226,14 +3226,14 @@ U:BA_COLD_2
 D:$The beautiful sword of Thingol, justly named "King's Ire".  It glistens
 D:$ icy enough to freeze the hearts of demons, and you feel supple and
 D:$ lightfooted as you clasp its hilt of gold and silver inlay.
-D:¤¤¤ß¤¸¤¯¤â¡Ö²¦¤ÎÅÜ¤ê¡×¤ÈÌ¾ÉÕ¤±¤é¤ì¤¿¡¢³¥¿§¥Þ¥ó¥È²¦¥·¥ó¥´¥ë¤ÎÈþ¤·¤¤·õ¤À¡£
-D:¤½¤Î¿Ï¤ÏÉ¹¤ÎÇ¡¤¯µ±¤­¡¢°­Ëâ¤Î¿´Â¡¤ò¤âÅà¤Æ¤Ä¤«¤»¤ë¡£¶â¶ä¤ÎºÙ¹©¤¬»Ü¤µ¤ì¤¿
-D:¤½¤ÎÊÁ¤ò¼ê¤Ë¤¹¤ì¤Ð¡¢¤·¤Ê¤ä¤«¤Ê¿È¤Î¤³¤Ê¤·¤È·Ú¤ä¤«¤ÊÂ­¼è¤ò´¶¤¸¤é¤ì¤ë¤À¤í¤¦¡£
+D:‚¢‚Ý‚¶‚­‚àu‰¤‚Ì“{‚èv‚Æ–¼•t‚¯‚ç‚ê‚½AŠDFƒ}ƒ“ƒg‰¤ƒVƒ“ƒSƒ‹‚Ì”ü‚µ‚¢Œ•‚¾B
+D:‚»‚Ìn‚Í•X‚Ì”@‚­‹P‚«Aˆ«–‚‚ÌS‘Ÿ‚ð‚à“€‚Ä‚Â‚©‚¹‚éB‹à‹â‚Ì×H‚ªŽ{‚³‚ê‚½
+D:‚»‚Ì•¿‚ðŽè‚É‚·‚ê‚ÎA‚µ‚È‚â‚©‚Èg‚Ì‚±‚È‚µ‚ÆŒy‚â‚©‚È‘«Žæ‚ðŠ´‚¶‚ç‚ê‚é‚¾‚ë‚¤B
 
 # The Set of Gauntlets 'Paurnimmen'
 
 # ???, Ko
-N:185:¡Ø¥Ñ¥¦¥¢¥Ë¥ó¥á¥ó¡Ù
+N:185:wƒpƒEƒAƒjƒ“ƒƒ“x
 E:'Paurnimmen'
 I:31:2:1
 W:10:20:25:13000
@@ -3241,10 +3241,10 @@ P:2:1d1:0:0:15
 F:INT | RES_COLD | EASY_SPELL | ACTIVATE
 U:BO_COLD_1
 D:$A set of handgear so icy as to be able to fire frost bolts.
-D:¥·¥ó¥À¡¼¥ë¸ì¤Ç¡ÖÇò¤­·ý¡×¤ò°ÕÌ£¤¹¤ëÌ¾¤ò»ý¤Ä¤³¤ÎäÆ¼ê¤Ï¾ï¤Ë
-D:Îä¤¿¤¯µ±¤­¡¢É¹¤ÎÌð¤òÊü¤Ä¤³¤È¤¬¤Ç¤­¤ë¡£
+D:ƒVƒ“ƒ_[ƒ‹Œê‚Åu”’‚«Œv‚ðˆÓ–¡‚·‚é–¼‚ðŽ‚Â‚±‚ÌâÄŽè‚Íí‚É
+D:—â‚½‚­‹P‚«A•X‚Ì–î‚ð•ú‚Â‚±‚Æ‚ª‚Å‚«‚éB
 
-N:186:¹Ò³¤¼Ô¥¨¥¢¥ì¥ó¥Ç¥£¥ë¤Î
+N:186:qŠCŽÒƒGƒAƒŒƒ“ƒfƒBƒ‹‚Ì
 E:of Earendil
 I:34:7:0
 W:50:6:160:90000
@@ -3254,28 +3254,28 @@ F:ACTIVATE | ESP_GOOD
 U:CURING
 D:$A shining shield, once borne by the great mariner Earendil, "scored with 
 D:$runes to keep all wounds and harm from him".
-D:¤«¤Ä¤Æ°ÎÂç¤Ê¤ëÁ¥¾è¤ê¥¨¥¢¥ì¥ó¥Ç¥£¥ë¤¬¿È¤ËÉÕ¤±¤Æ¤¤¤¿µ±¤¯½â¤À¡£
-#D:¤¢¤é¤æ¤ë³²¤Ê¤¹¤â¤Î¤òÂà¤±¤ë¥ë¡¼¥óÊ¸»ú¤¬¹ï¤Þ¤ì¤Æ¤¤¤ë¡£
-D:¡Öµ±¤¯½â¤Ë¤Ï¤¢¤é¤æ¤ë´í³²¤ä½ý³²¤ò¤µ¤±¤ë¥ë¡¼¥óÊ¸»ú¤ò¹ï¤ß¹þ¤ó¤À¡£¡×
-D:(J.R.R.¥È¡¼¥ë¥­¥ó¡¢À¥ÅÄÄçÆó¡¦ÅÄÃæÌÀ»ÒÌõ ¿·ÈÇ»ØÎØÊª¸ì) 
+D:‚©‚Â‚ÄˆÌ‘å‚È‚é‘Dæ‚èƒGƒAƒŒƒ“ƒfƒBƒ‹‚ªg‚É•t‚¯‚Ä‚¢‚½‹P‚­‚‚¾B
+#D:‚ ‚ç‚ä‚éŠQ‚È‚·‚à‚Ì‚ð‘Þ‚¯‚éƒ‹[ƒ“•¶Žš‚ª‚Ü‚ê‚Ä‚¢‚éB
+D:u‹P‚­‚‚É‚Í‚ ‚ç‚ä‚éŠëŠQ‚âŠQ‚ð‚³‚¯‚éƒ‹[ƒ“•¶Žš‚ð‚Ýž‚ñ‚¾Bv
+D:(J.R.R.ƒg[ƒ‹ƒLƒ“A£“c’å“ñE“c’†–¾Žq–ó V”ÅŽw—Ö•¨Œê) 
 
 # The Spear 'Aeglos'
 
-# (¥³¥á¥ó¥È)
+# (ƒRƒƒ“ƒg)
 #
 # wp.220
 #
-#(ÅÔ¡¹ÌÜ)
-#¡Ø¤Ä¤é¤é¡Ù¤È¤¤¤¦¥¹¥Ô¥¢ ¢ª ¡Ø¥¢¥¤¥°¥í¥¹¡Ù¤È¤¤¤¦¥¹¥Ô¥¢
-#¡ö»ØÎØÊª¸ì¤Ç¤Ï¤³¤¦É½µ­¤µ¤ì¤Æ¤¤¤Þ¤¹¡£
-#¡¡¡Ø¿Æ¤·¤ß¤ò½Ð¤¹¤¿¤á¤Ë¡ÙÆüËÜ¸ì¤Ç¤È¸À¤ï¤ì¤Þ¤·¤¿¤¬¡¢¤½¤¦¤¹¤ë¤È¥¨¥ë¥Õ¸ìÁ´Éô¤ò
-#ÆüËÜ¸ì¤ËÌõ¤µ¤Ê¤¯¤Æ¤Ï¤Ê¤ê¤Þ¤»¤ó¡£°ìÉô¤À¤±¥¨¥ë¥Õ¸ì¤«¤éÆüËÜ¸ì¤ËÌõ¤¹¤ë¤Î¤ÏÉÔ¼«
-#Á³¤Ç¤¹¡£¤Þ¤¿¡¢»ØÎØÊª¸ì¤Ë¤Ä¤¤¤Æ¤Î¥È¡¼¥ë¥­¥ó¤ÎÏÃ¤·¤Ë¡Ø±Ñ¸ì¤È¥¨¥ë¥Õ¸ì¤ÎÂÐÈæ¤ò¡Ù
-#½Ð¤½¤¦¤È¤·¤¿¤È¸À¤¦¤³¤È¤Ç¤¹¤«¤é¡¢±Ñ¸ì¤ÏÆüËÜ¸ì¤ËÌõ¤·¡¢¥¨¥ë¥Õ¸ì¤Ï¥¨¥ë¥Õ¸ì¤È¤·
-#¤Æ»Ä¤·¤Æ¤ª¤¯¤Ù¤­¤Ç¤¹¡£»ØÎØÊª¸ì¤ÎÆüËÜ¸ìÈÇ¤Ç¤â´ðËÜÅª¤Ë¤³¤Î¹Í¤¨Êý¤Ë¤è¤Ã¤ÆÌõ¤µ
-#¤ì¤Æ¤¤¤Þ¤¹¤·¡£¤½¤ì¤Ë¡Ø¤Ä¤é¤é¡Ù¤Ï³Ê¹¥°­¤¤¤·ÀÞ¤ì¤½¤¦¤À(¾Ð)¡£
+#(“sX–Ú)
+#w‚Â‚ç‚çx‚Æ‚¢‚¤ƒXƒsƒA ¨ wƒAƒCƒOƒƒXx‚Æ‚¢‚¤ƒXƒsƒA
+#–Žw—Ö•¨Œê‚Å‚Í‚±‚¤•\‹L‚³‚ê‚Ä‚¢‚Ü‚·B
+#@we‚µ‚Ý‚ðo‚·‚½‚ß‚Éx“ú–{Œê‚Å‚ÆŒ¾‚í‚ê‚Ü‚µ‚½‚ªA‚»‚¤‚·‚é‚ÆƒGƒ‹ƒtŒê‘S•”‚ð
+#“ú–{Œê‚É–ó‚³‚È‚­‚Ä‚Í‚È‚è‚Ü‚¹‚ñBˆê•”‚¾‚¯ƒGƒ‹ƒtŒê‚©‚ç“ú–{Œê‚É–ó‚·‚é‚Ì‚Í•sŽ©
+#‘R‚Å‚·B‚Ü‚½AŽw—Ö•¨Œê‚É‚Â‚¢‚Ä‚Ìƒg[ƒ‹ƒLƒ“‚Ì˜b‚µ‚Éw‰pŒê‚ÆƒGƒ‹ƒtŒê‚Ì‘Î”ä‚ðx
+#o‚»‚¤‚Æ‚µ‚½‚ÆŒ¾‚¤‚±‚Æ‚Å‚·‚©‚çA‰pŒê‚Í“ú–{Œê‚É–ó‚µAƒGƒ‹ƒtŒê‚ÍƒGƒ‹ƒtŒê‚Æ‚µ
+#‚ÄŽc‚µ‚Ä‚¨‚­‚×‚«‚Å‚·BŽw—Ö•¨Œê‚Ì“ú–{Œê”Å‚Å‚àŠî–{“I‚É‚±‚Ìl‚¦•û‚É‚æ‚Á‚Ä–ó‚³
+#‚ê‚Ä‚¢‚Ü‚·‚µB‚»‚ê‚Éw‚Â‚ç‚çx‚ÍŠiDˆ«‚¢‚µÜ‚ê‚»‚¤‚¾(Î)B
 #
-N:187:¡Ø¥¢¥¤¥°¥í¥¹¡Ù
+N:187:wƒAƒCƒOƒƒXx
 E:'Aeglos'
 I:22:2:4
 W:15:45:80:140000
@@ -3286,13 +3286,13 @@ F:SLOW_DIGEST | ACTIVATE | BLESSED | SHOW_MODS
 U:BA_COLD_2
 D:$The mighty spear of Gil-galad, famed as "Snow-point" in the songs of Elves, 
 D:$against which all the foul corruptions of Sauron dashed in vain.
-D:¾åµé²¦¥®¥ë=¥¬¥é¥É¤Î¶¯ÎÏ¤ÊÁä¤Ç¡¢¡ÖÀã¤ÎÀÚÀè¡×¤È¤·¤ÆÌ¾¹â¤¤¡£
-D:¡Ö¤½¤Î·õ¤ÏÄ¹¤¯¡¢¤½¤ÎÁä¤Ï±Ô¤¯¡¢µ±¤¯³õ¤Ï¡¢±ó¤¯¤è¤êË¾¤ß¤¨¤¿¤ê¡£¡×
-D:¤È¥¨¥ë¥Õ¤Î²Î¤Ë²Î¤ï¤ì¤ë¤³¤ÎÁä¤Ë¤Ï¡¢
-D:¥µ¥¦¥í¥ó¤Î¤¤¤«¤Ê¤ë´÷¤Þ¤ï¤·¤¤²¼ËÍ¤É¤â¤â
-D:ÂÀÅáÂÇ¤Á¤Ç¤­¤Ê¤«¤Ã¤¿¡£
+D:ã‹‰‰¤ƒMƒ‹=ƒKƒ‰ƒh‚Ì‹­—Í‚È‘„‚ÅAuá‚ÌØæv‚Æ‚µ‚Ä–¼‚‚¢B
+D:u‚»‚ÌŒ•‚Í’·‚­A‚»‚Ì‘„‚Í‰s‚­A‹P‚­Š•‚ÍA‰“‚­‚æ‚è–]‚Ý‚¦‚½‚èBv
+D:‚ÆƒGƒ‹ƒt‚Ì‰Ì‚É‰Ì‚í‚ê‚é‚±‚Ì‘„‚É‚ÍA
+D:ƒTƒEƒƒ“‚Ì‚¢‚©‚È‚éŠõ‚Ü‚í‚µ‚¢‰º–l‚Ç‚à‚à
+D:‘¾“‘Å‚¿‚Å‚«‚È‚©‚Á‚½B
 
-N:188:¥Ü¥ê¥·¥ç¥¤¤Î
+N:188:ƒ{ƒŠƒVƒ‡ƒC‚Ì
 E:of Bolshoi
 I:21:2:4
 W:15:8:30:22500
@@ -3300,21 +3300,21 @@ P:0:2d6:6:9:0
 F:DEX | CHR | HIDE_TYPE | RIDING |
 F:KILL_ANIMAL | ESP_ANIMAL | BRAND_FIRE | ACTIVATE
 U:CHARM_ANIMAL
-D:Ë¿¹ñ¥µ¡¼¥«¥¹ÃÄ¤Ç»ÈÍÑ¤µ¤ì¤¿Í³½ïÀµ¤·¤¤ÌÔ½Ã»È¤¤¤Î¾Ú¤À¡£
-D:¤³¤Î¥à¥Á¤Î²»¤Ï¤É¤ó¤ÊÌÔ½Ã¤Ç¤â¿Ì¤¨¾å¤¬¤é¤»¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+D:–^‘ƒT[ƒJƒX’c‚ÅŽg—p‚³‚ê‚½—R³‚µ‚¢–ÒbŽg‚¢‚ÌØ‚¾B
+D:‚±‚Ìƒ€ƒ`‚Ì‰¹‚Í‚Ç‚ñ‚È–Òb‚Å‚àk‚¦ã‚ª‚ç‚¹‚é‚±‚Æ‚ª‚Å‚«‚éB
 
-N:189:ÇË²õ¤Î
+N:189:”j‰ó‚Ì
 E:of Destruction
 I:23:33:3
 W:70:8:30:100000
 P:0:3d6:-25:25:0
 F:STR | DEX | BLOWS | CHAOTIC | CURSED | HEAVY_CURSE | TY_CURSE | AGGRAVATE
 F:BRAND_FIRE | BRAND_COLD | BRAND_ELEC | BRAND_ACID | BRAND_POIS
-D:¶¯ÎÏ¤ÊÇË²õÎÏ¤ò¤Û¤³¤ë¡Ö¤Ï¤«¤¤¤Î¤Ä¤ë¤®¡×¤ÈÁÇÁá¤¯¹¶·â¤ò·«¤ê¤À¤¹
-D:¡Ö¤Ï¤ä¤Ö¤µ¤Î¤±¤ó¡×¤ò¹ç¤ï¤»¤¿Éð´ï¤À¡£¤³¤Î·õ¤ò»È¤¨¤ÐÇË²õ¿À¥·¥É¡¼¤òÅÝ¤¹¤³¤È¤Ê¤É
-D:ÀÖ»Ò¤Î¼ê¤òÇ±¤ë¤è¤¦¤Ê¤â¤Î¤À¡£
+D:‹­—Í‚È”j‰ó—Í‚ð‚Ù‚±‚éu‚Í‚©‚¢‚Ì‚Â‚é‚¬v‚Æ‘f‘‚­UŒ‚‚ðŒJ‚è‚¾‚·
+D:u‚Í‚â‚Ô‚³‚Ì‚¯‚ñv‚ð‡‚í‚¹‚½•Ší‚¾B‚±‚ÌŒ•‚ðŽg‚¦‚Î”j‰ó_ƒVƒh[‚ð“|‚·‚±‚Æ‚È‚Ç
+D:ÔŽq‚ÌŽè‚ð”P‚é‚æ‚¤‚È‚à‚Ì‚¾B
 
-N:190:¡Ø¥¹¥È¡¼¥à¥Ö¥ê¥ó¥¬¡¼¡Ù
+N:190:wƒXƒg[ƒ€ƒuƒŠƒ“ƒK[x
 E:'Stormbringer'
 I:23:30:2
 W:45:1:180:100000
@@ -3322,13 +3322,13 @@ P:0:6d6:16:16:0
 F:VAMPIRIC | STR | CON | FREE_ACT | HOLD_LIFE | RES_NETHER | RES_CONF |
 F:RES_CHAOS | CURSED | HEAVY_CURSE | DRAIN_EXP | AGGRAVATE | QUESTITEM
 F:SLAY_HUMAN |
-D:°ìËüÇ¯¤ÎÄ¹¤­¤Ë¤ï¤¿¤ê¡¢±É²Ú¤ò¸Ø¤ê¤·¥á¥ë¥Ë¥Ü¥Í¤Î¸÷¤ÎÄë¹ñ¤ÎËö´ü¡¢Âç¤¤¤Ê¤ë
-D:°ÛÊÑÅ·ÃÏ¤Ë¤¢¤ê¤Æ¡¢¿Í¤È¿À¡¹¤Î±¿Ì¿¤Ï¡Ò½ÉÌ¿¡Ó¤Î¤«¤Ê¤Æ¤³¤Î¾å¤ËÃÃ¤Ø¤é¤ì¡¢
-D:¶²¤í¤·¤­Àï¤µ¤¢¤ê¡¢¤â¤í¤â¤í¤Î·®¤·¹Ô¤Ê¤Ï¤ì¤¿¤ê¡£¤³¤Î¤È¤­¤¢¤Þ¤¿¤ÎÍ¦¼Ô
-D:ÇÚ½Ð¤»¤ê¡£¤Ê¤ì¤É½°¤ËÍ¥¤ì¤¿¤ë¤Ï¥á¥ë¥Ë¥Ü¥ÍºÇ¸å¤Î²¦¥¨¥ë¥ê¥Ã¥¯¡¢¥ë¡¼¥ó¤Î
-D:¹ï¤Þ¤ì¤·¹õ¤­·õ¤Î¤Ë¤Ê¤Ò¼ê¤Ê¤ê¤­¡£
+D:ˆê–œ”N‚Ì’·‚«‚É‚í‚½‚èA‰h‰Ø‚ðŒÖ‚è‚µƒƒ‹ƒjƒ{ƒl‚ÌŒõ‚Ì’é‘‚Ì––ŠúA‘å‚¢‚È‚é
+D:ˆÙ•Ï“V’n‚É‚ ‚è‚ÄAl‚Æ_X‚Ì‰^–½‚Íqh–½r‚Ì‚©‚È‚Ä‚±‚Ìã‚É’b‚Ö‚ç‚êA
+D:‹°‚ë‚µ‚«í‚³‚ ‚èA‚à‚ë‚à‚ë‚ÌŒM‚µs‚È‚Í‚ê‚½‚èB‚±‚Ì‚Æ‚«‚ ‚Ü‚½‚Ì—EŽÒ
+D:”yo‚¹‚èB‚È‚ê‚ÇO‚É—D‚ê‚½‚é‚Íƒƒ‹ƒjƒ{ƒlÅŒã‚Ì‰¤ƒGƒ‹ƒŠƒbƒNAƒ‹[ƒ“‚Ì
+D:‚Ü‚ê‚µ•‚«Œ•‚Ì‚É‚È‚ÐŽè‚È‚è‚«B
 
-N:191:¡Ø¥Ê¥ë¥·¥ë¡Ù
+N:191:wƒiƒ‹ƒVƒ‹x
 E:'Narsil'
 I:23:2:1
 W:20:4:130:20000
@@ -3337,65 +3337,65 @@ F:STR | BLOWS | HIDE_TYPE |
 F:SLAY_ORC | SLAY_TROLL | RES_FIRE
 D:$A blade of Elendil that was broken by his fall as the battled Sauron upon
 D:$ the steps of Barad-Dur.
-D:¡Ö¶â¤Ï¤¹¤Ù¤Æ¸÷¤ë¤È¤Ï¸Â¤é¤Ì¡¢
-D:ÊüÏ²¤¹¤ë¼Ô¤¹¤Ù¤Æ¤¬¡¢¤Þ¤è¤¦¼Ô¤Ç¤Ï¤Ê¤¤¡£
-D:Ç¯¤Õ¤ë¤â¡¢¶¯¤­¤Ï¸Ï¤ì¤Ì¡¢
-D:¿¼¤­º¬¤Ë¡¢Áú¤ÏÆÏ¤«¤Ì¡£
-D:³¥¤ÎÃæ¤«¤é²Ð¤Ï¤è¤ß¤¬¤¨¤ê¡¢
-D:±Æ¤«¤é¸÷¤ê¤¬¤µ¤·¤¤¤º¤ë¤À¤í¤¦¡£
-D:ÀÞ¤ì¤¿¿Ï¤Ï¡¢¿·¤¿¤Ë¸¦¤¬¤ì¡¢
-D:Ìµ´§¤Î¼Ô¤¬¡¢¤Þ¤¿²¦¤È¤Ê¤í¤¦¡£¡×
+D:u‹à‚Í‚·‚×‚ÄŒõ‚é‚Æ‚ÍŒÀ‚ç‚ÊA
+D:•ú˜Q‚·‚éŽÒ‚·‚×‚Ä‚ªA‚Ü‚æ‚¤ŽÒ‚Å‚Í‚È‚¢B
+D:”N‚Ó‚é‚àA‹­‚«‚ÍŒÍ‚ê‚ÊA
+D:[‚«ª‚ÉA‘š‚Í“Í‚©‚ÊB
+D:ŠD‚Ì’†‚©‚ç‰Î‚Í‚æ‚Ý‚ª‚¦‚èA
+D:‰e‚©‚çŒõ‚è‚ª‚³‚µ‚¢‚¸‚é‚¾‚ë‚¤B
+D:Ü‚ê‚½n‚ÍAV‚½‚ÉŒ¤‚ª‚êA
+D:–³Š¥‚ÌŽÒ‚ªA‚Ü‚½‰¤‚Æ‚È‚ë‚¤Bv
 
-N:192:¡ØGHB ¤òÅÝ¤·¤¿¤±¤É¤³¤ó¤Ê·ù¤Ê£Ô¥·¥ã¥Ä¤·¤«¼ê¤ËÆþ¤é¤Ê¤«¤Ã¤¿¤è¡ª¡Ù
+N:192:wGHB ‚ð“|‚µ‚½‚¯‚Ç‚±‚ñ‚ÈŒ™‚È‚sƒVƒƒƒc‚µ‚©Žè‚É“ü‚ç‚È‚©‚Á‚½‚æIx
 E:'I killed the GHB and all I got was this lousy t-shirt!'
 I:36:0:0
 W:0:0:10:1
 P:1:1d1:0:0:0
 F:QUESTITEM
 
-N:193:Èþñù¸ø´Ø±©¤Î
+N:193:”üé™ŒöŠÖ‰H‚Ì
 E:of Guan Yu
 I:23:22:3
 W:60:60:320:200000
 P:0:4d5:20:20:5
 F:STR | DEX | CON | SLAY_EVIL | SLAY_HUMAN |
 F:VORPAL | SHOW_MODS
-D:Ë­¤«¤Êñù¤òÃß¤¨¤¿µÁ¿Í¡¦´Ø±©¤Ï¤³¤ÎÀÄÎ¶Åá¤ÇÂ¿¤¯¤Î¹ë·æ¤òÃÏ¤Ë
-D:Ã¡¤­Éú¤»¤ÆÍè¤¿¡£
+D:–L‚©‚Èé™‚ð’~‚¦‚½‹`lEŠÖ‰H‚Í‚±‚ÌÂ—´“‚Å‘½‚­‚Ì‹Œ†‚ð’n‚É
+D:’@‚«•š‚¹‚Ä—ˆ‚½B
 
-N:194:¼òÆÝÆ¸»Ò¤Î
+N:194:Žð“Û“¶Žq‚Ì
 E:of Shuten-douji
 I:21:16:6
 W:40:40:350:100000
 P:0:4d7:0:20:10
 F:STR | RES_FEAR
-D:Âç¹¾»³¤Îµ´¤Î¼óÎÎ¤¿¤ë¼òÆÝÆ¸»Ò¤Î½Å¤¤¶âËÀ¤À¡£
+D:‘å]ŽR‚Ì‹S‚ÌŽñ—Ì‚½‚éŽð“Û“¶Žq‚Ìd‚¢‹à–_‚¾B
 
-N:195:¡Ø¥´¡¼¥ë¥Ç¥ó¥Ï¥ó¥Þ¡¼¡Ù
+N:195:wƒS[ƒ‹ƒfƒ“ƒnƒ“ƒ}[x
 E:'Golden Hammer'
 I:21:19:0
 W:45:5:50:300000
 P:0:2d6:0:0:0
-D:¤³¤Î¥Ï¥ó¥Þ¡¼¤òÍÑ¤¤¤ë¤ÈÅð¤Þ¤ì¤¿¥¢¥¤¥Æ¥à¤¬¼è¤êÌá¤»¤ë¤é¤·¤¤¡£
+D:‚±‚Ìƒnƒ“ƒ}[‚ð—p‚¢‚é‚Æ“‚Ü‚ê‚½ƒAƒCƒeƒ€‚ªŽæ‚è–ß‚¹‚é‚ç‚µ‚¢B
 
-N:196:¡Ø¥°¥ê¥à¥È¥¥¡¼¥¹¡Ù
+N:196:wƒOƒŠƒ€ƒgƒD[ƒXx
 E:'Grimtooth'
 I:23:4:1
 W:7:15:12:25000
 P:0:1d4:5:5:0
 F:DEX | BLOWS | BRAND_POIS | SHOW_MODS | THROW
 
-N:197:¥Ú¥ë¥»¥¦¥¹¤Î
+N:197:ƒyƒ‹ƒZƒEƒX‚Ì
 E:of Perseus
 I:34:3:2
 W:30:10:65:45000
 P:5:1d2:0:0:15
 F:STR | RES_ACID | RES_COLD | RES_FEAR |
 F:REFLECT | SUST_STR | 
-D:¼Ø¤ÎÈ±¤ò»ý¤Ä¥á¥É¥¥¡¼¥µ¤ÎÀÐ²½¤ÎâË¤ß¤â¡¢¤³¤ÎÈ¿¼Í¤Î½â¤ÎÁ°¤Ë¤Ï
-D:¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£
+D:ŽÖ‚Ì”¯‚ðŽ‚ÂƒƒhƒD[ƒT‚ÌÎ‰»‚ÌáÉ‚Ý‚àA‚±‚Ì”½ŽË‚Ì‚‚Ì‘O‚É‚Í
+D:Œø‰Ê‚ª‚È‚©‚Á‚½B
 
-N:198:È´¤±Ç¦¥«¥à¥¤¤Î
+N:198:”²‚¯”EƒJƒ€ƒC‚Ì
 E:of Kamui the Escapee
 I:23:19:4
 W:20:8:100:60000
@@ -3404,7 +3404,7 @@ F:DEX | STEALTH | SEARCH | RES_FIRE | BRAND_POIS |
 F:ACTIVATE | SEE_INVIS | SHOW_MODS | WARNING
 U:TELEPORT
 
-N:199:¡Ø¥Ö¥é¥Ã¥Ç¥£¡¦¥à¡¼¥ó¡Ù
+N:199:wƒuƒ‰ƒbƒfƒBEƒ€[ƒ“x
 E:'Bloody Moon'
 I:22:30:2
 W:70:12:250:180000
@@ -3412,15 +3412,15 @@ P:0:8d4:8:8:8
 F:ACTIVATE | SHOW_MODS
 U:BLOODY_MOON
 
-N:200:¥À
+N:200:ƒ_
 E:'Dasai'
 I:36:8:-10
 W:20:3:110:0
 P:8:1d1:-1:0:64
 F:AGGRAVATE | SUST_CHR | CHR
-D:¤Ê¤ó¤È¥´¥Ä¥´¥Ä¤È¤·¤¿³»¤À¤³¤È¡£
+D:‚È‚ñ‚ÆƒSƒcƒSƒc‚Æ‚µ‚½ŠZ‚¾‚±‚ÆB
 
-N:201:¡ØÀÄÎ¶¤ÎÎîÎÚ¡Ù
+N:201:wÂ—´‚Ì—ì—Øx
 E:'Elemental of Ching-Rong'
 I:38:2:0
 W:80:9:300:200000
@@ -3429,10 +3429,10 @@ F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC |
 F:RES_DARK | RES_CONF | RES_POIS |
 F:FREE_ACT | SEE_INVIS | ACTIVATE
 U:RESIST_ALL
-D:¸¼Éð¡¢Çò¸×¡¢¼ë¿ý¤È¤È¤â¤Ë»Í½Ã¤È¸Æ¤Ð¤ì¤ëÀÄÎ¶¤ÎÎÚ³»¤ò
-D:¿È¤ËÅ»¤¨¤Ð¡¢¿À¤ÎÇ¡¤­¼é¸î¤ÎÎÏ¤¬ÆÀ¤é¤ì¤ë¡£
+D:Œº•A”’ŒÕAŽé‚Æ‚Æ‚à‚ÉŽlb‚ÆŒÄ‚Î‚ê‚éÂ—´‚Ì—ØŠZ‚ð
+D:g‚É“Z‚¦‚ÎA_‚Ì”@‚«ŽçŒì‚Ì—Í‚ª“¾‚ç‚ê‚éB
 
-N:202:¡ØÅ·¤Î¾ÂÌ·¡Ù
+N:202:w“V‚ÌÀ–µx
 E:'Ama-no-NumaHoko'
 I:22:4:4
 W:50:40:240:150000
@@ -3442,16 +3442,16 @@ F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD |
 F:RES_ACID | RES_COLD | RES_BLIND | RES_CHAOS |
 F:LITE | ACTIVATE | BLESSED | SEE_INVIS | SHOW_MODS
 U:BA_WATER
-D:¡ÖÀ§¤ËÅ·¤Ä¿À¡¢½ô¤ÎÌ¿°Ê¤Á¤Æ¡¢°Ë¼ÙÆá´ôÌ¿¡¢°Ë¼ÙÆáÈþÌ¿¡¢
-D:ÆóÃì¤Î¿À¤Ë¡¢¡ØÀ§¤ÎÂ¿ÂËÍÑÊÀÎ®¹ñ¤ò½¤¤áÍý¤ê¸Ç¤áÀ®¤»¡£¡Ù
-D:¤È¾Û¤ê¤Æ¡¢Å·¤Î¾ÂÌ·¤ò»ò¤Ò¤Æ¡¢¸À°Í¤µ¤·»ò¤Ò¤­¡£¸Î¡¢ÆóÃì
-D:¤Î¿À¡¢Å·¤ÎÉâ¶¶¤ËÎ©¤¿¤·¤Æ¡¢¤½¤Î¾ÂÌ·¤ò»Ø¤·²¼¤í¤·¤Æ²è¤­
-D:¤¿¤Þ¤Ø¤Ð¡¢±öµö¡¹êÏ¡¹Ï¤¡¹Æö²è¤­ÌÄ¤·¤Æ°ú¤­¾å¤²¤¿¤Þ¤Õ»þ¡¢
-D:Â¶¤ÎÌ·¤ÎËö¤è¤ê¿â¤êÍî¤Ä¤ë±ö¡¢Îß¤Ê¤êÀÑ¤â¤ê¤ÆÅç¤ÈÀ®¤ê¤­¡£
-D:À§¤ìÞËÇ½¸ëÏ¤Åç¤Ê¤ê¡£¡×(¸Å»öµ­)¡£ 
+D:u¥‚É“V‚Â_A”‚Ì–½ˆÈ‚¿‚ÄAˆÉŽ×“ßŠò–½AˆÉŽ×“ß”ü–½A
+D:“ñ’Œ‚Ì_‚ÉAw¥‚Ì‘½‘É—p•¾—¬‘‚ðC‚ß—‚èŒÅ‚ß¬‚¹Bx
+D:‚ÆÙ‚è‚ÄA“V‚ÌÀ–µ‚ðŽ’‚Ð‚ÄAŒ¾ˆË‚³‚µŽ’‚Ð‚«BŒÌA“ñ’Œ
+D:‚Ì_A“V‚Ì•‚‹´‚É—§‚½‚µ‚ÄA‚»‚ÌÀ–µ‚ðŽw‚µ‰º‚ë‚µ‚Ä‰æ‚«
+D:‚½‚Ü‚Ö‚ÎA‰–‹–XåÍX˜CX“ô‰æ‚«–Â‚µ‚Äˆø‚«ã‚°‚½‚Ü‚ÓŽžA
+D:‘´‚Ì–µ‚Ì––‚æ‚è‚‚è—Ž‚Â‚é‰–A—Ý‚È‚èÏ‚à‚è‚Ä“‡‚Æ¬‚è‚«B
+D:¥‚êŸÉ”\Œé˜C“‡‚È‚èBv(ŒÃŽ–‹L)B 
 
-# ¥â¡¼¥í¥Ã¥¯¤Î¹âÁÎ¤Î»¬¤Ó¤¿º¿¤«¤¿¤Ó¤é
-N:203:¥â¡¼¥í¥Ã¥¯¤Î¹âÁÎ¤Î
+# ƒ‚[ƒƒbƒN‚Ì‚‘m‚ÌŽK‚Ñ‚½½‚©‚½‚Ñ‚ç
+N:203:ƒ‚[ƒƒbƒN‚Ì‚‘m‚Ì
 E:of The High Preist of Morlok
 I:37:1:-2
 W:90:8:200:100000
@@ -3460,12 +3460,12 @@ F:INT | WIS | CHR | HIDE_TYPE | RES_LITE | RES_DARK |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
 F:RES_POIS | RES_CONF | RES_CHAOS | RES_NETHER |
 F:RES_NEXUS | AGGRAVATE | CURSED | HEAVY_CURSE | TY_CURSE
-D:¤³¤ÎÀÖ¡¹¤È»¬¤Ó¤¿º£¤Ë¤âÊø¤ìµî¤ê¤½¤¦¤Êº¿¤«¤¿¤Ó¤é¤Ë¤Ï¡¢
-D:¤«¤Ä¤Æ¶ò¤«¤Ë¤â¼é¸î¤¹¤ëËâ½ü¤±¤òÃ¥¤ï¤ìµà¤Á²Ì¤Æ¤¿¡¢
-D:ÂÀ¸Å¤Î¹âÁÎ¤Î±åÇ°¤¬¤³¤â¤Ã¤Æ¤¤¤ë¡£
+D:‚±‚ÌÔX‚ÆŽK‚Ñ‚½¡‚É‚à•ö‚ê‹Ž‚è‚»‚¤‚È½‚©‚½‚Ñ‚ç‚É‚ÍA
+D:‚©‚Â‚Ä‹ð‚©‚É‚àŽçŒì‚·‚é–‚œ‚¯‚ð’D‚í‚ê‹€‚¿‰Ê‚Ä‚½A
+D:‘¾ŒÃ‚Ì‚‘m‚Ì‰…”O‚ª‚±‚à‚Á‚Ä‚¢‚éB
 
-# ¹Ë³»¡Ø²½¾Ñ²ó¤·¡Ù
-N:204:¡Ø²½¾Ñ²ó¤·¡Ù
+# jŠZw‰»Ï‰ñ‚µx
+N:204:w‰»Ï‰ñ‚µx
 E:'Sumo wrestler's loincloth'
 I:36:9:4
 W:20:10:60:50000
@@ -3473,34 +3473,34 @@ P:4:0d0:0:0:0
 F:STR | CON | SUST_STR | SUST_CON |
 F:RES_FEAR | FREE_ACT | ACTIVATE
 U:SHIKOFUMI
-D:ÍÚ¤«Åì¤Î¹ñ¤Î¥¹¥â¡¼Àï»Î¤¬¿È¤Ë¤Ä¤±¤ëÀµÁõ¤À¡£
-D:¤½¤Î¹ë²Ú¤ÊÊõ¾þ¤ÏÎÏ¶¯¤µ¤ò´¶¤¸¤µ¤»¤ë¡£
+D:—y‚©“Œ‚Ì‘‚ÌƒXƒ‚[íŽm‚ªg‚É‚Â‚¯‚é³‘•‚¾B
+D:‚»‚Ì‹‰Ø‚È•óü‚Í—Í‹­‚³‚ðŠ´‚¶‚³‚¹‚éB
 
-N:205:ËÌ¶Ë¤ÎÀ»½Ã¥à¥Ã¥¯¤Î
+N:205:–k‹É‚Ì¹bƒ€ƒbƒN‚Ì
 E:of Mook
 I:35:3:0
 W:20:20:30:50000
 P:3:0d0:0:0:20
 F:RES_COLD | RES_ACID | RES_CHAOS | LEVITATION | ACTIVATE
 U:RESIST_COLD
-D:¥¬¥Á¥ã¥Ô¥ó¤ÈÂÐ¤ò¤Ê¤¹ÀÖ¤¤½Ã¤ÎÌÓÈé¤Î¥¯¥í¡¼¥¯¤À¡£
+D:ƒKƒ`ƒƒƒsƒ“‚Æ‘Î‚ð‚È‚·Ô‚¢b‚Ì–Ñ”ç‚ÌƒNƒ[ƒN‚¾B
 
-# ¶âÂ°À½¥é¥á¥é¡¼¡¦¥¢¡¼¥Þ¡¼¡Ø¥Ð¥Æ¥ì¥ó³»¡Ù
-# ¡ÖÌ´¸¸¤ÎÇ¡¤¯¡×¤È¤¤¤¦Ì¡²è¤Ç¡¤¿¥ÅÄ¿®Ä¹¤¬À¾ÍÎ³»¤òÃå¤Þ¤¹¡£
-# REFLECT¤Ï¡¤Ìð¤Ç¤âÅ´Ë¤¤Ç¤â»ý¤Ã¤ÆÍè¤¤¡ª¤Ã¤Æ¤³¤È¤Ç(¾Ð)¡£
-N:206:¡Ø¥Ð¥Æ¥ì¥ó³»¡Ù
+# ‹à‘®»ƒ‰ƒƒ‰[EƒA[ƒ}[wƒoƒeƒŒƒ“ŠZx
+# u–²Œ¶‚Ì”@‚­v‚Æ‚¢‚¤–Ÿ‰æ‚ÅCD“cM’·‚ª¼—mŠZ‚ð’…‚Ü‚·B
+# REFLECT‚ÍC–î‚Å‚à“S–C‚Å‚àŽ‚Á‚Ä—ˆ‚¢I‚Á‚Ä‚±‚Æ‚Å(Î)B
+N:206:wƒoƒeƒŒƒ“ŠZx
 E:of The Padre
 I:37:13:2
 W:45:5:340:80000
 P:23:1d6:5:5:17
 F:CHR | REFLECT |
 F:RES_FIRE | RES_CHAOS | LITE
-D:¿¥ÅÄ¿®Ä¹¤Î°¦ÍÑ¤·¤¿¸÷¤êµ±¤¯À¾ÍÎ¤Î³»¤À¡£
+D:D“cM’·‚Ìˆ¤—p‚µ‚½Œõ‚è‹P‚­¼—m‚ÌŠZ‚¾B
 
-# ¥°¥ì¡¼¥È¡¦¥½¡¼¥É¡Ø¿¿Ëâ¹äÎµ·õ¡Ù (from ¥À¥¤¤ÎÂçËÁ¸±)
-# ¥À¥¤¤Î¿ÆÉã¡¤Îµµ³¾­¥Ð¥é¥ó¤Î·õ¡£
-# È¯Æ°¤Ç¥µ¥ó¥À¡¼¥Ü¡¼¥ë(¥®¥¬¡¦¥Ö¥ì¥¤¥¯¤Î¤Ä¤â¤ê)
-N:207:¡Ø¿¿Ëâ¹äÎµ·õ¡Ù
+# ƒOƒŒ[ƒgEƒ\[ƒhw^–‚„—³Œ•x (from ƒ_ƒC‚Ì‘å–`Œ¯)
+# ƒ_ƒC‚Ìe•ƒC—³‹R«ƒoƒ‰ƒ“‚ÌŒ•B
+# ”­“®‚ÅƒTƒ“ƒ_[ƒ{[ƒ‹(ƒMƒKEƒuƒŒƒCƒN‚Ì‚Â‚à‚è)
+N:207:w^–‚„—³Œ•x
 E:'Dragonic Sword'
 I:23:25:3
 W:50:160:200:180000
@@ -3509,10 +3509,10 @@ F:STR | SLAY_EVIL | SLAY_DEMON | BRAND_ELEC |
 F:RES_ELEC | RES_FIRE | RES_NETHER |
 F:LITE | SEE_INVIS | SHOW_MODS | ACTIVATE
 U:BA_ELEC_3
-D:Å·ÃÏËâ³¦¤Î¥Ð¥é¥ó¥¹¤òÊÝ¤Ä»ÈÌ¿¤ò»ý¤ÄÎµ¤Îµ³»Î¤ËÂå¡¹ÅÁ¤ï¤ë
-D:¥ª¥ê¥Ï¥ë¥³¥ó¤Î·õ¤Ç¡¢Îµµ³¾­¥Ð¥é¥ó¤¬½êÍ­¤·¤Æ¤¤¤ë¡£
+D:“V’n–‚ŠE‚Ìƒoƒ‰ƒ“ƒX‚ð•Û‚ÂŽg–½‚ðŽ‚Â—³‚Ì‹RŽm‚É‘ãX“`‚í‚é
+D:ƒIƒŠƒnƒ‹ƒRƒ“‚ÌŒ•‚ÅA—³‹R«ƒoƒ‰ƒ“‚ªŠ—L‚µ‚Ä‚¢‚éB
 
-N:208:¡Ø¥¤¡¼¥¸¥¹¡¦¥Õ¥¡¥ó¥°¡Ù
+N:208:wƒC[ƒWƒXEƒtƒ@ƒ“ƒOx
 E:'Aegis Fang'
 I:21:8:2
 W:30:40:100:100000
@@ -3521,15 +3521,15 @@ F:STR | DEX | CHR | TUNNEL | BLESSED |
 F:SLAY_EVIL | SLAY_DRAGON | SLAY_ORC | SLAY_GIANT | SLAY_DEMON |
 F:RES_COLD | SEE_INVIS | RES_FEAR | REGEN
 U:HELO
-D:¥Ð¥È¥ë¥Ï¥ó¥Þ¡¼»áÂ²¤Î¥É¥ï¡¼¥Õ¤ÎÄ¹¤Ë¤·¤Æ¡¢ÅÁÀâ¤ÎÅÔ¥ß¥¹¥ê¥ë¡¦¥Û¡¼¥ë¤Î²¦¡¢
-D:¥Ö¥ë¡¼¥Î¡¼¡¦¥Ð¥È¥ë¥Ï¥ó¥Þ¡¼¤ÎÀ¸³¶ºÇ¹â·æºî¤À¡£
-D:¡Ö¤Ê¤ë¤Û¤É¤Í¡×¥É¥ê¥Ã¥º¥É¤Ï¡¢¥Ï¥ó¥Þ¡¼¤ò¥Ö¥ë¡¼¥Î¡¼¤ËÊÖ¤·¤¿¡£
-D:¡Ö¸Å¤¤¥Ï¥ó¥Þ¡¼¤«¡£¤¢¤Î»Ò¤Ë¤Ï¤Á¤ç¤¦¤É¤¤¤¤¤«¤â¤Ê¡£¥ß¥¹¥ê¥ë¤ä¡¢¥¢¥À¥Þ¥ó
-D:¥¿¥¤¥È¤ä¡¢¥À¥¤¥¢¥â¥ó¥É¤ò¤ï¤¶¤ï¤¶»È¤Ã¤Æ¤¢¤ë¤¯¤é¤¤¤À¤â¤Î¤Ê¡×
-D:¡ÊÉÙ»Î¸«½ñË¼¡Ö¥¢¥¤¥¹¥¦¥¤¥ó¥É¡¦¥µ¡¼¥¬£±ËâÀÐ¤ÎÉü³è¡× R¡¦A¡¦¥µ¥ë¥ô¥¡¥È¡¼¥ìÃø¡¢
-D:É÷¸«½áÌõ¡Ë
+D:ƒoƒgƒ‹ƒnƒ“ƒ}[Ž‘°‚Ìƒhƒ[ƒt‚Ì’·‚É‚µ‚ÄA“`à‚Ì“sƒ~ƒXƒŠƒ‹Eƒz[ƒ‹‚Ì‰¤A
+D:ƒuƒ‹[ƒm[Eƒoƒgƒ‹ƒnƒ“ƒ}[‚Ì¶ŠUÅ‚Œ†ì‚¾B
+D:u‚È‚é‚Ù‚Ç‚ËvƒhƒŠƒbƒYƒh‚ÍAƒnƒ“ƒ}[‚ðƒuƒ‹[ƒm[‚É•Ô‚µ‚½B
+D:uŒÃ‚¢ƒnƒ“ƒ}[‚©B‚ ‚ÌŽq‚É‚Í‚¿‚å‚¤‚Ç‚¢‚¢‚©‚à‚ÈBƒ~ƒXƒŠƒ‹‚âAƒAƒ_ƒ}ƒ“
+D:ƒ^ƒCƒg‚âAƒ_ƒCƒAƒ‚ƒ“ƒh‚ð‚í‚´‚í‚´Žg‚Á‚Ä‚ ‚é‚­‚ç‚¢‚¾‚à‚Ì‚Èv
+D:i•xŽmŒ©‘–[uƒAƒCƒXƒEƒCƒ“ƒhEƒT[ƒK‚P–‚Î‚Ì•œŠˆv REAEƒTƒ‹ƒ”ƒ@ƒg[ƒŒ’˜A
+D:•—Œ©–ój
 
-N:209:¡Ø±£¼Ô¤Î»ç¡Ù
+N:209:w‰BŽÒ‚ÌŽ‡x
 E:'hermit's purple'
 I:21:2:2
 W:40:40:30:40000
@@ -3537,22 +3537,22 @@ P:0:1d6:10:5:0
 F:INT | WIS | FORCE_WEAPON |
 F:SEE_INVIS | TELEPATHY
 U:PROT_EVIL
-D:È¾Í©ÂÎ²½¤·¤¿ÉÔ»×µÄ¤Ê°ñ¤ÎÊÜ¤À¡£½êÍ­¼Ô¤ÎÀº¿ÀÎÏ¤ò¹¶·âÎÏ¤ËÊÑ´¹¤·¡¢
-D:ÇÈÌæ¤ÎÎÏ¤Ç¿È¤ò¼é¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-D:¿È¤Ë¤Ä¤±¤ë¤È±ó¤¤¾ì½ê¤Î½ÐÍè»ö¤¬¤ï¤«¤ë¡£
+D:”¼—H‘Ì‰»‚µ‚½•sŽv‹c‚Èˆï‚Ì•Ú‚¾BŠ—LŽÒ‚Ì¸_—Í‚ðUŒ‚—Í‚É•ÏŠ·‚µA
+D:”g–ä‚Ì—Í‚Åg‚ðŽç‚é‚±‚Æ‚ª‚Å‚«‚éB
+D:g‚É‚Â‚¯‚é‚Æ‰“‚¢êŠ‚Ìo—ˆŽ–‚ª‚í‚©‚éB
 
-N:210:¡Ø±ê¤ÎÅ´¥²¥¿¡Ù
+N:210:w‰Š‚Ì“SƒQƒ^x
 E:'Tetsu-geta of Flame'
 I:30:6:-1
 W:20:15:150:40000
 P:6:1d1:-5:10:20
 F:INT | WIS | CHR | STEALTH | SPEED | RES_FIRE |
 F:SUST_STR | SUST_CON | SH_FIRE | REGEN | RES_FEAR
-D:¸ÅÍè¤è¤êÅÁ¤ï¤ë¡¢ÃË¤òËá¤¯¤¿¤á¤Î·¤¤À¡£
-D:¤Õ¤À¤ó¿È¤ËÉÕ¤±¤Æ¤¤¤ì¤Ð¡¢³°¤·¤¿¤È¤­¤Ë¼«Ê¬¤Î¤«¤é¤À¤¬±©º¬¤Î¤è¤¦¤Ë
-D:·Ú¤¯´¶¤¸¤é¤ì¤ë¤À¤í¤¦¡£
+D:ŒÃ—ˆ‚æ‚è“`‚í‚éA’j‚ð–‚­‚½‚ß‚ÌŒC‚¾B
+D:‚Ó‚¾‚ñg‚É•t‚¯‚Ä‚¢‚ê‚ÎAŠO‚µ‚½‚Æ‚«‚ÉŽ©•ª‚Ì‚©‚ç‚¾‚ª‰Hª‚Ì‚æ‚¤‚É
+D:Œy‚­Š´‚¶‚ç‚ê‚é‚¾‚ë‚¤B
 
-N:211:¥Ê¥¤¥ó¤Î
+N:211:ƒiƒCƒ“‚Ì
 E:of Nain
 I:20:7:6
 W:60:5:250:80000
@@ -3565,17 +3565,17 @@ U:STONE_MUD
 D:$Wielded by Nain of the Iron Hills at the Battle of Azanulbizar, this great 
 D:$mattock brought victory to the Dwarves over Azog's Orcs - though Nain 
 D:$himself fell at the last, even with victory already assured.
-D:¥¢¥¶¥Ì¥ë¥Ó¥¶¡¼¥ë¤ÎÀï¤¤¤Ë¤ª¤¤¤Æ¡¢¥¹¥í¡¼¥ë²¦¤Î
-D:µØ¤òÆ¤¤Ä¤¿¤á¥¢¥¾¥°¤Ë·èÆ®¤òÄ©¤ó¤À¥Ê¥¤¥ó¤¬
-D:»È¤Ã¤Æ¤¤¤¿¤Ä¤ë¤Ï¤·¤À¡£
-D:¡Ö¤¹¤ë¤È¤½¤Î»þ¡¢¤¯¤í¤¬¤ÍÏ¢»³¤Î°ìÂ²¤¬¤ä¤Ã¤ÆÍè¤Æ¡¢
-D:¿ë¤ËÀï¶É¤ò°ìÊÑ¤µ¤»¤¿¤Î¤Ç¤¢¤ë¡£Àï¾ì¤ËÃÙ¤ì¤Æ¿·¤¿¤ËÅþÃå¤·¤¿
-D:¥°¥í¡¼¥ë¤ÎÂ©»Ò¥Ê¥¤¥ó¤ÎÎ¨¤¤¤ë¡¢º¿¤«¤¿¤Ó¤é¤Ë¿È¤ò¸Ç¤á¤¿Àï»Î¤¿¤Á¤Ï
-D:¡Ø¥¢¥¾¥°¡ª¥¢¥¾¥°¡ª¡Ù¤È¸Æ¤Ð¤ï¤ê¡¢Á°¤ËÎ©¤Á¤Ï¤À¤«¤ë¼Ô¤¬¤¢¤ì¤Ð
-D:¤Ä¤ë¤Ï¤·¤ÇÅö¤¿¤ë¤ò¤µ¤¤¤ï¤¤»Â¤êÅÝ¤·¤Ê¤¬¤é¡¢¥ª¡¼¥¯¤¿¤Á¤Î´Ö¤ò
-D:¥â¥ê¥¢¤ÎÆþ¸ý¤Ë¸þ¤«¤Ã¤ÆÆÍ¿Ê¤·¤Æ¤¤¤Ã¤¿¡£¡×
+D:ƒAƒUƒkƒ‹ƒrƒU[ƒ‹‚Ìí‚¢‚É‚¨‚¢‚ÄAƒXƒ[ƒ‹‰¤‚Ì
+D:‹w‚ð“¢‚Â‚½‚ßƒAƒ]ƒO‚ÉŒˆ“¬‚ð’§‚ñ‚¾ƒiƒCƒ“‚ª
+D:Žg‚Á‚Ä‚¢‚½‚Â‚é‚Í‚µ‚¾B
+D:u‚·‚é‚Æ‚»‚ÌŽžA‚­‚ë‚ª‚Ë˜AŽR‚Ìˆê‘°‚ª‚â‚Á‚Ä—ˆ‚ÄA
+D:‹‚Éí‹Ç‚ðˆê•Ï‚³‚¹‚½‚Ì‚Å‚ ‚éBíê‚É’x‚ê‚ÄV‚½‚É“ž’…‚µ‚½
+D:ƒOƒ[ƒ‹‚Ì‘§ŽqƒiƒCƒ“‚Ì—¦‚¢‚éA½‚©‚½‚Ñ‚ç‚Ég‚ðŒÅ‚ß‚½íŽm‚½‚¿‚Í
+D:wƒAƒ]ƒOIƒAƒ]ƒOIx‚ÆŒÄ‚Î‚í‚èA‘O‚É—§‚¿‚Í‚¾‚©‚éŽÒ‚ª‚ ‚ê‚Î
+D:‚Â‚é‚Í‚µ‚Å“–‚½‚é‚ð‚³‚¢‚í‚¢Ža‚è“|‚µ‚È‚ª‚çAƒI[ƒN‚½‚¿‚ÌŠÔ‚ð
+D:ƒ‚ƒŠƒA‚Ì“üŒû‚ÉŒü‚©‚Á‚Ä“Ëi‚µ‚Ä‚¢‚Á‚½Bv
 
-N:212:¥Ð¥ë¥í¥°¤ÎÄ¹¥´¥¹¥â¥°¤Î
+N:212:ƒoƒ‹ƒƒO‚Ì’·ƒSƒXƒ‚ƒO‚Ì
 E:of Gothmog
 I:21:2:-2
 W:60:35:90:66666
@@ -3588,10 +3588,10 @@ F:ACTIVATE | SHOW_MODS
 U:BA_FIRE_2
 D:$With this unbearably bright whip of flame, the Balrog Gothmog has become
 D:$ known for never having lost in combat.
-D:¤³¤ÎÀµ»ë¤¹¤ë¤â¤«¤Ê¤ï¤ÌâÁ¤¤±ê¤Î¥à¥Á¤ò¤Ò¤È¤¿¤Ó¼ê¤Ë¼è¤ì¤Ð¡¢
-D:¥Ð¥ë¥í¥°¤ÎÄ¹¥´¥º¥â¥°¤ÏÀï¤Ë¤ª¤¤¤ÆÉé¤±ÃÎ¤é¤º¤Ç¤¢¤Ã¤¿¡£
+D:‚±‚Ì³Ž‹‚·‚é‚à‚©‚È‚í‚Êá¿‚¢‰Š‚Ìƒ€ƒ`‚ð‚Ð‚Æ‚½‚ÑŽè‚ÉŽæ‚ê‚ÎA
+D:ƒoƒ‹ƒƒO‚Ì’·ƒSƒYƒ‚ƒO‚Íí‚É‚¨‚¢‚Ä•‰‚¯’m‚ç‚¸‚Å‚ ‚Á‚½B
 
-N:213:Å·À­»ûÀ»ÃÏÂ¢Âº¤ÎÏ»´Ä
+N:213:“V«Ž›¹’n‘ ‘¸‚Ì˜ZŠÂ
 E:of The Bonze Octopus
 I:21:7:2
 W:35:40:70:125000
@@ -3599,13 +3599,13 @@ P:0:1d7:8:8:8
 F:STR | WIS | BLOWS | TUNNEL | ACTIVATE | RES_ACID | RES_ELEC
 F:REGEN | FREE_ACT | BRAND_ELEC | BLESSED | XTRA_H_RES
 U:SUMMON_OCTOPUS
-D:¤½¤ÎÀÎ¡¢Âý¤ò°ú¤­Ï¢¤ì¤Æ´ßÏÂÅÄ¤ÎÃÏ¤ò¼é¤ë¤¿¤á¤ËÀï¤«¤Ã¤¿¤È¤¤¤¦
-D:ÂýË¡»Õ¤³¤ÈÃÏÂ¢ÂçÊî»§¤Î²½¿È¤¬»È¤Ã¤Æ¤¤¤¿Ï»´Ä¤Î¼â¾ó¤À¡£
-D:¡Ö¡Ä¤½¤Î»þ¡£°ì¿Í¤ÎË¡»Õ¤¬¤É¤³¤«¤é¤È¤â¤Ê¤¯¸½¤ì¤Æ¡¢²¿Ëü¤È¤¤¤¦Å¨¤ËÈô¤Ó¤«¤«¤ê¡¢
-D:¼ê¤Ë»ý¤Ã¤¿¼â¾ó¤ò¤Ö¤ó¤Ö¤ó¤È¿¶¤ê²ö¤·¤ÆÅ¨Ê¼¤òÆå¤®ÅÝ¤¹¡¢¤½¤ÎÀª¤¤¤ÎÀ¨¤Þ¤¸¤¤¤³¤È¡£
-D:Å·¤¬°ð¸÷¤·¡¢ÃÏ¤¬ÍÉ¤ìÆ°¤¯¤è¤¦¤ä¤Ã¤¿¤½¤¦¤Ê¡£¡×
+D:‚»‚ÌÌA‘û‚ðˆø‚«˜A‚ê‚ÄŠÝ˜a“c‚Ì’n‚ðŽç‚é‚½‚ß‚Éí‚©‚Á‚½‚Æ‚¢‚¤
+D:‘û–@Žt‚±‚Æ’n‘ ‘å•ìŽF‚Ì‰»g‚ªŽg‚Á‚Ä‚¢‚½˜ZŠÂ‚ÌŽàñ‚¾B
+D:uc‚»‚ÌŽžBˆêl‚Ì–@Žt‚ª‚Ç‚±‚©‚ç‚Æ‚à‚È‚­Œ»‚ê‚ÄA‰½–œ‚Æ‚¢‚¤“G‚É”ò‚Ñ‚©‚©‚èA
+D:Žè‚ÉŽ‚Á‚½Žàñ‚ð‚Ô‚ñ‚Ô‚ñ‚ÆU‚è‰ô‚µ‚Ä“G•º‚ð“ã‚¬“|‚·A‚»‚Ì¨‚¢‚Ì¦‚Ü‚¶‚¢‚±‚ÆB
+D:“V‚ªˆîŒõ‚µA’n‚ª—h‚ê“®‚­‚æ‚¤‚â‚Á‚½‚»‚¤‚ÈBv
 
-N:214:ÀÄ¤­°á¤Î¥Õ¥ó¥Ç¥£¥ó¤Î
+N:214:Â‚«ˆß‚Ìƒtƒ“ƒfƒBƒ“‚Ì
 E:of Fundin Bluecloak
 I:21:6:4
 W:65:65:130:150000
@@ -3618,11 +3618,11 @@ U:DISP_EVIL
 D:$The weapon of one of the great dwarven priests, with powers 
 D:$to preserve body and soul, and the bane of those 
 D:$who seek life beyond death.
-D:¤â¤Ã¤È¤â°ÎÂç¤Ê¥É¥ï¡¼¥Õ¤Î»Êº×¤Î¤Ò¤È¤ê¡¢ÀÄ¤­°á¤Î¡Ø¥Õ¥ó¥Ç¥£¥ó¡Ù¤Î
-D:Éð´ï¤Ç¤¢¤ë¡£½êÍ­¼Ô¤ÎÆùÂÎ¤Èº²ò°¤ò
-D:¸î¤êÈ´¤­¡¢»à¤·¤Æ¤Ê¤ªÀ¸¤Ë¤¹¤¬¤ê¤Ä¤³¤¦¤È¤¹¤ë¼Ô¤É¤â¤òÂÇ¤ÁÌÇ¤Ü¤¹¡£
+D:‚à‚Á‚Æ‚àˆÌ‘å‚Èƒhƒ[ƒt‚ÌŽiÕ‚Ì‚Ð‚Æ‚èAÂ‚«ˆß‚Ìwƒtƒ“ƒfƒBƒ“x‚Ì
+D:•Ší‚Å‚ ‚éBŠ—LŽÒ‚Ì“÷‘Ì‚Æ°é®‚ð
+D:Œì‚è”²‚«AŽ€‚µ‚Ä‚È‚¨¶‚É‚·‚ª‚è‚Â‚±‚¤‚Æ‚·‚éŽÒ‚Ç‚à‚ð‘Å‚¿–Å‚Ú‚·B
 
-N:215:¾¬°Ç¤Î
+N:215:ªˆÅ‚Ì
 E:of The Pitch Dark Night
 I:40:24:4
 W:50:150:2:50000
@@ -3631,12 +3631,12 @@ F:STEALTH | SEARCH | HIDE_TYPE | SEE_INVIS |
 F:RES_DARK | ACTIVATE | LITE_M1 |
 F:INSTA_ART
 U:BA_DARK
-D:¼¿¹õ¤ÎÊõ¶Ì¤¬¤Ä¤±¤é¤ì¤¿ðô¾þ¤ê¤À¡£
-D:¿È¤ËÉÕ¤±¤ë¤È¼«Ê¬¤¬°Å°Ç¤ÎÃæ¤Ë¤¤¤ë¤Î¤ò´¶¤¸¤ë¡£
+D:Ž½•‚Ì•ó‹Ê‚ª‚Â‚¯‚ç‚ê‚½èòü‚è‚¾B
+D:g‚É•t‚¯‚é‚ÆŽ©•ª‚ªˆÃˆÅ‚Ì’†‚É‚¢‚é‚Ì‚ðŠ´‚¶‚éB
 
 # The Bastard Sword of Eowyn
 
-N:216:¥¨¥ª¥¦¥£¥óÉ±¤Î
+N:216:ƒGƒIƒEƒBƒ“•P‚Ì
 E:of Eowyn
 I:23:21:4
 W:30:50:140:120000
@@ -3644,12 +3644,12 @@ P:0:4d4:12:16:0
 F:STR | CHR | STEALTH | SPEED | 
 F:SLAY_EVIL | KILL_UNDEAD | SLAY_GIANT | SLAY_ANIMAL | 
 F:RES_NETHER | RES_FEAR | RES_DARK | RES_COLD
-D:¡Ö½â»ý¤Ä²µ½÷¡×¤³¤È¥í¡¼¥Ï¥ó²¦¹ñ¤Î¥¨¥ª¥¦¥£¥óÉ±¤¬¡¢
-D:¥Ù¥ì¥ó¥Î¡¼¥ë¤ÎÌî¤Ë¤ª¤¤¤ÆËâ²¦¤Ë¿¶¤ë¤Ã¤¿·õ¤À¡£
-D:¡Ö¤·¤«¤·¤ï¤¿¤·¤ÏÀ¸¤­¿È¤Î¿Í´Ö¤ÎÃË¤Ç¤Ï¤Ê¤¤¡ª¤ªÁ°¤¬¸þ¤­¹ç¤Ã¤Æ
-D:¤¤¤ë¤Î¤Ï½÷¤À¡£¤ï¤¿¤·¤Ï¥¨¥ª¥¦¥£¥ó¡¢¥¨¥ª¥à¥ó¥É¤ÎÌ¼¤À¡£¡×
+D:u‚Ž‚Â‰³—v‚±‚Æƒ[ƒnƒ“‰¤‘‚ÌƒGƒIƒEƒBƒ“•P‚ªA
+D:ƒxƒŒƒ“ƒm[ƒ‹‚Ì–ì‚É‚¨‚¢‚Ä–‚‰¤‚ÉU‚é‚Á‚½Œ•‚¾B
+D:u‚µ‚©‚µ‚í‚½‚µ‚Í¶‚«g‚ÌlŠÔ‚Ì’j‚Å‚Í‚È‚¢I‚¨‘O‚ªŒü‚«‡‚Á‚Ä
+D:‚¢‚é‚Ì‚Í—‚¾B‚í‚½‚µ‚ÍƒGƒIƒEƒBƒ“AƒGƒIƒ€ƒ“ƒh‚Ì–º‚¾Bv
 
-N:217:À»µ³»Î¤Î
+N:217:¹‹RŽm‚Ì
 E:of Sacred Knights
 I:40:25:2
 W:50:50:2:77777
@@ -3659,9 +3659,9 @@ F:RES_CONF | RES_CHAOS | BLESSED |
 F:SEE_INVIS | FREE_ACT | REGEN | HOLD_LIFE | ACTIVATE |
 F:INSTA_ART
 U:DISP_CURSE_XTRA
-D:¤³¤ì¤ò¿È¤Ë¤Ä¤±¤¿¥×¥ì¥¤¥ä¡¼¤Ï¼ö¤¤¤ò¤Ï¤ÍÊÖ¤¹¤³¤È¤¬¤Ç¤­¤ë¡£
+D:‚±‚ê‚ðg‚É‚Â‚¯‚½ƒvƒŒƒCƒ„[‚ÍŽô‚¢‚ð‚Í‚Ë•Ô‚·‚±‚Æ‚ª‚Å‚«‚éB
 
-N:218:ÃÏ¹ö¤Î
+N:218:’n–‚Ì
 E:of the Hell
 I:40:26:-2
 W:50:40:30:66666
@@ -3671,9 +3671,9 @@ F:RES_DARK | RES_NETHER |
 F:SEE_INVIS | AGGRAVATE | ESP_UNDEAD | ACTIVATE |
 F:INSTA_ART
 U:BA_DARK
-D:ÃÏ¹ö¤Î¼ü¿Í¤ò¹´Â«¤¹¤ë¼óÎØ¤À¡£Â¿¤¯¤Î¼ü¿Í¤Î±åÇ°¤¬¹þ¤á¤é¤ì¤Æ¤¤¤ë¡£
+D:’n–‚ÌŽúl‚ðS‘©‚·‚éŽñ—Ö‚¾B‘½‚­‚ÌŽúl‚Ì‰…”O‚ªž‚ß‚ç‚ê‚Ä‚¢‚éB
 
-N:219:ÂÓËâÎÏ¥Ú¥ó¥À¥ó¥È
+N:219:‘Ñ–‚—Íƒyƒ“ƒ_ƒ“ƒg
 E:Charmed Pendant
 I:40:27:2
 W:50:100:2:100000
@@ -3684,7 +3684,7 @@ F:SH_FIRE | SH_ELEC | SH_COLD | ACTIVATE |
 F:INSTA_ART
 U:CURE_MANA_FULL
 
-N:220:¤â¤Î¤Þ¤Í¤Î»ÏÁÄ¥´¥´¤Î
+N:220:‚à‚Ì‚Ü‚Ë‚ÌŽn‘cƒSƒS‚Ì
 E:of Gogo
 I:40:28:4
 W:50:100:2:55555
@@ -3693,7 +3693,7 @@ F:INT | WIS | DEX |
 F:SEE_INVIS | LITE |
 F:INSTA_ART
 
-N:221:¿¹¤Î¼í¿Í¥í¥Ó¥ó¥Õ¥Ã¥É¤Î
+N:221:X‚ÌŽëlƒƒrƒ“ƒtƒbƒh‚Ì
 E:of Robin Hood
 I:19:12:2
 W:20:15:30:50000
@@ -3701,10 +3701,10 @@ P:0:2d1:15:17:0
 F:DEX | CHR | STEALTH |
 F:XTRA_MIGHT | HIDE_TYPE | SHOW_MODS | XTRA_H_RES
 D:$This is of Robin Hood who live in the deep forest.
-D:¥·¥ã¡¼¥¦¥Ã¥É¤Î¿¹¤Ë½»¤àµÁÂ±¥í¥Ó¥ó¡¦¥Õ¥Ã¥É¤ÎµÝ¤À¡£
+D:ƒVƒƒ[ƒEƒbƒh‚ÌX‚ÉZ‚Þ‹`‘¯ƒƒrƒ“Eƒtƒbƒh‚Ì‹|‚¾B
 
 # from Slash'EM
-N:222:¡Ø¥Ø¥ë¥Õ¥¡¥¤¥¢¡Ù
+N:222:wƒwƒ‹ƒtƒ@ƒCƒAx
 E:of 'Hellfire'
 I:19:23:4
 W:30:15:110:60000
@@ -3713,10 +3713,10 @@ F:STR | INFRA | RES_FIRE | SH_FIRE |
 F:ACTIVATE | HIDE_TYPE | SHOW_MODS
 U:BRAND_FIRE_BOLTS
 D:$This crossbow gives flame energy to bolts which it fires.
-D:¤³¤ÎÇ³¤¨¤ë¤è¤¦¤Ê¿§¤Î¥¯¥í¥¹¥Ü¥¦¤Ï¡¢È¯¼Í¤¹¤ë¥Ü¥ë¥È¤Ë±ê¤ÎÎÏ¤ò
-D:Í¿¤¨¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+D:‚±‚Ì”R‚¦‚é‚æ‚¤‚ÈF‚ÌƒNƒƒXƒ{ƒE‚ÍA”­ŽË‚·‚éƒ{ƒ‹ƒg‚É‰Š‚Ì—Í‚ð
+D:—^‚¦‚é‚±‚Æ‚ª‚Å‚«‚éB
 
-N:223:Ì¾¼Í¼ê¥¦¥£¥ê¥¢¥à¡¦¥Æ¥ë¤Î
+N:223:–¼ŽËŽèƒEƒBƒŠƒAƒ€Eƒeƒ‹‚Ì
 E:of Wilhelm Tell
 I:19:23:4
 W:35:30:110:50000
@@ -3725,11 +3725,11 @@ F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
 D:$With this crossbow, Swiss hero Tell shot an apple exactly 
 D:$though it was on his son's head, and then he defeated evil 
 D:$magistrate Gessler.
-D:¥¹¥¤¥¹¤Î±ÑÍº¥¦¥£¥ê¥¢¥à¡¦¥Æ¥ë¤Î»È¤Ã¤¿¥¯¥í¥¹¥Ü¥¦¤À¡£
-D:Èà¤Ï²æ¤¬»Ò¤ÎÆ¬¤Î¾å¤Î¥ê¥ó¥´¤òÀµ³Î¤Ë·â¤ÁÈ´¤­¡¢Ì±½°¤ò¶ì¤·¤á¤ë
-D:°­Âå´±¥²¥¹¥é¡¼¤òÂÇ¤ÁÇË¤Ã¤¿¡£
+D:ƒXƒCƒX‚Ì‰p—YƒEƒBƒŠƒAƒ€Eƒeƒ‹‚ÌŽg‚Á‚½ƒNƒƒXƒ{ƒE‚¾B
+D:”Þ‚Í‰ä‚ªŽq‚Ì“ª‚Ìã‚ÌƒŠƒ“ƒS‚ð³Šm‚ÉŒ‚‚¿”²‚«A–¯O‚ð‹ê‚µ‚ß‚é
+D:ˆ«‘ãŠ¯ƒQƒXƒ‰[‚ð‘Å‚¿”j‚Á‚½B
 
-N:224:Ì¾¼Í¼ê¥¦¥£¥ê¥¢¥à¡¦¥Æ¥ë¤Î
+N:224:–¼ŽËŽèƒEƒBƒŠƒAƒ€Eƒeƒ‹‚Ì
 E:of Wilhelm Tell
 I:18:1:0
 W:35:35:2:5000
@@ -3737,11 +3737,11 @@ P:0:6d5:20:16:0
 F:KILL_HUMAN
 D:$It is said that this bolt sticked onto the heart of Gessler 
 D:$when Wilhelm Tell shot it.
-D:¤«¤Ä¤Æ¥¦¥£¥ê¥¢¥à¡¦¥Æ¥ë¤¬·â¤ÁÊü¤Ã¤¿1ËÜ¤Î¥¯¥í¥¹¥Ü¥¦¤ÎÌð¤À¡£
-D:°­Âå´±¥²¥¹¥é¡¼¤ÎÌ¿¤òÀµ³Î¤ËÃ¥¤Ã¤¿¤È¤¤¤¦¡£
+D:‚©‚Â‚ÄƒEƒBƒŠƒAƒ€Eƒeƒ‹‚ªŒ‚‚¿•ú‚Á‚½1–{‚ÌƒNƒƒXƒ{ƒE‚Ì–î‚¾B
+D:ˆ«‘ãŠ¯ƒQƒXƒ‰[‚Ì–½‚ð³Šm‚É’D‚Á‚½‚Æ‚¢‚¤B
 
 #JX#
-N:225:¥¢¥¹¥¯¥ì¥Ô¥ª¥¹¤Î
+N:225:ƒAƒXƒNƒŒƒsƒIƒX‚Ì
 E:of Aesculapius
 I:21:14:3
 W:40:45:160:300000
@@ -3754,11 +3754,11 @@ F:RES_POIS | RES_CONF | RES_CHAOS |
 U:REST_ALL
 D:$This is the staff of Aesculapius, who is a greek god of 
 D:$the medicine.
-D:¤³¤ì¤Ï¡¢°å³Ø¤Î¿À¥¢¥¹¥¯¥ì¥Ô¥ª¥¹¤Î´ñÀ×¤ÎÏ»¼ÜËÀ¤À¡£
-D:¤É¤ó¤Ê²ø²æ¤â¤¿¤Á¤Þ¤ÁÌþ¤·¤Æ¤·¤Þ¤¦¡£
+D:‚±‚ê‚ÍAˆãŠw‚Ì_ƒAƒXƒNƒŒƒsƒIƒX‚ÌŠïÕ‚Ì˜ZŽÚ–_‚¾B
+D:‚Ç‚ñ‚È‰ö‰ä‚à‚½‚¿‚Ü‚¿–ü‚µ‚Ä‚µ‚Ü‚¤B
 
 #JX#
-N:226:Í©ÂÎ¥É¥é¥´¥ó¡¦¥¹¥±¥¤¥ë¥á¥¤¥ë
+N:226:—H‘Ìƒhƒ‰ƒSƒ“EƒXƒPƒCƒ‹ƒƒCƒ‹
 E:Spectral Dragon Scale Mail
 I:38:3:0
 W:75:30:100:350000
@@ -3769,10 +3769,10 @@ F:SEE_INVIS | HOLD_LIFE | LEVITATION |
 F:CURSED | HEAVY_CURSE | DRAIN_EXP | FULL_NAME
 D:$A white transparent dragon scale mail which was made from
 D:$the tortured soul of a once powerful wyrm.
-D:¤³¤Î¥É¥é¥´¥ó¤ÎÎÚ³»¤Ï¡¢¤«¤Ä¤Æ¶¯Âç¤ÊÎÏ¤ò¸Ø¤Ã¤Æ¤¤¤¿¥ï¥¤¥¢¡¼¥à
-D:¤Î±åÎî¤ÎÎÚ¤«¤éºî¤é¤ì¤¿¤â¤Î¤À¡£¤¦¤Ã¤¹¤é¤ÈÇò¤¯Æ©¤­ÄÌ¤Ã¤Æ¤¤¤ë¡£
+D:‚±‚Ìƒhƒ‰ƒSƒ“‚Ì—ØŠZ‚ÍA‚©‚Â‚Ä‹­‘å‚È—Í‚ðŒÖ‚Á‚Ä‚¢‚½ƒƒCƒA[ƒ€
+D:‚Ì‰…—ì‚Ì—Ø‚©‚çì‚ç‚ê‚½‚à‚Ì‚¾B‚¤‚Á‚·‚ç‚Æ”’‚­“§‚«’Ê‚Á‚Ä‚¢‚éB
 
-N:227:¡Ø¹ßÍÅÊõ¾ó¡Ù
+N:227:w~—d•óñx
 E:of Sha Wujing
 I:22:14:2
 W:30:30:175:100000
@@ -3784,11 +3784,11 @@ F:RES_ACID | RES_COLD | RES_DARK | RES_FEAR
 D:$This lajatang looks like a staff because it has only a 
 D:$blade which looks like a half moon. Sha Wujing helped a 
 D:$long journy of Tang Sanzang with it.
-D:²ÏÆ¸¤ÎÍÅ²øº»¸ç¾ô¤Î»È¤Ã¤¿Éð´ï¤À¡£»°Æü·î¾õ¤Î¿Ï¤¬ËÀ¤ÎÀèÃ¼¤Ë¤Ä
-D:¤¤¤Æ¤¤¤ë¤¿¤á¡¢¼â¾ó¤Î¤è¤¦¤Ë¸«¤¨¤ë¡£¸ç¾ô¤Ï¤³¤ÎÉð´ï¤ò¼ê¤Ë»°Â¢
-D:Ë¡»Õ¤ÎÎ¹¤ò½õ¤±¤¿¡£
+D:‰Í“¶‚Ì—d‰ö¹Œåò‚ÌŽg‚Á‚½•Ší‚¾BŽO“úŒŽó‚Ìn‚ª–_‚Ìæ’[‚É‚Â
+D:‚¢‚Ä‚¢‚é‚½‚ßAŽàñ‚Ì‚æ‚¤‚ÉŒ©‚¦‚éBŒåò‚Í‚±‚Ì•Ší‚ðŽè‚ÉŽO‘ 
+D:–@Žt‚Ì—·‚ð•‚¯‚½B
 
-N:228:»¦¿Íµ´¥¨¥ë¥ß¤Î
+N:228:ŽEl‹SƒGƒ‹ƒ~‚Ì
 E:of Elmi the Murderer
 I:22:1:2
 W:15:10:60:50000
@@ -3797,12 +3797,12 @@ F:DEX | STEALTH | HIDE_TYPE | FORCE_WEAPON |
 F:KILL_HUMAN | VORPAL | SEE_INVIS |
 D:$This is a hatchet of Elmi who was a horrible muder of 
 D:$Raffnor.
-D:¥é¥Õ¥Î¡¼¥ëÃæ¤ò¿Ì¤¨¾å¤¬¤é¤»¤¿»¦¿Íµ´¥¨¥ë¥ß¤Î»È¤Ã¤¿¼êÉà¤À¡£
-D:¥é¥Õ¥Î¡¼¥ë¤Ï¤³¤Î»¦¿Íµ´¤òÊá¤é¤¨¤ë¤¿¤á¤Ë¡¢20¿Í°Ê¾å¤Î¹Ô¼Ô
-D:(¥¨¥¹¥Ñ¡¼)¤òÅêÆþ¤·¤¿¤È¤¤¤¦¡£¡Ö¤³¤Î¼ê¸ý¤Ë¤Ï¸«³Ð¤¨¤¬¤¢¤ë¡Ä¡×
-D:(À»Íªµª¡ÖÄ¶¿Í¥í¥Ã¥¯¡Ø¸÷¤Î·õ¡Ù¡×)
+D:ƒ‰ƒtƒm[ƒ‹’†‚ðk‚¦ã‚ª‚ç‚¹‚½ŽEl‹SƒGƒ‹ƒ~‚ÌŽg‚Á‚½Žè•€‚¾B
+D:ƒ‰ƒtƒm[ƒ‹‚Í‚±‚ÌŽEl‹S‚ð•ß‚ç‚¦‚é‚½‚ß‚ÉA20lˆÈã‚ÌsŽÒ
+D:(ƒGƒXƒp[)‚ð“Š“ü‚µ‚½‚Æ‚¢‚¤Bu‚±‚ÌŽèŒû‚É‚ÍŒ©Šo‚¦‚ª‚ ‚écv
+D:(¹—I‹Iu’´lƒƒbƒNwŒõ‚ÌŒ•xv)
 
-N:229:¡ØÂÀÏºÂÀÅá¡Ù
+N:229:w‘¾˜Y‘¾“x
 E:'Taro Dachi'
 I:23:27:4
 W:40:25:300:120000
@@ -3811,31 +3811,31 @@ F:STR | RES_FEAR | VORPAL |
 F:SLAY_HUMAN | SLAY_ORC | SLAY_TROLL | SLAY_GIANT
 D:$Asakura's captain Naotaka Magara defeated a lot of soldiers
 D:$with this large katana.
-D:Åá¿È¸Þ¼Ü»°À£¤ÎÄ¹¤¯¤Æ½Å¤¤ÂÀÅá¤À¡£Ä«ÁÒ²È²È¿Ã¿¿ÊÁÄ¾Î´¤Ï¡¢¤³¤Î
-D:Âç¤­¤ÊÂÀÅá¤ò¼ê¤Ë¤·¤ÆÂ¿¤¯¤ÎÅ¨Ê¼¤ÎÌ¿¤òÃ¥¤¤¤µ¤Ã¤¿¡£¤½¤Î¶¯¤µ¤æ
-D:¤¨¤ËÅ¨¿Ø¤ËÆÍ¤Ã¹þ¤ß¤¹¤®¤¿¤È¤¤¤¦¡£
+D:“gŒÜŽÚŽO¡‚Ì’·‚­‚Äd‚¢‘¾“‚¾B’©‘q‰Æ‰Æb^•¿’¼—²‚ÍA‚±‚Ì
+D:‘å‚«‚È‘¾“‚ðŽè‚É‚µ‚Ä‘½‚­‚Ì“G•º‚Ì–½‚ð’D‚¢‚³‚Á‚½B‚»‚Ì‹­‚³‚ä
+D:‚¦‚É“Gw‚É“Ë‚Áž‚Ý‚·‚¬‚½‚Æ‚¢‚¤B
 
-N:230:¼êÉÊ»Õ¤Î
+N:230:Žè•iŽt‚Ì
 E:of Magician
 I:23:1:0
 W:1:1:5:3000
 P:0:1d1:0:0:0
 D:$This dagger can not injure someone almostly.
-D:¤³¤Î¥À¥¬¡¼¤Ï¿Í¤ò½ý¤Ä¤±¤ë¤³¤È¤Ï¤Ê¤¤¤À¤í¤¦¡£
+D:‚±‚Ìƒ_ƒK[‚Íl‚ð‚Â‚¯‚é‚±‚Æ‚Í‚È‚¢‚¾‚ë‚¤B
 
-N:231:°Å»¦¼Ô·ÕíÆ¤Î
+N:231:ˆÃŽEŽÒŒtçe‚Ì
 E:of Jing Ke
 I:23:6:1
 W:15:15:20:50000
 P:0:2d5:-2:13:0
 F:DEX | BLOWS | SPEED | HIDE_TYPE |
 F:BRAND_COLD | BRAND_POIS | VORPAL | RES_FEAR
-D:ÌÔÆÇ¤Î¿Ï¤ò»ý¤Ä±Ô¤¤Ò¸¼ó¤À¡£»Â¤é¤ì¤ì¤Ð¤¿¤Á¤Þ¤Á»à¤Ë»ê¤ë¤À¤í¤¦¡£
-D:±í¤Î»ÉµÒ·ÕíÆ¤Ï¡¢¤³¤ÎÒ¸¼ó¤òÍÑ¤¤¤Æ¿Á¤Î»Ï¹ÄÄë¤Î°Å»¦¤ò»î¤ß¤¿¡£
-D:¤¤¤Þ¤â¤½¤Î¼¹Ç°¤¬½É¤ë¡£
-D:¡ÖÂ¶¿Íê­ÖáÝÇ¡¡ÀéºÜÍ­ñ±¾ð¡×(Æ«Ê¥ÌÀ¡Ö±Ó·ÕíÆ¡×)
+D:–Ò“Å‚Ìn‚ðŽ‚Â‰s‚¢™¶Žñ‚¾BŽa‚ç‚ê‚ê‚Î‚½‚¿‚Ü‚¿Ž€‚ÉŽŠ‚é‚¾‚ë‚¤B
+D:‰‚ÌŽh‹qŒtçe‚ÍA‚±‚Ì™¶Žñ‚ð—p‚¢‚Ä`‚ÌŽnc’é‚ÌˆÃŽE‚ðŽŽ‚Ý‚½B
+D:‚¢‚Ü‚à‚»‚ÌŽ·”O‚ªh‚éB
+D:u‘´lå«›ßŸf@çÚ—LéPîv(“©•£–¾u‰rŒtçev)
 
-N:232:ÇÀÉ×¥Þ¥´¥Ã¥È¤Î
+N:232:”_•vƒ}ƒSƒbƒg‚Ì
 E:of Maggot
 I:22:3:1
 W:10:4:70:10000
@@ -3843,10 +3843,10 @@ P:0:2d3:7:9:0
 F:STR | DEX | RES_FIRE | RES_LITE | VORPAL |
 D:$This is farmer Maggot's sickle. He left it behind on his 
 D:$farm.
-D:¤³¤ì¤ÏÇÀÉ×¥Þ¥´¥Ã¥È¤ÎÇÀºî¶ÈÍÑ¤Î³ù¤À¡£¤É¤¦¤ä¤éÇÀ¾ì¤ËÃÖ¤­Ëº¤ì
-D:¤Æ¤·¤Þ¤Ã¤¿¤è¤¦¤À¡£
+D:‚±‚ê‚Í”_•vƒ}ƒSƒbƒg‚Ì”_ì‹Æ—p‚ÌŠ™‚¾B‚Ç‚¤‚â‚ç”_ê‚É’u‚«–Y‚ê
+D:‚Ä‚µ‚Ü‚Á‚½‚æ‚¤‚¾B
 
-N:233:¡ØÅ·½÷¤Î±©°á¡Ù
+N:233:w“V—‚Ì‰Hˆßx
 E:of the Heavenly Maiden
 I:35:5:4
 W:50:3:0:45000
@@ -3857,13 +3857,13 @@ U:RECALL
 D:$This is a heavenly cloak of the maiden which was stolen 
 D:$by a man, when she was having a bath at a lake with her 
 D:$friend maidens.
-D:Ð®¾Ï¿·ÓÈåÑÃË»Ò¡¤¸«ÅÄÃæÍ­Ï»¼·½÷¡¤³§°áÌÓ°á¡¤ÉÔÃÎÀ§Ä»¡£
-D:ÒµÒ¶±ýÆÀÂ¶°ì½÷½ê²òÌÓ°á¡¤¼èé¶Ç·¡¤Â¨±ý½¢½ôÄ»¡£
-D:½ôÄ»³ÆÈôµî¡¤°ìÄ»à×ÉÔÆÀµî¡£ÃË»Ò¼è°Ê°ÙÉØ¡£À¸»°½÷¡£
-D:Â¶Êì¹¡»È½÷ÌäÉã¡¤ÃÎ°áºßÀÑãË²¼¡¤ÆÀÇ·¡¤°á¼©Èôµî¡¤¸åÉü°Ê·Þ»°½÷¡¤
-D:½÷ËòÆÀÈôµî¡£(ÁÜ¿Àµ­)
+D:˜¬ÍVšgãp’jŽqCŒ©“c’†—L˜ZŽµ—CŠFˆß–ÑˆßC•s’m¥’¹B
+D:™³™´‰“¾‘´ˆê—Š‰ð–ÑˆßCŽæåU”VC‘¦‰A”’¹B
+D:”’¹Še”ò‹ŽCˆê’¹àÕ•s“¾‹ŽB’jŽqŽæˆÈˆ×•wB¶ŽO—B
+D:‘´•ê@Žg—–â•ƒC’mˆßÝÏâj‰ºC“¾”VCˆßŽ§”ò‹ŽCŒã•œˆÈŒ}ŽO—C
+D:—–’“¾”ò‹ŽB(‘{_‹L)
 
-N:234:¸»µÁ·Ð¤Î
+N:234:Œ¹‹`Œo‚Ì
 E:of Yositsune
 I:32:8:2
 W:50:20:60:96000
@@ -3873,10 +3873,10 @@ F:RES_FEAR | RES_BLIND | RES_SOUND |
 F:WARNING | ESP_HUMAN |
 D:$This is Yositsune's kabuto. It defended his head against 
 D:$many arrows and blades from his ememies.
-D:¸»»á¤ÎÍ¦¼Ô¸»µÁ·Ð¤Î¾þ¤ê¤Î¤Ä¤¤¤¿À±³õ¤À¡£µÁ·Ð¤Ï¤³¤ì¤ò¤«¤Ö¤ê¡¢
-D:Ê¿»á¤«¤é¤Î¿Ï¤äÌð¤Î¹¶·â¤òËÉ¤¤¤À¡£
+D:Œ¹Ž‚Ì—EŽÒŒ¹‹`Œo‚Ìü‚è‚Ì‚Â‚¢‚½¯Š•‚¾B‹`Œo‚Í‚±‚ê‚ð‚©‚Ô‚èA
+D:•½Ž‚©‚ç‚Ìn‚â–î‚ÌUŒ‚‚ð–h‚¢‚¾B
 
-N:235:¸»µÁ·Ð¤Î
+N:235:Œ¹‹`Œo‚Ì
 E:of Yositsune
 I:37:14:2
 W:50:20:200:192000
@@ -3888,10 +3888,10 @@ F:RES_CHAOS | RES_NEXUS |
 D:$This is the haramakido of Yositsune who is the best brave 
 D:$warrior of Genji. You can feel his agility and dexterity, 
 D:$when you put it on.
-D:¸»µÁ·Ð¤ÎÀÖ»å°ÒÆ¹´Ý³»¤À¡£µÁ·Ð¤Ï¤³¤ì¤òÃå¤Æ½®¤«¤é½®¤Ø¤ÈÈô¤Ó°Ü
-D:¤Ã¤¿¡£¿È¤Ë¤Ä¤±¤ë¤ÈÈà¤Î¿È·Ú¤µ¤È´ïÍÑ¤µ¤ò´¶¤¸¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+D:Œ¹‹`Œo‚ÌÔŽ…ˆÐ“·ŠÛŠZ‚¾B‹`Œo‚Í‚±‚ê‚ð’…‚ÄM‚©‚çM‚Ö‚Æ”ò‚ÑˆÚ
+D:‚Á‚½Bg‚É‚Â‚¯‚é‚Æ”Þ‚ÌgŒy‚³‚ÆŠí—p‚³‚ðŠ´‚¶‚é‚±‚Æ‚ª‚Å‚«‚éB
 
-N:236:È«»³½ÅÃé¤ÎÀÖ»å°Ò
+N:236:”©ŽRd’‰‚ÌÔŽ…ˆÐ
 E:of the Bando Musha
 I:37:16:2
 W:45:15:320:90000
@@ -3902,28 +3902,28 @@ F:RES_FEAR | XTRA_H_RES
 D:$This is Shigetada Hatakeyama's O-yoroi. He is brave, wise 
 D:$and honest warrior, so he was called the best model of 
 D:$eastern samurai. This O-yoroi is majestical like him.
-D:ÃÎÍ¦·óÈ÷¤ÎÉð¼ÔÈ«»³½ÅÃé¤ÎÀÖ»å°ÒÂç³»¤À¡£À¶Î÷·éÇò¤ò¤â¤Ã¤ÆÃÎ¤é
-D:¤ì¤¿½ÅÃé¤Ï¡ÖºäÅìÉð»Î¤Î´Õ¡×¤È¾Î¤µ¤ì¤¿¡£¤³¤ÎÂç³»¤Ï¡¢¤¢¤¿¤«¤â
-D:Èà¤¬¤³¤³¤Ë¤¤¤ë¤«¤Î¤è¤¦¤Ë°ÒÉ÷Æ²¡¹¤È¤·¤Æ¤¤¤ë¡£
+D:’m—EŒ“”õ‚Ì•ŽÒ”©ŽRd’‰‚ÌÔŽ…ˆÐ‘åŠZ‚¾B´—õŒ‰”’‚ð‚à‚Á‚Ä’m‚ç
+D:‚ê‚½d’‰‚Íuâ“Œ•Žm‚ÌŠÓv‚ÆÌ‚³‚ê‚½B‚±‚Ì‘åŠZ‚ÍA‚ ‚½‚©‚à
+D:”Þ‚ª‚±‚±‚É‚¢‚é‚©‚Ì‚æ‚¤‚ÉˆÐ•—“°X‚Æ‚µ‚Ä‚¢‚éB
 
-N:237:¡Ø¥Ç¡¼¥â¥ó¥Ù¡¼¥ó¡Ù
+N:237:wƒf[ƒ‚ƒ“ƒx[ƒ“x
 E:'Demonbane'
 I:23:17:0
 W:10:0:130:2500
 P:0:2d5:5:0:0
 F:SLAY_DEMON | RIDING
-D:Ãá½ø¤Î²¼ËÍ¤¬´÷¤ß·ù¤¦·õ¤¬¤¢¤ë¤é¤·¤¤¡£
+D:’˜‚Ì‰º–l‚ªŠõ‚ÝŒ™‚¤Œ•‚ª‚ ‚é‚ç‚µ‚¢B
 
-N:238:¡Ø¥Ç¡¼¥â¥ó¥Ù¡¼¥ó¡Ù
+N:238:wƒf[ƒ‚ƒ“ƒx[ƒ“x
 E:'Demonbane'
 I:21:5:0
 W:45:18:250:2500
 P:0:4d6:15:15:0
 F:RIDING | WARNING | SLAY_EVIL | KILL_DEMON | ESP_DEMON
-D:¤Ê¤ó¤À¡¢¤Þ¤¿¤³¤ÎÌòÎ©¤¿¤º¤Î·õ¤«¡£¤ª¤ä¡©¤Á¤ç¤Ã¤ÈÂÔ¤Æ¤è¡Ä¡Ä
+D:‚È‚ñ‚¾A‚Ü‚½‚±‚Ì–ð—§‚½‚¸‚ÌŒ•‚©B‚¨‚âH‚¿‚å‚Á‚Æ‘Ò‚Ä‚æcc
 
 # The Light Crossbow 'Wiizapper' (x3)
-N:239:¡Ø¥¦¥£¥¶¥Ã¥Ñ¡¼¡Ù
+N:239:wƒEƒBƒUƒbƒp[x
 E:'Wiizapper'
 I:19:23:4
 W:30:10:110:77777
@@ -3934,12 +3934,12 @@ F:HIDE_TYPE | SHOW_MODS
 D:$The white light crossbow that the fighter Link, wearing green clothes,
 D:$bought for training of shooting.'Enjoy shootings at the living room.'
 D:$(Nintendo)
-D:ÎÐ¤ÎÉþ¤ÎÀï»Î¥ê¥ó¥¯¤¬¥Ü¥¦¥¬¥ó¤Î¥È¥ì¡¼¥Ë¥ó¥°¤Î¤¿¤á¤Ë¹ØÆþ¤·¤¿
-D:¤È¸À¤ï¤ì¤ë·Ú¤¯¤ÆÇò¤¤¥¯¥í¥¹¥Ü¥¦¤À¡£¡Ö¥ê¥Ó¥ó¥°¤Ç¼Í·â¤ò³Ú¤·¤à¡×
+D:—Î‚Ì•ž‚ÌíŽmƒŠƒ“ƒN‚ªƒ{ƒEƒKƒ“‚ÌƒgƒŒ[ƒjƒ“ƒO‚Ì‚½‚ß‚Éw“ü‚µ‚½
+D:‚ÆŒ¾‚í‚ê‚éŒy‚­‚Ä”’‚¢ƒNƒƒXƒ{ƒE‚¾BuƒŠƒrƒ“ƒO‚ÅŽËŒ‚‚ðŠy‚µ‚Þv
 D:(Nintendo)
 
 # The Heavy Crossbow 'Lion Slayer' (x5)
-N:240:¡Ø»â»Ò»¦¤·¡Ù
+N:240:wŽ‚ŽqŽE‚µx
 E:'Lion Slayer'
 I:19:24:2
 W:40:30:200:119929
@@ -3949,10 +3949,10 @@ F:RES_FEAR | XTRA_POWER |
 F:HIDE_TYPE | SHOW_MODS
 D:$This heavily heavy Crossbow shines black uncannily.
 D:$The shot also breaks the Lion Heart.
-D:¤³¤ÎÉÔµ¤Ì£¤Ë¹õ¸÷¤ë¥¯¥í¥¹¥Ü¥¦¤Ï¤º¤Ã¤·¤ê¤È½Å¤¤¡£¤½¤Î°ì·â¤Ï»â»Ò¤Î¿´¤ò¤âºÕ¤¯¡£
+D:‚±‚Ì•s‹C–¡‚É•Œõ‚éƒNƒƒXƒ{ƒE‚Í‚¸‚Á‚µ‚è‚Æd‚¢B‚»‚ÌˆêŒ‚‚ÍŽ‚Žq‚ÌS‚ð‚àÓ‚­B
 
 # The Heavy Crossbow of Guanzi (x4)
-N:241:´É»Ò¤Î
+N:241:ŠÇŽq‚Ì
 I:19:24:3
 W:40:20:200:99999
 P:0:4d1:10:15:0
@@ -3962,11 +3962,11 @@ F:HIDE_TYPE | SHOW_MODS
 D:$This is Guan Zhong's heavy crossbow for assassinating.
 D:$He took prime minister's post of Qi, although he failed to
 D:$take the life of the prince of Qi.
-D:ÀÆ¤Î´ÉÃç¤¬°Å»¦ÍÑ¤ËÍÑ¤¤¤¿½Å¤¤×¸¤À¡£¸ø»Ò¾®Çò¤ò¼ÍÈ´¤¯¤³¤È¤Ï¤Ç¤­¤Ê¤«¤Ã¤¿
-D:¤¬¡¢¸å¤ËÀÆ¤ÎºËÁê¤ÎºÂ¤ò¸«»ö¤Ë¼Í»ß¤á¤¿¡£
+D:Ä‚ÌŠÇ’‡‚ªˆÃŽE—p‚É—p‚¢‚½d‚¢œW‚¾BŒöŽq¬”’‚ðŽË”²‚­‚±‚Æ‚Í‚Å‚«‚È‚©‚Á‚½
+D:‚ªAŒã‚ÉÄ‚ÌÉ‘Š‚ÌÀ‚ðŒ©Ž–‚ÉŽËŽ~‚ß‚½B
 
 # The Flamberge 'Fusberta'
-N:242:¡Ø¥Õ¥¹¥Ù¥ë¥¿¡Ù
+N:242:wƒtƒXƒxƒ‹ƒ^x
 E:'Fusberta'
 I:23:26:1
 W:40:20:230:90000
@@ -3976,11 +3976,11 @@ F:VORPAL | BRAND_FIRE | RES_FEAR | RES_FIRE | RES_LITE |
 F:REGEN | BLESSED | RIDING | SHOW_MODS
 D:$The flame shaped magic sword of Renaud de Montauban.
 D:$It can cut up an enemy's armor easily.
-D:¥ë¥Î¡¼¡¦¥É¡¦¥â¥ó¥È¥Ð¡¼¥ó¤ÎËâË¡¤Î·õ¤À¡£Åá¿È¤¬±ê¤Î¤è¤¦¤Ë
-D:ÇÈÂÇ¤Ã¤Æ¤¤¤ë¡£Å¨¤Î³»¤òÍÆ°×¤¯ÀÚ¤êÎö¤¯¤³¤È¤¬¤Ç¤­¤ë¡£
+D:ƒ‹ƒm[EƒhEƒ‚ƒ“ƒgƒo[ƒ“‚Ì–‚–@‚ÌŒ•‚¾B“g‚ª‰Š‚Ì‚æ‚¤‚É
+D:”g‘Å‚Á‚Ä‚¢‚éB“G‚ÌŠZ‚ð—eˆÕ‚­Ø‚è—ô‚­‚±‚Æ‚ª‚Å‚«‚éB
 
 # The Bronze Dragon Scale Mail 'Dragon Cloth'
-N:243:¡Ø¥É¥é¥´¥ó¡¦¥¯¥í¥¹¡Ù
+N:243:wƒhƒ‰ƒSƒ“EƒNƒƒXx
 E:'Dragon Cloth'
 I:38:14:0
 W:30:3:100:100000
@@ -3991,12 +3991,12 @@ U:CAST_OFF
 D:$A suit of scales, gleaming in rich engraved bronze. It shapes like
 D:$a green dragon if putting its parts together. You can feel a cosmo
 D:$of Draco when you wear it.
-D:ÈôÎ®Ä¾²¼»°Àé¼Ü¤Èëð¤ï¤ì¤ë×ª»³¤ÎÂçßÆÉÛ¤Ë¤è¤Ã¤ÆÃÃ¤¨¾å¤²¤é¤ì¤¿ÀÄÆ¼¤Î³»¤À¡£
-D:ÅÁÀâ¤Î¥¢¥Æ¥Ê¤Î¼é¸îÀï»Î¤¬¿È¤Ë¤Þ¤È¤¤¡¢¥¢¥Æ¥Ê¤Ë¹ß¤ê¤«¤«¤ë¿ô¡¹¤Î´íµ¡¤òµß
-D:¤Ã¤¿¤È¸À¤ï¤ì¤ë¡£¥Ñ¡¼¥Ä¤òÁÈ¤ßÎ©¤Æ¤ë¤ÈÎÐÎ¶¤Î·Á¤ËÁÈ¤ß¤¢¤¬¤ë¡£
-D:¿È¤Ë¤Þ¤È¤¦¤ÈÎ¶À±ºÂ¤Î¾®±§Ãè¤ò´¶¤¸¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+D:”ò—¬’¼‰ºŽOçŽÚ‚Ææ‚í‚ê‚éœIŽR‚Ì‘åàe•z‚É‚æ‚Á‚Ä’b‚¦ã‚°‚ç‚ê‚½Â“º‚ÌŠZ‚¾B
+D:“`à‚ÌƒAƒeƒi‚ÌŽçŒìíŽm‚ªg‚É‚Ü‚Æ‚¢AƒAƒeƒi‚É~‚è‚©‚©‚é”X‚ÌŠë‹@‚ð‹~
+D:‚Á‚½‚ÆŒ¾‚í‚ê‚éBƒp[ƒc‚ð‘g‚Ý—§‚Ä‚é‚Æ—Î—´‚ÌŒ`‚É‘g‚Ý‚ ‚ª‚éB
+D:g‚É‚Ü‚Æ‚¤‚Æ—´¯À‚Ì¬‰F’ˆ‚ðŠ´‚¶‚é‚±‚Æ‚ª‚Å‚«‚éB
 
-N:244:¡Ø¥ô¥¡¥ó¥Ñ¥¤¥¢¡¦¥­¥é¡¼¡Ù
+N:244:wƒ”ƒ@ƒ“ƒpƒCƒAEƒLƒ‰[x
 E:'Vampire Killer'
 I:21:2:3
 W:50:55:75:220000
@@ -4006,32 +4006,32 @@ F:SLAY_EVIL | BRAND_FIRE | SLAY_DEMON | KILL_UNDEAD |
 F:FREE_ACT | RES_NETHER | HOLD_LIFE | SEE_INVIS | REGEN |
 F:ESP_UNDEAD | ESP_DEMON | DRAIN_EXP
 U:GRAND_CROSS
-D:¤³¤ÎÀ»¤Ê¤ëÊÜ¤Ï¡¢Ï£¶â½Ñ»Õ¤ÎÃÎ·Ã¤È²µ½÷¤ÎÂå½þ¤Ë¤è¤Ã¤ÆÀ¸¤ß½Ð¤µ¤ì¡¢
-D:ÂàËâ¤Î·ìÂ²¥Ù¥ë¥â¥ó¥É²ÈÂå¡¹¤Î¼ê¤Ç¿¶¤ë¤ï¤ì¤Æ¤­¤¿¡£
-D:¤½¤ÎÎÏ¤Ï¼Ù°­¤ÊÌë¤Î°ìÂ²¤ËÂÐ¤¹¤ë¼öëÇ¤½¤Î¤â¤Î¤Ç¤¢¤ê¡¢
-D:±ø¤ì¤¿º²¤ò²á¤¿¤º·â¤ÁÌÇ¤Ü¤¹¤À¤í¤¦¡£
+D:‚±‚Ì¹‚È‚é•Ú‚ÍA˜B‹àpŽt‚Ì’mŒb‚Æ‰³—‚Ì‘ãž‚É‚æ‚Á‚Ä¶‚Ýo‚³‚êA
+D:‘Þ–‚‚ÌŒŒ‘°ƒxƒ‹ƒ‚ƒ“ƒh‰Æ‘ãX‚ÌŽè‚ÅU‚é‚í‚ê‚Ä‚«‚½B
+D:‚»‚Ì—Í‚ÍŽ×ˆ«‚È–é‚Ìˆê‘°‚É‘Î‚·‚éŽôæf‚»‚Ì‚à‚Ì‚Å‚ ‚èA
+D:‰˜‚ê‚½°‚ð‰ß‚½‚¸Œ‚‚¿–Å‚Ú‚·‚¾‚ë‚¤B
 D:$This holy whip was generated with wise of a alchemist and a maiden's
 D:$sacrifice, wielded by Belmond family, the vampire hunters.
 D:$That power is indeed curse of evil household of night
 D:$and vanish the poisonous souls.
 
-N:245:±¿Ì¿¤Î¥ª¡¼¥Ö
+N:245:‰^–½‚ÌƒI[ƒu
 E:The Orb of Fate 
 I:39:10:3
 W:70:70:15:45000
 P:0:1d1:0:0:20
 F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 |
 U:TELEPORT_LEVEL
-D:¡Ö±¿Ì¿¤Î¥ª¡¼¥Ö¤ò»ý¤Ã¤Æ¤¤¤­¤Ê¤µ¤¤¡£¤ï¤¿¤·¤Ï±¿Ì¿¤Î¥ª¡¼¥Ö¤«¤é
-D:¿Í´Ö¤Î¼ê¤Ë¿¨¤ì¤Æ¤Ï¤Ê¤é¤ÌÌ¤Íè¤ò¹ð¤²¤ëÎÏ¤ò¼è¤ê½ü¤­¤Þ¤·¤¿¡£
-D:¤·¤«¤·¤Ê¤¬¤é±¿Ì¿¤Î¥ª¡¼¥Ö¤ÎÂ¾¤ÎÎÏ¤Ï¡¤¤¢¤Ê¤¿¤Î»×¤¤ÄÌ¤ê¤Ë
-D:¤·¤Æ¤«¤Þ¤¤¤Þ¤»¤ó¡£
-D:¤¢¤Ê¤¿¤Ï¥Á¥å¡¼¥ë¤ÎÌ¾¤Î¤â¤È¥¤¥§¥ó¥À¡¼¤ÎËâ½ü¤±¤òÃµ¤µ¤Í¤Ð¤Ê¤ê¤Þ¤»¤ó¡£
-D:¤¢¤Ê¤¿¤Î¿Ê¤àÆ»¤¬¥Á¥å¡¼¥ë¤ÎÆ³¤­¤Ë¤è¤ê³«¤«¤ì¤Þ¤¹¤è¤¦¤Ë¡£
-D:¤ï¤¿¤·¤ÎËå¤è¡×
-D:(¥Î¥ë¥ó¡¤JNethack)
+D:u‰^–½‚ÌƒI[ƒu‚ðŽ‚Á‚Ä‚¢‚«‚È‚³‚¢B‚í‚½‚µ‚Í‰^–½‚ÌƒI[ƒu‚©‚ç
+D:lŠÔ‚ÌŽè‚ÉG‚ê‚Ä‚Í‚È‚ç‚Ê–¢—ˆ‚ð‚°‚é—Í‚ðŽæ‚èœ‚«‚Ü‚µ‚½B
+D:‚µ‚©‚µ‚È‚ª‚ç‰^–½‚ÌƒI[ƒu‚Ì‘¼‚Ì—Í‚ÍC‚ ‚È‚½‚ÌŽv‚¢’Ê‚è‚É
+D:‚µ‚Ä‚©‚Ü‚¢‚Ü‚¹‚ñB
+D:‚ ‚È‚½‚Íƒ`ƒ…[ƒ‹‚Ì–¼‚Ì‚à‚ÆƒCƒFƒ“ƒ_[‚Ì–‚œ‚¯‚ð’T‚³‚Ë‚Î‚È‚è‚Ü‚¹‚ñB
+D:‚ ‚È‚½‚Ìi‚Þ“¹‚ªƒ`ƒ…[ƒ‹‚Ì“±‚«‚É‚æ‚èŠJ‚©‚ê‚Ü‚·‚æ‚¤‚ÉB
+D:‚í‚½‚µ‚Ì–…‚æv
+D:(ƒmƒ‹ƒ“CJNethack)
 
-N:246:Àï²µ½÷¥ß¥ê¥à¤Î
+N:246:í‰³—ƒ~ƒŠƒ€‚Ì
 E:of Milim the Valkyrie
 I:36:50:0
 W:60:2:60:80000
@@ -4040,10 +4040,10 @@ F:SUST_CHR | SUST_CON |
 F:RES_SOUND | RES_DISEN | REFLECT | FREE_ACT | ACTIVATE
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | AGGRAVATE
 U:STRAIN_HASTE
-D:¥É¥ï¡¼¥Õ¤ÎÉ±¡¢¹ÝÅ´»²ËÅ¥æ¡¼¥ß¥ë¤Î¸¦µæ¤ÎÀ®²Ì¤À¡£
-D:Ä¶¿¶Æ°¥¯¥ê¥¹¥¿¥ë¤¬¹â¤¤ËÉ¸æÎÏ¤ò¤â¤¿¤é¤·¤Æ¤¤¤ë¤é¤·¤¤¡£
+D:ƒhƒ[ƒt‚Ì•PA|“SŽQ–dƒ†[ƒ~ƒ‹‚ÌŒ¤‹†‚Ì¬‰Ê‚¾B
+D:’´U“®ƒNƒŠƒXƒ^ƒ‹‚ª‚‚¢–hŒä—Í‚ð‚à‚½‚ç‚µ‚Ä‚¢‚é‚ç‚µ‚¢B
 
-N:247:¡Øé¬é¯ÛùÊÜ¿Ï¡Ù
+N:247:wåKåNž™•Únx
 E:Rose
 I:21:2:2
 W:30:20:60:70000
@@ -4051,9 +4051,9 @@ P:0:3d8:20:12:0
 F:SHOW_MODS | VORPAL |
 F:SPEED | DEX | CHR | SLAY_DEMON | SLAY_ORC | SLAY_TROLL |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:¡ÖåºÎï¤Ê¥Ð¥é¤Ë¤Ï¡¢Ûù¤¬¤¢¤ë¤Î¤µ¡×¤È¤¢¤ëÍÅ¸Ñ¤¬°¦ÍÑ¤·¤Æ¤¤¤¿°ñ¤ÎÊÜ¤À¡£
+D:uãY—í‚Èƒoƒ‰‚É‚ÍAž™‚ª‚ ‚é‚Ì‚³v‚Æ‚ ‚é—dŒÏ‚ªˆ¤—p‚µ‚Ä‚¢‚½ˆï‚Ì•Ú‚¾B
 
-N:248:¡Ø¸×»¦¼·ÃúÇ°Ê©¡Ù
+N:248:wŒÕŽEŽµ’š”O•§x
 E:'Toragoroshi-Nanacho-Nenbutsu'
 I:23:20:3
 W:40:30:120:65000
@@ -4061,31 +4061,38 @@ P:0:6d4:11:23:-15
 F:VORPAL | HIDE_TYPE | SHOW_MODS | AGGRAVATE
 F:ACTIVATE | KILL_ANIMAL | KILL_HUMAN
 U:ARTS_FALLING_STAR
-D:ÄÔ»Â¤ê¤Ë¤¢¤Ã¤¿¸ð¿©Ë·¼ç¤¬ÀÚ¤é¤ì¤¿¤³¤È¤Ë¤¹¤éµ¤¤Å¤«¤º¡¢
-D:Ç°Ê©¤ò¾§¤¨¤Ê¤¬¤é¼·Ãú¤âÊâ¤¤¤¿¸å¤ËÀäÌ¿¤·¤¿¤È¤¤¤¦ÍÅÅá¤À¡£
-D:»ý¤Á¼ç¤ËºÒ¤¤¤ò¤â¤¿¤é¤¹¤È¸À¤ï¤ì¡¢¤½¤Î¼ç¤¿¤ë½êÍ­¼Ô¤Ç¤¢¤Ã¤¿
-D:´äËÜ¸×´ã¤Î»à¤Ë¤è¤ê¡Ö¸×»¦¡×¤ÎÌÃ¤¬²Ã¤¨¤é¤ì¤¿¡£
+D:’ÒŽa‚è‚É‚ ‚Á‚½ŒîH–VŽå‚ªØ‚ç‚ê‚½‚±‚Æ‚É‚·‚ç‹C‚Ã‚©‚¸A
+D:”O•§‚ð¥‚¦‚È‚ª‚çŽµ’š‚à•à‚¢‚½Œã‚Éâ–½‚µ‚½‚Æ‚¢‚¤—d“‚¾B
+D:Ž‚¿Žå‚ÉÐ‚¢‚ð‚à‚½‚ç‚·‚ÆŒ¾‚í‚êA‚»‚ÌŽå‚½‚éŠ—LŽÒ‚Å‚ ‚Á‚½
+D:Šâ–{ŒÕŠá‚ÌŽ€‚É‚æ‚èuŒÕŽEv‚Ì–Á‚ª‰Á‚¦‚ç‚ê‚½B
 
-N:249:¿ÈÂå¤ê¥·¥ó¥·¥¢¤Î
+N:249:g‘ã‚èƒVƒ“ƒVƒA‚Ì
 E:of Eliza the hero's scapegoat
 I:32:2:0
 W:5:4:12:10000
 P:2:0d0:0:0:0
 F:HIDE_TYPE | XTRA_H_RES
-D:Å·¶õ¿Í¤Î·ì¤ò°ú¤¯Í¦¼Ô¤òËâ¤Î¼ê¤«¤éÆ¨¤¹¤¿¤á¤Ë
-D:µ¾À·¤Ë¤Ê¤Ã¤¿¤È¤ÎÅÁ¾µ¤ò»ý¤Ä½÷À­¤ÎË¹»Ò¤À¡£
-D:¤µ¤ê¤È¤Æ±©º¬¾þ¤ê¤ÈÈù¤«¤Ê²Ã¸î°Ê¾å¤ËÆÃÉ®¤¹¤Ù¤­°õ¾Ý¤Ï¤Ê¤¤¡£
+D:“V‹ól‚ÌŒŒ‚ðˆø‚­—EŽÒ‚ð–‚‚ÌŽè‚©‚ç“¦‚·‚½‚ß‚É
+D:‹]µ‚É‚È‚Á‚½‚Æ‚Ì“`³‚ðŽ‚Â—«‚Ì–XŽq‚¾B
+D:‚³‚è‚Æ‚Ä‰Hªü‚è‚Æ”÷‚©‚È‰ÁŒìˆÈã‚É“Á•M‚·‚×‚«ˆóÛ‚Í‚È‚¢B
 
-N:250:¡Ø¥×¥é¥°¡Ù
+N:250:wƒvƒ‰ƒOx
 E:'Plag'
 I:40:29:3
 W:60:100:0:60000
 P:0:1d1:0:0:0
 F:INSTA_ART | STR | WIS | DEX | CON | SPEED |
 F:SLOW_DIGEST | REGEN | PERMA_CURSE | ESP_UNIQUE |
-D:¶ä²ÏÄë¹ñ¹ÄÄë¥«¥ë¥À¡¼¥à­¸À¤¤¬°ìÉô¤ÎÉô²¼¤Ë¼ø¤±¤ë¡¢Ç¾¤ËÄ¾ÀÜËä¤á¹þ¤à¿Ë¾õ¤ÎÊªÂÎ¤À¡£
-D:Ëä¤á¹þ¤Þ¤ì¤¿¼Ô¤ÏÇ½ÎÏ¤¬ÂçÉý¤ËÁý¶¯¤µ¤ì¡¢ÉÔÏ·ÉÔ»à¤Ë¤¹¤é¤Ê¤ë¤È¤¤¤¦¡£
-D:¡Ö¤Ê¤¼¤½¤ó¤Ê¤â¤Î¤òËä¤á¹þ¤ó¤À¡©ÃéÀ¿¤Î¾Ú¤·¤«¡©¤½¤ì¤È¤âÌ¾ÍÀ¤À¤È»×¤Ã¤Æ¤¤¤ë¤Î¤«
-D:¡¡¥³¥ó¥Ô¥å¡¼¥¿¡¼¤Î¡¡»È¤¤¼Î¤Æ¥¿¡¼¥ß¥Ê¥ë¤Ë¤Ê¤ë¤³¤È¤¬¡×(À»Íªµª¡ÖÄ¶¿Í¥í¥Ã¥¯¡×)
+D:‹â‰Í’é‘c’éƒJƒ‹ƒ_[ƒ€‡W¢‚ªˆê•”‚Ì•”‰º‚ÉŽö‚¯‚éA”]‚É’¼Ú–„‚ßž‚Þjó‚Ì•¨‘Ì‚¾B
+D:–„‚ßž‚Ü‚ê‚½ŽÒ‚Í”\—Í‚ª‘å•‚É‘‹­‚³‚êA•s˜V•sŽ€‚É‚·‚ç‚È‚é‚Æ‚¢‚¤B
+D:u‚È‚º‚»‚ñ‚È‚à‚Ì‚ð–„‚ßž‚ñ‚¾H’‰½‚ÌØ‚µ‚©H‚»‚ê‚Æ‚à–¼—_‚¾‚ÆŽv‚Á‚Ä‚¢‚é‚Ì‚©
+D:@ƒRƒ“ƒsƒ…[ƒ^[‚Ì@Žg‚¢ŽÌ‚Äƒ^[ƒ~ƒiƒ‹‚É‚È‚é‚±‚Æ‚ªv(¹—I‹Iu’´lƒƒbƒNv)
 
+N:251:’G‹ÕŽtƒƒrƒ“ƒgƒ“‚Ì
+E:of Robinton, the masterharper
+I:19:51:3
+W:50:150:120:75000
+P:0:0d0:0:0:0
+F:DEX | CHR
+F:RES_FIRE | RES_SOUND | RES_NETHER | SHOW_MODS | INSTA_ART
 

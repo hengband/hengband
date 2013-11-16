@@ -1464,6 +1464,7 @@
 #define ART_GOURYU              207
 #define ART_EOWYN               216
 #define ART_NANACHO             248
+#define ART_ROBINTON            251
 
 /* Polearms */
 #define ART_THEODEN             93
@@ -2031,6 +2032,7 @@
 #define SV_LIGHT_XBOW                   23	/* (x3) */
 #define SV_HEAVY_XBOW                   24	/* (x4) */
 #define SV_CRIMSON                      50	/* (x0) */
+#define SV_HARP                         51	/* (x0) */
 #define SV_NAMAKE_BOW                   63	/* (x3) */
 
 /* The "sval" codes for TV_DIGGING */
