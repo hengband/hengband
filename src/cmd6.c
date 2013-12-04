@@ -2016,14 +2016,14 @@ msg_print("ダンジョンが揺れた...");
 
 		case SV_SCROLL_ACQUIREMENT:
 		{
-			acquirement(py, px, 1, TRUE, FALSE);
+			acquirement(py, px, 1, TRUE, FALSE, FALSE);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_STAR_ACQUIREMENT:
 		{
-			acquirement(py, px, randint1(2) + 1, TRUE, FALSE);
+			acquirement(py, px, randint1(2) + 1, TRUE, FALSE, FALSE);
 			ident = TRUE;
 			break;
 		}

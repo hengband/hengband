@@ -2011,7 +2011,7 @@ void do_cmd_debug(void)
 	/* Good Objects */
 	case 'g':
 		if (command_arg <= 0) command_arg = 1;
-		acquirement(py, px, command_arg, FALSE, TRUE);
+		acquirement(py, px, command_arg, FALSE, FALSE, TRUE);
 		break;
 
 	/* Hitpoint rerating */
@@ -2129,6 +2129,12 @@ void do_cmd_debug(void)
 		do_cmd_wiz_summon(command_arg);
 		break;
 
+	/* Special(Random Artifact) Objects */
+	case 'S':
+		if (command_arg <= 0) command_arg = 1;
+		acquirement(py, px, command_arg, TRUE, TRUE, TRUE);
+		break;
+
 	/* Teleport */
 	case 't':
 		teleport_player(100, 0L);
@@ -2137,7 +2143,7 @@ void do_cmd_debug(void)
 	/* Very Good Objects */
 	case 'v':
 		if (command_arg <= 0) command_arg = 1;
-		acquirement(py, px, command_arg, TRUE, TRUE);
+		acquirement(py, px, command_arg, TRUE, FALSE, TRUE);
 		break;
 
 	/* Wizard Light the Level */

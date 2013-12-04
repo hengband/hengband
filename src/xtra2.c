@@ -4945,7 +4945,7 @@ msg_print("「我が与えし物を賢明に使うべし。」");
 			msg_print("'Use my gift wisely.'");
 #endif
 
-			acquirement(py, px, 1, FALSE, FALSE);
+			acquirement(py, px, 1, FALSE, FALSE, FALSE);
 #ifdef JP
 			reward = "上質なアイテムを手に入れた。";
 #else
@@ -4967,7 +4967,7 @@ msg_print("「我が与えし物を賢明に使うべし。」");
 			msg_print("'Use my gift wisely.'");
 #endif
 
-			acquirement(py, px, 1, TRUE, FALSE);
+			acquirement(py, px, 1, TRUE, FALSE, FALSE);
 #ifdef JP
 			reward = "高級品のアイテムを手に入れた。";
 #else
@@ -5108,7 +5108,7 @@ msg_print("「汝の行いは貴き報いに値せり。」");
 			msg_print("'Thy deed hath earned thee a worthy reward.'");
 #endif
 
-			acquirement(py, px, randint1(2) + 1, FALSE, FALSE);
+			acquirement(py, px, randint1(2) + 1, FALSE, FALSE, FALSE);
 #ifdef JP
 			reward = "上質なアイテムを手に入れた。";
 #else
@@ -5130,7 +5130,7 @@ msg_print("「下僕よ、汝の献身への我が惜しみ無き報いを見るがよい。」");
 			msg_print("'Behold, mortal, how generously I reward thy loyalty.'");
 #endif
 
-			acquirement(py, px, randint1(2) + 1, TRUE, FALSE);
+			acquirement(py, px, randint1(2) + 1, TRUE, FALSE, FALSE);
 #ifdef JP
 			reward = "高級品のアイテムを手に入れた。";
 #else

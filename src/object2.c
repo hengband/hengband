@@ -5384,11 +5384,11 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 /*
  * Scatter some "great" objects near the player
  */
-void acquirement(int y1, int x1, int num, bool great, bool known)
+void acquirement(int y1, int x1, int num, bool great, bool special, bool known)
 {
 	object_type *i_ptr;
 	object_type object_type_body;
-	u32b mode = AM_GOOD | (great ? AM_GREAT : 0L);
+	u32b mode = AM_GOOD | (great || special ? AM_GREAT : 0L) | (special ? AM_SPECIAL : 0L) ;
 
 	/* Acquirement */
 	while (num--)
@@ -5412,7 +5412,6 @@ void acquirement(int y1, int x1, int num, bool great, bool known)
 		(void)drop_near(i_ptr, -1, y1, x1);
 	}
 }
-
 
 /*
  * Scatter some "amusing" objects near the player
