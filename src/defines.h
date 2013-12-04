@@ -576,7 +576,7 @@
 #define BIAS_MAGE           17
 #define BIAS_WARRIOR        18
 #define BIAS_RANGER         19
-
+#define MAX_BIAS            20
 
 /*** Pet constants ***/
 

@@ -1662,6 +1662,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	char    new_name[1024];
 	int     has_pval = 0;
 	int     powers = randint1(5) + 1;
+	int     max_powers;
 	int     max_type = (object_is_weapon_ammo(o_ptr) ? 7 : 5);
 	int     power_level;
 	s32b    total_flags;
@@ -1775,6 +1776,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 	if (a_cursed) powers /= 2;
 
+	max_powers = powers;
 	/* Main loop */
 	while (powers--)
 	{
@@ -1858,7 +1860,6 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
 
 	total_flags = flag_cost(o_ptr, o_ptr->pval);
-	if (cheat_peek) msg_format("%ld", total_flags);
 
 	if (a_cursed) curse_artifact(o_ptr);
 
@@ -1978,19 +1979,29 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		get_random_name(new_name, object_is_armour(o_ptr), power_level);
 	}
 
-	if (cheat_xtra)
-	{
-#ifdef JP
-		if (artifact_bias) msg_format("運の偏ったアーティファクト: %d。", artifact_bias);
-		else msg_print("アーティファクトに運の偏りなし。");
-#else
-		if (artifact_bias) msg_format("Biased artifact: %d.", artifact_bias);
-		else msg_print("No bias in artifact.");
-#endif
-	}
-
 	/* Save the inscription */
 	o_ptr->art_name = quark_add(new_name);
+
+	if (cheat_xtra)
+	{
+		char o_name[MAX_NLEN];
+
+		object_aware(o_ptr);
+		object_known(o_ptr);
+
+		/* Mark the item as fully known */
+		o_ptr->ident |= (IDENT_MENTAL);
+
+		/* Description */
+		object_desc(o_name, o_ptr, 0);
+
+#ifdef JP
+		msg_format("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」:", max_powers, total_flags, artifact_bias_name[artifact_bias]);
+#else
+		msg_format("Random artifact generated '%s'. (Power:%d, Value:%ld) :", artifact_bias_name[artifact_bias], max_powers, total_flags);
+#endif
+		msg_format("%s", o_name);
+	}
 
 	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);

@@ -6388,3 +6388,53 @@ const activation_type activation_info[] =
 	{ NULL, 0, 0, 0, {0, 0},
 	  "" }
 };
+
+#ifdef JP
+const cptr artifact_bias_name[MAX_BIAS] =
+{
+	"なし",
+	"電撃",
+	"毒",
+	"火炎",
+	"冷気",
+	"酸",
+	"腕力",
+	"知力",
+	"賢さ",
+	"器用さ",
+	"耐久",
+	"魅力",
+	"混沌",
+	"プリースト",
+	"死霊",
+	"法",
+	"盗賊",
+	"メイジ",
+	"戦士",
+	"レンジャー",
+};
+#else
+const cptr artifact_bias_name[MAX_BIAS] =
+{
+	"None",
+	"Elec",
+	"Poison",
+	"Fire",
+	"Cold",
+	"Acid",
+	"STR",
+	"INT",
+	"WIS",
+	"DEX",
+	"CON",
+	"CHA",
+	"Chaos",
+	"Pristly",
+	"Necromantic",
+	"Law",
+	"Rogue",
+	"Mage",
+	"Warrior",
+	"Ranger",
+};
+#endif

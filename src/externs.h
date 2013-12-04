@@ -119,6 +119,7 @@ extern const mbe_info_type mbe_info[];
 extern const byte feature_action_flags[FF_FLAG_MAX];
 extern const dragonbreath_type dragonbreath_info[];
 extern const activation_type activation_info[];
+extern const cptr artifact_bias_name[MAX_BIAS];
 
 /* variable.c */
 extern const cptr copyright[5];
