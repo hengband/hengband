@@ -1078,6 +1078,8 @@ static void prt_depth(void)
  */
 static void prt_hunger(void)
 {
+	if(p_ptr->wizard && p_ptr->inside_arena) return;
+
 	/* Fainting / Starving */
 	if (p_ptr->food < PY_FOOD_FAINT)
 	{
@@ -1609,73 +1611,115 @@ static void health_redraw(bool riding)
 
 	m_ptr = &m_list[health_who];
 
-	/* Not tracking */
-	if (!health_who)
+	if (p_ptr->wizard && p_ptr->inside_battle)
 	{
-		/* Erase the health bar */
-		Term_erase(col, row, 12);
-	}
+		row = ROW_INFO - 2;
+		col = COL_INFO + 2;
 
-	/* Tracking an unseen monster */
-	else if (!m_ptr->ml)
-	{
-		/* Indicate that the monster health is "unknown" */
-		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-	}
+		Term_putstr(col - 2, row, 12, TERM_WHITE, "      /     ");
+		Term_putstr(col - 2, row + 1, 12, TERM_WHITE, "      /     ");
+		Term_putstr(col - 2, row + 2, 12, TERM_WHITE, "      /     ");
+		Term_putstr(col - 2, row + 3, 12, TERM_WHITE, "      /     ");
 
-	/* Tracking a hallucinatory monster */
-	else if (p_ptr->image)
-	{
-		/* Indicate that the monster health is "unknown" */
-		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-	}
+		if(m_list[1].r_idx)
+		{
+			Term_putstr(col - 2, row, 2, r_info[m_list[1].r_idx].x_attr, format("%c", r_info[m_list[1].r_idx].x_char));
+			Term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", m_list[1].hp));
+			Term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", m_list[1].max_maxhp));
+		}
 
-	/* Tracking a dead monster (???) */
-	else if (m_ptr->hp < 0)
-	{
-		/* Indicate that the monster health is "unknown" */
-		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-	}
+		if(m_list[2].r_idx)
+		{
+			Term_putstr(col - 2, row + 1, 2, r_info[m_list[2].r_idx].x_attr, format("%c", r_info[m_list[2].r_idx].x_char));
+			Term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", m_list[2].hp));
+			Term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", m_list[2].max_maxhp));
+		}
 
-	/* Tracking a visible monster */
+		if(m_list[3].r_idx)
+		{
+			Term_putstr(col - 2, row + 2, 2, r_info[m_list[3].r_idx].x_attr, format("%c", r_info[m_list[3].r_idx].x_char));
+			Term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", m_list[3].hp));
+			Term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", m_list[3].max_maxhp));
+		}
+
+		if(m_list[4].r_idx)
+		{
+			Term_putstr(col - 2, row + 3, 2, r_info[m_list[4].r_idx].x_attr, format("%c", r_info[m_list[4].r_idx].x_char));
+			Term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", m_list[4].hp));
+			Term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", m_list[4].max_maxhp));
+		}
+	}
 	else
 	{
-		/* Extract the "percent" of health */
-		int pct = 100L * m_ptr->hp / m_ptr->maxhp;
-		int pct2 = 100L * m_ptr->hp / m_ptr->max_maxhp;
 
-		/* Convert percent into "health" */
-		int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;
+		/* Not tracking */
+		if (!health_who)
+		{
+			/* Erase the health bar */
+			Term_erase(col, row, 12);
+		}
 
-		/* Default to almost dead */
-		byte attr = TERM_RED;
+		/* Tracking an unseen monster */
+		else if (!m_ptr->ml)
+		{
+			/* Indicate that the monster health is "unknown" */
+			Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+		}
 
-		/* Invulnerable */
-		if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;
+		/* Tracking a hallucinatory monster */
+		else if (p_ptr->image)
+		{
+			/* Indicate that the monster health is "unknown" */
+			Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+		}
 
-		/* Asleep */
-		else if (MON_CSLEEP(m_ptr)) attr = TERM_BLUE;
+		/* Tracking a dead monster (???) */
+		else if (m_ptr->hp < 0)
+		{
+			/* Indicate that the monster health is "unknown" */
+			Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+		}
 
-		/* Afraid */
-		else if (MON_MONFEAR(m_ptr)) attr = TERM_VIOLET;
+		/* Tracking a visible monster */
+		else
+		{
+			/* Extract the "percent" of health */
+			int pct = 100L * m_ptr->hp / m_ptr->maxhp;
+			int pct2 = 100L * m_ptr->hp / m_ptr->max_maxhp;
 
-		/* Healthy */
-		else if (pct >= 100) attr = TERM_L_GREEN;
+			/* Convert percent into "health" */
+			int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;
 
-		/* Somewhat Wounded */
-		else if (pct >= 60) attr = TERM_YELLOW;
+			/* Default to almost dead */
+			byte attr = TERM_RED;
 
-		/* Wounded */
-		else if (pct >= 25) attr = TERM_ORANGE;
+			/* Invulnerable */
+			if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;
 
-		/* Badly wounded */
-		else if (pct >= 10) attr = TERM_L_RED;
+			/* Asleep */
+			else if (MON_CSLEEP(m_ptr)) attr = TERM_BLUE;
 
-		/* Default to "unknown" */
-		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+			/* Afraid */
+			else if (MON_MONFEAR(m_ptr)) attr = TERM_VIOLET;
 
-		/* Dump the current "health" (use '*' symbols) */
-		Term_putstr(col + 1, row, len, attr, "**********");
+			/* Healthy */
+			else if (pct >= 100) attr = TERM_L_GREEN;
+
+			/* Somewhat Wounded */
+			else if (pct >= 60) attr = TERM_YELLOW;
+
+			/* Wounded */
+			else if (pct >= 25) attr = TERM_ORANGE;
+
+			/* Badly wounded */
+			else if (pct >= 10) attr = TERM_L_RED;
+
+			/* Default to "unknown" */
+			Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+
+			/* Dump the current "health" (use '*' symbols) */
+			Term_putstr(col + 1, row, len, attr, "**********");
+		}
 	}
 }
 
