@@ -27,8 +27,6 @@ extern cptr macro_modifier_name[MAX_MACRO_MOD];
 extern cptr macro_trigger_name[MAX_MACRO_TRIG];
 extern cptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
-
-/* ƁEܸ�Eǵ�ǽ�ɲäǻȤ� */
 extern int level_up;
 
 /* 
