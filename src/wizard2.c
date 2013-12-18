@@ -206,12 +206,11 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 {
 	int i, j;
 	int home = 0;
-	u32b maxr = 1, maxt = 1, ratio;
 	u32b rarity[K_MAX_DEPTH];
 	u32b total[K_MAX_DEPTH];
 	s32b maxd = 1, display[22];
 	byte c = TERM_WHITE;
-	cptr r = "+--common--+";
+	cptr r = "+---Rate---+";
 	object_kind *k_ptr;
 
 
@@ -251,68 +250,20 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 			if ((k_ptr->tval == tval) && (k_ptr->sval == sval))
 			{
 				home = k_ptr->level;
-				rarity[i] += prob;
+				rarity[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
 			}
 		}
 		total[i] += total_frac / (GREAT_OBJ * K_MAX_DEPTH);
-	}
-
-	/* Find maxima */
-	for (i = 0; i < K_MAX_DEPTH; i++)
-	{
-		if (rarity[i] > maxr) maxr = rarity[i];
-		if (total[i] > maxt) maxt = total[i];
-	}
-
-	if (maxr / (GREAT_OBJ * K_MAX_DEPTH) != 0)
-		ratio = maxt / (maxr / (GREAT_OBJ * K_MAX_DEPTH));
-	else
-		ratio = 99999L;
-
-	/* Simulate a log graph */
-	if (ratio > 1000)
-	{
-		c = TERM_L_WHITE;
-		r = "+-uncommon-+";
-	}
-	if (ratio > 3000)
-	{
-		c = TERM_SLATE;
-		r = "+---rare---+";
-	}
-	if (ratio > 32768L)
-	{
-		c = TERM_L_DARK;
-		r = "+-VeryRare-+";
 	}
 
 	/* Calculate probabilities for each range */
 	for (i = 0; i < 22; i++)
 	{
 		/* Shift the values into view */
-
 		int possibility = 0;
 		for (j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++)
-			possibility += rarity[j] * (100 * maxt / total[j]);
-
-		possibility = possibility / maxr;
-
-		/* display[i] = log_{sqrt(2)}(possibility) */
-		display[i] = 0;
-		while (possibility)
-		{
-			display[i]++;
-			possibility = possibility * 1000 / 1414;
-		}
-
-		/* Track maximum */
-		if (display[i] > maxd) maxd = display[i];
-	}
-
-	/* Normalize */
-	if (maxd > 10) for (i = 0; i < 22; i++)
-	{
-		display[i] = display[i] - maxd + 10;
+			possibility += rarity[j] * 100000 / total[j];
+		display[i] = possibility / 5;
 	}
 
 	/* Graph the rarities */
@@ -320,19 +271,17 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 	{
 		Term_putch(col, row + i + 1, TERM_WHITE,  '|');
 
-		prt(format("%d", (i * K_MAX_DEPTH / 220) % 10), row + i + 1, col);
+		prt(format("%2dF", (i * 5)), row + i + 1, col);
 
-		if (display[i] <= 0) 
-			continue;
 
 		/* Note the level */
 		if ((i * K_MAX_DEPTH / 22 <= home) && (home < (i + 1) * K_MAX_DEPTH / 22))
 		{
-			c_prt(TERM_RED, format("%.*s", display[i], "**********"), row + i + 1, col + 1);
+			c_prt(TERM_RED, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
 		}
 		else
 		{
-			c_prt(c, format("%.*s", display[i], "**********"), row + i + 1, col + 1);
+			c_prt(TERM_WHITE, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
 		}
 	}
 
