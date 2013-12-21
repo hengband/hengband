@@ -860,7 +860,7 @@ errr process_autopick_file_command(char *buf)
 			continue;
 		}
 #endif
-		if (isspace(buf[i]) && buf[i] != ' ')
+		if (iswspace(buf[i]) && buf[i] != ' ')
 			break;
 	}
 	buf[i] = 0;

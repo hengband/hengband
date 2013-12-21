@@ -622,7 +622,7 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 			for (q = 0; tmp[q]; q++)
 			{
 				/* Notice first non-space */
-				if (!isspace(tmp[q]))
+				if (!iswspace(tmp[q]))
 				{
 					/* Capitalize if possible */
 					if (islower(tmp[q]))

@@ -78,6 +78,7 @@
 #ifdef WINDOWS
 #include <windows.h>
 #include <direct.h>
+#include <locale.h>
 
 /*
  * Extract the "WIN32" flag from the compiler
@@ -1371,13 +1372,13 @@ static s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
 		char *t;
 
 		/* Skip leading whitespace */
-		for ( ; *s && isspace(*s); ++s) /* loop */;
+		for ( ; *s && iswspace(*s); ++s) /* loop */;
 
 		/* All done */
 		if (!*s) break;
 
 		/* Find next whitespace, if any */
-		for (t = s; *t && !isspace(*t); ++t) /* loop */;
+		for (t = s; *t && !iswspace(*t); ++t) /* loop */;
 
 		/* Nuke and advance (if necessary) */
 		if (*t) *t++ = '\0';
@@ -5361,6 +5362,8 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	WNDCLASS wc;
 	HDC hdc;
 	MSG msg;
+
+	setlocale( LC_ALL, "ja_JP" );
 
 	/* Unused */
 	(void)nCmdShow;

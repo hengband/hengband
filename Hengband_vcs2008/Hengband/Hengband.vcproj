@@ -113,7 +113,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WINDOWS;JP;SJIS;_CRT_SECURE_NO_WARNINGS;WIN32"
+				PreprocessorDefinitions="WINDOWS;JP;SJIS;_CRT_SECURE_NO_WARNINGS;WIN32;MBCS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"

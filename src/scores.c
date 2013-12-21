@@ -11,6 +11,7 @@
 /* Purpose: Highscores handling */
 
 #include "angband.h"
+#define _MBCS
 
 
 /*
@@ -238,10 +239,10 @@ sprintf(tmp_val, "( %d °Ì°Ê²¼ )", k + 1);
 			mdun = atoi(the_score.max_dun);
 
 			/* Hack -- extract the gold and such */
-			for (user = the_score.uid; isspace(*user); user++) /* loop */;
-			for (when = the_score.day; isspace(*when); when++) /* loop */;
-			for (gold = the_score.gold; isspace(*gold); gold++) /* loop */;
-			for (aged = the_score.turns; isspace(*aged); aged++) /* loop */;
+			for (user = the_score.uid; iswspace(*user); user++) /* loop */;
+			for (when = the_score.day; iswspace(*when); when++) /* loop */;
+			for (gold = the_score.gold; iswspace(*gold); gold++) /* loop */;
+			for (aged = the_score.turns; iswspace(*aged); aged++) /* loop */;
 
 			/* Clean up standard encoded form of "when" */
 			if ((*when == '@') && strlen(when) == 9)

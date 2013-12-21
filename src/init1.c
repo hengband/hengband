@@ -3783,7 +3783,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 	if (!buf[0]) return (0);
 
 	/* Skip "blank" lines */
-	if (isspace(buf[0])) return (0);
+	if (iswspace(buf[0])) return (0);
 
 	/* Skip comments */
 	if (buf[0] == '#') return (0);
@@ -4272,7 +4272,7 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 	s = (*sp);
 
 	/* Skip spaces */
-	while (isspace(*s)) s++;
+	while (iswspace(*s)) s++;
 
 	/* Save start */
 	b = s;
@@ -4622,7 +4622,7 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 		if (!buf[0]) continue;
 
 		/* Skip "blank" lines */
-		if (isspace(buf[0])) continue;
+		if (iswspace(buf[0])) continue;
 
 		/* Skip comments */
 		if (buf[0] == '#') continue;
@@ -4885,7 +4885,7 @@ void write_r_info_txt(void)
 			/* Start the line */
 			sprintf(buf, "D:");
 
-			for (bc = 0, t = buf + 2; ((bc < 60) || !isspace(desc[j])) && (j < dlen); j++, bc++, t++)
+			for (bc = 0, t = buf + 2; ((bc < 60) || !iswspace(desc[j])) && (j < dlen); j++, bc++, t++)
 			{
 				*t = desc[j];
 			}

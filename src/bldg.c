@@ -1456,7 +1456,7 @@ get_string("≤ø»÷°© (0-9): ", out_val, 32);
 					get_string("Pick a number (0-9): ", out_val, 32);
 #endif
 
-					for (p = out_val; isspace(*p); p++);
+					for (p = out_val; iswspace(*p); p++);
 					choice = atol(p);
 					if (choice < 0)
 					{

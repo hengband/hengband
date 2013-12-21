@@ -828,7 +828,7 @@ cptr process_pref_file_expr(char **sp, char *fp)
 	s = (*sp);
 
 	/* Skip spaces */
-	while (isspace(*s)) s++;
+	while (iswspace(*s)) s++;
 
 	/* Save start */
 	b = s;
@@ -1142,7 +1142,7 @@ static errr process_pref_file_aux(cptr name, int preftype)
 #ifdef JP
 		if (!iskanji(buf[0]))
 #endif
-		if (isspace(buf[0])) continue;
+		if (iswspace(buf[0])) continue;
 
 		/* Skip comments */
 		if (buf[0] == '#') continue;
