@@ -543,40 +543,40 @@
 /*
  * Misc constants
  */
-#define TOWN_DAWN         10000    /* Number of ticks from dawn to dawn XXX */
-#define TURNS_PER_TICK    10L      /* Number of energy-gain-turns per ticks */
-#define MAX_DAYS          20000    /* Maximum days */
-#define BREAK_GLYPH       550      /* Rune of protection resistance */
-#define BREAK_MINOR_GLYPH 299      /* For explosive runes */
-#define BTH_PLUS_ADJ       3       /* Adjust BTH per plus-to-hit */
-#define MON_MULT_ADJ  	   8       /* High value slows multiplication */
-#define MON_SUMMON_ADJ	   2       /* Adjust level of summoned creatures */
-#define MON_DRAIN_LIFE	   2       /* Percent of player exp drained per hit */
-#define USE_DEVICE    	   3       /* x> Harder devices x< Easier devices     */
+#define TOWN_DAWN         10000    /*!< 1日分のターン / Number of ticks from dawn to dawn XXX */
+#define TURNS_PER_TICK    10L      /*!< Number of energy-gain-turns per ticks */
+#define MAX_DAYS          20000    /*!< 内部処理中で保持される最大日数 / Maximum days */
+#define BREAK_GLYPH       550      /*!< 守りのルーンの強靭度 / Rune of protection resistance */
+#define BREAK_MINOR_GLYPH 299      /*!< 爆発のルーンの発動しやすさ / For explosive runes */
+#define BTH_PLUS_ADJ       3       /*!< Adjust BTH per plus-to-hit */
+#define MON_MULT_ADJ  	   8       /*!< High value slows multiplication */
+#define MON_SUMMON_ADJ	   2       /*!< Adjust level of summoned creatures */
+#define MON_DRAIN_LIFE	   2       /*!< Percent of player exp drained per hit */
+#define USE_DEVICE    	   3       /*!< x> Harder devices x< Easier devices     */
 
 
 /* "Biases" for random artifact gen */
 
-#define BIAS_ELEC            1
-#define BIAS_POIS            2
-#define BIAS_FIRE            3
-#define BIAS_COLD            4
-#define BIAS_ACID            5
-#define BIAS_STR             6
-#define BIAS_INT             7
-#define BIAS_WIS             8
-#define BIAS_DEX             9
-#define BIAS_CON            10
-#define BIAS_CHR            11
-#define BIAS_CHAOS          12
-#define BIAS_PRIESTLY       13
-#define BIAS_NECROMANTIC    14
-#define BIAS_LAW            15
-#define BIAS_ROGUE          16
-#define BIAS_MAGE           17
-#define BIAS_WARRIOR        18
-#define BIAS_RANGER         19
-#define MAX_BIAS            20
+#define BIAS_ELEC            1 /*!< ランダムアーティファクトバイアス:電撃 */
+#define BIAS_POIS            2 /*!< ランダムアーティファクトバイアス:毒 */
+#define BIAS_FIRE            3 /*!< ランダムアーティファクトバイアス:火炎 */
+#define BIAS_COLD            4 /*!< ランダムアーティファクトバイアス:冷気 */
+#define BIAS_ACID            5 /*!< ランダムアーティファクトバイアス:酸 */
+#define BIAS_STR             6 /*!< ランダムアーティファクトバイアス:腕力 */
+#define BIAS_INT             7 /*!< ランダムアーティファクトバイアス:知力 */
+#define BIAS_WIS             8 /*!< ランダムアーティファクトバイアス:賢さ */
+#define BIAS_DEX             9 /*!< ランダムアーティファクトバイアス:器用さ */
+#define BIAS_CON            10 /*!< ランダムアーティファクトバイアス:耐久 */
+#define BIAS_CHR            11 /*!< ランダムアーティファクトバイアス:魅力 */
+#define BIAS_CHAOS          12 /*!< ランダムアーティファクトバイアス:混沌 */
+#define BIAS_PRIESTLY       13 /*!< ランダムアーティファクトバイアス:プリースト系 */
+#define BIAS_NECROMANTIC    14 /*!< ランダムアーティファクトバイアス:死霊 */
+#define BIAS_LAW            15 /*!< ランダムアーティファクトバイアス:法 */
+#define BIAS_ROGUE          16 /*!< ランダムアーティファクトバイアス:盗賊系 */
+#define BIAS_MAGE           17 /*!< ランダムアーティファクトバイアス:メイジ系 */
+#define BIAS_WARRIOR        18 /*!< ランダムアーティファクトバイアス:戦士系 */
+#define BIAS_RANGER         19 /*!< ランダムアーティファクトバイアス:レンジャー系 */
+#define MAX_BIAS            20 /*!< ランダムアーティファクトバイアス:最大数 */
 
 /*** Pet constants ***/
 
