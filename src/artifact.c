@@ -366,7 +366,14 @@ static void curse_artifact(object_type * o_ptr)
 		add_flag(o_ptr->art_flags, TR_NO_MAGIC);
 }
 
-
+/*!
+ * @brief ランダムアーティファクト生成中、対象のオブジェクトにpval能力を付加する。/ Add one pval on generation of randam artifact.
+ * @details 優先的に付加されるpvalがランダムアーティファクトバイアスに依存して存在する。
+ * 原則的候補は腕力、知力、賢さ、器用さ、耐久、魅力、探索、隠密、赤外線視力、加速。武器のみ採掘、追加攻撃も候補に入る。
+ * @attension オブジェクトのtval、svalに依存したハードコーディング処理がある。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
 static void random_plus(object_type * o_ptr)
 {
 	int this_type = (object_is_weapon_ammo(o_ptr) ? 23 : 19);
@@ -580,7 +587,16 @@ static void random_plus(object_type * o_ptr)
 	}
 }
 
-
+/*!
+ * @brief ランダムアーティファクト生成中、対象のオブジェクトに耐性を付加する。/ Add one resistance on generation of randam artifact.
+ * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
+ * 原則的候補は火炎、冷気、電撃、酸（以上免疫の可能性もあり）、
+ * 毒、閃光、暗黒、破片、轟音、盲目、混乱、地獄、カオス、劣化、恐怖、火オーラ、冷気オーラ、電撃オーラ、反射。
+ * 戦士系バイアスのみ反魔もつく。
+ * @attension オブジェクトのtval、svalに依存したハードコーディング処理がある。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
 static void random_resistance(object_type * o_ptr)
 {
 	switch (artifact_bias)
