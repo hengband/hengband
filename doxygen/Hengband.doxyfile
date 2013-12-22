@@ -415,7 +415,7 @@ EXTRACT_PACKAGE        = NO
 # included in the documentation.
 # The default value is: NO.
 
-EXTRACT_STATIC         = NO
+EXTRACT_STATIC         = YES
 
 # If the EXTRACT_LOCAL_CLASSES tag is set to YES classes (and structs) defined
 # locally in source files will be included in the documentation. If set to NO
@@ -761,7 +761,7 @@ FILE_PATTERNS          = *.c \
 # be searched for input files as well.
 # The default value is: NO.
 
-RECURSIVE              = YES
+RECURSIVE              = NO
 
 # The EXCLUDE tag can be used to specify files and/or directories that should be
 # excluded from the INPUT source files. This way you can easily exclude a
