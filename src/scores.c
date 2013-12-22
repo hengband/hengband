@@ -11,7 +11,6 @@
 /* Purpose: Highscores handling */
 
 #include "angband.h"
-#define _MBCS
 
 
 /*

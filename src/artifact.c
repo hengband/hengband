@@ -1,39 +1,44 @@
-/* Purpose: Artifact code */
-
-/*
- * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research, and
- * not for profit purposes provided that this copyright and statement are
- * included in all such copies.
+/*!
+    @file artifact.c
+    @brief アーティファクトの生成と管理 / Artifact code
+    @date 2013/12/11
+    @author
+    Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
+    This software may be copied and distributed for educational, research, and\n
+    not for profit purposes provided that this copyright and statement are\n
+    included in all such copies.\n
+    2013 Deskull rearranged comment for Doxygen.
  */
 
 #include "angband.h"
 
 
 /* Chance of using syllables to form the name instead of the "template" files */
-#define SINDARIN_NAME   10
-#define TABLE_NAME      20
-#define A_CURSED        13
-#define WEIRD_LUCK      12
-#define BIAS_LUCK       20
-#define IM_LUCK         7
+#define SINDARIN_NAME   10 /*!< ランダムアーティファクトにシンダリン銘をつける条件分岐 */
+#define TABLE_NAME      20 /*!< ランダムアーティファクトに漢字銘をつける条件分岐 */
+#define A_CURSED        13 /*!< 1/nの確率で生成の巻物以外のランダムアーティファクトが呪いつきになる。 */
+#define WEIRD_LUCK      12 /*!< 1/nの確率でrandom_resistance()の処理中バイアス外の耐性がつき、create_artifactで4を超えるpvalが許可される。*/
+#define BIAS_LUCK       20 /*!< 1/nの確率でrandom_resistance()で付加する元素耐性が免疫になる */
+#define IM_LUCK         7 /*!< 1/nの確率でrandom_resistance()で複数免疫の除去処理が免除される */
 
-/*
+/*! @note
  * Bias luck needs to be higher than weird luck,
  * since it is usually tested several times...
  */
-#define ACTIVATION_CHANCE 3
+
+#define ACTIVATION_CHANCE 3 /*!< 1/nの確率でランダムアーティファクトに発動が付加される。ただし防具はさらに1/2 */
 
 
-/*
- * Use for biased artifact creation
+/*!
+ * アーティファクトのバイアスIDを保管する。 / Use for biased artifact creation
  */
 static int artifact_bias;
 
 
-/*
- * Choose one random sustain
+/*!
+ * 対象のオブジェクト構造体にランダムな能力維持を一つ付加する。 / Choose one random sustain
+ *  @param o_ptr 対象のオブジェクト構造体
+ *  @return なし
  */
 void one_sustain(object_type *o_ptr)
 {
