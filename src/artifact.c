@@ -2100,7 +2100,13 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	return TRUE;
 }
 
-
+/*!
+ * @brief オブジェクトから能力発動IDを取得する。
+ * @details いくつかのケースで定義されている発動効果から、
+ * 鍛冶師による付与＞固定アーティファクト＞エゴ＞ランダムアーティファクト＞ベースアイテムの優先順位で走査していく。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 発動効果のIDを返す
+ */
 int activation_index(object_type *o_ptr)
 {
 	/* Give priority to weaponsmith's essential activations */
@@ -2141,6 +2147,12 @@ int activation_index(object_type *o_ptr)
 	return o_ptr->xtra2;
 }
 
+/*!
+ * @brief オブジェクトから発動効果構造体のポインタを取得する。
+ * @details activation_index() 関数の結果から参照する。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 発動効果構造体のポインタを返す
+ */
 const activation_type* find_activation_info(object_type *o_ptr)
 {
 	const int index = activation_index(o_ptr);
@@ -2156,8 +2168,12 @@ const activation_type* find_activation_info(object_type *o_ptr)
 	return NULL;
 }
 
-
-/* Dragon breath activation */
+/*!
+ * @brief 発動によるブレスの属性をアイテムの耐性から選択し、実行を処理する。/ Dragon breath activation
+ * @details 対象となる耐性は dragonbreath_info テーブルを参照のこと。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 発動実行の是非を返す。
+ */
 static bool activate_dragon_breath(object_type *o_ptr)
 {
 	u32b flgs[TR_FLAG_SIZE]; /* for resistance flags */
@@ -2193,7 +2209,13 @@ static bool activate_dragon_breath(object_type *o_ptr)
 	return TRUE;
 }
 
-
+/*!
+ * @brief アイテムの発動効果を処理する。
+ * @details activate_random_artifact()とされているが、実際は全発動が統合された。
+ * @todo 折を見て関数名を修正すること。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 発動実行の是非を返す。
+ */
 bool activate_random_artifact(object_type *o_ptr)
 {
 	int plev = p_ptr->lev;
