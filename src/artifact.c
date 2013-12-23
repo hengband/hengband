@@ -14,8 +14,8 @@
 
 
 /* Chance of using syllables to form the name instead of the "template" files */
-#define SINDARIN_NAME   10 /*!< ランダムアーティファクトにシンダリン銘をつける条件分岐 */
-#define TABLE_NAME      20 /*!< ランダムアーティファクトに漢字銘をつける条件分岐 */
+#define SINDARIN_NAME   10 /*!< ランダムアーティファクトにシンダリン銘をつける確率 */
+#define TABLE_NAME      20 /*!< ランダムアーティファクトに漢字銘をつける確率(正確には TABLE_NAME - SINDARIN_NAME %)となる */
 #define A_CURSED        13 /*!< 1/nの確率で生成の巻物以外のランダムアーティファクトが呪いつきになる。 */
 #define WEIRD_LUCK      12 /*!< 1/nの確率でrandom_resistance()の処理中バイアス外の耐性がつき、create_artifactで4を超えるpvalが許可される。*/
 #define BIAS_LUCK       20 /*!< 1/nの確率でrandom_resistance()で付加する元素耐性が免疫になる */
@@ -922,7 +922,15 @@ static void random_resistance(object_type * o_ptr)
 }
 
 
-
+/*!
+ * @brief ランダムアーティファクト生成中、対象のオブジェクトにその他特性を付加する。/ Add one misc flag on generation of randam artifact.
+ * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
+ * 原則的候補は各種能力維持、永久光源+1、麻痺知らず、生命力維持、浮遊、透明視、急回復、遅消化、
+ * 乱テレポート、反魔法、反テレポート、警告、テレパシー、各種ESP、一部装備に殺戮修正。
+ * @attension オブジェクトのtval、svalに依存したハードコーディング処理がある。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
 static void random_misc(object_type * o_ptr)
 {
 	switch (artifact_bias)
@@ -1186,7 +1194,16 @@ static void random_misc(object_type * o_ptr)
 	}
 }
 
-
+/*!
+ * @brief ランダムアーティファクト生成中、対象のオブジェクトにスレイ効果を付加する。/ Add one slaying on generation of randam artifact.
+ * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
+ * 原則的候補は強力射、高速射、混沌効果、吸血効果、祝福、投擲しやすい、焼棄、凍結、電撃、溶解、毒殺、
+ * 動物スレイ、邪悪スレイ、悪魔スレイ、不死スレイ、オークスレイ、トロルスレイ、巨人スレイ、ドラゴンスレイ、
+ * *ドラゴンスレイ*、人間スレイ、切れ味、地震、理力。
+ * @attension オブジェクトのtval、svalに依存したハードコーディング処理がある。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
 static void random_slay(object_type *o_ptr)
 {
 	if (o_ptr->tval == TV_BOW)
@@ -1441,7 +1458,12 @@ static void random_slay(object_type *o_ptr)
 	}
 }
 
-
+/*!
+ * @brief ランダムアーティファクト生成中、対象のオブジェクトにバイアスに依存した発動を与える。/ Add one activaton of randam artifact depend on bias.
+ * @details バイアスが無い場合、一部のバイアスの確率によっては one_ability() に処理が移行する。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
 static void give_activation_power(object_type *o_ptr)
 {
 	int type = 0, chance = 0;
@@ -1621,7 +1643,14 @@ static void give_activation_power(object_type *o_ptr)
 	o_ptr->timeout = 0;
 }
 
-
+/*!
+ * @brief ランダムアーティファクト生成中、対象のオブジェクトに名前を与える。/ Set name of randomartifact.
+ * @details 確率によって、シンダリン銘、漢字銘、固定名のいずれか一つが与えられる。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @param armour 対象のオブジェクトが防具が否か
+ * @param power 銘の基準となるオブジェクトの価値レベル(0=呪い、1=低位、2=中位、3以上=高位)
+ * @return なし
+ */
 static void get_random_name(char *return_name, bool armour, int power)
 {
 	int prob = randint1(100);
@@ -1712,7 +1741,13 @@ static void get_random_name(char *return_name, bool armour, int power)
 	}
 }
 
-
+/*!
+ * @brief ランダムアーティファクト生成のメインルーチン
+ * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @param a_scroll アーティファクト生成の巻物上の処理。呪いのアーティファクトが生成対象外となる。
+ * @return 常にTRUE(1)を返す
+ */
 bool create_artifact(object_type *o_ptr, bool a_scroll)
 {
 	char    new_name[1024];
