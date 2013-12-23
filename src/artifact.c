@@ -3854,7 +3854,12 @@ bool activate_random_artifact(object_type *o_ptr)
 	return TRUE;
 }
 
-
+/*!
+ * @brief 固定アーティファクト『ブラッディムーン』の特性を変更する。
+ * @details スレイ2d2種、及びone_resistance()による耐性1d2種、pval2種を得る。
+ * @param o_ptr 対象のオブジェクト構造体（ブラッディムーン）のポインタ
+ * @return なし
+ */
 void get_bloody_moon_flags(object_type *o_ptr)
 {
 	int dummy, i;
@@ -3883,7 +3888,17 @@ void get_bloody_moon_flags(object_type *o_ptr)
 	}
 }
 
-
+/*!
+ * @brief 固定アーティファクト生成時の特別なハードコーディング処理を行う。.
+ * @details random_artifact_resistance()とあるが実際は固定アーティファクトである。
+ * 対象は恐怖の仮面、村正、ロビントンのハープ、龍争虎鬪、ブラッディムーン、羽衣、天女の羽衣、ミリム、
+ * その他追加耐性、特性追加処理。
+ * @attension プレイヤーの各種ステータスに依存した処理がある。
+ * @todo 折を見て関数名を変更すること。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @param a_ptr 生成する固定アーティファクト構造体ポインタ
+ * @return なし
+ */
 void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 {
 	bool give_resistance = FALSE, give_power = FALSE;
@@ -3977,8 +3992,17 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 }
 
 
-/*
- * Create the artifact of the specified number
+/*!
+ * @brief フロアの指定された位置に固定アーティファクトを生成する。 / Create the artifact of the specified number
+ * @details 固定アーティファクト構造体から基本ステータスをコピーした後、所定の座標でdrop_item()で落とす。
+ * @param a_idx 生成する固定アーティファクト構造体のID
+ * @param y アイテムを落とす地点のy座標
+ * @param x アイテムを落とす地点のx座標
+ * @return 生成が成功したか否か、失敗はIDの不全、ベースアイテムの不全、drop_item()の失敗時に起こる。
+ * @attention この処理はdrop_near()内で普通の固定アーティファクトが重ならない性質に依存する.
+ * 仮に2個以上存在可能かつ装備品以外の固定アーティファクトが作成されれば
+ * drop_near()関数の返り値は信用できなくなる.
+
  */
 bool create_named_art(int a_idx, int y, int x)
 {
@@ -4025,12 +4049,6 @@ bool create_named_art(int a_idx, int y, int x)
 	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2)) q_ptr->curse_flags |= get_curse(2, q_ptr);
 
 	random_artifact_resistance(q_ptr, a_ptr);
-
-	/*
-	 * drop_near()内で普通の固定アーティファクトが重ならない性質に依存する.
-	 * 仮に2個以上存在可能かつ装備品以外の固定アーティファクトが作成されれば
-	 * この関数の返り値は信用できなくなる.
-	 */
 
 	/* Drop the artifact from heaven */
 	return drop_near(q_ptr, -1, y, x) ? TRUE : FALSE;
