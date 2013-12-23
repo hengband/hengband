@@ -1,5 +1,5 @@
 /*!
-    @file avater.c
+    @file avatar.c
     @brief ウルティマ４を参考にした徳のシステムの実装 / Enable an Ultima IV style "avatar" game where you try to achieve perfection in various virtues.
     @date 2013/12/23
     @author
@@ -62,7 +62,15 @@ cptr virtue[MAX_VIRTUE] =
 #endif
 };
 
-
+/*!
+ * @brief 該当の徳がプレイヤーに指定されているか否かに応じつつ、大小を比較する。
+ * @details 徳がない場合は値0として比較する。
+ * @param type 比較したい徳のID
+ * @param num 比較基準値
+ * @param tekitou VIRTUE_LARGE = 基準値より大きいか / VIRTUE_SMALL = 基準値より小さいか
+ * @return 比較の真偽値を返す
+ * @todo 引数名を直しておく
+ */
 bool compare_virtue(int type, int num, int tekitou)
 {
 	int vir;
@@ -84,9 +92,11 @@ bool compare_virtue(int type, int num, int tekitou)
 	return FALSE;
 }
 
-
-/* Aux function */
-
+/*!
+ * @brief プレイヤーの指定の徳が何番目のスロットに登録されているかを返す。 / Aux function
+ * @param type 確認したい徳のID
+ * @return スロットがあるならばスロットのID(0〜7)+1、ない場合は0を返す。
+ */
 int virtue_number(int type)
 {
 	int i;
@@ -101,8 +111,11 @@ int virtue_number(int type)
 	return 0;
 }
 
-/* Aux function */
-
+/*!
+ * @brief プレイヤーの職業や種族に依存しないランダムな徳を取得する / Aux function
+ * @param which 確認したい徳のID
+ * @return 登録したい徳のスロットID(0〜7)。
+ */
 static void get_random_virtue(int which)
 {
 	int type = 0;
@@ -146,6 +159,11 @@ static void get_random_virtue(int which)
 	p_ptr->vir_types[which] = type;
 }
 
+/*!
+ * @brief プレイヤーの選んだ魔法領域に応じて対応する徳を返す。
+ * @param realm 魔法領域のID
+ * @return 対応する徳のID
+ */
 static s16b get_realm_virtues(byte realm)
 {
 	switch (realm)
@@ -396,6 +414,13 @@ void get_virtues(void)
 	}
 }
 
+/*!
+ * @brief 対応する徳をプレイヤーがスロットに登録している場合に加減を行う。
+ * @detail 範囲は-125〜125、基本的に絶対値が大きいほど絶対値が上がり辛くなる。
+ * @param virtue 徳のID
+ * @param amount 加減量
+ * @return なし
+ */
 void chg_virtue(int virtue, int amount)
 {
 	int i = 0;
@@ -454,6 +479,12 @@ void chg_virtue(int virtue, int amount)
 	}
 }
 
+/*!
+ * @brief 対応する徳をプレイヤーがスロットに登録している場合に固定値をセットする。
+ * @param virtue 徳のID
+ * @param amount セットしたい値。
+ * @return なし
+ */
 void set_virtue(int virtue, int amount)
 {
 	int i = 0;
@@ -468,6 +499,11 @@ void set_virtue(int virtue, int amount)
 	}
 }
 
+/*!
+ * @brief 徳のダンプ表示を行う。
+ * @param OutFile ファイルポインタ。
+ * @return なし
+ */
 void dump_virtues(FILE *OutFile)
 {
 	int v_nr = 0;
