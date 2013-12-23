@@ -1,28 +1,24 @@
-/* File: avatar.c */
+/*!
+    @file avater.c
+    @brief ウルティマ４を参考にした徳のシステムの実装 / Enable an Ultima IV style "avatar" game where you try to achieve perfection in various virtues.
+    @date 2013/12/23
+    @author
+    Topi Ylinen 1998\n
+    f1toyl@uta.fi\n
+    topi.ylinen@noodi.fi\n
+    \n
+    Copyright (c) 1989 James E. Wilson, Christopher J. Stuart
+    This software may be copied and distributed for educational, research, and
+    not for profit purposes provided that this copyright and statement are
+    included in all such copies.
+*/
 
-/*
- * Purpose: Enable an Ultima IV style "avatar" game where you try to
- * achieve perfection in various virtues.
- *
- * Topi Ylinen 1998
- * f1toyl@uta.fi
- * topi.ylinen@noodi.fi
- *
- */
-
-/*
- * Copyright (c) 1989 James E. Wilson, Christopher J. Stuart
- *
- * This software may be copied and distributed for educational, research, and
- * not for profit purposes provided that this copyright and statement are
- * included in all such copies.
- */
 
 #include "angband.h"
 
-
-/* The names of the virtues */
-
+/*!
+ * 徳の名称 / The names of the virtues
+ */
 cptr virtue[MAX_VIRTUE] =
 {
 #ifdef JP
@@ -189,8 +185,13 @@ static s16b get_realm_virtues(byte realm)
 	return 0;
 }
 
-/* Select virtues & reset values for a new character */
 
+/*!
+ * @brief 作成中のプレイヤーキャラクターに徳8種類を与える。 / Select virtues & reset values for a new character
+ * @details 職業に応じて1〜4種が固定、種族に応じて1種類が与えられ、後は重複なくランダムに選択される。
+ * @param なし
+ * @return なし
+ */
 void get_virtues(void)
 {
 	int i = 0, j = 0;
