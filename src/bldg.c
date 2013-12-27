@@ -3417,12 +3417,24 @@ static u32b calc_expect_dice(u32b dam, int mult, int div, bool force, int weight
 	return dam;
 }
 
-/*
- * Display the damage figure of an object
- * (used by compare_weapon_aux)
- *
- * Only accurate for the current weapon, because it includes
- * the current +dam of the player.
+
+/*!
+ * @brief 武器の各条件毎のダメージ期待値を表示する。
+ * @param r 表示行
+ * @param c 表示列
+ * @param mindice ダイス部分最小値
+ * @param maxdice ダイス部分最大値
+ * @param blows 攻撃回数
+ * @param dam_bonus ダメージ修正値
+ * @param attr 条件内容
+ * @param color 条件内容の表示色
+ * @details
+ * Display the damage figure of an object\n
+ * (used by compare_weapon_aux)\n
+ * \n
+ * Only accurate for the current weapon, because it includes\n
+ * the current +dam of the player.\n
+ * @return なし
  */
 static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, int dam_bonus, cptr attr, byte color)
 {
@@ -3448,11 +3460,17 @@ static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, i
 }
 
 
-/*
- * Show the damage figures for the various monster types
- *
- * Only accurate for the current weapon, because it includes
- * the current number of blows for the player.
+/*!
+ * @brief 武器一つ毎のダメージ情報を表示する。
+ * @param o_ptr オブジェクトの構造体の参照ポインタ。
+ * @param col 表示する行の上端
+ * @param r 表示する列の左端
+ * @details
+ * Show the damage figures for the various monster types\n
+ * \n
+ * Only accurate for the current weapon, because it includes\n
+ * the current number of blows for the player.\n
+ * @return なし
  */
 static void compare_weapon_aux(object_type *o_ptr, int col, int r)
 {
@@ -3656,6 +3674,12 @@ static void compare_weapon_aux(object_type *o_ptr, int col, int r)
 	}
 }
 
+/*!
+ * @brief モンスターへの命中率の計算
+ * @param to_h 命中値
+ * @param ac 敵AC
+ * @return なし
+ */
 static int hit_chance(int to_h, int ac)
 {
 	int chance = 0;
@@ -3672,7 +3696,12 @@ static int hit_chance(int to_h, int ac)
 	return chance;
 }
 
-/*
+/*!
+ * @brief 武器匠における武器一つ毎の完全情報を表示する。
+ * @param o_ptr オブジェクトの構造体の参照ポインタ。
+ * @param row 表示する列の左端
+ * @param col 表示する行の上端
+ * @details
  * Displays all info about a weapon
  *
  * Only accurate for the current weapon, because it includes
