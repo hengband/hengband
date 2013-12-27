@@ -114,7 +114,7 @@ int virtue_number(int type)
 /*!
  * @brief プレイヤーの職業や種族に依存しないランダムな徳を取得する / Aux function
  * @param which 確認したい徳のID
- * @return 登録したい徳のスロットID(0〜7)。
+ * @return なし
  */
 static void get_random_virtue(int which)
 {

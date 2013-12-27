@@ -1,21 +1,32 @@
-/* File: bldg.c */
-
-/*
- * Purpose: Building commands
- * Created by Ken Wigle for Kangband - a variant of Angband 2.8.3
- * -KMW-
- *
- * Rewritten for Kangband 2.8.3i using Kamband's version of
- * bldg.c as written by Ivan Tkatchev
- *
- * Changed for ZAngband by Robert Ruehlmann
- */
+/*!
+    @file bldg.c
+    @brief 町の施設処理 / Building commands
+    @date 2013/12/23
+    @author
+    Created by Ken Wigle for Kangband - a variant of Angband 2.8.3\n
+    -KMW-\n
+    \n
+    Rewritten for Kangband 2.8.3i using Kamband's version of\n
+    bldg.c as written by Ivan Tkatchev\n
+    \n
+    Changed for ZAngband by Robert Ruehlmann\n
+*/
 
 #include "angband.h"
 
-/* hack as in leave_store in store.c */
+
+/*!
+ * ループ中で / hack as in leave_store in store.c
+ */
 static bool leave_bldg = FALSE;
 
+/*!
+ * @brief 施設毎に設定された種族、職業、魔法領域フラグがプレイヤーと一致するかを判定する。
+ * @details 各種ギルドや寺院など、特定の職業ならば優遇措置を得られる施設、
+ * あるいは食堂など特定の種族では利用できない施設の判定処理を行う。
+ * @param bldg 施設構造体の参照ポインタ
+ * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
+ */
 static bool is_owner(building_type *bldg)
 {
 	if (bldg->member_class[p_ptr->pclass] == BUILDING_OWNER)
@@ -37,7 +48,15 @@ static bool is_owner(building_type *bldg)
 	return (FALSE);
 }
 
-
+/*!
+ * @brief 施設毎に設定された種族、職業、魔法領域フラグがプレイヤーと一致するかを判定する。
+ （スペルマスターの特別判定つき）
+ * @details 各種ギルドや寺院など、特定の職業ならば優遇措置を得られる施設、
+ * あるいは食堂など特定の種族では利用できない施設の判定処理を行う。
+ * @param bldg 施設構造体の参照ポインタ
+ * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
+ * @todo is_owner()との実質的な多重実装なので、リファクタリングを行うべきである。
+ */
 static bool is_member(building_type *bldg)
 {
 	if (bldg->member_class[p_ptr->pclass])
@@ -70,9 +89,12 @@ static bool is_member(building_type *bldg)
 	return (FALSE);
 }
 
-
-/*
- * Clear the building information
+/*!
+ * @brief コンソールに表示された施設に関する情報を消去する / Clear the building information
+ * @details 消去は行毎にヌル文字列で行われる。
+ * @param min_row 開始行番号
+ * @param max_row 末尾行番号
+ * @return なし
  */
 static void clear_bldg(int min_row, int max_row)
 {
@@ -82,6 +104,11 @@ static void clear_bldg(int min_row, int max_row)
 		prt("", i, 0);
 }
 
+/*!
+ * @brief 所持金を表示する。
+ * @param なし
+ * @return なし
+ */
 static void building_prt_gold(void)
 {
 	char tmp_str[80];
@@ -97,9 +124,10 @@ prt("手持ちのお金: ", 23,53);
 	prt(tmp_str, 23, 68);
 }
 
-
-/*
- * Display a building.
+/*!
+ * @brief 施設のサービス一覧を表示する / Display a building.
+ * @param bldg 施設構造体の参照ポインタ
+ * @return なし
  */
 static void show_building(building_type* bldg)
 {
@@ -227,9 +255,10 @@ prt(" ESC) 建物を出る", 23, 0);
 
 }
 
-
-/*
- * arena commands
+/*!
+ * @brief 闘技場に入るコマンドの処理 / arena commands
+ * @param cmd 闘技場処理のID
+ * @return なし
  */
 static void arena_comm(int cmd)
 {
@@ -389,9 +418,12 @@ msg_format("%s に挑戦するものはいないか？", name);
 	}
 }
 
-
-/*
- * display fruit for dice slots
+/*!
+ * @brief カジノのスロットシンボルを表示する / display fruit for dice slots
+ * @param row シンボルを表示する行の上端
+ * @param col シンボルを表示する行の左端
+ * @param fruit 表示するシンボルID
+ * @return なし
  */
 static void display_fruit(int row, int col, int fruit)
 {
