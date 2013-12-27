@@ -576,7 +576,7 @@ static void display_fruit(int row, int col, int fruit)
 	}
 }
 
-/*
+/*! @note
  * kpoker no (tyuto-hannpa na)pakuri desu...
  * joker ha shineru node haitte masen.
  *
@@ -591,12 +591,18 @@ static void display_fruit(int row, int col, int fruit)
  * 9/13/2000 --Koka
  * 9/15/2000 joker wo jissou. soreto, code wo sukosi kakikae. --Habu
  */
-#define SUIT_OF(card)  ((card) / 13)
-#define NUM_OF(card)   ((card) % 13)
-#define IS_JOKER(card) ((card) == 52)
 
-static int cards[5]; /* tefuda no card */
+#define SUIT_OF(card)  ((card) / 13) /*!< トランプカードのスートを返す */
+#define NUM_OF(card)   ((card) % 13) /*!< トランプカードの番号を返す */
+#define IS_JOKER(card) ((card) == 52) /*!< トランプカードがジョーカーかどうかを返す */
 
+static int cards[5]; /*!< ポーカーの現在の手札ID */
+
+/*!
+ * @brief ポーカーの山札を切る。
+ * @param なし
+ * @return なし
+ */
 static void reset_deck(int deck[])
 {
 	int i;
@@ -611,6 +617,11 @@ static void reset_deck(int deck[])
 	}
 }
 
+/*!
+ * @brief ポーカープレイ中にジョーカーを持っているかの判定を返す。
+ * @param なし
+ * @return ジョーカーを持っているか。
+ */
 static bool have_joker(void)
 {
 	int i;
@@ -621,6 +632,11 @@ static bool have_joker(void)
 	return FALSE;
 }
 
+/*!
+ * @brief ポーカーの手札に該当の番号の札があるかを返す。
+ * @param 探したいカードの番号。
+ * @return 該当の番号が手札にあるか。
+ */
 static bool find_card_num(int num)
 {
 	int i;
@@ -629,6 +645,11 @@ static bool find_card_num(int num)
 	return FALSE;
 }
 
+/*!
+ * @brief ポーカーの手札がフラッシュ役を得ているかを帰す。
+ * @param なし
+ * @return 役の判定結果
+ */
 static bool yaku_check_flush(void)
 {
 	int i, suit;
@@ -647,6 +668,11 @@ static bool yaku_check_flush(void)
 	return TRUE;
 }
 
+/*!
+ * @brief ポーカーの手札がストレート役を得ているかを帰す。
+ * @param なし
+ * @return 役の判定結果
+ */
 static int yaku_check_straight(void)
 {
 	int i, lowest = 99;
@@ -700,8 +726,10 @@ static int yaku_check_straight(void)
 	return 1;
 }
 
-/*
- * 0:nopair 1:1 pair 2:2 pair 3:3 cards 4:full house 6:4cards
+/*!
+ * @brief ポーカーのペア役の状態を返す。
+ * @param なし
+ * @return 0:nopair 1:1 pair 2:2 pair 3:3 cards 4:full house 6:4cards
  */
 static int yaku_check_pair(void)
 {
@@ -743,17 +771,22 @@ static int yaku_check_pair(void)
 	return matching;
 }
 
-#define ODDS_5A 3000
-#define ODDS_5C 400
-#define ODDS_RF 200
-#define ODDS_SF 80
-#define ODDS_4C 16
-#define ODDS_FH 12
-#define ODDS_FL 8
-#define ODDS_ST 4
-#define ODDS_3C 1
-#define ODDS_2P 1
+#define ODDS_5A 3000 /*!< ファイブエースの役倍率 */
+#define ODDS_5C 400 /*!< ファイブカードの役倍率 */
+#define ODDS_RF 200 /*!< ロイヤルストレートフラッシュの役倍率 */
+#define ODDS_SF 80 /*!< ストレートフラッシュの役倍率 */
+#define ODDS_4C 16 /*!< フォアカードの役倍率 */
+#define ODDS_FH 12 /*!< フルハウスの役倍率 */
+#define ODDS_FL 8 /*!< フラッシュの役倍率 */
+#define ODDS_ST 4 /*!< ストレートの役倍率 */
+#define ODDS_3C 1 /*!< スリーカードの役倍率 */
+#define ODDS_2P 1 /*!< ツーペアの役倍率 */
 
+/*!
+ * @brief ポーカーの役をチェックし、その結果を画面に表示しつつ結果を返す。
+ * @param なし
+ * @return 役のID
+ */
 static int yaku_check(void)
 {
 	prt("                            ", 4, 3);
@@ -858,6 +891,12 @@ static int yaku_check(void)
 	return 0;
 }
 
+/*!
+ * @brief ポーカーの捨てる/残すインターフェイスの表示を更新する。
+ * @param hoge カーソルの現在位置
+ * @param kaeruka カードの捨てる/残すフラグ配列
+ * @return なし
+ */
 static void display_kaeruka(int hoge, int kaeruka[])
 {
 	int i;
@@ -892,7 +931,11 @@ static void display_kaeruka(int hoge, int kaeruka[])
 	else move_cursor(16, 38);
 }
 
-
+/*!
+ * @brief ポーカーの手札を表示する。
+ * @param なし
+ * @return なし
+ */
 static void display_cards(void)
 {
 	int i, j;
@@ -1140,6 +1183,11 @@ static void display_cards(void)
 	}
 }
 
+/*!
+ * @brief ポーカーの１プレイルーチン。
+ * @param なし
+ * @return １プレイの役の結果
+ */
 static int do_poker(void)
 {
 	int i, k = 2;
