@@ -1305,8 +1305,10 @@ static int do_poker(void)
 #undef IS_JOKER
 /* end of poker codes --Koka */
 
-/*
- * gamble_comm
+/*!
+ * @brief カジノ１プレイごとのメインルーチン / gamble_comm
+ * @param cmd プレイするゲームID
+ * @return なし
  */
 static bool gamble_comm(int cmd)
 {
@@ -1742,6 +1744,13 @@ msg_print("「金をスッてしまったな、わはは！うちに帰った方がいいぜ。」");
 	return (TRUE);
 }
 
+/*!
+ * @brief モンスター闘技場に参加できるモンスターの判定
+ * @param r_idx モンスターＩＤ
+ * @details 基準はNEVER_MOVE MULTIPLY QUANTUM RF7_AQUATIC RF7_CHAMELEONのいずれも持たず、
+ * 自爆以外のなんらかのHP攻撃手段を持っていること。
+ * @return 参加できるか否か
+ */
 static bool vault_aux_battle(int r_idx)
 {
 	int i;
@@ -1773,6 +1782,11 @@ static bool vault_aux_battle(int r_idx)
 	return (TRUE);
 }
 
+/*!
+ * @brief モンスター闘技場に参加するモンスターをリセットする。
+ * @param なし
+ * @return なし
+ */
 void battle_monsters(void)
 {
 	int total, i;
@@ -1990,6 +2004,11 @@ void battle_monsters(void)
 	}
 }
 
+/*!
+ * @brief モンスター闘技場のメインルーチン
+ * @param なし
+ * @return 賭けを開始したか否か
+ */
 static bool kakutoujou(void)
 {
 	s32b maxbet;
@@ -2151,6 +2170,11 @@ msg_print("ＯＫ、１ゴールドでいこう。");
 	return (FALSE);
 }
 
+/*!
+ * @brief 本日の賞金首情報を表示する。
+ * @param なし
+ * @return なし
+ */
 static void today_target(void)
 {
 	char buf[160];
@@ -2183,6 +2207,11 @@ c_put_str(TERM_YELLOW, "本日の賞金首", 5, 10);
 	p_ptr->today_mon = today_mon;
 }
 
+/*!
+ * @brief ツチノコの賞金首情報を表示する。
+ * @param なし
+ * @return なし
+ */
 static void tsuchinoko(void)
 {
 	clear_bldg(4,18);
@@ -2201,6 +2230,11 @@ c_put_str(TERM_WHITE, "bones       ----   $100,000", 10, 10);
 #endif
 }
 
+/*!
+ * @brief 通常の賞金首情報を表示する。
+ * @param なし
+ * @return なし
+ */
 static void shoukinkubi(void)
 {
 	int i;
@@ -2255,7 +2289,10 @@ c_put_str(TERM_YELLOW, "Wanted monsters", 6, 10);
 }
 
 
-/* List of prize object */
+
+/*!
+ * 賞金首の報酬テーブル / List of prize object
+ */
 static struct {
 	s16b tval;
 	s16b sval;
@@ -2286,8 +2323,11 @@ static struct {
 	{TV_SCROLL, SV_SCROLL_ARTIFACT},
 };
 
-
-/* Get prize */
+/*!
+ * @brief 賞金首の引き換え処理 / Get prize
+ * @param なし
+ * @return 各種賞金首のいずれかでも換金が行われたか否か。
+ */
 static bool kankin(void)
 {
 	int i, j;
@@ -2566,7 +2606,12 @@ bool get_nightmare(int r_idx)
 	return (TRUE);
 }
 
-
+/*!
+ * @brief 悪夢モード時に睡眠/麻痺に陥った際のEldritchHorror処理
+ * @param r_idx 狂気の元凶となるモンスターのＩＤ
+ * @return なし
+ * @todo 重複関数あり、要リファクタリング。
+ */
 void have_nightmare(int r_idx)
 {
 	bool happened = FALSE;
@@ -2844,14 +2889,17 @@ msg_print("激烈な感情の発作におそわれるようになった！");
 }
 
 
-/*
- * inn commands
- * Note that resting for the night was a perfect way to avoid player
- * ghosts in the town *if* you could only make it to the inn in time (-:
- * Now that the ghosts are temporarily disabled in 2.8.X, this function
- * will not be that useful.  I will keep it in the hopes the player
- * ghost code does become a reality again. Does help to avoid filthy urchins.
- * Resting at night is also a quick way to restock stores -KMW-
+/*!
+ * @brief 宿屋の利用サブルーチン
+ * @details inn commands\n
+ * Note that resting for the night was a perfect way to avoid player\n
+ * ghosts in the town *if* you could only make it to the inn in time (-:\n
+ * Now that the ghosts are temporarily disabled in 2.8.X, this function\n
+ * will not be that useful.  I will keep it in the hopes the player\n
+ * ghost code does become a reality again. Does help to avoid filthy urchins.\n
+ * Resting at night is also a quick way to restock stores -KMW-\n
+ * @param cmd 宿屋の利用施設ID
+ * @return 施設の利用が実際に行われたか否か。
  */
 static bool inn_comm(int cmd)
 {
