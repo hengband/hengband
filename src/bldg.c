@@ -3050,8 +3050,11 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 }
 
 
-/*
- * Display quest information
+/*!
+ * @brief クエスト情報を表示しつつ処理する。/ Display quest information
+ * @param quest クエストのID
+ * @param do_init クエストの開始処理(TRUE)、結果処理か(FALSE)
+ * @return なし
  */
 static void get_questinfo(int questnum, bool do_init)
 {
@@ -3098,9 +3101,10 @@ sprintf(tmp_str, "クエスト情報 (危険度: %d 階相当)", quest[questnum].level);
 	}
 }
 
-
-/*
- * Request a quest from the Lord.
+/*!
+ * @brief クエスト処理のメインルーチン / Request a quest from the Lord.
+ * @param なし
+ * @return なし
  */
 static void castle_quest(void)
 {
@@ -3221,8 +3225,10 @@ msg_format("クエスト: %sを %d体倒す", name,q_ptr->max_num);
 }
 
 
-/*
- * Display town history
+/*!
+ * @brief 町に関するヘルプを表示する / Display town history
+ * @param なし
+ * @return なし
  */
 static void town_history(void)
 {
@@ -3241,7 +3247,14 @@ static void town_history(void)
 	screen_load();
 }
 
-/* critical happens at i / 10000 */
+/*!
+ * @brief 射撃時クリティカルによるダメージ期待値修正計算（スナイパーの集中処理と武器経験値） / critical happens at i / 10000
+ * @param weight 武器の重量
+ * @param plus_ammo 矢弾のダメージ修正
+ * @param plus_bow 弓のダメージ修正
+ * @param dam 基本ダメージ量
+ * @return ダメージ期待値
+ */
 s16b calc_crit_ratio_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 {
 	int i;
@@ -3267,6 +3280,14 @@ s16b calc_crit_ratio_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 	return i;
 }
 
+/*!
+ * @brief 射撃時クリティカルによるダメージ期待値修正計算（重量依存部分） / critical happens at i / 10000
+ * @param weight 武器の重量
+ * @param plus_ammo 矢弾のダメージ修正
+ * @param plus_bow 弓のダメージ修正
+ * @param dam 基本ダメージ量
+ * @return ダメージ期待値
+ */
 s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 {
 	u32b num;
@@ -3300,6 +3321,15 @@ s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 	return num;
 }
 
+/*!
+ * @brief 攻撃時クリティカルによるダメージ期待値修正計算（重量と毒針処理） / critical happens at i / 10000
+ * @param weight 武器の重量
+ * @param plus 武器のダメージ修正
+ * @param dam 基本ダメージ
+ * @param meichuu 命中値
+ * @param dokubari 毒針処理か否か
+ * @return ダメージ期待値
+ */
 s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari)
 {
 	u32b k, num;
@@ -3336,6 +3366,14 @@ s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari
 	return num;
 }
 
+/*!
+ * @brief 攻撃時スレイによるダメージ期待値修正計算 / critical happens at i / 10000
+ * @param dam 基本ダメージ
+ * @param mult スレイ倍率（掛け算部分）
+ * @param div スレイ倍率（割り算部分）
+ * @param force 理力特別計算フラグ
+ * @return ダメージ期待値
+ */
 static s16b calc_slaydam(int dam, int mult, int div, bool force)
 {
 	int tmp;
@@ -3357,6 +3395,20 @@ static s16b calc_slaydam(int dam, int mult, int div, bool force)
 	return tmp;
 }
 
+/*!
+ * @brief 攻撃時の期待値計算（スレイ→重量クリティカル→切れ味効果）
+ * @param dam 基本ダメージ
+ * @param mult スレイ倍率（掛け算部分）
+ * @param div スレイ倍率（割り算部分）
+ * @param force 理力特別計算フラグ
+ * @param weight 重量
+ * @param plus 武器ダメージ修正
+ * @param meichuu 命中値
+ * @param dokubari 毒針処理か否か
+ * @param vorpal_mult 切れ味倍率（掛け算部分）
+ * @param vorpal_div 切れ味倍率（割り算部分）
+ * @return ダメージ期待値
+ */
 static u32b calc_expect_dice(u32b dam, int mult, int div, bool force, int weight, int plus, s16b meichuu, bool dokubari, int vorpal_mult, int vorpal_div)
 {
 	dam = calc_slaydam(dam, mult, div, force);
