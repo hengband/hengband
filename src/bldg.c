@@ -2592,6 +2592,11 @@ static bool kankin(void)
 	return TRUE;
 }
 
+/*!
+ * @brief 悪夢の元凶となるモンスターかどうかを返す。
+ * @param r_idx 判定対象となるモンスターのＩＤ
+ * @return 悪夢の元凶となり得るか否か。
+ */
 bool get_nightmare(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -3706,6 +3711,7 @@ static int hit_chance(int to_h, int ac)
  *
  * Only accurate for the current weapon, because it includes
  * various info about the player's +to_dam and number of blows.
+ * @return なし
  */
 static void list_weapon(object_type *o_ptr, int row, int col)
 {
@@ -3778,8 +3784,10 @@ sprintf(tmp_str, "１ターンにつき %d-%d",
 }
 
 
-/*
- * Hook to specify "weapon"
+/*!
+ * @brief 武器匠の「武器」鑑定対象になるかを判定する。/ Hook to specify "weapon"
+ * @param o_ptr オブジェクトの構造体の参照ポインタ。
+ * @return 対象になるならTRUEを返す。
  */
 static bool item_tester_hook_melee_weapon(object_type *o_ptr)
 {
@@ -3801,8 +3809,10 @@ static bool item_tester_hook_melee_weapon(object_type *o_ptr)
 }
 
 
-/*
- * Hook to specify "ammo"
+/*!
+ * @brief 武器匠の「矢弾」鑑定対象になるかを判定する。/ Hook to specify "weapon"
+ * @param o_ptr オブジェクトの構造体の参照ポインタ。
+ * @return 対象になるならTRUEを返す。
  */
 static bool item_tester_hook_ammo(object_type *o_ptr)
 {
@@ -3820,11 +3830,14 @@ static bool item_tester_hook_ammo(object_type *o_ptr)
 }
 
 
-/*
- * Compare weapons
- *
- * Copies the weapons to compare into the weapon-slot and
- * compares the values for both weapons.
+/*!
+ * @brief 武器匠鑑定１回分（オブジェクト２種）の処理。/ Compare weapons
+ * @details 
+ * Copies the weapons to compare into the weapon-slot and\n
+ * compares the values for both weapons.\n
+ * 武器１つだけで比較をしないなら費用は半額になる。
+ * @param bcost 基本鑑定費用
+ * @return 最終的にかかった費用
  */
 static int compare_weapons(int bcost)
 {
@@ -3955,12 +3968,13 @@ static int compare_weapons(int bcost)
 }
 
 
-/*
- * Evaluate AC
- *
- * ACから回避率、ダメージ減少率を計算し表示する
+/*!
+ * @brief ACから回避率、ダメージ減少率を計算し表示する。 / Evaluate AC
+ * @details 
  * Calculate and display the dodge-rate and the protection-rate
  * based on AC
+ * @param iAC プレイヤーのAC。
+ * @return 常にTRUEを返す。
  */
 static bool eval_ac(int iAC)
 {
@@ -4058,8 +4072,10 @@ static bool eval_ac(int iAC)
 }
 
 
-/*
- * Hook to specify "broken weapon"
+/*!
+ * @brief 修復対象となる壊れた武器かを判定する。 / Hook to specify "broken weapon"
+ * @param o_ptr オブジェクトの構造体の参照ポインタ。
+ * @return 修復対象になるならTRUEを返す。
  */
 static bool item_tester_hook_broken_weapon(object_type *o_ptr)
 {
@@ -4075,6 +4091,12 @@ static bool item_tester_hook_broken_weapon(object_type *o_ptr)
 	return FALSE;
 }
 
+/*!
+ * @brief 修復材料のオブジェクトから修復対象に特性を移植する。
+ * @param to_ptr 修復対象オブジェクトの構造体の参照ポインタ。
+ * @param from_ptr 修復材料オブジェクトの構造体の参照ポインタ。
+ * @return 修復対象になるならTRUEを返す。
+ */
 static void give_one_ability_of_object(object_type *to_ptr, object_type *from_ptr)
 {
 	int i, n = 0;
@@ -4125,8 +4147,10 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 	return;
 }
 
-/*
- * Repair broken weapon
+/*!
+ * @brief アイテム修復処理のメインルーチン / Repair broken weapon
+ * @param bcost 基本鑑定費用
+ * @return 実際にかかった費用
  */
 static int repair_broken_weapon_aux(int bcost)
 {
@@ -4381,6 +4405,11 @@ static int repair_broken_weapon_aux(int bcost)
 	return (cost);
 }
 
+/*!
+ * @brief アイテム修復処理の過渡ルーチン / Repair broken weapon
+ * @param bcost 基本鑑定費用
+ * @return 実際にかかった費用
+ */
 static int repair_broken_weapon(int bcost)
 {
 	int cost;
@@ -4392,8 +4421,13 @@ static int repair_broken_weapon(int bcost)
 }
 
 
-/*
- * Enchant item
+/*!
+ * @brief アイテムの強化を行う。 / Enchant item
+ * @param cost １回毎の費用
+ * @to_hit 命中をアップさせる量
+ * @to_dam ダメージをアップさせる量
+ * @to_ac ＡＣをアップさせる量
+ * @return 実際にかかった費用
  */
 static bool enchant_item(int cost, int to_hit, int to_dam, int to_ac)
 {
@@ -4516,15 +4550,16 @@ static bool enchant_item(int cost, int to_hit, int to_dam, int to_ac)
 }
 
 
-/*
- * Recharge rods, wands and staves
- *
- * The player can select the number of charges to add
- * (up to a limit), and the recharge never fails.
- *
- * The cost for rods depends on the level of the rod. The prices
- * for recharging wands and staves are dependent on the cost of
- * the base-item.
+/*!
+ * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staves
+ * @detail
+ * The player can select the number of charges to add\n
+ * (up to a limit), and the recharge never fails.\n
+ *\n
+ * The cost for rods depends on the level of the rod. The prices\n
+ * for recharging wands and staves are dependent on the cost of\n
+ * the base-item.\n
+ * @return なし
  */
 static void building_recharge(void)
 {
@@ -4793,15 +4828,16 @@ msg_format("%sを＄%d で再充填しました。", tmp_str, price);
 }
 
 
-/*
- * Recharge rods, wands and staves
- *
- * The player can select the number of charges to add
- * (up to a limit), and the recharge never fails.
- *
- * The cost for rods depends on the level of the rod. The prices
- * for recharging wands and staves are dependent on the cost of
- * the base-item.
+/*!
+ * @brief 魔道具の使用回数を回復させる施設の一括処理向けサブルーチン / Recharge rods, wands and staves
+ * @detail
+ * The player can select the number of charges to add\n
+ * (up to a limit), and the recharge never fails.\n
+ *\n
+ * The cost for rods depends on the level of the rod. The prices\n
+ * for recharging wands and staves are dependent on the cost of\n
+ * the base-item.\n
+ * @return なし
  */
 static void building_recharge_all(void)
 {
@@ -4961,7 +4997,10 @@ static void building_recharge_all(void)
 	return;
 }
 
-
+/*!
+ * @brief 町間のテレポートを行うメインルーチン。
+ * @return テレポート処理を決定したか否か
+ */
 bool tele_town(void)
 {
 	int i, x, y;
@@ -5052,10 +5091,10 @@ bool tele_town(void)
 	return TRUE;
 }
 
-
-/*
- *  research_mon
- *  -KMW-
+/*!
+ * @brief 施設でモンスターの情報を知るメインルーチン / research_mon -KMW-
+ * @return 常にTRUEを返す。
+ * @todo 返り値が意味不明なので直した方が良いかもしれない。
  */
 static bool research_mon(void)
 {
@@ -5353,8 +5392,11 @@ Term_addstr(-1, TERM_WHITE, " ['r'思い出, ' 'で続行, ESC]");
 }
 
 
-/*
- * Execute a building command
+/*!
+ * @brief 施設の処理実行メインルーチン / Execute a building command
+ * @param bldg 施設構造体の参照ポインタ
+ * @param i 実行したい施設のサービステーブルの添字
+ * @return なし
  */
 static void bldg_process_command(building_type *bldg, int i)
 {
@@ -5635,9 +5677,9 @@ msg_print("お金が足りません！");
 	}
 }
 
-
-/*
- * Enter quest level
+/*!
+ * @brief クエスト入り口にプレイヤーが乗った際の処理 / Do building commands
+ * @return なし
  */
 void do_cmd_quest(void)
 {
@@ -5679,8 +5721,9 @@ msg_print("ここにはクエストの入口はない。");
 }
 
 
-/*
- * Do building commands
+/*!
+ * @brief 施設入り口にプレイヤーが乗った際の処理 / Do building commands
+ * @return なし
  */
 void do_cmd_bldg(void)
 {
@@ -5850,7 +5893,9 @@ void do_cmd_bldg(void)
 }
 
 
-/* Array of places to find an inscription */
+/*!
+ * @brief クエスト突入時のメッセージテーブル / Array of places to find an inscription
+ */
 static cptr find_quest[] =
 {
 #ifdef JP
@@ -5886,8 +5931,9 @@ static cptr find_quest[] =
 };
 
 
-/*
- * Discover quest
+/*!
+ * @brief クエストの導入メッセージを表示する / Discover quest
+ * @param q_idx 開始されたクエストのID
  */
 void quest_discovery(int q_idx)
 {
@@ -5946,8 +5992,11 @@ void quest_discovery(int q_idx)
 }
 
 
-/*
- * Hack -- Check if a level is a "quest" level
+/*!
+ * @brief 新しく入ったダンジョンの階層に固定されている一般のクエストを探し出しIDを返す。
+ * / Hack -- Check if a level is a "quest" level
+ * @param level 検索対象になる階
+ * @return クエストIDを返す。該当がない場合0を返す。
  */
 int quest_number(int level)
 {
@@ -5972,10 +6021,10 @@ int quest_number(int level)
 	return (random_quest_number(level));
 }
 
-
-/*
- * Return the index of the random quest on this level
- * (or zero)
+/*!
+ * @brief 新しく入ったダンジョンの階層に固定されているランダムクエストを探し出しIDを返す。
+ * @param level 検索対象になる階
+ * @return クエストIDを返す。該当がない場合0を返す。
  */
 int random_quest_number(int level)
 {
