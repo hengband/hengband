@@ -2663,10 +2663,12 @@ static int adjust_stat(int value, int amount)
 
 
 
-/*
- * Roll for a characters stats
- *
- * For efficiency, we include a chunk of "calc_bonuses()".
+/*!
+ * @brief プレイヤーの能力値を一通りロールする。 / Roll for a characters stats
+ * @details
+ * calc_bonuses()による、独立ステータスからの副次ステータス算出も行っている。
+ * For efficiency, we include a chunk of "calc_bonuses()".\n
+ * @return なし
  */
 static void get_stats(void)
 {
@@ -2719,6 +2721,10 @@ static void get_stats(void)
 	}
 }
 
+/*!
+ * @brief プレイヤーの限界ステータスを決める。
+ * @return なし
+ */
 void get_max_stats(void)
 {
 	int		i, j;
@@ -2761,8 +2767,9 @@ void get_max_stats(void)
 }
 
 
-/*
- * Roll for some info that the auto-roller ignores
+/*!
+ * @brief その他「オートローラ中は算出の対象にしない」副次ステータスを処理する / Roll for some info that the auto-roller ignores
+ * @return なし
  */
 static void get_extra(bool roll_hitdie)
 {
@@ -2813,8 +2820,9 @@ static void get_extra(bool roll_hitdie)
 }
 
 
-/*
- * Get the racial history, and social class, using the "history charts".
+/*!
+ * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".
+ * @return なし
  */
 static void get_history(void)
 {
@@ -3070,9 +3078,9 @@ static void get_history(void)
        }
 }
 
-
-/*
- * Get character's height and weight
+/*!
+ * @brief プレイヤーの身長体重を決める / Get character's height and weight
+ * @return なし
  */
 void get_height_weight(void)
 {
@@ -3098,9 +3106,10 @@ void get_height_weight(void)
 }
 
 
-/*
- * Computes character's age, height, and weight
- * by henkma
+/*!
+ * @brief プレイヤーの年齢を決める。 / Computes character's age, height, and weight by henkma
+ * @details 内部でget_height_weight()も呼び出している。
+ * @return なし
  */
 static void get_ahw(void)
 {
@@ -3111,9 +3120,9 @@ static void get_ahw(void)
 	get_height_weight();
 }
 
-
-/*
- * Get the player's starting money
+/*!
+ * @brief プレイヤーの初期所持金を決める。 / Get the player's starting money
+ * @return なし
  */
 static void get_money(void)
 {
@@ -3149,10 +3158,10 @@ static void get_money(void)
 
 
 
-/*
- * Display stat values, subset of "put_stats()"
- *
- * See 'display_player()' for screen layout constraints.
+/*!
+ * @brief put_stats()のサブルーチンとして、オートロール中のステータスを表示する / Display stat values, subset of "put_stats()"
+ * @details See 'display_player()' for screen layout constraints.
+ * @return なし
  */
 static void birth_put_stats(void)
 {
@@ -3211,6 +3220,10 @@ static void birth_put_stats(void)
 }
 
 
+/*!
+ * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
+ * @return なし
+ */
 static void k_info_reset(void)
 {
 	int i;
@@ -3229,8 +3242,9 @@ static void k_info_reset(void)
 }
 
 
-/*
- * Clear all the global "character" data
+/*!
+ * @brief プレイヤー構造体の内容を初期値で消去する / Clear all the global "character" data
+ * @return なし
  */
 static void player_wipe(void)
 {
@@ -3425,8 +3439,10 @@ static void player_wipe(void)
 }
 
 
-/*
- *  Hook function for quest monsters
+/*!
+ * @brief モンスターがクエストの討伐対象に成り得るかを返す / Hook function for quest monsters
+ * @param r_idx モンスターＩＤ
+ * @return 討伐対象にできるならTRUEを返す。
  */
 static bool mon_hook_quest(int r_idx)
 {
@@ -3448,8 +3464,10 @@ static bool mon_hook_quest(int r_idx)
 }
 
 
-/*
- * Determine the random quest uniques
+/*!
+ * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
+ * @param q_ptr クエスト構造体の参照ポインタ
+ * @return なし
  */
 void determine_random_questor(quest_type *q_ptr)
 {
@@ -3492,9 +3510,9 @@ void determine_random_questor(quest_type *q_ptr)
 	q_ptr->r_idx = r_idx;
 }
 
-
-/*
- *  Initialize random quests and final quests
+/*!
+ * @brief ダンジョン内部のクエストを初期化する / Initialize random quests and final quests
+ * @return なし
  */
 static void init_dungeon_quests(void)
 {
@@ -3541,8 +3559,10 @@ static void init_dungeon_quests(void)
 	p_ptr->inside_quest = 0;
 }
 
-/*
- * Reset turn
+/*!
+ * @brief ゲームターンを初期化する / Reset turn
+ * @details アンデッド系種族は開始時刻を夜からにする。
+ * @return なし
  */
 static void init_turn(void)
 {
