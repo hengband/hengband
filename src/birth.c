@@ -3586,10 +3586,11 @@ static void init_turn(void)
 }
 
 
-/* 
- * Try to wield everything wieldable in the inventory. 
- * Code taken from Angband 3.1.0 under Angband license
- */ 
+/*!
+ * @brief 所持状態にあるアイテムの中から一部枠の装備可能なものを装備させる。
+ * @details アンデッド系種族は開始時刻を夜からにする。
+ * @return なし
+ */
 static void wield_all(void) 
 { 
 	object_type *o_ptr; 
@@ -3651,9 +3652,10 @@ static void wield_all(void)
 } 
 
 
-/*
- * Each player starts out with a few items, given as tval/sval pairs.
- * In addition, he always has some food and a few torches.
+/*!
+ * プレイヤーの職業毎の初期装備テーブル。/\n
+ * Each player starts out with a few items, given as tval/sval pairs.\n
+ * In addition, he always has some food and a few torches.\n
  */
 static byte player_init[MAX_CLASS][3][2] =
 {
@@ -3851,9 +3853,10 @@ static byte player_init[MAX_CLASS][3][2] =
 	},
 };
 
-
-/*
- * Hook function for human corpses
+/*!
+ * @brief バルログが死体を食べられるモンスターかの判定 / Hook function for human corpses
+ * @param r_idx モンスターＩＤ
+ * @return 死体を食べられるならTRUEを返す。
  */
 static bool monster_hook_human(int r_idx)
 {
@@ -3866,9 +3869,11 @@ static bool monster_hook_human(int r_idx)
 	return FALSE;
 }
 
-
-/*
- * Add an outfit object
+/*!
+ * @brief 初期所持アイテムの処理 / Add an outfit object
+ * @detail アイテムを既知のものとした上でwield_all()関数により装備させる。
+ * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ
+ * @return なし
  */
 static void add_outfit(object_type *o_ptr)
 {
@@ -3886,10 +3891,10 @@ static void add_outfit(object_type *o_ptr)
 }
 
 
-/*
- * Init players with some belongings
- *
- * Having an item makes the player "aware" of its purpose.
+/*!
+ * @brief 種族/職業/性格などに基づき初期所持アイテムを設定するメインセット関数。 / Init players with some belongings
+ * @detail Having an item makes the player "aware" of its purpose.
+ * @return なし
  */
 void player_outfit(void)
 {
@@ -4143,9 +4148,9 @@ void player_outfit(void)
 	k_info[lookup_kind(TV_POTION, SV_POTION_WATER)].aware = TRUE;
 }
 
-
-/*
- * Player race
+/*!
+ * @brief プレイヤーの種族選択を行う / Player race
+ * @return なし
  */
 static bool get_player_race(void)
 {
@@ -4332,8 +4337,9 @@ static bool get_player_race(void)
 }
 
 
-/*
- * Player class
+/*!
+ * @brief プレイヤーの職業選択を行う / Player class
+ * @return なし
  */
 static bool get_player_class(void)
 {
@@ -4547,8 +4553,9 @@ static bool get_player_class(void)
 }
 
 
-/*
- * Player seikaku
+/*!
+ * @brief プレイヤーの性格選択を行う / Player Player seikaku
+ * @return なし
  */
 static bool get_player_seikaku(void)
 {
@@ -4792,6 +4799,10 @@ static bool get_player_seikaku(void)
 }
 
 #ifdef ALLOW_AUTOROLLER
+/*!
+ * @brief オートローラで得たい能力値の基準を決める。
+ * @return なし
+ */
 static bool get_stat_limits(void)
 {
 	int i, j, m, cs, os;
@@ -5054,6 +5065,10 @@ static bool get_stat_limits(void)
 #endif
 
 #ifdef ALLOW_AUTOROLLER
+/*!
+ * @brief オートローラで得たい年齢、身長、体重、社会的地位の基準を決める。
+ * @return なし
+ */
 static bool get_chara_limits(void)
 {
 #define MAXITEMS 8
@@ -5363,8 +5378,9 @@ static bool get_chara_limits(void)
 #define HISTPREF_LIMIT 1024
 static char *histpref_buf = NULL;
 
-/*
- * Hook function for reading the histpref.prf file.
+/*!
+ * @brief 生い立ちメッセージの内容をバッファに加える。 / Hook function for reading the histpref.prf file.
+ * @return なし
  */
 void add_history_from_pref_line(cptr t)
 {
@@ -5374,7 +5390,10 @@ void add_history_from_pref_line(cptr t)
 	my_strcat(histpref_buf, t, HISTPREF_LIMIT);
 }
 
-
+/*!
+ * @brief 生い立ちメッセージをファイルからロードする。
+ * @return なし
+ */
 static bool do_cmd_histpref(void)
 {
 	char buf[80];
@@ -5480,8 +5499,9 @@ static bool do_cmd_histpref(void)
 	return TRUE;
 }
 
-/*
- *  Character background edit-mode
+/*!
+ * @brief 生い立ちメッセージを編集する。/Character background edit-mode
+ * @return なし
  */
 static void edit_history(void)
 {
@@ -5684,12 +5704,13 @@ static void edit_history(void)
 }
 
 
-/*
- * Helper function for 'player_birth()'
- *
+/*!
+ * @brief player_birth()関数のサブセット/Helper function for 'player_birth()'
+ * @details
  * The delay may be reduced, but is recommended to keep players
  * from continuously rolling up characters, which can be VERY
  * expensive CPU wise.  And it cuts down on player stupidity.
+ * @return なし
  */
 static bool player_birth_aux(void)
 {
@@ -6413,9 +6434,9 @@ static bool player_birth_aux(void)
 	return (TRUE);
 }
 
-
-/*
- * Ask whether the player use Quick Start or not.
+/*!
+ * @brief クイックスタート処理の問い合わせと実行を行う。/Ask whether the player use Quick Start or not.
+ * @return なし
  */
 static bool ask_quick_start(void)
 {
@@ -6499,11 +6520,12 @@ static bool ask_quick_start(void)
 }
 
 
-/*
- * Create a new character.
- *
+/*!
+ * @brief プレイヤー作成処理のメインルーチン/ Create a new character.
+ * @details
  * Note that we may be called with "junk" leftover in the various
  * fields, so we must be sure to clear them first.
+ * @return なし
  */
 void player_birth(void)
 {
@@ -6615,7 +6637,11 @@ void player_birth(void)
 		window_flag[2] |= PW_INVEN;
 }
 
-
+/*!
+ * @brief プレイヤー作成処理中のステータス表示処理
+ * @params fff ファイルポインタ
+ * @return なし
+ */
 void dump_yourself(FILE *fff)
 {
 	char temp[80*10];
