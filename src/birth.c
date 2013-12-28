@@ -58,19 +58,19 @@ struct hist_type
 
 
 /*!
- * 生い立ちテーブルの定義 / Background information (see below)
- *
- * Chart progression by race:
- *   Human         -->  1 -->  2 -->  3 --> 50 --> 51 --> 52 --> 53
- *   Half-Elf      -->  4 -->  1 -->  2 -->  3 --> 50 --> 51 --> 52 --> 53
- *   Elf/High-Elf  -->  7 -->  8 -->  9 --> 54 --> 55 --> 56
- *   Hobbit        --> 10 --> 11 -->  3 --> 50 --> 51 --> 52 --> 53
- *   Gnome         --> 13 --> 14 -->  3 --> 50 --> 51 --> 52 --> 53
- *   Dwarf         --> 16 --> 17 --> 18 --> 57 --> 58 --> 59 --> 60 --> 61
- *   Half-Orc      --> 19 --> 20 -->  2 -->  3 --> 50 --> 51 --> 52 --> 53
- *   Half-Troll    --> 22 --> 23 --> 62 --> 63 --> 64 --> 65 --> 66
- *
- * XXX XXX XXX This table *must* be correct or drastic errors may occur!
+ * 生い立ちテーブルの定義 / Background information (see below)\n
+ *\n
+ * Chart progression by race:\n
+ *   Human         -->  1 -->  2 -->  3 --> 50 --> 51 --> 52 --> 53\n
+ *   Half-Elf      -->  4 -->  1 -->  2 -->  3 --> 50 --> 51 --> 52 --> 53\n
+ *   Elf/High-Elf  -->  7 -->  8 -->  9 --> 54 --> 55 --> 56\n
+ *   Hobbit        --> 10 --> 11 -->  3 --> 50 --> 51 --> 52 --> 53\n
+ *   Gnome         --> 13 --> 14 -->  3 --> 50 --> 51 --> 52 --> 53\n
+ *   Dwarf         --> 16 --> 17 --> 18 --> 57 --> 58 --> 59 --> 60 --> 61\n
+ *   Half-Orc      --> 19 --> 20 -->  2 -->  3 --> 50 --> 51 --> 52 --> 53\n
+ *   Half-Troll    --> 22 --> 23 --> 62 --> 63 --> 64 --> 65 --> 66\n
+ *\n
+ * XXX XXX XXX This table *must* be correct or drastic errors may occur!\n
  */
 static hist_type bg[] =
 {
@@ -2057,18 +2057,23 @@ static struct {
 /*! オートローラ中、各能力値が水準を超えた回数 / Autoroll matches */
 static s32b stat_match[6];
 
-/*1 オートローラの試行回数 / Autoroll round */
+/*! オートローラの試行回数 / Autoroll round */
 static s32b auto_round;
 
+/*! 
+ * @brief プレイヤー作成を中断して変愚蛮怒を終了する
+ * @return なし
+ */
 static void birth_quit(void)
 {
 	remove_loc();
 	quit(NULL);
 }
 
-
-/*
- *  Show specific help file
+/*!
+ * @brief 指定されたヘルプファイルを表示する / Show specific help file
+ * @param helpfile ファイル名
+ * @return なし
  */
 static void show_help(cptr helpfile)
 {
@@ -2083,8 +2088,11 @@ static void show_help(cptr helpfile)
 }
 
 
-/*
- * Choose from one of the available magical realms
+/*!
+ * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms
+ * @param choices 選択可能な魔法領域のビット配列
+ * @param count 選択可能な魔法領域を返すポインタ群。
+ * @return 選択した魔法領域のID
  */
 static byte choose_realm(s32b choices, int *count)
 {
@@ -2345,8 +2353,9 @@ static byte choose_realm(s32b choices, int *count)
 }
 
 
-/*
- * Choose the magical realms
+/*!
+ * @brief 選択した魔法領域の解説を表示する / Choose the magical realms
+ * @return ユーザが魔法領域の確定を選んだらTRUEを返す。
  */
 static bool get_player_realms(void)
 {
@@ -2480,8 +2489,10 @@ else
 }
 
 
-/*
- * Save the current data for later
+/*!
+ * @brief プレイヤーのクイックスタート情報をプレイヤー構造体から保存する / Save the current data for later
+ * @param birther_ptr クイックスタート構造体の参照ポインタ
+ * @return なし。
  */
 static void save_prev_data(birther *birther_ptr)
 {
@@ -2529,8 +2540,10 @@ static void save_prev_data(birther *birther_ptr)
 }
 
 
-/*
- * Load the previous data
+/*!
+ * @brief プレイヤーのクイックスタート情報をプレイヤー構造体へ読み込む / Load the previous data
+ * @param swap TRUEならば現在のプレイヤー構造体上との内容をスワップする形で読み込む。
+ * @return なし。
  */
 static void load_prev_data(bool swap)
 {
@@ -2595,8 +2608,11 @@ static void load_prev_data(bool swap)
 
 
 
-/*
- * Returns adjusted stat -JK-  Algorithm by -JWT-
+/*!
+ * @brief プレイヤーの能力値表現に基づいて加減算を行う。
+ * @param value 現在の能力値
+ * @param amount 加減算する値
+ * @return 加減算の結果
  */
 static int adjust_stat(int value, int amount)
 {
