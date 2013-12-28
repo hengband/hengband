@@ -1,16 +1,20 @@
-/* Purpose: create a player character */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file birth.c
+ * @brief プレイヤーの作成を行う / Create a player character
+ * @date 2013/12/28
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ *\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2013 Deskull Doxygen向けのコメント整理\n
  */
 
 #include "angband.h"
 
-/*
+/*!
+ * オートローラーの内容を描画する間隔 / 
  * How often the autoroller will update the display and pause
  * to check for user interuptions.
  * Bigger values will make the autoroller faster, but slower
@@ -19,41 +23,42 @@
  */
 #define AUTOROLLER_STEP 5431L
 
-/*
- * Define this to cut down processor use while autorolling
- */
 #if 0
-#  define AUTOROLLER_DELAY
+/*!
+ * オートローラを1回まわすごとに1/10秒のウェイトをかけるマクロ定義 / Define this to cut down processor use while autorolling
+ */
+#define AUTOROLLER_DELAY
 #endif
 
-/*
- * Maximum number of tries for selection of a proper quest monster
+/*!
+ * ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster
  */
 #define MAX_TRIES 100
 
+/* 選択可能な職業の最大数 */
 #define MAX_CLASS_CHOICE     MAX_CLASS
 
-/*
- * Forward declare
+/*!
+ * 生い立ちメッセージテーブル / Forward declare
  */
 typedef struct hist_type hist_type;
 
-/*
- * Player background information
+/*!
+ * 生い立ちメッセージテーブルの構造体定義 / Player background information
  */
 struct hist_type
 {
-	cptr info;			    /* Textual History */
+	cptr info;			    /*!> メッセージ本文 / Textual History */
 
-	byte roll;			    /* Frequency of this entry */
-	byte chart;			    /* Chart index */
-	byte next;			    /* Next chart index */
-	byte bonus;			    /* Social Class Bonus + 50 */
+	byte roll;			    /*!> 確率の重み / Frequency of this entry */
+	byte chart;			    /*!> 生い立ちメッセージの流れを示すチャートID / Chart index */
+	byte next;			    /*!> 次のチャートID */
+	byte bonus;			    /*!> メッセージに伴う社会的地位の変化量(50が基準値) / Social Class Bonus + 50 */
 };
 
 
-/*
- * Background information (see below)
+/*!
+ * 生い立ちテーブルの定義 / Background information (see below)
  *
  * Chart progression by race:
  *   Human         -->  1 -->  2 -->  3 --> 50 --> 51 --> 52 --> 53
@@ -1610,6 +1615,7 @@ static hist_type bg[] =
 #endif
 };
 
+/*! 種族の解説メッセージテーブル */
 static cptr race_jouhou[MAX_RACES] =
 {
 #ifdef JP
@@ -1766,6 +1772,7 @@ static cptr race_jouhou[MAX_RACES] =
 #endif
 };
 
+/*! 職業の解説メッセージテーブル */
 static cptr class_jouhou[MAX_CLASS] =
 {
 #ifdef JP
@@ -1885,7 +1892,7 @@ static cptr class_jouhou[MAX_CLASS] =
 #endif
 };
 
-
+/*! 正確の解説メッセージテーブル */
 static cptr seikaku_jouhou[MAX_SEIKAKU] =
 {
 #ifdef JP
@@ -1942,6 +1949,7 @@ static cptr seikaku_jouhou[MAX_SEIKAKU] =
 #endif
 };
 
+/*! 魔法領域の詳細解説メッセージテーブル */
 static cptr realm_jouhou[VALID_REALM] =
 {
 #ifdef JP
@@ -2000,6 +2008,7 @@ static cptr realm_jouhou[VALID_REALM] =
 #endif
 };
 
+/*! 魔法領域の簡易解説メッセージテーブル */
 static cptr realm_subinfo[VALID_REALM] =
 {
 #ifdef JP
@@ -2034,11 +2043,10 @@ static cptr realm_subinfo[VALID_REALM] =
 };
 
 
-/*
- * Autoroll limit
- */
+/*! オートローラの能力値的要求水準 / Autoroll limit */
 static s16b stat_limit[6];
 
+/*! オートローラの年齢、身長、体重、社会的地位の要求水準 */
 static struct {
 	s16b agemin, agemax;
 	s16b htmin, htmax;
@@ -2046,16 +2054,11 @@ static struct {
 	s16b scmin, scmax;
 } chara_limit;
 
-/*
- * Autoroll matches
- */
+/*! オートローラ中、各能力値が水準を超えた回数 / Autoroll matches */
 static s32b stat_match[6];
 
-/*
- * Autoroll round
- */
+/*1 オートローラの試行回数 / Autoroll round */
 static s32b auto_round;
-
 
 static void birth_quit(void)
 {

@@ -600,7 +600,7 @@ static int cards[5]; /*!< ポーカーの現在の手札ID */
 
 /*!
  * @brief ポーカーの山札を切る。
- * @param なし
+ * @param deck デッキの配列
  * @return なし
  */
 static void reset_deck(int deck[])
