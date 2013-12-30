@@ -72,9 +72,10 @@ bool is_trap(int feat)
 	return have_flag(f_info[feat].flags, FF_TRAP);
 }
 
-
-/*
- * Return TRUE if the given grid is a known trap
+/*!
+ * @brief マスに看破済みの罠があるかの判定を行う。 / Return TRUE if the given grid is a known trap
+ * @param c_ptr マス構造体の参照ポインタ
+ * @return 看破済みの罠があるならTRUEを返す。
  */
 bool is_known_trap(cave_type *c_ptr)
 {
@@ -84,9 +85,10 @@ bool is_known_trap(cave_type *c_ptr)
 		return FALSE;
 }
 
-
-/*
- * Return TRUE if the given grid is a closed door
+/*!
+ * @brief 地形が閉じたドアであるかの判定を行う。 / Return TRUE if the given grid is a closed door
+ * @param feat 地形情報のID
+ * @return 閉じたドアのある地形ならばTRUEを返す。
  */
 bool is_closed_door(int feat)
 {
@@ -96,9 +98,10 @@ bool is_closed_door(int feat)
 	       !have_flag(f_ptr->flags, FF_MOVE);
 }
 
-
-/*
- * Return TRUE if the given grid is a hidden closed door
+/*!
+ * @brief マスに隠されたドアがあるかの判定を行う。 / Return TRUE if the given grid is a hidden closed door
+ * @param c_ptr マス構造体の参照ポインタ
+ * @return 隠されたドアがあるならTRUEを返す。
  */
 bool is_hidden_door(cave_type *c_ptr)
 {
@@ -109,41 +112,48 @@ bool is_hidden_door(cave_type *c_ptr)
 		return FALSE;
 }
 
-
-/*
- * A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,
- * 4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.
- *
- * Returns TRUE if a line of sight can be traced from (x1,y1) to (x2,y2).
- *
- * The LOS begins at the center of the tile (x1,y1) and ends at the center of
- * the tile (x2,y2).  If los() is to return TRUE, all of the tiles this line
- * passes through must be floor tiles, except for (x1,y1) and (x2,y2).
- *
- * We assume that the "mathematical corner" of a non-floor tile does not
- * block line of sight.
- *
- * Because this function uses (short) ints for all calculations, overflow may
- * occur if dx and dy exceed 90.
- *
- * Once all the degenerate cases are eliminated, the values "qx", "qy", and
- * "m" are multiplied by a scale factor "f1 = abs(dx * dy * 2)", so that
- * we can use integer arithmetic.
- *
- * We travel from start to finish along the longer axis, starting at the border
- * between the first and second tiles, where the y offset = .5 * slope, taking
- * into account the scale factor.  See below.
- *
- * Also note that this function and the "move towards target" code do NOT
- * share the same properties.  Thus, you can see someone, target them, and
- * then fire a bolt at them, but the bolt may hit a wall, not them.  However,
- * by clever choice of target locations, you can sometimes throw a "curve".
- *
- * Note that "line of sight" is not "reflexive" in all cases.
- *
- * Use the "projectable()" routine to test "spell/missile line of sight".
- *
- * Use the "update_view()" function to determine player line-of-sight.
+/*!
+ * @brief LOS(Line Of Sight / 視線が通っているか)の判定を行う。
+ * @param c_ptr マス構造体の参照ポインタ
+ * @param y1 始点のy座標
+ * @param x1 始点のx座標
+ * @param y2 終点のy座標
+ * @param x2 終点のx座標
+ * @return LOSが通っているならTRUEを返す。
+ * @detail
+ * A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,\n
+ * 4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.\n
+ *\n
+ * Returns TRUE if a line of sight can be traced from (x1,y1) to (x2,y2).\n
+ *\n
+ * The LOS begins at the center of the tile (x1,y1) and ends at the center of\n
+ * the tile (x2,y2).  If los() is to return TRUE, all of the tiles this line\n
+ * passes through must be floor tiles, except for (x1,y1) and (x2,y2).\n
+ *\n
+ * We assume that the "mathematical corner" of a non-floor tile does not\n
+ * block line of sight.\n
+ *\n
+ * Because this function uses (short) ints for all calculations, overflow may\n
+ * occur if dx and dy exceed 90.\n
+ *\n
+ * Once all the degenerate cases are eliminated, the values "qx", "qy", and\n
+ * "m" are multiplied by a scale factor "f1 = abs(dx * dy * 2)", so that\n
+ * we can use integer arithmetic.\n
+ *\n
+ * We travel from start to finish along the longer axis, starting at the border\n
+ * between the first and second tiles, where the y offset = .5 * slope, taking\n
+ * into account the scale factor.  See below.\n
+ *\n
+ * Also note that this function and the "move towards target" code do NOT\n
+ * share the same properties.  Thus, you can see someone, target them, and\n
+ * then fire a bolt at them, but the bolt may hit a wall, not them.  However\n,
+ * by clever choice of target locations, you can sometimes throw a "curve".\n
+ *\n
+ * Note that "line of sight" is not "reflexive" in all cases.\n
+ *\n
+ * Use the "projectable()" routine to test "spell/missile line of sight".\n
+ *\n
+ * Use the "update_view()" function to determine player line-of-sight.\n
  */
 bool los(int y1, int x1, int y2, int x2)
 {
@@ -368,15 +378,14 @@ bool los(int y1, int x1, int y2, int x2)
 	return TRUE;
 }
 
+#define COMPLEX_WALL_ILLUMINATION /*!< 照明状態を壁により影響を受ける、より複雑な判定に切り替えるマクロ */
 
 
-
-
-
-#define COMPLEX_WALL_ILLUMINATION
-
-/*
- * Check for "local" illumination
+/*!
+ * @brief 指定された座標のマスが現在照らされているかを返す。 / Check for "local" illumination
+ * @param y y座標
+ * @param y x座標
+ * @return 指定された座標に照明がかかっているならTRUEを返す。。
  */
 static bool check_local_illumination(int y, int x)
 {
@@ -409,6 +418,7 @@ static bool check_local_illumination(int y, int x)
 }
 
 
+/*! 対象座標のマスの照明状態を更新する際の補助処理マクロ */
 #define update_local_illumination_aux(Y, X) \
 { \
 	if (player_has_los_bold((Y), (X))) \
@@ -422,9 +432,11 @@ static bool check_local_illumination(int y, int x)
 	} \
 }
 
-
-/*
- * Update "local" illumination
+/*!
+ * @brief 指定された座標の照明状態を更新する / Update "local" illumination
+ * @param y y座標
+ * @param y x座標
+ * @return なし
  */
 void update_local_illumination(int y, int x)
 {
@@ -518,37 +530,40 @@ void update_local_illumination(int y, int x)
 }
 
 
-/*
- * Can the player "see" the given grid in detail?
- *
- * He must have vision, illumination, and line of sight.
- *
- * Note -- "CAVE_LITE" is only set if the "torch" has "los()".
- * So, given "CAVE_LITE", we know that the grid is "fully visible".
- *
- * Note that "CAVE_GLOW" makes little sense for a wall, since it would mean
- * that a wall is visible from any direction.  That would be odd.  Except
- * under wizard light, which might make sense.  Thus, for walls, we require
- * not only that they be "CAVE_GLOW", but also, that they be adjacent to a
- * grid which is not only "CAVE_GLOW", but which is a non-wall, and which is
- * in line of sight of the player.
- *
- * This extra check is expensive, but it provides a more "correct" semantics.
- *
- * Note that we should not run this check on walls which are "outer walls" of
- * the dungeon, or we will induce a memory fault, but actually verifying all
- * of the locations would be extremely expensive.
- *
- * Thus, to speed up the function, we assume that all "perma-walls" which are
- * "CAVE_GLOW" are "illuminated" from all sides.  This is correct for all cases
- * except "vaults" and the "buildings" in town.  But the town is a hack anyway,
- * and the player has more important things on his mind when he is attacking a
- * monster vault.  It is annoying, but an extremely important optimization.
- *
- * Note that "glowing walls" are only considered to be "illuminated" if the
- * grid which is next to the wall in the direction of the player is also a
- * "glowing" grid.  This prevents the player from being able to "see" the
- * walls of illuminated rooms from a corridor outside the room.
+/*!
+ * @brief 指定された座標をプレイヤーが視覚に収められるかを返す。 / Can the player "see" the given grid in detail?
+ * @param y y座標
+ * @param y x座標
+ * @return 視覚に収められる状態ならTRUEを返す
+ * @details
+ * He must have vision, illumination, and line of sight.\n
+ * \n
+ * Note -- "CAVE_LITE" is only set if the "torch" has "los()".\n
+ * So, given "CAVE_LITE", we know that the grid is "fully visible".\n
+ *\n
+ * Note that "CAVE_GLOW" makes little sense for a wall, since it would mean\n
+ * that a wall is visible from any direction.  That would be odd.  Except\n
+ * under wizard light, which might make sense.  Thus, for walls, we require\n
+ * not only that they be "CAVE_GLOW", but also, that they be adjacent to a\n
+ * grid which is not only "CAVE_GLOW", but which is a non-wall, and which is\n
+ * in line of sight of the player.\n
+ *\n
+ * This extra check is expensive, but it provides a more "correct" semantics.\n
+ *\n
+ * Note that we should not run this check on walls which are "outer walls" of\n
+ * the dungeon, or we will induce a memory fault, but actually verifying all\n
+ * of the locations would be extremely expensive.\n
+ *\n
+ * Thus, to speed up the function, we assume that all "perma-walls" which are\n
+ * "CAVE_GLOW" are "illuminated" from all sides.  This is correct for all cases\n
+ * except "vaults" and the "buildings" in town.  But the town is a hack anyway,\n
+ * and the player has more important things on his mind when he is attacking a\n
+ * monster vault.  It is annoying, but an extremely important optimization.\n
+ *\n
+ * Note that "glowing walls" are only considered to be "illuminated" if the\n
+ * grid which is next to the wall in the direction of the player is also a\n
+ * "glowing" grid.  This prevents the player from being able to "see" the\n
+ * walls of illuminated rooms from a corridor outside the room.\n
  */
 bool player_can_see_bold(int y, int x)
 {
@@ -580,10 +595,12 @@ bool player_can_see_bold(int y, int x)
 	return check_local_illumination(y, x);
 }
 
-
-
-/*
- * Returns true if the player's grid is dark
+/*!
+ * @brief 指定された座標をプレイヤー収められていない状態かどうか / Returns true if the player's grid is dark
+ * @param y y座標
+ * @param y x座標
+ * @return 視覚に収められていないならTRUEを返す
+ * @details player_can_see_bold()関数の返り値の否定を返している。
  */
 bool no_lite(void)
 {
@@ -591,12 +608,13 @@ bool no_lite(void)
 }
 
 
-
-
-/*
- * Determine if a given location may be "destroyed"
- *
- * Used by destruction spells, and for placing stairs, etc.
+/*!
+ * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。 / Determine if a given location may be "destroyed"
+ * @param y y座標
+ * @param y x座標
+ * @return 各種の変更が可能ならTRUEを返す。
+ * @details 
+ * 条件は永久地形でなく、なおかつ該当のマスにアーティファクトが存在しないか、である。英語の旧コメントに反して＊破壊＊の抑止判定には現在使われていない。
  */
 bool cave_valid_bold(int y, int x)
 {
