@@ -1892,7 +1892,7 @@ static cptr class_jouhou[MAX_CLASS] =
 #endif
 };
 
-/*! 正確の解説メッセージテーブル */
+/*! 性格の解説メッセージテーブル */
 static cptr seikaku_jouhou[MAX_SEIKAKU] =
 {
 #ifdef JP

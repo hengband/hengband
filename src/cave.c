@@ -1,31 +1,35 @@
-/* File: cave.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file cave.c
+ * @brief ダンジョンの基礎部分実装(主にマスの実装) / low level dungeon routines -BEN-
+ * @date 2013/12/30
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ *\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * \n
+ * Support for Adam Bolt's tileset, lighting and transparency effects\n
+ * by Robert Ruehlmann (rr9@angband.org)\n
+ * \n
+ * 2013 Deskull Doxygen向けのコメント整理\n
  */
-
-/* Purpose: low level dungeon routines -BEN- */
 
 
 #include "angband.h"
 
-
-/*
- * Support for Adam Bolt's tileset, lighting and transparency effects
- * by Robert Ruehlmann (rr9@angband.org)
- */
-
-static byte display_autopick;
+static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 static int match_autopick;
-static object_type *autopick_obj;
-static int feat_priority;
+static object_type *autopick_obj; /*!< 各種自動拾い処理時に使うオブジェクトポインタ */
+static int feat_priority; /*!< マップ縮小表示時に表示すべき地形の優先度を保管する */
 
-/*
- * Distance between two points via Newton-Raphson technique
+/*!
+ * @brief 2点間の距離をニュートン・ラプソン法で算出する / Distance between two points via Newton-Raphson technique
+ * @param y1 1点目のy座標
+ * @param x1 1点目のx座標
+ * @param y2 2点目のy座標
+ * @param x2 2点目のx座標
+ * @return 2点間の距離
  */
 int distance (int y1, int x1, int y2, int x2)
 {
@@ -58,9 +62,10 @@ int distance (int y1, int x1, int y2, int x2)
 	return d;
 }
 
-
-/*
- * Return TRUE if the given feature is a trap
+/*!
+ * @brief 地形が罠持ちであるかの判定を行う。 / Return TRUE if the given feature is a trap
+ * @param feat 地形情報のID
+ * @return 罠持ちの地形ならばTRUEを返す。
  */
 bool is_trap(int feat)
 {
