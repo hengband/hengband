@@ -648,19 +648,22 @@ bool cave_valid_bold(int y, int x)
 
 
 
-/*
- * Hack -- Legal monster codes
+/*!
+ * 一般的にモンスターシンボルとして扱われる記号を定義する(幻覚処理向け) / Hack -- Legal monster codes
  */
 static char image_monster_hack[] = \
 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-/*
- * Hack -- Legal object codes
+/*!
+ * 一般的にオブジェクトシンボルとして扱われる記号を定義する(幻覚処理向け) /  Hack -- Legal object codes
  */
 static char image_object_hack[] = "?/|\\\"!$()_-=[]{},~";
 
-/*
- * Mega-Hack -- Hallucinatory monster
+/*!
+ * @brief モンスターの表示を幻覚状態に差し替える / Mega-Hack -- Hallucinatory monster
+ * @param ap 本来の色
+ * @param cp 本来のシンボル
+ * @return なし
  */
 static void image_monster(byte *ap, char *cp)
 {
@@ -684,9 +687,11 @@ static void image_monster(byte *ap, char *cp)
 	}
 }
 
-
-/*
- * Mega-Hack -- Hallucinatory object
+/*!
+ * @brief オブジェクトの表示を幻覚状態に差し替える / Hallucinatory object
+ * @param ap 本来の色
+ * @param cp 本来のシンボル
+ * @return なし
  */
 static void image_object(byte *ap, char *cp)
 {
@@ -709,9 +714,11 @@ static void image_object(byte *ap, char *cp)
 }
 
 
-
-/*
- * Hack -- Random hallucination
+/*!
+ * @brief オブジェクト＆モンスターの表示を幻覚状態に差し替える / Hack -- Random hallucination
+ * @param ap 本来の色
+ * @param cp 本来のシンボル
+ * @return なし
  */
 static void image_random(byte *ap, char *cp)
 {
@@ -728,15 +735,15 @@ static void image_random(byte *ap, char *cp)
 	}
 }
 
-/*
- * This array lists the effects of "brightness" on various "base" colours.
- *
- * This is used to do dynamic lighting effects in ascii :-)
- * At the moment, only the various "floor" tiles are affected.
- *
- * The layout of the array is [x][0] = light and [x][1] = dark.
+/*!
+ * 照明の表現を行うための色合いの関係を{暗闇時, 照明時} で定義する /
+ * This array lists the effects of "brightness" on various "base" colours.\n
+ *\n
+ * This is used to do dynamic lighting effects in ascii :-)\n
+ * At the moment, only the various "floor" tiles are affected.\n
+ *\n
+ * The layout of the array is [x][0] = light and [x][1] = dark.\n
  */
-
 static byte lighting_colours[16][2] =
 {
 	/* TERM_DARK */
@@ -788,9 +795,9 @@ static byte lighting_colours[16][2] =
 	{TERM_L_UMBER, TERM_UMBER}
 };
 
-
-/*
- * Apply "default" feature lighting effects
+/*!
+ * @brief 調査中
+ * @todo コメントを付加すること
  */
 void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
 {
@@ -813,129 +820,131 @@ void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
 }
 
 
-/* Is this grid "darkened" by monster? */
+/*!
+ * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
+ */
 #define darkened_grid(C) \
 	((((C)->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && \
 	!p_ptr->see_nocto)
 
 
-/*
- * Extract the attr/char to display at the given (legal) map location
- *
- * Basically, we "paint" the chosen attr/char in several passes, starting
- * with any known "terrain features" (defaulting to darkness), then adding
- * any known "objects", and finally, adding any known "monsters".  This
- * is not the fastest method but since most of the calls to this function
- * are made for grids with no monsters or objects, it is fast enough.
- *
- * Note that this function, if used on the grid containing the "player",
- * will return the attr/char of the grid underneath the player, and not
- * the actual player attr/char itself, allowing a lot of optimization
- * in various "display" functions.
- *
- * Note that the "zero" entry in the feature/object/monster arrays are
- * used to provide "special" attr/char codes, with "monster zero" being
- * used for the player attr/char, "object zero" being used for the "stack"
- * attr/char, and "feature zero" being used for the "nothing" attr/char,
- * though this function makes use of only "feature zero".
- *
- * Note that monsters can have some "special" flags, including "ATTR_MULTI",
- * which means their color changes, and "ATTR_CLEAR", which means they take
- * the color of whatever is under them, and "CHAR_CLEAR", which means that
- * they take the symbol of whatever is under them.  Technically, the flag
- * "CHAR_MULTI" is supposed to indicate that a monster looks strange when
- * examined, but this flag is currently ignored.
- *
- * Currently, we do nothing with multi-hued objects, because there are
- * not any.  If there were, they would have to set "shimmer_objects"
- * when they were created, and then new "shimmer" code in "dungeon.c"
- * would have to be created handle the "shimmer" effect, and the code
- * in "cave.c" would have to be updated to create the shimmer effect.
- *
- * Note the effects of hallucination.  Objects always appear as random
- * "objects", monsters as random "monsters", and normal grids occasionally
- * appear as random "monsters" or "objects", but note that these random
- * "monsters" and "objects" are really just "colored ascii symbols".
- *
- * Note that "floors" and "invisible traps" (and "zero" features) are
- * drawn as "floors" using a special check for optimization purposes,
- * and these are the only features which get drawn using the special
- * lighting effects activated by "view_special_lite".
- *
- * Note the use of the "mimic" field in the "terrain feature" processing,
- * which allows any feature to "pretend" to be another feature.  This is
- * used to "hide" secret doors, and to make all "doors" appear the same,
- * and all "walls" appear the same, and "hidden" treasure stay hidden.
- * It is possible to use this field to make a feature "look" like a floor,
- * but the "special lighting effects" for floors will not be used.
- *
- * Note the use of the new "terrain feature" information.  Note that the
- * assumption that all interesting "objects" and "terrain features" are
- * memorized allows extremely optimized processing below.  Note the use
- * of separate flags on objects to mark them as memorized allows a grid
- * to have memorized "terrain" without granting knowledge of any object
- * which may appear in that grid.
- *
- * Note the efficient code used to determine if a "floor" grid is
- * "memorized" or "viewable" by the player, where the test for the
- * grid being "viewable" is based on the facts that (1) the grid
- * must be "lit" (torch-lit or perma-lit), (2) the grid must be in
- * line of sight, and (3) the player must not be blind, and uses the
- * assumption that all torch-lit grids are in line of sight.
- *
- * Note that floors (and invisible traps) are the only grids which are
- * not memorized when seen, so only these grids need to check to see if
- * the grid is "viewable" to the player (if it is not memorized).  Since
- * most non-memorized grids are in fact walls, this induces *massive*
- * efficiency, at the cost of *forcing* the memorization of non-floor
- * grids when they are first seen.  Note that "invisible traps" are
- * always treated exactly like "floors", which prevents "cheating".
- *
- * Note the "special lighting effects" which can be activated for floor
- * grids using the "view_special_lite" option (for "white" floor grids),
- * causing certain grids to be displayed using special colors.  If the
- * player is "blind", we will use "dark gray", else if the grid is lit
- * by the torch, and the "view_yellow_lite" option is set, we will use
- * "yellow", else if the grid is "dark", we will use "dark gray", else
- * if the grid is not "viewable", and the "view_bright_lite" option is
- * set, and the we will use "slate" (gray).  We will use "white" for all
- * other cases, in particular, for illuminated viewable floor grids.
- *
- * Note the "special lighting effects" which can be activated for wall
- * grids using the "view_granite_lite" option (for "white" wall grids),
- * causing certain grids to be displayed using special colors.  If the
- * player is "blind", we will use "dark gray", else if the grid is lit
- * by the torch, and the "view_yellow_lite" option is set, we will use
- * "yellow", else if the "view_bright_lite" option is set, and the grid
- * is not "viewable", or is "dark", or is glowing, but not when viewed
- * from the player's current location, we will use "slate" (gray).  We
- * will use "white" for all other cases, in particular, for correctly
- * illuminated viewable wall grids.
- *
- * Note that, when "view_granite_lite" is set, we use an inline version
- * of the "player_can_see_bold()" function to check the "viewability" of
- * grids when the "view_bright_lite" option is set, and we do NOT use
- * any special colors for "dark" wall grids, since this would allow the
- * player to notice the walls of illuminated rooms from a hallway that
- * happened to run beside the room.  The alternative, by the way, would
- * be to prevent the generation of hallways next to rooms, but this
- * would still allow problems when digging towards a room.
- *
- * Note that bizarre things must be done when the "attr" and/or "char"
- * codes have the "high-bit" set, since these values are used to encode
- * various "special" pictures in some versions, and certain situations,
- * such as "multi-hued" or "clear" monsters, cause the attr/char codes
- * to be "scrambled" in various ways.
- *
- * Note that eventually we may use the "&" symbol for embedded treasure,
- * and use the "*" symbol to indicate multiple objects, though this will
- * have to wait for Angband 2.8.0 or later.  Note that currently, this
- * is not important, since only one object or terrain feature is allowed
- * in each grid.  If needed, "k_info[0]" will hold the "stack" attr/char.
- *
- * Note the assumption that doing "x_ptr = &x_info[x]" plus a few of
- * "x_ptr->xxx", is quicker than "x_info[x].xxx", if this is incorrect
- * then a whole lot of code should be changed...  XXX XXX
+/*!
+ * @brief Mコマンドによる縮小マップの表示を行う / Extract the attr/char to display at the given (legal) map location
+ * @details
+ * Basically, we "paint" the chosen attr/char in several passes, starting\n
+ * with any known "terrain features" (defaulting to darkness), then adding\n
+ * any known "objects", and finally, adding any known "monsters".  This\n
+ * is not the fastest method but since most of the calls to this function\n
+ * are made for grids with no monsters or objects, it is fast enough.\n
+ *\n
+ * Note that this function, if used on the grid containing the "player",\n
+ * will return the attr/char of the grid underneath the player, and not\n
+ * the actual player attr/char itself, allowing a lot of optimization\n
+ * in various "display" functions.\n
+ *\n
+ * Note that the "zero" entry in the feature/object/monster arrays are\n
+ * used to provide "special" attr/char codes, with "monster zero" being\n
+ * used for the player attr/char, "object zero" being used for the "stack"\n
+ * attr/char, and "feature zero" being used for the "nothing" attr/char,\n
+ * though this function makes use of only "feature zero".\n
+ *\n
+ * Note that monsters can have some "special" flags, including "ATTR_MULTI",\n
+ * which means their color changes, and "ATTR_CLEAR", which means they take\n
+ * the color of whatever is under them, and "CHAR_CLEAR", which means that\n
+ * they take the symbol of whatever is under them.  Technically, the flag\n
+ * "CHAR_MULTI" is supposed to indicate that a monster looks strange when\n
+ * examined, but this flag is currently ignored.\n
+ *\n
+ * Currently, we do nothing with multi-hued objects, because there are\n
+ * not any.  If there were, they would have to set "shimmer_objects"\n
+ * when they were created, and then new "shimmer" code in "dungeon.c"\n
+ * would have to be created handle the "shimmer" effect, and the code\n
+ * in "cave.c" would have to be updated to create the shimmer effect.\n
+ *\n
+ * Note the effects of hallucination.  Objects always appear as random\n
+ * "objects", monsters as random "monsters", and normal grids occasionally\n
+ * appear as random "monsters" or "objects", but note that these random\n
+ * "monsters" and "objects" are really just "colored ascii symbols".\n
+ *\n
+ * Note that "floors" and "invisible traps" (and "zero" features) are\n
+ * drawn as "floors" using a special check for optimization purposes,\n
+ * and these are the only features which get drawn using the special\n
+ * lighting effects activated by "view_special_lite".\n
+ *\n
+ * Note the use of the "mimic" field in the "terrain feature" processing,\n
+ * which allows any feature to "pretend" to be another feature.  This is\n
+ * used to "hide" secret doors, and to make all "doors" appear the same,\n
+ * and all "walls" appear the same, and "hidden" treasure stay hidden.\n
+ * It is possible to use this field to make a feature "look" like a floor,\n
+ * but the "special lighting effects" for floors will not be used.\n
+ *\n
+ * Note the use of the new "terrain feature" information.  Note that the\n
+ * assumption that all interesting "objects" and "terrain features" are\n
+ * memorized allows extremely optimized processing below.  Note the use\n
+ * of separate flags on objects to mark them as memorized allows a grid\n
+ * to have memorized "terrain" without granting knowledge of any object\n
+ * which may appear in that grid.\n
+ *\n
+ * Note the efficient code used to determine if a "floor" grid is\n
+ * "memorized" or "viewable" by the player, where the test for the\n
+ * grid being "viewable" is based on the facts that (1) the grid\n
+ * must be "lit" (torch-lit or perma-lit), (2) the grid must be in\n
+ * line of sight, and (3) the player must not be blind, and uses the\n
+ * assumption that all torch-lit grids are in line of sight.\n
+ *\n
+ * Note that floors (and invisible traps) are the only grids which are\n
+ * not memorized when seen, so only these grids need to check to see if\n
+ * the grid is "viewable" to the player (if it is not memorized).  Since\n
+ * most non-memorized grids are in fact walls, this induces *massive*\n
+ * efficiency, at the cost of *forcing* the memorization of non-floor\n
+ * grids when they are first seen.  Note that "invisible traps" are\n
+ * always treated exactly like "floors", which prevents "cheating".\n
+ *\n
+ * Note the "special lighting effects" which can be activated for floor\n
+ * grids using the "view_special_lite" option (for "white" floor grids),\n
+ * causing certain grids to be displayed using special colors.  If the\n
+ * player is "blind", we will use "dark gray", else if the grid is lit\n
+ * by the torch, and the "view_yellow_lite" option is set, we will use\n
+ * "yellow", else if the grid is "dark", we will use "dark gray", else\n
+ * if the grid is not "viewable", and the "view_bright_lite" option is\n
+ * set, and the we will use "slate" (gray).  We will use "white" for all\n
+ * other cases, in particular, for illuminated viewable floor grids.\n
+ *\n
+ * Note the "special lighting effects" which can be activated for wall\n
+ * grids using the "view_granite_lite" option (for "white" wall grids),\n
+ * causing certain grids to be displayed using special colors.  If the\n
+ * player is "blind", we will use "dark gray", else if the grid is lit\n
+ * by the torch, and the "view_yellow_lite" option is set, we will use\n
+ * "yellow", else if the "view_bright_lite" option is set, and the grid\n
+ * is not "viewable", or is "dark", or is glowing, but not when viewed\n
+ * from the player's current location, we will use "slate" (gray).  We\n
+ * will use "white" for all other cases, in particular, for correctly\n
+ * illuminated viewable wall grids.\n
+ *\n
+ * Note that, when "view_granite_lite" is set, we use an inline version\n
+ * of the "player_can_see_bold()" function to check the "viewability" of\n
+ * grids when the "view_bright_lite" option is set, and we do NOT use\n
+ * any special colors for "dark" wall grids, since this would allow the\n
+ * player to notice the walls of illuminated rooms from a hallway that\n
+ * happened to run beside the room.  The alternative, by the way, would\n
+ * be to prevent the generation of hallways next to rooms, but this\n
+ * would still allow problems when digging towards a room.\n
+ *\n
+ * Note that bizarre things must be done when the "attr" and/or "char"\n
+ * codes have the "high-bit" set, since these values are used to encode\n
+ * various "special" pictures in some versions, and certain situations,\n
+ * such as "multi-hued" or "clear" monsters, cause the attr/char codes\n
+ * to be "scrambled" in various ways.\n
+ *\n
+ * Note that eventually we may use the "&" symbol for embedded treasure,\n
+ * and use the "*" symbol to indicate multiple objects, though this will\n
+ * have to wait for Angband 2.8.0 or later.  Note that currently, this\n
+ * is not important, since only one object or terrain feature is allowed\n
+ * in each grid.  If needed, "k_info[0]" will hold the "stack" attr/char.\n
+ *\n
+ * Note the assumption that doing "x_ptr = &x_info[x]" plus a few of\n
+ * "x_ptr->xxx", is quicker than "x_info[x].xxx", if this is incorrect\n
+ * then a whole lot of code should be changed...  XXX XXX\n
  */
 void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
 {
