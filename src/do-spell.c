@@ -967,9 +967,12 @@ static void cast_shuffle(void)
 	}
 }
 
-
-/*
- * Drop 10+1d10 meteor ball at random places near the player
+/*!
+ * @brief カオス魔法「流星群」の処理としてプレイヤーを中心に隕石落下処理を10+1d10回繰り返す。
+ * / Drop 10+1d10 meteor ball at random places near the player
+ * @param dam ダメージ
+ * @param rad 効力の半径
+ * @return なし
  */
 static void cast_meteor(int dam, int rad)
 {
@@ -1010,8 +1013,11 @@ static void cast_meteor(int dam, int rad)
 }
 
 
-/*
- * Drop 10+1d10 disintegration ball at random places near the target
+/*!
+ * @brief 破邪魔法「神の怒り」の処理としてターゲットを指定した後分解のボールを最大20回発生させる。
+ * @param dam ダメージ
+ * @param rad 効力の半径
+ * @return ターゲットを指定し、実行したならばTRUEを返す。
  */
 static bool cast_wrath_of_the_god(int dam, int rad)
 {
@@ -1095,9 +1101,10 @@ static bool cast_wrath_of_the_god(int dam, int rad)
 	return TRUE;
 }
 
-
-/*
- * An "item_tester_hook" for offer
+/*!
+ * @brief 悪魔領域のグレーターデーモン召喚に利用可能な死体かどうかを返す。 / An "item_tester_hook" for offer
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @return 生贄に使用可能な死体ならばTRUEを返す。
  */
 static bool item_tester_offer(object_type *o_ptr)
 {
@@ -1112,9 +1119,9 @@ static bool item_tester_offer(object_type *o_ptr)
 	return (FALSE);
 }
 
-
-/*
- * Daemon spell Summon Greater Demon
+/*!
+ * @brief 悪魔領域のグレーターデーモン召喚を処理する / Daemon spell Summon Greater Demon
+ * @return 処理を実行したならばTRUEを返す。
  */
 static bool cast_summon_greater_demon(void)
 {
@@ -1191,9 +1198,11 @@ static bool cast_summon_greater_demon(void)
 	return TRUE;
 }
 
-
-/*
- * Start singing if the player is a Bard 
+/*!
+ * @brief 歌の開始を処理する / Start singing if the player is a Bard 
+ * @param spell 領域魔法としてのID
+ * @param song 魔法効果のID
+ * @return なし
  */
 static void start_singing(int spell, int song)
 {
@@ -1215,9 +1224,9 @@ static void start_singing(int spell, int song)
 	p_ptr->redraw |= (PR_STATUS);
 }
 
-
-/*
- * Stop singing if the player is a Bard 
+/*!
+ * @brief 歌の停止を処理する / Stop singing if the player is a Bard 
+ * @return なし
  */
 void stop_singing(void)
 {
@@ -1251,6 +1260,12 @@ void stop_singing(void)
 }
 
 
+/*!
+ * @brief 生命領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_life_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -1948,7 +1963,12 @@ static cptr do_life_spell(int spell, int mode)
 	return "";
 }
 
-
+/*!
+ * @brief 仙術領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_sorcery_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -2653,6 +2673,12 @@ static cptr do_sorcery_spell(int spell, int mode)
 }
 
 
+/*!
+ * @brief 自然領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_nature_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -3443,6 +3469,12 @@ static cptr do_nature_spell(int spell, int mode)
 }
 
 
+/*!
+ * @brief カオス領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_chaos_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -4245,7 +4277,12 @@ static cptr do_chaos_spell(int spell, int mode)
 	return "";
 }
 
-
+/*!
+ * @brief 暗黒領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_death_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -5080,6 +5117,12 @@ static cptr do_death_spell(int spell, int mode)
 }
 
 
+/*!
+ * @brief トランプ領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_trump_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -6008,6 +6051,12 @@ static cptr do_trump_spell(int spell, int mode)
 }
 
 
+/*!
+ * @brief 秘術領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_arcane_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -6730,7 +6779,12 @@ static cptr do_arcane_spell(int spell, int mode)
 	return "";
 }
 
-
+/*!
+ * @brief 匠領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_craft_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -7427,7 +7481,12 @@ static cptr do_craft_spell(int spell, int mode)
 	return "";
 }
 
-
+/*!
+ * @brief 悪魔領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_daemon_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -8219,7 +8278,12 @@ static cptr do_daemon_spell(int spell, int mode)
 	return "";
 }
 
-
+/*!
+ * @brief 破邪領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_crusade_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -9010,6 +9074,12 @@ static cptr do_crusade_spell(int spell, int mode)
 }
 
 
+/*!
+ * @brief 歌の各処理を行う
+ * @param spell 歌ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
+ */
 static cptr do_music_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -10247,7 +10317,12 @@ static cptr do_music_spell(int spell, int mode)
 	return "";
 }
 
-
+/*!
+ * @brief 剣術の各処理を行う
+ * @param spell 剣術ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ */
 static cptr do_hissatsu_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -11463,8 +11538,11 @@ static cptr do_hissatsu_spell(int spell, int mode)
 	return "";
 }
 
-
-/* Hex */
+/*!
+ * @brief 呪術領域の武器呪縛の対象にできる武器かどうかを返す。 / An "item_tester_hook" for offer
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @return 呪縛可能な武器ならばTRUEを返す
+ */
 static bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
 {
 	switch (o_ptr->tval)
@@ -11481,11 +11559,22 @@ static bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
 	return (FALSE);
 }
 
+/*!
+ * @brief 呪術領域の各処理に使える呪われた装備かどうかを返す。 / An "item_tester_hook" for offer
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @return 使える装備ならばTRUEを返す
+ */
 static bool item_tester_hook_cursed(object_type *o_ptr)
 {
 	return (bool)(object_is_cursed(o_ptr));
 }
 
+/*!
+ * @brief 呪術領域魔法の各処理を行う
+ * @param spell 魔法ID
+ * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
+ */
 static cptr do_hex_spell(int spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
@@ -12671,8 +12760,12 @@ static cptr do_hex_spell(int spell, int mode)
 }
 
 
-/*
- * Do everything for each spell
+/*!
+ * @brief 魔法処理のメインルーチン
+ * @param realm 魔法領域のID
+ * @param spell 各領域の魔法ID
+ * @param mode 求める処理
+ * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はNULLポインタを返す。
  */
 cptr do_spell(int realm, int spell, int mode)
 {
