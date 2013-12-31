@@ -699,7 +699,10 @@ static void pattern_teleport(void)
 	p_ptr->leaving = TRUE;
 }
 
-
+/*!
+ * @brief 種族アンバライトが出血時パターンの上に乗った際のペナルティ処理
+ * @return なし
+ */
 static void wreck_the_pattern(void)
 {
 	int to_ruin = 0, r_y, r_x;
@@ -742,8 +745,10 @@ static void wreck_the_pattern(void)
 	cave_set_feat(py, px, feat_pattern_corrupted);
 }
 
-
-/* Returns TRUE if we are on the Pattern... */
+/*!
+ * @brief 各種パターン地形上の特別な処理 / Returns TRUE if we are on the Pattern...
+ * @return 実際にパターン地形上にプレイヤーが居た場合はTRUEを返す。
+ */
 static bool pattern_effect(void)
 {
 	int pattern_type;
@@ -825,11 +830,10 @@ static bool pattern_effect(void)
 }
 
 
-
-
-
-/*
- * Regenerate hit points				-RAK-
+/*!
+ * @brief プレイヤーのHP自然回復処理 / Regenerate hit points -RAK-
+ * @param percent 回復比率
+ * @return なし
  */
 static void regenhp(int percent)
 {
@@ -879,8 +883,11 @@ static void regenhp(int percent)
 }
 
 
-/*
- * Regenerate mana points
+/*!
+ * @brief プレイヤーのMP自然回復処理(regen_magic()のサブセット) / Regenerate mana points
+ * @param upkeep_factor ペット維持によるMPコスト量
+ * @param regen_amount 回復量
+ * @return なし
  */
 static void regenmana(int upkeep_factor, int regen_amount)
 {
@@ -969,11 +976,10 @@ static void regenmana(int upkeep_factor, int regen_amount)
 	}
 }
 
-
-
-/*
- * Regenerate magic
- * regen_amount: PY_REGEN_NORMAL * 2 (if resting) * 2 (if having regenarate)
+/*!
+ * @brief プレイヤーのMP自然回復処理 / Regenerate magic regen_amount: PY_REGEN_NORMAL * 2 (if resting) * 2 (if having regenarate)
+ * @param regen_amount 回復量
+ * @return なし
  */
 static void regenmagic(int regen_amount)
 {
@@ -1015,14 +1021,10 @@ static void regenmagic(int regen_amount)
 }
 
 
-
-
-
-
-/*
- * Regenerate the monsters (once per 100 game turns)
- *
- * XXX XXX XXX Should probably be done during monster turns.
+/*!
+ * @brief 100ゲームターン毎のモンスターのHP自然回復処理 / Regenerate the monsters (once per 100 game turns)
+ * @return なし
+ * @memo XXX XXX XXX Should probably be done during monster turns.
  */
 static void regen_monsters(void)
 {
@@ -1066,10 +1068,10 @@ static void regen_monsters(void)
 }
 
 
-/*
- * Regenerate the captured monsters (once per 30 game turns)
- *
- * XXX XXX XXX Should probably be done during monster turns.
+/*!
+ * @brief 30ゲームターン毎のボール中モンスターのHP自然回復処理 / Regenerate the captured monsters (once per 30 game turns)
+ * @return なし
+ * @memo XXX XXX XXX Should probably be done during monster turns.
  */
 static void regen_captured_monsters(void)
 {
@@ -1122,7 +1124,11 @@ static void regen_captured_monsters(void)
 	}
 }
 
-
+/*!
+ * @brief 寿命つき光源の警告メッセージ処理
+ * @param o_ptr 現在光源として使っているオブジェクトの構造体参照ポインタ
+ * @return なし
+ */
 static void notice_lite_change(object_type *o_ptr)
 {
 	/* Hack -- notice interesting fuel steps */
@@ -1185,7 +1191,10 @@ msg_print("明かりが微かになってきている。");
 	}
 }
 
-
+/*!
+ * @brief クエスト階層から離脱する際の処理
+ * @return なし
+ */
 void leave_quest_check(void)
 {
 	/* Save quest number for dungeon pref file ($LEAVING_QUEST) */
@@ -1235,6 +1244,10 @@ void leave_quest_check(void)
 	}
 }
 
+/*!
+ * @brief 「塔」クエストの各階層から離脱する際の処理
+ * @return なし
+ */
 void leave_tower_check(void)
 {
 	leaving_quest = p_ptr->inside_quest;
