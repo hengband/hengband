@@ -1,25 +1,27 @@
-/* File: dungeonc */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+    @file dungeon.c
+    @brief Angbandゲームエンジン / Angband game engine
+    @date 2013/12/31
+    @author
+    Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
+    This software may be copied and distributed for educational, research, and\n
+    not for profit purposes provided that this copyright and statement are\n
+    included in all such copies.\n
+    2013 Deskull rearranged comment for Doxygen.
  */
-
-/* Purpose: Angband game engine */
 
 #include "angband.h"
 
-#define TY_CURSE_CHANCE 200
-#define CHAINSWORD_NOISE 100
+#define TY_CURSE_CHANCE 200 /*!<太古の怨念の1ターン毎の発動確率(1/n)*/
+#define CHAINSWORD_NOISE 100 /*!<チェンソーの1ターン毎の発動確率(1/n)*/
 
-static bool load = TRUE;
-static int wild_regen = 20;
+static bool load = TRUE; /*!<ロード処理中の分岐フラグ*/
+static int wild_regen = 20; /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
 
-/*
- * Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
+/*!
+ * @brief 重度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
+ * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
+ * @return 擬似鑑定結果のIDを返す。
  */
 static byte value_check_aux1(object_type *o_ptr)
 {
@@ -61,9 +63,10 @@ static byte value_check_aux1(object_type *o_ptr)
 	return FEEL_AVERAGE;
 }
 
-
-/*
- * Return a "feeling" (or NULL) about an item.  Method 2 (Light).
+/*!
+ * @brief 軽度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 2 (Light).
+ * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
+ * @return 擬似鑑定結果のIDを返す。
  */
 static byte value_check_aux2(object_type *o_ptr)
 {
@@ -90,7 +93,12 @@ static byte value_check_aux2(object_type *o_ptr)
 }
 
 
-
+/*!
+ * @brief 擬似鑑定を実際に行い判定を反映する
+ * @param slot 擬似鑑定を行うプレイヤーの所持リストID
+ * @param heavy 重度の擬似鑑定を行うならばTRUE
+ * @return なし
+ */
 static void sense_inventory_aux(int slot, bool heavy)
 {
 	byte        feel;
@@ -212,15 +220,18 @@ o_name, index_to_label(slot),game_inscriptions[feel]);
 
 
 
-/*
- * Sense the inventory
- *
- *   Class 0 = Warrior --> fast and heavy
- *   Class 1 = Mage    --> slow and light
- *   Class 2 = Priest  --> fast but light
- *   Class 3 = Rogue   --> okay and heavy
- *   Class 4 = Ranger  --> slow but heavy  (changed!)
- *   Class 5 = Paladin --> slow but heavy
+/*!
+ * @brief 1プレイヤーターン毎に武器、防具の擬似鑑定が行われるかを判定する。
+ * @return なし
+ * @details
+ * Sense the inventory\n
+ *\n
+ *   Class 0 = Warrior --> fast and heavy\n
+ *   Class 1 = Mage    --> slow and light\n
+ *   Class 2 = Priest  --> fast but light\n
+ *   Class 3 = Rogue   --> okay and heavy\n
+ *   Class 4 = Ranger  --> slow but heavy  (changed!)\n
+ *   Class 5 = Paladin --> slow but heavy\n
  */
 static void sense_inventory1(void)
 {
@@ -456,7 +467,10 @@ static void sense_inventory1(void)
 	}
 }
 
-
+/*!
+ * @brief 1プレイヤーターン毎に武器、防具以外の擬似鑑定が行われるかを判定する。
+ * @return なし
+ */
 static void sense_inventory2(void)
 {
 	int         i;
@@ -580,10 +594,9 @@ static void sense_inventory2(void)
 	}
 }
 
-
-
-/*
- * Go to any level (ripped off from wiz_jump)
+/*!
+ * @brief パターン終点到達時のテレポート処理を行う
+ * @return なし
  */
 static void pattern_teleport(void)
 {
