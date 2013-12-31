@@ -205,8 +205,12 @@ static cptr info_weight(int weight)
 }
 
 
-/*
- * Prepare standard probability to become beam for fire_bolt_or_beam()
+/*!
+ * @brief 一部ボルト魔法のビーム化確率を算出する / Prepare standard probability to become beam for fire_bolt_or_beam()
+ * @return ビーム化確率(%)
+ * @details
+ * ハードコーティングによる実装が行われている。
+ * メイジは(レベル)%、ハイメイジ、スペルマスターは(レベル)%、それ以外の職業は(レベル/2)%
  */
 static int beam_chance(void)
 {
@@ -218,9 +222,16 @@ static int beam_chance(void)
 	return p_ptr->lev / 2;
 }
 
-
-/*
- * Handle summoning and failure of trump spells
+/*!
+ * @brief トランプ魔法独自の召喚処理を行う / Handle summoning and failure of trump spells
+ * @param num summon_specific()関数を呼び出す回数
+ * @param pet ペット化として召喚されるか否か
+ * @param y 召喚位置のy座標
+ * @param x 召喚位置のx座標
+ * @param lev 召喚レベル
+ * @param type 召喚条件ID
+ * @param mode モンスター生成条件フラグ
+ * @return モンスターが（敵対も含めて）召還されたならばTRUEを返す。
  */
 static bool trump_summoning(int num, bool pet, int y, int x, int lev, int type, u32b mode)
 {
@@ -277,11 +288,15 @@ static bool trump_summoning(int num, bool pet, int y, int x, int lev, int type, 
 }
 
 
-/*
- * This spell should become more useful (more controlled) as the
- * player gains experience levels.  Thus, add 1/5 of the player's
- * level to the die roll.  This eliminates the worst effects later on,
- * while keeping the results quite random.  It also allows some potent
+/*!
+ * @brief 「ワンダー」のランダムな効果を決定して処理する。
+ * @param dir 方向ID
+ * @return なし
+ * @details
+ * This spell should become more useful (more controlled) as the\n
+ * player gains experience levels.  Thus, add 1/5 of the player's\n
+ * level to the die roll.  This eliminates the worst effects later on,\n
+ * while keeping the results quite random.  It also allows some potent\n
  * effects only at high level.
  */
 static void cast_wonder(int dir)
@@ -365,6 +380,11 @@ static void cast_wonder(int dir)
 }
 
 
+/*!
+ * @brief 「悪霊召喚」のランダムな効果を決定して処理する。
+ * @param dir 方向ID
+ * @return なし
+ */
 static void cast_invoke_spirits(int dir)
 {
 	int plev = p_ptr->lev;
@@ -531,7 +551,11 @@ static void cast_invoke_spirits(int dir)
 	}
 }
 
-
+/*!
+ * @brief カオス的効果あるいは及びシャッフルの「運命の輪」効果を引数基準に処理する。
+ * @param spell 基準となる引数ID
+ * @return なし
+ */
 static void wild_magic(int spell)
 {
 	int counter = 0;
@@ -630,7 +654,10 @@ static void wild_magic(int spell)
 	}
 }
 
-
+/*!
+ * @brief トランプ領域の「シャッフル」の効果をランダムに決めて処理する。
+ * @return なし
+ */
 static void cast_shuffle(void)
 {
 	int plev = p_ptr->lev;
