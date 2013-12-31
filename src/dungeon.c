@@ -1266,12 +1266,12 @@ void leave_tower_check(void)
 	}
 }
 
-
-/*
- * Forcibly pseudo-identify an object in the inventory
- * (or on the floor)
- *
- * note: currently this function allows pseudo-id of any object,
+/*!
+ * @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the inventory (or on the floor)
+ * @return なし
+ * @todo mind.cにこの関数を移動させるべき。
+ * @note
+ * currently this function allows pseudo-id of any object,
  * including silly ones like potions & scrolls, which always
  * get '{average}'. This should be changed, either to stop such
  * items from being pseudo-id'd, or to allow psychometry to
@@ -1403,10 +1403,10 @@ msg_format("%sは%sという感じがする...",
 	return (TRUE);
 }
 
-
-/*
- * If player has inscribed the object with "!!", let him know when it's
- * recharged. -LM-
+/*!
+ * @brief !!を刻んだ魔道具の時間経過による再充填を知らせる処理 / If player has inscribed the object with "!!", let him know when it's recharged. -LM-
+ * @param o_ptr 対象オブジェクトの構造体参照ポインタ
+ * @return なし
  */
 static void recharged_notice(object_type *o_ptr)
 {
@@ -1450,7 +1450,10 @@ static void recharged_notice(object_type *o_ptr)
 	}
 }
 
-
+/*!
+ * @brief プレイヤーの歌に関する継続処理
+ * @return なし
+ */
 static void check_music(void)
 {
 	const magic_type *s_ptr;
@@ -1524,8 +1527,12 @@ static void check_music(void)
 	do_spell(REALM_MUSIC, spell, SPELL_CONT);
 }
 
-
-/* Choose one of items that have cursed flag */
+/*!
+ * @brief 現在呪いを保持している装備品を一つランダムに探し出す / Choose one of items that have cursed flag
+ * @flag 探し出したい呪いフラグ配列
+ * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
+ * 呪いがない場合NULLを返す。
+ */
 static object_type *choose_cursed_obj_name(u32b flag)
 {
 	int i;
@@ -1593,9 +1600,10 @@ static object_type *choose_cursed_obj_name(u32b flag)
 	return (&inventory[choices[randint0(number)]]);
 }
 
-
-/*
- * Handle timed damage and regeneration every 10 game turns
+/*!
+ * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
+ *  / Handle timed damage and regeneration every 10 game turns
+ * @return なし
  */
 static void process_world_aux_hp_and_sp(void)
 {
@@ -1988,9 +1996,10 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 	}
 }
 
-
-/*
- * Handle timeout every 10 game turns
+/*!
+ * @brief 10ゲームターンが進行するごとに魔法効果の残りターンを減らしていく処理
+ * / Handle timeout every 10 game turns
+ * @return なし
  */
 static void process_world_aux_timeout(void)
 {
@@ -2300,8 +2309,10 @@ static void process_world_aux_timeout(void)
 }
 
 
-/*
- * Handle burning fuel every 10 game turns
+/*!
+ * @brief 10ゲームターンが進行する毎に光源の寿命を減らす処理
+ * / Handle burning fuel every 10 game turns
+ * @return なし
  */
 static void process_world_aux_light(void)
 {
@@ -2328,8 +2339,10 @@ static void process_world_aux_light(void)
 }
 
 
-/*
- * Handle mutation effects once every 10 game turns
+/*!
+ * @brief 10ゲームターンが進行するごとに突然変異の発動判定を行う処理
+ * / Handle mutation effects once every 10 game turns
+ * @return なし
  */
 static void process_world_aux_mutation(void)
 {
@@ -2969,8 +2982,10 @@ static void process_world_aux_mutation(void)
 	}
 }
 
-/*
- * Handle curse effects once every 10 game turns
+/*!
+ * @brief 10ゲームターンが進行するごとに装備効果の発動判定を行う処理
+ * / Handle curse effects once every 10 game turns
+ * @return なし
  */
 static void process_world_aux_curse(void)
 {
@@ -3225,8 +3240,10 @@ static void process_world_aux_curse(void)
 }
 
 
-/*
- * Handle recharging objects once every 10 game turns
+/*!
+ * @brief 10ゲームターンが進行するごとに魔道具の自然充填を行う処理。
+ * / Handle recharging objects once every 10 game turns
+ * @return なし
  */
 static void process_world_aux_recharge(void)
 {
