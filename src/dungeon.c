@@ -3241,7 +3241,7 @@ static void process_world_aux_curse(void)
 
 
 /*!
- * @brief 10ゲームターンが進行するごとに魔道具の自然充填を行う処理。
+ * @brief 10ゲームターンが進行するごとに魔道具の自然充填を行う処理
  * / Handle recharging objects once every 10 game turns
  * @return なし
  */
@@ -3353,8 +3353,10 @@ static void process_world_aux_recharge(void)
 }
 
 
-/*
- * Handle involuntary movement once every 10 game turns
+/*!
+ * @brief 10ゲームターンが進行するごとに帰還や現実変容などの残り時間カウントダウンと発動を処理する。
+ * / Handle involuntary movement once every 10 game turns
+ * @return なし
  */
 static void process_world_aux_movement(void)
 {
@@ -3533,8 +3535,11 @@ static void process_world_aux_movement(void)
 }
 
 
-/*
- * Count number of adjacent monsters
+/*!
+ * @brief 指定したモンスターに隣接しているモンスターの数を返す。
+ * / Count number of adjacent monsters
+ * @param m_idx 隣接数を調べたいモンスターのID
+ * @return 隣接しているモンスターの数
  */
 static int get_monster_crowd_number(int m_idx)
 {
@@ -3560,14 +3565,15 @@ static int get_monster_crowd_number(int m_idx)
 
 
 
-/*
- * Dungeon rating is no longer linear
+/*!
+ * ダンジョンの雰囲気を計算するための非線形基準値 / Dungeon rating is no longer linear
  */
 #define RATING_BOOST(delta) (delta * delta + 50 * delta)
 
-/*
- * Examine all monsters and unidentified objects,
- * and get the feeling of current dungeon floor
+/*!
+ * @brief ダンジョンの雰囲気を算出する。
+ * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
+ * @return 算出されたダンジョンの雰囲気ランク
  */
 static byte get_dungeon_feeling(void)
 {
@@ -3712,9 +3718,10 @@ static byte get_dungeon_feeling(void)
 	return 10;
 }
 
-
-/*
- * Update dungeon feeling, and announce it if changed
+/*!
+ * @brief ダンジョンの雰囲気を更新し、変化があった場合メッセージを表示する
+ * / Update dungeon feeling, and announce it if changed
+ * @return なし
  */
 static void update_dungeon_feeling(void)
 {
@@ -3766,9 +3773,10 @@ static void update_dungeon_feeling(void)
 	if (disturb_minor) disturb(0, 0);
 }
 
-
-/*
- * Handle certain things once every 10 game turns
+/*!
+ * @brief 10ゲームターンが進行する毎にゲーム世界全体の処理を行う。
+ * / Handle certain things once every 10 game turns
+ * @return なし
  */
 static void process_world(void)
 {
@@ -4304,10 +4312,10 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 	process_world_aux_movement();
 }
 
-
-
-/*
- * Verify use of "wizard" mode
+/*!
+ * @brief ウィザードモードへの導入処理
+ * / Verify use of "wizard" mode
+ * @return 実際にウィザードモードへ移行したらTRUEを返す。
  */
 static bool enter_wizard_mode(void)
 {
@@ -4362,8 +4370,10 @@ static bool enter_wizard_mode(void)
 
 #ifdef ALLOW_WIZARD
 
-/*
- * Verify use of "debug" commands
+/*!
+ * @brief デバッグコマンドへの導入処理
+ * / Verify use of "debug" commands
+ * @return 実際にデバッグコマンドへ移行したらTRUEを返す。
  */
 static bool enter_debug_mode(void)
 {
@@ -4425,8 +4435,10 @@ extern void do_cmd_debug(void);
 
 #ifdef ALLOW_BORG
 
-/*
- * Verify use of "borg" commands
+/*!
+ * @brief ボーグコマンドへの導入処理
+ * / Verify use of "borg" commands
+ * @return 実際にボーグコマンドへ移行したらTRUEを返す。
  */
 static bool enter_borg_mode(void)
 {
@@ -4475,12 +4487,11 @@ extern void do_cmd_borg(void);
 #endif /* ALLOW_BORG */
 
 
-
-/*
- * Parse and execute the current command
- * Give "Warning" on illegal commands.
- *
- * XXX XXX XXX Make some "blocks"
+/*!
+ * @brief プレイヤーから受けた入力コマンドの分岐処理。
+ * / Parse and execute the current command Give "Warning" on illegal commands.
+ * @todo XXX XXX XXX Make some "blocks"
+ * @return なし
  */
 static void process_command(void)
 {
@@ -5477,9 +5488,11 @@ prt(" '?' でヘルプが表示されます。", 0, 0);
 		now_message = old_now_message;
 }
 
-
-
-
+/*!
+ * @brief モンスター種族が釣れる種族かどうかを判定する。
+ * @param r_idx 判定したいモンスター種族のID
+ * @return 釣れる対象ならばTRUEを返す
+ */
 static bool monster_tsuri(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -5491,7 +5504,10 @@ static bool monster_tsuri(int r_idx)
 }
 
 
-/* Hack -- Pack Overflow */
+/*!
+ * @brief アイテムの所持種類数が超えた場合にアイテムを床に落とす処理 / Hack -- Pack Overflow
+ * @return なし
+ */
 static void pack_overflow(void)
 {
 	if (inventory[INVEN_PACK].k_idx)
@@ -5542,8 +5558,9 @@ static void pack_overflow(void)
 	}
 }
 
-/*
- * process the effects per 100 energy at player speed.
+/*!
+ * @brief プレイヤーの行動エネルギーが充填される（＝プレイヤーのターンが回る）毎に行われる処理  / process the effects per 100 energy at player speed.
+ * @return なし
  */
 static void process_upkeep_with_speed(void)
 {
@@ -5570,13 +5587,13 @@ static void process_upkeep_with_speed(void)
 	}
 }
 
-
-/*
- * Process the player
- *
- * Notice the annoying code to handle "pack overflow", which
- * must come first just in case somebody manages to corrupt
- * the savefiles by clever use of menu commands or something.
+/*!
+ * @brief プレイヤーの行動処理 / Process the player
+ * @return なし
+ * @memo
+ * Notice the annoying code to handle "pack overflow", which\n
+ * must come first just in case somebody manages to corrupt\n
+ * the savefiles by clever use of menu commands or something.\n
  */
 static void process_player(void)
 {
@@ -6183,12 +6200,12 @@ msg_print("中断しました。");
 	update_smell();
 }
 
-
-/*
- * Interact with the current dungeon level.
- *
- * This function will not exit until the level is completed,
- * the user dies, or the game is terminated.
+/*!
+ * @brief 現在プレイヤーがいるダンジョンの全体処理 / Interact with the current dungeon level.
+ * @return なし
+ * @memo
+ * This function will not exit until the level is completed,\n
+ * the user dies, or the game is terminated.\n
  */
 static void dungeon(bool load_game)
 {
@@ -6498,9 +6515,10 @@ msg_print("試合開始！");
 }
 
 
-/*
- * Load some "user pref files"
- *
+/*!
+ * @brief 全ユーザプロファイルをロードする / Load some "user pref files"
+ * @return なし
+ * @memo
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.
  */
@@ -6562,8 +6580,9 @@ static void load_all_pref_files(void)
 }
 
 
-/*
- * Extract option variables from bit sets
+/*!
+ * @brief ビットセットからゲームオプションを展開する / Extract option variables from bit sets
+ * @return なし
  */
 void extract_option_vars(void)
 {
@@ -6595,8 +6614,9 @@ void extract_option_vars(void)
 }
 
 
-/*
- * Determine bounty uniques
+/*!
+ * @brief 賞金首となるユニークを確定する / Determine bounty uniques
+ * @return なし
  */
 void determine_bounty_uniques(void)
 {
@@ -6642,9 +6662,10 @@ void determine_bounty_uniques(void)
 }
 
 
-/*
- * Determine today's bounty monster
- * Note: conv_old is used if loaded 0.0.3 or older save file
+/*!
+ * @brief 今日の賞金首を確定する / Determine today's bounty monster
+ * @return なし
+ * @note conv_old is used if loaded 0.0.3 or older save file
  */
 void determine_today_mon(bool conv_old)
 {
@@ -6683,10 +6704,10 @@ void determine_today_mon(bool conv_old)
 	p_ptr->inside_battle = old_inside_battle;
 }
 
-
-/*
- * Actually play a game
- *
+/*!
+ * @brief 1ゲームプレイの主要ルーチン / Actually play a game
+ * @return なし
+ * @note
  * If the "new_game" parameter is true, then, after loading the
  * savefile, we will commit suicide, if necessary, to allow the
  * player to start a new game.
@@ -7349,6 +7370,12 @@ prt("お待ち下さい...", 0, 0);
 	quit(NULL);
 }
 
+/*!
+ * @brief ゲームターンからの実時間換算を行うための補正をかける
+ * @param hoge ゲームターン
+ * @details アンデッド種族は18:00からゲームを開始するので、この修正を予め行う。
+ * @return 修正をかけた後のゲームターン
+ */
 s32b turn_real(s32b hoge)
 {
 	switch (p_ptr->start_race)
@@ -7363,9 +7390,10 @@ s32b turn_real(s32b hoge)
 	}
 }
 
-/*
- * ターンのオーバーフローに対する対処
- * ターン及びターンを記録する変数をターンの限界の1日前まで巻き戻す.
+/*!
+ * @brief ターンのオーバーフローに対する対処
+ * @details ターン及びターンを記録する変数をターンの限界の1日前まで巻き戻す.
+ * @return 修正をかけた後のゲームターン
  */
 void prevent_turn_overflow(void)
 {
