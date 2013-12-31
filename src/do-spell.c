@@ -1,12 +1,22 @@
-/* File: do-spell.c */
-
-/* Purpose: Do everything for each spell */
+/*!
+    @file do-spell.c
+    @brief 魔法のインターフェイスと発動 / Purpose: Do everything for each spell
+    @date 2013/12/31
+    @author
+    2013 Deskull rearranged comment for Doxygen.
+ */
 
 #include "angband.h"
 
 
-/*
- * Generate dice info string such as "foo 2d10"
+/*!
+ * @brief
+ * 魔法の効果を「キャプション:ダイス＋定数値」のフォーマットで出力する / Generate dice info string such as "foo 2d10"
+ * @param str キャプション
+ * @param dice ダイス数
+ * @param sides ダイス目
+ * @param base 固定値
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_string_dice(cptr str, int dice, int sides, int base)
 {
@@ -24,8 +34,12 @@ static cptr info_string_dice(cptr str, int dice, int sides, int base)
 }
 
 
-/*
- * Generate damage-dice info string such as "dam 2d10"
+/*!
+ * @brief 魔法によるダメージを出力する / Generate damage-dice info string such as "dam 2d10"
+ * @param dice ダイス数
+ * @param sides ダイス目
+ * @param base 固定値
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_damage(int dice, int sides, int base)
 {
@@ -36,9 +50,11 @@ static cptr info_damage(int dice, int sides, int base)
 #endif
 }
 
-
-/*
- * Generate duration info string such as "dur 20+1d20"
+/*!
+ * @brief 魔法の効果時間を出力する / Generate duration info string such as "dur 20+1d20"
+ * @param base 固定値
+ * @param sides ダイス目
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_duration(int base, int sides)
 {
@@ -49,9 +65,10 @@ static cptr info_duration(int base, int sides)
 #endif
 }
 
-
-/*
- * Generate range info string such as "range 5"
+/*!
+ * @brief 魔法の効果範囲を出力する / Generate range info string such as "range 5"
+ * @param range 効果範囲
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_range(int range)
 {
@@ -62,9 +79,12 @@ static cptr info_range(int range)
 #endif
 }
 
-
-/*
- * Generate heal info string such as "heal 2d8"
+/*!
+ * @brief 魔法による回復量を出力する / Generate heal info string such as "heal 2d8"
+ * @param dice ダイス数
+ * @param sides ダイス目
+ * @param base 固定値
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_heal(int dice, int sides, int base)
 {
@@ -75,9 +95,11 @@ static cptr info_heal(int dice, int sides, int base)
 #endif
 }
 
-
-/*
- * Generate delay info string such as "delay 15+1d15"
+/*!
+ * @brief 魔法効果発動までの遅延ターンを出力する / Generate delay info string such as "delay 15+1d15"
+ * @param base 固定値
+ * @param sides ダイス目
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_delay(int base, int sides)
 {
@@ -89,8 +111,10 @@ static cptr info_delay(int base, int sides)
 }
 
 
-/*
- * Generate multiple-damage info string such as "dam 25 each"
+/*!
+ * @brief 魔法によるダメージを出力する(固定値＆複数回処理) / Generate multiple-damage info string such as "dam 25 each"
+ * @param dam 固定値
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_multi_damage(int dam)
 {
@@ -102,8 +126,11 @@ static cptr info_multi_damage(int dam)
 }
 
 
-/*
- * Generate multiple-damage-dice info string such as "dam 5d2 each"
+/*!
+ * @brief 魔法によるダメージを出力する(ダイスのみ＆複数回処理) / Generate multiple-damage-dice info string such as "dam 5d2 each"
+ * @param dice ダイス数
+ * @param sides ダイス目
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_multi_damage_dice(int dice, int sides)
 {
@@ -114,9 +141,10 @@ static cptr info_multi_damage_dice(int dice, int sides)
 #endif
 }
 
-
-/*
- * Generate power info string such as "power 100"
+/*!
+ * @brief 魔法による一般的な効力値を出力する（固定値） / Generate power info string such as "power 100"
+ * @param power 固定値
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_power(int power)
 {
@@ -128,6 +156,12 @@ static cptr info_power(int power)
 }
 
 
+/*!
+ * @brief 魔法による一般的な効力値を出力する（ダイス値） / Generate power info string such as "power 100"
+ * @param dice ダイス数
+ * @param sides ダイス目
+ * @return フォーマットに従い整形された文字列
+ */
 /*
  * Generate power info string such as "power 1d100"
  */
@@ -141,8 +175,10 @@ static cptr info_power_dice(int dice, int sides)
 }
 
 
-/*
- * Generate radius info string such as "rad 100"
+/*!
+ * @brief 魔法の効果半径を出力する / Generate radius info string such as "rad 100"
+ * @param rad 効果半径
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_radius(int rad)
 {
@@ -154,8 +190,10 @@ static cptr info_radius(int rad)
 }
 
 
-/*
- * Generate weight info string such as "max wgt 15"
+/*!
+ * @brief 魔法効果の限界重量を出力する / Generate weight info string such as "max wgt 15"
+ * @param weight 最大重量
+ * @return フォーマットに従い整形された文字列
  */
 static cptr info_weight(int weight)
 {
