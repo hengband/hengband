@@ -4327,11 +4327,13 @@ msg_print("やっとお腹がきつくなくなった。");
 	return (TRUE);
 }
 
-/*
- * Increases a stat by one randomized level             -RAK-
- *
- * Note that this function (used by stat potions) now restores
- * the stat BEFORE increasing it.
+/*!
+ * @brief プレイヤーの基本能力値を増加させる / Increases a stat by one randomized level -RAK-
+ * @param stat 上昇させるステータスID
+ * @return 実際に上昇した場合TRUEを返す。
+ * @details
+ * Note that this function (used by stat potions) now restores\n
+ * the stat BEFORE increasing it.\n
  */
 bool inc_stat(int stat)
 {
@@ -4392,19 +4394,20 @@ bool inc_stat(int stat)
 	return (FALSE);
 }
 
-
-
-/*
- * Decreases a stat by an amount indended to vary from 0 to 100 percent.
- *
- * Amount could be a little higher in extreme cases to mangle very high
- * stats from massive assaults.  -CWS
- *
- * Note that "permanent" means that the *given* amount is permanent,
- * not that the new value becomes permanent.  This may not work exactly
- * as expected, due to "weirdness" in the algorithm, but in general,
- * if your stat is already drained, the "max" value will not drop all
- * the way down to the "cur" value.
+/*!
+ * @brief プレイヤーの基本能力値を減少させる / Decreases a stat by an amount indended to vary from 0 to 100 percent.
+ * @param stat 減少させるステータスID
+ * @return 実際に減少した場合TRUEを返す。
+ * @details
+ *\n
+ * Amount could be a little higher in extreme cases to mangle very high\n
+ * stats from massive assaults.  -CWS\n
+ *\n
+ * Note that "permanent" means that the *given* amount is permanent,\n
+ * not that the new value becomes permanent.  This may not work exactly\n
+ * as expected, due to "weirdness" in the algorithm, but in general,\n
+ * if your stat is already drained, the "max" value will not drop all\n
+ * the way down to the "cur" value.\n
  */
 bool dec_stat(int stat, int amount, int permanent)
 {
@@ -4520,8 +4523,10 @@ bool dec_stat(int stat, int amount, int permanent)
 }
 
 
-/*
- * Restore a stat.  Return TRUE only if this actually makes a difference.
+/*!
+ * @brief プレイヤーの基本能力値を回復させる / Restore a stat.  Return TRUE only if this actually makes a difference.
+ * @param stat 回復ステータスID
+ * @return 実際に回復した場合TRUEを返す。
  */
 bool res_stat(int stat)
 {
