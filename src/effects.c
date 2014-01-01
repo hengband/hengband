@@ -1742,9 +1742,11 @@ msg_print("不透明になった感じがする。");
 
 }
 
-
-/*
- * Set "p_ptr->invuln", notice observable changes
+/*!
+ * @brief 無傷球の継続時間をセットする / Set "p_ptr->invuln", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_invuln(int v, bool do_dec)
 {
@@ -1836,9 +1838,11 @@ msg_print("無敵ではなくなった。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_esp", notice observable changes
+/*!
+ * @brief 時限ESPの継続時間をセットする / Set "p_ptr->tim_esp", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_esp(int v, bool do_dec)
 {
@@ -1908,9 +1912,11 @@ msg_print("意識は元に戻った。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_invis", notice observable changes
+/*!
+ * @brief 時限透明視の継続時間をセットする / Set "p_ptr->tim_invis", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_invis(int v, bool do_dec)
 {
@@ -1980,9 +1986,11 @@ msg_print("目の敏感さがなくなったようだ。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_infra", notice observable changes
+/*!
+ * @brief 時限赤外線視力の継続時間をセットする / Set "p_ptr->tim_infra", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_infra(int v, bool do_dec)
 {
@@ -2052,9 +2060,11 @@ msg_print("目の輝きがなくなった。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_regen", notice observable changes
+/*!
+ * @brief 時限急回復の継続時間をセットする / Set "p_ptr->tim_regen", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_regen(int v, bool do_dec)
 {
@@ -2121,9 +2131,11 @@ msg_print("素早く回復する感じがなくなった。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_stealth", notice observable changes
+/*!
+ * @brief 隠密の歌の継続時間をセットする / Set "p_ptr->tim_stealth", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_stealth(int v, bool do_dec)
 {
@@ -2190,7 +2202,11 @@ msg_print("足音が大きくなった。");
 	return (TRUE);
 }
 
-
+/*!
+ * @brief 超隠密状態をセットする
+ * @set TRUEならば超隠密状態になる。
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
 bool set_superstealth(bool set)
 {
 	bool notice = FALSE;
@@ -2259,9 +2275,11 @@ bool set_superstealth(bool set)
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_levitation", notice observable changes
+/*!
+ * @brief 一時的浮遊の継続時間をセットする / Set "p_ptr->tim_levitation", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_levitation(int v, bool do_dec)
 {
@@ -2328,9 +2346,11 @@ msg_print("もう宙に浮かべなくなった。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_sh_touki", notice observable changes
+/*!
+ * @brief 一時的闘気のオーラの継続時間をセットする / Set "p_ptr->tim_sh_touki", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_sh_touki(int v, bool do_dec)
 {
@@ -2394,9 +2414,11 @@ msg_print("闘気が消えた。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_sh_fire", notice observable changes
+/*!
+ * @brief 一時的火炎のオーラの継続時間をセットする / Set "p_ptr->tim_sh_fire", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_sh_fire(int v, bool do_dec)
 {
@@ -2463,9 +2485,11 @@ msg_print("炎のオーラが消えた。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_sh_holy", notice observable changes
+/*!
+ * @brief 一時的聖なるのオーラの継続時間をセットする / Set "p_ptr->tim_sh_holy", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_sh_holy(int v, bool do_dec)
 {
@@ -2532,10 +2556,11 @@ msg_print("聖なるオーラが消えた。");
 	return (TRUE);
 }
 
-
-
-/*
- * Set "p_ptr->tim_eyeeye", notice observable changes
+/*!
+ * @brief 目には目をの残り時間をセットする / Set "p_ptr->tim_eyeeye", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_eyeeye(int v, bool do_dec)
 {
@@ -2603,9 +2628,11 @@ msg_print("懲罰を執行することができなくなった。");
 }
 
 
-
-/*
- * Set "p_ptr->resist_magic", notice observable changes
+/*!
+ * @brief 一時的魔法防御の継続時間をセットする / Set "p_ptr->resist_magic", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_resist_magic(int v, bool do_dec)
 {
@@ -2672,9 +2699,11 @@ msg_print("You are no longer protected from magic.");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_reflect", notice observable changes
+/*!
+ * @brief 一時的反射の継続時間をセットする / Set "p_ptr->tim_reflect", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_reflect(int v, bool do_dec)
 {
@@ -2810,9 +2839,11 @@ msg_print("幻影が消えた。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->dustrobe", notice observable changes
+/*!
+ * @brief 一時的破片のオーラの継続時間をセットする / Set "p_ptr->dustrobe", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_dustrobe(int v, bool do_dec)
 {
@@ -2879,9 +2910,11 @@ msg_print("鏡のオーラが消えた。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->tim_regen", notice observable changes
+/*!
+ * @brief 一時的壁抜けの継続時間をセットする / Set "p_ptr->kabenuke", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_kabenuke(int v, bool do_dec)
 {
@@ -2948,7 +2981,12 @@ msg_print("体が物質化した。");
 	return (TRUE);
 }
 
-
+/*!
+ * @brief オクレ兄さんの継続時間をセットする / Set "p_ptr->tsuyoshi", notice observable changes
+ * @param v 継続時間
+ * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
 bool set_tsuyoshi(int v, bool do_dec)
 {
 	bool notice = FALSE;
