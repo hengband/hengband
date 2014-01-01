@@ -1,17 +1,26 @@
-/* File: effects.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file effects.c
+ * @brief プレイヤーのステータス管理 / effects of various "objects"
+ * @date 2014/01/01
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ *\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ *\n
+ * 2013 Deskull rearranged comment for Doxygen.\n
  */
 
-/* Purpose: effects of various "objects" */
 
 #include "angband.h"
 
+/*!
+ * @brief プレイヤーの継続行動を設定する。
+ * @param typ 継続行動のID\n
+ * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_KAMAE / #ACTION_KATA / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL から選択。
+ * @return なし
+ */
 void set_action(int typ)
 {
 	int prev_typ = p_ptr->action;
@@ -160,7 +169,10 @@ void set_action(int typ)
 	p_ptr->redraw |= (PR_STATE);
 }
 
-/* reset timed flags */
+/*!
+ * @brief プレイヤーの全ての時限効果をリセットする。 / reset timed flags
+ * @return なし
+ */
 void reset_tim_flags(void)
 {
 	p_ptr->fast = 0;            /* Timed -- Fast */
@@ -243,7 +255,10 @@ void reset_tim_flags(void)
 	}
 }
 
-
+/*!
+ * @brief プレイヤーに魔力消去効果を与える。
+ * @return なし
+ */
 void dispel_player(void)
 {
 	(void)set_fast(0, TRUE);
@@ -331,9 +346,13 @@ void dispel_player(void)
 }
 
 
-/*
- * Set "p_ptr->tim_mimic", and "p_ptr->mimic_form",
- * notice observable changes
+/*!
+ * @brief 変身効果の継続時間と変身先をセットする / Set "p_ptr->tim_mimic", and "p_ptr->mimic_form", notice observable changes
+ * @param v 継続時間
+ * @param p 変身内容
+ * @param do_dec (現在使われていない)
+ * @todo do_decの実装を確認の上修正すること。
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_mimic(int v, int p, bool do_dec)
 {
@@ -402,13 +421,15 @@ bool set_mimic(int v, int p, bool do_dec)
 	return (TRUE);
 }
 
-/*
- * Set "p_ptr->blind", notice observable changes
- *
- * Note the use of "PU_UN_LITE" and "PU_UN_VIEW", which is needed to
- * memorize any terrain features which suddenly become "visible".
- * Note that blindness is currently the only thing which can affect
- * "player_can_see_bold()".
+/*!
+ * @brief 盲目の継続時間をセットする / Set "p_ptr->blind", notice observable changes
+ * @param v 継続時間
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ * @details
+ * Note the use of "PU_UN_LITE" and "PU_UN_VIEW", which is needed to\n
+ * memorize any terrain features which suddenly become "visible".\n
+ * Note that blindness is currently the only thing which can affect\n
+ * "player_can_see_bold()".\noo
  */
 bool set_blind(int v)
 {
