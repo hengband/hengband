@@ -350,7 +350,7 @@ void dispel_player(void)
  * @brief 変身効果の継続時間と変身先をセットする / Set "p_ptr->tim_mimic", and "p_ptr->mimic_form", notice observable changes
  * @param v 継続時間
  * @param p 変身内容
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_mimic(int v, int p, bool do_dec)
@@ -935,7 +935,7 @@ msg_print("やっとはっきりと物が見えるようになった。");
 /*!
  * @brief 加速の継続時間をセットする / Set "p_ptr->fast", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_fast(int v, bool do_dec)
@@ -1005,7 +1005,7 @@ msg_print("動きの素早さがなくなったようだ。");
 /*!
  * @brief 光速移動の継続時間をセットする / Set "p_ptr->lightspeed", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_lightspeed(int v, bool do_dec)
@@ -1077,7 +1077,7 @@ msg_print("動きの素早さがなくなったようだ。");
 /*!
  * @brief 減速の継続時間をセットする / Set "p_ptr->slow", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_slow(int v, bool do_dec)
@@ -1146,7 +1146,7 @@ msg_print("動きの遅さがなくなったようだ。");
 /*!
  * @brief 肌石化の継続時間をセットする / Set "p_ptr->shield", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_shield(int v, bool do_dec)
@@ -1218,7 +1218,7 @@ msg_print("肌が元に戻った。");
 /*!
  * @brief つぶれるの継続時間をセットする / Set "p_ptr->tsubureru", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tsubureru(int v, bool do_dec)
@@ -1290,7 +1290,7 @@ msg_print("もう横に伸びていない。");
 /*!
  * @brief 魔法の鎧の継続時間をセットする / Set "p_ptr->magicdef", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_magicdef(int v, bool do_dec)
@@ -1361,7 +1361,7 @@ bool set_magicdef(int v, bool do_dec)
 /*!
  * @brief 祝福の継続時間をセットする / Set "p_ptr->blessed", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_blessed(int v, bool do_dec)
@@ -1433,7 +1433,7 @@ msg_print("高潔な気分が消え失せた。");
 /*!
  * @brief 士気高揚の継続時間をセットする / Set "p_ptr->hero", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_hero(int v, bool do_dec)
@@ -1507,7 +1507,7 @@ msg_print("ヒーローの気分が消え失せた。");
 /*!
  * @brief 狂戦士化の継続時間をセットする / Set "p_ptr->shero", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_shero(int v, bool do_dec)
@@ -1582,7 +1582,7 @@ msg_print("野蛮な気持ちが消え失せた。");
 /*!
  * @brief 対邪悪結界の継続時間をセットする / Set "p_ptr->protevil", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_protevil(int v, bool do_dec)
@@ -1650,7 +1650,7 @@ msg_print("邪悪なる存在から守られている感じがなくなった。");
 /*!
  * @brief 幽体化の継続時間をセットする / Set "p_ptr->wraith_form", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_wraith_form(int v, bool do_dec)
@@ -1745,7 +1745,7 @@ msg_print("不透明になった感じがする。");
 /*!
  * @brief 無傷球の継続時間をセットする / Set "p_ptr->invuln", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_invuln(int v, bool do_dec)
@@ -1841,7 +1841,7 @@ msg_print("無敵ではなくなった。");
 /*!
  * @brief 時限ESPの継続時間をセットする / Set "p_ptr->tim_esp", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_esp(int v, bool do_dec)
@@ -1915,7 +1915,7 @@ msg_print("意識は元に戻った。");
 /*!
  * @brief 時限透明視の継続時間をセットする / Set "p_ptr->tim_invis", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_invis(int v, bool do_dec)
@@ -1989,7 +1989,7 @@ msg_print("目の敏感さがなくなったようだ。");
 /*!
  * @brief 時限赤外線視力の継続時間をセットする / Set "p_ptr->tim_infra", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_infra(int v, bool do_dec)
@@ -2063,7 +2063,7 @@ msg_print("目の輝きがなくなった。");
 /*!
  * @brief 時限急回復の継続時間をセットする / Set "p_ptr->tim_regen", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_regen(int v, bool do_dec)
@@ -2134,7 +2134,7 @@ msg_print("素早く回復する感じがなくなった。");
 /*!
  * @brief 隠密の歌の継続時間をセットする / Set "p_ptr->tim_stealth", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_stealth(int v, bool do_dec)
@@ -2278,7 +2278,7 @@ bool set_superstealth(bool set)
 /*!
  * @brief 一時的浮遊の継続時間をセットする / Set "p_ptr->tim_levitation", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_levitation(int v, bool do_dec)
@@ -2349,7 +2349,7 @@ msg_print("もう宙に浮かべなくなった。");
 /*!
  * @brief 一時的闘気のオーラの継続時間をセットする / Set "p_ptr->tim_sh_touki", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_sh_touki(int v, bool do_dec)
@@ -2417,7 +2417,7 @@ msg_print("闘気が消えた。");
 /*!
  * @brief 一時的火炎のオーラの継続時間をセットする / Set "p_ptr->tim_sh_fire", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_sh_fire(int v, bool do_dec)
@@ -2488,7 +2488,7 @@ msg_print("炎のオーラが消えた。");
 /*!
  * @brief 一時的聖なるのオーラの継続時間をセットする / Set "p_ptr->tim_sh_holy", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_sh_holy(int v, bool do_dec)
@@ -2559,7 +2559,7 @@ msg_print("聖なるオーラが消えた。");
 /*!
  * @brief 目には目をの残り時間をセットする / Set "p_ptr->tim_eyeeye", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_eyeeye(int v, bool do_dec)
@@ -2631,7 +2631,7 @@ msg_print("懲罰を執行することができなくなった。");
 /*!
  * @brief 一時的魔法防御の継続時間をセットする / Set "p_ptr->resist_magic", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_resist_magic(int v, bool do_dec)
@@ -2702,7 +2702,7 @@ msg_print("You are no longer protected from magic.");
 /*!
  * @brief 一時的反射の継続時間をセットする / Set "p_ptr->tim_reflect", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_reflect(int v, bool do_dec)
@@ -2842,7 +2842,7 @@ msg_print("幻影が消えた。");
 /*!
  * @brief 一時的破片のオーラの継続時間をセットする / Set "p_ptr->dustrobe", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_dustrobe(int v, bool do_dec)
@@ -2913,7 +2913,7 @@ msg_print("鏡のオーラが消えた。");
 /*!
  * @brief 一時的壁抜けの継続時間をセットする / Set "p_ptr->kabenuke", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_kabenuke(int v, bool do_dec)
@@ -2984,7 +2984,7 @@ msg_print("体が物質化した。");
 /*!
  * @brief オクレ兄さんの継続時間をセットする / Set "p_ptr->tsuyoshi", notice observable changes
  * @param v 継続時間
- * @do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tsuyoshi(int v, bool do_dec)
@@ -3060,10 +3060,11 @@ msg_print("肉体が急速にしぼんでいった。");
 	return (TRUE);
 }
 
-
-/*
- * Set a temporary elemental brand.  Clear all other brands.  Print status 
- * messages. -LM-
+/*!
+ * @brief 一時的元素スレイの継続時間をセットする / Set a temporary elemental brand.  Clear all other brands. Print status messages. -LM-
+ * @praram attack_type スレイのタイプID
+ * @param v 継続時間
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_ele_attack(u32b attack_type, int v)
 {
@@ -3159,10 +3160,11 @@ bool set_ele_attack(u32b attack_type, int v)
 	return (TRUE);
 }
 
-
-/*
- * Set a temporary elemental brand.  Clear all other brands.  Print status 
- * messages. -LM-
+/*!
+ * @brief 一時的元素免疫の継続時間をセットする / Set a temporary elemental brand.  Clear all other brands.  Print status messages. -LM-
+ * @praram attack_type 免疫のタイプID
+ * @param v 継続時間
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_ele_immune(u32b immune_type, int v)
 {
@@ -3258,9 +3260,11 @@ bool set_ele_immune(u32b immune_type, int v)
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->oppose_acid", notice observable changes
+/*!
+ * @brief 一時的酸耐性の継続時間をセットする / Set "p_ptr->oppose_acid", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_acid(int v, bool do_dec)
 {
@@ -3324,9 +3328,11 @@ msg_print("酸への耐性が薄れた気がする。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->oppose_elec", notice observable changes
+/*!
+ * @brief 一時的電撃耐性の継続時間をセットする / Set "p_ptr->oppose_elec", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_elec(int v, bool do_dec)
 {
@@ -3390,9 +3396,11 @@ msg_print("電撃への耐性が薄れた気がする。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->oppose_fire", notice observable changes
+/*!
+ * @brief 一時的火炎耐性の継続時間をセットする / Set "p_ptr->oppose_fire", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_fire(int v, bool do_dec)
 {
@@ -3457,9 +3465,11 @@ msg_print("火への耐性が薄れた気がする。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->oppose_cold", notice observable changes
+/*!
+ * @brief 一時的冷気耐性の継続時間をセットする / Set "p_ptr->oppose_cold", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_cold(int v, bool do_dec)
 {
@@ -3523,9 +3533,11 @@ msg_print("冷気への耐性が薄れた気がする。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->oppose_pois", notice observable changes
+/*!
+ * @brief 一時的毒耐性の継続時間をセットする / Set "p_ptr->oppose_pois", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_pois(int v, bool do_dec)
 {
@@ -3590,10 +3602,11 @@ msg_print("毒への耐性が薄れた気がする。");
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->stun", notice observable changes
- *
+/*!
+ * @brief 朦朧の継続時間をセットする / Set "p_ptr->stun", notice observable changes
+ * @param v 継続時間
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ * @details
  * Note the special code to only notice "range" changes.
  */
 bool set_stun(int v)
@@ -3786,9 +3799,11 @@ msg_print("やっと朦朧状態から回復した。");
 }
 
 
-/*
- * Set "p_ptr->cut", notice observable changes
- *
+/*!
+ * @brief 出血の継続時間をセットする / Set "p_ptr->cut", notice observable changes
+ * @param v 継続時間
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ * @details
  * Note the special code to only notice "range" changes.
  */
 bool set_cut(int v)
@@ -4044,28 +4059,31 @@ msg_format("やっと%s。", p_ptr->prace == RACE_ANDROID ? "怪我が直った" : "出血が
 	return (TRUE);
 }
 
-
-/*
- * Set "p_ptr->food", notice observable changes
- *
+/*!
+ * @brief 空腹状態をセットする / Set "p_ptr->food", notice observable changes
+ * @param v 継続時間
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ * @details
+ * Set "", notice observable changes\n
+ *\n
  * The "p_ptr->food" variable can get as large as 20000, allowing the
  * addition of the most "filling" item, Elvish Waybread, which adds
- * 7500 food units, without overflowing the 32767 maximum limit.
- *
+ * 7500 food units, without overflowing the 32767 maximum limit.\n
+ *\n
  * Perhaps we should disturb the player with various messages,
- * especially messages about hunger status changes.  XXX XXX XXX
- *
+ * especially messages about hunger status changes.  XXX XXX XXX\n
+ *\n
  * Digestion of food is handled in "dungeon.c", in which, normally,
  * the player digests about 20 food units per 100 game turns, more
  * when "fast", more when "regenerating", less with "slow digestion",
  * but when the player is "gorged", he digests 100 food units per 10
- * game turns, or a full 1000 food units per 100 game turns.
- *
+ * game turns, or a full 1000 food units per 100 game turns.\n
+ *\n
  * Note that the player's speed is reduced by 10 units while gorged,
  * so if the player eats a single food ration (5000 food units) when
  * full (15000 food units), he will be gorged for (5000/100)*10 = 500
  * game turns, or 500/(100/5) = 25 player turns (if nothing else is
- * affecting the player speed).
+ * affecting the player speed).\n
  */
 bool set_food(int v)
 {
