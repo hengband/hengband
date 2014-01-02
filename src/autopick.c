@@ -1,13 +1,14 @@
-/* File: autopick.c */
-
-/* Purpose: Object Auto-picker/Destroyer */
-
-/*
- * Copyright (c) 2002  Mogami
- *
- * This software may be copied and distributed for educational, research, and
- * not for profit purposes provided that this copyright and statement are
- * included in all such copies.
+/*!
+ * @file autopick.c
+ * @brief 自動拾い機能の実装 / Object Auto-picker/Destroyer
+ * @date 2014/01/02
+ * @author
+ * Copyright (c) 2002  Mogami\n
+ *\n
+ * This software may be copied and distributed for educational, research, and\n
+ * not for profit purposes provided that this copyright and statement are\n
+ * included in all such copies.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
 #include "angband.h"

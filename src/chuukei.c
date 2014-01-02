@@ -1,4 +1,10 @@
-/* chuukei.c */
+/*!
+    @file chuukei.c
+    @brief 中継機能の実装
+    @date 2014/01/02
+    @author
+    2014 Deskull rearranged comment for Doxygen.
+ */
 
 #include "angband.h"
 
