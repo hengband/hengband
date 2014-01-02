@@ -1,14 +1,14 @@
-/* File: cmd2.c */
-
-/*
+/*!
+ *  @file cmd2.c
+ *  @brief プレイヤーのコマンド処理2 / Movement commands (part 2)
+ *  @date 2014/01/02
+ *  @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
  */
-
-/* Purpose: Movement commands (part 2) */
 
 #include "angband.h"
 

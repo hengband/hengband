@@ -1,6 +1,8 @@
-/* File: cmd5.c */
-
-/*
+/*!
+ *  @file cmd5.c
+ *  @brief プレイヤーの魔法に関するコマンドの実装 / Spell/Prayer commands
+ *  @date 2014/01/02
+ *  @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
@@ -8,7 +10,6 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-/* Purpose: Spell/Prayer commands */
 
 #include "angband.h"
 

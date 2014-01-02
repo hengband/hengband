@@ -1,14 +1,14 @@
-/* File: cmd4.c */
-
-/*
+/*!
+ *  @file cmd4.c
+ *  @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
+ *  @date 2014/01/02
+ *  @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
  */
-
-/* Purpose: Interface commands */
 
 #include "angband.h"
 

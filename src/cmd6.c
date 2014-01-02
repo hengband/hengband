@@ -1,14 +1,14 @@
-/* File: cmd6.c */
-
-/*
+/*!
+ *  @file cmd6.c
+ *  @brief プレイヤーのアイテムに関するコマンドの実装2 / Spell/Prayer commands
+ *  @date 2014/01/02
+ *  @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
  */
-
-/* Purpose: Object commands */
 
 #include "angband.h"
 

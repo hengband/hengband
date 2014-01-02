@@ -1,6 +1,8 @@
-/* File: cmd1.c */
-
-/*
+/*!
+ *  @file cmd1.c
+ *  @brief プレイヤーのコマンド処理1 / Movement commands (part 1)
+ *  @date 2014/01/02
+ *  @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
@@ -8,7 +10,6 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-/* Purpose: Movement commands (part 1) */
 
 #include "angband.h"
 #define MAX_VAMPIRIC_DRAIN 50
