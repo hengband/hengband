@@ -549,7 +549,7 @@ char *object_desc_kosuu(char *t, object_type *o_ptr)
 /*!
  * @brief 対象文字配列に符号あり整数値をコピーする。
  * @param t 保管先文字列ポインタ
- * @param n コピーしたい数値
+ * @param v コピーしたい数値
  * @return なし
  * @details
  * Print an signed number "v" into a string "t", as if by
@@ -961,11 +961,20 @@ static flag_insc_table flag_insc_sust[] =
 };
 #endif
 
-/* Simple macro for get_inscription() */
+/* オブジェクトフラグを追加するための簡易なマクロ / Simple macro for get_inscription() */
 #define ADD_INSC(STR) (void)(ptr = object_desc_str(ptr, (STR)))
 
-/*
- *  Helper function for get_inscription()
+/*!
+ * @brief get_inscriptionのサブセットとしてオブジェクトの特性フラグを返す / Helper function for get_inscription()
+ * @param fi_ptr 参照する特性表示記号テーブル
+ * @param flgs 対応するオブジェクトのフラグ文字列
+ * @param kanji TRUEならば漢字記述/FALSEならば英語記述
+ * @param ptr フラグ群を保管する文字列参照ポインタ
+ * @return フラグ群を保管する文字列参照ポインタ(ptrと同じ)
+ * @details
+ * Print an signed number "v" into a string "t", as if by
+ * sprintf(t, "%+d", n), and return a pointer to the terminator.
+ * Note that we always print a sign, either "+" or "-".
  */
 static char *inscribe_flags_aux(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE], bool kanji, char *ptr)
 {
