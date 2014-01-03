@@ -255,36 +255,39 @@ static void shuffle_flavors(byte tval)
 	C_KILL(k_idx_list, max_k_idx, s16b);
 }
 
-/*
- * Prepare the "variable" part of the "k_info" array.
- *
- * The "color"/"metal"/"type" of an item is its "flavor".
- * For the most part, flavors are assigned randomly each game.
- *
- * Initialize descriptions for the "colored" objects, including:
- * Rings, Amulets, Staffs, Wands, Rods, Food, Potions, Scrolls.
- *
- * The first 4 entries for potions are fixed (Water, Apple Juice,
- * Slime Mold Juice, Unused Potion).
- *
- * Scroll titles are always between 6 and 14 letters long.  This is
- * ensured because every title is composed of whole words, where every
- * word is from 1 to 8 letters long (one or two syllables of 1 to 4
- * letters each), and that no scroll is finished until it attempts to
- * grow beyond 15 letters.  The first time this can happen is when the
- * current title has 6 letters and the new word has 8 letters, which
- * would result in a 6 letter scroll title.
- *
- * Duplicate titles are avoided by requiring that no two scrolls share
- * the same first four letters (not the most efficient method, and not
- * the least efficient method, but it will always work).
- *
- * Hack -- make sure everything stays the same for each saved game
- * This is accomplished by the use of a saved "random seed", as in
- * "town_gen()".  Since no other functions are called while the special
- * seed is in effect, so this function is pretty "safe".
- *
- * Note that the "hacked seed" may provide an RNG with alternating parity!
+/*!
+ * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン / Prepare the "variable" part of the "k_info" array.
+ * @return なし
+ * @details
+ * Prepare the "variable" part of the "k_info" array.\n
+ *\n
+ * The "color"/"metal"/"type" of an item is its "flavor".\n
+ * For the most part, flavors are assigned randomly each game.\n
+ *\n
+ * Initialize descriptions for the "colored" objects, including:\n
+ * Rings, Amulets, Staffs, Wands, Rods, Food, Potions, Scrolls.\n
+ *\n
+ * The first 4 entries for potions are fixed (Water, Apple Juice,\n
+ * Slime Mold Juice, Unused Potion).\n
+ *\n
+ * Scroll titles are always between 6 and 14 letters long.  This is\n
+ * ensured because every title is composed of whole words, where every\n
+ * word is from 1 to 8 letters long (one or two syllables of 1 to 4\n
+ * letters each), and that no scroll is finished until it attempts to\n
+ * grow beyond 15 letters.  The first time this can happen is when the\n
+ * current title has 6 letters and the new word has 8 letters, which\n
+ * would result in a 6 letter scroll title.\n
+ *\n
+ * Duplicate titles are avoided by requiring that no two scrolls share\n
+ * the same first four letters (not the most efficient method, and not\n
+ * the least efficient method, but it will always work).\n
+ *\n
+ * Hack -- make sure everything stays the same for each saved game\n
+ * This is accomplished by the use of a saved "random seed", as in\n
+ * "town_gen()".  Since no other functions are called while the special\n
+ * seed is in effect, so this function is pretty "safe".\n
+ *\n
+ * Note that the "hacked seed" may provide an RNG with alternating parity!\n
  */
 void flavor_init(void)
 {
@@ -358,9 +361,14 @@ void flavor_init(void)
 }
 
 
-/*
- * Print a char "c" into a string "t", as if by sprintf(t, "%c", c),
- * and return a pointer to the terminator (t + 1).
+/*!
+ * @brief 対象文字配列に一文字だけをコピーする。
+ * @param t 保管先文字列ポインタ
+ * @param c 保管したい1文字
+ * @return なし
+ * @details
+ * Print a char "c" into a string "t", as if by sprintf(t, "%c", c),\n
+ * and return a pointer to the terminator (t + 1).\n
  */
 static char *object_desc_chr(char *t, char c)
 {
@@ -374,8 +382,12 @@ static char *object_desc_chr(char *t, char c)
 	return (t);
 }
 
-
-/*
+/*!
+ * @brief 対象文字配列に文字列をコピーする。
+ * @param t 保管先文字列ポインタ
+ * @param c コピーしたい文字列ポインタ
+ * @return なし
+ * @details
  * Print a string "s" into a string "t", as if by strcpy(t, s),
  * and return a pointer to the terminator.
  */
@@ -391,9 +403,12 @@ static char *object_desc_str(char *t, cptr s)
 	return (t);
 }
 
-
-
-/*
+/*!
+ * @brief 対象文字配列に符号なし整数値をコピーする。
+ * @param t 保管先文字列ポインタ
+ * @param n コピーしたい数値
+ * @return なし
+ * @details
  * Print an unsigned number "n" into a string "t", as if by
  * sprintf(t, "%u", n), and return a pointer to the terminator.
  */
@@ -428,11 +443,14 @@ static char *object_desc_num(char *t, uint n)
 
 
 #ifdef JP
-/*
- * 日本語の個数表示ルーチン
- *（cmd1.c で流用するために object_desc_japanese から移動した。）
+/*!
+ * @brief 日本語の個数表示ルーチン
+ * @param t 保管先文字列ポインタ
+ * @param o_ptr 記述したいオブジェクトの構造体参照ポインタ
+ * @return なし
+ * @details
+ * cmd1.c で流用するために object_desc_japanese から移動した。
  */
-
 char *object_desc_kosuu(char *t, object_type *o_ptr)
 {
     t = object_desc_num(t, o_ptr->number);
@@ -528,7 +546,12 @@ char *object_desc_kosuu(char *t, object_type *o_ptr)
 }
 #endif
 
-/*
+/*!
+ * @brief 対象文字配列に符号あり整数値をコピーする。
+ * @param t 保管先文字列ポインタ
+ * @param n コピーしたい数値
+ * @return なし
+ * @details
  * Print an signed number "v" into a string "t", as if by
  * sprintf(t, "%+d", n), and return a pointer to the terminator.
  * Note that we always print a sign, either "+" or "-".
@@ -581,10 +604,9 @@ static char *object_desc_int(char *t, sint v)
 }
 
 
-/*
- * Structs and tables for Auto Inscription for flags
+/*!
+ * オブジェクトの特性表示記号テーブルの構造体 / Structs and tables for Auto Inscription for flags
  */
-
 typedef struct flag_insc_table
 {
 #ifdef JP
@@ -596,6 +618,7 @@ typedef struct flag_insc_table
 } flag_insc_table;
 
 #ifdef JP
+/*! オブジェクトの特性表示記号テーブルの定義(pval要素) */
 static flag_insc_table flag_insc_plus[] =
 {
 	{ "攻", "At", TR_BLOWS, -1 },
@@ -614,6 +637,7 @@ static flag_insc_table flag_insc_plus[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(免疫) */
 static flag_insc_table flag_insc_immune[] =
 {
 	{ "酸", "Ac", TR_IM_ACID, -1 },
@@ -623,6 +647,7 @@ static flag_insc_table flag_insc_immune[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(耐性) */
 static flag_insc_table flag_insc_resistance[] =
 {
 	{ "酸", "Ac", TR_RES_ACID, TR_IM_ACID },
@@ -644,6 +669,7 @@ static flag_insc_table flag_insc_resistance[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(その他特性) */
 static flag_insc_table flag_insc_misc[] =
 {
 	{ "易", "Es", TR_EASY_SPELL, -1 },
@@ -674,6 +700,7 @@ static flag_insc_table flag_insc_misc[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(オーラ) */
 static flag_insc_table flag_insc_aura[] =
 {
 	{ "炎", "F", TR_SH_FIRE, -1 },
@@ -684,6 +711,7 @@ static flag_insc_table flag_insc_aura[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(属性スレイ) */
 static flag_insc_table flag_insc_brand[] =
 {
 	{ "酸", "A", TR_BRAND_ACID, -1 },
@@ -699,6 +727,7 @@ static flag_insc_table flag_insc_brand[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(種族スレイ) */
 static flag_insc_table flag_insc_kill[] =
 {
 	{ "邪", "*", TR_KILL_EVIL, -1 },
@@ -713,6 +742,7 @@ static flag_insc_table flag_insc_kill[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(種族*スレイ*) */
 static flag_insc_table flag_insc_slay[] =
 {
 	{ "邪", "*", TR_SLAY_EVIL, TR_KILL_EVIL },
@@ -727,6 +757,7 @@ static flag_insc_table flag_insc_slay[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(ESP1) */
 static flag_insc_table flag_insc_esp1[] =
 {
 	{ "感", "Tele", TR_TELEPATHY, -1 },
@@ -737,6 +768,7 @@ static flag_insc_table flag_insc_esp1[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(ESP2) */
 static flag_insc_table flag_insc_esp2[] =
 {
 	{ "人", "p", TR_ESP_HUMAN, -1 },
@@ -750,6 +782,7 @@ static flag_insc_table flag_insc_esp2[] =
 	{ NULL, NULL, 0, -1 }
 };
 
+/*! オブジェクトの特性表示記号テーブルの定義(能力維持) */
 static flag_insc_table flag_insc_sust[] =
 {
 	{ "腕", "St", TR_SUST_STR, -1 },
