@@ -1,17 +1,22 @@
-/* Purpose: Object flavor code */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ *  @file flavor.c
+ *  @brief オブジェクトの記述処理 / Mbject flavor code
+ *  @date 2014/01/03
+ *  @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ *\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
  */
 
 #include "angband.h"
 
-/*
- * Certain items, if aware, are known instantly
+/*!
+ * @brief 最初から簡易な名称が明らかになるベースアイテムの判定。 /  Certain items, if aware, are known instantly 
+ * @param i ベースアイテムID
+ * @return 簡易名称を明らかにするならTRUEを返す。
+ * @details
  * This function is used only by "flavor_init()"
  */
 static bool object_easy_know(int i)
@@ -64,9 +69,12 @@ static bool object_easy_know(int i)
 	return (FALSE);
 }
 
-
-/*
- * Create a name from random parts.
+/*!
+ * @brief 各種語彙からランダムな名前を作成する / Create a name from random parts.
+ * @param out_string 作成した名を保管する参照ポインタ
+ * @return なし
+ * @details 日本語の場合 aname_j.txt 英語の場合確率に応じて
+ * syllables 配列と elvish.txt を組み合わせる。\n
  */
 void get_table_name_aux(char *out_string)
 {
@@ -129,9 +137,11 @@ void get_table_name_aux(char *out_string)
 #endif
 }
 
-
-/*
- * Create a name from random parts with quotes.
+/*!
+ * @brief ランダムな名前をアーティファクト銘として整形する。 / Create a name from random parts with quotes.
+ * @param out_string 作成した名を保管する参照ポインタ
+ * @return なし
+ * @details get_table_name_aux()ほぼ完全に実装を依存している。
  */
 void get_table_name(char *out_string)
 {
@@ -145,9 +155,11 @@ void get_table_name(char *out_string)
 #endif
 }
 
-
-/*
- * Make random Sindarin name
+/*!
+ * @brief ランダムなシンダリン銘を作成する / Make random Sindarin name
+ * @param out_string 作成した名を保管する参照ポインタ
+ * @return なし
+ * @details sname.txtが語幹の辞書となっている。
  */
 void get_table_sindarin_aux(char *out_string)
 {
@@ -172,9 +184,11 @@ void get_table_sindarin_aux(char *out_string)
 #endif
 }
 
-
-/*
- * Make random Sindarin name with quotes
+/*!
+ * @brief シンダリン銘をアーティファクト用に整形する。 / Make random Sindarin name with quotes
+ * @param out_string 作成した名を保管する参照ポインタ
+ * @return なし
+ * @details get_table_sindarin_aux()ほぼ完全に実装を依存している。
  */
 void get_table_sindarin(char *out_string)
 {
@@ -189,8 +203,11 @@ void get_table_sindarin(char *out_string)
 }
 
 
-/*
- * Shuffle flavor indices of a group of objects with given tval
+/*!
+ * @brief ベースアイテムの未確定名を共通tval間でシャッフルする / Shuffle flavor indices of a group of objects with given tval
+ * @param byte シャッフルしたいtval
+ * @return なし
+ * @details 巻物、各種魔道具などに利用される。
  */
 static void shuffle_flavors(byte tval)
 {
