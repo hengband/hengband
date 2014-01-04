@@ -229,9 +229,11 @@ static void kill_saved_floor(saved_floor_type *sf_ptr)
 }
 
 
-/*
- * Initialize new saved floor and get its floor id.  If number of
- * saved floors are already MAX_SAVED_FLOORS, kill the oldest one.
+/*!
+ * @brief 新規に利用可能な保存フロアを返す / Initialize new saved floor and get its floor id.
+ * @return 利用可能な保存フロアID
+ * @details
+ * If number of saved floors are already MAX_SAVED_FLOORS, kill the oldest one.
  */
 s16b get_new_floor_id(void)
 {
@@ -297,17 +299,19 @@ s16b get_new_floor_id(void)
 }
 
 
-/*
- * Prepare mode flags of changing floor
+/*!
+ * @brief フロア切り替え時の処理フラグを追加する / Prepare mode flags of changing floor
+ * @param mode 追加したい所持フラグ
+ * @return なし
  */
 void prepare_change_floor_mode(u32b mode)
 {
 	change_floor_mode |= mode;
 }
 
-
-/*
- * Builds the dead end
+/*!
+ * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
+ * @return なし
  */
 static void build_dead_end(void)
 {
@@ -344,14 +348,13 @@ static void build_dead_end(void)
 }
 
 
-/* Maximum number of preservable pets */
-#define MAX_PARTY_MON 21
 
-static monster_type party_mon[MAX_PARTY_MON];
+#define MAX_PARTY_MON 21 /*!< フロア移動時に先のフロアに連れて行けるペットの最大数 Maximum number of preservable pets */
+static monster_type party_mon[MAX_PARTY_MON]; /*!< フロア移動に保存するペットモンスターの配列 */
 
-
-/*
- * Preserve_pets
+/*!
+ * @brief フロア移動時のペット保存処理 / Preserve_pets
+ * @return なし
  */
 static void preserve_pet(void)
 {
@@ -485,8 +488,10 @@ static void preserve_pet(void)
 }
 
 
-/*
- * Pre-calculate the racial counters of preserved pets
+/*!
+ * @brief フロア移動時にペットを伴った場合の準備処理 / Pre-calculate the racial counters of preserved pets
+ * @return なし
+ * @details
  * To prevent multiple generation of unique monster who is the minion of player
  */
 void precalc_cur_num_of_pet(void)
@@ -507,9 +512,9 @@ void precalc_cur_num_of_pet(void)
 	}
 }
 
-
-/*
- * Place preserved pet monsters on new floor
+/*!
+ * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
+ * @return なし
  */
 static void place_pet(void)
 {
@@ -624,12 +629,14 @@ static void place_pet(void)
 }
 
 
-/*
- * Hack -- Update location of unique monsters and artifacts
- *
- * The r_ptr->floor_id and a_ptr->floor_id are not updated correctly
- * while new floor creation since dungeons may be re-created by
- * auto-scum option.
+/*!
+ * @brief ユニークモンスターやアーティファクトの所在フロアを更新する / Hack -- Update location of unique monsters and artifacts
+ * @param cur_floor_id 現在のフロアID
+ * @return なし
+ * @details 
+ * The r_ptr->floor_id and a_ptr->floor_id are not updated correctly\n
+ * while new floor creation since dungeons may be re-created by\n
+ * auto-scum option.\n
  */
 static void update_unique_artifact(s16b cur_floor_id)
 {
@@ -672,9 +679,9 @@ static void update_unique_artifact(s16b cur_floor_id)
 }
 
 
-/*
- * When a monster is at a place where player will return,
- * Get out of the my way!
+/*!
+ * @brief フロア移動時、プレイヤーの移動先モンスターが既にいた場合ランダムな近隣に移動させる / When a monster is at a place where player will return,
+ * @return なし
  */
 static void get_out_monster(void)
 {
@@ -741,20 +748,16 @@ static void get_out_monster(void)
 	}
 }
 
-
-/*
- * Is this feature has special meaning (except floor_id) with c_ptr->special?
+/*!
+ * マス構造体のspecial要素を利用する地形かどうかを判定するマクロ / Is this feature has special meaning (except floor_id) with c_ptr->special?
  */
 #define feat_uses_special(F) (have_flag(f_info[(F)].flags, FF_SPECIAL))
 
 
-/*
- * Virtually teleport onto the stairs that is connecting between two
- * floors.
- *
- * Teleport level spell and trap doors will always lead the player to
- * the one of the floors connected by the one of the stairs in the
- * current floor.
+/*!
+ * @brief 新フロアに移動元フロアに繋がる階段を配置する / Virtually teleport onto the stairs that is connecting between two floors.
+ * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
+ * @return なし
  */
 static void locate_connected_stairs(saved_floor_type *sf_ptr)
 {
