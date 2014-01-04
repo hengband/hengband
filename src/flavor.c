@@ -998,8 +998,11 @@ static char *inscribe_flags_aux(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE]
 }
 
 
-/*
- *  Special variation of have_flag for auto-inscription
+/*!
+ * @brief オブジェクトの特性表示記号テーブル1つに従いオブジェクトの特性フラグ配列に1つでも該当の特性があるかを返す / Special variation of have_flag for auto-inscription
+ * @param fi_ptr 参照する特性表示記号テーブル
+ * @param flgs 対応するオブジェクトのフラグ文字列
+ * @return 1つでも該当の特性があったらTRUEを返す。
  */
 static bool have_flag_of(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE])
 {
@@ -1014,6 +1017,14 @@ static bool have_flag_of(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE])
 	return (FALSE);
 }
 
+/*!
+ * @brief オブジェクト名の特性短縮表記をまとめて提示する。
+ * @param ptr 特性短縮表記を格納する文字列ポインタ
+ * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
+ * @param kanji TRUEならば漢字表記 / FALSEなら英語表記
+ * @param all TRUEならばベースアイテム上で明らかなフラグは省略する
+ * @return ptrと同じアドレス
+ */
 static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji, bool all)
 {
 	char *prev_ptr = ptr;
@@ -1161,8 +1172,11 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 }
 
 
-/*
- *  Get object inscription with auto inscription of object flags.
+/*!
+ * @brief オブジェクト名の特性短縮表記＋刻み内容を提示する。 / Get object inscription with auto inscription of object flags.
+ * @param buff 特性短縮表記を格納する文字列ポインタ
+ * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
+ * @return なし
  */
 static void get_inscription(char *buff, object_type *o_ptr)
 {
@@ -1236,6 +1250,11 @@ static void get_inscription(char *buff, object_type *o_ptr)
 	*ptr = '\0';
 }
 
+/*!
+ * @brief オブジェクトがクエストの達成目的か否かを返す。
+ * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
+ * @return 現在クエスト達成目的のアイテムならばTRUEを返す。
+ */
 bool object_is_quest_target(object_type *o_ptr)
 {
 	if (p_ptr->inside_quest)
@@ -1257,51 +1276,53 @@ bool object_is_quest_target(object_type *o_ptr)
 }
 
 
-/*
- * Creates a description of the item "o_ptr", and stores it in "out_val".
- *
- * One can choose the "verbosity" of the description, including whether
- * or not the "number" of items should be described, and how much detail
- * should be used when describing the item.
- *
- * The given "buf" must be MAX_NLEN chars long to hold the longest possible
- * description, which can get pretty long, including incriptions, such as:
- * "no more Maces of Disruption (Defender) (+10,+10) [+5] (+3 to stealth)".
- * Note that the inscription will be clipped to keep the total description
- * under MAX_NLEN-1 chars (plus a terminator).
- *
- * Note the use of "object_desc_num()" and "object_desc_int()" as hyper-efficient,
- * portable, versions of some common "sprintf()" commands.
- *
- * Note that all ego-items (when known) append an "Ego-Item Name", unless
- * the item is also an artifact, which should NEVER happen.
- *
- * Note that all artifacts (when known) append an "Artifact Name", so we
- * have special processing for "Specials" (artifact Lites, Rings, Amulets).
- * The "Specials" never use "modifiers" if they are "known", since they
- * have special "descriptions", such as "The Necklace of the Dwarves".
- *
- * Special Lite's use the "k_info" base-name (Phial, Star, or Arkenstone),
- * plus the artifact name, just like any other artifact, if known.
- *
- * Special Ring's and Amulet's, if not "aware", use the same code as normal
- * rings and amulets, and if "aware", use the "k_info" base-name (Ring or
- * Amulet or Necklace).  They will NEVER "append" the "k_info" name.  But,
- * they will append the artifact name, just like any artifact, if known.
- *
- * Hack -- Display "The One Ring" as "a Plain Gold Ring" until aware.
- *
- * Mode:
- *   OD_NAME_ONLY        : The Cloak of Death
- *   OD_NAME_AND_ENCHANT : The Cloak of Death [1,+3]
- *   OD_OMIT_INSCRIPTION : The Cloak of Death [1,+3] (+2 to Stealth)
- *   0                   : The Cloak of Death [1,+3] (+2 to Stealth) {nifty}
- *
- *   OD_OMIT_PREFIX      : Forbidden numeric prefix
- *   OD_NO_PLURAL        : Forbidden use of plural 
- *   OD_STORE            : Assume to be aware and known
- *   OD_NO_FLAVOR        : Allow to hidden flavor
- *   OD_FORCE_FLAVOR     : Get un-shuffled flavor name
+/*!
+ * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
+ * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
+ * @return 現在クエスト達成目的のアイテムならばTRUEを返す。
+ * @details
+ * One can choose the "verbosity" of the description, including whether\n
+ * or not the "number" of items should be described, and how much detail\n
+ * should be used when describing the item.\n
+ *\n
+ * The given "buf" must be MAX_NLEN chars long to hold the longest possible\n
+ * description, which can get pretty long, including incriptions, such as:\n
+ * "no more Maces of Disruption (Defender) (+10,+10) [+5] (+3 to stealth)".\n
+ * Note that the inscription will be clipped to keep the total description\n
+ * under MAX_NLEN-1 chars (plus a terminator).\n
+ *\n
+ * Note the use of "object_desc_num()" and "object_desc_int()" as hyper-efficient,\n
+ * portable, versions of some common "sprintf()" commands.\n
+ *\n
+ * Note that all ego-items (when known) append an "Ego-Item Name", unless\n
+ * the item is also an artifact, which should NEVER happen.\n
+ *\n
+ * Note that all artifacts (when known) append an "Artifact Name", so we\n
+ * have special processing for "Specials" (artifact Lites, Rings, Amulets).\n
+ * The "Specials" never use "modifiers" if they are "known", since they\n
+ * have special "descriptions", such as "The Necklace of the Dwarves".\n
+ *\n
+ * Special Lite's use the "k_info" base-name (Phial, Star, or Arkenstone),\n
+ * plus the artifact name, just like any other artifact, if known.\n
+ *\n
+ * Special Ring's and Amulet's, if not "aware", use the same code as normal\n
+ * rings and amulets, and if "aware", use the "k_info" base-name (Ring or\n
+ * Amulet or Necklace).  They will NEVER "append" the "k_info" name.  But,\n
+ * they will append the artifact name, just like any artifact, if known.\n
+ *\n
+ * Hack -- Display "The One Ring" as "a Plain Gold Ring" until aware.\n
+ *\n
+ * Mode:\n
+ *   OD_NAME_ONLY        : The Cloak of Death\n
+ *   OD_NAME_AND_ENCHANT : The Cloak of Death [1,+3]\n
+ *   OD_OMIT_INSCRIPTION : The Cloak of Death [1,+3] (+2 to Stealth)\n
+ *   0                   : The Cloak of Death [1,+3] (+2 to Stealth) {nifty}\n
+ *\n
+ *   OD_OMIT_PREFIX      : Forbidden numeric prefix\n
+ *   OD_NO_PLURAL        : Forbidden use of plural \n
+ *   OD_STORE            : Assume to be aware and known\n
+ *   OD_NO_FLAVOR        : Allow to hidden flavor\n
+ *   OD_FORCE_FLAVOR     : Get un-shuffled flavor name\n
  */
 void object_desc(char *buf, object_type *o_ptr, u32b mode)
 {
