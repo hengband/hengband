@@ -1,27 +1,29 @@
-/* File: floors.c */
-
-/* Purpose: management of the saved floor */
-
-/*
- * Copyright (c) 2002  Mogami
- *
- * This software may be copied and distributed for educational, research, and
- * not for profit purposes provided that this copyright and statement are
- * included in all such copies.
+/*!
+ * @file floors.c
+ * @brief 保存された階の管理 / management of the saved floor
+ * @date 2014/01/04
+ * @author
+ * Copyright (c) 2002  Mogami \n
+ * This software may be copied and distributed for educational, research, and \n
+ * not for profit purposes provided that this copyright and statement are \n
+ * included in all such copies. \n
+ * 2014 Deskull rearranged comment for Doxygen. \n
  */
 
 #include "angband.h"
 #include "grid.h"
 
 
-static s16b new_floor_id;       /* floor_id of the destination */
-static u32b change_floor_mode;  /* Mode flags for changing floor */
-static u32b latest_visit_mark;  /* Max number of visit_mark */
+static s16b new_floor_id;       /*!<次のフロアのID / floor_id of the destination */
+static u32b change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
+static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */
 
 
-/*
- * Initialize saved_floors array.  Make sure that old temporal files
- * are not remaining as gurbages.
+/*!
+ * @brief 保存フロア配列を初期化する / Initialize saved_floors array. 
+ * @param force テンポラリファイルが残っていた場合も警告なしで強制的に削除する。
+ * @details Make sure that old temporal files are not remaining as gurbages.
+ * @return なし
  */
 void init_saved_floors(bool force)
 {
@@ -115,10 +117,10 @@ void init_saved_floors(bool force)
 #endif
 }
 
-
-/*
- * Kill temporal files
- * Should be called just before the game quit.
+/*!
+ * @brief 保存フロア用テンポラリファイルを削除する / Kill temporal files
+ * @details Should be called just before the game quit.
+ * @return なし
  */
 void clear_saved_floor_files(void)
 {
@@ -161,9 +163,10 @@ void clear_saved_floor_files(void)
 #endif
 }
 
-
-/*
- * Get a pointer for an item of the saved_floors array.
+/*!
+ * @brief 保存フロアIDから参照ポインタを得る / Get a pointer for an item of the saved_floors array.
+ * @param floor_id 保存フロアID
+ * @return IDに対応する保存フロアのポインタ、ない場合はNULLを返す。
  */
 saved_floor_type *get_sf_ptr(s16b floor_id)
 {
@@ -184,8 +187,10 @@ saved_floor_type *get_sf_ptr(s16b floor_id)
 }
 
 
-/*
- * kill a saved floor and get an empty space
+/*!
+ * @brief 参照ポインタ先の保存フロアを抹消する / kill a saved floor and get an empty space
+ * @param sf_ptr 保存フロアの参照ポインタ
+ * @return なし
  */
 static void kill_saved_floor(saved_floor_type *sf_ptr)
 {
