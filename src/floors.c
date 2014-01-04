@@ -852,9 +852,10 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 	}
 }
 
-/*
- * Maintain quest monsters, mark next floor_id at stairs, save current
- * floor, and prepare to enter next floor.
+/*!
+ * @brief 現在のフロアを離れるに伴って行ｙ保存処理
+ * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
+ * @return なし
  */
 void leave_floor(void)
 {
@@ -1091,10 +1092,13 @@ void leave_floor(void)
 }
 
 
-/*
- * Enter new floor.  If the floor is an old saved floor, it will be
- * restored from the temporal file.  If the floor is new one, new cave
- * will be generated.
+/*!
+ * @brief フロアの切り替え処理 / Enter new floor.
+ * @return なし
+ * @details
+ * If the floor is an old saved floor, it will be\n
+ * restored from the temporal file.  If the floor is new one, new cave\n
+ * will be generated.\n
  */
 void change_floor(void)
 {
@@ -1424,11 +1428,10 @@ void change_floor(void)
 	change_floor_mode = 0L;
 }
 
-
-
-/*
- * Create stairs at or move previously created stairs into the player
- * location.
+/*!
+ * @brief プレイヤーの手による能動的な階段生成処理 /
+ * Create stairs at or move previously created stairs into the player location.
+ * @return なし
  */
 void stair_creation(void)
 {
