@@ -1,14 +1,15 @@
-/*
- * File: grid.c
- * Purpose: low-level dungeon creation primitives
- */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file grid.c
+ * @brief ダンジョンの生成処理の基幹部分 / low-level dungeon creation primitives
+ * @date 2014/01/04
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ *\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * \n
+ * 2014 Deskull Doxygen向けのコメント整理\n
  */
 
 #include "angband.h"
@@ -16,8 +17,9 @@
 #include "grid.h"
 
 
-/*
- * Returns random co-ordinates for player/monster/object
+/*!
+ * @brief 新規フロアに入りたてのプレイヤーをランダムな場所に配置する / Returns random co-ordinates for player/monster/object
+ * @return 配置に成功したらTRUEを返す
  */
 bool new_player_spot(void)
 {
@@ -76,8 +78,12 @@ bool new_player_spot(void)
 }
 
 
-/*
- * Place an up/down staircase at given location
+
+/*!
+ * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
+ * @param y 配置を試みたいマスのY座標
+ * @param x 配置を試みたいマスのX座標
+ * @return なし
  */
 void place_random_stairs(int y, int x)
 {
@@ -122,9 +128,12 @@ void place_random_stairs(int y, int x)
 		place_down_stairs(y, x);
 }
 
-
-/*
- * Place a random type of door at the given location
+/*!
+ * @brief 所定の位置にさまざまな状態や種類のドアを配置する / Place a random type of door at the given location
+ * @param y ドアの配置を試みたいマスのY座標
+ * @param x ドアの配置を試みたいマスのX座標
+ * @param room 部屋に接している場合向けのドア生成か否か
+ * @return なし
  */
 void place_random_door(int y, int x, bool room)
 {
@@ -203,9 +212,12 @@ void place_random_door(int y, int x, bool room)
 	delete_monster(y, x);
 }
 
-
-/*
- * Place a random type of normal door at the given location.
+/*!
+ * @brief 所定の位置に各種の閉じたドアを配置する / Place a random type of normal door at the given location.
+ * @param y ドアの配置を試みたいマスのY座標
+ * @param x ドアの配置を試みたいマスのX座標
+ * @param type ドアの地形ID
+ * @return なし
  */
 void place_closed_door(int y, int x, int type)
 {
@@ -255,9 +267,14 @@ void place_closed_door(int y, int x, int type)
 	}
 }
 
-
-/*
- * Make an empty square floor, for the middle of rooms
+/*!
+ * @brief 長方形の空洞を生成する / Make an empty square floor, for the middle of rooms
+ * @param x1 長方形の左端X座標(-1)
+ * @param x2 長方形の右端X座標(+1)
+ * @param y1 長方形の上端Y座標(-1)
+ * @param y2 長方形の下端Y座標(+1)
+ * @param light 照明の有無
+ * @return なし
  */
 void place_floor(int x1, int x2, int y1, int y2, bool light)
 {
@@ -276,8 +293,14 @@ void place_floor(int x1, int x2, int y1, int y2, bool light)
 }
 
 
-/*
- * Make an empty square room, only floor and wall grids
+/*!
+ * @brief 長方形の部屋を生成する / Make an empty square room, only floor and wall grids
+ * @param x1 長方形の左端X座標(-1)
+ * @param x2 長方形の右端X座標(+1)
+ * @param y1 長方形の上端Y座標(-1)
+ * @param y2 長方形の下端Y座標(+1)
+ * @param light 照明の有無
+ * @return なし
  */
 void place_room(int x1, int x2, int y1, int y2, bool light)
 {
