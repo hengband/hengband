@@ -548,8 +548,12 @@ void rand_dir(int *rdir, int *cdir)
 	*cdir = ddx_ddd[i];
 }
 
-
-/* Function that sees if a square is a floor.  (Includes range checking.) */
+/*!
+ * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
+ * @param x チェックするマスのX座標
+ * @param y チェックするマスのY座標
+ * @return 床系地形ならばTRUE
+ */
 bool get_is_floor(int x, int y)
 {
 	if (!in_bounds(y, x))
@@ -564,8 +568,12 @@ bool get_is_floor(int x, int y)
 	return (FALSE);
 }
 
-
-/* Set a square to be floor.  (Includes range checking.) */
+/*!
+ * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
+ * @param x 地形を変えたいマスのX座標
+ * @param y 地形を変えたいマスのY座標
+ * @return なし
+ */
 void set_floor(int x, int y)
 {
 	if (!in_bounds(y, x))
@@ -586,36 +594,40 @@ void set_floor(int x, int y)
 }
 
 
-
-/*
- * Constructs a tunnel between two points
- *
- * This function must be called BEFORE any streamers are created,
- * since we use the special "granite wall" sub-types to keep track
- * of legal places for corridors to pierce rooms.
- *
- * We use "door_flag" to prevent excessive construction of doors
- * along overlapping corridors.
- *
- * We queue the tunnel grids to prevent door creation along a corridor
- * which intersects itself.
- *
- * We queue the wall piercing grids to prevent a corridor from leaving
- * a room and then coming back in through the same entrance.
- *
- * We "pierce" grids which are "outer" walls of rooms, and when we
- * do so, we change all adjacent "outer" walls of rooms into "solid"
- * walls so that no two corridors may use adjacent grids for exits.
- *
- * The "solid" wall check prevents corridors from "chopping" the
- * corners of rooms off, as well as "silly" door placement, and
- * "excessively wide" room entrances.
- *
- * Kind of walls:
- *   extra -- walls
- *   inner -- inner room walls
- *   outer -- outer room walls
- *   solid -- solid room walls
+/*!
+ * @brief 部屋間のトンネルを生成する / Constructs a tunnel between two points
+ * @param row1 始点Y座標
+ * @param col1 始点X座標
+ * @param row2 終点Y座標
+ * @param col2 終点X座標
+ * @return 生成に成功したらTRUEを返す
+ * @details
+ * This function must be called BEFORE any streamers are created,\n
+ * since we use the special "granite wall" sub-types to keep track\n
+ * of legal places for corridors to pierce rooms.\n
+ *\n
+ * We use "door_flag" to prevent excessive construction of doors\n
+ * along overlapping corridors.\n
+ *\n
+ * We queue the tunnel grids to prevent door creation along a corridor\n
+ * which intersects itself.\n
+ *\n
+ * We queue the wall piercing grids to prevent a corridor from leaving\n
+ * a room and then coming back in through the same entrance.\n
+ *\n
+ * We "pierce" grids which are "outer" walls of rooms, and when we\n
+ * do so, we change all adjacent "outer" walls of rooms into "solid"\n
+ * walls so that no two corridors may use adjacent grids for exits.\n
+ *\n
+ * The "solid" wall check prevents corridors from "chopping" the\n
+ * corners of rooms off, as well as "silly" door placement, and\n
+ * "excessively wide" room entrances.\n
+ *\n
+ * Kind of walls:\n
+ *   extra -- walls\n
+ *   inner -- inner room walls\n
+ *   outer -- outer room walls\n
+ *   solid -- solid room walls\n
  */
 bool build_tunnel(int row1, int col1, int row2, int col2)
 {
@@ -795,16 +807,23 @@ bool build_tunnel(int row1, int col1, int row2, int col2)
 }
 
 
-/*
- * This routine adds the square to the tunnel
- * It also checks for SOLID walls - and returns a nearby
- * non-SOLID square in (x,y) so that a simple avoiding
- * routine can be used. The returned boolean value reflects
- * whether or not this routine hit a SOLID wall.
- *
- * "affectwall" toggles whether or not this new square affects
- * the boundaries of rooms. - This is used by the catacomb
- * routine.
+/*!
+ * @brief トンネル生成のための基準点を指定する。
+ * @param x 基準点を指定するX座標の参照ポインタ、適時値が修正される。
+ * @param y 基準点を指定するY座標の参照ポインタ、適時値が修正される。
+ * @param affectwall (調査中)
+ * @return なし
+ * @details
+ * This routine adds the square to the tunnel\n
+ * It also checks for SOLID walls - and returns a nearby\n
+ * non-SOLID square in (x,y) so that a simple avoiding\n
+ * routine can be used. The returned boolean value reflects\n
+ * whether or not this routine hit a SOLID wall.\n
+ *\n
+ * "affectwall" toggles whether or not this new square affects\n
+ * the boundaries of rooms. - This is used by the catacomb\n
+ * routine.\n
+ * @todo 特に詳細な処理の意味を調査すべし
  */
 static bool set_tunnel(int *x, int *y, bool affectwall)
 {
@@ -915,8 +934,12 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
 }
 
 
-/*
- * This routine creates the catacomb-like tunnels by removing extra rock.
+/*!
+ * @brief 外壁を削って「カタコンベ状」の通路を作成する / This routine creates the catacomb-like tunnels by removing extra rock.
+ * @param x 基準点のX座標
+ * @param y 基準点のY座標
+ * @return なし
+ * @details
  * Note that this routine is only called on "even" squares - so it gives
  * a natural checkerboard pattern.
  */
@@ -943,24 +966,27 @@ static void create_cata_tunnel(int x, int y)
 }
 
 
-/*
- * This routine does the bulk of the work in creating the new types of tunnels.
- * It is designed to use very simple algorithms to go from (x1,y1) to (x2,y2)
- * It doesn't need to add any complexity - straight lines are fine.
- * The SOLID walls are avoided by a recursive algorithm which tries random ways
- * around the obstical until it works.  The number of itterations is counted, and it
- * this gets too large the routine exits. This should stop any crashes - but may leave
- * small gaps in the tunnel where there are too many SOLID walls.
- *
- * Type 1 tunnels are extremely simple - straight line from A to B.  This is only used
- * as a part of the dodge SOLID walls algorithm.
- *
- * Type 2 tunnels are made of two straight lines at right angles. When this is used with
- * short line segments it gives the "cavelike" tunnels seen deeper in the dungeon.
- *
- * Type 3 tunnels are made of two straight lines like type 2, but with extra rock removed.
- * This, when used with longer line segments gives the "catacomb-like" tunnels seen near
- * the surface.
+/*!
+ * @brief トンネル生成処理（詳細調査中）/ This routine does the bulk of the work in creating the new types of tunnels.
+ * @return なし
+ * @todo 詳細用調査
+ * @details
+ * It is designed to use very simple algorithms to go from (x1,y1) to (x2,y2)\n
+ * It doesn't need to add any complexity - straight lines are fine.\n
+ * The SOLID walls are avoided by a recursive algorithm which tries random ways\n
+ * around the obstical until it works.  The number of itterations is counted, and it\n
+ * this gets too large the routine exits. This should stop any crashes - but may leave\n
+ * small gaps in the tunnel where there are too many SOLID walls.\n
+ *\n
+ * Type 1 tunnels are extremely simple - straight line from A to B.  This is only used\n
+ * as a part of the dodge SOLID walls algorithm.\n
+ *\n
+ * Type 2 tunnels are made of two straight lines at right angles. When this is used with\n
+ * short line segments it gives the "cavelike" tunnels seen deeper in the dungeon.\n
+ *\n
+ * Type 3 tunnels are made of two straight lines like type 2, but with extra rock removed.\n
+ * This, when used with longer line segments gives the "catacomb-like" tunnels seen near\n
+ * the surface.\n
  */
 static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, bool *fail)
 {
@@ -1075,16 +1101,19 @@ static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, 
 }
 
 
-/*
- * This routine maps a path from (x1, y1) to (x2, y2) avoiding SOLID walls.
- * Permanent rock is ignored in this path finding- sometimes there is no
- * path around anyway -so there will be a crash if we try to find one.
- * This routine is much like the river creation routine in Zangband.
- * It works by dividing a line segment into two.  The segments are divided
- * until they are less than "cutoff" - when the corresponding routine from
- * "short_seg_hack" is called.
- * Note it is VERY important that the "stop if hit another passage" logic
- * stays as is.  Without this the dungeon turns into Swiss Cheese...
+/*!
+ * @brief 特定の壁(永久壁など)を避けながら部屋間の通路を作成する / This routine maps a path from (x1, y1) to (x2, y2) avoiding SOLID walls.
+ * @return なし
+ * @todo 詳細用調査
+ * @details
+ * Permanent rock is ignored in this path finding- sometimes there is no\n
+ * path around anyway -so there will be a crash if we try to find one.\n
+ * This routine is much like the river creation routine in Zangband.\n
+ * It works by dividing a line segment into two.  The segments are divided\n
+ * until they are less than "cutoff" - when the corresponding routine from\n
+ * "short_seg_hack" is called.\n
+ * Note it is VERY important that the "stop if hit another passage" logic\n
+ * stays as is.  Without this the dungeon turns into Swiss Cheese...\n
  */
 bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 {
