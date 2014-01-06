@@ -278,9 +278,12 @@ static bool alloc_stairs(int feat, int num, int walls)
 	return TRUE;
 }
 
-
-/*
- * Allocates some objects (using "place" and "type")
+/*!
+ * @brief フロア上のランダム位置に各種オブジェクトを配置する / Allocates some objects (using "place" and "type")
+ * @param set 配置したい地形の種類
+ * @param typ 配置したいオブジェクトの種類
+ * @param num 配置したい数
+ * @return 規定数通りに生成に成功したらTRUEを返す。
  */
 static void alloc_object(int set, int typ, int num)
 {
@@ -569,8 +572,10 @@ bool place_quest_monsters(void)
 }
 
 
-/*
- * Set boundary mimic and add "solid" perma-wall
+/*!
+ * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
+ * @param c_ptr 永久壁を廃止したいマス構造体の参照ポインタ
+ * @return なし
  */
 static void set_bound_perm_wall(cave_type *c_ptr)
 {
@@ -596,11 +601,10 @@ static void set_bound_perm_wall(cave_type *c_ptr)
 	place_solid_perm_grid(c_ptr);
 }
 
-
-/*
- * Generate various caverns and lakes
- *
- * There were moved from cave_gen().
+/*!
+ * @brief フロアに洞窟や湖を配置する / Generate various caverns and lakes
+ * @details There were moved from cave_gen().
+ * @return なし
  */
 static void gen_caverns_and_lakes(void)
 {
@@ -697,11 +701,10 @@ static void gen_caverns_and_lakes(void)
 }
 
 
-
-/*
- * Generate a new dungeon level
- *
- * Note that "dun_body" adds about 4000 bytes of memory to the stack.
+/*!
+ * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
+ * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
+ * @return ダンジョン生成が全て無事に成功したらTRUEを返す。
  */
 static bool cave_gen(void)
 {
@@ -1106,9 +1109,9 @@ msg_format("モンスター数基本値を %d から %d に減らします", small_tester, i);
 	return TRUE;
 }
 
-
-/*
- * Builds the arena after it is entered -KMW-
+/*!
+ * @brief 闘技場用のアリーナ地形を作成する / Builds the arena after it is entered -KMW-
+ * @return なし
  */
 static void build_arena(void)
 {
@@ -1163,9 +1166,9 @@ static void build_arena(void)
 	player_place(i, j);
 }
 
-
-/*
- * Town logic flow for generation of arena -KMW-
+/*!
+ * @brief 闘技場への入場処理 / Town logic flow for generation of arena -KMW-
+ * @return なし
  */
 static void arena_gen(void)
 {
@@ -1215,10 +1218,9 @@ static void arena_gen(void)
 
 }
 
-
-
-/*
- * Builds the arena after it is entered -KMW-
+/*!
+ * @brief モンスター闘技場のフロア生成 / Builds the arena after it is entered -KMW-
+ * @return なし
  */
 static void build_battle(void)
 {
@@ -1279,9 +1281,9 @@ static void build_battle(void)
 	player_place(i, j);
 }
 
-
-/*
- * Town logic flow for generation of arena -KMW-
+/*!
+ * @brief モンスター闘技場への導入処理 / Town logic flow for generation of arena -KMW-
+ * @return なし
  */
 static void battle_gen(void)
 {
@@ -1334,9 +1336,9 @@ static void battle_gen(void)
 	}
 }
 
-
-/*
- * Generate a quest level
+/*!
+ * @brief 固定マップクエストのフロア生成 / Generate a quest level
+ * @return なし
  */
 static void quest_gen(void)
 {
@@ -1368,7 +1370,10 @@ static void quest_gen(void)
 	process_dungeon_file("q_info.txt", 0, 0, MAX_HGT, MAX_WID);
 }
 
-/* Make a real level */
+/*!
+ * @brief ダンジョン時のランダムフロア生成 / Make a real level
+ * @return フロアの生成に成功したらTRUE
+ */
 static bool level_gen(cptr *why)
 {
 	int level_height, level_width;
@@ -1442,9 +1447,9 @@ static bool level_gen(cptr *why)
 	else return TRUE;
 }
 
-
-/*
- * Wipe all unnecessary flags after cave generation
+/*!
+ * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after cave generation
+ * @return なし
  */
 void wipe_generate_cave_flags(void)
 {
@@ -1472,9 +1477,9 @@ void wipe_generate_cave_flags(void)
 	}
 }
 
-
-/*
- *  Clear and empty the cave
+/*!
+ * @brief フロアの全情報を初期化する / Clear and empty the cave
+ * @return なし
  */
 void clear_cave(void)
 {
@@ -1543,10 +1548,10 @@ void clear_cave(void)
 }
 
 
-/*
- * Generates a random dungeon level			-RAK-
- *
- * Hack -- regenerate any "overflow" levels
+/*!
+ * ダンジョンのランダムフロアを生成する / Generates a random dungeon level -RAK-
+ * @return なし
+ * @note Hack -- regenerate any "overflow" levels
  */
 void generate_cave(void)
 {
