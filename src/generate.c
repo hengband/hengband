@@ -373,14 +373,15 @@ msg_print("警告！アイテムを配置できません！");
 	}
 }
 
-
-/*
- * Count the number of "corridor" grids adjacent to the given grid.
- *
- * Note -- Assumes "in_bounds(y1, x1)"
- *
- * XXX XXX This routine currently only counts actual "empty floor"
- * grids which are not in rooms.  We might want to also count stairs,
+/*!
+ * @brief 隣接4マスに存在する通路の数を返す / Count the number of "corridor" grids adjacent to the given grid.
+ * @param y1 基準となるマスのY座標
+ * @param x1 基準となるマスのX座標
+ * @return 通路の数
+ * @note Assumes "in_bounds(y1, x1)"
+ * @details
+ * XXX XXX This routine currently only counts actual "empty floor"\n
+ * grids which are not in rooms.  We might want to also count stairs,\n
  * open doors, closed doors, etc.
  */
 static int next_to_corr(int y1, int x1)
@@ -418,11 +419,15 @@ static int next_to_corr(int y1, int x1)
 }
 
 
-/*
- * Determine if the given location is "between" two walls,
- * and "next to" two corridor spaces.  XXX XXX XXX
- *
- * Assumes "in_bounds(y, x)"
+/*!
+ * @brief ドアを設置可能な地形かを返す / Determine if the given location is "between" two walls, and "next to" two corridor spaces.
+ * @param y 判定を行いたいマスのY座標
+ * @param x 判定を行いたいマスのX座標
+ * @return ドアを設置可能ならばTRUEを返す
+ * @note Assumes "in_bounds(y1, x1)"
+ * @details
+ * XXX XXX XXX\n
+ * Assumes "in_bounds(y, x)"\n
  */
 static bool possible_doorway(int y, int x)
 {
@@ -448,9 +453,11 @@ static bool possible_doorway(int y, int x)
 	return (FALSE);
 }
 
-
-/*
- * Places door at y, x position if at least 2 walls found
+/*!
+ * @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
+ * @param y 設置を行いたいマスのY座標
+ * @param x 設置を行いたいマスのX座標
+ * @return なし
  */
 static void try_door(int y, int x)
 {
@@ -472,7 +479,10 @@ static void try_door(int y, int x)
 }
 
 
-/* Place quest monsters */
+/*!
+ * @brief クエストに関わるモンスターの配置を行う / Place quest monsters
+ * @return 成功したならばTRUEを返す
+ */
 bool place_quest_monsters(void)
 {
 	int i;
