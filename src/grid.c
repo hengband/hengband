@@ -322,8 +322,13 @@ void place_room(int x1, int x2, int y1, int y2, bool light)
 }
 
 
-/*
- * Create up to "num" objects near the given coordinates
+/*!
+ * @brief 特殊な部屋向けに各種アイテムを配置する / Create up to "num" objects near the given coordinates
+ * @param y 配置したい中心マスのY座標
+ * @param x 配置したい中心マスのX座標
+ * @param num 配置したい数
+ * @return なし
+ * @details
  * Only really called by some of the "vault" routines.
  */
 void vault_objects(int y, int x, int num)
@@ -387,9 +392,15 @@ msg_print("警告！地下室のアイテムを配置できません！");
 	}
 }
 
-
-/*
- * Place a trap with a given displacement of point
+/*!
+ * @brief 特殊な部屋向けに各種アイテムを配置する(vault_trapのサブセット) / Place a trap with a given displacement of point
+ * @param y トラップを配置したいマスの中心Y座標
+ * @param x トラップを配置したいマスの中心X座標
+ * @param yd Y方向の配置分散マス数
+ * @param xd X方向の配置分散マス数
+ * @return なし
+ * @details
+ * Only really called by some of the "vault" routines.
  */
 void vault_trap_aux(int y, int x, int yd, int xd)
 {
@@ -436,9 +447,16 @@ msg_print("警告！地下室のトラップを配置できません！");
 	}
 }
 
-
-/*
- * Place some traps with a given displacement of given location
+/*!
+ * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
+ * @param y トラップを配置したいマスの中心Y座標
+ * @param x トラップを配置したいマスの中心X座標
+ * @param yd Y方向の配置分散マス数
+ * @param xd X方向の配置分散マス数
+ * @param num 配置したいトラップの数
+ * @return なし
+ * @details
+ * Only really called by some of the "vault" routines.
  */
 void vault_traps(int y, int x, int yd, int xd, int num)
 {
@@ -450,9 +468,14 @@ void vault_traps(int y, int x, int yd, int xd, int num)
 	}
 }
 
-
-/*
- * Hack -- Place some sleeping monsters near the given location
+/*!
+ * @brief 特殊な部屋地形向けにモンスターを配置する / Hack -- Place some sleeping monsters near the given location
+ * @param y1 モンスターを配置したいマスの中心Y座標
+ * @param x1 モンスターを配置したいマスの中心X座標
+ * @param num 配置したいモンスターの数
+ * @return なし
+ * @details
+ * Only really called by some of the "vault" routines.
  */
 void vault_monsters(int y1, int x1, int num)
 {
@@ -483,8 +506,15 @@ void vault_monsters(int y1, int x1, int num)
 }
 
 
-/*
- * Always picks a correct direction
+/*!
+ * @brief build_tunnel用に通路を掘るための方向を位置関係通りに決める / Always picks a correct direction
+ * @param rdir Y方向に取るべきベクトル値を返す参照ポインタ
+ * @param cdir X方向に取るべきベクトル値を返す参照ポインタ
+ * @param y1 始点Y座標
+ * @param x1 始点X座標
+ * @param y2 終点Y座標
+ * @param x2 終点X座標
+ * @return なし
  */
 void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2)
 {
@@ -502,9 +532,11 @@ void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2)
 	}
 }
 
-
-/*
- * Pick a random direction
+/*!
+ * @brief build_tunnel用に通路を掘るための方向をランダムに決める / Pick a random direction
+ * @param rdir Y方向に取るべきベクトル値を返す参照ポインタ
+ * @param cdir X方向に取るべきベクトル値を返す参照ポインタ
+ * @return なし
  */
 void rand_dir(int *rdir, int *cdir)
 {
