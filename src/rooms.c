@@ -1,14 +1,33 @@
-/*
- * File: rooms.c
- * Purpose: make rooms. Used by generate.c when creating dungeons.
- */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file rooms.c
+ * @brief ダンジョンフロアの部屋生成処理 / make rooms. Used by generate.c when creating dungeons.
+ * @date 2014/01/06
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen. \n
+ * @details
+ * Room building routines.\n
+ *\n
+ * Room types:\n
+ *   1 -- normal\n
+ *   2 -- overlapping\n
+ *   3 -- cross shaped\n
+ *   4 -- large room with features\n
+ *   5 -- monster nests\n
+ *   6 -- monster pits\n
+ *   7 -- simple vaults\n
+ *   8 -- greater vaults\n
+ *   9 -- fractal caves\n
+ *  10 -- random vaults\n
+ *  11 -- circular rooms\n
+ *  12 -- crypts\n
+ *  13 -- trapped monster pits\n
+ *  14 -- trapped room\n
+ *  15 -- glass room\n
+ *  16 -- underground arcade\n
  */
 
 #include "angband.h"
@@ -17,20 +36,21 @@
 #include "rooms.h"
 
 
-/*
- * [from SAngband (originally from OAngband)]
- *
- * Table of values that control how many times each type of room will
- * appear.  Each type of room has its own row, and each column
- * corresponds to dungeon levels 0, 10, 20, and so on.  The final
- * value is the minimum depth the room can appear at.  -LM-
- *
- * Level 101 and below use the values for level 100.
- *
- * Rooms with lots of monsters or loot may not be generated if the
- * object or monster lists are already nearly full.  Rooms will not
- * appear above their minimum depth.  Tiny levels will not have space
- * for all the rooms you ask for.
+/*!
+ * 各部屋タイプの生成比定義
+ *[from SAngband (originally from OAngband)]\n
+ *\n
+ * Table of values that control how many times each type of room will\n
+ * appear.  Each type of room has its own row, and each column\n
+ * corresponds to dungeon levels 0, 10, 20, and so on.  The final\n
+ * value is the minimum depth the room can appear at.  -LM-\n
+ *\n
+ * Level 101 and below use the values for level 100.\n
+ *\n
+ * Rooms with lots of monsters or loot may not be generated if the\n
+ * object or monster lists are already nearly full.  Rooms will not\n
+ * appear above their minimum depth.  Tiny levels will not have space\n
+ * for all the rooms you ask for.\n
  */
 static room_info_type room_info_normal[ROOM_T_MAX] =
 {
@@ -56,7 +76,7 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 };
 
 
-/* Build rooms in descending order of difficulty. */
+/*! 部屋の生成処理順 / Build rooms in descending order of difficulty. */
 static byte room_build_order[ROOM_T_MAX] = {
 	ROOM_T_GREATER_VAULT,
 	ROOM_T_ARCADE,
@@ -76,7 +96,12 @@ static byte room_build_order[ROOM_T_MAX] = {
 	ROOM_T_NORMAL,
 };
 
-
+/*!
+ * @brief 鍵のかかったドアを配置する
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @return なし
+ */
 static void place_locked_door(int y, int x)
 {
 	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
@@ -91,6 +116,13 @@ static void place_locked_door(int y, int x)
 	}
 }
 
+/*!
+ * @brief 隠しドアを配置する
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @param type #DOOR_DEFAULT / #DOOR_DOOR / #DOOR_GLASS_DOOR / #DOOR_CURTAIN のいずれか
+ * @return なし
+ */
 static void place_secret_door(int y, int x, int type)
 {
 	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
@@ -132,7 +164,11 @@ static void place_secret_door(int y, int x, int type)
 	}
 }
 
-/*
+/*!
+ * @brief 1マスだけの部屋を作成し、上下左右いずれか一つに隠しドアを配置する。
+ * @param y0 配置したい中心のY座標
+ * @param x0 配置したい中心のX座標
+ * @details
  * This funtion makes a very small room centred at (x0, y0)
  * This is used in crypts, and random elemental vaults.
  *
@@ -171,10 +207,15 @@ static void build_small_room(int x0, int y0)
 	place_floor_bold(y0, x0);
 }
 
-
-/*
- * This function tunnels around a room if
- * it will cut off part of a cave system.
+/*!
+ * @brief
+ * 指定範囲に通路が通っていることを確認した上で床で埋める
+ * This function tunnels around a room if it will cut off part of a cave system.
+ * @param x1 範囲の左端
+ * @param y1 範囲の上端
+ * @param x2 範囲の右端
+ * @param y2 範囲の下端
+ * @return なし
  */
 static void check_room_boundary(int x1, int y1, int x2, int y2)
 {
@@ -252,10 +293,15 @@ static void check_room_boundary(int x1, int y1, int x2, int y2)
 }
 
 
-/*
- *  Helper function for find_space().
- *
- *  Is this a good location?
+/*!
+ * @brief
+ * find_space()の予備処理として部屋の生成が可能かを判定する /
+ * Helper function for find_space(). Is this a good location?
+ * @param block_high 範囲の高さ
+ * @param block_wide 範囲の幅
+ * @param block_y 範囲の上端
+ * @param block_x 範囲の左端
+ * @return なし
  */
 static bool find_space_aux(int blocks_high, int blocks_wide, int block_y, int block_x)
 {
@@ -328,20 +374,24 @@ static bool find_space_aux(int blocks_high, int blocks_wide, int block_y, int bl
 }
 
 
-/*
- * Find a good spot for the next room.  -LM-
- *
- * Find and allocate a free space in the dungeon large enough to hold
- * the room calling this function.
- *
- * We allocate space in 11x11 blocks, but want to make sure that rooms
- * align neatly on the standard screen.  Therefore, we make them use
- * blocks in few 11x33 rectangles as possible.
- *
- * Be careful to include the edges of the room in height and width!
- *
- * Return TRUE and values for the center of the room if all went well.
- * Otherwise, return FALSE.
+/*!
+ * @brief 部屋生成が可能なスペースを確保する / Find a good spot for the next room.  -LM-
+ * @param y 部屋の生成が可能な中心Y座標を返す参照ポインタ
+ * @param x 部屋の生成が可能な中心X座標を返す参照ポインタ
+ * @param height 確保したい領域の高さ
+ * @param width 確保したい領域の幅
+ * @details
+ * Find and allocate a free space in the dungeon large enough to hold\n
+ * the room calling this function.\n
+ *\n
+ * We allocate space in 11x11 blocks, but want to make sure that rooms\n
+ * align neatly on the standard screen.  Therefore, we make them use\n
+ * blocks in few 11x33 rectangles as possible.\n
+ *\n
+ * Be careful to include the edges of the room in height and width!\n
+ *\n
+ * Return TRUE and values for the center of the room if all went well.\n
+ * Otherwise, return FALSE.\n
  */
 static bool find_space(int *y, int *x, int height, int width)
 {
@@ -457,29 +507,6 @@ static bool find_space(int *y, int *x, int height, int width)
 	return TRUE;
 }
 
-
-
-/*
- * Room building routines.
- *
- * Room types:
- *   1 -- normal
- *   2 -- overlapping
- *   3 -- cross shaped
- *   4 -- large room with features
- *   5 -- monster nests
- *   6 -- monster pits
- *   7 -- simple vaults
- *   8 -- greater vaults
- *   9 -- fractal caves
- *  10 -- random vaults
- *  11 -- circular rooms
- *  12 -- crypts
- *  13 -- trapped monster pits
- *  14 -- trapped room
- *  15 -- glass room
- *  16 -- underground arcade
- */
 
 
 /*
