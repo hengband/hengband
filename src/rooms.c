@@ -515,7 +515,6 @@ static bool find_space(int *y, int *x, int height, int width)
 }
 
 
-
 /*!
  * @brief タイプ1の部屋…通常可変長方形の部屋を生成する / Type 1 -- normal rectangular rooms
  * @return なし
@@ -2072,7 +2071,7 @@ static vault_aux_type pit_types[] =
 };
 
 
-/* Nest types code */
+/*! nestのID定義 /  Nest types code */
 #define NEST_TYPE_CLONE        0
 #define NEST_TYPE_JELLY        1
 #define NEST_TYPE_SYMBOL_GOOD  2
@@ -2084,7 +2083,7 @@ static vault_aux_type pit_types[] =
 #define NEST_TYPE_CHAPEL       8
 #define NEST_TYPE_UNDEAD       9
 
-/* Pit types code */
+/*! pitのID定義 / Pit types code */
 #define PIT_TYPE_ORC           0
 #define PIT_TYPE_TROLL         1
 #define PIT_TYPE_GIANT         2
@@ -2097,7 +2096,12 @@ static vault_aux_type pit_types[] =
 #define PIT_TYPE_DARK_ELF      9
 
 
-/*
+/*!
+ * @brief デバッグ時に生成されたpit/nestの型を出力する処理
+ * @param type pit/nestの型ID
+ * @param nest TRUEならばnest、FALSEならばpit
+ * @return デバッグ表示文字列の参照ポインタ
+ * @details
  * Hack -- Get the string describing subtype of pit/nest
  * Determined in prepare function (some pit/nest only)
  */
@@ -2159,7 +2163,7 @@ static cptr pit_subtype_string(int type, bool nest)
 }
 
 
-/* A struct for nest monster information with cheat_hear */
+/*! デバッグ時にnestのモンスター情報を確認するための構造体 / A struct for nest monster information with cheat_hear */
 typedef struct
 {
 	s16b r_idx;
@@ -2169,7 +2173,12 @@ nest_mon_info_type;
 
 
 /*
- * Comp function for sorting nest monster information
+ *! @brief nestのモンスターリストをソートするための関数 /
+ *  Comp function for sorting nest monster information
+ *  @param u ソート処理対象配列ポインタ
+ *  @param v 未使用
+ *  @param a 比較対象参照ID1
+ *  @param b 比較対象参照ID2
  */
 static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 {
@@ -2203,9 +2212,13 @@ static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 	return w1 <= w2;
 }
 
-
-/*
+/*!
+ * @brief nestのモンスターリストをスワップするための関数 /
  * Swap function for sorting nest monster information
+ * @param u スワップ処理対象配列ポインタ
+ * @param v 未使用
+ * @param a スワップ対象参照ID1
+ * @param b スワップ対象参照ID2
  */
 static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
 {
@@ -2222,26 +2235,28 @@ static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
 }
 
 
-#define NUM_NEST_MON_TYPE 64
+#define NUM_NEST_MON_TYPE 64 /*!<nestの種別数 */
 
-/*
- * Type 5 -- Monster nests
- *
- * A monster nest is a "big" room, with an "inner" room, containing
- * a "collection" of monsters of a given type strewn about the room.
- *
- * The monsters are chosen from a set of 64 randomly selected monster
- * races, to allow the nest creation to fail instead of having "holes".
- *
- * Note the use of the "get_mon_num_prep()" function, and the special
- * "get_mon_num_hook()" restriction function, to prepare the "monster
- * allocation table" in such a way as to optimize the selection of
- * "appropriate" non-unique monsters for the nest.
- *
- * Note that the "get_mon_num()" function may (rarely) fail, in which
- * case the nest will be empty.
- *
- * Note that "monster nests" will never contain "unique" monsters.
+
+/*!
+ * @brief タイプ5の部屋…nestを生成する / Type 5 -- Monster nests
+ * @return なし
+ * @details
+ * A monster nest is a "big" room, with an "inner" room, containing\n
+ * a "collection" of monsters of a given type strewn about the room.\n
+ *\n
+ * The monsters are chosen from a set of 64 randomly selected monster\n
+ * races, to allow the nest creation to fail instead of having "holes".\n
+ *\n
+ * Note the use of the "get_mon_num_prep()" function, and the special\n
+ * "get_mon_num_hook()" restriction function, to prepare the "monster\n
+ * allocation table" in such a way as to optimize the selection of\n
+ * "appropriate" non-unique monsters for the nest.\n
+ *\n
+ * Note that the "get_mon_num()" function may (rarely) fail, in which\n
+ * case the nest will be empty.\n
+ *\n
+ * Note that "monster nests" will never contain "unique" monsters.\n
  */
 static bool build_type5(void)
 {
@@ -2426,41 +2441,42 @@ static bool build_type5(void)
 }
 
 
-/*
- * Type 6 -- Monster pits
- *
- * A monster pit is a "big" room, with an "inner" room, containing
- * a "collection" of monsters of a given type organized in the room.
- *
- * The inside room in a monster pit appears as shown below, where the
- * actual monsters in each location depend on the type of the pit
- *
- *   #####################
- *   #0000000000000000000#
- *   #0112233455543322110#
- *   #0112233467643322110#
- *   #0112233455543322110#
- *   #0000000000000000000#
- *   #####################
- *
- * Note that the monsters in the pit are now chosen by using "get_mon_num()"
- * to request 16 "appropriate" monsters, sorting them by level, and using
- * the "even" entries in this sorted list for the contents of the pit.
- *
- * Hack -- all of the "dragons" in a "dragon" pit must be the same "color",
- * which is handled by requiring a specific "breath" attack for all of the
- * dragons.  This may include "multi-hued" breath.  Note that "wyrms" may
- * be present in many of the dragon pits, if they have the proper breath.
- *
- * Note the use of the "get_mon_num_prep()" function, and the special
- * "get_mon_num_hook()" restriction function, to prepare the "monster
- * allocation table" in such a way as to optimize the selection of
- * "appropriate" non-unique monsters for the pit.
- *
- * Note that the "get_mon_num()" function may (rarely) fail, in which case
- * the pit will be empty.
- *
- * Note that "monster pits" will never contain "unique" monsters.
+/*!
+ * @brief タイプ6の部屋…pitを生成する / Type 6 -- Monster pits
+ * @return なし
+ * @details
+ * A monster pit is a "big" room, with an "inner" room, containing\n
+ * a "collection" of monsters of a given type organized in the room.\n
+ *\n
+ * The inside room in a monster pit appears as shown below, where the\n
+ * actual monsters in each location depend on the type of the pit\n
+ *\n
+ *   #####################\n
+ *   #0000000000000000000#\n
+ *   #0112233455543322110#\n
+ *   #0112233467643322110#\n
+ *   #0112233455543322110#\n
+ *   #0000000000000000000#\n
+ *   #####################\n
+ *\n
+ * Note that the monsters in the pit are now chosen by using "get_mon_num()"\n
+ * to request 16 "appropriate" monsters, sorting them by level, and using\n
+ * the "even" entries in this sorted list for the contents of the pit.\n
+ *\n
+ * Hack -- all of the "dragons" in a "dragon" pit must be the same "color",\n
+ * which is handled by requiring a specific "breath" attack for all of the\n
+ * dragons.  This may include "multi-hued" breath.  Note that "wyrms" may\n
+ * be present in many of the dragon pits, if they have the proper breath.\n
+ *\n
+ * Note the use of the "get_mon_num_prep()" function, and the special\n
+ * "get_mon_num_hook()" restriction function, to prepare the "monster\n
+ * allocation table" in such a way as to optimize the selection of\n
+ * "appropriate" non-unique monsters for the pit.\n
+ *\n
+ * Note that the "get_mon_num()" function may (rarely) fail, in which case\n
+ * the pit will be empty.\n
+ *\n
+ * Note that "monster pits" will never contain "unique" monsters.\n
  */
 static bool build_type6(void)
 {
@@ -2691,7 +2707,15 @@ static bool build_type6(void)
 }
 
 
-/* coordinate translation code */
+/*!
+ * @brief Vault地形を回転、上下左右反転するための座標変換を返す / coordinate translation code
+ * @param x 変換したい点のX座標参照ポインタ
+ * @param y 変換したい点のY座標参照ポインタ
+ * @param xoffset Vault生成時の基準X座標
+ * @param yoffset Vault生成時の基準Y座標
+ * @param transno 処理ID
+ * @return なし
+ */
 static void coord_trans(int *x, int *y, int xoffset, int yoffset, int transno)
 {
 	int i;
@@ -2725,9 +2749,17 @@ static void coord_trans(int *x, int *y, int xoffset, int yoffset, int transno)
 	*y += yoffset;
 }
 
-
-/*
- * Hack -- fill in "vault" rooms
+/*!
+ * @brief Vaultをフロアに配置する / Hack -- fill in "vault" rooms
+ * @param yval 生成基準Y座標
+ * @param xval 生成基準X座標
+ * @param ymax VaultのYサイズ
+ * @param xmax VaultのXサイズ
+ * @param data Vaultのデータ文字列
+ * @param xoffset 変換基準X座標
+ * @param yoffset 変換基準Y座標
+ * @param transno 変換ID
+ * @return なし
  */
 static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 		int xoffset, int yoffset, int transno)
@@ -2987,8 +3019,9 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
 }
 
 
-/*
- * Type 7 -- simple vaults (see "v_info.txt")
+/*!
+ * @brief タイプ7の部屋…v_info.txtより小型vaultを生成する / Type 7 -- simple vaults (see "v_info.txt")
+ * @return なし
  */
 static bool build_type7(void)
 {
@@ -3078,9 +3111,9 @@ static bool build_type7(void)
 	return TRUE;
 }
 
-
-/*
- * Type 8 -- greater vaults (see "v_info.txt")
+/*!
+ * @brief タイプ8の部屋…v_info.txtより大型vaultを生成する / Type 8 -- greater vaults (see "v_info.txt")
+ * @return なし
  */
 static bool build_type8(void)
 {
