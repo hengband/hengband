@@ -28,6 +28,12 @@
  *  14 -- trapped room\n
  *  15 -- glass room\n
  *  16 -- underground arcade\n
+ *\n
+ * Some functions are used to determine if the given monster\n
+ * is appropriate for inclusion in a monster nest or monster pit or\n
+ * the given type.\n
+ *\n
+ * None of the pits/nests are allowed to include "unique" monsters.\n
  */
 
 #include "angband.h"
@@ -1409,17 +1415,9 @@ static bool build_type4(void)
 }
 
 
-/*
- * The following functions are used to determine if the given monster
- * is appropriate for inclusion in a monster nest or monster pit or
- * the given type.
- *
- * None of the pits/nests are allowed to include "unique" monsters.
- */
 
-
-/*
- * Monster validation macro
+/*!
+ * vaultに配置可能なモンスターの条件を指定するマクロ / Monster validation macro
  *
  * Line 1 -- forbid town monsters
  * Line 2 -- forbid uniques
@@ -1433,18 +1431,21 @@ static bool build_type4(void)
 	 !(r_info[I].flags7 & RF7_AQUATIC))
 
 
-/* Race index for "monster pit (clone)" */
+/*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */
 static int vault_aux_race;
 
-/* Race index for "monster pit (symbol clone)" */
+/*! 単一シンボルpit生成時の指定シンボル / Race index for "monster pit (symbol clone)" */
 static char vault_aux_char;
 
-/* Breath mask for "monster pit (dragon)" */
+/*! ブレス属性に基づくドラゴンpit生成時条件マスク / Breath mask for "monster pit (dragon)" */
 static u32b vault_aux_dragon_mask4;
 
 
-/*
+/*!
+ * @brief モンスターがVault生成の最低必要条件を満たしているかを返す /
  * Helper monster selection function
+ * @param r_idx 確認したいモンスター種族ID
+ * @return Vault生成の最低必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_simple(int r_idx)
 {
@@ -1453,8 +1454,11 @@ static bool vault_aux_simple(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターがゼリーnestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (jelly)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_jelly(int r_idx)
 {
@@ -1475,9 +1479,11 @@ static bool vault_aux_jelly(int r_idx)
 	return (TRUE);
 }
 
-
-/*
+/*!
+ * @brief モンスターが動物nestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (animal)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_animal(int r_idx)
 {
@@ -1494,8 +1500,11 @@ static bool vault_aux_animal(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターがアンデッドnestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (undead)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_undead(int r_idx)
 {
@@ -1511,9 +1520,11 @@ static bool vault_aux_undead(int r_idx)
 	return (TRUE);
 }
 
-
-/*
+/*!
+ * @brief モンスターが聖堂nestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (chapel)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_chapel_g(int r_idx)
 {
@@ -1543,9 +1554,11 @@ static bool vault_aux_chapel_g(int r_idx)
 	return FALSE;
 }
 
-
-/*
+/*!
+ * @brief モンスターが犬小屋nestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (kennel)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_kennel(int r_idx)
 {
@@ -1561,9 +1574,11 @@ static bool vault_aux_kennel(int r_idx)
 	return (TRUE);
 }
 
-
-/*
+/*!
+ * @brief モンスターがミミックnestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (mimic)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_mimic(int r_idx)
 {
@@ -1579,8 +1594,11 @@ static bool vault_aux_mimic(int r_idx)
 	return (TRUE);
 }
 
-/*
+/*!
+ * @brief モンスターが単一クローンnestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (clone)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_clone(int r_idx)
 {
@@ -1591,8 +1609,11 @@ static bool vault_aux_clone(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターが邪悪属性シンボルクローンnestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (symbol clone)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_symbol_e(int r_idx)
 {
@@ -1613,8 +1634,11 @@ static bool vault_aux_symbol_e(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターが善良属性シンボルクローンnestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (symbol clone)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_symbol_g(int r_idx)
 {
@@ -1635,8 +1659,11 @@ static bool vault_aux_symbol_g(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターがオークpitの生成必要条件を満たしているかを返す /
  * Helper function for "monster pit (orc)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_orc(int r_idx)
 {
@@ -1656,8 +1683,11 @@ static bool vault_aux_orc(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターがトロルpitの生成必要条件を満たしているかを返す /
  * Helper function for "monster pit (troll)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_troll(int r_idx)
 {
@@ -1677,8 +1707,11 @@ static bool vault_aux_troll(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターが巨人pitの生成必要条件を満たしているかを返す /
  * Helper function for "monster pit (giant)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_giant(int r_idx)
 {
@@ -1700,8 +1733,11 @@ static bool vault_aux_giant(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターがドラゴンpitの生成必要条件を満たしているかを返す /
  * Helper function for "monster pit (dragon)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_dragon(int r_idx)
 {
@@ -1724,8 +1760,11 @@ static bool vault_aux_dragon(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターが悪魔pitの生成必要条件を満たしているかを返す /
  * Helper function for "monster pit (demon)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_demon(int r_idx)
 {
@@ -1744,8 +1783,11 @@ static bool vault_aux_demon(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターが狂気pitの生成必要条件を満たしているかを返す /
  * Helper function for "monster pit (lovecraftian)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_cthulhu(int r_idx)
 {
@@ -1764,8 +1806,9 @@ static bool vault_aux_cthulhu(int r_idx)
 }
 
 
-/*
- * Helper function for "monster pit (clone)"
+/*!
+ * @brief pit/nestの基準となる単種モンスターを決める /
+ * @return なし
  */
 static void vault_prep_clone(void)
 {
@@ -1780,8 +1823,9 @@ static void vault_prep_clone(void)
 }
 
 
-/*
- * Helper function for "monster pit (symbol clone)"
+/*!
+ * @brief pit/nestの基準となるモンスターシンボルを決める /
+ * @return なし
  */
 static void vault_prep_symbol(void)
 {
@@ -1800,9 +1844,9 @@ static void vault_prep_symbol(void)
 	vault_aux_char = r_info[r_idx].d_char;
 }
 
-
-/*
- * Helper function for "monster pit (dragon)"
+/*!
+ * @brief pit/nestの基準となるドラゴンの種類を決める /
+ * @return なし
  */
 static void vault_prep_dragon(void)
 {
@@ -1874,8 +1918,11 @@ static void vault_prep_dragon(void)
 }
 
 
-/*
+/*!
+ * @brief モンスターがダークエルフpitの生成必要条件を満たしているかを返す /
  * Helper function for "monster pit (dark elf)"
+ * @param r_idx 確認したいモンスター種族ID
+ * @return 生成必要条件を満たしているならTRUEを返す。
  */
 static bool vault_aux_dark_elf(int r_idx)
 {
@@ -1898,10 +1945,10 @@ static bool vault_aux_dark_elf(int r_idx)
 	return FALSE;
 }
 
-
+/*! pit/nest型情報のtypedef */
 typedef struct vault_aux_type vault_aux_type;
 
-
+/*! pit/nest型情報の構造体定義 */
 struct vault_aux_type
 {
 	cptr name;
@@ -1911,7 +1958,12 @@ struct vault_aux_type
 	int chance;
 };
 
-
+/*!
+ * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める
+ * @param l_ptr 選択されたpit/nest情報を返す参照ポインタ
+ * @param allow_flag_mask 生成が許されるpit/nestのビット配列
+ * @return 選択されたpit/nestのID、選択失敗した場合-1を返す。
+ */
 static int pick_vault_type(vault_aux_type *l_ptr, s16b allow_flag_mask)
 {
 	int tmp, total, count;
@@ -1959,6 +2011,7 @@ static int pick_vault_type(vault_aux_type *l_ptr, s16b allow_flag_mask)
 	return n_ptr->name ? count : -1;
 }
 
+/*!nest情報テーブル*/
 static vault_aux_type nest_types[] =
 {
 #ifdef JP
@@ -1988,6 +2041,7 @@ static vault_aux_type nest_types[] =
 #endif
 };
 
+/*!pit情報テーブル*/
 static vault_aux_type pit_types[] =
 {
 #ifdef JP
