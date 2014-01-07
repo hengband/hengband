@@ -3854,8 +3854,9 @@ static bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, b
 }
 
 
-/*
- * Driver routine to create fractal cave system
+/*!
+ * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal cave system
+ * @return なし
  */
 static bool build_type9(void)
 {
@@ -5495,8 +5496,9 @@ static void build_elemental_vault(int x0, int y0, int xsiz, int ysiz)
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
 
-/*
- * Random vaults
+/*!
+ * @brief タイプ10の部屋…ランダム生成vault / Type 10 -- Random vaults
+ * @return なし
  */
 static bool build_type10(void)
 {
@@ -5550,12 +5552,14 @@ static bool build_type10(void)
 }
 
 
-/*
- * Build an vertical oval room.
- * For every grid in the possible square, check the distance.
- * If it's less than the radius, make it a room square.
- *
- * When done fill from the inside to find the walls,
+/*!
+ * @brief タイプ11の部屋…円形部屋の生成 / Type 11 -- Build an vertical oval room.
+ * @return なし
+ * @details
+ * For every grid in the possible square, check the distance.\n
+ * If it's less than the radius, make it a room square.\n
+ *\n
+ * When done fill from the inside to find the walls,\n
  */
 static bool build_type11(void)
 {
@@ -5595,12 +5599,14 @@ static bool build_type11(void)
 }
 
 
-/*
- * Build crypt room.
- * For every grid in the possible square, check the (fake) distance.
- * If it's less than the radius, make it a room square.
- *
- * When done fill from the inside to find the walls,
+/*!
+ * @brief タイプ12の部屋…ドーム型部屋の生成 / Type 12 -- Build crypt room.
+ * @return なし
+ * @details
+ * For every grid in the possible square, check the (fake) distance.\n
+ * If it's less than the radius, make it a room square.\n
+ *\n
+ * When done fill from the inside to find the walls,\n
  */
 static bool build_type12(void)
 {
@@ -5709,49 +5715,50 @@ static bool vault_aux_trapped_pit(int r_idx)
 }
 
 
-/*
- * Type 13 -- Trapped monster pits
- *
- * A trapped monster pit is a "big" room with a straight corridor in
- * which wall opening traps are placed, and with two "inner" rooms
- * containing a "collection" of monsters of a given type organized in
- * the room.
- *
- * The trapped monster pit appears as shown below, where the actual
- * monsters in each location depend on the type of the pit
- *
- *  #########################
- *  #                       #
- *  ####################### #
- *  #####001123454321100### #
- *  ###0012234567654322100# #
- *  ####################### #
- *  #           ^           #
- *  # #######################
- *  # #0012234567654322100###
- *  # ###001123454321100#####
- *  # #######################
- *  #                       #
- *  #########################
- *
- * Note that the monsters in the pit are now chosen by using "get_mon_num()"
- * to request 16 "appropriate" monsters, sorting them by level, and using
- * the "even" entries in this sorted list for the contents of the pit.
- *
- * Hack -- all of the "dragons" in a "dragon" pit must be the same "color",
- * which is handled by requiring a specific "breath" attack for all of the
- * dragons.  This may include "multi-hued" breath.  Note that "wyrms" may
- * be present in many of the dragon pits, if they have the proper breath.
- *
- * Note the use of the "get_mon_num_prep()" function, and the special
- * "get_mon_num_hook()" restriction function, to prepare the "monster
- * allocation table" in such a way as to optimize the selection of
- * "appropriate" non-unique monsters for the pit.
- *
- * Note that the "get_mon_num()" function may (rarely) fail, in which case
- * the pit will be empty.
- *
- * Note that "monster pits" will never contain "unique" monsters.
+/*!
+ * @brief タイプ13の部屋…トラップpitの生成 / Type 13 -- Trapped monster pits
+ * @return なし
+ * @details
+ * A trapped monster pit is a "big" room with a straight corridor in\n
+ * which wall opening traps are placed, and with two "inner" rooms\n
+ * containing a "collection" of monsters of a given type organized in\n
+ * the room.\n
+ *\n
+ * The trapped monster pit appears as shown below, where the actual\n
+ * monsters in each location depend on the type of the pit\n
+ *\n
+ *  #########################\n
+ *  #                       #\n
+ *  ####################### #\n
+ *  #####001123454321100### #\n
+ *  ###0012234567654322100# #\n
+ *  ####################### #\n
+ *  #           ^           #\n
+ *  # #######################\n
+ *  # #0012234567654322100###\n
+ *  # ###001123454321100#####\n
+ *  # #######################\n
+ *  #                       #\n
+ *  #########################\n
+ *\n
+ * Note that the monsters in the pit are now chosen by using "get_mon_num()"\n
+ * to request 16 "appropriate" monsters, sorting them by level, and using\n
+ * the "even" entries in this sorted list for the contents of the pit.\n
+ *\n
+ * Hack -- all of the "dragons" in a "dragon" pit must be the same "color",\n
+ * which is handled by requiring a specific "breath" attack for all of the\n
+ * dragons.  This may include "multi-hued" breath.  Note that "wyrms" may\n
+ * be present in many of the dragon pits, if they have the proper breath.\n
+ *\n
+ * Note the use of the "get_mon_num_prep()" function, and the special\n
+ * "get_mon_num_hook()" restriction function, to prepare the "monster\n
+ * allocation table" in such a way as to optimize the selection of\n
+ * "appropriate" non-unique monsters for the pit.\n
+ *\n
+ * Note that the "get_mon_num()" function may (rarely) fail, in which case\n
+ * the pit will be empty.\n
+ *\n
+ * Note that "monster pits" will never contain "unique" monsters.\n
  */
 static bool build_type13(void)
 {
@@ -6001,9 +6008,10 @@ static bool build_type13(void)
 }
 
 
-/*
- * Type 14 -- trapped rooms
- *
+/*!
+ * @brief タイプ14の部屋…特殊トラップ部屋の生成 / Type 14 -- trapped rooms
+ * @return なし
+ * @details
  * A special trap is placed at center of the room
  */
 static bool build_type14(void)
@@ -6137,8 +6145,9 @@ static bool kind_is_potion(int k_idx)
 	return k_info[k_idx].tval == TV_POTION;
 }
 
-/*
- * Type 15 -- glass rooms
+/*!
+ * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms
+ * @return なし
  */
 static bool build_type15(void)
 {
@@ -6591,18 +6600,19 @@ static void build_stores(int ltcy, int ltcx, int stores[], int n)
 }
 
 
-/*
- * Type 16 -- Underground Arcade
- *
- * Town logic flow for generation of new town
- * Originally from Vanilla 3.0.3
- *
- * We start with a fully wiped cave of normal floors.
- *
- * Note that town_gen_hack() plays games with the R.N.G.
- *
- * This function does NOT do anything about the owners of the stores,
- * nor the contents thereof.  It only handles the physical layout.
+/*!
+ * @brief タイプ16の部屋…地下都市の生成 / Type 16 -- Underground Arcade
+ * @return なし
+ * @details
+ * Town logic flow for generation of new town\n
+ * Originally from Vanilla 3.0.3\n
+ *\n
+ * We start with a fully wiped cave of normal floors.\n
+ *\n
+ * Note that town_gen_hack() plays games with the R.N.G.\n
+ *\n
+ * This function does NOT do anything about the owners of the stores,\n
+ * nor the contents thereof.  It only handles the physical layout.\n
  */
 static bool build_type16(void)
 {
