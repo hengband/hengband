@@ -380,6 +380,7 @@ static bool find_space_aux(int blocks_high, int blocks_wide, int block_y, int bl
  * @param x 部屋の生成が可能な中心X座標を返す参照ポインタ
  * @param height 確保したい領域の高さ
  * @param width 確保したい領域の幅
+ * @return 所定の範囲が確保できた場合TRUEを返す
  * @details
  * Find and allocate a free space in the dungeon large enough to hold\n
  * the room calling this function.\n
@@ -509,8 +510,9 @@ static bool find_space(int *y, int *x, int height, int width)
 
 
 
-/*
- * Type 1 -- normal rectangular rooms
+/*!
+ * @brief タイプ1の部屋…通常可変長方形の部屋を生成する / Type 1 -- normal rectangular rooms
+ * @return なし
  */
 static bool build_type1(void)
 {
@@ -703,9 +705,9 @@ static bool build_type1(void)
 	return TRUE;
 }
 
-
-/*
- * Type 2 -- Overlapping rectangular rooms
+/*!
+ * @brief タイプ2の部屋…二重長方形の部屋を生成する / Type 2 -- Overlapping rectangular rooms
+ * @return なし
  */
 static bool build_type2(void)
 {
@@ -818,17 +820,18 @@ static bool build_type2(void)
 
 
 
-/*
- * Type 3 -- Cross shaped rooms
- *
- * Builds a room at a row, column coordinate
- *
- * Room "a" runs north/south, and Room "b" runs east/east
- * So the "central pillar" runs from x1a, y1b to x2a, y2b.
- *
- * Note that currently, the "center" is always 3x3, but I think that
- * the code below will work (with "bounds checking") for 5x5, or even
- * for unsymetric values like 4x3 or 5x3 or 3x4 or 3x5, or even larger.
+/*!
+ * @brief タイプ2の部屋…十字型の部屋を生成する / Type 3 -- Cross shaped rooms
+ * @return なし
+ * @details
+ * Builds a room at a row, column coordinate\n
+ *\n
+ * Room "a" runs north/south, and Room "b" runs east/east\n
+ * So the "central pillar" runs from x1a, y1b to x2a, y2b.\n
+ *\n
+ * Note that currently, the "center" is always 3x3, but I think that\n
+ * the code below will work (with "bounds checking") for 5x5, or even\n
+ * for unsymetric values like 4x3 or 5x3 or 3x4 or 3x5, or even larger.\n
  */
 static bool build_type3(void)
 {
@@ -1077,15 +1080,16 @@ static bool build_type3(void)
 }
 
 
-/*
- * Type 4 -- Large room with inner features
- *
- * Possible sub-types:
- *	1 - Just an inner room with one door
- *	2 - An inner room within an inner room
- *	3 - An inner room with pillar(s)
- *	4 - Inner room has a maze
- *	5 - A set of four inner rooms
+/*!
+ * @brief タイプ4の部屋…固定サイズの二重構造部屋を生成する / Type 4 -- Large room with inner features
+ * @return なし
+ * @details
+ * Possible sub-types:\n
+ *	1 - Just an inner room with one door\n
+ *	2 - An inner room within an inner room\n
+ *	3 - An inner room with pillar(s)\n
+ *	4 - Inner room has a maze\n
+ *	5 - A set of four inner rooms\n
  */
 static bool build_type4(void)
 {
