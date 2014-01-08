@@ -1,19 +1,22 @@
-/* File: racial.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file racial.c
+ * @brief レイシャルと突然変異の技能処理 / Racial powers (and mutations)
+ * @date 2014/01/08
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen. \n
  */
-
-/* Purpose: Racial powers (and mutations) */
 
 #include "angband.h"
 
 /*
+ * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/
  * Hook to determine if an object is contertible in an arrow/bolt
+ * @param o_ptr オブジェクトの構造体の参照ポインタ。
+ * @return 材料にできるならTRUEを返す
  */
 static bool item_tester_hook_convertible(object_type *o_ptr)
 {
@@ -24,10 +27,10 @@ static bool item_tester_hook_convertible(object_type *o_ptr)
 	return (FALSE);
 }
 
-
 /*
- * do_cmd_cast calls this function if the player's class
- * is 'archer'.
+ * @brief レイシャル「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.
+ * Hook to determine if an object is contertible in an arrow/bolt
+ * @return 製造を実際に行ったらTRUE、キャンセルしたらFALSEを返す
  */
 static bool do_cmd_archer(void)
 {
@@ -304,6 +307,10 @@ static bool do_cmd_archer(void)
 	return TRUE;
 }
 
+/*
+ * @brief 魔道具術師の魔力取り込み処理
+ * @return 取り込みを実行したらTRUE、キャンセルしたらFALSEを返す
+ */
 bool gain_magic(void)
 {
 	int item;
@@ -430,7 +437,10 @@ s = "魔力を取り込めるアイテムがない。";
 	return TRUE;
 }
 
-
+/*
+ * @brief 魔法系コマンドを実行できるかの判定を返す
+ * @return 魔法系コマンドを使用可能ならTRUE、不可能ならば理由をメッセージ表示してFALSEを返す。
+ */
 static bool can_do_cmd_cast(void)
 {
 	if (dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
@@ -465,7 +475,10 @@ static bool can_do_cmd_cast(void)
 		return TRUE;
 }
 
-
+/*
+ * @brief 修行僧の構え設定処理
+ * @return 構えを変化させたらTRUE、構え不能かキャンセルしたらFALSEを返す。
+ */
 static bool choose_kamae(void)
 {
 	char choice;
@@ -580,6 +593,10 @@ static bool choose_kamae(void)
 	return TRUE;
 }
 
+/*
+ * @brief 剣術家の型設定処理
+ * @return 型を変化させたらTRUE、型の構え不能かキャンセルしたらFALSEを返す。
+ */
 static bool choose_kata(void)
 {
 	char choice;

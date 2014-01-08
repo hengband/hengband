@@ -303,8 +303,8 @@ static void check_room_boundary(int x1, int y1, int x2, int y2)
  * @brief
  * find_space()¤ÎÍ½È÷½èÍý¤È¤·¤ÆÉô²°¤ÎÀ¸À®¤¬²ÄÇ½¤«¤òÈ½Äê¤¹¤ë /
  * Helper function for find_space(). Is this a good location?
- * @param block_high ÈÏ°Ï¤Î¹â¤µ
- * @param block_wide ÈÏ°Ï¤ÎÉý
+ * @param blocks_high ÈÏ°Ï¤Î¹â¤µ
+ * @param blocks_wide ÈÏ°Ï¤ÎÉý
  * @param block_y ÈÏ°Ï¤Î¾åÃ¼
  * @param block_x ÈÏ°Ï¤Îº¸Ã¼
  * @return ¤Ê¤·
@@ -2451,13 +2451,13 @@ static bool build_type5(void)
  * The inside room in a monster pit appears as shown below, where the\n
  * actual monsters in each location depend on the type of the pit\n
  *\n
- *   #####################\n
- *   #0000000000000000000#\n
- *   #0112233455543322110#\n
- *   #0112233467643322110#\n
- *   #0112233455543322110#\n
- *   #0000000000000000000#\n
- *   #####################\n
+ *   XXXXXXXXXXXXXXXXXXXXX\n
+ *   X0000000000000000000X\n
+ *   X0112233455543322110X\n
+ *   X0112233467643322110X\n
+ *   X0112233455543322110X\n
+ *   X0000000000000000000X\n
+ *   XXXXXXXXXXXXXXXXXXXXX\n
  *\n
  * Note that the monsters in the pit are now chosen by using "get_mon_num()"\n
  * to request 16 "appropriate" monsters, sorting them by level, and using\n
@@ -5727,19 +5727,19 @@ static bool vault_aux_trapped_pit(int r_idx)
  * The trapped monster pit appears as shown below, where the actual\n
  * monsters in each location depend on the type of the pit\n
  *\n
- *  #########################\n
- *  #                       #\n
- *  ####################### #\n
- *  #####001123454321100### #\n
- *  ###0012234567654322100# #\n
- *  ####################### #\n
- *  #           ^           #\n
- *  # #######################\n
- *  # #0012234567654322100###\n
- *  # ###001123454321100#####\n
- *  # #######################\n
- *  #                       #\n
- *  #########################\n
+ *  XXXXXXXXXXXXXXXXXXXXXXXXX\n
+ *  X                       X\n
+ *  XXXXXXXXXXXXXXXXXXXXXXX X\n
+ *  XXXXX001123454321100XXX X\n
+ *  XXX0012234567654322100X X\n
+ *  XXXXXXXXXXXXXXXXXXXXXXX X\n
+ *  X           ^           X\n
+ *  X XXXXXXXXXXXXXXXXXXXXXXX\n
+ *  X X0012234567654322100XXX\n
+ *  X XXX001123454321100XXXXX\n
+ *  X XXXXXXXXXXXXXXXXXXXXXXX\n
+ *  X                       X\n
+ *  XXXXXXXXXXXXXXXXXXXXXXXXX\n
  *\n
  * Note that the monsters in the pit are now chosen by using "get_mon_num()"\n
  * to request 16 "appropriate" monsters, sorting them by level, and using\n
