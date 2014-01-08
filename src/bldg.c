@@ -106,7 +106,6 @@ static void clear_bldg(int min_row, int max_row)
 
 /*!
  * @brief 所持金を表示する。
- * @param なし
  * @return なし
  */
 static void building_prt_gold(void)
@@ -619,7 +618,6 @@ static void reset_deck(int deck[])
 
 /*!
  * @brief ポーカープレイ中にジョーカーを持っているかの判定を返す。
- * @param なし
  * @return ジョーカーを持っているか。
  */
 static bool have_joker(void)
@@ -634,7 +632,7 @@ static bool have_joker(void)
 
 /*!
  * @brief ポーカーの手札に該当の番号の札があるかを返す。
- * @param 探したいカードの番号。
+ * @param num 探したいカードの番号。
  * @return 該当の番号が手札にあるか。
  */
 static bool find_card_num(int num)
@@ -647,7 +645,6 @@ static bool find_card_num(int num)
 
 /*!
  * @brief ポーカーの手札がフラッシュ役を得ているかを帰す。
- * @param なし
  * @return 役の判定結果
  */
 static bool yaku_check_flush(void)
@@ -670,7 +667,6 @@ static bool yaku_check_flush(void)
 
 /*!
  * @brief ポーカーの手札がストレート役を得ているかを帰す。
- * @param なし
  * @return 役の判定結果
  */
 static int yaku_check_straight(void)
@@ -728,7 +724,6 @@ static int yaku_check_straight(void)
 
 /*!
  * @brief ポーカーのペア役の状態を返す。
- * @param なし
  * @return 0:nopair 1:1 pair 2:2 pair 3:3 cards 4:full house 6:4cards
  */
 static int yaku_check_pair(void)
@@ -784,7 +779,6 @@ static int yaku_check_pair(void)
 
 /*!
  * @brief ポーカーの役をチェックし、その結果を画面に表示しつつ結果を返す。
- * @param なし
  * @return 役のID
  */
 static int yaku_check(void)
@@ -933,7 +927,6 @@ static void display_kaeruka(int hoge, int kaeruka[])
 
 /*!
  * @brief ポーカーの手札を表示する。
- * @param なし
  * @return なし
  */
 static void display_cards(void)
@@ -1185,7 +1178,6 @@ static void display_cards(void)
 
 /*!
  * @brief ポーカーの１プレイルーチン。
- * @param なし
  * @return １プレイの役の結果
  */
 static int do_poker(void)
@@ -1784,7 +1776,6 @@ static bool vault_aux_battle(int r_idx)
 
 /*!
  * @brief モンスター闘技場に参加するモンスターをリセットする。
- * @param なし
  * @return なし
  */
 void battle_monsters(void)
@@ -2006,7 +1997,6 @@ void battle_monsters(void)
 
 /*!
  * @brief モンスター闘技場のメインルーチン
- * @param なし
  * @return 賭けを開始したか否か
  */
 static bool kakutoujou(void)
@@ -2172,7 +2162,6 @@ msg_print("ＯＫ、１ゴールドでいこう。");
 
 /*!
  * @brief 本日の賞金首情報を表示する。
- * @param なし
  * @return なし
  */
 static void today_target(void)
@@ -2209,7 +2198,6 @@ c_put_str(TERM_YELLOW, "本日の賞金首", 5, 10);
 
 /*!
  * @brief ツチノコの賞金首情報を表示する。
- * @param なし
  * @return なし
  */
 static void tsuchinoko(void)
@@ -2232,7 +2220,6 @@ c_put_str(TERM_WHITE, "bones       ----   $100,000", 10, 10);
 
 /*!
  * @brief 通常の賞金首情報を表示する。
- * @param なし
  * @return なし
  */
 static void shoukinkubi(void)
@@ -2325,7 +2312,6 @@ static struct {
 
 /*!
  * @brief 賞金首の引き換え処理 / Get prize
- * @param なし
  * @return 各種賞金首のいずれかでも換金が行われたか否か。
  */
 static bool kankin(void)
@@ -3108,7 +3094,6 @@ sprintf(tmp_str, "クエスト情報 (危険度: %d 階相当)", quest[questnum].level);
 
 /*!
  * @brief クエスト処理のメインルーチン / Request a quest from the Lord.
- * @param なし
  * @return なし
  */
 static void castle_quest(void)
@@ -3232,7 +3217,6 @@ msg_format("クエスト: %sを %d体倒す", name,q_ptr->max_num);
 
 /*!
  * @brief 町に関するヘルプを表示する / Display town history
- * @param なし
  * @return なし
  */
 static void town_history(void)
@@ -4552,7 +4536,7 @@ static bool enchant_item(int cost, int to_hit, int to_dam, int to_ac)
 
 /*!
  * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staves
- * @detail
+ * @details
  * The player can select the number of charges to add\n
  * (up to a limit), and the recharge never fails.\n
  *\n
@@ -4830,7 +4814,7 @@ msg_format("%sを＄%d で再充填しました。", tmp_str, price);
 
 /*!
  * @brief 魔道具の使用回数を回復させる施設の一括処理向けサブルーチン / Recharge rods, wands and staves
- * @detail
+ * @details
  * The player can select the number of charges to add\n
  * (up to a limit), and the recharge never fails.\n
  *\n

@@ -3871,7 +3871,7 @@ static bool monster_hook_human(int r_idx)
 
 /*!
  * @brief 初期所持アイテムの処理 / Add an outfit object
- * @detail アイテムを既知のものとした上でwield_all()関数により装備させる。
+ * @details アイテムを既知のものとした上でwield_all()関数により装備させる。
  * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ
  * @return なし
  */
@@ -3893,7 +3893,7 @@ static void add_outfit(object_type *o_ptr)
 
 /*!
  * @brief 種族/職業/性格などに基づき初期所持アイテムを設定するメインセット関数。 / Init players with some belongings
- * @detail Having an item makes the player "aware" of its purpose.
+ * @details Having an item makes the player "aware" of its purpose.
  * @return なし
  */
 void player_outfit(void)
@@ -6639,7 +6639,7 @@ void player_birth(void)
 
 /*!
  * @brief プレイヤー作成処理中のステータス表示処理
- * @params fff ファイルポインタ
+ * @param fff ファイルポインタ
  * @return なし
  */
 void dump_yourself(FILE *fff)
