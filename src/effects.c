@@ -428,7 +428,7 @@ bool set_mimic(int v, int p, bool do_dec)
  * Note the use of "PU_UN_LITE" and "PU_UN_VIEW", which is needed to\n
  * memorize any terrain features which suddenly become "visible".\n
  * Note that blindness is currently the only thing which can affect\n
- * "player_can_see_bold()".\noo
+ * "player_can_see_bold()".\n
  */
 bool set_blind(int v)
 {
@@ -2204,7 +2204,7 @@ msg_print("足音が大きくなった。");
 
 /*!
  * @brief 超隠密状態をセットする
- * @set TRUEならば超隠密状態になる。
+ * @param set TRUEならば超隠密状態になる。
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_superstealth(bool set)
@@ -3061,8 +3061,8 @@ msg_print("肉体が急速にしぼんでいった。");
 }
 
 /*!
- * @brief 一時的元素スレイの継続時間をセットする / Set a temporary elemental brand.  Clear all other brands. Print status messages. -LM-
- * @praram attack_type スレイのタイプID
+ * @brief 一時的元素スレイの継続時間をセットする / Set a temporary elemental brand. Clear all other brands. Print status messages. -LM-
+ * @param attack_type スレイのタイプID
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
@@ -3162,7 +3162,7 @@ bool set_ele_attack(u32b attack_type, int v)
 
 /*!
  * @brief 一時的元素免疫の継続時間をセットする / Set a temporary elemental brand.  Clear all other brands.  Print status messages. -LM-
- * @praram attack_type 免疫のタイプID
+ * @param immune_type 免疫のタイプID
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
@@ -4397,6 +4397,8 @@ bool inc_stat(int stat)
 /*!
  * @brief プレイヤーの基本能力値を減少させる / Decreases a stat by an amount indended to vary from 0 to 100 percent.
  * @param stat 減少させるステータスID
+ * @param amount 減少させる基本量
+ * @param permanent TRUEならば現在の最大値を減少させる
  * @return 実際に減少した場合TRUEを返す。
  * @details
  *\n
