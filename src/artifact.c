@@ -370,7 +370,7 @@ static void curse_artifact(object_type * o_ptr)
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにpval能力を付加する。/ Add one pval on generation of randam artifact.
  * @details 優先的に付加されるpvalがランダムアーティファクトバイアスに依存して存在する。
  * 原則的候補は腕力、知力、賢さ、器用さ、耐久、魅力、探索、隠密、赤外線視力、加速。武器のみ採掘、追加攻撃も候補に入る。
- * @attension オブジェクトのtval、svalに依存したハードコーディング処理がある。
+ * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
@@ -593,7 +593,7 @@ static void random_plus(object_type * o_ptr)
  * 原則的候補は火炎、冷気、電撃、酸（以上免疫の可能性もあり）、
  * 毒、閃光、暗黒、破片、轟音、盲目、混乱、地獄、カオス、劣化、恐怖、火オーラ、冷気オーラ、電撃オーラ、反射。
  * 戦士系バイアスのみ反魔もつく。
- * @attension オブジェクトのtval、svalに依存したハードコーディング処理がある。
+ * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
@@ -927,7 +927,7 @@ static void random_resistance(object_type * o_ptr)
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
  * 原則的候補は各種能力維持、永久光源+1、麻痺知らず、生命力維持、浮遊、透明視、急回復、遅消化、
  * 乱テレポート、反魔法、反テレポート、警告、テレパシー、各種ESP、一部装備に殺戮修正。
- * @attension オブジェクトのtval、svalに依存したハードコーディング処理がある。
+ * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
@@ -1200,7 +1200,7 @@ static void random_misc(object_type * o_ptr)
  * 原則的候補は強力射、高速射、混沌効果、吸血効果、祝福、投擲しやすい、焼棄、凍結、電撃、溶解、毒殺、
  * 動物スレイ、邪悪スレイ、悪魔スレイ、不死スレイ、オークスレイ、トロルスレイ、巨人スレイ、ドラゴンスレイ、
  * *ドラゴンスレイ*、人間スレイ、切れ味、地震、理力。
- * @attension オブジェクトのtval、svalに依存したハードコーディング処理がある。
+ * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
@@ -1646,7 +1646,7 @@ static void give_activation_power(object_type *o_ptr)
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに名前を与える。/ Set name of randomartifact.
  * @details 確率によって、シンダリン銘、漢字銘、固定名のいずれか一つが与えられる。
- * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @param return_name 名前を返すための文字列参照ポインタ
  * @param armour 対象のオブジェクトが防具が否か
  * @param power 銘の基準となるオブジェクトの価値レベル(0=呪い、1=低位、2=中位、3以上=高位)
  * @return なし
@@ -3893,7 +3893,7 @@ void get_bloody_moon_flags(object_type *o_ptr)
  * @details random_artifact_resistance()とあるが実際は固定アーティファクトである。
  * 対象は恐怖の仮面、村正、ロビントンのハープ、龍争虎鬪、ブラッディムーン、羽衣、天女の羽衣、ミリム、
  * その他追加耐性、特性追加処理。
- * @attension プレイヤーの各種ステータスに依存した処理がある。
+ * @attention プレイヤーの各種ステータスに依存した処理がある。
  * @todo 折を見て関数名を変更すること。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @param a_ptr 生成する固定アーティファクト構造体ポインタ
