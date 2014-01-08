@@ -12,7 +12,7 @@
 
 #include "angband.h"
 
-/*
+/*!
  * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/
  * Hook to determine if an object is contertible in an arrow/bolt
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
@@ -27,7 +27,7 @@ static bool item_tester_hook_convertible(object_type *o_ptr)
 	return (FALSE);
 }
 
-/*
+/*!
  * @brief レイシャル「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.
  * Hook to determine if an object is contertible in an arrow/bolt
  * @return 製造を実際に行ったらTRUE、キャンセルしたらFALSEを返す
@@ -307,7 +307,7 @@ static bool do_cmd_archer(void)
 	return TRUE;
 }
 
-/*
+/*!
  * @brief 魔道具術師の魔力取り込み処理
  * @return 取り込みを実行したらTRUE、キャンセルしたらFALSEを返す
  */
@@ -437,7 +437,7 @@ s = "魔力を取り込めるアイテムがない。";
 	return TRUE;
 }
 
-/*
+/*!
  * @brief 魔法系コマンドを実行できるかの判定を返す
  * @return 魔法系コマンドを使用可能ならTRUE、不可能ならば理由をメッセージ表示してFALSEを返す。
  */
@@ -475,7 +475,7 @@ static bool can_do_cmd_cast(void)
 		return TRUE;
 }
 
-/*
+/*!
  * @brief 修行僧の構え設定処理
  * @return 構えを変化させたらTRUE、構え不能かキャンセルしたらFALSEを返す。
  */
@@ -593,7 +593,7 @@ static bool choose_kamae(void)
 	return TRUE;
 }
 
-/*
+/*!
  * @brief 剣術家の型設定処理
  * @return 型を変化させたらTRUE、型の構え不能かキャンセルしたらFALSEを返す。
  */
@@ -737,8 +737,14 @@ static bool choose_kata(void)
 }
 
 
+/*!
+ * @brief レイシャル・パワー情報のtypedef
+ */
 typedef struct power_desc_type power_desc_type;
 
+/*!
+ * @brief レイシャル・パワー情報の構造体定義
+ */
 struct power_desc_type
 {
 	char name[40];
@@ -750,8 +756,10 @@ struct power_desc_type
 };
 
 
-/*
- * Returns the chance to activate a racial power/mutation
+/*!
+ * @brief レイシャル・パワーの発動成功率を計算する / Returns the chance to activate a racial power/mutation
+ * @param pd_ptr 発動したいレイシャル・パワー情報の構造体参照ポインタ
+ * @return 成功率(%)を返す
  */
 static int racial_chance(power_desc_type *pd_ptr)
 {
@@ -804,9 +812,12 @@ static int racial_chance(power_desc_type *pd_ptr)
 
 static int  racial_cost;
 
-/*
- * Note: return value indicates that we have succesfully used the power
- * 1: Succeeded, 0: Cancelled, -1: Failed
+/*!
+ * @brief レイシャル・パワーの発動の判定処理
+ * @param pd_ptr 発動したいレイシャル・パワー情報の構造体参照ポインタ
+ * @return
+ * 発動成功ならば1、発動失敗ならば-1、キャンセルならば0を返す。
+ * return value indicates that we have succesfully used the power 1: Succeeded, 0: Cancelled, -1: Failed
  */
 static int racial_aux(power_desc_type *pd_ptr)
 {
@@ -898,15 +909,21 @@ static int racial_aux(power_desc_type *pd_ptr)
 	return -1;
 }
 
-
-
+/*!
+ * @brief レイシャル・パワー発動時に口を使う継続的な詠唱処理を中断する
+ * @return なし
+ */
 void ratial_stop_mouth()
 {
 	if (music_singing_any()) stop_singing();
 	if (hex_spelling_any()) stop_hex_spell_all();
 }
 
-
+/*!
+ * @brief レイシャル・パワー発動処理
+ * @param command 発動するレイシャルのID
+ * @return 処理を実際に実行した場合はTRUE、キャンセルした場合FALSEを返す。
+ */
 static bool cmd_racial_power_aux(s32b command)
 {
 	s16b        plev = p_ptr->lev;
@@ -2198,9 +2215,9 @@ static bool cmd_racial_power_aux(s32b command)
 	return TRUE;
 }
 
-
-/*
- * Allow user to choose a power (racial / mutation) to activate
+/*!
+ * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
+ * @return なし
  */
 void do_cmd_racial_power(void)
 {
