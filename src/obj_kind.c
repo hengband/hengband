@@ -296,8 +296,11 @@ bool object_refuse_enchant_weapon(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが強化可能武器であるかを返す /
  * Check if an object is weapon (including bows and ammo) and allows enchantment
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 強化可能ならばTRUEを返す
  */
 bool object_allow_enchant_weapon(object_type *o_ptr)
 {
@@ -307,8 +310,11 @@ bool object_allow_enchant_weapon(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが強化可能な近接武器であるかを返す /
  * Check if an object is melee weapon and allows enchantment
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 強化可能な近接武器ならばTRUEを返す
  */
 bool object_allow_enchant_melee_weapon(object_type *o_ptr)
 {
@@ -318,8 +324,11 @@ bool object_allow_enchant_melee_weapon(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが鍛冶師のエッセンス付加済みかを返す /
  * Check if an object is made by a smith's special ability
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return エッセンス付加済みならばTRUEを返す
  */
 bool object_is_smith(object_type *o_ptr)
 {
@@ -328,9 +337,11 @@ bool object_is_smith(object_type *o_ptr)
 	return FALSE;
 }
 
-
-/*
+/*!
+ * @brief オブジェクトがアーティファクトかを返す /
  * Check if an object is artifact
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return アーティファクトならばTRUEを返す
  */
 bool object_is_artifact(object_type *o_ptr)
 {
@@ -340,8 +351,11 @@ bool object_is_artifact(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトがランダムアーティファクトかを返す /
  * Check if an object is random artifact
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return ランダムアーティファクトならばTRUEを返す
  */
 bool object_is_random_artifact(object_type *o_ptr)
 {
@@ -350,9 +364,11 @@ bool object_is_random_artifact(object_type *o_ptr)
 	return FALSE;
 }
 
-
-/*
+/*!
+ * @brief オブジェクトが通常のアイテム(アーティファクト、エゴ、鍛冶師エッセンス付加いずれでもない)かを返す /
  * Check if an object is neither artifact, ego, nor 'smith' object
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 通常のアイテムならばTRUEを返す
  */
 bool object_is_nameless(object_type *o_ptr)
 {
@@ -363,8 +379,11 @@ bool object_is_nameless(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが両手持ち可能な武器かを返す /
  * Check if an object is melee weapon and allows wielding with two-hands
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 両手持ち可能ならばTRUEを返す
  */
 bool object_allow_two_hands_wielding(object_type *o_ptr)
 {
