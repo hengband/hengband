@@ -1917,9 +1917,12 @@ prt("[何かキーを押すとゲームに戻ります]", k, 15);
 
 
 
-/*
+/*!
+ * @brief オブジェクト選択時の選択アルファベットラベルを返す /
  * Convert an inventory index into a one character label
- * Note that the label does NOT distinguish inven/equip.
+ * @param i プレイヤーの所持/装備オブジェクトID
+ * @return 対応するアルファベット
+ * @details Note that the label does NOT distinguish inven/equip.
  */
 char index_to_label(int i)
 {
@@ -1930,10 +1933,11 @@ char index_to_label(int i)
 	return (I2A(i - INVEN_RARM));
 }
 
-
-/*
+/*!
+ * @brief 選択アルファベットラベルからプレイヤーの所持オブジェクトIDを返す /
  * Convert a label into the index of an item in the "inven"
- * Return "-1" if the label does not indicate a real item
+ * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
+ * @details Note that the label does NOT distinguish inven/equip.
  */
 s16b label_to_inven(int c)
 {
@@ -1953,19 +1957,25 @@ s16b label_to_inven(int c)
 }
 
 
-/* See cmd5.c */
+/*! See cmd5.c */
 extern bool select_ring_slot;
 
 
+/*!
+ * @brief プレイヤーの所持/装備オブジェクトIDが指輪枠かを返す /
+ * @param i プレイヤーの所持/装備オブジェクトID
+ * @return 指輪枠ならばTRUEを返す。
+ */
 static bool is_ring_slot(int i)
 {
 	return (i == INVEN_RIGHT) || (i == INVEN_LEFT);
 }
 
 
-/*
+/*!
+ * @brief 選択アルファベットラベルからプレイヤーの装備オブジェクトIDを返す /
  * Convert a label into the index of a item in the "equip"
- * Return "-1" if the label does not indicate a real item
+ * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */
 s16b label_to_equip(int c)
 {
@@ -1988,8 +1998,11 @@ s16b label_to_equip(int c)
 
 
 
-/*
+/*!
+ * @brief オブジェクトの該当装備部位IDを返す /
  * Determine which equipment slot (if any) an item likes
+ * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
+ * @return 対応する装備部位ID
  */
 s16b wield_slot(object_type *o_ptr)
 {
@@ -2073,9 +2086,11 @@ s16b wield_slot(object_type *o_ptr)
 	return (-1);
 }
 
-
-/*
+/*!
+ * @brief 所持/装備オブジェクトIDの部位表現を返す /
  * Return a string mentioning how a given item is carried
+ * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
+ * @return 部位表現の文字列ポインタ
  */
 cptr mention_use(int i)
 {
@@ -2168,8 +2183,12 @@ cptr mention_use(int i)
 }
 
 
-/*
+/*!
+ * @brief 所持/装備オブジェクトIDの現在の扱い方の状態表現を返す /
  * Return a string describing how a given item is being worn.
+ * @param i 状態表現を求めるプレイヤーの所持/装備オブジェクトID
+ * @return 状態表現内容の文字列ポインタ
+ * @details
  * Currently, only used for items in the equipment, not inventory.
  */
 cptr describe_use(int i)
@@ -2262,7 +2281,13 @@ cptr describe_use(int i)
 }
 
 
-/* Hack: Check if a spellbook is one of the realms we can use. -- TY */
+/*!
+ * @brief tval/sval指定のベースアイテムがプレイヤーの使用可能な魔法書かどうかを返す /
+ * Hack: Check if a spellbook is one of the realms we can use. -- TY
+ * @param tval ベースアイテムのtval
+ * @param sval ベースアイテムのsval
+ * @return 使用可能な魔法書ならばTRUEを返す。
+ */
 
 bool check_book_realm(const byte book_tval, const byte book_sval)
 {
@@ -2279,9 +2304,11 @@ bool check_book_realm(const byte book_tval, const byte book_sval)
 	return (REALM1_BOOK == book_tval || REALM2_BOOK == book_tval);
 }
 
-
-/*
+/*!
+ * @brief アイテムがitem_tester_hookグローバル関数ポインタの条件を満たしているかを返す汎用関数
  * Check an item against the item tester info
+ * @param o_ptr 判定を行いたいオブジェクト構造体参照ポインタ
+ * @return item_tester_hookの参照先、その他いくつかの例外に応じてTRUE/FALSEを返す。
  */
 bool item_tester_okay(object_type *o_ptr)
 {
@@ -2322,10 +2349,10 @@ bool item_tester_okay(object_type *o_ptr)
 }
 
 
-
-
-/*
+/*!
+ * @brief 所持アイテム一覧を表示する /
  * Choice window "shadow" of the "show_inven()" function
+ * @return なし
  */
 void display_inven(void)
 {
@@ -2418,8 +2445,10 @@ void display_inven(void)
 
 
 
-/*
+/*!
+ * @brief 装備アイテム一覧を表示する /
  * Choice window "shadow" of the "show_equip()" function
+ * @return なし
  */
 void display_equip(void)
 {
