@@ -2545,15 +2545,20 @@ void display_equip(void)
 }
 
 
-/*
+/*!
+ * @brief 所持/装備オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
  * Find the "first" inventory object with the given "tag".
- *
- * A "tag" is a numeral "n" appearing as "@n" anywhere in the
- * inscription of an object.  Alphabetical characters don't work as a
- * tag in this form.
- *
- * Also, the tag "@xn" will work as well, where "n" is a any tag-char,
- * and "x" is the "current" command_cmd code.
+ * @param cp 対応するタグIDを与える参照ポインタ
+ * @param tag 該当するオブジェクトがあるかを調べたいタグ
+ * @param mode 所持、装備の切り替え
+ * @return タグに該当するオブジェクトがあるならTRUEを返す
+ * @detail 
+ * A "tag" is a numeral "n" appearing as "@n" anywhere in the\n
+ * inscription of an object.  Alphabetical characters don't work as a\n
+ * tag in this form.\n
+ *\n
+ * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
+ * and "x" is the "current" command_cmd code.\n
  */
 static bool get_tag(int *cp, char tag, int mode)
 {
@@ -2664,15 +2669,21 @@ static bool get_tag(int *cp, char tag, int mode)
 }
 
 
-/*
- * Find the "first" floor object with the given "tag".
- *
- * A "tag" is a numeral "n" appearing as "@n" anywhere in the
- * inscription of an object.  Alphabetical characters don't work as a
- * tag in this form.
- *
- * Also, the tag "@xn" will work as well, where "n" is a any tag-char,
- * and "x" is the "current" command_cmd code.
+/*!
+ * @brief 床オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
+ * Find the "first" inventory object with the given "tag".
+ * @param cp 対応するタグIDを与える参照ポインタ
+ * @param tag 該当するオブジェクトがあるかを調べたいタグ
+ * @param floor_list 床上アイテムの配列
+ * @param floor_num  床上アイテムの配列ID
+ * @return タグに該当するオブジェクトがあるならTRUEを返す
+ * @detail 
+ * A "tag" is a numeral "n" appearing as "@n" anywhere in the\n
+ * inscription of an object.  Alphabetical characters don't work as a\n
+ * tag in this form.\n
+ *\n
+ * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
+ * and "x" is the "current" command_cmd code.\n
  */
 static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
 {
@@ -2754,8 +2765,12 @@ static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
 }
 
 
-/*
+/*!
+ * @brief タグIDにあわせてタグアルファベットのリストを返す /
  * Move around label characters with correspond tags
+ * @param label ラベルリストを取得する文字列参照ポインタ
+ * @param mode 所持品リストか装備品リストかの切り替え
+ * @return なし
  */
 static void prepare_label_string(char *label, int mode)
 {
@@ -2785,8 +2800,15 @@ static void prepare_label_string(char *label, int mode)
 }
 
 
-/*
+/*!
+ * @brief タグIDにあわせてタグアルファベットのリストを返す(床上アイテム用) /
  * Move around label characters with correspond tags (floor version)
+ * @param label ラベルリストを取得する文字列参照ポインタ
+ * @param floor_list 床上アイテムの配列
+ * @param floor_num  床上アイテムの配列ID
+ * @return なし
+ */
+/*
  */
 static void prepare_label_string_floor(char *label, int floor_list[], int floor_num)
 {
@@ -2815,9 +2837,12 @@ static void prepare_label_string_floor(char *label, int floor_list[], int floor_
 }
 
 
-/*
+/*!
+ * @brief 所持アイテムの表示を行う /
  * Display the inventory.
- *
+ * @param target_item アイテムの選択処理を行うか否か。
+ * @return 選択したアイテムのタグ
+ * @details
  * Hack -- do not display "trailing" empty slots
  */
 int show_inven(int target_item)
@@ -2989,9 +3014,11 @@ int show_inven(int target_item)
 }
 
 
-
-/*
+/*!
+ * @brief 装備アイテムの表示を行う /
  * Display the equipment.
+ * @param target_item アイテムの選択処理を行うか否か。
+ * @return 選択したアイテムのタグ
  */
 int show_equip(int target_item)
 {
@@ -3196,11 +3223,10 @@ int show_equip(int target_item)
 	return target_item_label;
 }
 
-
-
-
-/*
+/*!
+ * @brief サブウィンドウに所持品、装備品リストの表示を行う /
  * Flip "inven" and "equip" in any sub-windows
+ * @return なし
  */
 void toggle_inven_equip(void)
 {
@@ -3236,12 +3262,12 @@ void toggle_inven_equip(void)
 	}
 }
 
-
-
-/*
+/*!
+ * @brief 選択したアイテムの確認処理の補助 /
  * Verify the choice of an item.
- *
- * The item can be negative to mean "item on floor".
+ * @param item 選択アイテムID
+ * @return 確認がYesならTRUEを返す。
+ * @details The item can be negative to mean "item on floor".
  */
 static bool verify(cptr prompt, int item)
 {
@@ -3278,10 +3304,12 @@ static bool verify(cptr prompt, int item)
 }
 
 
-/*
+/*!
+ * @brief 選択したアイテムの確認処理のメインルーチン /
+ * @praram item 選択アイテムID
+ * @return 確認がYesならTRUEを返す。
+ * @details The item can be negative to mean "item on floor".
  * Hack -- allow user to "prevent" certain choices
- *
- * The item can be negative to mean "item on floor".
  */
 static bool get_item_allow(int item)
 {
@@ -3333,9 +3361,11 @@ if (!verify("本当に", item)) return (FALSE);
 }
 
 
-
-/*
+/*!
+ * @brief アイテムを拾うことができるかを返す /
  * Auxiliary function for "get_item()" -- test an index
+ * @param item 選択アイテムID
+ * @return アイテムを拾えるならばTRUEを返す。
  */
 static bool get_item_okay(int i)
 {
