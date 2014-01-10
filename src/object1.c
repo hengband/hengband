@@ -1,14 +1,15 @@
-/* File: object1.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file object1.c
+ * @brief オブジェクトの実装 / Object code, part 1
+ * @date 2014/01/10
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ *\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
  */
-
-/* Purpose: Object code, part 1 */
 
 #include "angband.h"
 
@@ -17,19 +18,20 @@
 #undef verify
 #endif
 #endif
-/*
- * Reset the "visual" lists
- *
- * This involves resetting various things to their "default" state.
- *
- * If the "prefs" flag is TRUE, then we will also load the appropriate
- * "user pref file" based on the current setting of the "use_graphics"
- * flag.  This is useful for switching "graphics" on/off.
- *
- * The features, objects, and monsters, should all be encoded in the
- * relevant "font.pref" and/or "graf.prf" files.  XXX XXX XXX
- *
- * The "prefs" parameter is no longer meaningful.  XXX XXX XXX
+
+/*!
+ * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists
+ * @return なし
+ * This involves resetting various things to their "default" state.\n
+ *\n
+ * If the "prefs" flag is TRUE, then we will also load the appropriate\n
+ * "user pref file" based on the current setting of the "use_graphics"\n
+ * flag.  This is useful for switching "graphics" on/off.\n
+ *\n
+ * The features, objects, and monsters, should all be encoded in the\n
+ * relevant "font.pref" and/or "graf.prf" files.  XXX XXX XXX\n
+ *\n
+ * The "prefs" parameter is no longer meaningful.  XXX XXX XXX\n
  */
 void reset_visuals(void)
 {
@@ -98,9 +100,12 @@ void reset_visuals(void)
 	}
 }
 
-
-/*
+/*!
+ * @brief オブジェクトのフラグ類を配列に与える
  * Obtain the "flags" for an item
+ * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
+ * @param flgs フラグ情報を受け取る配列
+ * @return なし
  */
 void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 {
@@ -204,10 +209,12 @@ void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 	}
 }
 
-
-
-/*
+/*!
+ * @brief オブジェクトの明示されているフラグ類を取得する
  * Obtain the "flags" for an item which are known to the player
+ * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
+ * @param flgs フラグ情報を受け取る配列
+ * @return なし
  */
 void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 {
@@ -329,7 +336,11 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 	}
 }
 
-
+/*!
+ * @brief オブジェクトの発動効果名称を返す（サブルーチン/ブレス）
+ * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
+ * @return cptr 発動名称を返す文字列ポインタ
+ */
 static cptr item_activation_dragon_breath(object_type *o_ptr)
 {
 	static char desc[256];
@@ -354,6 +365,11 @@ static cptr item_activation_dragon_breath(object_type *o_ptr)
 	return (desc);
 }
 
+/*!
+ * @brief オブジェクトの発動効果名称を返す（サブルーチン/汎用）
+ * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
+ * @return cptr 発動名称を返す文字列ポインタ
+ */
 static cptr item_activation_aux(object_type *o_ptr)
 {
 	static char activation_detail[256];
@@ -449,9 +465,11 @@ static cptr item_activation_aux(object_type *o_ptr)
 	return activation_detail;
 }
 
-/*
- * Determine the "Activation" (if any) for an artifact
- * Return a string, or NULL for "no activation"
+/*!
+ * @brief オブジェクトの発動効果名称を返す（メインルーチン） /
+ * Determine the "Activation" (if any) for an artifact Return a string, or NULL for "no activation"
+ * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
+ * @return cptr 発動名称を返す文字列ポインタ
  */
 cptr item_activation(object_type *o_ptr)
 {
@@ -501,8 +519,12 @@ return "モンスターを捕える、又は解放する。";
 }
 
 
-/*
+/*!
+ * @brief オブジェクトの*鑑定*内容を詳述して表示する /
  * Describe a "fully identified" item
+ * @param o_ptr *鑑定*情報を取得する元のオブジェクト構造体参照ポインタ
+ * @param mode 表示オプション
+ * @return 特筆すべき情報が一つでもあった場合TRUE、一つもなく表示がキャンセルされた場合FALSEを返す。
  */
 bool screen_object(object_type *o_ptr, u32b mode)
 {
