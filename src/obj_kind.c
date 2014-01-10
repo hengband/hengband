@@ -1,14 +1,29 @@
-/* File: obj_kind.c */
+/*!
+ * @file obj_kind.c
+ * @brief ベースアイテムの実装
+ * @date 2014/01/10
+ * @author
+ * 2014 Deskull rearranged comment for Doxygen.
+ */
 
 #include "angband.h"
 
-
+/*!
+ * @brief オブジェクトが薬であるかを返す
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return オブジェクトが薬ならばTRUEを返す
+ */
 bool object_is_potion(object_type *o_ptr)
 {
 	return (k_info[o_ptr->k_idx].tval == TV_POTION);
 }
 
 
+/*!
+ * @brief オブジェクトが賞金首の報酬対象になるかを返す
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return オブジェクトが報酬対象になるならTRUEを返す
+ */
 bool object_is_shoukinkubi(object_type *o_ptr)
 {
 	int i;
@@ -34,9 +49,10 @@ bool object_is_shoukinkubi(object_type *o_ptr)
 	return FALSE;
 }
 
-
-/*
- * Favorite weapons
+/*!
+ * @brief オブジェクトがプレイヤーの職業に応じた適正武器か否かを返す / Favorite weapons
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return オブジェクトが適正武器ならばTRUEを返す
  */
 bool object_is_favorite(object_type *o_ptr)
 {
@@ -98,9 +114,11 @@ bool object_is_favorite(object_type *o_ptr)
 }
 
 
-/*
- * Rare weapons/aromors
- * including Blade of Chaos, Dragon armors, etc.
+/*!
+ * @brief オブジェクトがレアアイテムかどうかを返す /
+ * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return レアアイテムならばTRUEを返す
  */
 bool object_is_rare(object_type *o_ptr)
 {
@@ -163,8 +181,10 @@ bool object_is_rare(object_type *o_ptr)
 }
 
 
-/*
- * Check if an object is weapon (including bows and ammo)
+/*!
+ * @brief オブジェクトが武器として装備できるかどうかを返す / Check if an object is weapon (including bows and ammo)
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 武器として使えるならばTRUEを返す
  */
 bool object_is_weapon(object_type *o_ptr)
 {
@@ -174,8 +194,11 @@ bool object_is_weapon(object_type *o_ptr)
 }
 
 
-/*
- * Check if an object is weapon (including bows and ammo)
+/*!
+ * @brief オブジェクトが武器や矢弾として使用できるかを返す / Check if an object is weapon (including bows and ammo)
+ * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 武器や矢弾として使えるならばTRUEを返す
  */
 bool object_is_weapon_ammo(object_type *o_ptr)
 {
@@ -184,9 +207,10 @@ bool object_is_weapon_ammo(object_type *o_ptr)
 	return FALSE;
 }
 
-
-/*
- * Check if an object is ammo
+/*!
+ * @brief オブジェクトが矢弾として使用できるかどうかを返す / Check if an object is ammo
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 矢弾として使えるならばTRUEを返す
  */
 bool object_is_ammo(object_type *o_ptr)
 {
@@ -195,9 +219,10 @@ bool object_is_ammo(object_type *o_ptr)
 	return FALSE;
 }
 
-
-/*
- * Check if an object is armour
+/*!
+ * @brief オブジェクトが防具として装備できるかどうかを返す / Check if an object is armour
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 矢弾として使えるならばTRUEを返す
  */
 bool object_is_armour(object_type *o_ptr)
 {
@@ -206,9 +231,10 @@ bool object_is_armour(object_type *o_ptr)
 	return FALSE;
 }
 
-
-/*
- * Check if an object is weapon, armour or ammo
+/*!
+ * @brief オブジェクトが武器、防具、矢弾として使用できるかを返す / Check if an object is weapon, armour or ammo
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 武器、防具、矢弾として使えるならばTRUEを返す
  */
 bool object_is_weapon_armour_ammo(object_type *o_ptr)
 {
@@ -218,8 +244,10 @@ bool object_is_weapon_armour_ammo(object_type *o_ptr)
 }
 
 
-/*
- * Melee weapons
+/*!
+ * @brief オブジェクトが近接武器として装備できるかを返す / Melee weapons
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 近接武器として使えるならばTRUEを返す
  */
 bool object_is_melee_weapon(object_type *o_ptr)
 {
@@ -229,8 +257,10 @@ bool object_is_melee_weapon(object_type *o_ptr)
 }
 
 
-/*
- * Wearable including all weapon, all armour, bow, light source, amulet, and ring
+/*!
+ * @brief オブジェクトが装備可能であるかを返す / Wearable including all weapon, all armour, bow, light source, amulet, and ring
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 装備可能ならばTRUEを返す
  */
 bool object_is_wearable(object_type *o_ptr)
 {
@@ -240,8 +270,10 @@ bool object_is_wearable(object_type *o_ptr)
 }
 
 
-/*
- * Equipment including all wearable objects and ammo
+/*!
+ * @brief オブジェクトが装備品であるかを返す(object_is_wearableに矢弾を含む) / Equipment including all wearable objects and ammo
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 装備品ならばTRUEを返す
  */
 bool object_is_equipment(object_type *o_ptr)
 {
@@ -251,8 +283,10 @@ bool object_is_equipment(object_type *o_ptr)
 }
 
 
-/*
- * Poison needle can not be enchanted
+/*!
+ * @brief オブジェクトが強化不能武器であるかを返す / Poison needle can not be enchanted
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 強化不能ならばTRUEを返す
  */
 bool object_refuse_enchant_weapon(object_type *o_ptr)
 {
