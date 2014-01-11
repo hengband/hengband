@@ -4336,9 +4336,14 @@ if (ver && !verify("本当に", k))
 
 #ifdef ALLOW_EASY_FLOOR
 
-/*
- * scan_floor --
- *
+/*!
+ * @brief 床下に落ちているオブジェクトの数を返す / scan_floor
+ * @param items オブジェクトのIDリストを返すための配列参照ポインタ
+ * @param y 走査するフロアのY座標
+ * @param x 走査するフロアのX座標
+ * @param mode オプションフラグ
+ * @return 対象のマスに落ちているアイテム数
+ * @details
  * Return a list of o_list[] indexes of items at the given cave
  * location. Valid flags are:
  *
@@ -4388,8 +4393,15 @@ int scan_floor(int *items, int y, int x, int mode)
 }
 
 
-/*
- * Display a list of the items on the floor at the given location.
+/*!
+ * @brief 床下に落ちているアイテムの一覧を返す / Display a list of the items on the floor at the given location.
+ * @param items オブジェクトのIDリストを返すための配列参照ポインタ
+ * @param target_item カーソルの初期値
+ * @param y 走査するフロアのY座標
+ * @param x 走査するフロアのX座標
+ * @param min_width 表示の長さ
+ * @return 選択したアイテムのID
+ * @details
  */
 int show_floor(int target_item, int y, int x, int *min_width)
 {
@@ -4522,9 +4534,14 @@ int show_floor(int target_item, int y, int x, int *min_width)
 	return target_item_label;
 }
 
-/*
- * This version of get_item() is called by get_item() when
- * the easy_floor is on.
+/*!
+ * @brief オブジェクト選択の汎用関数(床上アイテム用) /
+ * Let the user select an item, save its "index"
+ * @param cp 選択したオブジェクトのIDを返す。
+ * @param pmt 選択目的のメッセージ
+ * @param str 選択できるオブジェクトがない場合のキャンセルメッセージ
+ * @praram mode オプションフラグ
+ * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
 bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 {
@@ -5810,7 +5827,10 @@ if (ver && !verify("本当に", k))
 	return (item);
 }
 
-
+/*!
+ * @brief 床上のアイテムを拾う選択用サブルーチン 
+ * @return プレイヤーによりアイテムが選択されたならTRUEを返す。
+ */
 static bool py_pickup_floor_aux(void)
 {
 	s16b this_o_idx;
@@ -5846,12 +5866,11 @@ static bool py_pickup_floor_aux(void)
 	return (TRUE);
 }
 
-
-/*
- * Make the player carry everything in a grid
- *
- * If "pickup" is FALSE then only gold will be picked up
- *
+/*!
+ * @brief 床上のアイテムを拾うメイン処理
+ * @param pick FALSEなら金銭の自動拾いのみを行う/ FALSE then only gold will be picked up
+ * @return なし
+ * @details
  * This is called by py_pickup() when easy_floor is TRUE.
  */
 void py_pickup_floor(bool pickup)
