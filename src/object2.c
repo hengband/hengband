@@ -1,22 +1,24 @@
-/* File: object2.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file object2.c
+ * @brief オブジェクトの実装 / Object code, part 2
+ * @date 2014/01/11
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ *\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
  */
-
-/* Purpose: Object code, part 2 */
 
 #include "angband.h"
 
 #include "kajitips.h"
 
-
-/*
- * Excise a dungeon object from any stacks
+/*!
+ * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks
+ * @param o_idx 削除対象のオブジェクト構造体ポインタ
+ * @return なし
  */
 void excise_object_idx(int o_idx)
 {
@@ -140,10 +142,12 @@ void excise_object_idx(int o_idx)
 	}
 }
 
-
-/*
+/*!
+ * @brief オブジェクトを削除する /
  * Delete a dungeon object
- *
+ * @param o_idx 削除対象のオブジェクト構造体ポインタ
+ * @return なし
+ * @details
  * Handle "stacks" of objects correctly.
  */
 void delete_object_idx(int o_idx)
@@ -177,8 +181,12 @@ void delete_object_idx(int o_idx)
 }
 
 
-/*
- * Deletes all objects at given location
+/*!
+ * @brief フロアにマスに落ちているオブジェクトを全て削除する / Deletes all objects at given location
+ * Delete a dungeon object
+ * @param y 削除したフロアマスのY座標
+ * @param x 削除したフロアマスのX座標
+ * @return なし
  */
 void delete_object(int y, int x)
 {
@@ -220,8 +228,12 @@ void delete_object(int y, int x)
 }
 
 
-/*
+/*!
+ * @brief グローバルオブジェクト配列に対し指定範囲のオブジェクトを整理してIDの若い順に寄せる /
  * Move an object from index i1 to index i2 in the object list
+ * @param i1 整理したい配列の始点
+ * @param i2 整理したい配列の終点
+ * @return なし
  */
 static void compact_objects_aux(int i1, int i2)
 {
@@ -303,17 +315,21 @@ static void compact_objects_aux(int i1, int i2)
 }
 
 
-/*
- * Compact and Reorder the object list
- *
- * This function can be very dangerous, use with caution!
- *
- * When actually "compacting" objects, we base the saving throw on a
- * combination of object level, distance from player, and current
- * "desperation".
- *
- * After "compacting" (if needed), we "reorder" the objects into a more
- * compact order, and we reset the allocation info, and the "live" array.
+/*!
+ * @brief オブジェクトのグローバル配列から必要性の薄いものを削除し、データを圧縮する。 /
+ * Compact and Reorder the object list.
+ * @size 最低でも減らしたいオブジェクト数の水準
+ * @return なし
+ * @details
+ * （危険なので使用には注意すること）
+ * This function can be very dangerous, use with caution!\n
+ *\n
+ * When actually "compacting" objects, we base the saving throw on a\n
+ * combination of object level, distance from player, and current\n
+ * "desperation".\n
+ *\n
+ * After "compacting" (if needed), we "reorder" the objects into a more\n
+ * compact order, and we reset the allocation info, and the "live" array.\n
  */
 void compact_objects(int size)
 {
