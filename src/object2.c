@@ -830,9 +830,11 @@ void object_tried(object_type *o_ptr)
 }
 
 
-/*
- * Return the "value" of an "unknown" item
- * Make a guess at the value of non-aware items
+/*!
+ * @brief 未鑑定なベースアイテムの基本価格を返す /
+ * Return the "value" of an "unknown" item Make a guess at the value of non-aware items
+ * @param o_ptr 未鑑定価格を確認したいオブジェクトの構造体参照ポインタ
+ * @return オブジェクトの未鑑定価格
  */
 static s32b object_value_base(object_type *o_ptr)
 {
@@ -888,7 +890,13 @@ static s32b object_value_base(object_type *o_ptr)
 }
 
 
-/* Return the value of the flags the object has... */
+/*!
+ * @brief オブジェクトのフラグ類から価格を算出する /
+ * Return the value of the flags the object has...
+ * @param o_ptr フラグ価格を確認したいオブジェクトの構造体参照ポインタ
+ * @param plusses フラグに与える価格の基本重み
+ * @return オブジェクトのフラグ価格
+ */
 s32b flag_cost(object_type *o_ptr, int plusses)
 {
 	s32b total = 0;
@@ -1096,26 +1104,31 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 }
 
 
-/*
- * Return the "real" price of a "known" item, not including discounts
- *
- * Wand and staffs get cost for each charge
- *
- * Armor is worth an extra 100 gold per bonus point to armor class.
- *
- * Weapons are worth an extra 100 gold per bonus point (AC,TH,TD).
- *
- * Missiles are only worth 5 gold per bonus point, since they
- * usually appear in groups of 20, and we want the player to get
- * the same amount of cash for any "equivalent" item.  Note that
- * missiles never have any of the "pval" flags, and in fact, they
- * only have a few of the available flags, primarily of the "slay"
- * and "brand" and "ignore" variety.
- *
- * Armor with a negative armor bonus is worthless.
- * Weapons with negative hit+damage bonuses are worthless.
- *
- * Every wearable item with a "pval" bonus is worth extra (see below).
+/*!
+ * @brief オブジェクトの真の価格を算出する /
+ * Return the value of the flags the object has...
+ * @param o_ptr 本価格を確認したいオブジェクトの構造体参照ポインタ
+ * @return オブジェクトの本価格
+ * @details
+ * Return the "real" price of a "known" item, not including discounts\n
+ *\n
+ * Wand and staffs get cost for each charge\n
+ *\n
+ * Armor is worth an extra 100 gold per bonus point to armor class.\n
+ *\n
+ * Weapons are worth an extra 100 gold per bonus point (AC,TH,TD).\n
+ *\n
+ * Missiles are only worth 5 gold per bonus point, since they\n
+ * usually appear in groups of 20, and we want the player to get\n
+ * the same amount of cash for any "equivalent" item.  Note that\n
+ * missiles never have any of the "pval" flags, and in fact, they\n
+ * only have a few of the available flags, primarily of the "slay"\n
+ * and "brand" and "ignore" variety.\n
+ *\n
+ * Armor with a negative armor bonus is worthless.\n
+ * Weapons with negative hit+damage bonuses are worthless.\n
+ *\n
+ * Every wearable item with a "pval" bonus is worth extra (see below).\n
  */
 s32b object_value_real(object_type *o_ptr)
 {
@@ -1365,16 +1378,19 @@ s32b object_value_real(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief オブジェクト価格算出のメインルーチン /
  * Return the price of an item including plusses (and charges)
- *
- * This function returns the "value" of the given item (qty one)
- *
- * Never notice "unknown" bonuses or properties, including "curses",
- * since that would give the player information he did not have.
- *
- * Note that discounted items stay discounted forever, even if
- * the discount is "forgotten" by the player via memory loss.
+ * @param o_ptr 判明している現価格を確認したいオブジェクトの構造体参照ポインタ
+ * @return オブジェクトの判明している現価格
+ * @details
+ * This function returns the "value" of the given item (qty one)\n
+ *\n
+ * Never notice "unknown" bonuses or properties, including "curses",\n
+ * since that would give the player information he did not have.\n
+ *\n
+ * Note that discounted items stay discounted forever, even if\n
+ * the discount is "forgotten" by the player via memory loss.\n
  */
 s32b object_value(object_type *o_ptr)
 {
@@ -1417,8 +1433,12 @@ s32b object_value(object_type *o_ptr)
 }
 
 
-/*
+
+/*!
+ * @brief 破壊可能なアイテムかを返す /
  * Determines whether an object can be destroyed, and makes fake inscription.
+ * @param o_ptr 破壊可能かを確認したいオブジェクトの構造体参照ポインタ
+ * @return オブジェクトが破壊可能ならばTRUEを返す
  */
 bool can_player_destroy_object(object_type *o_ptr)
 {
