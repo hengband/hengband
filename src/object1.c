@@ -3362,10 +3362,10 @@ if (!verify("本当に", item)) return (FALSE);
 
 
 /*!
- * @brief アイテムを拾うことができるかを返す /
+ * @brief プレイヤーの所持/装備オブジェクトが正規のものかを返す /
  * Auxiliary function for "get_item()" -- test an index
  * @param item 選択アイテムID
- * @return アイテムを拾えるならばTRUEを返す。
+ * @return 正規のIDならばTRUEを返す。
  */
 static bool get_item_okay(int i)
 {
@@ -3381,11 +3381,12 @@ static bool get_item_okay(int i)
 	return (TRUE);
 }
 
-
-
-/*
+/*!
+ * @brief プレイヤーがオブジェクトを拾うことができる状態かを返す /
  * Determine whether get_item() can get some item or not
- * assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
+ * @param item 選択アイテムID
+ * @return アイテムを拾えるならばTRUEを返す。
+ * @details assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
  */
 bool can_get_item(void)
 {
@@ -3402,55 +3403,60 @@ bool can_get_item(void)
 	return FALSE;
 }
 
-/*
+/*!
+ * @brief オブジェクト選択の汎用関数 /
  * Let the user select an item, save its "index"
- *
- * Return TRUE only if an acceptable item was chosen by the user.
- *
- * The selected item must satisfy the "item_tester_hook()" function,
- * if that hook is set, and the "item_tester_tval", if that value is set.
- *
- * All "item_tester" restrictions are cleared before this function returns.
- *
- * The user is allowed to choose acceptable items from the equipment,
- * inventory, or floor, respectively, if the proper flag was given,
- * and there are any acceptable items in that location.
- *
- * The equipment or inventory are displayed (even if no acceptable
- * items are in that location) if the proper flag was given.
- *
- * If there are no acceptable items available anywhere, and "str" is
- * not NULL, then it will be used as the text of a warning message
- * before the function returns.
- *
- * Note that the user must press "-" to specify the item on the floor,
- * and there is no way to "examine" the item on the floor, while the
- * use of "capital" letters will "examine" an inventory/equipment item,
- * and prompt for its use.
- *
- * If a legal item is selected from the inventory, we save it in "cp"
- * directly (0 to 35), and return TRUE.
- *
- * If a legal item is selected from the floor, we save it in "cp" as
- * a negative (-1 to -511), and return TRUE.
- *
- * If no item is available, we do nothing to "cp", and we display a
- * warning message, using "str" if available, and return FALSE.
- *
- * If no item is selected, we do nothing to "cp", and return FALSE.
- *
- * Global "p_ptr->command_new" is used when viewing the inventory or equipment
- * to allow the user to enter a command while viewing those screens, and
- * also to induce "auto-enter" of stores, and other such stuff.
- *
- * Global "p_ptr->command_see" may be set before calling this function to start
- * out in "browse" mode.  It is cleared before this function returns.
- *
- * Global "p_ptr->command_wrk" is used to choose between equip/inven listings.
- * If it is TRUE then we are viewing inventory, else equipment.
- *
- * We always erase the prompt when we are done, leaving a blank line,
- * or a warning message, if appropriate, if no items are available.
+ * @param cp 選択したオブジェクトのIDを返す。
+ * @param pmt 選択目的のメッセージ
+ * @param str 選択できるオブジェクトがない場合のキャンセルメッセージ
+ * @praram mode オプションフラグ
+ * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
+ * Return TRUE only if an acceptable item was chosen by the user.\n
+ * @details
+ * The selected item must satisfy the "item_tester_hook()" function,\n
+ * if that hook is set, and the "item_tester_tval", if that value is set.\n
+ *\n
+ * All "item_tester" restrictions are cleared before this function returns.\n
+ *\n
+ * The user is allowed to choose acceptable items from the equipment,\n
+ * inventory, or floor, respectively, if the proper flag was given,\n
+ * and there are any acceptable items in that location.\n
+ *\n
+ * The equipment or inventory are displayed (even if no acceptable\n
+ * items are in that location) if the proper flag was given.\n
+ *\n
+ * If there are no acceptable items available anywhere, and "str" is\n
+ * not NULL, then it will be used as the text of a warning message\n
+ * before the function returns.\n
+ *\n
+ * Note that the user must press "-" to specify the item on the floor,\n
+ * and there is no way to "examine" the item on the floor, while the\n
+ * use of "capital" letters will "examine" an inventory/equipment item,\n
+ * and prompt for its use.\n
+ *\n
+ * If a legal item is selected from the inventory, we save it in "cp"\n
+ * directly (0 to 35), and return TRUE.\n
+ *\n
+ * If a legal item is selected from the floor, we save it in "cp" as\n
+ * a negative (-1 to -511), and return TRUE.\n
+ *\n
+ * If no item is available, we do nothing to "cp", and we display a\n
+ * warning message, using "str" if available, and return FALSE.\n
+ *\n
+ * If no item is selected, we do nothing to "cp", and return FALSE.\n
+ *\n
+ * Global "p_ptr->command_new" is used when viewing the inventory or equipment\n
+ * to allow the user to enter a command while viewing those screens, and\n
+ * also to induce "auto-enter" of stores, and other such stuff.\n
+ *\n
+ * Global "p_ptr->command_see" may be set before calling this function to start\n
+ * out in "browse" mode.  It is cleared before this function returns.\n
+ *\n
+ * Global "p_ptr->command_wrk" is used to choose between equip/inven listings.\n
+ * If it is TRUE then we are viewing inventory, else equipment.\n
+ *\n
+ * We always erase the prompt when we are done, leaving a blank line,\n
+ * or a warning message, if appropriate, if no items are available.\n
  */
 bool get_item(int *cp, cptr pmt, cptr str, int mode)
 {
