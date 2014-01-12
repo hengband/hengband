@@ -1474,21 +1474,21 @@ bool can_player_destroy_object(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 魔法棒やロッドのスロット分割時に使用回数を分配する /
  * Distribute charges of rods or wands.
- *
- * o_ptr = source item
- * q_ptr = target item, must be of the same type as o_ptr
- * amt   = number of items that are transfered
+ * @param o_ptr 分割元オブジェクトの構造体参照ポインタ source item
+ * @param q_ptr 分割先オブジェクトの構造体参照ポインタ target item, must be of the same type as o_ptr
+ * @param amt 分割したい回数量 number of items that are transfered
+ * @return なし
+ * @details
+ * Hack -- If rods or wands are dropped, the total maximum timeout or\n
+ * charges need to be allocated between the two stacks.  If all the items\n
+ * are being dropped, it makes for a neater message to leave the original\n
+ * stack's pval alone. -LM-\n
  */
 void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt)
 {
-	/*
-	 * Hack -- If rods or wands are dropped, the total maximum timeout or
-	 * charges need to be allocated between the two stacks.  If all the items
-	 * are being dropped, it makes for a neater message to leave the original
-	 * stack's pval alone. -LM-
-	 */
 	if ((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_ROD))
 	{
 		q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
@@ -1510,20 +1510,24 @@ void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt)
 	}
 }
 
+/*!
+ * @brief 魔法棒やロッドの使用回数を減らす /
+ * @param o_ptr オブジェクトの構造体参照ポインタ source item
+ * @param amt 減らしたい回数量 number of items that are transfered
+ * @return なし
+ * @details
+ * Hack -- If rods or wand are destroyed, the total maximum timeout or\n
+ * charges of the stack needs to be reduced, unless all the items are\n
+ * being destroyed. -LM-\n
+ */
 void reduce_charges(object_type *o_ptr, int amt)
 {
-	/*
-	 * Hack -- If rods or wand are destroyed, the total maximum timeout or
-	 * charges of the stack needs to be reduced, unless all the items are
-	 * being destroyed. -LM-
-	 */
 	if (((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_ROD)) &&
 		(amt < o_ptr->number))
 	{
 		o_ptr->pval -= o_ptr->pval * amt / o_ptr->number;
 	}
 }
-
 
 /*
  * Determine if an item can "absorb" a second item
@@ -1553,8 +1557,11 @@ void reduce_charges(object_type *o_ptr, int amt)
 
 
 /*
- *  Determine if an item can partly absorb a second item.
- *  Return maximum number of stack.
+ * @brief 両オブジェクトをスロットに重ね合わせ可能な最大数を返す。
+ * Determine if an item can partly absorb a second item. Return maximum number of stack.
+ * @param o_ptr 検証したいオブジェクトの構造体参照ポインタ1
+ * @param j_ptr 検証したいオブジェクトの構造体参照ポインタ2
+ * @return 重ね合わせ可能なアイテム数
  */
 int object_similar_part(object_type *o_ptr, object_type *j_ptr)
 {
@@ -1757,7 +1764,11 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
 }
 
 /*
- *  Determine if an item can absorb a second item.
+ * @brief 両オブジェクトがスロットに重ねることができるかどうかを返す。
+ * Determine if an item can absorb a second item.
+ * @param o_ptr 検証したいオブジェクトの構造体参照ポインタ1
+ * @param j_ptr 検証したいオブジェクトの構造体参照ポインタ2
+ * @return 重ね合わせ可能ならばTRUEを返す。
  */
 bool object_similar(object_type *o_ptr, object_type *j_ptr)
 {
