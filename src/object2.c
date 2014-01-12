@@ -5738,12 +5738,14 @@ void init_normal_traps(void)
 }
 
 /*
+ * @brief 基本トラップをランダムに選択する /
  * Get random trap
- *
- * XXX XXX XXX This routine should be redone to reflect trap "level".
- * That is, it does not make sense to have spiked pits at 50 feet.
- * Actually, it is not this routine, but the "trap instantiation"
- * code, which should also check for "trap doors" on quest levels.
+ * @return 選択したトラップのID
+ * @details
+ * XXX XXX XXX This routine should be redone to reflect trap "level".\n
+ * That is, it does not make sense to have spiked pits at 50 feet.\n
+ * Actually, it is not this routine, but the "trap instantiation"\n
+ * code, which should also check for "trap doors" on quest levels.\n
  */
 s16b choose_random_trap(void)
 {
@@ -5771,7 +5773,11 @@ s16b choose_random_trap(void)
 }
 
 /*
+ * @brief マスに存在するトラップを秘匿する /
  * Disclose an invisible trap
+ * @param y 秘匿したいマスのY座標
+ * @param x 秘匿したいマスのX座標
+ * @return なし
  */
 void disclose_grid(int y, int x)
 {
@@ -5795,15 +5801,15 @@ void disclose_grid(int y, int x)
 	}
 }
 
-
 /*
- * Places a random trap at the given location.
- *
+ * @brief マスをトラップを配置する /
  * The location must be a legal, naked, floor grid.
- *
- * Note that all traps start out as "invisible" and "untyped", and then
- * when they are "discovered" (by detecting them or setting them off),
- * the trap is "instantiated" as a visible, "typed", trap.
+ * @param y 配置したいマスのY座標
+ * @param x 配置したいマスのX座標
+ * @return
+ * Note that all traps start out as "invisible" and "untyped", and then\n
+ * when they are "discovered" (by detecting them or setting them off),\n
+ * the trap is "instantiated" as a visible, "typed", trap.\n
  */
 void place_trap(int y, int x)
 {
@@ -5820,9 +5826,11 @@ void place_trap(int y, int x)
 	c_ptr->feat = choose_random_trap();
 }
 
-
 /*
+ * @brief 魔道具の使用回数の残量を示すメッセージを表示する /
  * Describe the charges on an item in the inventory.
+ * @param item 残量を表示したいプレイヤーのアイテム所持スロット
+ * @return なし
  */
 void inven_item_charges(int item)
 {
@@ -5861,9 +5869,11 @@ void inven_item_charges(int item)
 
 }
 
-
 /*
+ * @brief アイテムの残り所持数メッセージを表示する /
  * Describe an item in the inventory.
+ * @param item 残量を表示したいプレイヤーのアイテム所持スロット
+ * @return なし
  */
 void inven_item_describe(int item)
 {
@@ -5892,9 +5902,12 @@ void inven_item_describe(int item)
 
 }
 
-
 /*
+ * @brief アイテムの残り所持数メッセージを表示する /
  * Increase the "number" of an item in the inventory
+ * @param item 所持数を増やしたいプレイヤーのアイテム所持スロット
+ * @param num 増やしたい量
+ * @return なし
  */
 void inven_item_increase(int item, int num)
 {
@@ -5946,9 +5959,11 @@ void inven_item_increase(int item, int num)
 	}
 }
 
-
 /*
+ * @brief 所持アイテムスロットから所持数のなくなったアイテムを消去する /
  * Erase an inventory slot if it has no more items
+ * @param item 消去したいプレイヤーのアイテム所持スロット
+ * @return なし
  */
 void inven_item_optimize(int item)
 {
@@ -6008,9 +6023,11 @@ void inven_item_optimize(int item)
 	p_ptr->window |= (PW_SPELL);
 }
 
-
 /*
+ * @brief 床上の魔道具の残り残量メッセージを表示する /
  * Describe the charges on an item on the floor.
+ * @param item メッセージの対象にしたいアイテム所持スロット
+ * @return なし
  */
 void floor_item_charges(int item)
 {
@@ -6049,9 +6066,11 @@ void floor_item_charges(int item)
 
 }
 
-
 /*
- * Describe an item in the inventory.
+ * @brief 床上のアイテムの残り数メッセージを表示する /
+ * Describe the charges on an item on the floor.
+ * @param item メッセージの対象にしたいアイテム所持スロット
+ * @return なし
  */
 void floor_item_describe(int item)
 {
@@ -6080,7 +6099,11 @@ void floor_item_describe(int item)
 
 
 /*
+ * @brief 床上のアイテムの数を増やす /
  * Increase the "number" of an item on the floor
+ * @param item 増やしたいアイテムの所持スロット
+ * @param num 増やしたいアイテムの数
+ * @return なし
  */
 void floor_item_increase(int item, int num)
 {
@@ -6102,7 +6125,10 @@ void floor_item_increase(int item, int num)
 
 
 /*
+ * @brief 床上の数の無くなったアイテムスロットを消去する /
  * Optimize an item on the floor (destroy "empty" items)
+ * @param item 消去したいアイテムの所持スロット
+ * @return なし
  */
 void floor_item_optimize(int item)
 {
@@ -6120,7 +6146,10 @@ void floor_item_optimize(int item)
 
 
 /*
+ * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
  * Check if we have space for an item in the pack without overflow
+ * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
+ * @return 溢れずに済むならTRUEを返す
  */
 bool inven_carry_okay(object_type *o_ptr)
 {
