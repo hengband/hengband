@@ -1556,7 +1556,7 @@ void reduce_charges(object_type *o_ptr, int amt)
 #define MAX_STACK_SIZE 99
 
 
-/*
+/*!
  * @brief 両オブジェクトをスロットに重ね合わせ可能な最大数を返す。
  * Determine if an item can partly absorb a second item. Return maximum number of stack.
  * @param o_ptr 検証したいオブジェクトの構造体参照ポインタ1
@@ -1763,7 +1763,7 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
 	return max_num;
 }
 
-/*
+/*!
  * @brief 両オブジェクトをスロットに重ねることができるかどうかを返す。
  * Determine if an item can absorb a second item.
  * @param o_ptr 検証したいオブジェクトの構造体参照ポインタ1
@@ -1790,7 +1790,7 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
 }
 
 
-/*
+/*!
  * @brief 両オブジェクトをスロットに重ね合わせる。
  * Allow one item to "absorb" another, assuming they are similar
  * @param o_ptr 重ね合わせ先のオブジェクトの構造体参照ポインタ
@@ -1845,7 +1845,7 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
 }
 
 
-/*
+/*!
  * @brief tvalとsvalに対応するベースアイテムのIDを返す。
  * Find the index of the object_kind with the given tval and sval
  * @param tval 検索したいベースアイテムのtval
@@ -1900,7 +1900,7 @@ s16b lookup_kind(int tval, int sval)
 }
 
 
-/*
+/*!
  * @brief オブジェクトを初期化する
  * Wipe an object clean.
  * @param o_ptr 初期化したいオブジェクトの構造体参照ポインタ
@@ -1913,7 +1913,7 @@ void object_wipe(object_type *o_ptr)
 }
 
 
-/*
+/*!
  * @brief オブジェクトを複製する
  * Wipe an object clean.
  * @param o_ptr 複製元のオブジェクトの構造体参照ポインタ
@@ -1927,7 +1927,7 @@ void object_copy(object_type *o_ptr, object_type *j_ptr)
 }
 
 
-/*
+/*!
  * @brief オブジェクト構造体にベースアイテムを作成する
  * Prepare an object based on an object kind.
  * @param o_ptr 代入したいオブジェクトの構造体参照ポインタ
@@ -1983,7 +1983,7 @@ void object_prep(object_type *o_ptr, int k_idx)
 }
 
 
-/*
+/*!
  * @brief 上質以上のオブジェクトに与えるための各種ボーナスを正規乱数も加えて算出する。
  * Help determine an "enchantment bonus" for an object.
  * @param max ボーナス値の限度
