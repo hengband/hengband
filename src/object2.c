@@ -2069,8 +2069,10 @@ s16b m_bonus(int max, int level)
 }
 
 
-/*
- * Cheat -- describe a created object for the user
+/*!
+ * @brief デバッグ時にアイテム生成情報をメッセージに出力する / Cheat -- describe a created object for the user
+ * @param o_ptr デバッグ出力するオブジェクトの構造体参照ポインタ
+ * @return なし
  */
 static void object_mention(object_type *o_ptr)
 {
@@ -2127,14 +2129,16 @@ static void object_mention(object_type *o_ptr)
 	}
 }
 
-
-/*
+/*!
+ * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
  * Mega-Hack -- Attempt to create one of the "Special Objects"
- *
- * We are only called from "make_object()", and we assume that
- * "apply_magic()" is called immediately after we return.
- *
- * Note -- see "make_artifact()" and "apply_magic()"
+ * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
+ * @return 生成に成功したらTRUEを返す。
+ * @details
+ * We are only called from "make_object()", and we assume that\n
+ * "apply_magic()" is called immediately after we return.\n
+ *\n
+ * Note -- see "make_artifact()" and "apply_magic()"\n
  */
 static bool make_artifact_special(object_type *o_ptr)
 {
@@ -2206,12 +2210,15 @@ static bool make_artifact_special(object_type *o_ptr)
 }
 
 
-/*
- * Attempt to change an object into an artifact
- *
- * This routine should only be called by "apply_magic()"
- *
- * Note -- see "make_artifact_special()" and "apply_magic()"
+/*!
+ * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
+ * Mega-Hack -- Attempt to create one of the "Special Objects"
+ * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
+ * @return 生成に成功したらTRUEを返す。
+ * @details
+ * Attempt to change an object into an artifact\n
+ * This routine should only be called by "apply_magic()"\n
+ * Note -- see "make_artifact_special()" and "apply_magic()"\n
  */
 static bool make_artifact(object_type *o_ptr)
 {
@@ -2271,8 +2278,12 @@ static bool make_artifact(object_type *o_ptr)
 }
 
 
-/*
- *  Choose random ego type
+/*!
+ * @brief アイテムのエゴをレア度の重みに合わせてランダムに選択する
+ * Choose random ego type
+ * @param slot 取得したいエゴの装備部位
+ * @param good TRUEならば通常のエゴ、FALSEならば呪いのエゴが選択対象となる。
+ * @return 選択されたエゴ情報のID、万一選択できなかった場合はmax_e_idxが返る。
  */
 static byte get_random_ego(byte slot, bool good)
 {
@@ -2311,11 +2322,16 @@ static byte get_random_ego(byte slot, bool good)
 }
 
 
-/*
+/*!
+ * @brief 武器系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be a "weapon"
- *
- * Hack -- note special base damage dice boosting
- * Hack -- note special processing for weapon/digger
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
+ * @return なし
+ * @details
+ * Hack -- note special base damage dice boosting\n
+ * Hack -- note special processing for weapon/digger\n
  */
 static void a_m_aux_1(object_type *o_ptr, int level, int power)
 {
@@ -2623,7 +2639,11 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 	}
 }
 
-
+/*!
+ * @brief ドラゴン装備にランダムな耐性を与える
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @return なし
+ */
 static void dragon_resist(object_type * o_ptr)
 {
 	do
@@ -2636,7 +2656,11 @@ static void dragon_resist(object_type * o_ptr)
 	while (one_in_(2));
 }
 
-
+/*!
+ * @brief オブジェクトにランダムな強いESPを与える
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @return なし
+ */
 static bool add_esp_strong(object_type *o_ptr)
 {
 	bool nonliv = FALSE;
@@ -2651,7 +2675,11 @@ static bool add_esp_strong(object_type *o_ptr)
 	return nonliv;
 }
 
-
+/*!
+ * @brief オブジェクトにランダムな弱いESPを与える
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @return なし
+ */
 static void add_esp_weak(object_type *o_ptr, bool extra)
 {
 	int i;
@@ -2681,11 +2709,16 @@ static void add_esp_weak(object_type *o_ptr, bool extra)
 }
 
 
-/*
+/*!
+ * @brief 防具系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be "armor"
- *
- * Hack -- note special processing for crown/helm
- * Hack -- note special processing for robe of permanence
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
+ * @return なし
+ * @details
+ * Hack -- note special processing for crown/helm\n
+ * Hack -- note special processing for robe of permanence\n
  */
 static void a_m_aux_2(object_type *o_ptr, int level, int power)
 {
@@ -3157,11 +3190,16 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 }
 
 
-/*
+/*!
+ * @brief 装飾品系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be a "ring" or "amulet"
- *
- * Hack -- note special "pval boost" code for ring of speed
- * Hack -- note that some items must be cursed (or blessed)
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
+ * @return なし
+ * @details
+ * Hack -- note special "pval boost" code for ring of speed\n
+ * Hack -- note that some items must be cursed (or blessed)\n
  */
 static void a_m_aux_3(object_type *o_ptr, int level, int power)
 {
@@ -3948,9 +3986,10 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 	}
 }
 
-
-/*
- * Hack -- help pick an item type
+/*!
+ * @brief モンスターが人形のベースにできるかを返す
+ * @param r_idx チェックしたいモンスター種族のID
+ * @return 人形にできるならTRUEを返す
  */
 static bool item_monster_okay(int r_idx)
 {
@@ -3969,9 +4008,14 @@ static bool item_monster_okay(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief その他雑多のオブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be "boring"
- *
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
+ * @return なし
+ * @details
  * Hack -- note the special code for various items
  */
 static void a_m_aux_4(object_type *o_ptr, int level, int power)
@@ -4267,37 +4311,41 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 	}
 }
 
-
-/*
+/*!
+ * @brief 生成されたベースアイテムに魔法的な強化を与えるメインルーチン
  * Complete the "creation" of an object by applying "magic" to the item
- *
- * This includes not only rolling for random bonuses, but also putting the
- * finishing touches on ego-items and artifacts, giving charges to wands and
- * staffs, giving fuel to lites, and placing traps on chests.
- *
- * In particular, note that "Instant Artifacts", if "created" by an external
- * routine, must pass through this function to complete the actual creation.
- *
- * The base "chance" of the item being "good" increases with the "level"
- * parameter, which is usually derived from the dungeon level, being equal
- * to the level plus 10, up to a maximum of 75.  If "good" is true, then
- * the object is guaranteed to be "good".  If an object is "good", then
- * the chance that the object will be "great" (ego-item or artifact), also
- * increases with the "level", being equal to half the level, plus 5, up to
- * a maximum of 20.  If "great" is true, then the object is guaranteed to be
- * "great".  At dungeon level 65 and below, 15/100 objects are "great".
- *
- * If the object is not "good", there is a chance it will be "cursed", and
- * if it is "cursed", there is a chance it will be "broken".  These chances
- * are related to the "good" / "great" chances above.
- *
- * Otherwise "normal" rings and amulets will be "good" half the time and
- * "cursed" half the time, unless the ring/amulet is always good or cursed.
- *
- * If "okay" is true, and the object is going to be "great", then there is
- * a chance that an artifact will be created.  This is true even if both the
- * "good" and "great" arguments are false.  As a total hack, if "great" is
- * true, then the item gets 3 extra "attempts" to become an artifact.
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param lev 生成基準階
+ * @param mode 生成オプション
+ * @return なし
+ * @details
+ * This includes not only rolling for random bonuses, but also putting the\n
+ * finishing touches on ego-items and artifacts, giving charges to wands and\n
+ * staffs, giving fuel to lites, and placing traps on chests.\n
+ *\n
+ * In particular, note that "Instant Artifacts", if "created" by an external\n
+ * routine, must pass through this function to complete the actual creation.\n
+ *\n
+ * The base "chance" of the item being "good" increases with the "level"\n
+ * parameter, which is usually derived from the dungeon level, being equal\n
+ * to the level plus 10, up to a maximum of 75.  If "good" is true, then\n
+ * the object is guaranteed to be "good".  If an object is "good", then\n
+ * the chance that the object will be "great" (ego-item or artifact), also\n
+ * increases with the "level", being equal to half the level, plus 5, up to\n
+ * a maximum of 20.  If "great" is true, then the object is guaranteed to be\n
+ * "great".  At dungeon level 65 and below, 15/100 objects are "great".\n
+ *\n
+ * If the object is not "good", there is a chance it will be "cursed", and\n
+ * if it is "cursed", there is a chance it will be "broken".  These chances\n
+ * are related to the "good" / "great" chances above.\n
+ *\n
+ * Otherwise "normal" rings and amulets will be "good" half the time and\n
+ * "cursed" half the time, unless the ring/amulet is always good or cursed.\n
+ *\n
+ * If "okay" is true, and the object is going to be "great", then there is\n
+ * a chance that an artifact will be created.  This is true even if both the\n
+ * "good" and "great" arguments are false.  As a total hack, if "great" is\n
+ * true, then the item gets 3 extra "attempts" to become an artifact.\n
  */
 void apply_magic(object_type *o_ptr, int lev, u32b mode)
 {
@@ -4709,8 +4757,11 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 }
 
 
-/*
+/*!
+ * @brief ベースアイテムが上質として扱われるかどうかを返す。
  * Hack -- determine if a template is "good"
+ * @param k_idx 判定したいベースアイテムのID
+ * @return ベースアイテムが上質ならばTRUEを返す。
  */
 static bool kind_is_good(int k_idx)
 {
@@ -4792,15 +4843,16 @@ static bool kind_is_good(int k_idx)
 	return (FALSE);
 }
 
-
-/*
+/*!
+ * @brief 生成階に応じたベースアイテムの生成を行う。
  * Attempt to make an object (normal or good/great)
- *
- * This routine plays nasty games to generate the "special artifacts".
- *
- * This routine uses "object_level" for the "generation level".
- *
- * We assume that the given object has been "wiped".
+ * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
+ * @param mode オプションフラグ
+ * @return 生成に成功したらTRUEを返す。
+ * @details
+ * This routine plays nasty games to generate the "special artifacts".\n
+ * This routine uses "object_level" for the "generation level".\n
+ * We assume that the given object has been "wiped".\n
  */
 bool make_object(object_type *j_ptr, u32b mode)
 {
@@ -4882,14 +4934,17 @@ bool make_object(object_type *j_ptr, u32b mode)
 }
 
 
-/*
+/*!
+ * @brief フロアの指定位置に生成階に応じたベースアイテムの生成を行う。
  * Attempt to place an object (normal or good/great) at the given location.
- *
- * This routine plays nasty games to generate the "special artifacts".
- *
- * This routine uses "object_level" for the "generation level".
- *
- * This routine requires a clean floor grid destination.
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @param mode オプションフラグ
+ * @return 生成に成功したらTRUEを返す。
+ * @details
+ * This routine plays nasty games to generate the "special artifacts".\n
+ * This routine uses "object_level" for the "generation level".\n
+ * This routine requires a clean floor grid destination.\n
  */
 void place_object(int y, int x, u32b mode)
 {
@@ -4963,9 +5018,12 @@ void place_object(int y, int x, u32b mode)
 }
 
 
-/*
+/*!
+ * @brief 生成階に応じた財宝オブジェクトの生成を行う。
  * Make a treasure object
- *
+ * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
+ * @return 生成に成功したらTRUEを返す。
+ * @details
  * The location must be a legal, clean, floor grid.
  */
 bool make_gold(object_type *j_ptr)
@@ -5004,9 +5062,13 @@ bool make_gold(object_type *j_ptr)
 }
 
 
-/*
+/*!
+ * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う。
  * Places a treasure (Gold or Gems) at given location
- *
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @return 生成に成功したらTRUEを返す。
+ * @details
  * The location must be a legal, clean, floor grid.
  */
 void place_gold(int y, int x)
@@ -5074,21 +5136,27 @@ void place_gold(int y, int x)
 }
 
 
-/*
+/*!
+ * @brief 生成済のオブジェクトをフロアの所定の位置に落とす。
  * Let an object fall to the ground at or near a location.
- *
- * The initial location is assumed to be "in_bounds()".
- *
- * This function takes a parameter "chance".  This is the percentage
- * chance that the item will "disappear" instead of drop.  If the object
- * has been thrown, then this is the chance of disappearance on contact.
- *
- * Hack -- this function uses "chance" to determine if it should produce
- * some form of "description" of the drop event (under the player).
- *
- * We check several locations to see if we can find a location at which
- * the object can combine, stack, or be placed.  Artifacts will try very
- * hard to be placed, including "teleporting" to a useful grid if needed.
+ * @param j_ptr 落としたいオブジェクト構造体の参照ポインタ
+ * @param chance ドロップの成功率(%)
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @return 生成に成功したらTRUEを返す。
+ * @details
+ * The initial location is assumed to be "in_bounds()".\n
+ *\n
+ * This function takes a parameter "chance".  This is the percentage\n
+ * chance that the item will "disappear" instead of drop.  If the object\n
+ * has been thrown, then this is the chance of disappearance on contact.\n
+ *\n
+ * Hack -- this function uses "chance" to determine if it should produce\n
+ * some form of "description" of the drop event (under the player).\n
+ *\n
+ * We check several locations to see if we can find a location at which\n
+ * the object can combine, stack, or be placed.  Artifacts will try very\n
+ * hard to be placed, including "teleporting" to a useful grid if needed.\n
  */
 s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 {
@@ -5467,8 +5535,16 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 }
 
 
-/*
+/*!
+ * @brief 獲得ドロップを行う。
  * Scatter some "great" objects near the player
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @param num 獲得の処理回数
+ * @param great TRUEならば必ず高級品以上を落とす
+ * @param special TRUEならば必ず特別品を落とす
+ * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
+ * @return なし
  */
 void acquirement(int y1, int x1, int num, bool great, bool special, bool known)
 {
@@ -5536,6 +5612,14 @@ amuse_type amuse_info[] =
 	{ 0, 0, 0 }
 };
 
+/*!
+ * @brief 誰得ドロップを行う。
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @param num 誰得の処理回数
+ * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
+ * @return なし
+ */
 void amusement(int y1, int x1, int num, bool known)
 {
 	object_type *i_ptr;
@@ -5626,7 +5710,8 @@ void amusement(int y1, int x1, int num, bool known)
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 
 /*
- * Initialize arrays for normal traps
+ * @brief タグに従って、基本トラップテーブルを初期化する / Initialize arrays for normal traps
+ * @return なし
  */
 void init_normal_traps(void)
 {
