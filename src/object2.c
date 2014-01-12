@@ -5709,7 +5709,7 @@ void amusement(int y1, int x1, int num, bool known)
 /* See init_feat_variables() in init2.c */
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 
-/*
+/*!
  * @brief タグに従って、基本トラップテーブルを初期化する / Initialize arrays for normal traps
  * @return なし
  */
@@ -5737,7 +5737,7 @@ void init_normal_traps(void)
 	normal_traps[cur_trap++] = f_tag_to_index_in_init("TRAP_ALARM");
 }
 
-/*
+/*!
  * @brief 基本トラップをランダムに選択する /
  * Get random trap
  * @return 選択したトラップのID
@@ -5772,7 +5772,7 @@ s16b choose_random_trap(void)
 	return feat;
 }
 
-/*
+/*!
  * @brief マスに存在するトラップを秘匿する /
  * Disclose an invisible trap
  * @param y 秘匿したいマスのY座標
@@ -5801,7 +5801,7 @@ void disclose_grid(int y, int x)
 	}
 }
 
-/*
+/*!
  * @brief マスをトラップを配置する /
  * The location must be a legal, naked, floor grid.
  * @param y 配置したいマスのY座標
@@ -5826,7 +5826,7 @@ void place_trap(int y, int x)
 	c_ptr->feat = choose_random_trap();
 }
 
-/*
+/*!
  * @brief 魔道具の使用回数の残量を示すメッセージを表示する /
  * Describe the charges on an item in the inventory.
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
@@ -5869,7 +5869,7 @@ void inven_item_charges(int item)
 
 }
 
-/*
+/*!
  * @brief アイテムの残り所持数メッセージを表示する /
  * Describe an item in the inventory.
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
@@ -5902,7 +5902,7 @@ void inven_item_describe(int item)
 
 }
 
-/*
+/*!
  * @brief アイテムの残り所持数メッセージを表示する /
  * Increase the "number" of an item in the inventory
  * @param item 所持数を増やしたいプレイヤーのアイテム所持スロット
@@ -5959,7 +5959,7 @@ void inven_item_increase(int item, int num)
 	}
 }
 
-/*
+/*!
  * @brief 所持アイテムスロットから所持数のなくなったアイテムを消去する /
  * Erase an inventory slot if it has no more items
  * @param item 消去したいプレイヤーのアイテム所持スロット
@@ -6023,7 +6023,7 @@ void inven_item_optimize(int item)
 	p_ptr->window |= (PW_SPELL);
 }
 
-/*
+/*!
  * @brief 床上の魔道具の残り残量メッセージを表示する /
  * Describe the charges on an item on the floor.
  * @param item メッセージの対象にしたいアイテム所持スロット
@@ -6066,7 +6066,7 @@ void floor_item_charges(int item)
 
 }
 
-/*
+/*!
  * @brief 床上のアイテムの残り数メッセージを表示する /
  * Describe the charges on an item on the floor.
  * @param item メッセージの対象にしたいアイテム所持スロット
@@ -6098,7 +6098,7 @@ void floor_item_describe(int item)
 }
 
 
-/*
+/*!
  * @brief 床上のアイテムの数を増やす /
  * Increase the "number" of an item on the floor
  * @param item 増やしたいアイテムの所持スロット
@@ -6124,7 +6124,7 @@ void floor_item_increase(int item, int num)
 }
 
 
-/*
+/*!
  * @brief 床上の数の無くなったアイテムスロットを消去する /
  * Optimize an item on the floor (destroy "empty" items)
  * @param item 消去したいアイテムの所持スロット
@@ -6145,7 +6145,7 @@ void floor_item_optimize(int item)
 }
 
 
-/*
+/*!
  * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
  * Check if we have space for an item in the pack without overflow
  * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
@@ -6174,7 +6174,13 @@ bool inven_carry_okay(object_type *o_ptr)
 	return (FALSE);
 }
 
-
+/*!
+ * @brief オブジェクトを定義された基準に従いソートするための関数 /
+ * Check if we have space for an item in the pack without overflow
+ * @param o_ptr 比較対象オブジェクトの構造体参照ポインタ1
+ * @param o_value o_ptrのアイテム価値（手動であらかじめ代入する必要がある？）
+ * @return o_ptrの方が上位ならばTRUEを返す。
+ */
 bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
 {
 	int o_type, j_type;
