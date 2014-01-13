@@ -1,18 +1,23 @@
-/* File: mutation.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file mutation.c
+ * @brief 突然変異ルールの実装 / Mutation effects (and racial powers)
+ * @date 2014/01/11
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ *\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
  */
-
-/* Purpose: Mutation effects (and racial powers) */
 
 #include "angband.h"
 
-
+/*!
+ * @brief プレイヤーに突然変異を与える
+ * @param choose_mut 与えたい突然変異のID、0ならばランダムに選択
+ * @return なし
+ */
 bool gain_random_mutation(int choose_mut)
 {
 	int     attempts_left = 20;
@@ -846,7 +851,11 @@ bool gain_random_mutation(int choose_mut)
 	}
 }
 
-
+/*!
+ * @brief プレイヤーから突然変異を取り除く
+ * @param choose_mut 取り除きたい突然変異のID、0ならばランダムに消去
+ * @return なし
+ */
 bool lose_mutation(int choose_mut)
 {
 	int attempts_left = 20;
@@ -1469,7 +1478,11 @@ bool lose_mutation(int choose_mut)
 	}
 }
 
-
+/*!
+ * @brief ファイルポインタを通じて突然変異の一覧を出力する
+ * @param OutFile 出力先ファイルポインタ
+ * @return なし
+ */
 void dump_mutations(FILE *OutFile)
 {
 	if (!OutFile) return;
@@ -1967,9 +1980,9 @@ void dump_mutations(FILE *OutFile)
 	}
 }
 
-
-/*
- * List mutations we have...
+/*!
+ * @brief 突然変異表示コマンドの実装 / List mutations we have...
+ * @return なし
  */
 void do_cmd_knowledge_mutations(void)
 {
@@ -1997,7 +2010,11 @@ show_file(TRUE, file_name, "突然変異", 0, 0);
 	fd_kill(file_name);
 }
 
-
+/*!
+ * @brief 符号なし32ビット整数のビット数を返す。
+ * @param ビット数を調べたい変数
+ * @return ビット数
+ */
 int count_bits(u32b x)
 {
 	int n = 0;
@@ -2011,7 +2028,10 @@ int count_bits(u32b x)
 	return (n);
 }
 
-
+/*!
+ * @brief 現在プレイヤー得ている突然変異の数を返す。
+ * @return 現在得ている突然変異の数
+ */
 static int count_mutations(void)
 {
 	return (count_bits(p_ptr->muta1) +
@@ -2020,9 +2040,10 @@ static int count_mutations(void)
 }
 
 
-/*
- * Return the modifier to the regeneration rate
- * (in percent)
+/*!
+ * @brief 突然変異による自然回復ペナルティをパーセント値で返す /
+ * Return the modifier to the regeneration rate (in percent)
+ * @return ペナルティ修正(%)
  */
 int calc_mutant_regenerate_mod(void)
 {
@@ -2053,7 +2074,10 @@ int calc_mutant_regenerate_mod(void)
 	return (regen);
 }
 
-
+/*!
+ * @brief 突然変異レイシャル上で口を使うよりを行った際に歌や呪術を停止する /
+ * @return なし
+ */
 void mutation_stop_mouth()
 {
 	if (music_singing_any()) stop_singing();
@@ -2061,6 +2085,11 @@ void mutation_stop_mouth()
 }
 
 
+/*!
+ * @brief 突然変異のレイシャル効果実装
+ * @return 発動させる突然変異レイシャルのID
+ * @return レイシャルを実行した場合TRUE、キャンセルした場合FALSEを返す
+ */
 bool mutation_power_aux(u32b power)
 {
 	int     dir = 0;
