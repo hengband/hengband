@@ -21854,7 +21854,7 @@ D:（『チャージマン研！』アニメ第１話・『危機!!子供宇宙ステーション』）
 N:1090:『ボルガ博士』
 E:Dr.Volga
 G:t:w
-I:120:3d10:10:150:12
+I:109:3d10:10:150:12
 W:0:10:0:200:0:0
 B:EXPLODE:SHATTER:15d8
 F:GOOD | DROP_GOOD | DROP_GREAT | ONLY_ITEM | DROP_90 | FORCE_MAXHP |
