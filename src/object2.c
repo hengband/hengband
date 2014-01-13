@@ -6777,10 +6777,12 @@ void reorder_pack(void)
 
 }
 
-
-/*
+/*!
+ * @brief 現在アクティブになっているウィンドウにオブジェクトの詳細を表示する /
  * Hack -- display an object kind in the current window
- *
+ * @param k_idx ベースアイテムの参照ID
+ * @return なし
+ * @details
  * Include list of usable spells for readible books
  */
 void display_koff(int k_idx)
@@ -6855,7 +6857,12 @@ void display_koff(int k_idx)
 	}
 }
 
-/* Choose one of items that have warning flag */
+/*!
+ * @brief 警告を放つアイテムを選択する /
+ * Choose one of items that have warning flag
+ * Calculate spell damages
+ * @return 警告を行う
+ */
 object_type *choose_warning_item(void)
 {
 	int i;
@@ -6883,7 +6890,16 @@ object_type *choose_warning_item(void)
 	return number ? &inventory[choices[randint0(number)]] : NULL;
 }
 
-/* Calculate spell damages */
+/*!
+ * @brief 警告基準を定めるために魔法の効果属性に基づいて最大魔法ダメージを計算する /
+ * Calculate spell damages
+ * @param m_ptr 魔法を行使するモンスターの構造体参照ポインタ
+ * @param typ 効果属性のID
+ * @param dam 基本ダメージ
+ * @param limit ダメージの限界値
+ * @param max 算出した最大ダメージを返すポインタ
+ * @return なし
+ */
 static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int *max)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -7122,7 +7138,13 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 	if (dam > *max) *max = dam;
 }
 
-/* Calculate blow damages */
+/*!
+ * @brief 警告基準を定めるためにモンスターの打撃最大ダメージを算出する /
+ * Calculate blow damages
+ * @param m_ptr 打撃を行使するモンスターの構造体参照ポインタ
+ * @param blow_ptr モンスターの打撃能力の構造体参照ポインタ
+ * @return 算出された最大ダメージを返す。
+ */
 static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 {
 	int  dam = blow_ptr->d_dice * blow_ptr->d_side;
@@ -7193,7 +7215,13 @@ static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 	return dam;
 }
 
-/* Examine the grid (xx,yy) and warn the player if there are any danger */
+/*!
+ * @brief プレイヤーが特定地点へ移動した場合に警告を発する処理 /
+ * Examine the grid (xx,yy) and warn the player if there are any danger
+ * @param xx 危険性を調査するマスのX座標
+ * @param yy 危険性を調査するマスのY座標
+ * @return 警告を無視して進むことを選択するかか問題が無ければTRUE、警告に従ったならFALSEを返す。
+ */
 bool process_warning(int xx, int yy)
 {
 	int mx, my;
@@ -7349,7 +7377,11 @@ bool process_warning(int xx, int yy)
 	return TRUE;
 }
 
-
+/*!
+ * @brief エッセンスの付加可能な武器や矢弾かを返す
+ * @param o_ptr チェックしたいオブジェクトの構造体参照ポインタ
+ * @return エッセンスの付加可能な武器か矢弾ならばTRUEを返す。
+ */
 static bool item_tester_hook_melee_ammo(object_type *o_ptr)
 {
 	switch (o_ptr->tval)
@@ -7373,8 +7405,8 @@ static bool item_tester_hook_melee_ammo(object_type *o_ptr)
 }
 
 
-/*
- *  A structure for smithing
+/*!
+ * エッセンス情報の構造体 / A structure for smithing
  */
 typedef struct {
 	int add;       /* TR flag number or special essence id */
@@ -7385,8 +7417,8 @@ typedef struct {
 } essence_type;
 
 
-/*
- *  Smithing type data for Weapon smith
+/*!
+ * エッセンス情報テーブル Smithing type data for Weapon smith
  */
 #ifdef JP
 static essence_type essence_info[] = 
@@ -7613,8 +7645,8 @@ static essence_type essence_info[] =
 #endif
 
 
-/*
- *  Essense names for Weapon smith
+/*!
+ * エッセンス名テーブル / Essense names for Weapon smith
  */
 #ifdef JP
 cptr essence_name[] = 
@@ -7822,7 +7854,10 @@ static cptr essence_name[] =
 };
 #endif
 
-
+/*!
+ * @brief 所持しているエッセンス一覧を表示する
+ * @return なし
+ */
 static void display_essence(void)
 {
 	int i, num = 0;
@@ -7853,6 +7888,10 @@ static void display_essence(void)
 	return;
 }
 
+/*!
+ * @brief エッセンスの抽出処理
+ * @return なし
+ */
 static void drain_essence(void)
 {
 	int drain_value[sizeof(p_ptr->magic_num1) / sizeof(s32b)];
@@ -8097,8 +8136,10 @@ static void drain_essence(void)
 	p_ptr->window |= (PW_INVEN);
 }
 
-
-
+/*!
+ * @brief 付加するエッセンスの大別を選択する
+ * @return 選んだエッセンスの大別ID
+ */
 static int choose_essence(void)
 {
 	int mode = 0;
@@ -8213,6 +8254,11 @@ static int choose_essence(void)
 	return mode;
 }
 
+/*!
+ * @brief エッセンスを実際に付加する
+ * @param mode エッセンスの大別ID
+ * @return なし
+ */
 static void add_essence(int mode)
 {
 	int item, max_num = 0;
@@ -8823,7 +8869,10 @@ static void add_essence(int mode)
 	p_ptr->window |= (PW_INVEN);
 }
 
-
+/*!
+ * @brief エッセンスを消去する
+ * @return なし
+ */
 static void erase_essence(void)
 {
 	int item;
@@ -8890,6 +8939,11 @@ static void erase_essence(void)
 	p_ptr->window |= (PW_INVEN);
 }
 
+/*!
+ * @brief 鍛冶コマンドのメインルーチン
+ * @param only_browse TRUEならばエッセンス一覧の表示のみを行う
+ * @return なし
+ */
 void do_cmd_kaji(bool only_browse)
 {
 	int mode = 0;
@@ -9080,8 +9134,12 @@ void do_cmd_kaji(bool only_browse)
 }
 
 
-/*
+/*!
+ * @brief 投擲時たいまつに投げやすい/焼棄/アンデッドスレイの特別効果を返す。
  * Torches have special abilities when they are flaming.
+ * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
+ * @param flgs 特別に追加するフラグを返す参照ポインタ
+ * @return なし
  */
 void torch_flags(object_type *o_ptr, u32b *flgs)
 {
@@ -9096,6 +9154,14 @@ void torch_flags(object_type *o_ptr, u32b *flgs)
 	}
 }
 
+/*!
+ * @brief 投擲時たいまつにダイスを与える。
+ * Torches have special abilities when they are flaming.
+ * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
+ * @param dd 特別なダイス数を返す参照ポインタ
+ * @param dd 特別なダイス面数を返す参照ポインタ
+ * @return なし
+ */
 void torch_dice(object_type *o_ptr, int *dd, int *ds)
 {
 	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
@@ -9108,6 +9174,12 @@ void torch_dice(object_type *o_ptr, int *dd, int *ds)
 	}
 }
 
+/*!
+ * @brief 投擲時命中したたいまつの寿命を縮める。
+ * Torches have special abilities when they are flaming.
+ * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
+ * @return なし
+ */
 void torch_lost_fuel(object_type *o_ptr)
 {
 	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
