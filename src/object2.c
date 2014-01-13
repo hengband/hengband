@@ -6262,22 +6262,25 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトをプレイヤーが拾って所持スロットに納めるメインルーチン /
  * Add an item to the players inventory, and return the slot used.
- *
- * If the new item can combine with an existing item in the inventory,
- * it will do so, using "object_similar()" and "object_absorb()", else,
- * the item will be placed into the "proper" location in the inventory.
- *
- * This function can be used to "over-fill" the player's pack, but only
- * once, and such an action must trigger the "overflow" code immediately.
- * Note that when the pack is being "over-filled", the new item must be
- * placed into the "overflow" slot, and the "overflow" must take place
- * before the pack is reordered, but (optionally) after the pack is
- * combined.  This may be tricky.  See "dungeon.c" for info.
- *
- * Note that this code must remove any location/stack information
- * from the object once it is placed into the inventory.
+ * @param o_ptr 拾うオブジェクトの構造体参照ポインタ
+ * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
+ * @details
+ * If the new item can combine with an existing item in the inventory,\n
+ * it will do so, using "object_similar()" and "object_absorb()", else,\n
+ * the item will be placed into the "proper" location in the inventory.\n
+ *\n
+ * This function can be used to "over-fill" the player's pack, but only\n
+ * once, and such an action must trigger the "overflow" code immediately.\n
+ * Note that when the pack is being "over-filled", the new item must be\n
+ * placed into the "overflow" slot, and the "overflow" must take place\n
+ * before the pack is reordered, but (optionally) after the pack is\n
+ * combined.  This may be tricky.  See "dungeon.c" for info.\n
+ *\n
+ * Note that this code must remove any location/stack information\n
+ * from the object once it is placed into the inventory.\n
  */
 s16b inven_carry(object_type *o_ptr)
 {
@@ -6400,15 +6403,17 @@ s16b inven_carry(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 装備スロットからオブジェクトを外すメインルーチン /
  * Take off (some of) a non-cursed equipment item
- *
- * Note that only one item at a time can be wielded per slot.
- *
- * Note that taking off an item when "full" may cause that item
- * to fall to the ground.
- *
- * Return the inventory slot into which the item is placed.
+ * @param item オブジェクトを外したい所持テーブルのID
+ * @param amt 外したい個数
+ * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
+ * @details
+ * Note that only one item at a time can be wielded per slot.\n
+ * Note that taking off an item when "full" may cause that item\n
+ * to fall to the ground.\n
+ * Return the inventory slot into which the item is placed.\n
  */
 s16b inven_takeoff(int item, int amt)
 {
@@ -6510,9 +6515,13 @@ s16b inven_takeoff(int item, int amt)
 }
 
 
-/*
+/*!
+ * @brief 所持スロットから床下にオブジェクトを落とすメインルーチン /
  * Drop (some of) a non-cursed inventory/equipment item
- *
+ * @param item 所持テーブルのID
+ * @param amt 落としたい個数
+ * @return なし
+ * @details
  * The object will be dropped "near" the current location
  */
 void inven_drop(int item, int amt)
@@ -6579,9 +6588,11 @@ void inven_drop(int item, int amt)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの所持スロットに存在するオブジェクトをまとめなおす /
  * Combine items in the pack
- *
+ * @return なし
+ * @details
  * Note special handling of the "overflow" slot
  */
 void combine_pack(void)
@@ -6693,10 +6704,11 @@ void combine_pack(void)
 #endif
 }
 
-
-/*
+/*!
+ * @brief プレイヤーの所持スロットに存在するオブジェクトを並び替える /
  * Reorder items in the pack
- *
+ * @return なし
+ * @details
  * Note special handling of the "overflow" slot
  */
 void reorder_pack(void)
