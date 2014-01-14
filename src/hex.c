@@ -1,19 +1,28 @@
+/*!
+ * @file hex.c
+ * @brief 呪術の処理実装 / Hex code
+ * @date 2014/01/14
+ * @author
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * @details
+ * p_ptr-magic_num1\n
+ * 0: Flag bits of spelling spells\n
+ * 1: Flag bits of despelled spells\n
+ * 2: Revange damage\n
+ * p_ptr->magic_num2\n
+ * 0: Number of spelling spells\n
+ * 1: Type of revenge\n
+ * 2: Turn count for revenge\n
+ */
+
 #include "angband.h"
 
-/* Flag list */
-/*
-p_ptr-magic_num1
-0: Flag bits of spelling spells
-1: Flag bits of despelled spells
-2: Revange damage
-p_ptr->magic_num2
-0: Number of spelling spells
-1: Type of revenge
-2: Turn count for revenge
-*/
+#define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 
-#define MAX_KEEP 4
-
+/*!
+ * @brief プレイヤーが詠唱中の全呪術を停止する
+ * @return なし
+ */
 bool stop_hex_spell_all(void)
 {
 	int i;
@@ -37,7 +46,10 @@ bool stop_hex_spell_all(void)
 	return TRUE;
 }
 
-
+/*!
+ * @brief プレイヤーが詠唱中の呪術から一つを選んで停止する
+ * @return なし
+ */
 bool stop_hex_spell(void)
 {
 	int spell;
@@ -122,8 +134,11 @@ bool stop_hex_spell(void)
 }
 
 
-/* Upkeeping hex spells
-   Called from dungeon.c */
+/*!
+ * @brief 一定時間毎に呪術で消費するMPを処理する /
+ * Upkeeping hex spells Called from dungeon.c
+ * @return なし
+ */
 void check_hex(void)
 {
 	int spell;
@@ -232,7 +247,10 @@ void check_hex(void)
 	}
 }
 
-
+/*!
+ * @brief プレイヤーの呪術詠唱枠がすでに最大かどうかを返す
+ * @return すでに全枠を利用しているならTRUEを返す
+ */
 bool hex_spell_fully(void)
 {
 	int k_max = 0;
@@ -247,7 +265,11 @@ bool hex_spell_fully(void)
 	return TRUE;
 }
 
-void revenge_spell()
+/*!
+ * @brief 一定ゲームターン毎に復讐処理の残り期間の判定を行う
+ * @return なし
+ */
+void revenge_spell(void)
 {
 	if (p_ptr->realm1 != REALM_HEX) return;
 	if (p_ptr->magic_num2[2] <= 0) return;
@@ -259,6 +281,11 @@ void revenge_spell()
 	}
 }
 
+/*!
+ * @brief 復讐ダメージの追加を行う
+ * @param 蓄積されるダメージ量
+ * @return なし
+ */
 void revenge_store(int dam)
 {
 	if (p_ptr->realm1 != REALM_HEX) return;
@@ -267,7 +294,11 @@ void revenge_store(int dam)
 	p_ptr->magic_num1[2] += dam;
 }
 
-
+/*!
+ * @brief 反テレポート結界の判定
+ * @param m_idx 判定の対象となるモンスターID
+ * @return 反テレポートの効果が適用されるならTRUEを返す
+ */
 bool teleport_barrier(int m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
@@ -279,7 +310,11 @@ bool teleport_barrier(int m_idx)
 	return TRUE;
 }
 
-
+/*!
+ * @brief 反魔法結界の判定
+ * @param m_idx 判定の対象となるモンスターID
+ * @return 反魔法の効果が適用されるならTRUEを返す
+ */
 bool magic_barrier(int m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
@@ -291,7 +326,11 @@ bool magic_barrier(int m_idx)
 	return TRUE;
 }
 
-
+/*!
+ * @brief 反増殖結界の判定
+ * @param m_idx 判定の対象となるモンスターID
+ * @return 反増殖の効果が適用されるならTRUEを返す
+ */
 bool multiply_barrier(int m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
