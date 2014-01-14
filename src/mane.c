@@ -1,20 +1,26 @@
-/* File: mind.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file mane.c
+ * @brief ものまねの処理実装 / Imitation code
+ * @date 2014/01/14
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
  */
-
-/* Purpose: Imitation code */
 
 #include "angband.h"
 
-
 static int damage;
 
+/*!
+ * @brief 受け取ったパラメータに応じてものまねの効果情報をまとめたフォーマットを返す
+ * @param p 情報を返す文字列参照ポインタ
+ * @param power ものまねの効力の種類
+ * @param dam ものまねの威力
+ * @return なし
+ */
 static void mane_info(char *p, int power, int dam)
 {
 	int plev = p_ptr->lev;
@@ -66,9 +72,13 @@ static void mane_info(char *p, int power, int dam)
 }
 
 
-/*
+/*!
+ * @brief どのものまねを発動するか選択する処理 /
  * Allow user to choose a imitation.
- *
+ * @param sn 実行したものまねのIDを返す参照ポインタ（キャンセルなどの場合-1を返す）
+ * @param baigaesi TRUEならば倍返し上の処理として行う
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
+ * @details
  * If a valid spell is chosen, saves it in '*sn' and returns TRUE
  * If the user hits escape, returns FALSE, and set '*sn' to -1
  * If there are no legal choices, returns FALSE, and sets '*sn' to -2
@@ -280,9 +290,11 @@ put_str("失率 効果", y, x + 36);
 }
 
 
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'imitator'.
+/*!
+ * @brief ものまね処理の発動 /
+ * do_cmd_cast calls this function if the player's class is 'imitator'.
+ * @param spell 発動するモンスター攻撃のID
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
 static bool use_mane(int spell)
 {
@@ -1269,9 +1281,22 @@ msg_print("特別な強敵を召喚した！");
 }
 
 
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'imitator'.
+/*!
+ * @brief ものまねコマンドのメインルーチン /
+ * do_cmd_cast calls this function if the player's class is 'imitator'.
+ * @param baigaesi TRUEならば倍返し上の処理として行う
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
+ * @details
+ * If a valid spell is chosen, saves it in '*sn' and returns TRUE
+ * If the user hits escape, returns FALSE, and set '*sn' to -1
+ * If there are no legal choices, returns FALSE, and sets '*sn' to -2
+ *
+ * The "prompt" should be "cast", "recite", or "study"
+ * The "known" should be TRUE for cast/pray, FALSE for study
+ *
+ * nb: This function has a (trivial) display bug which will be obvious
+ * when you run it. It's probably easy to fix but I haven't tried,
+ * sorry.
  */
 bool do_cmd_mane(bool baigaesi)
 {
