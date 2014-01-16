@@ -1,19 +1,25 @@
-/* File: mind.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file mind.c
+ * @brief 各職業の特殊技能実装 / Blue magic
+ * @date 2014/01/15
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2005 henkma \n
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * @details
+ * mind.cとあるが実際には超能力者、練気術師、狂戦士、鏡使い、忍者までの
+ * 特殊技能を揃えて実装している。
  */
 
-/* Purpose: Mindcrafter code */
+
 
 #include "angband.h"
 #include "mindtips.h"
 
-
+/*! 特殊技能の一覧テーブル */
 mind_power mind_powers[5] =
 {
   {
@@ -283,7 +289,13 @@ mind_power mind_powers[5] =
   },
 };
 
-
+/*!
+ * @brief 特殊技能の効果情報をまとめたフォーマットを返す
+ * @param p 情報を返す文字列参照ポインタ
+ * @param use_mind 職業毎の特殊技能ID
+ * @param power モンスター魔法のID
+ * @return なし
+ */
 void mindcraft_info(char *p, int use_mind, int power)
 {
 #ifdef JP
@@ -419,19 +431,23 @@ void mindcraft_info(char *p, int use_mind, int power)
 	}
 }
 
-  /*
+/*!
+ * @brief 使用可能な特殊技能を選択する /
  * Allow user to choose a mindcrafter power.
- *
- * If a valid spell is chosen, saves it in '*sn' and returns TRUE
- * If the user hits escape, returns FALSE, and set '*sn' to -1
- * If there are no legal choices, returns FALSE, and sets '*sn' to -2
- *
- * The "prompt" should be "cast", "recite", or "study"
- * The "known" should be TRUE for cast/pray, FALSE for study
- *
- * nb: This function has a (trivial) display bug which will be obvious
- * when you run it. It's probably easy to fix but I haven't tried,
- * sorry.
+ * @param sn 選択した特殊技能ID、キャンセルの場合-1、不正な選択の場合-2を返す
+ * @param only_browse 一覧を見るだけの場合TRUEを返す
+ * @return 発動可能な魔法を選択した場合TRUE、キャンセル処理か不正な選択が行われた場合FALSEを返す。
+ * @details
+ * If a valid spell is chosen, saves it in '*sn' and returns TRUE\n
+ * If the user hits escape, returns FALSE, and set '*sn' to -1\n
+ * If there are no legal choices, returns FALSE, and sets '*sn' to -2\n
+ *\n
+ * The "prompt" should be "cast", "recite", or "study"\n
+ * The "known" should be TRUE for cast/pray, FALSE for study\n
+ *\n
+ * nb: This function has a (trivial) display bug which will be obvious\n
+ * when you run it. It's probably easy to fix but I haven't tried,\n
+ * sorry.\n
  */
   static int get_mind_power(int *sn, bool only_browse)
     {
@@ -830,10 +846,11 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 	return (TRUE);
 }
 
-
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'mindcrafter'.
+/*!
+ * @brief 超能力の発動 /
+ * do_cmd_cast calls this function if the player's class is 'mindcrafter'.
+ * @param spell 発動する特殊技能のID
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
 static bool cast_mindcrafter_spell(int spell)
 {
@@ -1032,10 +1049,11 @@ msg_print("なに？");
 	return TRUE;
 }
 
-
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'ForceTrainer'.
+/*!
+ * @brief 練気術の発動 /
+ * do_cmd_cast calls this function if the player's class is 'ForceTrainer'.
+ * @param spell 発動する特殊技能のID
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
 static bool cast_force_spell(int spell)
 {
@@ -1227,8 +1245,11 @@ msg_print("なに？");
 	return TRUE;
 }
 
-/* by henkma */
-/* calculate mirrors */
+
+/*!
+ * @brief 現在フロアに存在している鏡の数を数える / calculate mirrors
+ * @return 鏡の枚数
+ */
 static int number_of_mirrors( void )
 {
   int x,y;
@@ -1241,6 +1262,12 @@ static int number_of_mirrors( void )
   return val;
 }
 
+/*!
+ * @brief 鏡魔法の発動 /
+ * do_cmd_cast calls this function if the player's class is 'Mirror magic'.
+ * @param spell 発動する特殊技能のID
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
+ */
 static bool cast_mirror_spell(int spell)
 {
 	int             dir;
@@ -1409,10 +1436,11 @@ msg_print("なに？");
 	return TRUE;
 }
 
-
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'berserker'.
+/*!
+ * @brief 怒りの発動 /
+ * do_cmd_cast calls this function if the player's class is 'berserker'.
+ * @param spell 発動する特殊技能のID
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
 static bool cast_berserk_spell(int spell)
 {
@@ -1495,11 +1523,11 @@ msg_print("なに？");
 	return TRUE;
 }
 
-
-
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'ninja'.
+/*!
+ * @brief 忍術の発動 /
+ * do_cmd_cast calls this function if the player's class is 'ninja'.
+ * @param spell 発動する特殊技能のID
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
 static bool cast_ninja_spell(int spell)
 {
@@ -1773,11 +1801,9 @@ msg_print("なに？");
 	return TRUE;
 }
 
-
-
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'mindcrafter'.
+/*!
+ * @brief 特殊技能コマンドのメインルーチン /
+ * @return なし
  */
 void do_cmd_mind(void)
 {
@@ -2164,9 +2190,9 @@ msg_print("自分の精神を攻撃してしまった！");
 }
 
 
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'mindcrafter'.
+/*!
+ * @brief 現在プレイヤーが使用可能な特殊技能の一覧表示 /
+ * @return なし
  */
 void do_cmd_mind_browse(void)
 {
