@@ -2678,6 +2678,7 @@ static bool add_esp_strong(object_type *o_ptr)
 /*!
  * @brief オブジェクトにランダムな弱いESPを与える
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param extra TRUEならばESPの最大付与数が増える(TRUE -> 3+1d6 / FALSE -> 1d3)
  * @return なし
  */
 static void add_esp_weak(object_type *o_ptr, bool extra)
@@ -5538,8 +5539,8 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 /*!
  * @brief 獲得ドロップを行う。
  * Scatter some "great" objects near the player
- * @param y 配置したいフロアのY座標
- * @param x 配置したいフロアのX座標
+ * @param y1 配置したいフロアのY座標
+ * @param x1 配置したいフロアのX座標
  * @param num 獲得の処理回数
  * @param great TRUEならば必ず高級品以上を落とす
  * @param special TRUEならば必ず特別品を落とす
@@ -9159,7 +9160,7 @@ void torch_flags(object_type *o_ptr, u32b *flgs)
  * Torches have special abilities when they are flaming.
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
  * @param dd 特別なダイス数を返す参照ポインタ
- * @param dd 特別なダイス面数を返す参照ポインタ
+ * @param ds 特別なダイス面数を返す参照ポインタ
  * @return なし
  */
 void torch_dice(object_type *o_ptr, int *dd, int *ds)

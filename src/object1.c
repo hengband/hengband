@@ -2284,8 +2284,8 @@ cptr describe_use(int i)
 /*!
  * @brief tval/sval指定のベースアイテムがプレイヤーの使用可能な魔法書かどうかを返す /
  * Hack: Check if a spellbook is one of the realms we can use. -- TY
- * @param tval ベースアイテムのtval
- * @param sval ベースアイテムのsval
+ * @param book_tval ベースアイテムのtval
+ * @param book_sval ベースアイテムのsval
  * @return 使用可能な魔法書ならばTRUEを返す。
  */
 

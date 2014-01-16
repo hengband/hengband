@@ -2012,7 +2012,7 @@ show_file(TRUE, file_name, "突然変異", 0, 0);
 
 /*!
  * @brief 符号なし32ビット整数のビット数を返す。
- * @param ビット数を調べたい変数
+ * @param x ビット数を調べたい変数
  * @return ビット数
  */
 int count_bits(u32b x)
