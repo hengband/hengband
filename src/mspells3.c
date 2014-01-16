@@ -1,19 +1,25 @@
-/* File: mspells3.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file mspells3.c
+ * @brief 青魔法の処理実装 / Blue magic
+ * @date 2014/01/15
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
  */
-
-/* Purpose: Imitation code */
 
 #include "angband.h"
 
-#define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130)
+#define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130) /*!< モンスター魔法をプレイヤーが使用する場合の換算レベル */
 
+/*!
+ * @brief 受け取ったモンスター魔法のIDに応じて青魔法の効果情報をまとめたフォーマットを返す
+ * @param p 情報を返す文字列参照ポインタ
+ * @param power モンスター魔法のID
+ * @return なし
+ */
 static void learned_info(char *p, int power)
 {
 	int plev = pseudo_plev();
@@ -235,19 +241,22 @@ static void learned_info(char *p, int power)
 }
 
 
-/*
+/*!
+ * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
- *
- * If a valid spell is chosen, saves it in '*sn' and returns TRUE
- * If the user hits escape, returns FALSE, and set '*sn' to -1
- * If there are no legal choices, returns FALSE, and sets '*sn' to -2
- *
- * The "prompt" should be "cast", "recite", or "study"
- * The "known" should be TRUE for cast/pray, FALSE for study
- *
- * nb: This function has a (trivial) display bug which will be obvious
- * when you run it. It's probably easy to fix but I haven't tried,
- * sorry.
+ * @param sn 選択したモンスター攻撃ID、キャンセルの場合-1、不正な選択の場合-2を返す
+ * @return 発動可能な魔法を選択した場合TRUE、キャンセル処理か不正な選択が行われた場合FALSEを返す。
+ * @details
+ * If a valid spell is chosen, saves it in '*sn' and returns TRUE\n
+ * If the user hits escape, returns FALSE, and set '*sn' to -1\n
+ * If there are no legal choices, returns FALSE, and sets '*sn' to -2\n
+ *\n
+ * The "prompt" should be "cast", "recite", or "study"\n
+ * The "known" should be TRUE for cast/pray, FALSE for study\n
+ *\n
+ * nb: This function has a (trivial) display bug which will be obvious\n
+ * when you run it. It's probably easy to fix but I haven't tried,\n
+ * sorry.\n
  */
 static int get_learned_power(int *sn)
 {
@@ -680,9 +689,12 @@ put_str("MP 失率 効果", y, x + 33);
 }
 
 
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'imitator'.
+/*!
+ * @brief 青魔法の発動 /
+ * do_cmd_cast calls this function if the player's class is 'blue-mage'.
+ * @param spell 発動するモンスター攻撃のID
+ * @param success TRUEは成功時、FALSEは失敗時の処理を行う
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
 static bool cast_learned_spell(int spell, bool success)
 {
@@ -1887,10 +1899,10 @@ msg_print("No one have appeared.");
 	return TRUE;
 }
 
-
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'Blue-Mage'.
+/*!
+ * @brief 青魔法コマンドのメインルーチン /
+ * do_cmd_cast calls this function if the player's class is 'Blue-Mage'.
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
 bool do_cmd_cast_learned(void)
 {
@@ -2059,6 +2071,11 @@ msg_print("体を悪くしてしまった！");
 	return TRUE;
 }
 
+/*!
+ * @brief 青魔法のラーニング判定と成功した場合のラーニング処理
+ * @param monspell ラーニングを試みるモンスター攻撃のID
+ * @return なし
+ */
 void learn_spell(int monspell)
 {
 	if (p_ptr->action != ACTION_LEARN) return;
@@ -2084,8 +2101,16 @@ void learn_spell(int monspell)
 }
 
 
-/*
+/*!
+ * @brief モンスター特殊能力のフラグ配列から特定条件の魔法だけを抜き出す処理
  * Extract monster spells mask for the given mode
+ * @param f4 モンスター特殊能力の4番目のフラグ配列
+ * @param f5 モンスター特殊能力の5番目のフラグ配列
+ * @param f6 モンスター特殊能力の6番目のフラグ配列
+ * @param mode 抜き出したい条件
+ * @return なし
+ */
+/*
  */
 void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode)
 {
