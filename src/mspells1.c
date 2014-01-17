@@ -1,52 +1,52 @@
-/* File: mspells1.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file mspells1.c
+ * @brief モンスター魔法の実装 / Monster spells (attack player)
+ * @date 2014/01/17
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * @details
+ * And now for Intelligent monster attacks (including spells).\n
+ *\n
+ * Original idea and code by "DRS" (David Reeves Sward).\n
+ * Major modifications by "BEN" (Ben Harrison).\n
+ *\n
+ * Give monsters more intelligent attack/spell selection based on\n
+ * observations of previous attacks on the player, and/or by allowing\n
+ * the monster to "cheat" and know the player status.\n
+ *\n
+ * Maintain an idea of the player status, and use that information\n
+ * to occasionally eliminate "ineffective" spell attacks.  We could\n
+ * also eliminate ineffective normal attacks, but there is no reason\n
+ * for the monster to do this, since he gains no benefit.\n
+ * Note that MINDLESS monsters are not allowed to use this code.\n
+ * And non-INTELLIGENT monsters only use it partially effectively.\n
+ *\n
+ * Actually learn what the player resists, and use that information\n
+ * to remove attacks or spells before using them.  This will require\n
+ * much less space, if I am not mistaken.  Thus, each monster gets a\n
+ * set of 32 bit flags, "smart", build from the various "SM_*" flags.\n
+ *\n
+ * This has the added advantage that attacks and spells are related.\n
+ * The "smart_learn" option means that the monster "learns" the flags\n
+ * that should be set, and "smart_cheat" means that he "knows" them.\n
+ * So "smart_cheat" means that the "smart" field is always up to date,\n
+ * while "smart_learn" means that the "smart" field is slowly learned.\n
+ * Both of them have the same effect on the "choose spell" routine.\n
  */
-
-/* Purpose: Monster spells (attack player) */
 
 #include "angband.h"
 
 
 /*
- * And now for Intelligent monster attacks (including spells).
- *
- * Original idea and code by "DRS" (David Reeves Sward).
- * Major modifications by "BEN" (Ben Harrison).
- *
- * Give monsters more intelligent attack/spell selection based on
- * observations of previous attacks on the player, and/or by allowing
- * the monster to "cheat" and know the player status.
- *
- * Maintain an idea of the player status, and use that information
- * to occasionally eliminate "ineffective" spell attacks.  We could
- * also eliminate ineffective normal attacks, but there is no reason
- * for the monster to do this, since he gains no benefit.
- * Note that MINDLESS monsters are not allowed to use this code.
- * And non-INTELLIGENT monsters only use it partially effectively.
- *
- * Actually learn what the player resists, and use that information
- * to remove attacks or spells before using them.  This will require
- * much less space, if I am not mistaken.  Thus, each monster gets a
- * set of 32 bit flags, "smart", build from the various "SM_*" flags.
- *
- * This has the added advantage that attacks and spells are related.
- * The "smart_learn" option means that the monster "learns" the flags
- * that should be set, and "smart_cheat" means that he "knows" them.
- * So "smart_cheat" means that the "smart" field is always up to date,
- * while "smart_learn" means that the "smart" field is slowly learned.
- * Both of them have the same effect on the "choose spell" routine.
- */
-
-
-
-/*
+ * @brief モンスターがプレイヤーの弱点をついた選択を取るかどうかの判定 /
  * Internal probability routine
+ * @param r_ptr モンスター種族の構造体参照ポインタ
+ * @param prob 基本確率(%)
+ * @return 適した選択を取るならばTRUEを返す。
  */
 static bool int_outof(monster_race *r_ptr, int prob)
 {
@@ -58,9 +58,14 @@ static bool int_outof(monster_race *r_ptr, int prob)
 }
 
 
-
 /*
+ * @brief モンスターの魔法一覧から戦術的に適さない魔法を除外する /
  * Remove the "bad" spells from a spell list
+ * @param m_idx モンスターの構造体参照ポインタ
+ * @param f4p モンスター魔法のフラグリスト1
+ * @param f5p モンスター魔法のフラグリスト2
+ * @param f6p モンスター魔法のフラグリスト3
+ * @return なし
  */
 static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 {
@@ -351,8 +356,11 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 
 /*
- * Determine if there is a space near the player in which
- * a summoned creature can appear
+ * @brief モンスターにとって所定の地点が召還に相応しい地点かどうかを返す。 /
+ * Determine if there is a space near the player in which a summoned creature can appear
+ * @param y1 判定を行いたいマスのY座標
+ * @param x1 判定を行いたいマスのX座標
+ * @return 召還に相応しいならばTRUEを返す
  */
 bool summon_possible(int y1, int x1)
 {
@@ -381,6 +389,12 @@ bool summon_possible(int y1, int x1)
 }
 
 
+/*
+ * @brief モンスターにとって死者復活を行うべき状態かどうかを返す /
+ * Determine if there is a space near the player in which a summoned creature can appear
+ * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
+ * @return 死者復活が有効な状態ならばTRUEを返す。
+ */
 bool raise_possible(monster_type *m_ptr)
 {
 	int xx, yy;
@@ -419,18 +433,25 @@ bool raise_possible(monster_type *m_ptr)
 }
 
 
+
 /*
- * Originally, it was possible for a friendly to shoot another friendly.
- * Change it so a "clean shot" means no equally friendly monster is
- * between the attacker and target.
- */
-/*
+ * @brief モンスターにとってボルト型魔法が有効な状態かを返す /
  * Determine if a bolt spell will hit the player.
- *
- * This is exactly like "projectable", but it will
- * return FALSE if a monster is in the way.
- * no equally friendly monster is
- * between the attacker and target.
+ * @param y1 ボルト魔法発射地点のY座標
+ * @param x1 ボルト魔法発射地点のX座標
+ * @param y2 ボルト魔法目標地点のY座標
+ * @param x2 ボルト魔法目標地点のX座標
+ * @param is_friend モンスターがプレイヤーに害意を持たない(ペットか友好的)ならばTRUEをつける
+ * @return ボルト型魔法が有効ならばTRUEを返す。
+ * @details
+ * Originally, it was possible for a friendly to shoot another friendly.\n
+ * Change it so a "clean shot" means no equally friendly monster is\n
+ * between the attacker and target.\n
+ *\n
+ * This is exactly like "projectable", but it will\n
+ * return FALSE if a monster is in the way.\n
+ * no equally friendly monster is\n
+ * between the attacker and target.\n
  */
 bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
 {
