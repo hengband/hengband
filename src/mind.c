@@ -1,6 +1,6 @@
 /*!
  * @file mind.c
- * @brief 各職業の特殊技能実装 / Blue magic
+ * @brief 各職業の特殊技能実装 / Special magics
  * @date 2014/01/15
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n

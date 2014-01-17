@@ -1,32 +1,36 @@
-/* File: mind.c */
-
-/* Purpose: Mindcrafter code */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file hissatsu.c
+ * @brief 剣術の実装 / Blade arts
+ * @date 2014/01/17
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
 #include "angband.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 
-/*
- * Allow user to choose a mindcrafter power.
- *
- * If a valid spell is chosen, saves it in '*sn' and returns TRUE
- * If the user hits escape, returns FALSE, and set '*sn' to -1
- * If there are no legal choices, returns FALSE, and sets '*sn' to -2
- *
- * The "prompt" should be "cast", "recite", or "study"
- * The "known" should be TRUE for cast/pray, FALSE for study
- *
- * nb: This function has a (trivial) display bug which will be obvious
- * when you run it. It's probably easy to fix but I haven't tried,
- * sorry.
+
+/*!
+ * @brief 使用可能な剣術を選択する /
+ * Allow user to choose a blade arts.
+ * @param sn 選択した特殊技能ID、キャンセルの場合-1、不正な選択の場合-2を返す
+ * @return 発動可能な魔法を選択した場合TRUE、キャンセル処理か不正な選択が行われた場合FALSEを返す。
+ * @details
+ * If a valid spell is chosen, saves it in '*sn' and returns TRUE\n
+ * If the user hits escape, returns FALSE, and set '*sn' to -1\n
+ * If there are no legal choices, returns FALSE, and sets '*sn' to -2\n
+ *\n
+ * The "prompt" should be "cast", "recite", or "study"\n
+ * The "known" should be TRUE for cast/pray, FALSE for study\n
+ *\n
+ * nb: This function has a (trivial) display bug which will be obvious\n
+ * when you run it. It's probably easy to fix but I haven't tried,\n
+ * sorry.\n
  */
 static int get_hissatsu_power(int *sn)
 {
@@ -334,9 +338,9 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 }
 
 
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'mindcrafter'.
+/*!
+ * @brief 剣術コマンドのメインルーチン
+ * @return なし
  */
 void do_cmd_hissatsu(void)
 {
@@ -424,6 +428,10 @@ msg_print("ＭＰが足りません。");
 }
 
 
+/*!
+ * @brief 剣術コマンドの学習
+ * @return なし
+ */
 void do_cmd_gain_hissatsu(void)
 {
 	int item, i, j;
@@ -548,8 +556,14 @@ s = "読める書がない。";
 }
 
 
-/*
+/*!
+ * @brief 剣術のスレイ倍率計算を行う /
  * Calcurate magnification of hissatsu technics
+ * @param mult 剣術のスレイ効果以前に算出している多要素の倍率(/10倍)
+ * @param flgs 剣術に使用する武器のスレイフラグ配列
+ * @param m_ptr 目標となるモンスターの構造体参照ポインタ
+ * @param mode 剣術のスレイ型ID
+ * @return スレイの倍率(/10倍)
  */
 s16b mult_hissatsu(int mult, u32b *flgs, monster_type *m_ptr, int mode)
 {
