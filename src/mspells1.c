@@ -41,7 +41,7 @@
 #include "angband.h"
 
 
-/*
+/*!
  * @brief モンスターがプレイヤーの弱点をついた選択を取るかどうかの判定 /
  * Internal probability routine
  * @param r_ptr モンスター種族の構造体参照ポインタ
@@ -58,7 +58,7 @@ static bool int_outof(monster_race *r_ptr, int prob)
 }
 
 
-/*
+/*!
  * @brief モンスターの魔法一覧から戦術的に適さない魔法を除外する /
  * Remove the "bad" spells from a spell list
  * @param m_idx モンスターの構造体参照ポインタ
@@ -355,7 +355,7 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 }
 
 
-/*
+/*!
  * @brief モンスターにとって所定の地点が召還に相応しい地点かどうかを返す。 /
  * Determine if there is a space near the player in which a summoned creature can appear
  * @param y1 判定を行いたいマスのY座標
@@ -389,7 +389,7 @@ bool summon_possible(int y1, int x1)
 }
 
 
-/*
+/*!
  * @brief モンスターにとって死者復活を行うべき状態かどうかを返す /
  * Determine if there is a space near the player in which a summoned creature can appear
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
@@ -434,7 +434,7 @@ bool raise_possible(monster_type *m_ptr)
 
 
 
-/*
+/*!
  * @brief モンスターにとってボルト型魔法が有効な状態かを返す /
  * Determine if a bolt spell will hit the player.
  * @param y1 ボルト魔法発射地点のY座標
@@ -498,7 +498,7 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
 	return (TRUE);
 }
 
-/*
+/*!
  * @brief モンスターのボルト型魔法処理 /
  * Cast a bolt at the player Stop if we hit a monster Affect monsters and the player
  * @param m_idx モンスターのID
@@ -517,7 +517,7 @@ static void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 	(void)project(m_idx, 0, py, px, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
-/*
+/*!
  * @brief モンスターのビーム型魔法処理 /
  * @param m_idx モンスターのID
  * @param typ 効果属性ID
@@ -535,7 +535,7 @@ static void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 }
 
 
-/*
+/*!
  * @brief モンスターのボール型＆ブレス型魔法処理 /
  * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
  * @param y 目標地点のY座標
@@ -583,7 +583,7 @@ static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool b
 	(void)project(m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
-/*
+/*!
  * @brief モンスターのボール型＆ブレス型魔法処理 /
  * @param power 呪いの段階
  * @param o_ptr 呪いをかけられる装備オブジェクトの構造体参照ポインタ
@@ -615,7 +615,7 @@ u32b get_curse(int power, object_type *o_ptr)
 	return new_curse;
 }
 
-/*
+/*!
  * @brief 装備への呪い付加判定と付加処理 /
  * @param chance 呪いの基本確率
  * @param heavy_chance 重い呪いを選択肢に入れるか否か。
@@ -690,7 +690,7 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 }
 
 
-/*
+/*!
  * @brief ID値が正しいモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good for hurting the player (directly).
  * @param spell 判定対象のID
@@ -718,7 +718,7 @@ static bool spell_attack(byte spell)
 }
 
 
-/*
+/*!
  * @brief ID値が退避目的に適したモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good for escaping.
  * @param spell 判定対象のID
@@ -736,7 +736,7 @@ static bool spell_escape(byte spell)
 	return (FALSE);
 }
 
-/*
+/*!
  * @brief ID値が妨害目的に適したモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good for annoying the player.
  * @param spell 判定対象のID
