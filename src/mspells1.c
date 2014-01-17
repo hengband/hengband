@@ -499,9 +499,14 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
 }
 
 /*
- * Cast a bolt at the player
- * Stop if we hit a monster
- * Affect monsters and the player
+ * @brief モンスターのボルト型魔法処理 /
+ * Cast a bolt at the player Stop if we hit a monster Affect monsters and the player
+ * @param m_idx モンスターのID
+ * @param typ 効果属性ID
+ * @param dam_hp 威力
+ * @param monspell モンスター魔法のID
+ * @param learnable ラーニング可能か否か
+ * @return なし
  */
 static void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 {
@@ -512,6 +517,15 @@ static void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 	(void)project(m_idx, 0, py, px, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
+/*
+ * @brief モンスターのビーム型魔法処理 /
+ * @param m_idx モンスターのID
+ * @param typ 効果属性ID
+ * @param dam_hp 威力
+ * @param monspell モンスター魔法のID
+ * @param learnable ラーニング可能か否か
+ * @return なし
+ */
 static void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 {
 	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER;
@@ -522,9 +536,18 @@ static void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 
 
 /*
- * Cast a breath (or ball) attack at the player
- * Pass over any monsters that may be in the way
- * Affect grids, objects, monsters, and the player
+ * @brief モンスターのボール型＆ブレス型魔法処理 /
+ * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
+ * @param y 目標地点のY座標
+ * @param x 目標地点のX座標
+ * @param m_idx モンスターのID
+ * @param typ 効果属性ID
+ * @param dam_hp 威力
+ * @param rad 半径
+ * @param breath TRUEならばブレス処理、FALSEならばボール処理
+ * @param monspell モンスター魔法のID
+ * @param learnable ラーニング可能か否か
+ * @return なし
  */
 static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
 {
@@ -560,7 +583,12 @@ static void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool b
 	(void)project(m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
-
+/*
+ * @brief モンスターのボール型＆ブレス型魔法処理 /
+ * @param power 呪いの段階
+ * @param o_ptr 呪いをかけられる装備オブジェクトの構造体参照ポインタ
+ * @return 与える呪いのID
+ */
 u32b get_curse(int power, object_type *o_ptr)
 {
 	u32b new_curse;
@@ -587,6 +615,12 @@ u32b get_curse(int power, object_type *o_ptr)
 	return new_curse;
 }
 
+/*
+ * @brief 装備への呪い付加判定と付加処理 /
+ * @param chance 呪いの基本確率
+ * @param heavy_chance 重い呪いを選択肢に入れるか否か。
+ * @return なし
+ */
 void curse_equipment(int chance, int heavy_chance)
 {
 	bool        changed = FALSE;
@@ -657,7 +691,10 @@ msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
 
 
 /*
+ * @brief ID値が正しいモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good for hurting the player (directly).
+ * @param spell 判定対象のID
+ * @return 正しいIDならばTRUEを返す。
  */
 static bool spell_attack(byte spell)
 {
@@ -682,7 +719,10 @@ static bool spell_attack(byte spell)
 
 
 /*
+ * @brief ID値が退避目的に適したモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good for escaping.
+ * @param spell 判定対象のID
+ * @return 適した魔法のIDならばTRUEを返す。
  */
 static bool spell_escape(byte spell)
 {
@@ -697,7 +737,10 @@ static bool spell_escape(byte spell)
 }
 
 /*
+ * @brief ID値が妨害目的に適したモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good for annoying the player.
+ * @param spell 判定対象のID
+ * @return 適した魔法のIDならばTRUEを返す。
  */
 static bool spell_annoy(byte spell)
 {
@@ -724,7 +767,10 @@ static bool spell_annoy(byte spell)
 }
 
 /*
- * Return TRUE if a spell summons help.
+ * @brief ID値が召喚型のモンスター魔法IDかどうかを返す /
+ * Return TRUE if a spell is good for annoying the player.
+ * @param spell 判定対象のID
+ * @return 召喚型魔法のIDならばTRUEを返す。
  */
 static bool spell_summon(byte spell)
 {
@@ -737,7 +783,10 @@ static bool spell_summon(byte spell)
 
 
 /*
- * Return TRUE if a spell raise-dead.
+ * @brief ID値が死者復活処理かどうかを返す /
+ * Return TRUE if a spell is good for annoying the player.
+ * @param spell 判定対象のID
+ * @return 死者復活の処理ならばTRUEを返す。
  */
 static bool spell_raise(byte spell)
 {
