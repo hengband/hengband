@@ -766,7 +766,7 @@ static bool spell_annoy(byte spell)
 	return (FALSE);
 }
 
-/*
+/*!
  * @brief ID値が召喚型のモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good for annoying the player.
  * @param spell 判定対象のID
@@ -782,7 +782,7 @@ static bool spell_summon(byte spell)
 }
 
 
-/*
+/*!
  * @brief ID値が死者復活処理かどうかを返す /
  * Return TRUE if a spell is good for annoying the player.
  * @param spell 判定対象のID
@@ -797,9 +797,11 @@ static bool spell_raise(byte spell)
 	return (FALSE);
 }
 
-
-/*
+/*!
+ * @brief ID値が戦術的なモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good in a tactical situation.
+ * @param spell 判定対象のID
+ * @return 戦術的な魔法のIDならばTRUEを返す。
  */
 static bool spell_tactic(byte spell)
 {
@@ -810,8 +812,11 @@ static bool spell_tactic(byte spell)
 	return (FALSE);
 }
 
-/*
+/*!
+ * @brief ID値が無敵化するモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell makes invulnerable.
+ * @param spell 判定対象のID
+ * @return 召喚型魔法のIDならばTRUEを返す。
  */
 static bool spell_invulner(byte spell)
 {
@@ -822,8 +827,11 @@ static bool spell_invulner(byte spell)
 	return (FALSE);
 }
 
-/*
+/*!
+ * @brief ID値が加速するモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell hastes.
+ * @param spell 判定対象のID
+ * @return 召喚型魔法のIDならばTRUEを返す。
  */
 static bool spell_haste(byte spell)
 {
@@ -835,36 +843,38 @@ static bool spell_haste(byte spell)
 }
 
 
-/*
+/*!
+ * @brief ID値が時間停止を行うモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell world.
+ * @param spell 判定対象のID
+ * @return 時間停止魔法のIDならばTRUEを返す。
  */
 static bool spell_world(byte spell)
 {
-	/* world */
 	if (spell == 160 + 6) return (TRUE);
-
-	/* Not a haste spell */
 	return (FALSE);
 }
 
 
-/*
+/*!
+ * @brief ID値が特別効果のモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell special.
+ * @param spell 判定対象のID
+ * @return 特別効果魔法のIDならばTRUEを返す。
  */
 static bool spell_special(byte spell)
 {
 	if (p_ptr->inside_battle) return FALSE;
-
-	/* world */
 	if (spell == 160 + 7) return (TRUE);
-
-	/* Not a haste spell */
 	return (FALSE);
 }
 
 
-/*
+/*!
+ * @brief ID値が光の剣のモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell psycho-spear.
+ * @param spell 判定対象のID
+ * @return 光の剣のIDならばTRUEを返す。
  */
 static bool spell_psy_spe(byte spell)
 {
