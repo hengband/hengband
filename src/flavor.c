@@ -205,7 +205,7 @@ void get_table_sindarin(char *out_string)
 
 /*!
  * @brief ベースアイテムの未確定名を共通tval間でシャッフルする / Shuffle flavor indices of a group of objects with given tval
- * @param byte シャッフルしたいtval
+ * @param tval シャッフルしたいtval
  * @return なし
  * @details 巻物、各種魔道具などに利用される。
  */
@@ -385,7 +385,7 @@ static char *object_desc_chr(char *t, char c)
 /*!
  * @brief 対象文字配列に文字列をコピーする。
  * @param t 保管先文字列ポインタ
- * @param c コピーしたい文字列ポインタ
+ * @param s コピーしたい文字列ポインタ
  * @return 保管先の末尾アドレス
  * @details
  * Print a string "s" into a string "t", as if by strcpy(t, s),

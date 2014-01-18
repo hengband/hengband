@@ -3265,6 +3265,7 @@ void toggle_inven_equip(void)
 /*!
  * @brief 選択したアイテムの確認処理の補助 /
  * Verify the choice of an item.
+ * @param prompt メッセージ表示の一部
  * @param item 選択アイテムID
  * @return 確認がYesならTRUEを返す。
  * @details The item can be negative to mean "item on floor".
@@ -4394,7 +4395,6 @@ int scan_floor(int *items, int y, int x, int mode)
 
 /*!
  * @brief 床下に落ちているアイテムの一覧を返す / Display a list of the items on the floor at the given location.
- * @param items オブジェクトのIDリストを返すための配列参照ポインタ
  * @param target_item カーソルの初期値
  * @param y 走査するフロアのY座標
  * @param x 走査するフロアのX座標

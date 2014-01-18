@@ -6180,6 +6180,7 @@ bool inven_carry_okay(object_type *o_ptr)
  * Check if we have space for an item in the pack without overflow
  * @param o_ptr 比較対象オブジェクトの構造体参照ポインタ1
  * @param o_value o_ptrのアイテム価値（手動であらかじめ代入する必要がある？）
+ * @param j_ptr 比較対象オブジェクトの構造体参照ポインタ2
  * @return o_ptrの方が上位ならばTRUEを返す。
  */
 bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
