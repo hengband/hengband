@@ -386,7 +386,7 @@ static char *object_desc_chr(char *t, char c)
  * @brief 対象文字配列に文字列をコピーする。
  * @param t 保管先文字列ポインタ
  * @param c コピーしたい文字列ポインタ
- * @return なし
+ * @return 保管先の末尾アドレス
  * @details
  * Print a string "s" into a string "t", as if by strcpy(t, s),
  * and return a pointer to the terminator.

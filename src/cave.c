@@ -119,7 +119,7 @@ bool is_hidden_door(cave_type *c_ptr)
  * @param y2 終点のy座標
  * @param x2 終点のx座標
  * @return LOSが通っているならTRUEを返す。
- * @detail
+ * @details
  * A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,\n
  * 4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.\n
  *\n
@@ -532,7 +532,7 @@ void update_local_illumination(int y, int x)
 /*!
  * @brief 指定された座標をプレイヤーが視覚に収められるかを返す。 / Can the player "see" the given grid in detail?
  * @param y y座標
- * @param y x座標
+ * @param x x座標
  * @return 視覚に収められる状態ならTRUEを返す
  * @details
  * He must have vision, illumination, and line of sight.\n
@@ -596,8 +596,6 @@ bool player_can_see_bold(int y, int x)
 
 /*!
  * @brief 指定された座標をプレイヤー収められていない状態かどうか / Returns true if the player's grid is dark
- * @param y y座標
- * @param x x座標
  * @return 視覚に収められていないならTRUEを返す
  * @details player_can_see_bold()関数の返り値の否定を返している。
  */

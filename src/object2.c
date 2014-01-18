@@ -318,7 +318,7 @@ static void compact_objects_aux(int i1, int i2)
 /*!
  * @brief グローバルオブジェクト配列から優先度の低いものを削除し、データを圧縮する。 /
  * Compact and Reorder the object list.
- * @size 最低でも減らしたいオブジェクト数の水準
+ * @param size 最低でも減らしたいオブジェクト数の水準
  * @return なし
  * @details
  * （危険なので使用には注意すること）
@@ -616,7 +616,7 @@ static errr get_obj_num_prep(void)
 /*!
  * @brief オブジェクト生成テーブルからアイテムを取得する /
  * Choose an object kind that seems "appropriate" to the given level
- * @param 生成階
+ * @param level 生成階
  * @return 選ばれたオブジェクトベースID
  * @details
  * This function uses the "prob2" field of the "object allocation table",\n
@@ -5615,8 +5615,8 @@ amuse_type amuse_info[] =
 
 /*!
  * @brief 誰得ドロップを行う。
- * @param y 配置したいフロアのY座標
- * @param x 配置したいフロアのX座標
+ * @param y1 配置したいフロアのY座標
+ * @param x1 配置したいフロアのX座標
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  * @return なし

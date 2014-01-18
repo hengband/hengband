@@ -2552,7 +2552,7 @@ void display_equip(void)
  * @param tag 該当するオブジェクトがあるかを調べたいタグ
  * @param mode 所持、装備の切り替え
  * @return タグに該当するオブジェクトがあるならTRUEを返す
- * @detail 
+ * @details
  * A "tag" is a numeral "n" appearing as "@n" anywhere in the\n
  * inscription of an object.  Alphabetical characters don't work as a\n
  * tag in this form.\n
@@ -2677,7 +2677,7 @@ static bool get_tag(int *cp, char tag, int mode)
  * @param floor_list 床上アイテムの配列
  * @param floor_num  床上アイテムの配列ID
  * @return タグに該当するオブジェクトがあるならTRUEを返す
- * @detail 
+ * @details
  * A "tag" is a numeral "n" appearing as "@n" anywhere in the\n
  * inscription of an object.  Alphabetical characters don't work as a\n
  * tag in this form.\n
@@ -3306,7 +3306,7 @@ static bool verify(cptr prompt, int item)
 
 /*!
  * @brief 選択したアイテムの確認処理のメインルーチン /
- * @praram item 選択アイテムID
+ * @param item 選択アイテムID
  * @return 確認がYesならTRUEを返す。
  * @details The item can be negative to mean "item on floor".
  * Hack -- allow user to "prevent" certain choices
@@ -3364,7 +3364,7 @@ if (!verify("本当に", item)) return (FALSE);
 /*!
  * @brief プレイヤーの所持/装備オブジェクトが正規のものかを返す /
  * Auxiliary function for "get_item()" -- test an index
- * @param item 選択アイテムID
+ * @param i 選択アイテムID
  * @return 正規のIDならばTRUEを返す。
  */
 static bool get_item_okay(int i)
@@ -3384,7 +3384,6 @@ static bool get_item_okay(int i)
 /*!
  * @brief プレイヤーがオブジェクトを拾うことができる状態かを返す /
  * Determine whether get_item() can get some item or not
- * @param item 選択アイテムID
  * @return アイテムを拾えるならばTRUEを返す。
  * @details assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
  */
@@ -3409,7 +3408,7 @@ bool can_get_item(void)
  * @param cp 選択したオブジェクトのIDを返す。
  * @param pmt 選択目的のメッセージ
  * @param str 選択できるオブジェクトがない場合のキャンセルメッセージ
- * @praram mode オプションフラグ
+ * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  * Return TRUE only if an acceptable item was chosen by the user.\n
  * @details
@@ -4540,7 +4539,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
  * @param cp 選択したオブジェクトのIDを返す。
  * @param pmt 選択目的のメッセージ
  * @param str 選択できるオブジェクトがない場合のキャンセルメッセージ
- * @praram mode オプションフラグ
+ * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
 bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
@@ -5868,7 +5867,7 @@ static bool py_pickup_floor_aux(void)
 
 /*!
  * @brief 床上のアイテムを拾うメイン処理
- * @param pick FALSEなら金銭の自動拾いのみを行う/ FALSE then only gold will be picked up
+ * @param pickup FALSEなら金銭の自動拾いのみを行う/ FALSE then only gold will be picked up
  * @return なし
  * @details
  * This is called by py_pickup() when easy_floor is TRUE.
