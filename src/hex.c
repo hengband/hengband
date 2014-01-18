@@ -283,7 +283,7 @@ void revenge_spell(void)
 
 /*!
  * @brief 復讐ダメージの追加を行う
- * @param 蓄積されるダメージ量
+ * @param dam 蓄積されるダメージ量
  * @return なし
  */
 void revenge_store(int dam)

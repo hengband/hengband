@@ -114,7 +114,6 @@ bool is_hidden_door(cave_type *c_ptr)
 
 /*!
  * @brief LOS(Line Of Sight / 視線が通っているか)の判定を行う。
- * @param c_ptr マス構造体の参照ポインタ
  * @param y1 始点のy座標
  * @param x1 始点のx座標
  * @param y2 終点のy座標
@@ -384,7 +383,7 @@ bool los(int y1, int x1, int y2, int x2)
 /*!
  * @brief 指定された座標のマスが現在照らされているかを返す。 / Check for "local" illumination
  * @param y y座標
- * @param y x座標
+ * @param x x座標
  * @return 指定された座標に照明がかかっているならTRUEを返す。。
  */
 static bool check_local_illumination(int y, int x)
@@ -435,7 +434,7 @@ static bool check_local_illumination(int y, int x)
 /*!
  * @brief 指定された座標の照明状態を更新する / Update "local" illumination
  * @param y y座標
- * @param y x座標
+ * @param x x座標
  * @return なし
  */
 void update_local_illumination(int y, int x)
@@ -598,7 +597,7 @@ bool player_can_see_bold(int y, int x)
 /*!
  * @brief 指定された座標をプレイヤー収められていない状態かどうか / Returns true if the player's grid is dark
  * @param y y座標
- * @param y x座標
+ * @param x x座標
  * @return 視覚に収められていないならTRUEを返す
  * @details player_can_see_bold()関数の返り値の否定を返している。
  */
@@ -611,7 +610,7 @@ bool no_lite(void)
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。 / Determine if a given location may be "destroyed"
  * @param y y座標
- * @param y x座標
+ * @param x x座標
  * @return 各種の変更が可能ならTRUEを返す。
  * @details 
  * 条件は永久地形でなく、なおかつ該当のマスにアーティファクトが存在しないか、である。英語の旧コメントに反して＊破壊＊の抑止判定には現在使われていない。

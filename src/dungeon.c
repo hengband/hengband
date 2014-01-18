@@ -1024,7 +1024,7 @@ static void regenmagic(int regen_amount)
 /*!
  * @brief 100ゲームターン毎のモンスターのHP自然回復処理 / Regenerate the monsters (once per 100 game turns)
  * @return なし
- * @memo XXX XXX XXX Should probably be done during monster turns.
+ * @note XXX XXX XXX Should probably be done during monster turns.
  */
 static void regen_monsters(void)
 {
@@ -1071,7 +1071,7 @@ static void regen_monsters(void)
 /*!
  * @brief 30ゲームターン毎のボール中モンスターのHP自然回復処理 / Regenerate the captured monsters (once per 30 game turns)
  * @return なし
- * @memo XXX XXX XXX Should probably be done during monster turns.
+ * @note XXX XXX XXX Should probably be done during monster turns.
  */
 static void regen_captured_monsters(void)
 {
@@ -1529,7 +1529,7 @@ static void check_music(void)
 
 /*!
  * @brief 現在呪いを保持している装備品を一つランダムに探し出す / Choose one of items that have cursed flag
- * @flag 探し出したい呪いフラグ配列
+ * @param flag 探し出したい呪いフラグ配列
  * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
  * 呪いがない場合NULLを返す。
  */
@@ -5590,7 +5590,7 @@ static void process_upkeep_with_speed(void)
 /*!
  * @brief プレイヤーの行動処理 / Process the player
  * @return なし
- * @memo
+ * @note
  * Notice the annoying code to handle "pack overflow", which\n
  * must come first just in case somebody manages to corrupt\n
  * the savefiles by clever use of menu commands or something.\n
@@ -6203,7 +6203,7 @@ msg_print("中断しました。");
 /*!
  * @brief 現在プレイヤーがいるダンジョンの全体処理 / Interact with the current dungeon level.
  * @return なし
- * @memo
+ * @note
  * This function will not exit until the level is completed,\n
  * the user dies, or the game is terminated.\n
  */
@@ -6518,7 +6518,7 @@ msg_print("試合開始！");
 /*!
  * @brief 全ユーザプロファイルをロードする / Load some "user pref files"
  * @return なし
- * @memo
+ * @note
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.
  */

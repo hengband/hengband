@@ -207,7 +207,6 @@ static s16b get_realm_virtues(byte realm)
 /*!
  * @brief 作成中のプレイヤーキャラクターに徳8種類を与える。 / Select virtues & reset values for a new character
  * @details 職業に応じて1〜4種が固定、種族に応じて1種類が与えられ、後は重複なくランダムに選択される。
- * @param なし
  * @return なし
  */
 void get_virtues(void)
@@ -416,7 +415,7 @@ void get_virtues(void)
 
 /*!
  * @brief 対応する徳をプレイヤーがスロットに登録している場合に加減を行う。
- * @detail 範囲は-125〜125、基本的に絶対値が大きいほど絶対値が上がり辛くなる。
+ * @details 範囲は-125〜125、基本的に絶対値が大きいほど絶対値が上がり辛くなる。
  * @param virtue 徳のID
  * @param amount 加減量
  * @return なし

@@ -1278,7 +1278,9 @@ bool object_is_quest_target(object_type *o_ptr)
 
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
+ * @param buf 表記を返すための文字列参照ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
+ * @param mode 表記に関するオプション指定
  * @return 現在クエスト達成目的のアイテムならばTRUEを返す。
  * @details
  * One can choose the "verbosity" of the description, including whether\n

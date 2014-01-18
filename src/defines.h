@@ -1,5 +1,5 @@
 /*!
- *  @file degine.h
+ *  @file defines.h
  *  @brief 主要なマクロ定義ヘッダ / Purpose: global constants and macro definitions
  *  @date 2014/01/02
  *  @author

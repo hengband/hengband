@@ -3043,7 +3043,7 @@ msg_print("バーテンはいくらかの食べ物とビールをくれた。");
 
 /*!
  * @brief クエスト情報を表示しつつ処理する。/ Display quest information
- * @param quest クエストのID
+ * @param questnum クエストのID
  * @param do_init クエストの開始処理(TRUE)、結果処理か(FALSE)
  * @return なし
  */
@@ -4408,9 +4408,9 @@ static int repair_broken_weapon(int bcost)
 /*!
  * @brief アイテムの強化を行う。 / Enchant item
  * @param cost １回毎の費用
- * @to_hit 命中をアップさせる量
- * @to_dam ダメージをアップさせる量
- * @to_ac ＡＣをアップさせる量
+ * @param to_hit 命中をアップさせる量
+ * @param to_dam ダメージをアップさせる量
+ * @param to_ac ＡＣをアップさせる量
  * @return 実際にかかった費用
  */
 static bool enchant_item(int cost, int to_hit, int to_dam, int to_ac)
