@@ -886,8 +886,11 @@ static bool spell_psy_spe(byte spell)
 }
 
 
-/*
+/*!
+ * @brief ID値が治癒魔法かどうかを返す /
  * Return TRUE if a spell is good for healing.
+ * @param spell 判定対象のID
+ * @return 治癒魔法のIDならばTRUEを返す。
  */
 static bool spell_heal(byte spell)
 {
@@ -899,8 +902,11 @@ static bool spell_heal(byte spell)
 }
 
 
-/*
+/*!
+ * @brief ID値が魔力消去かどうかを返す /
  * Return TRUE if a spell is good for dispel.
+ * @param spell 判定対象のID
+ * @return 魔力消去のIDならばTRUEを返す。
  */
 static bool spell_dispel(byte spell)
 {
@@ -912,8 +918,11 @@ static bool spell_dispel(byte spell)
 }
 
 
-/*
+/*!
+ * @brief モンスターがプレイヤーに魔力消去を与えるべきかを判定するルーチン
  * Check should monster cast dispel spell.
+ * @param m_idx モンスターの構造体配列ID
+ * @return 魔力消去をかけるべきならTRUEを返す。
  */
 bool dispel_check(int m_idx)
 {
@@ -1013,19 +1022,24 @@ bool dispel_check(int m_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
- *
- * Note that this list does NOT include spells that will just hit
- * other monsters, and the list is restricted when the monster is
- * "desperate".  Should that be the job of this function instead?
- *
- * Stupid monsters will just pick a spell randomly.  Smart monsters
- * will choose more "intelligently".
- *
- * Use the helper functions above to put spells into categories.
- *
- * This function may well be an efficiency bottleneck.
+ * @param m_idx モンスターの構造体配列ID
+ * @param spells 候補魔法IDをまとめた配列
+ * @param num spellsの長さ
+ * @return 選択したモンスター魔法のID
+ * @details
+ * Note that this list does NOT include spells that will just hit\n
+ * other monsters, and the list is restricted when the monster is\n
+ * "desperate".  Should that be the job of this function instead?\n
+ *\n
+ * Stupid monsters will just pick a spell randomly.  Smart monsters\n
+ * will choose more "intelligently".\n
+ *\n
+ * Use the helper functions above to put spells into categories.\n
+ *\n
+ * This function may well be an efficiency bottleneck.\n
  */
 static int choose_attack_spell(int m_idx, byte spells[], byte num)
 {
@@ -1250,8 +1264,11 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 }
 
 
-/*
+/*!
+ * @brief ID値が非魔術的な特殊技能かどうかを返す /
  * Return TRUE if a spell is inate spell.
+ * @param spell 判定対象のID
+ * @return 非魔術的な特殊技能ならばTRUEを返す。
  */
 bool spell_is_inate(u16b spell)
 {
@@ -1273,6 +1290,15 @@ bool spell_is_inate(u16b spell)
 }
 
 
+/*!
+ * @brief モンスターがプレイヤーにダメージを与えるための最適な座標を算出する /
+ * @param m_ptr 技能を使用するモンスター構造体の参照ポインタ
+ * @param yp 最適な目標地点のY座標を返す参照ポインタ
+ * @param xp 最適な目標地点のX座標を返す参照ポインタ
+ * @param f_flag 射線に入れるのを避ける地形の所持フラグ
+ * @param path_check 射線を判定するための関数ポインタ
+ * @return 有効な座標があった場合TRUEを返す
+ */
 static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
 	int f_flag, bool (*path_check)(int, int, int, int))
 {
@@ -1320,59 +1346,63 @@ static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
 #define DO_SPELL_BR_DISI 2
 #define DO_SPELL_BA_LITE 3
 
-/*
+/*!
+ * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
- *
- * Returns "TRUE" if a spell (or whatever) was (successfully) cast.
- *
- * XXX XXX XXX This function could use some work, but remember to
- * keep it as optimized as possible, while retaining generic code.
- *
- * Verify the various "blind-ness" checks in the code.
- *
- * XXX XXX XXX Note that several effects should really not be "seen"
- * if the player is blind.  See also "effects.c" for other "mistakes".
- *
- * Perhaps monsters should breathe at locations *near* the player,
- * since this would allow them to inflict "partial" damage.
- *
- * Perhaps smart monsters should decline to use "bolt" spells if
- * there is a monster in the way, unless they wish to kill it.
- *
- * Note that, to allow the use of the "track_target" option at some
- * later time, certain non-optimal things are done in the code below,
- * including explicit checks against the "direct" variable, which is
- * currently always true by the time it is checked, but which should
- * really be set according to an explicit "projectable()" test, and
- * the use of generic "x,y" locations instead of the player location,
- * with those values being initialized with the player location.
- *
- * It will not be possible to "correctly" handle the case in which a
- * monster attempts to attack a location which is thought to contain
- * the player, but which in fact is nowhere near the player, since this
- * might induce all sorts of messages about the attack itself, and about
- * the effects of the attack, which the player might or might not be in
- * a position to observe.  Thus, for simplicity, it is probably best to
- * only allow "faulty" attacks by a monster if one of the important grids
- * (probably the initial or final grid) is in fact in view of the player.
- * It may be necessary to actually prevent spell attacks except when the
- * monster actually has line of sight to the player.  Note that a monster
- * could be left in a bizarre situation after the player ducked behind a
- * pillar and then teleported away, for example.
- *
- * Note that certain spell attacks do not use the "project()" function
- * but "simulate" it via the "direct" variable, which is always at least
- * as restrictive as the "project()" function.  This is necessary to
- * prevent "blindness" attacks and such from bending around walls, etc,
- * and to allow the use of the "track_target" option in the future.
- *
- * Note that this function attempts to optimize the use of spells for the
- * cases in which the monster has no spells, or has spells but cannot use
- * them, or has spells but they will have no "useful" effect.  Note that
- * this function has been an efficiency bottleneck in the past.
- *
- * Note the special "MFLAG_NICE" flag, which prevents a monster from using
- * any spell attacks until the player has had a single chance to move.
+ * @param m_idx モンスター構造体配列のID
+ * @return 実際に特殊技能を利用したらTRUEを返す
+ * @details
+ * Returns "TRUE" if a spell (or whatever) was (successfully) cast.\n
+ *\n
+ * XXX XXX XXX This function could use some work, but remember to\n
+ * keep it as optimized as possible, while retaining generic code.\n
+ *\n
+ * Verify the various "blind-ness" checks in the code.\n
+ *\n
+ * XXX XXX XXX Note that several effects should really not be "seen"\n
+ * if the player is blind.  See also "effects.c" for other "mistakes".\n
+ *\n
+ * Perhaps monsters should breathe at locations *near* the player,\n
+ * since this would allow them to inflict "partial" damage.\n
+ *\n
+ * Perhaps smart monsters should decline to use "bolt" spells if\n
+ * there is a monster in the way, unless they wish to kill it.\n
+ *\n
+ * Note that, to allow the use of the "track_target" option at some\n
+ * later time, certain non-optimal things are done in the code below,\n
+ * including explicit checks against the "direct" variable, which is\n
+ * currently always true by the time it is checked, but which should\n
+ * really be set according to an explicit "projectable()" test, and\n
+ * the use of generic "x,y" locations instead of the player location,\n
+ * with those values being initialized with the player location.\n
+ *\n
+ * It will not be possible to "correctly" handle the case in which a\n
+ * monster attempts to attack a location which is thought to contain\n
+ * the player, but which in fact is nowhere near the player, since this\n
+ * might induce all sorts of messages about the attack itself, and about\n
+ * the effects of the attack, which the player might or might not be in\n
+ * a position to observe.  Thus, for simplicity, it is probably best to\n
+ * only allow "faulty" attacks by a monster if one of the important grids\n
+ * (probably the initial or final grid) is in fact in view of the player.\n
+ * It may be necessary to actually prevent spell attacks except when the\n
+ * monster actually has line of sight to the player.  Note that a monster\n
+ * could be left in a bizarre situation after the player ducked behind a\n
+ * pillar and then teleported away, for example.\n
+ *\n
+ * @note
+ * that certain spell attacks do not use the "project()" function\n
+ * but "simulate" it via the "direct" variable, which is always at least\n
+ * as restrictive as the "project()" function.  This is necessary to\n
+ * prevent "blindness" attacks and such from bending around walls, etc,\n
+ * and to allow the use of the "track_target" option in the future.\n
+ *\n
+ * Note that this function attempts to optimize the use of spells for the\n
+ * cases in which the monster has no spells, or has spells but cannot use\n
+ * them, or has spells but they will have no "useful" effect.  Note that\n
+ * this function has been an efficiency bottleneck in the past.\n
+ *\n
+ * Note the special "MFLAG_NICE" flag, which prevents a monster from using\n
+ * any spell attacks until the player has had a single chance to move.\n
  */
 bool make_attack_spell(int m_idx)
 {

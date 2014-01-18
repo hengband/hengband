@@ -440,9 +440,7 @@ static int get_snipe_power(int *sn, bool only_browse)
  * @brief スナイバー技能のスレイ倍率計算を行う /
  * Calcurate magnification of snipe technics
  * @param mult スナイバー技能のスレイ効果以前に算出している多要素の倍率(/10倍)
- * @param flgs スナイバー技能に使用する武器のスレイフラグ配列
  * @param m_ptr 目標となるモンスターの構造体参照ポインタ
- * @param mode スナイバー技能のスレイ型ID
  * @return スレイの倍率(/10倍)
  */
 int tot_dam_aux_snipe(int mult, monster_type *m_ptr)
