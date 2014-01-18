@@ -1,8 +1,19 @@
+/*!
+ * @file snipe.c
+ * @brief スナイパー技能の実装 / Sniping
+ * @date 2014/01/18
+ * @author
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ */
+
 #include "angband.h"
 
 #define MAX_SNIPE_POWERS 16
 
+/*! スナイパー技能情報のtypedef */
 typedef struct snipe_power snipe_power;
+
+/*! スナイパー技能情報の構造体 */
 struct snipe_power
 {
 	int     min_lev;
@@ -10,6 +21,7 @@ struct snipe_power
 	const char *name;
 };
 
+/*! スナイパー技能の解説メッセージ */
 static const char *snipe_tips[MAX_SNIPE_POWERS] =
 {
 #ifdef JP
@@ -49,6 +61,7 @@ static const char *snipe_tips[MAX_SNIPE_POWERS] =
 #endif
 };
 
+/*! スナイパー技能テーブル */
 snipe_power snipe_powers[MAX_SNIPE_POWERS] =
 {
 	/* Level gained,  cost,  name */
@@ -89,7 +102,10 @@ snipe_power snipe_powers[MAX_SNIPE_POWERS] =
 #endif
 };
 
-
+/*! 
+ * @brief スナイパーの集中度加算
+ * @return 常にTRUEを返す
+ */
 static bool snipe_concentrate(void)
 {
 	if ((int)p_ptr->concent < (2 + (p_ptr->lev + 5) / 10)) p_ptr->concent++;
@@ -113,6 +129,11 @@ static bool snipe_concentrate(void)
 	return (TRUE);
 }
 
+/*! 
+ * @brief スナイパーの集中度リセット
+ * @param msg TRUEならばメッセージを表示する
+ * @return なし
+ */
 void reset_concentration(bool msg)
 {
 	if (msg)
@@ -136,6 +157,11 @@ void reset_concentration(bool msg)
 	p_ptr->update |= (PU_MONSTERS);
 }
 
+/*! 
+ * @brief スナイパーの集中度によるダメージボーナスを加算する
+ * @param tdam 算出中のダメージ
+ * @return 集中度修正を加えたダメージ
+ */
 int boost_concentration_damage(int tdam)
 {
 	tdam *= (10 + p_ptr->concent);
@@ -144,6 +170,10 @@ int boost_concentration_damage(int tdam)
 	return (tdam);
 }
 
+/*! 
+ * @brief スナイパーの技能リストを表示する
+ * @return なし
+ */
 void display_snipe_list(void)
 {
 	int             i;
@@ -181,19 +211,23 @@ void display_snipe_list(void)
 }
 
 
-/*
- * Allow user to choose a mindcrafter power.
- *
- * If a valid spell is chosen, saves it in '*sn' and returns TRUE
- * If the user hits escape, returns FALSE, and set '*sn' to -1
- * If there are no legal choices, returns FALSE, and sets '*sn' to -2
- *
- * The "prompt" should be "cast", "recite", or "study"
- * The "known" should be TRUE for cast/pray, FALSE for study
- *
- * nb: This function has a (trivial) display bug which will be obvious
- * when you run it. It's probably easy to fix but I haven't tried,
- * sorry.
+/*! 
+ * @brief スナイパー技能を選択する
+ * @param sn 選択した特殊技能ID、キャンセルの場合-1、不正な選択の場合-2を返す
+ * @param only_browse 一覧を見るだけの場合TRUEを返す
+ * @return 発動可能な魔法を選択した場合TRUE、キャンセル処理か不正な選択が行われた場合FALSEを返す。
+ * Allow user to choose a mindcrafter power.\n
+ *\n
+ * If a valid spell is chosen, saves it in '*sn' and returns TRUE\n
+ * If the user hits escape, returns FALSE, and set '*sn' to -1\n
+ * If there are no legal choices, returns FALSE, and sets '*sn' to -2\n
+ *\n
+ * The "prompt" should be "cast", "recite", or "study"\n
+ * The "known" should be TRUE for cast/pray, FALSE for study\n
+ *\n
+ * nb: This function has a (trivial) display bug which will be obvious\n
+ * when you run it. It's probably easy to fix but I haven't tried,\n
+ * sorry.\n
  */
 static int get_snipe_power(int *sn, bool only_browse)
 {
@@ -402,8 +436,16 @@ static int get_snipe_power(int *sn, bool only_browse)
 	return (TRUE);
 }
 
-
-int tot_dam_aux_snipe (int mult, monster_type *m_ptr)
+/*!
+ * @brief スナイバー技能のスレイ倍率計算を行う /
+ * Calcurate magnification of snipe technics
+ * @param mult スナイバー技能のスレイ効果以前に算出している多要素の倍率(/10倍)
+ * @param flgs スナイバー技能に使用する武器のスレイフラグ配列
+ * @param m_ptr 目標となるモンスターの構造体参照ポインタ
+ * @param mode スナイバー技能のスレイ型ID
+ * @return スレイの倍率(/10倍)
+ */
+int tot_dam_aux_snipe(int mult, monster_type *m_ptr)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool seen = is_seen(m_ptr);
@@ -494,9 +536,12 @@ int tot_dam_aux_snipe (int mult, monster_type *m_ptr)
 	return (mult);
 }
 
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'mindcrafter'.
+
+/*!
+ * @brief スナイパー技能の発動 /
+ * do_cmd_cast calls this function if the player's class is 'snipe'.
+ * @param spell 発動する特殊技能のID
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
 static bool cast_sniper_spell(int spell)
 {
@@ -549,10 +594,9 @@ static bool cast_sniper_spell(int spell)
 	return (is_fired);
 }
 
-
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'mindcrafter'.
+/*!
+ * @brief スナイパー技能コマンドのメインルーチン /
+ * @return なし
  */
 void do_cmd_snipe(void)
 {
@@ -614,9 +658,9 @@ void do_cmd_snipe(void)
 	p_ptr->window |= (PW_SPELL);
 }
 
-/*
- * do_cmd_cast calls this function if the player's class
- * is 'mindcrafter'.
+/*!
+ * @brief スナイパー技能コマンドの表示 /
+ * @return なし
  */
 void do_cmd_snipe_browse(void)
 {
