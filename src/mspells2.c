@@ -1,20 +1,33 @@
-/* File: mspells2.c */
+/*!
+ * @file mspells2.c
+ * @brief モンスター魔法の実装(対モンスター処理) / Monster spells (attack monster)
+ * @date 2014/01/17
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * @details
 
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
- */
-
-/* Purpose: Monster spells (attack monster) */
 
 #include "angband.h"
 
 
-/*
+/*!
+ * @brief モンスターが敵対モンスターにブレス/ボール型特殊技能を放つ処理 /
  * Monster casts a breath (or ball) attack at another monster.
+ * @param m_idx 特殊技能を使うモンスターの参照ID
+ * @param y 目標のY座標
+ * @param x 目標のX座標
+ * @param typ 効果属性のID
+ * @param dam_hp 威力
+ * @param rad 半径
+ * @param breath TRUEならばブレス / FALSEならばボール
+ * @param monspell 特殊攻撃のID
+ * @param learnable ラーニング可能な前提が揃っているならばTRUE
+ * @return なし
+ * @details
  * Pass over any monsters that may be in the way
  * Affect grids, objects, monsters, and the player
  */
@@ -52,8 +65,18 @@ static void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int
 }
 
 
-/*
+/*!
+ * @brief モンスターが敵対モンスターにボルト型特殊技能を放つ処理 /
  * Monster casts a bolt at another monster
+ * @param m_idx 特殊技能を使うモンスターの参照ID
+ * @param y 目標のY座標
+ * @param x 目標のX座標
+ * @param typ 効果属性のID
+ * @param dam_hp 威力
+ * @param monspell 特殊攻撃のID
+ * @param learnable ラーニング可能な前提が揃っているならばTRUE
+ * @return なし
+ * @details
  * Stop if we hit a monster
  * Affect monsters and the player
  */
@@ -64,6 +87,19 @@ static void monst_bolt_monst(int m_idx, int y, int x, int typ, int dam_hp, int m
 	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
+
+/*!
+ * @brief モンスターが敵対モンスターにビーム型特殊技能を放つ処理 /
+ * Monster casts a bolt at another monster
+ * @param m_idx 特殊技能を使うモンスターの参照ID
+ * @param y 目標のY座標
+ * @param x 目標のX座標
+ * @param typ 効果属性のID
+ * @param dam_hp 威力
+ * @param monspell 特殊攻撃のID
+ * @param learnable ラーニング可能な前提が揃っているならばTRUE
+ * @return なし
+ */
 static void monst_beam_monst(int m_idx, int y, int x, int typ, int dam_hp, int monspell, bool learnable)
 {
 	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU;
@@ -71,8 +107,15 @@ static void monst_beam_monst(int m_idx, int y, int x, int typ, int dam_hp, int m
 	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
-/*
+/*!
+ * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
  * Determine if a beam spell will hit the target.
+ * @param y1 始点のY座標
+ * @param x1 始点のX座標
+ * @param y2 目標のY座標
+ * @param x2 目標のX座標
+ * @param m_ptr 使用するモンスターの構造体参照ポインタ
+ * @return ビームが到達可能ならばTRUEを返す
  */
 static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 {
@@ -112,6 +155,18 @@ static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 	return TRUE;
 }
 
+/*!
+ * @brief モンスターが敵対モンスターに直接ブレスを当てることが可能かを判定する /
+ * Determine if a breath will hit the target.
+ * @param y1 始点のY座標
+ * @param x1 始点のX座標
+ * @param y2 目標のY座標
+ * @param x2 目標のX座標
+ * @param rad 半径
+ * @param typ 効果属性ID
+ * @param is_friend TRUEならば、プレイヤーを巻き込む時にブレスの判定をFALSEにする。
+ * @return ブレスを直接当てられるならばTRUEを返す
+ */
 static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool is_friend)
 {
 	/* Must be the same as projectable() */
@@ -220,8 +275,15 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 	return TRUE;
 }
 
-/*
+/*!
+ * @brief モンスターが特殊能力の目標地点を決める処理 /
  * Get the actual center point of ball spells (rad > 1) (originally from TOband)
+ * @param sy 始点のY座標
+ * @param sx 始点のX座標
+ * @param ty 目標Y座標を返す参照ポインタ
+ * @param tx 目標X座標を返す参照ポインタ
+ * @param flg 判定のフラグ配列
+ * @return なし
  */
 void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 {
@@ -247,8 +309,12 @@ void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 	}
 }
 
-/*
+/*!
+ * @brief モンスターが敵モンスターに魔力消去を使うかどうかを返す /
  * Check should monster cast dispel spell at other monster.
+ * @param m_idx 術者のモンスターID
+ * @param t_idx 目標のモンスターID
+ * @return 魔力消去を使うべきならばTRUEを変えす。
  */
 static bool dispel_check_monster(int m_idx, int t_idx)
 {
@@ -273,10 +339,12 @@ static bool dispel_check_monster(int m_idx, int t_idx)
 	return FALSE;
 }
 
-/*
- * Monster tries to 'cast a spell' (or breath, etc)
- * at another monster.
- *
+/*!
+ * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
+ * Monster tries to 'cast a spell' (or breath, etc) at another monster.
+ * @param m_idx 術者のモンスターID
+ * @return 実際に特殊能力を使った場合TRUEを返す
+ * @details
  * The player is only disturbed if able to be affected by the spell.
  */
 bool monst_spell_monst(int m_idx)
