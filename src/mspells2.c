@@ -9,7 +9,7 @@
  * are included in all such copies.  Other copyrights may also apply.\n
  * 2014 Deskull rearranged comment for Doxygen.\n
  * @details
-
+ */
 
 #include "angband.h"
 
