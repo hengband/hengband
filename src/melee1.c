@@ -1,20 +1,26 @@
-/* File: melee1.c */
-
-/* Purpose: Monster attacks */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file melee1.c
+ * @brief モンスターの打撃処理 / Monster attacks
+ * @date 2014/01/17
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * @details
  */
 
 #include "angband.h"
 
 
-/*
- * Critical blow.  All hits that do 95% of total possible damage,
+/*!
+ * @brief モンスター打撃のクリティカルランクを返す /
+ * Critical blow. All hits that do 95% of total possible damage,
+ * @param dice モンスター打撃のダイス数
+ * @param sides モンスター打撃の最大ダイス目
+ * @param dam プレイヤーに与えたダメージ
+ * @details
  * and which also do at least 20 damage, or, sometimes, N damage.
  * This is used only to determine "cuts" and "stuns".
  */
@@ -47,12 +53,14 @@ static int monster_critical(int dice, int sides, int dam)
 	return (1 + max);
 }
 
-
-
-
-
-/*
+/*!
+ * @brief モンスター打撃の命中を判定する /
  * Determine if a monster attack against the player succeeds.
+ * @param power 打撃属性毎の基本命中値
+ * @param level モンスターのレベル
+ * @param stun モンスターの朦朧値
+ * @return TRUEならば命中判定
+ * @details
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match monster power against player armor.
  */
@@ -84,9 +92,7 @@ static int check_hit(int power, int level, int stun)
 
 
 
-/*
- * Hack -- possible "insult" messages
- */
+/*! モンスターの侮辱行為メッセージテーブル / Hack -- possible "insult" messages */
 static cptr desc_insult[] =
 {
 #ifdef JP
@@ -116,10 +122,7 @@ static cptr desc_insult[] =
 };
 
 
-
-/*
- * Hack -- possible "insult" messages
- */
+/*! マゴットのぼやきメッセージテーブル / Hack -- possible "insult" messages */
 static cptr desc_moan[] =
 {
 #ifdef JP
@@ -137,8 +140,10 @@ static cptr desc_moan[] =
 };
 
 
-/*
- * Attack the player via physical attacks.
+/*!
+ * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
+ * @param m_idx 打撃を行うモンスターのID
+ * @return 実際に攻撃処理を行った場合TRUEを返す
  */
 bool make_attack_normal(int m_idx)
 {
