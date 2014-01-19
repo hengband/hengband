@@ -188,6 +188,7 @@ static bool get_enemy_dir(int m_idx, int *mm)
  * @brief モンスターが敵モンスターに行う打撃処理 /
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
  * @param m_idx 目標となるモンスターの参照ID
+ * @param dam ダメージ量
  * @param fear 目標となるモンスターの恐慌状態を返す参照ポインタ
  * @param note 目標モンスターが死亡した場合の特別メッセージ(NULLならば標準表示を行う)
  * @param who 打撃を行ったモンスターの参照ID
@@ -918,19 +919,24 @@ static sint *dist_offsets_x[10] =
 	d_off_x_5, d_off_x_6, d_off_x_7, d_off_x_8, d_off_x_9
 };
 
-/*
-* Choose a "safe" location near a monster for it to run toward.
-*
-* A location is "safe" if it can be reached quickly and the player
-* is not able to fire into it (it isn't a "clean shot").  So, this will
-* cause monsters to "duck" behind walls.  Hopefully, monsters will also
-* try to run towards corridor openings if they are in a room.
-*
-* This function may take lots of CPU time if lots of monsters are
-* fleeing.
-*
-* Return TRUE if a safe location is available.
-*/
+/*!
+ * @brief モンスターが逃げ込める安全な地点を返す /
+ * Choose a "safe" location near a monster for it to run toward.
+ * @param m_idx モンスターの参照ID
+ * @param yp 移動先のマスのY座標を返す参照ポインタ
+ * @param xp 移動先のマスのX座標を返す参照ポインタ
+ * @return 有効なマスがあった場合TRUEを返す
+ * @details
+ * A location is "safe" if it can be reached quickly and the player\n
+ * is not able to fire into it (it isn't a "clean shot").  So, this will\n
+ * cause monsters to "duck" behind walls.  Hopefully, monsters will also\n
+ * try to run towards corridor openings if they are in a room.\n
+ *\n
+ * This function may take lots of CPU time if lots of monsters are\n
+ * fleeing.\n
+ *\n
+ * Return TRUE if a safe location is available.\n
+ */
 static bool find_safety(int m_idx, int *yp, int *xp)
 {
 	monster_type *m_ptr = &m_list[m_idx];
@@ -1012,13 +1018,18 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 }
 
 
-/*
+/*!
+ * @brief モンスターが隠れ潜める地点を返す /
  * Choose a good hiding place near a monster for it to run toward.
- *
- * Pack monsters will use this to "ambush" the player and lure him out
- * of corridors into open space so they can swarm him.
- *
- * Return TRUE if a good location is available.
+ * @param m_idx モンスターの参照ID
+ * @param yp 移動先のマスのY座標を返す参照ポインタ
+ * @param xp 移動先のマスのX座標を返す参照ポインタ
+ * @return 有効なマスがあった場合TRUEを返す
+ * @details
+ * Pack monsters will use this to "ambush" the player and lure him out\n
+ * of corridors into open space so they can swarm him.\n
+ *\n
+ * Return TRUE if a good location is available.\n
  */
 static bool find_hiding(int m_idx, int *yp, int *xp)
 {
@@ -1087,8 +1098,12 @@ static bool find_hiding(int m_idx, int *yp, int *xp)
 }
 
 
-/*
+/*!
+ * @brief モンスターの移動方向を返す /
  * Choose "logical" directions for monster movement
+ * @param m_idx モンスターの参照ID
+ * @param mm 移動方向を返す方向IDの参照ポインタ
+ * @return 有効方向があった場合TRUEを返す
  */
 static bool get_moves(int m_idx, int *mm)
 {
@@ -1417,6 +1432,14 @@ static bool get_moves(int m_idx, int *mm)
 }
 
 
+/*!
+ * @brief モンスターから敵モンスターへの命中判定
+ * @param power 打撃属性による基本命中値
+ * @param level 攻撃側モンスターのレベル
+ * @param ac 目標モンスターのAC
+ * @param stun 攻撃側モンスターが朦朧状態ならTRUEを返す
+ * @return 命中ならばTRUEを返す
+ */
 static int check_hit2(int power, int level, int ac, int stun)
 {
 	int i, k;
@@ -1446,7 +1469,12 @@ static int check_hit2(int power, int level, int ac, int stun)
 #define BLOW_EFFECT_TYPE_HEAL  3
 
 
-/* Monster attacks monster */
+/*!
+ * @brief モンスターから敵モンスターへの打撃攻撃処理
+ * @param m_idx 攻撃側モンスターの参照ID
+ * @param t_idx 目標側モンスターの参照ID
+ * @return 実際に打撃処理が行われた場合TRUEを返す
+ */
 static bool monst_attack_monst(int m_idx, int t_idx)
 {
 	monster_type    *m_ptr = &m_list[m_idx];
@@ -2227,31 +2255,34 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
 }
 
 
-/*
+/*!
+ * @brief モンスター単体の１ターン行動処理メインルーチン /
  * Process a monster
- *
- * The monster is known to be within 100 grids of the player
- *
- * In several cases, we directly update the monster lore
- *
- * Note that a monster is only allowed to "reproduce" if there
- * are a limited number of "reproducing" monsters on the current
- * level.  This should prevent the level from being "swamped" by
- * reproducing monsters.  It also allows a large mass of mice to
- * prevent a louse from multiplying, but this is a small price to
- * pay for a simple multiplication method.
- *
- * XXX Monster fear is slightly odd, in particular, monsters will
- * fixate on opening a door even if they cannot open it.  Actually,
- * the same thing happens to normal monsters when they hit a door
- *
- * XXX XXX XXX In addition, monsters which *cannot* open or bash
- * down a door will still stand there trying to open it...
- *
- * XXX Technically, need to check for monster in the way
- * combined with that monster being in a wall (or door?)
- *
- * A "direction" of "5" means "pick a random direction".
+ * @param m_idx 行動モンスターの参照ID
+ * @return なし
+ * @details
+ * The monster is known to be within 100 grids of the player\n
+ *\n
+ * In several cases, we directly update the monster lore\n
+ *\n
+ * Note that a monster is only allowed to "reproduce" if there\n
+ * are a limited number of "reproducing" monsters on the current\n
+ * level.  This should prevent the level from being "swamped" by\n
+ * reproducing monsters.  It also allows a large mass of mice to\n
+ * prevent a louse from multiplying, but this is a small price to\n
+ * pay for a simple multiplication method.\n
+ *\n
+ * XXX Monster fear is slightly odd, in particular, monsters will\n
+ * fixate on opening a door even if they cannot open it.  Actually,\n
+ * the same thing happens to normal monsters when they hit a door\n
+ *\n
+ * XXX XXX XXX In addition, monsters which *cannot* open or bash\n
+ * down a door will still stand there trying to open it...\n
+ *\n
+ * XXX Technically, need to check for monster in the way\n
+ * combined with that monster being in a wall (or door?)\n
+ *\n
+ * A "direction" of "5" means "pick a random direction".\n
  */
 static void process_monster(int m_idx)
 {
@@ -3626,37 +3657,39 @@ msg_format("%^s%s", m_name, monmessage);
 	}
 }
 
-/*
+/*!
+ * @brief 全モンスターのターン管理メインルーチン /
  * Process all the "live" monsters, once per game turn.
- *
- * During each game turn, we scan through the list of all the "live" monsters,
- * (backwards, so we can excise any "freshly dead" monsters), energizing each
- * monster, and allowing fully energized monsters to move, attack, pass, etc.
- *
- * Note that monsters can never move in the monster array (except when the
- * "compact_monsters()" function is called by "dungeon()" or "save_player()").
- *
- * This function is responsible for at least half of the processor time
- * on a normal system with a "normal" amount of monsters and a player doing
- * normal things.
- *
- * When the player is resting, virtually 90% of the processor time is spent
- * in this function, and its children, "process_monster()" and "make_move()".
- *
- * Most of the rest of the time is spent in "update_view()" and "lite_spot()",
- * especially when the player is running.
- *
- * Note the special "MFLAG_BORN" flag, which allows us to ignore "fresh"
- * monsters while they are still being "born".  A monster is "fresh" only
- * during the turn in which it is created, and we use the "hack_m_idx" to
- * determine if the monster is yet to be processed during the current turn.
- *
- * Note the special "MFLAG_NICE" flag, which allows the player to get one
- * move before any "nasty" monsters get to use their spell attacks.
- *
- * Note that when the "knowledge" about the currently tracked monster
- * changes (flags, attacks, spells), we induce a redraw of the monster
- * recall window.
+ * @return なし
+ * @details
+ * During each game turn, we scan through the list of all the "live" monsters,\n
+ * (backwards, so we can excise any "freshly dead" monsters), energizing each\n
+ * monster, and allowing fully energized monsters to move, attack, pass, etc.\n
+ *\n
+ * Note that monsters can never move in the monster array (except when the\n
+ * "compact_monsters()" function is called by "dungeon()" or "save_player()").\n
+ *\n
+ * This function is responsible for at least half of the processor time\n
+ * on a normal system with a "normal" amount of monsters and a player doing\n
+ * normal things.\n
+ *\n
+ * When the player is resting, virtually 90% of the processor time is spent\n
+ * in this function, and its children, "process_monster()" and "make_move()".\n
+ *\n
+ * Most of the rest of the time is spent in "update_view()" and "lite_spot()",\n
+ * especially when the player is running.\n
+ *\n
+ * Note the special "MFLAG_BORN" flag, which allows us to ignore "fresh"\n
+ * monsters while they are still being "born".  A monster is "fresh" only\n
+ * during the turn in which it is created, and we use the "hack_m_idx" to\n
+ * determine if the monster is yet to be processed during the current turn.\n
+ *\n
+ * Note the special "MFLAG_NICE" flag, which allows the player to get one\n
+ * move before any "nasty" monsters get to use their spell attacks.\n
+ *\n
+ * Note that when the "knowledge" about the currently tracked monster\n
+ * changes (flags, attacks, spells), we induce a redraw of the monster\n
+ * recall window.\n
  */
 void process_monsters(void)
 {
@@ -3868,7 +3901,12 @@ void process_monsters(void)
 	}
 }
 
-
+/*!
+ * @brief モンスターの時限ステータスを取得する
+ * @return m_idx モンスターの参照ID
+ * @return mproc_type モンスターの時限ステータスID
+ * @return 残りターン値
+ */
 int get_mproc_idx(int m_idx, int mproc_type)
 {
 	s16b *cur_mproc_list = mproc_list[mproc_type];
@@ -3882,13 +3920,24 @@ int get_mproc_idx(int m_idx, int mproc_type)
 	return -1;
 }
 
-
+/*!
+ * @brief モンスターの時限ステータスリストを追加する
+ * @return m_idx モンスターの参照ID
+ * @return mproc_type 追加したいモンスターの時限ステータスID
+ * @return なし
+ */
 static void mproc_add(int m_idx, int mproc_type)
 {
 	if (mproc_max[mproc_type] < max_m_idx) mproc_list[mproc_type][mproc_max[mproc_type]++] = m_idx;
 }
 
 
+/*!
+ * @brief モンスターの時限ステータスリストを削除
+ * @return m_idx モンスターの参照ID
+ * @return mproc_type 削除したいモンスターの時限ステータスID
+ * @return なし
+ */
 static void mproc_remove(int m_idx, int mproc_type)
 {
 	int mproc_idx = get_mproc_idx(m_idx, mproc_type);
@@ -3896,8 +3945,9 @@ static void mproc_remove(int m_idx, int mproc_type)
 }
 
 
-/*
- * Initialize monster process
+/*!
+ * @brief モンスターの時限ステータスリストを初期化する / Initialize monster process
+ * @return なし
  */
 void mproc_init(void)
 {
@@ -3924,8 +3974,12 @@ void mproc_init(void)
 }
 
 
-/*
+/*!
+ * @brief モンスターの睡眠状態値をセットする /
  * Set "m_ptr->mtimed[MTIMED_CSLEEP]", notice observable changes
+ * @param m_idx モンスター参照ID
+ * @param v セットする値
+ * @return 別途更新処理が必要な場合TRUEを返す
  */
 bool set_monster_csleep(int m_idx, int v)
 {
@@ -3973,8 +4027,12 @@ bool set_monster_csleep(int m_idx, int v)
 }
 
 
-/*
+/*!
+ * @brief モンスターの加速状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_FAST]", notice observable changes
+ * @param m_idx モンスター参照ID
+ * @param v セットする値
+ * @return 別途更新処理が必要な場合TRUEを返す
  */
 bool set_monster_fast(int m_idx, int v)
 {
@@ -4057,8 +4115,12 @@ bool set_monster_slow(int m_idx, int v)
 }
 
 
-/*
+/*!
+ * @brief モンスターの朦朧状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_STUNNED]", notice observable changes
+ * @param m_idx モンスター参照ID
+ * @param v セットする値
+ * @return 別途更新処理が必要な場合TRUEを返す
  */
 bool set_monster_stunned(int m_idx, int v)
 {
@@ -4095,8 +4157,12 @@ bool set_monster_stunned(int m_idx, int v)
 }
 
 
-/*
+/*!
+ * @brief モンスターの混乱状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_CONFUSED]", notice observable changes
+ * @param m_idx モンスター参照ID
+ * @param v セットする値
+ * @return 別途更新処理が必要な場合TRUEを返す
  */
 bool set_monster_confused(int m_idx, int v)
 {
@@ -4133,8 +4199,12 @@ bool set_monster_confused(int m_idx, int v)
 }
 
 
-/*
+/*!
+ * @brief モンスターの恐慌状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_MONFEAR]", notice observable changes
+ * @param m_idx モンスター参照ID
+ * @param v セットする値
+ * @return 別途更新処理が必要な場合TRUEを返す
  */
 bool set_monster_monfear(int m_idx, int v)
 {
@@ -4180,8 +4250,13 @@ bool set_monster_monfear(int m_idx, int v)
 }
 
 
-/*
+/*!
+ * @brief モンスターの無敵状態値をセット /
  * Set "m_ptr->mtimed[MTIMED_INVULNER]", notice observable changes
+ * @param m_idx モンスター参照ID
+ * @param v セットする値
+ * @param energy_need TRUEならば無敵解除時に行動ターン消費を行う
+ * @return 別途更新処理が必要な場合TRUEを返す
  */
 bool set_monster_invulner(int m_idx, int v, bool energy_need)
 {
@@ -4230,6 +4305,12 @@ bool set_monster_invulner(int m_idx, int v, bool energy_need)
 
 static u32b csleep_noise;
 
+/*!
+ * @brief モンスターの各種状態値を時間経過により更新するサブルーチン
+ * @param m_idx モンスター参照ID
+ * @param mtimed_idx 更新するモンスターの時限ステータスID
+ * @return なし
+ */
 static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
@@ -4464,9 +4545,12 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 }
 
 
-/*
- * Process the counters of monsters (once per 10 game turns)
- *
+/*!
+ * @brief 全モンスターの各種状態値を時間経過により更新するメインルーチン
+ * @param mtimed_idx 更新するモンスターの時限ステータスID
+ * @return なし
+ * @details
+ * Process the counters of monsters (once per 10 game turns)\n
  * These functions are to process monsters' counters same as player's.
  */
 void process_monsters_mtimed(int mtimed_idx)
@@ -4485,7 +4569,11 @@ void process_monsters_mtimed(int mtimed_idx)
 	}
 }
 
-
+/*!
+ * @brief モンスターへの魔力消去処理
+ * @param m_idx 魔力消去を受けるモンスターの参照ID
+ * @return なし
+ */
 void dispel_monster_status(int m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
@@ -4518,7 +4606,13 @@ void dispel_monster_status(int m_idx)
 	}
 }
 
-
+/*!
+ * @brief モンスターの時間停止処理
+ * @param num 時間停止を行った敵が行動できる回数
+ * @param who 時間停止処理の主体ID
+ * @param vs_player TRUEならば時間停止開始処理を行う
+ * @return 時間停止が行われている状態ならばTRUEを返す
+ */
 bool process_the_world(int num, int who, bool vs_player)
 {
 	monster_type *m_ptr = &m_list[hack_m_idx];  /* the world monster */
@@ -4600,7 +4694,12 @@ bool process_the_world(int num, int who, bool vs_player)
 	return (TRUE);
 }
 
-
+/*!
+ * @brief モンスターの経験値取得処理
+ * @param m_idx 経験値を得るモンスターの参照ID
+ * @param s_idx 撃破されたモンスター種族の参照ID
+ * @return なし
+ */
 void monster_gain_exp(int m_idx, int s_idx)
 {
 	monster_type *m_ptr;
