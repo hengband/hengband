@@ -1,19 +1,17 @@
-/* File: melee2.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file melee2.c
+ * @brief モンスターの特殊技能と移動処理/ Monster spells and movement
+ * @date 2014/01/17
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * @details
+ * This file has several additions to it by Keldon Jones (keldon@umr.edu)
+ * to improve the general quality of the AI (version 0.1.1).
  */
-
-/* Purpose: Monster spells and movement */
-
-/*
-* This file has several additions to it by Keldon Jones (keldon@umr.edu)
-* to improve the general quality of the AI (version 0.1.1).
-*/
 
 #include "angband.h"
 
@@ -21,8 +19,12 @@
 #define GRINDNOISE 20
 #define CYBERNOISE 20
 
-/*
+/*!
+ * @brief モンスターが敵に接近するための方向を決める /
  * Calculate the direction to the next enemy
+ * @param m_idx モンスターの参照ID
+ * @param mm 移動するべき方角IDを返す参照ポインタ
+ * @return 方向が確定した場合TRUE、接近する敵がそもそもいない場合FALSEを返す
  */
 static bool get_enemy_dir(int m_idx, int *mm)
 {
@@ -182,9 +184,14 @@ static bool get_enemy_dir(int m_idx, int *mm)
 }
 
 
-/*
- * Hack, based on mon_take_hit... perhaps all monster attacks on
- * other monsters should use this?
+/*!
+ * @brief モンスターが敵モンスターに行う打撃処理 /
+ * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
+ * @param m_idx 目標となるモンスターの参照ID
+ * @param fear 目標となるモンスターの恐慌状態を返す参照ポインタ
+ * @param note 目標モンスターが死亡した場合の特別メッセージ(NULLならば標準表示を行う)
+ * @param who 打撃を行ったモンスターの参照ID
+ * @return なし
  */
 void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 {
@@ -400,18 +407,21 @@ msg_format("%^sに振り落とされた！", m_name);
 }
 
 
-/*
+/*!
+ * @brief モンスターがプレイヤーから逃走するかどうかを返す /
  * Returns whether a given monster will try to run from the player.
- *
- * Monsters will attempt to avoid very powerful players.  See below.
- *
- * Because this function is called so often, little details are important
- * for efficiency.  Like not using "mod" or "div" when possible.  And
- * attempting to check the conditions in an optimal order.  Note that
- * "(x << 2) == (x * 4)" if "x" has enough bits to hold the result.
- *
- * Note that this function is responsible for about one to five percent
- * of the processor use in normal conditions...
+ * @param m_idx 逃走するモンスターの参照ID
+ * @return モンスターがプレイヤーから逃走するならばTRUEを返す。
+ * @details
+ * Monsters will attempt to avoid very powerful players.  See below.\n
+ *\n
+ * Because this function is called so often, little details are important\n
+ * for efficiency.  Like not using "mod" or "div" when possible.  And\n
+ * attempting to check the conditions in an optimal order.  Note that\n
+ * "(x << 2) == (x * 4)" if "x" has enough bits to hold the result.\n
+ *\n
+ * Note that this function is responsible for about one to five percent\n
+ * of the processor use in normal conditions...\n
  */
 static int mon_will_run(int m_idx)
 {
@@ -479,10 +489,13 @@ static int mon_will_run(int m_idx)
 }
 
 
-
-
-/*
+/*!
+ * @brief モンスターがプレイヤーに向けて遠距離攻撃を行うことが可能なマスを走査する /
  * Search spell castable grid
+ * @param m_idx モンスターの参照ID
+ * @param yp 適したマスのY座標を返す参照ポインタ
+ * @param xp 適したマスのX座標を返す参照ポインタ
+ * @return 有効なマスがあった場合TRUEを返す
  */
 static bool get_moves_aux2(int m_idx, int *yp, int *xp)
 {
@@ -561,27 +574,33 @@ static bool get_moves_aux2(int m_idx, int *yp, int *xp)
 }
 
 
-/*
+/*!
+ * @brief モンスターがプレイヤーに向けて接近することが可能なマスを走査する /
  * Choose the "best" direction for "flowing"
- *
- * Note that ghosts and rock-eaters are never allowed to "flow",
- * since they should move directly towards the player.
- *
- * Prefer "non-diagonal" directions, but twiddle them a little
- * to angle slightly towards the player's actual location.
- *
- * Allow very perceptive monsters to track old "spoor" left by
- * previous locations occupied by the player.  This will tend
- * to have monsters end up either near the player or on a grid
- * recently occupied by the player (and left via "teleport").
- *
- * Note that if "smell" is turned on, all monsters get vicious.
- *
- * Also note that teleporting away from a location will cause
- * the monsters who were chasing you to converge on that location
- * as long as you are still near enough to "annoy" them without
- * being close enough to chase directly.  I have no idea what will
- * happen if you combine "smell" with low "aaf" values.
+ * @param m_idx モンスターの参照ID
+ * @param yp 移動先のマスのY座標を返す参照ポインタ
+ * @param xp 移動先のマスのX座標を返す参照ポインタ
+ * @param no_flow モンスターにFLOWフラグが経っていない状態でTRUE
+ * @return 有効なマスがあった場合TRUEを返す
+ * @details
+ * Note that ghosts and rock-eaters are never allowed to "flow",\n
+ * since they should move directly towards the player.\n
+ *\n
+ * Prefer "non-diagonal" directions, but twiddle them a little\n
+ * to angle slightly towards the player's actual location.\n
+ *\n
+ * Allow very perceptive monsters to track old "spoor" left by\n
+ * previous locations occupied by the player.  This will tend\n
+ * to have monsters end up either near the player or on a grid\n
+ * recently occupied by the player (and left via "teleport").\n
+ *\n
+ * Note that if "smell" is turned on, all monsters get vicious.\n
+ *\n
+ * Also note that teleporting away from a location will cause\n
+ * the monsters who were chasing you to converge on that location\n
+ * as long as you are still near enough to "annoy" them without\n
+ * being close enough to chase directly.  I have no idea what will\n
+ * happen if you combine "smell" with low "aaf" values.\n
  */
 static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 {
@@ -690,13 +709,18 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 }
 
 
-/*
-* Provide a location to flee to, but give the player a wide berth.
-*
-* A monster may wish to flee to a location that is behind the player,
-* but instead of heading directly for it, the monster should "swerve"
-* around the player so that he has a smaller chance of getting hit.
-*/
+/*!
+ * @brief モンスターがプレイヤーから逃走することが可能なマスを走査する /
+ * Provide a location to flee to, but give the player a wide berth.
+ * @param m_idx モンスターの参照ID
+ * @param yp 移動先のマスのY座標を返す参照ポインタ
+ * @param xp 移動先のマスのX座標を返す参照ポインタ
+ * @return 有効なマスがあった場合TRUEを返す
+ * @details
+ * A monster may wish to flee to a location that is behind the player,\n
+ * but instead of heading directly for it, the monster should "swerve"\n
+ * around the player so that he has a smaller chance of getting hit.\n
+ */
 static bool get_fear_moves_aux(int m_idx, int *yp, int *xp)
 {
 	int y, x, y1, x1, fy, fx, gy = 0, gx = 0;
