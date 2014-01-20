@@ -563,25 +563,25 @@ void search(void)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーがオブジェクトを拾った際のメッセージ表示処理 /
  * Helper routine for py_pickup() and py_pickup_floor().
- *
- * Add the given dungeon object to the character's inventory.
- *
- * Delete the object afterwards.
+ * @param o_idx 取得したオブジェクトの参照ID
+ * @return なし
+ * @details
+ * アイテムを拾った際に「２つのケーキを持っている」\n
+ * "You have two cakes." とアイテムを拾った後の合計のみの表示がオリジナル\n
+ * だが、違和感が\n
+ * あるという指摘をうけたので、「〜を拾った、〜を持っている」という表示\n
+ * にかえてある。そのための配列。\n
+ * Add the given dungeon object to the character's inventory.\n
+ * Delete the object afterwards.\n
  */
 void py_pickup_aux(int o_idx)
 {
 	int slot;
 
 #ifdef JP
-/*
- * アイテムを拾った際に「２つのケーキを持っている」
- * "You have two cakes." とアイテムを拾った後の合計のみの表示がオリジナル
- * だが、違和感が
- * あるという指摘をうけたので、「〜を拾った、〜を持っている」という表示
- * にかえてある。そのための配列。
- */
 	char o_name[MAX_NLEN];
 	char old_name[MAX_NLEN];
 	char kazu_str[80];
@@ -659,7 +659,11 @@ void py_pickup_aux(int o_idx)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーがオブジェクト上に乗った際の表示処理
+ * @param pickup 自動拾い処理を行うならばTRUEとする
+ * @return なし
+ * @details
  * Player "wants" to pick up an object or gold.
  * Note that we ONLY handle things that can be picked up.
  * See "move_player()" for handling of other things.
@@ -820,8 +824,12 @@ void carry(bool pickup)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーへのトラップ命中判定 /
  * Determine if a trap affects the player.
+ * @param power 基本回避難度
+ * @return トラップが命中した場合TRUEを返す。
+ * @details
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match trap power against player armor.
  */
@@ -852,7 +860,11 @@ static int check_hit(int power)
 }
 
 
-
+/*!
+ * @brief 落とし穴系トラップの判定とプレイヤーの被害処理
+ * @param trap_feat_typeトラップの種別ID
+ * @return なし
+ */
 static void hit_trap_pit(int trap_feat_type)
 {
 	int dam;
@@ -913,6 +925,10 @@ static void hit_trap_pit(int trap_feat_type)
 	take_hit(DAMAGE_NOESCAPE, dam, trap_name, -1);
 }
 
+/*!
+ * @brief ダーツ系トラップ（通常ダメージ）の判定とプレイヤーの被害処理
+ * @return ダーツが命中した場合TRUEを返す
+ */
 static bool hit_trap_dart(void)
 {
 	bool hit = FALSE;
@@ -933,6 +949,11 @@ static bool hit_trap_dart(void)
 	return hit;
 }
 
+/*!
+ * @brief ダーツ系トラップ（通常ダメージ＋能力値減少）の判定とプレイヤーの被害処理
+ * @param stat 低下する能力値ID
+ * @return なし
+ */
 static void hit_trap_lose_stat(int stat)
 {
 	if (hit_trap_dart())
@@ -941,6 +962,10 @@ static void hit_trap_lose_stat(int stat)
 	}
 }
 
+/*!
+ * @brief ダーツ系トラップ（通常ダメージ＋減速）の判定とプレイヤーの被害処理
+ * @return なし
+ */
 static void hit_trap_slow(void)
 {
 	if (hit_trap_dart())
@@ -949,6 +974,14 @@ static void hit_trap_slow(void)
 	}
 }
 
+/*!
+ * @brief ダーツ系トラップ（通常ダメージ＋状態異常）の判定とプレイヤーの被害処理
+ * @param trap_messsage メッセージの補完文字列
+ * @param resist 状態異常に抵抗する判定が出たならTRUE
+ * @param set_status 状態異常を指定する関数ポインタ
+ * @param turn 状態異常の追加ターン量
+ * @return なし
+ */
 static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*set_status)(int turn), int turn)
 {
 	msg_print(trap_message);
@@ -959,8 +992,11 @@ static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*
 	}
 }
 
-/*
+/*!
+ * @brief プレイヤーへのトラップ作動処理メインルーチン /
  * Handle player hitting a real trap
+ * @param break_trap 作動後のトラップ破壊が確定しているならばTRUE
+ * @return なし
  */
 static void hit_trap(bool break_trap)
 {
@@ -1334,6 +1370,17 @@ msg_print("まばゆい閃光が走った！");
 }
 
 
+/*!
+ * @brief 敵オーラによるプレイヤーのダメージ処理（補助）
+ * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
+ * @param immune ダメージを回避できる免疫フラグ
+ * @param flags_offset オーラフラグ配列の参照オフセット
+ * @param r_flags_offset モンスターの耐性配列の参照オフセット
+ * @param aura_flag オーラフラグ配列
+ * @param dam_func ダメージ処理を行う関数の参照ポインタ
+ * @param message オーラダメージを受けた際のメッセージ
+ * @return なし
+ */
 static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
 				 int (*dam_func)(int dam, cptr kb_str, int monspell, bool aura), cptr message)
 {
