@@ -385,6 +385,7 @@ static int mult_brand(int mult, const u32b* flgs, const monster_type* m_ptr)
  * @param o_ptr 使用武器オブジェクトの構造体参照ポインタ
  * @param tdam 現在算出途中のダメージ値
  * @param m_ptr 目標モンスターの構造体参照ポインタ
+ * @param mode 剣術のID
  * @param thrown 射撃処理ならばTRUEを指定する
  * @return 総合的なスレイを加味したダメージ値
  * @note
@@ -862,7 +863,7 @@ static int check_hit(int power)
 
 /*!
  * @brief 落とし穴系トラップの判定とプレイヤーの被害処理
- * @param trap_feat_typeトラップの種別ID
+ * @param trap_feat_type トラップの種別ID
  * @return なし
  */
 static void hit_trap_pit(int trap_feat_type)
@@ -976,7 +977,7 @@ static void hit_trap_slow(void)
 
 /*!
  * @brief ダーツ系トラップ（通常ダメージ＋状態異常）の判定とプレイヤーの被害処理
- * @param trap_messsage メッセージの補完文字列
+ * @param trap_message メッセージの補完文字列
  * @param resist 状態異常に抵抗する判定が出たならTRUE
  * @param set_status 状態異常を指定する関数ポインタ
  * @param turn 状態異常の追加ターン量
