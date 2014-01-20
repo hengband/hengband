@@ -1407,6 +1407,11 @@ static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_off
 	}
 }
 
+/*!
+ * @brief 敵オーラによるプレイヤーのダメージ処理（メイン）
+ * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
+ * @return なし
+ */
 static void touch_zap_player(monster_type *m_ptr)
 {
 	touch_zap_player_aux(m_ptr, p_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
@@ -1418,6 +1423,14 @@ static void touch_zap_player(monster_type *m_ptr)
 }
 
 
+/*!
+ * @brief プレイヤーの変異要素による打撃処理
+ * @param m_idx 攻撃目標となったモンスターの参照ID
+ * @param attack 変異要素による攻撃要素の種類
+ * @param fear 攻撃を受けたモンスターが恐慌状態に陥ったかを返す参照ポインタ
+ * @param mdeath 攻撃を受けたモンスターが死亡したかを返す参照ポインタ
+ * @return なし
+ */
 static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 {
 	int             k, bonus, chance;
@@ -1587,10 +1600,17 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 }
 
 
-
-/*
+/*!
+ * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
- *
+ * @param y 攻撃目標のY座標
+ * @param x 攻撃目標のX座標
+ * @param fear 攻撃を受けたモンスターが恐慌状態に陥ったかを返す参照ポインタ
+ * @param mdeath 攻撃を受けたモンスターが死亡したかを返す参照ポインタ
+ * @param hand 攻撃を行うための武器を持つ手
+ * @param mode 発動中の剣術ID
+ * @return なし
+ * @details
  * If no "weapon" is available, then "punch" the monster one time.
  */
 static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int mode)
@@ -2683,6 +2703,15 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	}
 }
 
+/*!
+ * @brief プレイヤーの打撃処理メインルーチン
+ * @param y 攻撃目標のY座標
+ * @param x 攻撃目標のX座標
+ * @param mode 発動中の剣術ID
+ * @return 実際に攻撃処理が行われた場合TRUEを返す。
+ * @details
+ * If no "weapon" is available, then "punch" the monster one time.
+ */
 bool py_attack(int y, int x, int mode)
 {
 	bool            fear = FALSE;
