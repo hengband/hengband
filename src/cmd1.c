@@ -19,7 +19,7 @@
  * @brief プレイヤーからモンスターへの射撃命中判定 /
  * Determine if the player "hits" a monster (normal combat).
  * @param chance 基本命中値
- * @param m_ptr モンスターの参照ID
+ * @param m_ptr モンスターの構造体参照ポインタ
  * @param vis 目標を視界に捕らえているならばTRUEを指定
  * @param o_name メッセージ表示時のモンスター名
  * @return 命中と判定された場合TRUEを返す
@@ -75,7 +75,7 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
  * @brief プレイヤーからモンスターへの打撃命中判定 /
  * Determine if the player "hits" a monster (normal combat).
  * @param chance 基本命中値
- * @param m_ptr モンスターの参照ID
+ * @param ac モンスターのAC
  * @param vis 目標を視界に捕らえているならばTRUEを指定
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
@@ -260,6 +260,13 @@ s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
 
 
 
+/*!
+ * @brief プレイヤー攻撃の種族スレイング倍率計算
+ * @param mult 算出前の基本倍率(/10倍)
+ * @param flgs スレイフラグ配列
+ * @param m_ptr 目標モンスターの構造体参照ポインタ
+ * @return スレイング加味後の倍率(/10倍)
+ */
 static int mult_slaying(int mult, const u32b* flgs, const monster_type* m_ptr)
 {
 	static const struct slay_table_t {
@@ -314,6 +321,13 @@ static int mult_slaying(int mult, const u32b* flgs, const monster_type* m_ptr)
 	return mult;
 }
 
+/*!
+ * @brief プレイヤー攻撃の属性スレイング倍率計算
+ * @param mult 算出前の基本倍率(/10倍)
+ * @param flgs スレイフラグ配列
+ * @param m_ptr 目標モンスターの構造体参照ポインタ
+ * @return スレイング加味後の倍率(/10倍)
+ */
 static int mult_brand(int mult, const u32b* flgs, const monster_type* m_ptr)
 {
 	static const struct brand_table_t {
@@ -364,14 +378,21 @@ static int mult_brand(int mult, const u32b* flgs, const monster_type* m_ptr)
 
 	return mult;
 }
-/*
+
+/*!
+ * @brief ダメージにスレイ要素を加える総合処理ルーチン /
  * Extract the "total damage" from a given object hitting a given monster.
- *
- * Note that "flasks of oil" do NOT do fire damage, although they
- * certainly could be made to do so.  XXX XXX
- *
- * Note that most brands and slays are x3, except Slay Animal (x2),
- * Slay Evil (x2), and Kill dragon (x5).
+ * @param o_ptr 使用武器オブジェクトの構造体参照ポインタ
+ * @param tdam 現在算出途中のダメージ値
+ * @param m_ptr 目標モンスターの構造体参照ポインタ
+ * @param thrown 射撃処理ならばTRUEを指定する
+ * @return 総合的なスレイを加味したダメージ値
+ * @note
+ * Note that "flasks of oil" do NOT do fire damage, although they\n
+ * certainly could be made to do so.  XXX XXX\n
+ *\n
+ * Note that most brands and slays are x3, except Slay Animal (x2),\n
+ * Slay Evil (x2), and Kill dragon (x5).\n
  */
 s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bool thrown)
 {
@@ -441,8 +462,12 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
 }
 
 
-/*
+/*!
+ * @brief 地形やその上のアイテムの隠された要素を明かす /
  * Search for hidden things
+ * @param y 対象となるマスのY座標
+ * @param x 対象となるマスのX座標
+ * @return なし
  */
 static void discover_hidden_things(int y, int x)
 {
@@ -511,6 +536,10 @@ static void discover_hidden_things(int y, int x)
 	}
 }
 
+/*!
+ * @brief プレイヤーの探索処理判定
+ * @return なし
+ */
 void search(void)
 {
 	int i, chance;
