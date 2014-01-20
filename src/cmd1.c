@@ -12,12 +12,18 @@
 
 
 #include "angband.h"
-#define MAX_VAMPIRIC_DRAIN 50
+#define MAX_VAMPIRIC_DRAIN 50 /*!< 吸血処理の最大回復HP */
 
 
-/*
+/*!
+ * @brief プレイヤーからモンスターへの射撃命中判定 /
  * Determine if the player "hits" a monster (normal combat).
- * Note -- Always miss 5%, always hit 5%, otherwise random.
+ * @param chance 基本命中値
+ * @param m_ptr モンスターの参照ID
+ * @param vis 目標を視界に捕らえているならばTRUEを指定
+ * @param o_name メッセージ表示時のモンスター名
+ * @return 命中と判定された場合TRUEを返す
+ * @note Always miss 5%, always hit 5%, otherwise random.
  */
 bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 {
@@ -65,10 +71,14 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 
 
 
-/*
+/*!
+ * @brief プレイヤーからモンスターへの打撃命中判定 /
  * Determine if the player "hits" a monster (normal combat).
- *
- * Note -- Always miss 5%, always hit 5%, otherwise random.
+ * @param chance 基本命中値
+ * @param m_ptr モンスターの参照ID
+ * @param vis 目標を視界に捕らえているならばTRUEを指定
+ * @return 命中と判定された場合TRUEを返す
+ * @note Always miss 5%, always hit 5%, otherwise random.
  */
 bool test_hit_norm(int chance, int ac, int vis)
 {
@@ -98,9 +108,14 @@ bool test_hit_norm(int chance, int ac, int vis)
 
 
 
-/*
- * Critical hits (from objects thrown by player)
- * Factor in item weight, total plusses, and player level.
+/*!
+ * @brief プレイヤーからモンスターへの射撃クリティカル判定 /
+ * Critical hits (from objects thrown by player) Factor in item weight, total plusses, and player level.
+ * @param weight 矢弾の重量
+ * @param plus_ammo 矢弾の命中修正
+ * @param plus_bow 弓の命中修正
+ * @param dam 現在算出中のダメージ値
+ * @return クリティカル修正が入ったダメージ値
  */
 s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
 {
@@ -165,10 +180,15 @@ s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
 
 
 
-/*
- * Critical hits (by player)
- *
- * Factor in weapon weight, total plusses, player melee bonus
+/*!
+ * @brief プレイヤーからモンスターへの打撃クリティカル判定 /
+ * Critical hits (by player) Factor in weapon weight, total plusses, player melee bonus
+ * @param weight 矢弾の重量
+ * @param plus 武器の命中修正
+ * @param dam 現在算出中のダメージ値
+ * @param meichuu 打撃の基本命中力
+ * @param mode オプションフラグ
+ * @return クリティカル修正が入ったダメージ値
  */
 s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
 {
