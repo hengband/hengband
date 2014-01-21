@@ -2941,6 +2941,14 @@ bool py_attack(int y, int x, int mode)
 }
 
 
+/*!
+ * @brief パターンによる移動制限処理
+ * @param c_y プレイヤーの移動元Y座標
+ * @param c_x プレイヤーの移動元X座標
+ * @param n_y プレイヤーの移動先Y座標
+ * @param n_x プレイヤーの移動先X座標
+ * @return 移動処理が可能である場合（可能な場合に選択した場合）TRUEを返す。
+ */
 bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 {
 	feature_type *cur_f_ptr = &f_info[cave[c_y][c_x].feat];
@@ -3093,6 +3101,12 @@ bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
 }
 
 
+/*!
+ * @brief プレイヤーが地形踏破可能かを返す
+ * @param feature 判定したい地形ID
+ * @param mode 移動に関するオプションフラグ
+ * @return 移動可能ならばTRUEを返す
+ */
 bool player_can_enter(s16b feature, u16b mode)
 {
 	feature_type *f_ptr = &f_info[feature];
@@ -3116,8 +3130,12 @@ bool player_can_enter(s16b feature, u16b mode)
 }
 
 
-/*
- * Move the player
+/*!
+ * @brief 移動に伴うプレイヤーのステータス変化処理
+ * @param ny 移動先Y座標
+ * @param nx 移動先X座標
+ * @param mpe_mode 移動オプションフラグ
+ * @return プレイヤーが死亡やフロア離脱を行わず、実際に移動が可能ならばTRUEを返す。
  */
 bool move_player_effect(int ny, int nx, u32b mpe_mode)
 {
@@ -3345,7 +3363,11 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 	return player_bold(ny, nx) && !p_ptr->is_dead && !p_ptr->leaving;
 }
 
-
+/*!
+ * @brief 該当地形のトラップがプレイヤーにとって無効かどうかを判定して返す
+ * @param feat 地形ID
+ * @return トラップが自動的に無効ならばTRUEを返す
+ */
 bool trap_can_be_ignored(int feat)
 {
 	feature_type *f_ptr = &f_info[feat];
