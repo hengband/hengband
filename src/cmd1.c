@@ -64,7 +64,7 @@
  *\n
  * #.#\n
  * ##.##\n
- * .@x..\n
+ * \.\@x..\n
  * ##.##\n
  * #.#\n
  *\n
@@ -4153,19 +4153,21 @@ static bool find_breakleft;
 
 
 
-/*
+/*!
+ * @brief ダッシュ処理の導入 /
  * Initialize the running algorithm for a new direction.
- *
- * Diagonal Corridor -- allow diaginal entry into corridors.
- *
- * Blunt Corridor -- If there is a wall two spaces ahead and
- * we seem to be in a corridor, then force a turn into the side
- * corridor, must be moving straight into a corridor here. ???
- *
- * Diagonal Corridor    Blunt Corridor (?)
- *       # #                  #
- *       #x#                 @x#
- *       @p.                  p
+ * @param dir 導入の移動先
+ * @details
+ * Diagonal Corridor -- allow diaginal entry into corridors.\n
+ *\n
+ * Blunt Corridor -- If there is a wall two spaces ahead and\n
+ * we seem to be in a corridor, then force a turn into the side\n
+ * corridor, must be moving straight into a corridor here. ???\n
+ *\n
+ * Diagonal Corridor    Blunt Corridor (?)\n
+ *       # #                  #\n
+ *       #x#                 @x#\n
+ *       @p.                  p\n
  */
 static void run_init(int dir)
 {
@@ -4260,9 +4262,11 @@ static void run_init(int dir)
 }
 
 
-/*
+/*!
+ * @brief ダッシュ移動が継続できるかどうかの判定 /
  * Update the current "run" path
- *
+ * @return
+ * ダッシュ移動が継続できるならばTRUEを返す。
  * Return TRUE if the running should be stopped
  */
 static bool run_test(void)
@@ -4600,8 +4604,11 @@ static bool run_test(void)
 
 
 
-/*
+/*!
+ * @brief 継続的なダッシュ処理 /
  * Take one step along the current "run" path
+ * @param dir 移動を試みる方向ID
+ * @return なし
  */
 void run_step(int dir)
 {
@@ -4673,8 +4680,12 @@ void run_step(int dir)
 
 
 #ifdef TRAVEL
-/*
+
+/*!
+ * @brief トラベル機能の判定処理 /
  * Test for traveling
+ * @param prev_dir 前回移動を行った元の方角ID
+ * @return なし
  */
 static int travel_test(int prev_dir)
 {
@@ -4774,8 +4785,10 @@ static int travel_test(int prev_dir)
 }
 
 
-/*
+/*!
+ * @brief トラベル機能の実装 /
  * Travel command
+ * @return なし
  */
 void travel_step(void)
 {
