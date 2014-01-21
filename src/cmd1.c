@@ -48,8 +48,8 @@
  * sides are closed, then it is an enclosed (corridor) run.
  *
  * LL           L
- * @x          LxR
- * RR          @R
+ * @@x          LxR
+ * RR          @@R
  *
  * Looking at more than just the immediate squares is
  * significant. Consider the following case. A run along the
@@ -63,22 +63,22 @@
  * straight into the gap. Otherwise, the tail end of the other
  * entry would be perceived as an alternative on the next move.
  *
- * #.#
- * ##.##
- * \.\@x..
- * ##.##
- * #.#
+ * \#.\#
+ * \#\#.\#\#
+ * \.\@@x..
+ * \#\#.\#\#
+ * \#.\#
  *
  * Likewise, a run along a wall, and then into a doorway (two
- * runs) will work correctly. A single run rightwards from @ will
+ * runs) will work correctly. A single run rightwards from \@ will
  * stop at 1. Another run right and down will enter the corridor
  * and make the corner, stopping at the 2.
  *
- * ##################
- * o@x       1
- * ########### ######
- * #2          #
- * #############
+ * \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+ * o@@x       1
+ * \#\#\#\#\#\#\#\#\#\#\# \#\#\#\#\#\#
+ * \#2          \#
+ * \#\#\#\#\#\#\#\#\#\#\#\#\#
  *
  * After any move, the function area_affect is called to
  * determine the new surroundings, and the direction of
@@ -92,8 +92,8 @@
  * marked as '!' in the diagrams below.
  *
  *   ...!              ...
- *   .o@!  (normal)    .o.!  (diagonal)
- *   ...!  (east)      ..@!  (south east)
+ *   .o@@!  (normal)    .o.!  (diagonal)
+ *   ...!  (east)      ..@@!  (south east)
  *                      !!!
  *
  * You STOP if any of the new squares are interesting in any way:
@@ -121,9 +121,9 @@
  * We assign "option" to the straight-on grid, and "option2" to the
  * diagonal grid, and "check_dir" to the grid marked 's'.
  *
- * ##s
- * @x?
- * #.?
+ * \#\#s
+ * @@x?
+ * \#.?
  *
  * If they are both seen to be closed, then it is seen that no benefit
  * is gained from moving straight. It is a known corner.  To cut the
@@ -4167,9 +4167,9 @@ static bool find_breakleft;
  * corridor, must be moving straight into a corridor here. ???\n
  *\n
  * Diagonal Corridor    Blunt Corridor (?)\n
- *       # #                  #\n
- *       #x#                 @x#\n
- *       @p.                  p\n
+ *       \# \#                  \#\n
+ *       \#x\#                 @\@x\#\n
+ *       \@\@p.                  p\n
  */
 static void run_init(int dir)
 {
