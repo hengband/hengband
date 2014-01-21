@@ -8,6 +8,133 @@
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * @note
+ * The running algorithm:                       -CJS-\n
+ *\n
+ * In the diagrams below, the player has just arrived in the\n
+ * grid marked as '@', and he has just come from a grid marked\n
+ * as 'o', and he is about to enter the grid marked as 'x'.\n
+ *\n
+ * Of course, if the "requested" move was impossible, then you\n
+ * will of course be blocked, and will stop.\n
+ *\n
+ * Overview: You keep moving until something interesting happens.\n
+ * If you are in an enclosed space, you follow corners. This is\n
+ * the usual corridor scheme. If you are in an open space, you go\n
+ * straight, but stop before entering enclosed space. This is\n
+ * analogous to reaching doorways. If you have enclosed space on\n
+ * one side only (that is, running along side a wall) stop if\n
+ * your wall opens out, or your open space closes in. Either case\n
+ * corresponds to a doorway.\n
+ *\n
+ * What happens depends on what you can really SEE. (i.e. if you\n
+ * have no light, then running along a dark corridor is JUST like\n
+ * running in a dark room.) The algorithm works equally well in\n
+ * corridors, rooms, mine tailings, earthquake rubble, etc, etc.\n
+ *\n
+ * These conditions are kept in static memory:\n
+ * find_openarea         You are in the open on at least one\n
+ * side.\n
+ * find_breakleft        You have a wall on the left, and will\n
+ * stop if it opens\n
+ * find_breakright       You have a wall on the right, and will\n
+ * stop if it opens\n
+ *\n
+ * To initialize these conditions, we examine the grids adjacent\n
+ * to the grid marked 'x', two on each side (marked 'L' and 'R').\n
+ * If either one of the two grids on a given side is seen to be\n
+ * closed, then that side is considered to be closed. If both\n
+ * sides are closed, then it is an enclosed (corridor) run.\n
+ *\n
+ * LL           L\n
+ * @x          LxR\n
+ * RR          @R\n
+ *\n
+ * Looking at more than just the immediate squares is\n
+ * significant. Consider the following case. A run along the\n
+ * corridor will stop just before entering the center point,\n
+ * because a choice is clearly established. Running in any of\n
+ * three available directions will be defined as a corridor run.\n
+ * Note that a minor hack is inserted to make the angled corridor\n
+ * entry (with one side blocked near and the other side blocked\n
+ * further away from the runner) work correctly. The runner moves\n
+ * diagonally, but then saves the previous direction as being\n
+ * straight into the gap. Otherwise, the tail end of the other\n
+ * entry would be perceived as an alternative on the next move.\n
+ *\n
+ * #.#\n
+ * ##.##\n
+ * .@x..\n
+ * ##.##\n
+ * #.#\n
+ *\n
+ * Likewise, a run along a wall, and then into a doorway (two\n
+ * runs) will work correctly. A single run rightwards from @ will\n
+ * stop at 1. Another run right and down will enter the corridor\n
+ * and make the corner, stopping at the 2.\n
+ *\n
+ * ##################\n
+ * o@x       1\n
+ * ########### ######\n
+ * #2          #\n
+ * #############\n
+ *\n
+ * After any move, the function area_affect is called to\n
+ * determine the new surroundings, and the direction of\n
+ * subsequent moves. It examines the current player location\n
+ * (at which the runner has just arrived) and the previous\n
+ * direction (from which the runner is considered to have come).\n
+ *\n
+ * Moving one square in some direction places you adjacent to\n
+ * three or five new squares (for straight and diagonal moves\n
+ * respectively) to which you were not previously adjacent,\n
+ * marked as '!' in the diagrams below.\n
+ *\n
+ *   ...!              ...\n
+ *   .o@!  (normal)    .o.!  (diagonal)\n
+ *   ...!  (east)      ..@!  (south east)\n
+ *                      !!!\n
+ *\n
+ * You STOP if any of the new squares are interesting in any way:\n
+ * for example, if they contain visible monsters or treasure.\n
+ *\n
+ * You STOP if any of the newly adjacent squares seem to be open,\n
+ * and you are also looking for a break on that side. (that is,\n
+ * find_openarea AND find_break).\n
+ *\n
+ * You STOP if any of the newly adjacent squares do NOT seem to be\n
+ * open and you are in an open area, and that side was previously\n
+ * entirely open.\n
+ *\n
+ * Corners: If you are not in the open (i.e. you are in a corridor)\n
+ * and there is only one way to go in the new squares, then turn in\n
+ * that direction. If there are more than two new ways to go, STOP.\n
+ * If there are two ways to go, and those ways are separated by a\n
+ * square which does not seem to be open, then STOP.\n
+ *\n
+ * Otherwise, we have a potential corner. There are two new open\n
+ * squares, which are also adjacent. One of the new squares is\n
+ * diagonally located, the other is straight on (as in the diagram).\n
+ * We consider two more squares further out (marked below as ?).\n
+ *\n
+ * We assign "option" to the straight-on grid, and "option2" to the\n
+ * diagonal grid, and "check_dir" to the grid marked 's'.\n
+ *\n
+ * ##s\n
+ * @x?\n
+ * #.?\n
+ *\n
+ * If they are both seen to be closed, then it is seen that no benefit\n
+ * is gained from moving straight. It is a known corner.  To cut the\n
+ * corner, go diagonally, otherwise go straight, but pretend you\n
+ * stepped diagonally into that next location for a full view next\n
+ * time. Conversely, if one of the ? squares is not seen to be closed\n,
+ * then there is a potential choice. We check to see whether it is a\n
+ * potential corner or an intersection/room entrance.  If the square\n
+ * two spaces straight ahead, and the space marked with 's' are both\n
+ * unknown space, then it is a potential corner and enter if\n
+ * find_examine is set, otherwise must stop because it is not a\n
+ * corner. (find_examine option is removed and always is TRUE.)\n
  */
 
 
@@ -3418,14 +3545,20 @@ bool trap_can_be_ignored(int feat)
 	 have_flag((MF)->flags, FF_PROJECT) && \
 	 !have_flag((MF)->flags, FF_OPEN))
 
-/*
+
+/*!
+ * @brief 該当地形のトラップがプレイヤーにとって無効かどうかを判定して返す /
  * Move player in the given direction, with the given "pickup" flag.
- *
- * This routine should (probably) always induce energy expenditure.
- *
- * Note that moving will *always* take a turn, and will *always* hit
- * any monster which might be in the destination grid.  Previously,
- * moving into walls was "free" and did NOT hit invisible monsters.
+ * @param dir 移動方向ID
+ * @param do_pickup 罠解除を試みながらの移動ならばTRUE
+ * @param break_trap トラップ粉砕処理を行うならばTRUE
+ * @return 実際に移動が行われたならばTRUEを返す。
+ * @note
+ * This routine should (probably) always induce energy expenditure.\n
+ * @details
+ * Note that moving will *always* take a turn, and will *always* hit\n
+ * any monster which might be in the destination grid.  Previously,\n
+ * moving into walls was "free" and did NOT hit invisible monsters.\n
  */
 void move_player(int dir, bool do_pickup, bool break_trap)
 {
@@ -3908,8 +4041,13 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 
 static bool ignore_avoid_run;
 
-/*
+/*!
+ * @brief ダッシュ移動処理中、移動先のマスが既知の壁かどうかを判定する /
  * Hack -- Check for a "known wall" (see below)
+ * @param dir 想定する移動方向ID
+ * @param y 移動元のY座標
+ * @param x 移動元のX座標
+ * @return 移動先が既知の壁ならばTRUE
  */
 static int see_wall(int dir, int y, int x)
 {
@@ -3948,8 +4086,13 @@ static int see_wall(int dir, int y, int x)
 }
 
 
-/*
+/*!
+ * @brief ダッシュ移動処理中、移動先のマスか未知の地形かどうかを判定する /
  * Hack -- Check for an "unknown corner" (see below)
+ * @param dir 想定する移動方向ID
+ * @param y 移動元のY座標
+ * @param x 移動元のX座標
+ * @return 移動先が未知の地形ならばTRUE
  */
 static int see_nothing(int dir, int y, int x)
 {
@@ -3971,137 +4114,6 @@ static int see_nothing(int dir, int y, int x)
 }
 
 
-
-
-
-/*
- * The running algorithm:                       -CJS-
- *
- * In the diagrams below, the player has just arrived in the
- * grid marked as '@', and he has just come from a grid marked
- * as 'o', and he is about to enter the grid marked as 'x'.
- *
- * Of course, if the "requested" move was impossible, then you
- * will of course be blocked, and will stop.
- *
- * Overview: You keep moving until something interesting happens.
- * If you are in an enclosed space, you follow corners. This is
- * the usual corridor scheme. If you are in an open space, you go
- * straight, but stop before entering enclosed space. This is
- * analogous to reaching doorways. If you have enclosed space on
- * one side only (that is, running along side a wall) stop if
- * your wall opens out, or your open space closes in. Either case
- * corresponds to a doorway.
- *
- * What happens depends on what you can really SEE. (i.e. if you
- * have no light, then running along a dark corridor is JUST like
- * running in a dark room.) The algorithm works equally well in
- * corridors, rooms, mine tailings, earthquake rubble, etc, etc.
- *
- * These conditions are kept in static memory:
- * find_openarea         You are in the open on at least one
- * side.
- * find_breakleft        You have a wall on the left, and will
- * stop if it opens
- * find_breakright       You have a wall on the right, and will
- * stop if it opens
- *
- * To initialize these conditions, we examine the grids adjacent
- * to the grid marked 'x', two on each side (marked 'L' and 'R').
- * If either one of the two grids on a given side is seen to be
- * closed, then that side is considered to be closed. If both
- * sides are closed, then it is an enclosed (corridor) run.
- *
- * LL           L
- * @x          LxR
- * RR          @R
- *
- * Looking at more than just the immediate squares is
- * significant. Consider the following case. A run along the
- * corridor will stop just before entering the center point,
- * because a choice is clearly established. Running in any of
- * three available directions will be defined as a corridor run.
- * Note that a minor hack is inserted to make the angled corridor
- * entry (with one side blocked near and the other side blocked
- * further away from the runner) work correctly. The runner moves
- * diagonally, but then saves the previous direction as being
- * straight into the gap. Otherwise, the tail end of the other
- * entry would be perceived as an alternative on the next move.
- *
- * #.#
- * ##.##
- * .@x..
- * ##.##
- * #.#
- *
- * Likewise, a run along a wall, and then into a doorway (two
- * runs) will work correctly. A single run rightwards from @ will
- * stop at 1. Another run right and down will enter the corridor
- * and make the corner, stopping at the 2.
- *
- * ##################
- * o@x       1
- * ########### ######
- * #2          #
- * #############
- *
- * After any move, the function area_affect is called to
- * determine the new surroundings, and the direction of
- * subsequent moves. It examines the current player location
- * (at which the runner has just arrived) and the previous
- * direction (from which the runner is considered to have come).
- *
- * Moving one square in some direction places you adjacent to
- * three or five new squares (for straight and diagonal moves
- * respectively) to which you were not previously adjacent,
- * marked as '!' in the diagrams below.
- *
- *   ...!              ...
- *   .o@!  (normal)    .o.!  (diagonal)
- *   ...!  (east)      ..@!  (south east)
- *                      !!!
- *
- * You STOP if any of the new squares are interesting in any way:
- * for example, if they contain visible monsters or treasure.
- *
- * You STOP if any of the newly adjacent squares seem to be open,
- * and you are also looking for a break on that side. (that is,
- * find_openarea AND find_break).
- *
- * You STOP if any of the newly adjacent squares do NOT seem to be
- * open and you are in an open area, and that side was previously
- * entirely open.
- *
- * Corners: If you are not in the open (i.e. you are in a corridor)
- * and there is only one way to go in the new squares, then turn in
- * that direction. If there are more than two new ways to go, STOP.
- * If there are two ways to go, and those ways are separated by a
- * square which does not seem to be open, then STOP.
- *
- * Otherwise, we have a potential corner. There are two new open
- * squares, which are also adjacent. One of the new squares is
- * diagonally located, the other is straight on (as in the diagram).
- * We consider two more squares further out (marked below as ?).
- *
- * We assign "option" to the straight-on grid, and "option2" to the
- * diagonal grid, and "check_dir" to the grid marked 's'.
- *
- * ##s
- * @x?
- * #.?
- *
- * If they are both seen to be closed, then it is seen that no benefit
- * is gained from moving straight. It is a known corner.  To cut the
- * corner, go diagonally, otherwise go straight, but pretend you
- * stepped diagonally into that next location for a full view next
- * time. Conversely, if one of the ? squares is not seen to be closed,
- * then there is a potential choice. We check to see whether it is a
- * potential corner or an intersection/room entrance.  If the square
- * two spaces straight ahead, and the space marked with 's' are both
- * unknown space, then it is a potential corner and enter if
- * find_examine is set, otherwise must stop because it is not a
- * corner. (find_examine option is removed and always is TRUE.)
- */
 
 
 
