@@ -2973,7 +2973,6 @@ void do_cmd_stay(bool pickup)
 }
 
 
-
 /*!
  * @brief 「休む」動作コマンドのメインルーチン /
  * Resting allows a player to safely restore his hp	-RAK-
@@ -3072,9 +3071,12 @@ void do_cmd_rest(void)
 }
 
 
-/*
+/*!
+ * @brief 矢弾を射撃した場合の破損確率を返す /
  * Determines the odds of an object breaking when thrown at a monster
- *
+ * @param o_ptr 矢弾のオブジェクト構造体参照ポインタ
+ * @return 破損確率(%)
+ * @details
  * Note that artifacts never break, see the "drop_near()" function.
  */
 static int breakage_chance(object_type *o_ptr)
@@ -3127,6 +3129,14 @@ static int breakage_chance(object_type *o_ptr)
 }
 
 
+/*!
+ * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /
+ * Determines the odds of an object breaking when thrown at a monster
+ * @param o_ptr 矢弾のオブジェクト構造体参照ポインタ
+ * @param tdam 計算途中のダメージ量
+ * @param m_ptr 目標モンスターの構造体参照ポインタ
+ * @return スレイ倍率をかけたダメージ量
+ */
 static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 {
 	int mult = 10;
@@ -3494,9 +3504,14 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 }
 
 
-/*
+/*!
+ * @brief 射撃処理のサブルーチン /
  * Fire an object from the pack or floor.
- *
+ * @param item 射撃するオブジェクトの所持ID
+ * @param j_ptr 射撃武器のオブジェクト参照ポインタ
+ * @return なし
+ * @details
+ * <pre>
  * You may only fire items that "match" your missile launcher.
  *
  * You must use slings + pebbles/shots, bows + arrows, xbows + bolts.
@@ -3521,6 +3536,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
  * for the damage multiplier.
  *
  * Note that Bows of "Extra Shots" give an extra shot.
+ * </pre>
  */
 void do_cmd_fire_aux(int item, object_type *j_ptr)
 {
@@ -4141,7 +4157,10 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	if (p_ptr->concent) reset_concentration(FALSE);
 }
 
-
+/*!
+ * @brief 射撃処理のメインルーチン
+ * @return なし
+ */
 void do_cmd_fire(void)
 {
 	int item;
@@ -4222,7 +4241,11 @@ void do_cmd_fire(void)
 	}
 }
 
-
+/*!
+ * @brief オブジェクトが投射可能な武器かどうかを返す。
+ * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
+ * @return 投射可能な武器ならばTRUE
+ */
 static bool item_tester_hook_boomerang(object_type *o_ptr)
 {
 	if ((o_ptr->tval==TV_DIGGING) || (o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM) || (o_ptr->tval == TV_HAFTED)) return (TRUE);
@@ -4232,14 +4255,21 @@ static bool item_tester_hook_boomerang(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 投射処理のサブルーチン /
  * Throw an object from the pack or floor.
- *
+ * @param mult 威力の倍率
+ * @param boomerang ブーメラン処理ならばTRUE
+ * @param shuriken 忍者の手裏剣処理ならばTRUE
+ * @return ターンを消費した場合TRUEを返す
+ * @details
+ * <pre>
  * Note: "unseen" monsters are very hard to hit.
  *
  * Should throwing a weapon do full damage?  Should it allow the magic
  * to hit bonus of the weapon to have an effect?  Should it ever cause
  * the item to be destroyed?  Should it do any damage at all?
+ * </pre>
  */
 bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 {
@@ -4880,8 +4910,10 @@ msg_print("これはあまり良くない気がする。");
 }
 
 
-/*
+/*!
+ * @brief 投射処理のメインルーチン /
  * Throw an object from the pack or floor.
+ * @return なし
  */
 void do_cmd_throw(void)
 {
@@ -5045,6 +5077,10 @@ static void travel_flow(int ty, int tx)
 	flow_head = flow_tail = 0;
 }
 
+/*!
+ * @brief トラベル処理のメインルーチン
+ * @return なし
+ */
 void do_cmd_travel(void)
 {
 	int x, y, i;
