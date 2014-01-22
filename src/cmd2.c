@@ -1070,7 +1070,7 @@ static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
  * Return the number of chests around (or under) the character.
  * @param y 該当するマスの中から1つのY座標を返す参照ポインタ
  * @param x 該当するマスの中から1つのX座標を返す参照ポインタ
- * @param test TRUEならばトラップの存在が判明している箱のみ対象にする
+ * @param trapped TRUEならばトラップの存在が判明している箱のみ対象にする
  * @return 該当する地形の数
  * @details
  * If requested, count only trapped chests.
@@ -1450,8 +1450,6 @@ static bool do_cmd_close_aux(int y, int x)
 /*!
  * @brief 「閉じる」コマンドのメインルーチン /
  * Close an open door.
- * @param y 対象を行うマスのY座標
- * @param x 対象を行うマスのX座標
  * @return なし
  * @details
  * Unlocking a locked door/chest is worth one experience point.

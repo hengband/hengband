@@ -65,7 +65,7 @@
  *
  * \#.\#
  * \#\#.\#\#
- * \.\@@x..
+ * \.\@x..
  * \#\#.\#\#
  * \#.\#
  *
@@ -4168,7 +4168,7 @@ static bool find_breakleft;
  *\n
  * Diagonal Corridor    Blunt Corridor (?)\n
  *       \# \#                  \#\n
- *       \#x\#                 @\@x\#\n
+ *       \#x\#                  \@x\#\n
  *       \@\@p.                  p\n
  */
 static void run_init(int dir)
