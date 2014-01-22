@@ -1450,6 +1450,8 @@ static bool do_cmd_close_aux(int y, int x)
 /*!
  * @brief 「閉じる」コマンドのメインルーチン /
  * Close an open door.
+ * @param y 対象を行うマスのY座標
+ * @param x 対象を行うマスのX座標
  * @return なし
  * @details
  * Unlocking a locked door/chest is worth one experience point.
@@ -1549,8 +1551,12 @@ void do_cmd_close(void)
 }
 
 
-/*
+/*!
+ * @brief 「掘る」コマンドを該当のマスに行えるかの判定と結果メッセージの表示 /
  * Determine if a given grid may be "tunneled"
+ * @param y 対象を行うマスのY座標
+ * @param x 対象を行うマスのX座標
+ * @return 
  */
 static bool do_cmd_tunnel_test(int y, int x)
 {
@@ -1589,13 +1595,15 @@ static bool do_cmd_tunnel_test(int y, int x)
 }
 
 
-/*
+/*!
+ * @brief 「掘る」動作コマンドのサブルーチン /
  * Perform the basic "tunnel" command
- *
+ * @param y 対象を行うマスのY座標
+ * @param x 対象を行うマスのX座標
+ * @return 実際に処理が行われた場合TRUEを返す。
+ * @details
  * Assumes that no monster is blocking the destination
- *
  * Do not use twall anymore
- *
  * Returns TRUE if repeated commands may continue
  */
 static bool do_cmd_tunnel_aux(int y, int x)
@@ -1752,14 +1760,18 @@ static bool do_cmd_tunnel_aux(int y, int x)
 }
 
 
-/*
+/*!
+ * @brief 「掘る」動作コマンドのメインルーチン /
  * Tunnels through "walls" (including rubble and closed doors)
- *
+ * @return なし
+ * @details
+ * <pre>
  * Note that you must tunnel in order to hit invisible monsters
  * in walls, though moving into walls still takes a turn anyway.
  *
  * Digging is very difficult without a "digger" weapon, but can be
  * accomplished by strong players using heavy weapons.
+ * </pre>
  */
 void do_cmd_tunnel(void)
 {
@@ -1855,15 +1867,19 @@ void do_cmd_tunnel(void)
 
 #ifdef ALLOW_EASY_OPEN /* TNB */
 
-/*
+/*!
+ * @brief 移動処理による簡易な「開く」処理 /
  * easy_open_door --
- *
+ * @return 開く処理が実際に試みられた場合TRUEを返す
+ * @details
+ * <pre>
  *	If there is a jammed/closed/locked door at the given location,
  *	then attempt to unlock/open it. Return TRUE if an attempt was
  *	made (successful or not), otherwise return FALSE.
  *
  *	The code here should be nearly identical to that in
  *	do_cmd_open_test() and do_cmd_open_aux().
+ * </pre>
  */
 bool easy_open_door(int y, int x)
 {
@@ -1963,14 +1979,19 @@ bool easy_open_door(int y, int x)
 #endif /* ALLOW_EASY_OPEN -- TNB */
 
 
-/*
+/*!
+ * @brief 箱のトラップを解除するコマンドのメインルーチン /
  * Perform the basic "disarm" command
- *
+ * @param y 解除を行うマスのY座標
+ * @param x 解除を行うマスのX座標
+ * @param o_idx 箱のオブジェクトID
+ * @return ターンを消費する処理が行われた場合TRUEを返す
+ * @details
+ * <pre>
  * Assume destination is a visible trap
- *
  * Assume there is no monster blocking the destination
- *
  * Returns TRUE if repeated commands may continue
+ * </pre>
  */
 static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
 {
@@ -2075,14 +2096,19 @@ static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
 }
 
 
-/*
+/*!
+ * @brief 箱のトラップを解除するコマンドのサブルーチン /
  * Perform the basic "disarm" command
- *
+ * @param y 解除を行うマスのY座標
+ * @param x 解除を行うマスのX座標
+ * @param dir プレイヤーからみた方向ID
+ * @return ターンを消費する処理が行われた場合TRUEを返す
+ * @details
+ * <pre>
  * Assume destination is a visible trap
- *
  * Assume there is no monster blocking the destination
- *
  * Returns TRUE if repeated commands may continue
+ * </pre>
  */
 #ifdef ALLOW_EASY_DISARM /* TNB */
 
@@ -2200,8 +2226,10 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
 }
 
 
-/*
+/*!
+ * @brief 箱、床のトラップ解除処理双方の統合メインルーチン /
  * Disarms a trap, or chest
+ * @return なし
  */
 void do_cmd_disarm(void)
 {
@@ -2319,14 +2347,19 @@ void do_cmd_disarm(void)
 }
 
 
-/*
+/*!
+ * @brief 「打ち破る」動作コマンドのサブルーチン /
  * Perform the basic "bash" command
- *
+ * @param y 対象を行うマスのY座標
+ * @param x 対象を行うマスのX座標
+ * @param dir プレイヤーから見たターゲットの方角ID
+ * @return 実際に処理が行われた場合TRUEを返す。
+ * @details
+ * <pre>
  * Assume destination is a closed/locked/jammed door
- *
  * Assume there is no monster blocking the destination
- *
  * Returns TRUE if repeated commands may continue
+ * </pre>
  */
 static bool do_cmd_bash_aux(int y, int x, int dir)
 {
@@ -2430,9 +2463,12 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 }
 
 
-/*
+/*!
+ * @brief 「打ち破る」動作コマンドのメインルーチン /
  * Bash open a door, success based on character strength
- *
+ * @return なし
+ * @details
+ * <pre>
  * For a closed door, pval is positive if locked; negative if stuck.
  *
  * For an open door, pval is positive for a broken door.
@@ -2443,6 +2479,7 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
  * be bashed. A closed door can be jammed (see do_cmd_spike()).
  *
  * Creatures can also open or bash doors, see elsewhere.
+ * </pre>
  */
 void do_cmd_bash(void)
 {
@@ -2529,7 +2566,11 @@ void do_cmd_bash(void)
 }
 
 
-/*
+/*!
+ * @brief 特定のマスに影響を及ぼすための汎用的コマンド
+ * @return なし
+ * @details
+ * <pre>
  * Manipulate an adjacent grid in some way
  *
  * Attack monsters, tunnel through walls, disarm traps, open doors.
@@ -2538,6 +2579,7 @@ void do_cmd_bash(void)
  *
  * This command must always take a turn, to prevent free detection
  * of invisible monsters.
+ * </pre>
  */
 void do_cmd_alter(void)
 {
@@ -2641,10 +2683,16 @@ void do_cmd_alter(void)
 }
 
 
-/*
+
+/*!
+ * @brief 「くさびを打つ」ために必要なオブジェクトがあるかどうかの判定を返す /
  * Find the index of some "spikes", if possible.
- *
+ * @param ip くさびとして打てるオブジェクトのID
+ * @return オブジェクトがある場合TRUEを返す
+ * @details
+ * <pre>
  * XXX XXX XXX Let user choose a pile of spikes, perhaps?
+ * </pre>
  */
 static bool get_spike(int *ip)
 {
@@ -2674,10 +2722,14 @@ static bool get_spike(int *ip)
 }
 
 
-/*
+/*!
+ * @brief 「くさびを打つ」動作コマンドのメインルーチン /
  * Jam a closed door with a spike
- *
+ * @return なし
+ * @details
+ * <pre>
  * This command may NOT be repeated
+ * </pre>
  */
 void do_cmd_spike(void)
 {
@@ -2770,8 +2822,11 @@ void do_cmd_spike(void)
 
 
 
-/*
+/*!
+ * @brief 「歩く」動作コマンドのメインルーチン /
  * Support code for the "Walk" and "Jump" commands
+ * @param pickup アイテムの自動拾いを行うならTRUE
+ * @return なし
  */
 void do_cmd_walk(bool pickup)
 {
@@ -2848,9 +2903,10 @@ void do_cmd_walk(bool pickup)
 }
 
 
-
-/*
+/*!
+ * @brief 「走る」動作コマンドのメインルーチン /
  * Start running.
+ * @return なし
  */
 void do_cmd_run(void)
 {
@@ -2885,10 +2941,12 @@ void do_cmd_run(void)
 }
 
 
-
-/*
+/*!
+ * @brief 「留まる」動作コマンドのメインルーチン /
  * Stay still.  Search.  Enter stores.
  * Pick up treasure if "pickup" is true.
+ * @param pickup アイテムの自動拾いを行うならTRUE
+ * @return なし
  */
 void do_cmd_stay(bool pickup)
 {
@@ -2916,8 +2974,10 @@ void do_cmd_stay(bool pickup)
 
 
 
-/*
+/*!
+ * @brief 「休む」動作コマンドのメインルーチン /
  * Resting allows a player to safely restore his hp	-RAK-
+ * @return なし
  */
 void do_cmd_rest(void)
 {
