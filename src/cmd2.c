@@ -612,11 +612,18 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 }
 
 
-/*
+/*!
+ * @brief 箱のトラップ処理 /
  * Chests have traps too.
- *
+ * @param y 箱の存在するマスのY座標
+ * @param x 箱の存在するマスのX座標
+ * @param o_idx 箱のオブジェクトID
+ * @return なし
+ * @details
+ * <pre>
  * Exploding chest destroys contents (and traps).
  * Note that the chest itself is never destroyed.
+ * </pre>
  */
 static void chest_trap(int y, int x, s16b o_idx)
 {
@@ -902,12 +909,15 @@ static void chest_trap(int y, int x, s16b o_idx)
 }
 
 
-/*
+/*!
+ * @brief 箱を開けるコマンドのメインルーチン /
  * Attempt to open the given chest at the given location
- *
+ * @param y 箱の存在するマスのY座標
+ * @param x 箱の存在するマスのX座標
+ * @param o_idx 箱のオブジェクトID
+ * @return 箱が開かなかった場合TRUE / Returns TRUE if repeated commands may continue
+ * @details
  * Assume there is no monster blocking the destination
- *
- * Returns TRUE if repeated commands may continue
  */
 static bool do_cmd_open_chest(int y, int x, s16b o_idx)
 {
@@ -987,8 +997,11 @@ static bool do_cmd_open_chest(int y, int x, s16b o_idx)
 
 #if defined(ALLOW_EASY_OPEN) || defined(ALLOW_EASY_DISARM) /* TNB */
 
-/*
- * Return TRUE if the given feature is an open door
+/*!
+ * @brief 地形は開くものであって、かつ開かれているかを返す /
+ * Attempt to open the given chest at the given location
+ * @param feat 地形ID
+ * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
  */
 static bool is_open(int feat)
 {
@@ -996,8 +1009,15 @@ static bool is_open(int feat)
 }
 
 
-/*
- * Return the number of features around (or under) the character.
+/*!
+ * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す /
+ * Attempt to open the given chest at the given location
+ * @param y 該当する地形の中から1つのY座標を返す参照ポインタ
+ * @param x 該当する地形の中から1つのX座標を返す参照ポインタ
+ * @param test 地形条件を判定するための関数ポインタ
+ * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
+ * @return 該当する地形の数
+ * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
 static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
