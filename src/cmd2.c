@@ -1065,8 +1065,14 @@ static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの周辺9マスに箱のあるマスがいくつあるかを返す /
  * Return the number of chests around (or under) the character.
+ * @param y 該当するマスの中から1つのY座標を返す参照ポインタ
+ * @param x 該当するマスの中から1つのX座標を返す参照ポインタ
+ * @param test TRUEならばトラップの存在が判明している箱のみ対象にする
+ * @return 該当する地形の数
+ * @details
  * If requested, count only trapped chests.
  */
 static int count_chests(int *y, int *x, bool trapped)
@@ -1111,8 +1117,12 @@ static int count_chests(int *y, int *x, bool trapped)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーから指定の座標がどの方角にあるかを返す /
  * Convert an adjacent location to a direction.
+ * @param y 方角を確認したY座標
+ * @param x 方角を確認したX座標
+ * @return 方向ID
  */
 static int coords_to_dir(int y, int x)
 {
@@ -1131,13 +1141,15 @@ static int coords_to_dir(int y, int x)
 #endif /* defined(ALLOW_EASY_OPEN) || defined(ALLOW_EASY_DISARM) -- TNB */
 
 
-/*
+/*!
+ * @brief 「開ける」動作コマンドのサブルーチン /
  * Perform the basic "open" command on doors
- *
+ * @param y 対象を行うマスのY座標
+ * @param x 対象を行うマスのX座標
+ * @return 実際に処理が行われた場合TRUEを返す。
+ * @details
  * Assume destination is a closed/locked/jammed door
- *
  * Assume there is no monster blocking the destination
- *
  * Returns TRUE if repeated commands may continue
  */
 static bool do_cmd_open_aux(int y, int x)
@@ -1241,11 +1253,11 @@ static bool do_cmd_open_aux(int y, int x)
 	return (more);
 }
 
-
-
-/*
+/*!
+ * @brief 「開ける」コマンドのメインルーチン /
  * Open a closed/locked/jammed door or a closed/locked chest.
- *
+ * @return なし
+ * @details
  * Unlocking a locked door/chest is worth one experience point.
  */
 void do_cmd_open(void)
@@ -1368,13 +1380,15 @@ void do_cmd_open(void)
 
 
 
-/*
+/*!
+ * @brief 「閉じる」動作コマンドのサブルーチン /
  * Perform the basic "close" command
- *
+ * @param y 対象を行うマスのY座標
+ * @param x 対象を行うマスのX座標
+ * @return 実際に処理が行われた場合TRUEを返す。
+ * @details
  * Assume destination is an open/broken door
- *
  * Assume there is no monster blocking the destination
- *
  * Returns TRUE if repeated commands may continue
  */
 static bool do_cmd_close_aux(int y, int x)
@@ -1433,8 +1447,12 @@ static bool do_cmd_close_aux(int y, int x)
 }
 
 
-/*
+/*!
+ * @brief 「閉じる」コマンドのメインルーチン /
  * Close an open door.
+ * @return なし
+ * @details
+ * Unlocking a locked door/chest is worth one experience point.
  */
 void do_cmd_close(void)
 {
