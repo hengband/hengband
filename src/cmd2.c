@@ -12,6 +12,12 @@
 
 #include "angband.h"
 
+
+/*!
+ * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理
+ * @param down_stair TRUEならば階段を降りる処理、FALSEなら階段を昇る処理による内容
+ * @return フロア移動を実際に行うならTRUE、キャンセルする場合はFALSE
+ */
 bool confirm_leave_level(bool down_stair)
 {
 	quest_type *q_ptr = &quest[p_ptr->inside_quest];
@@ -40,9 +46,9 @@ bool confirm_leave_level(bool down_stair)
 	return FALSE;
 }
 
-
-/*
- * Go up one level
+/*!
+ * @brief 階段を使って階層を昇る処理 / Go up one level
+ * @return なし
  */
 void do_cmd_go_up(void)
 {
@@ -209,8 +215,9 @@ void do_cmd_go_up(void)
 }
 
 
-/*
- * Go down one level
+/*!
+ * @brief 階段を使って階層を降りる処理 / Go down one level
+ * @return なし
  */
 void do_cmd_go_down(void)
 {
@@ -418,9 +425,9 @@ void do_cmd_go_down(void)
 }
 
 
-
-/*
- * Simple command to "search" for one turn
+/*!
+ * @brief 探索コマンドのメインルーチン / Simple command to "search" for one turn
+ * @return なし
  */
 void do_cmd_search(void)
 {
@@ -445,8 +452,12 @@ void do_cmd_search(void)
 }
 
 
-/*
- * Determine if a grid contains a chest
+/*!
+ * @brief 該当のマスに存在している箱のオブジェクトIDを返す。
+ * @param y 走査対象にしたいマスのY座標
+ * @param x 走査対象にしたいマスのX座標
+ * @param trapped TRUEならばトラップが存在する箱のみ、FALSEならば空でない箱全てを対象にする
+ * @return 箱が存在する場合そのオブジェクトID、存在しない場合0を返す。
  */
 static s16b chest_check(int y, int x, bool trapped)
 {
@@ -483,9 +494,16 @@ static s16b chest_check(int y, int x, bool trapped)
 }
 
 
-/*
+/*!
+ * @brief 箱からアイテムを引き出す /
  * Allocates objects upon opening a chest    -BEN-
- *
+ * @param scatter TRUEならばトラップによるアイテムの拡散処理
+ * @param y 箱の存在するマスのY座標
+ * @param x 箱の存在するマスのX座標
+ * @param o_idx 箱のオブジェクトID
+ * @return なし
+ * @details
+ * <pre>
  * Disperse treasures from the given chest, centered at (x,y).
  *
  * Small chests often contain "gold", while Large chests always contain
@@ -493,6 +511,7 @@ static s16b chest_check(int y, int x, bool trapped)
  * and Steel chests contain 6 items.  The "value" of the items in a
  * chest is based on the "power" of the chest, which is in turn based
  * on the level on which the chest is generated.
+ * </pre>
  */
 static void chest_death(bool scatter, int y, int x, s16b o_idx)
 {
