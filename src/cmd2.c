@@ -4932,7 +4932,10 @@ static int flow_tail = 0;
 static s16b temp2_x[MAX_SHORT];
 static s16b temp2_y[MAX_SHORT];
 
-/* Hack: forget the "flow" information */
+/*!
+ * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information 
+ * @return なし
+ */
 void forget_travel_flow(void)
 {
 	int x, y;
@@ -4950,6 +4953,12 @@ void forget_travel_flow(void)
 	travel.y = travel.x = 0;
 }
 
+/*!
+ * @brief トラベル処理中に地形に応じた移動コスト基準を返す
+ * @param y 該当地点のY座標
+ * @param x 該当地点のX座標
+ * @return コスト値
+ */
 static int travel_flow_cost(int y, int x)
 {
 	feature_type *f_ptr = &f_info[cave[y][x].feat];
@@ -4985,6 +4994,14 @@ static int travel_flow_cost(int y, int x)
 	return (cost);
 }
 
+/*!
+ * @brief トラベル処理の到達地点までの行程を得る処理のサブルーチン
+ * @param y 目標地点のY座標
+ * @param x 目標地点のX座標
+ * @param n 現在のコスト
+ * @param wall プレイヤーが壁の中にいるならばTRUE
+ * @return なし
+ */
 static void travel_flow_aux(int y, int x, int n, bool wall)
 {
 	cave_type *c_ptr = &cave[y][x];
@@ -5036,7 +5053,12 @@ static void travel_flow_aux(int y, int x, int n, bool wall)
 	return;
 }
 
-
+/*!
+ * @brief トラベル処理の到達地点までの行程を得る処理のメインルーチン
+ * @param ty 目標地点のY座標
+ * @param tx 目標地点のX座標
+ * @return なし
+ */
 static void travel_flow(int ty, int tx)
 {
 	int x, y, d;
