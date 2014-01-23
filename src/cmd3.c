@@ -15,8 +15,9 @@
 
 
 
-/*
- * Display inventory
+/*!
+ * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory
+ * @return なし 
  */
 void do_cmd_inven(void)
 {
@@ -88,8 +89,9 @@ void do_cmd_inven(void)
 }
 
 
-/*
- * Display equipment
+/*!
+ * @brief 装備一覧を表示するコマンドのメインルーチン / Display equipment
+ * @return なし 
  */
 void do_cmd_equip(void)
 {
@@ -162,8 +164,10 @@ void do_cmd_equip(void)
 }
 
 
-/*
- * The "wearable" tester
+/*!
+ * @brief オブジェクトを防具として装備できるかの判定 / The "wearable" tester
+ * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
+ * @return オブジェクトが防具として装備できるならTRUEを返す。
  */
 static bool item_tester_hook_wear(object_type *o_ptr)
 {
@@ -178,6 +182,11 @@ static bool item_tester_hook_wear(object_type *o_ptr)
 }
 
 
+/*!
+ * @brief オブジェクトがどちらの手にも装備できる武器かどうかの判定
+ * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
+ * @return 左右両方の手で装備できるならばTRUEを返す。
+ */
 static bool item_tester_hook_mochikae(object_type *o_ptr)
 {
 	/* Check for a usable slot */
@@ -189,7 +198,11 @@ static bool item_tester_hook_mochikae(object_type *o_ptr)
 	return (FALSE);
 }
 
-
+/*!
+ * @brief オブジェクトが右手か左手に装備できる武器かどうかの判定
+ * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
+ * @return 右手か左手の武器として装備できるならばTRUEを返す。
+ */
 static bool item_tester_hook_melee_weapon(object_type *o_ptr)
 {
 	/* Check for a usable slot */
@@ -202,8 +215,9 @@ static bool item_tester_hook_melee_weapon(object_type *o_ptr)
 
 bool select_ring_slot = FALSE;
 
-/*
- * Wield or wear a single item from the pack or floor
+/*!
+ * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
+ * @return なし 
  */
 void do_cmd_wield(void)
 {
@@ -624,7 +638,11 @@ sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいですか？", o_name);
 	calc_android_exp();
 }
 
-
+/*!
+ * @brief 持ち替え処理
+ * @param item 持ち替えを行いたい装備部位ID
+ * @return なし
+ */
 void kamaenaoshi(int item)
 {
 	object_type *o_ptr, *new_o_ptr;
@@ -699,8 +717,9 @@ void kamaenaoshi(int item)
 }
 
 
-/*
- * Take off an item
+/*!
+ * @brief 装備を外すコマンドのメインルーチン / Take off an item
+ * @return なし
  */
 void do_cmd_takeoff(void)
 {
@@ -810,8 +829,9 @@ void do_cmd_takeoff(void)
 }
 
 
-/*
- * Drop an item
+/*!
+ * @brief アイテムを落とすコマンドのメインルーチン / Drop an item
+ * @return なし
  */
 void do_cmd_drop(void)
 {
@@ -893,7 +913,11 @@ void do_cmd_drop(void)
 	p_ptr->redraw |= (PR_EQUIPPY);
 }
 
-
+/*!
+ * @brief オブジェクトが高位の魔法書かどうかを判定する
+ * @param 判定したいオブジェクトの構造体参照ポインタ
+ * @return オブジェクトが高位の魔法書ならばTRUEを返す
+ */
 static bool high_level_book(object_type *o_ptr)
 {
 	if ((o_ptr->tval == TV_LIFE_BOOK) ||
@@ -918,8 +942,9 @@ static bool high_level_book(object_type *o_ptr)
 }
 
 
-/*
- * Destroy an item
+/*!
+ * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
+ * @return なし
  */
 void do_cmd_destroy(void)
 {
@@ -1161,8 +1186,9 @@ msg_print("更に経験を積んだような気がする。");
 }
 
 
-/*
- * Observe an item which has been *identify*-ed
+/*!
+ * @brief アイテムを調査するコマンドのメインルーチン / Observe an item which has been *identify*-ed
+ * @return なし
  */
 void do_cmd_observe(void)
 {
