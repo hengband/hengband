@@ -6922,8 +6922,10 @@ static void do_cmd_knowledge_weapon_exp(void)
 }
 
 
-/*
+/*!
+ * @brief 魔法の経験値を表示するコマンドのメインルーチン
  * Display spell-exp
+ * @return なし
  */
 static void do_cmd_knowledge_spell_exp(void)
 {
@@ -7026,8 +7028,10 @@ static void do_cmd_knowledge_spell_exp(void)
 }
 
 
-/*
+/*!
+ * @brief スキル情報を表示するコマンドのメインルーチン /
  * Display skill-exp
+ * @return なし
  */
 static void do_cmd_knowledge_skill_exp(void)
 {
@@ -7081,8 +7085,10 @@ static void do_cmd_knowledge_skill_exp(void)
 }
 
 
-/*
- * Pluralize a monster name
+/*!
+ * @brief 英単語、句、説を複数形を変換する / Pluralize a monster name
+ * @param Name 変換したい文字列の参照ポインタ
+ * @return なし
  */
 void plural_aux(char *Name)
 {
@@ -7204,8 +7210,10 @@ void plural_aux(char *Name)
 	}
 }
 
-/*
+/*!
+ * @brief 現在のペットを表示するコマンドのメインルーチン /
  * Display current pets
+ * @return なし
  */
 static void do_cmd_knowledge_pets(void)
 {
@@ -7278,10 +7286,11 @@ static void do_cmd_knowledge_pets(void)
 }
 
 
-/*
+/*!
+ * @brief 現在のペットを表示するコマンドのメインルーチン /
  * Total kill count
- *
- * Note that the player ghosts are ignored.  XXX XXX XXX
+ * @return なし
+ * @note the player ghosts are ignored.  XXX XXX XXX
  */
 static void do_cmd_knowledge_kill_count(void)
 {
