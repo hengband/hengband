@@ -915,7 +915,7 @@ void do_cmd_drop(void)
 
 /*!
  * @brief オブジェクトが高位の魔法書かどうかを判定する
- * @param 判定したいオブジェクトの構造体参照ポインタ
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトが高位の魔法書ならばTRUEを返す
  */
 static bool high_level_book(object_type *o_ptr)
@@ -1259,9 +1259,10 @@ void do_cmd_observe(void)
 
 
 
-/*
- * Remove the inscription from an object
- * XXX Mention item (when done)?
+/*!
+ * @brief アイテムの銘を消すコマンドのメインルーチン
+ * Remove the inscription from an object XXX Mention item (when done)?
+ * @return なし
  */
 void do_cmd_uninscribe(void)
 {
@@ -1330,8 +1331,10 @@ void do_cmd_uninscribe(void)
 }
 
 
-/*
+/*!
+ * @brief アイテムの銘を刻むコマンドのメインルーチン
  * Inscribe an object with a comment
+ * @return なし
  */
 void do_cmd_inscribe(void)
 {
@@ -1414,8 +1417,11 @@ void do_cmd_inscribe(void)
 
 
 
-/*
+/*!
+ * @brief オブジェクトがランタンの燃料になるかどうかを判定する
  * An "item_tester_hook" for refilling lanterns
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return オブジェクトがランタンの燃料になるならばTRUEを返す
  */
 static bool item_tester_refill_lantern(object_type *o_ptr)
 {
@@ -1431,8 +1437,10 @@ static bool item_tester_refill_lantern(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief ランタンに燃料を加えるコマンドのメインルーチン
  * Refill the players lamp (from the pack or floor)
+ * @return なし
  */
 static void do_cmd_refill_lamp(void)
 {
@@ -1538,8 +1546,11 @@ static void do_cmd_refill_lamp(void)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが松明に束ねられるかどうかを判定する
  * An "item_tester_hook" for refilling torches
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return オブジェクトが松明に束ねられるならばTRUEを返す
  */
 static bool item_tester_refill_torch(object_type *o_ptr)
 {
@@ -1552,8 +1563,10 @@ static bool item_tester_refill_torch(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 松明を束ねるコマンドのメインルーチン
  * Refuel the players torch (from the pack or floor)
+ * @return なし
  */
 static void do_cmd_refill_torch(void)
 {
@@ -1672,8 +1685,10 @@ static void do_cmd_refill_torch(void)
 }
 
 
-/*
+/*!
+ * @brief 燃料を補充するコマンドのメインルーチン
  * Refill the players lamp, or restock his torches
+ * @return なし
  */
 void do_cmd_refill(void)
 {
@@ -1723,8 +1738,10 @@ void do_cmd_refill(void)
 }
 
 
-/*
+/*!
+ * @brief ターゲットを設定するコマンドのメインルーチン
  * Target command
+ * @return なし
  */
 void do_cmd_target(void)
 {
@@ -1753,8 +1770,10 @@ void do_cmd_target(void)
 
 
 
-/*
+/*!
+ * @brief 周囲を見渡すコマンドのメインルーチン
  * Look command
+ * @return なし
  */
 void do_cmd_look(void)
 {
@@ -1776,9 +1795,10 @@ void do_cmd_look(void)
 }
 
 
-
-/*
+/*!
+ * @brief 位置を確認するコマンドのメインルーチン
  * Allow the player to examine other sectors on the map
+ * @return なし
  */
 void do_cmd_locate(void)
 {
@@ -1884,9 +1904,14 @@ void do_cmd_locate(void)
 
 
 
-/*
+/*!
+ * @brief モンスター種族情報を特定の基準によりソートするための比較処理
  * Sorting hook -- Comp function -- see below
- *
+ * @param u モンスター種族情報の入れるポインタ
+ * @param v 条件基準ID
+ * @param a 比較するモンスター種族のID1
+ * @param b 比較するモンスター種族のID2
+ * @return 2の方が大きければTRUEを返す
  * We use "u" to point to array of monster indexes,
  * and "v" to select the type of sorting to perform on "u".
  */
@@ -1958,9 +1983,15 @@ bool ang_sort_comp_hook(vptr u, vptr v, int a, int b)
 }
 
 
-/*
+/*!
+ * @brief モンスター種族情報を特定の基準によりソートするためのスワップ処理
  * Sorting hook -- Swap function -- see below
- *
+ * @param u モンスター種族情報の入れるポインタ
+ * @param v 未使用
+ * @param a スワップするモンスター種族のID1
+ * @param b スワップするモンスター種族のID2
+ * @return なし
+ * @details
  * We use "u" to point to array of monster indexes,
  * and "v" to select the type of sorting to perform.
  */
@@ -1981,9 +2012,12 @@ void ang_sort_swap_hook(vptr u, vptr v, int a, int b)
 
 
 
-/*
+/*!
+ * @brief モンスターの思い出を見るコマンドのメインルーチン
  * Identify a character, allow recall of monsters
- *
+ * @return なし
+ * @details
+ * <pre>
  * Several "special" responses recall "multiple" monsters:
  *   ^A (all monsters)
  *   ^U (all unique monsters)
@@ -1992,6 +2026,7 @@ void ang_sort_swap_hook(vptr u, vptr v, int a, int b)
  * The responses may be sorted in several ways, see below.
  *
  * Note that the player ghosts are ignored. XXX XXX XXX
+ * </pre>
  */
 void do_cmd_query_symbol(void)
 {
