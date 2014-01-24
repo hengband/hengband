@@ -315,8 +315,10 @@ static bool open_auto_dump(cptr buf, cptr mark)
 	return TRUE;
 }
 
-/*
- *  Append foot part and close auto dump.
+/*!
+ * @brief prfファイルをファイルクローズする /
+ * Append foot part and close auto dump.
+ * @return なし
  */
 static void close_auto_dump(void)
 {
@@ -344,8 +346,11 @@ static void close_auto_dump(void)
 
 
 #ifndef JP
-/*
- * Return suffix of ordinal number
+
+/*!
+ * @brief Return suffix of ordinal number
+ * @num number
+ * @return pointer of suffix string.
  */
 cptr get_ordinal_number_suffix(int num)
 {
@@ -365,8 +370,13 @@ cptr get_ordinal_number_suffix(int num)
 #endif
 
 
-/*
- *   Take note to the diary.
+/*!
+ * @brief 日記にメッセージを追加する /
+ * Take note to the diary.
+ * @param type 日記内容のID
+ * @param num 日記内容のIDに応じた数値
+ * @param note 日記内容のIDに応じた文字列参照ポインタ
+ * @return エラーID
  */
 errr do_cmd_write_nikki(int type, int num, cptr note)
 {
@@ -887,6 +897,10 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 
 #define MAX_SUBTITLE (sizeof(subtitle)/sizeof(subtitle[0]))
 
+/*!
+ * @brief 日記のタイトル表記と内容出力 /
+ * @return なし
+ */
 static void do_cmd_disp_nikki(void)
 {
 	char nikki_title[256];
@@ -986,6 +1000,10 @@ static void do_cmd_disp_nikki(void)
 	show_file(FALSE, buf, nikki_title, -1, 0);
 }
 
+/*!
+ * @brief 日記に任意の内容を表記するコマンドのメインルーチン /
+ * @return なし
+ */
 static void do_cmd_bunshou(void)
 {
 	char tmp[80] = "\0";
@@ -1003,6 +1021,10 @@ static void do_cmd_bunshou(void)
 	}
 }
 
+/*!
+ * @brief 最後に取得したアイテムの情報を日記に追加するメインルーチン /
+ * @return なし
+ */
 static void do_cmd_last_get(void)
 {
 	char buf[256];
