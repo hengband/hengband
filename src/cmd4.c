@@ -1092,7 +1092,10 @@ static void do_cmd_erase_nikki(void)
 	msg_print(NULL);
 }
 
-
+/*!
+ * @brief 日記コマンド
+ * @return なし
+ */
 void do_cmd_nikki(void)
 {
 	int i;
@@ -1179,9 +1182,12 @@ void do_cmd_nikki(void)
 	screen_load();
 }
 
-/*
+/*!
+ * @brief 画面を再描画するコマンドのメインルーチン
  * Hack -- redraw the screen
- *
+ * @return なし
+ * @details
+ * <pre>
  * This command performs various low level updates, clears all the "extra"
  * windows, does a total redraw of the main window, and requests all of the
  * interesting updates and redraws that I can think of.
@@ -1189,6 +1195,7 @@ void do_cmd_nikki(void)
  * This command is also used to "instantiate" the results of the user
  * selecting various things, such as graphics mode, so it must call
  * the "TERM_XTRA_REACT" hook before redrawing the windows.
+ * </pre>
  */
 void do_cmd_redraw(void)
 {
@@ -1258,8 +1265,10 @@ void do_cmd_redraw(void)
 }
 
 
-/*
+/*!
+ * @brief 名前を変更するコマンドのメインルーチン
  * Hack -- change name
+ * @return なし
  */
 void do_cmd_change_name(void)
 {
@@ -1356,8 +1365,10 @@ void do_cmd_change_name(void)
 }
 
 
-/*
+/*!
+ * @brief 最近表示されたメッセージを再表示するコマンドのメインルーチン
  * Recall the most recent message
+ * @return なし
  */
 void do_cmd_message_one(void)
 {
@@ -1366,7 +1377,12 @@ void do_cmd_message_one(void)
 }
 
 
-/*
+/*!
+ * @brief メッセージのログを表示するコマンドのメインルーチン
+ * Recall the most recent message
+ * @return なし
+ * @details
+ * <pre>
  * Show previous messages to the user	-BEN-
  *
  * The screen format uses line 0 and 23 for headers and prompts,
@@ -1380,6 +1396,7 @@ void do_cmd_message_one(void)
  * "slide" the virtual display to the left or right.
  *
  * Attempt to only hilite the matching portions of the string.
+ * </pre>
  */
 void do_cmd_messages(int num_now)
 {
@@ -1619,13 +1636,13 @@ void do_cmd_messages(int num_now)
 
 
 
-/*
- * Number of cheating options
+/*!
+ * チートオプションの最大数 / Number of cheating options
  */
 #define CHEAT_MAX 7
 
-/*
- * Cheating options
+/*!
+ * チーとオプションの定義テーブル / Cheating options
  */
 static option_type cheat_info[CHEAT_MAX] =
 {
@@ -1686,8 +1703,11 @@ static option_type cheat_info[CHEAT_MAX] =
 	}
 };
 
-/*
+/*!
+ * @brief チートオプションを変更するコマンドのメインルーチン
  * Interact with some options for cheating
+ * @param info 表示メッセージ
+ * @return なし
  */
 static void do_cmd_options_cheat(cptr info)
 {
@@ -1830,6 +1850,9 @@ static void do_cmd_options_cheat(cptr info)
 }
 
 
+/*!
+ * 自動セーブオプションテーブル
+ */
 static option_type autosave_info[2] =
 {
 	{ &autosave_l,      FALSE, 255, 0x01, 0x00,
@@ -1849,7 +1872,11 @@ static option_type autosave_info[2] =
 
 };
 
-
+/*!
+ * @brief セーブ頻度ターンの次の値を返す
+ * @param current 現在のセーブ頻度ターン値
+ * @return 次のセーブ頻度ターン値
+ */
 static s16b toggle_frequency(s16b current)
 {
 	switch (current)
@@ -1868,8 +1895,10 @@ static s16b toggle_frequency(s16b current)
 }
 
 
-/*
- * Interact with some options for cheating
+/*!
+ * @brief 自動セーブオプションを変更するコマンドのメインルーチン
+ * @param info 表示メッセージ
+ * @return なし
  */
 static void do_cmd_options_autosave(cptr info)
 {
@@ -2010,8 +2039,12 @@ static void do_cmd_options_autosave(cptr info)
 }
 
 
-/*
+/*!
+ * @brief 標準オプションを変更するコマンドのサブルーチン /
  * Interact with some options
+ * @param page オプションページ番号
+ * @param info 表示メッセージ
+ * @return なし
  */
 void do_cmd_options_aux(int page, cptr info)
 {
@@ -2173,8 +2206,10 @@ void do_cmd_options_aux(int page, cptr info)
 }
 
 
-/*
+/*!
+ * @brief ウィンドウオプションを変更するコマンドのメインルーチン /
  * Modify the "window" options
+ * @return なし
  */
 static void do_cmd_options_win(void)
 {
@@ -2419,11 +2454,15 @@ option_fields[OPT_NUM] =
 };
 
 
-/*
+/*!
+ * @brief 標準オプションを変更するコマンドのメインルーチン /
  * Set or unset various options.
- *
+ * @return なし
+ * @details
+ * <pre>
  * The user must use the "Ctrl-R" command to "adapt" to changes
  * in any options which control "visual" aspects of the game.
+ * </pre>
  */
 void do_cmd_options(void)
 {
@@ -2826,9 +2865,11 @@ void do_cmd_options(void)
 
 
 
-/*
+/*!
+ * @brief prefファイルを選択して処理する /
  * Ask for a "user pref line" and process it
- *
+ * @return なし
+ * @details
  * XXX XXX XXX Allow absolute file names?
  */
 void do_cmd_pref(void)
