@@ -3,11 +3,13 @@
  *  @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
  *  @date 2014/01/02
  *  @author
+ * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * </pre>
  */
 
 #include "angband.h"
@@ -59,8 +61,11 @@ static FILE *auto_dump_stream;
 static cptr auto_dump_mark;
 static int auto_dump_line_num;
 
-/*
+
+/*!
+ * @brief prf出力内容を消去する /
  * Remove old lines automatically generated before.
+ * @param orig_file 消去を行うファイル名
  */
 static void remove_auto_dump(cptr orig_file)
 {
@@ -223,8 +228,10 @@ static void remove_auto_dump(cptr orig_file)
 }
 
 
-/*
+/*!
+ * @brief prfファイルのフォーマットに従った内容を出力する /
  * Dump a formatted line, using "vstrnfmt()".
+ * @param fmt 出力内容
  */
 static void auto_dump_printf(cptr fmt, ...)
 {
@@ -253,8 +260,12 @@ static void auto_dump_printf(cptr fmt, ...)
 }
 
 
-/*
- *  Open file to append auto dump.
+/*!
+ * @brief prfファイルをファイルオープンする /
+ * Open file to append auto dump.
+ * @param buf ファイル名
+ * @param mark 出力するヘッダマーク
+ * @return ファイルポインタを取得できたらTRUEを返す
  */
 static bool open_auto_dump(cptr buf, cptr mark)
 {
@@ -7465,8 +7476,18 @@ static void do_cmd_knowledge_kill_count(void)
 }
 
 
-/*
+/*!
+ * @brief モンスター情報リスト中のグループを表示する /
  * Display the object groups.
+ * @brief col 開始行
+ * @brief row 開始列
+ * @brief wid 表示文字数幅
+ * @brief per_page リストの表示行
+ * @brief grp_idx グループのID配列
+ * @brief group_text グループ名の文字列配列
+ * @brie  grp_cur 現在の選択ID
+ * @brief grp_top 現在の選択リスト最上部ID
+ * @return なし
  */
 static void display_group_list(int col, int row, int wid, int per_page,
 	int grp_idx[], cptr group_text[], int grp_cur, int grp_top)
