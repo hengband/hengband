@@ -2891,6 +2891,10 @@ void do_cmd_pref(void)
 	(void)process_pref_file_command(buf);
 }
 
+/*!
+ * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
+ * @return なし
+ */
 void do_cmd_reload_autopick(void)
 {
 #ifdef JP
@@ -2905,8 +2909,10 @@ void do_cmd_reload_autopick(void)
 
 #ifdef ALLOW_MACROS
 
-/*
- * Hack -- append all current macros to the given file
+/*!
+ * @brief マクロ情報をprefファイルに保存する /
+ * @param fname ファイル名
+ * @return なし
  */
 static errr macro_dump(cptr fname)
 {
@@ -2959,12 +2965,17 @@ static errr macro_dump(cptr fname)
 }
 
 
-/*
+/*!
+ * @brief マクロのトリガーキーを取得する /
  * Hack -- ask for a "trigger" (see below)
- *
+ * @param buf キー表記を保管するバッファ
+ * @return なし
+ * @details
+ * <pre>
  * Note the complex use of the "inkey()" function from "util.c".
  *
  * Note that both "flush()" calls are extremely important.
+ * </pre>
  */
 static void do_cmd_macro_aux(char *buf)
 {
@@ -3014,12 +3025,16 @@ static void do_cmd_macro_aux(char *buf)
 
 #endif
 
-
-/*
+/*!
+ * @brief マクロのキー表記からアスキーコードを得てターミナルに表示する /
  * Hack -- ask for a keymap "trigger" (see below)
- *
+ * @param buf キー表記を取得するバッファ
+ * @return なし
+ * @details
+ * <pre>
  * Note that both "flush()" calls are extremely important.  This may
  * no longer be true, since "util.c" is much simpler now.  XXX XXX XXX
+ * </pre>
  */
 static void do_cmd_macro_aux_keymap(char *buf)
 {
@@ -3047,8 +3062,12 @@ static void do_cmd_macro_aux_keymap(char *buf)
 }
 
 
-/*
+/*!
+ * @brief キーマップをprefファイルにダンプする /
  * Hack -- append all keymaps to the given file
+ * @param fname ファイルネーム
+ * @return エラーコード
+ * @details
  */
 static errr keymap_dump(cptr fname)
 {
@@ -3121,13 +3140,16 @@ static errr keymap_dump(cptr fname)
 }
 
 
-
-/*
+/*!
+ * @brief マクロを設定するコマンドのメインルーチン /
  * Interact with "macros"
- *
+ * @return なし
+ * @details
+ * <pre>
  * Note that the macro "action" must be defined before the trigger.
  *
  * Could use some helpful instructions on this page.  XXX XXX XXX
+ * </pre>
  */
 void do_cmd_macros(void)
 {
