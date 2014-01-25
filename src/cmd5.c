@@ -1793,6 +1793,10 @@ int calculate_upkeep(void)
 		return 0;
 }
 
+/*!
+ * @brief ペットを開放するコマンドのメインルーチン
+ * @return なし
+ */
 void do_cmd_pet_dismiss(void)
 {
 	monster_type	*m_ptr;
@@ -1936,6 +1940,12 @@ void do_cmd_pet_dismiss(void)
 #endif
 }
 
+/*!
+ * @brief プレイヤーの騎乗/下馬処理判定
+ * @param c_ptr プレイヤーの移動先マスの構造体参照ポインタ
+ * @param now_riding TRUEなら下馬処理、FALSEならば騎乗処理
+ * @return 可能ならばTRUEを返す
+ */
 static bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
 {
 	bool p_can_enter;
@@ -1973,6 +1983,12 @@ static bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
 	return p_can_enter;
 }
 
+/*!
+ * @brief プレイヤーの落馬判定処理
+ * @param dam 落馬判定を発した際に受けたダメージ量
+ * @param force TRUEならば強制的に落馬する
+ * @return 実際に落馬したらTRUEを返す
+ */
 bool rakuba(int dam, bool force)
 {
 	int i, y, x, oy, ox;
@@ -2289,6 +2305,10 @@ bool do_riding(bool force)
 	return TRUE;
 }
 
+/*!
+ * @brief ペットに名前をつけるコマンドのメインルーチン
+ * @return なし
+ */
 static void do_name_pet(void)
 {
 	monster_type *m_ptr;
@@ -2385,8 +2405,11 @@ static void do_name_pet(void)
 	}
 }
 
-/*
+
+/*!
+ * @brief ペットに関するコマンドリストのメインルーチン /
  * Issue a pet command
+ * @return なし
  */
 void do_cmd_pet(void)
 {
