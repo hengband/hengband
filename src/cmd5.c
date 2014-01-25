@@ -13,6 +13,11 @@
 
 #include "angband.h"
 
+/*!
+ * @brief 領域魔法に応じて技能の名称を返す。
+ * @param tval 魔法書のtval
+ * @return 領域魔法の技能名称を保管した文字列ポインタ
+ */
 cptr spell_category_name(int tval)
 {
 	switch (tval)
@@ -39,19 +44,27 @@ cptr spell_category_name(int tval)
 	}
 }
 
+
+bool select_the_force = FALSE;
+
 /*
+ * @brief 領域魔法の閲覧、学習、使用選択するインターフェイス処理
  * Allow user to choose a spell/prayer from the given book.
- *
+ * @param sn 選択した魔法IDを返す参照ポインタ
+ * @param prompt 魔法を利用する際の動詞表記
+ * @param sval 魔道書のsval
+ * @param learned 閲覧/使用選択ならばTRUE、学習処理ならFALSE
+ * @param use_realm 魔法領域ID
+ * @return
+ * <pre>
  * If a valid spell is chosen, saves it in '*sn' and returns TRUE
  * If the user hits escape, returns FALSE, and set '*sn' to -1
  * If there are no legal choices, returns FALSE, and sets '*sn' to -2
  *
  * The "prompt" should be "cast", "recite", or "study"
  * The "known" should be TRUE for cast/pray, FALSE for study
+ * </pre>
  */
-
-bool select_the_force = FALSE;
-
 static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm)
 {
 	int         i;
@@ -334,7 +347,11 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 	return TRUE;
 }
 
-
+/*
+ * @brief オブジェクトがプレイヤーが使用可能な魔道書かどうかを判定する
+ * @param 判定したいオブ会ジェクトの構造体参照ポインタ
+ * @return 学習できる魔道書ならばTRUEを返す
+ */
 static bool item_tester_learn_spell(object_type *o_ptr)
 {
 	s32b choices = realm_choices2[p_ptr->pclass];
@@ -359,7 +376,10 @@ static bool item_tester_learn_spell(object_type *o_ptr)
 	return (FALSE);
 }
 
-
+/*
+ * @brief プレイヤーが魔道書を一冊も持っていないかを判定する
+ * @return 魔道書を一冊も持っていないならTRUEを返す
+ */
 static bool player_has_no_spellbooks(void)
 {
 	int         i;
