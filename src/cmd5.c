@@ -47,7 +47,7 @@ cptr spell_category_name(int tval)
 
 bool select_the_force = FALSE;
 
-/*
+/*!
  * @brief 領域魔法の閲覧、学習、使用選択するインターフェイス処理
  * Allow user to choose a spell/prayer from the given book.
  * @param sn 選択した魔法IDを返す参照ポインタ
@@ -347,7 +347,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 	return TRUE;
 }
 
-/*
+/*!
  * @brief オブジェクトがプレイヤーが使用可能な魔道書かどうかを判定する
  * @param 判定したいオブ会ジェクトの構造体参照ポインタ
  * @return 学習できる魔道書ならばTRUEを返す
@@ -376,7 +376,7 @@ static bool item_tester_learn_spell(object_type *o_ptr)
 	return (FALSE);
 }
 
-/*
+/*!
  * @brief プレイヤーが魔道書を一冊も持っていないかを判定する
  * @return 魔道書を一冊も持っていないならTRUEを返す
  */
@@ -400,7 +400,11 @@ static bool player_has_no_spellbooks(void)
 	return TRUE;
 }
 
-
+/*!
+ * @brief プレイヤーの職業が練気術師の時、領域魔法と練気術を切り換える処理のインターフェイス
+ * @param browse_only 魔法と技能の閲覧を行うならばTRUE
+ * @return 魔道書を一冊も持っていないならTRUEを返す
+ */
 static void confirm_use_force(bool browse_only)
 {
 	int  item;
@@ -453,13 +457,17 @@ static void confirm_use_force(bool browse_only)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの魔法と技能を閲覧するコマンドのメインルーチン /
  * Peruse the spells/prayers in a book
- *
+ * @return なし
+ * @details
+ * <pre>
  * Note that *all* spells in the book are listed
  *
  * Note that browsing is allowed while confused or blind,
  * and in the dark, primarily to allow browsing in stores.
+ * </pre>
  */
 void do_cmd_browse(void)
 {
@@ -630,7 +638,11 @@ void do_cmd_browse(void)
 	screen_load();
 }
 
-
+/*!
+ * @brief プレイヤーの第二魔法領域を変更する /
+ * @param 変更先の魔法領域ID
+ * @return なし
+ */
 static void change_realm2(int next_realm)
 {
 	int i, j = 0;
@@ -670,8 +682,10 @@ static void change_realm2(int next_realm)
 }
 
 
-/*
+/*!
+ * @brief 魔法を学習するコマンドのメインルーチン /
  * Study a book to gain a new spell/prayer
+ * @return なし
  */
 void do_cmd_study(void)
 {
@@ -1107,8 +1121,10 @@ static void wild_magic(int spell)
 }
 
 
-/*
+/*!
+ * @brief 魔法を詠唱するコマンドのメインルーチン /
  * Cast a spell
+ * @return なし
  */
 void do_cmd_cast(void)
 {
@@ -1644,7 +1660,14 @@ msg_print("体を悪くしてしまった！");
 	p_ptr->window |= (PW_SPELL);
 }
 
-
+/*!
+ * @brief ペットになっているモンスターをソートするための比較処理
+ * @param u モンスターの構造体配列
+ * @param v 未使用
+ * @param a 比較対象のモンスターID1
+ * @param b 比較対象のモンスターID2
+ * @return 2番目が大ならばTRUEを返す
+ */
 static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 {
 	u16b *who = (u16b*)(u);
@@ -1681,6 +1704,12 @@ static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 	return w1 <= w2;
 }
 
+/*!
+ * @brief ペットの善悪属性に応じた維持コストの途中計算処理
+ * @param m_ptr 計算基準となるモンスターの構造体参照ポインタ
+ * @param inc m_ptrで指定したモンスターを維持コスト計算に加えるならTRUE、外すならFALSEを指定
+ * @return なし
+ */
 void check_pets_num_and_align(monster_type *m_ptr, bool inc)
 {
 	s32b old_friend_align = friend_align;
@@ -1702,6 +1731,10 @@ void check_pets_num_and_align(monster_type *m_ptr, bool inc)
 	if (old_friend_align != friend_align) p_ptr->update |= (PU_BONUS);
 }
 
+/*!
+ * @brief ペットの維持コスト計算
+ * @return 維持コスト(%)
+ */
 int calculate_upkeep(void)
 {
 	s32b old_friend_align = friend_align;
