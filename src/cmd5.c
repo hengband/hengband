@@ -1019,7 +1019,11 @@ msg_format("その本には学ぶべき%sがない。", p);
 	p_ptr->window |= (PW_OBJECT);
 }
 
-
+/*!
+ * @brief 運命の輪、並びにカオス的な効果の発動
+ * @param spell ランダムな効果を選択するための基準ID
+ * @return なし
+ */
 static void wild_magic(int spell)
 {
 	int counter = 0;
@@ -2140,6 +2144,11 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった。",m_name);
 	return fall_dam;
 }
 
+/*!
+ * @brief ペットから騎乗/下馬するコマンドのメインルーチン /
+ * @force 強制的に騎乗/下馬するならばTRUE
+ * @return 騎乗/下馬できたらTRUE
+ */
 bool do_riding(bool force)
 {
 	int x, y, dir = 0;
