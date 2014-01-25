@@ -60,7 +60,6 @@ bool select_the_force = FALSE;
  * If a valid spell is chosen, saves it in '*sn' and returns TRUE
  * If the user hits escape, returns FALSE, and set '*sn' to -1
  * If there are no legal choices, returns FALSE, and sets '*sn' to -2
- *
  * The "prompt" should be "cast", "recite", or "study"
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
@@ -349,7 +348,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 
 /*!
  * @brief オブジェクトがプレイヤーが使用可能な魔道書かどうかを判定する
- * @param 判定したいオブ会ジェクトの構造体参照ポインタ
+ * @param o_ptr 判定したいオブ会ジェクトの構造体参照ポインタ
  * @return 学習できる魔道書ならばTRUEを返す
  */
 static bool item_tester_learn_spell(object_type *o_ptr)
@@ -640,7 +639,7 @@ void do_cmd_browse(void)
 
 /*!
  * @brief プレイヤーの第二魔法領域を変更する /
- * @param 変更先の魔法領域ID
+ * @param next_realm 変更先の魔法領域ID
  * @return なし
  */
 static void change_realm2(int next_realm)
@@ -2146,7 +2145,7 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった。",m_name);
 
 /*!
  * @brief ペットから騎乗/下馬するコマンドのメインルーチン /
- * @force 強制的に騎乗/下馬するならばTRUE
+ * @param force 強制的に騎乗/下馬するならばTRUE
  * @return 騎乗/下馬できたらTRUE
  */
 bool do_riding(bool force)

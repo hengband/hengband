@@ -1,25 +1,18 @@
 /*!
- *  @file cmd4.c
- *  @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
- *  @date 2014/01/02
- *  @author
+ * @file cmd4.c
+ * @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
+ * @date 2014/01/02
+ * @author
  * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
  * </pre>
- */
-
-#include "angband.h"
-
-
-
-/*
+ * @details
+ * <pre>
  * A set of functions to maintain automatic dumps of various kinds.
  * -Mogami-
- *
  * remove_auto_dump(orig_file, mark)
  *     Remove the old automatic dump of type "mark".
  * auto_dump_printf(fmt, ...)
@@ -28,24 +21,29 @@
  *     Open a file, remove old dump, and add new header.
  * close_auto_dump(void)
  *     Add a footer, and close the file.
- *
  *    The dump commands of original Angband simply add new lines to
  * existing files; these files will become bigger and bigger unless
  * an user deletes some or all of these files by hand at some
  * point.
- *
  *     These three functions automatically delete old dumped lines 
  * before adding new ones.  Since there are various kinds of automatic 
  * dumps in a single file, we add a header and a footer with a type 
  * name for every automatic dump, and kill old lines only when the 
  * lines have the correct type of header and footer.
- *
  *     We need to be quite paranoid about correctness; the user might 
  * (mistakenly) edit the file by hand, and see all their work come
  * to nothing on the next auto dump otherwise.  The current code only 
  * detects changes by noting inconsistencies between the actual number 
  * of lines and the number written in the footer.  Note that this will 
  * not catch single-line edits.
+ * </pre>
+ */
+
+#include "angband.h"
+
+
+
+/*
  */
 
 /*
@@ -349,7 +347,7 @@ static void close_auto_dump(void)
 
 /*!
  * @brief Return suffix of ordinal number
- * @num number
+ * @param num number
  * @return pointer of suffix string.
  */
 cptr get_ordinal_number_suffix(int num)
@@ -7564,14 +7562,14 @@ static void do_cmd_knowledge_kill_count(void)
 /*!
  * @brief モンスター情報リスト中のグループを表示する /
  * Display the object groups.
- * @brief col 開始行
- * @brief row 開始列
- * @brief wid 表示文字数幅
- * @brief per_page リストの表示行
- * @brief grp_idx グループのID配列
- * @brief group_text グループ名の文字列配列
- * @brie  grp_cur 現在の選択ID
- * @brief grp_top 現在の選択リスト最上部ID
+ * @param col 開始行
+ * @param row 開始列
+ * @param wid 表示文字数幅
+ * @param per_page リストの表示行
+ * @param grp_idx グループのID配列
+ * @param group_text グループ名の文字列配列
+ * @param grp_cur 現在の選択ID
+ * @param grp_top 現在の選択リスト最上部ID
  * @return なし
  */
 static void display_group_list(int col, int row, int wid, int per_page,
