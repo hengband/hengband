@@ -1591,6 +1591,7 @@ void do_cmd_quaff_potion(void)
  * @brief 巻物を読むコマンドのサブルーチン
  * Read a scroll (from the pack or floor).
  * @param item 読むオブジェクトの所持品ID
+ * @param known 判明済ならばTRUE
  * @return なし
  * @details
  * <pre>
@@ -3945,9 +3946,11 @@ static bool item_tester_hook_activate(object_type *o_ptr)
 	return (FALSE);
 }
 
-
-/*
+/*!
+ * @brief 『一つの指輪』の効果処理 /
  * Hack -- activate the ring of power
+ * @param dir 発動の方向ID
+ * @return なし
  */
 void ring_of_power(int dir)
 {
@@ -4021,7 +4024,14 @@ void ring_of_power(int dir)
 	}
 }
 
-
+/*!
+ * @brief ペット入りモンスターボールをソートするための比較関数
+ * @param u 所持品配列の参照ポインタ
+ * @param v 未使用
+ * @param a 所持品ID1
+ * @param b 所持品ID2
+ * @return 1の方が大であればTRUE
+ */
 static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
 {
 	u16b *who = (u16b*)(u);
@@ -4053,15 +4063,19 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
 }
 
 
-/*
+/*!
+ * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
  * And even if they did, activatable objects never stack.
- *
+ * @param item 発動するオブジェクトの所持品ID
+ * @return なし
+ * @details
+ * <pre>
  * Currently, only (some) artifacts, and Dragon Scale Mail, can be activated.
  * But one could, for example, easily make an activatable "Ring of Plasma".
- *
  * Note that it always takes a turn to activate an artifact, even if
  * the user hits "escape" at the "direction" prompt.
+ * </pre>
  */
 static void do_cmd_activate_aux(int item)
 {
@@ -4398,7 +4412,10 @@ static void do_cmd_activate_aux(int item)
 
 }
 
-
+/*!
+ * @brief 装備を発動するコマンドのメインルーチン /
+ * @return なし
+ */
 void do_cmd_activate(void)
 {
 	int     item;
@@ -4430,8 +4447,11 @@ void do_cmd_activate(void)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトをプレイヤーが簡易使用コマンドで利用できるかを判定する /
  * Hook to determine if an object is useable
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return 利用可能ならばTRUEを返す
  */
 static bool item_tester_hook_use(object_type *o_ptr)
 {
@@ -4482,8 +4502,11 @@ static bool item_tester_hook_use(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムを汎用的に「使う」コマンドのメインルーチン /
  * Use an item
+ * @return なし
+ * @details
  * XXX - Add actions for other item types
  */
 void do_cmd_use(void)
@@ -4624,6 +4647,11 @@ msg_print("混乱していて読めない！");
 	}
 }
 
+/*!
+ * @brief 魔道具術師の取り込んだ魔力一覧から選択/閲覧する /
+ * @param only_browse 閲覧するだけならばTRUE
+ * @return 選択した魔力のID、キャンセルならば-1を返す
+ */
 static int select_magic_eater(bool only_browse)
 {
 	int ext=0;
@@ -5095,8 +5123,12 @@ static int select_magic_eater(bool only_browse)
 }
 
 
-/*
- *  Use eaten rod, wand or staff
+/*!
+ * @brief 取り込んだ魔力を利用するコマンドのメインルーチン /
+ * Use eaten rod, wand or staff
+ * @param only_browse 閲覧するだけならばTRUE
+ * @param powerful 強力発動中の処理ならばTRUE
+ * @return 実際にコマンドを実行したならばTRUEを返す。
  */
 bool do_cmd_magic_eater(bool only_browse, bool powerful)
 {
