@@ -2347,7 +2347,15 @@ void do_cmd_read_scroll(void)
 	do_cmd_read_scroll_aux(item, object_is_aware(o_ptr));
 }
 
-
+/*!
+ * @brief 杖の効果を発動する
+ * @param sval オブジェクトのsval
+ * @param use_charge 使用回数を消費したかどうかを返す参照ポインタ
+ * @param powerful 強力発動上の処理ならばTRUE
+ * @param magic 魔道具術上の処理ならばTRUE
+ * @param known 判明済ならばTRUE
+ * @return 発動により効果内容が確定したならばTRUEを返す
+ */
 static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, bool known)
 {
 	int k;
@@ -2709,11 +2717,13 @@ msg_print("ダンジョンが揺れた。");
 	return ident;
 }
 
-/*
+/*!
+ * @brief 杖を使うコマンドのサブルーチン / 
  * Use a staff.			-RAK-
- *
+ * @param item 使うオブジェクトの所持品ID
+ * @return なし
+ * @details
  * One charge of one staff disappears.
- *
  * Hack -- staffs of identify can be "cancelled".
  */
 static void do_cmd_use_staff_aux(int item)
@@ -2902,7 +2912,10 @@ static void do_cmd_use_staff_aux(int item)
 	}
 }
 
-
+/*!
+ * @brief 杖を使うコマンドのメインルーチン /
+ * @return なし
+ */
 void do_cmd_use_staff(void)
 {
 	int  item;
@@ -2930,7 +2943,14 @@ void do_cmd_use_staff(void)
 	do_cmd_use_staff_aux(item);
 }
 
-
+/*!
+ * @brief 魔法棒の効果を発動する
+ * @param sval オブジェクトのsval
+ * @param dir 発動の方向ID
+ * @param powerful 強力発動上の処理ならばTRUE
+ * @param magic 魔道具術上の処理ならばTRUE
+ * @return 発動により効果内容が確定したならばTRUEを返す
+ */
 static int wand_effect(int sval, int dir, bool powerful, bool magic)
 {
 	int ident = FALSE;
@@ -3229,26 +3249,26 @@ msg_print("ロケットを発射した！");
 	return ident;
 }
 
-
-/*
+/*!
+ * @brief 魔法棒を使うコマンドのサブルーチン / 
  * Aim a wand (from the pack or floor).
- *
+ * @param item 使うオブジェクトの所持品ID
+ * @return なし
+ * @details
+ * <pre>
  * Use a single charge from a single item.
  * Handle "unstacking" in a logical manner.
- *
  * For simplicity, you cannot use a stack of items from the
  * ground.  This would require too much nasty code.
- *
  * There are no wands which can "destroy" themselves, in the inventory
  * or on the ground, so we can ignore this possibility.  Note that this
  * required giving "wand of wonder" the ability to ignore destruction
  * by electric balls.
- *
  * All wands can be "cancelled" at the "Direction?" prompt for free.
- *
  * Note that the basic "bolt" wands do slightly less damage than the
  * basic "bolt" rods, but the basic "ball" wands do the same damage
  * as the basic "ball" rods.
+ * </pre>
  */
 static void do_cmd_aim_wand_aux(int item)
 {
@@ -3405,7 +3425,10 @@ static void do_cmd_aim_wand_aux(int item)
 	}
 }
 
-
+/*!
+ * @brief 魔法棒を使うコマンドのメインルーチン /
+ * @return なし
+ */
 void do_cmd_aim_wand(void)
 {
 	int     item;
