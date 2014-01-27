@@ -1,19 +1,17 @@
 /*!
- *  @file cmd6.c
- *  @brief プレイヤーのアイテムに関するコマンドの実装2 / Spell/Prayer commands
- *  @date 2014/01/02
- *  @author
+ * @file cmd6.c
+ * @brief プレイヤーのアイテムに関するコマンドの実装2 / Spell/Prayer commands
+ * @date 2014/01/27
+ * @author
+ * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
- */
-
-#include "angband.h"
-
-
-/*
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * </pre>
+ * @details
+ * <pre>
  * This file includes code for eating food, drinking potions,
  * reading scrolls, aiming wands, using staffs, zapping rods,
  * and activating artifacts.
@@ -51,9 +49,17 @@
  *
  * Note that food/potions/scrolls no longer use bit-flags for effects,
  * but instead use the "sval" (which is also used to sort the objects).
+ * </pre>
  */
 
+#include "angband.h"
 
+
+/*!
+ * @brief 食料を食べるコマンドのサブルーチン
+ * @param item 食べるオブジェクトの所持品ID
+ * @return なし
+ */
 static void do_cmd_eat_food_aux(int item)
 {
 	int ident, lev;
@@ -633,8 +639,11 @@ msg_print("生者の食物はあなたにとってほとんど栄養にならない。");
 }
 
 
-/*
+/*!
+ * @brief オブジェクトをプレイヤーが食べることができるかを判定する /
  * Hook to determine if an object is eatable
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return 食べることが可能ならばTRUEを返す
  */
 static bool item_tester_hook_eatable(object_type *o_ptr)
 {
@@ -672,8 +681,10 @@ static bool item_tester_hook_eatable(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 食料を食べるコマンドのメインルーチン /
  * Eat some food (from the pack or floor)
+ * @return なし
  */
 void do_cmd_eat_food(void)
 {
