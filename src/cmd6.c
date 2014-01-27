@@ -3457,7 +3457,15 @@ void do_cmd_aim_wand(void)
 	do_cmd_aim_wand_aux(item);
 }
 
-
+/*!
+ * @brief ロッドの効果を発動する
+ * @param sval オブジェクトのsval
+ * @param dir 発動目標の方向ID
+ * @param use_charge チャージを消費したかどうかを返す参照ポインタ
+ * @param powerful 強力発動上の処理ならばTRUE
+ * @param magic 魔道具術上の処理ならばTRUE
+ * @return 発動により効果内容が確定したならばTRUEを返す
+ */
 static int rod_effect(int sval, int dir, bool *use_charge, bool powerful, bool magic)
 {
 	int ident = FALSE;
@@ -3706,15 +3714,18 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool powerful, bool m
 	return ident;
 }
 
-/*
+/*!
+ * @brief 魔法棒を使うコマンドのサブルーチン / 
  * Activate (zap) a Rod
- *
+ * @param item 使うオブジェクトの所持品ID
+ * @return なし
+ * @details
+ * <pre>
  * Unstack fully charged rods as needed.
- *
  * Hack -- rods of perception/genocide can be "cancelled"
  * All rods can be cancelled at the "Direction?" prompt
- *
  * pvals are defined for each rod in k_info. -LM-
+ * </pre>
  */
 static void do_cmd_zap_rod_aux(int item)
 {
@@ -3879,7 +3890,10 @@ msg_print("そのロッドはまだ充填中です。");
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 }
 
-
+/*!
+ * @brief ロッドを使うコマンドのメインルーチン /
+ * @return なし
+ */
 void do_cmd_zap_rod(void)
 {
 	int item;
@@ -3908,9 +3922,11 @@ void do_cmd_zap_rod(void)
 	do_cmd_zap_rod_aux(item);
 }
 
-
-/*
+/*!
+ * @brief オブジェクトをプレイヤーが魔道具として発動できるかを判定する /
  * Hook to determine if an object is activatable
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return 魔道具として発動可能ならばTRUEを返す
  */
 static bool item_tester_hook_activate(object_type *o_ptr)
 {
