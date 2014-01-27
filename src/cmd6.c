@@ -716,8 +716,11 @@ void do_cmd_eat_food(void)
 }
 
 
-/*
+/*!
+ * @brief 薬を飲むコマンドのサブルーチン /
  * Quaff a potion (from the pack or the floor)
+ * @param item 飲む薬オブジェクトの所持品ID
+ * @return なし
  */
 static void do_cmd_quaff_potion_aux(int item)
 {
@@ -1531,8 +1534,11 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 }
 
 
-/*
+/*!
+ * @brief オブジェクトをプレイヤーが飲むことができるかを判定する /
  * Hook to determine if an object can be quaffed
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return 飲むことが可能ならばTRUEを返す
  */
 static bool item_tester_hook_quaff(object_type *o_ptr)
 {
@@ -1543,13 +1549,14 @@ static bool item_tester_hook_quaff(object_type *o_ptr)
 		if (o_ptr->tval == TV_FLASK && o_ptr->sval == SV_FLASK_OIL)
 			return TRUE;
 	}
-
 	return FALSE;
 }
 
 
-/*
+/*!
+ * @brief 薬を飲むコマンドのメインルーチン /
  * Quaff some potion (from the pack or floor)
+ * @return なし
  */
 void do_cmd_quaff_potion(void)
 {
@@ -1580,12 +1587,17 @@ void do_cmd_quaff_potion(void)
 }
 
 
-/*
+/*!
+ * @brief 巻物を読むコマンドのサブルーチン
  * Read a scroll (from the pack or floor).
- *
+ * @param item 読むオブジェクトの所持品ID
+ * @return なし
+ * @details
+ * <pre>
  * Certain scrolls can be "aborted" without losing the scroll.  These
  * include scrolls with no effects but recharge or identify, which are
  * cancelled before use.  XXX Reading them still takes a turn, though.
+ * </pre>
  */
 static void do_cmd_read_scroll_aux(int item, bool known)
 {
@@ -2242,9 +2254,11 @@ take_hit(DAMAGE_NOESCAPE, 111+randint1(111), "ログルスの巻物", -1);
 	}
 }
 
-
-/*
+/*!
+ * @brief オブジェクトをプレイヤーが読むことができるかを判定する /
  * Hook to determine if an object is readable
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return 読むことが可能ならばTRUEを返す
  */
 static bool item_tester_hook_readable(object_type *o_ptr)
 {
@@ -2254,7 +2268,11 @@ static bool item_tester_hook_readable(object_type *o_ptr)
 	return (FALSE);
 }
 
-
+/*!
+ * @brief 読むコマンドのメインルーチン /
+ * Eat some food (from the pack or floor)
+ * @return なし
+ */
 void do_cmd_read_scroll(void)
 {
 	object_type *o_ptr;
