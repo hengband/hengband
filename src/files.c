@@ -3059,7 +3059,7 @@ typedef struct {
 
 
 /*!
- * @brief プレイヤーの特性フラグ一覧を表示するためのサブルーチン /
+ * @brief プレイヤーの特性フラグ一種を表示するサブルーチン /
  * Helper function, see below
  * @param row コンソール表示位置の左上行
  * @param col コンソール表示位置の左上列
@@ -3201,8 +3201,10 @@ static void display_flag_aux(int row, int col, cptr header,
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの特性フラグ一覧表示１ /
  * Special display, part 1
+ * @return なし
  */
 static void display_player_flag_info(void)
 {
@@ -3330,8 +3332,10 @@ display_flag_aux(row+9, col, "呪い      :", 0, &f, DP_CURSE);
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの特性フラグ一覧表示２ /
  * Special display, part 2
+ * @return なし
  */
 static void display_player_other_flag_info(void)
 {
@@ -3521,8 +3525,10 @@ static void display_player_other_flag_info(void)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの特性フラグ一覧表示２a /
  * Special display, part 2a
+ * @return なし
  */
 static void display_player_misc_info(void)
 {
@@ -3577,9 +3583,12 @@ put_str("ＭＰ  :", 8, 1);
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの特性フラグ一覧表示２b /
  * Special display, part 2b
- *
+ * @return なし
+ * @details
+ * <pre>
  * How to print out the modifications and sustains.
  * Positive mods with no sustain will be light green.
  * Positive mods with a sustain will be dark green.
@@ -3587,6 +3596,7 @@ put_str("ＭＰ  :", 8, 1);
  * Negative mods (from a curse) will be red.
  * Huge mods (>9), like from MICoMorgoth, will be a '*'
  * No mod, no sustain, will be a slate '.'
+ * </pre>
  */
 static void display_player_stat_info(void)
 {
@@ -3882,16 +3892,20 @@ c_put_str(TERM_L_GREEN, "能力修正", row - 1, col);
 }
 
 
-/*
+/*!
+ * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
- *
+ * @param 表示モードID
+ * @return なし
+ * @details
+ * <pre>
  * The top one and bottom two lines are left blank.
- *
  * Mode 0 = standard display with skills
  * Mode 1 = standard display with history
  * Mode 2 = summary of various things
  * Mode 3 = summary of various things (part 2)
  * Mode 4 = mutations
+ * </pre>
  */
 void display_player(int mode)
 {
@@ -4156,9 +4170,10 @@ void display_player(int mode)
 	}
 }
 
-
-/*
- *
+/*!
+ * @brief プレイヤーのステータス表示をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_display_player(FILE *fff)
 {
@@ -4290,8 +4305,10 @@ static void dump_aux_display_player(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief プレイヤーのペット情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_pet(FILE *fff)
 {
@@ -4370,8 +4387,10 @@ static void dump_aux_pet(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief プレイヤーの職業能力情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_class_special(FILE *fff)
 {
@@ -4627,8 +4646,10 @@ static void dump_aux_class_special(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief クエスト情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_quest(FILE *fff)
 {
@@ -4664,8 +4685,10 @@ static void dump_aux_quest(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief 死の直前メッセージ並びに遺言をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_last_message(FILE *fff)
 {
@@ -4701,9 +4724,10 @@ static void dump_aux_last_message(FILE *fff)
 	}
 }
 
-
-/*
- *
+/*!
+ * @brief 帰還場所情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_recall(FILE *fff)
 {
@@ -4736,8 +4760,10 @@ static void dump_aux_recall(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief オプション情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_options(FILE *fff)
 {
@@ -4874,8 +4900,10 @@ static void dump_aux_options(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief 闘技場の情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_arena(FILE *fff)
 {
@@ -4932,8 +4960,10 @@ static void dump_aux_arena(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief 撃破モンスターの情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_monsters(FILE *fff)
 {
@@ -5050,8 +5080,10 @@ static void dump_aux_monsters(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief 元種族情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_race_history(FILE *fff)
 {
@@ -5087,8 +5119,10 @@ static void dump_aux_race_history(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief 元魔法領域情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_realm_history(FILE *fff)
 {
@@ -5111,8 +5145,10 @@ static void dump_aux_realm_history(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief 徳の情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_virtues(FILE *fff)
 {
@@ -5154,8 +5190,10 @@ static void dump_aux_virtues(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief 突然変異の情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_mutations(FILE *fff)
 {
@@ -5172,8 +5210,10 @@ static void dump_aux_mutations(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief 所持品の情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_equipment_inventory(FILE *fff)
 {
@@ -5227,8 +5267,10 @@ static void dump_aux_equipment_inventory(FILE *fff)
 }
 
 
-/*
- *
+/*!
+ * @brief 我が家と博物館のオブジェクト情報をファイルにダンプする
+ * @param fff ファイルポインタ
+ * @return なし
  */
 static void dump_aux_home_museum(FILE *fff)
 {
@@ -5307,8 +5349,11 @@ static void dump_aux_home_museum(FILE *fff)
 }
 
 
-/*
+/*!
+ * @brief ダンプ出力のメインルーチン
  * Output the character dump to a file
+ * @param fff ファイルポインタ
+ * @return エラーコード
  */
 errr make_character_dump(FILE *fff)
 {
