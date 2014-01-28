@@ -1,14 +1,17 @@
-/* File: files.c */
-
-/*
+/*!
+ * @file files.c
+ * @brief ファイル入出力管理 / Purpose: code dealing with files (and death)
+ * @date 2014/01/28
+ * @author
+ * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
- */
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * </pre>
+ *
 
-/* Purpose: code dealing with files (and death) */
 
 #include "angband.h"
 
@@ -19,8 +22,8 @@
 /* #undef _POSIX_SAVED_IDS */
 
 
-/*
- * Hack -- drop permissions
+/*!
+ * @brief ファイルのドロップパーミッションチェック / Hack -- drop permissions
  */
 void safe_setuid_drop(void)
 {
@@ -80,8 +83,8 @@ quit("setregid(): 正しく許可が取れません！");
 }
 
 
-/*
- * Hack -- grab permissions
+/*!
+ * @brief ファイルのグラブパーミッションチェック / Hack -- grab permissions
  */
 void safe_setuid_grab(void)
 {
@@ -141,21 +144,23 @@ quit("setregid(): 正しく許可が取れません！");
 }
 
 
-/*
- * Extract the first few "tokens" from a buffer
- *
+/*!
+ * @brief 各種データテキストをトークン単位に分解する / Extract the first few "tokens" from a buffer
+ * @param buf データテキストの参照ポインタ
+ * @param num トークンの数
+ * @param tokens トークンを保管する文字列参照ポインタ配列
+ * @param mode オプション
+ * @return 解釈した文字列数
+ * @details
+ * <pre>
  * This function uses "colon" and "slash" as the delimeter characters.
- *
  * We never extract more than "num" tokens.  The "last" token may include
  * "delimeter" characters, allowing the buffer to include a "string" token.
- *
  * We save pointers to the tokens in "tokens", and return the number found.
- *
  * Hack -- Attempt to handle the 'c' character formalism
- *
  * Hack -- An empty buffer, or a final delimeter, yields an "empty" token.
- *
  * Hack -- We will always extract at least one token
+ * </pre>
  */
 s16b tokenize(char *buf, s16b num, char **tokens, int mode)
 {
@@ -335,9 +340,13 @@ static named_num gf_desc[] =
 };
 
 
-/*
+/*!
+ * @brief 設定ファイルの各行から各種テキスト情報を取得する /
  * Parse a sub-file of the "extra info" (format shown below)
- *
+ * @param buf データテキストの参照ポインタ
+ * @return エラーコード
+ * @details
+ * <pre>
  * Each "action" line has an "action symbol" in the first column,
  * followed by a colon, followed by some command specific info,
  * usually in the form of "tokens" separated by colons or slashes.
@@ -401,7 +410,7 @@ static named_num gf_desc[] =
  * Specify a macro trigger template and macro trigger names.
  *   T:<template>:<modifier chr>:<modifier name1>:<modifier name2>:...
  *   T:<trigger>:<keycode>:<shift-keycode>
- *
+ * </pre>
  */
 
 errr process_pref_file_command(char *buf)
