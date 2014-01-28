@@ -1251,14 +1251,17 @@ static errr process_pref_file_aux(cptr name, int preftype)
 }
 
 
-
-/*
+/*!
+ * @brief pref設定ファイルを読み込み設定を反映させる /
  * Process the "user pref file" with the given name
- *
+ * @param name 読み込むファイル名
+ * @return エラーコード
+ * @details
+ * <pre>
  * See the functions above for a list of legal "commands".
- *
  * We also accept the special "?" and "%" directives, which
  * allow conditional evaluation and filename inclusion.
+ * </pre>
  */
 errr process_pref_file(cptr name)
 {
@@ -1317,8 +1320,10 @@ static bool check_time_flag = FALSE;
 #endif
 
 
-/*
+/*!
+ * @brief Angbandプレイ禁止時刻をチェック /
  * Handle CHECK_TIME
+ * @return エラーコード
  */
 errr check_time(void)
 {
@@ -1345,9 +1350,10 @@ errr check_time(void)
 }
 
 
-
-/*
+/*!
+ * @brief Angbandプレイ禁止時刻の初期化 /
  * Initialize CHECK_TIME
+ * @return エラーコード
  */
 errr check_time_init(void)
 {
@@ -1437,8 +1443,10 @@ static int check_load_value = 0;
 #endif
 
 
-/*
+/*!
+ * @brief Angbandプレイ禁止ホストのチェック /
  * Handle CHECK_LOAD
+ * @return エラーコード
  */
 errr check_load(void)
 {
@@ -1467,8 +1475,10 @@ errr check_load(void)
 }
 
 
-/*
+/*!
+ * @brief Angbandプレイ禁止ホストの設定初期化 /
  * Initialize CHECK_LOAD
+ * @return エラーコード
  */
 errr check_load_init(void)
 {
@@ -1684,6 +1694,13 @@ static struct
 };
 #endif
 
+/*!
+ * @brief プレイヤーのステータス1種を出力する
+ * @param entry 項目ID
+ * @param val 値を保管した文字列ポインタ
+ * @param attr 項目表示の色
+ * @return なし
+ */
 static void display_player_one_line(int entry, cptr val, byte attr)
 {
 	char buf[40];
@@ -1714,7 +1731,12 @@ static void display_player_one_line(int entry, cptr val, byte attr)
 	return;
 }
 
-
+/*!
+ * @brief プレイヤーの打撃能力修正を表示する
+ * @param hand 武器の装備部位ID
+ * @param hand_entry 項目ID
+ * @return なし
+ */
 static void display_player_melee_bonus(int hand, int hand_entry)
 {
 	char buf[160];
@@ -1741,8 +1763,10 @@ static void display_player_melee_bonus(int hand, int hand_entry)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
  * Prints the following information on the screen.
+ * @return なし
  */
 static void display_player_middle(void)
 {
@@ -1971,8 +1995,12 @@ static void display_player_middle(void)
 static byte likert_color = TERM_WHITE;
 
 
-/*
+/*!
+ * @brief 技能ランクの表示基準を定める
  * Returns a "rating" of x depending on y
+ * @int x 技能値
+ * @int y 技能値に対するランク基準比
+ * @return なし
  */
 static cptr likert(int x, int y)
 {
@@ -2081,9 +2109,13 @@ static cptr likert(int x, int y)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーステータスの1ページ目各種詳細をまとめて表示するサブルーチン
  * Prints ratings on certain abilities
- *
+ * @int x 技能値
+ * @int y 技能値に対するランク基準比
+ * @return なし
+ * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
  */
 static void display_player_various(void)
