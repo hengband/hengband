@@ -350,69 +350,49 @@ static named_num gf_desc[] =
  * Each "action" line has an "action symbol" in the first column,
  * followed by a colon, followed by some command specific info,
  * usually in the form of "tokens" separated by colons or slashes.
- *
  * Blank lines, lines starting with white space, and lines starting
  * with pound signs ("#") are ignored (as comments).
- *
  * Note the use of "tokenize()" to allow the use of both colons and
  * slashes as delimeters, while still allowing final tokens which
  * may contain any characters including "delimiters".
- *
  * Note the use of "strtol()" to allow all "integers" to be encoded
  * in decimal, hexidecimal, or octal form.
- *
  * Note that "monster zero" is used for the "player" attr/char, "object
  * zero" will be used for the "stack" attr/char, and "feature zero" is
  * used for the "nothing" attr/char.
- *
  * Parse another file recursively, see below for details
  *   %:<filename>
- *
  * Specify the attr/char values for "monsters" by race index
  *   R:<num>:<a>:<c>
- *
  * Specify the attr/char values for "objects" by kind index
  *   K:<num>:<a>:<c>
- *
  * Specify the attr/char values for "features" by feature index
  *   F:<num>:<a>:<c>
- *
  * Specify the attr/char values for unaware "objects" by kind tval
  *   U:<tv>:<a>:<c>
- *
  * Specify the attr/char values for inventory "objects" by kind tval
  *   E:<tv>:<a>:<c>
- *
  * Define a macro action, given an encoded macro action
  *   A:<str>
- *
  * Create a normal macro, given an encoded macro trigger
  *   P:<str>
- *
  * Create a command macro, given an encoded macro trigger
  *   C:<str>
- *
  * Create a keyset mapping
  *   S:<key>:<key>:<dir>
- *
  * Turn an option off, given its name
  *   X:<str>
- *
  * Turn an option on, given its name
  *   Y:<str>
- *
  * Specify visual information, given an index, and some data
  *   V:<num>:<kv>:<rv>:<gv>:<bv>
- *
  * Specify the set of colors to use when drawing a zapped spell
  *   Z:<type>:<str>
- *
  * Specify a macro trigger template and macro trigger names.
  *   T:<template>:<modifier chr>:<modifier name1>:<modifier name2>:...
  *   T:<trigger>:<keycode>:<shift-keycode>
  * </pre>
  */
-
 errr process_pref_file_command(char *buf)
 {
 	int i, j, n1, n2;
@@ -810,15 +790,20 @@ errr process_pref_file_command(char *buf)
 }
 
 
-/*
+/*!
+ * @brief process_pref_fileのサブルーチンとして条件分岐処理の解釈と結果を返す /
  * Helper function for "process_pref_file()"
- *
+ * @param sp テキスト文字列の参照ポインタ
+ * @param fp 再帰中のポインタ参照
+ * @return
+ * @details
+ * <pre>
  * Input:
  *   v: output buffer array
  *   f: final character
- *
  * Output:
  *   result
+ * </pre>
  */
 cptr process_pref_file_expr(char **sp, char *fp)
 {
@@ -1114,8 +1099,20 @@ cptr process_pref_file_expr(char **sp, char *fp)
 #define PREF_TYPE_AUTOPICK 1
 #define PREF_TYPE_HISTPREF 2
 
-/*
+/*!
+ * @brief process_pref_fileのサブルーチン /
  * Open the "user pref file" and parse it.
+ * @param name 読み込むファイル名
+ * @param preftype prefファイルのタイプ
+ * @return エラーコード
+ * @details
+ * <pre>
+ * Input:
+ *   v: output buffer array
+ *   f: final character
+ * Output:
+ *   result
+ * </pre>
  */
 static errr process_pref_file_aux(cptr name, int preftype)
 {
