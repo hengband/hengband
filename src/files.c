@@ -2112,8 +2112,6 @@ static cptr likert(int x, int y)
 /*!
  * @brief プレイヤーステータスの1ページ目各種詳細をまとめて表示するサブルーチン
  * Prints ratings on certain abilities
- * @int x 技能値
- * @int y 技能値に対するランク基準比
  * @return なし
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
@@ -2294,8 +2292,15 @@ static void display_player_various(void)
 
 
 
-/*
+/*!
+ * @brief プレイヤーの職業、種族に応じた耐性フラグを返す
+ * Prints ratings on certain abilities
+ * @param flgs フラグを保管する配列
+ * @return なし
+ * @details
  * Obtain the "flags" for the player as if he was an item
+ * @todo
+ * xtra1.c周りと多重実装になっているのを何とかする
  */
 static void player_flags(u32b flgs[TR_FLAG_SIZE])
 {
@@ -2736,7 +2741,14 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 	}
 }
 
-
+/*!
+ * @brief プレイヤーの一時的魔法効果による耐性を返す
+ * Prints ratings on certain abilities
+ * @param flgs フラグを保管する配列
+ * @return なし
+ * @todo
+ * xtra1.c周りと多重実装になっているのを何とかする
+ */
 static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
 {
 	int i;
@@ -2860,8 +2872,13 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
 #define DP_WP      0x08
 
 
-/*
+/*!
+ * @brief プレイヤーの装備一覧をシンボルで並べる
  * Equippy chars
+ * @param y 表示するコンソールの行
+ * @param x 表示するコンソールの列
+ * @param mode オプション
+ * @return なし
  */
 static void display_player_equippy(int y, int x, u16b mode)
 {
@@ -2898,15 +2915,22 @@ static void display_player_equippy(int y, int x, u16b mode)
 }
 
 
+/*!
+ * @brief プレイヤーの装備一覧シンボルを固定位置に表示する
+ * @return なし
+ */
 void print_equippy(void)
 {
 	display_player_equippy(ROW_EQUIPPY, COL_EQUIPPY, 0);
 }
 
-/*
- *
+/*!
+ * @brief プレイヤーの装備による免疫フラグを返す
+ * @param flgs フラグを保管する配列
+ * @return なし
+ * @todo
+ * xtra1.c周りと多重実装になっているのを何とかする
  */
-
 static void known_obj_immunity(u32b flgs[TR_FLAG_SIZE])
 {
 	int i;
@@ -2937,6 +2961,13 @@ static void known_obj_immunity(u32b flgs[TR_FLAG_SIZE])
 	}
 }
 
+/*!
+ * @brief プレイヤーの種族による免疫フラグを返す
+ * @param flgs フラグを保管する配列
+ * @return なし
+ * @todo
+ * xtra1.c周りと多重実装になっているのを何とかする
+ */
 static void player_immunity(u32b flgs[TR_FLAG_SIZE])
 {
 	int i;
@@ -2955,6 +2986,13 @@ static void player_immunity(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_ACID);
 }
 
+/*!
+ * @brief プレイヤーの一時的魔法効果による免疫フラグを返す
+ * @param flgs フラグを保管する配列
+ * @return なし
+ * @todo
+ * xtra1.c周りと多重実装になっているのを何とかする
+ */
 static void tim_player_immunity(u32b flgs[TR_FLAG_SIZE])
 {
 	int i;
@@ -2975,6 +3013,13 @@ static void tim_player_immunity(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_DARK);
 }
 
+/*!
+ * @brief プレイヤーの種族による弱点フラグを返す
+ * @param flgs フラグを保管する配列
+ * @return なし
+ * @todo
+ * xtra1.c周りと多重実装になっているのを何とかする
+ */
 static void player_vuln_flags(u32b flgs[TR_FLAG_SIZE])
 {
 	int i;
@@ -3013,8 +3058,16 @@ typedef struct {
 } all_player_flags;
 
 
-/*
+/*!
+ * @brief プレイヤーの特性フラグ一覧を表示するためのサブルーチン /
  * Helper function, see below
+ * @param row コンソール表示位置の左上行
+ * @param col コンソール表示位置の左上列
+ * @param header コンソール上で表示する特性名
+ * @param flag1 参照する特性ID
+ * @param f プレイヤーの特性情報構造体
+ * @param mode 表示オプション
+ * @return なし
  */
 static void display_flag_aux(int row, int col, cptr header,
 				    int flag1, all_player_flags *f, u16b mode)
