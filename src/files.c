@@ -5393,9 +5393,12 @@ errr make_character_dump(FILE *fff)
 	return 0;
 }
 
-/*
+/*!
+ * @brief プレイヤーステータスをファイルダンプ出力する
  * Hack -- Dump a character description file
- *
+ * @param name 出力ファイル名
+ * @return エラーコード
+ * @details
  * XXX XXX XXX Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
@@ -5473,15 +5476,21 @@ msg_print("キャラクタ情報のファイルへの書き出しに成功しました。");
 }
 
 
-/*
+/*!
+ * @brief ファイル内容の一行をコンソールに出力する
  * Display single line of on-line help file
- *
+ * @param str 出力する文字列
+ * @param cy コンソールの行
+ * @param shower 確認中
+ * @return なし
+ * @details
+ * <pre>
  * You can insert some special color tag to change text color.
  * Such as...
  * WHITETEXT [[[[y|SOME TEXT WHICH IS DISPLAYED IN YELLOW| WHITETEXT
- *
  * A colored segment is between "[[[[y|" and the last "|".
  * You can use any single character in place of the "|".
+ * </pre>
  */
 static void show_file_aux_line(cptr str, int cy, cptr shower)
 {
@@ -5596,13 +5605,21 @@ static void show_file_aux_line(cptr str, int cy, cptr shower)
 }
 
 
-/*
+/*!
+ * @brief ファイル内容をコンソールに出力する
  * Recursive file perusal.
- *
+ * @param show_version TRUEならばコンソール上にゲームのバージョンを表示する
+ * @param name ファイル名の文字列
+ * @param what 内容キャプションの文字列
+ * @param line 表示の現在行
+ * @param mode オプション
+ * @return なし
+ * @details
+ * <pre>
  * Process various special text in the input file, including
  * the "menu" structures used by the "help file" system.
- *
  * Return FALSE on 'q' to exit from a deep, otherwise TRUE.
+ * </pre>
  */
 bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 {
