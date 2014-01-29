@@ -6248,8 +6248,11 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 }
 
 
-/*
+/*!
+ * @brief ヘルプを表示するコマンドのメインルーチン
  * Peruse the On-Line-Help
+ * @return なし
+ * @details
  */
 void do_cmd_help(void)
 {
@@ -6269,8 +6272,12 @@ void do_cmd_help(void)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの名前をチェックして修正する
  * Process the player name.
+ * @param sf セーブファイル名に合わせた修正を行うならばTRUE
+ * @return なし
+ * @details
  * Extract a clean "base name".
  * Build the savefile name if needed.
  */
@@ -6452,15 +6459,17 @@ quit_fmt("'%s' という名前は不正なコントロールコードを含んでいます。", player_nam
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの名前を変更するコマンドのメインルーチン
  * Gets a name for the character, reacting to name changes.
- *
+ * @return なし
+ * @details
+ * <pre>
  * Assumes that "display_player(0)" has just been called
- *
  * Perhaps we should NOT ask for a name (at "birth()") on
  * Unix machines?  XXX XXX
- *
  * What a horrible name for a global function.  XXX XXX XXX
+ * </pre>
  */
 void get_name(void)
 {
@@ -6505,8 +6514,11 @@ void get_name(void)
 
 
 
-/*
+/*!
+ * @brief 自殺するコマンドのメインルーチン
  * Hack -- commit suicide
+ * @return なし
+ * @details
  */
 void do_cmd_suicide(void)
 {
@@ -6615,9 +6627,12 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 }
 
 
-
-/*
+/*!
+ * @brief セーブするコマンドのメインルーチン
  * Save the game
+ * @param is_autosave オートセーブ中の処理ならばTRUE
+ * @return なし
+ * @details
  */
 void do_cmd_save_game(int is_autosave)
 {
