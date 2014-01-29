@@ -361,36 +361,36 @@ static named_num gf_desc[] =
  * zero" will be used for the "stack" attr/char, and "feature zero" is
  * used for the "nothing" attr/char.
  * Parse another file recursively, see below for details
- *   %:<filename>
+ *   %:\<filename\>
  * Specify the attr/char values for "monsters" by race index
- *   R:<num>:<a>:<c>
+ *   R:\<num\>:\<a\>:\<c\>
  * Specify the attr/char values for "objects" by kind index
- *   K:<num>:<a>:<c>
+ *   K:\<num\>:\<a\>:\<c\>
  * Specify the attr/char values for "features" by feature index
- *   F:<num>:<a>:<c>
+ *   F:\<num\>:\<a\>:\<c\>
  * Specify the attr/char values for unaware "objects" by kind tval
- *   U:<tv>:<a>:<c>
+ *   U:\<tv\>:\<a\>:\<c\>
  * Specify the attr/char values for inventory "objects" by kind tval
- *   E:<tv>:<a>:<c>
+ *   E:\<tv\>:\<a\>:\<c\>
  * Define a macro action, given an encoded macro action
- *   A:<str>
+ *   A:\<str\>
  * Create a normal macro, given an encoded macro trigger
- *   P:<str>
+ *   P:\<str\>
  * Create a command macro, given an encoded macro trigger
- *   C:<str>
+ *   C:\<str\>
  * Create a keyset mapping
- *   S:<key>:<key>:<dir>
+ *   S:\<key\>:\<key\>:\<dir\>
  * Turn an option off, given its name
- *   X:<str>
+ *   X:\<str\>
  * Turn an option on, given its name
- *   Y:<str>
+ *   Y:\<str\>
  * Specify visual information, given an index, and some data
- *   V:<num>:<kv>:<rv>:<gv>:<bv>
+ *   V:\<num\>:\<kv\>:\<rv\>:\<gv\>:\<bv\>
  * Specify the set of colors to use when drawing a zapped spell
- *   Z:<type>:<str>
+ *   Z:\<type\>:\<str\>
  * Specify a macro trigger template and macro trigger names.
- *   T:<template>:<modifier chr>:<modifier name1>:<modifier name2>:...
- *   T:<trigger>:<keycode>:<shift-keycode>
+ *   T:\<template\>:\<modifier chr\>:\<modifier name1\>:\<modifier name2\>:...
+ *   T:\<trigger\>:\<keycode\>:\<shift-keycode\>
  * </pre>
  */
 errr process_pref_file_command(char *buf)
@@ -1998,8 +1998,8 @@ static byte likert_color = TERM_WHITE;
 /*!
  * @brief 技能ランクの表示基準を定める
  * Returns a "rating" of x depending on y
- * @int x 技能値
- * @int y 技能値に対するランク基準比
+ * @param x 技能値
+ * @param y  技能値に対するランク基準比
  * @return なし
  */
 static cptr likert(int x, int y)
@@ -3895,7 +3895,7 @@ c_put_str(TERM_L_GREEN, "能力修正", row - 1, col);
 /*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
- * @param 表示モードID
+ * @param mode 表示モードID
  * @return なし
  * @details
  * <pre>
