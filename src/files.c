@@ -6729,8 +6729,11 @@ prt("ゲームをセーブしています... 失敗！", 0, 0);
 }
 
 
-/*
+/*!
+ * @brief セーブ後にゲーム中断フラグを立てる/
  * Save the game and exit
+ * @return なし
+ * @details
  */
 void do_cmd_save_and_exit(void)
 {
@@ -6746,8 +6749,11 @@ void do_cmd_save_and_exit(void)
 }
 
 
-/*
+/*!
+ * @brief スコアを計算する /
  * Hack -- Calculates the total number of points earned		-JWT-
+ * @return なし
+ * @details
  */
 long total_points(void)
 {
@@ -6809,8 +6815,11 @@ long total_points(void)
 
 #define GRAVE_LINE_WIDTH 31
 
-/*
+/*!
+ * @brief 墓石の真ん中に文字列を書き込む /
  * Centers a string within a GRAVE_LINE_WIDTH character string		-JWT-
+ * @return なし
+ * @details
  */
 static void center_string(char *buf, cptr str)
 {
@@ -6828,13 +6837,15 @@ static void center_string(char *buf, cptr str)
 
 
 #if 0
-/*
+/*!
+ * @brief 骨ファイル出力 /
  * Save a "bones" file for a dead character
- *
+ * @details
+ * <pre>
  * Note that we will not use these files until Angband 2.8.0, and
  * then we will only use the name and level on which death occured.
- *
  * Should probably attempt some form of locking...
+ * </pre>
  */
 static void make_bones(void)
 {
@@ -6902,7 +6913,9 @@ bool (*tombstone_aux)(void) = NULL;
 
 
 /*
+ * @brief 墓石のアスキーアート表示 /
  * Display a "tomb-stone"
+ * @return なし
  */
 static void print_tomb(void)
 {
@@ -7132,8 +7145,10 @@ static void print_tomb(void)
 }
 
 
-/*
+/*!
+ * @brief 死亡、引退時の簡易ステータス表示 /
  * Display some character info
+ * @return なし
  */
 static void show_info(void)
 {
@@ -7323,7 +7338,11 @@ prt(format("我が家に置いてあったアイテム ( %d ページ): -続く-", k+1), 0, 0);
 	}
 }
 
-
+/*!
+ * @brief スコアファイル出力
+ * Display some character info
+ * @return なし
+ */
 static bool check_score(void)
 {
 	/* Clear screen */
@@ -7425,10 +7444,14 @@ msg_print("途中終了のためスコアが記録されません。");
 	return TRUE;
 }
 
-/*
+/*!
+ * @brief ゲーム終了処理 /
  * Close up the current game (player may or may not be dead)
- *
+ * @return なし
+ * @details
+ * <pre>
  * This function is called only from "main.c" and "signals.c".
+ * </pre>
  */
 void close_game(void)
 {
@@ -7565,14 +7588,17 @@ prt("リターンキーか ESC キーを押して下さい。", 0, 40);
 }
 
 
-/*
+/*!
+ * @brief 異常発生時のゲーム緊急終了処理 /
  * Handle abrupt death of the visual system
- *
+ * @return なし
+ * @details
+ * <pre>
  * This routine is called only in very rare situations, and only
  * by certain visual systems, when they experience fatal errors.
- *
  * XXX XXX Hack -- clear the death flag when creating a HANGUP
  * save file so that player can see tombstone when restart.
+ * </pre>
  */
 void exit_game_panic(void)
 {
@@ -7626,9 +7652,17 @@ void exit_game_panic(void)
 }
 
 
-/*
+/*!
+ * @brief ファイルからランダムに行を一つ取得する /
  * Get a random line from a file
+ * @param file_name ファイル名
+ * @param entry 特定条件時のN:タグヘッダID
+ * @param output 出力先の文字列参照ポインタ
+ * @return エラーコード
+ * @details
+ * <pre>
  * Based on the monster speech patch by Matt Graham,
+ * </pre>
  */
 errr get_rnd_line(cptr file_name, int entry, char *output)
 {
@@ -7732,6 +7766,15 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 
 
 #ifdef JP
+/*!
+ * @brief ファイルからランダムに行を一つ取得する(日本語文字列のみ) /
+ * @param file_name ファイル名
+ * @param entry 特定条件時のN:タグヘッダID
+ * @param output 出力先の文字列参照ポインタ
+ * @param count 試行回数
+ * @return エラーコード
+ * @details
+ */
 errr get_rnd_line_jonly(cptr file_name, int entry, char *output, int count)
 {
 	int  i, j, kanji;
@@ -7749,8 +7792,10 @@ errr get_rnd_line_jonly(cptr file_name, int entry, char *output, int count)
 }
 #endif
 
-/*
- * Process file for auto picker/destroyer.
+/*!
+ * @brief 自動拾いファイルを読み込む /
+ * @param name ファイル名
+ * @details
  */
 errr process_autopick_file(cptr name)
 {
@@ -7768,8 +7813,12 @@ errr process_autopick_file(cptr name)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの生い立ちファイルを読み込む /
  * Process file for player's history editor.
+ * @param name ファイル名
+ * @return エラーコード
+ * @details
  */
 errr process_histpref_file(cptr name)
 {
@@ -7791,7 +7840,14 @@ errr process_histpref_file(cptr name)
 	return (err);
 }
 
-
+/*!
+ * @brief ファイル位置をシーク /
+ * @param fd ファイルディスクリプタ
+ * @param where ファイルバイト位置
+ * @param flag FALSEならば現ファイルを超えた位置へシーク時エラー、TRUEなら足りない間を0で埋め尽くす
+ * @return エラーコード
+ * @details
+ */
 static errr counts_seek(int fd, u32b where, bool flag)
 {
 	huge seekpoint;
@@ -7832,6 +7888,12 @@ static errr counts_seek(int fd, u32b where, bool flag)
 	return fd_seek(fd, seekpoint + where * sizeof(u32b));
 }
 
+/*!
+ * @brief ファイル位置を読み込む
+ * @param where ファイルバイト位置
+ * @return エラーコード
+ * @details
+ */
 u32b counts_read(int where)
 {
 	int fd;
@@ -7854,6 +7916,13 @@ u32b counts_read(int where)
 	return count;
 }
 
+/*!
+ * @brief ファイル位置に書き込む /
+ * @param where ファイルバイト位置
+ * @param count 書き込む値
+ * @return エラーコード
+ * @details
+ */
 errr counts_write(int where, u32b count)
 {
 	int fd;
@@ -7924,9 +7993,11 @@ errr counts_write(int where, u32b count)
 #include <signal.h>
 
 
-/*
+/*!
+ * @brief OSからのシグナルを受けてサスペンド状態に入る /
  * Handle signals -- suspend
- *
+ * @param sig 受け取ったシグナル
+ * @details
  * Actually suspend the game, and then resume cleanly
  */
 static void handle_signal_suspend(int sig)
@@ -7961,19 +8032,21 @@ static void handle_signal_suspend(int sig)
 }
 
 
-/*
+/*!
+ * @brief OSからのシグナルを受けて中断、終了する /
  * Handle signals -- simple (interrupt and quit)
- *
+ * @param sig 受け取ったシグナル
+ * @details
+ * <pre>
  * This function was causing a *huge* number of problems, so it has
  * been simplified greatly.  We keep a global variable which counts
  * the number of times the user attempts to kill the process, and
  * we commit suicide if the user does this a certain number of times.
- *
  * We attempt to give "feedback" to the user as he approaches the
  * suicide thresh-hold, but without penalizing accidental keypresses.
- *
  * To prevent messy accidents, we should reset this global variable
  * whenever the user enters a keypress, or something like that.
+ * </pre>
  */
 static void handle_signal_simple(int sig)
 {
@@ -8084,8 +8157,22 @@ Term_putstr(0, 0, -1, TERM_WHITE, "熟慮の上の自殺！");
 }
 
 
-/*
+/*!
+ * @brief OSからのシグナルを受けて強制終了する /
  * Handle signal -- abort, kill, etc
+ * @param sig 受け取ったシグナル
+ * @return なし
+ * @details
+ * <pre>
+ * This function was causing a *huge* number of problems, so it has
+ * been simplified greatly.  We keep a global variable which counts
+ * the number of times the user attempts to kill the process, and
+ * we commit suicide if the user does this a certain number of times.
+ * We attempt to give "feedback" to the user as he approaches the
+ * suicide thresh-hold, but without penalizing accidental keypresses.
+ * To prevent messy accidents, we should reset this global variable
+ * whenever the user enters a keypress, or something like that.
+ * </pre>
  */
 static void handle_signal_abort(int sig)
 {
@@ -8182,11 +8269,11 @@ quit("ソフトのバグ");
 
 }
 
-
-
-
-/*
+/*!
+ * @brief OSからのSIGTSTPシグナルを無視する関数 /
  * Ignore SIGTSTP signals (keyboard suspend)
+ * @return なし
+ * @details
  */
 void signals_ignore_tstp(void)
 {
@@ -8197,8 +8284,11 @@ void signals_ignore_tstp(void)
 
 }
 
-/*
+/*!
+ * @brief OSからのSIGTSTPシグナルハンドラ /
  * Handle SIGTSTP signals (keyboard suspend)
+ * @return なし
+ * @details
  */
 void signals_handle_tstp(void)
 {
@@ -8210,8 +8300,11 @@ void signals_handle_tstp(void)
 }
 
 
-/*
+/*!
+ * @brief OSからのシグナルハンドルを初期化する /
  * Prepare to handle the relevant signals
+ * @return なし
+ * @details
  */
 void signals_init(void)
 {
@@ -8297,21 +8390,24 @@ void signals_init(void)
 #else	/* HANDLE_SIGNALS */
 
 
-/*
+/*!
+ * @brief ダミー /
  * Do nothing
  */
 void signals_ignore_tstp(void)
 {
 }
 
-/*
+/*!
+ * @brief ダミー /
  * Do nothing
  */
 void signals_handle_tstp(void)
 {
 }
 
-/*
+/*!
+ * @brief ダミー /
  * Do nothing
  */
 void signals_init(void)
