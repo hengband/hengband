@@ -1449,8 +1449,13 @@ errr parse_m_info(char *buf, header *head)
 }
 
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(汎用) /
  * Grab one flag from a textual string
+ * @param flgs ビットフラグを追加する先の参照ポインタ
+ * @param names トークン定義配列
+ * @param what 参照元の文字列ポインタ
+ * @return エラーコード
  */
 static errr grab_one_flag(u32b *flags, cptr names[], cptr what)
 {
@@ -1470,8 +1475,12 @@ static errr grab_one_flag(u32b *flags, cptr names[], cptr what)
 }
 
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る（地形情報向け） /
  * Grab one flag in an feature_type from a textual string
+ * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @return エラーコード
  */
 static errr grab_one_feat_flag(feature_type *f_ptr, cptr what)
 {
@@ -1499,8 +1508,13 @@ static errr grab_one_feat_flag(feature_type *f_ptr, cptr what)
 }
 
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグ(ステート)を一つ得る（地形情報向け2） /
  * Grab an action in an feature_type from a textual string
+ * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @param count ステートの保存先ID
+ * @return エラーコード
  */
 static errr grab_one_feat_action(feature_type *f_ptr, cptr what, int count)
 {
@@ -1528,8 +1542,12 @@ static errr grab_one_feat_action(feature_type *f_ptr, cptr what, int count)
 }
 
 
-/*
- * Initialize the "f_info" array, by parsing an ascii "template" file
+/*!
+ * @brief 地形情報(f_info)のパース関数 /
+ * Initialize the "s_info" array, by parsing an ascii "template" file
+ * @param buf テキスト列
+ * @param head ヘッダ構造体
+ * @return エラーコード
  */
 errr parse_f_info(char *buf, header *head)
 {
@@ -1812,8 +1830,11 @@ errr parse_f_info(char *buf, header *head)
 }
 
 
-/*
+/*!
+ * @brief 地形タグからIDを得る /
  * Convert a fake tag to a real feat index
+ * @param str タグ文字列
+ * @return 地形ID
  */
 s16b f_tag_to_index(cptr str)
 {
@@ -1834,8 +1855,11 @@ s16b f_tag_to_index(cptr str)
 }
 
 
-/*
+/*!
+ * @brief 地形タグからIDを得る /
  * Search for real index corresponding to this fake tag
+ * @param str タグ文字列
+ * @return なし
  */
 static void search_real_feat(s16b *feat)
 {
@@ -1864,8 +1888,11 @@ static void search_real_feat(s16b *feat)
 }
 
 
-/*
+/*!
+ * @brief 地形情報の各種タグからIDへ変換して結果を収める /
  * Retouch fake tags of f_info
+ * @param head ヘッダ構造体
+ * @return なし
  */
 void retouch_f_info(header *head)
 {
