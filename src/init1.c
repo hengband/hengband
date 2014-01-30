@@ -850,7 +850,8 @@ static cptr k_info_gen_flags[] =
 	"XXX",
 };
 
-/*
+/*!
+ * ダンジョン特性トークンの定義 /
  * Dungeon flags
  */
 static cptr d_info_flags1[] =
@@ -890,9 +891,15 @@ static cptr d_info_flags1[] =
 };
 
 
-/*
+/*!
+ * @brief データの可変文字列情報をテキストとして保管する /
  * Add a text to the text-storage and store offset to it.
- *
+ * @param offset 文字列保管ポインタからのオフセット
+ * @param head テキスト保管ヘッダ情報の構造体参照ポインタ
+ * @param buf 保管文字列
+ * @param normal_text テキストの正規化を行う
+ * @return
+ * 無事保管ができたらTRUEを返す。
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
@@ -947,11 +954,16 @@ static bool add_text(u32b *offset, header *head, cptr buf, bool normal_text)
 }
 
 
-/*
+/*!
+ * @brief データの可変文字列情報を名前として保管する /
  * Add a name to the name-storage and return an offset to it.
- *
+ * @param offset 文字列保管ポインタからのオフセット
+ * @param head テキスト保管ヘッダ情報の構造体参照ポインタ
+ * @param buf 保管文字列
+ * @return
+ * 無事保管ができたらTRUEを返す。
  * Returns FALSE when there isn't enough space available to store
- * the name.
+ * the text.
  */
 static bool add_name(u32b *offset, header *head, cptr buf)
 {
@@ -977,11 +989,16 @@ static bool add_name(u32b *offset, header *head, cptr buf)
 }
 
 
-/*
+/*!
+ * @brief データの可変文字列情報をタグとして保管する /
  * Add a tag to the tag-storage and return an offset to it.
- *
+ * @param offset 文字列保管ポインタからのオフセット
+ * @param head テキスト保管ヘッダ情報の構造体参照ポインタ
+ * @param buf 保管文字列
+ * @return
+ * 無事保管ができたらTRUEを返す。
  * Returns FALSE when there isn't enough space available to store
- * the name.
+ * the text.
  */
 static bool add_tag(s16b *offset, header *head, cptr buf)
 {
@@ -1019,9 +1036,12 @@ static bool add_tag(s16b *offset, header *head, cptr buf)
 }
 
 
-/*
+/*!
+ * @brief シンボル1文字をカラーIDに変更する /
  * Convert a "color letter" into an "actual" color
  * The colors are: dwsorgbuDWvyRGBU, as shown below
+ * @param c シンボル文字
+ * @return カラーID
  */
 byte color_char_to_attr(char c)
 {
@@ -1054,8 +1074,14 @@ byte color_char_to_attr(char c)
 /*** Initialize from ascii template files ***/
 
 
-/*
+/*!
+ * @brief パース関数に基づいてデータファイルからデータを読み取る /
  * Initialize an "*_info" array, by parsing an ascii "template" file
+ * @param fp 読み取りに使うファイルポインタ
+ * @param buf 読み取りに使うバッファ領域
+ * @param head ヘッダ構造体
+ * @param parse_info_txt_line パース関数
+ * @return エラーコード
  */
 errr init_info_txt(FILE *fp, char *buf, header *head,
 		   parse_info_txt_func parse_info_txt_line)
@@ -1120,8 +1146,12 @@ errr init_info_txt(FILE *fp, char *buf, header *head,
 }
 
 
-/*
+/*!
+ * @brief Vault情報(v_info)のパース関数 /
  * Initialize the "v_info" array, by parsing an ascii "template" file
+ * @param buf テキスト列
+ * @param head ヘッダ構造体
+ * @return エラーコード
  */
 errr parse_v_info(char *buf, header *head)
 {
@@ -1202,9 +1232,12 @@ errr parse_v_info(char *buf, header *head)
 }
 
 
-
-/*
+/*!
+ * @brief 職業技能情報(s_info)のパース関数 /
  * Initialize the "s_info" array, by parsing an ascii "template" file
+ * @param buf テキスト列
+ * @param head ヘッダ構造体
+ * @return エラーコード
  */
 errr parse_s_info(char *buf, header *head)
 {
@@ -1284,8 +1317,12 @@ errr parse_s_info(char *buf, header *head)
 }
 
 
-/*
+/*!
+ * @brief 職業魔法情報(m_info)のパース関数 /
  * Initialize the "m_info" array, by parsing an ascii "template" file
+ * @param buf テキスト列
+ * @param head ヘッダ構造体
+ * @return エラーコード
  */
 errr parse_m_info(char *buf, header *head)
 {
