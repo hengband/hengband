@@ -1,34 +1,29 @@
-/* File: init1.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison
- *
+/*!
+ * @file init1.c
+ * @brief ゲームデータ初期化1 / Initialization (part 1) -BEN-
+ * @date 2014/01/28
+ * @author
+ * <pre>
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
- */
-
-/* Purpose: Initialization (part 1) -BEN- */
-
-#include "angband.h"
-
-
-/*
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * </pre>
+ * @details
+ * <pre>
  * This file is used to initialize various variables and arrays for the
  * Angband game.  Note the use of "fd_read()" and "fd_write()" to bypass
  * the common limitation of "read()" and "write()" to only 32767 bytes
  * at a time.
- *
  * Several of the arrays for Angband are built from "template" files in
  * the "lib/file" directory, from which quick-load binary "image" files
  * are constructed whenever they are not present in the "lib/data"
  * directory, or if those files become obsolete, if we are allowed.
- *
  * Warning -- the "ascii" file parsers use a minor hack to collect the
  * name and text information in a single pass.  Thus, the game will not
  * be able to load any template file with more than 20K of names or 60K
  * of text, even though technically, up to 64K should be legal.
- *
  * Note that if "ALLOW_TEMPLATES" is not defined, then a lot of the code
  * in this file is compiled out, and the game will not run unless valid
  * "binary template files" already exist in "lib/data".  Thus, one can
@@ -36,11 +31,15 @@
  * "*.raw" files in "lib/data", and then quit, and recompile without
  * defining ALLOW_TEMPLATES, which will both save 20K and prevent people
  * from changing the ascii template files in potentially dangerous ways.
- *
  * The code could actually be removed and placed into a "stand-alone"
  * program, but that feels a little silly, especially considering some
  * of the platforms that we currently support.
+ * </pre>
  */
+
+#include "angband.h"
+
+
 
 #ifdef ALLOW_TEMPLATES
 
@@ -49,7 +48,8 @@
 
 /*** Helper arrays for parsing ascii template files ***/
 
-/*
+/*!
+ * モンスターの打撃手段トークンの定義 /
  * Monster Blow Methods
  */
 static cptr r_info_blow_method[] =
@@ -84,7 +84,8 @@ static cptr r_info_blow_method[] =
 };
 
 
-/*
+/*!
+ * モンスターの打撃属性トークンの定義 /
  * Monster Blow Effects
  */
 static cptr r_info_blow_effect[] =
@@ -128,8 +129,8 @@ static cptr r_info_blow_effect[] =
 	NULL
 };
 
-
-/*
+/*!
+ * 地形属性トークンの定義 /
  * Feature info flags
  */
 static cptr f_info_flags[] =
@@ -253,7 +254,8 @@ static cptr f_info_flags[] =
 };
 
 
-/*
+/*!
+ * モンスター特性トークンの定義1 /
  * Monster race flags
  */
 static cptr r_info_flags1[] =
@@ -292,7 +294,8 @@ static cptr r_info_flags1[] =
 	"XXX3"
 };
 
-/*
+/*!
+ * モンスター特性トークンの定義2 /
  * Monster race flags
  */
 static cptr r_info_flags2[] =
@@ -331,7 +334,8 @@ static cptr r_info_flags2[] =
 	"QUANTUM"
 };
 
-/*
+/*!
+ * モンスター特性トークンの定義3 /
  * Monster race flags
  */
 static cptr r_info_flags3[] =
@@ -370,7 +374,8 @@ static cptr r_info_flags3[] =
 	"NO_SLEEP"
 };
 
-/*
+/*!
+ * モンスター特性トークンの定義4 /
  * Monster race flags
  */
 static cptr r_info_flags4[] =
@@ -409,7 +414,8 @@ static cptr r_info_flags4[] =
 	"BR_DISI",
 };
 
-/*
+/*!
+ * モンスター特性トークンの定義5 /
  * Monster race flags
  */
 static cptr r_info_flags5[] =
@@ -448,7 +454,8 @@ static cptr r_info_flags5[] =
 	"HOLD"
 };
 
-/*
+/*!
+ * モンスター特性トークンの定義6 /
  * Monster race flags
  */
 static cptr r_info_flags6[] =
@@ -488,7 +495,8 @@ static cptr r_info_flags6[] =
 };
 
 
-/*
+/*!
+ * モンスター特性トークンの定義7 /
  * Monster race flags
  */
 static cptr r_info_flags7[] =
@@ -527,7 +535,8 @@ static cptr r_info_flags7[] =
 	"XXX7X31",
 };
 
-/*
+/*!
+ * モンスター特性トークンの定義8 /
  * Monster race flags
  */
 static cptr r_info_flags8[] =
@@ -567,8 +576,9 @@ static cptr r_info_flags8[] =
 };
 
 
-/*
- * Monster race flags - Drops
+/*!
+ * モンスター特性トークンの定義9 /
+ * Monster race flags
  */
 static cptr r_info_flags9[] =
 {
@@ -608,8 +618,9 @@ static cptr r_info_flags9[] =
 };
 
 
-/*
- * Monster race flags - Resistances
+/*!
+ * モンスター特性トークンの定義R(耐性) /
+ * Monster race flags
  */
 static cptr r_info_flagsr[] =
 {
@@ -648,7 +659,8 @@ static cptr r_info_flagsr[] =
 };
 
 
-/*
+/*!
+ * オブジェクト基本特性トークンの定義 /
  * Object flags
  */
 static cptr k_info_flags[] =
@@ -798,6 +810,10 @@ static cptr k_info_flags[] =
 	"SLOW_REGEN",
 };
 
+/*!
+ * オブジェクト生成特性トークンの定義 /
+ * Object flags
+ */
 static cptr k_info_gen_flags[] =
 {
 	"INSTA_ART",

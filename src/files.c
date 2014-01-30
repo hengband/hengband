@@ -6912,7 +6912,7 @@ static void make_bones(void)
 bool (*tombstone_aux)(void) = NULL;
 
 
-/*
+/*!
  * @brief 墓石のアスキーアート表示 /
  * Display a "tomb-stone"
  * @return なし
