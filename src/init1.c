@@ -1544,7 +1544,7 @@ static errr grab_one_feat_action(feature_type *f_ptr, cptr what, int count)
 
 /*!
  * @brief 地形情報(f_info)のパース関数 /
- * Initialize the "s_info" array, by parsing an ascii "template" file
+ * Initialize the "f_info" array, by parsing an ascii "template" file
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
@@ -1913,8 +1913,12 @@ void retouch_f_info(header *head)
 }
 
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用) /
  * Grab one flag in an object_kind from a textual string
+ * @param k_ptr 保管先のベースアイテム構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @return エラーコード
  */
 static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
 {
@@ -1945,8 +1949,11 @@ static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
 	return (1);
 }
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(発動能力用) /
  * Grab one activation index flag
+ * @param what 参照元の文字列ポインタ
+ * @return 発動能力ID
  */
 static byte grab_one_activation_flag(cptr what)
 {
@@ -1980,8 +1987,12 @@ static byte grab_one_activation_flag(cptr what)
 }
 
 
-/*
+/*!
+ * @brief ベースアイテム(k_info)のパース関数 /
  * Initialize the "k_info" array, by parsing an ascii "template" file
+ * @param buf テキスト列
+ * @param head ヘッダ構造体
+ * @return エラーコード
  */
 errr parse_k_info(char *buf, header *head)
 {
@@ -2254,9 +2265,12 @@ errr parse_k_info(char *buf, header *head)
 	return (0);
 }
 
-
-/*
- * Grab one flag in an artifact_type from a textual string
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(アーティファクト用) /
+ * Grab one activation index flag
+ * @param a_ptr 保管先のアーティファクト構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @return エラーがあった場合1、エラーがない場合0を返す
  */
 static errr grab_one_artifact_flag(artifact_type *a_ptr, cptr what)
 {
@@ -2288,8 +2302,12 @@ static errr grab_one_artifact_flag(artifact_type *a_ptr, cptr what)
 }
 
 
-/*
+/*!
+ * @brief 固定アーティファクト情報(a_info)のパース関数 /
  * Initialize the "a_info" array, by parsing an ascii "template" file
+ * @param buf テキスト列
+ * @param head ヘッダ構造体
+ * @return エラーコード
  */
 errr parse_a_info(char *buf, header *head)
 {
@@ -2482,8 +2500,12 @@ errr parse_a_info(char *buf, header *head)
 }
 
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(アーティファクト用) /
  * Grab one flag in a ego-item_type from a textual string
+ * @param e_ptr 保管先のエゴ構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @return エラーがあった場合1、エラーがない場合0を返す
  */
 static bool grab_one_ego_item_flag(ego_item_type *e_ptr, cptr what)
 {
@@ -2515,10 +2537,12 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, cptr what)
 }
 
 
-
-
-/*
+/*!
+ * @brief アイテムエゴ情報(e_info)のパース関数 /
  * Initialize the "e_info" array, by parsing an ascii "template" file
+ * @param buf テキスト列
+ * @param head ヘッダ構造体
+ * @return エラーコード
  */
 errr parse_e_info(char *buf, header *head)
 {
@@ -2700,8 +2724,12 @@ errr parse_e_info(char *buf, header *head)
 }
 
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(モンスター用1) /
  * Grab one (basic) flag in a monster_race from a textual string
+ * @param e_ptr 保管先のモンスター種族構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @return エラーコード
  */
 static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
 {
@@ -2739,8 +2767,12 @@ static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
 }
 
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(モンスター用2) /
  * Grab one (spell) flag in a monster_race from a textual string
+ * @param e_ptr 保管先のモンスター種族構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @return エラーコード
  */
 static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
 {
@@ -2766,10 +2798,12 @@ static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
 }
 
 
-
-
-/*
+/*!
+ * @brief モンスター種族情報(r_info)のパース関数 /
  * Initialize the "r_info" array, by parsing an ascii "template" file
+ * @param buf テキスト列
+ * @param head ヘッダ構造体
+ * @return エラーコード
  */
 errr parse_r_info(char *buf, header *head)
 {
