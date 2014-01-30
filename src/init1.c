@@ -1452,7 +1452,7 @@ errr parse_m_info(char *buf, header *head)
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(汎用) /
  * Grab one flag from a textual string
- * @param flgs ビットフラグを追加する先の参照ポインタ
+ * @param flags ビットフラグを追加する先の参照ポインタ
  * @param names トークン定義配列
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
@@ -1858,7 +1858,7 @@ s16b f_tag_to_index(cptr str)
 /*!
  * @brief 地形タグからIDを得る /
  * Search for real index corresponding to this fake tag
- * @param str タグ文字列
+ * @param feat タグ文字列
  * @return なし
  */
 static void search_real_feat(s16b *feat)
@@ -2727,7 +2727,7 @@ errr parse_e_info(char *buf, header *head)
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(モンスター用1) /
  * Grab one (basic) flag in a monster_race from a textual string
- * @param e_ptr 保管先のモンスター種族構造体参照ポインタ
+ * @param r_ptr 保管先のモンスター種族構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
@@ -2770,7 +2770,7 @@ static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(モンスター用2) /
  * Grab one (spell) flag in a monster_race from a textual string
- * @param e_ptr 保管先のモンスター種族構造体参照ポインタ
+ * @param r_ptr 保管先のモンスター種族構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
@@ -3104,8 +3104,12 @@ errr parse_r_info(char *buf, header *head)
 }
 
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(ダンジョン用) /
  * Grab one flag for a dungeon type from a textual string
+ * @param d_ptr 保管先のダンジョン構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @return エラーコード
  */
 static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, cptr what)
 {
@@ -3123,8 +3127,12 @@ static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, cptr what)
 	return (1);
 }
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(モンスターのダンジョン出現条件用1) /
  * Grab one (basic) flag in a monster_race from a textual string
+ * @param d_ptr 保管先のダンジョン構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @return エラーコード
  */
 static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
 {
@@ -3160,8 +3168,12 @@ static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
 }
 
 
-/*
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(モンスターのダンジョン出現条件用2) /
  * Grab one (spell) flag in a monster_race from a textual string
+ * @param d_ptr 保管先のダンジョン構造体参照ポインタ
+ * @param what 参照元の文字列ポインタ
+ * @return エラーコード
  */
 static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
 {
@@ -3185,8 +3197,12 @@ static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
 	return (1);
 }
 
-/*
+/*!
+ * @brief ダンジョン情報(d_info)のパース関数 /
  * Initialize the "d_info" array, by parsing an ascii "template" file
+ * @param buf テキスト列
+ * @param head ヘッダ構造体
+ * @return エラーコード
  */
 errr parse_d_info(char *buf, header *head)
 {
@@ -3551,8 +3567,11 @@ struct dungeon_grid
 static dungeon_grid letter[255];
 
 
-/*
+/*!
+ * @brief 地形情報の「F:」情報をパースする
  * Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid
+ * @param buf 解析文字列
+ * @return エラーコード
  */
 static errr parse_line_feature(char *buf)
 {
@@ -3697,8 +3716,11 @@ static errr parse_line_feature(char *buf)
 }
 
 
-/*
+/*!
+ * @brief 地形情報の「B:」情報をパースする
  * Process "B:<Index>:<Command>:..." -- Building definition
+ * @param buf 解析文字列
+ * @return エラーコード
  */
 static errr parse_line_building(char *buf)
 {
@@ -3850,8 +3872,13 @@ static errr parse_line_building(char *buf)
 }
 
 
-/*
+/*!
+ * @brief フロアの所定のマスにオブジェクトを配置する
  * Place the object j_ptr to a grid
+ * @param j_ptr オブジェクト構造体の参照ポインタ
+ * @param y 配置先Y座標
+ * @param x 配置先X座標
+ * @return エラーコード
  */
 static void drop_here(object_type *j_ptr, int y, int x)
 {
@@ -3883,8 +3910,17 @@ static void drop_here(object_type *j_ptr, int y, int x)
 }
 
 
-/*
+/*!
+ * @brief クエスト用固定ダンジョンをフロアに生成する
  * Parse a sub-file of the "extra info"
+ * @param buf 文字列
+ * @param ymin 詳細不明
+ * @param xmin 詳細不明
+ * @param ymax 詳細不明
+ * @param xmax 詳細不明
+ * @param y 詳細不明
+ * @param x 詳細不明
+ * @return エラーコード
  */
 static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
@@ -4367,8 +4403,12 @@ static char tmp[8];
 static cptr variant = "ZANGBAND";
 
 
-/*
+/*!
+ * @brief クエスト用固定ダンジョン生成時の分岐処理
  * Helper function for "process_dungeon_file()"
+ * @param sp
+ * @param fp
+ * @return エラーコード
  */
 static cptr process_dungeon_file_expr(char **sp, char *fp)
 {
@@ -4700,6 +4740,16 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 }
 
 
+/*!
+ * @brief クエスト用固定ダンジョン生成時のメインルーチン
+ * Helper function for "process_dungeon_file()"
+ * @param name ファイル名
+ * @param ymin 詳細不明
+ * @param xmin 詳細不明
+ * @param ymax 詳細不明
+ * @param xmax 詳細不明
+ * @return エラーコード
+ */
 errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 {
 	FILE *fp;
