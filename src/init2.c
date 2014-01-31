@@ -348,8 +348,12 @@ static errr check_modification_date(int fd, cptr template_file)
 /*** Initialize from binary image files ***/
 
 
-/*
+/*!
+ * @brief rawファイルからのデータの読み取り処理
  * Initialize the "*_info" array, by parsing a binary "image" file
+ * @param fd ファイルディスクリプタ
+ * @param head rawファイルのヘッダ
+ * @return エラーコード
  */
 static errr init_info_raw(int fd, header *head)
 {
@@ -417,8 +421,13 @@ static errr init_info_raw(int fd, header *head)
 
 
 
-/*
+/*!
+ * @brief ヘッダ構造体の更新
  * Initialize the header of an *_info.raw file.
+ * @param head rawファイルのヘッダ
+ * @param num データ数
+ * @param len データの長さ
+ * @return エラーコード
  */
 static void init_header(header *head, int num, int len)
 {
@@ -438,9 +447,17 @@ static void init_header(header *head, int num, int len)
 }
 
 
-/*
+/*!
+ * @brief ヘッダ構造体の更新
  * Initialize the "*_info" array
- *
+ * @param filename ファイル名(拡張子txt/raw)
+ * @param head 処理に用いるヘッダ構造体
+ * @param info データ保管先の構造体ポインタ
+ * @param name 名称用可変文字列の保管先
+ * @param text テキスト用可変文字列の保管先
+ * @param tag タグ用可変文字列の保管先
+ * @return エラーコード
+ * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
