@@ -1660,8 +1660,10 @@ s16b f_tag_to_index_in_init(cptr str)
 }
 
 
-/*
+/*!
+ * @brief 地形の汎用定義をタグを通じて取得する /
  * Initialize feature variables
+ * @return エラーコード
  */
 static errr init_feat_variables(void)
 {
@@ -1806,8 +1808,10 @@ static errr init_feat_variables(void)
 }
 
 
-/*
+/*!
+ * @brief その他の初期情報更新 /
  * Initialize some other arrays
+ * @return エラーコード
  */
 static errr init_other(void)
 {
@@ -1931,8 +1935,10 @@ static errr init_other(void)
 }
 
 
-/*
+/*!
+ * @brief オブジェクト配列を初期化する /
  * Initialize some other arrays
+ * @return エラーコード
  */
 static errr init_object_alloc(void)
 {
@@ -2047,8 +2053,10 @@ if (!num[0]) quit("町のアイテムがない！");
 }
 
 
-/*
+/*!
+ * @brief モンスター配列と生成テーブルを初期化する /
  * Initialize some other arrays
+ * @return エラーコード
  */
 static errr init_alloc(void)
 {
@@ -2213,8 +2221,10 @@ static errr init_alloc(void)
 
 
 
-/*
+/*!
+ * @brief 画面左下にシステムメッセージを表示する /
  * Hack -- take notes on line 23
+ * @return なし
  */
 static void note(cptr str)
 {
@@ -2225,12 +2235,16 @@ static void note(cptr str)
 
 
 
-/*
+/*!
+ * @brief 全ゲームデータ読み込みのサブルーチン /
  * Hack -- Explain a broken "lib" folder and quit (see below).
- *
+ * @return なし
+ * @note
+ * <pre>
  * XXX XXX XXX This function is "messy" because various things
  * may or may not be initialized, but the "plog()" and "quit()"
  * functions are "supposed" to work under any conditions.
+ * </pre>
  */
 static void init_angband_aux(cptr why)
 {
@@ -2266,26 +2280,29 @@ static void init_angband_aux(cptr why)
 }
 
 
-/*
+/*!
+ * @brief 全ゲームデータ読み込みのメインルーチン /
  * Hack -- main Angband initialization entry point
- *
+ * @return なし
+ * @note
+ * <pre>
+ * XXX XXX XXX This function is "messy" because various things
+ * may or may not be initialized, but the "plog()" and "quit()"
+ * functions are "supposed" to work under any conditions.
  * Verify some files, display the "news.txt" file, create
  * the high score file, initialize all internal arrays, and
  * load the basic "user pref files".
- *
  * Be very careful to keep track of the order in which things
  * are initialized, in particular, the only thing *known* to
  * be available when this function is called is the "z-term.c"
  * package, and that may not be fully initialized until the
  * end of this function, when the default "user pref files"
  * are loaded and "Term_xtra(TERM_XTRA_REACT,0)" is called.
- *
  * Note that this function attempts to verify the "news" file,
  * and the game aborts (cleanly) on failure, since without the
  * "news" file, it is likely that the "lib" folder has not been
  * correctly located.  Otherwise, the news file is displayed for
  * the user.
- *
  * Note that this function attempts to verify (or create) the
  * "high score" file, and the game aborts (cleanly) on failure,
  * since one of the most common "extraction" failures involves
@@ -2296,22 +2313,18 @@ static void init_angband_aux(cptr why)
  * code below, since the "lib/apex" directory, being empty in the
  * standard distributions, is most likely to be "lost", making it
  * impossible to create the high score file.
- *
  * Note that various things are initialized by this function,
  * including everything that was once done by "init_some_arrays".
- *
  * This initialization involves the parsing of special files
  * in the "lib/data" and sometimes the "lib/edit" directories.
- *
  * Note that the "template" files are initialized first, since they
  * often contain errors.  This means that macros and message recall
  * and things like that are not available until after they are done.
- *
  * We load the default "user pref files" here in case any "color"
  * changes are needed before character creation.
- *
  * Note that the "graf-xxx.prf" file must be loaded separately,
  * if needed, in the first (?) pass through "TERM_XTRA_REACT".
+ * </pre>
  */
 void init_angband(void)
 {
@@ -2657,8 +2670,9 @@ note("[ユーザー設定ファイルを初期化しています...]");
 
 }
 
-/*
- *  Get check sum in string form
+/*!
+ * @brief サムチェック情報を出力 / Get check sum in string form
+ * @return サムチェック情報の文字列
  */
 cptr get_check_sum(void)
 {
