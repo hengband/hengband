@@ -701,8 +701,10 @@ static errr init_info(cptr filename, header *head,
 }
 
 
-/*
+/*!
+ * @brief 地形情報読み込みのメインルーチン /
  * Initialize the "f_info" array
+ * @return エラーコード
  */
 static errr init_f_info(void)
 {
@@ -724,8 +726,10 @@ static errr init_f_info(void)
 }
 
 
-/*
+/*!
+ * @brief ベースアイテム情報読み込みのメインルーチン /
  * Initialize the "k_info" array
+ * @return エラーコード
  */
 static errr init_k_info(void)
 {
@@ -745,8 +749,10 @@ static errr init_k_info(void)
 
 
 
-/*
+/*!
+ * @brief 固定アーティファクト情報読み込みのメインルーチン /
  * Initialize the "a_info" array
+ * @return エラーコード
  */
 static errr init_a_info(void)
 {
@@ -766,8 +772,10 @@ static errr init_a_info(void)
 
 
 
-/*
+/*!
+ * @brief 固定アーティファクト情報読み込みのメインルーチン /
  * Initialize the "e_info" array
+ * @return エラーコード
  */
 static errr init_e_info(void)
 {
@@ -787,8 +795,10 @@ static errr init_e_info(void)
 
 
 
-/*
+/*!
+ * @brief モンスター種族情報読み込みのメインルーチン /
  * Initialize the "r_info" array
+ * @return エラーコード
  */
 static errr init_r_info(void)
 {
@@ -808,8 +818,10 @@ static errr init_r_info(void)
 
 
 
-/*
+/*!
+ * @brief ダンジョン情報読み込みのメインルーチン /
  * Initialize the "d_info" array
+ * @return エラーコード
  */
 static errr init_d_info(void)
 {
@@ -828,9 +840,11 @@ static errr init_d_info(void)
 }
 
 
-/*
+/*!
+ * @brief Vault情報読み込みのメインルーチン /
  * Initialize the "v_info" array
- *
+ * @return エラーコード
+ * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
@@ -851,8 +865,10 @@ errr init_v_info(void)
 }
 
 
-/*
+/*!
+ * @brief 職業技能情報読み込みのメインルーチン /
  * Initialize the "s_info" array
+ * @return エラーコード
  */
 static errr init_s_info(void)
 {
@@ -871,8 +887,10 @@ static errr init_s_info(void)
 }
 
 
-/*
+/*!
+ * @brief 職業魔法情報読み込みのメインルーチン /
  * Initialize the "m_info" array
+ * @return エラーコード
  */
 static errr init_m_info(void)
 {
@@ -1450,8 +1468,10 @@ static byte store_table[MAX_STORES][STORE_CHOICES][2] =
 };
 
 
-/*
+/*!
+ * @brief 基本情報読み込みのメインルーチン /
  * Initialize misc. values
+ * @return エラーコード
  */
 static errr init_misc(void)
 {
@@ -1462,8 +1482,10 @@ static errr init_misc(void)
 }
 
 
-/*
+/*!
+ * @brief 町情報読み込みのメインルーチン /
  * Initialize town array
+ * @return エラーコード
  */
 static errr init_towns(void)
 {
@@ -1552,8 +1574,10 @@ static errr init_towns(void)
 	return 0;
 }
 
-/*
+/*!
+ * @brief 店情報初期化のメインルーチン /
  * Initialize buildings
+ * @return エラーコード
  */
 errr init_buildings(void)
 {
@@ -1595,8 +1619,10 @@ errr init_buildings(void)
 }
 
 
-/*
+/*!
+ * @brief クエスト情報初期化のメインルーチン /
  * Initialize quest array
+ * @return エラーコード
  */
 static errr init_quests(void)
 {
@@ -1619,7 +1645,11 @@ static errr init_quests(void)
 
 static bool feat_tag_is_not_found = FALSE;
 
-
+/*!
+ * @brief 地形タグからIDを得る /
+ * Initialize quest array
+ * @return 地形ID
+ */
 s16b f_tag_to_index_in_init(cptr str)
 {
 	s16b feat = f_tag_to_index(str);
