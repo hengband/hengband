@@ -247,12 +247,12 @@ void init_file_paths(char *path)
 /*
  * Hack -- help give useful error messages
  */
-int error_idx;
-int error_line;
+int error_idx; /*!< データ読み込み/初期化時に汎用的にエラーコードを保存するグローバル変数 */
+int error_line; /*!< データ読み込み/初期化時に汎用的にエラー行数を保存するグローバル変数 */
 
 
-/*
- * Standard error message text
+/*!
+ * エラーメッセージの名称定義 / Standard error message text
  */
 cptr err_str[PARSE_ERROR_MAX] =
 {
@@ -290,15 +290,15 @@ cptr err_str[PARSE_ERROR_MAX] =
 /*
  * File headers
  */
-header v_head;
-header f_head;
-header k_head;
-header a_head;
-header e_head;
-header r_head;
-header d_head;
-header s_head;
-header m_head;
+header v_head; /*!< Vault情報のヘッダ構造体 */
+header f_head; /*!< 地形情報のヘッダ構造体 */
+header k_head; /*!< ペースアイテム情報のヘッダ構造体 */
+header a_head; /*!< 固定アーティファクト情報のヘッダ構造体 */
+header e_head; /*!< アイテムエゴ情報のヘッダ構造体 */
+header r_head; /*!< モンスター種族情報のヘッダ構造体 */
+header d_head; /*!< ダンジョン情報のヘッダ構造体 */
+header s_head; /*!< プレイヤー職業技能情報のヘッダ構造体 */
+header m_head; /*!< プレイヤー職業魔法情報のヘッダ構造体 */
 
 #ifdef CHECK_MODIFICATION_TIME
 
@@ -912,8 +912,8 @@ static errr init_m_info(void)
 
 /*** Initialize others ***/
 
-/*
- * Hack -- Objects sold in the stores -- by tval/sval pair.
+/*!
+ * 店舗で販売するオブジェクトを定義する / Hack -- Objects sold in the stores -- by tval/sval pair.
  */
 static byte store_table[MAX_STORES][STORE_CHOICES][2] =
 {
@@ -1642,7 +1642,7 @@ static errr init_quests(void)
 	return 0;
 }
 
-
+/*! 地形タグ情報から地形IDを得られなかった場合にTRUEを返すグローバル変数 */
 static bool feat_tag_is_not_found = FALSE;
 
 /*!
