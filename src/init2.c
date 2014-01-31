@@ -1,14 +1,36 @@
-/* File: init2.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison
- *
+/*!
+ * @file init2.c
+ * @brief ゲームデータ初期化2 / Initialization (part 2) -BEN-
+ * @date 2014/01/28
+ * @author
+ * <pre>
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * 2014 Deskull rearranged comment for Doxygen.\n
+ * </pre>
+ * @details
+ * <pre>
+ * This file is used to initialize various variables and arrays for the
+ * Angband game.  Note the use of "fd_read()" and "fd_write()" to bypass
+ * the common limitation of "read()" and "write()" to only 32767 bytes
+ * at a time.
+ * Several of the arrays for Angband are built from "template" files in
+ * the "lib/file" directory, from which quick-load binary "image" files
+ * are constructed whenever they are not present in the "lib/data"
+ * directory, or if those files become obsolete, if we are allowed.
+ * Warning -- the "ascii" file parsers use a minor hack to collect the
+ * name and text information in a single pass.  Thus, the game will not
+ * be able to load any template file with more than 20K of names or 60K
+ * of text, even though technically, up to 64K should be legal.
+ * The "init1.c" file is used only to parse the ascii template files,
+ * to create the binary image files.  If you include the binary image
+ * files instead of the ascii template files, then you can undefine
+ * "ALLOW_TEMPLATES", saving about 20K by removing "init1.c".  Note
+ * that the binary image files are extremely system dependant.
+ * </pre>
  */
-
-/* Purpose: Initialization (part 2) -BEN- */
 
 #include "angband.h"
 
@@ -21,63 +43,40 @@
 #endif /* CHECK_MODIFICATION_TIME */
 #endif
 
-/*
- * This file is used to initialize various variables and arrays for the
- * Angband game.  Note the use of "fd_read()" and "fd_write()" to bypass
- * the common limitation of "read()" and "write()" to only 32767 bytes
- * at a time.
- *
- * Several of the arrays for Angband are built from "template" files in
- * the "lib/file" directory, from which quick-load binary "image" files
- * are constructed whenever they are not present in the "lib/data"
- * directory, or if those files become obsolete, if we are allowed.
- *
- * Warning -- the "ascii" file parsers use a minor hack to collect the
- * name and text information in a single pass.  Thus, the game will not
- * be able to load any template file with more than 20K of names or 60K
- * of text, even though technically, up to 64K should be legal.
- *
- * The "init1.c" file is used only to parse the ascii template files,
- * to create the binary image files.  If you include the binary image
- * files instead of the ascii template files, then you can undefine
- * "ALLOW_TEMPLATES", saving about 20K by removing "init1.c".  Note
- * that the binary image files are extremely system dependant.
- */
 
 
 
-/*
+/*!
+ * @brief 各データファイルを読み取るためのパスを取得する
  * Find the default paths to all of our important sub-directories.
- *
+ * @param path パス保管先の文字列
+ * @return なし
+ * @details
+ * <pre>
  * The purpose of each sub-directory is described in "variable.c".
- *
  * All of the sub-directories should, by default, be located inside
  * the main "lib" directory, whose location is very system dependant.
- *
  * This function takes a writable buffer, initially containing the
  * "path" to the "lib" directory, for example, "/pkg/lib/angband/",
  * or a system dependant string, for example, ":lib:".  The buffer
  * must be large enough to contain at least 32 more characters.
- *
  * Various command line options may allow some of the important
  * directories to be changed to user-specified directories, most
  * importantly, the "info" and "user" and "save" directories,
  * but this is done after this function, see "main.c".
- *
  * In general, the initial path should end in the appropriate "PATH_SEP"
  * string.  All of the "sub-directory" paths (created below or supplied
  * by the user) will NOT end in the "PATH_SEP" string, see the special
  * "path_build()" function in "util.c" for more information.
- *
  * Mega-Hack -- support fat raw files under NEXTSTEP, using special
  * "suffixed" directories for the "ANGBAND_DIR_DATA" directory, but
  * requiring the directories to be created by hand by the user.
- *
  * Hack -- first we free all the strings, since this is known
  * to succeed even if the strings have not been allocated yet,
  * as long as the variables start out as "NULL".  This allows
  * this function to be called multiple times, for example, to
  * try several base "path" values until a good one is found.
+ * </pre>
  */
 void init_file_paths(char *path)
 {
@@ -303,6 +302,13 @@ header m_head;
 
 #ifdef CHECK_MODIFICATION_TIME
 
+/*!
+ * @brief テキストファイルとrawファイルの更新時刻を比較する
+ * Find the default paths to all of our important sub-directories.
+ * @param fd ファイルディスクリプタ
+ * @param template_file ファイル名
+ * @return テキストの方が新しいか、rawファイルがなく更新の必要がある場合-1、更新の必要がない場合0。
+ */
 static errr check_modification_date(int fd, cptr template_file)
 {
 	char buf[1024];
