@@ -546,9 +546,14 @@ static cptr comment_7d[MAX_COMMENT_7D] =
 };
 
 
-/*
+/*!
+ * @brief 店主が交渉を終えた際の反応を返す処理 /
  * Let a shop-keeper React to a purchase
- *
+ * @param price アイテムの取引額
+ * @param value アイテムの実際価値
+ * @param guess 店主が当初予想していた価値
+ * @return なし
+ * @details 
  * We paid "price", it was worth "value", and we thought it was worth "guess"
  */
 static void purchase_analyze(s32b price, s32b value, s32b guess)
@@ -858,25 +863,27 @@ static byte rgold_adj[MAX_RACES][MAX_RACES] =
 
 
 
-
-/*
+/*!
+ * @brief 店舗価格を決定する /
  * Determine the price of an item (qty one) in a store.
- *
+ * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
+ * @param greed 店主の強欲度
+ * @param flip TRUEならば店主にとっての買取価格、FALSEなら売出価格を計算
+ * @return なし
+ * @details 
+ * <pre>
  * This function takes into account the player's charisma, and the
  * shop-keepers friendliness, and the shop-keeper's base greed, but
  * never lets a shop-keeper lose money in a transaction.
- *
  * The "greed" value should exceed 100 when the player is "buying" the
  * item, and should be less than 100 when the player is "selling" it.
- *
  * Hack -- the black market always charges twice as much as it should.
- *
  * Charisma adjustment runs from 80 to 130
  * Racial adjustment runs from 95 to 130
- *
  * Since greed/charisma/racial adjustments are centered at 100, we need
  * to adjust (by 200) to extract a usable multiplier.  Note that the
  * "greed" value is always something (?).
+ * </pre>
  */
 static s32b price_item(object_type *o_ptr, int greed, bool flip)
 {
@@ -943,9 +950,15 @@ static s32b price_item(object_type *o_ptr, int greed, bool flip)
 }
 
 
-/*
+/*!
+ * @brief 安価な消耗品の販売数を増やし、低確率で割引にする /
  * Certain "cheap" objects should be created in "piles"
+ * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
+ * @return なし
+ * @details 
+ * <pre>
  * Some objects can be sold at a "discount" (in small piles)
+ * </pre>
  */
 static void mass_produce(object_type *o_ptr)
 {
@@ -1116,10 +1129,16 @@ msg_print("ランダムアーティファクトは値引きなし。");
 
 
 
-/*
+/*!
+ * @brief 店舗に並べた品を同一品であるかどうか判定する /
  * Determine if a store item can "absorb" another item
- *
+ * @param o_ptr 判定するオブジェクト構造体の参照ポインタ1
+ * @param j_ptr 判定するオブジェクト構造体の参照ポインタ2
+ * @return 同一扱いできるならTRUEを返す
+ * @details 
+ * <pre>
  * See "object_similar()" for the same function for the "player"
+ * </pre>
  */
 static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 {
@@ -1173,8 +1192,16 @@ static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 }
 
 
-/*
+/*!
+ * @brief 店舗に並べた品を重ね合わせできるかどうか判定する /
  * Allow a store item to absorb another item
+ * @param o_ptr 判定するオブジェクト構造体の参照ポインタ1
+ * @param j_ptr 判定するオブジェクト構造体の参照ポインタ2
+ * @return 重ね合わせできるならTRUEを返す
+ * @details 
+ * <pre>
+ * See "object_similar()" for the same function for the "player"
+ * </pre>
  */
 static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
 {
@@ -1200,15 +1227,20 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
 }
 
 
-/*
+/*!
+ * @brief 店舗に品を置くスペースがあるかどうかの判定を返す /
  * Check to see if the shop will be carrying too many objects	-RAK-
+ * @param o_ptr 店舗に置きたいオブジェクト構造体の参照ポインタ
+ * @return 置き場がないなら0、重ね合わせできるアイテムがあるなら-1、スペースがあるなら1を返す。
+ * @details 
+ * <pre>
  * Note that the shop, just like a player, will not accept things
  * it cannot hold.	Before, one could "nuke" potions this way.
- *
  * Return value is now int:
  *  0 : No space
  * -1 : Can be combined to existing slot.
  *  1 : Cannot be combined but there are empty spaces.
+ * </pre>
  */
 static int store_check_num(object_type *o_ptr)
 {
@@ -1287,7 +1319,11 @@ static int store_check_num(object_type *o_ptr)
 	return 0;
 }
 
-
+/*!
+ * @brief オブジェクトが祝福されているかの判定を返す /
+ * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
+ * @return アイテムが祝福されたアイテムならばTRUEを返す
+ */
 static bool is_blessed(object_type *o_ptr)
 {
 	u32b flgs[TR_FLAG_SIZE];
@@ -1298,9 +1334,12 @@ static bool is_blessed(object_type *o_ptr)
 
 
 
-/*
+/*!
+ * @brief オブジェクトが所定の店舗で引き取れるかどうかを返す /
  * Determine if the current store will purchase the given item
- *
+ * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
+ * @return アイテムが買い取れるならばTRUEを返す
+ * @note
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
 static bool store_will_buy(object_type *o_ptr)
@@ -1517,8 +1556,11 @@ static bool store_will_buy(object_type *o_ptr)
 }
 
 
-/*
- * Combine and reorder items in the home
+/*!
+ * @brief 現在の町の指定された店舗のアイテムを整理する /
+ * Combine and reorder items in store.
+ * @param store_num 店舗ID
+ * @return 実際に整理が行われたならばTRUEを返す。
  */
 bool combine_and_reorder_home(int store_num)
 {
@@ -1677,15 +1719,18 @@ bool combine_and_reorder_home(int store_num)
 }
 
 
-/*
+/*!
+ * @brief 我が家にオブジェクトを加える /
  * Add the item "o_ptr" to the inventory of the "Home"
- *
+ * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
+ * @return 収めた先のID
+ * @details
+ * <pre>
  * In all cases, return the slot (or -1) where the object was placed
- *
  * Note that this is a hacked up version of "inven_carry()".
- *
  * Also note that it may not correctly "adapt" to "knowledge" bacoming
  * known, the player may have to pick stuff up and drop it again.
+ * </pre>
  */
 static int home_carry(object_type *o_ptr)
 {
@@ -1779,17 +1824,18 @@ static int home_carry(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 店舗にオブジェクトを加える /
  * Add the item "o_ptr" to a real stores inventory.
- *
- * If the item is "worthless", it is thrown away (except in the home).
- *
- * If the item cannot be combined with an object already in the inventory,
- * make a new slot for it, and calculate its "per item" price.	Note that
- * this price will be negative, since the price will not be "fixed" yet.
- * Adding an item to a "fixed" price stack will not change the fixed price.
- *
+ * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
+ * @return 収めた先のID
+ * @details
+ * <pre>
  * In all cases, return the slot (or -1) where the object was placed
+ * Note that this is a hacked up version of "inven_carry()".
+ * Also note that it may not correctly "adapt" to "knowledge" bacoming
+ * known, the player may have to pick stuff up and drop it again.
+ * </pre>
  */
 static int store_carry(object_type *o_ptr)
 {
