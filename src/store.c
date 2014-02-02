@@ -2710,7 +2710,7 @@ static int get_stock(int *com_val, cptr pmt, int i, int j)
 
 
 /*!
- * @brief 店主の不満度を増やし、限界に達したらプレイヤーを締め出す /
+ * @brief 店主の不満度を増やし、プレイヤーを締め出す判定と処理を行う /
  * Increase the insult counter and get angry if too many -RAK-
  * @return プレイヤーを締め出す場合TRUEを返す
  */
@@ -2754,8 +2754,10 @@ static void decrease_insults(void)
 }
 
 
-/*
+/*!
+ * @brief 店主の不満度が増えた場合のみのメッセージを表示する /
  * Have insulted while haggling 			-RAK-
+ * @return プレイヤーを締め出す場合TRUEを返す
  */
 static int haggle_insults(void)
 {
@@ -2781,8 +2783,14 @@ static bool allow_inc = FALSE;
 static s32b last_inc = 0L;
 
 
-/*
+/*!
+ * @brief 交渉価格を確認と認証の是非を行う /
  * Get a haggle
+ * @param pmt メッセージ
+ * @param poffer 別途価格提示をした場合の値を返す参照ポインタ
+ * @param price 現在の交渉価格
+ * @param final 最終確定価格ならばTRUE
+ * @return プレイヤーを締め出す場合TRUEを返す
  */
 static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
 {
@@ -2931,9 +2939,14 @@ static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
 }
 
 
-/*
+/*!
+ * @brief 店主がプレイヤーからの交渉価格を判断する /
  * Receive an offer (from the player)
- *
+ * @param pmt メッセージ
+ * @param poffer 店主からの交渉価格を返す参照ポインタ
+ * @param last_offer 現在の交渉価格
+ * @param factor 店主の価格基準倍率
+ * @return プレイヤーの価格に対して不服ならばTRUEを返す /
  * Return TRUE if offer is NOT okay
  */
 static bool receive_offer(cptr pmt, s32b *poffer,
@@ -2961,9 +2974,12 @@ static bool receive_offer(cptr pmt, s32b *poffer,
 }
 
 
-/*
+/*!
+ * @brief プレイヤーが購入する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
- *
+ * @param o_ptr オブジェクトの構造体参照ポインタ
+ * @param price 最終価格を返す参照ポインタ
+ * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
 static bool purchase_haggle(object_type *o_ptr, s32b *price)
@@ -3176,9 +3192,12 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーが売却する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
- *
+ * @param o_ptr オブジェクトの構造体参照ポインタ
+ * @param price 最終価格を返す参照ポインタ
+ * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
 static bool sell_haggle(object_type *o_ptr, s32b *price)
@@ -3416,8 +3435,10 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 }
 
 
-/*
+/*!
+ * @brief 店からの購入処理のメインルーチン /
  * Buy an item from a store 			-RAK-
+ * @return なし
  */
 static void store_purchase(void)
 {
@@ -3866,8 +3887,10 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 }
 
 
-/*
+/*!
+ * @brief 店からの売却処理のメインルーチン /
  * Sell an item to the store (or home)
+ * @return なし
  */
 static void store_sell(void)
 {
@@ -4268,8 +4291,10 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 }
 
 
-/*
+/*!
+ * @brief 店のアイテムを調べるコマンドのメインルーチン /
  * Examine an item in a store			   -JDL-
+ * @return なし
  */
 static void store_examine(void)
 {
@@ -4368,8 +4393,10 @@ msg_print("特に変わったところはないようだ。");
 }
 
 
-/*
+/*!
+ * @brief 博物館のアイテムを除去するコマンドのメインルーチン /
  * Remove an item from museum (Originally from TOband)
+ * @return なし
  */
 static void museum_remove_object(void)
 {
@@ -4458,13 +4485,17 @@ static void museum_remove_object(void)
 static bool leave_store = FALSE;
 
 
-/*
+/*!
+ * @brief 店舗処理コマンド選択のメインルーチン /
  * Process a command in a store
- *
+ * @return なし
+ * @note
+ * <pre>
  * Note that we must allow the use of a few "special" commands
  * in the stores which are not allowed in the dungeon, and we
  * must disable some commands which are allowed in the dungeon
  * but not in the stores, to prevent chaos.
+ * </pre>
  */
 static void store_process_command(void)
 {
@@ -4845,15 +4876,19 @@ static void store_process_command(void)
 }
 
 
-/*
- * Enter a store, and interact with it.
- *
+/*!
+ * @brief 店舗処理全体のメインルーチン /
+ * Enter a store, and interact with it. *
+ * @return なし
+ * @note
+ * <pre>
  * Note that we use the standard "request_command()" function
  * to get a command, allowing us to use "command_arg" and all
  * command macros and other nifty stuff, but we use the special
  * "shopping" argument, to force certain commands to be converted
  * into other commands, normally, we convert "p" (pray) and "m"
  * (cast magic) into "g" (get), and "s" (search) into "d" (drop).
+ * </pre>
  */
 void do_cmd_store(void)
 {
@@ -5244,8 +5279,11 @@ void do_cmd_store(void)
 
 
 
-/*
+/*!
+ * @brief 現在の町の店主を交代させる /
  * Shuffle one of the stores.
+ * @param 店舗種類のID
+ * @return なし
  */
 void store_shuffle(int which)
 {
@@ -5315,8 +5353,12 @@ void store_shuffle(int which)
 }
 
 
-/*
+/*!
+ * @brief 店の品揃えを変化させる /
  * Maintain the inventory at the stores.
+ * @param town_num 町のID
+ * @param store_num 店舗種類のID
+ * @return なし
  */
 void store_maint(int town_num, int store_num)
 {
@@ -5395,8 +5437,12 @@ void store_maint(int town_num, int store_num)
 }
 
 
-/*
+/*!
+ * @brief 店舗情報を初期化する /
  * Initialize the stores
+ * @param town_num 町のID
+ * @param store_num 店舗種類のID
+ * @return なし
  */
 void store_init(int town_num, int store_num)
 {
@@ -5449,6 +5495,11 @@ void store_init(int town_num, int store_num)
 }
 
 
+/*!
+ * @brief アイテムを町のブラックマーケットに移動させる /
+ * @param o_ptr 移動させたいオブジェクトの構造体参照ポインタ
+ * @return なし
+ */
 void move_to_black_market(object_type *o_ptr)
 {
 	/* Not in town */
@@ -5462,3 +5513,4 @@ void move_to_black_market(object_type *o_ptr)
 
 	object_wipe(o_ptr); /* Don't leave a bogus object behind... */
 }
+
