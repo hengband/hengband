@@ -302,7 +302,8 @@ static cptr comment_6[MAX_COMMENT_6] =
 
 
 /*!
- * @brief 取引成功時の店主のメッセージ / Successful haggle.
+ * @brief 取引成功時の店主のメッセージ処理 /
+ * Successful haggle.
  * @return なし
  */
 static void say_comment_1(void)
@@ -332,8 +333,12 @@ static void say_comment_1(void)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーがアイテムを買う時の価格代案メッセージ処理 /
  * Continue haggling (player is buying)
+ * @param vaule 店主の提示価格
+ * @param annoyed 店主のいらつき度
+ * @return なし
  */
 static void say_comment_2(s32b value, int annoyed)
 {
@@ -369,8 +374,12 @@ static void say_comment_2(s32b value, int annoyed)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーがアイテムを売る時の価格代案メッセージ処理 /
  * Continue haggling (player is selling)
+ * @param vaule 店主の提示価格
+ * @param annoyed 店主のいらつき度
+ * @return なし
  */
 static void say_comment_3(s32b value, int annoyed)
 {
@@ -406,8 +415,10 @@ static void say_comment_3(s32b value, int annoyed)
 }
 
 
-/*
+/*!
+ * @brief 店主がプレイヤーを追い出す時のメッセージ処理 /
  * Kick 'da bum out.					-RAK-
+ * @return なし
  */
 static void say_comment_4(void)
 {
@@ -429,8 +440,10 @@ static void say_comment_4(void)
 }
 
 
-/*
+/*!
+ * @brief 店主がプレイヤーに取り合わない時のメッセージ処理 /
  * You are insulting me
+ * @return なし
  */
 static void say_comment_5(void)
 {
@@ -449,19 +462,16 @@ static void say_comment_5(void)
 }
 
 
-/*
+/*!
+ * @brief 店主がプレイヤーの提示を理解できなかった時のメッセージ処理 /
  * That makes no sense.
+ * @return なし
  */
 static void say_comment_6(void)
 {
 	msg_print(comment_6[randint0(MAX_COMMENT_6)]);
 }
 
-
-
-/*
- * Messages for reacting to purchase prices.
- */
 
 #define MAX_COMMENT_7A	4
 
