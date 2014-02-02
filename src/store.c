@@ -1929,9 +1929,17 @@ static int store_carry(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 店舗のオブジェクト数を増やす /
+ * Add the item "o_ptr" to a real stores inventory.
+ * @param item 増やしたいアイテムのID
+ * @param num 増やしたい数
+ * @return なし
+ * @details
+ * <pre>
  * Increase, by a given amount, the number of a certain item
  * in a certain store.	This can result in zero items.
+ * </pre>
  */
 static void store_item_increase(int item, int num)
 {
@@ -1952,8 +1960,11 @@ static void store_item_increase(int item, int num)
 }
 
 
-/*
+/*!
+ * @brief 店舗のオブジェクト数を削除する /
  * Remove a slot if it is empty
+ * @param item 削除したいアイテムのID
+ * @return なし
  */
 static void store_item_optimize(int item)
 {
@@ -1982,11 +1993,16 @@ static void store_item_optimize(int item)
 	object_wipe(&st_ptr->stock[j]);
 }
 
-
-/*
+/*!
+ * @brief ブラックマーケット用の無価値品の排除判定 /
  * This function will keep 'crap' out of the black market.
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return ブラックマーケットにとって無価値な品ならばTRUEを返す
+ * @details
+ * <pre>
  * Crap is defined as any item that is "available" elsewhere
  * Based on a suggestion by "Lee Vogt" <lvogt@cig.mcel.mot.com>
+ * </pre>
  */
 static bool black_market_crap(object_type *o_ptr)
 {
@@ -2021,9 +2037,14 @@ static bool black_market_crap(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 店舗の品揃え変化のためにアイテムを削除する /
  * Attempt to delete (some of) a random item from the store
+ * @return なし
+ * @details
+ * <pre>
  * Hack -- we attempt to "maintain" piles of items when possible.
+ * </pre>
  */
 static void store_delete(void)
 {
@@ -2053,16 +2074,19 @@ static void store_delete(void)
 }
 
 
-/*
+/*!
+ * @brief 店舗の品揃え変化のためにアイテムを追加する /
  * Creates a random item and gives it to a store
+ * @return なし
+ * @details
+ * <pre>
  * This algorithm needs to be rethought.  A lot.
  * Currently, "normal" stores use a pre-built array.
- *
  * Note -- the "level" given to "obj_get_num()" is a "favored"
  * level, that is, there is a much higher chance of getting
  * items with a level approaching that of the given level...
- *
  * Should we check for "permission" to have the given item?
+ * </pre>
  */
 static void store_create(void)
 {
@@ -2165,9 +2189,11 @@ static void store_create(void)
 }
 
 
-
-/*
+/*!
+ * @brief 店舗の割引対象外にするかどうかを判定 /
  * Eliminate need to bargain if player has haggled well in the past
+ * @param minprice アイテムの最低販売価格
+ * @return 割引を禁止するならTRUEを返す。
  */
 static bool noneedtobargain(s32b minprice)
 {
@@ -2188,8 +2214,13 @@ static bool noneedtobargain(s32b minprice)
 }
 
 
-/*
+/*!
+ * @brief 店主の持つプレイヤーに対する売買の良し悪し経験を記憶する /
  * Update the bargain info
+ * @param price 実際の取引価格
+ * @param minprice 店主の提示した価格
+ * @param num 売買数 
+ * @return なし
  */
 static void updatebargain(s32b price, s32b minprice, int num)
 {
@@ -2221,9 +2252,11 @@ static void updatebargain(s32b price, s32b minprice, int num)
 }
 
 
-
-/*
+/*!
+ * @brief 店の商品リストを再表示する /
  * Re-displays a single store entry
+ * @param pos 表示行
+ * @return なし
  */
 static void display_entry(int pos)
 {
@@ -2366,8 +2399,11 @@ static void display_entry(int pos)
 }
 
 
-/*
+/*!
+ * @brief 店の商品リストを表示する /
  * Displays a store's inventory 		-RAK-
+ * @return なし
+ * @details
  * All prices are listed as "per individual object".  -BEN-
  */
 static void display_inventory(void)
@@ -2430,8 +2466,11 @@ static void display_inventory(void)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの所持金を表示する /
  * Displays players gold					-RAK-
+ * @return なし
+ * @details
  */
 static void store_prt_gold(void)
 {
@@ -2448,9 +2487,11 @@ static void store_prt_gold(void)
 	prt(out_val, 19 + xtra_stock, 68);
 }
 
-
-/*
+/*!
+ * @brief 店舗情報全体を表示するメインルーチン /
  * Displays store (after clearing screen)		-RAK-
+ * @return なし
+ * @details
  */
 static void display_store(void)
 {
@@ -2574,8 +2615,14 @@ static void display_store(void)
 
 
 
-/*
+/*!
+ * @brief 店舗からアイテムを選択する /
  * Get the ID of a store item and return its value	-RAK-
+ * @param com_val 選択IDを返す参照ポインタ
+ * @param pmt メッセージキャプション
+ * @param i 選択範囲の最小値
+ * @param j 選択範囲の最大値
+ * @return 実際に選択したらTRUE、キャンセルしたらFALSE
  */
 static int get_stock(int *com_val, cptr pmt, int i, int j)
 {
@@ -2662,8 +2709,10 @@ static int get_stock(int *com_val, cptr pmt, int i, int j)
 }
 
 
-/*
+/*!
+ * @brief 店主の不満度を増やし、限界に達したらプレイヤーを締め出す /
  * Increase the insult counter and get angry if too many -RAK-
+ * @return プレイヤーを締め出す場合TRUEを返す
  */
 static int increase_insults(void)
 {
@@ -2693,8 +2742,10 @@ static int increase_insults(void)
 }
 
 
-/*
+/*!
+ * @brief 店主の不満度を減らす /
  * Decrease insults 				-RAK-
+ * @return プレイヤーを締め出す場合TRUEを返す
  */
 static void decrease_insults(void)
 {
