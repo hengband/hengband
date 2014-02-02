@@ -1,14 +1,14 @@
-/* File: store.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file store.c
+ * @brief 店の処理 / Store commands
+ * @date 2014/02/02
+ * @author
+ * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research, and\n
+ * not for profit purposes provided that this copyright and statement are\n
+ * included in all such copies.\n
+ * 2014 Deskull rearranged comment for Doxygen.
  */
-
-/* Purpose: Store commands */
 
 #include "angband.h"
 
@@ -47,7 +47,7 @@ static cptr comment_1[MAX_COMMENT_1] =
 };
 
 #ifdef JP
-/* ブラックマーケット追加メッセージ（承諾） */
+/*! ブラックマーケット追加メッセージ（承諾） */
 static cptr comment_1_B[MAX_COMMENT_1] = {
 	"まあ、それでいいや。",
 	"今日はそれで勘弁してやる。",
@@ -106,7 +106,7 @@ static cptr comment_2b[MAX_COMMENT_2B] =
 };
 
 #ifdef JP
-/* ブラックマーケット用追加メッセージ（売るとき） */
+/*! ブラックマーケット用追加メッセージ（売るとき） */
 static cptr comment_2b_B[MAX_COMMENT_2B] = {
 	"いくら俺様がお人好しとはいえ $%s が限界だね。嫌なら帰りな。",
 	"金がないのかい、あんた？まずは家に帰って $%s 揃えてきな。",
@@ -172,7 +172,7 @@ static cptr comment_3b[MAX_COMMENT_3B] =
 };
 
 #ifdef JP
-/* ブラックマーケット用追加メッセージ（買い取り） */
+/*! ブラックマーケット用追加メッセージ（買い取り） */
 static cptr comment_3b_B[MAX_COMMENT_3B] = {
 	" $%s ってところだね。そのどうしようもないガラクタは。",
 	"この俺が $%s って言っているんだから、その通りにした方が身のためだぞ。",
@@ -207,7 +207,7 @@ static cptr comment_4a[MAX_COMMENT_4A] =
 };
 
 #ifdef JP
-/* ブラックマーケット用追加メッセージ（怒りの頂点） */
+/*! ブラックマーケット用追加メッセージ（怒りの頂点） */
 static cptr comment_4a_B[MAX_COMMENT_4A] = {
 	"なめやがって！温厚な俺様でも限界があるってことを知れ！",
 	"俺をここまで怒らせて...命があるだけでもありがたいと思え！",
@@ -234,7 +234,7 @@ static cptr comment_4b[MAX_COMMENT_4B] =
 };
 
 #ifdef JP
-/* ブラックマーケット用追加メッセージ（追い出し） */
+/*! ブラックマーケット用追加メッセージ（追い出し） */
 static cptr comment_4b_B[MAX_COMMENT_4B] = {
 	"二度とうちに来るんじゃねえ！！",
 	"とっとと、どっかへ失せろ！！",
@@ -269,7 +269,7 @@ static cptr comment_5[MAX_COMMENT_5] =
 };
 
 #ifdef JP
-/* ブラックマーケット用追加メッセージ（怒り） */
+/*! ブラックマーケット用追加メッセージ（怒り） */
 static cptr comment_5_B[MAX_COMMENT_5] = {
 	"時間の無駄だな、これは。",
 	"厄介なお客様だな！",
@@ -301,8 +301,9 @@ static cptr comment_6[MAX_COMMENT_6] =
 
 
 
-/*
- * Successful haggle.
+/*!
+ * @brief 取引成功時の店主のメッセージ / Successful haggle.
+ * @return なし
  */
 static void say_comment_1(void)
 {

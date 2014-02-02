@@ -1,13 +1,13 @@
 /*!
-    @file artifact.c
-    @brief アーティファクトの生成と管理 / Artifact code
-    @date 2013/12/11
-    @author
-    Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
-    This software may be copied and distributed for educational, research, and\n
-    not for profit purposes provided that this copyright and statement are\n
-    included in all such copies.\n
-    2013 Deskull rearranged comment for Doxygen.
+ * @file artifact.c
+ * @brief アーティファクトの生成と管理 / Artifact code
+ * @date 2013/12/11
+ * @author
+ * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research, and\n
+ * not for profit purposes provided that this copyright and statement are\n
+ * included in all such copies.\n
+ * 2013 Deskull rearranged comment for Doxygen.
  */
 
 #include "angband.h"
