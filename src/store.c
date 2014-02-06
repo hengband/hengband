@@ -336,7 +336,7 @@ static void say_comment_1(void)
 /*!
  * @brief プレイヤーがアイテムを買う時の価格代案メッセージ処理 /
  * Continue haggling (player is buying)
- * @param vaule 店主の提示価格
+ * @param value 店主の提示価格
  * @param annoyed 店主のいらつき度
  * @return なし
  */
@@ -377,7 +377,7 @@ static void say_comment_2(s32b value, int annoyed)
 /*!
  * @brief プレイヤーがアイテムを売る時の価格代案メッセージ処理 /
  * Continue haggling (player is selling)
- * @param vaule 店主の提示価格
+ * @param value 店主の提示価格
  * @param annoyed 店主のいらつき度
  * @return なし
  */
@@ -2946,6 +2946,8 @@ static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
  * @param poffer 店主からの交渉価格を返す参照ポインタ
  * @param last_offer 現在の交渉価格
  * @param factor 店主の価格基準倍率
+ * @param price アイテムの実価値
+ * @param final 最終価格確定ならばTRUE
  * @return プレイヤーの価格に対して不服ならばTRUEを返す /
  * Return TRUE if offer is NOT okay
  */
@@ -5282,7 +5284,7 @@ void do_cmd_store(void)
 /*!
  * @brief 現在の町の店主を交代させる /
  * Shuffle one of the stores.
- * @param 店舗種類のID
+ * @param which 店舗種類のID
  * @return なし
  */
 void store_shuffle(int which)
