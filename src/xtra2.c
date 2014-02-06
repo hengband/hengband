@@ -2311,8 +2311,12 @@ msg_format("%^sに振り落とされた！", m_name);
 }
 
 
-/*
+/*!
+ * @brief 現在のコンソール表示の縦横を返す。 /
  * Get term size and calculate screen size
+ * @param wid_p コンソールの表示幅文字数を返す
+ * @param hgt_p コンソールの表示行数を返す
+ * @return なし
  */
 void get_screen_size(int *wid_p, int *hgt_p)
 {
@@ -2323,9 +2327,10 @@ void get_screen_size(int *wid_p, int *hgt_p)
 }
 
 
-/*
- * Calculates current boundaries
- * Called below and from "do_cmd_locate()".
+/*!
+ * @brief コンソール上におけるマップ表示の左上位置を返す /
+ * Calculates current boundaries Called below and from "do_cmd_locate()".
+ * @return なし
  */
 void panel_bounds_center(void)
 {
@@ -2341,8 +2346,10 @@ void panel_bounds_center(void)
 }
 
 
-/*
+/*!
+ * @brief コンソールのリサイズに合わせてマップを再描画する /
  * Map resizing whenever the main term changes size
+ * @return なし
  */
 void resize_map(void)
 {
@@ -2390,8 +2397,10 @@ void resize_map(void)
 	Term_fresh();
 }
 
-/*
+/*!
+ * @brief コンソールを再描画する /
  * Redraw a term when it is resized
+ * @return なし
  */
 void redraw_window(void)
 {
@@ -2412,12 +2421,14 @@ void redraw_window(void)
 }
 
 
-/*
+/*!
+ * @brief フォーカスを当てるべきマップ描画の基準座標を指定する（サブルーチン）
+ * @param dy 変更先のフロアY座標
+ * @param dx 変更先のフロアX座標
  * Handle a request to change the current panel
- *
  * Return TRUE if the panel was changed.
- *
  * Also used in do_cmd_locate
+ * @return 実際に再描画が必要だった場合TRUEを返す
  */
 bool change_panel(int dy, int dx)
 {
@@ -2466,6 +2477,16 @@ bool change_panel(int dy, int dx)
 	return (FALSE);
 }
 
+/*!
+ * @brief フォーカスを当てるべきマップ描画の基準座標を指定する
+ * @param y 変更先のフロアY座標
+ * @param x 変更先のフロアX座標
+ * @details
+ * Handle a request to change the current panel
+ * Return TRUE if the panel was changed.
+ * Also used in do_cmd_locate
+ * @return 実際に再描画が必要だった場合TRUEを返す
+ */
 bool change_panel_xy(int y, int x)
 {
 	int dy = 0, dx = 0;
@@ -2485,13 +2506,14 @@ bool change_panel_xy(int y, int x)
 }
 
 
-/*
+/*!
+ * @brief マップ描画のフォーカスを当てるべき座標を更新する
+ * @details
  * Given an row (y) and col (x), this routine detects when a move
  * off the screen has occurred and figures new borders. -RAK-
- *
  * "Update" forces a "full update" to take place.
- *
  * The map is reprinted if necessary, and "TRUE" is returned.
+ * @return 実際に再描画が必要だった場合TRUEを返す
  */
 void verify_panel(void)
 {
