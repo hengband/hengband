@@ -85,20 +85,10 @@ F:!:FLOOR:3:0:73
 F:b:BUILDING_1:3:0:0:0:0:NONE:14
 F:!:FLOOR:3:0:70
 
-# Ring of Warning
-?:[AND [EQU $QUEST1 3] [EQU $CLASS Mage High-Mage Blue-Mage Sorcerer Mirror-Master] ]
-F:b:BUILDING_1:3:0:0:0:0:NONE:14
-F:!:FLOOR:3:0:618
-
 # Dagger
 ?:[AND [EQU $QUEST1 3] [EQU $CLASS Ninja] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:14
 F:!:FLOOR:3:0:43
-
-# Light Cross Bow
-?:[AND [EQU $QUEST1 3] [EQU $CLASS Sniper] ]
-F:b:BUILDING_1:3:0:0:0:0:NONE:14
-F:!:FLOOR:3:0:75
 
 # Quest 1 finished, continue with quest 14
 ?:[EQU $QUEST1 4]
@@ -125,15 +115,11 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:14
 ?:[EQU $QUEST14 2]
 F:b:BUILDING_1:3:0:0:0:0:NONE:14
 
-# Quest 14 rewarding, reward is a Small Metal Shield,
+# Quest 14 rewarding, reward is a Light Cross Bow,
 # continue with quest 18
 ?:[EQU $QUEST14 3]
 F:b:BUILDING_1:3:0:0:0:0:NONE:18
-F:!:FLOOR:3:0:130
-
-?:[AND [EQU $QUEST14 3] [EQU $CLASS BeastMaster Cavalry Ninja] ]
-F:b:BUILDING_1:3:0:0:0:0:NONE:18
-F:!:FLOOR:3:0:126
+F:!:FLOOR:3:0:75
 
 # Continue with quest 18
 ?:[EQU $QUEST14 4]
@@ -253,12 +239,6 @@ F:a:BUILDING_0:3:0:0:0:0:NONE:34
 ?:[EQU $QUEST34 3]
 F:a:BUILDING_0:3:0:0:0:0:NONE:31
 F:@:FLOOR:3:0:618
-
-# Light Crossbow
-?:[AND [EQU $QUEST34 3] [EQU $CLASS Mage High-Mage Blue-Mage Sorcerer Mirror-Master] ]
-F:a:BUILDING_0:3:0:0:0:0:NONE:31
-F:@:FLOOR:3:0:75
-
 
 # Quest 34 finished, continue with quest 31
 ?:[EQU $QUEST34 4]

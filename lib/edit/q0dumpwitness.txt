@@ -59,8 +59,8 @@ F:%:FLOOR:10:0:395
 F:(:FLOOR:8:243
 # Death sword
 F:|:FLOOR:8:107
-# Blinking dot
-F:0:FLOOR:8:22
+# Killer bee
+F:I:FLOOR:8:174
 
 # Potion of cure critical wounds
 F:!:FLOOR:10:0:241
@@ -74,7 +74,7 @@ F:?:FLOOR:8:0:186
 D:XXXXXXXXXXXXXXXXXXXXXX
 D:X...................<X
 D:X...........X++++++X.X
-D:X...........X0~~~~~X.X
+D:X...........XI~~~~~X.X
 D:X.XXXX++++XXXX4444XX.X
 D:X.X    %           X.X
 D:X.+   3 3     %    +.X
