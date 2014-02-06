@@ -403,7 +403,11 @@ static bool kind_is_hafted(int k_idx)
 	return (FALSE);
 }
 
-
+/*!
+ * @brief クエストを達成状態にする /
+ * @param quest_num 達成状態にしたいクエストのID
+ * @return なし
+ */
 void complete_quest(int quest_num)
 {
 	quest_type* const q_ptr = &quest[quest_num];
@@ -430,6 +434,10 @@ void complete_quest(int quest_num)
 	}
 }
 
+/*!
+ * @brief 現在フロアに残っている敵モンスターの数を返す /
+ * @return 現在の敵モンスターの数
+ */
 static int count_all_hostile_monsters(void)
 {
 	int x, y;
@@ -451,8 +459,11 @@ static int count_all_hostile_monsters(void)
 	return number_mon;
 }
 
-/*
+/*!
+ * @brief 特定の敵を倒した際にクエスト達成処理 /
  * Check for "Quest" completion when a quest monster is killed or charmed.
+ * @param m_ptr 撃破したモンスターの構造体参照ポインタ
+ * @return なし
  */
 void check_quest_completion(monster_type *m_ptr)
 {
@@ -672,7 +683,12 @@ msg_print("魔法の階段が現れた...");
 	}
 }
 
-
+/*!
+ * @brief 特定のアーティファクトを入手した際のクエスト達成処理 /
+ * Check for "Quest" completion when a quest monster is killed or charmed.
+ * @param o_ptr 入手したオブジェクトの構造体参照ポインタ
+ * @return なし
+ */
 void check_find_art_quest_completion(object_type *o_ptr)
 {
 	int i;
@@ -688,8 +704,12 @@ void check_find_art_quest_completion(object_type *o_ptr)
 	}
 }
 
-/*
+
+/*!
+ * @brief モンスターを撃破した際の述語メッセージを返す /
  * Return monster death string
+ * @param r_ptr 撃破されたモンスターの種族情報を持つ構造体の参照ポインタ
+ * @return 撃破されたモンスターの述語
  */
 cptr extract_note_dies(monster_race *r_ptr)
 {
@@ -726,19 +746,22 @@ cptr extract_note_dies(monster_race *r_ptr)
 }
 
 
-/*
+/*!
+ * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
- *
+ * @param m_idx 死亡したモンスターのID
+ * @param drop_item TRUEならばモンスターのドロップ処理を行う
+ * @return 撃破されたモンスターの述語
+ * @details
+ * <pre>
  * Disperse treasures centered at the monster location based on the
  * various flags contained in the monster flags fields.
- *
  * Check for "Quest" completion when a quest monster is killed.
- *
  * Note that only the player can induce "monster_death()" on Uniques.
  * Thus (for now) all Quest monsters should be Uniques.
- *
  * Note that monsters can now carry objects, and when a monster dies,
  * it drops all of its objects, which may disappear in crowded rooms.
+ * </pre>
  */
 void monster_death(int m_idx, bool drop_item)
 {
@@ -1652,14 +1675,20 @@ msg_print("地面に落とされた。");
 	}
 }
 
-/*
+/*!
+ * @brief モンスターに与えたダメージの修正処理 /
  * Modify the physical damage done to the monster.
+ * @param m_ptr ダメージを受けるモンスターの構造体参照ポインタ
+ * @param dam ダメージ基本値
+ * @param is_psy_spear 攻撃手段が光の剣ならばTRUE
+ * @return 修正を行った結果のダメージ量
+ * @details
+ * <pre>
  * (for example when it's invulnerable or shielded)
- *
  * ToDo: Accept a damage-type to calculate the modified damage from
  * things like fire, frost, lightning, poison, ... attacks.
- *
  * "type" is not yet used and should be 0.
+ * </pre>
  */
 int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear)
 {
@@ -1693,14 +1722,19 @@ int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear)
 }
 
 
-/*
+/*!
+ * @brief モンスターに与えたダメージを元に経験値を加算する /
  * Calculate experience point to be get
- *
+ * @param dam 与えたダメージ量
+ * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
+ * @return なし
+ * @details
+ * <pre>
  * Even the 64 bit operation is not big enough to avoid overflaw
  * unless we carefully choose orders of multiplication and division.
- *
  * Get the coefficient first, and multiply (potentially huge) base
  * experience point of a monster later.
+ * </pre>
  */
 static void get_exp_from_mon(int dam, monster_type *m_ptr)
 {
@@ -1772,34 +1806,34 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
 }
 
 
-/*
+/*!
+ * @brief モンスターのHPをダメージに応じて減算する /
  * Decreases monsters hit points, handling monster death.
- *
+ * @param dam 与えたダメージ量
+ * @param m_idx ダメージを与えたモンスターのID
+ * @param fear ダメージによってモンスターが恐慌状態に陥ったならばTRUEを返す
+ * @param note モンスターが倒された際の特別なメッセージ述語
+ * @return なし
+ * @details
+ * <pre>
  * We return TRUE if the monster has been killed (and deleted).
- *
  * We announce monster death (using an optional "death message"
  * if given, and a otherwise a generic killed/destroyed message).
- *
  * Only "physical attacks" can induce the "You have slain" message.
  * Missile and Spell attacks will induce the "dies" message, or
  * various "specialized" messages.  Note that "You have destroyed"
  * and "is destroyed" are synonyms for "You have slain" and "dies".
- *
  * Hack -- unseen monsters yield "You have killed it." message.
- *
  * Added fear (DGK) and check whether to print fear messages -CWS
- *
  * Made name, sex, and capitalization generic -BEN-
- *
  * As always, the "ghost" processing is a total hack.
- *
  * Hack -- we "delay" fear messages by passing around a "fear" flag.
- *
  * XXX XXX XXX Consider decreasing monster experience over time, say,
  * by using "(m_exp * m_lev * (m_lev)) / (p_lev * (m_lev + n_killed))"
  * instead of simply "(m_exp * m_lev) / (p_lev)", to make the first
  * monster worth more than subsequent monsters.  This would also need
  * to induce changes in the monster recall code.
+ * </pre>
  */
 bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 {
