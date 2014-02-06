@@ -1,22 +1,25 @@
-/* File: xtra2.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file xtra2.c
+ * @brief 雑多なその他の処理2 / effects of various "objects"
+ * @date 2014/02/06
+ * @author
+ * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research, and\n
+ * not for profit purposes provided that this copyright and statement are\n
+ * included in all such copies.\n
+ * 2014 Deskull rearranged comment for Doxygen.
  */
 
-/* Purpose: effects of various "objects" */
 
 #include "angband.h"
 
 #define REWARD_CHANCE 10
 
 
-/*
+/*!
+ * @brief プレイヤーの経験値について整合性のためのチェックと調整を行う /
  * Advance experience levels and print experience
+ * @return なし
  */
 void check_experience(void)
 {
@@ -227,10 +230,13 @@ msg_print("あなたは変わった気がする...");
 }
 
 
-/*
+/*!
+ * @brief モンスターを倒した際の財宝svalを返す
+ * @param r_idx 倒したモンスターの種族ID
+ * @return 財宝のsval
+ * @details
  * Hack -- Return the "automatic coin type" of a monster race
  * Used to allocate proper treasure when "Creeping coins" die
- *
  * XXX XXX XXX Note the use of actual "monster names"
  */
 static int get_coin_type(int r_idx)
@@ -251,8 +257,11 @@ static int get_coin_type(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトがクロークかどうかを判定する /
  * Hack -- determine if a template is Cloak
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトがクロークならばTRUEを返す
  */
 static bool kind_is_cloak(int k_idx)
 {
@@ -269,8 +278,11 @@ static bool kind_is_cloak(int k_idx)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが竿状武器かどうかを判定する /
  * Hack -- determine if a template is Polearm
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトが竿状武器ならばTRUEを返す
  */
 static bool kind_is_polearm(int k_idx)
 {
@@ -287,8 +299,11 @@ static bool kind_is_polearm(int k_idx)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが剣かどうかを判定する /
  * Hack -- determine if a template is Sword
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトが剣ならばTRUEを返す
  */
 static bool kind_is_sword(int k_idx)
 {
@@ -305,8 +320,11 @@ static bool kind_is_sword(int k_idx)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが魔法書かどうかを判定する /
  * Hack -- determine if a template is Book
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトが魔法書ならばTRUEを返す
  */
 static bool kind_is_book(int k_idx)
 {
@@ -323,8 +341,11 @@ static bool kind_is_book(int k_idx)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトがベースアイテム時点でGOODかどうかを判定する /
  * Hack -- determine if a template is Good book
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトがベースアイテム時点でGOODなアイテムならばTRUEを返す
  */
 static bool kind_is_good_book(int k_idx)
 {
@@ -341,8 +362,11 @@ static bool kind_is_good_book(int k_idx)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが鎧かどうかを判定する /
  * Hack -- determine if a template is Armor
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトが鎧ならばTRUEを返す
  */
 static bool kind_is_armor(int k_idx)
 {
@@ -359,8 +383,11 @@ static bool kind_is_armor(int k_idx)
 }
 
 
-/*
+/*!
+ * @brief オブジェクトが打撃武器かどうかを判定する /
  * Hack -- determine if a template is hafted weapon
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトが打撃武器ならばTRUEを返す
  */
 static bool kind_is_hafted(int k_idx)
 {
