@@ -308,7 +308,7 @@
 /*
  * OPTION: Allow the use of "music" in various places
  */
-/* #define USE_MUSIC */
+#define USE_MUSIC
 
 #endif /* USE_SPECIAL */
 

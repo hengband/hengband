@@ -560,6 +560,7 @@ static cptr AngList = "AngList";
  */
 static cptr ANGBAND_DIR_XTRA_GRAF;
 static cptr ANGBAND_DIR_XTRA_SOUND;
+static cptr ANGBAND_DIR_XTRA_MUSIC;
 static cptr ANGBAND_DIR_XTRA_HELP;
 #if 0 /* #ifndef JP */
 static cptr ANGBAND_DIR_XTRA_FONT;
@@ -1343,7 +1344,7 @@ static void load_prefs(void)
 	}
 }
 
-#ifdef USE_SOUND
+#if defined(USE_SOUND) || defined(USE_MUSIC)
 
 /*
  * XXX XXX XXX - Taken from files.c.
@@ -1395,6 +1396,10 @@ static s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
 	return (k);
 }
 
+#endif /* USE_SOUND || USE_MUSIC */
+
+#ifdef USE_SOUND
+
 static void load_sound_prefs(void)
 {
 	int i, j, num;
@@ -1426,6 +1431,40 @@ static void load_sound_prefs(void)
 }
 
 #endif /* USE_SOUND */
+
+#ifdef USE_MUSIC
+
+static void load_music_prefs(void)
+{
+	int i, j, num;
+	char tmp[1024];
+	char ini_path[1024];
+	char wav_path[1024];
+	char *zz[SAMPLE_MAX];
+
+	/* Access the music.cfg */
+
+	path_build(ini_path, 1024, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
+
+	for (i = 0; i < SOUND_MAX; i++)
+	{
+		GetPrivateProfileString("Music", angband_sound_name[i], "", tmp, 1024, ini_path);
+
+		num = tokenize_whitespace(tmp, SAMPLE_MAX, zz);
+
+		for (j = 0; j < num; j++)
+		{
+			/* Access the sound */
+			path_build(wav_path, 1024, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
+
+			/* Save the sound filename, if it exists */
+			if (check_file(wav_path))
+				sound_file[i][j] = string_make(zz[j]);
+		}
+	}
+}
+
+#endif /* USE_MUSIC */
 
 /*
  * Create the new global palette based on the bitmap palette

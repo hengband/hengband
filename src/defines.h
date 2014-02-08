@@ -4587,9 +4587,10 @@ extern int PlayerUID;
 /*
  * Mega-Hack -- maximum known sounds
  */
-#define SOUND_MAX 66
+#define MUSIC_MAX 66 /*!< BGM定義の最大数 */
+#define SOUND_MAX 66 /*!< 効果音定義の最大数 */
 
-#define MAX_VIRTUE 18
+#define MAX_VIRTUE 18 /*!< 徳定義の最大数 */
 
 #define V_COMPASSION	    1
 #define V_HONOUR	    2
