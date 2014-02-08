@@ -1219,6 +1219,10 @@ static void save_prefs(void)
 	strcpy(buf, arg_sound ? "1" : "0");
 	WritePrivateProfileString("Angband", "Sound", buf, ini_file);
 
+	/* Save the "arg_sound" flag */
+	strcpy(buf, arg_music ? "1" : "0");
+	WritePrivateProfileString("Angband", "Music", buf, ini_file);
+
 	/* bg */
 	strcpy(buf, use_bg ? "1" : "0");
 	WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
@@ -1338,6 +1342,9 @@ static void load_prefs(void)
 
 	/* Extract the "arg_sound" flag */
 	arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
+
+	/* Extract the "arg_sound" flag */
+	arg_sound = (GetPrivateProfileInt("Music", "Music", 0, ini_file) != 0);
 
 	/* bg */
 	use_bg = GetPrivateProfileInt("Angband", "BackGround", 0, ini_file);
@@ -2173,6 +2180,30 @@ static errr Term_xtra_win_react(void)
 
 		/* Change setting */
 		use_sound = arg_sound;
+	}
+
+#endif
+
+#ifdef USE_MUSIC
+
+	/* Handle "arg_sound" */
+	if (use_music != arg_music)
+	{
+		/* Initialize (if needed) */
+		if (arg_music && !init_music())
+		{
+			/* Warning */
+#ifdef JP
+			plog("BGMを初期化できません！");
+#else
+			plog("Cannot initialize BGM!");
+#endif
+			/* Cannot enable */
+			arg_music = FALSE;
+		}
+
+		/* Change setting */
+		use_music = arg_music;
 	}
 
 #endif

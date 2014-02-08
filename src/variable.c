@@ -71,6 +71,7 @@ u16b sf_saves;			/* Number of "saves" during this life */
 bool arg_fiddle;			/* Command arg -- Request fiddle mode */
 bool arg_wizard;			/* Command arg -- Request wizard mode */
 bool arg_sound;				/* Command arg -- Request special sounds */
+bool arg_music;				/* Command arg -- Request special musics */
 byte arg_graphics;			/* Command arg -- Request graphics mode */
 bool arg_monochrome;		/* Command arg -- Request monochrome mode */
 bool arg_force_original;	/* Command arg -- Request original keyset */
@@ -129,6 +130,7 @@ s32b old_turn;			/* Turn when level began */
 s32b old_battle;
 
 bool use_sound;			/* The "sound" mode is enabled */
+bool use_music;			/* The "music" mode is enabled */
 bool use_graphics;		/* The "graphics" mode is enabled */
 bool use_bigtile = FALSE;
 
@@ -663,7 +665,7 @@ const cptr angband_sound_name[SOUND_MAX] =
 /*
  * Standard music names
  */
-const cptr angband_music_name[MUSIC_BASIC_MAX] =
+const cptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 {
 	"title",
 	"dead",
