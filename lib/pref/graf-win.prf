@@ -14,3 +14,7 @@
 # New tiles
 ?:[EQU $GRAF new]
 %:graf-new.prf
+
+# Hengband tiles
+?:[EQU $GRAF ne2]
+%:graf-ne2.prf
