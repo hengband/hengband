@@ -539,6 +539,12 @@ static cptr sound_file[SOUND_MAX][SAMPLE_MAX];
 
 #endif /* USE_SOUND */
 
+#ifdef USE_MUSIC
+
+static bool can_use_music = FALSE;
+
+#endif /* USE_MUSIC */
+
 
 /*
  * Full path to ANGBAND.INI
@@ -1446,9 +1452,9 @@ static void load_music_prefs(void)
 
 	path_build(ini_path, 1024, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
 
-	for (i = 0; i < SOUND_MAX; i++)
+	for (i = 0; i < MUSIC_BASIC_MAX; i++)
 	{
-		GetPrivateProfileString("Music", angband_sound_name[i], "", tmp, 1024, ini_path);
+		GetPrivateProfileString("Basic", angband_music_basic_name[i], "", tmp, 1024, ini_path);
 
 		num = tokenize_whitespace(tmp, SAMPLE_MAX, zz);
 
@@ -1726,6 +1732,27 @@ static bool init_graphics(void)
 }
 #endif /* USE_GRAPHICS */
 
+
+#ifdef USE_MUSIC
+/*
+ * Initialize music
+ */
+static bool init_music(void)
+{
+	/* Initialize once */
+	if (!can_use_music)
+	{
+		/* Load the prefs */
+		load_music_prefs();
+
+		/* Sound available */
+		can_use_music = TRUE;
+	}
+
+	/* Result */
+	return (can_use_music);
+}
+#endif /* USE_SOUND */
 
 #ifdef USE_SOUND
 /*

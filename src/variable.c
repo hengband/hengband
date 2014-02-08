@@ -660,6 +660,16 @@ const cptr angband_sound_name[SOUND_MAX] =
 	"glass",
 };
 
+/*
+ * Standard music names
+ */
+const cptr angband_music_name[MUSIC_BASIC_MAX] =
+{
+	"title",
+	"dead",
+	"exit",
+};
+
 
 /*
  * The array of "cave grids" [MAX_WID][MAX_HGT].

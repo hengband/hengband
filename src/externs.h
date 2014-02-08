@@ -444,6 +444,7 @@ extern term *angband_term[8];
 extern const char angband_term_name[8][16];
 extern byte angband_color_table[256][4];
 extern const cptr angband_sound_name[SOUND_MAX];
+extern const cptr angband_music_basic_name[MUSIC_BASIC_MAX];
 extern cave_type *cave[MAX_HGT];
 extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 extern s16b max_floor_id;
