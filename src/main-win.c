@@ -179,15 +179,16 @@
 #define IDM_WINDOW_D_HGT_6		276
 #define IDM_WINDOW_D_HGT_7		277
 
-#define IDM_OPTIONS_NO_GRAPHICS	 400
-#define IDM_OPTIONS_OLD_GRAPHICS 401
-#define IDM_OPTIONS_NEW_GRAPHICS 402
-#define IDM_OPTIONS_BIGTILE		409
-#define IDM_OPTIONS_SOUND		410
-#define IDM_OPTIONS_SAVER		420
-#define IDM_OPTIONS_MAP			430
-#define IDM_OPTIONS_BG			440
-#define IDM_OPTIONS_OPEN_BG		441
+#define IDM_OPTIONS_NO_GRAPHICS	  400
+#define IDM_OPTIONS_OLD_GRAPHICS  401
+#define IDM_OPTIONS_NEW_GRAPHICS  402
+#define IDM_OPTIONS_NEW2_GRAPHICS 403
+#define IDM_OPTIONS_BIGTILE		  409
+#define IDM_OPTIONS_SOUND		  410
+#define IDM_OPTIONS_SAVER		  420
+#define IDM_OPTIONS_MAP			  430
+#define IDM_OPTIONS_BG			  440
+#define IDM_OPTIONS_OPEN_BG		  441
 
 #define IDM_DUMP_SCREEN_HTML	450
 
@@ -1403,6 +1404,7 @@ static void load_sound_prefs(void)
 	char *zz[SAMPLE_MAX];
 
 	/* Access the sound.cfg */
+
 	path_build(ini_path, 1024, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
 
 	for (i = 0; i < SOUND_MAX; i++)
@@ -1599,6 +1601,15 @@ static bool init_graphics(void)
 
 			ANGBAND_GRAF = "new";
 		}
+		else if (arg_graphics == GRAPHICS_HENGBAND)
+		{
+			wid = 32;
+			hgt = 32;
+
+			name = "32X32.BMP";
+
+			ANGBAND_GRAF = "ne2";
+		}
 		else
 		{
 			wid = 8;
@@ -1631,6 +1642,18 @@ static bool init_graphics(void)
 		{
 			/* Access the mask file */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask.bmp");
+
+			/* Load the bitmap or quit */
+			if (!ReadDIB(data[0].w, buf, &infMask))
+			{
+				plog_fmt("Cannot read bitmap file '%s'", buf);
+				return (FALSE);
+			}
+		}
+		if (arg_graphics == GRAPHICS_HENGBAND)
+		{
+			/* Access the mask file */
+			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
 
 			/* Load the bitmap or quit */
 			if (!ReadDIB(data[0].w, buf, &infMask))
@@ -2780,7 +2803,7 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 	hdcSrc = CreateCompatibleDC(hdc);
 	hbmSrcOld = SelectObject(hdcSrc, infGraph.hBitmap);
 
-	if (arg_graphics == GRAPHICS_ADAM_BOLT)
+	if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND)
 	{
 		hdcMask = CreateCompatibleDC(hdc);
 		SelectObject(hdcMask, infMask.hBitmap);
@@ -2800,7 +2823,7 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 		x1 = col * w1;
 		y1 = row * h1;
 
-		if (arg_graphics == GRAPHICS_ADAM_BOLT)
+		if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND)
 		{
 			x3 = (tcp[i] & 0x7F) * w1;
 			y3 = (tap[i] & 0x7F) * h1;
@@ -2863,7 +2886,7 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 	SelectObject(hdcSrc, hbmSrcOld);
 	DeleteDC(hdcSrc);
 
-	if (arg_graphics == GRAPHICS_ADAM_BOLT)
+	if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND)
 	{
 		/* Release */
 		SelectObject(hdcMask, hbmSrcOld);
@@ -3400,6 +3423,8 @@ static void setup_menus(void)
 		      (arg_graphics == GRAPHICS_ORIGINAL ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS,
 		      (arg_graphics == GRAPHICS_ADAM_BOLT ? MF_CHECKED : MF_UNCHECKED));
+	CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS,
+		      (arg_graphics == GRAPHICS_HENGBAND ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_BIGTILE,
 		      (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_SOUND,
@@ -3999,6 +4024,30 @@ static void process_menus(WORD wCmd)
 			if (arg_graphics != GRAPHICS_ADAM_BOLT)
 			{
 				arg_graphics = GRAPHICS_ADAM_BOLT;
+
+				/* React to changes */
+				Term_xtra_win_react();
+
+				/* Hack -- Force redraw */
+				Term_key_push(KTRL('R'));
+			}
+
+			break;
+		}
+
+		case IDM_OPTIONS_NEW2_GRAPHICS:
+		{
+			/* Paranoia */
+			if (!inkey_flag)
+			{
+				plog("You may not do that right now.");
+				break;
+			}
+
+			/* Toggle "arg_graphics" */
+			if (arg_graphics != GRAPHICS_HENGBAND)
+			{
+				arg_graphics = GRAPHICS_HENGBAND;
 
 				/* React to changes */
 				Term_xtra_win_react();

@@ -89,7 +89,7 @@ static byte mh_attr(int max)
 static byte spell_color(int type)
 {
 	/* Check if A.B.'s new graphics should be used (rr9) */
-	if (streq(ANGBAND_GRAF, "new"))
+	if (streq(ANGBAND_GRAF, "new") || streq(ANGBAND_GRAF, "ne2"))
 	{
 		/* Analyze */
 		switch (type)

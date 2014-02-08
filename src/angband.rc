@@ -123,6 +123,7 @@ ANGBAND MENU
 			MENUITEM "なし(&N)", 400
 			MENUITEM "旧タイル(&O)", 401
 			MENUITEM "&Adam Boltさんタイル", 402
+			MENUITEM "新タイル", 403
 			MENUITEM "タイルを2倍幅で表示", 409
 		}
 		MENUITEM "効果音(&S)", 410
