@@ -547,6 +547,8 @@ static cptr sound_file[SOUND_MAX][SAMPLE_MAX];
 static cptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
 static bool can_use_music = FALSE;
 
+static MCI_OPEN_PARMS mop;
+
 #endif /* USE_MUSIC */
 
 
@@ -2436,7 +2438,6 @@ static errr Term_xtra_win_music(int v)
 #ifdef USE_MUSIC
 	int i;
 	char buf[1024];
-	static MCI_OPEN_PARMS mop;
 #endif /* USE_MUSIC */
 
 	/* Sound disabled */
@@ -2466,8 +2467,9 @@ static errr Term_xtra_win_music(int v)
 
 	mop.lpstrDeviceType = "WaveAudio";
 	mop.lpstrElementName = buf;
-	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
-	mciSendCommand(mop.wDeviceID,MCI_PLAY,0,0);
+	mciSendCommand(mop.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
+	mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
+	mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
 	return (0);
 
 #else /* USE_MUSIC */
@@ -4598,6 +4600,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 		/* XXX XXX XXX */
 		case WM_CREATE:
 		{
+			mop.dwCallback=(DWORD)hWnd;
 			return 0;
 		}
 
@@ -4634,6 +4637,18 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			ValidateRect(hWnd, NULL);
 			return 0;
 		}
+
+#ifdef USE_MUSIC
+		case MM_MCINOTIFY:
+		{
+			if(wParam == MCI_NOTIFY_SUCCESSFUL)
+			{
+				mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
+				mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
+			}
+			return 0;
+		}
+#endif
 
 		case WM_SYSKEYDOWN:
 		case WM_KEYDOWN:
