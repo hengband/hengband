@@ -185,6 +185,7 @@
 #define IDM_OPTIONS_NEW2_GRAPHICS 403
 #define IDM_OPTIONS_BIGTILE		  409
 #define IDM_OPTIONS_SOUND		  410
+#define IDM_OPTIONS_MUSIC		  411
 #define IDM_OPTIONS_SAVER		  420
 #define IDM_OPTIONS_MAP			  430
 #define IDM_OPTIONS_BG			  440
@@ -2424,6 +2425,57 @@ static errr Term_xtra_win_sound(int v)
 #endif /* USE_SOUND */
 }
 
+/*
+ * Hack -- play a music
+ */
+static errr Term_xtra_win_music(int v)
+{
+#ifdef USE_MUSIC
+	int i;
+	char buf[1024];
+#endif /* USE_MUSIC */
+
+	/* Sound disabled */
+	if (!use_music) return (1);
+
+	/* Illegal sound */
+	if ((v < 0) || (v >= MUSIC_BASIC_MAX)) return (1);
+
+#ifdef USE_MUSIC
+
+	/* Count the samples */
+	for (i = 0; i < SAMPLE_MAX; i++)
+	{
+		if (!sound_file[v][i])
+			break;
+	}
+
+	/* No sample */
+	if (i == 0) return (1);
+
+	/* Build the path */
+	path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, sound_file[v][Rand_external(i)]);
+
+#ifdef WIN32
+
+	/* Play the sound, catch errors */
+	return (PlaySound(buf, 0, SND_FILENAME | SND_ASYNC));
+
+#else /* WIN32 */
+
+	/* Play the sound, catch errors */
+	return (sndPlaySound(buf, SND_ASYNC));
+
+#endif /* WIN32 */
+
+#else /* USE_MUSIC */
+
+	/* Oops */
+	return (1);
+
+#endif /* USE_MUSIC */
+}
+
 
 /*
  * Delay for "x" milliseconds
@@ -2474,6 +2526,12 @@ static errr Term_xtra_win(int n, int v)
 		case TERM_XTRA_NOISE:
 		{
 			return (Term_xtra_win_noise());
+		}
+
+		/* Play a music */
+		case TERM_XTRA_MUSIC:
+		{
+			return (Term_xtra_win_music(v));
 		}
 
 		/* Make a special sound */
@@ -3524,6 +3582,8 @@ static void setup_menus(void)
 		      (arg_graphics == GRAPHICS_HENGBAND ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_BIGTILE,
 		      (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
+	CheckMenuItem(hm, IDM_OPTIONS_MUSIC,
+		      (arg_music ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_SOUND,
 		      (arg_sound ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_BG,

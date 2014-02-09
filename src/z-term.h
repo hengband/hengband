@@ -261,6 +261,7 @@ struct term
 #define TERM_XTRA_ALIVE 11	/* Change the "hard" level (optional) */
 #define TERM_XTRA_LEVEL 12	/* Change the "soft" level (optional) */
 #define TERM_XTRA_DELAY 13	/* Delay some milliseconds (optional) */
+#define TERM_XTRA_MUSIC 14	/* Play a music (optional) */
 
 
 /**** Available Variables ****/
