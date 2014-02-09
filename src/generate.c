@@ -720,8 +720,6 @@ static bool cave_gen(void)
 	dun->cavern = FALSE;
 	dun->laketype = 0;
 
-	music(MUSIC_TITLE);
-
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(dungeon_type);
 

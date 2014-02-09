@@ -667,10 +667,21 @@ const cptr angband_sound_name[SOUND_MAX] =
  */
 const cptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 {
-	"title",
-	"dead",
+	"default",
+	"gameover",
 	"exit",
 	"town",
+	"field1",
+	"field2",
+	"field3",
+	"dun_low",
+	"dun_med",
+	"dun_high",
+	"feel1",
+	"feel2",
+	"winner",
+	"build",
+	"wild",
 };
 
 

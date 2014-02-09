@@ -1292,6 +1292,7 @@ void change_floor(void)
 				/* Make a (group of) new monster */
 				(void)alloc_monster(0, 0);
 			}
+
 		}
 
 		/* New floor_id or failed to restore */
@@ -1426,6 +1427,8 @@ void change_floor(void)
 
 	/* Clear all flags */
 	change_floor_mode = 0L;
+
+	select_floor_music();
 }
 
 /*!

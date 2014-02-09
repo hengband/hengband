@@ -1720,6 +1720,18 @@ void music(int val)
 	Term_xtra(TERM_XTRA_MUSIC, val);
 }
 
+/*
+ * Hack -- Select floor music.
+ */
+void select_floor_music()
+{
+	/* No sound */
+	if (!use_music) return;
+
+	/* Make a sound (if allowed) */
+	//TODO Term_xtra(TERM_XTRA_MUSIC, val);
+}
+
 
 
 /*
