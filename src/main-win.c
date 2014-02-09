@@ -2436,6 +2436,7 @@ static errr Term_xtra_win_music(int v)
 #ifdef USE_MUSIC
 	int i;
 	char buf[1024];
+	static MCI_OPEN_PARMS mop;
 #endif /* USE_MUSIC */
 
 	/* Sound disabled */
@@ -2457,19 +2458,17 @@ static errr Term_xtra_win_music(int v)
 	if (i == 0) return (1);
 
 	/* Build the path */
-	path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, music_file[v][Rand_external(i)]);
+	path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, music_file[v][Rand_external(i)]);
+
+#endif /* USE_MUSIC */
 
 #ifdef WIN32
 
-	/* Play the sound, catch errors */
-	return (PlaySound(buf, 0, SND_FILENAME | SND_ASYNC));
-
-#else /* WIN32 */
-
-	/* Play the sound, catch errors */
-	return (sndPlaySound(buf, SND_ASYNC));
-
-#endif /* WIN32 */
+	mop.lpstrDeviceType = "WaveAudio";
+	mop.lpstrElementName = buf;
+	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
+	mciSendCommand(mop.wDeviceID,MCI_PLAY,0,0);
+	return (0);
 
 #else /* USE_MUSIC */
 
