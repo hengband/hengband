@@ -532,7 +532,6 @@ static DIBINIT infMask;
 static bool can_use_sound = FALSE;
 
 #define SAMPLE_MAX 8
-
 /*
  * An array of sound file names
  */
@@ -540,8 +539,12 @@ static cptr sound_file[SOUND_MAX][SAMPLE_MAX];
 
 #endif /* USE_SOUND */
 
+
+
 #ifdef USE_MUSIC
 
+#define SAMPLE_MUSIC_MAX 16
+static cptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
 static bool can_use_music = FALSE;
 
 #endif /* USE_MUSIC */
@@ -1345,7 +1348,7 @@ static void load_prefs(void)
 	arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
 
 	/* Extract the "arg_sound" flag */
-	arg_sound = (GetPrivateProfileInt("Music", "Music", 0, ini_file) != 0);
+	arg_music = (GetPrivateProfileInt("Angband", "Music", 0, ini_file) != 0);
 
 	/* bg */
 	use_bg = GetPrivateProfileInt("Angband", "BackGround", 0, ini_file);
@@ -1464,7 +1467,7 @@ static void load_music_prefs(void)
 	{
 		GetPrivateProfileString("Basic", angband_music_basic_name[i], "", tmp, 1024, ini_path);
 
-		num = tokenize_whitespace(tmp, SAMPLE_MAX, zz);
+		num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
 
 		for (j = 0; j < num; j++)
 		{
@@ -1473,7 +1476,7 @@ static void load_music_prefs(void)
 
 			/* Save the sound filename, if it exists */
 			if (check_file(wav_path))
-				sound_file[i][j] = string_make(zz[j]);
+				music_file[i][j] = string_make(zz[j]);
 		}
 	}
 }
@@ -2446,7 +2449,7 @@ static errr Term_xtra_win_music(int v)
 	/* Count the samples */
 	for (i = 0; i < SAMPLE_MAX; i++)
 	{
-		if (!sound_file[v][i])
+		if (!music_file[v][i])
 			break;
 	}
 
@@ -2454,7 +2457,7 @@ static errr Term_xtra_win_music(int v)
 	if (i == 0) return (1);
 
 	/* Build the path */
-	path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, sound_file[v][Rand_external(i)]);
+	path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, music_file[v][Rand_external(i)]);
 
 #ifdef WIN32
 
@@ -4238,6 +4241,27 @@ static void process_menus(WORD wCmd)
 
 			/* Redraw later */
 			InvalidateRect(td->w, NULL, TRUE);
+
+			break;
+		}
+
+		case IDM_OPTIONS_MUSIC:
+		{
+			/* Paranoia */
+			if (!inkey_flag)
+			{
+				plog("You may not do that right now.");
+				break;
+			}
+
+			/* Toggle "arg_sound" */
+			arg_music = !arg_music;
+
+			/* React to changes */
+			Term_xtra_win_react();
+
+			/* Hack -- Force redraw */
+			Term_key_push(KTRL('R'));
 
 			break;
 		}

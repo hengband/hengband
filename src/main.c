@@ -426,6 +426,13 @@ int main(int argc, char *argv[])
 				break;
 			}
 
+			case 'B':
+			case 'b':
+			{
+				arg_music = TRUE;
+				break;
+			}
+
 			case 'V':
 			case 'v':
 			{
@@ -545,6 +552,7 @@ int main(int argc, char *argv[])
 				puts("  -n       Start a new character");
 				puts("  -f       Request fiddle mode");
 				puts("  -w       Request wizard mode");
+				puts("  -b       Request BGM mode");
 				puts("  -v       Request sound mode");
 				puts("  -g       Request graphics mode");
 				puts("  -o       Request original keyset");

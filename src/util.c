@@ -1708,6 +1708,18 @@ void sound(int val)
 	Term_xtra(TERM_XTRA_SOUND, val);
 }
 
+/*
+ * Hack -- Play a music
+ */
+void music(int val)
+{
+	/* No sound */
+	if (!use_music) return;
+
+	/* Make a sound (if allowed) */
+	Term_xtra(TERM_XTRA_MUSIC, val);
+}
+
 
 
 /*

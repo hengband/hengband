@@ -670,6 +670,7 @@ const cptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 	"title",
 	"dead",
 	"exit",
+	"town",
 };
 
 
