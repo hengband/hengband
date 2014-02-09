@@ -261,7 +261,10 @@ struct term
 #define TERM_XTRA_ALIVE 11	/* Change the "hard" level (optional) */
 #define TERM_XTRA_LEVEL 12	/* Change the "soft" level (optional) */
 #define TERM_XTRA_DELAY 13	/* Delay some milliseconds (optional) */
-#define TERM_XTRA_MUSIC 14	/* Play a music (optional) */
+#define TERM_XTRA_MUSIC_BASIC 14   /* Play a music(basic)   (optional) */
+#define TERM_XTRA_MUSIC_DUNGEON 15 /* Play a music(dungeon) (optional) */
+#define TERM_XTRA_MUSIC_QUEST 16   /* Play a music(quest)   (optional) */
+#define TERM_XTRA_MUSIC_TOWN 17    /* Play a music(floor)   (optional) */
 
 
 /**** Available Variables ****/

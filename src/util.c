@@ -1711,13 +1711,13 @@ void sound(int val)
 /*
  * Hack -- Play a music
  */
-void music(int val)
+void music_basic(int val)
 {
 	/* No sound */
 	if (!use_music) return;
 
 	/* Make a sound (if allowed) */
-	Term_xtra(TERM_XTRA_MUSIC, val);
+	Term_xtra(TERM_XTRA_MUSIC_BASIC, val);
 }
 
 /*
@@ -1728,8 +1728,12 @@ void select_floor_music()
 	/* No sound */
 	if (!use_music) return;
 
+	if(dun_level < 40) music_basic(MUSIC_BASIC_DUN_LOW);
+	else if(dun_level < 80) music_basic(MUSIC_BASIC_DUN_MED);
+	else music_basic(MUSIC_BASIC_DUN_HIGH);
+
 	/* Make a sound (if allowed) */
-	//TODO Term_xtra(TERM_XTRA_MUSIC, val);
+	//TODO Term_xtra(TERM_XTRA_MUSIC_BASIC, val);
 }
 
 

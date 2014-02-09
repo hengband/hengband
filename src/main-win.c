@@ -2465,8 +2465,10 @@ static errr Term_xtra_win_music(int v)
 
 #ifdef WIN32
 
-	mop.lpstrDeviceType = "WaveAudio";
+	mop.lpstrDeviceType = "MPEGVideo";	
+	//mop.lpstrDeviceType = "WaveAudio";
 	mop.lpstrElementName = buf;
+	mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
 	mciSendCommand(mop.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 	mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
 	mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
@@ -2533,7 +2535,7 @@ static errr Term_xtra_win(int n, int v)
 		}
 
 		/* Play a music */
-		case TERM_XTRA_MUSIC:
+		case TERM_XTRA_MUSIC_BASIC:
 		{
 			return (Term_xtra_win_music(v));
 		}

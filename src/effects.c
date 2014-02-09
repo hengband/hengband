@@ -5373,6 +5373,8 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 			bool seppuku = streq(hit_from, "Seppuku");
 			bool winning_seppuku = p_ptr->total_winner && seppuku;
 
+			music_basic(MUSIC_BASIC_GAMEOVER);
+
 #ifdef WORLD_SCORE
 			/* Make screen dump */
 			screen_dump = make_screen_dump();
