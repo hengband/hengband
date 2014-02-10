@@ -2451,12 +2451,16 @@ static errr Term_xtra_win_music(int v)
 	/* Count the samples */
 	for (i = 0; i < SAMPLE_MAX; i++)
 	{
-		if (!music_file[v][i])
-			break;
+		if (!music_file[v][i]) break;
 	}
 
 	/* No sample */
-	if (i == 0) return (1);
+	if (i == 0)
+	{
+		mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
+		mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+		return (1);
+	}
 
 	/* Build the path */
 	path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, music_file[v][Rand_external(i)]);
