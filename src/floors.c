@@ -853,7 +853,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 }
 
 /*!
- * @brief 現在のフロアを離れるに伴って行ｙ保存処理
+ * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
  * @return なし
  */

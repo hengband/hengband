@@ -6564,6 +6564,8 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 		i = inkey();
 		prt("", 0, 0);
 		if (i != '@') return;
+
+		music_basic(MUSIC_BASIC_GAMEOVER);
 	}
 
 	/* Initialize "last message" buffer */
@@ -6574,7 +6576,7 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 	if (p_ptr->total_winner && last_words)
 	{
 		char buf[1024] = "";
-
+		music_basic(MUSIC_BASIC_WINNER);
 		do
 		{
 #ifdef JP
@@ -7563,11 +7565,12 @@ if (!save_player()) msg_print("セーブ失敗！");
 
 		/* Prompt for scores XXX XXX XXX */
 #ifdef JP
-prt("リターンキーか ESC キーを押して下さい。", 0, 40);
+		prt("リターンキーか ESC キーを押して下さい。", 0, 40);
 #else
 		prt("Press Return (or Escape).", 0, 40);
 #endif
 
+		music_basic(MUSIC_BASIC_EXIT);
 
 		/* Predict score (or ESCAPE) */
 		if (inkey() != ESCAPE) predict_score();

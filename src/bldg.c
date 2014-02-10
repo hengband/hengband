@@ -5811,6 +5811,8 @@ void do_cmd_bldg(void)
 	show_building(bldg);
 	leave_bldg = FALSE;
 
+	music_basic(MUSIC_BASIC_BUILD);
+
 	while (!leave_bldg)
 	{
 		validcmd = FALSE;
@@ -5849,6 +5851,8 @@ void do_cmd_bldg(void)
 		/* Handle stuff */
 		handle_stuff();
 	}
+
+	select_floor_music();
 
 	/* Flush messages XXX XXX XXX */
 	msg_flag = FALSE;

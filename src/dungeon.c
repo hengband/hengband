@@ -7038,6 +7038,7 @@ prt("お待ち下さい...", 0, 0);
 
 		process_dungeon_file("t_info.txt", 0, 0, MAX_HGT, MAX_WID);
 
+		select_floor_music();
 	}
 
 
@@ -7147,6 +7148,8 @@ prt("お待ち下さい...", 0, 0);
 
 	(void)combine_and_reorder_home(STORE_HOME);
 	(void)combine_and_reorder_home(STORE_MUSEUM);
+
+	select_floor_music();
 
 	/* Process */
 	while (TRUE)

@@ -4998,6 +4998,8 @@ void do_cmd_store(void)
 	/* Start at the beginning */
 	store_top = 0;
 
+	music_basic(MUSIC_BASIC_BUILD);
+
 	/* Display the store */
 	display_store();
 
@@ -5237,6 +5239,8 @@ void do_cmd_store(void)
 		/* Hack -- get kicked out of the store */
 		if (st_ptr->store_open >= turn) leave_store = TRUE;
 	}
+
+	select_floor_music();
 
 	p_ptr->town_num = old_town_num;
 

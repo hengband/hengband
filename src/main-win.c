@@ -2469,6 +2469,7 @@ static errr Term_xtra_win_music(int v)
 	//mop.lpstrDeviceType = "WaveAudio";
 	mop.lpstrElementName = buf;
 	mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
+	mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 	mciSendCommand(mop.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 	mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
 	mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
