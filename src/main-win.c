@@ -548,6 +548,7 @@ static cptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
 static bool can_use_music = FALSE;
 
 static MCI_OPEN_PARMS mop;
+static mci_device_type[256];
 
 #endif /* USE_MUSIC */
 
@@ -1464,6 +1465,8 @@ static void load_music_prefs(void)
 	/* Access the music.cfg */
 
 	path_build(ini_path, 1024, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
+
+	GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path);
 
 	for (i = 0; i < MUSIC_BASIC_MAX; i++)
 	{
@@ -2469,8 +2472,7 @@ static errr Term_xtra_win_music(int v)
 
 #ifdef WIN32
 
-	mop.lpstrDeviceType = "MPEGVideo";	
-	//mop.lpstrDeviceType = "WaveAudio";
+	mop.lpstrDeviceType = mci_device_type;	
 	mop.lpstrElementName = buf;
 	mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
 	mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
