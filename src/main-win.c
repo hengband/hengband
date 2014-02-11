@@ -548,7 +548,7 @@ static cptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
 static bool can_use_music = FALSE;
 
 static MCI_OPEN_PARMS mop;
-static mci_device_type[256];
+static char mci_device_type[256];
 
 #endif /* USE_MUSIC */
 
