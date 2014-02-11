@@ -1768,7 +1768,17 @@ static bool init_music(void)
 	/* Result */
 	return (can_use_music);
 }
-#endif /* USE_SOUND */
+
+/*
+ * Hack -- Stop a music
+ */
+static void stop_music(void)
+{
+	mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
+	mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+}
+
+#endif /* USE_MUSIC */
 
 #ifdef USE_SOUND
 /*
@@ -2213,6 +2223,10 @@ static errr Term_xtra_win_react(void)
 
 		/* Change setting */
 		use_music = arg_music;
+
+		if(!arg_music) stop_music();
+		else select_floor_music();
+
 	}
 
 #endif

@@ -3766,6 +3766,8 @@ static void update_dungeon_feeling(void)
 	/* Announce feeling */
 	do_cmd_feeling();
 
+	select_floor_music();
+
 	/* Update the level indicator */
 	p_ptr->redraw |= (PR_DEPTH);
 

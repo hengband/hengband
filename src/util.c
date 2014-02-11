@@ -1750,9 +1750,14 @@ void select_floor_music()
 	}
 	else if(dungeon_type)
 	{
-		if(dun_level < 40) music_basic(MUSIC_BASIC_DUN_LOW);
-		else if(dun_level < 80) music_basic(MUSIC_BASIC_DUN_MED);
-		else music_basic(MUSIC_BASIC_DUN_HIGH);
+		if(p_ptr->feeling == 2) music_basic(MUSIC_BASIC_DUN_FEEL2);
+		else if(p_ptr->feeling >= 3 && p_ptr->feeling <= 5) music_basic(MUSIC_BASIC_DUN_FEEL1);
+		else
+		{
+			if(dun_level < 40) music_basic(MUSIC_BASIC_DUN_LOW);
+			else if(dun_level < 80) music_basic(MUSIC_BASIC_DUN_MED);
+			else music_basic(MUSIC_BASIC_DUN_HIGH);
+		}
 		return;
 	}
 	else if(p_ptr->town_num)
