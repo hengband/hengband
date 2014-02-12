@@ -74,11 +74,11 @@
 
 #include "angband.h"
 
-
 #ifdef WINDOWS
 #include <windows.h>
 #include <direct.h>
 #include <locale.h>
+#include "z-term.h"
 
 /*
  * Extract the "WIN32" flag from the compiler
@@ -2510,7 +2510,7 @@ static errr Term_xtra_win_sound(int v)
 /*
  * Hack -- play a music
  */
-static errr Term_xtra_win_music(int v)
+static errr Term_xtra_win_music(int n, int v)
 {
 #ifdef USE_MUSIC
 	int i;
@@ -2518,17 +2518,28 @@ static errr Term_xtra_win_music(int v)
 #endif /* USE_MUSIC */
 
 	/* Sound disabled */
-	if (!use_music) return (1);
+	if(!use_music) return (1);
 
 	/* Illegal sound */
-	if ((v < 0) || (v >= MUSIC_BASIC_MAX)) return (1);
+	if(n == TERM_XTRA_MUSIC_BASIC && ((v < 0) || (v >= MUSIC_BASIC_MAX))) return (1);
+	else if(v < 0 || v >= 1000) return(1); /*!< TODO */
 
 #ifdef USE_MUSIC
 
-	/* Count the samples */
-	for (i = 0; i < SAMPLE_MAX; i++)
+	switch(n)
 	{
-		if (!music_file[v][i]) break;
+	case TERM_XTRA_MUSIC_BASIC:
+		for (i = 0; i < SAMPLE_MAX; i++) if(!music_file[v][i]) break;
+		break;
+	case TERM_XTRA_MUSIC_DUNGEON:
+		for (i = 0; i < SAMPLE_MAX; i++) if(!dungeon_music_file[v][i]) break;
+		break;
+	case TERM_XTRA_MUSIC_QUEST:
+		for (i = 0; i < SAMPLE_MAX; i++) if(!quest_music_file[v][i]) break;
+		break;
+	case TERM_XTRA_MUSIC_TOWN:
+		for (i = 0; i < SAMPLE_MAX; i++) if(!town_music_file[v][i]) break;
+		break;
 	}
 
 	/* No sample */
@@ -2539,8 +2550,46 @@ static errr Term_xtra_win_music(int v)
 		return (1);
 	}
 
-	/* Build the path */
-	path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, music_file[v][Rand_external(i)]);
+	switch(n)
+	{
+	case TERM_XTRA_MUSIC_BASIC:
+		for (i = 0; i < SAMPLE_MAX; i++) if(!music_file[v][i]) break;
+		break;
+	case TERM_XTRA_MUSIC_DUNGEON:
+		for (i = 0; i < SAMPLE_MAX; i++) if(!dungeon_music_file[v][i]) break;
+		break;
+	case TERM_XTRA_MUSIC_QUEST:
+		for (i = 0; i < SAMPLE_MAX; i++) if(!quest_music_file[v][i]) break;
+		break;
+	case TERM_XTRA_MUSIC_TOWN:
+		for (i = 0; i < SAMPLE_MAX; i++) if(!town_music_file[v][i]) break;
+		break;
+	}
+
+	/* No sample */
+	if (i == 0)
+	{
+		mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
+		mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+		return (1);
+	}
+
+	switch(n)
+	{
+	case TERM_XTRA_MUSIC_BASIC:
+		path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, music_file[v][Rand_external(i)]);
+		break;
+	case TERM_XTRA_MUSIC_DUNGEON:
+		path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, dungeon_music_file[v][Rand_external(i)]);
+		break;
+	case TERM_XTRA_MUSIC_QUEST:
+		path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, quest_music_file[v][Rand_external(i)]);
+		break;
+	case TERM_XTRA_MUSIC_TOWN:
+		path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, town_music_file[v][Rand_external(i)]);
+		break;
+	}
+
 
 #endif /* USE_MUSIC */
 
@@ -2617,8 +2666,11 @@ static errr Term_xtra_win(int n, int v)
 
 		/* Play a music */
 		case TERM_XTRA_MUSIC_BASIC:
+		case TERM_XTRA_MUSIC_DUNGEON:
+		case TERM_XTRA_MUSIC_QUEST:
+		case TERM_XTRA_MUSIC_TOWN:
 		{
-			return (Term_xtra_win_music(v));
+			return (Term_xtra_win_music(n, v));
 		}
 
 		/* Make a special sound */
