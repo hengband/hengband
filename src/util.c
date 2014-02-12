@@ -1711,13 +1711,13 @@ void sound(int val)
 /*
  * Hack -- Play a music
  */
-void play_music(int type, int val)
+errr play_music(int type, int val)
 {
 	/* No sound */
-	if (!use_music) return;
+	if (!use_music) return 1;
 
 	/* Make a sound (if allowed) */
-	Term_xtra(type , val);
+	return Term_xtra(type , val);
 }
 
 /*
@@ -1745,24 +1745,33 @@ void select_floor_music()
 	}
 	else if(p_ptr->inside_quest)
 	{
-		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST);
+		if(play_music(TERM_XTRA_MUSIC_QUEST, p_ptr->inside_quest))
+		{
+			play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST);
+		}
 		return;
 	}
 	else if(dungeon_type)
 	{
-		if(p_ptr->feeling == 2) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL2);
-		else if(p_ptr->feeling >= 3 && p_ptr->feeling <= 5) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL1);
-		else
+		if(play_music(TERM_XTRA_MUSIC_DUNGEON, dungeon_type))
 		{
-			if(dun_level < 40) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW);
-			else if(dun_level < 80) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED);
-			else play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_HIGH);
+			if(p_ptr->feeling == 2) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL2);
+			else if(p_ptr->feeling >= 3 && p_ptr->feeling <= 5) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL1);
+			else
+			{
+				if(dun_level < 40) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW);
+				else if(dun_level < 80) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED);
+				else play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_HIGH);
+			}
 		}
 		return;
 	}
 	else if(p_ptr->town_num)
 	{
-		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_TOWN);
+		if(play_music(TERM_XTRA_MUSIC_TOWN, p_ptr->town_num))
+		{
+			play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_TOWN);
+		}
 		return;
 	}
 	else if(!dun_level)

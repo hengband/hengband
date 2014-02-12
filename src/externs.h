@@ -1331,7 +1331,7 @@ extern errr fd_write(int fd, cptr buf, huge n);
 extern errr fd_close(int fd);
 extern void flush(void);
 extern void bell(void);
-extern void play_music(int type, int num);
+extern errr play_music(int type, int num);
 extern void select_floor_music(void);
 extern void sound(int num);
 extern void move_cursor(int row, int col);
