@@ -545,6 +545,9 @@ static cptr sound_file[SOUND_MAX][SAMPLE_MAX];
 
 #define SAMPLE_MUSIC_MAX 16
 static cptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
+static cptr dungeon_music_file[1000][SAMPLE_MUSIC_MAX];
+static cptr town_music_file[1000][SAMPLE_MUSIC_MAX];
+static cptr quest_music_file[1000][SAMPLE_MUSIC_MAX];
 static bool can_use_music = FALSE;
 
 static MCI_OPEN_PARMS mop;
@@ -1461,6 +1464,7 @@ static void load_music_prefs(void)
 	char ini_path[1024];
 	char wav_path[1024];
 	char *zz[SAMPLE_MAX];
+	char key[80];
 
 	/* Access the music.cfg */
 
@@ -1484,6 +1488,62 @@ static void load_music_prefs(void)
 				music_file[i][j] = string_make(zz[j]);
 		}
 	}
+
+	for (i = 0; i < max_d_idx; i++)
+	{
+		sprintf(key, "dungeon%03d", i);
+		GetPrivateProfileString("Dungeon", key, "", tmp, 1024, ini_path);
+
+		num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
+
+		for (j = 0; j < num; j++)
+		{
+			/* Access the sound */
+			path_build(wav_path, 1024, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
+
+			/* Save the sound filename, if it exists */
+			if (check_file(wav_path))
+				dungeon_music_file[i][j] = string_make(zz[j]);
+		}
+	}
+
+	for (i = 0; i < 1000; i++) /*!< @todo クエスト最大数指定 */
+	{
+		sprintf(key, "quest%03d", i);
+		GetPrivateProfileString("Quest", key, "", tmp, 1024, ini_path);
+
+		num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
+
+		for (j = 0; j < num; j++)
+		{
+			/* Access the sound */
+			path_build(wav_path, 1024, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
+
+			/* Save the sound filename, if it exists */
+			if (check_file(wav_path))
+				quest_music_file[i][j] = string_make(zz[j]);
+		}
+	}
+
+	for (i = 0; i < 1000; i++) /*!< @todo 町最大数指定 */
+	{
+		sprintf(key, "town%03d", i);
+		GetPrivateProfileString("Town", key, "", tmp, 1024, ini_path);
+
+		num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
+
+		for (j = 0; j < num; j++)
+		{
+			/* Access the sound */
+			path_build(wav_path, 1024, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
+
+			/* Save the sound filename, if it exists */
+			if (check_file(wav_path))
+				town_music_file[i][j] = string_make(zz[j]);
+		}
+	}
+
+
 }
 
 #endif /* USE_MUSIC */
