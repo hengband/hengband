@@ -5811,7 +5811,7 @@ void do_cmd_bldg(void)
 	show_building(bldg);
 	leave_bldg = FALSE;
 
-	music_basic(MUSIC_BASIC_BUILD);
+	play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
 	while (!leave_bldg)
 	{

@@ -6548,7 +6548,7 @@ void player_birth(void)
 	/* Quick start? */
 	if (!ask_quick_start())
 	{
-		music_basic(MUSIC_BASIC_DEFAULT);
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DEFAULT);
 
 		/* No, normal start */
 		while (1)

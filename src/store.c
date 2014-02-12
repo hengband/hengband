@@ -4998,7 +4998,7 @@ void do_cmd_store(void)
 	/* Start at the beginning */
 	store_top = 0;
 
-	music_basic(MUSIC_BASIC_BUILD);
+	play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
 	/* Display the store */
 	display_store();

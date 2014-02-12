@@ -6565,7 +6565,7 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 		prt("", 0, 0);
 		if (i != '@') return;
 
-		music_basic(MUSIC_BASIC_GAMEOVER);
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 	}
 
 	/* Initialize "last message" buffer */
@@ -6576,7 +6576,7 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 	if (p_ptr->total_winner && last_words)
 	{
 		char buf[1024] = "";
-		music_basic(MUSIC_BASIC_WINNER);
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
 		do
 		{
 #ifdef JP
@@ -7570,7 +7570,7 @@ if (!save_player()) msg_print("セーブ失敗！");
 		prt("Press Return (or Escape).", 0, 40);
 #endif
 
-		music_basic(MUSIC_BASIC_EXIT);
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
 
 		/* Predict score (or ESCAPE) */
 		if (inkey() != ESCAPE) predict_score();
