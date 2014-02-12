@@ -21870,7 +21870,7 @@ N:1091:¥°¥¦¥£¥ó¤Î¹õµ³»Î
 E:Black knight of Gwyn
 G:p:s
 I:125:60d30:25:130:10
-W:43:3:0:3400:15000:0
+W:43:3:0:3400:0:0
 B:HIT:HURT:8d6
 B:HIT:HURT:10d5
 B:HIT:HURT:10d5
