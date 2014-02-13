@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <wctype.h>
 #include <errno.h>
 #include <stddef.h>
 
