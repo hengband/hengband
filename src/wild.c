@@ -1,19 +1,23 @@
-/* File: wild.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke,
- * Robert Ruehlmann
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+/*!
+ * @file wild.c
+ * @brief 荒野マップの生成とルール管理 / Wilderness generation
+ * @date 2014/02/13
+ * @author
+ * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research, and\n
+ * not for profit purposes provided that this copyright and statement are\n
+ * included in all such copies.\n
+ * 2013 Deskull rearranged comment for Doxygen.
  */
-
-/* Purpose: Wilderness generation */
 
 #include "angband.h"
 
-
+/*!
+ * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
+ * @param feat_type 非一様確率を再現するための要素数100の配列
+ * @param feat_prob_prob 元の確率テーブル
+ * @return なし
+ */
 static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_FEAT_PROB_NUM])
 {
 	int lim[DUNGEON_FEAT_PROB_NUM], cur = 0, i;
@@ -31,8 +35,11 @@ static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_F
 	}
 }
 
-/*
- * Fill the arrays of floors and walls in the good proportions
+/*!
+ * @brief ダンジョンの地形を指定確率に応じて各マスへランダムに敷き詰める
+ * / Fill the arrays of floors and walls in the good proportions
+ * @param type ダンジョンID
+ * @return なし
  */
 void set_floor_and_wall(byte type)
 {
