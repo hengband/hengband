@@ -26,6 +26,9 @@ doxygen/html/
 # Windows binary
 Hengband.exe
 
+# game data files auto generated
+*.raw
+
 ### settings below are copied from
 ### https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 ## Ignore Visual Studio temporary files, build results, and
