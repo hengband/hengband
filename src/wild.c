@@ -15,7 +15,7 @@
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
  * @param feat_type 非一様確率を再現するための要素数100の配列
- * @param feat_prob_prob 元の確率テーブル
+ * @param prob 元の確率テーブル
  * @return なし
  */
 static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_FEAT_PROB_NUM])
@@ -61,8 +61,18 @@ void set_floor_and_wall(byte type)
 }
 
 
-/*
- * Helper for plasma generation.
+/*!
+ * @brief プラズマフラクタル的地形生成の再帰中間処理
+ * / Helper for plasma generation.
+ * @param x1 左上端の深み
+ * @param x2 右上端の深み
+ * @param x3 左下端の深み
+ * @param x4 右下端の深み
+ * @param xmid 中央座標X
+ * @param ymid 中央座標Y
+ * @param rough ランダム幅
+ * @param depth_max 深みの最大値
+ * @return なし
  */
 static void perturb_point_mid(int x1, int x2, int x3, int x4,
 			  int xmid, int ymid, int rough, int depth_max)
@@ -89,6 +99,18 @@ static void perturb_point_mid(int x1, int x2, int x3, int x4,
 }
 
 
+/*!
+ * @brief プラズマフラクタル的地形生成の再帰末端処理
+ * / Helper for plasma generation.
+ * @param x1 中間末端部1の重み
+ * @param x2 中間末端部2の重み
+ * @param x3 中間末端部3の重み
+ * @param xmid 最終末端部座標X
+ * @param ymid 最終末端部座標Y
+ * @param rough ランダム幅
+ * @param depth_max 深みの最大値
+ * @return なし
+ */
 static void perturb_point_end(int x1, int x2, int x3,
 			  int xmid, int ymid, int rough, int depth_max)
 {
@@ -113,12 +135,24 @@ static void perturb_point_end(int x1, int x2, int x3,
 }
 
 
-/*
+/*!
+ * @brief プラズマフラクタル的地形生成の開始処理
+ * / Helper for plasma generation.
+ * @param x1 処理範囲の左上X座標
+ * @param y1 処理範囲の左上Y座標
+ * @param x2 処理範囲の右下X座標
+ * @param y2 処理範囲の右下Y座標
+ * @param depth_max 深みの最大値
+ * @param rough ランダム幅
+ * @return なし
+ * @details
+ * <pre>
  * A generic function to generate the plasma fractal.
  * Note that it uses ``cave_feat'' as temporary storage.
  * The values in ``cave_feat'' after this function
  * are NOT actual features; They are raw heights which
  * need to be converted to features.
+ * </pre>
  */
 static void plasma_recursive(int x1, int y1, int x2, int y2,
 			     int depth_max, int rough)
