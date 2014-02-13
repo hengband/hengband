@@ -1725,6 +1725,7 @@ errr play_music(int type, int val)
  */
 void select_floor_music()
 {
+	int i;
 	/* No sound */
 	if (!use_music) return;
 
@@ -1733,17 +1734,20 @@ void select_floor_music()
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WILD);
 		return;
 	}
-	else if(p_ptr->inside_arena)
+
+	if(p_ptr->inside_arena)
 	{
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_ARENA);
 		return;
 	}
-	else if(p_ptr->inside_battle)
+
+	if(p_ptr->inside_battle)
 	{
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BATTLE);
 		return;
 	}
-	else if(p_ptr->inside_quest)
+
+	if(p_ptr->inside_quest)
 	{
 		if(play_music(TERM_XTRA_MUSIC_QUEST, p_ptr->inside_quest))
 		{
@@ -1751,7 +1755,22 @@ void select_floor_music()
 		}
 		return;
 	}
-	else if(dungeon_type)
+
+	for(i = 0; i < max_quests; i++)
+	{ // TODO マクロで類似条件を統合すること
+		if(quest[i].status == QUEST_STATUS_TAKEN &&
+			(quest[i].type == QUEST_TYPE_KILL_LEVEL || quest[i].type == QUEST_TYPE_RANDOM) &&
+			 quest[i].level == dun_level && dungeon_type == quest[i].dungeon)
+		{
+			if(play_music(TERM_XTRA_MUSIC_QUEST, i)) 
+			{
+				play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST);
+			}
+			return;
+		}
+	}
+
+	if(dungeon_type)
 	{
 		if(play_music(TERM_XTRA_MUSIC_DUNGEON, dungeon_type))
 		{
@@ -1766,7 +1785,8 @@ void select_floor_music()
 		}
 		return;
 	}
-	else if(p_ptr->town_num)
+
+	if(p_ptr->town_num)
 	{
 		if(play_music(TERM_XTRA_MUSIC_TOWN, p_ptr->town_num))
 		{
@@ -1774,7 +1794,8 @@ void select_floor_music()
 		}
 		return;
 	}
-	else if(!dun_level)
+
+	if(!dun_level)
 	{
 		if(p_ptr->lev >= 45) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD3);
 		else if(p_ptr->lev >= 25) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD2);
