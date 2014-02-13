@@ -1989,7 +1989,7 @@ act = "%sにむかって歌った。";
 				pt = GF_TIME;
 				break;
 
-			case RBE_EXP_VAMP:
+			case RBE_DR_LIFE:
 				pt = GF_OLD_DRAIN;
 				effect_type = BLOW_EFFECT_TYPE_HEAL;
 				break;

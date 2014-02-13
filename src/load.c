@@ -434,7 +434,7 @@ static void rd_item_old(object_type *o_ptr)
 			case 4: add_flag(o_ptr->art_flags, TR_SLOW_DIGEST); break;
 			case 5: add_flag(o_ptr->art_flags, TR_REGEN);       break;
 			case 6: add_flag(o_ptr->art_flags, TR_FREE_ACT);    break;
-			case 7: add_flag(o_ptr->art_flags, TR_HOLD_LIFE);   break;
+			case 7: add_flag(o_ptr->art_flags, TR_HOLD_EXP);   break;
 			}
 			o_ptr->xtra2 = 0;
 		}

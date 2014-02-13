@@ -5026,7 +5026,7 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "生命力復活";
+		if (name) return "経験値復活";
 		if (desc) return "失った経験値を回復する。";
 #else
 		if (name) return "Restore Life";
@@ -12399,18 +12399,18 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "生命力復活";
+		if (name) return "全復活";
 		if (desc) return "経験値を徐々に復活し、減少した能力値を回復させる。";
 #else
-		if (name) return "Restore life";
-		if (desc) return "Restores life energy and status.";
+		if (name) return "Restoration";
+		if (desc) return "Restores experience and status.";
 #endif
 		if (cast)
 		{
 #ifdef JP
-			msg_print("生命力が戻り始めた。");
+			msg_print("体が元の活力を取り戻し始めた。");
 #else
-			msg_print("You feel your life energy starting to return.");
+			msg_print("You feel your lost status starting to return.");
 #endif
 		}
 		if (cast || cont)

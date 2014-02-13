@@ -6049,7 +6049,7 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, by
 			print_flag(TR_RES_CONF);
 			print_flag(TR_FREE_ACT);
 			print_flag(TR_SEE_INVIS);
-			print_flag(TR_HOLD_LIFE);
+			print_flag(TR_HOLD_EXP);
 			print_flag(TR_TELEPATHY);
 			print_flag(TR_SLOW_DIGEST);
 			print_flag(TR_REGEN);

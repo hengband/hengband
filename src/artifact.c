@@ -187,7 +187,7 @@ void one_resistance(object_type *o_ptr)
 
 /*!
  * @brief 対象のオブジェクトに能力を一つ付加する。/ Choose one random ability
- * @details 候補は浮遊、永久光源+1、透明視、警告、遅消化、急回復、麻痺知らず、生命力維持のいずれか。
+ * @details 候補は浮遊、永久光源+1、透明視、警告、遅消化、急回復、麻痺知らず、経験値維持のいずれか。
  * 重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
@@ -203,7 +203,7 @@ void one_ability(object_type *o_ptr)
 	case 4: add_flag(o_ptr->art_flags, TR_SLOW_DIGEST); break;
 	case 5: add_flag(o_ptr->art_flags, TR_REGEN);       break;
 	case 6: add_flag(o_ptr->art_flags, TR_FREE_ACT);    break;
-	case 7: add_flag(o_ptr->art_flags, TR_HOLD_LIFE);   break;
+	case 7: add_flag(o_ptr->art_flags, TR_HOLD_EXP);   break;
 	case 8:
 	case 9:
 		one_low_esp(o_ptr);
@@ -270,7 +270,7 @@ void one_activation(object_type *o_ptr)
 			case ACT_VAMPIRE_1:
 			case ACT_BO_MISS_2:
 			case ACT_BA_FIRE_2:
-			case ACT_REST_LIFE:
+			case ACT_REST_EXP:
 				chance = 66;
 				break;
 			case ACT_BA_FIRE_3:
@@ -925,7 +925,7 @@ static void random_resistance(object_type * o_ptr)
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにその他特性を付加する。/ Add one misc flag on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
- * 原則的候補は各種能力維持、永久光源+1、麻痺知らず、生命力維持、浮遊、透明視、急回復、遅消化、
+ * 原則的候補は各種能力維持、永久光源+1、麻痺知らず、経験値維持、浮遊、透明視、急回復、遅消化、
  * 乱テレポート、反魔法、反テレポート、警告、テレパシー、各種ESP、一部装備に殺戮修正。
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
@@ -1045,7 +1045,7 @@ static void random_misc(object_type * o_ptr)
 			add_flag(o_ptr->art_flags, TR_FREE_ACT);
 			break;
 		case 9:
-			add_flag(o_ptr->art_flags, TR_HOLD_LIFE);
+			add_flag(o_ptr->art_flags, TR_HOLD_EXP);
 			if (!artifact_bias && one_in_(5))
 				artifact_bias = BIAS_PRIESTLY;
 			else if (!artifact_bias && one_in_(6))
@@ -1545,7 +1545,7 @@ static void give_activation_power(object_type *o_ptr)
 			else if (one_in_(7))
 				type = ACT_REST_ALL;
 			else if (one_in_(6))
-				type = ACT_REST_LIFE;
+				type = ACT_REST_EXP;
 			else
 				type = ACT_CURE_MW;
 			break;
@@ -2894,7 +2894,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
-		case ACT_REST_LIFE:
+		case ACT_REST_EXP:
 		{
 			msg_print(_("深紅に輝いている...", "It glows a deep red..."));
 			restore_level();

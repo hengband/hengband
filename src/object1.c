@@ -926,7 +926,7 @@ info[i++] = "それはカオス的な効果を及ぼす。";
 	if (have_flag(flgs, TR_VAMPIRIC))
 	{
 #ifdef JP
-info[i++] = "それは敵からヒットポイントを吸収する。";
+info[i++] = "それは敵から生命力を吸収する。";
 #else
 		info[i++] = "It drains life from your foes.";
 #endif
@@ -1251,12 +1251,12 @@ info[i++] = "それは麻痺に対する完全な免疫を授ける。";
 #endif
 
 	}
-	if (have_flag(flgs, TR_HOLD_LIFE))
+	if (have_flag(flgs, TR_HOLD_EXP))
 	{
 #ifdef JP
-info[i++] = "それは生命力吸収に対する耐性を授ける。";
+info[i++] = "それは経験値吸収に対する耐性を授ける。";
 #else
-		info[i++] = "It provides resistance to life draining.";
+		info[i++] = "It provides resistance to experience draining.";
 #endif
 
 	}

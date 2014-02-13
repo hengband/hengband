@@ -955,7 +955,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			break;
 
 		case SV_POTION_LOSE_MEMORIES:
-			if (!p_ptr->hold_life && (p_ptr->exp > 0))
+			if (!p_ptr->hold_exp && (p_ptr->exp > 0))
 			{
 #ifdef JP
 				msg_print("過去の記憶が薄れていく気がする。");

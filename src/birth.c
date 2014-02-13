@@ -1625,7 +1625,7 @@ static cptr race_jouhou[MAX_RACES] =
   
 "エルフは人間より良い魔法使いになれますが、戦闘は苦手です。彼らは人間やハーフエルフよりも頭が良く、高い賢さを持っています。エルフは探索, 解除, 知覚, 隠密行動, 射撃, そして魔法道具使用で優れていますが、武器の扱いは得意ではありません。彼らは生まれつき光に対する耐性を持っています。",
   
-"ホビット、またはハーフリングは弓や投擲に長け、魔法防御も優れています。また、探索, 解除, 知覚, そして隠密行動でもとても良い能力を示します。そのため、彼らは優れた盗賊となることができます（しかし、「忍びの者」と呼ばれることを好みます）。ホビットは人間より遥かに貧弱で、戦士としてはてんでダメです。彼らはかなり良い赤外線視力を持っており、温血動物を離れた場所から見つけることができます。彼らは生命力を保持する力が強く、生命力吸収攻撃に対して耐性を持っています。",
+"ホビット、またはハーフリングは弓や投擲に長け、魔法防御も優れています。また、探索, 解除, 知覚, そして隠密行動でもとても良い能力を示します。そのため、彼らは優れた盗賊となることができます（しかし、「忍びの者」と呼ばれることを好みます）。ホビットは人間より遥かに貧弱で、戦士としてはてんでダメです。彼らはかなり良い赤外線視力を持っており、温血動物を離れた場所から見つけることができます。彼らは経験値を保持する力が強く、経験値吸収攻撃に対して耐性を持っています。",
   
 "ノームはドワーフより小さいですが、ホビットよりは大きい種族です。彼らはホビット同様地表の洞穴のような家に住んでいます。ノームはとても良い魔法防御を持ち、探索, 解除, 知覚, 隠密行動でも優れています。彼らは人間より低い腕力を持ち、武器を持っての戦闘は苦手です。ノームはかなり良い赤外線視力を持っており、温血動物を離れた場所から見つけることができます。ノームは生まれつき麻痺に対する耐性を持っています。",
   
@@ -1683,7 +1683,7 @@ static cptr race_jouhou[MAX_RACES] =
   
 "天使の上位種であるアルコンは、全てのスキルに熟達しており、強くて賢く、非常に人気があります。彼らは目に見えないものを見ることができ、その翼で罠や危険な地形を飛び越えることができます。しかし、非常に成長が遅いという欠点もあります。",
   
-"悪魔の上位種であるバルログは、強く、知的で、またタフでもあります。しかし、彼らは神を信じようとはせず、プリーストには全く向いていません。炎と地獄、生命力吸収への耐性を持っており、レベルが上がれば見えないものを見る能力を獲得します。また、地獄や火炎のブレスを吐くこともできます。彼等はほとんどの技能で優れていますが、静かに歩くことは苦手です。彼らは食物からほとんど栄養を摂取できませんが、人間タイプを生贄にする事で精力を回復する事ができます。",
+"悪魔の上位種であるバルログは、強く、知的で、またタフでもあります。しかし、彼らは神を信じようとはせず、プリーストには全く向いていません。炎と地獄、経験値吸収への耐性を持っており、レベルが上がれば見えないものを見る能力を獲得します。また、地獄や火炎のブレスを吐くこともできます。彼等はほとんどの技能で優れていますが、静かに歩くことは苦手です。彼らは食物からほとんど栄養を摂取できませんが、人間タイプを生贄にする事で精力を回復する事ができます。",
   
 "ドゥナダンは西方から来た屈強な種族です。このいにしえの種族は全ての領域において人間の能力を凌駕し、特に耐久力に関してはそれが顕著です。しかしながらこの種族は全てに卓越していることが災いして、この世界には新しい経験といったものがほとんどなく、レベルを上げることが非常に困難です。彼らはとてもタフで頑強であり、彼らの耐久力が下がることはありません。",
   
@@ -1691,7 +1691,7 @@ static cptr race_jouhou[MAX_RACES] =
   
 "クターとしている無表情の謎の生物です。彼らは外見がかわいらしいため、魅力が高いです。彼らは混乱しません。なぜなら、混乱してもクターとしているため変わりないからです。しかも、そのクターとしている外見から敵に見つかりにくいです。しかし、彼らは注意力が少ないため探索や知覚能力は悪いです。彼らはレベルが上がると横に伸びてACを上げる技を覚えますが、伸びている間は魔法防御能力は低くなってしまいます。",
   
-"アンドロイドは機械の身体を持つ人工的な存在です。魔法をうまく使うことはできませんが、戦士としては非常に優れています。彼らは他の種族のように経験値を得て成長するということはありません。身体に身につける装備によって成長します。ただし、指輪、アミュレット、光源は成長に影響しません。彼らは毒の耐性を持ち、麻痺知らずで、生命力を吸われることがありません。また、身体が頑丈なのでACにボーナスを得ます。しかし身体のいたるところに電子回路が組み込まれているため、電撃によって通常よりも大きなダメージを受けてしまいます。彼らは食物からほとんど動力を得られませんが、油を補給する事で動力源を得る事ができます。"
+"アンドロイドは機械の身体を持つ人工的な存在です。魔法をうまく使うことはできませんが、戦士としては非常に優れています。彼らは他の種族のように経験値を得て成長するということはありません。身体に身につける装備によって成長します。ただし、指輪、アミュレット、光源は成長に影響しません。彼らは毒の耐性を持ち、麻痺知らずで、生命力を吸収されることがありません。また、身体が頑丈なのでACにボーナスを得ます。しかし身体のいたるところに電子回路が組み込まれているため、電撃によって通常よりも大きなダメージを受けてしまいます。彼らは食物からほとんど動力を得られませんが、油を補給する事で動力源を得る事ができます。"
 
 #else
 
@@ -1741,15 +1741,15 @@ static cptr race_jouhou[MAX_RACES] =
 
 "A demon-creature from the nether-world, naturally resistant to fire attacks, and capable of learning fire bolt and fire ball attacks.  They are little loved by other races, but can perform fairly well in most professions.  As they advance levels, they gain the powers of See Invisible.",
 
-"A Golem is an artificial creature, built from a lifeless raw material like clay, and awakened to life.  They are nearly mindless, making them useless for professions which rely on magic, but as warriors they are very tough.  They are resistant to poison, they can see invisible things, and move freely.  At higher levels, they also become resistant to attacks which threaten to drain away their life force.  Golems gain very little nutrition from ordinary food, but can absorb mana from staves and wands as their power source.  Golems also gain a natural armor class bonus from their tough body.",
+"A Golem is an artificial creature, built from a lifeless raw material like clay, and awakened to life.  They are nearly mindless, making them useless for professions which rely on magic, but as warriors they are very tough.  They are resistant to poison, they can see invisible things, and move freely.  At higher levels, they also become resistant to attacks which threaten to drain away their experience.  Golems gain very little nutrition from ordinary food, but can absorb mana from staves and wands as their power source.  Golems also gain a natural armor class bonus from their tough body.",
 
 "There are two types of skeletons: the ordinary, warrior-like skeletons, and the spell-using skeletons, which are also called liches.  As undead beings, skeletons need to worry very little about poison or attacks that can drain life.  They do not really use eyes for perceiving things, and are thus not fooled by invisibility.  Their bones are resistant to sharp shrapnel, and they will quickly become resistant to cold.  Although the magical effects of these will affect the skeleton even without entering the skeleton's (non-existent) belly, the potion or food itself will fall through the skeleton's jaws, giving no nutritional benefit.  They can absorb mana from staves and wands as their energy source.",
 
-"Much like Skeletons, Zombies too are undead horrors: they are resistant to life-draining attacks, and can learn to restore their life-force.  Like skeletons, they become resistant to cold-based attacks (actually earlier than skeletons), resist poison and can see invisible.  While still vulnerable to cuts (unlike skeletons), Zombies are resistant to Nether.  Like Golems, they gain very little nutrition from the food of mortals, but can absorb mana from staves and wands as their energy source.",
+"Much like Skeletons, Zombies too are undead horrors: they are resistant to exp-draining attacks, and can learn to restore their experience.  Like skeletons, they become resistant to cold-based attacks (actually earlier than skeletons), resist poison and can see invisible.  While still vulnerable to cuts (unlike skeletons), Zombies are resistant to Nether.  Like Golems, they gain very little nutrition from the food of mortals, but can absorb mana from staves and wands as their energy source.",
 
-"One of the mightier undead creatures, the Vampire is an awe-inspiring sight.  Yet this dread creature has a serious weakness: the bright rays of sun are its bane, and it will need to flee the surface to the deep recesses of earth until the sun finally sets.  Darkness, on the other hand, only makes the Vampire stronger.  As undead, the Vampire has a firm hold on its life force, and resists nether attacks.  The Vampire also resists cold and poison based attacks.  It is, however, susceptible to its perpetual hunger for fresh blood, which can only be satiated by sucking the blood from a nearby monster.",
+"One of the mightier undead creatures, the Vampire is an awe-inspiring sight.  Yet this dread creature has a serious weakness: the bright rays of sun are its bane, and it will need to flee the surface to the deep recesses of earth until the sun finally sets.  Darkness, on the other hand, only makes the Vampire stronger.  As undead, the Vampire has a firm hold on its experience, and resists nether attacks.  The Vampire also resists cold and poison based attacks.  It is, however, susceptible to its perpetual hunger for fresh blood, which can only be satiated by sucking the blood from a nearby monster.",
 
-"Another powerful undead creature: the Spectre is a ghastly apparition, surrounded by an unearthly green glow.  They exist only partially on our plane of existence: half-corporeal, they can pass through walls, although the density of the wall will hurt them in the process of doing this.  As undead, they have a firm hold on their life force, see invisible, and resist poison and cold.  They also resist nether.  At higher levels they develop telepathic abilities.  Spectres make superb spellcasters, but their physical form is very weak.  They gain very little nutrition from the food of mortals, but can absorb mana from staves and wands as their energy source.",
+"Another powerful undead creature: the Spectre is a ghastly apparition, surrounded by an unearthly green glow.  They exist only partially on our plane of existence: half-corporeal, they can pass through walls, although the density of the wall will hurt them in the process of doing this.  As undead, they have a firm hold on their experience, see invisible, and resist poison and cold.  They also resist nether.  At higher levels they develop telepathic abilities.  Spectres make superb spellcasters, but their physical form is very weak.  They gain very little nutrition from the food of mortals, but can absorb mana from staves and wands as their energy source.",
 
 "One of the several fairy races, Sprites are very small.  They have tiny wings and can fly over traps that may open up beneath them.  They enjoy sunlight intensely, and need worry little about light based attacks.  Although physically among the weakest races, Sprites are very talented in magic, and can become highly skilled wizards.  Sprites have the special power of spraying Sleeping Dust, and at higher levels they learn to fly faster.",
 
@@ -1759,7 +1759,7 @@ static cptr race_jouhou[MAX_RACES] =
 
 "Archons are a higher class of angels.  They are good at all skills, and are strong, wise, and are a favorite with any people.  They are able to see the unseen, and their wings allow them to safely fly over traps and other dangerous places.  However, belonging to a higher plane as they do, the experiences of this world do not leave a strong impression on them and they gain levels slowly.",
 
-"Balrogs are a higher class of demons.  They are strong, intelligent and tough.  They do not believe in gods, and are not suitable for priest at all.  Balrog are resistant to fire and nether, and have a firm hold on their life force.  They also eventually learn to see invisible things.  They are good at almost all skills except stealth.  They gain very little nutrition from the food of mortals, and need human corpses as sacrifices to regain their vitality.",
+"Balrogs are a higher class of demons.  They are strong, intelligent and tough.  They do not believe in gods, and are not suitable for priest at all.  Balrog are resistant to fire and nether, and have a firm hold on their experience.  They also eventually learn to see invisible things.  They are good at almost all skills except stealth.  They gain very little nutrition from the food of mortals, and need human corpses as sacrifices to regain their vitality.",
 
 "Dunedain are a race of hardy men from the West.  This elder race surpasses human abilities in every field, especially constitution.  However, being men of the world, very little is new to them, and levels are very hard for them to gain.  Their constitution cannot be reduced. ",
 
@@ -1767,7 +1767,7 @@ static cptr race_jouhou[MAX_RACES] =
 
 "A Kutar is an expressionless animal-like living creature.  The word 'kuta' means 'absentmindedly' or 'vacantly'.  Their absentmindedness hurts their searching and perception skills, but renders them incapable of being confused.  Their unearthly calmness and serenity make them among the most stealthy of any race.  Kutars, although expressionless, are beautiful and so have a high charisma.  Members of this race can learn to expand their body horizontally.  This increases armour class, but renders them vulnerable to magical attacks.",
 
-"An android is a artificial creation with a body of machinery.  They are poor at spell casting, but they make excellent warriors.  They don't acquire experience like other races, but rather gain in power as they attach new equipment to their frame.  Rings, amulets, and lights do not influence growth.  Androids are resistant to poison, can move freely, and are immune to life-draining attacks.  Moreover, because of their hard metallic bodies, they get a bonus to AC.  Androids have electronic circuits throughout their body and must beware of electric shocks.  They gain very little nutrition from the food of mortals, but they can use flasks of oil as their energy source."
+"An android is a artificial creation with a body of machinery.  They are poor at spell casting, but they make excellent warriors.  They don't acquire experience like other races, but rather gain in power as they attach new equipment to their frame.  Rings, amulets, and lights do not influence growth.  Androids are resistant to poison, can move freely, and are immune to exp-draining attacks.  Moreover, because of their hard metallic bodies, they get a bonus to AC.  Androids have electronic circuits throughout their body and must beware of electric shocks.  They gain very little nutrition from the food of mortals, but they can use flasks of oil as their energy source."
 
 #endif
 };

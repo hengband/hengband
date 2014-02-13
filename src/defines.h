@@ -1746,7 +1746,7 @@
 #define EGO_AMU_SLOW_D          210
 #define EGO_AMU_INFRA           211
 #define EGO_AMU_SEE_INVIS       212
-#define EGO_AMU_HOLD_LIFE       213
+#define EGO_AMU_HOLD_EXP        213
 #define EGO_AMU_DRAIN_EXP       214
 #define EGO_AMU_FOOL            215
 #define EGO_AMU_AGGRAVATE       216
@@ -1846,7 +1846,7 @@
 #define ACT_CURE_LW             81
 #define ACT_CURE_MW             82
 #define ACT_CURE_POISON         83
-#define ACT_REST_LIFE           84
+#define ACT_REST_EXP            84
 #define ACT_REST_ALL            85
 #define ACT_CURE_700            86
 #define ACT_CURE_1000           87
@@ -3342,7 +3342,7 @@
 #define TR_THROW               44     /* Later */
 #define TR_REFLECT             45     /* Reflect 'bolts' */
 #define TR_FREE_ACT            46     /* Free Action */
-#define TR_HOLD_LIFE           47     /* Hold Life */
+#define TR_HOLD_EXP            47     /* Hold EXP */
 #define TR_RES_ACID            48
 #define TR_RES_ELEC            49
 #define TR_RES_FIRE            50
@@ -3580,7 +3580,7 @@
 #define RBE_EXP_80      28
 #define RBE_DISEASE     29
 #define RBE_TIME        30
-#define RBE_EXP_VAMP    31
+#define RBE_DR_LIFE     31
 #define RBE_DR_MANA     32
 #define RBE_SUPERHURT   33
 #define RBE_INERTIA     34

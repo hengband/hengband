@@ -1435,7 +1435,7 @@ msg_print("カオス的な効果を発生した！");
 				take_hit(DAMAGE_LOSELIFE, damroll(o_ptr->sval + 1, 6), "a miscast Death spell", -1);
 #endif
 
-				if ((spell > 15) && one_in_(6) && !p_ptr->hold_life)
+				if ((spell > 15) && one_in_(6) && !p_ptr->hold_exp)
 					lose_exp(spell * 250);
 			}
 		}

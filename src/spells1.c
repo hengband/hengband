@@ -6212,14 +6212,14 @@ msg_print("エネルギーのうねりを感じた！");
 				if (!one_in_(6)) break;
 			}
 			case 23: case 24: case 25:
-				if (p_ptr->hold_life && (randint0(100) < 75)) break;
+				if (p_ptr->hold_exp && (randint0(100) < 75)) break;
 #ifdef JP
-msg_print("生命力が体から吸い取られた気がする！");
+msg_print("経験値が体から吸い取られた気がする！");
 #else
-				msg_print("You feel your life draining away...");
+				msg_print("You feel your experience draining away...");
 #endif
 
-				if (p_ptr->hold_life) lose_exp(p_ptr->exp / 160);
+				if (p_ptr->hold_exp) lose_exp(p_ptr->exp / 160);
 				else lose_exp(p_ptr->exp / 16);
 				if (!one_in_(6)) break;
 			case 26: case 27: case 28:

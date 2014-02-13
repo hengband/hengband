@@ -713,7 +713,7 @@ static cptr k_info_flags[] =
 	"THROW",
 	"REFLECT",
 	"FREE_ACT",
-	"HOLD_LIFE",
+	"HOLD_EXP",
 	"RES_ACID",
 	"RES_ELEC",
 	"RES_FIRE",
