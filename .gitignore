@@ -20,6 +20,9 @@ src/stamp-h1
 src/*.o
 src/hengband
 
+# Ignore generated documents by Doxygen
+doxygen/html/
+
 # Windows binary
 Hengband.exe
 
