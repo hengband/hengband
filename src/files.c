@@ -4619,9 +4619,9 @@ static void dump_aux_class_special(FILE *fff)
 #endif
 
 #ifdef JP
-		fprintf(fff, "エッセンス   個数     エッセンス   個数     エッセンス   個数", 1, 8);
+		fprintf(fff, "エッセンス   個数     エッセンス   個数     エッセンス   個数");
 #else
-		fprintf(fff, "Essence      Num      Essence      Num      Essence      Num ", 1, 8);
+		fprintf(fff, "Essence      Num      Essence      Num      Essence      Num ");
 #endif
 		for (i = 0; essence_name[i]; i++)
 		{
