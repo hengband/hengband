@@ -1474,7 +1474,7 @@ extern void gain_exp_64(s32b amount, u32b amount_frac);
 extern void gain_exp(s32b amount);
 extern void calc_android_exp(void);
 extern void lose_exp(s32b amount);
-extern bool drain_exp(s32b drain, s32b slip, int hold_life_prob);
+extern bool drain_exp(s32b drain, s32b slip, int hold_exp_prob);
 extern void do_poly_self(void);
 extern bool set_ultimate_res(int v, bool do_dec);
 extern bool set_tim_res_nether(int v, bool do_dec);

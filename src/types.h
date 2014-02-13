@@ -1269,7 +1269,7 @@ struct player_type
 	bool free_act;		/* Never paralyzed */
 	bool see_inv;		/* Can see invisible */
 	bool regenerate;	/* Regenerate hit pts */
-	bool hold_life;		/* Resist life draining */
+	bool hold_exp;		/* Resist exp draining */
 
 	bool telepathy;		/* Telepathy */
 	bool esp_animal;

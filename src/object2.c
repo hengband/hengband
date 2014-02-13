@@ -996,7 +996,7 @@ s32b flag_cost(object_type *o_ptr, int plusses)
 	if (have_flag(flgs, TR_EASY_SPELL)) total += 1500;
 	if (have_flag(flgs, TR_THROW)) total += 5000;
 	if (have_flag(flgs, TR_FREE_ACT)) total += 4500;
-	if (have_flag(flgs, TR_HOLD_LIFE)) total += 8500;
+	if (have_flag(flgs, TR_HOLD_EXP)) total += 8500;
 
 	tmp_cost = 0;
 	count = 0;
@@ -2497,7 +2497,7 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 					break;
 				case EGO_PATTERN:
 					if (one_in_(3))
-						add_flag(o_ptr->art_flags, TR_HOLD_LIFE);
+						add_flag(o_ptr->art_flags, TR_HOLD_EXP);
 					if (one_in_(3))
 						add_flag(o_ptr->art_flags, TR_DEX);
 					if (one_in_(5))
@@ -3865,8 +3865,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 						o_ptr->name2 = EGO_AMU_SEE_INVIS;
 						break;
 					case 7: case 8:
-						if (have_flag(k_ptr->flags, TR_HOLD_LIFE)) break;
-						o_ptr->name2 = EGO_AMU_HOLD_LIFE;
+						if (have_flag(k_ptr->flags, TR_HOLD_EXP)) break;
+						o_ptr->name2 = EGO_AMU_HOLD_EXP;
 						break;
 					case 9:
 						if (have_flag(k_ptr->flags, TR_LEVITATION)) break;
@@ -7458,7 +7458,7 @@ static essence_type essence_info[] =
 	{TR_IM_COLD, "Îäµ¤ÌÈ±Ö", 2, TR_IM_ACID, 20},
 	{TR_REFLECT, "È¿¼Í", 2, TR_REFLECT, 20},
 	{TR_FREE_ACT, "ËãáãÃÎ¤é¤º", 3, TR_FREE_ACT, 20},
-	{TR_HOLD_LIFE, "À¸Ì¿ÎÏ°Ý»ý", 3, TR_HOLD_LIFE, 20},
+	{TR_HOLD_EXP, "·Ð¸³ÃÍ°Ý»ý", 3, TR_HOLD_EXP, 20},
 	{TR_RES_ACID, "ÂÑ»À", 2, TR_RES_ACID, 15},
 	{TR_RES_ELEC, "ÂÑÅÅ·â", 2, TR_RES_ELEC, 15},
 	{TR_RES_FIRE, "ÂÑ²Ð±ê", 2, TR_RES_FIRE, 15},
@@ -7569,7 +7569,7 @@ static essence_type essence_info[] =
 	{TR_IM_COLD, "cold immunity", 2, TR_IM_ACID, 20},
 	{TR_REFLECT, "reflection", 2, TR_REFLECT, 20},
 	{TR_FREE_ACT, "free action", 3, TR_FREE_ACT, 20},
-	{TR_HOLD_LIFE, "hold life", 3, TR_HOLD_LIFE, 20},
+	{TR_HOLD_EXP, "hold experience", 3, TR_HOLD_EXP, 20},
 	{TR_RES_ACID, "resistance to acid", 2, TR_RES_ACID, 15},
 	{TR_RES_ELEC, "resistance to electric", 2, TR_RES_ELEC, 15},
 	{TR_RES_FIRE, "resistance to fire", 2, TR_RES_FIRE, 15},
@@ -7700,7 +7700,7 @@ cptr essence_name[] =
 	"",
 	"È¿¼Í",
 	"ËãáãÃÎ¤é¤º",
-	"À¸Ì¿ÎÏ°Ý»ý",
+	"·Ð¸³ÃÍ°Ý»ý",
 	"ÂÑ»À",
 	"ÂÑÅÅ·â",
 	"ÂÑ²Ð±ê",
@@ -7803,7 +7803,7 @@ static cptr essence_name[] =
 	"",
 	"reflection",
 	"free action",
-	"hold life",
+	"hold exp",
 	"res. acid",
 	"res. elec.",
 	"res. fire",

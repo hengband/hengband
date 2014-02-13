@@ -2389,7 +2389,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		switch(p_ptr->mimic_form)
 		{
 		case MIMIC_DEMON:
-			add_flag(flgs, TR_HOLD_LIFE);
+			add_flag(flgs, TR_HOLD_EXP);
 			add_flag(flgs, TR_RES_CHAOS);
 			add_flag(flgs, TR_RES_NETHER);
 			add_flag(flgs, TR_RES_FIRE);
@@ -2397,7 +2397,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 			add_flag(flgs, TR_SPEED);
 			break;
 		case MIMIC_DEMON_LORD:
-			add_flag(flgs, TR_HOLD_LIFE);
+			add_flag(flgs, TR_HOLD_EXP);
 			add_flag(flgs, TR_RES_CHAOS);
 			add_flag(flgs, TR_RES_NETHER);
 			add_flag(flgs, TR_RES_FIRE);
@@ -2417,7 +2417,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 			add_flag(flgs, TR_SPEED);
 			break;
 		case MIMIC_VAMPIRE:
-			add_flag(flgs, TR_HOLD_LIFE);
+			add_flag(flgs, TR_HOLD_EXP);
 			add_flag(flgs, TR_RES_DARK);
 			add_flag(flgs, TR_RES_NETHER);
 			if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE_1);
@@ -2436,7 +2436,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_LITE);
 		break;
 	case RACE_HOBBIT:
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		break;
 	case RACE_GNOME:
 		add_flag(flgs, TR_FREE_ACT);
@@ -2545,19 +2545,19 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_POIS);
 		add_flag(flgs, TR_SLOW_DIGEST);
 		if (p_ptr->lev > 34)
-			add_flag(flgs, TR_HOLD_LIFE);
+			add_flag(flgs, TR_HOLD_EXP);
 		break;
 	case RACE_SKELETON:
 		add_flag(flgs, TR_SEE_INVIS);
 		add_flag(flgs, TR_RES_SHARDS);
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		add_flag(flgs, TR_RES_POIS);
 		if (p_ptr->lev > 9)
 			add_flag(flgs, TR_RES_COLD);
 		break;
 	case RACE_ZOMBIE:
 		add_flag(flgs, TR_SEE_INVIS);
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		add_flag(flgs, TR_RES_NETHER);
 		add_flag(flgs, TR_RES_POIS);
 		add_flag(flgs, TR_SLOW_DIGEST);
@@ -2565,7 +2565,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 			add_flag(flgs, TR_RES_COLD);
 		break;
 	case RACE_VAMPIRE:
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		add_flag(flgs, TR_RES_DARK);
 		add_flag(flgs, TR_RES_NETHER);
 		if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE_1);
@@ -2577,7 +2577,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_FREE_ACT);
 		add_flag(flgs, TR_RES_COLD);
 		add_flag(flgs, TR_SEE_INVIS);
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		add_flag(flgs, TR_RES_NETHER);
 		add_flag(flgs, TR_RES_POIS);
 		add_flag(flgs, TR_SLOW_DIGEST);
@@ -2602,7 +2602,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 	case RACE_DEMON:
 		add_flag(flgs, TR_RES_FIRE);
 		add_flag(flgs, TR_RES_NETHER);
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		if (p_ptr->lev > 9)
 			add_flag(flgs, TR_SEE_INVIS);
 		break;
@@ -2619,7 +2619,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_FREE_ACT);
 		add_flag(flgs, TR_RES_POIS);
 		add_flag(flgs, TR_SLOW_DIGEST);
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		break;
 	default:
 		; /* Do nothing */
@@ -2684,7 +2684,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 	{
 		add_flag(flgs, TR_RES_BLIND);
 		add_flag(flgs, TR_RES_CONF);
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		if (p_ptr->pclass != CLASS_NINJA) add_flag(flgs, TR_LITE_1);
 		if (p_ptr->lev > 9)
 			add_flag(flgs, TR_SPEED);
@@ -2721,7 +2721,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_CHAOS);
 		add_flag(flgs, TR_RES_DISEN);
 		add_flag(flgs, TR_REFLECT);
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		add_flag(flgs, TR_FREE_ACT);
 		add_flag(flgs, TR_SH_FIRE);
 		add_flag(flgs, TR_SH_ELEC);
@@ -2833,7 +2833,7 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_CHAOS);
 		add_flag(flgs, TR_RES_DISEN);
 		add_flag(flgs, TR_REFLECT);
-		add_flag(flgs, TR_HOLD_LIFE);
+		add_flag(flgs, TR_HOLD_EXP);
 		add_flag(flgs, TR_FREE_ACT);
 		add_flag(flgs, TR_SH_FIRE);
 		add_flag(flgs, TR_SH_ELEC);
@@ -3309,7 +3309,7 @@ display_flag_aux(row+9, col, "Îäµ¤¥ª:", TR_SH_COLD, &f, 0);
 display_flag_aux(row+0, col, "²ÃÂ®      :", TR_SPEED, &f, 0);
 display_flag_aux(row+1, col, "ÂÑËãáã    :", TR_FREE_ACT, &f, 0);
 display_flag_aux(row+2, col, "Æ©ÌÀÂÎ»ëÇ§:", TR_SEE_INVIS, &f, 0);
-display_flag_aux(row+3, col, "·Ð¸³ÃÍÊÝ»ý:", TR_HOLD_LIFE, &f, 0);
+display_flag_aux(row+3, col, "·Ð¸³ÃÍÊÝ»ý:", TR_HOLD_EXP, &f, 0);
 display_flag_aux(row+4, col, "·Ù¹ð      :", TR_WARNING, &f, 0);
 display_flag_aux(row+5, col, "ÃÙ¾Ã²½    :", TR_SLOW_DIGEST, &f, 0);
 display_flag_aux(row+6, col, "µÞ²óÉü    :", TR_REGEN, &f, 0);
@@ -3320,7 +3320,7 @@ display_flag_aux(row+9, col, "¼ö¤¤      :", 0, &f, DP_CURSE);
 	display_flag_aux(row+0, col, "Speed     :", TR_SPEED, &f, 0);
 	display_flag_aux(row+1, col, "FreeAction:", TR_FREE_ACT, &f, 0);
 	display_flag_aux(row+2, col, "SeeInvisi.:", TR_SEE_INVIS, &f, 0);
-	display_flag_aux(row+3, col, "Hold Life :", TR_HOLD_LIFE, &f, 0);
+	display_flag_aux(row+3, col, "Hold Exp :", TR_HOLD_EXP, &f, 0);
 	display_flag_aux(row+4, col, "Warning   :", TR_WARNING, &f, 0);
 	display_flag_aux(row+5, col, "SlowDigest:", TR_SLOW_DIGEST, &f, 0);
 	display_flag_aux(row+6, col, "Regene.   :", TR_REGEN, &f, 0);

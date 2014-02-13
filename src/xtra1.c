@@ -3392,7 +3392,7 @@ void calc_bonuses(void)
 	p_ptr->regenerate = FALSE;
 	p_ptr->can_swim = FALSE;
 	p_ptr->levitation = FALSE;
-	p_ptr->hold_life = FALSE;
+	p_ptr->hold_exp = FALSE;
 	p_ptr->telepathy = FALSE;
 	p_ptr->esp_animal = FALSE;
 	p_ptr->esp_undead = FALSE;
@@ -3654,7 +3654,7 @@ void calc_bonuses(void)
 		switch (p_ptr->mimic_form)
 		{
 		case MIMIC_DEMON:
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			p_ptr->resist_chaos = TRUE;
 			p_ptr->resist_neth = TRUE;
 			p_ptr->resist_fire = TRUE;
@@ -3667,7 +3667,7 @@ void calc_bonuses(void)
 			p_ptr->align -= 200;
 			break;
 		case MIMIC_DEMON_LORD:
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			p_ptr->resist_chaos = TRUE;
 			p_ptr->resist_neth = TRUE;
 			p_ptr->immune_fire = TRUE;
@@ -3692,7 +3692,7 @@ void calc_bonuses(void)
 			break;
 		case MIMIC_VAMPIRE:
 			p_ptr->resist_dark = TRUE;
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			p_ptr->resist_neth = TRUE;
 			p_ptr->resist_cold = TRUE;
 			p_ptr->resist_pois = TRUE;
@@ -3712,7 +3712,7 @@ void calc_bonuses(void)
 			p_ptr->resist_lite = TRUE;
 			break;
 		case RACE_HOBBIT:
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			break;
 		case RACE_GNOME:
 			p_ptr->free_act = TRUE;
@@ -3812,18 +3812,18 @@ void calc_bonuses(void)
 			p_ptr->free_act = TRUE;
 			p_ptr->see_inv = TRUE;
 			p_ptr->resist_pois = TRUE;
-			if (p_ptr->lev > 34) p_ptr->hold_life = TRUE;
+			if (p_ptr->lev > 34) p_ptr->hold_exp = TRUE;
 			break;
 		case RACE_SKELETON:
 			p_ptr->resist_shard = TRUE;
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			p_ptr->see_inv = TRUE;
 			p_ptr->resist_pois = TRUE;
 			if (p_ptr->lev > 9) p_ptr->resist_cold = TRUE;
 			break;
 		case RACE_ZOMBIE:
 			p_ptr->resist_neth = TRUE;
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			p_ptr->see_inv = TRUE;
 			p_ptr->resist_pois = TRUE;
 			p_ptr->slow_digest = TRUE;
@@ -3831,7 +3831,7 @@ void calc_bonuses(void)
 			break;
 		case RACE_VAMPIRE:
 			p_ptr->resist_dark = TRUE;
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			p_ptr->resist_neth = TRUE;
 			p_ptr->resist_cold = TRUE;
 			p_ptr->resist_pois = TRUE;
@@ -3841,7 +3841,7 @@ void calc_bonuses(void)
 			p_ptr->levitation = TRUE;
 			p_ptr->free_act = TRUE;
 			p_ptr->resist_neth = TRUE;
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			p_ptr->see_inv = TRUE;
 			p_ptr->resist_pois = TRUE;
 			p_ptr->slow_digest = TRUE;
@@ -3885,7 +3885,7 @@ void calc_bonuses(void)
 		case RACE_DEMON:
 			p_ptr->resist_fire  = TRUE;
 			p_ptr->resist_neth  = TRUE;
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			if (p_ptr->lev > 9) p_ptr->see_inv = TRUE;
 			if (p_ptr->lev > 44)
 			{
@@ -3907,7 +3907,7 @@ void calc_bonuses(void)
 			p_ptr->slow_digest = TRUE;
 			p_ptr->free_act = TRUE;
 			p_ptr->resist_pois = TRUE;
-			p_ptr->hold_life = TRUE;
+			p_ptr->hold_exp = TRUE;
 			break;
 		default:
 			/* Do nothing */
@@ -3922,7 +3922,7 @@ void calc_bonuses(void)
 		p_ptr->slow_digest = TRUE;
 		p_ptr->regenerate = TRUE;
 		p_ptr->levitation = TRUE;
-		p_ptr->hold_life = TRUE;
+		p_ptr->hold_exp = TRUE;
 		p_ptr->telepathy = TRUE;
 		p_ptr->lite = TRUE;
 		p_ptr->sustain_str = TRUE;
@@ -3987,7 +3987,7 @@ void calc_bonuses(void)
 	{
 		p_ptr->resist_blind = TRUE;
 		p_ptr->resist_conf  = TRUE;
-		p_ptr->hold_life = TRUE;
+		p_ptr->hold_exp = TRUE;
 		if (p_ptr->pclass != CLASS_NINJA) p_ptr->lite = TRUE;
 
 		if ((p_ptr->prace != RACE_KLACKON) && (p_ptr->prace != RACE_SPRITE))
@@ -4277,7 +4277,7 @@ void calc_bonuses(void)
 		if (have_flag(flgs, TR_SEE_INVIS))   p_ptr->see_inv = TRUE;
 		if (have_flag(flgs, TR_LEVITATION))     p_ptr->levitation = TRUE;
 		if (have_flag(flgs, TR_FREE_ACT))    p_ptr->free_act = TRUE;
-		if (have_flag(flgs, TR_HOLD_LIFE))   p_ptr->hold_life = TRUE;
+		if (have_flag(flgs, TR_HOLD_EXP))   p_ptr->hold_exp = TRUE;
 		if (have_flag(flgs, TR_WARNING)){
 			if (!o_ptr->inscription || !(my_strchr(quark_str(o_ptr->inscription),'$')))
 			  p_ptr->warning = TRUE;

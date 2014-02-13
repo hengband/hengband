@@ -3080,7 +3080,7 @@ strcpy(power_desc[num].name, "È©ÀÐ²½ (´ü´Ö 1d20+30)");
 #ifdef JP
 strcpy(power_desc[num].name, "·Ð¸³ÃÍÉü³è");
 #else
-			strcpy(power_desc[num].name, "Restore Life");
+			strcpy(power_desc[num].name, "Restore Experience");
 #endif
 
 			power_desc[num].level = 30;

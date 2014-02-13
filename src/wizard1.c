@@ -821,12 +821,12 @@ static const flag_desc misc_flags2_desc[] =
 	{ TR_THROW,      "ÅêÚ³" },
 	{ TR_REFLECT,    "È¿¼Í" },
 	{ TR_FREE_ACT,   "ËãáãÃÎ¤é¤º" },
-	{ TR_HOLD_LIFE,  "À¸Ì¿ÎÏ°Ý»ý" },
+	{ TR_HOLD_EXP,   "·Ð¸³ÃÍ°Ý»ý" },
 #else
 	{ TR_THROW,      "Throwing" },
 	{ TR_REFLECT,    "Reflection" },
 	{ TR_FREE_ACT,   "Free Action" },
-	{ TR_HOLD_LIFE,  "Hold Life" },
+	{ TR_HOLD_EXP,   "Hold Experience" },
 #endif
 };
 

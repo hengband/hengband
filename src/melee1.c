@@ -1688,7 +1688,7 @@ bool make_attack_normal(int m_idx)
 
 					break;
 				}
-				case RBE_EXP_VAMP:
+				case RBE_DR_LIFE:
 				{
 					s32b d = damroll(60, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
 					bool resist_drain;

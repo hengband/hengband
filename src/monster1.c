@@ -2813,9 +2813,9 @@ case RBE_TIME:      q = "時間を逆戻りさせる"; break;
 #endif
 
 #ifdef JP
-case RBE_EXP_VAMP:  q = "生命力を吸収する"; break;
+			case RBE_DR_LIFE:  q = "生命力を吸収する"; break;
 #else
-			case RBE_EXP_VAMP:  q = "drain life force"; break;
+			case RBE_DR_LIFE:  q = "drain life"; break;
 #endif
 
 #ifdef JP

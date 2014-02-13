@@ -478,9 +478,9 @@ info[i++] = "あなたは d20+30 ターンの間肌を石に変化させられる。(15 MP)";
 		case RACE_SKELETON:
 			if (plev > 29)
 #ifdef JP
-info[i++] = "あなたは失った生命力を回復することができる。(30 MP)";
+info[i++] = "あなたは失った経験値を回復することができる。(30 MP)";
 #else
-				info[i++] = "You can restore lost life forces (cost 30).";
+				info[i++] = "You can restore lost experience (cost 30).";
 #endif
 
 			break;
@@ -1983,9 +1983,9 @@ info[i++] = "あなたは幻覚を見ている。";
 	{
 		info[i++] = _("あなたは特別な強敵の存在を感じる能力を持っている。", "You sense unique monsters.");
 	}
-	if (p_ptr->hold_life)
+	if (p_ptr->hold_exp)
 	{
-		info[i++] = _("あなたは自己の生命力をしっかりと維持する。", "You have a firm hold on your life force.");
+		info[i++] = _("あなたは自己の経験値をしっかりと維持する。", "You have a firm hold on your experience.");
 	}
 	if (p_ptr->reflect)
 	{
@@ -6568,9 +6568,9 @@ msg_print("エネルギーのうねりを感じた！");
 			if (!one_in_(6)) break;
 		case 10: case 11: case 12:
 #ifdef JP
-msg_print("生命力が体から吸い取られた気がする！");
+msg_print("経験値が体から吸い取られた気がする！");
 #else
-			msg_print("You feel your life draining away...");
+			msg_print("You feel your experience draining away...");
 #endif
 
 			lose_exp(p_ptr->exp / 16);

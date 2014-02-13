@@ -4853,9 +4853,9 @@ bool restore_level(void)
 	{
 		/* Message */
 #ifdef JP
-msg_print("生命力が戻ってきた気がする。");
+msg_print("経験値が戻ってきた気がする。");
 #else
-		msg_print("You feel your life energies returning.");
+		msg_print("You feel your experience returning.");
 #endif
 
 
@@ -5792,38 +5792,38 @@ void lose_exp(s32b amount)
  * Drain experience
  * If resisted to draining, return FALSE
  */
-bool drain_exp(s32b drain, s32b slip, int hold_life_prob)
+bool drain_exp(s32b drain, s32b slip, int hold_exp_prob)
 {
 	/* Androids and their mimics are never drained */
 	if (p_ptr->prace == RACE_ANDROID) return FALSE;
 
-	if (p_ptr->hold_life && (randint0(100) < hold_life_prob))
+	if (p_ptr->hold_exp && (randint0(100) < hold_exp_prob))
 	{
 		/* Hold experience */
 #ifdef JP
-		msg_print("しかし自己の生命力を守りきった！");
+		msg_print("しかし自己の経験値を守りきった！");
 #else
-		msg_print("You keep hold of your life force!");
+		msg_print("You keep hold of your experience!");
 #endif
 		return FALSE;
 	}
 
 	/* Hold experience failed */
-	if (p_ptr->hold_life)
+	if (p_ptr->hold_exp)
 	{
 #ifdef JP
-		msg_print("生命力を少し吸い取られた気がする！");
+		msg_print("経験値を少し吸い取られた気がする！");
 #else
-		msg_print("You feel your life slipping away!");
+		msg_print("You feel your experience slipping away!");
 #endif
 		lose_exp(slip);
 	}
 	else
 	{
 #ifdef JP
-		msg_print("生命力が体から吸い取られた気がする！");
+		msg_print("経験値が体から吸い取られた気がする！");
 #else
-		msg_print("You feel your life draining away!");
+		msg_print("You feel your experience draining away!");
 #endif
 		lose_exp(drain);
 	}
