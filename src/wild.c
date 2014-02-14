@@ -195,7 +195,14 @@ static void plasma_recursive(int x1, int y1, int x2, int y2,
  */
 static s16b terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
 
-
+/*!
+ * @brief 荒野フロア生成のサブルーチン
+ * @param terrain 荒野地形ID
+ * @param seed 乱数の固定シード
+ * @param border 未使用
+ * @param corner 広域マップの角部分としての生成ならばTRUE
+ * @return なし
+ */
 static void generate_wilderness_area(int terrain, u32b seed, bool border, bool corner)
 {
 	int x1, y1;
@@ -290,15 +297,23 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 
 
 
-/*
+/*!
+ * @brief 荒野フロア生成のメインルーチン /
  * Load a town or generate a terrain level using "plasma" fractals.
- *
+ * @param y 広域マップY座標
+ * @param x 広域マップY座標
+ * @param border 広域マップの辺部分としての生成ならばTRUE
+ * @param corner 広域マップの角部分としての生成ならばTRUE
+ * @return なし
+ * @details
+ * <pre>
  * x and y are the coordinates of the area in the wilderness.
  * Border and corner are optimization flags to speed up the
  * generation of the fractal terrain.
  * If border is set then only the border of the terrain should
  * be generated (for initializing the border structure).
  * If corner is set then only the corners of the area are needed.
+ * </pre>
  */
 static void generate_area(int y, int x, bool border, bool corner)
 {
@@ -425,8 +440,10 @@ static void generate_area(int y, int x, bool border, bool corner)
 static border_type border;
 
 
-/*
+/*!
+ * @brief 広域マップの生成 /
  * Build the wilderness area outside of the town.
+ * @return なし
  */
 void wilderness_gen(void)
 {
@@ -671,9 +688,10 @@ void wilderness_gen(void)
 
 static s16b conv_terrain2feat[MAX_WILDERNESS];
 
-/*
- * Build the wilderness area.
- * -DG-
+/*!
+ * @brief 広域マップの生成(簡易処理版) /
+ * Build the wilderness area. -DG-
+ * @return なし
  */
 void wilderness_gen_small()
 {
@@ -742,8 +760,17 @@ struct wilderness_grid
 static wilderness_grid w_letter[255];
 
 
-/*
+/*!
+ * @brief w_info.txtのデータ解析 /
  * Parse a sub-file of the "extra info"
+ * @param buf
+ * @param ymin 未使用
+ * @param xmin 広域地形マップを読み込みたいx座標の開始位置
+ * @param ymax 未使用
+ * @param xmax 広域地形マップを読み込みたいx座標の終了位置
+ * @param y 広域マップの高さを返す参照ポインタ
+ * @param x 広域マップの幅を返す参照ポインタ
+ * @return なし
  */
 errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
