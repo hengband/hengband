@@ -1469,7 +1469,7 @@ static void roff_aux(int r_idx, int mode)
 			case RBE_HURT:    	q = _("攻撃する", "attack"); break;
 			case RBE_POISON:  	q = _("毒をくらわす", "poison"); break;
 			case RBE_UN_BONUS:	q = _("劣化させる", "disenchant"); break;
-			case RBE_UN_POWER:	q = _("魔道具の魔力を吸い取る", "drain charges"); break;
+			case RBE_UN_POWER:	q = _("充填魔力を吸収する", "drain charges"); break;
 			case RBE_EAT_GOLD:	q = _("金を盗む", "steal gold"); break;
 			case RBE_EAT_ITEM:	q = _("アイテムを盗む", "steal items"); break;
 			case RBE_EAT_FOOD:	q = _("あなたの食料を食べる", "eat your food"); break;
