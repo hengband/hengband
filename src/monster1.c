@@ -271,37 +271,23 @@ static void roff_aux(int r_idx, int mode)
 		if (r_ptr->r_deaths)
 		{
 			/* Killed ancestors */
-#ifdef JP
-			hooked_roff(format("%^sはあなたの先祖を %d 人葬っている",
+			hooked_roff(format(_("%^sはあなたの先祖を %d 人葬っている", "%^s has slain %d of your ancestors"),
 					   wd_he[msex], r_ptr->r_deaths));
-#else
-			hooked_roff(format("%^s has slain %d of your ancestors",
-					   wd_he[msex], r_ptr->r_deaths));
-#endif
-
 
 			/* But we've also killed it */
 			if (dead)
 			{
-#ifdef JP
-				hooked_roff(format("が、すでに仇討ちは果たしている！"));
-#else
-				hooked_roff(format(", but you have avenged %s!  ",
-					    plural(r_ptr->r_deaths, "him", "them")));
-#endif
-
+				hooked_roff(format(
+					_("が、すでに仇討ちは果たしている！", 
+					 (", but you have avenged %s!  ", plural(r_ptr->r_deaths, "him", "them")))));
 			}
 
 			/* Unavenged (ever) */
 			else
 			{
-#ifdef JP
-				hooked_roff(format("のに、まだ仇討ちを果たしていない。"));
-#else
-				hooked_roff(format(", who %s unavenged.  ",
-					    plural(r_ptr->r_deaths, "remains", "remain")));
-#endif
-
+				hooked_roff(format(
+					_("のに、まだ仇討ちを果たしていない。", 
+					 (", who %s unavenged.  ", plural(r_ptr->r_deaths, "remains", "remain")))));
 			}
 
 			/* Start a new line */
@@ -311,11 +297,7 @@ static void roff_aux(int r_idx, int mode)
 		/* Dead unique who never hurt us */
 		else if (dead)
 		{
-#ifdef JP
-			hooked_roff("あなたはこの仇敵をすでに葬り去っている。");
-#else
-			hooked_roff("You have slain this foe.  ");
-#endif
+			hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
 
 			/* Start a new line */
 			hooked_roff("\n");
@@ -326,48 +308,32 @@ static void roff_aux(int r_idx, int mode)
 	else if (r_ptr->r_deaths)
 	{
 		/* Dead ancestors */
-#ifdef JP
-		hooked_roff(format("このモンスターはあなたの先祖を %d 人葬っている",
-			    r_ptr->r_deaths ));
-#else
-		hooked_roff(format("%d of your ancestors %s been killed by this creature, ",
-			    r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have")));
-#endif
-
+		hooked_roff(format(
+			_(("このモンスターはあなたの先祖を %d 人葬っている", r_ptr->r_deaths), 
+			  ("%d of your ancestors %s been killed by this creature, ", r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have")))));
 
 		/* Some kills this life */
 		if (r_ptr->r_pkills)
 		{
-#ifdef JP
-			hooked_roff(format("が、あなたはこのモンスターを少なくとも %d 体は倒している。", r_ptr->r_pkills));
-#else
-			hooked_roff(format("and you have exterminated at least %d of the creatures.  ", r_ptr->r_pkills));
-#endif
-
+			hooked_roff(format(
+				_("が、あなたはこのモンスターを少なくとも %d 体は倒している。", 
+				 "and you have exterminated at least %d of the creatures.  "), r_ptr->r_pkills));
 		}
 
 		/* Some kills past lives */
 		else if (r_ptr->r_tkills)
 		{
-#ifdef JP
-			hooked_roff(format("が、%sはこのモンスターを少なくとも %d 体は倒している。",
-				    "あなたの先祖", r_ptr->r_tkills));
-#else
-			hooked_roff(format("and %s have exterminated at least %d of the creatures.  ",
-				    "your ancestors", r_ptr->r_tkills));
-#endif
-
+			hooked_roff(format(
+				_("が、あなたの先祖はこのモンスターを少なくとも %d 体は倒している。", 
+				  "and your ancestors have exterminated at least %d of the creatures.  "), r_ptr->r_tkills));
 		}
 
 		/* No kills */
 		else
 		{
-#ifdef JP
-			hooked_roff(format("が、まだ%sを倒したことはない。", wd_he[msex]));
-#else
-			hooked_roff(format("and %s is not ever known to have been defeated.  ", wd_he[msex]));
-#endif
-
+			hooked_roff(format(
+				_("が、まだ%sを倒したことはない。", 
+				  "and %s is not ever known to have been defeated.  "), wd_he[msex]));
 		}
 
 		/* Start a new line */
@@ -380,33 +346,23 @@ static void roff_aux(int r_idx, int mode)
 		/* Killed some this life */
 		if (r_ptr->r_pkills)
 		{
-#ifdef JP
-			hooked_roff(format("あなたはこのモンスターを少なくとも %d 体は殺している。", r_ptr->r_pkills));
-#else
-			hooked_roff(format("You have killed at least %d of these creatures.  ", r_ptr->r_pkills));
-#endif
-
+			hooked_roff(format(
+				_("あなたはこのモンスターを少なくとも %d 体は殺している。",
+				  "You have killed at least %d of these creatures.  "), r_ptr->r_pkills));
 		}
 
 		/* Killed some last life */
 		else if (r_ptr->r_tkills)
 		{
-#ifdef JP
-			hooked_roff(format("あなたの先祖はこのモンスターを少なくとも %d 体は殺している。", r_ptr->r_tkills));
-#else
-			hooked_roff(format("Your ancestors have killed at least %d of these creatures.  ", r_ptr->r_tkills));
-#endif
-
+			hooked_roff(format(
+				_("あなたの先祖はこのモンスターを少なくとも %d 体は殺している。", 
+				  "Your ancestors have killed at least %d of these creatures.  "), r_ptr->r_tkills));
 		}
 
 		/* Killed none */
 		else
 		{
-#ifdef JP
-			hooked_roff("このモンスターを倒したことはない。");
-#else
-			hooked_roff("No battles to the death are recalled.  ");
-#endif
+			hooked_roff(_("このモンスターを倒したことはない。", "No battles to the death are recalled.  "));
 		}
 
 		/* Start a new line */
@@ -441,35 +397,22 @@ static void roff_aux(int r_idx, int mode)
 	/* Describe location */
 	if (r_ptr->level == 0)
 	{
-#ifdef JP
-		hooked_roff(format("%^sは町に住み", wd_he[msex]));
-#else
-		hooked_roff(format("%^s lives in the town", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sは町に住み", "%^s lives in the town"), wd_he[msex]));
 		old = TRUE;
 	}
 	else if (r_ptr->r_tkills || know_everything)
 	{
 		if (depth_in_feet)
 		{
-#ifdef JP
-			hooked_roff(format("%^sは通常地下 %d フィートで出現し",
-#else
-			hooked_roff(format("%^s is normally found at depths of %d feet",
-#endif
-
-				    wd_he[msex], r_ptr->level * 50));
+			hooked_roff(format(
+				_("%^sは通常地下 %d フィートで出現し", "%^s is normally found at depths of %d feet"),
+				  wd_he[msex], r_ptr->level * 50));
 		}
 		else
 		{
-#ifdef JP
-			hooked_roff(format("%^sは通常地下 %d 階で出現し",
-#else
-			hooked_roff(format("%^s is normally found on dungeon level %d",
-#endif
-
-				    wd_he[msex], r_ptr->level));
+			hooked_roff(format(
+				_("%^sは通常地下 %d 階で出現し", "%^s is normally found on dungeon level %d"),
+				  wd_he[msex], r_ptr->level));
 		}
 		old = TRUE;
 	}
@@ -478,11 +421,7 @@ static void roff_aux(int r_idx, int mode)
 	/* Describe movement */
 	if (r_idx == MON_CHAMELEON)
 	{
-#ifdef JP
-		hooked_roff("、他のモンスターに化ける。");
-#else
-		hooked_roff("and can take the shape of other monster.");
-#endif
+		hooked_roff(_("、他のモンスターに化ける。", "and can take the shape of other monster."));
 		return;
 	}
 	else
@@ -490,21 +429,11 @@ static void roff_aux(int r_idx, int mode)
 		/* Introduction */
 		if (old)
 		{
-#ifdef JP
-			hooked_roff("、");
-#else
-			hooked_roff(", and ");
-#endif
-
+			hooked_roff(_("、", ", and "));
 		}
 		else
 		{
-#ifdef JP
-			hooked_roff(format("%^sは", wd_he[msex]));
-#else
-			hooked_roff(format("%^s ", wd_he[msex]));
-#endif
-
+			hooked_roff(format(_("%^sは", "%^s "), wd_he[msex]));
 			old = TRUE;
 		}
 #ifndef JP
@@ -517,94 +446,45 @@ static void roff_aux(int r_idx, int mode)
 			/* Adverb */
 			if ((flags1 & RF1_RAND_50) && (flags1 & RF1_RAND_25))
 			{
-#ifdef JP
-				hooked_roff("かなり");
-#else
-				hooked_roff(" extremely");
-#endif
-
+				hooked_roff(_("かなり", " extremely"));
 			}
 			else if (flags1 & RF1_RAND_50)
 			{
-#ifdef JP
-				hooked_roff("幾分");
-#else
-				hooked_roff(" somewhat");
-#endif
-
+				hooked_roff(_("幾分", " somewhat"));
 			}
 			else if (flags1 & RF1_RAND_25)
 			{
-#ifdef JP
-				hooked_roff("少々");
-#else
-				hooked_roff(" a bit");
-#endif
-
+				hooked_roff(_("少々", " a bit"));
 			}
 
 			/* Adjective */
-#ifdef JP
-			hooked_roff("不規則に");
-#else
-			hooked_roff(" erratically");
-#endif
-
+			hooked_roff(_("不規則に", " erratically"));
 
 			/* Hack -- Occasional conjunction */
-#ifdef JP
-			if (speed != 110) hooked_roff("、かつ");
-#else
-			if (speed != 110) hooked_roff(", and");
-#endif
-
+			if (speed != 110) hooked_roff(_("、かつ", ", and"));
 		}
 
 		/* Speed */
 		if (speed > 110)
 		{
-#ifdef JP
-			if (speed > 139) hook_c_roff(TERM_RED, "信じ難いほど");
-			else if (speed > 134) hook_c_roff(TERM_ORANGE, "猛烈に");
-			else if (speed > 129) hook_c_roff(TERM_ORANGE, "非常に");
-			else if (speed > 124) hook_c_roff(TERM_UMBER, "かなり");
-			else if (speed < 120) hook_c_roff(TERM_L_UMBER, "やや");
-			hook_c_roff(TERM_L_RED, "素早く");
-#else
-			if (speed > 139) hook_c_roff(TERM_RED, " incredibly");
-			else if (speed > 134) hook_c_roff(TERM_ORANGE, " extremely");
-			else if (speed > 129) hook_c_roff(TERM_ORANGE, " very");
-			else if (speed > 124) hook_c_roff(TERM_UMBER, " fairly");
-			else if (speed < 120) hook_c_roff(TERM_L_UMBER, " somewhat");
-			hook_c_roff(TERM_L_RED, " quickly");
-#endif
-
+			if (speed > 139) hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));
+			else if (speed > 134) hook_c_roff(TERM_ORANGE, _("猛烈に", " extremely"));
+			else if (speed > 129) hook_c_roff(TERM_ORANGE, _("非常に", " very"));
+			else if (speed > 124) hook_c_roff(TERM_UMBER, _("かなり", " fairly"));
+			else if (speed < 120) hook_c_roff(TERM_L_UMBER, _("やや", " somewhat"));
+			hook_c_roff(TERM_L_RED, _("素早く", " quickly"));
 		}
 		else if (speed < 110)
 		{
-#ifdef JP
-			if (speed < 90) hook_c_roff(TERM_L_GREEN, "信じ難いほど");
-			else if (speed < 95) hook_c_roff(TERM_BLUE, "非常に");
-			else if (speed < 100) hook_c_roff(TERM_BLUE, "かなり");
-			else if (speed > 104) hook_c_roff(TERM_GREEN, "やや");
-			hook_c_roff(TERM_L_BLUE, "ゆっくりと");
-#else
-			if (speed < 90) hook_c_roff(TERM_L_GREEN, " incredibly");
-			else if (speed < 95) hook_c_roff(TERM_BLUE, " very");
-			else if (speed < 100) hook_c_roff(TERM_BLUE, " fairly");
-			else if (speed > 104) hook_c_roff(TERM_GREEN, " somewhat");
-			hook_c_roff(TERM_L_BLUE, " slowly");
-#endif
-
+			if (speed < 90) hook_c_roff(TERM_L_GREEN, _("信じ難いほど", " incredibly"));
+			else if (speed < 95) hook_c_roff(TERM_BLUE, _("非常に", " very"));
+			else if (speed < 100) hook_c_roff(TERM_BLUE, _("かなり", " fairly"));
+			else if (speed > 104) hook_c_roff(TERM_GREEN, _("やや", " somewhat"));
+			hook_c_roff(TERM_L_BLUE, _("ゆっくりと", " slowly"));
 		}
 		else
 		{
-#ifdef JP
-			hooked_roff("普通の速さで");
-#else
-			hooked_roff(" at normal speed");
-#endif
-
+			hooked_roff(_("普通の速さで", " at normal speed"));
 		}
 #ifdef JP
 		hooked_roff("動いている");
@@ -617,42 +497,22 @@ static void roff_aux(int r_idx, int mode)
 		/* Introduce */
 		if (old)
 		{
-#ifdef JP
-			hooked_roff("、しかし");
-#else
-			hooked_roff(", but ");
-#endif
-
+			hooked_roff(_("、しかし", ", but "));
 		}
 		else
 		{
-#ifdef JP
-			hooked_roff(format("%^sは", wd_he[msex]));
-#else
-			hooked_roff(format("%^s ", wd_he[msex]));
-#endif
-
+			hooked_roff(format(_("%^sは", "%^s "), wd_he[msex]));
 			old = TRUE;
 		}
 
 		/* Describe */
-#ifdef JP
-		hooked_roff("侵入者を追跡しない");
-#else
-		hooked_roff("does not deign to chase intruders");
-#endif
-
+		hooked_roff(_("侵入者を追跡しない", "does not deign to chase intruders"));
 	}
 
 	/* End this sentence */
 	if (old)
 	{
-#ifdef JP
-		hooked_roff("。");
-#else
-		hooked_roff(".  ");
-#endif
-
+		hooked_roff(_("。", ".  "));
 		old = FALSE;
 	}
 
@@ -676,94 +536,28 @@ static void roff_aux(int r_idx, int mode)
 
 
 		/* Describe the "quality" */
-#ifdef JP
-if (flags2 & RF2_ELDRITCH_HORROR) hook_c_roff(TERM_VIOLET, "狂気を誘う");/*nuke me*/
-#else
-		if (flags2 & RF2_ELDRITCH_HORROR) hook_c_roff(TERM_VIOLET, " sanity-blasting");
-#endif
+		if (flags2 & RF2_ELDRITCH_HORROR) hook_c_roff(TERM_VIOLET, _("狂気を誘う", " sanity-blasting"));/*nuke me*/
+		if (flags3 & RF3_ANIMAL)          hook_c_roff(TERM_L_GREEN, _("自然界の", " natural"));
+		if (flags3 & RF3_EVIL)            hook_c_roff(TERM_L_DARK, _("邪悪なる", " evil"));
+		if (flags3 & RF3_GOOD)            hook_c_roff(TERM_YELLOW, _("善良な", " good"));
+		if (flags3 & RF3_UNDEAD)          hook_c_roff(TERM_VIOLET, _("アンデッドの", " undead"));
+		if (flags3 & RF3_AMBERITE)        hook_c_roff(TERM_VIOLET, _("アンバーの王族の", " Amberite"));
 
-#ifdef JP
-if (flags3 & RF3_ANIMAL)          hook_c_roff(TERM_L_GREEN, "自然界の");
-#else
-		if (flags3 & RF3_ANIMAL)          hook_c_roff(TERM_L_GREEN, " natural");
-#endif
-
-#ifdef JP
-if (flags3 & RF3_EVIL)            hook_c_roff(TERM_L_DARK, "邪悪なる");
-#else
-		if (flags3 & RF3_EVIL)            hook_c_roff(TERM_L_DARK, " evil");
-#endif
-
-#ifdef JP
-if (flags3 & RF3_GOOD)            hook_c_roff(TERM_YELLOW, "善良な");
-#else
-		if (flags3 & RF3_GOOD)            hook_c_roff(TERM_YELLOW, " good");
-#endif
-
-#ifdef JP
-if (flags3 & RF3_UNDEAD)          hook_c_roff(TERM_VIOLET, "アンデッドの");
-#else
-		if (flags3 & RF3_UNDEAD)          hook_c_roff(TERM_VIOLET, " undead");
-#endif
-#ifdef JP
-if (flags3 & RF3_AMBERITE)        hook_c_roff(TERM_VIOLET, "アンバーの王族の");
-#else
-		if (flags3 & RF3_AMBERITE)        hook_c_roff(TERM_VIOLET, " Amberite");
-#endif
-
-
-	if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC)) || (flags2 & (RF2_QUANTUM | RF2_HUMAN)))
-	{
-	/* Describe the "race" */
-#ifdef JP
-     if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, "ドラゴン");
-#else
-		     if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, " dragon");
-#endif
-
-#ifdef JP
-if (flags3 & RF3_DEMON)    hook_c_roff(TERM_VIOLET, "デーモン");
-#else
-		if (flags3 & RF3_DEMON)    hook_c_roff(TERM_VIOLET, " demon");
-#endif
-
-#ifdef JP
-if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, "ジャイアント");
-#else
-		if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, " giant");
-#endif
-
-#ifdef JP
-if (flags3 & RF3_TROLL)    hook_c_roff(TERM_BLUE, "トロル");
-#else
-		if (flags3 & RF3_TROLL)    hook_c_roff(TERM_BLUE, " troll");
-#endif
-
-#ifdef JP
-if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, "オーク");
-#else
-		if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, " orc");
-#endif
-
-#ifdef JP
-if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, "人間");
-#else
-		if (flags2 & RF2_HUMAN) hook_c_roff(TERM_L_WHITE, " human");
-#endif
-
-#ifdef JP
-if (flags2 & RF2_QUANTUM)  hook_c_roff(TERM_VIOLET, "量子生物");
-#else
-		if (flags2 & RF2_QUANTUM)  hook_c_roff(TERM_VIOLET, " quantum creature");
-#endif
-
-	}
-#ifdef JP
-else                            hooked_roff("モンスター");
-#else
-		else                            hooked_roff(" creature");
-#endif
-
+		if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC)) || (flags2 & (RF2_QUANTUM | RF2_HUMAN)))
+		{
+		/* Describe the "race" */
+			if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, _("ドラゴン", " dragon"));
+			if (flags3 & RF3_DEMON)    hook_c_roff(TERM_VIOLET, _("デーモン", " demon"));
+			if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, _("ジャイアント", " giant"));
+			if (flags3 & RF3_TROLL)    hook_c_roff(TERM_BLUE, _("トロル", " troll"));
+			if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, _("オーク", " orc"));
+			if (flags2 & RF2_HUMAN)    hook_c_roff(TERM_L_WHITE, _("人間", " human"));
+			if (flags2 & RF2_QUANTUM)  hook_c_roff(TERM_VIOLET, _("量子生物", " quantum creature"));
+		}
+		else
+		{
+			hooked_roff(_("モンスター", " creature"));
+		}
 
 #ifdef JP
 		hooked_roff("を倒すことは");
@@ -819,188 +613,106 @@ else                            hooked_roff("モンスター");
 
 	if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC) && (flags3 & RF3_AURA_COLD))
 	{
-#ifdef JP
-		hook_c_roff(TERM_VIOLET, format("%^sは炎と氷とスパークに包まれている。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_VIOLET, format("%^s is surrounded by flames, ice and electricity.  ", wd_he[msex]));
-#endif
+		hook_c_roff(TERM_VIOLET, format(
+			_("%^sは炎と氷とスパークに包まれている。", "%^s is surrounded by flames, ice and electricity.  "), wd_he[msex]));
 	}
 	else if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC))
 	{
-#ifdef JP
-		hook_c_roff(TERM_L_RED, format("%^sは炎とスパークに包まれている。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_L_RED, format("%^s is surrounded by flames and electricity.  ", wd_he[msex]));
-#endif
+		hook_c_roff(TERM_L_RED, format(
+			_("%^sは炎とスパークに包まれている。", "%^s is surrounded by flames and electricity.  "), wd_he[msex]));
 	}
 	else if ((flags2 & RF2_AURA_FIRE) && (flags3 & RF3_AURA_COLD))
 	{
-#ifdef JP
-		hook_c_roff(TERM_BLUE, format("%^sは炎と氷に包まれている。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_BLUE, format("%^s is surrounded by flames and ice.  ", wd_he[msex]));
-#endif
+		hook_c_roff(TERM_BLUE, format(
+			_("%^sは炎と氷に包まれている。", "%^s is surrounded by flames and ice.  "), wd_he[msex]));
 	}
 	else if ((flags3 & RF3_AURA_COLD) && (flags2 & RF2_AURA_ELEC))
 	{
-#ifdef JP
-		hook_c_roff(TERM_L_GREEN, format("%^sは氷とスパークに包まれている。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_L_GREEN, format("%^s is surrounded by ice and electricity.  ", wd_he[msex]));
-#endif
+		hook_c_roff(TERM_L_GREEN, format(
+			_("%^sは氷とスパークに包まれている。", "%^s is surrounded by ice and electricity.  "), wd_he[msex]));
 	}
 	else if (flags2 & RF2_AURA_FIRE)
 	{
-#ifdef JP
-		hook_c_roff(TERM_RED, format("%^sは炎に包まれている。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_RED, format("%^s is surrounded by flames.  ", wd_he[msex]));
-#endif
+		hook_c_roff(TERM_RED, format(
+			_("%^sは炎に包まれている。", "%^s is surrounded by flames.  "), wd_he[msex]));
 	}
 	else if (flags3 & RF3_AURA_COLD)
 	{
-#ifdef JP
-		hook_c_roff(TERM_BLUE, format("%^sは氷に包まれている。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_BLUE, format("%^s is surrounded by ice.  ", wd_he[msex]));
-#endif
+		hook_c_roff(TERM_BLUE, format(
+			_("%^sは氷に包まれている。", "%^s is surrounded by ice.  "), wd_he[msex]));
 	}
 	else if (flags2 & RF2_AURA_ELEC)
 	{
-#ifdef JP
-		hook_c_roff(TERM_L_BLUE, format("%^sはスパークに包まれている。", wd_he[msex]));
-#else
-		hook_c_roff(TERM_L_BLUE, format("%^s is surrounded by electricity.  ", wd_he[msex]));
-#endif
+		hook_c_roff(TERM_L_BLUE, format(
+			_("%^sはスパークに包まれている。", "%^s is surrounded by electricity.  "), wd_he[msex]));
 	}
 
 	if (flags2 & RF2_REFLECTING)
-	{
-#ifdef JP
-		hooked_roff(format("%^sは矢の呪文を跳ね返す。", wd_he[msex]));
-#else
-		hooked_roff(format("%^s reflects bolt spells.  ", wd_he[msex]));
-#endif
-
-	}
+		hooked_roff(format(_("%^sは矢の呪文を跳ね返す。", "%^s reflects bolt spells.  "), wd_he[msex]));
 
 	/* Describe escorts */
 	if ((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS) || reinforce)
 	{
-#ifdef JP
-		hooked_roff(format("%^sは通常護衛を伴って現れる。",
-#else
-		hooked_roff(format("%^s usually appears with escorts.  ",
-#endif
-			    wd_he[msex]));
+		hooked_roff(format(
+			_("%^sは通常護衛を伴って現れる。", "%^s usually appears with escorts.  "), wd_he[msex]));
 
 		if(reinforce)
 		{
-#ifdef JP
-			hooked_roff("護衛の構成は");
+			hooked_roff(_("護衛の構成は", "These escorts"));
 			if((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS))
 			{
-				hooked_roff("少なくとも");
+				hooked_roff(_("少なくとも", " at the least"));
 			}
-#else
-			hooked_roff("These escorts");
-			if((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS))
-			{
-				hooked_roff(" at the least");
-			}
+#ifndef JP
 			hooked_roff(" contain ");
 #endif			
 			for(n = 0; n < 6; n++)
 			{
-#ifdef JP
 				if(r_ptr->reinforce_id[n] && r_ptr->reinforce_dd[n] && r_ptr->reinforce_ds[n])
 				{
 					monster_race *rf_ptr = &r_info[r_ptr->reinforce_id[n]];
 					if(rf_ptr->flags1 & RF1_UNIQUE)
 					{
-						hooked_roff(format("、%s", r_name + rf_ptr->name));
+						hooked_roff(format(_("、%s", ", %s"), r_name + rf_ptr->name));
 					}
 					else
 					{
+#ifdef JP
 						hooked_roff(format("、 %dd%d 体の%s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n],
 							r_name + rf_ptr->name));
-					}
-				}
 #else
-				if(r_ptr->reinforce_id[n] && r_ptr->reinforce_dd[n] && r_ptr->reinforce_ds[n])
-				{
-					monster_race *rf_ptr = &r_info[r_ptr->reinforce_id[n]];
-					if(rf_ptr->flags1 & RF1_UNIQUE)
-					{
-						hooked_roff(format(", %s", r_name + rf_ptr->name));
-					}
-					else
-					{
 						bool plural = (r_ptr->reinforce_dd[n] * r_ptr->reinforce_ds[n] > 1);
 						char name[80];
 						strcpy(name, r_name + rf_ptr->name);
 						if(plural) plural_aux(name);
 						hooked_roff(format(",%dd%d %s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n], name));
+#endif
 					}
 				}
-#endif
 			}
-#ifdef JP
-			hooked_roff("で成り立っている。");
-#else
-			hooked_roff(".");
-#endif
+			hooked_roff(_("で成り立っている。", "."));
 		}
 	}
 
 	/* Describe friends */
 	else if (flags1 & RF1_FRIENDS)
 	{
-#ifdef JP
-		hooked_roff(format("%^sは通常集団で現れる。",
-#else
-		hooked_roff(format("%^s usually appears in groups.  ",
-#endif
-
-			    wd_he[msex]));
+		hooked_roff(format(_("%^sは通常集団で現れる。", "%^s usually appears in groups.  "), wd_he[msex]));
 	}
 
 
 	/* Collect inate attacks */
 	vn = 0;
-#ifdef JP
-	if (flags4 & RF4_SHRIEK)  {vp[vn] = "悲鳴で助けを求める";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags4 & RF4_SHRIEK)  {vp[vn] = "shriek for help";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-	if (flags4 & RF4_ROCKET)  {vp[vn] = "ロケットを発射する";color[vn++] = TERM_UMBER;}
-#else
-	if (flags4 & RF4_ROCKET)  {vp[vn] = "shoot a rocket";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-	if (flags4 & RF4_SHOOT) {vp[vn] = "射撃をする";color[vn++] = TERM_UMBER;}
-#else
-	if (flags4 & RF4_SHOOT) {vp[vn] = "fire an arrow";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-	if (flags6 & (RF6_SPECIAL)) {vp[vn] = "特別な行動をする";color[vn++] = TERM_VIOLET;}
-#else
-	if (flags6 & (RF6_SPECIAL)) {vp[vn] = "do something";color[vn++] = TERM_VIOLET;}
-#endif
+	if (flags4 & RF4_SHRIEK)  { vp[vn] = _("悲鳴で助けを求める", "shriek for help"); color[vn++] = TERM_L_WHITE; }
+	if (flags4 & RF4_ROCKET)  { vp[vn] = _("ロケットを発射する", "shoot a rocket"); color[vn++] = TERM_UMBER; }
+	if (flags4 & RF4_SHOOT) { vp[vn] = _("射撃をする", "fire an arrow"); color[vn++] = TERM_UMBER; }
+	if (flags6 & (RF6_SPECIAL)) { vp[vn] = _("特別な行動をする", "do something"); color[vn++] = TERM_VIOLET; }
 
 	/* Describe inate attacks */
 	if (vn)
 	{
 		/* Intro */
-#ifdef JP
-		hooked_roff(format("%^sは", wd_he[msex]));
-#else
-		hooked_roff(format("%^s", wd_he[msex]));
-#endif
+		hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
 
 
 		/* Scan */
@@ -1028,149 +740,34 @@ else                            hooked_roff("モンスター");
 		}
 
 		/* End */
-#ifdef JP
-		hooked_roff("ことがある。");
-#else
-		hooked_roff(".  ");
-#endif
-
+		hooked_roff(_("ことがある。", ".  "));
 	}
 
 
 	/* Collect breaths */
 	vn = 0;
-#ifdef JP
-	if (flags4 & (RF4_BR_ACID))		{vp[vn] = "酸";color[vn++] = TERM_GREEN;}
-#else
-	if (flags4 & (RF4_BR_ACID))		{vp[vn] = "acid";color[vn++] = TERM_GREEN;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_ELEC))		{vp[vn] = "稲妻";color[vn++] = TERM_BLUE;}
-#else
-	if (flags4 & (RF4_BR_ELEC))		{vp[vn] = "lightning";color[vn++] = TERM_BLUE;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_FIRE))		{vp[vn] = "火炎";color[vn++] = TERM_RED;}
-#else
-	if (flags4 & (RF4_BR_FIRE))		{vp[vn] = "fire";color[vn++] = TERM_RED;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_COLD))		{vp[vn] = "冷気";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags4 & (RF4_BR_COLD))		{vp[vn] = "frost";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_POIS))		{vp[vn] = "毒";color[vn++] = TERM_L_GREEN;}
-#else
-	if (flags4 & (RF4_BR_POIS))		{vp[vn] = "poison";color[vn++] = TERM_L_GREEN;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_NETH))		{vp[vn] = "地獄";color[vn++] = TERM_L_DARK;}
-#else
-	if (flags4 & (RF4_BR_NETH))		{vp[vn] = "nether";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_LITE))		{vp[vn] = "閃光";color[vn++] = TERM_YELLOW;}
-#else
-	if (flags4 & (RF4_BR_LITE))		{vp[vn] = "light";color[vn++] = TERM_YELLOW;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_DARK))		{vp[vn] = "暗黒";color[vn++] = TERM_L_DARK;}
-#else
-	if (flags4 & (RF4_BR_DARK))		{vp[vn] = "darkness";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_CONF))		{vp[vn] = "混乱";color[vn++] = TERM_L_UMBER;}
-#else
-	if (flags4 & (RF4_BR_CONF))		{vp[vn] = "confusion";color[vn++] = TERM_L_UMBER;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_SOUN))		{vp[vn] = "轟音";color[vn++] = TERM_ORANGE;}
-#else
-	if (flags4 & (RF4_BR_SOUN))		{vp[vn] = "sound";color[vn++] = TERM_ORANGE;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_CHAO))		{vp[vn] = "カオス";color[vn++] = TERM_VIOLET;}
-#else
-	if (flags4 & (RF4_BR_CHAO))		{vp[vn] = "chaos";color[vn++] = TERM_VIOLET;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_DISE))		{vp[vn] = "劣化";color[vn++] = TERM_VIOLET;}
-#else
-	if (flags4 & (RF4_BR_DISE))		{vp[vn] = "disenchantment";color[vn++] = TERM_VIOLET;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_NEXU))		{vp[vn] = "因果混乱";color[vn++] = TERM_VIOLET;}
-#else
-	if (flags4 & (RF4_BR_NEXU))		{vp[vn] = "nexus";color[vn++] = TERM_VIOLET;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_TIME))		{vp[vn] = "時間逆転";color[vn++] = TERM_L_BLUE;}
-#else
-	if (flags4 & (RF4_BR_TIME))		{vp[vn] = "time";color[vn++] = TERM_L_BLUE;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_INER))		{vp[vn] = "遅鈍";color[vn++] = TERM_SLATE;}
-#else
-	if (flags4 & (RF4_BR_INER))		{vp[vn] = "inertia";color[vn++] = TERM_SLATE;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_GRAV))		{vp[vn] = "重力";color[vn++] = TERM_SLATE;}
-#else
-	if (flags4 & (RF4_BR_GRAV))		{vp[vn] = "gravity";color[vn++] = TERM_SLATE;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_SHAR))		{vp[vn] = "破片";color[vn++] = TERM_L_UMBER;}
-#else
-	if (flags4 & (RF4_BR_SHAR))		{vp[vn] = "shards";color[vn++] = TERM_L_UMBER;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_PLAS))		{vp[vn] = "プラズマ";color[vn++] = TERM_L_RED;}
-#else
-	if (flags4 & (RF4_BR_PLAS))		{vp[vn] = "plasma";color[vn++] = TERM_L_RED;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_WALL))		{vp[vn] = "フォース";color[vn++] = TERM_UMBER;}
-#else
-	if (flags4 & (RF4_BR_WALL))		{vp[vn] = "force";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_MANA))		{vp[vn] = "魔力";color[vn++] = TERM_L_BLUE;}
-#else
-	if (flags4 & (RF4_BR_MANA))		{vp[vn] = "mana";color[vn++] = TERM_L_BLUE;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_NUKE))		{vp[vn] = "放射性廃棄物";color[vn++] = TERM_L_GREEN;}
-#else
-	if (flags4 & (RF4_BR_NUKE))		{vp[vn] = "toxic waste";color[vn++] = TERM_L_GREEN;}
-#endif
-
-#ifdef JP
-	if (flags4 & (RF4_BR_DISI))		{vp[vn] = "分解";color[vn++] = TERM_SLATE;}
-#else
-	if (flags4 & (RF4_BR_DISI))		{vp[vn] = "disintegration";color[vn++] = TERM_SLATE;}
-#endif
-
+	if (flags4 & (RF4_BR_ACID))		{ vp[vn] = _("酸", "acid"); color[vn++] = TERM_GREEN; }
+	if (flags4 & (RF4_BR_ELEC))		{ vp[vn] = _("稲妻", "lightning"); color[vn++] = TERM_BLUE; }
+	if (flags4 & (RF4_BR_FIRE))		{ vp[vn] = _("火炎", "fire"); color[vn++] = TERM_RED; }
+	if (flags4 & (RF4_BR_COLD))		{ vp[vn] = _("冷気", "frost"); color[vn++] = TERM_L_WHITE; }
+	if (flags4 & (RF4_BR_POIS))		{ vp[vn] = _("毒", "poison"); color[vn++] = TERM_L_GREEN; }
+	if (flags4 & (RF4_BR_NETH))		{ vp[vn] = _("地獄", "nether"); color[vn++] = TERM_L_DARK; }
+	if (flags4 & (RF4_BR_LITE))		{ vp[vn] = _("閃光", "light"); color[vn++] = TERM_YELLOW; }
+	if (flags4 & (RF4_BR_DARK))		{ vp[vn] = _("暗黒", "darkness"); color[vn++] = TERM_L_DARK; }
+	if (flags4 & (RF4_BR_CONF))		{ vp[vn] = _("混乱", "confusion"); color[vn++] = TERM_L_UMBER; }
+	if (flags4 & (RF4_BR_SOUN))		{ vp[vn] = _("轟音", "sound"); color[vn++] = TERM_ORANGE; }
+	if (flags4 & (RF4_BR_CHAO))		{ vp[vn] = _("カオス", "chaos"); color[vn++] = TERM_VIOLET; }
+	if (flags4 & (RF4_BR_DISE))		{ vp[vn] = _("劣化", "disenchantment"); color[vn++] = TERM_VIOLET; }
+	if (flags4 & (RF4_BR_NEXU))		{ vp[vn] = _("因果混乱", "nexus"); color[vn++] = TERM_VIOLET; }
+	if (flags4 & (RF4_BR_TIME))		{ vp[vn] = _("時間逆転", "time"); color[vn++] = TERM_L_BLUE; }
+	if (flags4 & (RF4_BR_INER))		{ vp[vn] = _("遅鈍", "inertia"); color[vn++] = TERM_SLATE; }
+	if (flags4 & (RF4_BR_GRAV))		{ vp[vn] = _("重力", "gravity"); color[vn++] = TERM_SLATE; }
+	if (flags4 & (RF4_BR_SHAR))		{ vp[vn] = _("破片", "shards"); color[vn++] = TERM_L_UMBER; }
+	if (flags4 & (RF4_BR_PLAS))		{ vp[vn] = _("プラズマ", "plasma"); color[vn++] = TERM_L_RED; }
+	if (flags4 & (RF4_BR_WALL))		{ vp[vn] = _("フォース", "force"); color[vn++] = TERM_UMBER; }
+	if (flags4 & (RF4_BR_MANA))		{ vp[vn] = _("魔力", "mana"); color[vn++] = TERM_L_BLUE; }
+	if (flags4 & (RF4_BR_NUKE))		{ vp[vn] = _("放射性廃棄物", "toxic waste"); color[vn++] = TERM_L_GREEN; }
+	if (flags4 & (RF4_BR_DISI))		{ vp[vn] = _("分解", "disintegration"); color[vn++] = TERM_SLATE; }
 
 	/* Describe breaths */
 	if (vn)
@@ -1179,12 +776,7 @@ else                            hooked_roff("モンスター");
 		breath = TRUE;
 
 		/* Intro */
-#ifdef JP
-		hooked_roff(format("%^sは", wd_he[msex]));
-#else
-		hooked_roff(format("%^s", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
@@ -1210,415 +802,84 @@ else                            hooked_roff("モンスター");
 
 	/* Collect spells */
 	vn = 0;
-#ifdef JP
-if (flags5 & (RF5_BA_ACID))         {vp[vn] = "アシッド・ボール";color[vn++] = TERM_GREEN;}
-#else
-	if (flags5 & (RF5_BA_ACID))         {vp[vn] = "produce acid balls";color[vn++] = TERM_GREEN;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BA_ELEC))         {vp[vn] = "サンダー・ボール";color[vn++] = TERM_BLUE;}
-#else
-	if (flags5 & (RF5_BA_ELEC))         {vp[vn] = "produce lightning balls";color[vn++] = TERM_BLUE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BA_FIRE))         {vp[vn] = "ファイア・ボール";color[vn++] = TERM_RED;}
-#else
-	if (flags5 & (RF5_BA_FIRE))         {vp[vn] = "produce fire balls";color[vn++] = TERM_RED;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BA_COLD))         {vp[vn] = "アイス・ボール";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags5 & (RF5_BA_COLD))         {vp[vn] = "produce frost balls";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BA_POIS))         {vp[vn] = "悪臭雲";color[vn++] = TERM_L_GREEN;}
-#else
-	if (flags5 & (RF5_BA_POIS))         {vp[vn] = "produce poison balls";color[vn++] = TERM_L_GREEN;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BA_NETH))         {vp[vn] = "地獄球";color[vn++] = TERM_L_DARK;}
-#else
-	if (flags5 & (RF5_BA_NETH))         {vp[vn] = "produce nether balls";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BA_WATE))         {vp[vn] = "ウォーター・ボール";color[vn++] = TERM_BLUE;}
-#else
-	if (flags5 & (RF5_BA_WATE))         {vp[vn] = "produce water balls";color[vn++] = TERM_BLUE;}
-#endif
-
-#ifdef JP
-if (flags4 & (RF4_BA_NUKE))         {vp[vn] = "放射能球";color[vn++] = TERM_L_GREEN;}
-#else
-	if (flags4 & (RF4_BA_NUKE))         {vp[vn] = "produce balls of radiation";color[vn++] = TERM_L_GREEN;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BA_MANA))         {vp[vn] = "魔力の嵐";color[vn++] = TERM_L_BLUE;}
-#else
-	if (flags5 & (RF5_BA_MANA))         {vp[vn] = "invoke mana storms";color[vn++] = TERM_L_BLUE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BA_DARK))         {vp[vn] = "暗黒の嵐";color[vn++] = TERM_L_DARK;}
-#else
-	if (flags5 & (RF5_BA_DARK))         {vp[vn] = "invoke darkness storms";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BA_LITE))         {vp[vn] = "スターバースト";color[vn++] = TERM_YELLOW;}
-#else
-	if (flags5 & (RF5_BA_LITE))         {vp[vn] = "invoke starburst";color[vn++] = TERM_YELLOW;}
-#endif
-
-#ifdef JP
-if (flags4 & (RF4_BA_CHAO))         {vp[vn] = "純ログルス";color[vn++] = TERM_VIOLET;}
-#else
-	if (flags4 & (RF4_BA_CHAO))         {vp[vn] = "invoke raw Logrus";color[vn++] = TERM_VIOLET;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_HAND_DOOM))       {vp[vn] = "破滅の手";color[vn++] = TERM_VIOLET;}
-#else
-	if (flags6 & (RF6_HAND_DOOM))       {vp[vn] = "invoke the Hand of Doom";color[vn++] = TERM_VIOLET;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_PSY_SPEAR))            {vp[vn] = "光の剣";color[vn++] = TERM_YELLOW;}
-#else
-	if (flags6 & (RF6_PSY_SPEAR))            {vp[vn] = "psycho-spear";color[vn++] = TERM_YELLOW;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_DRAIN_MANA))      {vp[vn] = "魔力吸収";color[vn++] = TERM_SLATE;}
-#else
-	if (flags5 & (RF5_DRAIN_MANA))      {vp[vn] = "drain mana";color[vn++] = TERM_SLATE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_MIND_BLAST))      {vp[vn] = "精神攻撃";color[vn++] = TERM_L_RED;}
-#else
-	if (flags5 & (RF5_MIND_BLAST))      {vp[vn] = "cause mind blasting";color[vn++] = TERM_L_RED;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BRAIN_SMASH))     {vp[vn] = "脳攻撃";color[vn++] = TERM_RED;}
-#else
-	if (flags5 & (RF5_BRAIN_SMASH))     {vp[vn] = "cause brain smashing";color[vn++] = TERM_RED;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_CAUSE_1))         {vp[vn] = "軽傷＋呪い";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags5 & (RF5_CAUSE_1))         {vp[vn] = "cause light wounds and cursing";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_CAUSE_2))         {vp[vn] = "重傷＋呪い";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags5 & (RF5_CAUSE_2))         {vp[vn] = "cause serious wounds and cursing";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_CAUSE_3))         {vp[vn] = "致命傷＋呪い";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags5 & (RF5_CAUSE_3))         {vp[vn] = "cause critical wounds and cursing";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_CAUSE_4))         {vp[vn] = "秘孔を突く";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags5 & (RF5_CAUSE_4))         {vp[vn] = "cause mortal wounds";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BO_ACID))         {vp[vn] = "アシッド・ボルト";color[vn++] = TERM_GREEN;}
-#else
-	if (flags5 & (RF5_BO_ACID))         {vp[vn] = "produce acid bolts";color[vn++] = TERM_GREEN;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BO_ELEC))         {vp[vn] = "サンダー・ボルト";color[vn++] = TERM_BLUE;}
-#else
-	if (flags5 & (RF5_BO_ELEC))         {vp[vn] = "produce lightning bolts";color[vn++] = TERM_BLUE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BO_FIRE))         {vp[vn] = "ファイア・ボルト";color[vn++] = TERM_RED;}
-#else
-	if (flags5 & (RF5_BO_FIRE))         {vp[vn] = "produce fire bolts";color[vn++] = TERM_RED;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BO_COLD))         {vp[vn] = "アイス・ボルト";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags5 & (RF5_BO_COLD))         {vp[vn] = "produce frost bolts";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BO_NETH))         {vp[vn] = "地獄の矢";color[vn++] = TERM_L_DARK;}
-#else
-	if (flags5 & (RF5_BO_NETH))         {vp[vn] = "produce nether bolts";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BO_WATE))         {vp[vn] = "ウォーター・ボルト";color[vn++] = TERM_BLUE;}
-#else
-	if (flags5 & (RF5_BO_WATE))         {vp[vn] = "produce water bolts";color[vn++] = TERM_BLUE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BO_MANA))         {vp[vn] = "魔力の矢";color[vn++] = TERM_L_BLUE;}
-#else
-	if (flags5 & (RF5_BO_MANA))         {vp[vn] = "produce mana bolts";color[vn++] = TERM_L_BLUE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BO_PLAS))         {vp[vn] = "プラズマ・ボルト";color[vn++] = TERM_L_RED;}
-#else
-	if (flags5 & (RF5_BO_PLAS))         {vp[vn] = "produce plasma bolts";color[vn++] = TERM_L_RED;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BO_ICEE))         {vp[vn] = "極寒の矢";color[vn++] = TERM_WHITE;}
-#else
-	if (flags5 & (RF5_BO_ICEE))         {vp[vn] = "produce ice bolts";color[vn++] = TERM_WHITE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_MISSILE))         {vp[vn] = "マジックミサイル";color[vn++] = TERM_SLATE;}
-#else
-	if (flags5 & (RF5_MISSILE))         {vp[vn] = "produce magic missiles";color[vn++] = TERM_SLATE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_SCARE))           {vp[vn] = "恐怖";color[vn++] = TERM_SLATE;}
-#else
-	if (flags5 & (RF5_SCARE))           {vp[vn] = "terrify";color[vn++] = TERM_SLATE;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_BLIND))           {vp[vn] = "目くらまし";color[vn++] = TERM_L_DARK;}
-#else
-	if (flags5 & (RF5_BLIND))           {vp[vn] = "blind";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_CONF))            {vp[vn] = "混乱";color[vn++] = TERM_L_UMBER;}
-#else
-	if (flags5 & (RF5_CONF))            {vp[vn] = "confuse";color[vn++] = TERM_L_UMBER;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_SLOW))            {vp[vn] = "減速";color[vn++] = TERM_UMBER;}
-#else
-	if (flags5 & (RF5_SLOW))            {vp[vn] = "slow";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-if (flags5 & (RF5_HOLD))            {vp[vn] = "麻痺";color[vn++] = TERM_RED;}
-#else
-	if (flags5 & (RF5_HOLD))            {vp[vn] = "paralyze";color[vn++] = TERM_RED;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_HASTE))           {vp[vn] = "加速";color[vn++] = TERM_L_GREEN;}
-#else
-	if (flags6 & (RF6_HASTE))           {vp[vn] = "haste-self";color[vn++] = TERM_L_GREEN;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_HEAL))            {vp[vn] = "治癒";color[vn++] = TERM_WHITE;}
-#else
-	if (flags6 & (RF6_HEAL))            {vp[vn] = "heal-self";color[vn++] = TERM_WHITE;}
-#endif
-
-#ifdef JP
-	if (flags6 & (RF6_INVULNER))        {vp[vn] = "無敵化";color[vn++] = TERM_WHITE;}
-#else
-	if (flags6 & (RF6_INVULNER))        {vp[vn] = "make invulnerable";color[vn++] = TERM_WHITE;}
-#endif
-
-#ifdef JP
-if (flags4 & RF4_DISPEL)    {vp[vn] = "魔力消去";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags4 & RF4_DISPEL)    {vp[vn] = "dispel-magic";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_BLINK))           {vp[vn] = "ショートテレポート";color[vn++] = TERM_UMBER;}
-#else
-	if (flags6 & (RF6_BLINK))           {vp[vn] = "blink-self";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_TPORT))           {vp[vn] = "テレポート";color[vn++] = TERM_ORANGE;}
-#else
-	if (flags6 & (RF6_TPORT))           {vp[vn] = "teleport-self";color[vn++] = TERM_ORANGE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_WORLD))            {vp[vn] = "時を止める";color[vn++] = TERM_L_BLUE;}
-#else
-	if (flags6 & (RF6_WORLD))            {vp[vn] = "stop the time";color[vn++] = TERM_L_BLUE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_TELE_TO))         {vp[vn] = "テレポートバック";color[vn++] = TERM_L_UMBER;}
-#else
-	if (flags6 & (RF6_TELE_TO))         {vp[vn] = "teleport to";color[vn++] = TERM_L_UMBER;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_TELE_AWAY))       {vp[vn] = "テレポートアウェイ";color[vn++] = TERM_UMBER;}
-#else
-	if (flags6 & (RF6_TELE_AWAY))       {vp[vn] = "teleport away";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_TELE_LEVEL))      {vp[vn] = "テレポート・レベル";color[vn++] = TERM_ORANGE;}
-#else
-	if (flags6 & (RF6_TELE_LEVEL))      {vp[vn] = "teleport level";color[vn++] = TERM_ORANGE;}
-#endif
+	if (flags5 & (RF5_BA_ACID))         { vp[vn] = _("アシッド・ボール", "produce acid balls"); color[vn++] = TERM_GREEN; }
+	if (flags5 & (RF5_BA_ELEC))         { vp[vn] = _("サンダー・ボール", "produce lightning balls"); color[vn++] = TERM_BLUE; }
+	if (flags5 & (RF5_BA_FIRE))         { vp[vn] = _("ファイア・ボール", "produce fire balls"); color[vn++] = TERM_RED; }
+	if (flags5 & (RF5_BA_COLD))         { vp[vn] = _("アイス・ボール", "produce frost balls"); color[vn++] = TERM_L_WHITE; }
+	if (flags5 & (RF5_BA_POIS))         { vp[vn] = _("悪臭雲", "produce poison balls"); color[vn++] = TERM_L_GREEN; }
+	if (flags5 & (RF5_BA_NETH))         { vp[vn] = _("地獄球", "produce nether balls"); color[vn++] = TERM_L_DARK; }
+	if (flags5 & (RF5_BA_WATE))         { vp[vn] = _("ウォーター・ボール", "produce water balls"); color[vn++] = TERM_BLUE; }
+	if (flags4 & (RF4_BA_NUKE))         { vp[vn] = _("放射能球", "produce balls of radiation"); color[vn++] = TERM_L_GREEN; }
+	if (flags5 & (RF5_BA_MANA))         { vp[vn] = _("魔力の嵐", "invoke mana storms"); color[vn++] = TERM_L_BLUE; }
+	if (flags5 & (RF5_BA_DARK))         { vp[vn] = _("暗黒の嵐", "invoke darkness storms"); color[vn++] = TERM_L_DARK; }
+	if (flags5 & (RF5_BA_LITE))         { vp[vn] = _("スターバースト", "invoke starburst"); color[vn++] = TERM_YELLOW; }
+	if (flags4 & (RF4_BA_CHAO))         { vp[vn] = _("純ログルス", "invoke raw Logrus"); color[vn++] = TERM_VIOLET; }
+	if (flags6 & (RF6_HAND_DOOM))       { vp[vn] = _("破滅の手", "invoke the Hand of Doom"); color[vn++] = TERM_VIOLET; }
+	if (flags6 & (RF6_PSY_SPEAR))       { vp[vn] = _("光の剣", "psycho-spear"); color[vn++] = TERM_YELLOW; }
+	if (flags5 & (RF5_DRAIN_MANA))      { vp[vn] = _("魔力吸収", "drain mana"); color[vn++] = TERM_SLATE; }
+	if (flags5 & (RF5_MIND_BLAST))      { vp[vn] = _("精神攻撃", "cause mind blasting"); color[vn++] = TERM_L_RED; }
+	if (flags5 & (RF5_BRAIN_SMASH))     { vp[vn] = _("脳攻撃", "cause brain smashing"); color[vn++] = TERM_RED; }
+	if (flags5 & (RF5_CAUSE_1))         { vp[vn] = _("軽傷＋呪い", "cause light wounds and cursing"); color[vn++] = TERM_L_WHITE; }
+	if (flags5 & (RF5_CAUSE_2))         { vp[vn] = _("重傷＋呪い", "cause serious wounds and cursing"); color[vn++] = TERM_L_WHITE; }
+	if (flags5 & (RF5_CAUSE_3))         { vp[vn] = _("致命傷＋呪い", "cause critical wounds and cursing"); color[vn++] = TERM_L_WHITE; }
+	if (flags5 & (RF5_CAUSE_4))         { vp[vn] = _("秘孔を突く", "cause mortal wounds"); color[vn++] = TERM_L_WHITE; }
+	if (flags5 & (RF5_BO_ACID))         { vp[vn] = _("アシッド・ボルト", "produce acid bolts"); color[vn++] = TERM_GREEN; }
+	if (flags5 & (RF5_BO_ELEC))         { vp[vn] = _("サンダー・ボルト", "produce lightning bolts"); color[vn++] = TERM_BLUE; }
+	if (flags5 & (RF5_BO_FIRE))         { vp[vn] = _("ファイア・ボルト", "produce fire bolts"); color[vn++] = TERM_RED; }
+	if (flags5 & (RF5_BO_COLD))         { vp[vn] = _("アイス・ボルト", "produce frost bolts"); color[vn++] = TERM_L_WHITE; }
+	if (flags5 & (RF5_BO_NETH))         { vp[vn] = _("地獄の矢", "produce nether bolts"); color[vn++] = TERM_L_DARK; }
+	if (flags5 & (RF5_BO_WATE))         { vp[vn] = _("ウォーター・ボルト", "produce water bolts"); color[vn++] = TERM_BLUE; }
+	if (flags5 & (RF5_BO_MANA))         { vp[vn] = _("魔力の矢", "produce mana bolts"); color[vn++] = TERM_L_BLUE; }
+	if (flags5 & (RF5_BO_PLAS))         { vp[vn] = _("プラズマ・ボルト", "produce plasma bolts"); color[vn++] = TERM_L_RED; }
+	if (flags5 & (RF5_BO_ICEE))         { vp[vn] = _("極寒の矢", "produce ice bolts"); color[vn++] = TERM_WHITE; }
+	if (flags5 & (RF5_MISSILE))         { vp[vn] = _("マジックミサイル", "produce magic missiles"); color[vn++] = TERM_SLATE; }
+	if (flags5 & (RF5_SCARE))           { vp[vn] = _("恐怖", "terrify"); color[vn++] = TERM_SLATE; }
+	if (flags5 & (RF5_BLIND))           { vp[vn] = _("目くらまし", "blind"); color[vn++] = TERM_L_DARK; }
+	if (flags5 & (RF5_CONF))            { vp[vn] = _("混乱", "confuse"); color[vn++] = TERM_L_UMBER; }
+	if (flags5 & (RF5_SLOW))            { vp[vn] = _("減速", "slow"); color[vn++] = TERM_UMBER; }
+	if (flags5 & (RF5_HOLD))            { vp[vn] = _("麻痺", "paralyze"); color[vn++] = TERM_RED; }
+	if (flags6 & (RF6_HASTE))           { vp[vn] = _("加速", "haste-self"); color[vn++] = TERM_L_GREEN; }
+	if (flags6 & (RF6_HEAL))            { vp[vn] = _("治癒", "heal-self"); color[vn++] = TERM_WHITE; }
+	if (flags6 & (RF6_INVULNER))        { vp[vn] = _("無敵化", "make invulnerable"); color[vn++] = TERM_WHITE; }
+	if (flags4 & RF4_DISPEL)            { vp[vn] = _("魔力消去", "dispel-magic"); color[vn++] = TERM_L_WHITE; }
+	if (flags6 & (RF6_BLINK))           { vp[vn] = _("ショートテレポート", "blink-self"); color[vn++] = TERM_UMBER; }
+	if (flags6 & (RF6_TPORT))           { vp[vn] = _("テレポート", "teleport-self"); color[vn++] = TERM_ORANGE; }
+	if (flags6 & (RF6_WORLD))           { vp[vn] = _("時を止める", "stop the time"); color[vn++] = TERM_L_BLUE; }
+	if (flags6 & (RF6_TELE_TO))         { vp[vn] = _("テレポートバック", "teleport to"); color[vn++] = TERM_L_UMBER; }
+	if (flags6 & (RF6_TELE_AWAY))       { vp[vn] = _("テレポートアウェイ", "teleport away"); color[vn++] = TERM_UMBER; }
+	if (flags6 & (RF6_TELE_LEVEL))      { vp[vn] = _("テレポート・レベル", "teleport level"); color[vn++] = TERM_ORANGE; }
 
 	if (flags6 & (RF6_DARKNESS))
 	{
 		if ((p_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (r_ptr->flags7 & RF7_DARK_MASK))
 		{
-#ifdef JP
-			vp[vn] =  "暗闇"; color[vn++] = TERM_L_DARK;
-#else
-			vp[vn] = "create darkness"; color[vn++] = TERM_L_DARK;
-#endif
+			vp[vn] = _("暗闇", "create darkness"); color[vn++] = TERM_L_DARK;
 		}
 		else
 		{
-#ifdef JP
-			vp[vn] = "閃光"; color[vn++] = TERM_YELLOW;
-#else
-			vp[vn] = "create light"; color[vn++] = TERM_YELLOW;
-#endif
+			vp[vn] = _("閃光", "create light"); color[vn++] = TERM_YELLOW;
 		}
 	}
 
-#ifdef JP
-if (flags6 & (RF6_TRAPS))           {vp[vn] = "トラップ";color[vn++] = TERM_BLUE;}
-#else
-	if (flags6 & (RF6_TRAPS))           {vp[vn] = "create traps";color[vn++] = TERM_BLUE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_FORGET))          {vp[vn] = "記憶消去";color[vn++] = TERM_BLUE;}
-#else
-	if (flags6 & (RF6_FORGET))          {vp[vn] = "cause amnesia";color[vn++] = TERM_BLUE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_RAISE_DEAD))      {vp[vn] = "死者復活";color[vn++] = TERM_RED;}
-#else
-	if (flags6 & (RF6_RAISE_DEAD))      {vp[vn] = "raise dead";color[vn++] = TERM_RED;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_MONSTER))       {vp[vn] = "モンスター一体召喚";color[vn++] = TERM_SLATE;}
-#else
-	if (flags6 & (RF6_S_MONSTER))       {vp[vn] = "summon a monster";color[vn++] = TERM_SLATE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_MONSTERS))      {vp[vn] = "モンスター複数召喚";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags6 & (RF6_S_MONSTERS))      {vp[vn] = "summon monsters";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_KIN))           {vp[vn] = "救援召喚";color[vn++] = TERM_ORANGE;}
-#else
-	if (flags6 & (RF6_S_KIN))           {vp[vn] = "summon aid";color[vn++] = TERM_ORANGE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_ANT))           {vp[vn] = "アリ召喚";color[vn++] = TERM_RED;}
-#else
-	if (flags6 & (RF6_S_ANT))           {vp[vn] = "summon ants";color[vn++] = TERM_RED;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_SPIDER))        {vp[vn] = "クモ召喚";color[vn++] = TERM_L_DARK;}
-#else
-	if (flags6 & (RF6_S_SPIDER))        {vp[vn] = "summon spiders";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_HOUND))         {vp[vn] = "ハウンド召喚";color[vn++] = TERM_L_UMBER;}
-#else
-	if (flags6 & (RF6_S_HOUND))         {vp[vn] = "summon hounds";color[vn++] = TERM_L_UMBER;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_HYDRA))         {vp[vn] = "ヒドラ召喚";color[vn++] = TERM_L_GREEN;}
-#else
-	if (flags6 & (RF6_S_HYDRA))         {vp[vn] = "summon hydras";color[vn++] = TERM_L_GREEN;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_ANGEL))         {vp[vn] = "天使一体召喚";color[vn++] = TERM_YELLOW;}
-#else
-	if (flags6 & (RF6_S_ANGEL))         {vp[vn] = "summon an angel";color[vn++] = TERM_YELLOW;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_DEMON))         {vp[vn] = "デーモン一体召喚";color[vn++] = TERM_L_RED;}
-#else
-	if (flags6 & (RF6_S_DEMON))         {vp[vn] = "summon a demon";color[vn++] = TERM_L_RED;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_UNDEAD))        {vp[vn] = "アンデッド一体召喚";color[vn++] = TERM_L_DARK;}
-#else
-	if (flags6 & (RF6_S_UNDEAD))        {vp[vn] = "summon an undead";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_DRAGON))        {vp[vn] = "ドラゴン一体召喚";color[vn++] = TERM_ORANGE;}
-#else
-	if (flags6 & (RF6_S_DRAGON))        {vp[vn] = "summon a dragon";color[vn++] = TERM_ORANGE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_HI_UNDEAD))     {vp[vn] = "強力なアンデッド召喚";color[vn++] = TERM_L_DARK;}
-#else
-	if (flags6 & (RF6_S_HI_UNDEAD))     {vp[vn] = "summon Greater Undead";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_HI_DRAGON))     {vp[vn] = "古代ドラゴン召喚";color[vn++] = TERM_ORANGE;}
-#else
-	if (flags6 & (RF6_S_HI_DRAGON))     {vp[vn] = "summon Ancient Dragons";color[vn++] = TERM_ORANGE;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_CYBER))         {vp[vn] = "サイバーデーモン召喚";color[vn++] = TERM_UMBER;}
-#else
-	if (flags6 & (RF6_S_CYBER))         {vp[vn] = "summon Cyberdemons";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_AMBERITES))     {vp[vn] = "アンバーの王族召喚";color[vn++] = TERM_VIOLET;}
-#else
-	if (flags6 & (RF6_S_AMBERITES))     {vp[vn] = "summon Lords of Amber";color[vn++] = TERM_VIOLET;}
-#endif
-
-#ifdef JP
-if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[vn++] = TERM_VIOLET;}
-#else
-	if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "summon Unique Monsters";color[vn++] = TERM_VIOLET;}
-#endif
+	if (flags6 & (RF6_TRAPS))           { vp[vn] = _("トラップ", "create traps"); color[vn++] = TERM_BLUE; }
+	if (flags6 & (RF6_FORGET))          { vp[vn] = _("記憶消去", "cause amnesia"); color[vn++] = TERM_BLUE; }
+	if (flags6 & (RF6_RAISE_DEAD))      { vp[vn] = _("死者復活", "raise dead"); color[vn++] = TERM_RED; }
+	if (flags6 & (RF6_S_MONSTER))       { vp[vn] = _("モンスター一体召喚", "summon a monster"); color[vn++] = TERM_SLATE; }
+	if (flags6 & (RF6_S_MONSTERS))      { vp[vn] = _("モンスター複数召喚", "summon monsters"); color[vn++] = TERM_L_WHITE; }
+	if (flags6 & (RF6_S_KIN))           { vp[vn] = _("救援召喚", "summon aid"); color[vn++] = TERM_ORANGE; }
+	if (flags6 & (RF6_S_ANT))           { vp[vn] = _("アリ召喚", "summon ants"); color[vn++] = TERM_RED; }
+	if (flags6 & (RF6_S_SPIDER))        { vp[vn] = _("クモ召喚", "summon spiders"); color[vn++] = TERM_L_DARK; }
+	if (flags6 & (RF6_S_HOUND))         { vp[vn] = _("ハウンド召喚", "summon hounds"); color[vn++] = TERM_L_UMBER; }
+	if (flags6 & (RF6_S_HYDRA))         { vp[vn] = _("ヒドラ召喚", "summon hydras"); color[vn++] = TERM_L_GREEN; }
+	if (flags6 & (RF6_S_ANGEL))         { vp[vn] = _("天使一体召喚", "summon an angel"); color[vn++] = TERM_YELLOW; }
+	if (flags6 & (RF6_S_DEMON))         { vp[vn] = _("デーモン一体召喚", "summon a demon"); color[vn++] = TERM_L_RED; }
+	if (flags6 & (RF6_S_UNDEAD))        { vp[vn] = _("アンデッド一体召喚", "summon an undead"); color[vn++] = TERM_L_DARK; }
+	if (flags6 & (RF6_S_DRAGON))        { vp[vn] = _("ドラゴン一体召喚", "summon a dragon"); color[vn++] = TERM_ORANGE; }
+	if (flags6 & (RF6_S_HI_UNDEAD))     { vp[vn] = _("強力なアンデッド召喚", "summon Greater Undead"); color[vn++] = TERM_L_DARK; }
+	if (flags6 & (RF6_S_HI_DRAGON))     { vp[vn] = _("古代ドラゴン召喚", "summon Ancient Dragons"); color[vn++] = TERM_ORANGE; }	
+	if (flags6 & (RF6_S_CYBER))         { vp[vn] = _("サイバーデーモン召喚", "summon Cyberdemons"); color[vn++] = TERM_UMBER; }
+	if (flags6 & (RF6_S_AMBERITES))     { vp[vn] = _("アンバーの王族召喚", "summon Lords of Amber"); color[vn++] = TERM_VIOLET; }
+	if (flags6 & (RF6_S_UNIQUE))        { vp[vn] = _("ユニーク・モンスター召喚", "summon Unique Monsters"); color[vn++] = TERM_VIOLET; }
 
 
 	/* Describe spells */
@@ -1630,21 +891,11 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		/* Intro */
 		if (breath)
 		{
-#ifdef JP
-			hooked_roff("、なおかつ");
-#else
-			hooked_roff(", and is also");
-#endif
-
+			hooked_roff(_("、なおかつ", ", and is also"));
 		}
 		else
 		{
-#ifdef JP
-			hooked_roff(format("%^sは", wd_he[msex]));
-#else
-			hooked_roff(format("%^s is", wd_he[msex]));
-#endif
-
+			hooked_roff(format(_("%^sは", "%^s is"), wd_he[msex]));
 		}
 
 #ifdef JP
@@ -1696,67 +947,44 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		/* Describe the spell frequency */
 		if (m > 100 || know_everything)
 		{
-#ifdef JP
-			hooked_roff(format("(確率:1/%d)", 100 / n));
-#else
-			hooked_roff(format("; 1 time in %d", 100 / n));
-#endif
-
+			hooked_roff(format(
+				_("(確率:1/%d)", "; 1 time in %d"), 100 / n));
 		}
 
 		/* Guess at the frequency */
 		else if (m)
 		{
 			n = ((n + 9) / 10) * 10;
-#ifdef JP
-			hooked_roff(format("(確率:約1/%d)", 100 / n));
-#else
-			hooked_roff(format("; about 1 time in %d", 100 / n));
-#endif
-
+			hooked_roff(format(
+				_("(確率:約1/%d)", "; about 1 time in %d"), 100 / n));
 		}
 
 		/* End this sentence */
-#ifdef JP
-		hooked_roff("。");
-#else
-		hooked_roff(".  ");
-#endif
-
+		hooked_roff(_("。", ".  "));
 	}
 
 	/* Describe monster "toughness" */
 	if (know_armour(r_idx))
 	{
 		/* Armor */
-#ifdef JP
-		hooked_roff(format("%^sは AC%d の防御力と",
-#else
-		hooked_roff(format("%^s has an armor rating of %d",
-#endif
-
+		hooked_roff(format(
+			_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"),
 			    wd_he[msex], r_ptr->ac));
 
 		/* Maximized hitpoints */
 		if ((flags1 & RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
 		{
 			u32b hp = r_ptr->hdice * (nightmare ? 2 : 1) * r_ptr->hside;
-#ifdef JP
-			hooked_roff(format(" %d の体力がある。",
-#else
-			hooked_roff(format(" and a life rating of %d.  ",
-#endif
+			hooked_roff(format(
+				_(" %d の体力がある。", " and a life rating of %d.  "),
 				    (s16b)MIN(30000, hp)));
 		}
 
 		/* Variable hitpoints */
 		else
 		{
-#ifdef JP
-			hooked_roff(format(" %dd%d の体力がある。",
-#else
-			hooked_roff(format(" and a life rating of %dd%d.  ",
-#endif
+			hooked_roff(format(
+				_(" %dd%d の体力がある。", " and a life rating of %dd%d.  "),
 				    r_ptr->hdice * (nightmare ? 2 : 1), r_ptr->hside));
 		}
 	}
@@ -1860,41 +1088,17 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 
 	/* Collect susceptibilities */
 	vn = 0;
-#ifdef JP
-	if (flags3 & RF3_HURT_ROCK) {vp[vn] = "岩を除去するもの";color[vn++] = TERM_UMBER;}
-#else
-	if (flags3 & RF3_HURT_ROCK) {vp[vn] = "rock remover";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-	if (flags3 & RF3_HURT_LITE) {vp[vn] = "明るい光";color[vn++] = TERM_YELLOW;}
-#else
-	if (flags3 & RF3_HURT_LITE) {vp[vn] = "bright light";color[vn++] = TERM_YELLOW;}
-#endif
-
-#ifdef JP
-	if (flags3 & RF3_HURT_FIRE) {vp[vn] = "炎";color[vn++] = TERM_RED;}
-#else
-	if (flags3 & RF3_HURT_FIRE) {vp[vn] = "fire";color[vn++] = TERM_RED;}
-#endif
-
-#ifdef JP
-	if (flags3 & RF3_HURT_COLD) {vp[vn] = "冷気";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flags3 & RF3_HURT_COLD) {vp[vn] = "cold";color[vn++] = TERM_L_WHITE;}
-#endif
+	if (flags3 & RF3_HURT_ROCK) { vp[vn] = _("岩を除去するもの", "rock remover"); color[vn++] = TERM_UMBER; }
+	if (flags3 & RF3_HURT_LITE) { vp[vn] = _("明るい光", "bright light"); color[vn++] = TERM_YELLOW; }
+	if (flags3 & RF3_HURT_FIRE) { vp[vn] = _("炎", "fire"); color[vn++] = TERM_RED; }
+	if (flags3 & RF3_HURT_COLD) { vp[vn] = _("冷気", "cold"); color[vn++] = TERM_L_WHITE; }
 
 
 	/* Describe susceptibilities */
 	if (vn)
 	{
 		/* Intro */
-#ifdef JP
-		hooked_roff(format("%^sには", wd_he[msex]));
-#else
-		hooked_roff(format("%^s", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sには", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
@@ -1914,156 +1118,42 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		}
 
 		/* End */
-#ifdef JP
-		hooked_roff("でダメージを与えられる。");
-#else
-		hooked_roff(".  ");
-#endif
-
+		hooked_roff(_("でダメージを与えられる。", ".  "));
 	}
 
 
 	/* Collect immunities */
 	vn = 0;
-#ifdef JP
-	if (flagsr & RFR_IM_ACID) {vp[vn] = "酸";color[vn++] = TERM_GREEN;}
-#else
-	if (flagsr & RFR_IM_ACID) {vp[vn] = "acid";color[vn++] = TERM_GREEN;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_IM_ELEC) {vp[vn] = "稲妻";color[vn++] = TERM_BLUE;}
-#else
-	if (flagsr & RFR_IM_ELEC) {vp[vn] = "lightning";color[vn++] = TERM_BLUE;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_IM_FIRE) {vp[vn] = "炎";color[vn++] = TERM_RED;}
-#else
-	if (flagsr & RFR_IM_FIRE) {vp[vn] = "fire";color[vn++] = TERM_RED;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_IM_COLD) {vp[vn] = "冷気";color[vn++] = TERM_L_WHITE;}
-#else
-	if (flagsr & RFR_IM_COLD) {vp[vn] = "cold";color[vn++] = TERM_L_WHITE;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_IM_POIS) {vp[vn] = "毒";color[vn++] = TERM_L_GREEN;}
-#else
-	if (flagsr & RFR_IM_POIS) {vp[vn] = "poison";color[vn++] = TERM_L_GREEN;}
-#endif
+	if (flagsr & RFR_IM_ACID) { vp[vn] = _("酸", "acid"); color[vn++] = TERM_GREEN; }
+	if (flagsr & RFR_IM_ELEC) { vp[vn] = _("稲妻", "lightning"); color[vn++] = TERM_BLUE; }
+	if (flagsr & RFR_IM_FIRE) { vp[vn] = _("炎", "fire"); color[vn++] = TERM_RED; }
+	if (flagsr & RFR_IM_COLD) { vp[vn] = _("冷気", "cold"); color[vn++] = TERM_L_WHITE; }
+	if (flagsr & RFR_IM_POIS) { vp[vn] = _("毒", "poison"); color[vn++] = TERM_L_GREEN; }
 
 
 	/* Collect resistances */
-#ifdef JP
-	if (flagsr & RFR_RES_LITE) {vp[vn] = "閃光";color[vn++] = TERM_YELLOW;}
-#else
-	if (flagsr & RFR_RES_LITE) {vp[vn] = "light";color[vn++] = TERM_YELLOW;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_DARK) {vp[vn] = "暗黒";color[vn++] = TERM_L_DARK;}
-#else
-	if (flagsr & RFR_RES_DARK) {vp[vn] = "dark";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_NETH) {vp[vn] = "地獄";color[vn++] = TERM_L_DARK;}
-#else
-	if (flagsr & RFR_RES_NETH) {vp[vn] = "nether";color[vn++] = TERM_L_DARK;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_WATE) {vp[vn] = "水";color[vn++] = TERM_BLUE;}
-#else
-	if (flagsr & RFR_RES_WATE) {vp[vn] = "water";color[vn++] = TERM_BLUE;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_PLAS) {vp[vn] = "プラズマ";color[vn++] = TERM_L_RED;}
-#else
-	if (flagsr & RFR_RES_PLAS) {vp[vn] = "plasma";color[vn++] = TERM_L_RED;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_SHAR) {vp[vn] = "破片";color[vn++] = TERM_L_UMBER;}
-#else
-	if (flagsr & RFR_RES_SHAR) {vp[vn] = "shards";color[vn++] = TERM_L_UMBER;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_SOUN) {vp[vn] = "轟音";color[vn++] = TERM_ORANGE;}
-#else
-	if (flagsr & RFR_RES_SOUN) {vp[vn] = "sound";color[vn++] = TERM_ORANGE;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_CHAO) {vp[vn] = "カオス";color[vn++] = TERM_VIOLET;}
-#else
-	if (flagsr & RFR_RES_CHAO) {vp[vn] = "chaos";color[vn++] = TERM_VIOLET;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_NEXU) {vp[vn] = "因果混乱";color[vn++] = TERM_VIOLET;}
-#else
-	if (flagsr & RFR_RES_NEXU) {vp[vn] = "nexus";color[vn++] = TERM_VIOLET;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_DISE) {vp[vn] = "劣化";color[vn++] = TERM_VIOLET;}
-#else
-	if (flagsr & RFR_RES_DISE) {vp[vn] = "disenchantment";color[vn++] = TERM_VIOLET;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_WALL) {vp[vn] = "フォース";color[vn++] = TERM_UMBER;}
-#else
-	if (flagsr & RFR_RES_WALL) {vp[vn] = "force";color[vn++] = TERM_UMBER;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_INER) {vp[vn] = "遅鈍";color[vn++] = TERM_SLATE;}
-#else
-	if (flagsr & RFR_RES_INER) {vp[vn] = "inertia";color[vn++] = TERM_SLATE;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_TIME) {vp[vn] = "時間逆転";color[vn++] = TERM_L_BLUE;}
-#else
-	if (flagsr & RFR_RES_TIME) {vp[vn] = "time";color[vn++] = TERM_L_BLUE;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_GRAV) {vp[vn] = "重力";color[vn++] = TERM_SLATE;}
-#else
-	if (flagsr & RFR_RES_GRAV) {vp[vn] = "gravity";color[vn++] = TERM_SLATE;}
-#endif
-
-#ifdef JP
-	if (flagsr & RFR_RES_ALL) {vp[vn] = "あらゆる攻撃";color[vn++] = TERM_YELLOW;}
-#else
-	if (flagsr & RFR_RES_ALL) {vp[vn] = "all";color[vn++] = TERM_YELLOW;}
-#endif
-
-#ifdef JP
-	if ((flagsr & RFR_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポート";color[vn++] = TERM_ORANGE;}
-#else
-	if ((flagsr & RFR_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "teleportation";color[vn++] = TERM_ORANGE;}
-#endif
-
+	if (flagsr & RFR_RES_LITE) { vp[vn] = _("閃光", "light"); color[vn++] = TERM_YELLOW; }
+	if (flagsr & RFR_RES_DARK) { vp[vn] = _("暗黒", "dark"); color[vn++] = TERM_L_DARK; }
+	if (flagsr & RFR_RES_NETH) { vp[vn] = _("地獄", "nether"); color[vn++] = TERM_L_DARK; }
+	if (flagsr & RFR_RES_WATE) { vp[vn] = _("水", "water"); color[vn++] = TERM_BLUE; }
+	if (flagsr & RFR_RES_PLAS) { vp[vn] = _("プラズマ", "plasma"); color[vn++] = TERM_L_RED; }
+	if (flagsr & RFR_RES_SHAR) { vp[vn] = _("破片", "shards"); color[vn++] = TERM_L_UMBER; }
+	if (flagsr & RFR_RES_SOUN) { vp[vn] = _("轟音", "sound"); color[vn++] = TERM_ORANGE; }
+	if (flagsr & RFR_RES_CHAO) { vp[vn] = _("カオス", "chaos"); color[vn++] = TERM_VIOLET; }
+	if (flagsr & RFR_RES_NEXU) { vp[vn] = _("因果混乱", "nexus"); color[vn++] = TERM_VIOLET; }
+	if (flagsr & RFR_RES_DISE) { vp[vn] = _("劣化", "disenchantment"); color[vn++] = TERM_VIOLET; }
+	if (flagsr & RFR_RES_WALL) { vp[vn] = _("フォース", "force"); color[vn++] = TERM_UMBER; }
+	if (flagsr & RFR_RES_INER) { vp[vn] = _("遅鈍", "inertia"); color[vn++] = TERM_SLATE; }
+	if (flagsr & RFR_RES_TIME) { vp[vn] = _("時間逆転", "time"); color[vn++] = TERM_L_BLUE; }
+	if (flagsr & RFR_RES_GRAV) { vp[vn] = _("重力", "gravity"); color[vn++] = TERM_SLATE; }
+	if (flagsr & RFR_RES_ALL) { vp[vn] = _("あらゆる攻撃", "all"); color[vn++] = TERM_YELLOW; }
+	if ((flagsr & RFR_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("テレポート", "teleportation"); color[vn++] = TERM_ORANGE; }
 
 	/* Describe immunities and resistances */
 	if (vn)
 	{
 		/* Intro */
-#ifdef JP
-		hooked_roff(format("%^sは", wd_he[msex]));
-#else
-		hooked_roff(format("%^s", wd_he[msex]));
-#endif
-
+		hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
@@ -2083,12 +1173,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		}
 
 		/* End */
-#ifdef JP
-		hooked_roff("の耐性を持っている。");
-#else
-		hooked_roff(".  ");
-#endif
-
+		hooked_roff(_("の耐性を持っている。", ".  "));
 	}
 
 
@@ -2096,70 +1181,36 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 	{
 		if (r_ptr->next_r_idx)
 		{
-#ifdef JP
-			hooked_roff(format("%^sは経験を積むと、", wd_he[msex]));
-#else
-			hooked_roff(format("%^s will evolve into ", wd_he[msex]));
-#endif
+			hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), wd_he[msex]));
 			hook_c_roff(TERM_YELLOW, format("%s", r_name+r_info[r_ptr->next_r_idx].name));
-#ifdef JP
-			hooked_roff(format("に進化する。"));
-#else
-			hooked_roff(format(" when %s gets enugh experience.  ", wd_he[msex]));
-#endif
+			hooked_roff(format(
+				_(("に進化する。"), 
+				  (" when %s gets enugh experience.  ", wd_he[msex]))));
 		}
 		else if (!(r_ptr->flags1 & RF1_UNIQUE))
 		{
-#ifdef JP
-			hooked_roff(format("%sは進化しない。", wd_he[msex]));
-#else
-			hooked_roff(format("%s won't evolve.  ", wd_he[msex]));
-#endif
+			hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), wd_he[msex]));
 		}
 	}
 
 	/* Collect non-effects */
 	vn = 0;
-#ifdef JP
-	if (flags3 & RF3_NO_STUN)  {vp[vn] = "朦朧としない";color[vn++] = TERM_ORANGE;}
-#else
-	if (flags3 & RF3_NO_STUN)  {vp[vn] = "stunned";color[vn++] = TERM_ORANGE;}
-#endif
+	if (flags3 & RF3_NO_STUN)  { vp[vn] = _("朦朧としない", "stunned"); color[vn++] = TERM_ORANGE; }
 
-#ifdef JP
-	if (flags3 & RF3_NO_FEAR)  {vp[vn] = "恐怖を感じない";color[vn++] = TERM_SLATE;}
-#else
-	if (flags3 & RF3_NO_FEAR)  {vp[vn] = "frightened";color[vn++] = TERM_SLATE;}
-#endif
+	if (flags3 & RF3_NO_FEAR)  { vp[vn] = _("恐怖を感じない", "frightened"); color[vn++] = TERM_SLATE; }
 
-#ifdef JP
-	if (flags3 & RF3_NO_CONF)  {vp[vn] = "混乱しない";color[vn++] = TERM_L_UMBER;}
-#else
-	if (flags3 & RF3_NO_CONF)  {vp[vn] = "confused";color[vn++] = TERM_L_UMBER;}
-#endif
+	if (flags3 & RF3_NO_CONF)  { vp[vn] = _("混乱しない", "confused"); color[vn++] = TERM_L_UMBER; }
 
-#ifdef JP
-	if (flags3 & RF3_NO_SLEEP) {vp[vn] = "眠らされない";color[vn++] = TERM_BLUE;}
-#else
-	if (flags3 & RF3_NO_SLEEP) {vp[vn] = "slept";color[vn++] = TERM_BLUE;}
-#endif
+	if (flags3 & RF3_NO_SLEEP) { vp[vn] = _("眠らされない", "slept"); color[vn++] = TERM_BLUE; }
 
-#ifdef JP
-	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "テレポートされない";color[vn++] = TERM_ORANGE;}
-#else
-	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {vp[vn] = "teleported";color[vn++] = TERM_ORANGE;}
-#endif
+	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("テレポートされない", "teleported"); color[vn++] = TERM_ORANGE; }
 
 	/* Describe non-effects */
 	if (vn)
 	{
 		/* Intro */
-#ifdef JP
-		hooked_roff(format("%^sは", wd_he[msex]));
-#else
-		hooked_roff(format("%^s", wd_he[msex]));
-#endif
-
+		hooked_roff(format(
+			_("%^sは", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
@@ -2179,12 +1230,7 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		}
 
 		/* End */
-#ifdef JP
-		hooked_roff("。");
-#else
-		hooked_roff(".  ");
-#endif
-
+		hooked_roff(_("。", ".  "));
 	}
 
 
@@ -2197,102 +1243,47 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 
 		if (r_ptr->sleep > 200)
 		{
-#ifdef JP
-			act = "を無視しがちであるが";
-#else
-			act = "prefers to ignore";
-#endif
-
+			act = _("を無視しがちであるが", "prefers to ignore");
 		}
 		else if (r_ptr->sleep > 95)
 		{
-#ifdef JP
-			act = "に対してほとんど注意を払わないが";
-#else
-			act = "pays very little attention to";
-#endif
-
+			act = _("に対してほとんど注意を払わないが", "pays very little attention to");
 		}
 		else if (r_ptr->sleep > 75)
 		{
-#ifdef JP
-			act = "に対してあまり注意を払わないが";
-#else
-			act = "pays little attention to";
-#endif
-
+			act = _("に対してあまり注意を払わないが", "pays little attention to");
 		}
 		else if (r_ptr->sleep > 45)
 		{
-#ifdef JP
-			act = "を見過ごしがちであるが";
-#else
-			act = "tends to overlook";
-#endif
-
+			act = _("を見過ごしがちであるが", "tends to overlook");
 		}
 		else if (r_ptr->sleep > 25)
 		{
-#ifdef JP
-			act = "をほんの少しは見ており";
-#else
-			act = "takes quite a while to see";
-#endif
-
+			act = _("をほんの少しは見ており", "takes quite a while to see");
 		}
 		else if (r_ptr->sleep > 10)
 		{
-#ifdef JP
-			act = "をしばらくは見ており";
-#else
-			act = "takes a while to see";
-#endif
-
+			act = _("をしばらくは見ており", "takes a while to see");
 		}
 		else if (r_ptr->sleep > 5)
 		{
-#ifdef JP
-			act = "を幾分注意深く見ており";
-#else
-			act = "is fairly observant of";
-#endif
-
+			act = _("を幾分注意深く見ており", "is fairly observant of");
 		}
 		else if (r_ptr->sleep > 3)
 		{
-#ifdef JP
-			act = "を注意深く見ており";
-#else
-			act = "is observant of";
-#endif
-
+			act = _("を注意深く見ており", "is observant of");
 		}
 		else if (r_ptr->sleep > 1)
 		{
-#ifdef JP
-			act = "をかなり注意深く見ており";
-#else
-			act = "is very observant of";
-#endif
-
+			act = _("をかなり注意深く見ており", "is very observant of");
 		}
 		else if (r_ptr->sleep > 0)
 		{
-#ifdef JP
-			act = "を警戒しており";
-#else
-			act = "is vigilant for";
-#endif
-
+			act = _("を警戒しており", "is vigilant for");
 		}
 		else
 		{
-#ifdef JP
-			act = "をかなり警戒しており";
-#else
-			act = "is ever vigilant for";
-#endif
-
+			act = _("をかなり警戒しており", "is ever vigilant for");
 		}
 
 #ifdef JP
@@ -2310,11 +1301,9 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 	if (drop_gold || drop_item)
 	{
 		/* Intro */
-#ifdef JP
-		hooked_roff(format("%^sは", wd_he[msex]));
-#else
-		hooked_roff(format("%^s may carry", wd_he[msex]));
-
+		hooked_roff(format(
+			_("%^sは", "%^s may carry"), wd_he[msex]));
+#ifndef JP
 		/* No "n" needed */
 		sin = FALSE;
 #endif
@@ -2326,10 +1315,8 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		/* One drop (may need an "n") */
 		if (n == 1)
 		{
-#ifdef JP
-			hooked_roff("一つの");
-#else
-			hooked_roff(" a");
+			hooked_roff(_("一つの", " a"));
+#ifndef JP
 			sin = TRUE;
 #endif
 		}
@@ -2337,44 +1324,29 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		/* Two drops */
 		else if (n == 2)
 		{
-#ifdef JP
-			hooked_roff("一つか二つの");
-#else
-			hooked_roff(" one or two");
-#endif
-
+			hooked_roff(
+				_("一つか二つの", " one or two"));
 		}
 
 		/* Many drops */
 		else
 		{
-#ifdef JP
-			hooked_roff(format(" %d 個までの", n));
-#else
-			hooked_roff(format(" up to %d", n));
-#endif
-
+			hooked_roff(format(
+				_(" %d 個までの", " up to %d"), n));
 		}
 
 
 		/* Great */
 		if (flags1 & RF1_DROP_GREAT)
 		{
-#ifdef JP
-			p = "特別な";
-#else
-			p = " exceptional";
-#endif
-
+			p = _("特別な", " exceptional");
 		}
 
 		/* Good (no "n" needed) */
 		else if (flags1 & RF1_DROP_GOOD)
 		{
-#ifdef JP
-			p = "上質な";
-#else
-			p = " good";
+			p = _("上質な", " good");
+#ifndef JP
 			sin = FALSE;
 #endif
 		}
@@ -2397,21 +1369,16 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 
 			/* Dump "object(s)" */
 			if (p) hooked_roff(p);
-#ifdef JP
-			hooked_roff("アイテム");
-#else
-			hooked_roff(" object");
+			hooked_roff(
+				_("アイテム", " object"));
+
+#ifndef JP
 			if (n != 1) hooked_roff("s");
 #endif
 
 
 			/* Conjunction replaces variety, if needed for "gold" below */
-#ifdef JP
-			p = "や";
-#else
-			p = " or";
-#endif
-
+			p = _("や", " or");
 		}
 
 		/* Treasures */
@@ -2438,12 +1405,8 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		}
 
 		/* End this sentence */
-#ifdef JP
-		hooked_roff("を持っていることがある。");
-#else
-		hooked_roff(".  ");
-#endif
-
+		hooked_roff(
+			_("を持っていることがある。", ".  "));
 	}
 
 
@@ -2482,145 +1445,30 @@ if (flags6 & (RF6_S_UNIQUE))        {vp[vn] = "ユニーク・モンスター召喚";color[v
 		/* Acquire the method */
 		switch (method)
 		{
-#ifdef JP
-case RBM_HIT:		p = "殴る"; break;
-#else
-			case RBM_HIT:		p = "hit"; break;
-#endif
-
-#ifdef JP
-case RBM_TOUCH:		p = "触る"; break;
-#else
-			case RBM_TOUCH:		p = "touch"; break;
-#endif
-
-#ifdef JP
-case RBM_PUNCH:		p = "パンチする"; break;
-#else
-			case RBM_PUNCH:		p = "punch"; break;
-#endif
-
-#ifdef JP
-case RBM_KICK:		p = "蹴る"; break;
-#else
-			case RBM_KICK:		p = "kick"; break;
-#endif
-
-#ifdef JP
-case RBM_CLAW:		p = "ひっかく"; break;
-#else
-			case RBM_CLAW:		p = "claw"; break;
-#endif
-
-#ifdef JP
-case RBM_BITE:		p = "噛む"; break;
-#else
-			case RBM_BITE:		p = "bite"; break;
-#endif
-
-#ifdef JP
-case RBM_STING:		p = "刺す"; break;
-#else
-			case RBM_STING:		p = "sting"; break;
-#endif
-
-#ifdef JP
-case RBM_SLASH:		p = "斬る"; break;
-#else
-			case RBM_SLASH:		p = "slash"; break;
-#endif
-
-#ifdef JP
-case RBM_BUTT:		p = "角で突く"; break;
-#else
-			case RBM_BUTT:		p = "butt"; break;
-#endif
-
-#ifdef JP
-case RBM_CRUSH:		p = "体当たりする"; break;
-#else
-			case RBM_CRUSH:		p = "crush"; break;
-#endif
-
-#ifdef JP
-case RBM_ENGULF:	p = "飲み込む"; break;
-#else
-			case RBM_ENGULF:	p = "engulf"; break;
-#endif
-
-#ifdef JP
-case RBM_CHARGE: 	p = "請求書をよこす"; break;
-#else
-			case RBM_CHARGE: 	p = "charge";   break;
-#endif
-
-#ifdef JP
-case RBM_CRAWL:		p = "体の上を這い回る"; break;
-#else
-			case RBM_CRAWL:		p = "crawl on you"; break;
-#endif
-
-#ifdef JP
-case RBM_DROOL:		p = "よだれをたらす"; break;
-#else
-			case RBM_DROOL:		p = "drool on you"; break;
-#endif
-
-#ifdef JP
-case RBM_SPIT:		p = "つばを吐く"; break;
-#else
-			case RBM_SPIT:		p = "spit"; break;
-#endif
-
-#ifdef JP
-case RBM_EXPLODE:	p = "爆発する"; break;
-#else
-			case RBM_EXPLODE:	p = "explode"; break;
-#endif
-
-#ifdef JP
-case RBM_GAZE:		p = "にらむ"; break;
-#else
-			case RBM_GAZE:		p = "gaze"; break;
-#endif
-
-#ifdef JP
-case RBM_WAIL:		p = "泣き叫ぶ"; break;
-#else
-			case RBM_WAIL:		p = "wail"; break;
-#endif
-
-#ifdef JP
-case RBM_SPORE:		p = "胞子を飛ばす"; break;
-#else
-			case RBM_SPORE:		p = "release spores"; break;
-#endif
-
+			case RBM_HIT:		p = _("殴る", "hit"); break;
+			case RBM_TOUCH:		p = _("触る", "touch"); break;
+			case RBM_PUNCH:		p = _("パンチする", "punch"); break;
+			case RBM_KICK:		p = _("蹴る", "kick"); break;
+			case RBM_CLAW:		p = _("ひっかく", "claw"); break;
+			case RBM_BITE:		p = _("噛む", "bite"); break;
+			case RBM_STING:		p = _("刺す", "sting"); break;
+			case RBM_SLASH:		p = _("斬る", "slash"); break;
+			case RBM_BUTT:		p = _("角で突く", "butt"); break;
+			case RBM_CRUSH:		p = _("体当たりする", "crush"); break;
+			case RBM_ENGULF:	p = _("飲み込む", "engulf"); break;
+			case RBM_CHARGE: 	p = _("請求書をよこす", "charge"); break;
+			case RBM_CRAWL:		p = _("体の上を這い回る", "crawl on you"); break;
+			case RBM_DROOL:		p = _("よだれをたらす", "drool on you"); break;
+			case RBM_SPIT:		p = _("つばを吐く", "spit"); break;
+			case RBM_EXPLODE:	p = _("爆発する", "explode"); break;
+			case RBM_GAZE:		p = _("にらむ", "gaze"); break;
+			case RBM_WAIL:		p = _("泣き叫ぶ", "wail"); break;
+			case RBM_SPORE:		p = _("胞子を飛ばす", "release spores"); break;
 			case RBM_XXX4:		break;
-#ifdef JP
-case RBM_BEG:		p = "金をせがむ"; break;
-#else
-			case RBM_BEG:		p = "beg"; break;
-#endif
-
-#ifdef JP
-case RBM_INSULT:	p = "侮辱する"; break;
-#else
-			case RBM_INSULT:	p = "insult"; break;
-#endif
-
-#ifdef JP
-case RBM_MOAN:		p = "うめく"; break;
-#else
-			case RBM_MOAN:		p = "moan"; break;
-#endif
-
-#ifdef JP
-case RBM_SHOW:  	p = "歌う"; break;
-#else
-			case RBM_SHOW:  	p = "sing"; break;
-#endif
-
+			case RBM_BEG:		p = _("金をせがむ", "beg"); break;
+			case RBM_INSULT:	p = _("侮辱する", "insult"); break;
+			case RBM_MOAN:		p = _("うめく", "moan"); break;
+			case RBM_SHOW:  	p = _("歌う", "sing"); break;
 		}
 
 
@@ -2630,207 +1478,41 @@ case RBM_SHOW:  	p = "歌う"; break;
 		/* Acquire the effect */
 		switch (effect)
 		{
-#ifdef JP
-case RBE_SUPERHURT:
-case RBE_HURT:    	q = "攻撃する"; break;
-#else
 			case RBE_SUPERHURT:
-			case RBE_HURT:    	q = "attack"; break;
-#endif
-
-#ifdef JP
-case RBE_POISON:  	q = "毒をくらわす"; break;
-#else
-			case RBE_POISON:  	q = "poison"; break;
-#endif
-
-#ifdef JP
-case RBE_UN_BONUS:	q = "劣化させる"; break;
-#else
-			case RBE_UN_BONUS:	q = "disenchant"; break;
-#endif
-
-#ifdef JP
-case RBE_UN_POWER:	q = "魔力を吸い取る"; break;
-#else
-			case RBE_UN_POWER:	q = "drain charges"; break;
-#endif
-
-#ifdef JP
-case RBE_EAT_GOLD:	q = "金を盗む"; break;
-#else
-			case RBE_EAT_GOLD:	q = "steal gold"; break;
-#endif
-
-#ifdef JP
-case RBE_EAT_ITEM:	q = "アイテムを盗む"; break;
-#else
-			case RBE_EAT_ITEM:	q = "steal items"; break;
-#endif
-
-#ifdef JP
-case RBE_EAT_FOOD:	q = "あなたの食料を食べる"; break;
-#else
-			case RBE_EAT_FOOD:	q = "eat your food"; break;
-#endif
-
-#ifdef JP
-case RBE_EAT_LITE:	q = "明かりを吸収する"; break;
-#else
-			case RBE_EAT_LITE:	q = "absorb light"; break;
-#endif
-
-#ifdef JP
-case RBE_ACID:    	q = "酸を飛ばす"; break;
-#else
-			case RBE_ACID:    	q = "shoot acid"; break;
-#endif
-
-#ifdef JP
-case RBE_ELEC:    	q = "感電させる"; break;
-#else
-			case RBE_ELEC:    	q = "electrocute"; break;
-#endif
-
-#ifdef JP
-case RBE_FIRE:    	q = "燃やす"; break;
-#else
-			case RBE_FIRE:    	q = "burn"; break;
-#endif
-
-#ifdef JP
-case RBE_COLD:    	q = "凍らせる"; break;
-#else
-			case RBE_COLD:    	q = "freeze"; break;
-#endif
-
-#ifdef JP
-case RBE_BLIND:   	q = "盲目にする"; break;
-#else
-			case RBE_BLIND:   	q = "blind"; break;
-#endif
-
-#ifdef JP
-case RBE_CONFUSE: 	q = "混乱させる"; break;
-#else
-			case RBE_CONFUSE: 	q = "confuse"; break;
-#endif
-
-#ifdef JP
-case RBE_TERRIFY: 	q = "恐怖させる"; break;
-#else
-			case RBE_TERRIFY: 	q = "terrify"; break;
-#endif
-
-#ifdef JP
-case RBE_PARALYZE:	q = "麻痺させる"; break;
-#else
-			case RBE_PARALYZE:	q = "paralyze"; break;
-#endif
-
-#ifdef JP
-case RBE_LOSE_STR:	q = "腕力を減少させる"; break;
-#else
-			case RBE_LOSE_STR:	q = "reduce strength"; break;
-#endif
-
-#ifdef JP
-case RBE_LOSE_INT:	q = "知能を減少させる"; break;
-#else
-			case RBE_LOSE_INT:	q = "reduce intelligence"; break;
-#endif
-
-#ifdef JP
-case RBE_LOSE_WIS:	q = "賢さを減少させる"; break;
-#else
-			case RBE_LOSE_WIS:	q = "reduce wisdom"; break;
-#endif
-
-#ifdef JP
-case RBE_LOSE_DEX:	q = "器用さを減少させる"; break;
-#else
-			case RBE_LOSE_DEX:	q = "reduce dexterity"; break;
-#endif
-
-#ifdef JP
-case RBE_LOSE_CON:	q = "耐久力を減少させる"; break;
-#else
-			case RBE_LOSE_CON:	q = "reduce constitution"; break;
-#endif
-
-#ifdef JP
-case RBE_LOSE_CHR:	q = "魅力を減少させる"; break;
-#else
-			case RBE_LOSE_CHR:	q = "reduce charisma"; break;
-#endif
-
-#ifdef JP
-case RBE_LOSE_ALL:	q = "全ステータスを減少させる"; break;
-#else
-			case RBE_LOSE_ALL:	q = "reduce all stats"; break;
-#endif
-
-#ifdef JP
-case RBE_SHATTER:	q = "粉砕する"; break;
-#else
-			case RBE_SHATTER:	q = "shatter"; break;
-#endif
-
-#ifdef JP
-case RBE_EXP_10:	q = "経験値を減少(10d6+)させる"; break;
-#else
-			case RBE_EXP_10:	q = "lower experience (by 10d6+)"; break;
-#endif
-
-#ifdef JP
-case RBE_EXP_20:	q = "経験値を減少(20d6+)させる"; break;
-#else
-			case RBE_EXP_20:	q = "lower experience (by 20d6+)"; break;
-#endif
-
-#ifdef JP
-case RBE_EXP_40:	q = "経験値を減少(40d6+)させる"; break;
-#else
-			case RBE_EXP_40:	q = "lower experience (by 40d6+)"; break;
-#endif
-
-#ifdef JP
-case RBE_EXP_80:	q = "経験値を減少(80d6+)させる"; break;
-#else
-			case RBE_EXP_80:	q = "lower experience (by 80d6+)"; break;
-#endif
-
-#ifdef JP
-case RBE_DISEASE:	q = "病気にする"; break;
-#else
-			case RBE_DISEASE:	q = "disease"; break;
-#endif
-
-#ifdef JP
-case RBE_TIME:      q = "時間を逆戻りさせる"; break;
-#else
-			case RBE_TIME:      q = "time"; break;
-#endif
-
-#ifdef JP
-			case RBE_DR_LIFE:  q = "生命力を吸収する"; break;
-#else
-			case RBE_DR_LIFE:  q = "drain life"; break;
-#endif
-
-#ifdef JP
-case RBE_DR_MANA:  q = "魔力を奪う"; break;
-#else
-			case RBE_DR_MANA:  q = "drain mana force"; break;
-#endif
-
-#ifdef JP
-			case RBE_INERTIA:  q = "減速させる"; break;
-			case RBE_STUN:     q = "朦朧とさせる"; break;
-#else
-			case RBE_INERTIA:  q = "slow"; break;
-			case RBE_STUN:     q = "stun"; break;
-#endif
+			case RBE_HURT:    	q = _("攻撃する", "attack"); break;
+			case RBE_POISON:  	q = _("毒をくらわす", "poison"); break;
+			case RBE_UN_BONUS:	q = _("劣化させる", "disenchant"); break;
+			case RBE_UN_POWER:	q = _("魔力を吸い取る", "drain charges"); break;
+			case RBE_EAT_GOLD:	q = _("金を盗む", "steal gold"); break;
+			case RBE_EAT_ITEM:	q = _("アイテムを盗む", "steal items"); break;
+			case RBE_EAT_FOOD:	q = _("あなたの食料を食べる", "eat your food"); break;
+			case RBE_EAT_LITE:	q = _("明かりを吸収する", "absorb light"); break;
+			case RBE_ACID:    	q = _("酸を飛ばす", "shoot acid"); break;
+			case RBE_ELEC:    	q = _("感電させる", "electrocute"); break;
+			case RBE_FIRE:    	q = _("燃やす", "burn"); break;
+			case RBE_COLD:    	q = _("凍らせる", "freeze"); break;
+			case RBE_BLIND:   	q = _("盲目にする", "blind"); break;
+			case RBE_CONFUSE: 	q = _("混乱させる", "confuse"); break;
+			case RBE_TERRIFY: 	q = _("恐怖させる", "terrify"); break;
+			case RBE_PARALYZE:	q = _("麻痺させる", "paralyze"); break;
+			case RBE_LOSE_STR:	q = _("腕力を減少させる", "reduce strength"); break;
+			case RBE_LOSE_INT:	q = _("知能を減少させる", "reduce intelligence"); break;
+			case RBE_LOSE_WIS:	q = _("賢さを減少させる", "reduce wisdom"); break;
+			case RBE_LOSE_DEX:	q = _("器用さを減少させる", "reduce dexterity"); break;
+			case RBE_LOSE_CON:	q = _("耐久力を減少させる", "reduce constitution"); break;
+			case RBE_LOSE_CHR:	q = _("魅力を減少させる", "reduce charisma"); break;
+			case RBE_LOSE_ALL:	q = _("全ステータスを減少させる", "reduce all stats"); break;
+			case RBE_SHATTER:	q = _("粉砕する", "shatter"); break;
+			case RBE_EXP_10:	q = _("経験値を減少(10d6+)させる", "lower experience (by 10d6+)"); break;
+			case RBE_EXP_20:	q = _("経験値を減少(20d6+)させる", "lower experience (by 20d6+)"); break;
+			case RBE_EXP_40:	q = _("経験値を減少(40d6+)させる", "lower experience (by 40d6+)"); break;
+			case RBE_EXP_80:	q = _("経験値を減少(80d6+)させる", "lower experience (by 80d6+)"); break;
+			case RBE_DISEASE:	q = _("病気にする", "disease"); break;
+			case RBE_TIME:      q = _("時間を逆戻りさせる", "time"); break;
+			case RBE_DR_LIFE:   q = _("生命力を吸収する", "drain life"); break;
+			case RBE_DR_MANA:   q = _("魔力を奪う", "drain mana force"); break;
+			case RBE_INERTIA:   q = _("減速させる", "slow"); break;
+			case RBE_STUN:      q = _("朦朧とさせる", "stun"); break;
 		}
 
 
@@ -2915,34 +1597,23 @@ case RBE_DR_MANA:  q = "魔力を奪う"; break;
 	/* Finish sentence above */
 	if (r)
 	{
-#ifdef JP
-		hooked_roff("。");
-#else
-		hooked_roff(".  ");
-#endif
-
+		hooked_roff(_("。", ".  "));
 	}
 
 	/* Notice lack of attacks */
 	else if (flags1 & RF1_NEVER_BLOW)
 	{
-#ifdef JP
-		hooked_roff(format("%^sは物理的な攻撃方法を持たない。", wd_he[msex]));
-#else
-		hooked_roff(format("%^s has no physical attacks.  ", wd_he[msex]));
-#endif
-
+		hooked_roff(format(
+			_("%^sは物理的な攻撃方法を持たない。",
+			  "%^s has no physical attacks.  "), wd_he[msex]));
 	}
 
 	/* Or describe the lack of knowledge */
 	else
 	{
-#ifdef JP
-		hooked_roff(format("%s攻撃については何も知らない。", wd_his[msex]));
-#else
-		hooked_roff(format("Nothing is known about %s attack.  ", wd_his[msex]));
-#endif
-
+		hooked_roff(format(
+			_("%s攻撃については何も知らない。",
+			  "Nothing is known about %s attack.  "), wd_his[msex]));
 	}
 
 
@@ -2952,22 +1623,16 @@ case RBE_DR_MANA:  q = "魔力を奪う"; break;
 	 */
 	if ((flags1 & RF1_QUESTOR) && ((r_ptr->r_sights) && (r_ptr->max_num) && ((r_idx == MON_OBERON) || (r_idx == MON_SERPENT))))
 	{
-#ifdef JP
-		hook_c_roff(TERM_VIOLET, "あなたはこのモンスターを殺したいという強い欲望を感じている...");
-#else
-		hook_c_roff(TERM_VIOLET, "You feel an intense desire to kill this monster...  ");
-#endif
-
+		hook_c_roff(TERM_VIOLET, 
+			_("あなたはこのモンスターを殺したいという強い欲望を感じている...",
+			  "You feel an intense desire to kill this monster...  "));
 	}
 
 	else if (flags7 & RF7_GUARDIAN)
 	{
-#ifdef JP
-		hook_c_roff(TERM_L_RED, "このモンスターはダンジョンの主である。");
-#else
-		hook_c_roff(TERM_L_RED, "This monster is the master of a dungeon.");
-#endif
-
+		hook_c_roff(TERM_L_RED, 
+			_("このモンスターはダンジョンの主である。",
+			  "This monster is the master of a dungeon."));
 	}
 
 
