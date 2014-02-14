@@ -1196,13 +1196,9 @@ static void roff_aux(int r_idx, int mode)
 	/* Collect non-effects */
 	vn = 0;
 	if (flags3 & RF3_NO_STUN)  { vp[vn] = _("朦朧としない", "stunned"); color[vn++] = TERM_ORANGE; }
-
 	if (flags3 & RF3_NO_FEAR)  { vp[vn] = _("恐怖を感じない", "frightened"); color[vn++] = TERM_SLATE; }
-
 	if (flags3 & RF3_NO_CONF)  { vp[vn] = _("混乱しない", "confused"); color[vn++] = TERM_L_UMBER; }
-
 	if (flags3 & RF3_NO_SLEEP) { vp[vn] = _("眠らされない", "slept"); color[vn++] = TERM_BLUE; }
-
 	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("テレポートされない", "teleported"); color[vn++] = TERM_ORANGE; }
 
 	/* Describe non-effects */
@@ -1286,14 +1282,9 @@ static void roff_aux(int r_idx, int mode)
 			act = _("をかなり警戒しており", "is ever vigilant for");
 		}
 
-#ifdef JP
-		hooked_roff(format("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。",
-		     wd_he[msex], act, 10 * r_ptr->aaf));
-#else
-		hooked_roff(format("%^s %s intruders, which %s may notice from %d feet.  ",
-			    wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf));
-#endif
-
+		hooked_roff(format(
+			_(("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", wd_he[msex], act, 10 * r_ptr->aaf), 
+			  ("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf))));
 	}
 
 
@@ -1376,7 +1367,6 @@ static void roff_aux(int r_idx, int mode)
 			if (n != 1) hooked_roff("s");
 #endif
 
-
 			/* Conjunction replaces variety, if needed for "gold" below */
 			p = _("や", " or");
 		}
@@ -1395,18 +1385,15 @@ static void roff_aux(int r_idx, int mode)
 
 			/* Dump "treasure(s)" */
 			if (p) hooked_roff(p);
-#ifdef JP
-			hooked_roff("財宝");
-#else
-			hooked_roff(" treasure");
+			hooked_roff(_("財宝", " treasure"));
+#ifndef JP
 			if (n != 1) hooked_roff("s");
 #endif
 
 		}
 
 		/* End this sentence */
-		hooked_roff(
-			_("を持っていることがある。", ".  "));
+		hooked_roff(_("を持っていることがある。", ".  "));
 	}
 
 
@@ -1482,7 +1469,7 @@ static void roff_aux(int r_idx, int mode)
 			case RBE_HURT:    	q = _("攻撃する", "attack"); break;
 			case RBE_POISON:  	q = _("毒をくらわす", "poison"); break;
 			case RBE_UN_BONUS:	q = _("劣化させる", "disenchant"); break;
-			case RBE_UN_POWER:	q = _("魔力を吸い取る", "drain charges"); break;
+			case RBE_UN_POWER:	q = _("魔道具の魔力を吸い取る", "drain charges"); break;
 			case RBE_EAT_GOLD:	q = _("金を盗む", "steal gold"); break;
 			case RBE_EAT_ITEM:	q = _("アイテムを盗む", "steal items"); break;
 			case RBE_EAT_FOOD:	q = _("あなたの食料を食べる", "eat your food"); break;
