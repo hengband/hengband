@@ -763,7 +763,7 @@ static wilderness_grid w_letter[255];
 /*!
  * @brief w_info.txtのデータ解析 /
  * Parse a sub-file of the "extra info"
- * @param buf
+ * @param buf 読み取ったデータ行のバッファ
  * @param ymin 未使用
  * @param xmin 広域地形マップを読み込みたいx座標の開始位置
  * @param ymax 未使用
@@ -913,8 +913,11 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 }
 
 
-/*
+
+/*!
+ * @brief ゲーム開始時に各荒野フロアの乱数シードを指定する /
  * Generate the random seeds for the wilderness
+ * @return なし
  */
 void seed_wilderness(void)
 {
@@ -937,8 +940,11 @@ void seed_wilderness(void)
  */
 typedef wilderness_type *wilderness_type_ptr;
 
-/*
+
+/*!
+ * @brief ゲーム開始時の荒野初期化メインルーチン /
  * Initialize wilderness array
+ * @return エラーコード
  */
 errr init_wilderness(void)
 {
@@ -957,7 +963,14 @@ errr init_wilderness(void)
 	return 0;
 }
 
-
+/*!
+ * @brief 荒野の地勢設定を初期化する /
+ * Initialize wilderness array
+ * @param terrain 初期化したい地勢ID
+ * @param feat_global 基本的な地形ID
+ * @param fmt 地勢内の地形数を参照するための独自フォーマット
+ * @return なし
+ */
 static void init_terrain_table(int terrain, s16b feat_global, cptr fmt, ...)
 {
 	va_list vp;
@@ -1007,8 +1020,10 @@ static void init_terrain_table(int terrain, s16b feat_global, cptr fmt, ...)
 }
 
 
-/*
+/*!
+ * @brief 荒野の地勢設定全体を初期化するメインルーチン /
  * Initialize arrays for wilderness terrains
+ * @return なし
  */
 void init_wilderness_terrains(void)
 {
@@ -1085,7 +1100,11 @@ void init_wilderness_terrains(void)
 		feat_mountain, MAX_FEAT_IN_TERRAIN - 8);
 }
 
-
+/*!
+ * @brief 荒野から広域マップへの切り替え処理 /
+ * Initialize arrays for wilderness terrains
+ * @return 切り替えが行われた場合はTRUEを返す。
+ */
 bool change_wild_mode(void)
 {
 	int i;
