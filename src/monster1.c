@@ -308,9 +308,9 @@ static void roff_aux(int r_idx, int mode)
 	else if (r_ptr->r_deaths)
 	{
 		/* Dead ancestors */
-		hooked_roff(format(
-			_(("このモンスターはあなたの先祖を %d 人葬っている", r_ptr->r_deaths), 
-			  ("%d of your ancestors %s been killed by this creature, ", r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have")))));
+		hooked_roff(
+			_(format("このモンスターはあなたの先祖を %d 人葬っている", r_ptr->r_deaths),
+			  format("%d of your ancestors %s been killed by this creature, ", r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have"))));
 
 		/* Some kills this life */
 		if (r_ptr->r_pkills)
@@ -1282,9 +1282,9 @@ static void roff_aux(int r_idx, int mode)
 			act = _("をかなり警戒しており", "is ever vigilant for");
 		}
 
-		hooked_roff(format(
-			_(("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", wd_he[msex], act, 10 * r_ptr->aaf), 
-			  ("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf))));
+		hooked_roff(
+			_(format("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", wd_he[msex], act, 10 * r_ptr->aaf),
+			  format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf)));
 	}
 
 
