@@ -1,14 +1,14 @@
-/*!
- * @file monster1.c
- * @brief モンスター情報の記述 / describe monsters (using monster memory)
- * @date 2013/12/11
- * @author
+/* File: monster1.c */
+
+/*
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
+ *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
- * 2014 Deskull rearranged comment for Doxygen.
  */
+
+/* Purpose: describe monsters (using monster memory) */
 
 #include "angband.h"
 
@@ -32,19 +32,19 @@ static cptr wd_his[3] =
 
 
 
-/*!
- * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)
+/*
+ * Pluralizer.  Args(count, singular, plural)
  */
 #define plural(c,s,p) \
     (((c) == 1) ? (s) : (p))
 
 
 
-/*!
- * @brief モンスターのAC情報を得ることができるかを返す / Determine if the "armor" is known
- * @param r_idx モンスターの種族ID
- * @return 敵のACを知る条件が満たされているならTRUEを返す
- * @details
+
+
+
+/*
+ * Determine if the "armor" is known
  * The higher the level, the fewer kills needed.
  */
 static bool know_armour(int r_idx)
@@ -71,17 +71,10 @@ static bool know_armour(int r_idx)
 }
 
 
-/*!
- * @brief モンスターの打撃威力を知ることができるかどうかを返す
+/*
  * Determine if the "damage" of the given attack is known
- * @param r_idx モンスターの種族ID
- * @param i 確認したい攻撃手番
- * @return 敵のダメージダイスを知る条件が満たされているならTRUEを返す
- * @details
- * <pre>
  * the higher the level of the monster, the fewer the attacks you need,
  * the more damage an attack does, the more attacks you need
- * </pre>
  */
 static bool know_damage(int r_idx, int i)
 {
@@ -124,13 +117,9 @@ static void hooked_roff(cptr str)
 }
 
 
-/*!
- * @brief モンスターの思い出情報を表示する
+/*
  * Hack -- display monster information using "hooked_roff()"
- * @param r_idx モンスターの種族ID
- * @param mode 表示オプション
- * @return なし
- * @details
+ *
  * This function should only be called with the cursor placed at the
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
@@ -1640,11 +1629,9 @@ static void roff_aux(int r_idx, int mode)
 }
 
 
-/*!
- * @brief モンスター情報のヘッダを記述する
+
+/*
  * Hack -- Display the "name" and "attr/chars" of a monster race
- * @param r_idx モンスターの種族ID
- * @return なし
  */
 void roff_top(int r_idx)
 {
@@ -1705,12 +1692,8 @@ void roff_top(int r_idx)
 
 
 
-/*!
- * @brief  モンスター情報の表示と共に画面を一時消去するサブルーチン /
+/*
  * Hack -- describe the given monster race at the top of the screen
- * @param r_idx モンスターの種族ID
- * @param mode 表示オプション
- * @return なし
  */
 void screen_roff(int r_idx, int mode)
 {
@@ -1732,11 +1715,8 @@ void screen_roff(int r_idx, int mode)
 
 
 
-/*!
- * @brief モンスター情報の現在のウィンドウに表示する /
+/*
  * Hack -- describe the given monster race in the current "term" window
- * @param r_idx モンスターの種族ID
- * @return なし
  */
 void display_roff(int r_idx)
 {
@@ -1762,12 +1742,9 @@ void display_roff(int r_idx)
 }
 
 
-/*!
- * @brief モンスター詳細情報を自動スポイラー向けに出力する /
+
+/*
  * Hack -- output description of the given monster race
- * @param r_idx モンスターの種族ID
- * @param roff_func 出力処理を行う関数ポインタ
- * @return なし
  */
 void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str))
 {
@@ -1778,11 +1755,6 @@ void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str))
 }
 
 
-/*!
- * @brief モンスターがダンジョンに出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return ダンジョンに出現するならばTRUEを返す
- */
 bool mon_hook_dungeon(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1799,11 +1771,6 @@ bool mon_hook_dungeon(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが海洋に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 海洋に出現するならばTRUEを返す
- */
 static bool mon_hook_ocean(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1815,11 +1782,6 @@ static bool mon_hook_ocean(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが海岸に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 海岸に出現するならばTRUEを返す
- */
 static bool mon_hook_shore(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1831,11 +1793,6 @@ static bool mon_hook_shore(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが荒地に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 荒地に出現するならばTRUEを返す
- */
 static bool mon_hook_waste(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1847,11 +1804,6 @@ static bool mon_hook_waste(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが町に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 荒地に出現するならばTRUEを返す
- */
 static bool mon_hook_town(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1863,11 +1815,6 @@ static bool mon_hook_town(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが森林に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 森林に出現するならばTRUEを返す
- */
 static bool mon_hook_wood(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1879,11 +1826,6 @@ static bool mon_hook_wood(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが火山に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 火山に出現するならばTRUEを返す
- */
 static bool mon_hook_volcano(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1894,11 +1836,7 @@ static bool mon_hook_volcano(int r_idx)
 		return FALSE;
 }
 
-/*!
- * @brief モンスターが山地に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 山地に出現するならばTRUEを返す
- */
+
 static bool mon_hook_mountain(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1910,11 +1848,6 @@ static bool mon_hook_mountain(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが草原に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 森林に出現するならばTRUEを返す
- */
 static bool mon_hook_grass(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1925,11 +1858,7 @@ static bool mon_hook_grass(int r_idx)
 		return FALSE;
 }
 
-/*!
- * @brief モンスターが深い水地形に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 深い水地形に出現するならばTRUEを返す
- */
+
 static bool mon_hook_deep_water(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1943,11 +1872,6 @@ static bool mon_hook_deep_water(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが浅い水地形に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 浅い水地形に出現するならばTRUEを返す
- */
 static bool mon_hook_shallow_water(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1961,11 +1885,6 @@ static bool mon_hook_shallow_water(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが溶岩地形に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 溶岩地形に出現するならばTRUEを返す
- */
 static bool mon_hook_lava(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1981,11 +1900,6 @@ static bool mon_hook_lava(int r_idx)
 }
 
 
-/*!
- * @brief モンスターが通常の床地形に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 通常の床地形に出現するならばTRUEを返す
- */
 static bool mon_hook_floor(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1998,10 +1912,6 @@ static bool mon_hook_floor(int r_idx)
 }
 
 
-/*!
- * @brief プレイヤーの現在の広域マップ座標から得た地勢を元にモンスターの生成条件関数を返す
- * @return 地勢にあったモンスターの生成条件関数
- */
 monster_hook_type get_monster_hook(void)
 {
 	if (!dun_level && !p_ptr->inside_quest)
@@ -2037,10 +1947,7 @@ monster_hook_type get_monster_hook(void)
 	}
 }
 
-/*!
- * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
- * @return 地勢にあったモンスターの生成条件関数
- */
+
 monster_hook_type get_monster_hook2(int y, int x)
 {
 	feature_type *f_ptr = &f_info[cave[y][x].feat];
@@ -2072,21 +1979,12 @@ monster_hook_type get_monster_hook2(int y, int x)
 	else return (monster_hook_type)mon_hook_floor;
 }
 
-/*!
- * @brief モンスターを友好的にする
- * @param モンスター情報構造体の参照ポインタ
- * @return なし
- */
+
 void set_friendly(monster_type *m_ptr)
 {
 	m_ptr->smart |= SM_FRIENDLY;
 }
 
-/*!
- * @brief モンスターをペットにする
- * @param モンスター情報構造体の参照ポインタ
- * @return なし
- */
 void set_pet(monster_type *m_ptr)
 {
 	if (!is_pet(m_ptr)) check_pets_num_and_align(m_ptr, TRUE);
@@ -2099,11 +1997,8 @@ void set_pet(monster_type *m_ptr)
 		m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
 }
 
-/*!
- * @brief モンスターを敵に回す
+/*
  * Makes the monster hostile towards the player
- * @param モンスター情報構造体の参照ポインタ
- * @return なし
  */
 void set_hostile(monster_type *m_ptr)
 {
@@ -2116,11 +2011,8 @@ void set_hostile(monster_type *m_ptr)
 }
 
 
-/*!
- * @brief モンスターを怒らせる
+/*
  * Anger the monster
- * @param モンスター情報構造体の参照ポインタ
- * @return なし
  */
 void anger_monster(monster_type *m_ptr)
 {

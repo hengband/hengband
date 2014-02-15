@@ -1,0 +1,171 @@
+# File: Makefile.dos
+
+# Purpose: Makefile support for "main-dos.c"
+
+#
+# Note: Rename to "Makefile" before using
+#
+# Allegro support by Robert Ruehlmann (rr9@angband.org)
+#
+
+# Compiling with MOD-file support:
+# - Get the JG-MOD library from http://www.jgmod.home.ml.org and install it.
+# - Insert -ljgmod in front of -lalleg to the Libraries section.
+# - Add -DUSE_MOD_FILES to the compiler flags.
+# - Copy your MOD-files into the "lib/xtra/music" folder.
+# Mod-support is experimental and may cause *strange* problems when a
+# non-MOD file is encountered in lib/xtra/music
+
+###################################################################
+#
+# Options for Japanese version (comment out for English version)
+
+JP_OPT= -DJP -DSJIS
+
+###################################################################
+
+
+#
+# Basic definitions
+#
+
+OBJS = \
+	z-util.o z-virt.o z-form.o z-rand.o z-term.o \
+	variable.o tables.o util.o cave.o \
+	object1.o object2.o monster1.o monster2.o \
+	xtra1.o xtra2.o spells1.o spells2.o \
+	melee1.o melee2.o save.o files.o floors.o \
+	cmd1.o cmd2.o cmd3.o cmd4.o cmd5.o cmd6.o \
+	do-spell.o store.o birth.o load.o \
+	wizard1.o wizard2.o grid.o streams.o rooms.o \
+	generate.o dungeon.o init1.o init2.o \
+	effects.o racial.o snipe.o hex.o \
+	artifact.o autopick.o mutation.o flavor.o spells3.o \
+	mspells1.o mspells2.o scores.o mind.o mane.o hissatsu.o \
+	bldg.o obj_kind.o wild.o avatar.o japanese.o mspells3.o \
+	main-ibm.o main-dos.o main.o
+
+
+# Compiler
+CC = gcc
+
+# Compiler flags
+#CFLAGS = \
+#-Wall -O2 -s -fno-strength-reduce -DUSE_DOS -DUSE_IBM -DUSE_BACKGROUND \
+#-DUSE_TRANSPARENCY \
+## -DUSE_MOD_FILES \
+
+CFLAGS = \
+-Wall -O2 -s -fno-strength-reduce -DUSE_DOS -DUSE_IBM -DUSE_BACKGROUND \
+-DUSE_TRANSPARENCY $(JP_OPT)
+
+# Libraries
+LIBS = -lpc -lalleg
+
+#
+# Targets
+#
+
+default: hengband.exe
+	copy hengband.exe ..
+	del hengband.exe
+
+install: hengband.exe
+	copy hengband.exe ..
+
+all: hengband.exe
+	@echo All done.  Use 'make install' to install.
+
+
+#
+# Link executables
+#
+
+hengband.exe: $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
+
+
+#
+# Compile source files
+#
+
+.c.o:
+	$(CC) $(CFLAGS) -c $*.c
+
+
+#
+# Clean up
+#
+
+clean:
+	del *.o
+
+cleanall: clean
+	del *.exe
+
+
+artifact.o: artifact.c $(INCS)
+autopick.o: autopick.c $(INCS)
+avatar.o: avatar.c $(INCS)
+birth.o: birth.c $(INCS)
+bldg.o: bldg.c $(INCS)
+cave.o: cave.c $(INCS)
+cmd1.o: cmd1.c $(INCS)
+cmd2.o: cmd2.c $(INCS)
+cmd3.o: cmd3.c $(INCS)
+cmd4.o: cmd4.c $(INCS)
+cmd5.o: cmd5.c $(INCS)
+cmd6.o: cmd6.c $(INCS)
+do-spell.o: do-spell.c $(INCS)
+dungeon.o: dungeon.c $(INCS)
+effects.o: effects.c $(INCS)
+files.o: files.c $(INCS)
+flavor.o: flavor.c $(INCS)
+generate.o: generate.c $(INCS) generate.h grid.h rooms.h streams.h
+grid.o: grid.c $(INCS) grid.h generate.h
+rooms.o: rooms.c $(INCS) grid.h rooms.h generate.h
+streams.o: streams.c $(INCS) grid.h generate.h
+hex.o: hex.c $(INCS)
+init1.o: init1.c $(INCS)
+init2.o: init2.c $(INCS)
+load.o: load.c $(INCS)
+main-dos.o: main-dos.c $(INCS)
+main.o: main.c $(INCS)
+melee1.o: melee1.c $(INCS)
+melee2.o: melee2.c $(INCS)
+mind.o: mind.c $(INCS)
+monster1.o: monster1.c $(INCS)
+monster2.o: monster2.c $(INCS)
+mspells1.o: mspells1.c $(INCS)
+mspells2.o: mspells2.c $(INCS)
+mutation.o: mutation.c $(INCS)
+notes.o: notes.c $(INCS)
+object1.o: object1.c $(INCS)
+object2.o: object2.c $(INCS)
+obj_kind.o: obj_kind.c $(INCS)
+racial.o: racial.c $(INCS)
+save.o: save.c $(INCS)
+scores.o: scores.c $(INCS)
+snipe.o: snipe.c $(INCS)
+spells1.o: spells1.c $(INCS)
+spells2.o: spells2.c $(INCS)
+spells3.o: spells3.c $(INCS)
+store.o: store.c $(INCS)
+tables.o: tables.c $(INCS)
+util.o: util.c $(INCS)
+variable.o: variable.c $(INCS)
+wild.o: wild.c $(INCS)
+wizard1.o: wizard1.c $(INCS)
+wizard2.o: wizard2.c $(INCS)
+xtra1.o: xtra1.c $(INCS)
+xtra2.o: xtra2.c $(INCS)
+z-form.o: z-form.c $(HDRS) z-form.h z-util.h z-virt.h
+z-rand.o: z-rand.c $(HDRS) z-rand.h
+z-term.o: z-term.c $(HDRS) z-term.h z-virt.h
+z-util.o: z-util.c $(HDRS) z-util.h
+z-virt.o: z-virt.c $(HDRS) z-virt.h z-util.h
+mane.o: mane.c $(INCS)
+hissatsu.o: hissatsu.c $(INCS)
+japanese.o: japanese.c $(INCS)
+main-ibm.o: main-ibm.c $(INCS)
+chuukei.o: chuukei.c $(INCS)

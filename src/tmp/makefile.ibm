@@ -1,0 +1,84 @@
+# File: Makefile.ibm
+
+# Purpose: Makefile support for "main-ibm.c" and Gnu C
+
+# Note: Rename to "Makefile" before using
+# Added extra targets: mrmarcel@eos.ncsu.edu (Mike Marcelais)
+
+
+###################################################################
+#
+# Options for Japanese version (comment out for English version)
+
+JP_OPT= -DJP -DSJIS
+
+###################################################################
+
+
+OBJS = \
+	z-util.o z-virt.o z-form.o z-rand.o z-term.o \
+	variable.o tables.o util.o cave.o \
+	object1.o object2.o monster1.o monster2.o \
+	xtra1.o xtra2.o spells1.o spells2.o \
+	melee1.o melee2.o save.o files.o floors.o \
+	cmd1.o cmd2.o cmd3.o cmd4.o cmd5.o cmd6.o \
+	do-spell.o store.o birth.o load.o \
+	wizard1.o wizard2.o grid.o streams.o rooms.o \
+	generate.o dungeon.o init1.o init2.o \
+	effects.o racial.o snipe.o hex.o \
+	artifact.o autopick.o mutation.o flavor.o spells3.o \
+	mspells1.o mspells2.o scores.o mind.o mane.o hissatsu.o \
+	bldg.o obj_kind.o wild.o avatar.o japanese.o mspells3.o \
+	main-ibm.o main.o chuukei.o
+
+# Compiler
+
+CC = gcc
+
+# Compiler flags
+
+CFLAGS = -Wall -O2 -fno-strength-reduce -DUSE_IBM $(JP_OPT)
+
+
+# Libraries
+
+LIBS = -lpc
+GLIBS= -lgrx20
+
+#
+# Targets
+#
+
+default: hengband.exe
+	copy hengband.exe ..
+	del hengband.exe
+
+install: hengband.exe
+	copy hengband.exe ..
+
+all: hengband.exe
+	@echo All done.  Use 'make install' to install.
+
+#
+# Link Executables
+#
+
+hengband.exe: $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
+
+# Compile source files
+
+.c.o:
+	$(CC) $(CFLAGS) -c $*.c
+
+
+#
+# Clean up
+#
+
+clean:
+	del *.o
+
+cleanall: clean
+	del *.exe
+
