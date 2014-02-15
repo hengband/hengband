@@ -1640,9 +1640,11 @@ static void roff_aux(int r_idx, int mode)
 }
 
 
-
-/*
+/*!
+ * @brief モンスター情報のヘッダを記述する
  * Hack -- Display the "name" and "attr/chars" of a monster race
+ * @param r_idx モンスターの種族ID
+ * @return なし
  */
 void roff_top(int r_idx)
 {
@@ -1703,8 +1705,12 @@ void roff_top(int r_idx)
 
 
 
-/*
+/*!
+ * @brief  モンスター情報の表示と共に画面を一時消去するサブルーチン /
  * Hack -- describe the given monster race at the top of the screen
+ * @param r_idx モンスターの種族ID
+ * @param mode 表示オプション
+ * @return なし
  */
 void screen_roff(int r_idx, int mode)
 {
@@ -1726,8 +1732,11 @@ void screen_roff(int r_idx, int mode)
 
 
 
-/*
+/*!
+ * @brief モンスター情報の現在のウィンドウに表示する /
  * Hack -- describe the given monster race in the current "term" window
+ * @param r_idx モンスターの種族ID
+ * @return なし
  */
 void display_roff(int r_idx)
 {
@@ -1753,9 +1762,12 @@ void display_roff(int r_idx)
 }
 
 
-
-/*
+/*!
+ * @brief モンスター詳細情報を自動スポイラー向けに出力する /
  * Hack -- output description of the given monster race
+ * @param r_idx モンスターの種族ID
+ * @param roff_func 出力処理を行う関数ポインタ
+ * @return なし
  */
 void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str))
 {
