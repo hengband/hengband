@@ -1710,14 +1710,17 @@ static bool init_graphics(void)
 	/* if (can_use_graphics != arg_graphics) */
 	{
 		char buf[1024];
-		int wid, hgt;
+		int wid, hgt, twid, thgt, ox, oy;
 		cptr name;
 
 		if (arg_graphics == GRAPHICS_ADAM_BOLT)
 		{
 			wid = 16;
 			hgt = 16;
-
+			twid = 16;
+			thgt = 16;
+			ox = 0;
+			oy = 0;
 			name = "16X16.BMP";
 
 			ANGBAND_GRAF = "new";
@@ -1726,7 +1729,10 @@ static bool init_graphics(void)
 		{
 			wid = 32;
 			hgt = 32;
-
+			twid = 32;
+			thgt = 32;
+			ox = 0;
+			oy = 0;
 			name = "32X32.BMP";
 
 			ANGBAND_GRAF = "ne2";
@@ -1735,7 +1741,10 @@ static bool init_graphics(void)
 		{
 			wid = 8;
 			hgt = 8;
-
+			twid = 8;
+			thgt = 8;
+			ox = 0;
+			oy = 0;
 			name = "8X8.BMP";
 			ANGBAND_GRAF = "old";
 		}
@@ -1758,6 +1767,10 @@ static bool init_graphics(void)
 		/* Save the new sizes */
 		infGraph.CellWidth = wid;
 		infGraph.CellHeight = hgt;
+		infGraph.TileWidth = twid;
+		infGraph.TileHeight = thgt;
+		infGraph.OffsetX = ox;
+		infGraph.OffsetY = oy;
 
 		if (arg_graphics == GRAPHICS_ADAM_BOLT)
 		{
@@ -3049,7 +3062,7 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 #ifdef USE_GRAPHICS
 
 	int i;
-	int x1, y1, w1, h1;
+	int x1, y1, w1, h1, tw1, th1;
 	int x2, y2, w2, h2, tw2;
 	int x3, y3;
 
@@ -3069,6 +3082,8 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 	/* Size of bitmap cell */
 	w1 = infGraph.CellWidth;
 	h1 = infGraph.CellHeight;
+	tw1 = infGraph.TileWidth;
+	th1 = infGraph.TileHeight;
 
 	/* Size of window cell */
 	if (td->map_active)
@@ -3087,8 +3102,8 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 	}
 
 	/* Location of window cell */
-	x2 = x * w2 + td->size_ow1;
-	y2 = y * h2 + td->size_oh1;
+	x2 = x * w2 + td->size_ow1 + infGraph.OffsetX;
+	y2 = y * h2 + td->size_oh1 + infGraph.OffsetY;
 
 	/* Info */
 	hdc = GetDC(td->w);
@@ -3109,6 +3124,7 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 		byte a = ap[i];
 		char c = cp[i];
 
+
 		/* Extract picture */
 		int row = (a & 0x7F);
 		int col = (c & 0x7F);
@@ -3121,9 +3137,11 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 		{
 			x3 = (tcp[i] & 0x7F) * w1;
 			y3 = (tap[i] & 0x7F) * h1;
+			tw2 = tw2 * w1 / tw1;
+			h2 = h2 * h1 / th1;
 
 			/* Perfect size */
-			if ((w1 == tw2) && (h1 == h2))
+			if ((tw1 == tw2) && (th1 == h2))
 			{
 				/* Copy the terrain picture from the bitmap to the window */
 				BitBlt(hdc, x2, y2, tw2, h2, hdcSrc, x3, y3, SRCCOPY);

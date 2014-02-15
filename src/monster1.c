@@ -117,6 +117,11 @@ static bool know_damage(int r_idx, int i)
  */
 void (*hook_c_roff)(byte attr, cptr str) = c_roff;
 
+/*!
+ * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
+ * @param str 出力文字列
+ * @return なし
+ */
 static void hooked_roff(cptr str)
 {
 	/* Spawn */
@@ -2074,7 +2079,7 @@ monster_hook_type get_monster_hook2(int y, int x)
 
 /*!
  * @brief モンスターを友好的にする
- * @param モンスター情報構造体の参照ポインタ
+ * @param m_ptr モンスター情報構造体の参照ポインタ
  * @return なし
  */
 void set_friendly(monster_type *m_ptr)
@@ -2084,7 +2089,7 @@ void set_friendly(monster_type *m_ptr)
 
 /*!
  * @brief モンスターをペットにする
- * @param モンスター情報構造体の参照ポインタ
+ * @param m_ptr モンスター情報構造体の参照ポインタ
  * @return なし
  */
 void set_pet(monster_type *m_ptr)
@@ -2102,7 +2107,7 @@ void set_pet(monster_type *m_ptr)
 /*!
  * @brief モンスターを敵に回す
  * Makes the monster hostile towards the player
- * @param モンスター情報構造体の参照ポインタ
+ * @param m_ptr モンスター情報構造体の参照ポインタ
  * @return なし
  */
 void set_hostile(monster_type *m_ptr)
@@ -2119,7 +2124,7 @@ void set_hostile(monster_type *m_ptr)
 /*!
  * @brief モンスターを怒らせる
  * Anger the monster
- * @param モンスター情報構造体の参照ポインタ
+ * @param m_ptr モンスター情報構造体の参照ポインタ
  * @return なし
  */
 void anger_monster(monster_type *m_ptr)
@@ -2146,8 +2151,13 @@ msg_format("%^sは怒った！", m_name);
 }
 
 
-/*
+/*!
+ * @brief モンスターが地形を踏破できるかどうかを返す
  * Check if monster can cross terrain
+ * @param feat 地形ID
+ * @param r_ptr モンスター種族構造体の参照ポインタ
+ * @param mode オプション
+ * @return 踏破可能ならばTRUEを返す
  */
 bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode)
 {
@@ -2205,8 +2215,14 @@ bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode)
 }
 
 
-/*
+/*!
+ * @brief 指定された座標の地形をモンスターが踏破できるかどうかを返す
  * Strictly check if monster can enter the grid
+ * @param y 地形のY座標
+ * @param x 地形のX座標
+ * @param r_ptr モンスター種族構造体の参照ポインタ
+ * @param mode オプション
+ * @return 踏破可能ならばTRUEを返す
  */
 bool monster_can_enter(int y, int x, monster_race *r_ptr, u16b mode)
 {
@@ -2220,8 +2236,12 @@ bool monster_can_enter(int y, int x, monster_race *r_ptr, u16b mode)
 }
 
 
-/*
+/*!
+ * @brief モンスターの属性の基づいた敵対関係の有無を返す（サブルーチン）
  * Check if this monster has "hostile" alignment (aux)
+ * @param sub_align1 モンスター1のサブフラグ
+ * @param sub_align2 モンスター2のサブフラグ
+ * @return 敵対関係にあるならばTRUEを返す
  */
 static bool check_hostile_align(byte sub_align1, byte sub_align2)
 {
@@ -2237,8 +2257,12 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
 }
 
 
-/*
+/*!
+ * @brief モンスターの属性の基づいた敵対関係の有無を返す
  * Check if two monsters are enemies
+ * @param m_ptr モンスター1の構造体参照ポインタ
+ * @param n_ptr モンスター2の構造体参照ポインタ
+ * @return 敵対関係にあるならばTRUEを返す
  */
 bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 {
@@ -2274,8 +2298,15 @@ bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 }
 
 
-/*
+/*!
+ * @brief モンスターがプレイヤーに対して敵意を抱くかどうかを返す
  * Check if this monster race has "hostile" alignment
+ * @param m_ptr モンスター情報構造体の参照ポインタ
+ * @param pa_good プレイヤーの善傾向値
+ * @param pa_evil プレイヤーの悪傾向値
+ * @param r_ptr モンスター種族情報の構造体参照ポインタ
+ * @return プレイヤーに敵意を持つならばTRUEを返す
+ * @details
  * If user is player, m_ptr == NULL.
  */
 bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr)
@@ -2304,9 +2335,12 @@ bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, mo
 }
 
 
-/*
+/*!
+ * @brief モンスターが生命体かどうかを返す
  * Is the monster "alive"?
- *
+ * @param r_ptr 判定するモンスターの種族情報構造体参照ポインタ
+ * @return 生命体ならばTRUEを返す
+ * @details
  * Used to determine the message to print for a killed monster.
  * ("dies", "destroyed")
  */
@@ -2320,8 +2354,13 @@ bool monster_living(monster_race *r_ptr)
 }
 
 
-/*
- * Is this monster declined to be questor or bounty?
+/*!
+ * @brief モンスターが特殊能力上、賞金首から排除する必要があるかどうかを返す。
+ * Is the monster "alive"? / Is this monster declined to be questor or bounty?
+ * @param r_idx モンスターの種族ID
+ * @return 賞金首に加えられないならばTRUEを返す
+ * @details
+ * 実質バーノール＝ルパート用。
  */
 bool no_questor_or_bounty_uniques(int r_idx)
 {

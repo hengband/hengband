@@ -15,6 +15,10 @@ typedef struct {
 	HANDLE hPalette;
 	BYTE   CellWidth;
 	BYTE   CellHeight;
+	BYTE   TileWidth;
+	BYTE   TileHeight;
+	INT    OffsetX;
+	INT    OffsetY;
 } DIBINIT;
 
 /* Read a DIB from a file */
