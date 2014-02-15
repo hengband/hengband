@@ -1,14 +1,14 @@
-/* File: monster1.c */
-
-/*
+/*!
+ * @file monster1.c
+ * @brief モンスター情報の記述 / describe monsters (using monster memory)
+ * @date 2013/12/11
+ * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * 2014 Deskull rearranged comment for Doxygen.
  */
-
-/* Purpose: describe monsters (using monster memory) */
 
 #include "angband.h"
 
@@ -32,19 +32,19 @@ static cptr wd_his[3] =
 
 
 
-/*
- * Pluralizer.  Args(count, singular, plural)
+/*!
+ * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)
  */
 #define plural(c,s,p) \
     (((c) == 1) ? (s) : (p))
 
 
 
-
-
-
-/*
- * Determine if the "armor" is known
+/*!
+ * @brief モンスターのAC情報を得ることができるかを返す / Determine if the "armor" is known
+ * @param r_idx モンスターの種族ID
+ * @return 敵のACを知る条件が満たされているならTRUEを返す
+ * @details
  * The higher the level, the fewer kills needed.
  */
 static bool know_armour(int r_idx)
@@ -71,10 +71,17 @@ static bool know_armour(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターの打撃威力を知ることができるかどうかを返す
  * Determine if the "damage" of the given attack is known
+ * @param r_idx モンスターの種族ID
+ * @param i 確認したい攻撃手番
+ * @return 敵のダメージダイスを知る条件が満たされているならTRUEを返す
+ * @details
+ * <pre>
  * the higher the level of the monster, the fewer the attacks you need,
  * the more damage an attack does, the more attacks you need
+ * </pre>
  */
 static bool know_damage(int r_idx, int i)
 {
@@ -117,9 +124,13 @@ static void hooked_roff(cptr str)
 }
 
 
-/*
+/*!
+ * @brief モンスターの思い出情報を表示する
  * Hack -- display monster information using "hooked_roff()"
- *
+ * @param r_idx モンスターの種族ID
+ * @param mode 表示オプション
+ * @return なし
+ * @details
  * This function should only be called with the cursor placed at the
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
