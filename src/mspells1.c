@@ -1781,11 +1781,7 @@ bool make_attack_spell(int m_idx)
 	{
 		disturb(1, 1);
 		/* Message */
-#ifdef JP
-		msg_format("%^sは呪文を唱えようとしたが失敗した。", m_name);
-#else
-		msg_format("%^s tries to cast a spell, but fails.", m_name);
-#endif
+		msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);
 
 		return (TRUE);
 	}
@@ -1793,11 +1789,7 @@ bool make_attack_spell(int m_idx)
 	/* Hex: Anti Magic Barrier */
 	if (!spell_is_inate(thrown_spell) && magic_barrier(m_idx))
 	{
-#ifdef JP
-		msg_format("反魔法バリアが%^sの呪文をかき消した。", m_name);
-#else
-		msg_format("Anti magic barrier cancels the spell which %^s casts.");
-#endif
+		msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), m_name);
 		return (TRUE);
 	}
 
@@ -1813,12 +1805,7 @@ bool make_attack_spell(int m_idx)
 		case 96+0:
 		{
 			disturb(1, 1);
-#ifdef JP
-msg_format("%^sがかん高い金切り声をあげた。", m_name);
-#else
-			msg_format("%^s makes a high pitched shriek.", m_name);
-#endif
-
+			msg_format(_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."), m_name);
 			aggravate_monsters(m_idx);
 			break;
 		}
@@ -1835,13 +1822,15 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-			if (blind) msg_format("%^sが何かを力強くつぶやいた。", m_name);
-			else msg_format("%^sが魔力消去の呪文を念じた。", m_name);
-#else
-			if (blind) msg_format("%^s mumbles powerfully.", m_name);
-			else msg_format("%^s invokes a dispel magic.", m_name);
-#endif
+
+			if (blind)
+			{
+				msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."), m_name);
+			}
 			dispel_player();
 			if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
 
@@ -1857,17 +1846,14 @@ msg_format("%^sがかん高い金切り声をあげた。", m_name);
 		case 96+3:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かを射った。", m_name);
-#else
-			if (blind) msg_format("%^s shoots something.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sがロケットを発射した。", m_name);
-#else
-			else msg_format("%^s fires a rocket.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かを射った。", "%^s shoots something."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sがロケットを発射した。", "%^s fires a rocket."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 4) > 800 ? 800 : (m_ptr->hp / 4));
 			breath(y, x, m_idx, GF_ROCKET,
@@ -1881,17 +1867,14 @@ else msg_format("%^sがロケットを発射した。", m_name);
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが奇妙な音を発した。", m_name);
-#else
-			if (blind) msg_format("%^s makes a strange noise.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが矢を放った。", m_name);
-#else
-			else msg_format("%^s fires an arrow.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが奇妙な音を発した。", "%^s makes a strange noise."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが矢を放った。", "%^s fires an arrow."), m_name);
+			}
 
 			dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
 			bolt(m_idx, GF_ARROW, dam, MS_SHOOT, learnable);
@@ -1924,17 +1907,14 @@ else msg_format("%^sが矢を放った。", m_name);
 		case 96+8:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが酸のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes acid.", m_name);
-#endif
+			if (blind) 
+			{	
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが酸のブレスを吐いた。", "%^s breathes acid."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_ACID, dam, 0, TRUE, MS_BR_ACID, learnable);
@@ -1946,17 +1926,14 @@ else msg_format("%^sが酸のブレスを吐いた。", m_name);
 		case 96+9:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが稲妻のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes lightning.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが稲妻のブレスを吐いた。", "%^s breathes lightning."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_ELEC, dam,0, TRUE, MS_BR_ELEC, learnable);
@@ -1968,17 +1945,14 @@ else msg_format("%^sが稲妻のブレスを吐いた。", m_name);
 		case 96+10:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが火炎のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes fire.", m_name);
-#endif
+			if (blind) 
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが火炎のブレスを吐いた。", "%^s breathes fire."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_FIRE, dam,0, TRUE, MS_BR_FIRE, learnable);
@@ -1990,17 +1964,14 @@ else msg_format("%^sが火炎のブレスを吐いた。", m_name);
 		case 96+11:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが冷気のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes frost.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが冷気のブレスを吐いた。", "%^s breathes frost."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_COLD, dam,0, TRUE, MS_BR_COLD, learnable);
@@ -2012,17 +1983,14 @@ else msg_format("%^sが冷気のブレスを吐いた。", m_name);
 		case 96+12:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sがガスのブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes gas.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sがガスのブレスを吐いた。", "%^s breathes gas."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 3) > 800 ? 800 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_POIS, dam, 0, TRUE, MS_BR_POIS, learnable);
@@ -2035,17 +2003,14 @@ else msg_format("%^sがガスのブレスを吐いた。", m_name);
 		case 96+13:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが地獄のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes nether.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが地獄のブレスを吐いた。", "%^s breathes nether."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 550 ? 550 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_NETHER, dam,0, TRUE, MS_BR_NETHER, learnable);
@@ -2057,17 +2022,14 @@ else msg_format("%^sが地獄のブレスを吐いた。", m_name);
 		case 96+14:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが閃光のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes light.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが閃光のブレスを吐いた。", "%^s breathes light."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 400 ? 400 : (m_ptr->hp / 6));
 			breath(y_br_lite, x_br_lite, m_idx, GF_LITE, dam,0, TRUE, MS_BR_LITE, learnable);
@@ -2079,17 +2041,14 @@ else msg_format("%^sが閃光のブレスを吐いた。", m_name);
 		case 96+15:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが暗黒のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes darkness.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが暗黒のブレスを吐いた。", "%^s breathes darkness."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 400 ? 400 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_DARK, dam,0, TRUE, MS_BR_DARK, learnable);
@@ -2101,17 +2060,15 @@ else msg_format("%^sが暗黒のブレスを吐いた。", m_name);
 		case 96+16:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが混乱のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes confusion.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが混乱のブレスを吐いた。", "%^s breathes confusion."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 450 ? 450 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_CONFUSION, dam,0, TRUE, MS_BR_CONF, learnable);
@@ -2124,22 +2081,17 @@ else msg_format("%^sが混乱のブレスを吐いた。", m_name);
 		{
 			disturb(1, 1);
 			if (m_ptr->r_idx == MON_JAIAN)
-#ifdef JP
-				msg_format("「ボォエ〜〜〜〜〜〜」");
-#else
-				msg_format("'Booooeeeeee'");
-#endif
-#ifdef JP
-else if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			else if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが轟音のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes sound.", m_name);
-#endif
+			{
+				msg_format(_("「ボォエ〜〜〜〜〜〜」", "'Booooeeeeee'"));
+			}
+			else if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが轟音のブレスを吐いた。", "%^s breathes sound."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 450 ? 450 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_SOUND, dam,0, TRUE, MS_BR_SOUND, learnable);
@@ -2151,17 +2103,14 @@ else msg_format("%^sが轟音のブレスを吐いた。", m_name);
 		case 96+18:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sがカオスのブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes chaos.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sがカオスのブレスを吐いた。", "%^s breathes chaos."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 600 ? 600 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_CHAOS, dam,0, TRUE, MS_BR_CHAOS, learnable);
@@ -2173,17 +2122,15 @@ else msg_format("%^sがカオスのブレスを吐いた。", m_name);
 		case 96+19:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが劣化のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes disenchantment.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが劣化のブレスを吐いた。", "%^s breathes disenchantment."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 500 ? 500 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_DISENCHANT, dam,0, TRUE, MS_BR_DISEN, learnable);
@@ -2195,17 +2142,15 @@ else msg_format("%^sが劣化のブレスを吐いた。", m_name);
 		case 96+20:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが因果混乱のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes nexus.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが因果混乱のブレスを吐いた。", "%^s breathes nexus."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 3) > 250 ? 250 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_NEXUS, dam,0, TRUE, MS_BR_NEXUS, learnable);
@@ -2217,17 +2162,15 @@ else msg_format("%^sが因果混乱のブレスを吐いた。", m_name);
 		case 96+21:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが時間逆転のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes time.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが時間逆転のブレスを吐いた。", "%^s breathes time."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 3) > 150 ? 150 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_TIME, dam,0, TRUE, MS_BR_TIME, learnable);
@@ -2238,17 +2181,15 @@ else msg_format("%^sが時間逆転のブレスを吐いた。", m_name);
 		case 96+22:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが遅鈍のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes inertia.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが遅鈍のブレスを吐いた。", "%^s breathes inertia."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 200 ? 200 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_INERTIA, dam,0, TRUE, MS_BR_INERTIA, learnable);
@@ -2259,17 +2200,15 @@ else msg_format("%^sが遅鈍のブレスを吐いた。", m_name);
 		case 96+23:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが重力のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes gravity.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが重力のブレスを吐いた。", "%^s breathes gravity."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 3) > 200 ? 200 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_GRAVITY, dam,0, TRUE, MS_BR_GRAVITY, learnable);
@@ -2281,22 +2220,17 @@ else msg_format("%^sが重力のブレスを吐いた。", m_name);
 		{
 			disturb(1, 1);
 			if (m_ptr->r_idx == MON_BOTEI)
-#ifdef JP
-				msg_format("「ボ帝ビルカッター！！！」");
-#else
-				msg_format("'Boty-Build cutter!!!'");
-#endif
-#ifdef JP
-else if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			else if (blind) msg_format("%^s breathes.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが破片のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes shards.", m_name);
-#endif
+			{
+				msg_format(_("「ボ帝ビルカッター！！！」", "'Boty-Build cutter!!!'"));
+			}
+			else if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが破片のブレスを吐いた。", "%^s breathes shards."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 500 ? 500 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_SHARDS, dam,0, TRUE, MS_BR_SHARDS, learnable);
@@ -2308,17 +2242,15 @@ else msg_format("%^sが破片のブレスを吐いた。", m_name);
 		case 96+25:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sがプラズマのブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes plasma.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sがプラズマのブレスを吐いた。", "%^s breathes plasma."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 150 ? 150 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_PLASMA, dam,0, TRUE, MS_BR_PLASMA, learnable);
@@ -2329,17 +2261,15 @@ else msg_format("%^sがプラズマのブレスを吐いた。", m_name);
 		case 96+26:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sがフォースのブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes force.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sがフォースのブレスを吐いた。", "%^s breathes force."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 200 ? 200 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_FORCE, dam,0, TRUE, MS_BR_FORCE, learnable);
@@ -2350,17 +2280,16 @@ else msg_format("%^sがフォースのブレスを吐いた。", m_name);
 		case 96+27:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが魔力のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes mana.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが魔力のブレスを吐いた。", "%^s breathes mana."), m_name);
+			}
+
 			dam = ((m_ptr->hp / 3) > 250 ? 250 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_MANA, dam,0, TRUE, MS_BR_MANA, learnable);
 			break;
@@ -2370,17 +2299,15 @@ else msg_format("%^sが魔力のブレスを吐いた。", m_name);
 		case 96+28:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが放射能球を放った。", m_name);
-#else
-			else msg_format("%^s casts a ball of radiation.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが放射能球を放った。", "%^s casts a ball of radiation."), m_name);
+			}
 
 			dam = (rlev + damroll(10, 6)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 			breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, learnable);
@@ -2392,17 +2319,15 @@ else msg_format("%^sが放射能球を放った。", m_name);
 		case 96+29:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが放射性廃棄物のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes toxic waste.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが放射性廃棄物のブレスを吐いた。", "%^s breathes toxic waste."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 3) > 800 ? 800 : (m_ptr->hp / 3));
 			breath(y, x, m_idx, GF_NUKE, dam,0, TRUE, MS_BR_NUKE, learnable);
@@ -2414,17 +2339,15 @@ else msg_format("%^sが放射性廃棄物のブレスを吐いた。", m_name);
 		case 96+30:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが恐ろしげにつぶやいた。", m_name);
-#else
-			if (blind) msg_format("%^s mumbles frighteningly.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが純ログルスを放った。", m_name);/*nuke me*/
-#else
-			else msg_format("%^s invokes a raw Logrus.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが恐ろしげにつぶやいた。", "%^s mumbles frighteningly."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが純ログルスを放った。", "%^s invokes a raw Logrus."), m_name);
+			}
 
 			dam = ((r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 3) : (rlev * 2))+ damroll(10, 10);
 			breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, learnable);
@@ -2436,17 +2359,15 @@ else msg_format("%^sが純ログルスを放った。", m_name);/*nuke me*/
 		case 96+31:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かのブレスを吐いた。", m_name);
-#else
-			if (blind) msg_format("%^s breathes.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^sが分解のブレスを吐いた。", m_name);
-#else
-			else msg_format("%^s breathes disintegration.", m_name);
-#endif
+			if (blind)
+			{
+				msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sが分解のブレスを吐いた。", "%^s breathes disintegration."), m_name);
+			}
 
 			dam = ((m_ptr->hp / 6) > 150 ? 150 : (m_ptr->hp / 6));
 			breath(y, x, m_idx, GF_DISINTEGRATE, dam,0, TRUE, MS_BR_DISI, learnable);
@@ -2459,13 +2380,16 @@ else msg_format("%^sが分解のブレスを吐いた。", m_name);
 		case 128+0:
 		{
 			disturb(1, 1);
-#ifdef JP
-			if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
-			else msg_format("%^sがアシッド・ボールの呪文を唱えた。", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-			else msg_format("%^s casts an acid ball.", m_name);
-#endif
+
+			if (blind)
+			{
+				msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sがアシッド・ボールの呪文を唱えた。", "%^s casts an acid ball."), m_name);
+			}
+
 			if (r_ptr->flags2 & RF2_POWERFUL)
 			{
 				rad = 4;
@@ -2486,13 +2410,16 @@ else msg_format("%^sが分解のブレスを吐いた。", m_name);
 		{
 			int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 4 : 2;
 			disturb(1, 1);
-#ifdef JP
-			if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
-			else msg_format("%^sがサンダー・ボールの呪文を唱えた。", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-			else msg_format("%^s casts a lightning ball.", m_name);
-#endif
+
+			if (blind)
+			{
+				msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+			}
+			else
+			{
+				msg_format(_("%^sがサンダー・・ボールの呪文を唱えた。", "%^s casts a lightning ball."), m_name);
+			}
+
 			if (r_ptr->flags2 & RF2_POWERFUL)
 			{
 				rad = 4;
@@ -2516,27 +2443,17 @@ else msg_format("%^sが分解のブレスを吐いた。", m_name);
 
 			if (m_ptr->r_idx == MON_ROLENTO)
 			{
-#ifdef JP
 				if (blind)
-					msg_format("%sが何かを投げた。", m_name);
+					msg_format(_("%sが何かを投げた。", "%^s throws something."), m_name);
 				else 
-					msg_format("%sは手榴弾を投げた。", m_name);
-#else
-				if (blind)
-					msg_format("%^s throws something.", m_name);
-				else
-					msg_format("%^s throws a hand grenade.", m_name);
-#endif
+					msg_format(_("%sは手榴弾を投げた。", "%^s throws a hand grenade."), m_name);
 			}
 			else
 			{
-#ifdef JP
-				if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
-				else msg_format("%^sがファイア・ボールの呪文を唱えた。", m_name);
-#else
-				if (blind) msg_format("%^s mumbles.", m_name);
-				else msg_format("%^s casts a fire ball.", m_name);
-#endif
+				if (blind)
+					msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+				else
+					msg_format(_("%^sがファイア・ボールの呪文を唱えた。", "%^s casts a fire ball."), m_name);
 			}
 
 			if (r_ptr->flags2 & RF2_POWERFUL)
@@ -2559,13 +2476,13 @@ else msg_format("%^sが分解のブレスを吐いた。", m_name);
 		{
 			int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 4 : 2;
 			disturb(1, 1);
-#ifdef JP
-			if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
-			else msg_format("%^sがアイス・ボールの呪文を唱えた。", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-			else msg_format("%^s casts a frost ball.", m_name);
-#endif
+
+
+			if (blind)
+				msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+			else
+				msg_format(_("%^sがアイス・ボールの呪文を唱えた。", "%^s casts a frost ball."), m_name);
+
 			if (r_ptr->flags2 & RF2_POWERFUL)
 			{
 				rad = 4;
@@ -2585,17 +2502,11 @@ else msg_format("%^sが分解のブレスを吐いた。", m_name);
 		case 128+4:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^sが何かをつぶやいた。", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^sが悪臭雲の呪文を唱えた。", m_name);
-#else
-			else msg_format("%^s casts a stinking cloud.", m_name);
-#endif
+			
+			if (blind)
+				msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+			else
+				msg_format(_("%^sが悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud."), m_name);
 
 			dam = damroll(12, 2) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 			breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, learnable);
