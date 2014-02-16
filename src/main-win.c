@@ -1727,13 +1727,13 @@ static bool init_graphics(void)
 		}
 		else if (arg_graphics == GRAPHICS_HENGBAND)
 		{
-			wid = 32;
-			hgt = 32;
+			wid = 64;
+			hgt = 64;
 			twid = 32;
 			thgt = 32;
-			ox = 0;
-			oy = 0;
-			name = "32X32.BMP";
+			ox = -16;
+			oy = -24;
+			name = "64X64.BMP";
 
 			ANGBAND_GRAF = "ne2";
 		}
@@ -1787,7 +1787,7 @@ static bool init_graphics(void)
 		if (arg_graphics == GRAPHICS_HENGBAND)
 		{
 			/* Access the mask file */
-			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
+			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask64.bmp");
 
 			/* Load the bitmap or quit */
 			if (!ReadDIB(data[0].w, buf, &infMask))
@@ -3160,7 +3160,9 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 				SetStretchBltMode(hdc, COLORONCOLOR);
 
 				/* Copy the terrain picture from the bitmap to the window */
-				StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, x3, y3, w1, h1, SRCCOPY);
+				StretchBlt(hdc, x2, y2, tw2, h2, hdcMask, x3, y3, w1, h1, SRCAND);
+
+				StretchBlt(hdc, x2, y2, tw2, h2, hdcSrc, x3, y3, w1, h1, SRCPAINT);
 
 				/* Only draw if terrain and overlay are different */
 				if ((x1 != x3) || (y1 != y3))
