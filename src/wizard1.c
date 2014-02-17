@@ -996,8 +996,12 @@ typedef struct
 } obj_desc_list;
 
 
-/*
+/*!
+ * @brief ファイルポインタ先に同じ文字を複数出力する /
  * Write out `n' of the character `c' to the spoiler file
+ * @param n 出力する数
+ * @param c 出力するキャラクタ
+ * @return なし
  */
 static void spoiler_out_n_chars(int n, char c)
 {
@@ -1005,8 +1009,11 @@ static void spoiler_out_n_chars(int n, char c)
 }
 
 
-/*
+/*!
+ * @brief ファイルポインタ先に改行を複数出力する /
  * Write out `n' blank lines to the spoiler file
+ * @param n 改行を出力する数
+ * @return なし
  */
 static void spoiler_blanklines(int n)
 {
@@ -1014,8 +1021,11 @@ static void spoiler_blanklines(int n)
 }
 
 
-/*
+/*!
+ * @brief ファイルポインタ先に複数のハイフンで装飾した文字列を出力する /
  * Write a line to the spoiler file and then "underline" it with hypens
+ * @param str 出力したい文字列
+ * @return なし
  */
 static void spoiler_underline(cptr str)
 {
@@ -1026,15 +1036,24 @@ static void spoiler_underline(cptr str)
 
 
 
-/*
+/*!
+ * @brief アーティファクトの特性一覧を出力する /
+ * Write a line to the spoiler file and then "underline" it with hypens
+ * @param art_flags アーティファクトのフラグ群
+ * @param flag_ptr フラグ記述情報の参照ポインタ
+ * @param desc_ptr 記述内容を返すための文字列参照ポインタ
+ * @param n_elmnts フラグの要素数
+ * @return desc_ptrと同じアドレス
+ * @details
+ * <pre>
  * This function does most of the actual "analysis". Given a set of bit flags
  * (which will be from one of the flags fields from the object in question),
  * a "flag description structure", a "description list", and the number of
  * elements in the "flag description structure", this function sets the
  * "description list" members to the appropriate descriptions contained in
  * the "flag description structure".
- *
  * The possibly updated description pointer is returned.
+ * </pre>
  */
 static cptr *spoiler_flag_aux(const u32b art_flags[TR_FLAG_SIZE],
 			      const flag_desc *flag_ptr,
@@ -1054,8 +1073,12 @@ static cptr *spoiler_flag_aux(const u32b art_flags[TR_FLAG_SIZE],
 }
 
 
-/*
+/*!
+ * @brief アイテムの特定記述内容を返す /
  * Acquire a "basic" description "The Cloak of Death [1,+10]"
+ * @param o_ptr 記述を得たいオブジェクトの参照ポインタ
+ * @param desc_ptr 記述内容を返すための文字列参照ポインタ
+ * @return なし
  */
 static void analyze_general(object_type *o_ptr, char *desc_ptr)
 {
