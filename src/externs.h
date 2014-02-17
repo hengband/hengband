@@ -1573,11 +1573,20 @@ extern void do_cmd_mind_browse(void);
 
 /* mane.c */
 extern bool do_cmd_mane(bool baigaesi);
+extern void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable);
+extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable);
 
 /* mspells3.c */
 extern bool do_cmd_cast_learned(void);
 extern void learn_spell(int monspell);
 extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
+
+/* mspells4.c */
+extern void spell_RF4_SHRIEK(int m_idx, cptr m_name);
+extern void spell_RF4_DISPEL(bool blind, cptr m_name);
+extern void spell_RF4_ROCKET(bool blind, cptr m_name, monster_type* m_ptr, int y, int x, int m_idx, bool learnable);
+extern void spell_RF4_SHOOT(bool blind, cptr m_name, monster_race* r_ptr, int m_idx, bool learnable);
+extern void spell_RF4_BREATH(int GF_TYPE, bool blind, cptr m_name, monster_type* m_ptr, int y, int x, int m_idx, bool learnable);
 
 /* hissatsu.c */
 extern void hissatsu_info(char *p, int power);

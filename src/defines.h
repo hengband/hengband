@@ -3754,7 +3754,7 @@
 #define RF5_CAUSE_3         0x00004000  /* Cause Critical Wound */
 #define RF5_CAUSE_4         0x00008000  /* Cause Mortal Wound */
 #define RF5_BO_ACID         0x00010000  /* Acid Bolt */
-#define RF5_BO_ELEC         0x00020000  /* Elec Bolt (unused) */
+#define RF5_BO_ELEC         0x00020000  /* Elec Bolt */
 #define RF5_BO_FIRE         0x00040000  /* Fire Bolt */
 #define RF5_BO_COLD         0x00080000  /* Cold Bolt */
 #define RF5_BA_LITE         0x00100000  /* StarBurst */
@@ -3877,7 +3877,7 @@
 #define RF9_EAT_LOSE_STR        0x02000000
 #define RF9_EAT_LOSE_INT        0x04000000
 #define RF9_EAT_LOSE_WIS        0x08000000
-#define RF9_EAT_LOSE_DEX        0x01000000
+#define RF9_EAT_LOSE_DEX        0x10000000
 #define RF9_EAT_LOSE_CON        0x20000000
 #define RF9_EAT_LOSE_CHR        0x40000000
 #define RF9_EAT_DRAIN_MANA      0x80000000
