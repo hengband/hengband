@@ -1,14 +1,14 @@
-/* File: wizard1.c */
-
-/*
+/*!
+ *  @file wizard1.c
+ *  @brief ウィザードモードの処理(スポイラー出力中心) / Spoiler generation -BEN-
+ *  @date 2014/02/17
+ *  @author
  * Copyright (c) 1997 Ben Harrison, and others
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * 2013 Deskull rearranged comment for Doxygen.
  */
-
-/* Purpose: Spoiler generation -BEN- */
 
 #include "angband.h"
 
@@ -23,8 +23,11 @@ static FILE *fff = NULL;
 
 
 
-/*
+/*!
+ * @brief シンボル職の記述名を返す /
  * Extract a textual representation of an attribute
+ * @param r_ptr モンスター種族の構造体ポインタ
+ * @return シンボル職の記述名
  */
 static cptr attr_to_text(monster_race *r_ptr)
 {
@@ -256,8 +259,16 @@ static grouper group_item[] =
 };
 
 
-/*
+/*!
+ * @brief ベースアイテムの各情報を文字列化する /
  * Describe the kind
+ * @param buf 名称を返すバッファ参照ポインタ
+ * @param dam ダメージダイス記述を返すバッファ参照ポインタ
+ * @param wgt 重量記述を返すバッファ参照ポインタ
+ * @param lev 生成階記述を返すバッファ参照ポインタ
+ * @param val 価値を返すバッファ参照ポインタ
+ * @param k ベースアイテムID
+ * @return なし
  */
 static void kind_info(char *buf, char *dam, char *wgt, int *lev, s32b *val, int k)
 {
@@ -349,8 +360,11 @@ static void kind_info(char *buf, char *dam, char *wgt, int *lev, s32b *val, int 
 }
 
 
-/*
+/*!
+ * @brief 各ベースアイテムの情報を一行毎に記述する /
  * Create a spoiler file for items
+ * @param fname ファイル名
+ * @return なし
  */
 static void spoil_obj_desc(cptr fname)
 {
