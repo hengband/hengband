@@ -1839,79 +1839,11 @@ bool make_attack_spell(int m_idx)
         case 96 + 25: spell_RF4_BREATH(GF_PLASMA, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_PLAS */
         case 96 + 26: spell_RF4_BREATH(GF_FORCE, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_WALL */
         case 96 + 27: spell_RF4_BREATH(GF_MANA, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_MANA */
-
-		/* RF4_BA_NUKE */
-		case 96+28:
-		{
-			disturb(1, 1);
-
-			if (blind)
-			{
-				msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-			}
-			else
-			{
-				msg_format(_("%^sが放射能球を放った。", "%^s casts a ball of radiation."), m_name);
-			}
-
-			dam = (rlev + damroll(10, 6)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-			breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, learnable);
-			update_smart_learn(m_idx, DRS_POIS);
-			break;
-		}
-
+        case 96 + 28: spell_RF4_BA_NUKE(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;   /* RF4_BA_NUKE */
         case 96 + 29: spell_RF4_BREATH(GF_NUKE, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_NUKE */
-		
-		/* RF4_BA_CHAO */
-		case 96+30:
-		{
-			disturb(1, 1);
-
-			if (blind)
-			{
-				msg_format(_("%^sが恐ろしげにつぶやいた。", "%^s mumbles frighteningly."), m_name);
-			}
-			else
-			{
-				msg_format(_("%^sが純ログルスを放った。", "%^s invokes a raw Logrus."), m_name);
-			}
-
-			dam = ((r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 3) : (rlev * 2))+ damroll(10, 10);
-			breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, learnable);
-			update_smart_learn(m_idx, DRS_CHAOS);
-			break;
-		}
-
+        case 96 + 30: spell_RF4_BA_CHAO(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;  /* RF4_BA_CHAO */
         case 96 + 31: spell_RF4_BREATH(GF_DISINTEGRATE, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_DISI */
-
-		/* RF5_BA_ACID */
-		case 128+0:
-		{
-			disturb(1, 1);
-
-			if (blind)
-			{
-				msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-			}
-			else
-			{
-				msg_format(_("%^sがアシッド・ボールの呪文を唱えた。", "%^s casts an acid ball."), m_name);
-			}
-
-			if (r_ptr->flags2 & RF2_POWERFUL)
-			{
-				rad = 4;
-				dam = (rlev * 4) + 50 + damroll(10, 10);
-			}
-			else
-			{
-				rad = 2;
-				dam = (randint1(rlev * 3) + 15);
-			}
-			breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, learnable);
-			update_smart_learn(m_idx, DRS_ACID);
-			break;
-		}
+        case 128 + 0: spell_RF5_BA_ACID(GF_DISINTEGRATE, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_DISI */
 
 		/* RF5_BA_ELEC */
 		case 128+1:

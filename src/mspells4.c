@@ -232,3 +232,71 @@ void spell_RF4_BREATH(int GF_TYPE, bool blind, cptr m_name, monster_type* m_ptr,
     breath(y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, learnable);
     if (smart_learn) update_smart_learn(m_idx, drs_type);
 }
+
+void spell_RF4_BA_CHAO(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+{
+    int dam;
+    disturb(1, 1);
+
+    if (blind)
+    {
+        msg_format(_("%^sが恐ろしげにつぶやいた。", "%^s mumbles frighteningly."), m_name);
+    }
+    else
+    {
+        msg_format(_("%^sが純ログルスを放った。", "%^s invokes a raw Logrus."), m_name);
+    }
+
+    dam = ((r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 3) : (rlev * 2)) + damroll(10, 10);
+
+    breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, learnable);
+    update_smart_learn(m_idx, DRS_CHAOS);
+}
+
+void spell_RF4_BA_NUKE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+{
+    int dam;
+    disturb(1, 1);
+
+    if (blind)
+    {
+        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+    }
+    else
+    {
+        msg_format(_("%^sが放射能球を放った。", "%^s casts a ball of radiation."), m_name);
+    }
+
+    dam = (rlev + damroll(10, 6)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+
+    breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, learnable);
+    update_smart_learn(m_idx, DRS_POIS);
+}
+
+void spell_RF5_BA_ACID(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+{
+    int dam, rad;
+    disturb(1, 1);
+
+    if (blind)
+    {
+        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+    }
+    else
+    {
+        msg_format(_("%^sがアシッド・ボールの呪文を唱えた。", "%^s casts an acid ball."), m_name);
+    }
+
+    if (r_ptr->flags2 & RF2_POWERFUL)
+    {
+        rad = 4;
+        dam = (rlev * 4) + 50 + damroll(10, 10);
+    }
+    else
+    {
+        rad = 2;
+        dam = (randint1(rlev * 3) + 15);
+    }
+    breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, learnable);
+    update_smart_learn(m_idx, DRS_ACID);
+}
