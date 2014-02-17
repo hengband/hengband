@@ -1727,6 +1727,7 @@ static bool init_graphics(void)
 		}
 		else if (arg_graphics == GRAPHICS_HENGBAND)
 		{
+			/*! @todo redraw 
 			wid = 64;
 			hgt = 64;
 			twid = 32;
@@ -1734,6 +1735,15 @@ static bool init_graphics(void)
 			ox = -16;
 			oy = -24;
 			name = "64X64.BMP";
+			*/
+
+			wid = 32;
+			hgt = 32;
+			twid = 32;
+			thgt = 32;
+			ox = 0;
+			oy = 0;
+			name = "32X32.BMP";
 
 			ANGBAND_GRAF = "ne2";
 		}
@@ -1787,7 +1797,7 @@ static bool init_graphics(void)
 		if (arg_graphics == GRAPHICS_HENGBAND)
 		{
 			/* Access the mask file */
-			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask64.bmp");
+			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
 
 			/* Load the bitmap or quit */
 			if (!ReadDIB(data[0].w, buf, &infMask))
