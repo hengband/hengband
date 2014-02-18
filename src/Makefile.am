@@ -16,8 +16,9 @@ hengband_SOURCES = \
 	generate.c dungeon.c init1.c init2.c \
 	effects.c racial.c inet.c report.c snipe.c hex.c \
 	artifact.c autopick.c mutation.c flavor.c spells3.c \
-	mspells1.c mspells2.c scores.c mind.c mane.c hissatsu.c \
-	bldg.c obj_kind.c wild.c avatar.c japanese.c mspells3.c \
+	mspells1.c mspells2.c mspells3.c mspells4.c \
+	scores.c mind.c mane.c hissatsu.c \
+	bldg.c obj_kind.c wild.c avatar.c japanese.c \
 	main-cap.c main-gcu.c main-x11.c main-xaw.c main.c chuukei.c \
 	angband.h defines.h externs.h generate.h grid.h \
 	h-basic.h h-config.h h-define.h h-system.h h-type.h \
