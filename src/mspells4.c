@@ -3,7 +3,7 @@
 void spell_RF4_SHRIEK(int m_idx, cptr m_name)
 {
     disturb(1, 1);
-    msg_format(_("%^s偑偐傫崅偄嬥愗傝惡傪偁偘偨丅", "%^s makes a high pitched shriek."), m_name);
+    msg_format(_("%^sがかん光い垛磊り兰をあげた。", "%^s makes a high pitched shriek."), m_name);
     aggravate_monsters(m_idx);
 }
 
@@ -12,16 +12,16 @@ void spell_RF4_DISPEL(bool blind, cptr m_name)
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪椡嫮偔偮傇傗偄偨丅", "%^s mumbles powerfully."), m_name);
+        msg_format(_("%^sが部かを蜗动くつぶやいた。", "%^s mumbles powerfully."), m_name);
     else
-        msg_format(_("%^s偑杺椡徚嫀偺庺暥傪擮偠偨丅", "%^s invokes a dispel magic."), m_name);
+        msg_format(_("%^sが蒜蜗久殿の荐矢を前じた。", "%^s invokes a dispel magic."), m_name);
 
     dispel_player();
     if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
 
 #ifdef JP
     if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-        msg_print("傗傝傗偑偭偨側両");
+        msg_print("やりやがったな—");
 #endif
     learn_spell(MS_DISPEL);
 }
@@ -32,9 +32,9 @@ void spell_RF4_ROCKET(bool blind, cptr m_name, monster_type* m_ptr, int y, int x
 
     disturb(1, 1);
     if (blind)
-        msg_format(_("%^s偑壗偐傪幩偭偨丅", "%^s shoots something."), m_name);
+        msg_format(_("%^sが部かを纪った。", "%^s shoots something."), m_name);
     else
-        msg_format(_("%^s偑儘働僢僩傪敪幩偟偨丅", "%^s fires a rocket."), m_name);
+        msg_format(_("%^sがロケットを券纪した。", "%^s fires a rocket."), m_name);
 
     dam = ((m_ptr->hp / 4) > 800 ? 800 : (m_ptr->hp / 4));
     breath(y, x, m_idx, GF_ROCKET,
@@ -47,9 +47,9 @@ void spell_RF4_SHOOT(bool blind, cptr m_name, monster_race* r_ptr, int m_idx, bo
     int dam;
     disturb(1, 1);
     if (blind)
-        msg_format(_("%^s偑婏柇側壒傪敪偟偨丅", "%^s makes a strange noise."), m_name);
+        msg_format(_("%^sが瘩摊な不を券した。", "%^s makes a strange noise."), m_name);
     else
-        msg_format(_("%^s偑栴傪曻偭偨丅", "%^s fires an arrow."), m_name);
+        msg_format(_("%^sが甜を庶った。", "%^s fires an arrow."), m_name);
 
     dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
     bolt(m_idx, GF_ARROW, dam, MS_SHOOT, learnable);
@@ -66,133 +66,133 @@ void spell_RF4_BREATH(int GF_TYPE, bool blind, cptr m_name, monster_type* m_ptr,
     {
         case GF_ACID:
             dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-            type_s = _("巁", "acid");
+            type_s = _("焕", "acid");
             ms_type = MS_BR_ACID;
             drs_type = DRS_ACID;
             break;
         case GF_ELEC:
             dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-            type_s = _("堫嵢", "lightning");
+            type_s = _("梆菏", "lightning");
             ms_type = MS_BR_ELEC;
             drs_type = DRS_ELEC;
             break;
         case GF_FIRE:
             dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-            type_s = _("壩墛", "fire");
+            type_s = _("残标", "fire");
             ms_type = MS_BR_FIRE;
             drs_type = DRS_FIRE;
             break;
         case GF_COLD:
             dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-            type_s = _("椻婥", "frost");
+            type_s = _("武丹", "frost");
             ms_type = MS_BR_COLD;
             drs_type = DRS_COLD;
             break;
         case GF_POIS:
             dam = ((m_ptr->hp / 3) > 800 ? 800 : (m_ptr->hp / 3));
-            type_s = _("僈僗", "gas");
+            type_s = _("ガス", "gas");
             ms_type = MS_BR_POIS;
             drs_type = DRS_POIS;
             break;
         case GF_NETHER:
             dam = ((m_ptr->hp / 6) > 550 ? 550 : (m_ptr->hp / 6));
-            type_s = _("抧崠", "nether");
+            type_s = _("孟滚", "nether");
             ms_type = MS_BR_NETHER;
             drs_type = DRS_NETH;
             break;
         case GF_LITE:
             dam = ((m_ptr->hp / 6) > 400 ? 400 : (m_ptr->hp / 6));
-            type_s = _("慚岝", "light");
+            type_s = _("廉各", "light");
             ms_type = MS_BR_LITE;
             drs_type = DRS_LITE;
             break;
         case GF_DARK:
             dam = ((m_ptr->hp / 6) > 400 ? 400 : (m_ptr->hp / 6));
-            type_s = _("埫崟", "darkness");
+            type_s = _("芭辊", "darkness");
             ms_type = MS_BR_DARK;
             drs_type = DRS_DARK;
             break;
         case GF_CONFUSION:
             dam = ((m_ptr->hp / 6) > 450 ? 450 : (m_ptr->hp / 6));
-            type_s = _("崿棎", "confusion");
+            type_s = _("寒宛", "confusion");
             ms_type = MS_BR_CONF;
             drs_type = DRS_CONF;
             break;
         case GF_SOUND:
             dam = ((m_ptr->hp / 6) > 450 ? 450 : (m_ptr->hp / 6));
-            type_s = _("崒壒", "sound");
+            type_s = _("轨不", "sound");
             ms_type = MS_BR_SOUND;
             drs_type = DRS_SOUND;
             break;
         case GF_CHAOS:
             dam = ((m_ptr->hp / 6) > 600 ? 600 : (m_ptr->hp / 6));
-            type_s = _("僇僆僗", "chaos");
+            type_s = _("カオス", "chaos");
             ms_type = MS_BR_CHAOS;
             drs_type = DRS_CHAOS;
             break;
         case GF_DISENCHANT:
             dam = ((m_ptr->hp / 6) > 500 ? 500 : (m_ptr->hp / 6));
-            type_s = _("楎壔", "disenchantment");
+            type_s = _("昔步", "disenchantment");
             ms_type = MS_BR_DISEN;
             drs_type = DRS_DISEN;
             break;
         case GF_NEXUS:
             dam = ((m_ptr->hp / 3) > 250 ? 250 : (m_ptr->hp / 3));
-            type_s = _("場壥崿棎", "nexus");
+            type_s = _("傍蔡寒宛", "nexus");
             ms_type = MS_BR_NEXUS;
             drs_type = DRS_NEXUS;
             break;
         case GF_TIME:
             dam = ((m_ptr->hp / 3) > 150 ? 150 : (m_ptr->hp / 3));
-            type_s = _("帪娫媡揮", "time");
+            type_s = _("箕粗嫡啪", "time");
             ms_type = MS_BR_TIME;
             smart_learn = FALSE;
             break;
         case GF_INERTIA:
             dam = ((m_ptr->hp / 6) > 200 ? 200 : (m_ptr->hp / 6));
-            type_s = _("抶撦", "inertia");
+            type_s = _("觅七", "inertia");
             ms_type = MS_BR_INERTIA;
             smart_learn = FALSE;
             break;
         case GF_GRAVITY:
             dam = ((m_ptr->hp / 3) > 200 ? 200 : (m_ptr->hp / 3));
-            type_s = _("廳椡", "gravity");
+            type_s = _("脚蜗", "gravity");
             ms_type = MS_BR_GRAVITY;
             smart_learn = FALSE;
             break;
         case GF_SHARDS:
             dam = ((m_ptr->hp / 6) > 500 ? 500 : (m_ptr->hp / 6));
-            type_s = _("攋曅", "shards");
+            type_s = _("撬室", "shards");
             ms_type = MS_BR_SHARDS;
             drs_type = DRS_SHARD;
             break;
         case GF_PLASMA:
             dam = ((m_ptr->hp / 6) > 150 ? 150 : (m_ptr->hp / 6));
-            type_s = _("僾儔僘儅", "plasma");
+            type_s = _("プラズマ", "plasma");
             ms_type = MS_BR_PLASMA;
             smart_learn = FALSE;
             break;
         case GF_FORCE:
             dam = ((m_ptr->hp / 6) > 200 ? 200 : (m_ptr->hp / 6));
-            type_s = _("僼僅乕僗", "force");
+            type_s = _("フォ〖ス", "force");
             ms_type = MS_BR_FORCE;
             smart_learn = FALSE;
             break;
         case GF_MANA:
             dam = ((m_ptr->hp / 3) > 250 ? 250 : (m_ptr->hp / 3));
-            type_s = _("杺椡", "mana");
+            type_s = _("蒜蜗", "mana");
             ms_type = MS_BR_MANA;
             smart_learn = FALSE;
             break;
         case GF_NUKE:
             dam = ((m_ptr->hp / 3) > 800 ? 800 : (m_ptr->hp / 3));
-            type_s = _("曻幩惈攑婞暔", "toxic waste");
+            type_s = _("庶纪拉茄逮湿", "toxic waste");
             ms_type = MS_BR_NUKE;
             drs_type = DRS_POIS;
             break;
         case GF_DISINTEGRATE:
             dam = ((m_ptr->hp / 6) > 150 ? 150 : (m_ptr->hp / 6));
-            type_s = _("暘夝", "disintegration");
+            type_s = _("尸豺", "disintegration");
             ms_type = MS_BR_DISI;
             smart_learn = FALSE;
             break;
@@ -203,19 +203,19 @@ void spell_RF4_BREATH(int GF_TYPE, bool blind, cptr m_name, monster_type* m_ptr,
     disturb(1, 1);
     if (m_ptr->r_idx == MON_JAIAN && GF_TYPE == GF_SOUND)
     {
-        msg_format(_("乽儃僅僄乣乣乣乣乣乣乿", "'Booooeeeeee'"));
+        msg_format(_("≈ボォエ××××××∽", "'Booooeeeeee'"));
     }
     else if (m_ptr->r_idx == MON_BOTEI && GF_TYPE == GF_SHARDS)
     {
-        msg_format(_("乽儃掗價儖僇僢僞乕両両両乿", "'Boty-Build cutter!!!'"));
+        msg_format(_("≈ボ碾ビルカッタ〖———∽", "'Boty-Build cutter!!!'"));
     }
     else if (blind)
     {
-        msg_format(_("%^s偑壗偐偺僽儗僗傪揻偄偨丅", "%^s breathes."), m_name);
+        msg_format(_("%^sが部かのブレスを徘いた。", "%^s breathes."), m_name);
     }
     else
     {
-        msg_format(_("%^s偑%^s偺僽儗僗傪揻偄偨丅", "%^s breathes %^s."), m_name, type_s);
+        msg_format(_("%^sが%^sのブレスを徘いた。", "%^s breathes %^s."), m_name, type_s);
     }
 
     breath(y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, learnable);
@@ -228,9 +228,9 @@ void spell_RF4_BA_CHAO(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑嫲傠偟偘偵偮傇傗偄偨丅", "%^s mumbles frighteningly."), m_name);
+        msg_format(_("%^sが恫ろしげにつぶやいた。", "%^s mumbles frighteningly."), m_name);
     else
-        msg_format(_("%^s偑弮儘僌儖僗傪曻偭偨丅", "%^s invokes a raw Logrus."), m_name);
+        msg_format(_("%^sが姐ログルスを庶った。", "%^s invokes a raw Logrus."), m_name);
     
     dam = ((r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 3) : (rlev * 2)) + damroll(10, 10);
 
@@ -244,9 +244,9 @@ void spell_RF4_BA_NUKE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑曻幩擻媴傪曻偭偨丅", "%^s casts a ball of radiation."), m_name);
+        msg_format(_("%^sが庶纪墙靛を庶った。", "%^s casts a ball of radiation."), m_name);
     
     dam = (rlev + damroll(10, 6)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 
@@ -260,9 +260,9 @@ void spell_RF5_BA_ACID(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑傾僔僢僪丒儃乕儖偺庺暥傪彞偊偨丅", "%^s casts an acid ball."), m_name);
+        msg_format(_("%^sがアシッドˇボ〖ルの荐矢を晶えた。", "%^s casts an acid ball."), m_name);
     
     if (r_ptr->flags2 & RF2_POWERFUL)
     {
@@ -284,9 +284,9 @@ void spell_RF5_BA_ELEC(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑僒儞僟乕丒丒儃乕儖偺庺暥傪彞偊偨丅", "%^s casts a lightning ball."), m_name);
+        msg_format(_("%^sがサンダ〖ˇˇボ〖ルの荐矢を晶えた。", "%^s casts a lightning ball."), m_name);
 
     if (r_ptr->flags2 & RF2_POWERFUL)
     {
@@ -310,16 +310,16 @@ void spell_RF5_BA_FIRE(monster_type* m_ptr, bool blind, cptr m_name, monster_rac
     if (m_ptr->r_idx == MON_ROLENTO)
     {
         if (blind)
-            msg_format(_("%s偑壗偐傪搳偘偨丅", "%^s throws something."), m_name);
+            msg_format(_("%sが部かを抨げた。", "%^s throws something."), m_name);
         else
-            msg_format(_("%s偼庤炛抏傪搳偘偨丅", "%^s throws a hand grenade."), m_name);
+            msg_format(_("%sは缄茇闷を抨げた。", "%^s throws a hand grenade."), m_name);
     }
     else
     {
         if (blind)
-            msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+            msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
         else
-            msg_format(_("%^s偑僼傽僀傾丒儃乕儖偺庺暥傪彞偊偨丅", "%^s casts a fire ball."), m_name);
+            msg_format(_("%^sがファイアˇボ〖ルの荐矢を晶えた。", "%^s casts a fire ball."), m_name);
     }
 
     if (r_ptr->flags2 & RF2_POWERFUL)
@@ -342,9 +342,9 @@ void spell_RF5_BA_COLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑傾僀僗丒儃乕儖偺庺暥傪彞偊偨丅", "%^s casts a frost ball."), m_name);
+        msg_format(_("%^sがアイスˇボ〖ルの荐矢を晶えた。", "%^s casts a frost ball."), m_name);
 
     if (r_ptr->flags2 & RF2_POWERFUL)
     {
@@ -366,9 +366,9 @@ void spell_RF5_BA_POIS(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑埆廘塤偺庺暥傪彞偊偨丅", "%^s casts a stinking cloud."), m_name);
+        msg_format(_("%^sが碍江崩の荐矢を晶えた。", "%^s casts a stinking cloud."), m_name);
 
     dam = damroll(12, 2) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
     breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, learnable);
@@ -380,9 +380,9 @@ void spell_RF5_BA_NETH(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     int dam;
     disturb(1, 1);
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑抧崠媴偺庺暥傪彞偊偨丅", "%^s casts a nether ball."), m_name);
+        msg_format(_("%^sが孟滚靛の荐矢を晶えた。", "%^s casts a nether ball."), m_name);
 
     dam = 50 + damroll(10, 10) + (rlev * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1));
     breath(y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, learnable);
@@ -395,11 +395,11 @@ void spell_RF5_BA_WATE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑棳傟傞傛偆側恎怳傝傪偟偨丅", "%^s gestures fluidly."), m_name);
+        msg_format(_("%^sが萎れるような咳慷りをした。", "%^s gestures fluidly."), m_name);
 
-    msg_print(_("偁側偨偼塓姫偒偵堸傒崬傑傟偨丅", "You are engulfed in a whirlpool."));
+    msg_print(_("あなたは辈船きに胞み哈まれた。", "You are engulfed in a whirlpool."));
 
     dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint1(rlev * 3) : randint1(rlev * 2)) + 50;
     breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, learnable);
@@ -410,9 +410,9 @@ void spell_RF5_BA_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     int dam;
     disturb(1, 1);
     if (blind)
-        msg_format(_("%^s偑壗偐傪椡嫮偔偮傇傗偄偨丅", "%^s mumbles powerfully."), m_name);
+        msg_format(_("%^sが部かを蜗动くつぶやいた。", "%^s mumbles powerfully."), m_name);
     else
-        msg_format(_("%^s偑杺椡偺棐偺庺暥傪擮偠偨丅", "%^s invokes a mana storm."), m_name);
+        msg_format(_("%^sが蒜蜗の万の荐矢を前じた。", "%^s invokes a mana storm."), m_name);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
     breath(y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, learnable);
@@ -424,9 +424,9 @@ void spell_RF5_BA_DARK(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪椡嫮偔偮傇傗偄偨丅", "%^s mumbles powerfully."), m_name);
+        msg_format(_("%^sが部かを蜗动くつぶやいた。", "%^s mumbles powerfully."), m_name);
     else
-        msg_format(_("%^s偑埫崟偺棐偺庺暥傪擮偠偨丅", "%^s invokes a darkness storm."), m_name);
+        msg_format(_("%^sが芭辊の万の荐矢を前じた。", "%^s invokes a darkness storm."), m_name);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
     breath(y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, learnable);
@@ -448,9 +448,9 @@ void spell_RF5_MIND_BLAST(bool seen, cptr m_name, monster_race* r_ptr, int rlev,
     int dam;
     disturb(1, 1);
     if (!seen)
-        msg_print(_("壗偐偑偁側偨偺惛恄偵擮傪曻偭偰偄傞傛偆偩丅", "You feel something focusing on your mind."));
+        msg_print(_("部かがあなたの篮坷に前を庶っているようだ。", "You feel something focusing on your mind."));
     else
-        msg_format(_("%^s偑偁側偨偺摰傪偠偭偲偵傜傫偱偄傞丅", "%^s gazes deep into your eyes."), m_name);
+        msg_format(_("%^sがあなたの品をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
 
     dam = damroll(7, 7);
     breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, learnable);
@@ -461,9 +461,9 @@ void spell_RF5_BRAIN_SMASH(bool seen, cptr m_name, monster_race* r_ptr, int rlev
     int dam;
     disturb(1, 1);
     if (!seen)
-        msg_print(_("壗偐偑偁側偨偺惛恄偵擮傪曻偭偰偄傞傛偆偩丅", "You feel something focusing on your mind."));
+        msg_print(_("部かがあなたの篮坷に前を庶っているようだ。", "You feel something focusing on your mind."));
     else
-        msg_format(_("%^s偑偁側偨偺摰傪偠偭偲尒偰偄傞丅", "%^s looks deep into your eyes."), m_name);
+        msg_format(_("%^sがあなたの品をじっと斧ている。", "%^s looks deep into your eyes."), m_name);
 
     dam = damroll(12, 12);
 }
@@ -474,9 +474,9 @@ void spell_RF5_CAUSE_1(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑偁側偨傪巜偝偟偰庺偭偨丅", "%^s points at you and curses."), m_name);
+        msg_format(_("%^sがあなたを回さして荐った。", "%^s points at you and curses."), m_name);
 
     dam = damroll(3, 8);
     breath(y, x, m_idx, GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1, learnable);
@@ -488,9 +488,9 @@ void spell_RF5_CAUSE_2(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑偁側偨傪巜偝偟偰嫲傠偟偘偵庺偭偨丅", "%^s points at you and curses horribly."), m_name);
+        msg_format(_("%^sがあなたを回さして恫ろしげに荐った。", "%^s points at you and curses horribly."), m_name);
 
     dam = damroll(8, 8);
     breath(y, x, m_idx, GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2, learnable);
@@ -502,9 +502,9 @@ void spell_RF5_CAUSE_3(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪戝惡偱嫨傫偩丅", "%^s mumbles loudly."), m_name);
+        msg_format(_("%^sが部かを络兰で东んだ。", "%^s mumbles loudly."), m_name);
     else
-        msg_format(_("%^s偑偁側偨傪巜偝偟偰嫲傠偟偘偵庺暥傪彞偊偨両", "%^s points at you, incanting terribly!"), m_name);
+        msg_format(_("%^sがあなたを回さして恫ろしげに荐矢を晶えた—", "%^s points at you, incanting terribly!"), m_name);
 
     dam = damroll(10, 15);
     breath(y, x, m_idx, GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3, learnable);
@@ -516,9 +516,9 @@ void spell_RF5_CAUSE_4(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑乽偍慜偼婛偵巰傫偱偄傞乿偲嫨傫偩丅", "%^s screams the word 'DIE!'"), m_name);
+        msg_format(_("%^sが≈お涟は贷に秽んでいる∽と东んだ。", "%^s screams the word 'DIE!'"), m_name);
     else
-        msg_format(_("%^s偑偁側偨偺旈岴傪撍偄偰乽偍慜偼婛偵巰傫偱偄傞乿偲嫨傫偩丅",
+        msg_format(_("%^sがあなたの入功を仆いて≈お涟は贷に秽んでいる∽と东んだ。",
         "%^s points at you, screaming the word DIE!"), m_name);
 
     dam = damroll(15, 15);
@@ -531,9 +531,9 @@ void spell_RF5_BO_ACID(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑傾僔僢僪丒儃儖僩偺庺暥傪彞偊偨丅", "%^s casts a acid bolt."), m_name);
+        msg_format(_("%^sがアシッドˇボルトの荐矢を晶えた。", "%^s casts a acid bolt."), m_name);
 
     dam = (damroll(7, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
     bolt(m_idx, GF_ACID, dam, MS_BOLT_ACID, learnable);
@@ -547,9 +547,9 @@ void spell_RF5_BO_ELEC(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑僒儞僟乕丒儃儖僩偺庺暥傪彞偊偨丅", "%^s casts a lightning bolt."), m_name);
+        msg_format(_("%^sがサンダ〖ˇボルトの荐矢を晶えた。", "%^s casts a lightning bolt."), m_name);
 
     dam = (damroll(4, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
     bolt(m_idx, GF_ELEC, dam, MS_BOLT_ELEC, learnable);
@@ -563,9 +563,9 @@ void spell_RF5_BO_FIRE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑僼傽僀傾丒儃儖僩偺庺暥傪彞偊偨丅", "%^s casts a fire bolt."), m_name);
+        msg_format(_("%^sがファイアˇボルトの荐矢を晶えた。", "%^s casts a fire bolt."), m_name);
 
     dam = (damroll(9, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
     bolt(m_idx, GF_FIRE, dam, MS_BOLT_FIRE, learnable);
@@ -579,9 +579,9 @@ void spell_RF5_BO_COLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑傾僀僗丒儃儖僩偺庺暥傪彞偊偨丅", "%^s casts a frost bolt."), m_name);
+        msg_format(_("%^sがアイスˇボルトの荐矢を晶えた。", "%^s casts a frost bolt."), m_name);
 
     dam = (damroll(6, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
     bolt(m_idx, GF_COLD, dam, MS_BOLT_COLD, learnable);
@@ -596,9 +596,9 @@ void spell_RF5_BA_LITE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪椡嫮偔偮傇傗偄偨丅", "%^s mumbles powerfully."), m_name);
+        msg_format(_("%^sが部かを蜗动くつぶやいた。", "%^s mumbles powerfully."), m_name);
     else
-        msg_format(_("%^s偑僗僞乕僶乕僗僩偺庺暥傪擮偠偨丅", "%^s invokes a starburst."), m_name);
+        msg_format(_("%^sがスタ〖バ〖ストの荐矢を前じた。", "%^s invokes a starburst."), m_name);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
     breath(y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, learnable);
@@ -612,9 +612,9 @@ void spell_RF5_BO_NETH(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑抧崠偺栴偺庺暥傪彞偊偨丅", "%^s casts a nether bolt."), m_name);
+        msg_format(_("%^sが孟滚の甜の荐矢を晶えた。", "%^s casts a nether bolt."), m_name);
 
     dam = 30 + damroll(5, 5) + (rlev * 4) / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3);
     bolt(m_idx, GF_NETHER, dam, MS_BOLT_NETHER, learnable);
@@ -628,9 +628,9 @@ void spell_RF5_BO_WATE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     disturb(1, 1);
 
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑僂僅乕僞乕丒儃儖僩偺庺暥傪彞偊偨丅", "%^s casts a water bolt."), m_name);
+        msg_format(_("%^sがウォ〖タ〖ˇボルトの荐矢を晶えた。", "%^s casts a water bolt."), m_name);
 
     dam = damroll(10, 10) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
     bolt(m_idx, GF_WATER, dam, MS_BOLT_WATER, learnable);
@@ -642,9 +642,9 @@ void spell_RF5_BO_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     int dam;
     disturb(1, 1);
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑杺椡偺栴偺庺暥傪彞偊偨丅", "%^s casts a mana bolt."), m_name);
+        msg_format(_("%^sが蒜蜗の甜の荐矢を晶えた。", "%^s casts a mana bolt."), m_name);
 
     dam = randint1(rlev * 7 / 2) + 50;
     bolt(m_idx, GF_MANA, dam, MS_BOLT_MANA, learnable);
@@ -656,10 +656,10 @@ void spell_RF5_BO_PLAS(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     int dam;
     disturb(1, 1);
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
 
     else
-        msg_format(_("%^s偑僾儔僘儅丒儃儖僩偺庺暥傪彞偊偨丅", "%^s casts a plasma bolt."), m_name);
+        msg_format(_("%^sがプラズマˇボルトの荐矢を晶えた。", "%^s casts a plasma bolt."), m_name);
 
     dam = 10 + damroll(8, 7) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
     bolt(m_idx, GF_PLASMA, dam, MS_BOLT_PLASMA, learnable);
@@ -671,9 +671,9 @@ void spell_RF5_BO_ICEE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     int dam;
     disturb(1, 1);
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑嬌姦偺栴偺庺暥傪彞偊偨丅", "%^s casts an ice bolt."), m_name);
+        msg_format(_("%^sが端川の甜の荐矢を晶えた。", "%^s casts an ice bolt."), m_name);
 
     dam = damroll(6, 6) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
     bolt(m_idx, GF_ICE, dam, MS_BOLT_ICE, learnable);
@@ -687,9 +687,9 @@ void spell_RF5_MISSILE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, i
     int dam;
     disturb(1, 1);
     if (blind)
-        msg_format(_("%^s偑壗偐傪偮傇傗偄偨丅", "%^s mumbles."), m_name);
+        msg_format(_("%^sが部かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^s偑儅僕僢僋丒儈僒僀儖偺庺暥傪彞偊偨丅", "%^s casts a magic missile."), m_name);
+        msg_format(_("%^sがマジックˇミサイルの荐矢を晶えた。", "%^s casts a magic missile."), m_name);
 
     dam = damroll(2, 6) + (rlev / 3);
     bolt(m_idx, GF_MISSILE, dam, MS_MAGIC_MISSILE, learnable);

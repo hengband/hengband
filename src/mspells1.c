@@ -1,6 +1,6 @@
 /*!
  * @file mspells1.c
- * @brief ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌÀ‘• / Monster spells (attack player)
+ * @brief ¥â¥ó¥¹¥¿¡¼ËâË¡¤Î¼ÂÁõ / Monster spells (attack player)
  * @date 2014/01/17
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -42,11 +42,11 @@
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚ªƒvƒŒƒCƒ„[‚Ìã“_‚ğ‚Â‚¢‚½‘I‘ğ‚ğæ‚é‚©‚Ç‚¤‚©‚Ì”»’è /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤Î¼åÅÀ¤ò¤Ä¤¤¤¿ÁªÂò¤ò¼è¤ë¤«¤É¤¦¤«¤ÎÈ½Äê /
  * Internal probability routine
- * @param r_ptr ƒ‚ƒ“ƒXƒ^[í‘°‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @param prob Šî–{Šm—¦(%)
- * @return “K‚µ‚½‘I‘ğ‚ğæ‚é‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param r_ptr ¥â¥ó¥¹¥¿¡¼¼ïÂ²¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
+ * @param prob ´ğËÜ³ÎÎ¨(%)
+ * @return Å¬¤·¤¿ÁªÂò¤ò¼è¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool int_outof(monster_race *r_ptr, int prob)
 {
@@ -59,13 +59,13 @@ static bool int_outof(monster_race *r_ptr, int prob)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ì–‚–@ˆê——‚©‚çíp“I‚É“K‚³‚È‚¢–‚–@‚ğœŠO‚·‚é /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤ÎËâË¡°ìÍ÷¤«¤éÀï½ÑÅª¤ËÅ¬¤µ¤Ê¤¤ËâË¡¤ò½ü³°¤¹¤ë /
  * Remove the "bad" spells from a spell list
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @param f4p ƒ‚ƒ“ƒXƒ^[–‚–@‚Ìƒtƒ‰ƒOƒŠƒXƒg1
- * @param f5p ƒ‚ƒ“ƒXƒ^[–‚–@‚Ìƒtƒ‰ƒOƒŠƒXƒg2
- * @param f6p ƒ‚ƒ“ƒXƒ^[–‚–@‚Ìƒtƒ‰ƒOƒŠƒXƒg3
- * @return ‚È‚µ
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
+ * @param f4p ¥â¥ó¥¹¥¿¡¼ËâË¡¤Î¥Õ¥é¥°¥ê¥¹¥È1
+ * @param f5p ¥â¥ó¥¹¥¿¡¼ËâË¡¤Î¥Õ¥é¥°¥ê¥¹¥È2
+ * @param f6p ¥â¥ó¥¹¥¿¡¼ËâË¡¤Î¥Õ¥é¥°¥ê¥¹¥È3
+ * @return ¤Ê¤·
  */
 static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 {
@@ -356,11 +356,11 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚É‚Æ‚Á‚ÄŠ’è‚Ì’n“_‚ª¢ŠÒ‚É‘Š‰‚µ‚¢’n“_‚©‚Ç‚¤‚©‚ğ•Ô‚·B /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Ë¤È¤Ã¤Æ½êÄê¤ÎÃÏÅÀ¤¬¾¤´Ô¤ËÁê±ş¤·¤¤ÃÏÅÀ¤«¤É¤¦¤«¤òÊÖ¤¹¡£ /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param y1 ”»’è‚ğs‚¢‚½‚¢ƒ}ƒX‚ÌYÀ•W
- * @param x1 ”»’è‚ğs‚¢‚½‚¢ƒ}ƒX‚ÌXÀ•W
- * @return ¢ŠÒ‚É‘Š‰‚µ‚¢‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+ * @param y1 È½Äê¤ò¹Ô¤¤¤¿¤¤¥Ş¥¹¤ÎYºÂÉ¸
+ * @param x1 È½Äê¤ò¹Ô¤¤¤¿¤¤¥Ş¥¹¤ÎXºÂÉ¸
+ * @return ¾¤´Ô¤ËÁê±ş¤·¤¤¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
  */
 bool summon_possible(int y1, int x1)
 {
@@ -390,10 +390,10 @@ bool summon_possible(int y1, int x1)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚É‚Æ‚Á‚Ä€Ò•œŠˆ‚ğs‚¤‚×‚«ó‘Ô‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Ë¤È¤Ã¤Æ»à¼ÔÉü³è¤ò¹Ô¤¦¤Ù¤­¾õÂÖ¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param m_ptr ”»’è‚ğs‚¢‚½‚¢ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @return €Ò•œŠˆ‚ª—LŒø‚Èó‘Ô‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param m_ptr È½Äê¤ò¹Ô¤¤¤¿¤¤¥â¥ó¥¹¥¿¡¼¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
+ * @return »à¼ÔÉü³è¤¬Í­¸ú¤Ê¾õÂÖ¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 bool raise_possible(monster_type *m_ptr)
 {
@@ -435,14 +435,14 @@ bool raise_possible(monster_type *m_ptr)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚É‚Æ‚Á‚Äƒ{ƒ‹ƒgŒ^–‚–@‚ª—LŒø‚Èó‘Ô‚©‚ğ•Ô‚· /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Ë¤È¤Ã¤Æ¥Ü¥ë¥È·¿ËâË¡¤¬Í­¸ú¤Ê¾õÂÖ¤«¤òÊÖ¤¹ /
  * Determine if a bolt spell will hit the player.
- * @param y1 ƒ{ƒ‹ƒg–‚–@”­Ë’n“_‚ÌYÀ•W
- * @param x1 ƒ{ƒ‹ƒg–‚–@”­Ë’n“_‚ÌXÀ•W
- * @param y2 ƒ{ƒ‹ƒg–‚–@–Ú•W’n“_‚ÌYÀ•W
- * @param x2 ƒ{ƒ‹ƒg–‚–@–Ú•W’n“_‚ÌXÀ•W
- * @param is_friend ƒ‚ƒ“ƒXƒ^[‚ªƒvƒŒƒCƒ„[‚ÉŠQˆÓ‚ğ‚½‚È‚¢(ƒyƒbƒg‚©—FD“I)‚È‚ç‚ÎTRUE‚ğ‚Â‚¯‚é
- * @return ƒ{ƒ‹ƒgŒ^–‚–@‚ª—LŒø‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param y1 ¥Ü¥ë¥ÈËâË¡È¯¼ÍÃÏÅÀ¤ÎYºÂÉ¸
+ * @param x1 ¥Ü¥ë¥ÈËâË¡È¯¼ÍÃÏÅÀ¤ÎXºÂÉ¸
+ * @param y2 ¥Ü¥ë¥ÈËâË¡ÌÜÉ¸ÃÏÅÀ¤ÎYºÂÉ¸
+ * @param x2 ¥Ü¥ë¥ÈËâË¡ÌÜÉ¸ÃÏÅÀ¤ÎXºÂÉ¸
+ * @param is_friend ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤Ë³²°Õ¤ò»ı¤¿¤Ê¤¤(¥Ú¥Ã¥È¤«Í§¹¥Åª)¤Ê¤é¤ĞTRUE¤ò¤Ä¤±¤ë
+ * @return ¥Ü¥ë¥È·¿ËâË¡¤¬Í­¸ú¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  * @details
  * Originally, it was possible for a friendly to shoot another friendly.\n
  * Change it so a "clean shot" means no equally friendly monster is\n
@@ -499,14 +499,14 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ìƒ{ƒ‹ƒgŒ^–‚–@ˆ— /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Î¥Ü¥ë¥È·¿ËâË¡½èÍı /
  * Cast a bolt at the player Stop if we hit a monster Affect monsters and the player
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚ÌID
- * @param typ Œø‰Ê‘®«ID
- * @param dam_hp ˆĞ—Í
- * @param monspell ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌID
- * @param learnable ƒ‰[ƒjƒ“ƒO‰Â”\‚©”Û‚©
- * @return ‚È‚µ
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤ÎID
+ * @param typ ¸ú²ÌÂ°À­ID
+ * @param dam_hp °ÒÎÏ
+ * @param monspell ¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID
+ * @param learnable ¥é¡¼¥Ë¥ó¥°²ÄÇ½¤«Èİ¤«
+ * @return ¤Ê¤·
  */
 void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 {
@@ -518,13 +518,13 @@ void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ìƒr[ƒ€Œ^–‚–@ˆ— /
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚ÌID
- * @param typ Œø‰Ê‘®«ID
- * @param dam_hp ˆĞ—Í
- * @param monspell ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌID
- * @param learnable ƒ‰[ƒjƒ“ƒO‰Â”\‚©”Û‚©
- * @return ‚È‚µ
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Î¥Ó¡¼¥à·¿ËâË¡½èÍı /
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤ÎID
+ * @param typ ¸ú²ÌÂ°À­ID
+ * @param dam_hp °ÒÎÏ
+ * @param monspell ¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID
+ * @param learnable ¥é¡¼¥Ë¥ó¥°²ÄÇ½¤«Èİ¤«
+ * @return ¤Ê¤·
  */
 static void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 {
@@ -536,18 +536,18 @@ static void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ìƒ{[ƒ‹Œ^•ƒuƒŒƒXŒ^–‚–@ˆ— /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Î¥Ü¡¼¥ë·¿¡õ¥Ö¥ì¥¹·¿ËâË¡½èÍı /
  * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
- * @param y –Ú•W’n“_‚ÌYÀ•W
- * @param x –Ú•W’n“_‚ÌXÀ•W
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚ÌID
- * @param typ Œø‰Ê‘®«ID
- * @param dam_hp ˆĞ—Í
- * @param rad ”¼Œa
- * @param breath TRUE‚È‚ç‚ÎƒuƒŒƒXˆ—AFALSE‚È‚ç‚Îƒ{[ƒ‹ˆ—
- * @param monspell ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌID
- * @param learnable ƒ‰[ƒjƒ“ƒO‰Â”\‚©”Û‚©
- * @return ‚È‚µ
+ * @param y ÌÜÉ¸ÃÏÅÀ¤ÎYºÂÉ¸
+ * @param x ÌÜÉ¸ÃÏÅÀ¤ÎXºÂÉ¸
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤ÎID
+ * @param typ ¸ú²ÌÂ°À­ID
+ * @param dam_hp °ÒÎÏ
+ * @param rad È¾·Â
+ * @param breath TRUE¤Ê¤é¤Ğ¥Ö¥ì¥¹½èÍı¡¢FALSE¤Ê¤é¤Ğ¥Ü¡¼¥ë½èÍı
+ * @param monspell ¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID
+ * @param learnable ¥é¡¼¥Ë¥ó¥°²ÄÇ½¤«Èİ¤«
+ * @return ¤Ê¤·
  */
 void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
 {
@@ -584,10 +584,10 @@ void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, 
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ìƒ{[ƒ‹Œ^•ƒuƒŒƒXŒ^–‚–@ˆ— /
- * @param power ô‚¢‚Ì’iŠK
- * @param o_ptr ô‚¢‚ğ‚©‚¯‚ç‚ê‚é‘•”õƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @return —^‚¦‚éô‚¢‚ÌID
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Î¥Ü¡¼¥ë·¿¡õ¥Ö¥ì¥¹·¿ËâË¡½èÍı /
+ * @param power ¼ö¤¤¤ÎÃÊ³¬
+ * @param o_ptr ¼ö¤¤¤ò¤«¤±¤é¤ì¤ëÁõÈ÷¥ª¥Ö¥¸¥§¥¯¥È¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
+ * @return Í¿¤¨¤ë¼ö¤¤¤ÎID
  */
 u32b get_curse(int power, object_type *o_ptr)
 {
@@ -616,10 +616,10 @@ u32b get_curse(int power, object_type *o_ptr)
 }
 
 /*!
- * @brief ‘•”õ‚Ö‚Ìô‚¢•t‰Á”»’è‚Æ•t‰Áˆ— /
- * @param chance ô‚¢‚ÌŠî–{Šm—¦
- * @param heavy_chance d‚¢ô‚¢‚ğ‘I‘ğˆ‚É“ü‚ê‚é‚©”Û‚©B
- * @return ‚È‚µ
+ * @brief ÁõÈ÷¤Ø¤Î¼ö¤¤ÉÕ²ÃÈ½Äê¤ÈÉÕ²Ã½èÍı /
+ * @param chance ¼ö¤¤¤Î´ğËÜ³ÎÎ¨
+ * @param heavy_chance ½Å¤¤¼ö¤¤¤òÁªÂò»è¤ËÆş¤ì¤ë¤«Èİ¤«¡£
+ * @return ¤Ê¤·
  */
 void curse_equipment(int chance, int heavy_chance)
 {
@@ -642,7 +642,7 @@ void curse_equipment(int chance, int heavy_chance)
 	if (have_flag(oflgs, TR_BLESSED) && (randint1(888) > chance))
 	{
 #ifdef JP
-msg_format("%s‚Íô‚¢‚ğ’µ‚Ë•Ô‚µ‚½I", o_name,
+msg_format("%s¤Ï¼ö¤¤¤òÄ·¤ÍÊÖ¤·¤¿¡ª", o_name,
 #else
 		msg_format("Your %s resist%s cursing!", o_name,
 #endif
@@ -679,7 +679,7 @@ msg_format("%s‚Íô‚¢‚ğ’µ‚Ë•Ô‚µ‚½I", o_name,
 	if (changed)
 	{
 #ifdef JP
-msg_format("ˆ«ˆÓ‚É–‚¿‚½•‚¢ƒI[ƒ‰‚ª%s‚ğ‚Æ‚è‚Ü‚¢‚½...", o_name);
+msg_format("°­°Õ¤ËËş¤Á¤¿¹õ¤¤¥ª¡¼¥é¤¬%s¤ò¤È¤ê¤Ş¤¤¤¿...", o_name);
 #else
 		msg_format("There is a malignant black aura surrounding %s...", o_name);
 #endif
@@ -691,10 +691,10 @@ msg_format("ˆ«ˆÓ‚É–‚¿‚½•‚¢ƒI[ƒ‰‚ª%s‚ğ‚Æ‚è‚Ü‚¢‚½...", o_name);
 
 
 /*!
- * @brief ID’l‚ª³‚µ‚¢ƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬Àµ¤·¤¤¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for hurting the player (directly).
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ³‚µ‚¢ID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return Àµ¤·¤¤ID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_attack(byte spell)
 {
@@ -719,10 +719,10 @@ static bool spell_attack(byte spell)
 
 
 /*!
- * @brief ID’l‚ª‘Ş”ğ–Ú“I‚É“K‚µ‚½ƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ÂàÈòÌÜÅª¤ËÅ¬¤·¤¿¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for escaping.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return “K‚µ‚½–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return Å¬¤·¤¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_escape(byte spell)
 {
@@ -737,10 +737,10 @@ static bool spell_escape(byte spell)
 }
 
 /*!
- * @brief ID’l‚ª–WŠQ–Ú“I‚É“K‚µ‚½ƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬Ë¸³²ÌÜÅª¤ËÅ¬¤·¤¿¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for annoying the player.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return “K‚µ‚½–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return Å¬¤·¤¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_annoy(byte spell)
 {
@@ -767,10 +767,10 @@ static bool spell_annoy(byte spell)
 }
 
 /*!
- * @brief ID’l‚ª¢Š«Œ^‚Ìƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬¾¤´­·¿¤Î¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for annoying the player.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ¢Š«Œ^–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¾¤´­·¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_summon(byte spell)
 {
@@ -783,10 +783,10 @@ static bool spell_summon(byte spell)
 
 
 /*!
- * @brief ID’l‚ª€Ò•œŠˆˆ—‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬»à¼ÔÉü³è½èÍı¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for annoying the player.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return €Ò•œŠˆ‚Ìˆ—‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return »à¼ÔÉü³è¤Î½èÍı¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_raise(byte spell)
 {
@@ -798,10 +798,10 @@ static bool spell_raise(byte spell)
 }
 
 /*!
- * @brief ID’l‚ªíp“I‚Èƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬Àï½ÑÅª¤Ê¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good in a tactical situation.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return íp“I‚È–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return Àï½ÑÅª¤ÊËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_tactic(byte spell)
 {
@@ -813,10 +813,10 @@ static bool spell_tactic(byte spell)
 }
 
 /*!
- * @brief ID’l‚ª–³“G‰»‚·‚éƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ÌµÅ¨²½¤¹¤ë¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell makes invulnerable.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ¢Š«Œ^–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¾¤´­·¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_invulner(byte spell)
 {
@@ -828,10 +828,10 @@ static bool spell_invulner(byte spell)
 }
 
 /*!
- * @brief ID’l‚ª‰Á‘¬‚·‚éƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬²ÃÂ®¤¹¤ë¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell hastes.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ¢Š«Œ^–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¾¤´­·¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_haste(byte spell)
 {
@@ -844,10 +844,10 @@ static bool spell_haste(byte spell)
 
 
 /*!
- * @brief ID’l‚ªŠÔ’â~‚ğs‚¤ƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬»ş´ÖÄä»ß¤ò¹Ô¤¦¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell world.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ŠÔ’â~–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return »ş´ÖÄä»ßËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_world(byte spell)
 {
@@ -857,10 +857,10 @@ static bool spell_world(byte spell)
 
 
 /*!
- * @brief ID’l‚ª“Á•ÊŒø‰Ê‚Ìƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ÆÃÊÌ¸ú²Ì¤Î¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell special.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return “Á•ÊŒø‰Ê–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ÆÃÊÌ¸ú²ÌËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_special(byte spell)
 {
@@ -871,10 +871,10 @@ static bool spell_special(byte spell)
 
 
 /*!
- * @brief ID’l‚ªŒõ‚ÌŒ•‚Ìƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬¸÷¤Î·õ¤Î¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell psycho-spear.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return Œõ‚ÌŒ•‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¸÷¤Î·õ¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_psy_spe(byte spell)
 {
@@ -887,10 +887,10 @@ static bool spell_psy_spe(byte spell)
 
 
 /*!
- * @brief ID’l‚ª¡–ü–‚–@‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬¼£ÌşËâË¡¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for healing.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ¡–ü–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¼£ÌşËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_heal(byte spell)
 {
@@ -903,10 +903,10 @@ static bool spell_heal(byte spell)
 
 
 /*!
- * @brief ID’l‚ª–‚—ÍÁ‹‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ËâÎÏ¾Ãµî¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for dispel.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return –‚—ÍÁ‹‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ËâÎÏ¾Ãµî¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_dispel(byte spell)
 {
@@ -919,10 +919,10 @@ static bool spell_dispel(byte spell)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚ªƒvƒŒƒCƒ„[‚É–‚—ÍÁ‹‚ğ—^‚¦‚é‚×‚«‚©‚ğ”»’è‚·‚éƒ‹[ƒ`ƒ“
+ * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤ËËâÎÏ¾Ãµî¤òÍ¿¤¨¤ë¤Ù¤­¤«¤òÈ½Äê¤¹¤ë¥ë¡¼¥Á¥ó
  * Check should monster cast dispel spell.
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘Ì”z—ñID
- * @return –‚—ÍÁ‹‚ğ‚©‚¯‚é‚×‚«‚È‚çTRUE‚ğ•Ô‚·B
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î¹½Â¤ÂÎÇÛÎóID
+ * @return ËâÎÏ¾Ãµî¤ò¤«¤±¤ë¤Ù¤­¤Ê¤éTRUE¤òÊÖ¤¹¡£
  */
 bool dispel_check(int m_idx)
 {
@@ -1023,12 +1023,12 @@ bool dispel_check(int m_idx)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ì–‚–@‘I‘ğƒ‹[ƒ`ƒ“
+ * @brief ¥â¥ó¥¹¥¿¡¼¤ÎËâË¡ÁªÂò¥ë¡¼¥Á¥ó
  * Have a monster choose a spell from a list of "useful" spells.
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘Ì”z—ñID
- * @param spells Œó•â–‚–@ID‚ğ‚Ü‚Æ‚ß‚½”z—ñ
- * @param num spells‚Ì’·‚³
- * @return ‘I‘ğ‚µ‚½ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌID
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î¹½Â¤ÂÎÇÛÎóID
+ * @param spells ¸õÊäËâË¡ID¤ò¤Ş¤È¤á¤¿ÇÛÎó
+ * @param num spells¤ÎÄ¹¤µ
+ * @return ÁªÂò¤·¤¿¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID
  * @details
  * Note that this list does NOT include spells that will just hit\n
  * other monsters, and the list is restricted when the monster is\n
@@ -1265,10 +1265,10 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 
 
 /*!
- * @brief ID’l‚ª”ñ–‚p“I‚È“Áê‹Z”\‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ÈóËâ½ÑÅª¤ÊÆÃ¼ìµ»Ç½¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is inate spell.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ”ñ–‚p“I‚È“Áê‹Z”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ÈóËâ½ÑÅª¤ÊÆÃ¼ìµ»Ç½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 bool spell_is_inate(u16b spell)
 {
@@ -1291,13 +1291,13 @@ bool spell_is_inate(u16b spell)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚ªƒvƒŒƒCƒ„[‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚é‚½‚ß‚ÌÅ“K‚ÈÀ•W‚ğZo‚·‚é /
- * @param m_ptr ‹Z”\‚ğg—p‚·‚éƒ‚ƒ“ƒXƒ^[\‘¢‘Ì‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param yp Å“K‚È–Ú•W’n“_‚ÌYÀ•W‚ğ•Ô‚·QÆƒ|ƒCƒ“ƒ^
- * @param xp Å“K‚È–Ú•W’n“_‚ÌXÀ•W‚ğ•Ô‚·QÆƒ|ƒCƒ“ƒ^
- * @param f_flag Ëü‚É“ü‚ê‚é‚Ì‚ğ”ğ‚¯‚é’nŒ`‚ÌŠƒtƒ‰ƒO
- * @param path_check Ëü‚ğ”»’è‚·‚é‚½‚ß‚ÌŠÖ”ƒ|ƒCƒ“ƒ^
- * @return —LŒø‚ÈÀ•W‚ª‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¤¿¤á¤ÎºÇÅ¬¤ÊºÂÉ¸¤ò»»½Ğ¤¹¤ë /
+ * @param m_ptr µ»Ç½¤ò»ÈÍÑ¤¹¤ë¥â¥ó¥¹¥¿¡¼¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
+ * @param yp ºÇÅ¬¤ÊÌÜÉ¸ÃÏÅÀ¤ÎYºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
+ * @param xp ºÇÅ¬¤ÊÌÜÉ¸ÃÏÅÀ¤ÎXºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
+ * @param f_flag ¼ÍÀş¤ËÆş¤ì¤ë¤Î¤òÈò¤±¤ëÃÏ·Á¤Î½ê»ı¥Õ¥é¥°
+ * @param path_check ¼ÍÀş¤òÈ½Äê¤¹¤ë¤¿¤á¤Î´Ø¿ô¥İ¥¤¥ó¥¿
+ * @return Í­¸ú¤ÊºÂÉ¸¤¬¤¢¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
  */
 static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
 	int f_flag, bool (*path_check)(int, int, int, int))
@@ -1347,10 +1347,10 @@ static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
 #define DO_SPELL_BA_LITE 3
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ì“Áê‹Z”\ƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÆÃ¼ìµ»Ç½¥á¥¤¥ó¥ë¡¼¥Á¥ó /
  * Creatures can cast spells, shoot missiles, and breathe.
- * @param m_idx ƒ‚ƒ“ƒXƒ^[\‘¢‘Ì”z—ñ‚ÌID
- * @return ÀÛ‚É“Áê‹Z”\‚ğ—˜—p‚µ‚½‚çTRUE‚ğ•Ô‚·
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¹½Â¤ÂÎÇÛÎó¤ÎID
+ * @return ¼Âºİ¤ËÆÃ¼ìµ»Ç½¤òÍøÍÑ¤·¤¿¤éTRUE¤òÊÖ¤¹
  * @details
  * Returns "TRUE" if a spell (or whatever) was (successfully) cast.\n
  *\n
@@ -1781,7 +1781,7 @@ bool make_attack_spell(int m_idx)
 	{
 		disturb(1, 1);
 		/* Message */
-		msg_format(_("%^s‚Íô•¶‚ğ¥‚¦‚æ‚¤‚Æ‚µ‚½‚ª¸”s‚µ‚½B", "%^s tries to cast a spell, but fails."), m_name);
+		msg_format(_("%^s¤Ï¼öÊ¸¤ò¾§¤¨¤è¤¦¤È¤·¤¿¤¬¼ºÇÔ¤·¤¿¡£", "%^s tries to cast a spell, but fails."), m_name);
 
 		return (TRUE);
 	}
@@ -1789,7 +1789,7 @@ bool make_attack_spell(int m_idx)
 	/* Hex: Anti Magic Barrier */
 	if (!spell_is_inate(thrown_spell) && magic_barrier(m_idx))
 	{
-		msg_format(_("”½–‚–@ƒoƒŠƒA‚ª%^s‚Ìô•¶‚ğ‚©‚«Á‚µ‚½B", "Anti magic barrier cancels the spell which %^s casts."), m_name);
+		msg_format(_("È¿ËâË¡¥Ğ¥ê¥¢¤¬%^s¤Î¼öÊ¸¤ò¤«¤­¾Ã¤·¤¿¡£", "Anti magic barrier cancels the spell which %^s casts."), m_name);
 		return (TRUE);
 	}
 
@@ -1893,35 +1893,19 @@ bool make_attack_spell(int m_idx)
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚­‚ÆA‹°‚ë‚µ‚°‚È‰¹‚ª•·‚±‚¦‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles, and you hear scary noises.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^s‚ª‹°‚ë‚µ‚°‚ÈŒ¶Šo‚ğì‚èo‚µ‚½B", m_name);
-#else
-			else msg_format("%^s casts a fearful illusion.", m_name);
-#endif
+            
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¯¤È¡¢¶²¤í¤·¤²¤Ê²»¤¬Ê¹¤³¤¨¤¿¡£", "%^s mumbles, and you hear scary noises."), m_name);
+            else
+                msg_format(_("%^s¤¬¶²¤í¤·¤²¤Ê¸¸³Ğ¤òºî¤ê½Ğ¤·¤¿¡£", "%^s casts a fearful illusion."), m_name);
 
 			if (p_ptr->resist_fear)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µ‹°•|‚ÉN‚³‚ê‚È‚©‚Á‚½B");
-#else
-				msg_print("You refuse to be frightened.");
-#endif
-
+                msg_print(_("¤·¤«¤·¶²Éİ¤Ë¿¯¤µ¤ì¤Ê¤«¤Ã¤¿¡£", "You refuse to be frightened."));
 			}
 			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µ‹°•|‚ÉN‚³‚ê‚È‚©‚Á‚½B");
-#else
-				msg_print("You refuse to be frightened.");
-#endif
-
+                msg_print(_("¤·¤«¤·¶²Éİ¤Ë¿¯¤µ¤ì¤Ê¤«¤Ã¤¿¡£", "You refuse to be frightened."));
 			}
 			else
 			{
@@ -1937,35 +1921,20 @@ msg_print("‚µ‚©‚µ‹°•|‚ÉN‚³‚ê‚È‚©‚Á‚½B");
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ªô•¶‚ğ¥‚¦‚Ä‚ ‚È‚½‚Ì–Ú‚ğ‚­‚ç‚Ü‚µ‚½I", m_name);
-#else
-			else msg_format("%^s casts a spell, burning your eyes!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬¼öÊ¸¤ò¾§¤¨¤Æ¤¢¤Ê¤¿¤ÎÌÜ¤ò¤¯¤é¤Ş¤·¤¿¡ª",
+                             "%^s casts a spell, burning your eyes!"), m_name);
 
 			if (p_ptr->resist_blind)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒø‰Ê‚ª‚È‚©‚Á‚½I");
-#else
-				msg_print("You are unaffected!");
-#endif
-
+                msg_print(_("¤·¤«¤·¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", "You are unaffected!"));
 			}
 			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I");
-#else
-				msg_print("You resist the effects!");
-#endif
-
+                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
 			}
 			else
 			{
@@ -1981,35 +1950,21 @@ msg_print("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I");
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚­‚ÆA“ª‚ğ”Y‚Ü‚·‰¹‚ª‚µ‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles, and you hear puzzling noises.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª—U˜f“I‚ÈŒ¶Šo‚ğì‚èo‚µ‚½B", m_name);
-#else
-			else msg_format("%^s creates a mesmerising illusion.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¯¤È¡¢Æ¬¤òÇº¤Ş¤¹²»¤¬¤·¤¿¡£", 
+                             "%^s mumbles, and you hear puzzling noises."), m_name);
+            else
+                msg_format(_("%^s¤¬Í¶ÏÇÅª¤Ê¸¸³Ğ¤òºî¤ê½Ğ¤·¤¿¡£",
+                             "%^s creates a mesmerising illusion."), m_name);
 
 			if (p_ptr->resist_conf)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒ¶Šo‚É‚Í‚¾‚Ü‚³‚ê‚È‚©‚Á‚½B");
-#else
-				msg_print("You disbelieve the feeble spell.");
-#endif
-
+                msg_print(_("¤·¤«¤·¸¸³Ğ¤Ë¤Ï¤À¤Ş¤µ¤ì¤Ê¤«¤Ã¤¿¡£", "You disbelieve the feeble spell."));
 			}
 			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒ¶Šo‚É‚Í‚¾‚Ü‚³‚ê‚È‚©‚Á‚½B");
-#else
-				msg_print("You disbelieve the feeble spell.");
-#endif
-
+                msg_print(_("¤·¤«¤·¸¸³Ğ¤Ë¤Ï¤À¤Ş¤µ¤ì¤Ê¤«¤Ã¤¿¡£", "You disbelieve the feeble spell."));
 			}
 			else
 			{
@@ -2025,29 +1980,17 @@ msg_print("‚µ‚©‚µŒ¶Šo‚É‚Í‚¾‚Ü‚³‚ê‚È‚©‚Á‚½B");
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-msg_format("%^s‚ª‚ ‚È‚½‚Ì‹Ø—Í‚ğ‹z‚¢æ‚ë‚¤‚Æ‚µ‚½I", m_name);
-#else
-			msg_format("%^s drains power from your muscles!", m_name);
-#endif
+
+            msg_format(_("%^s¤¬¤¢¤Ê¤¿¤Î¶ÚÎÏ¤òµÛ¤¤¼è¤í¤¦¤È¤·¤¿¡ª", 
+                         "%^s drains power from your muscles!"), m_name);
 
 			if (p_ptr->free_act)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒø‰Ê‚ª‚È‚©‚Á‚½I");
-#else
-				msg_print("You are unaffected!");
-#endif
-
+                msg_print(_("¤·¤«¤·¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", "You are unaffected!"));
 			}
 			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I");
-#else
-				msg_print("You resist the effects!");
-#endif
-
+                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
 			}
 			else
 			{
@@ -2063,35 +2006,19 @@ msg_print("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I");
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª‚ ‚È‚½‚Ì–Ú‚ğ‚¶‚Á‚ÆŒ©‚Â‚ß‚½I", m_name);
-#else
-			else msg_format("%^s stares deep into your eyes!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬¤¢¤Ê¤¿¤ÎÌÜ¤ò¤¸¤Ã¤È¸«¤Ä¤á¤¿¡ª", "%^s stares deep into your eyes!"), m_name);
 
 			if (p_ptr->free_act)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒø‰Ê‚ª‚È‚©‚Á‚½I");
-#else
-				msg_print("You are unaffected!");
-#endif
-
+                msg_print(_("¤·¤«¤·¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", "You are unaffected!"));
 			}
 			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
-#ifdef JP
-msg_format("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I");
-#else
-				msg_format("You resist the effects!");
-#endif
-
+                msg_format(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
 			}
 			else
 			{
@@ -2108,31 +2035,17 @@ msg_format("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I");
 			disturb(1, 1);
 			if (blind)
 			{
-#ifdef JP
-msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-				msg_format("%^s mumbles.", m_name);
-#endif
-
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
 			}
 			else
 			{
-#ifdef JP
-msg_format("%^s‚ª©•ª‚Ì‘Ì‚É”O‚ğ‘—‚Á‚½B", m_name);
-#else
-				msg_format("%^s concentrates on %s body.", m_name, m_poss);
-#endif
-
+                msg_format(_("%^s¤¬¼«Ê¬¤ÎÂÎ¤ËÇ°¤òÁ÷¤Ã¤¿¡£", "%^s concentrates on %s body."), m_name);
 			}
 
 			/* Allow quick speed increases to base+10 */
 			if (set_monster_fast(m_idx, MON_FAST(m_ptr) + 100))
 			{
-#ifdef JP
-				msg_format("%^s‚Ì“®‚«‚ª‘¬‚­‚È‚Á‚½B", m_name);
-#else
-				msg_format("%^s starts moving faster.", m_name);
-#endif
+                msg_format(_("%^s¤ÎÆ°¤­¤¬Â®¤¯¤Ê¤Ã¤¿¡£", "%^s starts moving faster."), m_name);
 			}
 			break;
 		}
@@ -2142,11 +2055,7 @@ msg_format("%^s‚ª©•ª‚Ì‘Ì‚É”O‚ğ‘—‚Á‚½B", m_name);
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-msg_format("%^s‚ª<”j–Å‚Ìè>‚ğ•ú‚Á‚½I", m_name);
-#else
-			msg_format("%^s invokes the Hand of Doom!", m_name);
-#endif
+            msg_format(_("%^s¤¬<ÇËÌÇ¤Î¼ê>¤òÊü¤Ã¤¿¡ª", "%^s invokes the Hand of Doom!"), m_name);
 			dam = (((s32b) ((40 + randint1(20)) * (p_ptr->chp))) / 100);
 			breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, learnable);
 			break;
@@ -2159,77 +2068,35 @@ msg_format("%^s‚ª<”j–Å‚Ìè>‚ğ•ú‚Á‚½I", m_name);
 
 			/* Message */
 			if (blind)
-			{
-#ifdef JP
-msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-				msg_format("%^s mumbles.", m_name);
-#endif
-
-			}
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
 			else
-			{
-#ifdef JP
-msg_format("%^s‚ª©•ª‚Ì‚ÉW’†‚µ‚½B", m_name);
-#else
-				msg_format("%^s concentrates on %s wounds.", m_name, m_poss);
-#endif
-
-			}
+                msg_format(_("%^s¤¬¼«Ê¬¤Î½ı¤Ë½¸Ãæ¤·¤¿¡£", "%^s concentrates on %s wounds."), m_name);
 
 			/* Heal some */
 			m_ptr->hp += (rlev * 6);
 
 			/* Fully healed */
-			if (m_ptr->hp >= m_ptr->maxhp)
-			{
-				/* Fully healed */
-				m_ptr->hp = m_ptr->maxhp;
+            if (m_ptr->hp >= m_ptr->maxhp)
+            {
+                /* Fully healed */
+                m_ptr->hp = m_ptr->maxhp;
 
-				/* Message */
-				if (seen)
-				{
-#ifdef JP
-msg_format("%^s‚ÍŠ®‘S‚É¡‚Á‚½I", m_name);
-#else
-					msg_format("%^s looks completely healed!", m_name);
-#endif
-
-				}
-				else
-				{
-#ifdef JP
-msg_format("%^s‚ÍŠ®‘S‚É¡‚Á‚½‚æ‚¤‚¾I", m_name);
-#else
-					msg_format("%^s sounds completely healed!", m_name);
-#endif
-
-				}
-			}
+                /* Message */
+                if (seen)
+                    msg_format(_("%^s¤Ï´°Á´¤Ë¼£¤Ã¤¿¡ª", "%^s looks completely healed!"), m_name);
+                else
+                    msg_format(_("%^s¤Ï´°Á´¤Ë¼£¤Ã¤¿¤è¤¦¤À¡ª", "%^s sounds completely healed!"), m_name);
+            }
 
 			/* Partially healed */
-			else
-			{
-				/* Message */
-				if (seen)
-				{
-#ifdef JP
-msg_format("%^s‚Í‘Ì—Í‚ğ‰ñ•œ‚µ‚½‚æ‚¤‚¾B", m_name);
-#else
-					msg_format("%^s looks healthier.", m_name);
-#endif
-
-				}
-				else
-				{
-#ifdef JP
-msg_format("%^s‚Í‘Ì—Í‚ğ‰ñ•œ‚µ‚½‚æ‚¤‚¾B", m_name);
-#else
-					msg_format("%^s sounds healthier.", m_name);
-#endif
-
-				}
-			}
+            else
+            {
+                /* Message */
+                if (seen)
+                    msg_format(_("%^s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", "%^s looks healthier."), m_name);
+                else
+                    msg_format(_("%^s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", "%^s sounds healthier."), m_name);
+            }
 
 			/* Redraw (later) if needed */
 			if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
@@ -2242,11 +2109,7 @@ msg_format("%^s‚Í‘Ì—Í‚ğ‰ñ•œ‚µ‚½‚æ‚¤‚¾B", m_name);
 				(void)set_monster_monfear(m_idx, 0);
 
 				/* Message */
-#ifdef JP
-				msg_format("%^s‚Í—E‹C‚ğæ‚è–ß‚µ‚½B", m_name);
-#else
-				msg_format("%^s recovers %s courage.", m_name, m_poss);
-#endif
+                msg_format(_("%^s¤ÏÍ¦µ¤¤ò¼è¤êÌá¤·¤¿¡£", "%^s recovers %s courage."), m_name);
 			}
 			break;
 		}
@@ -2258,24 +2121,10 @@ msg_format("%^s‚Í‘Ì—Í‚ğ‰ñ•œ‚µ‚½‚æ‚¤‚¾B", m_name);
 
 			/* Message */
 			if (!seen)
-			{
-#ifdef JP
-msg_format("%^s‚ª‰½‚©‚ğ—Í‹­‚­‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-				msg_format("%^s mumbles powerfully.", m_name);
-#endif
-
-			}
+			    msg_format(_("%^s¤¬²¿¤«¤òÎÏ¶¯¤¯¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles powerfully."), m_name);
 			else
-			{
-#ifdef JP
-msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
-#else
-				msg_format("%^s casts a Globe of Invulnerability.", m_name);
-#endif
-
-			}
-
+			    msg_format(_("%s¤ÏÌµ½ı¤Îµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "%^s casts a Globe of Invulnerability."), m_name);
+			
 			if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(m_idx, randint1(4) + 4, FALSE);
 			break;
 		}
@@ -2286,19 +2135,12 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 			disturb(1, 1);
 			if (teleport_barrier(m_idx))
 			{
-#ifdef JP
-				msg_format("–‚–@‚ÌƒoƒŠƒA‚ª%^s‚ÌƒeƒŒƒ|[ƒg‚ğ×–‚‚µ‚½B", m_name);
-#else
-				msg_format("Magic barrier obstructs teleporting of %^s.", m_name);
-#endif
+				msg_format(_("ËâË¡¤Î¥Ğ¥ê¥¢¤¬%^s¤Î¥Æ¥ì¥İ¡¼¥È¤ò¼ÙËâ¤·¤¿¡£", 
+                             "Magic barrier obstructs teleporting of %^s."), m_name);
 			}
 			else
 			{
-#ifdef JP
-				msg_format("%^s‚ªu‚ÉÁ‚¦‚½B", m_name);
-#else
-				msg_format("%^s blinks away.", m_name);
-#endif
+                msg_format(_("%^s¤¬½Ö»ş¤Ë¾Ã¤¨¤¿¡£", "%^s blinks away."), m_name);
 				teleport_away(m_idx, 10, 0L);
 				p_ptr->update |= (PU_MONSTERS);
 			}
@@ -2311,19 +2153,12 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 			disturb(1, 1);
 			if (teleport_barrier(m_idx))
 			{
-#ifdef JP
-				msg_format("–‚–@‚ÌƒoƒŠƒA‚ª%^s‚ÌƒeƒŒƒ|[ƒg‚ğ×–‚‚µ‚½B", m_name);
-#else
-				msg_format("Magic barrier obstructs teleporting of %^s.", m_name);
-#endif
+				msg_format(_("ËâË¡¤Î¥Ğ¥ê¥¢¤¬%^s¤Î¥Æ¥ì¥İ¡¼¥È¤ò¼ÙËâ¤·¤¿¡£", 
+                             "Magic barrier obstructs teleporting of %^s."), m_name);
 			}
 			else
 			{
-#ifdef JP
-				msg_format("%^s‚ªƒeƒŒƒ|[ƒg‚µ‚½B", m_name);
-#else
-				msg_format("%^s teleports away.", m_name);
-#endif
+                msg_format(_("%^s¤¬¥Æ¥ì¥İ¡¼¥È¤·¤¿¡£", "%^s teleports away."), m_name);
 				teleport_away_followable(m_idx);
 			}
 			break;
@@ -2369,11 +2204,8 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 					m_list[hack_m_idx_ii].hp = dummy_hp;
 					m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
-#ifdef JP
-					msg_print("wƒo[ƒm[ƒ‹Eƒ‹ƒp[ƒgx‚ª•ª—ô‚µ‚½I");
-#else
-					msg_print("Banor=Rupart splits in two person!");
-#endif
+					msg_print(_("¡Ø¥Ğ¡¼¥Î¡¼¥ë¡¦¥ë¥Ñ¡¼¥È¡Ù¤¬Ê¬Îö¤·¤¿¡ª", 
+                                "Banor=Rupart splits in two person!"));
 
 					break;
 				}
@@ -2405,23 +2237,16 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 					m_list[hack_m_idx_ii].hp = dummy_hp;
 					m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
-#ifdef JP
-					msg_print("wƒo[ƒm[ƒ‹x‚Æwƒ‹ƒp[ƒgx‚ª‡‘Ì‚µ‚½I");
-#else
-					msg_print("Banor and Rupart combine into one!");
-#endif
-
+					msg_print(_("¡Ø¥Ğ¡¼¥Î¡¼¥ë¡Ù¤È¡Ø¥ë¥Ñ¡¼¥È¡Ù¤¬¹çÂÎ¤·¤¿¡ª", 
+                                "Banor and Rupart combine into one!"));
 					break;
 				}
 
 			case MON_ROLENTO:
-#ifdef JP
-				if (blind) msg_format("%^s‚ª‰½‚©‘å—Ê‚É“Š‚°‚½B", m_name);
-				else msg_format("%^s‚ÍèÖ’e‚ğ‚Î‚ç‚Ü‚¢‚½B", m_name);
-#else
-				if (blind) msg_format("%^s spreads something.", m_name);
-				else msg_format("%^s throws some hand grenades.", m_name);
-#endif
+				if (blind)
+                    msg_format(_("%^s¤¬²¿¤«ÂçÎÌ¤ËÅê¤²¤¿¡£", "%^s spreads something."), m_name);
+				else
+                    msg_format(_("%^s¤Ï¼êÜØÃÆ¤ò¤Ğ¤é¤Ş¤¤¤¿¡£", "%^s throws some hand grenades."), m_name);
 
 				{
 					int num = 1 + randint1(3);
@@ -2431,11 +2256,10 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 						count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, mode);
 					}
 				}
-#ifdef JP
-				if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚É‚Î‚ç‚Ü‚©‚ê‚é‰¹‚ª‚·‚éB");
-#else
-				if (blind && count) msg_print("You hear many things are scattered nearby.");
-#endif
+
+				if (blind && count)
+                    msg_print(_("Â¿¤¯¤Î¤â¤Î¤¬´Ö¶á¤Ë¤Ğ¤é¤Ş¤«¤ì¤ë²»¤¬¤¹¤ë¡£", "You hear many things are scattered nearby."));
+
 				break;
 
 			default:
@@ -2444,11 +2268,7 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 					disturb(1, 1);
 					if (one_in_(3) || !direct)
 					{
-#ifdef JP
-						msg_format("%^s‚Í“Ë‘R‹ŠE‚©‚çÁ‚¦‚½!", m_name);
-#else
-						msg_format("%^s suddenly go out of your sight!", m_name);
-#endif
+                        msg_format(_("%^s¤ÏÆÍÁ³»ë³¦¤«¤é¾Ã¤¨¤¿!", "%^s suddenly go out of your sight!"), m_name);
 						teleport_away(m_idx, 10, TELEPORT_NONMAGICAL);
 						p_ptr->update |= (PU_MONSTERS);
 					}
@@ -2457,11 +2277,8 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 						int get_damage = 0;
 						bool fear; /* dummy */
 
-#ifdef JP
-						msg_format("%^s‚ª‚ ‚È‚½‚ğ’Í‚ñ‚Å‹ó’†‚©‚ç“Š‚°—‚Æ‚µ‚½B", m_name);
-#else
-						msg_format("%^s holds you, and drops from the sky.", m_name);
-#endif
+                        msg_format(_("%^s¤¬¤¢¤Ê¤¿¤òÄÏ¤ó¤Ç¶õÃæ¤«¤éÅê¤²Íî¤È¤·¤¿¡£", 
+                                     "%^s holds you, and drops from the sky."), m_name);
 						dam = damroll(4, 8);
 						teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 
@@ -2469,19 +2286,11 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 
 						if (p_ptr->levitation)
 						{
-#ifdef JP
-							msg_print("‚ ‚È‚½‚ÍÃ‚©‚É’…’n‚µ‚½B");
-#else
-							msg_print("You float gently down to the ground.");
-#endif
+                            msg_print(_("¤¢¤Ê¤¿¤ÏÀÅ¤«¤ËÃåÃÏ¤·¤¿¡£", "You float gently down to the ground."));
 						}
 						else
 						{
-#ifdef JP
-							msg_print("‚ ‚È‚½‚Í’n–Ê‚É’@‚«‚Â‚¯‚ç‚ê‚½B");
-#else
-							msg_print("You crashed into the ground.");
-#endif
+                            msg_print(_("¤¢¤Ê¤¿¤ÏÃÏÌÌ¤ËÃ¡¤­¤Ä¤±¤é¤ì¤¿¡£", "You crashed into the ground."));
 							dam += damroll(6, 8);
 						}
 
@@ -2492,7 +2301,7 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 						if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
 						{
 #ifdef JP
-							msg_format("UŒ‚‚ª%s©g‚ğ‚Â‚¯‚½I", m_name);
+							msg_format("¹¶·â¤¬%s¼«¿È¤ò½ı¤Ä¤±¤¿¡ª", m_name);
 #else
 							char m_name_self[80];
 
@@ -2521,11 +2330,7 @@ msg_format("%s‚Í–³‚Ì‹…‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-msg_format("%^s‚ª‚ ‚È‚½‚ğˆø‚«–ß‚µ‚½B", m_name);
-#else
-			msg_format("%^s commands you to return.", m_name);
-#endif
+            msg_format(_("%^s¤¬¤¢¤Ê¤¿¤ò°ú¤­Ìá¤·¤¿¡£", "%^s commands you to return."), m_name);
 
 			teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
 			learn_spell(MS_TELE_TO);
@@ -2537,13 +2342,10 @@ msg_format("%^s‚ª‚ ‚È‚½‚ğˆø‚«–ß‚µ‚½B", m_name);
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-msg_format("%^s‚ÉƒeƒŒƒ|[ƒg‚³‚¹‚ç‚ê‚½B", m_name);
+
+            msg_format(_("%^s¤Ë¥Æ¥ì¥İ¡¼¥È¤µ¤»¤é¤ì¤¿¡£", "%^s teleports you away."), m_name);
 			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-				msg_print("‚­‚Á‚»`");
-#else
-			msg_format("%^s teleports you away.", m_name);
-#endif
+				msg_print(_("¤¯¤Ã¤½¡Á", ""));
 
 			learn_spell(MS_TELE_AWAY);
 			teleport_player_away(m_idx, 100);
@@ -2555,35 +2357,19 @@ msg_format("%^s‚ÉƒeƒŒƒ|[ƒg‚³‚¹‚ç‚ê‚½B", m_name);
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©Šï–­‚ÈŒ¾—t‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles strangely.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª‚ ‚È‚½‚Ì‘«‚ğw‚³‚µ‚½B", m_name);
-#else
-			else msg_format("%^s gestures at your feet.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«´ñÌ¯¤Ê¸ÀÍÕ¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles strangely."), m_name);
+            else
+                msg_format(_("%^s¤¬¤¢¤Ê¤¿¤ÎÂ­¤ò»Ø¤µ¤·¤¿¡£", "%^s gestures at your feet."), m_name);
 
 			if (p_ptr->resist_nexus)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒø‰Ê‚ª‚È‚©‚Á‚½I");
-#else
-				msg_print("You are unaffected!");
-#endif
-
+                msg_print(_("¤·¤«¤·¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", "You are unaffected!"));
 			}
 			else if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I");
-#else
-				msg_print("You resist the effects!");
-#endif
-
+                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
 			}
 			else
 			{
@@ -2599,17 +2385,10 @@ msg_print("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I");
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^s‚ªŒõ‚ÌŒ•‚ğ•ú‚Á‚½B", m_name);
-#else
-			else msg_format("%^s throw a Psycho-Spear.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬¸÷¤Î·õ¤òÊü¤Ã¤¿¡£", "%^s throw a Psycho-Spear."), m_name);
 
 			dam = (r_ptr->flags2 & RF2_POWERFUL) ? (randint1(rlev * 2) + 150) : (randint1(rlev * 3 / 2) + 100);
 			beam(m_idx, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, learnable);
@@ -2621,19 +2400,13 @@ else msg_format("%^s‚ªŒõ‚ÌŒ•‚ğ•ú‚Á‚½B", m_name);
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-			if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-			else if (can_use_lite_area) msg_format("%^s‚ª•Ó‚è‚ğ–¾‚é‚­Æ‚ç‚µ‚½B", m_name);
-			else msg_format("%^s‚ªˆÃˆÅ‚Ì’†‚Åè‚ğU‚Á‚½B", m_name);
-#else
-			else if (can_use_lite_area) msg_format("%^s cast a spell to light up.", m_name);
-			else msg_format("%^s gestures in shadow.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+			else if (can_use_lite_area)
+                msg_format(_("%^s¤¬ÊÕ¤ê¤òÌÀ¤ë¤¯¾È¤é¤·¤¿¡£", "%^s cast a spell to light up."), m_name);
+			else 
+                msg_format(_("%^s¤¬°Å°Ç¤ÎÃæ¤Ç¼ê¤ò¿¶¤Ã¤¿¡£", "%^s gestures in shadow."), m_name);
 
 			if (can_use_lite_area) (void)lite_area(0, 3);
 			else
@@ -2648,17 +2421,13 @@ else msg_format("%^s‚ªŒõ‚ÌŒ•‚ğ•ú‚Á‚½B", m_name);
 		case 160+13:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚Ä×ˆ«‚É”÷Î‚ñ‚¾B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles, and then cackles evilly.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ªô•¶‚ğ¥‚¦‚Ä×ˆ«‚É”÷Î‚ñ‚¾B", m_name);
-#else
-			else msg_format("%^s casts a spell and cackles evilly.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤Æ¼Ù°­¤ËÈù¾Ğ¤ó¤À¡£",
+                             "%^s mumbles, and then cackles evilly."), m_name);
+            else
+                msg_format(_("%^s¤¬¼öÊ¸¤ò¾§¤¨¤Æ¼Ù°­¤ËÈù¾Ğ¤ó¤À¡£",
+                             "%^s casts a spell and cackles evilly."), m_name);
 
 			learn_spell(MS_MAKE_TRAP);
 			(void)trap_creation(y, x);
@@ -2670,30 +2439,17 @@ else msg_format("%^s‚ªô•¶‚ğ¥‚¦‚Ä×ˆ«‚É”÷Î‚ñ‚¾B", m_name);
 		{
 			if (!direct) return (FALSE);
 			disturb(1, 1);
-#ifdef JP
-msg_format("%^s‚ª‚ ‚È‚½‚Ì‹L‰¯‚ğÁ‹‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚éB", m_name);
-#else
-			msg_format("%^s tries to blank your mind.", m_name);
-#endif
 
+            msg_format(_("%^s¤¬¤¢¤Ê¤¿¤Îµ­²±¤ò¾Ãµî¤·¤è¤¦¤È¤·¤Æ¤¤¤ë¡£", 
+                         "%^s tries to blank your mind."), m_name);
 
 			if (randint0(100 + rlev/2) < p_ptr->skill_sav)
 			{
-#ifdef JP
-msg_print("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I");
-#else
-				msg_print("You resist the effects!");
-#endif
-
+                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
 			}
 			else if (lose_all_info())
 			{
-#ifdef JP
-msg_print("‹L‰¯‚ª”–‚ê‚Ä‚µ‚Ü‚Á‚½B");
-#else
-				msg_print("Your memories fade away.");
-#endif
-
+                msg_print(_("µ­²±¤¬Çö¤ì¤Æ¤·¤Ş¤Ã¤¿¡£", "Your memories fade away."));
 			}
 			learn_spell(MS_FORGET);
 			break;
@@ -2703,17 +2459,13 @@ msg_print("‹L‰¯‚ª”–‚ê‚Ä‚µ‚Ü‚Á‚½B");
 		case 160+15:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª€Ò•œŠˆ‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
-#else
-			else msg_format("%^s casts a spell to revive corpses.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬»à¼ÔÉü³è¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£",
+                             "%^s casts a spell to revive corpses."), m_name);
+
 			animate_dead(m_idx, m_ptr->fy, m_ptr->fx);
 			break;
 		}
@@ -2724,32 +2476,23 @@ else msg_format("%^s‚ª€Ò•œŠˆ‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 			disturb(1, 1);
 			if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
 			{
-#ifdef JP
 				if (blind)
-					msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
+                    msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
 				else
-					msg_format("%^s‚ªƒ_ƒ“ƒWƒ‡ƒ“‚Ìå‚ğ¢Š«‚µ‚½B", m_name);
-#else
-				if (blind)
-					msg_format("%^s mumbles.", m_name);
-				else
-					msg_format("%^s magically summons guardians of dungeons.", m_name);
-#endif
+					msg_format(_("%^s¤¬¥À¥ó¥¸¥ç¥ó¤Î¼ç¤ò¾¤´­¤·¤¿¡£", 
+                                 "%^s magically summons guardians of dungeons."), m_name);
 			}
 			else
 			{
-#ifdef JP
 				if (blind)
-					msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
+                    msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
 				else
-					msg_format("%^s‚Í–‚–@‚Å%s‚ğ¢Š«‚µ‚½B",
+#ifdef JP
+					msg_format("%^s¤ÏËâË¡¤Ç%s¤ò¾¤´­¤·¤¿¡£",
 					m_name,
 					((r_ptr->flags1) & RF1_UNIQUE ?
-					"è‰º" : "’‡ŠÔ"));
+					"¼ê²¼" : "Ãç´Ö"));
 #else
-				if (blind)
-					msg_format("%^s mumbles.", m_name);
-				else
 					msg_format("%^s magically summons %s %s.",
 					m_name, m_poss,
 					((r_ptr->flags1) & RF1_UNIQUE ?
@@ -2788,11 +2531,7 @@ else msg_format("%^s‚ª€Ò•œŠˆ‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 
 					if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6))
 					{
-#ifdef JP
-						msg_print("’n–Ê‚©‚ç…‚ª‚«o‚µ‚½I");
-#else
-						msg_print("Water blew off from the ground!");
-#endif
+                        msg_print(_("ÃÏÌÌ¤«¤é¿å¤¬¿á¤­½Ğ¤·¤¿¡ª", "Water blew off from the ground!"));
 						fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
 					}
 
@@ -2832,11 +2571,8 @@ else msg_format("%^s‚ª€Ò•œŠˆ‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 				}
 				break;
 			}
-#ifdef JP
-			if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear many things appear nearby.");
-#endif
+			if (blind && count)
+                msg_print(_("Â¿¤¯¤Î¤â¤Î¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear many things appear nearby."));
 
 			break;
 		}
@@ -2845,23 +2581,15 @@ else msg_format("%^s‚ª€Ò•œŠˆ‚Ìô•¶‚ğ¥‚¦‚½B", m_name);
 		case 160+17:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ªƒTƒCƒo[ƒf[ƒ‚ƒ“‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons Cyberdemons!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¤ò¾¤´­¤·¤¿¡ª",
+                             "%^s magically summons Cyberdemons!"), m_name);
 
-#ifdef JP
-if (blind && count) msg_print("dŒú‚È‘«‰¹‚ª‹ß‚­‚Å•·‚±‚¦‚éB");
-#else
-			if (blind && count) msg_print("You hear heavy steps nearby.");
-#endif
+            if (blind && count)
+                msg_print(_("½Å¸ü¤ÊÂ­²»¤¬¶á¤¯¤ÇÊ¹¤³¤¨¤ë¡£", "You hear heavy steps nearby."));
 
 			summon_cyber(m_idx, y, x);
 			break;
@@ -2871,27 +2599,18 @@ if (blind && count) msg_print("dŒú‚È‘«‰¹‚ª‹ß‚­‚Å•·‚±‚¦‚éB");
 		case 160+18:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚Å’‡ŠÔ‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons help!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else 
+                msg_format(_("%^s¤¬ËâË¡¤ÇÃç´Ö¤ò¾¤´­¤·¤¿¡ª", "%^s magically summons help!"), m_name);
 
 			for (k = 0; k < 1; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 			}
-#ifdef JP
-if (blind && count) msg_print("‰½‚©‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear something appear nearby.");
-#endif
+            if (blind && count)
+                msg_print(_("²¿¤«¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear something appear nearby."));
 
 			break;
 		}
@@ -2900,27 +2619,19 @@ if (blind && count) msg_print("‰½‚©‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 		case 160+19:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚Åƒ‚ƒ“ƒXƒ^[‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons monsters!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤Ç¥â¥ó¥¹¥¿¡¼¤ò¾¤´­¤·¤¿¡ª", "%^s magically summons monsters!"), m_name);
 
 			for (k = 0; k < s_num_6; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 			}
-#ifdef JP
-if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear many things appear nearby.");
-#endif
+
+            if (blind && count)
+                msg_print(_("Â¿¤¯¤Î¤â¤Î¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear many things appear nearby."));
 
 			break;
 		}
@@ -2929,27 +2640,19 @@ if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 		case 160+20:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚ÅƒAƒŠ‚ğ¢Š«‚µ‚½B", m_name);
-#else
-			else msg_format("%^s magically summons ants.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤Ç¥¢¥ê¤ò¾¤´­¤·¤¿¡£", "%^s magically summons ants."), m_name);
 
 			for (k = 0; k < s_num_6; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_ANT, PM_ALLOW_GROUP);
 			}
-#ifdef JP
-if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear many things appear nearby.");
-#endif
+
+            if (blind && count)
+                msg_print(_("Â¿¤¯¤Î¤â¤Î¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear many things appear nearby."));
 
 			break;
 		}
@@ -2958,27 +2661,19 @@ if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 		case 160+21:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚ÅƒNƒ‚‚ğ¢Š«‚µ‚½B", m_name);
-#else
-			else msg_format("%^s magically summons spiders.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤Ç¥¯¥â¤ò¾¤´­¤·¤¿¡£", "%^s magically summons spiders."), m_name);
 
 			for (k = 0; k < s_num_6; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_SPIDER, PM_ALLOW_GROUP);
 			}
-#ifdef JP
-if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear many things appear nearby.");
-#endif
+
+            if (blind && count)
+                msg_print(_("Â¿¤¯¤Î¤â¤Î¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear many things appear nearby."));
 
 			break;
 		}
@@ -2987,27 +2682,19 @@ if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 		case 160+22:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚ÅƒnƒEƒ“ƒh‚ğ¢Š«‚µ‚½B", m_name);
-#else
-			else msg_format("%^s magically summons hounds.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤Ç¥Ï¥¦¥ó¥É¤ò¾¤´­¤·¤¿¡£", "%^s magically summons hounds."), m_name);
 
 			for (k = 0; k < s_num_4; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_HOUND, PM_ALLOW_GROUP);
 			}
-#ifdef JP
-if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear many things appear nearby.");
-#endif
+
+            if (blind && count)
+                msg_print(_("Â¿¤¯¤Î¤â¤Î¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear many things appear nearby."));
 
 			break;
 		}
@@ -3016,27 +2703,18 @@ if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 		case 160+23:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚Åƒqƒhƒ‰‚ğ¢Š«‚µ‚½B", m_name);
-#else
-			else msg_format("%^s magically summons hydras.", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤Ç¥Ò¥É¥é¤ò¾¤´­¤·¤¿¡£", "%^s magically summons hydras."), m_name);
 
 			for (k = 0; k < s_num_4; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_HYDRA, PM_ALLOW_GROUP);
 			}
-#ifdef JP
-if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear many things appear nearby.");
-#endif
+            if (blind && count)
+                msg_print(_("Â¿¤¯¤Î¤â¤Î¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear many things appear nearby."));
 
 			break;
 		}
@@ -3047,17 +2725,11 @@ if (blind && count) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 			int num = 1;
 
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚Å“Vg‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons an angel!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤ÇÅ·»È¤ò¾¤´­¤·¤¿¡ª", "%^s magically summons an angel!"), m_name);
 
 			if ((r_ptr->flags1 & RF1_UNIQUE) && !easy_band)
 			{
@@ -3071,19 +2743,13 @@ else msg_format("%^s‚ª–‚–@‚Å“Vg‚ğ¢Š«‚µ‚½I", m_name);
 
 			if (count < 2)
 			{
-#ifdef JP
-if (blind && count) msg_print("‰½‚©‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-				if (blind && count) msg_print("You hear something appear nearby.");
-#endif
+                if (blind && count)
+                    msg_print(_("²¿¤«¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear something appear nearby."));
 			}
 			else
 			{
-#ifdef JP
-if (blind) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-				if (blind) msg_print("You hear many things appear nearby.");
-#endif
+                if (blind)
+                    msg_print(_("Â¿¤¯¤Î¤â¤Î¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear many things appear nearby."));
 			}
 
 			break;
@@ -3093,27 +2759,20 @@ if (blind) msg_print("‘½‚­‚Ì‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 		case 160+25:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚Í–‚–@‚Å¬“×‚Ì‹{’ì‚©‚çˆ«–‚‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons a demon from the Courts of Chaos!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤ÏËâË¡¤Çº®ÆÙ¤ÎµÜÄî¤«¤é°­Ëâ¤ò¾¤´­¤·¤¿¡ª", 
+                             "%^s magically summons a demon from the Courts of Chaos!"), m_name);
 
 			for (k = 0; k < 1; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_DEMON, PM_ALLOW_GROUP);
 			}
-#ifdef JP
-if (blind && count) msg_print("‰½‚©‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear something appear nearby.");
-#endif
+
+            if (blind && count)
+                msg_print(_("²¿¤«¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear something appear nearby."));
 
 			break;
 		}
@@ -3122,27 +2781,20 @@ if (blind && count) msg_print("‰½‚©‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 		case 160+26:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚ÅƒAƒ“ƒfƒbƒh‚Ì‹­“G‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons an undead adversary!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤Ç¥¢¥ó¥Ç¥Ã¥É¤Î¶¯Å¨¤ò¾¤´­¤·¤¿¡ª",
+                             "%^s magically summons an undead adversary!"), m_name);
 
 			for (k = 0; k < 1; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_UNDEAD, PM_ALLOW_GROUP);
 			}
-#ifdef JP
-if (blind && count) msg_print("‰½‚©‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear something appear nearby.");
-#endif
+
+            if (blind && count)
+                msg_print(_("²¿¤«¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear something appear nearby."));
 
 			break;
 		}
@@ -3151,27 +2803,18 @@ if (blind && count) msg_print("‰½‚©‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 		case 160+27:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚Åƒhƒ‰ƒSƒ“‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons a dragon!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤Ç¥É¥é¥´¥ó¤ò¾¤´­¤·¤¿¡ª", "%^s magically summons a dragon!"), m_name);
 
 			for (k = 0; k < 1; k++)
 			{
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_DRAGON, PM_ALLOW_GROUP);
 			}
-#ifdef JP
-if (blind && count) msg_print("‰½‚©‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
-#else
-			if (blind && count) msg_print("You hear something appear nearby.");
-#endif
+            if (blind && count)
+                msg_print(_("²¿¤«¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬¤¹¤ë¡£", "You hear something appear nearby."));
 
 			break;
 		}
@@ -3186,18 +2829,12 @@ if (blind && count) msg_print("‰½‚©‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª‚·‚éB");
 				int cy = y;
 				int cx = x;
 
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-				if (blind) msg_format("%^s mumbles.", m_name);
-#endif
+                if (blind) 
+                    msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+                else
+                    msg_format(_("%^s¤¬ËâË¡¤ÇÍ©µ´ÀïÂâ¤ò¾¤´­¤·¤¿¡ª", "%^s magically summons rangers of Nazgul!"), m_name);
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚Å—H‹Sí‘à‚ğ¢Š«‚µ‚½I", m_name);
-#else
-				else msg_format("%^s magically summons rangers of Nazgul!", m_name);
-#endif
-				msg_print(NULL);
+                msg_print(NULL);
 
 				for (k = 0; k < 30; k++)
 				{
@@ -3219,40 +2856,26 @@ else msg_format("%^s‚ª–‚–@‚Å—H‹Sí‘à‚ğ¢Š«‚µ‚½I", m_name);
 						x = cx;
 						count++;
 						if (count == 1)
-#ifdef JP
-msg_format("u—H‹Sí‘à%d†AƒiƒYƒOƒ‹Eƒuƒ‰ƒbƒNIv", count);
-#else
-							msg_format("A Nazgul says 'Nazgul-Rangers Number %d, Nazgul-Black!'",count);
-#endif
+                            msg_format(_("¡ÖÍ©µ´ÀïÂâ%d¹æ¡¢¥Ê¥º¥°¥ë¡¦¥Ö¥é¥Ã¥¯¡ª¡×", 
+                                         "A Nazgul says 'Nazgul-Rangers Number %d, Nazgul-Black!'"), count);
 						else
-#ifdef JP
-msg_format("u“¯‚¶‚­%d†AƒiƒYƒOƒ‹Eƒuƒ‰ƒbƒNIv", count);
-#else
-							msg_format("Another one says 'Number %d, Nazgul-Black!'",count);
-#endif
+                            msg_format(_("¡ÖÆ±¤¸¤¯%d¹æ¡¢¥Ê¥º¥°¥ë¡¦¥Ö¥é¥Ã¥¯¡ª¡×",
+                                         "Another one says 'Number %d, Nazgul-Black!'"), count);
+
 						msg_print(NULL);
 					}
 				}
-#ifdef JP
-msg_format("u%dl‚»‚ë‚Á‚ÄAƒŠƒ“ƒOƒŒƒ“ƒWƒƒ[Iv", count);
-#else
-msg_format("They say 'The %d meets! We are the Ring-Ranger!'.", count);
-#endif
+                msg_format(_("¡Ö%d¿Í¤½¤í¤Ã¤Æ¡¢¥ê¥ó¥°¥ì¥ó¥¸¥ã¡¼¡ª¡×", 
+                             "They say 'The %d meets! We are the Ring-Ranger!'."), count);
 				msg_print(NULL);
 			}
 			else
 			{
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-				if (blind) msg_format("%^s mumbles.", m_name);
-#endif
-
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚Å‹­—Í‚ÈƒAƒ“ƒfƒbƒh‚ğ¢Š«‚µ‚½I", m_name);
-#else
-				else msg_format("%^s magically summons greater undead!", m_name);
-#endif
+                if (blind)
+                    msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+                else
+                    msg_format(_("%^s¤¬ËâË¡¤Ç¶¯ÎÏ¤Ê¥¢¥ó¥Ç¥Ã¥É¤ò¾¤´­¤·¤¿¡ª", 
+                                 "%^s magically summons greater undead!"), m_name);
 
 				for (k = 0; k < s_num_6; k++)
 				{
@@ -3261,12 +2884,8 @@ else msg_format("%^s‚ª–‚–@‚Å‹­—Í‚ÈƒAƒ“ƒfƒbƒh‚ğ¢Š«‚µ‚½I", m_name);
 			}
 			if (blind && count)
 			{
-#ifdef JP
-msg_print("ŠÔ‹ß‚Å‰½‚©‘½‚­‚Ì‚à‚Ì‚ª”‡‚¢‰ñ‚é‰¹‚ª•·‚±‚¦‚éB");
-#else
-				msg_print("You hear many creepy things appear nearby.");
-#endif
-
+                msg_print(_("´Ö¶á¤Ç²¿¤«Â¿¤¯¤Î¤â¤Î¤¬Çç¤¤²ó¤ë²»¤¬Ê¹¤³¤¨¤ë¡£",
+                            "You hear many creepy things appear nearby."));
 			}
 			break;
 		}
@@ -3275,17 +2894,11 @@ msg_print("ŠÔ‹ß‚Å‰½‚©‘½‚­‚Ì‚à‚Ì‚ª”‡‚¢‰ñ‚é‰¹‚ª•·‚±‚¦‚éB");
 		case 160+29:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚ÅŒÃ‘ãƒhƒ‰ƒSƒ“‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons ancient dragons!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤Ç¸ÅÂå¥É¥é¥´¥ó¤ò¾¤´­¤·¤¿¡ª", "%^s magically summons ancient dragons!"), m_name);
 
 			for (k = 0; k < s_num_4; k++)
 			{
@@ -3293,12 +2906,8 @@ else msg_format("%^s‚ª–‚–@‚ÅŒÃ‘ãƒhƒ‰ƒSƒ“‚ğ¢Š«‚µ‚½I", m_name);
 			}
 			if (blind && count)
 			{
-#ifdef JP
-msg_print("‘½‚­‚Ì—Í‹­‚¢‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª•·‚±‚¦‚éB");
-#else
-				msg_print("You hear many powerful things appear nearby.");
-#endif
-
+                msg_print(_("Â¿¤¯¤ÎÎÏ¶¯¤¤¤â¤Î¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬Ê¹¤³¤¨¤ë¡£", 
+                            "You hear many powerful things appear nearby."));
 			}
 			break;
 		}
@@ -3307,17 +2916,11 @@ msg_print("‘½‚­‚Ì—Í‹­‚¢‚à‚Ì‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª•·‚±‚¦‚éB");
 		case 160+30:
 		{
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ªƒAƒ“ƒo[‚Ì‰¤‘°‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons Lords of Amber!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬¥¢¥ó¥Ğ¡¼¤Î²¦Â²¤ò¾¤´­¤·¤¿¡ª", "%^s magically summons Lords of Amber!"), m_name);
 
 
 
@@ -3327,12 +2930,7 @@ else msg_format("%^s‚ªƒAƒ“ƒo[‚Ì‰¤‘°‚ğ¢Š«‚µ‚½I", m_name);
 			}
 			if (blind && count)
 			{
-#ifdef JP
-msg_print("•s€‚ÌÒ‚ª‹ß‚­‚ÉŒ»‚ê‚é‚Ì‚ª•·‚±‚¦‚½B");
-#else
-				msg_print("You hear immortal beings appear nearby.");
-#endif
-
+                msg_print(_("ÉÔ»à¤Î¼Ô¤¬¶á¤¯¤Ë¸½¤ì¤ë¤Î¤¬Ê¹¤³¤¨¤¿¡£", "You hear immortal beings appear nearby."));
 			}
 			break;
 		}
@@ -3344,17 +2942,11 @@ msg_print("•s€‚ÌÒ‚ª‹ß‚­‚ÉŒ»‚ê‚é‚Ì‚ª•·‚±‚¦‚½B");
 			int non_unique_type = SUMMON_HI_UNDEAD;
 
 			disturb(1, 1);
-#ifdef JP
-if (blind) msg_format("%^s‚ª‰½‚©‚ğ‚Â‚Ô‚â‚¢‚½B", m_name);
-#else
-			if (blind) msg_format("%^s mumbles.", m_name);
-#endif
 
-#ifdef JP
-else msg_format("%^s‚ª–‚–@‚Å“Á•Ê‚È‹­“G‚ğ¢Š«‚µ‚½I", m_name);
-#else
-			else msg_format("%^s magically summons special opponents!", m_name);
-#endif
+            if (blind)
+                msg_format(_("%^s¤¬²¿¤«¤ò¤Ä¤Ö¤ä¤¤¤¿¡£", "%^s mumbles."), m_name);
+            else
+                msg_format(_("%^s¤¬ËâË¡¤ÇÆÃÊÌ¤Ê¶¯Å¨¤ò¾¤´­¤·¤¿¡ª", "%^s magically summons special opponents!"), m_name);
 
 			for (k = 0; k < s_num_4; k++)
 			{
@@ -3375,11 +2967,8 @@ else msg_format("%^s‚ª–‚–@‚Å“Á•Ê‚È‹­“G‚ğ¢Š«‚µ‚½I", m_name);
 
 			if (blind && count)
 			{
-#ifdef JP
-				msg_format("‘½‚­‚Ì%s‚ªŠÔ‹ß‚ÉŒ»‚ê‚½‰¹‚ª•·‚±‚¦‚éB", uniques_are_summoned ? "—Í‹­‚¢‚à‚Ì" : "‚à‚Ì");
-#else
-				msg_format("You hear many %s appear nearby.", uniques_are_summoned ? "powerful things" : "things");
-#endif
+                msg_format(_("Â¿¤¯¤Î%s¤¬´Ö¶á¤Ë¸½¤ì¤¿²»¤¬Ê¹¤³¤¨¤ë¡£", "You hear many %s appear nearby."),
+                    uniques_are_summoned ? _("ÎÏ¶¯¤¤¤â¤Î", "powerful things") : _("¤â¤Î", "things"));
 			}
 			break;
 		}
