@@ -1,6 +1,6 @@
 /*!
  * @file mspells1.c
- * @brief ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌÀ‘• / Monster spells (attack player)
+ * @brief ¥â¥ó¥¹¥¿¡¼ËâË¡¤Î¼ÂÁõ / Monster spells (attack player)
  * @date 2014/01/17
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -42,11 +42,11 @@
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚ªƒvƒŒƒCƒ„[‚Ìã“_‚ğ‚Â‚¢‚½‘I‘ğ‚ğæ‚é‚©‚Ç‚¤‚©‚Ì”»’è /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤Î¼åÅÀ¤ò¤Ä¤¤¤¿ÁªÂò¤ò¼è¤ë¤«¤É¤¦¤«¤ÎÈ½Äê /
  * Internal probability routine
- * @param r_ptr ƒ‚ƒ“ƒXƒ^[í‘°‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @param prob Šî–{Šm—¦(%)
- * @return “K‚µ‚½‘I‘ğ‚ğæ‚é‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param r_ptr ¥â¥ó¥¹¥¿¡¼¼ïÂ²¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
+ * @param prob ´ğËÜ³ÎÎ¨(%)
+ * @return Å¬¤·¤¿ÁªÂò¤ò¼è¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool int_outof(monster_race *r_ptr, int prob)
 {
@@ -59,13 +59,13 @@ static bool int_outof(monster_race *r_ptr, int prob)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ì–‚–@ˆê——‚©‚çíp“I‚É“K‚³‚È‚¢–‚–@‚ğœŠO‚·‚é /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤ÎËâË¡°ìÍ÷¤«¤éÀï½ÑÅª¤ËÅ¬¤µ¤Ê¤¤ËâË¡¤ò½ü³°¤¹¤ë /
  * Remove the "bad" spells from a spell list
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @param f4p ƒ‚ƒ“ƒXƒ^[–‚–@‚Ìƒtƒ‰ƒOƒŠƒXƒg1
- * @param f5p ƒ‚ƒ“ƒXƒ^[–‚–@‚Ìƒtƒ‰ƒOƒŠƒXƒg2
- * @param f6p ƒ‚ƒ“ƒXƒ^[–‚–@‚Ìƒtƒ‰ƒOƒŠƒXƒg3
- * @return ‚È‚µ
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
+ * @param f4p ¥â¥ó¥¹¥¿¡¼ËâË¡¤Î¥Õ¥é¥°¥ê¥¹¥È1
+ * @param f5p ¥â¥ó¥¹¥¿¡¼ËâË¡¤Î¥Õ¥é¥°¥ê¥¹¥È2
+ * @param f6p ¥â¥ó¥¹¥¿¡¼ËâË¡¤Î¥Õ¥é¥°¥ê¥¹¥È3
+ * @return ¤Ê¤·
  */
 static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 {
@@ -356,11 +356,11 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚É‚Æ‚Á‚ÄŠ’è‚Ì’n“_‚ª¢ŠÒ‚É‘Š‰‚µ‚¢’n“_‚©‚Ç‚¤‚©‚ğ•Ô‚·B /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Ë¤È¤Ã¤Æ½êÄê¤ÎÃÏÅÀ¤¬¾¤´Ô¤ËÁê±ş¤·¤¤ÃÏÅÀ¤«¤É¤¦¤«¤òÊÖ¤¹¡£ /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param y1 ”»’è‚ğs‚¢‚½‚¢ƒ}ƒX‚ÌYÀ•W
- * @param x1 ”»’è‚ğs‚¢‚½‚¢ƒ}ƒX‚ÌXÀ•W
- * @return ¢ŠÒ‚É‘Š‰‚µ‚¢‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+ * @param y1 È½Äê¤ò¹Ô¤¤¤¿¤¤¥Ş¥¹¤ÎYºÂÉ¸
+ * @param x1 È½Äê¤ò¹Ô¤¤¤¿¤¤¥Ş¥¹¤ÎXºÂÉ¸
+ * @return ¾¤´Ô¤ËÁê±ş¤·¤¤¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
  */
 bool summon_possible(int y1, int x1)
 {
@@ -390,10 +390,10 @@ bool summon_possible(int y1, int x1)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚É‚Æ‚Á‚Ä€Ò•œŠˆ‚ğs‚¤‚×‚«ó‘Ô‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Ë¤È¤Ã¤Æ»à¼ÔÉü³è¤ò¹Ô¤¦¤Ù¤­¾õÂÖ¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param m_ptr ”»’è‚ğs‚¢‚½‚¢ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @return €Ò•œŠˆ‚ª—LŒø‚Èó‘Ô‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param m_ptr È½Äê¤ò¹Ô¤¤¤¿¤¤¥â¥ó¥¹¥¿¡¼¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
+ * @return »à¼ÔÉü³è¤¬Í­¸ú¤Ê¾õÂÖ¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 bool raise_possible(monster_type *m_ptr)
 {
@@ -435,14 +435,14 @@ bool raise_possible(monster_type *m_ptr)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚É‚Æ‚Á‚Äƒ{ƒ‹ƒgŒ^–‚–@‚ª—LŒø‚Èó‘Ô‚©‚ğ•Ô‚· /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Ë¤È¤Ã¤Æ¥Ü¥ë¥È·¿ËâË¡¤¬Í­¸ú¤Ê¾õÂÖ¤«¤òÊÖ¤¹ /
  * Determine if a bolt spell will hit the player.
- * @param y1 ƒ{ƒ‹ƒg–‚–@”­Ë’n“_‚ÌYÀ•W
- * @param x1 ƒ{ƒ‹ƒg–‚–@”­Ë’n“_‚ÌXÀ•W
- * @param y2 ƒ{ƒ‹ƒg–‚–@–Ú•W’n“_‚ÌYÀ•W
- * @param x2 ƒ{ƒ‹ƒg–‚–@–Ú•W’n“_‚ÌXÀ•W
- * @param is_friend ƒ‚ƒ“ƒXƒ^[‚ªƒvƒŒƒCƒ„[‚ÉŠQˆÓ‚ğ‚½‚È‚¢(ƒyƒbƒg‚©—FD“I)‚È‚ç‚ÎTRUE‚ğ‚Â‚¯‚é
- * @return ƒ{ƒ‹ƒgŒ^–‚–@‚ª—LŒø‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param y1 ¥Ü¥ë¥ÈËâË¡È¯¼ÍÃÏÅÀ¤ÎYºÂÉ¸
+ * @param x1 ¥Ü¥ë¥ÈËâË¡È¯¼ÍÃÏÅÀ¤ÎXºÂÉ¸
+ * @param y2 ¥Ü¥ë¥ÈËâË¡ÌÜÉ¸ÃÏÅÀ¤ÎYºÂÉ¸
+ * @param x2 ¥Ü¥ë¥ÈËâË¡ÌÜÉ¸ÃÏÅÀ¤ÎXºÂÉ¸
+ * @param is_friend ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤Ë³²°Õ¤ò»ı¤¿¤Ê¤¤(¥Ú¥Ã¥È¤«Í§¹¥Åª)¤Ê¤é¤ĞTRUE¤ò¤Ä¤±¤ë
+ * @return ¥Ü¥ë¥È·¿ËâË¡¤¬Í­¸ú¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  * @details
  * Originally, it was possible for a friendly to shoot another friendly.\n
  * Change it so a "clean shot" means no equally friendly monster is\n
@@ -499,14 +499,14 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ìƒ{ƒ‹ƒgŒ^–‚–@ˆ— /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Î¥Ü¥ë¥È·¿ËâË¡½èÍı /
  * Cast a bolt at the player Stop if we hit a monster Affect monsters and the player
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚ÌID
- * @param typ Œø‰Ê‘®«ID
- * @param dam_hp ˆĞ—Í
- * @param monspell ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌID
- * @param learnable ƒ‰[ƒjƒ“ƒO‰Â”\‚©”Û‚©
- * @return ‚È‚µ
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤ÎID
+ * @param typ ¸ú²ÌÂ°À­ID
+ * @param dam_hp °ÒÎÏ
+ * @param monspell ¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID
+ * @param learnable ¥é¡¼¥Ë¥ó¥°²ÄÇ½¤«Èİ¤«
+ * @return ¤Ê¤·
  */
 void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 {
@@ -518,13 +518,13 @@ void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ìƒr[ƒ€Œ^–‚–@ˆ— /
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚ÌID
- * @param typ Œø‰Ê‘®«ID
- * @param dam_hp ˆĞ—Í
- * @param monspell ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌID
- * @param learnable ƒ‰[ƒjƒ“ƒO‰Â”\‚©”Û‚©
- * @return ‚È‚µ
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Î¥Ó¡¼¥à·¿ËâË¡½èÍı /
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤ÎID
+ * @param typ ¸ú²ÌÂ°À­ID
+ * @param dam_hp °ÒÎÏ
+ * @param monspell ¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID
+ * @param learnable ¥é¡¼¥Ë¥ó¥°²ÄÇ½¤«Èİ¤«
+ * @return ¤Ê¤·
  */
 void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 {
@@ -536,18 +536,18 @@ void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ìƒ{[ƒ‹Œ^•ƒuƒŒƒXŒ^–‚–@ˆ— /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Î¥Ü¡¼¥ë·¿¡õ¥Ö¥ì¥¹·¿ËâË¡½èÍı /
  * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
- * @param y –Ú•W’n“_‚ÌYÀ•W
- * @param x –Ú•W’n“_‚ÌXÀ•W
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚ÌID
- * @param typ Œø‰Ê‘®«ID
- * @param dam_hp ˆĞ—Í
- * @param rad ”¼Œa
- * @param breath TRUE‚È‚ç‚ÎƒuƒŒƒXˆ—AFALSE‚È‚ç‚Îƒ{[ƒ‹ˆ—
- * @param monspell ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌID
- * @param learnable ƒ‰[ƒjƒ“ƒO‰Â”\‚©”Û‚©
- * @return ‚È‚µ
+ * @param y ÌÜÉ¸ÃÏÅÀ¤ÎYºÂÉ¸
+ * @param x ÌÜÉ¸ÃÏÅÀ¤ÎXºÂÉ¸
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤ÎID
+ * @param typ ¸ú²ÌÂ°À­ID
+ * @param dam_hp °ÒÎÏ
+ * @param rad È¾·Â
+ * @param breath TRUE¤Ê¤é¤Ğ¥Ö¥ì¥¹½èÍı¡¢FALSE¤Ê¤é¤Ğ¥Ü¡¼¥ë½èÍı
+ * @param monspell ¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID
+ * @param learnable ¥é¡¼¥Ë¥ó¥°²ÄÇ½¤«Èİ¤«
+ * @return ¤Ê¤·
  */
 void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
 {
@@ -584,10 +584,10 @@ void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, 
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ìƒ{[ƒ‹Œ^•ƒuƒŒƒXŒ^–‚–@ˆ— /
- * @param power ô‚¢‚Ì’iŠK
- * @param o_ptr ô‚¢‚ğ‚©‚¯‚ç‚ê‚é‘•”õƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @return —^‚¦‚éô‚¢‚ÌID
+ * @brief ¥â¥ó¥¹¥¿¡¼¤Î¥Ü¡¼¥ë·¿¡õ¥Ö¥ì¥¹·¿ËâË¡½èÍı /
+ * @param power ¼ö¤¤¤ÎÃÊ³¬
+ * @param o_ptr ¼ö¤¤¤ò¤«¤±¤é¤ì¤ëÁõÈ÷¥ª¥Ö¥¸¥§¥¯¥È¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
+ * @return Í¿¤¨¤ë¼ö¤¤¤ÎID
  */
 u32b get_curse(int power, object_type *o_ptr)
 {
@@ -616,10 +616,10 @@ u32b get_curse(int power, object_type *o_ptr)
 }
 
 /*!
- * @brief ‘•”õ‚Ö‚Ìô‚¢•t‰Á”»’è‚Æ•t‰Áˆ— /
- * @param chance ô‚¢‚ÌŠî–{Šm—¦
- * @param heavy_chance d‚¢ô‚¢‚ğ‘I‘ğˆ‚É“ü‚ê‚é‚©”Û‚©B
- * @return ‚È‚µ
+ * @brief ÁõÈ÷¤Ø¤Î¼ö¤¤ÉÕ²ÃÈ½Äê¤ÈÉÕ²Ã½èÍı /
+ * @param chance ¼ö¤¤¤Î´ğËÜ³ÎÎ¨
+ * @param heavy_chance ½Å¤¤¼ö¤¤¤òÁªÂò»è¤ËÆş¤ì¤ë¤«Èİ¤«¡£
+ * @return ¤Ê¤·
  */
 void curse_equipment(int chance, int heavy_chance)
 {
@@ -642,7 +642,7 @@ void curse_equipment(int chance, int heavy_chance)
 	if (have_flag(oflgs, TR_BLESSED) && (randint1(888) > chance))
 	{
 #ifdef JP
-msg_format("%s‚Íô‚¢‚ğ’µ‚Ë•Ô‚µ‚½I", o_name,
+msg_format("%s¤Ï¼ö¤¤¤òÄ·¤ÍÊÖ¤·¤¿¡ª", o_name,
 #else
 		msg_format("Your %s resist%s cursing!", o_name,
 #endif
@@ -679,7 +679,7 @@ msg_format("%s‚Íô‚¢‚ğ’µ‚Ë•Ô‚µ‚½I", o_name,
 	if (changed)
 	{
 #ifdef JP
-msg_format("ˆ«ˆÓ‚É–‚¿‚½•‚¢ƒI[ƒ‰‚ª%s‚ğ‚Æ‚è‚Ü‚¢‚½...", o_name);
+msg_format("°­°Õ¤ËËş¤Á¤¿¹õ¤¤¥ª¡¼¥é¤¬%s¤ò¤È¤ê¤Ş¤¤¤¿...", o_name);
 #else
 		msg_format("There is a malignant black aura surrounding %s...", o_name);
 #endif
@@ -691,10 +691,10 @@ msg_format("ˆ«ˆÓ‚É–‚¿‚½•‚¢ƒI[ƒ‰‚ª%s‚ğ‚Æ‚è‚Ü‚¢‚½...", o_name);
 
 
 /*!
- * @brief ID’l‚ª³‚µ‚¢ƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬Àµ¤·¤¤¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for hurting the player (directly).
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ³‚µ‚¢ID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return Àµ¤·¤¤ID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_attack(byte spell)
 {
@@ -719,10 +719,10 @@ static bool spell_attack(byte spell)
 
 
 /*!
- * @brief ID’l‚ª‘Ş”ğ–Ú“I‚É“K‚µ‚½ƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ÂàÈòÌÜÅª¤ËÅ¬¤·¤¿¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for escaping.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return “K‚µ‚½–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return Å¬¤·¤¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_escape(byte spell)
 {
@@ -737,10 +737,10 @@ static bool spell_escape(byte spell)
 }
 
 /*!
- * @brief ID’l‚ª–WŠQ–Ú“I‚É“K‚µ‚½ƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬Ë¸³²ÌÜÅª¤ËÅ¬¤·¤¿¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for annoying the player.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return “K‚µ‚½–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return Å¬¤·¤¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_annoy(byte spell)
 {
@@ -767,10 +767,10 @@ static bool spell_annoy(byte spell)
 }
 
 /*!
- * @brief ID’l‚ª¢Š«Œ^‚Ìƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬¾¤´­·¿¤Î¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for annoying the player.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ¢Š«Œ^–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¾¤´­·¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_summon(byte spell)
 {
@@ -783,10 +783,10 @@ static bool spell_summon(byte spell)
 
 
 /*!
- * @brief ID’l‚ª€Ò•œŠˆˆ—‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬»à¼ÔÉü³è½èÍı¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for annoying the player.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return €Ò•œŠˆ‚Ìˆ—‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return »à¼ÔÉü³è¤Î½èÍı¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_raise(byte spell)
 {
@@ -798,10 +798,10 @@ static bool spell_raise(byte spell)
 }
 
 /*!
- * @brief ID’l‚ªíp“I‚Èƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬Àï½ÑÅª¤Ê¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good in a tactical situation.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return íp“I‚È–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return Àï½ÑÅª¤ÊËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_tactic(byte spell)
 {
@@ -813,10 +813,10 @@ static bool spell_tactic(byte spell)
 }
 
 /*!
- * @brief ID’l‚ª–³“G‰»‚·‚éƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ÌµÅ¨²½¤¹¤ë¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell makes invulnerable.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ¢Š«Œ^–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¾¤´­·¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_invulner(byte spell)
 {
@@ -828,10 +828,10 @@ static bool spell_invulner(byte spell)
 }
 
 /*!
- * @brief ID’l‚ª‰Á‘¬‚·‚éƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬²ÃÂ®¤¹¤ë¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell hastes.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ¢Š«Œ^–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¾¤´­·¿ËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_haste(byte spell)
 {
@@ -844,10 +844,10 @@ static bool spell_haste(byte spell)
 
 
 /*!
- * @brief ID’l‚ªŠÔ’â~‚ğs‚¤ƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬»ş´ÖÄä»ß¤ò¹Ô¤¦¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell world.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ŠÔ’â~–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return »ş´ÖÄä»ßËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_world(byte spell)
 {
@@ -857,10 +857,10 @@ static bool spell_world(byte spell)
 
 
 /*!
- * @brief ID’l‚ª“Á•ÊŒø‰Ê‚Ìƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ÆÃÊÌ¸ú²Ì¤Î¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell special.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return “Á•ÊŒø‰Ê–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ÆÃÊÌ¸ú²ÌËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_special(byte spell)
 {
@@ -871,10 +871,10 @@ static bool spell_special(byte spell)
 
 
 /*!
- * @brief ID’l‚ªŒõ‚ÌŒ•‚Ìƒ‚ƒ“ƒXƒ^[–‚–@ID‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬¸÷¤Î·õ¤Î¥â¥ó¥¹¥¿¡¼ËâË¡ID¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell psycho-spear.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return Œõ‚ÌŒ•‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¸÷¤Î·õ¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_psy_spe(byte spell)
 {
@@ -887,10 +887,10 @@ static bool spell_psy_spe(byte spell)
 
 
 /*!
- * @brief ID’l‚ª¡–ü–‚–@‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬¼£ÌşËâË¡¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for healing.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ¡–ü–‚–@‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ¼£ÌşËâË¡¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_heal(byte spell)
 {
@@ -903,10 +903,10 @@ static bool spell_heal(byte spell)
 
 
 /*!
- * @brief ID’l‚ª–‚—ÍÁ‹‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ËâÎÏ¾Ãµî¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is good for dispel.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return –‚—ÍÁ‹‚ÌID‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ËâÎÏ¾Ãµî¤ÎID¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 static bool spell_dispel(byte spell)
 {
@@ -919,10 +919,10 @@ static bool spell_dispel(byte spell)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚ªƒvƒŒƒCƒ„[‚É–‚—ÍÁ‹‚ğ—^‚¦‚é‚×‚«‚©‚ğ”»’è‚·‚éƒ‹[ƒ`ƒ“
+ * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤ËËâÎÏ¾Ãµî¤òÍ¿¤¨¤ë¤Ù¤­¤«¤òÈ½Äê¤¹¤ë¥ë¡¼¥Á¥ó
  * Check should monster cast dispel spell.
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘Ì”z—ñID
- * @return –‚—ÍÁ‹‚ğ‚©‚¯‚é‚×‚«‚È‚çTRUE‚ğ•Ô‚·B
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î¹½Â¤ÂÎÇÛÎóID
+ * @return ËâÎÏ¾Ãµî¤ò¤«¤±¤ë¤Ù¤­¤Ê¤éTRUE¤òÊÖ¤¹¡£
  */
 bool dispel_check(int m_idx)
 {
@@ -1023,12 +1023,12 @@ bool dispel_check(int m_idx)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ì–‚–@‘I‘ğƒ‹[ƒ`ƒ“
+ * @brief ¥â¥ó¥¹¥¿¡¼¤ÎËâË¡ÁªÂò¥ë¡¼¥Á¥ó
  * Have a monster choose a spell from a list of "useful" spells.
- * @param m_idx ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘Ì”z—ñID
- * @param spells Œó•â–‚–@ID‚ğ‚Ü‚Æ‚ß‚½”z—ñ
- * @param num spells‚Ì’·‚³
- * @return ‘I‘ğ‚µ‚½ƒ‚ƒ“ƒXƒ^[–‚–@‚ÌID
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î¹½Â¤ÂÎÇÛÎóID
+ * @param spells ¸õÊäËâË¡ID¤ò¤Ş¤È¤á¤¿ÇÛÎó
+ * @param num spells¤ÎÄ¹¤µ
+ * @return ÁªÂò¤·¤¿¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID
  * @details
  * Note that this list does NOT include spells that will just hit\n
  * other monsters, and the list is restricted when the monster is\n
@@ -1265,10 +1265,10 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 
 
 /*!
- * @brief ID’l‚ª”ñ–‚p“I‚È“Áê‹Z”\‚©‚Ç‚¤‚©‚ğ•Ô‚· /
+ * @brief IDÃÍ¤¬ÈóËâ½ÑÅª¤ÊÆÃ¼ìµ»Ç½¤«¤É¤¦¤«¤òÊÖ¤¹ /
  * Return TRUE if a spell is inate spell.
- * @param spell ”»’è‘ÎÛ‚ÌID
- * @return ”ñ–‚p“I‚È“Áê‹Z”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+ * @param spell È½ÄêÂĞ¾İ¤ÎID
+ * @return ÈóËâ½ÑÅª¤ÊÆÃ¼ìµ»Ç½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
  */
 bool spell_is_inate(u16b spell)
 {
@@ -1291,13 +1291,13 @@ bool spell_is_inate(u16b spell)
 
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚ªƒvƒŒƒCƒ„[‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚é‚½‚ß‚ÌÅ“K‚ÈÀ•W‚ğZo‚·‚é /
- * @param m_ptr ‹Z”\‚ğg—p‚·‚éƒ‚ƒ“ƒXƒ^[\‘¢‘Ì‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param yp Å“K‚È–Ú•W’n“_‚ÌYÀ•W‚ğ•Ô‚·QÆƒ|ƒCƒ“ƒ^
- * @param xp Å“K‚È–Ú•W’n“_‚ÌXÀ•W‚ğ•Ô‚·QÆƒ|ƒCƒ“ƒ^
- * @param f_flag Ëü‚É“ü‚ê‚é‚Ì‚ğ”ğ‚¯‚é’nŒ`‚ÌŠƒtƒ‰ƒO
- * @param path_check Ëü‚ğ”»’è‚·‚é‚½‚ß‚ÌŠÖ”ƒ|ƒCƒ“ƒ^
- * @return —LŒø‚ÈÀ•W‚ª‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¤¿¤á¤ÎºÇÅ¬¤ÊºÂÉ¸¤ò»»½Ğ¤¹¤ë /
+ * @param m_ptr µ»Ç½¤ò»ÈÍÑ¤¹¤ë¥â¥ó¥¹¥¿¡¼¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
+ * @param yp ºÇÅ¬¤ÊÌÜÉ¸ÃÏÅÀ¤ÎYºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
+ * @param xp ºÇÅ¬¤ÊÌÜÉ¸ÃÏÅÀ¤ÎXºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
+ * @param f_flag ¼ÍÀş¤ËÆş¤ì¤ë¤Î¤òÈò¤±¤ëÃÏ·Á¤Î½ê»ı¥Õ¥é¥°
+ * @param path_check ¼ÍÀş¤òÈ½Äê¤¹¤ë¤¿¤á¤Î´Ø¿ô¥İ¥¤¥ó¥¿
+ * @return Í­¸ú¤ÊºÂÉ¸¤¬¤¢¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
  */
 static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
 	int f_flag, bool (*path_check)(int, int, int, int))
@@ -1347,10 +1347,10 @@ static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
 #define DO_SPELL_BA_LITE 3
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚Ì“Áê‹Z”\ƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÆÃ¼ìµ»Ç½¥á¥¤¥ó¥ë¡¼¥Á¥ó /
  * Creatures can cast spells, shoot missiles, and breathe.
- * @param m_idx ƒ‚ƒ“ƒXƒ^[\‘¢‘Ì”z—ñ‚ÌID
- * @return ÀÛ‚É“Áê‹Z”\‚ğ—˜—p‚µ‚½‚çTRUE‚ğ•Ô‚·
+ * @param m_idx ¥â¥ó¥¹¥¿¡¼¹½Â¤ÂÎÇÛÎó¤ÎID
+ * @return ¼Âºİ¤ËÆÃ¼ìµ»Ç½¤òÍøÍÑ¤·¤¿¤éTRUE¤òÊÖ¤¹
  * @details
  * Returns "TRUE" if a spell (or whatever) was (successfully) cast.\n
  *\n
@@ -1781,7 +1781,7 @@ bool make_attack_spell(int m_idx)
 	{
 		disturb(1, 1);
 		/* Message */
-		msg_format(_("%^s‚Íô•¶‚ğ¥‚¦‚æ‚¤‚Æ‚µ‚½‚ª¸”s‚µ‚½B", "%^s tries to cast a spell, but fails."), m_name);
+		msg_format(_("%^s¤Ï¼öÊ¸¤ò¾§¤¨¤è¤¦¤È¤·¤¿¤¬¼ºÇÔ¤·¤¿¡£", "%^s tries to cast a spell, but fails."), m_name);
 
 		return (TRUE);
 	}
@@ -1789,7 +1789,7 @@ bool make_attack_spell(int m_idx)
 	/* Hex: Anti Magic Barrier */
 	if (!spell_is_inate(thrown_spell) && magic_barrier(m_idx))
 	{
-		msg_format(_("”½–‚–@ƒoƒŠƒA‚ª%^s‚Ìô•¶‚ğ‚©‚«Á‚µ‚½B", "Anti magic barrier cancels the spell which %^s casts."), m_name);
+		msg_format(_("È¿ËâË¡¥Ğ¥ê¥¢¤¬%^s¤Î¼öÊ¸¤ò¤«¤­¾Ã¤·¤¿¡£", "Anti magic barrier cancels the spell which %^s casts."), m_name);
 		return (TRUE);
 	}
 

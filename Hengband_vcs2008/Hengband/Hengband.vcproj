@@ -325,6 +325,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\mspells4.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\mutation.c"
 				>
 			</File>
