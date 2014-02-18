@@ -29,6 +29,7 @@ OBJS = \
 	artifact.o autopick.o mutation.o flavor.o spells3.o \
 	mspells1.o mspells2.o scores.o mind.o mane.o hissatsu.o \
 	bldg.o obj_kind.o wild.o avatar.o japanese.o mspells3.o \
+	mspells4.o \
 	main-ibm.o main.o chuukei.o
 
 # Compiler

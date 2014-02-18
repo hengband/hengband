@@ -43,6 +43,7 @@ OBJS = \
 	artifact.o autopick.o mutation.o flavor.o spells3.o \
 	mspells1.o mspells2.o scores.o mind.o mane.o hissatsu.o \
 	bldg.o obj_kind.o wild.o avatar.o japanese.o mspells3.o \
+	mspells4.o \
 	main-ibm.o main-dos.o main.o
 
 
@@ -138,6 +139,8 @@ monster1.o: monster1.c $(INCS)
 monster2.o: monster2.c $(INCS)
 mspells1.o: mspells1.c $(INCS)
 mspells2.o: mspells2.c $(INCS)
+mspells3.o: mspells3.c $(INCS)
+mspells4.o: mspells4.c $(INCS)
 mutation.o: mutation.c $(INCS)
 notes.o: notes.c $(INCS)
 object1.o: object1.c $(INCS)

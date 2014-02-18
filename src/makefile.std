@@ -57,6 +57,7 @@ SRCS = \
 	artifact.c autopick.c mutation.c flavor.c spells3.c \
 	mspells1.c mspells2.c scores.c mind.c mane.c hissatsu.c \
 	bldg.c obj_kind.c wild.c avatar.c japanese.c mspells3.c \
+	mspells4.c \
 	main-cap.c main-gcu.c main-x11.c main-xaw.c main.c chuukei.c
 
 OBJS = \
@@ -73,6 +74,7 @@ OBJS = \
 	artifact.o autopick.o mutation.o flavor.o spells3.o \
 	mspells1.o mspells2.o scores.o mind.o mane.o hissatsu.o \
 	bldg.o obj_kind.o wild.o avatar.o japanese.o mspells3.o \
+	mspells4.o \
 	main-cap.o main-gcu.o main-x11.o main-xaw.o main.o chuukei.o
 
 
