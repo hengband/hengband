@@ -1087,9 +1087,13 @@ static void analyze_general(object_type *o_ptr, char *desc_ptr)
 }
 
 
-/*
+/*!
+ * @brief アーティファクトがプレイヤーに与えるpval修正を構造体に収める /
  * List "player traits" altered by an artifact's pval. These include stats,
  * speed, infravision, tunneling, stealth, searching, and extra attacks.
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param p_ptr pval修正構造体の参照ポインタ
+ * @return なし
  */
 static void analyze_pval(object_type *o_ptr, pval_info_type *p_ptr)
 {
@@ -1144,8 +1148,13 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *p_ptr)
 	*affects_list = NULL;
 }
 
-
-/* Note the slaying specialties of a weapon */
+/*!
+ * @brief アーティファクトの種族スレイ特性を構造体に収める /
+ * Note the slaying specialties of a weapon
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param slay_list 種族スレイ構造体の参照ポインタ
+ * @return なし
+ */
 static void analyze_slay(object_type *o_ptr, cptr *slay_list)
 {
 	u32b flgs[TR_FLAG_SIZE];
@@ -1159,7 +1168,14 @@ static void analyze_slay(object_type *o_ptr, cptr *slay_list)
 	*slay_list = NULL;
 }
 
-/* Note an object's elemental brands */
+
+/*!
+ * @brief アーティファクトの属性ブランド特性を構造体に収める /
+ * Note an object's elemental brands
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param brand_list 属性ブランド構造体の参照ポインタ
+ * @return なし
+ */
 static void analyze_brand(object_type *o_ptr, cptr *brand_list)
 {
 	u32b flgs[TR_FLAG_SIZE];
@@ -1174,7 +1190,13 @@ static void analyze_brand(object_type *o_ptr, cptr *brand_list)
 }
 
 
-/* Note the resistances granted by an object */
+/*!
+ * @brief アーティファクトの通常耐性を構造体に収める /
+ * Note an object's elemental brands
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param resist_list 通常耐性構造体の参照ポインタ
+ * @return なし
+ */
 static void analyze_resist(object_type *o_ptr, cptr *resist_list)
 {
 	u32b flgs[TR_FLAG_SIZE];
@@ -1189,7 +1211,13 @@ static void analyze_resist(object_type *o_ptr, cptr *resist_list)
 }
 
 
-/* Note the immunities granted by an object */
+/*!
+ * @brief アーティファクトの免疫特性を構造体に収める /
+ * Note the immunities granted by an object
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param immune_list 免疫構造体の参照ポインタ
+ * @return なし
+ */
 static void analyze_immune(object_type *o_ptr, cptr *immune_list)
 {
 	u32b flgs[TR_FLAG_SIZE];
@@ -1204,7 +1232,13 @@ static void analyze_immune(object_type *o_ptr, cptr *immune_list)
 }
 
 
-/* Note which stats an object sustains */
+/*!
+ * @brief アーティファクトの維持特性を構造体に収める /
+ * Note which stats an object sustains
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param sustain_list 維持特性構造体の参照ポインタ
+ * @return なし
+ */
 static void analyze_sustains(object_type *o_ptr, cptr *sustain_list)
 {
 	u32b flgs[TR_FLAG_SIZE];
@@ -1238,9 +1272,13 @@ static void analyze_sustains(object_type *o_ptr, cptr *sustain_list)
 }
 
 
-/*
+/*!
+ * @brief アーティファクトのその他の特性を構造体に収める /
  * Note miscellaneous powers bestowed by an artifact such as see invisible,
  * free action, permanent light, etc.
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param misc_list その他の特性構造体の参照ポインタ
+ * @return なし
  */
 static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 {
@@ -1321,8 +1359,12 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 }
 
 
-/*
+/*!
+ * @brief アーティファクトの追加ランダム特性を構造体に収める /
  * Note additional ability and/or resistance of fixed artifacts
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param addition 追加ランダム耐性構造体の参照ポインタ
+ * @return なし
  */
 static void analyze_addition(object_type *o_ptr, char *addition)
 {
@@ -1361,9 +1403,13 @@ static void analyze_addition(object_type *o_ptr, char *addition)
 }
 
 
-/*
+/*!
+ * @brief アーティファクトの基本情報を文字列に収める /
  * Determine the minimum depth an artifact can appear, its rarity, its weight,
  * and its value in gold pieces
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param misc_desc 基本情報を収める文字列参照ポインタ
+ * @return なし
  */
 static void analyze_misc(object_type *o_ptr, char *misc_desc)
 {
@@ -1381,8 +1427,13 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 }
 
 
-/*
+/*!
+ * @brief アーティファクトの情報全体を構造体に収める /
  * Fill in an object description structure for a given object
+ * and its value in gold pieces
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param misc_desc 全アーティファクト情報を収める文字列参照ポインタ
+ * @return なし
  */
 static void object_analyze(object_type *o_ptr, obj_desc_list *desc_ptr)
 {
@@ -1400,6 +1451,10 @@ static void object_analyze(object_type *o_ptr, obj_desc_list *desc_ptr)
 }
 
 
+/*!
+ * @brief バッファにアーティファクト出力情報ヘッダを収める /
+ * @return なし
+ */
 static void print_header(void)
 {
 	char buf[80];
