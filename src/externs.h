@@ -1631,7 +1631,7 @@ extern void spell_RF6_TPORT(cptr m_name, int m_idx);
 extern int spell_RF6_WORLD(cptr m_name, monster_type* m_ptr, int m_idx);
 extern int spell_RF6_SPECIAL(cptr m_name, monster_type* m_ptr, monster_race* r_ptr, u32b mode, bool blind, bool direct, int y, int x, int m_idx);
 extern void spell_RF6_TELE_TO(cptr m_name, monster_type* m_ptr);
-extern void spell_RF6_TELE_AWAY(cptr m_name, monster_type* m_ptr);
+extern void spell_RF6_TELE_AWAY(cptr m_name, int m_idx);
 extern void spell_RF6_TELE_LEVEL(bool blind, cptr m_name, int m_idx, int rlev);
 extern int spell_RF6_PSY_SPEAR(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int m_idx, bool learnable);
 extern void spell_RF6_DARKNESS(bool blind, cptr m_name, bool can_use_lite_area);

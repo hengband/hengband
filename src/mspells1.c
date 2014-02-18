@@ -1919,7 +1919,7 @@ bool make_attack_spell(int m_idx)
             break;
 
         case 160 + 8:  spell_RF6_TELE_TO(m_name, m_ptr); break;     /* RF6_TELE_TO */
-        case 160 + 9:  spell_RF6_TELE_AWAY(m_name, m_ptr); break;     /* RF6_TELE_AWAY */
+        case 160 + 9:  spell_RF6_TELE_AWAY(m_name, m_idx); break;     /* RF6_TELE_AWAY */
         case 160 + 10: spell_RF6_TELE_LEVEL(blind, m_name, m_idx, rlev); break;     /* RF6_TELE_LEVEL */
         case 160 + 11: spell_RF6_PSY_SPEAR(blind, m_name, r_ptr, rlev, m_idx, learnable); break;    /* RF6_PSY_SPEAR */
         case 160 + 12: spell_RF6_DARKNESS(blind, m_name, can_use_lite_area); break;     /* RF6_DARKNESS */
