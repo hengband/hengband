@@ -1590,6 +1590,32 @@ extern void spell_RF4_BREATH(int GF_TYPE, bool blind, cptr m_name, monster_type*
 extern void spell_RF4_BA_CHAO(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
 extern void spell_RF4_BA_NUKE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
 extern void spell_RF5_BA_ACID(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BA_ELEC(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BA_FIRE(monster_type* m_ptr, bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BA_COLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BA_POIS(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BA_NETH(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BA_WATE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BA_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BA_DARK(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_DRAIN_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_MIND_BLAST(bool seen, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BRAIN_SMASH(bool seen, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_CAUSE_1(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_CAUSE_2(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_CAUSE_3(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_CAUSE_4(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BO_ACID(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BO_ELEC(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BO_FIRE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BO_COLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BA_LITE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BO_NETH(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BO_WATE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BO_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BO_PLAS(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_BO_ICEE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
+extern void spell_RF5_MISSILE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable);
 
 /* hissatsu.c */
 extern void hissatsu_info(char *p, int power);

@@ -119,6 +119,7 @@
     <ClCompile Include="..\..\src\mspells1.c" />
     <ClCompile Include="..\..\src\mspells2.c" />
     <ClCompile Include="..\..\src\mspells3.c" />
+    <ClCompile Include="..\..\src\mspells4.c" />
     <ClCompile Include="..\..\src\mutation.c" />
     <ClCompile Include="..\..\src\obj_kind.c" />
     <ClCompile Include="..\..\src\object1.c" />
