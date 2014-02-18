@@ -2329,8 +2329,13 @@ static void spoil_mon_info(cptr fname)
 #define MAX_EVOL_DEPTH 64
 
 
-/*
+/*!
+ * @brief int配列でstrncmp()と似た比較処理を行う / 
  * Compare two int-type array like strncmp() and return TRUE if equals
+ * @param a 比較するint配列1
+ * @param b 比較するint配列2
+ * @param length 
+ * @return 両者の値が等しければTRUEを返す
  */
 static bool int_n_cmp(int *a, int *b, int length)
 {
@@ -2348,8 +2353,12 @@ static bool int_n_cmp(int *a, int *b, int length)
 }
 
 
-/*
+/*!
+ * @brief ある木が指定された木の部分木かどうかを返す / 
  * Returns TRUE if an evolution tree is "partial tree"
+ * @param tree 元となる木構造リスト
+ * @param partical_tree 部分木かどうか判定したい木構造リスト
+ * @return 部分木ならばTRUEを返す
  */
 static bool is_partial_tree(int *tree, int *partial_tree)
 {
@@ -2370,8 +2379,14 @@ static bool is_partial_tree(int *tree, int *partial_tree)
 }
 
 
-/*
+/*!
+ * @brief 進化ツリーをソートするためモンスター種族の判定関数 / 
  * Sorting hook -- Comp function
+ * @param u 進化木構造データ
+ * @param v 未使用
+ * @param a 比較したいモンスター種族ID1
+ * @param b 比較したいモンスター種族ID2
+ * @return 2が大きければTRUEを返す
  */
 static bool ang_sort_comp_evol_tree(vptr u, vptr v, int a, int b)
 {
@@ -2401,9 +2416,14 @@ static bool ang_sort_comp_evol_tree(vptr u, vptr v, int a, int b)
 	return w1 <= w2;
 }
 
-
-/*
+/*!
+ * @brief 進化ツリーをソートするため木構造のスワップ関数 / 
  * Sorting hook -- Swap function
+ * @param u 進化木構造データ
+ * @param v 未使用
+ * @param a スワップしたい木構造1
+ * @param b スワップしたい木構造2
+ * @return 2が大きければTRUEを返す
  */
 static void ang_sort_swap_evol_tree(vptr u, vptr v, int a, int b)
 {
@@ -2419,9 +2439,11 @@ static void ang_sort_swap_evol_tree(vptr u, vptr v, int a, int b)
 	evol_tree[b] = holder;
 }
 
-
-/*
+/*!
+ * @brief 進化ツリーをスポイラー出力するメインルーチン / 
  * Print monsters' evolution information to file
+ * @param 出力ファイル名
+ * @return なし
  */
 static void spoil_mon_evol(cptr fname)
 {
@@ -2568,8 +2590,10 @@ static void spoil_mon_evol(cptr fname)
  */
 extern void do_cmd_spoilers(void);
 
-/*
+/*!
+ * @brief スポイラー出力を行うコマンドのメインルーチン / 
  * Create Spoiler files -BEN-
+ * @return なし
  */
 void do_cmd_spoilers(void)
 {
@@ -2644,8 +2668,12 @@ void do_cmd_spoilers(void)
 	}
 }
 
-/*
+/*!
+ * @brief ランダムアーティファクト１件を解析する / 
  * Fill in an object description structure for a given object
+ * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
+ * @param desc_ptr 記述内容を収める構造体参照ポインタ
+ * @return なし
  */
 static void random_artifact_analyze(object_type *o_ptr, obj_desc_list *desc_ptr)
 {
@@ -2667,8 +2695,14 @@ static void random_artifact_analyze(object_type *o_ptr, obj_desc_list *desc_ptr)
 #endif
 }
 
-/* Create a spoiler file entry for an artifact */
-
+/*!
+ * @brief ランダムアーティファクト１件をスポイラー出力する / 
+ * Create a spoiler file entry for an artifact
+ * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
+ * @param desc_ptr 記述内容を収めた構造体参照ポインタ
+ * Fill in an object description structure for a given object
+ * @return なし
+ */
 static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 {
 	pval_info_type *pval_ptr = &art_ptr->pval_info;
@@ -2731,8 +2765,13 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 	fprintf(fff, "%s%s\n\n", INDENT1, art_ptr->misc_desc);
 }
 
-/* Create a part of file for random artifacts */
 
+/*!
+ * @brief ランダムアーティファクト内容をスポイラー出力するサブルーチン / 
+ * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
+ * @param i 出力したい記録ランダムアーティファクトID
+ * @return なし
+ */
 static void spoil_random_artifact_aux(object_type *o_ptr, int i)
 {
 	obj_desc_list artifact;
@@ -2748,8 +2787,11 @@ static void spoil_random_artifact_aux(object_type *o_ptr, int i)
 	spoiler_print_randart(o_ptr, &artifact);
 }
 
-/*
+/*!
+ * @brief ランダムアーティファクト内容をスポイラー出力するメインルーチン / 
  * Create a list file for random artifacts
+ * @param fname 出力ファイル名
+ * @return なし
  */
 void spoil_random_artifact(cptr fname)
 {
