@@ -1432,7 +1432,7 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
  * Fill in an object description structure for a given object
  * and its value in gold pieces
  * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param misc_desc 全アーティファクト情報を収める文字列参照ポインタ
+ * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
  * @return なし
  */
 static void object_analyze(object_type *o_ptr, obj_desc_list *desc_ptr)
@@ -2357,7 +2357,7 @@ static bool int_n_cmp(int *a, int *b, int length)
  * @brief ある木が指定された木の部分木かどうかを返す / 
  * Returns TRUE if an evolution tree is "partial tree"
  * @param tree 元となる木構造リスト
- * @param partical_tree 部分木かどうか判定したい木構造リスト
+ * @param partial_tree 部分木かどうか判定したい木構造リスト
  * @return 部分木ならばTRUEを返す
  */
 static bool is_partial_tree(int *tree, int *partial_tree)
@@ -2442,7 +2442,7 @@ static void ang_sort_swap_evol_tree(vptr u, vptr v, int a, int b)
 /*!
  * @brief 進化ツリーをスポイラー出力するメインルーチン / 
  * Print monsters' evolution information to file
- * @param 出力ファイル名
+ * @param fname 出力ファイル名
  * @return なし
  */
 static void spoil_mon_evol(cptr fname)
@@ -2699,7 +2699,7 @@ static void random_artifact_analyze(object_type *o_ptr, obj_desc_list *desc_ptr)
  * @brief ランダムアーティファクト１件をスポイラー出力する / 
  * Create a spoiler file entry for an artifact
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
- * @param desc_ptr 記述内容を収めた構造体参照ポインタ
+ * @param art_ptr 記述内容を収めた構造体参照ポインタ
  * Fill in an object description structure for a given object
  * @return なし
  */
