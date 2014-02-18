@@ -1506,6 +1506,13 @@ static void print_header(void)
 #define LIST_SEP ';'
 #endif
 
+/*!
+ * @brief フラグ名称を出力する汎用関数
+ * @param header ヘッダに出力するフラグ群の名前
+ * @param list フラグ名リスト
+ * @param separator フラグ表示の区切り記号
+ * @return なし
+ */
 static void spoiler_outlist(cptr header, cptr *list, char separator)
 {
 	int line_len, buf_len;
@@ -1597,9 +1604,12 @@ static void spoiler_outlist(cptr header, cptr *list, char separator)
 	fprintf(fff, "%s\n", line);
 }
 
-
-/* Create a spoiler file entry for an artifact */
-
+/*!
+ * @brief アーティファクト一件をスポイラー出力する /
+ * Create a spoiler file entry for an artifact
+ * @param art_ptr アーティファクト情報をまとめた構造体の参照ポインタ
+ * @return なし
+ */
 static void spoiler_print_art(obj_desc_list *art_ptr)
 {
 	pval_info_type *pval_ptr = &art_ptr->pval_info;
@@ -1662,8 +1672,12 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
 }
 
 
-/*
+/*!
+ * @brief アーティファクト情報を出力するためにダミー生成を行う /
  * Hack -- Create a "forged" artifact
+ * @param o_ptr 一時生成先を保管するオブジェクト構造体
+ * @param name1 生成するアーティファクトID
+ * @return 生成が成功した場合TRUEを返す
  */
 static bool make_fake_artifact(object_type *o_ptr, int name1)
 {
@@ -1702,8 +1716,11 @@ static bool make_fake_artifact(object_type *o_ptr, int name1)
 }
 
 
-/*
+/*!
+ * @brief アーティファクト情報のスポイラー出力を行うメインルーチン /
  * Create a spoiler file for artifacts
+ * @param fname 生成ファイル名
+ * @return なし
  */
 static void spoil_artifact(cptr fname)
 {
@@ -1784,11 +1801,11 @@ static void spoil_artifact(cptr fname)
 }
 
 
-
-
-
-/*
+/*!
+ * @brief モンスター簡易情報のスポイラー出力を行うメインルーチン /
  * Create a spoiler file for monsters   -BEN-
+ * @param fname 生成ファイル名
+ * @return なし
  */
 static void spoil_mon_desc(cptr fname)
 {
@@ -1953,9 +1970,12 @@ static void spoil_mon_desc(cptr fname)
 
 
 
-/*
+/*!
+ * @brief 文字列をファイルポインタに出力する /
  * Buffer text to the given file. (-SHAWN-)
  * This is basically c_roff() from mon-desc.c with a few changes.
+ * @param str 文字列参照ポインタ
+ * @return なし
  */
 static void spoil_out(cptr str)
 {
@@ -2118,8 +2138,12 @@ static void spoil_out(cptr str)
 
 
 
-/*
- *  Hook function used in spoil_mon_info()
+/*!
+ * @brief 関数ポインタ用の出力関数 /
+ * Hook function used in spoil_mon_info()
+ * @param attr 未使用
+ * @param str 文字列参照ポインタ
+ * @return なし
  */
 static void roff_func(byte attr, cptr str)
 {
@@ -2130,8 +2154,11 @@ static void roff_func(byte attr, cptr str)
 }
 
 
-/*
+/*!
+ * @brief モンスター詳細情報をスポイラー出力するメインルーチン /
  * Create a spoiler file for monsters (-SHAWN-)
+ * @param fname ファイル名
+ * @return なし
  */
 static void spoil_mon_info(cptr fname)
 {
