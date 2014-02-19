@@ -507,20 +507,20 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
- * @param spell_type モンスターからモンスターへ撃つならSPELL_MON_TO_MON、モンスターからプレイヤーならSPELL_MON_TO_PLAYER
+ * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int spell_type)
+void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
   {
     int flg;
     bool learnable = spell_learnable(m_idx);
 
-    switch (spell_type)
+    switch (target_type)
     {
-    case SPELL_MON_TO_MON:
+    case MONSTER_TO_MONSTER:
         flg = PROJECT_STOP | PROJECT_KILL;
         break;
-    case SPELL_MON_TO_PLAYER:
+    case MONSTER_TO_PLAYER:
         flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER;
         break;
     }
@@ -538,20 +538,20 @@ void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int spell_
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
- * @param spell_type モンスターからモンスターへ撃つならSPELL_MON_TO_MON、モンスターからプレイヤーならSPELL_MON_TO_PLAYER
+ * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int spell_type)
+void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
 {
     int flg;
     bool learnable = spell_learnable(m_idx);
 
-    switch (spell_type)
+    switch (target_type)
     {
-    case SPELL_MON_TO_MON:
+    case MONSTER_TO_MONSTER:
         flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU;
         break;
-    case SPELL_MON_TO_PLAYER:
+    case MONSTER_TO_PLAYER:
         flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER;
         break;
     }
@@ -572,22 +572,22 @@ void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int spell_
  * @param rad 半径
  * @param breath TRUEならばブレス処理、FALSEならばボール処理
  * @param monspell モンスター魔法のID
- * @param spell_type モンスターからモンスターへ撃つならSPELL_MON_TO_MON、モンスターからプレイヤーならSPELL_MON_TO_PLAYER
+ * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int spell_type)
+void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type)
 {
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool learnable = spell_learnable(m_idx);
 	int flg;
 
-    switch (spell_type)
+    switch (target_type)
     {
-        case SPELL_MON_TO_MON:
+        case MONSTER_TO_MONSTER:
             flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
             break;
-        case SPELL_MON_TO_PLAYER:
+        case MONSTER_TO_PLAYER:
             flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
             break;
     }
@@ -1878,34 +1878,34 @@ bool make_attack_spell(int m_idx)
         case 96 + 1:   break;   /* RF4_XXX1 */
         case 96 + 2:   MP_spell_RF4_DISPEL(m_idx); break;  /* RF4_DISPEL */
         case 96 + 3:   dam = MP_spell_RF4_ROCKET(y, x, m_idx); break;   /* RF4_ROCKET */
-        case 96 + 4:   dam = spell_RF4_SHOOT(y, x, m_idx); break;    /* RF4_SHOOT */
+        case 96 + 4:   dam = MP_spell_RF4_SHOOT(y, x, m_idx); break;    /* RF4_SHOOT */
         case 96 + 5:   break;   /* RF4_XXX2 */
         case 96 + 6:   break;   /* RF4_XXX3 */
         case 96 + 7:   break;   /* RF4_XXX4 */
-        case 96 + 8:   dam = spell_RF4_BREATH(GF_ACID, y, x, m_idx); break;    /* RF4_BR_ACID */
-        case 96 + 9:   dam = spell_RF4_BREATH(GF_ELEC, y, x, m_idx); break;    /* RF4_BR_ELEC */
-        case 96 + 10:  dam = spell_RF4_BREATH(GF_FIRE, y, x, m_idx); break;    /* RF4_BR_FIRE */
-        case 96 + 11:  dam = spell_RF4_BREATH(GF_COLD, y, x, m_idx); break;    /* RF4_BR_COLD */
-        case 96 + 12:  dam = spell_RF4_BREATH(GF_POIS, y, x, m_idx); break;    /* RF4_BR_POIS */
-        case 96 + 13:  dam = spell_RF4_BREATH(GF_NETHER, y, x, m_idx); break;    /* RF4_BR_NETH */
-        case 96 + 14:  dam = spell_RF4_BREATH(GF_LITE, y_br_lite, x_br_lite, m_idx); break;    /* RF4_BR_LITE */
-        case 96 + 15:  dam = spell_RF4_BREATH(GF_DARK, y, x, m_idx); break;    /* RF4_BR_DARK */
-        case 96 + 16:  dam = spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx); break;    /* RF4_BR_CONF */
-        case 96 + 17:  dam = spell_RF4_BREATH(GF_SOUND, y, x, m_idx); break;    /* RF4_BR_SOUN */
-        case 96 + 18:  dam = spell_RF4_BREATH(GF_CHAOS, y, x, m_idx); break;    /* RF4_BR_CHAO */
-        case 96 + 19:  dam = spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx); break;    /* RF4_BR_DISE */
-        case 96 + 20:  dam = spell_RF4_BREATH(GF_NEXUS, y, x, m_idx); break;    /* RF4_BR_NEXU */
-        case 96 + 21:  dam = spell_RF4_BREATH(GF_TIME, y, x, m_idx); break;    /* RF4_BR_TIME */
-        case 96 + 22:  dam = spell_RF4_BREATH(GF_INERTIA, y, x, m_idx); break;    /* RF4_BR_INER */
-        case 96 + 23:  dam = spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx); break;    /* RF4_BR_GRAV */
-        case 96 + 24:  dam = spell_RF4_BREATH(GF_SHARDS, y, x, m_idx); break;    /* RF4_BR_SHAR */
-        case 96 + 25:  dam = spell_RF4_BREATH(GF_PLASMA, y, x, m_idx); break;    /* RF4_BR_PLAS */
-        case 96 + 26:  dam = spell_RF4_BREATH(GF_FORCE, y, x, m_idx); break;    /* RF4_BR_WALL */
-        case 96 + 27:  dam = spell_RF4_BREATH(GF_MANA, y, x, m_idx); break;    /* RF4_BR_MANA */
+        case 96 + 8:   dam = MP_spell_RF4_BREATH(GF_ACID, y, x, m_idx); break;    /* RF4_BR_ACID */
+        case 96 + 9:   dam = MP_spell_RF4_BREATH(GF_ELEC, y, x, m_idx); break;    /* RF4_BR_ELEC */
+        case 96 + 10:  dam = MP_spell_RF4_BREATH(GF_FIRE, y, x, m_idx); break;    /* RF4_BR_FIRE */
+        case 96 + 11:  dam = MP_spell_RF4_BREATH(GF_COLD, y, x, m_idx); break;    /* RF4_BR_COLD */
+        case 96 + 12:  dam = MP_spell_RF4_BREATH(GF_POIS, y, x, m_idx); break;    /* RF4_BR_POIS */
+        case 96 + 13:  dam = MP_spell_RF4_BREATH(GF_NETHER, y, x, m_idx); break;    /* RF4_BR_NETH */
+        case 96 + 14:  dam = MP_spell_RF4_BREATH(GF_LITE, y_br_lite, x_br_lite, m_idx); break;    /* RF4_BR_LITE */
+        case 96 + 15:  dam = MP_spell_RF4_BREATH(GF_DARK, y, x, m_idx); break;    /* RF4_BR_DARK */
+        case 96 + 16:  dam = MP_spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx); break;    /* RF4_BR_CONF */
+        case 96 + 17:  dam = MP_spell_RF4_BREATH(GF_SOUND, y, x, m_idx); break;    /* RF4_BR_SOUN */
+        case 96 + 18:  dam = MP_spell_RF4_BREATH(GF_CHAOS, y, x, m_idx); break;    /* RF4_BR_CHAO */
+        case 96 + 19:  dam = MP_spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx); break;    /* RF4_BR_DISE */
+        case 96 + 20:  dam = MP_spell_RF4_BREATH(GF_NEXUS, y, x, m_idx); break;    /* RF4_BR_NEXU */
+        case 96 + 21:  dam = MP_spell_RF4_BREATH(GF_TIME, y, x, m_idx); break;    /* RF4_BR_TIME */
+        case 96 + 22:  dam = MP_spell_RF4_BREATH(GF_INERTIA, y, x, m_idx); break;    /* RF4_BR_INER */
+        case 96 + 23:  dam = MP_spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx); break;    /* RF4_BR_GRAV */
+        case 96 + 24:  dam = MP_spell_RF4_BREATH(GF_SHARDS, y, x, m_idx); break;    /* RF4_BR_SHAR */
+        case 96 + 25:  dam = MP_spell_RF4_BREATH(GF_PLASMA, y, x, m_idx); break;    /* RF4_BR_PLAS */
+        case 96 + 26:  dam = MP_spell_RF4_BREATH(GF_FORCE, y, x, m_idx); break;    /* RF4_BR_WALL */
+        case 96 + 27:  dam = MP_spell_RF4_BREATH(GF_MANA, y, x, m_idx); break;    /* RF4_BR_MANA */
         case 96 + 28:  dam = spell_RF4_BA_NUKE(y, x, m_idx); break;   /* RF4_BA_NUKE */
-        case 96 + 29:  dam = spell_RF4_BREATH(GF_NUKE, y, x, m_idx); break;    /* RF4_BR_NUKE */
+        case 96 + 29:  dam = MP_spell_RF4_BREATH(GF_NUKE, y, x, m_idx); break;    /* RF4_BR_NUKE */
         case 96 + 30:  dam = spell_RF4_BA_CHAO(y, x, m_idx); break;  /* RF4_BA_CHAO */
-        case 96 + 31:  dam = spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx); break;    /* RF4_BR_DISI */
+        case 96 + 31:  dam = MP_spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx); break;    /* RF4_BR_DISI */
         case 128 + 0:  dam = spell_RF5_BA_ACID(y, x, m_idx); break;    /* RF5_BA_ACID */
         case 128 + 1:  dam = spell_RF5_BA_ELEC(y, x, m_idx); break;    /* RF5_BA_ELEC */
         case 128 + 2:  dam = spell_RF5_BA_FIRE(y, x, m_idx); break;    /* RF5_BA_FIRE */

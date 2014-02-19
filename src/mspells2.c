@@ -735,773 +735,93 @@ bool monst_spell_monst(int m_idx)
 
 	switch (thrown_spell)
 	{
-    case 96 + 0: MM_spell_RF4_SHRIEK(m_idx, t_idx); break; /* RF4_SHRIEK */
-    case 96 + 1: return FALSE;  /* RF4_XXX1 */
-    case 96 + 2: MM_spell_RF4_DISPEL(m_idx, t_idx); break; /* RF4_DISPEL */
-    case 96 + 3: dam = MM_spell_RF4_ROCKET(y, x, m_idx, t_idx); break; /* RF4_ROCKET */
-	
-	/* RF4_SHOOT */
-	case 96+4:
-		if (known)
-		{
-			if (see_either)
-			{
-				if (blind)
-				{
-					msg_format(_("%^sが奇妙な音を発した。", "%^s makes a strange noise."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに矢を放った。", "%^s fires an arrow at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_SHOOT);
-		}
-
-		dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
-		bolt(m_idx, y, x, GF_ARROW, dam, MS_SHOOT, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_XXX2 */
-	case 96+5:
-		/* XXX XXX XXX */
-		return FALSE;
-
-	/* RF4_XXX3 */
-	case 96+6:
-		/* XXX XXX XXX */
-		return FALSE;
-
-	/* RF4_XXX4 */
-	case 96+7:
-		/* XXX XXX XXX */
-		return FALSE;
-
-	/* RF4_BR_ACID */
-	case 96+8:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに酸のブレスを吐いた。", "%^s breathes acid at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-		breath(y, x, m_idx,GF_ACID,dam, 0, TRUE, MS_BR_ACID, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_ELEC */
-	case 96+9:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに稲妻のブレスを吐いた。", "%^s breathes lightning at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-        breath(y, x, m_idx,GF_ELEC, dam, 0, TRUE, MS_BR_ELEC, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_FIRE */
-	case 96+10:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに火炎のブレスを吐いた。", "%^s breathes fire at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-        breath(y, x, m_idx,GF_FIRE, dam, 0, TRUE, MS_BR_FIRE, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_COLD */
-	case 96+11:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに冷気のブレスを吐いた。", "%^s breathes frost at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-        breath(y, x, m_idx,GF_COLD, dam, 0, TRUE, MS_BR_COLD, SPELL_MON_TO_MON);
-		break;
-
-	/* RF4_BR_POIS */
-	case 96+12:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sにガスのブレスを吐いた。", "%^s breathes gas at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 800 ? 800 : (m_ptr->hp / 3));
-        breath(y, x, m_idx,GF_POIS, dam, 0, TRUE, MS_BR_POIS, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_NETH */
-	case 96+13:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに地獄のブレスを吐いた。", "%^s breathes nether at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 550 ? 550 : (m_ptr->hp / 6));
-        breath(y, x, m_idx,GF_NETHER, dam, 0, TRUE, MS_BR_NETHER, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_LITE */
-	case 96+14:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに閃光のブレスを吐いた。", "%^s breathes light at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 400 ? 400 : (m_ptr->hp / 6));
-        breath(y, x, m_idx,GF_LITE, dam, 0, TRUE, MS_BR_LITE, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_DARK */
-	case 96+15:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに暗黒のブレスを吐いた。", "%^s breathes darkness at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 400 ? 400 : (m_ptr->hp / 6));
-        breath(y, x, m_idx,GF_DARK, dam, 0, TRUE, MS_BR_DARK, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_CONF */
-	case 96+16:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに混乱のブレスを吐いた。", "%^s breathes confusion at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 450 ? 450 : (m_ptr->hp / 6));
-        breath(y, x, m_idx,GF_CONFUSION, dam, 0, TRUE, MS_BR_CONF, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_SOUN */
-	case 96+17:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (m_ptr->r_idx == MON_JAIAN)
-				{
-					msg_format(_("「ボォエ〜〜〜〜〜〜」", "'Booooeeeeee'"));
-				}
-				else if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに轟音のブレスを吐いた。", "%^s breathes sound at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 450 ? 450 : (m_ptr->hp / 6));
-        breath(y, x, m_idx,GF_SOUND, dam, 0, TRUE, MS_BR_SOUND, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_CHAO */
-	case 96+18:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sにカオスのブレスを吐いた。", "%^s breathes chaos at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 600 ? 600 : (m_ptr->hp / 6));
-        breath(y, x, m_idx, GF_CHAOS, dam, 0, TRUE, MS_BR_CHAOS, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_DISE */
-	case 96+19:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに劣化のブレスを吐いた。", "%^s breathes disenchantment at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 500 ? 500 : (m_ptr->hp / 6));
-        breath(y, x, m_idx, GF_DISENCHANT, dam, 0, TRUE, MS_BR_DISEN, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_NEXU */
-	case 96+20:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに因果混乱のブレスを吐いた。", "%^s breathes nexus at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 250 ? 250 : (m_ptr->hp / 3));
-        breath(y, x, m_idx, GF_NEXUS, dam, 0, TRUE, MS_BR_NEXUS, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_TIME */
-	case 96+21:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに時間逆転のブレスを吐いた。", "%^s breathes time at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 150 ? 150 : (m_ptr->hp / 3));
-        breath(y, x, m_idx, GF_TIME, dam, 0, TRUE, MS_BR_TIME, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_INER */
-	case 96+22:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに遅鈍のブレスを吐いた。", "%^s breathes inertia at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 200 ? 200 : (m_ptr->hp / 6));
-        breath(y, x, m_idx, GF_INERTIA, dam, 0, TRUE, MS_BR_INERTIA, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_GRAV */
-	case 96+23:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに重力のブレスを吐いた。", "%^s breathes gravity at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 200 ? 200 : (m_ptr->hp / 3));
-        breath(y, x, m_idx, GF_GRAVITY, dam, 0, TRUE, MS_BR_GRAVITY, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_SHAR */
-	case 96+24:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (m_ptr->r_idx == MON_BOTEI)
-				{
-					msg_format(_("「ボ帝ビルカッター！！！」", "'Boty-Build cutter!!!'"));
-				}
-				else if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに破片のブレスを吐いた。", "%^s breathes shards at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 500 ? 500 : (m_ptr->hp / 6));
-        breath(y, x, m_idx, GF_SHARDS, dam, 0, TRUE, MS_BR_SHARDS, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_PLAS */
-	case 96+25:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sにプラズマのブレスを吐いた。", "%^s breathes plasma at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 150 ? 150 : (m_ptr->hp / 6));
-        breath(y, x, m_idx,GF_PLASMA, dam, 0, TRUE, MS_BR_PLASMA, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_WALL */
-	case 96+26:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sにフォースのブレスを吐いた。", "%^s breathes force at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 200 ? 200 : (m_ptr->hp / 6));
-        breath(y, x, m_idx,GF_FORCE, dam, 0, TRUE, MS_BR_FORCE, SPELL_MON_TO_MON);
-		break;
-
-	/* RF4_BR_MANA */
-	case 96+27:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに魔力のブレスを吐いた。", "%^s breathes mana at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 250 ? 250 : (m_ptr->hp / 3));
-        breath(y, x, m_idx,GF_MANA, dam, 0, TRUE, MS_BR_MANA, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BA_NUKE */
-	case 96+28:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに放射能球を放った。", "%^s casts a ball of radiation at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-		}
-
-		dam = (rlev + damroll(10, 6));
-        breath(y, x, m_idx,GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_NUKE */
-	case 96+29:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに放射性廃棄物のブレスを吐いた。", "%^s breathes toxic waste at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 3) > 800 ? 800 : (m_ptr->hp / 3));
-        breath(y, x, m_idx,GF_NUKE, dam, 0, TRUE, MS_BR_NUKE, SPELL_MON_TO_MON);
-		break;
-
-	/* RF4_BA_CHAO */
-	case 96+30:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが恐ろしげにつぶやいた。", "%^s mumbles frighteningly."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに純ログルスを放った。", "%^s invokes raw Logrus upon %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-		}
-
-		dam = (rlev * 2) + damroll(10, 10);
-        breath(y, x, m_idx,GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, SPELL_MON_TO_MON);
-
-		break;
-
-	/* RF4_BR_DISI */
-	case 96+31:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sに分解のブレスを吐いた。", "%^s breathes disintegration at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-
-			sound(SOUND_BREATH);
-		}
-
-		dam = ((m_ptr->hp / 6) > 150 ? 150 : (m_ptr->hp / 6));
-        breath(y, x, m_idx,GF_DISINTEGRATE, dam, 0, TRUE, MS_BR_DISI, SPELL_MON_TO_MON);
-		break;
+    case 96 + 0:  MM_spell_RF4_SHRIEK(m_idx, t_idx); break; /* RF4_SHRIEK */
+    case 96 + 1:  return FALSE;  /* RF4_XXX1 */
+    case 96 + 2:  MM_spell_RF4_DISPEL(m_idx, t_idx); break; /* RF4_DISPEL */
+    case 96 + 3:  dam = MM_spell_RF4_ROCKET(y, x, m_idx, t_idx); break; /* RF4_ROCKET */
+    case 96 + 4:  dam = MM_spell_RF4_SHOOT(y, x, m_idx, t_idx); break; /* RF4_SHOOT */
+    case 96 + 5:  return FALSE; /* RF4_XXX2 */
+    case 96 + 6:  return FALSE; /* RF4_XXX3 */
+    case 96 + 7:  return FALSE; /* RF4_XXX4 */
+    case 96 + 8:  dam = MM_spell_RF4_BREATH(GF_ACID, y, x, m_idx, t_idx); break; /* RF4_BR_ACID */
+    case 96 + 9:  dam = MM_spell_RF4_BREATH(GF_ELEC, y, x, m_idx, t_idx); break; /* RF4_BR_ELEC */
+    case 96 + 10: dam = MM_spell_RF4_BREATH(GF_FIRE, y, x, m_idx, t_idx); break; /* RF4_BR_FIRE */
+    case 96 + 11: dam = MM_spell_RF4_BREATH(GF_COLD, y, x, m_idx, t_idx); break; /* RF4_BR_COLD */
+    case 96 + 12: dam = MM_spell_RF4_BREATH(GF_POIS, y, x, m_idx, t_idx); break; /* RF4_BR_POIS */
+    case 96 + 13: dam = MM_spell_RF4_BREATH(GF_NETHER, y, x, m_idx, t_idx); break; /* RF4_BR_NETH */
+    case 96 + 14: dam = MM_spell_RF4_BREATH(GF_LITE, y, x, m_idx, t_idx); break; /* RF4_BR_LITE */
+    case 96 + 15: dam = MM_spell_RF4_BREATH(GF_DARK, y, x, m_idx, t_idx); break; /* RF4_BR_DARK */
+    case 96 + 16: dam = MM_spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx, t_idx); break; /* RF4_BR_CONF */
+    case 96 + 17: dam = MM_spell_RF4_BREATH(GF_SOUND, y, x, m_idx, t_idx); break; /* RF4_BR_SOUN */
+    case 96 + 18: dam = MM_spell_RF4_BREATH(GF_CHAOS, y, x, m_idx, t_idx); break; /* RF4_BR_CHAO */
+    case 96 + 19: dam = MM_spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx, t_idx); break; /* RF4_BR_DISE */
+    case 96 + 20: dam = MM_spell_RF4_BREATH(GF_NEXUS, y, x, m_idx, t_idx); break; /* RF4_BR_NEXU */
+    case 96 + 21: dam = MM_spell_RF4_BREATH(GF_TIME, y, x, m_idx, t_idx); break; /* RF4_BR_TIME */
+    case 96 + 22: dam = MM_spell_RF4_BREATH(GF_INERTIA, y, x, m_idx, t_idx); break; /* RF4_BR_INER */
+    case 96 + 23: dam = MM_spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx, t_idx); break; /* RF4_BR_GRAV */
+    case 96 + 24: dam = MM_spell_RF4_BREATH(GF_SHARDS, y, x, m_idx, t_idx); break; /* RF4_BR_SHAR */
+    case 96 + 25: dam = MM_spell_RF4_BREATH(GF_PLASMA, y, x, m_idx, t_idx); break; /* RF4_BR_PLAS */
+    case 96 + 26: dam = MM_spell_RF4_BREATH(GF_FORCE, y, x, m_idx, t_idx); break; /* RF4_BR_WALL */
+    case 96 + 27: dam = MM_spell_RF4_BREATH(GF_MANA, y, x, m_idx, t_idx); break; /* RF4_BR_MANA */
+
+    /* RF4_BA_NUKE */
+    case 96 + 28:
+        if (known)
+        {
+            if (see_either)
+            {
+                disturb(1, 1);
+
+                if (blind)
+                {
+                    msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+                }
+                else
+                {
+                    msg_format(_("%^sが%sに放射能球を放った。", "%^s casts a ball of radiation at %s."), m_name, t_name);
+                }
+            }
+            else
+            {
+                mon_fight = TRUE;
+            }
+        }
+
+        dam = (rlev + damroll(10, 6));
+        breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, MONSTER_TO_MONSTER);
+
+        break;
+
+    case 96 + 29: dam = MM_spell_RF4_BREATH(GF_NUKE, y, x, m_idx, t_idx); break; /* RF4_BR_NUKE */
+    
+    /* RF4_BA_CHAO */
+    case 96 + 30:
+        if (known)
+        {
+            if (see_either)
+            {
+                disturb(1, 1);
+
+                if (blind)
+                {
+                    msg_format(_("%^sが恐ろしげにつぶやいた。", "%^s mumbles frighteningly."), m_name);
+                }
+                else
+                {
+                    msg_format(_("%^sが%sに純ログルスを放った。", "%^s invokes raw Logrus upon %s."), m_name, t_name);
+                }
+            }
+            else
+            {
+                mon_fight = TRUE;
+            }
+        }
+
+        dam = (rlev * 2) + damroll(10, 10);
+        breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, MONSTER_TO_MONSTER);
+        break;
+
+    case 96 + 31: dam = MM_spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx, t_idx); break; /* RF4_BR_DISI */
 
 	/* RF5_BA_ACID */
 	case 128+0:
@@ -1537,7 +857,7 @@ bool monst_spell_monst(int m_idx)
 			rad = 2;
 			dam = (randint1(rlev * 3) + 15);
 		}
-        breath(y, x, m_idx,GF_ACID, dam, rad, FALSE, MS_BALL_ACID, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_ACID, dam, rad, FALSE, MS_BALL_ACID, MONSTER_TO_MONSTER);
 		break;
 
 	/* RF5_BA_ELEC */
@@ -1573,7 +893,7 @@ bool monst_spell_monst(int m_idx)
 			rad = 2;
 			dam = (randint1(rlev * 3 / 2) + 8);
 		}
-        breath(y, x, m_idx,GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, MONSTER_TO_MONSTER);
 		break;
 
 	/* RF5_BA_FIRE */
@@ -1620,7 +940,7 @@ bool monst_spell_monst(int m_idx)
 			rad = 2;
 			dam = (randint1(rlev * 7 / 2) + 10);
 		}
-        breath(y, x, m_idx,GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, MONSTER_TO_MONSTER);
 		break;
 
 	/* RF5_BA_COLD */
@@ -1657,7 +977,7 @@ bool monst_spell_monst(int m_idx)
 			rad = 2;
 			dam = (randint1(rlev * 3 / 2) + 10);
 		}
-        breath(y, x, m_idx,GF_COLD, dam, rad, FALSE, MS_BALL_COLD, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_COLD, dam, rad, FALSE, MS_BALL_COLD, MONSTER_TO_MONSTER);
 		break;
 
 	/* RF5_BA_POIS */
@@ -1685,7 +1005,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(12, 2) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-        breath(y, x, m_idx,GF_POIS, dam, 2, FALSE, MS_BALL_POIS, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_POIS, dam, 2, FALSE, MS_BALL_POIS, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1713,7 +1033,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = 50 + damroll(10, 10) + (rlev * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1));
-        breath(y, x, m_idx,GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1743,7 +1063,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint1(rlev * 3) : randint1(rlev * 2)) + 50;
-        breath(y, x, m_idx,GF_WATER, dam, 4, FALSE, MS_BALL_WATER, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_WATER, dam, 4, FALSE, MS_BALL_WATER, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1771,7 +1091,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (rlev * 4) + 50 + damroll(10, 10);
-        breath(y, x, m_idx,GF_MANA, dam, 4, FALSE, MS_BALL_MANA, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_MANA, dam, 4, FALSE, MS_BALL_MANA, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1799,7 +1119,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (rlev * 4) + 50 + damroll(10, 10);
-        breath(y, x, m_idx,GF_DARK, dam, 4, FALSE, MS_BALL_DARK, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_DARK, dam, 4, FALSE, MS_BALL_DARK, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1812,7 +1132,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((randint1(rlev) / 2) + 1);
-        breath(y, x, m_idx,GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1824,7 +1144,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(7, 7);
-        breath(y, x, m_idx,GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1836,7 +1156,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(12, 12);
-        breath(y, x, m_idx,GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1855,7 +1175,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(3, 8);
-        breath(y, x, m_idx,GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1875,7 +1195,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(8, 8);
-        breath(y, x, m_idx,GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1895,7 +1215,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(10, 15);
-        breath(y, x, m_idx,GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1915,7 +1235,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(15, 15);
-        breath(y, x, m_idx,GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1934,7 +1254,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (damroll(7, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-        bolt(m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1953,7 +1273,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (damroll(4, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-        bolt(m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1972,7 +1292,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (damroll(9, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-        bolt(m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -1991,7 +1311,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (damroll(6, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-        bolt(m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -2020,7 +1340,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (rlev * 4) + 50 + damroll(10, 10);
-        breath(y, x, m_idx,GF_LITE, dam, 4, FALSE, MS_STARBURST, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_LITE, dam, 4, FALSE, MS_STARBURST, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -2040,7 +1360,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = 30 + damroll(5, 5) + (rlev * 4) / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3);
-        bolt(m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -2060,7 +1380,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(10, 10) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-        bolt(m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -2080,7 +1400,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = randint1(rlev * 7 / 2) + 50;
-        bolt(m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -2100,7 +1420,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = 10 + damroll(8, 7) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-        bolt(m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -2120,7 +1440,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(6, 6) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-        bolt(m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -2140,7 +1460,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(2, 6) + (rlev / 3);
-        bolt(m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, SPELL_MON_TO_MON);
+        bolt(m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -2363,7 +1683,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = 20; /* Dummy power */
-        breath(y, x, m_idx,GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, SPELL_MON_TO_MON);
+        breath(y, x, m_idx,GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_MONSTER);
 
 		break;
 
@@ -2752,7 +2072,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (r_ptr->flags2 & RF2_POWERFUL) ? (randint1(rlev * 2) + 180) : (randint1(rlev * 3 / 2) + 120);
-		beam(m_idx, y, x, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, SPELL_MON_TO_MON);
+		beam(m_idx, y, x, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, MONSTER_TO_MONSTER);
 		break;
 
 	/* RF6_DARKNESS */

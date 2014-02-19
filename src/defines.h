@@ -5696,8 +5696,8 @@ extern int PlayerUID;
 	(have_flag(ARRAY, TR_LITE_M1) || have_flag(ARRAY, TR_LITE_M2) || have_flag(ARRAY, TR_LITE_M3))
 
 /* Spell Type flag */
-#define SPELL_MON_TO_PLAYER     0x01
-#define SPELL_MON_TO_MON        0x02
+#define MONSTER_TO_PLAYER     0x01
+#define MONSTER_TO_MONSTER    0x02
 
 /* summoning number */
 #define S_NUM_6     (easy_band ? 2 : 6)
