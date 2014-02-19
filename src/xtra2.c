@@ -1785,7 +1785,7 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
 	}
 	
 	/* Special penalty for rest_and_shoot exp scum */
-	if ((m_ptr->dealt_damage > m_ptr->max_maxhp) && (m_ptr->hp >= 0))
+	if ((m_ptr->dealt_damage > (u32b)m_ptr->max_maxhp) && (m_ptr->hp >= 0))
 	{
 		int over_damage = m_ptr->dealt_damage / m_ptr->max_maxhp;
 		if (over_damage > 32) over_damage = 32;
@@ -1880,7 +1880,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 	m_ptr->hp -= dam;
 	
 	m_ptr->dealt_damage += dam;
-	if(m_ptr->dealt_damage > m_ptr->max_maxhp * 100) m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
+	if(m_ptr->dealt_damage > (u32b)m_ptr->max_maxhp * 100) m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
 	if (p_ptr->wizard)
 	{
 		msg_format( _("合計%d/%dのダメージを与えた。","You do %d (out of %d) damage."),

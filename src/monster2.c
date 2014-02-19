@@ -3681,7 +3681,7 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 		n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);
 		for(j = 0; j < n; j++)
 		{
-			int nx, ny, z, d = 7;
+			int nx, ny, d = 7;
 			scatter(&ny, &nx, y, x, d, 0);
 			(void)place_monster_one(place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
 		}

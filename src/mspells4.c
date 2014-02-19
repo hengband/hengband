@@ -2,7 +2,7 @@
 
 cptr monster_name(int m_idx)
 {
-    char            m_name[80];
+    static char            m_name[80];
     monster_type    *m_ptr = &m_list[m_idx];
     monster_desc(m_name, m_ptr, 0x00);
     return m_name;
@@ -55,12 +55,12 @@ int spell_core(int SPELL_NUM, int hp, int y, int x, int m_idx, int SPELL_TYPE)
         dam = (hp / 4) > 800 ? 800 : (hp / 4);
         if (SPELL_TYPE == SPELL_MON_TO_PLAYER)
         {
-            breath(y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, learnable);
+            breath(y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET);
             update_smart_learn(m_idx, DRS_SHARD);
         }
         else if (SPELL_TYPE == SPELL_MON_TO_MON)
         {
-            monst_breath_monst(m_idx, y, x, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, learnable);
+            monst_breath_monst(m_idx, y, x, GF_ROCKET, dam, 2, FALSE, MS_ROCKET);
         }
         break;
     }
@@ -197,7 +197,7 @@ int spell_RF4_SHOOT(int m_idx)
         msg_format(_("%^sが矢を放った。", "%^s fires an arrow."), m_name);
 
     dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
-    bolt(m_idx, GF_ARROW, dam, MS_SHOOT, learnable);
+    bolt(m_idx, GF_ARROW, dam, MS_SHOOT);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
 }
@@ -367,7 +367,7 @@ int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx)
         msg_format(_("%^sが%^sのブレスを吐いた。", "%^s breathes %^s."), m_name, type_s);
     }
 
-    breath(y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, learnable);
+    breath(y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type);
     if (smart_learn) update_smart_learn(m_idx, drs_type);
     return dam;
 }
@@ -390,7 +390,7 @@ int spell_RF4_BA_CHAO(int y, int x, int m_idx)
     
     dam = ((r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 3) : (rlev * 2)) + damroll(10, 10);
 
-    breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, learnable);
+    breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS);
     update_smart_learn(m_idx, DRS_CHAOS);
     return dam;
 }
@@ -412,7 +412,7 @@ int spell_RF4_BA_NUKE(int y, int x, int m_idx)
     
     dam = (rlev + damroll(10, 6)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 
-    breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, learnable);
+    breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE);
     update_smart_learn(m_idx, DRS_POIS);
     return dam;
 }
@@ -442,7 +442,7 @@ int spell_RF5_BA_ACID(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 3) + 15);
     }
-    breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, learnable);
+    breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID);
     update_smart_learn(m_idx, DRS_ACID);
     return dam;
 }
@@ -472,7 +472,7 @@ int spell_RF5_BA_ELEC(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 3 / 2) + 8);
     }
-    breath(y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, learnable);
+    breath(y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC);
     update_smart_learn(m_idx, DRS_ELEC);
     return dam;
 }
@@ -512,7 +512,7 @@ int spell_RF5_BA_FIRE(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 7 / 2) + 10);
     }
-    breath(y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, learnable);
+    breath(y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE);
     update_smart_learn(m_idx, DRS_FIRE);
     return dam;
 }
@@ -542,7 +542,7 @@ int spell_RF5_BA_COLD(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 3 / 2) + 10);
     }
-    breath(y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, learnable);
+    breath(y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD);
     update_smart_learn(m_idx, DRS_COLD);
     return dam;
 }
@@ -563,7 +563,7 @@ int spell_RF5_BA_POIS(int y, int x, int m_idx)
         msg_format(_("%^sが悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud."), m_name);
 
     dam = damroll(12, 2) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, learnable);
+    breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS);
     update_smart_learn(m_idx, DRS_POIS);
     return dam;
 }
@@ -583,7 +583,7 @@ int spell_RF5_BA_NETH(int y, int x, int m_idx)
         msg_format(_("%^sが地獄球の呪文を唱えた。", "%^s casts a nether ball."), m_name);
 
     dam = 50 + damroll(10, 10) + (rlev * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1));
-    breath(y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, learnable);
+    breath(y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER);
     update_smart_learn(m_idx, DRS_NETH);
     return dam;
 }
@@ -606,13 +606,12 @@ int spell_RF5_BA_WATE(int y, int x, int m_idx)
     msg_print(_("あなたは渦巻きに飲み込まれた。", "You are engulfed in a whirlpool."));
 
     dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint1(rlev * 3) : randint1(rlev * 2)) + 50;
-    breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, learnable);
+    breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER);
     return dam;
 }
 
 int spell_RF5_BA_MANA(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
@@ -625,13 +624,12 @@ int spell_RF5_BA_MANA(int y, int x, int m_idx)
         msg_format(_("%^sが魔力の嵐の呪文を念じた。", "%^s invokes a mana storm."), m_name);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
-    breath(y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, learnable);
+    breath(y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA);
     return dam;
 }
 
 int spell_RF5_BA_DARK(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
@@ -645,28 +643,26 @@ int spell_RF5_BA_DARK(int y, int x, int m_idx)
         msg_format(_("%^sが暗黒の嵐の呪文を念じた。", "%^s invokes a darkness storm."), m_name);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
-    breath(y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, learnable);
+    breath(y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK);
     update_smart_learn(m_idx, DRS_DARK);
     return dam;
 }
 
 int spell_RF5_DRAIN_MANA(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
     dam = (randint1(rlev) / 2) + 1;
-    breath(y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, learnable);
+    breath(y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA);
     update_smart_learn(m_idx, DRS_MANA);
     return dam;
 }
 
 int spell_RF5_MIND_BLAST(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     bool seen = (!p_ptr->blind && m_ptr->ml);
@@ -679,13 +675,12 @@ int spell_RF5_MIND_BLAST(int y, int x, int m_idx)
         msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
 
     dam = damroll(7, 7);
-    breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, learnable);
+    breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST);
     return dam;
 }
 
 int spell_RF5_BRAIN_SMASH(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     bool seen = (!p_ptr->blind && m_ptr->ml);
@@ -698,13 +693,12 @@ int spell_RF5_BRAIN_SMASH(int y, int x, int m_idx)
         msg_format(_("%^sがあなたの瞳をじっと見ている。", "%^s looks deep into your eyes."), m_name);
 
     dam = damroll(12, 12);
-    breath(y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, learnable);
+    breath(y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH);
     return dam;
 }
 
 int spell_RF5_CAUSE_1(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int dam;
@@ -716,13 +710,12 @@ int spell_RF5_CAUSE_1(int y, int x, int m_idx)
         msg_format(_("%^sがあなたを指さして呪った。", "%^s points at you and curses."), m_name);
 
     dam = damroll(3, 8);
-    breath(y, x, m_idx, GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1, learnable);
+    breath(y, x, m_idx, GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1);
     return dam;
 }
 
 int spell_RF5_CAUSE_2(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int dam;
@@ -734,13 +727,12 @@ int spell_RF5_CAUSE_2(int y, int x, int m_idx)
         msg_format(_("%^sがあなたを指さして恐ろしげに呪った。", "%^s points at you and curses horribly."), m_name);
 
     dam = damroll(8, 8);
-    breath(y, x, m_idx, GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2, learnable);
+    breath(y, x, m_idx, GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2);
     return dam;
 }
 
 int spell_RF5_CAUSE_3(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int dam;
@@ -752,13 +744,12 @@ int spell_RF5_CAUSE_3(int y, int x, int m_idx)
         msg_format(_("%^sがあなたを指さして恐ろしげに呪文を唱えた！", "%^s points at you, incanting terribly!"), m_name);
 
     dam = damroll(10, 15);
-    breath(y, x, m_idx, GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3, learnable);
+    breath(y, x, m_idx, GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3);
     return dam;
 }
 
 int spell_RF5_CAUSE_4(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int dam;
@@ -771,7 +762,7 @@ int spell_RF5_CAUSE_4(int y, int x, int m_idx)
         "%^s points at you, screaming the word DIE!"), m_name);
 
     dam = damroll(15, 15);
-    breath(y, x, m_idx, GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4, learnable);
+    breath(y, x, m_idx, GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4);
     return dam;
 }
 
@@ -791,7 +782,7 @@ int spell_RF5_BO_ACID(int y, int x, int m_idx)
         msg_format(_("%^sがアシッド・ボルトの呪文を唱えた。", "%^s casts a acid bolt."), m_name);
 
     dam = (damroll(7, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    bolt(m_idx, GF_ACID, dam, MS_BOLT_ACID, learnable);
+    bolt(m_idx, GF_ACID, dam, MS_BOLT_ACID);
     update_smart_learn(m_idx, DRS_ACID);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
@@ -813,7 +804,7 @@ int spell_RF5_BO_ELEC(int y, int x, int m_idx)
         msg_format(_("%^sがサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt."), m_name);
 
     dam = (damroll(4, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    bolt(m_idx, GF_ELEC, dam, MS_BOLT_ELEC, learnable);
+    bolt(m_idx, GF_ELEC, dam, MS_BOLT_ELEC);
     update_smart_learn(m_idx, DRS_ELEC);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
@@ -835,7 +826,7 @@ int spell_RF5_BO_FIRE(int y, int x, int m_idx)
         msg_format(_("%^sがファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt."), m_name);
 
     dam = (damroll(9, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    bolt(m_idx, GF_FIRE, dam, MS_BOLT_FIRE, learnable);
+    bolt(m_idx, GF_FIRE, dam, MS_BOLT_FIRE);
     update_smart_learn(m_idx, DRS_FIRE);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
@@ -857,7 +848,7 @@ int spell_RF5_BO_COLD(int y, int x, int m_idx)
         msg_format(_("%^sがアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt."), m_name);
 
     dam = (damroll(6, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    bolt(m_idx, GF_COLD, dam, MS_BOLT_COLD, learnable);
+    bolt(m_idx, GF_COLD, dam, MS_BOLT_COLD);
     update_smart_learn(m_idx, DRS_COLD);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
@@ -866,7 +857,6 @@ int spell_RF5_BO_COLD(int y, int x, int m_idx)
 
 int spell_RF5_BA_LITE(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int dam;
@@ -878,7 +868,7 @@ int spell_RF5_BA_LITE(int y, int x, int m_idx)
         msg_format(_("%^sがスターバーストの呪文を念じた。", "%^s invokes a starburst."), m_name);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
-    breath(y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, learnable);
+    breath(y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST);
     update_smart_learn(m_idx, DRS_LITE);
     return dam;
 }
@@ -900,7 +890,7 @@ int spell_RF5_BO_NETH(int y, int x, int m_idx)
         msg_format(_("%^sが地獄の矢の呪文を唱えた。", "%^s casts a nether bolt."), m_name);
 
     dam = 30 + damroll(5, 5) + (rlev * 4) / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3);
-    bolt(m_idx, GF_NETHER, dam, MS_BOLT_NETHER, learnable);
+    bolt(m_idx, GF_NETHER, dam, MS_BOLT_NETHER);
     update_smart_learn(m_idx, DRS_NETH);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
@@ -922,7 +912,7 @@ int spell_RF5_BO_WATE(int y, int x, int m_idx)
         msg_format(_("%^sがウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt."), m_name);
 
     dam = damroll(10, 10) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-    bolt(m_idx, GF_WATER, dam, MS_BOLT_WATER, learnable);
+    bolt(m_idx, GF_WATER, dam, MS_BOLT_WATER);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
 }
@@ -942,7 +932,7 @@ int spell_RF5_BO_MANA(int y, int x, int m_idx)
         msg_format(_("%^sが魔力の矢の呪文を唱えた。", "%^s casts a mana bolt."), m_name);
 
     dam = randint1(rlev * 7 / 2) + 50;
-    bolt(m_idx, GF_MANA, dam, MS_BOLT_MANA, learnable);
+    bolt(m_idx, GF_MANA, dam, MS_BOLT_MANA);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
 }
@@ -963,7 +953,7 @@ int spell_RF5_BO_PLAS(int y, int x, int m_idx)
         msg_format(_("%^sがプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt."), m_name);
 
     dam = 10 + damroll(8, 7) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-    bolt(m_idx, GF_PLASMA, dam, MS_BOLT_PLASMA, learnable);
+    bolt(m_idx, GF_PLASMA, dam, MS_BOLT_PLASMA);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
 }
@@ -983,7 +973,7 @@ int spell_RF5_BO_ICEE(int y, int x, int m_idx)
         msg_format(_("%^sが極寒の矢の呪文を唱えた。", "%^s casts an ice bolt."), m_name);
 
     dam = damroll(6, 6) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-    bolt(m_idx, GF_ICE, dam, MS_BOLT_ICE, learnable);
+    bolt(m_idx, GF_ICE, dam, MS_BOLT_ICE);
     update_smart_learn(m_idx, DRS_COLD);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
@@ -1003,7 +993,7 @@ int spell_RF5_MISSILE(int y, int x, int m_idx)
         msg_format(_("%^sがマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile."), m_name);
 
     dam = damroll(2, 6) + (rlev / 3);
-    bolt(m_idx, GF_MISSILE, dam, MS_MAGIC_MISSILE, learnable);
+    bolt(m_idx, GF_MISSILE, dam, MS_MAGIC_MISSILE);
     update_smart_learn(m_idx, DRS_REFLECT);
     return dam;
 }
@@ -1167,14 +1157,13 @@ void spell_RF6_HASTE(int m_idx)
 
 int spell_RF6_HAND_DOOM(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
     cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     int dam;
     disturb(1, 1);
     msg_format(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"), m_name);
     dam = (((s32b)((40 + randint1(20)) * (p_ptr->chp))) / 100);
-    breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, learnable);
+    breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM);
     return dam;
 }
 
@@ -1509,7 +1498,7 @@ int spell_RF6_PSY_SPEAR(int m_idx)
         msg_format(_("%^sが光の剣を放った。", "%^s throw a Psycho-Spear."), m_name);
 
     dam = (r_ptr->flags2 & RF2_POWERFUL) ? (randint1(rlev * 2) + 150) : (randint1(rlev * 3 / 2) + 100);
-    beam(m_idx, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, learnable);
+    beam(m_idx, GF_PSY_SPEAR, dam, MS_PSY_SPEAR);
     return dam;
 }
 

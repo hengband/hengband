@@ -1531,7 +1531,7 @@ extern bool raise_possible(monster_type *m_ptr);
 extern bool dispel_check(int m_idx);
 extern bool spell_is_inate(u16b spell);
 extern bool make_attack_spell(int m_idx);
-extern void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable);
+extern void beam(int m_idx, int typ, int dam_hp, int monspell);
 
 /* mspells2.c */
 extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);
@@ -1574,11 +1574,11 @@ extern void do_cmd_mind_browse(void);
 
 /* mane.c */
 extern bool do_cmd_mane(bool baigaesi);
-extern void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable);
-extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable);
+extern void bolt(int m_idx, int typ, int dam_hp, int monspell);
+extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell);
 
 /* mspells2.c */
-extern void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable);
+extern void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int rad, bool breath, int monspell);
 
 /* mspells3.c */
 extern bool do_cmd_cast_learned(void);
@@ -1586,6 +1586,7 @@ extern void learn_spell(int monspell);
 extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
 
 /* mspells4.c */
+extern bool spell_learnable(int m_idx);
 
 /* spells monster to player */
 extern void MP_spell_RF4_SHRIEK(int m_idx);

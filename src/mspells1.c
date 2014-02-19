@@ -508,9 +508,10 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  * @param learnable ラーニング可能か否か
  * @return なし
  */
-void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
+void bolt(int m_idx, int typ, int dam_hp, int monspell)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER;
+    int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER;
+    bool learnable = spell_learnable(m_idx);
 	if (typ != GF_ARROW) flg  |= PROJECT_REFLECTABLE;
 
 	/* Target the player with a bolt attack */
@@ -523,12 +524,12 @@ void bolt(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
- * @param learnable ラーニング可能か否か
  * @return なし
  */
-void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
+void beam(int m_idx, int typ, int dam_hp, int monspell)
 {
-	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER;
+    int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER;
+    bool learnable = spell_learnable(m_idx);
 
 	/* Target the player with a bolt attack */
 	(void)project(m_idx, 0, py, px, dam_hp, typ, flg, (learnable ? monspell : -1));
@@ -546,15 +547,15 @@ void beam(int m_idx, int typ, int dam_hp, int monspell, bool learnable)
  * @param rad 半径
  * @param breath TRUEならばブレス処理、FALSEならばボール処理
  * @param monspell モンスター魔法のID
- * @param learnable ラーニング可能か否か
  * @return なし
  */
-void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
+void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell)
 {
 	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
 
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    bool learnable = spell_learnable(m_idx);
 
 	/* Determine the radius of the blast */
 	if ((rad < 1) && breath) rad = (r_ptr->flags2 & (RF2_POWERFUL)) ? 3 : 2;
@@ -1439,9 +1440,7 @@ bool make_attack_spell(int m_idx)
 
 	/* Extract the "see-able-ness" */
 	bool seen = (!blind && m_ptr->ml);
-
 	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
-	bool learnable = (seen && maneable && !world_monster);
 
 	/* Check "projectable" */
 	bool direct;
