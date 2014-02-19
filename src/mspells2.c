@@ -31,7 +31,7 @@
  * Pass over any monsters that may be in the way
  * Affect grids, objects, monsters, and the player
  */
-static void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
+void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int rad, bool breath, int monspell, bool learnable)
 {
 	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
@@ -830,78 +830,11 @@ bool monst_spell_monst(int m_idx)
 
 	switch (thrown_spell)
 	{
-	/* RF4_SHRIEK */
-	case 96+0:
-		if (known)
-		{
-			if (see_m)
-			{
-				msg_format(_("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."), m_name, t_name);
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-		}
-
-		wake_up = TRUE;
-
-		break;
-
-	/* RF4_XXX1 */
-	case 96+1:
-		/* XXX XXX XXX */
-		return FALSE;
-
-	/* RF4_DISPEL */
-	case 96+2:
-		if (known)
-		{
-			if (see_m)
-			{
-				msg_format(_("%^sが%sに対して魔力消去の呪文を念じた。", 
-					         "%^s invokes a dispel magic at %s."), m_name, t_name);
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-		}
-
-		if (t_idx == p_ptr->riding) dispel_player();
-		dispel_monster_status(t_idx);
-
-		break;
-
-	/* RF4_ROCKET */
-	case 96+3:
-		if (known)
-		{
-			if (see_either)
-			{
-				disturb(1, 1);
-
-				if (blind)
-				{
-					msg_format(_("%^sが何かを射った。", "%^s shoots something."), m_name);
-				}
-				else
-				{
-					msg_format(_("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."), m_name, t_name);
-				}
-			}
-			else
-			{
-				mon_fight = TRUE;
-			}
-		}
-
-		dam = ((m_ptr->hp / 4) > 800 ? 800 : (m_ptr->hp / 4));
-		monst_breath_monst(m_idx, y, x, GF_ROCKET,
-				   dam, 2, FALSE, MS_ROCKET, learnable);
-
-		break;
-
+    case 96 + 0: MM_spell_RF4_SHRIEK(m_idx, t_idx); break; /* RF4_SHRIEK */
+    case 96 + 1: return FALSE;  /* RF4_XXX1 */
+    case 96 + 2: MM_spell_RF4_DISPEL(m_idx, t_idx); break; /* RF4_DISPEL */
+    case 96 + 3: dam = MM_spell_RF4_ROCKET(y, x, m_idx, t_idx); break; /* RF4_ROCKET */
+	
 	/* RF4_SHOOT */
 	case 96+4:
 		if (known)

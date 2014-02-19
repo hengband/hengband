@@ -1840,108 +1840,108 @@ bool make_attack_spell(int m_idx)
 	/* Cast the spell. */
 	switch (thrown_spell)
 	{
-        case 96 + 0:   spell_RF4_SHRIEK(m_idx, m_name); break;  /* RF4_SHRIEK */
+        case 96 + 0:   MP_spell_RF4_SHRIEK(m_idx); break;  /* RF4_SHRIEK */
         case 96 + 1:   break;   /* RF4_XXX1 */
-        case 96 + 2:   spell_RF4_DISPEL(blind, m_name); break;  /* RF4_DISPEL */
-        case 96 + 3:   dam = spell_RF4_ROCKET(blind, m_name, m_ptr, y, x, m_idx, learnable); break;   /* RF4_ROCKET */
-        case 96 + 4:   dam = spell_RF4_SHOOT(blind, m_name, r_ptr, m_idx, learnable); break;    /* RF4_SHOOT */
+        case 96 + 2:   MP_spell_RF4_DISPEL(m_idx); break;  /* RF4_DISPEL */
+        case 96 + 3:   dam = MP_spell_RF4_ROCKET(y, x, m_idx); break;   /* RF4_ROCKET */
+        case 96 + 4:   dam = spell_RF4_SHOOT(m_idx); break;    /* RF4_SHOOT */
         case 96 + 5:   break;   /* RF4_XXX2 */
         case 96 + 6:   break;   /* RF4_XXX3 */
         case 96 + 7:   break;   /* RF4_XXX4 */
-        case 96 + 8:   dam = spell_RF4_BREATH(GF_ACID, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_ACID */
-        case 96 + 9:   dam = spell_RF4_BREATH(GF_ELEC, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_ELEC */
-        case 96 + 10:  dam = spell_RF4_BREATH(GF_FIRE, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_FIRE */
-        case 96 + 11:  dam = spell_RF4_BREATH(GF_COLD, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_COLD */
-        case 96 + 12:  dam = spell_RF4_BREATH(GF_POIS, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_POIS */
-        case 96 + 13:  dam = spell_RF4_BREATH(GF_NETHER, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_NETH */
-        case 96 + 14:  dam = spell_RF4_BREATH(GF_LITE, blind, m_name, m_ptr, y_br_lite, x_br_lite, m_idx, learnable); break;    /* RF4_BR_LITE */
-        case 96 + 15:  dam = spell_RF4_BREATH(GF_DARK, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_DARK */
-        case 96 + 16:  dam = spell_RF4_BREATH(GF_CONFUSION, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_CONF */
-        case 96 + 17:  dam = spell_RF4_BREATH(GF_SOUND, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_SOUN */
-        case 96 + 18:  dam = spell_RF4_BREATH(GF_CHAOS, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_CHAO */
-        case 96 + 19:  dam = spell_RF4_BREATH(GF_DISENCHANT, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_DISE */
-        case 96 + 20:  dam = spell_RF4_BREATH(GF_NEXUS, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_NEXU */
-        case 96 + 21:  dam = spell_RF4_BREATH(GF_TIME, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_TIME */
-        case 96 + 22:  dam = spell_RF4_BREATH(GF_INERTIA, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_INER */
-        case 96 + 23:  dam = spell_RF4_BREATH(GF_GRAVITY, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_GRAV */
-        case 96 + 24:  dam = spell_RF4_BREATH(GF_SHARDS, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_SHAR */
-        case 96 + 25:  dam = spell_RF4_BREATH(GF_PLASMA, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_PLAS */
-        case 96 + 26:  dam = spell_RF4_BREATH(GF_FORCE, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_WALL */
-        case 96 + 27:  dam = spell_RF4_BREATH(GF_MANA, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_MANA */
-        case 96 + 28:  dam = spell_RF4_BA_NUKE(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;   /* RF4_BA_NUKE */
-        case 96 + 29:  dam = spell_RF4_BREATH(GF_NUKE, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_NUKE */
-        case 96 + 30:  dam = spell_RF4_BA_CHAO(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;  /* RF4_BA_CHAO */
-        case 96 + 31:  dam = spell_RF4_BREATH(GF_DISINTEGRATE, blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF4_BR_DISI */
-        case 128 + 0:  dam = spell_RF5_BA_ACID(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_ACID */
-        case 128 + 1:  dam = spell_RF5_BA_ELEC(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_ELEC */
-        case 128 + 2:  dam = spell_RF5_BA_FIRE(m_ptr, blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_FIRE */
-        case 128 + 3:  dam = spell_RF5_BA_COLD(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_COLD */
-        case 128 + 4:  dam = spell_RF5_BA_POIS(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_POIS */
-        case 128 + 5:  dam = spell_RF5_BA_NETH(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_NETH */
-        case 128 + 6:  dam = spell_RF5_BA_WATE(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_WATE */
-        case 128 + 7:  dam = spell_RF5_BA_MANA(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_MANA */
-        case 128 + 8:  dam = spell_RF5_BA_DARK(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_DARK */
-        case 128 + 9:  dam = spell_RF5_DRAIN_MANA(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_DRAIN_MANA */
-        case 128 + 10: dam = spell_RF5_MIND_BLAST(seen, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_MIND_BLAST */
-        case 128 + 11: dam = spell_RF5_BRAIN_SMASH(seen, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_MIND_BLAST */
-        case 128 + 12: dam = spell_RF5_CAUSE_1(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_CAUSE_1 */
-        case 128 + 13: dam = spell_RF5_CAUSE_2(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_CAUSE_2 */
-        case 128 + 14: dam = spell_RF5_CAUSE_3(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_CAUSE_3 */
-        case 128 + 15: dam = spell_RF5_CAUSE_4(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_CAUSE_4 */
-        case 128 + 16: dam = spell_RF5_BO_ACID(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BO_ACID */
-        case 128 + 17: dam = spell_RF5_BO_ELEC(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BO_ELEC */
-        case 128 + 18: dam = spell_RF5_BO_FIRE(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BO_FIRE */
-        case 128 + 19: dam = spell_RF5_BO_COLD(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BO_COLD */
-        case 128 + 20: dam = spell_RF5_BA_LITE(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BA_LITE */
-        case 128 + 21: dam = spell_RF5_BO_NETH(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BO_NETH */
-        case 128 + 22: dam = spell_RF5_BO_WATE(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BO_WATE */
-        case 128 + 23: dam = spell_RF5_BO_MANA(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BO_MANA */
-        case 128 + 24: dam = spell_RF5_BO_PLAS(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BO_PLAS */
-        case 128 + 25: dam = spell_RF5_BO_ICEE(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_BO_ICEE */
-        case 128 + 26: dam = spell_RF5_MISSILE(blind, m_name, r_ptr, rlev, y, x, m_idx, learnable); break;    /* RF5_MISSILE */
-        case 128 + 27: spell_RF5_SCARE(blind, m_name, r_ptr, rlev, y, x, m_idx); break;    /* RF5_SCARE */
-        case 128 + 28: spell_RF5_BLIND(blind, m_name, r_ptr, rlev, y, x, m_idx); break;    /* RF5_BLIND */
-        case 128 + 29: spell_RF5_CONF(blind, m_name, r_ptr, rlev, y, x, m_idx); break;    /* RF5_CONF */
-        case 128 + 30: spell_RF5_SLOW(blind, m_name, r_ptr, rlev, y, x, m_idx); break;    /* RF5_SLOW */
-        case 128 + 31: spell_RF5_HOLD(blind, m_name, r_ptr, rlev, y, x, m_idx); break;    /* RF5_HOLD */
-        case 160 + 0:  spell_RF6_HASTE(blind, m_name, m_ptr, y, x, m_idx); break;    /* RF6_HASTE */
-        case 160 + 1:  dam = spell_RF6_HAND_DOOM(blind, m_name, m_ptr, y, x, m_idx, learnable); break;    /* RF6_HAND_DOOM */
-        case 160 + 2:  spell_RF6_HEAL(blind, seen, m_name, m_ptr, rlev, m_idx); break;     /* RF6_HEAL */
-        case 160 + 3:  spell_RF6_INVULNER(seen, m_name, m_ptr, m_idx); break;     /* RF6_INVULNER */
-        case 160 + 4:  spell_RF6_BLINK(m_name, m_idx); break;     /* RF6_BLINK */
-        case 160 + 5:  spell_RF6_TPORT(m_name, m_idx); break;     /* RF6_TPORT */
-        case 160 + 6:  dam = spell_RF6_WORLD(m_name, m_ptr, m_idx); break;     /* RF6_WORLD */
+        case 96 + 8:   dam = spell_RF4_BREATH(GF_ACID, y, x, m_idx); break;    /* RF4_BR_ACID */
+        case 96 + 9:   dam = spell_RF4_BREATH(GF_ELEC, y, x, m_idx); break;    /* RF4_BR_ELEC */
+        case 96 + 10:  dam = spell_RF4_BREATH(GF_FIRE, y, x, m_idx); break;    /* RF4_BR_FIRE */
+        case 96 + 11:  dam = spell_RF4_BREATH(GF_COLD, y, x, m_idx); break;    /* RF4_BR_COLD */
+        case 96 + 12:  dam = spell_RF4_BREATH(GF_POIS, y, x, m_idx); break;    /* RF4_BR_POIS */
+        case 96 + 13:  dam = spell_RF4_BREATH(GF_NETHER, y, x, m_idx); break;    /* RF4_BR_NETH */
+        case 96 + 14:  dam = spell_RF4_BREATH(GF_LITE, y_br_lite, x_br_lite, m_idx); break;    /* RF4_BR_LITE */
+        case 96 + 15:  dam = spell_RF4_BREATH(GF_DARK, y, x, m_idx); break;    /* RF4_BR_DARK */
+        case 96 + 16:  dam = spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx); break;    /* RF4_BR_CONF */
+        case 96 + 17:  dam = spell_RF4_BREATH(GF_SOUND, y, x, m_idx); break;    /* RF4_BR_SOUN */
+        case 96 + 18:  dam = spell_RF4_BREATH(GF_CHAOS, y, x, m_idx); break;    /* RF4_BR_CHAO */
+        case 96 + 19:  dam = spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx); break;    /* RF4_BR_DISE */
+        case 96 + 20:  dam = spell_RF4_BREATH(GF_NEXUS, y, x, m_idx); break;    /* RF4_BR_NEXU */
+        case 96 + 21:  dam = spell_RF4_BREATH(GF_TIME, y, x, m_idx); break;    /* RF4_BR_TIME */
+        case 96 + 22:  dam = spell_RF4_BREATH(GF_INERTIA, y, x, m_idx); break;    /* RF4_BR_INER */
+        case 96 + 23:  dam = spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx); break;    /* RF4_BR_GRAV */
+        case 96 + 24:  dam = spell_RF4_BREATH(GF_SHARDS, y, x, m_idx); break;    /* RF4_BR_SHAR */
+        case 96 + 25:  dam = spell_RF4_BREATH(GF_PLASMA, y, x, m_idx); break;    /* RF4_BR_PLAS */
+        case 96 + 26:  dam = spell_RF4_BREATH(GF_FORCE, y, x, m_idx); break;    /* RF4_BR_WALL */
+        case 96 + 27:  dam = spell_RF4_BREATH(GF_MANA, y, x, m_idx); break;    /* RF4_BR_MANA */
+        case 96 + 28:  dam = spell_RF4_BA_NUKE(y, x, m_idx); break;   /* RF4_BA_NUKE */
+        case 96 + 29:  dam = spell_RF4_BREATH(GF_NUKE, y, x, m_idx); break;    /* RF4_BR_NUKE */
+        case 96 + 30:  dam = spell_RF4_BA_CHAO(y, x, m_idx); break;  /* RF4_BA_CHAO */
+        case 96 + 31:  dam = spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx); break;    /* RF4_BR_DISI */
+        case 128 + 0:  dam = spell_RF5_BA_ACID(y, x, m_idx); break;    /* RF5_BA_ACID */
+        case 128 + 1:  dam = spell_RF5_BA_ELEC(y, x, m_idx); break;    /* RF5_BA_ELEC */
+        case 128 + 2:  dam = spell_RF5_BA_FIRE(y, x, m_idx); break;    /* RF5_BA_FIRE */
+        case 128 + 3:  dam = spell_RF5_BA_COLD(y, x, m_idx); break;    /* RF5_BA_COLD */
+        case 128 + 4:  dam = spell_RF5_BA_POIS(y, x, m_idx); break;    /* RF5_BA_POIS */
+        case 128 + 5:  dam = spell_RF5_BA_NETH(y, x, m_idx); break;    /* RF5_BA_NETH */
+        case 128 + 6:  dam = spell_RF5_BA_WATE(y, x, m_idx); break;    /* RF5_BA_WATE */
+        case 128 + 7:  dam = spell_RF5_BA_MANA(y, x, m_idx); break;    /* RF5_BA_MANA */
+        case 128 + 8:  dam = spell_RF5_BA_DARK(y, x, m_idx); break;    /* RF5_BA_DARK */
+        case 128 + 9:  dam = spell_RF5_DRAIN_MANA(y, x, m_idx); break;    /* RF5_DRAIN_MANA */
+        case 128 + 10: dam = spell_RF5_MIND_BLAST(y, x, m_idx); break;    /* RF5_MIND_BLAST */
+        case 128 + 11: dam = spell_RF5_BRAIN_SMASH(y, x, m_idx); break;    /* RF5_MIND_BLAST */
+        case 128 + 12: dam = spell_RF5_CAUSE_1(y, x, m_idx); break;    /* RF5_CAUSE_1 */
+        case 128 + 13: dam = spell_RF5_CAUSE_2(y, x, m_idx); break;    /* RF5_CAUSE_2 */
+        case 128 + 14: dam = spell_RF5_CAUSE_3(y, x, m_idx); break;    /* RF5_CAUSE_3 */
+        case 128 + 15: dam = spell_RF5_CAUSE_4(y, x, m_idx); break;    /* RF5_CAUSE_4 */
+        case 128 + 16: dam = spell_RF5_BO_ACID(y, x, m_idx); break;    /* RF5_BO_ACID */
+        case 128 + 17: dam = spell_RF5_BO_ELEC(y, x, m_idx); break;    /* RF5_BO_ELEC */
+        case 128 + 18: dam = spell_RF5_BO_FIRE(y, x, m_idx); break;    /* RF5_BO_FIRE */
+        case 128 + 19: dam = spell_RF5_BO_COLD(y, x, m_idx); break;    /* RF5_BO_COLD */
+        case 128 + 20: dam = spell_RF5_BA_LITE(y, x, m_idx); break;    /* RF5_BA_LITE */
+        case 128 + 21: dam = spell_RF5_BO_NETH(y, x, m_idx); break;    /* RF5_BO_NETH */
+        case 128 + 22: dam = spell_RF5_BO_WATE(y, x, m_idx); break;    /* RF5_BO_WATE */
+        case 128 + 23: dam = spell_RF5_BO_MANA(y, x, m_idx); break;    /* RF5_BO_MANA */
+        case 128 + 24: dam = spell_RF5_BO_PLAS(y, x, m_idx); break;    /* RF5_BO_PLAS */
+        case 128 + 25: dam = spell_RF5_BO_ICEE(y, x, m_idx); break;    /* RF5_BO_ICEE */
+        case 128 + 26: dam = spell_RF5_MISSILE(y, x, m_idx); break;    /* RF5_MISSILE */
+        case 128 + 27: spell_RF5_SCARE(y, x, m_idx); break;    /* RF5_SCARE */
+        case 128 + 28: spell_RF5_BLIND(y, x, m_idx); break;    /* RF5_BLIND */
+        case 128 + 29: spell_RF5_CONF(y, x, m_idx); break;    /* RF5_CONF */
+        case 128 + 30: spell_RF5_SLOW(y, x, m_idx); break;    /* RF5_SLOW */
+        case 128 + 31: spell_RF5_HOLD(y, x, m_idx); break;    /* RF5_HOLD */
+        case 160 + 0:  spell_RF6_HASTE(m_idx); break;    /* RF6_HASTE */
+        case 160 + 1:  dam = spell_RF6_HAND_DOOM(y, x, m_idx); break;    /* RF6_HAND_DOOM */
+        case 160 + 2:  spell_RF6_HEAL(m_idx); break;     /* RF6_HEAL */
+        case 160 + 3:  spell_RF6_INVULNER(m_idx); break;     /* RF6_INVULNER */
+        case 160 + 4:  spell_RF6_BLINK(m_idx); break;     /* RF6_BLINK */
+        case 160 + 5:  spell_RF6_TPORT(m_idx); break;     /* RF6_TPORT */
+        case 160 + 6:  dam = spell_RF6_WORLD(m_idx); break;     /* RF6_WORLD */
             
         /* RF6_SPECIAL */
         case 160 + 7:  
-            dam = spell_RF6_SPECIAL(m_name, m_ptr, r_ptr, mode, blind, direct, y, x, m_idx);
+            dam = spell_RF6_SPECIAL(y, x, m_idx);
             if (dam < 0) return FALSE; 
             break;
 
-        case 160 + 8:  spell_RF6_TELE_TO(m_name, m_ptr); break;     /* RF6_TELE_TO */
-        case 160 + 9:  spell_RF6_TELE_AWAY(m_name, m_idx); break;     /* RF6_TELE_AWAY */
-        case 160 + 10: spell_RF6_TELE_LEVEL(blind, m_name, m_idx, rlev); break;     /* RF6_TELE_LEVEL */
-        case 160 + 11: spell_RF6_PSY_SPEAR(blind, m_name, r_ptr, rlev, m_idx, learnable); break;    /* RF6_PSY_SPEAR */
-        case 160 + 12: spell_RF6_DARKNESS(blind, m_name, can_use_lite_area); break;     /* RF6_DARKNESS */
-        case 160 + 13: spell_RF6_TRAPS(blind, m_name, y, x); break;     /* RF6_TRAPS */
-        case 160 + 14: spell_RF6_FORGET(m_name, rlev); break;     /* RF6_FORGET */
-        case 160 + 15: spell_RF6_RAISE_DEAD(blind, m_name, m_idx, m_ptr); break;    /* RF6_RAISE_DEAD */
-        case 160 + 16: spell_RF6_S_KIN(blind, m_name, m_ptr, r_ptr, m_idx, y, x, rlev, mode); break;  /* RF6_S_KIN */
-        case 160 + 17: spell_RF6_S_CYBER(blind, m_name, m_idx, y, x); break;    /* RF6_S_CYBER */
-        case 160 + 18: spell_RF6_S_MONSTER(blind, m_name, m_idx, y, x, rlev); break;    /* RF6_S_MONSTER */
-        case 160 + 19: spell_RF6_S_MONSTERS(blind, m_name, m_idx, y, x, rlev, s_num_6); break;    /* RF6_S_MONSTER */
-        case 160 + 20: spell_RF6_S_ANT(blind, m_name, m_idx, y, x, rlev, s_num_6); break;    /* RF6_S_ANT */
-        case 160 + 21: spell_RF6_S_SPIDER(blind, m_name, m_idx, y, x, rlev, s_num_6); break;    /* RF6_S_SPIDER */
-        case 160 + 22: spell_RF6_S_HOUND(blind, m_name, m_idx, y, x, rlev, s_num_4); break;    /* RF6_S_HOUND */
-        case 160 + 23: spell_RF6_S_HYDRA(blind, m_name, m_idx, y, x, rlev, s_num_4); break;    /* RF6_S_HYDRA */
-        case 160 + 24: spell_RF6_S_ANGEL(blind, m_name, r_ptr, m_idx, y, x, rlev); break;   /* RF6_S_ANGEL */
-        case 160 + 25: spell_RF6_S_DEMON(blind, m_name, m_idx, y, x, rlev); break;   /* RF6_S_DEMON */
-        case 160 + 26: spell_RF6_S_UNDEAD(blind, m_name, m_idx, y, x, rlev); break;   /* RF6_S_UNDEAD */
-        case 160 + 27: spell_RF6_S_DRAGON(blind, m_name, m_idx, y, x, rlev); break;   /* RF6_S_DRAGON */
-        case 160 + 28: spell_RF6_S_HI_UNDEAD(m_ptr, blind, m_name, m_idx, y, x, rlev, s_num_6, mode); break;  /* RF6_S_HI_UNDEAD */
-        case 160 + 29: spell_RF6_S_HI_DRAGON(blind, m_name, m_idx, y, x, rlev, s_num_4); break;  /* RF6_S_HI_DRAGON */
-        case 160 + 30: spell_RF6_S_AMBERITES(blind, m_name, m_idx, y, x, rlev, s_num_4); break;  /* RF6_S_AMBERITES */
-        case 160 + 31: spell_RF6_S_UNIQUE(blind, m_name, m_idx, m_ptr, y, x, rlev, s_num_4); break;     /* RF6_S_UNIQUE */
+        case 160 + 8:  spell_RF6_TELE_TO(m_idx); break;     /* RF6_TELE_TO */
+        case 160 + 9:  spell_RF6_TELE_AWAY(m_idx); break;     /* RF6_TELE_AWAY */
+        case 160 + 10: spell_RF6_TELE_LEVEL(m_idx); break;     /* RF6_TELE_LEVEL */
+        case 160 + 11: spell_RF6_PSY_SPEAR(m_idx); break;    /* RF6_PSY_SPEAR */
+        case 160 + 12: spell_RF6_DARKNESS(m_idx); break;     /* RF6_DARKNESS */
+        case 160 + 13: spell_RF6_TRAPS(y, x, m_idx); break;     /* RF6_TRAPS */
+        case 160 + 14: spell_RF6_FORGET(m_idx); break;     /* RF6_FORGET */
+        case 160 + 15: spell_RF6_RAISE_DEAD(m_idx); break;    /* RF6_RAISE_DEAD */
+        case 160 + 16: spell_RF6_S_KIN(y, x, m_idx); break;  /* RF6_S_KIN */
+        case 160 + 17: spell_RF6_S_CYBER(y, x, m_idx); break;    /* RF6_S_CYBER */
+        case 160 + 18: spell_RF6_S_MONSTER(y, x, m_idx); break;    /* RF6_S_MONSTER */
+        case 160 + 19: spell_RF6_S_MONSTERS(y, x, m_idx); break;    /* RF6_S_MONSTER */
+        case 160 + 20: spell_RF6_S_ANT(y, x, m_idx); break;    /* RF6_S_ANT */
+        case 160 + 21: spell_RF6_S_SPIDER(y, x, m_idx); break;    /* RF6_S_SPIDER */
+        case 160 + 22: spell_RF6_S_HOUND(y, x, m_idx); break;    /* RF6_S_HOUND */
+        case 160 + 23: spell_RF6_S_HYDRA(y, x, m_idx); break;    /* RF6_S_HYDRA */
+        case 160 + 24: spell_RF6_S_ANGEL(y, x, m_idx); break;   /* RF6_S_ANGEL */
+        case 160 + 25: spell_RF6_S_DEMON(y, x, m_idx); break;   /* RF6_S_DEMON */
+        case 160 + 26: spell_RF6_S_UNDEAD(y, x, m_idx); break;   /* RF6_S_UNDEAD */
+        case 160 + 27: spell_RF6_S_DRAGON(y, x, m_idx); break;   /* RF6_S_DRAGON */
+        case 160 + 28: spell_RF6_S_HI_UNDEAD(y, x, m_idx); break;  /* RF6_S_HI_UNDEAD */
+        case 160 + 29: spell_RF6_S_HI_DRAGON(y, x, m_idx); break;  /* RF6_S_HI_DRAGON */
+        case 160 + 30: spell_RF6_S_AMBERITES(y, x, m_idx); break;  /* RF6_S_AMBERITES */
+        case 160 + 31: spell_RF6_S_UNIQUE(y, x, m_idx); break;     /* RF6_S_UNIQUE */
 	}
 
 	if ((p_ptr->action == ACTION_LEARN) && thrown_spell > 175)

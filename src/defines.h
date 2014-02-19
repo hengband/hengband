@@ -5694,3 +5694,11 @@ extern int PlayerUID;
 
 #define have_dark_flag(ARRAY) \
 	(have_flag(ARRAY, TR_LITE_M1) || have_flag(ARRAY, TR_LITE_M2) || have_flag(ARRAY, TR_LITE_M3))
+
+/* Spell Type flag */
+#define SPELL_MON_TO_PLAYER     0x01
+#define SPELL_MON_TO_MON        0x02
+
+/* summoning number */
+#define S_NUM_6     (easy_band ? 2 : 6)
+#define S_NUM_4     (easy_band ? 1 : 4)

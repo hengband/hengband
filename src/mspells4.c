@@ -1,17 +1,106 @@
 #include "angband.h"
 
-void spell_RF4_SHRIEK(int m_idx, cptr m_name)
+cptr monster_name(int m_idx)
 {
+    char            m_name[80];
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_desc(m_name, m_ptr, 0x00);
+    return m_name;
+}
+
+/* 2 monster each is near by player, return true */
+bool monster_near_player(int m_idx, int t_idx)
+{
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_type    *t_ptr = &m_list[t_idx];
+    return (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
+}
+
+/* player can see monster, return true */
+bool see_monster(int m_idx)
+{
+    monster_type    *m_ptr = &m_list[m_idx];
+    return is_seen(m_ptr);
+}
+
+bool spell_learnable(int m_idx)
+{
+    monster_type    *m_ptr = &m_list[m_idx];
+    /* Extract the "see-able-ness" */
+    bool seen = (!p_ptr->blind && m_ptr->ml);
+
+    bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
+    return (seen && maneable && !world_monster);
+}
+
+int monster_level_idx(int m_idx)
+{
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    return rlev;
+}
+
+int spell_core(int SPELL_NUM, int hp, int y, int x, int m_idx, int SPELL_TYPE)
+{
+    int dam;
+
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    bool learnable = spell_learnable(m_idx);
+
+    switch (SPELL_NUM)
+    {
+    case RF4_ROCKET:
+        dam = (hp / 4) > 800 ? 800 : (hp / 4);
+        if (SPELL_TYPE == SPELL_MON_TO_PLAYER)
+        {
+            breath(y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, learnable);
+            update_smart_learn(m_idx, DRS_SHARD);
+        }
+        else if (SPELL_TYPE == SPELL_MON_TO_MON)
+        {
+            monst_breath_monst(m_idx, y, x, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, learnable);
+        }
+        break;
+    }
+    return dam;
+}
+
+void MP_spell_RF4_SHRIEK(int m_idx)
+{
+    cptr m_name = monster_name(m_idx);
     disturb(1, 1);
     msg_format(_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."), m_name);
     aggravate_monsters(m_idx);
 }
 
-void spell_RF4_DISPEL(bool blind, cptr m_name)
+void MM_spell_RF4_SHRIEK(int m_idx, int t_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    cptr t_name = monster_name(t_idx);
+    bool known = monster_near_player(m_idx, t_idx);
+    bool see_m = see_monster(m_idx);
+    if (known)
+    {
+        if (see_m)
+        {
+            msg_format(_("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."), m_name, t_name);
+        }
+        else
+        {
+            mon_fight = TRUE;
+        }
+    }
+    (void)set_monster_csleep(t_idx, 0);
+}
+
+void MP_spell_RF4_DISPEL(int m_idx)
+{
+    cptr m_name = monster_name(m_idx);
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
     else
         msg_format(_("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."), m_name);
@@ -19,35 +108,90 @@ void spell_RF4_DISPEL(bool blind, cptr m_name)
     dispel_player();
     if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
 
-#ifdef JP
     if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-        msg_print("やりやがったな！");
-#endif
+        msg_print(_("やりやがったな！", ""));
+
     learn_spell(MS_DISPEL);
 }
 
-int spell_RF4_ROCKET(bool blind, cptr m_name, monster_type* m_ptr, int y, int x, int m_idx, bool learnable)
+void MM_spell_RF4_DISPEL(int m_idx, int t_idx)
 {
-    int dam;
+    cptr m_name = monster_name(m_idx);
+    cptr t_name = monster_name(t_idx);
+    bool known = monster_near_player(m_idx, t_idx);
+    bool see_m = see_monster(m_idx);
+    if (known)
+    {
+        if (see_m)
+        {
+            msg_format(_("%^sが%sに対して魔力消去の呪文を念じた。",
+                         "%^s invokes a dispel magic at %s."), m_name, t_name);
+        }
+        else
+        {
+            mon_fight = TRUE;
+        }
+    }
 
+    if (t_idx == p_ptr->riding) dispel_player();
+    dispel_monster_status(t_idx);
+}
+
+
+int MP_spell_RF4_ROCKET(int y, int x, int m_idx)
+{
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かを射った。", "%^s shoots something."), m_name);
     else
         msg_format(_("%^sがロケットを発射した。", "%^s fires a rocket."), m_name);
 
-    dam = ((m_ptr->hp / 4) > 800 ? 800 : (m_ptr->hp / 4));
-    breath(y, x, m_idx, GF_ROCKET,
-        dam, 2, FALSE, MS_ROCKET, learnable);
-    update_smart_learn(m_idx, DRS_SHARD);
-    return dam;
+    return spell_core(RF4_ROCKET, m_ptr->hp, y, x, m_idx, SPELL_MON_TO_PLAYER);
 }
 
-int spell_RF4_SHOOT(bool blind, cptr m_name, monster_race* r_ptr, int m_idx, bool learnable)
+int MM_spell_RF4_ROCKET(int y, int x, int m_idx, int t_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    cptr t_name = monster_name(t_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+
+    bool known = monster_near_player(m_idx, t_idx);
+    bool see_either = see_monster(m_idx) || see_monster(t_idx);
+    if (known)
+    {
+        if (see_either)
+        {
+            disturb(1, 1);
+
+            if (p_ptr->blind)
+            {
+                msg_format(_("%^sが何かを射った。", "%^s shoots something."), m_name);
+            }
+            else
+            {
+                msg_format(_("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."), m_name, t_name);
+            }
+        }
+        else
+        {
+            mon_fight = TRUE;
+        }
+    }
+    return spell_core(RF4_ROCKET, m_ptr->hp, y, x, m_idx, SPELL_MON_TO_MON);
+}
+
+int spell_RF4_SHOOT(int m_idx)
+{
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+
     int dam;
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが奇妙な音を発した。", "%^s makes a strange noise."), m_name);
     else
         msg_format(_("%^sが矢を放った。", "%^s fires an arrow."), m_name);
@@ -58,11 +202,14 @@ int spell_RF4_SHOOT(bool blind, cptr m_name, monster_race* r_ptr, int m_idx, boo
     return dam;
 }
 
-int spell_RF4_BREATH(int GF_TYPE, bool blind, cptr m_name, monster_type* m_ptr, int y, int x, int m_idx, bool learnable)
+int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
     int dam, ms_type, drs_type;
     cptr type_s;
     bool smart_learn = TRUE;
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
 
     switch (GF_TYPE)
     {
@@ -211,7 +358,7 @@ int spell_RF4_BREATH(int GF_TYPE, bool blind, cptr m_name, monster_type* m_ptr, 
     {
         msg_format(_("「ボ帝ビルカッター！！！」", "'Boty-Build cutter!!!'"));
     }
-    else if (blind)
+    else if (p_ptr->blind)
     {
         msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
     }
@@ -225,12 +372,18 @@ int spell_RF4_BREATH(int GF_TYPE, bool blind, cptr m_name, monster_type* m_ptr, 
     return dam;
 }
 
-int spell_RF4_BA_CHAO(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF4_BA_CHAO(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
+
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが恐ろしげにつぶやいた。", "%^s mumbles frighteningly."), m_name);
     else
         msg_format(_("%^sが純ログルスを放った。", "%^s invokes a raw Logrus."), m_name);
@@ -242,12 +395,17 @@ int spell_RF4_BA_CHAO(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF4_BA_NUKE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF4_BA_NUKE(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが放射能球を放った。", "%^s casts a ball of radiation."), m_name);
@@ -259,12 +417,17 @@ int spell_RF4_BA_NUKE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BA_ACID(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_ACID(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam, rad;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがアシッド・ボールの呪文を唱えた。", "%^s casts an acid ball."), m_name);
@@ -284,12 +447,17 @@ int spell_RF5_BA_ACID(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BA_ELEC(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_ELEC(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam, rad;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがサンダー・・ボールの呪文を唱えた。", "%^s casts a lightning ball."), m_name);
@@ -309,21 +477,26 @@ int spell_RF5_BA_ELEC(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BA_FIRE(monster_type* m_ptr, bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_FIRE(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam, rad;
     disturb(1, 1);
 
     if (m_ptr->r_idx == MON_ROLENTO)
     {
-        if (blind)
+        if (p_ptr->blind)
             msg_format(_("%sが何かを投げた。", "%^s throws something."), m_name);
         else
             msg_format(_("%sは手榴弾を投げた。", "%^s throws a hand grenade."), m_name);
     }
     else
     {
-        if (blind)
+        if (p_ptr->blind)
             msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
         else
             msg_format(_("%^sがファイア・ボールの呪文を唱えた。", "%^s casts a fire ball."), m_name);
@@ -344,12 +517,17 @@ int spell_RF5_BA_FIRE(monster_type* m_ptr, bool blind, cptr m_name, monster_race
     return dam;
 }
 
-int spell_RF5_BA_COLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_COLD(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam, rad;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがアイス・ボールの呪文を唱えた。", "%^s casts a frost ball."), m_name);
@@ -369,12 +547,17 @@ int spell_RF5_BA_COLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BA_POIS(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_POIS(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud."), m_name);
@@ -385,11 +568,16 @@ int spell_RF5_BA_POIS(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BA_NETH(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_NETH(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが地獄球の呪文を唱えた。", "%^s casts a nether ball."), m_name);
@@ -400,12 +588,17 @@ int spell_RF5_BA_NETH(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BA_WATE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_WATE(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが流れるような身振りをした。", "%^s gestures fluidly."), m_name);
@@ -417,11 +610,16 @@ int spell_RF5_BA_WATE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BA_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_MANA(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
     else
         msg_format(_("%^sが魔力の嵐の呪文を念じた。", "%^s invokes a mana storm."), m_name);
@@ -431,12 +629,17 @@ int spell_RF5_BA_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BA_DARK(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_DARK(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
     else
         msg_format(_("%^sが暗黒の嵐の呪文を念じた。", "%^s invokes a darkness storm."), m_name);
@@ -447,8 +650,11 @@ int spell_RF5_BA_DARK(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_DRAIN_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_DRAIN_MANA(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
@@ -458,8 +664,13 @@ int spell_RF5_DRAIN_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev,
     return dam;
 }
 
-int spell_RF5_MIND_BLAST(bool seen, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_MIND_BLAST(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    bool seen = (!p_ptr->blind && m_ptr->ml);
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
     if (!seen)
@@ -472,8 +683,13 @@ int spell_RF5_MIND_BLAST(bool seen, cptr m_name, monster_race* r_ptr, int rlev, 
     return dam;
 }
 
-int spell_RF5_BRAIN_SMASH(bool seen, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BRAIN_SMASH(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    bool seen = (!p_ptr->blind && m_ptr->ml);
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
     if (!seen)
@@ -486,12 +702,15 @@ int spell_RF5_BRAIN_SMASH(bool seen, cptr m_name, monster_race* r_ptr, int rlev,
     return dam;
 }
 
-int spell_RF5_CAUSE_1(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_CAUSE_1(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがあなたを指さして呪った。", "%^s points at you and curses."), m_name);
@@ -501,12 +720,15 @@ int spell_RF5_CAUSE_1(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_CAUSE_2(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_CAUSE_2(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがあなたを指さして恐ろしげに呪った。", "%^s points at you and curses horribly."), m_name);
@@ -516,12 +738,15 @@ int spell_RF5_CAUSE_2(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_CAUSE_3(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_CAUSE_3(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かを大声で叫んだ。", "%^s mumbles loudly."), m_name);
     else
         msg_format(_("%^sがあなたを指さして恐ろしげに呪文を唱えた！", "%^s points at you, incanting terribly!"), m_name);
@@ -531,12 +756,15 @@ int spell_RF5_CAUSE_3(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_CAUSE_4(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_CAUSE_4(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが「お前は既に死んでいる」と叫んだ。", "%^s screams the word 'DIE!'"), m_name);
     else
         msg_format(_("%^sがあなたの秘孔を突いて「お前は既に死んでいる」と叫んだ。",
@@ -547,12 +775,17 @@ int spell_RF5_CAUSE_4(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BO_ACID(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BO_ACID(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがアシッド・ボルトの呪文を唱えた。", "%^s casts a acid bolt."), m_name);
@@ -564,12 +797,17 @@ int spell_RF5_BO_ACID(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BO_ELEC(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BO_ELEC(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt."), m_name);
@@ -581,12 +819,17 @@ int spell_RF5_BO_ELEC(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BO_FIRE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BO_FIRE(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt."), m_name);
@@ -598,12 +841,17 @@ int spell_RF5_BO_FIRE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BO_COLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BO_COLD(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt."), m_name);
@@ -616,12 +864,15 @@ int spell_RF5_BO_COLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
 }
 
 
-int spell_RF5_BA_LITE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BA_LITE(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
     else
         msg_format(_("%^sがスターバーストの呪文を念じた。", "%^s invokes a starburst."), m_name);
@@ -633,12 +884,17 @@ int spell_RF5_BA_LITE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
 }
 
 
-int spell_RF5_BO_NETH(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BO_NETH(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが地獄の矢の呪文を唱えた。", "%^s casts a nether bolt."), m_name);
@@ -650,12 +906,17 @@ int spell_RF5_BO_NETH(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BO_WATE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BO_WATE(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt."), m_name);
@@ -666,11 +927,16 @@ int spell_RF5_BO_WATE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BO_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BO_MANA(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔力の矢の呪文を唱えた。", "%^s casts a mana bolt."), m_name);
@@ -681,11 +947,16 @@ int spell_RF5_BO_MANA(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BO_PLAS(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BO_PLAS(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
 
     else
@@ -697,11 +968,16 @@ int spell_RF5_BO_PLAS(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-int spell_RF5_BO_ICEE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_BO_ICEE(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが極寒の矢の呪文を唱えた。", "%^s casts an ice bolt."), m_name);
@@ -714,11 +990,14 @@ int spell_RF5_BO_ICEE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
 }
 
 
-int spell_RF5_MISSILE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx, bool learnable)
+int spell_RF5_MISSILE(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile."), m_name);
@@ -729,11 +1008,13 @@ int spell_RF5_MISSILE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, in
     return dam;
 }
 
-void spell_RF5_SCARE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx)
+void spell_RF5_SCARE(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやくと、恐ろしげな音が聞こえた。", "%^s mumbles, and you hear scary noises."), m_name);
     else
         msg_format(_("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion."), m_name);
@@ -754,11 +1035,13 @@ void spell_RF5_SCARE(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int
     update_smart_learn(m_idx, DRS_FEAR);
 }
 
-void spell_RF5_BLIND(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx)
+void spell_RF5_BLIND(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが呪文を唱えてあなたの目をくらました！",
@@ -780,11 +1063,13 @@ void spell_RF5_BLIND(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int
     update_smart_learn(m_idx, DRS_BLIND);
 }
 
-void spell_RF5_CONF(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx)
+void spell_RF5_CONF(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやくと、頭を悩ます音がした。",
         "%^s mumbles, and you hear puzzling noises."), m_name);
     else
@@ -807,8 +1092,10 @@ void spell_RF5_CONF(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int 
     update_smart_learn(m_idx, DRS_CONF);
 }
 
-void spell_RF5_SLOW(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx)
+void spell_RF5_SLOW(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     disturb(1, 1);
 
     msg_format(_("%^sがあなたの筋力を吸い取ろうとした！",
@@ -830,11 +1117,13 @@ void spell_RF5_SLOW(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int 
     update_smart_learn(m_idx, DRS_FREE);
 }
 
-void spell_RF5_HOLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int y, int x, int m_idx)
+void spell_RF5_HOLD(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがあなたの目をじっと見つめた！", "%^s stares deep into your eyes!"), m_name);
@@ -855,10 +1144,12 @@ void spell_RF5_HOLD(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int 
     update_smart_learn(m_idx, DRS_FREE);
 }
 
-void spell_RF6_HASTE(bool blind, cptr m_name, monster_type* m_ptr, int y, int x, int m_idx)
+void spell_RF6_HASTE(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
     {
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     }
@@ -874,8 +1165,11 @@ void spell_RF6_HASTE(bool blind, cptr m_name, monster_type* m_ptr, int y, int x,
     }
 }
 
-int spell_RF6_HAND_DOOM(bool blind, cptr m_name, monster_type* m_ptr, int y, int x, int m_idx, bool learnable)
+int spell_RF6_HAND_DOOM(int y, int x, int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
     int dam;
     disturb(1, 1);
     msg_format(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"), m_name);
@@ -884,12 +1178,16 @@ int spell_RF6_HAND_DOOM(bool blind, cptr m_name, monster_type* m_ptr, int y, int
     return dam;
 }
 
-void spell_RF6_HEAL(bool blind, bool seen, cptr m_name, monster_type* m_ptr,int rlev, int m_idx)
+void spell_RF6_HEAL(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    int rlev = monster_level_idx(m_idx);
+    bool seen = (!p_ptr->blind && m_ptr->ml);
     disturb(1, 1);
 
     /* Message */
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが自分の傷に集中した。", "%^s concentrates on %s wounds."), m_name);
@@ -934,8 +1232,11 @@ void spell_RF6_HEAL(bool blind, bool seen, cptr m_name, monster_type* m_ptr,int 
         msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
     }
 }
-void spell_RF6_INVULNER(bool seen, cptr m_name, monster_type* m_ptr, int m_idx)
+void spell_RF6_INVULNER(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    bool seen = (!p_ptr->blind && m_ptr->ml);
     disturb(1, 1);
 
     /* Message */
@@ -947,8 +1248,9 @@ void spell_RF6_INVULNER(bool seen, cptr m_name, monster_type* m_ptr, int m_idx)
     if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(m_idx, randint1(4) + 4, FALSE);
 }
 
-void spell_RF6_BLINK(cptr m_name, int m_idx)
+void spell_RF6_BLINK(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
     disturb(1, 1);
     if (teleport_barrier(m_idx))
     {
@@ -963,8 +1265,9 @@ void spell_RF6_BLINK(cptr m_name, int m_idx)
     }
 }
 
-void spell_RF6_TPORT(cptr m_name, int m_idx)
+void spell_RF6_TPORT(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
     disturb(1, 1);
     if (teleport_barrier(m_idx))
     {
@@ -978,8 +1281,10 @@ void spell_RF6_TPORT(cptr m_name, int m_idx)
     }
 }
 
-int spell_RF6_WORLD(cptr m_name, monster_type* m_ptr, int m_idx)
+int spell_RF6_WORLD(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
     int who = 0;
     disturb(1, 1);
     if (m_ptr->r_idx == MON_DIO) who = 1;
@@ -988,8 +1293,13 @@ int spell_RF6_WORLD(cptr m_name, monster_type* m_ptr, int m_idx)
     return who;
 }
 
-int spell_RF6_SPECIAL(cptr m_name, monster_type* m_ptr, monster_race* r_ptr, u32b mode, bool blind, bool direct, int y, int x, int m_idx)
+int spell_RF6_SPECIAL(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    u32b mode = 0L;
+    bool direct = player_bold(y, x);
     int k, dam, count=0;
 
     disturb(1, 1);
@@ -1050,7 +1360,7 @@ int spell_RF6_SPECIAL(cptr m_name, monster_type* m_ptr, monster_race* r_ptr, u32
         }
 
         case MON_ROLENTO:
-            if (blind)
+            if (p_ptr->blind)
                 msg_format(_("%^sが何か大量に投げた。", "%^s spreads something."), m_name);
             else
                 msg_format(_("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), m_name);
@@ -1064,7 +1374,7 @@ int spell_RF6_SPECIAL(cptr m_name, monster_type* m_ptr, monster_race* r_ptr, u32
                 }
             }
 
-            if (blind && count)
+            if (p_ptr->blind && count)
                 msg_print(_("多くのものが間近にばらまかれる音がする。", "You hear many things are scattered nearby."));
 
             break;
@@ -1133,8 +1443,10 @@ int spell_RF6_SPECIAL(cptr m_name, monster_type* m_ptr, monster_race* r_ptr, u32
 }
 
 
-void spell_RF6_TELE_TO(cptr m_name, monster_type* m_ptr)
+void spell_RF6_TELE_TO(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
     disturb(1, 1);
     msg_format(_("%^sがあなたを引き戻した。", "%^s commands you to return."), m_name);
 
@@ -1142,8 +1454,9 @@ void spell_RF6_TELE_TO(cptr m_name, monster_type* m_ptr)
     learn_spell(MS_TELE_TO);
 }
 
-void spell_RF6_TELE_AWAY(cptr m_name, int m_idx)
+void spell_RF6_TELE_AWAY(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
     disturb(1, 1);
 
     msg_format(_("%^sにテレポートさせられた。", "%^s teleports you away."), m_name);
@@ -1154,11 +1467,13 @@ void spell_RF6_TELE_AWAY(cptr m_name, int m_idx)
     teleport_player_away(m_idx, 100);
 }
 
-void spell_RF6_TELE_LEVEL(bool blind, cptr m_name, int m_idx, int rlev)
+void spell_RF6_TELE_LEVEL(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何か奇妙な言葉をつぶやいた。", "%^s mumbles strangely."), m_name);
     else
         msg_format(_("%^sがあなたの足を指さした。", "%^s gestures at your feet."), m_name);
@@ -1179,11 +1494,16 @@ void spell_RF6_TELE_LEVEL(bool blind, cptr m_name, int m_idx, int rlev)
     update_smart_learn(m_idx, DRS_NEXUS);
 }
 
-int spell_RF6_PSY_SPEAR(bool blind, cptr m_name, monster_race* r_ptr, int rlev, int m_idx, bool learnable)
+int spell_RF6_PSY_SPEAR(int m_idx)
 {
+    bool learnable = spell_learnable(m_idx);
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int dam;
     disturb(1, 1);
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが光の剣を放った。", "%^s throw a Psycho-Spear."), m_name);
@@ -1193,18 +1513,30 @@ int spell_RF6_PSY_SPEAR(bool blind, cptr m_name, monster_race* r_ptr, int rlev, 
     return dam;
 }
 
-void spell_RF6_DARKNESS(bool blind, cptr m_name, bool can_use_lite_area)
+void spell_RF6_DARKNESS(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    bool can_use_lite_area = FALSE;
+
+    if ((p_ptr->pclass == CLASS_NINJA) &&
+        !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
+        !(r_ptr->flags7 & RF7_DARK_MASK))
+        can_use_lite_area = TRUE;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else if (can_use_lite_area)
         msg_format(_("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."), m_name);
     else
         msg_format(_("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."), m_name);
 
-    if (can_use_lite_area) (void)lite_area(0, 3);
+    if (can_use_lite_area)
+    {
+        (void)lite_area(0, 3);
+    }
     else
     {
         learn_spell(MS_DARKNESS);
@@ -1212,11 +1544,12 @@ void spell_RF6_DARKNESS(bool blind, cptr m_name, bool can_use_lite_area)
     }
 }
 
-void spell_RF6_TRAPS(bool blind, cptr m_name, int y, int x)
+void spell_RF6_TRAPS(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいて邪悪に微笑んだ。",
         "%^s mumbles, and then cackles evilly."), m_name);
     else
@@ -1227,8 +1560,10 @@ void spell_RF6_TRAPS(bool blind, cptr m_name, int y, int x)
     (void)trap_creation(y, x);
 }
 
-void spell_RF6_FORGET(cptr m_name, int rlev)
+void spell_RF6_FORGET(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     disturb(1, 1);
 
     msg_format(_("%^sがあなたの記憶を消去しようとしている。",
@@ -1245,11 +1580,13 @@ void spell_RF6_FORGET(cptr m_name, int rlev)
     learn_spell(MS_FORGET);
 }
 
-void spell_RF6_RAISE_DEAD(bool blind, cptr m_name, int m_idx, monster_type* m_ptr)
+void spell_RF6_RAISE_DEAD(int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが死者復活の呪文を唱えた。",
@@ -1258,13 +1595,18 @@ void spell_RF6_RAISE_DEAD(bool blind, cptr m_name, int m_idx, monster_type* m_pt
     animate_dead(m_idx, m_ptr->fy, m_ptr->fx);
 }
 
-void spell_RF6_S_KIN(bool blind, cptr m_name, monster_type* m_ptr, monster_race* r_ptr, int m_idx, int y, int x, int rlev, u32b mode)
+void spell_RF6_S_KIN(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int count = 0, k;
+    u32b mode = 0L;
     disturb(1, 1);
     if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
     {
-        if (blind)
+        if (p_ptr->blind)
             msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
         else
             msg_format(_("%^sがダンジョンの主を召喚した。",
@@ -1272,7 +1614,7 @@ void spell_RF6_S_KIN(bool blind, cptr m_name, monster_type* m_ptr, monster_race*
     }
     else
     {
-        if (blind)
+        if (p_ptr->blind)
             msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
         else
 #ifdef JP
@@ -1360,16 +1702,17 @@ void spell_RF6_S_KIN(bool blind, cptr m_name, monster_type* m_ptr, monster_race*
         break;
     }
     
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 }
 
-void spell_RF6_S_CYBER(bool blind, cptr m_name, int m_idx, int y, int x)
+void spell_RF6_S_CYBER(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
     int count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがサイバーデーモンを召喚した！",
@@ -1377,16 +1720,18 @@ void spell_RF6_S_CYBER(bool blind, cptr m_name, int m_idx, int y, int x)
 
     count = summon_cyber(m_idx, y, x);
 
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("重厚な足音が近くで聞こえる。", "You hear heavy steps nearby."));
 }
 
-void spell_RF6_S_MONSTER(bool blind, cptr m_name, int m_idx, int y, int x, int rlev)
+void spell_RF6_S_MONSTER(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"), m_name);
@@ -1395,112 +1740,126 @@ void spell_RF6_S_MONSTER(bool blind, cptr m_name, int m_idx, int y, int x, int r
     {
         count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 }
 
-void spell_RF6_S_MONSTERS(bool blind, cptr m_name, int m_idx, int y, int x, int rlev, int s_num_6)
+void spell_RF6_S_MONSTERS(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"), m_name);
 
-    for (k = 0; k < s_num_6; k++)
+    for (k = 0; k < S_NUM_6; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
 
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 }
 
-void spell_RF6_S_ANT(bool blind, cptr m_name, int m_idx, int y, int x, int rlev, int s_num_6)
+void spell_RF6_S_ANT(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法でアリを召喚した。", "%^s magically summons ants."), m_name);
 
-    for (k = 0; k < s_num_6; k++)
+    for (k = 0; k < S_NUM_6; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_ANT, PM_ALLOW_GROUP);
     }
 
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 }
 
-void spell_RF6_S_SPIDER(bool blind, cptr m_name, int m_idx, int y, int x, int rlev, int s_num_6)
+void spell_RF6_S_SPIDER(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."), m_name);
 
-    for (k = 0; k < s_num_6; k++)
+    for (k = 0; k < S_NUM_6; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_SPIDER, PM_ALLOW_GROUP);
     }
 
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 }
 
-void spell_RF6_S_HOUND(bool blind, cptr m_name, int m_idx, int y, int x, int rlev, int s_num_4)
+void spell_RF6_S_HOUND(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."), m_name);
 
-    for (k = 0; k < s_num_4; k++)
+    for (k = 0; k < S_NUM_4; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_HOUND, PM_ALLOW_GROUP);
     }
 
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 }
 
-void spell_RF6_S_HYDRA(bool blind, cptr m_name, int m_idx, int y, int x, int rlev, int s_num_4)
+void spell_RF6_S_HYDRA(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."), m_name);
 
-    for (k = 0; k < s_num_4; k++)
+    for (k = 0; k < S_NUM_4; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_HYDRA, PM_ALLOW_GROUP);
     }
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 }
 
-void spell_RF6_S_ANGEL(bool blind, cptr m_name, monster_race* r_ptr, int m_idx, int y, int x, int rlev)
+void spell_RF6_S_ANGEL(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     int num = 1;
 
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"), m_name);
@@ -1517,22 +1876,24 @@ void spell_RF6_S_ANGEL(bool blind, cptr m_name, monster_race* r_ptr, int m_idx, 
 
     if (count < 2)
     {
-        if (blind && count)
+        if (p_ptr->blind && count)
             msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
     }
     else
     {
-        if (blind)
+        if (p_ptr->blind)
             msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
     }
 }
 
-void spell_RF6_S_DEMON(bool blind, cptr m_name, int m_idx, int y, int x, int rlev)
+void spell_RF6_S_DEMON(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sは魔法で混沌の宮廷から悪魔を召喚した！",
@@ -1543,16 +1904,18 @@ void spell_RF6_S_DEMON(bool blind, cptr m_name, int m_idx, int y, int x, int rle
         count += summon_specific(m_idx, y, x, rlev, SUMMON_DEMON, PM_ALLOW_GROUP);
     }
 
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 }
 
-void spell_RF6_S_UNDEAD(bool blind, cptr m_name, int m_idx, int y, int x, int rlev)
+void spell_RF6_S_UNDEAD(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法でアンデッドの強敵を召喚した！",
@@ -1563,16 +1926,18 @@ void spell_RF6_S_UNDEAD(bool blind, cptr m_name, int m_idx, int y, int x, int rl
         count += summon_specific(m_idx, y, x, rlev, SUMMON_UNDEAD, PM_ALLOW_GROUP);
     }
 
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 }
 
-void spell_RF6_S_DRAGON(bool blind, cptr m_name, int m_idx, int y, int x, int rlev)
+void spell_RF6_S_DRAGON(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"), m_name);
@@ -1581,12 +1946,17 @@ void spell_RF6_S_DRAGON(bool blind, cptr m_name, int m_idx, int y, int x, int rl
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_DRAGON, PM_ALLOW_GROUP);
     }
-    if (blind && count)
+    if (p_ptr->blind && count)
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 }
 
-void spell_RF6_S_HI_UNDEAD(monster_type* m_ptr, bool blind, cptr m_name, int m_idx, int y, int x, int rlev, int s_num_6, u32b mode)
+void spell_RF6_S_HI_UNDEAD(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
+    u32b mode = 0L;
     int k, count = 0;
     disturb(1, 1);
 
@@ -1595,7 +1965,7 @@ void spell_RF6_S_HI_UNDEAD(monster_type* m_ptr, bool blind, cptr m_name, int m_i
         int cy = y;
         int cx = x;
 
-        if (blind)
+        if (p_ptr->blind)
             msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
         else
             msg_format(_("%^sが魔法で幽鬼戦隊を召喚した！", "%^s magically summons rangers of Nazgul!"), m_name);
@@ -1637,18 +2007,18 @@ void spell_RF6_S_HI_UNDEAD(monster_type* m_ptr, bool blind, cptr m_name, int m_i
     }
     else
     {
-        if (blind)
+        if (p_ptr->blind)
             msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
         else
             msg_format(_("%^sが魔法で強力なアンデッドを召喚した！",
             "%^s magically summons greater undead!"), m_name);
 
-        for (k = 0; k < s_num_6; k++)
+        for (k = 0; k < S_NUM_6; k++)
         {
             count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
         }
     }
-    if (blind && count)
+    if (p_ptr->blind && count)
     {
         msg_print(_("間近で何か多くのものが這い回る音が聞こえる。",
             "You hear many creepy things appear nearby."));
@@ -1656,61 +2026,68 @@ void spell_RF6_S_HI_UNDEAD(monster_type* m_ptr, bool blind, cptr m_name, int m_i
 }
 
 
-void spell_RF6_S_HI_DRAGON(bool blind, cptr m_name, int m_idx, int y, int x, int rlev, int s_num_4)
+void spell_RF6_S_HI_DRAGON(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法で古代ドラゴンを召喚した！", "%^s magically summons ancient dragons!"), m_name);
 
-    for (k = 0; k < s_num_4; k++)
+    for (k = 0; k < S_NUM_4; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
-    if (blind && count)
+    if (p_ptr->blind && count)
     {
         msg_print(_("多くの力強いものが間近に現れた音が聞こえる。",
             "You hear many powerful things appear nearby."));
     }
 }
 
-void spell_RF6_S_AMBERITES(bool blind, cptr m_name, int m_idx, int y, int x, int rlev, int s_num_4)
+void spell_RF6_S_AMBERITES(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sがアンバーの王族を召喚した！", "%^s magically summons Lords of Amber!"), m_name);
 
-    for (k = 0; k < s_num_4; k++)
+    for (k = 0; k < S_NUM_4; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_AMBERITES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
-    if (blind && count)
+    if (p_ptr->blind && count)
     {
         msg_print(_("不死の者が近くに現れるのが聞こえた。", "You hear immortal beings appear nearby."));
     }
 }
 
-void spell_RF6_S_UNIQUE(bool blind, cptr m_name, int m_idx, monster_type* m_ptr, int y, int x, int rlev, int s_num_4)
+void spell_RF6_S_UNIQUE(int y, int x, int m_idx)
 {
+    cptr m_name = monster_name(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     bool uniques_are_summoned = FALSE;
     int non_unique_type = SUMMON_HI_UNDEAD;
 
     disturb(1, 1);
 
-    if (blind)
+    if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
         msg_format(_("%^sが魔法で特別な強敵を召喚した！", "%^s magically summons special opponents!"), m_name);
 
-    for (k = 0; k < s_num_4; k++)
+    for (k = 0; k < S_NUM_4; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
@@ -1722,12 +2099,12 @@ void spell_RF6_S_UNIQUE(bool blind, cptr m_name, int m_idx, monster_type* m_ptr,
     else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
         non_unique_type = SUMMON_ANGEL;
 
-    for (k = count; k < s_num_4; k++)
+    for (k = count; k < S_NUM_4; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, non_unique_type, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
 
-    if (blind && count)
+    if (p_ptr->blind && count)
     {
         msg_format(_("多くの%sが間近に現れた音が聞こえる。", "You hear many %s appear nearby."),
             uniques_are_summoned ? _("力強いもの", "powerful things") : _("もの", "things"));
