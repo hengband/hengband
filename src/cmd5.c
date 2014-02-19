@@ -146,7 +146,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 
 	/* Build a prompt (accept all spells) */
 #ifdef JP
-	jverb1( prompt, jverb_buf );
+	jverb( prompt, jverb_buf, JVERB_AND );
 	(void) strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ",
 		p, I2A(0), I2A(num - 1), p, jverb_buf );
 #else
@@ -298,7 +298,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 
 			/* Prompt */
 #ifdef JP
-			jverb1( prompt, jverb_buf );
+			jverb( prompt, jverb_buf, JVERB_AND );
 			/* 英日切り替え機能に対応 */
 			(void) strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ",
 				do_spell(use_realm, spell, SPELL_NAME), need_mana,

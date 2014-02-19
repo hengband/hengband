@@ -1821,9 +1821,6 @@ extern void dump_virtues(FILE * OutFile);
 #ifdef JP
 /* japanese.c */
 extern void sindarin_to_kana(char *kana, const char *sindarin);
-extern void jverb1( const char *in , char *out);
-extern void jverb2( const char *in , char *out);
-extern void jverb3( const char *in , char *out);
 extern void jverb( const char *in , char *out , int flag);
 extern void sjis2euc(char *str);
 extern void euc2sjis(char *str);
