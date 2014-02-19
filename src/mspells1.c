@@ -502,37 +502,62 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  * @brief モンスターのボルト型魔法処理 /
  * Cast a bolt at the player Stop if we hit a monster Affect monsters and the player
  * @param m_idx モンスターのID
+ * @param y 目標のY座標
+ * @param x 目標のX座標
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
- * @param learnable ラーニング可能か否か
+ * @param spell_type モンスターからモンスターへ撃つならSPELL_MON_TO_MON、モンスターからプレイヤーならSPELL_MON_TO_PLAYER
  * @return なし
  */
-void bolt(int m_idx, int typ, int dam_hp, int monspell)
-{
-    int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER;
+void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int spell_type)
+  {
+    int flg;
     bool learnable = spell_learnable(m_idx);
+
+    switch (spell_type)
+    {
+    case SPELL_MON_TO_MON:
+        flg = PROJECT_STOP | PROJECT_KILL;
+        break;
+    case SPELL_MON_TO_PLAYER:
+        flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER;
+        break;
+    }
 	if (typ != GF_ARROW) flg  |= PROJECT_REFLECTABLE;
 
 	/* Target the player with a bolt attack */
-	(void)project(m_idx, 0, py, px, dam_hp, typ, flg, (learnable ? monspell : -1));
+	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
 /*!
  * @brief モンスターのビーム型魔法処理 /
  * @param m_idx モンスターのID
+ * @param y 目標のY座標
+ * @param x 目標のX座標
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
+ * @param spell_type モンスターからモンスターへ撃つならSPELL_MON_TO_MON、モンスターからプレイヤーならSPELL_MON_TO_PLAYER
  * @return なし
  */
-void beam(int m_idx, int typ, int dam_hp, int monspell)
+void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int spell_type)
 {
-    int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER;
+    int flg;
     bool learnable = spell_learnable(m_idx);
 
+    switch (spell_type)
+    {
+    case SPELL_MON_TO_MON:
+        flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU;
+        break;
+    case SPELL_MON_TO_PLAYER:
+        flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER;
+        break;
+    }
+
 	/* Target the player with a bolt attack */
-	(void)project(m_idx, 0, py, px, dam_hp, typ, flg, (learnable ? monspell : -1));
+	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
 
@@ -1853,7 +1878,7 @@ bool make_attack_spell(int m_idx)
         case 96 + 1:   break;   /* RF4_XXX1 */
         case 96 + 2:   MP_spell_RF4_DISPEL(m_idx); break;  /* RF4_DISPEL */
         case 96 + 3:   dam = MP_spell_RF4_ROCKET(y, x, m_idx); break;   /* RF4_ROCKET */
-        case 96 + 4:   dam = spell_RF4_SHOOT(m_idx); break;    /* RF4_SHOOT */
+        case 96 + 4:   dam = spell_RF4_SHOOT(y, x, m_idx); break;    /* RF4_SHOOT */
         case 96 + 5:   break;   /* RF4_XXX2 */
         case 96 + 6:   break;   /* RF4_XXX3 */
         case 96 + 7:   break;   /* RF4_XXX4 */
@@ -1930,7 +1955,7 @@ bool make_attack_spell(int m_idx)
         case 160 + 8:  spell_RF6_TELE_TO(m_idx); break;     /* RF6_TELE_TO */
         case 160 + 9:  spell_RF6_TELE_AWAY(m_idx); break;     /* RF6_TELE_AWAY */
         case 160 + 10: spell_RF6_TELE_LEVEL(m_idx); break;     /* RF6_TELE_LEVEL */
-        case 160 + 11: spell_RF6_PSY_SPEAR(m_idx); break;    /* RF6_PSY_SPEAR */
+        case 160 + 11: spell_RF6_PSY_SPEAR(y, x, m_idx); break;    /* RF6_PSY_SPEAR */
         case 160 + 12: spell_RF6_DARKNESS(m_idx); break;     /* RF6_DARKNESS */
         case 160 + 13: spell_RF6_TRAPS(y, x, m_idx); break;     /* RF6_TRAPS */
         case 160 + 14: spell_RF6_FORGET(m_idx); break;     /* RF6_FORGET */

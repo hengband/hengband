@@ -1569,8 +1569,8 @@ extern bool raise_possible(monster_type *m_ptr);
 extern bool dispel_check(int m_idx);
 extern bool spell_is_inate(u16b spell);
 extern bool make_attack_spell(int m_idx);
-extern void beam(int m_idx, int typ, int dam_hp, int monspell);
-extern void bolt(int m_idx, int typ, int dam_hp, int monspell);
+extern void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int spell_type);
+extern void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int spell_type);
 extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int spell_type);
 
 /* mspells2.c */
@@ -1589,7 +1589,7 @@ extern bool spell_learnable(int m_idx);
 extern void MP_spell_RF4_SHRIEK(int m_idx);
 extern void MP_spell_RF4_DISPEL(int m_idx);
 extern int MP_spell_RF4_ROCKET(int y, int x, int m_idx);
-extern int spell_RF4_SHOOT(int m_idx);
+extern int spell_RF4_SHOOT(int y, int x, int m_idx);
 extern int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx);
 extern int spell_RF4_BA_CHAO(int y, int x, int m_idx);
 extern int spell_RF4_BA_NUKE(int y, int x, int m_idx);
@@ -1636,7 +1636,7 @@ extern int spell_RF6_SPECIAL(int y, int x, int m_idx);
 extern void spell_RF6_TELE_TO(int m_idx);
 extern void spell_RF6_TELE_AWAY(int m_idx);
 extern void spell_RF6_TELE_LEVEL(int m_idx);
-extern int spell_RF6_PSY_SPEAR(int m_idx);
+extern int spell_RF6_PSY_SPEAR(int y, int x, int m_idx);
 extern void spell_RF6_DARKNESS(int m_idx);
 extern void spell_RF6_TRAPS(int y, int x, int m_idx);
 extern void spell_RF6_FORGET(int m_idx);

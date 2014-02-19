@@ -14,51 +14,6 @@
 #include "angband.h"
 
 /*!
- * @brief モンスターが敵対モンスターにボルト型特殊技能を放つ処理 /
- * Monster casts a bolt at another monster
- * @param m_idx 特殊技能を使うモンスターの参照ID
- * @param y 目標のY座標
- * @param x 目標のX座標
- * @param typ 効果属性のID
- * @param dam_hp 威力
- * @param monspell 特殊攻撃のID
- * @param learnable ラーニング可能な前提が揃っているならばTRUE
- * @return なし
- * @details
- * Stop if we hit a monster
- * Affect monsters and the player
- */
-static void monst_bolt_monst(int m_idx, int y, int x, int typ, int dam_hp, int monspell)
-{
-	int flg = PROJECT_STOP | PROJECT_KILL;
-    bool learnable = spell_learnable(m_idx);
-
-	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
-	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
-}
-
-
-/*!
- * @brief モンスターが敵対モンスターにビーム型特殊技能を放つ処理 /
- * Monster casts a bolt at another monster
- * @param m_idx 特殊技能を使うモンスターの参照ID
- * @param y 目標のY座標
- * @param x 目標のX座標
- * @param typ 効果属性のID
- * @param dam_hp 威力
- * @param monspell 特殊攻撃のID
- * @param learnable ラーニング可能な前提が揃っているならばTRUE
- * @return なし
- */
-static void monst_beam_monst(int m_idx, int y, int x, int typ, int dam_hp, int monspell)
-{
-	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU;
-    bool learnable = spell_learnable(m_idx);
-
-	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
-}
-
-/*!
  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
  * Determine if a beam spell will hit the target.
  * @param y1 始点のY座標
@@ -809,7 +764,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
-		monst_bolt_monst(m_idx, y, x, GF_ARROW, dam, MS_SHOOT);
+		bolt(m_idx, y, x, GF_ARROW, dam, MS_SHOOT, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1979,7 +1934,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (damroll(7, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-		monst_bolt_monst(m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID);
+        bolt(m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1998,7 +1953,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (damroll(4, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-		monst_bolt_monst(m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC);
+        bolt(m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2017,7 +1972,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (damroll(9, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-		monst_bolt_monst(m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE);
+        bolt(m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2036,7 +1991,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (damroll(6, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-		monst_bolt_monst(m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD);
+        bolt(m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2085,7 +2040,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = 30 + damroll(5, 5) + (rlev * 4) / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3);
-		monst_bolt_monst(m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER);
+        bolt(m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2105,7 +2060,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(10, 10) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-		monst_bolt_monst(m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER);
+        bolt(m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2125,7 +2080,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = randint1(rlev * 7 / 2) + 50;
-		monst_bolt_monst(m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA);
+        bolt(m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2145,7 +2100,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = 10 + damroll(8, 7) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-		monst_bolt_monst(m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA);
+        bolt(m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2165,7 +2120,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(6, 6) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-		monst_bolt_monst(m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE);
+        bolt(m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2185,7 +2140,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(2, 6) + (rlev / 3);
-		monst_bolt_monst(m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE);
+        bolt(m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2797,7 +2752,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (r_ptr->flags2 & RF2_POWERFUL) ? (randint1(rlev * 2) + 180) : (randint1(rlev * 3 / 2) + 120);
-		monst_beam_monst(m_idx, y, x, GF_PSY_SPEAR, dam, MS_PSY_SPEAR);
+		beam(m_idx, y, x, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, SPELL_MON_TO_MON);
 		break;
 
 	/* RF6_DARKNESS */
