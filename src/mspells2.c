@@ -13,58 +13,6 @@
 
 #include "angband.h"
 
-
-/*!
- * @brief モンスターが敵対モンスターにブレス/ボール型特殊技能を放つ処理 /
- * Monster casts a breath (or ball) attack at another monster.
- * @param m_idx 特殊技能を使うモンスターの参照ID
- * @param y 目標のY座標
- * @param x 目標のX座標
- * @param typ 効果属性のID
- * @param dam_hp 威力
- * @param rad 半径
- * @param breath TRUEならばブレス / FALSEならばボール
- * @param monspell 特殊攻撃のID
- * @return なし
- * @details
- * Pass over any monsters that may be in the way
- * Affect grids, objects, monsters, and the player
- */
-void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int rad, bool breath, int monspell)
-{
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    bool learnable = spell_learnable(m_idx);
-
-	monster_type *m_ptr = &m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-	/* Determine the radius of the blast */
-	if (rad < 1 && breath) rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
-
-	/* Handle breath attacks */
-	if (breath) rad = 0 - rad;
-
-	switch (typ)
-	{
-	case GF_ROCKET:
-		flg |= PROJECT_STOP;
-		break;
-	case GF_DRAIN_MANA:
-	case GF_MIND_BLAST:
-	case GF_BRAIN_SMASH:
-	case GF_CAUSE_1:
-	case GF_CAUSE_2:
-	case GF_CAUSE_3:
-	case GF_CAUSE_4:
-	case GF_HAND_DOOM:
-		flg |= (PROJECT_HIDE | PROJECT_AIMED);
-		break;
-	}
-
-	(void)project(m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
-}
-
-
 /*!
  * @brief モンスターが敵対モンスターにボルト型特殊技能を放つ処理 /
  * Monster casts a bolt at another monster
@@ -906,8 +854,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_ACID,
-				   dam,0, TRUE, MS_BR_ACID);
+		breath(y, x, m_idx,GF_ACID,dam, 0, TRUE, MS_BR_ACID, SPELL_MON_TO_MON);
 
 		break;
 
@@ -937,8 +884,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_ELEC,
-				   dam,0, TRUE, MS_BR_ELEC);
+        breath(y, x, m_idx,GF_ELEC, dam, 0, TRUE, MS_BR_ELEC, SPELL_MON_TO_MON);
 
 		break;
 
@@ -968,8 +914,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_FIRE,
-				   dam,0, TRUE, MS_BR_FIRE);
+        breath(y, x, m_idx,GF_FIRE, dam, 0, TRUE, MS_BR_FIRE, SPELL_MON_TO_MON);
 
 		break;
 
@@ -999,8 +944,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 1600 ? 1600 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_COLD,
-				   dam,0, TRUE, MS_BR_COLD);
+        breath(y, x, m_idx,GF_COLD, dam, 0, TRUE, MS_BR_COLD, SPELL_MON_TO_MON);
 		break;
 
 	/* RF4_BR_POIS */
@@ -1029,8 +973,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 800 ? 800 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_POIS,
-				   dam,0, TRUE, MS_BR_POIS);
+        breath(y, x, m_idx,GF_POIS, dam, 0, TRUE, MS_BR_POIS, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1060,8 +1003,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 550 ? 550 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_NETHER,
-				   dam,0, TRUE, MS_BR_NETHER);
+        breath(y, x, m_idx,GF_NETHER, dam, 0, TRUE, MS_BR_NETHER, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1091,8 +1033,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 400 ? 400 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_LITE,
-				   dam,0, TRUE, MS_BR_LITE);
+        breath(y, x, m_idx,GF_LITE, dam, 0, TRUE, MS_BR_LITE, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1122,8 +1063,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 400 ? 400 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_DARK,
-				   dam,0, TRUE, MS_BR_DARK);
+        breath(y, x, m_idx,GF_DARK, dam, 0, TRUE, MS_BR_DARK, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1153,8 +1093,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 450 ? 450 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_CONFUSION,
-				   dam,0, TRUE, MS_BR_CONF);
+        breath(y, x, m_idx,GF_CONFUSION, dam, 0, TRUE, MS_BR_CONF, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1188,8 +1127,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 450 ? 450 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_SOUND,
-				   dam,0, TRUE, MS_BR_SOUND);
+        breath(y, x, m_idx,GF_SOUND, dam, 0, TRUE, MS_BR_SOUND, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1219,8 +1157,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 600 ? 600 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_CHAOS,
-				   dam,0, TRUE, MS_BR_CHAOS);
+        breath(y, x, m_idx, GF_CHAOS, dam, 0, TRUE, MS_BR_CHAOS, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1250,8 +1187,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 500 ? 500 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_DISENCHANT,
-				   dam,0, TRUE, MS_BR_DISEN);
+        breath(y, x, m_idx, GF_DISENCHANT, dam, 0, TRUE, MS_BR_DISEN, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1281,8 +1217,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 250 ? 250 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_NEXUS,
-				   dam,0, TRUE, MS_BR_NEXUS);
+        breath(y, x, m_idx, GF_NEXUS, dam, 0, TRUE, MS_BR_NEXUS, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1312,8 +1247,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 150 ? 150 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_TIME,
-				   dam,0, TRUE, MS_BR_TIME);
+        breath(y, x, m_idx, GF_TIME, dam, 0, TRUE, MS_BR_TIME, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1343,8 +1277,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 200 ? 200 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_INERTIA,
-				   dam,0, TRUE, MS_BR_INERTIA);
+        breath(y, x, m_idx, GF_INERTIA, dam, 0, TRUE, MS_BR_INERTIA, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1374,8 +1307,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 200 ? 200 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_GRAVITY,
-				   dam,0, TRUE, MS_BR_GRAVITY);
+        breath(y, x, m_idx, GF_GRAVITY, dam, 0, TRUE, MS_BR_GRAVITY, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1409,8 +1341,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 500 ? 500 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_SHARDS,
-				   dam,0, TRUE, MS_BR_SHARDS);
+        breath(y, x, m_idx, GF_SHARDS, dam, 0, TRUE, MS_BR_SHARDS, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1440,8 +1371,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 150 ? 150 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_PLASMA,
-				   dam,0, TRUE, MS_BR_PLASMA);
+        breath(y, x, m_idx,GF_PLASMA, dam, 0, TRUE, MS_BR_PLASMA, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1471,8 +1401,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 200 ? 200 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_FORCE,
-				   dam,0, TRUE, MS_BR_FORCE);
+        breath(y, x, m_idx,GF_FORCE, dam, 0, TRUE, MS_BR_FORCE, SPELL_MON_TO_MON);
 		break;
 
 	/* RF4_BR_MANA */
@@ -1501,8 +1430,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 250 ? 250 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_MANA,
-				   dam,0, TRUE, MS_BR_MANA);
+        breath(y, x, m_idx,GF_MANA, dam, 0, TRUE, MS_BR_MANA, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1530,8 +1458,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (rlev + damroll(10, 6));
-		monst_breath_monst(m_idx, y, x, GF_NUKE,
-				   dam, 2, FALSE, MS_BALL_NUKE);
+        breath(y, x, m_idx,GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1561,8 +1488,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 3) > 800 ? 800 : (m_ptr->hp / 3));
-		monst_breath_monst(m_idx, y, x, GF_NUKE,
-				   dam,0, TRUE, MS_BR_NUKE);
+        breath(y, x, m_idx,GF_NUKE, dam, 0, TRUE, MS_BR_NUKE, SPELL_MON_TO_MON);
 		break;
 
 	/* RF4_BA_CHAO */
@@ -1589,8 +1515,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (rlev * 2) + damroll(10, 10);
-		monst_breath_monst(m_idx, y, x, GF_CHAOS,
-				   dam, 4, FALSE, MS_BALL_CHAOS);
+        breath(y, x, m_idx,GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1620,8 +1545,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((m_ptr->hp / 6) > 150 ? 150 : (m_ptr->hp / 6));
-		monst_breath_monst(m_idx, y, x, GF_DISINTEGRATE,
-				   dam,0, TRUE, MS_BR_DISI);
+        breath(y, x, m_idx,GF_DISINTEGRATE, dam, 0, TRUE, MS_BR_DISI, SPELL_MON_TO_MON);
 		break;
 
 	/* RF5_BA_ACID */
@@ -1658,7 +1582,7 @@ bool monst_spell_monst(int m_idx)
 			rad = 2;
 			dam = (randint1(rlev * 3) + 15);
 		}
-		monst_breath_monst(m_idx, y, x, GF_ACID, dam, rad, FALSE, MS_BALL_ACID);
+        breath(y, x, m_idx,GF_ACID, dam, rad, FALSE, MS_BALL_ACID, SPELL_MON_TO_MON);
 		break;
 
 	/* RF5_BA_ELEC */
@@ -1694,7 +1618,7 @@ bool monst_spell_monst(int m_idx)
 			rad = 2;
 			dam = (randint1(rlev * 3 / 2) + 8);
 		}
-		monst_breath_monst(m_idx, y, x, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC);
+        breath(y, x, m_idx,GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, SPELL_MON_TO_MON);
 		break;
 
 	/* RF5_BA_FIRE */
@@ -1741,7 +1665,7 @@ bool monst_spell_monst(int m_idx)
 			rad = 2;
 			dam = (randint1(rlev * 7 / 2) + 10);
 		}
-		monst_breath_monst(m_idx, y, x, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE);
+        breath(y, x, m_idx,GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, SPELL_MON_TO_MON);
 		break;
 
 	/* RF5_BA_COLD */
@@ -1778,7 +1702,7 @@ bool monst_spell_monst(int m_idx)
 			rad = 2;
 			dam = (randint1(rlev * 3 / 2) + 10);
 		}
-		monst_breath_monst(m_idx, y, x, GF_COLD, dam, rad, FALSE, MS_BALL_COLD);
+        breath(y, x, m_idx,GF_COLD, dam, rad, FALSE, MS_BALL_COLD, SPELL_MON_TO_MON);
 		break;
 
 	/* RF5_BA_POIS */
@@ -1806,7 +1730,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(12, 2) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-		monst_breath_monst(m_idx, y, x, GF_POIS, dam, 2, FALSE, MS_BALL_POIS);
+        breath(y, x, m_idx,GF_POIS, dam, 2, FALSE, MS_BALL_POIS, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1834,7 +1758,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = 50 + damroll(10, 10) + (rlev * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1));
-		monst_breath_monst(m_idx, y, x, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER);
+        breath(y, x, m_idx,GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1864,7 +1788,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint1(rlev * 3) : randint1(rlev * 2)) + 50;
-		monst_breath_monst(m_idx, y, x, GF_WATER, dam, 4, FALSE, MS_BALL_WATER);
+        breath(y, x, m_idx,GF_WATER, dam, 4, FALSE, MS_BALL_WATER, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1892,7 +1816,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (rlev * 4) + 50 + damroll(10, 10);
-		monst_breath_monst(m_idx, y, x, GF_MANA, dam, 4, FALSE, MS_BALL_MANA);
+        breath(y, x, m_idx,GF_MANA, dam, 4, FALSE, MS_BALL_MANA, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1920,7 +1844,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (rlev * 4) + 50 + damroll(10, 10);
-		monst_breath_monst(m_idx, y, x, GF_DARK, dam, 4, FALSE, MS_BALL_DARK);
+        breath(y, x, m_idx,GF_DARK, dam, 4, FALSE, MS_BALL_DARK, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1933,7 +1857,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = ((randint1(rlev) / 2) + 1);
-		monst_breath_monst(m_idx, y, x, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA);
+        breath(y, x, m_idx,GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1945,7 +1869,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(7, 7);
-		monst_breath_monst(m_idx, y, x, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST);
+        breath(y, x, m_idx,GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1957,7 +1881,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(12, 12);
-		monst_breath_monst(m_idx, y, x, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH);
+        breath(y, x, m_idx,GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1976,7 +1900,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(3, 8);
-		monst_breath_monst(m_idx, y, x, GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1);
+        breath(y, x, m_idx,GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1, SPELL_MON_TO_MON);
 
 		break;
 
@@ -1996,7 +1920,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(8, 8);
-		monst_breath_monst(m_idx, y, x, GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2);
+        breath(y, x, m_idx,GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2016,7 +1940,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(10, 15);
-		monst_breath_monst(m_idx, y, x, GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3);
+        breath(y, x, m_idx,GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2036,7 +1960,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = damroll(15, 15);
-		monst_breath_monst(m_idx, y, x, GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4);
+        breath(y, x, m_idx,GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2141,7 +2065,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = (rlev * 4) + 50 + damroll(10, 10);
-		monst_breath_monst(m_idx, y, x, GF_LITE, dam, 4, FALSE, MS_STARBURST);
+        breath(y, x, m_idx,GF_LITE, dam, 4, FALSE, MS_STARBURST, SPELL_MON_TO_MON);
 
 		break;
 
@@ -2484,7 +2408,7 @@ bool monst_spell_monst(int m_idx)
 		}
 
 		dam = 20; /* Dummy power */
-		monst_breath_monst(m_idx, y, x, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM);
+        breath(y, x, m_idx,GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, SPELL_MON_TO_MON);
 
 		break;
 

@@ -1524,19 +1524,6 @@ extern int riding_exp_level(int riding_exp);
 extern int spell_exp_level(int spell_exp);
 extern void display_rumor(bool ex);
 
-/* mspells1.c */
-extern bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend);
-extern bool summon_possible(int y1, int x1);
-extern bool raise_possible(monster_type *m_ptr);
-extern bool dispel_check(int m_idx);
-extern bool spell_is_inate(u16b spell);
-extern bool make_attack_spell(int m_idx);
-extern void beam(int m_idx, int typ, int dam_hp, int monspell);
-
-/* mspells2.c */
-extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);
-extern bool monst_spell_monst(int m_idx);
-
 /* artifact.c */
 extern void one_sustain(object_type *o_ptr);
 extern void one_high_resistance(object_type *o_ptr);
@@ -1574,11 +1561,21 @@ extern void do_cmd_mind_browse(void);
 
 /* mane.c */
 extern bool do_cmd_mane(bool baigaesi);
+
+/* mspells1.c */
+extern bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend);
+extern bool summon_possible(int y1, int x1);
+extern bool raise_possible(monster_type *m_ptr);
+extern bool dispel_check(int m_idx);
+extern bool spell_is_inate(u16b spell);
+extern bool make_attack_spell(int m_idx);
+extern void beam(int m_idx, int typ, int dam_hp, int monspell);
 extern void bolt(int m_idx, int typ, int dam_hp, int monspell);
-extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell);
+extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int spell_type);
 
 /* mspells2.c */
-extern void monst_breath_monst(int m_idx, int y, int x, int typ, int dam_hp, int rad, bool breath, int monspell);
+extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);
+extern bool monst_spell_monst(int m_idx);
 
 /* mspells3.c */
 extern bool do_cmd_cast_learned(void);

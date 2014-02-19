@@ -547,15 +547,25 @@ void beam(int m_idx, int typ, int dam_hp, int monspell)
  * @param rad 半径
  * @param breath TRUEならばブレス処理、FALSEならばボール処理
  * @param monspell モンスター魔法のID
+ * @param spell_type モンスターからモンスターへ撃つならSPELL_MON_TO_MON、モンスターからプレイヤーならSPELL_MON_TO_PLAYER
  * @return なし
  */
-void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell)
+void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int spell_type)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
-
-	monster_type *m_ptr = &m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    monster_type *m_ptr = &m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool learnable = spell_learnable(m_idx);
+	int flg;
+
+    switch (spell_type)
+    {
+        case SPELL_MON_TO_MON:
+            flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+            break;
+        case SPELL_MON_TO_PLAYER:
+            flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
+            break;
+    }
 
 	/* Determine the radius of the blast */
 	if ((rad < 1) && breath) rad = (r_ptr->flags2 & (RF2_POWERFUL)) ? 3 : 2;

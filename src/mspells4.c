@@ -53,14 +53,10 @@ int spell_core(int SPELL_NUM, int hp, int y, int x, int m_idx, int SPELL_TYPE)
     {
     case RF4_ROCKET:
         dam = (hp / 4) > 800 ? 800 : (hp / 4);
+        breath(y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, SPELL_TYPE);
         if (SPELL_TYPE == SPELL_MON_TO_PLAYER)
         {
-            breath(y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET);
             update_smart_learn(m_idx, DRS_SHARD);
-        }
-        else if (SPELL_TYPE == SPELL_MON_TO_MON)
-        {
-            monst_breath_monst(m_idx, y, x, GF_ROCKET, dam, 2, FALSE, MS_ROCKET);
         }
         break;
     }
@@ -367,7 +363,7 @@ int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx)
         msg_format(_("%^sが%^sのブレスを吐いた。", "%^s breathes %^s."), m_name, type_s);
     }
 
-    breath(y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type);
+    breath(y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, SPELL_MON_TO_PLAYER);
     if (smart_learn) update_smart_learn(m_idx, drs_type);
     return dam;
 }
@@ -390,7 +386,7 @@ int spell_RF4_BA_CHAO(int y, int x, int m_idx)
     
     dam = ((r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 3) : (rlev * 2)) + damroll(10, 10);
 
-    breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS);
+    breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_CHAOS);
     return dam;
 }
@@ -412,7 +408,7 @@ int spell_RF4_BA_NUKE(int y, int x, int m_idx)
     
     dam = (rlev + damroll(10, 6)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
 
-    breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE);
+    breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_POIS);
     return dam;
 }
@@ -442,7 +438,7 @@ int spell_RF5_BA_ACID(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 3) + 15);
     }
-    breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID);
+    breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_ACID);
     return dam;
 }
@@ -472,7 +468,7 @@ int spell_RF5_BA_ELEC(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 3 / 2) + 8);
     }
-    breath(y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC);
+    breath(y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_ELEC);
     return dam;
 }
@@ -512,7 +508,7 @@ int spell_RF5_BA_FIRE(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 7 / 2) + 10);
     }
-    breath(y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE);
+    breath(y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_FIRE);
     return dam;
 }
@@ -542,7 +538,7 @@ int spell_RF5_BA_COLD(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 3 / 2) + 10);
     }
-    breath(y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD);
+    breath(y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_COLD);
     return dam;
 }
@@ -563,7 +559,7 @@ int spell_RF5_BA_POIS(int y, int x, int m_idx)
         msg_format(_("%^sが悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud."), m_name);
 
     dam = damroll(12, 2) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS);
+    breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_POIS);
     return dam;
 }
@@ -583,7 +579,7 @@ int spell_RF5_BA_NETH(int y, int x, int m_idx)
         msg_format(_("%^sが地獄球の呪文を唱えた。", "%^s casts a nether ball."), m_name);
 
     dam = 50 + damroll(10, 10) + (rlev * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1));
-    breath(y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER);
+    breath(y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_NETH);
     return dam;
 }
@@ -606,7 +602,7 @@ int spell_RF5_BA_WATE(int y, int x, int m_idx)
     msg_print(_("あなたは渦巻きに飲み込まれた。", "You are engulfed in a whirlpool."));
 
     dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint1(rlev * 3) : randint1(rlev * 2)) + 50;
-    breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER);
+    breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, SPELL_MON_TO_PLAYER);
     return dam;
 }
 
@@ -624,7 +620,7 @@ int spell_RF5_BA_MANA(int y, int x, int m_idx)
         msg_format(_("%^sが魔力の嵐の呪文を念じた。", "%^s invokes a mana storm."), m_name);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
-    breath(y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA);
+    breath(y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, SPELL_MON_TO_PLAYER);
     return dam;
 }
 
@@ -643,7 +639,7 @@ int spell_RF5_BA_DARK(int y, int x, int m_idx)
         msg_format(_("%^sが暗黒の嵐の呪文を念じた。", "%^s invokes a darkness storm."), m_name);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
-    breath(y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK);
+    breath(y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_DARK);
     return dam;
 }
@@ -656,7 +652,7 @@ int spell_RF5_DRAIN_MANA(int y, int x, int m_idx)
     disturb(1, 1);
 
     dam = (randint1(rlev) / 2) + 1;
-    breath(y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA);
+    breath(y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_MANA);
     return dam;
 }
@@ -675,7 +671,7 @@ int spell_RF5_MIND_BLAST(int y, int x, int m_idx)
         msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
 
     dam = damroll(7, 7);
-    breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST);
+    breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, SPELL_MON_TO_PLAYER);
     return dam;
 }
 
@@ -693,7 +689,7 @@ int spell_RF5_BRAIN_SMASH(int y, int x, int m_idx)
         msg_format(_("%^sがあなたの瞳をじっと見ている。", "%^s looks deep into your eyes."), m_name);
 
     dam = damroll(12, 12);
-    breath(y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH);
+    breath(y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, SPELL_MON_TO_PLAYER);
     return dam;
 }
 
@@ -710,7 +706,7 @@ int spell_RF5_CAUSE_1(int y, int x, int m_idx)
         msg_format(_("%^sがあなたを指さして呪った。", "%^s points at you and curses."), m_name);
 
     dam = damroll(3, 8);
-    breath(y, x, m_idx, GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1);
+    breath(y, x, m_idx, GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1, SPELL_MON_TO_PLAYER);
     return dam;
 }
 
@@ -727,7 +723,7 @@ int spell_RF5_CAUSE_2(int y, int x, int m_idx)
         msg_format(_("%^sがあなたを指さして恐ろしげに呪った。", "%^s points at you and curses horribly."), m_name);
 
     dam = damroll(8, 8);
-    breath(y, x, m_idx, GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2);
+    breath(y, x, m_idx, GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2, SPELL_MON_TO_PLAYER);
     return dam;
 }
 
@@ -744,7 +740,7 @@ int spell_RF5_CAUSE_3(int y, int x, int m_idx)
         msg_format(_("%^sがあなたを指さして恐ろしげに呪文を唱えた！", "%^s points at you, incanting terribly!"), m_name);
 
     dam = damroll(10, 15);
-    breath(y, x, m_idx, GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3);
+    breath(y, x, m_idx, GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3, SPELL_MON_TO_PLAYER);
     return dam;
 }
 
@@ -762,7 +758,7 @@ int spell_RF5_CAUSE_4(int y, int x, int m_idx)
         "%^s points at you, screaming the word DIE!"), m_name);
 
     dam = damroll(15, 15);
-    breath(y, x, m_idx, GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4);
+    breath(y, x, m_idx, GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4, SPELL_MON_TO_PLAYER);
     return dam;
 }
 
@@ -868,7 +864,7 @@ int spell_RF5_BA_LITE(int y, int x, int m_idx)
         msg_format(_("%^sがスターバーストの呪文を念じた。", "%^s invokes a starburst."), m_name);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
-    breath(y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST);
+    breath(y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, SPELL_MON_TO_PLAYER);
     update_smart_learn(m_idx, DRS_LITE);
     return dam;
 }
@@ -1163,7 +1159,7 @@ int spell_RF6_HAND_DOOM(int y, int x, int m_idx)
     disturb(1, 1);
     msg_format(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"), m_name);
     dam = (((s32b)((40 + randint1(20)) * (p_ptr->chp))) / 100);
-    breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM);
+    breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, SPELL_MON_TO_PLAYER);
     return dam;
 }
 
