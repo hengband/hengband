@@ -1,8 +1,7 @@
 #include "angband.h"
 
-cptr monster_name(int m_idx)
+char* monster_name(int m_idx, char* m_name)
 {
-    static char            m_name[80];
     monster_type    *m_ptr = &m_list[m_idx];
     monster_desc(m_name, m_ptr, 0x00);
     return m_name;
@@ -41,137 +40,154 @@ int monster_level_idx(int m_idx)
     return rlev;
 }
 
-void MP_spell_RF4_SHRIEK(int m_idx)
+bool monster_is_powerful(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
-    disturb(1, 1);
-    msg_format(_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."), m_name);
-    aggravate_monsters(m_idx);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    return (r_ptr->flags2 & RF2_POWERFUL);
 }
 
-void MM_spell_RF4_SHRIEK(int m_idx, int t_idx)
+void monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
-    cptr t_name = monster_name(t_idx);
     bool known = monster_near_player(m_idx, t_idx);
-    bool see_m = see_monster(m_idx);
-    if (known)
-    {
-        if (see_m)
-        {
-            msg_format(_("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."), m_name, t_name);
-        }
-        else
-        {
-            mon_fight = TRUE;
-        }
-    }
-    (void)set_monster_csleep(t_idx, 0);
-}
+    bool see_either = see_monster(m_idx) || see_monster(t_idx);
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	char m_name[80], t_name[80];
+    monster_name(m_idx, m_name);
+	monster_name(t_idx, t_name);
 
-void MP_spell_RF4_DISPEL(int m_idx)
-{
-    cptr m_name = monster_name(m_idx);
-    disturb(1, 1);
+
+    if (mon_to_player || (mon_to_mon && known && see_either))
+        disturb(1, 1);
 
     if (p_ptr->blind)
-        msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
-    else
-        msg_format(_("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."), m_name);
-
-    dispel_player();
-    if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
-
-    if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-        msg_print(_("やりやがったな！", ""));
-
-    learn_spell(MS_DISPEL);
-}
-
-void MM_spell_RF4_DISPEL(int m_idx, int t_idx)
-{
-    cptr m_name = monster_name(m_idx);
-    cptr t_name = monster_name(t_idx);
-    bool known = monster_near_player(m_idx, t_idx);
-    bool see_m = see_monster(m_idx);
-    if (known)
     {
-        if (see_m)
+        if (mon_to_player || (mon_to_mon && known && see_either))
+            msg_format(msg1, m_name);
+    }
+    else
+    {
+        if (mon_to_player)
         {
-            msg_format(_("%^sが%sに対して魔力消去の呪文を念じた。",
-                         "%^s invokes a dispel magic at %s."), m_name, t_name);
+            msg_format(msg2, m_name);
         }
-        else
+        else if (mon_to_mon && known && see_either)
         {
-            mon_fight = TRUE;
+            msg_format(msg3, m_name, t_name);
         }
     }
 
-    if (t_idx == p_ptr->riding) dispel_player();
-    dispel_monster_status(t_idx);
+    if (mon_to_mon && known && !see_either)
+        mon_fight = TRUE;
 }
 
-int spell_RF4_ROCKET(int y, int x, int m_idx, int TARGET_TYPE)
+void spell_RF4_SHRIEK(int m_idx, int t_idx, int TARGET_TYPE)
+{
+	bool known = monster_near_player(m_idx, t_idx);
+    bool see_m = see_monster(m_idx);
+	char m_name[80], t_name[80];
+    monster_name(m_idx, m_name);
+	monster_name(t_idx, t_name);
+
+    if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        if (known)
+        {
+            if (see_m)
+            {
+                msg_format(_("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."), m_name, t_name);
+            }
+            else
+            {
+                mon_fight = TRUE;
+            }
+        }
+        (void)set_monster_csleep(t_idx, 0);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        disturb(1, 1);
+        msg_format(_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."), m_name);
+        aggravate_monsters(m_idx);
+    }
+}
+
+void spell_RF4_DISPEL(int m_idx, int t_idx, int TARGET_TYPE)
+{
+    bool known = monster_near_player(m_idx, t_idx);
+    bool see_m = see_monster(m_idx);
+	char m_name[80], t_name[80];
+    monster_name(m_idx, m_name);
+	monster_name(t_idx, t_name);
+
+
+    if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        if (known)
+        {
+            if (see_m)
+            {
+                msg_format(_("%^sが%sに対して魔力消去の呪文を念じた。",
+                    "%^s invokes a dispel magic at %s."), m_name, t_name);
+            }
+            else
+            {
+                mon_fight = TRUE;
+            }
+        }
+
+        if (t_idx == p_ptr->riding) dispel_player();
+        dispel_monster_status(t_idx);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        disturb(1, 1);
+
+        if (p_ptr->blind)
+            msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
+        else
+            msg_format(_("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."), m_name);
+
+        dispel_player();
+        if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
+
+        if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+            msg_print(_("やりやがったな！", ""));
+
+        learn_spell(MS_DISPEL);
+    }
+}
+
+int spell_RF4_ROCKET(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int dam;
     monster_type    *m_ptr = &m_list[m_idx];
+
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かを射った。", "%^s shoots something."),
+        _("%^sがロケットを発射した。", "%^s fires a rocket."),
+        _("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."),
+        TARGET_TYPE);
 
     dam = (m_ptr->hp / 4) > 800 ? 800 : (m_ptr->hp / 4);
     breath(y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
-    {
         update_smart_learn(m_idx, DRS_SHARD);
-    }
     return dam;
 }
 
-int MP_spell_RF4_ROCKET(int y, int x, int m_idx)
-{
-    cptr m_name = monster_name(m_idx);
-    disturb(1, 1);
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かを射った。", "%^s shoots something."), m_name);
-    else
-        msg_format(_("%^sがロケットを発射した。", "%^s fires a rocket."), m_name);
-
-    return spell_RF4_ROCKET(y, x, m_idx, MONSTER_TO_PLAYER);
-}
-
-int MM_spell_RF4_ROCKET(int y, int x, int m_idx, int t_idx)
-{
-    cptr m_name = monster_name(m_idx);
-    cptr t_name = monster_name(t_idx);
-
-    bool known = monster_near_player(m_idx, t_idx);
-    bool see_either = see_monster(m_idx) || see_monster(t_idx);
-    if (known)
-    {
-        if (see_either)
-        {
-            disturb(1, 1);
-
-            if (p_ptr->blind)
-            {
-                msg_format(_("%^sが何かを射った。", "%^s shoots something."), m_name);
-            }
-            else
-            {
-                msg_format(_("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."), m_name, t_name);
-            }
-        }
-        else
-        {
-            mon_fight = TRUE;
-        }
-    }
-    return spell_RF4_ROCKET(y, x, m_idx, MONSTER_TO_MONSTER);
-}
-
-int spell_RF4_SHOOT(int y, int x, int m_idx, int TARGET_TYPE)
+int spell_RF4_SHOOT(int y, int x, int m_idx, int t_idx,int TARGET_TYPE)
 {
     int dam;
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    
+    monspell_message(m_idx, t_idx,
+        _("%^sが奇妙な音を発した。", "%^s makes a strange noise."),
+        _("%^sが矢を放った。", "%^s fires an arrow."),
+        _("%^sが%sに矢を放った。", "%^s fires an arrow at %s."),
+        TARGET_TYPE);
 
     dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
     bolt(m_idx, y, x, GF_ARROW, dam, MS_SHOOT, TARGET_TYPE);
@@ -180,58 +196,19 @@ int spell_RF4_SHOOT(int y, int x, int m_idx, int TARGET_TYPE)
     return dam;
 }
 
-int MP_spell_RF4_SHOOT(int y, int x, int m_idx)
-{
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-
-    disturb(1, 1);
-    if (p_ptr->blind)
-        msg_format(_("%^sが奇妙な音を発した。", "%^s makes a strange noise."), m_name);
-    else
-        msg_format(_("%^sが矢を放った。", "%^s fires an arrow."), m_name);
-
-    return spell_RF4_SHOOT(y, x, m_idx, MONSTER_TO_PLAYER);
-}
-
-int MM_spell_RF4_SHOOT(int y, int x, int m_idx, int t_idx)
-{
-    cptr m_name = monster_name(m_idx);
-    cptr t_name = monster_name(t_idx);
-    bool known = monster_near_player(m_idx, t_idx);
-    bool see_either = see_monster(m_idx) || see_monster(t_idx);
-    if (known)
-    {
-        if (see_either)
-        {
-            if (p_ptr->blind)
-            {
-                msg_format(_("%^sが奇妙な音を発した。", "%^s makes a strange noise."), m_name);
-            }
-            else
-            {
-                msg_format(_("%^sが%sに矢を放った。", "%^s fires an arrow at %s."), m_name, t_name);
-            }
-        }
-        else
-        {
-            mon_fight = TRUE;
-        }
-    }
-    return spell_RF4_SHOOT(y, x, m_idx, MONSTER_TO_MONSTER);
-}
-
 int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
     int dam, ms_type, drs_type;
     cptr type_s;
     bool smart_learn = TRUE;
-    cptr m_name = monster_name(m_idx);
-    cptr t_name = monster_name(t_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     bool known = monster_near_player(m_idx, t_idx);
     bool see_either = see_monster(m_idx) || see_monster(t_idx);
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	char m_name[80], t_name[80];
+    monster_name(m_idx, m_name);
+	monster_name(t_idx, t_name);
 
     switch (GF_TYPE)
     {
@@ -371,7 +348,9 @@ int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx, int t_idx, int TARGET
         break;
     }
 
-    disturb(1, 1);
+    if (mon_to_player || (mon_to_mon && known && see_either))
+        disturb(1, 1);
+
     if (m_ptr->r_idx == MON_JAIAN && GF_TYPE == GF_SOUND)
     {
         msg_format(_("「ボォエ〜〜〜〜〜〜」", "'Booooeeeeee'"));
@@ -382,104 +361,85 @@ int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx, int t_idx, int TARGET
     }
     else if (p_ptr->blind)
     {
-        if (TARGET_TYPE == MONSTER_TO_PLAYER || 
-            ((TARGET_TYPE == MONSTER_TO_MONSTER) && known && see_either))
-        msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+        if (mon_to_player || (mon_to_mon && known && see_either))
+            msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
     }
     else
     {
-        if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        if (mon_to_player)
         {
             msg_format(_("%^sが%^sのブレスを吐いた。", "%^s breathes %^s."), m_name, type_s);
         }
-        else if ((TARGET_TYPE == MONSTER_TO_MONSTER) && known && see_either)
+        else if (mon_to_mon && known && see_either)
         {
             _(msg_format("%^sが%^sに%^sのブレスを吐いた。", m_name, t_name, type_s),
               msg_format("%^s breathes %^s at %^s.", m_name, type_s, t_name));
         }
     }
 
-    if (known && !see_either)
+    if (mon_to_mon && known && !see_either)
         mon_fight = TRUE;
 
     sound(SOUND_BREATH);
     breath(y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, TARGET_TYPE);
-    if (smart_learn && TARGET_TYPE == MONSTER_TO_PLAYER)
+    if (smart_learn && mon_to_player)
         update_smart_learn(m_idx, drs_type);
+
     return dam;
 }
 
-int MP_spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx)
+int spell_RF4_BA_NUKE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    return spell_RF4_BREATH(GF_TYPE, y, x, m_idx, 0, MONSTER_TO_PLAYER);
-}
-
-int MM_spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx, int t_idx)
-{
-    return spell_RF4_BREATH(GF_TYPE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);
-}
-
-int spell_RF4_BA_CHAO(int y, int x, int m_idx)
-{
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
-
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが恐ろしげにつぶやいた。", "%^s mumbles frighteningly."), m_name);
-    else
-        msg_format(_("%^sが純ログルスを放った。", "%^s invokes a raw Logrus."), m_name);
-    
-    dam = ((r_ptr->flags2 & RF2_POWERFUL) ? (rlev * 3) : (rlev * 2)) + damroll(10, 10);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが放射能球を放った。", "%^s casts a ball of radiation."),
+        _("%^sが%sに放射能球を放った。", "%^s casts a ball of radiation at %s."),
+        TARGET_TYPE);
 
-    breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_CHAOS);
+    dam = (rlev + damroll(10, 6)) * (monster_is_powerful(m_idx) ? 2 : 1);
+    breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_POIS);
+
     return dam;
 }
 
-int spell_RF4_BA_NUKE(int y, int x, int m_idx)
+int spell_RF4_BA_CHAO(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが放射能球を放った。", "%^s casts a ball of radiation."), m_name);
-    
-    dam = (rlev + damroll(10, 6)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
+    monspell_message(m_idx, t_idx,
+        _("%^sが恐ろしげにつぶやいた。", "%^s mumbles frighteningly."),
+        _("%^sが純ログルスを放った。", "%^s invokes a raw Logrus."),
+        _("%^sが%sに純ログルスを放った。", "%^s invokes raw Logrus upon %s."),
+        TARGET_TYPE);
 
-    breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_POIS);
+    dam = (monster_is_powerful(m_idx) ? (rlev * 3) : (rlev * 2)) + damroll(10, 10);
+
+    breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_CHAOS);
+
     return dam;
 }
 
-int spell_RF5_BA_ACID(int y, int x, int m_idx)
+int spell_RF5_BA_ACID(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam, rad;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがアシッド・ボールの呪文を唱えた。", "%^s casts an acid ball."), m_name);
-    
-    if (r_ptr->flags2 & RF2_POWERFUL)
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがアシッド・ボールの呪文を唱えた。", "%^s casts an acid ball."),
+        _("%^sが%sに向かってアシッド・ボールの呪文を唱えた。",
+          "%^s casts an acid ball at %s."),
+        TARGET_TYPE);
+
+    if (monster_is_powerful(m_idx))
     {
         rad = 4;
         dam = (rlev * 4) + 50 + damroll(10, 10);
@@ -489,27 +449,27 @@ int spell_RF5_BA_ACID(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 3) + 15);
     }
-    breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_ACID);
+
+    breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_ACID);
+
     return dam;
 }
 
-int spell_RF5_BA_ELEC(int y, int x, int m_idx)
+int spell_RF5_BA_ELEC(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam, rad;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがサンダー・・ボールの呪文を唱えた。", "%^s casts a lightning ball."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがサンダー・・ボールの呪文を唱えた。", "%^s casts a lightning ball."),
+        _("%^sが%sに向かってサンダー・ボールの呪文を唱えた。", 
+          "%^s casts a lightning ball at %s."),
+        TARGET_TYPE);
 
-    if (r_ptr->flags2 & RF2_POWERFUL)
+    if (monster_is_powerful(m_idx))
     {
         rad = 4;
         dam = (rlev * 4) + 50 + damroll(10, 10);
@@ -519,37 +479,39 @@ int spell_RF5_BA_ELEC(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 3 / 2) + 8);
     }
-    breath(y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_ELEC);
+    
+    breath(y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_ELEC);
+
     return dam;
 }
 
-int spell_RF5_BA_FIRE(int y, int x, int m_idx)
+int spell_RF5_BA_FIRE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam, rad;
-    disturb(1, 1);
+    monster_type    *m_ptr = &m_list[m_idx];
+    int rlev = monster_level_idx(m_idx);
 
     if (m_ptr->r_idx == MON_ROLENTO)
     {
-        if (p_ptr->blind)
-            msg_format(_("%sが何かを投げた。", "%^s throws something."), m_name);
-        else
-            msg_format(_("%sは手榴弾を投げた。", "%^s throws a hand grenade."), m_name);
+        monspell_message(m_idx, t_idx,
+            _("%sが何かを投げた。", "%^s throws something."),
+            _("%sは手榴弾を投げた。", "%^s throws a hand grenade."),
+            _("%^sが%^sに向かって手榴弾を投げた。", "%^s throws a hand grenade."),
+            TARGET_TYPE);
     }
     else
     {
-        if (p_ptr->blind)
-            msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-        else
-            msg_format(_("%^sがファイア・ボールの呪文を唱えた。", "%^s casts a fire ball."), m_name);
+        monspell_message(m_idx, t_idx,
+            _("%^sが何かをつぶやいた。", "%^s mumbles."),
+            _("%^sがファイア・ボールの呪文を唱えた。", "%^s casts a fire ball."),
+            _("%^sが%sに向かってファイア・ボールの呪文を唱えた。",
+            "%^s casts a fire ball at %s."),
+            TARGET_TYPE);
     }
 
-    if (r_ptr->flags2 & RF2_POWERFUL)
+    if (monster_is_powerful(m_idx))
     {
         rad = 4;
         dam = (rlev * 4) + 50 + damroll(10, 10);
@@ -559,27 +521,27 @@ int spell_RF5_BA_FIRE(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 7 / 2) + 10);
     }
-    breath(y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_FIRE);
+
+    breath(y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_FIRE);
+
     return dam;
 }
 
-int spell_RF5_BA_COLD(int y, int x, int m_idx)
+int spell_RF5_BA_COLD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam, rad;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがアイス・ボールの呪文を唱えた。", "%^s casts a frost ball."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがアイス・ボールの呪文を唱えた。", "%^s casts a frost ball."),
+        _("%^sが%sに向かってアイス・ボールの呪文を唱えた。",
+        "%^s casts a frost ball at %s."),
+        TARGET_TYPE);
 
-    if (r_ptr->flags2 & RF2_POWERFUL)
+    if (monster_is_powerful(m_idx))
     {
         rad = 4;
         dam = (rlev * 4) + 50 + damroll(10, 10);
@@ -589,467 +551,520 @@ int spell_RF5_BA_COLD(int y, int x, int m_idx)
         rad = 2;
         dam = (randint1(rlev * 3 / 2) + 10);
     }
-    breath(y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_COLD);
+
+    breath(y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_COLD);
+
     return dam;
 }
 
-int spell_RF5_BA_POIS(int y, int x, int m_idx)
+
+int spell_RF5_BA_POIS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud."),
+        _("%^sが%sに向かって悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud at %s."),
+        TARGET_TYPE);
 
-    dam = damroll(12, 2) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_POIS);
+    dam = damroll(12, 2) * (monster_is_powerful(m_idx) ? 2 : 1);
+    breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_POIS);
+
     return dam;
 }
 
-int spell_RF5_BA_NETH(int y, int x, int m_idx)
+int spell_RF5_BA_NETH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが地獄球の呪文を唱えた。", "%^s casts a nether ball."), m_name);
+    int rlev = monster_level_idx(m_idx);
 
-    dam = 50 + damroll(10, 10) + (rlev * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1));
-    breath(y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_NETH);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが地獄球の呪文を唱えた。", "%^s casts a nether ball."),
+        _("%^sが%sに向かって地獄球の呪文を唱えた。", "%^s casts a nether ball at %s."),
+        TARGET_TYPE);
+
+    dam = 50 + damroll(10, 10) + (rlev * (monster_is_powerful(m_idx) ? 2 : 1));
+    breath(y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_NETH);
+
     return dam;
 }
 
-int spell_RF5_BA_WATE(int y, int x, int m_idx)
+int spell_RF5_BA_WATE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
+    bool known = monster_near_player(m_idx, t_idx);
+    bool see_either = see_monster(m_idx) || see_monster(t_idx);
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	char t_name[80];
+    monster_name(t_idx, t_name);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが流れるような身振りをした。", "%^s gestures fluidly."), m_name);
 
-    msg_print(_("あなたは渦巻きに飲み込まれた。", "You are engulfed in a whirlpool."));
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが流れるような身振りをした。", "%^s gestures fluidly."),
+        _("%^sが%sに対して流れるような身振りをした。", "%^s gestures fluidly at %s."),
+        TARGET_TYPE);
 
-    dam = ((r_ptr->flags2 & RF2_POWERFUL) ? randint1(rlev * 3) : randint1(rlev * 2)) + 50;
-    breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, MONSTER_TO_PLAYER);
+    if (mon_to_player)
+    {
+        msg_format(_("あなたは渦巻きに飲み込まれた。", "You are engulfed in a whirlpool."));
+    }
+    else if (mon_to_mon && known && see_either && !p_ptr->blind)
+    {
+        msg_format(_("%^sは渦巻に飲み込まれた。", "%^s is engulfed in a whirlpool."), t_name);
+    }
+
+    dam = (monster_is_powerful(m_idx) ? randint1(rlev * 3) : randint1(rlev * 2)) + 50;
+    breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, TARGET_TYPE);
     return dam;
 }
 
-int spell_RF5_BA_MANA(int y, int x, int m_idx)
+
+int spell_RF5_BA_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
-    else
-        msg_format(_("%^sが魔力の嵐の呪文を念じた。", "%^s invokes a mana storm."), m_name);
+    int rlev = monster_level_idx(m_idx);
+
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+        _("%^sが魔力の嵐の呪文を念じた。", "%^s invokes a mana storm."),
+        _("%^sが%sに対して魔力の嵐の呪文を念じた。", "%^s invokes a mana storm upon %s."),
+        TARGET_TYPE);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
-    breath(y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, MONSTER_TO_PLAYER);
+    breath(y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, TARGET_TYPE);
     return dam;
 }
 
-int spell_RF5_BA_DARK(int y, int x, int m_idx)
+int spell_RF5_BA_DARK(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
-    else
-        msg_format(_("%^sが暗黒の嵐の呪文を念じた。", "%^s invokes a darkness storm."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+        _("%^sが暗黒の嵐の呪文を念じた。", "%^s invokes a darkness storm."),
+        _("%^sが%sに対して暗黒の嵐の呪文を念じた。", "%^s invokes a darkness storm upon %s."),
+        TARGET_TYPE);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
-    breath(y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_DARK);
+    breath(y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_DARK);
+
     return dam;
 }
 
-int spell_RF5_DRAIN_MANA(int y, int x, int m_idx)
+int spell_RF5_DRAIN_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+	char m_name[80], t_name[80];
+    monster_name(m_idx, m_name);
+	monster_name(t_idx, t_name);
 
-    dam = (randint1(rlev) / 2) + 1;
-    breath(y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_MANA);
+
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        disturb(1, 1);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(m_idx))
+    { 
+        /* Basic message */
+        msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
+    }
+
+    dam = ((randint1(rlev) / 2) + 1);
+    breath(y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_MANA);
+    
     return dam;
 }
 
-int spell_RF5_MIND_BLAST(int y, int x, int m_idx)
+int spell_RF5_MIND_BLAST(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     bool seen = (!p_ptr->blind && m_ptr->ml);
     int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
-    if (!seen)
-        msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
-    else
-        msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
+	char m_name[80], t_name[80];
+    monster_name(m_idx, m_name);
+	monster_name(t_idx, t_name);
+
+
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        disturb(1, 1);
+        if (!seen)
+            msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
+        else
+            msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(m_idx))
+    {
+        msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
+    }
 
     dam = damroll(7, 7);
-    breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, MONSTER_TO_PLAYER);
+    breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, TARGET_TYPE);
     return dam;
 }
 
-int spell_RF5_BRAIN_SMASH(int y, int x, int m_idx)
+int spell_RF5_BRAIN_SMASH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     bool seen = (!p_ptr->blind && m_ptr->ml);
     int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
-    if (!seen)
-        msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
-    else
-        msg_format(_("%^sがあなたの瞳をじっと見ている。", "%^s looks deep into your eyes."), m_name);
+	char m_name[80], t_name[80];
+    monster_name(m_idx, m_name);
+	monster_name(t_idx, t_name);
+
+
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        disturb(1, 1);
+        if (!seen)
+            msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
+        else
+            msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(m_idx))
+    {
+        msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
+    }
 
     dam = damroll(12, 12);
-    breath(y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, MONSTER_TO_PLAYER);
+    breath(y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, TARGET_TYPE);
     return dam;
 }
 
-int spell_RF5_CAUSE_1(int y, int x, int m_idx)
+void spell_RF5_CAUSE(int GF_TYPE, int dam, int y, int x, int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, int MS_TYPE, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
-    int dam;
-    disturb(1, 1);
+	char m_name[80], t_name[80];
+    monster_name(m_idx, m_name);
+	monster_name(t_idx, t_name);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがあなたを指さして呪った。", "%^s points at you and curses."), m_name);
 
-    dam = damroll(3, 8);
-    breath(y, x, m_idx, GF_CAUSE_1, dam, 0, FALSE, MS_CAUSE_1, MONSTER_TO_PLAYER);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        disturb(1, 1);
+        if (p_ptr->blind)
+            msg_format(msg1, m_name);
+        else
+            msg_format(msg2, m_name);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        if (see_monster(m_idx))
+        {
+            msg_format(msg3, m_name, t_name);
+        }
+        else
+        {
+            mon_fight = TRUE;
+        }
+    }
+    breath(y, x, m_idx, GF_TYPE, dam, 0, FALSE, MS_TYPE, TARGET_TYPE);
+}
+
+int spell_RF5_CAUSE_1(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+{
+    cptr msg1, msg2, msg3;
+    int dam = damroll(3, 8);
+
+    msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
+    msg2 = _("%^sがあなたを指さして呪った。", "%^s points at you and curses.");
+    msg3 = _("%^sは%sを指さして呪いをかけた。", "%^s points at %s and curses.");
+    
+    spell_RF5_CAUSE(GF_CAUSE_1, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_1, TARGET_TYPE);
     return dam;
 }
 
-int spell_RF5_CAUSE_2(int y, int x, int m_idx)
+int spell_RF5_CAUSE_2(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
-    int rlev = monster_level_idx(m_idx);
-    int dam;
-    disturb(1, 1);
+    cptr msg1, msg2, msg3;
+    int dam = damroll(8, 8);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがあなたを指さして恐ろしげに呪った。", "%^s points at you and curses horribly."), m_name);
+    msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
+    msg2 = _("%^sがあなたを指さして恐ろしげに呪った。", "%^s points at you and curses horribly.");
+    msg3 = _("%^sは%sを指さして恐ろしげに呪いをかけた。", "%^s points at %s and curses horribly.");
 
-    dam = damroll(8, 8);
-    breath(y, x, m_idx, GF_CAUSE_2, dam, 0, FALSE, MS_CAUSE_2, MONSTER_TO_PLAYER);
+    spell_RF5_CAUSE(GF_CAUSE_2, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_2, TARGET_TYPE);
     return dam;
 }
 
-int spell_RF5_CAUSE_3(int y, int x, int m_idx)
+int spell_RF5_CAUSE_3(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
-    int rlev = monster_level_idx(m_idx);
-    int dam;
-    disturb(1, 1);
+    cptr msg1, msg2, msg3;
+    int dam = damroll(10, 15);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かを大声で叫んだ。", "%^s mumbles loudly."), m_name);
-    else
-        msg_format(_("%^sがあなたを指さして恐ろしげに呪文を唱えた！", "%^s points at you, incanting terribly!"), m_name);
+    msg1 = _("%^sが何かを大声で叫んだ。", "%^s mumbles loudly.");
+    msg2 = _("%^sがあなたを指さして恐ろしげに呪文を唱えた！", "%^s points at you, incanting terribly!");
+    msg3 = _("%^sは%sを指さし、恐ろしげに呪文を唱えた！", "%^s points at %s, incanting terribly!");
 
-    dam = damroll(10, 15);
-    breath(y, x, m_idx, GF_CAUSE_3, dam, 0, FALSE, MS_CAUSE_3, MONSTER_TO_PLAYER);
+    spell_RF5_CAUSE(GF_CAUSE_3, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_3, TARGET_TYPE);
     return dam;
 }
 
-int spell_RF5_CAUSE_4(int y, int x, int m_idx)
+int spell_RF5_CAUSE_4(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
-    int rlev = monster_level_idx(m_idx);
-    int dam;
-    disturb(1, 1);
+    cptr msg1, msg2, msg3;
+    int dam = damroll(15, 15);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが「お前は既に死んでいる」と叫んだ。", "%^s screams the word 'DIE!'"), m_name);
-    else
-        msg_format(_("%^sがあなたの秘孔を突いて「お前は既に死んでいる」と叫んだ。",
-        "%^s points at you, screaming the word DIE!"), m_name);
+    msg1 = _("%^sが「お前は既に死んでいる」と叫んだ。", "%^s screams the word 'DIE!'");
+    msg2 = _("%^sがあなたの秘孔を突いて「お前は既に死んでいる」と叫んだ。", "%^s points at you, screaming the word DIE!");
+    msg3 = _("%^sが%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。", "%^s points at %s, screaming the word, 'DIE!'");
 
-    dam = damroll(15, 15);
-    breath(y, x, m_idx, GF_CAUSE_4, dam, 0, FALSE, MS_CAUSE_4, MONSTER_TO_PLAYER);
+    spell_RF5_CAUSE(GF_CAUSE_4, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_4, TARGET_TYPE);
     return dam;
 }
 
-int spell_RF5_BO_ACID(int y, int x, int m_idx)
+int spell_RF5_BO_ACID(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがアシッド・ボルトの呪文を唱えた。", "%^s casts a acid bolt."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがアシッド・ボルトの呪文を唱えた。", "%^s casts a acid bolt."),
+        _("%sが%sに向かってアシッド・ボルトの呪文を唱えた。", "%^s casts an acid bolt at %s."),
+        TARGET_TYPE);
 
-    dam = (damroll(7, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    bolt(m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_ACID);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    dam = (damroll(7, 8) + (rlev / 3)) * (monster_is_powerful(m_idx) ? 2 : 1);
+    bolt(m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_ACID);
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
-int spell_RF5_BO_ELEC(int y, int x, int m_idx)
+int spell_RF5_BO_ELEC(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt."),
+        _("%^sが%sに向かってサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt at %s."),
+        TARGET_TYPE);
 
-    dam = (damroll(4, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    bolt(m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_ELEC);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    dam = (damroll(4, 8) + (rlev / 3)) * (monster_is_powerful(m_idx) ? 2 : 1);
+    bolt(m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_ELEC);
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
-int spell_RF5_BO_FIRE(int y, int x, int m_idx)
+int spell_RF5_BO_FIRE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt."),
+        _("%^sが%sに向かってファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt at %s."),
+        TARGET_TYPE);
 
-    dam = (damroll(9, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    bolt(m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_FIRE);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    dam = (damroll(9, 8) + (rlev / 3)) * (monster_is_powerful(m_idx) ? 2 : 1);
+    bolt(m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_FIRE);
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
-int spell_RF5_BO_COLD(int y, int x, int m_idx)
+int spell_RF5_BO_COLD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt."),
+        _("%^sが%sに向かってアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt at %s."),
+        TARGET_TYPE);
 
-    dam = (damroll(6, 8) + (rlev / 3)) * ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 1);
-    bolt(m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_COLD);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    dam = (damroll(6, 8) + (rlev / 3)) * (monster_is_powerful(m_idx) ? 2 : 1);
+    bolt(m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_COLD);
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
-
-int spell_RF5_BA_LITE(int y, int x, int m_idx)
+int spell_RF5_BA_LITE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    cptr m_name = monster_name(m_idx);
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
-    else
-        msg_format(_("%^sがスターバーストの呪文を念じた。", "%^s invokes a starburst."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+        _("%^sがスターバーストの呪文を念じた。", "%^s invokes a starburst."),
+        _("%^sが%sに対してスターバーストの呪文を念じた。", "%^s invokes a starburst upon %s."),
+        TARGET_TYPE);
 
     dam = (rlev * 4) + 50 + damroll(10, 10);
-    breath(y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_LITE);
+    breath(y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+        update_smart_learn(m_idx, DRS_LITE);
+
     return dam;
 }
 
 
-int spell_RF5_BO_NETH(int y, int x, int m_idx)
+int spell_RF5_BO_NETH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが地獄の矢の呪文を唱えた。", "%^s casts a nether bolt."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが地獄の矢の呪文を唱えた。", "%^s casts a nether bolt."),
+        _("%^sが%sに向かって地獄の矢の呪文を唱えた。", "%^s casts a nether bolt at %s."),
+        TARGET_TYPE);
 
-    dam = 30 + damroll(5, 5) + (rlev * 4) / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3);
-    bolt(m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_NETH);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    dam = 30 + damroll(5, 5) + (rlev * 4) / (monster_is_powerful(m_idx) ? 2 : 3);
+    bolt(m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_NETH);
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
-int spell_RF5_BO_WATE(int y, int x, int m_idx)
+int spell_RF5_BO_WATE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
+    int rlev = monster_level_idx(m_idx);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt."),
+        _("%^sが%sに向かってウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt at %s."),
+        TARGET_TYPE);
 
-    dam = damroll(10, 10) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-    bolt(m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    dam = damroll(10, 10) + (rlev * 3 / (monster_is_powerful(m_idx) ? 2 : 3));
+    bolt(m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
-int spell_RF5_BO_MANA(int y, int x, int m_idx)
+int spell_RF5_BO_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔力の矢の呪文を唱えた。", "%^s casts a mana bolt."), m_name);
+    int rlev = monster_level_idx(m_idx);
+
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが魔力の矢の呪文を唱えた。", "%^s casts a mana bolt."),
+        _("%^sが%sに向かって魔力の矢の呪文を唱えた。", "%^s casts a mana bolt at %s."),
+        TARGET_TYPE);
 
     dam = randint1(rlev * 7 / 2) + 50;
-    bolt(m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    bolt(m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
-int spell_RF5_BO_PLAS(int y, int x, int m_idx)
+int spell_RF5_BO_PLAS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+    int rlev = monster_level_idx(m_idx);
 
-    else
-        msg_format(_("%^sがプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt."),
+        _("%^sが%sに向かってプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt at %s."),
+        TARGET_TYPE);
 
-    dam = 10 + damroll(8, 7) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-    bolt(m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    dam = 10 + damroll(8, 7) + (rlev * 3 / (monster_is_powerful(m_idx) ? 2 : 3));
+    bolt(m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
-int spell_RF5_BO_ICEE(int y, int x, int m_idx)
+int spell_RF5_BO_ICEE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが極寒の矢の呪文を唱えた。", "%^s casts an ice bolt."), m_name);
+    int rlev = monster_level_idx(m_idx);
 
-    dam = damroll(6, 6) + (rlev * 3 / ((r_ptr->flags2 & RF2_POWERFUL) ? 2 : 3));
-    bolt(m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_COLD);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが極寒の矢の呪文を唱えた。", "%^s casts an ice bolt."),
+        _("%^sが%sに向かって極寒の矢の呪文を唱えた。", "%^s casts an ice bolt at %s."),
+        TARGET_TYPE);
+
+    dam = damroll(6, 6) + (rlev * 3 / (monster_is_powerful(m_idx) ? 2 : 3));
+    bolt(m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_COLD);
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
-
-int spell_RF5_MISSILE(int y, int x, int m_idx)
+int spell_RF5_MISSILE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
-    int rlev = monster_level_idx(m_idx);
     int dam;
-    disturb(1, 1);
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile."), m_name);
+    int rlev = monster_level_idx(m_idx);
+
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sがマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile."),
+        _("%^sが%sに向かってマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile at %s."),
+        TARGET_TYPE);
 
     dam = damroll(2, 6) + (rlev / 3);
-    bolt(m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, MONSTER_TO_PLAYER);
-    update_smart_learn(m_idx, DRS_REFLECT);
+    bolt(m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, TARGET_TYPE);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        update_smart_learn(m_idx, DRS_REFLECT);
+    }
     return dam;
 }
 
 void spell_RF5_SCARE(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
     disturb(1, 1);
+
 
     if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやくと、恐ろしげな音が聞こえた。", "%^s mumbles, and you hear scary noises."), m_name);
@@ -1074,8 +1089,10 @@ void spell_RF5_SCARE(int y, int x, int m_idx)
 
 void spell_RF5_BLIND(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1102,8 +1119,10 @@ void spell_RF5_BLIND(int y, int x, int m_idx)
 
 void spell_RF5_CONF(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1131,8 +1150,10 @@ void spell_RF5_CONF(int y, int x, int m_idx)
 
 void spell_RF5_SLOW(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     msg_format(_("%^sがあなたの筋力を吸い取ろうとした！",
@@ -1156,8 +1177,9 @@ void spell_RF5_SLOW(int y, int x, int m_idx)
 
 void spell_RF5_HOLD(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1183,8 +1205,9 @@ void spell_RF5_HOLD(int y, int x, int m_idx)
 
 void spell_RF6_HASTE(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
+	char m_name[80];
+    monster_name(m_idx, m_name);
     disturb(1, 1);
     if (p_ptr->blind)
     {
@@ -1204,9 +1227,10 @@ void spell_RF6_HASTE(int m_idx)
 
 int spell_RF6_HAND_DOOM(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     int dam;
+	char m_name[80];
+    monster_name(m_idx, m_name);
     disturb(1, 1);
     msg_format(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"), m_name);
     dam = (((s32b)((40 + randint1(20)) * (p_ptr->chp))) / 100);
@@ -1216,10 +1240,12 @@ int spell_RF6_HAND_DOOM(int y, int x, int m_idx)
 
 void spell_RF6_HEAL(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool seen = (!p_ptr->blind && m_ptr->ml);
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     /* Message */
@@ -1270,9 +1296,10 @@ void spell_RF6_HEAL(int m_idx)
 }
 void spell_RF6_INVULNER(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     bool seen = (!p_ptr->blind && m_ptr->ml);
+	char m_name[80];
+    monster_name(m_idx, m_name);
     disturb(1, 1);
 
     /* Message */
@@ -1286,7 +1313,9 @@ void spell_RF6_INVULNER(int m_idx)
 
 void spell_RF6_BLINK(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
     if (teleport_barrier(m_idx))
     {
@@ -1302,9 +1331,11 @@ void spell_RF6_BLINK(int m_idx)
 }
 
 void spell_RF6_TPORT(int m_idx)
-{
-    cptr m_name = monster_name(m_idx);
-    disturb(1, 1);
+{	
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
+	disturb(1, 1);
     if (teleport_barrier(m_idx))
     {
         msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
@@ -1319,9 +1350,11 @@ void spell_RF6_TPORT(int m_idx)
 
 int spell_RF6_WORLD(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     int who = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
     if (m_ptr->r_idx == MON_DIO) who = 1;
     else if (m_ptr->r_idx == MON_WONG) who = 3;
@@ -1331,12 +1364,13 @@ int spell_RF6_WORLD(int m_idx)
 
 int spell_RF6_SPECIAL(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     u32b mode = 0L;
     bool direct = player_bold(y, x);
     int k, dam, count=0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
 
     disturb(1, 1);
     switch (m_ptr->r_idx)
@@ -1481,8 +1515,10 @@ int spell_RF6_SPECIAL(int y, int x, int m_idx)
 
 void spell_RF6_TELE_TO(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
     msg_format(_("%^sがあなたを引き戻した。", "%^s commands you to return."), m_name);
 
@@ -1492,7 +1528,8 @@ void spell_RF6_TELE_TO(int m_idx)
 
 void spell_RF6_TELE_AWAY(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
     disturb(1, 1);
 
     msg_format(_("%^sにテレポートさせられた。", "%^s teleports you away."), m_name);
@@ -1505,8 +1542,10 @@ void spell_RF6_TELE_AWAY(int m_idx)
 
 void spell_RF6_TELE_LEVEL(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1532,12 +1571,13 @@ void spell_RF6_TELE_LEVEL(int m_idx)
 
 int spell_RF6_PSY_SPEAR(int y, int x, int m_idx)
 {
-    bool learnable = spell_learnable(m_idx);
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int rlev = monster_level_idx(m_idx);
+	int rlev = monster_level_idx(m_idx);
     int dam;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
     if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
@@ -1551,10 +1591,11 @@ int spell_RF6_PSY_SPEAR(int y, int x, int m_idx)
 
 void spell_RF6_DARKNESS(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     bool can_use_lite_area = FALSE;
+	char m_name[80];
+    monster_name(m_idx, m_name);
 
     if ((p_ptr->pclass == CLASS_NINJA) &&
         !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
@@ -1582,7 +1623,8 @@ void spell_RF6_DARKNESS(int m_idx)
 
 void spell_RF6_TRAPS(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1598,8 +1640,10 @@ void spell_RF6_TRAPS(int y, int x, int m_idx)
 
 void spell_RF6_FORGET(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     msg_format(_("%^sがあなたの記憶を消去しようとしている。",
@@ -1618,8 +1662,10 @@ void spell_RF6_FORGET(int m_idx)
 
 void spell_RF6_RAISE_DEAD(int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1633,12 +1679,14 @@ void spell_RF6_RAISE_DEAD(int m_idx)
 
 void spell_RF6_S_KIN(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
     int count = 0, k;
     u32b mode = 0L;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
     if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
     {
@@ -1744,8 +1792,10 @@ void spell_RF6_S_KIN(int y, int x, int m_idx)
 
 void spell_RF6_S_CYBER(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1762,9 +1812,11 @@ void spell_RF6_S_CYBER(int y, int x, int m_idx)
 
 void spell_RF6_S_MONSTER(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1782,9 +1834,11 @@ void spell_RF6_S_MONSTER(int y, int x, int m_idx)
 
 void spell_RF6_S_MONSTERS(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1803,9 +1857,11 @@ void spell_RF6_S_MONSTERS(int y, int x, int m_idx)
 
 void spell_RF6_S_ANT(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1824,9 +1880,11 @@ void spell_RF6_S_ANT(int y, int x, int m_idx)
 
 void spell_RF6_S_SPIDER(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1845,9 +1903,11 @@ void spell_RF6_S_SPIDER(int y, int x, int m_idx)
 
 void spell_RF6_S_HOUND(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1866,9 +1926,11 @@ void spell_RF6_S_HOUND(int y, int x, int m_idx)
 
 void spell_RF6_S_HYDRA(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1886,12 +1948,13 @@ void spell_RF6_S_HYDRA(int y, int x, int m_idx)
 
 void spell_RF6_S_ANGEL(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     int num = 1;
+	char m_name[80];
+    monster_name(m_idx, m_name);
 
     disturb(1, 1);
 
@@ -1924,9 +1987,11 @@ void spell_RF6_S_ANGEL(int y, int x, int m_idx)
 
 void spell_RF6_S_DEMON(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1946,9 +2011,11 @@ void spell_RF6_S_DEMON(int y, int x, int m_idx)
 
 void spell_RF6_S_UNDEAD(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1968,9 +2035,11 @@ void spell_RF6_S_UNDEAD(int y, int x, int m_idx)
 
 void spell_RF6_S_DRAGON(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
     if (p_ptr->blind)
@@ -1988,7 +2057,7 @@ void spell_RF6_S_DRAGON(int y, int x, int m_idx)
 
 void spell_RF6_S_HI_UNDEAD(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
+    char* m_name = monster_name(m_idx, "");
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
@@ -2064,7 +2133,7 @@ void spell_RF6_S_HI_UNDEAD(int y, int x, int m_idx)
 
 void spell_RF6_S_HI_DRAGON(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
+    char* m_name = monster_name(m_idx, "");
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
@@ -2087,7 +2156,7 @@ void spell_RF6_S_HI_DRAGON(int y, int x, int m_idx)
 
 void spell_RF6_S_AMBERITES(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
+    char* m_name = monster_name(m_idx, "");
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
     disturb(1, 1);
@@ -2109,7 +2178,7 @@ void spell_RF6_S_AMBERITES(int y, int x, int m_idx)
 
 void spell_RF6_S_UNIQUE(int y, int x, int m_idx)
 {
-    cptr m_name = monster_name(m_idx);
+    char* m_name = monster_name(m_idx, "");
     monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;

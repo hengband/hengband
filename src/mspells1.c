@@ -1874,65 +1874,65 @@ bool make_attack_spell(int m_idx)
 	/* Cast the spell. */
 	switch (thrown_spell)
 	{
-        case 96 + 0:   MP_spell_RF4_SHRIEK(m_idx); break;  /* RF4_SHRIEK */
+        case 96 + 0:   spell_RF4_SHRIEK(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF4_SHRIEK */
         case 96 + 1:   break;   /* RF4_XXX1 */
-        case 96 + 2:   MP_spell_RF4_DISPEL(m_idx); break;  /* RF4_DISPEL */
-        case 96 + 3:   dam = MP_spell_RF4_ROCKET(y, x, m_idx); break;   /* RF4_ROCKET */
-        case 96 + 4:   dam = MP_spell_RF4_SHOOT(y, x, m_idx); break;    /* RF4_SHOOT */
+        case 96 + 2:   spell_RF4_DISPEL(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF4_DISPEL */
+        case 96 + 3:   dam = spell_RF4_ROCKET(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF4_ROCKET */
+        case 96 + 4:   dam = spell_RF4_SHOOT(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_SHOOT */
         case 96 + 5:   break;   /* RF4_XXX2 */
         case 96 + 6:   break;   /* RF4_XXX3 */
         case 96 + 7:   break;   /* RF4_XXX4 */
-        case 96 + 8:   dam = MP_spell_RF4_BREATH(GF_ACID, y, x, m_idx); break;    /* RF4_BR_ACID */
-        case 96 + 9:   dam = MP_spell_RF4_BREATH(GF_ELEC, y, x, m_idx); break;    /* RF4_BR_ELEC */
-        case 96 + 10:  dam = MP_spell_RF4_BREATH(GF_FIRE, y, x, m_idx); break;    /* RF4_BR_FIRE */
-        case 96 + 11:  dam = MP_spell_RF4_BREATH(GF_COLD, y, x, m_idx); break;    /* RF4_BR_COLD */
-        case 96 + 12:  dam = MP_spell_RF4_BREATH(GF_POIS, y, x, m_idx); break;    /* RF4_BR_POIS */
-        case 96 + 13:  dam = MP_spell_RF4_BREATH(GF_NETHER, y, x, m_idx); break;    /* RF4_BR_NETH */
-        case 96 + 14:  dam = MP_spell_RF4_BREATH(GF_LITE, y_br_lite, x_br_lite, m_idx); break;    /* RF4_BR_LITE */
-        case 96 + 15:  dam = MP_spell_RF4_BREATH(GF_DARK, y, x, m_idx); break;    /* RF4_BR_DARK */
-        case 96 + 16:  dam = MP_spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx); break;    /* RF4_BR_CONF */
-        case 96 + 17:  dam = MP_spell_RF4_BREATH(GF_SOUND, y, x, m_idx); break;    /* RF4_BR_SOUN */
-        case 96 + 18:  dam = MP_spell_RF4_BREATH(GF_CHAOS, y, x, m_idx); break;    /* RF4_BR_CHAO */
-        case 96 + 19:  dam = MP_spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx); break;    /* RF4_BR_DISE */
-        case 96 + 20:  dam = MP_spell_RF4_BREATH(GF_NEXUS, y, x, m_idx); break;    /* RF4_BR_NEXU */
-        case 96 + 21:  dam = MP_spell_RF4_BREATH(GF_TIME, y, x, m_idx); break;    /* RF4_BR_TIME */
-        case 96 + 22:  dam = MP_spell_RF4_BREATH(GF_INERTIA, y, x, m_idx); break;    /* RF4_BR_INER */
-        case 96 + 23:  dam = MP_spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx); break;    /* RF4_BR_GRAV */
-        case 96 + 24:  dam = MP_spell_RF4_BREATH(GF_SHARDS, y, x, m_idx); break;    /* RF4_BR_SHAR */
-        case 96 + 25:  dam = MP_spell_RF4_BREATH(GF_PLASMA, y, x, m_idx); break;    /* RF4_BR_PLAS */
-        case 96 + 26:  dam = MP_spell_RF4_BREATH(GF_FORCE, y, x, m_idx); break;    /* RF4_BR_WALL */
-        case 96 + 27:  dam = MP_spell_RF4_BREATH(GF_MANA, y, x, m_idx); break;    /* RF4_BR_MANA */
-        case 96 + 28:  dam = spell_RF4_BA_NUKE(y, x, m_idx); break;   /* RF4_BA_NUKE */
-        case 96 + 29:  dam = MP_spell_RF4_BREATH(GF_NUKE, y, x, m_idx); break;    /* RF4_BR_NUKE */
-        case 96 + 30:  dam = spell_RF4_BA_CHAO(y, x, m_idx); break;  /* RF4_BA_CHAO */
-        case 96 + 31:  dam = MP_spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx); break;    /* RF4_BR_DISI */
-        case 128 + 0:  dam = spell_RF5_BA_ACID(y, x, m_idx); break;    /* RF5_BA_ACID */
-        case 128 + 1:  dam = spell_RF5_BA_ELEC(y, x, m_idx); break;    /* RF5_BA_ELEC */
-        case 128 + 2:  dam = spell_RF5_BA_FIRE(y, x, m_idx); break;    /* RF5_BA_FIRE */
-        case 128 + 3:  dam = spell_RF5_BA_COLD(y, x, m_idx); break;    /* RF5_BA_COLD */
-        case 128 + 4:  dam = spell_RF5_BA_POIS(y, x, m_idx); break;    /* RF5_BA_POIS */
-        case 128 + 5:  dam = spell_RF5_BA_NETH(y, x, m_idx); break;    /* RF5_BA_NETH */
-        case 128 + 6:  dam = spell_RF5_BA_WATE(y, x, m_idx); break;    /* RF5_BA_WATE */
-        case 128 + 7:  dam = spell_RF5_BA_MANA(y, x, m_idx); break;    /* RF5_BA_MANA */
-        case 128 + 8:  dam = spell_RF5_BA_DARK(y, x, m_idx); break;    /* RF5_BA_DARK */
-        case 128 + 9:  dam = spell_RF5_DRAIN_MANA(y, x, m_idx); break;    /* RF5_DRAIN_MANA */
-        case 128 + 10: dam = spell_RF5_MIND_BLAST(y, x, m_idx); break;    /* RF5_MIND_BLAST */
-        case 128 + 11: dam = spell_RF5_BRAIN_SMASH(y, x, m_idx); break;    /* RF5_MIND_BLAST */
-        case 128 + 12: dam = spell_RF5_CAUSE_1(y, x, m_idx); break;    /* RF5_CAUSE_1 */
-        case 128 + 13: dam = spell_RF5_CAUSE_2(y, x, m_idx); break;    /* RF5_CAUSE_2 */
-        case 128 + 14: dam = spell_RF5_CAUSE_3(y, x, m_idx); break;    /* RF5_CAUSE_3 */
-        case 128 + 15: dam = spell_RF5_CAUSE_4(y, x, m_idx); break;    /* RF5_CAUSE_4 */
-        case 128 + 16: dam = spell_RF5_BO_ACID(y, x, m_idx); break;    /* RF5_BO_ACID */
-        case 128 + 17: dam = spell_RF5_BO_ELEC(y, x, m_idx); break;    /* RF5_BO_ELEC */
-        case 128 + 18: dam = spell_RF5_BO_FIRE(y, x, m_idx); break;    /* RF5_BO_FIRE */
-        case 128 + 19: dam = spell_RF5_BO_COLD(y, x, m_idx); break;    /* RF5_BO_COLD */
-        case 128 + 20: dam = spell_RF5_BA_LITE(y, x, m_idx); break;    /* RF5_BA_LITE */
-        case 128 + 21: dam = spell_RF5_BO_NETH(y, x, m_idx); break;    /* RF5_BO_NETH */
-        case 128 + 22: dam = spell_RF5_BO_WATE(y, x, m_idx); break;    /* RF5_BO_WATE */
-        case 128 + 23: dam = spell_RF5_BO_MANA(y, x, m_idx); break;    /* RF5_BO_MANA */
-        case 128 + 24: dam = spell_RF5_BO_PLAS(y, x, m_idx); break;    /* RF5_BO_PLAS */
-        case 128 + 25: dam = spell_RF5_BO_ICEE(y, x, m_idx); break;    /* RF5_BO_ICEE */
-        case 128 + 26: dam = spell_RF5_MISSILE(y, x, m_idx); break;    /* RF5_MISSILE */
+        case 96 + 8:   dam = spell_RF4_BREATH(GF_ACID, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_ACID */
+        case 96 + 9:   dam = spell_RF4_BREATH(GF_ELEC, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_ELEC */
+        case 96 + 10:  dam = spell_RF4_BREATH(GF_FIRE, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_FIRE */
+        case 96 + 11:  dam = spell_RF4_BREATH(GF_COLD, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_COLD */
+        case 96 + 12:  dam = spell_RF4_BREATH(GF_POIS, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_POIS */
+        case 96 + 13:  dam = spell_RF4_BREATH(GF_NETHER, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_NETH */
+        case 96 + 14:  dam = spell_RF4_BREATH(GF_LITE, y_br_lite, x_br_lite, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_LITE */
+        case 96 + 15:  dam = spell_RF4_BREATH(GF_DARK, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_DARK */
+        case 96 + 16:  dam = spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_CONF */
+        case 96 + 17:  dam = spell_RF4_BREATH(GF_SOUND, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_SOUN */
+        case 96 + 18:  dam = spell_RF4_BREATH(GF_CHAOS, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_CHAO */
+        case 96 + 19:  dam = spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_DISE */
+        case 96 + 20:  dam = spell_RF4_BREATH(GF_NEXUS, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_NEXU */
+        case 96 + 21:  dam = spell_RF4_BREATH(GF_TIME, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_TIME */
+        case 96 + 22:  dam = spell_RF4_BREATH(GF_INERTIA, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_INER */
+        case 96 + 23:  dam = spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_GRAV */
+        case 96 + 24:  dam = spell_RF4_BREATH(GF_SHARDS, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_SHAR */
+        case 96 + 25:  dam = spell_RF4_BREATH(GF_PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_PLAS */
+        case 96 + 26:  dam = spell_RF4_BREATH(GF_FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_WALL */
+        case 96 + 27:  dam = spell_RF4_BREATH(GF_MANA, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_MANA */
+        case 96 + 28:  dam = spell_RF4_BA_NUKE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF4_BA_NUKE */
+        case 96 + 29:  dam = spell_RF4_BREATH(GF_NUKE, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_NUKE */
+        case 96 + 30:  dam = spell_RF4_BA_CHAO(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF4_BA_CHAO */
+        case 96 + 31:  dam = spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_BR_DISI */
+        case 128 + 0:  dam = spell_RF5_BA_ACID(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_ACID */
+        case 128 + 1:  dam = spell_RF5_BA_ELEC(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_ELEC */
+        case 128 + 2:  dam = spell_RF5_BA_FIRE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_FIRE */
+        case 128 + 3:  dam = spell_RF5_BA_COLD(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_COLD */
+        case 128 + 4:  dam = spell_RF5_BA_POIS(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_POIS */
+        case 128 + 5:  dam = spell_RF5_BA_NETH(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_NETH */
+        case 128 + 6:  dam = spell_RF5_BA_WATE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_WATE */
+        case 128 + 7:  dam = spell_RF5_BA_MANA(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_MANA */
+        case 128 + 8:  dam = spell_RF5_BA_DARK(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_DARK */
+        case 128 + 9:  dam = spell_RF5_DRAIN_MANA(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_DRAIN_MANA */
+        case 128 + 10: dam = spell_RF5_MIND_BLAST(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_MIND_BLAST */
+        case 128 + 11: dam = spell_RF5_BRAIN_SMASH(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_MIND_BLAST */
+        case 128 + 12: dam = spell_RF5_CAUSE_1(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_CAUSE_1 */
+        case 128 + 13: dam = spell_RF5_CAUSE_2(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_CAUSE_2 */
+        case 128 + 14: dam = spell_RF5_CAUSE_3(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_CAUSE_3 */
+        case 128 + 15: dam = spell_RF5_CAUSE_4(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_CAUSE_4 */
+        case 128 + 16: dam = spell_RF5_BO_ACID(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BO_ACID */
+        case 128 + 17: dam = spell_RF5_BO_ELEC(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BO_ELEC */
+        case 128 + 18: dam = spell_RF5_BO_FIRE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BO_FIRE */
+        case 128 + 19: dam = spell_RF5_BO_COLD(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BO_COLD */
+        case 128 + 20: dam = spell_RF5_BA_LITE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BA_LITE */
+        case 128 + 21: dam = spell_RF5_BO_NETH(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BO_NETH */
+        case 128 + 22: dam = spell_RF5_BO_WATE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BO_WATE */
+        case 128 + 23: dam = spell_RF5_BO_MANA(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BO_MANA */
+        case 128 + 24: dam = spell_RF5_BO_PLAS(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BO_PLAS */
+        case 128 + 25: dam = spell_RF5_BO_ICEE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_BO_ICEE */
+        case 128 + 26: dam = spell_RF5_MISSILE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF5_MISSILE */
         case 128 + 27: spell_RF5_SCARE(y, x, m_idx); break;    /* RF5_SCARE */
         case 128 + 28: spell_RF5_BLIND(y, x, m_idx); break;    /* RF5_BLIND */
         case 128 + 29: spell_RF5_CONF(y, x, m_idx); break;    /* RF5_CONF */
