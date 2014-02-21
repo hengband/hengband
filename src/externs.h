@@ -1573,6 +1573,17 @@ extern void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int
 extern void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type);
 extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type);
 
+/* mspells1.c */
+extern bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend);
+extern bool summon_possible(int y1, int x1);
+extern bool raise_possible(monster_type *m_ptr);
+extern bool dispel_check(int m_idx);
+extern bool spell_is_inate(u16b spell);
+extern bool make_attack_spell(int m_idx);
+extern void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type);
+extern void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type);
+extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type);
+
 /* mspells2.c */
 extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);
 extern bool monst_spell_monst(int m_idx);
@@ -1584,52 +1595,9 @@ extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
 
 /* mspells4.c */
 extern bool spell_learnable(int m_idx);
-extern void spell_RF4_SHRIEK(int m_idx, int t_idx, int TARGET_TYPE);;
-extern void spell_RF4_DISPEL(int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF4_ROCKET(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF4_SHOOT(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF4_BA_NUKE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF4_BA_CHAO(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_ACID(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_ELEC(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_FIRE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_COLD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_POIS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_NETH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_WATE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_DARK(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_DRAIN_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_MIND_BLAST(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BRAIN_SMASH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_CAUSE_1(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_CAUSE_2(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_CAUSE_3(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_CAUSE_4(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BO_ACID(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BO_ELEC(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BO_FIRE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BO_COLD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BA_LITE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BO_NETH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BO_WATE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BO_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BO_PLAS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_BO_ICEE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern int spell_RF5_MISSILE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE);
-extern void spell_RF5_SCARE(int y, int x, int m_idx);
-extern void spell_RF5_BLIND(int y, int x, int m_idx);
-extern void spell_RF5_CONF(int y, int x, int m_idx);
-extern void spell_RF5_SLOW(int y, int x, int m_idx);
-extern void spell_RF5_HOLD(int y, int x, int m_idx);
-extern void spell_RF6_HASTE(int m_idx);
-extern int spell_RF6_HAND_DOOM(int y, int x, int m_idx);
-extern void spell_RF6_HEAL(int m_idx);
-extern void spell_RF6_INVULNER(int m_idx);
-extern void spell_RF6_BLINK(int m_idx);
-extern void spell_RF6_TPORT(int m_idx);
-extern int spell_RF6_WORLD(int m_idx);
+extern int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx);
+extern int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx);
+
 extern int spell_RF6_SPECIAL(int y, int x, int m_idx);
 extern void spell_RF6_TELE_TO(int m_idx);
 extern void spell_RF6_TELE_AWAY(int m_idx);

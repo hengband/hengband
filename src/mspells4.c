@@ -47,7 +47,22 @@ bool monster_is_powerful(int m_idx)
     return (r_ptr->flags2 & RF2_POWERFUL);
 }
 
-void monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, int TARGET_TYPE)
+void monster_wakeup(int t_idx)
+{
+    (void)set_monster_csleep(t_idx, 0);
+}
+
+void monster_fear_message(int t_idx)
+{
+    char t_name[80];
+    monster_name(t_idx, t_name);
+    if (see_monster(t_idx))
+    {
+        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), t_name);
+    }
+}
+
+void monspell_message_base(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, cptr msg4, bool msg_flag, int TARGET_TYPE)
 {
     bool known = monster_near_player(m_idx, t_idx);
     bool see_either = see_monster(m_idx) || see_monster(t_idx);
@@ -57,24 +72,25 @@ void monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, int
     monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
-
     if (mon_to_player || (mon_to_mon && known && see_either))
         disturb(1, 1);
 
-    if (p_ptr->blind)
+    if (msg_flag)
     {
-        if (mon_to_player || (mon_to_mon && known && see_either))
+        if (mon_to_player)
             msg_format(msg1, m_name);
+        else if (mon_to_mon && known && see_either)
+            msg_format(msg2, m_name);
     }
     else
     {
         if (mon_to_player)
         {
-            msg_format(msg2, m_name);
+            msg_format(msg3, m_name);
         }
         else if (mon_to_mon && known && see_either)
         {
-            msg_format(msg3, m_name, t_name);
+            msg_format(msg4, m_name, t_name);
         }
     }
 
@@ -82,34 +98,30 @@ void monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, int
         mon_fight = TRUE;
 }
 
+void monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, int TARGET_TYPE)
+{
+    monspell_message_base(m_idx, t_idx, msg1, msg1, msg2, msg3, p_ptr->blind, TARGET_TYPE);
+}
+
+void simple_monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, int TARGET_TYPE)
+{
+    monspell_message_base(m_idx, t_idx, msg1, msg1, msg2, msg2, p_ptr->blind, TARGET_TYPE);
+}
+
 void spell_RF4_SHRIEK(int m_idx, int t_idx, int TARGET_TYPE)
 {
-	bool known = monster_near_player(m_idx, t_idx);
-    bool see_m = see_monster(m_idx);
-	char m_name[80], t_name[80];
-    monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+    simple_monspell_message(m_idx, t_idx,
+        _("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."),
+        _("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."),
+        TARGET_TYPE);
 
-    if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
-        if (known)
-        {
-            if (see_m)
-            {
-                msg_format(_("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."), m_name, t_name);
-            }
-            else
-            {
-                mon_fight = TRUE;
-            }
-        }
-        (void)set_monster_csleep(t_idx, 0);
-    }
-    else if (TARGET_TYPE == MONSTER_TO_PLAYER)
-    {
-        disturb(1, 1);
-        msg_format(_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."), m_name);
         aggravate_monsters(m_idx);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        monster_wakeup(t_idx);
     }
 }
 
@@ -121,34 +133,14 @@ void spell_RF4_DISPEL(int m_idx, int t_idx, int TARGET_TYPE)
     monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+        _("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."),
+        _("%^sが%sに対して魔力消去の呪文を念じた。", "%^s invokes a dispel magic at %s."),
+        TARGET_TYPE);
 
-    if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
-        if (known)
-        {
-            if (see_m)
-            {
-                msg_format(_("%^sが%sに対して魔力消去の呪文を念じた。",
-                    "%^s invokes a dispel magic at %s."), m_name, t_name);
-            }
-            else
-            {
-                mon_fight = TRUE;
-            }
-        }
-
-        if (t_idx == p_ptr->riding) dispel_player();
-        dispel_monster_status(t_idx);
-    }
-    else if (TARGET_TYPE == MONSTER_TO_PLAYER)
-    {
-        disturb(1, 1);
-
-        if (p_ptr->blind)
-            msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
-        else
-            msg_format(_("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."), m_name);
-
         dispel_player();
         if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
 
@@ -156,6 +148,11 @@ void spell_RF4_DISPEL(int m_idx, int t_idx, int TARGET_TYPE)
             msg_print(_("やりやがったな！", ""));
 
         learn_spell(MS_DISPEL);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        if (t_idx == p_ptr->riding) dispel_player();
+        dispel_monster_status(t_idx);
     }
 }
 
@@ -757,7 +754,6 @@ void spell_RF5_CAUSE(int GF_TYPE, int dam, int y, int x, int m_idx, int t_idx, c
     monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
-
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
         disturb(1, 1);
@@ -1058,187 +1054,355 @@ int spell_RF5_MISSILE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
     return dam;
 }
 
-void spell_RF5_SCARE(int y, int x, int m_idx)
+void spell_badstatus_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, cptr msg4, bool resist, bool saving_throw, int TARGET_TYPE)
 {
-    int rlev = monster_level_idx(m_idx);
-	char m_name[80];
+    bool see_either = see_monster(m_idx) || see_monster(t_idx);
+    bool see_t = see_monster(t_idx);
+    bool known = monster_near_player(m_idx, t_idx);
+    char m_name[80], t_name[80];
     monster_name(m_idx, m_name);
-    disturb(1, 1);
+    monster_name(t_idx, t_name);
 
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        disturb(1, 1);
+        if (p_ptr->blind)
+            msg_format(msg1, m_name);
+        else
+            msg_format(msg2, m_name);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやくと、恐ろしげな音が聞こえた。", "%^s mumbles, and you hear scary noises."), m_name);
-    else
-        msg_format(_("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion."), m_name);
+        if (resist)
+        {
+            msg_print(msg3);
+        }
+        else if (saving_throw)
+        {
+            msg_print(msg4);
+        }
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        if (known)
+        {
+            if (see_either)
+            {
+                msg_format(msg1, m_name, t_name);
+            }
+            else
+            {
+                mon_fight = TRUE;
+            }
+        }
 
-    if (p_ptr->resist_fear)
-    {
-        msg_print(_("しかし恐怖に侵されなかった。", "You refuse to be frightened."));
+        if (resist)
+        {
+            if (see_t) msg_format(msg2, t_name);
+        }
+        else if (saving_throw)
+        {
+            if (see_t) msg_format(msg3, t_name);
+        }
+        else
+        {
+            if (see_t) msg_format(msg4, t_name);
+        }
+        monster_wakeup(t_idx);
     }
-    else if (randint0(100 + rlev / 2) < p_ptr->skill_sav)
-    {
-        msg_print(_("しかし恐怖に侵されなかった。", "You refuse to be frightened."));
-    }
-    else
-    {
-        (void)set_afraid(p_ptr->afraid + randint0(4) + 4);
-    }
-    learn_spell(MS_SCARE);
-    update_smart_learn(m_idx, DRS_FEAR);
 }
 
-void spell_RF5_BLIND(int y, int x, int m_idx)
+void spell_RF5_SCARE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    monster_type    *t_ptr = &m_list[t_idx];
+    monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
-	char m_name[80];
-    monster_name(m_idx, m_name);
+    bool resist, saving_throw;
 
-    disturb(1, 1);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        resist = p_ptr->resist_fear;
+        saving_throw = (randint0(100 + rlev / 2) < p_ptr->skill_sav);
+        spell_badstatus_message(m_idx, t_idx,
+            _("%^sが何かをつぶやくと、恐ろしげな音が聞こえた。", "%^s mumbles, and you hear scary noises."),
+            _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion."),
+            _("しかし恐怖に侵されなかった。", "You refuse to be frightened."),
+            _("しかし恐怖に侵されなかった。", "You refuse to be frightened."),
+            resist, saving_throw, TARGET_TYPE);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが呪文を唱えてあなたの目をくらました！",
-        "%^s casts a spell, burning your eyes!"), m_name);
+        if (!resist && !saving_throw)
+        {
+            (void)set_afraid(p_ptr->afraid + randint0(4) + 4);
+        }
+        learn_spell(MS_SCARE);
+        update_smart_learn(m_idx, DRS_FEAR);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        resist = tr_ptr->flags3 & RF3_NO_FEAR;
+        saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    if (p_ptr->resist_blind)
-    {
-        msg_print(_("しかし効果がなかった！", "You are unaffected!"));
+        spell_badstatus_message(m_idx, t_idx, 
+            _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion in front of %s."),
+            _("%^sは恐怖を感じない。", "%^s refuses to be frightened."),
+            _("%^sは恐怖を感じない。", "%^s refuses to be frightened."),
+            _("%^sは恐怖して逃げ出した！", "%^s flees in terror!"),
+            resist, saving_throw, TARGET_TYPE);
+
+        if (!resist && !saving_throw)
+        {
+            set_monster_monfear(t_idx, MON_MONFEAR(t_ptr) + randint0(4) + 4);
+        }
     }
-    else if (randint0(100 + rlev / 2) < p_ptr->skill_sav)
-    {
-        msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-    }
-    else
-    {
-        (void)set_blind(12 + randint0(4));
-    }
-    learn_spell(MS_BLIND);
-    update_smart_learn(m_idx, DRS_BLIND);
 }
 
-void spell_RF5_CONF(int y, int x, int m_idx)
+void spell_RF5_BLIND(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    monster_type    *t_ptr = &m_list[t_idx];
+    monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
-	char m_name[80];
-    monster_name(m_idx, m_name);
+    bool resist, saving_throw;
 
-    disturb(1, 1);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        resist = p_ptr->resist_blind;
+        saving_throw = (randint0(100 + rlev / 2) < p_ptr->skill_sav);
+        spell_badstatus_message(m_idx, t_idx,
+            _("%^sが何かをつぶやいた。", "%^s mumbles."),
+            _("%^sが呪文を唱えてあなたの目をくらました！", "%^s casts a spell, burning your eyes!"),
+            _("しかし効果がなかった！", "You are unaffected!"),
+            _("しかし効力を跳ね返した！", "You resist the effects!"),
+            resist, saving_throw, TARGET_TYPE);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやくと、頭を悩ます音がした。",
-        "%^s mumbles, and you hear puzzling noises."), m_name);
-    else
-        msg_format(_("%^sが誘惑的な幻覚を作り出した。",
-        "%^s creates a mesmerising illusion."), m_name);
+        if (!resist && !saving_throw)
+        {
+            (void)set_blind(12 + randint0(4));
+        }
+        learn_spell(MS_BLIND);
+        update_smart_learn(m_idx, DRS_BLIND);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        cptr msg1;
+        char t_name[80];
+        monster_name(t_idx, t_name);
+        
+        if (streq(t_name, "it"))
+        {
+            msg1 = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%^s casts a spell, burning %ss eyes.");
+        }
+        else
+        {
+            msg1 = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%^s casts a spell, burning %s's eyes.");
+        }
 
-    if (p_ptr->resist_conf)
-    {
-        msg_print(_("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."));
+        resist = tr_ptr->flags3 & RF3_NO_CONF;
+        saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+
+        spell_badstatus_message(m_idx, t_idx,
+            msg1,
+            _("%^sには効果がなかった。", "%^s is unaffected."),
+            _("%^sには効果がなかった。", "%^s is unaffected."),
+            _("%^sは目が見えなくなった！ ", "%^s is blinded!"),
+            resist, saving_throw, TARGET_TYPE);
+
+        if (!resist && !saving_throw)
+        {
+            (void)set_monster_confused(t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
+        }
     }
-    else if (randint0(100 + rlev / 2) < p_ptr->skill_sav)
-    {
-        msg_print(_("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."));
-    }
-    else
-    {
-        (void)set_confused(p_ptr->confused + randint0(4) + 4);
-    }
-    learn_spell(MS_CONF);
-    update_smart_learn(m_idx, DRS_CONF);
 }
 
-void spell_RF5_SLOW(int y, int x, int m_idx)
+void spell_RF5_CONF(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    monster_type    *t_ptr = &m_list[t_idx];
+    monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
-	char m_name[80];
-    monster_name(m_idx, m_name);
+    bool resist, saving_throw;
 
-    disturb(1, 1);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        resist = p_ptr->resist_conf;
+        saving_throw = (randint0(100 + rlev / 2) < p_ptr->skill_sav);
+        spell_badstatus_message(m_idx, t_idx,
+            _("%^sが何かをつぶやくと、頭を悩ます音がした。", "%^s mumbles, and you hear puzzling noises."),
+            _("%^sが誘惑的な幻覚を作り出した。", "%^s creates a mesmerising illusion."),
+            _("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."),
+            _("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."),
+            resist, saving_throw, TARGET_TYPE);
 
-    msg_format(_("%^sがあなたの筋力を吸い取ろうとした！",
-        "%^s drains power from your muscles!"), m_name);
+        if (!resist && !saving_throw)
+        {
+            (void)set_confused(p_ptr->confused + randint0(4) + 4);
+        }
+        learn_spell(MS_CONF);
+        update_smart_learn(m_idx, DRS_CONF);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        resist = tr_ptr->flags3 & RF3_NO_CONF;
+        saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    if (p_ptr->free_act)
-    {
-        msg_print(_("しかし効果がなかった！", "You are unaffected!"));
+        spell_badstatus_message(m_idx, t_idx,
+            _("%^sが%sの前に幻惑的な幻をつくり出した。", "%^s casts a mesmerizing illusion in front of %s."),
+            _("%^sは惑わされなかった。", "%^s disbelieves the feeble spell."),
+            _("%^sは惑わされなかった。", "%^s disbelieves the feeble spell."),
+            _("%^sは混乱したようだ。", "%^s seems confused."),
+            resist, saving_throw, TARGET_TYPE);
+
+        if (!resist && !saving_throw)
+        {
+            (void)set_monster_confused(t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
+        }
     }
-    else if (randint0(100 + rlev / 2) < p_ptr->skill_sav)
-    {
-        msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-    }
-    else
-    {
-        (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
-    }
-    learn_spell(MS_SLOW);
-    update_smart_learn(m_idx, DRS_FREE);
 }
 
-void spell_RF5_HOLD(int y, int x, int m_idx)
+
+void spell_RF5_SLOW(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    monster_type    *t_ptr = &m_list[t_idx];
+    monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
-	char m_name[80];
-    monster_name(m_idx, m_name);
-    disturb(1, 1);
+    bool resist, saving_throw;
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがあなたの目をじっと見つめた！", "%^s stares deep into your eyes!"), m_name);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        resist = p_ptr->resist_conf;
+        saving_throw = (randint0(100 + rlev / 2) < p_ptr->skill_sav);
+        spell_badstatus_message(m_idx, t_idx,
+            _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
+            _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
+            _("しかし効果がなかった！", "You are unaffected!"),
+            _("しかし効力を跳ね返した！", "You resist the effects!"),
+            resist, saving_throw, TARGET_TYPE);
 
-    if (p_ptr->free_act)
-    {
-        msg_print(_("しかし効果がなかった！", "You are unaffected!"));
+        if (!resist && !saving_throw)
+        {
+            (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+        }
+        learn_spell(MS_SLOW);
+        update_smart_learn(m_idx, DRS_FREE);
     }
-    else if (randint0(100 + rlev / 2) < p_ptr->skill_sav)
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
     {
-        msg_format(_("しかし効力を跳ね返した！", "You resist the effects!"));
+        cptr msg1;
+        char t_name[80];
+        monster_name(t_idx, t_name);
+
+        if (streq(t_name, "it"))
+        {
+            msg1 = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %ss muscles.");
+        }
+        else
+        {
+            msg1 = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %s's muscles.");
+        }
+
+        resist = tr_ptr->flags1 & RF1_UNIQUE;
+        saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+
+        spell_badstatus_message(m_idx, t_idx,
+            msg1,
+            _("%^sには効果がなかった。", "%^s is unaffected."),
+            _("%^sには効果がなかった。", "%^s is unaffected."),
+            _("%sの動きが遅くなった。", "%^s starts moving slower."),
+            resist, saving_throw, TARGET_TYPE);
+
+        if (!resist && !saving_throw)
+        {
+            set_monster_slow(t_idx, MON_SLOW(t_ptr) + 50);
+        }
     }
-    else
-    {
-        (void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
-    }
-    learn_spell(MS_SLEEP);
-    update_smart_learn(m_idx, DRS_FREE);
 }
 
-void spell_RF6_HASTE(int m_idx)
+void spell_RF5_HOLD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    monster_type    *t_ptr = &m_list[t_idx];
+    monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
+    int rlev = monster_level_idx(m_idx);
+    bool resist, saving_throw;
+
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        resist = p_ptr->free_act;
+        saving_throw = (randint0(100 + rlev / 2) < p_ptr->skill_sav);
+        spell_badstatus_message(m_idx, t_idx,
+            _("%^sが何かをつぶやいた。", "%^s mumbles."),
+            _("%^sがあなたの目をじっと見つめた！", "%^s stares deep into your eyes!"),
+            _("しかし効果がなかった！", "You are unaffected!"),
+            _("しかし効力を跳ね返した！", "You resist the effects!"),
+            resist, saving_throw, TARGET_TYPE);
+
+        if (!resist && !saving_throw)
+        {
+            (void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
+        }
+        learn_spell(MS_SLEEP);
+        update_smart_learn(m_idx, DRS_FREE);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        resist = (tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flags3 & RF3_NO_STUN);
+        saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+
+        spell_badstatus_message(m_idx, t_idx,
+            _("%^sは%sをじっと見つめた。", "%^s stares intently at %s."),
+            _("%^sには効果がなかった。", "%^s is unaffected."),
+            _("%^sには効果がなかった。", "%^s is unaffected."), 
+            _("%^sは麻痺した！", "%^s is paralyzed!"),
+            resist, saving_throw, TARGET_TYPE);
+
+        if (!resist && !saving_throw)
+        {
+            (void)set_monster_stunned(t_idx, MON_STUNNED(t_ptr) + randint1(4) + 4);
+        }
+    }
+}
+
+void spell_RF6_HASTE(int m_idx, int t_idx, int TARGET_TYPE)
+{
+    bool see_m = see_monster(m_idx);
     monster_type    *m_ptr = &m_list[m_idx];
 	char m_name[80];
     monster_name(m_idx, m_name);
-    disturb(1, 1);
-    if (p_ptr->blind)
-    {
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    }
-    else
-    {
-        msg_format(_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."), m_name);
-    }
+
+    monspell_message_base(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
+        _("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
+        _("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
+        p_ptr->blind, TARGET_TYPE);
 
     /* Allow quick speed increases to base+10 */
     if (set_monster_fast(m_idx, MON_FAST(m_ptr) + 100))
     {
-        msg_format(_("%^sの動きが速くなった。", "%^s starts moving faster."), m_name);
+        if (TARGET_TYPE == MONSTER_TO_PLAYER ||
+            (TARGET_TYPE == MONSTER_TO_MONSTER && see_m))
+            msg_format(_("%^sの動きが速くなった。", "%^s starts moving faster."), m_name);
     }
 }
 
-int spell_RF6_HAND_DOOM(int y, int x, int m_idx)
+int spell_RF6_HAND_DOOM(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    monster_type    *m_ptr = &m_list[m_idx];
     int dam;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-    disturb(1, 1);
-    msg_format(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"), m_name);
-    dam = (((s32b)((40 + randint1(20)) * (p_ptr->chp))) / 100);
-    breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_PLAYER);
+
+    simple_monspell_message(m_idx, t_idx,
+        _("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"),
+        _("%^sが%sに<破滅の手>を放った！", "%^s invokes the Hand of Doom upon %s!"),
+        TARGET_TYPE);
+
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        dam = (((s32b)((40 + randint1(20)) * (p_ptr->chp))) / 100);
+        breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_PLAYER);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        dam = 20; /* Dummy power */
+        breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_MONSTER);
+    }
     return dam;
 }
 
-void spell_RF6_HEAL(int m_idx)
+void spell_RF6_HEAL(int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
@@ -1249,10 +1413,12 @@ void spell_RF6_HEAL(int m_idx)
     disturb(1, 1);
 
     /* Message */
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが自分の傷に集中した。", "%^s concentrates on %s wounds."), m_name);
+    monspell_message_base(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sは自分の傷に念を集中した。", "%^s concentrates on %s wounds."),
+        _("%^sが自分の傷に集中した。", "%^s concentrates on %s wounds."),
+        _("%^sは自分の傷に念を集中した。", "%^s concentrates on %s wounds."),
+        p_ptr->blind, TARGET_TYPE);
 
     /* Heal some */
     m_ptr->hp += (rlev * 6);
@@ -1264,20 +1430,24 @@ void spell_RF6_HEAL(int m_idx)
         m_ptr->hp = m_ptr->maxhp;
 
         /* Message */
-        if (seen)
-            msg_format(_("%^sは完全に治った！", "%^s looks completely healed!"), m_name);
-        else
-            msg_format(_("%^sは完全に治ったようだ！", "%^s sounds completely healed!"), m_name);
+        monspell_message_base(m_idx, t_idx,
+            _("%^sは完全に治ったようだ！", "%^s sounds completely healed!"),
+            _("%^sは完全に治ったようだ！", "%^s sounds completely healed!"),
+            _("%^sは完全に治った！", "%^s looks completely healed!"),
+            _("%^sは完全に治った！", "%^s looks completely healed!"),
+            !seen, TARGET_TYPE);
     }
 
     /* Partially healed */
     else
     {
         /* Message */
-        if (seen)
-            msg_format(_("%^sは体力を回復したようだ。", "%^s looks healthier."), m_name);
-        else
-            msg_format(_("%^sは体力を回復したようだ。", "%^s sounds healthier."), m_name);
+        monspell_message_base(m_idx, t_idx,
+            _("%^sは体力を回復したようだ。", "%^s sounds healthier."),
+            _("%^sは体力を回復したようだ。", "%^s sounds healthier."),
+            _("%^sは体力を回復したようだ。", "%^s looks healthier."),
+            _("%^sは体力を回復したようだ。", "%^s looks healthier."),
+            !seen, TARGET_TYPE);
     }
 
     /* Redraw (later) if needed */
@@ -1291,59 +1461,70 @@ void spell_RF6_HEAL(int m_idx)
         (void)set_monster_monfear(m_idx, 0);
 
         /* Message */
-        msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
+        if (see_monster(m_idx))
+            msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
     }
 }
-void spell_RF6_INVULNER(int m_idx)
+void spell_RF6_INVULNER(int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *m_ptr = &m_list[m_idx];
     bool seen = (!p_ptr->blind && m_ptr->ml);
-	char m_name[80];
-    monster_name(m_idx, m_name);
-    disturb(1, 1);
 
     /* Message */
-    if (!seen)
-        msg_format(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), m_name);
-    else
-        msg_format(_("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."), m_name);
+	monspell_message_base(m_idx, t_idx,
+            _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+            _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+            _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
+            _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
+            !seen, TARGET_TYPE);
 
     if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(m_idx, randint1(4) + 4, FALSE);
 }
 
-void spell_RF6_BLINK(int m_idx)
+void spell_RF6_BLINK(int m_idx, int TARGET_TYPE)
 {
 	char m_name[80];
     monster_name(m_idx, m_name);
+	
+	if (TARGET_TYPE==MONSTER_TO_PLAYER)
+		disturb(1, 1);
 
-    disturb(1, 1);
     if (teleport_barrier(m_idx))
     {
-        msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
-            "Magic barrier obstructs teleporting of %^s."), m_name);
+		if(see_monster(m_idx))
+	        msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
+						 "Magic barrier obstructs teleporting of %^s."), m_name);
     }
     else
     {
-        msg_format(_("%^sが瞬時に消えた。", "%^s blinks away."), m_name);
+		if(see_monster(m_idx))
+	        msg_format(_("%^sが瞬時に消えた。", "%^s blinks away."), m_name);
+
         teleport_away(m_idx, 10, 0L);
-        p_ptr->update |= (PU_MONSTERS);
+
+		if (TARGET_TYPE==MONSTER_TO_PLAYER)
+	        p_ptr->update |= (PU_MONSTERS);
     }
 }
 
-void spell_RF6_TPORT(int m_idx)
+void spell_RF6_TPORT(int m_idx, int TARGET_TYPE)
 {	
 	char m_name[80];
     monster_name(m_idx, m_name);
-
-	disturb(1, 1);
+	
+	if (TARGET_TYPE==MONSTER_TO_PLAYER)
+		disturb(1, 1);
     if (teleport_barrier(m_idx))
     {
-        msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
-            "Magic barrier obstructs teleporting of %^s."), m_name);
+		if(see_monster(m_idx))
+			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
+						 "Magic barrier obstructs teleporting of %^s."), m_name);
     }
     else
     {
-        msg_format(_("%^sがテレポートした。", "%^s teleports away."), m_name);
+		if(see_monster(m_idx))
+			msg_format(_("%^sがテレポートした。", "%^s teleports away."), m_name);
+
         teleport_away_followable(m_idx);
     }
 }
@@ -2216,3 +2397,186 @@ void spell_RF6_S_UNIQUE(int y, int x, int m_idx)
     }
 }
 
+
+int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx)
+{
+    switch (SPELL_NUM)
+    {
+    case 96 + 0:   spell_RF4_SHRIEK(m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_SHRIEK */
+    case 96 + 1:   break;   /* RF4_XXX1 */
+    case 96 + 2:   spell_RF4_DISPEL(m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF4_DISPEL */
+    case 96 + 3:   return spell_RF4_ROCKET(y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_ROCKET */
+    case 96 + 4:   return spell_RF4_SHOOT(y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_SHOOT */
+    case 96 + 5:   break;   /* RF4_XXX2 */
+    case 96 + 6:   break;   /* RF4_XXX3 */
+    case 96 + 7:   break;   /* RF4_XXX4 */
+    case 96 + 8:   return spell_RF4_BREATH(GF_ACID, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ACID */
+    case 96 + 9:   return spell_RF4_BREATH(GF_ELEC, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ELEC */
+    case 96 + 10:  return spell_RF4_BREATH(GF_FIRE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_FIRE */
+    case 96 + 11:  return spell_RF4_BREATH(GF_COLD, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_COLD */
+    case 96 + 12:  return spell_RF4_BREATH(GF_POIS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_POIS */
+    case 96 + 13:  return spell_RF4_BREATH(GF_NETHER, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_NETH */
+    case 96 + 14:  return spell_RF4_BREATH(GF_LITE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_LITE */
+    case 96 + 15:  return spell_RF4_BREATH(GF_DARK, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DARK */
+    case 96 + 16:  return spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx, 0, MONSTER_TO_PLAYER);    /* RF4_BR_CONF */
+    case 96 + 17:  return spell_RF4_BREATH(GF_SOUND, y, x, m_idx, 0, MONSTER_TO_PLAYER);    /* RF4_BR_SOUN */
+    case 96 + 18:  return spell_RF4_BREATH(GF_CHAOS, y, x, m_idx, 0, MONSTER_TO_PLAYER);    /* RF4_BR_CHAO */
+    case 96 + 19:  return spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_DISE */
+    case 96 + 20:  return spell_RF4_BREATH(GF_NEXUS, y, x, m_idx, 0, MONSTER_TO_PLAYER);    /* RF4_BR_NEXU */
+    case 96 + 21:  return spell_RF4_BREATH(GF_TIME, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_TIME */
+    case 96 + 22:  return spell_RF4_BREATH(GF_INERTIA, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_INER */
+    case 96 + 23:  return spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_GRAV */
+    case 96 + 24:  return spell_RF4_BREATH(GF_SHARDS, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_SHAR */
+    case 96 + 25:  return spell_RF4_BREATH(GF_PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_PLAS */
+    case 96 + 26:  return spell_RF4_BREATH(GF_FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER);    /* RF4_BR_WALL */
+    case 96 + 27:  return spell_RF4_BREATH(GF_MANA, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_MANA */
+    case 96 + 28:  return spell_RF4_BA_NUKE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_NUKE */
+    case 96 + 29:  return spell_RF4_BREATH(GF_NUKE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NUKE */
+    case 96 + 30:  return spell_RF4_BA_CHAO(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_CHAO */
+    case 96 + 31:  return spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DISI */
+    case 128 + 0:  return spell_RF5_BA_ACID(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ACID */
+    case 128 + 1:  return spell_RF5_BA_ELEC(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ELEC */
+    case 128 + 2:  return spell_RF5_BA_FIRE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_FIRE */
+    case 128 + 3:  return spell_RF5_BA_COLD(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_COLD */
+    case 128 + 4:  return spell_RF5_BA_POIS(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_POIS */
+    case 128 + 5:  return spell_RF5_BA_NETH(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_NETH */
+    case 128 + 6:  return spell_RF5_BA_WATE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_WATE */
+    case 128 + 7:  return spell_RF5_BA_MANA(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_MANA */
+    case 128 + 8:  return spell_RF5_BA_DARK(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_DARK */
+    case 128 + 9:  return spell_RF5_DRAIN_MANA(y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_DRAIN_MANA */
+    case 128 + 10: return spell_RF5_MIND_BLAST(y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_MIND_BLAST */
+    case 128 + 11: return spell_RF5_BRAIN_SMASH(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MIND_BLAST */
+    case 128 + 12: return spell_RF5_CAUSE_1(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_1 */
+    case 128 + 13: return spell_RF5_CAUSE_2(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_2 */
+    case 128 + 14: return spell_RF5_CAUSE_3(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_3 */
+    case 128 + 15: return spell_RF5_CAUSE_4(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_4 */
+    case 128 + 16: return spell_RF5_BO_ACID(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ACID */
+    case 128 + 17: return spell_RF5_BO_ELEC(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ELEC */
+    case 128 + 18: return spell_RF5_BO_FIRE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_FIRE */
+    case 128 + 19: return spell_RF5_BO_COLD(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_COLD */
+    case 128 + 20: return spell_RF5_BA_LITE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_LITE */
+    case 128 + 21: return spell_RF5_BO_NETH(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_NETH */
+    case 128 + 22: return spell_RF5_BO_WATE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_WATE */
+    case 128 + 23: return spell_RF5_BO_MANA(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_MANA */
+    case 128 + 24: return spell_RF5_BO_PLAS(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_PLAS */
+    case 128 + 25: return spell_RF5_BO_ICEE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ICEE */
+    case 128 + 26: return spell_RF5_MISSILE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MISSILE */
+    case 128 + 27: spell_RF5_SCARE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF5_SCARE */
+    case 128 + 28: spell_RF5_BLIND(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF5_BLIND */
+    case 128 + 29: spell_RF5_CONF(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_CONF */
+    case 128 + 30: spell_RF5_SLOW(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_SLOW */
+    case 128 + 31: spell_RF5_HOLD(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_HOLD */
+    case 160 + 0:  spell_RF6_HASTE(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_HASTE */
+    case 160 + 1:  return spell_RF6_HAND_DOOM(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HAND_DOOM */
+    case 160 + 2:  spell_RF6_HEAL(m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF6_HEAL */
+    case 160 + 3:  spell_RF6_INVULNER(m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF6_INVULNER */
+    case 160 + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_BLINK */
+    case 160 + 5:  spell_RF6_TPORT(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_TPORT */
+    case 160 + 6:  return spell_RF6_WORLD(m_idx); break;    /* RF6_WORLD */
+    case 160 + 7:  return spell_RF6_SPECIAL(y, x, m_idx);   /* RF6_SPECIAL */
+    case 160 + 8:  spell_RF6_TELE_TO(m_idx); break; /* RF6_TELE_TO */
+    case 160 + 9:  spell_RF6_TELE_AWAY(m_idx); break;   /* RF6_TELE_AWAY */
+    case 160 + 10: spell_RF6_TELE_LEVEL(m_idx); break;  /* RF6_TELE_LEVEL */
+    case 160 + 11: spell_RF6_PSY_SPEAR(y, x, m_idx); break; /* RF6_PSY_SPEAR */
+    case 160 + 12: spell_RF6_DARKNESS(m_idx); break;    /* RF6_DARKNESS */
+    case 160 + 13: spell_RF6_TRAPS(y, x, m_idx); break; /* RF6_TRAPS */
+    case 160 + 14: spell_RF6_FORGET(m_idx); break;  /* RF6_FORGET */
+    case 160 + 15: spell_RF6_RAISE_DEAD(m_idx); break;  /* RF6_RAISE_DEAD */
+    case 160 + 16: spell_RF6_S_KIN(y, x, m_idx); break; /* RF6_S_KIN */
+    case 160 + 17: spell_RF6_S_CYBER(y, x, m_idx); break;   /* RF6_S_CYBER */
+    case 160 + 18: spell_RF6_S_MONSTER(y, x, m_idx); break; /* RF6_S_MONSTER */
+    case 160 + 19: spell_RF6_S_MONSTERS(y, x, m_idx); break;    /* RF6_S_MONSTER */
+    case 160 + 20: spell_RF6_S_ANT(y, x, m_idx); break; /* RF6_S_ANT */
+    case 160 + 21: spell_RF6_S_SPIDER(y, x, m_idx); break;  /* RF6_S_SPIDER */
+    case 160 + 22: spell_RF6_S_HOUND(y, x, m_idx); break;   /* RF6_S_HOUND */
+    case 160 + 23: spell_RF6_S_HYDRA(y, x, m_idx); break;   /* RF6_S_HYDRA */
+    case 160 + 24: spell_RF6_S_ANGEL(y, x, m_idx); break;   /* RF6_S_ANGEL */
+    case 160 + 25: spell_RF6_S_DEMON(y, x, m_idx); break;   /* RF6_S_DEMON */
+    case 160 + 26: spell_RF6_S_UNDEAD(y, x, m_idx); break;  /* RF6_S_UNDEAD */
+    case 160 + 27: spell_RF6_S_DRAGON(y, x, m_idx); break;  /* RF6_S_DRAGON */
+    case 160 + 28: spell_RF6_S_HI_UNDEAD(y, x, m_idx); break;   /* RF6_S_HI_UNDEAD */
+    case 160 + 29: spell_RF6_S_HI_DRAGON(y, x, m_idx); break;   /* RF6_S_HI_DRAGON */
+    case 160 + 30: spell_RF6_S_AMBERITES(y, x, m_idx); break;   /* RF6_S_AMBERITES */
+    case 160 + 31: spell_RF6_S_UNIQUE(y, x, m_idx); break;  /* RF6_S_UNIQUE */
+    }
+    return 0;
+}
+
+int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx)
+{
+    switch (SPELL_NUM)
+    {
+    case 96 + 0:   spell_RF4_SHRIEK(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_SHRIEK */
+    case 96 + 1:   return -1;   /* RF4_XXX1 */
+    case 96 + 2:   spell_RF4_DISPEL(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_DISPEL */
+    case 96 + 3:   return spell_RF4_ROCKET(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_ROCKET */
+    case 96 + 4:   return spell_RF4_SHOOT(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_SHOOT */
+    case 96 + 5:   return -1;   /* RF4_XXX2 */
+    case 96 + 6:   return -1;   /* RF4_XXX3 */
+    case 96 + 7:   return -1;   /* RF4_XXX4 */
+    case 96 + 8:   return spell_RF4_BREATH(GF_ACID, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_ACID */
+    case 96 + 9:   return spell_RF4_BREATH(GF_ELEC, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_ELEC */
+    case 96 + 10:  return spell_RF4_BREATH(GF_FIRE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_FIRE */
+    case 96 + 11:  return spell_RF4_BREATH(GF_COLD, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_COLD */
+    case 96 + 12:  return spell_RF4_BREATH(GF_POIS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_POIS */
+    case 96 + 13:  return spell_RF4_BREATH(GF_NETHER, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_NETH */
+    case 96 + 14:  return spell_RF4_BREATH(GF_LITE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_LITE */
+    case 96 + 15:  return spell_RF4_BREATH(GF_DARK, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_DARK */
+    case 96 + 16:  return spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CONF */
+    case 96 + 17:  return spell_RF4_BREATH(GF_SOUND, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_SOUN */
+    case 96 + 18:  return spell_RF4_BREATH(GF_CHAOS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CHAO */
+    case 96 + 19:  return spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_DISE */
+    case 96 + 20:  return spell_RF4_BREATH(GF_NEXUS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_NEXU */
+    case 96 + 21:  return spell_RF4_BREATH(GF_TIME, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_TIME */
+    case 96 + 22:  return spell_RF4_BREATH(GF_INERTIA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_INER */
+    case 96 + 23:  return spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_GRAV */
+    case 96 + 24:  return spell_RF4_BREATH(GF_SHARDS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_SHAR */
+    case 96 + 25:  return spell_RF4_BREATH(GF_PLASMA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_PLAS */
+    case 96 + 26:  return spell_RF4_BREATH(GF_FORCE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_WALL */
+    case 96 + 27:  return spell_RF4_BREATH(GF_MANA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_MANA */
+    case 96 + 28:  return spell_RF4_BA_NUKE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BA_NUKE */
+    case 96 + 29:  return spell_RF4_BREATH(GF_NUKE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_NUKE */
+    case 96 + 30:  return spell_RF4_BA_CHAO(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BA_CHAO */
+    case 96 + 31:  return spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_DISI */
+    case 128 + 0:  return spell_RF5_BA_ACID(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_ACID */
+    case 128 + 1:  return spell_RF5_BA_ELEC(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_ELEC */
+    case 128 + 2:  return spell_RF5_BA_FIRE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_FIRE */
+    case 128 + 3:  return spell_RF5_BA_COLD(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_COLD */
+    case 128 + 4:  return spell_RF5_BA_POIS(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_POIS */
+    case 128 + 5:  return spell_RF5_BA_NETH(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_NETH */
+    case 128 + 6:  return spell_RF5_BA_WATE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_WATE */
+    case 128 + 7:  return spell_RF5_BA_MANA(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_MANA */
+    case 128 + 8:  return spell_RF5_BA_DARK(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_DARK */
+    case 128 + 9:  return spell_RF5_DRAIN_MANA(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_DRAIN_MANA */
+    case 128 + 10: return spell_RF5_MIND_BLAST(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_MIND_BLAST */
+    case 128 + 11: return spell_RF5_BRAIN_SMASH(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BRAIN_SMASH */
+    case 128 + 12: return spell_RF5_CAUSE_1(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_CAUSE_1 */
+    case 128 + 13: return spell_RF5_CAUSE_2(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_CAUSE_2 */
+    case 128 + 14: return spell_RF5_CAUSE_3(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_CAUSE_3 */
+    case 128 + 15: return spell_RF5_CAUSE_4(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_CAUSE_4 */
+    case 128 + 16: return spell_RF5_BO_ACID(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_ACID */
+    case 128 + 17: return spell_RF5_BO_ELEC(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_ELEC */
+    case 128 + 18: return spell_RF5_BO_FIRE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_FIRE */
+    case 128 + 19: return spell_RF5_BO_COLD(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_COLD */
+    case 128 + 20: return spell_RF5_BA_LITE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BA_LITE */
+    case 128 + 21: return spell_RF5_BO_NETH(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_NETH */
+    case 128 + 22: return spell_RF5_BO_WATE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_WATE */
+    case 128 + 23: return spell_RF5_BO_MANA(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_MANA */
+    case 128 + 24: return spell_RF5_BO_PLAS(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_PLAS */
+    case 128 + 25: return spell_RF5_BO_ICEE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_ICEE */
+    case 128 + 26: return spell_RF5_MISSILE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_MISSILE */
+    case 128 + 27: spell_RF5_SCARE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_SCARE */
+    case 128 + 28: spell_RF5_BLIND(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_BLIND */
+    case 128 + 29: spell_RF5_CONF(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_CONF */
+    case 128 + 30: spell_RF5_SLOW(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_SLOW */
+    case 128 + 31: spell_RF5_HOLD(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_HOLD */
+    case 160 + 0:  spell_RF6_HASTE(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_HASTE */
+    case 160 + 1:  return spell_RF6_HAND_DOOM(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF6_HAND_DOOM */
+    case 160 + 2:  spell_RF6_HEAL(m_idx, t_idx, MONSTER_TO_MONSTER); break;    /* RF6_HEAL */
+    case 160 + 3:  spell_RF6_INVULNER(m_idx, t_idx, MONSTER_TO_MONSTER); break;    /* RF6_INVULNER */
+    case 160 + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_MONSTER); break;   /* RF6_BLINK */
+    case 160 + 5:  spell_RF6_TPORT(m_idx, MONSTER_TO_MONSTER); break;   /* RF6_TPORT */
+    case 160 + 6:  return -1; break;    /* RF6_WORLD */
+    }
+    return 0;
+}
