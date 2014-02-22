@@ -1598,10 +1598,6 @@ extern bool spell_learnable(int m_idx);
 extern int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx);
 extern int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx);
 
-extern int spell_RF6_SPECIAL(int y, int x, int m_idx);
-extern void spell_RF6_TELE_TO(int m_idx);
-extern void spell_RF6_TELE_AWAY(int m_idx);
-extern void spell_RF6_TELE_LEVEL(int m_idx);
 extern int spell_RF6_PSY_SPEAR(int y, int x, int m_idx);
 extern void spell_RF6_DARKNESS(int m_idx);
 extern void spell_RF6_TRAPS(int y, int x, int m_idx);

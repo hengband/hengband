@@ -507,7 +507,7 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
- * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプ・Eぅ筺爾覆・ONSTER_TO_PLAYER
+ * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
 void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
@@ -538,7 +538,7 @@ void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
- * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプ・Eぅ筺爾覆・ONSTER_TO_PLAYER
+ * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
 void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
@@ -572,7 +572,7 @@ void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target
  * @param rad 半径
  * @param breath TRUEならばブ・E構萢・．ALSEならばボー・E萢
  * @param monspell モンスター魔法のID
- * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプ・Eぅ筺爾覆・ONSTER_TO_PLAYER
+ * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
 void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type)

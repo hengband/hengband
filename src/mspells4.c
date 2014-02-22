@@ -105,7 +105,7 @@ void monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, int
 
 void simple_monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, int TARGET_TYPE)
 {
-    monspell_message_base(m_idx, t_idx, msg1, msg1, msg2, msg2, p_ptr->blind, TARGET_TYPE);
+    monspell_message_base(m_idx, t_idx, msg1, msg2, msg1, msg2, p_ptr->blind, TARGET_TYPE);
 }
 
 void spell_RF4_SHRIEK(int m_idx, int t_idx, int TARGET_TYPE)
@@ -1543,51 +1543,41 @@ int spell_RF6_WORLD(int m_idx)
     return who;
 }
 
-int spell_RF6_SPECIAL(int y, int x, int m_idx)
+int spell_RF6_SPECIAL_BANORLUPART(int m_idx, int mode)
 {
     monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    u32b mode = 0L;
-    bool direct = player_bold(y, x);
-    int k, dam, count=0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
+	int dummy_hp, dummy_maxhp, k;
+	int dummy_y = m_ptr->fy;
+	int dummy_x = m_ptr->fx;
 
-    disturb(1, 1);
-    switch (m_ptr->r_idx)
-    {
-        case MON_OHMU:
-            /* Moved to process_monster(), like multiplication */
-            return -1;
-        case MON_BANORLUPART:
-        {
-            int dummy_hp = (m_ptr->hp + 1) / 2;
-            int dummy_maxhp = m_ptr->maxhp / 2;
-            int dummy_y = m_ptr->fy;
-            int dummy_x = m_ptr->fx;
+	switch(m_ptr->r_idx)
+	{
+		case MON_BANORLUPART:
+			dummy_hp = (m_ptr->hp + 1) / 2;
+			dummy_maxhp = m_ptr->maxhp / 2;
+			
+			if (p_ptr->inside_arena || p_ptr->inside_battle || !summon_possible(m_ptr->fy, m_ptr->fx)) 
+				return -1;
 
-            if (p_ptr->inside_arena || p_ptr->inside_battle || !summon_possible(m_ptr->fy, m_ptr->fx)) return -1;
-            delete_monster_idx(cave[m_ptr->fy][m_ptr->fx].m_idx);
-            summon_named_creature(0, dummy_y, dummy_x, MON_BANOR, mode);
-            m_list[hack_m_idx_ii].hp = dummy_hp;
-            m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
-            summon_named_creature(0, dummy_y, dummy_x, MON_LUPART, mode);
-            m_list[hack_m_idx_ii].hp = dummy_hp;
-            m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
+			delete_monster_idx(cave[m_ptr->fy][m_ptr->fx].m_idx);
+			summon_named_creature(0, dummy_y, dummy_x, MON_BANOR, mode);
+			m_list[hack_m_idx_ii].hp = dummy_hp;
+			m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
+			summon_named_creature(0, dummy_y, dummy_x, MON_LUPART, mode);
+			m_list[hack_m_idx_ii].hp = dummy_hp;
+			m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
-            msg_print(_("『バーノール・ルパート』が分裂した！","Banor=Rupart splits in two person!"));
-            break;
-        }
-
+			msg_print(_("『バーノール・ルパート』が分裂した！","Banor=Rupart splits in two person!"));
+			break;
+		
         case MON_BANOR:
         case MON_LUPART:
-        {
-            int dummy_hp = 0;
-            int dummy_maxhp = 0;
-            int dummy_y = m_ptr->fy;
-            int dummy_x = m_ptr->fx;
+            dummy_hp = 0;
+            dummy_maxhp = 0;
 
-            if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num) return (FALSE);
+            if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num) 
+				return -1;
+
             for (k = 1; k < m_max; k++)
             {
                 if (m_list[k].r_idx == MON_BANOR || m_list[k].r_idx == MON_LUPART)
@@ -1608,146 +1598,312 @@ int spell_RF6_SPECIAL(int y, int x, int m_idx)
 
             msg_print(_("『バーノール』と『ルパート』が合体した！", "Banor and Rupart combine into one!"));
             break;
-        }
+	}
+	return 0;
+}
+
+
+int spell_RF6_SPECIAL_ROLENTO(int y, int x, int m_idx, int t_idx, int mode, int TARGET_TYPE)
+{
+	int count = 0, k;
+	int num = 1 + randint1(3);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何か大量に投げた。", "%^s spreads something."),
+		_("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."),
+        _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."),
+        TARGET_TYPE);
+
+	for (k = 0; k < num; k++)
+	{
+		count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, mode);
+	}
+	
+	if (p_ptr->blind && count)
+		msg_print(_("多くのものが間近にばらまかれる音がする。", "You hear many things are scattered nearby."));
+	
+	return 0;
+}
+
+int spell_RF6_SPECIAL_B(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+{
+	int dam;
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_type    *t_ptr = &m_list[t_idx];
+    monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
+	bool monster_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	bool monster_to_monster = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool direct = player_bold(y, x);
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
+	disturb(1, 1);
+	if (one_in_(3) || !direct)
+	{		
+		simple_monspell_message(m_idx, t_idx,
+			_("%^sは突然視界から消えた!", "%^s suddenly go out of your sight!"),
+			_("%^sは突然急上昇して視界から消えた!", "%^s suddenly go out of your sight!"),
+			TARGET_TYPE);
+				
+		teleport_away(m_idx, 10, TELEPORT_NONMAGICAL);
+		p_ptr->update |= (PU_MONSTERS);
+	}
+	else
+	{
+		int get_damage = 0;
+		bool fear; /* dummy */
+	
+		simple_monspell_message(m_idx, t_idx,
+			_("%^sがあなたを掴んで空中から投げ落とした。", "%^s holds you, and drops from the sky."),
+			_("%^sが%sを掴んで空中から投げ落とした。", "%^s holds %s, and drops from the sky."),
+			TARGET_TYPE);
+
+		dam = damroll(4, 8);
+
+		if (monster_to_player || t_idx == p_ptr->riding)
+			teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+		else 
+			teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+
+		sound(SOUND_FALL);
+
+		if ((monster_to_player && p_ptr->levitation) ||
+			(monster_to_monster && (tr_ptr->flags7 & RF7_CAN_FLY)))
+		{
+			simple_monspell_message(m_idx, t_idx,
+				_("あなたは静かに着地した。", "You float gently down to the ground."),
+				_("%^sは静かに着地した。", "%^s floats gently down to the ground."),
+				TARGET_TYPE);
+		}
+		else
+		{
+			simple_monspell_message(m_idx, t_idx,
+				_("あなたは地面に叩きつけられた。", "You crashed into the ground."),
+				_("%^sは地面に叩きつけられた。", "%^s crashed into the ground."),
+				TARGET_TYPE);
+			dam += damroll(6, 8);
+		}
+
+		if(monster_to_player ||
+		   (monster_to_monster && p_ptr->riding == t_idx))
+		{
+			/* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
+			-- henkma
+			*/
+			get_damage = take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
+			if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
+			{
+				char m_name_self[80];
+				/* hisself */
+				monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+
+				msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
+
+				project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
+				set_tim_eyeeye(p_ptr->tim_eyeeye - 5, TRUE);
+			}
+		}
+
+		if(monster_to_player && p_ptr->riding)
+			mon_take_hit_mon(p_ptr->riding, dam, &fear, extract_note_dies(real_r_ptr(&m_list[p_ptr->riding])), m_idx);
+
+		if(monster_to_monster)
+			mon_take_hit_mon(t_idx, dam, &fear, extract_note_dies(real_r_ptr(t_ptr)), m_idx);
+	}
+	return dam;
+}
+
+int spell_RF6_SPECIAL(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+{
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    u32b mode = 0L;
+    int count=0;
+
+    disturb(1, 1);
+    switch (m_ptr->r_idx)
+    {
+        case MON_OHMU:
+            /* Moved to process_monster(), like multiplication */
+            return -1;
+
+        case MON_BANORLUPART:
+        case MON_BANOR:
+        case MON_LUPART:
+			return spell_RF6_SPECIAL_BANORLUPART(m_idx, mode);
 
         case MON_ROLENTO:
-            if (p_ptr->blind)
-                msg_format(_("%^sが何か大量に投げた。", "%^s spreads something."), m_name);
-            else
-                msg_format(_("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), m_name);
-
-            {
-                int num = 1 + randint1(3);
-
-                for (k = 0; k < num; k++)
-                {
-                    count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, mode);
-                }
-            }
-
-            if (p_ptr->blind && count)
-                msg_print(_("多くのものが間近にばらまかれる音がする。", "You hear many things are scattered nearby."));
-
+			return spell_RF6_SPECIAL_ROLENTO(y, x, m_idx, t_idx, mode, TARGET_TYPE);
             break;
 
         default:
         if (r_ptr->d_char == 'B')
         {
-            disturb(1, 1);
-            if (one_in_(3) || !direct)
-            {
-                msg_format(_("%^sは突然視界から消えた!", "%^s suddenly go out of your sight!"), m_name);
-                teleport_away(m_idx, 10, TELEPORT_NONMAGICAL);
-                p_ptr->update |= (PU_MONSTERS);
-            }
-            else
-            {
-                int get_damage = 0;
-                bool fear; /* dummy */
-
-                msg_format(_("%^sがあなたを掴んで空中から投げ落とした。",
-                    "%^s holds you, and drops from the sky."), m_name);
-                dam = damroll(4, 8);
-                teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
-
-                sound(SOUND_FALL);
-
-                if (p_ptr->levitation)
-                {
-                    msg_print(_("あなたは静かに着地した。", "You float gently down to the ground."));
-                }
-                else
-                {
-                    msg_print(_("あなたは地面に叩きつけられた。", "You crashed into the ground."));
-                    dam += damroll(6, 8);
-                }
-
-                /* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
-                -- henkma
-                */
-                get_damage = take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
-                if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
-                {
-#ifdef JP
-                    msg_format("攻撃が%s自身を傷つけた！", m_name);
-#else
-                    char m_name_self[80];
-
-                    /* hisself */
-                    monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-
-                    msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
-#endif
-                    project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
-                    set_tim_eyeeye(p_ptr->tim_eyeeye - 5, TRUE);
-                }
-
-                if (p_ptr->riding) mon_take_hit_mon(p_ptr->riding, dam, &fear, extract_note_dies(real_r_ptr(&m_list[p_ptr->riding])), m_idx);
-            }
+            return spell_RF6_SPECIAL_B(y, x, m_idx, t_idx, TARGET_TYPE);
             break;
         }
 
         /* Something is wrong */
         else return -1;
     }
-    return dam;
 }
 
-
-void spell_RF6_TELE_TO(int m_idx)
+void spell_RF6_TELE_TO(int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *m_ptr = &m_list[m_idx];
-	char m_name[80];
-    monster_name(m_idx, m_name);
+    monster_type    *t_ptr = &m_list[t_idx];
+    monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
 
-    disturb(1, 1);
-    msg_format(_("%^sがあなたを引き戻した。", "%^s commands you to return."), m_name);
+	simple_monspell_message(m_idx, t_idx,
+		_("%^sがあなたを引き戻した。", "%^s commands you to return."),
+		_("%^sが%sを引き戻した。", "%^s commands %s to return."),
+		TARGET_TYPE);
+	
+	if (TARGET_TYPE == MONSTER_TO_PLAYER)
+	{
+		teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+		learn_spell(MS_TELE_TO);
+	}
+	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+	{
+		bool resists_tele = FALSE;
+		char t_name[80];
+		monster_name(t_idx, t_name);
 
-    teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
-    learn_spell(MS_TELE_TO);
+		if (tr_ptr->flagsr & RFR_RES_TELE)
+		{
+			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
+			{
+				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+				if (see_monster(t_idx))
+				{
+					msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
+				}
+				resists_tele = TRUE;
+			}
+			else if (tr_ptr->level > randint1(100))
+			{
+				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+				if (see_monster(t_idx))
+				{
+					msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
+				}
+				resists_tele = TRUE;
+			}
+		}
+
+		if (!resists_tele)
+		{
+			if (t_idx == p_ptr->riding) 
+				teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+			else 
+				teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_PASSIVE);
+		}
+        monster_wakeup(t_idx);
+	}
 }
 
-void spell_RF6_TELE_AWAY(int m_idx)
+void spell_RF6_TELE_AWAY(int m_idx, int t_idx, int TARGET_TYPE)
 {
-	char m_name[80];
-    monster_name(m_idx, m_name);
-    disturb(1, 1);
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_type    *t_ptr = &m_list[t_idx];
+    monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
 
-    msg_format(_("%^sにテレポートさせられた。", "%^s teleports you away."), m_name);
-    if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-        msg_print(_("くっそ〜", ""));
+	simple_monspell_message(m_idx, t_idx,
+		_("%^sにテレポートさせられた。", "%^s teleports you away."),
+		_("%^sは%sをテレポートさせた。", "%^s teleports %s away."),
+		TARGET_TYPE);
+	
+	if (TARGET_TYPE == MONSTER_TO_PLAYER)
+	{
+		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+			msg_print(_("くっそ〜", ""));
+		
+		learn_spell(MS_TELE_AWAY);
+		teleport_player_away(m_idx, 100);
+	}
+	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+	{
+		bool resists_tele = FALSE;
+		char t_name[80];
+		monster_name(t_idx, t_name);
 
-    learn_spell(MS_TELE_AWAY);
-    teleport_player_away(m_idx, 100);
+		if (tr_ptr->flagsr & RFR_RES_TELE)
+		{
+			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
+			{
+				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+				if (see_monster(t_idx))
+				{
+					msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
+				}
+				resists_tele = TRUE;
+			}
+			else if (tr_ptr->level > randint1(100))
+			{
+				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+				if (see_monster(t_idx))
+				{
+					msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
+				}
+				resists_tele = TRUE;
+			}
+		}
+
+		if (!resists_tele)
+		{
+			if (t_idx == p_ptr->riding) 
+				teleport_player_away(m_idx, MAX_SIGHT * 2 + 5);
+			else 
+				teleport_away(t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
+		}
+        monster_wakeup(t_idx);
+	}
 }
 
-void spell_RF6_TELE_LEVEL(int m_idx)
+void spell_RF6_TELE_LEVEL(int m_idx, int t_idx, int TARGET_TYPE)
 {
+    monster_type    *t_ptr = &m_list[t_idx];
+    monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
-	char m_name[80];
-    monster_name(m_idx, m_name);
+    bool resist, saving_throw;
 
-    disturb(1, 1);
+    if (TARGET_TYPE == MONSTER_TO_PLAYER)
+    {
+        resist = p_ptr->resist_nexus;
+        saving_throw = (randint0(100 + rlev / 2) < p_ptr->skill_sav);
+        spell_badstatus_message(m_idx, t_idx,
+            _("%^sが何か奇妙な言葉をつぶやいた。", "%^s mumbles strangely."),
+            _("%^sがあなたの足を指さした。", "%^s gestures at your feet."),
+            _("しかし効果がなかった！", "You are unaffected!"),
+            _("しかし効力を跳ね返した！", "You resist the effects!"),
+            resist, saving_throw, TARGET_TYPE);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何か奇妙な言葉をつぶやいた。", "%^s mumbles strangely."), m_name);
-    else
-        msg_format(_("%^sがあなたの足を指さした。", "%^s gestures at your feet."), m_name);
+        if (!resist && !saving_throw)
+        {
+			teleport_level(0);
+        }
+		learn_spell(MS_TELE_LEVEL);
+		update_smart_learn(m_idx, DRS_NEXUS);
+    }
+    else if (TARGET_TYPE == MONSTER_TO_MONSTER)
+    {
+        resist = tr_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE);
+        saving_throw = (tr_ptr->flags1 & RF1_QUESTOR) ||
+			           (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    if (p_ptr->resist_nexus)
-    {
-        msg_print(_("しかし効果がなかった！", "You are unaffected!"));
+        spell_badstatus_message(m_idx, t_idx, 
+            _("%^sが%sの足を指さした。", "%^s gestures at %s's feet."),
+            _("%^sには効果がなかった。", "%^s is unaffected!"),
+            _("%^sは効力を跳ね返した！", "%^s resist the effects!"),
+            "",
+            resist, saving_throw, TARGET_TYPE);
+
+        if (!resist && !saving_throw)
+        {
+			teleport_level((t_idx == p_ptr->riding) ? 0 : t_idx);
+        }
     }
-    else if (randint0(100 + rlev / 2) < p_ptr->skill_sav)
-    {
-        msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-    }
-    else
-    {
-        teleport_level(0);
-    }
-    learn_spell(MS_TELE_LEVEL);
-    update_smart_learn(m_idx, DRS_NEXUS);
 }
 
 int spell_RF6_PSY_SPEAR(int y, int x, int m_idx)
@@ -2473,10 +2629,10 @@ int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx)
     case 160 + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_BLINK */
     case 160 + 5:  spell_RF6_TPORT(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_TPORT */
     case 160 + 6:  return spell_RF6_WORLD(m_idx); break;    /* RF6_WORLD */
-    case 160 + 7:  return spell_RF6_SPECIAL(y, x, m_idx);   /* RF6_SPECIAL */
-    case 160 + 8:  spell_RF6_TELE_TO(m_idx); break; /* RF6_TELE_TO */
-    case 160 + 9:  spell_RF6_TELE_AWAY(m_idx); break;   /* RF6_TELE_AWAY */
-    case 160 + 10: spell_RF6_TELE_LEVEL(m_idx); break;  /* RF6_TELE_LEVEL */
+    case 160 + 7:  return spell_RF6_SPECIAL(y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF6_SPECIAL */
+    case 160 + 8:  spell_RF6_TELE_TO(m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_TELE_TO */
+    case 160 + 9:  spell_RF6_TELE_AWAY(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_TELE_AWAY */
+    case 160 + 10: spell_RF6_TELE_LEVEL(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_TELE_LEVEL */
     case 160 + 11: spell_RF6_PSY_SPEAR(y, x, m_idx); break; /* RF6_PSY_SPEAR */
     case 160 + 12: spell_RF6_DARKNESS(m_idx); break;    /* RF6_DARKNESS */
     case 160 + 13: spell_RF6_TRAPS(y, x, m_idx); break; /* RF6_TRAPS */
@@ -2577,6 +2733,10 @@ int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx)
     case 160 + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_MONSTER); break;   /* RF6_BLINK */
     case 160 + 5:  spell_RF6_TPORT(m_idx, MONSTER_TO_MONSTER); break;   /* RF6_TPORT */
     case 160 + 6:  return -1; break;    /* RF6_WORLD */
+    case 160 + 7:  return spell_RF6_SPECIAL(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF6_SPECIAL */
+    case 160 + 8:  spell_RF6_TELE_TO(m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_TELE_TO */
+    case 160 + 9:  spell_RF6_TELE_AWAY(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_TELE_AWAY */
+    case 160 + 10: spell_RF6_TELE_LEVEL(m_idx, t_idx, MONSTER_TO_PLAYER); break;  /* RF6_TELE_LEVEL */
     }
     return 0;
 }
