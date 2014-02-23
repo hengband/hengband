@@ -1598,28 +1598,6 @@ extern bool spell_learnable(int m_idx);
 extern int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx);
 extern int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx);
 
-extern int spell_RF6_PSY_SPEAR(int y, int x, int m_idx);
-extern void spell_RF6_DARKNESS(int m_idx);
-extern void spell_RF6_TRAPS(int y, int x, int m_idx);
-extern void spell_RF6_FORGET(int m_idx);
-extern void spell_RF6_RAISE_DEAD(int m_idx);
-extern void spell_RF6_S_KIN(int y, int x, int m_idx);
-extern void spell_RF6_S_CYBER(int y, int x, int m_idx);
-extern void spell_RF6_S_MONSTER(int y, int x, int m_idx);
-extern void spell_RF6_S_MONSTERS(int y, int x, int m_idx);
-extern void spell_RF6_S_ANT(int y, int x, int m_idx);
-extern void spell_RF6_S_SPIDER(int y, int x, int m_idx);
-extern void spell_RF6_S_HOUND(int y, int x, int m_idx);
-extern void spell_RF6_S_HYDRA(int y, int x, int m_idx);
-extern void spell_RF6_S_ANGEL(int y, int x, int m_idx);
-extern void spell_RF6_S_DEMON(int y, int x, int m_idx);
-extern void spell_RF6_S_UNDEAD(int y, int x, int m_idx);
-extern void spell_RF6_S_DRAGON(int y, int x, int m_idx);
-extern void spell_RF6_S_HI_UNDEAD(int y, int x, int m_idx);
-extern void spell_RF6_S_HI_DRAGON(int y, int x, int m_idx);
-extern void spell_RF6_S_AMBERITES(int y, int x, int m_idx);
-extern void spell_RF6_S_UNIQUE(int y, int x, int m_idx);
-
 /* hissatsu.c */
 extern void hissatsu_info(char *p, int power);
 extern void do_cmd_hissatsu(void);

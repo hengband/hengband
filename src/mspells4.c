@@ -47,19 +47,18 @@ bool monster_is_powerful(int m_idx)
     return (r_ptr->flags2 & RF2_POWERFUL);
 }
 
+u32b monster_u_mode(int m_idx)
+{
+	u32b u_mode = 0L;
+    monster_type    *m_ptr = &m_list[m_idx];
+	bool pet = is_pet(m_ptr);
+	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
+	return u_mode;
+}
+
 void monster_wakeup(int t_idx)
 {
     (void)set_monster_csleep(t_idx, 0);
-}
-
-void monster_fear_message(int t_idx)
-{
-    char t_name[80];
-    monster_name(t_idx, t_name);
-    if (see_monster(t_idx))
-    {
-        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), t_name);
-    }
 }
 
 void monspell_message_base(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, cptr msg4, bool msg_flag, int TARGET_TYPE)
@@ -1906,56 +1905,94 @@ void spell_RF6_TELE_LEVEL(int m_idx, int t_idx, int TARGET_TYPE)
     }
 }
 
-int spell_RF6_PSY_SPEAR(int y, int x, int m_idx)
+int spell_RF6_PSY_SPEAR(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-	int rlev = monster_level_idx(m_idx);
     int dam;
-	char m_name[80];
-    monster_name(m_idx, m_name);
+    int rlev = monster_level_idx(m_idx);
 
-    disturb(1, 1);
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが光の剣を放った。", "%^s throw a Psycho-Spear."), m_name);
-
-    dam = (r_ptr->flags2 & RF2_POWERFUL) ? (randint1(rlev * 2) + 150) : (randint1(rlev * 3 / 2) + 100);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが光の剣を放った。", "%^s throw a Psycho-Spear."),
+        _("%^sが%sに向かって光の剣を放った。", "%^s throw a Psycho-spear at %s."),
+        TARGET_TYPE);
+	
+    dam = monster_is_powerful(m_idx) ? (randint1(rlev * 2) + 150) : (randint1(rlev * 3 / 2) + 100);
     beam(m_idx, y, x, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, MONSTER_TO_PLAYER);
     return dam;
 }
 
-void spell_RF6_DARKNESS(int m_idx)
+void spell_RF6_DARKNESS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *m_ptr = &m_list[m_idx];
+    monster_type    *t_ptr = &m_list[t_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     bool can_use_lite_area = FALSE;
-	char m_name[80];
-    monster_name(m_idx, m_name);
+	bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
+	bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
+	char t_name[80];
+	monster_name(t_idx, t_name);
 
     if ((p_ptr->pclass == CLASS_NINJA) &&
         !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
         !(r_ptr->flags7 & RF7_DARK_MASK))
         can_use_lite_area = TRUE;
-    disturb(1, 1);
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else if (can_use_lite_area)
-        msg_format(_("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."), m_name);
-    else
-        msg_format(_("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."), m_name);
+	if(monster_to_monster && !is_hostile(t_ptr))
+        can_use_lite_area = FALSE;
 
-    if (can_use_lite_area)
-    {
-        (void)lite_area(0, 3);
-    }
-    else
-    {
-        learn_spell(MS_DARKNESS);
-        (void)unlite_area(0, 3);
-    }
+	
+	if (can_use_lite_area)
+	{
+		monspell_message(m_idx, t_idx,
+			_("%^sが何かをつぶやいた。", "%^s mumbles."),
+			_("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."),
+			_("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."),
+			TARGET_TYPE);
+
+		if (see_monster(t_idx) && monster_to_monster)
+		{
+			msg_format(_("%^sは白い光に包まれた。", "%^s is surrounded by a white light."), t_name);
+		}
+	}
+	else
+	{
+		monspell_message(m_idx, t_idx,
+			_("%^sが何かをつぶやいた。", "%^s mumbles."),
+			_("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."),
+			_("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."),
+			TARGET_TYPE);
+
+		if (see_monster(t_idx) && monster_to_monster)
+		{
+			msg_format(_("%^sは暗闇に包まれた。", "%^s is surrounded by darkness."), t_name);
+		}
+	}
+
+	if(monster_to_player)
+	{
+		if (can_use_lite_area)
+		{
+			(void)lite_area(0, 3);
+		}
+		else
+		{
+			learn_spell(MS_DARKNESS);
+			(void)unlite_area(0, 3);
+		}
+	}
+	else if(monster_to_monster)
+	{
+		if (can_use_lite_area)
+		{
+			(void)project(m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL, -1);
+			lite_room(y, x);
+		}
+		else
+		{
+			(void)project(m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
+			unlite_room(y, x);
+		}
+	}
 }
 
 void spell_RF6_TRAPS(int y, int x, int m_idx)
@@ -1997,58 +2034,150 @@ void spell_RF6_FORGET(int m_idx)
     learn_spell(MS_FORGET);
 }
 
-void spell_RF6_RAISE_DEAD(int m_idx)
+void spell_RF6_RAISE_DEAD(int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *m_ptr = &m_list[m_idx];
-	char m_name[80];
-    monster_name(m_idx, m_name);
 
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが死者復活の呪文を唱えた。",
-        "%^s casts a spell to revive corpses."), m_name);
+    monspell_message(m_idx, t_idx,
+        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+        _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."),
+        _("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."),
+        TARGET_TYPE);
 
     animate_dead(m_idx, m_ptr->fy, m_ptr->fx);
 }
 
-void spell_RF6_S_KIN(int y, int x, int m_idx)
+int summon_EAGLE(int y, int x, int rlev, int m_idx)
 {
+	int k, count = 0;	
+	int num = 4 + randint1(3);
+	for (k = 0; k < num; k++)
+	{
+		count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+	}
+	return count;
+}
+
+int summon_IE(int y, int x, int rlev, int m_idx, int mode)
+{
+	int k, count = 0;	
+	int num = 2 + randint1(3);
+    for (k = 0; k < num; k++)
+    {
+        count += summon_named_creature(m_idx, y, x, MON_IE, mode);
+    }
+	return count;
+}
+
+int summon_Guardian(int y, int x, int rlev, int m_idx, int t_idx, int TARGET_TYPE)
+{
+	int k, count = 0;	
+	int num = 2 + randint1(3);
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+
+    if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6))
+    {
+		simple_monspell_message(m_idx, t_idx,
+			_("地面から水が吹き出した！", "Water blew off from the ground!"),
+			_("地面から水が吹き出した！", "Water blew off from the ground!"),
+			TARGET_TYPE);
+
+		if(mon_to_player)
+	        fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
+		else if(mon_to_mon)
+			project(t_idx, 8, y, x, 3, GF_WATER_FLOW, PROJECT_GRID | PROJECT_HIDE, -1);
+    }
+
+    for (k = 0; k < num; k++)
+    {
+        count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+    }
+	return count;
+}
+
+int summon_LOCK_CLONE(int y, int x, int rlev, int m_idx, int mode)
+{
+	int k, count = 0;	
+	int num = randint1(3);
+    for (k = 0; k < num; k++)
+    {
+        count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, mode);
+    }
+	return count;
+}
+
+int summon_LOUSE(int y, int x, int rlev, int m_idx)
+{
+	int k, count = 0;	
+	int num = 2 + randint1(3);
+    for (k = 0; k < num; k++)
+    {
+        count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
+    }
+	return count;
+}
+
+int summon_Kin(int y, int x, int rlev, int m_idx)
+{
+	int k, count = 0;
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+	summon_kin_type = r_ptr->d_char; /* Big hack */
+
+	for (k = 0; k < 4; k++)
+	{
+		count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, PM_ALLOW_GROUP);
+	}
+	return count;
+}
+
+void spell_RF6_S_KIN(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+{
+	bool known = monster_near_player(m_idx, t_idx);
+    bool see_either = see_monster(m_idx) || see_monster(t_idx);
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
-    int count = 0, k;
+    int count = 0;
     u32b mode = 0L;
-	char m_name[80];
+	char m_name[80], t_name[80], m_poss[80];
     monster_name(m_idx, m_name);
+	monster_name(t_idx, t_name);
+	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     disturb(1, 1);
     if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
     {
-        if (p_ptr->blind)
-            msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-        else
-            msg_format(_("%^sがダンジョンの主を召喚した。",
-            "%^s magically summons guardians of dungeons."), m_name);
+		monspell_message(m_idx, t_idx,
+			_("%^sが何かをつぶやいた。", "%^s mumbles."),
+			_("%^sがダンジョンの主を召喚した。", "%^s magically summons guardians of dungeons."),
+			_("%^sがダンジョンの主を召喚した。", "%^s magically summons guardians of dungeons."),
+			TARGET_TYPE);
     }
     else
     {
-        if (p_ptr->blind)
-            msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-        else
-#ifdef JP
-            msg_format("%^sは魔法で%sを召喚した。",
-            m_name,
-            ((r_ptr->flags1) & RF1_UNIQUE ?
-            "手下" : "仲間"));
-#else
-            msg_format("%^s magically summons %s %s.",
-            m_name, m_poss,
-            ((r_ptr->flags1) & RF1_UNIQUE ?
-            "minions" : "kin"));
-#endif
+		if (mon_to_player || (mon_to_mon && known && see_either))
+			disturb(1, 1);
+
+		if (p_ptr->blind)
+		{
+			if (mon_to_player)
+				msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+		}
+		else
+		{
+			if (mon_to_player || (mon_to_mon && known && see_either))
+			{
+				_(msg_format("%sが魔法で%sを召喚した。", m_name, ((r_ptr->flags1 & RF1_UNIQUE) ? "手下" : "仲間")),
+				  msg_format("%^s magically summons %s %s.", m_name, m_poss, ((r_ptr->flags1 & RF1_UNIQUE) ? "minions" : "kin")));
+			}
+		}
+
+		if (mon_to_mon && known && !see_either)
+			mon_fight = TRUE;
     }
 
     switch (m_ptr->r_idx)
@@ -2056,260 +2185,259 @@ void spell_RF6_S_KIN(int y, int x, int m_idx)
         case MON_MENELDOR:
         case MON_GWAIHIR:
         case MON_THORONDOR:
-        {
-            int num = 4 + randint1(3);
-            for (k = 0; k < num; k++)
-            {
-                count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
-            }
-        }
-        break;
+			count += summon_EAGLE(y, x, rlev, m_idx);
+			break;
 
         case MON_BULLGATES:
-        {
-            int num = 2 + randint1(3);
-            for (k = 0; k < num; k++)
-            {
-                count += summon_named_creature(m_idx, y, x, MON_IE, mode);
-            }
-        }
-        break;
+			count += summon_IE(y, x, rlev, m_idx, mode);
+	        break;
 
         case MON_SERPENT:
         case MON_ZOMBI_SERPENT:
-        {
-            int num = 2 + randint1(3);
-
-            if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6))
-            {
-                msg_print(_("地面から水が吹き出した！", "Water blew off from the ground!"));
-                fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
-            }
-
-            for (k = 0; k < num; k++)
-            {
-                count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
-            }
-        }
-        break;
-
+			count += summon_Guardian(y, x, rlev, m_idx, t_idx, TARGET_TYPE);
+	        break;
+			
         case MON_CALDARM:
-        {
-            int num = randint1(3);
-            for (k = 0; k < num; k++)
-            {
-                count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, mode);
-            }
-        }
-        break;
+			count += summon_LOCK_CLONE(y, x, rlev, m_idx, mode);
+			break;
 
         case MON_LOUSY:
-        {
-            int num = 2 + randint1(3);
-            for (k = 0; k < num; k++)
-            {
-                count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
-            }
-        }
-        break;
+			count += summon_LOUSE(y, x, rlev, m_idx);
+	        break;
 
         default:
-        summon_kin_type = r_ptr->d_char; /* Big hack */
-
-        for (k = 0; k < 4; k++)
-        {
-            count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, PM_ALLOW_GROUP);
-        }
-        break;
+			count += summon_Kin(y, x, rlev, m_idx);
+			break;
     }
     
-    if (p_ptr->blind && count)
+    if (p_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+
+	if (known && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_CYBER(int y, int x, int m_idx)
+void spell_RF6_S_CYBER(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
+    monster_type    *m_ptr = &m_list[m_idx];
+    int rlev = monster_level_idx(m_idx);
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sがサイバーデーモンを召喚した！", "%^s magically summons Cyberdemons!"),
+		_("%^sがサイバーデーモンを召喚した！", "%^s magically summons Cyberdemons!"),
+		TARGET_TYPE);
 
-    disturb(1, 1);
+	if (is_friendly(m_ptr) && mon_to_mon)
+	{
+		count += summon_specific(m_idx, y, x, rlev, SUMMON_CYBER, (PM_ALLOW_GROUP));
+	}
+	else
+	{
+		count += summon_cyber(m_idx, y, x);
+	}
 
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがサイバーデーモンを召喚した！",
-        "%^s magically summons Cyberdemons!"), m_name);
-
-    count = summon_cyber(m_idx, y, x);
-
-    if (p_ptr->blind && count)
+    if (p_ptr->blind && count && mon_to_player)
         msg_print(_("重厚な足音が近くで聞こえる。", "You hear heavy steps nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_MONSTER(int y, int x, int m_idx)
+
+void spell_RF6_S_MONSTER(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"), m_name);
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"),
+		_("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"),
+		TARGET_TYPE);
 
     for (k = 0; k < 1; k++)
     {
-        count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		if(mon_to_player)
+	        count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+
+		if(mon_to_mon)
+			count += summon_specific(m_idx, y, x, rlev, 0, (monster_u_mode(m_idx)));
     }
-    if (p_ptr->blind && count)
+
+    if (p_ptr->blind && count && mon_to_player)
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_MONSTERS(int y, int x, int m_idx)
+void spell_RF6_S_MONSTERS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"), m_name);
-
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"),
+		_("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"),
+		TARGET_TYPE);
+	
     for (k = 0; k < S_NUM_6; k++)
     {
-        count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		if(mon_to_player)
+			count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+
+		if(mon_to_mon)
+			count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | monster_u_mode(m_idx)));
     }
 
-    if (p_ptr->blind && count)
+    if (p_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_ANT(int y, int x, int m_idx)
+void spell_RF6_S_ANT(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法でアリを召喚した。", "%^s magically summons ants."), m_name);
-
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法でアリを召喚した。", "%^s magically summons ants."),
+		_("%^sが魔法でアリを召喚した。", "%^s magically summons ants."),
+		TARGET_TYPE);
+	
     for (k = 0; k < S_NUM_6; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_ANT, PM_ALLOW_GROUP);
     }
 
-    if (p_ptr->blind && count)
+    if (p_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_SPIDER(int y, int x, int m_idx)
+void spell_RF6_S_SPIDER(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."), m_name);
-
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."),
+		_("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."),
+		TARGET_TYPE);
+	
     for (k = 0; k < S_NUM_6; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_SPIDER, PM_ALLOW_GROUP);
     }
 
-    if (p_ptr->blind && count)
+    if (p_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_HOUND(int y, int x, int m_idx)
+void spell_RF6_S_HOUND(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."), m_name);
-
-    for (k = 0; k < S_NUM_4; k++)
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."),
+		_("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."),
+		TARGET_TYPE);
+	
+	for (k = 0; k < S_NUM_4; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_HOUND, PM_ALLOW_GROUP);
     }
 
-    if (p_ptr->blind && count)
+    if (p_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_HYDRA(int y, int x, int m_idx)
+void spell_RF6_S_HYDRA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."), m_name);
-
-    for (k = 0; k < S_NUM_4; k++)
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."),
+		_("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."),
+		TARGET_TYPE);
+	
+	for (k = 0; k < S_NUM_4; k++)
     {
         count += summon_specific(m_idx, y, x, rlev, SUMMON_HYDRA, PM_ALLOW_GROUP);
     }
-    if (p_ptr->blind && count)
+
+    if (p_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_ANGEL(int y, int x, int m_idx)
+void spell_RF6_S_ANGEL(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    int num = 1;
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-    int num = 1;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"), m_name);
-
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"),
+		_("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"),
+		TARGET_TYPE);
+	
     if ((r_ptr->flags1 & RF1_UNIQUE) && !easy_band)
     {
         num += r_ptr->level / 40;
     }
-
-    for (k = 0; k < num; k++)
-    {
+	
+	for (k = 0; k < num; k++)
+	{
         count += summon_specific(m_idx, y, x, rlev, SUMMON_ANGEL, PM_ALLOW_GROUP);
-    }
-
+	}
+	
     if (count < 2)
     {
         if (p_ptr->blind && count)
@@ -2320,220 +2448,266 @@ void spell_RF6_S_ANGEL(int y, int x, int m_idx)
         if (p_ptr->blind)
             msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
     }
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_DEMON(int y, int x, int m_idx)
+void spell_RF6_S_DEMON(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sは魔法で混沌の宮廷から悪魔を召喚した！",
-        "%^s magically summons a demon from the Courts of Chaos!"), m_name);
-
-    for (k = 0; k < 1; k++)
-    {
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sは魔法で混沌の宮廷から悪魔を召喚した！", "%^s magically summons a demon from the Courts of Chaos!"),
+		_("%^sは魔法で混沌の宮廷から悪魔を召喚した！", "%^s magically summons a demon from the Courts of Chaos!"),
+		TARGET_TYPE);
+	
+	for (k = 0; k < 1; k++)
+	{
         count += summon_specific(m_idx, y, x, rlev, SUMMON_DEMON, PM_ALLOW_GROUP);
-    }
-
+	}
+	
     if (p_ptr->blind && count)
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_UNDEAD(int y, int x, int m_idx)
+void spell_RF6_S_UNDEAD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-	char m_name[80];
-    monster_name(m_idx, m_name);
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法でアンデッドの強敵を召喚した！",
-        "%^s magically summons an undead adversary!"), m_name);
-
-    for (k = 0; k < 1; k++)
-    {
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法でアンデッドの強敵を召喚した！", "%^s magically summons an undead adversary!"),
+		_("%sが魔法でアンデッドを召喚した。", "%^s magically summons undead."),
+		TARGET_TYPE);
+	
+	for (k = 0; k < 1; k++)
+	{
         count += summon_specific(m_idx, y, x, rlev, SUMMON_UNDEAD, PM_ALLOW_GROUP);
-    }
-
+	}
+	
     if (p_ptr->blind && count)
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_DRAGON(int y, int x, int m_idx)
+void spell_RF6_S_DRAGON(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"),
+		_("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"),
+		TARGET_TYPE);
+	
+	for (k = 0; k < 1; k++)
+	{
+        count += summon_specific(m_idx, y, x, rlev, SUMMON_DRAGON, PM_ALLOW_GROUP);
+	}
+	
+    if (p_ptr->blind && count)
+        msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
+}
+
+int summon_NAZGUL(int y, int x, int m_idx, int mode)
+{
+	int count = 0, k;
+	int cy = y;
+    int cx = x;
 	char m_name[80];
     monster_name(m_idx, m_name);
-
-    disturb(1, 1);
 
     if (p_ptr->blind)
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     else
-        msg_format(_("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"), m_name);
+        msg_format(_("%^sが魔法で幽鬼戦隊を召喚した！", "%^s magically summons rangers of Nazgul!"), m_name);
 
-    for (k = 0; k < 1; k++)
+    msg_print(NULL);
+
+    for (k = 0; k < 30; k++)
     {
-        count += summon_specific(m_idx, y, x, rlev, SUMMON_DRAGON, PM_ALLOW_GROUP);
+        if (!summon_possible(cy, cx) || !cave_empty_bold(cy, cx))
+        {
+            int j;
+            for (j = 100; j > 0; j--)
+            {
+                scatter(&cy, &cx, y, x, 2, 0);
+                if (cave_empty_bold(cy, cx)) break;
+            }
+            if (!j) break;
+        }
+        if (!cave_empty_bold(cy, cx)) continue;
+
+        if (summon_named_creature(m_idx, cy, cx, MON_NAZGUL, mode))
+        {
+            y = cy;
+            x = cx;
+            count++;
+            if (count == 1)
+                msg_format(_("「幽鬼戦隊%d号、ナズグル・ブラック！」",
+                "A Nazgul says 'Nazgul-Rangers Number %d, Nazgul-Black!'"), count);
+            else
+                msg_format(_("「同じく%d号、ナズグル・ブラック！」",
+                "Another one says 'Number %d, Nazgul-Black!'"), count);
+
+            msg_print(NULL);
+        }
     }
-    if (p_ptr->blind && count)
-        msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+    msg_format(_("「%d人そろって、リングレンジャー！」",
+        "They say 'The %d meets! We are the Ring-Ranger!'."), count);
+    msg_print(NULL);
+	return count;
 }
 
-void spell_RF6_S_HI_UNDEAD(int y, int x, int m_idx)
+void spell_RF6_S_HI_UNDEAD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    char* m_name = monster_name(m_idx, "");
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
     u32b mode = 0L;
     int k, count = 0;
+	char m_name[80];
+    monster_name(m_idx, m_name);
+
     disturb(1, 1);
 
-    if (((m_ptr->r_idx == MON_MORGOTH) || (m_ptr->r_idx == MON_SAURON) || (m_ptr->r_idx == MON_ANGMAR)) && ((r_info[MON_NAZGUL].cur_num + 2) < r_info[MON_NAZGUL].max_num))
+    if (((m_ptr->r_idx == MON_MORGOTH) || (m_ptr->r_idx == MON_SAURON) || (m_ptr->r_idx == MON_ANGMAR)) &&
+		((r_info[MON_NAZGUL].cur_num + 2) < r_info[MON_NAZGUL].max_num) &&
+		mon_to_player)
     {
-        int cy = y;
-        int cx = x;
-
-        if (p_ptr->blind)
-            msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-        else
-            msg_format(_("%^sが魔法で幽鬼戦隊を召喚した！", "%^s magically summons rangers of Nazgul!"), m_name);
-
-        msg_print(NULL);
-
-        for (k = 0; k < 30; k++)
-        {
-            if (!summon_possible(cy, cx) || !cave_empty_bold(cy, cx))
-            {
-                int j;
-                for (j = 100; j > 0; j--)
-                {
-                    scatter(&cy, &cx, y, x, 2, 0);
-                    if (cave_empty_bold(cy, cx)) break;
-                }
-                if (!j) break;
-            }
-            if (!cave_empty_bold(cy, cx)) continue;
-
-            if (summon_named_creature(m_idx, cy, cx, MON_NAZGUL, mode))
-            {
-                y = cy;
-                x = cx;
-                count++;
-                if (count == 1)
-                    msg_format(_("「幽鬼戦隊%d号、ナズグル・ブラック！」",
-                    "A Nazgul says 'Nazgul-Rangers Number %d, Nazgul-Black!'"), count);
-                else
-                    msg_format(_("「同じく%d号、ナズグル・ブラック！」",
-                    "Another one says 'Number %d, Nazgul-Black!'"), count);
-
-                msg_print(NULL);
-            }
-        }
-        msg_format(_("「%d人そろって、リングレンジャー！」",
-            "They say 'The %d meets! We are the Ring-Ranger!'."), count);
-        msg_print(NULL);
+        count +=  summon_NAZGUL(y, x, m_idx, mode);
     }
     else
-    {
-        if (p_ptr->blind)
-            msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-        else
-            msg_format(_("%^sが魔法で強力なアンデッドを召喚した！",
-            "%^s magically summons greater undead!"), m_name);
+    {	
+		monspell_message(m_idx, t_idx,
+			_("%^sが何かをつぶやいた。", "%^s mumbles."),
+			_("%^sが魔法で強力なアンデッドを召喚した！", "%^s magically summons greater undead!"),
+			_("%sが魔法でアンデッドを召喚した。", "%^s magically summons undead."),
+			TARGET_TYPE);
 
         for (k = 0; k < S_NUM_6; k++)
         {
-            count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+			if(mon_to_player)
+	            count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+
+			if(mon_to_mon)
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | monster_u_mode(m_idx)));
         }
     }
-    if (p_ptr->blind && count)
+    if (p_ptr->blind && count && mon_to_player)
     {
-        msg_print(_("間近で何か多くのものが這い回る音が聞こえる。",
-            "You hear many creepy things appear nearby."));
+        msg_print(_("間近で何か多くのものが這い回る音が聞こえる。", "You hear many creepy things appear nearby."));
     }
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-
-void spell_RF6_S_HI_DRAGON(int y, int x, int m_idx)
+void spell_RF6_S_HI_DRAGON(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    char* m_name = monster_name(m_idx, "");
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法で古代ドラゴンを召喚した！", "%^s magically summons ancient dragons!"), m_name);
-
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法で古代ドラゴンを召喚した！", "%^s magically summons ancient dragons!"),
+		_("%^sが魔法で古代ドラゴンを召喚した！", "%^s magically summons ancient dragons!"),
+		TARGET_TYPE);
+	
     for (k = 0; k < S_NUM_4; k++)
-    {
-        count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+    {	
+		if(mon_to_player)
+			count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+
+		if(mon_to_mon)
+			count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | monster_u_mode(m_idx)));
     }
-    if (p_ptr->blind && count)
+	
+    if (p_ptr->blind && count && mon_to_player)
     {
-        msg_print(_("多くの力強いものが間近に現れた音が聞こえる。",
-            "You hear many powerful things appear nearby."));
+        msg_print(_("多くの力強いものが間近に現れた音が聞こえる。", "You hear many powerful things appear nearby."));
     }
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_AMBERITES(int y, int x, int m_idx)
+void spell_RF6_S_AMBERITES(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    char* m_name = monster_name(m_idx, "");
+    int count = 0, k;
+    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sがアンバーの王族を召喚した！", "%^s magically summons Lords of Amber!"), m_name);
-
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sがアンバーの王族を召喚した！", "%^s magically summons Lords of Amber!"),
+		_("%^sがアンバーの王族を召喚した！", "%^s magically summons Lords of Amber!"),
+		TARGET_TYPE);
+	
     for (k = 0; k < S_NUM_4; k++)
-    {
-        count += summon_specific(m_idx, y, x, rlev, SUMMON_AMBERITES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+    {	
+		count += summon_specific(m_idx, y, x, rlev, SUMMON_AMBERITES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
-    if (p_ptr->blind && count)
+	
+    if (p_ptr->blind && count && mon_to_player)
     {
         msg_print(_("不死の者が近くに現れるのが聞こえた。", "You hear immortal beings appear nearby."));
     }
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
 
-void spell_RF6_S_UNIQUE(int y, int x, int m_idx)
+void spell_RF6_S_UNIQUE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    char* m_name = monster_name(m_idx, "");
+    int count = 0, k;
     monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
-    int k, count = 0;
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     bool uniques_are_summoned = FALSE;
     int non_unique_type = SUMMON_HI_UNDEAD;
-
-    disturb(1, 1);
-
-    if (p_ptr->blind)
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
-        msg_format(_("%^sが魔法で特別な強敵を召喚した！", "%^s magically summons special opponents!"), m_name);
-
+	
+	monspell_message(m_idx, t_idx,
+		_("%^sが何かをつぶやいた。", "%^s mumbles."),
+		_("%^sが魔法で特別な強敵を召喚した！", "%^s magically summons special opponents!"),
+		_("%^sが魔法で特別な強敵を召喚した！", "%^s magically summons special opponents!"),
+		TARGET_TYPE);
+	
     for (k = 0; k < S_NUM_4; k++)
-    {
+    {	
         count += summon_specific(m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
-
+	
     if (count) uniques_are_summoned = TRUE;
 
     if ((m_ptr->sub_align & (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) == (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL))
@@ -2546,13 +2720,15 @@ void spell_RF6_S_UNIQUE(int y, int x, int m_idx)
         count += summon_specific(m_idx, y, x, rlev, non_unique_type, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
 
-    if (p_ptr->blind && count)
+    if (p_ptr->blind && count && mon_to_player)
     {
         msg_format(_("多くの%sが間近に現れた音が聞こえる。", "You hear many %s appear nearby."),
             uniques_are_summoned ? _("力強いもの", "powerful things") : _("もの", "things"));
     }
+	
+	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+		mon_fight = TRUE;
 }
-
 
 int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx)
 {
@@ -2633,27 +2809,27 @@ int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx)
     case 160 + 8:  spell_RF6_TELE_TO(m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_TELE_TO */
     case 160 + 9:  spell_RF6_TELE_AWAY(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_TELE_AWAY */
     case 160 + 10: spell_RF6_TELE_LEVEL(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_TELE_LEVEL */
-    case 160 + 11: spell_RF6_PSY_SPEAR(y, x, m_idx); break; /* RF6_PSY_SPEAR */
-    case 160 + 12: spell_RF6_DARKNESS(m_idx); break;    /* RF6_DARKNESS */
+    case 160 + 11: spell_RF6_PSY_SPEAR(y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_PSY_SPEAR */
+    case 160 + 12: spell_RF6_DARKNESS(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF6_DARKNESS */
     case 160 + 13: spell_RF6_TRAPS(y, x, m_idx); break; /* RF6_TRAPS */
     case 160 + 14: spell_RF6_FORGET(m_idx); break;  /* RF6_FORGET */
-    case 160 + 15: spell_RF6_RAISE_DEAD(m_idx); break;  /* RF6_RAISE_DEAD */
-    case 160 + 16: spell_RF6_S_KIN(y, x, m_idx); break; /* RF6_S_KIN */
-    case 160 + 17: spell_RF6_S_CYBER(y, x, m_idx); break;   /* RF6_S_CYBER */
-    case 160 + 18: spell_RF6_S_MONSTER(y, x, m_idx); break; /* RF6_S_MONSTER */
-    case 160 + 19: spell_RF6_S_MONSTERS(y, x, m_idx); break;    /* RF6_S_MONSTER */
-    case 160 + 20: spell_RF6_S_ANT(y, x, m_idx); break; /* RF6_S_ANT */
-    case 160 + 21: spell_RF6_S_SPIDER(y, x, m_idx); break;  /* RF6_S_SPIDER */
-    case 160 + 22: spell_RF6_S_HOUND(y, x, m_idx); break;   /* RF6_S_HOUND */
-    case 160 + 23: spell_RF6_S_HYDRA(y, x, m_idx); break;   /* RF6_S_HYDRA */
-    case 160 + 24: spell_RF6_S_ANGEL(y, x, m_idx); break;   /* RF6_S_ANGEL */
-    case 160 + 25: spell_RF6_S_DEMON(y, x, m_idx); break;   /* RF6_S_DEMON */
-    case 160 + 26: spell_RF6_S_UNDEAD(y, x, m_idx); break;  /* RF6_S_UNDEAD */
-    case 160 + 27: spell_RF6_S_DRAGON(y, x, m_idx); break;  /* RF6_S_DRAGON */
-    case 160 + 28: spell_RF6_S_HI_UNDEAD(y, x, m_idx); break;   /* RF6_S_HI_UNDEAD */
-    case 160 + 29: spell_RF6_S_HI_DRAGON(y, x, m_idx); break;   /* RF6_S_HI_DRAGON */
-    case 160 + 30: spell_RF6_S_AMBERITES(y, x, m_idx); break;   /* RF6_S_AMBERITES */
-    case 160 + 31: spell_RF6_S_UNIQUE(y, x, m_idx); break;  /* RF6_S_UNIQUE */
+    case 160 + 15: spell_RF6_RAISE_DEAD(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_RAISE_DEAD */
+    case 160 + 16: spell_RF6_S_KIN(y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_S_KIN */
+    case 160 + 17: spell_RF6_S_CYBER(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_CYBER */
+    case 160 + 18: spell_RF6_S_MONSTER(y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_S_MONSTER */
+    case 160 + 19: spell_RF6_S_MONSTERS(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF6_S_MONSTER */
+    case 160 + 20: spell_RF6_S_ANT(y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_S_ANT */
+    case 160 + 21: spell_RF6_S_SPIDER(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_S_SPIDER */
+    case 160 + 22: spell_RF6_S_HOUND(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_HOUND */
+    case 160 + 23: spell_RF6_S_HYDRA(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_HYDRA */
+    case 160 + 24: spell_RF6_S_ANGEL(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_ANGEL */
+    case 160 + 25: spell_RF6_S_DEMON(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_DEMON */
+    case 160 + 26: spell_RF6_S_UNDEAD(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_S_UNDEAD */
+    case 160 + 27: spell_RF6_S_DRAGON(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_S_DRAGON */
+    case 160 + 28: spell_RF6_S_HI_UNDEAD(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_HI_UNDEAD */
+    case 160 + 29: spell_RF6_S_HI_DRAGON(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_HI_DRAGON */
+    case 160 + 30: spell_RF6_S_AMBERITES(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_AMBERITES */
+    case 160 + 31: spell_RF6_S_UNIQUE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_S_UNIQUE */
     }
     return 0;
 }
@@ -2736,7 +2912,28 @@ int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx)
     case 160 + 7:  return spell_RF6_SPECIAL(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF6_SPECIAL */
     case 160 + 8:  spell_RF6_TELE_TO(m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_TELE_TO */
     case 160 + 9:  spell_RF6_TELE_AWAY(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_TELE_AWAY */
-    case 160 + 10: spell_RF6_TELE_LEVEL(m_idx, t_idx, MONSTER_TO_PLAYER); break;  /* RF6_TELE_LEVEL */
+    case 160 + 10: spell_RF6_TELE_LEVEL(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_TELE_LEVEL */
+    case 160 + 11: spell_RF6_PSY_SPEAR(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_PSY_SPEAR */
+    case 160 + 12: spell_RF6_DARKNESS(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;    /* RF6_DARKNESS */
+    case 160 + 13: return -1; /* RF6_TRAPS */
+    case 160 + 14: return -1;  /* RF6_FORGET */
+    case 160 + 15: spell_RF6_RAISE_DEAD(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_RAISE_DEAD */
+    case 160 + 16: spell_RF6_S_KIN(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_S_KIN */
+    case 160 + 17: spell_RF6_S_CYBER(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_CYBER */
+    case 160 + 18: spell_RF6_S_MONSTER(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_S_MONSTER */
+    case 160 + 19: spell_RF6_S_MONSTERS(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;    /* RF6_S_MONSTER */
+    case 160 + 20: spell_RF6_S_ANT(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_S_ANT */
+    case 160 + 21: spell_RF6_S_SPIDER(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_S_SPIDER */
+    case 160 + 22: spell_RF6_S_HOUND(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_HOUND */
+    case 160 + 23: spell_RF6_S_HYDRA(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_HYDRA */
+    case 160 + 24: spell_RF6_S_ANGEL(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_ANGEL */
+    case 160 + 25: spell_RF6_S_DEMON(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_DEMON */
+    case 160 + 26: spell_RF6_S_UNDEAD(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_S_UNDEAD */
+    case 160 + 27: spell_RF6_S_DRAGON(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_S_DRAGON */
+    case 160 + 28: spell_RF6_S_HI_UNDEAD(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_HI_UNDEAD */
+    case 160 + 29: spell_RF6_S_HI_DRAGON(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_HI_DRAGON */
+    case 160 + 30: spell_RF6_S_AMBERITES(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_AMBERITES */
+    case 160 + 31: spell_RF6_S_UNIQUE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_S_UNIQUE */
     }
     return 0;
 }
