@@ -4093,9 +4093,9 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, monster
 
     switch (TYPE)
     {
-    case DAM_MAX: dam += mult / div * maxroll(dice_num, dice_side); break;
-    case DAM_MIN: dam += mult / div * dice_num * 1; break;
-    case DAM_ROLL: dam += mult / div * damroll(dice_num, dice_side); break;
+    case DAM_MAX: dam += maxroll(dice_num, dice_side) * mult / div ; break;
+    case DAM_MIN: dam += dice_num * 1 * mult / div; break;
+    case DAM_ROLL: dam += damroll(dice_num, dice_side) * mult / div; break;
     }
 
     return dam;

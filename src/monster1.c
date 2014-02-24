@@ -128,6 +128,24 @@ static void hooked_roff(cptr str)
 	hook_c_roff(TERM_WHITE, str);
 }
 
+/*!
+ * @brief 文字列にモンスターの攻撃力を加える
+ * @param r_idx モンスターの種族ID
+ * @param SPELL_NUM 呪文番号
+ * @param msg 表示する文字列
+ * @param tmp 返すメッセージを格納する配列
+ * @param min_max TRUEなら(最小-最大)形式で、FALSEなら(最大値)形式で返す
+ * @return なし
+ */
+void set_damage(int r_idx, int SPELL_NUM, char* msg, char* tmp, bool min_max)
+{
+	int dam_min = monspell_race_damage(SPELL_NUM, r_idx, DAM_MIN);
+	int dam_max = monspell_race_damage(SPELL_NUM, r_idx, DAM_MAX);
+	if(min_max)
+	    sprintf(tmp, msg, dam_min, dam_max);
+	else
+	    sprintf(tmp, msg, dam_max);
+}
 
 /*!
  * @brief モンスターの思い出情報を表示する
@@ -723,8 +741,7 @@ static void roff_aux(int r_idx, int mode)
 	if (flags4 & RF4_SHRIEK)  { vp[vn] = _("悲鳴で助けを求める", "shriek for help"); color[vn++] = TERM_L_WHITE; }
 	if (flags4 & RF4_ROCKET)  
     {
-        int dam = monspell_race_damage(monspell_num(RF4_SPELL_START, RF4_ROCKET), r_idx, DAM_MAX);
-        sprintf(tmp_msg[vn], _("ロケット(%d)を発射する", "shoot a rocket(%d)"), dam);
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_ROCKET), _("ロケット(%d)を発射する", "shoot a rocket(%d)"), tmp_msg[vn], FALSE);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_UMBER; 
     }
@@ -781,28 +798,138 @@ static void roff_aux(int r_idx, int mode)
 
 	/* Collect breaths */
 	vn = 0;
-	if (flags4 & (RF4_BR_ACID))		{ vp[vn] = _("酸", "acid"); color[vn++] = TERM_GREEN; }
-	if (flags4 & (RF4_BR_ELEC))		{ vp[vn] = _("稲妻", "lightning"); color[vn++] = TERM_BLUE; }
-	if (flags4 & (RF4_BR_FIRE))		{ vp[vn] = _("火炎", "fire"); color[vn++] = TERM_RED; }
-	if (flags4 & (RF4_BR_COLD))		{ vp[vn] = _("冷気", "frost"); color[vn++] = TERM_L_WHITE; }
-	if (flags4 & (RF4_BR_POIS))		{ vp[vn] = _("毒", "poison"); color[vn++] = TERM_L_GREEN; }
-	if (flags4 & (RF4_BR_NETH))		{ vp[vn] = _("地獄", "nether"); color[vn++] = TERM_L_DARK; }
-	if (flags4 & (RF4_BR_LITE))		{ vp[vn] = _("閃光", "light"); color[vn++] = TERM_YELLOW; }
-	if (flags4 & (RF4_BR_DARK))		{ vp[vn] = _("暗黒", "darkness"); color[vn++] = TERM_L_DARK; }
-	if (flags4 & (RF4_BR_CONF))		{ vp[vn] = _("混乱", "confusion"); color[vn++] = TERM_L_UMBER; }
-	if (flags4 & (RF4_BR_SOUN))		{ vp[vn] = _("轟音", "sound"); color[vn++] = TERM_ORANGE; }
-	if (flags4 & (RF4_BR_CHAO))		{ vp[vn] = _("カオス", "chaos"); color[vn++] = TERM_VIOLET; }
-	if (flags4 & (RF4_BR_DISE))		{ vp[vn] = _("劣化", "disenchantment"); color[vn++] = TERM_VIOLET; }
-	if (flags4 & (RF4_BR_NEXU))		{ vp[vn] = _("因果混乱", "nexus"); color[vn++] = TERM_VIOLET; }
-	if (flags4 & (RF4_BR_TIME))		{ vp[vn] = _("時間逆転", "time"); color[vn++] = TERM_L_BLUE; }
-	if (flags4 & (RF4_BR_INER))		{ vp[vn] = _("遅鈍", "inertia"); color[vn++] = TERM_SLATE; }
-	if (flags4 & (RF4_BR_GRAV))		{ vp[vn] = _("重力", "gravity"); color[vn++] = TERM_SLATE; }
-	if (flags4 & (RF4_BR_SHAR))		{ vp[vn] = _("破片", "shards"); color[vn++] = TERM_L_UMBER; }
-	if (flags4 & (RF4_BR_PLAS))		{ vp[vn] = _("プラズマ", "plasma"); color[vn++] = TERM_L_RED; }
-	if (flags4 & (RF4_BR_WALL))		{ vp[vn] = _("フォース", "force"); color[vn++] = TERM_UMBER; }
-	if (flags4 & (RF4_BR_MANA))		{ vp[vn] = _("魔力", "mana"); color[vn++] = TERM_L_BLUE; }
-	if (flags4 & (RF4_BR_NUKE))		{ vp[vn] = _("放射性廃棄物", "toxic waste"); color[vn++] = TERM_L_GREEN; }
-	if (flags4 & (RF4_BR_DISI))		{ vp[vn] = _("分解", "disintegration"); color[vn++] = TERM_SLATE; }
+	if (flags4 & (RF4_BR_ACID))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_ACID), _("酸(%d)", "acid(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_GREEN; 
+	}
+	if (flags4 & (RF4_BR_ELEC))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_ELEC), _("稲妻(%d)", "lightning(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_BLUE; 
+	}
+	if (flags4 & (RF4_BR_FIRE))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_FIRE), _("火炎(%d)", "fire(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_RED; 
+	}
+	if (flags4 & (RF4_BR_FIRE))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_COLD), _("冷気(%d)", "frost(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_WHITE; 
+	}
+	if (flags4 & (RF4_BR_POIS))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_POIS), _("毒(%d)", "poison(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_GREEN; 
+	}
+	if (flags4 & (RF4_BR_NETH))
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_NETH), _("地獄(%d)", "nether(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_DARK; 
+	}
+	if (flags4 & (RF4_BR_LITE))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_LITE), _("閃光(%d)", "light(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_YELLOW; 
+	}
+	if (flags4 & (RF4_BR_DARK))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_DARK), _("暗黒(%d)", "darkness(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_DARK; 
+	}
+	if (flags4 & (RF4_BR_CONF))
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_CONF), _("混乱(%d)", "confusion(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_UMBER; 
+	}
+	if (flags4 & (RF4_BR_SOUN))		
+	{
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_SOUN), _("轟音(%d)", "sound(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_ORANGE; 
+	}
+	if (flags4 & (RF4_BR_CHAO))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_CHAO), _("カオス(%d)", "chaos(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_VIOLET; 
+	}
+	if (flags4 & (RF4_BR_DISE))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_DISE), _("劣化(%d)", "disenchantment(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_VIOLET; 
+	}
+	if (flags4 & (RF4_BR_NEXU))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_NEXU), _("因果混乱(%d)", "nexus(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_VIOLET; 
+	}
+	if (flags4 & (RF4_BR_TIME))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_TIME), _("時間逆転(%d)", "time(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_BLUE; 
+	}
+	if (flags4 & (RF4_BR_INER))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_INER), _("遅鈍(%d)", "inertia(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_SLATE; 
+	}
+	if (flags4 & (RF4_BR_GRAV))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_GRAV), _("重力(%d)", "gravity(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_SLATE; 
+	}
+	if (flags4 & (RF4_BR_SHAR))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_SHAR), _("破片(%d)", "shards(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_UMBER; 
+	}
+	if (flags4 & (RF4_BR_PLAS))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_PLAS), _("プラズマ(%d)", "plasma(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_RED; 
+	}
+	if (flags4 & (RF4_BR_WALL))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_WALL), _("フォース(%d)", "force(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_UMBER; 
+	}
+	if (flags4 & (RF4_BR_MANA))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_MANA), _("魔力(%d)", "mana(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_BLUE; 
+	}
+	if (flags4 & (RF4_BR_NUKE))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_NUKE), _("放射性廃棄物(%d)", "toxic waste(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_GREEN; 
+	}
+	if (flags4 & (RF4_BR_DISI))		
+	{ 
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BR_DISI), _("分解(%d)", "disintegration(%d)"), tmp_msg[vn], FALSE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_SLATE; 
+	}
 
 	/* Describe breaths */
 	if (vn)
@@ -837,37 +964,191 @@ static void roff_aux(int r_idx, int mode)
 
 	/* Collect spells */
 	vn = 0;
-	if (flags5 & (RF5_BA_ACID))         { vp[vn] = _("アシッド・ボール", "produce acid balls"); color[vn++] = TERM_GREEN; }
-	if (flags5 & (RF5_BA_ELEC))         { vp[vn] = _("サンダー・ボール", "produce lightning balls"); color[vn++] = TERM_BLUE; }
-	if (flags5 & (RF5_BA_FIRE))         { vp[vn] = _("ファイア・ボール", "produce fire balls"); color[vn++] = TERM_RED; }
-	if (flags5 & (RF5_BA_COLD))         { vp[vn] = _("アイス・ボール", "produce frost balls"); color[vn++] = TERM_L_WHITE; }
-	if (flags5 & (RF5_BA_POIS))         { vp[vn] = _("悪臭雲", "produce poison balls"); color[vn++] = TERM_L_GREEN; }
-	if (flags5 & (RF5_BA_NETH))         { vp[vn] = _("地獄球", "produce nether balls"); color[vn++] = TERM_L_DARK; }
-	if (flags5 & (RF5_BA_WATE))         { vp[vn] = _("ウォーター・ボール", "produce water balls"); color[vn++] = TERM_BLUE; }
-	if (flags4 & (RF4_BA_NUKE))         { vp[vn] = _("放射能球", "produce balls of radiation"); color[vn++] = TERM_L_GREEN; }
-	if (flags5 & (RF5_BA_MANA))         { vp[vn] = _("魔力の嵐", "invoke mana storms"); color[vn++] = TERM_L_BLUE; }
-	if (flags5 & (RF5_BA_DARK))         { vp[vn] = _("暗黒の嵐", "invoke darkness storms"); color[vn++] = TERM_L_DARK; }
-	if (flags5 & (RF5_BA_LITE))         { vp[vn] = _("スターバースト", "invoke starburst"); color[vn++] = TERM_YELLOW; }
-	if (flags4 & (RF4_BA_CHAO))         { vp[vn] = _("純ログルス", "invoke raw Logrus"); color[vn++] = TERM_VIOLET; }
-	if (flags6 & (RF6_HAND_DOOM))       { vp[vn] = _("破滅の手", "invoke the Hand of Doom"); color[vn++] = TERM_VIOLET; }
-	if (flags6 & (RF6_PSY_SPEAR))       { vp[vn] = _("光の剣", "psycho-spear"); color[vn++] = TERM_YELLOW; }
-	if (flags5 & (RF5_DRAIN_MANA))      { vp[vn] = _("魔力吸収", "drain mana"); color[vn++] = TERM_SLATE; }
-	if (flags5 & (RF5_MIND_BLAST))      { vp[vn] = _("精神攻撃", "cause mind blasting"); color[vn++] = TERM_L_RED; }
-	if (flags5 & (RF5_BRAIN_SMASH))     { vp[vn] = _("脳攻撃", "cause brain smashing"); color[vn++] = TERM_RED; }
-	if (flags5 & (RF5_CAUSE_1))         { vp[vn] = _("軽傷＋呪い", "cause light wounds and cursing"); color[vn++] = TERM_L_WHITE; }
-	if (flags5 & (RF5_CAUSE_2))         { vp[vn] = _("重傷＋呪い", "cause serious wounds and cursing"); color[vn++] = TERM_L_WHITE; }
-	if (flags5 & (RF5_CAUSE_3))         { vp[vn] = _("致命傷＋呪い", "cause critical wounds and cursing"); color[vn++] = TERM_L_WHITE; }
-	if (flags5 & (RF5_CAUSE_4))         { vp[vn] = _("秘孔を突く", "cause mortal wounds"); color[vn++] = TERM_L_WHITE; }
-	if (flags5 & (RF5_BO_ACID))         { vp[vn] = _("アシッド・ボルト", "produce acid bolts"); color[vn++] = TERM_GREEN; }
-	if (flags5 & (RF5_BO_ELEC))         { vp[vn] = _("サンダー・ボルト", "produce lightning bolts"); color[vn++] = TERM_BLUE; }
-	if (flags5 & (RF5_BO_FIRE))         { vp[vn] = _("ファイア・ボルト", "produce fire bolts"); color[vn++] = TERM_RED; }
-	if (flags5 & (RF5_BO_COLD))         { vp[vn] = _("アイス・ボルト", "produce frost bolts"); color[vn++] = TERM_L_WHITE; }
-	if (flags5 & (RF5_BO_NETH))         { vp[vn] = _("地獄の矢", "produce nether bolts"); color[vn++] = TERM_L_DARK; }
-	if (flags5 & (RF5_BO_WATE))         { vp[vn] = _("ウォーター・ボルト", "produce water bolts"); color[vn++] = TERM_BLUE; }
-	if (flags5 & (RF5_BO_MANA))         { vp[vn] = _("魔力の矢", "produce mana bolts"); color[vn++] = TERM_L_BLUE; }
-	if (flags5 & (RF5_BO_PLAS))         { vp[vn] = _("プラズマ・ボルト", "produce plasma bolts"); color[vn++] = TERM_L_RED; }
-	if (flags5 & (RF5_BO_ICEE))         { vp[vn] = _("極寒の矢", "produce ice bolts"); color[vn++] = TERM_WHITE; }
-	if (flags5 & (RF5_MISSILE))         { vp[vn] = _("マジックミサイル", "produce magic missiles"); color[vn++] = TERM_SLATE; }
+	if (flags5 & (RF5_BA_ACID))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_ACID), _("アシッド・ボール(%d-%d)", "produce acid balls(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_GREEN;
+	}
+	if (flags5 & (RF5_BA_ELEC))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_ELEC), _("サンダー・ボール(%d-%d)", "produce lightning balls(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_BLUE;
+	}
+	if (flags5 & (RF5_BA_FIRE))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_FIRE), _("ファイア・ボール(%d-%d)", "produce fire balls(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_RED;
+	}
+	if (flags5 & (RF5_BA_COLD))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_COLD), _("アイス・ボール(%d-%d)", "produce frost balls(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_WHITE;
+	}
+	if (flags5 & (RF5_BA_POIS))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_POIS), _("悪臭雲(%d-%d)", "produce poison balls(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_GREEN;
+	}
+	if (flags5 & (RF5_BA_NETH))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_NETH), _("地獄球(%d-%d)", "produce nether balls(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_DARK;
+	}
+	if (flags5 & (RF5_BA_WATE))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_WATE), _("ウォーター・ボール(%d-%d)", "produce water balls(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_BLUE;
+	}
+	if (flags4 & (RF4_BA_NUKE))         
+	{
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BA_NUKE), _("放射能球(%d-%d)", "produce balls of radiation(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_GREEN;
+	}
+	if (flags5 & (RF5_BA_MANA))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_MANA), _("魔力の嵐(%d-%d)", "invoke mana storms(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_BLUE;
+	}
+	if (flags5 & (RF5_BA_DARK))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_DARK), _("暗黒の嵐(%d-%d)", "invoke darkness storms(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_DARK;
+	}
+	if (flags5 & (RF5_BA_LITE))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BA_LITE), _("スターバースト(%d-%d)", "invoke starburst(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_YELLOW;
+	}
+	if (flags4 & (RF4_BA_CHAO))         
+	{
+		set_damage(r_idx, monspell_num(RF4_SPELL_START, RF4_BA_CHAO), _("純ログルス(%d-%d)", "invoke raw Logrus(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_VIOLET;
+	}
+	if (flags6 & (RF6_HAND_DOOM)){ vp[vn] = _("破滅の手(40%-60%)", "invoke the Hand of Doom(40%-60%)"); color[vn++] = TERM_VIOLET; }
+	if (flags6 & (RF6_PSY_SPEAR))
+	{
+		set_damage(r_idx, monspell_num(RF6_SPELL_START, RF6_PSY_SPEAR), _("光の剣(%d-%d)", "psycho-spear(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_YELLOW;
+	}
+	if (flags5 & (RF5_DRAIN_MANA))
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_DRAIN_MANA), _("魔力吸収(%d-%d)", "drain mana(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_SLATE;
+	}
+	if (flags5 & (RF5_MIND_BLAST))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_MIND_BLAST), _("精神攻撃(%d-%d)", "cause mind blasting(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_RED;
+	}
+	if (flags5 & (RF5_BRAIN_SMASH))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BRAIN_SMASH), _("脳攻撃(%d-%d)", "cause brain smashing(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_RED;
+	}
+	if (flags5 & (RF5_CAUSE_1))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_CAUSE_1), 
+			_("軽傷＋呪い(%d-%d)", "cause light wounds and cursing(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_WHITE;
+	}
+	if (flags5 & (RF5_CAUSE_2))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_CAUSE_2), 
+			_("重傷＋呪い(%d-%d)", "cause serious wounds and cursing(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_WHITE;
+	}
+	if (flags5 & (RF5_CAUSE_3))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_CAUSE_3), 
+			_("致命傷＋呪い(%d-%d)", "cause critical wounds and cursing(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_WHITE;
+	}
+	if (flags5 & (RF5_CAUSE_4))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_CAUSE_4), 
+			_("秘孔を突く(%d-%d)", "cause mortal wounds(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_WHITE;
+	}
+	if (flags5 & (RF5_BO_ACID))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BO_ACID), _("アシッド・ボルト(%d-%d)", "produce acid bolts(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_GREEN;
+	}
+	if (flags5 & (RF5_BO_ELEC))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BO_ELEC), _("サンダー・ボルト(%d-%d)", "produce lightning bolts(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_BLUE;
+	}
+	if (flags5 & (RF5_BO_FIRE))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BO_FIRE), _("ファイア・ボルト(%d-%d)", "produce fire bolts(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_RED;
+	}
+	if (flags5 & (RF5_BO_COLD))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BO_COLD), _("アイス・ボルト(%d-%d)", "produce frost bolts(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_WHITE;
+	}
+	if (flags5 & (RF5_BO_NETH))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BO_NETH), _("地獄の矢(%d-%d)", "produce nether bolts(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_DARK;
+	}
+	if (flags5 & (RF5_BO_WATE))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BO_WATE), _("ウォーター・ボルト(%d-%d)", "produce water bolts(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_BLUE;
+	}
+	if (flags5 & (RF5_BO_MANA))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BO_MANA), _("魔力の矢(%d-%d)", "produce mana bolts(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_BLUE;
+	}
+	if (flags5 & (RF5_BO_PLAS))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BO_PLAS), _("プラズマ・ボルト(%d-%d)", "produce plasma bolts(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_L_RED;
+	}
+	if (flags5 & (RF5_BO_ICEE))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_BO_ICEE), _("極寒の矢(%d-%d)", "produce ice bolts(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_WHITE;
+	}
+	if (flags5 & (RF5_MISSILE))         
+	{
+		set_damage(r_idx, monspell_num(RF5_SPELL_START, RF5_MISSILE), _("マジックミサイル(%d-%d)", "produce magic missiles(%d-%d)"), tmp_msg[vn], TRUE);
+        vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_SLATE;
+	}
 	if (flags5 & (RF5_SCARE))           { vp[vn] = _("恐怖", "terrify"); color[vn++] = TERM_SLATE; }
 	if (flags5 & (RF5_BLIND))           { vp[vn] = _("目くらまし", "blind"); color[vn++] = TERM_L_DARK; }
 	if (flags5 & (RF5_CONF))            { vp[vn] = _("混乱", "confuse"); color[vn++] = TERM_L_UMBER; }
