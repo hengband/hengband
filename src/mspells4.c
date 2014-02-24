@@ -3678,25 +3678,17 @@ int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx)
 
 /*!
 * @brief モンスターの使う呪文の威力を返す /
-* @param m_idx 呪文を唱えるモンスターID
+* @param SPELL_NUM 呪文番号
+* @param hp 呪文を唱えるモンスターの体力
+* @param rlev 呪文を唱えるモンスターのレベル
+* @param powerful 呪文を唱えるモンスターのpowerfulフラグ
+* @param r_ptr 呪文を唱えるモンスターの種族ポインタ
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
+int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, monster_race* r_ptr, int TYPE)
 {
-    monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    int hp, dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
-    int rlev = monster_level_idx(m_idx);
-
-    if (TYPE == DAM_MAX)
-    {
-        hp = m_ptr->max_maxhp;
-    }
-    else if (TYPE == DAM_ROLL)
-    {
-        hp = m_ptr->hp;
-    }
+    int dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
 
     switch (SPELL_NUM)
     {
@@ -3802,7 +3794,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF4_BA_NUKE */
     case RF4_SPELL_START + 28:
-        mult = monster_is_powerful(m_idx) ? 2 : 1;
+        mult = powerful ? 2 : 1;
         dam = rlev * (mult / div);
         dice_num = 10;
         dice_side = 6;
@@ -3815,7 +3807,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF4_BA_CHAO */
     case RF4_SPELL_START + 30:
-        dam = (monster_is_powerful(m_idx) ? (rlev * 3) : (rlev * 2));
+        dam = (powerful ? (rlev * 3) : (rlev * 2));
         dice_num = 10;
         dice_side = 10;
         break;
@@ -3827,7 +3819,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BA_ACID */
     case RF5_SPELL_START + 0:
-        if (monster_is_powerful(m_idx))
+        if (powerful)
         {
             dam = (rlev * 4) + 50;
             dice_num = 10;
@@ -3843,7 +3835,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BA_ELEC */
     case RF5_SPELL_START + 1:
-        if (monster_is_powerful(m_idx))
+        if (powerful)
         {
             dam = (rlev * 4) + 50;
             dice_num = 10;
@@ -3859,7 +3851,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BA_FIRE */
     case RF5_SPELL_START + 2:
-        if (monster_is_powerful(m_idx))
+        if (powerful)
         {
             dam = (rlev * 4) + 50;
             dice_num = 10;
@@ -3875,7 +3867,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BA_COLD */
     case RF5_SPELL_START + 3:
-        if (monster_is_powerful(m_idx))
+        if (powerful)
         {
             dam = (rlev * 4) + 50;
             dice_num = 10;
@@ -3891,14 +3883,14 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BA_POIS */
     case RF5_SPELL_START + 4:
-        mult = monster_is_powerful(m_idx) ? 2 : 1;
+        mult = powerful ? 2 : 1;
         dice_num = 12;
         dice_side = 2;
         break;
 
         /* RF5_BA_NETH */
     case RF5_SPELL_START + 5:
-        dam = 50 + (rlev * (monster_is_powerful(m_idx) ? 2 : 1));
+        dam = 50 + (rlev * powerful ? 2 : 1);
         dice_num = 10;
         dice_side = 10;
         break;
@@ -3907,7 +3899,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
     case RF5_SPELL_START + 6:
         dam = 50;
         dice_num = 1;
-        dice_side = (monster_is_powerful(m_idx) ? (rlev * 3) : (rlev * 2));
+        dice_side = powerful ? (rlev * 3) : (rlev * 2);
         break;
 
         /* RF5_BA_MANA */
@@ -3965,7 +3957,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BO_ACID */
     case RF5_SPELL_START + 16:
-        mult = monster_is_powerful(m_idx) ? 2 : 1;
+        mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 7;
         dice_side = 8;
@@ -3973,7 +3965,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BO_ELEC */
     case RF5_SPELL_START + 17:
-        mult = monster_is_powerful(m_idx) ? 2 : 1;
+        mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 4;
         dice_side = 8;
@@ -3981,7 +3973,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BO_FIRE */
     case RF5_SPELL_START + 18:
-        mult = monster_is_powerful(m_idx) ? 2 : 1;
+        mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 9;
         dice_side = 8;
@@ -3989,7 +3981,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BO_COLD */
     case RF5_SPELL_START + 19:
-        mult = monster_is_powerful(m_idx) ? 2 : 1;
+        mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 6;
         dice_side = 8;
@@ -4004,14 +3996,14 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BO_NETH */
     case RF5_SPELL_START + 21:
-        dam = 30 + (rlev * 4) / (monster_is_powerful(m_idx) ? 2 : 3);
+        dam = 30 + (rlev * 4) / (powerful ? 2 : 3);
         dice_num = 5;
         dice_side = 5;
         break;
 
         /* RF5_BO_WATE */
     case RF5_SPELL_START + 22:
-        dam = (rlev * 3 / (monster_is_powerful(m_idx) ? 2 : 3));
+        dam = (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 10;
         dice_side = 10;
         break;
@@ -4025,14 +4017,14 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF5_BO_PLAS */
     case RF5_SPELL_START + 24:
-        dam = 10 + (rlev * 3 / (monster_is_powerful(m_idx) ? 2 : 3));
+        dam = 10 + (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 8;
         dice_side = 7;
         break;
 
         /* RF5_BO_ICEE */
     case RF5_SPELL_START + 25:
-        dam = (rlev * 3 / (monster_is_powerful(m_idx) ? 2 : 3));
+        dam = (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 6;
         dice_side = 6;
         break;
@@ -4072,9 +4064,9 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
 
         /* RF6_PSY_SPEAR */
     case RF6_SPELL_START + 11:
-        dam = monster_is_powerful(m_idx) ? 150 : 100;
+        dam = powerful ? 150 : 100;
         dice_num = 1;
-        dice_side = monster_is_powerful(m_idx) ? (rlev * 2) : (rlev * 3 / 2);
+        dice_side = powerful ? (rlev * 2) : (rlev * 3 / 2);
         break;
 
     case RF6_SPELL_START + 12: return -1;   /* RF6_DARKNESS */
@@ -4107,4 +4099,47 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
     }
 
     return dam;
+}
+
+
+/*!
+* @brief モンスターの使う呪文の威力を返す /
+* @param SPELL_NUM 呪文番号
+* @param m_idx 呪文を唱えるモンスターID
+* @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
+* @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
+*/
+int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
+{
+    monster_type    *m_ptr = &m_list[m_idx];
+    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+    int hp;
+    int rlev = monster_level_idx(m_idx);
+
+    if (TYPE == DAM_MAX)
+    {
+        hp = m_ptr->max_maxhp;
+    }
+    else if (TYPE == DAM_ROLL)
+    {
+        hp = m_ptr->hp;
+    }
+    return monspell_damage_base(SPELL_NUM, hp, rlev, monster_is_powerful(m_idx), r_ptr, TYPE);
+}
+
+/*!
+* @brief モンスターの使う呪文の威力を返す /
+* @param SPELL_NUM 呪文番号
+* @param r_idx 呪文を唱えるモンスターの種族ID
+* @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
+* @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
+*/
+int monspell_race_damage(int SPELL_NUM, int r_idx, int TYPE)
+{
+    monster_race    *r_ptr = &r_info[r_idx];
+    int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    bool powerful = r_ptr->flags2 & RF2_POWERFUL;
+    u32b hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
+
+    return monspell_damage_base(SPELL_NUM, MIN(30000, hp), rlev, powerful, r_ptr, TYPE);
 }

@@ -178,7 +178,7 @@ static void roff_aux(int r_idx, int mode)
 	int		vn = 0;
 	byte		color[96];
 	cptr		vp[96];
-	char shoot_power[96];
+	char tmp_msg[96][96];
 
 	bool know_everything = FALSE;
 
@@ -721,15 +721,22 @@ static void roff_aux(int r_idx, int mode)
 	/* Collect inate attacks */
 	vn = 0;
 	if (flags4 & RF4_SHRIEK)  { vp[vn] = _("悲鳴で助けを求める", "shriek for help"); color[vn++] = TERM_L_WHITE; }
-	if (flags4 & RF4_ROCKET)  { vp[vn] = _("ロケットを発射する", "shoot a rocket"); color[vn++] = TERM_UMBER; }
+	if (flags4 & RF4_ROCKET)  
+    {
+        int dam = monspell_race_damage(monspell_num(RF4_SPELL_START, RF4_ROCKET), r_idx, DAM_MAX);
+        sprintf(tmp_msg[vn], _("ロケット(%d)を発射する", "shoot a rocket(%d)"), dam);
+        vp[vn] = tmp_msg[vn];
+        color[vn++] = TERM_UMBER; 
+    }
+    
 	if (flags4 & RF4_SHOOT)
 	{ 
 		for (r = 0, m = 0; m < 4; m++)
 		{
 			if (r_ptr->blow[m].method == RBM_SHOOT)
 			{
-				sprintf(shoot_power, _("威力 %dd%d の射撃をする","fire an arrow (Power:%dd%d)"), r_ptr->blow[m].d_side, r_ptr->blow[m].d_dice);
-				vp[vn] = shoot_power; color[vn++] = TERM_UMBER;
+				sprintf(tmp_msg[vn], _("威力 %dd%d の射撃をする","fire an arrow (Power:%dd%d)"), r_ptr->blow[m].d_side, r_ptr->blow[m].d_dice);
+                vp[vn] = tmp_msg[vn]; color[vn++] = TERM_UMBER;
 				break;
 			}
 		}		
