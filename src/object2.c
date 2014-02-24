@@ -6898,17 +6898,14 @@ object_type *choose_warning_item(void)
  * @param m_ptr 魔法を行使するモンスターの構造体参照ポインタ
  * @param typ 効果属性のID
  * @param dam 基本ダメージ
- * @param limit ダメージの限界値
  * @param max 算出した最大ダメージを返すポインタ
  * @return なし
  */
-static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int *max)
+static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int *max)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	int          rlev = r_ptr->level;
 	bool         ignore_wraith_form = FALSE;
-
-	if (limit) dam = (dam > limit) ? limit : dam;
 
 	/* Vulnerability, resistance and immunity */
 	switch (typ)
@@ -7141,6 +7138,23 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int limit, int 
 }
 
 /*!
+* @brief 警告基準を定めるために魔法の効果属性に基づいて最大魔法ダメージを計算する。 /
+* Calculate spell damages
+* @param spell_num RF4ならRF4_SPELL_STARTのように32区切りのベースとなる数値
+* @param spell_flag RF4_SHRIEKなどのスペルフラグ
+* @param typ 効果属性のID
+* @param m_idx 魔法を行使するモンスターのID
+* @param max 算出した最大ダメージを返すポインタ
+* @return なし
+*/
+void spell_damcalc_by_spellnum(int spell_num, int spell_flag, int typ, int m_idx, int *max)
+{
+    monster_type *m_ptr = &m_list[m_idx];
+    int dam = monspell_damage(monspell_num(spell_num, spell_flag), m_idx, DAM_MAX);
+    spell_damcalc(m_ptr, typ, dam, max);
+}
+
+/*!
  * @brief 警告基準を定めるためにモンスターの打撃最大ダメージを算出する /
  * Calculate blow damages
  * @param m_ptr 打撃を行使するモンスターの構造体参照ポインタ
@@ -7172,25 +7186,25 @@ static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 			break;
 
 		case RBE_ACID:
-			spell_damcalc(m_ptr, GF_ACID, dam, 0, &dummy_max);
+			spell_damcalc(m_ptr, GF_ACID, dam, &dummy_max);
 			dam = dummy_max;
 			check_wraith_form = FALSE;
 			break;
 
 		case RBE_ELEC:
-			spell_damcalc(m_ptr, GF_ELEC, dam, 0, &dummy_max);
+			spell_damcalc(m_ptr, GF_ELEC, dam, &dummy_max);
 			dam = dummy_max;
 			check_wraith_form = FALSE;
 			break;
 
 		case RBE_FIRE:
-			spell_damcalc(m_ptr, GF_FIRE, dam, 0, &dummy_max);
+			spell_damcalc(m_ptr, GF_FIRE, dam, &dummy_max);
 			dam = dummy_max;
 			check_wraith_form = FALSE;
 			break;
 
 		case RBE_COLD:
-			spell_damcalc(m_ptr, GF_COLD, dam, 0, &dummy_max);
+			spell_damcalc(m_ptr, GF_COLD, dam, &dummy_max);
 			dam = dummy_max;
 			check_wraith_form = FALSE;
 			break;
@@ -7210,7 +7224,7 @@ static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 	else
 	{
 		dam = (dam + 1) / 2;
-		spell_damcalc(m_ptr, mbe_info[blow_ptr->effect].explode_type, dam, 0, &dummy_max);
+		spell_damcalc(m_ptr, mbe_info[blow_ptr->effect].explode_type, dam, &dummy_max);
 		dam = dummy_max;
 	}
 
@@ -7257,49 +7271,43 @@ bool process_warning(int xx, int yy)
 
 			/* Monster spells (only powerful ones)*/
 			if (projectable(my, mx, yy, xx))
-			{
-				int breath_dam_div3 = m_ptr->hp / 3;
-				int breath_dam_div6 = m_ptr->hp / 6;
+            {
 				u32b f4 = r_ptr->flags4;
 				u32b f5 = r_ptr->flags5;
 				u32b f6 = r_ptr->flags6;
 
 				if (!(d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
 				{
-					int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-					int storm_dam = rlev * 4 + 150;
-					bool powerful = (bool)(r_ptr->flags2 & RF2_POWERFUL);
-
-					if (f4 & RF4_BA_CHAO) spell_damcalc(m_ptr, GF_CHAOS, rlev * (powerful ? 3 : 2) + 100, 0, &dam_max0);
-					if (f5 & RF5_BA_MANA) spell_damcalc(m_ptr, GF_MANA, storm_dam, 0, &dam_max0);
-					if (f5 & RF5_BA_DARK) spell_damcalc(m_ptr, GF_DARK, storm_dam, 0, &dam_max0);
-					if (f5 & RF5_BA_LITE) spell_damcalc(m_ptr, GF_LITE, storm_dam, 0, &dam_max0);
-					if (f6 & RF6_HAND_DOOM) spell_damcalc(m_ptr, GF_HAND_DOOM, p_ptr->chp * 6 / 10, 0, &dam_max0);
-					if (f6 & RF6_PSY_SPEAR) spell_damcalc(m_ptr, GF_PSY_SPEAR, powerful ? (rlev * 2 + 150) : (rlev * 3 / 2 + 100), 0, &dam_max0);
+                    if (f4 & RF4_BA_CHAO) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BA_CHAO, GF_CHAOS, c_ptr->m_idx,  &dam_max0);
+                    if (f5 & RF5_BA_MANA) spell_damcalc_by_spellnum(RF5_SPELL_START, RF5_BA_MANA, GF_MANA, c_ptr->m_idx, &dam_max0);
+                    if (f5 & RF5_BA_DARK) spell_damcalc_by_spellnum(RF5_SPELL_START, RF5_BA_DARK, GF_DARK, c_ptr->m_idx, &dam_max0);
+                    if (f5 & RF5_BA_LITE) spell_damcalc_by_spellnum(RF5_SPELL_START, RF5_BA_LITE, GF_LITE, c_ptr->m_idx, &dam_max0);
+                    if (f6 & RF6_HAND_DOOM) spell_damcalc_by_spellnum(RF6_SPELL_START, RF6_HAND_DOOM, GF_HAND_DOOM, c_ptr->m_idx, &dam_max0);
+                    if (f6 & RF6_PSY_SPEAR) spell_damcalc_by_spellnum(RF6_SPELL_START, RF6_PSY_SPEAR, GF_PSY_SPEAR, c_ptr->m_idx, &dam_max0);
 				}
-				if (f4 & RF4_ROCKET) spell_damcalc(m_ptr, GF_ROCKET, m_ptr->hp / 4, 800, &dam_max0);
-				if (f4 & RF4_BR_ACID) spell_damcalc(m_ptr, GF_ACID, breath_dam_div3, 1600, &dam_max0);
-				if (f4 & RF4_BR_ELEC) spell_damcalc(m_ptr, GF_ELEC, breath_dam_div3, 1600, &dam_max0);
-				if (f4 & RF4_BR_FIRE) spell_damcalc(m_ptr, GF_FIRE, breath_dam_div3, 1600, &dam_max0);
-				if (f4 & RF4_BR_COLD) spell_damcalc(m_ptr, GF_COLD, breath_dam_div3, 1600, &dam_max0);
-				if (f4 & RF4_BR_POIS) spell_damcalc(m_ptr, GF_POIS, breath_dam_div3, 800, &dam_max0);
-				if (f4 & RF4_BR_NETH) spell_damcalc(m_ptr, GF_NETHER, breath_dam_div6, 550, &dam_max0);
-				if (f4 & RF4_BR_LITE) spell_damcalc(m_ptr, GF_LITE, breath_dam_div6, 400, &dam_max0);
-				if (f4 & RF4_BR_DARK) spell_damcalc(m_ptr, GF_DARK, breath_dam_div6, 400, &dam_max0);
-				if (f4 & RF4_BR_CONF) spell_damcalc(m_ptr, GF_CONFUSION, breath_dam_div6, 450, &dam_max0);
-				if (f4 & RF4_BR_SOUN) spell_damcalc(m_ptr, GF_SOUND, breath_dam_div6, 450, &dam_max0);
-				if (f4 & RF4_BR_CHAO) spell_damcalc(m_ptr, GF_CHAOS, breath_dam_div6, 600, &dam_max0);
-				if (f4 & RF4_BR_DISE) spell_damcalc(m_ptr, GF_DISENCHANT, breath_dam_div6, 500, &dam_max0);
-				if (f4 & RF4_BR_NEXU) spell_damcalc(m_ptr, GF_NEXUS, breath_dam_div3, 250, &dam_max0);
-				if (f4 & RF4_BR_TIME) spell_damcalc(m_ptr, GF_TIME, breath_dam_div3, 150, &dam_max0);
-				if (f4 & RF4_BR_INER) spell_damcalc(m_ptr, GF_INERTIA, breath_dam_div6, 200, &dam_max0);
-				if (f4 & RF4_BR_GRAV) spell_damcalc(m_ptr, GF_GRAVITY, breath_dam_div3, 200, &dam_max0);
-				if (f4 & RF4_BR_SHAR) spell_damcalc(m_ptr, GF_SHARDS, breath_dam_div6, 500, &dam_max0);
-				if (f4 & RF4_BR_PLAS) spell_damcalc(m_ptr, GF_PLASMA, breath_dam_div6, 150, &dam_max0);
-				if (f4 & RF4_BR_WALL) spell_damcalc(m_ptr, GF_FORCE, breath_dam_div6, 200, &dam_max0);
-				if (f4 & RF4_BR_MANA) spell_damcalc(m_ptr, GF_MANA, breath_dam_div3, 250, &dam_max0);
-				if (f4 & RF4_BR_NUKE) spell_damcalc(m_ptr, GF_NUKE, breath_dam_div3, 800, &dam_max0);
-				if (f4 & RF4_BR_DISI) spell_damcalc(m_ptr, GF_DISINTEGRATE, breath_dam_div6, 150, &dam_max0);
+                if (f4 & RF4_ROCKET) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_ROCKET, GF_ROCKET, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_ACID) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_ACID, GF_ACID, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_ELEC) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_ELEC, GF_ELEC, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_FIRE) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_FIRE, GF_FIRE, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_COLD) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_COLD, GF_COLD, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_POIS) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_POIS, GF_POIS, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_NETH) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_NETH, GF_NETHER, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_LITE) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_LITE, GF_LITE, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_DARK) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_DARK, GF_DARK, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_CONF) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_CONF, GF_CONFUSION, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_SOUN) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_SOUN, GF_SOUND, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_CHAO) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_CHAO, GF_CHAOS, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_DISE) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_DISE, GF_DISENCHANT, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_NEXU) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_NEXU, GF_NEXUS, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_TIME) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_TIME, GF_TIME, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_INER) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_INER, GF_INERTIA, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_GRAV) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_GRAV, GF_GRAVITY, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_SHAR) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_SHAR, GF_SHARDS, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_PLAS) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_PLAS, GF_PLASMA, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_WALL) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_WALL, GF_FORCE, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_MANA) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_MANA, GF_MANA, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_NUKE) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_NUKE, GF_NUKE, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_DISI) spell_damcalc_by_spellnum(RF4_SPELL_START, RF4_BR_DISI, GF_DISINTEGRATE, c_ptr->m_idx, &dam_max0);
 			}
 
 			/* Monster melee attacks */
@@ -7336,20 +7344,14 @@ bool process_warning(int xx, int yy)
 		{
 			object_type *o_ptr = choose_warning_item();
 
-			if (o_ptr) object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-#ifdef JP
-			else strcpy(o_name, "体"); /* Warning ability without item */
-			msg_format("%sが鋭く震えた！", o_name);
-#else
-			else strcpy(o_name, "body"); /* Warning ability without item */
-			msg_format("Your %s pulsates sharply!", o_name);
-#endif
+			if (o_ptr)
+                object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            else 
+                strcpy(o_name, _("体", "body")); /* Warning ability without item */
+            msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
+
 			disturb(0, 1);
-#ifdef JP
-			return get_check("本当にこのまま進むか？");
-#else
-			return get_check("Really want to go ahead? ");
-#endif
+            return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 		}
 	}
 	else old_damage = old_damage / 2;
@@ -7360,20 +7362,13 @@ bool process_warning(int xx, int yy)
 	{
 		object_type *o_ptr = choose_warning_item();
 
-		if (o_ptr) object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-#ifdef JP
-		else strcpy(o_name, "体"); /* Warning ability without item */
-		msg_format("%sが震えた！", o_name);
-#else
-		else strcpy(o_name, "body"); /* Warning ability without item */
-		msg_format("Your %s pulsates!", o_name);
-#endif
+		if (o_ptr) 
+            object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        else
+            strcpy(o_name, _("体", "body")); /* Warning ability without item */
+        msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
 		disturb(0, 1);
-#ifdef JP
-		return get_check("本当にこのまま進むか？");
-#else
-		return get_check("Really want to go ahead? ");
-#endif
+        return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 	}
 
 	return TRUE;

@@ -258,13 +258,9 @@ bool monst_spell_monst(int m_idx)
 	int y = 0, x = 0;
 	int i, k, t_idx = 0;
 	int thrown_spell, count = 0;
-	int rlev;
 	int dam = 0;
 	int start;
 	int plus = 1;
-	u32b u_mode = 0L;
-	int s_num_6 = (easy_band ? 2 : 6);
-	int s_num_4 = (easy_band ? 1 : 4);
 	int rad = 0; //For elemental balls
 
 	byte spell[96], num = 0;
@@ -284,17 +280,10 @@ bool monst_spell_monst(int m_idx)
 
 	u32b f4, f5, f6;
 
-	bool wake_up = FALSE;
-	bool fear = FALSE;
-
-	bool blind = (p_ptr->blind ? TRUE : FALSE);
-
 	bool see_m = is_seen(m_ptr);
 	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
 	bool see_t;
 	bool see_either;
-	bool known;
-
 	bool pet = is_pet(m_ptr);
 
 	bool in_no_magic_dungeon = (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && dun_level
@@ -305,9 +294,6 @@ bool monst_spell_monst(int m_idx)
 	bool can_remember;
 
 	bool resists_tele = FALSE;
-
-	/* Prepare flags for summoning */
-	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
 
 	/* Cannot cast spells when confused */
 	if (MON_CONFUSED(m_ptr)) return (FALSE);
@@ -403,9 +389,6 @@ bool monst_spell_monst(int m_idx)
 
 	/* Forget old counter attack target */
 	reset_target(m_ptr);
-
-	/* Extract the monster level */
-	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
 	/* Remove unimplemented spells */
 	f6 &= ~(RF6_WORLD | RF6_TRAPS | RF6_FORGET);
@@ -666,19 +649,19 @@ bool monst_spell_monst(int m_idx)
 	/* Extract the "inate" spells */
 	for (k = 0; k < 32; k++)
 	{
-		if (f4 & (1L << k)) spell[num++] = k + 32 * 3;
+		if (f4 & (1L << k)) spell[num++] = k + RF4_SPELL_START;
 	}
 
 	/* Extract the "normal" spells */
 	for (k = 0; k < 32; k++)
 	{
-		if (f5 & (1L << k)) spell[num++] = k + 32 * 4;
+        if (f5 & (1L << k)) spell[num++] = k + RF5_SPELL_START;
 	}
 
 	/* Extract the "bizarre" spells */
 	for (k = 0; k < 32; k++)
 	{
-		if (f6 & (1L << k)) spell[num++] = k + 32 * 5;
+        if (f6 & (1L << k)) spell[num++] = k + RF6_SPELL_START;
 	}
 
 	/* No spells left */
@@ -706,9 +689,6 @@ bool monst_spell_monst(int m_idx)
 
 	see_t = is_seen(t_ptr);
 	see_either = (see_m || see_t);
-
-	/* Can the player be aware of this attack? */
-	known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
 
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 1);
 
@@ -749,7 +729,7 @@ bool monst_spell_monst(int m_idx)
 					p_ptr->mane_dam[i] = p_ptr->mane_dam[i+1];
 				}
 			}
-			p_ptr->mane_spell[p_ptr->mane_num] = thrown_spell - 96;
+			p_ptr->mane_spell[p_ptr->mane_num] = thrown_spell - RF4_SPELL_START;
 			p_ptr->mane_dam[p_ptr->mane_num] = dam;
 			p_ptr->mane_num++;
 			new_mane = TRUE;
@@ -762,23 +742,23 @@ bool monst_spell_monst(int m_idx)
 	if (can_remember)
 	{
 		/* Inate spell */
-		if (thrown_spell < 32*4)
+        if (thrown_spell < RF4_SPELL_START + RF4_SPELL_SIZE)
 		{
-			r_ptr->r_flags4 |= (1L << (thrown_spell - 32*3));
+            r_ptr->r_flags4 |= (1L << (thrown_spell - RF4_SPELL_START));
 			if (r_ptr->r_cast_spell < MAX_UCHAR) r_ptr->r_cast_spell++;
 		}
 
 		/* Bolt or Ball */
-		else if (thrown_spell < 32*5)
+        else if (thrown_spell < RF5_SPELL_START + RF5_SPELL_SIZE)
 		{
-			r_ptr->r_flags5 |= (1L << (thrown_spell - 32*4));
+            r_ptr->r_flags5 |= (1L << (thrown_spell - RF5_SPELL_START));
 			if (r_ptr->r_cast_spell < MAX_UCHAR) r_ptr->r_cast_spell++;
 		}
 
 		/* Special spell */
-		else if (thrown_spell < 32*6)
+        else if (thrown_spell < RF6_SPELL_START + RF6_SPELL_SIZE)
 		{
-			r_ptr->r_flags6 |= (1L << (thrown_spell - 32*5));
+            r_ptr->r_flags6 |= (1L << (thrown_spell - RF6_SPELL_START));
 			if (r_ptr->r_cast_spell < MAX_UCHAR) r_ptr->r_cast_spell++;
 		}
 	}

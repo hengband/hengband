@@ -1454,9 +1454,6 @@ bool make_attack_spell(int m_idx)
 	bool            no_inate = FALSE;
 	bool            do_spell = DO_SPELL_NONE;
 	int             dam = 0;
-	u32b mode = 0L;
-	int s_num_6 = (easy_band ? 2 : 6);
-	int s_num_4 = (easy_band ? 1 : 4);
 	int rad = 0; //For elemental spells
 
 	/* Target location */
@@ -1470,11 +1467,8 @@ bool make_attack_spell(int m_idx)
 	/* Summon count */
 	int count = 0;
 
-	/* Extract the blind-ness */
-	bool blind = (p_ptr->blind ? TRUE : FALSE);
-
 	/* Extract the "see-able-ness" */
-	bool seen = (!blind && m_ptr->ml);
+    bool seen = (!p_ptr->blind && m_ptr->ml);
 	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
 
 	/* Check "projectable" */
@@ -1739,19 +1733,19 @@ bool make_attack_spell(int m_idx)
 	/* Extract the "inate" spells */
 	for (k = 0; k < 32; k++)
 	{
-		if (f4 & (1L << k)) spell[num++] = k + 32 * 3;
+        if (f4 & (1L << k)) spell[num++] = k + RF4_SPELL_START;
 	}
 
 	/* Extract the "normal" spells */
 	for (k = 0; k < 32; k++)
 	{
-		if (f5 & (1L << k)) spell[num++] = k + 32 * 4;
+        if (f5 & (1L << k)) spell[num++] = k + RF5_SPELL_START;
 	}
 
 	/* Extract the "bizarre" spells */
 	for (k = 0; k < 32; k++)
 	{
-		if (f6 & (1L << k)) spell[num++] = k + 32 * 5;
+        if (f6 & (1L << k)) spell[num++] = k + RF6_SPELL_START;
 	}
 
 	/* No spells left */

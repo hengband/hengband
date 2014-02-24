@@ -1594,9 +1594,11 @@ extern void learn_spell(int monspell);
 extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
 
 /* mspells4.c */
+extern int monspell_num(int SPELL_NUM_BASE, u32b SPELL_FLAG);
 extern bool spell_learnable(int m_idx);
 extern int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx);
 extern int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx);
+extern int monspell_damage(int SPELL_NUM, int m_idx, int TYPE);
 
 /* hissatsu.c */
 extern void hissatsu_info(char *p, int power);
