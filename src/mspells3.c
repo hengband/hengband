@@ -1244,7 +1244,7 @@ static bool cast_learned_spell(int spell, bool success)
 		if ((r_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE)) ||
 			(r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > plev + randint1(60)))
 		{
-            msg_print(_("しかし効果がなかった！", "%^s is unaffected!"), m_name);
+            msg_format(_("しかし効果がなかった！", "%^s is unaffected!"), m_name);
 		}
 		else teleport_level(target_m_idx);
 		break;
