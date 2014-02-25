@@ -3682,11 +3682,12 @@ int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx)
 * @param hp 呪文を唱えるモンスターの体力
 * @param rlev 呪文を唱えるモンスターのレベル
 * @param powerful 呪文を唱えるモンスターのpowerfulフラグ
-* @param r_ptr 呪文を唱えるモンスターの種族ポインタ
+* @param shoot_dd 射撃のダイス数
+* @param shoot_ds 射撃のダイス面
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, monster_race* r_ptr, int TYPE)
+int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
 {
     int dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
 
@@ -3703,8 +3704,9 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, monster
 
         /* RF4_SHOOT */
     case RF4_SPELL_START + 4:
-        dice_num = r_ptr->blow[0].d_dice;
-        dice_side = r_ptr->blow[0].d_side;
+        dice_num = shoot_dd;
+        dice_side = shoot_ds;
+        dam = shoot_base;
         break;
     case RF4_SPELL_START + 5:   return -1;   /* RF4_XXX2 */
     case RF4_SPELL_START + 6:   return -1;   /* RF4_XXX3 */
@@ -4097,7 +4099,7 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, monster
     case DAM_MIN: dam += dice_num * 1 * mult / div; break;
     case DAM_ROLL: dam += damroll(dice_num, dice_side) * mult / div; break;
     }
-
+    if (dam < 1) dam = 1;
     return dam;
 }
 
@@ -4115,6 +4117,8 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int hp;
     int rlev = monster_level_idx(m_idx);
+    int shoot_dd = r_ptr->blow[0].d_dice;
+    int shoot_ds = r_ptr->blow[0].d_side;
 
     if (TYPE == DAM_MAX)
     {
@@ -4124,7 +4128,7 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
     {
         hp = m_ptr->hp;
     }
-    return monspell_damage_base(SPELL_NUM, hp, rlev, monster_is_powerful(m_idx), r_ptr, TYPE);
+    return monspell_damage_base(SPELL_NUM, hp, rlev, monster_is_powerful(m_idx), shoot_dd, shoot_ds, 0, TYPE);
 }
 
 /*!
@@ -4140,6 +4144,33 @@ int monspell_race_damage(int SPELL_NUM, int r_idx, int TYPE)
     int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     bool powerful = r_ptr->flags2 & RF2_POWERFUL;
     u32b hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
+    int shoot_dd = r_ptr->blow[0].d_dice;
+    int shoot_ds = r_ptr->blow[0].d_side;
 
-    return monspell_damage_base(SPELL_NUM, MIN(30000, hp), rlev, powerful, r_ptr, TYPE);
+    return monspell_damage_base(SPELL_NUM, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
+}
+
+/*!
+* @brief 青魔導師の使う呪文の威力を返す /
+* @param SPELL_NUM 呪文番号
+* @param plev 使用するレベル。2倍して扱う。
+* @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
+* @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
+*/
+int monspell_bluemage_damage(int SPELL_NUM, int plev, int TYPE)
+{
+    int hp = p_ptr->chp;
+    int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
+    object_type *o_ptr = NULL;
+
+    if (buki_motteruka(INVEN_RARM)) o_ptr = &inventory[INVEN_RARM];
+    else if (buki_motteruka(INVEN_LARM)) o_ptr = &inventory[INVEN_LARM];
+
+    if (o_ptr)
+    {
+        shoot_dd = o_ptr->dd;
+        shoot_ds = o_ptr->ds;
+        shoot_base = o_ptr->to_d;
+    }
+    return monspell_damage_base(SPELL_NUM, hp, plev * 2, FALSE, shoot_dd, shoot_ds, shoot_base, TYPE);
 }

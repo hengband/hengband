@@ -1600,6 +1600,7 @@ extern int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx);
 extern int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx);
 extern int monspell_damage(int SPELL_NUM, int m_idx, int TYPE);
 extern int monspell_race_damage(int SPELL_NUM, int r_idx, int TYPE);
+extern int monspell_bluemage_damage(int SPELL_NUM, int plev, int TYPE);
 
 /* hissatsu.c */
 extern void hissatsu_info(char *p, int power);
