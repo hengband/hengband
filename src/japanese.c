@@ -357,5 +357,92 @@ bool iskanji2(cptr s, int x)
 	return FALSE;
 }
 
-#endif /* JP */
+/*!
+ * @brief 文字列の文字コードがASCIIかどうかを判定する
+ * @param str 判定する文字列へのポインタ
+ * @return 文字列の文字コードがASCIIならTRUE、そうでなければFALSE
+ */
+static bool is_ascii_str(cptr str)
+{
+	for (;*str; str++) {
+		if (!(0x00 < *str && *str <= 0x7f))
+			return FALSE;
+	}
+	return TRUE;
+}
 
+/*!
+ * @brief 文字列の文字コードがUTF-8かどうかを判定する
+ * @param str 判定する文字列へのポインタ
+ * @return 文字列の文字コードがASCIIならTRUE、そうでなければFALSE
+ */
+static bool is_utf8_str(cptr str)
+{
+	const unsigned char* p;
+	for (p = (const unsigned char*)str; *p; p++) {
+		int subseq_num = 0;
+		if (0x00 < *p && *p <= 0x7f) continue;
+		
+		if ((*p & 0xe0) == 0xc0) subseq_num = 1;
+		if ((*p & 0xf0) == 0xe0) subseq_num = 2;
+		if ((*p & 0xf8) == 0xf0) subseq_num = 3;
+
+		if (subseq_num == 0) return FALSE;
+		while (subseq_num--) {
+			p++;
+			if (!*p || (*p & 0xc0) != 0x80) return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+/*!
+ * @brief 文字コードがUTF-8の文字列をシステムの文字コードに変換する
+ * @param utf8_str 変換するUTF-8の文字列へのポインタ
+ * @param sys_str_buffer 変換したシステムの文字コードの文字列を格納するバッファへのポインタ
+ * @param sys_str_buflen 変換したシステムの文字コードの文字列を格納するバッファの長さ
+ * @return なし
+ */
+#ifdef SJIS
+#ifdef WINDOWS
+#include <Windows.h>
+static void utf8_to_sys(cptr utf8_str, char* sys_str_buffer, size_t sys_str_buflen)
+{
+	LPWSTR utf16buf;
+	int input_str_len = strlen(utf8_str);
+	int len;
+
+	C_MAKE(utf16buf, input_str_len, WCHAR);
+
+	MultiByteToWideChar( CP_UTF8, 0, (LPCSTR)utf8_str, input_str_len, (LPWSTR)utf16buf, input_str_len);
+ 
+	len = WideCharToMultiByte( CP_ACP, 0, (LPCWSTR)utf16buf, -1, (LPSTR)sys_str_buffer, sys_str_buflen, NULL, NULL );
+
+	sys_str_buffer[len] = '\0';
+
+	C_KILL(utf16buf, input_str_len, WCHAR);
+}
+#endif
+#endif
+
+/*!
+ * @brief 受け取った文字列の文字コードを推定し、システムの文字コードへ変換する
+ * @param strbuf 変換する文字列を格納したバッファへのポインタ。
+ *               バッファは変換した文字列で上書きされる。
+ * @param buflen バッファの長さ。
+ * @return なし
+ */
+void guess_convert_to_system_encoding(char* strbuf, int buflen)
+{
+	if (is_ascii_str(strbuf)) return;
+
+	if (is_utf8_str(strbuf)) {
+		char* work;
+		C_MAKE(work, buflen, char);
+		strncpy(work, strbuf, buflen);
+		utf8_to_sys(work, strbuf, buflen);
+		C_KILL(work, buflen, char);
+	}
+}
+
+#endif /* JP */

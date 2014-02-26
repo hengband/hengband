@@ -1763,6 +1763,7 @@ extern void sjis2euc(char *str);
 extern void euc2sjis(char *str);
 extern byte codeconv(char *str);
 extern bool iskanji2(cptr s, int x);
+extern void guess_convert_to_system_encoding(char* strbuf, int buflen);
 #endif
 
 #ifdef WORLD_SCORE
