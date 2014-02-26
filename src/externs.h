@@ -964,6 +964,7 @@ extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern bool monster_living(monster_race *r_ptr);
 extern bool no_questor_or_bounty_uniques(int r_idx);
+extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
 
 
 /* monster2.c */
@@ -1594,7 +1595,6 @@ extern void learn_spell(int monspell);
 extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
 
 /* mspells4.c */
-extern int monspell_num(int SPELL_NUM_BASE, u32b SPELL_FLAG);
 extern bool spell_learnable(int m_idx);
 extern int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx);
 extern int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx);

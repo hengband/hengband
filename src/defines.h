@@ -5716,3 +5716,8 @@ extern int PlayerUID;
 #define DAM_ROLL 1
 #define DAM_MAX 2
 #define DAM_MIN 3
+#define DICE_NUM 4
+#define DICE_SIDE 5
+#define DICE_MULT 6
+#define DICE_DIV 7
+#define BASE_DAM 8

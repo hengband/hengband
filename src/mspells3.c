@@ -14,6 +14,27 @@
 
 #define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130) /*!< モンスター魔法をプレイヤーが使用する場合の換算レベル */
 
+
+/*!
+* @brief 文字列に青魔導師の呪文の攻撃力を加える
+* @param r_idx モンスターの種族ID
+* @param SPELL_NUM 呪文番号
+* @param msg 表示する文字列
+* @param tmp 返すメッセージを格納する配列
+* @return なし
+*/
+void set_bluemage_damage(int SPELL_NUM, int plev, cptr msg, char* tmp)
+{
+    int base_damage = monspell_bluemage_damage(SPELL_NUM, plev, BASE_DAM);
+    int dice_num = monspell_bluemage_damage(SPELL_NUM, plev, DICE_NUM);
+    int dice_side = monspell_bluemage_damage(SPELL_NUM, plev, DICE_SIDE);
+    int dice_mult = monspell_bluemage_damage(SPELL_NUM, plev, DICE_MULT);
+    int dice_div = monspell_bluemage_damage(SPELL_NUM, plev, DICE_DIV);
+    char dmg_str[80];
+    dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
+    sprintf(tmp, msg, dmg_str);
+}
+
 /*!
  * @brief 受け取ったモンスター魔法のIDに応じて青魔法の効果情報をまとめたフォーマットを返す
  * @param p 情報を返す文字列参照ポインタ
@@ -26,15 +47,15 @@ static void learned_info(char *p, int power)
 	int hp = p_ptr->chp;
 
 #ifdef JP
-	cptr s_dam = "損傷:";
+	cptr s_dam = " 損傷:%s";
 	cptr s_dur = "期間:";
 	cptr s_range = "範囲:";
-	cptr s_heal = "回復:";
+	cptr s_heal = " 回復:%s";
 #else
-	cptr s_dam = "dam ";
+	cptr s_dam = " dam %s";
 	cptr s_dur = "dur ";
 	cptr s_range = "range ";
-	cptr s_heal = "heal ";
+	cptr s_heal = " heal %s";
 #endif
 
 	strcpy(p, "");
@@ -77,149 +98,70 @@ static void learned_info(char *p, int power)
 		case MS_S_AMBERITE:
 		case MS_S_UNIQUE:
 			break;
-		case MS_BALL_MANA:
-		case MS_BALL_DARK:
-		case MS_STARBURST:
-			sprintf(p, " %s%d+10d10", s_dam, plev * 8 + 50);
-			break;
+        case MS_BALL_MANA:
+        case MS_BALL_DARK:
+        case MS_STARBURST: 
+            set_bluemage_damage((power), plev, s_dam, p); break;
 		case MS_DISPEL:
 			break;
-		case MS_ROCKET:
-			sprintf(p, " %s%d", s_dam, hp/4);
-			break;
-		case MS_SHOOT:
-		{
-			object_type *o_ptr = NULL;
-			if (buki_motteruka(INVEN_RARM)) o_ptr = &inventory[INVEN_RARM];
-			else if (buki_motteruka(INVEN_LARM)) o_ptr = &inventory[INVEN_LARM];
-			else
-				sprintf(p, " %s1", s_dam);
-			if (o_ptr)
-				sprintf(p, " %s%dd%d+%d", s_dam, o_ptr->dd, o_ptr->ds, o_ptr->to_d);
-			break;
-		}
-		case MS_BR_ACID:
-		case MS_BR_ELEC:
-		case MS_BR_FIRE:
-		case MS_BR_COLD:
-		case MS_BR_POIS:
-		case MS_BR_NUKE:
-			sprintf(p, " %s%d", s_dam, hp/3);
-			break;
-		case MS_BR_NEXUS:
-			sprintf(p, " %s%d", s_dam, MIN(hp/3, 250));
-			break;
-		case MS_BR_TIME:
-			sprintf(p, " %s%d", s_dam, MIN(hp/3, 150));
-			break;
-		case MS_BR_GRAVITY:
-			sprintf(p, " %s%d", s_dam, MIN(hp/3, 200));
-			break;
-		case MS_BR_MANA:
-			sprintf(p, " %s%d", s_dam, MIN(hp/3, 250));
-			break;
-		case MS_BR_NETHER:
-		case MS_BR_LITE:
-		case MS_BR_DARK:
-		case MS_BR_CONF:
-		case MS_BR_SOUND:
-		case MS_BR_CHAOS:
-		case MS_BR_DISEN:
-		case MS_BR_SHARDS:
-		case MS_BR_PLASMA:
-			sprintf(p, " %s%d", s_dam, hp/6);
-			break;
-		case MS_BR_INERTIA:
-		case MS_BR_FORCE:
-			sprintf(p, " %s%d", s_dam, MIN(hp/6, 200));
-			break;
-		case MS_BR_DISI:
-			sprintf(p, " %s%d", s_dam, MIN(hp/6, 150));
-			break;
-		case MS_BALL_NUKE:
-			sprintf(p, " %s%d+10d6", s_dam, plev * 2);
-			break;
-		case MS_BALL_CHAOS:
-			sprintf(p, " %s%d+10d10", s_dam, plev * 4);
-			break;
-		case MS_BALL_ACID:
-			sprintf(p, " %s15+d%d", s_dam, plev * 6);
-			break;
-		case MS_BALL_ELEC:
-			sprintf(p, " %s8+d%d", s_dam, plev * 3);
-			break;
-		case MS_BALL_FIRE:
-			sprintf(p, " %s10+d%d", s_dam, plev * 7);
-			break;
-		case MS_BALL_COLD:
-			sprintf(p, " %s10+d%d", s_dam, plev * 3);
-			break;
-		case MS_BALL_POIS:
-			sprintf(p, " %s12d2", s_dam);
-			break;
-		case MS_BALL_NETHER:
-			sprintf(p, " %s%d+10d10", s_dam, plev * 2 + 50);
-			break;
-		case MS_BALL_WATER:
-			sprintf(p, " %s50+d%d", s_dam, plev * 4);
-			break;
-		case MS_DRAIN_MANA:
-			sprintf(p, " %sd%d+%d", s_heal, plev, plev);
-			break;
-		case MS_MIND_BLAST:
-			sprintf(p, " %s8d8", s_dam);
-			break;
-		case MS_BRAIN_SMASH:
-			sprintf(p, " %s12d15", s_dam);
-			break;
-		case MS_CAUSE_1:
-			sprintf(p, " %s3d8", s_dam);
-			break;
-		case MS_CAUSE_2:
-			sprintf(p, " %s8d8", s_dam);
-			break;
-		case MS_CAUSE_3:
-			sprintf(p, " %s10d15", s_dam);
-			break;
-		case MS_CAUSE_4:
-			sprintf(p, " %s15d15", s_dam);
-			break;
-		case MS_BOLT_ACID:
-			sprintf(p, " %s%d+7d8", s_dam, plev * 2 / 3);
-			break;
-		case MS_BOLT_ELEC:
-			sprintf(p, " %s%d+4d8", s_dam, plev * 2 / 3);
-			break;
-		case MS_BOLT_FIRE:
-			sprintf(p, " %s%d+9d8", s_dam, plev * 2 / 3);
-			break;
-		case MS_BOLT_COLD:
-			sprintf(p, " %s%d+6d8", s_dam, plev * 2 / 3);
-			break;
-		case MS_BOLT_NETHER:
-			sprintf(p, " %s%d+5d5", s_dam, 30 + plev * 8 / 3);
-			break;
-		case MS_BOLT_WATER:
-			sprintf(p, " %s%d+10d10", s_dam, plev * 2);
-			break;
-		case MS_BOLT_MANA:
-			sprintf(p, " %s50+d%d", s_dam, plev * 7);
-			break;
-		case MS_BOLT_PLASMA:
-			sprintf(p, " %s%d+8d7", s_dam, plev * 2 + 10);
-			break;
-		case MS_BOLT_ICE:
-			sprintf(p, " %s%d+6d6", s_dam, plev * 2);
-			break;
-		case MS_MAGIC_MISSILE:
-			sprintf(p, " %s%d+2d6", s_dam, plev * 2 / 3);
-			break;
+        case MS_ROCKET:
+        case MS_SHOOT:
+        case MS_BR_ACID:
+        case MS_BR_ELEC:
+        case MS_BR_FIRE:
+        case MS_BR_COLD:
+        case MS_BR_POIS:
+        case MS_BR_NUKE: 
+        case MS_BR_NEXUS:
+        case MS_BR_TIME:
+        case MS_BR_GRAVITY:
+        case MS_BR_MANA:
+        case MS_BR_NETHER:
+        case MS_BR_LITE:
+        case MS_BR_DARK:
+        case MS_BR_CONF:
+        case MS_BR_SOUND:
+        case MS_BR_CHAOS:
+        case MS_BR_DISEN:
+        case MS_BR_SHARDS:
+        case MS_BR_PLASMA:
+        case MS_BR_INERTIA:
+        case MS_BR_FORCE:
+        case MS_BR_DISI:
+        case MS_BALL_NUKE:
+        case MS_BALL_CHAOS:
+        case MS_BALL_ACID:
+        case MS_BALL_ELEC:
+        case MS_BALL_FIRE:
+        case MS_BALL_COLD:
+        case MS_BALL_POIS:
+        case MS_BALL_NETHER:
+        case MS_BALL_WATER:
+            set_bluemage_damage((power), plev, s_dam, p); break;
+        case MS_DRAIN_MANA:
+            set_bluemage_damage((power), plev, s_heal, p); break;
+        case MS_MIND_BLAST:
+        case MS_BRAIN_SMASH:
+        case MS_CAUSE_1:
+        case MS_CAUSE_2:
+        case MS_CAUSE_3:
+        case MS_CAUSE_4:
+        case MS_BOLT_ACID:
+        case MS_BOLT_ELEC:
+        case MS_BOLT_FIRE:
+        case MS_BOLT_COLD:
+        case MS_BOLT_NETHER:
+        case MS_BOLT_WATER:
+        case MS_BOLT_MANA:
+        case MS_BOLT_PLASMA:
+        case MS_BOLT_ICE: 
+        case MS_MAGIC_MISSILE: 
+            set_bluemage_damage((power), plev, s_dam, p); break;
 		case MS_SPEED:
 			sprintf(p, " %sd%d+%d", s_dur, 20+plev, plev);
 			break;
-		case MS_HEAL:
-			sprintf(p, " %s%d", s_heal, plev*4);
-			break;
+        case MS_HEAL:
+            set_bluemage_damage((power), plev, s_heal, p); break;
 		case MS_INVULNER:
 			sprintf(p, " %sd7+7", s_dur);
 			break;
@@ -229,8 +171,8 @@ static void learned_info(char *p, int power)
 		case MS_TELEPORT:
 			sprintf(p, " %s%d", s_range, plev * 5);
 			break;
-		case MS_PSY_SPEAR:
-			sprintf(p, " %s100+d%d", s_dam, plev * 3);
+        case MS_PSY_SPEAR:
+            set_bluemage_damage((power), plev, s_dam, p); break;
 			break;
 		case MS_RAISE_DEAD:
 			sprintf(p, " %s5", s_range);
@@ -745,7 +687,7 @@ static bool cast_learned_spell(int spell, bool success)
 		if (!get_aim_dir(&dir)) return FALSE;
 		
         msg_print(_("ロケットを発射した。", "You fire a rocket."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_ROCKET), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_ROCKET), plev, DAM_ROLL);
 		fire_rocket(GF_ROCKET, dir, damage, 2);
 		break;
 	case MS_SHOOT:
@@ -755,7 +697,7 @@ static bool cast_learned_spell(int spell, bool success)
 		if (!get_aim_dir(&dir)) return FALSE;
 		
         msg_print(_("矢を放った。", "You fire an arrow."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_SHOOT), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_SHOOT), plev, DAM_ROLL);
 		fire_bolt(GF_ARROW, dir, damage);
 		break;
 	}
@@ -769,350 +711,350 @@ static bool cast_learned_spell(int spell, bool success)
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_ACID), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_ACID), plev, DAM_ROLL);
 		fire_ball(GF_ACID, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_ELEC), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_ELEC), plev, DAM_ROLL);
 		fire_ball(GF_ELEC, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_FIRE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_FIRE), plev, DAM_ROLL);
 		fire_ball(GF_FIRE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_COLD:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_COLD), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_COLD), plev, DAM_ROLL);
 		fire_ball(GF_COLD, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_POIS:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_POIS), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_POIS), plev, DAM_ROLL);
 		fire_ball(GF_POIS, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_NETHER:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_NETH), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_NETHER), plev, DAM_ROLL);
 		fire_ball(GF_NETHER, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_LITE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_LITE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_LITE), plev, DAM_ROLL);
 		fire_ball(GF_LITE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_DARK), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_DARK), plev, DAM_ROLL);
 		fire_ball(GF_DARK, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_CONF), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_CONF), plev, DAM_ROLL);
 		fire_ball(GF_CONFUSION, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_SOUND:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_SOUN), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_SOUND), plev, DAM_ROLL);
 		fire_ball(GF_SOUND, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_CHAO), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_CHAOS), plev, DAM_ROLL);
 		fire_ball(GF_CHAOS, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_DISEN:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_DISE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_DISEN), plev, DAM_ROLL);
 		fire_ball(GF_DISENCHANT, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_NEXUS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_NEXU), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_NEXUS), plev, DAM_ROLL);
 		fire_ball(GF_NEXUS, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_TIME:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_TIME), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_TIME), plev, DAM_ROLL);
 		fire_ball(GF_TIME, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_INERTIA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_INER), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_INERTIA), plev, DAM_ROLL);
 		fire_ball(GF_INERTIA, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_GRAVITY:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_GRAV), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_GRAVITY), plev, DAM_ROLL);
 		fire_ball(GF_GRAVITY, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_SHARDS:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_SHAR), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_SHARDS), plev, DAM_ROLL);
 		fire_ball(GF_SHARDS, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_PLASMA:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_PLAS), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_PLASMA), plev, DAM_ROLL);
 		fire_ball(GF_PLASMA, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_FORCE:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_WALL), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_FORCE), plev, DAM_ROLL);
 		fire_ball(GF_FORCE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_MANA), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_MANA), plev, DAM_ROLL);
 		fire_ball(GF_MANA, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BALL_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BA_NUKE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_NUKE), plev, DAM_ROLL);
 		fire_ball(GF_NUKE, dir, damage, 2);
 		break;
 	case MS_BR_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_NUKE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_NUKE), plev, DAM_ROLL);
 		fire_ball(GF_NUKE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BALL_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("純ログルスを放った。", "You invoke a raw Logrus."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BA_CHAO), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_CHAOS), plev, DAM_ROLL);
 		fire_ball(GF_CHAOS, dir, damage, 4);
 		break;
 	case MS_BR_DISI:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
-        damage = monspell_bluemage_damage(monspell_num(RF4_SPELL_START, RF4_BR_DISI), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BR_DISI), plev, DAM_ROLL);
 		fire_ball(GF_DISINTEGRATE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BALL_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_ACID), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_ACID), plev, DAM_ROLL);
 		fire_ball(GF_ACID, dir, damage, 2);
 		break;
 	case MS_BALL_ELEC:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_ELEC), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_ELEC), plev, DAM_ROLL);
 		fire_ball(GF_ELEC, dir, damage, 2);
 		break;
 	case MS_BALL_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_FIRE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_FIRE), plev, DAM_ROLL);
 		fire_ball(GF_FIRE, dir, damage, 2);
 		break;
 	case MS_BALL_COLD:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_COLD), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_COLD), plev, DAM_ROLL);
 		fire_ball(GF_COLD, dir, damage, 2);
 		break;
 	case MS_BALL_POIS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_POIS), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_POIS), plev, DAM_ROLL);
 		fire_ball(GF_POIS, dir, damage, 2);
 		break;
 	case MS_BALL_NETHER:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_NETH), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_NETHER), plev, DAM_ROLL);
 		fire_ball(GF_NETHER, dir, damage, 2);
 		break;
 	case MS_BALL_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_WATE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_WATER), plev, DAM_ROLL);
 		fire_ball(GF_WATER, dir, damage, 4);
 		break;
 	case MS_BALL_MANA:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_MANA), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_MANA), plev, DAM_ROLL);
 		fire_ball(GF_MANA, dir, damage, 4);
 		break;
 	case MS_BALL_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_DARK), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BALL_DARK), plev, DAM_ROLL);
 		fire_ball(GF_DARK, dir, damage, 4);
 		break;
 	case MS_DRAIN_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_DRAIN_MANA), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_DRAIN_MANA), plev, DAM_ROLL);
         fire_ball_hide(GF_DRAIN_MANA, dir, damage, 0);
 		break;
 	case MS_MIND_BLAST:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_MIND_BLAST), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_MIND_BLAST), plev, DAM_ROLL);
 		fire_ball_hide(GF_MIND_BLAST, dir, damage, 0);
 		break;
 	case MS_BRAIN_SMASH:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BRAIN_SMASH), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BRAIN_SMASH), plev, DAM_ROLL);
 		fire_ball_hide(GF_BRAIN_SMASH, dir, damage, 0);
 		break;
 	case MS_CAUSE_1:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_CAUSE_1), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_CAUSE_1), plev, DAM_ROLL);
 		fire_ball_hide(GF_CAUSE_1, dir, damage, 0);
 		break;
 	case MS_CAUSE_2:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_CAUSE_2), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_CAUSE_2), plev, DAM_ROLL);
 		fire_ball_hide(GF_CAUSE_2, dir, damage, 0);
 		break;
 	case MS_CAUSE_3:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_CAUSE_3), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_CAUSE_3), plev, DAM_ROLL);
 		fire_ball_hide(GF_CAUSE_3, dir, damage, 0);
 		break;
 	case MS_CAUSE_4:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_CAUSE_4), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_CAUSE_4), plev, DAM_ROLL);
 		fire_ball_hide(GF_CAUSE_4, dir, damage, 0);
 		break;
 	case MS_BOLT_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BO_ACID), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BOLT_ACID), plev, DAM_ROLL);
         fire_bolt(GF_ACID, dir, damage);
 		break;
 	case MS_BOLT_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BO_ELEC), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BOLT_ELEC), plev, DAM_ROLL);
 		fire_bolt(GF_ELEC, dir, damage);
 		break;
 	case MS_BOLT_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BO_FIRE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BOLT_FIRE), plev, DAM_ROLL);
 		fire_bolt(GF_FIRE, dir, damage);
 		break;
 	case MS_BOLT_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BO_COLD), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BOLT_COLD), plev, DAM_ROLL);
 		fire_bolt(GF_COLD, dir, damage);
 		break;
 	case MS_STARBURST:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BA_LITE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_STARBURST), plev, DAM_ROLL);
 		fire_ball(GF_LITE, dir, damage, 4);
 		break;
 	case MS_BOLT_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("地獄の矢の呪文を唱えた。", "You cast a nether bolt."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BO_NETH), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BOLT_NETHER), plev, DAM_ROLL);
 		fire_bolt(GF_NETHER, dir, damage);
 		break;
 	case MS_BOLT_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BO_WATE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BOLT_WATER), plev, DAM_ROLL);
 		fire_bolt(GF_WATER, dir, damage);
 		break;
 	case MS_BOLT_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("魔力の矢の呪文を唱えた。", "You cast a mana bolt."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BO_MANA), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BOLT_MANA), plev, DAM_ROLL);
 		fire_bolt(GF_MANA, dir, damage);
 		break;
 	case MS_BOLT_PLASMA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BO_PLAS), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BOLT_PLASMA), plev, DAM_ROLL);
 		fire_bolt(GF_PLASMA, dir, damage);
 		break;
 	case MS_BOLT_ICE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_BO_ICEE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_BOLT_ICE), plev, DAM_ROLL);
 		fire_bolt(GF_ICE, dir, damage);
 		break;
 	case MS_MAGIC_MISSILE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
-        damage = monspell_bluemage_damage(monspell_num(RF5_SPELL_START, RF5_MISSILE), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_MAGIC_MISSILE), plev, DAM_ROLL);
 		fire_bolt(GF_MISSILE, dir, damage);
 		break;
 	case MS_SCARE:
@@ -1253,7 +1195,7 @@ static bool cast_learned_spell(int spell, bool success)
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
-        damage = monspell_bluemage_damage(monspell_num(RF6_SPELL_START, RF6_PSY_SPEAR), plev, DAM_ROLL);
+        damage = monspell_bluemage_damage((MS_PSY_SPEAR), plev, DAM_ROLL);
 		(void)fire_beam(GF_PSY_SPEAR, dir, damage);
 		break;
 	case MS_DARKNESS:

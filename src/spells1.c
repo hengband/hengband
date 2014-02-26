@@ -4951,7 +4951,7 @@ note_dies = "はドロドロに溶けた！";
 					if (caster_ptr->hp < caster_ptr->maxhp)
 					{
 						/* Heal */
-						caster_ptr->hp += 6 * dam;
+						caster_ptr->hp += dam;
 						if (caster_ptr->hp > caster_ptr->maxhp) caster_ptr->hp = caster_ptr->maxhp;
 
 						/* Redraw (later) if needed */
@@ -7463,7 +7463,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 					if (m_ptr->hp < m_ptr->maxhp)
 					{
 						/* Heal */
-						m_ptr->hp += (6 * dam);
+						m_ptr->hp += dam;
 						if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
 
 						/* Redraw (later) if needed */

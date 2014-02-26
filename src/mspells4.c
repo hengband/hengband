@@ -1,23 +1,6 @@
 #include "angband.h"
 
 /*!
-* @brief モンスターの呪文の通し番号を取得する /
-* @param SPELL_NUM_BASE RF4ならRF4_SPELL_STARTのように32区切りのベースとなる数値
-* @param SPELL_FLAG RF4_SHRIEKなどのスペルフラグ
-* @return 呪文の通し番号。
-*/
-int monspell_num(int SPELL_NUM_BASE, u32b SPELL_FLAG)
-{
-    int k;
-    for (k = 0; k < 32; k++)
-    {
-        if (SPELL_FLAG & (1L << k)) return k + SPELL_NUM_BASE;
-    }
-    return 0;
-}
-
-
-/*!
 * @brief モンスターIDを取り、モンスター名をm_nameに代入する /
 * @param m_idx モンスターID
 * @param m_name モンスター名を入力する配列
@@ -89,7 +72,8 @@ bool monster_is_powerful(int m_idx)
 {
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    return (r_ptr->flags2 & RF2_POWERFUL);
+    bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : FALSE;
+    return powerful;
 }
 
 /*!
@@ -268,7 +252,7 @@ int spell_RF4_ROCKET(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_ROCKET), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_ROCKET), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_SHARD);
@@ -294,7 +278,7 @@ int spell_RF4_SHOOT(int y, int x, int m_idx, int t_idx,int TARGET_TYPE)
         _("%^sが%sに矢を放った。", "%^s fires an arrow at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_SHOOT), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_SHOOT), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_ARROW, dam, MS_SHOOT, TARGET_TYPE);
     sound(SOUND_SHOOT);
 
@@ -328,133 +312,133 @@ int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx, int t_idx, int TARGET
     switch (GF_TYPE)
     {
     case GF_ACID:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_ACID), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_ACID), m_idx, DAM_ROLL);
         type_s = _("酸", "acid");
         ms_type = MS_BR_ACID;
         drs_type = DRS_ACID;
         break;
     case GF_ELEC:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_ELEC), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_ELEC), m_idx, DAM_ROLL);
         type_s = _("稲妻", "lightning");
         ms_type = MS_BR_ELEC;
         drs_type = DRS_ELEC;
         break;
     case GF_FIRE:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_FIRE), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_FIRE), m_idx, DAM_ROLL);
         type_s = _("火炎", "fire");
         ms_type = MS_BR_FIRE;
         drs_type = DRS_FIRE;
         break;
     case GF_COLD:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_COLD), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_COLD), m_idx, DAM_ROLL);
         type_s = _("冷気", "frost");
         ms_type = MS_BR_COLD;
         drs_type = DRS_COLD;
         break;
     case GF_POIS:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_POIS), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_POIS), m_idx, DAM_ROLL);
         type_s = _("ガス", "gas");
         ms_type = MS_BR_POIS;
         drs_type = DRS_POIS;
         break;
     case GF_NETHER:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_NETH), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_NETHER), m_idx, DAM_ROLL);
         type_s = _("地獄", "nether");
         ms_type = MS_BR_NETHER;
         drs_type = DRS_NETH;
         break;
     case GF_LITE:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_LITE), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_LITE), m_idx, DAM_ROLL);
         type_s = _("閃光", "light");
         ms_type = MS_BR_LITE;
         drs_type = DRS_LITE;
         break;
     case GF_DARK:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_DARK), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_DARK), m_idx, DAM_ROLL);
         type_s = _("暗黒", "darkness");
         ms_type = MS_BR_DARK;
         drs_type = DRS_DARK;
         break;
     case GF_CONFUSION:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_CONF), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_CONF), m_idx, DAM_ROLL);
         type_s = _("混乱", "confusion");
         ms_type = MS_BR_CONF;
         drs_type = DRS_CONF;
         break;
     case GF_SOUND:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_SOUN), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_SOUND), m_idx, DAM_ROLL);
         type_s = _("轟音", "sound");
         ms_type = MS_BR_SOUND;
         drs_type = DRS_SOUND;
         break;
     case GF_CHAOS:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_CHAO), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_CHAOS), m_idx, DAM_ROLL);
         type_s = _("カオス", "chaos");
         ms_type = MS_BR_CHAOS;
         drs_type = DRS_CHAOS;
         break;
     case GF_DISENCHANT:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_DISE), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_DISEN), m_idx, DAM_ROLL);
         type_s = _("劣化", "disenchantment");
         ms_type = MS_BR_DISEN;
         drs_type = DRS_DISEN;
         break;
     case GF_NEXUS:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_NEXU), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_NEXUS), m_idx, DAM_ROLL);
         type_s = _("因果混乱", "nexus");
         ms_type = MS_BR_NEXUS;
         drs_type = DRS_NEXUS;
         break;
     case GF_TIME:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_TIME), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_TIME), m_idx, DAM_ROLL);
         type_s = _("時間逆転", "time");
         ms_type = MS_BR_TIME;
         smart_learn = FALSE;
         break;
     case GF_INERTIA:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_INER), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_INERTIA), m_idx, DAM_ROLL);
         type_s = _("遅鈍", "inertia");
         ms_type = MS_BR_INERTIA;
         smart_learn = FALSE;
         break;
     case GF_GRAVITY:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_GRAV), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_GRAVITY), m_idx, DAM_ROLL);
         type_s = _("重力", "gravity");
         ms_type = MS_BR_GRAVITY;
         smart_learn = FALSE;
         break;
     case GF_SHARDS:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_SHAR), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_SHARDS), m_idx, DAM_ROLL);
         type_s = _("破片", "shards");
         ms_type = MS_BR_SHARDS;
         drs_type = DRS_SHARD;
         break;
     case GF_PLASMA:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_PLAS), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_PLASMA), m_idx, DAM_ROLL);
         type_s = _("プラズマ", "plasma");
         ms_type = MS_BR_PLASMA;
         smart_learn = FALSE;
         break;
     case GF_FORCE:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_WALL), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_FORCE), m_idx, DAM_ROLL);
         type_s = _("フォース", "force");
         ms_type = MS_BR_FORCE;
         smart_learn = FALSE;
         break;
     case GF_MANA:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_MANA), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_MANA), m_idx, DAM_ROLL);
         type_s = _("魔力", "mana");
         ms_type = MS_BR_MANA;
         smart_learn = FALSE;
         break;
     case GF_NUKE:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_NUKE), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_NUKE), m_idx, DAM_ROLL);
         type_s = _("放射性廃棄物", "toxic waste");
         ms_type = MS_BR_NUKE;
         drs_type = DRS_POIS;
         break;
     case GF_DISINTEGRATE:
-        dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BR_DISI), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_BR_DISI), m_idx, DAM_ROLL);
         type_s = _("分解", "disintegration");
         ms_type = MS_BR_DISI;
         smart_learn = FALSE;
@@ -522,7 +506,7 @@ int spell_RF4_BA_NUKE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに放射能球を放った。", "%^s casts a ball of radiation at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BA_NUKE), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_NUKE), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_POIS);
@@ -549,7 +533,7 @@ int spell_RF4_BA_CHAO(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに純ログルスを放った。", "%^s invokes raw Logrus upon %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF4_SPELL_START, RF4_BA_CHAO), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_CHAOS), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_CHAOS);
@@ -578,7 +562,7 @@ int spell_RF5_BA_ACID(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         TARGET_TYPE);
 
     rad = monster_is_powerful(m_idx) ? 4 : 2;
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_ACID), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_ACID), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_ACID);
@@ -607,7 +591,7 @@ int spell_RF5_BA_ELEC(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         TARGET_TYPE);
 
     rad = monster_is_powerful(m_idx) ? 4 : 2;
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_ELEC), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_ELEC), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_ELEC);
@@ -647,7 +631,7 @@ int spell_RF5_BA_FIRE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
             TARGET_TYPE);
     }
     rad = monster_is_powerful(m_idx) ? 4 : 2;
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_FIRE), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_FIRE), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_FIRE);
@@ -676,7 +660,7 @@ int spell_RF5_BA_COLD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         TARGET_TYPE);
 
     rad = monster_is_powerful(m_idx) ? 4 : 2;
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_COLD), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_COLD), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_COLD);
@@ -703,7 +687,7 @@ int spell_RF5_BA_POIS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かって悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_POIS), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_POIS), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_POIS);
@@ -730,7 +714,7 @@ int spell_RF5_BA_NETH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かって地獄球の呪文を唱えた。", "%^s casts a nether ball at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_NETH), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_NETHER), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_NETH);
@@ -773,7 +757,7 @@ int spell_RF5_BA_WATE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         msg_format(_("%^sは渦巻に飲み込まれた。", "%^s is engulfed in a whirlpool."), t_name);
     }
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_WATE), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_WATER), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, TARGET_TYPE);
     return dam;
 }
@@ -797,7 +781,7 @@ int spell_RF5_BA_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに対して魔力の嵐の呪文を念じた。", "%^s invokes a mana storm upon %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_MANA), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_MANA), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, TARGET_TYPE);
     return dam;
 }
@@ -821,7 +805,7 @@ int spell_RF5_BA_DARK(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに対して暗黒の嵐の呪文を念じた。", "%^s invokes a darkness storm upon %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_DARK), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BALL_DARK), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_DARK);
@@ -856,7 +840,7 @@ int spell_RF5_DRAIN_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
     }
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_DRAIN_MANA), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_DRAIN_MANA), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_MANA);
@@ -896,7 +880,7 @@ int spell_RF5_MIND_BLAST(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_MIND_BLAST), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_MIND_BLAST), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, TARGET_TYPE);
     return dam;
 }
@@ -933,7 +917,7 @@ int spell_RF5_BRAIN_SMASH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BRAIN_SMASH), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BRAIN_SMASH), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, TARGET_TYPE);
     return dam;
 }
@@ -994,7 +978,7 @@ int spell_RF5_CAUSE_1(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     cptr msg1, msg2, msg3;
     int dam;
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_CAUSE_1), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_CAUSE_1), m_idx, DAM_ROLL);
 
     msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
     msg2 = _("%^sがあなたを指さして呪った。", "%^s points at you and curses.");
@@ -1017,7 +1001,7 @@ int spell_RF5_CAUSE_2(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     cptr msg1, msg2, msg3;
     int dam;
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_CAUSE_2), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_CAUSE_2), m_idx, DAM_ROLL);
 
     msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
     msg2 = _("%^sがあなたを指さして恐ろしげに呪った。", "%^s points at you and curses horribly.");
@@ -1040,7 +1024,7 @@ int spell_RF5_CAUSE_3(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     cptr msg1, msg2, msg3;
     int dam;
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_CAUSE_3), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_CAUSE_3), m_idx, DAM_ROLL);
 
     msg1 = _("%^sが何かを大声で叫んだ。", "%^s mumbles loudly.");
     msg2 = _("%^sがあなたを指さして恐ろしげに呪文を唱えた！", "%^s points at you, incanting terribly!");
@@ -1063,7 +1047,7 @@ int spell_RF5_CAUSE_4(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     cptr msg1, msg2, msg3;
     int dam;
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_CAUSE_4), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_CAUSE_4), m_idx, DAM_ROLL);
 
     msg1 = _("%^sが「お前は既に死んでいる」と叫んだ。", "%^s screams the word 'DIE!'");
     msg2 = _("%^sがあなたの秘孔を突いて「お前は既に死んでいる」と叫んだ。", "%^s points at you, screaming the word DIE!");
@@ -1092,7 +1076,7 @@ int spell_RF5_BO_ACID(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%sが%sに向かってアシッド・ボルトの呪文を唱えた。", "%^s casts an acid bolt at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BO_ACID), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BOLT_ACID), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1121,7 +1105,7 @@ int spell_RF5_BO_ELEC(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かってサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BO_ELEC), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BOLT_ELEC), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1150,7 +1134,7 @@ int spell_RF5_BO_FIRE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かってファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BO_FIRE), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BOLT_FIRE), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1179,7 +1163,7 @@ int spell_RF5_BO_COLD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かってアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BO_COLD), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BOLT_COLD), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1208,7 +1192,7 @@ int spell_RF5_BA_LITE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに対してスターバーストの呪文を念じた。", "%^s invokes a starburst upon %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BA_LITE), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_STARBURST), m_idx, DAM_ROLL);
     breath(y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(m_idx, DRS_LITE);
@@ -1235,7 +1219,7 @@ int spell_RF5_BO_NETH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かって地獄の矢の呪文を唱えた。", "%^s casts a nether bolt at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BO_NETH), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BOLT_NETHER), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1265,7 +1249,7 @@ int spell_RF5_BO_WATE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かってウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BO_WATE), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BOLT_WATER), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1294,7 +1278,7 @@ int spell_RF5_BO_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かって魔力の矢の呪文を唱えた。", "%^s casts a mana bolt at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BO_MANA), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BOLT_MANA), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1323,7 +1307,7 @@ int spell_RF5_BO_PLAS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かってプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BO_PLAS), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BOLT_PLASMA), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1352,7 +1336,7 @@ int spell_RF5_BO_ICEE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かって極寒の矢の呪文を唱えた。", "%^s casts an ice bolt at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_BO_ICEE), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_BOLT_ICE), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1382,7 +1366,7 @@ int spell_RF5_MISSILE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かってマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF5_SPELL_START, RF5_MISSILE), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_MAGIC_MISSILE), m_idx, DAM_ROLL);
     bolt(m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
@@ -1794,7 +1778,7 @@ int spell_RF6_HAND_DOOM(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
     {
-        dam = monspell_damage(monspell_num(RF6_SPELL_START, RF6_HAND_DOOM), m_idx, DAM_ROLL);
+        dam = monspell_damage((MS_HAND_DOOM), m_idx, DAM_ROLL);
         breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_PLAYER);
     }
     else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -2409,7 +2393,7 @@ int spell_RF6_PSY_SPEAR(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
         _("%^sが%sに向かって光の剣を放った。", "%^s throw a Psycho-spear at %s."),
         TARGET_TYPE);
 
-    dam = monspell_damage(monspell_num(RF6_SPELL_START, RF6_PSY_SPEAR), m_idx, DAM_ROLL);
+    dam = monspell_damage((MS_PSY_SPEAR), m_idx, DAM_ROLL);
     beam(m_idx, y, x, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, MONSTER_TO_PLAYER);
     return dam;
 }
@@ -3677,6 +3661,33 @@ int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx)
 }
 
 /*!
+* @brief モンスターの使う呪文の威力を決定する /
+* @param dam 定数値
+* @param dice_num ダイス数
+* @param dice_side ダイス面
+* @param mult ダイス倍率
+* @param div ダイス倍率
+* @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
+* @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
+*/
+int monspell_damage_roll(int dam, int dice_num, int dice_side, int mult, int div, int TYPE)
+{
+    switch (TYPE)
+    {
+        case DAM_MAX: dam += maxroll(dice_num, dice_side) * mult / div; break;
+        case DAM_MIN: dam += dice_num * 1 * mult / div; break;
+        case DAM_ROLL: dam += damroll(dice_num, dice_side) * mult / div; break;
+        case DICE_NUM: return dice_num;
+        case DICE_SIDE: return dice_side;
+        case DICE_MULT: return mult;
+        case DICE_DIV: return div;
+        case BASE_DAM: return dam;
+    }
+    if (dam < 1) dam = 1;
+    return dam;
+}
+
+/*!
 * @brief モンスターの使う呪文の威力を返す /
 * @param SPELL_NUM 呪文番号
 * @param hp 呪文を唱えるモンスターの体力
@@ -3693,109 +3704,109 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
 
     switch (SPELL_NUM)
     {
-    case RF4_SPELL_START + 0:   return -1;   /* RF4_SHRIEK */
-    case RF4_SPELL_START + 1:   return -1;   /* RF4_XXX1 */
-    case RF4_SPELL_START + 2:   return -1;   /* RF4_DISPEL */
+    case MS_SHRIEK:   return -1;   /* RF4_SHRIEK */
+    case MS_XXX1:   return -1;   /* RF4_XXX1 */
+    case MS_DISPEL:   return -1;   /* RF4_DISPEL */
 
         /* RF4_ROCKET */
-    case RF4_SPELL_START + 3:
+    case MS_ROCKET:
         dam = (hp / 4) > 800 ? 800 : (hp / 4);
         break;
 
         /* RF4_SHOOT */
-    case RF4_SPELL_START + 4:
+    case MS_SHOOT:
         dice_num = shoot_dd;
         dice_side = shoot_ds;
         dam = shoot_base;
         break;
-    case RF4_SPELL_START + 5:   return -1;   /* RF4_XXX2 */
-    case RF4_SPELL_START + 6:   return -1;   /* RF4_XXX3 */
-    case RF4_SPELL_START + 7:   return -1;   /* RF4_XXX4 */
+    case MS_XXX2:   return -1;   /* RF4_XXX2 */
+    case MS_XXX3:   return -1;   /* RF4_XXX3 */
+    case MS_XXX4:   return -1;   /* RF4_XXX4 */
 
         /* RF4_BR_ACID */
         /* RF4_BR_ELEC */
         /* RF4_BR_FIRE */
         /* RF4_BR_COLD */
-    case RF4_SPELL_START + 8:
-    case RF4_SPELL_START + 9:
-    case RF4_SPELL_START + 10:
-    case RF4_SPELL_START + 11:
+    case MS_BR_ACID:
+    case MS_BR_ELEC:
+    case MS_BR_FIRE:
+    case MS_BR_COLD:
         dam = ((hp / 3) > 1600 ? 1600 : (hp / 3));
         break;
 
         /* RF4_BR_POIS */
-    case RF4_SPELL_START + 12:
+    case MS_BR_POIS:
         dam = ((hp / 3) > 800 ? 800 : (hp / 3));
         break;
 
         /* RF4_BR_NETH */
-    case RF4_SPELL_START + 13:
+    case MS_BR_NETHER:
         dam = ((hp / 6) > 550 ? 550 : (hp / 6));
         break;
 
         /* RF4_BR_LITE */
         /* RF4_BR_DARK */
-    case RF4_SPELL_START + 14:
-    case RF4_SPELL_START + 15:
+    case MS_BR_LITE:
+    case MS_BR_DARK:
         dam = ((hp / 6) > 400 ? 400 : (hp / 6));
         break;
 
         /* RF4_BR_CONF */
         /* RF4_BR_SOUN */
-    case RF4_SPELL_START + 16:
-    case RF4_SPELL_START + 17:
+    case MS_BR_CONF:
+    case MS_BR_SOUND:
         dam = ((hp / 6) > 450 ? 450 : (hp / 6));
         break;
 
         /* RF4_BR_CHAO */
-    case RF4_SPELL_START + 18:
+    case MS_BR_CHAOS:
         dam = ((hp / 6) > 600 ? 600 : (hp / 6));
         break;
 
         /* RF4_BR_DISE */
-    case RF4_SPELL_START + 19:
+    case MS_BR_DISEN:
         dam = ((hp / 6) > 500 ? 500 : (hp / 6));
         break;
 
         /* RF4_BR_NEXU */
-    case RF4_SPELL_START + 20:
+    case MS_BR_NEXUS:
         dam = ((hp / 3) > 250 ? 250 : (hp / 3));
         break;
 
         /* RF4_BR_TIME */
-    case RF4_SPELL_START + 21:
+    case MS_BR_TIME:
         dam = ((hp / 3) > 150 ? 150 : (hp / 3));
         break;
 
         /* RF4_BR_INER */
         /* RF4_BR_GRAV */
-    case RF4_SPELL_START + 22:
-    case RF4_SPELL_START + 23:
+    case MS_BR_INERTIA:
+    case MS_BR_GRAVITY:
         dam = ((hp / 6) > 200 ? 200 : (hp / 6));
         break;
 
         /* RF4_BR_SHAR */
-    case RF4_SPELL_START + 24:
+    case MS_BR_SHARDS:
         dam = ((hp / 6) > 500 ? 500 : (hp / 6));
         break;
 
         /* RF4_BR_PLAS */
-    case RF4_SPELL_START + 25:
+    case MS_BR_PLASMA:
         dam = ((hp / 6) > 150 ? 150 : (hp / 6));
         break;
 
         /* RF4_BR_WALL */
-    case RF4_SPELL_START + 26:
+    case MS_BR_FORCE:
         dam = ((hp / 6) > 200 ? 200 : (hp / 6));
         break;
 
         /* RF4_BR_MANA */
-    case RF4_SPELL_START + 27:
+    case MS_BR_MANA:
         dam = ((hp / 3) > 250 ? 250 : (hp / 3));
         break;
 
         /* RF4_BA_NUKE */
-    case RF4_SPELL_START + 28:
+    case MS_BALL_NUKE:
         mult = powerful ? 2 : 1;
         dam = rlev * (mult / div);
         dice_num = 10;
@@ -3803,24 +3814,24 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         break;
 
         /* RF4_BR_NUKE */
-    case RF4_SPELL_START + 29:
+    case MS_BR_NUKE:
         dam = ((hp / 3) > 800 ? 800 : (hp / 3));
         break;
 
         /* RF4_BA_CHAO */
-    case RF4_SPELL_START + 30:
+    case MS_BALL_CHAOS:
         dam = (powerful ? (rlev * 3) : (rlev * 2));
         dice_num = 10;
         dice_side = 10;
         break;
 
         /* RF4_BR_DISI */
-    case RF4_SPELL_START + 31:
+    case MS_BR_DISI:
         dam = ((hp / 6) > 150 ? 150 : (hp / 6));
         break;
 
         /* RF5_BA_ACID */
-    case RF5_SPELL_START + 0:
+    case MS_BALL_ACID:
         if (powerful)
         {
             dam = (rlev * 4) + 50;
@@ -3836,7 +3847,7 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         break;
 
         /* RF5_BA_ELEC */
-    case RF5_SPELL_START + 1:
+    case MS_BALL_ELEC:
         if (powerful)
         {
             dam = (rlev * 4) + 50;
@@ -3852,7 +3863,7 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         break;
 
         /* RF5_BA_FIRE */
-    case RF5_SPELL_START + 2:
+    case MS_BALL_FIRE:
         if (powerful)
         {
             dam = (rlev * 4) + 50;
@@ -3868,7 +3879,7 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         break;
 
         /* RF5_BA_COLD */
-    case RF5_SPELL_START + 3:
+    case MS_BALL_COLD:
         if (powerful)
         {
             dam = (rlev * 4) + 50;
@@ -3884,21 +3895,21 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         break;
 
         /* RF5_BA_POIS */
-    case RF5_SPELL_START + 4:
+    case MS_BALL_POIS:
         mult = powerful ? 2 : 1;
         dice_num = 12;
         dice_side = 2;
         break;
 
         /* RF5_BA_NETH */
-    case RF5_SPELL_START + 5:
-        dam = 50 + (rlev * powerful ? 2 : 1);
+    case MS_BALL_NETHER:
+        dam = 50 + rlev * (powerful ? 2 : 1);
         dice_num = 10;
         dice_side = 10;
         break;
 
         /* RF5_BA_WATE */
-    case RF5_SPELL_START + 6:
+    case MS_BALL_WATER:
         dam = 50;
         dice_num = 1;
         dice_side = powerful ? (rlev * 3) : (rlev * 2);
@@ -3906,59 +3917,59 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
 
         /* RF5_BA_MANA */
         /* RF5_BA_DARK */
-    case RF5_SPELL_START + 7:
-    case RF5_SPELL_START + 8:
+    case MS_BALL_MANA:
+    case MS_BALL_DARK:
         dam = (rlev * 4) + 50;
         dice_num = 10;
         dice_side = 10;
         break;
 
         /* RF5_DRAIN_MANA */
-    case RF5_SPELL_START + 9:
-        dam = 1;
-        div = 2;
+    case MS_DRAIN_MANA:
+        dam = rlev;
+        div = 1;
         dice_num = 1;
         dice_side = rlev;
         break;
 
         /* RF5_MIND_BLAST */
-    case RF5_SPELL_START + 10:
+    case MS_MIND_BLAST:
         dice_num = 7;
         dice_side = 7;
         break;
 
         /* RF5_BRAIN_SMASH */
-    case RF5_SPELL_START + 11:
+    case MS_BRAIN_SMASH:
         dice_num = 12;
         dice_side = 12;
         break;
 
         /* RF5_CAUSE_1 */
-    case RF5_SPELL_START + 12:
+    case MS_CAUSE_1:
         dice_num = 3;
         dice_side = 8;
         break;
 
         /* RF5_CAUSE_2 */
-    case RF5_SPELL_START + 13:
+    case MS_CAUSE_2:
         dice_num = 8;
         dice_side = 8;
         break;
 
         /* RF5_CAUSE_3 */
-    case RF5_SPELL_START + 14:
+    case MS_CAUSE_3:
         dice_num = 10;
         dice_side = 15;
         break;
 
         /* RF5_CAUSE_4 */
-    case RF5_SPELL_START + 15:
+    case MS_CAUSE_4:
         dice_num = 15;
         dice_side = 15;
         break;
 
         /* RF5_BO_ACID */
-    case RF5_SPELL_START + 16:
+    case MS_BOLT_ACID:
         mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 7;
@@ -3966,7 +3977,7 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         break;
 
         /* RF5_BO_ELEC */
-    case RF5_SPELL_START + 17:
+    case MS_BOLT_ELEC:
         mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 4;
@@ -3974,7 +3985,7 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         break;
 
         /* RF5_BO_FIRE */
-    case RF5_SPELL_START + 18:
+    case MS_BOLT_FIRE:
         mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 9;
@@ -3982,7 +3993,7 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         break;
 
         /* RF5_BO_COLD */
-    case RF5_SPELL_START + 19:
+    case MS_BOLT_COLD:
         mult = powerful ? 2 : 1;
         dam = rlev / 3 * (mult / div);
         dice_num = 6;
@@ -3990,63 +4001,63 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         break;
 
         /* RF5_BA_LITE */
-    case RF5_SPELL_START + 20:
+    case MS_STARBURST:
         dam = (rlev * 4) + 50;
         dice_num = 10;
         dice_side = 10;
         break;
 
         /* RF5_BO_NETH */
-    case RF5_SPELL_START + 21:
+    case MS_BOLT_NETHER:
         dam = 30 + (rlev * 4) / (powerful ? 2 : 3);
         dice_num = 5;
         dice_side = 5;
         break;
 
         /* RF5_BO_WATE */
-    case RF5_SPELL_START + 22:
+    case MS_BOLT_WATER:
         dam = (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 10;
         dice_side = 10;
         break;
 
         /* RF5_BO_MANA */
-    case RF5_SPELL_START + 23:
+    case MS_BOLT_MANA:
         dam = 50;
         dice_num = 1;
         dice_side = rlev * 7 / 2;
         break;
 
         /* RF5_BO_PLAS */
-    case RF5_SPELL_START + 24:
+    case MS_BOLT_PLASMA:
         dam = 10 + (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 8;
         dice_side = 7;
         break;
 
         /* RF5_BO_ICEE */
-    case RF5_SPELL_START + 25:
+    case MS_BOLT_ICE:
         dam = (rlev * 3 / (powerful ? 2 : 3));
         dice_num = 6;
         dice_side = 6;
         break;
 
         /* RF5_MISSILE */
-    case RF5_SPELL_START + 26:
+    case MS_MAGIC_MISSILE:
         dam = (rlev / 3);
         dice_num = 2;
         dice_side = 6;
         break;
 
-    case RF5_SPELL_START + 27: return -1;   /* RF5_SCARE */
-    case RF5_SPELL_START + 28: return -1;   /* RF5_BLIND */
-    case RF5_SPELL_START + 29: return -1;   /* RF5_CONF */
-    case RF5_SPELL_START + 30: return -1;   /* RF5_SLOW */
-    case RF5_SPELL_START + 31: return -1;   /* RF5_HOLD */
-    case RF6_SPELL_START + 0:  return -1;   /* RF6_HASTE */
+    case MS_SCARE: return -1;   /* RF5_SCARE */
+    case MS_BLIND: return -1;   /* RF5_BLIND */
+    case MS_CONF: return -1;   /* RF5_CONF */
+    case MS_SLOW: return -1;   /* RF5_SLOW */
+    case MS_SLEEP: return -1;   /* RF5_HOLD */
+    case MS_SPEED:  return -1;   /* RF6_HASTE */
 
         /* RF6_HAND_DOOM */
-    case RF6_SPELL_START + 1:
+    case MS_HAND_DOOM:
         mult = p_ptr->chp;
         div = 100;
         dam = 40 * (mult / div);
@@ -4054,53 +4065,46 @@ int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int sho
         dice_side = 20;
         break;
 
-    case RF6_SPELL_START + 2:  return -1;   /* RF6_HEAL */
-    case RF6_SPELL_START + 3:  return -1;   /* RF6_INVULNER */
-    case RF6_SPELL_START + 4:  return -1;   /* RF6_BLINK */
-    case RF6_SPELL_START + 5:  return -1;   /* RF6_TPORT */
-    case RF6_SPELL_START + 6:  return -1;   /* RF6_WORLD */
-    case RF6_SPELL_START + 7:  return -1;   /* RF6_SPECIAL */
-    case RF6_SPELL_START + 8:  return -1;   /* RF6_TELE_TO */
-    case RF6_SPELL_START + 9:  return -1;   /* RF6_TELE_AWAY */
-    case RF6_SPELL_START + 10: return -1;   /* RF6_TELE_LEVEL */
+    case MS_HEAL:  return -1;   /* RF6_HEAL */
+    case MS_INVULNER:  return -1;   /* RF6_INVULNER */
+    case MS_BLINK:  return -1;   /* RF6_BLINK */
+    case MS_TELEPORT:  return -1;   /* RF6_TPORT */
+    case MS_WORLD:  return -1;   /* RF6_WORLD */
+    case MS_SPECIAL:  return -1;   /* RF6_SPECIAL */
+    case MS_TELE_TO:  return -1;   /* RF6_TELE_TO */
+    case MS_TELE_AWAY:  return -1;   /* RF6_TELE_AWAY */
+    case MS_TELE_LEVEL: return -1;   /* RF6_TELE_LEVEL */
 
         /* RF6_PSY_SPEAR */
-    case RF6_SPELL_START + 11:
+    case MS_PSY_SPEAR:
         dam = powerful ? 150 : 100;
         dice_num = 1;
         dice_side = powerful ? (rlev * 2) : (rlev * 3 / 2);
         break;
 
-    case RF6_SPELL_START + 12: return -1;   /* RF6_DARKNESS */
-    case RF6_SPELL_START + 13: return -1;   /* RF6_TRAPS */
-    case RF6_SPELL_START + 14: return -1;   /* RF6_FORGET */
-    case RF6_SPELL_START + 15: return -1;   /* RF6_RAISE_DEAD */
-    case RF6_SPELL_START + 16: return -1;   /* RF6_S_KIN */
-    case RF6_SPELL_START + 17: return -1;   /* RF6_S_CYBER */
-    case RF6_SPELL_START + 18: return -1;   /* RF6_S_MONSTER */
-    case RF6_SPELL_START + 19: return -1;   /* RF6_S_MONSTER */
-    case RF6_SPELL_START + 20: return -1;   /* RF6_S_ANT */
-    case RF6_SPELL_START + 21: return -1;   /* RF6_S_SPIDER */
-    case RF6_SPELL_START + 22: return -1;   /* RF6_S_HOUND */
-    case RF6_SPELL_START + 23: return -1;   /* RF6_S_HYDRA */
-    case RF6_SPELL_START + 24: return -1;   /* RF6_S_ANGEL */
-    case RF6_SPELL_START + 25: return -1;   /* RF6_S_DEMON */
-    case RF6_SPELL_START + 26: return -1;   /* RF6_S_UNDEAD */
-    case RF6_SPELL_START + 27: return -1;   /* RF6_S_DRAGON */
-    case RF6_SPELL_START + 28: return -1;   /* RF6_S_HI_UNDEAD */
-    case RF6_SPELL_START + 29: return -1;   /* RF6_S_HI_DRAGON */
-    case RF6_SPELL_START + 30: return -1;   /* RF6_S_AMBERITES */
-    case RF6_SPELL_START + 31: return -1;   /* RF6_S_UNIQUE */
+    case MS_DARKNESS: return -1;   /* RF6_DARKNESS */
+    case MS_MAKE_TRAP: return -1;   /* RF6_TRAPS */
+    case MS_FORGET: return -1;   /* RF6_FORGET */
+    case MS_RAISE_DEAD: return -1;   /* RF6_RAISE_DEAD */
+    case MS_S_KIN: return -1;   /* RF6_S_KIN */
+    case MS_S_CYBER: return -1;   /* RF6_S_CYBER */
+    case MS_S_MONSTER: return -1;   /* RF6_S_MONSTER */
+    case MS_S_MONSTERS: return -1;   /* RF6_S_MONSTER */
+    case MS_S_ANT: return -1;   /* RF6_S_ANT */
+    case MS_S_SPIDER: return -1;   /* RF6_S_SPIDER */
+    case MS_S_HOUND: return -1;   /* RF6_S_HOUND */
+    case MS_S_HYDRA: return -1;   /* RF6_S_HYDRA */
+    case MS_S_ANGEL: return -1;   /* RF6_S_ANGEL */
+    case MS_S_DEMON: return -1;   /* RF6_S_DEMON */
+    case MS_S_UNDEAD: return -1;   /* RF6_S_UNDEAD */
+    case MS_S_DRAGON: return -1;   /* RF6_S_DRAGON */
+    case MS_S_HI_UNDEAD: return -1;   /* RF6_S_HI_UNDEAD */
+    case MS_S_HI_DRAGON: return -1;   /* RF6_S_HI_DRAGON */
+    case MS_S_AMBERITE: return -1;   /* RF6_S_AMBERITES */
+    case MS_S_UNIQUE: return -1;   /* RF6_S_UNIQUE */
     }
 
-    switch (TYPE)
-    {
-    case DAM_MAX: dam += maxroll(dice_num, dice_side) * mult / div ; break;
-    case DAM_MIN: dam += dice_num * 1 * mult / div; break;
-    case DAM_ROLL: dam += damroll(dice_num, dice_side) * mult / div; break;
-    }
-    if (dam < 1) dam = 1;
-    return dam;
+    return monspell_damage_roll(dam, dice_num, dice_side, mult, div, TYPE);
 }
 
 
@@ -4120,14 +4124,14 @@ int monspell_damage(int SPELL_NUM, int m_idx, int TYPE)
     int shoot_dd = r_ptr->blow[0].d_dice;
     int shoot_ds = r_ptr->blow[0].d_side;
 
-    if (TYPE == DAM_MAX)
-    {
-        hp = m_ptr->max_maxhp;
-    }
-    else if (TYPE == DAM_ROLL)
+    if (TYPE == DAM_ROLL)
     {
         hp = m_ptr->hp;
     }
+    else
+    {
+        hp = m_ptr->max_maxhp;
+    } 
     return monspell_damage_base(SPELL_NUM, hp, rlev, monster_is_powerful(m_idx), shoot_dd, shoot_ds, 0, TYPE);
 }
 
@@ -4142,7 +4146,7 @@ int monspell_race_damage(int SPELL_NUM, int r_idx, int TYPE)
 {
     monster_race    *r_ptr = &r_info[r_idx];
     int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    bool powerful = r_ptr->flags2 & RF2_POWERFUL;
+    bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : FALSE;
     u32b hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
     int shoot_dd = r_ptr->blow[0].d_dice;
     int shoot_ds = r_ptr->blow[0].d_side;
