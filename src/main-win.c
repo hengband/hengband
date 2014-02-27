@@ -2613,9 +2613,6 @@ static errr Term_xtra_win_music(int n, int v)
 		break;
 	}
 
-
-#endif /* USE_MUSIC */
-
 #ifdef WIN32
 
 	mop.lpstrDeviceType = mci_device_type;	
@@ -2627,12 +2624,14 @@ static errr Term_xtra_win_music(int n, int v)
 	mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
 	return (0);
 
+#endif /* WIN32 */
+
 #else /* USE_MUSIC */
 
-	/* Oops */
 	return (1);
 
 #endif /* USE_MUSIC */
+
 }
 
 
@@ -4765,7 +4764,9 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 		/* XXX XXX XXX */
 		case WM_CREATE:
 		{
+#ifdef USE_MUSIC
 			mop.dwCallback=(DWORD)hWnd;
+#endif
 			return 0;
 		}
 
