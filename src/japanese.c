@@ -401,26 +401,32 @@ static bool is_utf8_str(cptr str)
  * @param utf8_str 変換するUTF-8の文字列へのポインタ
  * @param sys_str_buffer 変換したシステムの文字コードの文字列を格納するバッファへのポインタ
  * @param sys_str_buflen 変換したシステムの文字コードの文字列を格納するバッファの長さ
- * @return なし
+ * @return 変換に成功した場合TRUE、失敗した場合FALSEを返す
  */
 #ifdef SJIS
 #ifdef WINDOWS
 #include <Windows.h>
-static void utf8_to_sys(cptr utf8_str, char* sys_str_buffer, size_t sys_str_buflen)
+static bool utf8_to_sys(cptr utf8_str, char* sys_str_buffer, size_t sys_str_buflen)
 {
 	LPWSTR utf16buf;
-	int input_str_len = strlen(utf8_str);
-	int len;
+	int input_len = strlen(utf8_str) + 1; /* include termination character */
 
-	C_MAKE(utf16buf, input_str_len, WCHAR);
+	C_MAKE(utf16buf, input_len, WCHAR);
 
-	MultiByteToWideChar( CP_UTF8, 0, (LPCSTR)utf8_str, input_str_len, (LPWSTR)utf16buf, input_str_len);
+	/* UTF-8 -> UTF-16 */
+	if (MultiByteToWideChar( CP_UTF8, 0, utf8_str, input_len, utf16buf, input_len) == 0) {
+		C_KILL(utf16buf, input_len, WCHAR);
+		return FALSE;	
+	}
  
-	len = WideCharToMultiByte( CP_ACP, 0, (LPCWSTR)utf16buf, -1, (LPSTR)sys_str_buffer, sys_str_buflen, NULL, NULL );
+	/* UTF-8 -> SJIS(CP932) */
+	if (WideCharToMultiByte( CP_ACP, 0, utf16buf, -1, sys_str_buffer, sys_str_buflen, NULL, NULL ) == 0) {
+		C_KILL(utf16buf, input_len, WCHAR);
+		return FALSE;
+	}
 
-	sys_str_buffer[len] = '\0';
-
-	C_KILL(utf16buf, input_str_len, WCHAR);
+	C_KILL(utf16buf, input_len, WCHAR);
+	return TRUE;
 }
 #endif
 #endif
@@ -429,6 +435,7 @@ static void utf8_to_sys(cptr utf8_str, char* sys_str_buffer, size_t sys_str_bufl
  * @brief 受け取った文字列の文字コードを推定し、システムの文字コードへ変換する
  * @param strbuf 変換する文字列を格納したバッファへのポインタ。
  *               バッファは変換した文字列で上書きされる。
+ *               UTF-8からSJISもしくはEUCへの変換を想定しているのでバッファの長さが足りなくなることはない。
  * @param buflen バッファの長さ。
  * @return なし
  */
@@ -439,8 +446,11 @@ void guess_convert_to_system_encoding(char* strbuf, int buflen)
 	if (is_utf8_str(strbuf)) {
 		char* work;
 		C_MAKE(work, buflen, char);
-		strncpy(work, strbuf, buflen);
-		utf8_to_sys(work, strbuf, buflen);
+		my_strcpy(work, strbuf, buflen);
+		if (!utf8_to_sys(work, strbuf, buflen)) {
+			msg_print("警告:文字コードの変換に失敗しました");
+			msg_print(NULL);
+		}
 		C_KILL(work, buflen, char);
 	}
 }
