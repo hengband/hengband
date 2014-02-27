@@ -374,7 +374,7 @@ static bool is_ascii_str(cptr str)
 /*!
  * @brief 文字列の文字コードがUTF-8かどうかを判定する
  * @param str 判定する文字列へのポインタ
- * @return 文字列の文字コードがASCIIならTRUE、そうでなければFALSE
+ * @return 文字列の文字コードがUTF-8ならTRUE、そうでなければFALSE
  */
 static bool is_utf8_str(cptr str)
 {
