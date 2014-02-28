@@ -396,6 +396,11 @@ static bool is_utf8_str(cptr str)
 	return TRUE;
 }
 
+#if defined(EUC)
+#include <iconv.h>
+#elif defined(SJIS) && defined(WINDOWS)
+#include <Windows.h>
+#endif
 /*!
  * @brief 文字コードがUTF-8の文字列をシステムの文字コードに変換する
  * @param utf8_str 変換するUTF-8の文字列へのポインタ
@@ -403,11 +408,19 @@ static bool is_utf8_str(cptr str)
  * @param sys_str_buflen 変換したシステムの文字コードの文字列を格納するバッファの長さ
  * @return 変換に成功した場合TRUE、失敗した場合FALSEを返す
  */
-#ifdef SJIS
-#ifdef WINDOWS
-#include <Windows.h>
-static bool utf8_to_sys(cptr utf8_str, char* sys_str_buffer, size_t sys_str_buflen)
+static bool utf8_to_sys(char* utf8_str, char* sys_str_buffer, size_t sys_str_buflen)
 {
+#if defined(EUC)
+
+        iconv_t cd = iconv_open("EUC-JP", "UTF-8");
+        size_t utf8_len = strlen(utf8_str) + 1; /* include termination character */
+        char *from = utf8_str;
+        int ret = iconv(cd, &from, &utf8_len, &sys_str_buffer, &sys_str_buflen);
+        iconv_close(cd);
+        return (ret >= 0);
+
+#elif defined(SJIS) && defined(WINDOWS)
+
 	LPWSTR utf16buf;
 	int input_len = strlen(utf8_str) + 1; /* include termination character */
 
@@ -416,9 +429,9 @@ static bool utf8_to_sys(cptr utf8_str, char* sys_str_buffer, size_t sys_str_bufl
 	/* UTF-8 -> UTF-16 */
 	if (MultiByteToWideChar( CP_UTF8, 0, utf8_str, input_len, utf16buf, input_len) == 0) {
 		C_KILL(utf16buf, input_len, WCHAR);
-		return FALSE;	
+		return FALSE;
 	}
- 
+
 	/* UTF-8 -> SJIS(CP932) */
 	if (WideCharToMultiByte( CP_ACP, 0, utf16buf, -1, sys_str_buffer, sys_str_buflen, NULL, NULL ) == 0) {
 		C_KILL(utf16buf, input_len, WCHAR);
@@ -427,9 +440,9 @@ static bool utf8_to_sys(cptr utf8_str, char* sys_str_buffer, size_t sys_str_bufl
 
 	C_KILL(utf16buf, input_len, WCHAR);
 	return TRUE;
+
+#endif
 }
-#endif
-#endif
 
 /*!
  * @brief 受け取った文字列の文字コードを推定し、システムの文字コードへ変換する
