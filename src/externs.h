@@ -1,4 +1,4 @@
-/* File: externs.h */
+﻿/* File: externs.h */
 
 /*
  * Copyright (c) 1997 Ben Harrison

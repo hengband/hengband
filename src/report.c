@@ -1,4 +1,4 @@
-/* File: report.c */
+ï»¿/* File: report.c */
 
 #define _GNU_SOURCE
 #include "angband.h"
@@ -215,7 +215,7 @@ static void http_post(int sd, cptr url, BUF *buf)
 }
 
 
-/* ¥­¥ã¥é¥¯¥¿¥À¥ó¥×¤òºî¤Ã¤Æ BUF¤ËÊİÂ¸ */
+/* ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ€ãƒ³ãƒ—ã‚’ä½œã£ã¦ BUFã«ä¿å­˜ */
 static errr make_dump(BUF* dumpbuf)
 {
 	char		buf[1024];
@@ -227,7 +227,7 @@ static errr make_dump(BUF* dumpbuf)
 	if (!fff)
 	{
 #ifdef JP
-		msg_format("°ì»ş¥Õ¥¡¥¤¥ë %s ¤òºîÀ®¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿¡£", file_name);
+		msg_format("ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ« %s ã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", file_name);
 #else
 		msg_format("Failed to create temporary file %s.", file_name);
 #endif
@@ -235,7 +235,7 @@ static errr make_dump(BUF* dumpbuf)
 		return 1;
 	}
 
-	/* °ìÃ¶°ì»ş¥Õ¥¡¥¤¥ë¤òºî¤ë¡£ÄÌ¾ï¤Î¥À¥ó¥×½ĞÎÏ¤È¶¦ÄÌ²½¤¹¤ë¤¿¤á¡£ */
+	/* ä¸€æ—¦ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œã‚‹ã€‚é€šå¸¸ã®ãƒ€ãƒ³ãƒ—å‡ºåŠ›ã¨å…±é€šåŒ–ã™ã‚‹ãŸã‚ã€‚ */
 	(void)make_character_dump(fff);
 
 	/* Close the file */
@@ -408,14 +408,14 @@ errr report_score(void)
 	score = buf_new();
 
 #ifdef JP
-	sprintf(seikakutmp, "%s%s", ap_ptr->title, (ap_ptr->no ? "¤Î" : ""));
+	sprintf(seikakutmp, "%s%s", ap_ptr->title, (ap_ptr->no ? "ã®" : ""));
 #else
 	sprintf(seikakutmp, "%s ", ap_ptr->title);
 #endif
 
 	buf_sprintf(score, "name: %s\n", player_name);
 #ifdef JP
-	buf_sprintf(score, "version: ÊÑ¶òÈÚÅÜ %d.%d.%d\n",
+	buf_sprintf(score, "version: å¤‰æ„šè›®æ€’ %d.%d.%d\n",
 		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #else
 	buf_sprintf(score, "version: Hengband %d.%d.%d\n",
@@ -472,13 +472,13 @@ errr report_score(void)
 	{
 		char buff[160];
 #ifdef JP
-		prt("ÀÜÂ³Ãæ...", 0, 0);
+		prt("æ¥ç¶šä¸­...", 0, 0);
 #else
 		prt("connecting...", 0, 0);
 #endif
 		Term_fresh();
 		
-		/* ¥×¥í¥­¥·¤òÀßÄê¤¹¤ë */
+		/* ãƒ—ãƒ­ã‚­ã‚·ã‚’è¨­å®šã™ã‚‹ */
 		set_proxy(HTTP_PROXY, HTTP_PROXY_PORT);
 
 		/* Connect to the score server */
@@ -487,7 +487,7 @@ errr report_score(void)
 
 		if (!(sd < 0)) break;
 #ifdef JP
-		sprintf(buff, "¥¹¥³¥¢¡¦¥µ¡¼¥Ğ¤Ø¤ÎÀÜÂ³¤Ë¼ºÇÔ¤·¤Ş¤·¤¿¡£(%s)", soc_err());
+		sprintf(buff, "ã‚¹ã‚³ã‚¢ãƒ»ã‚µãƒ¼ãƒã¸ã®æ¥ç¶šã«å¤±æ•—ã—ã¾ã—ãŸã€‚(%s)", soc_err());
 #else
 		sprintf(buff, "Failed to connect to the score server.(%s)", soc_err());
 #endif
@@ -495,7 +495,7 @@ errr report_score(void)
 		(void)inkey();
 		
 #ifdef JP
-		if (!get_check_strict("¤â¤¦°ìÅÙÀÜÂ³¤ò»î¤ß¤Ş¤¹¤«? ", CHECK_NO_HISTORY))
+		if (!get_check_strict("ã‚‚ã†ä¸€åº¦æ¥ç¶šã‚’è©¦ã¿ã¾ã™ã‹? ", CHECK_NO_HISTORY))
 #else
 		if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
 #endif
@@ -505,7 +505,7 @@ errr report_score(void)
 		}
 	}
 #ifdef JP
-	prt("¥¹¥³¥¢Á÷¿®Ãæ...", 0, 0);
+	prt("ã‚¹ã‚³ã‚¢é€ä¿¡ä¸­...", 0, 0);
 #else
 	prt("Sending the score...", 0, 0);
 #endif

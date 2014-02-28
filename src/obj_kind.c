@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file obj_kind.c
- * @brief ¥Ù¡¼¥¹¥¢¥¤¥Æ¥à¤Î¼ÂÁõ
+ * @brief ãƒ™ãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ ã®å®Ÿè£…
  * @date 2014/01/10
  * @author
  * 2014 Deskull rearranged comment for Doxygen.
@@ -9,9 +9,9 @@
 #include "angband.h"
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬Ìô¤Ç¤¢¤ë¤«¤òÊÖ¤¹
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¥ª¥Ö¥¸¥§¥¯¥È¤¬Ìô¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè–¬ã§ã‚ã‚‹ã‹ã‚’è¿”ã™
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè–¬ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_potion(object_type *o_ptr)
 {
@@ -20,9 +20,9 @@ bool object_is_potion(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¾Ş¶â¼ó¤ÎÊó½·ÂĞ¾İ¤Ë¤Ê¤ë¤«¤òÊÖ¤¹
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¥ª¥Ö¥¸¥§¥¯¥È¤¬Êó½·ÂĞ¾İ¤Ë¤Ê¤ë¤Ê¤éTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè³é‡‘é¦–ã®å ±é…¬å¯¾è±¡ã«ãªã‚‹ã‹ã‚’è¿”ã™
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå ±é…¬å¯¾è±¡ã«ãªã‚‹ãªã‚‰TRUEã‚’è¿”ã™
  */
 bool object_is_shoukinkubi(object_type *o_ptr)
 {
@@ -50,9 +50,9 @@ bool object_is_shoukinkubi(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¥×¥ì¥¤¥ä¡¼¤Î¿¦¶È¤Ë±ş¤¸¤¿Å¬ÀµÉğ´ï¤«Èİ¤«¤òÊÖ¤¹ / Favorite weapons
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¥ª¥Ö¥¸¥§¥¯¥È¤¬Å¬ÀµÉğ´ï¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è·æ¥­ã«å¿œã˜ãŸé©æ­£æ­¦å™¨ã‹å¦ã‹ã‚’è¿”ã™ / Favorite weapons
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé©æ­£æ­¦å™¨ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_favorite(object_type *o_ptr)
 {
@@ -115,10 +115,10 @@ bool object_is_favorite(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¥ì¥¢¥¢¥¤¥Æ¥à¤«¤É¤¦¤«¤òÊÖ¤¹ /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒ¬ã‚¢ã‚¢ã‚¤ãƒ†ãƒ ã‹ã©ã†ã‹ã‚’è¿”ã™ /
  * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¥ì¥¢¥¢¥¤¥Æ¥à¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãƒ¬ã‚¢ã‚¢ã‚¤ãƒ†ãƒ ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_rare(object_type *o_ptr)
 {
@@ -182,9 +182,9 @@ bool object_is_rare(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬Éğ´ï¤È¤·¤ÆÁõÈ÷¤Ç¤­¤ë¤«¤É¤¦¤«¤òÊÖ¤¹ / Check if an object is weapon (including bows and ammo)
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return Éğ´ï¤È¤·¤Æ»È¤¨¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæ­¦å™¨ã¨ã—ã¦è£…å‚™ã§ãã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ / Check if an object is weapon (including bows and ammo)
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return æ­¦å™¨ã¨ã—ã¦ä½¿ãˆã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_weapon(object_type *o_ptr)
 {
@@ -195,10 +195,10 @@ bool object_is_weapon(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬Éğ´ï¤äÌğÃÆ¤È¤·¤Æ»ÈÍÑ¤Ç¤­¤ë¤«¤òÊÖ¤¹ / Check if an object is weapon (including bows and ammo)
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæ­¦å™¨ã‚„çŸ¢å¼¾ã¨ã—ã¦ä½¿ç”¨ã§ãã‚‹ã‹ã‚’è¿”ã™ / Check if an object is weapon (including bows and ammo)
  * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return Éğ´ï¤äÌğÃÆ¤È¤·¤Æ»È¤¨¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return æ­¦å™¨ã‚„çŸ¢å¼¾ã¨ã—ã¦ä½¿ãˆã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_weapon_ammo(object_type *o_ptr)
 {
@@ -208,9 +208,9 @@ bool object_is_weapon_ammo(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬ÌğÃÆ¤È¤·¤Æ»ÈÍÑ¤Ç¤­¤ë¤«¤É¤¦¤«¤òÊÖ¤¹ / Check if an object is ammo
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ÌğÃÆ¤È¤·¤Æ»È¤¨¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒçŸ¢å¼¾ã¨ã—ã¦ä½¿ç”¨ã§ãã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ / Check if an object is ammo
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return çŸ¢å¼¾ã¨ã—ã¦ä½¿ãˆã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_ammo(object_type *o_ptr)
 {
@@ -220,9 +220,9 @@ bool object_is_ammo(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬ËÉ¶ñ¤È¤·¤ÆÁõÈ÷¤Ç¤­¤ë¤«¤É¤¦¤«¤òÊÖ¤¹ / Check if an object is armour
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ÌğÃÆ¤È¤·¤Æ»È¤¨¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé˜²å…·ã¨ã—ã¦è£…å‚™ã§ãã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ / Check if an object is armour
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return çŸ¢å¼¾ã¨ã—ã¦ä½¿ãˆã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_armour(object_type *o_ptr)
 {
@@ -232,9 +232,9 @@ bool object_is_armour(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬Éğ´ï¡¢ËÉ¶ñ¡¢ÌğÃÆ¤È¤·¤Æ»ÈÍÑ¤Ç¤­¤ë¤«¤òÊÖ¤¹ / Check if an object is weapon, armour or ammo
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return Éğ´ï¡¢ËÉ¶ñ¡¢ÌğÃÆ¤È¤·¤Æ»È¤¨¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæ­¦å™¨ã€é˜²å…·ã€çŸ¢å¼¾ã¨ã—ã¦ä½¿ç”¨ã§ãã‚‹ã‹ã‚’è¿”ã™ / Check if an object is weapon, armour or ammo
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return æ­¦å™¨ã€é˜²å…·ã€çŸ¢å¼¾ã¨ã—ã¦ä½¿ãˆã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_weapon_armour_ammo(object_type *o_ptr)
 {
@@ -245,9 +245,9 @@ bool object_is_weapon_armour_ammo(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¶áÀÜÉğ´ï¤È¤·¤ÆÁõÈ÷¤Ç¤­¤ë¤«¤òÊÖ¤¹ / Melee weapons
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¶áÀÜÉğ´ï¤È¤·¤Æ»È¤¨¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè¿‘æ¥æ­¦å™¨ã¨ã—ã¦è£…å‚™ã§ãã‚‹ã‹ã‚’è¿”ã™ / Melee weapons
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return è¿‘æ¥æ­¦å™¨ã¨ã—ã¦ä½¿ãˆã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_melee_weapon(object_type *o_ptr)
 {
@@ -258,9 +258,9 @@ bool object_is_melee_weapon(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬ÁõÈ÷²ÄÇ½¤Ç¤¢¤ë¤«¤òÊÖ¤¹ / Wearable including all weapon, all armour, bow, light source, amulet, and ring
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ÁõÈ÷²ÄÇ½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè£…å‚™å¯èƒ½ã§ã‚ã‚‹ã‹ã‚’è¿”ã™ / Wearable including all weapon, all armour, bow, light source, amulet, and ring
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return è£…å‚™å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_wearable(object_type *o_ptr)
 {
@@ -271,9 +271,9 @@ bool object_is_wearable(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬ÁõÈ÷ÉÊ¤Ç¤¢¤ë¤«¤òÊÖ¤¹(object_is_wearable¤ËÌğÃÆ¤ò´Ş¤à) / Equipment including all wearable objects and ammo
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ÁõÈ÷ÉÊ¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè£…å‚™å“ã§ã‚ã‚‹ã‹ã‚’è¿”ã™(object_is_wearableã«çŸ¢å¼¾ã‚’å«ã‚€) / Equipment including all wearable objects and ammo
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return è£…å‚™å“ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_equipment(object_type *o_ptr)
 {
@@ -284,9 +284,9 @@ bool object_is_equipment(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¶¯²½ÉÔÇ½Éğ´ï¤Ç¤¢¤ë¤«¤òÊÖ¤¹ / Poison needle can not be enchanted
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¶¯²½ÉÔÇ½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå¼·åŒ–ä¸èƒ½æ­¦å™¨ã§ã‚ã‚‹ã‹ã‚’è¿”ã™ / Poison needle can not be enchanted
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return å¼·åŒ–ä¸èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_refuse_enchant_weapon(object_type *o_ptr)
 {
@@ -297,10 +297,10 @@ bool object_refuse_enchant_weapon(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¶¯²½²ÄÇ½Éğ´ï¤Ç¤¢¤ë¤«¤òÊÖ¤¹ /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå¼·åŒ–å¯èƒ½æ­¦å™¨ã§ã‚ã‚‹ã‹ã‚’è¿”ã™ /
  * Check if an object is weapon (including bows and ammo) and allows enchantment
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¶¯²½²ÄÇ½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return å¼·åŒ–å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_allow_enchant_weapon(object_type *o_ptr)
 {
@@ -311,10 +311,10 @@ bool object_allow_enchant_weapon(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¶¯²½²ÄÇ½¤Ê¶áÀÜÉğ´ï¤Ç¤¢¤ë¤«¤òÊÖ¤¹ /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå¼·åŒ–å¯èƒ½ãªè¿‘æ¥æ­¦å™¨ã§ã‚ã‚‹ã‹ã‚’è¿”ã™ /
  * Check if an object is melee weapon and allows enchantment
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¶¯²½²ÄÇ½¤Ê¶áÀÜÉğ´ï¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return å¼·åŒ–å¯èƒ½ãªè¿‘æ¥æ­¦å™¨ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_allow_enchant_melee_weapon(object_type *o_ptr)
 {
@@ -325,10 +325,10 @@ bool object_allow_enchant_melee_weapon(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬ÃÃÌê»Õ¤Î¥¨¥Ã¥»¥ó¥¹ÉÕ²ÃºÑ¤ß¤«¤òÊÖ¤¹ /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé›å†¶å¸«ã®ã‚¨ãƒƒã‚»ãƒ³ã‚¹ä»˜åŠ æ¸ˆã¿ã‹ã‚’è¿”ã™ /
  * Check if an object is made by a smith's special ability
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¥¨¥Ã¥»¥ó¥¹ÉÕ²ÃºÑ¤ß¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚¨ãƒƒã‚»ãƒ³ã‚¹ä»˜åŠ æ¸ˆã¿ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_smith(object_type *o_ptr)
 {
@@ -338,10 +338,10 @@ bool object_is_smith(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤«¤òÊÖ¤¹ /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã‹ã‚’è¿”ã™ /
  * Check if an object is artifact
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_artifact(object_type *o_ptr)
 {
@@ -352,10 +352,10 @@ bool object_is_artifact(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤«¤òÊÖ¤¹ /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã‹ã‚’è¿”ã™ /
  * Check if an object is random artifact
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_random_artifact(object_type *o_ptr)
 {
@@ -365,10 +365,10 @@ bool object_is_random_artifact(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬ÄÌ¾ï¤Î¥¢¥¤¥Æ¥à(¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¡¢¥¨¥´¡¢ÃÃÌê»Õ¥¨¥Ã¥»¥ó¥¹ÉÕ²Ã¤¤¤º¤ì¤Ç¤â¤Ê¤¤)¤«¤òÊÖ¤¹ /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé€šå¸¸ã®ã‚¢ã‚¤ãƒ†ãƒ (ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã€ã‚¨ã‚´ã€é›å†¶å¸«ã‚¨ãƒƒã‚»ãƒ³ã‚¹ä»˜åŠ ã„ãšã‚Œã§ã‚‚ãªã„)ã‹ã‚’è¿”ã™ /
  * Check if an object is neither artifact, ego, nor 'smith' object
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ÄÌ¾ï¤Î¥¢¥¤¥Æ¥à¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return é€šå¸¸ã®ã‚¢ã‚¤ãƒ†ãƒ ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_is_nameless(object_type *o_ptr)
 {
@@ -380,10 +380,10 @@ bool object_is_nameless(object_type *o_ptr)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬Î¾¼ê»ı¤Á²ÄÇ½¤ÊÉğ´ï¤«¤òÊÖ¤¹ /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒä¸¡æ‰‹æŒã¡å¯èƒ½ãªæ­¦å™¨ã‹ã‚’è¿”ã™ /
  * Check if an object is melee weapon and allows wielding with two-hands
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return Î¾¼ê»ı¤Á²ÄÇ½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ä¸¡æ‰‹æŒã¡å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool object_allow_two_hands_wielding(object_type *o_ptr)
 {

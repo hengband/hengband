@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
     @file chuukei.c
-    @brief Ãæ·Ñµ¡Ç½¤Î¼ÂÁõ
+    @brief ä¸­ç¶™æ©Ÿèƒ½ã®å®Ÿè£…
     @date 2014/01/02
     @author
     2014 Deskull rearranged comment for Doxygen.
@@ -41,16 +41,16 @@
 #ifdef WINDOWS
 #define WAIT 100
 #else
-#define WAIT 100*1000 /* ¥Ö¥é¥¦¥ºÂ¦¤Î¥¦¥¨¥¤¥È(usÃ±°Ì) */
+#define WAIT 100*1000 /* ãƒ–ãƒ©ã‚¦ã‚ºå´ã®ã‚¦ã‚¨ã‚¤ãƒˆ(uså˜ä½) */
 #endif
 #define DEFAULT_DELAY 50
 #define RECVBUF_SIZE 1024
 
-static long epoch_time;  /* ¥Ğ¥Ã¥Õ¥¡³«»Ï»ş¹ï */
-static int browse_delay; /* É½¼¨¤¹¤ë¤Ş¤Ç¤Î»ş´Ö(100msÃ±°Ì)(¤³¤Î´Ö¤Ë¥é¥°¤òµÛ¼ı¤¹¤ë) */
+static long epoch_time;  /* ãƒãƒƒãƒ•ã‚¡é–‹å§‹æ™‚åˆ» */
+static int browse_delay; /* è¡¨ç¤ºã™ã‚‹ã¾ã§ã®æ™‚é–“(100mså˜ä½)(ã“ã®é–“ã«ãƒ©ã‚°ã‚’å¸åã™ã‚‹) */
 #ifdef CHUUKEI
-static int sd; /* ¥½¥±¥Ã¥È¤Î¥Õ¥¡¥¤¥ë¥Ç¥£¥¹¥¯¥ê¥×¥¿ */
-static long time_diff;   /* ¥×¥ì¥¤Â¦¤È¤Î»ş´Ö¤Î¤º¤ì(¤³¤ì¤ò¸«¤Ê¤¬¤é¥Ç¥£¥ì¥¤¤òÄ´À°¤·¤Æ¤¤¤¯) */
+static int sd; /* ã‚½ã‚±ãƒƒãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ */
+static long time_diff;   /* ãƒ—ãƒ¬ã‚¤å´ã¨ã®æ™‚é–“ã®ãšã‚Œ(ã“ã‚Œã‚’è¦‹ãªãŒã‚‰ãƒ‡ã‚£ãƒ¬ã‚¤ã‚’èª¿æ•´ã—ã¦ã„ã) */
 static int server_port;
 static char server_name[MAX_HOSTNAME];
 #endif
@@ -68,7 +68,7 @@ static InetSvcRef inet_services = nil;
 static EndpointRef ep			= kOTInvalidEndpointRef;
 #endif
 #endif
-/* ÉÁ²è¤¹¤ë»ş¹ï¤ò³Ğ¤¨¤Æ¤ª¤¯¥­¥å¡¼¹½Â¤ÂÎ */
+/* æç”»ã™ã‚‹æ™‚åˆ»ã‚’è¦šãˆã¦ãŠãã‚­ãƒ¥ãƒ¼æ§‹é€ ä½“ */
 static struct
 {
 	int time[FRESH_QUEUE_SIZE];
@@ -77,7 +77,7 @@ static struct
 }fresh_queue;
 
 
-/* ¥ê¥ó¥°¥Ğ¥Ã¥Õ¥¡¹½Â¤ÂÎ */
+/* ãƒªãƒ³ã‚°ãƒãƒƒãƒ•ã‚¡æ§‹é€ ä½“ */
 static struct
 {
 	char *buf;
@@ -119,7 +119,7 @@ static void disable_chuukei_server(void)
 	t->text_hook = old_text_hook;
 }
 
-/* ANSI C¤Ë¤è¤ì¤ĞstaticÊÑ¿ô¤Ï0¤Ç½é´ü²½¤µ¤ì¤ë¤¬°ì±ş½é´ü²½¤¹¤ë */
+/* ANSI Cã«ã‚ˆã‚Œã°staticå¤‰æ•°ã¯0ã§åˆæœŸåŒ–ã•ã‚Œã‚‹ãŒä¸€å¿œåˆæœŸåŒ–ã™ã‚‹ */
 static errr init_buffer(void)
 {
 	fresh_queue.next = fresh_queue.tail = 0;
@@ -131,7 +131,7 @@ static errr init_buffer(void)
 	return (0);
 }
 
-/* ¸½ºß¤Î»ş´Ö¤ò100msÃ±°Ì¤Ç¼èÆÀ¤¹¤ë */
+/* ç¾åœ¨ã®æ™‚é–“ã‚’100mså˜ä½ã§å–å¾—ã™ã‚‹ */
 static long get_current_time(void)
 {
 #ifdef WINDOWS
@@ -147,11 +147,11 @@ static long get_current_time(void)
 }
 
 
-/* ¥ê¥ó¥°¥Ğ¥Ã¥Õ¥¡¹½Â¤ÂÎ¤Ë buf ¤ÎÆâÍÆ¤ò²Ã¤¨¤ë */
+/* ãƒªãƒ³ã‚°ãƒãƒƒãƒ•ã‚¡æ§‹é€ ä½“ã« buf ã®å†…å®¹ã‚’åŠ ãˆã‚‹ */
 static errr insert_ringbuf(char *buf)
 {
 	int len;
-	len = strlen(buf) + 1; /* +1¤Ï½ªÃ¼Ê¸»úÊ¬ */
+	len = strlen(buf) + 1; /* +1ã¯çµ‚ç«¯æ–‡å­—åˆ† */
 
 	if (movie_mode)
 	{
@@ -163,14 +163,14 @@ static errr insert_ringbuf(char *buf)
 #endif
 	}
 
-	/* ¥Ğ¥Ã¥Õ¥¡¤ò¥ª¡¼¥Ğ¡¼ */
+	/* ãƒãƒƒãƒ•ã‚¡ã‚’ã‚ªãƒ¼ãƒãƒ¼ */
 	if (ring.inlen + len >= RINGBUF_SIZE)
 	{
 #ifdef CHUUKEI
 		if (chuukei_server) disable_chuukei_server();
 		else chuukei_client = FALSE;
 
-		prt("Á÷¼õ¿®¥Ğ¥Ã¥Õ¥¡¤¬°î¤ì¤Ş¤·¤¿¡£¥µ¡¼¥Ğ¤È¤ÎÀÜÂ³¤òÀÚÃÇ¤·¤Ş¤¹¡£", 0, 0);
+		prt("é€å—ä¿¡ãƒãƒƒãƒ•ã‚¡ãŒæº¢ã‚Œã¾ã—ãŸã€‚ã‚µãƒ¼ãƒã¨ã®æ¥ç¶šã‚’åˆ‡æ–­ã—ã¾ã™ã€‚", 0, 0);
 		inkey();
 
 		close(sd);
@@ -178,17 +178,17 @@ static errr insert_ringbuf(char *buf)
 		return (-1);
 	}
 
-	/* ¥Ğ¥Ã¥Õ¥¡¤Î½ªÃ¼¤Ş¤Ç¤Ë¼ı¤Ş¤ë */
+	/* ãƒãƒƒãƒ•ã‚¡ã®çµ‚ç«¯ã¾ã§ã«åã¾ã‚‹ */
 	if (ring.wptr + len < RINGBUF_SIZE)
 	{
 		memcpy(ring.buf + ring.wptr, buf, len);
 		ring.wptr += len;
 	}
-	/* ¥Ğ¥Ã¥Õ¥¡¤Î½ªÃ¼¤Ş¤Ç¤Ë¼ı¤Ş¤é¤Ê¤¤(¥Ô¥Ã¥¿¥ê¼ı¤Ş¤ë¾ì¹ç¤â´Ş¤à) */
+	/* ãƒãƒƒãƒ•ã‚¡ã®çµ‚ç«¯ã¾ã§ã«åã¾ã‚‰ãªã„(ãƒ”ãƒƒã‚¿ãƒªåã¾ã‚‹å ´åˆã‚‚å«ã‚€) */
 	else
 	{
-		int head = RINGBUF_SIZE - ring.wptr;  /* Á°È¾ */
-		int tail = len - head;               /* ¸åÈ¾ */
+		int head = RINGBUF_SIZE - ring.wptr;  /* å‰åŠ */
+		int tail = len - head;               /* å¾ŒåŠ */
 
 		memcpy(ring.buf + ring.wptr, buf, head);
 		memcpy(ring.buf, buf + head, tail);
@@ -225,20 +225,20 @@ void flush_ringbuf(void)
 
 		tmp_fdset = fdset;
 
-		/* ¥½¥±¥Ã¥È¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤á¤ë¤«¤É¤¦¤«Ä´¤Ù¤ë */
+		/* ã‚½ã‚±ãƒƒãƒˆã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚ã‚‹ã‹ã©ã†ã‹èª¿ã¹ã‚‹ */
 		select(sd+1, (fd_set *)NULL, &tmp_fdset, (fd_set *)NULL, &tv);
 
-		/* ½ñ¤­¹ş¤á¤Ê¤±¤ì¤ĞÌá¤ë */
+		/* æ›¸ãè¾¼ã‚ãªã‘ã‚Œã°æˆ»ã‚‹ */
 		if (FD_ISSET(sd, &tmp_fdset) == 0) break;
 
 		result = send(sd, ring.buf + ring.rptr, ((ring.wptr > ring.rptr ) ? ring.wptr : RINGBUF_SIZE) - ring.rptr, 0);
 
 		if (result <= 0)
 		{
-			/* ¥µ¡¼¥Ğ¤È¤ÎÀÜÂ³ÃÇ¡© */
+			/* ã‚µãƒ¼ãƒã¨ã®æ¥ç¶šæ–­ï¼Ÿ */
 			if (chuukei_server) disable_chuukei_server();
 
-			prt("¥µ¡¼¥Ğ¤È¤ÎÀÜÂ³¤¬ÀÚÃÇ¤µ¤ì¤Ş¤·¤¿¡£", 0, 0);
+			prt("ã‚µãƒ¼ãƒã¨ã®æ¥ç¶šãŒåˆ‡æ–­ã•ã‚Œã¾ã—ãŸã€‚", 0, 0);
 			inkey();
 			close(sd);
 
@@ -260,15 +260,15 @@ void flush_ringbuf(void)
 	{
 		int result;
 
-		/* ¥½¥±¥Ã¥È¤Ë¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤á¤ë¤«¤É¤¦¤«Ä´¤Ù¤ë */
+		/* ã‚½ã‚±ãƒƒãƒˆã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚ã‚‹ã‹ã©ã†ã‹èª¿ã¹ã‚‹ */
 		result = OTSnd(ep, ring.buf + ring.rptr, ((ring.wptr > ring.rptr ) ? ring.wptr : RINGBUF_SIZE) - ring.rptr, 0);
 
 		if (result <= 0)
 		{
-			/* ¥µ¡¼¥Ğ¤È¤ÎÀÜÂ³ÃÇ¡© */
+			/* ã‚µãƒ¼ãƒã¨ã®æ¥ç¶šæ–­ï¼Ÿ */
 			if (chuukei_server) disable_chuukei_server();
 
-			prt("¥µ¡¼¥Ğ¤È¤ÎÀÜÂ³¤¬ÀÚÃÇ¤µ¤ì¤Ş¤·¤¿¡£", 0, 0);
+			prt("ã‚µãƒ¼ãƒã¨ã®æ¥ç¶šãŒåˆ‡æ–­ã•ã‚Œã¾ã—ãŸã€‚", 0, 0);
 			inkey();
 			close(sd);
 
@@ -295,27 +295,27 @@ static int read_chuukei_prf(cptr prf_name)
 
 	if (!fp) return (-1);
 
-	/* ½é´ü²½ */
+	/* åˆæœŸåŒ– */
 	server_port = -1;
 	server_name[0] = 0;
 	browse_delay = DEFAULT_DELAY;
 
 	while (0 == my_fgets(fp, buf, sizeof(buf)))
 	{
-		/* ¥µ¡¼¥ĞÌ¾ */
+		/* ã‚µãƒ¼ãƒå */
 		if (!strncmp(buf, "server:", 7))
 		{
 			strncpy(server_name, buf + 7, MAX_HOSTNAME - 1);
 			server_name[MAX_HOSTNAME - 1] = '\0';
 		}
 
-		/* ¥İ¡¼¥ÈÈÖ¹æ */
+		/* ãƒãƒ¼ãƒˆç•ªå· */
 		if (!strncmp(buf, "port:", 5))
 		{
 			server_port = atoi(buf + 5);
 		}
 
-		/* ¥Ç¥£¥ì¥¤ */
+		/* ãƒ‡ã‚£ãƒ¬ã‚¤ */
 		if (!strncmp(buf, "delay:", 6))
 		{
 			browse_delay = atoi(buf + 6);
@@ -324,7 +324,7 @@ static int read_chuukei_prf(cptr prf_name)
 
 	my_fclose(fp);
 
-	/* prf¥Õ¥¡¥¤¥ë¤¬´°Á´¤Ç¤Ê¤¤ */
+	/* prfãƒ•ã‚¡ã‚¤ãƒ«ãŒå®Œå…¨ã§ãªã„ */
 	if (server_port == -1 || server_name[0] == 0) return (-1);
 
 	return (0);
@@ -499,7 +499,7 @@ int connect_chuukei_server(char *prf_name)
 }
 #endif /* CHUUKEI */
 
-/* str¤¬Æ±¤¸Ê¸»ú¤Î·«¤êÊÖ¤·¤«¤É¤¦¤«Ä´¤Ù¤ë */
+/* strãŒåŒã˜æ–‡å­—ã®ç¹°ã‚Šè¿”ã—ã‹ã©ã†ã‹èª¿ã¹ã‚‹ */
 static bool string_is_repeat(char *str, int len)
 {
 	char c = str[0];
@@ -653,7 +653,7 @@ void prepare_movie_hooks(void)
 #endif
 		fd_close(movie_fd);
 #ifdef JP
-		msg_print("Ï¿²è¤ò½ªÎ»¤·¤Ş¤·¤¿¡£");
+		msg_print("éŒ²ç”»ã‚’çµ‚äº†ã—ã¾ã—ãŸã€‚");
 #else
 		msg_print("Stopped recording.");
 #endif
@@ -662,7 +662,7 @@ void prepare_movie_hooks(void)
 	{
 		sprintf(tmp, "%s.amv", player_base);
 #ifdef JP
-		if (get_string("¥à¡¼¥Ó¡¼µ­Ï¿¥Õ¥¡¥¤¥ë: ", tmp, 80))
+		if (get_string("ãƒ ãƒ¼ãƒ“ãƒ¼è¨˜éŒ²ãƒ•ã‚¡ã‚¤ãƒ«: ", tmp, 80))
 #else
 		if (get_string("Movie file name: ", tmp, 80))
 #endif
@@ -683,7 +683,7 @@ void prepare_movie_hooks(void)
 
 				/* Build query */
 #ifdef JP
-				(void)sprintf(out_val, "¸½Â¸¤¹¤ë¥Õ¥¡¥¤¥ë¤Ë¾å½ñ¤­¤·¤Ş¤¹¤«? (%s)", buf);
+				(void)sprintf(out_val, "ç¾å­˜ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¸Šæ›¸ãã—ã¾ã™ã‹? (%s)", buf);
 #else
 				(void)sprintf(out_val, "Replace existing file %s? ", buf);
 #endif
@@ -701,7 +701,7 @@ void prepare_movie_hooks(void)
 			if (!movie_fd)
 			{
 #ifdef JP
-				msg_print("¥Õ¥¡¥¤¥ë¤ò³«¤±¤Ş¤»¤ó¡ª");
+				msg_print("ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ï¼");
 #else
 				msg_print("Can not open file.");
 #endif
@@ -724,34 +724,34 @@ static int handle_timestamp_data(int timestamp)
 {
 	long current_time = get_current_time();
 
-	/* ÉÁ²è¥­¥å¡¼¤Ï¶õ¤«¤É¤¦¤«¡© */
+	/* æç”»ã‚­ãƒ¥ãƒ¼ã¯ç©ºã‹ã©ã†ã‹ï¼Ÿ */
 	if (fresh_queue.tail == fresh_queue.next)
 	{
-		/* ¥Ğ¥Ã¥Õ¥¡¥ê¥ó¥°¤·»Ï¤á¤Î»ş´Ö¤òÊİÂ¸¤·¤Æ¤ª¤¯ */
+		/* ãƒãƒƒãƒ•ã‚¡ãƒªãƒ³ã‚°ã—å§‹ã‚ã®æ™‚é–“ã‚’ä¿å­˜ã—ã¦ãŠã */
 		epoch_time = current_time;
 		epoch_time += browse_delay;
 		epoch_time -= timestamp;
 		time_diff = current_time - timestamp;
 	}
 
-	/* ÉÁ²è¥­¥å¡¼¤ËÊİÂ¸¤·¡¢ÊİÂ¸°ÌÃÖ¤ò¿Ê¤á¤ë */
+	/* æç”»ã‚­ãƒ¥ãƒ¼ã«ä¿å­˜ã—ã€ä¿å­˜ä½ç½®ã‚’é€²ã‚ã‚‹ */
 	fresh_queue.time[fresh_queue.tail] = timestamp;
 	fresh_queue.tail ++;
 
-	/* ¥­¥å¡¼¤ÎºÇ¸åÈø¤ËÅşÃ£¤·¤¿¤éÀèÆ¬¤ËÌá¤¹ */
+	/* ã‚­ãƒ¥ãƒ¼ã®æœ€å¾Œå°¾ã«åˆ°é”ã—ãŸã‚‰å…ˆé ­ã«æˆ»ã™ */
 	fresh_queue.tail %= FRESH_QUEUE_SIZE;
 
 	if (fresh_queue.tail == fresh_queue.next)
 	{
-		/* ÉÁ²è¥­¥å¡¼°î¤ì */
-		prt("ÉÁ²è¥¿¥¤¥ß¥ó¥°¥­¥å¡¼¤¬°î¤ì¤Ş¤·¤¿¡£¥µ¡¼¥Ğ¤È¤ÎÀÜÂ³¤òÀÚÃÇ¤·¤Ş¤¹¡£", 0, 0);
+		/* æç”»ã‚­ãƒ¥ãƒ¼æº¢ã‚Œ */
+		prt("æç”»ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚­ãƒ¥ãƒ¼ãŒæº¢ã‚Œã¾ã—ãŸã€‚ã‚µãƒ¼ãƒã¨ã®æ¥ç¶šã‚’åˆ‡æ–­ã—ã¾ã™ã€‚", 0, 0);
 		inkey();
 		close(sd);
 
 		return -1;
 	}
 
-	/* ¥×¥ì¥¤Â¦¤È¤Î¥Ç¥£¥ì¥¤¤òÄ´À° */
+	/* ãƒ—ãƒ¬ã‚¤å´ã¨ã®ãƒ‡ã‚£ãƒ¬ã‚¤ã‚’èª¿æ•´ */
 	if (time_diff != current_time - timestamp)
 	{
 		long old_time_diff = time_diff;
@@ -768,10 +768,10 @@ static int handle_movie_timestamp_data(int timestamp)
 {
 	static int initialized = FALSE;
 
-	/* ÉÁ²è¥­¥å¡¼¤Ï¶õ¤«¤É¤¦¤«¡© */
+	/* æç”»ã‚­ãƒ¥ãƒ¼ã¯ç©ºã‹ã©ã†ã‹ï¼Ÿ */
 	if (!initialized)
 	{
-		/* ¥Ğ¥Ã¥Õ¥¡¥ê¥ó¥°¤·»Ï¤á¤Î»ş´Ö¤òÊİÂ¸¤·¤Æ¤ª¤¯ */
+		/* ãƒãƒƒãƒ•ã‚¡ãƒªãƒ³ã‚°ã—å§‹ã‚ã®æ™‚é–“ã‚’ä¿å­˜ã—ã¦ãŠã */
 		epoch_time = get_current_time();
 		epoch_time += browse_delay;
 		epoch_time -= timestamp;
@@ -779,11 +779,11 @@ static int handle_movie_timestamp_data(int timestamp)
 		initialized = TRUE;
 	}
 
-	/* ÉÁ²è¥­¥å¡¼¤ËÊİÂ¸¤·¡¢ÊİÂ¸°ÌÃÖ¤ò¿Ê¤á¤ë */
+	/* æç”»ã‚­ãƒ¥ãƒ¼ã«ä¿å­˜ã—ã€ä¿å­˜ä½ç½®ã‚’é€²ã‚ã‚‹ */
 	fresh_queue.time[fresh_queue.tail] = timestamp;
 	fresh_queue.tail ++;
 
-	/* ¥­¥å¡¼¤ÎºÇ¸åÈø¤ËÅşÃ£¤·¤¿¤éÀèÆ¬¤ËÌá¤¹ */
+	/* ã‚­ãƒ¥ãƒ¼ã®æœ€å¾Œå°¾ã«åˆ°é”ã—ãŸã‚‰å…ˆé ­ã«æˆ»ã™ */
 	fresh_queue.tail %= FRESH_QUEUE_SIZE;
 
 	/* Success */
@@ -798,31 +798,31 @@ static int read_sock(void)
 	int recv_bytes;
 	int i;
 
-	/* Á°²ó»Ä¤Ã¤¿¥Ç¡¼¥¿¤Î¸å¤Ë¤Ä¤Å¤±¤ÆÇÛ¿®¥µ¡¼¥Ğ¤«¤é¥Ç¡¼¥¿¼õ¿® */
+	/* å‰å›æ®‹ã£ãŸãƒ‡ãƒ¼ã‚¿ã®å¾Œã«ã¤ã¥ã‘ã¦é…ä¿¡ã‚µãƒ¼ãƒã‹ã‚‰ãƒ‡ãƒ¼ã‚¿å—ä¿¡ */
 	recv_bytes = recv(sd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes, 0);
 
 	if (recv_bytes <= 0)
 		return -1;
 
-	/* Á°²ó»Ä¤Ã¤¿¥Ç¡¼¥¿ÎÌ¤Ëº£²óÆÉ¤ó¤À¥Ç¡¼¥¿ÎÌ¤òÄÉ²Ã */
+	/* å‰å›æ®‹ã£ãŸãƒ‡ãƒ¼ã‚¿é‡ã«ä»Šå›èª­ã‚“ã ãƒ‡ãƒ¼ã‚¿é‡ã‚’è¿½åŠ  */
 	remain_bytes += recv_bytes;
 
 	for (i = 0; i < remain_bytes; i ++)
 	{
-		/* ¥Ç¡¼¥¿¤Î¤¯¤®¤ê('\0')¤òÃµ¤¹ */
+		/* ãƒ‡ãƒ¼ã‚¿ã®ããã‚Š('\0')ã‚’æ¢ã™ */
 		if (recv_buf[i] == '\0')
 		{
-			/* 'd'¤Ç»Ï¤Ş¤ë¥Ç¡¼¥¿(¥¿¥¤¥à¥¹¥¿¥ó¥×)¤Î¾ì¹ç¤Ï
-			   ÉÁ²è¥­¥å¡¼¤ËÊİÂ¸¤¹¤ë½èÍı¤ò¸Æ¤Ö */
+			/* 'd'ã§å§‹ã¾ã‚‹ãƒ‡ãƒ¼ã‚¿(ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—)ã®å ´åˆã¯
+			   æç”»ã‚­ãƒ¥ãƒ¼ã«ä¿å­˜ã™ã‚‹å‡¦ç†ã‚’å‘¼ã¶ */
 			if ((recv_buf[0] == 'd') &&
 			    (handle_timestamp_data(atoi(recv_buf + 1)) < 0))
 				return -1;
 
-			/* ¼õ¿®¥Ç¡¼¥¿¤òÊİÂ¸ */
+			/* å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜ */
 			if (insert_ringbuf(recv_buf) < 0) 
 				return -1;
 
-			/* ¼¡¤Î¥Ç¡¼¥¿°Ü¹Ô¤òrecv_buf¤ÎÀèÆ¬¤Ë°ÜÆ° */
+			/* æ¬¡ã®ãƒ‡ãƒ¼ã‚¿ç§»è¡Œã‚’recv_bufã®å…ˆé ­ã«ç§»å‹• */
 			memmove(recv_buf, recv_buf + i + 1, remain_bytes - i - 1);
 
 			remain_bytes -= (i+1);
@@ -846,25 +846,25 @@ static int read_movie_file(void)
 	if (recv_bytes <= 0)
 		return -1;
 
-	/* Á°²ó»Ä¤Ã¤¿¥Ç¡¼¥¿ÎÌ¤Ëº£²óÆÉ¤ó¤À¥Ç¡¼¥¿ÎÌ¤òÄÉ²Ã */
+	/* å‰å›æ®‹ã£ãŸãƒ‡ãƒ¼ã‚¿é‡ã«ä»Šå›èª­ã‚“ã ãƒ‡ãƒ¼ã‚¿é‡ã‚’è¿½åŠ  */
 	remain_bytes += recv_bytes;
 
 	for (i = 0; i < remain_bytes; i ++)
 	{
-		/* ¥Ç¡¼¥¿¤Î¤¯¤®¤ê('\0')¤òÃµ¤¹ */
+		/* ãƒ‡ãƒ¼ã‚¿ã®ããã‚Š('\0')ã‚’æ¢ã™ */
 		if (recv_buf[i] == '\0')
 		{
-			/* 'd'¤Ç»Ï¤Ş¤ë¥Ç¡¼¥¿(¥¿¥¤¥à¥¹¥¿¥ó¥×)¤Î¾ì¹ç¤Ï
-			   ÉÁ²è¥­¥å¡¼¤ËÊİÂ¸¤¹¤ë½èÍı¤ò¸Æ¤Ö */
+			/* 'd'ã§å§‹ã¾ã‚‹ãƒ‡ãƒ¼ã‚¿(ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—)ã®å ´åˆã¯
+			   æç”»ã‚­ãƒ¥ãƒ¼ã«ä¿å­˜ã™ã‚‹å‡¦ç†ã‚’å‘¼ã¶ */
 			if ((recv_buf[0] == 'd') &&
 			    (handle_movie_timestamp_data(atoi(recv_buf + 1)) < 0))
 				return -1;
 
-			/* ¼õ¿®¥Ç¡¼¥¿¤òÊİÂ¸ */
+			/* å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜ */
 			if (insert_ringbuf(recv_buf) < 0) 
 				return -1;
 
-			/* ¼¡¤Î¥Ç¡¼¥¿°Ü¹Ô¤òrecv_buf¤ÎÀèÆ¬¤Ë°ÜÆ° */
+			/* æ¬¡ã®ãƒ‡ãƒ¼ã‚¿ç§»è¡Œã‚’recv_bufã®å…ˆé ­ã«ç§»å‹• */
 			memmove(recv_buf, recv_buf + i + 1, remain_bytes - i - 1);
 
 			remain_bytes -= (i+1);
@@ -877,7 +877,7 @@ static int read_movie_file(void)
 
 
 #ifndef WINDOWS
-/* WinÈÇ¤Î¾²¤ÎÃæÅÀ¤ÈÊÉ¤ÎÆ¦Éå¤ò¥Ô¥ê¥ª¥É¤È¥·¥ã¡¼¥×¤Ë¤¹¤ë¡£*/
+/* Winç‰ˆã®åºŠã®ä¸­ç‚¹ã¨å£ã®è±†è…ã‚’ãƒ”ãƒªã‚ªãƒ‰ã¨ã‚·ãƒ£ãƒ¼ãƒ—ã«ã™ã‚‹ã€‚*/
 static void win2unix(int col, char *buf)
 {
 	char kabe;
@@ -917,7 +917,7 @@ static bool get_nextbuf(char *buf)
 	return (TRUE);
 }
 
-/* ¥×¥ì¥¤¥Û¥¹¥È¤Î¥Ş¥Ã¥×¤¬Âç¤­¤¤¤È¤­¥¯¥é¥¤¥¢¥ó¥È¤Î¥Ş¥Ã¥×¤â¥ê¥µ¥¤¥º¤¹¤ë */
+/* ãƒ—ãƒ¬ã‚¤ãƒ›ã‚¹ãƒˆã®ãƒãƒƒãƒ—ãŒå¤§ãã„ã¨ãã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®ãƒãƒƒãƒ—ã‚‚ãƒªã‚µã‚¤ã‚ºã™ã‚‹ */
 static void update_term_size(int x, int y, int len)
 {
 	int ox, oy;
@@ -926,9 +926,9 @@ static void update_term_size(int x, int y, int len)
 	nx = ox;
 	ny = oy;
 
-	/* ²£Êı¸ş¤Î¥Á¥§¥Ã¥¯ */
+	/* æ¨ªæ–¹å‘ã®ãƒã‚§ãƒƒã‚¯ */
 	if (x + len > ox) nx = x + len;
-	/* ½ÄÊı¸ş¤Î¥Á¥§¥Ã¥¯ */
+	/* ç¸¦æ–¹å‘ã®ãƒã‚§ãƒƒã‚¯ */
 	if (y + 1 > oy) ny = y + 1;
 
 	if (nx != ox || ny != oy) Term_resize(nx, ny);
@@ -938,13 +938,13 @@ static bool flush_ringbuf_client(void)
 {
 	char buf[1024];
 
-	/* ½ñ¤¯¥Ç¡¼¥¿¤Ê¤· */
+	/* æ›¸ããƒ‡ãƒ¼ã‚¿ãªã— */
 	if (fresh_queue.next == fresh_queue.tail) return (FALSE);
 
-	/* ¤Ş¤À½ñ¤¯¤Ù¤­»ş¤Ç¤Ê¤¤ */
+	/* ã¾ã æ›¸ãã¹ãæ™‚ã§ãªã„ */
 	if (fresh_queue.time[fresh_queue.next] > get_current_time() - epoch_time) return (FALSE);
 
-	/* »ş´Ö¾ğÊó(¶èÀÚ¤ê)¤¬ÆÀ¤é¤ì¤ë¤Ş¤Ç½ñ¤¯ */
+	/* æ™‚é–“æƒ…å ±(åŒºåˆ‡ã‚Š)ãŒå¾—ã‚‰ã‚Œã‚‹ã¾ã§æ›¸ã */
 	while (get_nextbuf(buf))
 	{
 		char id;
@@ -967,7 +967,7 @@ static bool flush_ringbuf_client(void)
 
 		switch (id)
 		{
-		case 't': /* ÄÌ¾ï */
+		case 't': /* é€šå¸¸ */
 #ifdef SJIS
 			euc2sjis(mesg);
 #endif
@@ -980,7 +980,7 @@ static bool flush_ringbuf_client(void)
 			}
 			break;
 
-		case 'n': /* ·«¤êÊÖ¤· */
+		case 'n': /* ç¹°ã‚Šè¿”ã— */
 			for (i = 1; i < len; i++)
 			{
 				mesg[i] = mesg[0];
@@ -995,7 +995,7 @@ static bool flush_ringbuf_client(void)
 			}
 			break;
 
-		case 's': /* °ìÊ¸»ú */
+		case 's': /* ä¸€æ–‡å­— */
 			update_term_size(x, y, 1);
 			(void)((*angband_term[0]->text_hook)(x, y, 1, (byte)col, mesg));
 			strncpy(&Term->scr->c[y][x], mesg, 1);
@@ -1055,7 +1055,7 @@ void browse_chuukei()
 		tmp_fdset = fdset;
 		tmp_tv = tv;
 
-		/* ¥½¥±¥Ã¥È¤Ë¥Ç¡¼¥¿¤¬Íè¤Æ¤¤¤ë¤«¤É¤¦¤«Ä´¤Ù¤ë */
+		/* ã‚½ã‚±ãƒƒãƒˆã«ãƒ‡ãƒ¼ã‚¿ãŒæ¥ã¦ã„ã‚‹ã‹ã©ã†ã‹èª¿ã¹ã‚‹ */
 		select(sd+1, &tmp_fdset, (fd_set *)NULL, (fd_set *)NULL, &tmp_tv);
 		if (FD_ISSET(sd, &tmp_fdset) == 0)
 		{
@@ -1068,7 +1068,7 @@ void browse_chuukei()
 			chuukei_client = FALSE;
 		}
 
-		/* ÀÜÂ³¤¬ÀÚ¤ì¤¿¾õÂÖ¤Ç½ñ¤¯¤Ù¤­¥Ç¡¼¥¿¤¬¤Ê¤¯¤Ê¤Ã¤Æ¤¤¤¿¤é½ªÎ» */
+		/* æ¥ç¶šãŒåˆ‡ã‚ŒãŸçŠ¶æ…‹ã§æ›¸ãã¹ããƒ‡ãƒ¼ã‚¿ãŒãªããªã£ã¦ã„ãŸã‚‰çµ‚äº† */
 		if (!chuukei_client && fresh_queue.next == fresh_queue.tail ) break;
 	}
 #else
@@ -1083,7 +1083,7 @@ void browse_chuukei()
 
 		if (flush_ringbuf_client()) continue;
 
-		/* ¥½¥±¥Ã¥È¤Ë¥Ç¡¼¥¿¤¬Íè¤Æ¤¤¤ë¤«¤É¤¦¤«Ä´¤Ù¤ë */
+		/* ã‚½ã‚±ãƒƒãƒˆã«ãƒ‡ãƒ¼ã‚¿ãŒæ¥ã¦ã„ã‚‹ã‹ã©ã†ã‹èª¿ã¹ã‚‹ */
 
 		OTCountDataBytes(ep, &unreadData);
 		if(unreadData <= 0 ){
@@ -1095,7 +1095,7 @@ void browse_chuukei()
 			chuukei_client = FALSE;
 		}
 
-		/* ÀÜÂ³¤¬ÀÚ¤ì¤¿¾õÂÖ¤Ç½ñ¤¯¤Ù¤­¥Ç¡¼¥¿¤¬¤Ê¤¯¤Ê¤Ã¤Æ¤¤¤¿¤é½ªÎ» */
+		/* æ¥ç¶šãŒåˆ‡ã‚ŒãŸçŠ¶æ…‹ã§æ›¸ãã¹ããƒ‡ãƒ¼ã‚¿ãŒãªããªã£ã¦ã„ãŸã‚‰çµ‚äº† */
 		if (!chuukei_client && fresh_queue.next == fresh_queue.tail ) break;
 	}
 #endif /*MACINTOSH*/
@@ -1133,7 +1133,7 @@ void browse_movie(void)
 			{
 				Term_xtra(TERM_XTRA_FLUSH, 0);
 
-				/* ¥½¥±¥Ã¥È¤Ë¥Ç¡¼¥¿¤¬Íè¤Æ¤¤¤ë¤«¤É¤¦¤«Ä´¤Ù¤ë */
+				/* ã‚½ã‚±ãƒƒãƒˆã«ãƒ‡ãƒ¼ã‚¿ãŒæ¥ã¦ã„ã‚‹ã‹ã©ã†ã‹èª¿ã¹ã‚‹ */
 #ifdef WINDOWS
 				Sleep(WAIT);
 #else

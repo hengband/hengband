@@ -1,4 +1,4 @@
-/* File: h-type.h */
+﻿/* File: h-type.h */
 
 #ifndef INCLUDED_H_TYPE_H
 #define INCLUDED_H_TYPE_H

@@ -1,4 +1,4 @@
-/* File: maid-x11.c */
+﻿/* File: maid-x11.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others

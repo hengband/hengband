@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file mutation.c
- * @brief ÆÍÁ³ÊÑ°Û¥ë¡¼¥ë¤Î¼ÂÁõ / Mutation effects (and racial powers)
+ * @brief çªç„¶å¤‰ç•°ãƒ«ãƒ¼ãƒ«ã®å®Ÿè£… / Mutation effects (and racial powers)
  * @date 2014/01/11
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -14,9 +14,9 @@
 #include "angband.h"
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤ËÆÍÁ³ÊÑ°Û¤òÍ¿¤¨¤ë
- * @param choose_mut Í¿¤¨¤¿¤¤ÆÍÁ³ÊÑ°Û¤ÎID¡¢0¤Ê¤é¤Ğ¥é¥ó¥À¥à¤ËÁªÂò
- * @return ¤Ê¤·
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«çªç„¶å¤‰ç•°ã‚’ä¸ãˆã‚‹
+ * @param choose_mut ä¸ãˆãŸã„çªç„¶å¤‰ç•°ã®IDã€0ãªã‚‰ã°ãƒ©ãƒ³ãƒ€ãƒ ã«é¸æŠ
+ * @return ãªã—
  */
 bool gain_random_mutation(int choose_mut)
 {
@@ -35,342 +35,342 @@ bool gain_random_mutation(int choose_mut)
 		case 1: case 2: case 3: case 4:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SPIT_ACID;
-			muta_desc = _("»À¤òÅÇ¤¯Ç½ÎÏ¤òÆÀ¤¿¡£", "You gain the ability to spit acid.");
+			muta_desc = _("é…¸ã‚’åãèƒ½åŠ›ã‚’å¾—ãŸã€‚", "You gain the ability to spit acid.");
 			break;
 			
 		case 5: case 6: case 7:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_BR_FIRE;
-			muta_desc = _("²Ğ¤òÅÇ¤¯Ç½ÎÏ¤òÆÀ¤¿¡£", "You gain the ability to breathe fire.");
+			muta_desc = _("ç«ã‚’åãèƒ½åŠ›ã‚’å¾—ãŸã€‚", "You gain the ability to breathe fire.");
 			break;
 			
 		case 8: case 9:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_HYPN_GAZE;
-			muta_desc = _("ºÅÌ²´ã¤ÎÇ½ÎÏ¤òÆÀ¤¿¡£", "Your eyes look mesmerizing...");
+			muta_desc = _("å‚¬çœ çœ¼ã®èƒ½åŠ›ã‚’å¾—ãŸã€‚", "Your eyes look mesmerizing...");
 			break;
 			
 		case 10: case 11:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_TELEKINES;
-			muta_desc = _("ÊªÂÎ¤òÇ°Æ°ÎÏ¤ÇÆ°¤«¤¹Ç½ÎÏ¤òÆÀ¤¿¡£", "You gain the ability to move objects telekinetically.");
+			muta_desc = _("ç‰©ä½“ã‚’å¿µå‹•åŠ›ã§å‹•ã‹ã™èƒ½åŠ›ã‚’å¾—ãŸã€‚", "You gain the ability to move objects telekinetically.");
 			break;
 			
 		case 12: case 13: case 14:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_VTELEPORT;
-			muta_desc = _("¼«Ê¬¤Î°Õ»×¤Ç¥Æ¥ì¥İ¡¼¥È¤¹¤ëÇ½ÎÏ¤òÆÀ¤¿¡£", "You gain the power of teleportation at will.");
+			muta_desc = _("è‡ªåˆ†ã®æ„æ€ã§ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹èƒ½åŠ›ã‚’å¾—ãŸã€‚", "You gain the power of teleportation at will.");
 			break;
 			
 		case 15: case 16:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_MIND_BLST;
-			muta_desc = _("Àº¿À¹¶·â¤ÎÇ½ÎÏ¤òÆÀ¤¿¡£", "You gain the power of Mind Blast.");
+			muta_desc = _("ç²¾ç¥æ”»æ’ƒã®èƒ½åŠ›ã‚’å¾—ãŸã€‚", "You gain the power of Mind Blast.");
 			break;
 			
 		case 17: case 18:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_RADIATION;
-			muta_desc = _("¤¢¤Ê¤¿¤Ï¶¯¤¤Êü¼ÍÀş¤òÈ¯À¸¤·»Ï¤á¤¿¡£", "You start emitting hard radiation.");
+			muta_desc = _("ã‚ãªãŸã¯å¼·ã„æ”¾å°„ç·šã‚’ç™ºç”Ÿã—å§‹ã‚ãŸã€‚", "You start emitting hard radiation.");
 			break;
 			
 		case 19: case 20:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_VAMPIRISM;
-			muta_desc = _("À¸Ì¿ÎÏ¤òµÛ¼ı¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£", "You become vampiric.");
+			muta_desc = _("ç”Ÿå‘½åŠ›ã‚’å¸åã§ãã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚", "You become vampiric.");
 			break;
 			
 		case 21: case 22: case 23:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SMELL_MET;
-			muta_desc = _("¶âÂ°¤ÎÆ÷¤¤¤òÓÌ¤®Ê¬¤±¤é¤ì¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£", "You smell a metallic odor.");
+			muta_desc = _("é‡‘å±ã®åŒ‚ã„ã‚’å—…ãåˆ†ã‘ã‚‰ã‚Œã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚", "You smell a metallic odor.");
 			break;
 			
 		case 24: case 25: case 26: case 27:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SMELL_MON;
-			muta_desc = _("¥â¥ó¥¹¥¿¡¼¤Î½­¤¤¤òÓÌ¤®Ê¬¤±¤é¤ì¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£", "You smell filthy monsters.");
+			muta_desc = _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®è‡­ã„ã‚’å—…ãåˆ†ã‘ã‚‰ã‚Œã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚", "You smell filthy monsters.");
 			break;
 			
 		case 28: case 29: case 30:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_BLINK;
-			muta_desc = _("¶áµ÷Î¥¥Æ¥ì¥İ¡¼¥È¤ÎÇ½ÎÏ¤òÆÀ¤¿¡£", "You gain the power of minor teleportation.");
+			muta_desc = _("è¿‘è·é›¢ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã®èƒ½åŠ›ã‚’å¾—ãŸã€‚", "You gain the power of minor teleportation.");
 			break;
 			
 		case 31: case 32:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_EAT_ROCK;
-			muta_desc = _("ÊÉ¤¬ÈşÌ£¤·¤½¤¦¤Ë¸«¤¨¤ë¡£", "The walls look delicious.");
+			muta_desc = _("å£ãŒç¾å‘³ã—ãã†ã«è¦‹ãˆã‚‹ã€‚", "The walls look delicious.");
 			break;
 			
 		case 33: case 34:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SWAP_POS;
-			muta_desc = _("Â¾¿Í¤Î·¤¤Ç°ì¥Ş¥¤¥ëÊâ¤¯¤è¤¦¤Êµ¤Ê¬¤¬¤¹¤ë¡£", "You feel like walking a mile in someone else's shoes.");
+			muta_desc = _("ä»–äººã®é´ã§ä¸€ãƒã‚¤ãƒ«æ­©ãã‚ˆã†ãªæ°—åˆ†ãŒã™ã‚‹ã€‚", "You feel like walking a mile in someone else's shoes.");
 			break;
 			
 		case 35: case 36: case 37:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SHRIEK;
-			muta_desc = _("¤¢¤Ê¤¿¤ÎÀ¼¤ÏÁêÅö¶¯¤¯¤Ê¤Ã¤¿¡£", "Your vocal cords get much tougher.");
+			muta_desc = _("ã‚ãªãŸã®å£°ã¯ç›¸å½“å¼·ããªã£ãŸã€‚", "Your vocal cords get much tougher.");
 			break;
 			
 		case 38: case 39: case 40:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_ILLUMINE;
-			muta_desc = _("¤¢¤Ê¤¿¤Ï¸÷¤êµ±¤¤¤ÆÉô²°¤òÌÀ¤ë¤¯¤¹¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£", "You can light up rooms with your presence.");
+			muta_desc = _("ã‚ãªãŸã¯å…‰ã‚Šè¼ã„ã¦éƒ¨å±‹ã‚’æ˜ã‚‹ãã™ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚", "You can light up rooms with your presence.");
 			break;
 			
 		case 41: case 42:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_DET_CURSE;
-			muta_desc = _("¼Ù°­¤ÊËâË¡¤ò´¶ÃÎ¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£", "You can feel evil magics.");
+			muta_desc = _("é‚ªæ‚ªãªé­”æ³•ã‚’æ„ŸçŸ¥ã§ãã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚", "You can feel evil magics.");
 			break;
 			
 		case 43: case 44: case 45:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_BERSERK;
-			muta_desc = _("À©¸æ¤Ç¤­¤ë·ã¾ğ¤ò´¶¤¸¤ë¡£", "You feel a controlled rage.");
+			muta_desc = _("åˆ¶å¾¡ã§ãã‚‹æ¿€æƒ…ã‚’æ„Ÿã˜ã‚‹ã€‚", "You feel a controlled rage.");
 			break;
 			
 		case 46:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_POLYMORPH;
-			muta_desc = _("ÂÎ¤¬ÊÑ°Û¤·¤ä¤¹¤¯¤Ê¤Ã¤¿¡£", "Your body seems mutable.");
+			muta_desc = _("ä½“ãŒå¤‰ç•°ã—ã‚„ã™ããªã£ãŸã€‚", "Your body seems mutable.");
 			break;
 			
 		case 47: case 48:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_MIDAS_TCH;
-			muta_desc = _("¡Ö¥ß¥À¥¹²¦¤Î¼ê¡×¤ÎÇ½ÎÏ¤òÆÀ¤¿¡£", "You gain the Midas touch.");/*¥È¥¥¡¼¥à¥ì¥¤¥À¡¼¥¹¤Ë¤¢¤ê¤Ş¤·¤¿¤Í¡£ */
+			muta_desc = _("ã€ŒãƒŸãƒ€ã‚¹ç‹ã®æ‰‹ã€ã®èƒ½åŠ›ã‚’å¾—ãŸã€‚", "You gain the Midas touch.");/*ãƒˆã‚¥ãƒ¼ãƒ ãƒ¬ã‚¤ãƒ€ãƒ¼ã‚¹ã«ã‚ã‚Šã¾ã—ãŸã­ã€‚ */
 			break;
 			
 		case 49:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_GROW_MOLD;
-			muta_desc = _("ÆÍÁ³¥«¥Ó¤Ë¿Æ¤·¤ß¤ò³Ğ¤¨¤¿¡£", "You feel a sudden affinity for mold.");
+			muta_desc = _("çªç„¶ã‚«ãƒ“ã«è¦ªã—ã¿ã‚’è¦šãˆãŸã€‚", "You feel a sudden affinity for mold.");
 			break;
 			
 		case 50: case 51: case 52:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_RESIST;
-			muta_desc = _("¤¢¤Ê¤¿¤Ï¼«Ê¬¼«¿È¤ò¼é¤ì¤ëµ¤¤¬¤¹¤ë¡£", "You feel like you can protect yourself.");
+			muta_desc = _("ã‚ãªãŸã¯è‡ªåˆ†è‡ªèº«ã‚’å®ˆã‚Œã‚‹æ°—ãŒã™ã‚‹ã€‚", "You feel like you can protect yourself.");
 			break;
 			
 		case 53: case 54: case 55:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_EARTHQUAKE;
-			muta_desc = _("¥À¥ó¥¸¥ç¥ó¤òÇË²õ¤¹¤ëÇ½ÎÏ¤òÆÀ¤¿¡£", "You gain the ability to wreck the dungeon.");
+			muta_desc = _("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’ç ´å£Šã™ã‚‹èƒ½åŠ›ã‚’å¾—ãŸã€‚", "You gain the ability to wreck the dungeon.");
 			break;
 			
 		case 56:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_EAT_MAGIC;
-			muta_desc = _("ËâË¡¤Î¥¢¥¤¥Æ¥à¤¬ÈşÌ£¤½¤¦¤Ë¸«¤¨¤ë¡£", "Your magic items look delicious.");
+			muta_desc = _("é­”æ³•ã®ã‚¢ã‚¤ãƒ†ãƒ ãŒç¾å‘³ãã†ã«è¦‹ãˆã‚‹ã€‚", "Your magic items look delicious.");
 			break;
 			
 		case 57: case 58:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_WEIGH_MAG;
-			muta_desc = _("¤¢¤Ê¤¿¤Ï¼ş°Ï¤Ë¤¢¤ëËâË¡¤ò¤è¤êÎÉ¤¯Íı²ò¤Ç¤­¤ëµ¤¤¬¤¹¤ë¡£", "You feel you can better understand the magic around you.");
+			muta_desc = _("ã‚ãªãŸã¯å‘¨å›²ã«ã‚ã‚‹é­”æ³•ã‚’ã‚ˆã‚Šè‰¯ãç†è§£ã§ãã‚‹æ°—ãŒã™ã‚‹ã€‚", "You feel you can better understand the magic around you.");
 			break;
 			
 		case 59:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_STERILITY;
-			muta_desc = _("¼ş¤ê¤ÎÁ´¤Æ¤Î¼Ô¤ËÆ¬ÄË¤òµ¯¤³¤¹¤³¤È¤¬¤Ç¤­¤ë¡£", "You can give everything around you a headache.");
+			muta_desc = _("å‘¨ã‚Šã®å…¨ã¦ã®è€…ã«é ­ç—›ã‚’èµ·ã“ã™ã“ã¨ãŒã§ãã‚‹ã€‚", "You can give everything around you a headache.");
 			break;
 		case 60: case 61:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_PANIC_HIT;
-			muta_desc = _("ÆÍÁ³¡¢Å¥ËÀ¤Îµ¤Ê¬¤¬Ê¬¤«¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£", "You suddenly understand how thieves feel.");
+			muta_desc = _("çªç„¶ã€æ³¥æ£’ã®æ°—åˆ†ãŒåˆ†ã‹ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚", "You suddenly understand how thieves feel.");
 			break;
 			
 		case 62: case 63: case 64:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_DAZZLE;
-			muta_desc = _("âÁ¤¤Á®¸÷¤òÈ¯¤¹¤ëÇ½ÎÏ¤òÆÀ¤¿¡£", "You gain the ability to emit dazzling lights.");
+			muta_desc = _("çœ©ã„é–ƒå…‰ã‚’ç™ºã™ã‚‹èƒ½åŠ›ã‚’å¾—ãŸã€‚", "You gain the ability to emit dazzling lights.");
 			break;
 			
 		case 65: case 66: case 67:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_LASER_EYE;
-			muta_desc = _("¤¢¤Ê¤¿¤ÎÌÜ¤Ï°ì½Ö¾Æ¤±ÉÕ¤¤¤¿¡£", "Your eyes burn for a moment.");
+			muta_desc = _("ã‚ãªãŸã®ç›®ã¯ä¸€ç¬ç„¼ã‘ä»˜ã„ãŸã€‚", "Your eyes burn for a moment.");
 			break;
 			
 		case 68: case 69:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_RECALL;
-			muta_desc = _("¾¯¤·¤À¤±¥Û¡¼¥à¥·¥Ã¥¯¤Ë¤Ê¤Ã¤¿¤¬¡¢¤¹¤°Ä¾¤Ã¤¿¡£", "You feel briefly homesick, but it passes.");
+			muta_desc = _("å°‘ã—ã ã‘ãƒ›ãƒ¼ãƒ ã‚·ãƒƒã‚¯ã«ãªã£ãŸãŒã€ã™ãç›´ã£ãŸã€‚", "You feel briefly homesick, but it passes.");
 			break;
 			
 		case 70:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_BANISH;
-			muta_desc = _("¿ÀÀ»¤ÊÅÜ¤ê¤ÎÎÏ¤ËËş¤¿¤µ¤ì¤¿¡£", "You feel a holy wrath fill you.");
+			muta_desc = _("ç¥è–ãªæ€’ã‚Šã®åŠ›ã«æº€ãŸã•ã‚ŒãŸã€‚", "You feel a holy wrath fill you.");
 			break;
 			
 		case 71: case 72:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_COLD_TOUCH;
-			muta_desc = _("¤¢¤Ê¤¿¤ÎÎ¾¼ê¤Ï¤È¤Æ¤âÎä¤¿¤¯¤Ê¤Ã¤¿¡£", "Your hands get very cold.");
+			muta_desc = _("ã‚ãªãŸã®ä¸¡æ‰‹ã¯ã¨ã¦ã‚‚å†·ãŸããªã£ãŸã€‚", "Your hands get very cold.");
 			break;
 			
 		case 73: case 74:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_LAUNCHER;
-			muta_desc = _("¤¢¤Ê¤¿¤ÎÊª¤òÅê¤²¤ë¼ê¤Ï¤«¤Ê¤ê¶¯¤¯¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£", "Your throwing arm feels much stronger.");
+			muta_desc = _("ã‚ãªãŸã®ç‰©ã‚’æŠ•ã’ã‚‹æ‰‹ã¯ã‹ãªã‚Šå¼·ããªã£ãŸæ°—ãŒã™ã‚‹ã€‚", "Your throwing arm feels much stronger.");
 			break;
 			
 		case 75:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_BERS_RAGE;
-			muta_desc = _("¤¢¤Ê¤¿¤Ï¶¸Ë½²½¤ÎÈ¯ºî¤òµ¯¤³¤¹¤è¤¦¤Ë¤Ê¤Ã¤¿¡ª", "You become subject to fits of berserk rage!");
+			muta_desc = _("ã‚ãªãŸã¯ç‹‚æš´åŒ–ã®ç™ºä½œã‚’èµ·ã“ã™ã‚ˆã†ã«ãªã£ãŸï¼", "You become subject to fits of berserk rage!");
 			break;
 			
 		case 76:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_COWARDICE;
-			muta_desc = _("¿®¤¸¤é¤ì¤Ê¤¤¤¯¤é¤¤²²ÉÂ¤Ë¤Ê¤Ã¤¿¡ª", "You become an incredible coward!");
+			muta_desc = _("ä¿¡ã˜ã‚‰ã‚Œãªã„ãã‚‰ã„è‡†ç—…ã«ãªã£ãŸï¼", "You become an incredible coward!");
 			break;
 			
 		case 77:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_RTELEPORT;
-			muta_desc = _("¤¢¤Ê¤¿¤Î°ÌÃÖ¤ÏÈó¾ï¤ËÉÔ³ÎÄê¤Ë¤Ê¤Ã¤¿¡£", "Your position seems very uncertain...");
+			muta_desc = _("ã‚ãªãŸã®ä½ç½®ã¯éå¸¸ã«ä¸ç¢ºå®šã«ãªã£ãŸã€‚", "Your position seems very uncertain...");
 			break;
 			
 		case 78:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_ALCOHOL;
-			muta_desc = _("¤¢¤Ê¤¿¤Ï¥¢¥ë¥³¡¼¥ë¤òÊ¬Èç¤¹¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£", "Your body starts producing alcohol!");
+			muta_desc = _("ã‚ãªãŸã¯ã‚¢ãƒ«ã‚³ãƒ¼ãƒ«ã‚’åˆ†æ³Œã™ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚", "Your body starts producing alcohol!");
 			break;
 			
 		case 79:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_HALLU;
-			muta_desc = _("¤¢¤Ê¤¿¤Ï¸¸³Ğ¤ò°ú¤­µ¯¤³¤¹Àº¿ÀºøÍğ¤Ë¿¯¤µ¤ì¤¿¡£", "You are afflicted by a hallucinatory insanity!");
+			muta_desc = _("ã‚ãªãŸã¯å¹»è¦šã‚’å¼•ãèµ·ã“ã™ç²¾ç¥éŒ¯ä¹±ã«ä¾µã•ã‚ŒãŸã€‚", "You are afflicted by a hallucinatory insanity!");
 			break;
 			
 		case 80:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_FLATULENT;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÏÀ©¸æÉÔÇ½¤Ê¶¯Îõ¤ÊÕû¤ò¤³¤¯¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You become subject to uncontrollable flatulence.");
+			muta_desc = _( "ã‚ãªãŸã¯åˆ¶å¾¡ä¸èƒ½ãªå¼·çƒˆãªå±ã‚’ã“ãã‚ˆã†ã«ãªã£ãŸã€‚",  "You become subject to uncontrollable flatulence.");
 
 			break;
 		case 81: case 82:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_SCOR_TAIL;
-			muta_desc = _( "¥µ¥½¥ê¤Î¿¬Èø¤¬À¸¤¨¤Æ¤­¤¿¡ª",  "You grow a scorpion tail!");
+			muta_desc = _( "ã‚µã‚½ãƒªã®å°»å°¾ãŒç”Ÿãˆã¦ããŸï¼",  "You grow a scorpion tail!");
 
 			break;
 		case 83: case 84:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_HORNS;
-			muta_desc = _( "³Û¤Ë³Ñ¤¬À¸¤¨¤¿¡ª",  "Horns pop forth into your forehead!");
+			muta_desc = _( "é¡ã«è§’ãŒç”ŸãˆãŸï¼",  "Horns pop forth into your forehead!");
 
 			break;
 		case 85: case 86:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_BEAK;
-			muta_desc = _( "¸ı¤¬±Ô¤¯¶¯¤¤¥¯¥Á¥Ğ¥·¤ËÊÑ²½¤·¤¿¡ª",  "Your mouth turns into a sharp, powerful beak!");
+			muta_desc = _( "å£ãŒé‹­ãå¼·ã„ã‚¯ãƒãƒã‚·ã«å¤‰åŒ–ã—ãŸï¼",  "Your mouth turns into a sharp, powerful beak!");
 
 			break;
 		case 87: case 88:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_ATT_DEMON;
-			muta_desc = _( "°­Ëâ¤ò°ú¤­ÉÕ¤±¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You start attracting demons.");
+			muta_desc = _( "æ‚ªé­”ã‚’å¼•ãä»˜ã‘ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚",  "You start attracting demons.");
 
 			break;
 		case 89:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_PROD_MANA;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÏÀ©¸æÉÔÇ½¤ÊËâË¡¤Î¥¨¥Í¥ë¥®¡¼¤òÈ¯À¸¤¹¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You start producing magical energy uncontrollably.");
+			muta_desc = _( "ã‚ãªãŸã¯åˆ¶å¾¡ä¸èƒ½ãªé­”æ³•ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’ç™ºç”Ÿã™ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚",  "You start producing magical energy uncontrollably.");
 
 			break;
 		case 90: case 91:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_SPEED_FLUX;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ïí¯İµ¼Á¤Ë¤Ê¤Ã¤¿¡£",  "You become manic-depressive.");
+			muta_desc = _( "ã‚ãªãŸã¯èºé¬±è³ªã«ãªã£ãŸã€‚",  "You become manic-depressive.");
 
 			break;
 		case 92: case 93:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_BANISH_ALL;
-			muta_desc = _( "¶²¤í¤·¤¤ÎÏ¤¬¤¢¤Ê¤¿¤ÎÇØ¸å¤ËÀø¤ó¤Ç¤¤¤ëµ¤¤¬¤¹¤ë¡£",  "You feel a terrifying power lurking behind you.");
+			muta_desc = _( "æã‚ã—ã„åŠ›ãŒã‚ãªãŸã®èƒŒå¾Œã«æ½œã‚“ã§ã„ã‚‹æ°—ãŒã™ã‚‹ã€‚",  "You feel a terrifying power lurking behind you.");
 
 			break;
 		case 94:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_EAT_LIGHT;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï¥¦¥ó¥´¥ê¥¢¥ó¥È¤Ë´ñÌ¯¤Ê¿Æ¤·¤ß¤ò³Ğ¤¨¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You feel a strange kinship with Ungoliant.");
+			muta_desc = _( "ã‚ãªãŸã¯ã‚¦ãƒ³ã‚´ãƒªã‚¢ãƒ³ãƒˆã«å¥‡å¦™ãªè¦ªã—ã¿ã‚’è¦šãˆã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚",  "You feel a strange kinship with Ungoliant.");
 
 			break;
 		case 95: case 96:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_TRUNK;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎÉ¡¤Ï¿­¤Ó¤Æ¾İ¤ÎÉ¡¤Î¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "Your nose grows into an elephant-like trunk.");
+			muta_desc = _( "ã‚ãªãŸã®é¼»ã¯ä¼¸ã³ã¦è±¡ã®é¼»ã®ã‚ˆã†ã«ãªã£ãŸã€‚",  "Your nose grows into an elephant-like trunk.");
 
 			break;
 		case 97:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_ATT_ANIMAL;
-			muta_desc = _( "Æ°Êª¤ò°ú¤­ÉÕ¤±¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You start attracting animals.");
+			muta_desc = _( "å‹•ç‰©ã‚’å¼•ãä»˜ã‘ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚",  "You start attracting animals.");
 
 			break;
 		case 98:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_TENTACLES;
-			muta_desc = _( "¼Ù°­¤Ê¿¨¼ê¤¬ÂÎ¤ÎÎ¾Â¦¤ËÀ¸¤¨¤Æ¤­¤¿¡£",  "Evil-looking tentacles sprout from your sides.");
+			muta_desc = _( "é‚ªæ‚ªãªè§¦æ‰‹ãŒä½“ã®ä¸¡å´ã«ç”Ÿãˆã¦ããŸã€‚",  "Evil-looking tentacles sprout from your sides.");
 
 			break;
 		case 99:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_RAW_CHAOS;
-			muta_desc = _( "¼ş°Ï¤Î¶õ´Ö¤¬ÉÔ°ÂÄê¤Ë¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£",  "You feel the universe is less stable around you.");
+			muta_desc = _( "å‘¨å›²ã®ç©ºé–“ãŒä¸å®‰å®šã«ãªã£ãŸæ°—ãŒã™ã‚‹ã€‚",  "You feel the universe is less stable around you.");
 
 			break;
 		case 100: case 101: case 102:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_NORMALITY;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï´ñÌ¯¤Ê¤Û¤ÉÉáÄÌ¤Ë¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£",  "You feel strangely normal.");
+			muta_desc = _( "ã‚ãªãŸã¯å¥‡å¦™ãªã»ã©æ™®é€šã«ãªã£ãŸæ°—ãŒã™ã‚‹ã€‚",  "You feel strangely normal.");
 
 			break;
 		case 103:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WRAITH;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÏÍ©ÂÎ²½¤·¤¿¤ê¼ÂÂÎ²½¤·¤¿¤ê¤¹¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You start to fade in and out of the physical world.");
+			muta_desc = _( "ã‚ãªãŸã¯å¹½ä½“åŒ–ã—ãŸã‚Šå®Ÿä½“åŒ–ã—ãŸã‚Šã™ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚",  "You start to fade in and out of the physical world.");
 
 			break;
 		case 104:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_POLY_WOUND;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï¥«¥ª¥¹¤ÎÎÏ¤¬¸Å¤¤½ı¤ËÆş¤ê¹ş¤ó¤Ç¤¯¤ë¤Î¤ò´¶¤¸¤¿¡£",  "You feel forces of chaos entering your old scars.");
+			muta_desc = _( "ã‚ãªãŸã¯ã‚«ã‚ªã‚¹ã®åŠ›ãŒå¤ã„å‚·ã«å…¥ã‚Šè¾¼ã‚“ã§ãã‚‹ã®ã‚’æ„Ÿã˜ãŸã€‚",  "You feel forces of chaos entering your old scars.");
 
 			break;
 		case 105:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WASTING;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÏÆÍÁ³¤ª¤¾¤Ş¤·¤¤¿ê¼åÉÂ¤Ë¤«¤«¤Ã¤¿¡£",  "You suddenly contract a horrible wasting disease.");
+			muta_desc = _( "ã‚ãªãŸã¯çªç„¶ãŠãã¾ã—ã„è¡°å¼±ç—…ã«ã‹ã‹ã£ãŸã€‚",  "You suddenly contract a horrible wasting disease.");
 
 			break;
 		case 106:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_ATT_DRAGON;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï¥É¥é¥´¥ó¤ò°ú¤­¤Ä¤±¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You start attracting dragons.");
+			muta_desc = _( "ã‚ãªãŸã¯ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¼•ãã¤ã‘ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚",  "You start attracting dragons.");
 
 			break;
 		case 107: case 108:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WEIRD_MIND;
-			muta_desc = _( "¤¢¤Ê¤¿¤Î»×¹Í¤ÏÆÍÁ³¤ª¤«¤·¤ÊÊı¸ş¤Ë¸ş¤­»Ï¤á¤¿¡£",  "Your thoughts suddenly take off in strange directions.");
+			muta_desc = _( "ã‚ãªãŸã®æ€è€ƒã¯çªç„¶ãŠã‹ã—ãªæ–¹å‘ã«å‘ãå§‹ã‚ãŸã€‚",  "Your thoughts suddenly take off in strange directions.");
 
 			break;
 		case 109:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_NAUSEA;
-			muta_desc = _( "°ßÂŞ¤¬¥Ô¥¯¥Ô¥¯¤·¤Ï¤¸¤á¤¿¡£",  "Your stomach starts to roil nauseously.");
+			muta_desc = _( "èƒƒè¢‹ãŒãƒ”ã‚¯ãƒ”ã‚¯ã—ã¯ã˜ã‚ãŸã€‚",  "Your stomach starts to roil nauseously.");
 
 			break;
 		case 110: case 111:
@@ -379,237 +379,237 @@ bool gain_random_mutation(int choose_mut)
 			{
 				muta_class = &(p_ptr->muta2);
 				muta_which = MUT2_CHAOS_GIFT;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï¥«¥ª¥¹¤Î¼é¸î°­Ëâ¤ÎÃí°Õ¤ò¼æ¤¯¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You attract the notice of a chaos deity!");
+			muta_desc = _( "ã‚ãªãŸã¯ã‚«ã‚ªã‚¹ã®å®ˆè­·æ‚ªé­”ã®æ³¨æ„ã‚’æƒ¹ãã‚ˆã†ã«ãªã£ãŸã€‚",  "You attract the notice of a chaos deity!");
 
 			}
 			break;
 		case 112:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WALK_SHAD;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï¸½¼Â¤¬»æ¤Î¤è¤¦¤ËÇö¤¤¤È´¶¤¸¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You feel like reality is as thin as paper.");
+			muta_desc = _( "ã‚ãªãŸã¯ç¾å®ŸãŒç´™ã®ã‚ˆã†ã«è–„ã„ã¨æ„Ÿã˜ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚",  "You feel like reality is as thin as paper.");
 
 			break;
 		case 113: case 114:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WARNING;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÏÆÍÁ³¥Ñ¥é¥Î¥¤¥¢¤Ë¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£",  "You suddenly feel paranoid.");
+			muta_desc = _( "ã‚ãªãŸã¯çªç„¶ãƒ‘ãƒ©ãƒã‚¤ã‚¢ã«ãªã£ãŸæ°—ãŒã™ã‚‹ã€‚",  "You suddenly feel paranoid.");
 
 			break;
 		case 115:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_INVULN;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï½ËÊ¡¤µ¤ì¡¢ÌµÅ¨¾õÂÖ¤Ë¤Ê¤ëÈ¯ºî¤òµ¯¤³¤¹¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You are blessed with fits of invulnerability.");
+			muta_desc = _( "ã‚ãªãŸã¯ç¥ç¦ã•ã‚Œã€ç„¡æ•µçŠ¶æ…‹ã«ãªã‚‹ç™ºä½œã‚’èµ·ã“ã™ã‚ˆã†ã«ãªã£ãŸã€‚",  "You are blessed with fits of invulnerability.");
 
 			break;
 		case 116: case 117:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_SP_TO_HP;
-			muta_desc = _( "ËâË¡¤Î¼£Ìş¤ÎÈ¯ºî¤òµ¯¤³¤¹¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You are subject to fits of magical healing.");
+			muta_desc = _( "é­”æ³•ã®æ²»ç™’ã®ç™ºä½œã‚’èµ·ã“ã™ã‚ˆã†ã«ãªã£ãŸã€‚",  "You are subject to fits of magical healing.");
 
 			break;
 		case 118:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_HP_TO_SP;
-			muta_desc = _( "ÄË¤ß¤òÈ¼¤¦Àº¿ÀÌÀÎÆ²½¤ÎÈ¯ºî¤òµ¯¤³¤¹¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You are subject to fits of painful clarity.");
+			muta_desc = _( "ç—›ã¿ã‚’ä¼´ã†ç²¾ç¥æ˜ç­åŒ–ã®ç™ºä½œã‚’èµ·ã“ã™ã‚ˆã†ã«ãªã£ãŸã€‚",  "You are subject to fits of painful clarity.");
 
 			break;
 		case 119:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_DISARM;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎµÓ¤ÏÄ¹¤µ¤¬»ÍÇÜ¤Ë¤Ê¤Ã¤¿¡£",  "Your feet grow to four times their former size.");
+			muta_desc = _( "ã‚ãªãŸã®è„šã¯é•·ã•ãŒå››å€ã«ãªã£ãŸã€‚",  "Your feet grow to four times their former size.");
 
 			break;
 		case 120: case 121: case 122:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_HYPER_STR;
-			muta_desc = _( "Ä¶¿ÍÅª¤Ë¶¯¤¯¤Ê¤Ã¤¿¡ª",  "You turn into a superhuman he-man!");
+			muta_desc = _( "è¶…äººçš„ã«å¼·ããªã£ãŸï¼",  "You turn into a superhuman he-man!");
 
 			break;
 		case 123: case 124: case 125:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_PUNY;
-			muta_desc = _( "¶ÚÆù¤¬¼å¤Ã¤Æ¤·¤Ş¤Ã¤¿...",  "Your muscles wither away...");
+			muta_desc = _( "ç­‹è‚‰ãŒå¼±ã£ã¦ã—ã¾ã£ãŸ...",  "Your muscles wither away...");
 
 			break;
 		case 126: case 127: case 128:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_HYPER_INT;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎÇ¾¤ÏÀ¸ÂÎ¥³¥ó¥Ô¥å¡¼¥¿¤Ë¿Ê²½¤·¤¿¡ª",  "Your brain evolves into a living computer!");
+			muta_desc = _( "ã‚ãªãŸã®è„³ã¯ç”Ÿä½“ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã«é€²åŒ–ã—ãŸï¼",  "Your brain evolves into a living computer!");
 
 			break;
 		case 129: case 130: case 131:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_MORONIC;
-			muta_desc = _( "Ç¾¤¬°à½Ì¤·¤Æ¤·¤Ş¤Ã¤¿...",  "Your brain withers away...");
+			muta_desc = _( "è„³ãŒèç¸®ã—ã¦ã—ã¾ã£ãŸ...",  "Your brain withers away...");
 
 			break;
 		case 132: case 133:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_RESILIENT;
-			muta_desc = _( "ÊÂ³°¤ì¤Æ¥¿¥Õ¤Ë¤Ê¤Ã¤¿¡£",  "You become extraordinarily resilient.");
+			muta_desc = _( "ä¸¦å¤–ã‚Œã¦ã‚¿ãƒ•ã«ãªã£ãŸã€‚",  "You become extraordinarily resilient.");
 
 			break;
 		case 134: case 135:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_XTRA_FAT;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ïµ¤»ı¤Á°­¤¤¤¯¤é¤¤ÂÀ¤Ã¤¿¡ª",  "You become sickeningly fat!");
+			muta_desc = _( "ã‚ãªãŸã¯æ°—æŒã¡æ‚ªã„ãã‚‰ã„å¤ªã£ãŸï¼",  "You become sickeningly fat!");
 
 			break;
 		case 136: case 137:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ALBINO;
-			muta_desc = _( "¥¢¥ë¥Ó¥Î¤Ë¤Ê¤Ã¤¿¡ª¼å¤¯¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë...",  "You turn into an albino! You feel frail...");
+			muta_desc = _( "ã‚¢ãƒ«ãƒ“ãƒã«ãªã£ãŸï¼å¼±ããªã£ãŸæ°—ãŒã™ã‚‹...",  "You turn into an albino! You feel frail...");
 
 			break;
 		case 138: case 139: case 140:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_FLESH_ROT;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎÆùÂÎ¤ÏÉåÇÔ¤¹¤ëÉÂµ¤¤Ë¿¯¤µ¤ì¤¿¡ª",  "Your flesh is afflicted by a rotting disease!");
+			muta_desc = _( "ã‚ãªãŸã®è‚‰ä½“ã¯è…æ•—ã™ã‚‹ç—…æ°—ã«ä¾µã•ã‚ŒãŸï¼",  "Your flesh is afflicted by a rotting disease!");
 
 			break;
 		case 141: case 142:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_SILLY_VOI;
-			muta_desc = _( "À¼¤¬´ÖÈ´¤±¤Ê¥­¡¼¥­¡¼À¼¤Ë¤Ê¤Ã¤¿¡ª",  "Your voice turns into a ridiculous squeak!");
+			muta_desc = _( "å£°ãŒé–“æŠœã‘ãªã‚­ãƒ¼ã‚­ãƒ¼å£°ã«ãªã£ãŸï¼",  "Your voice turns into a ridiculous squeak!");
 
 			break;
 		case 143: case 144:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_BLANK_FAC;
-			muta_desc = _( "¤Î¤Ã¤Ú¤é¤Ü¤¦¤Ë¤Ê¤Ã¤¿¡ª",  "Your face becomes completely featureless!");
+			muta_desc = _( "ã®ã£ãºã‚‰ã¼ã†ã«ãªã£ãŸï¼",  "Your face becomes completely featureless!");
 
 			break;
 		case 145:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ILL_NORM;
-			muta_desc = _( "¿´¤Î°Â¤é¤°¸¸±Æ¤ò±Ç¤·½Ğ¤¹¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You start projecting a reassuring image.");
+			muta_desc = _( "å¿ƒã®å®‰ã‚‰ãå¹»å½±ã‚’æ˜ ã—å‡ºã™ã‚ˆã†ã«ãªã£ãŸã€‚",  "You start projecting a reassuring image.");
 
 			break;
 		case 146: case 147: case 148:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_XTRA_EYES;
-			muta_desc = _( "¿·¤¿¤ËÆó¤Ä¤ÎÌÜ¤¬½ĞÍè¤¿¡ª",  "You grow an extra pair of eyes!");
+			muta_desc = _( "æ–°ãŸã«äºŒã¤ã®ç›®ãŒå‡ºæ¥ãŸï¼",  "You grow an extra pair of eyes!");
 
 			break;
 		case 149: case 150:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_MAGIC_RES;
-			muta_desc = _( "ËâË¡¤Ø¤ÎÂÑÀ­¤¬¤Ä¤¤¤¿¡£",  "You become resistant to magic.");
+			muta_desc = _( "é­”æ³•ã¸ã®è€æ€§ãŒã¤ã„ãŸã€‚",  "You become resistant to magic.");
 
 			break;
 		case 151: case 152: case 153:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_XTRA_NOIS;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï´ñÌ¯¤Ê²»¤òÎ©¤Æ»Ï¤á¤¿¡ª",  "You start making strange noise!");
+			muta_desc = _( "ã‚ãªãŸã¯å¥‡å¦™ãªéŸ³ã‚’ç«‹ã¦å§‹ã‚ãŸï¼",  "You start making strange noise!");
 
 			break;
 		case 154: case 155: case 156:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_INFRAVIS;
-			muta_desc = _( "ÀÖ³°Àş»ëÎÏ¤¬Áı¤·¤¿¡£",  "Your infravision is improved.");
+			muta_desc = _( "èµ¤å¤–ç·šè¦–åŠ›ãŒå¢—ã—ãŸã€‚",  "Your infravision is improved.");
 
 			break;
 		case 157: case 158:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_XTRA_LEGS;
-			muta_desc = _( "¿·¤¿¤ËÆóËÜ¤ÎÂ­¤¬À¸¤¨¤Æ¤­¤¿¡ª",  "You grow an extra pair of legs!");
+			muta_desc = _( "æ–°ãŸã«äºŒæœ¬ã®è¶³ãŒç”Ÿãˆã¦ããŸï¼",  "You grow an extra pair of legs!");
 
 			break;
 		case 159: case 160:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_SHORT_LEG;
-			muta_desc = _( "Â­¤¬Ã»¤¤ÆÍµ¯¤Ë¤Ê¤Ã¤Æ¤·¤Ş¤Ã¤¿¡ª",  "Your legs turn into short stubs!");
+			muta_desc = _( "è¶³ãŒçŸ­ã„çªèµ·ã«ãªã£ã¦ã—ã¾ã£ãŸï¼",  "Your legs turn into short stubs!");
 
 			break;
 		case 161: case 162:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ELEC_TOUC;
-			muta_desc = _( "·ì´É¤òÅÅÎ®¤¬Î®¤ì»Ï¤á¤¿¡ª",  "Electricity starts running through you!");
+			muta_desc = _( "è¡€ç®¡ã‚’é›»æµãŒæµã‚Œå§‹ã‚ãŸï¼",  "Electricity starts running through you!");
 
 			break;
 		case 163: case 164:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_FIRE_BODY;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎÂÎ¤Ï±ê¤Ë¤Ä¤Ä¤Ş¤ì¤Æ¤¤¤ë¡£",  "Your body is enveloped in flames!");
+			muta_desc = _( "ã‚ãªãŸã®ä½“ã¯ç‚ã«ã¤ã¤ã¾ã‚Œã¦ã„ã‚‹ã€‚",  "Your body is enveloped in flames!");
 
 			break;
 		case 165: case 166: case 167:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_WART_SKIN;
-			muta_desc = _( "µ¤»ı¤Á°­¤¤¥¤¥Ü¥¤¥Ü¤¬ÂÎÃæ¤Ë¤Ç¤­¤¿¡ª",  "Disgusting warts appear everywhere on you!");
+			muta_desc = _( "æ°—æŒã¡æ‚ªã„ã‚¤ãƒœã‚¤ãƒœãŒä½“ä¸­ã«ã§ããŸï¼",  "Disgusting warts appear everywhere on you!");
 
 			break;
 		case 168: case 169: case 170:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_SCALES;
-			muta_desc = _( "È©¤¬¹õ¤¤ÎÚ¤ËÊÑ¤ï¤Ã¤¿¡ª",  "Your skin turns into black scales!");
+			muta_desc = _( "è‚ŒãŒé»’ã„é±—ã«å¤‰ã‚ã£ãŸï¼",  "Your skin turns into black scales!");
 
 			break;
 		case 171: case 172:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_IRON_SKIN;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎÈ©¤ÏÅ´¤Ë¤Ê¤Ã¤¿¡ª",  "Your skin turns to steel!");
+			muta_desc = _( "ã‚ãªãŸã®è‚Œã¯é‰„ã«ãªã£ãŸï¼",  "Your skin turns to steel!");
 
 			break;
 		case 173: case 174:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_WINGS;
-			muta_desc = _( "ÇØÃæ¤Ë±©¤¬À¸¤¨¤¿¡£",  "You grow a pair of wings.");
+			muta_desc = _( "èƒŒä¸­ã«ç¾½ãŒç”ŸãˆãŸã€‚",  "You grow a pair of wings.");
 
 			break;
 		case 175: case 176: case 177:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_FEARLESS;
-			muta_desc = _( "´°Á´¤ËÉİ¤ìÃÎ¤é¤º¤Ë¤Ê¤Ã¤¿¡£",  "You become completely fearless.");
+			muta_desc = _( "å®Œå…¨ã«æ€–ã‚ŒçŸ¥ã‚‰ãšã«ãªã£ãŸã€‚",  "You become completely fearless.");
 
 			break;
 		case 178: case 179:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_REGEN;
-			muta_desc = _( "µŞÂ®¤Ë²óÉü¤·»Ï¤á¤¿¡£",  "You start regenerating.");
+			muta_desc = _( "æ€¥é€Ÿã«å›å¾©ã—å§‹ã‚ãŸã€‚",  "You start regenerating.");
 
 			break;
 		case 180: case 181:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ESP;
-			muta_desc = _( "¥Æ¥ì¥Ñ¥·¡¼¤ÎÇ½ÎÏ¤òÆÀ¤¿¡ª",  "You develop a telepathic ability!");
+			muta_desc = _( "ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼ã®èƒ½åŠ›ã‚’å¾—ãŸï¼",  "You develop a telepathic ability!");
 
 			break;
 		case 182: case 183: case 184:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_LIMBER;
-			muta_desc = _( "¶ÚÆù¤¬¤·¤Ê¤ä¤«¤Ë¤Ê¤Ã¤¿¡£",  "Your muscles become limber.");
+			muta_desc = _( "ç­‹è‚‰ãŒã—ãªã‚„ã‹ã«ãªã£ãŸã€‚",  "Your muscles become limber.");
 
 			break;
 		case 185: case 186: case 187:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ARTHRITIS;
-			muta_desc = _( "´ØÀá¤¬ÆÍÁ³ÄË¤ß½Ğ¤·¤¿¡£",  "Your joints suddenly hurt.");
+			muta_desc = _( "é–¢ç¯€ãŒçªç„¶ç—›ã¿å‡ºã—ãŸã€‚",  "Your joints suddenly hurt.");
 
 			break;
 		case 188:
 			if (p_ptr->pseikaku == SEIKAKU_LUCKY) break;
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_BAD_LUCK;
-			muta_desc = _( "°­°Õ¤ËËş¤Á¤¿¹õ¤¤¥ª¡¼¥é¤¬¤¢¤Ê¤¿¤ò¤È¤ê¤Ş¤¤¤¿...",  "There is a malignant black aura surrounding you...");
+			muta_desc = _( "æ‚ªæ„ã«æº€ã¡ãŸé»’ã„ã‚ªãƒ¼ãƒ©ãŒã‚ãªãŸã‚’ã¨ã‚Šã¾ã„ãŸ...",  "There is a malignant black aura surrounding you...");
 
 			break;
 		case 189:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_VULN_ELEM;
-			muta_desc = _( "Ì¯¤ËÌµËÉÈ÷¤Ë¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£",  "You feel strangely exposed.");
+			muta_desc = _( "å¦™ã«ç„¡é˜²å‚™ã«ãªã£ãŸæ°—ãŒã™ã‚‹ã€‚",  "You feel strangely exposed.");
 
 			break;
 		case 190: case 191: case 192:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_MOTION;
-			muta_desc = _( "ÂÎ¤ÎÆ°ºî¤¬¤è¤êÀµ³Î¤Ë¤Ê¤Ã¤¿¡£",  "You move with new assurance.");
+			muta_desc = _( "ä½“ã®å‹•ä½œãŒã‚ˆã‚Šæ­£ç¢ºã«ãªã£ãŸã€‚",  "You move with new assurance.");
 
 			break;
 		case 193:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_GOOD_LUCK;
-			muta_desc = _( "»üÈá¿¼¤¤Çò¤¤¥ª¡¼¥é¤¬¤¢¤Ê¤¿¤ò¤È¤ê¤Ş¤¤¤¿...",  "There is a benevolent white aura surrounding you...");
+			muta_desc = _( "æ…ˆæ‚²æ·±ã„ç™½ã„ã‚ªãƒ¼ãƒ©ãŒã‚ãªãŸã‚’ã¨ã‚Šã¾ã„ãŸ...",  "There is a benevolent white aura surrounding you...");
 
 			break;
 		default:
@@ -629,7 +629,7 @@ bool gain_random_mutation(int choose_mut)
 
 	if (!muta_chosen)
 	{
-		msg_print(_("ÉáÄÌ¤Ë¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£", "You feel normal."));
+		msg_print(_("æ™®é€šã«ãªã£ãŸæ°—ãŒã™ã‚‹ã€‚", "You feel normal."));
 
 		return FALSE;
 	}
@@ -649,7 +649,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				muta_class = &(p_ptr->muta1);
 				muta_which = MUT1_HYPN_GAZE;
-			muta_desc = _( "´ã¤¬¸¸ÏÇÅª¤Ë¤Ê¤Ã¤¿...",  "Your eyes look mesmerizing...");
+			muta_desc = _( "çœ¼ãŒå¹»æƒ‘çš„ã«ãªã£ãŸ...",  "Your eyes look mesmerizing...");
 
 			}
 
@@ -659,7 +659,7 @@ bool gain_random_mutation(int choose_mut)
 			  {
 				muta_class = &(p_ptr->muta2);
 				muta_which = MUT2_HORNS;
-			muta_desc = _( "³Ñ¤¬³Û¤«¤éÀ¸¤¨¤Æ¤­¤¿¡ª",  "Horns pop forth into your forehead!");
+			muta_desc = _( "è§’ãŒé¡ã‹ã‚‰ç”Ÿãˆã¦ããŸï¼",  "Horns pop forth into your forehead!");
 
 			}
 
@@ -669,7 +669,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				muta_class = &(p_ptr->muta1);
 				muta_which = MUT1_SHRIEK;
-			muta_desc = _( "À¼¼Á¤¬¤«¤Ê¤ê¶¯¤¯¤Ê¤Ã¤¿¡£",  "Your vocal cords get much tougher.");
+			muta_desc = _( "å£°è³ªãŒã‹ãªã‚Šå¼·ããªã£ãŸã€‚",  "Your vocal cords get much tougher.");
 
 			}
 
@@ -679,7 +679,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				muta_class = &(p_ptr->muta1);
 				muta_which = MUT1_POLYMORPH;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎÆùÂÎ¤ÏÊÑ²½¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡¢",  "Your body seems mutable.");
+			muta_desc = _( "ã‚ãªãŸã®è‚‰ä½“ã¯å¤‰åŒ–ã§ãã‚‹ã‚ˆã†ã«ãªã£ãŸã€",  "Your body seems mutable.");
 
 			}
 
@@ -689,11 +689,11 @@ bool gain_random_mutation(int choose_mut)
 			{
 				muta_class = &(p_ptr->muta2);
 				muta_which = MUT2_TENTACLES;
-			muta_desc = _( "¼Ù°­¤Ê¿¨¼ê¤¬¸ı¤Î¼ş¤ê¤ËÀ¸¤¨¤¿¡£",  "Evil-looking tentacles sprout from your mouth.");
+			muta_desc = _( "é‚ªæ‚ªãªè§¦æ‰‹ãŒå£ã®å‘¨ã‚Šã«ç”ŸãˆãŸã€‚",  "Evil-looking tentacles sprout from your mouth.");
 
 			}
 		}
-		msg_print(_("ÆÍÁ³ÊÑ°Û¤·¤¿¡ª", "You mutate!"));
+		msg_print(_("çªç„¶å¤‰ç•°ã—ãŸï¼", "You mutate!"));
 
 		msg_print(muta_desc);
 		*muta_class |= muta_which;
@@ -704,7 +704,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_HYPER_STR)
 				{
-					msg_print(_("¤¢¤Ê¤¿¤Ï¤â¤¦Ä¶¿ÍÅª¤Ë¶¯¤¯¤Ï¤Ê¤¤¡ª", "You no longer feel super-strong!"));
+					msg_print(_("ã‚ãªãŸã¯ã‚‚ã†è¶…äººçš„ã«å¼·ãã¯ãªã„ï¼", "You no longer feel super-strong!"));
 
 					p_ptr->muta3 &= ~(MUT3_HYPER_STR);
 				}
@@ -713,7 +713,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_PUNY)
 				{
-					msg_print(_("¤¢¤Ê¤¿¤Ï¤â¤¦µõ¼å¤Ç¤Ï¤Ê¤¤¡ª", "You no longer feel puny!"));
+					msg_print(_("ã‚ãªãŸã¯ã‚‚ã†è™šå¼±ã§ã¯ãªã„ï¼", "You no longer feel puny!"));
 
 					p_ptr->muta3 &= ~(MUT3_PUNY);
 				}
@@ -722,7 +722,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_HYPER_INT)
 				{
-					msg_print(_("¤¢¤Ê¤¿¤ÎÇ¾¤Ï¤â¤¦À¸ÂÎ¥³¥ó¥Ô¥å¡¼¥¿¤Ç¤Ï¤Ê¤¤¡£", "Your brain is no longer a living computer."));
+					msg_print(_("ã‚ãªãŸã®è„³ã¯ã‚‚ã†ç”Ÿä½“ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã§ã¯ãªã„ã€‚", "Your brain is no longer a living computer."));
 
 					p_ptr->muta3 &= ~(MUT3_HYPER_INT);
 				}
@@ -731,7 +731,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_MORONIC)
 				{
-					msg_print(_("¤¢¤Ê¤¿¤Ï¤â¤¦Àº¿ÀÇö¼å¤Ç¤Ï¤Ê¤¤¡£", "You are no longer moronic."));
+					msg_print(_("ã‚ãªãŸã¯ã‚‚ã†ç²¾ç¥è–„å¼±ã§ã¯ãªã„ã€‚", "You are no longer moronic."));
 
 					p_ptr->muta3 &= ~(MUT3_MORONIC);
 				}
@@ -740,19 +740,19 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_SCALES)
 				{
-					msg_print(_("ÎÚ¤¬¤Ê¤¯¤Ê¤Ã¤¿¡£", "You lose your scales."));
+					msg_print(_("é±—ãŒãªããªã£ãŸã€‚", "You lose your scales."));
 
 					p_ptr->muta3 &= ~(MUT3_SCALES);
 				}
 				if (p_ptr->muta3 & MUT3_FLESH_ROT)
 				{
-					msg_print(_("ÆùÂÎ¤¬ÉåÍğ¤·¤Ê¤¯¤Ê¤Ã¤¿¡£", "Your flesh rots no longer."));
+					msg_print(_("è‚‰ä½“ãŒè…ä¹±ã—ãªããªã£ãŸã€‚", "Your flesh rots no longer."));
 
 					p_ptr->muta3 &= ~(MUT3_FLESH_ROT);
 				}
 				if (p_ptr->muta3 & MUT3_WART_SKIN)
 				{
-					msg_print(_("È©¤Î¥¤¥Ü¥¤¥Ü¤¬¤Ê¤¯¤Ê¤Ã¤¿¡£", "You lose your warts."));
+					msg_print(_("è‚Œã®ã‚¤ãƒœã‚¤ãƒœãŒãªããªã£ãŸã€‚", "You lose your warts."));
 
 					p_ptr->muta3 &= ~(MUT3_WART_SKIN);
 				}
@@ -762,7 +762,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_IRON_SKIN)
 				{
-					msg_print(_("¤¢¤Ê¤¿¤ÎÈ©¤Ï¤â¤¦Å´¤Ç¤Ï¤Ê¤¤¡£", "Your skin is no longer made of steel."));
+					msg_print(_("ã‚ãªãŸã®è‚Œã¯ã‚‚ã†é‰„ã§ã¯ãªã„ã€‚", "Your skin is no longer made of steel."));
 
 					p_ptr->muta3 &= ~(MUT3_IRON_SKIN);
 				}
@@ -771,7 +771,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta2 & MUT2_COWARDICE)
 				{
-					msg_print(_("²²ÉÂ¤Ç¤Ê¤¯¤Ê¤Ã¤¿¡£", "You are no longer cowardly."));
+					msg_print(_("è‡†ç—…ã§ãªããªã£ãŸã€‚", "You are no longer cowardly."));
 
 					p_ptr->muta2 &= ~(MUT2_COWARDICE);
 				}
@@ -780,7 +780,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_REGEN)
 				{
-					msg_print(_("µŞÂ®¤Ë²óÉü¤·¤Ê¤¯¤Ê¤Ã¤¿¡£", "You stop regenerating."));
+					msg_print(_("æ€¥é€Ÿã«å›å¾©ã—ãªããªã£ãŸã€‚", "You stop regenerating."));
 
 					p_ptr->muta3 &= ~(MUT3_REGEN);
 				}
@@ -789,7 +789,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_FLESH_ROT)
 				{
-					msg_print(_("ÆùÂÎ¤¬ÉåÍğ¤·¤Ê¤¯¤Ê¤Ã¤¿¡£", "Your flesh stops rotting."));
+					msg_print(_("è‚‰ä½“ãŒè…ä¹±ã—ãªããªã£ãŸã€‚", "Your flesh stops rotting."));
 
 					p_ptr->muta3 &= ~(MUT3_FLESH_ROT);
 				}
@@ -798,7 +798,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_ARTHRITIS)
 				{
-					msg_print(_("´ØÀá¤¬ÄË¤¯¤Ê¤¯¤Ê¤Ã¤¿¡£", "Your joints stop hurting."));
+					msg_print(_("é–¢ç¯€ãŒç—›ããªããªã£ãŸã€‚", "Your joints stop hurting."));
 
 					p_ptr->muta3 &= ~(MUT3_ARTHRITIS);
 				}
@@ -807,7 +807,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_LIMBER)
 				{
-					msg_print(_("¤¢¤Ê¤¿¤Ï¤·¤Ê¤ä¤«¤Ç¤Ê¤¯¤Ê¤Ã¤¿¡£", "You no longer feel limber."));
+					msg_print(_("ã‚ãªãŸã¯ã—ãªã‚„ã‹ã§ãªããªã£ãŸã€‚", "You no longer feel limber."));
 
 					p_ptr->muta3 &= ~(MUT3_LIMBER);
 				}
@@ -819,7 +819,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta3 & MUT3_FEARLESS)
 				{
-					msg_print(_("¶²¤ìÃÎ¤é¤º¤Ç¤Ê¤¯¤Ê¤Ã¤¿¡£", "You no longer feel fearless."));
+					msg_print(_("æã‚ŒçŸ¥ã‚‰ãšã§ãªããªã£ãŸã€‚", "You no longer feel fearless."));
 
 					p_ptr->muta3 &= ~(MUT3_FEARLESS);
 				}
@@ -828,7 +828,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta2 & MUT2_TRUNK)
 				{
-					msg_print(_("¤¢¤Ê¤¿¤ÎÉ¡¤Ï¤â¤¦¾İ¤ÎÉ¡¤Î¤è¤¦¤Ç¤Ï¤Ê¤¯¤Ê¤Ã¤¿¡£", "Your nose is no longer elephantine."));
+					msg_print(_("ã‚ãªãŸã®é¼»ã¯ã‚‚ã†è±¡ã®é¼»ã®ã‚ˆã†ã§ã¯ãªããªã£ãŸã€‚", "Your nose is no longer elephantine."));
 
 					p_ptr->muta2 &= ~(MUT2_TRUNK);
 				}
@@ -837,7 +837,7 @@ bool gain_random_mutation(int choose_mut)
 			{
 				if (p_ptr->muta2 & MUT2_BEAK)
 				{
-					msg_print(_("¹Å¤¤¥¯¥Á¥Ğ¥·¤¬¤Ê¤¯¤Ê¤Ã¤¿¡£", "You no longer have a hard beak."));
+					msg_print(_("ç¡¬ã„ã‚¯ãƒãƒã‚·ãŒãªããªã£ãŸã€‚", "You no longer have a hard beak."));
 
 					p_ptr->muta2 &= ~(MUT2_BEAK);
 				}
@@ -852,9 +852,9 @@ bool gain_random_mutation(int choose_mut)
 }
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤«¤éÆÍÁ³ÊÑ°Û¤ò¼è¤ê½ü¤¯
- * @param choose_mut ¼è¤ê½ü¤­¤¿¤¤ÆÍÁ³ÊÑ°Û¤ÎID¡¢0¤Ê¤é¤Ğ¥é¥ó¥À¥à¤Ë¾Ãµî
- * @return ¤Ê¤·
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰çªç„¶å¤‰ç•°ã‚’å–ã‚Šé™¤ã
+ * @param choose_mut å–ã‚Šé™¤ããŸã„çªç„¶å¤‰ç•°ã®IDã€0ãªã‚‰ã°ãƒ©ãƒ³ãƒ€ãƒ ã«æ¶ˆå»
+ * @return ãªã—
  */
 bool lose_mutation(int choose_mut)
 {
@@ -873,578 +873,578 @@ bool lose_mutation(int choose_mut)
 		case 1: case 2: case 3: case 4:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SPIT_ACID;
-			muta_desc = _( "»À¤ò¿á¤­¤«¤±¤ëÇ½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You lose the ability to spit acid.");
+			muta_desc = _( "é…¸ã‚’å¹ãã‹ã‘ã‚‹èƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You lose the ability to spit acid.");
 
 			break;
 		case 5: case 6: case 7:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_BR_FIRE;
-			muta_desc = _( "±ê¤Î¥Ö¥ì¥¹¤òÅÇ¤¯Ç½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You lose the ability to breathe fire.");
+			muta_desc = _( "ç‚ã®ãƒ–ãƒ¬ã‚¹ã‚’åãèƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You lose the ability to breathe fire.");
 
 			break;
 		case 8: case 9:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_HYPN_GAZE;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎÌÜ¤Ï¤Ä¤Ş¤é¤Ê¤¤ÌÜ¤Ë¤Ê¤Ã¤¿¡£",  "Your eyes look uninteresting.");
+			muta_desc = _( "ã‚ãªãŸã®ç›®ã¯ã¤ã¾ã‚‰ãªã„ç›®ã«ãªã£ãŸã€‚",  "Your eyes look uninteresting.");
 
 			break;
 		case 10: case 11:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_TELEKINES;
-			muta_desc = _( "Ç°Æ°ÎÏ¤ÇÊª¤òÆ°¤«¤¹Ç½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You lose the ability to move objects telekinetically.");
+			muta_desc = _( "å¿µå‹•åŠ›ã§ç‰©ã‚’å‹•ã‹ã™èƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You lose the ability to move objects telekinetically.");
 
 			break;
 		case 12: case 13: case 14:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_VTELEPORT;
-			muta_desc = _( "¼«Ê¬¤Î°Õ»×¤Ç¥Æ¥ì¥İ¡¼¥È¤¹¤ëÇ½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You lose the power of teleportation at will.");
+			muta_desc = _( "è‡ªåˆ†ã®æ„æ€ã§ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹èƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You lose the power of teleportation at will.");
 
 			break;
 		case 15: case 16:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_MIND_BLST;
-			muta_desc = _( "Àº¿À¹¶·â¤ÎÇ½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You lose the power of Mind Blast.");
+			muta_desc = _( "ç²¾ç¥æ”»æ’ƒã®èƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You lose the power of Mind Blast.");
 
 			break;
 		case 17: case 18:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_RADIATION;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÏÊü¼ÍÇ½¤òÈ¯À¸¤·¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You stop emitting hard radiation.");
+			muta_desc = _( "ã‚ãªãŸã¯æ”¾å°„èƒ½ã‚’ç™ºç”Ÿã—ãªããªã£ãŸã€‚",  "You stop emitting hard radiation.");
 
 			break;
 		case 19: case 20:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_VAMPIRISM;
-			muta_desc = _( "µÛ·ì¤ÎÇ½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You are no longer vampiric.");
+			muta_desc = _( "å¸è¡€ã®èƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You are no longer vampiric.");
 
 			break;
 		case 21: case 22: case 23:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SMELL_MET;
-			muta_desc = _( "¶âÂ°¤Î½­¤¤¤òÓÌ¤²¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You no longer smell a metallic odor.");
+			muta_desc = _( "é‡‘å±ã®è‡­ã„ã‚’å—…ã’ãªããªã£ãŸã€‚",  "You no longer smell a metallic odor.");
 
 			break;
 		case 24: case 25: case 26: case 27:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SMELL_MON;
-			muta_desc = _( "ÉÔ·é¤Ê¥â¥ó¥¹¥¿¡¼¤Î½­¤¤¤òÓÌ¤²¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You no longer smell filthy monsters.");
+			muta_desc = _( "ä¸æ½”ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®è‡­ã„ã‚’å—…ã’ãªããªã£ãŸã€‚",  "You no longer smell filthy monsters.");
 
 			break;
 		case 28: case 29: case 30:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_BLINK;
-			muta_desc = _( "¶áµ÷Î¥¥Æ¥ì¥İ¡¼¥È¤ÎÇ½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You lose the power of minor teleportation.");
+			muta_desc = _( "è¿‘è·é›¢ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã®èƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You lose the power of minor teleportation.");
 
 			break;
 		case 31: case 32:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_EAT_ROCK;
-			muta_desc = _( "ÊÉ¤ÏÈşÌ£¤·¤½¤¦¤Ë¸«¤¨¤Ê¤¯¤Ê¤Ã¤¿¡£",  "The walls look unappetizing.");
+			muta_desc = _( "å£ã¯ç¾å‘³ã—ãã†ã«è¦‹ãˆãªããªã£ãŸã€‚",  "The walls look unappetizing.");
 
 			break;
 		case 33: case 34:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SWAP_POS;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï¼«Ê¬¤Î·¤¤ËÎ±¤Ş¤ë´¶¤¸¤¬¤¹¤ë¡£",  "You feel like staying in your own shoes.");
+			muta_desc = _( "ã‚ãªãŸã¯è‡ªåˆ†ã®é´ã«ç•™ã¾ã‚‹æ„Ÿã˜ãŒã™ã‚‹ã€‚",  "You feel like staying in your own shoes.");
 
 			break;
 		case 35: case 36: case 37:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_SHRIEK;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎÀ¼¼Á¤Ï¼å¤¯¤Ê¤Ã¤¿¡£",  "Your vocal cords get much weaker.");
+			muta_desc = _( "ã‚ãªãŸã®å£°è³ªã¯å¼±ããªã£ãŸã€‚",  "Your vocal cords get much weaker.");
 
 			break;
 		case 38: case 39: case 40:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_ILLUMINE;
-			muta_desc = _( "Éô²°¤òÌÀ¤ë¤¯¾È¤é¤¹¤³¤È¤¬½ĞÍè¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You can no longer light up rooms with your presence.");
+			muta_desc = _( "éƒ¨å±‹ã‚’æ˜ã‚‹ãç…§ã‚‰ã™ã“ã¨ãŒå‡ºæ¥ãªããªã£ãŸã€‚",  "You can no longer light up rooms with your presence.");
 
 			break;
 		case 41: case 42:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_DET_CURSE;
-			muta_desc = _( "¼Ù°­¤ÊËâË¡¤ò´¶¤¸¤é¤ì¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You can no longer feel evil magics.");
+			muta_desc = _( "é‚ªæ‚ªãªé­”æ³•ã‚’æ„Ÿã˜ã‚‰ã‚Œãªããªã£ãŸã€‚",  "You can no longer feel evil magics.");
 
 			break;
 		case 43: case 44: case 45:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_BERSERK;
-			muta_desc = _( "À©¸æ¤Ç¤­¤ë·ã¾ğ¤ò´¶¤¸¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You no longer feel a controlled rage.");
+			muta_desc = _( "åˆ¶å¾¡ã§ãã‚‹æ¿€æƒ…ã‚’æ„Ÿã˜ãªããªã£ãŸã€‚",  "You no longer feel a controlled rage.");
 
 			break;
 		case 46:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_POLYMORPH;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÎÂÎ¤Ï°ÂÄê¤·¤¿¤è¤¦¤Ë¸«¤¨¤ë¡£",  "Your body seems stable.");
+			muta_desc = _( "ã‚ãªãŸã®ä½“ã¯å®‰å®šã—ãŸã‚ˆã†ã«è¦‹ãˆã‚‹ã€‚",  "Your body seems stable.");
 
 			break;
 		case 47: case 48:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_MIDAS_TCH;
-			muta_desc = _( "¥ß¥À¥¹¤Î¼ê¤ÎÇ½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You lose the Midas touch.");
+			muta_desc = _( "ãƒŸãƒ€ã‚¹ã®æ‰‹ã®èƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You lose the Midas touch.");
 
 			break;
 		case 49:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_GROW_MOLD;
-			muta_desc = _( "ÆÍÁ³¥«¥Ó¤¬·ù¤¤¤Ë¤Ê¤Ã¤¿¡£",  "You feel a sudden dislike for mold.");
+			muta_desc = _( "çªç„¶ã‚«ãƒ“ãŒå«Œã„ã«ãªã£ãŸã€‚",  "You feel a sudden dislike for mold.");
 
 			break;
 		case 50: case 51: case 52:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_RESIST;
-			muta_desc = _( "½ı¤Ä¤­°×¤¯¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£",  "You feel like you might be vulnerable.");
+			muta_desc = _( "å‚·ã¤ãæ˜“ããªã£ãŸæ°—ãŒã™ã‚‹ã€‚",  "You feel like you might be vulnerable.");
 
 			break;
 		case 53: case 54: case 55:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_EARTHQUAKE;
-			muta_desc = _( "¥À¥ó¥¸¥ç¥ó¤ò²õ¤¹Ç½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You lose the ability to wreck the dungeon.");
+			muta_desc = _( "ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’å£Šã™èƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You lose the ability to wreck the dungeon.");
 
 			break;
 		case 56:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_EAT_MAGIC;
-			muta_desc = _( "ËâË¡¤Î¥¢¥¤¥Æ¥à¤Ï¤â¤¦ÈşÌ£¤·¤½¤¦¤Ë¸«¤¨¤Ê¤¯¤Ê¤Ã¤¿¡£",  "Your magic items no longer look delicious.");
+			muta_desc = _( "é­”æ³•ã®ã‚¢ã‚¤ãƒ†ãƒ ã¯ã‚‚ã†ç¾å‘³ã—ãã†ã«è¦‹ãˆãªããªã£ãŸã€‚",  "Your magic items no longer look delicious.");
 
 			break;
 		case 57: case 58:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_WEIGH_MAG;
-			muta_desc = _( "ËâÎÏ¤ò´¶¤¸¤é¤ì¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You no longer sense magic.");
+			muta_desc = _( "é­”åŠ›ã‚’æ„Ÿã˜ã‚‰ã‚Œãªããªã£ãŸã€‚",  "You no longer sense magic.");
 
 			break;
 		case 59:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_STERILITY;
-			muta_desc = _( "¤¿¤¯¤µ¤ó¤Î°ÂÅÈ¤ÎÅÇÂ©¤¬Ê¹¤³¤¨¤¿¡£",  "You hear a massed sigh of relief.");
+			muta_desc = _( "ãŸãã•ã‚“ã®å®‰å µã®åæ¯ãŒèã“ãˆãŸã€‚",  "You hear a massed sigh of relief.");
 
 			break;
 		case 60: case 61:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_PANIC_HIT;
-			muta_desc = _( "¤¢¤Á¤³¤Á¤ØÄ·¤Ù¤ëµ¤Ê¬¤¬¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You no longer feel jumpy.");
+			muta_desc = _( "ã‚ã¡ã“ã¡ã¸è·³ã¹ã‚‹æ°—åˆ†ãŒãªããªã£ãŸã€‚",  "You no longer feel jumpy.");
 
 			break;
 		case 62: case 63: case 64:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_DAZZLE;
-			muta_desc = _( "¤Ş¤Ğ¤æ¤¤Á®¸÷¤òÈ¯¤¹¤ëÇ½ÎÏ¤ò¼º¤Ã¤¿¡£",  "You lose the ability to emit dazzling lights.");
+			muta_desc = _( "ã¾ã°ã‚†ã„é–ƒå…‰ã‚’ç™ºã™ã‚‹èƒ½åŠ›ã‚’å¤±ã£ãŸã€‚",  "You lose the ability to emit dazzling lights.");
 
 			break;
 		case 65: case 66: case 67:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_LASER_EYE;
-			muta_desc = _( "´ã¤¬¾¯¤·¤Î´Ö¾Æ¤­ÉÕ¤¤¤Æ¡¢ÄË¤ß¤¬ÏÂ¤é¤¤¤À¡£",  "Your eyes burn for a moment, then feel soothed.");
+			muta_desc = _( "çœ¼ãŒå°‘ã—ã®é–“ç„¼ãä»˜ã„ã¦ã€ç—›ã¿ãŒå’Œã‚‰ã„ã ã€‚",  "Your eyes burn for a moment, then feel soothed.");
 
 			break;
 		case 68: case 69:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_RECALL;
-			muta_desc = _( "¾¯¤·¤Î´Ö¥Û¡¼¥à¥·¥Ã¥¯¤Ë¤Ê¤Ã¤¿¡£",  "You feel briefly homesick.");
+			muta_desc = _( "å°‘ã—ã®é–“ãƒ›ãƒ¼ãƒ ã‚·ãƒƒã‚¯ã«ãªã£ãŸã€‚",  "You feel briefly homesick.");
 
 			break;
 		case 70:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_BANISH;
-			muta_desc = _( "¿ÀÀ»¤ÊÅÜ¤ê¤ÎÎÏ¤ò´¶¤¸¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You no longer feel a holy wrath.");
+			muta_desc = _( "ç¥è–ãªæ€’ã‚Šã®åŠ›ã‚’æ„Ÿã˜ãªããªã£ãŸã€‚",  "You no longer feel a holy wrath.");
 
 			break;
 		case 71: case 72:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_COLD_TOUCH;
-			muta_desc = _( "¼ê¤¬ÃÈ¤«¤¯¤Ê¤Ã¤¿¡£",  "Your hands warm up.");
+			muta_desc = _( "æ‰‹ãŒæš–ã‹ããªã£ãŸã€‚",  "Your hands warm up.");
 
 			break;
 		case 73: case 74:
 			muta_class = &(p_ptr->muta1);
 			muta_which = MUT1_LAUNCHER;
-			muta_desc = _( "Êª¤òÅê¤²¤ë¼ê¤¬¼å¤¯¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£",  "Your throwing arm feels much weaker.");
+			muta_desc = _( "ç‰©ã‚’æŠ•ã’ã‚‹æ‰‹ãŒå¼±ããªã£ãŸæ°—ãŒã™ã‚‹ã€‚",  "Your throwing arm feels much weaker.");
 
 			break;
 		case 75:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_BERS_RAGE;
-			muta_desc = _( "¶§Ë½²½¤ÎÈ¯ºî¤Ë¤µ¤é¤µ¤ì¤Ê¤¯¤Ê¤Ã¤¿¡ª",  "You are no longer subject to fits of berserk rage!");
+			muta_desc = _( "å‡¶æš´åŒ–ã®ç™ºä½œã«ã•ã‚‰ã•ã‚Œãªããªã£ãŸï¼",  "You are no longer subject to fits of berserk rage!");
 
 			break;
 		case 76:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_COWARDICE;
-			muta_desc = _( "¤â¤¦¿®¤¸¤¬¤¿¤¤¤Û¤É²²ÉÂ¤Ç¤Ï¤Ê¤¯¤Ê¤Ã¤¿¡ª",  "You are no longer an incredible coward!");
+			muta_desc = _( "ã‚‚ã†ä¿¡ã˜ãŒãŸã„ã»ã©è‡†ç—…ã§ã¯ãªããªã£ãŸï¼",  "You are no longer an incredible coward!");
 
 			break;
 		case 77:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_RTELEPORT;
-			muta_desc = _( "¤¢¤Ê¤¿¤Î°ÌÃÖ¤Ï¤è¤ê³ÎÄêÅª¤Ë¤Ê¤Ã¤¿¡£",  "Your position seems more certain.");
+			muta_desc = _( "ã‚ãªãŸã®ä½ç½®ã¯ã‚ˆã‚Šç¢ºå®šçš„ã«ãªã£ãŸã€‚",  "Your position seems more certain.");
 
 			break;
 		case 78:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_ALCOHOL;
-			muta_desc = _( "¤¢¤Ê¤¿¤Ï¥¢¥ë¥³¡¼¥ë¤òÊ¬Èç¤·¤Ê¤¯¤Ê¤Ã¤¿¡ª",  "Your body stops producing alcohol!");
+			muta_desc = _( "ã‚ãªãŸã¯ã‚¢ãƒ«ã‚³ãƒ¼ãƒ«ã‚’åˆ†æ³Œã—ãªããªã£ãŸï¼",  "Your body stops producing alcohol!");
 
 			break;
 		case 79:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_HALLU;
-			muta_desc = _( "¸¸³Ğ¤ò¤Ò¤­µ¯¤³¤¹Àº¿À¾ã³²¤òµ¯¤³¤µ¤Ê¤¯¤Ê¤Ã¤¿¡ª",  "You are no longer afflicted by a hallucinatory insanity!");
+			muta_desc = _( "å¹»è¦šã‚’ã²ãèµ·ã“ã™ç²¾ç¥éšœå®³ã‚’èµ·ã“ã•ãªããªã£ãŸï¼",  "You are no longer afflicted by a hallucinatory insanity!");
 
 			break;
 		case 80:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_FLATULENT;
-			muta_desc = _( "¤â¤¦¶¯Îõ¤ÊÕû¤Ï¤³¤«¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You are no longer subject to uncontrollable flatulence.");
+			muta_desc = _( "ã‚‚ã†å¼·çƒˆãªå±ã¯ã“ã‹ãªããªã£ãŸã€‚",  "You are no longer subject to uncontrollable flatulence.");
 
 			break;
 		case 81: case 82:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_SCOR_TAIL;
-			muta_desc = _( "¥µ¥½¥ê¤Î¿¬Èø¤¬¤Ê¤¯¤Ê¤Ã¤¿¡ª",  "You lose your scorpion tail!");
+			muta_desc = _( "ã‚µã‚½ãƒªã®å°»å°¾ãŒãªããªã£ãŸï¼",  "You lose your scorpion tail!");
 
 			break;
 		case 83: case 84:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_HORNS;
-			muta_desc = _( "³Û¤«¤é³Ñ¤¬¾Ã¤¨¤¿¡ª",  "Your horns vanish from your forehead!");
+			muta_desc = _( "é¡ã‹ã‚‰è§’ãŒæ¶ˆãˆãŸï¼",  "Your horns vanish from your forehead!");
 
 			break;
 		case 85: case 86:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_BEAK;
-			muta_desc = _( "¸ı¤¬ÉáÄÌ¤ËÌá¤Ã¤¿¡ª",  "Your mouth reverts to normal!");
+			muta_desc = _( "å£ãŒæ™®é€šã«æˆ»ã£ãŸï¼",  "Your mouth reverts to normal!");
 
 			break;
 		case 87: case 88:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_ATT_DEMON;
-			muta_desc = _( "¥Ç¡¼¥â¥ó¤ò°ú¤­´ó¤»¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You stop attracting demons.");
+			muta_desc = _( "ãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¼•ãå¯„ã›ãªããªã£ãŸã€‚",  "You stop attracting demons.");
 
 			break;
 		case 89:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_PROD_MANA;
-			muta_desc = _( "À©¸æÉÔÇ½¤ÊËâË¡¤Î¥¨¥Í¥ë¥®¡¼¤òÈ¯À¸¤·¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You stop producing magical energy uncontrollably.");
+			muta_desc = _( "åˆ¶å¾¡ä¸èƒ½ãªé­”æ³•ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’ç™ºç”Ÿã—ãªããªã£ãŸã€‚",  "You stop producing magical energy uncontrollably.");
 
 			break;
 		case 90: case 91:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_SPEED_FLUX;
-			muta_desc = _( "í¯İµ¼Á¤Ç¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You are no longer manic-depressive.");
+			muta_desc = _( "èºé¬±è³ªã§ãªããªã£ãŸã€‚",  "You are no longer manic-depressive.");
 
 			break;
 		case 92: case 93:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_BANISH_ALL;
-			muta_desc = _( "ÇØ¸å¤Ë¶²¤í¤·¤¤ÎÏ¤ò´¶¤¸¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You no longer feel a terrifying power lurking behind you.");
+			muta_desc = _( "èƒŒå¾Œã«æã‚ã—ã„åŠ›ã‚’æ„Ÿã˜ãªããªã£ãŸã€‚",  "You no longer feel a terrifying power lurking behind you.");
 
 			break;
 		case 94:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_EAT_LIGHT;
-			muta_desc = _( "À¤³¦¤¬ÌÀ¤ë¤¤¤È´¶¤¸¤ë¡£",  "You feel the world's a brighter place.");
+			muta_desc = _( "ä¸–ç•ŒãŒæ˜ã‚‹ã„ã¨æ„Ÿã˜ã‚‹ã€‚",  "You feel the world's a brighter place.");
 
 			break;
 		case 95: case 96:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_TRUNK;
-			muta_desc = _( "É¡¤¬ÉáÄÌ¤ÎÄ¹¤µ¤ËÌá¤Ã¤¿¡£",  "Your nose returns to a normal length.");
+			muta_desc = _( "é¼»ãŒæ™®é€šã®é•·ã•ã«æˆ»ã£ãŸã€‚",  "Your nose returns to a normal length.");
 
 			break;
 		case 97:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_ATT_ANIMAL;
-			muta_desc = _( "Æ°Êª¤ò°ú¤­´ó¤»¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You stop attracting animals.");
+			muta_desc = _( "å‹•ç‰©ã‚’å¼•ãå¯„ã›ãªããªã£ãŸã€‚",  "You stop attracting animals.");
 
 			break;
 		case 98:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_TENTACLES;
-			muta_desc = _( "¿¨¼ê¤¬¾Ã¤¨¤¿¡£",  "Your tentacles vanish from your sides.");
+			muta_desc = _( "è§¦æ‰‹ãŒæ¶ˆãˆãŸã€‚",  "Your tentacles vanish from your sides.");
 
 			break;
 		case 99:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_RAW_CHAOS;
-			muta_desc = _( "¼ş°Ï¤Î¶õ´Ö¤¬°ÂÄê¤·¤¿µ¤¤¬¤¹¤ë¡£",  "You feel the universe is more stable around you.");
+			muta_desc = _( "å‘¨å›²ã®ç©ºé–“ãŒå®‰å®šã—ãŸæ°—ãŒã™ã‚‹ã€‚",  "You feel the universe is more stable around you.");
 
 			break;
 		case 100: case 101: case 102:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_NORMALITY;
-			muta_desc = _( "ÉáÄÌ¤Ë´ñÌ¯¤Ê´¶¤¸¤¬¤¹¤ë¡£",  "You feel normally strange.");
+			muta_desc = _( "æ™®é€šã«å¥‡å¦™ãªæ„Ÿã˜ãŒã™ã‚‹ã€‚",  "You feel normally strange.");
 
 			break;
 		case 103:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WRAITH;
-			muta_desc = _( "¤¢¤Ê¤¿¤ÏÊª¼ÁÀ¤³¦¤Ë¤·¤Ã¤«¤êÂ¸ºß¤·¤Æ¤¤¤ë¡£",  "You are firmly in the physical world.");
+			muta_desc = _( "ã‚ãªãŸã¯ç‰©è³ªä¸–ç•Œã«ã—ã£ã‹ã‚Šå­˜åœ¨ã—ã¦ã„ã‚‹ã€‚",  "You are firmly in the physical world.");
 
 			break;
 		case 104:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_POLY_WOUND;
-			muta_desc = _( "¸Å¤¤½ı¤«¤é¥«¥ª¥¹¤ÎÎÏ¤¬µî¤Ã¤Æ¤¤¤Ã¤¿¡£",  "You feel forces of chaos departing your old scars.");
+			muta_desc = _( "å¤ã„å‚·ã‹ã‚‰ã‚«ã‚ªã‚¹ã®åŠ›ãŒå»ã£ã¦ã„ã£ãŸã€‚",  "You feel forces of chaos departing your old scars.");
 
 			break;
 		case 105:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WASTING;
-			muta_desc = _( "¤ª¤¾¤Ş¤·¤¤¿ê¼åÉÂ¤¬¼£¤Ã¤¿¡ª",  "You are cured of the horrible wasting disease!");
+			muta_desc = _( "ãŠãã¾ã—ã„è¡°å¼±ç—…ãŒæ²»ã£ãŸï¼",  "You are cured of the horrible wasting disease!");
 
 			break;
 		case 106:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_ATT_DRAGON;
-			muta_desc = _( "¥É¥é¥´¥ó¤ò°ú¤­´ó¤»¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You stop attracting dragons.");
+			muta_desc = _( "ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¼•ãå¯„ã›ãªããªã£ãŸã€‚",  "You stop attracting dragons.");
 
 			break;
 		case 107: case 108:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WEIRD_MIND;
-			muta_desc = _( "»×¹Í¤¬Âà¶ş¤ÊÊı¸ş¤ËÌá¤Ã¤¿¡£",  "Your thoughts return to boring paths.");
+			muta_desc = _( "æ€è€ƒãŒé€€å±ˆãªæ–¹å‘ã«æˆ»ã£ãŸã€‚",  "Your thoughts return to boring paths.");
 
 			break;
 		case 109:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_NAUSEA;
-			muta_desc = _( "°ß¤¬áÛÚ»¤·¤Ê¤¯¤Ê¤Ã¤¿¡£",  "Your stomach stops roiling.");
+			muta_desc = _( "èƒƒãŒç—™æ”£ã—ãªããªã£ãŸã€‚",  "Your stomach stops roiling.");
 
 			break;
 		case 110: case 111:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_CHAOS_GIFT;
-			muta_desc = _( "º®ÆÙ¤Î¿À¡¹¤Î¶½Ì£¤ò¼æ¤«¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You lose the attention of the chaos deities.");
+			muta_desc = _( "æ··æ²Œã®ç¥ã€…ã®èˆˆå‘³ã‚’æƒ¹ã‹ãªããªã£ãŸã€‚",  "You lose the attention of the chaos deities.");
 
 			break;
 		case 112:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WALK_SHAD;
-			muta_desc = _( "Êª¼ÁÀ¤³¦¤ËÊá¤é¤ï¤ì¤Æ¤¤¤ëµ¤¤¬¤¹¤ë¡£",  "You feel like you're trapped in reality.");
+			muta_desc = _( "ç‰©è³ªä¸–ç•Œã«æ•ã‚‰ã‚ã‚Œã¦ã„ã‚‹æ°—ãŒã™ã‚‹ã€‚",  "You feel like you're trapped in reality.");
 
 			break;
 		case 113: case 114:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_WARNING;
-			muta_desc = _( "¥Ñ¥é¥Î¥¤¥¢¤Ç¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You no longer feel paranoid.");
+			muta_desc = _( "ãƒ‘ãƒ©ãƒã‚¤ã‚¢ã§ãªããªã£ãŸã€‚",  "You no longer feel paranoid.");
 
 			break;
 		case 115:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_INVULN;
-			muta_desc = _( "ÌµÅ¨¾õÂÖ¤ÎÈ¯ºî¤òµ¯¤³¤µ¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You are no longer blessed with fits of invulnerability.");
+			muta_desc = _( "ç„¡æ•µçŠ¶æ…‹ã®ç™ºä½œã‚’èµ·ã“ã•ãªããªã£ãŸã€‚",  "You are no longer blessed with fits of invulnerability.");
 
 			break;
 		case 116: case 117:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_SP_TO_HP;
-			muta_desc = _( "ËâË¡¤Î¼£Ìş¤ÎÈ¯ºî¤Ë½±¤ï¤ì¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You are no longer subject to fits of magical healing.");
+			muta_desc = _( "é­”æ³•ã®æ²»ç™’ã®ç™ºä½œã«è¥²ã‚ã‚Œãªããªã£ãŸã€‚",  "You are no longer subject to fits of magical healing.");
 
 			break;
 		case 118:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_HP_TO_SP;
-			muta_desc = _( "ÄË¤ß¤òÈ¼¤¦Àº¿ÀÌÀÎÆ²½¤ÎÈ¯ºî¤Ë½±¤ï¤ì¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You are no longer subject to fits of painful clarity.");
+			muta_desc = _( "ç—›ã¿ã‚’ä¼´ã†ç²¾ç¥æ˜ç­åŒ–ã®ç™ºä½œã«è¥²ã‚ã‚Œãªããªã£ãŸã€‚",  "You are no longer subject to fits of painful clarity.");
 
 			break;
 		case 119:
 			muta_class = &(p_ptr->muta2);
 			muta_which = MUT2_DISARM;
-			muta_desc = _( "µÓ¤¬¸µ¤ÎÂç¤­¤µ¤ËÌá¤Ã¤¿¡£",  "Your feet shrink to their former size.");
+			muta_desc = _( "è„šãŒå…ƒã®å¤§ãã•ã«æˆ»ã£ãŸã€‚",  "Your feet shrink to their former size.");
 
 			break;
 		case 120: case 121: case 122:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_HYPER_STR;
-			muta_desc = _( "¶ÚÆù¤¬ÉáÄÌ¤ËÌá¤Ã¤¿¡£",  "Your muscles revert to normal.");
+			muta_desc = _( "ç­‹è‚‰ãŒæ™®é€šã«æˆ»ã£ãŸã€‚",  "Your muscles revert to normal.");
 
 			break;
 		case 123: case 124: case 125:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_PUNY;
-			muta_desc = _( "¶ÚÆù¤¬ÉáÄÌ¤ËÌá¤Ã¤¿¡£",  "Your muscles revert to normal.");
+			muta_desc = _( "ç­‹è‚‰ãŒæ™®é€šã«æˆ»ã£ãŸã€‚",  "Your muscles revert to normal.");
 
 			break;
 		case 126: case 127: case 128:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_HYPER_INT;
-			muta_desc = _( "Ç¾¤¬ÉáÄÌ¤ËÌá¤Ã¤¿¡£",  "Your brain reverts to normal.");
+			muta_desc = _( "è„³ãŒæ™®é€šã«æˆ»ã£ãŸã€‚",  "Your brain reverts to normal.");
 
 			break;
 		case 129: case 130: case 131:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_MORONIC;
-			muta_desc = _( "Ç¾¤¬ÉáÄÌ¤ËÌá¤Ã¤¿¡£",  "Your brain reverts to normal.");
+			muta_desc = _( "è„³ãŒæ™®é€šã«æˆ»ã£ãŸã€‚",  "Your brain reverts to normal.");
 
 			break;
 		case 132: case 133:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_RESILIENT;
-			muta_desc = _( "ÉáÄÌ¤Î¾æÉ×¤µ¤ËÌá¤Ã¤¿¡£",  "You become ordinarily resilient again.");
+			muta_desc = _( "æ™®é€šã®ä¸ˆå¤«ã•ã«æˆ»ã£ãŸã€‚",  "You become ordinarily resilient again.");
 
 			break;
 		case 134: case 135:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_XTRA_FAT;
-			muta_desc = _( "´ñÀ×Åª¤Ê¥À¥¤¥¨¥Ã¥È¤ËÀ®¸ù¤·¤¿¡ª",  "You benefit from a miracle diet!");
+			muta_desc = _( "å¥‡è·¡çš„ãªãƒ€ã‚¤ã‚¨ãƒƒãƒˆã«æˆåŠŸã—ãŸï¼",  "You benefit from a miracle diet!");
 
 			break;
 		case 136: case 137:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ALBINO;
-			muta_desc = _( "¥¢¥ë¥Ó¥Î¤Ç¤Ê¤¯¤Ê¤Ã¤¿¡ª",  "You are no longer an albino!");
+			muta_desc = _( "ã‚¢ãƒ«ãƒ“ãƒã§ãªããªã£ãŸï¼",  "You are no longer an albino!");
 
 			break;
 		case 138: case 139: case 140:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_FLESH_ROT;
-			muta_desc = _( "ÆùÂÎ¤òÉåÇÔ¤µ¤»¤ëÉÂµ¤¤¬¼£¤Ã¤¿¡ª",  "Your flesh is no longer afflicted by a rotting disease!");
+			muta_desc = _( "è‚‰ä½“ã‚’è…æ•—ã•ã›ã‚‹ç—…æ°—ãŒæ²»ã£ãŸï¼",  "Your flesh is no longer afflicted by a rotting disease!");
 
 			break;
 		case 141: case 142:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_SILLY_VOI;
-			muta_desc = _( "À¼¼Á¤¬ÉáÄÌ¤ËÌá¤Ã¤¿¡£",  "Your voice returns to normal.");
+			muta_desc = _( "å£°è³ªãŒæ™®é€šã«æˆ»ã£ãŸã€‚",  "Your voice returns to normal.");
 
 			break;
 		case 143: case 144:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_BLANK_FAC;
-			muta_desc = _( "´é¤ËÌÜÉ¡¤¬Ìá¤Ã¤¿¡£",  "Your facial features return.");
+			muta_desc = _( "é¡”ã«ç›®é¼»ãŒæˆ»ã£ãŸã€‚",  "Your facial features return.");
 
 			break;
 		case 145:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ILL_NORM;
-			muta_desc = _( "¿´¤¬°Â¤é¤°¸¸±Æ¤ò±Ç¤·½Ğ¤µ¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You stop projecting a reassuring image.");
+			muta_desc = _( "å¿ƒãŒå®‰ã‚‰ãå¹»å½±ã‚’æ˜ ã—å‡ºã•ãªããªã£ãŸã€‚",  "You stop projecting a reassuring image.");
 
 			break;
 		case 146: case 147: case 148:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_XTRA_EYES;
-			muta_desc = _( "Í¾Ê¬¤ÊÌÜ¤¬¾Ã¤¨¤Æ¤·¤Ş¤Ã¤¿¡ª",  "Your extra eyes vanish!");
+			muta_desc = _( "ä½™åˆ†ãªç›®ãŒæ¶ˆãˆã¦ã—ã¾ã£ãŸï¼",  "Your extra eyes vanish!");
 
 			break;
 		case 149: case 150:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_MAGIC_RES;
-			muta_desc = _( "ËâË¡¤Ë¼å¤¯¤Ê¤Ã¤¿¡£",  "You become susceptible to magic again.");
+			muta_desc = _( "é­”æ³•ã«å¼±ããªã£ãŸã€‚",  "You become susceptible to magic again.");
 
 			break;
 		case 151: case 152: case 153:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_XTRA_NOIS;
-			muta_desc = _( "´ñÌ¯¤Ê²»¤òÎ©¤Æ¤Ê¤¯¤Ê¤Ã¤¿¡ª",  "You stop making strange noise!");
+			muta_desc = _( "å¥‡å¦™ãªéŸ³ã‚’ç«‹ã¦ãªããªã£ãŸï¼",  "You stop making strange noise!");
 
 			break;
 		case 154: case 155: case 156:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_INFRAVIS;
-			muta_desc = _( "ÀÖ³°Àş»ëÎÏ¤¬Íî¤Á¤¿¡£",  "Your infravision is degraded.");
+			muta_desc = _( "èµ¤å¤–ç·šè¦–åŠ›ãŒè½ã¡ãŸã€‚",  "Your infravision is degraded.");
 
 			break;
 		case 157: case 158:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_XTRA_LEGS;
-			muta_desc = _( "Í¾Ê¬¤ÊµÓ¤¬¾Ã¤¨¤Æ¤·¤Ş¤Ã¤¿¡ª",  "Your extra legs disappear!");
+			muta_desc = _( "ä½™åˆ†ãªè„šãŒæ¶ˆãˆã¦ã—ã¾ã£ãŸï¼",  "Your extra legs disappear!");
 
 			break;
 		case 159: case 160:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_SHORT_LEG;
-			muta_desc = _( "µÓ¤ÎÄ¹¤µ¤¬ÉáÄÌ¤ËÌá¤Ã¤¿¡£",  "Your legs lengthen to normal.");
+			muta_desc = _( "è„šã®é•·ã•ãŒæ™®é€šã«æˆ»ã£ãŸã€‚",  "Your legs lengthen to normal.");
 
 			break;
 		case 161: case 162:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ELEC_TOUC;
-			muta_desc = _( "ÂÎ¤òÅÅÎ®¤¬Î®¤ì¤Ê¤¯¤Ê¤Ã¤¿¡£",  "Electricity stops running through you.");
+			muta_desc = _( "ä½“ã‚’é›»æµãŒæµã‚Œãªããªã£ãŸã€‚",  "Electricity stops running through you.");
 
 			break;
 		case 163: case 164:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_FIRE_BODY;
-			muta_desc = _( "ÂÎ¤¬±ê¤ËÊñ¤Ş¤ì¤Ê¤¯¤Ê¤Ã¤¿¡£",  "Your body is no longer enveloped in flames.");
+			muta_desc = _( "ä½“ãŒç‚ã«åŒ…ã¾ã‚Œãªããªã£ãŸã€‚",  "Your body is no longer enveloped in flames.");
 
 			break;
 		case 165: case 166: case 167:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_WART_SKIN;
-			muta_desc = _( "¥¤¥Ü¥¤¥Ü¤¬¾Ã¤¨¤¿¡ª",  "Your warts disappear!");
+			muta_desc = _( "ã‚¤ãƒœã‚¤ãƒœãŒæ¶ˆãˆãŸï¼",  "Your warts disappear!");
 
 			break;
 		case 168: case 169: case 170:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_SCALES;
-			muta_desc = _( "ÎÚ¤¬¾Ã¤¨¤¿¡ª",  "Your scales vanish!");
+			muta_desc = _( "é±—ãŒæ¶ˆãˆãŸï¼",  "Your scales vanish!");
 
 			break;
 		case 171: case 172:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_IRON_SKIN;
-			muta_desc = _( "È©¤¬Æù¤Ë¤â¤É¤Ã¤¿¡ª",  "Your skin reverts to flesh!");
+			muta_desc = _( "è‚ŒãŒè‚‰ã«ã‚‚ã©ã£ãŸï¼",  "Your skin reverts to flesh!");
 
 			break;
 		case 173: case 174:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_WINGS;
-			muta_desc = _( "ÇØÃæ¤Î±©º¬¤¬¼è¤ìÍî¤Á¤¿¡£",  "Your wings fall off.");
+			muta_desc = _( "èƒŒä¸­ã®ç¾½æ ¹ãŒå–ã‚Œè½ã¡ãŸã€‚",  "Your wings fall off.");
 
 			break;
 		case 175: case 176: case 177:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_FEARLESS;
-			muta_desc = _( "ºÆ¤Ó¶²Éİ¤ò´¶¤¸¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£",  "You begin to feel fear again.");
+			muta_desc = _( "å†ã³ææ€–ã‚’æ„Ÿã˜ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚",  "You begin to feel fear again.");
 
 			break;
 		case 178: case 179:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_REGEN;
-			muta_desc = _( "µŞÂ®²óÉü¤·¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You stop regenerating.");
+			muta_desc = _( "æ€¥é€Ÿå›å¾©ã—ãªããªã£ãŸã€‚",  "You stop regenerating.");
 
 			break;
 		case 180: case 181:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ESP;
-			muta_desc = _( "¥Æ¥ì¥Ñ¥·¡¼¤ÎÇ½ÎÏ¤ò¼º¤Ã¤¿¡ª",  "You lose your telepathic ability!");
+			muta_desc = _( "ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼ã®èƒ½åŠ›ã‚’å¤±ã£ãŸï¼",  "You lose your telepathic ability!");
 
 			break;
 		case 182: case 183: case 184:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_LIMBER;
-			muta_desc = _( "¶ÚÆù¤¬¹Å¤¯¤Ê¤Ã¤¿¡£",  "Your muscles stiffen.");
+			muta_desc = _( "ç­‹è‚‰ãŒç¡¬ããªã£ãŸã€‚",  "Your muscles stiffen.");
 
 			break;
 		case 185: case 186: case 187:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ARTHRITIS;
-			muta_desc = _( "´ØÀá¤¬ÄË¤¯¤Ê¤¯¤Ê¤Ã¤¿¡£",  "Your joints stop hurting.");
+			muta_desc = _( "é–¢ç¯€ãŒç—›ããªããªã£ãŸã€‚",  "Your joints stop hurting.");
 
 			break;
 		case 188:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_BAD_LUCK;
-			muta_desc = _( "¹õ¤¤¥ª¡¼¥é¤Ï±²´¬¤¤¤Æ¾Ã¤¨¤¿¡£",  "Your black aura swirls and fades.");
+			muta_desc = _( "é»’ã„ã‚ªãƒ¼ãƒ©ã¯æ¸¦å·»ã„ã¦æ¶ˆãˆãŸã€‚",  "Your black aura swirls and fades.");
 
 			break;
 		case 189:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_VULN_ELEM;
-			muta_desc = _( "ÌµËÉÈ÷¤Ê´¶¤¸¤Ï¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You feel less exposed.");
+			muta_desc = _( "ç„¡é˜²å‚™ãªæ„Ÿã˜ã¯ãªããªã£ãŸã€‚",  "You feel less exposed.");
 
 			break;
 		case 190: case 191: case 192:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_MOTION;
-			muta_desc = _( "Æ°ºî¤ÎÀµ³Î¤µ¤¬¤Ê¤¯¤Ê¤Ã¤¿¡£",  "You move with less assurance.");
+			muta_desc = _( "å‹•ä½œã®æ­£ç¢ºã•ãŒãªããªã£ãŸã€‚",  "You move with less assurance.");
 
 			break;
 		case 193:
 			if (p_ptr->pseikaku == SEIKAKU_LUCKY) break;
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_GOOD_LUCK;
-			muta_desc = _( "Çò¤¤¥ª¡¼¥é¤Ïµ±¤¤¤Æ¾Ã¤¨¤¿¡£",  "Your white aura shimmers and fades.");
+			muta_desc = _( "ç™½ã„ã‚ªãƒ¼ãƒ©ã¯è¼ã„ã¦æ¶ˆãˆãŸã€‚",  "Your white aura shimmers and fades.");
 
 			break;
 		default:
@@ -1479,9 +1479,9 @@ bool lose_mutation(int choose_mut)
 }
 
 /*!
- * @brief ¥Õ¥¡¥¤¥ë¥İ¥¤¥ó¥¿¤òÄÌ¤¸¤ÆÆÍÁ³ÊÑ°Û¤Î°ìÍ÷¤ò½ĞÎÏ¤¹¤ë
- * @param OutFile ½ĞÎÏÀè¥Õ¥¡¥¤¥ë¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿ã‚’é€šã˜ã¦çªç„¶å¤‰ç•°ã®ä¸€è¦§ã‚’å‡ºåŠ›ã™ã‚‹
+ * @param OutFile å‡ºåŠ›å…ˆãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void dump_mutations(FILE *OutFile)
 {
@@ -1491,162 +1491,162 @@ void dump_mutations(FILE *OutFile)
 	{
 		if (p_ptr->muta1 & MUT1_SPIT_ACID)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï»À¤ò¿á¤­¤«¤±¤ë¤³¤È¤¬¤Ç¤­¤ë¡£(¥À¥á¡¼¥¸ ¥ì¥Ù¥ëX1)\n", " You can spit acid (dam lvl).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯é…¸ã‚’å¹ãã‹ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ ãƒ¬ãƒ™ãƒ«X1)\n", " You can spit acid (dam lvl).\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_BR_FIRE)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï±ê¤Î¥Ö¥ì¥¹¤òÅÇ¤¯¤³¤È¤¬¤Ç¤­¤ë¡£(¥À¥á¡¼¥¸ ¥ì¥Ù¥ëX2)\n", " You can breathe fire (dam lvl * 2).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ç‚ã®ãƒ–ãƒ¬ã‚¹ã‚’åãã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ ãƒ¬ãƒ™ãƒ«X2)\n", " You can breathe fire (dam lvl * 2).\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_HYPN_GAZE)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎâË¤ß¤ÏºÅÌ²¸ú²Ì¤ò¤â¤Ä¡£\n", " Your gaze is hypnotic.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®ç¨ã¿ã¯å‚¬çœ åŠ¹æœã‚’ã‚‚ã¤ã€‚\n", " Your gaze is hypnotic.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_TELEKINES)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÇ°Æ°ÎÏ¤ò¤â¤Ã¤Æ¤¤¤ë¡£\n", " You are telekinetic.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å¿µå‹•åŠ›ã‚’ã‚‚ã£ã¦ã„ã‚‹ã€‚\n", " You are telekinetic.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_VTELEPORT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼«Ê¬¤Î°Õ»×¤Ç¥Æ¥ì¥İ¡¼¥È¤Ç¤­¤ë¡£\n", " You can teleport at will.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è‡ªåˆ†ã®æ„æ€ã§ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã§ãã‚‹ã€‚\n", " You can teleport at will.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_MIND_BLST)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÅ¨¤òÀº¿À¹¶·â¤Ç¤­¤ë¡£\n", " You can Mind Blast your enemies.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ•µã‚’ç²¾ç¥æ”»æ’ƒã§ãã‚‹ã€‚\n", " You can Mind Blast your enemies.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_RADIATION)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼«Ê¬¤Î°Õ»×¤ÇÊü¼ÍÇ½¤òÈ¯À¸¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can emit hard radiation at will.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è‡ªåˆ†ã®æ„æ€ã§æ”¾å°„èƒ½ã‚’ç™ºç”Ÿã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can emit hard radiation at will.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_VAMPIRISM)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏµÛ·ìµ´¤Î¤è¤¦¤ËÅ¨¤«¤éÀ¸Ì¿ÎÏ¤òµÛ¼ı¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can drain life from a foe like a vampire.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å¸è¡€é¬¼ã®ã‚ˆã†ã«æ•µã‹ã‚‰ç”Ÿå‘½åŠ›ã‚’å¸åã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can drain life from a foe like a vampire.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_SMELL_MET)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¶á¤¯¤Ë¤¢¤ëµ®¶âÂ°¤ò¤«¤®Ê¬¤±¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can smell nearby precious metal.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è¿‘ãã«ã‚ã‚‹è²´é‡‘å±ã‚’ã‹ãåˆ†ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can smell nearby precious metal.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_SMELL_MON)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¶á¤¯¤Î¥â¥ó¥¹¥¿¡¼¤ÎÂ¸ºß¤ò¤«¤®Ê¬¤±¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can smell nearby monsters.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è¿‘ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å­˜åœ¨ã‚’ã‹ãåˆ†ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can smell nearby monsters.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_BLINK)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÃ»¤¤µ÷Î¥¤ò¥Æ¥ì¥İ¡¼¥È¤Ç¤­¤ë¡£\n", " You can teleport yourself short distances.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯çŸ­ã„è·é›¢ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã§ãã‚‹ã€‚\n", " You can teleport yourself short distances.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_EAT_ROCK)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¹Å¤¤´ä¤ò¿©¤Ù¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can consume solid rock.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ç¡¬ã„å²©ã‚’é£Ÿã¹ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can consume solid rock.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_SWAP_POS)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÂ¾¤Î¼Ô¤È¾ì½ê¤òÆş¤ìÂØ¤ï¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can switch locations with another being.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ä»–ã®è€…ã¨å ´æ‰€ã‚’å…¥ã‚Œæ›¿ã‚ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can switch locations with another being.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_SHRIEK)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¿È¤ÎÌÓ¤â¤è¤À¤Ä¶«¤ÓÀ¼¤òÈ¯¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can emit a horrible shriek.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯èº«ã®æ¯›ã‚‚ã‚ˆã ã¤å«ã³å£°ã‚’ç™ºã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can emit a horrible shriek.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_ILLUMINE)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÌÀ¤ë¤¤¸÷¤òÊü¤Ä¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can emit bright light.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ˜ã‚‹ã„å…‰ã‚’æ”¾ã¤ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can emit bright light.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_DET_CURSE)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼Ù°­¤ÊËâË¡¤Î´í¸±¤ò´¶¤¸¤È¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can feel the danger of evil magic.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯é‚ªæ‚ªãªé­”æ³•ã®å±é™ºã‚’æ„Ÿã˜ã¨ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can feel the danger of evil magic.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_BERSERK)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼«Ê¬¤Î°Õ»×¤Ç¶¸ÍğÀïÆ®¾õÂÖ¤Ë¤Ê¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can drive yourself into a berserk frenzy.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è‡ªåˆ†ã®æ„æ€ã§ç‹‚ä¹±æˆ¦é—˜çŠ¶æ…‹ã«ãªã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can drive yourself into a berserk frenzy.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_POLYMORPH)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼«Ê¬¤Î°Õ»Ö¤ÇÊÑ²½¤Ç¤­¤ë¡£\n", " You can polymorph yourself at will.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è‡ªåˆ†ã®æ„å¿—ã§å¤‰åŒ–ã§ãã‚‹ã€‚\n", " You can polymorph yourself at will.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_MIDAS_TCH)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÄÌ¾ï¥¢¥¤¥Æ¥à¤ò¶â¤ËÊÑ¤¨¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can turn ordinary items to gold.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯é€šå¸¸ã‚¢ã‚¤ãƒ†ãƒ ã‚’é‡‘ã«å¤‰ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can turn ordinary items to gold.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_GROW_MOLD)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼ş°Ï¤Ë¥­¥Î¥³¤òÀ¸¤ä¤¹¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can cause mold to grow near you.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å‘¨å›²ã«ã‚­ãƒã‚³ã‚’ç”Ÿã‚„ã™ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can cause mold to grow near you.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_RESIST)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¸µÁÇ¤Î¹¶·â¤ËÂĞ¤·¤Æ¿È¤ò¹Å¤¯¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can harden yourself to the ravages of the elements.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å…ƒç´ ã®æ”»æ’ƒã«å¯¾ã—ã¦èº«ã‚’ç¡¬ãã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can harden yourself to the ravages of the elements.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_EARTHQUAKE)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼ş°Ï¤Î¥À¥ó¥¸¥ç¥ó¤òÊø²õ¤µ¤»¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can bring down the dungeon around your ears.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å‘¨å›²ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’å´©å£Šã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can bring down the dungeon around your ears.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_EAT_MAGIC)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏËâË¡¤Î¥¨¥Í¥ë¥®¡¼¤ò¼«Ê¬¤ÎÊª¤È¤·¤Æ»ÈÍÑ¤Ç¤­¤ë¡£\n", " You can consume magic energy for your own use.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯é­”æ³•ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’è‡ªåˆ†ã®ç‰©ã¨ã—ã¦ä½¿ç”¨ã§ãã‚‹ã€‚\n", " You can consume magic energy for your own use.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_WEIGH_MAG)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼«Ê¬¤Ë±Æ¶Á¤òÍ¿¤¨¤ëËâË¡¤ÎÎÏ¤ò´¶¤¸¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can feel the strength of the magics affecting you.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è‡ªåˆ†ã«å½±éŸ¿ã‚’ä¸ãˆã‚‹é­”æ³•ã®åŠ›ã‚’æ„Ÿã˜ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can feel the strength of the magics affecting you.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_STERILITY)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï½¸ÃÄÅªÀ¸¿£ÉÔÇ½¤òµ¯¤³¤¹¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can cause mass impotence.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯é›†å›£çš„ç”Ÿæ®–ä¸èƒ½ã‚’èµ·ã“ã™ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can cause mass impotence.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_PANIC_HIT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¹¶·â¤·¤¿¸å¿È¤ò¼é¤ë¤¿¤áÆ¨¤²¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can run for your life after hitting something.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ”»æ’ƒã—ãŸå¾Œèº«ã‚’å®ˆã‚‹ãŸã‚é€ƒã’ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can run for your life after hitting something.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_DAZZLE)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ïº®Íğ¤ÈÌÕÌÜ¤ò°ú¤­µ¯¤³¤¹Êü¼ÍÇ½¤òÈ¯À¸¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£ \n", " You can emit confusing, blinding radiation.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ··ä¹±ã¨ç›²ç›®ã‚’å¼•ãèµ·ã“ã™æ”¾å°„èƒ½ã‚’ç™ºç”Ÿã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚ \n", " You can emit confusing, blinding radiation.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_LASER_EYE)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÌÜ¤«¤é¥ì¡¼¥¶¡¼¸÷Àş¤òÈ¯¼Í¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " Your eyes can fire laser beams.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ç›®ã‹ã‚‰ãƒ¬ãƒ¼ã‚¶ãƒ¼å…‰ç·šã‚’ç™ºå°„ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " Your eyes can fire laser beams.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_RECALL)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï³¹¤È¥À¥ó¥¸¥ç¥ó¤Î´Ö¤ò¹Ô¤­Íè¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can travel between town and the depths.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è¡—ã¨ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®é–“ã‚’è¡Œãæ¥ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can travel between town and the depths.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_BANISH)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤òÃÏ¹ö¤ËÍî¤È¤¹¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can send evil creatures directly to Hell.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’åœ°ç„ã«è½ã¨ã™ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can send evil creatures directly to Hell.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_COLD_TOUCH)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÊª¤ò¿¨¤Ã¤ÆÅà¤é¤»¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can freeze things with a touch.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ç‰©ã‚’è§¦ã£ã¦å‡ã‚‰ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can freeze things with a touch.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_LAUNCHER)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥¢¥¤¥Æ¥à¤òÎÏ¶¯¤¯Åê¤²¤ë¤³¤È¤¬¤Ç¤­¤ë¡£\n", " You can hurl objects with great force.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã‚¢ã‚¤ãƒ†ãƒ ã‚’åŠ›å¼·ãæŠ•ã’ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚\n", " You can hurl objects with great force.\n"));
 
 		}
 	}
@@ -1655,162 +1655,162 @@ void dump_mutations(FILE *OutFile)
 	{
 		if (p_ptr->muta2 & MUT2_BERS_RAGE)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¶¸Àï»Î²½¤ÎÈ¯ºî¤òµ¯¤³¤¹¡£\n", " You are subject to berserker fits.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ç‹‚æˆ¦å£«åŒ–ã®ç™ºä½œã‚’èµ·ã“ã™ã€‚\n", " You are subject to berserker fits.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_COWARDICE)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï»ş¡¹²²ÉÂ¤Ë¤Ê¤ë¡£\n", " You are subject to cowardice.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ™‚ã€…è‡†ç—…ã«ãªã‚‹ã€‚\n", " You are subject to cowardice.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_RTELEPORT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥é¥ó¥À¥à¤Ë¥Æ¥ì¥İ¡¼¥È¤¹¤ë¡£\n", " You are teleporting randomly.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ãƒ©ãƒ³ãƒ€ãƒ ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚\n", " You are teleporting randomly.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_ALCOHOL)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÂÎ¤Ï¥¢¥ë¥³¡¼¥ë¤òÊ¬Èç¤¹¤ë¡£\n", " Your body produces alcohol.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®ä½“ã¯ã‚¢ãƒ«ã‚³ãƒ¼ãƒ«ã‚’åˆ†æ³Œã™ã‚‹ã€‚\n", " Your body produces alcohol.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_HALLU)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¸¸³Ğ¤ò°ú¤­µ¯¤³¤¹Àº¿ÀºøÍğ¤Ë¿¯¤µ¤ì¤Æ¤¤¤ë¡£\n", " You have a hallucinatory insanity.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å¹»è¦šã‚’å¼•ãèµ·ã“ã™ç²¾ç¥éŒ¯ä¹±ã«ä¾µã•ã‚Œã¦ã„ã‚‹ã€‚\n", " You have a hallucinatory insanity.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_FLATULENT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÀ©¸æ¤Ç¤­¤Ê¤¤¶¯Îõ¤ÊÕû¤ò¤³¤¯¡£\n", " You are subject to uncontrollable flatulence.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯åˆ¶å¾¡ã§ããªã„å¼·çƒˆãªå±ã‚’ã“ãã€‚\n", " You are subject to uncontrollable flatulence.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_PROD_MANA)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÀ©¸æÉÔÇ½¤ÊËâË¡¤Î¥¨¥Í¥ë¥®¡¼¤òÈ¯¤·¤Æ¤¤¤ë¡£\n", " You are producing magical energy uncontrollably.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯åˆ¶å¾¡ä¸èƒ½ãªé­”æ³•ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’ç™ºã—ã¦ã„ã‚‹ã€‚\n", " You are producing magical energy uncontrollably.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_ATT_DEMON)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥Ç¡¼¥â¥ó¤ò°ú¤­¤Ä¤±¤ë¡£\n", " You attract demons.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¼•ãã¤ã‘ã‚‹ã€‚\n", " You attract demons.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_SCOR_TAIL)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥µ¥½¥ê¤Î¿¬Èø¤¬À¸¤¨¤Æ¤¤¤ë¡£(ÆÇ¡¢¥À¥á¡¼¥¸ 3d7)\n", " You have a scorpion tail (poison, 3d7).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã‚µã‚½ãƒªã®å°»å°¾ãŒç”Ÿãˆã¦ã„ã‚‹ã€‚(æ¯’ã€ãƒ€ãƒ¡ãƒ¼ã‚¸ 3d7)\n", " You have a scorpion tail (poison, 3d7).\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_HORNS)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï³Ñ¤¬À¸¤¨¤Æ¤¤¤ë¡£(¥À¥á¡¼¥¸ 2d6)\n", " You have horns (dam. 2d6).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è§’ãŒç”Ÿãˆã¦ã„ã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ 2d6)\n", " You have horns (dam. 2d6).\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_BEAK)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥¯¥Á¥Ğ¥·¤¬À¸¤¨¤Æ¤¤¤ë¡£(¥À¥á¡¼¥¸ 2d4)\n", " You have a beak (dam. 2d4).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã‚¯ãƒãƒã‚·ãŒç”Ÿãˆã¦ã„ã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ 2d4)\n", " You have a beak (dam. 2d4).\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_SPEED_FLUX)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥é¥ó¥À¥à¤ËÁá¤¯Æ°¤¤¤¿¤êÃÙ¤¯Æ°¤¤¤¿¤ê¤¹¤ë¡£\n", " You move faster or slower randomly.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ãƒ©ãƒ³ãƒ€ãƒ ã«æ—©ãå‹•ã„ãŸã‚Šé…ãå‹•ã„ãŸã‚Šã™ã‚‹ã€‚\n", " You move faster or slower randomly.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_BANISH_ALL)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï»ş¡¹¶á¤¯¤Î¥â¥ó¥¹¥¿¡¼¤ò¾ÃÌÇ¤µ¤»¤ë¡£\n", " You sometimes cause nearby creatures to vanish.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ™‚ã€…è¿‘ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ¶ˆæ»…ã•ã›ã‚‹ã€‚\n", " You sometimes cause nearby creatures to vanish.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_EAT_LIGHT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï»ş¡¹¼ş°Ï¤Î¸÷¤òµÛ¼ı¤·¤Æ±ÉÍÜ¤Ë¤¹¤ë¡£\n", " You sometimes feed off of the light around you.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ™‚ã€…å‘¨å›²ã®å…‰ã‚’å¸åã—ã¦æ „é¤Šã«ã™ã‚‹ã€‚\n", " You sometimes feed off of the light around you.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_TRUNK)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¾İ¤Î¤è¤¦¤ÊÉ¡¤ò»ı¤Ã¤Æ¤¤¤ë¡£(¥À¥á¡¼¥¸ 1d4)\n", " You have an elephantine trunk (dam 1d4).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è±¡ã®ã‚ˆã†ãªé¼»ã‚’æŒã£ã¦ã„ã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ 1d4)\n", " You have an elephantine trunk (dam 1d4).\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_ATT_ANIMAL)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÆ°Êª¤ò°ú¤­¤Ä¤±¤ë¡£\n", " You attract animals.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å‹•ç‰©ã‚’å¼•ãã¤ã‘ã‚‹ã€‚\n", " You attract animals.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_TENTACLES)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¼Ù°­¤Ê¿¨¼ê¤ò»ı¤Ã¤Æ¤¤¤ë¡£(¥À¥á¡¼¥¸ 2d5)\n", " You have evil looking tentacles (dam 2d5).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯é‚ªæ‚ªãªè§¦æ‰‹ã‚’æŒã£ã¦ã„ã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ 2d5)\n", " You have evil looking tentacles (dam 2d5).\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_RAW_CHAOS)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¤·¤Ğ¤·¤Ğ½ã¥«¥ª¥¹¤ËÊñ¤Ş¤ì¤ë¡£\n", " You occasionally are surrounded with raw chaos.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã—ã°ã—ã°ç´”ã‚«ã‚ªã‚¹ã«åŒ…ã¾ã‚Œã‚‹ã€‚\n", " You occasionally are surrounded with raw chaos.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_NORMALITY)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÊÑ°Û¤·¤Æ¤¤¤¿¤¬¡¢²óÉü¤·¤Æ¤­¤Æ¤¤¤ë¡£\n", " You may be mutated, but you're recovering.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å¤‰ç•°ã—ã¦ã„ãŸãŒã€å›å¾©ã—ã¦ãã¦ã„ã‚‹ã€‚\n", " You may be mutated, but you're recovering.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_WRAITH)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÆùÂÎ¤ÏÍ©ÂÎ²½¤·¤¿¤ê¼ÂÂÎ²½¤·¤¿¤ê¤¹¤ë¡£\n", " You fade in and out of physical reality.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®è‚‰ä½“ã¯å¹½ä½“åŒ–ã—ãŸã‚Šå®Ÿä½“åŒ–ã—ãŸã‚Šã™ã‚‹ã€‚\n", " You fade in and out of physical reality.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_POLY_WOUND)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Î·ò¹¯¤Ï¥«¥ª¥¹¤ÎÎÏ¤Ë±Æ¶Á¤ò¼õ¤±¤ë¡£\n", " Your health is subject to chaotic forces.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®å¥åº·ã¯ã‚«ã‚ªã‚¹ã®åŠ›ã«å½±éŸ¿ã‚’å—ã‘ã‚‹ã€‚\n", " Your health is subject to chaotic forces.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_WASTING)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¿ê¼å¤¹¤ë¶²¤í¤·¤¤ÉÂµ¤¤Ë¤«¤«¤Ã¤Æ¤¤¤ë¡£\n", " You have a horrible wasting disease.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è¡°å¼±ã™ã‚‹æã‚ã—ã„ç—…æ°—ã«ã‹ã‹ã£ã¦ã„ã‚‹ã€‚\n", " You have a horrible wasting disease.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_ATT_DRAGON)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥É¥é¥´¥ó¤ò°ú¤­¤Ä¤±¤ë¡£\n", " You attract dragons.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¼•ãã¤ã‘ã‚‹ã€‚\n", " You attract dragons.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_WEIRD_MIND)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÀº¿À¤Ï¥é¥ó¥À¥à¤Ë³ÈÂç¤·¤¿¤ê½Ì¾®¤·¤¿¤ê¤·¤Æ¤¤¤ë¡£\n", " Your mind randomly expands and contracts.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®ç²¾ç¥ã¯ãƒ©ãƒ³ãƒ€ãƒ ã«æ‹¡å¤§ã—ãŸã‚Šç¸®å°ã—ãŸã‚Šã—ã¦ã„ã‚‹ã€‚\n", " Your mind randomly expands and contracts.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_NAUSEA)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Î°ß¤ÏÈó¾ï¤ËÍî¤ÁÃå¤­¤¬¤Ê¤¤¡£\n", " You have a seriously upset stomach.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®èƒƒã¯éå¸¸ã«è½ã¡ç€ããŒãªã„ã€‚\n", " You have a seriously upset stomach.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_CHAOS_GIFT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥«¥ª¥¹¤Î¼é¸î°­Ëâ¤«¤éË«Èş¤ò¤¦¤±¤È¤ë¡£\n", " Chaos deities give you gifts.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã‚«ã‚ªã‚¹ã®å®ˆè­·æ‚ªé­”ã‹ã‚‰è¤’ç¾ã‚’ã†ã‘ã¨ã‚‹ã€‚\n", " Chaos deities give you gifts.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_WALK_SHAD)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¤·¤Ğ¤·¤ĞÂ¾¤Î¡Ö±Æ¡×¤ËÌÂ¤¤¹ş¤à¡£\n", " You occasionally stumble into other shadows.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã—ã°ã—ã°ä»–ã®ã€Œå½±ã€ã«è¿·ã„è¾¼ã‚€ã€‚\n", " You occasionally stumble into other shadows.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_WARNING)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÅ¨¤Ë´Ø¤¹¤ë·Ù¹ğ¤ò´¶¤¸¤ë¡£\n", " You receive warnings about your foes.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ•µã«é–¢ã™ã‚‹è­¦å‘Šã‚’æ„Ÿã˜ã‚‹ã€‚\n", " You receive warnings about your foes.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_INVULN)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï»ş¡¹Éé¤±ÃÎ¤é¤º¤Êµ¤Ê¬¤Ë¤Ê¤ë¡£\n", " You occasionally feel invincible.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ™‚ã€…è² ã‘çŸ¥ã‚‰ãšãªæ°—åˆ†ã«ãªã‚‹ã€‚\n", " You occasionally feel invincible.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_SP_TO_HP)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï»ş¡¹·ì¤¬¶ÚÆù¤Ë¤É¤Ã¤ÈÎ®¤ì¤ë¡£\n", " Your blood sometimes rushes to your muscles.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ™‚ã€…è¡€ãŒç­‹è‚‰ã«ã©ã£ã¨æµã‚Œã‚‹ã€‚\n", " Your blood sometimes rushes to your muscles.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_HP_TO_SP)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï»ş¡¹Æ¬¤Ë·ì¤¬¤É¤Ã¤ÈÎ®¤ì¤ë¡£\n", " Your blood sometimes rushes to your head.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ™‚ã€…é ­ã«è¡€ãŒã©ã£ã¨æµã‚Œã‚‹ã€‚\n", " Your blood sometimes rushes to your head.\n"));
 
 		}
 		if (p_ptr->muta2 & MUT2_DISARM)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¤è¤¯¤Ä¤Ş¤Å¤¤¤ÆÊª¤òÍî¤È¤¹¡£\n", " You occasionally stumble and drop things.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã‚ˆãã¤ã¾ã¥ã„ã¦ç‰©ã‚’è½ã¨ã™ã€‚\n", " You occasionally stumble and drop things.\n"));
 
 		}
 	}
@@ -1819,170 +1819,170 @@ void dump_mutations(FILE *OutFile)
 	{
 		if (p_ptr->muta3 & MUT3_HYPER_STR)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÄ¶¿ÍÅª¤Ë¶¯¤¤¡£(ÏÓÎÏ+4)\n", " You are superhumanly strong (+4 STR).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è¶…äººçš„ã«å¼·ã„ã€‚(è…•åŠ›+4)\n", " You are superhumanly strong (+4 STR).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_PUNY)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ïµõ¼å¤À¡£(ÏÓÎÏ-4)\n", " You are puny (-4 STR).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯è™šå¼±ã ã€‚(è…•åŠ›-4)\n", " You are puny (-4 STR).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_HYPER_INT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÇ¾¤ÏÀ¸ÂÎ¥³¥ó¥Ô¥å¡¼¥¿¤À¡£(ÃÎÇ½¡õ¸­¤µ+4)\n", " Your brain is a living computer (+4 INT/WIS).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®è„³ã¯ç”Ÿä½“ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã ã€‚(çŸ¥èƒ½ï¼†è³¢ã•+4)\n", " Your brain is a living computer (+4 INT/WIS).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_MORONIC)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÀº¿ÀÇö¼å¤À¡£(ÃÎÇ½¡õ¸­¤µ-4)\n", " You are moronic (-4 INT/WIS).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ç²¾ç¥è–„å¼±ã ã€‚(çŸ¥èƒ½ï¼†è³¢ã•-4)\n", " You are moronic (-4 INT/WIS).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_RESILIENT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÂÎ¤ÏÃÆÎÏÀ­¤ËÉÙ¤ó¤Ç¤¤¤ë¡£(ÂÑµ×+4)\n", " You are very resilient (+4 CON).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®ä½“ã¯å¼¾åŠ›æ€§ã«å¯Œã‚“ã§ã„ã‚‹ã€‚(è€ä¹…+4)\n", " You are very resilient (+4 CON).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_XTRA_FAT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¶ËÃ¼¤ËÂÀ¤Ã¤Æ¤¤¤ë¡£(ÂÑµ×+2,¥¹¥Ô¡¼¥É-2)\n", " You are extremely fat (+2 CON, -2 speed).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ¥µç«¯ã«å¤ªã£ã¦ã„ã‚‹ã€‚(è€ä¹…+2,ã‚¹ãƒ”ãƒ¼ãƒ‰-2)\n", " You are extremely fat (+2 CON, -2 speed).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_ALBINO)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥¢¥ë¥Ó¥Î¤À¡£(ÂÑµ×-4)\n", " You are albino (-4 CON).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã‚¢ãƒ«ãƒ“ãƒã ã€‚(è€ä¹…-4)\n", " You are albino (-4 CON).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_FLESH_ROT)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÆùÂÎ¤ÏÉåÇÔ¤·¤Æ¤¤¤ë¡£(ÂÑµ×-2,Ì¥ÎÏ-1)\n", " Your flesh is rotting (-2 CON, -1 CHR).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®è‚‰ä½“ã¯è…æ•—ã—ã¦ã„ã‚‹ã€‚(è€ä¹…-2,é­…åŠ›-1)\n", " Your flesh is rotting (-2 CON, -1 CHR).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_SILLY_VOI)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÀ¼¤Ï´ÖÈ´¤±¤Ê¥­¡¼¥­¡¼À¼¤À¡£(Ì¥ÎÏ-4)\n", " Your voice is a silly squeak (-4 CHR).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®å£°ã¯é–“æŠœã‘ãªã‚­ãƒ¼ã‚­ãƒ¼å£°ã ã€‚(é­…åŠ›-4)\n", " Your voice is a silly squeak (-4 CHR).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_BLANK_FAC)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¤Î¤Ã¤Ú¤é¤Ü¤¦¤À¡£(Ì¥ÎÏ-1)\n", " Your face is featureless (-1 CHR).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã®ã£ãºã‚‰ã¼ã†ã ã€‚(é­…åŠ›-1)\n", " Your face is featureless (-1 CHR).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_ILL_NORM)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¸¸±Æ¤ËÊ¤¤ï¤ì¤Æ¤¤¤ë¡£\n", " Your appearance is masked with illusion.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å¹»å½±ã«è¦†ã‚ã‚Œã¦ã„ã‚‹ã€‚\n", " Your appearance is masked with illusion.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_XTRA_EYES)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÍ¾Ê¬¤ËÆó¤Ä¤ÎÌÜ¤ò»ı¤Ã¤Æ¤¤¤ë¡£(Ãµº÷+15)\n", " You have an extra pair of eyes (+15 search).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ä½™åˆ†ã«äºŒã¤ã®ç›®ã‚’æŒã£ã¦ã„ã‚‹ã€‚(æ¢ç´¢+15)\n", " You have an extra pair of eyes (+15 search).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_MAGIC_RES)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏËâË¡¤Ø¤ÎÂÑÀ­¤ò¤â¤Ã¤Æ¤¤¤ë¡£\n", " You are resistant to magic.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯é­”æ³•ã¸ã®è€æ€§ã‚’ã‚‚ã£ã¦ã„ã‚‹ã€‚\n", " You are resistant to magic.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_XTRA_NOIS)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÊÑ¤Ê²»¤òÈ¯¤·¤Æ¤¤¤ë¡£(±£Ì©-3)\n", " You make a lot of strange noise (-3 stealth).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å¤‰ãªéŸ³ã‚’ç™ºã—ã¦ã„ã‚‹ã€‚(éš å¯†-3)\n", " You make a lot of strange noise (-3 stealth).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_INFRAVIS)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÁÇÀ²¤é¤·¤¤ÀÖ³°Àş»ëÎÏ¤ò»ı¤Ã¤Æ¤¤¤ë¡£(+3)\n", " You have remarkable infravision (+3).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ç´ æ™´ã‚‰ã—ã„èµ¤å¤–ç·šè¦–åŠ›ã‚’æŒã£ã¦ã„ã‚‹ã€‚(+3)\n", " You have remarkable infravision (+3).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_XTRA_LEGS)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÍ¾Ê¬¤ËÆóËÜ¤ÎÂ­¤¬À¸¤¨¤Æ¤¤¤ë¡£(²ÃÂ®+3)\n", " You have an extra pair of legs (+3 speed).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ä½™åˆ†ã«äºŒæœ¬ã®è¶³ãŒç”Ÿãˆã¦ã„ã‚‹ã€‚(åŠ é€Ÿ+3)\n", " You have an extra pair of legs (+3 speed).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_SHORT_LEG)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÂ­¤ÏÃ»¤¤ÆÍµ¯¤À¡£(²ÃÂ®-3)\n", " Your legs are short stubs (-3 speed).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®è¶³ã¯çŸ­ã„çªèµ·ã ã€‚(åŠ é€Ÿ-3)\n", " Your legs are short stubs (-3 speed).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_ELEC_TOUC)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Î·ì´É¤Ë¤ÏÅÅÎ®¤¬Î®¤ì¤Æ¤¤¤ë¡£\n", " Electricity is running through your veins.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®è¡€ç®¡ã«ã¯é›»æµãŒæµã‚Œã¦ã„ã‚‹ã€‚\n", " Electricity is running through your veins.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_FIRE_BODY)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÂÎ¤Ï±ê¤Ë¤Ä¤Ä¤Ş¤ì¤Æ¤¤¤ë¡£\n", " Your body is enveloped in flames.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®ä½“ã¯ç‚ã«ã¤ã¤ã¾ã‚Œã¦ã„ã‚‹ã€‚\n", " Your body is enveloped in flames.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_WART_SKIN)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÈ©¤Ï¥¤¥Ü¤ËÈï¤ï¤ì¤Æ¤¤¤ë¡£(Ì¥ÎÏ-2, AC+5)\n", " Your skin is covered with warts (-2 CHR, +5 AC).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®è‚Œã¯ã‚¤ãƒœã«è¢«ã‚ã‚Œã¦ã„ã‚‹ã€‚(é­…åŠ›-2, AC+5)\n", " Your skin is covered with warts (-2 CHR, +5 AC).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_SCALES)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÈ©¤ÏÎÚ¤Ë¤Ê¤Ã¤Æ¤¤¤ë¡£(Ì¥ÎÏ-1, AC+10)\n", " Your skin has turned into scales (-1 CHR, +10 AC).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®è‚Œã¯é±—ã«ãªã£ã¦ã„ã‚‹ã€‚(é­…åŠ›-1, AC+10)\n", " Your skin has turned into scales (-1 CHR, +10 AC).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_IRON_SKIN)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÈ©¤ÏÅ´¤Ç¤Ç¤­¤Æ¤¤¤ë¡£(´ïÍÑ-1, AC+25)\n", " Your skin is made of steel (-1 DEX, +25 AC).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®è‚Œã¯é‰„ã§ã§ãã¦ã„ã‚‹ã€‚(å™¨ç”¨-1, AC+25)\n", " Your skin is made of steel (-1 DEX, +25 AC).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_WINGS)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï±©¤ò»ı¤Ã¤Æ¤¤¤ë¡£\n", " You have wings.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ç¾½ã‚’æŒã£ã¦ã„ã‚‹ã€‚\n", " You have wings.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_FEARLESS)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÁ´¤¯¶²Éİ¤ò´¶¤¸¤Ê¤¤¡£\n", " You are completely fearless.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å…¨ãææ€–ã‚’æ„Ÿã˜ãªã„ã€‚\n", " You are completely fearless.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_REGEN)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏµŞÂ®¤Ë²óÉü¤¹¤ë¡£\n", " You are regenerating.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯æ€¥é€Ÿã«å›å¾©ã™ã‚‹ã€‚\n", " You are regenerating.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_ESP)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¥Æ¥ì¥Ñ¥·¡¼¤ò»ı¤Ã¤Æ¤¤¤ë¡£\n", " You are telepathic.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼ã‚’æŒã£ã¦ã„ã‚‹ã€‚\n", " You are telepathic.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_LIMBER)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÂÎ¤ÏÈó¾ï¤Ë¤·¤Ê¤ä¤«¤À¡£(´ïÍÑ+3)\n", " Your body is very limber (+3 DEX).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®ä½“ã¯éå¸¸ã«ã—ãªã‚„ã‹ã ã€‚(å™¨ç”¨+3)\n", " Your body is very limber (+3 DEX).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_ARTHRITIS)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¤¤¤Ä¤â´ØÀá¤ËÄË¤ß¤ò´¶¤¸¤Æ¤¤¤ë¡£(´ïÍÑ-3)\n", " Your joints ache constantly (-3 DEX).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ã„ã¤ã‚‚é–¢ç¯€ã«ç—›ã¿ã‚’æ„Ÿã˜ã¦ã„ã‚‹ã€‚(å™¨ç”¨-3)\n", " Your joints ache constantly (-3 DEX).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_VULN_ELEM)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¸µÁÇ¤Î¹¶·â¤Ë¼å¤¤¡£\n", " You are susceptible to damage from the elements.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯å…ƒç´ ã®æ”»æ’ƒã«å¼±ã„ã€‚\n", " You are susceptible to damage from the elements.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_MOTION)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÎÆ°ºî¤ÏÀµ³Î¤ÇÎÏ¶¯¤¤¡£(±£Ì©+1)\n", " Your movements are precise and forceful (+1 STL).\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã®å‹•ä½œã¯æ­£ç¢ºã§åŠ›å¼·ã„ã€‚(éš å¯†+1)\n", " Your movements are precise and forceful (+1 STL).\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_GOOD_LUCK)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤ÏÇò¤¤¥ª¡¼¥é¤Ë¤Ä¤Ä¤Ş¤ì¤Æ¤¤¤ë¡£\n", " There is a white aura surrounding you.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯ç™½ã„ã‚ªãƒ¼ãƒ©ã«ã¤ã¤ã¾ã‚Œã¦ã„ã‚‹ã€‚\n", " There is a white aura surrounding you.\n"));
 
 		}
 		if (p_ptr->muta3 & MUT3_BAD_LUCK)
 		{
-			fprintf(OutFile, _(" ¤¢¤Ê¤¿¤Ï¹õ¤¤¥ª¡¼¥é¤Ë¤Ä¤Ä¤Ş¤ì¤Æ¤¤¤ë¡£\n", " There is a black aura surrounding you.\n"));
+			fprintf(OutFile, _(" ã‚ãªãŸã¯é»’ã„ã‚ªãƒ¼ãƒ©ã«ã¤ã¤ã¾ã‚Œã¦ã„ã‚‹ã€‚\n", " There is a black aura surrounding you.\n"));
 
 		}
 	}
 }
 
 /*!
- * @brief ÆÍÁ³ÊÑ°ÛÉ½¼¨¥³¥Ş¥ó¥É¤Î¼ÂÁõ / List mutations we have...
- * @return ¤Ê¤·
+ * @brief çªç„¶å¤‰ç•°è¡¨ç¤ºã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè£… / List mutations we have...
+ * @return ãªã—
  */
 void do_cmd_knowledge_mutations(void)
 {
@@ -2000,7 +2000,7 @@ void do_cmd_knowledge_mutations(void)
 
 	/* Display the file contents */
 #ifdef JP
-show_file(TRUE, file_name, "ÆÍÁ³ÊÑ°Û", 0, 0);
+show_file(TRUE, file_name, "çªç„¶å¤‰ç•°", 0, 0);
 #else
 	show_file(TRUE, file_name, "Mutations", 0, 0);
 #endif
@@ -2011,9 +2011,9 @@ show_file(TRUE, file_name, "ÆÍÁ³ÊÑ°Û", 0, 0);
 }
 
 /*!
- * @brief Éä¹æ¤Ê¤·32¥Ó¥Ã¥ÈÀ°¿ô¤Î¥Ó¥Ã¥È¿ô¤òÊÖ¤¹¡£
- * @param x ¥Ó¥Ã¥È¿ô¤òÄ´¤Ù¤¿¤¤ÊÑ¿ô
- * @return ¥Ó¥Ã¥È¿ô
+ * @brief ç¬¦å·ãªã—32ãƒ“ãƒƒãƒˆæ•´æ•°ã®ãƒ“ãƒƒãƒˆæ•°ã‚’è¿”ã™ã€‚
+ * @param x ãƒ“ãƒƒãƒˆæ•°ã‚’èª¿ã¹ãŸã„å¤‰æ•°
+ * @return ãƒ“ãƒƒãƒˆæ•°
  */
 int count_bits(u32b x)
 {
@@ -2029,8 +2029,8 @@ int count_bits(u32b x)
 }
 
 /*!
- * @brief ¸½ºß¥×¥ì¥¤¥ä¡¼ÆÀ¤Æ¤¤¤ëÆÍÁ³ÊÑ°Û¤Î¿ô¤òÊÖ¤¹¡£
- * @return ¸½ºßÆÀ¤Æ¤¤¤ëÆÍÁ³ÊÑ°Û¤Î¿ô
+ * @brief ç¾åœ¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å¾—ã¦ã„ã‚‹çªç„¶å¤‰ç•°ã®æ•°ã‚’è¿”ã™ã€‚
+ * @return ç¾åœ¨å¾—ã¦ã„ã‚‹çªç„¶å¤‰ç•°ã®æ•°
  */
 static int count_mutations(void)
 {
@@ -2041,9 +2041,9 @@ static int count_mutations(void)
 
 
 /*!
- * @brief ÆÍÁ³ÊÑ°Û¤Ë¤è¤ë¼«Á³²óÉü¥Ú¥Ê¥ë¥Æ¥£¤ò¥Ñ¡¼¥»¥ó¥ÈÃÍ¤ÇÊÖ¤¹ /
+ * @brief çªç„¶å¤‰ç•°ã«ã‚ˆã‚‹è‡ªç„¶å›å¾©ãƒšãƒŠãƒ«ãƒ†ã‚£ã‚’ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆå€¤ã§è¿”ã™ /
  * Return the modifier to the regeneration rate (in percent)
- * @return ¥Ú¥Ê¥ë¥Æ¥£½¤Àµ(%)
+ * @return ãƒšãƒŠãƒ«ãƒ†ã‚£ä¿®æ­£(%)
  */
 int calc_mutant_regenerate_mod(void)
 {
@@ -2075,8 +2075,8 @@ int calc_mutant_regenerate_mod(void)
 }
 
 /*!
- * @brief ÆÍÁ³ÊÑ°Û¥ì¥¤¥·¥ã¥ë¾å¤Ç¸ı¤ò»È¤¦¤è¤ê¤ò¹Ô¤Ã¤¿ºİ¤Ë²Î¤ä¼ö½Ñ¤òÄä»ß¤¹¤ë /
- * @return ¤Ê¤·
+ * @brief çªç„¶å¤‰ç•°ãƒ¬ã‚¤ã‚·ãƒ£ãƒ«ä¸Šã§å£ã‚’ä½¿ã†ã‚ˆã‚Šã‚’è¡Œã£ãŸéš›ã«æ­Œã‚„å‘ªè¡“ã‚’åœæ­¢ã™ã‚‹ /
+ * @return ãªã—
  */
 void mutation_stop_mouth()
 {
@@ -2086,9 +2086,9 @@ void mutation_stop_mouth()
 
 
 /*!
- * @brief ÆÍÁ³ÊÑ°Û¤Î¥ì¥¤¥·¥ã¥ë¸ú²Ì¼ÂÁõ
- * @return È¯Æ°¤µ¤»¤ëÆÍÁ³ÊÑ°Û¥ì¥¤¥·¥ã¥ë¤ÎID
- * @return ¥ì¥¤¥·¥ã¥ë¤ò¼Â¹Ô¤·¤¿¾ì¹çTRUE¡¢¥­¥ã¥ó¥»¥ë¤·¤¿¾ì¹çFALSE¤òÊÖ¤¹
+ * @brief çªç„¶å¤‰ç•°ã®ãƒ¬ã‚¤ã‚·ãƒ£ãƒ«åŠ¹æœå®Ÿè£…
+ * @return ç™ºå‹•ã•ã›ã‚‹çªç„¶å¤‰ç•°ãƒ¬ã‚¤ã‚·ãƒ£ãƒ«ã®ID
+ * @return ãƒ¬ã‚¤ã‚·ãƒ£ãƒ«ã‚’å®Ÿè¡Œã—ãŸå ´åˆTRUEã€ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸå ´åˆFALSEã‚’è¿”ã™
  */
 bool mutation_power_aux(u32b power)
 {
@@ -2101,7 +2101,7 @@ bool mutation_power_aux(u32b power)
 		case MUT1_SPIT_ACID:
 			if (!get_aim_dir(&dir)) return FALSE;
 			mutation_stop_mouth();
-			msg_print(_("»À¤òÅÇ¤­¤«¤±¤¿...", "You spit acid..."));
+			msg_print(_("é…¸ã‚’åãã‹ã‘ãŸ...", "You spit acid..."));
 
 			fire_ball(GF_ACID, dir, lvl, 1 + (lvl / 30));
 			break;
@@ -2109,40 +2109,40 @@ bool mutation_power_aux(u32b power)
 		case MUT1_BR_FIRE:
 			if (!get_aim_dir(&dir)) return FALSE;
 			mutation_stop_mouth();
-			msg_print(_("¤¢¤Ê¤¿¤Ï²Ğ±ê¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿...", "You breathe fire..."));
+			msg_print(_("ã‚ãªãŸã¯ç«ç‚ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸ...", "You breathe fire..."));
 
 			fire_ball(GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
 			break;
 
 		case MUT1_HYPN_GAZE:
 			if (!get_aim_dir(&dir)) return FALSE;
-			msg_print(_("¤¢¤Ê¤¿¤ÎÌÜ¤Ï¸¸ÏÇÅª¤Ë¤Ê¤Ã¤¿...", "Your eyes look mesmerizing..."));
+			msg_print(_("ã‚ãªãŸã®ç›®ã¯å¹»æƒ‘çš„ã«ãªã£ãŸ...", "Your eyes look mesmerizing..."));
 
 			(void)charm_monster(dir, lvl);
 			break;
 
 		case MUT1_TELEKINES:
 			if (!get_aim_dir(&dir)) return FALSE;
-			msg_print(_("½¸Ãæ¤·¤Æ¤¤¤ë...", "You concentrate..."));
+			msg_print(_("é›†ä¸­ã—ã¦ã„ã‚‹...", "You concentrate..."));
 
 			fetch(dir, lvl * 10, TRUE);
 			break;
 
 		case MUT1_VTELEPORT:
-			msg_print(_("½¸Ãæ¤·¤Æ¤¤¤ë...", "You concentrate..."));
+			msg_print(_("é›†ä¸­ã—ã¦ã„ã‚‹...", "You concentrate..."));
 
 			teleport_player(10 + 4 * lvl, 0L);
 			break;
 
 		case MUT1_MIND_BLST:
 			if (!get_aim_dir(&dir)) return FALSE;
-			msg_print(_("½¸Ãæ¤·¤Æ¤¤¤ë...", "You concentrate..."));
+			msg_print(_("é›†ä¸­ã—ã¦ã„ã‚‹...", "You concentrate..."));
 
 			fire_bolt(GF_PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
 			break;
 
 		case MUT1_RADIATION:
-			msg_print(_("ÂÎ¤«¤éÊü¼ÍÇ½¤¬È¯À¸¤·¤¿¡ª", "Radiation flows from your body!"));
+			msg_print(_("ä½“ã‹ã‚‰æ”¾å°„èƒ½ãŒç™ºç”Ÿã—ãŸï¼", "Radiation flows from your body!"));
 
 			fire_ball(GF_NUKE, 0, (lvl * 2), 3 + (lvl / 20));
 			break;
@@ -2162,12 +2162,12 @@ bool mutation_power_aux(u32b power)
 
 				if (!(c_ptr->m_idx))
 				{
-					msg_print(_("²¿¤â¤Ê¤¤¾ì½ê¤Ë³ú¤ß¤Ä¤¤¤¿¡ª", "You bite into thin air!"));
+					msg_print(_("ä½•ã‚‚ãªã„å ´æ‰€ã«å™›ã¿ã¤ã„ãŸï¼", "You bite into thin air!"));
 
 					break;
 				}
 
-				msg_print(_("¤¢¤Ê¤¿¤Ï¥Ë¥ä¥ê¤È¤·¤Æ²ç¤ò¤à¤¤¤¿...", "You grin and bare your fangs..."));
+				msg_print(_("ã‚ãªãŸã¯ãƒ‹ãƒ¤ãƒªã¨ã—ã¦ç‰™ã‚’ã‚€ã„ãŸ...", "You grin and bare your fangs..."));
 
 
 				dummy = lvl * 2;
@@ -2178,7 +2178,7 @@ bool mutation_power_aux(u32b power)
 						/* No heal if we are "full" */
 						(void)hp_player(dummy);
 					else
-						msg_print(_("¤¢¤Ê¤¿¤Ï¶õÊ¢¤Ç¤Ï¤¢¤ê¤Ş¤»¤ó¡£", "You were not hungry."));
+						msg_print(_("ã‚ãªãŸã¯ç©ºè…¹ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚", "You were not hungry."));
 
 					/* Gain nutritional sustenance: 150/hp drained */
 					/* A Food ration gives 5000 food points (by contrast) */
@@ -2189,7 +2189,7 @@ bool mutation_power_aux(u32b power)
 						(void)set_food(dummy >= PY_FOOD_MAX ? PY_FOOD_MAX-1 : dummy);
 				}
 				else
-					msg_print(_("¤²¤§¡ª¤Ò¤É¤¤Ì£¤À¡£", "Yechh. That tastes foul."));
+					msg_print(_("ã’ã‡ï¼ã²ã©ã„å‘³ã ã€‚", "Yechh. That tastes foul."));
 
 			}
 			break;
@@ -2225,13 +2225,13 @@ bool mutation_power_aux(u32b power)
 
 				if (!have_flag(mimic_f_ptr->flags, FF_HURT_ROCK))
 				{
-					msg_print(_("¤³¤ÎÃÏ·Á¤Ï¿©¤Ù¤é¤ì¤Ê¤¤¡£", "You cannot eat this feature."));
+					msg_print(_("ã“ã®åœ°å½¢ã¯é£Ÿã¹ã‚‰ã‚Œãªã„ã€‚", "You cannot eat this feature."));
 					break;
 				}
 				else if (have_flag(f_ptr->flags, FF_PERMANENT))
 				{
 #ifdef JP
-					msg_format("¤¤¤Æ¤Ã¡ª¤³¤Î%s¤Ï¤¢¤Ê¤¿¤Î»õ¤è¤ê¹Å¤¤¡ª", f_name + mimic_f_ptr->name);
+					msg_format("ã„ã¦ã£ï¼ã“ã®%sã¯ã‚ãªãŸã®æ­¯ã‚ˆã‚Šç¡¬ã„ï¼", f_name + mimic_f_ptr->name);
 #else
 					msg_format("Ouch!  This %s is harder than your teeth!", f_name + mimic_f_ptr->name);
 #endif
@@ -2240,19 +2240,19 @@ bool mutation_power_aux(u32b power)
 				else if (c_ptr->m_idx)
 				{
 					monster_type *m_ptr = &m_list[c_ptr->m_idx];
-					msg_print(_("²¿¤«¤¬¼ÙËâ¤·¤Æ¤¤¤Ş¤¹¡ª", "There's something in the way!"));
+					msg_print(_("ä½•ã‹ãŒé‚ªé­”ã—ã¦ã„ã¾ã™ï¼", "There's something in the way!"));
 
 					if (!m_ptr->ml || !is_pet(m_ptr)) py_attack(y, x, 0);
 					break;
 				}
 				else if (have_flag(f_ptr->flags, FF_TREE))
 				{
-					msg_print(_("ÌÚ¤ÎÌ£¤Ï¹¥¤­¤¸¤ã¤Ê¤¤¡ª", "You don't like the woody taste!"));
+					msg_print(_("æœ¨ã®å‘³ã¯å¥½ãã˜ã‚ƒãªã„ï¼", "You don't like the woody taste!"));
 					break;
 				}
 				else if (have_flag(f_ptr->flags, FF_GLASS))
 				{
-					msg_print(_("¥¬¥é¥¹¤ÎÌ£¤Ï¹¥¤­¤¸¤ã¤Ê¤¤¡ª", "You don't like the glassy taste!"));
+					msg_print(_("ã‚¬ãƒ©ã‚¹ã®å‘³ã¯å¥½ãã˜ã‚ƒãªã„ï¼", "You don't like the glassy taste!"));
 					break;
 				}
 				else if (have_flag(f_ptr->flags, FF_DOOR) || have_flag(f_ptr->flags, FF_CAN_DIG))
@@ -2266,7 +2266,7 @@ bool mutation_power_aux(u32b power)
 				else
 				{
 #ifdef JP
-					msg_format("¤³¤Î%s¤Ï¤È¤Æ¤â¤ª¤¤¤·¤¤¡ª", f_name + mimic_f_ptr->name);
+					msg_format("ã“ã®%sã¯ã¨ã¦ã‚‚ãŠã„ã—ã„ï¼", f_name + mimic_f_ptr->name);
 #else
 					msg_format("This %s is very filling!", f_name + mimic_f_ptr->name);
 #endif
@@ -2326,7 +2326,7 @@ bool mutation_power_aux(u32b power)
 
 		case MUT1_POLYMORPH:
 #ifdef JP
-			if (!get_check("ÊÑ¿È¤·¤Ş¤¹¡£¤è¤í¤·¤¤¤Ç¤¹¤«¡©")) return FALSE;
+			if (!get_check("å¤‰èº«ã—ã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ")) return FALSE;
 #else
 			if (!get_check("You will polymorph your self. Are you sure? ")) return FALSE;
 #endif
@@ -2396,8 +2396,8 @@ bool mutation_power_aux(u32b power)
 		case MUT1_STERILITY:
 			/* Fake a population explosion. */
 #ifdef JP
-			msg_print("ÆÍÁ³Æ¬¤¬ÄË¤¯¤Ê¤Ã¤¿¡ª");
-			take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, "¶ØÍß¤ò¶¯¤¤¤¿ÈèÏ«", -1);
+			msg_print("çªç„¶é ­ãŒç—›ããªã£ãŸï¼");
+			take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, "ç¦æ¬²ã‚’å¼·ã„ãŸç–²åŠ´", -1);
 #else
 			msg_print("You suddenly have a headache!");
 			take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, "the strain of forcing abstinence", -1);
@@ -2417,12 +2417,12 @@ bool mutation_power_aux(u32b power)
 				{
 					py_attack(y, x, 0);
 					if (randint0(p_ptr->skill_dis) < 7)
-						msg_print(_("¤¦¤Ş¤¯Æ¨¤²¤é¤ì¤Ê¤«¤Ã¤¿¡£", "You failed to teleport."));
+						msg_print(_("ã†ã¾ãé€ƒã’ã‚‰ã‚Œãªã‹ã£ãŸã€‚", "You failed to teleport."));
 					else teleport_player(30, 0L);
 				}
 				else
 				{
-					msg_print(_("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£", "You don't see any monster in this direction"));
+					msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "You don't see any monster in this direction"));
 
 					msg_print(NULL);
 				}
@@ -2458,7 +2458,7 @@ bool mutation_power_aux(u32b power)
 
 				if (!c_ptr->m_idx)
 				{
-					msg_print(_("¼Ù°­¤ÊÂ¸ºß¤ò´¶¤¸¤È¤ì¤Ş¤»¤ó¡ª", "You sense no evil there!"));
+					msg_print(_("é‚ªæ‚ªãªå­˜åœ¨ã‚’æ„Ÿã˜ã¨ã‚Œã¾ã›ã‚“ï¼", "You sense no evil there!"));
 
 					break;
 				}
@@ -2483,12 +2483,12 @@ bool mutation_power_aux(u32b power)
 
 					/* Delete the monster, rather than killing it. */
 					delete_monster_idx(c_ptr->m_idx);
-					msg_print(_("¤½¤Î¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ÏÎ²²«½­¤¤±ì¤È¤È¤â¤Ë¾Ã¤¨µî¤Ã¤¿¡ª", "The evil creature vanishes in a puff of sulfurous smoke!"));
+					msg_print(_("ãã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ç¡«é»„è‡­ã„ç…™ã¨ã¨ã‚‚ã«æ¶ˆãˆå»ã£ãŸï¼", "The evil creature vanishes in a puff of sulfurous smoke!"));
 
 				}
 				else
 				{
-					msg_print(_("µ§¤ê¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", "Your invocation is ineffectual!"));
+					msg_print(_("ç¥ˆã‚Šã¯åŠ¹æœãŒãªã‹ã£ãŸï¼", "Your invocation is ineffectual!"));
 
 					if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
 				}
@@ -2507,7 +2507,7 @@ bool mutation_power_aux(u32b power)
 
 				if (!c_ptr->m_idx)
 				{
-					msg_print(_("¤¢¤Ê¤¿¤Ï²¿¤â¤Ê¤¤¾ì½ê¤Ç¼ê¤ò¿¶¤Ã¤¿¡£", "You wave your hands in the air."));
+					msg_print(_("ã‚ãªãŸã¯ä½•ã‚‚ãªã„å ´æ‰€ã§æ‰‹ã‚’æŒ¯ã£ãŸã€‚", "You wave your hands in the air."));
 
 					break;
 				}
@@ -2524,7 +2524,7 @@ bool mutation_power_aux(u32b power)
 		default:
 			energy_use = 0;
 #ifdef JP
-			msg_format("Ç½ÎÏ %s ¤Ï¼ÂÁõ¤µ¤ì¤Æ¤¤¤Ş¤»¤ó¡£", power);
+			msg_format("èƒ½åŠ› %s ã¯å®Ÿè£…ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", power);
 #else
 			msg_format("Power %s not implemented. Oops.", power);
 #endif

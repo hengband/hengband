@@ -1,4 +1,4 @@
-/* File: main-xaw.c */
+﻿/* File: main-xaw.c */
 
 /* Purpose: Support for X Athena Widget based Angband */
 /* Most code written by Torbjn Lindgren (tl@cd.chalmers.se) */

@@ -1,4 +1,4 @@
-/* File: angband.h */
+﻿/* File: angband.h */
 
 /* Main "Angband" header file */
 

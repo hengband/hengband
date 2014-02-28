@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file monster1.c
- * @brief ¥â¥ó¥¹¥¿¡¼¾ğÊó¤Îµ­½Ò / describe monsters (using monster memory)
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±ã®è¨˜è¿° / describe monsters (using monster memory)
  * @date 2013/12/11
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
@@ -18,14 +18,14 @@
  */
 static cptr wd_he[3] =
 #ifdef JP
-{ "¤½¤ì", "Èà", "Èà½÷" };
+{ "ãã‚Œ", "å½¼", "å½¼å¥³" };
 #else
 { "it", "he", "she" };
 #endif
 
 static cptr wd_his[3] =
 #ifdef JP
-{ "¤½¤ì¤Î", "Èà¤Î", "Èà½÷¤Î" };
+{ "ãã‚Œã®", "å½¼ã®", "å½¼å¥³ã®" };
 #else
 { "its", "his", "her" };
 #endif
@@ -33,7 +33,7 @@ static cptr wd_his[3] =
 
 
 /*!
- * ±Ñ¸ì¤ÎÊ£¿ô·Ïµ­½ÒÍÑ¥Ş¥¯¥í / Pluralizer.  Args(count, singular, plural)
+ * è‹±èªã®è¤‡æ•°ç³»è¨˜è¿°ç”¨ãƒã‚¯ãƒ­ / Pluralizer.  Args(count, singular, plural)
  */
 #define plural(c,s,p) \
     (((c) == 1) ? (s) : (p))
@@ -41,9 +41,9 @@ static cptr wd_his[3] =
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤ÎAC¾ğÊó¤òÆÀ¤ë¤³¤È¤¬¤Ç¤­¤ë¤«¤òÊÖ¤¹ / Determine if the "armor" is known
- * @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return Å¨¤ÎAC¤òÃÎ¤ë¾ò·ï¤¬Ëş¤¿¤µ¤ì¤Æ¤¤¤ë¤Ê¤éTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ACæƒ…å ±ã‚’å¾—ã‚‹ã“ã¨ãŒã§ãã‚‹ã‹ã‚’è¿”ã™ / Determine if the "armor" is known
+ * @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return æ•µã®ACã‚’çŸ¥ã‚‹æ¡ä»¶ãŒæº€ãŸã•ã‚Œã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™
  * @details
  * The higher the level, the fewer kills needed.
  */
@@ -72,11 +72,11 @@ static bool know_armour(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÂÇ·â°ÒÎÏ¤òÃÎ¤ë¤³¤È¤¬¤Ç¤­¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ‰“æ’ƒå¨åŠ›ã‚’çŸ¥ã‚‹ã“ã¨ãŒã§ãã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
  * Determine if the "damage" of the given attack is known
- * @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @param i ³ÎÇ§¤·¤¿¤¤¹¶·â¼êÈÖ
- * @return Å¨¤Î¥À¥á¡¼¥¸¥À¥¤¥¹¤òÃÎ¤ë¾ò·ï¤¬Ëş¤¿¤µ¤ì¤Æ¤¤¤ë¤Ê¤éTRUE¤òÊÖ¤¹
+ * @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @param i ç¢ºèªã—ãŸã„æ”»æ’ƒæ‰‹ç•ª
+ * @return æ•µã®ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒ€ã‚¤ã‚¹ã‚’çŸ¥ã‚‹æ¡ä»¶ãŒæº€ãŸã•ã‚Œã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™
  * @details
  * <pre>
  * the higher the level of the monster, the fewer the attacks you need,
@@ -118,9 +118,9 @@ static bool know_damage(int r_idx, int i)
 void (*hook_c_roff)(byte attr, cptr str) = c_roff;
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î»×¤¤½Ğ¥á¥Ã¥»¡¼¥¸¤ò¤¢¤é¤«¤¸¤á»ØÄê¤µ¤ì¤¿´Ø¿ô¥İ¥¤¥ó¥¿¤Ë´ğ¤Å¤­½ĞÎÏ¤¹¤ë
- * @param str ½ĞÎÏÊ¸»úÎó
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ€ã„å‡ºãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ã‚ã‚‰ã‹ã˜ã‚æŒ‡å®šã•ã‚ŒãŸé–¢æ•°ãƒã‚¤ãƒ³ã‚¿ã«åŸºã¥ãå‡ºåŠ›ã™ã‚‹
+ * @param str å‡ºåŠ›æ–‡å­—åˆ—
+ * @return ãªã—
  */
 static void hooked_roff(cptr str)
 {
@@ -129,14 +129,14 @@ static void hooked_roff(cptr str)
 }
 
 /*!
-* @brief ¥À¥¤¥¹ÌÜ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
-* @param base_damage ¸ÇÄêÃÍ
-* @param dice_num ¥À¥¤¥¹¿ô
-* @param dice_side ¥À¥¤¥¹ÌÌ
-* @param dice_mult ¥À¥¤¥¹ÇÜÎ¨
-* @param dice_div ¥À¥¤¥¹½ü¿ô
-* @param msg Ê¸»úÎó¤ò³ÊÇ¼¤¹¤ë¥İ¥¤¥ó¥¿
-* @return ¤Ê¤·
+* @brief ãƒ€ã‚¤ã‚¹ç›®ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+* @param base_damage å›ºå®šå€¤
+* @param dice_num ãƒ€ã‚¤ã‚¹æ•°
+* @param dice_side ãƒ€ã‚¤ã‚¹é¢
+* @param dice_mult ãƒ€ã‚¤ã‚¹å€ç‡
+* @param dice_div ãƒ€ã‚¤ã‚¹é™¤æ•°
+* @param msg æ–‡å­—åˆ—ã‚’æ ¼ç´ã™ã‚‹ãƒã‚¤ãƒ³ã‚¿
+* @return ãªã—
 */
 void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg)
 {
@@ -168,12 +168,12 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
 }
 
 /*!
-* @brief Ê¸»úÎó¤Ë¥â¥ó¥¹¥¿¡¼¤Î¹¶·âÎÏ¤ò²Ã¤¨¤ë
-* @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
-* @param SPELL_NUM ¼öÊ¸ÈÖ¹æ
-* @param msg É½¼¨¤¹¤ëÊ¸»úÎó
-* @param tmp ÊÖ¤¹¥á¥Ã¥»¡¼¥¸¤ò³ÊÇ¼¤¹¤ëÇÛÎó
-* @return ¤Ê¤·
+* @brief æ–‡å­—åˆ—ã«ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ”»æ’ƒåŠ›ã‚’åŠ ãˆã‚‹
+* @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+* @param SPELL_NUM å‘ªæ–‡ç•ªå·
+* @param msg è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—
+* @param tmp è¿”ã™ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æ ¼ç´ã™ã‚‹é…åˆ—
+* @return ãªã—
 */
 void set_damage(int r_idx, int SPELL_NUM, char* msg, char* tmp)
 {
@@ -188,11 +188,11 @@ void set_damage(int r_idx, int SPELL_NUM, char* msg, char* tmp)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î»×¤¤½Ğ¾ğÊó¤òÉ½¼¨¤¹¤ë
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ€ã„å‡ºæƒ…å ±ã‚’è¡¨ç¤ºã™ã‚‹
  * Hack -- display monster information using "hooked_roff()"
- * @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @param mode É½¼¨¥ª¥×¥·¥ç¥ó
- * @return ¤Ê¤·
+ * @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @param mode è¡¨ç¤ºã‚ªãƒ—ã‚·ãƒ§ãƒ³
+ * @return ãªã—
  * @details
  * This function should only be called with the cursor placed at the
  * left edge of the screen, on a cleared line, in which the recall is
@@ -346,14 +346,14 @@ static void roff_aux(int r_idx, int mode)
 		if (r_ptr->r_deaths)
 		{
 			/* Killed ancestors */
-			hooked_roff(format(_("%^s¤Ï¤¢¤Ê¤¿¤ÎÀèÁÄ¤ò %d ¿ÍÁò¤Ã¤Æ¤¤¤ë", "%^s has slain %d of your ancestors"),
+			hooked_roff(format(_("%^sã¯ã‚ãªãŸã®å…ˆç¥–ã‚’ %d äººè‘¬ã£ã¦ã„ã‚‹", "%^s has slain %d of your ancestors"),
 					   wd_he[msex], r_ptr->r_deaths));
 
 			/* But we've also killed it */
 			if (dead)
 			{
 				hooked_roff(format(
-					_("¤¬¡¢¤¹¤Ç¤ËµØÆ¤¤Á¤Ï²Ì¤¿¤·¤Æ¤¤¤ë¡ª", 
+					_("ãŒã€ã™ã§ã«ä»‡è¨ã¡ã¯æœãŸã—ã¦ã„ã‚‹ï¼", 
 					 (", but you have avenged %s!  ", plural(r_ptr->r_deaths, "him", "them")))));
 			}
 
@@ -361,7 +361,7 @@ static void roff_aux(int r_idx, int mode)
 			else
 			{
 				hooked_roff(format(
-					_("¤Î¤Ë¡¢¤Ş¤ÀµØÆ¤¤Á¤ò²Ì¤¿¤·¤Æ¤¤¤Ê¤¤¡£", 
+					_("ã®ã«ã€ã¾ã ä»‡è¨ã¡ã‚’æœãŸã—ã¦ã„ãªã„ã€‚", 
 					 (", who %s unavenged.  ", plural(r_ptr->r_deaths, "remains", "remain")))));
 			}
 
@@ -372,7 +372,7 @@ static void roff_aux(int r_idx, int mode)
 		/* Dead unique who never hurt us */
 		else if (dead)
 		{
-			hooked_roff(_("¤¢¤Ê¤¿¤Ï¤³¤ÎµØÅ¨¤ò¤¹¤Ç¤ËÁò¤êµî¤Ã¤Æ¤¤¤ë¡£", "You have slain this foe.  "));
+			hooked_roff(_("ã‚ãªãŸã¯ã“ã®ä»‡æ•µã‚’ã™ã§ã«è‘¬ã‚Šå»ã£ã¦ã„ã‚‹ã€‚", "You have slain this foe.  "));
 
 			/* Start a new line */
 			hooked_roff("\n");
@@ -384,14 +384,14 @@ static void roff_aux(int r_idx, int mode)
 	{
 		/* Dead ancestors */
 		hooked_roff(
-			_(format("¤³¤Î¥â¥ó¥¹¥¿¡¼¤Ï¤¢¤Ê¤¿¤ÎÀèÁÄ¤ò %d ¿ÍÁò¤Ã¤Æ¤¤¤ë", r_ptr->r_deaths),
+			_(format("ã“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã‚ãªãŸã®å…ˆç¥–ã‚’ %d äººè‘¬ã£ã¦ã„ã‚‹", r_ptr->r_deaths),
 			  format("%d of your ancestors %s been killed by this creature, ", r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have"))));
 
 		/* Some kills this life */
 		if (r_ptr->r_pkills)
 		{
 			hooked_roff(format(
-				_("¤¬¡¢¤¢¤Ê¤¿¤Ï¤³¤Î¥â¥ó¥¹¥¿¡¼¤ò¾¯¤Ê¤¯¤È¤â %d ÂÎ¤ÏÅİ¤·¤Æ¤¤¤ë¡£", 
+				_("ãŒã€ã‚ãªãŸã¯ã“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å°‘ãªãã¨ã‚‚ %d ä½“ã¯å€’ã—ã¦ã„ã‚‹ã€‚", 
 				 "and you have exterminated at least %d of the creatures.  "), r_ptr->r_pkills));
 		}
 
@@ -399,7 +399,7 @@ static void roff_aux(int r_idx, int mode)
 		else if (r_ptr->r_tkills)
 		{
 			hooked_roff(format(
-				_("¤¬¡¢¤¢¤Ê¤¿¤ÎÀèÁÄ¤Ï¤³¤Î¥â¥ó¥¹¥¿¡¼¤ò¾¯¤Ê¤¯¤È¤â %d ÂÎ¤ÏÅİ¤·¤Æ¤¤¤ë¡£", 
+				_("ãŒã€ã‚ãªãŸã®å…ˆç¥–ã¯ã“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å°‘ãªãã¨ã‚‚ %d ä½“ã¯å€’ã—ã¦ã„ã‚‹ã€‚", 
 				  "and your ancestors have exterminated at least %d of the creatures.  "), r_ptr->r_tkills));
 		}
 
@@ -407,7 +407,7 @@ static void roff_aux(int r_idx, int mode)
 		else
 		{
 			hooked_roff(format(
-				_("¤¬¡¢¤Ş¤À%s¤òÅİ¤·¤¿¤³¤È¤Ï¤Ê¤¤¡£", 
+				_("ãŒã€ã¾ã %sã‚’å€’ã—ãŸã“ã¨ã¯ãªã„ã€‚", 
 				  "and %s is not ever known to have been defeated.  "), wd_he[msex]));
 		}
 
@@ -422,7 +422,7 @@ static void roff_aux(int r_idx, int mode)
 		if (r_ptr->r_pkills)
 		{
 			hooked_roff(format(
-				_("¤¢¤Ê¤¿¤Ï¤³¤Î¥â¥ó¥¹¥¿¡¼¤ò¾¯¤Ê¤¯¤È¤â %d ÂÎ¤Ï»¦¤·¤Æ¤¤¤ë¡£",
+				_("ã‚ãªãŸã¯ã“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å°‘ãªãã¨ã‚‚ %d ä½“ã¯æ®ºã—ã¦ã„ã‚‹ã€‚",
 				  "You have killed at least %d of these creatures.  "), r_ptr->r_pkills));
 		}
 
@@ -430,14 +430,14 @@ static void roff_aux(int r_idx, int mode)
 		else if (r_ptr->r_tkills)
 		{
 			hooked_roff(format(
-				_("¤¢¤Ê¤¿¤ÎÀèÁÄ¤Ï¤³¤Î¥â¥ó¥¹¥¿¡¼¤ò¾¯¤Ê¤¯¤È¤â %d ÂÎ¤Ï»¦¤·¤Æ¤¤¤ë¡£", 
+				_("ã‚ãªãŸã®å…ˆç¥–ã¯ã“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å°‘ãªãã¨ã‚‚ %d ä½“ã¯æ®ºã—ã¦ã„ã‚‹ã€‚", 
 				  "Your ancestors have killed at least %d of these creatures.  "), r_ptr->r_tkills));
 		}
 
 		/* Killed none */
 		else
 		{
-			hooked_roff(_("¤³¤Î¥â¥ó¥¹¥¿¡¼¤òÅİ¤·¤¿¤³¤È¤Ï¤Ê¤¤¡£", "No battles to the death are recalled.  "));
+			hooked_roff(_("ã“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å€’ã—ãŸã“ã¨ã¯ãªã„ã€‚", "No battles to the death are recalled.  "));
 		}
 
 		/* Start a new line */
@@ -472,7 +472,7 @@ static void roff_aux(int r_idx, int mode)
 	/* Describe location */
 	if (r_ptr->level == 0)
 	{
-		hooked_roff(format(_("%^s¤ÏÄ®¤Ë½»¤ß", "%^s lives in the town"), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯ç”ºã«ä½ã¿", "%^s lives in the town"), wd_he[msex]));
 		old = TRUE;
 	}
 	else if (r_ptr->r_tkills || know_everything)
@@ -480,13 +480,13 @@ static void roff_aux(int r_idx, int mode)
 		if (depth_in_feet)
 		{
 			hooked_roff(format(
-				_("%^s¤ÏÄÌ¾ïÃÏ²¼ %d ¥Õ¥£¡¼¥È¤Ç½Ğ¸½¤·", "%^s is normally found at depths of %d feet"),
+				_("%^sã¯é€šå¸¸åœ°ä¸‹ %d ãƒ•ã‚£ãƒ¼ãƒˆã§å‡ºç¾ã—", "%^s is normally found at depths of %d feet"),
 				  wd_he[msex], r_ptr->level * 50));
 		}
 		else
 		{
 			hooked_roff(format(
-				_("%^s¤ÏÄÌ¾ïÃÏ²¼ %d ³¬¤Ç½Ğ¸½¤·", "%^s is normally found on dungeon level %d"),
+				_("%^sã¯é€šå¸¸åœ°ä¸‹ %d éšã§å‡ºç¾ã—", "%^s is normally found on dungeon level %d"),
 				  wd_he[msex], r_ptr->level));
 		}
 		old = TRUE;
@@ -496,7 +496,7 @@ static void roff_aux(int r_idx, int mode)
 	/* Describe movement */
 	if (r_idx == MON_CHAMELEON)
 	{
-		hooked_roff(_("¡¢Â¾¤Î¥â¥ó¥¹¥¿¡¼¤Ë²½¤±¤ë¡£", "and can take the shape of other monster."));
+		hooked_roff(_("ã€ä»–ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«åŒ–ã‘ã‚‹ã€‚", "and can take the shape of other monster."));
 		return;
 	}
 	else
@@ -504,11 +504,11 @@ static void roff_aux(int r_idx, int mode)
 		/* Introduction */
 		if (old)
 		{
-			hooked_roff(_("¡¢", ", and "));
+			hooked_roff(_("ã€", ", and "));
 		}
 		else
 		{
-			hooked_roff(format(_("%^s¤Ï", "%^s "), wd_he[msex]));
+			hooked_roff(format(_("%^sã¯", "%^s "), wd_he[msex]));
 			old = TRUE;
 		}
 #ifndef JP
@@ -521,48 +521,48 @@ static void roff_aux(int r_idx, int mode)
 			/* Adverb */
 			if ((flags1 & RF1_RAND_50) && (flags1 & RF1_RAND_25))
 			{
-				hooked_roff(_("¤«¤Ê¤ê", " extremely"));
+				hooked_roff(_("ã‹ãªã‚Š", " extremely"));
 			}
 			else if (flags1 & RF1_RAND_50)
 			{
-				hooked_roff(_("´öÊ¬", " somewhat"));
+				hooked_roff(_("å¹¾åˆ†", " somewhat"));
 			}
 			else if (flags1 & RF1_RAND_25)
 			{
-				hooked_roff(_("¾¯¡¹", " a bit"));
+				hooked_roff(_("å°‘ã€…", " a bit"));
 			}
 
 			/* Adjective */
-			hooked_roff(_("ÉÔµ¬Â§¤Ë", " erratically"));
+			hooked_roff(_("ä¸è¦å‰‡ã«", " erratically"));
 
 			/* Hack -- Occasional conjunction */
-			if (speed != 110) hooked_roff(_("¡¢¤«¤Ä", ", and"));
+			if (speed != 110) hooked_roff(_("ã€ã‹ã¤", ", and"));
 		}
 
 		/* Speed */
 		if (speed > 110)
 		{
-			if (speed > 139) hook_c_roff(TERM_RED, _("¿®¤¸Æñ¤¤¤Û¤É", " incredibly"));
-			else if (speed > 134) hook_c_roff(TERM_ORANGE, _("ÌÔÎõ¤Ë", " extremely"));
-			else if (speed > 129) hook_c_roff(TERM_ORANGE, _("Èó¾ï¤Ë", " very"));
-			else if (speed > 124) hook_c_roff(TERM_UMBER, _("¤«¤Ê¤ê", " fairly"));
-			else if (speed < 120) hook_c_roff(TERM_L_UMBER, _("¤ä¤ä", " somewhat"));
-			hook_c_roff(TERM_L_RED, _("ÁÇÁá¤¯", " quickly"));
+			if (speed > 139) hook_c_roff(TERM_RED, _("ä¿¡ã˜é›£ã„ã»ã©", " incredibly"));
+			else if (speed > 134) hook_c_roff(TERM_ORANGE, _("çŒ›çƒˆã«", " extremely"));
+			else if (speed > 129) hook_c_roff(TERM_ORANGE, _("éå¸¸ã«", " very"));
+			else if (speed > 124) hook_c_roff(TERM_UMBER, _("ã‹ãªã‚Š", " fairly"));
+			else if (speed < 120) hook_c_roff(TERM_L_UMBER, _("ã‚„ã‚„", " somewhat"));
+			hook_c_roff(TERM_L_RED, _("ç´ æ—©ã", " quickly"));
 		}
 		else if (speed < 110)
 		{
-			if (speed < 90) hook_c_roff(TERM_L_GREEN, _("¿®¤¸Æñ¤¤¤Û¤É", " incredibly"));
-			else if (speed < 95) hook_c_roff(TERM_BLUE, _("Èó¾ï¤Ë", " very"));
-			else if (speed < 100) hook_c_roff(TERM_BLUE, _("¤«¤Ê¤ê", " fairly"));
-			else if (speed > 104) hook_c_roff(TERM_GREEN, _("¤ä¤ä", " somewhat"));
-			hook_c_roff(TERM_L_BLUE, _("¤æ¤Ã¤¯¤ê¤È", " slowly"));
+			if (speed < 90) hook_c_roff(TERM_L_GREEN, _("ä¿¡ã˜é›£ã„ã»ã©", " incredibly"));
+			else if (speed < 95) hook_c_roff(TERM_BLUE, _("éå¸¸ã«", " very"));
+			else if (speed < 100) hook_c_roff(TERM_BLUE, _("ã‹ãªã‚Š", " fairly"));
+			else if (speed > 104) hook_c_roff(TERM_GREEN, _("ã‚„ã‚„", " somewhat"));
+			hook_c_roff(TERM_L_BLUE, _("ã‚†ã£ãã‚Šã¨", " slowly"));
 		}
 		else
 		{
-			hooked_roff(_("ÉáÄÌ¤ÎÂ®¤µ¤Ç", " at normal speed"));
+			hooked_roff(_("æ™®é€šã®é€Ÿã•ã§", " at normal speed"));
 		}
 #ifdef JP
-		hooked_roff("Æ°¤¤¤Æ¤¤¤ë");
+		hooked_roff("å‹•ã„ã¦ã„ã‚‹");
 #endif
 	}
 
@@ -572,22 +572,22 @@ static void roff_aux(int r_idx, int mode)
 		/* Introduce */
 		if (old)
 		{
-			hooked_roff(_("¡¢¤·¤«¤·", ", but "));
+			hooked_roff(_("ã€ã—ã‹ã—", ", but "));
 		}
 		else
 		{
-			hooked_roff(format(_("%^s¤Ï", "%^s "), wd_he[msex]));
+			hooked_roff(format(_("%^sã¯", "%^s "), wd_he[msex]));
 			old = TRUE;
 		}
 
 		/* Describe */
-		hooked_roff(_("¿¯Æş¼Ô¤òÄÉÀ×¤·¤Ê¤¤", "does not deign to chase intruders"));
+		hooked_roff(_("ä¾µå…¥è€…ã‚’è¿½è·¡ã—ãªã„", "does not deign to chase intruders"));
 	}
 
 	/* End this sentence */
 	if (old)
 	{
-		hooked_roff(_("¡£", ".  "));
+		hooked_roff(_("ã€‚", ".  "));
 		old = FALSE;
 	}
 
@@ -597,7 +597,7 @@ static void roff_aux(int r_idx, int mode)
 	{
 		/* Introduction */
 #ifdef JP
-		hooked_roff("¤³¤Î");
+		hooked_roff("ã“ã®");
 #else
 		if (flags1 & RF1_UNIQUE)
 		{
@@ -611,31 +611,31 @@ static void roff_aux(int r_idx, int mode)
 
 
 		/* Describe the "quality" */
-		if (flags2 & RF2_ELDRITCH_HORROR) hook_c_roff(TERM_VIOLET, _("¶¸µ¤¤òÍ¶¤¦", " sanity-blasting"));/*nuke me*/
-		if (flags3 & RF3_ANIMAL)          hook_c_roff(TERM_L_GREEN, _("¼«Á³³¦¤Î", " natural"));
-		if (flags3 & RF3_EVIL)            hook_c_roff(TERM_L_DARK, _("¼Ù°­¤Ê¤ë", " evil"));
-		if (flags3 & RF3_GOOD)            hook_c_roff(TERM_YELLOW, _("Á±ÎÉ¤Ê", " good"));
-		if (flags3 & RF3_UNDEAD)          hook_c_roff(TERM_VIOLET, _("¥¢¥ó¥Ç¥Ã¥É¤Î", " undead"));
-		if (flags3 & RF3_AMBERITE)        hook_c_roff(TERM_VIOLET, _("¥¢¥ó¥Ğ¡¼¤Î²¦Â²¤Î", " Amberite"));
+		if (flags2 & RF2_ELDRITCH_HORROR) hook_c_roff(TERM_VIOLET, _("ç‹‚æ°—ã‚’èª˜ã†", " sanity-blasting"));/*nuke me*/
+		if (flags3 & RF3_ANIMAL)          hook_c_roff(TERM_L_GREEN, _("è‡ªç„¶ç•Œã®", " natural"));
+		if (flags3 & RF3_EVIL)            hook_c_roff(TERM_L_DARK, _("é‚ªæ‚ªãªã‚‹", " evil"));
+		if (flags3 & RF3_GOOD)            hook_c_roff(TERM_YELLOW, _("å–„è‰¯ãª", " good"));
+		if (flags3 & RF3_UNDEAD)          hook_c_roff(TERM_VIOLET, _("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®", " undead"));
+		if (flags3 & RF3_AMBERITE)        hook_c_roff(TERM_VIOLET, _("ã‚¢ãƒ³ãƒãƒ¼ã®ç‹æ—ã®", " Amberite"));
 
 		if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC)) || (flags2 & (RF2_QUANTUM | RF2_HUMAN)))
 		{
 		/* Describe the "race" */
-			if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, _("¥É¥é¥´¥ó", " dragon"));
-			if (flags3 & RF3_DEMON)    hook_c_roff(TERM_VIOLET, _("¥Ç¡¼¥â¥ó", " demon"));
-			if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, _("¥¸¥ã¥¤¥¢¥ó¥È", " giant"));
-			if (flags3 & RF3_TROLL)    hook_c_roff(TERM_BLUE, _("¥È¥í¥ë", " troll"));
-			if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, _("¥ª¡¼¥¯", " orc"));
-			if (flags2 & RF2_HUMAN)    hook_c_roff(TERM_L_WHITE, _("¿Í´Ö", " human"));
-			if (flags2 & RF2_QUANTUM)  hook_c_roff(TERM_VIOLET, _("ÎÌ»ÒÀ¸Êª", " quantum creature"));
+			if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, _("ãƒ‰ãƒ©ã‚´ãƒ³", " dragon"));
+			if (flags3 & RF3_DEMON)    hook_c_roff(TERM_VIOLET, _("ãƒ‡ãƒ¼ãƒ¢ãƒ³", " demon"));
+			if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, _("ã‚¸ãƒ£ã‚¤ã‚¢ãƒ³ãƒˆ", " giant"));
+			if (flags3 & RF3_TROLL)    hook_c_roff(TERM_BLUE, _("ãƒˆãƒ­ãƒ«", " troll"));
+			if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, _("ã‚ªãƒ¼ã‚¯", " orc"));
+			if (flags2 & RF2_HUMAN)    hook_c_roff(TERM_L_WHITE, _("äººé–“", " human"));
+			if (flags2 & RF2_QUANTUM)  hook_c_roff(TERM_VIOLET, _("é‡å­ç”Ÿç‰©", " quantum creature"));
 		}
 		else
 		{
-			hooked_roff(_("¥â¥ó¥¹¥¿¡¼", " creature"));
+			hooked_roff(_("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", " creature"));
 		}
 
 #ifdef JP
-		hooked_roff("¤òÅİ¤¹¤³¤È¤Ï");
+		hooked_roff("ã‚’å€’ã™ã“ã¨ã¯");
 #endif
 		/* Group some variables */
 		{
@@ -643,13 +643,13 @@ static void roff_aux(int r_idx, int mode)
 
 #ifdef JP
 			i = p_ptr->lev;
-			hooked_roff(format(" %lu ¥ì¥Ù¥ë¤Î¥­¥ã¥é¥¯¥¿¤Ë¤È¤Ã¤Æ", (long)i));
+			hooked_roff(format(" %lu ãƒ¬ãƒ™ãƒ«ã®ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ã«ã¨ã£ã¦", (long)i));
 
 			i = (long)r_ptr->mexp * r_ptr->level / (p_ptr->max_plv+2);
 			j = ((((long)r_ptr->mexp * r_ptr->level % (p_ptr->max_plv+2)) *
 			       (long)1000 / (p_ptr->max_plv+2) + 5) / 10);
 
-			hooked_roff(format(" Ìó%ld.%02ld ¥İ¥¤¥ó¥È¤Î·Ğ¸³¤È¤Ê¤ë¡£",
+			hooked_roff(format(" ç´„%ld.%02ld ãƒã‚¤ãƒ³ãƒˆã®çµŒé¨“ã¨ãªã‚‹ã€‚",
 				(long)i, (long)j ));
 #else
 			/* calculate the integer exp part */
@@ -689,54 +689,54 @@ static void roff_aux(int r_idx, int mode)
 	if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC) && (flags3 & RF3_AURA_COLD))
 	{
 		hook_c_roff(TERM_VIOLET, format(
-			_("%^s¤Ï±ê¤ÈÉ¹¤È¥¹¥Ñ¡¼¥¯¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¡£", "%^s is surrounded by flames, ice and electricity.  "), wd_he[msex]));
+			_("%^sã¯ç‚ã¨æ°·ã¨ã‚¹ãƒ‘ãƒ¼ã‚¯ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "%^s is surrounded by flames, ice and electricity.  "), wd_he[msex]));
 	}
 	else if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC))
 	{
 		hook_c_roff(TERM_L_RED, format(
-			_("%^s¤Ï±ê¤È¥¹¥Ñ¡¼¥¯¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¡£", "%^s is surrounded by flames and electricity.  "), wd_he[msex]));
+			_("%^sã¯ç‚ã¨ã‚¹ãƒ‘ãƒ¼ã‚¯ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "%^s is surrounded by flames and electricity.  "), wd_he[msex]));
 	}
 	else if ((flags2 & RF2_AURA_FIRE) && (flags3 & RF3_AURA_COLD))
 	{
 		hook_c_roff(TERM_BLUE, format(
-			_("%^s¤Ï±ê¤ÈÉ¹¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¡£", "%^s is surrounded by flames and ice.  "), wd_he[msex]));
+			_("%^sã¯ç‚ã¨æ°·ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "%^s is surrounded by flames and ice.  "), wd_he[msex]));
 	}
 	else if ((flags3 & RF3_AURA_COLD) && (flags2 & RF2_AURA_ELEC))
 	{
 		hook_c_roff(TERM_L_GREEN, format(
-			_("%^s¤ÏÉ¹¤È¥¹¥Ñ¡¼¥¯¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¡£", "%^s is surrounded by ice and electricity.  "), wd_he[msex]));
+			_("%^sã¯æ°·ã¨ã‚¹ãƒ‘ãƒ¼ã‚¯ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "%^s is surrounded by ice and electricity.  "), wd_he[msex]));
 	}
 	else if (flags2 & RF2_AURA_FIRE)
 	{
 		hook_c_roff(TERM_RED, format(
-			_("%^s¤Ï±ê¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¡£", "%^s is surrounded by flames.  "), wd_he[msex]));
+			_("%^sã¯ç‚ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "%^s is surrounded by flames.  "), wd_he[msex]));
 	}
 	else if (flags3 & RF3_AURA_COLD)
 	{
 		hook_c_roff(TERM_BLUE, format(
-			_("%^s¤ÏÉ¹¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¡£", "%^s is surrounded by ice.  "), wd_he[msex]));
+			_("%^sã¯æ°·ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "%^s is surrounded by ice.  "), wd_he[msex]));
 	}
 	else if (flags2 & RF2_AURA_ELEC)
 	{
 		hook_c_roff(TERM_L_BLUE, format(
-			_("%^s¤Ï¥¹¥Ñ¡¼¥¯¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¡£", "%^s is surrounded by electricity.  "), wd_he[msex]));
+			_("%^sã¯ã‚¹ãƒ‘ãƒ¼ã‚¯ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "%^s is surrounded by electricity.  "), wd_he[msex]));
 	}
 
 	if (flags2 & RF2_REFLECTING)
-		hooked_roff(format(_("%^s¤ÏÌğ¤Î¼öÊ¸¤òÄ·¤ÍÊÖ¤¹¡£", "%^s reflects bolt spells.  "), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯çŸ¢ã®å‘ªæ–‡ã‚’è·³ã­è¿”ã™ã€‚", "%^s reflects bolt spells.  "), wd_he[msex]));
 
 	/* Describe escorts */
 	if ((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS) || reinforce)
 	{
 		hooked_roff(format(
-			_("%^s¤ÏÄÌ¾ï¸î±Ò¤òÈ¼¤Ã¤Æ¸½¤ì¤ë¡£", "%^s usually appears with escorts.  "), wd_he[msex]));
+			_("%^sã¯é€šå¸¸è­·è¡›ã‚’ä¼´ã£ã¦ç¾ã‚Œã‚‹ã€‚", "%^s usually appears with escorts.  "), wd_he[msex]));
 
 		if(reinforce)
 		{
-			hooked_roff(_("¸î±Ò¤Î¹½À®¤Ï", "These escorts"));
+			hooked_roff(_("è­·è¡›ã®æ§‹æˆã¯", "These escorts"));
 			if((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS))
 			{
-				hooked_roff(_("¾¯¤Ê¤¯¤È¤â", " at the least"));
+				hooked_roff(_("å°‘ãªãã¨ã‚‚", " at the least"));
 			}
 #ifndef JP
 			hooked_roff(" contain ");
@@ -748,12 +748,12 @@ static void roff_aux(int r_idx, int mode)
 					monster_race *rf_ptr = &r_info[r_ptr->reinforce_id[n]];
 					if(rf_ptr->flags1 & RF1_UNIQUE)
 					{
-						hooked_roff(format(_("¡¢%s", ", %s"), r_name + rf_ptr->name));
+						hooked_roff(format(_("ã€%s", ", %s"), r_name + rf_ptr->name));
 					}
 					else
 					{
 #ifdef JP
-						hooked_roff(format("¡¢ %dd%d ÂÎ¤Î%s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n],
+						hooked_roff(format("ã€ %dd%d ä½“ã®%s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n],
 							r_name + rf_ptr->name));
 #else
 						bool plural = (r_ptr->reinforce_dd[n] * r_ptr->reinforce_ds[n] > 1);
@@ -765,23 +765,23 @@ static void roff_aux(int r_idx, int mode)
 					}
 				}
 			}
-			hooked_roff(_("¤ÇÀ®¤êÎ©¤Ã¤Æ¤¤¤ë¡£", "."));
+			hooked_roff(_("ã§æˆã‚Šç«‹ã£ã¦ã„ã‚‹ã€‚", "."));
 		}
 	}
 
 	/* Describe friends */
 	else if (flags1 & RF1_FRIENDS)
 	{
-		hooked_roff(format(_("%^s¤ÏÄÌ¾ï½¸ÃÄ¤Ç¸½¤ì¤ë¡£", "%^s usually appears in groups.  "), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯é€šå¸¸é›†å›£ã§ç¾ã‚Œã‚‹ã€‚", "%^s usually appears in groups.  "), wd_he[msex]));
 	}
 
 
 	/* Collect inate attacks */
 	vn = 0;
-	if (flags4 & RF4_SHRIEK)  { vp[vn] = _("ÈáÌÄ¤Ç½õ¤±¤òµá¤á¤ë", "shriek for help"); color[vn++] = TERM_L_WHITE; }
+	if (flags4 & RF4_SHRIEK)  { vp[vn] = _("æ‚²é³´ã§åŠ©ã‘ã‚’æ±‚ã‚ã‚‹", "shriek for help"); color[vn++] = TERM_L_WHITE; }
 	if (flags4 & RF4_ROCKET)  
     {
-		set_damage(r_idx, (MS_ROCKET), _("¥í¥±¥Ã¥È(%s)¤òÈ¯¼Í¤¹¤ë", "shoot a rocket(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_ROCKET), _("ãƒ­ã‚±ãƒƒãƒˆ(%s)ã‚’ç™ºå°„ã™ã‚‹", "shoot a rocket(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_UMBER; 
     }
@@ -792,19 +792,19 @@ static void roff_aux(int r_idx, int mode)
 		{
 			if (r_ptr->blow[m].method == RBM_SHOOT)
 			{
-				sprintf(tmp_msg[vn], _("°ÒÎÏ %dd%d ¤Î¼Í·â¤ò¤¹¤ë","fire an arrow (Power:%dd%d)"), r_ptr->blow[m].d_side, r_ptr->blow[m].d_dice);
+				sprintf(tmp_msg[vn], _("å¨åŠ› %dd%d ã®å°„æ’ƒã‚’ã™ã‚‹","fire an arrow (Power:%dd%d)"), r_ptr->blow[m].d_side, r_ptr->blow[m].d_dice);
                 vp[vn] = tmp_msg[vn]; color[vn++] = TERM_UMBER;
 				break;
 			}
 		}		
 	}
-	if (flags6 & (RF6_SPECIAL)) { vp[vn] = _("ÆÃÊÌ¤Ê¹ÔÆ°¤ò¤¹¤ë", "do something"); color[vn++] = TERM_VIOLET; }
+	if (flags6 & (RF6_SPECIAL)) { vp[vn] = _("ç‰¹åˆ¥ãªè¡Œå‹•ã‚’ã™ã‚‹", "do something"); color[vn++] = TERM_VIOLET; }
 
 	/* Describe inate attacks */
 	if (vn)
 	{
 		/* Intro */
-		hooked_roff(format(_("%^s¤Ï", "%^s"), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯", "%^s"), wd_he[msex]));
 
 
 		/* Scan */
@@ -815,8 +815,8 @@ static void roff_aux(int r_idx, int mode)
 			{
 				jverb(vp[n], jverb_buf, JVERB_OR);
 				hook_c_roff(color[n], jverb_buf);
-				hook_c_roff(color[n], "¤ê");
-				hooked_roff("¡¢");
+				hook_c_roff(color[n], "ã‚Š");
+				hooked_roff("ã€");
 			}
 			else hook_c_roff(color[n], vp[n]);
 #else
@@ -832,7 +832,7 @@ static void roff_aux(int r_idx, int mode)
 		}
 
 		/* End */
-		hooked_roff(_("¤³¤È¤¬¤¢¤ë¡£", ".  "));
+		hooked_roff(_("ã“ã¨ãŒã‚ã‚‹ã€‚", ".  "));
 	}
 
 
@@ -840,133 +840,133 @@ static void roff_aux(int r_idx, int mode)
 	vn = 0;
 	if (flags4 & (RF4_BR_ACID))		
 	{ 
-		set_damage(r_idx, (MS_BR_ACID), _("»À(%s)", "acid(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_ACID), _("é…¸(%s)", "acid(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_GREEN; 
 	}
 	if (flags4 & (RF4_BR_ELEC))		
 	{ 
-		set_damage(r_idx, (MS_BR_ELEC), _("°ğºÊ(%s)", "lightning(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_ELEC), _("ç¨²å¦»(%s)", "lightning(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE; 
 	}
 	if (flags4 & (RF4_BR_FIRE))		
 	{ 
-		set_damage(r_idx, (MS_BR_FIRE), _("²Ğ±ê(%s)", "fire(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_FIRE), _("ç«ç‚(%s)", "fire(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED; 
 	}
 	if (flags4 & (RF4_BR_COLD))		
 	{ 
-		set_damage(r_idx, (MS_BR_COLD), _("Îäµ¤(%s)", "frost(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_COLD), _("å†·æ°—(%s)", "frost(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE; 
 	}
 	if (flags4 & (RF4_BR_POIS))		
 	{ 
-		set_damage(r_idx, (MS_BR_POIS), _("ÆÇ(%s)", "poison(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_POIS), _("æ¯’(%s)", "poison(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN; 
 	}
 	if (flags4 & (RF4_BR_NETH))
 	{ 
-		set_damage(r_idx, (MS_BR_NETHER), _("ÃÏ¹ö(%s)", "nether(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_NETHER), _("åœ°ç„(%s)", "nether(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK; 
 	}
 	if (flags4 & (RF4_BR_LITE))		
 	{ 
-		set_damage(r_idx, (MS_BR_LITE), _("Á®¸÷(%s)", "light(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_LITE), _("é–ƒå…‰(%s)", "light(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_YELLOW; 
 	}
 	if (flags4 & (RF4_BR_DARK))		
 	{ 
-		set_damage(r_idx, (MS_BR_DARK), _("°Å¹õ(%s)", "darkness(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_DARK), _("æš—é»’(%s)", "darkness(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK; 
 	}
 	if (flags4 & (RF4_BR_CONF))
 	{ 
-		set_damage(r_idx, (MS_BR_CONF), _("º®Íğ(%s)", "confusion(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_CONF), _("æ··ä¹±(%s)", "confusion(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_UMBER; 
 	}
 	if (flags4 & (RF4_BR_SOUN))		
 	{
-		set_damage(r_idx, (MS_BR_SOUND), _("¹ì²»(%s)", "sound(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_SOUND), _("è½ŸéŸ³(%s)", "sound(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_ORANGE; 
 	}
 	if (flags4 & (RF4_BR_CHAO))		
 	{ 
-		set_damage(r_idx, (MS_BR_CHAOS), _("¥«¥ª¥¹(%s)", "chaos(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_CHAOS), _("ã‚«ã‚ªã‚¹(%s)", "chaos(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_VIOLET; 
 	}
 	if (flags4 & (RF4_BR_DISE))		
 	{ 
-		set_damage(r_idx, (MS_BR_DISEN), _("Îô²½(%s)", "disenchantment(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_DISEN), _("åŠ£åŒ–(%s)", "disenchantment(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_VIOLET; 
 	}
 	if (flags4 & (RF4_BR_NEXU))		
 	{ 
-		set_damage(r_idx, (MS_BR_NEXUS), _("°ø²Ìº®Íğ(%s)", "nexus(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_NEXUS), _("å› æœæ··ä¹±(%s)", "nexus(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_VIOLET; 
 	}
 	if (flags4 & (RF4_BR_TIME))		
 	{ 
-		set_damage(r_idx, (MS_BR_TIME), _("»ş´ÖµÕÅ¾(%s)", "time(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_TIME), _("æ™‚é–“é€†è»¢(%s)", "time(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE; 
 	}
 	if (flags4 & (RF4_BR_INER))		
 	{ 
-		set_damage(r_idx, (MS_BR_INERTIA), _("ÃÙÆß(%s)", "inertia(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_INERTIA), _("é…éˆ(%s)", "inertia(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE; 
 	}
 	if (flags4 & (RF4_BR_GRAV))		
 	{ 
-		set_damage(r_idx, (MS_BR_GRAVITY), _("½ÅÎÏ(%s)", "gravity(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_GRAVITY), _("é‡åŠ›(%s)", "gravity(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE; 
 	}
 	if (flags4 & (RF4_BR_SHAR))		
 	{ 
-		set_damage(r_idx, (MS_BR_SHARDS), _("ÇËÊÒ(%s)", "shards(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_SHARDS), _("ç ´ç‰‡(%s)", "shards(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_UMBER; 
 	}
 	if (flags4 & (RF4_BR_PLAS))		
 	{ 
-		set_damage(r_idx, (MS_BR_PLASMA), _("¥×¥é¥º¥Ş(%s)", "plasma(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_PLASMA), _("ãƒ—ãƒ©ã‚ºãƒ(%s)", "plasma(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_RED; 
 	}
 	if (flags4 & (RF4_BR_WALL))		
 	{ 
-		set_damage(r_idx, (MS_BR_FORCE), _("¥Õ¥©¡¼¥¹(%s)", "force(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_FORCE), _("ãƒ•ã‚©ãƒ¼ã‚¹(%s)", "force(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_UMBER; 
 	}
 	if (flags4 & (RF4_BR_MANA))		
 	{ 
-		set_damage(r_idx, (MS_BR_MANA), _("ËâÎÏ(%s)", "mana(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_MANA), _("é­”åŠ›(%s)", "mana(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE; 
 	}
 	if (flags4 & (RF4_BR_NUKE))		
 	{ 
-		set_damage(r_idx, (MS_BR_NUKE), _("Êü¼ÍÀ­ÇÑ´şÊª(%s)", "toxic waste(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_NUKE), _("æ”¾å°„æ€§å»ƒæ£„ç‰©(%s)", "toxic waste(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN; 
 	}
 	if (flags4 & (RF4_BR_DISI))		
 	{ 
-		set_damage(r_idx, (MS_BR_DISI), _("Ê¬²ò(%s)", "disintegration(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BR_DISI), _("åˆ†è§£(%s)", "disintegration(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE; 
 	}
@@ -978,14 +978,14 @@ static void roff_aux(int r_idx, int mode)
 		breath = TRUE;
 
 		/* Intro */
-		hooked_roff(format(_("%^s¤Ï", "%^s"), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("¤ä");
+			if ( n != 0 ) hooked_roff("ã‚„");
 #else
 			if (n == 0) hooked_roff(" may breathe ");
 			else if (n < vn-1) hooked_roff(", ");
@@ -997,7 +997,7 @@ static void roff_aux(int r_idx, int mode)
 			hook_c_roff(color[n], vp[n]);
 		}
 #ifdef JP
-		hooked_roff("¤Î¥Ö¥ì¥¹¤òÅÇ¤¯¤³¤È¤¬¤¢¤ë");
+		hooked_roff("ã®ãƒ–ãƒ¬ã‚¹ã‚’åãã“ã¨ãŒã‚ã‚‹");
 #endif
 	}
 
@@ -1006,236 +1006,236 @@ static void roff_aux(int r_idx, int mode)
 	vn = 0;
 	if (flags5 & (RF5_BA_ACID))         
 	{
-		set_damage(r_idx, (MS_BALL_ACID), _("¥¢¥·¥Ã¥É¡¦¥Ü¡¼¥ë(%s)", "produce acid balls(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_ACID), _("ã‚¢ã‚·ãƒƒãƒ‰ãƒ»ãƒœãƒ¼ãƒ«(%s)", "produce acid balls(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_GREEN;
 	}
 	if (flags5 & (RF5_BA_ELEC))         
 	{
-		set_damage(r_idx, (MS_BALL_ELEC), _("¥µ¥ó¥À¡¼¡¦¥Ü¡¼¥ë(%s)", "produce lightning balls(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_ELEC), _("ã‚µãƒ³ãƒ€ãƒ¼ãƒ»ãƒœãƒ¼ãƒ«(%s)", "produce lightning balls(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
 	if (flags5 & (RF5_BA_FIRE))         
 	{
-		set_damage(r_idx, (MS_BALL_FIRE), _("¥Õ¥¡¥¤¥¢¡¦¥Ü¡¼¥ë(%s)", "produce fire balls(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_FIRE), _("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ¼ãƒ«(%s)", "produce fire balls(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
 	if (flags5 & (RF5_BA_COLD))         
 	{
-		set_damage(r_idx, (MS_BALL_COLD), _("¥¢¥¤¥¹¡¦¥Ü¡¼¥ë(%s)", "produce frost balls(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_COLD), _("ã‚¢ã‚¤ã‚¹ãƒ»ãƒœãƒ¼ãƒ«(%s)", "produce frost balls(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (flags5 & (RF5_BA_POIS))         
 	{
-		set_damage(r_idx, (MS_BALL_POIS), _("°­½­±À(%s)", "produce poison balls(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_POIS), _("æ‚ªè‡­é›²(%s)", "produce poison balls(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN;
 	}
 	if (flags5 & (RF5_BA_NETH))         
 	{
-		set_damage(r_idx, (MS_BALL_NETHER), _("ÃÏ¹öµå(%s)", "produce nether balls(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_NETHER), _("åœ°ç„çƒ(%s)", "produce nether balls(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
 	if (flags5 & (RF5_BA_WATE))         
 	{
-		set_damage(r_idx, (MS_BALL_WATER), _("¥¦¥©¡¼¥¿¡¼¡¦¥Ü¡¼¥ë(%s)", "produce water balls(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_WATER), _("ã‚¦ã‚©ãƒ¼ã‚¿ãƒ¼ãƒ»ãƒœãƒ¼ãƒ«(%s)", "produce water balls(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
 	if (flags4 & (RF4_BA_NUKE))         
 	{
-		set_damage(r_idx, (MS_BALL_NUKE), _("Êü¼ÍÇ½µå(%s)", "produce balls of radiation(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_NUKE), _("æ”¾å°„èƒ½çƒ(%s)", "produce balls of radiation(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN;
 	}
 	if (flags5 & (RF5_BA_MANA))         
 	{
-		set_damage(r_idx, (MS_BALL_MANA), _("ËâÎÏ¤ÎÍò(%s)", "invoke mana storms(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_MANA), _("é­”åŠ›ã®åµ(%s)", "invoke mana storms(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE;
 	}
 	if (flags5 & (RF5_BA_DARK))         
 	{
-		set_damage(r_idx, (MS_BALL_DARK), _("°Å¹õ¤ÎÍò(%s)", "invoke darkness storms(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_DARK), _("æš—é»’ã®åµ(%s)", "invoke darkness storms(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
 	if (flags5 & (RF5_BA_LITE))         
 	{
-		set_damage(r_idx, (MS_STARBURST), _("¥¹¥¿¡¼¥Ğ¡¼¥¹¥È(%s)", "invoke starburst(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_STARBURST), _("ã‚¹ã‚¿ãƒ¼ãƒãƒ¼ã‚¹ãƒˆ(%s)", "invoke starburst(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_YELLOW;
 	}
 	if (flags4 & (RF4_BA_CHAO))         
 	{
-		set_damage(r_idx, (MS_BALL_CHAOS), _("½ã¥í¥°¥ë¥¹(%s)", "invoke raw Logrus(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BALL_CHAOS), _("ç´”ãƒ­ã‚°ãƒ«ã‚¹(%s)", "invoke raw Logrus(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_VIOLET;
 	}
-	if (flags6 & (RF6_HAND_DOOM)){ vp[vn] = _("ÇËÌÇ¤Î¼ê(40%-60%)", "invoke the Hand of Doom(40%-60%)"); color[vn++] = TERM_VIOLET; }
+	if (flags6 & (RF6_HAND_DOOM)){ vp[vn] = _("ç ´æ»…ã®æ‰‹(40%-60%)", "invoke the Hand of Doom(40%-60%)"); color[vn++] = TERM_VIOLET; }
 	if (flags6 & (RF6_PSY_SPEAR))
 	{
-		set_damage(r_idx, (MS_PSY_SPEAR), _("¸÷¤Î·õ(%s)", "psycho-spear(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_PSY_SPEAR), _("å…‰ã®å‰£(%s)", "psycho-spear(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_YELLOW;
 	}
 	if (flags5 & (RF5_DRAIN_MANA))
 	{
-		set_damage(r_idx, (MS_DRAIN_MANA), _("ËâÎÏµÛ¼ı(%s)", "drain mana(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_DRAIN_MANA), _("é­”åŠ›å¸å(%s)", "drain mana(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
 	if (flags5 & (RF5_MIND_BLAST))         
 	{
-		set_damage(r_idx, (MS_MIND_BLAST), _("Àº¿À¹¶·â(%s)", "cause mind blasting(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_MIND_BLAST), _("ç²¾ç¥æ”»æ’ƒ(%s)", "cause mind blasting(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_RED;
 	}
 	if (flags5 & (RF5_BRAIN_SMASH))         
 	{
-		set_damage(r_idx, (MS_BRAIN_SMASH), _("Ç¾¹¶·â(%s)", "cause brain smashing(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BRAIN_SMASH), _("è„³æ”»æ’ƒ(%s)", "cause brain smashing(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
 	if (flags5 & (RF5_CAUSE_1))         
 	{
 		set_damage(r_idx, (MS_CAUSE_1), 
-			_("·Ú½ı¡Ü¼ö¤¤(%s)", "cause light wounds and cursing(%s)"), tmp_msg[vn]);
+			_("è»½å‚·ï¼‹å‘ªã„(%s)", "cause light wounds and cursing(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (flags5 & (RF5_CAUSE_2))         
 	{
 		set_damage(r_idx, (MS_CAUSE_2), 
-			_("½Å½ı¡Ü¼ö¤¤(%s)", "cause serious wounds and cursing(%s)"), tmp_msg[vn]);
+			_("é‡å‚·ï¼‹å‘ªã„(%s)", "cause serious wounds and cursing(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (flags5 & (RF5_CAUSE_3))         
 	{
 		set_damage(r_idx, (MS_CAUSE_3), 
-			_("Ã×Ì¿½ı¡Ü¼ö¤¤(%s)", "cause critical wounds and cursing(%s)"), tmp_msg[vn]);
+			_("è‡´å‘½å‚·ï¼‹å‘ªã„(%s)", "cause critical wounds and cursing(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (flags5 & (RF5_CAUSE_4))         
 	{
 		set_damage(r_idx, (MS_CAUSE_4), 
-			_("Èë¹¦¤òÆÍ¤¯(%s)", "cause mortal wounds(%s)"), tmp_msg[vn]);
+			_("ç§˜å­”ã‚’çªã(%s)", "cause mortal wounds(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (flags5 & (RF5_BO_ACID))         
 	{
-		set_damage(r_idx, (MS_BOLT_ACID), _("¥¢¥·¥Ã¥É¡¦¥Ü¥ë¥È(%s)", "produce acid bolts(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BOLT_ACID), _("ã‚¢ã‚·ãƒƒãƒ‰ãƒ»ãƒœãƒ«ãƒˆ(%s)", "produce acid bolts(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_GREEN;
 	}
 	if (flags5 & (RF5_BO_ELEC))         
 	{
-		set_damage(r_idx, (MS_BOLT_ELEC), _("¥µ¥ó¥À¡¼¡¦¥Ü¥ë¥È(%s)", "produce lightning bolts(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BOLT_ELEC), _("ã‚µãƒ³ãƒ€ãƒ¼ãƒ»ãƒœãƒ«ãƒˆ(%s)", "produce lightning bolts(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
 	if (flags5 & (RF5_BO_FIRE))         
 	{
-		set_damage(r_idx, (MS_BOLT_FIRE), _("¥Õ¥¡¥¤¥¢¡¦¥Ü¥ë¥È(%s)", "produce fire bolts(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BOLT_FIRE), _("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ«ãƒˆ(%s)", "produce fire bolts(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
 	if (flags5 & (RF5_BO_COLD))         
 	{
-		set_damage(r_idx, (MS_BOLT_COLD), _("¥¢¥¤¥¹¡¦¥Ü¥ë¥È(%s)", "produce frost bolts(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BOLT_COLD), _("ã‚¢ã‚¤ã‚¹ãƒ»ãƒœãƒ«ãƒˆ(%s)", "produce frost bolts(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (flags5 & (RF5_BO_NETH))         
 	{
-		set_damage(r_idx, (MS_BOLT_NETHER), _("ÃÏ¹ö¤ÎÌğ(%s)", "produce nether bolts(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BOLT_NETHER), _("åœ°ç„ã®çŸ¢(%s)", "produce nether bolts(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
 	if (flags5 & (RF5_BO_WATE))         
 	{
-		set_damage(r_idx, (MS_BOLT_WATER), _("¥¦¥©¡¼¥¿¡¼¡¦¥Ü¥ë¥È(%s)", "produce water bolts(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BOLT_WATER), _("ã‚¦ã‚©ãƒ¼ã‚¿ãƒ¼ãƒ»ãƒœãƒ«ãƒˆ(%s)", "produce water bolts(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
 	if (flags5 & (RF5_BO_MANA))         
 	{
-		set_damage(r_idx, (MS_BOLT_MANA), _("ËâÎÏ¤ÎÌğ(%s)", "produce mana bolts(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BOLT_MANA), _("é­”åŠ›ã®çŸ¢(%s)", "produce mana bolts(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE;
 	}
 	if (flags5 & (RF5_BO_PLAS))         
 	{
-		set_damage(r_idx, (MS_BOLT_PLASMA), _("¥×¥é¥º¥Ş¡¦¥Ü¥ë¥È(%s)", "produce plasma bolts(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BOLT_PLASMA), _("ãƒ—ãƒ©ã‚ºãƒãƒ»ãƒœãƒ«ãƒˆ(%s)", "produce plasma bolts(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_RED;
 	}
 	if (flags5 & (RF5_BO_ICEE))         
 	{
-		set_damage(r_idx, (MS_BOLT_ICE), _("¶Ë´¨¤ÎÌğ(%s)", "produce ice bolts(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_BOLT_ICE), _("æ¥µå¯’ã®çŸ¢(%s)", "produce ice bolts(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_WHITE;
 	}
 	if (flags5 & (RF5_MISSILE))         
 	{
-		set_damage(r_idx, (MS_MAGIC_MISSILE), _("¥Ş¥¸¥Ã¥¯¥ß¥µ¥¤¥ë(%s)", "produce magic missiles(%s)"), tmp_msg[vn]);
+		set_damage(r_idx, (MS_MAGIC_MISSILE), _("ãƒã‚¸ãƒƒã‚¯ãƒŸã‚µã‚¤ãƒ«(%s)", "produce magic missiles(%s)"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
-	if (flags5 & (RF5_SCARE))           { vp[vn] = _("¶²Éİ", "terrify"); color[vn++] = TERM_SLATE; }
-	if (flags5 & (RF5_BLIND))           { vp[vn] = _("ÌÜ¤¯¤é¤Ş¤·", "blind"); color[vn++] = TERM_L_DARK; }
-	if (flags5 & (RF5_CONF))            { vp[vn] = _("º®Íğ", "confuse"); color[vn++] = TERM_L_UMBER; }
-	if (flags5 & (RF5_SLOW))            { vp[vn] = _("¸ºÂ®", "slow"); color[vn++] = TERM_UMBER; }
-	if (flags5 & (RF5_HOLD))            { vp[vn] = _("Ëãáã", "paralyze"); color[vn++] = TERM_RED; }
-	if (flags6 & (RF6_HASTE))           { vp[vn] = _("²ÃÂ®", "haste-self"); color[vn++] = TERM_L_GREEN; }
-	if (flags6 & (RF6_HEAL))            { vp[vn] = _("¼£Ìş", "heal-self"); color[vn++] = TERM_WHITE; }
-	if (flags6 & (RF6_INVULNER))        { vp[vn] = _("ÌµÅ¨²½", "make invulnerable"); color[vn++] = TERM_WHITE; }
-	if (flags4 & RF4_DISPEL)            { vp[vn] = _("ËâÎÏ¾Ãµî", "dispel-magic"); color[vn++] = TERM_L_WHITE; }
-	if (flags6 & (RF6_BLINK))           { vp[vn] = _("¥·¥ç¡¼¥È¥Æ¥ì¥İ¡¼¥È", "blink-self"); color[vn++] = TERM_UMBER; }
-	if (flags6 & (RF6_TPORT))           { vp[vn] = _("¥Æ¥ì¥İ¡¼¥È", "teleport-self"); color[vn++] = TERM_ORANGE; }
-	if (flags6 & (RF6_WORLD))           { vp[vn] = _("»ş¤ò»ß¤á¤ë", "stop the time"); color[vn++] = TERM_L_BLUE; }
-	if (flags6 & (RF6_TELE_TO))         { vp[vn] = _("¥Æ¥ì¥İ¡¼¥È¥Ğ¥Ã¥¯", "teleport to"); color[vn++] = TERM_L_UMBER; }
-	if (flags6 & (RF6_TELE_AWAY))       { vp[vn] = _("¥Æ¥ì¥İ¡¼¥È¥¢¥¦¥§¥¤", "teleport away"); color[vn++] = TERM_UMBER; }
-	if (flags6 & (RF6_TELE_LEVEL))      { vp[vn] = _("¥Æ¥ì¥İ¡¼¥È¡¦¥ì¥Ù¥ë", "teleport level"); color[vn++] = TERM_ORANGE; }
+	if (flags5 & (RF5_SCARE))           { vp[vn] = _("ææ€–", "terrify"); color[vn++] = TERM_SLATE; }
+	if (flags5 & (RF5_BLIND))           { vp[vn] = _("ç›®ãã‚‰ã¾ã—", "blind"); color[vn++] = TERM_L_DARK; }
+	if (flags5 & (RF5_CONF))            { vp[vn] = _("æ··ä¹±", "confuse"); color[vn++] = TERM_L_UMBER; }
+	if (flags5 & (RF5_SLOW))            { vp[vn] = _("æ¸›é€Ÿ", "slow"); color[vn++] = TERM_UMBER; }
+	if (flags5 & (RF5_HOLD))            { vp[vn] = _("éº»ç—º", "paralyze"); color[vn++] = TERM_RED; }
+	if (flags6 & (RF6_HASTE))           { vp[vn] = _("åŠ é€Ÿ", "haste-self"); color[vn++] = TERM_L_GREEN; }
+	if (flags6 & (RF6_HEAL))            { vp[vn] = _("æ²»ç™’", "heal-self"); color[vn++] = TERM_WHITE; }
+	if (flags6 & (RF6_INVULNER))        { vp[vn] = _("ç„¡æ•µåŒ–", "make invulnerable"); color[vn++] = TERM_WHITE; }
+	if (flags4 & RF4_DISPEL)            { vp[vn] = _("é­”åŠ›æ¶ˆå»", "dispel-magic"); color[vn++] = TERM_L_WHITE; }
+	if (flags6 & (RF6_BLINK))           { vp[vn] = _("ã‚·ãƒ§ãƒ¼ãƒˆãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "blink-self"); color[vn++] = TERM_UMBER; }
+	if (flags6 & (RF6_TPORT))           { vp[vn] = _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "teleport-self"); color[vn++] = TERM_ORANGE; }
+	if (flags6 & (RF6_WORLD))           { vp[vn] = _("æ™‚ã‚’æ­¢ã‚ã‚‹", "stop the time"); color[vn++] = TERM_L_BLUE; }
+	if (flags6 & (RF6_TELE_TO))         { vp[vn] = _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒãƒƒã‚¯", "teleport to"); color[vn++] = TERM_L_UMBER; }
+	if (flags6 & (RF6_TELE_AWAY))       { vp[vn] = _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚¢ã‚¦ã‚§ã‚¤", "teleport away"); color[vn++] = TERM_UMBER; }
+	if (flags6 & (RF6_TELE_LEVEL))      { vp[vn] = _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¬ãƒ™ãƒ«", "teleport level"); color[vn++] = TERM_ORANGE; }
 
 	if (flags6 & (RF6_DARKNESS))
 	{
 		if ((p_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (r_ptr->flags7 & RF7_DARK_MASK))
 		{
-			vp[vn] = _("°Å°Ç", "create darkness"); color[vn++] = TERM_L_DARK;
+			vp[vn] = _("æš—é—‡", "create darkness"); color[vn++] = TERM_L_DARK;
 		}
 		else
 		{
-			vp[vn] = _("Á®¸÷", "create light"); color[vn++] = TERM_YELLOW;
+			vp[vn] = _("é–ƒå…‰", "create light"); color[vn++] = TERM_YELLOW;
 		}
 	}
 
-	if (flags6 & (RF6_TRAPS))           { vp[vn] = _("¥È¥é¥Ã¥×", "create traps"); color[vn++] = TERM_BLUE; }
-	if (flags6 & (RF6_FORGET))          { vp[vn] = _("µ­²±¾Ãµî", "cause amnesia"); color[vn++] = TERM_BLUE; }
-	if (flags6 & (RF6_RAISE_DEAD))      { vp[vn] = _("»à¼ÔÉü³è", "raise dead"); color[vn++] = TERM_RED; }
-	if (flags6 & (RF6_S_MONSTER))       { vp[vn] = _("¥â¥ó¥¹¥¿¡¼°ìÂÎ¾¤´­", "summon a monster"); color[vn++] = TERM_SLATE; }
-	if (flags6 & (RF6_S_MONSTERS))      { vp[vn] = _("¥â¥ó¥¹¥¿¡¼Ê£¿ô¾¤´­", "summon monsters"); color[vn++] = TERM_L_WHITE; }
-	if (flags6 & (RF6_S_KIN))           { vp[vn] = _("µß±ç¾¤´­", "summon aid"); color[vn++] = TERM_ORANGE; }
-	if (flags6 & (RF6_S_ANT))           { vp[vn] = _("¥¢¥ê¾¤´­", "summon ants"); color[vn++] = TERM_RED; }
-	if (flags6 & (RF6_S_SPIDER))        { vp[vn] = _("¥¯¥â¾¤´­", "summon spiders"); color[vn++] = TERM_L_DARK; }
-	if (flags6 & (RF6_S_HOUND))         { vp[vn] = _("¥Ï¥¦¥ó¥É¾¤´­", "summon hounds"); color[vn++] = TERM_L_UMBER; }
-	if (flags6 & (RF6_S_HYDRA))         { vp[vn] = _("¥Ò¥É¥é¾¤´­", "summon hydras"); color[vn++] = TERM_L_GREEN; }
-	if (flags6 & (RF6_S_ANGEL))         { vp[vn] = _("Å·»È°ìÂÎ¾¤´­", "summon an angel"); color[vn++] = TERM_YELLOW; }
-	if (flags6 & (RF6_S_DEMON))         { vp[vn] = _("¥Ç¡¼¥â¥ó°ìÂÎ¾¤´­", "summon a demon"); color[vn++] = TERM_L_RED; }
-	if (flags6 & (RF6_S_UNDEAD))        { vp[vn] = _("¥¢¥ó¥Ç¥Ã¥É°ìÂÎ¾¤´­", "summon an undead"); color[vn++] = TERM_L_DARK; }
-	if (flags6 & (RF6_S_DRAGON))        { vp[vn] = _("¥É¥é¥´¥ó°ìÂÎ¾¤´­", "summon a dragon"); color[vn++] = TERM_ORANGE; }
-	if (flags6 & (RF6_S_HI_UNDEAD))     { vp[vn] = _("¶¯ÎÏ¤Ê¥¢¥ó¥Ç¥Ã¥É¾¤´­", "summon Greater Undead"); color[vn++] = TERM_L_DARK; }
-	if (flags6 & (RF6_S_HI_DRAGON))     { vp[vn] = _("¸ÅÂå¥É¥é¥´¥ó¾¤´­", "summon Ancient Dragons"); color[vn++] = TERM_ORANGE; }	
-	if (flags6 & (RF6_S_CYBER))         { vp[vn] = _("¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¾¤´­", "summon Cyberdemons"); color[vn++] = TERM_UMBER; }
-	if (flags6 & (RF6_S_AMBERITES))     { vp[vn] = _("¥¢¥ó¥Ğ¡¼¤Î²¦Â²¾¤´­", "summon Lords of Amber"); color[vn++] = TERM_VIOLET; }
-	if (flags6 & (RF6_S_UNIQUE))        { vp[vn] = _("¥æ¥Ë¡¼¥¯¡¦¥â¥ó¥¹¥¿¡¼¾¤´­", "summon Unique Monsters"); color[vn++] = TERM_VIOLET; }
+	if (flags6 & (RF6_TRAPS))           { vp[vn] = _("ãƒˆãƒ©ãƒƒãƒ—", "create traps"); color[vn++] = TERM_BLUE; }
+	if (flags6 & (RF6_FORGET))          { vp[vn] = _("è¨˜æ†¶æ¶ˆå»", "cause amnesia"); color[vn++] = TERM_BLUE; }
+	if (flags6 & (RF6_RAISE_DEAD))      { vp[vn] = _("æ­»è€…å¾©æ´»", "raise dead"); color[vn++] = TERM_RED; }
+	if (flags6 & (RF6_S_MONSTER))       { vp[vn] = _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ä¸€ä½“å¬å–š", "summon a monster"); color[vn++] = TERM_SLATE; }
+	if (flags6 & (RF6_S_MONSTERS))      { vp[vn] = _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼è¤‡æ•°å¬å–š", "summon monsters"); color[vn++] = TERM_L_WHITE; }
+	if (flags6 & (RF6_S_KIN))           { vp[vn] = _("æ•‘æ´å¬å–š", "summon aid"); color[vn++] = TERM_ORANGE; }
+	if (flags6 & (RF6_S_ANT))           { vp[vn] = _("ã‚¢ãƒªå¬å–š", "summon ants"); color[vn++] = TERM_RED; }
+	if (flags6 & (RF6_S_SPIDER))        { vp[vn] = _("ã‚¯ãƒ¢å¬å–š", "summon spiders"); color[vn++] = TERM_L_DARK; }
+	if (flags6 & (RF6_S_HOUND))         { vp[vn] = _("ãƒã‚¦ãƒ³ãƒ‰å¬å–š", "summon hounds"); color[vn++] = TERM_L_UMBER; }
+	if (flags6 & (RF6_S_HYDRA))         { vp[vn] = _("ãƒ’ãƒ‰ãƒ©å¬å–š", "summon hydras"); color[vn++] = TERM_L_GREEN; }
+	if (flags6 & (RF6_S_ANGEL))         { vp[vn] = _("å¤©ä½¿ä¸€ä½“å¬å–š", "summon an angel"); color[vn++] = TERM_YELLOW; }
+	if (flags6 & (RF6_S_DEMON))         { vp[vn] = _("ãƒ‡ãƒ¼ãƒ¢ãƒ³ä¸€ä½“å¬å–š", "summon a demon"); color[vn++] = TERM_L_RED; }
+	if (flags6 & (RF6_S_UNDEAD))        { vp[vn] = _("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ä¸€ä½“å¬å–š", "summon an undead"); color[vn++] = TERM_L_DARK; }
+	if (flags6 & (RF6_S_DRAGON))        { vp[vn] = _("ãƒ‰ãƒ©ã‚´ãƒ³ä¸€ä½“å¬å–š", "summon a dragon"); color[vn++] = TERM_ORANGE; }
+	if (flags6 & (RF6_S_HI_UNDEAD))     { vp[vn] = _("å¼·åŠ›ãªã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰å¬å–š", "summon Greater Undead"); color[vn++] = TERM_L_DARK; }
+	if (flags6 & (RF6_S_HI_DRAGON))     { vp[vn] = _("å¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³å¬å–š", "summon Ancient Dragons"); color[vn++] = TERM_ORANGE; }	
+	if (flags6 & (RF6_S_CYBER))         { vp[vn] = _("ã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³å¬å–š", "summon Cyberdemons"); color[vn++] = TERM_UMBER; }
+	if (flags6 & (RF6_S_AMBERITES))     { vp[vn] = _("ã‚¢ãƒ³ãƒãƒ¼ã®ç‹æ—å¬å–š", "summon Lords of Amber"); color[vn++] = TERM_VIOLET; }
+	if (flags6 & (RF6_S_UNIQUE))        { vp[vn] = _("ãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å¬å–š", "summon Unique Monsters"); color[vn++] = TERM_VIOLET; }
 
 
 	/* Describe spells */
@@ -1247,19 +1247,19 @@ static void roff_aux(int r_idx, int mode)
 		/* Intro */
 		if (breath)
 		{
-			hooked_roff(_("¡¢¤Ê¤ª¤«¤Ä", ", and is also"));
+			hooked_roff(_("ã€ãªãŠã‹ã¤", ", and is also"));
 		}
 		else
 		{
-			hooked_roff(format(_("%^s¤Ï", "%^s is"), wd_he[msex]));
+			hooked_roff(format(_("%^sã¯", "%^s is"), wd_he[msex]));
 		}
 
 #ifdef JP
 		/* Adverb */
-		if (flags2 & (RF2_SMART)) hook_c_roff(TERM_YELLOW, "Åª³Î¤Ë");
+		if (flags2 & (RF2_SMART)) hook_c_roff(TERM_YELLOW, "çš„ç¢ºã«");
 
 		/* Verb Phrase */
-		hooked_roff("ËâË¡¤ò»È¤¦¤³¤È¤¬¤Ç¤­¡¢");
+		hooked_roff("é­”æ³•ã‚’ä½¿ã†ã“ã¨ãŒã§ãã€");
 #else
 		/* Verb Phrase */
 		hooked_roff(" magical, casting spells");
@@ -1274,7 +1274,7 @@ static void roff_aux(int r_idx, int mode)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("¡¢");
+			if ( n != 0 ) hooked_roff("ã€");
 #else
 			if (n == 0) hooked_roff(" which ");
 			else if (n < vn-1) hooked_roff(", ");
@@ -1286,7 +1286,7 @@ static void roff_aux(int r_idx, int mode)
 			hook_c_roff(color[n], vp[n]);
 		}
 #ifdef JP
-		hooked_roff("¤Î¼öÊ¸¤ò¾§¤¨¤ë¤³¤È¤¬¤¢¤ë");
+		hooked_roff("ã®å‘ªæ–‡ã‚’å”±ãˆã‚‹ã“ã¨ãŒã‚ã‚‹");
 #endif
 	}
 
@@ -1304,7 +1304,7 @@ static void roff_aux(int r_idx, int mode)
 		if (m > 100 || know_everything)
 		{
 			hooked_roff(format(
-				_("(³ÎÎ¨:1/%d)", "; 1 time in %d"), 100 / n));
+				_("(ç¢ºç‡:1/%d)", "; 1 time in %d"), 100 / n));
 		}
 
 		/* Guess at the frequency */
@@ -1312,11 +1312,11 @@ static void roff_aux(int r_idx, int mode)
 		{
 			n = ((n + 9) / 10) * 10;
 			hooked_roff(format(
-				_("(³ÎÎ¨:Ìó1/%d)", "; about 1 time in %d"), 100 / n));
+				_("(ç¢ºç‡:ç´„1/%d)", "; about 1 time in %d"), 100 / n));
 		}
 
 		/* End this sentence */
-		hooked_roff(_("¡£", ".  "));
+		hooked_roff(_("ã€‚", ".  "));
 	}
 
 	/* Describe monster "toughness" */
@@ -1324,7 +1324,7 @@ static void roff_aux(int r_idx, int mode)
 	{
 		/* Armor */
 		hooked_roff(format(
-			_("%^s¤Ï AC%d ¤ÎËÉ¸æÎÏ¤È", "%^s has an armor rating of %d"),
+			_("%^sã¯ AC%d ã®é˜²å¾¡åŠ›ã¨", "%^s has an armor rating of %d"),
 			    wd_he[msex], r_ptr->ac));
 
 		/* Maximized hitpoints */
@@ -1332,7 +1332,7 @@ static void roff_aux(int r_idx, int mode)
 		{
 			u32b hp = r_ptr->hdice * (nightmare ? 2 : 1) * r_ptr->hside;
 			hooked_roff(format(
-				_(" %d ¤ÎÂÎÎÏ¤¬¤¢¤ë¡£", " and a life rating of %d.  "),
+				_(" %d ã®ä½“åŠ›ãŒã‚ã‚‹ã€‚", " and a life rating of %d.  "),
 				    (s16b)MIN(30000, hp)));
 		}
 
@@ -1340,7 +1340,7 @@ static void roff_aux(int r_idx, int mode)
 		else
 		{
 			hooked_roff(format(
-				_(" %dd%d ¤ÎÂÎÎÏ¤¬¤¢¤ë¡£", " and a life rating of %dd%d.  "),
+				_(" %dd%d ã®ä½“åŠ›ãŒã‚ã‚‹ã€‚", " and a life rating of %dd%d.  "),
 				    r_ptr->hdice * (nightmare ? 2 : 1), r_ptr->hside));
 		}
 	}
@@ -1349,25 +1349,25 @@ static void roff_aux(int r_idx, int mode)
 
 	/* Collect special abilities. */
 	vn = 0;
-	if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) { vp[vn] = _("¥À¥ó¥¸¥ç¥ó¤ò¾È¤é¤¹", "illuminate the dungeon");     color[vn++] = TERM_WHITE; }
-	if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) { vp[vn] = _("¥À¥ó¥¸¥ç¥ó¤ò°Å¤¯¤¹¤ë", "darken the dungeon");   color[vn++] = TERM_L_DARK; }
-	if (flags2 & RF2_OPEN_DOOR) { vp[vn] = _("¥É¥¢¤ò³«¤±¤ë", "open doors"); color[vn++] = TERM_WHITE; }
-	if (flags2 & RF2_BASH_DOOR) { vp[vn] = _("¥É¥¢¤òÂÇ¤ÁÇË¤ë", "bash down doors"); color[vn++] = TERM_WHITE; }
-	if (flags7 & RF7_CAN_FLY)  { vp[vn] = _("¶õ¤òÈô¤Ö", "fly"); color[vn++] = TERM_WHITE; }
-	if (flags7 & RF7_CAN_SWIM)   { vp[vn] = _("¿å¤òÅÏ¤ë", "swim"); color[vn++] = TERM_WHITE; }
-	if (flags2 & RF2_PASS_WALL) { vp[vn] = _("ÊÉ¤ò¤¹¤êÈ´¤±¤ë", "pass through walls"); color[vn++] = TERM_WHITE; }
-	if (flags2 & RF2_KILL_WALL) { vp[vn] = _("ÊÉ¤ò·¡¤ê¿Ê¤à", "bore through walls"); color[vn++] = TERM_WHITE; }
-	if (flags2 & RF2_MOVE_BODY) { vp[vn] = _("¼å¤¤¥â¥ó¥¹¥¿¡¼¤ò²¡¤·¤Î¤±¤ë", "push past weaker monsters"); color[vn++] = TERM_WHITE; }
-	if (flags2 & RF2_KILL_BODY) { vp[vn] = _("¼å¤¤¥â¥ó¥¹¥¿¡¼¤òÅİ¤¹", "destroy weaker monsters"); color[vn++] = TERM_WHITE; }
-	if (flags2 & RF2_TAKE_ITEM) { vp[vn] = _("¥¢¥¤¥Æ¥à¤ò½¦¤¦", "pick up objects"); color[vn++] = TERM_WHITE; }
-	if (flags2 & RF2_KILL_ITEM) { vp[vn] = _("¥¢¥¤¥Æ¥à¤ò²õ¤¹", "destroy objects"); color[vn++] = TERM_WHITE; }
+	if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) { vp[vn] = _("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’ç…§ã‚‰ã™", "illuminate the dungeon");     color[vn++] = TERM_WHITE; }
+	if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) { vp[vn] = _("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’æš—ãã™ã‚‹", "darken the dungeon");   color[vn++] = TERM_L_DARK; }
+	if (flags2 & RF2_OPEN_DOOR) { vp[vn] = _("ãƒ‰ã‚¢ã‚’é–‹ã‘ã‚‹", "open doors"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_BASH_DOOR) { vp[vn] = _("ãƒ‰ã‚¢ã‚’æ‰“ã¡ç ´ã‚‹", "bash down doors"); color[vn++] = TERM_WHITE; }
+	if (flags7 & RF7_CAN_FLY)  { vp[vn] = _("ç©ºã‚’é£›ã¶", "fly"); color[vn++] = TERM_WHITE; }
+	if (flags7 & RF7_CAN_SWIM)   { vp[vn] = _("æ°´ã‚’æ¸¡ã‚‹", "swim"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_PASS_WALL) { vp[vn] = _("å£ã‚’ã™ã‚ŠæŠœã‘ã‚‹", "pass through walls"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_KILL_WALL) { vp[vn] = _("å£ã‚’æ˜ã‚Šé€²ã‚€", "bore through walls"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_MOVE_BODY) { vp[vn] = _("å¼±ã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æŠ¼ã—ã®ã‘ã‚‹", "push past weaker monsters"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_KILL_BODY) { vp[vn] = _("å¼±ã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å€’ã™", "destroy weaker monsters"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_TAKE_ITEM) { vp[vn] = _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã†", "pick up objects"); color[vn++] = TERM_WHITE; }
+	if (flags2 & RF2_KILL_ITEM) { vp[vn] = _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’å£Šã™", "destroy objects"); color[vn++] = TERM_WHITE; }
 
 
 	/* Describe special abilities. */
 	if (vn)
 	{
 		/* Intro */
-		hooked_roff(format(_("%^s¤Ï", "%^s"), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
@@ -1378,7 +1378,7 @@ static void roff_aux(int r_idx, int mode)
 			{
 				jverb(vp[n], jverb_buf, JVERB_AND);
 				hook_c_roff(color[n], jverb_buf);
-				hooked_roff("¡¢");
+				hooked_roff("ã€");
 			}
 			else hook_c_roff(color[n], vp[n]);
 #else
@@ -1393,75 +1393,75 @@ static void roff_aux(int r_idx, int mode)
 		}
 
 		/* End */
-		hooked_roff(_("¤³¤È¤¬¤Ç¤­¤ë¡£", ".  "));
+		hooked_roff(_("ã“ã¨ãŒã§ãã‚‹ã€‚", ".  "));
 
 	}
 	
 	/* Aquatic */
 	if (flags7 & RF7_AQUATIC)
 	{
-		hooked_roff(format(_("%^s¤Ï¿åÃæ¤ËÀ³¤ó¤Ç¤¤¤ë¡£", "%^s lives in water.  "), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯æ°´ä¸­ã«æ£²ã‚“ã§ã„ã‚‹ã€‚", "%^s lives in water.  "), wd_he[msex]));
 	}
 
 	/* Describe special abilities. */
 	if (flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2))
 	{
-		hooked_roff(format(_("%^s¤Ï¸÷¤Ã¤Æ¤¤¤ë¡£", "%^s is shining.  "), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯å…‰ã£ã¦ã„ã‚‹ã€‚", "%^s is shining.  "), wd_he[msex]));
 	}
 	if (flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2))
 	{
-		hook_c_roff(TERM_L_DARK, format(_("%^s¤Ï°Å¹õ¤ËÊñ¤Ş¤ì¤Æ¤¤¤ë¡£", "%^s is surrounded by darkness.  "), wd_he[msex]));
+		hook_c_roff(TERM_L_DARK, format(_("%^sã¯æš—é»’ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "%^s is surrounded by darkness.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_INVISIBLE)
 	{
-		hooked_roff(format(_("%^s¤ÏÆ©ÌÀ¤ÇÌÜ¤Ë¸«¤¨¤Ê¤¤¡£", "%^s is invisible.  "), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯é€æ˜ã§ç›®ã«è¦‹ãˆãªã„ã€‚", "%^s is invisible.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_COLD_BLOOD)
 	{
-		hooked_roff(format(_("%^s¤ÏÎä·ìÆ°Êª¤Ç¤¢¤ë¡£", "%^s is cold blooded.  "), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯å†·è¡€å‹•ç‰©ã§ã‚ã‚‹ã€‚", "%^s is cold blooded.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_EMPTY_MIND)
 	{
-		hooked_roff(format(_("%^s¤Ï¥Æ¥ì¥Ñ¥·¡¼¤Ç¤Ï´¶ÃÎ¤Ç¤­¤Ê¤¤¡£", "%^s is not detected by telepathy.  "), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼ã§ã¯æ„ŸçŸ¥ã§ããªã„ã€‚", "%^s is not detected by telepathy.  "), wd_he[msex]));
 	}
 	else if (flags2 & RF2_WEIRD_MIND)
 	{
-		hooked_roff(format(_("%^s¤Ï¤Ş¤ì¤Ë¥Æ¥ì¥Ñ¥·¡¼¤Ç´¶ÃÎ¤Ç¤­¤ë¡£", "%^s is rarely detected by telepathy.  "), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯ã¾ã‚Œã«ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼ã§æ„ŸçŸ¥ã§ãã‚‹ã€‚", "%^s is rarely detected by telepathy.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_MULTIPLY)
 	{
-		hook_c_roff(TERM_L_UMBER, format(_("%^s¤ÏÇúÈ¯Åª¤ËÁı¿£¤¹¤ë¡£", "%^s breeds explosively.  "), wd_he[msex]));
+		hook_c_roff(TERM_L_UMBER, format(_("%^sã¯çˆ†ç™ºçš„ã«å¢—æ®–ã™ã‚‹ã€‚", "%^s breeds explosively.  "), wd_he[msex]));
 	}
 	if (flags2 & RF2_REGENERATE)
 	{
-		hook_c_roff(TERM_L_WHITE, format(_("%^s¤ÏÁÇÁá¤¯ÂÎÎÏ¤ò²óÉü¤¹¤ë¡£", "%^s regenerates quickly.  "), wd_he[msex]));
+		hook_c_roff(TERM_L_WHITE, format(_("%^sã¯ç´ æ—©ãä½“åŠ›ã‚’å›å¾©ã™ã‚‹ã€‚", "%^s regenerates quickly.  "), wd_he[msex]));
 	}
 	if (flags7 & RF7_RIDING)
 	{
-		hook_c_roff(TERM_SLATE, format(_("%^s¤Ë¾è¤ë¤³¤È¤¬¤Ç¤­¤ë¡£", "%^s is suitable for riding.  "), wd_he[msex]));
+		hook_c_roff(TERM_SLATE, format(_("%^sã«ä¹—ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "%^s is suitable for riding.  "), wd_he[msex]));
 	}
 
 
 	/* Collect susceptibilities */
 	vn = 0;
-	if (flags3 & RF3_HURT_ROCK) { vp[vn] = _("´ä¤ò½üµî¤¹¤ë¤â¤Î", "rock remover"); color[vn++] = TERM_UMBER; }
-	if (flags3 & RF3_HURT_LITE) { vp[vn] = _("ÌÀ¤ë¤¤¸÷", "bright light"); color[vn++] = TERM_YELLOW; }
-	if (flags3 & RF3_HURT_FIRE) { vp[vn] = _("±ê", "fire"); color[vn++] = TERM_RED; }
-	if (flags3 & RF3_HURT_COLD) { vp[vn] = _("Îäµ¤", "cold"); color[vn++] = TERM_L_WHITE; }
+	if (flags3 & RF3_HURT_ROCK) { vp[vn] = _("å²©ã‚’é™¤å»ã™ã‚‹ã‚‚ã®", "rock remover"); color[vn++] = TERM_UMBER; }
+	if (flags3 & RF3_HURT_LITE) { vp[vn] = _("æ˜ã‚‹ã„å…‰", "bright light"); color[vn++] = TERM_YELLOW; }
+	if (flags3 & RF3_HURT_FIRE) { vp[vn] = _("ç‚", "fire"); color[vn++] = TERM_RED; }
+	if (flags3 & RF3_HURT_COLD) { vp[vn] = _("å†·æ°—", "cold"); color[vn++] = TERM_L_WHITE; }
 
 
 	/* Describe susceptibilities */
 	if (vn)
 	{
 		/* Intro */
-		hooked_roff(format(_("%^s¤Ë¤Ï", "%^s"), wd_he[msex]));
+		hooked_roff(format(_("%^sã«ã¯", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("¤ä");
+			if ( n != 0 ) hooked_roff("ã‚„");
 #else
 			if (n == 0) hooked_roff(" is hurt by ");
 			else if (n < vn-1) hooked_roff(", ");
@@ -1474,49 +1474,49 @@ static void roff_aux(int r_idx, int mode)
 		}
 
 		/* End */
-		hooked_roff(_("¤Ç¥À¥á¡¼¥¸¤òÍ¿¤¨¤é¤ì¤ë¡£", ".  "));
+		hooked_roff(_("ã§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‰ã‚Œã‚‹ã€‚", ".  "));
 	}
 
 
 	/* Collect immunities */
 	vn = 0;
-	if (flagsr & RFR_IM_ACID) { vp[vn] = _("»À", "acid"); color[vn++] = TERM_GREEN; }
-	if (flagsr & RFR_IM_ELEC) { vp[vn] = _("°ğºÊ", "lightning"); color[vn++] = TERM_BLUE; }
-	if (flagsr & RFR_IM_FIRE) { vp[vn] = _("±ê", "fire"); color[vn++] = TERM_RED; }
-	if (flagsr & RFR_IM_COLD) { vp[vn] = _("Îäµ¤", "cold"); color[vn++] = TERM_L_WHITE; }
-	if (flagsr & RFR_IM_POIS) { vp[vn] = _("ÆÇ", "poison"); color[vn++] = TERM_L_GREEN; }
+	if (flagsr & RFR_IM_ACID) { vp[vn] = _("é…¸", "acid"); color[vn++] = TERM_GREEN; }
+	if (flagsr & RFR_IM_ELEC) { vp[vn] = _("ç¨²å¦»", "lightning"); color[vn++] = TERM_BLUE; }
+	if (flagsr & RFR_IM_FIRE) { vp[vn] = _("ç‚", "fire"); color[vn++] = TERM_RED; }
+	if (flagsr & RFR_IM_COLD) { vp[vn] = _("å†·æ°—", "cold"); color[vn++] = TERM_L_WHITE; }
+	if (flagsr & RFR_IM_POIS) { vp[vn] = _("æ¯’", "poison"); color[vn++] = TERM_L_GREEN; }
 
 
 	/* Collect resistances */
-	if (flagsr & RFR_RES_LITE) { vp[vn] = _("Á®¸÷", "light"); color[vn++] = TERM_YELLOW; }
-	if (flagsr & RFR_RES_DARK) { vp[vn] = _("°Å¹õ", "dark"); color[vn++] = TERM_L_DARK; }
-	if (flagsr & RFR_RES_NETH) { vp[vn] = _("ÃÏ¹ö", "nether"); color[vn++] = TERM_L_DARK; }
-	if (flagsr & RFR_RES_WATE) { vp[vn] = _("¿å", "water"); color[vn++] = TERM_BLUE; }
-	if (flagsr & RFR_RES_PLAS) { vp[vn] = _("¥×¥é¥º¥Ş", "plasma"); color[vn++] = TERM_L_RED; }
-	if (flagsr & RFR_RES_SHAR) { vp[vn] = _("ÇËÊÒ", "shards"); color[vn++] = TERM_L_UMBER; }
-	if (flagsr & RFR_RES_SOUN) { vp[vn] = _("¹ì²»", "sound"); color[vn++] = TERM_ORANGE; }
-	if (flagsr & RFR_RES_CHAO) { vp[vn] = _("¥«¥ª¥¹", "chaos"); color[vn++] = TERM_VIOLET; }
-	if (flagsr & RFR_RES_NEXU) { vp[vn] = _("°ø²Ìº®Íğ", "nexus"); color[vn++] = TERM_VIOLET; }
-	if (flagsr & RFR_RES_DISE) { vp[vn] = _("Îô²½", "disenchantment"); color[vn++] = TERM_VIOLET; }
-	if (flagsr & RFR_RES_WALL) { vp[vn] = _("¥Õ¥©¡¼¥¹", "force"); color[vn++] = TERM_UMBER; }
-	if (flagsr & RFR_RES_INER) { vp[vn] = _("ÃÙÆß", "inertia"); color[vn++] = TERM_SLATE; }
-	if (flagsr & RFR_RES_TIME) { vp[vn] = _("»ş´ÖµÕÅ¾", "time"); color[vn++] = TERM_L_BLUE; }
-	if (flagsr & RFR_RES_GRAV) { vp[vn] = _("½ÅÎÏ", "gravity"); color[vn++] = TERM_SLATE; }
-	if (flagsr & RFR_RES_ALL) { vp[vn] = _("¤¢¤é¤æ¤ë¹¶·â", "all"); color[vn++] = TERM_YELLOW; }
-	if ((flagsr & RFR_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("¥Æ¥ì¥İ¡¼¥È", "teleportation"); color[vn++] = TERM_ORANGE; }
+	if (flagsr & RFR_RES_LITE) { vp[vn] = _("é–ƒå…‰", "light"); color[vn++] = TERM_YELLOW; }
+	if (flagsr & RFR_RES_DARK) { vp[vn] = _("æš—é»’", "dark"); color[vn++] = TERM_L_DARK; }
+	if (flagsr & RFR_RES_NETH) { vp[vn] = _("åœ°ç„", "nether"); color[vn++] = TERM_L_DARK; }
+	if (flagsr & RFR_RES_WATE) { vp[vn] = _("æ°´", "water"); color[vn++] = TERM_BLUE; }
+	if (flagsr & RFR_RES_PLAS) { vp[vn] = _("ãƒ—ãƒ©ã‚ºãƒ", "plasma"); color[vn++] = TERM_L_RED; }
+	if (flagsr & RFR_RES_SHAR) { vp[vn] = _("ç ´ç‰‡", "shards"); color[vn++] = TERM_L_UMBER; }
+	if (flagsr & RFR_RES_SOUN) { vp[vn] = _("è½ŸéŸ³", "sound"); color[vn++] = TERM_ORANGE; }
+	if (flagsr & RFR_RES_CHAO) { vp[vn] = _("ã‚«ã‚ªã‚¹", "chaos"); color[vn++] = TERM_VIOLET; }
+	if (flagsr & RFR_RES_NEXU) { vp[vn] = _("å› æœæ··ä¹±", "nexus"); color[vn++] = TERM_VIOLET; }
+	if (flagsr & RFR_RES_DISE) { vp[vn] = _("åŠ£åŒ–", "disenchantment"); color[vn++] = TERM_VIOLET; }
+	if (flagsr & RFR_RES_WALL) { vp[vn] = _("ãƒ•ã‚©ãƒ¼ã‚¹", "force"); color[vn++] = TERM_UMBER; }
+	if (flagsr & RFR_RES_INER) { vp[vn] = _("é…éˆ", "inertia"); color[vn++] = TERM_SLATE; }
+	if (flagsr & RFR_RES_TIME) { vp[vn] = _("æ™‚é–“é€†è»¢", "time"); color[vn++] = TERM_L_BLUE; }
+	if (flagsr & RFR_RES_GRAV) { vp[vn] = _("é‡åŠ›", "gravity"); color[vn++] = TERM_SLATE; }
+	if (flagsr & RFR_RES_ALL) { vp[vn] = _("ã‚ã‚‰ã‚†ã‚‹æ”»æ’ƒ", "all"); color[vn++] = TERM_YELLOW; }
+	if ((flagsr & RFR_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "teleportation"); color[vn++] = TERM_ORANGE; }
 
 	/* Describe immunities and resistances */
 	if (vn)
 	{
 		/* Intro */
-		hooked_roff(format(_("%^s¤Ï", "%^s"), wd_he[msex]));
+		hooked_roff(format(_("%^sã¯", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("¤È");
+			if ( n != 0 ) hooked_roff("ã¨");
 #else
 			if (n == 0) hooked_roff(" resists ");
 			else if (n < vn-1) hooked_roff(", ");
@@ -1529,7 +1529,7 @@ static void roff_aux(int r_idx, int mode)
 		}
 
 		/* End */
-		hooked_roff(_("¤ÎÂÑÀ­¤ò»ı¤Ã¤Æ¤¤¤ë¡£", ".  "));
+		hooked_roff(_("ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", ".  "));
 	}
 
 
@@ -1537,39 +1537,39 @@ static void roff_aux(int r_idx, int mode)
 	{
 		if (r_ptr->next_r_idx)
 		{
-			hooked_roff(format(_("%^s¤Ï·Ğ¸³¤òÀÑ¤à¤È¡¢", "%^s will evolve into "), wd_he[msex]));
+			hooked_roff(format(_("%^sã¯çµŒé¨“ã‚’ç©ã‚€ã¨ã€", "%^s will evolve into "), wd_he[msex]));
 			hook_c_roff(TERM_YELLOW, format("%s", r_name+r_info[r_ptr->next_r_idx].name));
 			hooked_roff(format(
-				_(("¤Ë¿Ê²½¤¹¤ë¡£"), 
+				_(("ã«é€²åŒ–ã™ã‚‹ã€‚"), 
 				  (" when %s gets enugh experience.  ", wd_he[msex]))));
 		}
 		else if (!(r_ptr->flags1 & RF1_UNIQUE))
 		{
-			hooked_roff(format(_("%s¤Ï¿Ê²½¤·¤Ê¤¤¡£", "%s won't evolve.  "), wd_he[msex]));
+			hooked_roff(format(_("%sã¯é€²åŒ–ã—ãªã„ã€‚", "%s won't evolve.  "), wd_he[msex]));
 		}
 	}
 
 	/* Collect non-effects */
 	vn = 0;
-	if (flags3 & RF3_NO_STUN)  { vp[vn] = _("Û¯Û°¤È¤·¤Ê¤¤", "stunned"); color[vn++] = TERM_ORANGE; }
-	if (flags3 & RF3_NO_FEAR)  { vp[vn] = _("¶²Éİ¤ò´¶¤¸¤Ê¤¤", "frightened"); color[vn++] = TERM_SLATE; }
-	if (flags3 & RF3_NO_CONF)  { vp[vn] = _("º®Íğ¤·¤Ê¤¤", "confused"); color[vn++] = TERM_L_UMBER; }
-	if (flags3 & RF3_NO_SLEEP) { vp[vn] = _("Ì²¤é¤µ¤ì¤Ê¤¤", "slept"); color[vn++] = TERM_BLUE; }
-	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("¥Æ¥ì¥İ¡¼¥È¤µ¤ì¤Ê¤¤", "teleported"); color[vn++] = TERM_ORANGE; }
+	if (flags3 & RF3_NO_STUN)  { vp[vn] = _("æœ¦æœ§ã¨ã—ãªã„", "stunned"); color[vn++] = TERM_ORANGE; }
+	if (flags3 & RF3_NO_FEAR)  { vp[vn] = _("ææ€–ã‚’æ„Ÿã˜ãªã„", "frightened"); color[vn++] = TERM_SLATE; }
+	if (flags3 & RF3_NO_CONF)  { vp[vn] = _("æ··ä¹±ã—ãªã„", "confused"); color[vn++] = TERM_L_UMBER; }
+	if (flags3 & RF3_NO_SLEEP) { vp[vn] = _("çœ ã‚‰ã•ã‚Œãªã„", "slept"); color[vn++] = TERM_BLUE; }
+	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã‚Œãªã„", "teleported"); color[vn++] = TERM_ORANGE; }
 
 	/* Describe non-effects */
 	if (vn)
 	{
 		/* Intro */
 		hooked_roff(format(
-			_("%^s¤Ï", "%^s"), wd_he[msex]));
+			_("%^sã¯", "%^s"), wd_he[msex]));
 
 		/* Scan */
 		for (n = 0; n < vn; n++)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("¤·¡¢");
+			if ( n != 0 ) hooked_roff("ã—ã€");
 #else
 			if (n == 0) hooked_roff(" cannot be ");
 			else if (n < vn - 1) hooked_roff(", ");
@@ -1582,7 +1582,7 @@ static void roff_aux(int r_idx, int mode)
 		}
 
 		/* End */
-		hooked_roff(_("¡£", ".  "));
+		hooked_roff(_("ã€‚", ".  "));
 	}
 
 
@@ -1595,51 +1595,51 @@ static void roff_aux(int r_idx, int mode)
 
 		if (r_ptr->sleep > 200)
 		{
-			act = _("¤òÌµ»ë¤·¤¬¤Á¤Ç¤¢¤ë¤¬", "prefers to ignore");
+			act = _("ã‚’ç„¡è¦–ã—ãŒã¡ã§ã‚ã‚‹ãŒ", "prefers to ignore");
 		}
 		else if (r_ptr->sleep > 95)
 		{
-			act = _("¤ËÂĞ¤·¤Æ¤Û¤È¤ó¤ÉÃí°Õ¤òÊ§¤ï¤Ê¤¤¤¬", "pays very little attention to");
+			act = _("ã«å¯¾ã—ã¦ã»ã¨ã‚“ã©æ³¨æ„ã‚’æ‰•ã‚ãªã„ãŒ", "pays very little attention to");
 		}
 		else if (r_ptr->sleep > 75)
 		{
-			act = _("¤ËÂĞ¤·¤Æ¤¢¤Ş¤êÃí°Õ¤òÊ§¤ï¤Ê¤¤¤¬", "pays little attention to");
+			act = _("ã«å¯¾ã—ã¦ã‚ã¾ã‚Šæ³¨æ„ã‚’æ‰•ã‚ãªã„ãŒ", "pays little attention to");
 		}
 		else if (r_ptr->sleep > 45)
 		{
-			act = _("¤ò¸«²á¤´¤·¤¬¤Á¤Ç¤¢¤ë¤¬", "tends to overlook");
+			act = _("ã‚’è¦‹éã”ã—ãŒã¡ã§ã‚ã‚‹ãŒ", "tends to overlook");
 		}
 		else if (r_ptr->sleep > 25)
 		{
-			act = _("¤ò¤Û¤ó¤Î¾¯¤·¤Ï¸«¤Æ¤ª¤ê", "takes quite a while to see");
+			act = _("ã‚’ã»ã‚“ã®å°‘ã—ã¯è¦‹ã¦ãŠã‚Š", "takes quite a while to see");
 		}
 		else if (r_ptr->sleep > 10)
 		{
-			act = _("¤ò¤·¤Ğ¤é¤¯¤Ï¸«¤Æ¤ª¤ê", "takes a while to see");
+			act = _("ã‚’ã—ã°ã‚‰ãã¯è¦‹ã¦ãŠã‚Š", "takes a while to see");
 		}
 		else if (r_ptr->sleep > 5)
 		{
-			act = _("¤ò´öÊ¬Ãí°Õ¿¼¤¯¸«¤Æ¤ª¤ê", "is fairly observant of");
+			act = _("ã‚’å¹¾åˆ†æ³¨æ„æ·±ãè¦‹ã¦ãŠã‚Š", "is fairly observant of");
 		}
 		else if (r_ptr->sleep > 3)
 		{
-			act = _("¤òÃí°Õ¿¼¤¯¸«¤Æ¤ª¤ê", "is observant of");
+			act = _("ã‚’æ³¨æ„æ·±ãè¦‹ã¦ãŠã‚Š", "is observant of");
 		}
 		else if (r_ptr->sleep > 1)
 		{
-			act = _("¤ò¤«¤Ê¤êÃí°Õ¿¼¤¯¸«¤Æ¤ª¤ê", "is very observant of");
+			act = _("ã‚’ã‹ãªã‚Šæ³¨æ„æ·±ãè¦‹ã¦ãŠã‚Š", "is very observant of");
 		}
 		else if (r_ptr->sleep > 0)
 		{
-			act = _("¤ò·Ù²ü¤·¤Æ¤ª¤ê", "is vigilant for");
+			act = _("ã‚’è­¦æˆ’ã—ã¦ãŠã‚Š", "is vigilant for");
 		}
 		else
 		{
-			act = _("¤ò¤«¤Ê¤ê·Ù²ü¤·¤Æ¤ª¤ê", "is ever vigilant for");
+			act = _("ã‚’ã‹ãªã‚Šè­¦æˆ’ã—ã¦ãŠã‚Š", "is ever vigilant for");
 		}
 
 		hooked_roff(
-			_(format("%^s¤Ï¿¯Æş¼Ô%s¡¢ %d ¥Õ¥£¡¼¥ÈÀè¤«¤é¿¯Æş¼Ô¤Ëµ¤ÉÕ¤¯¤³¤È¤¬¤¢¤ë¡£", wd_he[msex], act, 10 * r_ptr->aaf),
+			_(format("%^sã¯ä¾µå…¥è€…%sã€ %d ãƒ•ã‚£ãƒ¼ãƒˆå…ˆã‹ã‚‰ä¾µå…¥è€…ã«æ°—ä»˜ãã“ã¨ãŒã‚ã‚‹ã€‚", wd_he[msex], act, 10 * r_ptr->aaf),
 			  format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf)));
 	}
 
@@ -1649,7 +1649,7 @@ static void roff_aux(int r_idx, int mode)
 	{
 		/* Intro */
 		hooked_roff(format(
-			_("%^s¤Ï", "%^s may carry"), wd_he[msex]));
+			_("%^sã¯", "%^s may carry"), wd_he[msex]));
 #ifndef JP
 		/* No "n" needed */
 		sin = FALSE;
@@ -1662,7 +1662,7 @@ static void roff_aux(int r_idx, int mode)
 		/* One drop (may need an "n") */
 		if (n == 1)
 		{
-			hooked_roff(_("°ì¤Ä¤Î", " a"));
+			hooked_roff(_("ä¸€ã¤ã®", " a"));
 #ifndef JP
 			sin = TRUE;
 #endif
@@ -1672,27 +1672,27 @@ static void roff_aux(int r_idx, int mode)
 		else if (n == 2)
 		{
 			hooked_roff(
-				_("°ì¤Ä¤«Æó¤Ä¤Î", " one or two"));
+				_("ä¸€ã¤ã‹äºŒã¤ã®", " one or two"));
 		}
 
 		/* Many drops */
 		else
 		{
 			hooked_roff(format(
-				_(" %d ¸Ä¤Ş¤Ç¤Î", " up to %d"), n));
+				_(" %d å€‹ã¾ã§ã®", " up to %d"), n));
 		}
 
 
 		/* Great */
 		if (flags1 & RF1_DROP_GREAT)
 		{
-			p = _("ÆÃÊÌ¤Ê", " exceptional");
+			p = _("ç‰¹åˆ¥ãª", " exceptional");
 		}
 
 		/* Good (no "n" needed) */
 		else if (flags1 & RF1_DROP_GOOD)
 		{
-			p = _("¾å¼Á¤Ê", " good");
+			p = _("ä¸Šè³ªãª", " good");
 #ifndef JP
 			sin = FALSE;
 #endif
@@ -1717,14 +1717,14 @@ static void roff_aux(int r_idx, int mode)
 			/* Dump "object(s)" */
 			if (p) hooked_roff(p);
 			hooked_roff(
-				_("¥¢¥¤¥Æ¥à", " object"));
+				_("ã‚¢ã‚¤ãƒ†ãƒ ", " object"));
 
 #ifndef JP
 			if (n != 1) hooked_roff("s");
 #endif
 
 			/* Conjunction replaces variety, if needed for "gold" below */
-			p = _("¤ä", " or");
+			p = _("ã‚„", " or");
 		}
 
 		/* Treasures */
@@ -1741,7 +1741,7 @@ static void roff_aux(int r_idx, int mode)
 
 			/* Dump "treasure(s)" */
 			if (p) hooked_roff(p);
-			hooked_roff(_("ºâÊõ", " treasure"));
+			hooked_roff(_("è²¡å®", " treasure"));
 #ifndef JP
 			if (n != 1) hooked_roff("s");
 #endif
@@ -1749,7 +1749,7 @@ static void roff_aux(int r_idx, int mode)
 		}
 
 		/* End this sentence */
-		hooked_roff(_("¤ò»ı¤Ã¤Æ¤¤¤ë¤³¤È¤¬¤¢¤ë¡£", ".  "));
+		hooked_roff(_("ã‚’æŒã£ã¦ã„ã‚‹ã“ã¨ãŒã‚ã‚‹ã€‚", ".  "));
 	}
 
 
@@ -1788,30 +1788,30 @@ static void roff_aux(int r_idx, int mode)
 		/* Acquire the method */
 		switch (method)
 		{
-			case RBM_HIT:		p = _("²¥¤ë", "hit"); break;
-			case RBM_TOUCH:		p = _("¿¨¤ë", "touch"); break;
-			case RBM_PUNCH:		p = _("¥Ñ¥ó¥Á¤¹¤ë", "punch"); break;
-			case RBM_KICK:		p = _("½³¤ë", "kick"); break;
-			case RBM_CLAW:		p = _("¤Ò¤Ã¤«¤¯", "claw"); break;
-			case RBM_BITE:		p = _("³ú¤à", "bite"); break;
-			case RBM_STING:		p = _("»É¤¹", "sting"); break;
-			case RBM_SLASH:		p = _("»Â¤ë", "slash"); break;
-			case RBM_BUTT:		p = _("³Ñ¤ÇÆÍ¤¯", "butt"); break;
-			case RBM_CRUSH:		p = _("ÂÎÅö¤¿¤ê¤¹¤ë", "crush"); break;
-			case RBM_ENGULF:	p = _("°û¤ß¹ş¤à", "engulf"); break;
-			case RBM_CHARGE: 	p = _("ÀÁµá½ñ¤ò¤è¤³¤¹", "charge"); break;
-			case RBM_CRAWL:		p = _("ÂÎ¤Î¾å¤òÇç¤¤²ó¤ë", "crawl on you"); break;
-			case RBM_DROOL:		p = _("¤è¤À¤ì¤ò¤¿¤é¤¹", "drool on you"); break;
-			case RBM_SPIT:		p = _("¤Ä¤Ğ¤òÅÇ¤¯", "spit"); break;
-			case RBM_EXPLODE:	p = _("ÇúÈ¯¤¹¤ë", "explode"); break;
-			case RBM_GAZE:		p = _("¤Ë¤é¤à", "gaze"); break;
-			case RBM_WAIL:		p = _("µã¤­¶«¤Ö", "wail"); break;
-			case RBM_SPORE:		p = _("Ë¦»Ò¤òÈô¤Ğ¤¹", "release spores"); break;
+			case RBM_HIT:		p = _("æ®´ã‚‹", "hit"); break;
+			case RBM_TOUCH:		p = _("è§¦ã‚‹", "touch"); break;
+			case RBM_PUNCH:		p = _("ãƒ‘ãƒ³ãƒã™ã‚‹", "punch"); break;
+			case RBM_KICK:		p = _("è¹´ã‚‹", "kick"); break;
+			case RBM_CLAW:		p = _("ã²ã£ã‹ã", "claw"); break;
+			case RBM_BITE:		p = _("å™›ã‚€", "bite"); break;
+			case RBM_STING:		p = _("åˆºã™", "sting"); break;
+			case RBM_SLASH:		p = _("æ–¬ã‚‹", "slash"); break;
+			case RBM_BUTT:		p = _("è§’ã§çªã", "butt"); break;
+			case RBM_CRUSH:		p = _("ä½“å½“ãŸã‚Šã™ã‚‹", "crush"); break;
+			case RBM_ENGULF:	p = _("é£²ã¿è¾¼ã‚€", "engulf"); break;
+			case RBM_CHARGE: 	p = _("è«‹æ±‚æ›¸ã‚’ã‚ˆã“ã™", "charge"); break;
+			case RBM_CRAWL:		p = _("ä½“ã®ä¸Šã‚’é€™ã„å›ã‚‹", "crawl on you"); break;
+			case RBM_DROOL:		p = _("ã‚ˆã ã‚Œã‚’ãŸã‚‰ã™", "drool on you"); break;
+			case RBM_SPIT:		p = _("ã¤ã°ã‚’åã", "spit"); break;
+			case RBM_EXPLODE:	p = _("çˆ†ç™ºã™ã‚‹", "explode"); break;
+			case RBM_GAZE:		p = _("ã«ã‚‰ã‚€", "gaze"); break;
+			case RBM_WAIL:		p = _("æ³£ãå«ã¶", "wail"); break;
+			case RBM_SPORE:		p = _("èƒå­ã‚’é£›ã°ã™", "release spores"); break;
 			case RBM_XXX4:		break;
-			case RBM_BEG:		p = _("¶â¤ò¤»¤¬¤à", "beg"); break;
-			case RBM_INSULT:	p = _("Éî¿«¤¹¤ë", "insult"); break;
-			case RBM_MOAN:		p = _("¤¦¤á¤¯", "moan"); break;
-			case RBM_SHOW:  	p = _("²Î¤¦", "sing"); break;
+			case RBM_BEG:		p = _("é‡‘ã‚’ã›ãŒã‚€", "beg"); break;
+			case RBM_INSULT:	p = _("ä¾®è¾±ã™ã‚‹", "insult"); break;
+			case RBM_MOAN:		p = _("ã†ã‚ã", "moan"); break;
+			case RBM_SHOW:  	p = _("æ­Œã†", "sing"); break;
 		}
 
 
@@ -1822,47 +1822,47 @@ static void roff_aux(int r_idx, int mode)
 		switch (effect)
 		{
 			case RBE_SUPERHURT:
-			case RBE_HURT:    	q = _("¹¶·â¤¹¤ë", "attack"); break;
-			case RBE_POISON:  	q = _("ÆÇ¤ò¤¯¤é¤ï¤¹", "poison"); break;
-			case RBE_UN_BONUS:	q = _("Îô²½¤µ¤»¤ë", "disenchant"); break;
-			case RBE_UN_POWER:	q = _("½¼Å¶ËâÎÏ¤òµÛ¼ı¤¹¤ë", "drain charges"); break;
-			case RBE_EAT_GOLD:	q = _("¶â¤òÅğ¤à", "steal gold"); break;
-			case RBE_EAT_ITEM:	q = _("¥¢¥¤¥Æ¥à¤òÅğ¤à", "steal items"); break;
-			case RBE_EAT_FOOD:	q = _("¤¢¤Ê¤¿¤Î¿©ÎÁ¤ò¿©¤Ù¤ë", "eat your food"); break;
-			case RBE_EAT_LITE:	q = _("ÌÀ¤«¤ê¤òµÛ¼ı¤¹¤ë", "absorb light"); break;
-			case RBE_ACID:    	q = _("»À¤òÈô¤Ğ¤¹", "shoot acid"); break;
-			case RBE_ELEC:    	q = _("´¶ÅÅ¤µ¤»¤ë", "electrocute"); break;
-			case RBE_FIRE:    	q = _("Ç³¤ä¤¹", "burn"); break;
-			case RBE_COLD:    	q = _("Åà¤é¤»¤ë", "freeze"); break;
-			case RBE_BLIND:   	q = _("ÌÕÌÜ¤Ë¤¹¤ë", "blind"); break;
-			case RBE_CONFUSE: 	q = _("º®Íğ¤µ¤»¤ë", "confuse"); break;
-			case RBE_TERRIFY: 	q = _("¶²Éİ¤µ¤»¤ë", "terrify"); break;
-			case RBE_PARALYZE:	q = _("Ëãáã¤µ¤»¤ë", "paralyze"); break;
-			case RBE_LOSE_STR:	q = _("ÏÓÎÏ¤ò¸º¾¯¤µ¤»¤ë", "reduce strength"); break;
-			case RBE_LOSE_INT:	q = _("ÃÎÇ½¤ò¸º¾¯¤µ¤»¤ë", "reduce intelligence"); break;
-			case RBE_LOSE_WIS:	q = _("¸­¤µ¤ò¸º¾¯¤µ¤»¤ë", "reduce wisdom"); break;
-			case RBE_LOSE_DEX:	q = _("´ïÍÑ¤µ¤ò¸º¾¯¤µ¤»¤ë", "reduce dexterity"); break;
-			case RBE_LOSE_CON:	q = _("ÂÑµ×ÎÏ¤ò¸º¾¯¤µ¤»¤ë", "reduce constitution"); break;
-			case RBE_LOSE_CHR:	q = _("Ì¥ÎÏ¤ò¸º¾¯¤µ¤»¤ë", "reduce charisma"); break;
-			case RBE_LOSE_ALL:	q = _("Á´¥¹¥Æ¡¼¥¿¥¹¤ò¸º¾¯¤µ¤»¤ë", "reduce all stats"); break;
-			case RBE_SHATTER:	q = _("Ê´ºÕ¤¹¤ë", "shatter"); break;
-			case RBE_EXP_10:	q = _("·Ğ¸³ÃÍ¤ò¸º¾¯(10d6+)¤µ¤»¤ë", "lower experience (by 10d6+)"); break;
-			case RBE_EXP_20:	q = _("·Ğ¸³ÃÍ¤ò¸º¾¯(20d6+)¤µ¤»¤ë", "lower experience (by 20d6+)"); break;
-			case RBE_EXP_40:	q = _("·Ğ¸³ÃÍ¤ò¸º¾¯(40d6+)¤µ¤»¤ë", "lower experience (by 40d6+)"); break;
-			case RBE_EXP_80:	q = _("·Ğ¸³ÃÍ¤ò¸º¾¯(80d6+)¤µ¤»¤ë", "lower experience (by 80d6+)"); break;
-			case RBE_DISEASE:	q = _("ÉÂµ¤¤Ë¤¹¤ë", "disease"); break;
-			case RBE_TIME:      q = _("»ş´Ö¤òµÕÌá¤ê¤µ¤»¤ë", "time"); break;
-			case RBE_DR_LIFE:   q = _("À¸Ì¿ÎÏ¤òµÛ¼ı¤¹¤ë", "drain life"); break;
-			case RBE_DR_MANA:   q = _("ËâÎÏ¤òÃ¥¤¦", "drain mana force"); break;
-			case RBE_INERTIA:   q = _("¸ºÂ®¤µ¤»¤ë", "slow"); break;
-			case RBE_STUN:      q = _("Û¯Û°¤È¤µ¤»¤ë", "stun"); break;
+			case RBE_HURT:    	q = _("æ”»æ’ƒã™ã‚‹", "attack"); break;
+			case RBE_POISON:  	q = _("æ¯’ã‚’ãã‚‰ã‚ã™", "poison"); break;
+			case RBE_UN_BONUS:	q = _("åŠ£åŒ–ã•ã›ã‚‹", "disenchant"); break;
+			case RBE_UN_POWER:	q = _("å……å¡«é­”åŠ›ã‚’å¸åã™ã‚‹", "drain charges"); break;
+			case RBE_EAT_GOLD:	q = _("é‡‘ã‚’ç›—ã‚€", "steal gold"); break;
+			case RBE_EAT_ITEM:	q = _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’ç›—ã‚€", "steal items"); break;
+			case RBE_EAT_FOOD:	q = _("ã‚ãªãŸã®é£Ÿæ–™ã‚’é£Ÿã¹ã‚‹", "eat your food"); break;
+			case RBE_EAT_LITE:	q = _("æ˜ã‹ã‚Šã‚’å¸åã™ã‚‹", "absorb light"); break;
+			case RBE_ACID:    	q = _("é…¸ã‚’é£›ã°ã™", "shoot acid"); break;
+			case RBE_ELEC:    	q = _("æ„Ÿé›»ã•ã›ã‚‹", "electrocute"); break;
+			case RBE_FIRE:    	q = _("ç‡ƒã‚„ã™", "burn"); break;
+			case RBE_COLD:    	q = _("å‡ã‚‰ã›ã‚‹", "freeze"); break;
+			case RBE_BLIND:   	q = _("ç›²ç›®ã«ã™ã‚‹", "blind"); break;
+			case RBE_CONFUSE: 	q = _("æ··ä¹±ã•ã›ã‚‹", "confuse"); break;
+			case RBE_TERRIFY: 	q = _("ææ€–ã•ã›ã‚‹", "terrify"); break;
+			case RBE_PARALYZE:	q = _("éº»ç—ºã•ã›ã‚‹", "paralyze"); break;
+			case RBE_LOSE_STR:	q = _("è…•åŠ›ã‚’æ¸›å°‘ã•ã›ã‚‹", "reduce strength"); break;
+			case RBE_LOSE_INT:	q = _("çŸ¥èƒ½ã‚’æ¸›å°‘ã•ã›ã‚‹", "reduce intelligence"); break;
+			case RBE_LOSE_WIS:	q = _("è³¢ã•ã‚’æ¸›å°‘ã•ã›ã‚‹", "reduce wisdom"); break;
+			case RBE_LOSE_DEX:	q = _("å™¨ç”¨ã•ã‚’æ¸›å°‘ã•ã›ã‚‹", "reduce dexterity"); break;
+			case RBE_LOSE_CON:	q = _("è€ä¹…åŠ›ã‚’æ¸›å°‘ã•ã›ã‚‹", "reduce constitution"); break;
+			case RBE_LOSE_CHR:	q = _("é­…åŠ›ã‚’æ¸›å°‘ã•ã›ã‚‹", "reduce charisma"); break;
+			case RBE_LOSE_ALL:	q = _("å…¨ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’æ¸›å°‘ã•ã›ã‚‹", "reduce all stats"); break;
+			case RBE_SHATTER:	q = _("ç²‰ç •ã™ã‚‹", "shatter"); break;
+			case RBE_EXP_10:	q = _("çµŒé¨“å€¤ã‚’æ¸›å°‘(10d6+)ã•ã›ã‚‹", "lower experience (by 10d6+)"); break;
+			case RBE_EXP_20:	q = _("çµŒé¨“å€¤ã‚’æ¸›å°‘(20d6+)ã•ã›ã‚‹", "lower experience (by 20d6+)"); break;
+			case RBE_EXP_40:	q = _("çµŒé¨“å€¤ã‚’æ¸›å°‘(40d6+)ã•ã›ã‚‹", "lower experience (by 40d6+)"); break;
+			case RBE_EXP_80:	q = _("çµŒé¨“å€¤ã‚’æ¸›å°‘(80d6+)ã•ã›ã‚‹", "lower experience (by 80d6+)"); break;
+			case RBE_DISEASE:	q = _("ç—…æ°—ã«ã™ã‚‹", "disease"); break;
+			case RBE_TIME:      q = _("æ™‚é–“ã‚’é€†æˆ»ã‚Šã•ã›ã‚‹", "time"); break;
+			case RBE_DR_LIFE:   q = _("ç”Ÿå‘½åŠ›ã‚’å¸åã™ã‚‹", "drain life"); break;
+			case RBE_DR_MANA:   q = _("é­”åŠ›ã‚’å¥ªã†", "drain mana force"); break;
+			case RBE_INERTIA:   q = _("æ¸›é€Ÿã•ã›ã‚‹", "slow"); break;
+			case RBE_STUN:      q = _("æœ¦æœ§ã¨ã•ã›ã‚‹", "stun"); break;
 		}
 
 
 #ifdef JP
-		if ( r == 0 ) hooked_roff( format("%^s¤Ï", wd_he[msex]) );
+		if ( r == 0 ) hooked_roff( format("%^sã¯", wd_he[msex]) );
 
-		/***¼ã´³É½¸½¤òÊÑ¹¹ ita ***/
+		/***è‹¥å¹²è¡¨ç¾ã‚’å¤‰æ›´ ita ***/
 
 			/* Describe damage (if known) */
 		if (d1 && d2 && (know_everything || know_damage(r_idx, m)))
@@ -1870,13 +1870,13 @@ static void roff_aux(int r_idx, int mode)
 		    
 		    /* Display the damage */
 		    hooked_roff(format(" %dd%d ", d1, d2));
-		    hooked_roff("¤Î¥À¥á¡¼¥¸¤Ç");
+		    hooked_roff("ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã§");
 		  }
 		/* Hack -- force a method */
-		if (!p) p = "²¿¤«´ñÌ¯¤Ê¤³¤È¤ò¤¹¤ë";
+		if (!p) p = "ä½•ã‹å¥‡å¦™ãªã“ã¨ã‚’ã™ã‚‹";
 
 		/* Describe the method */
-		/* XX¤·¤ÆYY¤·/XX¤·¤ÆYY¤¹¤ë/XX¤·/XX¤¹¤ë */
+		/* XXã—ã¦YYã—/XXã—ã¦YYã™ã‚‹/XXã—/XXã™ã‚‹ */
 		if(q) jverb( p ,jverb_buf, JVERB_TO);
 		else if(r!=n-1) jverb( p ,jverb_buf, JVERB_AND);
 		else strcpy(jverb_buf, p);
@@ -1890,7 +1890,7 @@ static void roff_aux(int r_idx, int mode)
 		  else strcpy(jverb_buf,q); 
 		  hooked_roff(jverb_buf);
 		}
-		if(r!=n-1) hooked_roff("¡¢");
+		if(r!=n-1) hooked_roff("ã€");
 #else
 		/* Introduce the attack description */
 		if (!r)
@@ -1940,14 +1940,14 @@ static void roff_aux(int r_idx, int mode)
 	/* Finish sentence above */
 	if (r)
 	{
-		hooked_roff(_("¡£", ".  "));
+		hooked_roff(_("ã€‚", ".  "));
 	}
 
 	/* Notice lack of attacks */
 	else if (flags1 & RF1_NEVER_BLOW)
 	{
 		hooked_roff(format(
-			_("%^s¤ÏÊªÍıÅª¤Ê¹¶·âÊıË¡¤ò»ı¤¿¤Ê¤¤¡£",
+			_("%^sã¯ç‰©ç†çš„ãªæ”»æ’ƒæ–¹æ³•ã‚’æŒãŸãªã„ã€‚",
 			  "%^s has no physical attacks.  "), wd_he[msex]));
 	}
 
@@ -1955,7 +1955,7 @@ static void roff_aux(int r_idx, int mode)
 	else
 	{
 		hooked_roff(format(
-			_("%s¹¶·â¤Ë¤Ä¤¤¤Æ¤Ï²¿¤âÃÎ¤é¤Ê¤¤¡£",
+			_("%sæ”»æ’ƒã«ã¤ã„ã¦ã¯ä½•ã‚‚çŸ¥ã‚‰ãªã„ã€‚",
 			  "Nothing is known about %s attack.  "), wd_his[msex]));
 	}
 
@@ -1967,14 +1967,14 @@ static void roff_aux(int r_idx, int mode)
 	if ((flags1 & RF1_QUESTOR) && ((r_ptr->r_sights) && (r_ptr->max_num) && ((r_idx == MON_OBERON) || (r_idx == MON_SERPENT))))
 	{
 		hook_c_roff(TERM_VIOLET, 
-			_("¤¢¤Ê¤¿¤Ï¤³¤Î¥â¥ó¥¹¥¿¡¼¤ò»¦¤·¤¿¤¤¤È¤¤¤¦¶¯¤¤ÍßË¾¤ò´¶¤¸¤Æ¤¤¤ë...",
+			_("ã‚ãªãŸã¯ã“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ®ºã—ãŸã„ã¨ã„ã†å¼·ã„æ¬²æœ›ã‚’æ„Ÿã˜ã¦ã„ã‚‹...",
 			  "You feel an intense desire to kill this monster...  "));
 	}
 
 	else if (flags7 & RF7_GUARDIAN)
 	{
 		hook_c_roff(TERM_L_RED, 
-			_("¤³¤Î¥â¥ó¥¹¥¿¡¼¤Ï¥À¥ó¥¸¥ç¥ó¤Î¼ç¤Ç¤¢¤ë¡£",
+			_("ã“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®ä¸»ã§ã‚ã‚‹ã€‚",
 			  "This monster is the master of a dungeon."));
 	}
 
@@ -1986,10 +1986,10 @@ static void roff_aux(int r_idx, int mode)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¾ğÊó¤Î¥Ø¥Ã¥À¤òµ­½Ò¤¹¤ë
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±ã®ãƒ˜ãƒƒãƒ€ã‚’è¨˜è¿°ã™ã‚‹
  * Hack -- Display the "name" and "attr/chars" of a monster race
- * @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ¤Ê¤·
+ * @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return ãªã—
  */
 void roff_top(int r_idx)
 {
@@ -2051,11 +2051,11 @@ void roff_top(int r_idx)
 
 
 /*!
- * @brief  ¥â¥ó¥¹¥¿¡¼¾ğÊó¤ÎÉ½¼¨¤È¶¦¤Ë²èÌÌ¤ò°ì»ş¾Ãµî¤¹¤ë¥µ¥Ö¥ë¡¼¥Á¥ó /
+ * @brief  ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±ã®è¡¨ç¤ºã¨å…±ã«ç”»é¢ã‚’ä¸€æ™‚æ¶ˆå»ã™ã‚‹ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ /
  * Hack -- describe the given monster race at the top of the screen
- * @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @param mode É½¼¨¥ª¥×¥·¥ç¥ó
- * @return ¤Ê¤·
+ * @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @param mode è¡¨ç¤ºã‚ªãƒ—ã‚·ãƒ§ãƒ³
+ * @return ãªã—
  */
 void screen_roff(int r_idx, int mode)
 {
@@ -2078,10 +2078,10 @@ void screen_roff(int r_idx, int mode)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¾ğÊó¤Î¸½ºß¤Î¥¦¥£¥ó¥É¥¦¤ËÉ½¼¨¤¹¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±ã®ç¾åœ¨ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«è¡¨ç¤ºã™ã‚‹ /
  * Hack -- describe the given monster race in the current "term" window
- * @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ¤Ê¤·
+ * @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return ãªã—
  */
 void display_roff(int r_idx)
 {
@@ -2108,11 +2108,11 @@ void display_roff(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¾ÜºÙ¾ğÊó¤ò¼«Æ°¥¹¥İ¥¤¥é¡¼¸ş¤±¤Ë½ĞÎÏ¤¹¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼è©³ç´°æƒ…å ±ã‚’è‡ªå‹•ã‚¹ãƒã‚¤ãƒ©ãƒ¼å‘ã‘ã«å‡ºåŠ›ã™ã‚‹ /
  * Hack -- output description of the given monster race
- * @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @param roff_func ½ĞÎÏ½èÍı¤ò¹Ô¤¦´Ø¿ô¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @param roff_func å‡ºåŠ›å‡¦ç†ã‚’è¡Œã†é–¢æ•°ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str))
 {
@@ -2124,9 +2124,9 @@ void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str))
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥À¥ó¥¸¥ç¥ó¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ¥À¥ó¥¸¥ç¥ó¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool mon_hook_dungeon(int r_idx)
 {
@@ -2145,9 +2145,9 @@ bool mon_hook_dungeon(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬³¤ÍÎ¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ³¤ÍÎ¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæµ·æ´‹ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return æµ·æ´‹ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_ocean(int r_idx)
 {
@@ -2161,9 +2161,9 @@ static bool mon_hook_ocean(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬³¤´ß¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ³¤´ß¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæµ·å²¸ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return æµ·å²¸ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_shore(int r_idx)
 {
@@ -2177,9 +2177,9 @@ static bool mon_hook_shore(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬¹ÓÃÏ¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ¹ÓÃÏ¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒè’åœ°ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return è’åœ°ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_waste(int r_idx)
 {
@@ -2193,9 +2193,9 @@ static bool mon_hook_waste(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Ä®¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ¹ÓÃÏ¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒç”ºã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return è’åœ°ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_town(int r_idx)
 {
@@ -2209,9 +2209,9 @@ static bool mon_hook_town(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬¿¹ÎÓ¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ¿¹ÎÓ¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ£®æ—ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return æ£®æ—ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_wood(int r_idx)
 {
@@ -2225,9 +2225,9 @@ static bool mon_hook_wood(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬²Ğ»³¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ²Ğ»³¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒç«å±±ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return ç«å±±ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_volcano(int r_idx)
 {
@@ -2240,9 +2240,9 @@ static bool mon_hook_volcano(int r_idx)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬»³ÃÏ¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return »³ÃÏ¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå±±åœ°ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return å±±åœ°ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_mountain(int r_idx)
 {
@@ -2256,9 +2256,9 @@ static bool mon_hook_mountain(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Áğ¸¶¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ¿¹ÎÓ¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒè‰åŸã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return æ£®æ—ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_grass(int r_idx)
 {
@@ -2271,9 +2271,9 @@ static bool mon_hook_grass(int r_idx)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬¿¼¤¤¿åÃÏ·Á¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ¿¼¤¤¿åÃÏ·Á¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ·±ã„æ°´åœ°å½¢ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return æ·±ã„æ°´åœ°å½¢ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_deep_water(int r_idx)
 {
@@ -2289,9 +2289,9 @@ static bool mon_hook_deep_water(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Àõ¤¤¿åÃÏ·Á¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return Àõ¤¤¿åÃÏ·Á¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæµ…ã„æ°´åœ°å½¢ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return æµ…ã„æ°´åœ°å½¢ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_shallow_water(int r_idx)
 {
@@ -2307,9 +2307,9 @@ static bool mon_hook_shallow_water(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬ÍÏ´äÃÏ·Á¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ÍÏ´äÃÏ·Á¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæº¶å²©åœ°å½¢ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return æº¶å²©åœ°å½¢ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_lava(int r_idx)
 {
@@ -2327,9 +2327,9 @@ static bool mon_hook_lava(int r_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬ÄÌ¾ï¤Î¾²ÃÏ·Á¤Ë½Ğ¸½¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
- * @param r_idx È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ÄÌ¾ï¤Î¾²ÃÏ·Á¤Ë½Ğ¸½¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€šå¸¸ã®åºŠåœ°å½¢ã«å‡ºç¾ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
+ * @param r_idx åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return é€šå¸¸ã®åºŠåœ°å½¢ã«å‡ºç¾ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool mon_hook_floor(int r_idx)
 {
@@ -2344,8 +2344,8 @@ static bool mon_hook_floor(int r_idx)
 
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤Î¸½ºß¤Î¹­°è¥Ş¥Ã¥×ºÂÉ¸¤«¤éÆÀ¤¿ÃÏÀª¤ò¸µ¤Ë¥â¥ó¥¹¥¿¡¼¤ÎÀ¸À®¾ò·ï´Ø¿ô¤òÊÖ¤¹
- * @return ÃÏÀª¤Ë¤¢¤Ã¤¿¥â¥ó¥¹¥¿¡¼¤ÎÀ¸À®¾ò·ï´Ø¿ô
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®åºƒåŸŸãƒãƒƒãƒ—åº§æ¨™ã‹ã‚‰å¾—ãŸåœ°å‹¢ã‚’å…ƒã«ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç”Ÿæˆæ¡ä»¶é–¢æ•°ã‚’è¿”ã™
+ * @return åœ°å‹¢ã«ã‚ã£ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç”Ÿæˆæ¡ä»¶é–¢æ•°
  */
 monster_hook_type get_monster_hook(void)
 {
@@ -2383,8 +2383,8 @@ monster_hook_type get_monster_hook(void)
 }
 
 /*!
- * @brief »ØÄê¤µ¤ì¤¿¹­°è¥Ş¥Ã¥×ºÂÉ¸¤ÎÃÏÀª¤ò¸µ¤Ë¥â¥ó¥¹¥¿¡¼¤ÎÀ¸À®¾ò·ï´Ø¿ô¤òÊÖ¤¹
- * @return ÃÏÀª¤Ë¤¢¤Ã¤¿¥â¥ó¥¹¥¿¡¼¤ÎÀ¸À®¾ò·ï´Ø¿ô
+ * @brief æŒ‡å®šã•ã‚ŒãŸåºƒåŸŸãƒãƒƒãƒ—åº§æ¨™ã®åœ°å‹¢ã‚’å…ƒã«ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç”Ÿæˆæ¡ä»¶é–¢æ•°ã‚’è¿”ã™
+ * @return åœ°å‹¢ã«ã‚ã£ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç”Ÿæˆæ¡ä»¶é–¢æ•°
  */
 monster_hook_type get_monster_hook2(int y, int x)
 {
@@ -2418,9 +2418,9 @@ monster_hook_type get_monster_hook2(int y, int x)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤òÍ§¹¥Åª¤Ë¤¹¤ë
- * @param m_ptr ¥â¥ó¥¹¥¿¡¼¾ğÊó¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å‹å¥½çš„ã«ã™ã‚‹
+ * @param m_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void set_friendly(monster_type *m_ptr)
 {
@@ -2428,9 +2428,9 @@ void set_friendly(monster_type *m_ptr)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤ò¥Ú¥Ã¥È¤Ë¤¹¤ë
- * @param m_ptr ¥â¥ó¥¹¥¿¡¼¾ğÊó¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒšãƒƒãƒˆã«ã™ã‚‹
+ * @param m_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void set_pet(monster_type *m_ptr)
 {
@@ -2445,10 +2445,10 @@ void set_pet(monster_type *m_ptr)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤òÅ¨¤Ë²ó¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ•µã«å›ã™
  * Makes the monster hostile towards the player
- * @param m_ptr ¥â¥ó¥¹¥¿¡¼¾ğÊó¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @param m_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void set_hostile(monster_type *m_ptr)
 {
@@ -2462,10 +2462,10 @@ void set_hostile(monster_type *m_ptr)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤òÅÜ¤é¤»¤ë
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ€’ã‚‰ã›ã‚‹
  * Anger the monster
- * @param m_ptr ¥â¥ó¥¹¥¿¡¼¾ğÊó¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @param m_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void anger_monster(monster_type *m_ptr)
 {
@@ -2476,7 +2476,7 @@ void anger_monster(monster_type *m_ptr)
 
 		monster_desc(m_name, m_ptr, 0);
 #ifdef JP
-msg_format("%^s¤ÏÅÜ¤Ã¤¿¡ª", m_name);
+msg_format("%^sã¯æ€’ã£ãŸï¼", m_name);
 #else
 		msg_format("%^s gets angry!", m_name);
 #endif
@@ -2492,12 +2492,12 @@ msg_format("%^s¤ÏÅÜ¤Ã¤¿¡ª", m_name);
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬ÃÏ·Á¤òÆ§ÇË¤Ç¤­¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒåœ°å½¢ã‚’è¸ç ´ã§ãã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
  * Check if monster can cross terrain
- * @param feat ÃÏ·ÁID
- * @param r_ptr ¥â¥ó¥¹¥¿¡¼¼ïÂ²¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @param mode ¥ª¥×¥·¥ç¥ó
- * @return Æ§ÇË²ÄÇ½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param feat åœ°å½¢ID
+ * @param r_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param mode ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+ * @return è¸ç ´å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode)
 {
@@ -2556,13 +2556,13 @@ bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode)
 
 
 /*!
- * @brief »ØÄê¤µ¤ì¤¿ºÂÉ¸¤ÎÃÏ·Á¤ò¥â¥ó¥¹¥¿¡¼¤¬Æ§ÇË¤Ç¤­¤ë¤«¤É¤¦¤«¤òÊÖ¤¹
+ * @brief æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ã®åœ°å½¢ã‚’ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒè¸ç ´ã§ãã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
  * Strictly check if monster can enter the grid
- * @param y ÃÏ·Á¤ÎYºÂÉ¸
- * @param x ÃÏ·Á¤ÎXºÂÉ¸
- * @param r_ptr ¥â¥ó¥¹¥¿¡¼¼ïÂ²¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @param mode ¥ª¥×¥·¥ç¥ó
- * @return Æ§ÇË²ÄÇ½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param y åœ°å½¢ã®Yåº§æ¨™
+ * @param x åœ°å½¢ã®Xåº§æ¨™
+ * @param r_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param mode ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+ * @return è¸ç ´å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool monster_can_enter(int y, int x, monster_race *r_ptr, u16b mode)
 {
@@ -2577,11 +2577,11 @@ bool monster_can_enter(int y, int x, monster_race *r_ptr, u16b mode)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÂ°À­¤Î´ğ¤Å¤¤¤¿Å¨ÂĞ´Ø·¸¤ÎÍ­Ìµ¤òÊÖ¤¹¡Ê¥µ¥Ö¥ë¡¼¥Á¥ó¡Ë
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å±æ€§ã®åŸºã¥ã„ãŸæ•µå¯¾é–¢ä¿‚ã®æœ‰ç„¡ã‚’è¿”ã™ï¼ˆã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ï¼‰
  * Check if this monster has "hostile" alignment (aux)
- * @param sub_align1 ¥â¥ó¥¹¥¿¡¼1¤Î¥µ¥Ö¥Õ¥é¥°
- * @param sub_align2 ¥â¥ó¥¹¥¿¡¼2¤Î¥µ¥Ö¥Õ¥é¥°
- * @return Å¨ÂĞ´Ø·¸¤Ë¤¢¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param sub_align1 ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ã®ã‚µãƒ–ãƒ•ãƒ©ã‚°
+ * @param sub_align2 ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼2ã®ã‚µãƒ–ãƒ•ãƒ©ã‚°
+ * @return æ•µå¯¾é–¢ä¿‚ã«ã‚ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool check_hostile_align(byte sub_align1, byte sub_align2)
 {
@@ -2598,11 +2598,11 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÂ°À­¤Î´ğ¤Å¤¤¤¿Å¨ÂĞ´Ø·¸¤ÎÍ­Ìµ¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å±æ€§ã®åŸºã¥ã„ãŸæ•µå¯¾é–¢ä¿‚ã®æœ‰ç„¡ã‚’è¿”ã™
  * Check if two monsters are enemies
- * @param m_ptr ¥â¥ó¥¹¥¿¡¼1¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
- * @param n_ptr ¥â¥ó¥¹¥¿¡¼2¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
- * @return Å¨ÂĞ´Ø·¸¤Ë¤¢¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param m_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param n_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼2ã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return æ•µå¯¾é–¢ä¿‚ã«ã‚ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 {
@@ -2639,13 +2639,13 @@ bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤ËÂĞ¤·¤ÆÅ¨°Õ¤òÊú¤¯¤«¤É¤¦¤«¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å¯¾ã—ã¦æ•µæ„ã‚’æŠ±ãã‹ã©ã†ã‹ã‚’è¿”ã™
  * Check if this monster race has "hostile" alignment
- * @param m_ptr ¥â¥ó¥¹¥¿¡¼¾ğÊó¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @param pa_good ¥×¥ì¥¤¥ä¡¼¤ÎÁ±·¹¸şÃÍ
- * @param pa_evil ¥×¥ì¥¤¥ä¡¼¤Î°­·¹¸şÃÍ
- * @param r_ptr ¥â¥ó¥¹¥¿¡¼¼ïÂ²¾ğÊó¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
- * @return ¥×¥ì¥¤¥ä¡¼¤ËÅ¨°Õ¤ò»ı¤Ä¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param m_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param pa_good ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å–„å‚¾å‘å€¤
+ * @param pa_evil ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ‚ªå‚¾å‘å€¤
+ * @param r_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—æƒ…å ±ã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«æ•µæ„ã‚’æŒã¤ãªã‚‰ã°TRUEã‚’è¿”ã™
  * @details
  * If user is player, m_ptr == NULL.
  */
@@ -2676,10 +2676,10 @@ bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, mo
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬À¸Ì¿ÂÎ¤«¤É¤¦¤«¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒç”Ÿå‘½ä½“ã‹ã©ã†ã‹ã‚’è¿”ã™
  * Is the monster "alive"?
- * @param r_ptr È½Äê¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²¾ğÊó¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
- * @return À¸Ì¿ÂÎ¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param r_ptr åˆ¤å®šã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—æƒ…å ±æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ç”Ÿå‘½ä½“ãªã‚‰ã°TRUEã‚’è¿”ã™
  * @details
  * Used to determine the message to print for a killed monster.
  * ("dies", "destroyed")
@@ -2695,12 +2695,12 @@ bool monster_living(monster_race *r_ptr)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬ÆÃ¼ìÇ½ÎÏ¾å¡¢¾Ş¶â¼ó¤«¤éÇÓ½ü¤¹¤ëÉ¬Í×¤¬¤¢¤ë¤«¤É¤¦¤«¤òÊÖ¤¹¡£
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒç‰¹æ®Šèƒ½åŠ›ä¸Šã€è³é‡‘é¦–ã‹ã‚‰æ’é™¤ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ã€‚
  * Is the monster "alive"? / Is this monster declined to be questor or bounty?
- * @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
- * @return ¾Ş¶â¼ó¤Ë²Ã¤¨¤é¤ì¤Ê¤¤¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return è³é‡‘é¦–ã«åŠ ãˆã‚‰ã‚Œãªã„ãªã‚‰ã°TRUEã‚’è¿”ã™
  * @details
- * ¼Â¼Á¥Ğ¡¼¥Î¡¼¥ë¡á¥ë¥Ñ¡¼¥ÈÍÑ¡£
+ * å®Ÿè³ªãƒãƒ¼ãƒãƒ¼ãƒ«ï¼ãƒ«ãƒ‘ãƒ¼ãƒˆç”¨ã€‚
  */
 bool no_questor_or_bounty_uniques(int r_idx)
 {

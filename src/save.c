@@ -1,4 +1,4 @@
-/* File: save.c */
+ï»¿/* File: save.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
@@ -504,7 +504,7 @@ static void wr_ghost(void)
 
 	/* Name */
 #ifdef JP
-	wr_string("ÉÔÀµ¤Ê¥´¡¼¥¹¥È");
+	wr_string("ä¸æ­£ãªã‚´ãƒ¼ã‚¹ãƒˆ");
 #else
 	wr_string("Broken Ghost");
 #endif
@@ -1758,7 +1758,7 @@ bool load_player(void)
 	{
 		/* Give a message */
 #ifdef JP
-		msg_print("¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤¬¤¢¤ê¤Þ¤»¤ó¡£");
+		msg_print("ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
 #else
 		msg_print("Savefile does not exist.");
 #endif
@@ -1796,7 +1796,7 @@ bool load_player(void)
 
 			/* Message */
 #ifdef JP
-			msg_print("¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤Ï¸½ºß»ÈÍÑÃæ¤Ç¤¹¡£");
+			msg_print("ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã¯ç¾åœ¨ä½¿ç”¨ä¸­ã§ã™ã€‚");
 #else
 			msg_print("Savefile is currently in use.");
 #endif
@@ -1831,7 +1831,7 @@ bool load_player(void)
 
 		/* Message (below) */
 #ifdef JP
-		if (err) what = "¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤ò³«¤±¤Þ¤»¤ó¡£";
+		if (err) what = "ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ã€‚";
 #else
 		if (err) what = "Cannot open savefile";
 #endif
@@ -1852,7 +1852,7 @@ bool load_player(void)
 
 		/* What */
 #ifdef JP
-		if (err) what = "¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤òÆÉ¤á¤Þ¤»¤ó¡£";
+		if (err) what = "ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã‚ã¾ã›ã‚“ã€‚";
 #else
 		if (err) what = "Cannot read savefile";
 #endif
@@ -1881,7 +1881,7 @@ bool load_player(void)
 
 		/* Message (below) */
 #ifdef JP
-		if (err) what = "¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤ò²òÀÏ½ÐÍè¤Þ¤»¤ó¡£";
+		if (err) what = "ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è§£æžå‡ºæ¥ã¾ã›ã‚“ã€‚";
 #else
 		if (err) what = "Cannot parse savefile";
 #endif
@@ -1896,7 +1896,7 @@ bool load_player(void)
 
 		/* Message (below) */
 #ifdef JP
-		if (err) what = "¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤¬²õ¤ì¤Æ¤¤¤Þ¤¹";
+		if (err) what = "ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ãŒå£Šã‚Œã¦ã„ã¾ã™";
 #else
 		if (err) what = "Broken savefile";
 #endif
@@ -1913,7 +1913,7 @@ bool load_player(void)
 		{
 			/* Message */
 #ifdef JP
-			what = "Ìµ¸ú¤Ê¥¿¥¤¥à¡¦¥¹¥¿¥ó¥×¤Ç¤¹";
+			what = "ç„¡åŠ¹ãªã‚¿ã‚¤ãƒ ãƒ»ã‚¹ã‚¿ãƒ³ãƒ—ã§ã™";
 #else
 			what = "Invalid timestamp";
 #endif
@@ -1937,7 +1937,7 @@ bool load_player(void)
 			if (z_major == 2 && z_minor == 0 && z_patch == 6)
 			{
 #ifdef JP
-				msg_print("¥Ð¡¼¥¸¥ç¥ó 2.0.* ÍÑ¤Î¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤òÊÑ´¹¤·¤Þ¤·¤¿¡£");
+				msg_print("ãƒãƒ¼ã‚¸ãƒ§ãƒ³ 2.0.* ç”¨ã®ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¤‰æ›ã—ã¾ã—ãŸã€‚");
 #else
 				msg_print("Converted a 2.0.* savefile.");
 #endif
@@ -1947,7 +1947,7 @@ bool load_player(void)
 			{
 				/* Message */
 #ifdef JP
-				msg_format("¥Ð¡¼¥¸¥ç¥ó %d.%d.%d ÍÑ¤Î¥»¡¼¥Ö¡¦¥Õ¥¡¥¤¥ë¤òÊÑ´¹¤·¤Þ¤·¤¿¡£",
+				msg_format("ãƒãƒ¼ã‚¸ãƒ§ãƒ³ %d.%d.%d ç”¨ã®ã‚»ãƒ¼ãƒ–ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¤‰æ›ã—ã¾ã—ãŸã€‚",
 				    (z_major > 9) ? z_major-10 : z_major , z_minor, z_patch);
 #else
 				msg_format("Converted a %d.%d.%d savefile.",
@@ -2017,7 +2017,7 @@ bool load_player(void)
 
 	/* Message */
 #ifdef JP
-	msg_format("¥¨¥é¡¼(%s)¤¬¥Ð¡¼¥¸¥ç¥ó%d.%d.%d ÍÑ¥»¡¼¥Ö¥Õ¥¡¥¤¥ëÆÉ¤ß¹þÃæ¤ËÈ¯À¸¡£",
+	msg_format("ã‚¨ãƒ©ãƒ¼(%s)ãŒãƒãƒ¼ã‚¸ãƒ§ãƒ³%d.%d.%d ç”¨ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ä¸­ã«ç™ºç”Ÿã€‚",
 		   what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);
 #else
 	msg_format("Error (%s) reading %d.%d.%d savefile.",

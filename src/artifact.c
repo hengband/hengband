@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file artifact.c
- * @brief ¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤ÎÀ¸À®¤È´ÉÍı / Artifact code
+ * @brief ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã®ç”Ÿæˆã¨ç®¡ç† / Artifact code
  * @date 2013/12/11
  * @author
  * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
@@ -14,32 +14,32 @@
 
 
 /* Chance of using syllables to form the name instead of the "template" files */
-#define SINDARIN_NAME   10 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Ë¥·¥ó¥À¥ê¥óÌÃ¤ò¤Ä¤±¤ë³ÎÎ¨ */
-#define TABLE_NAME      20 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Ë´Á»úÌÃ¤ò¤Ä¤±¤ë³ÎÎ¨(Àµ³Î¤Ë¤Ï TABLE_NAME - SINDARIN_NAME %)¤È¤Ê¤ë */
-#define A_CURSED        13 /*!< 1/n¤Î³ÎÎ¨¤ÇÀ¸À®¤Î´¬Êª°Ê³°¤Î¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤¬¼ö¤¤¤Ä¤­¤Ë¤Ê¤ë¡£ */
-#define WEIRD_LUCK      12 /*!< 1/n¤Î³ÎÎ¨¤Çrandom_resistance()¤Î½èÍıÃæ¥Ğ¥¤¥¢¥¹³°¤ÎÂÑÀ­¤¬¤Ä¤­¡¢create_artifact¤Ç4¤òÄ¶¤¨¤ëpval¤¬µö²Ä¤µ¤ì¤ë¡£*/
-#define BIAS_LUCK       20 /*!< 1/n¤Î³ÎÎ¨¤Çrandom_resistance()¤ÇÉÕ²Ã¤¹¤ë¸µÁÇÂÑÀ­¤¬ÌÈ±Ö¤Ë¤Ê¤ë */
-#define IM_LUCK         7 /*!< 1/n¤Î³ÎÎ¨¤Çrandom_resistance()¤ÇÊ£¿ôÌÈ±Ö¤Î½üµî½èÍı¤¬ÌÈ½ü¤µ¤ì¤ë */
+#define SINDARIN_NAME   10 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã«ã‚·ãƒ³ãƒ€ãƒªãƒ³éŠ˜ã‚’ã¤ã‘ã‚‹ç¢ºç‡ */
+#define TABLE_NAME      20 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã«æ¼¢å­—éŠ˜ã‚’ã¤ã‘ã‚‹ç¢ºç‡(æ­£ç¢ºã«ã¯ TABLE_NAME - SINDARIN_NAME %)ã¨ãªã‚‹ */
+#define A_CURSED        13 /*!< 1/nã®ç¢ºç‡ã§ç”Ÿæˆã®å·»ç‰©ä»¥å¤–ã®ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãŒå‘ªã„ã¤ãã«ãªã‚‹ã€‚ */
+#define WEIRD_LUCK      12 /*!< 1/nã®ç¢ºç‡ã§random_resistance()ã®å‡¦ç†ä¸­ãƒã‚¤ã‚¢ã‚¹å¤–ã®è€æ€§ãŒã¤ãã€create_artifactã§4ã‚’è¶…ãˆã‚‹pvalãŒè¨±å¯ã•ã‚Œã‚‹ã€‚*/
+#define BIAS_LUCK       20 /*!< 1/nã®ç¢ºç‡ã§random_resistance()ã§ä»˜åŠ ã™ã‚‹å…ƒç´ è€æ€§ãŒå…ç–«ã«ãªã‚‹ */
+#define IM_LUCK         7 /*!< 1/nã®ç¢ºç‡ã§random_resistance()ã§è¤‡æ•°å…ç–«ã®é™¤å»å‡¦ç†ãŒå…é™¤ã•ã‚Œã‚‹ */
 
 /*! @note
  * Bias luck needs to be higher than weird luck,
  * since it is usually tested several times...
  */
 
-#define ACTIVATION_CHANCE 3 /*!< 1/n¤Î³ÎÎ¨¤Ç¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤ËÈ¯Æ°¤¬ÉÕ²Ã¤µ¤ì¤ë¡£¤¿¤À¤·ËÉ¶ñ¤Ï¤µ¤é¤Ë1/2 */
+#define ACTIVATION_CHANCE 3 /*!< 1/nã®ç¢ºç‡ã§ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã«ç™ºå‹•ãŒä»˜åŠ ã•ã‚Œã‚‹ã€‚ãŸã ã—é˜²å…·ã¯ã•ã‚‰ã«1/2 */
 
 
 /*!
- * ¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Î¥Ğ¥¤¥¢¥¹ID¤òÊİ´É¤¹¤ë¡£ / Use for biased artifact creation
+ * ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã®ãƒã‚¤ã‚¢ã‚¹IDã‚’ä¿ç®¡ã™ã‚‹ã€‚ / Use for biased artifact creation
  */
 static int artifact_bias;
 
 
 /*!
- * @brief ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ë¥é¥ó¥À¥à¤ÊÇ½ÎÏ°İ»ı¤ò°ì¤ÄÉÕ²Ã¤¹¤ë¡£/ Choose one random sustain
- * @details ½ÅÊ£¤ÎÍŞ»ß¤Ï¤Ê¤¤¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãƒ©ãƒ³ãƒ€ãƒ ãªèƒ½åŠ›ç¶­æŒã‚’ä¸€ã¤ä»˜åŠ ã™ã‚‹ã€‚/ Choose one random sustain
+ * @details é‡è¤‡ã®æŠ‘æ­¢ã¯ãªã„ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void one_sustain(object_type *o_ptr)
 {
@@ -56,10 +56,10 @@ void one_sustain(object_type *o_ptr)
 
 
 /*!
- * @brief ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ë¥é¥ó¥À¥à¤Ê¾å°ÌÂÑÀ­¤ò°ì¤ÄÉÕ²Ã¤¹¤ë¡£/ Choose one random high resistance
- * @details ½ÅÊ£¤ÎÍŞ»ß¤Ï¤Ê¤¤¡£¸õÊä¤ÏÆÇ¡¢Á®¸÷¡¢°Å¹õ¡¢ÇËÊÒ¡¢ÌÕÌÜ¡¢º®Íğ¡¢ÃÏ¹ö¡¢°ø²Ìº®Íğ¡¢¥«¥ª¥¹¡¢Îô²½¡¢¶²Éİ¤Î¤¤¤º¤ì¤«¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãƒ©ãƒ³ãƒ€ãƒ ãªä¸Šä½è€æ€§ã‚’ä¸€ã¤ä»˜åŠ ã™ã‚‹ã€‚/ Choose one random high resistance
+ * @details é‡è¤‡ã®æŠ‘æ­¢ã¯ãªã„ã€‚å€™è£œã¯æ¯’ã€é–ƒå…‰ã€æš—é»’ã€ç ´ç‰‡ã€ç›²ç›®ã€æ··ä¹±ã€åœ°ç„ã€å› æœæ··ä¹±ã€ã‚«ã‚ªã‚¹ã€åŠ£åŒ–ã€ææ€–ã®ã„ãšã‚Œã‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void one_high_resistance(object_type *o_ptr)
 {
@@ -81,12 +81,12 @@ void one_high_resistance(object_type *o_ptr)
 }
 
 /*!
- * @brief ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ë²¦¼Ô¤Î»ØÎØ¸ş¤±¤Î¾å°ÌÂÑÀ­¤ò°ì¤ÄÉÕ²Ã¤¹¤ë¡£/ Choose one random high resistance
- * @details ¸õÊä¤ÏÁ®¸÷¡¢°Å¹õ¡¢ÇËÊÒ¡¢ÌÕÌÜ¡¢º®Íğ¡¢ÃÏ¹ö¡¢°ø²Ìº®Íğ¡¢¥«¥ª¥¹¡¢¶²Éİ¤Ç¤¢¤ê
- * ²¦¼Ô¤Î»ØÎØ¤Ë¤¢¤é¤«¤¸¤á¤Ä¤¤¤Æ¤¤¤ëÂÑÀ­¤òone_high_resistance()¤«¤é½ü³°¤·¤¿¤â¤Î¤Ç¤¢¤ë¡£
- * ¥é¥ó¥À¥àÉÕ²Ã¤½¤Î¤â¤Î¤Ë½ÅÊ£¤ÎÍŞ»ß¤Ï¤Ê¤¤¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ç‹è€…ã®æŒ‡è¼ªå‘ã‘ã®ä¸Šä½è€æ€§ã‚’ä¸€ã¤ä»˜åŠ ã™ã‚‹ã€‚/ Choose one random high resistance
+ * @details å€™è£œã¯é–ƒå…‰ã€æš—é»’ã€ç ´ç‰‡ã€ç›²ç›®ã€æ··ä¹±ã€åœ°ç„ã€å› æœæ··ä¹±ã€ã‚«ã‚ªã‚¹ã€ææ€–ã§ã‚ã‚Š
+ * ç‹è€…ã®æŒ‡è¼ªã«ã‚ã‚‰ã‹ã˜ã‚ã¤ã„ã¦ã„ã‚‹è€æ€§ã‚’one_high_resistance()ã‹ã‚‰é™¤å¤–ã—ãŸã‚‚ã®ã§ã‚ã‚‹ã€‚
+ * ãƒ©ãƒ³ãƒ€ãƒ ä»˜åŠ ãã®ã‚‚ã®ã«é‡è¤‡ã®æŠ‘æ­¢ã¯ãªã„ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void one_lordly_high_resistance(object_type *o_ptr)
 {
@@ -106,10 +106,10 @@ void one_lordly_high_resistance(object_type *o_ptr)
 }
 
 /*!
- * @brief ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ë¸µÁÇÂÑÀ­¤ò°ì¤ÄÉÕ²Ã¤¹¤ë¡£/ Choose one random element resistance
- * @details ¸õÊä¤Ï²Ğ±ê¡¢Îäµ¤¡¢ÅÅ·â¡¢»À¤Î¤¤¤º¤ì¤«¤Ç¤¢¤ê¡¢½ÅÊ£¤ÎÍŞ»ß¤Ï¤Ê¤¤¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å…ƒç´ è€æ€§ã‚’ä¸€ã¤ä»˜åŠ ã™ã‚‹ã€‚/ Choose one random element resistance
+ * @details å€™è£œã¯ç«ç‚ã€å†·æ°—ã€é›»æ’ƒã€é…¸ã®ã„ãšã‚Œã‹ã§ã‚ã‚Šã€é‡è¤‡ã®æŠ‘æ­¢ã¯ãªã„ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void one_ele_resistance(object_type *o_ptr)
 {
@@ -123,10 +123,10 @@ void one_ele_resistance(object_type *o_ptr)
 }
 
 /*!
- * @brief ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ë¥É¥é¥´¥óÁõÈ÷¸ş¤±¸µÁÇÂÑÀ­¤ò°ì¤ÄÉÕ²Ã¤¹¤ë¡£/ Choose one random element or poison resistance
- * @details ¸õÊä¤Ï1/7¤Î³ÎÎ¨¤ÇÆÇ¡¢6/7¤Î³ÎÎ¨¤Ç²Ğ±ê¡¢Îäµ¤¡¢ÅÅ·â¡¢»À¤Î¤¤¤º¤ì¤«(one_ele_resistance()¤Î¥³¡¼¥ë)¤Ç¤¢¤ê¡¢½ÅÊ£¤ÎÍŞ»ß¤Ï¤Ê¤¤¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãƒ‰ãƒ©ã‚´ãƒ³è£…å‚™å‘ã‘å…ƒç´ è€æ€§ã‚’ä¸€ã¤ä»˜åŠ ã™ã‚‹ã€‚/ Choose one random element or poison resistance
+ * @details å€™è£œã¯1/7ã®ç¢ºç‡ã§æ¯’ã€6/7ã®ç¢ºç‡ã§ç«ç‚ã€å†·æ°—ã€é›»æ’ƒã€é…¸ã®ã„ãšã‚Œã‹(one_ele_resistance()ã®ã‚³ãƒ¼ãƒ«)ã§ã‚ã‚Šã€é‡è¤‡ã®æŠ‘æ­¢ã¯ãªã„ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void one_dragon_ele_resistance(object_type *o_ptr)
 {
@@ -141,11 +141,11 @@ void one_dragon_ele_resistance(object_type *o_ptr)
 }
 
 /*!
- * @brief ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ë¼å¤¤ESP¤ò°ì¤ÄÉÕ²Ã¤¹¤ë¡£/ Choose one lower rank esp
- * @details ¸õÊä¤ÏÆ°Êª¡¢¥¢¥ó¥Ç¥Ã¥É¡¢°­Ëâ¡¢¥ª¡¼¥¯¡¢¥È¥í¥ë¡¢µğ¿Í¡¢
- * ¥É¥é¥´¥ó¡¢¿Í´Ö¡¢Á±ÎÉ¡¢¥æ¥Ë¡¼¥¯ESP¤Î¤¤¤º¤ì¤«¤Ç¤¢¤ê¡¢½ÅÊ£¤ÎÍŞ»ß¤Ï¤Ê¤¤¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¼±ã„ESPã‚’ä¸€ã¤ä»˜åŠ ã™ã‚‹ã€‚/ Choose one lower rank esp
+ * @details å€™è£œã¯å‹•ç‰©ã€ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã€æ‚ªé­”ã€ã‚ªãƒ¼ã‚¯ã€ãƒˆãƒ­ãƒ«ã€å·¨äººã€
+ * ãƒ‰ãƒ©ã‚´ãƒ³ã€äººé–“ã€å–„è‰¯ã€ãƒ¦ãƒ‹ãƒ¼ã‚¯ESPã®ã„ãšã‚Œã‹ã§ã‚ã‚Šã€é‡è¤‡ã®æŠ‘æ­¢ã¯ãªã„ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void one_low_esp(object_type *o_ptr)
 {
@@ -166,11 +166,11 @@ void one_low_esp(object_type *o_ptr)
 
 
 /*!
- * @brief ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ËÂÑÀ­¤ò°ì¤ÄÉÕ²Ã¤¹¤ë¡£/ Choose one random resistance
- * @details 1/3¤Ç¸µÁÇÂÑÀ­(one_ele_resistance())¡¢2/3¤Ç¾å°ÌÂÑÀ­(one_high_resistance)
- * ¤ò¥³¡¼¥ë¤¹¤ë¡£½ÅÊ£¤ÎÍŞ»ß¤Ï¤Ê¤¤¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è€æ€§ã‚’ä¸€ã¤ä»˜åŠ ã™ã‚‹ã€‚/ Choose one random resistance
+ * @details 1/3ã§å…ƒç´ è€æ€§(one_ele_resistance())ã€2/3ã§ä¸Šä½è€æ€§(one_high_resistance)
+ * ã‚’ã‚³ãƒ¼ãƒ«ã™ã‚‹ã€‚é‡è¤‡ã®æŠ‘æ­¢ã¯ãªã„ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void one_resistance(object_type *o_ptr)
 {
@@ -186,11 +186,11 @@ void one_resistance(object_type *o_ptr)
 
 
 /*!
- * @brief ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ËÇ½ÎÏ¤ò°ì¤ÄÉÕ²Ã¤¹¤ë¡£/ Choose one random ability
- * @details ¸õÊä¤ÏÉâÍ·¡¢±Êµ×¸÷¸»+1¡¢Æ©ÌÀ»ë¡¢·Ù¹ğ¡¢ÃÙ¾Ã²½¡¢µŞ²óÉü¡¢ËãáãÃÎ¤é¤º¡¢·Ğ¸³ÃÍ°İ»ı¤Î¤¤¤º¤ì¤«¡£
- * ½ÅÊ£¤ÎÍŞ»ß¤Ï¤Ê¤¤¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«èƒ½åŠ›ã‚’ä¸€ã¤ä»˜åŠ ã™ã‚‹ã€‚/ Choose one random ability
+ * @details å€™è£œã¯æµ®éŠã€æ°¸ä¹…å…‰æº+1ã€é€æ˜è¦–ã€è­¦å‘Šã€é…æ¶ˆåŒ–ã€æ€¥å›å¾©ã€éº»ç—ºçŸ¥ã‚‰ãšã€çµŒé¨“å€¤ç¶­æŒã®ã„ãšã‚Œã‹ã€‚
+ * é‡è¤‡ã®æŠ‘æ­¢ã¯ãªã„ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void one_ability(object_type *o_ptr)
 {
@@ -212,11 +212,11 @@ void one_ability(object_type *o_ptr)
 }
 
 /*!
- * @brief ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ËÈ¯Æ°¤ò°ì¤ÄÉÕ²Ã¤¹¤ë¡£/ Choose one random activation
- * @details ¸õÊäÂ¿¿ô¡£¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Î¥Ğ¥¤¥¢¥¹¤Ë¤Ï°ìÀÚ°ÍÂ¸¤»¤º¡¢
- * while¥ë¡¼¥×¤Ë¤è¤ë¹½Â¤¤ÇÇ½ÎÏÅª¤Ë¶¯ÎÏ¤Ê¤â¤Î¤Û¤É³ÎÎ¨¤òÍî¤È¤·¤Æ¤¤¤ë¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ç™ºå‹•ã‚’ä¸€ã¤ä»˜åŠ ã™ã‚‹ã€‚/ Choose one random activation
+ * @details å€™è£œå¤šæ•°ã€‚ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã®ãƒã‚¤ã‚¢ã‚¹ã«ã¯ä¸€åˆ‡ä¾å­˜ã›ãšã€
+ * whileãƒ«ãƒ¼ãƒ—ã«ã‚ˆã‚‹æ§‹é€ ã§èƒ½åŠ›çš„ã«å¼·åŠ›ãªã‚‚ã®ã»ã©ç¢ºç‡ã‚’è½ã¨ã—ã¦ã„ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void one_activation(object_type *o_ptr)
 {
@@ -333,13 +333,13 @@ void one_activation(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®Ãæ¡¢ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ò¼ö¤¤¤Î¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Ë¤¹¤ë·Ğ²á½èÍı¡£/ generation process of cursed artifact.
- * @details pval¡¢AC¡¢Ì¿Ãæ¡¢¥À¥á¡¼¥¸¤¬Àµ¤Î¾ì¹ç¡¢Éä¹æÈ¿Å¾¤Î¾å1d4¤À¤±°­²½¤µ¤»¡¢½Å¤¤¼ö¤¤¡¢¼ö¤¤¥Õ¥é¥°¤òÉ¬¤ºÉÕ²Ã¡£
- * ½ËÊ¡¤òÌµ¸ú¡£³ÎÎ¨¤Ë±ş¤¸¤Æ¡¢±Ê±ó¤Î¼ö¤¤¡¢ÂÀ¸Å¤Î±åÇ°¡¢·Ğ¸³ÃÍµÛ¼ı¡¢¼å¤¤¼ö¤¤¤Î·ÑÂ³ÅªÉÕ²Ã¡¢¶¯¤¤¼ö¤¤¤Î·ÑÂ³ÅªÉÕ²Ã¡¢HPµÛ¼ı¤Î¼ö¤¤¡¢
- * MPµÛ¼ı¤Î¼ö¤¤¡¢Íğ¥Æ¥ì¥İ¡¼¥È¡¢È¿¥Æ¥ì¥İ¡¼¥È¡¢È¿ËâË¡¤ò¤Ä¤±¤ë¡£
- * @attention ¥×¥ì¥¤¥ä¡¼¤Î¿¦¶È°ÍÂ¸½èÍı¤¢¤ê¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆä¸­ã€å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‘ªã„ã®ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã«ã™ã‚‹çµŒéå‡¦ç†ã€‚/ generation process of cursed artifact.
+ * @details pvalã€ACã€å‘½ä¸­ã€ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒæ­£ã®å ´åˆã€ç¬¦å·åè»¢ã®ä¸Š1d4ã ã‘æ‚ªåŒ–ã•ã›ã€é‡ã„å‘ªã„ã€å‘ªã„ãƒ•ãƒ©ã‚°ã‚’å¿…ãšä»˜åŠ ã€‚
+ * ç¥ç¦ã‚’ç„¡åŠ¹ã€‚ç¢ºç‡ã«å¿œã˜ã¦ã€æ°¸é ã®å‘ªã„ã€å¤ªå¤ã®æ€¨å¿µã€çµŒé¨“å€¤å¸åã€å¼±ã„å‘ªã„ã®ç¶™ç¶šçš„ä»˜åŠ ã€å¼·ã„å‘ªã„ã®ç¶™ç¶šçš„ä»˜åŠ ã€HPå¸åã®å‘ªã„ã€
+ * MPå¸åã®å‘ªã„ã€ä¹±ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã€åãƒ†ãƒ¬ãƒãƒ¼ãƒˆã€åé­”æ³•ã‚’ã¤ã‘ã‚‹ã€‚
+ * @attention ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è·æ¥­ä¾å­˜å‡¦ç†ã‚ã‚Šã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void curse_artifact(object_type * o_ptr)
 {
@@ -367,12 +367,12 @@ static void curse_artifact(object_type * o_ptr)
 }
 
 /*!
- * @brief ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®Ãæ¡¢ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ËpvalÇ½ÎÏ¤òÉÕ²Ã¤¹¤ë¡£/ Add one pval on generation of randam artifact.
- * @details Í¥ÀèÅª¤ËÉÕ²Ã¤µ¤ì¤ëpval¤¬¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹¤Ë°ÍÂ¸¤·¤ÆÂ¸ºß¤¹¤ë¡£
- * ¸¶Â§Åª¸õÊä¤ÏÏÓÎÏ¡¢ÃÎÎÏ¡¢¸­¤µ¡¢´ïÍÑ¤µ¡¢ÂÑµ×¡¢Ì¥ÎÏ¡¢Ãµº÷¡¢±£Ì©¡¢ÀÖ³°Àş»ëÎÏ¡¢²ÃÂ®¡£Éğ´ï¤Î¤ßºÎ·¡¡¢ÄÉ²Ã¹¶·â¤â¸õÊä¤ËÆş¤ë¡£
- * @attention ¥ª¥Ö¥¸¥§¥¯¥È¤Îtval¡¢sval¤Ë°ÍÂ¸¤·¤¿¥Ï¡¼¥É¥³¡¼¥Ç¥£¥ó¥°½èÍı¤¬¤¢¤ë¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆä¸­ã€å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«pvalèƒ½åŠ›ã‚’ä»˜åŠ ã™ã‚‹ã€‚/ Add one pval on generation of randam artifact.
+ * @details å„ªå…ˆçš„ã«ä»˜åŠ ã•ã‚Œã‚‹pvalãŒãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹ã«ä¾å­˜ã—ã¦å­˜åœ¨ã™ã‚‹ã€‚
+ * åŸå‰‡çš„å€™è£œã¯è…•åŠ›ã€çŸ¥åŠ›ã€è³¢ã•ã€å™¨ç”¨ã•ã€è€ä¹…ã€é­…åŠ›ã€æ¢ç´¢ã€éš å¯†ã€èµ¤å¤–ç·šè¦–åŠ›ã€åŠ é€Ÿã€‚æ­¦å™¨ã®ã¿æ¡æ˜ã€è¿½åŠ æ”»æ’ƒã‚‚å€™è£œã«å…¥ã‚‹ã€‚
+ * @attention ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®tvalã€svalã«ä¾å­˜ã—ãŸãƒãƒ¼ãƒ‰ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°å‡¦ç†ãŒã‚ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void random_plus(object_type * o_ptr)
 {
@@ -588,14 +588,14 @@ static void random_plus(object_type * o_ptr)
 }
 
 /*!
- * @brief ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®Ãæ¡¢ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ËÂÑÀ­¤òÉÕ²Ã¤¹¤ë¡£/ Add one resistance on generation of randam artifact.
- * @details Í¥ÀèÅª¤ËÉÕ²Ã¤µ¤ì¤ëÂÑÀ­¤¬¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹¤Ë°ÍÂ¸¤·¤ÆÂ¸ºß¤¹¤ë¡£
- * ¸¶Â§Åª¸õÊä¤Ï²Ğ±ê¡¢Îäµ¤¡¢ÅÅ·â¡¢»À¡Ê°Ê¾åÌÈ±Ö¤Î²ÄÇ½À­¤â¤¢¤ê¡Ë¡¢
- * ÆÇ¡¢Á®¸÷¡¢°Å¹õ¡¢ÇËÊÒ¡¢¹ì²»¡¢ÌÕÌÜ¡¢º®Íğ¡¢ÃÏ¹ö¡¢¥«¥ª¥¹¡¢Îô²½¡¢¶²Éİ¡¢²Ğ¥ª¡¼¥é¡¢Îäµ¤¥ª¡¼¥é¡¢ÅÅ·â¥ª¡¼¥é¡¢È¿¼Í¡£
- * Àï»Î·Ï¥Ğ¥¤¥¢¥¹¤Î¤ßÈ¿Ëâ¤â¤Ä¤¯¡£
- * @attention ¥ª¥Ö¥¸¥§¥¯¥È¤Îtval¡¢sval¤Ë°ÍÂ¸¤·¤¿¥Ï¡¼¥É¥³¡¼¥Ç¥£¥ó¥°½èÍı¤¬¤¢¤ë¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆä¸­ã€å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è€æ€§ã‚’ä»˜åŠ ã™ã‚‹ã€‚/ Add one resistance on generation of randam artifact.
+ * @details å„ªå…ˆçš„ã«ä»˜åŠ ã•ã‚Œã‚‹è€æ€§ãŒãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹ã«ä¾å­˜ã—ã¦å­˜åœ¨ã™ã‚‹ã€‚
+ * åŸå‰‡çš„å€™è£œã¯ç«ç‚ã€å†·æ°—ã€é›»æ’ƒã€é…¸ï¼ˆä»¥ä¸Šå…ç–«ã®å¯èƒ½æ€§ã‚‚ã‚ã‚Šï¼‰ã€
+ * æ¯’ã€é–ƒå…‰ã€æš—é»’ã€ç ´ç‰‡ã€è½ŸéŸ³ã€ç›²ç›®ã€æ··ä¹±ã€åœ°ç„ã€ã‚«ã‚ªã‚¹ã€åŠ£åŒ–ã€ææ€–ã€ç«ã‚ªãƒ¼ãƒ©ã€å†·æ°—ã‚ªãƒ¼ãƒ©ã€é›»æ’ƒã‚ªãƒ¼ãƒ©ã€åå°„ã€‚
+ * æˆ¦å£«ç³»ãƒã‚¤ã‚¢ã‚¹ã®ã¿åé­”ã‚‚ã¤ãã€‚
+ * @attention ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®tvalã€svalã«ä¾å­˜ã—ãŸãƒãƒ¼ãƒ‰ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°å‡¦ç†ãŒã‚ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void random_resistance(object_type * o_ptr)
 {
@@ -923,13 +923,13 @@ static void random_resistance(object_type * o_ptr)
 
 
 /*!
- * @brief ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®Ãæ¡¢ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ë¤½¤ÎÂ¾ÆÃÀ­¤òÉÕ²Ã¤¹¤ë¡£/ Add one misc flag on generation of randam artifact.
- * @details Í¥ÀèÅª¤ËÉÕ²Ã¤µ¤ì¤ëÂÑÀ­¤¬¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹¤Ë°ÍÂ¸¤·¤ÆÂ¸ºß¤¹¤ë¡£
- * ¸¶Â§Åª¸õÊä¤Ï³Æ¼ïÇ½ÎÏ°İ»ı¡¢±Êµ×¸÷¸»+1¡¢ËãáãÃÎ¤é¤º¡¢·Ğ¸³ÃÍ°İ»ı¡¢ÉâÍ·¡¢Æ©ÌÀ»ë¡¢µŞ²óÉü¡¢ÃÙ¾Ã²½¡¢
- * Íğ¥Æ¥ì¥İ¡¼¥È¡¢È¿ËâË¡¡¢È¿¥Æ¥ì¥İ¡¼¥È¡¢·Ù¹ğ¡¢¥Æ¥ì¥Ñ¥·¡¼¡¢³Æ¼ïESP¡¢°ìÉôÁõÈ÷¤Ë»¦Ù¤½¤Àµ¡£
- * @attention ¥ª¥Ö¥¸¥§¥¯¥È¤Îtval¡¢sval¤Ë°ÍÂ¸¤·¤¿¥Ï¡¼¥É¥³¡¼¥Ç¥£¥ó¥°½èÍı¤¬¤¢¤ë¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆä¸­ã€å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãã®ä»–ç‰¹æ€§ã‚’ä»˜åŠ ã™ã‚‹ã€‚/ Add one misc flag on generation of randam artifact.
+ * @details å„ªå…ˆçš„ã«ä»˜åŠ ã•ã‚Œã‚‹è€æ€§ãŒãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹ã«ä¾å­˜ã—ã¦å­˜åœ¨ã™ã‚‹ã€‚
+ * åŸå‰‡çš„å€™è£œã¯å„ç¨®èƒ½åŠ›ç¶­æŒã€æ°¸ä¹…å…‰æº+1ã€éº»ç—ºçŸ¥ã‚‰ãšã€çµŒé¨“å€¤ç¶­æŒã€æµ®éŠã€é€æ˜è¦–ã€æ€¥å›å¾©ã€é…æ¶ˆåŒ–ã€
+ * ä¹±ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã€åé­”æ³•ã€åãƒ†ãƒ¬ãƒãƒ¼ãƒˆã€è­¦å‘Šã€ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼ã€å„ç¨®ESPã€ä¸€éƒ¨è£…å‚™ã«æ®ºæˆ®ä¿®æ­£ã€‚
+ * @attention ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®tvalã€svalã«ä¾å­˜ã—ãŸãƒãƒ¼ãƒ‰ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°å‡¦ç†ãŒã‚ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void random_misc(object_type * o_ptr)
 {
@@ -1195,14 +1195,14 @@ static void random_misc(object_type * o_ptr)
 }
 
 /*!
- * @brief ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®Ãæ¡¢ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ë¥¹¥ì¥¤¸ú²Ì¤òÉÕ²Ã¤¹¤ë¡£/ Add one slaying on generation of randam artifact.
- * @details Í¥ÀèÅª¤ËÉÕ²Ã¤µ¤ì¤ëÂÑÀ­¤¬¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹¤Ë°ÍÂ¸¤·¤ÆÂ¸ºß¤¹¤ë¡£
- * ¸¶Â§Åª¸õÊä¤Ï¶¯ÎÏ¼Í¡¢¹âÂ®¼Í¡¢º®ÆÙ¸ú²Ì¡¢µÛ·ì¸ú²Ì¡¢½ËÊ¡¡¢ÅêÚ³¤·¤ä¤¹¤¤¡¢¾Æ´ş¡¢Åà·ë¡¢ÅÅ·â¡¢ÍÏ²ò¡¢ÆÇ»¦¡¢
- * Æ°Êª¥¹¥ì¥¤¡¢¼Ù°­¥¹¥ì¥¤¡¢°­Ëâ¥¹¥ì¥¤¡¢ÉÔ»à¥¹¥ì¥¤¡¢¥ª¡¼¥¯¥¹¥ì¥¤¡¢¥È¥í¥ë¥¹¥ì¥¤¡¢µğ¿Í¥¹¥ì¥¤¡¢¥É¥é¥´¥ó¥¹¥ì¥¤¡¢
- * *¥É¥é¥´¥ó¥¹¥ì¥¤*¡¢¿Í´Ö¥¹¥ì¥¤¡¢ÀÚ¤ìÌ£¡¢ÃÏ¿Ì¡¢ÍıÎÏ¡£
- * @attention ¥ª¥Ö¥¸¥§¥¯¥È¤Îtval¡¢sval¤Ë°ÍÂ¸¤·¤¿¥Ï¡¼¥É¥³¡¼¥Ç¥£¥ó¥°½èÍı¤¬¤¢¤ë¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆä¸­ã€å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚¹ãƒ¬ã‚¤åŠ¹æœã‚’ä»˜åŠ ã™ã‚‹ã€‚/ Add one slaying on generation of randam artifact.
+ * @details å„ªå…ˆçš„ã«ä»˜åŠ ã•ã‚Œã‚‹è€æ€§ãŒãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹ã«ä¾å­˜ã—ã¦å­˜åœ¨ã™ã‚‹ã€‚
+ * åŸå‰‡çš„å€™è£œã¯å¼·åŠ›å°„ã€é«˜é€Ÿå°„ã€æ··æ²ŒåŠ¹æœã€å¸è¡€åŠ¹æœã€ç¥ç¦ã€æŠ•æ“²ã—ã‚„ã™ã„ã€ç„¼æ£„ã€å‡çµã€é›»æ’ƒã€æº¶è§£ã€æ¯’æ®ºã€
+ * å‹•ç‰©ã‚¹ãƒ¬ã‚¤ã€é‚ªæ‚ªã‚¹ãƒ¬ã‚¤ã€æ‚ªé­”ã‚¹ãƒ¬ã‚¤ã€ä¸æ­»ã‚¹ãƒ¬ã‚¤ã€ã‚ªãƒ¼ã‚¯ã‚¹ãƒ¬ã‚¤ã€ãƒˆãƒ­ãƒ«ã‚¹ãƒ¬ã‚¤ã€å·¨äººã‚¹ãƒ¬ã‚¤ã€ãƒ‰ãƒ©ã‚´ãƒ³ã‚¹ãƒ¬ã‚¤ã€
+ * *ãƒ‰ãƒ©ã‚´ãƒ³ã‚¹ãƒ¬ã‚¤*ã€äººé–“ã‚¹ãƒ¬ã‚¤ã€åˆ‡ã‚Œå‘³ã€åœ°éœ‡ã€ç†åŠ›ã€‚
+ * @attention ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®tvalã€svalã«ä¾å­˜ã—ãŸãƒãƒ¼ãƒ‰ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°å‡¦ç†ãŒã‚ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void random_slay(object_type *o_ptr)
 {
@@ -1459,10 +1459,10 @@ static void random_slay(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®Ãæ¡¢ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ë¥Ğ¥¤¥¢¥¹¤Ë°ÍÂ¸¤·¤¿È¯Æ°¤òÍ¿¤¨¤ë¡£/ Add one activaton of randam artifact depend on bias.
- * @details ¥Ğ¥¤¥¢¥¹¤¬Ìµ¤¤¾ì¹ç¡¢°ìÉô¤Î¥Ğ¥¤¥¢¥¹¤Î³ÎÎ¨¤Ë¤è¤Ã¤Æ¤Ï one_ability() ¤Ë½èÍı¤¬°Ü¹Ô¤¹¤ë¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆä¸­ã€å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãƒã‚¤ã‚¢ã‚¹ã«ä¾å­˜ã—ãŸç™ºå‹•ã‚’ä¸ãˆã‚‹ã€‚/ Add one activaton of randam artifact depend on bias.
+ * @details ãƒã‚¤ã‚¢ã‚¹ãŒç„¡ã„å ´åˆã€ä¸€éƒ¨ã®ãƒã‚¤ã‚¢ã‚¹ã®ç¢ºç‡ã«ã‚ˆã£ã¦ã¯ one_ability() ã«å‡¦ç†ãŒç§»è¡Œã™ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void give_activation_power(object_type *o_ptr)
 {
@@ -1644,12 +1644,12 @@ static void give_activation_power(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®Ãæ¡¢ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ËÌ¾Á°¤òÍ¿¤¨¤ë¡£/ Set name of randomartifact.
- * @details ³ÎÎ¨¤Ë¤è¤Ã¤Æ¡¢¥·¥ó¥À¥ê¥óÌÃ¡¢´Á»úÌÃ¡¢¸ÇÄêÌ¾¤Î¤¤¤º¤ì¤«°ì¤Ä¤¬Í¿¤¨¤é¤ì¤ë¡£
- * @param return_name Ì¾Á°¤òÊÖ¤¹¤¿¤á¤ÎÊ¸»úÎó»²¾È¥İ¥¤¥ó¥¿
- * @param armour ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤¬ËÉ¶ñ¤¬Èİ¤«
- * @param power ÌÃ¤Î´ğ½à¤È¤Ê¤ë¥ª¥Ö¥¸¥§¥¯¥È¤Î²ÁÃÍ¥ì¥Ù¥ë(0=¼ö¤¤¡¢1=Äã°Ì¡¢2=Ãæ°Ì¡¢3°Ê¾å=¹â°Ì)
- * @return ¤Ê¤·
+ * @brief ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆä¸­ã€å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«åå‰ã‚’ä¸ãˆã‚‹ã€‚/ Set name of randomartifact.
+ * @details ç¢ºç‡ã«ã‚ˆã£ã¦ã€ã‚·ãƒ³ãƒ€ãƒªãƒ³éŠ˜ã€æ¼¢å­—éŠ˜ã€å›ºå®šåã®ã„ãšã‚Œã‹ä¸€ã¤ãŒä¸ãˆã‚‰ã‚Œã‚‹ã€‚
+ * @param return_name åå‰ã‚’è¿”ã™ãŸã‚ã®æ–‡å­—åˆ—å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param armour å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé˜²å…·ãŒå¦ã‹
+ * @param power éŠ˜ã®åŸºæº–ã¨ãªã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä¾¡å€¤ãƒ¬ãƒ™ãƒ«(0=å‘ªã„ã€1=ä½ä½ã€2=ä¸­ä½ã€3ä»¥ä¸Š=é«˜ä½)
+ * @return ãªã—
  */
 static void get_random_name(char *return_name, bool armour, int power)
 {
@@ -1742,11 +1742,11 @@ static void get_random_name(char *return_name, bool armour, int power)
 }
 
 /*!
- * @brief ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®¤Î¥á¥¤¥ó¥ë¡¼¥Á¥ó
- * @details ´û¤ËÀ¸À®¤¬ºÑ¤ó¤Ç¤¤¤ë¥ª¥Ö¥¸¥§¥¯¥È¤Î¹½Â¤ÂÎ¤ò¡¢¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤È¤·¤Æ¶¯²½¤¹¤ë¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @param a_scroll ¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®¤Î´¬Êª¾å¤Î½èÍı¡£¼ö¤¤¤Î¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤¬À¸À®ÂĞ¾İ³°¤È¤Ê¤ë¡£
- * @return ¾ï¤ËTRUE(1)¤òÊÖ¤¹
+ * @brief ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
+ * @details æ—¢ã«ç”ŸæˆãŒæ¸ˆã‚“ã§ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“ã‚’ã€ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã¨ã—ã¦å¼·åŒ–ã™ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @param a_scroll ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆã®å·»ç‰©ä¸Šã®å‡¦ç†ã€‚å‘ªã„ã®ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãŒç”Ÿæˆå¯¾è±¡å¤–ã¨ãªã‚‹ã€‚
+ * @return å¸¸ã«TRUE(1)ã‚’è¿”ã™
  */
 bool create_artifact(object_type *o_ptr, bool a_scroll)
 {
@@ -2025,7 +2025,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	{
 		char dummy_name[80] = "";
 #ifdef JP
-		cptr ask_msg = "¤³¤Î¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤ò²¿¤ÈÌ¾ÉÕ¤±¤Ş¤¹¤«¡©";
+		cptr ask_msg = "ã“ã®ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã‚’ä½•ã¨åä»˜ã‘ã¾ã™ã‹ï¼Ÿ";
 #else
 		cptr ask_msg = "What do you want to call the artifact? ";
 #endif
@@ -2057,7 +2057,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		}
 
 #ifdef JP
-		sprintf(new_name, "¡Ô%s¡Õ", dummy_name);
+		sprintf(new_name, "ã€Š%sã€‹", dummy_name);
 #else
 		sprintf(new_name, "'%s'", dummy_name);
 #endif
@@ -2087,7 +2087,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
-		msg_format("¥Ñ¥ï¡¼ %d ¤Ç ²ÁÃÍ%ld ¤Î¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À® ¥Ğ¥¤¥¢¥¹¤Ï¡Ö%s¡×:", max_powers, total_flags, artifact_bias_name[artifact_bias]);
+		msg_format("ãƒ‘ãƒ¯ãƒ¼ %d ã§ ä¾¡å€¤%ld ã®ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆ ãƒã‚¤ã‚¢ã‚¹ã¯ã€Œ%sã€:", max_powers, total_flags, artifact_bias_name[artifact_bias]);
 #else
 		msg_format("Random artifact generated '%s'. (Power:%d, Value:%ld) :", artifact_bias_name[artifact_bias], max_powers, total_flags);
 #endif
@@ -2101,11 +2101,11 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 }
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤«¤éÇ½ÎÏÈ¯Æ°ID¤ò¼èÆÀ¤¹¤ë¡£
- * @details ¤¤¤¯¤Ä¤«¤Î¥±¡¼¥¹¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ëÈ¯Æ°¸ú²Ì¤«¤é¡¢
- * ÃÃÌê»Õ¤Ë¤è¤ëÉÕÍ¿¡ä¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¡ä¥¨¥´¡ä¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¡ä¥Ù¡¼¥¹¥¢¥¤¥Æ¥à¤ÎÍ¥Àè½ç°Ì¤ÇÁöºº¤·¤Æ¤¤¤¯¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return È¯Æ°¸ú²Ì¤ÎID¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰èƒ½åŠ›ç™ºå‹•IDã‚’å–å¾—ã™ã‚‹ã€‚
+ * @details ã„ãã¤ã‹ã®ã‚±ãƒ¼ã‚¹ã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ç™ºå‹•åŠ¹æœã‹ã‚‰ã€
+ * é›å†¶å¸«ã«ã‚ˆã‚‹ä»˜ä¸ï¼å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆï¼ã‚¨ã‚´ï¼ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆï¼ãƒ™ãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ ã®å„ªå…ˆé †ä½ã§èµ°æŸ»ã—ã¦ã„ãã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ç™ºå‹•åŠ¹æœã®IDã‚’è¿”ã™
  */
 int activation_index(object_type *o_ptr)
 {
@@ -2148,10 +2148,10 @@ int activation_index(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤«¤éÈ¯Æ°¸ú²Ì¹½Â¤ÂÎ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë¡£
- * @details activation_index() ´Ø¿ô¤Î·ë²Ì¤«¤é»²¾È¤¹¤ë¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return È¯Æ°¸ú²Ì¹½Â¤ÂÎ¤Î¥İ¥¤¥ó¥¿¤òÊÖ¤¹
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰ç™ºå‹•åŠ¹æœæ§‹é€ ä½“ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ã€‚
+ * @details activation_index() é–¢æ•°ã®çµæœã‹ã‚‰å‚ç…§ã™ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ç™ºå‹•åŠ¹æœæ§‹é€ ä½“ã®ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™
  */
 const activation_type* find_activation_info(object_type *o_ptr)
 {
@@ -2169,10 +2169,10 @@ const activation_type* find_activation_info(object_type *o_ptr)
 }
 
 /*!
- * @brief È¯Æ°¤Ë¤è¤ë¥Ö¥ì¥¹¤ÎÂ°À­¤ò¥¢¥¤¥Æ¥à¤ÎÂÑÀ­¤«¤éÁªÂò¤·¡¢¼Â¹Ô¤ò½èÍı¤¹¤ë¡£/ Dragon breath activation
- * @details ÂĞ¾İ¤È¤Ê¤ëÂÑÀ­¤Ï dragonbreath_info ¥Æ¡¼¥Ö¥ë¤ò»²¾È¤Î¤³¤È¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return È¯Æ°¼Â¹Ô¤ÎÀ§Èó¤òÊÖ¤¹¡£
+ * @brief ç™ºå‹•ã«ã‚ˆã‚‹ãƒ–ãƒ¬ã‚¹ã®å±æ€§ã‚’ã‚¢ã‚¤ãƒ†ãƒ ã®è€æ€§ã‹ã‚‰é¸æŠã—ã€å®Ÿè¡Œã‚’å‡¦ç†ã™ã‚‹ã€‚/ Dragon breath activation
+ * @details å¯¾è±¡ã¨ãªã‚‹è€æ€§ã¯ dragonbreath_info ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’å‚ç…§ã®ã“ã¨ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ç™ºå‹•å®Ÿè¡Œã®æ˜¯éã‚’è¿”ã™ã€‚
  */
 static bool activate_dragon_breath(object_type *o_ptr)
 {
@@ -2203,18 +2203,18 @@ static bool activate_dragon_breath(object_type *o_ptr)
 	if (hex_spelling_any()) stop_hex_spell_all();
 
 	t = randint0(n);
-	msg_format(_("¤¢¤Ê¤¿¤Ï%s¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe %s."), name[t]);
+	msg_format(_("ã‚ãªãŸã¯%sã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe %s."), name[t]);
 	fire_ball(type[t], dir, 250, -4);
 
 	return TRUE;
 }
 
 /*!
- * @brief ¥¢¥¤¥Æ¥à¤ÎÈ¯Æ°¸ú²Ì¤ò½èÍı¤¹¤ë¡£
- * @details activate_random_artifact()¤È¤µ¤ì¤Æ¤¤¤ë¤¬¡¢¼Âºİ¤ÏÁ´È¯Æ°¤¬Åı¹ç¤µ¤ì¤¿¡£
- * @todo ÀŞ¤ò¸«¤Æ´Ø¿ôÌ¾¤ò½¤Àµ¤¹¤ë¤³¤È¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return È¯Æ°¼Â¹Ô¤ÎÀ§Èó¤òÊÖ¤¹¡£
+ * @brief ã‚¢ã‚¤ãƒ†ãƒ ã®ç™ºå‹•åŠ¹æœã‚’å‡¦ç†ã™ã‚‹ã€‚
+ * @details activate_random_artifact()ã¨ã•ã‚Œã¦ã„ã‚‹ãŒã€å®Ÿéš›ã¯å…¨ç™ºå‹•ãŒçµ±åˆã•ã‚ŒãŸã€‚
+ * @todo æŠ˜ã‚’è¦‹ã¦é–¢æ•°åã‚’ä¿®æ­£ã™ã‚‹ã“ã¨ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ç™ºå‹•å®Ÿè¡Œã®æ˜¯éã‚’è¿”ã™ã€‚
  */
 bool activate_random_artifact(object_type *o_ptr)
 {
@@ -2236,14 +2236,14 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_SUNLIGHT:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			msg_print(_("ÂÀÍÛ¸÷Àş¤¬Êü¤¿¤ì¤¿¡£", "A line of sunlight appears."));
+			msg_print(_("å¤ªé™½å…‰ç·šãŒæ”¾ãŸã‚ŒãŸã€‚", "A line of sunlight appears."));
 			(void)lite_line(dir, damroll(6, 8));
 			break;
 		}
 
 		case ACT_BO_MISS_1:
 		{
-			msg_print(_("¤½¤ì¤ÏâÁ¤·¤¤¤¯¤é¤¤¤ËÌÀ¤ë¤¯µ±¤¤¤Æ¤¤¤ë...", "It glows extremely brightly..."));
+			msg_print(_("ãã‚Œã¯çœ©ã—ã„ãã‚‰ã„ã«æ˜ã‚‹ãè¼ã„ã¦ã„ã‚‹...", "It glows extremely brightly..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_MISSILE, dir, damroll(2, 6));
 			break;
@@ -2251,7 +2251,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_POIS_1:
 		{
-			msg_print(_("¤½¤ì¤ÏÇ»ÎĞ¿§¤ËÌ®Æ°¤·¤Æ¤¤¤ë...","It throbs deep green..."));
+			msg_print(_("ãã‚Œã¯æ¿ƒç·‘è‰²ã«è„ˆå‹•ã—ã¦ã„ã‚‹...","It throbs deep green..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_POIS, dir, 12, 3);
 			break;
@@ -2259,7 +2259,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_ELEC_1:
 		{
-			msg_print(_("¤½¤ì¤Ï²Ğ²Ö¤ËÊ¤¤ï¤ì¤¿...", "It is covered in sparks..."));
+			msg_print(_("ãã‚Œã¯ç«èŠ±ã«è¦†ã‚ã‚ŒãŸ...", "It is covered in sparks..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ELEC, dir, damroll(4, 8));
 			break;
@@ -2267,7 +2267,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_ACID_1:
 		{
-			msg_print(_("¤½¤ì¤Ï»À¤ËÊ¤¤ï¤ì¤¿...","It is covered in acid..."));
+			msg_print(_("ãã‚Œã¯é…¸ã«è¦†ã‚ã‚ŒãŸ...","It is covered in acid..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ACID, dir, damroll(5, 8));
 			break;
@@ -2275,7 +2275,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_COLD_1:
 		{
-			msg_print(_("¤½¤ì¤ÏÁú¤ËÊ¤¤ï¤ì¤¿...","It is covered in frost..."));
+			msg_print(_("ãã‚Œã¯éœœã«è¦†ã‚ã‚ŒãŸ...","It is covered in frost..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_COLD, dir, damroll(6, 8));
 			break;
@@ -2283,7 +2283,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_FIRE_1:
 		{
-			msg_print(_("¤½¤ì¤Ï±ê¤ËÊ¤¤ï¤ì¤¿...","It is covered in fire..."));
+			msg_print(_("ãã‚Œã¯ç‚ã«è¦†ã‚ã‚ŒãŸ...","It is covered in fire..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_FIRE, dir, damroll(9, 8));
 			break;
@@ -2291,7 +2291,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_COLD_1:
 		{
-			msg_print(_("¤½¤ì¤ÏÁú¤ËÊ¤¤ï¤ì¤¿...","It is covered in frost..."));
+			msg_print(_("ãã‚Œã¯éœœã«è¦†ã‚ã‚ŒãŸ...","It is covered in frost..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_COLD, dir, 48, 2);
 			break;
@@ -2299,7 +2299,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_BA_COLD_2:
 		{
-			msg_print(_("¤½¤ì¤ÏÀÄ¤¯·ã¤·¤¯µ±¤¤¤¿...", "It glows an intense blue..."));
+			msg_print(_("ãã‚Œã¯é’ãæ¿€ã—ãè¼ã„ãŸ...", "It glows an intense blue..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_COLD, dir, 100, 2);
 			break;
@@ -2307,7 +2307,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_BA_COLD_3:
 		{
-			msg_print(_("ÌÀ¤ë¤¯Çò¿§¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows bright white..."));
+			msg_print(_("æ˜ã‚‹ãç™½è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows bright white..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_COLD, dir, 400, 3);
 			break;
@@ -2315,7 +2315,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_FIRE_1:
 		{
-			msg_print(_("¤½¤ì¤ÏÀÖ¤¯·ã¤·¤¯µ±¤¤¤¿...","It glows an intense red..."));
+			msg_print(_("ãã‚Œã¯èµ¤ãæ¿€ã—ãè¼ã„ãŸ...","It glows an intense red..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_FIRE, dir, 72, 2);
 			break;
@@ -2323,7 +2323,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_BA_FIRE_2:
 		{
-			msg_format(_("%s¤«¤é±ê¤¬¿á¤­½Ğ¤·¤¿...", "The %s rages in fire..."), name);
+			msg_format(_("%sã‹ã‚‰ç‚ãŒå¹ãå‡ºã—ãŸ...", "The %s rages in fire..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_FIRE, dir, 120, 3);
 			break;
@@ -2331,7 +2331,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_BA_FIRE_3:
 		{
-			msg_print(_("¿¼ÀÖ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows deep red..."));
+			msg_print(_("æ·±èµ¤è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows deep red..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_FIRE, dir, 300, 3);
 			break;
@@ -2339,7 +2339,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_BA_FIRE_4:
 		{
-			msg_print(_("¤½¤ì¤ÏÀÖ¤¯·ã¤·¤¯µ±¤¤¤¿...","It glows an intense red..."));
+			msg_print(_("ãã‚Œã¯èµ¤ãæ¿€ã—ãè¼ã„ãŸ...","It glows an intense red..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_FIRE, dir, 100, 2);
 			break;
@@ -2347,7 +2347,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_BA_ELEC_2:
 		{
-			msg_print(_("ÅÅµ¤¤¬¥Ñ¥Á¥Ñ¥Á²»¤òÎ©¤Æ¤¿...","It crackles with electricity..."));
+			msg_print(_("é›»æ°—ãŒãƒ‘ãƒãƒ‘ãƒéŸ³ã‚’ç«‹ã¦ãŸ...","It crackles with electricity..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_ELEC, dir, 100, 3);
 			break;
@@ -2355,7 +2355,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_BA_ELEC_3:
 		{
-			msg_print(_("¿¼ÀÄ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows deep blue..."));
+			msg_print(_("æ·±é’è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows deep blue..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_ELEC, dir, 500, 3);
 			break;
@@ -2363,7 +2363,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_BA_ACID_1:
 		{
-			msg_print(_("¤½¤ì¤Ï¹õ¤¯·ã¤·¤¯µ±¤¤¤¿...","It glows an intense black..."));
+			msg_print(_("ãã‚Œã¯é»’ãæ¿€ã—ãè¼ã„ãŸ...","It glows an intense black..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_ACID, dir, 100, 2);
 			break;
@@ -2371,7 +2371,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_BA_NUKE_1:
 		{
-			msg_print(_("¤½¤ì¤ÏÎĞ¤Ë·ã¤·¤¯µ±¤¤¤¿...","It glows an intense green..."));
+			msg_print(_("ãã‚Œã¯ç·‘ã«æ¿€ã—ãè¼ã„ãŸ...","It glows an intense green..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_NUKE, dir, 100, 2);
 			break;
@@ -2379,7 +2379,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		
 		case ACT_DRAIN_1:
 		{
-			msg_format(_("¤¢¤Ê¤¿¤Ï%s¤ËÅ¨¤òÄù¤á»¦¤¹¤è¤¦Ì¿¤¸¤¿¡£", "You order the %s to strangle your opponent."), name);
+			msg_format(_("ã‚ãªãŸã¯%sã«æ•µã‚’ç· ã‚æ®ºã™ã‚ˆã†å‘½ã˜ãŸã€‚", "You order the %s to strangle your opponent."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			if (drain_life(dir, 100))
 			break;
@@ -2387,7 +2387,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_DRAIN_2:
 		{
-			msg_print(_("¹õ¤¯µ±¤¤¤Æ¤¤¤ë...", "It glows black..."));
+			msg_print(_("é»’ãè¼ã„ã¦ã„ã‚‹...", "It glows black..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			drain_life(dir, 120);
 			break;
@@ -2406,7 +2406,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BO_MISS_2:
 		{
-			msg_print(_("ËâË¡¤Î¥È¥²¤¬¸½¤ì¤¿...", "It grows magical spikes..."));
+			msg_print(_("é­”æ³•ã®ãƒˆã‚²ãŒç¾ã‚ŒãŸ...", "It grows magical spikes..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ARROW, dir, 150);
 			break;
@@ -2450,7 +2450,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CALL_CHAOS:
 		{
-			msg_print(_("ÍÍ¡¹¤Ê¿§¤Î²Ğ²Ö¤òÈ¯¤·¤Æ¤¤¤ë...","It glows in scintillating colours..."));
+			msg_print(_("æ§˜ã€…ãªè‰²ã®ç«èŠ±ã‚’ç™ºã—ã¦ã„ã‚‹...","It glows in scintillating colours..."));
 			call_chaos();
 			break;
 		}
@@ -2458,14 +2458,14 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_ROCKET:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			msg_print(_("¥í¥±¥Ã¥È¤òÈ¯¼Í¤·¤¿¡ª", "You launch a rocket!"));
+			msg_print(_("ãƒ­ã‚±ãƒƒãƒˆã‚’ç™ºå°„ã—ãŸï¼", "You launch a rocket!"));
 			fire_ball(GF_ROCKET, dir, 250 + plev*3, 2);
 			break;
 		}
 
 		case ACT_DISP_EVIL:
 		{
-			msg_print(_("¿ÀÀ»¤ÊÊ·°Ïµ¤¤¬½¼Ëş¤·¤¿...", "It floods the area with goodness..."));
+			msg_print(_("ç¥è–ãªé›°å›²æ°—ãŒå……æº€ã—ãŸ...", "It floods the area with goodness..."));
 			dispel_evil(p_ptr->lev * 5);
 			break;
 		}
@@ -2473,21 +2473,21 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_BA_MISS_3:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			msg_print(_("¤¢¤Ê¤¿¤Ï¥¨¥ì¥á¥ó¥È¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe the elements."));
+			msg_print(_("ã‚ãªãŸã¯ã‚¨ãƒ¬ãƒ¡ãƒ³ãƒˆã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe the elements."));
 			fire_ball(GF_MISSILE, dir, 300, -4);
 			break;
 		}
 
 		case ACT_DISP_GOOD:
 		{
-			msg_print(_("¼Ù°­¤ÊÊ·°Ïµ¤¤¬½¼Ëş¤·¤¿...", "It floods the area with evil..."));
+			msg_print(_("é‚ªæ‚ªãªé›°å›²æ°—ãŒå……æº€ã—ãŸ...", "It floods the area with evil..."));
 			dispel_good(p_ptr->lev * 5);
 			break;
 		}
 
 		case ACT_BO_MANA:
 		{
-			msg_format(_("%s¤ËËâË¡¤Î¥È¥²¤¬¸½¤ì¤¿...", "The %s grows magical spikes..."), name);
+			msg_format(_("%sã«é­”æ³•ã®ãƒˆã‚²ãŒç¾ã‚ŒãŸ...", "The %s grows magical spikes..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_bolt(GF_ARROW, dir, 150);
 			break;
@@ -2495,7 +2495,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_WATER:
 		{
-			msg_format(_("%s¤¬¿¼¤¤ÀÄ¿§¤Ë¸İÆ°¤·¤Æ¤¤¤ë...", "The %s throbs deep blue..."), name);
+			msg_format(_("%sãŒæ·±ã„é’è‰²ã«é¼“å‹•ã—ã¦ã„ã‚‹...", "The %s throbs deep blue..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_WATER, dir, 200, 3);
 			break;
@@ -2503,7 +2503,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_DARK:
 		{
-			msg_format(_("%s¤¬¿¼¤¤°Ç¤ËÊ¤¤ï¤ì¤¿...","The %s is coverd in pitch-darkness..."), name);
+			msg_format(_("%sãŒæ·±ã„é—‡ã«è¦†ã‚ã‚ŒãŸ...","The %s is coverd in pitch-darkness..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_DARK, dir, 250, 4);
 			break;
@@ -2511,7 +2511,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BA_MANA:
 		{
-			msg_format(_("%s¤¬ÀÄÇò¤¯¸÷¤Ã¤¿¡¥¡¥¡¥", "The %s glows pale..."), name);
+			msg_format(_("%sãŒé’ç™½ãå…‰ã£ãŸï¼ï¼ï¼", "The %s glows pale..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_MANA, dir, 250, 4);
 			break;
@@ -2519,14 +2519,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_PESTICIDE:
 		{
-			msg_print(_("¤¢¤Ê¤¿¤Ï³²Ãî¤ò°ìÁİ¤·¤¿¡£","You exterminate small life."));
+			msg_print(_("ã‚ãªãŸã¯å®³è™«ã‚’ä¸€æƒã—ãŸã€‚","You exterminate small life."));
 			(void)dispel_monsters(4);
 			break;
 		}
 
 		case ACT_BLINDING_LIGHT:
 		{
-			msg_format(_("%s¤¬âÁ¤·¤¤¸÷¤Çµ±¤¤¤¿...", "The %s gleams with blinding light..."), name);
+			msg_format(_("%sãŒçœ©ã—ã„å…‰ã§è¼ã„ãŸ...", "The %s gleams with blinding light..."), name);
 			fire_ball(GF_LITE, 0, 300, 6);
 			confuse_monsters(3 * p_ptr->lev / 2);
 			break;
@@ -2534,7 +2534,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BIZARRE:
 		{
-			msg_format(_("%s¤Ï¼¿¹õ¤Ëµ±¤¤¤¿...", "The %s glows intensely black..."), name);
+			msg_format(_("%sã¯æ¼†é»’ã«è¼ã„ãŸ...", "The %s glows intensely black..."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
 			ring_of_power(dir);
 			break;
@@ -2545,7 +2545,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			int num = damroll(5, 3);
 			int y, x;
 			int attempts;
-			msg_format(_("%s¤¬°ğºÊ¤ÇÊ¤¤ï¤ì¤¿...","The %s is surrounded by lightning..."), name);
+			msg_format(_("%sãŒç¨²å¦»ã§è¦†ã‚ã‚ŒãŸ...","The %s is surrounded by lightning..."), name);
 			for (k = 0; k < num; k++)
 			{
 				attempts = 1000;
@@ -2569,9 +2569,9 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_BLADETURNER:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			msg_print(_("¤¢¤Ê¤¿¤Ï¥¨¥ì¥á¥ó¥È¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe the elements."));
+			msg_print(_("ã‚ãªãŸã¯ã‚¨ãƒ¬ãƒ¡ãƒ³ãƒˆã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe the elements."));
 			fire_ball(GF_MISSILE, dir, 300, -4);
-			msg_print(_("³»¤¬ÍÍ¡¹¤Ê¿§¤Ëµ±¤¤¤¿...", "Your armor glows many colours..."));
+			msg_print(_("é§ãŒæ§˜ã€…ãªè‰²ã«è¼ã„ãŸ...", "Your armor glows many colours..."));
 			(void)set_afraid(0);
 			(void)set_hero(randint1(50) + 50, FALSE);
 			(void)hp_player(10);
@@ -2614,7 +2614,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CONFUSE:
 		{
-			msg_print(_("ÍÍ¡¹¤Ê¿§¤Î²Ğ²Ö¤òÈ¯¤·¤Æ¤¤¤ë...", "It glows in scintillating colours..."));
+			msg_print(_("æ§˜ã€…ãªè‰²ã®ç«èŠ±ã‚’ç™ºã—ã¦ã„ã‚‹...", "It glows in scintillating colours..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			confuse_monster(dir, 20);
 			break;
@@ -2622,7 +2622,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SLEEP:
 		{
-			msg_print(_("¿¼ÀÄ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows deep blue..."));
+			msg_print(_("æ·±é’è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows deep blue..."));
 			sleep_monsters_touch();
 			break;
 		}
@@ -2650,21 +2650,21 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			if (banish_evil(100))
 			{
-				msg_print(_("¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤ÎÎÏ¤¬¼Ù°­¤òÂÇ¤ÁÊ§¤Ã¤¿¡ª", "The power of the artifact banishes evil!"));
+				msg_print(_("ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã®åŠ›ãŒé‚ªæ‚ªã‚’æ‰“ã¡æ‰•ã£ãŸï¼", "The power of the artifact banishes evil!"));
 			}
 			break;
 		}
 
 		case ACT_GENOCIDE:
 		{
-			msg_print(_("¿¼ÀÄ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows deep blue..."));
+			msg_print(_("æ·±é’è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows deep blue..."));
 			(void)symbol_genocide(200, TRUE);
 			break;
 		}
 
 		case ACT_MASS_GENO:
 		{
-			msg_print(_("¤Ò¤É¤¯±Ô¤¤²»¤¬Î®¤ì½Ğ¤¿...", "It lets out a long, shrill note..."));
+			msg_print(_("ã²ã©ãé‹­ã„éŸ³ãŒæµã‚Œå‡ºãŸ...", "It lets out a long, shrill note..."));
 			(void)mass_genocide(200, TRUE);
 			break;
 		}
@@ -2673,7 +2673,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			if (music_singing_any()) stop_singing();
 			if (hex_spelling_any()) stop_hex_spell_all();
-			msg_print(_("¤¢¤Ê¤¿¤ÏÎÏ¶¯¤¤ÆÍÉ÷¤ò¿á¤­ÌÄ¤é¤·¤¿¡£¼ş°Ï¤ÎÅ¨¤¬¿Ì¤¨¾å¤Ã¤Æ¤¤¤ë!",
+			msg_print(_("ã‚ãªãŸã¯åŠ›å¼·ã„çªé¢¨ã‚’å¹ãé³´ã‚‰ã—ãŸã€‚å‘¨å›²ã®æ•µãŒéœ‡ãˆä¸Šã£ã¦ã„ã‚‹!",
 					"You wind a mighty blast; your enemies tremble!"));
 			(void)turn_monsters((3 * p_ptr->lev / 2) + 10);
 			break;
@@ -2683,11 +2683,11 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			if (o_ptr->name1 == ART_HYOUSIGI)
 			{
-				msg_print(_("Çï»ÒÌÚ¤òÂÇ¤Ã¤¿¡£", "You beat Your wooden clappers."));
+				msg_print(_("æ‹å­æœ¨ã‚’æ‰“ã£ãŸã€‚", "You beat Your wooden clappers."));
 			}
 			else
 			{
-				msg_format(_("%s¤ÏÉÔ²÷¤ÊÊª²»¤òÎ©¤Æ¤¿¡£","The %s sounds an unpleasant noise."), name);
+				msg_format(_("%sã¯ä¸å¿«ãªç‰©éŸ³ã‚’ç«‹ã¦ãŸã€‚","The %s sounds an unpleasant noise."), name);
 			}
 			aggravate_monsters(0);
 			break;
@@ -2736,7 +2736,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SUMMON_PHANTOM:
 		{
-			msg_print(_("¸¸Îî¤ò¾¤´­¤·¤¿¡£", "You summon a phantasmal servant."));
+			msg_print(_("å¹»éœŠã‚’å¬å–šã—ãŸã€‚", "You summon a phantasmal servant."));
 			(void)summon_specific(-1, py, px, dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			break;
 		}
@@ -2752,11 +2752,11 @@ bool activate_random_artifact(object_type *o_ptr)
 
 			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_ELEMENTAL, mode))
 			{
-				msg_print(_("¥¨¥ì¥á¥ó¥¿¥ë¤¬¸½¤ì¤¿...", "An elemental materializes..."));
+				msg_print(_("ã‚¨ãƒ¬ãƒ¡ãƒ³ã‚¿ãƒ«ãŒç¾ã‚ŒãŸ...", "An elemental materializes..."));
 				if (pet)
-					msg_print(_("¤¢¤Ê¤¿¤ËÉş½¾¤·¤Æ¤¤¤ë¤è¤¦¤À¡£", "It seems obedient to you."));
+					msg_print(_("ã‚ãªãŸã«æœå¾“ã—ã¦ã„ã‚‹ã‚ˆã†ã ã€‚", "It seems obedient to you."));
 				else
-					msg_print(_("¤½¤ì¤ò¥³¥ó¥È¥í¡¼¥ë¤Ç¤­¤Ê¤«¤Ã¤¿¡ª", "You fail to control it!"));
+					msg_print(_("ãã‚Œã‚’ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã§ããªã‹ã£ãŸï¼", "You fail to control it!"));
 			}
 
 			break;
@@ -2773,11 +2773,11 @@ bool activate_random_artifact(object_type *o_ptr)
 
 			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_DEMON, mode))
 			{
-				msg_print(_("Î²²«¤Î°­½­¤¬½¼Ëş¤·¤¿¡£", "The area fills with a stench of sulphur and brimstone."));
+				msg_print(_("ç¡«é»„ã®æ‚ªè‡­ãŒå……æº€ã—ãŸã€‚", "The area fills with a stench of sulphur and brimstone."));
 				if (pet)
-					msg_print(_("¡Ö¤´ÍÑ¤Ç¤´¤¶¤¤¤Ş¤¹¤«¡¢¤´¼ç¿ÍÍÍ¡×", "'What is thy bidding... Master?'"));
+					msg_print(_("ã€Œã”ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€ã”ä¸»äººæ§˜ã€", "'What is thy bidding... Master?'"));
 				else
-					msg_print(_("¡ÖNON SERVIAM! Wretch! ¤ªÁ°¤Îº²¤òÄº¤¯¤¾¡ª¡×", "'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
+					msg_print(_("ã€ŒNON SERVIAM! Wretch! ãŠå‰ã®é­‚ã‚’é ‚ããï¼ã€", "'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
 			}
 
 			break;
@@ -2797,13 +2797,13 @@ bool activate_random_artifact(object_type *o_ptr)
 
 			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), type, mode))
 			{
-				msg_print(_("Îä¤¿¤¤É÷¤¬¤¢¤Ê¤¿¤Î¼ş¤ê¤Ë¿á¤­»Ï¤á¤¿¡£¤½¤ì¤ÏÉåÇÔ½­¤ò±¿¤ó¤Ç¤¤¤ë...",
+				msg_print(_("å†·ãŸã„é¢¨ãŒã‚ãªãŸã®å‘¨ã‚Šã«å¹ãå§‹ã‚ãŸã€‚ãã‚Œã¯è…æ•—è‡­ã‚’é‹ã‚“ã§ã„ã‚‹...",
 						"Cold winds begin to blow around you, carrying with them the stench of decay..."));
 				if (pet)
-				msg_print(_("¸Å¤¨¤Î»à¤»¤ë¼Ô¶¦¤¬¤¢¤Ê¤¿¤Ë»Å¤¨¤ë¤¿¤áÅÚ¤«¤éá´¤Ã¤¿¡ª",
+				msg_print(_("å¤ãˆã®æ­»ã›ã‚‹è€…å…±ãŒã‚ãªãŸã«ä»•ãˆã‚‹ãŸã‚åœŸã‹ã‚‰ç”¦ã£ãŸï¼",
 						"Ancient, long-dead forms arise from the ground to serve you!"));
 				else
-				msg_print(_("»à¼Ô¤¬á´¤Ã¤¿¡£Ì²¤ê¤òË¸¤²¤ë¤¢¤Ê¤¿¤òÈ³¤¹¤ë¤¿¤á¤Ë¡ª",
+				msg_print(_("æ­»è€…ãŒç”¦ã£ãŸã€‚çœ ã‚Šã‚’å¦¨ã’ã‚‹ã‚ãªãŸã‚’ç½°ã™ã‚‹ãŸã‚ã«ï¼",
 						"'The dead arise... to punish you for disturbing them!'"));
 			}
 
@@ -2821,10 +2821,10 @@ bool activate_random_artifact(object_type *o_ptr)
 			{
 
 				if (pet)
-					msg_print(_("¥Ï¥¦¥ó¥É¤¬¤¢¤Ê¤¿¤Î²¼ËÍ¤È¤·¤Æ½Ğ¸½¤·¤¿¡£",
+					msg_print(_("ãƒã‚¦ãƒ³ãƒ‰ãŒã‚ãªãŸã®ä¸‹åƒ•ã¨ã—ã¦å‡ºç¾ã—ãŸã€‚",
 						"A group of hounds appear as your servant."));
 				else
-					msg_print(_("¥Ï¥¦¥ó¥É¤Ï¤¢¤Ê¤¿¤Ë²ç¤ò¸ş¤±¤Æ¤¤¤ë¡ª",
+					msg_print(_("ãƒã‚¦ãƒ³ãƒ‰ã¯ã‚ãªãŸã«ç‰™ã‚’å‘ã‘ã¦ã„ã‚‹ï¼",
 						"A group of hounds appear as your enemy!"));
 			}
 
@@ -2833,7 +2833,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SUMMON_DAWN:
 		{
-			msg_print(_("¶Ç¤Î»ÕÃÄ¤ò¾¤´­¤·¤¿¡£","You summon the Legion of the Dawn."));
+			msg_print(_("æšã®å¸«å›£ã‚’å¬å–šã—ãŸã€‚","You summon the Legion of the Dawn."));
 			(void)summon_specific(-1, py, px, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			break;
 		}
@@ -2847,9 +2847,9 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (summon_named_creature(0, py, px, MON_JIZOTAKO, mode))
 			{
 				if (pet)
-					msg_print(_("Âı¤¬¤¢¤Ê¤¿¤Î²¼ËÍ¤È¤·¤Æ½Ğ¸½¤·¤¿¡£", "A group of octopuses appear as your servant."));
+					msg_print(_("è›¸ãŒã‚ãªãŸã®ä¸‹åƒ•ã¨ã—ã¦å‡ºç¾ã—ãŸã€‚", "A group of octopuses appear as your servant."));
 				else
-					msg_print(_("Âı¤Ï¤¢¤Ê¤¿¤òâË¤ó¤Ç¤¤¤ë¡ª", "A group of octopuses appear as your enemy!"));
+					msg_print(_("è›¸ã¯ã‚ãªãŸã‚’ç¨ã‚“ã§ã„ã‚‹ï¼", "A group of octopuses appear as your enemy!"));
 			}
 
 			break;
@@ -2859,7 +2859,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CHOIR_SINGS:
 		{
-			msg_print(_("Å·¹ñ¤Î²Î¤¬Ê¹¤³¤¨¤ë...", "A heavenly choir sings..."));
+			msg_print(_("å¤©å›½ã®æ­ŒãŒèã“ãˆã‚‹...", "A heavenly choir sings..."));
 			(void)set_poisoned(0);
 			(void)set_cut(0);
 			(void)set_stun(0);
@@ -2880,7 +2880,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_MW:
 		{
-			msg_print(_("¿¼»ç¿§¤Î¸÷¤òÈ¯¤·¤Æ¤¤¤ë...", "It radiates deep purple..."));
+			msg_print(_("æ·±ç´«è‰²ã®å…‰ã‚’ç™ºã—ã¦ã„ã‚‹...", "It radiates deep purple..."));
 			hp_player(damroll(4, 8));
 			(void)set_cut((p_ptr->cut / 2) - 50);
 			break;
@@ -2888,7 +2888,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_POISON:
 		{
-			msg_print(_("¿¼ÀÄ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows deep blue..."));
+			msg_print(_("æ·±é’è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows deep blue..."));
 			(void)set_afraid(0);
 			(void)set_poisoned(0);
 			break;
@@ -2896,14 +2896,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_REST_EXP:
 		{
-			msg_print(_("¿¼¹È¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows a deep red..."));
+			msg_print(_("æ·±ç´…ã«è¼ã„ã¦ã„ã‚‹...", "It glows a deep red..."));
 			restore_level();
 			break;
 		}
 
 		case ACT_REST_ALL:
 		{
-			msg_print(_("Ç»ÎĞ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows a deep green..."));
+			msg_print(_("æ¿ƒç·‘è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows a deep green..."));
 			(void)do_res_stat(A_STR);
 			(void)do_res_stat(A_INT);
 			(void)do_res_stat(A_WIS);
@@ -2916,8 +2916,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_700:
 		{
-			msg_print(_("¿¼ÀÄ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...","It glows deep blue..."));
-			msg_print(_("ÂÎÆâ¤ËÃÈ¤«¤¤¸İÆ°¤¬´¶¤¸¤é¤ì¤ë...","You feel a warm tingling inside..."));
+			msg_print(_("æ·±é’è‰²ã«è¼ã„ã¦ã„ã‚‹...","It glows deep blue..."));
+			msg_print(_("ä½“å†…ã«æš–ã‹ã„é¼“å‹•ãŒæ„Ÿã˜ã‚‰ã‚Œã‚‹...","You feel a warm tingling inside..."));
 			(void)hp_player(700);
 			(void)set_cut(0);
 			break;
@@ -2925,8 +2925,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_1000:
 		{
-			msg_print(_("Çò¤¯ÌÀ¤ë¤¯µ±¤¤¤Æ¤¤¤ë...","It glows a bright white..."));
-			msg_print(_("¤Ò¤¸¤ç¤¦¤Ëµ¤Ê¬¤¬¤è¤¤...","You feel much better..."));
+			msg_print(_("ç™½ãæ˜ã‚‹ãè¼ã„ã¦ã„ã‚‹...","It glows a bright white..."));
+			msg_print(_("ã²ã˜ã‚‡ã†ã«æ°—åˆ†ãŒã‚ˆã„...","You feel much better..."));
 			(void)hp_player(1000);
 			(void)set_cut(0);
 			break;
@@ -2934,7 +2934,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURING:
 		{
-			msg_format(_("%s¤ÎÍ¥¤·¤µ¤ËÌş¤µ¤ì¤ë...", "the %s cures you affectionately ..."), name);
+			msg_format(_("%sã®å„ªã—ã•ã«ç™’ã•ã‚Œã‚‹...", "the %s cures you affectionately ..."), name);
 			(void)set_poisoned(0);
 			(void)set_confused(0);
 			(void)set_blind(0);
@@ -2947,7 +2947,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_CURE_MANA_FULL:
 		{
-			msg_format(_("%s¤¬ÀÄÇò¤¯¸÷¤Ã¤¿¡¥¡¥¡¥","The %s glows pale..."), name);
+			msg_format(_("%sãŒé’ç™½ãå…‰ã£ãŸï¼ï¼ï¼","The %s glows pale..."), name);
 			if (p_ptr->pclass == CLASS_MAGIC_EATER)
 			{
 				int i;
@@ -2962,14 +2962,14 @@ bool activate_random_artifact(object_type *o_ptr)
 					p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
 					if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 				}
-				msg_print(_("Æ¬¤¬¥Ï¥Ã¥­¥ê¤È¤·¤¿¡£", "You feel your head clear."));
+				msg_print(_("é ­ãŒãƒãƒƒã‚­ãƒªã¨ã—ãŸã€‚", "You feel your head clear."));
 				p_ptr->window |= (PW_PLAYER);
 			}
 			else if (p_ptr->csp < p_ptr->msp)
 			{
 				p_ptr->csp = p_ptr->msp;
 				p_ptr->csp_frac = 0;
-				msg_print(_("Æ¬¤¬¥Ï¥Ã¥­¥ê¤È¤·¤¿¡£", "You feel your head clear."));
+				msg_print(_("é ­ãŒãƒãƒƒã‚­ãƒªã¨ã—ãŸã€‚", "You feel your head clear."));
 				p_ptr->redraw |= (PR_MANA);
 				p_ptr->window |= (PW_PLAYER);
 				p_ptr->window |= (PW_SPELL);
@@ -2998,7 +2998,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_PROT_EVIL:
 		{
-			msg_format(_("%s¤«¤é±Ô¤¤²»¤¬Î®¤ì½Ğ¤¿...", "The %s lets out a shrill wail..."), name);
+			msg_format(_("%sã‹ã‚‰é‹­ã„éŸ³ãŒæµã‚Œå‡ºãŸ...", "The %s lets out a shrill wail..."), name);
 			k = 3 * p_ptr->lev;
 			(void)set_protevil(randint1(25) + k, FALSE);
 			break;
@@ -3006,7 +3006,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_ALL:
 		{
-			msg_print(_("ÍÍ¡¹¤Ê¿§¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows many colours..."));
+			msg_print(_("æ§˜ã€…ãªè‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows many colours..."));
 			(void)set_oppose_acid(randint1(40) + 40, FALSE);
 			(void)set_oppose_elec(randint1(40) + 40, FALSE);
 			(void)set_oppose_fire(randint1(40) + 40, FALSE);
@@ -3017,14 +3017,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SPEED:
 		{
-			msg_print(_("ÌÀ¤ë¤¯ÎĞ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...", "It glows bright green..."));
+			msg_print(_("æ˜ã‚‹ãç·‘è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows bright green..."));
 			(void)set_fast(randint1(20) + 20, FALSE);
 			break;
 		}
 
 		case ACT_XTRA_SPEED:
 		{
-			msg_print(_("ÌÀ¤ë¤¯µ±¤¤¤Æ¤¤¤ë...", "It glows brightly..."));
+			msg_print(_("æ˜ã‚‹ãè¼ã„ã¦ã„ã‚‹...", "It glows brightly..."));
 			(void)set_fast(randint1(75) + 75, FALSE);
 			break;
 		}
@@ -3060,7 +3060,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_ACID:
 		{
-			msg_format(_("%s¤¬¹õ¤¯µ±¤¤¤¿...", "The %s grows black."), name);
+			msg_format(_("%sãŒé»’ãè¼ã„ãŸ...", "The %s grows black."), name);
 			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
@@ -3072,7 +3072,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_FIRE:
 		{
-			msg_format(_("%s¤¬ÀÖ¤¯µ±¤¤¤¿...","The %s grows red."), name);
+			msg_format(_("%sãŒèµ¤ãè¼ã„ãŸ...","The %s grows red."), name);
 			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
@@ -3084,7 +3084,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_COLD:
 		{
-			msg_format(_("%s¤¬Çò¤¯µ±¤¤¤¿...","The %s grows white.") , name);
+			msg_format(_("%sãŒç™½ãè¼ã„ãŸ...","The %s grows white.") , name);
 			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
@@ -3096,7 +3096,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_ELEC:
 		{
-			msg_format(_("%s¤¬ÀÄ¤¯µ±¤¤¤¿...", "The %s grows blue."), name);
+			msg_format(_("%sãŒé’ãè¼ã„ãŸ...", "The %s grows blue."), name);
 			if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
@@ -3108,7 +3108,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RESIST_POIS:
 		{
-			msg_format(_("%s¤¬ÎĞ¤Ëµ±¤¤¤¿...", "The %s grows green."), name);
+			msg_format(_("%sãŒç·‘ã«è¼ã„ãŸ...", "The %s grows green."), name);
 			(void)set_oppose_pois(randint1(20) + 20, FALSE);
 			break;
 		}
@@ -3118,7 +3118,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_LIGHT:
 		{
 #ifdef JP
-			msg_format("%s¤«¤éÀ¡¤ó¤À¸÷¤¬¤¢¤Õ¤ì½Ğ¤¿...", name);
+			msg_format("%sã‹ã‚‰æ¾„ã‚“ã å…‰ãŒã‚ãµã‚Œå‡ºãŸ...", name);
 #else
 			msg_format("The %s wells with clear light...", name);
 #endif
@@ -3129,7 +3129,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_MAP_LIGHT:
 		{
 #ifdef JP
-			msg_print("âÁ¤·¤¯µ±¤¤¤¿...");
+			msg_print("çœ©ã—ãè¼ã„ãŸ...");
 #else
 			msg_print("It shines brightly...");
 #endif
@@ -3141,8 +3141,8 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_DETECT_ALL:
 		{
 #ifdef JP
-			msg_print("Çò¤¯ÌÀ¤ë¤¯µ±¤¤¤Æ¤¤¤ë...");
-			msg_print("¿´¤Ë¥¤¥á¡¼¥¸¤¬Éâ¤«¤ó¤Ç¤­¤¿...");
+			msg_print("ç™½ãæ˜ã‚‹ãè¼ã„ã¦ã„ã‚‹...");
+			msg_print("å¿ƒã«ã‚¤ãƒ¡ãƒ¼ã‚¸ãŒæµ®ã‹ã‚“ã§ããŸ...");
 #else
 			msg_print("It glows bright white...");
 			msg_print("An image forms in your mind...");
@@ -3154,7 +3154,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_DETECT_XTRA:
 		{
 #ifdef JP
-			msg_print("ÌÀ¤ë¤¯µ±¤¤¤Æ¤¤¤ë...");
+			msg_print("æ˜ã‚‹ãè¼ã„ã¦ã„ã‚‹...");
 #else
 			msg_print("It glows brightly...");
 #endif
@@ -3167,7 +3167,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_ID_FULL:
 		{
 #ifdef JP
-			msg_print("²«¿§¤¯µ±¤¤¤Æ¤¤¤ë...");
+			msg_print("é»„è‰²ãè¼ã„ã¦ã„ã‚‹...");
 #else
 			msg_print("It glows yellow...");
 #endif
@@ -3184,7 +3184,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_RUNE_EXPLO:
 		{
 #ifdef JP
-			msg_print("ÌÀ¤ë¤¤ÀÖ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...");
+			msg_print("æ˜ã‚‹ã„èµ¤è‰²ã«è¼ã„ã¦ã„ã‚‹...");
 #else
 			msg_print("It glows bright red...");
 #endif
@@ -3195,7 +3195,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_RUNE_PROT:
 		{
 #ifdef JP
-			msg_print("¥Ö¥ë¡¼¤ËÌÀ¤ë¤¯µ±¤¤¤Æ¤¤¤ë...");
+			msg_print("ãƒ–ãƒ«ãƒ¼ã«æ˜ã‚‹ãè¼ã„ã¦ã„ã‚‹...");
 #else
 			msg_print("It glows light blue...");
 #endif
@@ -3212,7 +3212,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_DEST_DOOR:
 		{
 #ifdef JP
-			msg_print("ÌÀ¤ë¤¤ÀÖ¿§¤Ëµ±¤¤¤Æ¤¤¤ë...");
+			msg_print("æ˜ã‚‹ã„èµ¤è‰²ã«è¼ã„ã¦ã„ã‚‹...");
 #else
 			msg_print("It glows bright red...");
 #endif
@@ -3223,7 +3223,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_STONE_MUD:
 		{
 #ifdef JP
-			msg_print("¸İÆ°¤·¤Æ¤¤¤ë...");
+			msg_print("é¼“å‹•ã—ã¦ã„ã‚‹...");
 #else
 			msg_print("It pulsates...");
 #endif
@@ -3241,7 +3241,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_ALCHEMY:
 		{
 #ifdef JP
-			msg_print("ÌÀ¤ë¤¤²«¿§¤Ëµ±¤¤¤Æ¤¤¤ë...");
+			msg_print("æ˜ã‚‹ã„é»„è‰²ã«è¼ã„ã¦ã„ã‚‹...");
 #else
 			msg_print("It glows bright yellow...");
 #endif
@@ -3252,7 +3252,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_DIM_DOOR:
 		{
 #ifdef JP
-			msg_print("¼¡¸µ¤ÎÈâ¤¬³«¤¤¤¿¡£ÌÜÅªÃÏ¤òÁª¤ó¤Ç²¼¤µ¤¤¡£");
+			msg_print("æ¬¡å…ƒã®æ‰‰ãŒé–‹ã„ãŸã€‚ç›®çš„åœ°ã‚’é¸ã‚“ã§ä¸‹ã•ã„ã€‚");
 #else
 			msg_print("You open a dimensional gate. Choose a destination.");
 #endif
@@ -3264,7 +3264,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_TELEPORT:
 		{
 #ifdef JP
-			msg_print("¼ş¤ê¤Î¶õ´Ö¤¬ÏÄ¤ó¤Ç¤¤¤ë...");
+			msg_print("å‘¨ã‚Šã®ç©ºé–“ãŒæ­ªã‚“ã§ã„ã‚‹...");
 #else
 			msg_print("It twists space around you...");
 #endif
@@ -3275,7 +3275,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_RECALL:
 		{
 #ifdef JP
-			msg_print("¤ä¤ï¤é¤«¤ÊÇò¿§¤Ëµ±¤¤¤Æ¤¤¤ë...");
+			msg_print("ã‚„ã‚ã‚‰ã‹ãªç™½è‰²ã«è¼ã„ã¦ã„ã‚‹...");
 #else
 			msg_print("It glows soft white...");
 #endif
@@ -3286,7 +3286,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_JUDGE:
 		{
 #ifdef JP
-			msg_format("%s¤ÏÀÖ¤¯ÌÀ¤ë¤¯¸÷¤Ã¤¿¡ª", name);
+			msg_format("%sã¯èµ¤ãæ˜ã‚‹ãå…‰ã£ãŸï¼", name);
 #else
 			msg_format("The %s flashes bright red!", name);
 #endif
@@ -3294,8 +3294,8 @@ bool activate_random_artifact(object_type *o_ptr)
 			chg_virtue(V_ENLIGHTEN, 1);
 			wiz_lite(FALSE);
 #ifdef JP
-			msg_format("%s¤Ï¤¢¤Ê¤¿¤ÎÂÎÎÏ¤òÃ¥¤Ã¤¿...", name);
-			take_hit(DAMAGE_LOSELIFE, damroll(3,8), "¿³È½¤ÎÊõÀĞ", -1);
+			msg_format("%sã¯ã‚ãªãŸã®ä½“åŠ›ã‚’å¥ªã£ãŸ...", name);
+			take_hit(DAMAGE_LOSELIFE, damroll(3,8), "å¯©åˆ¤ã®å®çŸ³", -1);
 #else
 			msg_format("The %s drains your vitality...", name);
 			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "the Jewel of Judgement", -1);
@@ -3304,7 +3304,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			(void)detect_doors(DETECT_RAD_DEFAULT);
 			(void)detect_stairs(DETECT_RAD_DEFAULT);
 #ifdef JP
-			if (get_check("µ¢´Ô¤ÎÎÏ¤ò»È¤¤¤Ş¤¹¤«¡©"))
+			if (get_check("å¸°é‚„ã®åŠ›ã‚’ä½¿ã„ã¾ã™ã‹ï¼Ÿ"))
 #else
 			if (get_check("Activate recall? "))
 #endif
@@ -3319,7 +3319,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-			msg_format("%s¤ò¿­¤Ğ¤·¤¿¡£", name);
+			msg_format("%sã‚’ä¼¸ã°ã—ãŸã€‚", name);
 #else
 			msg_format("You stretched your %s.", name);
 #endif
@@ -3333,7 +3333,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			monster_type *m_ptr;
 			monster_race *r_ptr;
 #ifdef JP
-			msg_print("´ñÌ¯¤Ê¾ì½ê¤¬Æ¬¤ÎÃæ¤ËÉâ¤«¤ó¤À¡¥¡¥¡¥");
+			msg_print("å¥‡å¦™ãªå ´æ‰€ãŒé ­ã®ä¸­ã«æµ®ã‹ã‚“ã ï¼ï¼ï¼");
 #else
 			msg_print("Some strange places show up in your mind. And you see ...");
 #endif
@@ -3351,7 +3351,7 @@ bool activate_random_artifact(object_type *o_ptr)
 				if(r_ptr->flags1 & RF1_UNIQUE)
 				{
 #ifdef JP
-					msg_format("%s¡¥ ",r_name + r_ptr->name);
+					msg_format("%sï¼ ",r_name + r_ptr->name);
 #else
 					msg_format("%s. ",r_name + r_ptr->name);
 #endif
@@ -3375,7 +3375,7 @@ bool activate_random_artifact(object_type *o_ptr)
 				break;
 			default:
 #ifdef JP
-				if (get_check("¤³¤Î³¬¤òµî¤ê¤Ş¤¹¤«¡©"))
+				if (get_check("ã“ã®éšã‚’å»ã‚Šã¾ã™ã‹ï¼Ÿ"))
 #else
 				if (get_check("Leave this level? "))
 #endif
@@ -3392,14 +3392,14 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_DISP_CURSE_XTRA:
 		{
 #ifdef JP
-			msg_format("%s¤¬¿¿¼Â¤ò¾È¤é¤·½Ğ¤¹...", name);
+			msg_format("%sãŒçœŸå®Ÿã‚’ç…§ã‚‰ã—å‡ºã™...", name);
 #else
 			msg_format("The %s exhibits the truth...", name);
 #endif
 			if (remove_all_curse())
 			{
 #ifdef JP
-				msg_print("Ã¯¤«¤Ë¸«¼é¤é¤ì¤Æ¤¤¤ë¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£");
+				msg_print("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚");
 #else
 				msg_print("You feel as if someone is watching over you.");
 #endif
@@ -3411,7 +3411,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_BRAND_FIRE_BOLTS:
 		{
 #ifdef JP
-			msg_format("%s¤¬¿¼¹È¤Ëµ±¤¤¤¿...", name);
+			msg_format("%sãŒæ·±ç´…ã«è¼ã„ãŸ...", name);
 #else
 			msg_format("Your %s glows deep red...", name);
 #endif
@@ -3422,7 +3422,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_RECHARGE_XTRA:
 		{
 #ifdef JP
-			msg_format("%s¤¬Çò¤¯µ±¤¤¤¿¡¥¡¥¡¥", name);
+			msg_format("%sãŒç™½ãè¼ã„ãŸï¼ï¼ï¼", name);
 #else
 			msg_format("The %s gleams with blinding light...", name);
 #endif
@@ -3433,7 +3433,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_LORE:
 		{
 #ifdef JP
-			msg_print("ÀĞ¤¬±£¤µ¤ì¤¿ÈëÌ©¤ò¼Ì¤·½Ğ¤·¤¿¡¥¡¥¡¥");
+			msg_print("çŸ³ãŒéš ã•ã‚ŒãŸç§˜å¯†ã‚’å†™ã—å‡ºã—ãŸï¼ï¼ï¼");
 #else
 			msg_print("The stone reveals hidden mysteries...");
 #endif
@@ -3459,7 +3459,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 					/* Message */
 #ifdef JP
-					msg_print("ÀĞ¤òÀ©¸æ¤Ç¤­¤Ê¤¤¡ª");
+					msg_print("çŸ³ã‚’åˆ¶å¾¡ã§ããªã„ï¼");
 #else
 					msg_print("You are too weak to control the stone!");
 #endif
@@ -3476,7 +3476,7 @@ bool activate_random_artifact(object_type *o_ptr)
 				p_ptr->redraw |= (PR_MANA);
 			}
 #ifdef JP
-			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), "´í¸±¤ÊÈëÌ©", -1);
+			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), "å±é™ºãªç§˜å¯†", -1);
 #else
 			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), "perilous secrets", -1);
 #endif
@@ -3487,7 +3487,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			/* Exercise a little care... */
 			if (one_in_(20))
 #ifdef JP
-				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "´í¸±¤ÊÈëÌ©", -1);
+				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "å±é™ºãªç§˜å¯†", -1);
 #else
 				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "perilous secrets", -1);
 #endif
@@ -3497,7 +3497,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_SHIKOFUMI:
 		{
 #ifdef JP
-			msg_print("ÎÏ¶¯¤¯»Í¸Ô¤òÆ§¤ó¤À¡£");
+			msg_print("åŠ›å¼·ãå››è‚¡ã‚’è¸ã‚“ã ã€‚");
 #else
 			msg_print("You stamp. (as if you are in a ring.)");
 #endif
@@ -3560,10 +3560,10 @@ bool activate_random_artifact(object_type *o_ptr)
 			o_ptr = &o_list[o_idx];
 
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
-			msg_format(_("%s¤òÃ¦¤®¼Î¤Æ¤¿¡£", "You cast off %s."), o_name);
+			msg_format(_("%sã‚’è„±ãæ¨ã¦ãŸã€‚", "You cast off %s."), o_name);
 
 			/* Get effects */
-			msg_print(_("¡ÖÇ³¤¨¾å¤¬¤ì²¶¤Î¾®±§Ãè¡ª¡×", "You say, 'Burn up my cosmo!"));
+			msg_print(_("ã€Œç‡ƒãˆä¸ŠãŒã‚Œä¿ºã®å°å®‡å®™ï¼ã€", "You say, 'Burn up my cosmo!"));
 			t = 20 + randint1(20);
 			(void)set_blind(p_ptr->blind + t);
 			(void)set_afraid(0);
@@ -3576,7 +3576,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (p_ptr->pclass == CLASS_FORCETRAINER)
 			{
 				p_ptr->magic_num1[0] = plev * 5 + 190;
-				msg_print(_("µ¤¤¬ÇúÈ¯À£Á°¤Ë¤Ê¤Ã¤¿¡£", "Your force are immediatly before explosion."));
+				msg_print(_("æ°—ãŒçˆ†ç™ºå¯¸å‰ã«ãªã£ãŸã€‚", "Your force are immediatly before explosion."));
 			}
 
 			break;
@@ -3584,15 +3584,15 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_FALLING_STAR:
 		{
-			msg_print(_("¤¢¤Ê¤¿¤ÏÍÅÅá¤ËÌ¥Æş¤é¤ì¤¿¡Ä", "You are enchanted by cursed blade..."));
-			msg_print(_("¡Ö¶¸¤Û¤·¤¯ ·ì¤Î¤´¤È¤­ ·î¤Ï¤Î¤Ü¤ì¤ê Èë¤á¤ª¤­¤· Ëâ·õ ¤¤¤º¤³¤¾¤ä¡×", "'Behold the blade arts.'"));
+			msg_print(_("ã‚ãªãŸã¯å¦–åˆ€ã«é­…å…¥ã‚‰ã‚ŒãŸâ€¦", "You are enchanted by cursed blade..."));
+			msg_print(_("ã€Œç‹‚ã»ã—ã è¡€ã®ã”ã¨ã æœˆã¯ã®ã¼ã‚Œã‚Š ç§˜ã‚ãŠãã— é­”å‰£ ã„ãšã“ãã‚„ã€", "'Behold the blade arts.'"));
 			massacre(py, px);
 			break;
 		}
 
 		case ACT_GRAND_CROSS:
 		{
-			msg_print(_("¡Ö°Ç¤Ë´Ô¤ì¡ª¡×", "You say, 'Return to darkness!'"));
+			msg_print(_("ã€Œé—‡ã«é‚„ã‚Œï¼ã€", "You say, 'Return to darkness!'"));
 			project(0, 8, py, px, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 			break;
 		}
@@ -3600,7 +3600,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_TELEPORT_LEVEL:
 		{
 #ifdef JP
-			if (!get_check("ËÜÅö¤ËÂ¾¤Î³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤·¤Ş¤¹¤«¡©")) return FALSE;
+			if (!get_check("æœ¬å½“ã«ä»–ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ")) return FALSE;
 #else
 			if (!get_check("Are you sure? (Teleport Level)")) return FALSE;
 #endif
@@ -3612,8 +3612,8 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			int t;
 #ifdef JP
-			msg_format("%s¤Ï¤¢¤Ê¤¿¤ÎÂÎÎÏ¤òÃ¥¤Ã¤¿...", name);
-			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "²ÃÂ®¤·¤¿ÈèÏ«", -1);
+			msg_format("%sã¯ã‚ãªãŸã®ä½“åŠ›ã‚’å¥ªã£ãŸ...", name);
+			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "åŠ é€Ÿã—ãŸç–²åŠ´", -1);
 #else
 			msg_format("The %s drains your vitality...", name);
 			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "the strain of haste", -1);
@@ -3634,7 +3634,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (!cave_have_flag_bold(y, x, FF_WATER))
 			{
 #ifdef JP
-				msg_print("¤½¤³¤Ï¿åÊÕ¤Ç¤Ï¤Ê¤¤¡£");
+				msg_print("ãã“ã¯æ°´è¾ºã§ã¯ãªã„ã€‚");
 #else
 				msg_print("There is no fishing place.");
 #endif
@@ -3645,7 +3645,7 @@ bool activate_random_artifact(object_type *o_ptr)
 				char m_name[80];
 				monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
 #ifdef JP
-				msg_format("%s¤¬¼ÙËâ¤À¡ª", m_name);
+				msg_format("%sãŒé‚ªé­”ã ï¼", m_name);
 #else
 				msg_format("%^s is stand in your way.", m_name);
 #endif
@@ -3667,7 +3667,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (summon_named_creature(0, py, px, MON_SUKE, PM_FORCE_PET))
 			{
 #ifdef JP
-				msg_print("¡Ø½õ¤µ¤ó¡Ù¤¬¸½¤ì¤¿¡£");
+				msg_print("ã€åŠ©ã•ã‚“ã€ãŒç¾ã‚ŒãŸã€‚");
 #else
 				msg_print("Suke-san apperars.");
 				kakusan = "Suke-san";
@@ -3677,7 +3677,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (summon_named_creature(0, py, px, MON_KAKU, PM_FORCE_PET))
 			{
 #ifdef JP
-				msg_print("¡Ø³Ê¤µ¤ó¡Ù¤¬¸½¤ì¤¿¡£");
+				msg_print("ã€æ ¼ã•ã‚“ã€ãŒç¾ã‚ŒãŸã€‚");
 #else
 				msg_print("Kaku-san appears.");
 				kakusan = "Kaku-san";
@@ -3701,7 +3701,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (count)
 			{
 #ifdef JP
-				msg_print("¡Ö¼Ô¤É¤â¡¢¤Ò¤«¤¨¤ª¤í¤¦¡ª¡ª¡ª¤³¤Î¤ªÊı¤ò¤É¤Ê¤¿¤È¤³¤³¤í¤¨¤ë¡£¡×");
+				msg_print("ã€Œè€…ã©ã‚‚ã€ã²ã‹ãˆãŠã‚ã†ï¼ï¼ï¼ã“ã®ãŠæ–¹ã‚’ã©ãªãŸã¨ã“ã“ã‚ãˆã‚‹ã€‚ã€");
 #else
 				msg_format("%^s says 'WHO do you think this person is! Bow your head, down your knees!'", kakusan);
 #endif
@@ -3715,7 +3715,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			else
 			{
 #ifdef JP
-				msg_print("¤·¤«¤·¡¢²¿¤âµ¯¤­¤Ê¤«¤Ã¤¿¡£");
+				msg_print("ã—ã‹ã—ã€ä½•ã‚‚èµ·ããªã‹ã£ãŸã€‚");
 #else
 				msg_print("Nothing happen.");
 #endif
@@ -3728,13 +3728,13 @@ bool activate_random_artifact(object_type *o_ptr)
 			/* Only for Muramasa */
 			if (o_ptr->name1 != ART_MURAMASA) return FALSE;
 #ifdef JP
-			if (get_check("ËÜÅö¤Ë»È¤¤¤Ş¤¹¤«¡©"))
+			if (get_check("æœ¬å½“ã«ä½¿ã„ã¾ã™ã‹ï¼Ÿ"))
 #else
 			if (get_check("Are you sure?!"))
 #endif
 			{
 #ifdef JP
-				msg_print("Â¼Àµ¤¬¿Ì¤¨¤¿¡¥¡¥¡¥");
+				msg_print("æ‘æ­£ãŒéœ‡ãˆãŸï¼ï¼ï¼");
 #else
 				msg_print("The Muramasa pulsates...");
 #endif
@@ -3742,7 +3742,7 @@ bool activate_random_artifact(object_type *o_ptr)
 				if (one_in_(2))
 				{
 #ifdef JP
-					msg_print("Â¼Àµ¤Ï²õ¤ì¤¿¡ª");
+					msg_print("æ‘æ­£ã¯å£Šã‚ŒãŸï¼");
 #else
 					msg_print("The Muramasa is destroyed!");
 #endif
@@ -3757,7 +3757,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			/* Only for Bloody Moon */
 			if (o_ptr->name1 != ART_BLOOD) return FALSE;
 #ifdef JP
-			msg_print("³ù¤¬ÌÀ¤ë¤¯µ±¤¤¤¿...");
+			msg_print("éŒãŒæ˜ã‚‹ãè¼ã„ãŸ...");
 #else
 			msg_print("Your scythe glows brightly!");
 #endif
@@ -3778,7 +3778,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (o_ptr->name1 != ART_CRIMSON) return FALSE;
 
 #ifdef JP
-			msg_print("¤»¤Ã¤«¤¯¤À¤«¤é¡Ø¥¯¥ê¥à¥¾¥ó¡Ù¤ò¤Ö¤Ã¤Ñ¤Ê¤¹¤¼¡ª");
+			msg_print("ã›ã£ã‹ãã ã‹ã‚‰ã€ã‚¯ãƒªãƒ ã‚¾ãƒ³ã€ã‚’ã¶ã£ã±ãªã™ãœï¼");
 #else
 			msg_print("I'll fire CRIMSON! SEKKAKUDAKARA!");
 #endif
@@ -3855,10 +3855,10 @@ bool activate_random_artifact(object_type *o_ptr)
 }
 
 /*!
- * @brief ¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¡Ø¥Ö¥é¥Ã¥Ç¥£¥à¡¼¥ó¡Ù¤ÎÆÃÀ­¤òÊÑ¹¹¤¹¤ë¡£
- * @details ¥¹¥ì¥¤2d2¼ï¡¢µÚ¤Óone_resistance()¤Ë¤è¤ëÂÑÀ­1d2¼ï¡¢pval2¼ï¤òÆÀ¤ë¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¡Ê¥Ö¥é¥Ã¥Ç¥£¥à¡¼¥ó¡Ë¤Î¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã€ãƒ–ãƒ©ãƒƒãƒ‡ã‚£ãƒ ãƒ¼ãƒ³ã€ã®ç‰¹æ€§ã‚’å¤‰æ›´ã™ã‚‹ã€‚
+ * @details ã‚¹ãƒ¬ã‚¤2d2ç¨®ã€åŠã³one_resistance()ã«ã‚ˆã‚‹è€æ€§1d2ç¨®ã€pval2ç¨®ã‚’å¾—ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ï¼ˆãƒ–ãƒ©ãƒƒãƒ‡ã‚£ãƒ ãƒ¼ãƒ³ï¼‰ã®ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void get_bloody_moon_flags(object_type *o_ptr)
 {
@@ -3889,15 +3889,15 @@ void get_bloody_moon_flags(object_type *o_ptr)
 }
 
 /*!
- * @brief ¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥ÈÀ¸À®»ş¤ÎÆÃÊÌ¤Ê¥Ï¡¼¥É¥³¡¼¥Ç¥£¥ó¥°½èÍı¤ò¹Ô¤¦¡£.
- * @details random_artifact_resistance()¤È¤¢¤ë¤¬¼Âºİ¤Ï¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Ç¤¢¤ë¡£
- * ÂĞ¾İ¤Ï¶²Éİ¤Î²¾ÌÌ¡¢Â¼Àµ¡¢¥í¥Ó¥ó¥È¥ó¤Î¥Ï¡¼¥×¡¢Î¶Áè¸×ò¬¡¢¥Ö¥é¥Ã¥Ç¥£¥à¡¼¥ó¡¢±©°á¡¢Å·½÷¤Î±©°á¡¢¥ß¥ê¥à¡¢
- * ¤½¤ÎÂ¾ÄÉ²ÃÂÑÀ­¡¢ÆÃÀ­ÄÉ²Ã½èÍı¡£
- * @attention ¥×¥ì¥¤¥ä¡¼¤Î³Æ¼ï¥¹¥Æ¡¼¥¿¥¹¤Ë°ÍÂ¸¤·¤¿½èÍı¤¬¤¢¤ë¡£
- * @todo ÀŞ¤ò¸«¤Æ´Ø¿ôÌ¾¤òÊÑ¹¹¤¹¤ë¤³¤È¡£
- * @param o_ptr ÂĞ¾İ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @param a_ptr À¸À®¤¹¤ë¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¹½Â¤ÂÎ¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆæ™‚ã®ç‰¹åˆ¥ãªãƒãƒ¼ãƒ‰ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°å‡¦ç†ã‚’è¡Œã†ã€‚.
+ * @details random_artifact_resistance()ã¨ã‚ã‚‹ãŒå®Ÿéš›ã¯å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã§ã‚ã‚‹ã€‚
+ * å¯¾è±¡ã¯ææ€–ã®ä»®é¢ã€æ‘æ­£ã€ãƒ­ãƒ“ãƒ³ãƒˆãƒ³ã®ãƒãƒ¼ãƒ—ã€é¾äº‰è™é¬ªã€ãƒ–ãƒ©ãƒƒãƒ‡ã‚£ãƒ ãƒ¼ãƒ³ã€ç¾½è¡£ã€å¤©å¥³ã®ç¾½è¡£ã€ãƒŸãƒªãƒ ã€
+ * ãã®ä»–è¿½åŠ è€æ€§ã€ç‰¹æ€§è¿½åŠ å‡¦ç†ã€‚
+ * @attention ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å„ç¨®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã«ä¾å­˜ã—ãŸå‡¦ç†ãŒã‚ã‚‹ã€‚
+ * @todo æŠ˜ã‚’è¦‹ã¦é–¢æ•°åã‚’å¤‰æ›´ã™ã‚‹ã“ã¨ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @param a_ptr ç”Ÿæˆã™ã‚‹å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 {
@@ -3993,15 +3993,15 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 
 
 /*!
- * @brief ¥Õ¥í¥¢¤Î»ØÄê¤µ¤ì¤¿°ÌÃÖ¤Ë¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤òÀ¸À®¤¹¤ë¡£ / Create the artifact of the specified number
- * @details ¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¹½Â¤ÂÎ¤«¤é´ğËÜ¥¹¥Æ¡¼¥¿¥¹¤ò¥³¥Ô¡¼¤·¤¿¸å¡¢½êÄê¤ÎºÂÉ¸¤Çdrop_item()¤ÇÍî¤È¤¹¡£
- * @param a_idx À¸À®¤¹¤ë¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¹½Â¤ÂÎ¤ÎID
- * @param y ¥¢¥¤¥Æ¥à¤òÍî¤È¤¹ÃÏÅÀ¤ÎyºÂÉ¸
- * @param x ¥¢¥¤¥Æ¥à¤òÍî¤È¤¹ÃÏÅÀ¤ÎxºÂÉ¸
- * @return À¸À®¤¬À®¸ù¤·¤¿¤«Èİ¤«¡¢¼ºÇÔ¤ÏID¤ÎÉÔÁ´¡¢¥Ù¡¼¥¹¥¢¥¤¥Æ¥à¤ÎÉÔÁ´¡¢drop_item()¤Î¼ºÇÔ»ş¤Ëµ¯¤³¤ë¡£
- * @attention ¤³¤Î½èÍı¤Ïdrop_near()Æâ¤ÇÉáÄÌ¤Î¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤¬½Å¤Ê¤é¤Ê¤¤À­¼Á¤Ë°ÍÂ¸¤¹¤ë.
- * ²¾¤Ë2¸Ä°Ê¾åÂ¸ºß²ÄÇ½¤«¤ÄÁõÈ÷ÉÊ°Ê³°¤Î¸ÇÄê¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤¬ºîÀ®¤µ¤ì¤ì¤Ğ
- * drop_near()´Ø¿ô¤ÎÊÖ¤êÃÍ¤Ï¿®ÍÑ¤Ç¤­¤Ê¤¯¤Ê¤ë.
+ * @brief ãƒ•ãƒ­ã‚¢ã®æŒ‡å®šã•ã‚ŒãŸä½ç½®ã«å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹ã€‚ / Create the artifact of the specified number
+ * @details å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆæ§‹é€ ä½“ã‹ã‚‰åŸºæœ¬ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’ã‚³ãƒ”ãƒ¼ã—ãŸå¾Œã€æ‰€å®šã®åº§æ¨™ã§drop_item()ã§è½ã¨ã™ã€‚
+ * @param a_idx ç”Ÿæˆã™ã‚‹å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆæ§‹é€ ä½“ã®ID
+ * @param y ã‚¢ã‚¤ãƒ†ãƒ ã‚’è½ã¨ã™åœ°ç‚¹ã®yåº§æ¨™
+ * @param x ã‚¢ã‚¤ãƒ†ãƒ ã‚’è½ã¨ã™åœ°ç‚¹ã®xåº§æ¨™
+ * @return ç”ŸæˆãŒæˆåŠŸã—ãŸã‹å¦ã‹ã€å¤±æ•—ã¯IDã®ä¸å…¨ã€ãƒ™ãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ ã®ä¸å…¨ã€drop_item()ã®å¤±æ•—æ™‚ã«èµ·ã“ã‚‹ã€‚
+ * @attention ã“ã®å‡¦ç†ã¯drop_near()å†…ã§æ™®é€šã®å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãŒé‡ãªã‚‰ãªã„æ€§è³ªã«ä¾å­˜ã™ã‚‹.
+ * ä»®ã«2å€‹ä»¥ä¸Šå­˜åœ¨å¯èƒ½ã‹ã¤è£…å‚™å“ä»¥å¤–ã®å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãŒä½œæˆã•ã‚Œã‚Œã°
+ * drop_near()é–¢æ•°ã®è¿”ã‚Šå€¤ã¯ä¿¡ç”¨ã§ããªããªã‚‹.
 
  */
 bool create_named_art(int a_idx, int y, int x)

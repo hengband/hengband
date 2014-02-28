@@ -1,4 +1,4 @@
-/* File: main-ibm.c */
+﻿/* File: main-ibm.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others

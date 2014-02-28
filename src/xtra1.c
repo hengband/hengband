@@ -1,4 +1,4 @@
-
+ï»¿
 /* File: misc.c */
 
 /*
@@ -162,8 +162,8 @@ void prt_time(void)
 
 	/* Dump the info itself */
 #ifdef JP
-	if (day < 1000) c_put_str(TERM_WHITE, format("%2dÆüÌÜ", day), ROW_DAY, COL_DAY);
-	else c_put_str(TERM_WHITE, "***ÆüÌÜ", ROW_DAY, COL_DAY);
+	if (day < 1000) c_put_str(TERM_WHITE, format("%2dæ—¥ç›®", day), ROW_DAY, COL_DAY);
+	else c_put_str(TERM_WHITE, "***æ—¥ç›®", ROW_DAY, COL_DAY);
 #else
 	if (day < 1000) c_put_str(TERM_WHITE, format("Day%3d", day), ROW_DAY, COL_DAY);
 	else c_put_str(TERM_WHITE, "Day***", ROW_DAY, COL_DAY);
@@ -178,25 +178,25 @@ cptr map_name(void)
 	if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)
 	    && (quest[p_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
 #ifdef JP
-		return "¥¯¥¨¥¹¥È";
+		return "ã‚¯ã‚¨ã‚¹ãƒˆ";
 #else
 		return "Quest";
 #endif
 	else if (p_ptr->wild_mode)
 #ifdef JP
-		return "ÃÏ¾å";
+		return "åœ°ä¸Š";
 #else
 		return "Surface";
 #endif
 	else if (p_ptr->inside_arena)
 #ifdef JP
-		return "¥¢¥ê¡¼¥Ê";
+		return "ã‚¢ãƒªãƒ¼ãƒŠ";
 #else
 		return "Arena";
 #endif
 	else if (p_ptr->inside_battle)
 #ifdef JP
-		return "Æ®µ»¾ì";
+		return "é—˜æŠ€å ´";
 #else
 		return "Monster Arena";
 #endif
@@ -257,7 +257,7 @@ static void prt_stat(int stat)
 	if (p_ptr->stat_max[stat] == p_ptr->stat_max_max[stat])
 	{
 #ifdef JP
-		/* ÆüËÜ¸ì¤Ë¤«¤Ö¤é¤Ê¤¤¤è¤¦¤ËÉ½¼¨°ÌÃÖ¤òÊÑ¹¹ */
+		/* æ—¥æœ¬èªã«ã‹ã¶ã‚‰ãªã„ã‚ˆã†ã«è¡¨ç¤ºä½ç½®ã‚’å¤‰æ›´ */
 		put_str("!", ROW_STAT + stat, 5);
 #else
 		put_str("!", ROW_STAT + stat, 3);
@@ -345,74 +345,74 @@ static struct {
 } bar[]
 #ifdef JP
 = {
-	{TERM_YELLOW, "¤Ä", "¤Ä¤è¤·"},
-	{TERM_VIOLET, "¸¸", "¸¸³Ğ"},
-	{TERM_L_DARK, "ÌÕ", "ÌÕÌÜ"},
-	{TERM_RED, "áã", "Ëãáã"},
-	{TERM_VIOLET, "Íğ", "º®Íğ"},
-	{TERM_GREEN, "ÆÇ", "ÆÇ"},
-	{TERM_BLUE, "¶²", "¶²Éİ"},
-	{TERM_L_BLUE, "Éâ", "ÉâÍ·"},
-	{TERM_SLATE, "È¿", "È¿¼Í"},
-	{TERM_SLATE, "ÊÉ", "ÊÉÈ´¤±"},
-	{TERM_L_DARK, "Í©", "Í©ÂÎ"},
-	{TERM_SLATE, "¼Ù", "ËÉ¼Ù"},
-	{TERM_VIOLET, "ÊÑ", "ÊÑ¤ï¤ê¿È"},
-	{TERM_YELLOW, "Ëâ", "ËâË¡³»"},
-	{TERM_L_UMBER, "¿­", "¿­¤Ó"},
-	{TERM_WHITE, "ÀĞ", "ÀĞÈ©"},
-	{TERM_L_BLUE, "Ê¬", "Ê¬¿È"},
-	{TERM_SLATE, "ËÉ", "ËâË¡ËÉ¸æ"},
-	{TERM_YELLOW, "µæ", "µæ¶Ë"},
-	{TERM_YELLOW, "Ìµ", "ÌµÅ¨"},
-	{TERM_L_GREEN, "»À", "»ÀÌÈ±Ö"},
-	{TERM_GREEN, "»À", "ÂÑ»À"},
-	{TERM_L_BLUE, "ÅÅ", "ÅÅÌÈ±Ö"},
-	{TERM_BLUE, "ÅÅ", "ÂÑÅÅ"},
-	{TERM_L_RED, "²Ğ", "²ĞÌÈ±Ö"},
-	{TERM_RED, "²Ğ", "ÂÑ²Ğ"},
-	{TERM_WHITE, "Îä", "ÎäÌÈ±Ö"},
-	{TERM_SLATE, "Îä", "ÂÑÎä"},
-	{TERM_GREEN, "ÆÇ", "ÂÑÆÇ"},
-	{TERM_L_DARK, "¹ö", "ÂÑÃÏ¹ö"},
-	{TERM_L_BLUE, "»ş", "ÂÑ»ş´Ö"},
-	{TERM_L_DARK, "¶À", "¶À¥ª¡¼¥é"},
-	{TERM_L_RED, "¥ª", "²Ğ¥ª¡¼¥é"},
-	{TERM_WHITE, "Æ®", "Æ®µ¤"},
-	{TERM_WHITE, "À»", "À»¥ª¡¼¥é"},
-	{TERM_VIOLET, "ÌÜ", "ÌÜ¤Ë¤ÏÌÜ"},
-	{TERM_WHITE, "½Ë", "½ËÊ¡"},
-	{TERM_WHITE, "Í¦", "Í¦"},
-	{TERM_RED, "¶¸", "¶¸Íğ"},
-	{TERM_L_RED, "²Ğ", "Ëâ·õ²Ğ"},
-	{TERM_WHITE, "Îä", "Ëâ·õÎä"},
-	{TERM_L_BLUE, "ÅÅ", "Ëâ·õÅÅ"},
-	{TERM_SLATE, "»À", "Ëâ·õ»À"},
-	{TERM_L_GREEN, "ÆÇ", "Ëâ·õÆÇ"},
-	{TERM_RED, "Íğ", "º®ÍğÂÇ·â"},
-	{TERM_L_BLUE, "»ë", "Æ©ÌÀ»ë"},
-	{TERM_ORANGE, "¥Æ", "¥Æ¥ì¥Ñ¥·"},
-	{TERM_L_BLUE, "²ó", "²óÉü"},
-	{TERM_L_RED, "ÀÖ", "ÀÖ³°"},
-	{TERM_UMBER, "±£", "±£Ì©"},
-	{TERM_YELLOW, "±£", "Ä¶±£Ì©"},
-	{TERM_WHITE, "µ¢", "µ¢´Ô"},
-	{TERM_WHITE, "¸½", "¸½¼ÂÊÑÍÆ"},
+	{TERM_YELLOW, "ã¤", "ã¤ã‚ˆã—"},
+	{TERM_VIOLET, "å¹»", "å¹»è¦š"},
+	{TERM_L_DARK, "ç›²", "ç›²ç›®"},
+	{TERM_RED, "ç—º", "éº»ç—º"},
+	{TERM_VIOLET, "ä¹±", "æ··ä¹±"},
+	{TERM_GREEN, "æ¯’", "æ¯’"},
+	{TERM_BLUE, "æ", "ææ€–"},
+	{TERM_L_BLUE, "æµ®", "æµ®éŠ"},
+	{TERM_SLATE, "å", "åå°„"},
+	{TERM_SLATE, "å£", "å£æŠœã‘"},
+	{TERM_L_DARK, "å¹½", "å¹½ä½“"},
+	{TERM_SLATE, "é‚ª", "é˜²é‚ª"},
+	{TERM_VIOLET, "å¤‰", "å¤‰ã‚ã‚Šèº«"},
+	{TERM_YELLOW, "é­”", "é­”æ³•é§"},
+	{TERM_L_UMBER, "ä¼¸", "ä¼¸ã³"},
+	{TERM_WHITE, "çŸ³", "çŸ³è‚Œ"},
+	{TERM_L_BLUE, "åˆ†", "åˆ†èº«"},
+	{TERM_SLATE, "é˜²", "é­”æ³•é˜²å¾¡"},
+	{TERM_YELLOW, "ç©¶", "ç©¶æ¥µ"},
+	{TERM_YELLOW, "ç„¡", "ç„¡æ•µ"},
+	{TERM_L_GREEN, "é…¸", "é…¸å…ç–«"},
+	{TERM_GREEN, "é…¸", "è€é…¸"},
+	{TERM_L_BLUE, "é›»", "é›»å…ç–«"},
+	{TERM_BLUE, "é›»", "è€é›»"},
+	{TERM_L_RED, "ç«", "ç«å…ç–«"},
+	{TERM_RED, "ç«", "è€ç«"},
+	{TERM_WHITE, "å†·", "å†·å…ç–«"},
+	{TERM_SLATE, "å†·", "è€å†·"},
+	{TERM_GREEN, "æ¯’", "è€æ¯’"},
+	{TERM_L_DARK, "ç„", "è€åœ°ç„"},
+	{TERM_L_BLUE, "æ™‚", "è€æ™‚é–“"},
+	{TERM_L_DARK, "é¡", "é¡ã‚ªãƒ¼ãƒ©"},
+	{TERM_L_RED, "ã‚ª", "ç«ã‚ªãƒ¼ãƒ©"},
+	{TERM_WHITE, "é—˜", "é—˜æ°—"},
+	{TERM_WHITE, "è–", "è–ã‚ªãƒ¼ãƒ©"},
+	{TERM_VIOLET, "ç›®", "ç›®ã«ã¯ç›®"},
+	{TERM_WHITE, "ç¥", "ç¥ç¦"},
+	{TERM_WHITE, "å‹‡", "å‹‡"},
+	{TERM_RED, "ç‹‚", "ç‹‚ä¹±"},
+	{TERM_L_RED, "ç«", "é­”å‰£ç«"},
+	{TERM_WHITE, "å†·", "é­”å‰£å†·"},
+	{TERM_L_BLUE, "é›»", "é­”å‰£é›»"},
+	{TERM_SLATE, "é…¸", "é­”å‰£é…¸"},
+	{TERM_L_GREEN, "æ¯’", "é­”å‰£æ¯’"},
+	{TERM_RED, "ä¹±", "æ··ä¹±æ‰“æ’ƒ"},
+	{TERM_L_BLUE, "è¦–", "é€æ˜è¦–"},
+	{TERM_ORANGE, "ãƒ†", "ãƒ†ãƒ¬ãƒ‘ã‚·"},
+	{TERM_L_BLUE, "å›", "å›å¾©"},
+	{TERM_L_RED, "èµ¤", "èµ¤å¤–"},
+	{TERM_UMBER, "éš ", "éš å¯†"},
+	{TERM_YELLOW, "éš ", "è¶…éš å¯†"},
+	{TERM_WHITE, "å¸°", "å¸°é‚„"},
+	{TERM_WHITE, "ç¾", "ç¾å®Ÿå¤‰å®¹"},
 	/* Hex */
-	{TERM_WHITE, "¥ª", "É¹¥ª¡¼¥é"},
-	{TERM_BLUE, "¥ª", "ÅÅ¥ª¡¼¥é"},
-	{TERM_L_DARK, "¥ª", "±Æ¥ª¡¼¥é"},
-	{TERM_YELLOW, "ÏÓ", "ÏÓÎÏ¶¯²½"},
-	{TERM_RED, "Æù", "ÆùÂÎ¶¯²½"},
-	{TERM_L_DARK, "¿£", "È¿Áı¿£"},
-	{TERM_ORANGE, "¥Æ", "È¿¥Æ¥ì¥İ"},
-	{TERM_RED, "Ëâ", "È¿ËâË¡"},
-	{TERM_SLATE, "²æ", "²æËı"},
-	{TERM_SLATE, "Àë", "Àë¹ğ"},
-	{TERM_L_DARK, "·õ", "Ëâ·õ²½"},
-	{TERM_RED, "µÛ", "µÛ·ìÂÇ·â"},
-	{TERM_WHITE, "²ó", "²óÉü"},
-	{TERM_L_DARK, "´¶", "¼Ù°­´¶ÃÎ"},
+	{TERM_WHITE, "ã‚ª", "æ°·ã‚ªãƒ¼ãƒ©"},
+	{TERM_BLUE, "ã‚ª", "é›»ã‚ªãƒ¼ãƒ©"},
+	{TERM_L_DARK, "ã‚ª", "å½±ã‚ªãƒ¼ãƒ©"},
+	{TERM_YELLOW, "è…•", "è…•åŠ›å¼·åŒ–"},
+	{TERM_RED, "è‚‰", "è‚‰ä½“å¼·åŒ–"},
+	{TERM_L_DARK, "æ®–", "åå¢—æ®–"},
+	{TERM_ORANGE, "ãƒ†", "åãƒ†ãƒ¬ãƒ"},
+	{TERM_RED, "é­”", "åé­”æ³•"},
+	{TERM_SLATE, "æˆ‘", "æˆ‘æ…¢"},
+	{TERM_SLATE, "å®£", "å®£å‘Š"},
+	{TERM_L_DARK, "å‰£", "é­”å‰£åŒ–"},
+	{TERM_RED, "å¸", "å¸è¡€æ‰“æ’ƒ"},
+	{TERM_WHITE, "å›", "å›å¾©"},
+	{TERM_L_DARK, "æ„Ÿ", "é‚ªæ‚ªæ„ŸçŸ¥"},
 	{0, NULL, NULL}
 };
 #else
@@ -738,8 +738,8 @@ static void prt_title(void)
 	if (p_ptr->wizard)
 	{
 #ifdef JP
-		/* ±ÑÆüÀÚ¤êÂØ¤¨µ¡Ç½ ¾Î¹æ */
-		p = "[¥¦¥£¥¶¡¼¥É]";
+		/* è‹±æ—¥åˆ‡ã‚Šæ›¿ãˆæ©Ÿèƒ½ ç§°å· */
+		p = "[ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰]";
 #else
 		p = "[=-WIZARD-=]";
 #endif
@@ -752,8 +752,8 @@ static void prt_title(void)
 		if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
 		{
 #ifdef JP
-			/* ±ÑÆüÀÚ¤êÂØ¤¨µ¡Ç½ ¾Î¹æ */
-			p = "*¿¿¡¦¾¡Íø¼Ô*";
+			/* è‹±æ—¥åˆ‡ã‚Šæ›¿ãˆæ©Ÿèƒ½ ç§°å· */
+			p = "*çœŸãƒ»å‹åˆ©è€…*";
 #else
 			p = "*TRUEWINNER*";
 #endif
@@ -761,8 +761,8 @@ static void prt_title(void)
 		else
 		{
 #ifdef JP
-			/* ±ÑÆüÀÚ¤êÂØ¤¨µ¡Ç½ ¾Î¹æ */
-			p = "***¾¡Íø¼Ô***";
+			/* è‹±æ—¥åˆ‡ã‚Šæ›¿ãˆæ©Ÿèƒ½ ç§°å· */
+			p = "***å‹åˆ©è€…***";
 #else
 			p = "***WINNER***";
 #endif
@@ -797,7 +797,7 @@ static void prt_level(void)
 	if (p_ptr->lev >= p_ptr->max_plv)
 	{
 #ifdef JP
-		put_str("¥ì¥Ù¥ë ", ROW_LEVEL, 0);
+		put_str("ãƒ¬ãƒ™ãƒ« ", ROW_LEVEL, 0);
 		c_put_str(TERM_L_GREEN, tmp, ROW_LEVEL, COL_LEVEL + 7);
 #else
 		put_str("LEVEL ", ROW_LEVEL, 0);
@@ -808,7 +808,7 @@ static void prt_level(void)
 	else
 	{
 #ifdef JP
-		put_str("x¥ì¥Ù¥ë", ROW_LEVEL, 0);
+		put_str("xãƒ¬ãƒ™ãƒ«", ROW_LEVEL, 0);
 		c_put_str(TERM_YELLOW, tmp, ROW_LEVEL, COL_LEVEL + 7);
 #else
 		put_str("Level ", ROW_LEVEL, 0);
@@ -853,8 +853,8 @@ static void prt_exp(void)
 	if (p_ptr->exp >= p_ptr->max_exp)
 	{
 #ifdef JP
-		if (p_ptr->prace == RACE_ANDROID) put_str("¶¯²½ ", ROW_EXP, 0);
-		else put_str("·Ğ¸³ ", ROW_EXP, 0);
+		if (p_ptr->prace == RACE_ANDROID) put_str("å¼·åŒ– ", ROW_EXP, 0);
+		else put_str("çµŒé¨“ ", ROW_EXP, 0);
 		c_put_str(TERM_L_GREEN, out_val, ROW_EXP, COL_EXP + 5);
 #else
 		if (p_ptr->prace == RACE_ANDROID) put_str("Cst ", ROW_EXP, 0);
@@ -866,7 +866,7 @@ static void prt_exp(void)
 	else
 	{
 #ifdef JP
-		put_str("x·Ğ¸³", ROW_EXP, 0);
+		put_str("xçµŒé¨“", ROW_EXP, 0);
 		c_put_str(TERM_YELLOW, out_val, ROW_EXP, COL_EXP + 5);
 #else
 		put_str("Exp ", ROW_EXP, 0);
@@ -884,7 +884,7 @@ static void prt_gold(void)
 	char tmp[32];
 
 #ifdef JP
-	put_str("¡ğ ", ROW_GOLD, COL_GOLD);
+	put_str("ï¼„ ", ROW_GOLD, COL_GOLD);
 #else
 	put_str("AU ", ROW_GOLD, COL_GOLD);
 #endif
@@ -903,8 +903,8 @@ static void prt_ac(void)
 	char tmp[32];
 
 #ifdef JP
-/* AC ¤ÎÉ½¼¨Êı¼°¤òÊÑ¹¹¤·¤Æ¤¤¤ë */
-	put_str(" £Á£Ã(     )", ROW_AC, COL_AC);
+/* AC ã®è¡¨ç¤ºæ–¹å¼ã‚’å¤‰æ›´ã—ã¦ã„ã‚‹ */
+	put_str(" ï¼¡ï¼£(     )", ROW_AC, COL_AC);
 	sprintf(tmp, "%5d", p_ptr->dis_ac + p_ptr->dis_to_a);
 	c_put_str(TERM_L_GREEN, tmp, ROW_AC, COL_AC + 6);
 #else
@@ -921,17 +921,17 @@ static void prt_ac(void)
  */
 static void prt_hp(void)
 {
-/* ¥Ò¥Ã¥È¥İ¥¤¥ó¥È¤ÎÉ½¼¨ÊıË¡¤òÊÑ¹¹ */
+/* ãƒ’ãƒƒãƒˆãƒã‚¤ãƒ³ãƒˆã®è¡¨ç¤ºæ–¹æ³•ã‚’å¤‰æ›´ */
 	char tmp[32];
   
 	byte color;
   
-	/* ¥¿¥¤¥È¥ë */
-/*	put_str(" £È£Ğ¡¦£Í£Ğ", ROW_HPMP, COL_HPMP); */
+	/* ã‚¿ã‚¤ãƒˆãƒ« */
+/*	put_str(" ï¼¨ï¼°ãƒ»ï¼­ï¼°", ROW_HPMP, COL_HPMP); */
 
 	put_str("HP", ROW_CURHP, COL_CURHP);
 
-	/* ¸½ºß¤Î¥Ò¥Ã¥È¥İ¥¤¥ó¥È */
+	/* ç¾åœ¨ã®ãƒ’ãƒƒãƒˆãƒã‚¤ãƒ³ãƒˆ */
 	sprintf(tmp, "%4ld", (long int)p_ptr->chp);
 
 	if (p_ptr->chp >= p_ptr->mhp)
@@ -949,10 +949,10 @@ static void prt_hp(void)
 
 	c_put_str(color, tmp, ROW_CURHP, COL_CURHP+3);
 
-	/* ¶èÀÚ¤ê */
+	/* åŒºåˆ‡ã‚Š */
 	put_str( "/", ROW_CURHP, COL_CURHP + 7 );
 
-	/* ºÇÂç¥Ò¥Ã¥È¥İ¥¤¥ó¥È */
+	/* æœ€å¤§ãƒ’ãƒƒãƒˆãƒã‚¤ãƒ³ãƒˆ */
 	sprintf(tmp, "%4ld", (long int)p_ptr->mhp);
 	color = TERM_L_GREEN;
 
@@ -965,7 +965,7 @@ static void prt_hp(void)
  */
 static void prt_sp(void)
 {
-/* ¥Ş¥¸¥Ã¥¯¥İ¥¤¥ó¥È¤ÎÉ½¼¨ÊıË¡¤òÊÑ¹¹¤·¤Æ¤¤¤ë */
+/* ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ãƒˆã®è¡¨ç¤ºæ–¹æ³•ã‚’å¤‰æ›´ã—ã¦ã„ã‚‹ */
 	char tmp[32];
 	byte color;
 
@@ -973,8 +973,8 @@ static void prt_sp(void)
 	/* Do not show mana unless it matters */
 	if (!mp_ptr->spell_book) return;
 
-	/* ¥¿¥¤¥È¥ë */
-/*	put_str(" £Í£Ğ / ºÇÂç", ROW_MAXSP, COL_MAXSP); */
+	/* ã‚¿ã‚¤ãƒˆãƒ« */
+/*	put_str(" ï¼­ï¼° / æœ€å¤§", ROW_MAXSP, COL_MAXSP); */
 
 #ifdef JP
 	put_str("MP", ROW_CURSP, COL_CURSP);
@@ -982,7 +982,7 @@ static void prt_sp(void)
 	put_str("SP", ROW_CURSP, COL_CURSP);
 #endif
 
-	/* ¸½ºß¤Î¥Ş¥¸¥Ã¥¯¥İ¥¤¥ó¥È */
+	/* ç¾åœ¨ã®ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ãƒˆ */
 	sprintf(tmp, "%4ld", (long int)p_ptr->csp);
 
 	if (p_ptr->csp >= p_ptr->msp)
@@ -1000,10 +1000,10 @@ static void prt_sp(void)
 
 	c_put_str(color, tmp, ROW_CURSP, COL_CURSP+3);
 
-	/* ¶èÀÚ¤ê */
+	/* åŒºåˆ‡ã‚Š */
 	put_str( "/", ROW_CURSP, COL_CURSP + 7 );
 
-	/* ºÇÂç¥Ş¥¸¥Ã¥¯¥İ¥¤¥ó¥È */
+	/* æœ€å¤§ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ãƒˆ */
 	sprintf(tmp, "%4ld", (long int)p_ptr->msp);
 	color = TERM_L_GREEN;
 
@@ -1027,7 +1027,7 @@ static void prt_depth(void)
 	if (!dun_level)
 	{
 #ifdef JP
-		strcpy(depths, "ÃÏ¾å");
+		strcpy(depths, "åœ°ä¸Š");
 #else
 		strcpy(depths, "Surf.");
 #endif
@@ -1035,7 +1035,7 @@ static void prt_depth(void)
 	else if (p_ptr->inside_quest && !dungeon_type)
 	{
 #ifdef JP
-		strcpy(depths, "ÃÏ¾å");
+		strcpy(depths, "åœ°ä¸Š");
 #else
 		strcpy(depths, "Quest");
 #endif
@@ -1044,7 +1044,7 @@ static void prt_depth(void)
 	{
 #ifdef JP
 		if (depth_in_feet) (void)sprintf(depths, "%d ft", dun_level * 50);
-		else (void)sprintf(depths, "%d ³¬", dun_level);
+		else (void)sprintf(depths, "%d éš", dun_level);
 #else
 		if (depth_in_feet) (void)sprintf(depths, "%d ft", dun_level * 50);
 		else (void)sprintf(depths, "Lev %d", dun_level);
@@ -1084,7 +1084,7 @@ static void prt_hunger(void)
 	if (p_ptr->food < PY_FOOD_FAINT)
 	{
 #ifdef JP
-		c_put_str(TERM_RED, "¿ê¼å  ", ROW_HUNGRY, COL_HUNGRY);
+		c_put_str(TERM_RED, "è¡°å¼±  ", ROW_HUNGRY, COL_HUNGRY);
 #else
 		c_put_str(TERM_RED, "Weak  ", ROW_HUNGRY, COL_HUNGRY);
 #endif
@@ -1095,7 +1095,7 @@ static void prt_hunger(void)
 	else if (p_ptr->food < PY_FOOD_WEAK)
 	{
 #ifdef JP
-		c_put_str(TERM_ORANGE, "¿ê¼å  ", ROW_HUNGRY, COL_HUNGRY);
+		c_put_str(TERM_ORANGE, "è¡°å¼±  ", ROW_HUNGRY, COL_HUNGRY);
 #else
 		c_put_str(TERM_ORANGE, "Weak  ", ROW_HUNGRY, COL_HUNGRY);
 #endif
@@ -1106,7 +1106,7 @@ static void prt_hunger(void)
 	else if (p_ptr->food < PY_FOOD_ALERT)
 	{
 #ifdef JP
-		c_put_str(TERM_YELLOW, "¶õÊ¢  ", ROW_HUNGRY, COL_HUNGRY);
+		c_put_str(TERM_YELLOW, "ç©ºè…¹  ", ROW_HUNGRY, COL_HUNGRY);
 #else
 		c_put_str(TERM_YELLOW, "Hungry", ROW_HUNGRY, COL_HUNGRY);
 #endif
@@ -1123,7 +1123,7 @@ static void prt_hunger(void)
 	else if (p_ptr->food < PY_FOOD_MAX)
 	{
 #ifdef JP
-		c_put_str(TERM_L_GREEN, "ËşÊ¢  ", ROW_HUNGRY, COL_HUNGRY);
+		c_put_str(TERM_L_GREEN, "æº€è…¹  ", ROW_HUNGRY, COL_HUNGRY);
 #else
 		c_put_str(TERM_L_GREEN, "Full  ", ROW_HUNGRY, COL_HUNGRY);
 #endif
@@ -1134,7 +1134,7 @@ static void prt_hunger(void)
 	else
 	{
 #ifdef JP
-		c_put_str(TERM_GREEN, "¿©²á¤®", ROW_HUNGRY, COL_HUNGRY);
+		c_put_str(TERM_GREEN, "é£Ÿéã", ROW_HUNGRY, COL_HUNGRY);
 #else
 		c_put_str(TERM_GREEN, "Gorged", ROW_HUNGRY, COL_HUNGRY);
 #endif
@@ -1187,7 +1187,7 @@ sprintf(text, "  %2d", command_rep);
 			case ACTION_SEARCH:
 			{
 #ifdef JP
-				strcpy(text, "Ãµº÷");
+				strcpy(text, "æ¢ç´¢");
 #else
 				strcpy(text, "Sear");
 #endif
@@ -1256,7 +1256,7 @@ sprintf(text, "  %2d", command_rep);
 			case ACTION_LEARN:
 			{
 #ifdef JP
-				strcpy(text, "³Ø½¬");
+				strcpy(text, "å­¦ç¿’");
 #else
 				strcpy(text, "lear");
 #endif
@@ -1266,7 +1266,7 @@ sprintf(text, "  %2d", command_rep);
 			case ACTION_FISH:
 			{
 #ifdef JP
-				strcpy(text, "Äà¤ê");
+				strcpy(text, "é‡£ã‚Š");
 #else
 				strcpy(text, "fish");
 #endif
@@ -1298,7 +1298,7 @@ sprintf(text, "  %2d", command_rep);
 			case ACTION_SING:
 			{
 #ifdef JP
-				strcpy(text, "²Î  ");
+				strcpy(text, "æ­Œ  ");
 #else
 				strcpy(text, "Sing");
 #endif
@@ -1307,7 +1307,7 @@ sprintf(text, "  %2d", command_rep);
 			case ACTION_HAYAGAKE:
 			{
 #ifdef JP
-				strcpy(text, "Â®¶î");
+				strcpy(text, "é€Ÿé§†");
 #else
 				strcpy(text, "Fast");
 #endif
@@ -1316,7 +1316,7 @@ sprintf(text, "  %2d", command_rep);
 			case ACTION_SPELL:
 			{
 #ifdef JP
-				strcpy(text, "±Ó¾§");
+				strcpy(text, "è© å”±");
 #else
 				strcpy(text, "Spel");
 #endif
@@ -1368,7 +1368,7 @@ static void prt_speed(void)
 		else if (p_ptr->slow && !is_fast) attr = TERM_VIOLET;
 		else attr = TERM_L_GREEN;
 #ifdef JP
-		sprintf(buf, "%s(+%d)", (p_ptr->riding ? "¾èÇÏ" : "²ÃÂ®"), (i - 110));
+		sprintf(buf, "%s(+%d)", (p_ptr->riding ? "ä¹—é¦¬" : "åŠ é€Ÿ"), (i - 110));
 #else
 		sprintf(buf, "Fast(+%d)", (i - 110));
 #endif
@@ -1389,7 +1389,7 @@ static void prt_speed(void)
 		else if (p_ptr->slow && !is_fast) attr = TERM_VIOLET;
 		else attr = TERM_L_UMBER;
 #ifdef JP
-		sprintf(buf, "%s(-%d)", (p_ptr->riding ? "¾èÇÏ" : "¸ºÂ®"), (110 - i));
+		sprintf(buf, "%s(-%d)", (p_ptr->riding ? "ä¹—é¦¬" : "æ¸›é€Ÿ"), (110 - i));
 #else
 		sprintf(buf, "Slow(-%d)", (110 - i));
 #endif
@@ -1398,7 +1398,7 @@ static void prt_speed(void)
 	{
 		attr = TERM_GREEN;
 #ifdef JP
-		strcpy(buf, "¾èÇÏÃæ");
+		strcpy(buf, "ä¹—é¦¬ä¸­");
 #else
 		strcpy(buf, "Riding");
 #endif
@@ -1420,7 +1420,7 @@ static void prt_study(void)
 	if (p_ptr->new_spells)
 	{
 #ifdef JP
-		put_str("³Ø½¬", row_study, col_study);
+		put_str("å­¦ç¿’", row_study, col_study);
 #else
 		put_str("Stud", row_study, col_study);
 #endif
@@ -1449,7 +1449,7 @@ static void prt_imitation(void)
 			if (new_mane) attr = TERM_L_RED;
 			else attr = TERM_WHITE;
 #ifdef JP
-			c_put_str(attr, "¤Ş¤Í", row_study, col_study);
+			c_put_str(attr, "ã¾ã­", row_study, col_study);
 #else
 			c_put_str(attr, "Imit", row_study, col_study);
 #endif
@@ -1469,7 +1469,7 @@ static void prt_cut(void)
 	if (c > 1000)
 	{
 #ifdef JP
-		c_put_str(TERM_L_RED, "Ã×Ì¿½ı      ", ROW_CUT, COL_CUT);
+		c_put_str(TERM_L_RED, "è‡´å‘½å‚·      ", ROW_CUT, COL_CUT);
 #else
 		c_put_str(TERM_L_RED, "Mortal wound", ROW_CUT, COL_CUT);
 #endif
@@ -1478,7 +1478,7 @@ static void prt_cut(void)
 	else if (c > 200)
 	{
 #ifdef JP
-		c_put_str(TERM_RED, "¤Ò¤É¤¤¿¼¼ê  ", ROW_CUT, COL_CUT);
+		c_put_str(TERM_RED, "ã²ã©ã„æ·±æ‰‹  ", ROW_CUT, COL_CUT);
 #else
 		c_put_str(TERM_RED, "Deep gash   ", ROW_CUT, COL_CUT);
 #endif
@@ -1487,7 +1487,7 @@ static void prt_cut(void)
 	else if (c > 100)
 	{
 #ifdef JP
-		c_put_str(TERM_RED, "½Å½ı        ", ROW_CUT, COL_CUT);
+		c_put_str(TERM_RED, "é‡å‚·        ", ROW_CUT, COL_CUT);
 #else
 		c_put_str(TERM_RED, "Severe cut  ", ROW_CUT, COL_CUT);
 #endif
@@ -1496,7 +1496,7 @@ static void prt_cut(void)
 	else if (c > 50)
 	{
 #ifdef JP
-		c_put_str(TERM_ORANGE, "ÂçÊÑ¤Ê½ı    ", ROW_CUT, COL_CUT);
+		c_put_str(TERM_ORANGE, "å¤§å¤‰ãªå‚·    ", ROW_CUT, COL_CUT);
 #else
 		c_put_str(TERM_ORANGE, "Nasty cut   ", ROW_CUT, COL_CUT);
 #endif
@@ -1505,7 +1505,7 @@ static void prt_cut(void)
 	else if (c > 25)
 	{
 #ifdef JP
-		c_put_str(TERM_ORANGE, "¤Ò¤É¤¤½ı    ", ROW_CUT, COL_CUT);
+		c_put_str(TERM_ORANGE, "ã²ã©ã„å‚·    ", ROW_CUT, COL_CUT);
 #else
 		c_put_str(TERM_ORANGE, "Bad cut     ", ROW_CUT, COL_CUT);
 #endif
@@ -1514,7 +1514,7 @@ static void prt_cut(void)
 	else if (c > 10)
 	{
 #ifdef JP
-		c_put_str(TERM_YELLOW, "·Ú½ı        ", ROW_CUT, COL_CUT);
+		c_put_str(TERM_YELLOW, "è»½å‚·        ", ROW_CUT, COL_CUT);
 #else
 		c_put_str(TERM_YELLOW, "Light cut   ", ROW_CUT, COL_CUT);
 #endif
@@ -1523,7 +1523,7 @@ static void prt_cut(void)
 	else if (c)
 	{
 #ifdef JP
-		c_put_str(TERM_YELLOW, "¤«¤¹¤ê½ı    ", ROW_CUT, COL_CUT);
+		c_put_str(TERM_YELLOW, "ã‹ã™ã‚Šå‚·    ", ROW_CUT, COL_CUT);
 #else
 		c_put_str(TERM_YELLOW, "Graze       ", ROW_CUT, COL_CUT);
 #endif
@@ -1544,7 +1544,7 @@ static void prt_stun(void)
 	if (s > 100)
 	{
 #ifdef JP
-		c_put_str(TERM_RED, "°Õ¼±ÉÔÌÀÎÆ  ", ROW_STUN, COL_STUN);
+		c_put_str(TERM_RED, "æ„è­˜ä¸æ˜ç­  ", ROW_STUN, COL_STUN);
 #else
 		c_put_str(TERM_RED, "Knocked out ", ROW_STUN, COL_STUN);
 #endif
@@ -1553,7 +1553,7 @@ static void prt_stun(void)
 	else if (s > 50)
 	{
 #ifdef JP
-		c_put_str(TERM_ORANGE, "¤Ò¤É¤¯Û¯Û°  ", ROW_STUN, COL_STUN);
+		c_put_str(TERM_ORANGE, "ã²ã©ãæœ¦æœ§  ", ROW_STUN, COL_STUN);
 #else
 		c_put_str(TERM_ORANGE, "Heavy stun  ", ROW_STUN, COL_STUN);
 #endif
@@ -1562,7 +1562,7 @@ static void prt_stun(void)
 	else if (s)
 	{
 #ifdef JP
-		c_put_str(TERM_ORANGE, "Û¯Û°        ", ROW_STUN, COL_STUN);
+		c_put_str(TERM_ORANGE, "æœ¦æœ§        ", ROW_STUN, COL_STUN);
 #else
 		c_put_str(TERM_ORANGE, "Stun        ", ROW_STUN, COL_STUN);
 #endif
@@ -1886,7 +1886,7 @@ static void print_monster_line(int x, int y, monster_type* m_ptr, int n_same){
 }
 
  /*
-	max_lines : ºÇÂç²¿¹ÔÉÁ²è¤¹¤ë¤«¡¥
+	max_lines : æœ€å¤§ä½•è¡Œæç”»ã™ã‚‹ã‹ï¼
 */
 void print_monster_list(int x, int y, int max_lines){
 	int line = y;
@@ -1907,20 +1907,20 @@ void print_monster_list(int x, int y, int max_lines){
 			monster_race* r_ptr = &r_info[r_idx];
 			cptr name = (r_name + r_ptr->name);
 			cptr ename = (r_name + r_ptr->name);
-			//¥ß¥ß¥Ã¥¯Îà¤ä¡Ö¤½¤ì¡×Åù¤Ï¡¢°ìÍ÷¤Ë½Ğ¤Æ¤Ï¤¤¤±¤Ê¤¤
+			//ãƒŸãƒŸãƒƒã‚¯é¡ã‚„ã€Œãã‚Œã€ç­‰ã¯ã€ä¸€è¦§ã«å‡ºã¦ã¯ã„ã‘ãªã„
 			if(r_ptr->flags1&RF1_CHAR_CLEAR)continue;
 			if((r_ptr->flags1&RF1_NEVER_MOVE)&&(r_ptr->flags2&RF2_CHAR_MULTI))continue;
-			//¡Ø¥Ì¥ë¡Ù¤Ï¡¢°ìÍ÷¤Ë½Ğ¤Æ¤Ï¤¤¤±¤Ê¤¤
-			if((strcmp(name, "À¸¤±¤ëµõÌµ¡Ø¥Ì¥ë¡Ù")==0)||
+			//ã€ãƒŒãƒ«ã€ã¯ã€ä¸€è¦§ã«å‡ºã¦ã¯ã„ã‘ãªã„
+			if((strcmp(name, "ç”Ÿã‘ã‚‹è™šç„¡ã€ãƒŒãƒ«ã€")==0)||
 			   (strcmp(ename, "Null the Living Void")==0))continue;
-			//"¶âÌµ¹¤¤Î»ØÎØ"¤Ï¡¢°ìÍ÷¤Ë½Ğ¤Æ¤Ï¤¤¤±¤Ê¤¤
-			if((strcmp(name, "¶âÌµ¹¤¤Î»ØÎØ")==0)||
+			//"é‡‘ç„¡å¢ã®æŒ‡è¼ª"ã¯ã€ä¸€è¦§ã«å‡ºã¦ã¯ã„ã‘ãªã„
+			if((strcmp(name, "é‡‘ç„¡å¢ã®æŒ‡è¼ª")==0)||
 				(strcmp(ename, "Plain Gold Ring")==0))continue;
 			*/
 		}
 
-		//¥½¡¼¥ÈºÑ¤ß¤Ê¤Î¤ÇÆ±¤¸¥â¥ó¥¹¥¿¡¼¤ÏÏ¢Â³¤¹¤ë¡¥¤³¤ì¤òÍøÍÑ¤·¤ÆÆ±¤¸¥â¥ó¥¹¥¿¡¼¤ò¥«¥¦¥ó¥È¡¤¤Ş¤È¤á¤ÆÉ½¼¨¤¹¤ë¡¥
-		if(!last_mons){//ÀèÆ¬¥â¥ó¥¹¥¿¡¼
+		//ã‚½ãƒ¼ãƒˆæ¸ˆã¿ãªã®ã§åŒã˜ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯é€£ç¶šã™ã‚‹ï¼ã“ã‚Œã‚’åˆ©ç”¨ã—ã¦åŒã˜ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ã‚«ã‚¦ãƒ³ãƒˆï¼Œã¾ã¨ã‚ã¦è¡¨ç¤ºã™ã‚‹ï¼
+		if(!last_mons){//å…ˆé ­ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼
 			last_mons = m_ptr;
 			n_same = 1;
 			continue;
@@ -1928,13 +1928,13 @@ void print_monster_list(int x, int y, int max_lines){
 		//same race?
 		if(last_mons->ap_r_idx == m_ptr->ap_r_idx){
 			n_same++;
-			continue;//É½¼¨½èÍı¤ò¼¡¤Ë²ó¤¹
+			continue;//è¡¨ç¤ºå‡¦ç†ã‚’æ¬¡ã«å›ã™
 		}
 		//print last mons info
 		print_monster_line(x, line++, last_mons, n_same);
 		n_same = 1;
 		last_mons = m_ptr;
-		if(line-y-1==max_lines){//»Ä¤ê1¹Ô
+		if(line-y-1==max_lines){//æ®‹ã‚Š1è¡Œ
 			break;
 		}
 	}
@@ -1970,7 +1970,7 @@ static void fix_monster_list(void)
 
 		Term_clear();
 
-		target_set_prepare_look();//¥â¥ó¥¹¥¿¡¼°ìÍ÷¤òÀ¸À®¡¤¥½¡¼¥È
+		target_set_prepare_look();//ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ä¸€è¦§ã‚’ç”Ÿæˆï¼Œã‚½ãƒ¼ãƒˆ
 		print_monster_list(0, 0, h);
 
 		/* Fresh */
@@ -2421,7 +2421,7 @@ static void calc_spells(void)
 
 			/* Message */
 #ifdef JP
-			msg_format("%s¤Î%s¤òËº¤ì¤Æ¤·¤Ş¤Ã¤¿¡£",
+			msg_format("%sã®%sã‚’å¿˜ã‚Œã¦ã—ã¾ã£ãŸã€‚",
 				   do_spell(which, j%32, SPELL_NAME), p );
 #else
 			msg_format("You have forgotten the %s of %s.", p,
@@ -2481,7 +2481,7 @@ static void calc_spells(void)
 
 			/* Message */
 #ifdef JP
-			msg_format("%s¤Î%s¤òËº¤ì¤Æ¤·¤Ş¤Ã¤¿¡£",
+			msg_format("%sã®%sã‚’å¿˜ã‚Œã¦ã—ã¾ã£ãŸã€‚",
 				   do_spell(which, j%32, SPELL_NAME), p );
 #else
 			msg_format("You have forgotten the %s of %s.", p,
@@ -2557,7 +2557,7 @@ static void calc_spells(void)
 
 			/* Message */
 #ifdef JP
-			msg_format("%s¤Î%s¤ò»×¤¤½Ğ¤·¤¿¡£",
+			msg_format("%sã®%sã‚’æ€ã„å‡ºã—ãŸã€‚",
 				   do_spell(which, j%32, SPELL_NAME), p );
 #else
 			msg_format("You have remembered the %s of %s.",
@@ -2607,9 +2607,9 @@ static void calc_spells(void)
 			/* Message */
 #ifdef JP
 			if( p_ptr->new_spells < 10 ){
-				msg_format("¤¢¤È %d ¤Ä¤Î%s¤ò³Ø¤Ù¤ë¡£", p_ptr->new_spells, p);
+				msg_format("ã‚ã¨ %d ã¤ã®%sã‚’å­¦ã¹ã‚‹ã€‚", p_ptr->new_spells, p);
 			}else{
-				msg_format("¤¢¤È %d ¸Ä¤Î%s¤ò³Ø¤Ù¤ë¡£", p_ptr->new_spells, p);
+				msg_format("ã‚ã¨ %d å€‹ã®%sã‚’å­¦ã¹ã‚‹ã€‚", p_ptr->new_spells, p);
 			}
 #else
 			msg_format("You can learn %d more %s%s.",
@@ -2889,10 +2889,10 @@ static void calc_mana(void)
 		}
 
 #ifdef JP
-		/* ¥ì¥Ù¥ë¥¢¥Ã¥×¤Î»ş¤Ï¾å¾ºÎÌ¤òÉ½¼¨¤¹¤ë */
+		/* ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ã®æ™‚ã¯ä¸Šæ˜‡é‡ã‚’è¡¨ç¤ºã™ã‚‹ */
 		if ((level_up == 1) && (msp > p_ptr->msp))
 		{
-			msg_format("ºÇÂç¥Ş¥¸¥Ã¥¯¡¦¥İ¥¤¥ó¥È¤¬ %d Áı²Ã¤·¤¿¡ª",
+			msg_format("æœ€å¤§ãƒã‚¸ãƒƒã‚¯ãƒ»ãƒã‚¤ãƒ³ãƒˆãŒ %d å¢—åŠ ã—ãŸï¼",
 				   (msp - p_ptr->msp));
 		}
 #endif
@@ -2918,7 +2918,7 @@ static void calc_mana(void)
 		if (p_ptr->cumber_glove)
 		{
 #ifdef JP
-			msg_print("¼ê¤¬Ê¤¤ï¤ì¤Æ¼öÊ¸¤¬¾§¤¨¤Ë¤¯¤¤´¶¤¸¤¬¤¹¤ë¡£");
+			msg_print("æ‰‹ãŒè¦†ã‚ã‚Œã¦å‘ªæ–‡ãŒå”±ãˆã«ãã„æ„Ÿã˜ãŒã™ã‚‹ã€‚");
 #else
 			msg_print("Your covered hands feel unsuitable for spellcasting.");
 #endif
@@ -2927,7 +2927,7 @@ static void calc_mana(void)
 		else
 		{
 #ifdef JP
-			msg_print("¤³¤Î¼ê¤Î¾õÂÖ¤Ê¤é¡¢¤°¤Ã¤È¼öÊ¸¤¬¾§¤¨¤ä¤¹¤¤´¶¤¸¤À¡£");
+			msg_print("ã“ã®æ‰‹ã®çŠ¶æ…‹ãªã‚‰ã€ãã£ã¨å‘ªæ–‡ãŒå”±ãˆã‚„ã™ã„æ„Ÿã˜ã ã€‚");
 #else
 			msg_print("Your hands feel more suitable for spellcasting.");
 #endif
@@ -2946,7 +2946,7 @@ static void calc_mana(void)
 		if (p_ptr->cumber_armor)
 		{
 #ifdef JP
-			msg_print("ÁõÈ÷¤Î½Å¤µ¤ÇÆ°¤­¤¬Æß¤¯¤Ê¤Ã¤Æ¤·¤Ş¤Ã¤Æ¤¤¤ë¡£");
+			msg_print("è£…å‚™ã®é‡ã•ã§å‹•ããŒéˆããªã£ã¦ã—ã¾ã£ã¦ã„ã‚‹ã€‚");
 #else
 			msg_print("The weight of your equipment encumbers your movement.");
 #endif
@@ -2955,7 +2955,7 @@ static void calc_mana(void)
 		else
 		{
 #ifdef JP
-			msg_print("¤°¤Ã¤È³Ú¤ËÂÎ¤òÆ°¤«¤»¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£");
+			msg_print("ãã£ã¨æ¥½ã«ä½“ã‚’å‹•ã‹ã›ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚");
 #else
 			msg_print("You feel able to move more freely.");
 #endif
@@ -3032,10 +3032,10 @@ static void calc_hitpoints(void)
 		}
 
 #ifdef JP
-		/* ¥ì¥Ù¥ë¥¢¥Ã¥×¤Î»ş¤Ï¾å¾ºÎÌ¤òÉ½¼¨¤¹¤ë */
+		/* ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ã®æ™‚ã¯ä¸Šæ˜‡é‡ã‚’è¡¨ç¤ºã™ã‚‹ */
 		if ((level_up == 1) && (mhp > p_ptr->mhp))
 		{
-			msg_format("ºÇÂç¥Ò¥Ã¥È¡¦¥İ¥¤¥ó¥È¤¬ %d Áı²Ã¤·¤¿¡ª",
+			msg_format("æœ€å¤§ãƒ’ãƒƒãƒˆãƒ»ãƒã‚¤ãƒ³ãƒˆãŒ %d å¢—åŠ ã—ãŸï¼",
 				   (mhp - p_ptr->mhp) );
 		}
 #endif
@@ -5709,7 +5709,7 @@ void calc_bonuses(void)
 		if (p_ptr->heavy_shoot)
 		{
 #ifdef JP
-			msg_print("¤³¤ó¤Ê½Å¤¤µİ¤òÁõÈ÷¤·¤Æ¤¤¤ë¤Î¤ÏÂçÊÑ¤À¡£");
+			msg_print("ã“ã‚“ãªé‡ã„å¼“ã‚’è£…å‚™ã—ã¦ã„ã‚‹ã®ã¯å¤§å¤‰ã ã€‚");
 #else
 			msg_print("You have trouble wielding such a heavy bow.");
 #endif
@@ -5718,7 +5718,7 @@ void calc_bonuses(void)
 		else if (inventory[INVEN_BOW].k_idx)
 		{
 #ifdef JP
-			msg_print("¤³¤Îµİ¤Ê¤éÁõÈ÷¤·¤Æ¤¤¤Æ¤â¿É¤¯¤Ê¤¤¡£");
+			msg_print("ã“ã®å¼“ãªã‚‰è£…å‚™ã—ã¦ã„ã¦ã‚‚è¾›ããªã„ã€‚");
 #else
 			msg_print("You have no trouble wielding your bow.");
 #endif
@@ -5727,7 +5727,7 @@ void calc_bonuses(void)
 		else
 		{
 #ifdef JP
-			msg_print("½Å¤¤µİ¤òÁõÈ÷¤«¤é¤Ï¤º¤·¤ÆÂÎ¤¬³Ú¤Ë¤Ê¤Ã¤¿¡£");
+			msg_print("é‡ã„å¼“ã‚’è£…å‚™ã‹ã‚‰ã¯ãšã—ã¦ä½“ãŒæ¥½ã«ãªã£ãŸã€‚");
 #else
 			msg_print("You feel relieved to put down your heavy bow.");
 #endif
@@ -5747,7 +5747,7 @@ void calc_bonuses(void)
 			if (p_ptr->heavy_wield[i])
 			{
 #ifdef JP
-				msg_print("¤³¤ó¤Ê½Å¤¤Éğ´ï¤òÁõÈ÷¤·¤Æ¤¤¤ë¤Î¤ÏÂçÊÑ¤À¡£");
+				msg_print("ã“ã‚“ãªé‡ã„æ­¦å™¨ã‚’è£…å‚™ã—ã¦ã„ã‚‹ã®ã¯å¤§å¤‰ã ã€‚");
 #else
 				msg_print("You have trouble wielding such a heavy weapon.");
 #endif
@@ -5756,7 +5756,7 @@ void calc_bonuses(void)
 			else if (buki_motteruka(INVEN_RARM+i))
 			{
 #ifdef JP
-				msg_print("¤³¤ì¤Ê¤éÁõÈ÷¤·¤Æ¤¤¤Æ¤â¿É¤¯¤Ê¤¤¡£");
+				msg_print("ã“ã‚Œãªã‚‰è£…å‚™ã—ã¦ã„ã¦ã‚‚è¾›ããªã„ã€‚");
 #else
 				msg_print("You have no trouble wielding your weapon.");
 #endif
@@ -5765,7 +5765,7 @@ void calc_bonuses(void)
 			else if (p_ptr->heavy_wield[1-i])
 			{
 #ifdef JP
-				msg_print("¤Ş¤ÀÉğ´ï¤¬½Å¤¤¡£");
+				msg_print("ã¾ã æ­¦å™¨ãŒé‡ã„ã€‚");
 #else
 				msg_print("You have still trouble wielding a heavy weapon.");
 #endif
@@ -5774,7 +5774,7 @@ void calc_bonuses(void)
 			else
 			{
 #ifdef JP
-				msg_print("½Å¤¤Éğ´ï¤òÁõÈ÷¤«¤é¤Ï¤º¤·¤ÆÂÎ¤¬³Ú¤Ë¤Ê¤Ã¤¿¡£");
+				msg_print("é‡ã„æ­¦å™¨ã‚’è£…å‚™ã‹ã‚‰ã¯ãšã—ã¦ä½“ãŒæ¥½ã«ãªã£ãŸã€‚");
 #else
 				msg_print("You feel relieved to put down your heavy weapon.");
 #endif
@@ -5792,7 +5792,7 @@ void calc_bonuses(void)
 			if (p_ptr->riding_wield[i])
 			{
 #ifdef JP
-				msg_print("¤³¤ÎÉğ´ï¤Ï¾èÇÏÃæ¤Ë»È¤¦¤Ë¤Ï¤à¤«¤Ê¤¤¤è¤¦¤À¡£");
+				msg_print("ã“ã®æ­¦å™¨ã¯ä¹—é¦¬ä¸­ã«ä½¿ã†ã«ã¯ã‚€ã‹ãªã„ã‚ˆã†ã ã€‚");
 #else
 				msg_print("This weapon is not suitable for use while riding.");
 #endif
@@ -5801,7 +5801,7 @@ void calc_bonuses(void)
 			else if (!p_ptr->riding)
 			{
 #ifdef JP
-				msg_print("¤³¤ÎÉğ´ï¤ÏÅÌÊâ¤Ç»È¤¤¤ä¤¹¤¤¡£");
+				msg_print("ã“ã®æ­¦å™¨ã¯å¾’æ­©ã§ä½¿ã„ã‚„ã™ã„ã€‚");
 #else
 				msg_print("This weapon was not suitable for use while riding.");
 #endif
@@ -5810,7 +5810,7 @@ void calc_bonuses(void)
 			else if (buki_motteruka(INVEN_RARM+i))
 			{
 #ifdef JP
-				msg_print("¤³¤ì¤Ê¤é¾èÇÏÃæ¤Ë¤Ô¤Ã¤¿¤ê¤À¡£");
+				msg_print("ã“ã‚Œãªã‚‰ä¹—é¦¬ä¸­ã«ã´ã£ãŸã‚Šã ã€‚");
 #else
 				msg_print("This weapon is suitable for use while riding.");
 #endif
@@ -5827,7 +5827,7 @@ void calc_bonuses(void)
 			if (p_ptr->icky_wield[i])
 			{
 #ifdef JP
-				msg_print("º£¤ÎÁõÈ÷¤Ï¤É¤¦¤â¼«Ê¬¤Ë¤Õ¤µ¤ï¤·¤¯¤Ê¤¤µ¤¤¬¤¹¤ë¡£");
+				msg_print("ä»Šã®è£…å‚™ã¯ã©ã†ã‚‚è‡ªåˆ†ã«ãµã•ã‚ã—ããªã„æ°—ãŒã™ã‚‹ã€‚");
 #else
 				msg_print("You do not feel comfortable with your weapon.");
 #endif
@@ -5839,7 +5839,7 @@ void calc_bonuses(void)
 			else if (buki_motteruka(INVEN_RARM+i))
 			{
 #ifdef JP
-				msg_print("º£¤ÎÁõÈ÷¤Ï¼«Ê¬¤Ë¤Õ¤µ¤ï¤·¤¤µ¤¤¬¤¹¤ë¡£");
+				msg_print("ä»Šã®è£…å‚™ã¯è‡ªåˆ†ã«ãµã•ã‚ã—ã„æ°—ãŒã™ã‚‹ã€‚");
 #else
 				msg_print("You feel comfortable with your weapon.");
 #endif
@@ -5848,7 +5848,7 @@ void calc_bonuses(void)
 			else
 			{
 #ifdef JP
-				msg_print("ÁõÈ÷¤ò¤Ï¤º¤·¤¿¤é¿ïÊ¬¤Èµ¤¤¬³Ú¤Ë¤Ê¤Ã¤¿¡£");
+				msg_print("è£…å‚™ã‚’ã¯ãšã—ãŸã‚‰éšåˆ†ã¨æ°—ãŒæ¥½ã«ãªã£ãŸã€‚");
 #else
 				msg_print("You feel more comfortable after removing your weapon.");
 #endif
@@ -5866,7 +5866,7 @@ void calc_bonuses(void)
 		if (p_ptr->riding_ryoute)
 		{
 #ifdef JP
-			msg_format("%sÇÏ¤òÁà¤ì¤Ê¤¤¡£", (empty_hands(FALSE) == EMPTY_HAND_NONE) ? "Î¾¼ê¤¬¤Õ¤µ¤¬¤Ã¤Æ¤¤¤Æ" : "");
+			msg_format("%sé¦¬ã‚’æ“ã‚Œãªã„ã€‚", (empty_hands(FALSE) == EMPTY_HAND_NONE) ? "ä¸¡æ‰‹ãŒãµã•ãŒã£ã¦ã„ã¦" : "");
 #else
 			msg_print("You are using both hand for fighting, and you can't control a riding pet.");
 #endif
@@ -5874,7 +5874,7 @@ void calc_bonuses(void)
 		else
 		{
 #ifdef JP
-			msg_format("%sÇÏ¤òÁà¤ì¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£", (empty_hands(FALSE) == EMPTY_HAND_NONE) ? "¼ê¤¬¶õ¤¤¤Æ" : "");
+			msg_format("%sé¦¬ã‚’æ“ã‚Œã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚", (empty_hands(FALSE) == EMPTY_HAND_NONE) ? "æ‰‹ãŒç©ºã„ã¦" : "");
 #else
 			msg_print("You began to control riding pet with one hand.");
 #endif
@@ -5888,7 +5888,7 @@ void calc_bonuses(void)
 		if (heavy_armor())
 		{
 #ifdef JP
-msg_print("ÁõÈ÷¤¬½Å¤¯¤Æ¥Ğ¥é¥ó¥¹¤ò¼è¤ì¤Ê¤¤¡£");
+msg_print("è£…å‚™ãŒé‡ãã¦ãƒãƒ©ãƒ³ã‚¹ã‚’å–ã‚Œãªã„ã€‚");
 #else
 			msg_print("The weight of your armor disrupts your balance.");
 #endif
@@ -5900,7 +5900,7 @@ msg_print("ÁõÈ÷¤¬½Å¤¯¤Æ¥Ğ¥é¥ó¥¹¤ò¼è¤ì¤Ê¤¤¡£");
 		}
 		else
 #ifdef JP
-msg_print("¥Ğ¥é¥ó¥¹¤¬¤È¤ì¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£");
+msg_print("ãƒãƒ©ãƒ³ã‚¹ãŒã¨ã‚Œã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚");
 #else
 			msg_print("You regain your balance.");
 #endif

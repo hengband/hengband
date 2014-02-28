@@ -1,4 +1,4 @@
-/* File: readdib.h */
+﻿/* File: readdib.h */
 
 /*
  * This file has been modified for use with "Angband 2.8.2"

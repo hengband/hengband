@@ -1,4 +1,4 @@
-/* File: main-cap.c */
+﻿/* File: main-cap.c */
 
 /* Purpose: Support for "term.c" using "termcap" calls */
 

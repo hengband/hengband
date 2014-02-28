@@ -1,4 +1,4 @@
-/* File: util.c */
+ï»¿/* File: util.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
@@ -73,7 +73,7 @@ int usleep(huge usecs)
 
 	/* Paranoia -- No excessive sleeping */
 #ifdef JP
-	if (usecs > 4000000L) core("ÉÔÅö¤Ê usleep() ¸Æ¤Ó½Ğ¤·");
+	if (usecs > 4000000L) core("ä¸å½“ãª usleep() å‘¼ã³å‡ºã—");
 #else
 	if (usecs > 4000000L) core("Illegal usleep() call");
 #endif
@@ -498,7 +498,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 				buf[i++] = *s;
 			}
 
-			/* È¾³Ñ¤«¤Ê¤ËÂĞ±ş */
+			/* åŠè§’ã‹ãªã«å¯¾å¿œ */
 			else if (iskana(*s))
 			{
 				buf[i++] = *s;
@@ -1758,7 +1758,7 @@ void select_floor_music()
 	}
 
 	for(i = 0; i < max_quests; i++)
-	{ // TODO ¥Ş¥¯¥í¤ÇÎà»÷¾ò·ï¤òÅı¹ç¤¹¤ë¤³¤È
+	{ // TODO ãƒã‚¯ãƒ­ã§é¡ä¼¼æ¡ä»¶ã‚’çµ±åˆã™ã‚‹ã“ã¨
 		if(quest[i].status == QUEST_STATUS_TAKEN &&
 			(quest[i].type == QUEST_TYPE_KILL_LEVEL || quest[i].type == QUEST_TYPE_RANDOM) &&
 			 quest[i].level == dun_level && dungeon_type == quest[i].dungeon)
@@ -1835,7 +1835,7 @@ static char inkey_aux(void)
 
 	char *buf = inkey_macro_trigger_string;
 
-	/* Hack : ¥­¡¼ÆşÎÏÂÔ¤Á¤Ç»ß¤Ş¤Ã¤Æ¤¤¤ë¤Î¤Ç¡¢Î®¤ì¤¿¹Ô¤Îµ­²±¤ÏÉÔÍ×¡£ */
+	/* Hack : ã‚­ãƒ¼å…¥åŠ›å¾…ã¡ã§æ­¢ã¾ã£ã¦ã„ã‚‹ã®ã§ã€æµã‚ŒãŸè¡Œã®è¨˜æ†¶ã¯ä¸è¦ã€‚ */
 	num_more = 0;
 
 	if (parse_macro)
@@ -2498,7 +2498,7 @@ void message_add(cptr str)
 	      t++;
 	      n++;
 	    }
-	  if (n == 81) n = 79; /* ºÇ¸å¤ÎÊ¸»ú¤¬´Á»úÈ¾Ê¬ */
+	  if (n == 81) n = 79; /* æœ€å¾Œã®æ–‡å­—ãŒæ¼¢å­—åŠåˆ† */
 #else
 	  for (n = 80; n > 60; n--)
 		  if (str[n] == ' ') break;
@@ -2584,7 +2584,7 @@ void message_add(cptr str)
 		}
 		else
 		{
-			num_more++;/*Î®¤ì¤¿¹Ô¤Î¿ô¤ò¿ô¤¨¤Æ¤ª¤¯ */
+			num_more++;/*æµã‚ŒãŸè¡Œã®æ•°ã‚’æ•°ãˆã¦ãŠã */
 			now_message++;
 		}
 
@@ -2771,7 +2771,7 @@ static void msg_flush(int x)
 	{
 		/* Pause for response */
 #ifdef JP
-		Term_putstr(x, 0, -1, a, "-Â³¤¯-");
+		Term_putstr(x, 0, -1, a, "-ç¶šã-");
 #else
 		Term_putstr(x, 0, -1, a, "-more-");
 #endif
@@ -2782,13 +2782,13 @@ static void msg_flush(int x)
 		{
 			int cmd = inkey();
 			if (cmd == ESCAPE) {
-			    num_more = -9999; /*auto_more¤Î¤È¤­¡¢Á´¤ÆÎ®¤¹¡£ */
+			    num_more = -9999; /*auto_moreã®ã¨ãã€å…¨ã¦æµã™ã€‚ */
 			    break;
 			} else if (cmd == ' ') {
-			    num_more = 0; /*£±²èÌÌ¤À¤±Î®¤¹¡£ */
+			    num_more = 0; /*ï¼‘ç”»é¢ã ã‘æµã™ã€‚ */
 			    break;
 			} else if ((cmd == '\n') || (cmd == '\r')) {
-			    num_more--; /*£±¹Ô¤À¤±Î®¤¹¡£ */
+			    num_more--; /*ï¼‘è¡Œã ã‘æµã™ã€‚ */
 			    break;
 			}
 			if (quick_messages) break;
@@ -3171,7 +3171,7 @@ void c_roff(byte a, cptr str)
 			if (x < w)
 #ifdef JP
 			{
-			/* ¸½ºß¤¬È¾³ÑÊ¸»ú¤Î¾ì¹ç */
+			/* ç¾åœ¨ãŒåŠè§’æ–‡å­—ã®å ´åˆ */
 			if( !k_flag )
 #endif
 			{
@@ -3195,11 +3195,11 @@ void c_roff(byte a, cptr str)
 #ifdef JP
 			else
 			{
-				/* ¸½ºß¤¬Á´³ÑÊ¸»ú¤Î¤È¤­ */
-				/* Ê¸Æ¬¤¬¡Ö¡£¡×¡Ö¡¢¡×Åù¤Ë¤Ê¤ë¤È¤­¤Ï¡¢¤½¤Î£±¤ÄÁ°¤Î¸ì¤Ç²ş¹Ô */
-				if (strncmp(s, "¡£", 2) == 0 || strncmp(s, "¡¢", 2) == 0
-#if 0                   /* °ìÈÌÅª¤Ë¤Ï¡Ö¥£¡×¡Ö¡¼¡×¤Ï¶ØÂ§¤ÎÂĞ¾İ³° */
-					|| strncmp(s, "¥£", 2) == 0 || strncmp(s, "¡¼", 2) == 0
+				/* ç¾åœ¨ãŒå…¨è§’æ–‡å­—ã®ã¨ã */
+				/* æ–‡é ­ãŒã€Œã€‚ã€ã€Œã€ã€ç­‰ã«ãªã‚‹ã¨ãã¯ã€ãã®ï¼‘ã¤å‰ã®èªã§æ”¹è¡Œ */
+				if (strncmp(s, "ã€‚", 2) == 0 || strncmp(s, "ã€", 2) == 0
+#if 0                   /* ä¸€èˆ¬çš„ã«ã¯ã€Œã‚£ã€ã€Œãƒ¼ã€ã¯ç¦å‰‡ã®å¯¾è±¡å¤– */
+					|| strncmp(s, "ã‚£", 2) == 0 || strncmp(s, "ãƒ¼", 2) == 0
 #endif
 			       ){
 					Term_what(x  , y, &av[x  ], &cv[x  ]);
@@ -3804,7 +3804,7 @@ s16b get_quantity(cptr prompt, int max)
 	{
 		/* Build a prompt */
 #ifdef JP
-		sprintf(tmp, "¤¤¤¯¤Ä¤Ç¤¹¤« (1-%d): ", max);
+		sprintf(tmp, "ã„ãã¤ã§ã™ã‹ (1-%d): ", max);
 #else
 		sprintf(tmp, "Quantity (1-%d): ", max);
 #endif
@@ -3868,7 +3868,7 @@ void pause_line(int row)
 {
 	prt("", row, 0);
 #ifdef JP
-	put_str("[ ²¿¤«¥­¡¼¤ò²¡¤·¤Æ²¼¤µ¤¤ ]", row, 26);
+	put_str("[ ä½•ã‹ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ ]", row, 26);
 #else
 	put_str("[Press any key to continue]", row, 23);
 #endif
@@ -3896,23 +3896,23 @@ typedef struct
 menu_naiyou menu_info[10][10] =
 {
 	{
-		{"ËâË¡/ÆÃ¼ìÇ½ÎÏ", 1, FALSE},
-		{"¹ÔÆ°", 2, FALSE},
-		{"Æ»¶ñ(»ÈÍÑ)", 3, FALSE},
-		{"Æ»¶ñ(¤½¤ÎÂ¾)", 4, FALSE},
-		{"ÁõÈ÷", 5, FALSE},
-		{"Èâ/È¢", 6, FALSE},
-		{"¾ğÊó", 7, FALSE},
-		{"ÀßÄê", 8, FALSE},
-		{"¤½¤ÎÂ¾", 9, FALSE},
+		{"é­”æ³•/ç‰¹æ®Šèƒ½åŠ›", 1, FALSE},
+		{"è¡Œå‹•", 2, FALSE},
+		{"é“å…·(ä½¿ç”¨)", 3, FALSE},
+		{"é“å…·(ãã®ä»–)", 4, FALSE},
+		{"è£…å‚™", 5, FALSE},
+		{"æ‰‰/ç®±", 6, FALSE},
+		{"æƒ…å ±", 7, FALSE},
+		{"è¨­å®š", 8, FALSE},
+		{"ãã®ä»–", 9, FALSE},
 		{"", 0, FALSE},
 	},
 
 	{
-		{"»È¤¦(m)", 'm', TRUE},
-		{"Ä´¤Ù¤ë(b/P)", 'b', TRUE},
-		{"³Ğ¤¨¤ë(G)", 'G', TRUE},
-		{"ÆÃ¼ìÇ½ÎÏ¤ò»È¤¦(U/O)", 'U', TRUE},
+		{"ä½¿ã†(m)", 'm', TRUE},
+		{"èª¿ã¹ã‚‹(b/P)", 'b', TRUE},
+		{"è¦šãˆã‚‹(G)", 'G', TRUE},
+		{"ç‰¹æ®Šèƒ½åŠ›ã‚’ä½¿ã†(U/O)", 'U', TRUE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
@@ -3922,62 +3922,49 @@ menu_naiyou menu_info[10][10] =
 	},
 
 	{
-		{"µÙÂ©¤¹¤ë(R)", 'R', TRUE},
-		{"¥È¥é¥Ã¥×²ò½ü(D)", 'D', TRUE},
-		{"Ãµ¤¹(s)", 's', TRUE},
-		{"¼ş¤ê¤òÄ´¤Ù¤ë(l/x)", 'l', TRUE},
-		{"¥¿¡¼¥²¥Ã¥È»ØÄê(*)", '*', TRUE},
-		{"·ê¤ò·¡¤ë(T/^t)", 'T', TRUE},
-		{"³¬ÃÊ¤ò¾å¤ë(<)", '<', TRUE},
-		{"³¬ÃÊ¤ò²¼¤ê¤ë(>)", '>', TRUE},
-		{"¥Ú¥Ã¥È¤ËÌ¿Îá¤¹¤ë(p)", 'p', TRUE},
-		{"Ãµº÷¥â¡¼¥É¤ÎON/OFF(S/#)", 'S', TRUE}
+		{"ä¼‘æ¯ã™ã‚‹(R)", 'R', TRUE},
+		{"ãƒˆãƒ©ãƒƒãƒ—è§£é™¤(D)", 'D', TRUE},
+		{"æ¢ã™(s)", 's', TRUE},
+		{"å‘¨ã‚Šã‚’èª¿ã¹ã‚‹(l/x)", 'l', TRUE},
+		{"ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®š(*)", '*', TRUE},
+		{"ç©´ã‚’æ˜ã‚‹(T/^t)", 'T', TRUE},
+		{"éšæ®µã‚’ä¸Šã‚‹(<)", '<', TRUE},
+		{"éšæ®µã‚’ä¸‹ã‚Šã‚‹(>)", '>', TRUE},
+		{"ãƒšãƒƒãƒˆã«å‘½ä»¤ã™ã‚‹(p)", 'p', TRUE},
+		{"æ¢ç´¢ãƒ¢ãƒ¼ãƒ‰ã®ON/OFF(S/#)", 'S', TRUE}
 	},
 
 	{
-		{"ÆÉ¤à(r)", 'r', TRUE},
-		{"°û¤à(q)", 'q', TRUE},
-		{"¾ó¤ò»È¤¦(u/Z)", 'u', TRUE},
-		{"ËâË¡ËÀ¤ÇÁÀ¤¦(a/z)", 'a', TRUE},
-		{"¥í¥Ã¥É¤ò¿¶¤ë(z/a)", 'z', TRUE},
-		{"»ÏÆ°¤¹¤ë(A)", 'A', TRUE},
-		{"¿©¤Ù¤ë(E)", 'E', TRUE},
-		{"Èô¤ÓÆ»¶ñ¤Ç·â¤Ä(f/t)", 'f', TRUE},
-		{"Åê¤²¤ë(v)", 'v', TRUE},
+		{"èª­ã‚€(r)", 'r', TRUE},
+		{"é£²ã‚€(q)", 'q', TRUE},
+		{"æ–ã‚’ä½¿ã†(u/Z)", 'u', TRUE},
+		{"é­”æ³•æ£’ã§ç‹™ã†(a/z)", 'a', TRUE},
+		{"ãƒ­ãƒƒãƒ‰ã‚’æŒ¯ã‚‹(z/a)", 'z', TRUE},
+		{"å§‹å‹•ã™ã‚‹(A)", 'A', TRUE},
+		{"é£Ÿã¹ã‚‹(E)", 'E', TRUE},
+		{"é£›ã³é“å…·ã§æ’ƒã¤(f/t)", 'f', TRUE},
+		{"æŠ•ã’ã‚‹(v)", 'v', TRUE},
 		{"", 0, FALSE}
 	},
 
 	{
-		{"½¦¤¦(g)", 'g', TRUE},
-		{"Íî¤È¤¹(d)", 'd', TRUE},
-		{"²õ¤¹(k/^d)", 'k', TRUE},
-		{"ÌÃ¤ò¹ï¤à({)", '{', TRUE},
-		{"ÌÃ¤ò¾Ã¤¹(})", '}', TRUE},
-		{"Ä´ºº(I)", 'I', TRUE},
-		{"¥¢¥¤¥Æ¥à°ìÍ÷(i)", 'i', TRUE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE}
-	},
-
-	{
-		{"ÁõÈ÷¤¹¤ë(w)", 'w', TRUE},
-		{"ÁõÈ÷¤ò³°¤¹(t/T)", 't', TRUE},
-		{"Ç³ÎÁ¤òÊäµë(F)", 'F', TRUE},
-		{"ÁõÈ÷°ìÍ÷(e)", 'e', TRUE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
+		{"æ‹¾ã†(g)", 'g', TRUE},
+		{"è½ã¨ã™(d)", 'd', TRUE},
+		{"å£Šã™(k/^d)", 'k', TRUE},
+		{"éŠ˜ã‚’åˆ»ã‚€({)", '{', TRUE},
+		{"éŠ˜ã‚’æ¶ˆã™(})", '}', TRUE},
+		{"èª¿æŸ»(I)", 'I', TRUE},
+		{"ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§(i)", 'i', TRUE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE}
 	},
 
 	{
-		{"³«¤±¤ë(o)", 'o', TRUE},
-		{"ÊÄ¤¸¤ë(c)", 'c', TRUE},
-		{"ÂÎÅö¤¿¤ê¤¹¤ë(B/f)", 'B', TRUE},
-		{"¤¯¤µ¤Ó¤òÂÇ¤Ä(j/S)", 'j', TRUE},
+		{"è£…å‚™ã™ã‚‹(w)", 'w', TRUE},
+		{"è£…å‚™ã‚’å¤–ã™(t/T)", 't', TRUE},
+		{"ç‡ƒæ–™ã‚’è£œçµ¦(F)", 'F', TRUE},
+		{"è£…å‚™ä¸€è¦§(e)", 'e', TRUE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
@@ -3987,41 +3974,54 @@ menu_naiyou menu_info[10][10] =
 	},
 
 	{
-		{"¥À¥ó¥¸¥ç¥ó¤ÎÁ´ÂÎ¿Ş(M)", 'M', TRUE},
-		{"°ÌÃÖ¤ò³ÎÇ§(L/W)", 'L', TRUE},
-		{"³¬¤ÎÊ·°Ïµ¤(^f)", KTRL('F'), TRUE},
-		{"¥¹¥Æ¡¼¥¿¥¹(C)", 'C', TRUE},
-		{"Ê¸»ú¤ÎÀâÌÀ(/)", '/', TRUE},
-		{"¥á¥Ã¥»¡¼¥¸ÍúÎò(^p)", KTRL('P'), TRUE},
-		{"¸½ºß¤Î»ş¹ï(^t/')", KTRL('T'), TRUE},
-		{"¸½ºß¤ÎÃÎ¼±(~)", '~', TRUE},
-		{"¥×¥ì¥¤µ­Ï¿(|)", '|', TRUE},
-		{"", 0, FALSE}
-	},
-
-	{
-		{"¥ª¥×¥·¥ç¥ó(=)", '=', TRUE},
-		{"¥Ş¥¯¥í(@)", '@', TRUE},
-		{"²èÌÌÉ½¼¨(%)", '%', TRUE},
-		{"¥«¥é¡¼(&)", '&', TRUE},
-		{"ÀßÄêÊÑ¹¹¥³¥Ş¥ó¥É(\")", '\"', TRUE},
-		{"¼«Æ°½¦¤¤¤ò¥í¡¼¥É($)", '$', TRUE},
-		{"¥·¥¹¥Æ¥à(!)", '!', TRUE},
+		{"é–‹ã‘ã‚‹(o)", 'o', TRUE},
+		{"é–‰ã˜ã‚‹(c)", 'c', TRUE},
+		{"ä½“å½“ãŸã‚Šã™ã‚‹(B/f)", 'B', TRUE},
+		{"ãã•ã³ã‚’æ‰“ã¤(j/S)", 'j', TRUE},
+		{"", 0, FALSE},
+		{"", 0, FALSE},
+		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE}
 	},
 
 	{
-		{"¥»¡¼¥Ö&ÃæÃÇ(^x)", KTRL('X'), TRUE},
-		{"¥»¡¼¥Ö(^s)", KTRL('S'), TRUE},
-		{"¥Ø¥ë¥×(?)", '?', TRUE},
-		{"ºÆÉÁ²è(^r)", KTRL('R'), TRUE},
-		{"¥á¥â(:)", ':', TRUE},
-		{"µ­Ç°»£±Æ())", ')', TRUE},
-		{"µ­Ç°»£±Æ¤ÎÉ½¼¨(()", '(', TRUE},
-		{"¥Ğ¡¼¥¸¥ç¥ó¾ğÊó(V)", 'V', TRUE},
-		{"°úÂà¤¹¤ë(Q)", 'Q', TRUE},
+		{"ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®å…¨ä½“å›³(M)", 'M', TRUE},
+		{"ä½ç½®ã‚’ç¢ºèª(L/W)", 'L', TRUE},
+		{"éšã®é›°å›²æ°—(^f)", KTRL('F'), TRUE},
+		{"ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹(C)", 'C', TRUE},
+		{"æ–‡å­—ã®èª¬æ˜(/)", '/', TRUE},
+		{"ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å±¥æ­´(^p)", KTRL('P'), TRUE},
+		{"ç¾åœ¨ã®æ™‚åˆ»(^t/')", KTRL('T'), TRUE},
+		{"ç¾åœ¨ã®çŸ¥è­˜(~)", '~', TRUE},
+		{"ãƒ—ãƒ¬ã‚¤è¨˜éŒ²(|)", '|', TRUE},
+		{"", 0, FALSE}
+	},
+
+	{
+		{"ã‚ªãƒ—ã‚·ãƒ§ãƒ³(=)", '=', TRUE},
+		{"ãƒã‚¯ãƒ­(@)", '@', TRUE},
+		{"ç”»é¢è¡¨ç¤º(%)", '%', TRUE},
+		{"ã‚«ãƒ©ãƒ¼(&)", '&', TRUE},
+		{"è¨­å®šå¤‰æ›´ã‚³ãƒãƒ³ãƒ‰(\")", '\"', TRUE},
+		{"è‡ªå‹•æ‹¾ã„ã‚’ãƒ­ãƒ¼ãƒ‰($)", '$', TRUE},
+		{"ã‚·ã‚¹ãƒ†ãƒ (!)", '!', TRUE},
+		{"", 0, FALSE},
+		{"", 0, FALSE},
+		{"", 0, FALSE}
+	},
+
+	{
+		{"ã‚»ãƒ¼ãƒ–&ä¸­æ–­(^x)", KTRL('X'), TRUE},
+		{"ã‚»ãƒ¼ãƒ–(^s)", KTRL('S'), TRUE},
+		{"ãƒ˜ãƒ«ãƒ—(?)", '?', TRUE},
+		{"å†æç”»(^r)", KTRL('R'), TRUE},
+		{"ãƒ¡ãƒ¢(:)", ':', TRUE},
+		{"è¨˜å¿µæ’®å½±())", ')', TRUE},
+		{"è¨˜å¿µæ’®å½±ã®è¡¨ç¤º(()", '(', TRUE},
+		{"ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±(V)", 'V', TRUE},
+		{"å¼•é€€ã™ã‚‹(Q)", 'Q', TRUE},
 		{"", 0, FALSE}
 	},
 };
@@ -4175,17 +4175,17 @@ typedef struct
 #ifdef JP
 special_menu_naiyou special_menu_info[] =
 {
-	{"Ä¶Ç½ÎÏ/ÆÃ¼ìÇ½ÎÏ", 0, 0, MENU_CLASS, CLASS_MINDCRAFTER},
-	{"¤â¤Î¤Ş¤Í/ÆÃ¼ìÇ½ÎÏ", 0, 0, MENU_CLASS, CLASS_IMITATOR},
-	{"²Î/ÆÃ¼ìÇ½ÎÏ", 0, 0, MENU_CLASS, CLASS_BARD},
-	{"É¬»¦µ»/ÆÃ¼ìÇ½ÎÏ", 0, 0, MENU_CLASS, CLASS_SAMURAI},
-	{"Îıµ¤½Ñ/ËâË¡/ÆÃ¼ìÇ½ÎÏ", 0, 0, MENU_CLASS, CLASS_FORCETRAINER},
-	{"µ»/ÆÃ¼ìÇ½ÎÏ", 0, 0, MENU_CLASS, CLASS_BERSERKER},
-	{"µ»½Ñ/ÆÃ¼ìÇ½ÎÏ", 0, 0, MENU_CLASS, CLASS_SMITH},
-	{"¶ÀËâË¡/ÆÃ¼ìÇ½ÎÏ", 0, 0, MENU_CLASS, CLASS_MIRROR_MASTER},
-	{"Ç¦½Ñ/ÆÃ¼ìÇ½ÎÏ", 0, 0, MENU_CLASS, CLASS_NINJA},
-	{"¹­°è¥Ş¥Ã¥×(<)", 2, 6, MENU_WILD, FALSE},
-	{"ÄÌ¾ï¥Ş¥Ã¥×(>)", 2, 7, MENU_WILD, TRUE},
+	{"è¶…èƒ½åŠ›/ç‰¹æ®Šèƒ½åŠ›", 0, 0, MENU_CLASS, CLASS_MINDCRAFTER},
+	{"ã‚‚ã®ã¾ã­/ç‰¹æ®Šèƒ½åŠ›", 0, 0, MENU_CLASS, CLASS_IMITATOR},
+	{"æ­Œ/ç‰¹æ®Šèƒ½åŠ›", 0, 0, MENU_CLASS, CLASS_BARD},
+	{"å¿…æ®ºæŠ€/ç‰¹æ®Šèƒ½åŠ›", 0, 0, MENU_CLASS, CLASS_SAMURAI},
+	{"ç·´æ°—è¡“/é­”æ³•/ç‰¹æ®Šèƒ½åŠ›", 0, 0, MENU_CLASS, CLASS_FORCETRAINER},
+	{"æŠ€/ç‰¹æ®Šèƒ½åŠ›", 0, 0, MENU_CLASS, CLASS_BERSERKER},
+	{"æŠ€è¡“/ç‰¹æ®Šèƒ½åŠ›", 0, 0, MENU_CLASS, CLASS_SMITH},
+	{"é¡é­”æ³•/ç‰¹æ®Šèƒ½åŠ›", 0, 0, MENU_CLASS, CLASS_MIRROR_MASTER},
+	{"å¿è¡“/ç‰¹æ®Šèƒ½åŠ›", 0, 0, MENU_CLASS, CLASS_NINJA},
+	{"åºƒåŸŸãƒãƒƒãƒ—(<)", 2, 6, MENU_WILD, FALSE},
+	{"é€šå¸¸ãƒãƒƒãƒ—(>)", 2, 7, MENU_WILD, TRUE},
 	{"", 0, 0, 0, 0},
 };
 #else
@@ -4266,7 +4266,7 @@ static char inkey_from_menu(void)
 		max_num = i;
 		kisuu = max_num % 2;
 #ifdef JP
-		put_str("¡Õ",basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
+		put_str("ã€‹",basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
 #else
 		put_str("> ",basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
 #endif
@@ -4454,7 +4454,7 @@ void request_command(int shopping)
 
 			/* Begin the input */
 #ifdef JP
-			prt("²ó¿ô: ", 0, 0);
+			prt("å›æ•°: ", 0, 0);
 #else
 			prt("Count: ", 0, 0);
 #endif
@@ -4474,7 +4474,7 @@ void request_command(int shopping)
 
 					/* Show current count */
 #ifdef JP
-					prt(format("²ó¿ô: %d", command_arg), 0, 0);
+					prt(format("å›æ•°: %d", command_arg), 0, 0);
 #else
 					prt(format("Count: %d", command_arg), 0, 0);
 #endif
@@ -4503,7 +4503,7 @@ void request_command(int shopping)
 
 					/* Show current count */
 #ifdef JP
-					prt(format("²ó¿ô: %d", command_arg), 0, 0);
+					prt(format("å›æ•°: %d", command_arg), 0, 0);
 #else
 					prt(format("Count: %d", command_arg), 0, 0);
 #endif
@@ -4525,7 +4525,7 @@ void request_command(int shopping)
 
 				/* Show current count */
 #ifdef JP
-				prt(format("²ó¿ô: %d", command_arg), 0, 0);
+				prt(format("å›æ•°: %d", command_arg), 0, 0);
 #else
 				prt(format("Count: %d", command_arg), 0, 0);
 #endif
@@ -4540,7 +4540,7 @@ void request_command(int shopping)
 
 				/* Show current count */
 #ifdef JP
-prt(format("²ó¿ô: %d", command_arg), 0, 0);
+prt(format("å›æ•°: %d", command_arg), 0, 0);
 #else
 				prt(format("Count: %d", command_arg), 0, 0);
 #endif
@@ -4552,7 +4552,7 @@ prt(format("²ó¿ô: %d", command_arg), 0, 0);
 			{
 				/* Get a real command */
 #ifdef JP
-				if (!get_com("¥³¥Ş¥ó¥É: ", (char *)&cmd, FALSE))
+				if (!get_com("ã‚³ãƒãƒ³ãƒ‰: ", (char *)&cmd, FALSE))
 #else
 				if (!get_com("Command: ", (char *)&cmd, FALSE))
 #endif
@@ -4573,7 +4573,7 @@ prt(format("²ó¿ô: %d", command_arg), 0, 0);
 		{
 			/* Get a real command */
 #ifdef JP
-			(void)get_com("¥³¥Ş¥ó¥É: ", (char *)&cmd, FALSE);
+			(void)get_com("ã‚³ãƒãƒ³ãƒ‰: ", (char *)&cmd, FALSE);
 #else
 			(void)get_com("Command: ", (char *)&cmd, FALSE);
 #endif
@@ -4702,7 +4702,7 @@ prt(format("²ó¿ô: %d", command_arg), 0, 0);
 			{
 				/* Hack -- Verify command */
 #ifdef JP
-				if (!get_check("ËÜÅö¤Ç¤¹¤«? "))
+				if (!get_check("æœ¬å½“ã§ã™ã‹? "))
 #else
 				if (!get_check("Are you sure? "))
 #endif
@@ -5240,10 +5240,10 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf, size_t bufsize)
 			ch[1] = str[read_pt+1];
 			ch_len = 2;
 
-			if (strcmp(ch, "¡£") == 0 ||
-			    strcmp(ch, "¡¢") == 0 ||
-			    strcmp(ch, "¥£") == 0 ||
-			    strcmp(ch, "¡¼") == 0)
+			if (strcmp(ch, "ã€‚") == 0 ||
+			    strcmp(ch, "ã€") == 0 ||
+			    strcmp(ch, "ã‚£") == 0 ||
+			    strcmp(ch, "ãƒ¼") == 0)
 				kinsoku = TRUE;
 		}
 		else if (!isprint(ch[0]))

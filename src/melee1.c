@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file melee1.c
- * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÂÇ·â½èÍı / Monster attacks
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ‰“æ’ƒå‡¦ç† / Monster attacks
  * @date 2014/01/17
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -15,11 +15,11 @@
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼ÂÇ·â¤Î¥¯¥ê¥Æ¥£¥«¥ë¥é¥ó¥¯¤òÊÖ¤¹ /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ‰“æ’ƒã®ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ãƒ©ãƒ³ã‚¯ã‚’è¿”ã™ /
  * Critical blow. All hits that do 95% of total possible damage,
- * @param dice ¥â¥ó¥¹¥¿¡¼ÂÇ·â¤Î¥À¥¤¥¹¿ô
- * @param sides ¥â¥ó¥¹¥¿¡¼ÂÇ·â¤ÎºÇÂç¥À¥¤¥¹ÌÜ
- * @param dam ¥×¥ì¥¤¥ä¡¼¤ËÍ¿¤¨¤¿¥À¥á¡¼¥¸
+ * @param dice ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ‰“æ’ƒã®ãƒ€ã‚¤ã‚¹æ•°
+ * @param sides ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ‰“æ’ƒã®æœ€å¤§ãƒ€ã‚¤ã‚¹ç›®
+ * @param dam ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ä¸ãˆãŸãƒ€ãƒ¡ãƒ¼ã‚¸
  * @details
  * and which also do at least 20 damage, or, sometimes, N damage.
  * This is used only to determine "cuts" and "stuns".
@@ -54,12 +54,12 @@ static int monster_critical(int dice, int sides, int dam)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼ÂÇ·â¤ÎÌ¿Ãæ¤òÈ½Äê¤¹¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ‰“æ’ƒã®å‘½ä¸­ã‚’åˆ¤å®šã™ã‚‹ /
  * Determine if a monster attack against the player succeeds.
- * @param power ÂÇ·âÂ°À­Ëè¤Î´ğËÜÌ¿ÃæÃÍ
- * @param level ¥â¥ó¥¹¥¿¡¼¤Î¥ì¥Ù¥ë
- * @param stun ¥â¥ó¥¹¥¿¡¼¤ÎÛ¯Û°ÃÍ
- * @return TRUE¤Ê¤é¤ĞÌ¿ÃæÈ½Äê
+ * @param power æ‰“æ’ƒå±æ€§æ¯ã®åŸºæœ¬å‘½ä¸­å€¤
+ * @param level ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ãƒ¬ãƒ™ãƒ«
+ * @param stun ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æœ¦æœ§å€¤
+ * @return TRUEãªã‚‰ã°å‘½ä¸­åˆ¤å®š
  * @details
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match monster power against player armor.
@@ -92,20 +92,20 @@ static int check_hit(int power, int level, int stun)
 
 
 
-/*! ¥â¥ó¥¹¥¿¡¼¤ÎÉî¿«¹Ô°Ù¥á¥Ã¥»¡¼¥¸¥Æ¡¼¥Ö¥ë / Hack -- possible "insult" messages */
+/*! ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ä¾®è¾±è¡Œç‚ºãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ†ãƒ¼ãƒ–ãƒ« / Hack -- possible "insult" messages */
 static cptr desc_insult[] =
 {
 #ifdef JP
-	"¤¬¤¢¤Ê¤¿¤òÉî¿«¤·¤¿¡ª",
-	"¤¬¤¢¤Ê¤¿¤ÎÊì¤òÉî¿«¤·¤¿¡ª",
-	"¤¬¤¢¤Ê¤¿¤ò·ÚÊÎ¤·¤¿¡ª",
-	"¤¬¤¢¤Ê¤¿¤ò¿«¤á¤¿¡ª",
-	"¤¬¤¢¤Ê¤¿¤ò±ø¤·¤¿¡ª",
-	"¤¬¤¢¤Ê¤¿¤Î²ó¤ê¤ÇÍÙ¤Ã¤¿¡ª",
-	"¤¬àĞêø¤Ê¿È¤Ö¤ê¤ò¤·¤¿¡ª",
-	"¤¬¤¢¤Ê¤¿¤ò¤Ü¤ó¤ä¤ê¤È¸«¤¿¡ª¡ª¡ª",
-	"¤¬¤¢¤Ê¤¿¤ò¥Ñ¥é¥µ¥¤¥È¸Æ¤Ğ¤ï¤ê¤·¤¿¡ª",
-	"¤¬¤¢¤Ê¤¿¤ò¥µ¥¤¥Ü¡¼¥°°·¤¤¤·¤¿¡ª"
+	"ãŒã‚ãªãŸã‚’ä¾®è¾±ã—ãŸï¼",
+	"ãŒã‚ãªãŸã®æ¯ã‚’ä¾®è¾±ã—ãŸï¼",
+	"ãŒã‚ãªãŸã‚’è»½è”‘ã—ãŸï¼",
+	"ãŒã‚ãªãŸã‚’è¾±ã‚ãŸï¼",
+	"ãŒã‚ãªãŸã‚’æ±šã—ãŸï¼",
+	"ãŒã‚ãªãŸã®å›ã‚Šã§è¸Šã£ãŸï¼",
+	"ãŒçŒ¥è¤»ãªèº«ã¶ã‚Šã‚’ã—ãŸï¼",
+	"ãŒã‚ãªãŸã‚’ã¼ã‚“ã‚„ã‚Šã¨è¦‹ãŸï¼ï¼ï¼",
+	"ãŒã‚ãªãŸã‚’ãƒ‘ãƒ©ã‚µã‚¤ãƒˆå‘¼ã°ã‚ã‚Šã—ãŸï¼",
+	"ãŒã‚ãªãŸã‚’ã‚µã‚¤ãƒœãƒ¼ã‚°æ‰±ã„ã—ãŸï¼"
 #else
 	"insults you!",
 	"insults your mother!",
@@ -122,14 +122,14 @@ static cptr desc_insult[] =
 };
 
 
-/*! ¥Ş¥´¥Ã¥È¤Î¤Ü¤ä¤­¥á¥Ã¥»¡¼¥¸¥Æ¡¼¥Ö¥ë / Hack -- possible "insult" messages */
+/*! ãƒã‚´ãƒƒãƒˆã®ã¼ã‚„ããƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ†ãƒ¼ãƒ–ãƒ« / Hack -- possible "insult" messages */
 static cptr desc_moan[] =
 {
 #ifdef JP
-	"¤Ï²¿¤«¤òÈá¤·¤ó¤Ç¤¤¤ë¤è¤¦¤À¡£",
-	"¤¬Èà¤Î»ô¤¤¸¤¤ò¸«¤Ê¤«¤Ã¤¿¤«¤È¿Ò¤Í¤Æ¤¤¤ë¡£",
-	"¤¬ÆìÄ¥¤ê¤«¤é½Ğ¤Æ¹Ô¤±¤È¸À¤Ã¤Æ¤¤¤ë¡£",
-	"¤Ï¥­¥Î¥³¤¬¤É¤¦¤È¤«Òì¤¤¤Æ¤¤¤ë¡£"
+	"ã¯ä½•ã‹ã‚’æ‚²ã—ã‚“ã§ã„ã‚‹ã‚ˆã†ã ã€‚",
+	"ãŒå½¼ã®é£¼ã„çŠ¬ã‚’è¦‹ãªã‹ã£ãŸã‹ã¨å°‹ã­ã¦ã„ã‚‹ã€‚",
+	"ãŒç¸„å¼µã‚Šã‹ã‚‰å‡ºã¦è¡Œã‘ã¨è¨€ã£ã¦ã„ã‚‹ã€‚",
+	"ã¯ã‚­ãƒã‚³ãŒã©ã†ã¨ã‹å‘Ÿã„ã¦ã„ã‚‹ã€‚"
 #else
 	"seems sad about something.",
 	"asks if you have seen his dogs.",
@@ -141,9 +141,9 @@ static cptr desc_moan[] =
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤«¤é¥×¥ì¥¤¥ä¡¼¤Ø¤ÎÂÇ·â½èÍı / Attack the player via physical attacks.
- * @param m_idx ÂÇ·â¤ò¹Ô¤¦¥â¥ó¥¹¥¿¡¼¤ÎID
- * @return ¼Âºİ¤Ë¹¶·â½èÍı¤ò¹Ô¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®æ‰“æ’ƒå‡¦ç† / Attack the player via physical attacks.
+ * @param m_idx æ‰“æ’ƒã‚’è¡Œã†ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ID
+ * @return å®Ÿéš›ã«æ”»æ’ƒå‡¦ç†ã‚’è¡Œã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool make_attack_normal(int m_idx)
 {
@@ -196,7 +196,7 @@ bool make_attack_normal(int m_idx)
 	if (p_ptr->special_defense & KATA_IAI)
 	{
 #ifdef JP
-		msg_print("Áê¼ê¤¬½±¤¤¤«¤«¤ëÁ°¤ËÁÇÁá¤¯Éğ´ï¤ò¿¶¤ë¤Ã¤¿¡£");
+		msg_print("ç›¸æ‰‹ãŒè¥²ã„ã‹ã‹ã‚‹å‰ã«ç´ æ—©ãæ­¦å™¨ã‚’æŒ¯ã‚‹ã£ãŸã€‚");
 #else
 		msg_format("You took sen, draw and cut in one motion before %s move.", m_name);
 #endif
@@ -273,10 +273,10 @@ bool make_attack_normal(int m_idx)
 				/* Message */
 #ifdef JP
 				if (abbreviate)
-				    msg_format("·âÂà¤·¤¿¡£");
+				    msg_format("æ’ƒé€€ã—ãŸã€‚");
 				else
-				    msg_format("%^s¤Ï·âÂà¤µ¤ì¤¿¡£", m_name);
-				abbreviate = 1;/*£²²óÌÜ°Ê¹ß¤Ï¾ÊÎ¬ */
+				    msg_format("%^sã¯æ’ƒé€€ã•ã‚ŒãŸã€‚", m_name);
+				abbreviate = 1;/*ï¼’å›ç›®ä»¥é™ã¯çœç•¥ */
 #else
 				msg_format("%^s is repelled.", m_name);
 #endif
@@ -296,7 +296,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_HIT:
 				{
 #ifdef JP
-					act = "²¥¤é¤ì¤¿¡£";
+					act = "æ®´ã‚‰ã‚ŒãŸã€‚";
 #else
 					act = "hits you.";
 #endif
@@ -310,7 +310,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_TOUCH:
 				{
 #ifdef JP
-					act = "¿¨¤é¤ì¤¿¡£";
+					act = "è§¦ã‚‰ã‚ŒãŸã€‚";
 #else
 					act = "touches you.";
 #endif
@@ -323,7 +323,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_PUNCH:
 				{
 #ifdef JP
-					act = "¥Ñ¥ó¥Á¤µ¤ì¤¿¡£";
+					act = "ãƒ‘ãƒ³ãƒã•ã‚ŒãŸã€‚";
 #else
 					act = "punches you.";
 #endif
@@ -337,7 +337,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_KICK:
 				{
 #ifdef JP
-					act = "½³¤é¤ì¤¿¡£";
+					act = "è¹´ã‚‰ã‚ŒãŸã€‚";
 #else
 					act = "kicks you.";
 #endif
@@ -351,7 +351,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_CLAW:
 				{
 #ifdef JP
-					act = "¤Ò¤Ã¤«¤«¤ì¤¿¡£";
+					act = "ã²ã£ã‹ã‹ã‚ŒãŸã€‚";
 #else
 					act = "claws you.";
 #endif
@@ -365,7 +365,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_BITE:
 				{
 #ifdef JP
-					act = "³ú¤Ş¤ì¤¿¡£";
+					act = "å™›ã¾ã‚ŒãŸã€‚";
 #else
 					act = "bites you.";
 #endif
@@ -379,7 +379,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_STING:
 				{
 #ifdef JP
-					act = "»É¤µ¤ì¤¿¡£";
+					act = "åˆºã•ã‚ŒãŸã€‚";
 #else
 					act = "stings you.";
 #endif
@@ -392,7 +392,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_SLASH:
 				{
 #ifdef JP
-					act = "»Â¤é¤ì¤¿¡£";
+					act = "æ–¬ã‚‰ã‚ŒãŸã€‚";
 #else
 					act = "slashes you.";
 #endif
@@ -406,7 +406,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_BUTT:
 				{
 #ifdef JP
-					act = "³Ñ¤ÇÆÍ¤«¤ì¤¿¡£";
+					act = "è§’ã§çªã‹ã‚ŒãŸã€‚";
 #else
 					act = "butts you.";
 #endif
@@ -420,7 +420,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_CRUSH:
 				{
 #ifdef JP
-					act = "ÂÎÅö¤¿¤ê¤µ¤ì¤¿¡£";
+					act = "ä½“å½“ãŸã‚Šã•ã‚ŒãŸã€‚";
 #else
 					act = "crushes you.";
 #endif
@@ -434,7 +434,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_ENGULF:
 				{
 #ifdef JP
-					act = "°û¤ß¹ş¤Ş¤ì¤¿¡£";
+					act = "é£²ã¿è¾¼ã¾ã‚ŒãŸã€‚";
 #else
 					act = "engulfs you.";
 #endif
@@ -448,7 +448,7 @@ bool make_attack_normal(int m_idx)
 				{
 #ifdef JP
 					abbreviate = -1;
-					act = "¤ÏÀÁµá½ñ¤ò¤è¤³¤·¤¿¡£";
+					act = "ã¯è«‹æ±‚æ›¸ã‚’ã‚ˆã“ã—ãŸã€‚";
 #else
 					act = "charges you.";
 #endif
@@ -462,7 +462,7 @@ bool make_attack_normal(int m_idx)
 				{
 #ifdef JP
 					abbreviate = -1;
-					act = "¤¬ÂÎ¤Î¾å¤òÇç¤¤²ó¤Ã¤¿¡£";
+					act = "ãŒä½“ã®ä¸Šã‚’é€™ã„å›ã£ãŸã€‚";
 #else
 					act = "crawls on you.";
 #endif
@@ -475,7 +475,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_DROOL:
 				{
 #ifdef JP
-					act = "¤è¤À¤ì¤ò¤¿¤é¤µ¤ì¤¿¡£";
+					act = "ã‚ˆã ã‚Œã‚’ãŸã‚‰ã•ã‚ŒãŸã€‚";
 #else
 					act = "drools on you.";
 #endif
@@ -487,7 +487,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_SPIT:
 				{
 #ifdef JP
-					act = "ÂÃ¤òÅÇ¤«¤ì¤¿¡£";
+					act = "å”¾ã‚’åã‹ã‚ŒãŸã€‚";
 #else
 					act = "spits on you.";
 #endif
@@ -500,7 +500,7 @@ bool make_attack_normal(int m_idx)
 				{
 #ifdef JP
 					abbreviate = -1;
-					act = "¤ÏÇúÈ¯¤·¤¿¡£";
+					act = "ã¯çˆ†ç™ºã—ãŸã€‚";
 #else
 					act = "explodes.";
 #endif
@@ -512,7 +512,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_GAZE:
 				{
 #ifdef JP
-					act = "¤Ë¤é¤Ş¤ì¤¿¡£";
+					act = "ã«ã‚‰ã¾ã‚ŒãŸã€‚";
 #else
 					act = "gazes at you.";
 #endif
@@ -523,7 +523,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_WAIL:
 				{
 #ifdef JP
-					act = "µã¤­¶«¤Ğ¤ì¤¿¡£";
+					act = "æ³£ãå«ã°ã‚ŒãŸã€‚";
 #else
 					act = "wails at you.";
 #endif
@@ -535,7 +535,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_SPORE:
 				{
 #ifdef JP
-					act = "Ë¦»Ò¤òÈô¤Ğ¤µ¤ì¤¿¡£";
+					act = "èƒå­ã‚’é£›ã°ã•ã‚ŒãŸã€‚";
 #else
 					act = "releases spores at you.";
 #endif
@@ -548,7 +548,7 @@ bool make_attack_normal(int m_idx)
 				{
 #ifdef JP
 					abbreviate = -1;
-					act = "¤¬ XXX4 ¤òÈ¯¼Í¤·¤¿¡£";
+					act = "ãŒ XXX4 ã‚’ç™ºå°„ã—ãŸã€‚";
 #else
 					act = "projects XXX4's at you.";
 #endif
@@ -559,7 +559,7 @@ bool make_attack_normal(int m_idx)
 				case RBM_BEG:
 				{
 #ifdef JP
-					act = "¶â¤ò¤»¤¬¤Ş¤ì¤¿¡£";
+					act = "é‡‘ã‚’ã›ãŒã¾ã‚ŒãŸã€‚";
 #else
 					act = "begs you for money.";
 #endif
@@ -601,43 +601,43 @@ bool make_attack_normal(int m_idx)
 						  case 1:
 						  case 6:
 						  case 11:
-							act = "¡Ö¢ö¤ª¡Á¤ì¤Ï¥¸¥ã¥¤¥¢¥ó¡Á¡Á¥¬¡Á¥­¤À¤¤¤·¤ç¤¦¡Á¡×";
+							act = "ã€Œâ™ªãŠï½ã‚Œã¯ã‚¸ãƒ£ã‚¤ã‚¢ãƒ³ï½ï½ã‚¬ï½ã‚­ã ã„ã—ã‚‡ã†ï½ã€";
 							break;
 						  case 2:
-							act = "¡Ö¢ö¤Æ¡Á¤ó¤«¤à¡Á¤Æ¤­¤Î¤ª¡Á¤È¤³¤À¤¼¡Á¡Á¡×";
+							act = "ã€Œâ™ªã¦ï½ã‚“ã‹ã‚€ï½ã¦ãã®ãŠï½ã¨ã“ã ãœï½ï½ã€";
 							break;
 						  case 3:
-							act = "¡Ö¢ö¤Î¡Á¤ÓÂÀ¥¹¥ÍÉ×¤Ï¥á¤¸¤ã¤Ê¤¤¤è¡Á¡Á¡×";
+							act = "ã€Œâ™ªã®ï½ã³å¤ªã‚¹ãƒå¤«ã¯ãƒ¡ã˜ã‚ƒãªã„ã‚ˆï½ï½ã€";
 							break;
 						  case 4:
-							act = "¡Ö¢ö¤±¡Á¤ó¤«¥¹¥İ¡Á¥Ä¡Á¤É¤ó¤È¤³¤¤¡Á¡×";
+							act = "ã€Œâ™ªã‘ï½ã‚“ã‹ã‚¹ãƒï½ãƒ„ï½ã©ã‚“ã¨ã“ã„ï½ã€";
 							break;
 						  case 5:
-							act = "¡Ö¢ö¤¦¤¿¡Á¤â¡Á¡Á¤¦¡Á¤Ş¤¤¤¼¡Á¤Ş¤«¤·¤È¤±¡Á¡×";
+							act = "ã€Œâ™ªã†ãŸï½ã‚‚ï½ï½ã†ï½ã¾ã„ãœï½ã¾ã‹ã—ã¨ã‘ï½ã€";
 							break;
 						  case 7:
-							act = "¡Ö¢ö¤Ş¡Á¤Á¤¤¤Á¤Ğ¡Á¤ó¤Î¤Ë¡Á¤ó¤­¤â¤Î¡Á¡Á¡×";
+							act = "ã€Œâ™ªã¾ï½ã¡ã„ã¡ã°ï½ã‚“ã®ã«ï½ã‚“ãã‚‚ã®ï½ï½ã€";
 							break;
 						  case 8:
-							act = "¡Ö¢ö¤Ù¤ó¤­¤ç¤¦¤·¤å¤¯¤À¤¤¥á¤¸¤ã¤Ê¤¤¤è¡Á¡Á¡×";
+							act = "ã€Œâ™ªã¹ã‚“ãã‚‡ã†ã—ã‚…ãã ã„ãƒ¡ã˜ã‚ƒãªã„ã‚ˆï½ï½ã€";
 							break;
 						  case 9:
-							act = "¡Ö¢ö¤­¤Ï¤ä¤µ¤·¡Á¤¯¤Æ¡Á¤Á¡Á¤«¤é¤â¤Á¡Á¡×";
+							act = "ã€Œâ™ªãã¯ã‚„ã•ã—ï½ãã¦ï½ã¡ï½ã‹ã‚‰ã‚‚ã¡ï½ã€";
 							break;
 						  case 10:
-							act = "¡Ö¢ö¤«¤ª¡Á¤â¡Á¡Á¥¹¥¿¥¤¥ë¤â¡Á¥Ğ¥Ä¥°¥ó¤µ¡Á¡×";
+							act = "ã€Œâ™ªã‹ãŠï½ã‚‚ï½ï½ã‚¹ã‚¿ã‚¤ãƒ«ã‚‚ï½ãƒãƒ„ã‚°ãƒ³ã•ï½ã€";
 							break;
 						  case 12:
-							act = "¡Ö¢ö¤¬¤Ã¤³¤¦¤¤¡Á¤Á¤Î¡Á¤¢¡Á¤Ğ¤ì¤ó¤Ü¤¦¡Á¡Á¡×";
+							act = "ã€Œâ™ªãŒã£ã“ã†ã„ï½ã¡ã®ï½ã‚ï½ã°ã‚Œã‚“ã¼ã†ï½ï½ã€";
 							break;
 						  case 13:
-							act = "¡Ö¢ö¥É¡Á¥é¤â¥É¥é¥ß¤â¥á¤¸¤ã¤Ê¤¤¤è¡Á¡Á¡×";
+							act = "ã€Œâ™ªãƒ‰ï½ãƒ©ã‚‚ãƒ‰ãƒ©ãƒŸã‚‚ãƒ¡ã˜ã‚ƒãªã„ã‚ˆï½ï½ã€";
 							break;
 						  case 14:
-							act = "¡Ö¢ö¤è¤¸¤²¤ó¤İ¤±¤Ã¤È¡Á¤Ê¡Á¤¯¤¿¤Ã¤Æ¡Á¡×";
+							act = "ã€Œâ™ªã‚ˆã˜ã’ã‚“ã½ã‘ã£ã¨ï½ãªï½ããŸã£ã¦ï½ã€";
 							break;
 						  case 15:
-							act = "¡Ö¢ö¤¢¤·¡Á¤Î¡Á¡Á¤Ê¤¬¤µ¡Á¤Ï¡Á¤Ş¤±¤Ê¤¤¤¼¡Á¡×";
+							act = "ã€Œâ™ªã‚ã—ï½ã®ï½ï½ãªãŒã•ï½ã¯ï½ã¾ã‘ãªã„ãœï½ã€";
 							break;
 						}
 #else
@@ -648,9 +648,9 @@ bool make_attack_normal(int m_idx)
 					{
 						if (one_in_(3))
 #ifdef JP
-							act = "¤Ï¢öËÍ¤é¤Ï³Ú¤·¤¤²ÈÂ²¢ö¤È²Î¤Ã¤Æ¤¤¤ë¡£";
+							act = "ã¯â™ªåƒ•ã‚‰ã¯æ¥½ã—ã„å®¶æ—â™ªã¨æ­Œã£ã¦ã„ã‚‹ã€‚";
 						else
-							act = "¤Ï¢ö¥¢¥¤ ¥é¥Ö ¥æ¡¼¡¢¥æ¡¼ ¥é¥Ö ¥ß¡¼¢ö¤È²Î¤Ã¤Æ¤¤¤ë¡£";
+							act = "ã¯â™ªã‚¢ã‚¤ ãƒ©ãƒ– ãƒ¦ãƒ¼ã€ãƒ¦ãƒ¼ ãƒ©ãƒ– ãƒŸãƒ¼â™ªã¨æ­Œã£ã¦ã„ã‚‹ã€‚";
 #else
 							act = "sings 'We are a happy family.'";
 						else
@@ -675,12 +675,12 @@ bool make_attack_normal(int m_idx)
 				}
 #ifdef JP
 				if (abbreviate == 0)
-				    msg_format("%^s¤Ë%s", m_name, act);
+				    msg_format("%^sã«%s", m_name, act);
 				else if (abbreviate == 1)
 				    msg_format("%s", act);
 				else /* if (abbreviate == -1) */
 				    msg_format("%^s%s", m_name, act);
-				abbreviate = 1;/*£²²óÌÜ°Ê¹ß¤Ï¾ÊÎ¬ */
+				abbreviate = 1;/*ï¼’å›ç›®ä»¥é™ã¯çœç•¥ */
 #else
 				msg_format("%^s %s%s", m_name, act, do_silly_attack ? " you." : "");
 #endif
@@ -718,7 +718,7 @@ bool make_attack_normal(int m_idx)
 					{
 						int tmp_damage = damage - (damage * ((ac < 150) ? ac : 150) / 250);
 #ifdef JP
-						msg_print("ÄËº¨¤Î°ì·â¡ª");
+						msg_print("ç—›æ¨ã®ä¸€æ’ƒï¼");
 #else
 						msg_print("It was a critical hit!");
 #endif
@@ -825,7 +825,7 @@ bool make_attack_normal(int m_idx)
 
 							/* Message */
 #ifdef JP
-							msg_print("¥¶¥Ã¥¯¤«¤é¥¨¥Í¥ë¥®¡¼¤¬µÛ¤¤¼è¤é¤ì¤¿¡ª");
+							msg_print("ã‚¶ãƒƒã‚¯ã‹ã‚‰ã‚¨ãƒãƒ«ã‚®ãƒ¼ãŒå¸ã„å–ã‚‰ã‚ŒãŸï¼");
 #else
 							msg_print("Energy drains from your pack!");
 #endif
@@ -878,7 +878,7 @@ bool make_attack_normal(int m_idx)
 					{
 						/* Saving throw message */
 #ifdef JP
-						msg_print("¤·¤«¤·ÁÇÁá¤¯ºâÉÛ¤ò¼é¤Ã¤¿¡ª");
+						msg_print("ã—ã‹ã—ç´ æ—©ãè²¡å¸ƒã‚’å®ˆã£ãŸï¼");
 #else
 						msg_print("You quickly protect your money pouch!");
 #endif
@@ -899,7 +899,7 @@ bool make_attack_normal(int m_idx)
 						if (gold <= 0)
 						{
 #ifdef JP
-							msg_print("¤·¤«¤·²¿¤âÅğ¤Ş¤ì¤Ê¤«¤Ã¤¿¡£");
+							msg_print("ã—ã‹ã—ä½•ã‚‚ç›—ã¾ã‚Œãªã‹ã£ãŸã€‚");
 #else
 							msg_print("Nothing was stolen.");
 #endif
@@ -908,8 +908,8 @@ bool make_attack_normal(int m_idx)
 						else if (p_ptr->au)
 						{
 #ifdef JP
-							msg_print("ºâÉÛ¤¬·Ú¤¯¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£");
-							msg_format("$%ld ¤Î¤ª¶â¤¬Åğ¤Ş¤ì¤¿¡ª", (long)gold);
+							msg_print("è²¡å¸ƒãŒè»½ããªã£ãŸæ°—ãŒã™ã‚‹ã€‚");
+							msg_format("$%ld ã®ãŠé‡‘ãŒç›—ã¾ã‚ŒãŸï¼", (long)gold);
 #else
 							msg_print("Your purse feels lighter.");
 							msg_format("%ld coins were stolen!", (long)gold);
@@ -919,8 +919,8 @@ bool make_attack_normal(int m_idx)
 						else
 						{
 #ifdef JP
-							msg_print("ºâÉÛ¤¬·Ú¤¯¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£");
-							msg_print("¤ª¶â¤¬Á´ÉôÅğ¤Ş¤ì¤¿¡ª");
+							msg_print("è²¡å¸ƒãŒè»½ããªã£ãŸæ°—ãŒã™ã‚‹ã€‚");
+							msg_print("ãŠé‡‘ãŒå…¨éƒ¨ç›—ã¾ã‚ŒãŸï¼");
 #else
 							msg_print("Your purse feels lighter.");
 							msg_print("All of your coins were stolen!");
@@ -959,7 +959,7 @@ bool make_attack_normal(int m_idx)
 					{
 						/* Saving throw message */
 #ifdef JP
-						msg_print("¤·¤«¤·¤¢¤ï¤Æ¤Æ¥¶¥Ã¥¯¤ò¼è¤êÊÖ¤·¤¿¡ª");
+						msg_print("ã—ã‹ã—ã‚ã‚ã¦ã¦ã‚¶ãƒƒã‚¯ã‚’å–ã‚Šè¿”ã—ãŸï¼");
 #else
 						msg_print("You grab hold of your backpack!");
 #endif
@@ -997,9 +997,9 @@ bool make_attack_normal(int m_idx)
 
 						/* Message */
 #ifdef JP
-						msg_format("%s(%c)¤ò%sÅğ¤Ş¤ì¤¿¡ª",
+						msg_format("%s(%c)ã‚’%sç›—ã¾ã‚ŒãŸï¼",
 							   o_name, index_to_label(i),
-							   ((o_ptr->number > 1) ? "°ì¤Ä" : ""));
+							   ((o_ptr->number > 1) ? "ä¸€ã¤" : ""));
 #else
 						msg_format("%sour %s (%c) was stolen!",
 							   ((o_ptr->number > 1) ? "One of y" : "Y"),
@@ -1093,9 +1093,9 @@ bool make_attack_normal(int m_idx)
 
 						/* Message */
 #ifdef JP
-						msg_format("%s(%c)¤ò%s¿©¤Ù¤é¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª",
+						msg_format("%s(%c)ã‚’%sé£Ÿã¹ã‚‰ã‚Œã¦ã—ã¾ã£ãŸï¼",
 							  o_name, index_to_label(i),
-							  ((o_ptr->number > 1) ? "°ì¤Ä" : ""));
+							  ((o_ptr->number > 1) ? "ä¸€ã¤" : ""));
 #else
 						msg_format("%sour %s (%c) was eaten!",
 							   ((o_ptr->number > 1) ? "One of y" : "Y"),
@@ -1138,7 +1138,7 @@ bool make_attack_normal(int m_idx)
 						if (!p_ptr->blind)
 						{
 #ifdef JP
-							msg_print("ÌÀ¤«¤ê¤¬°Å¤¯¤Ê¤Ã¤Æ¤·¤Ş¤Ã¤¿¡£");
+							msg_print("æ˜ã‹ã‚ŠãŒæš—ããªã£ã¦ã—ã¾ã£ãŸã€‚");
 #else
 							msg_print("Your light dims.");
 #endif
@@ -1161,7 +1161,7 @@ bool make_attack_normal(int m_idx)
 
 					/* Message */
 #ifdef JP
-					msg_print("»À¤òÍá¤Ó¤»¤é¤ì¤¿¡ª");
+					msg_print("é…¸ã‚’æµ´ã³ã›ã‚‰ã‚ŒãŸï¼");
 #else
 					msg_print("You are covered in acid!");
 #endif
@@ -1187,7 +1187,7 @@ bool make_attack_normal(int m_idx)
 
 					/* Message */
 #ifdef JP
-					msg_print("ÅÅ·â¤òÍá¤Ó¤»¤é¤ì¤¿¡ª");
+					msg_print("é›»æ’ƒã‚’æµ´ã³ã›ã‚‰ã‚ŒãŸï¼");
 #else
 					msg_print("You are struck by electricity!");
 #endif
@@ -1210,7 +1210,7 @@ bool make_attack_normal(int m_idx)
 
 					/* Message */
 #ifdef JP
-					msg_print("Á´¿È¤¬±ê¤ËÊñ¤Ş¤ì¤¿¡ª");
+					msg_print("å…¨èº«ãŒç‚ã«åŒ…ã¾ã‚ŒãŸï¼");
 #else
 					msg_print("You are enveloped in flames!");
 #endif
@@ -1233,7 +1233,7 @@ bool make_attack_normal(int m_idx)
 
 					/* Message */
 #ifdef JP
-					msg_print("Á´¿È¤¬Îäµ¤¤ÇÊ¤¤ï¤ì¤¿¡ª");
+					msg_print("å…¨èº«ãŒå†·æ°—ã§è¦†ã‚ã‚ŒãŸï¼");
 #else
 					msg_print("You are covered with frost!");
 #endif
@@ -1261,7 +1261,7 @@ bool make_attack_normal(int m_idx)
 						if (set_blind(p_ptr->blind + 10 + randint1(rlev)))
 						{
 #ifdef JP
-							if (m_ptr->r_idx == MON_DIO) msg_print("¤É¤¦¤À¥Ã¡ª¤³¤Î·ì¤ÎÌÜÄÙ¤·¤Ï¥Ã¡ª");
+							if (m_ptr->r_idx == MON_DIO) msg_print("ã©ã†ã ãƒƒï¼ã“ã®è¡€ã®ç›®æ½°ã—ã¯ãƒƒï¼");
 #else
 							/* nanka */
 #endif
@@ -1313,7 +1313,7 @@ bool make_attack_normal(int m_idx)
 					else if (p_ptr->resist_fear)
 					{
 #ifdef JP
-						msg_print("¤·¤«¤·¶²Éİ¤Ë¿¯¤µ¤ì¤Ê¤«¤Ã¤¿¡ª");
+						msg_print("ã—ã‹ã—ææ€–ã«ä¾µã•ã‚Œãªã‹ã£ãŸï¼");
 #else
 						msg_print("You stand your ground!");
 #endif
@@ -1323,7 +1323,7 @@ bool make_attack_normal(int m_idx)
 					else if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
 					{
 #ifdef JP
-						msg_print("¤·¤«¤·¶²Éİ¤Ë¿¯¤µ¤ì¤Ê¤«¤Ã¤¿¡ª");
+						msg_print("ã—ã‹ã—ææ€–ã«ä¾µã•ã‚Œãªã‹ã£ãŸï¼");
 #else
 						msg_print("You stand your ground!");
 #endif
@@ -1359,7 +1359,7 @@ bool make_attack_normal(int m_idx)
 					else if (p_ptr->free_act)
 					{
 #ifdef JP
-						msg_print("¤·¤«¤·¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª");
+						msg_print("ã—ã‹ã—åŠ¹æœãŒãªã‹ã£ãŸï¼");
 #else
 						msg_print("You are unaffected!");
 #endif
@@ -1369,7 +1369,7 @@ bool make_attack_normal(int m_idx)
 					else if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
 					{
 #ifdef JP
-						msg_print("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª");
+						msg_print("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼");
 #else
 						msg_print("You resist the effects!");
 #endif
@@ -1597,7 +1597,7 @@ bool make_attack_normal(int m_idx)
 						if (dec_stat(A_CON, randint1(10), perm))
 						{
 #ifdef JP
-							msg_print("ÉÂ¤¬¤¢¤Ê¤¿¤ò¿ª¤ó¤Ç¤¤¤ëµ¤¤¬¤¹¤ë¡£");
+							msg_print("ç—…ãŒã‚ãªãŸã‚’è•ã‚“ã§ã„ã‚‹æ°—ãŒã™ã‚‹ã€‚");
 #else
 							msg_print("You feel strange sickness.");
 #endif
@@ -1619,7 +1619,7 @@ bool make_attack_normal(int m_idx)
 							{
 								if (p_ptr->prace == RACE_ANDROID) break;
 #ifdef JP
-								msg_print("¿ÍÀ¸¤¬µÕÌá¤ê¤·¤¿µ¤¤¬¤¹¤ë¡£");
+								msg_print("äººç”ŸãŒé€†æˆ»ã‚Šã—ãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 								msg_print("You feel life has clocked back.");
 #endif
@@ -1635,12 +1635,12 @@ bool make_attack_normal(int m_idx)
 								switch (stat)
 								{
 #ifdef JP
-									case A_STR: act = "¶¯¤¯"; break;
-									case A_INT: act = "ÁïÌÀ¤Ç"; break;
-									case A_WIS: act = "¸­ÌÀ¤Ç"; break;
-									case A_DEX: act = "´ïÍÑ¤Ç"; break;
-									case A_CON: act = "·ò¹¯¤Ç"; break;
-									case A_CHR: act = "Èş¤·¤¯"; break;
+									case A_STR: act = "å¼·ã"; break;
+									case A_INT: act = "è¡æ˜ã§"; break;
+									case A_WIS: act = "è³¢æ˜ã§"; break;
+									case A_DEX: act = "å™¨ç”¨ã§"; break;
+									case A_CON: act = "å¥åº·ã§"; break;
+									case A_CHR: act = "ç¾ã—ã"; break;
 #else
 									case A_STR: act = "strong"; break;
 									case A_INT: act = "bright"; break;
@@ -1653,7 +1653,7 @@ bool make_attack_normal(int m_idx)
 								}
 
 #ifdef JP
-								msg_format("¤¢¤Ê¤¿¤Ï°ÊÁ°¤Û¤É%s¤Ê¤¯¤Ê¤Ã¤Æ¤·¤Ş¤Ã¤¿...¡£", act);
+								msg_format("ã‚ãªãŸã¯ä»¥å‰ã»ã©%sãªããªã£ã¦ã—ã¾ã£ãŸ...ã€‚", act);
 #else
 								msg_format("You're not as %s as you used to be...", act);
 #endif
@@ -1668,7 +1668,7 @@ bool make_attack_normal(int m_idx)
 							case 10:
 							{
 #ifdef JP
-						msg_print("¤¢¤Ê¤¿¤Ï°ÊÁ°¤Û¤ÉÎÏ¶¯¤¯¤Ê¤¯¤Ê¤Ã¤Æ¤·¤Ş¤Ã¤¿...¡£");
+						msg_print("ã‚ãªãŸã¯ä»¥å‰ã»ã©åŠ›å¼·ããªããªã£ã¦ã—ã¾ã£ãŸ...ã€‚");
 #else
 								msg_print("You're not as powerful as you used to be...");
 #endif
@@ -1743,7 +1743,7 @@ bool make_attack_normal(int m_idx)
 						if (m_ptr->ml && did_heal)
 						{
 #ifdef JP
-msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
+msg_format("%sã¯ä½“åŠ›ã‚’å›å¾©ã—ãŸã‚ˆã†ã ã€‚", m_name);
 #else
 							msg_format("%^s appears healthier.", m_name);
 #endif
@@ -1761,7 +1761,7 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 					if (CHECK_MULTISHADOW())
 					{
 #ifdef JP
-						msg_print("¹¶·â¤Ï¸¸±Æ¤ËÌ¿Ãæ¤·¡¢¤¢¤Ê¤¿¤Ë¤ÏÆÏ¤«¤Ê¤«¤Ã¤¿¡£");
+						msg_print("æ”»æ’ƒã¯å¹»å½±ã«å‘½ä¸­ã—ã€ã‚ãªãŸã«ã¯å±Šã‹ãªã‹ã£ãŸã€‚");
 #else
 						msg_print("The attack hits Shadow, you are unharmed!");
 #endif
@@ -1921,9 +1921,9 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 #ifdef JP
-						msg_format("%^s¤ÏÆÍÁ³Ç®¤¯¤Ê¤Ã¤¿¡ª", m_name);
+						msg_format("%^sã¯çªç„¶ç†±ããªã£ãŸï¼", m_name);
 						if (mon_take_hit(m_idx, dam, &fear,
-						    "¤Ï³¥¤Î»³¤Ë¤Ê¤Ã¤¿¡£"))
+						    "ã¯ç°ã®å±±ã«ãªã£ãŸã€‚"))
 #else
 						msg_format("%^s is suddenly very hot!", m_name);
 
@@ -1953,9 +1953,9 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 #ifdef JP
-						msg_format("%^s¤ÏÅÅ·â¤ò¤¯¤é¤Ã¤¿¡ª", m_name);
+						msg_format("%^sã¯é›»æ’ƒã‚’ãã‚‰ã£ãŸï¼", m_name);
 						if (mon_take_hit(m_idx, dam, &fear,
-						    "¤ÏÇ³¤¨³Ì¤Î»³¤Ë¤Ê¤Ã¤¿¡£"))
+						    "ã¯ç‡ƒãˆæ®»ã®å±±ã«ãªã£ãŸã€‚"))
 #else
 						msg_format("%^s gets zapped!", m_name);
 
@@ -1985,9 +1985,9 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 #ifdef JP
-						msg_format("%^s¤ÏÎäµ¤¤ò¤¯¤é¤Ã¤¿¡ª", m_name);
+						msg_format("%^sã¯å†·æ°—ã‚’ãã‚‰ã£ãŸï¼", m_name);
 						if (mon_take_hit(m_idx, dam, &fear,
-						    "¤ÏÅà¤ê¤Ä¤¤¤¿¡£"))
+						    "ã¯å‡ã‚Šã¤ã„ãŸã€‚"))
 #else
 						msg_format("%^s is very cold!", m_name);
 
@@ -2018,9 +2018,9 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 #ifdef JP
-						msg_format("%^s¤Ï¶À¤ÎÇËÊÒ¤ò¤¯¤é¤Ã¤¿¡ª", m_name);
+						msg_format("%^sã¯é¡ã®ç ´ç‰‡ã‚’ãã‚‰ã£ãŸï¼", m_name);
 						if (mon_take_hit(m_idx, dam, &fear,
-						    "¤Ï¥º¥¿¥º¥¿¤Ë¤Ê¤Ã¤¿¡£"))
+						    "ã¯ã‚ºã‚¿ã‚ºã‚¿ã«ãªã£ãŸã€‚"))
 #else
 						msg_format("%^s gets zapped!", m_name);
 
@@ -2056,9 +2056,9 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 							dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 #ifdef JP
-							msg_format("%^s¤ÏÀ»¤Ê¤ë¥ª¡¼¥é¤Ç½ı¤Ä¤¤¤¿¡ª", m_name);
+							msg_format("%^sã¯è–ãªã‚‹ã‚ªãƒ¼ãƒ©ã§å‚·ã¤ã„ãŸï¼", m_name);
 							if (mon_take_hit(m_idx, dam, &fear,
-							    "¤ÏÅİ¤ì¤¿¡£"))
+							    "ã¯å€’ã‚ŒãŸã€‚"))
 #else
 							msg_format("%^s is injured by holy power!", m_name);
 
@@ -2090,9 +2090,9 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 #ifdef JP
-						msg_format("%^s¤¬±Ô¤¤Æ®µ¤¤Î¥ª¡¼¥é¤Ç½ı¤Ä¤¤¤¿¡ª", m_name);
+						msg_format("%^sãŒé‹­ã„é—˜æ°—ã®ã‚ªãƒ¼ãƒ©ã§å‚·ã¤ã„ãŸï¼", m_name);
 						if (mon_take_hit(m_idx, dam, &fear,
-						    "¤ÏÅİ¤ì¤¿¡£"))
+						    "ã¯å€’ã‚ŒãŸã€‚"))
 #else
 						msg_format("%^s is injured by the Force", m_name);
 
@@ -2133,8 +2133,8 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 #ifdef JP
-						msg_format("±Æ¤Î¥ª¡¼¥é¤¬%^s¤ËÈ¿·â¤·¤¿¡ª", m_name);
-						if (mon_take_hit(m_idx, dam, &fear, "¤ÏÅİ¤ì¤¿¡£"))
+						msg_format("å½±ã®ã‚ªãƒ¼ãƒ©ãŒ%^sã«åæ’ƒã—ãŸï¼", m_name);
+						if (mon_take_hit(m_idx, dam, &fear, "ã¯å€’ã‚ŒãŸã€‚"))
 #else
 						msg_format("Enveloped shadows attack %^s.", m_name);
 
@@ -2201,10 +2201,10 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 					/* Message */
 #ifdef JP
 					if (abbreviate)
-					    msg_format("%s¤«¤ï¤·¤¿¡£", (p_ptr->special_attack & ATTACK_SUIKEN) ? "´ñÌ¯¤ÊÆ°¤­¤Ç" : "");
+					    msg_format("%sã‹ã‚ã—ãŸã€‚", (p_ptr->special_attack & ATTACK_SUIKEN) ? "å¥‡å¦™ãªå‹•ãã§" : "");
 					else
-					    msg_format("%s%^s¤Î¹¶·â¤ò¤«¤ï¤·¤¿¡£", (p_ptr->special_attack & ATTACK_SUIKEN) ? "´ñÌ¯¤ÊÆ°¤­¤Ç" : "", m_name);
-					abbreviate = 1;/*£²²óÌÜ°Ê¹ß¤Ï¾ÊÎ¬ */
+					    msg_format("%s%^sã®æ”»æ’ƒã‚’ã‹ã‚ã—ãŸã€‚", (p_ptr->special_attack & ATTACK_SUIKEN) ? "å¥‡å¦™ãªå‹•ãã§" : "", m_name);
+					abbreviate = 1;/*ï¼’å›ç›®ä»¥é™ã¯çœç•¥ */
 #else
 					msg_format("%^s misses you.", m_name);
 #endif
@@ -2238,7 +2238,7 @@ msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
 			if (rakuba((damage > 200) ? 200 : damage, FALSE))
 			{
 #ifdef JP
-msg_format("%^s¤«¤éÍî¤Á¤Æ¤·¤Ş¤Ã¤¿¡ª", m_name);
+msg_format("%^sã‹ã‚‰è½ã¡ã¦ã—ã¾ã£ãŸï¼", m_name);
 #else
 				msg_format("You have fallen from %s.", m_name);
 #endif
@@ -2258,7 +2258,7 @@ msg_format("%^s¤«¤éÍî¤Á¤Æ¤·¤Ş¤Ã¤¿¡ª", m_name);
 		&& get_damage > 0 && !p_ptr->is_dead)
 	{
 #ifdef JP
-		msg_format("¹¶·â¤¬%s¼«¿È¤ò½ı¤Ä¤±¤¿¡ª", m_name);
+		msg_format("æ”»æ’ƒãŒ%sè‡ªèº«ã‚’å‚·ã¤ã‘ãŸï¼", m_name);
 #else
 		char m_name_self[80];
 
@@ -2278,7 +2278,7 @@ msg_format("%^s¤«¤éÍî¤Á¤Æ¤·¤Ş¤Ã¤¿¡ª", m_name);
 
 		p_ptr->csp -= 7;
 #ifdef JP
-		msg_format("%^s¤ËÈ¿·â¤·¤¿¡ª", m_name);
+		msg_format("%^sã«åæ’ƒã—ãŸï¼", m_name);
 #else
 		msg_format("Your counterattack to %s!", m_name);
 #endif
@@ -2295,7 +2295,7 @@ msg_format("%^s¤«¤éÍî¤Á¤Æ¤·¤Ş¤Ã¤¿¡ª", m_name);
 		if (teleport_barrier(m_idx))
 		{
 #ifdef JP
-			msg_print("Å¥ËÀ¤Ï¾Ğ¤Ã¤ÆÆ¨¤²...¤è¤¦¤È¤·¤¿¤¬¥Ğ¥ê¥¢¤ËËÉ¤¬¤ì¤¿¡£");
+			msg_print("æ³¥æ£’ã¯ç¬‘ã£ã¦é€ƒã’...ã‚ˆã†ã¨ã—ãŸãŒãƒãƒªã‚¢ã«é˜²ãŒã‚ŒãŸã€‚");
 #else
 			msg_print("The thief flees laughing...? But magic barrier obstructs it.");
 #endif
@@ -2303,7 +2303,7 @@ msg_format("%^s¤«¤éÍî¤Á¤Æ¤·¤Ş¤Ã¤¿¡ª", m_name);
 		else
 		{
 #ifdef JP
-			msg_print("Å¥ËÀ¤Ï¾Ğ¤Ã¤ÆÆ¨¤²¤¿¡ª");
+			msg_print("æ³¥æ£’ã¯ç¬‘ã£ã¦é€ƒã’ãŸï¼");
 #else
 			msg_print("The thief flees laughing!");
 #endif
@@ -2322,7 +2322,7 @@ msg_format("%^s¤«¤éÍî¤Á¤Æ¤·¤Ş¤Ã¤¿¡ª", m_name);
 	{
 		sound(SOUND_FLEE);
 #ifdef JP
-		msg_format("%^s¤Ï¶²Éİ¤ÇÆ¨¤²½Ğ¤·¤¿¡ª", m_name);
+		msg_format("%^sã¯ææ€–ã§é€ƒã’å‡ºã—ãŸï¼", m_name);
 #else
 		msg_format("%^s flees in terror!", m_name);
 #endif

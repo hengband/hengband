@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file melee2.c
- * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÆÃ¼ìµ»Ç½¤È°ÜÆ°½èÍı/ Monster spells and movement
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç‰¹æ®ŠæŠ€èƒ½ã¨ç§»å‹•å‡¦ç†/ Monster spells and movement
  * @date 2014/01/17
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -20,11 +20,11 @@
 #define CYBERNOISE 20
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Å¨¤ËÀÜ¶á¤¹¤ë¤¿¤á¤ÎÊı¸ş¤ò·è¤á¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ•µã«æ¥è¿‘ã™ã‚‹ãŸã‚ã®æ–¹å‘ã‚’æ±ºã‚ã‚‹ /
  * Calculate the direction to the next enemy
- * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param mm °ÜÆ°¤¹¤ë¤Ù¤­Êı³ÑID¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @return Êı¸ş¤¬³ÎÄê¤·¤¿¾ì¹çTRUE¡¢ÀÜ¶á¤¹¤ëÅ¨¤¬¤½¤â¤½¤â¤¤¤Ê¤¤¾ì¹çFALSE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param mm ç§»å‹•ã™ã‚‹ã¹ãæ–¹è§’IDã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return æ–¹å‘ãŒç¢ºå®šã—ãŸå ´åˆTRUEã€æ¥è¿‘ã™ã‚‹æ•µãŒãã‚‚ãã‚‚ã„ãªã„å ´åˆFALSEã‚’è¿”ã™
  */
 static bool get_enemy_dir(int m_idx, int *mm)
 {
@@ -185,14 +185,14 @@ static bool get_enemy_dir(int m_idx, int *mm)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Å¨¥â¥ó¥¹¥¿¡¼¤Ë¹Ô¤¦ÂÇ·â½èÍı /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ•µãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«è¡Œã†æ‰“æ’ƒå‡¦ç† /
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
- * @param m_idx ÌÜÉ¸¤È¤Ê¤ë¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param dam ¥À¥á¡¼¥¸ÎÌ
- * @param fear ÌÜÉ¸¤È¤Ê¤ë¥â¥ó¥¹¥¿¡¼¤Î¶²¹²¾õÂÖ¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param note ÌÜÉ¸¥â¥ó¥¹¥¿¡¼¤¬»àË´¤·¤¿¾ì¹ç¤ÎÆÃÊÌ¥á¥Ã¥»¡¼¥¸(NULL¤Ê¤é¤ĞÉ¸½àÉ½¼¨¤ò¹Ô¤¦)
- * @param who ÂÇ·â¤ò¹Ô¤Ã¤¿¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @return ¤Ê¤·
+ * @param m_idx ç›®æ¨™ã¨ãªã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param dam ãƒ€ãƒ¡ãƒ¼ã‚¸é‡
+ * @param fear ç›®æ¨™ã¨ãªã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ææ…ŒçŠ¶æ…‹ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param note ç›®æ¨™ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ­»äº¡ã—ãŸå ´åˆã®ç‰¹åˆ¥ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸(NULLãªã‚‰ã°æ¨™æº–è¡¨ç¤ºã‚’è¡Œã†)
+ * @param who æ‰“æ’ƒã‚’è¡Œã£ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @return ãªã—
  */
 void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 {
@@ -227,7 +227,7 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 		if (seen)
 		{
 #ifdef JP
-msg_format("%^s¤Ï¥À¥á¡¼¥¸¤ò¼õ¤±¤Ê¤¤¡£", m_name);
+msg_format("%^sã¯ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãªã„ã€‚", m_name);
 #else
 			msg_format("%^s is unharmed.", m_name);
 #endif
@@ -249,7 +249,7 @@ msg_format("%^s¤Ï¥À¥á¡¼¥¸¤ò¼õ¤±¤Ê¤¤¡£", m_name);
 			if (seen)
 			{
 #ifdef JP
-msg_format("%^s¤Ï¥À¥á¡¼¥¸¤ò¼õ¤±¤Ê¤¤¡£", m_name);
+msg_format("%^sã¯ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãªã„ã€‚", m_name);
 #else
 				msg_format("%^s is unharmed.", m_name);
 #endif
@@ -305,7 +305,7 @@ msg_format("%^s%s", m_name, note);
 				else if (!monster_living(r_ptr))
 				{
 #ifdef JP
-msg_format("%^s¤ÏÇË²õ¤µ¤ì¤¿¡£", m_name);
+msg_format("%^sã¯ç ´å£Šã•ã‚ŒãŸã€‚", m_name);
 #else
 					msg_format("%^s is destroyed.", m_name);
 #endif
@@ -315,7 +315,7 @@ msg_format("%^s¤ÏÇË²õ¤µ¤ì¤¿¡£", m_name);
 				else
 				{
 #ifdef JP
-msg_format("%^s¤Ï»¦¤µ¤ì¤¿¡£", m_name);
+msg_format("%^sã¯æ®ºã•ã‚ŒãŸã€‚", m_name);
 #else
 					msg_format("%^s is killed.", m_name);
 #endif
@@ -396,7 +396,7 @@ msg_format("%^s¤Ï»¦¤µ¤ì¤¿¡£", m_name);
 		if (rakuba((dam > 200) ? 200 : dam, FALSE))
 		{
 #ifdef JP
-msg_format("%^s¤Ë¿¶¤êÍî¤È¤µ¤ì¤¿¡ª", m_name);
+msg_format("%^sã«æŒ¯ã‚Šè½ã¨ã•ã‚ŒãŸï¼", m_name);
 #else
 				msg_format("You have thrown off from %s!", m_name);
 #endif
@@ -409,10 +409,10 @@ msg_format("%^s¤Ë¿¶¤êÍî¤È¤µ¤ì¤¿¡ª", m_name);
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤«¤éÆ¨Áö¤¹¤ë¤«¤É¤¦¤«¤òÊÖ¤¹ /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰é€ƒèµ°ã™ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™ /
  * Returns whether a given monster will try to run from the player.
- * @param m_idx Æ¨Áö¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @return ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤«¤éÆ¨Áö¤¹¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
+ * @param m_idx é€ƒèµ°ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @return ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰é€ƒèµ°ã™ã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
  * @details
  * Monsters will attempt to avoid very powerful players.  See below.\n
  *\n
@@ -491,12 +491,12 @@ static int mon_will_run(int m_idx)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤Ë¸ş¤±¤Æ±óµ÷Î¥¹¶·â¤ò¹Ô¤¦¤³¤È¤¬²ÄÇ½¤Ê¥Ş¥¹¤òÁöºº¤¹¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã‘ã¦é è·é›¢æ”»æ’ƒã‚’è¡Œã†ã“ã¨ãŒå¯èƒ½ãªãƒã‚¹ã‚’èµ°æŸ»ã™ã‚‹ /
  * Search spell castable grid
- * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param yp Å¬¤·¤¿¥Ş¥¹¤ÎYºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param xp Å¬¤·¤¿¥Ş¥¹¤ÎXºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @return Í­¸ú¤Ê¥Ş¥¹¤¬¤¢¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param yp é©ã—ãŸãƒã‚¹ã®Yåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param xp é©ã—ãŸãƒã‚¹ã®Xåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return æœ‰åŠ¹ãªãƒã‚¹ãŒã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 static bool get_moves_aux2(int m_idx, int *yp, int *xp)
 {
@@ -576,13 +576,13 @@ static bool get_moves_aux2(int m_idx, int *yp, int *xp)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤Ë¸ş¤±¤ÆÀÜ¶á¤¹¤ë¤³¤È¤¬²ÄÇ½¤Ê¥Ş¥¹¤òÁöºº¤¹¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã‘ã¦æ¥è¿‘ã™ã‚‹ã“ã¨ãŒå¯èƒ½ãªãƒã‚¹ã‚’èµ°æŸ»ã™ã‚‹ /
  * Choose the "best" direction for "flowing"
- * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param yp °ÜÆ°Àè¤Î¥Ş¥¹¤ÎYºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param xp °ÜÆ°Àè¤Î¥Ş¥¹¤ÎXºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param no_flow ¥â¥ó¥¹¥¿¡¼¤ËFLOW¥Õ¥é¥°¤¬·Ğ¤Ã¤Æ¤¤¤Ê¤¤¾õÂÖ¤ÇTRUE
- * @return Í­¸ú¤Ê¥Ş¥¹¤¬¤¢¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param yp ç§»å‹•å…ˆã®ãƒã‚¹ã®Yåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param xp ç§»å‹•å…ˆã®ãƒã‚¹ã®Xåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param no_flow ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«FLOWãƒ•ãƒ©ã‚°ãŒçµŒã£ã¦ã„ãªã„çŠ¶æ…‹ã§TRUE
+ * @return æœ‰åŠ¹ãªãƒã‚¹ãŒã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  * @details
  * Note that ghosts and rock-eaters are never allowed to "flow",\n
  * since they should move directly towards the player.\n
@@ -711,12 +711,12 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬¥×¥ì¥¤¥ä¡¼¤«¤éÆ¨Áö¤¹¤ë¤³¤È¤¬²ÄÇ½¤Ê¥Ş¥¹¤òÁöºº¤¹¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰é€ƒèµ°ã™ã‚‹ã“ã¨ãŒå¯èƒ½ãªãƒã‚¹ã‚’èµ°æŸ»ã™ã‚‹ /
  * Provide a location to flee to, but give the player a wide berth.
- * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param yp °ÜÆ°Àè¤Î¥Ş¥¹¤ÎYºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param xp °ÜÆ°Àè¤Î¥Ş¥¹¤ÎXºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @return Í­¸ú¤Ê¥Ş¥¹¤¬¤¢¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param yp ç§»å‹•å…ˆã®ãƒã‚¹ã®Yåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param xp ç§»å‹•å…ˆã®ãƒã‚¹ã®Xåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return æœ‰åŠ¹ãªãƒã‚¹ãŒã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  * @details
  * A monster may wish to flee to a location that is behind the player,\n
  * but instead of heading directly for it, the monster should "swerve"\n
@@ -920,12 +920,12 @@ static sint *dist_offsets_x[10] =
 };
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Æ¨¤²¹ş¤á¤ë°ÂÁ´¤ÊÃÏÅÀ¤òÊÖ¤¹ /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€ƒã’è¾¼ã‚ã‚‹å®‰å…¨ãªåœ°ç‚¹ã‚’è¿”ã™ /
  * Choose a "safe" location near a monster for it to run toward.
- * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param yp °ÜÆ°Àè¤Î¥Ş¥¹¤ÎYºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param xp °ÜÆ°Àè¤Î¥Ş¥¹¤ÎXºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @return Í­¸ú¤Ê¥Ş¥¹¤¬¤¢¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param yp ç§»å‹•å…ˆã®ãƒã‚¹ã®Yåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param xp ç§»å‹•å…ˆã®ãƒã‚¹ã®Xåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return æœ‰åŠ¹ãªãƒã‚¹ãŒã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  * @details
  * A location is "safe" if it can be reached quickly and the player\n
  * is not able to fire into it (it isn't a "clean shot").  So, this will\n
@@ -1019,12 +1019,12 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬±£¤ìÀø¤á¤ëÃÏÅÀ¤òÊÖ¤¹ /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒéš ã‚Œæ½œã‚ã‚‹åœ°ç‚¹ã‚’è¿”ã™ /
  * Choose a good hiding place near a monster for it to run toward.
- * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param yp °ÜÆ°Àè¤Î¥Ş¥¹¤ÎYºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param xp °ÜÆ°Àè¤Î¥Ş¥¹¤ÎXºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @return Í­¸ú¤Ê¥Ş¥¹¤¬¤¢¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param yp ç§»å‹•å…ˆã®ãƒã‚¹ã®Yåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param xp ç§»å‹•å…ˆã®ãƒã‚¹ã®Xåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return æœ‰åŠ¹ãªãƒã‚¹ãŒã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  * @details
  * Pack monsters will use this to "ambush" the player and lure him out\n
  * of corridors into open space so they can swarm him.\n
@@ -1099,11 +1099,11 @@ static bool find_hiding(int m_idx, int *yp, int *xp)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î°ÜÆ°Êı¸ş¤òÊÖ¤¹ /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç§»å‹•æ–¹å‘ã‚’è¿”ã™ /
  * Choose "logical" directions for monster movement
- * @param m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param mm °ÜÆ°Êı¸ş¤òÊÖ¤¹Êı¸şID¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return Í­¸úÊı¸ş¤¬¤¢¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param mm ç§»å‹•æ–¹å‘ã‚’è¿”ã™æ–¹å‘IDã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return æœ‰åŠ¹æ–¹å‘ãŒã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 static bool get_moves(int m_idx, int *mm)
 {
@@ -1433,12 +1433,12 @@ static bool get_moves(int m_idx, int *mm)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤«¤éÅ¨¥â¥ó¥¹¥¿¡¼¤Ø¤ÎÌ¿ÃæÈ½Äê
- * @param power ÂÇ·âÂ°À­¤Ë¤è¤ë´ğËÜÌ¿ÃæÃÍ
- * @param level ¹¶·âÂ¦¥â¥ó¥¹¥¿¡¼¤Î¥ì¥Ù¥ë
- * @param ac ÌÜÉ¸¥â¥ó¥¹¥¿¡¼¤ÎAC
- * @param stun ¹¶·âÂ¦¥â¥ó¥¹¥¿¡¼¤¬Û¯Û°¾õÂÖ¤Ê¤éTRUE¤òÊÖ¤¹
- * @return Ì¿Ãæ¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰æ•µãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¸ã®å‘½ä¸­åˆ¤å®š
+ * @param power æ‰“æ’ƒå±æ€§ã«ã‚ˆã‚‹åŸºæœ¬å‘½ä¸­å€¤
+ * @param level æ”»æ’ƒå´ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ãƒ¬ãƒ™ãƒ«
+ * @param ac ç›®æ¨™ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®AC
+ * @param stun æ”»æ’ƒå´ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæœ¦æœ§çŠ¶æ…‹ãªã‚‰TRUEã‚’è¿”ã™
+ * @return å‘½ä¸­ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static int check_hit2(int power, int level, int ac, int stun)
 {
@@ -1470,10 +1470,10 @@ static int check_hit2(int power, int level, int ac, int stun)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤«¤éÅ¨¥â¥ó¥¹¥¿¡¼¤Ø¤ÎÂÇ·â¹¶·â½èÍı
- * @param m_idx ¹¶·âÂ¦¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param t_idx ÌÜÉ¸Â¦¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @return ¼Âºİ¤ËÂÇ·â½èÍı¤¬¹Ô¤ï¤ì¤¿¾ì¹çTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰æ•µãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¸ã®æ‰“æ’ƒæ”»æ’ƒå‡¦ç†
+ * @param m_idx æ”»æ’ƒå´ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param t_idx ç›®æ¨™å´ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @return å®Ÿéš›ã«æ‰“æ’ƒå‡¦ç†ãŒè¡Œã‚ã‚ŒãŸå ´åˆTRUEã‚’è¿”ã™
  */
 static bool monst_attack_monst(int m_idx, int t_idx)
 {
@@ -1580,7 +1580,7 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 			case RBM_HIT:
 				{
 #ifdef JP
-act = "%s¤ò²¥¤Ã¤¿¡£";
+act = "%sã‚’æ®´ã£ãŸã€‚";
 #else
 					act = "hits %s.";
 #endif
@@ -1592,7 +1592,7 @@ act = "%s¤ò²¥¤Ã¤¿¡£";
 			case RBM_TOUCH:
 				{
 #ifdef JP
-act = "%s¤ò¿¨¤Ã¤¿¡£";
+act = "%sã‚’è§¦ã£ãŸã€‚";
 #else
 					act = "touches %s.";
 #endif
@@ -1604,7 +1604,7 @@ act = "%s¤ò¿¨¤Ã¤¿¡£";
 			case RBM_PUNCH:
 				{
 #ifdef JP
-act = "%s¤ò¥Ñ¥ó¥Á¤·¤¿¡£";
+act = "%sã‚’ãƒ‘ãƒ³ãƒã—ãŸã€‚";
 #else
 					act = "punches %s.";
 #endif
@@ -1616,7 +1616,7 @@ act = "%s¤ò¥Ñ¥ó¥Á¤·¤¿¡£";
 			case RBM_KICK:
 				{
 #ifdef JP
-act = "%s¤ò½³¤Ã¤¿¡£";
+act = "%sã‚’è¹´ã£ãŸã€‚";
 #else
 					act = "kicks %s.";
 #endif
@@ -1628,7 +1628,7 @@ act = "%s¤ò½³¤Ã¤¿¡£";
 			case RBM_CLAW:
 				{
 #ifdef JP
-act = "%s¤ò¤Ò¤Ã¤«¤¤¤¿¡£";
+act = "%sã‚’ã²ã£ã‹ã„ãŸã€‚";
 #else
 					act = "claws %s.";
 #endif
@@ -1640,7 +1640,7 @@ act = "%s¤ò¤Ò¤Ã¤«¤¤¤¿¡£";
 			case RBM_BITE:
 				{
 #ifdef JP
-act = "%s¤ò³ú¤ó¤À¡£";
+act = "%sã‚’å™›ã‚“ã ã€‚";
 #else
 					act = "bites %s.";
 #endif
@@ -1652,7 +1652,7 @@ act = "%s¤ò³ú¤ó¤À¡£";
 			case RBM_STING:
 				{
 #ifdef JP
-act = "%s¤ò»É¤·¤¿¡£";
+act = "%sã‚’åˆºã—ãŸã€‚";
 #else
 					act = "stings %s.";
 #endif
@@ -1664,7 +1664,7 @@ act = "%s¤ò»É¤·¤¿¡£";
 			case RBM_SLASH:
 				{
 #ifdef JP
-act = "%s¤ò»Â¤Ã¤¿¡£";
+act = "%sã‚’æ–¬ã£ãŸã€‚";
 #else
 					act = "slashes %s.";
 #endif
@@ -1675,7 +1675,7 @@ act = "%s¤ò»Â¤Ã¤¿¡£";
 			case RBM_BUTT:
 				{
 #ifdef JP
-act = "%s¤ò³Ñ¤ÇÆÍ¤¤¤¿¡£";
+act = "%sã‚’è§’ã§çªã„ãŸã€‚";
 #else
 					act = "butts %s.";
 #endif
@@ -1687,7 +1687,7 @@ act = "%s¤ò³Ñ¤ÇÆÍ¤¤¤¿¡£";
 			case RBM_CRUSH:
 				{
 #ifdef JP
-act = "%s¤ËÂÎÅö¤ê¤·¤¿¡£";
+act = "%sã«ä½“å½“ã‚Šã—ãŸã€‚";
 #else
 					act = "crushes %s.";
 #endif
@@ -1699,7 +1699,7 @@ act = "%s¤ËÂÎÅö¤ê¤·¤¿¡£";
 			case RBM_ENGULF:
 				{
 #ifdef JP
-act = "%s¤ò°û¤ß¹ş¤ó¤À¡£";
+act = "%sã‚’é£²ã¿è¾¼ã‚“ã ã€‚";
 #else
 					act = "engulfs %s.";
 #endif
@@ -1711,7 +1711,7 @@ act = "%s¤ò°û¤ß¹ş¤ó¤À¡£";
 			case RBM_CHARGE:
 				{
 #ifdef JP
-act = "%s¤ËÀÁµá½ñ¤ò¤è¤³¤·¤¿¡£";
+act = "%sã«è«‹æ±‚æ›¸ã‚’ã‚ˆã“ã—ãŸã€‚";
 #else
 					act = "charges %s.";
 #endif
@@ -1723,7 +1723,7 @@ act = "%s¤ËÀÁµá½ñ¤ò¤è¤³¤·¤¿¡£";
 			case RBM_CRAWL:
 				{
 #ifdef JP
-act = "%s¤ÎÂÎ¤Î¾å¤òÇç¤¤²ó¤Ã¤¿¡£";
+act = "%sã®ä½“ã®ä¸Šã‚’é€™ã„å›ã£ãŸã€‚";
 #else
 					act = "crawls on %s.";
 #endif
@@ -1735,7 +1735,7 @@ act = "%s¤ÎÂÎ¤Î¾å¤òÇç¤¤²ó¤Ã¤¿¡£";
 			case RBM_DROOL:
 				{
 #ifdef JP
-act = "%s¤Ë¤è¤À¤ì¤ò¤¿¤é¤·¤¿¡£";
+act = "%sã«ã‚ˆã ã‚Œã‚’ãŸã‚‰ã—ãŸã€‚";
 #else
 					act = "drools on %s.";
 #endif
@@ -1747,7 +1747,7 @@ act = "%s¤Ë¤è¤À¤ì¤ò¤¿¤é¤·¤¿¡£";
 			case RBM_SPIT:
 				{
 #ifdef JP
-act = "%s¤ËÂÃ¤òÅÇ¤¤¤¿¡£";
+act = "%sã«å”¾ã‚’åã„ãŸã€‚";
 #else
 					act = "spits on %s.";
 #endif
@@ -1760,7 +1760,7 @@ act = "%s¤ËÂÃ¤òÅÇ¤¤¤¿¡£";
 				{
 					if (see_either) disturb(1, 1);
 #ifdef JP
-act = "ÇúÈ¯¤·¤¿¡£";
+act = "çˆ†ç™ºã—ãŸã€‚";
 #else
 					act = "explodes.";
 #endif
@@ -1773,7 +1773,7 @@ act = "ÇúÈ¯¤·¤¿¡£";
 			case RBM_GAZE:
 				{
 #ifdef JP
-act = "%s¤ò¤Ë¤é¤ó¤À¡£";
+act = "%sã‚’ã«ã‚‰ã‚“ã ã€‚";
 #else
 					act = "gazes at %s.";
 #endif
@@ -1785,7 +1785,7 @@ act = "%s¤ò¤Ë¤é¤ó¤À¡£";
 			case RBM_WAIL:
 				{
 #ifdef JP
-act = "%s¤Ëµã¤­¤Ä¤¤¤¿¡£";
+act = "%sã«æ³£ãã¤ã„ãŸã€‚";
 #else
 					act = "wails at %s.";
 #endif
@@ -1797,7 +1797,7 @@ act = "%s¤Ëµã¤­¤Ä¤¤¤¿¡£";
 			case RBM_SPORE:
 				{
 #ifdef JP
-act = "%s¤ËË¦»Ò¤òÈô¤Ğ¤·¤¿¡£";
+act = "%sã«èƒå­ã‚’é£›ã°ã—ãŸã€‚";
 #else
 					act = "releases spores at %s.";
 #endif
@@ -1809,7 +1809,7 @@ act = "%s¤ËË¦»Ò¤òÈô¤Ğ¤·¤¿¡£";
 			case RBM_XXX4:
 				{
 #ifdef JP
-act = "%s¤ËXXX4¤òÈô¤Ğ¤·¤¿¡£";
+act = "%sã«XXX4ã‚’é£›ã°ã—ãŸã€‚";
 #else
 					act = "projects XXX4's at %s.";
 #endif
@@ -1821,7 +1821,7 @@ act = "%s¤ËXXX4¤òÈô¤Ğ¤·¤¿¡£";
 			case RBM_BEG:
 				{
 #ifdef JP
-act = "%s¤Ë¶â¤ò¤»¤¬¤ó¤À¡£";
+act = "%sã«é‡‘ã‚’ã›ãŒã‚“ã ã€‚";
 #else
 					act = "begs %s for money.";
 #endif
@@ -1833,7 +1833,7 @@ act = "%s¤Ë¶â¤ò¤»¤¬¤ó¤À¡£";
 			case RBM_INSULT:
 				{
 #ifdef JP
-act = "%s¤òÉî¿«¤·¤¿¡£";
+act = "%sã‚’ä¾®è¾±ã—ãŸã€‚";
 #else
 					act = "insults %s.";
 #endif
@@ -1845,7 +1845,7 @@ act = "%s¤òÉî¿«¤·¤¿¡£";
 			case RBM_MOAN:
 				{
 #ifdef JP
-act = "%s¤Ë¤à¤«¤Ã¤Æ¤¦¤á¤¤¤¿¡£";
+act = "%sã«ã‚€ã‹ã£ã¦ã†ã‚ã„ãŸã€‚";
 #else
 					act = "moans at %s.";
 #endif
@@ -1857,7 +1857,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ¤¦¤á¤¤¤¿¡£";
 			case RBM_SHOW:
 				{
 #ifdef JP
-act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
+act = "%sã«ã‚€ã‹ã£ã¦æ­Œã£ãŸã€‚";
 #else
 					act = "sings to %s.";
 #endif
@@ -1873,7 +1873,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
 #ifdef JP
 				if (do_silly_attack) act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
 				strfmt(temp, act, t_name);
-				msg_format("%^s¤Ï%s", m_name, temp);
+				msg_format("%^sã¯%s", m_name, temp);
 #else
 				if (do_silly_attack)
 				{
@@ -2047,7 +2047,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
 						if (see_m && did_heal)
 						{
 #ifdef JP
-							msg_format("%s¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", m_name);
+							msg_format("%sã¯ä½“åŠ›ã‚’å›å¾©ã—ãŸã‚ˆã†ã ã€‚", m_name);
 #else
 							msg_format("%^s appears healthier.", m_name);
 #endif
@@ -2066,7 +2066,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
 							if (see_either)
 							{
 #ifdef JP
-								msg_format("%^s¤ÏÆÍÁ³Ç®¤¯¤Ê¤Ã¤¿¡ª", m_name);
+								msg_format("%^sã¯çªç„¶ç†±ããªã£ãŸï¼", m_name);
 #else
 								msg_format("%^s is suddenly very hot!", m_name);
 #endif
@@ -2091,7 +2091,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
 							if (see_either)
 							{
 #ifdef JP
-								msg_format("%^s¤ÏÆÍÁ³´¨¤¯¤Ê¤Ã¤¿¡ª", m_name);
+								msg_format("%^sã¯çªç„¶å¯’ããªã£ãŸï¼", m_name);
 #else
 								msg_format("%^s is suddenly very cold!", m_name);
 #endif
@@ -2116,7 +2116,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
 							if (see_either)
 							{
 #ifdef JP
-								msg_format("%^s¤ÏÅÅ·â¤ò¿©¤é¤Ã¤¿¡ª", m_name);
+								msg_format("%^sã¯é›»æ’ƒã‚’é£Ÿã‚‰ã£ãŸï¼", m_name);
 #else
 								msg_format("%^s gets zapped!", m_name);
 #endif
@@ -2163,7 +2163,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
 					{
 						/* Message */
 #ifdef JP
-						msg_format("%s¤Ï%^s¤Î¹¶·â¤ò¤«¤ï¤·¤¿¡£", t_name,m_name);
+						msg_format("%sã¯%^sã®æ”»æ’ƒã‚’ã‹ã‚ã—ãŸã€‚", t_name,m_name);
 #else
 						msg_format("%^s misses %s.", m_name, t_name);
 #endif
@@ -2198,7 +2198,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
 		(void)set_monster_invulner(m_idx, 0, FALSE);
 
 #ifdef JP
-		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, "¤ÏÇúÈ¯¤·¤ÆÊ´¡¹¤Ë¤Ê¤Ã¤¿¡£", m_idx);
+		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, "ã¯çˆ†ç™ºã—ã¦ç²‰ã€…ã«ãªã£ãŸã€‚", m_idx);
 #else
 		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, " explodes into tiny shreds.", m_idx);
 #endif
@@ -2214,7 +2214,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
 			if (see_m)
 			{
 #ifdef JP
-				msg_print("Å¥ËÀ¤Ï¾Ğ¤Ã¤ÆÆ¨¤²...¤è¤¦¤È¤·¤¿¤¬¥Ğ¥ê¥¢¤ËËÉ¤¬¤ì¤¿¡£");
+				msg_print("æ³¥æ£’ã¯ç¬‘ã£ã¦é€ƒã’...ã‚ˆã†ã¨ã—ãŸãŒãƒãƒªã‚¢ã«é˜²ãŒã‚ŒãŸã€‚");
 #else
 				msg_print("The thief flees laughing...? But magic barrier obstructs it.");
 #endif
@@ -2229,7 +2229,7 @@ act = "%s¤Ë¤à¤«¤Ã¤Æ²Î¤Ã¤¿¡£";
 			if (see_m)
 			{
 #ifdef JP
-				msg_print("Å¥ËÀ¤Ï¾Ğ¤Ã¤ÆÆ¨¤²¤¿¡ª");
+				msg_print("æ³¥æ£’ã¯ç¬‘ã£ã¦é€ƒã’ãŸï¼");
 #else
 				msg_print("The thief flees laughing!");
 #endif
@@ -2256,10 +2256,10 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼Ã±ÂÎ¤Î£±¥¿¡¼¥ó¹ÔÆ°½èÍı¥á¥¤¥ó¥ë¡¼¥Á¥ó /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å˜ä½“ã®ï¼‘ã‚¿ãƒ¼ãƒ³è¡Œå‹•å‡¦ç†ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Process a monster
- * @param m_idx ¹ÔÆ°¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @return ¤Ê¤·
+ * @param m_idx è¡Œå‹•ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @return ãªã—
  * @details
  * The monster is known to be within 100 grids of the player\n
  *\n
@@ -2326,7 +2326,7 @@ static void process_monster(int m_idx)
 		if (rakuba(0, TRUE))
 		{
 #ifdef JP
-			msg_print("ÃÏÌÌ¤ËÍî¤È¤µ¤ì¤¿¡£");
+			msg_print("åœ°é¢ã«è½ã¨ã•ã‚ŒãŸã€‚");
 #else
 			char m_name[80];
 			monster_desc(m_name, &m_list[p_ptr->riding], 0);
@@ -2365,7 +2365,7 @@ static void process_monster(int m_idx)
 			monster_desc(m_name, m_ptr, 0);
 
 #ifdef JP
-			msg_format("%s¤Ï¾Ã¤¨µî¤Ã¤¿¡ª", m_name);
+			msg_format("%sã¯æ¶ˆãˆå»ã£ãŸï¼", m_name);
 #else
 			msg_format("%^s disappears!", m_name);
 #endif
@@ -2408,7 +2408,7 @@ static void process_monster(int m_idx)
 
 				/* Oops */
 #ifdef JP
-				msg_format("%s¤Ï¾Ã¤¨µî¤Ã¤¿¡ª", m_name);
+				msg_format("%sã¯æ¶ˆãˆå»ã£ãŸï¼", m_name);
 #else
 				msg_format("%^s disappears!", m_name);
 #endif
@@ -2423,7 +2423,7 @@ static void process_monster(int m_idx)
 			if (sad)
 			{
 #ifdef JP
-				msg_print("¾¯¤·¤Î´ÖÈá¤·¤¤µ¤Ê¬¤Ë¤Ê¤Ã¤¿¡£");
+				msg_print("å°‘ã—ã®é–“æ‚²ã—ã„æ°—åˆ†ã«ãªã£ãŸã€‚");
 #else
 				msg_print("You feel sad for a moment.");
 #endif
@@ -2435,7 +2435,7 @@ static void process_monster(int m_idx)
 
 	if (m_ptr->r_idx == MON_SHURYUUDAN)
 #ifdef JP
-		mon_take_hit_mon(m_idx, 1, &fear, "¤ÏÇúÈ¯¤·¤ÆÊ´¡¹¤Ë¤Ê¤Ã¤¿¡£", m_idx);
+		mon_take_hit_mon(m_idx, 1, &fear, "ã¯çˆ†ç™ºã—ã¦ç²‰ã€…ã«ãªã£ãŸã€‚", m_idx);
 #else
 		mon_take_hit_mon(m_idx, 1, &fear, " explodes into tiny shreds.", m_idx);
 #endif
@@ -2452,7 +2452,7 @@ static void process_monster(int m_idx)
 			if (is_riding_mon && riding_pinch < 2)
 			{
 #ifdef JP
-				msg_format("%s¤Ï½ı¤ÎÄË¤µ¤ÎÍ¾¤ê¤¢¤Ê¤¿¤ÎÂ«Çû¤«¤éÆ¨¤ì¤è¤¦¤È¤·¤Æ¤¤¤ë¡£", m_name);
+				msg_format("%sã¯å‚·ã®ç—›ã•ã®ä½™ã‚Šã‚ãªãŸã®æŸç¸›ã‹ã‚‰é€ƒã‚Œã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã€‚", m_name);
 #else
 				msg_format("%^s seems to be in so much pain, and trying to escape from your restriction.", m_name);
 #endif
@@ -2464,14 +2464,14 @@ static void process_monster(int m_idx)
 				if (is_riding_mon)
 				{
 #ifdef JP
-					msg_format("%s¤Ï¤¢¤Ê¤¿¤ÎÂ«Çû¤«¤éÃ¦½Ğ¤·¤¿¡£", m_name);
+					msg_format("%sã¯ã‚ãªãŸã®æŸç¸›ã‹ã‚‰è„±å‡ºã—ãŸã€‚", m_name);
 #else
 					msg_format("%^s succeeded to escape from your restriction!", m_name);
 #endif
 					if (rakuba(-1, FALSE))
 					{
 #ifdef JP
-						msg_print("ÃÏÌÌ¤ËÍî¤È¤µ¤ì¤¿¡£");
+						msg_print("åœ°é¢ã«è½ã¨ã•ã‚ŒãŸã€‚");
 #else
 						msg_print("You have fallen from riding pet.");
 #endif
@@ -2484,14 +2484,14 @@ static void process_monster(int m_idx)
 					    player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(m_ptr->fy, m_ptr->fx, py, px))
 					{
 #ifdef JP
-						msg_format("%^s¡Ö¥Ô¥ó¥Á¤À¡ªÂàµÑ¤µ¤»¤Æ¤â¤é¤¦¡ª¡×", m_name);
+						msg_format("%^sã€Œãƒ”ãƒ³ãƒã ï¼é€€å´ã•ã›ã¦ã‚‚ã‚‰ã†ï¼ã€", m_name);
 #else
 						msg_format("%^s says 'It is the pinch! I will retreat'.", m_name);
 #endif
 					}
 #ifdef JP
-					msg_format("%^s¤¬¥Æ¥ì¥İ¡¼¥È¡¦¥ì¥Ù¥ë¤Î´¬Êª¤òÆÉ¤ó¤À¡£", m_name);
-					msg_format("%^s¤¬¾Ã¤¨µî¤Ã¤¿¡£", m_name);
+					msg_format("%^sãŒãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¬ãƒ™ãƒ«ã®å·»ç‰©ã‚’èª­ã‚“ã ã€‚", m_name);
+					msg_format("%^sãŒæ¶ˆãˆå»ã£ãŸã€‚", m_name);
 #else
 					msg_format("%^s read a scroll of teleport level.", m_name);
 					msg_format("%^s disappears.", m_name);
@@ -2501,7 +2501,7 @@ static void process_monster(int m_idx)
 				if (is_riding_mon && rakuba(-1, FALSE))
 				{
 #ifdef JP
-					msg_print("ÃÏÌÌ¤ËÍî¤È¤µ¤ì¤¿¡£");
+					msg_print("åœ°é¢ã«è½ã¨ã•ã‚ŒãŸã€‚");
 #else
 					msg_print("You have fallen from riding pet.");
 #endif
@@ -2543,7 +2543,7 @@ static void process_monster(int m_idx)
 
 			/* Dump a message */
 #ifdef JP
-			msg_format("%^s¤¬ÌÜ¤ò³Ğ¤Ş¤·¤¿¡£", m_name);
+			msg_format("%^sãŒç›®ã‚’è¦šã¾ã—ãŸã€‚", m_name);
 #else
 			msg_format("%^s wakes up.", m_name);
 #endif
@@ -2590,7 +2590,7 @@ static void process_monster(int m_idx)
 			char m_name[80];
 			monster_desc(m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
 #ifdef JP
-			msg_format("%^s¤ÏÆÍÁ³Å¨¤Ë¤Ş¤ï¤Ã¤¿¡ª", m_name);
+			msg_format("%^sã¯çªç„¶æ•µã«ã¾ã‚ã£ãŸï¼", m_name);
 #else
 			msg_format("%^s suddenly becomes hostile!", m_name);
 #endif
@@ -2680,7 +2680,7 @@ static void process_monster(int m_idx)
 		{
 			if (disturb_minor) disturb(FALSE, FALSE);
 #ifdef JP
-			msg_print("½Å¸ü¤ÊÂ­²»¤¬Ê¹¤³¤¨¤¿¡£");
+			msg_print("é‡åšãªè¶³éŸ³ãŒèã“ãˆãŸã€‚");
 #else
 			msg_print("You hear heavy steps.");
 #endif
@@ -2701,7 +2701,7 @@ static void process_monster(int m_idx)
 				monster_desc(m_name, m_ptr, 0);
 			else
 #ifdef JP
-				strcpy(m_name, "¤½¤ì");
+				strcpy(m_name, "ãã‚Œ");
 #else
 				strcpy(m_name, "It");
 #endif
@@ -3031,13 +3031,13 @@ msg_format("%^s%s", m_name, monmessage);
 					/* Message */
 					if (have_flag(f_ptr->flags, FF_GLASS))
 #ifdef JP
-						msg_print("¥¬¥é¥¹¤¬ºÕ¤±¤ë²»¤¬¤·¤¿¡ª");
+						msg_print("ã‚¬ãƒ©ã‚¹ãŒç •ã‘ã‚‹éŸ³ãŒã—ãŸï¼");
 #else
 						msg_print("You hear a glass was crashed!");
 #endif
 					else
 #ifdef JP
-						msg_print("¥É¥¢¤òÃ¡¤­³«¤±¤ë²»¤¬¤·¤¿¡ª");
+						msg_print("ãƒ‰ã‚¢ã‚’å©ãé–‹ã‘ã‚‹éŸ³ãŒã—ãŸï¼");
 #else
 						msg_print("You hear a door burst open!");
 #endif
@@ -3101,7 +3101,7 @@ msg_format("%^s%s", m_name, monmessage);
 				if (c_ptr->info & CAVE_MARK)
 				{
 #ifdef JP
-					msg_print("¼é¤ê¤Î¥ë¡¼¥ó¤¬²õ¤ì¤¿¡ª");
+					msg_print("å®ˆã‚Šã®ãƒ«ãƒ¼ãƒ³ãŒå£Šã‚ŒãŸï¼");
 #else
 					msg_print("The rune of protection is broken!");
 #endif
@@ -3137,7 +3137,7 @@ msg_format("%^s%s", m_name, monmessage);
 					if (c_ptr->info & CAVE_MARK)
 					{
 #ifdef JP
-						msg_print("¥ë¡¼¥ó¤¬ÇúÈ¯¤·¤¿¡ª");
+						msg_print("ãƒ«ãƒ¼ãƒ³ãŒçˆ†ç™ºã—ãŸï¼");
 #else
 						msg_print("The rune explodes!");
 #endif
@@ -3148,7 +3148,7 @@ msg_format("%^s%s", m_name, monmessage);
 				else
 				{
 #ifdef JP
-					msg_print("ÇúÈ¯¤Î¥ë¡¼¥ó¤Ï²ò½ü¤µ¤ì¤¿¡£");
+					msg_print("çˆ†ç™ºã®ãƒ«ãƒ¼ãƒ³ã¯è§£é™¤ã•ã‚ŒãŸã€‚");
 #else
 					msg_print("An explosive rune was disarmed.");
 #endif
@@ -3283,13 +3283,13 @@ msg_format("%^s%s", m_name, monmessage);
 			{
 				if (have_flag(f_ptr->flags, FF_GLASS))
 #ifdef JP
-					msg_print("²¿¤«¤ÎºÕ¤±¤ë²»¤¬Ê¹¤³¤¨¤ë¡£");
+					msg_print("ä½•ã‹ã®ç •ã‘ã‚‹éŸ³ãŒèã“ãˆã‚‹ã€‚");
 #else
 					msg_print("There is a crashing sound.");
 #endif
 				else
 #ifdef JP
-					msg_print("¥®¥·¥®¥·¤¤¤¦²»¤¬Ê¹¤³¤¨¤ë¡£");
+					msg_print("ã‚®ã‚·ã‚®ã‚·ã„ã†éŸ³ãŒèã“ãˆã‚‹ã€‚");
 #else
 					msg_print("There is a grinding sound.");
 #endif
@@ -3495,7 +3495,7 @@ msg_format("%^s%s", m_name, monmessage);
 							{
 								/* Dump a message */
 #ifdef JP
-								msg_format("%^s¤Ï%s¤ò½¦¤ª¤¦¤È¤·¤¿¤¬¡¢¤À¤á¤À¤Ã¤¿¡£", m_name, o_name);
+								msg_format("%^sã¯%sã‚’æ‹¾ãŠã†ã¨ã—ãŸãŒã€ã ã‚ã ã£ãŸã€‚", m_name, o_name);
 #else
 								msg_format("%^s tries to pick up %s, but fails.", m_name, o_name);
 #endif
@@ -3514,7 +3514,7 @@ msg_format("%^s%s", m_name, monmessage);
 						{
 							/* Dump a message */
 #ifdef JP
-							msg_format("%^s¤¬%s¤ò½¦¤Ã¤¿¡£", m_name, o_name);
+							msg_format("%^sãŒ%sã‚’æ‹¾ã£ãŸã€‚", m_name, o_name);
 #else
 							msg_format("%^s picks up %s.", m_name, o_name);
 #endif
@@ -3550,7 +3550,7 @@ msg_format("%^s%s", m_name, monmessage);
 						{
 							/* Dump a message */
 #ifdef JP
-							msg_format("%^s¤¬%s¤òÇË²õ¤·¤¿¡£", m_name, o_name);
+							msg_format("%^sãŒ%sã‚’ç ´å£Šã—ãŸã€‚", m_name, o_name);
 #else
 							msg_format("%^s destroys %s.", m_name, o_name);
 #endif
@@ -3645,7 +3645,7 @@ msg_format("%^s%s", m_name, monmessage);
 
 			/* Dump a message */
 #ifdef JP
-			msg_format("%^s¤ÏÀï¤¤¤ò·è°Õ¤·¤¿¡ª", m_name);
+			msg_format("%^sã¯æˆ¦ã„ã‚’æ±ºæ„ã—ãŸï¼", m_name);
 #else
 			msg_format("%^s turns to fight!", m_name);
 #endif
@@ -3658,9 +3658,9 @@ msg_format("%^s%s", m_name, monmessage);
 }
 
 /*!
- * @brief Á´¥â¥ó¥¹¥¿¡¼¤Î¥¿¡¼¥ó´ÉÍı¥á¥¤¥ó¥ë¡¼¥Á¥ó /
+ * @brief å…¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ã‚¿ãƒ¼ãƒ³ç®¡ç†ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Process all the "live" monsters, once per game turn.
- * @return ¤Ê¤·
+ * @return ãªã—
  * @details
  * During each game turn, we scan through the list of all the "live" monsters,\n
  * (backwards, so we can excise any "freshly dead" monsters), energizing each\n
@@ -3902,10 +3902,10 @@ void process_monsters(void)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î»ş¸Â¥¹¥Æ¡¼¥¿¥¹¤ò¼èÆÀ¤¹¤ë
- * @return m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @return mproc_type ¥â¥ó¥¹¥¿¡¼¤Î»ş¸Â¥¹¥Æ¡¼¥¿¥¹ID
- * @return »Ä¤ê¥¿¡¼¥óÃÍ
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å–å¾—ã™ã‚‹
+ * @return m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @return mproc_type ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ID
+ * @return æ®‹ã‚Šã‚¿ãƒ¼ãƒ³å€¤
  */
 int get_mproc_idx(int m_idx, int mproc_type)
 {
@@ -3921,10 +3921,10 @@ int get_mproc_idx(int m_idx, int mproc_type)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î»ş¸Â¥¹¥Æ¡¼¥¿¥¹¥ê¥¹¥È¤òÄÉ²Ã¤¹¤ë
- * @return m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @return mproc_type ÄÉ²Ã¤·¤¿¤¤¥â¥ó¥¹¥¿¡¼¤Î»ş¸Â¥¹¥Æ¡¼¥¿¥¹ID
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒªã‚¹ãƒˆã‚’è¿½åŠ ã™ã‚‹
+ * @return m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @return mproc_type è¿½åŠ ã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ID
+ * @return ãªã—
  */
 static void mproc_add(int m_idx, int mproc_type)
 {
@@ -3933,10 +3933,10 @@ static void mproc_add(int m_idx, int mproc_type)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î»ş¸Â¥¹¥Æ¡¼¥¿¥¹¥ê¥¹¥È¤òºï½ü
- * @return m_idx ¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @return mproc_type ºï½ü¤·¤¿¤¤¥â¥ó¥¹¥¿¡¼¤Î»ş¸Â¥¹¥Æ¡¼¥¿¥¹ID
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒªã‚¹ãƒˆã‚’å‰Šé™¤
+ * @return m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @return mproc_type å‰Šé™¤ã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ID
+ * @return ãªã—
  */
 static void mproc_remove(int m_idx, int mproc_type)
 {
@@ -3946,8 +3946,8 @@ static void mproc_remove(int m_idx, int mproc_type)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î»ş¸Â¥¹¥Æ¡¼¥¿¥¹¥ê¥¹¥È¤ò½é´ü²½¤¹¤ë / Initialize monster process
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒªã‚¹ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ / Initialize monster process
+ * @return ãªã—
  */
 void mproc_init(void)
 {
@@ -3975,11 +3975,11 @@ void mproc_init(void)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î¿çÌ²¾õÂÖÃÍ¤ò¥»¥Ã¥È¤¹¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¡çœ çŠ¶æ…‹å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ /
  * Set "m_ptr->mtimed[MTIMED_CSLEEP]", notice observable changes
- * @param m_idx ¥â¥ó¥¹¥¿¡¼»²¾ÈID
- * @param v ¥»¥Ã¥È¤¹¤ëÃÍ
- * @return ÊÌÅÓ¹¹¿·½èÍı¤¬É¬Í×¤Ê¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‚ç…§ID
+ * @param v ã‚»ãƒƒãƒˆã™ã‚‹å€¤
+ * @return åˆ¥é€”æ›´æ–°å‡¦ç†ãŒå¿…è¦ãªå ´åˆTRUEã‚’è¿”ã™
  */
 bool set_monster_csleep(int m_idx, int v)
 {
@@ -4028,11 +4028,11 @@ bool set_monster_csleep(int m_idx, int v)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î²ÃÂ®¾õÂÖÃÍ¤ò¥»¥Ã¥È /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®åŠ é€ŸçŠ¶æ…‹å€¤ã‚’ã‚»ãƒƒãƒˆ /
  * Set "m_ptr->mtimed[MTIMED_FAST]", notice observable changes
- * @param m_idx ¥â¥ó¥¹¥¿¡¼»²¾ÈID
- * @param v ¥»¥Ã¥È¤¹¤ëÃÍ
- * @return ÊÌÅÓ¹¹¿·½èÍı¤¬É¬Í×¤Ê¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‚ç…§ID
+ * @param v ã‚»ãƒƒãƒˆã™ã‚‹å€¤
+ * @return åˆ¥é€”æ›´æ–°å‡¦ç†ãŒå¿…è¦ãªå ´åˆTRUEã‚’è¿”ã™
  */
 bool set_monster_fast(int m_idx, int v)
 {
@@ -4116,11 +4116,11 @@ bool set_monster_slow(int m_idx, int v)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÛ¯Û°¾õÂÖÃÍ¤ò¥»¥Ã¥È /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æœ¦æœ§çŠ¶æ…‹å€¤ã‚’ã‚»ãƒƒãƒˆ /
  * Set "m_ptr->mtimed[MTIMED_STUNNED]", notice observable changes
- * @param m_idx ¥â¥ó¥¹¥¿¡¼»²¾ÈID
- * @param v ¥»¥Ã¥È¤¹¤ëÃÍ
- * @return ÊÌÅÓ¹¹¿·½èÍı¤¬É¬Í×¤Ê¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‚ç…§ID
+ * @param v ã‚»ãƒƒãƒˆã™ã‚‹å€¤
+ * @return åˆ¥é€”æ›´æ–°å‡¦ç†ãŒå¿…è¦ãªå ´åˆTRUEã‚’è¿”ã™
  */
 bool set_monster_stunned(int m_idx, int v)
 {
@@ -4158,11 +4158,11 @@ bool set_monster_stunned(int m_idx, int v)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Îº®Íğ¾õÂÖÃÍ¤ò¥»¥Ã¥È /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ··ä¹±çŠ¶æ…‹å€¤ã‚’ã‚»ãƒƒãƒˆ /
  * Set "m_ptr->mtimed[MTIMED_CONFUSED]", notice observable changes
- * @param m_idx ¥â¥ó¥¹¥¿¡¼»²¾ÈID
- * @param v ¥»¥Ã¥È¤¹¤ëÃÍ
- * @return ÊÌÅÓ¹¹¿·½èÍı¤¬É¬Í×¤Ê¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‚ç…§ID
+ * @param v ã‚»ãƒƒãƒˆã™ã‚‹å€¤
+ * @return åˆ¥é€”æ›´æ–°å‡¦ç†ãŒå¿…è¦ãªå ´åˆTRUEã‚’è¿”ã™
  */
 bool set_monster_confused(int m_idx, int v)
 {
@@ -4200,11 +4200,11 @@ bool set_monster_confused(int m_idx, int v)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î¶²¹²¾õÂÖÃÍ¤ò¥»¥Ã¥È /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ææ…ŒçŠ¶æ…‹å€¤ã‚’ã‚»ãƒƒãƒˆ /
  * Set "m_ptr->mtimed[MTIMED_MONFEAR]", notice observable changes
- * @param m_idx ¥â¥ó¥¹¥¿¡¼»²¾ÈID
- * @param v ¥»¥Ã¥È¤¹¤ëÃÍ
- * @return ÊÌÅÓ¹¹¿·½èÍı¤¬É¬Í×¤Ê¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‚ç…§ID
+ * @param v ã‚»ãƒƒãƒˆã™ã‚‹å€¤
+ * @return åˆ¥é€”æ›´æ–°å‡¦ç†ãŒå¿…è¦ãªå ´åˆTRUEã‚’è¿”ã™
  */
 bool set_monster_monfear(int m_idx, int v)
 {
@@ -4251,12 +4251,12 @@ bool set_monster_monfear(int m_idx, int v)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÌµÅ¨¾õÂÖÃÍ¤ò¥»¥Ã¥È /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç„¡æ•µçŠ¶æ…‹å€¤ã‚’ã‚»ãƒƒãƒˆ /
  * Set "m_ptr->mtimed[MTIMED_INVULNER]", notice observable changes
- * @param m_idx ¥â¥ó¥¹¥¿¡¼»²¾ÈID
- * @param v ¥»¥Ã¥È¤¹¤ëÃÍ
- * @param energy_need TRUE¤Ê¤é¤ĞÌµÅ¨²ò½ü»ş¤Ë¹ÔÆ°¥¿¡¼¥ó¾ÃÈñ¤ò¹Ô¤¦
- * @return ÊÌÅÓ¹¹¿·½èÍı¤¬É¬Í×¤Ê¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‚ç…§ID
+ * @param v ã‚»ãƒƒãƒˆã™ã‚‹å€¤
+ * @param energy_need TRUEãªã‚‰ã°ç„¡æ•µè§£é™¤æ™‚ã«è¡Œå‹•ã‚¿ãƒ¼ãƒ³æ¶ˆè²»ã‚’è¡Œã†
+ * @return åˆ¥é€”æ›´æ–°å‡¦ç†ãŒå¿…è¦ãªå ´åˆTRUEã‚’è¿”ã™
  */
 bool set_monster_invulner(int m_idx, int v, bool energy_need)
 {
@@ -4306,10 +4306,10 @@ bool set_monster_invulner(int m_idx, int v, bool energy_need)
 static u32b csleep_noise;
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î³Æ¼ï¾õÂÖÃÍ¤ò»ş´Ö·Ğ²á¤Ë¤è¤ê¹¹¿·¤¹¤ë¥µ¥Ö¥ë¡¼¥Á¥ó
- * @param m_idx ¥â¥ó¥¹¥¿¡¼»²¾ÈID
- * @param mtimed_idx ¹¹¿·¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î»ş¸Â¥¹¥Æ¡¼¥¿¥¹ID
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å„ç¨®çŠ¶æ…‹å€¤ã‚’æ™‚é–“çµŒéã«ã‚ˆã‚Šæ›´æ–°ã™ã‚‹ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³
+ * @param m_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‚ç…§ID
+ * @param mtimed_idx æ›´æ–°ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ID
+ * @return ãªã—
  */
 static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 {
@@ -4386,7 +4386,7 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 
 						/* Dump a message */
 #ifdef JP
-						msg_format("%^s¤¬ÌÜ¤ò³Ğ¤Ş¤·¤¿¡£", m_name);
+						msg_format("%^sãŒç›®ã‚’è¦šã¾ã—ãŸã€‚", m_name);
 #else
 						msg_format("%^s wakes up.", m_name);
 #endif
@@ -4416,7 +4416,7 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 
 				/* Dump a message */
 #ifdef JP
-				msg_format("%^s¤Ï¤â¤¦²ÃÂ®¤µ¤ì¤Æ¤¤¤Ê¤¤¡£", m_name);
+				msg_format("%^sã¯ã‚‚ã†åŠ é€Ÿã•ã‚Œã¦ã„ãªã„ã€‚", m_name);
 #else
 				msg_format("%^s is no longer fast.", m_name);
 #endif
@@ -4437,7 +4437,7 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 
 				/* Dump a message */
 #ifdef JP
-				msg_format("%^s¤Ï¤â¤¦¸ºÂ®¤µ¤ì¤Æ¤¤¤Ê¤¤¡£", m_name);
+				msg_format("%^sã¯ã‚‚ã†æ¸›é€Ÿã•ã‚Œã¦ã„ãªã„ã€‚", m_name);
 #else
 				msg_format("%^s is no longer slow.", m_name);
 #endif
@@ -4462,7 +4462,7 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 
 				/* Dump a message */
 #ifdef JP
-				msg_format("%^s¤ÏÛ¯Û°¾õÂÖ¤«¤éÎ©¤ÁÄ¾¤Ã¤¿¡£", m_name);
+				msg_format("%^sã¯æœ¦æœ§çŠ¶æ…‹ã‹ã‚‰ç«‹ã¡ç›´ã£ãŸã€‚", m_name);
 #else
 				msg_format("%^s is no longer stunned.", m_name);
 #endif
@@ -4485,7 +4485,7 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 
 				/* Dump a message */
 #ifdef JP
-				msg_format("%^s¤Ïº®Íğ¤«¤éÎ©¤ÁÄ¾¤Ã¤¿¡£", m_name);
+				msg_format("%^sã¯æ··ä¹±ã‹ã‚‰ç«‹ã¡ç›´ã£ãŸã€‚", m_name);
 #else
 				msg_format("%^s is no longer confused.", m_name);
 #endif
@@ -4513,7 +4513,7 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 
 				/* Dump a message */
 #ifdef JP
-				msg_format("%^s¤ÏÍ¦µ¤¤ò¼è¤êÌá¤·¤¿¡£", m_name);
+				msg_format("%^sã¯å‹‡æ°—ã‚’å–ã‚Šæˆ»ã—ãŸã€‚", m_name);
 #else
 				msg_format("%^s recovers %s courage.", m_name, m_poss);
 #endif
@@ -4534,7 +4534,7 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 
 				/* Dump a message */
 #ifdef JP
-				msg_format("%^s¤Ï¤â¤¦ÌµÅ¨¤Ç¤Ê¤¤¡£", m_name);
+				msg_format("%^sã¯ã‚‚ã†ç„¡æ•µã§ãªã„ã€‚", m_name);
 #else
 				msg_format("%^s is no longer invulnerable.", m_name);
 #endif
@@ -4546,9 +4546,9 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 
 
 /*!
- * @brief Á´¥â¥ó¥¹¥¿¡¼¤Î³Æ¼ï¾õÂÖÃÍ¤ò»ş´Ö·Ğ²á¤Ë¤è¤ê¹¹¿·¤¹¤ë¥á¥¤¥ó¥ë¡¼¥Á¥ó
- * @param mtimed_idx ¹¹¿·¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î»ş¸Â¥¹¥Æ¡¼¥¿¥¹ID
- * @return ¤Ê¤·
+ * @brief å…¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å„ç¨®çŠ¶æ…‹å€¤ã‚’æ™‚é–“çµŒéã«ã‚ˆã‚Šæ›´æ–°ã™ã‚‹ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
+ * @param mtimed_idx æ›´æ–°ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ID
+ * @return ãªã—
  * @details
  * Process the counters of monsters (once per 10 game turns)\n
  * These functions are to process monsters' counters same as player's.
@@ -4570,9 +4570,9 @@ void process_monsters_mtimed(int mtimed_idx)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Ø¤ÎËâÎÏ¾Ãµî½èÍı
- * @param m_idx ËâÎÏ¾Ãµî¤ò¼õ¤±¤ë¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¸ã®é­”åŠ›æ¶ˆå»å‡¦ç†
+ * @param m_idx é­”åŠ›æ¶ˆå»ã‚’å—ã‘ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @return ãªã—
  */
 void dispel_monster_status(int m_idx)
 {
@@ -4583,7 +4583,7 @@ void dispel_monster_status(int m_idx)
 	if (set_monster_invulner(m_idx, 0, TRUE))
 	{
 #ifdef JP
-		if (m_ptr->ml) msg_format("%s¤Ï¤â¤¦ÌµÅ¨¤Ç¤Ï¤Ê¤¤¡£", m_name);
+		if (m_ptr->ml) msg_format("%sã¯ã‚‚ã†ç„¡æ•µã§ã¯ãªã„ã€‚", m_name);
 #else
 		if (m_ptr->ml) msg_format("%^s is no longer invulnerable.", m_name);
 #endif
@@ -4591,7 +4591,7 @@ void dispel_monster_status(int m_idx)
 	if (set_monster_fast(m_idx, 0))
 	{
 #ifdef JP
-		if (m_ptr->ml) msg_format("%s¤Ï¤â¤¦²ÃÂ®¤µ¤ì¤Æ¤¤¤Ê¤¤¡£", m_name);
+		if (m_ptr->ml) msg_format("%sã¯ã‚‚ã†åŠ é€Ÿã•ã‚Œã¦ã„ãªã„ã€‚", m_name);
 #else
 		if (m_ptr->ml) msg_format("%^s is no longer fast.", m_name);
 #endif
@@ -4599,7 +4599,7 @@ void dispel_monster_status(int m_idx)
 	if (set_monster_slow(m_idx, 0))
 	{
 #ifdef JP
-		if (m_ptr->ml) msg_format("%s¤Ï¤â¤¦¸ºÂ®¤µ¤ì¤Æ¤¤¤Ê¤¤¡£", m_name);
+		if (m_ptr->ml) msg_format("%sã¯ã‚‚ã†æ¸›é€Ÿã•ã‚Œã¦ã„ãªã„ã€‚", m_name);
 #else
 		if (m_ptr->ml) msg_format("%^s is no longer slow.", m_name);
 #endif
@@ -4607,11 +4607,11 @@ void dispel_monster_status(int m_idx)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î»ş´ÖÄä»ß½èÍı
- * @param num »ş´ÖÄä»ß¤ò¹Ô¤Ã¤¿Å¨¤¬¹ÔÆ°¤Ç¤­¤ë²ó¿ô
- * @param who »ş´ÖÄä»ß½èÍı¤Î¼çÂÎID
- * @param vs_player TRUE¤Ê¤é¤Ğ»ş´ÖÄä»ß³«»Ï½èÍı¤ò¹Ô¤¦
- * @return »ş´ÖÄä»ß¤¬¹Ô¤ï¤ì¤Æ¤¤¤ë¾õÂÖ¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ™‚é–“åœæ­¢å‡¦ç†
+ * @param num æ™‚é–“åœæ­¢ã‚’è¡Œã£ãŸæ•µãŒè¡Œå‹•ã§ãã‚‹å›æ•°
+ * @param who æ™‚é–“åœæ­¢å‡¦ç†ã®ä¸»ä½“ID
+ * @param vs_player TRUEãªã‚‰ã°æ™‚é–“åœæ­¢é–‹å§‹å‡¦ç†ã‚’è¡Œã†
+ * @return æ™‚é–“åœæ­¢ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹çŠ¶æ…‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool process_the_world(int num, int who, bool vs_player)
 {
@@ -4626,13 +4626,13 @@ bool process_the_world(int num, int who, bool vs_player)
 
 		if (who == 1)
 #ifdef JP
-			msg_print("¡Ö¡Ø¥¶¡¦¥ï¡¼¥ë¥É¡Ù¡ª»ş¤Ï»ß¤Ş¤Ã¤¿¡ª¡×");
+			msg_print("ã€Œã€ã‚¶ãƒ»ãƒ¯ãƒ¼ãƒ«ãƒ‰ã€ï¼æ™‚ã¯æ­¢ã¾ã£ãŸï¼ã€");
 #else
 			msg_format("%s yells 'The World! Time has stopped!'", m_name);
 #endif
 		else if (who == 3)
 #ifdef JP
-			msg_print("¡Ö»ş¤è¡ª¡×");
+			msg_print("ã€Œæ™‚ã‚ˆï¼ã€");
 #else
 			msg_format("%s yells 'Time!'", m_name);
 #endif
@@ -4682,7 +4682,7 @@ bool process_the_world(int num, int who, bool vs_player)
 	if (vs_player || (player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(py, px, m_ptr->fy, m_ptr->fx)))
 	{
 #ifdef JP
-		msg_print("¡Ö»ş¤ÏÆ°¤­¤À¤¹¡Ä¡×");
+		msg_print("ã€Œæ™‚ã¯å‹•ãã ã™â€¦ã€");
 #else
 		msg_print("You feel time flowing around you once more.");
 #endif
@@ -4695,10 +4695,10 @@ bool process_the_world(int num, int who, bool vs_player)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤Î·Ğ¸³ÃÍ¼èÆÀ½èÍı
- * @param m_idx ·Ğ¸³ÃÍ¤òÆÀ¤ë¥â¥ó¥¹¥¿¡¼¤Î»²¾ÈID
- * @param s_idx ·âÇË¤µ¤ì¤¿¥â¥ó¥¹¥¿¡¼¼ïÂ²¤Î»²¾ÈID
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®çµŒé¨“å€¤å–å¾—å‡¦ç†
+ * @param m_idx çµŒé¨“å€¤ã‚’å¾—ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‚ç…§ID
+ * @param s_idx æ’ƒç ´ã•ã‚ŒãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ã®å‚ç…§ID
+ * @return ãªã—
  */
 void monster_gain_exp(int m_idx, int s_idx)
 {
@@ -4798,7 +4798,7 @@ void monster_gain_exp(int m_idx, int s_idx)
 					while (!hallu_race->name || (hallu_race->flags1 & RF1_UNIQUE));
 
 #ifdef JP
-					msg_format("%s¤Ï%s¤Ë¿Ê²½¤·¤¿¡£", m_name, r_name + hallu_race->name);
+					msg_format("%sã¯%sã«é€²åŒ–ã—ãŸã€‚", m_name, r_name + hallu_race->name);
 #else
 					msg_format("%^s evolved into %s.", m_name, r_name + hallu_race->name);
 #endif
@@ -4806,7 +4806,7 @@ void monster_gain_exp(int m_idx, int s_idx)
 				else
 				{
 #ifdef JP
-					msg_format("%s¤Ï%s¤Ë¿Ê²½¤·¤¿¡£", m_name, r_name + r_ptr->name);
+					msg_format("%sã¯%sã«é€²åŒ–ã—ãŸã€‚", m_name, r_name + r_ptr->name);
 #else
 					msg_format("%^s evolved into %s.", m_name, r_name + r_ptr->name);
 #endif

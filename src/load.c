@@ -1,4 +1,4 @@
-/* File: load.c */
+ï»¿/* File: load.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others
@@ -249,10 +249,10 @@ static void rd_string(char *str, int max)
 
 	case 0:
 	{
-		/* ÉÔÌÀ¤Î´Á»ú¥³¡¼¥É¤«¤é¥·¥¹¥Æ¥à¤Î´Á»ú¥³¡¼¥É¤ËÊÑ´¹ */
+		/* ä¸æ˜ã®æ¼¢å­—ã‚³ãƒ¼ãƒ‰ã‹ã‚‰ã‚·ã‚¹ãƒ†ãƒ ã®æ¼¢å­—ã‚³ãƒ¼ãƒ‰ã«å¤‰æ› */
 		byte code = codeconv(str);
 
-		/* ´Á»ú¥³¡¼¥É¤¬È½ÌÀ¤·¤¿¤é¡¢¤½¤ì¤òµ­Ï¿ */
+		/* æ¼¢å­—ã‚³ãƒ¼ãƒ‰ãŒåˆ¤æ˜ã—ãŸã‚‰ã€ãã‚Œã‚’è¨˜éŒ² */
 		if (code) kanji_code = code;
 
 		break;
@@ -2277,7 +2277,7 @@ static errr rd_inventory(void)
 		{
 			/* Oops */
 #ifdef JP
-note("»ı¤ÁÊª¤ÎÃæ¤Î¥¢¥¤¥Æ¥à¤¬Â¿¤¹¤®¤ë¡ª");
+note("æŒã¡ç‰©ã®ä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ ãŒå¤šã™ãã‚‹ï¼");
 #else
 			note("Too many items in the inventory!");
 #endif
@@ -2399,7 +2399,7 @@ static errr rd_dungeon_old(void)
 	rd_s16b(&tmp16s); /* max_panel_cols */
 
 #if 0
-	if (!py || !px) {py = 10;px = 10;}/* ¥À¥ó¥¸¥ç¥óÀ¸À®¤Ë¼ºÇÔ¤·¤Æ¥»¥°¥á¥ó¥Æ¤Ã¤¿¤È¤­¤ÎÉüµìÍÑ */
+	if (!py || !px) {py = 10;px = 10;}/* ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ç”Ÿæˆã«å¤±æ•—ã—ã¦ã‚»ã‚°ãƒ¡ãƒ³ãƒ†ã£ãŸã¨ãã®å¾©æ—§ç”¨ */
 #endif
 
 	/* Maximal size */
@@ -2651,7 +2651,7 @@ static errr rd_dungeon_old(void)
 	if (limit > max_o_idx)
 	{
 #ifdef JP
-note(format("¥¢¥¤¥Æ¥à¤ÎÇÛÎó¤¬Âç¤­¤¹¤®¤ë(%d)¡ª", limit));
+note(format("ã‚¢ã‚¤ãƒ†ãƒ ã®é…åˆ—ãŒå¤§ãã™ãã‚‹(%d)ï¼", limit));
 #else
 		note(format("Too many (%d) object entries!", limit));
 #endif
@@ -2674,7 +2674,7 @@ note(format("¥¢¥¤¥Æ¥à¤ÎÇÛÎó¤¬Âç¤­¤¹¤®¤ë(%d)¡ª", limit));
 		if (i != o_idx)
 		{
 #ifdef JP
-note(format("¥¢¥¤¥Æ¥àÇÛÃÖ¥¨¥é¡¼ (%d <> %d)", i, o_idx));
+note(format("ã‚¢ã‚¤ãƒ†ãƒ é…ç½®ã‚¨ãƒ©ãƒ¼ (%d <> %d)", i, o_idx));
 #else
 			note(format("Object allocation error (%d <> %d)", i, o_idx));
 #endif
@@ -2731,7 +2731,7 @@ note(format("¥¢¥¤¥Æ¥àÇÛÃÖ¥¨¥é¡¼ (%d <> %d)", i, o_idx));
 	if (limit > max_m_idx)
 	{
 #ifdef JP
-note(format("¥â¥ó¥¹¥¿¡¼¤ÎÇÛÎó¤¬Âç¤­¤¹¤®¤ë(%d)¡ª", limit));
+note(format("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®é…åˆ—ãŒå¤§ãã™ãã‚‹(%d)ï¼", limit));
 #else
 		note(format("Too many (%d) monster entries!", limit));
 #endif
@@ -2752,7 +2752,7 @@ note(format("¥â¥ó¥¹¥¿¡¼¤ÎÇÛÎó¤¬Âç¤­¤¹¤®¤ë(%d)¡ª", limit));
 		if (i != m_idx)
 		{
 #ifdef JP
-note(format("¥â¥ó¥¹¥¿¡¼ÇÛÃÖ¥¨¥é¡¼ (%d <> %d)", i, m_idx));
+note(format("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é…ç½®ã‚¨ãƒ©ãƒ¼ (%d <> %d)", i, m_idx));
 #else
 			note(format("Monster allocation error (%d <> %d)", i, m_idx));
 #endif
@@ -3191,7 +3191,7 @@ static errr rd_dungeon(void)
 	{
 	case 151:
 #ifdef JP
-		note("¥¢¥¤¥Æ¥à¤ÎÇÛÎó¤¬Âç¤­¤¹¤®¤ë¡ª");
+		note("ã‚¢ã‚¤ãƒ†ãƒ ã®é…åˆ—ãŒå¤§ãã™ãã‚‹ï¼");
 #else
 		note("Too many object entries!");
 #endif
@@ -3199,7 +3199,7 @@ static errr rd_dungeon(void)
 
 	case 152:
 #ifdef JP
-		note("¥¢¥¤¥Æ¥àÇÛÃÖ¥¨¥é¡¼");
+		note("ã‚¢ã‚¤ãƒ†ãƒ é…ç½®ã‚¨ãƒ©ãƒ¼");
 #else
 		note("Object allocation error");
 #endif
@@ -3207,7 +3207,7 @@ static errr rd_dungeon(void)
 
 	case 161:
 #ifdef JP
-		note("¥â¥ó¥¹¥¿¡¼¤ÎÇÛÎó¤¬Âç¤­¤¹¤®¤ë¡ª");
+		note("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®é…åˆ—ãŒå¤§ãã™ãã‚‹ï¼");
 #else
 		note("Too many monster entries!");
 #endif
@@ -3215,7 +3215,7 @@ static errr rd_dungeon(void)
 
 	case 162:
 #ifdef JP
-		note("¥â¥ó¥¹¥¿¡¼ÇÛÃÖ¥¨¥é¡¼");
+		note("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é…ç½®ã‚¨ãƒ©ãƒ¼");
 #else
 		note("Monster allocation error");
 #endif
@@ -3223,7 +3223,7 @@ static errr rd_dungeon(void)
 
 	case 171:
 #ifdef JP
-		note("ÊİÂ¸¤µ¤ì¤¿¥Õ¥í¥¢¤Î¥À¥ó¥¸¥ç¥ó¥Ç¡¼¥¿¤¬²õ¤ì¤Æ¤¤¤Ş¤¹¡ª");
+		note("ä¿å­˜ã•ã‚ŒãŸãƒ•ãƒ­ã‚¢ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ãŒå£Šã‚Œã¦ã„ã¾ã™ï¼");
 #else
 		note("Dungeon data of saved floors are broken!");
 #endif
@@ -3231,7 +3231,7 @@ static errr rd_dungeon(void)
 
 	case 182:
 #ifdef JP
-		note("¥Æ¥ó¥İ¥é¥ê¡¦¥Õ¥¡¥¤¥ë¤òºîÀ®¤Ç¤­¤Ş¤»¤ó¡ª");
+		note("ãƒ†ãƒ³ãƒãƒ©ãƒªãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã§ãã¾ã›ã‚“ï¼");
 #else
 		note("Failed to make temporal files!");
 #endif
@@ -3278,7 +3278,7 @@ static errr rd_savefile_new_aux(void)
 	/* Mention the savefile version */
 	note(format(
 #ifdef JP
-		     "¥Ğ¡¼¥¸¥ç¥ó %d.%d.%d ¤Î¥»¡¼¥Ö¡¦¥Õ¥¡¥¤¥ë¤ò¥í¡¼¥ÉÃæ...",
+		     "ãƒãƒ¼ã‚¸ãƒ§ãƒ³ %d.%d.%d ã®ã‚»ãƒ¼ãƒ–ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ä¸­...",
 #else
 		     "Loading a %d.%d.%d savefile...",
 #endif
@@ -3331,7 +3331,7 @@ static errr rd_savefile_new_aux(void)
 	/* Read RNG state */
 	rd_randomizer();
 #ifdef JP
-if (arg_fiddle) note("Íğ¿ô¾ğÊó¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
+if (arg_fiddle) note("ä¹±æ•°æƒ…å ±ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ");
 #else
 	if (arg_fiddle) note("Loaded Randomizer Info");
 #endif
@@ -3341,7 +3341,7 @@ if (arg_fiddle) note("Íğ¿ô¾ğÊó¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
 	/* Then the options */
 	rd_options();
 #ifdef JP
-if (arg_fiddle) note("¥ª¥×¥·¥ç¥ó¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
+if (arg_fiddle) note("ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ");
 #else
 	if (arg_fiddle) note("Loaded Option Flags");
 #endif
@@ -3349,7 +3349,7 @@ if (arg_fiddle) note("¥ª¥×¥·¥ç¥ó¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
 	/* Then the "messages" */
 	rd_messages();
 #ifdef JP
-if (arg_fiddle) note("¥á¥Ã¥»¡¼¥¸¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
+if (arg_fiddle) note("ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ");
 #else
 	if (arg_fiddle) note("Loaded Messages");
 #endif
@@ -3377,7 +3377,7 @@ if (arg_fiddle) note("¥á¥Ã¥»¡¼¥¸¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
 	if (tmp16u > max_r_idx)
 	{
 #ifdef JP
-note(format("¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²¤¬Â¿¤¹¤®¤ë(%u)¡ª", tmp16u));
+note(format("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ãŒå¤šã™ãã‚‹(%u)ï¼", tmp16u));
 #else
 		note(format("Too many (%u) monster races!", tmp16u));
 #endif
@@ -3393,7 +3393,7 @@ note(format("¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²¤¬Â¿¤¹¤®¤ë(%u)¡ª", tmp16u));
 	}
 
 #ifdef JP
-if (arg_fiddle) note("¥â¥ó¥¹¥¿¡¼¤Î»×¤¤½Ğ¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
+if (arg_fiddle) note("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ€ã„å‡ºã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ");
 #else
 	if (arg_fiddle) note("Loaded Monster Memory");
 #endif
@@ -3407,7 +3407,7 @@ if (arg_fiddle) note("¥â¥ó¥¹¥¿¡¼¤Î»×¤¤½Ğ¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
 	if (tmp16u > max_k_idx)
 	{
 #ifdef JP
-note(format("¥¢¥¤¥Æ¥à¤Î¼ïÎà¤¬Â¿¤¹¤®¤ë(%u)¡ª", tmp16u));
+note(format("ã‚¢ã‚¤ãƒ†ãƒ ã®ç¨®é¡ãŒå¤šã™ãã‚‹(%u)ï¼", tmp16u));
 #else
 		note(format("Too many (%u) object kinds!", tmp16u));
 #endif
@@ -3427,7 +3427,7 @@ note(format("¥¢¥¤¥Æ¥à¤Î¼ïÎà¤¬Â¿¤¹¤®¤ë(%u)¡ª", tmp16u));
 		k_ptr->tried = (tmp8u & 0x02) ? TRUE: FALSE;
 	}
 #ifdef JP
-if (arg_fiddle) note("¥¢¥¤¥Æ¥à¤Îµ­Ï¿¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
+if (arg_fiddle) note("ã‚¢ã‚¤ãƒ†ãƒ ã®è¨˜éŒ²ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ");
 #else
 	if (arg_fiddle) note("Loaded Object Memory");
 #endif
@@ -3456,7 +3456,7 @@ if (arg_fiddle) note("¥¢¥¤¥Æ¥à¤Îµ­Ï¿¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
 		if (max_towns_load > max_towns)
 		{
 #ifdef JP
-note(format("Ä®¤¬Â¿¤¹¤®¤ë(%u)¡ª", max_towns_load));
+note(format("ç”ºãŒå¤šã™ãã‚‹(%u)ï¼", max_towns_load));
 #else
 			note(format("Too many (%u) towns!", max_towns_load));
 #endif
@@ -3480,7 +3480,7 @@ note(format("Ä®¤¬Â¿¤¹¤®¤ë(%u)¡ª", max_towns_load));
 		if (max_quests_load > max_quests)
 		{
 #ifdef JP
-note(format("¥¯¥¨¥¹¥È¤¬Â¿¤¹¤®¤ë(%u)¡ª", max_quests_load));
+note(format("ã‚¯ã‚¨ã‚¹ãƒˆãŒå¤šã™ãã‚‹(%u)ï¼", max_quests_load));
 #else
 			note(format("Too many (%u) quests!", max_quests_load));
 #endif
@@ -3609,7 +3609,7 @@ note(format("¥¯¥¨¥¹¥È¤¬Â¿¤¹¤®¤ë(%u)¡ª", max_quests_load));
 		if ((wild_x_size > max_wild_x) || (wild_y_size > max_wild_y))
 		{
 #ifdef JP
-note(format("¹ÓÌî¤¬Âç¤­¤¹¤®¤ë(%u/%u)¡ª", wild_x_size, wild_y_size));
+note(format("è’é‡ãŒå¤§ãã™ãã‚‹(%u/%u)ï¼", wild_x_size, wild_y_size));
 #else
 			note(format("Wilderness is too big (%u/%u)!", wild_x_size, wild_y_size));
 #endif
@@ -3628,7 +3628,7 @@ note(format("¹ÓÌî¤¬Âç¤­¤¹¤®¤ë(%u/%u)¡ª", wild_x_size, wild_y_size));
 	}
 
 #ifdef JP
-if (arg_fiddle) note("¥¯¥¨¥¹¥È¾ğÊó¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
+if (arg_fiddle) note("ã‚¯ã‚¨ã‚¹ãƒˆæƒ…å ±ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ");
 #else
 	if (arg_fiddle) note("Loaded Quests");
 #endif
@@ -3640,7 +3640,7 @@ if (arg_fiddle) note("¥¯¥¨¥¹¥È¾ğÊó¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
 	if (tmp16u > max_a_idx)
 	{
 #ifdef JP
-note(format("ÅÁÀâ¤Î¥¢¥¤¥Æ¥à¤¬Â¿¤¹¤®¤ë(%u)¡ª", tmp16u));
+note(format("ä¼èª¬ã®ã‚¢ã‚¤ãƒ†ãƒ ãŒå¤šã™ãã‚‹(%u)ï¼", tmp16u));
 #else
 		note(format("Too many (%u) artifacts!", tmp16u));
 #endif
@@ -3670,7 +3670,7 @@ note(format("ÅÁÀâ¤Î¥¢¥¤¥Æ¥à¤¬Â¿¤¹¤®¤ë(%u)¡ª", tmp16u));
 		}
 	}
 #ifdef JP
-if (arg_fiddle) note("ÅÁÀâ¤Î¥¢¥¤¥Æ¥à¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
+if (arg_fiddle) note("ä¼èª¬ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ");
 #else
 	if (arg_fiddle) note("Loaded Artifacts");
 #endif
@@ -3682,7 +3682,7 @@ if (arg_fiddle) note("ÅÁÀâ¤Î¥¢¥¤¥Æ¥à¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
 	if (p_ptr->energy_need < -999) world_player = TRUE;
 
 #ifdef JP
-if (arg_fiddle) note("ÆÃÊÌ¾ğÊó¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
+if (arg_fiddle) note("ç‰¹åˆ¥æƒ…å ±ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¾ã—ãŸ");
 #else
 	if (arg_fiddle) note("Loaded extra information");
 #endif
@@ -3695,7 +3695,7 @@ if (arg_fiddle) note("ÆÃÊÌ¾ğÊó¤ò¥í¡¼¥É¤·¤Ş¤·¤¿");
 	if (tmp16u > PY_MAX_LEVEL)
 	{
 #ifdef JP
-note(format("¥Ò¥Ã¥È¥İ¥¤¥ó¥ÈÇÛÎó¤¬Âç¤­¤¹¤®¤ë(%u)¡ª", tmp16u));
+note(format("ãƒ’ãƒƒãƒˆãƒã‚¤ãƒ³ãƒˆé…åˆ—ãŒå¤§ãã™ãã‚‹(%u)ï¼", tmp16u));
 #else
 		note(format("Too many (%u) hitpoint entries!", tmp16u));
 #endif
@@ -3783,7 +3783,7 @@ note(format("¥Ò¥Ã¥È¥İ¥¤¥ó¥ÈÇÛÎó¤¬Âç¤­¤¹¤®¤ë(%u)¡ª", tmp16u));
 	if (rd_inventory())
 	{
 #ifdef JP
-note("»ı¤ÁÊª¾ğÊó¤òÆÉ¤ß¹ş¤à¤³¤È¤¬¤Ç¤­¤Ş¤»¤ó");
+note("æŒã¡ç‰©æƒ…å ±ã‚’èª­ã¿è¾¼ã‚€ã“ã¨ãŒã§ãã¾ã›ã‚“");
 #else
 		note("Unable to read inventory");
 #endif
@@ -3867,7 +3867,7 @@ note("»ı¤ÁÊª¾ğÊó¤òÆÉ¤ß¹ş¤à¤³¤È¤¬¤Ç¤­¤Ş¤»¤ó");
 	{
 		/* Dead players have no dungeon */
 #ifdef JP
-note("¥À¥ó¥¸¥ç¥óÉü¸µÃæ...");
+note("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å¾©å…ƒä¸­...");
 #else
 		note("Restoring Dungeon...");
 #endif
@@ -3875,7 +3875,7 @@ note("¥À¥ó¥¸¥ç¥óÉü¸µÃæ...");
 		if (rd_dungeon())
 		{
 #ifdef JP
-note("¥À¥ó¥¸¥ç¥ó¥Ç¡¼¥¿ÆÉ¤ß¹ş¤ß¼ºÇÔ");
+note("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿å¤±æ•—");
 #else
 			note("Error reading dungeon data");
 #endif
@@ -3918,7 +3918,7 @@ note("¥À¥ó¥¸¥ç¥ó¥Ç¡¼¥¿ÆÉ¤ß¹ş¤ß¼ºÇÔ");
 	if (o_v_check != n_v_check)
 	{
 #ifdef JP
-note("¥Á¥§¥Ã¥¯¥µ¥à¤¬¤ª¤«¤·¤¤");
+note("ãƒã‚§ãƒƒã‚¯ã‚µãƒ ãŒãŠã‹ã—ã„");
 #else
 		note("Invalid checksum");
 #endif
@@ -3938,7 +3938,7 @@ note("¥Á¥§¥Ã¥¯¥µ¥à¤¬¤ª¤«¤·¤¤");
 	if (o_x_check != n_x_check)
 	{
 #ifdef JP
-note("¥¨¥ó¥³¡¼¥É¤µ¤ì¤¿¥Á¥§¥Ã¥¯¥µ¥à¤¬¤ª¤«¤·¤¤");
+note("ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã•ã‚ŒãŸãƒã‚§ãƒƒã‚¯ã‚µãƒ ãŒãŠã‹ã—ã„");
 #else
 		note("Invalid encoded checksum");
 #endif
