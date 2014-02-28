@@ -5,7 +5,7 @@
 
 # Number:Name
 Q:$18:N:Water Cave
-Q:18:N:¸Ğ¤ÎÆ¶·¢
+Q:18:N:æ¹–ã®æ´çªŸ
 
 # type:num_mon:cur_num:max_num:level:r_index:k_idx
 Q:$18:Q:4:0:0:0:35:0:0:0:6
@@ -18,9 +18,9 @@ Q:$18:T:the shore of our lake. Please investigate and
 Q:$18:T:discover what is inside. Be careful! The
 Q:$18:T:tunnel entrance does not appear to be very
 Q:$18:T:stable.
-Q:18:T:ºÇ¶á¸Ğ¤Î¶á¤¯¤ËÆ¶·¢¤ÎÆş¸ı¤¬¸½¤ì¤Ş¤·¤¿¡£¤É¤¦¤«Ãæ¤òÄ´¤Ù¤Æ²¿¤¬¤¢¤ë¤«¸«¤Æ
-Q:18:T:¤­¤Æ²¼¤µ¤¤¡£¤¿¤À¤·¡¢Æ¶·¢¤ÎÆş¸ı¤Ï¤¢¤Ş¤ê°ÂÄê¤·¤Æ¤Ê¤¤¤è¤¦¤Ê¤Î¤Ç
-Q:18:T:µ¤¤ò¤Ä¤±¤Æ²¼¤µ¤¤¡ª
+Q:18:T:æœ€è¿‘æ¹–ã®è¿‘ãã«æ´çªŸã®å…¥å£ãŒç¾ã‚Œã¾ã—ãŸã€‚ã©ã†ã‹ä¸­ã‚’èª¿ã¹ã¦ä½•ãŒã‚ã‚‹ã‹è¦‹ã¦
+Q:18:T:ãã¦ä¸‹ã•ã„ã€‚ãŸã ã—ã€æ´çªŸã®å…¥å£ã¯ã‚ã¾ã‚Šå®‰å®šã—ã¦ãªã„ã‚ˆã†ãªã®ã§
+Q:18:T:æ°—ã‚’ã¤ã‘ã¦ä¸‹ã•ã„ï¼
 ?:1
 
 # Description for quest reward
@@ -29,14 +29,14 @@ Q:$18:T:We have closed the tunnel to prevent anybody from
 Q:$18:T:getting trapped in the cavern. Please accept the
 Q:$18:T:gift that awaits you outside as an reward for your
 Q:$18:T:help.
-Q:18:T:¿Í¡¹¤¬Æ¶·¢¤Ë´Ö°ã¤Ã¤ÆÆş¤é¤Ê¤¤¤è¤¦¤Ë¥È¥ó¥Í¥ë¤òÊÄº¿¤·¤Æ¤ª¤­¤Ş¤·¤¿¡£
-Q:18:T:¤É¤¦¤¾³°¤Ë¤¢¤ë²æ¡¹¤«¤é¤ÎÂ£Êª¤ò¼õ¤±¤È¤Ã¤Æ²¼¤µ¤¤¡£
+Q:18:T:äººã€…ãŒæ´çªŸã«é–“é•ã£ã¦å…¥ã‚‰ãªã„ã‚ˆã†ã«ãƒˆãƒ³ãƒãƒ«ã‚’é–‰é–ã—ã¦ãŠãã¾ã—ãŸã€‚
+Q:18:T:ã©ã†ãå¤–ã«ã‚ã‚‹æˆ‘ã€…ã‹ã‚‰ã®è´ˆç‰©ã‚’å—ã‘ã¨ã£ã¦ä¸‹ã•ã„ã€‚
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST18 5]
 Q:$5:T:It seems like this task was too difficult for you.
-Q:5:T:¤³¤Î»Å»ö¤Ï¤¢¤Ê¤¿¤Ë¤ÏÆñ¤·¤«¤Ã¤¿¤è¤¦¤Ç¤¹¤Í¡£
+Q:5:T:ã“ã®ä»•äº‹ã¯ã‚ãªãŸã«ã¯é›£ã—ã‹ã£ãŸã‚ˆã†ã§ã™ã­ã€‚
 ?:1
 
 # Shallow water with Portuguese man-o-war

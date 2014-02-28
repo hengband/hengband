@@ -1,4 +1,4 @@
-/* File: spells1.c */
+ï»¿/* File: spells1.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
@@ -27,8 +27,8 @@ int project_length = 0;
  */
 static void next_mirror( int* next_y , int* next_x , int cury, int curx)
 {
-	int mirror_x[10],mirror_y[10]; /* ¶À¤Ï¤â¤Ã¤È¾¯¤Ê¤¤ */
-	int mirror_num=0;              /* ¶À¤Î¿ô */
+	int mirror_x[10],mirror_y[10]; /* é¡ã¯ã‚‚ã£ã¨å°‘ãªã„ */
+	int mirror_num=0;              /* é¡ã®æ•° */
 	int x,y;
 	int num;
 
@@ -613,18 +613,18 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		case GF_POIS:
 		case GF_NUKE:
 		case GF_DEATH_RAY:
-            message = _("¸Ï¤ì¤¿", "was blasted."); break;
+            message = _("æ¯ã‚ŒãŸ", "was blasted."); break;
 		case GF_TIME:
-            message = _("½Ì¤ó¤À", "shrank."); break;
+            message = _("ç¸®ã‚“ã ", "shrank."); break;
 		case GF_ACID:
-            message = _("ÍÏ¤±¤¿", "melted."); break;
+            message = _("æº¶ã‘ãŸ", "melted."); break;
 		case GF_COLD:
 		case GF_ICE:
-            message = _("Åà¤ê¡¢ºÕ¤±»¶¤Ã¤¿", "was frozen and smashed."); break;
+            message = _("å‡ã‚Šã€ç •ã‘æ•£ã£ãŸ", "was frozen and smashed."); break;
 		case GF_FIRE:
 		case GF_ELEC:
 		case GF_PLASMA:
-            message = _("Ç³¤¨¤¿", "burns up!"); break;
+            message = _("ç‡ƒãˆãŸ", "burns up!"); break;
 		case GF_METEOR:
 		case GF_CHAOS:
 		case GF_MANA:
@@ -636,13 +636,13 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		case GF_DISENCHANT:
 		case GF_FORCE:
 		case GF_GRAVITY:
-            message = _("Ê´ºÕ¤µ¤ì¤¿", "was crushed."); break;
+            message = _("ç²‰ç •ã•ã‚ŒãŸ", "was crushed."); break;
 		default:
 			message = NULL;break;
 		}
 		if (message)
 		{
-            msg_format(_("ÌÚ¤Ï%s¡£", "A tree %s"), message);
+            msg_format(_("æœ¨ã¯%sã€‚", "A tree %s"), message);
 			cave_set_feat(y, x, one_in_(3) ? feat_brake : feat_grass);
 
 			/* Observe */
@@ -710,7 +710,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				/* Check line of sight */
 				if (known)
 				{
-                    msg_print(_("¤Ş¤Ğ¤æ¤¤Á®¸÷¤¬Áö¤Ã¤¿¡ª", "There is a bright flash of light!"));
+                    msg_print(_("ã¾ã°ã‚†ã„é–ƒå…‰ãŒèµ°ã£ãŸï¼", "There is a bright flash of light!"));
 					obvious = TRUE;
 				}
 
@@ -729,7 +729,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				/* Check line of sound */
 				if (known && (old_feat != c_ptr->feat))
 				{
-                    msg_print(_("¥«¥Á¥Ã¤È²»¤¬¤·¤¿¡ª", "Click!"));
+                    msg_print(_("ã‚«ãƒãƒƒã¨éŸ³ãŒã—ãŸï¼", "Click!"));
 					obvious = TRUE;
 				}
 			}
@@ -758,7 +758,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				if (known)
 				{
 					/* Message */
-                    msg_print(_("¤Ş¤Ğ¤æ¤¤Á®¸÷¤¬Áö¤Ã¤¿¡ª", "There is a bright flash of light!"));
+                    msg_print(_("ã¾ã°ã‚†ã„é–ƒå…‰ãŒèµ°ã£ãŸï¼", "There is a bright flash of light!"));
 					obvious = TRUE;
 				}
 
@@ -801,7 +801,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				if (known && have_flag(mimic_f_ptr->flags, FF_OPEN))
 				{
 					/* Message */
-                    msg_format(_("%s¤Ë²¿¤«¤¬¤Ä¤Ã¤«¤¨¤Æ³«¤«¤Ê¤¯¤Ê¤Ã¤¿¡£", "The %s seems stuck."), f_name + mimic_f_ptr->name);
+                    msg_format(_("%sã«ä½•ã‹ãŒã¤ã£ã‹ãˆã¦é–‹ã‹ãªããªã£ãŸã€‚", "The %s seems stuck."), f_name + mimic_f_ptr->name);
 					obvious = TRUE;
 				}
 			}
@@ -816,7 +816,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				/* Message */
 				if (known && (c_ptr->info & (CAVE_MARK)))
 				{
-                    msg_format(_("%s¤¬ÍÏ¤±¤ÆÅ¥¤Ë¤Ê¤Ã¤¿¡ª", "The %s turns into mud!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
+                    msg_format(_("%sãŒæº¶ã‘ã¦æ³¥ã«ãªã£ãŸï¼", "The %s turns into mud!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
 					obvious = TRUE;
 				}
 
@@ -1054,7 +1054,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		{
 			if (is_mirror_grid(c_ptr))
 			{
-                msg_print(_("¶À¤¬³ä¤ì¤¿¡ª", "The mirror was crashed!"));
+                msg_print(_("é¡ãŒå‰²ã‚ŒãŸï¼", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
 				remove_mirror(y, x);
 				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
@@ -1065,7 +1065,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				/* Message */
 				if (known && (c_ptr->info & CAVE_MARK))
 				{
-                    msg_format(_("%s¤¬³ä¤ì¤¿¡ª", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
+                    msg_format(_("%sãŒå‰²ã‚ŒãŸï¼", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
 					sound(SOUND_GLASS);
 				}
 
@@ -1082,7 +1082,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 		{
 			if (is_mirror_grid(c_ptr) && p_ptr->lev < 40)
             {
-                msg_print(_("¶À¤¬³ä¤ì¤¿¡ª", "The mirror was crashed!"));
+                msg_print(_("é¡ãŒå‰²ã‚ŒãŸï¼", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
 				remove_mirror(y, x);
 				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
@@ -1093,7 +1093,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 				/* Message */
 				if (known && (c_ptr->info & CAVE_MARK))
 				{
-                    msg_format(_("%s¤¬³ä¤ì¤¿¡ª", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
+                    msg_format(_("%sãŒå‰²ã‚ŒãŸï¼", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
 					sound(SOUND_GLASS);
 				}
 
@@ -1207,7 +1207,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 				if (hates_acid(o_ptr))
 				{
 					do_kill = TRUE;
-                    note_kill = _("Í»¤±¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " melt!" : " melts!"));
+                    note_kill = _("èã‘ã¦ã—ã¾ã£ãŸï¼", (plural ? " melt!" : " melts!"));
 					if (have_flag(flgs, TR_IGNORE_ACID)) ignore = TRUE;
 				}
 				break;
@@ -1219,7 +1219,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 				if (hates_elec(o_ptr))
 				{
 					do_kill = TRUE;
-                    note_kill = _("²õ¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " are destroyed!" : " is destroyed!"));
+                    note_kill = _("å£Šã‚Œã¦ã—ã¾ã£ãŸï¼", (plural ? " are destroyed!" : " is destroyed!"));
 					if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
 				}
 				break;
@@ -1231,7 +1231,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 				if (hates_fire(o_ptr))
 				{
                     do_kill = TRUE;
-                    note_kill = _("Ç³¤¨¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " burn up!" : " burns up!"));
+                    note_kill = _("ç‡ƒãˆã¦ã—ã¾ã£ãŸï¼", (plural ? " burn up!" : " burns up!"));
 					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 				}
 				break;
@@ -1242,7 +1242,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 			{
 				if (hates_cold(o_ptr))
 				{
-                    note_kill = _("ºÕ¤±»¶¤Ã¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " shatter!" : " shatters!"));
+                    note_kill = _("ç •ã‘æ•£ã£ã¦ã—ã¾ã£ãŸï¼", (plural ? " shatter!" : " shatters!"));
 					do_kill = TRUE;
 					if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
 				}
@@ -1255,14 +1255,14 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 				if (hates_fire(o_ptr))
 				{
 					do_kill = TRUE;
-                    note_kill = _("Ç³¤¨¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " burn up!" : " burns up!"));
+                    note_kill = _("ç‡ƒãˆã¦ã—ã¾ã£ãŸï¼", (plural ? " burn up!" : " burns up!"));
 					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 				}
 				if (hates_elec(o_ptr))
 				{
 					ignore = FALSE;
 					do_kill = TRUE;
-                    note_kill = _("²õ¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " are destroyed!" : " is destroyed!"));
+                    note_kill = _("å£Šã‚Œã¦ã—ã¾ã£ãŸï¼", (plural ? " are destroyed!" : " is destroyed!"));
 					if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
 				}
 				break;
@@ -1274,14 +1274,14 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 				if (hates_fire(o_ptr))
 				{
                     do_kill = TRUE;
-                    note_kill = _("Ç³¤¨¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " burn up!" : " burns up!"));
+                    note_kill = _("ç‡ƒãˆã¦ã—ã¾ã£ãŸï¼", (plural ? " burn up!" : " burns up!"));
 					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 				}
 				if (hates_cold(o_ptr))
 				{
 					ignore = FALSE;
 					do_kill = TRUE;
-                    note_kill = _("ºÕ¤±»¶¤Ã¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " shatter!" : " shatters!"));
+                    note_kill = _("ç •ã‘æ•£ã£ã¦ã—ã¾ã£ãŸï¼", (plural ? " shatter!" : " shatters!"));
 					if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
 				}
 				break;
@@ -1295,7 +1295,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 			{
 				if (hates_cold(o_ptr))
                 {
-                    note_kill = _("ºÕ¤±»¶¤Ã¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " shatter!" : " shatters!"));
+                    note_kill = _("ç •ã‘æ•£ã£ã¦ã—ã¾ã£ãŸï¼", (plural ? " shatter!" : " shatters!"));
 					do_kill = TRUE;
 				}
 				break;
@@ -1307,21 +1307,21 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 			case GF_SUPER_RAY:
 			{
 				do_kill = TRUE;
-                note_kill = _("²õ¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " are destroyed!" : " is destroyed!"));
+                note_kill = _("å£Šã‚Œã¦ã—ã¾ã£ãŸï¼", (plural ? " are destroyed!" : " is destroyed!"));
 				break;
 			}
 
 			case GF_DISINTEGRATE:
 			{
 				do_kill = TRUE;
-                note_kill = _("¾øÈ¯¤·¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " evaporate!" : " evaporates!"));
+                note_kill = _("è’¸ç™ºã—ã¦ã—ã¾ã£ãŸï¼", (plural ? " evaporate!" : " evaporates!"));
 				break;
 			}
 
 			case GF_CHAOS:
 			{
 				do_kill = TRUE;
-                note_kill = _("²õ¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " are destroyed!" : " is destroyed!"));
+                note_kill = _("å£Šã‚Œã¦ã—ã¾ã£ãŸï¼", (plural ? " are destroyed!" : " is destroyed!"));
 				if (have_flag(flgs, TR_RES_CHAOS)) ignore = TRUE;
 				else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS)) ignore = TRUE;
 				break;
@@ -1334,7 +1334,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 				if (object_is_cursed(o_ptr))
 				{
                     do_kill = TRUE;
-                    note_kill = _("²õ¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª", (plural ? " are destroyed!" : " is destroyed!"));
+                    note_kill = _("å£Šã‚Œã¦ã—ã¾ã£ãŸï¼", (plural ? " are destroyed!" : " is destroyed!"));
 				}
 				break;
 			}
@@ -1367,7 +1367,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 						/* Notice */
 						if (known && (o_ptr->marked & OM_FOUND))
 						{
-                            msg_print(_("¥«¥Á¥Ã¤È²»¤¬¤·¤¿¡ª", "Click!"));
+                            msg_print(_("ã‚«ãƒãƒƒã¨éŸ³ãŒã—ãŸï¼", "Click!"));
 							obvious = TRUE;
 						}
 					}
@@ -1392,17 +1392,17 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 						{
 							if (!note_kill)
 							{
-                                note_kill = _("³¥¤Ë¤Ê¤Ã¤¿¡£", (plural ? " become dust." : " becomes dust."));
+                                note_kill = _("ç°ã«ãªã£ãŸã€‚", (plural ? " become dust." : " becomes dust."));
 							}
 							continue;
 						}
 						else if (summon_named_creature(who, y, x, o_ptr->pval, mode))
 						{
-                            note_kill = _("À¸¤­ÊÖ¤Ã¤¿¡£", " revived.");
+                            note_kill = _("ç”Ÿãè¿”ã£ãŸã€‚", " revived.");
 						}
 						else if (!note_kill)
 						{
-                            note_kill = _("³¥¤Ë¤Ê¤Ã¤¿¡£", (plural ? " become dust." : " becomes dust."));
+                            note_kill = _("ç°ã«ãªã£ãŸã€‚", (plural ? " become dust." : " becomes dust."));
 						}
 					}
 					do_kill = TRUE;
@@ -1429,7 +1429,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 				/* Observe the resist */
 				if (known && (o_ptr->marked & OM_FOUND))
 				{
-                    msg_format(_("%s¤Ï±Æ¶Á¤ò¼õ¤±¤Ê¤¤¡ª", 
+                    msg_format(_("%sã¯å½±éŸ¿ã‚’å—ã‘ãªã„ï¼", 
                        (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
 				}
 			}
@@ -1440,7 +1440,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 				/* Describe if needed */
 				if (known && (o_ptr->marked & OM_FOUND) && note_kill)
 				{
-                    msg_format(_("%s¤Ï%s", "The %s%s"), o_name, note_kill);
+                    msg_format(_("%sã¯%s", "The %s%s"), o_name, note_kill);
 				}
 
 				k_idx = o_ptr->k_idx;
@@ -1626,7 +1626,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -1641,14 +1641,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_ACID)
 			{
-                note = _("¤Ë¤Ï¤«¤Ê¤êÂÑÀ­¤¬¤¢¤ë¡ª", " resists a lot.");
+                note = _("ã«ã¯ã‹ãªã‚Šè€æ€§ãŒã‚ã‚‹ï¼", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ACID);
 			}
@@ -1662,14 +1662,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_ELEC)
 			{
-                note = _("¤Ë¤Ï¤«¤Ê¤êÂÑÀ­¤¬¤¢¤ë¡ª", " resists a lot.");
+                note = _("ã«ã¯ã‹ãªã‚Šè€æ€§ãŒã‚ã‚‹ï¼", " resists a lot.");
                 dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ELEC);
 			}
@@ -1683,20 +1683,20 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_FIRE)
 			{
-                note = _("¤Ë¤Ï¤«¤Ê¤êÂÑÀ­¤¬¤¢¤ë¡ª", " resists a lot.");
+                note = _("ã«ã¯ã‹ãªã‚Šè€æ€§ãŒã‚ã‚‹ï¼", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_FIRE);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_FIRE))
 			{
-                note = _("¤Ï¤Ò¤É¤¤ÄË¼ê¤ò¤¦¤±¤¿¡£", " is hit hard.");
+                note = _("ã¯ã²ã©ã„ç—›æ‰‹ã‚’ã†ã‘ãŸã€‚", " is hit hard.");
 				dam *= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_FIRE);
 			}
@@ -1710,20 +1710,20 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_COLD)
 			{
-                note = _("¤Ë¤Ï¤«¤Ê¤êÂÑÀ­¤¬¤¢¤ë¡ª", " resists a lot.");
+                note = _("ã«ã¯ã‹ãªã‚Šè€æ€§ãŒã‚ã‚‹ï¼", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_COLD))
             {
-                note = _("¤Ï¤Ò¤É¤¤ÄË¼ê¤ò¤¦¤±¤¿¡£", " is hit hard.");
+                note = _("ã¯ã²ã©ã„ç—›æ‰‹ã‚’ã†ã‘ãŸã€‚", " is hit hard.");
 				dam *= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
@@ -1737,14 +1737,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_POIS)
 			{
-                note = _("¤Ë¤Ï¤«¤Ê¤êÂÑÀ­¤¬¤¢¤ë¡ª", " resists a lot.");
+                note = _("ã«ã¯ã‹ãªã‚Šè€æ€§ãŒã‚ã‚‹ï¼", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
@@ -1758,14 +1758,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_POIS)
 			{
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
@@ -1780,14 +1780,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flags3 & RF3_GOOD)
             {
-                note = _("¤Ï¤Ò¤É¤¤ÄË¼ê¤ò¤¦¤±¤¿¡£", " is hit hard.");
+                note = _("ã¯ã²ã©ã„ç—›æ‰‹ã‚’ã†ã‘ãŸã€‚", " is hit hard.");
 				dam *= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 			}
@@ -1801,26 +1801,26 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flags3 & RF3_GOOD)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_GOOD;
 			}
 			else if (r_ptr->flags3 & RF3_EVIL)
 			{
                 dam *= 2;
-                note = _("¤Ï¤Ò¤É¤¤ÄË¼ê¤ò¤¦¤±¤¿¡£", " is hit hard.");
+                note = _("ã¯ã²ã©ã„ç—›æ‰‹ã‚’ã†ã‘ãŸã€‚", " is hit hard.");
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
 			}
 			else
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 			}
 			break;
@@ -1833,7 +1833,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -1848,14 +1848,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_PLAS)
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_PLAS);
 			}
@@ -1869,7 +1869,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -1878,20 +1878,20 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			{
 				if (r_ptr->flags3 & RF3_UNDEAD)
                 {
-                    note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                    note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 					dam = 0;
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 				}
 				else
 				{
-                    note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                    note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 					dam *= 3; dam /= randint1(6) + 6;
 				}
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NETH);
 			}
 			else if (r_ptr->flags3 & RF3_EVIL)
             {
-                note = _("¤Ï¤¤¤¯¤é¤«ÂÑÀ­¤ò¼¨¤·¤¿¡£", " resists somewhat.");
+                note = _("ã¯ã„ãã‚‰ã‹è€æ€§ã‚’ç¤ºã—ãŸã€‚", " resists somewhat.");
 				dam /= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 			}
@@ -1905,7 +1905,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -1914,12 +1914,12 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			{
 				if ((m_ptr->r_idx == MON_WATER_ELEM) || (m_ptr->r_idx == MON_UNMAKER))
                 {
-                    note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                    note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 					dam = 0;
 				}
 				else
                 {
-                    note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                    note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 					dam *= 3; dam /= randint1(6) + 6;
 				}
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WATE);
@@ -1934,20 +1934,20 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_CHAO)
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_CHAO);
 			}
 			else if ((r_ptr->flags3 & RF3_DEMON) && one_in_(3))
             {
-                note = _("¤Ï¤¤¤¯¤é¤«ÂÑÀ­¤ò¼¨¤·¤¿¡£", " resists somewhat.");
+                note = _("ã¯ã„ãã‚‰ã‹è€æ€§ã‚’ç¤ºã—ãŸã€‚", " resists somewhat.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
 			}
@@ -1966,14 +1966,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_SHAR)
 			{
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
                 dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
@@ -1987,14 +1987,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_SHAR)
             {
-                note = _("¤Ï¤¤¤¯¤é¤«ÂÑÀ­¤ò¼¨¤·¤¿¡£", " resists somewhat.");
+                note = _("ã¯ã„ãã‚‰ã‹è€æ€§ã‚’ç¤ºã—ãŸã€‚", " resists somewhat.");
 				dam /= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
@@ -2009,14 +2009,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_SOUN)
 			{
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
                 dam *= 2; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SOUN);
 			}
@@ -2031,14 +2031,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flags3 & RF3_NO_CONF)
 			{
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
                 dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 			}
@@ -2053,14 +2053,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_DISE)
 			{
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
                 dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DISE);
 			}
@@ -2074,14 +2074,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_NEXU)
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NEXU);
 			}
@@ -2095,14 +2095,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_WALL)
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WALL);
 			}
@@ -2117,14 +2117,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_INER)
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_INER);
 			}
@@ -2141,7 +2141,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				{
 					if (set_monster_slow(c_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
-                        note = _("¤ÎÆ°¤­¤¬ÃÙ¤¯¤Ê¤Ã¤¿¡£", " starts moving slower.");
+                        note = _("ã®å‹•ããŒé…ããªã£ãŸã€‚", " starts moving slower.");
 					}
 				}
 			}
@@ -2155,14 +2155,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_TIME)
 			{
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_TIME);
 			}
@@ -2179,7 +2179,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2189,13 +2189,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (r_ptr->flags1 & (RF1_UNIQUE))
 				{
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected!");
+                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected!");
 					resist_tele = TRUE;
 				}
 				else if (r_ptr->level > randint1(100))
 				{
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                    note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                    note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 					resist_tele = TRUE;
 				}
 			}
@@ -2206,7 +2206,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_GRAV)
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 				dam *= 3; dam /= randint1(6) + 6;
 				do_dist = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_GRAV);
@@ -2225,7 +2225,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				{
 					if (set_monster_slow(c_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
-                        note = _("¤ÎÆ°¤­¤¬ÃÙ¤¯¤Ê¤Ã¤¿¡£", " starts moving slower.");
+                        note = _("ã®å‹•ããŒé…ããªã£ãŸã€‚", " starts moving slower.");
 					}
 				}
 
@@ -2239,7 +2239,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 					/* Resist */
 					do_stun = 0;
 					/* No obvious effect */
-                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected!");
+                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected!");
 					obvious = FALSE;
 				}
 			}
@@ -2255,7 +2255,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2271,7 +2271,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2279,8 +2279,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if (r_ptr->flags3 & RF3_HURT_ROCK)
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
-                note = _("¤ÎÈéÉæ¤¬¤¿¤À¤ì¤¿¡ª", " loses some skin!");
-                note_dies = _("¤Ï¾øÈ¯¤·¤¿¡ª", " evaporates!");
+                note = _("ã®çš®è†šãŒãŸã ã‚ŒãŸï¼", " loses some skin!");
+                note_dies = _("ã¯è’¸ç™ºã—ãŸï¼", " evaporates!");
 				dam *= 2;
 			}
 			break;
@@ -2294,14 +2294,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if (!(los(m_ptr->fy, m_ptr->fx, py, px)))
 			{
 				if (seen_msg) 
-                    msg_format(_("%s¤Ï¤¢¤Ê¤¿¤¬¸«¤¨¤Ê¤¤¤Î¤Ç±Æ¶Á¤µ¤ì¤Ê¤¤¡ª", "%^s can't see you, and isn't affected!"), m_name);
+                    msg_format(_("%sã¯ã‚ãªãŸãŒè¦‹ãˆãªã„ã®ã§å½±éŸ¿ã•ã‚Œãªã„ï¼", "%^s can't see you, and isn't affected!"), m_name);
 				skipped = TRUE;
 				break;
 			}
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2309,7 +2309,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
 				dam = 0;
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 
 			}
@@ -2317,7 +2317,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			         (r_ptr->flags3 & RF3_ANIMAL) ||
 			         (r_ptr->level > randint1(3 * dam)))
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 				dam /= 3;
 
 				/*
@@ -2329,14 +2329,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				    one_in_(2))
 				{
 					note = NULL;
-					msg_format(_("%^s¤ÎÂÄÍî¤·¤¿Àº¿À¤Ï¹¶·â¤òÄ·¤ÍÊÖ¤·¤¿¡ª", 
+					msg_format(_("%^sã®å •è½ã—ãŸç²¾ç¥ã¯æ”»æ’ƒã‚’è·³ã­è¿”ã—ãŸï¼", 
                         (seen ? "%^s's corrupted mind backlashes your attack!" : 
                                 "%^ss corrupted mind backlashes your attack!")), m_name);
 
 					/* Saving throw */
 					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 					{
-                        msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                        msg_print(_("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 					}
 					else
 					{
@@ -2356,7 +2356,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 								case 3:
 								{
 									if (r_ptr->flags3 & RF3_NO_FEAR)
-                                        note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                                        note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 									else
 										set_afraid(p_ptr->afraid + 3 + randint1(dam));
 									break;
@@ -2386,13 +2386,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 						do_fear = 3 + randint1(dam);
 						break;
 					default:
-                        note = _("¤ÏÌ²¤ê¹ş¤ó¤Ç¤·¤Ş¤Ã¤¿¡ª", " falls asleep!");
+                        note = _("ã¯çœ ã‚Šè¾¼ã‚“ã§ã—ã¾ã£ãŸï¼", " falls asleep!");
 						do_sleep = 3 + randint1(dam);
 						break;
 				}
 			}
 
-            note_dies = _("¤ÎÀº¿À¤ÏÊø²õ¤·¡¢ÆùÂÎ¤ÏÈ´¤±³Ì¤È¤Ê¤Ã¤¿¡£", " collapses, a mindless husk.");
+            note_dies = _("ã®ç²¾ç¥ã¯å´©å£Šã—ã€è‚‰ä½“ã¯æŠœã‘æ®»ã¨ãªã£ãŸã€‚", " collapses, a mindless husk.");
 			break;
 		}
 
@@ -2402,7 +2402,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2410,13 +2410,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
                 dam = 0;
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 			}
 			else if ((r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
 			         (r_ptr->flags3 & RF3_ANIMAL) ||
 			         (r_ptr->level > randint1(3 * dam)))
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 				dam /= 3;
 
 				/*
@@ -2428,13 +2428,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				     (one_in_(2)))
 				{
 					note = NULL;
-					msg_format(_("%^s¤ÎÂÄÍî¤·¤¿Àº¿À¤Ï¹¶·â¤òÄ·¤ÍÊÖ¤·¤¿¡ª", 
+					msg_format(_("%^sã®å •è½ã—ãŸç²¾ç¥ã¯æ”»æ’ƒã‚’è·³ã­è¿”ã—ãŸï¼", 
                         (seen ? "%^s's corrupted mind backlashes your attack!" : 
                                 "%^ss corrupted mind backlashes your attack!")), m_name);
 					/* Saving throw */
 					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 					{
-                        msg_print(_("¤¢¤Ê¤¿¤Ï¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                        msg_print(_("ã‚ãªãŸã¯åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 					}
 					else
 					{
@@ -2442,7 +2442,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 						monster_desc(killer, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 						if (!CHECK_MULTISHADOW())
 						{
-                            msg_print(_("Ä¶Ç½ÎÏ¥Ñ¥ï¡¼¤òµÛ¤¤¤È¤é¤ì¤¿¡ª", "Your psychic energy is drained!"));
+                            msg_print(_("è¶…èƒ½åŠ›ãƒ‘ãƒ¯ãƒ¼ã‚’å¸ã„ã¨ã‚‰ã‚ŒãŸï¼", "Your psychic energy is drained!"));
 							p_ptr->csp -= damroll(5, dam) / 2;
 							if (p_ptr->csp < 0) p_ptr->csp = 0;
 							p_ptr->redraw |= PR_MANA;
@@ -2456,8 +2456,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			else if (dam > 0)
 			{
 				int b = damroll(5, dam) / 4;
-                cptr str = (p_ptr->pclass == CLASS_MINDCRAFTER) ? _("Ä¶Ç½ÎÏ¥Ñ¥ï¡¼", "psychic energy") : _("ËâÎÏ", "mana");
-                cptr msg = _("¤¢¤Ê¤¿¤Ï%s¤Î¶ìÄË¤ò%s¤ËÊÑ´¹¤·¤¿¡ª", 
+                cptr str = (p_ptr->pclass == CLASS_MINDCRAFTER) ? _("è¶…èƒ½åŠ›ãƒ‘ãƒ¯ãƒ¼", "psychic energy") : _("é­”åŠ›", "mana");
+                cptr msg = _("ã‚ãªãŸã¯%sã®è‹¦ç—›ã‚’%sã«å¤‰æ›ã—ãŸï¼", 
                      (seen ? "You convert %s's pain into %s!" : 
                              "You convert %ss pain into %s!"));
 				msg_format(msg, m_name, str);
@@ -2467,7 +2467,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				p_ptr->redraw |= PR_MANA;
 				p_ptr->window |= (PW_SPELL);
 			}
-            note_dies = _("¤ÎÀº¿À¤ÏÊø²õ¤·¡¢ÆùÂÎ¤ÏÈ´¤±³Ì¤È¤Ê¤Ã¤¿¡£", " collapses, a mindless husk.");
+            note_dies = _("ã®ç²¾ç¥ã¯å´©å£Šã—ã€è‚‰ä½“ã¯æŠœã‘æ®»ã¨ãªã£ãŸã€‚", " collapses, a mindless husk.");
 			break;
 		}
 
@@ -2477,7 +2477,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2510,7 +2510,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2525,7 +2525,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2541,7 +2541,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", " is immune.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2569,14 +2569,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				    (one_in_(2)))
 				{
                     note = NULL;
-                    msg_format(_("%^s¤ÎÂÄÍî¤·¤¿Àº¿À¤Ï¹¶·â¤òÄ·¤ÍÊÖ¤·¤¿¡ª",
+                    msg_format(_("%^sã®å •è½ã—ãŸç²¾ç¥ã¯æ”»æ’ƒã‚’è·³ã­è¿”ã—ãŸï¼",
                         (seen ? "%^s's corrupted mind backlashes your attack!" :
                         "%^ss corrupted mind backlashes your attack!")), m_name);
 
 					/* Saving throw */
 					if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
 					{
-                        msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                        msg_print(_("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 					}
 					else
 					{
@@ -2592,7 +2592,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 							default:
 							{
 								if (r_ptr->flags3 & RF3_NO_FEAR)
-                                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 								else
 									set_afraid(p_ptr->afraid + dam);
 							}
@@ -2602,7 +2602,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				else
 				{
 					/* No obvious effect */
-                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 					obvious = FALSE;
 				}
 			}
@@ -2610,7 +2610,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			{
 				if ((dam > 29) && (randint1(100) < dam))
 				{
-                    note = _("¤¬¤¢¤Ê¤¿¤ËÎìÂ°¤·¤¿¡£", " is in your thrall!");
+                    note = _("ãŒã‚ãªãŸã«éš·å±ã—ãŸã€‚", " is in your thrall!");
 					set_pet(m_ptr);
 				}
 				else
@@ -2643,7 +2643,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2651,13 +2651,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			do_stun = (randint1(15) + 1) / (r + 1);
 			if (r_ptr->flagsr & RFR_IM_COLD)
             {
-                note = _("¤Ë¤Ï¤«¤Ê¤êÂÑÀ­¤¬¤¢¤ë¡ª", " resists a lot.");
+                note = _("ã«ã¯ã‹ãªã‚Šè€æ€§ãŒã‚ã‚‹ï¼", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_COLD))
 			{
-                note = _("¤Ï¤Ò¤É¤¤ÄË¼ê¤ò¤¦¤±¤¿¡£", " is hit hard.");
+                note = _("ã¯ã²ã©ã„ç—›æ‰‹ã‚’ã†ã‘ãŸã€‚", " is hit hard.");
 				dam *= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
@@ -2672,7 +2672,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2685,7 +2685,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
 					if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
 				}
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 				dam = 0;
 			}
@@ -2701,7 +2701,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2714,7 +2714,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
 					if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
 				}
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				obvious = FALSE;
 				dam = 0;
 			}
@@ -2723,7 +2723,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				 (((r_ptr->level + randint1(20)) > randint1((caster_lev / 2) + randint1(10))) &&
 				 randint1(100) != 66))
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 				obvious = FALSE;
 				dam = 0;
 			}
@@ -2738,7 +2738,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2751,7 +2751,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			    (r_ptr->flags1 & RF1_QUESTOR) ||
 			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				do_poly = FALSE;
 				obvious = FALSE;
 			}
@@ -2770,7 +2770,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if ((p_ptr->inside_arena) || is_pet(m_ptr) || (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 			}
 			else
 			{
@@ -2780,7 +2780,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				/* Attempt to clone. */
 				if (multiply_monster(c_ptr->m_idx, TRUE, 0L))
 				{
-                    note = _("¤¬Ê¬Îö¤·¤¿¡ª", " spawns!");
+                    note = _("ãŒåˆ†è£‚ã—ãŸï¼", " spawns!");
 				}
 			}
 
@@ -2801,7 +2801,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (m_ptr->maxhp < m_ptr->max_maxhp)
 			{
-                if (seen_msg) msg_format(_("%^s¤Î¶¯¤µ¤¬Ìá¤Ã¤¿¡£", "%^s recovers %s vitality."), m_name, m_poss);
+                if (seen_msg) msg_format(_("%^sã®å¼·ã•ãŒæˆ»ã£ãŸã€‚", "%^s recovers %s vitality."), m_name, m_poss);
 				m_ptr->maxhp = m_ptr->max_maxhp;
 			}
 
@@ -2823,17 +2823,17 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			(void)set_monster_csleep(c_ptr->m_idx, 0);
 			if (MON_STUNNED(m_ptr))
 			{
-                if (seen_msg) msg_format(_("%^s¤ÏÛ¯Û°¾õÂÖ¤«¤éÎ©¤ÁÄ¾¤Ã¤¿¡£", "%^s is no longer stunned."), m_name);
+                if (seen_msg) msg_format(_("%^sã¯æœ¦æœ§çŠ¶æ…‹ã‹ã‚‰ç«‹ã¡ç›´ã£ãŸã€‚", "%^s is no longer stunned."), m_name);
 				(void)set_monster_stunned(c_ptr->m_idx, 0);
 			}
 			if (MON_CONFUSED(m_ptr))
 			{
-                if (seen_msg) msg_format(_("%^s¤Ïº®Íğ¤«¤éÎ©¤ÁÄ¾¤Ã¤¿¡£", "%^s is no longer confused."), m_name);
+                if (seen_msg) msg_format(_("%^sã¯æ··ä¹±ã‹ã‚‰ç«‹ã¡ç›´ã£ãŸã€‚", "%^s is no longer confused."), m_name);
 				(void)set_monster_confused(c_ptr->m_idx, 0);
 			}
 			if (MON_MONFEAR(m_ptr))
 			{
-                if (seen_msg) msg_format(_("%^s¤ÏÍ¦µ¤¤ò¼è¤êÌá¤·¤¿¡£", "%^s recovers %s courage."), m_name);
+                if (seen_msg) msg_format(_("%^sã¯å‹‡æ°—ã‚’å–ã‚Šæˆ»ã—ãŸã€‚", "%^s recovers %s courage."), m_name);
 				(void)set_monster_monfear(c_ptr->m_idx, 0);
 			}
 
@@ -2875,7 +2875,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 			/* Message */
-            note = _("¤ÏÂÎÎÏ¤ò²óÉü¤·¤¿¤è¤¦¤À¡£", " looks healthier.");
+            note = _("ã¯ä½“åŠ›ã‚’å›å¾©ã—ãŸã‚ˆã†ã ã€‚", " looks healthier.");
 
 			/* No "real" damage */
 			dam = 0;
@@ -2891,7 +2891,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			/* Speed up */
 			if (set_monster_fast(c_ptr->m_idx, MON_FAST(m_ptr) + 100))
 			{
-                note = _("¤ÎÆ°¤­¤¬Â®¤¯¤Ê¤Ã¤¿¡£", " starts moving faster.");
+                note = _("ã®å‹•ããŒé€Ÿããªã£ãŸã€‚", " starts moving faster.");
 			}
 
 			if (!who)
@@ -2915,7 +2915,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2924,7 +2924,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 			}
 
@@ -2933,7 +2933,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			{
 				if (set_monster_slow(c_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 				{
-                    note = _("¤ÎÆ°¤­¤¬ÃÙ¤¯¤Ê¤Ã¤¿¡£", " starts moving slower.");
+                    note = _("ã®å‹•ããŒé…ããªã£ãŸã€‚", " starts moving slower.");
 				}
 			}
 
@@ -2950,7 +2950,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2966,13 +2966,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
 				}
 				/* No obvious effect */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 			}
 			else
 			{
 				/* Go to sleep (much) later */
-                note = _("¤ÏÌ²¤ê¹ş¤ó¤Ç¤·¤Ş¤Ã¤¿¡ª", " falls asleep!");
+                note = _("ã¯çœ ã‚Šè¾¼ã‚“ã§ã—ã¾ã£ãŸï¼", " falls asleep!");
 				do_sleep = 500;
 			}
 
@@ -2989,7 +2989,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", " is immune.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2999,13 +2999,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			    !(r_ptr->flags3 & RF3_EVIL) ||
 			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 			}
 			else
 			{
 				/* Go to sleep (much) later */
-                note = _("¤ÏÆ°¤±¤Ê¤¯¤Ê¤Ã¤¿¡ª", " is suspended!");
+                note = _("ã¯å‹•ã‘ãªããªã£ãŸï¼", " is suspended!");
 				do_sleep = 500;
 			}
 
@@ -3021,7 +3021,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3030,13 +3030,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 			}
 			else
 			{
 				/* Go to sleep (much) later */
-                note = _("¤ÏÆ°¤±¤Ê¤¯¤Ê¤Ã¤¿¡ª", " is suspended!");
+                note = _("ã¯å‹•ã‘ãªããªã£ãŸï¼", " is suspended!");
 				do_sleep = 500;
 			}
 
@@ -3066,7 +3066,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3089,19 +3089,19 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 				/* Resist */
 				/* No obvious effect */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("¤Ï¤¢¤Ê¤¿¤ËÅ¨°Õ¤òÊú¤¤¤Æ¤¤¤ë¡ª", " hates you too much!");
+                note = _("ã¯ã‚ãªãŸã«æ•µæ„ã‚’æŠ±ã„ã¦ã„ã‚‹ï¼", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("¤ÏÆÍÁ³Í§¹¥Åª¤Ë¤Ê¤Ã¤¿¤è¤¦¤À¡ª", " suddenly seems friendly!");
+                note = _("ã¯çªç„¶å‹å¥½çš„ã«ãªã£ãŸã‚ˆã†ã ï¼", " suddenly seems friendly!");
 				set_pet(m_ptr);
 
 				chg_virtue(V_INDIVIDUALISM, -1);
@@ -3134,7 +3134,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3150,18 +3150,18 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("¤Ï¤¢¤Ê¤¿¤ËÅ¨°Õ¤òÊú¤¤¤Æ¤¤¤ë¡ª", " hates you too much!");
+                note = _("ã¯ã‚ãªãŸã«æ•µæ„ã‚’æŠ±ã„ã¦ã„ã‚‹ï¼", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("¤Ï´û¤Ë¤¢¤Ê¤¿¤ÎÅÛÎì¤À¡ª", " is in your thrall!");
+                note = _("ã¯æ—¢ã«ã‚ãªãŸã®å¥´éš·ã ï¼", " is in your thrall!");
 				set_pet(m_ptr);
 			}
 
@@ -3190,7 +3190,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3206,19 +3206,19 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("¤Ï¤¢¤Ê¤¿¤ËÅ¨°Õ¤òÊú¤¤¤Æ¤¤¤ë¡ª", " hates you too much!");
+                note = _("ã¯ã‚ãªãŸã«æ•µæ„ã‚’æŠ±ã„ã¦ã„ã‚‹ï¼", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("¤Ï´û¤Ë¤¢¤Ê¤¿¤ÎÅÛÎì¤À¡ª", " is in your thrall!");
+                note = _("ã¯æ—¢ã«ã‚ãªãŸã®å¥´éš·ã ï¼", " is in your thrall!");
 				set_pet(m_ptr);
 			}
 
@@ -3248,7 +3248,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3272,19 +3272,19 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 				/* Resist */
 				/* No obvious effect */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("¤Ï¤¢¤Ê¤¿¤ËÅ¨°Õ¤òÊú¤¤¤Æ¤¤¤ë¡ª", " hates you too much!");
+                note = _("ã¯ã‚ãªãŸã«æ•µæ„ã‚’æŠ±ã„ã¦ã„ã‚‹ï¼", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("¤Ï¤Ê¤Ä¤¤¤¿¡£", " is tamed!");
+                note = _("ã¯ãªã¤ã„ãŸã€‚", " is tamed!");
 				set_pet(m_ptr);
 
 				if (r_ptr->flags3 & RF3_ANIMAL)
@@ -3319,10 +3319,10 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flags3 & (RF3_NO_CONF)) dam -= 30;
 			if (dam < 1) dam = 1;
-            msg_format(_("%s¤ò¸«¤Ä¤á¤¿¡£", "You stare into %s."), m_name);
+            msg_format(_("%sã‚’è¦‹ã¤ã‚ãŸã€‚", "You stare into %s."), m_name);
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3339,19 +3339,19 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			{
 				/* Resist */
 				/* No obvious effect */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("¤Ï¤¢¤Ê¤¿¤ËÅ¨°Õ¤òÊú¤¤¤Æ¤¤¤ë¡ª", " hates you too much!");
+                note = _("ã¯ã‚ãªãŸã«æ•µæ„ã‚’æŠ±ã„ã¦ã„ã‚‹ï¼", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("¤ò»ÙÇÛ¤·¤¿¡£", " is tamed!");
+                note = _("ã‚’æ”¯é…ã—ãŸã€‚", " is tamed!");
 				set_pet(m_ptr);
 
 				if (r_ptr->flags3 & RF3_ANIMAL)
@@ -3370,7 +3370,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3393,7 +3393,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				do_conf = 0;
 
 				/* No obvious effect */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 			}
 
@@ -3408,7 +3408,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3423,7 +3423,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				do_stun = 0;
 
 				/* No obvious effect */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 			}
 
@@ -3458,8 +3458,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 
 				/* Special effect */
-                note = _("¤Ï¸÷¤Ë¿È¤ò¤¹¤¯¤á¤¿¡ª", " cringes from the light!");
-                note_dies = _("¤Ï¸÷¤ò¼õ¤±¤Æ¤·¤Ü¤ó¤Ç¤·¤Ş¤Ã¤¿¡ª", " shrivels away in the light!");
+                note = _("ã¯å…‰ã«èº«ã‚’ã™ãã‚ãŸï¼", " cringes from the light!");
+                note_dies = _("ã¯å…‰ã‚’å—ã‘ã¦ã—ã¼ã‚“ã§ã—ã¾ã£ãŸï¼", " shrivels away in the light!");
 			}
 
 			/* Normally no damage */
@@ -3481,22 +3481,22 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_LITE)
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 				dam *= 2; dam /= (randint1(6)+6);
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_LITE);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_LITE))
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
-                note = _("¤Ï¸÷¤Ë¿È¤ò¤¹¤¯¤á¤¿¡ª", " cringes from the light!");
-                note_dies = _("¤Ï¸÷¤ò¼õ¤±¤Æ¤·¤Ü¤ó¤Ç¤·¤Ş¤Ã¤¿¡ª", " shrivels away in the light!");
+                note = _("ã¯å…‰ã«èº«ã‚’ã™ãã‚ãŸï¼", " cringes from the light!");
+                note_dies = _("ã¯å…‰ã‚’å—ã‘ã¦ã—ã¼ã‚“ã§ã—ã¾ã£ãŸï¼", " shrivels away in the light!");
 				dam *= 2;
 			}
 			break;
@@ -3510,14 +3510,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_DARK)
             {
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 				dam *= 2; dam /= (randint1(6)+6);
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DARK);
 			}
@@ -3543,8 +3543,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
 
 				/* Cute little message */
-                note = _("¤ÎÈéÉæ¤¬¤¿¤À¤ì¤¿¡ª", " loses some skin!");
-                note_dies = _("¤Ï¥É¥í¥É¥í¤ËÍÏ¤±¤¿¡ª", " dissolves!");
+                note = _("ã®çš®è†šãŒãŸã ã‚ŒãŸï¼", " loses some skin!");
+                note_dies = _("ã¯ãƒ‰ãƒ­ãƒ‰ãƒ­ã«æº¶ã‘ãŸï¼", " dissolves!");
 			}
 
 			/* Usually, ignore the effects */
@@ -3571,13 +3571,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 					if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 					{
                         if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                        note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                        note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 						resists_tele = TRUE;
 					}
 					else if (r_ptr->level > randint1(100))
 					{
                         if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                        note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                        note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 						resists_tele = TRUE;
 					}
 				}
@@ -3616,13 +3616,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 					if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 					{
                         if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                        note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                        note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 						resists_tele = TRUE;
 					}
 					else if (r_ptr->level > randint1(100))
 					{
                         if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                        note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                        note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 						resists_tele = TRUE;
 					}
 				}
@@ -3657,13 +3657,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 				{
                     if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 					resists_tele = TRUE;
 				}
 				else if (r_ptr->level > randint1(100))
 				{
                     if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                    note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                    note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 					resists_tele = TRUE;
 				}
 			}
@@ -3707,7 +3707,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
 				{
 					/* No obvious effect */
-                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 					obvious = FALSE;
 					do_fear = 0;
 				}
@@ -3750,7 +3750,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
 				{
 					/* No obvious effect */
-                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 					obvious = FALSE;
 					do_fear = 0;
 				}
@@ -3789,7 +3789,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				obvious = FALSE;
 				do_fear = 0;
 			}
@@ -3819,8 +3819,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 
 				/* Message */
-                note = _("¤Ï¿È¿Ì¤¤¤·¤¿¡£", " shudders.");
-                note_dies = _("¤Ï¥É¥í¥É¥í¤ËÍÏ¤±¤¿¡ª", " dissolves!");
+                note = _("ã¯èº«éœ‡ã„ã—ãŸã€‚", " shudders.");
+                note_dies = _("ã¯ãƒ‰ãƒ­ãƒ‰ãƒ­ã«æº¶ã‘ãŸï¼", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -3856,8 +3856,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 
 				/* Message */
-                note = _("¤Ï¿È¿Ì¤¤¤·¤¿¡£", " shudders.");
-                note_dies = _("¤Ï¥É¥í¥É¥í¤ËÍÏ¤±¤¿¡ª", " dissolves!");
+                note = _("ã¯èº«éœ‡ã„ã—ãŸã€‚", " shudders.");
+                note_dies = _("ã¯ãƒ‰ãƒ­ãƒ‰ãƒ­ã«æº¶ã‘ãŸï¼", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -3892,8 +3892,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 
 				/* Message */
-                note = _("¤Ï¿È¿Ì¤¤¤·¤¿¡£", " shudders.");
-                note_dies = _("¤Ï¥É¥í¥É¥í¤ËÍÏ¤±¤¿¡ª", " dissolves!");
+                note = _("ã¯èº«éœ‡ã„ã—ãŸã€‚", " shudders.");
+                note_dies = _("ã¯ãƒ‰ãƒ­ãƒ‰ãƒ­ã«æº¶ã‘ãŸï¼", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -3925,8 +3925,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (seen) obvious = TRUE;
 
 				/* Message */
-                note = _("¤Ï¿È¿Ì¤¤¤·¤¿¡£", " shudders.");
-                note_dies = _("¤Ï¥É¥í¥É¥í¤ËÍÏ¤±¤¿¡ª", " dissolves!");
+                note = _("ã¯èº«éœ‡ã„ã—ãŸã€‚", " shudders.");
+                note_dies = _("ã¯ãƒ‰ãƒ­ãƒ‰ãƒ­ã«æº¶ã‘ãŸï¼", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -3961,8 +3961,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
 
 				/* Message */
-                note = _("¤Ï¿È¿Ì¤¤¤·¤¿¡£", " shudders.");
-                note_dies = _("¤Ï¥É¥í¥É¥í¤ËÍÏ¤±¤¿¡ª", " dissolves!");
+                note = _("ã¯èº«éœ‡ã„ã—ãŸã€‚", " shudders.");
+                note_dies = _("ã¯ãƒ‰ãƒ­ãƒ‰ãƒ­ã«æº¶ã‘ãŸï¼", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -3991,8 +3991,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if (seen) obvious = TRUE;
 
 			/* Message */
-            note = _("¤Ï¿È¿Ì¤¤¤·¤¿¡£", " shudders.");
-            note_dies = _("¤Ï¥É¥í¥É¥í¤ËÍÏ¤±¤¿¡ª", " dissolves!");
+            note = _("ã¯èº«éœ‡ã„ã—ãŸã€‚", " shudders.");
+            note_dies = _("ã¯ãƒ‰ãƒ­ãƒ‰ãƒ­ã«æº¶ã‘ãŸï¼", " dissolves!");
 			break;
 		}
 
@@ -4003,7 +4003,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4029,20 +4029,20 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 						{
 							/* Get the monster name */
 							monster_desc(killer, caster_ptr, 0);
-                            msg_format(_("%^s¤Ïµ¤Ê¬¤¬ÎÉ¤µ¤½¤¦¤À¡£", "%^s appears healthier."), killer);
+                            msg_format(_("%^sã¯æ°—åˆ†ãŒè‰¯ã•ãã†ã ã€‚", "%^s appears healthier."), killer);
 						}
 					}
 				}
 				else
 				{
 					/* Message */
-                    msg_format(_("%s¤«¤éÀº¿À¥¨¥Í¥ë¥®¡¼¤òµÛ¤¤¤È¤Ã¤¿¡£", "You draw psychic energy from %s."), m_name);
+                    msg_format(_("%sã‹ã‚‰ç²¾ç¥ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’å¸ã„ã¨ã£ãŸã€‚", "You draw psychic energy from %s."), m_name);
 					(void)hp_player(dam);
 				}
 			}
 			else
 			{
-                if (see_s_msg) msg_format(_("%s¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", "%s is unaffected."), m_name);
+                if (see_s_msg) msg_format(_("%sã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", "%s is unaffected."), m_name);
 			}
 			dam = 0;
 			break;
@@ -4053,11 +4053,11 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%s¤ò¤¸¤Ã¤ÈâË¤ó¤À¡£", "You gaze intently at %s."), m_name);
+            if (!who) msg_format(_("%sã‚’ã˜ã£ã¨ç¨ã‚“ã ã€‚", "You gaze intently at %s."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4073,25 +4073,25 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				{
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
                 }
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
                 if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡£", " resists.");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ã€‚", " resists.");
 				dam /= 3;
 			}
 			else
 			{
-                note = _("¤ÏÀº¿À¹¶·â¤ò¿©¤é¤Ã¤¿¡£", " is blasted by psionic energy.");
-                note_dies = _("¤ÎÀº¿À¤ÏÊø²õ¤·¡¢ÆùÂÎ¤ÏÈ´¤±³Ì¤È¤Ê¤Ã¤¿¡£", " collapses, a mindless husk.");
+                note = _("ã¯ç²¾ç¥æ”»æ’ƒã‚’é£Ÿã‚‰ã£ãŸã€‚", " is blasted by psionic energy.");
+                note_dies = _("ã®ç²¾ç¥ã¯å´©å£Šã—ã€è‚‰ä½“ã¯æŠœã‘æ®»ã¨ãªã£ãŸã€‚", " collapses, a mindless husk.");
 
 				if (who > 0) do_conf = randint0(4) + 4;
 				else do_conf = randint0(8) + 8;
@@ -4104,11 +4104,11 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%s¤ò¤¸¤Ã¤ÈâË¤ó¤À¡£", "You gaze intently at %s."), m_name);
+            if (!who) msg_format(_("%sã‚’ã˜ã£ã¨ç¨ã‚“ã ã€‚", "You gaze intently at %s."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4124,25 +4124,25 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				{
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
                 }
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
                 if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
 			{
                 if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
-                note = _("¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", " resists!");
+                note = _("ã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", " resists!");
 				dam /= 3;
 			}
 			else
 			{
-                note = _("¤ÏÀº¿À¹¶·â¤ò¿©¤é¤Ã¤¿¡£", " is blasted by psionic energy.");
-                note_dies = _("¤ÎÀº¿À¤ÏÊø²õ¤·¡¢ÆùÂÎ¤ÏÈ´¤±³Ì¤È¤Ê¤Ã¤¿¡£", " collapses, a mindless husk.");
+                note = _("ã¯ç²¾ç¥æ”»æ’ƒã‚’é£Ÿã‚‰ã£ãŸã€‚", " is blasted by psionic energy.");
+                note_dies = _("ã®ç²¾ç¥ã¯å´©å£Šã—ã€è‚‰ä½“ã¯æŠœã‘æ®»ã¨ãªã£ãŸã€‚", " collapses, a mindless husk.");
 
 				if (who > 0)
 				{
@@ -4164,11 +4164,11 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%s¤ò»Øº¹¤·¤Æ¼ö¤¤¤ò¤«¤±¤¿¡£", "You point at %s and curse."), m_name);
+            if (!who) msg_format(_("%sã‚’æŒ‡å·®ã—ã¦å‘ªã„ã‚’ã‹ã‘ãŸã€‚", "You point at %s and curse."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4177,7 +4177,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			/* Attempt a saving throw */
 			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4188,11 +4188,11 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%s¤ò»Øº¹¤·¤Æ¶²¤í¤·¤²¤Ë¼ö¤¤¤ò¤«¤±¤¿¡£", "You point at %s and curse horribly."), m_name);
+            if (!who) msg_format(_("%sã‚’æŒ‡å·®ã—ã¦æã‚ã—ã’ã«å‘ªã„ã‚’ã‹ã‘ãŸã€‚", "You point at %s and curse horribly."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4201,7 +4201,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			/* Attempt a saving throw */
 			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4212,11 +4212,11 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%s¤ò»Øº¹¤·¡¢¶²¤í¤·¤²¤Ë¼öÊ¸¤ò¾§¤¨¤¿¡ª", "You point at %s, incanting terribly!"), m_name);
+            if (!who) msg_format(_("%sã‚’æŒ‡å·®ã—ã€æã‚ã—ã’ã«å‘ªæ–‡ã‚’å”±ãˆãŸï¼", "You point at %s, incanting terribly!"), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4225,7 +4225,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			/* Attempt a saving throw */
 			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4237,12 +4237,12 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if (seen) obvious = TRUE;
 			/* Message */
 			if (!who) 
-                msg_format(_("%s¤ÎÈë¹¦¤òÆÍ¤¤¤Æ¡¢¡Ö¤ªÁ°¤Ï´û¤Ë»à¤ó¤Ç¤¤¤ë¡×¤È¶«¤ó¤À¡£", 
+                msg_format(_("%sã®ç§˜å­”ã‚’çªã„ã¦ã€ã€ŒãŠå‰ã¯æ—¢ã«æ­»ã‚“ã§ã„ã‚‹ã€ã¨å«ã‚“ã ã€‚", 
                              "You point at %s, screaming the word, 'DIE!'."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4251,7 +4251,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			/* Attempt a saving throw */
 			if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (caster_ptr->r_idx != MON_KENSHIROU)))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4264,7 +4264,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4272,7 +4272,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flags1 & RF1_UNIQUE)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 			}
 			else
@@ -4286,7 +4286,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				}
 				else
 				{
-                    note = _("¤ÏÂÑÀ­¤ò»ı¤Ã¤Æ¤¤¤ë¡ª", "resists!");
+                    note = _("ã¯è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ï¼", "resists!");
 					dam = 0;
 				}
 			}
@@ -4300,7 +4300,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if ((p_ptr->inside_quest && (quest[p_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(m_ptr)) ||
 			    (r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL)) || (r_ptr->flags7 & (RF7_UNIQUE2)) || (r_ptr->flags1 & RF1_QUESTOR) || m_ptr->parent_m_idx)
             {
-                msg_format(_("%s¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", "%s is unaffected."), m_name);
+                msg_format(_("%sã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", "%s is unaffected."), m_name);
 				skipped = TRUE;
 				break;
 			}
@@ -4313,13 +4313,13 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (m_ptr->hp >= nokori_hp)
 			{
-                msg_format(_("¤â¤Ã¤È¼å¤é¤»¤Ê¤¤¤È¡£", "You need to weaken %s more."), m_name);
+                msg_format(_("ã‚‚ã£ã¨å¼±ã‚‰ã›ãªã„ã¨ã€‚", "You need to weaken %s more."), m_name);
 				skipped = TRUE;
 			}
 			else if (m_ptr->hp < randint0(nokori_hp))
 			{
 				if (m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(c_ptr->m_idx, FALSE, MON_CHAMELEON);
-                msg_format(_("%s¤òÊá¤¨¤¿¡ª", "You capture %^s!"), m_name);
+                msg_format(_("%sã‚’æ•ãˆãŸï¼", "You capture %^s!"), m_name);
 				cap_mon = m_ptr->r_idx;
 				cap_mspeed = m_ptr->mspeed;
 				cap_hp = m_ptr->hp;
@@ -4329,7 +4329,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				{
 					if (rakuba(-1, FALSE))
 					{
-                        msg_format(_("ÃÏÌÌ¤ËÍî¤È¤µ¤ì¤¿¡£", "You have fallen from %s."), m_name);
+                        msg_format(_("åœ°é¢ã«è½ã¨ã•ã‚ŒãŸã€‚", "You have fallen from %s."), m_name);
 					}
 				}
 
@@ -4339,7 +4339,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			}
 			else
 			{
-                msg_format(_("¤¦¤Ş¤¯Êá¤Ş¤¨¤é¤ì¤Ê¤«¤Ã¤¿¡£", "You failed to capture %s."), m_name);
+                msg_format(_("ã†ã¾ãæ•ã¾ãˆã‚‰ã‚Œãªã‹ã£ãŸã€‚", "You failed to capture %s."), m_name);
 				skipped = TRUE;
 			}
 			break;
@@ -4362,14 +4362,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flags2 & RF2_EMPTY_MIND)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
@@ -4377,7 +4377,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			}
 			if (MON_CSLEEP(m_ptr))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 				skipped = TRUE;
 				break;
@@ -4394,7 +4394,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
                 {
-                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 					obvious = FALSE;
 				}
 
@@ -4403,7 +4403,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				{
 					if (set_monster_slow(c_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
-                        note = _("¤ÎÆ°¤­¤¬ÃÙ¤¯¤Ê¤Ã¤¿¡£", " starts moving slower.");
+                        note = _("ã®å‹•ããŒé…ããªã£ãŸã€‚", " starts moving slower.");
 					}
 				}
 			}
@@ -4420,7 +4420,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 					do_stun = 0;
 
 					/* No obvious effect */
-                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 					obvious = FALSE;
 				}
 			}
@@ -4439,20 +4439,20 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 					}
 
 					/* No obvious effect */
-                    note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                    note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 					obvious = FALSE;
 				}
 				else
 				{
 					/* Go to sleep (much) later */
-                    note = _("¤ÏÌ²¤ê¹ş¤ó¤Ç¤·¤Ş¤Ã¤¿¡ª", " falls asleep!");
+                    note = _("ã¯çœ ã‚Šè¾¼ã‚“ã§ã—ã¾ã£ãŸï¼", " falls asleep!");
 					do_sleep = 500;
 				}
 			}
 
 			if (!done)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 			}
 
 			/* No "real" damage */
@@ -4467,15 +4467,15 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 
-            if (genocide_aux(c_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("¥â¥ó¥¹¥¿¡¼¾ÃÌÇ", "Genocide One")))
+            if (genocide_aux(c_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ¶ˆæ»…", "Genocide One")))
 			{
-                if (seen_msg) msg_format(_("%s¤Ï¾ÃÌÇ¤·¤¿¡ª", "%^s disappered!"), m_name);
+                if (seen_msg) msg_format(_("%sã¯æ¶ˆæ»…ã—ãŸï¼", "%^s disappered!"), m_name);
 				chg_virtue(V_VITALITY, -1);
 				return TRUE;
 			}
@@ -4486,7 +4486,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 		case GF_PHOTO:
 		{
-			if (!who) msg_format(_("%s¤ò¼Ì¿¿¤Ë»£¤Ã¤¿¡£", "You take a photograph of %s."), m_name);
+			if (!who) msg_format(_("%sã‚’å†™çœŸã«æ’®ã£ãŸã€‚", "You take a photograph of %s."), m_name);
 			/* Hurt by light */
 			if (r_ptr->flags3 & (RF3_HURT_LITE))
 			{
@@ -4497,8 +4497,8 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 
 				/* Special effect */
-                note = _("¤Ï¸÷¤Ë¿È¤ò¤¹¤¯¤á¤¿¡ª", " cringes from the light!");
-                note_dies = _("¤Ï¸÷¤ò¼õ¤±¤Æ¤·¤Ü¤ó¤Ç¤·¤Ş¤Ã¤¿¡ª", " shrivels away in the light!");
+                note = _("ã¯å…‰ã«èº«ã‚’ã™ãã‚ãŸï¼", " cringes from the light!");
+                note_dies = _("ã¯å…‰ã‚’å—ã‘ã¦ã—ã¼ã‚“ã§ã—ã¾ã£ãŸï¼", " shrivels away in the light!");
 			}
 
 			/* Normally no damage */
@@ -4521,7 +4521,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4542,7 +4542,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				/* No need to tame your pet */
 				if (is_pet(m_ptr))
 				{
-                    note = _("¤ÎÆ°¤­¤¬Â®¤¯¤Ê¤Ã¤¿¡£", " starts moving faster.");
+                    note = _("ã®å‹•ããŒé€Ÿããªã£ãŸã€‚", " starts moving faster.");
 					(void)set_monster_fast(c_ptr->m_idx, MON_FAST(m_ptr) + 100);
 					success = TRUE;
 				}
@@ -4559,7 +4559,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				}
 				else
 				{
-                    note = _("¤ò»ÙÇÛ¤·¤¿¡£", " is tamed!");
+                    note = _("ã‚’æ”¯é…ã—ãŸã€‚", " is tamed!");
 					set_pet(m_ptr);
 					(void)set_monster_fast(c_ptr->m_idx, MON_FAST(m_ptr) + 100);
 
@@ -4589,7 +4589,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
             {
-                note = _("¤Ë¤Ï´°Á´¤ÊÂÑÀ­¤¬¤¢¤ë¡ª", " is immune.");
+                note = _("ã«ã¯å®Œå…¨ãªè€æ€§ãŒã‚ã‚‹ï¼", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4598,7 +4598,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			/* Attempt a saving throw */
 			if (randint0(100 + dam) < (r_ptr->level + 50))
             {
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4644,7 +4644,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 	/* Modify the damage */
 	tmp = dam;
 	dam = mon_damage_mod(m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
-    if ((tmp > 0) && (dam == 0)) note = _("¤Ï¥À¥á¡¼¥¸¤ò¼õ¤±¤Æ¤¤¤Ê¤¤¡£", " is unharmed.");
+    if ((tmp > 0) && (dam == 0)) note = _("ã¯ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ãªã„ã€‚", " is unharmed.");
 
 	/* Check for death */
 	if (dam > m_ptr->hp)
@@ -4665,12 +4665,12 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			/* Get stunned */
 			if (MON_STUNNED(m_ptr))
 			{
-                note = _("¤Ï¤Ò¤É¤¯¤â¤¦¤í¤¦¤È¤·¤¿¡£", " is more dazed.");
+                note = _("ã¯ã²ã©ãã‚‚ã†ã‚ã†ã¨ã—ãŸã€‚", " is more dazed.");
                 tmp = MON_STUNNED(m_ptr) + (do_stun / 2);
 			}
 			else
 			{
-                note = _("¤Ï¤â¤¦¤í¤¦¤È¤·¤¿¡£", " is dazed.");
+                note = _("ã¯ã‚‚ã†ã‚ã†ã¨ã—ãŸã€‚", " is dazed.");
 				tmp = do_stun;
 			}
 
@@ -4692,14 +4692,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			/* Already partially confused */
 			if (MON_CONFUSED(m_ptr))
 			{
-                note = _("¤Ï¤µ¤é¤Ëº®Íğ¤·¤¿¤è¤¦¤À¡£", " looks more confused.");
+                note = _("ã¯ã•ã‚‰ã«æ··ä¹±ã—ãŸã‚ˆã†ã ã€‚", " looks more confused.");
 				tmp = MON_CONFUSED(m_ptr) + (do_conf / 2);
 			}
 
 			/* Was not confused */
 			else
 			{
-                note = _("¤Ïº®Íğ¤·¤¿¤è¤¦¤À¡£", " looks confused.");
+                note = _("ã¯æ··ä¹±ã—ãŸã‚ˆã†ã ã€‚", " looks confused.");
 				tmp = do_conf;
 			}
 
@@ -4719,7 +4719,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (do_time)
 			{
-                note = _("¤Ï¼å¤¯¤Ê¤Ã¤¿¤è¤¦¤À¡£", " seems weakened.");
+                note = _("ã¯å¼±ããªã£ãŸã‚ˆã†ã ã€‚", " seems weakened.");
 				m_ptr->maxhp -= do_time;
 				if ((m_ptr->hp - dam) > m_ptr->maxhp) dam = m_ptr->hp - m_ptr->maxhp;
 			}
@@ -4735,7 +4735,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (seen) obvious = TRUE;
 
 				/* Monster polymorphs */
-                note = _("¤¬ÊÑ¿È¤·¤¿¡ª", " changes!");
+                note = _("ãŒå¤‰èº«ã—ãŸï¼", " changes!");
 
 				/* Turn off the damage */
 				dam = 0;
@@ -4743,7 +4743,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			else
 			{
 				/* No polymorph */
-                note = _("¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£", " is unaffected.");
+                note = _("ã«ã¯åŠ¹æœãŒãªã‹ã£ãŸã€‚", " is unaffected.");
 			}
 
 			/* Hack -- Get new monster */
@@ -4760,7 +4760,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if (seen) obvious = TRUE;
 
 			/* Message */
-            note = _("¤¬¾Ã¤¨µî¤Ã¤¿¡ª", " disappears!");
+            note = _("ãŒæ¶ˆãˆå»ã£ãŸï¼", " disappears!");
 
 			if (!who) chg_virtue(V_VALOUR, -1);
 
@@ -4837,7 +4837,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 			if (sad)
 			{
-                msg_print(_("¾¯¤·Èá¤·¤¤µ¤Ê¬¤¬¤·¤¿¡£", "You feel sad for a moment."));
+                msg_print(_("å°‘ã—æ‚²ã—ã„æ°—åˆ†ãŒã—ãŸã€‚", "You feel sad for a moment."));
 			}
 		}
 
@@ -4864,7 +4864,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 
 	else if (heal_leper)
 	{
-        if (seen_msg) msg_print(_("ÉÔ·é¤ÊÉÂ¿Í¤ÏÉÂµ¤¤¬¼£¤Ã¤¿¡ª", "The Mangy looking leper is healed!"));
+        if (seen_msg) msg_print(_("ä¸æ½”ãªç—…äººã¯ç—…æ°—ãŒæ²»ã£ãŸï¼", "The Mangy looking leper is healed!"));
 
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
@@ -4915,7 +4915,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				sound(SOUND_FLEE);
 
 				/* Message */
-                msg_format(_("%^s¤Ï¶²Éİ¤·¤ÆÆ¨¤²½Ğ¤·¤¿¡ª", "%^s flees in terror!"), m_name);
+                msg_format(_("%^sã¯ææ€–ã—ã¦é€ƒã’å‡ºã—ãŸï¼", "%^s flees in terror!"), m_name);
 			}
 
 			/* Hack -- handle sleep */
@@ -4934,7 +4934,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			case 1: case 2:
 				if (!count)
 				{
-                    msg_print(_("ÃÏÌÌ¤¬ÍÉ¤ì¤¿...", "The ground trembles..."));
+                    msg_print(_("åœ°é¢ãŒæºã‚ŒãŸ...", "The ground trembles..."));
 					earthquake(ty, tx, 4 + randint0(4));
 					if (!one_in_(6)) break;
 				}
@@ -4942,7 +4942,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (!count)
 				{
 					int dam = damroll(10, 10);
-                    msg_print(_("½ã¿è¤ÊËâÎÏ¤Î¼¡¸µ¤Ø¤ÎÈâ¤¬³«¤¤¤¿¡ª", "A portal opens to a plane of raw mana!"));
+                    msg_print(_("ç´”ç²‹ãªé­”åŠ›ã®æ¬¡å…ƒã¸ã®æ‰‰ãŒé–‹ã„ãŸï¼", "A portal opens to a plane of raw mana!"));
 
 					project(0, 8, ty,tx, dam, GF_MANA, curse_flg, -1);
 					if (!one_in_(6)) break;
@@ -4950,14 +4950,14 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			case 7: case 8:
 				if (!count)
 				{
-                    msg_print(_("¶õ´Ö¤¬ÏÄ¤ó¤À¡ª", "Space warps about you!"));
+                    msg_print(_("ç©ºé–“ãŒæ­ªã‚“ã ï¼", "Space warps about you!"));
 
 					if (m_ptr->r_idx) teleport_away(c_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
 					if (one_in_(13)) count += activate_hi_summon(ty, tx, TRUE);
 					if (!one_in_(6)) break;
 				}
 			case 9: case 10: case 11:
-                msg_print(_("¥¨¥Í¥ë¥®¡¼¤Î¤¦¤Í¤ê¤ò´¶¤¸¤¿¡ª", "You feel a surge of energy!"));
+                msg_print(_("ã‚¨ãƒãƒ«ã‚®ãƒ¼ã®ã†ã­ã‚Šã‚’æ„Ÿã˜ãŸï¼", "You feel a surge of energy!"));
 				project(0, 7, ty, tx, 50, GF_DISINTEGRATE, curse_flg, -1);
 				if (!one_in_(6)) break;
 			case 12: case 13: case 14: case 15: case 16:
@@ -4979,7 +4979,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			}
 			case 23: case 24: case 25:
 				if (p_ptr->hold_exp && (randint0(100) < 75)) break;
-                msg_print(_("·Ğ¸³ÃÍ¤¬ÂÎ¤«¤éµÛ¤¤¼è¤é¤ì¤¿µ¤¤¬¤¹¤ë¡ª", "You feel your experience draining away..."));
+                msg_print(_("çµŒé¨“å€¤ãŒä½“ã‹ã‚‰å¸ã„å–ã‚‰ã‚ŒãŸæ°—ãŒã™ã‚‹ï¼", "You feel your experience draining away..."));
 
 				if (p_ptr->hold_exp) lose_exp(p_ptr->exp / 160);
 				else lose_exp(p_ptr->exp / 16);
@@ -5152,11 +5152,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		int max_attempts = 10;
 
         if (blind) 
-            msg_print(_("²¿¤«¤¬Ä·¤ÍÊÖ¤Ã¤¿¡ª", "Something bounces!"));
+            msg_print(_("ä½•ã‹ãŒè·³ã­è¿”ã£ãŸï¼", "Something bounces!"));
 		else if (p_ptr->special_defense & KATA_FUUJIN) 
-            msg_print(_("É÷¤ÎÇ¡¤¯Éğ´ï¤ò¿¶¤ë¤Ã¤ÆÃÆ¤­ÊÖ¤·¤¿¡ª", "The attack bounces!"));
+            msg_print(_("é¢¨ã®å¦‚ãæ­¦å™¨ã‚’æŒ¯ã‚‹ã£ã¦å¼¾ãè¿”ã—ãŸï¼", "The attack bounces!"));
 		else 
-            msg_print(_("¹¶·â¤¬Ä·¤ÍÊÖ¤Ã¤¿¡ª", "The attack bounces!"));
+            msg_print(_("æ”»æ’ƒãŒè·³ã­è¿”ã£ãŸï¼", "The attack bounces!"));
 
 
 		/* Choose 'new' target */
@@ -5218,15 +5218,15 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		switch (who)
 		{
 		case PROJECT_WHO_UNCTRL_POWER:
-            strcpy(killer, _("À©¸æ¤Ç¤­¤Ê¤¤ÎÏ¤ÎÈÅÎ®", "uncontrollable power storm"));
+            strcpy(killer, _("åˆ¶å¾¡ã§ããªã„åŠ›ã®æ°¾æµ", "uncontrollable power storm"));
 			break;
 
 		case PROJECT_WHO_GLASS_SHARDS:
-            strcpy(killer, _("¥¬¥é¥¹¤ÎÇËÊÒ", "shards of glass"));
+            strcpy(killer, _("ã‚¬ãƒ©ã‚¹ã®ç ´ç‰‡", "shards of glass"));
 			break;
 
 		default:
-            strcpy(killer, _("æ«", "a trap"));
+            strcpy(killer, _("ç½ ", "a trap"));
 			break;
 		}
 
@@ -5240,7 +5240,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Standard damage -- hurts inventory too */
 		case GF_ACID:
 		{
-            if (fuzzy) msg_print(_("»À¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by acid!"));			
+            if (fuzzy) msg_print(_("é…¸ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by acid!"));			
 			get_damage = acid_dam(dam, killer, monspell, FALSE);
 			break;
 		}
@@ -5248,7 +5248,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Standard damage -- hurts inventory too */
 		case GF_FIRE:
 		{
-            if (fuzzy) msg_print(_("²Ğ±ê¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by fire!"));
+            if (fuzzy) msg_print(_("ç«ç‚ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by fire!"));
             get_damage = fire_dam(dam, killer, monspell, FALSE);
 			break;
 		}
@@ -5256,7 +5256,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Standard damage -- hurts inventory too */
 		case GF_COLD:
 		{
-			if (fuzzy) msg_print(_("Îäµ¤¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by cold!"));
+			if (fuzzy) msg_print(_("å†·æ°—ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by cold!"));
 			get_damage = cold_dam(dam, killer, monspell, FALSE);
 			break;
 		}
@@ -5264,7 +5264,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Standard damage -- hurts inventory too */
 		case GF_ELEC:
 		{
-			if (fuzzy) msg_print(_("ÅÅ·â¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by lightning!"));
+			if (fuzzy) msg_print(_("é›»æ’ƒã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by lightning!"));
 			get_damage = elec_dam(dam, killer, monspell, FALSE);
 			break;
 		}
@@ -5273,7 +5273,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		case GF_POIS:
 		{
 			bool double_resist = IS_OPPOSE_POIS();
-            if (fuzzy) msg_print(_("ÆÇ¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by poison!"));
+            if (fuzzy) msg_print(_("æ¯’ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by poison!"));
 
 			if (p_ptr->resist_pois) dam = (dam + 2) / 3;
 			if (double_resist) dam = (dam + 2) / 3;
@@ -5297,7 +5297,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		case GF_NUKE:
 		{
 			bool double_resist = IS_OPPOSE_POIS();
-            if (fuzzy) msg_print(_("Êü¼ÍÇ½¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by radiation!"));
+            if (fuzzy) msg_print(_("æ”¾å°„èƒ½ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by radiation!"));
 
 			if (p_ptr->resist_pois) dam = (2 * dam + 2) / 5;
 			if (double_resist) dam = (2 * dam + 2) / 5;
@@ -5308,7 +5308,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 				if (one_in_(5)) /* 6 */
 				{
-                    msg_print(_("´ñ·ÁÅª¤ÊÊÑ¿È¤ò¿ë¤²¤¿¡ª", "You undergo a freakish metamorphosis!"));
+                    msg_print(_("å¥‡å½¢çš„ãªå¤‰èº«ã‚’é‚ã’ãŸï¼", "You undergo a freakish metamorphosis!"));
 					if (one_in_(4)) /* 4 */
 						do_poly_self();
 					else
@@ -5326,7 +5326,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Standard damage */
 		case GF_MISSILE:
 		{
-            if (fuzzy) msg_print(_("²¿¤«¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something!"));
+            if (fuzzy) msg_print(_("ä½•ã‹ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something!"));
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
@@ -5334,7 +5334,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Holy Orb -- Player only takes partial damage */
 		case GF_HOLY_FIRE:
 		{
-            if (fuzzy) msg_print(_("²¿¤«¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something!"));
+            if (fuzzy) msg_print(_("ä½•ã‹ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something!"));
 			if (p_ptr->align > 10)
 				dam /= 2;
 			else if (p_ptr->align < -10)
@@ -5345,7 +5345,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 		case GF_HELL_FIRE:
 		{
-            if (fuzzy) msg_print(_("²¿¤«¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something!"));
+            if (fuzzy) msg_print(_("ä½•ã‹ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something!"));
 			if (p_ptr->align > 10)
 				dam *= 2;
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -5357,11 +5357,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		{
             if (fuzzy)
             {
-                msg_print(_("²¿¤«±Ô¤¤¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something sharp!"));
+                msg_print(_("ä½•ã‹é‹­ã„ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something sharp!"));
             }
 			else if ((inventory[INVEN_RARM].name1 == ART_ZANTETSU) || (inventory[INVEN_LARM].name1 == ART_ZANTETSU))
 			{
-                msg_print(_("Ìğ¤ò»Â¤ê¼Î¤Æ¤¿¡ª", "You cut down the arrow!"));
+                msg_print(_("çŸ¢ã‚’æ–¬ã‚Šæ¨ã¦ãŸï¼", "You cut down the arrow!"));
 				break;
 			}
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -5371,7 +5371,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Plasma -- XXX No resist */
 		case GF_PLASMA:
 		{
-			if (fuzzy) msg_print(_("²¿¤«¤È¤Æ¤âÇ®¤¤¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something *HOT*!"));
+			if (fuzzy) msg_print(_("ä½•ã‹ã¨ã¦ã‚‚ç†±ã„ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something *HOT*!"));
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 
 			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
@@ -5393,7 +5393,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Nether -- drain experience */
 		case GF_NETHER:
 		{
-			if (fuzzy) msg_print(_("ÃÏ¹ö¤ÎÎÏ¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by nether forces!"));
+			if (fuzzy) msg_print(_("åœ°ç„ã®åŠ›ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by nether forces!"));
 			if (p_ptr->resist_neth)
 			{
 				if (!prace_is_(RACE_SPECTRE))
@@ -5403,7 +5403,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 			if (prace_is_(RACE_SPECTRE) && !CHECK_MULTISHADOW())
 			{
-                msg_print(_("µ¤Ê¬¤¬¤è¤¯¤Ê¤Ã¤¿¡£", "You feel invigorated!"));
+                msg_print(_("æ°—åˆ†ãŒã‚ˆããªã£ãŸã€‚", "You feel invigorated!"));
 				hp_player(dam / 4);
 				learn_spell(monspell);
 			}
@@ -5418,7 +5418,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Water -- stun/confuse */
 		case GF_WATER:
 		{
-			if (fuzzy) msg_print(_("²¿¤«¼¾¤Ã¤¿¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something wet!"));
+			if (fuzzy) msg_print(_("ä½•ã‹æ¹¿ã£ãŸã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something wet!"));
             if (!CHECK_MULTISHADOW())
 			{
 				if (!p_ptr->resist_sound)
@@ -5443,7 +5443,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Chaos -- many effects */
 		case GF_CHAOS:
 		{
-            if (fuzzy) msg_print(_("ÌµÃá½ø¤ÎÇÈÆ°¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by a wave of anarchy!"));
+            if (fuzzy) msg_print(_("ç„¡ç§©åºã®æ³¢å‹•ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by a wave of anarchy!"));
 			if (p_ptr->resist_chaos)
 			{
 				dam *= 6; dam /= (randint1(4) + 7);
@@ -5460,7 +5460,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 					(void)set_image(p_ptr->image + randint1(10));
 					if (one_in_(3))
 					{
-                        msg_print(_("¤¢¤Ê¤¿¤Î¿ÈÂÎ¤Ï¥«¥ª¥¹¤ÎÎÏ¤ÇÇ±¤¸¶Ê¤²¤é¤ì¤¿¡ª", "Your body is twisted by chaos!"));
+                        msg_print(_("ã‚ãªãŸã®èº«ä½“ã¯ã‚«ã‚ªã‚¹ã®åŠ›ã§æ»ã˜æ›²ã’ã‚‰ã‚ŒãŸï¼", "Your body is twisted by chaos!"));
 						(void)gain_random_mutation(0);
 					}
 				}
@@ -5483,7 +5483,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Shards -- mostly cutting */
 		case GF_SHARDS:
 		{
-			if (fuzzy) msg_print(_("²¿¤«±Ô¤¤¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something sharp!"));
+			if (fuzzy) msg_print(_("ä½•ã‹é‹­ã„ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something sharp!"));
 			if (p_ptr->resist_shard)
 			{
 				dam *= 6; dam /= (randint1(4) + 7);
@@ -5505,7 +5505,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Sound -- mostly stunning */
 		case GF_SOUND:
 		{
-			if (fuzzy) msg_print(_("¹ì²»¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by a loud noise!"));
+			if (fuzzy) msg_print(_("è½ŸéŸ³ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by a loud noise!"));
 			if (p_ptr->resist_sound)
 			{
 				dam *= 5; dam /= (randint1(4) + 7);
@@ -5528,7 +5528,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Pure confusion */
 		case GF_CONFUSION:
 		{
-			if (fuzzy) msg_print(_("²¿¤«º®Íğ¤¹¤ë¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something puzzling!"));
+			if (fuzzy) msg_print(_("ä½•ã‹æ··ä¹±ã™ã‚‹ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something puzzling!"));
 			if (p_ptr->resist_conf)
 			{
 				dam *= 5; dam /= (randint1(4) + 7);
@@ -5544,7 +5544,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Disenchantment -- see above */
 		case GF_DISENCHANT:
 		{
-			if (fuzzy) msg_print(_("²¿¤«¤µ¤¨¤Ê¤¤¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something static!"));
+			if (fuzzy) msg_print(_("ä½•ã‹ã•ãˆãªã„ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something static!"));
 			if (p_ptr->resist_disen)
 			{
 				dam *= 6; dam /= (randint1(4) + 7);
@@ -5560,7 +5560,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Nexus -- see above */
 		case GF_NEXUS:
 		{
-			if (fuzzy) msg_print(_("²¿¤«´ñÌ¯¤Ê¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something strange!"));
+			if (fuzzy) msg_print(_("ä½•ã‹å¥‡å¦™ãªã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something strange!"));
 			if (p_ptr->resist_nexus)
 			{
 				dam *= 6; dam /= (randint1(4) + 7);
@@ -5576,7 +5576,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Force -- mostly stun */
 		case GF_FORCE:
 		{
-			if (fuzzy) msg_print(_("±¿Æ°¥¨¥Í¥ë¥®¡¼¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by kinetic force!"));
+			if (fuzzy) msg_print(_("é‹å‹•ã‚¨ãƒãƒ«ã‚®ãƒ¼ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by kinetic force!"));
 			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
 				(void)set_stun(p_ptr->stun + randint1(20));
@@ -5589,7 +5589,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Rocket -- stun, cut */
 		case GF_ROCKET:
 		{
-			if (fuzzy) msg_print(_("ÇúÈ¯¤¬¤¢¤Ã¤¿¡ª", "There is an explosion!"));
+			if (fuzzy) msg_print(_("çˆ†ç™ºãŒã‚ã£ãŸï¼", "There is an explosion!"));
 			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
 				(void)set_stun(p_ptr->stun + randint1(20));
@@ -5616,7 +5616,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Inertia -- slowness */
 		case GF_INERTIA:
 		{
-			if (fuzzy) msg_print(_("²¿¤«ÃÙ¤¤¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something slow!"));
+			if (fuzzy) msg_print(_("ä½•ã‹é…ã„ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something slow!"));
 			if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
@@ -5625,7 +5625,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Lite -- blinding */
 		case GF_LITE:
 		{
-			if (fuzzy) msg_print(_("²¿¤«¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something!"));
+			if (fuzzy) msg_print(_("ä½•ã‹ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something!"));
 			if (p_ptr->resist_lite)
 			{
 				dam *= 4; dam /= (randint1(4) + 7);
@@ -5637,7 +5637,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 			if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 			{
-                if (!CHECK_MULTISHADOW()) msg_print(_("¸÷¤ÇÆùÂÎ¤¬¾Ç¤¬¤µ¤ì¤¿¡ª", "The light scorches your flesh!"));
+                if (!CHECK_MULTISHADOW()) msg_print(_("å…‰ã§è‚‰ä½“ãŒç„¦ãŒã•ã‚ŒãŸï¼", "The light scorches your flesh!"));
 				dam *= 2;
 			}
 			else if (prace_is_(RACE_S_FAIRY))
@@ -5651,7 +5651,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 			if (p_ptr->wraith_form && !CHECK_MULTISHADOW())
 			{
 				p_ptr->wraith_form = 0;
-				msg_print(_("Á®¸÷¤Î¤¿¤áÈóÊª¼ÁÅª¤Ê±Æ¤ÎÂ¸ºß¤Ç¤¤¤é¤ì¤Ê¤¯¤Ê¤Ã¤¿¡£",
+				msg_print(_("é–ƒå…‰ã®ãŸã‚éç‰©è³ªçš„ãªå½±ã®å­˜åœ¨ã§ã„ã‚‰ã‚Œãªããªã£ãŸã€‚",
                     "The light forces you out of your incorporeal shadow form."));
 
 				p_ptr->redraw |= PR_MAP;
@@ -5671,7 +5671,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Dark -- blinding */
 		case GF_DARK:
 		{
-			if (fuzzy) msg_print(_("²¿¤«¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something!"));
+			if (fuzzy) msg_print(_("ä½•ã‹ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something!"));
 			if (p_ptr->resist_dark)
 			{
 				dam *= 4; dam /= (randint1(4) + 7);
@@ -5689,12 +5689,12 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Time -- bolt fewer effects XXX */
 		case GF_TIME:
 		{
-			if (fuzzy) msg_print(_("²áµî¤«¤é¤Î¾×·â¤Ë¹¶·â¤µ¤ì¤¿¡ª", "You are hit by a blast from the past!"));
+			if (fuzzy) msg_print(_("éå»ã‹ã‚‰ã®è¡æ’ƒã«æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by a blast from the past!"));
 			if (p_ptr->resist_time)
 			{
 				dam *= 4;
 				dam /= (randint1(4) + 7);
-                msg_print(_("»ş´Ö¤¬ÄÌ¤ê²á¤®¤Æ¤¤¤¯µ¤¤¬¤¹¤ë¡£", "You feel as if time is passing you by."));
+                msg_print(_("æ™‚é–“ãŒé€šã‚Šéãã¦ã„ãæ°—ãŒã™ã‚‹ã€‚", "You feel as if time is passing you by."));
 			}
 			else if (!CHECK_MULTISHADOW())
 			{
@@ -5703,7 +5703,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 					case 1: case 2: case 3: case 4: case 5:
 					{
 						if (p_ptr->prace == RACE_ANDROID) break;
-                        msg_print(_("¿ÍÀ¸¤¬µÕÌá¤ê¤·¤¿µ¤¤¬¤¹¤ë¡£", "You feel life has clocked back."));
+                        msg_print(_("äººç”ŸãŒé€†æˆ»ã‚Šã—ãŸæ°—ãŒã™ã‚‹ã€‚", "You feel life has clocked back."));
 						lose_exp(100 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
 						break;
 					}
@@ -5712,15 +5712,15 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 					{
 						switch (randint1(6))
 						{
-                            case 1: k = A_STR; act = _("¶¯¤¯", "strong"); break;
-                            case 2: k = A_INT; act = _("ÁïÌÀ¤Ç", "bright"); break;
-                            case 3: k = A_WIS; act = _("¸­ÌÀ¤Ç", "wise"); break;
-                            case 4: k = A_DEX; act = _("´ïÍÑ¤Ç", "agile"); break;
-                            case 5: k = A_CON; act = _("·ò¹¯¤Ç", "hale"); break;
-                            case 6: k = A_CHR; act = _("Èş¤·¤¯", "beautiful"); break;
+                            case 1: k = A_STR; act = _("å¼·ã", "strong"); break;
+                            case 2: k = A_INT; act = _("è¡æ˜ã§", "bright"); break;
+                            case 3: k = A_WIS; act = _("è³¢æ˜ã§", "wise"); break;
+                            case 4: k = A_DEX; act = _("å™¨ç”¨ã§", "agile"); break;
+                            case 5: k = A_CON; act = _("å¥åº·ã§", "hale"); break;
+                            case 6: k = A_CHR; act = _("ç¾ã—ã", "beautiful"); break;
 						}
 
-						msg_format(_("¤¢¤Ê¤¿¤Ï°ÊÁ°¤Û¤É%s¤Ê¤¯¤Ê¤Ã¤Æ¤·¤Ş¤Ã¤¿...¡£", 
+						msg_format(_("ã‚ãªãŸã¯ä»¥å‰ã»ã©%sãªããªã£ã¦ã—ã¾ã£ãŸ...ã€‚", 
                                      "You're not as %s as you used to be..."), act);
 
 						p_ptr->stat_cur[k] = (p_ptr->stat_cur[k] * 3) / 4;
@@ -5731,7 +5731,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 					case 10:
 					{
-						msg_print(_("¤¢¤Ê¤¿¤Ï°ÊÁ°¤Û¤ÉÎÏ¶¯¤¯¤Ê¤¯¤Ê¤Ã¤Æ¤·¤Ş¤Ã¤¿...¡£", 
+						msg_print(_("ã‚ãªãŸã¯ä»¥å‰ã»ã©åŠ›å¼·ããªããªã£ã¦ã—ã¾ã£ãŸ...ã€‚", 
                                     "You're not as powerful as you used to be..."));
 
 						for (k = 0; k < 6; k++)
@@ -5752,8 +5752,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Gravity -- stun plus slowness plus teleport */
 		case GF_GRAVITY:
 		{
-			if (fuzzy) msg_print(_("²¿¤«½Å¤¤¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something heavy!"));
-            msg_print(_("¼şÊÕ¤Î½ÅÎÏ¤¬¤æ¤¬¤ó¤À¡£", "Gravity warps around you."));
+			if (fuzzy) msg_print(_("ä½•ã‹é‡ã„ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something heavy!"));
+            msg_print(_("å‘¨è¾ºã®é‡åŠ›ãŒã‚†ãŒã‚“ã ã€‚", "Gravity warps around you."));
 
 			if (!CHECK_MULTISHADOW())
 			{
@@ -5783,7 +5783,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Standard damage */
 		case GF_DISINTEGRATE:
 		{
-			if (fuzzy) msg_print(_("½ã¿è¤Ê¥¨¥Í¥ë¥®¡¼¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by pure energy!"));
+			if (fuzzy) msg_print(_("ç´”ç²‹ãªã‚¨ãƒãƒ«ã‚®ãƒ¼ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by pure energy!"));
 
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
@@ -5791,7 +5791,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 		case GF_OLD_HEAL:
 		{
-			if (fuzzy) msg_print(_("²¿¤é¤«¤Î¹¶·â¤Ë¤è¤Ã¤Æµ¤Ê¬¤¬¤è¤¯¤Ê¤Ã¤¿¡£", "You are hit by something invigorating!"));
+			if (fuzzy) msg_print(_("ä½•ã‚‰ã‹ã®æ”»æ’ƒã«ã‚ˆã£ã¦æ°—åˆ†ãŒã‚ˆããªã£ãŸã€‚", "You are hit by something invigorating!"));
 
 			(void)hp_player(dam);
 			dam = 0;
@@ -5800,7 +5800,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 		case GF_OLD_SPEED:
 		{
-			if (fuzzy) msg_print(_("²¿¤«¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something!"));
+			if (fuzzy) msg_print(_("ä½•ã‹ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something!"));
 			(void)set_fast(p_ptr->fast + randint1(5), FALSE);
 			dam = 0;
 			break;
@@ -5808,7 +5808,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 		case GF_OLD_SLOW:
 		{
-			if (fuzzy) msg_print(_("²¿¤«ÃÙ¤¤¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something slow!"));
+			if (fuzzy) msg_print(_("ä½•ã‹é…ã„ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something slow!"));
 			(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 			break;
 		}
@@ -5816,11 +5816,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		case GF_OLD_SLEEP:
 		{
 			if (p_ptr->free_act)  break;
-            if (fuzzy) msg_print(_("Ì²¤Ã¤Æ¤·¤Ş¤Ã¤¿¡ª", "You fall asleep!"));
+            if (fuzzy) msg_print(_("çœ ã£ã¦ã—ã¾ã£ãŸï¼", "You fall asleep!"));
 
 			if (ironman_nightmare)
 			{
-                msg_print(_("¶²¤í¤·¤¤¸÷·Ê¤¬Æ¬¤ËÉâ¤«¤ó¤Ç¤­¤¿¡£", "A horrible vision enters your mind."));
+                msg_print(_("æã‚ã—ã„å…‰æ™¯ãŒé ­ã«æµ®ã‹ã‚“ã§ããŸã€‚", "A horrible vision enters your mind."));
 
 				/* Pick a nightmare */
 				get_mon_num_prep(get_nightmare, NULL);
@@ -5842,7 +5842,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		case GF_SEEKER:
 		case GF_SUPER_RAY:
 		{
-			if (fuzzy) msg_print(_("ËâË¡¤Î¥ª¡¼¥é¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by an aura of magic!"));
+			if (fuzzy) msg_print(_("é­”æ³•ã®ã‚ªãƒ¼ãƒ©ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by an aura of magic!"));
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
@@ -5850,7 +5850,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Pure damage */
 		case GF_PSY_SPEAR:
 		{
-			if (fuzzy) msg_print(_("¥¨¥Í¥ë¥®¡¼¤Î²ô¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by an energy!"));
+			if (fuzzy) msg_print(_("ã‚¨ãƒãƒ«ã‚®ãƒ¼ã®å¡Šã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by an energy!"));
 			get_damage = take_hit(DAMAGE_FORCE, dam, killer, monspell);
 			break;
 		}
@@ -5858,7 +5858,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Pure damage */
 		case GF_METEOR:
 		{
-			if (fuzzy) msg_print(_("²¿¤«¤¬¶õ¤«¤é¤¢¤Ê¤¿¤ÎÆ¬¾å¤ËÍî¤Á¤Æ¤­¤¿¡ª", "Something falls from the sky on you!"));
+			if (fuzzy) msg_print(_("ä½•ã‹ãŒç©ºã‹ã‚‰ã‚ãªãŸã®é ­ä¸Šã«è½ã¡ã¦ããŸï¼", "Something falls from the sky on you!"));
 
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			if (!p_ptr->resist_shard || one_in_(13))
@@ -5873,7 +5873,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Ice -- cold plus stun plus cuts */
 		case GF_ICE:
 		{
-			if (fuzzy) msg_print(_("²¿¤«±Ô¤¯Îä¤¿¤¤¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something sharp and cold!"));
+			if (fuzzy) msg_print(_("ä½•ã‹é‹­ãå†·ãŸã„ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something sharp and cold!"));
 			get_damage = cold_dam(dam, killer, monspell, FALSE);
 			if (!CHECK_MULTISHADOW())
 			{
@@ -5898,7 +5898,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Death Ray */
 		case GF_DEATH_RAY:
 		{
-			if (fuzzy) msg_print(_("²¿¤«Èó¾ï¤ËÎä¤¿¤¤¤â¤Î¤Ç¹¶·â¤µ¤ì¤¿¡ª", "You are hit by something extremely cold!"));
+			if (fuzzy) msg_print(_("ä½•ã‹éå¸¸ã«å†·ãŸã„ã‚‚ã®ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by something extremely cold!"));
 
 			if (p_ptr->mimic_form)
 			{
@@ -5938,15 +5938,15 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		{
 			if (CHECK_MULTISHADOW())
 			{
-                msg_print(_("¹¶·â¤Ï¸¸±Æ¤ËÌ¿Ãæ¤·¡¢¤¢¤Ê¤¿¤Ë¤ÏÆÏ¤«¤Ê¤«¤Ã¤¿¡£", "The attack hits Shadow, you are unharmed!"));
+                msg_print(_("æ”»æ’ƒã¯å¹»å½±ã«å‘½ä¸­ã—ã€ã‚ãªãŸã«ã¯å±Šã‹ãªã‹ã£ãŸã€‚", "The attack hits Shadow, you are unharmed!"));
 			}
 			else if (p_ptr->csp)
 			{
 				/* Basic message */
 				if (who > 0) 
-                    msg_format(_("%^s¤ËÀº¿À¥¨¥Í¥ë¥®¡¼¤òµÛ¤¤¼è¤é¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª", "%^s draws psychic energy from you!"), m_name);
+                    msg_format(_("%^sã«ç²¾ç¥ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’å¸ã„å–ã‚‰ã‚Œã¦ã—ã¾ã£ãŸï¼", "%^s draws psychic energy from you!"), m_name);
 				else 
-                    msg_print(_("Àº¿À¥¨¥Í¥ë¥®¡¼¤òµÛ¤¤¼è¤é¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª", "Your psychic energy is drawn!"));
+                    msg_print(_("ç²¾ç¥ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’å¸ã„å–ã‚‰ã‚Œã¦ã—ã¾ã£ãŸï¼", "Your psychic energy is drawn!"));
 
 				/* Full drain */
 				if (dam >= p_ptr->csp)
@@ -5987,7 +5987,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 						/* Special message */
 						if (m_ptr->ml)
 						{
-                            msg_format(_("%^s¤Ïµ¤Ê¬¤¬ÎÉ¤µ¤½¤¦¤À¡£", "%^s appears healthier."), m_name);
+                            msg_format(_("%^sã¯æ°—åˆ†ãŒè‰¯ã•ãã†ã ã€‚", "%^s appears healthier."), m_name);
 						}
 					}
 				}
@@ -6002,14 +6002,14 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		{
 			if ((randint0(100 + rlev / 2) < MAX(5, p_ptr->skill_sav)) && !CHECK_MULTISHADOW())
 			{
-                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                msg_print(_("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
 			{
 				if (!CHECK_MULTISHADOW())
 				{
-                    msg_print(_("ÎîÅª¥¨¥Í¥ë¥®¡¼¤ÇÀº¿À¤¬¹¶·â¤µ¤ì¤¿¡£", "Your mind is blasted by psyonic energy."));
+                    msg_print(_("éœŠçš„ã‚¨ãƒãƒ«ã‚®ãƒ¼ã§ç²¾ç¥ãŒæ”»æ’ƒã•ã‚ŒãŸã€‚", "Your mind is blasted by psyonic energy."));
 
 					if (!p_ptr->resist_conf)
 					{
@@ -6040,14 +6040,14 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		{
 			if ((randint0(100 + rlev / 2) < MAX(5, p_ptr->skill_sav)) && !CHECK_MULTISHADOW())
             {
-                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                msg_print(_("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
 			{
 				if (!CHECK_MULTISHADOW())
                 {
-                    msg_print(_("ÎîÅª¥¨¥Í¥ë¥®¡¼¤ÇÀº¿À¤¬¹¶·â¤µ¤ì¤¿¡£", "Your mind is blasted by psyonic energy."));
+                    msg_print(_("éœŠçš„ã‚¨ãƒãƒ«ã‚®ãƒ¼ã§ç²¾ç¥ãŒæ”»æ’ƒã•ã‚ŒãŸã€‚", "Your mind is blasted by psyonic energy."));
 
 					p_ptr->csp -= 100;
 					if (p_ptr->csp < 0)
@@ -6094,7 +6094,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		{
 			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
             {
-                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                msg_print(_("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
@@ -6110,7 +6110,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		{
 			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
             {
-                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                msg_print(_("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
@@ -6126,7 +6126,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		{
 			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
             {
-                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                msg_print(_("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
@@ -6142,7 +6142,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		{
 			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW())
 			{
-                msg_print(_("¤·¤«¤·Èë¹¦¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                msg_print(_("ã—ã‹ã—ç§˜å­”ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
@@ -6158,14 +6158,14 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		{
 			if ((randint0(100 + rlev/2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
             {
-                msg_print(_("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª", "You resist the effects!"));
+                msg_print(_("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
 			{
 				if (!CHECK_MULTISHADOW())
 				{
-                    msg_print(_("¤¢¤Ê¤¿¤ÏÌ¿¤¬Çö¤Ş¤Ã¤Æ¤¤¤¯¤è¤¦¤Ë´¶¤¸¤¿¡ª", "You feel your life fade away!"));
+                    msg_print(_("ã‚ãªãŸã¯å‘½ãŒè–„ã¾ã£ã¦ã„ãã‚ˆã†ã«æ„Ÿã˜ãŸï¼", "You feel your life fade away!"));
 					curse_equipment(40, 20);
 				}
 
@@ -6197,7 +6197,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* hisself */
 		monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
-		msg_format(_("¹¶·â¤¬%s¼«¿È¤ò½ı¤Ä¤±¤¿¡ª", "The attack of %s has wounded %s!"), m_name, m_name_self);
+		msg_format(_("æ”»æ’ƒãŒ%sè‡ªèº«ã‚’å‚·ã¤ã‘ãŸï¼", "The attack of %s has wounded %s!"), m_name, m_name_self);
 		project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 		if (p_ptr->tim_eyeeye) set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
 	}
@@ -7543,11 +7543,11 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 					if (is_seen(m_ptr))
 					{
 						if ((m_ptr->r_idx == MON_KENSHIROU) || (m_ptr->r_idx == MON_RAOU))
-                            msg_print(_("¡ÖËÌÅÍ¿À·ı±üµÁ¡¦Æó»Ø¿¿¶õÇÄ¡ª¡×", "The attack bounces!"));
+                            msg_print(_("ã€ŒåŒ—æ–—ç¥æ‹³å¥¥ç¾©ãƒ»äºŒæŒ‡çœŸç©ºæŠŠï¼ã€", "The attack bounces!"));
 						else if (m_ptr->r_idx == MON_DIO) 
-                            msg_print(_("¥Ç¥£¥ª¡¦¥Ö¥é¥ó¥É¡¼¤Ï»Ø°ìËÜ¤Ç¹¶·â¤òÃÆ¤­ÊÖ¤·¤¿¡ª", "The attack bounces!"));
+                            msg_print(_("ãƒ‡ã‚£ã‚ªãƒ»ãƒ–ãƒ©ãƒ³ãƒ‰ãƒ¼ã¯æŒ‡ä¸€æœ¬ã§æ”»æ’ƒã‚’å¼¾ãè¿”ã—ãŸï¼", "The attack bounces!"));
 						else 
-                            msg_print(_("¹¶·â¤ÏÄ·¤ÍÊÖ¤Ã¤¿¡ª", "The attack bounces!"));
+                            msg_print(_("æ”»æ’ƒã¯è·³ã­è¿”ã£ãŸï¼", "The attack bounces!"));
 					}
 					if (is_original_ap_and_seen(m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 
@@ -7761,14 +7761,14 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		{
 			if (rakuba(rakubadam_m, FALSE))
 			{
-                msg_format(_("%^s¤Ë¿¶¤êÍî¤È¤µ¤ì¤¿¡ª", "%^s has thrown you off!"), m_name);
+                msg_format(_("%^sã«æŒ¯ã‚Šè½ã¨ã•ã‚ŒãŸï¼", "%^s has thrown you off!"), m_name);
 			}
 		}
 		if (p_ptr->riding && rakubadam_p > 0)
 		{
 			if(rakuba(rakubadam_p, FALSE))
 			{
-                msg_format(_("%^s¤«¤éÍî¤Á¤Æ¤·¤Ş¤Ã¤¿¡ª", "You have fallen from %s."), m_name);
+                msg_format(_("%^sã‹ã‚‰è½ã¡ã¦ã—ã¾ã£ãŸï¼", "You have fallen from %s."), m_name);
 			}
 		}
 	}
@@ -7779,15 +7779,15 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 
 bool binding_field( int dam )
 {
-	int mirror_x[10],mirror_y[10]; /* ¶À¤Ï¤â¤Ã¤È¾¯¤Ê¤¤ */
-	int mirror_num=0;              /* ¶À¤Î¿ô */
+	int mirror_x[10],mirror_y[10]; /* é¡ã¯ã‚‚ã£ã¨å°‘ãªã„ */
+	int mirror_num=0;              /* é¡ã®æ•° */
 	int x,y;
 	int centersign;
 	int x1,x2,y1,y2;
 	u16b p;
 	int msec= delay_factor*delay_factor*delay_factor;
 
-	/* »°³Ñ·Á¤ÎÄºÅÀ */
+	/* ä¸‰è§’å½¢ã®é ‚ç‚¹ */
 	int point_x[3];
 	int point_y[3];
 
@@ -7914,7 +7914,7 @@ bool binding_field( int dam )
 		}
 	}
 	if( one_in_(7) ){
-        msg_print(_("¶À¤¬·ë³¦¤ËÂÑ¤¨¤­¤ì¤º¡¢²õ¤ì¤Æ¤·¤Ş¤Ã¤¿¡£", "The field broke a mirror"));
+        msg_print(_("é¡ãŒçµç•Œã«è€ãˆãã‚Œãšã€å£Šã‚Œã¦ã—ã¾ã£ãŸã€‚", "The field broke a mirror"));
 		remove_mirror(point_y[0],point_x[0]);
 	}
 

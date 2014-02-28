@@ -1,6 +1,6 @@
-/*!
+﻿/*!
  * @file store.c
- * @brief Ź�ν��� / Store commands
+ * @brief 店の処理 / Store commands
  * @date 2014/02/02
  * @author
  * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
@@ -29,12 +29,12 @@ static s16b inner_town_num = 0;
 static cptr comment_1[MAX_COMMENT_1] =
 {
 #ifdef JP
-	"������������",
-	"�빽����",
-	"�������褦��",
-	"��������",
-	"�褷��",
-	"�狼�ä���"
+	"オーケーだ。",
+	"結構だ。",
+	"そうしよう！",
+	"賛成だ！",
+	"よし！",
+	"わかった！"
 #else
 	"Okay.",
 	"Fine.",
@@ -47,14 +47,14 @@ static cptr comment_1[MAX_COMMENT_1] =
 };
 
 #ifdef JP
-/*! �֥�å��ޡ����å��ɲå�å������ʾ����� */
+/*! ブラックマーケット追加メッセージ（承諾） */
 static cptr comment_1_B[MAX_COMMENT_1] = {
-	"�ޤ�������Ǥ����䡣",
-	"�����Ϥ���Ǵ��ۤ��Ƥ�롣",
-	"ʬ���ä��衣",
-	"���礦���ʤ���",
-	"����ǲ�������衣",
-	"����ʤ���������"
+	"まあ、それでいいや。",
+	"今日はそれで勘弁してやる。",
+	"分かったよ。",
+	"しょうがない。",
+	"それで我慢するよ。",
+	"こんなもんだろう。"
 };
 #endif
 #define MAX_COMMENT_2A	2
@@ -62,8 +62,8 @@ static cptr comment_1_B[MAX_COMMENT_1] = {
 static cptr comment_2a[MAX_COMMENT_2A] =
 {
 #ifdef JP
-	"���Ǧ���Ϥ��Ƥ���Τ����� $%s ���Ǹ����",
-	"�����ˤ���٤����뤾�� $%s ���Ǹ����"
+	"私の忍耐力を試しているのかい？ $%s が最後だ。",
+	"我慢にも限度があるぞ。 $%s が最後だ。"
 #else
 	"You try my patience.  %s is final.",
 	"My patience grows thin.  %s is final."
@@ -76,18 +76,18 @@ static cptr comment_2a[MAX_COMMENT_2A] =
 static cptr comment_2b[MAX_COMMENT_2B] =
 {
 #ifdef JP
-	" $%s ���餤�ϽФ��ʤ��������衣",
-	" $%s �ʤ������äƤ⤤������",
-	"�ϡ� $%s �ʲ��Ϥʤ��͡�",
-	"�����ۤ��� $%s �ʲ��Ϥ������ʤ�����",
-	"���줸�㾯�ʤ����롪 $%s ���ߤ����Ȥ�������",
-	"�Х��ˤ��Ƥ��롪 $%s �Ϥ���ʤ��ȡ�",
-	"���������� $%s �Ǥɤ�������",
-	"���������� $%s ��ͤ��Ƥ���ʤ�����",
-	"1000ɤ�Υ������ΥΥߤ˶줷����뤬������ $%s ����",
-	"���������ڤʤ�Τ˺Ҥ����졪 $%s �Ǥɤ�����",
-	"��르���˾�̣����뤬������������ $%s �ʤ��������",
-	"��������Ƥϥ��������� $%s �ϽФ��Ĥ��ʤ������"
+	" $%s ぐらいは出さなきゃダメだよ。",
+	" $%s なら受け取ってもいいが。",
+	"ハ！ $%s 以下はないね。",
+	"何て奴だ！ $%s 以下はあり得ないぞ。",
+	"それじゃ少なすぎる！ $%s は欲しいところだ。",
+	"バカにしている！ $%s はもらわないと。",
+	"嘘だろう！ $%s でどうだい？",
+	"おいおい！ $%s を考えてくれないか？",
+	"1000匹のオークのノミに苦しめられるがいい！ $%s だ。",
+	"お前の大切なものに災いあれ！ $%s でどうだ。",
+	"モルゴスに賞味されるがいい！本当は $%s なんだろう？",
+	"お前の母親はオーガか！ $%s は出すつもりなんだろ？"
 #else
 	"I can take no less than %s gold pieces.",
 	"I will accept no less than %s gold pieces.",
@@ -106,20 +106,20 @@ static cptr comment_2b[MAX_COMMENT_2B] =
 };
 
 #ifdef JP
-/*! �֥�å��ޡ����å����ɲå�å����������Ȥ��� */
+/*! ブラックマーケット用追加メッセージ（売るとき） */
 static cptr comment_2b_B[MAX_COMMENT_2B] = {
-	"�����鲶�ͤ����͹����ȤϤ��� $%s ���³����͡����ʤ鵢��ʡ�",
-	"�⤬�ʤ��Τ��������󤿡��ޤ��ϲȤ˵��ä� $%s ·���Ƥ��ʡ�",
-	"ʪ�β��ͤ�ʬ������ۤ��ʡ������ $%s �����̤ʤ���衣",
-	"�����դ������ʤ�ʸ�礬����Τ��� $%s ���³�����",
-	"�Ҥ�äȤ��ƿ���ξ��̤����� $%s ���äƤʤ��ʤ鵢��ʡ�",
-	"������¾��Ź�Ȥϰ㤦����衣$%s ���餤�ϽФ��ʡ�",
-	"�㤦�����ʤ��ʤ鵢��ʡ� $%s ���ȸ��äƤ�������",
-	"�äˤʤ�ʤ��͡� $%s ���餤���äƤ���������",
-	"�ϡ��ʤ������㡩 $%s �δְ㤤�����Ҥ�äȤ��ơ�",
-	"�и��Ϥ��ä����衣����Ȥ� $%s �Ф���Τ��������󤿤ˡ�",
-	"̿�Τ餺���ۤ��ʡ� $%s �Ф��к����ν�ϴ��ۤ��Ƥ��衣",
-	"������Ź����˳�ͤ��Ǥ���� $%s ���餤�Ф��ʤ��Τ�����"
+	"いくら俺様がお人好しとはいえ $%s が限界だね。嫌なら帰りな。",
+	"金がないのかい、あんた？まずは家に帰って $%s 揃えてきな。",
+	"物の価値が分からん奴だな。これは $%s が普通なんだよ。",
+	"俺の付けた値段に文句があるのか？ $%s が限界だ。",
+	"ひょっとして新手の冗談かい？ $%s 持ってないなら帰りな。",
+	"うちは他の店とは違うんだよ。$%s ぐらいは出しな。",
+	"買う気がないなら帰りな。 $%s だと言っているんだ。",
+	"話にならないね。 $%s くらい持っているんだろ？",
+	"は？なんだそりゃ？ $%s の間違いか、ひょっとして？",
+	"出口はあっちだよ。それとも $%s 出せるのかい、あんたに。",
+	"命知らずな奴だな。 $%s 出せば今日の所は勘弁してやるよ。",
+	"うちの店は貧乏人お断りだ。 $%s ぐらい出せないのかい？"
 };
 #endif
 #define MAX_COMMENT_3A	2
@@ -127,8 +127,8 @@ static cptr comment_2b_B[MAX_COMMENT_2B] = {
 static cptr comment_3a[MAX_COMMENT_3A] =
 {
 #ifdef JP
-	"���Ǧ���Ϥ��Ƥ���Τ����� $%s ���Ǹ����",
-	"�����ˤ���٤����뤾�� $%s ���Ǹ����"
+	"私の忍耐力を試しているのかい？ $%s が最後だ。",
+	"我慢にも限度があるぞ。 $%s が最後だ。"
 #else
 	"You try my patience.  %s is final.",
 	"My patience grows thin.  %s is final."
@@ -142,18 +142,18 @@ static cptr comment_3a[MAX_COMMENT_3A] =
 static cptr comment_3b[MAX_COMMENT_3B] =
 {
 #ifdef JP
-	"�ܲ�������� $%s �Ǥ����������",
-	" $%s �Ǥɤ�������",
-	" $%s ���餤�ʤ�Ф��Ƥ⤤������",
-	" $%s �ʾ�ʧ���ʤ�ƹͤ����ʤ��͡�",
-	"�ޤ�����Ĥ��ơ� $%s �Ǥɤ�������",
-	"���Υ��饯���ʤ� $%s �ǰ������衣",
-	"���줸��⤹���롪 $%s �������Ȥ�������",
-	"�ɤ�������ʤ�������� $%s �Ǥ���������",
-	"������ᡪ $%s �����äȤ����礤���衣",
-	"�Х��ˤ��Ƥ��롪 $%s ��������������",
-	" $%s �ʤ�򤷤��Ȥ��������ʤ���",
-	" $%s ������ʾ�ϥӥ���ʸ�Ф��ʤ��衪"
+	"本音を言うと $%s でいいんだろ？",
+	" $%s でどうだい？",
+	" $%s ぐらいなら出してもいいが。",
+	" $%s 以上払うなんて考えられないね。",
+	"まあ落ちついて。 $%s でどうだい？",
+	"そのガラクタなら $%s で引き取るよ。",
+	"それじゃ高すぎる！ $%s がいいとこだろ。",
+	"どうせいらないんだろ！ $%s でいいだろ？",
+	"だめだめ！ $%s がずっとお似合いだよ。",
+	"バカにしている！ $%s がせいぜいだ。",
+	" $%s なら嬉しいところだがなあ。",
+	" $%s 、それ以上はビタ一文出さないよ！"
 #else
 	"Perhaps %s gold pieces?",
 	"How about %s gold pieces?",
@@ -172,20 +172,20 @@ static cptr comment_3b[MAX_COMMENT_3B] =
 };
 
 #ifdef JP
-/*! �֥�å��ޡ����å����ɲå�å��������㤤���� */
+/*! ブラックマーケット用追加メッセージ（買い取り） */
 static cptr comment_3b_B[MAX_COMMENT_3B] = {
-	" $%s �äƤȤ������͡����Τɤ����褦��ʤ����饯���ϡ�",
-	"���β��� $%s �äƸ��äƤ��������顢�����̤�ˤ��������ȤΤ��������",
-	"����ͥ�����˴Ť���Τ⤤���ø��ˤ��Ƥ����� $%s ����",
-	"�����ʤʤ� $%s ����äƤ���Ƥ��뤬�͡��Ｑ����»ΤϤߤ�ʡ�",
-	"�����ޤ�������Ĥ��ۤ��ʡ������鲶�������ȤϤ��� $%s ���³�����",
-	" $%s �����̤˲��Ϥ���ʥ��饯���ߤ����Ϥʤ�������顣",
-	"���δ���ۤ���������ʤ��Τ��� $%s �����ʤ鵢��ʡ�",
-	" $%s �ǰ�����äƤ��衣���Ǽ������ʡ���˳�͡�",
-	"ʪ�β��ͤ�ʬ������ۤϻ����ˤ�����ʡ������ $%s �ʤ���衣",
-	"����ʤ˶⤬�ߤ����Τ������󤿡� $%s ����­�Ǥ���Τ���",
-	"����Ź�ְ㤨�Ƥ󤸤�ʤ��Τ��� $%s �Ƿ��ʤ�¾�򤢤��äƤ��졣",
-	"���θ����ͤ˥�����Ĥ����ۤ�����Ȥϡ� �����ٶ����Ȥ��� $%s ����"
+	" $%s ってところだね。そのどうしようもないガラクタは。",
+	"この俺が $%s って言っているんだから、その通りにした方が身のためだぞ。",
+	"俺の優しさに甘えるのもいい加減にしておけ。 $%s だ。",
+	"その品なら $%s で売ってくれているがね、常識ある紳士はみんな。",
+	"こりゃまた、がめつい奴だな。いくら俺が温厚とはいえ $%s が限界だ。",
+	" $%s だ。別に俺はそんなガラクタ欲しくはないんだから。",
+	"俺の鑑定額が気に入らないのか？ $%s 、嫌なら帰りな。",
+	" $%s で引き取ってやるよ。喜んで受け取りな、貧乏人。",
+	"物の価値が分からん奴は始末におえんな。それは $%s なんだよ。",
+	"そんなに金が欲しいのか、あんた？ $%s で満足できんのか？",
+	"入る店間違えてんじゃないのか？ $%s で嫌なら他をあたってくれ。",
+	"俺の言い値にケチをつける奴がいるとは！ その度胸に免じて $%s だ。"
 };
 #endif
 #define MAX_COMMENT_4A	4
@@ -193,10 +193,10 @@ static cptr comment_3b_B[MAX_COMMENT_3B] = {
 static cptr comment_4a[MAX_COMMENT_4A] =
 {
 #ifdef JP
-	"�⤦��������������٤���鷺��碌�ʤ��Ǥ��졪",
-	"�������������β����θ��٤�Ķ���Ƥ��롪",
-	"�⤦���������֤�̵�̰ʳ��Τʤˤ�ΤǤ�ʤ���",
-	"�⤦��äƤ��ʤ��衪��⸫�����ʤ���"
+	"もうたくさんだ！何度も私をわずらわせないでくれ！",
+	"うがー！一日の我慢の限度を超えている！",
+	"もういい！時間の無駄以外のなにものでもない！",
+	"もうやってられないよ！顔も見たくない！"
 #else
 	"Enough!  You have abused me once too often!",
 	"Arghhh!  I have had enough abuse for one day!",
@@ -207,12 +207,12 @@ static cptr comment_4a[MAX_COMMENT_4A] =
 };
 
 #ifdef JP
-/*! �֥�å��ޡ����å����ɲå�å��������ܤ��ĺ���� */
+/*! ブラックマーケット用追加メッセージ（怒りの頂点） */
 static cptr comment_4a_B[MAX_COMMENT_4A] = {
-	"�ʤ�䤬�äơ������ʲ��ͤǤ�³�������äƤ��Ȥ��Τ졪",
-	"���򤳤��ޤ��ܤ餻��...̿����������Ǥ⤢�꤬�����Ȼפ���",
-	"�դ����Ƥ�Τ�����䤫���ʤ����򸫤Ƥ���ˤ�����",
-	"����������ˤ��������٤���ʤޤͤ����餿�����㤪���ͤ�����"
+	"なめやがって！温厚な俺様でも限界があるってことを知れ！",
+	"俺をここまで怒らせて...命があるだけでもありがたいと思え！",
+	"ふざけてるのか！冷やかしなら相手を見てからにしろ！",
+	"いいかげんにしろ！今度こんなまねしたらただじゃおかねえぞ！"
 };
 #endif
 #define MAX_COMMENT_4B	4
@@ -220,10 +220,10 @@ static cptr comment_4a_B[MAX_COMMENT_4A] = {
 static cptr comment_4b[MAX_COMMENT_4B] =
 {
 #ifdef JP
-	"Ź����ФƹԤ���",
-	"����������ä���������",
-	"�ɤä��˹Ԥä��ޤ���",
-	"�Ф����Ф����ФƹԤ���"
+	"店から出て行け！",
+	"俺の前から消え失せろ！",
+	"どっかに行っちまえ！",
+	"出ろ、出ろ、出て行け！"
 #else
 	"Leave my store!",
 	"Get out of my sight!",
@@ -234,12 +234,12 @@ static cptr comment_4b[MAX_COMMENT_4B] =
 };
 
 #ifdef JP
-/*! �֥�å��ޡ����å����ɲå�å��������ɤ��Ф��� */
+/*! ブラックマーケット用追加メッセージ（追い出し） */
 static cptr comment_4b_B[MAX_COMMENT_4B] = {
-	"���٤Ȥ��������󤸤�ͤ�����",
-	"�ȤäȤȡ��ɤä��ؼ���������",
-	"�������ä�����������",
-	"�ФƤ������ФƤ�������"
+	"二度とうちに来るんじゃねえ！！",
+	"とっとと、どっかへ失せろ！！",
+	"今すぐ消え失せろ！！",
+	"出ていけ！出ていけ！！"
 };
 #endif
 #define MAX_COMMENT_5	8
@@ -247,14 +247,14 @@ static cptr comment_4b_B[MAX_COMMENT_4B] = {
 static cptr comment_5[MAX_COMMENT_5] =
 {
 #ifdef JP
-	"�ͤ�ľ���Ƥ��졣",
-	"����㤪��������",
-	"��äȿ����ܤ˸��äƤ��졪",
-	"��Ĥ��뵤������Τ�����",
-	"��䤫�����褿�Τ���",
-	"�������̤���",
-	"��������٤�����",
-	"�ա��ࡢ�ɤ�ŷ������"
+	"考え直してくれ。",
+	"そりゃおかしい！",
+	"もっと真面目に言ってくれ！",
+	"交渉する気があるのかい？",
+	"冷やかしに来たのか！",
+	"悪い冗談だ！",
+	"我慢くらべかい。",
+	"ふーむ、良い天気だ。"
 #else
 	"Try again.",
 	"Ridiculous!",
@@ -269,16 +269,16 @@ static cptr comment_5[MAX_COMMENT_5] =
 };
 
 #ifdef JP
-/*! �֥�å��ޡ����å����ɲå�å��������ܤ�� */
+/*! ブラックマーケット用追加メッセージ（怒り） */
 static cptr comment_5_B[MAX_COMMENT_5] = {
-	"���֤�̵�̤��ʡ�����ϡ�",
-	"���ʤ����ͤ��ʡ�",
-	"�ä���ʬ������ꤸ��ʤ���������",
-	"�ˤ��ܤˤ��������餷���ʡ�",
-	"�ʤ�ƶ��ߤ��ۤ���",
-	"�äˤʤ���ڤ���",
-	"�ɤ����褦��ʤ���˳�ͤ���",
-	"���ޤ���äƤ���Τ���"
+	"時間の無駄だな、これは。",
+	"厄介なお客様だな！",
+	"話して分かる相手じゃなさそうだ。",
+	"痛い目にあいたいらしいな！",
+	"なんて強欲な奴だ！",
+	"話にならん輩だ！",
+	"どうしようもない貧乏人だ！",
+	"喧嘩を売っているのか？"
 };
 #endif
 #define MAX_COMMENT_6	4
@@ -286,10 +286,10 @@ static cptr comment_5_B[MAX_COMMENT_5] = {
 static cptr comment_6[MAX_COMMENT_6] =
 {
 #ifdef JP
-	"�ɤ����ʹ���ְ㤨���餷����",
-	"���顢�褯ʹ�����ʤ��ä��衣",
-	"���ޤʤ��������äơ�",
-	"�������⤦���ٸ��äƤ���롩"
+	"どうやら聞き間違えたらしい。",
+	"失礼、よく聞こえなかったよ。",
+	"すまない、何だって？",
+	"悪い、もう一度言ってくれる？"
 #else
 	"I must have heard you wrong.",
 	"I'm sorry, I missed that.",
@@ -302,14 +302,14 @@ static cptr comment_6[MAX_COMMENT_6] =
 
 
 /*!
- * @brief �����������Ź��Υ�å��������� /
+ * @brief 取引成功時の店主のメッセージ処理 /
  * Successful haggle.
- * @return �ʤ�
+ * @return なし
  */
 static void say_comment_1(void)
 {
 #ifdef JP
-	/* �֥�å��ޡ����åȤΤȤ����̤Υ�å�������Ф� */
+	/* ブラックマーケットのときは別のメッセージを出す */
 	if ( cur_store_num == STORE_BLACK ) {
 		msg_print(comment_1_B[randint0(MAX_COMMENT_1)]);
 	}
@@ -324,7 +324,7 @@ static void say_comment_1(void)
 	if (one_in_(RUMOR_CHANCE))
 	{
 #ifdef JP
-		msg_print("Ź��ϼ���������:");
+		msg_print("店主は耳うちした:");
 #else
 		msg_print("The shopkeeper whispers something into your ear:");
 #endif
@@ -334,11 +334,11 @@ static void say_comment_1(void)
 
 
 /*!
- * @brief �ץ쥤�䡼�������ƥ���㤦���β�����ƥ�å��������� /
+ * @brief プレイヤーがアイテムを買う時の価格代案メッセージ処理 /
  * Continue haggling (player is buying)
- * @param value Ź����󼨲���
- * @param annoyed Ź��Τ���Ĥ���
- * @return �ʤ�
+ * @param value 店主の提示価格
+ * @param annoyed 店主のいらつき度
+ * @return なし
  */
 static void say_comment_2(s32b value, int annoyed)
 {
@@ -359,7 +359,7 @@ static void say_comment_2(s32b value, int annoyed)
 	{
 		/* Formatted message */
 #ifdef JP
-		/* �֥�å��ޡ����åȤλ����̤Υ�å�������Ф� */
+		/* ブラックマーケットの時は別のメッセージを出す */
 		if ( cur_store_num == STORE_BLACK ){
 			msg_format(comment_2b_B[randint0(MAX_COMMENT_2B)], tmp_val);
 		}
@@ -375,11 +375,11 @@ static void say_comment_2(s32b value, int annoyed)
 
 
 /*!
- * @brief �ץ쥤�䡼�������ƥ�������β�����ƥ�å��������� /
+ * @brief プレイヤーがアイテムを売る時の価格代案メッセージ処理 /
  * Continue haggling (player is selling)
- * @param value Ź����󼨲���
- * @param annoyed Ź��Τ���Ĥ���
- * @return �ʤ�
+ * @param value 店主の提示価格
+ * @param annoyed 店主のいらつき度
+ * @return なし
  */
 static void say_comment_3(s32b value, int annoyed)
 {
@@ -400,7 +400,7 @@ static void say_comment_3(s32b value, int annoyed)
 	{
 		/* Formatted message */
 #ifdef JP
-		/* �֥�å��ޡ����åȤλ����̤Υ�å�������Ф� */
+		/* ブラックマーケットの時は別のメッセージを出す */
 		if ( cur_store_num == STORE_BLACK ){
 			msg_format(comment_3b_B[randint0(MAX_COMMENT_3B)], tmp_val);
 		}
@@ -416,14 +416,14 @@ static void say_comment_3(s32b value, int annoyed)
 
 
 /*!
- * @brief Ź�礬�ץ쥤�䡼���ɤ��Ф����Υ�å��������� /
+ * @brief 店主がプレイヤーを追い出す時のメッセージ処理 /
  * Kick 'da bum out.					-RAK-
- * @return �ʤ�
+ * @return なし
  */
 static void say_comment_4(void)
 {
 #ifdef JP
-	/* �֥�å��ޡ����åȤλ����̤Υ�å�������Ф� */
+	/* ブラックマーケットの時は別のメッセージを出す */
 	if ( cur_store_num == STORE_BLACK ){
 		msg_print(comment_4a_B[randint0(MAX_COMMENT_4A)]);
 		msg_print(comment_4b_B[randint0(MAX_COMMENT_4B)]);
@@ -441,14 +441,14 @@ static void say_comment_4(void)
 
 
 /*!
- * @brief Ź�礬�ץ쥤�䡼�˼����ʤ����Υ�å��������� /
+ * @brief 店主がプレイヤーに取り合わない時のメッセージ処理 /
  * You are insulting me
- * @return �ʤ�
+ * @return なし
  */
 static void say_comment_5(void)
 {
 #ifdef JP
-	/* �֥�å��ޡ����åȤλ����̤Υ�å�������Ф� */
+	/* ブラックマーケットの時は別のメッセージを出す */
 	if ( cur_store_num == STORE_BLACK ){
 		msg_print(comment_5_B[randint0(MAX_COMMENT_5)]);
 	}
@@ -463,9 +463,9 @@ static void say_comment_5(void)
 
 
 /*!
- * @brief Ź�礬�ץ쥤�䡼���󼨤�����Ǥ��ʤ��ä����Υ�å��������� /
+ * @brief 店主がプレイヤーの提示を理解できなかった時のメッセージ処理 /
  * That makes no sense.
- * @return �ʤ�
+ * @return なし
  */
 static void say_comment_6(void)
 {
@@ -478,10 +478,10 @@ static void say_comment_6(void)
 static cptr comment_7a[MAX_COMMENT_7A] =
 {
 #ifdef JP
-	"���濫��������",
-	"�ʤ�Ƥ��ä���",
-	"ï�����ऻ�ӵ㤯����ʹ������...��",
-	"Ź�礬�������ˤ�ᤤ�Ƥ��롪"
+	"うわああぁぁ！",
+	"なんてこった！",
+	"誰かがむせび泣く声が聞こえる...。",
+	"店主が悔しげにわめいている！"
 #else
 	"Arrgghh!",
 	"You bastard!",
@@ -496,10 +496,10 @@ static cptr comment_7a[MAX_COMMENT_7A] =
 static cptr comment_7b[MAX_COMMENT_7B] =
 {
 #ifdef JP
-	"��������",
-	"���ΰ���ᡪ",
-	"Ź�礬���ᤷ�����˸��Ƥ��롣",
-	"Ź�礬�ˤ�Ǥ��롣"
+	"くそう！",
+	"この悪魔め！",
+	"店主が恨めしそうに見ている。",
+	"店主が睨んでいる。"
 #else
 	"Damn!",
 	"You fiend!",
@@ -514,10 +514,10 @@ static cptr comment_7b[MAX_COMMENT_7B] =
 static cptr comment_7c[MAX_COMMENT_7C] =
 {
 #ifdef JP
-	"���Ф餷����",
-	"����ŷ�Ȥ˸�����衪",
-	"Ź�礬���������ФäƤ��롣",
-	"Ź�礬�����ǾФäƤ��롣"
+	"すばらしい！",
+	"君が天使に見えるよ！",
+	"店主がクスクス笑っている。",
+	"店主が大声で笑っている。"
 #else
 	"Cool!",
 	"You've made my day!",
@@ -532,10 +532,10 @@ static cptr comment_7c[MAX_COMMENT_7C] =
 static cptr comment_7d[MAX_COMMENT_7D] =
 {
 #ifdef JP
-	"��äۤ���",
-	"����ʤ��������פ��򤷤��顢�����ܤ�Ư���ʤ��ʤ�ʤ���",
-	"Ź��ϴ򤷤���ķ�Ͳ�äƤ��롣",
-	"Ź������̤˾Фߤ򤿤����Ƥ��롣"
+	"やっほぅ！",
+	"こんなおいしい思いをしたら、真面目に働けなくなるなぁ。",
+	"店主は嬉しくて跳ね回っている。",
+	"店主は満面に笑みをたたえている。"
 #else
 	"Yipee!",
 	"I think I'll retire!",
@@ -547,12 +547,12 @@ static cptr comment_7d[MAX_COMMENT_7D] =
 
 
 /*!
- * @brief Ź�礬��Ĥ򽪤����ݤ�ȿ�����֤����� /
+ * @brief 店主が交渉を終えた際の反応を返す処理 /
  * Let a shop-keeper React to a purchase
- * @param price �����ƥ�μ����
- * @param value �����ƥ�μºݲ���
- * @param guess Ź�礬����ͽ�ۤ��Ƥ�������
- * @return �ʤ�
+ * @param price アイテムの取引額
+ * @param value アイテムの実際価値
+ * @param guess 店主が当初予想していた価値
+ * @return なし
  * @details 
  * We paid "price", it was worth "value", and we thought it was worth "guess"
  */
@@ -864,12 +864,12 @@ static byte rgold_adj[MAX_RACES][MAX_RACES] =
 
 
 /*!
- * @brief Ź�޲��ʤ���ꤹ�� /
+ * @brief 店舗価格を決定する /
  * Determine the price of an item (qty one) in a store.
- * @param o_ptr Ź�ޤ��¤٤륪�֥������ȹ�¤�Τλ��ȥݥ���
- * @param greed Ź��ζ�����
- * @param flip TRUE�ʤ��Ź��ˤȤäƤ������ʡ�FALSE�ʤ���в��ʤ�׻�
- * @return �ʤ�
+ * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
+ * @param greed 店主の強欲度
+ * @param flip TRUEならば店主にとっての買取価格、FALSEなら売出価格を計算
+ * @return なし
  * @details 
  * <pre>
  * This function takes into account the player's charisma, and the
@@ -951,10 +951,10 @@ static s32b price_item(object_type *o_ptr, int greed, bool flip)
 
 
 /*!
- * @brief �²��ʾ����ʤ�����������䤷�����Ψ�ǳ���ˤ��� /
+ * @brief 安価な消耗品の販売数を増やし、低確率で割引にする /
  * Certain "cheap" objects should be created in "piles"
- * @param o_ptr Ź�ޤ��¤٤륪�֥������ȹ�¤�Τλ��ȥݥ���
- * @return �ʤ�
+ * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
+ * @return なし
  * @details 
  * <pre>
  * Some objects can be sold at a "discount" (in small piles)
@@ -1105,7 +1105,7 @@ static void mass_produce(object_type *o_ptr)
 		if (cheat_peek && discount)
 		{
 #ifdef JP
-msg_print("�����ॢ���ƥ��ե����Ȥ��Ͱ����ʤ���");
+msg_print("ランダムアーティファクトは値引きなし。");
 #else
 			msg_print("No discount on random artifacts.");
 #endif
@@ -1130,11 +1130,11 @@ msg_print("�����ॢ���ƥ��ե����Ȥ��Ͱ����ʤ���");
 
 
 /*!
- * @brief Ź�ޤ��¤٤��ʤ�Ʊ���ʤǤ��뤫�ɤ���Ƚ�ꤹ�� /
+ * @brief 店舗に並べた品を同一品であるかどうか判定する /
  * Determine if a store item can "absorb" another item
- * @param o_ptr Ƚ�ꤹ�륪�֥������ȹ�¤�Τλ��ȥݥ���1
- * @param j_ptr Ƚ�ꤹ�륪�֥������ȹ�¤�Τλ��ȥݥ���2
- * @return Ʊ�찷���Ǥ���ʤ�TRUE���֤�
+ * @param o_ptr 判定するオブジェクト構造体の参照ポインタ1
+ * @param j_ptr 判定するオブジェクト構造体の参照ポインタ2
+ * @return 同一扱いできるならTRUEを返す
  * @details 
  * <pre>
  * See "object_similar()" for the same function for the "player"
@@ -1193,11 +1193,11 @@ static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 
 
 /*!
- * @brief Ź�ޤ��¤٤��ʤ�Ť͹�碌�Ǥ��뤫�ɤ���Ƚ�ꤹ�� /
+ * @brief 店舗に並べた品を重ね合わせできるかどうか判定する /
  * Allow a store item to absorb another item
- * @param o_ptr Ƚ�ꤹ�륪�֥������ȹ�¤�Τλ��ȥݥ���1
- * @param j_ptr Ƚ�ꤹ�륪�֥������ȹ�¤�Τλ��ȥݥ���2
- * @return �Ť͹�碌�Ǥ���ʤ�TRUE���֤�
+ * @param o_ptr 判定するオブジェクト構造体の参照ポインタ1
+ * @param j_ptr 判定するオブジェクト構造体の参照ポインタ2
+ * @return 重ね合わせできるならTRUEを返す
  * @details 
  * <pre>
  * See "object_similar()" for the same function for the "player"
@@ -1228,10 +1228,10 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
 
 
 /*!
- * @brief Ź�ޤ��ʤ��֤����ڡ��������뤫�ɤ�����Ƚ����֤� /
+ * @brief 店舗に品を置くスペースがあるかどうかの判定を返す /
  * Check to see if the shop will be carrying too many objects	-RAK-
- * @param o_ptr Ź�ޤ��֤��������֥������ȹ�¤�Τλ��ȥݥ���
- * @return �֤��줬�ʤ��ʤ�0���Ť͹�碌�Ǥ��륢���ƥब����ʤ�-1�����ڡ���������ʤ�1���֤���
+ * @param o_ptr 店舗に置きたいオブジェクト構造体の参照ポインタ
+ * @return 置き場がないなら0、重ね合わせできるアイテムがあるなら-1、スペースがあるなら1を返す。
  * @details 
  * <pre>
  * Note that the shop, just like a player, will not accept things
@@ -1301,8 +1301,8 @@ static int store_check_num(object_type *o_ptr)
 
 	/* Free space is always usable */
 	/*
-	 * ���ץ���� powerup_home �����ꤵ��Ƥ����
-	 * �椬�Ȥ� 20 �ڡ����ޤǻȤ���
+	 * オプション powerup_home が設定されていると
+	 * 我が家が 20 ページまで使える
 	 */
 	if ((cur_store_num == STORE_HOME) && ( powerup_home == FALSE )) {
 		if (st_ptr->stock_num < ((st_ptr->stock_size) / 10)) {
@@ -1320,9 +1320,9 @@ static int store_check_num(object_type *o_ptr)
 }
 
 /*!
- * @brief ���֥������Ȥ���ʡ����Ƥ��뤫��Ƚ����֤� /
- * @param o_ptr Ƚ�ꤷ�������֥������ȹ�¤�Τλ��ȥݥ���
- * @return �����ƥब��ʡ���줿�����ƥ�ʤ��TRUE���֤�
+ * @brief オブジェクトが祝福されているかの判定を返す /
+ * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
+ * @return アイテムが祝福されたアイテムならばTRUEを返す
  */
 static bool is_blessed(object_type *o_ptr)
 {
@@ -1335,10 +1335,10 @@ static bool is_blessed(object_type *o_ptr)
 
 
 /*!
- * @brief ���֥������Ȥ������Ź�ޤǰ������뤫�ɤ������֤� /
+ * @brief オブジェクトが所定の店舗で引き取れるかどうかを返す /
  * Determine if the current store will purchase the given item
- * @param o_ptr Ƚ�ꤷ�������֥������ȹ�¤�Τλ��ȥݥ���
- * @return �����ƥब�㤤����ʤ��TRUE���֤�
+ * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
+ * @return アイテムが買い取れるならばTRUEを返す
  * @note
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
@@ -1557,10 +1557,10 @@ static bool store_will_buy(object_type *o_ptr)
 
 
 /*!
- * @brief ���ߤ�Į�λ��ꤵ�줿Ź�ޤΥ����ƥ���������� /
+ * @brief 現在の町の指定された店舗のアイテムを整理する /
  * Combine and reorder items in store.
- * @param store_num Ź��ID
- * @return �ºݤ��������Ԥ�줿�ʤ��TRUE���֤���
+ * @param store_num 店舗ID
+ * @return 実際に整理が行われたならばTRUEを返す。
  */
 bool combine_and_reorder_home(int store_num)
 {
@@ -1720,10 +1720,10 @@ bool combine_and_reorder_home(int store_num)
 
 
 /*!
- * @brief �椬�Ȥ˥��֥������Ȥ�ä��� /
+ * @brief 我が家にオブジェクトを加える /
  * Add the item "o_ptr" to the inventory of the "Home"
- * @param o_ptr �ä��������֥������Ȥι�¤�λ��ȥݥ���
- * @return ���᤿���ID
+ * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
+ * @return 収めた先のID
  * @details
  * <pre>
  * In all cases, return the slot (or -1) where the object was placed
@@ -1778,8 +1778,8 @@ static int home_carry(object_type *o_ptr)
 
 	/* No space? */
 	/*
-	 * ������ǽ: ���ץ���� powerup_home �����ꤵ��Ƥ����
-	 *           �椬�Ȥ� 20 �ڡ����ޤǻȤ���
+	 * 隠し機能: オプション powerup_home が設定されていると
+	 *           我が家が 20 ページまで使える
 	 */
 	/* No space? */
 	if ((cur_store_num != STORE_HOME) || (powerup_home == TRUE)) {
@@ -1825,10 +1825,10 @@ static int home_carry(object_type *o_ptr)
 
 
 /*!
- * @brief Ź�ޤ˥��֥������Ȥ�ä��� /
+ * @brief 店舗にオブジェクトを加える /
  * Add the item "o_ptr" to a real stores inventory.
- * @param o_ptr �ä��������֥������Ȥι�¤�λ��ȥݥ���
- * @return ���᤿���ID
+ * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
+ * @return 収めた先のID
  * @details
  * <pre>
  * In all cases, return the slot (or -1) where the object was placed
@@ -1930,11 +1930,11 @@ static int store_carry(object_type *o_ptr)
 
 
 /*!
- * @brief Ź�ޤΥ��֥������ȿ������䤹 /
+ * @brief 店舗のオブジェクト数を増やす /
  * Add the item "o_ptr" to a real stores inventory.
- * @param item ���䤷���������ƥ��ID
- * @param num ���䤷������
- * @return �ʤ�
+ * @param item 増やしたいアイテムのID
+ * @param num 増やしたい数
+ * @return なし
  * @details
  * <pre>
  * Increase, by a given amount, the number of a certain item
@@ -1961,10 +1961,10 @@ static void store_item_increase(int item, int num)
 
 
 /*!
- * @brief Ź�ޤΥ��֥������ȿ��������� /
+ * @brief 店舗のオブジェクト数を削除する /
  * Remove a slot if it is empty
- * @param item ��������������ƥ��ID
- * @return �ʤ�
+ * @param item 削除したいアイテムのID
+ * @return なし
  */
 static void store_item_optimize(int item)
 {
@@ -1994,10 +1994,10 @@ static void store_item_optimize(int item)
 }
 
 /*!
- * @brief �֥�å��ޡ����å��Ѥ�̵�����ʤ��ӽ�Ƚ�� /
+ * @brief ブラックマーケット用の無価値品の排除判定 /
  * This function will keep 'crap' out of the black market.
- * @param o_ptr Ƚ�ꤷ�������֥������Ȥι�¤�λ��ȥݥ���
- * @return �֥�å��ޡ����åȤˤȤä�̵���ͤ��ʤʤ��TRUE���֤�
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return ブラックマーケットにとって無価値な品ならばTRUEを返す
  * @details
  * <pre>
  * Crap is defined as any item that is "available" elsewhere
@@ -2038,9 +2038,9 @@ static bool black_market_crap(object_type *o_ptr)
 
 
 /*!
- * @brief Ź�ޤ���·���Ѳ��Τ���˥����ƥ�������� /
+ * @brief 店舗の品揃え変化のためにアイテムを削除する /
  * Attempt to delete (some of) a random item from the store
- * @return �ʤ�
+ * @return なし
  * @details
  * <pre>
  * Hack -- we attempt to "maintain" piles of items when possible.
@@ -2075,9 +2075,9 @@ static void store_delete(void)
 
 
 /*!
- * @brief Ź�ޤ���·���Ѳ��Τ���˥����ƥ���ɲä��� /
+ * @brief 店舗の品揃え変化のためにアイテムを追加する /
  * Creates a random item and gives it to a store
- * @return �ʤ�
+ * @return なし
  * @details
  * <pre>
  * This algorithm needs to be rethought.  A lot.
@@ -2190,10 +2190,10 @@ static void store_create(void)
 
 
 /*!
- * @brief Ź�ޤγ���оݳ��ˤ��뤫�ɤ�����Ƚ�� /
+ * @brief 店舗の割引対象外にするかどうかを判定 /
  * Eliminate need to bargain if player has haggled well in the past
- * @param minprice �����ƥ�κ����������
- * @return �����ػߤ���ʤ�TRUE���֤���
+ * @param minprice アイテムの最低販売価格
+ * @return 割引を禁止するならTRUEを返す。
  */
 static bool noneedtobargain(s32b minprice)
 {
@@ -2215,12 +2215,12 @@ static bool noneedtobargain(s32b minprice)
 
 
 /*!
- * @brief Ź��λ��ĥץ쥤�䡼���Ф���������ɤ������и��򵭲����� /
+ * @brief 店主の持つプレイヤーに対する売買の良し悪し経験を記憶する /
  * Update the bargain info
- * @param price �ºݤμ������
- * @param minprice Ź����󼨤�������
- * @param num ����� 
- * @return �ʤ�
+ * @param price 実際の取引価格
+ * @param minprice 店主の提示した価格
+ * @param num 売買数 
+ * @return なし
  */
 static void updatebargain(s32b price, s32b minprice, int num)
 {
@@ -2253,10 +2253,10 @@ static void updatebargain(s32b price, s32b minprice, int num)
 
 
 /*!
- * @brief Ź�ξ��ʥꥹ�Ȥ��ɽ������ /
+ * @brief 店の商品リストを再表示する /
  * Re-displays a single store entry
- * @param pos ɽ����
- * @return �ʤ�
+ * @param pos 表示行
+ * @return なし
  */
 static void display_entry(int pos)
 {
@@ -2363,7 +2363,7 @@ static void display_entry(int pos)
 
 			/* Actually draw the price (not fixed) */
 #ifdef JP
-(void)sprintf(out_val, "%9ld��", (long)x);
+(void)sprintf(out_val, "%9ld固", (long)x);
 #else
 			(void)sprintf(out_val, "%9ld F", (long)x);
 #endif
@@ -2400,9 +2400,9 @@ static void display_entry(int pos)
 
 
 /*!
- * @brief Ź�ξ��ʥꥹ�Ȥ�ɽ������ /
+ * @brief 店の商品リストを表示する /
  * Displays a store's inventory 		-RAK-
- * @return �ʤ�
+ * @return なし
  * @details
  * All prices are listed as "per individual object".  -BEN-
  */
@@ -2436,7 +2436,7 @@ static void display_inventory(void)
 	{
 		/* Show "more" reminder (after the last item) */
 #ifdef JP
-		prt("-³��-", k + 6, 3);
+		prt("-続く-", k + 6, 3);
 #else
 		prt("-more-", k + 6, 3);
 #endif
@@ -2445,7 +2445,7 @@ static void display_inventory(void)
 		/* Indicate the "current page" */
 		/* Trailing spaces are to display (Page xx) and (Page x) */
 #ifdef JP
-		put_str(format("(%d�ڡ���)  ", store_top/store_bottom + 1), 5, 20);
+		put_str(format("(%dページ)  ", store_top/store_bottom + 1), 5, 20);
 #else
 		put_str(format("(Page %d)  ", store_top/store_bottom + 1), 5, 20);
 #endif
@@ -2458,7 +2458,7 @@ static void display_inventory(void)
 
 		if (cur_store_num == STORE_HOME && !powerup_home) k /= 10;
 #ifdef JP
-		put_str(format("�����ƥ��:  %4d/%4d", st_ptr->stock_num, k), 19 + xtra_stock, 27);
+		put_str(format("アイテム数:  %4d/%4d", st_ptr->stock_num, k), 19 + xtra_stock, 27);
 #else
 		put_str(format("Objects:  %4d/%4d", st_ptr->stock_num, k), 19 + xtra_stock, 30);
 #endif
@@ -2467,9 +2467,9 @@ static void display_inventory(void)
 
 
 /*!
- * @brief �ץ쥤�䡼�ν�����ɽ������ /
+ * @brief プレイヤーの所持金を表示する /
  * Displays players gold					-RAK-
- * @return �ʤ�
+ * @return なし
  * @details
  */
 static void store_prt_gold(void)
@@ -2477,7 +2477,7 @@ static void store_prt_gold(void)
 	char out_val[64];
 
 #ifdef JP
-	prt("������Τ���: ", 19 + xtra_stock, 53);
+	prt("手持ちのお金: ", 19 + xtra_stock, 53);
 #else
 	prt("Gold Remaining: ", 19 + xtra_stock, 53);
 #endif
@@ -2488,9 +2488,9 @@ static void store_prt_gold(void)
 }
 
 /*!
- * @brief Ź�޾������Τ�ɽ������ᥤ��롼���� /
+ * @brief 店舗情報全体を表示するメインルーチン /
  * Displays store (after clearing screen)		-RAK-
- * @return �ʤ�
+ * @return なし
  * @details
  */
 static void display_store(void)
@@ -2506,7 +2506,7 @@ static void display_store(void)
 	{
 		/* Put the owner name */
 #ifdef JP
-		put_str("�椬��", 3, 31);
+		put_str("我が家", 3, 31);
 #else
 		put_str("Your Home", 3, 30);
 #endif
@@ -2514,7 +2514,7 @@ static void display_store(void)
 
 		/* Label the item descriptions */
 #ifdef JP
-		put_str("�����ƥ�ΰ���", 5, 4);
+		put_str("アイテムの一覧", 5, 4);
 #else
 		put_str("Item Description", 5, 3);
 #endif
@@ -2524,7 +2524,7 @@ static void display_store(void)
 		if (show_weights)
 		{
 #ifdef JP
-			put_str("�Ť�", 5, 72);
+			put_str("重さ", 5, 72);
 #else
 			put_str("Weight", 5, 70);
 #endif
@@ -2537,7 +2537,7 @@ static void display_store(void)
 	{
 		/* Put the owner name */
 #ifdef JP
-		put_str("��ʪ��", 3, 31);
+		put_str("博物館", 3, 31);
 #else
 		put_str("Museum", 3, 30);
 #endif
@@ -2545,7 +2545,7 @@ static void display_store(void)
 
 		/* Label the item descriptions */
 #ifdef JP
-		put_str("�����ƥ�ΰ���", 5, 4);
+		put_str("アイテムの一覧", 5, 4);
 #else
 		put_str("Item Description", 5, 3);
 #endif
@@ -2555,7 +2555,7 @@ static void display_store(void)
 		if (show_weights)
 		{
 #ifdef JP
-			put_str("�Ť�", 5, 72);
+			put_str("重さ", 5, 72);
 #else
 			put_str("Weight", 5, 70);
 #endif
@@ -2580,7 +2580,7 @@ static void display_store(void)
 
 		/* Label the item descriptions */
 #ifdef JP
-		put_str("���ʤΰ���", 5, 7);
+		put_str("商品の一覧", 5, 7);
 #else
 		put_str("Item Description", 5, 3);
 #endif
@@ -2590,7 +2590,7 @@ static void display_store(void)
 		if (show_weights)
 		{
 #ifdef JP
-			put_str("�Ť�", 5, 62);
+			put_str("重さ", 5, 62);
 #else
 			put_str("Weight", 5, 60);
 #endif
@@ -2599,7 +2599,7 @@ static void display_store(void)
 
 		/* Label the asking price (in stores) */
 #ifdef JP
-		put_str("����", 5, 73);
+		put_str("価格", 5, 73);
 #else
 		put_str("Price", 5, 72);
 #endif
@@ -2616,13 +2616,13 @@ static void display_store(void)
 
 
 /*!
- * @brief Ź�ޤ��饢���ƥ�����򤹤� /
+ * @brief 店舗からアイテムを選択する /
  * Get the ID of a store item and return its value	-RAK-
- * @param com_val ����ID���֤����ȥݥ���
- * @param pmt ��å���������ץ����
- * @param i �����ϰϤκǾ���
- * @param j �����ϰϤκ�����
- * @return �ºݤ����򤷤���TRUE������󥻥뤷����FALSE
+ * @param com_val 選択IDを返す参照ポインタ
+ * @param pmt メッセージキャプション
+ * @param i 選択範囲の最小値
+ * @param j 選択範囲の最大値
+ * @return 実際に選択したらTRUE、キャンセルしたらFALSE
  */
 static int get_stock(int *com_val, cptr pmt, int i, int j)
 {
@@ -2656,8 +2656,8 @@ static int get_stock(int *com_val, cptr pmt, int i, int j)
 	lo = I2A(i);
 	hi = (j > 25) ? toupper(I2A(j - 26)) : I2A(j);
 #ifdef JP
-	(void)sprintf(out_val, "(%s:%c-%c, ESC������) %s",
-		(((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) ? "�����ƥ�" : "����"), 
+	(void)sprintf(out_val, "(%s:%c-%c, ESCで中断) %s",
+		(((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) ? "アイテム" : "商品"), 
 				  lo, hi, pmt);
 #else
 	(void)sprintf(out_val, "(Items %c-%c, ESC to exit) %s",
@@ -2710,9 +2710,9 @@ static int get_stock(int *com_val, cptr pmt, int i, int j)
 
 
 /*!
- * @brief Ź��������٤����䤷���ץ쥤�䡼������Ф�Ƚ��Ƚ�����Ԥ� /
+ * @brief 店主の不満度を増やし、プレイヤーを締め出す判定と処理を行う /
  * Increase the insult counter and get angry if too many -RAK-
- * @return �ץ쥤�䡼������Ф����TRUE���֤�
+ * @return プレイヤーを締め出す場合TRUEを返す
  */
 static int increase_insults(void)
 {
@@ -2743,9 +2743,9 @@ static int increase_insults(void)
 
 
 /*!
- * @brief Ź��������٤򸺤餹 /
+ * @brief 店主の不満度を減らす /
  * Decrease insults 				-RAK-
- * @return �ץ쥤�䡼������Ф����TRUE���֤�
+ * @return プレイヤーを締め出す場合TRUEを返す
  */
 static void decrease_insults(void)
 {
@@ -2755,9 +2755,9 @@ static void decrease_insults(void)
 
 
 /*!
- * @brief Ź��������٤����������ΤߤΥ�å�������ɽ������ /
+ * @brief 店主の不満度が増えた場合のみのメッセージを表示する /
  * Have insulted while haggling 			-RAK-
- * @return �ץ쥤�䡼������Ф����TRUE���֤�
+ * @return プレイヤーを締め出す場合TRUEを返す
  */
 static int haggle_insults(void)
 {
@@ -2784,13 +2784,13 @@ static s32b last_inc = 0L;
 
 
 /*!
- * @brief ��Ĳ��ʤ��ǧ��ǧ�ڤ������Ԥ� /
+ * @brief 交渉価格を確認と認証の是非を行う /
  * Get a haggle
- * @param pmt ��å�����
- * @param poffer ���Ӳ����󼨤򤷤������ͤ��֤����ȥݥ���
- * @param price ���ߤθ�Ĳ���
- * @param final �ǽ�������ʤʤ��TRUE
- * @return �ץ쥤�䡼������Ф����TRUE���֤�
+ * @param pmt メッセージ
+ * @param poffer 別途価格提示をした場合の値を返す参照ポインタ
+ * @param price 現在の交渉価格
+ * @param final 最終確定価格ならばTRUE
+ * @return プレイヤーを締め出す場合TRUEを返す
  */
 static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
 {
@@ -2810,7 +2810,7 @@ static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
 	if (final)
 	{
 #ifdef JP
-		sprintf(buf, "%s [����] ", pmt);
+		sprintf(buf, "%s [承諾] ", pmt);
 #else
 		sprintf(buf, "%s [accept] ", pmt);
 #endif
@@ -2926,7 +2926,7 @@ static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
 
 		/* Warning */
 #ifdef JP
-		msg_print("�ͤ����������Ǥ���");
+		msg_print("値がおかしいです。");
 #else
 		msg_print("Invalid response.");
 #endif
@@ -2940,15 +2940,15 @@ static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
 
 
 /*!
- * @brief Ź�礬�ץ쥤�䡼����θ�Ĳ��ʤ�Ƚ�Ǥ��� /
+ * @brief 店主がプレイヤーからの交渉価格を判断する /
  * Receive an offer (from the player)
- * @param pmt ��å�����
- * @param poffer Ź�礫��θ�Ĳ��ʤ��֤����ȥݥ���
- * @param last_offer ���ߤθ�Ĳ���
- * @param factor Ź��β��ʴ����Ψ
- * @param price �����ƥ�μ²���
- * @param final �ǽ����ʳ���ʤ��TRUE
- * @return �ץ쥤�䡼�β��ʤ��Ф��������ʤ��TRUE���֤� /
+ * @param pmt メッセージ
+ * @param poffer 店主からの交渉価格を返す参照ポインタ
+ * @param last_offer 現在の交渉価格
+ * @param factor 店主の価格基準倍率
+ * @param price アイテムの実価値
+ * @param final 最終価格確定ならばTRUE
+ * @return プレイヤーの価格に対して不服ならばTRUEを返す /
  * Return TRUE if offer is NOT okay
  */
 static bool receive_offer(cptr pmt, s32b *poffer,
@@ -2977,11 +2977,11 @@ static bool receive_offer(cptr pmt, s32b *poffer,
 
 
 /*!
- * @brief �ץ쥤�䡼����������������ڤ�����ᥤ��롼���� /
+ * @brief プレイヤーが購入する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
- * @param o_ptr ���֥������Ȥι�¤�λ��ȥݥ���
- * @param price �ǽ����ʤ��֤����ȥݥ���
- * @return �ץ쥤�䡼�β��ʤ��Ф���Ź�礬�����ʤ��TRUE���֤� /
+ * @param o_ptr オブジェクトの構造体参照ポインタ
+ * @param price 最終価格を返す参照ポインタ
+ * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
 static bool purchase_haggle(object_type *o_ptr, s32b *price)
@@ -2996,7 +2996,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 	bool		cancel = FALSE;
 
 #ifdef JP
-	cptr pmt = "�󼨲���";
+	cptr pmt = "提示価格";
 #else
 	cptr		pmt = "Asking";
 #endif
@@ -3023,7 +3023,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 		{
 			/* Message summary */
 #ifdef JP
-			msg_print("��ɤ��ζ�ۤˤޤȤޤä���");
+			msg_print("結局この金額にまとまった。");
 #else
 			msg_print("You eventually agree upon the price.");
 #endif
@@ -3036,7 +3036,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 		{
 			/* Message summary */
 #ifdef JP
-			msg_print("����ʤ�Ȥ��ζ�ۤˤޤȤޤä���");
+			msg_print("すんなりとこの金額にまとまった。");
 #else
 			msg_print("You quickly agree upon the price.");
 #endif
@@ -3052,7 +3052,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 
 		/* Go to final offer */
 #ifdef JP
-		pmt = "�ǽ��󼨲���";
+		pmt = "最終提示価格";
 #else
 		pmt = "Final Offer";
 #endif
@@ -3091,7 +3091,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 			(void)sprintf(out_val, "%s :  %ld", pmt, (long)cur_ask);
 			put_str(out_val, 1, 0);
 #ifdef JP
-			cancel = receive_offer("�󼨤�����? ",
+			cancel = receive_offer("提示する金額? ",
 #else
 			cancel = receive_offer("What do you offer? ",
 #endif
@@ -3146,7 +3146,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 				final = TRUE;
 				cur_ask = final_ask;
 #ifdef JP
-				pmt = "�ǽ��󼨲���";
+				pmt = "最終提示価格";
 #else
 				pmt = "Final Offer";
 #endif
@@ -3171,7 +3171,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 				allow_inc = TRUE;
 				prt("", 1, 0);
 #ifdef JP
-(void)sprintf(out_val, "������󼨶��: $%ld",
+(void)sprintf(out_val, "前回の提示金額: $%ld",
 #else
 				(void)sprintf(out_val, "Your last offer: %ld",
 #endif
@@ -3195,11 +3195,11 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 
 
 /*!
- * @brief �ץ쥤�䡼����Ѥ���������ڤ�����ᥤ��롼���� /
+ * @brief プレイヤーが売却する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
- * @param o_ptr ���֥������Ȥι�¤�λ��ȥݥ���
- * @param price �ǽ����ʤ��֤����ȥݥ���
- * @return �ץ쥤�䡼�β��ʤ��Ф���Ź�礬�����ʤ��TRUE���֤� /
+ * @param o_ptr オブジェクトの構造体参照ポインタ
+ * @param price 最終価格を返す参照ポインタ
+ * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
 static bool sell_haggle(object_type *o_ptr, s32b *price)
@@ -3212,7 +3212,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 	int     annoyed = 0, final = FALSE;
 	bool    cancel = FALSE;
 #ifdef JP
-	cptr pmt = "�󼨶��";
+	cptr pmt = "提示金額";
 #else
 	cptr    pmt = "Offer";
 #endif
@@ -3247,7 +3247,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		{
 			/* Message */
 #ifdef JP
-			msg_print("¨�¤ˤ��ζ�ۤˤޤȤޤä���");
+			msg_print("即座にこの金額にまとまった。");
 #else
 			msg_print("You instantly agree upon the price.");
 #endif
@@ -3263,7 +3263,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		{
 			/* Message */
 #ifdef JP
-			msg_print("��ɤ��ζ�ۤˤޤȤޤä���");
+			msg_print("結局この金額にまとまった。");
 #else
 			msg_print("You eventually agree upon the price.");
 #endif
@@ -3276,7 +3276,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		{
 			/* Message summary */
 #ifdef JP
-			msg_print("����ʤ�Ȥ��ζ�ۤˤޤȤޤä���");
+			msg_print("すんなりとこの金額にまとまった。");
 #else
 			msg_print("You quickly agree upon the price.");
 #endif
@@ -3290,7 +3290,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		/* Final offer */
 		final = TRUE;
 #ifdef JP
-		pmt = "�ǽ��󼨶��";
+		pmt = "最終提示金額";
 #else
 		pmt = "Final Offer";
 #endif
@@ -3328,7 +3328,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 			(void)sprintf(out_val, "%s :  %ld", pmt, (long)cur_ask);
 			put_str(out_val, 1, 0);
 #ifdef JP
-			cancel = receive_offer("�󼨤������? ",
+			cancel = receive_offer("提示する価格? ",
 #else
 			cancel = receive_offer("What price do you ask? ",
 #endif
@@ -3386,7 +3386,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 				cur_ask = final_ask;
 				final = TRUE;
 #ifdef JP
-				pmt = "�ǽ��󼨶��";
+				pmt = "最終提示金額";
 #else
 				pmt = "Final Offer";
 #endif
@@ -3396,7 +3396,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 				{
 					flag = TRUE;
 #ifdef JP
-				/* �ɲ� $0 ���㤤����Ƥ��ޤ��Τ��ɻ� By FIRST*/
+				/* 追加 $0 で買い取られてしまうのを防止 By FIRST*/
 					cancel = TRUE;
 #endif
 					(void)(increase_insults());
@@ -3415,7 +3415,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 				prt("", 1, 0);
 				(void)sprintf(out_val,
 #ifdef JP
-					      "������󼨲��� $%ld", (long)last_offer);
+					      "前回の提示価格 $%ld", (long)last_offer);
 #else
 							  "Your last bid %ld", (long)last_offer);
 #endif
@@ -3438,9 +3438,9 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 
 
 /*!
- * @brief Ź����ι��������Υᥤ��롼���� /
+ * @brief 店からの購入処理のメインルーチン /
  * Buy an item from a store 			-RAK-
- * @return �ʤ�
+ * @return なし
  */
 static void store_purchase(void)
 {
@@ -3461,7 +3461,7 @@ static void store_purchase(void)
 	if (cur_store_num == STORE_MUSEUM)
 	{
 #ifdef JP
-		msg_print("��ʪ�ۤ�����Ф����ȤϤǤ��ޤ���");
+		msg_print("博物館から取り出すことはできません。");
 #else
 		msg_print("Museum.");
 #endif
@@ -3473,14 +3473,14 @@ static void store_purchase(void)
 	{
 		if (cur_store_num == STORE_HOME)
 #ifdef JP
-			msg_print("�椬�Ȥˤϲ����֤��Ƥ���ޤ���");
+			msg_print("我が家には何も置いてありません。");
 #else
 			msg_print("Your home is empty.");
 #endif
 
 		else
 #ifdef JP
-			msg_print("���߾��ʤκ߸ˤ��ڤ餷�Ƥ��ޤ���");
+			msg_print("現在商品の在庫を切らしています。");
 #else
 			msg_print("I am currently out of stock.");
 #endif
@@ -3497,16 +3497,16 @@ static void store_purchase(void)
 
 	/* Prompt */
 #ifdef JP
-	/* �֥�å��ޡ����åȤλ����̤Υ�å����� */
+	/* ブラックマーケットの時は別のメッセージ */
 	switch( cur_store_num ) {
 		case 7:
-			sprintf(out_val, "�ɤΥ����ƥ����ޤ���? ");
+			sprintf(out_val, "どのアイテムを取りますか? ");
 			break;
 		case 6:
-			sprintf(out_val, "�ɤ�? ");
+			sprintf(out_val, "どれ? ");
 			break;
 		default:
-			sprintf(out_val, "�ɤ���ʪ���ߤ��������? ");
+			sprintf(out_val, "どの品物が欲しいんだい? ");
 			break;
 	}
 #else
@@ -3552,7 +3552,7 @@ static void store_purchase(void)
 	if (!inven_carry_okay(j_ptr))
 	{
 #ifdef JP
-msg_print("����ʤ˥����ƥ����Ƥʤ���");
+msg_print("そんなにアイテムを持てない。");
 #else
 		msg_print("You cannot carry that many different items.");
 #endif
@@ -3571,7 +3571,7 @@ msg_print("����ʤ˥����ƥ����Ƥʤ���");
 		    (o_ptr->ident & IDENT_FIXED))
 		{
 #ifdef JP
-msg_format("��ĤˤĤ� $%ld�Ǥ���", (long)(best));
+msg_format("一つにつき $%ldです。", (long)(best));
 #else
 			msg_format("That costs %ld gold per item.", (long)(best));
 #endif
@@ -3604,7 +3604,7 @@ msg_format("��ĤˤĤ� $%ld�Ǥ���", (long)(best));
 	if (!inven_carry_okay(j_ptr))
 	{
 #ifdef JP
-		msg_print("���å��ˤ��Υ����ƥ��������֤��ʤ���");
+		msg_print("ザックにそのアイテムを入れる隙間がない。");
 #else
 		msg_print("You cannot carry that many items.");
 #endif
@@ -3633,7 +3633,7 @@ msg_format("��ĤˤĤ� $%ld�Ǥ���", (long)(best));
 
 			/* Message */
 #ifdef JP
-msg_format("%s(%c)��������롣", o_name, I2A(item));
+msg_format("%s(%c)を購入する。", o_name, I2A(item));
 #else
 			msg_format("Buying %s (%c).", o_name, I2A(item));
 #endif
@@ -3687,7 +3687,7 @@ msg_format("%s(%c)��������롣", o_name, I2A(item));
 
 				/* Message */
 #ifdef JP
-msg_format("%s�� $%ld�ǹ������ޤ�����", o_name, (long)price);
+msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 #else
 				msg_format("You bought %s for %ld gold.", o_name, (long)price);
 #endif
@@ -3714,7 +3714,7 @@ msg_format("%s�� $%ld�ǹ������ޤ�����", o_name, (long)price);
 
 				/* Message */
 #ifdef JP
-		msg_format("%s(%c)�������줿��", o_name, index_to_label(item_new));
+		msg_format("%s(%c)を手に入れた。", o_name, index_to_label(item_new));
 #else
 				msg_format("You have %s (%c).",
 						   o_name, index_to_label(item_new));
@@ -3748,7 +3748,7 @@ msg_format("%s�� $%ld�ǹ������ޤ�����", o_name, (long)price);
 						char buf[80];
 						/* Message */
 #ifdef JP
-						msg_print("Ź��ϰ��ष����");
+						msg_print("店主は引退した。");
 #else
 						msg_print("The shopkeeper retires.");
 #endif
@@ -3771,7 +3771,7 @@ msg_format("%s�� $%ld�ǹ������ޤ�����", o_name, (long)price);
 					{
 						/* Message */
 #ifdef JP
-						msg_print("Ź��Ͽ����ʺ߸ˤ���Ф�����");
+						msg_print("店主は新たな在庫を取り出した。");
 #else
 						msg_print("The shopkeeper brings out some new stock.");
 #endif
@@ -3815,7 +3815,7 @@ msg_format("%s�� $%ld�ǹ������ޤ�����", o_name, (long)price);
 			{
 				/* Simple message (no insult) */
 #ifdef JP
-				msg_print("���⤬­��ޤ���");
+				msg_print("お金が足りません。");
 #else
 				msg_print("You do not have enough gold.");
 #endif
@@ -3840,7 +3840,7 @@ msg_format("%s�� $%ld�ǹ������ޤ�����", o_name, (long)price);
 
 		/* Message */
 #ifdef JP
-				msg_format("%s(%c)���ä���",
+				msg_format("%s(%c)を取った。",
 #else
 		msg_format("You have %s (%c).",
 #endif
@@ -3890,9 +3890,9 @@ msg_format("%s�� $%ld�ǹ������ޤ�����", o_name, (long)price);
 
 
 /*!
- * @brief Ź�������ѽ����Υᥤ��롼���� /
+ * @brief 店からの売却処理のメインルーチン /
  * Sell an item to the store (or home)
- * @return �ʤ�
+ * @return なし
  */
 static void store_sell(void)
 {
@@ -3915,21 +3915,21 @@ static void store_sell(void)
 	/* Prepare a prompt */
 	if (cur_store_num == STORE_HOME)
 #ifdef JP
-	q = "�ɤΥ����ƥ���֤��ޤ���? ";
+	q = "どのアイテムを置きますか? ";
 #else
 		q = "Drop which item? ";
 #endif
 
 	else if (cur_store_num == STORE_MUSEUM)
 #ifdef JP
-	q = "�ɤΥ����ƥ���£���ޤ���? ";
+	q = "どのアイテムを寄贈しますか? ";
 #else
 		q = "Give which item? ";
 #endif
 
 	else
 #ifdef JP
-		q = "�ɤΥ����ƥ�����ޤ���? ";
+		q = "どのアイテムを売りますか? ";
 #else
 		q = "Sell which item? ";
 #endif
@@ -3940,11 +3940,11 @@ static void store_sell(void)
 	item_tester_hook = store_will_buy;
 
 	/* Get an item */
-	/* �椬�ȤǤ������ʥ�å��������Ф륪�ꥸ�ʥ�ΥХ����� */
+	/* 我が家でおかしなメッセージが出るオリジナルのバグを修正 */
 	if (cur_store_num == STORE_HOME)
 	{
 #ifdef JP
-		s = "�֤��륢���ƥ����äƤ��ޤ���";
+		s = "置けるアイテムを持っていません。";
 #else
 		s = "You don't have any item to drop.";
 #endif
@@ -3952,7 +3952,7 @@ static void store_sell(void)
 	else if (cur_store_num == STORE_MUSEUM)
 	{
 #ifdef JP
-		s = "��£�Ǥ��륢���ƥ����äƤ��ޤ���";
+		s = "寄贈できるアイテムを持っていません。";
 #else
 		s = "You don't have any item to give.";
 #endif
@@ -3960,7 +3960,7 @@ static void store_sell(void)
 	else
 	{
 #ifdef JP
-		s = "�ߤ���ʪ���ʤ��Ǥ��ͤ���";
+		s = "欲しい物がないですねえ。";
 #else
 		s = "You have nothing that I want.";
 #endif
@@ -3986,7 +3986,7 @@ static void store_sell(void)
 	{
 		/* Oops */
 #ifdef JP
-		msg_print("�ա��ࡢ�ɤ���餽��ϼ����Ƥ���褦���͡�");
+		msg_print("ふーむ、どうやらそれは呪われているようだね。");
 #else
 		msg_print("Hmmm, it seems to be cursed.");
 #endif
@@ -4043,21 +4043,21 @@ static void store_sell(void)
 	{
 		if (cur_store_num == STORE_HOME)
 #ifdef JP
-			msg_print("�椬�ȤˤϤ⤦�֤���꤬�ʤ���");
+			msg_print("我が家にはもう置く場所がない。");
 #else
 			msg_print("Your home is full.");
 #endif
 
 		else if (cur_store_num == STORE_MUSEUM)
 #ifdef JP
-			msg_print("��ʪ�ۤϤ⤦���դ���");
+			msg_print("博物館はもう満杯だ。");
 #else
 			msg_print("Museum is full.");
 #endif
 
 		else
 #ifdef JP
-			msg_print("�����ޤ��󤬡�Ź�ˤϤ⤦�֤���꤬����ޤ���");
+			msg_print("すいませんが、店にはもう置く場所がありません。");
 #else
 			msg_print("I have not the room in my store to keep it.");
 #endif
@@ -4071,7 +4071,7 @@ static void store_sell(void)
 	{
 		/* Describe the transaction */
 #ifdef JP
-		msg_format("%s(%c)����Ѥ��롣", o_name, index_to_label(item));
+		msg_format("%s(%c)を売却する。", o_name, index_to_label(item));
 #else
 		msg_format("Selling %s (%c).", o_name, index_to_label(item));
 #endif
@@ -4142,7 +4142,7 @@ static void store_sell(void)
 
 			/* Describe the result (in message buffer) */
 #ifdef JP
-msg_format("%s�� $%ld����Ѥ��ޤ�����", o_name, (long)price);
+msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 #else
 			msg_format("You sold %s for %ld gold.", o_name, (long)price);
 #endif
@@ -4198,7 +4198,7 @@ msg_format("%s�� $%ld����Ѥ��ޤ�����", o_name, (long)price);
 		if (-1 == store_check_num(q_ptr))
 		{
 #ifdef JP
-			msg_print("�����Ʊ����ʪ�ϴ�����ʪ�ۤˤ���褦�Ǥ���");
+			msg_print("それと同じ品物は既に博物館にあるようです。");
 #else
 			msg_print("The same object as it is already in the Museum.");
 #endif
@@ -4206,13 +4206,13 @@ msg_format("%s�� $%ld����Ѥ��ޤ�����", o_name, (long)price);
 		else
 		{
 #ifdef JP
-			msg_print("��ʪ�ۤ˴�£������Τϼ��Ф����Ȥ��Ǥ��ޤ��󡪡�");
+			msg_print("博物館に寄贈したものは取り出すことができません！！");
 #else
 			msg_print("You cannot take items which is given to the Museum back!!");
 #endif
 		}
 #ifdef JP
-		if (!get_check(format("������%s���£���ޤ�����", o2_name))) return;
+		if (!get_check(format("本当に%sを寄贈しますか？", o2_name))) return;
 #else
 		if (!get_check(format("Really give %s to the Museum? ", o2_name))) return;
 #endif
@@ -4226,7 +4226,7 @@ msg_format("%s�� $%ld����Ѥ��ޤ�����", o_name, (long)price);
 
 		/* Describe */
 #ifdef JP
-		msg_format("%s���֤�����(%c)", o_name, index_to_label(item));
+		msg_format("%sを置いた。(%c)", o_name, index_to_label(item));
 #else
 		msg_format("You drop %s (%c).", o_name, index_to_label(item));
 #endif
@@ -4259,7 +4259,7 @@ msg_format("%s�� $%ld����Ѥ��ޤ�����", o_name, (long)price);
 
 		/* Describe */
 #ifdef JP
-		msg_format("%s���֤�����(%c)", o_name, index_to_label(item));
+		msg_format("%sを置いた。(%c)", o_name, index_to_label(item));
 #else
 		msg_format("You drop %s (%c).", o_name, index_to_label(item));
 #endif
@@ -4294,9 +4294,9 @@ msg_format("%s�� $%ld����Ѥ��ޤ�����", o_name, (long)price);
 
 
 /*!
- * @brief Ź�Υ����ƥ��Ĵ�٤륳�ޥ�ɤΥᥤ��롼���� /
+ * @brief 店のアイテムを調べるコマンドのメインルーチン /
  * Examine an item in a store			   -JDL-
- * @return �ʤ�
+ * @return なし
  */
 static void store_examine(void)
 {
@@ -4312,21 +4312,21 @@ static void store_examine(void)
 	{
 		if (cur_store_num == STORE_HOME)
 #ifdef JP
-			msg_print("�椬�Ȥˤϲ����֤��Ƥ���ޤ���");
+			msg_print("我が家には何も置いてありません。");
 #else
 			msg_print("Your home is empty.");
 #endif
 
 		else if (cur_store_num == STORE_MUSEUM)
 #ifdef JP
-			msg_print("��ʪ�ۤˤϲ����֤��Ƥ���ޤ���");
+			msg_print("博物館には何も置いてありません。");
 #else
 			msg_print("Museum is empty.");
 #endif
 
 		else
 #ifdef JP
-			msg_print("���߾��ʤκ߸ˤ��ڤ餷�Ƥ��ޤ���");
+			msg_print("現在商品の在庫を切らしています。");
 #else
 			msg_print("I am currently out of stock.");
 #endif
@@ -4343,7 +4343,7 @@ static void store_examine(void)
 
 	/* Prompt */
 #ifdef JP
-sprintf(out_val, "�ɤ��Ĵ�٤ޤ�����");
+sprintf(out_val, "どれを調べますか？");
 #else
 	sprintf(out_val, "Which item do you want to examine? ");
 #endif
@@ -4363,7 +4363,7 @@ sprintf(out_val, "�ɤ��Ĵ�٤ޤ�����");
 	{
 		/* This can only happen in the home */
 #ifdef JP
-msg_print("���Υ����ƥ�ˤĤ����ä��ΤäƤ��뤳�ȤϤʤ���");
+msg_print("このアイテムについて特に知っていることはない。");
 #else
 		msg_print("You have no special knowledge about that item.");
 #endif
@@ -4376,7 +4376,7 @@ msg_print("���Υ����ƥ�ˤĤ����ä��ΤäƤ��뤳�ȤϤʤ���");
 
 	/* Describe */
 #ifdef JP
-msg_format("%s��Ĵ�٤Ƥ���...", o_name);
+msg_format("%sを調べている...", o_name);
 #else
 	msg_format("Examining %s...", o_name);
 #endif
@@ -4385,7 +4385,7 @@ msg_format("%s��Ĵ�٤Ƥ���...", o_name);
 	/* Describe it fully */
 	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL))
 #ifdef JP
-msg_print("�ä��Ѥ�ä��Ȥ����Ϥʤ��褦����");
+msg_print("特に変わったところはないようだ。");
 #else
 		msg_print("You see nothing special.");
 #endif
@@ -4396,9 +4396,9 @@ msg_print("�ä��Ѥ�ä��Ȥ����Ϥʤ��褦����");
 
 
 /*!
- * @brief ��ʪ�ۤΥ����ƥ�����륳�ޥ�ɤΥᥤ��롼���� /
+ * @brief 博物館のアイテムを除去するコマンドのメインルーチン /
  * Remove an item from museum (Originally from TOband)
- * @return �ʤ�
+ * @return なし
  */
 static void museum_remove_object(void)
 {
@@ -4412,7 +4412,7 @@ static void museum_remove_object(void)
 	if (st_ptr->stock_num <= 0)
 	{
 #ifdef JP
-		msg_print("��ʪ�ۤˤϲ����֤��Ƥ���ޤ���");
+		msg_print("博物館には何も置いてありません。");
 #else
 		msg_print("Museum is empty.");
 #endif
@@ -4428,7 +4428,7 @@ static void museum_remove_object(void)
 
 	/* Prompt */
 #ifdef JP
-	sprintf(out_val, "�ɤΥ����ƥ��Ÿ�����ᤵ���ޤ�����");
+	sprintf(out_val, "どのアイテムの展示をやめさせますか？");
 #else
 	sprintf(out_val, "Which item do you want to order to remove? ");
 #endif
@@ -4446,8 +4446,8 @@ static void museum_remove_object(void)
 	object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
-	msg_print("Ÿ�����ᤵ���������ƥ�����٤ȸ��뤳�ȤϤǤ��ޤ���");
-	if (!get_check(format("������%s��Ÿ�����ᤵ���ޤ�����", o_name))) return;
+	msg_print("展示をやめさせたアイテムは二度と見ることはできません！");
+	if (!get_check(format("本当に%sの展示をやめさせますか？", o_name))) return;
 #else
 	msg_print("You cannot see items which is removed from the Museum!");
 	if (!get_check(format("Really order to remove %s from the Museum? ", o_name))) return;
@@ -4455,7 +4455,7 @@ static void museum_remove_object(void)
 
 	/* Message */
 #ifdef JP
-	msg_format("%s��Ÿ�����ᤵ������", o_name);
+	msg_format("%sの展示をやめさせた。", o_name);
 #else
 	msg_format("You ordered to remove %s.", o_name);
 #endif
@@ -4488,9 +4488,9 @@ static bool leave_store = FALSE;
 
 
 /*!
- * @brief Ź�޽������ޥ������Υᥤ��롼���� /
+ * @brief 店舗処理コマンド選択のメインルーチン /
  * Process a command in a store
- * @return �ʤ�
+ * @return なし
  * @note
  * <pre>
  * Note that we must allow the use of a few "special" commands
@@ -4523,13 +4523,13 @@ static void store_process_command(void)
 			break;
 		}
 
-		/* ���ܸ����ɲ� */
-		/* 1 �ڡ�����륳�ޥ��: �椬�ȤΥڡ�������¿���Τǽ�������Ϥ� By BUG */
+		/* 日本語版追加 */
+		/* 1 ページ戻るコマンド: 我が家のページ数が多いので重宝するはず By BUG */
 		case '-':
 		{
 			if (st_ptr->stock_num <= store_bottom) {
 #ifdef JP
-				msg_print("����������Ǥ���");
+				msg_print("これで全部です。");
 #else
 				msg_print("Entire inventory is shown.");
 #endif
@@ -4551,7 +4551,7 @@ static void store_process_command(void)
 			if (st_ptr->stock_num <= store_bottom)
 			{
 #ifdef JP
-				msg_print("����������Ǥ���");
+				msg_print("これで全部です。");
 #else
 				msg_print("Entire inventory is shown.");
 #endif
@@ -4561,8 +4561,8 @@ static void store_process_command(void)
 			{
 				store_top += store_bottom;
 				/*
-				 * �������ץ����(powerup_home)�����åȤ���Ƥ��ʤ��Ȥ���
-				 * �椬�ȤǤ� 2 �ڡ����ޤǤ���ɽ�����ʤ�
+				 * 隠しオプション(powerup_home)がセットされていないときは
+				 * 我が家では 2 ページまでしか表示しない
 				 */
 				if ((cur_store_num == STORE_HOME) && 
 				    (powerup_home == FALSE) && 
@@ -4866,7 +4866,7 @@ static void store_process_command(void)
 			else
 			{
 #ifdef JP
-				msg_print("���Υ��ޥ�ɤ�Ź����ǤϻȤ��ޤ���");
+				msg_print("そのコマンドは店の中では使えません。");
 #else
 				msg_print("That command does not work in stores.");
 #endif
@@ -4879,9 +4879,9 @@ static void store_process_command(void)
 
 
 /*!
- * @brief Ź�޽������ΤΥᥤ��롼���� /
+ * @brief 店舗処理全体のメインルーチン /
  * Enter a store, and interact with it. *
- * @return �ʤ�
+ * @return なし
  * @note
  * <pre>
  * Note that we use the standard "request_command()" function
@@ -4915,7 +4915,7 @@ void do_cmd_store(void)
 	if (!cave_have_flag_grid(c_ptr, FF_STORE))
 	{
 #ifdef JP
-		msg_print("�����ˤ�Ź������ޤ���");
+		msg_print("ここには店がありません。");
 #else
 		msg_print("You see no store here.");
 #endif
@@ -4936,7 +4936,7 @@ void do_cmd_store(void)
 	    (ironman_shops))
 	{
 #ifdef JP
-		msg_print("�ɥ��˸��������äƤ��롣");
+		msg_print("ドアに鍵がかかっている。");
 #else
 		msg_print("The doors are locked.");
 #endif
@@ -5018,7 +5018,7 @@ void do_cmd_store(void)
 
 		/* Basic commands */
 #ifdef JP
-		prt(" ESC) ��ʪ����Ф�", 21 + xtra_stock, 0);
+		prt(" ESC) 建物から出る", 21 + xtra_stock, 0);
 #else
 		prt(" ESC) Exit from Building.", 21 + xtra_stock, 0);
 #endif
@@ -5028,8 +5028,8 @@ void do_cmd_store(void)
 		if (st_ptr->stock_num > store_bottom)
 		{
 #ifdef JP
-			prt(" -)���ڡ���", 22 + xtra_stock, 0);
-			prt(" ���ڡ���) ���ڡ���", 23 + xtra_stock, 0);
+			prt(" -)前ページ", 22 + xtra_stock, 0);
+			prt(" スペース) 次ページ", 23 + xtra_stock, 0);
 #else
 			prt(" -) Previous page", 22 + xtra_stock, 0);
 			prt(" SPACE) Next page", 23 + xtra_stock, 0);
@@ -5041,9 +5041,9 @@ void do_cmd_store(void)
 		if (cur_store_num == STORE_HOME)
 		{
 #ifdef JP
-			prt("g) �����ƥ����", 21 + xtra_stock, 27);
-			prt("d) �����ƥ���֤�", 22 + xtra_stock, 27);
-			prt("x) �ȤΥ����ƥ��Ĵ�٤�", 23 + xtra_stock, 27);
+			prt("g) アイテムを取る", 21 + xtra_stock, 27);
+			prt("d) アイテムを置く", 22 + xtra_stock, 27);
+			prt("x) 家のアイテムを調べる", 23 + xtra_stock, 27);
 #else
 			prt("g) Get an item.", 21 + xtra_stock, 27);
 			prt("d) Drop an item.", 22 + xtra_stock, 27);
@@ -5055,9 +5055,9 @@ void do_cmd_store(void)
 		else if (cur_store_num == STORE_MUSEUM)
 		{
 #ifdef JP
-			prt("d) �����ƥ���֤�", 21 + xtra_stock, 27);
-			prt("r) �����ƥ��Ÿ�������", 22 + xtra_stock, 27);
-			prt("x) ��ʪ�ۤΥ����ƥ��Ĵ�٤�", 23 + xtra_stock, 27);
+			prt("d) アイテムを置く", 21 + xtra_stock, 27);
+			prt("r) アイテムの展示をやめる", 22 + xtra_stock, 27);
+			prt("x) 博物館のアイテムを調べる", 23 + xtra_stock, 27);
 #else
 			prt("d) Drop an item.", 21 + xtra_stock, 27);
 			prt("r) order to Remove an item.", 22 + xtra_stock, 27);
@@ -5069,9 +5069,9 @@ void do_cmd_store(void)
 		else
 		{
 #ifdef JP
-			prt("p) ���ʤ��㤦", 21 + xtra_stock, 30);
-			prt("s) �����ƥ�����", 22 + xtra_stock, 30);
-			prt("x) ���ʤ�Ĵ�٤�", 23 + xtra_stock,30);
+			prt("p) 商品を買う", 21 + xtra_stock, 30);
+			prt("s) アイテムを売る", 22 + xtra_stock, 30);
+			prt("x) 商品を調べる", 23 + xtra_stock,30);
 #else
 			prt("p) Purchase an item.", 21 + xtra_stock, 30);
 			prt("s) Sell an item.", 22 + xtra_stock, 30);
@@ -5080,17 +5080,17 @@ void do_cmd_store(void)
 		}
 
 #ifdef JP
-		/* ����Ū�ʥ��ޥ�ɤ��ɲ�ɽ�� */
+		/* 基本的なコマンドの追加表示 */
 
-		prt("i/e) ����ʪ/�����ΰ���", 21 + xtra_stock, 56);
+		prt("i/e) 持ち物/装備の一覧", 21 + xtra_stock, 56);
 
 		if (rogue_like_commands)
 		{
-			prt("w/T) ��������/�Ϥ���", 22 + xtra_stock, 56);
+			prt("w/T) 装備する/はずす", 22 + xtra_stock, 56);
 		}
 		else
 		{
-			prt("w/t) ��������/�Ϥ���", 22 + xtra_stock, 56);
+			prt("w/t) 装備する/はずす", 22 + xtra_stock, 56);
 		}
 #else
 		prt("i/e) Inventry/Equipment list", 21 + xtra_stock, 56);
@@ -5106,7 +5106,7 @@ void do_cmd_store(void)
 #endif
 		/* Prompt */
 #ifdef JP
-		prt("���ޥ��:", 20 + xtra_stock, 0);
+		prt("コマンド:", 20 + xtra_stock, 0);
 #else
 		prt("You may: ", 20 + xtra_stock, 0);
 #endif
@@ -5146,9 +5146,9 @@ void do_cmd_store(void)
 				/* Message */
 #ifdef JP
 				if (cur_store_num == STORE_MUSEUM)
-					msg_print("���å����饢���ƥब���դ줽���ʤΤǡ�����Ƥ���ʪ�ۤ���Ф�...");
+					msg_print("ザックからアイテムがあふれそうなので、あわてて博物館から出た...");
 				else
-					msg_print("���å����饢���ƥब���դ줽���ʤΤǡ�����Ƥ�Ź����Ф�...");
+					msg_print("ザックからアイテムがあふれそうなので、あわてて店から出た...");
 #else
 				if (cur_store_num == STORE_MUSEUM)
 					msg_print("Your pack is so full that you flee the Museum...");
@@ -5166,7 +5166,7 @@ void do_cmd_store(void)
 			{
 				/* Message */
 #ifdef JP
-				msg_print("���å����饢���ƥब���դ줽���ʤΤǡ�����ƤƲȤ���Ф�...");
+				msg_print("ザックからアイテムがあふれそうなので、あわてて家から出た...");
 #else
 				msg_print("Your pack is so full that you flee your home...");
 #endif
@@ -5189,7 +5189,7 @@ void do_cmd_store(void)
 
 				/* Give a message */
 #ifdef JP
-				msg_print("���å����饢���ƥब���դ�Ƥ��ޤä���");
+				msg_print("ザックからアイテムがあふれてしまった！");
 #else
 				msg_print("Your pack overflows!");
 #endif
@@ -5206,7 +5206,7 @@ void do_cmd_store(void)
 
 				/* Message */
 #ifdef JP
-				msg_format("%s���������(%c)", o_name, index_to_label(item));
+				msg_format("%sが落ちた。(%c)", o_name, index_to_label(item));
 #else
 				msg_format("You drop %s (%c).", o_name, index_to_label(item));
 #endif
@@ -5286,10 +5286,10 @@ void do_cmd_store(void)
 
 
 /*!
- * @brief ���ߤ�Į��Ź�����夵���� /
+ * @brief 現在の町の店主を交代させる /
  * Shuffle one of the stores.
- * @param which Ź�޼����ID
- * @return �ʤ�
+ * @param which 店舗種類のID
+ * @return なし
  */
 void store_shuffle(int which)
 {
@@ -5350,7 +5350,7 @@ void store_shuffle(int which)
 
 			/* Mega-Hack -- Note that the item is "on sale" */
 #ifdef JP
-			o_ptr->inscription = quark_add("�����");
+			o_ptr->inscription = quark_add("売出中");
 #else
 			o_ptr->inscription = quark_add("on sale");
 #endif
@@ -5360,11 +5360,11 @@ void store_shuffle(int which)
 
 
 /*!
- * @brief Ź����·�����Ѳ������� /
+ * @brief 店の品揃えを変化させる /
  * Maintain the inventory at the stores.
- * @param town_num Į��ID
- * @param store_num Ź�޼����ID
- * @return �ʤ�
+ * @param town_num 町のID
+ * @param store_num 店舗種類のID
+ * @return なし
  */
 void store_maint(int town_num, int store_num)
 {
@@ -5444,11 +5444,11 @@ void store_maint(int town_num, int store_num)
 
 
 /*!
- * @brief Ź�޾������������ /
+ * @brief 店舗情報を初期化する /
  * Initialize the stores
- * @param town_num Į��ID
- * @param store_num Ź�޼����ID
- * @return �ʤ�
+ * @param town_num 町のID
+ * @param store_num 店舗種類のID
+ * @return なし
  */
 void store_init(int town_num, int store_num)
 {
@@ -5502,9 +5502,9 @@ void store_init(int town_num, int store_num)
 
 
 /*!
- * @brief �����ƥ��Į�Υ֥�å��ޡ����åȤ˰�ư������ /
- * @param o_ptr ��ư�����������֥������Ȥι�¤�λ��ȥݥ���
- * @return �ʤ�
+ * @brief アイテムを町のブラックマーケットに移動させる /
+ * @param o_ptr 移動させたいオブジェクトの構造体参照ポインタ
+ * @return なし
  */
 void move_to_black_market(object_type *o_ptr)
 {

@@ -1,144 +1,144 @@
 -----------------------------------------------------------
-���ꥸ�ʥ�����ܸ��� ZAngband�����ɽ��
+オリジナルの日本語版 ZAngbandの著作権表記
 -----------------------------------------------------------
 
 *********************************************************************
-                          ���ܸ�������Ԥ��
+                          日本語版製作者より
 *********************************************************************
 
-����ˤĤ���
+著作権について
 --------------
-���ܸ��� Zangband�Ρ�Zangband ��ͭ�����ܸ첽��ʬ�ˤĤ��Ƥϰʲ��μԤ���
-ɽ���������ͭ���ޤ����Ƶ���ˤ������ѹ���ʬ������ˤĤ��ƤϳƵ���
-�Υɥ�����Ȥ򻲾Ȥ��Ʋ�������
+日本語版 Zangbandの、Zangband 固有の日本語化部分については以下の者が代
+表して著作権を有します。各機種における変更部分の著作権については各機種
+のドキュメントを参照して下さい。
 
-    ���ܸ첽��ɽ�ԡ�����    Email: ita@zangband.org
-    ����¾���Ϥ��Ʋ����ä������ζ��ӤϥС����������������������
+    日本語化代表者：板倉    Email: ita@zangband.org
+    その他協力して下さった方々の業績はバージョン履歴を御覧下さい。
 
-���ܸ��ǥ��󥰥Х�� 2.8.3-1.2.6 �ǤΥ��ꥸ�ʥ� angband 2.8.3 ������
-���ﶦ�̤��ѹ���ʬ�ˤĤ��Ƥϰʲ��μԤ������ͭ���ޤ���
+日本語版アングバンド 2.8.3-1.2.6 でのオリジナル angband 2.8.3 よりの全
+機種共通の変更部分については以下の者が著作権を有します。
 
-    ���Ȥ���(�ⳤ����)      iris@bf.mbn.or.jp
-    ������å�              CXK01336@niftyserve.or.jp
-    �ƣɣңӣ�(��������Ϻ)  argrath@yo.rim.or.jp
+    しとしん(内海清秀)      iris@bf.mbn.or.jp
+    エルロック              CXK01336@niftyserve.or.jp
+    ＦＩＲＳＴ(白方健太郎)  argrath@yo.rim.or.jp
     sayu(YOKOYAMA Atsushi)  sayu@gol.com
-    �߹���                  kis-@ca2.so-net.or.jp
+    岸康司                  kis-@ca2.so-net.or.jp
     TeO                     CXE00237@niftyserve.or.jp
-    ����β˿�(�������)    KFF02766@niftyserve.or.jp
-    VOLKO(��ͥ�����)       ���BBS: VOLKO
+    怒涛の暇人(金光寛峯)    KFF02766@niftyserve.or.jp
+    VOLKO(城戸イサム)       東京BBS: VOLKO
 
 
-Ϣ����
+連絡先
 ------
-������δ��ۤ���ʿ��ո���Х����䴶�դθ���:-P�ʤɤϡ����٤Ʋ�����
-�Ǽ��ǤޤǤ��Τ餻��������
+ゲームの感想や不平や意見やバグ報告や感謝の言葉:-Pなどは、すべて下記の
+掲示版までお知らせ下さい。
 
      http://www63.tcup.com/6300/ita.html
 
 
-����������ӥХ��ʥ�μ���
+ソースおよびバイナリの取得
 --------------------------
-���ܸ��� Zangband�������ﶦ�̥������ѥå��ϲ����Υۡ���ڡ����������
-�Ǥ��ޤ���
+日本語版 Zangbandの全機種共通ソースパッチは下記のホームページから取得
+できます。
 
     http://www.geocities.co.jp/SiliconValley-SanJose/9606/zg/index.html
 
-    �Ƶ����ǤΥХ��ʥ�ڤӥ������ˤĤ��Ƥϲ����ΰܿ��Ԥˤ��ҤͲ�������
-    ��Windows �ؤΰܿ��� :   ���� ����  Email: ita@zangband.org
+    各機種版のバイナリ及びソースについては下記の移植者にお尋ね下さい。
+    ★Windows への移植者 :   板倉 充洋  Email: ita@zangband.org
       http://www.geocities.co.jp/SiliconValley-SanJose/9606/
-    ��Mac �ؤΰܿ��� :       ���� ����  Email: s_abe@i.bekkoame.ne.jp
+    ★Mac への移植者 :       阿部 慎一  Email: s_abe@i.bekkoame.ne.jp
       http://www.bekkoame.ne.jp/i/s_abe/
 
 
-���ܸ��� Zangband �γ���
+日本語版 Zangband の概要
 ------------------------
-������ҡˤϻϤ� Zangband �����ܸ첽���褦�ʤɤȤϻפäƤ��ޤ���Ǥ�
-�������ޤ��޻���ʪ���ۥӥåȤ������ʤɤ��ɤ�Ǥ��ơ����ᥢ���������
-�����������äƤ������ᡢ��������Υ��ᥢ����Υ���դ����ܸ���Ѥ��Ƥ�
-���Τ����ä����Ǥ������Ȥ�������lib/file/monspeak.txt �ˤ��볺����ʬ��
-���ܸ��ľ���Ƥ⥲�������ɽ������ʤ��Τǡ����ܸ��ɽ���Ǥ���褦��
-�����������ɤ򤤤���Ϥᡢ�����Ĥ�����ϥޤäƤ��ޤ����������Ѹ��ǡ���
-�ܸ��ǤȤ�� Angband �Υ�����������ʬ����䤹���������ѹ����䤹����
-�ΤǤ��ä����ᡢ���ܸ��ǥ��󥰥Х�ɤ������ܸ첽��ʬ�򵡳�Ū����Ф���
-����򵡳�Ū�˱Ѹ��� Zangband ���Ȥ߹���Ȥ������Ȥ�����ơ�ϫ��������
-���ʤ����ʬ�����ܸ첽���뤳�Ȥ�����ޤ����������ϸ��äƤ���ȼ��Υ��
-�����������ܸ첽���٤���ʬ�Ϥޤ����̤˻ĤäƤ��ޤ�����
+私（板倉）は始め Zangband を日本語化しようなどとは思っていませんでし
+た。たまたま指輪物語やホビットの冒険などを読んでいて、スメアゴルの喋り
+方が気に入っていたため、ゲーム中のスメアゴルのセリフを日本語に変えてみ
+たのがきっかけでした。ところが、lib/file/monspeak.txt にある該当部分を
+日本語に直してもゲーム中に表示されないので、日本語を表示できるように
+ソースコードをいじり始め、気がついたらハマっていました。幸い英語版、日
+本語版ともに Angband のソースは非常に分かりやすく、かつ変更しやすいも
+のであったため、日本語版アングバンドから日本語化部分を機械的に抽出し、
+それを機械的に英語版 Zangband へ組み込むということが出来て、労せずして
+かなりの部分を日本語化することが出来ました。そうは言ってもＺ独自のメッ
+セージで日本語化すべき部分はまだ大量に残っていました。
 
-�����ǻ�Ϥޤ�̤�����Υ��������������Zangband �ե���������������˶�
-�Ϥ��Ƥ���������褦�ͥåȾ�ǸƤӤ���������˥�����ɥ����ǤΥХ��ʥ�
-��������ơ����¿���������򴬤��������˽Фޤ����������Ƥޤ��ͥåȾ�
-�Ǹ����������������������餷���ۡ���ڡ����κ����Ԥ��������̼���ʤ���
-�˥᡼���Ф����͡���ͭ�פʾ����ĺ�����Ȥ�����ޤ�����
+そこで私はまだ未完成のソースを公開し、Zangband ファンの方々に翻訳に協
+力していただけるようネット上で呼びかけ、さらにウィンドウズ版のバイナリ
+も公開して、より多くの方々を巻き込む作戦に出ました。そしてまたネット上
+で見かけたいろいろな素晴らしいホームページの作成者の方々に面識もないの
+にメールを出し、様々な有益な情報を頂くことが出来ました。
 
-�������ƽ�����¿���ο͡��򴬤����ߡ����ܸ첽��ʤ�Ǥ��Ƹ��ߤ˻���
-����2000/04/06 ���ߡ���������ʬ�����ܸ첽�Ϥۤܽ�λ�����Ĥ��ϥ��
-�����Υ���դȰ����β���Ȥ��������ˤޤǤʤ�ޤ��������Ϥ��Ʋ����ä���
-���ˤ����Ѵ��դ��Ƥ���ޤ���
-�����˶��Ϥ��Ʋ����ä���������Τ�̾����ʲ��˵����ޤ���
+こうして徐々に多くの人々を巻き込み、日本語化も進んできて現在に至りま
+す。2000/04/06 現在、ソース部分の日本語化はほぼ終了し、残すはモンス
+ターのセリフと一部の解説という状況にまでなりました。協力して下さった方
+々には大変感謝しております。
+翻訳に協力して下さった主な方々のお名前を以下に記します。
 
-    �����͡�bldg.c, cmd5.c��
-    ����������͡ʥ������ȡ�
-    ���״��͡ʥ�󥹥���̾�������ƥ�̾�ʤɡ�
-    Tessi�͡ʥ��ᥢ������աˡ�
-    ��α�͡ʥ��ȥ���ա�����С��ط���
-    ƣ���͡ʥ���С��ط���
+    若林様（bldg.c, cmd5.c）
+    夜空の彗星様（クエスト）
+    紫月閑丸様（モンスター名、アイテム名など）
+    Tessi様（スメアゴル言葉）、
+    久留様（クトゥルフ、アンバー関係）
+    藤岡様（アンバー関係）
 
-�ä����̤�ʸ�����饯�ȥ���մط���ˮ�����ܤ��Ф���ĺ������α�ͤˤ�����
-�˴��դ��Ƥ���ޤ��������ͤ� R_INFO_J.TXT �ϻ���Ū���ͤΤ����Τˤޤ�
-�ʤ�ޤ������ޤ������������ͰƤ���ĺ�������״��ͤˤⴶ�դ��Ƥ����
-����
+特に大量の文献からクトゥルフ関係の邦訳を捜し出して頂いた久留様には大変
+に感謝しております。お蔭様で R_INFO_J.TXT は資料的価値のあるものにまで
+なりました。また色々と訳語を考案して頂いた紫月閑丸様にも感謝しておりま
+す。
 
-���ȥ���շϥ�󥹥����˴ؤ��Ƥϡ� ����Ū�ʾ����̤Υ��ȥ���վ��󥵥���
-N-SYSTEM  (http://www.geocities.com/Tokyo/Palace/8768/ ) �δ����ͤǤ�
-�ä���� NeSYS �ͤˡ���󥹥����β������Ѥ�����ĺ�����Ȥ����������
-��ĺ�������ʤ�ܤ���������ɲä��뤳�Ȥ�����ޤ��������ξ��ڤ�Ƥ���
-�����夲�ޤ���
+クトゥルフ系モンスターに関しては、 圧倒的な情報量のクトゥルフ情報サイト
+N-SYSTEM  (http://www.geocities.com/Tokyo/Palace/8768/ ) の管理人でら
+っしゃる NeSYS 様に、モンスターの解説を引用させて頂くことを快く承諾し
+て頂き、かなり詳しい解説を追加することが出来ました。この場を借りてお礼
+申し上げます。
 
-�إ�ץե�����ϡ���ƣ����� ZKB-Japanese Edition
-http://www.ceres.dti.ne.jp/~asaitoh/roguelike/zkb/contents/main.html��
-�Ȥ碌�Ƥ��������ޤ�����
+ヘルプファイルは、斎藤さんの ZKB-Japanese Edition
+http://www.ceres.dti.ne.jp/~asaitoh/roguelike/zkb/contents/main.htmlを
+使わせていただきました。
 
-�ޤ���������� Angband, JAngband, Zangband ����줿�����ˤⴶ�դ���
-����ޤ����ʤˤ��� NetHack �ˤ���٤�ȣ����ܤ��餤���ܸ첽���䤹��
-�����������ɤʤΤǤ����顣�ޤ� WINDOWS �Ǻ����ˤ����äƤ�JAngband
-WINDOWS �Ǥ���줿 TeO ��������Ѥ����äˤʤ�ޤ�����
+また、もちろん Angband, JAngband, Zangband を作られた方々にも感謝して
+おります。なにしろ NetHack にくらべると１０倍くらい日本語化しやすい
+ソースコードなのですから。また WINDOWS 版作成にあたってはJAngband
+WINDOWS 版を作られた TeO さんに大変お世話になりました。
 
-���θ��Ǽ��Ǥ�����¿�����������饢�ɥХ����䥢���ǥ�����ĺ���Ƥ���
-������̾�������ƾ夲�뤳�ȤϽ���ޤ������˴��դ��Ƥ���ޤ���
+その後も掲示版の方で多くの方々からアドバイスやアイディアを頂いていま
+す。お名前を全て上げることは出来ませんが非常に感謝しております。
 
 
-���ۤˤĤ���
+配布について
 ------------
-���ۤ˴ؤ��Ƥϥ��ꥸ�ʥ�Ǥ���Ѹ��� ZAngband 2.X.X �˽स�ޤ�������Ū
-�����ۤ˴ؤ��Ƥ�:
+配布に関してはオリジナルである英語版 ZAngband 2.X.X に準じます。基本的
+に配布に関しては:
 
-      (1) ���ۥե�������ѹ���ä��ʤ�����
-      (2) �����Ѥ������Ū�����ۤ򤷤ʤ�����(���פ����ʤ�����)
+      (1) 配布ファイルに変更を加えないこと
+      (2) 商利用や営利目的の配布をしないこと(利益を得ないこと)
 
-���äƲ����������פǤ���
+を守って下されば大丈夫です。
 
 
-�Ѹ��� Angband �����
+英語版 Angband の著作権
 -----------------------
 Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
-���Υ��եȥ������϶���並��Τ���ʤ�С����������פ���Ū�Ȥ��ʤ��Τʤ��
-ʣ�̤�������ۤ��Ƥ褤�������������������ʸ�Ϥϵ��ܤ��Ƥ������ȡ�
+このソフトウェアは教育や研究のためならば、そして利益を目的としないのならば
+複写および配布してよい。ただし、この著作権と文章は記載しておくこと。
 This software may be copied and distributed for educational, research,
 and not for profit purposes provided that this copyright and statement
 are included in all such copies.  Other copyrights may also apply.
 
 
-�Ѹ��� Moria (Angband �Υ١����ˤʤä�������)�����
+英語版 Moria (Angband のベースになったゲーム)の著作権
 -----------------------------------------------------
 Copyright (c) 1989 James E. Wilson, Robert A. Keoneke
-���Υ��եȥ������϶���並��Τ���ʤ�С����������פ���Ū�Ȥ��ʤ��Τʤ��
-ʣ�̤�������ۤ��Ƥ褤�������������������ʸ�Ϥϵ��ܤ��Ƥ������ȡ�
+このソフトウェアは教育や研究のためならば、そして利益を目的としないのならば
+複写および配布してよい。ただし、この著作権と文章は記載しておくこと。
 This software may be copied and distributed for educational, research, and
 not for profit purposes provided that this copyright and statement are
 included in all such copies.
 
 
-�ݾ�
+保証
 ----
-�ܥץ���������Ѥ������Ȥˤ�ä������������ʤ�»���ˤĤ��Ƥ�����Ԥ�
-������Ǥ���餤�ޤ���
+本プログラムを使用したことによって生じたいかなる損害についても製作者は
+その責任を負いません。

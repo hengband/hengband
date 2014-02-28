@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  *  @file defines.h
- *  @brief ¼çÍ×¤Ê¥Ş¥¯¥íÄêµÁ¥Ø¥Ã¥À / Purpose: global constants and macro definitions
+ *  @brief ä¸»è¦ãªãƒã‚¯ãƒ­å®šç¾©ãƒ˜ãƒƒãƒ€ / Purpose: global constants and macro definitions
  *  @date 2014/01/02
  *  @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -540,11 +540,11 @@
 /*
  * Misc constants
  */
-#define TOWN_DAWN         10000    /*!< 1ÆüÊ¬¤Î¥¿¡¼¥ó / Number of ticks from dawn to dawn XXX */
+#define TOWN_DAWN         10000    /*!< 1æ—¥åˆ†ã®ã‚¿ãƒ¼ãƒ³ / Number of ticks from dawn to dawn XXX */
 #define TURNS_PER_TICK    10L      /*!< Number of energy-gain-turns per ticks */
-#define MAX_DAYS          20000    /*!< ÆâÉô½èÍıÃæ¤ÇÊİ»ı¤µ¤ì¤ëºÇÂçÆü¿ô / Maximum days */
-#define BREAK_GLYPH       550      /*!< ¼é¤ê¤Î¥ë¡¼¥ó¤Î¶¯¿ÙÅÙ / Rune of protection resistance */
-#define BREAK_MINOR_GLYPH 299      /*!< ÇúÈ¯¤Î¥ë¡¼¥ó¤ÎÈ¯Æ°¤·¤ä¤¹¤µ / For explosive runes */
+#define MAX_DAYS          20000    /*!< å†…éƒ¨å‡¦ç†ä¸­ã§ä¿æŒã•ã‚Œã‚‹æœ€å¤§æ—¥æ•° / Maximum days */
+#define BREAK_GLYPH       550      /*!< å®ˆã‚Šã®ãƒ«ãƒ¼ãƒ³ã®å¼·é­åº¦ / Rune of protection resistance */
+#define BREAK_MINOR_GLYPH 299      /*!< çˆ†ç™ºã®ãƒ«ãƒ¼ãƒ³ã®ç™ºå‹•ã—ã‚„ã™ã• / For explosive runes */
 #define BTH_PLUS_ADJ       3       /*!< Adjust BTH per plus-to-hit */
 #define MON_MULT_ADJ  	   8       /*!< High value slows multiplication */
 #define MON_SUMMON_ADJ	   2       /*!< Adjust level of summoned creatures */
@@ -554,26 +554,26 @@
 
 /* "Biases" for random artifact gen */
 
-#define BIAS_ELEC            1 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:ÅÅ·â */
-#define BIAS_POIS            2 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:ÆÇ */
-#define BIAS_FIRE            3 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:²Ğ±ê */
-#define BIAS_COLD            4 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:Îäµ¤ */
-#define BIAS_ACID            5 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:»À */
-#define BIAS_STR             6 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:ÏÓÎÏ */
-#define BIAS_INT             7 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:ÃÎÎÏ */
-#define BIAS_WIS             8 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:¸­¤µ */
-#define BIAS_DEX             9 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:´ïÍÑ¤µ */
-#define BIAS_CON            10 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:ÂÑµ× */
-#define BIAS_CHR            11 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:Ì¥ÎÏ */
-#define BIAS_CHAOS          12 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:º®ÆÙ */
-#define BIAS_PRIESTLY       13 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:¥×¥ê¡¼¥¹¥È·Ï */
-#define BIAS_NECROMANTIC    14 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:»àÎî */
-#define BIAS_LAW            15 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:Ë¡ */
-#define BIAS_ROGUE          16 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:ÅğÂ±·Ï */
-#define BIAS_MAGE           17 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:¥á¥¤¥¸·Ï */
-#define BIAS_WARRIOR        18 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:Àï»Î·Ï */
-#define BIAS_RANGER         19 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:¥ì¥ó¥¸¥ã¡¼·Ï */
-#define MAX_BIAS            20 /*!< ¥é¥ó¥À¥à¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¥Ğ¥¤¥¢¥¹:ºÇÂç¿ô */
+#define BIAS_ELEC            1 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:é›»æ’ƒ */
+#define BIAS_POIS            2 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:æ¯’ */
+#define BIAS_FIRE            3 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:ç«ç‚ */
+#define BIAS_COLD            4 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:å†·æ°— */
+#define BIAS_ACID            5 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:é…¸ */
+#define BIAS_STR             6 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:è…•åŠ› */
+#define BIAS_INT             7 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:çŸ¥åŠ› */
+#define BIAS_WIS             8 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:è³¢ã• */
+#define BIAS_DEX             9 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:å™¨ç”¨ã• */
+#define BIAS_CON            10 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:è€ä¹… */
+#define BIAS_CHR            11 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:é­…åŠ› */
+#define BIAS_CHAOS          12 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:æ··æ²Œ */
+#define BIAS_PRIESTLY       13 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:ãƒ—ãƒªãƒ¼ã‚¹ãƒˆç³» */
+#define BIAS_NECROMANTIC    14 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:æ­»éœŠ */
+#define BIAS_LAW            15 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:æ³• */
+#define BIAS_ROGUE          16 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:ç›—è³Šç³» */
+#define BIAS_MAGE           17 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:ãƒ¡ã‚¤ã‚¸ç³» */
+#define BIAS_WARRIOR        18 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:æˆ¦å£«ç³» */
+#define BIAS_RANGER         19 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:ãƒ¬ãƒ³ã‚¸ãƒ£ãƒ¼ç³» */
+#define MAX_BIAS            20 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãƒã‚¤ã‚¢ã‚¹:æœ€å¤§æ•° */
 
 /*** Pet constants ***/
 
@@ -4529,7 +4529,7 @@ extern int PlayerUID;
 #define MUSIC_BASIC_QUEST     15
 #define MUSIC_BASIC_ARENA     16
 #define MUSIC_BASIC_BATTLE    17
-#define MUSIC_BASIC_MAX       18 /*!< BGMÄêµÁ¤ÎºÇÂç¿ô */
+#define MUSIC_BASIC_MAX       18 /*!< BGMå®šç¾©ã®æœ€å¤§æ•° */
 
 /*** Sound constants ***/
 
@@ -4607,9 +4607,9 @@ extern int PlayerUID;
 /*
  * Mega-Hack -- maximum known sounds
  */
-#define SOUND_MAX 66 /*!< ¸ú²Ì²»ÄêµÁ¤ÎºÇÂç¿ô */
+#define SOUND_MAX 66 /*!< åŠ¹æœéŸ³å®šç¾©ã®æœ€å¤§æ•° */
 
-#define MAX_VIRTUE 18 /*!< ÆÁÄêµÁ¤ÎºÇÂç¿ô */
+#define MAX_VIRTUE 18 /*!< å¾³å®šç¾©ã®æœ€å¤§æ•° */
 
 #define V_COMPASSION    1
 #define V_HONOUR	    2

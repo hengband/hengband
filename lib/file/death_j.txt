@@ -1,61 +1,61 @@
 N:*:Default
-ÌıÃÇÂçÅ¨¡¢Ëı¿´¶¯Å¨¡£»à¤·¤Æ»Ó½¦¤¦¤â¤Î¤Ê¤·¡£
-¥Æ¥Ã¡¢¥Æ¥ì¥İ¡¼¡Ä¡Ä¤Ü¤Õ¤¥¡ª¡ª
-»à¤ó¤À¡Á¡ª¡ª¡ª
-¤ä¤Ã¤ÑÌµÍı¤«¡£
-¤¤¤ä¡¼¤Ş¤À¤Ş¤À¤À¤ï¡¢¡¢¡¢
-¤¢¤¡¡¼¤À¤á¤¸¤ã¤ó¡¢¡¢¡¢
-»à¤ó¤¸¤ã¤Ã¤¿¡Ä¡Ä¤Õ¤¥¡¢Èè¤ì¤¿¡£
-¤¦¤ï¤¢¡Á¡Á¡Á¡Á¡Á¡Á¡Á
-¤Ê¤á¤ó¤Ê¡£
-¤ó¤â¡¼¡ª
-ÌıÃÇ¤·¤¿¡ª¡ª
-¤°¤Ã¤Ï¤¡¡£
-¤³¤ó¤Ê¤â¤ó¤«¡£
-¤Ş¤¿¤ä¤Ã¤Á¤Ş¤Ã¤¿¤è(TT
-¤Ø¡©¤Ê¤ó¤Ç¡©
-»à¤ó¤ÇÅöÁ³¤«¤â¤Ê¡£
-¤ä¤ì¤ä¤ì¡£
-¤Õ¤¶¤±¤ó¤Ê¡ª
-¤ä¤Ã¤Á¤Ş¤Ã¤¿¡Á¡ª
-¤Ê¤ó¤È¤©¤©¤Ã¡ª¡©
-¤Ê¤ó¤Ç¤³¤©¤Ê¤ë¤Î¡ª¡©
-¡©¡©¡©¡©¡©
-²¿»ö¡©
-¤¦¤½¤©¡©
-º£Æü¤Ï¤À¤á¤À¤ï¡¢¡¢¡¢
-¤Ê¤ó¤Ç¤ä¤Í¤ó
-»à¤Ì¤Ã¤Æ¤ä¤Ê¤â¤ó¤À¤Ê¡¦¡¦¡¦¡¦
-¤ä¤Ã¤Æ¤â¤¦¤¿¡£
-¤­¤ã¡¼¡ª
-¤·¤Ş¤Ã¤¿¡ª
-¾¡µ¡¤Ï´°Á´¤Ë¤Ê¤¯¤Ê¤Ã¤¿¡¦¡¦¡¦»¦¤»¡¦¡¦¡¦¡¦¡¦¡¦
-Ï·Ê¼¤Ï»à¤Ê¤º¡¢¤¿¤À¾Ã¤¨µî¤ë¤Î¤ß¡£
+æ²¹æ–­å¤§æ•µã€æ…¢å¿ƒå¼·æ•µã€‚æ­»ã—ã¦å±æ‹¾ã†ã‚‚ã®ãªã—ã€‚
+ãƒ†ãƒƒã€ãƒ†ãƒ¬ãƒãƒ¼â€¦â€¦ã¼ãµã…ï¼ï¼
+æ­»ã‚“ã ã€œï¼ï¼ï¼
+ã‚„ã£ã±ç„¡ç†ã‹ã€‚
+ã„ã‚„ãƒ¼ã¾ã ã¾ã ã ã‚ã€ã€ã€
+ã‚ããƒ¼ã ã‚ã˜ã‚ƒã‚“ã€ã€ã€
+æ­»ã‚“ã˜ã‚ƒã£ãŸâ€¦â€¦ãµã…ã€ç–²ã‚ŒãŸã€‚
+ã†ã‚ã‚ã€œã€œã€œã€œã€œã€œã€œ
+ãªã‚ã‚“ãªã€‚
+ã‚“ã‚‚ãƒ¼ï¼
+æ²¹æ–­ã—ãŸï¼ï¼
+ãã£ã¯ãã€‚
+ã“ã‚“ãªã‚‚ã‚“ã‹ã€‚
+ã¾ãŸã‚„ã£ã¡ã¾ã£ãŸã‚ˆ(TT
+ã¸ï¼Ÿãªã‚“ã§ï¼Ÿ
+æ­»ã‚“ã§å½“ç„¶ã‹ã‚‚ãªã€‚
+ã‚„ã‚Œã‚„ã‚Œã€‚
+ãµã–ã‘ã‚“ãªï¼
+ã‚„ã£ã¡ã¾ã£ãŸã€œï¼
+ãªã‚“ã¨ã‰ã‰ã£ï¼ï¼Ÿ
+ãªã‚“ã§ã“ã‰ãªã‚‹ã®ï¼ï¼Ÿ
+ï¼Ÿï¼Ÿï¼Ÿï¼Ÿï¼Ÿ
+ä½•äº‹ï¼Ÿ
+ã†ãã‰ï¼Ÿ
+ä»Šæ—¥ã¯ã ã‚ã ã‚ã€ã€ã€
+ãªã‚“ã§ã‚„ã­ã‚“
+æ­»ã¬ã£ã¦ã‚„ãªã‚‚ã‚“ã ãªãƒ»ãƒ»ãƒ»ãƒ»
+ã‚„ã£ã¦ã‚‚ã†ãŸã€‚
+ãã‚ƒãƒ¼ï¼
+ã—ã¾ã£ãŸï¼
+å‹æ©Ÿã¯å®Œå…¨ã«ãªããªã£ãŸãƒ»ãƒ»ãƒ»æ®ºã›ãƒ»ãƒ»ãƒ»ãƒ»ãƒ»ãƒ»
+è€å…µã¯æ­»ãªãšã€ãŸã æ¶ˆãˆå»ã‚‹ã®ã¿ã€‚
 #Live and let live, right..?
-¡ÖÀ¸¤­¡¢À¸¤«¤¹¡×¡¢¤À¤í¡©
+ã€Œç”Ÿãã€ç”Ÿã‹ã™ã€ã€ã ã‚ï¼Ÿ
 #AAAAAAAAARRRRRRRRRRRRRRGGGGGGGGGGGGGHHHHHHHHHHHHHHH!!!!!!!!!!!!
-¤¦¤ï¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡¼¡ª¡ª¡ª¡ª
+ã†ã‚ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ï¼ï¼ï¼ï¼
 #AAAARRRGGGHHH!!!
-¥¢¥¡¥¡¥¡¥¡¥¡¡¼¡¼¡¼¡¼¡¼¡¼¡ª¡ª
+ã‚¢ã‚¡ã‚¡ã‚¡ã‚¡ã‚¡ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ãƒ¼ï¼ï¼
 #Somehow, I have a bad feeling about this...
-²¿¤«ÎÉ¤¯¤Ê¤¤µ¤¤¬¤¹...
+ä½•ã‹è‰¯ããªã„æ°—ãŒã™...
 #Strangely, all of a sudden I don't feel so good.
-´ñÌ¯¤Ê¤³¤È¤Ë¡¢ÆÍÁ³¤Ê¤Ë¤«ÎÉ¤¯¤Ê¤¤µ¤¤¬¤¹¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£
+å¥‡å¦™ãªã“ã¨ã«ã€çªç„¶ãªã«ã‹è‰¯ããªã„æ°—ãŒã™ã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚
 #You can see armored women on winged horses coming for you.
-³»¤òÃå¤¿½÷¤¬±©º¬¤ÎÀ¸¤¨¤¿ÇÏ¤Ë¾è¤Ã¤Æ¤ä¤Ã¤Æ¤¯¤ë...
+é§ã‚’ç€ãŸå¥³ãŒç¾½æ ¹ã®ç”ŸãˆãŸé¦¬ã«ä¹—ã£ã¦ã‚„ã£ã¦ãã‚‹...
 #Oh well, you can't always win.
-¤Ş¤¢¡¢¤¤¤Ä¤â¾¡¤Æ¤ëÌõ¤¸¤ã¤Ê¤¤¤µ¡£
+ã¾ã‚ã€ã„ã¤ã‚‚å‹ã¦ã‚‹è¨³ã˜ã‚ƒãªã„ã•ã€‚
 I'm too young to die!
 #I'll be back!
-¥¢¥¤¥ë¥Ó¡¼¥Ğ¥Ã¥¯¡ª
+ã‚¢ã‚¤ãƒ«ãƒ“ãƒ¼ãƒãƒƒã‚¯ï¼
 O, untimely death!
 Slave, thou hast slain me!
 Ouch! That smarts!
 Who knocked?
 #Did anybody get the number of that truck..?
-¤¢¤Î¥È¥é¥Ã¥¯¤Î¥Ê¥ó¥Ğ¡¼Ã¯¤«¸«¤¿¡©
+ã‚ã®ãƒˆãƒ©ãƒƒã‚¯ã®ãƒŠãƒ³ãƒãƒ¼èª°ã‹è¦‹ãŸï¼Ÿ
 #Ouch.
-¤ä¤ê¤ä¤¬¤Ã¤¿¤Ê¡ª
+ã‚„ã‚Šã‚„ãŒã£ãŸãªï¼
 Et tu, Brute! Then fall, Caesar!
 O! I die, Horatio...
 I told you to be careful with that sword...
@@ -63,7 +63,7 @@ This guy's a little crazy...
 Ok, ok, I get it: No more pals.
 No more mr. nice guy!
 #Who turned off the light..?
-ÌÀ¤«¤ê¤ò¾Ã¤·¤¿¤Î¤ÏÃ¯¡Ä¡©
+æ˜ã‹ã‚Šã‚’æ¶ˆã—ãŸã®ã¯èª°â€¦ï¼Ÿ
 Join the army, see the world, they said...
 Mom told me there'd be days like this...
 Rats!
@@ -73,17 +73,17 @@ What ho! Help!
 What hast thou done?
 I'll be revenged on the whole pack of you!
 #You will *pay* for this!
-²±¤¨¤Æ¤í¤è¡ª
+æ†¶ãˆã¦ã‚ã‚ˆï¼
 They say blood will have blood...
 Violence is no solution!
 Yes?
 #&%#&#%*#*&%!!!!!
 #F***!
-¥Õ¥¡¡û¥¯¡ª
+ãƒ•ã‚¡â—‹ã‚¯ï¼
 #No time to make a testament?
-°ä¸À¤ò½ñ¤¯²Ë¤â¤Ê¤¤¤Î¤«¡©
+éºè¨€ã‚’æ›¸ãæš‡ã‚‚ãªã„ã®ã‹ï¼Ÿ
 #Ugh!
-¤¦¤°¤Ã¡ª
+ã†ãã£ï¼
 Aargh!
 Aaagghhh!
 I'm melting!
@@ -93,33 +93,33 @@ Did somebody knock?
 Later, dude...
 CU!
 #What? Who? Me? Oh, s..t!
-²¿¡©Ã¯¡©²¶¡©¤¯¤Ã¤½¡¼¡ª
+ä½•ï¼Ÿèª°ï¼Ÿä¿ºï¼Ÿãã£ããƒ¼ï¼
 #...amen!
-...¥¢¡¼¥á¥ó¡ª
+...ã‚¢ãƒ¼ãƒ¡ãƒ³ï¼
 #Eeek!
-¥¤¡¼¡¼¡¼¥Ã¥Ã¡ª
+ã‚¤ãƒ¼ãƒ¼ãƒ¼ãƒƒãƒƒï¼
 #Aacch!
-¥¢¡¼¡¼¡¼¥Ã¥Ã¡ª
+ã‚¢ãƒ¼ãƒ¼ãƒ¼ãƒƒãƒƒï¼
 I hate it when that happens.
 One direct hit can ruin your whole day.
 #Oh no!
-¤ª¡¼¤Î¡¼¡£
+ãŠãƒ¼ã®ãƒ¼ã€‚
 Not me!
 Ouch.
 #Oh no, not again.
-¤Á¤­¤·¤ç¤¦¡¢¤Ş¤¿¤«¤è¡ª
+ã¡ãã—ã‚‡ã†ã€ã¾ãŸã‹ã‚ˆï¼
 Another one bites the dust.
 #Goodbye.
-¤µ¤é¤Ğ¤À¡ª
+ã•ã‚‰ã°ã ï¼
 #Help me!
-½õ¤±¤Æ¤¯¤ì¡ª
+åŠ©ã‘ã¦ãã‚Œï¼
 #Farewell, cruel world.
-»Ä¹ó¤ÊÀ¤³¦¤è¡¢¤µ¤é¤Ğ¡£
+æ®‹é…·ãªä¸–ç•Œã‚ˆã€ã•ã‚‰ã°ã€‚
 Oh man!
 Doough!
 This is the End, my only friend.
 #It's all over.
-Á´¤Æ½ª¤Ã¤¿¡£
+å…¨ã¦çµ‚ã£ãŸã€‚
 The fat lady sang.
 Why does everything happen to me?
 I'm going down.
@@ -133,46 +133,46 @@ No... a Bud light!
 What was that noise?
 Mama said there'd be days like this.
 #It's just one of those days...
-¤¤¤Ä¤â¤Î¤³¤È¤µ...
+ã„ã¤ã‚‚ã®ã“ã¨ã•...
 #I see a bright light...
-ÌÀ¤ë¤¤¸÷¤¬¸«¤¨¤ë...
+æ˜ã‚‹ã„å…‰ãŒè¦‹ãˆã‚‹...
 #Mommy? Is that you?
-Êì¤µ¤ó¡©Êì¤µ¤ó¤Ê¤Î¤«¤¤¡©
+æ¯ã•ã‚“ï¼Ÿæ¯ã•ã‚“ãªã®ã‹ã„ï¼Ÿ
 I let you hit me!
 Sucker shot!
 I didn't want to live anyway.
 -<sob>-
 #Hah haa! Missed me! Ha---
-¥ï¥Ï¥Ï¡ªÅö¤¿¤é¤Ê¤¤¤¾¡ª¥ï¥Ï¡½¡½
+ãƒ¯ãƒãƒï¼å½“ãŸã‚‰ãªã„ãï¼ãƒ¯ãƒâ€”â€”
 Was that as close as I think it was?
 #Monsters rejoice: the hero has been defeated.
-²øÊª¤É¤â¤Ï´î¤ó¤Ç¤¤¤ë¡£±ÑÍº¤¬Åİ¤ì¤¿¤Î¤À¡£
+æ€ªç‰©ã©ã‚‚ã¯å–œã‚“ã§ã„ã‚‹ã€‚è‹±é›„ãŒå€’ã‚ŒãŸã®ã ã€‚
 It wasn't just a job it was an adventure!
 #I didn't like violence anyway!
-¤Æ¤¤¤¦¤«Ë½ÎÏ¤Ï·ù¤¤¤À¡ª
+ã¦ã„ã†ã‹æš´åŠ›ã¯å«Œã„ã ï¼
 I thought you liked me?
 #Such senseless violence! I don't understand it.
-¤Ê¤ó¤Æ¤Ğ¤«¤²¤¿Ë½ÎÏ¤À¡ª²¶¤Ë¤ÏÍı²ò¤Ç¤­¤ó¡£
+ãªã‚“ã¦ã°ã‹ã’ãŸæš´åŠ›ã ï¼ä¿ºã«ã¯ç†è§£ã§ãã‚“ã€‚
 I think this guy's a little crazy.
 #Somehow, I have a bad feeling about this...
-¤Ê¤ó¤«·ù¤Ê´¶¤¸¤¬¤¹¤ë¡Ä¡£
+ãªã‚“ã‹å«Œãªæ„Ÿã˜ãŒã™ã‚‹â€¦ã€‚
 #Help me! I am undone!
-½õ¤±¤Æ¡ª¤â¤¦ÂÌÌÜ¡ª
+åŠ©ã‘ã¦ï¼ã‚‚ã†é§„ç›®ï¼
 Hey! Killin' ain't cool.
 #This fell sergeant, Death, is strict in his arrest...
-¤³¤ÎÃÏ¹ö¤Î·Ù´±¡¢¤¹¤Ê¤ï¤Á»à¿À¡¢¤ÏÉ¬¤º³ÍÊª¤òÂáÊá¤¹¤ë...
+ã“ã®åœ°ç„ã®è­¦å®˜ã€ã™ãªã‚ã¡æ­»ç¥ã€ã¯å¿…ãšç²ç‰©ã‚’é€®æ•ã™ã‚‹...
 #The rest is silence.
-¤½¤·¤ÆÀÅ¤±¤µ¤Î¤ß¤¬»Ä¤Ã¤¿¡£
+ãã—ã¦é™ã‘ã•ã®ã¿ãŒæ®‹ã£ãŸã€‚
 #Guh!
-¥¬¡¼¡ª
+ã‚¬ãƒ¼ï¼
 It's game over, man!
 You've run out of life.
 #Thou art slain.
-Æò¤Ï»à¤»¤ê
+æ±ã¯æ­»ã›ã‚Š
 Finish him!
 Trust me, I know what I'm doing...
 #Die, mortal!
-»à¤Í¡¢ÄêÌ¿¤Î¼Ô¤è¡ª
+æ­»ã­ã€å®šå‘½ã®è€…ã‚ˆï¼
 Kill men i' the dark! What be these bloody thieves?
 Ho! Murder! Murder!
 O! I am spoil'd, undone by villains!
@@ -182,54 +182,54 @@ A guiltless death I die.
 AAAAAAAAAAAAAAAAAAAAAAAAHHHHHHH!
 Trust me.
 #Dammit, this thing won't die!
-¤Á¤¯¤·¤ç¡¼¡ª¤³¤¤¤Ä»à¤Ê¤Ê¤¤¤¾¡ª
+ã¡ãã—ã‚‡ãƒ¼ï¼ã“ã„ã¤æ­»ãªãªã„ãï¼
 He hit me for HOW MUCH?????
 Look, behind you!!!
 #Who fed steroids to that kobold?
-¤¢¤Î¥³¥Ü¥ë¥É¤Ë¶ÚÆùÁı¶¯ºŞ¤ò°û¤Ş¤»¤¿¤Î¤ÏÃ¯¤À¡©
+ã‚ã®ã‚³ãƒœãƒ«ãƒ‰ã«ç­‹è‚‰å¢—å¼·å‰¤ã‚’é£²ã¾ã›ãŸã®ã¯èª°ã ï¼Ÿ
 Don't worry, be happy!
 #I don't believe this!
-¿®¤¸¤Ê¤¤¤¾¡ª
+ä¿¡ã˜ãªã„ãï¼
 #Oops.
-¤¯¤Ã¤½¡¼¡£
+ãã£ããƒ¼ã€‚
 #Oups.
-¤¯¤Ã¤½¡Á¡£
+ãã£ãã€œã€‚
 #Can't you take a joke?
-¤¢¤ó¤¿¥¸¥ç¡¼¥¯¤¬Ê¬¤«¤ó¤Ê¤¤¤Î¤«¡©
+ã‚ã‚“ãŸã‚¸ãƒ§ãƒ¼ã‚¯ãŒåˆ†ã‹ã‚“ãªã„ã®ã‹ï¼Ÿ
 #Well, I didn't much like this character, anyway...
-¤Ş¤¢¡¢¤³¤Î¥­¥ã¥é¤Ï¤¢¤ó¤Ş¤ê¹¥¤­¤¸¤ã¤Ê¤«¤Ã¤¿¤«¤é¤Í¡Ä¡£
+ã¾ã‚ã€ã“ã®ã‚­ãƒ£ãƒ©ã¯ã‚ã‚“ã¾ã‚Šå¥½ãã˜ã‚ƒãªã‹ã£ãŸã‹ã‚‰ã­â€¦ã€‚
 #Oops, sorry... didn't mean to disturb you.
-¤ª¤Ã¤È¡£¤´¤á¤ó¡Ä¡£¼ÙËâ¤¹¤ë¤Ä¤â¤ê¤Ï¤Ê¤«¤Ã¤¿¤ó¤À¡£
+ãŠã£ã¨ã€‚ã”ã‚ã‚“â€¦ã€‚é‚ªé­”ã™ã‚‹ã¤ã‚‚ã‚Šã¯ãªã‹ã£ãŸã‚“ã ã€‚
 I never get to have any fun!
 #Stop!
-»ß¤á¤í¡ª
+æ­¢ã‚ã‚ï¼
 Cut it out!
 #Don't worry. I've got a plan.
-¿´ÇÛ¤¹¤ë¤Ê¤è¡£¹Í¤¨¤¬¤¢¤ë¤ó¤À¡£
+å¿ƒé…ã™ã‚‹ãªã‚ˆã€‚è€ƒãˆãŒã‚ã‚‹ã‚“ã ã€‚
 #It didn't look so tough.
-¤½¤ó¤Ê¤Ë¶¯¤½¤¦¤Ë¤Ï¸«¤¨¤Ê¤«¤Ã¤¿¤Î¤Ë¡£
+ãã‚“ãªã«å¼·ãã†ã«ã¯è¦‹ãˆãªã‹ã£ãŸã®ã«ã€‚
 #Run away!
-Æ¨¤²¤í¡ª
+é€ƒã’ã‚ï¼
 All clear, guys.
 #AGAIN!?!?!
-¤Ş¤¿¤«¡ª¡©¡ª¡©
+ã¾ãŸã‹ï¼ï¼Ÿï¼ï¼Ÿ
 #I don't like this dungeon...
-¤³¤Î¥À¥ó¥¸¥ç¥ó¤Ï·ù¤¤¤À¡Ä¡£
+ã“ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã¯å«Œã„ã â€¦ã€‚
 #Maybe this wasn't such a good idea.
-¤µ¤Ã¤­¤Î¤Ï¤¢¤ó¤Ş¤ê¤¤¤¤¥¢¥¤¥Ç¥£¥¢¤¸¤ã¤Ê¤«¤Ã¤¿¤é¤·¤¤¤Ê¡£
+ã•ã£ãã®ã¯ã‚ã‚“ã¾ã‚Šã„ã„ã‚¢ã‚¤ãƒ‡ã‚£ã‚¢ã˜ã‚ƒãªã‹ã£ãŸã‚‰ã—ã„ãªã€‚
 My God will protect me.
 You wouldn't dare!
 But what about my Parry Skill? Tumbling?
 Don't worry - I have Pilot-7.
 And I've *never* done you any harm.
 #I don't understand. It should be dead by now.
-Íı²ò¤Ç¤­¤Ê¤¤¡£¸ş¤³¤¦¤¬Àè¤Ë»à¤ó¤Ç¤ë¤Ï¤º¤À¡£
+ç†è§£ã§ããªã„ã€‚å‘ã“ã†ãŒå…ˆã«æ­»ã‚“ã§ã‚‹ã¯ãšã ã€‚
 I'm heir to the crown. They wouldn't dare!
 #Hey! Where's my stomach? My hands?
-¤ª¡¼¤¤¡ª»ä¤Î°ß¤Ï¤É¤³¡©¼ê¤Ï¤É¤³¡©
+ãŠãƒ¼ã„ï¼ç§ã®èƒƒã¯ã©ã“ï¼Ÿæ‰‹ã¯ã©ã“ï¼Ÿ
 Ha! That's the oldest trick in the book.
 #Cover me.
-²¶¤ò±ç¸î¤·¤í¡ª
+ä¿ºã‚’æ´è­·ã—ã‚ï¼
 Watch this.
 And damn'd be him that first cries, 'Hold, enough!'
 I will not yield.
@@ -238,26 +238,26 @@ If you cut me down, I will only become more powerful.
 Well, at least I tried...?
 What could possibly have gone wrong?
 #You die...
-»à¤ó¤À¡Ä¡£
+æ­»ã‚“ã â€¦ã€‚
 What's with that weirdo with the teeth?
 #Surrender? Never!
-¹ßÉú¤À¤Ã¤Æ¡©¤¹¤ë¤â¤Î¤«¡ª
+é™ä¼ã ã£ã¦ï¼Ÿã™ã‚‹ã‚‚ã®ã‹ï¼
 #I'm sure reinforcements will get here on time. They promised.
-±ç·³¤¬¤Á¤ã¤ó¤ÈÅşÃå¤¹¤ë¤Ï¤º¤À¡£ÌóÂ«¤·¤Æ¤¢¤ë¡£
+æ´è»ãŒã¡ã‚ƒã‚“ã¨åˆ°ç€ã™ã‚‹ã¯ãšã ã€‚ç´„æŸã—ã¦ã‚ã‚‹ã€‚
 Funny, didn't *look* like a cyberpsycho....
 I have a very bad feeling about this.
 Do something, SCHMUCK!
 #I feel I could cast 'Speak with Dead' and talk to myself.
-¡Ö»à¼Ô¤È¤Î²ñÏÃ¡×¤Î¼öÊ¸¤ò²±¤¨¤¿µ¤¤¬¤¹¤ë¡£¼«Ê¬¼«¿È¤ÈÏÃ¤»¤ë¤è¤¦¤À¡£
+ã€Œæ­»è€…ã¨ã®ä¼šè©±ã€ã®å‘ªæ–‡ã‚’æ†¶ãˆãŸæ°—ãŒã™ã‚‹ã€‚è‡ªåˆ†è‡ªèº«ã¨è©±ã›ã‚‹ã‚ˆã†ã ã€‚
 #Oh, that's just a light wound.
-¤Û¤ó¤Î¤«¤¹¤ê½ı¤µ¡ª
+ã»ã‚“ã®ã‹ã™ã‚Šå‚·ã•ï¼
 Ach, is doch nur 'ne Fleischwunde...
 #I thought you were on MY side...
-Ì£Êı¤À¤È»×¤Ã¤Æ¤¤¤¿¤Î¤Ë¡Ä¡£
+å‘³æ–¹ã ã¨æ€ã£ã¦ã„ãŸã®ã«â€¦ã€‚
 Next time, try talking!
 Oh shit... I'll try to teleport again.
 #Somebody get me a Rod of Resurrection... QUICK!
-Ã¯¤«¡¢À¸¤­ÊÖ¤ê¤Î¥í¥Ã¥É¤ò·Ã¤ó¤Ç¤¯¤ì...º£¤¹¤°¤Ë¡ª
+èª°ã‹ã€ç”Ÿãè¿”ã‚Šã®ãƒ­ãƒƒãƒ‰ã‚’æµã‚“ã§ãã‚Œ...ä»Šã™ãã«ï¼
 Uhh... oh-oh...
 Gee, where'd everybody go?
 I see it coming...aaargllhhhh! {sough}
@@ -268,20 +268,20 @@ Et tu, Caesar! Then fall, Brute!
 Even the best laid plans...
 Hey, not too rough!
 #The Random Number Generator hates me!
-Íğ¿ô¤Ë·ù¤ï¤ì¤Æ¤·¤Ş¤Ã¤¿¤è¡ª
+ä¹±æ•°ã«å«Œã‚ã‚Œã¦ã—ã¾ã£ãŸã‚ˆï¼
 So when I die, the first thing I will see in heaven is a score list?
 Can't we talk this thing over?
 #Wait! Spare me and I'll make you rich! Money is not a problem!
-¡ÖÂÔ¤Ã¤Æ¤¯¤ì¡ª½õ¤±¤Æ¤¯¤ì¤¿¤é¤¢¤ó¤¿¤ò¶â»ı¤Á¤Ë¤·¤Æ¤ä¤ë¤è¡ª¶â¤ÏÌäÂê¤¸¤ã¤Ê¤¤¡ª¡×
+ã€Œå¾…ã£ã¦ãã‚Œï¼åŠ©ã‘ã¦ãã‚ŒãŸã‚‰ã‚ã‚“ãŸã‚’é‡‘æŒã¡ã«ã—ã¦ã‚„ã‚‹ã‚ˆï¼é‡‘ã¯å•é¡Œã˜ã‚ƒãªã„ï¼ã€
 #I hate you!
-¤ª¤Ş¤¨¤Ê¤ó¤«·ù¤¤¤À¡ª
+ãŠã¾ãˆãªã‚“ã‹å«Œã„ã ï¼
 By the kind gods, 'twas most ignobly done!
 Mein Leben!
 Meine Lieder!
 #I'm the hero of this story! I CAN'T die!
-²¶¤Ï¼çÌò¤Ê¤ó¤À¡ª»à¤Ì¤Ï¤º¤¬¤Ê¤¤¡ª
+ä¿ºã¯ä¸»å½¹ãªã‚“ã ï¼æ­»ã¬ã¯ãšãŒãªã„ï¼
 #I thought heroes were supposed to win!
-¼çÌò¤Ï¤¤¤Ä¤â¾¡¤Ä¤ó¤À¤È»×¤Ã¤Æ¤¿¤±¤É¤Ê¡ª
+ä¸»å½¹ã¯ã„ã¤ã‚‚å‹ã¤ã‚“ã ã¨æ€ã£ã¦ãŸã‘ã©ãªï¼
 Gee... thanks.
 You've fallen and can't get up!
 #911?
@@ -303,7 +303,7 @@ Don't let poor Nelly starve!
 Wally, what is this? It is death, my boy: they have deceived me.
 Everyone dances with the Grim Reaper.
 #Adios.
-¥¢¥Ç¥£¥ª¥¹¡£
+ã‚¢ãƒ‡ã‚£ã‚ªã‚¹ã€‚
 I'm going home, babe.
 I am innocent, innocent, innocent!
 Watch where you're pointing with that sword! You nearly...
@@ -313,68 +313,68 @@ Of course I know what I am doing.
 It looked harmless.
 Hilfe, hilfe, hilfe!
 #Look, dad! No head!
-¥Ñ¥Ñ¸«¤Æ¡ªÆ¬¤¬¤Ê¤¤¤è¡ª
+ãƒ‘ãƒ‘è¦‹ã¦ï¼é ­ãŒãªã„ã‚ˆï¼
 #Look! I'm flying!
-¸«¤Æ¡ªËÍ¤ÏÈô¤ó¤Ç¤ë¤è¡ª
+è¦‹ã¦ï¼åƒ•ã¯é£›ã‚“ã§ã‚‹ã‚ˆï¼
 Think I'm gonna fall for that?
 I'll be back... as soon as I can.
 #3... 2... 1... Liftoff!
-3... 2... 1... È¯¼Í¡ª
+3... 2... 1... ç™ºå°„ï¼
 My wallet? In your dreams!
 Yes! Yes! YES! YES! YY... AAARRRGGGHH!
 #See you later, alligator!
-¥·¡¼¥æ¡¼¥ì¥¤¥¿¡¼¡¢¥¢¥ê¥²¥¤¥¿¡¼¡ª
+ã‚·ãƒ¼ãƒ¦ãƒ¼ãƒ¬ã‚¤ã‚¿ãƒ¼ã€ã‚¢ãƒªã‚²ã‚¤ã‚¿ãƒ¼ï¼
 Up, up and awaaaayyy!
 #Been nice knowing you.
-·¯¤Ë²ñ¤¨¤Æ¤¦¤ì¤·¤«¤Ã¤¿¤è¡£
+å›ã«ä¼šãˆã¦ã†ã‚Œã—ã‹ã£ãŸã‚ˆã€‚
 #But I just got a little prick!
-¤Ç¤â¤Á¤ç¤Ã¤È»É¤µ¤Ã¤¿¤À¤±¤Ê¤Î¤Ë¡ª
+ã§ã‚‚ã¡ã‚‡ã£ã¨åˆºã•ã£ãŸã ã‘ãªã®ã«ï¼
 And I just wanted that fancy suit of armour you were carrying...
 Hey guys, where are you?
 Hey look... ARCHERS!
 I can't probably miss...
 #I don't care. I have a Scroll of Raise Dead.
-»ä¤Ï»à¼ÔÉü³è¤Î´¬Êª¤ò»ı¤Ã¤Æ¤ë¤ó¤À¡£¤³¤ÎÄøÅÙ¤Î¤³¤È¤Ïµ¤¤Ë¤·¤Ê¤¤¡£
+ç§ã¯æ­»è€…å¾©æ´»ã®å·»ç‰©ã‚’æŒã£ã¦ã‚‹ã‚“ã ã€‚ã“ã®ç¨‹åº¦ã®ã“ã¨ã¯æ°—ã«ã—ãªã„ã€‚
 #I don't care. I have a Ring of Regeneration.
-»ä¤ÏºÆÀ¸¤Î»ØÎØ¤ò»ı¤Ã¤Æ¤ë¤ó¤À¡£¤³¤ÎÄøÅÙ¤Î¤³¤È¤Ïµ¤¤Ë¤·¤Ê¤¤¡£
+ç§ã¯å†ç”Ÿã®æŒ‡è¼ªã‚’æŒã£ã¦ã‚‹ã‚“ã ã€‚ã“ã®ç¨‹åº¦ã®ã“ã¨ã¯æ°—ã«ã—ãªã„ã€‚
 I have this dungeon at home, I know where everything is!
 This HAS to be an illusion. I attempt to disbelieve it.
 I thought you could be trusted.
 Never try to sneak in a plate mail.
 #I'll never surrender.
-¹ßÉú¤Ê¤ó¤«¤·¤Ê¤¤¤¾¡£
+é™ä¼ãªã‚“ã‹ã—ãªã„ãã€‚
 I'll use the Cheat Death option...
 I'm invincible!
 I'm death incarnate! Nothing can harm me!
 #Hey, it was only a joke, all right?
-¤ª¤¤¡¢¤Û¤ó¤Î¾éÃÌ¤¸¤ã¤Ê¤¤¤«¡£
+ãŠã„ã€ã»ã‚“ã®å†—è«‡ã˜ã‚ƒãªã„ã‹ã€‚
 Hey, don't talk to me like that!
 #I have rights, too!
-²¶¤Ë¤â¿Í¸¢¤Ã¤Æ¤â¤Î¤¬¤¢¤ë¤ó¤À¤¾¡ª
+ä¿ºã«ã‚‚äººæ¨©ã£ã¦ã‚‚ã®ãŒã‚ã‚‹ã‚“ã ãï¼
 Just because you're big and ugly doesn't mean you can push ME around.
 Me first! Me first!
 Let me handle this.
 No problem. That's easy.O
 #Oh, shit.
-¤¯¤½¤Ã¡£
+ããã£ã€‚
 #So what?
-¤½¤ì¤Ç¡©
+ãã‚Œã§ï¼Ÿ
 #Tell me this is an illusion... please!
-Ã¯¤«¡¢¤³¤ì¤Ï¸¸³Ğ¤À¤È¸À¤Ã¤Æ¤¯¤ì¡ª
+èª°ã‹ã€ã“ã‚Œã¯å¹»è¦šã ã¨è¨€ã£ã¦ãã‚Œï¼
 #I hate the RNG...
-£Ò£Î£Ç¤Ï·ù¤¤¤À¡Ä¡£
+ï¼²ï¼®ï¼§ã¯å«Œã„ã â€¦ã€‚
 #They need a twenty to hit me! I'm invincible!
-20¤ò¿¶¤é¤Ê¤­¤ã²¶¤Ë¤ÏÅö¤¿¤é¤Ê¤¤¡£²¶¤ÏÌµÅ¨¤À¡ª
+20ã‚’æŒ¯ã‚‰ãªãã‚ƒä¿ºã«ã¯å½“ãŸã‚‰ãªã„ã€‚ä¿ºã¯ç„¡æ•µã ï¼
 #Trust me.
-¿®¤¸¤Æ¤¯¤ì¡£
+ä¿¡ã˜ã¦ãã‚Œã€‚
 #CHARGE!
-ÆÍ·â¤À¡ª
+çªæ’ƒã ï¼
 #What do you mean, how many hit points do I have?
-¤É¤¦¤¤¤¦¤³¤È¡©º££È£Ğ¤¤¤¯¤é¡©
+ã©ã†ã„ã†ã“ã¨ï¼Ÿä»Šï¼¨ï¼°ã„ãã‚‰ï¼Ÿ
 #What do you mean, my GOI expired?
-¤É¤¦¤¤¤¦¤³¤È¡©Ìµ½ı¤Îµå¤¬ÀÚ¤ì¤¿¤Î¡©
+ã©ã†ã„ã†ã“ã¨ï¼Ÿç„¡å‚·ã®çƒãŒåˆ‡ã‚ŒãŸã®ï¼Ÿ
 #Yeah, I knew it was dangerous, but I was thinking about the experience points.
-¤¤¤ä¡¢´í¸±¤À¤Ã¤ÆÃÎ¤Ã¤Æ¤¿¤±¤É·Ğ¸³ÃÍ¤¬Íß¤·¤«¤Ã¤¿¤ó¤À¤è¡£
+ã„ã‚„ã€å±é™ºã ã£ã¦çŸ¥ã£ã¦ãŸã‘ã©çµŒé¨“å€¤ãŒæ¬²ã—ã‹ã£ãŸã‚“ã ã‚ˆã€‚
 You mean you get to use the critical hit chart too?
 You'd have to be a GOD to smile after that hit!
 I'm not afraid of death. I just don't want to be there when it happens.
@@ -383,18 +383,18 @@ I pray you all pray for me.
 I shall hear in heaven.
 Is not this dying with courage and true greatness?
 #I must sleep now.
-¤â¤¦Ì²¤é¤Ê¤­¤ã¡£
+ã‚‚ã†çœ ã‚‰ãªãã‚ƒã€‚
 Nurse, nurse, what murder! What blood! I have done wrong!
 #It is finished.
-¤³¤ì¤Ç½ª¤ï¤ê¤À¡£
+ã“ã‚Œã§çµ‚ã‚ã‚Šã ã€‚
 That unworthy hand! That unworthy hand!
 I am dying.
 Oh, dear.
 I will not kneel. Strike!
 #I have led a happy life.
-¹¬¤»¤Ê¿ÍÀ¸¤À¤Ã¤¿¡£
+å¹¸ã›ãªäººç”Ÿã ã£ãŸã€‚
 #Dying, dying.
-»à¤À¡£»à¤À¡£
+æ­»ã ã€‚æ­»ã ã€‚
 I feel the flowers growing over me.
 Now it is come.
 Let me die to the sound of sweet music.
@@ -402,15 +402,15 @@ I will now enter the Halls of Mandos.
 Ungrateful traitors!
 We perish, we disappear, but the march of time goes on forever.
 #Youth, I forgive thee.
-Ç§¤á¤¿¤¯¤Ê¤¤¤â¤Î¤À¤Ê¡£¼ã¤µ¸Î¤Î²á¤Á¤È¤¤¤¦¤â¤Î¤Ï¡£
+èªã‚ãŸããªã„ã‚‚ã®ã ãªã€‚è‹¥ã•æ•…ã®éã¡ã¨ã„ã†ã‚‚ã®ã¯ã€‚
 Treason! Treason!
 #Coward! Why did you not protect me?
-²²ÉÂ¼Ô¡ª¤É¤¦¤·¤Æ¼é¤Ã¤Æ¤¯¤ì¤Ê¤«¤Ã¤¿¤ó¤À¡©
+è‡†ç—…è€…ï¼ã©ã†ã—ã¦å®ˆã£ã¦ãã‚Œãªã‹ã£ãŸã‚“ã ï¼Ÿ
 #I am absolutely undone.
-¤â¤¦´°àú¤ËÂÌÌÜ¤À¡£
+ã‚‚ã†å®Œç’§ã«é§„ç›®ã ã€‚
 It is well. I die hard, but am not afraid to go.
 #Do let me die in peace.
-°Â¤é¤«¤Ë»à¤Ê¤»¤Æ¤¯¤ì¡£
+å®‰ã‚‰ã‹ã«æ­»ãªã›ã¦ãã‚Œã€‚
 Nothing is real but pain now.
 Violent use brings violent plans.
 Soldier boy, made of clay, now an empty shell.
@@ -422,12 +422,12 @@ No one to play soldier now, no one to pretend.
 Time for lust, time for lie, time to kiss your life goodbye.
 Greetings, Death, he's yours to take away.
 #I was born for dying.
-»ä¤Ï»à¤Ì°Ù¤ËÀ¸¤Ş¤ì¤¿¤ó¤À¡£
+ç§ã¯æ­»ã¬ç‚ºã«ç”Ÿã¾ã‚ŒãŸã‚“ã ã€‚
 The higher you walk, the farther you fall.
 Where's your crown, King Nothing?
 Exit: light - enter: night!
 #New blood joins this earth...
-¿·¤¿¤Ê·ì¤¬¤Ş¤¿ÂçÃÏ¤òÀ÷¤á¤ë...
+æ–°ãŸãªè¡€ãŒã¾ãŸå¤§åœ°ã‚’æŸ“ã‚ã‚‹...
 You labeled me, I'll label you, so I dub thee unforgiven.
 If you're gonna die, die with your boots on!
 There's a time to live, and a time to die, when it's time to meet the maker.
@@ -439,13 +439,13 @@ Now I am cold, but a ghost lives in my veins.
 You got to watch them - be quick or be dead.
 Heaven can wait 'till another day.
 #You'll take my life but I'll take yours too.
-»¦¤¹¤Ê¤é»¦¤»¡ª¤ªÁ°¤âÆ»Ï¢¤ì¤À¡ª
+æ®ºã™ãªã‚‰æ®ºã›ï¼ãŠå‰ã‚‚é“é€£ã‚Œã ï¼
 We won't live to fight another day.
 As I lay forgotten and alone, without fear I draw my parting groan.
 #Somebody please tell me that I'm dreaming!
-Ã¯¤«¤³¤ì¤ÏÌ´¤À¤Ã¤Æ¸À¤Ã¤Æ¤¯¤ì¡ª
+èª°ã‹ã“ã‚Œã¯å¤¢ã ã£ã¦è¨€ã£ã¦ãã‚Œï¼
 #Can't it be there's been some sort of error?
-²¿¤«¤Î´Ö°ã¤¤¤Ã¤Æ¤³¤È¤Ï¤Ê¤¤¤Î¤«¡©
+ä½•ã‹ã®é–“é•ã„ã£ã¦ã“ã¨ã¯ãªã„ã®ã‹ï¼Ÿ
 Is it really the end not some crazy dream?
 Life down there is just a strange illusion.
 Your body tries to leave your soul.
@@ -454,11 +454,11 @@ Life, life! Death, death! How curious it is!
 Catch my soul 'cos it's willing to fly away!
 Flames? Not yet, I think.
 #Someone call the Gendarmes!
-Ã¯¤«±ÒÊ¼¤ò¸Æ¤Ù¡ª
+èª°ã‹è¡›å…µã‚’å‘¼ã¹ï¼
 #I split my brain, melt through the floor.
-¤Î¡¼¤ß¤½Èô¤Ó»¶¤Ã¤Á¤ã¤Ã¤Æ¾²¤Ë¤·¤ß¤Æ¤ë¤è¡£
+ã®ãƒ¼ã¿ãé£›ã³æ•£ã£ã¡ã‚ƒã£ã¦åºŠã«ã—ã¿ã¦ã‚‹ã‚ˆã€‚
 #And now the dreams end.
-¤½¤·¤Æº£Ì´¤Ï½ª¤ë¡£
+ãã—ã¦ä»Šå¤¢ã¯çµ‚ã‚‹ã€‚
 Off to Never-Never Land!
 Death greets me warm, now I will just say goodbye.
 What is this? I've been stricken by fate!
@@ -468,30 +468,30 @@ You have been dying since the day you were born.
 No point asking who's to blame.
 But for all his power he couldn't foresee his own demise.
 #My creator will lay my soul to rest.
-ÁÏÂ¤¼ç¤Ï»ä¤Îº²¤ò°Â¤é¤«¤ÊÌ²¤ê¤Ë½¢¤«¤»¤Æ¤¯¤ì¤ë¤À¤í¤¦¡£
+å‰µé€ ä¸»ã¯ç§ã®é­‚ã‚’å®‰ã‚‰ã‹ãªçœ ã‚Šã«å°±ã‹ã›ã¦ãã‚Œã‚‹ã ã‚ã†ã€‚
 #Was that worth dying for?
-¤¢¤ì¤ÏÌ¿¤òÅÒ¤±¤ë¤Û¤É¤Î¤³¤È¤À¤Ã¤¿¤«¤Ê¡©
+ã‚ã‚Œã¯å‘½ã‚’è³­ã‘ã‚‹ã»ã©ã®ã“ã¨ã ã£ãŸã‹ãªï¼Ÿ
 Can you say you are proud of what you've done?
 But there are some things which cannot be excused.
 Why is it some of us are here just so that we'll die?
 #The shortest straw, pulled for you.
-¤¢¤Ê¤¿¤¬°ú¤¤¤¿¤Î¤Ï°ìÈÖÃ»¤¤¥ï¥é¤Ç¤·¤¿¡£
+ã‚ãªãŸãŒå¼•ã„ãŸã®ã¯ä¸€ç•ªçŸ­ã„ãƒ¯ãƒ©ã§ã—ãŸã€‚
 There's got to be just more to it that this or tell me why do we exist?
 I can't believe that really my time has come.
 Too much of a good thing, I guess...
 #I really screwed up this time.
-º£²ó¤Ï¥Û¥ó¥È¤Ë¥Ø¥Ş¤·¤Á¤Ş¤Ã¤¿¡£
+ä»Šå›ã¯ãƒ›ãƒ³ãƒˆã«ãƒ˜ãƒã—ã¡ã¾ã£ãŸã€‚
 Wow, what a trip!
 What is Time, friend or foe
 #Time waits for none
-ºĞ·î¿Í¤òÂÔ¤¿¤º¡£
+æ­³æœˆäººã‚’å¾…ãŸãšã€‚
 Running through your fingers like sand
 Taking us along to future unknown
 And all too sudden, like it or not
 #We become part of the Land.
-²æ¡¹¤ÏÂçÃÏ¤Î°ìÉô¤È¤Ê¤ë¤Î¤À¡£
+æˆ‘ã€…ã¯å¤§åœ°ã®ä¸€éƒ¨ã¨ãªã‚‹ã®ã ã€‚
 Hah! I'm not dead yet.  I still have five hit points.
 #I don't understand.  It should be dead by now.
-Íı²ò¤Ç¤­¤Ê¤¤¡£¸ş¤³¤¦¤¬Àè¤Ë»à¤ó¤Ç¤ë¤Ï¤º¤À¡£
+ç†è§£ã§ããªã„ã€‚å‘ã“ã†ãŒå…ˆã«æ­»ã‚“ã§ã‚‹ã¯ãšã ã€‚
 #I rolled a 20.  How could that be a miss?
-20¤ò¿¶¤Ã¤¿¤Î¤Ë¡£¤É¤¦¤·¤Æ¤Ï¤º¤ì¤ë¤ó¤À¡©
+20ã‚’æŒ¯ã£ãŸã®ã«ã€‚ã©ã†ã—ã¦ã¯ãšã‚Œã‚‹ã‚“ã ï¼Ÿ

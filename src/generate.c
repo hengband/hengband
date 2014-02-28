@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file generate.c
- * @brief ¥À¥ó¥¸¥ç¥ó¤ÎÀ¸À® / Dungeon generation
+ * @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®ç”Ÿæˆ / Dungeon generation
  * @date 2014/01/04
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -116,10 +116,10 @@ dun_data *dun;
 
 
 /*!
- * @brief ¾å²¼º¸±¦¤Î³°ÊÉ¿ô¤ò¥«¥¦¥ó¥È¤¹¤ë / Count the number of walls adjacent to the given grid.
- * @param y ´ğ½à¤ÎyºÂÉ¸
- * @param x ´ğ½à¤ÎxºÂÉ¸
- * @return ÎÙÀÜ¤¹¤ë³°ÊÉ¤Î¿ô
+ * @brief ä¸Šä¸‹å·¦å³ã®å¤–å£æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹ / Count the number of walls adjacent to the given grid.
+ * @param y åŸºæº–ã®yåº§æ¨™
+ * @param x åŸºæº–ã®xåº§æ¨™
+ * @return éš£æ¥ã™ã‚‹å¤–å£ã®æ•°
  * @note Assumes "in_bounds(y, x)"
  * @details We count only granite walls and permanent walls.
  */
@@ -136,11 +136,11 @@ static int next_to_walls(int y, int x)
 }
 
 /*!
- * @brief alloc_stairs()¤ÎÊä½õ¤È¤·¤Æ»ØÄê¤Î°ÌÃÖ¤Ë³¬ÃÊ¤òÀ¸À®¤Ç¤­¤ë¤«¤ÎÈ½Äê¤ò¹Ô¤¦ / Helper function for alloc_stairs(). Is this a good location for stairs?
- * @param y ´ğ½à¤ÎyºÂÉ¸
- * @param x ´ğ½à¤ÎxºÂÉ¸
- * @param walls ºÇÄã¸ºÎÙÀÜ¤µ¤»¤¿¤¤³°ÊÉ¤Î¿ô
- * @return ³¬ÃÊ¤òÀ¸À®¤·¤ÆÌäÂê¤¬¤Ê¤¤¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
+ * @brief alloc_stairs()ã®è£œåŠ©ã¨ã—ã¦æŒ‡å®šã®ä½ç½®ã«éšæ®µã‚’ç”Ÿæˆã§ãã‚‹ã‹ã®åˆ¤å®šã‚’è¡Œã† / Helper function for alloc_stairs(). Is this a good location for stairs?
+ * @param y åŸºæº–ã®yåº§æ¨™
+ * @param x åŸºæº–ã®xåº§æ¨™
+ * @param walls æœ€ä½æ¸›éš£æ¥ã•ã›ãŸã„å¤–å£ã®æ•°
+ * @return éšæ®µã‚’ç”Ÿæˆã—ã¦å•é¡ŒãŒãªã„ãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
  */
 static bool alloc_stairs_aux(int y, int x, int walls)
 {
@@ -160,11 +160,11 @@ static bool alloc_stairs_aux(int y, int x, int walls)
 
 
 /*!
- * @brief ³°ÊÉ¤ËÎÙÀÜ¤µ¤»¤Æ³¬ÃÊ¤òÀ¸À®¤¹¤ë / Places some staircases near walls
- * @param feat ÇÛÃÖ¤·¤¿¤¤ÃÏ·ÁID
- * @param num ÇÛÃÖ¤·¤¿¤¤³¬ÃÊ¤Î¿ô
- * @param walls ºÇÄã¸ºÎÙÀÜ¤µ¤»¤¿¤¤³°ÊÉ¤Î¿ô
- * @return µ¬Äê¿ôÄÌ¤ê¤ËÀ¸À®¤ËÀ®¸ù¤·¤¿¤éTRUE¤òÊÖ¤¹¡£
+ * @brief å¤–å£ã«éš£æ¥ã•ã›ã¦éšæ®µã‚’ç”Ÿæˆã™ã‚‹ / Places some staircases near walls
+ * @param feat é…ç½®ã—ãŸã„åœ°å½¢ID
+ * @param num é…ç½®ã—ãŸã„éšæ®µã®æ•°
+ * @param walls æœ€ä½æ¸›éš£æ¥ã•ã›ãŸã„å¤–å£ã®æ•°
+ * @return è¦å®šæ•°é€šã‚Šã«ç”Ÿæˆã«æˆåŠŸã—ãŸã‚‰TRUEã‚’è¿”ã™ã€‚
  */
 static bool alloc_stairs(int feat, int num, int walls)
 {
@@ -279,11 +279,11 @@ static bool alloc_stairs(int feat, int num, int walls)
 }
 
 /*!
- * @brief ¥Õ¥í¥¢¾å¤Î¥é¥ó¥À¥à°ÌÃÖ¤Ë³Æ¼ï¥ª¥Ö¥¸¥§¥¯¥È¤òÇÛÃÖ¤¹¤ë / Allocates some objects (using "place" and "type")
- * @param set ÇÛÃÖ¤·¤¿¤¤ÃÏ·Á¤Î¼ïÎà
- * @param typ ÇÛÃÖ¤·¤¿¤¤¥ª¥Ö¥¸¥§¥¯¥È¤Î¼ïÎà
- * @param num ÇÛÃÖ¤·¤¿¤¤¿ô
- * @return µ¬Äê¿ôÄÌ¤ê¤ËÀ¸À®¤ËÀ®¸ù¤·¤¿¤éTRUE¤òÊÖ¤¹¡£
+ * @brief ãƒ•ãƒ­ã‚¢ä¸Šã®ãƒ©ãƒ³ãƒ€ãƒ ä½ç½®ã«å„ç¨®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é…ç½®ã™ã‚‹ / Allocates some objects (using "place" and "type")
+ * @param set é…ç½®ã—ãŸã„åœ°å½¢ã®ç¨®é¡
+ * @param typ é…ç½®ã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç¨®é¡
+ * @param num é…ç½®ã—ãŸã„æ•°
+ * @return è¦å®šæ•°é€šã‚Šã«ç”Ÿæˆã«æˆåŠŸã—ãŸã‚‰TRUEã‚’è¿”ã™ã€‚
  */
 static void alloc_object(int set, int typ, int num)
 {
@@ -334,7 +334,7 @@ static void alloc_object(int set, int typ, int num)
 			if (cheat_room)
 			{
 #ifdef JP
-msg_print("·Ù¹ğ¡ª¥¢¥¤¥Æ¥à¤òÇÛÃÖ¤Ç¤­¤Ş¤»¤ó¡ª");
+msg_print("è­¦å‘Šï¼ã‚¢ã‚¤ãƒ†ãƒ ã‚’é…ç½®ã§ãã¾ã›ã‚“ï¼");
 #else
 				msg_print("Warning! Could not place object!");
 #endif
@@ -377,10 +377,10 @@ msg_print("·Ù¹ğ¡ª¥¢¥¤¥Æ¥à¤òÇÛÃÖ¤Ç¤­¤Ş¤»¤ó¡ª");
 }
 
 /*!
- * @brief ÎÙÀÜ4¥Ş¥¹¤ËÂ¸ºß¤¹¤ëÄÌÏ©¤Î¿ô¤òÊÖ¤¹ / Count the number of "corridor" grids adjacent to the given grid.
- * @param y1 ´ğ½à¤È¤Ê¤ë¥Ş¥¹¤ÎYºÂÉ¸
- * @param x1 ´ğ½à¤È¤Ê¤ë¥Ş¥¹¤ÎXºÂÉ¸
- * @return ÄÌÏ©¤Î¿ô
+ * @brief éš£æ¥4ãƒã‚¹ã«å­˜åœ¨ã™ã‚‹é€šè·¯ã®æ•°ã‚’è¿”ã™ / Count the number of "corridor" grids adjacent to the given grid.
+ * @param y1 åŸºæº–ã¨ãªã‚‹ãƒã‚¹ã®Yåº§æ¨™
+ * @param x1 åŸºæº–ã¨ãªã‚‹ãƒã‚¹ã®Xåº§æ¨™
+ * @return é€šè·¯ã®æ•°
  * @note Assumes "in_bounds(y1, x1)"
  * @details
  * XXX XXX This routine currently only counts actual "empty floor"\n
@@ -423,10 +423,10 @@ static int next_to_corr(int y1, int x1)
 
 
 /*!
- * @brief ¥É¥¢¤òÀßÃÖ²ÄÇ½¤ÊÃÏ·Á¤«¤òÊÖ¤¹ / Determine if the given location is "between" two walls, and "next to" two corridor spaces.
- * @param y È½Äê¤ò¹Ô¤¤¤¿¤¤¥Ş¥¹¤ÎYºÂÉ¸
- * @param x È½Äê¤ò¹Ô¤¤¤¿¤¤¥Ş¥¹¤ÎXºÂÉ¸
- * @return ¥É¥¢¤òÀßÃÖ²ÄÇ½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ‰ã‚¢ã‚’è¨­ç½®å¯èƒ½ãªåœ°å½¢ã‹ã‚’è¿”ã™ / Determine if the given location is "between" two walls, and "next to" two corridor spaces.
+ * @param y åˆ¤å®šã‚’è¡Œã„ãŸã„ãƒã‚¹ã®Yåº§æ¨™
+ * @param x åˆ¤å®šã‚’è¡Œã„ãŸã„ãƒã‚¹ã®Xåº§æ¨™
+ * @return ãƒ‰ã‚¢ã‚’è¨­ç½®å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  * @note Assumes "in_bounds(y1, x1)"
  * @details
  * XXX XXX XXX\n
@@ -457,10 +457,10 @@ static bool possible_doorway(int y, int x)
 }
 
 /*!
- * @brief ¥É¥¢¤ÎÀßÃÖ¤ò»î¤ß¤ë / Places door at y, x position if at least 2 walls found
- * @param y ÀßÃÖ¤ò¹Ô¤¤¤¿¤¤¥Ş¥¹¤ÎYºÂÉ¸
- * @param x ÀßÃÖ¤ò¹Ô¤¤¤¿¤¤¥Ş¥¹¤ÎXºÂÉ¸
- * @return ¤Ê¤·
+ * @brief ãƒ‰ã‚¢ã®è¨­ç½®ã‚’è©¦ã¿ã‚‹ / Places door at y, x position if at least 2 walls found
+ * @param y è¨­ç½®ã‚’è¡Œã„ãŸã„ãƒã‚¹ã®Yåº§æ¨™
+ * @param x è¨­ç½®ã‚’è¡Œã„ãŸã„ãƒã‚¹ã®Xåº§æ¨™
+ * @return ãªã—
  */
 static void try_door(int y, int x)
 {
@@ -483,8 +483,8 @@ static void try_door(int y, int x)
 
 
 /*!
- * @brief ¥¯¥¨¥¹¥È¤Ë´Ø¤ï¤ë¥â¥ó¥¹¥¿¡¼¤ÎÇÛÃÖ¤ò¹Ô¤¦ / Place quest monsters
- * @return À®¸ù¤·¤¿¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ã‚¯ã‚¨ã‚¹ãƒˆã«é–¢ã‚ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®é…ç½®ã‚’è¡Œã† / Place quest monsters
+ * @return æˆåŠŸã—ãŸãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool place_quest_monsters(void)
 {
@@ -573,9 +573,9 @@ bool place_quest_monsters(void)
 
 
 /*!
- * @brief ¥Ş¥¹¤Ë¥Õ¥í¥¢Ã¼ÍÑ¤Î±Êµ×ÊÉ¤òÇÛÃÖ¤¹¤ë / Set boundary mimic and add "solid" perma-wall
- * @param c_ptr ±Êµ×ÊÉ¤òÇÑ»ß¤·¤¿¤¤¥Ş¥¹¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief ãƒã‚¹ã«ãƒ•ãƒ­ã‚¢ç«¯ç”¨ã®æ°¸ä¹…å£ã‚’é…ç½®ã™ã‚‹ / Set boundary mimic and add "solid" perma-wall
+ * @param c_ptr æ°¸ä¹…å£ã‚’å»ƒæ­¢ã—ãŸã„ãƒã‚¹æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void set_bound_perm_wall(cave_type *c_ptr)
 {
@@ -602,9 +602,9 @@ static void set_bound_perm_wall(cave_type *c_ptr)
 }
 
 /*!
- * @brief ¥Õ¥í¥¢¤ËÆ¶·¢¤ä¸Ğ¤òÇÛÃÖ¤¹¤ë / Generate various caverns and lakes
+ * @brief ãƒ•ãƒ­ã‚¢ã«æ´çªŸã‚„æ¹–ã‚’é…ç½®ã™ã‚‹ / Generate various caverns and lakes
  * @details There were moved from cave_gen().
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void gen_caverns_and_lakes(void)
 {
@@ -668,7 +668,7 @@ static void gen_caverns_and_lakes(void)
 		{
 			if (cheat_room)
 #ifdef JP
-				msg_print("¸Ğ¤òÀ¸À®¡£");
+				msg_print("æ¹–ã‚’ç”Ÿæˆã€‚");
 #else
 				msg_print("Lake on the level.");
 #endif
@@ -687,7 +687,7 @@ static void gen_caverns_and_lakes(void)
 
 		if (cheat_room)
 #ifdef JP
-			msg_print("Æ¶·¢¤òÀ¸À®¡£");
+			msg_print("æ´çªŸã‚’ç”Ÿæˆã€‚");
 #else
 			msg_print("Cavern on level.");
 #endif
@@ -702,9 +702,9 @@ static void gen_caverns_and_lakes(void)
 
 
 /*!
- * @brief ¥À¥ó¥¸¥ç¥óÀ¸À®¤Î¥á¥¤¥ó¥ë¡¼¥Á¥ó / Generate a new dungeon level
+ * @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ç”Ÿæˆã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
- * @return ¥À¥ó¥¸¥ç¥óÀ¸À®¤¬Á´¤ÆÌµ»ö¤ËÀ®¸ù¤·¤¿¤éTRUE¤òÊÖ¤¹¡£
+ * @return ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ç”ŸæˆãŒå…¨ã¦ç„¡äº‹ã«æˆåŠŸã—ãŸã‚‰TRUEã‚’è¿”ã™ã€‚
  */
 static bool cave_gen(void)
 {
@@ -756,7 +756,7 @@ static bool cave_gen(void)
 
 		if (cheat_room)
 #ifdef JP
-			msg_print("¥¢¥ê¡¼¥Ê¥ì¥Ù¥ë");
+			msg_print("ã‚¢ãƒªãƒ¼ãƒŠãƒ¬ãƒ™ãƒ«");
 #else
 			msg_print("Arena level.");
 #endif
@@ -1052,7 +1052,7 @@ static bool cave_gen(void)
 		else if (cheat_hear)
 		{
 #ifdef JP
-msg_format("¥â¥ó¥¹¥¿¡¼¿ô´ğËÜÃÍ¤ò %d ¤«¤é %d ¤Ë¸º¤é¤·¤Ş¤¹", small_tester, i);
+msg_format("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ•°åŸºæœ¬å€¤ã‚’ %d ã‹ã‚‰ %d ã«æ¸›ã‚‰ã—ã¾ã™", small_tester, i);
 #else
 			msg_format("Reduced monsters base from %d to %d", small_tester, i);
 #endif
@@ -1110,8 +1110,8 @@ msg_format("¥â¥ó¥¹¥¿¡¼¿ô´ğËÜÃÍ¤ò %d ¤«¤é %d ¤Ë¸º¤é¤·¤Ş¤¹", small_tester, i);
 }
 
 /*!
- * @brief Æ®µ»¾ìÍÑ¤Î¥¢¥ê¡¼¥ÊÃÏ·Á¤òºîÀ®¤¹¤ë / Builds the arena after it is entered -KMW-
- * @return ¤Ê¤·
+ * @brief é—˜æŠ€å ´ç”¨ã®ã‚¢ãƒªãƒ¼ãƒŠåœ°å½¢ã‚’ä½œæˆã™ã‚‹ / Builds the arena after it is entered -KMW-
+ * @return ãªã—
  */
 static void build_arena(void)
 {
@@ -1167,8 +1167,8 @@ static void build_arena(void)
 }
 
 /*!
- * @brief Æ®µ»¾ì¤Ø¤ÎÆş¾ì½èÍı / Town logic flow for generation of arena -KMW-
- * @return ¤Ê¤·
+ * @brief é—˜æŠ€å ´ã¸ã®å…¥å ´å‡¦ç† / Town logic flow for generation of arena -KMW-
+ * @return ãªã—
  */
 static void arena_gen(void)
 {
@@ -1210,7 +1210,7 @@ static void arena_gen(void)
 		p_ptr->exit_bldg = TRUE;
 		p_ptr->arena_number++;
 #ifdef JP
-		msg_print("Áê¼ê¤Ï·ç¾ì¤·¤¿¡£¤¢¤Ê¤¿¤ÎÉÔÀï¾¡¤À¡£");
+		msg_print("ç›¸æ‰‹ã¯æ¬ å ´ã—ãŸã€‚ã‚ãªãŸã®ä¸æˆ¦å‹ã ã€‚");
 #else
 		msg_print("The enemy is unable appear. You won by default.");
 #endif
@@ -1219,8 +1219,8 @@ static void arena_gen(void)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼Æ®µ»¾ì¤Î¥Õ¥í¥¢À¸À® / Builds the arena after it is entered -KMW-
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é—˜æŠ€å ´ã®ãƒ•ãƒ­ã‚¢ç”Ÿæˆ / Builds the arena after it is entered -KMW-
+ * @return ãªã—
  */
 static void build_battle(void)
 {
@@ -1282,8 +1282,8 @@ static void build_battle(void)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼Æ®µ»¾ì¤Ø¤ÎÆ³Æş½èÍı / Town logic flow for generation of arena -KMW-
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é—˜æŠ€å ´ã¸ã®å°å…¥å‡¦ç† / Town logic flow for generation of arena -KMW-
+ * @return ãªã—
  */
 static void battle_gen(void)
 {
@@ -1337,8 +1337,8 @@ static void battle_gen(void)
 }
 
 /*!
- * @brief ¸ÇÄê¥Ş¥Ã¥×¥¯¥¨¥¹¥È¤Î¥Õ¥í¥¢À¸À® / Generate a quest level
- * @return ¤Ê¤·
+ * @brief å›ºå®šãƒãƒƒãƒ—ã‚¯ã‚¨ã‚¹ãƒˆã®ãƒ•ãƒ­ã‚¢ç”Ÿæˆ / Generate a quest level
+ * @return ãªã—
  */
 static void quest_gen(void)
 {
@@ -1371,8 +1371,8 @@ static void quest_gen(void)
 }
 
 /*!
- * @brief ¥À¥ó¥¸¥ç¥ó»ş¤Î¥é¥ó¥À¥à¥Õ¥í¥¢À¸À® / Make a real level
- * @return ¥Õ¥í¥¢¤ÎÀ¸À®¤ËÀ®¸ù¤·¤¿¤éTRUE
+ * @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³æ™‚ã®ãƒ©ãƒ³ãƒ€ãƒ ãƒ•ãƒ­ã‚¢ç”Ÿæˆ / Make a real level
+ * @return ãƒ•ãƒ­ã‚¢ã®ç”Ÿæˆã«æˆåŠŸã—ãŸã‚‰TRUE
  */
 static bool level_gen(cptr *why)
 {
@@ -1386,7 +1386,7 @@ static bool level_gen(cptr *why)
 	{
 		if (cheat_room)
 #ifdef JP
-			msg_print("¾®¤µ¤Ê¥Õ¥í¥¢");
+			msg_print("å°ã•ãªãƒ•ãƒ­ã‚¢");
 #else
 			msg_print("A 'small' dungeon level.");
 #endif
@@ -1437,7 +1437,7 @@ static bool level_gen(cptr *why)
 	if (!cave_gen())
 	{
 #ifdef JP
-*why = "¥À¥ó¥¸¥ç¥óÀ¸À®¤Ë¼ºÇÔ";
+*why = "ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ç”Ÿæˆã«å¤±æ•—";
 #else
 		*why = "could not place player";
 #endif
@@ -1448,8 +1448,8 @@ static bool level_gen(cptr *why)
 }
 
 /*!
- * @brief ¥Õ¥í¥¢¤ËÂ¸ºß¤¹¤ëÁ´¥Ş¥¹¤Îµ­²±¾õÂÖ¤ò½é´ü²½¤¹¤ë / Wipe all unnecessary flags after cave generation
- * @return ¤Ê¤·
+ * @brief ãƒ•ãƒ­ã‚¢ã«å­˜åœ¨ã™ã‚‹å…¨ãƒã‚¹ã®è¨˜æ†¶çŠ¶æ…‹ã‚’åˆæœŸåŒ–ã™ã‚‹ / Wipe all unnecessary flags after cave generation
+ * @return ãªã—
  */
 void wipe_generate_cave_flags(void)
 {
@@ -1478,8 +1478,8 @@ void wipe_generate_cave_flags(void)
 }
 
 /*!
- * @brief ¥Õ¥í¥¢¤ÎÁ´¾ğÊó¤ò½é´ü²½¤¹¤ë / Clear and empty the cave
- * @return ¤Ê¤·
+ * @brief ãƒ•ãƒ­ã‚¢ã®å…¨æƒ…å ±ã‚’åˆæœŸåŒ–ã™ã‚‹ / Clear and empty the cave
+ * @return ãªã—
  */
 void clear_cave(void)
 {
@@ -1549,8 +1549,8 @@ void clear_cave(void)
 
 
 /*!
- * ¥À¥ó¥¸¥ç¥ó¤Î¥é¥ó¥À¥à¥Õ¥í¥¢¤òÀ¸À®¤¹¤ë / Generates a random dungeon level -RAK-
- * @return ¤Ê¤·
+ * ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®ãƒ©ãƒ³ãƒ€ãƒ ãƒ•ãƒ­ã‚¢ã‚’ç”Ÿæˆã™ã‚‹ / Generates a random dungeon level -RAK-
+ * @return ãªã—
  * @note Hack -- regenerate any "overflow" levels
  */
 void generate_cave(void)
@@ -1609,7 +1609,7 @@ void generate_cave(void)
 		{
 			/* Message */
 #ifdef JP
-why = "¥¢¥¤¥Æ¥à¤¬Â¿¤¹¤®¤ë";
+why = "ã‚¢ã‚¤ãƒ†ãƒ ãŒå¤šã™ãã‚‹";
 #else
 			why = "too many objects";
 #endif
@@ -1623,7 +1623,7 @@ why = "¥¢¥¤¥Æ¥à¤¬Â¿¤¹¤®¤ë";
 		{
 			/* Message */
 #ifdef JP
-why = "¥â¥ó¥¹¥¿¡¼¤¬Â¿¤¹¤®¤ë";
+why = "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå¤šã™ãã‚‹";
 #else
 			why = "too many monsters";
 #endif
@@ -1638,7 +1638,7 @@ why = "¥â¥ó¥¹¥¿¡¼¤¬Â¿¤¹¤®¤ë";
 
 		/* Message */
 #ifdef JP
-if (why) msg_format("À¸À®¤ä¤êÄ¾¤·(%s)", why);
+if (why) msg_format("ç”Ÿæˆã‚„ã‚Šç›´ã—(%s)", why);
 #else
 		if (why) msg_format("Generation restarted (%s)", why);
 #endif

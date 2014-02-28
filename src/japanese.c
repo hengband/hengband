@@ -1,4 +1,4 @@
-/* File: japanese.c */
+﻿/* File: japanese.c */
 
 
 #include "angband.h"
@@ -16,44 +16,44 @@ struct convert_key
 static const convert_key s2j_table[] = {
 	{"mb","nb"}, {"mp","np"}, {"mv","nv"}, {"mm","nm"},
 	{"x","ks"},
-	/* sindar:���������  parantir:�ѥ��ƥ���  feanor:�ե����Ρ��� */
+	/* sindar:シンダール  parantir:パランティア  feanor:フェアノール */
 	{"ar$","a-ru$"}, {"ir$","ia$"}, {"or$","o-ru$"},
-	{"ra","��"}, {"ri","��"}, {"ru","��"}, {"re","��"}, {"ro","��"},
-	{"ir","ia"}, {"ur","ua"}, {"er","ea"}, {"ar","a��"},
-	{"sha","����"}, {"shi","��"}, {"shu","����"}, {"she","����"}, {"sho","����"},
-	{"tha","��"}, {"thi","��"}, {"thu","��"}, {"the","��"}, {"tho","��"},
-	{"cha","��"}, {"chi","��"}, {"chu","��"}, {"che","��"}, {"cho","��"},
-	{"dha","��"}, {"dhi","��"}, {"dhu","��"}, {"dhe","��"}, {"dho","��"},
-	{"ba","��"}, {"bi","��"}, {"bu","��"}, {"be","��"}, {"bo","��"},
-	{"ca","��"}, {"ci","��"}, {"cu","��"}, {"ce","��"}, {"co","��"},
-	{"da","��"}, {"di","�ǥ�"}, {"du","�ɥ�"}, {"de","��"}, {"do","��"},
-	{"fa","�ե�"}, {"fi","�ե�"}, {"fu","��"}, {"fe","�ե�"}, {"fo","�ե�"},
-	{"ga","��"}, {"gi","��"}, {"gu","��"}, {"ge","��"}, {"go","��"},
-	{"ha","��"}, {"hi","��"}, {"hu","��"}, {"he","��"}, {"ho","��"},
-	{"ja","����"}, {"ji","��"}, {"ju","����"}, {"je","����"}, {"jo","����"},
-	{"ka","��"}, {"ki","��"}, {"ku","��"}, {"ke","��"}, {"ko","��"},
-	{"la","��"}, {"li","��"}, {"lu","��"}, {"le","��"}, {"lo","��"},
-	{"ma","��"}, {"mi","��"}, {"mu","��"}, {"me","��"}, {"mo","��"},
-	{"na","��"}, {"ni","��"}, {"nu","��"}, {"ne","��"}, {"no","��"},
-	{"pa","��"}, {"pi","��"}, {"pu","��"}, {"pe","��"}, {"po","��"},
-	{"qu","��"},
-	{"sa","��"}, {"si","��"}, {"su","��"}, {"se","��"}, {"so","��"},
-	{"ta","��"}, {"ti","�ƥ�"}, {"tu","�ȥ�"}, {"te","��"}, {"to","��"},
-	{"va","����"}, {"vi","����"}, {"vu","��"}, {"ve","����"}, {"vo","����"},
-	{"wa","��"}, {"wi","����"}, {"wu","��"}, {"we","����"}, {"wo","����"},
-	{"ya","��"}, {"yu","��"}, {"yo","��"},
-	{"za","��"}, {"zi","��"}, {"zu","��"}, {"ze","��"}, {"zo","��"},
-	{"dh","��"}, {"ch","��"}, {"th","��"},
-	{"b","��"}, {"c","��"}, {"d","��"}, {"f","��"}, {"g","��"},
-	{"h","��"}, {"j","����"}, {"k","��"}, {"l","��"}, {"m","��"},
-	{"n","��"}, {"p","��"}, {"q","��"}, {"r","��"}, {"s","��"},
-	{"t","��"}, {"v","��"}, {"w","��"}, {"y","��"},
-	{"a","��"}, {"i","��"}, {"u","��"}, {"e","��"}, {"o","��"},
-	{"-","��"},
+	{"ra","ラ"}, {"ri","リ"}, {"ru","ル"}, {"re","レ"}, {"ro","ロ"},
+	{"ir","ia"}, {"ur","ua"}, {"er","ea"}, {"ar","aル"},
+	{"sha","シャ"}, {"shi","シ"}, {"shu","シュ"}, {"she","シェ"}, {"sho","ショ"},
+	{"tha","サ"}, {"thi","シ"}, {"thu","ス"}, {"the","セ"}, {"tho","ソ"},
+	{"cha","ハ"}, {"chi","ヒ"}, {"chu","フ"}, {"che","ヘ"}, {"cho","ホ"},
+	{"dha","ザ"}, {"dhi","ジ"}, {"dhu","ズ"}, {"dhe","ゼ"}, {"dho","ゾ"},
+	{"ba","バ"}, {"bi","ビ"}, {"bu","ブ"}, {"be","ベ"}, {"bo","ボ"},
+	{"ca","カ"}, {"ci","キ"}, {"cu","ク"}, {"ce","ケ"}, {"co","コ"},
+	{"da","ダ"}, {"di","ディ"}, {"du","ドゥ"}, {"de","デ"}, {"do","ド"},
+	{"fa","ファ"}, {"fi","フィ"}, {"fu","フ"}, {"fe","フェ"}, {"fo","フォ"},
+	{"ga","ガ"}, {"gi","ギ"}, {"gu","グ"}, {"ge","ゲ"}, {"go","ゴ"},
+	{"ha","ハ"}, {"hi","ヒ"}, {"hu","フ"}, {"he","ヘ"}, {"ho","ホ"},
+	{"ja","ジャ"}, {"ji","ジ"}, {"ju","ジュ"}, {"je","ジェ"}, {"jo","ジョ"},
+	{"ka","カ"}, {"ki","キ"}, {"ku","ク"}, {"ke","ケ"}, {"ko","コ"},
+	{"la","ラ"}, {"li","リ"}, {"lu","ル"}, {"le","レ"}, {"lo","ロ"},
+	{"ma","マ"}, {"mi","ミ"}, {"mu","ム"}, {"me","メ"}, {"mo","モ"},
+	{"na","ナ"}, {"ni","ニ"}, {"nu","ヌ"}, {"ne","ネ"}, {"no","ノ"},
+	{"pa","パ"}, {"pi","ピ"}, {"pu","プ"}, {"pe","ペ"}, {"po","ポ"},
+	{"qu","ク"},
+	{"sa","サ"}, {"si","シ"}, {"su","ス"}, {"se","セ"}, {"so","ソ"},
+	{"ta","タ"}, {"ti","ティ"}, {"tu","トゥ"}, {"te","テ"}, {"to","ト"},
+	{"va","ヴァ"}, {"vi","ヴィ"}, {"vu","ヴ"}, {"ve","ヴェ"}, {"vo","ヴォ"},
+	{"wa","ワ"}, {"wi","ウィ"}, {"wu","ウ"}, {"we","ウェ"}, {"wo","ウォ"},
+	{"ya","ヤ"}, {"yu","ユ"}, {"yo","ヨ"},
+	{"za","ザ"}, {"zi","ジ"}, {"zu","ズ"}, {"ze","ゼ"}, {"zo","ゾ"},
+	{"dh","ズ"}, {"ch","フ"}, {"th","ス"},
+	{"b","ブ"}, {"c","ク"}, {"d","ド"}, {"f","フ"}, {"g","グ"},
+	{"h","フ"}, {"j","ジュ"}, {"k","ク"}, {"l","ル"}, {"m","ム"},
+	{"n","ン"}, {"p","プ"}, {"q","ク"}, {"r","ル"}, {"s","ス"},
+	{"t","ト"}, {"v","ヴ"}, {"w","ウ"}, {"y","イ"},
+	{"a","ア"}, {"i","イ"}, {"u","ウ"}, {"e","エ"}, {"o","オ"},
+	{"-","ー"},
 	{NULL,NULL}
 };
 
-/* ������������ܸ���ɤߤ��Ѵ����� */
+/* シンダリンを日本語の読みに変換する */
 void sindarin_to_kana(char *kana, const char *sindarin)
 {
 	char buf[256];
@@ -105,44 +105,44 @@ void sindarin_to_kana(char *kana, const char *sindarin)
 }
 
 
-/*���ܸ�ư����� (�Ǥġ��Ǥä�,�Ǥ� etc) */
-/* JVERB_AND: ����,���� > ����,���� */
-/* JVERB_TO:  ����,���� > ���äƽ��� */
-/* JVERB_OR:  ����,���� > ���ä��꽳�ä��� */
+/*日本語動詞活用 (打つ＞打って,打ち etc) */
+/* JVERB_AND: 殴る,蹴る > 殴り,蹴る */
+/* JVERB_TO:  殴る,蹴る > 殴って蹴る */
+/* JVERB_OR:  殴る,蹴る > 殴ったり蹴ったり */
 
 static const struct jverb_table_t {
 	const char* from;
 	const char* to[3];
 } jverb_table[] = {
-	{ "����", {"��", "����", "����"}},
-	{ "����", {"����", "����", "����"}},
+	{ "する", {"し", "して", "した"}},
+	{ "いる", {"いて", "いて", "いた"}},
 
-	{ "����", {"��", "����", "����"}},
-	{ "����", {"��", "����", "����"}},
-	{ "����", {"��", "����", "����"}},
-	{ "����", {"��", "����", "����"}},
-	{ "����", {"��", "����", "����"}},
-	{ "�Ƥ�", {"��", "�Ƥä�", "�Ƥä�"}},
-	{ "�Ǥ�", {"��", "�Ǥ�", "�Ǥ�"}},
-	{ "�ͤ�", {"��", "�ͤ�", "�ͤ�"}},
-	{ "�ؤ�", {"��", "�ؤ�", "�ؤ�"}},
-	{ "�٤�", {"��", "�٤�", "�٤�"}},
-	{ "���", {"��", "���", "�᤿"}},
-	{ "���", {"��", "���", "�줿"}},
+	{ "える", {"え", "えて", "えた"}},
+	{ "ける", {"け", "けて", "けた"}},
+	{ "げる", {"げ", "えて", "げた"}},
+	{ "せる", {"せ", "せて", "せた"}},
+	{ "ぜる", {"ぜ", "ぜて", "ぜた"}},
+	{ "てる", {"て", "てって", "てった"}},
+	{ "でる", {"で", "でて", "でた"}},
+	{ "ねる", {"ね", "ねて", "ねた"}},
+	{ "へる", {"へ", "へて", "へた"}},
+	{ "べる", {"べ", "べて", "べた"}},
+	{ "める", {"め", "めて", "めた"}},
+	{ "れる", {"れ", "れて", "れた"}},
 
-	{ "��", {"��", "�ä�", "�ä�"}},
-	{ "��", {"��", "����", "����"}},
-	{ "��", {"��", "����", "����"}},
-	{ "��", {"��", "����", "����"}},
-	{ "��", {"��", "����", "����"}},
-	{ "��", {"��", "�ä�", "�ä�"}},
-	{ "��", {"��", "�ä�", "�ä�"}},
-	{ "��", {"��", "�ͤ�", "�ͤ�"}},
-	{ "��", {"��", "�ؤ�", "�ؤ�"}},
-	{ "��", {"��", "���", "���"}},
-	{ "��", {"��", "���", "���"}},
-	{ "��", {"��", "�ä�", "�ä�"}},
-	{ NULL, {"������", "���Ȥˤ��", "���Ȥ�"}},
+	{ "う", {"い", "って", "った"}},
+	{ "く", {"き", "いて", "いた"}},
+	{ "ぐ", {"ぎ", "いで", "いだ"}},
+	{ "す", {"し", "して", "した"}},
+	{ "ず", {"じ", "じて", "じた"}},
+	{ "つ", {"ち", "って", "った"}},
+	{ "づ", {"ぢ", "って", "った"}},
+	{ "ぬ", {"に", "ねて", "ねた"}},
+	{ "ふ", {"ひ", "へて", "へた"}},
+	{ "ぶ", {"び", "んで", "んだ"}},
+	{ "む", {"み", "んで", "んだ"}},
+	{ "る", {"り", "って", "った"}},
+	{ NULL, {"そして", "ことにより", "ことや"}},
 };
 
 void jverb(const char *in , char *out , int flag)
@@ -253,8 +253,8 @@ void euc2sjis(char *str)
 
 
 /*
- * str��Ķ��˹�ä�ʸ�������ɤ��Ѵ������Ѵ�����ʸ�������ɤ��֤���
- * str��Ĺ�������¤Ϥʤ���
+ * strを環境に合った文字コードに変換し、変換前の文字コードを返す。
+ * strの長さに制限はない。
  *
  * 0: Unknown
  * 1: ASCII (Never known to be ASCII in this function.)
@@ -343,7 +343,7 @@ byte codeconv(char *str)
 	return code;
 }
 
-/* ʸ����s��x�Х����ܤ�������1�Х����ܤ��ɤ���Ƚ�ꤹ�� */
+/* 文字列sのxバイト目が漢字の1バイト目かどうか判定する */
 bool iskanji2(cptr s, int x)
 {
 	int i;
@@ -357,5 +357,115 @@ bool iskanji2(cptr s, int x)
 	return FALSE;
 }
 
-#endif /* JP */
+/*!
+ * @brief 文字列の文字コードがASCIIかどうかを判定する
+ * @param str 判定する文字列へのポインタ
+ * @return 文字列の文字コードがASCIIならTRUE、そうでなければFALSE
+ */
+static bool is_ascii_str(cptr str)
+{
+	for (;*str; str++) {
+		if (!(0x00 < *str && *str <= 0x7f))
+			return FALSE;
+	}
+	return TRUE;
+}
 
+/*!
+ * @brief 文字列の文字コードがUTF-8かどうかを判定する
+ * @param str 判定する文字列へのポインタ
+ * @return 文字列の文字コードがUTF-8ならTRUE、そうでなければFALSE
+ */
+static bool is_utf8_str(cptr str)
+{
+	const unsigned char* p;
+	for (p = (const unsigned char*)str; *p; p++) {
+		int subseq_num = 0;
+		if (0x00 < *p && *p <= 0x7f) continue;
+		
+		if ((*p & 0xe0) == 0xc0) subseq_num = 1;
+		if ((*p & 0xf0) == 0xe0) subseq_num = 2;
+		if ((*p & 0xf8) == 0xf0) subseq_num = 3;
+
+		if (subseq_num == 0) return FALSE;
+		while (subseq_num--) {
+			p++;
+			if (!*p || (*p & 0xc0) != 0x80) return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+#if defined(EUC)
+#include <iconv.h>
+#elif defined(SJIS) && defined(WINDOWS)
+#include <Windows.h>
+#endif
+/*!
+ * @brief 文字コードがUTF-8の文字列をシステムの文字コードに変換する
+ * @param utf8_str 変換するUTF-8の文字列へのポインタ
+ * @param sys_str_buffer 変換したシステムの文字コードの文字列を格納するバッファへのポインタ
+ * @param sys_str_buflen 変換したシステムの文字コードの文字列を格納するバッファの長さ
+ * @return 変換に成功した場合TRUE、失敗した場合FALSEを返す
+ */
+static bool utf8_to_sys(char* utf8_str, char* sys_str_buffer, size_t sys_str_buflen)
+{
+#if defined(EUC)
+
+        iconv_t cd = iconv_open("EUC-JP", "UTF-8");
+        size_t utf8_len = strlen(utf8_str) + 1; /* include termination character */
+        char *from = utf8_str;
+        int ret = iconv(cd, &from, &utf8_len, &sys_str_buffer, &sys_str_buflen);
+        iconv_close(cd);
+        return (ret >= 0);
+
+#elif defined(SJIS) && defined(WINDOWS)
+
+	LPWSTR utf16buf;
+	int input_len = strlen(utf8_str) + 1; /* include termination character */
+
+	C_MAKE(utf16buf, input_len, WCHAR);
+
+	/* UTF-8 -> UTF-16 */
+	if (MultiByteToWideChar( CP_UTF8, 0, utf8_str, input_len, utf16buf, input_len) == 0) {
+		C_KILL(utf16buf, input_len, WCHAR);
+		return FALSE;
+	}
+
+	/* UTF-8 -> SJIS(CP932) */
+	if (WideCharToMultiByte( CP_ACP, 0, utf16buf, -1, sys_str_buffer, sys_str_buflen, NULL, NULL ) == 0) {
+		C_KILL(utf16buf, input_len, WCHAR);
+		return FALSE;
+	}
+
+	C_KILL(utf16buf, input_len, WCHAR);
+	return TRUE;
+
+#endif
+}
+
+/*!
+ * @brief 受け取った文字列の文字コードを推定し、システムの文字コードへ変換する
+ * @param strbuf 変換する文字列を格納したバッファへのポインタ。
+ *               バッファは変換した文字列で上書きされる。
+ *               UTF-8からSJISもしくはEUCへの変換を想定しているのでバッファの長さが足りなくなることはない。
+ * @param buflen バッファの長さ。
+ * @return なし
+ */
+void guess_convert_to_system_encoding(char* strbuf, int buflen)
+{
+	if (is_ascii_str(strbuf)) return;
+
+	if (is_utf8_str(strbuf)) {
+		char* work;
+		C_MAKE(work, buflen, char);
+		my_strcpy(work, strbuf, buflen);
+		if (!utf8_to_sys(work, strbuf, buflen)) {
+			msg_print("警告:文字コードの変換に失敗しました");
+			msg_print(NULL);
+		}
+		C_KILL(work, buflen, char);
+	}
+}
+
+#endif /* JP */

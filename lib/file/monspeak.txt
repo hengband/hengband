@@ -182,9 +182,9 @@ N:186:Grishnakh, the Hill Orc
 says, 'Saruman is a fool, and a dirty treacherous fool.'
 says, 'I left a fool.'
 yells, 'Nazgul, Nazgul!'
-says, 'Fine leadership!��I hope the great Ugluk will lead us out again.'
+says, 'Fine leadership!　I hope the great Ugluk will lead us out again.'
 hisses, 'My dear tender little fools.'
-says, 'Well, my little ones!��Enjoying your nice rest?'
+says, 'Well, my little ones!　Enjoying your nice rest?'
 snarls, 'Have you got it -- either of you?'
 
 N:215:Golfimbul, the Hill Orc Chief
@@ -640,24 +640,24 @@ says, 'I don't endure your sabotaging...'
 says, 'You are a little barrier of my plan. Die...'
 says, 'Everything is as I like... huh...'
 
-#����������������᤿��ʬ
+#↓ウォンの台詞の諦めた部分
 #29
-#�ּ�ʬ�����̤�¬��ʤ��ΤǤ����������ͤʹԤ���[˽���Ȳ�]�ȸ����ΤǤ��衣��
-#��[����̴��]�Ĥ��ʤ��ΰ�����ʪ���ˤդ��路�����դǤ��ͤ��ġ�
-#��[���ε������˿臘]�Ĥ��ξ�硢���ʤ��˾ä��Ƥ��������Τ������ν��֤��Ȥ������Ǥ�����
-#�֤��ʤ����Ϥ�����Ǥ��ʤ���д��������ޤ��ġ�[��Ͻ���ܤ����򡢽���ʤ��]�Ȥ�����ޤ����ͤ�����
-#�֤��ʤ����Ϥʤ�[�ꧤ���]���ͤʤ�Ρ���ˤ��ˤ��⡢�ڤ��⤢��ޤ��󡣡�
-#�֤��ʤ��ˤϤ�Ϥ䡢¸�߲��ͤ�����ޤ������ˡ�[��������]�Ȥ��ä��Ȥ����Ǥ��ͤ�����
-#��[����Ϳå]�ġ��եաĤ��ʤ��Τ������ǡ����Ťʥǡ��������ޤ��衣��
-#�֤��ʤ��ηײ�ʤɽ�����[����ϰ��]���������˲᤮�ʤ��ä��ΤǤ��衣��
-#�֤Ȥ��[�Ӽ�����]�Ǥ��͡ġ���
-#�ֻ��ϡ��ͤ����������ư������¨��[ͣ����º]�ʤ�Ǥ��衣��
-#�ֿͤ�̿��īϪ���ͤ�ʪ�ġ�[�����Υ]�ȸ�����������Ʋ���������
-#�������Ϥ�ᾮɾ�����Ƥ��뤫��Ǥ��衣�����[�ҳ�δ�]�ȸ����ޤ�����
-#�ּ�ʬ�����̤��Τ�ʤ��Ȥϡġ�[��ť��Τ]�Ǥ��ͤ��ġ���
-#��[��ϧ����]�ġġ��Ȥ��ʤ��ʤä�ʪ�ϼΤƤ�˸¤�ޤ�����
-#��������٤ˤϷ�²�Ǥ�Ƨ����ˤ���ġ����������λ��Ǥ��衣��
-#�����Ƥ�[����ŷ��]������ή�����̣�����Ƥ���ΤǤ��衣��
+#「自分の力量も測れないのですか。その様な行いを[暴虎馮河]と言うのですよ。」
+#「[酔生夢死]…あなたの一生を物語るにふさわしい言葉ですねぇ…」
+#「[時の宜しきに随う]…この場合、あなたに消えていただくのが最善の処置だという訳です。」
+#「あなたの力は制御できなければ危険すぎます…。[水は舟を載せ、亦、舟を覆す]とも言いますしねぇ。」
+#「あなたの力など[蟷螂の斧]の様なもの。私には痛くも、痒くもありません。」
+#「あなたにはもはや、存在価値がありません。正に、[行尸走肉]といったところですねぇ。」
+#「[生殺与奪]…。フフ…あなたのおかげで、貴重なデータが取れますよ。」
+#「あなたの計画など所詮は[空中楼閣]。絵空事に過ぎなかったのですよ。」
+#「とんだ[羊質虎皮]ですね…。」
+#「時は、人を操り世界を動かす。即ち[唯我独尊]なんですよ。」
+#「人の命は朝露の様な物…。[会者定離]と言う事で諦めて下さい。」
+#「相手の力を過小評価しているからですよ。これを[子且の患]と言います。」
+#「自分の力量も知らないとは…。[雲泥万里]ですねぇ…。」
+#「[夏炉冬扇]……。使えなくなった物は捨てるに限ります。」
+#「生きる為には血族でも踏み台にする…。当たり前の事ですよ。」
+#「全ては[運否天賦]、時の流れも私に味方しているのですよ。」
 
 N:921:Internet Exploder
 is slow.

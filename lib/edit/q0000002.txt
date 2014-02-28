@@ -2,7 +2,7 @@
 
 # Name
 Q:$2:N:The Sewer
-Q:2:N:²¼¿åÆ»
+Q:2:N:ä¸‹æ°´é“
 
 # Definition
 Q:$2:Q:6:0:0:0:15:0:0:0:6
@@ -14,24 +14,24 @@ Q:$2:T:The sewer underneath the city has been acting strange
 Q:$2:T:lately. There are rumors of monsters living beneath our
 Q:$2:T:fair city. I need you to exterminate the vermin and
 Q:$2:T:bring the sewer back to its normal, if dirty, self.
-Q:2:T:³¹¤ÎÃÏ²¼¤Î²¼¿åÆ»¤ÎÍÍ»Ò¤¬ºÇ¶á¤ª¤«¤·¤¤¤Ç¤¹¡£¤³¤ÎÁÇÀ²¤é¤·¤¤
-Q:2:T:³¹¤ÎÃÏ²¼¤Ë²øÊª¤¬À³¤ó¤Ç¤¤¤ë¤È¸À¤¦±½¤¬Î®¤ì¤Æ¤¤¤Ş¤¹¡£¤É¤¦¤«
-Q:2:T:³²Ãî¤É¤â¤ò¶î½ü¤·¡¢²¼¿åÆ»¤ò¡Ê±ø¤¯¤Æ¤â¡Ë¤â¤È¤Î¾õÂÖ¤Ë
-Q:2:T:Ìá¤·¤Æ²¼¤µ¤¤¡£
+Q:2:T:è¡—ã®åœ°ä¸‹ã®ä¸‹æ°´é“ã®æ§˜å­ãŒæœ€è¿‘ãŠã‹ã—ã„ã§ã™ã€‚ã“ã®ç´ æ™´ã‚‰ã—ã„
+Q:2:T:è¡—ã®åœ°ä¸‹ã«æ€ªç‰©ãŒæ£²ã‚“ã§ã„ã‚‹ã¨è¨€ã†å™‚ãŒæµã‚Œã¦ã„ã¾ã™ã€‚ã©ã†ã‹
+Q:2:T:å®³è™«ã©ã‚‚ã‚’é§†é™¤ã—ã€ä¸‹æ°´é“ã‚’ï¼ˆæ±šãã¦ã‚‚ï¼‰ã‚‚ã¨ã®çŠ¶æ…‹ã«
+Q:2:T:æˆ»ã—ã¦ä¸‹ã•ã„ã€‚
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST2 3]
 Q:$2:T:A reward for your good work awaits you outside.
-Q:2:T:¤ª¸«»ö¤Ç¤¹¡£¤ªÎé¤ò³°¤ËÍÑ°Õ¤·¤Æ¤ª¤­¤Ş¤·¤¿¡£
+Q:2:T:ãŠè¦‹äº‹ã§ã™ã€‚ãŠç¤¼ã‚’å¤–ã«ç”¨æ„ã—ã¦ãŠãã¾ã—ãŸã€‚
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST2 5]
 Q:$1:T:I had to call help from a local druid, since you failed to
 Q:$1:T:clean out the sewer.
-Q:1:T:¤¢¤Ê¤¿¤¬²¼¿åÆ»¤ò°ìÁİ¤¹¤ë¤Î¤Ë¼ºÇÔ¤·¤¿¤Î¤Ç¡¢
-Q:1:T:ÃÏ¸µ¤Î¥É¥ë¥¤¥É¶µ²ñ¤Ë±ş±ç¤òÍê¤à±©ÌÜ¤Ë¤Ê¤ê¤Ş¤·¤¿¤è¡£
+Q:1:T:ã‚ãªãŸãŒä¸‹æ°´é“ã‚’ä¸€æƒã™ã‚‹ã®ã«å¤±æ•—ã—ãŸã®ã§ã€
+Q:1:T:åœ°å…ƒã®ãƒ‰ãƒ«ã‚¤ãƒ‰æ•™ä¼šã«å¿œæ´ã‚’é ¼ã‚€ç¾½ç›®ã«ãªã‚Šã¾ã—ãŸã‚ˆã€‚
 ?:1
 
 # Floor with Giant white rat

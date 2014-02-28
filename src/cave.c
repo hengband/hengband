@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file cave.c
- * @brief ¥À¥ó¥¸¥ç¥ó¤Î´ğÁÃÉôÊ¬¼ÂÁõ(¼ç¤Ë¥Ş¥¹¤Î¼ÂÁõ) / low level dungeon routines -BEN-
+ * @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®åŸºç¤éƒ¨åˆ†å®Ÿè£…(ä¸»ã«ãƒã‚¹ã®å®Ÿè£…) / low level dungeon routines -BEN-
  * @date 2013/12/30
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -12,24 +12,24 @@
  * Support for Adam Bolt's tileset, lighting and transparency effects\n
  * by Robert Ruehlmann (rr9@angband.org)\n
  * \n
- * 2013 Deskull Doxygen¸ş¤±¤Î¥³¥á¥ó¥ÈÀ°Íı\n
+ * 2013 Deskull Doxygenå‘ã‘ã®ã‚³ãƒ¡ãƒ³ãƒˆæ•´ç†\n
  */
 
 
 #include "angband.h"
 
-static byte display_autopick; /*!< ¼«Æ°½¦¤¤¾õÂÖ¤ÎÀßÄê¥Õ¥é¥° */
+static byte display_autopick; /*!< è‡ªå‹•æ‹¾ã„çŠ¶æ…‹ã®è¨­å®šãƒ•ãƒ©ã‚° */
 static int match_autopick;
-static object_type *autopick_obj; /*!< ³Æ¼ï¼«Æ°½¦¤¤½èÍı»ş¤Ë»È¤¦¥ª¥Ö¥¸¥§¥¯¥È¥İ¥¤¥ó¥¿ */
-static int feat_priority; /*!< ¥Ş¥Ã¥×½Ì¾®É½¼¨»ş¤ËÉ½¼¨¤¹¤Ù¤­ÃÏ·Á¤ÎÍ¥ÀèÅÙ¤òÊİ´É¤¹¤ë */
+static object_type *autopick_obj; /*!< å„ç¨®è‡ªå‹•æ‹¾ã„å‡¦ç†æ™‚ã«ä½¿ã†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒã‚¤ãƒ³ã‚¿ */
+static int feat_priority; /*!< ãƒãƒƒãƒ—ç¸®å°è¡¨ç¤ºæ™‚ã«è¡¨ç¤ºã™ã¹ãåœ°å½¢ã®å„ªå…ˆåº¦ã‚’ä¿ç®¡ã™ã‚‹ */
 
 /*!
- * @brief 2ÅÀ´Ö¤Îµ÷Î¥¤ò¥Ë¥å¡¼¥È¥ó¡¦¥é¥×¥½¥óË¡¤Ç»»½Ğ¤¹¤ë / Distance between two points via Newton-Raphson technique
- * @param y1 1ÅÀÌÜ¤ÎyºÂÉ¸
- * @param x1 1ÅÀÌÜ¤ÎxºÂÉ¸
- * @param y2 2ÅÀÌÜ¤ÎyºÂÉ¸
- * @param x2 2ÅÀÌÜ¤ÎxºÂÉ¸
- * @return 2ÅÀ´Ö¤Îµ÷Î¥
+ * @brief 2ç‚¹é–“ã®è·é›¢ã‚’ãƒ‹ãƒ¥ãƒ¼ãƒˆãƒ³ãƒ»ãƒ©ãƒ—ã‚½ãƒ³æ³•ã§ç®—å‡ºã™ã‚‹ / Distance between two points via Newton-Raphson technique
+ * @param y1 1ç‚¹ç›®ã®yåº§æ¨™
+ * @param x1 1ç‚¹ç›®ã®xåº§æ¨™
+ * @param y2 2ç‚¹ç›®ã®yåº§æ¨™
+ * @param x2 2ç‚¹ç›®ã®xåº§æ¨™
+ * @return 2ç‚¹é–“ã®è·é›¢
  */
 int distance (int y1, int x1, int y2, int x2)
 {
@@ -63,9 +63,9 @@ int distance (int y1, int x1, int y2, int x2)
 }
 
 /*!
- * @brief ÃÏ·Á¤¬æ«»ı¤Á¤Ç¤¢¤ë¤«¤ÎÈ½Äê¤ò¹Ô¤¦¡£ / Return TRUE if the given feature is a trap
- * @param feat ÃÏ·Á¾ğÊó¤ÎID
- * @return æ«»ı¤Á¤ÎÃÏ·Á¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
+ * @brief åœ°å½¢ãŒç½ æŒã¡ã§ã‚ã‚‹ã‹ã®åˆ¤å®šã‚’è¡Œã†ã€‚ / Return TRUE if the given feature is a trap
+ * @param feat åœ°å½¢æƒ…å ±ã®ID
+ * @return ç½ æŒã¡ã®åœ°å½¢ãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
  */
 bool is_trap(int feat)
 {
@@ -73,9 +73,9 @@ bool is_trap(int feat)
 }
 
 /*!
- * @brief ¥Ş¥¹¤Ë´ÇÇËºÑ¤ß¤Îæ«¤¬¤¢¤ë¤«¤ÎÈ½Äê¤ò¹Ô¤¦¡£ / Return TRUE if the given grid is a known trap
- * @param c_ptr ¥Ş¥¹¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return ´ÇÇËºÑ¤ß¤Îæ«¤¬¤¢¤ë¤Ê¤éTRUE¤òÊÖ¤¹¡£
+ * @brief ãƒã‚¹ã«çœ‹ç ´æ¸ˆã¿ã®ç½ ãŒã‚ã‚‹ã‹ã®åˆ¤å®šã‚’è¡Œã†ã€‚ / Return TRUE if the given grid is a known trap
+ * @param c_ptr ãƒã‚¹æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return çœ‹ç ´æ¸ˆã¿ã®ç½ ãŒã‚ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
  */
 bool is_known_trap(cave_type *c_ptr)
 {
@@ -86,9 +86,9 @@ bool is_known_trap(cave_type *c_ptr)
 }
 
 /*!
- * @brief ÃÏ·Á¤¬ÊÄ¤¸¤¿¥É¥¢¤Ç¤¢¤ë¤«¤ÎÈ½Äê¤ò¹Ô¤¦¡£ / Return TRUE if the given grid is a closed door
- * @param feat ÃÏ·Á¾ğÊó¤ÎID
- * @return ÊÄ¤¸¤¿¥É¥¢¤Î¤¢¤ëÃÏ·Á¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
+ * @brief åœ°å½¢ãŒé–‰ã˜ãŸãƒ‰ã‚¢ã§ã‚ã‚‹ã‹ã®åˆ¤å®šã‚’è¡Œã†ã€‚ / Return TRUE if the given grid is a closed door
+ * @param feat åœ°å½¢æƒ…å ±ã®ID
+ * @return é–‰ã˜ãŸãƒ‰ã‚¢ã®ã‚ã‚‹åœ°å½¢ãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
  */
 bool is_closed_door(int feat)
 {
@@ -99,9 +99,9 @@ bool is_closed_door(int feat)
 }
 
 /*!
- * @brief ¥Ş¥¹¤Ë±£¤µ¤ì¤¿¥É¥¢¤¬¤¢¤ë¤«¤ÎÈ½Äê¤ò¹Ô¤¦¡£ / Return TRUE if the given grid is a hidden closed door
- * @param c_ptr ¥Ş¥¹¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return ±£¤µ¤ì¤¿¥É¥¢¤¬¤¢¤ë¤Ê¤éTRUE¤òÊÖ¤¹¡£
+ * @brief ãƒã‚¹ã«éš ã•ã‚ŒãŸãƒ‰ã‚¢ãŒã‚ã‚‹ã‹ã®åˆ¤å®šã‚’è¡Œã†ã€‚ / Return TRUE if the given grid is a hidden closed door
+ * @param c_ptr ãƒã‚¹æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return éš ã•ã‚ŒãŸãƒ‰ã‚¢ãŒã‚ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
  */
 bool is_hidden_door(cave_type *c_ptr)
 {
@@ -113,12 +113,12 @@ bool is_hidden_door(cave_type *c_ptr)
 }
 
 /*!
- * @brief LOS(Line Of Sight / »ëÀş¤¬ÄÌ¤Ã¤Æ¤¤¤ë¤«)¤ÎÈ½Äê¤ò¹Ô¤¦¡£
- * @param y1 »ÏÅÀ¤ÎyºÂÉ¸
- * @param x1 »ÏÅÀ¤ÎxºÂÉ¸
- * @param y2 ½ªÅÀ¤ÎyºÂÉ¸
- * @param x2 ½ªÅÀ¤ÎxºÂÉ¸
- * @return LOS¤¬ÄÌ¤Ã¤Æ¤¤¤ë¤Ê¤éTRUE¤òÊÖ¤¹¡£
+ * @brief LOS(Line Of Sight / è¦–ç·šãŒé€šã£ã¦ã„ã‚‹ã‹)ã®åˆ¤å®šã‚’è¡Œã†ã€‚
+ * @param y1 å§‹ç‚¹ã®yåº§æ¨™
+ * @param x1 å§‹ç‚¹ã®xåº§æ¨™
+ * @param y2 çµ‚ç‚¹ã®yåº§æ¨™
+ * @param x2 çµ‚ç‚¹ã®xåº§æ¨™
+ * @return LOSãŒé€šã£ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
  * @details
  * A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,\n
  * 4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.\n
@@ -377,14 +377,14 @@ bool los(int y1, int x1, int y2, int x2)
 	return TRUE;
 }
 
-#define COMPLEX_WALL_ILLUMINATION /*!< ¾ÈÌÀ¾õÂÖ¤òÊÉ¤Ë¤è¤ê±Æ¶Á¤ò¼õ¤±¤ë¡¢¤è¤êÊ£»¨¤ÊÈ½Äê¤ËÀÚ¤êÂØ¤¨¤ë¥Ş¥¯¥í */
+#define COMPLEX_WALL_ILLUMINATION /*!< ç…§æ˜çŠ¶æ…‹ã‚’å£ã«ã‚ˆã‚Šå½±éŸ¿ã‚’å—ã‘ã‚‹ã€ã‚ˆã‚Šè¤‡é›‘ãªåˆ¤å®šã«åˆ‡ã‚Šæ›¿ãˆã‚‹ãƒã‚¯ãƒ­ */
 
 
 /*!
- * @brief »ØÄê¤µ¤ì¤¿ºÂÉ¸¤Î¥Ş¥¹¤¬¸½ºß¾È¤é¤µ¤ì¤Æ¤¤¤ë¤«¤òÊÖ¤¹¡£ / Check for "local" illumination
- * @param y yºÂÉ¸
- * @param x xºÂÉ¸
- * @return »ØÄê¤µ¤ì¤¿ºÂÉ¸¤Ë¾ÈÌÀ¤¬¤«¤«¤Ã¤Æ¤¤¤ë¤Ê¤éTRUE¤òÊÖ¤¹¡£¡£
+ * @brief æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ã®ãƒã‚¹ãŒç¾åœ¨ç…§ã‚‰ã•ã‚Œã¦ã„ã‚‹ã‹ã‚’è¿”ã™ã€‚ / Check for "local" illumination
+ * @param y yåº§æ¨™
+ * @param x xåº§æ¨™
+ * @return æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ã«ç…§æ˜ãŒã‹ã‹ã£ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚ã€‚
  */
 static bool check_local_illumination(int y, int x)
 {
@@ -417,7 +417,7 @@ static bool check_local_illumination(int y, int x)
 }
 
 
-/*! ÂĞ¾İºÂÉ¸¤Î¥Ş¥¹¤Î¾ÈÌÀ¾õÂÖ¤ò¹¹¿·¤¹¤ëºİ¤ÎÊä½õ½èÍı¥Ş¥¯¥í */
+/*! å¯¾è±¡åº§æ¨™ã®ãƒã‚¹ã®ç…§æ˜çŠ¶æ…‹ã‚’æ›´æ–°ã™ã‚‹éš›ã®è£œåŠ©å‡¦ç†ãƒã‚¯ãƒ­ */
 #define update_local_illumination_aux(Y, X) \
 { \
 	if (player_has_los_bold((Y), (X))) \
@@ -432,10 +432,10 @@ static bool check_local_illumination(int y, int x)
 }
 
 /*!
- * @brief »ØÄê¤µ¤ì¤¿ºÂÉ¸¤Î¾ÈÌÀ¾õÂÖ¤ò¹¹¿·¤¹¤ë / Update "local" illumination
- * @param y yºÂÉ¸
- * @param x xºÂÉ¸
- * @return ¤Ê¤·
+ * @brief æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ã®ç…§æ˜çŠ¶æ…‹ã‚’æ›´æ–°ã™ã‚‹ / Update "local" illumination
+ * @param y yåº§æ¨™
+ * @param x xåº§æ¨™
+ * @return ãªã—
  */
 void update_local_illumination(int y, int x)
 {
@@ -530,10 +530,10 @@ void update_local_illumination(int y, int x)
 
 
 /*!
- * @brief »ØÄê¤µ¤ì¤¿ºÂÉ¸¤ò¥×¥ì¥¤¥ä¡¼¤¬»ë³Ğ¤Ë¼ı¤á¤é¤ì¤ë¤«¤òÊÖ¤¹¡£ / Can the player "see" the given grid in detail?
- * @param y yºÂÉ¸
- * @param x xºÂÉ¸
- * @return »ë³Ğ¤Ë¼ı¤á¤é¤ì¤ë¾õÂÖ¤Ê¤éTRUE¤òÊÖ¤¹
+ * @brief æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒè¦–è¦šã«åã‚ã‚‰ã‚Œã‚‹ã‹ã‚’è¿”ã™ã€‚ / Can the player "see" the given grid in detail?
+ * @param y yåº§æ¨™
+ * @param x xåº§æ¨™
+ * @return è¦–è¦šã«åã‚ã‚‰ã‚Œã‚‹çŠ¶æ…‹ãªã‚‰TRUEã‚’è¿”ã™
  * @details
  * He must have vision, illumination, and line of sight.\n
  * \n
@@ -595,9 +595,9 @@ bool player_can_see_bold(int y, int x)
 }
 
 /*!
- * @brief »ØÄê¤µ¤ì¤¿ºÂÉ¸¤ò¥×¥ì¥¤¥ä¡¼¼ı¤á¤é¤ì¤Æ¤¤¤Ê¤¤¾õÂÖ¤«¤É¤¦¤« / Returns true if the player's grid is dark
- * @return »ë³Ğ¤Ë¼ı¤á¤é¤ì¤Æ¤¤¤Ê¤¤¤Ê¤éTRUE¤òÊÖ¤¹
- * @details player_can_see_bold()´Ø¿ô¤ÎÊÖ¤êÃÍ¤ÎÈİÄê¤òÊÖ¤·¤Æ¤¤¤ë¡£
+ * @brief æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åã‚ã‚‰ã‚Œã¦ã„ãªã„çŠ¶æ…‹ã‹ã©ã†ã‹ / Returns true if the player's grid is dark
+ * @return è¦–è¦šã«åã‚ã‚‰ã‚Œã¦ã„ãªã„ãªã‚‰TRUEã‚’è¿”ã™
+ * @details player_can_see_bold()é–¢æ•°ã®è¿”ã‚Šå€¤ã®å¦å®šã‚’è¿”ã—ã¦ã„ã‚‹ã€‚
  */
 bool no_lite(void)
 {
@@ -606,12 +606,12 @@ bool no_lite(void)
 
 
 /*!
- * @brief »ØÄê¤µ¤ì¤¿ºÂÉ¸¤¬ÃÏ¿Ì¤ä³¬ÃÊÀ¸À®¤ÎÂĞ¾İ¤È¤Ê¤ë¥Ş¥¹¤«¤òÊÖ¤¹¡£ / Determine if a given location may be "destroyed"
- * @param y yºÂÉ¸
- * @param x xºÂÉ¸
- * @return ³Æ¼ï¤ÎÊÑ¹¹¤¬²ÄÇ½¤Ê¤éTRUE¤òÊÖ¤¹¡£
+ * @brief æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ãŒåœ°éœ‡ã‚„éšæ®µç”Ÿæˆã®å¯¾è±¡ã¨ãªã‚‹ãƒã‚¹ã‹ã‚’è¿”ã™ã€‚ / Determine if a given location may be "destroyed"
+ * @param y yåº§æ¨™
+ * @param x xåº§æ¨™
+ * @return å„ç¨®ã®å¤‰æ›´ãŒå¯èƒ½ãªã‚‰TRUEã‚’è¿”ã™ã€‚
  * @details 
- * ¾ò·ï¤Ï±Êµ×ÃÏ·Á¤Ç¤Ê¤¯¡¢¤Ê¤ª¤«¤Ä³ºÅö¤Î¥Ş¥¹¤Ë¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤¬Â¸ºß¤·¤Ê¤¤¤«¡¢¤Ç¤¢¤ë¡£±Ñ¸ì¤Îµì¥³¥á¥ó¥È¤ËÈ¿¤·¤Æ¡öÇË²õ¡ö¤ÎÍŞ»ßÈ½Äê¤Ë¤Ï¸½ºß»È¤ï¤ì¤Æ¤¤¤Ê¤¤¡£
+ * æ¡ä»¶ã¯æ°¸ä¹…åœ°å½¢ã§ãªãã€ãªãŠã‹ã¤è©²å½“ã®ãƒã‚¹ã«ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãŒå­˜åœ¨ã—ãªã„ã‹ã€ã§ã‚ã‚‹ã€‚è‹±èªã®æ—§ã‚³ãƒ¡ãƒ³ãƒˆã«åã—ã¦ï¼Šç ´å£Šï¼Šã®æŠ‘æ­¢åˆ¤å®šã«ã¯ç¾åœ¨ä½¿ã‚ã‚Œã¦ã„ãªã„ã€‚
  */
 bool cave_valid_bold(int y, int x)
 {
@@ -646,21 +646,21 @@ bool cave_valid_bold(int y, int x)
 
 
 /*!
- * °ìÈÌÅª¤Ë¥â¥ó¥¹¥¿¡¼¥·¥ó¥Ü¥ë¤È¤·¤Æ°·¤ï¤ì¤ëµ­¹æ¤òÄêµÁ¤¹¤ë(¸¸³Ğ½èÍı¸ş¤±) / Hack -- Legal monster codes
+ * ä¸€èˆ¬çš„ã«ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚·ãƒ³ãƒœãƒ«ã¨ã—ã¦æ‰±ã‚ã‚Œã‚‹è¨˜å·ã‚’å®šç¾©ã™ã‚‹(å¹»è¦šå‡¦ç†å‘ã‘) / Hack -- Legal monster codes
  */
 static char image_monster_hack[] = \
 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 /*!
- * °ìÈÌÅª¤Ë¥ª¥Ö¥¸¥§¥¯¥È¥·¥ó¥Ü¥ë¤È¤·¤Æ°·¤ï¤ì¤ëµ­¹æ¤òÄêµÁ¤¹¤ë(¸¸³Ğ½èÍı¸ş¤±) /  Hack -- Legal object codes
+ * ä¸€èˆ¬çš„ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚·ãƒ³ãƒœãƒ«ã¨ã—ã¦æ‰±ã‚ã‚Œã‚‹è¨˜å·ã‚’å®šç¾©ã™ã‚‹(å¹»è¦šå‡¦ç†å‘ã‘) /  Hack -- Legal object codes
  */
 static char image_object_hack[] = "?/|\\\"!$()_-=[]{},~";
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤ÎÉ½¼¨¤ò¸¸³Ğ¾õÂÖ¤Ëº¹¤·ÂØ¤¨¤ë / Mega-Hack -- Hallucinatory monster
- * @param ap ËÜÍè¤Î¿§
- * @param cp ËÜÍè¤Î¥·¥ó¥Ü¥ë
- * @return ¤Ê¤·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®è¡¨ç¤ºã‚’å¹»è¦šçŠ¶æ…‹ã«å·®ã—æ›¿ãˆã‚‹ / Mega-Hack -- Hallucinatory monster
+ * @param ap æœ¬æ¥ã®è‰²
+ * @param cp æœ¬æ¥ã®ã‚·ãƒ³ãƒœãƒ«
+ * @return ãªã—
  */
 static void image_monster(byte *ap, char *cp)
 {
@@ -685,10 +685,10 @@ static void image_monster(byte *ap, char *cp)
 }
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤ÎÉ½¼¨¤ò¸¸³Ğ¾õÂÖ¤Ëº¹¤·ÂØ¤¨¤ë / Hallucinatory object
- * @param ap ËÜÍè¤Î¿§
- * @param cp ËÜÍè¤Î¥·¥ó¥Ü¥ë
- * @return ¤Ê¤·
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¡¨ç¤ºã‚’å¹»è¦šçŠ¶æ…‹ã«å·®ã—æ›¿ãˆã‚‹ / Hallucinatory object
+ * @param ap æœ¬æ¥ã®è‰²
+ * @param cp æœ¬æ¥ã®ã‚·ãƒ³ãƒœãƒ«
+ * @return ãªã—
  */
 static void image_object(byte *ap, char *cp)
 {
@@ -712,10 +712,10 @@ static void image_object(byte *ap, char *cp)
 
 
 /*!
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¡õ¥â¥ó¥¹¥¿¡¼¤ÎÉ½¼¨¤ò¸¸³Ğ¾õÂÖ¤Ëº¹¤·ÂØ¤¨¤ë / Hack -- Random hallucination
- * @param ap ËÜÍè¤Î¿§
- * @param cp ËÜÍè¤Î¥·¥ó¥Ü¥ë
- * @return ¤Ê¤·
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼†ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®è¡¨ç¤ºã‚’å¹»è¦šçŠ¶æ…‹ã«å·®ã—æ›¿ãˆã‚‹ / Hack -- Random hallucination
+ * @param ap æœ¬æ¥ã®è‰²
+ * @param cp æœ¬æ¥ã®ã‚·ãƒ³ãƒœãƒ«
+ * @return ãªã—
  */
 static void image_random(byte *ap, char *cp)
 {
@@ -733,7 +733,7 @@ static void image_random(byte *ap, char *cp)
 }
 
 /*!
- * ¾ÈÌÀ¤ÎÉ½¸½¤ò¹Ô¤¦¤¿¤á¤Î¿§¹ç¤¤¤Î´Ø·¸¤ò{°Å°Ç»ş, ¾ÈÌÀ»ş} ¤ÇÄêµÁ¤¹¤ë /
+ * ç…§æ˜ã®è¡¨ç¾ã‚’è¡Œã†ãŸã‚ã®è‰²åˆã„ã®é–¢ä¿‚ã‚’{æš—é—‡æ™‚, ç…§æ˜æ™‚} ã§å®šç¾©ã™ã‚‹ /
  * This array lists the effects of "brightness" on various "base" colours.\n
  *\n
  * This is used to do dynamic lighting effects in ascii :-)\n
@@ -793,8 +793,8 @@ static byte lighting_colours[16][2] =
 };
 
 /*!
- * @brief Ä´ººÃæ
- * @todo ¥³¥á¥ó¥È¤òÉÕ²Ã¤¹¤ë¤³¤È
+ * @brief èª¿æŸ»ä¸­
+ * @todo ã‚³ãƒ¡ãƒ³ãƒˆã‚’ä»˜åŠ ã™ã‚‹ã“ã¨
  */
 void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
 {
@@ -818,7 +818,7 @@ void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
 
 
 /*!
- * ¥â¥ó¥¹¥¿¡¼¤Ë¤è¤ê¾ÈÌÀ¤¬¾Ã¤µ¤ì¤Æ¤¤¤ëÃÏ·Á¤«Èİ¤«¤òÈ½Äê¤¹¤ë¡£ / Is this grid "darkened" by monster?
+ * ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã‚ˆã‚Šç…§æ˜ãŒæ¶ˆã•ã‚Œã¦ã„ã‚‹åœ°å½¢ã‹å¦ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚ / Is this grid "darkened" by monster?
  */
 #define darkened_grid(C) \
 	((((C)->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && \
@@ -826,7 +826,7 @@ void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
 
 
 /*!
- * @brief M¥³¥Ş¥ó¥É¤Ë¤è¤ë½Ì¾®¥Ş¥Ã¥×¤ÎÉ½¼¨¤ò¹Ô¤¦ / Extract the attr/char to display at the given (legal) map location
+ * @brief Mã‚³ãƒãƒ³ãƒ‰ã«ã‚ˆã‚‹ç¸®å°ãƒãƒƒãƒ—ã®è¡¨ç¤ºã‚’è¡Œã† / Extract the attr/char to display at the given (legal) map location
  * @details
  * Basically, we "paint" the chosen attr/char in several passes, starting\n
  * with any known "terrain features" (defaulting to darkness), then adding\n
@@ -1813,7 +1813,7 @@ void prt_path(int y, int x)
 static cptr simplify_list[][2] =
 {
 #ifdef JP
-	{"¤ÎËâË¡½ñ", ""},
+	{"ã®é­”æ³•æ›¸", ""},
 	{NULL, NULL}
 #else
 	{"^Ring of ",   "="},
@@ -1849,7 +1849,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 	{
 		attr = TERM_WHITE;
 #ifdef JP
-		strcpy(buf, "²¿¤«´ñÌ¯¤ÊÊª");
+		strcpy(buf, "ä½•ã‹å¥‡å¦™ãªç‰©");
 #else
 		strcpy(buf, "something strange");
 #endif
@@ -1886,7 +1886,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 
 	c = buf;
 	len = 0;
-	/* È¾³Ñ 12 Ê¸»úÊ¬¤ÇÀÚ¤ë */
+	/* åŠè§’ 12 æ–‡å­—åˆ†ã§åˆ‡ã‚‹ */
 	while(*c)
 	{
 #ifdef JP
@@ -2209,7 +2209,7 @@ void do_cmd_view_map(void)
 
 	/* Note */
 #ifdef JP
-prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
+prt("ãŠå¾…ã¡ä¸‹ã•ã„...", 0, 0);
 #else
 	prt("Please wait...", 0, 0);
 #endif
@@ -2241,7 +2241,7 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 			row_message = hgt - 1;
 
 #ifdef JP
-			put_str("²¿¤«¥­¡¼¤ò²¡¤·¤Æ¤¯¤À¤µ¤¤('M':½¦¤¦ 'N':ÊüÃÖ 'D':M+N 'K':²õ¤¹¥¢¥¤¥Æ¥à¤òÉ½¼¨)", row_message, 1);
+			put_str("ä½•ã‹ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ãã ã•ã„('M':æ‹¾ã† 'N':æ”¾ç½® 'D':M+N 'K':å£Šã™ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤º)", row_message, 1);
 #else
 			put_str(" Hit M, N(for ~), K(for !), or D(same as M+N) to display auto-picker items.", row_message, 1);
 #endif
@@ -2278,7 +2278,7 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 	else
 	{
 #ifdef JP
-		put_str("²¿¤«¥­¡¼¤ò²¡¤¹¤È¥²¡¼¥à¤ËÌá¤ê¤Ş¤¹", 23, 30);
+		put_str("ä½•ã‹ã‚­ãƒ¼ã‚’æŠ¼ã™ã¨ã‚²ãƒ¼ãƒ ã«æˆ»ã‚Šã¾ã™", 23, 30);
 #else
 		put_str("Hit any key to continue", 23, 30);
 #endif		/* Hilite the player */
@@ -3305,7 +3305,7 @@ void update_mon_lite(void)
 			if (p_ptr->monlite)
 			{
 #ifdef JP
-				msg_print("±Æ¤ÎÊ¤¤¤¤¬Çö¤ì¤¿µ¤¤¬¤¹¤ë¡£");
+				msg_print("å½±ã®è¦†ã„ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 				msg_print("Your mantle of shadow become thin.");
 #endif
@@ -3313,7 +3313,7 @@ void update_mon_lite(void)
 			else
 			{
 #ifdef JP
-				msg_print("±Æ¤ÎÊ¤¤¤¤¬Ç»¤¯¤Ê¤Ã¤¿¡ª");
+				msg_print("å½±ã®è¦†ã„ãŒæ¿ƒããªã£ãŸï¼");
 #else
 				msg_print("Your mantle of shadow restored its original darkness.");
 #endif
@@ -4776,7 +4776,7 @@ void cave_alter_feat(int y, int x, int action)
 		if (found && character_dungeon && player_can_see_bold(y, x))
 		{
 #ifdef JP
-			msg_print("²¿¤«¤òÈ¯¸«¤·¤¿¡ª");
+			msg_print("ä½•ã‹ã‚’ç™ºè¦‹ã—ãŸï¼");
 #else
 			msg_print("You have found something!");
 #endif

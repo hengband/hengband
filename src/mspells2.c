@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file mspells2.c
- * @brief ¥â¥ó¥¹¥¿¡¼ËâË¡¤Î¼ÂÁõ(ÂĞ¥â¥ó¥¹¥¿¡¼½èÍı) / Monster spells (attack monster)
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é­”æ³•ã®å®Ÿè£…(å¯¾ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‡¦ç†) / Monster spells (attack monster)
  * @date 2014/01/17
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -14,14 +14,14 @@
 #include "angband.h"
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Å¨ÂĞ¥â¥ó¥¹¥¿¡¼¤Ë¥Ó¡¼¥à¤òÅö¤Æ¤ë¤³¤È²ÄÇ½¤«¤òÈ½Äê¤¹¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ•µå¯¾ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ“ãƒ¼ãƒ ã‚’å½“ã¦ã‚‹ã“ã¨å¯èƒ½ã‹ã‚’åˆ¤å®šã™ã‚‹ /
  * Determine if a beam spell will hit the target.
- * @param y1 »ÏÅÀ¤ÎYºÂÉ¸
- * @param x1 »ÏÅÀ¤ÎXºÂÉ¸
- * @param y2 ÌÜÉ¸¤ÎYºÂÉ¸
- * @param x2 ÌÜÉ¸¤ÎXºÂÉ¸
- * @param m_ptr »ÈÍÑ¤¹¤ë¥â¥ó¥¹¥¿¡¼¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
- * @return ¥Ó¡¼¥à¤¬ÅşÃ£²ÄÇ½¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param y1 å§‹ç‚¹ã®Yåº§æ¨™
+ * @param x1 å§‹ç‚¹ã®Xåº§æ¨™
+ * @param y2 ç›®æ¨™ã®Yåº§æ¨™
+ * @param x2 ç›®æ¨™ã®Xåº§æ¨™
+ * @param m_ptr ä½¿ç”¨ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãƒ“ãƒ¼ãƒ ãŒåˆ°é”å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 {
@@ -62,16 +62,16 @@ static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Å¨ÂĞ¥â¥ó¥¹¥¿¡¼¤ËÄ¾ÀÜ¥Ö¥ì¥¹¤òÅö¤Æ¤ë¤³¤È¤¬²ÄÇ½¤«¤òÈ½Äê¤¹¤ë /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ•µå¯¾ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ç›´æ¥ãƒ–ãƒ¬ã‚¹ã‚’å½“ã¦ã‚‹ã“ã¨ãŒå¯èƒ½ã‹ã‚’åˆ¤å®šã™ã‚‹ /
  * Determine if a breath will hit the target.
- * @param y1 »ÏÅÀ¤ÎYºÂÉ¸
- * @param x1 »ÏÅÀ¤ÎXºÂÉ¸
- * @param y2 ÌÜÉ¸¤ÎYºÂÉ¸
- * @param x2 ÌÜÉ¸¤ÎXºÂÉ¸
- * @param rad È¾·Â
- * @param typ ¸ú²ÌÂ°À­ID
- * @param is_friend TRUE¤Ê¤é¤Ğ¡¢¥×¥ì¥¤¥ä¡¼¤ò´¬¤­¹ş¤à»ş¤Ë¥Ö¥ì¥¹¤ÎÈ½Äê¤òFALSE¤Ë¤¹¤ë¡£
- * @return ¥Ö¥ì¥¹¤òÄ¾ÀÜÅö¤Æ¤é¤ì¤ë¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @param y1 å§‹ç‚¹ã®Yåº§æ¨™
+ * @param x1 å§‹ç‚¹ã®Xåº§æ¨™
+ * @param y2 ç›®æ¨™ã®Yåº§æ¨™
+ * @param x2 ç›®æ¨™ã®Xåº§æ¨™
+ * @param rad åŠå¾„
+ * @param typ åŠ¹æœå±æ€§ID
+ * @param is_friend TRUEãªã‚‰ã°ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å·»ãè¾¼ã‚€æ™‚ã«ãƒ–ãƒ¬ã‚¹ã®åˆ¤å®šã‚’FALSEã«ã™ã‚‹ã€‚
+ * @return ãƒ–ãƒ¬ã‚¹ã‚’ç›´æ¥å½“ã¦ã‚‰ã‚Œã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool is_friend)
 {
@@ -182,14 +182,14 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬ÆÃ¼ìÇ½ÎÏ¤ÎÌÜÉ¸ÃÏÅÀ¤ò·è¤á¤ë½èÍı /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒç‰¹æ®Šèƒ½åŠ›ã®ç›®æ¨™åœ°ç‚¹ã‚’æ±ºã‚ã‚‹å‡¦ç† /
  * Get the actual center point of ball spells (rad > 1) (originally from TOband)
- * @param sy »ÏÅÀ¤ÎYºÂÉ¸
- * @param sx »ÏÅÀ¤ÎXºÂÉ¸
- * @param ty ÌÜÉ¸YºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param tx ÌÜÉ¸XºÂÉ¸¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param flg È½Äê¤Î¥Õ¥é¥°ÇÛÎó
- * @return ¤Ê¤·
+ * @param sy å§‹ç‚¹ã®Yåº§æ¨™
+ * @param sx å§‹ç‚¹ã®Xåº§æ¨™
+ * @param ty ç›®æ¨™Yåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param tx ç›®æ¨™Xåº§æ¨™ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param flg åˆ¤å®šã®ãƒ•ãƒ©ã‚°é…åˆ—
+ * @return ãªã—
  */
 void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 {
@@ -216,11 +216,11 @@ void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Å¨¥â¥ó¥¹¥¿¡¼¤ËËâÎÏ¾Ãµî¤ò»È¤¦¤«¤É¤¦¤«¤òÊÖ¤¹ /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ•µãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«é­”åŠ›æ¶ˆå»ã‚’ä½¿ã†ã‹ã©ã†ã‹ã‚’è¿”ã™ /
  * Check should monster cast dispel spell at other monster.
- * @param m_idx ½Ñ¼Ô¤Î¥â¥ó¥¹¥¿¡¼ID
- * @param t_idx ÌÜÉ¸¤Î¥â¥ó¥¹¥¿¡¼ID
- * @return ËâÎÏ¾Ãµî¤ò»È¤¦¤Ù¤­¤Ê¤é¤ĞTRUE¤òÊÑ¤¨¤¹¡£
+ * @param m_idx è¡“è€…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ID
+ * @param t_idx ç›®æ¨™ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ID
+ * @return é­”åŠ›æ¶ˆå»ã‚’ä½¿ã†ã¹ããªã‚‰ã°TRUEã‚’å¤‰ãˆã™ã€‚
  */
 static bool dispel_check_monster(int m_idx, int t_idx)
 {
@@ -246,10 +246,10 @@ static bool dispel_check_monster(int m_idx, int t_idx)
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¤¬Å¨¥â¥ó¥¹¥¿¡¼¤ËÆÃ¼ìÇ½ÎÏ¤ò»È¤¦½èÍı¤Î¥á¥¤¥ó¥ë¡¼¥Á¥ó /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ•µãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ç‰¹æ®Šèƒ½åŠ›ã‚’ä½¿ã†å‡¦ç†ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
- * @param m_idx ½Ñ¼Ô¤Î¥â¥ó¥¹¥¿¡¼ID
- * @return ¼Âºİ¤ËÆÃ¼ìÇ½ÎÏ¤ò»È¤Ã¤¿¾ì¹çTRUE¤òÊÖ¤¹
+ * @param m_idx è¡“è€…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ID
+ * @return å®Ÿéš›ã«ç‰¹æ®Šèƒ½åŠ›ã‚’ä½¿ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  * @details
  * The player is only disturbed if able to be affected by the spell.
  */
@@ -697,7 +697,7 @@ bool monst_spell_monst(int m_idx)
 	{
 		disturb(1, 1);
 		/* Message */
-		if (see_m) msg_format(_("%^s¤Ï¼öÊ¸¤ò¾§¤¨¤è¤¦¤È¤·¤¿¤¬¼ºÇÔ¤·¤¿¡£", 
+		if (see_m) msg_format(_("%^sã¯å‘ªæ–‡ã‚’å”±ãˆã‚ˆã†ã¨ã—ãŸãŒå¤±æ•—ã—ãŸã€‚", 
 			                    "%^s tries to cast a spell, but fails."), m_name);
 
 		return (TRUE);
@@ -706,7 +706,7 @@ bool monst_spell_monst(int m_idx)
 	/* Hex: Anti Magic Barrier */
 	if (!spell_is_inate(thrown_spell) && magic_barrier(m_idx))
 	{
-		if (see_m) msg_format(_("È¿ËâË¡¥Ğ¥ê¥¢¤¬%^s¤Î¼öÊ¸¤ò¤«¤­¾Ã¤·¤¿¡£", 
+		if (see_m) msg_format(_("åé­”æ³•ãƒãƒªã‚¢ãŒ%^sã®å‘ªæ–‡ã‚’ã‹ãæ¶ˆã—ãŸã€‚", 
 			                    "Anti magic barrier cancels the spell which %^s casts."), m_name);
 		return (TRUE);
 	}

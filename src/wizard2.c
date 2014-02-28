@@ -1,4 +1,4 @@
-/* File: wizard2.c */
+ï»¿/* File: wizard2.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others
@@ -79,7 +79,7 @@ void do_cmd_rerate(bool display)
 	if (display)
 	{
 #ifdef JP
-		msg_format("¸½ºß¤ÎÂÎÎÏ¥é¥ó¥¯¤Ï %d/100 ¤Ç¤¹¡£", percent);
+		msg_format("ç¾åœ¨ã®ä½“åŠ›ãƒ©ãƒ³ã‚¯ã¯ %d/100 ã§ã™ã€‚", percent);
 #else
 		msg_format("Your life rate is %d/100 now.", percent);
 #endif
@@ -88,7 +88,7 @@ void do_cmd_rerate(bool display)
 	else
 	{
 #ifdef JP
-		msg_print("ÂÎÎÏ¥é¥ó¥¯¤¬ÊÑ¤ï¤Ã¤¿¡£");
+		msg_print("ä½“åŠ›ãƒ©ãƒ³ã‚¯ãŒå¤‰ã‚ã£ãŸã€‚");
 #else
 		msg_print("Life rate is changed.");
 #endif
@@ -378,7 +378,7 @@ static void do_cmd_wiz_change_aux(void)
 
 	/* Query */
 #ifdef JP
-	if (!get_string("½ÏÎıÅÙ: ", tmp_val, 9)) return;
+	if (!get_string("ç†Ÿç·´åº¦: ", tmp_val, 9)) return;
 #else
 	if (!get_string("Proficiency: ", tmp_val, 9)) return;
 #endif
@@ -1705,7 +1705,7 @@ static void do_cmd_wiz_create_feature(void)
 
 	/* Query */
 #ifdef JP
-	if (!get_string("ÃÏ·Á: ", tmp_val, 3)) return;
+	if (!get_string("åœ°å½¢: ", tmp_val, 3)) return;
 #else
 	if (!get_string("Feature: ", tmp_val, 3)) return;
 #endif
@@ -1720,7 +1720,7 @@ static void do_cmd_wiz_create_feature(void)
 
 	/* Query */
 #ifdef JP
-	if (!get_string("ÃÏ·Á (mimic): ", tmp_val, 3)) return;
+	if (!get_string("åœ°å½¢ (mimic): ", tmp_val, 3)) return;
 #else
 	if (!get_string("Feature (mimic): ", tmp_val, 3)) return;
 #endif
@@ -1781,7 +1781,7 @@ static void do_cmd_dump_options(void)
 	if (!fff)
 	{
 #ifdef JP
-		msg_format("¥Õ¥¡¥¤¥ë %s ¤ò³«¤±¤Ş¤»¤ó¤Ç¤·¤¿¡£", buf);
+		msg_format("ãƒ•ã‚¡ã‚¤ãƒ« %s ã‚’é–‹ã‘ã¾ã›ã‚“ã§ã—ãŸã€‚", buf);
 #else
 		msg_format("Failed to open file %s.", buf);
 #endif
@@ -1833,7 +1833,7 @@ static void do_cmd_dump_options(void)
 	my_fclose(fff);
 
 #ifdef JP
-	msg_format("¥ª¥×¥·¥ç¥óbit»ÈÍÑ¾õ¶·¤ò¥Õ¥¡¥¤¥ë %s ¤Ë½ñ¤­½Ğ¤·¤Ş¤·¤¿¡£", buf);
+	msg_format("ã‚ªãƒ—ã‚·ãƒ§ãƒ³bitä½¿ç”¨çŠ¶æ³ã‚’ãƒ•ã‚¡ã‚¤ãƒ« %s ã«æ›¸ãå‡ºã—ã¾ã—ãŸã€‚", buf);
 #else
 	msg_format("Option bits usage dump saved to file %s.", buf);
 #endif

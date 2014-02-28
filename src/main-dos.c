@@ -1,4 +1,4 @@
-/* File: main-dos.c */
+﻿/* File: main-dos.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, Robert Ruehlmann, and others

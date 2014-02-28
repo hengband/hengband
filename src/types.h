@@ -1,4 +1,4 @@
-/* File: types.h */
+ï»¿/* File: types.h */
 
 /*
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
@@ -298,7 +298,7 @@ struct monster_race
 {
 	u32b name;				/* Name (offset) */
 #ifdef JP
-	u32b E_name;                    /* ±Ñ¸ìÌ¾ (offset) */
+	u32b E_name;                    /* è‹±èªå (offset) */
 #endif
 	u32b text;				/* Text (offset) */
 
@@ -818,8 +818,8 @@ struct player_sex
 	cptr title;			/* Type of sex */
 	cptr winner;		/* Name of winner */
 #ifdef JP
-	cptr E_title;		/* ±Ñ¸ìÀ­ÊÌ */
-	cptr E_winner;		/* ±Ñ¸ìÀ­ÊÌ */
+	cptr E_title;		/* è‹±èªæ€§åˆ¥ */
+	cptr E_winner;		/* è‹±èªæ€§åˆ¥ */
 #endif
 };
 
@@ -835,7 +835,7 @@ struct player_race
 	cptr title;			/* Type of race */
 
 #ifdef JP
-	cptr E_title;		/* ±Ñ¸ì¼ïÂ² */
+	cptr E_title;		/* è‹±èªç¨®æ— */
 #endif
 	s16b r_adj[6];		/* Racial stat bonuses */
 
@@ -882,7 +882,7 @@ struct player_class
 	cptr title;			/* Type of class */
 
 #ifdef JP
-	cptr E_title;		/* ±Ñ¸ì¿¦¶È */
+	cptr E_title;		/* è‹±èªè·æ¥­ */
 #endif
 	s16b c_adj[6];		/* Class stat modifier */
 
@@ -917,7 +917,7 @@ struct player_seikaku
 	cptr title;			/* Type of seikaku */
 
 #ifdef JP
-	cptr E_title;		/* ±Ñ¸ìÀ­³Ê */
+	cptr E_title;		/* è‹±èªæ€§æ ¼ */
 #endif
 
 	s16b a_adj[6];		/* seikaku stat bonuses */
@@ -933,7 +933,7 @@ struct player_seikaku
 
 	s16b a_mhp;			/* Race hit-dice modifier */
 
-	byte no;			/* ¤Î */
+	byte no;			/* ã® */
 	byte sex;			/* seibetu seigen */
 };
 

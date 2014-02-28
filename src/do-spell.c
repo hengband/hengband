@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
     @file do-spell.c
-    @brief ËâË¡¤Î¥¤¥ó¥¿¡¼¥Õ¥§¥¤¥¹¤ÈÈ¯Æ° / Purpose: Do everything for each spell
+    @brief é­”æ³•ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã¨ç™ºå‹• / Purpose: Do everything for each spell
     @date 2013/12/31
     @author
     2013 Deskull rearranged comment for Doxygen.
@@ -11,12 +11,12 @@
 
 /*!
  * @brief
- * ËâË¡¤Î¸ú²Ì¤ò¡Ö¥­¥ã¥×¥·¥ç¥ó:¥À¥¤¥¹¡ÜÄê¿ôÃÍ¡×¤Î¥Õ¥©¡¼¥Ş¥Ã¥È¤Ç½ĞÎÏ¤¹¤ë / Generate dice info string such as "foo 2d10"
- * @param str ¥­¥ã¥×¥·¥ç¥ó
- * @param dice ¥À¥¤¥¹¿ô
- * @param sides ¥À¥¤¥¹ÌÜ
- * @param base ¸ÇÄêÃÍ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * é­”æ³•ã®åŠ¹æœã‚’ã€Œã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³:ãƒ€ã‚¤ã‚¹ï¼‹å®šæ•°å€¤ã€ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§å‡ºåŠ›ã™ã‚‹ / Generate dice info string such as "foo 2d10"
+ * @param str ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³
+ * @param dice ãƒ€ã‚¤ã‚¹æ•°
+ * @param sides ãƒ€ã‚¤ã‚¹ç›®
+ * @param base å›ºå®šå€¤
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_string_dice(cptr str, int dice, int sides, int base)
 {
@@ -35,76 +35,76 @@ static cptr info_string_dice(cptr str, int dice, int sides, int base)
 
 
 /*!
- * @brief ËâË¡¤Ë¤è¤ë¥À¥á¡¼¥¸¤ò½ĞÎÏ¤¹¤ë / Generate damage-dice info string such as "dam 2d10"
- * @param dice ¥À¥¤¥¹¿ô
- * @param sides ¥À¥¤¥¹ÌÜ
- * @param base ¸ÇÄêÃÍ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•ã«ã‚ˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å‡ºåŠ›ã™ã‚‹ / Generate damage-dice info string such as "dam 2d10"
+ * @param dice ãƒ€ã‚¤ã‚¹æ•°
+ * @param sides ãƒ€ã‚¤ã‚¹ç›®
+ * @param base å›ºå®šå€¤
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_damage(int dice, int sides, int base)
 {
 #ifdef JP
-	return info_string_dice("Â»½ı:", dice, sides, base);
+	return info_string_dice("æå‚·:", dice, sides, base);
 #else
 	return info_string_dice("dam ", dice, sides, base);
 #endif
 }
 
 /*!
- * @brief ËâË¡¤Î¸ú²Ì»ş´Ö¤ò½ĞÎÏ¤¹¤ë / Generate duration info string such as "dur 20+1d20"
- * @param base ¸ÇÄêÃÍ
- * @param sides ¥À¥¤¥¹ÌÜ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•ã®åŠ¹æœæ™‚é–“ã‚’å‡ºåŠ›ã™ã‚‹ / Generate duration info string such as "dur 20+1d20"
+ * @param base å›ºå®šå€¤
+ * @param sides ãƒ€ã‚¤ã‚¹ç›®
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_duration(int base, int sides)
 {
 #ifdef JP
-	return format("´ü´Ö:%d+1d%d", base, sides);
+	return format("æœŸé–“:%d+1d%d", base, sides);
 #else
 	return format("dur %d+1d%d", base, sides);
 #endif
 }
 
 /*!
- * @brief ËâË¡¤Î¸ú²ÌÈÏ°Ï¤ò½ĞÎÏ¤¹¤ë / Generate range info string such as "range 5"
- * @param range ¸ú²ÌÈÏ°Ï
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•ã®åŠ¹æœç¯„å›²ã‚’å‡ºåŠ›ã™ã‚‹ / Generate range info string such as "range 5"
+ * @param range åŠ¹æœç¯„å›²
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_range(int range)
 {
 #ifdef JP
-	return format("ÈÏ°Ï:%d", range);
+	return format("ç¯„å›²:%d", range);
 #else
 	return format("range %d", range);
 #endif
 }
 
 /*!
- * @brief ËâË¡¤Ë¤è¤ë²óÉüÎÌ¤ò½ĞÎÏ¤¹¤ë / Generate heal info string such as "heal 2d8"
- * @param dice ¥À¥¤¥¹¿ô
- * @param sides ¥À¥¤¥¹ÌÜ
- * @param base ¸ÇÄêÃÍ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•ã«ã‚ˆã‚‹å›å¾©é‡ã‚’å‡ºåŠ›ã™ã‚‹ / Generate heal info string such as "heal 2d8"
+ * @param dice ãƒ€ã‚¤ã‚¹æ•°
+ * @param sides ãƒ€ã‚¤ã‚¹ç›®
+ * @param base å›ºå®šå€¤
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_heal(int dice, int sides, int base)
 {
 #ifdef JP
-	return info_string_dice("²óÉü:", dice, sides, base);
+	return info_string_dice("å›å¾©:", dice, sides, base);
 #else
 	return info_string_dice("heal ", dice, sides, base);
 #endif
 }
 
 /*!
- * @brief ËâË¡¸ú²ÌÈ¯Æ°¤Ş¤Ç¤ÎÃÙ±ä¥¿¡¼¥ó¤ò½ĞÎÏ¤¹¤ë / Generate delay info string such as "delay 15+1d15"
- * @param base ¸ÇÄêÃÍ
- * @param sides ¥À¥¤¥¹ÌÜ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•åŠ¹æœç™ºå‹•ã¾ã§ã®é…å»¶ã‚¿ãƒ¼ãƒ³ã‚’å‡ºåŠ›ã™ã‚‹ / Generate delay info string such as "delay 15+1d15"
+ * @param base å›ºå®šå€¤
+ * @param sides ãƒ€ã‚¤ã‚¹ç›®
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_delay(int base, int sides)
 {
 #ifdef JP
-	return format("ÃÙ±ä:%d+1d%d", base, sides);
+	return format("é…å»¶:%d+1d%d", base, sides);
 #else
 	return format("delay %d+1d%d", base, sides);
 #endif
@@ -112,14 +112,14 @@ static cptr info_delay(int base, int sides)
 
 
 /*!
- * @brief ËâË¡¤Ë¤è¤ë¥À¥á¡¼¥¸¤ò½ĞÎÏ¤¹¤ë(¸ÇÄêÃÍ¡õÊ£¿ô²ó½èÍı) / Generate multiple-damage info string such as "dam 25 each"
- * @param dam ¸ÇÄêÃÍ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•ã«ã‚ˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å‡ºåŠ›ã™ã‚‹(å›ºå®šå€¤ï¼†è¤‡æ•°å›å‡¦ç†) / Generate multiple-damage info string such as "dam 25 each"
+ * @param dam å›ºå®šå€¤
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_multi_damage(int dam)
 {
 #ifdef JP
-	return format("Â»½ı:³Æ%d", dam);
+	return format("æå‚·:å„%d", dam);
 #else
 	return format("dam %d each", dam);
 #endif
@@ -127,29 +127,29 @@ static cptr info_multi_damage(int dam)
 
 
 /*!
- * @brief ËâË¡¤Ë¤è¤ë¥À¥á¡¼¥¸¤ò½ĞÎÏ¤¹¤ë(¥À¥¤¥¹¤Î¤ß¡õÊ£¿ô²ó½èÍı) / Generate multiple-damage-dice info string such as "dam 5d2 each"
- * @param dice ¥À¥¤¥¹¿ô
- * @param sides ¥À¥¤¥¹ÌÜ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•ã«ã‚ˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å‡ºåŠ›ã™ã‚‹(ãƒ€ã‚¤ã‚¹ã®ã¿ï¼†è¤‡æ•°å›å‡¦ç†) / Generate multiple-damage-dice info string such as "dam 5d2 each"
+ * @param dice ãƒ€ã‚¤ã‚¹æ•°
+ * @param sides ãƒ€ã‚¤ã‚¹ç›®
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_multi_damage_dice(int dice, int sides)
 {
 #ifdef JP
-	return format("Â»½ı:³Æ%dd%d", dice, sides);
+	return format("æå‚·:å„%dd%d", dice, sides);
 #else
 	return format("dam %dd%d each", dice, sides);
 #endif
 }
 
 /*!
- * @brief ËâË¡¤Ë¤è¤ë°ìÈÌÅª¤Ê¸úÎÏÃÍ¤ò½ĞÎÏ¤¹¤ë¡Ê¸ÇÄêÃÍ¡Ë / Generate power info string such as "power 100"
- * @param power ¸ÇÄêÃÍ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•ã«ã‚ˆã‚‹ä¸€èˆ¬çš„ãªåŠ¹åŠ›å€¤ã‚’å‡ºåŠ›ã™ã‚‹ï¼ˆå›ºå®šå€¤ï¼‰ / Generate power info string such as "power 100"
+ * @param power å›ºå®šå€¤
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_power(int power)
 {
 #ifdef JP
-	return format("¸úÎÏ:%d", power);
+	return format("åŠ¹åŠ›:%d", power);
 #else
 	return format("power %d", power);
 #endif
@@ -157,10 +157,10 @@ static cptr info_power(int power)
 
 
 /*!
- * @brief ËâË¡¤Ë¤è¤ë°ìÈÌÅª¤Ê¸úÎÏÃÍ¤ò½ĞÎÏ¤¹¤ë¡Ê¥À¥¤¥¹ÃÍ¡Ë / Generate power info string such as "power 100"
- * @param dice ¥À¥¤¥¹¿ô
- * @param sides ¥À¥¤¥¹ÌÜ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•ã«ã‚ˆã‚‹ä¸€èˆ¬çš„ãªåŠ¹åŠ›å€¤ã‚’å‡ºåŠ›ã™ã‚‹ï¼ˆãƒ€ã‚¤ã‚¹å€¤ï¼‰ / Generate power info string such as "power 100"
+ * @param dice ãƒ€ã‚¤ã‚¹æ•°
+ * @param sides ãƒ€ã‚¤ã‚¹ç›®
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 /*
  * Generate power info string such as "power 1d100"
@@ -168,7 +168,7 @@ static cptr info_power(int power)
 static cptr info_power_dice(int dice, int sides)
 {
 #ifdef JP
-	return format("¸úÎÏ:%dd%d", dice, sides);
+	return format("åŠ¹åŠ›:%dd%d", dice, sides);
 #else
 	return format("power %dd%d", dice, sides);
 #endif
@@ -176,14 +176,14 @@ static cptr info_power_dice(int dice, int sides)
 
 
 /*!
- * @brief ËâË¡¤Î¸ú²ÌÈ¾·Â¤ò½ĞÎÏ¤¹¤ë / Generate radius info string such as "rad 100"
- * @param rad ¸ú²ÌÈ¾·Â
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•ã®åŠ¹æœåŠå¾„ã‚’å‡ºåŠ›ã™ã‚‹ / Generate radius info string such as "rad 100"
+ * @param rad åŠ¹æœåŠå¾„
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_radius(int rad)
 {
 #ifdef JP
-	return format("È¾·Â:%d", rad);
+	return format("åŠå¾„:%d", rad);
 #else
 	return format("rad %d", rad);
 #endif
@@ -191,14 +191,14 @@ static cptr info_radius(int rad)
 
 
 /*!
- * @brief ËâË¡¸ú²Ì¤Î¸Â³¦½ÅÎÌ¤ò½ĞÎÏ¤¹¤ë / Generate weight info string such as "max wgt 15"
- * @param weight ºÇÂç½ÅÎÌ
- * @return ¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½¾¤¤À°·Á¤µ¤ì¤¿Ê¸»úÎó
+ * @brief é­”æ³•åŠ¹æœã®é™ç•Œé‡é‡ã‚’å‡ºåŠ›ã™ã‚‹ / Generate weight info string such as "max wgt 15"
+ * @param weight æœ€å¤§é‡é‡
+ * @return ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¾“ã„æ•´å½¢ã•ã‚ŒãŸæ–‡å­—åˆ—
  */
 static cptr info_weight(int weight)
 {
 #ifdef JP
-	return format("ºÇÂç½ÅÎÌ:%d.%dkg", lbtokg1(weight), lbtokg2(weight));
+	return format("æœ€å¤§é‡é‡:%d.%dkg", lbtokg1(weight), lbtokg2(weight));
 #else
 	return format("max wgt %d", weight/10);
 #endif
@@ -206,11 +206,11 @@ static cptr info_weight(int weight)
 
 
 /*!
- * @brief °ìÉô¥Ü¥ë¥ÈËâË¡¤Î¥Ó¡¼¥à²½³ÎÎ¨¤ò»»½Ğ¤¹¤ë / Prepare standard probability to become beam for fire_bolt_or_beam()
- * @return ¥Ó¡¼¥à²½³ÎÎ¨(%)
+ * @brief ä¸€éƒ¨ãƒœãƒ«ãƒˆé­”æ³•ã®ãƒ“ãƒ¼ãƒ åŒ–ç¢ºç‡ã‚’ç®—å‡ºã™ã‚‹ / Prepare standard probability to become beam for fire_bolt_or_beam()
+ * @return ãƒ“ãƒ¼ãƒ åŒ–ç¢ºç‡(%)
  * @details
- * ¥Ï¡¼¥É¥³¡¼¥Æ¥£¥ó¥°¤Ë¤è¤ë¼ÂÁõ¤¬¹Ô¤ï¤ì¤Æ¤¤¤ë¡£
- * ¥á¥¤¥¸¤Ï(¥ì¥Ù¥ë)%¡¢¥Ï¥¤¥á¥¤¥¸¡¢¥¹¥Ú¥ë¥Ş¥¹¥¿¡¼¤Ï(¥ì¥Ù¥ë)%¡¢¤½¤ì°Ê³°¤Î¿¦¶È¤Ï(¥ì¥Ù¥ë/2)%
+ * ãƒãƒ¼ãƒ‰ã‚³ãƒ¼ãƒ†ã‚£ãƒ³ã‚°ã«ã‚ˆã‚‹å®Ÿè£…ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ã€‚
+ * ãƒ¡ã‚¤ã‚¸ã¯(ãƒ¬ãƒ™ãƒ«)%ã€ãƒã‚¤ãƒ¡ã‚¤ã‚¸ã€ã‚¹ãƒšãƒ«ãƒã‚¹ã‚¿ãƒ¼ã¯(ãƒ¬ãƒ™ãƒ«)%ã€ãã‚Œä»¥å¤–ã®è·æ¥­ã¯(ãƒ¬ãƒ™ãƒ«/2)%
  */
 static int beam_chance(void)
 {
@@ -223,15 +223,15 @@ static int beam_chance(void)
 }
 
 /*!
- * @brief ¥È¥é¥ó¥×ËâË¡ÆÈ¼«¤Î¾¤´­½èÍı¤ò¹Ô¤¦ / Handle summoning and failure of trump spells
- * @param num summon_specific()´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹²ó¿ô
- * @param pet ¥Ú¥Ã¥È²½¤È¤·¤Æ¾¤´­¤µ¤ì¤ë¤«Èİ¤«
- * @param y ¾¤´­°ÌÃÖ¤ÎyºÂÉ¸
- * @param x ¾¤´­°ÌÃÖ¤ÎxºÂÉ¸
- * @param lev ¾¤´­¥ì¥Ù¥ë
- * @param type ¾¤´­¾ò·ïID
- * @param mode ¥â¥ó¥¹¥¿¡¼À¸À®¾ò·ï¥Õ¥é¥°
- * @return ¥â¥ó¥¹¥¿¡¼¤¬¡ÊÅ¨ÂĞ¤â´Ş¤á¤Æ¡Ë¾¤´Ô¤µ¤ì¤¿¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
+ * @brief ãƒˆãƒ©ãƒ³ãƒ—é­”æ³•ç‹¬è‡ªã®å¬å–šå‡¦ç†ã‚’è¡Œã† / Handle summoning and failure of trump spells
+ * @param num summon_specific()é–¢æ•°ã‚’å‘¼ã³å‡ºã™å›æ•°
+ * @param pet ãƒšãƒƒãƒˆåŒ–ã¨ã—ã¦å¬å–šã•ã‚Œã‚‹ã‹å¦ã‹
+ * @param y å¬å–šä½ç½®ã®yåº§æ¨™
+ * @param x å¬å–šä½ç½®ã®xåº§æ¨™
+ * @param lev å¬å–šãƒ¬ãƒ™ãƒ«
+ * @param type å¬å–šæ¡ä»¶ID
+ * @param mode ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç”Ÿæˆæ¡ä»¶ãƒ•ãƒ©ã‚°
+ * @return ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒï¼ˆæ•µå¯¾ã‚‚å«ã‚ã¦ï¼‰å¬é‚„ã•ã‚ŒãŸãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
  */
 static bool trump_summoning(int num, bool pet, int y, int x, int lev, int type, u32b mode)
 {
@@ -278,7 +278,7 @@ static bool trump_summoning(int num, bool pet, int y, int x, int lev, int type, 
 	if (!success)
 	{
 #ifdef JP
-		msg_print("Ã¯¤â¤¢¤Ê¤¿¤Î¥«¡¼¥É¤Î¸Æ¤ÓÀ¼¤ËÅú¤¨¤Ê¤¤¡£");
+		msg_print("èª°ã‚‚ã‚ãªãŸã®ã‚«ãƒ¼ãƒ‰ã®å‘¼ã³å£°ã«ç­”ãˆãªã„ã€‚");
 #else
 		msg_print("Nobody answers to your Trump call.");
 #endif
@@ -289,9 +289,9 @@ static bool trump_summoning(int num, bool pet, int y, int x, int lev, int type, 
 
 
 /*!
- * @brief ¡Ö¥ï¥ó¥À¡¼¡×¤Î¥é¥ó¥À¥à¤Ê¸ú²Ì¤ò·èÄê¤·¤Æ½èÍı¤¹¤ë¡£
- * @param dir Êı¸şID
- * @return ¤Ê¤·
+ * @brief ã€Œãƒ¯ãƒ³ãƒ€ãƒ¼ã€ã®ãƒ©ãƒ³ãƒ€ãƒ ãªåŠ¹æœã‚’æ±ºå®šã—ã¦å‡¦ç†ã™ã‚‹ã€‚
+ * @param dir æ–¹å‘ID
+ * @return ãªã—
  * @details
  * This spell should become more useful (more controlled) as the\n
  * player gains experience levels.  Thus, add 1/5 of the player's\n
@@ -323,7 +323,7 @@ static void cast_wonder(int dir)
 	if (die > 100)
 	{
 #ifdef JP
-		msg_print("¤¢¤Ê¤¿¤ÏÎÏ¤¬¤ß¤Ê¤®¤ë¤Î¤ò´¶¤¸¤¿¡ª");
+		msg_print("ã‚ãªãŸã¯åŠ›ãŒã¿ãªãã‚‹ã®ã‚’æ„Ÿã˜ãŸï¼");
 #else
 		msg_print("You feel a surge of power!");
 #endif
@@ -381,9 +381,9 @@ static void cast_wonder(int dir)
 
 
 /*!
- * @brief ¡Ö°­Îî¾¤´­¡×¤Î¥é¥ó¥À¥à¤Ê¸ú²Ì¤ò·èÄê¤·¤Æ½èÍı¤¹¤ë¡£
- * @param dir Êı¸şID
- * @return ¤Ê¤·
+ * @brief ã€Œæ‚ªéœŠå¬å–šã€ã®ãƒ©ãƒ³ãƒ€ãƒ ãªåŠ¹æœã‚’æ±ºå®šã—ã¦å‡¦ç†ã™ã‚‹ã€‚
+ * @param dir æ–¹å‘ID
+ * @return ãªã—
  */
 static void cast_invoke_spirits(int dir)
 {
@@ -404,7 +404,7 @@ static void cast_invoke_spirits(int dir)
 	}
 
 #ifdef JP
-	msg_print("¤¢¤Ê¤¿¤Ï»à¼Ô¤¿¤Á¤ÎÎÏ¤ò¾·½¸¤·¤¿...");
+	msg_print("ã‚ãªãŸã¯æ­»è€…ãŸã¡ã®åŠ›ã‚’æ‹›é›†ã—ãŸ...");
 #else
 	msg_print("You call on the power of the dead...");
 #endif
@@ -414,7 +414,7 @@ static void cast_invoke_spirits(int dir)
 	if (die > 100)
 	{
 #ifdef JP
-		msg_print("¤¢¤Ê¤¿¤Ï¤ª¤É¤í¤ª¤É¤í¤·¤¤ÎÏ¤Î¤¦¤Í¤ê¤ò´¶¤¸¤¿¡ª");
+		msg_print("ã‚ãªãŸã¯ãŠã©ã‚ãŠã©ã‚ã—ã„åŠ›ã®ã†ã­ã‚Šã‚’æ„Ÿã˜ãŸï¼");
 #else
 		msg_print("You feel a surge of eldritch force!");
 #endif
@@ -424,7 +424,7 @@ static void cast_invoke_spirits(int dir)
 	if (die < 8)
 	{
 #ifdef JP
-		msg_print("¤Ê¤ó¤Æ¤³¤Ã¤¿¡ª¤¢¤Ê¤¿¤Î¼ş¤ê¤ÎÃÏÌÌ¤«¤éµà¤Á¤¿¿Í±Æ¤¬Î©¤Á¾å¤¬¤Ã¤Æ¤­¤¿¡ª");
+		msg_print("ãªã‚“ã¦ã“ã£ãŸï¼ã‚ãªãŸã®å‘¨ã‚Šã®åœ°é¢ã‹ã‚‰æœ½ã¡ãŸäººå½±ãŒç«‹ã¡ä¸ŠãŒã£ã¦ããŸï¼");
 #else
 		msg_print("Oh no! Mouldering forms rise from the earth around you!");
 #endif
@@ -435,7 +435,7 @@ static void cast_invoke_spirits(int dir)
 	else if (die < 14)
 	{
 #ifdef JP
-		msg_print("Ì¾¾õ¤·Æñ¤¤¼Ù°­¤ÊÂ¸ºß¤¬¤¢¤Ê¤¿¤Î¿´¤òÄÌ¤ê²á¤®¤Æ¹Ô¤Ã¤¿...");
+		msg_print("åçŠ¶ã—é›£ã„é‚ªæ‚ªãªå­˜åœ¨ãŒã‚ãªãŸã®å¿ƒã‚’é€šã‚Šéãã¦è¡Œã£ãŸ...");
 #else
 		msg_print("An unnamable evil brushes against your mind...");
 #endif
@@ -445,7 +445,7 @@ static void cast_invoke_spirits(int dir)
 	else if (die < 26)
 	{
 #ifdef JP
-		msg_print("¤¢¤Ê¤¿¤ÎÆ¬¤ËÂçÎÌ¤ÎÍ©Îî¤¿¤Á¤ÎÁû¡¹¤·¤¤À¼¤¬²¡¤·´ó¤»¤Æ¤­¤¿...");
+		msg_print("ã‚ãªãŸã®é ­ã«å¤§é‡ã®å¹½éœŠãŸã¡ã®é¨’ã€…ã—ã„å£°ãŒæŠ¼ã—å¯„ã›ã¦ããŸ...");
 #else
 		msg_print("Your head is invaded by a horde of gibbering spectral voices...");
 #endif
@@ -544,7 +544,7 @@ static void cast_invoke_spirits(int dir)
 	if (die < 31)
 	{
 #ifdef JP
-		msg_print("±¢±µ¤ÊÀ¼¤¬¥¯¥¹¥¯¥¹¾Ğ¤¦¡£¡Ö¤â¤¦¤¹¤°¤ª¤Ş¤¨¤Ï²æ¡¹¤ÎÃç´Ö¤Ë¤Ê¤ë¤À¤í¤¦¡£¼å¤­¼Ô¤è¡£¡×");
+		msg_print("é™°æ¬ãªå£°ãŒã‚¯ã‚¹ã‚¯ã‚¹ç¬‘ã†ã€‚ã€Œã‚‚ã†ã™ããŠã¾ãˆã¯æˆ‘ã€…ã®ä»²é–“ã«ãªã‚‹ã ã‚ã†ã€‚å¼±ãè€…ã‚ˆã€‚ã€");
 #else
 		msg_print("Sepulchral voices chuckle. 'Soon you will join us, mortal.'");
 #endif
@@ -552,9 +552,9 @@ static void cast_invoke_spirits(int dir)
 }
 
 /*!
- * @brief ¥«¥ª¥¹Åª¸ú²Ì¤¢¤ë¤¤¤ÏµÚ¤Ó¥·¥ã¥Ã¥Õ¥ë¤Î¡Ö±¿Ì¿¤ÎÎØ¡×¸ú²Ì¤ò°ú¿ô´ğ½à¤Ë½èÍı¤¹¤ë¡£
- * @param spell ´ğ½à¤È¤Ê¤ë°ú¿ôID
- * @return ¤Ê¤·
+ * @brief ã‚«ã‚ªã‚¹çš„åŠ¹æœã‚ã‚‹ã„ã¯åŠã³ã‚·ãƒ£ãƒƒãƒ•ãƒ«ã®ã€Œé‹å‘½ã®è¼ªã€åŠ¹æœã‚’å¼•æ•°åŸºæº–ã«å‡¦ç†ã™ã‚‹ã€‚
+ * @param spell åŸºæº–ã¨ãªã‚‹å¼•æ•°ID
+ * @return ãªã—
  */
 static void wild_magic(int spell)
 {
@@ -655,8 +655,8 @@ static void wild_magic(int spell)
 }
 
 /*!
- * @brief ¥È¥é¥ó¥×ÎÎ°è¤Î¡Ö¥·¥ã¥Ã¥Õ¥ë¡×¤Î¸ú²Ì¤ò¥é¥ó¥À¥à¤Ë·è¤á¤Æ½èÍı¤¹¤ë¡£
- * @return ¤Ê¤·
+ * @brief ãƒˆãƒ©ãƒ³ãƒ—é ˜åŸŸã®ã€Œã‚·ãƒ£ãƒƒãƒ•ãƒ«ã€ã®åŠ¹æœã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«æ±ºã‚ã¦å‡¦ç†ã™ã‚‹ã€‚
+ * @return ãªã—
  */
 static void cast_shuffle(void)
 {
@@ -688,7 +688,7 @@ static void cast_shuffle(void)
 	}
 
 #ifdef JP
-	msg_print("¤¢¤Ê¤¿¤Ï¥«¡¼¥É¤òÀÚ¤Ã¤Æ°ìËç°ú¤¤¤¿...");
+	msg_print("ã‚ãªãŸã¯ã‚«ãƒ¼ãƒ‰ã‚’åˆ‡ã£ã¦ä¸€æšå¼•ã„ãŸ...");
 #else
 	msg_print("You shuffle the deck and draw a card...");
 #endif
@@ -699,7 +699,7 @@ static void cast_shuffle(void)
 	if (die < 7)
 	{
 #ifdef JP
-		msg_print("¤Ê¤ó¤Æ¤³¤Ã¤¿¡ª¡Ô»à¡Õ¤À¡ª");
+		msg_print("ãªã‚“ã¦ã“ã£ãŸï¼ã€Šæ­»ã€‹ã ï¼");
 #else
 		msg_print("Oh no! It's Death!");
 #endif
@@ -710,7 +710,7 @@ static void cast_shuffle(void)
 	else if (die < 14)
 	{
 #ifdef JP
-		msg_print("¤Ê¤ó¤Æ¤³¤Ã¤¿¡ª¡Ô°­Ëâ¡Õ¤À¡ª");
+		msg_print("ãªã‚“ã¦ã“ã£ãŸï¼ã€Šæ‚ªé­”ã€‹ã ï¼");
 #else
 		msg_print("Oh no! It's the Devil!");
 #endif
@@ -721,7 +721,7 @@ static void cast_shuffle(void)
 	{
 		int count = 0;
 #ifdef JP
-		msg_print("¤Ê¤ó¤Æ¤³¤Ã¤¿¡ª¡ÔÄß¤é¤ì¤¿ÃË¡Õ¤À¡ª");
+		msg_print("ãªã‚“ã¦ã“ã£ãŸï¼ã€ŠåŠã‚‰ã‚ŒãŸç”·ã€‹ã ï¼");
 #else
 		msg_print("Oh no! It's the Hanged Man.");
 #endif
@@ -731,7 +731,7 @@ static void cast_shuffle(void)
 	else if (die < 22)
 	{
 #ifdef JP
-		msg_print("¡ÔÉÔÄ´ÏÂ¤Î·õ¡Õ¤À¡£");
+		msg_print("ã€Šä¸èª¿å’Œã®å‰£ã€‹ã ã€‚");
 #else
 		msg_print("It's the swords of discord.");
 #endif
@@ -741,7 +741,7 @@ static void cast_shuffle(void)
 	else if (die < 26)
 	{
 #ifdef JP
-		msg_print("¡Ô¶ò¼Ô¡Õ¤À¡£");
+		msg_print("ã€Šæ„šè€…ã€‹ã ã€‚");
 #else
 		msg_print("It's the Fool.");
 #endif
@@ -752,7 +752,7 @@ static void cast_shuffle(void)
 	else if (die < 30)
 	{
 #ifdef JP
-		msg_print("´ñÌ¯¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
+		msg_print("å¥‡å¦™ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®çµµã ã€‚");
 #else
 		msg_print("It's the picture of a strange monster.");
 #endif
@@ -762,7 +762,7 @@ static void cast_shuffle(void)
 	else if (die < 33)
 	{
 #ifdef JP
-		msg_print("¡Ô·î¡Õ¤À¡£");
+		msg_print("ã€Šæœˆã€‹ã ã€‚");
 #else
 		msg_print("It's the Moon.");
 #endif
@@ -772,7 +772,7 @@ static void cast_shuffle(void)
 	else if (die < 38)
 	{
 #ifdef JP
-		msg_print("¡Ô±¿Ì¿¤ÎÎØ¡Õ¤À¡£");
+		msg_print("ã€Šé‹å‘½ã®è¼ªã€‹ã ã€‚");
 #else
 		msg_print("It's the Wheel of Fortune.");
 #endif
@@ -782,7 +782,7 @@ static void cast_shuffle(void)
 	else if (die < 40)
 	{
 #ifdef JP
-		msg_print("¥Æ¥ì¥İ¡¼¥È¡¦¥«¡¼¥É¤À¡£");
+		msg_print("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ã‚«ãƒ¼ãƒ‰ã ã€‚");
 #else
 		msg_print("It's a teleport trump card.");
 #endif
@@ -792,7 +792,7 @@ static void cast_shuffle(void)
 	else if (die < 42)
 	{
 #ifdef JP
-		msg_print("¡ÔÀµµÁ¡Õ¤À¡£");
+		msg_print("ã€Šæ­£ç¾©ã€‹ã ã€‚");
 #else
 		msg_print("It's Justice.");
 #endif
@@ -802,7 +802,7 @@ static void cast_shuffle(void)
 	else if (die < 47)
 	{
 #ifdef JP
-		msg_print("¥Æ¥ì¥İ¡¼¥È¡¦¥«¡¼¥É¤À¡£");
+		msg_print("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ã‚«ãƒ¼ãƒ‰ã ã€‚");
 #else
 		msg_print("It's a teleport trump card.");
 #endif
@@ -812,7 +812,7 @@ static void cast_shuffle(void)
 	else if (die < 52)
 	{
 #ifdef JP
-		msg_print("¥Æ¥ì¥İ¡¼¥È¡¦¥«¡¼¥É¤À¡£");
+		msg_print("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ã‚«ãƒ¼ãƒ‰ã ã€‚");
 #else
 		msg_print("It's a teleport trump card.");
 #endif
@@ -822,7 +822,7 @@ static void cast_shuffle(void)
 	else if (die < 60)
 	{
 #ifdef JP
-		msg_print("¡ÔÅã¡Õ¤À¡£");
+		msg_print("ã€Šå¡”ã€‹ã ã€‚");
 #else
 		msg_print("It's the Tower.");
 #endif
@@ -832,7 +832,7 @@ static void cast_shuffle(void)
 	else if (die < 72)
 	{
 #ifdef JP
-		msg_print("¡ÔÀáÀ©¡Õ¤À¡£");
+		msg_print("ã€Šç¯€åˆ¶ã€‹ã ã€‚");
 #else
 		msg_print("It's Temperance.");
 #endif
@@ -842,7 +842,7 @@ static void cast_shuffle(void)
 	else if (die < 80)
 	{
 #ifdef JP
-		msg_print("¡ÔÅã¡Õ¤À¡£");
+		msg_print("ã€Šå¡”ã€‹ã ã€‚");
 #else
 		msg_print("It's the Tower.");
 #endif
@@ -852,7 +852,7 @@ static void cast_shuffle(void)
 	else if (die < 82)
 	{
 #ifdef JP
-		msg_print("Í§¹¥Åª¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
+		msg_print("å‹å¥½çš„ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®çµµã ã€‚");
 #else
 		msg_print("It's the picture of a friendly monster.");
 #endif
@@ -862,7 +862,7 @@ static void cast_shuffle(void)
 	else if (die < 84)
 	{
 #ifdef JP
-		msg_print("Í§¹¥Åª¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
+		msg_print("å‹å¥½çš„ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®çµµã ã€‚");
 #else
 		msg_print("It's the picture of a friendly monster.");
 #endif
@@ -872,7 +872,7 @@ static void cast_shuffle(void)
 	else if (die < 86)
 	{
 #ifdef JP
-		msg_print("Í§¹¥Åª¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
+		msg_print("å‹å¥½çš„ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®çµµã ã€‚");
 #else
 		msg_print("It's the picture of a friendly monster.");
 #endif
@@ -882,7 +882,7 @@ static void cast_shuffle(void)
 	else if (die < 88)
 	{
 #ifdef JP
-		msg_print("Í§¹¥Åª¤Ê¥â¥ó¥¹¥¿¡¼¤Î³¨¤À¡£");
+		msg_print("å‹å¥½çš„ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®çµµã ã€‚");
 #else
 		msg_print("It's the picture of a friendly monster.");
 #endif
@@ -892,7 +892,7 @@ static void cast_shuffle(void)
 	else if (die < 96)
 	{
 #ifdef JP
-		msg_print("¡ÔÎø¿Í¡Õ¤À¡£");
+		msg_print("ã€Šæ‹äººã€‹ã ã€‚");
 #else
 		msg_print("It's the Lovers.");
 #endif
@@ -903,7 +903,7 @@ static void cast_shuffle(void)
 	else if (die < 101)
 	{
 #ifdef JP
-		msg_print("¡Ô±£¼Ô¡Õ¤À¡£");
+		msg_print("ã€Šéš è€…ã€‹ã ã€‚");
 #else
 		msg_print("It's the Hermit.");
 #endif
@@ -913,7 +913,7 @@ static void cast_shuffle(void)
 	else if (die < 111)
 	{
 #ifdef JP
-		msg_print("¡Ô¿³È½¡Õ¤À¡£");
+		msg_print("ã€Šå¯©åˆ¤ã€‹ã ã€‚");
 #else
 		msg_print("It's the Judgement.");
 #endif
@@ -922,7 +922,7 @@ static void cast_shuffle(void)
 		if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
 		{
 #ifdef JP
-			msg_print("Á´¤Æ¤ÎÆÍÁ³ÊÑ°Û¤¬¼£¤Ã¤¿¡£");
+			msg_print("å…¨ã¦ã®çªç„¶å¤‰ç•°ãŒæ²»ã£ãŸã€‚");
 #else
 			msg_print("You are cured of all mutations.");
 #endif
@@ -935,7 +935,7 @@ static void cast_shuffle(void)
 	else if (die < 120)
 	{
 #ifdef JP
-		msg_print("¡ÔÂÀÍÛ¡Õ¤À¡£");
+		msg_print("ã€Šå¤ªé™½ã€‹ã ã€‚");
 #else
 		msg_print("It's the Sun.");
 #endif
@@ -947,7 +947,7 @@ static void cast_shuffle(void)
 	else
 	{
 #ifdef JP
-		msg_print("¡ÔÀ¤³¦¡Õ¤À¡£");
+		msg_print("ã€Šä¸–ç•Œã€‹ã ã€‚");
 #else
 		msg_print("It's the World.");
 #endif
@@ -957,7 +957,7 @@ static void cast_shuffle(void)
 			s32b ee = (p_ptr->exp / 25) + 1;
 			if (ee > 5000) ee = 5000;
 #ifdef JP
-			msg_print("¹¹¤Ë·Ğ¸³¤òÀÑ¤ó¤À¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£");
+			msg_print("æ›´ã«çµŒé¨“ã‚’ç©ã‚“ã ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚");
 #else
 			msg_print("You feel more experienced.");
 #endif
@@ -968,11 +968,11 @@ static void cast_shuffle(void)
 }
 
 /*!
- * @brief ¥«¥ª¥¹ËâË¡¡ÖÎ®À±·²¡×¤Î½èÍı¤È¤·¤Æ¥×¥ì¥¤¥ä¡¼¤òÃæ¿´¤Ëğ¨ÀĞÍî²¼½èÍı¤ò10+1d10²ó·«¤êÊÖ¤¹¡£
+ * @brief ã‚«ã‚ªã‚¹é­”æ³•ã€Œæµæ˜Ÿç¾¤ã€ã®å‡¦ç†ã¨ã—ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸­å¿ƒã«éš•çŸ³è½ä¸‹å‡¦ç†ã‚’10+1d10å›ç¹°ã‚Šè¿”ã™ã€‚
  * / Drop 10+1d10 meteor ball at random places near the player
- * @param dam ¥À¥á¡¼¥¸
- * @param rad ¸úÎÏ¤ÎÈ¾·Â
- * @return ¤Ê¤·
+ * @param dam ãƒ€ãƒ¡ãƒ¼ã‚¸
+ * @param rad åŠ¹åŠ›ã®åŠå¾„
+ * @return ãªã—
  */
 static void cast_meteor(int dam, int rad)
 {
@@ -1014,10 +1014,10 @@ static void cast_meteor(int dam, int rad)
 
 
 /*!
- * @brief ÇË¼ÙËâË¡¡Ö¿À¤ÎÅÜ¤ê¡×¤Î½èÍı¤È¤·¤Æ¥¿¡¼¥²¥Ã¥È¤ò»ØÄê¤·¤¿¸åÊ¬²ò¤Î¥Ü¡¼¥ë¤òºÇÂç20²óÈ¯À¸¤µ¤»¤ë¡£
- * @param dam ¥À¥á¡¼¥¸
- * @param rad ¸úÎÏ¤ÎÈ¾·Â
- * @return ¥¿¡¼¥²¥Ã¥È¤ò»ØÄê¤·¡¢¼Â¹Ô¤·¤¿¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
+ * @brief ç ´é‚ªé­”æ³•ã€Œç¥ã®æ€’ã‚Šã€ã®å‡¦ç†ã¨ã—ã¦ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’æŒ‡å®šã—ãŸå¾Œåˆ†è§£ã®ãƒœãƒ¼ãƒ«ã‚’æœ€å¤§20å›ç™ºç”Ÿã•ã›ã‚‹ã€‚
+ * @param dam ãƒ€ãƒ¡ãƒ¼ã‚¸
+ * @param rad åŠ¹åŠ›ã®åŠå¾„
+ * @return ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’æŒ‡å®šã—ã€å®Ÿè¡Œã—ãŸãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
  */
 static bool cast_wrath_of_the_god(int dam, int rad)
 {
@@ -1102,9 +1102,9 @@ static bool cast_wrath_of_the_god(int dam, int rad)
 }
 
 /*!
- * @brief °­ËâÎÎ°è¤Î¥°¥ì¡¼¥¿¡¼¥Ç¡¼¥â¥ó¾¤´­¤ËÍøÍÑ²ÄÇ½¤Ê»àÂÎ¤«¤É¤¦¤«¤òÊÖ¤¹¡£ / An "item_tester_hook" for offer
- * @param o_ptr ¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return À¸ìÓ¤Ë»ÈÍÑ²ÄÇ½¤Ê»àÂÎ¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
+ * @brief æ‚ªé­”é ˜åŸŸã®ã‚°ãƒ¬ãƒ¼ã‚¿ãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³å¬å–šã«åˆ©ç”¨å¯èƒ½ãªæ­»ä½“ã‹ã©ã†ã‹ã‚’è¿”ã™ã€‚ / An "item_tester_hook" for offer
+ * @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ç”Ÿè´„ã«ä½¿ç”¨å¯èƒ½ãªæ­»ä½“ãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
  */
 static bool item_tester_offer(object_type *o_ptr)
 {
@@ -1120,8 +1120,8 @@ static bool item_tester_offer(object_type *o_ptr)
 }
 
 /*!
- * @brief °­ËâÎÎ°è¤Î¥°¥ì¡¼¥¿¡¼¥Ç¡¼¥â¥ó¾¤´­¤ò½èÍı¤¹¤ë / Daemon spell Summon Greater Demon
- * @return ½èÍı¤ò¼Â¹Ô¤·¤¿¤Ê¤é¤ĞTRUE¤òÊÖ¤¹¡£
+ * @brief æ‚ªé­”é ˜åŸŸã®ã‚°ãƒ¬ãƒ¼ã‚¿ãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³å¬å–šã‚’å‡¦ç†ã™ã‚‹ / Daemon spell Summon Greater Demon
+ * @return å‡¦ç†ã‚’å®Ÿè¡Œã—ãŸãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
  */
 static bool cast_summon_greater_demon(void)
 {
@@ -1133,8 +1133,8 @@ static bool cast_summon_greater_demon(void)
 
 	item_tester_hook = item_tester_offer;
 #ifdef JP
-	q = "¤É¤Î»àÂÎ¤òÊû¤²¤Ş¤¹¤«? ";
-	s = "Êû¤²¤é¤ì¤ë»àÂÎ¤ò»ı¤Ã¤Æ¤¤¤Ê¤¤¡£";
+	q = "ã©ã®æ­»ä½“ã‚’æ§ã’ã¾ã™ã‹? ";
+	s = "æ§ã’ã‚‰ã‚Œã‚‹æ­»ä½“ã‚’æŒã£ã¦ã„ãªã„ã€‚";
 #else
 	q = "Sacrifice which corpse? ";
 	s = "You have nothing to scrifice.";
@@ -1158,14 +1158,14 @@ static bool cast_summon_greater_demon(void)
 	if (summon_specific(-1, py, px, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 	{
 #ifdef JP
-		msg_print("Î²²«¤Î°­½­¤¬½¼Ëş¤·¤¿¡£");
+		msg_print("ç¡«é»„ã®æ‚ªè‡­ãŒå……æº€ã—ãŸã€‚");
 #else
 		msg_print("The area fills with a stench of sulphur and brimstone.");
 #endif
 
 
 #ifdef JP
-		msg_print("¡Ö¤´ÍÑ¤Ç¤´¤¶¤¤¤Ş¤¹¤«¡¢¤´¼ç¿ÍÍÍ¡×");
+		msg_print("ã€Œã”ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€ã”ä¸»äººæ§˜ã€");
 #else
 		msg_print("'What is thy bidding... Master?'");
 #endif
@@ -1189,7 +1189,7 @@ static bool cast_summon_greater_demon(void)
 	else
 	{
 #ifdef JP
-		msg_print("°­Ëâ¤Ï¸½¤ì¤Ê¤«¤Ã¤¿¡£");
+		msg_print("æ‚ªé­”ã¯ç¾ã‚Œãªã‹ã£ãŸã€‚");
 #else
 		msg_print("No Greater Demon arrive.");
 #endif
@@ -1199,10 +1199,10 @@ static bool cast_summon_greater_demon(void)
 }
 
 /*!
- * @brief ²Î¤Î³«»Ï¤ò½èÍı¤¹¤ë / Start singing if the player is a Bard 
- * @param spell ÎÎ°èËâË¡¤È¤·¤Æ¤ÎID
- * @param song ËâË¡¸ú²Ì¤ÎID
- * @return ¤Ê¤·
+ * @brief æ­Œã®é–‹å§‹ã‚’å‡¦ç†ã™ã‚‹ / Start singing if the player is a Bard 
+ * @param spell é ˜åŸŸé­”æ³•ã¨ã—ã¦ã®ID
+ * @param song é­”æ³•åŠ¹æœã®ID
+ * @return ãªã—
  */
 static void start_singing(int spell, int song)
 {
@@ -1225,8 +1225,8 @@ static void start_singing(int spell, int song)
 }
 
 /*!
- * @brief ²Î¤ÎÄä»ß¤ò½èÍı¤¹¤ë / Stop singing if the player is a Bard 
- * @return ¤Ê¤·
+ * @brief æ­Œã®åœæ­¢ã‚’å‡¦ç†ã™ã‚‹ / Stop singing if the player is a Bard 
+ * @return ãªã—
  */
 void stop_singing(void)
 {
@@ -1261,10 +1261,10 @@ void stop_singing(void)
 
 
 /*!
- * @brief À¸Ì¿ÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief ç”Ÿå‘½é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_life_spell(int spell, int mode)
 {
@@ -1280,8 +1280,8 @@ static cptr do_life_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "·Ú½ı¤Î¼£Ìş";
-		if (desc) return "²ø²æ¤ÈÂÎÎÏ¤ò¾¯¤·²óÉü¤µ¤»¤ë¡£";
+		if (name) return "è»½å‚·ã®æ²»ç™’";
+		if (desc) return "æ€ªæˆ‘ã¨ä½“åŠ›ã‚’å°‘ã—å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Cure Light Wounds";
 		if (desc) return "Heals cut and HP a little.";
@@ -1303,8 +1303,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "½ËÊ¡";
-		if (desc) return "°ìÄê»ş´Ö¡¢Ì¿ÃæÎ¨¤ÈAC¤Ë¥Ü¡¼¥Ê¥¹¤òÆÀ¤ë¡£";
+		if (name) return "ç¥ç¦";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€å‘½ä¸­ç‡ã¨ACã«ãƒœãƒ¼ãƒŠã‚¹ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Bless";
 		if (desc) return "Gives bonus to hit and AC for a few turns.";
@@ -1324,8 +1324,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "·Ú½ı";
-		if (desc) return "1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤Ë¾®¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "è»½å‚·";
+		if (desc) return "1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å°ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Cause Light Wounds";
 		if (desc) return "Wounds a monster a little unless resisted.";
@@ -1347,8 +1347,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "¸÷¤Î¾¤´­";
-		if (desc) return "¸÷¸»¤¬¾È¤é¤·¤Æ¤¤¤ëÈÏ°Ï¤«Éô²°Á´ÂÎ¤ò±Êµ×¤ËÌÀ¤ë¤¯¤¹¤ë¡£";
+		if (name) return "å…‰ã®å¬å–š";
+		if (desc) return "å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚";
 #else
 		if (name) return "Call Light";
 		if (desc) return "Lights up nearby area and the inside of a room permanently.";
@@ -1370,8 +1370,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "æ« & ±£¤·Èâ´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Îæ«¤ÈÈâ¤È³¬ÃÊ¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ç½  & éš ã—æ‰‰æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ç½ ã¨æ‰‰ã¨éšæ®µã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Doors & Traps";
 		if (desc) return "Detects traps, doors, and stairs in your vicinity.";
@@ -1393,8 +1393,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "½Å½ı¤Î¼£Ìş";
-		if (desc) return "²ø²æ¤ÈÂÎÎÏ¤òÃæÄøÅÙ²óÉü¤µ¤»¤ë¡£";
+		if (name) return "é‡å‚·ã®æ²»ç™’";
+		if (desc) return "æ€ªæˆ‘ã¨ä½“åŠ›ã‚’ä¸­ç¨‹åº¦å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Cure Medium Wounds";
 		if (desc) return "Heals cut and HP more.";
@@ -1416,8 +1416,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "²òÆÇ";
-		if (desc) return "ÂÎÆâ¤ÎÆÇ¤ò¼è¤ê½ü¤¯¡£";
+		if (name) return "è§£æ¯’";
+		if (desc) return "ä½“å†…ã®æ¯’ã‚’å–ã‚Šé™¤ãã€‚";
 #else
 		if (name) return "Cure Poison";
 		if (desc) return "Cure poison status.";
@@ -1433,8 +1433,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "¶õÊ¢½¼Â­";
-		if (desc) return "ËşÊ¢¤Ë¤¹¤ë¡£";
+		if (name) return "ç©ºè…¹å……è¶³";
+		if (desc) return "æº€è…¹ã«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Satisfy Hunger";
 		if (desc) return "Satisfies hunger.";
@@ -1450,8 +1450,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "²ò¼ö";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Ë¤«¤«¤Ã¤¿¼å¤¤¼ö¤¤¤ò²ò½ü¤¹¤ë¡£";
+		if (name) return "è§£å‘ª";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼±ã„å‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚";
 #else
 		if (name) return "Remove Curse";
 		if (desc) return "Removes normal curses from equipped items.";
@@ -1463,7 +1463,7 @@ static cptr do_life_spell(int spell, int mode)
 				if (remove_curse())
 				{
 #ifdef JP
-					msg_print("Ã¯¤«¤Ë¸«¼é¤é¤ì¤Æ¤¤¤ë¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£");
+					msg_print("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚");
 #else
 					msg_print("You feel as if someone is watching over you.");
 #endif
@@ -1474,8 +1474,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "½Å½ı";
-		if (desc) return "1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤ËÃæ¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "é‡å‚·";
+		if (desc) return "1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ä¸­ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Cause Medium Wounds";
 		if (desc) return "Wounds a monster unless resisted.";
@@ -1497,8 +1497,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "Ã×Ì¿½ı¤Î¼£Ìş";
-		if (desc) return "ÂÎÎÏ¤òÂçÉı¤Ë²óÉü¤µ¤»¡¢Éé½ı¤ÈÛ¯Û°¾õÂÖ¤âÁ´²÷¤¹¤ë¡£";
+		if (name) return "è‡´å‘½å‚·ã®æ²»ç™’";
+		if (desc) return "ä½“åŠ›ã‚’å¤§å¹…ã«å›å¾©ã•ã›ã€è² å‚·ã¨æœ¦æœ§çŠ¶æ…‹ã‚‚å…¨å¿«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Cure Critical Wounds";
 		if (desc) return "Heals cut, stun and HP greatly.";
@@ -1521,8 +1521,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "ÂÑÇ®ÂÑ´¨";
-		if (desc) return "°ìÄê»ş´Ö¡¢²Ğ±ê¤ÈÎäµ¤¤ËÂĞ¤¹¤ëÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€ç†±è€å¯’";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ç«ç‚ã¨å†·æ°—ã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Heat and Cold";
 		if (desc) return "Gives resistance to fire and cold. These resistances can be added to which from equipment for more powerful resistances.";
@@ -1543,8 +1543,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "¼şÊÕ´¶ÃÎ";
-		if (desc) return "¼şÊÕ¤ÎÃÏ·Á¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "å‘¨è¾ºæ„ŸçŸ¥";
+		if (desc) return "å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Sense Surroundings";
 		if (desc) return "Maps nearby area.";
@@ -1564,8 +1564,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "¥Ñ¥Ë¥Ã¥¯¡¦¥¢¥ó¥Ç¥Ã¥É";
-		if (desc) return "»ë³¦Æâ¤Î¥¢¥ó¥Ç¥Ã¥É¤ò¶²Éİ¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ãƒ‘ãƒ‹ãƒƒã‚¯ãƒ»ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰";
+		if (desc) return "è¦–ç•Œå†…ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’ææ€–ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Turn Undead";
 		if (desc) return "Attempts to scare undead monsters in sight.";
@@ -1581,8 +1581,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "ÂÎÎÏ²óÉü";
-		if (desc) return "¶Ë¤á¤Æ¶¯ÎÏ¤Ê²óÉü¼öÊ¸¤Ç¡¢Éé½ı¤ÈÛ¯Û°¾õÂÖ¤âÁ´²÷¤¹¤ë¡£";
+		if (name) return "ä½“åŠ›å›å¾©";
+		if (desc) return "æ¥µã‚ã¦å¼·åŠ›ãªå›å¾©å‘ªæ–‡ã§ã€è² å‚·ã¨æœ¦æœ§çŠ¶æ…‹ã‚‚å…¨å¿«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Healing";
 		if (desc) return "Much powerful healing magic, and heals cut and stun completely.";
@@ -1604,8 +1604,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "·ë³¦¤ÎÌæ¾Ï";
-		if (desc) return "¼«Ê¬¤Î¤¤¤ë¾²¤Î¾å¤Ë¡¢¥â¥ó¥¹¥¿¡¼¤¬ÄÌ¤êÈ´¤±¤¿¤ê¾¤´­¤µ¤ì¤¿¤ê¤¹¤ë¤³¤È¤¬¤Ç¤­¤Ê¤¯¤Ê¤ë¥ë¡¼¥ó¤òÉÁ¤¯¡£";
+		if (name) return "çµç•Œã®ç´‹ç« ";
+		if (desc) return "è‡ªåˆ†ã®ã„ã‚‹åºŠã®ä¸Šã«ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€šã‚ŠæŠœã‘ãŸã‚Šå¬å–šã•ã‚ŒãŸã‚Šã™ã‚‹ã“ã¨ãŒã§ããªããªã‚‹ãƒ«ãƒ¼ãƒ³ã‚’æãã€‚";
 #else
 		if (name) return "Glyph of Warding";
 		if (desc) return "Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.";
@@ -1621,8 +1621,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "*²ò¼ö*";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Ë¤«¤«¤Ã¤¿¶¯ÎÏ¤Ê¼ö¤¤¤ò²ò½ü¤¹¤ë¡£";
+		if (name) return "*è§£å‘ª*";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼·åŠ›ãªå‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚";
 #else
 		if (name) return "Dispel Curse";
 		if (desc) return "Removes normal and heavy curse from equipped items.";
@@ -1634,7 +1634,7 @@ static cptr do_life_spell(int spell, int mode)
 				if (remove_all_curse())
 				{
 #ifdef JP
-					msg_print("Ã¯¤«¤Ë¸«¼é¤é¤ì¤Æ¤¤¤ë¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£");
+					msg_print("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚");
 #else
 					msg_print("You feel as if someone is watching over you.");
 #endif
@@ -1645,8 +1645,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "´Õ¼±";
-		if (desc) return "¥¢¥¤¥Æ¥à¤ò¼±ÊÌ¤¹¤ë¡£";
+		if (name) return "é‘‘è­˜";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã‚’è­˜åˆ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Perception";
 		if (desc) return "Identifies an item.";
@@ -1662,8 +1662,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "¥¢¥ó¥Ç¥Ã¥ÉÂà»¶";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥¢¥ó¥Ç¥Ã¥É¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰é€€æ•£";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Dispel Undead";
 		if (desc) return "Damages all undead monsters in sight.";
@@ -1684,8 +1684,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "Æä¤Î¹ï";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ¥Î»¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "å‡ªã®åˆ»";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Day of the Dove";
 		if (desc) return "Attempts to charm all monsters in sight.";
@@ -1705,8 +1705,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "Ã×Ì¿½ı";
-		if (desc) return "1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤ËÂç¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "è‡´å‘½å‚·";
+		if (desc) return "1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Cause Critical Wounds";
 		if (desc) return "Wounds a monster critically unless resisted.";
@@ -1728,8 +1728,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "µ¢´Ô¤Î¾Û";
-		if (desc) return "ÃÏ¾å¤Ë¤¤¤ë¤È¤­¤Ï¥À¥ó¥¸¥ç¥ó¤ÎºÇ¿¼³¬¤Ø¡¢¥À¥ó¥¸¥ç¥ó¤Ë¤¤¤ë¤È¤­¤ÏÃÏ¾å¤Ø¤È°ÜÆ°¤¹¤ë¡£";
+		if (name) return "å¸°é‚„ã®è©”";
+		if (desc) return "åœ°ä¸Šã«ã„ã‚‹ã¨ãã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®æœ€æ·±éšã¸ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«ã„ã‚‹ã¨ãã¯åœ°ä¸Šã¸ã¨ç§»å‹•ã™ã‚‹ã€‚";
 #else
 		if (name) return "Word of Recall";
 		if (desc) return "Recalls player from dungeon to town, or from town to the deepest level of dungeon.";
@@ -1750,8 +1750,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "¿¿¼Â¤Îº×ÃÅ";
-		if (desc) return "¸½ºß¤Î³¬¤òºÆ¹½À®¤¹¤ë¡£";
+		if (name) return "çœŸå®Ÿã®ç¥­å£‡";
+		if (desc) return "ç¾åœ¨ã®éšã‚’å†æ§‹æˆã™ã‚‹ã€‚";
 #else
 		if (name) return "Alter Reality";
 		if (desc) return "Recreates current dungeon level.";
@@ -1772,8 +1772,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "¿¿¡¦·ë³¦";
-		if (desc) return "¼«Ê¬¤Î¤¤¤ë¾²¤È¼ş°Ï8¥Ş¥¹¤Î¾²¤Î¾å¤Ë¡¢¥â¥ó¥¹¥¿¡¼¤¬ÄÌ¤êÈ´¤±¤¿¤ê¾¤´­¤µ¤ì¤¿¤ê¤¹¤ë¤³¤È¤¬¤Ç¤­¤Ê¤¯¤Ê¤ë¥ë¡¼¥ó¤òÉÁ¤¯¡£";
+		if (name) return "çœŸãƒ»çµç•Œ";
+		if (desc) return "è‡ªåˆ†ã®ã„ã‚‹åºŠã¨å‘¨å›²8ãƒã‚¹ã®åºŠã®ä¸Šã«ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€šã‚ŠæŠœã‘ãŸã‚Šå¬å–šã•ã‚ŒãŸã‚Šã™ã‚‹ã“ã¨ãŒã§ããªããªã‚‹ãƒ«ãƒ¼ãƒ³ã‚’æãã€‚";
 #else
 		if (name) return "Warding True";
 		if (desc) return "Creates glyphs in all adjacent squares and under you.";
@@ -1794,8 +1794,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "ÉÔÌÓ²½";
-		if (desc) return "¤³¤Î³¬¤ÎÁı¿£¤¹¤ë¥â¥ó¥¹¥¿¡¼¤¬Áı¿£¤Ç¤­¤Ê¤¯¤Ê¤ë¡£";
+		if (name) return "ä¸æ¯›åŒ–";
+		if (desc) return "ã“ã®éšã®å¢—æ®–ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå¢—æ®–ã§ããªããªã‚‹ã€‚";
 #else
 		if (name) return "Sterilization";
 		if (desc) return "Prevents any breeders on current level from breeding.";
@@ -1811,8 +1811,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "Á´´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¡¢æ«¡¢Èâ¡¢³¬ÃÊ¡¢ºâÊõ¡¢¤½¤·¤Æ¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "å…¨æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€ç½ ã€æ‰‰ã€éšæ®µã€è²¡å®ã€ãã—ã¦ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detection";
 		if (desc) return "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.";
@@ -1832,8 +1832,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "¥¢¥ó¥Ç¥Ã¥É¾ÃÌÇ";
-		if (desc) return "¼«Ê¬¤Î¼ş°Ï¤Ë¤¤¤ë¥¢¥ó¥Ç¥Ã¥É¤ò¸½ºß¤Î³¬¤«¤é¾Ã¤·µî¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰æ¶ˆæ»…";
+		if (desc) return "è‡ªåˆ†ã®å‘¨å›²ã«ã„ã‚‹ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’ç¾åœ¨ã®éšã‹ã‚‰æ¶ˆã—å»ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Annihilate Undead";
 		if (desc) return "Eliminates all nearby undead monsters, exhausting you.  Powerful or unique monsters may be able to resist.";
@@ -1853,8 +1853,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "ÀéÎ¤´ã";
-		if (desc) return "¤½¤Î³¬Á´ÂÎ¤ò±Êµ×¤Ë¾È¤é¤·¡¢¥À¥ó¥¸¥ç¥óÆâ¤¹¤Ù¤Æ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "åƒé‡Œçœ¼";
+		if (desc) return "ãã®éšå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Clairvoyance";
 		if (desc) return "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.";
@@ -1870,8 +1870,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "Á´Éü³è";
-		if (desc) return "¤¹¤Ù¤Æ¤Î¥¹¥Æ¡¼¥¿¥¹¤È·Ğ¸³ÃÍ¤ò²óÉü¤¹¤ë¡£";
+		if (name) return "å…¨å¾©æ´»";
+		if (desc) return "ã™ã¹ã¦ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¨çµŒé¨“å€¤ã‚’å›å¾©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Restoration";
 		if (desc) return "Restores all stats and experience.";
@@ -1893,8 +1893,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "*ÂÎÎÏ²óÉü*";
-		if (desc) return "ºÇ¶¯¤Î¼£Ìş¤ÎËâË¡¤Ç¡¢Éé½ı¤ÈÛ¯Û°¾õÂÖ¤âÁ´²÷¤¹¤ë¡£";
+		if (name) return "*ä½“åŠ›å›å¾©*";
+		if (desc) return "æœ€å¼·ã®æ²»ç™’ã®é­”æ³•ã§ã€è² å‚·ã¨æœ¦æœ§çŠ¶æ…‹ã‚‚å…¨å¿«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Healing True";
 		if (desc) return "The greatest healing magic. Heals all HP, cut and stun.";
@@ -1916,8 +1916,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "À»¤Ê¤ë¥Ó¥¸¥ç¥ó";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Î»ı¤ÄÇ½ÎÏ¤ò´°Á´¤ËÃÎ¤ë¡£";
+		if (name) return "è–ãªã‚‹ãƒ“ã‚¸ãƒ§ãƒ³";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚";
 #else
 		if (name) return "Holy Vision";
 		if (desc) return "*Identifies* an item.";
@@ -1933,8 +1933,8 @@ static cptr do_life_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "µæ¶Ë¤ÎÂÑÀ­";
-		if (desc) return "°ìÄê»ş´Ö¡¢¤¢¤é¤æ¤ëÂÑÀ­¤òÉÕ¤±¡¢AC¤ÈËâË¡ËÉ¸æÇ½ÎÏ¤ò¾å¾º¤µ¤»¤ë¡£";
+		if (name) return "ç©¶æ¥µã®è€æ€§";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ã‚ã‚‰ã‚†ã‚‹è€æ€§ã‚’ä»˜ã‘ã€ACã¨é­”æ³•é˜²å¾¡èƒ½åŠ›ã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Ultimate Resistance";
 		if (desc) return "Gives ultimate resistance, bonus to AC and speed.";
@@ -1964,10 +1964,10 @@ static cptr do_life_spell(int spell, int mode)
 }
 
 /*!
- * @brief Àç½ÑÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief ä»™è¡“é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_sorcery_spell(int spell, int mode)
 {
@@ -1983,8 +1983,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "¥â¥ó¥¹¥¿¡¼´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¸«¤¨¤ë¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®è¦‹ãˆã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Monsters";
 		if (desc) return "Detects all monsters in your vicinity unless invisible.";
@@ -2004,8 +2004,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "¥·¥ç¡¼¥È¡¦¥Æ¥ì¥İ¡¼¥È";
-		if (desc) return "¶áµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£";
+		if (name) return "ã‚·ãƒ§ãƒ¼ãƒˆãƒ»ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ";
+		if (desc) return "è¿‘è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚";
 #else
 		if (name) return "Phase Door";
 		if (desc) return "Teleport short distance.";
@@ -2025,8 +2025,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "æ«¤ÈÈâ´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤ÎÈâ¤Èæ«¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ç½ ã¨æ‰‰æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®æ‰‰ã¨ç½ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Doors and Traps";
 		if (desc) return "Detects traps, doors, and stairs in your vicinity.";
@@ -2048,8 +2048,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "¥é¥¤¥È¡¦¥¨¥ê¥¢";
-		if (desc) return "¸÷¸»¤¬¾È¤é¤·¤Æ¤¤¤ëÈÏ°Ï¤«Éô²°Á´ÂÎ¤ò±Êµ×¤ËÌÀ¤ë¤¯¤¹¤ë¡£";
+		if (name) return "ãƒ©ã‚¤ãƒˆãƒ»ã‚¨ãƒªã‚¢";
+		if (desc) return "å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚";
 #else
 		if (name) return "Light Area";
 		if (desc) return "Lights up nearby area and the inside of a room permanently.";
@@ -2071,8 +2071,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "¥Ñ¥Ë¥Ã¥¯¡¦¥â¥ó¥¹¥¿¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤òº®Íğ¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ãƒ‘ãƒ‹ãƒƒã‚¯ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’æ··ä¹±ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Confuse Monster";
 		if (desc) return "Attempts to confuse a monster.";
@@ -2094,8 +2094,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È";
-		if (desc) return "±óµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ";
+		if (desc) return "é è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚";
 #else
 		if (name) return "Teleport";
 		if (desc) return "Teleport long distance.";
@@ -2115,8 +2115,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "¥¹¥ê¡¼¥×¡¦¥â¥ó¥¹¥¿¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤òÌ²¤é¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ã‚¹ãƒªãƒ¼ãƒ—ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’çœ ã‚‰ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Sleep Monster";
 		if (desc) return "Attempts to sleep a monster.";
@@ -2138,8 +2138,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "ËâÎÏ½¼Å¶";
-		if (desc) return "¾ó/ËâË¡ËÀ¤Î½¼Å¶²ó¿ô¤òÁı¤ä¤¹¤«¡¢½¼Å¶Ãæ¤Î¥í¥Ã¥É¤Î½¼Å¶»ş´Ö¤ò¸º¤é¤¹¡£";
+		if (name) return "é­”åŠ›å……å¡«";
+		if (desc) return "æ–/é­”æ³•æ£’ã®å……å¡«å›æ•°ã‚’å¢—ã‚„ã™ã‹ã€å……å¡«ä¸­ã®ãƒ­ãƒƒãƒ‰ã®å……å¡«æ™‚é–“ã‚’æ¸›ã‚‰ã™ã€‚";
 #else
 		if (name) return "Recharging";
 		if (desc) return "Recharges staffs, wands or rods.";
@@ -2159,8 +2159,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "ËâË¡¤ÎÃÏ¿Ş";
-		if (desc) return "¼şÊÕ¤ÎÃÏ·Á¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "é­”æ³•ã®åœ°å›³";
+		if (desc) return "å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Magic Mapping";
 		if (desc) return "Maps nearby area.";
@@ -2180,8 +2180,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "´ÕÄê";
-		if (desc) return "¥¢¥¤¥Æ¥à¤ò¼±ÊÌ¤¹¤ë¡£";
+		if (name) return "é‘‘å®š";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã‚’è­˜åˆ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Identify";
 		if (desc) return "Identifies an item.";
@@ -2197,8 +2197,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "¥¹¥í¥¦¡¦¥â¥ó¥¹¥¿¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤ò¸ºÂ®¤µ¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ã‚¹ãƒ­ã‚¦ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’æ¸›é€Ÿã•ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Slow Monster";
 		if (desc) return "Attempts to slow a monster.";
@@ -2220,8 +2220,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "¼şÊÕ¥¹¥ê¡¼¥×";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ²¤é¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "å‘¨è¾ºã‚¹ãƒªãƒ¼ãƒ—";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’çœ ã‚‰ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Mass Sleep";
 		if (desc) return "Attempts to sleep all monsters in sight.";
@@ -2241,8 +2241,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È¡¦¥â¥ó¥¹¥¿¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¥Ó¡¼¥à¤òÊü¤Ä¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Teleport Away";
 		if (desc) return "Teleports all monsters on the line away unless resisted.";
@@ -2264,8 +2264,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "¥¹¥Ô¡¼¥É";
-		if (desc) return "°ìÄê»ş´Ö¡¢²ÃÂ®¤¹¤ë¡£";
+		if (name) return "ã‚¹ãƒ”ãƒ¼ãƒ‰";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€åŠ é€Ÿã™ã‚‹ã€‚";
 #else
 		if (name) return "Haste Self";
 		if (desc) return "Hastes you for a while.";
@@ -2286,8 +2286,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "¿¿¡¦´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¡¢æ«¡¢Èâ¡¢³¬ÃÊ¡¢ºâÊõ¡¢¤½¤·¤Æ¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "çœŸãƒ»æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€ç½ ã€æ‰‰ã€éšæ®µã€è²¡å®ã€ãã—ã¦ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detection True";
 		if (desc) return "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.";
@@ -2307,8 +2307,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "¿¿¡¦´ÕÄê";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Î»ı¤ÄÇ½ÎÏ¤ò´°Á´¤ËÃÎ¤ë¡£";
+		if (name) return "çœŸãƒ»é‘‘å®š";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚";
 #else
 		if (name) return "Identify True";
 		if (desc) return "*Identifies* an item.";
@@ -2324,8 +2324,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "ÊªÂÎ¤ÈºâÊõ´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¥¢¥¤¥Æ¥à¤ÈºâÊõ¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ç‰©ä½“ã¨è²¡å®æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã¨è²¡å®ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect items and Treasure";
 		if (desc) return "Detects all treasures and items in your vicinity.";
@@ -2347,8 +2347,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "¥Á¥ã¡¼¥à¡¦¥â¥ó¥¹¥¿¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤òÌ¥Î»¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ãƒãƒ£ãƒ¼ãƒ ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Charm Monster";
 		if (desc) return "Attempts to charm a monster.";
@@ -2370,8 +2370,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "Àº¿À´¶ÃÎ";
-		if (desc) return "°ìÄê»ş´Ö¡¢¥Æ¥ì¥Ñ¥·¡¼Ç½ÎÏ¤òÆÀ¤ë¡£";
+		if (name) return "ç²¾ç¥æ„ŸçŸ¥";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Sense Minds";
 		if (desc) return "Gives telepathy for a while.";
@@ -2392,8 +2392,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "³¹°ÜÆ°";
-		if (desc) return "³¹¤Ø°ÜÆ°¤¹¤ë¡£ÃÏ¾å¤Ë¤¤¤ë¤È¤­¤·¤«»È¤¨¤Ê¤¤¡£";
+		if (name) return "è¡—ç§»å‹•";
+		if (desc) return "è¡—ã¸ç§»å‹•ã™ã‚‹ã€‚åœ°ä¸Šã«ã„ã‚‹ã¨ãã—ã‹ä½¿ãˆãªã„ã€‚";
 #else
 		if (name) return "Teleport to town";
 		if (desc) return "Teleport to a town which you choose in a moment. Can only be used outdoors.";
@@ -2409,8 +2409,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "¼«¸ÊÊ¬ÀÏ";
-		if (desc) return "¸½ºß¤Î¼«Ê¬¤Î¾õÂÖ¤ò´°Á´¤ËÃÎ¤ë¡£";
+		if (name) return "è‡ªå·±åˆ†æ";
+		if (desc) return "ç¾åœ¨ã®è‡ªåˆ†ã®çŠ¶æ…‹ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚";
 #else
 		if (name) return "Self Knowledge";
 		if (desc) return "Gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.";
@@ -2426,8 +2426,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È¡¦¥ì¥Ù¥ë";
-		if (desc) return "½Ö»ş¤Ë¾å¤«²¼¤Î³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤¹¤ë¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¬ãƒ™ãƒ«";
+		if (desc) return "ç¬æ™‚ã«ä¸Šã‹ä¸‹ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚";
 #else
 		if (name) return "Teleport Level";
 		if (desc) return "Teleport to up or down stairs in a moment.";
@@ -2437,7 +2437,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				if (!get_check("ËÜÅö¤ËÂ¾¤Î³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤·¤Ş¤¹¤«¡©")) return NULL;
+				if (!get_check("æœ¬å½“ã«ä»–ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ")) return NULL;
 #else
 				if (!get_check("Are you sure? (Teleport Level)")) return NULL;
 #endif
@@ -2448,8 +2448,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "µ¢´Ô¤Î¼öÊ¸";
-		if (desc) return "ÃÏ¾å¤Ë¤¤¤ë¤È¤­¤Ï¥À¥ó¥¸¥ç¥ó¤ÎºÇ¿¼³¬¤Ø¡¢¥À¥ó¥¸¥ç¥ó¤Ë¤¤¤ë¤È¤­¤ÏÃÏ¾å¤Ø¤È°ÜÆ°¤¹¤ë¡£";
+		if (name) return "å¸°é‚„ã®å‘ªæ–‡";
+		if (desc) return "åœ°ä¸Šã«ã„ã‚‹ã¨ãã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®æœ€æ·±éšã¸ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«ã„ã‚‹ã¨ãã¯åœ°ä¸Šã¸ã¨ç§»å‹•ã™ã‚‹ã€‚";
 #else
 		if (name) return "Word of Recall";
 		if (desc) return "Recalls player from dungeon to town, or from town to the deepest level of dungeon.";
@@ -2470,8 +2470,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "¼¡¸µ¤ÎÈâ";
-		if (desc) return "Ã»µ÷Î¥Æâ¤Î»ØÄê¤·¤¿¾ì½ê¤Ë¥Æ¥ì¥İ¡¼¥È¤¹¤ë¡£";
+		if (name) return "æ¬¡å…ƒã®æ‰‰";
+		if (desc) return "çŸ­è·é›¢å†…ã®æŒ‡å®šã—ãŸå ´æ‰€ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚";
 #else
 		if (name) return "Dimension Door";
 		if (desc) return "Teleport to given location.";
@@ -2485,7 +2485,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				msg_print("¼¡¸µ¤ÎÈâ¤¬³«¤¤¤¿¡£ÌÜÅªÃÏ¤òÁª¤ó¤Ç²¼¤µ¤¤¡£");
+				msg_print("æ¬¡å…ƒã®æ‰‰ãŒé–‹ã„ãŸã€‚ç›®çš„åœ°ã‚’é¸ã‚“ã§ä¸‹ã•ã„ã€‚");
 #else
 				msg_print("You open a dimensional gate. Choose a destination.");
 #endif
@@ -2497,8 +2497,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "Ä´ºº";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼¤ÎÂ°À­¡¢»Ä¤êÂÎÎÏ¡¢ºÇÂçÂÎÎÏ¡¢¥¹¥Ô¡¼¥É¡¢ÀµÂÎ¤òÃÎ¤ë¡£";
+		if (name) return "èª¿æŸ»";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å±æ€§ã€æ®‹ã‚Šä½“åŠ›ã€æœ€å¤§ä½“åŠ›ã€ã‚¹ãƒ”ãƒ¼ãƒ‰ã€æ­£ä½“ã‚’çŸ¥ã‚‹ã€‚";
 #else
 		if (name) return "Probing";
 		if (desc) return "Proves all monsters' alignment, HP, speed and their true character.";
@@ -2514,8 +2514,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "ÇúÈ¯¤Î¥ë¡¼¥ó";
-		if (desc) return "¼«Ê¬¤Î¤¤¤ë¾²¤Î¾å¤Ë¡¢¥â¥ó¥¹¥¿¡¼¤¬ÄÌ¤ë¤ÈÇúÈ¯¤·¤Æ¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¥ë¡¼¥ó¤òÉÁ¤¯¡£";
+		if (name) return "çˆ†ç™ºã®ãƒ«ãƒ¼ãƒ³";
+		if (desc) return "è‡ªåˆ†ã®ã„ã‚‹åºŠã®ä¸Šã«ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€šã‚‹ã¨çˆ†ç™ºã—ã¦ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ãƒ«ãƒ¼ãƒ³ã‚’æãã€‚";
 #else
 		if (name) return "Explosive Rune";
 		if (desc) return "Sets a glyph under you. The glyph will explode when a monster moves on it.";
@@ -2537,8 +2537,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "Ç°Æ°ÎÏ";
-		if (desc) return "¥¢¥¤¥Æ¥à¤ò¼«Ê¬¤ÎÂ­¸µ¤Ø°ÜÆ°¤µ¤»¤ë¡£";
+		if (name) return "å¿µå‹•åŠ›";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã‚’è‡ªåˆ†ã®è¶³å…ƒã¸ç§»å‹•ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Telekinesis";
 		if (desc) return "Pulls a distant item close to you.";
@@ -2560,8 +2560,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "ÀéÎ¤´ã";
-		if (desc) return "¤½¤Î³¬Á´ÂÎ¤ò±Êµ×¤Ë¾È¤é¤·¡¢¥À¥ó¥¸¥ç¥óÆâ¤¹¤Ù¤Æ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£¤µ¤é¤Ë¡¢°ìÄê»ş´Ö¥Æ¥ì¥Ñ¥·¡¼Ç½ÎÏ¤òÆÀ¤ë¡£";
+		if (name) return "åƒé‡Œçœ¼";
+		if (desc) return "ãã®éšå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚ã•ã‚‰ã«ã€ä¸€å®šæ™‚é–“ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Clairvoyance";
 		if (desc) return "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.";
@@ -2590,8 +2590,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "Ì¥Î»¤Î»ëÀş";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ¥Î»¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "é­…äº†ã®è¦–ç·š";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Charm monsters";
 		if (desc) return "Attempts to charm all monsters in sight.";
@@ -2611,8 +2611,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "Ï£¶â½Ñ";
-		if (desc) return "¥¢¥¤¥Æ¥à1¤Ä¤ò¤ª¶â¤ËÊÑ¤¨¤ë¡£";
+		if (name) return "éŒ¬é‡‘è¡“";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ 1ã¤ã‚’ãŠé‡‘ã«å¤‰ãˆã‚‹ã€‚";
 #else
 		if (name) return "Alchemy";
 		if (desc) return "Turns an item into 1/3 of its value in gold.";
@@ -2628,8 +2628,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "²øÊªÄÉÊü";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "æ€ªç‰©è¿½æ”¾";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Banishment";
 		if (desc) return "Teleports all monsters in sight away unless resisted.";
@@ -2649,8 +2649,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "Ìµ½ı¤Îµå";
-		if (desc) return "°ìÄê»ş´Ö¡¢¥À¥á¡¼¥¸¤ò¼õ¤±¤Ê¤¯¤Ê¤ë¥Ğ¥ê¥¢¤òÄ¥¤ë¡£ÀÚ¤ì¤¿½Ö´Ö¤Ë¾¯¤·¥¿¡¼¥ó¤ò¾ÃÈñ¤¹¤ë¤Î¤ÇÃí°Õ¡£";
+		if (name) return "ç„¡å‚·ã®çƒ";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãªããªã‚‹ãƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚åˆ‡ã‚ŒãŸç¬é–“ã«å°‘ã—ã‚¿ãƒ¼ãƒ³ã‚’æ¶ˆè²»ã™ã‚‹ã®ã§æ³¨æ„ã€‚";
 #else
 		if (name) return "Globe of Invulnerability";
 		if (desc) return "Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.";
@@ -2674,10 +2674,10 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 
 /*!
- * @brief ¼«Á³ÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief è‡ªç„¶é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_nature_spell(int spell, int mode)
 {
@@ -2687,8 +2687,8 @@ static cptr do_nature_spell(int spell, int mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 #ifdef JP
-	static const char s_dam[] = "Â»½ı:";
-	static const char s_rng[] = "¼ÍÄø";
+	static const char s_dam[] = "æå‚·:";
+	static const char s_rng[] = "å°„ç¨‹";
 #else
 	static const char s_dam[] = "dam ";
 	static const char s_rng[] = "rng ";
@@ -2701,8 +2701,8 @@ static cptr do_nature_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "¥â¥ó¥¹¥¿¡¼´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¸«¤¨¤ë¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®è¦‹ãˆã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Creatures";
 		if (desc) return "Detects all monsters in your vicinity unless invisible.";
@@ -2722,8 +2722,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "°ğºÊ";
-		if (desc) return "ÅÅ·â¤ÎÃ»¤¤¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "ç¨²å¦»";
+		if (desc) return "é›»æ’ƒã®çŸ­ã„ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Lightning";
 		if (desc) return "Fires a short beam of lightning.";
@@ -2749,8 +2749,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "æ«¤ÈÈâ´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Îæ«¤ÈÈâ¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ç½ ã¨æ‰‰æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ç½ ã¨æ‰‰ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Doors and Traps";
 		if (desc) return "Detects traps, doors, and stairs in your vicinity.";
@@ -2772,8 +2772,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "¿©ÎÈÀ¸À®";
-		if (desc) return "¿©ÎÁ¤ò°ì¤Äºî¤ê½Ğ¤¹¡£";
+		if (name) return "é£Ÿç³§ç”Ÿæˆ";
+		if (desc) return "é£Ÿæ–™ã‚’ä¸€ã¤ä½œã‚Šå‡ºã™ã€‚";
 #else
 		if (name) return "Produce Food";
 		if (desc) return "Produces a Ration of Food.";
@@ -2785,7 +2785,7 @@ static cptr do_nature_spell(int spell, int mode)
 				object_type forge, *q_ptr = &forge;
 
 #ifdef JP
-				msg_print("¿©ÎÁ¤òÀ¸À®¤·¤¿¡£");
+				msg_print("é£Ÿæ–™ã‚’ç”Ÿæˆã—ãŸã€‚");
 #else
 				msg_print("A food ration is produced.");
 #endif
@@ -2801,8 +2801,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "Æü¤Î¸÷";
-		if (desc) return "¸÷¸»¤¬¾È¤é¤·¤Æ¤¤¤ëÈÏ°Ï¤«Éô²°Á´ÂÎ¤ò±Êµ×¤ËÌÀ¤ë¤¯¤¹¤ë¡£";
+		if (name) return "æ—¥ã®å…‰";
+		if (desc) return "å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚";
 #else
 		if (name) return "Daylight";
 		if (desc) return "Lights up nearby area and the inside of a room permanently.";
@@ -2822,13 +2822,13 @@ static cptr do_nature_spell(int spell, int mode)
 				if ((prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
 				{
 #ifdef JP
-					msg_print("Æü¤Î¸÷¤¬¤¢¤Ê¤¿¤ÎÆùÂÎ¤ò¾Ç¤¬¤·¤¿¡ª");
+					msg_print("æ—¥ã®å…‰ãŒã‚ãªãŸã®è‚‰ä½“ã‚’ç„¦ãŒã—ãŸï¼");
 #else
 					msg_print("The daylight scorches your flesh!");
 #endif
 
 #ifdef JP
-					take_hit(DAMAGE_NOESCAPE, damroll(2, 2), "Æü¤Î¸÷", -1);
+					take_hit(DAMAGE_NOESCAPE, damroll(2, 2), "æ—¥ã®å…‰", -1);
 #else
 					take_hit(DAMAGE_NOESCAPE, damroll(2, 2), "daylight", -1);
 #endif
@@ -2839,8 +2839,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "Æ°Êª½¬¤·";
-		if (desc) return "Æ°Êª1ÂÎ¤òÌ¥Î»¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "å‹•ç‰©ç¿’ã—";
+		if (desc) return "å‹•ç‰©1ä½“ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Animal Taming";
 		if (desc) return "Attempts to charm an animal.";
@@ -2862,8 +2862,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "´Ä¶­¤Ø¤ÎÂÑÀ­";
-		if (desc) return "°ìÄê»ş´Ö¡¢Îäµ¤¡¢±ê¡¢ÅÅ·â¤ËÂĞ¤¹¤ëÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "ç’°å¢ƒã¸ã®è€æ€§";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€å†·æ°—ã€ç‚ã€é›»æ’ƒã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Environment";
 		if (desc) return "Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.";
@@ -2885,8 +2885,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "½ı¤ÈÆÇ¼£ÎÅ";
-		if (desc) return "²ø²æ¤òÁ´²÷¤µ¤»¡¢ÆÇ¤òÂÎ¤«¤é´°Á´¤Ë¼è¤ê½ü¤­¡¢ÂÎÎÏ¤ò¾¯¤·²óÉü¤µ¤»¤ë¡£";
+		if (name) return "å‚·ã¨æ¯’æ²»ç™‚";
+		if (desc) return "æ€ªæˆ‘ã‚’å…¨å¿«ã•ã›ã€æ¯’ã‚’ä½“ã‹ã‚‰å®Œå…¨ã«å–ã‚Šé™¤ãã€ä½“åŠ›ã‚’å°‘ã—å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Cure Wounds & Poison";
 		if (desc) return "Heals all cut and poison status. Heals HP a little.";
@@ -2909,8 +2909,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "´äÀĞÍÏ²ò";
-		if (desc) return "ÊÉ¤òÍÏ¤«¤·¤Æ¾²¤Ë¤¹¤ë¡£";
+		if (name) return "å²©çŸ³æº¶è§£";
+		if (desc) return "å£ã‚’æº¶ã‹ã—ã¦åºŠã«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Stone to Mud";
 		if (desc) return "Turns one rock square to mud.";
@@ -2934,8 +2934,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "¥¢¥¤¥¹¡¦¥Ü¥ë¥È";
-		if (desc) return "Îäµ¤¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "ã‚¢ã‚¤ã‚¹ãƒ»ãƒœãƒ«ãƒˆ";
+		if (desc) return "å†·æ°—ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Frost Bolt";
 		if (desc) return "Fires a bolt or beam of cold.";
@@ -2957,8 +2957,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "¼«Á³¤Î³ĞÀÃ";
-		if (desc) return "¼şÊÕ¤ÎÃÏ·Á¤ò´¶ÃÎ¤·¡¢¶á¤¯¤Îæ«¡¢Èâ¡¢³¬ÃÊ¡¢Á´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "è‡ªç„¶ã®è¦šé†’";
+		if (desc) return "å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã—ã€è¿‘ãã®ç½ ã€æ‰‰ã€éšæ®µã€å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Nature Awareness";
 		if (desc) return "Maps nearby area. Detects all monsters, traps, doors and stairs.";
@@ -2983,8 +2983,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "¥Õ¥¡¥¤¥¢¡¦¥Ü¥ë¥È";
-		if (desc) return "²Ğ±ê¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ«ãƒˆ";
+		if (desc) return "ç«ç‚ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Fire Bolt";
 		if (desc) return "Fires a bolt or beam of fire.";
@@ -3006,8 +3006,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "ÂÀÍÛ¸÷Àş";
-		if (desc) return "¸÷Àş¤òÊü¤Ä¡£¸÷¤ê¤ò·ù¤¦¥â¥ó¥¹¥¿¡¼¤Ë¸ú²Ì¤¬¤¢¤ë¡£";
+		if (name) return "å¤ªé™½å…‰ç·š";
+		if (desc) return "å…‰ç·šã‚’æ”¾ã¤ã€‚å…‰ã‚Šã‚’å«Œã†ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«åŠ¹æœãŒã‚ã‚‹ã€‚";
 #else
 		if (name) return "Ray of Sunlight";
 		if (desc) return "Fires a beam of light which damages to light-sensitive monsters.";
@@ -3023,7 +3023,7 @@ static cptr do_nature_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 #ifdef JP
-				msg_print("ÂÀÍÛ¸÷Àş¤¬¸½¤ì¤¿¡£");
+				msg_print("å¤ªé™½å…‰ç·šãŒç¾ã‚ŒãŸã€‚");
 #else
 				msg_print("A line of sunlight appears.");
 #endif
@@ -3035,8 +3035,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "Â­¤«¤»";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤ò¸ºÂ®¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "è¶³ã‹ã›";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ¸›é€Ÿã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Entangle";
 		if (desc) return "Attempts to slow all monsters in sight.";
@@ -3056,8 +3056,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "Æ°Êª¾¤´­";
-		if (desc) return "Æ°Êª¤ò1ÂÎ¾¤´­¤¹¤ë¡£";
+		if (name) return "å‹•ç‰©å¬å–š";
+		if (desc) return "å‹•ç‰©ã‚’1ä½“å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Summon Animal";
 		if (desc) return "Summons an animal.";
@@ -3069,7 +3069,7 @@ static cptr do_nature_spell(int spell, int mode)
 				if (!(summon_specific(-1, py, px, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET))))
 				{
 #ifdef JP
-					msg_print("Æ°Êª¤Ï¸½¤ì¤Ê¤«¤Ã¤¿¡£");
+					msg_print("å‹•ç‰©ã¯ç¾ã‚Œãªã‹ã£ãŸã€‚");
 #else
 					msg_print("No animals arrive.");
 #endif
@@ -3081,8 +3081,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "ÌôÁğ¼£ÎÅ";
-		if (desc) return "ÂÎÎÏ¤òÂçÉı¤Ë²óÉü¤µ¤»¡¢Éé½ı¡¢Û¯Û°¾õÂÖ¡¢ÆÇ¤«¤éÁ´²÷¤¹¤ë¡£";
+		if (name) return "è–¬è‰æ²»ç™‚";
+		if (desc) return "ä½“åŠ›ã‚’å¤§å¹…ã«å›å¾©ã•ã›ã€è² å‚·ã€æœ¦æœ§çŠ¶æ…‹ã€æ¯’ã‹ã‚‰å…¨å¿«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Herbal Healing";
 		if (desc) return "Heals HP greatly. And heals cut, stun and poison completely.";
@@ -3105,8 +3105,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "³¬ÃÊÀ¸À®";
-		if (desc) return "¼«Ê¬¤Î¤¤¤ë°ÌÃÖ¤Ë³¬ÃÊ¤òºî¤ë¡£";
+		if (name) return "éšæ®µç”Ÿæˆ";
+		if (desc) return "è‡ªåˆ†ã®ã„ã‚‹ä½ç½®ã«éšæ®µã‚’ä½œã‚‹ã€‚";
 #else
 		if (name) return "Stair Building";
 		if (desc) return "Creates a stair which goes down or up.";
@@ -3122,8 +3122,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "È©ÀĞ²½";
-		if (desc) return "°ìÄê»ş´Ö¡¢AC¤ò¾å¾º¤µ¤»¤ë¡£";
+		if (name) return "è‚ŒçŸ³åŒ–";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ACã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Stone Skin";
 		if (desc) return "Gives bonus to AC for a while.";
@@ -3144,8 +3144,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "¿¿¡¦ÂÑÀ­";
-		if (desc) return "°ìÄê»ş´Ö¡¢»À¡¢ÅÅ·â¡¢±ê¡¢Îäµ¤¡¢ÆÇ¤ËÂĞ¤¹¤ëÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "çœŸãƒ»è€æ€§";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é…¸ã€é›»æ’ƒã€ç‚ã€å†·æ°—ã€æ¯’ã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resistance True";
 		if (desc) return "Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.";
@@ -3169,8 +3169,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "¿¹ÎÓÁÏÂ¤";
-		if (desc) return "¼ş°Ï¤ËÌÚ¤òºî¤ê½Ğ¤¹¡£";
+		if (name) return "æ£®æ—å‰µé€ ";
+		if (desc) return "å‘¨å›²ã«æœ¨ã‚’ä½œã‚Šå‡ºã™ã€‚";
 #else
 		if (name) return "Forest Creation";
 		if (desc) return "Creates trees in all adjacent squares.";
@@ -3186,8 +3186,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "Æ°ÊªÍ§ÏÂ";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤ÎÆ°Êª¤òÌ¥Î»¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "å‹•ç‰©å‹å’Œ";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®å‹•ç‰©ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Animal Friendship";
 		if (desc) return "Attempts to charm all animals in sight.";
@@ -3207,8 +3207,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "»î¶âÀĞ";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Î»ı¤ÄÇ½ÎÏ¤ò´°Á´¤ËÃÎ¤ë¡£";
+		if (name) return "è©¦é‡‘çŸ³";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚";
 #else
 		if (name) return "Stone Tell";
 		if (desc) return "*Identifies* an item.";
@@ -3224,8 +3224,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "ÀĞ¤ÎÊÉ";
-		if (desc) return "¼«Ê¬¤Î¼ş°Ï¤Ë²ÖÖ¾´ä¤ÎÊÉ¤òºî¤ë¡£";
+		if (name) return "çŸ³ã®å£";
+		if (desc) return "è‡ªåˆ†ã®å‘¨å›²ã«èŠ±å´—å²©ã®å£ã‚’ä½œã‚‹ã€‚";
 #else
 		if (name) return "Wall of Stone";
 		if (desc) return "Creates granite walls in all adjacent squares.";
@@ -3241,8 +3241,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "Éå¿©ËÉ»ß";
-		if (desc) return "¥¢¥¤¥Æ¥à¤ò»À¤Ç½ı¤Ä¤«¤Ê¤¤¤è¤¦²Ã¹©¤¹¤ë¡£";
+		if (name) return "è…é£Ÿé˜²æ­¢";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã‚’é…¸ã§å‚·ã¤ã‹ãªã„ã‚ˆã†åŠ å·¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Protect from Corrosion";
 		if (desc) return "Makes an equipment acid-proof.";
@@ -3258,8 +3258,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "ÃÏ¿Ì";
-		if (desc) return "¼ş°Ï¤Î¥À¥ó¥¸¥ç¥ó¤òÍÉ¤é¤·¡¢ÊÉ¤È¾²¤ò¥é¥ó¥À¥à¤ËÆş¤ìÊÑ¤¨¤ë¡£";
+		if (name) return "åœ°éœ‡";
+		if (desc) return "å‘¨å›²ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’æºã‚‰ã—ã€å£ã¨åºŠã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«å…¥ã‚Œå¤‰ãˆã‚‹ã€‚";
 #else
 		if (name) return "Earthquake";
 		if (desc) return "Shakes dungeon structure, and results in random swapping of floors and walls.";
@@ -3279,8 +3279,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "¥«¥Ş¥¤¥¿¥Á";
-		if (desc) return "Á´Êı¸ş¤Ë¸ş¤«¤Ã¤Æ¹¶·â¤¹¤ë¡£";
+		if (name) return "ã‚«ãƒã‚¤ã‚¿ãƒ";
+		if (desc) return "å…¨æ–¹å‘ã«å‘ã‹ã£ã¦æ”»æ’ƒã™ã‚‹ã€‚";
 #else
 		if (name) return "Cyclone";
 		if (desc) return "Attacks all adjacent monsters.";
@@ -3312,8 +3312,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "¥Ö¥ê¥¶¡¼¥É";
-		if (desc) return "µğÂç¤ÊÎäµ¤¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ãƒ–ãƒªã‚¶ãƒ¼ãƒ‰";
+		if (desc) return "å·¨å¤§ãªå†·æ°—ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Blizzard";
 		if (desc) return "Fires a huge ball of cold.";
@@ -3336,8 +3336,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "°ğºÊÍò";
-		if (desc) return "µğÂç¤ÊÅÅ·â¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ç¨²å¦»åµ";
+		if (desc) return "å·¨å¤§ãªé›»æ’ƒã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Lightning Storm";
 		if (desc) return "Fires a huge electric ball.";
@@ -3360,8 +3360,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "±²Ä¬";
-		if (desc) return "µğÂç¤Ê¿å¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "æ¸¦æ½®";
+		if (desc) return "å·¨å¤§ãªæ°´ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Whirlpool";
 		if (desc) return "Fires a huge ball of water.";
@@ -3383,8 +3383,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "ÍÛ¸÷¾¤´­";
-		if (desc) return "¼«Ê¬¤òÃæ¿´¤È¤·¤¿¸÷¤Îµå¤òÈ¯À¸¤µ¤»¤ë¡£¤µ¤é¤Ë¡¢¤½¤Î³¬Á´ÂÎ¤ò±Êµ×¤Ë¾È¤é¤·¡¢¥À¥ó¥¸¥ç¥óÆâ¤¹¤Ù¤Æ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "é™½å…‰å¬å–š";
+		if (desc) return "è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸå…‰ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚ã•ã‚‰ã«ã€ãã®éšå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Call Sunlight";
 		if (desc) return "Generates ball of light centered on you. Maps and lights whole dungeon level. Knows all objects location.";
@@ -3406,13 +3406,13 @@ static cptr do_nature_spell(int spell, int mode)
 				if ((prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
 				{
 #ifdef JP
-					msg_print("Æü¸÷¤¬¤¢¤Ê¤¿¤ÎÆùÂÎ¤ò¾Ç¤¬¤·¤¿¡ª");
+					msg_print("æ—¥å…‰ãŒã‚ãªãŸã®è‚‰ä½“ã‚’ç„¦ãŒã—ãŸï¼");
 #else
 					msg_print("The sunlight scorches your flesh!");
 #endif
 
 #ifdef JP
-					take_hit(DAMAGE_NOESCAPE, 50, "Æü¸÷", -1);
+					take_hit(DAMAGE_NOESCAPE, 50, "æ—¥å…‰", -1);
 #else
 					take_hit(DAMAGE_NOESCAPE, 50, "sunlight", -1);
 #endif
@@ -3423,8 +3423,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "ÀºÎî¤Î¿Ï";
-		if (desc) return "Éğ´ï¤Ë±ê¤«Îäµ¤¤ÎÂ°À­¤ò¤Ä¤±¤ë¡£";
+		if (name) return "ç²¾éœŠã®åˆƒ";
+		if (desc) return "æ­¦å™¨ã«ç‚ã‹å†·æ°—ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Elemental Branding";
 		if (desc) return "Makes current weapon fire or frost branded.";
@@ -3440,8 +3440,8 @@ static cptr do_nature_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "¼«Á³¤Î¶¼°Ò";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¡¢ÃÏ¿Ì¤òµ¯¤³¤·¡¢¼«Ê¬¤òÃæ¿´¤È¤·¤¿Ê¬²ò¤Îµå¤òÈ¯À¸¤µ¤»¤ë¡£";
+		if (name) return "è‡ªç„¶ã®è„…å¨";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã€åœ°éœ‡ã‚’èµ·ã“ã—ã€è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸåˆ†è§£ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Nature's Wrath";
 		if (desc) return "Damages all monsters in sight. Makes quake. Generates disintegration ball centered on you.";
@@ -3470,10 +3470,10 @@ static cptr do_nature_spell(int spell, int mode)
 
 
 /*!
- * @brief ¥«¥ª¥¹ÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief ã‚«ã‚ªã‚¹é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_chaos_spell(int spell, int mode)
 {
@@ -3483,8 +3483,8 @@ static cptr do_chaos_spell(int spell, int mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 #ifdef JP
-	static const char s_dam[] = "Â»½ı:";
-	static const char s_random[] = "¥é¥ó¥À¥à";
+	static const char s_dam[] = "æå‚·:";
+	static const char s_random[] = "ãƒ©ãƒ³ãƒ€ãƒ ";
 #else
 	static const char s_dam[] = "dam ";
 	static const char s_random[] = "random";
@@ -3497,8 +3497,8 @@ static cptr do_chaos_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "¥Ş¥¸¥Ã¥¯¡¦¥ß¥µ¥¤¥ë";
-		if (desc) return "¼å¤¤ËâË¡¤ÎÌğ¤òÊü¤Ä¡£";
+		if (name) return "ãƒã‚¸ãƒƒã‚¯ãƒ»ãƒŸã‚µã‚¤ãƒ«";
+		if (desc) return "å¼±ã„é­”æ³•ã®çŸ¢ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Magic Missile";
 		if (desc) return "Fires a weak bolt of magic.";
@@ -3521,8 +3521,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "¥È¥é¥Ã¥×/¥É¥¢ÇË²õ";
-		if (desc) return "ÎÙÀÜ¤¹¤ëæ«¤ÈÈâ¤òÇË²õ¤¹¤ë¡£";
+		if (name) return "ãƒˆãƒ©ãƒƒãƒ—/ãƒ‰ã‚¢ç ´å£Š";
+		if (desc) return "éš£æ¥ã™ã‚‹ç½ ã¨æ‰‰ã‚’ç ´å£Šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trap / Door Destruction";
 		if (desc) return "Destroys all traps in adjacent squares.";
@@ -3542,8 +3542,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "Á®¸÷";
-		if (desc) return "¸÷¸»¤¬¾È¤é¤·¤Æ¤¤¤ëÈÏ°Ï¤«Éô²°Á´ÂÎ¤ò±Êµ×¤ËÌÀ¤ë¤¯¤¹¤ë¡£";
+		if (name) return "é–ƒå…‰";
+		if (desc) return "å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚";
 #else
 		if (name) return "Flash of Light";
 		if (desc) return "Lights up nearby area and the inside of a room permanently.";
@@ -3565,8 +3565,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "º®Íğ¤Î¼ê";
-		if (desc) return "Áê¼ê¤òº®Íğ¤µ¤»¤ë¹¶·â¤ò¤Ç¤­¤ë¤è¤¦¤Ë¤¹¤ë¡£";
+		if (name) return "æ··ä¹±ã®æ‰‹";
+		if (desc) return "ç›¸æ‰‹ã‚’æ··ä¹±ã•ã›ã‚‹æ”»æ’ƒã‚’ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Touch of Confusion";
 		if (desc) return "Attempts to confuse the next monster that you hit.";
@@ -3578,7 +3578,7 @@ static cptr do_chaos_spell(int spell, int mode)
 				if (!(p_ptr->special_attack & ATTACK_CONFUSE))
 				{
 #ifdef JP
-					msg_print("¤¢¤Ê¤¿¤Î¼ê¤Ï¸÷¤ê»Ï¤á¤¿¡£");
+					msg_print("ã‚ãªãŸã®æ‰‹ã¯å…‰ã‚Šå§‹ã‚ãŸã€‚");
 #else
 					msg_print("Your hands start glowing.");
 #endif
@@ -3592,8 +3592,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "ËâÎÏßÚÎö";
-		if (desc) return "ËâË¡¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "é­”åŠ›ç‚¸è£‚";
+		if (desc) return "é­”æ³•ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Mana Burst";
 		if (desc) return "Fires a ball of magic.";
@@ -3632,8 +3632,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "¥Õ¥¡¥¤¥¢¡¦¥Ü¥ë¥È";
-		if (desc) return "±ê¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ«ãƒˆ";
+		if (desc) return "ç‚ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Fire Bolt";
 		if (desc) return "Fires a bolt or beam of fire.";
@@ -3656,8 +3656,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "ÎÏ¤Î·ı";
-		if (desc) return "¤´¤¯¾®¤µ¤ÊÊ¬²ò¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "åŠ›ã®æ‹³";
+		if (desc) return "ã”ãå°ã•ãªåˆ†è§£ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Fist of Force";
 		if (desc) return "Fires a tiny ball of disintegration.";
@@ -3681,8 +3681,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È";
-		if (desc) return "±óµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ";
+		if (desc) return "é è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚";
 #else
 		if (name) return "Teleport Self";
 		if (desc) return "Teleport long distance.";
@@ -3702,8 +3702,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "¥ï¥ó¥À¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼¤Ë¥é¥ó¥À¥à¤Ê¸ú²Ì¤òÍ¿¤¨¤ë¡£";
+		if (name) return "ãƒ¯ãƒ³ãƒ€ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ©ãƒ³ãƒ€ãƒ ãªåŠ¹æœã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Wonder";
 		if (desc) return "Fires something with random effects.";
@@ -3724,8 +3724,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "¥«¥ª¥¹¡¦¥Ü¥ë¥È";
-		if (desc) return "¥«¥ª¥¹¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "ã‚«ã‚ªã‚¹ãƒ»ãƒœãƒ«ãƒˆ";
+		if (desc) return "ã‚«ã‚ªã‚¹ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Chaos Bolt";
 		if (desc) return "Fires a bolt or ball of chaos.";
@@ -3748,8 +3748,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "¥½¥Ë¥Ã¥¯¡¦¥Ö¡¼¥à";
-		if (desc) return "¼«Ê¬¤òÃæ¿´¤È¤·¤¿¹ì²»¤Îµå¤òÈ¯À¸¤µ¤»¤ë¡£";
+		if (name) return "ã‚½ãƒ‹ãƒƒã‚¯ãƒ»ãƒ–ãƒ¼ãƒ ";
+		if (desc) return "è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸè½ŸéŸ³ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Sonic Boom";
 		if (desc) return "Generates a ball of sound centered on you.";
@@ -3764,7 +3764,7 @@ static cptr do_chaos_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				msg_print("¥É¡¼¥ó¡ªÉô²°¤¬ÍÉ¤ì¤¿¡ª");
+				msg_print("ãƒ‰ãƒ¼ãƒ³ï¼éƒ¨å±‹ãŒæºã‚ŒãŸï¼");
 #else
 				msg_print("BOOM! Shake the room!");
 #endif
@@ -3776,8 +3776,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "ÇËÌÇ¤ÎÌğ";
-		if (desc) return "½ã¿è¤ÊËâÎÏ¤Î¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "ç ´æ»…ã®çŸ¢";
+		if (desc) return "ç´”ç²‹ãªé­”åŠ›ã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Doom Bolt";
 		if (desc) return "Fires a beam of pure mana.";
@@ -3800,8 +3800,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "¥Õ¥¡¥¤¥¢¡¦¥Ü¡¼¥ë";
-		if (desc) return "±ê¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ¼ãƒ«";
+		if (desc) return "ç‚ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Fire Ball";
 		if (desc) return "Fires a ball of fire.";
@@ -3824,8 +3824,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È¡¦¥¢¥¦¥§¥¤";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¥Ó¡¼¥à¤òÊü¤Ä¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ã‚¢ã‚¦ã‚§ã‚¤";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Teleport Other";
 		if (desc) return "Teleports all monsters on the line away unless resisted.";
@@ -3847,8 +3847,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "ÇË²õ¤Î¸ÀÍÕ";
-		if (desc) return "¼şÊÕ¤Î¥¢¥¤¥Æ¥à¡¢¥â¥ó¥¹¥¿¡¼¡¢ÃÏ·Á¤òÇË²õ¤¹¤ë¡£";
+		if (name) return "ç ´å£Šã®è¨€è‘‰";
+		if (desc) return "å‘¨è¾ºã®ã‚¢ã‚¤ãƒ†ãƒ ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€åœ°å½¢ã‚’ç ´å£Šã™ã‚‹ã€‚";
 #else
 		if (name) return "Word of Destruction";
 		if (desc) return "Destroy everything in nearby area.";
@@ -3867,8 +3867,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "¥í¥°¥ë¥¹È¯Æ°";
-		if (desc) return "µğÂç¤Ê¥«¥ª¥¹¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ãƒ­ã‚°ãƒ«ã‚¹ç™ºå‹•";
+		if (desc) return "å·¨å¤§ãªã‚«ã‚ªã‚¹ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Invoke Logrus";
 		if (desc) return "Fires a huge ball of chaos.";
@@ -3891,8 +3891,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "Â¾¼ÔÊÑÍÆ";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤òÊÑ¿È¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ä»–è€…å¤‰å®¹";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’å¤‰èº«ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Polymorph Other";
 		if (desc) return "Attempts to polymorph a monster.";
@@ -3914,8 +3914,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "Ï¢º¿°ğºÊ";
-		if (desc) return "Á´Êı¸ş¤ËÂĞ¤·¤ÆÅÅ·â¤Î¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "é€£é–ç¨²å¦»";
+		if (desc) return "å…¨æ–¹å‘ã«å¯¾ã—ã¦é›»æ’ƒã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Chain Lightning";
 		if (desc) return "Fires lightning beams in all directions.";
@@ -3937,8 +3937,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "ËâÎÏÉõÆş";
-		if (desc) return "¾ó/ËâË¡ËÀ¤Î½¼Å¶²ó¿ô¤òÁı¤ä¤¹¤«¡¢½¼Å¶Ãæ¤Î¥í¥Ã¥É¤Î½¼Å¶»ş´Ö¤ò¸º¤é¤¹¡£";
+		if (name) return "é­”åŠ›å°å…¥";
+		if (desc) return "æ–/é­”æ³•æ£’ã®å……å¡«å›æ•°ã‚’å¢—ã‚„ã™ã‹ã€å……å¡«ä¸­ã®ãƒ­ãƒƒãƒ‰ã®å……å¡«æ™‚é–“ã‚’æ¸›ã‚‰ã™ã€‚";
 #else
 		if (name) return "Arcane Binding";
 		if (desc) return "Recharges staffs, wands or rods.";
@@ -3958,8 +3958,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "¸¶»ÒÊ¬²ò";
-		if (desc) return "µğÂç¤ÊÊ¬²ò¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "åŸå­åˆ†è§£";
+		if (desc) return "å·¨å¤§ãªåˆ†è§£ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Disintegrate";
 		if (desc) return "Fires a huge ball of disintegration.";
@@ -3982,8 +3982,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "¸½¼ÂÊÑÍÆ";
-		if (desc) return "¸½ºß¤Î³¬¤òºÆ¹½À®¤¹¤ë¡£";
+		if (name) return "ç¾å®Ÿå¤‰å®¹";
+		if (desc) return "ç¾åœ¨ã®éšã‚’å†æ§‹æˆã™ã‚‹ã€‚";
 #else
 		if (name) return "Alter Reality";
 		if (desc) return "Recreates current dungeon level.";
@@ -4004,8 +4004,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "¥Ş¥¸¥Ã¥¯¡¦¥í¥±¥Ã¥È";
-		if (desc) return "¥í¥±¥Ã¥È¤òÈ¯¼Í¤¹¤ë¡£";
+		if (name) return "ãƒã‚¸ãƒƒã‚¯ãƒ»ãƒ­ã‚±ãƒƒãƒˆ";
+		if (desc) return "ãƒ­ã‚±ãƒƒãƒˆã‚’ç™ºå°„ã™ã‚‹ã€‚";
 #else
 		if (name) return "Magic Rocket";
 		if (desc) return "Fires a magic rocket.";
@@ -4022,7 +4022,7 @@ static cptr do_chaos_spell(int spell, int mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 #ifdef JP
-				msg_print("¥í¥±¥Ã¥ÈÈ¯¼Í¡ª");
+				msg_print("ãƒ­ã‚±ãƒƒãƒˆç™ºå°„ï¼");
 #else
 				msg_print("You launch a rocket!");
 #endif
@@ -4034,8 +4034,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "º®ÆÙ¤Î¿Ï";
-		if (desc) return "Éğ´ï¤Ë¥«¥ª¥¹¤ÎÂ°À­¤ò¤Ä¤±¤ë¡£";
+		if (name) return "æ··æ²Œã®åˆƒ";
+		if (desc) return "æ­¦å™¨ã«ã‚«ã‚ªã‚¹ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Chaos Branding";
 		if (desc) return "Makes current weapon a Chaotic weapon.";
@@ -4051,8 +4051,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "°­Ëâ¾¤´­";
-		if (desc) return "°­Ëâ¤ò1ÂÎ¾¤´­¤¹¤ë¡£";
+		if (name) return "æ‚ªé­”å¬å–š";
+		if (desc) return "æ‚ªé­”ã‚’1ä½“å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Summon Demon";
 		if (desc) return "Summons a demon.";
@@ -4071,7 +4071,7 @@ static cptr do_chaos_spell(int spell, int mode)
 				if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, SUMMON_DEMON, mode))
 				{
 #ifdef JP
-					msg_print("Î²²«¤Î°­½­¤¬½¼Ëş¤·¤¿¡£");
+					msg_print("ç¡«é»„ã®æ‚ªè‡­ãŒå……æº€ã—ãŸã€‚");
 #else
 					msg_print("The area fills with a stench of sulphur and brimstone.");
 #endif
@@ -4079,7 +4079,7 @@ static cptr do_chaos_spell(int spell, int mode)
 					if (pet)
 					{
 #ifdef JP
-						msg_print("¡Ö¤´ÍÑ¤Ç¤´¤¶¤¤¤Ş¤¹¤«¡¢¤´¼ç¿ÍÍÍ¡×");
+						msg_print("ã€Œã”ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€ã”ä¸»äººæ§˜ã€");
 #else
 						msg_print("'What is thy bidding... Master?'");
 #endif
@@ -4087,7 +4087,7 @@ static cptr do_chaos_spell(int spell, int mode)
 					else
 					{
 #ifdef JP
-						msg_print("¡ÖÈÜ¤·¤­¼Ô¤è¡¢²æ¤ÏÆò¤Î²¼ËÍ¤Ë¤¢¤é¤º¡ª ¤ªÁ°¤Îº²¤òÄº¤¯¤¾¡ª¡×");
+						msg_print("ã€Œå‘ã—ãè€…ã‚ˆã€æˆ‘ã¯æ±ã®ä¸‹åƒ•ã«ã‚ã‚‰ãšï¼ ãŠå‰ã®é­‚ã‚’é ‚ããï¼ã€");
 #else
 						msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'");
 #endif
@@ -4099,8 +4099,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "½ÅÎÏ¸÷Àş";
-		if (desc) return "½ÅÎÏ¤Î¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "é‡åŠ›å…‰ç·š";
+		if (desc) return "é‡åŠ›ã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Beam of Gravity";
 		if (desc) return "Fires a beam of gravity.";
@@ -4123,8 +4123,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "Î®À±·²";
-		if (desc) return "¼«Ê¬¤Î¼şÊÕ¤Ëğ¨ÀĞ¤òÍî¤È¤¹¡£";
+		if (name) return "æµæ˜Ÿç¾¤";
+		if (desc) return "è‡ªåˆ†ã®å‘¨è¾ºã«éš•çŸ³ã‚’è½ã¨ã™ã€‚";
 #else
 		if (name) return "Meteor Swarm";
 		if (desc) return "Makes meteor balls fall down to nearby random locations.";
@@ -4145,8 +4145,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "±ë¤Î°ì·â";
-		if (desc) return "¼«Ê¬¤òÃæ¿´¤È¤·¤¿Ä¶µğÂç¤Ê±ê¤Îµå¤òÈ¯À¸¤µ¤»¤ë¡£";
+		if (name) return "ç„”ã®ä¸€æ’ƒ";
+		if (desc) return "è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸè¶…å·¨å¤§ãªç‚ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Flame Strike";
 		if (desc) return "Generate a huge ball of fire centered on you.";
@@ -4167,8 +4167,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "º®ÆÙ¾¤Íè";
-		if (desc) return "¥é¥ó¥À¥à¤ÊÂ°À­¤Îµå¤ä¥Ó¡¼¥à¤òÈ¯À¸¤µ¤»¤ë¡£";
+		if (name) return "æ··æ²Œå¬æ¥";
+		if (desc) return "ãƒ©ãƒ³ãƒ€ãƒ ãªå±æ€§ã®çƒã‚„ãƒ“ãƒ¼ãƒ ã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Call Chaos";
 		if (desc) return "Generate random kind of balls or beams.";
@@ -4186,8 +4186,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "¼«¸ÊÊÑÍÆ";
-		if (desc) return "¼«Ê¬¤òÊÑ¿È¤µ¤»¤è¤¦¤È¤¹¤ë¡£";
+		if (name) return "è‡ªå·±å¤‰å®¹";
+		if (desc) return "è‡ªåˆ†ã‚’å¤‰èº«ã•ã›ã‚ˆã†ã¨ã™ã‚‹ã€‚";
 #else
 		if (name) return "Polymorph Self";
 		if (desc) return "Polymorphs yourself.";
@@ -4197,7 +4197,7 @@ static cptr do_chaos_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				if (!get_check("ÊÑ¿È¤·¤Ş¤¹¡£¤è¤í¤·¤¤¤Ç¤¹¤«¡©")) return NULL;
+				if (!get_check("å¤‰èº«ã—ã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ")) return NULL;
 #else
 				if (!get_check("You will polymorph yourself. Are you sure? ")) return NULL;
 #endif
@@ -4208,8 +4208,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "ËâÎÏ¤ÎÍò";
-		if (desc) return "Èó¾ï¤Ë¶¯ÎÏ¤ÇµğÂç¤Ê½ã¿è¤ÊËâÎÏ¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "é­”åŠ›ã®åµ";
+		if (desc) return "éå¸¸ã«å¼·åŠ›ã§å·¨å¤§ãªç´”ç²‹ãªé­”åŠ›ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Mana Storm";
 		if (desc) return "Fires an extremely powerful huge ball of pure mana.";
@@ -4232,8 +4232,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "¥í¥°¥ë¥¹¤Î¥Ö¥ì¥¹";
-		if (desc) return "Èó¾ï¤Ë¶¯ÎÏ¤Ê¥«¥ª¥¹¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ãƒ­ã‚°ãƒ«ã‚¹ã®ãƒ–ãƒ¬ã‚¹";
+		if (desc) return "éå¸¸ã«å¼·åŠ›ãªã‚«ã‚ªã‚¹ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Breathe Logrus";
 		if (desc) return "Fires an extremely powerful ball of chaos.";
@@ -4256,8 +4256,8 @@ static cptr do_chaos_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "µõÌµ¾¤Íè";
-		if (desc) return "¼«Ê¬¤Ë¼ş°Ï¤Ë¸ş¤«¤Ã¤Æ¡¢¥í¥±¥Ã¥È¡¢½ã¿è¤ÊËâÎÏ¤Îµå¡¢Êü¼ÍÀ­ÇÑ´şÊª¤Îµå¤òÊü¤Ä¡£¤¿¤À¤·¡¢ÊÉ¤ËÎÙÀÜ¤·¤Æ»ÈÍÑ¤¹¤ë¤È¹­ÈÏ°Ï¤òÇË²õ¤¹¤ë¡£";
+		if (name) return "è™šç„¡å¬æ¥";
+		if (desc) return "è‡ªåˆ†ã«å‘¨å›²ã«å‘ã‹ã£ã¦ã€ãƒ­ã‚±ãƒƒãƒˆã€ç´”ç²‹ãªé­”åŠ›ã®çƒã€æ”¾å°„æ€§å»ƒæ£„ç‰©ã®çƒã‚’æ”¾ã¤ã€‚ãŸã ã—ã€å£ã«éš£æ¥ã—ã¦ä½¿ç”¨ã™ã‚‹ã¨åºƒç¯„å›²ã‚’ç ´å£Šã™ã‚‹ã€‚";
 #else
 		if (name) return "Call the Void";
 		if (desc) return "Fires rockets, mana balls and nuclear waste balls in all directions each unless you are not adjacent to any walls. Otherwise *destroys* huge area.";
@@ -4278,10 +4278,10 @@ static cptr do_chaos_spell(int spell, int mode)
 }
 
 /*!
- * @brief °Å¹õÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief æš—é»’é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_death_spell(int spell, int mode)
 {
@@ -4291,8 +4291,8 @@ static cptr do_death_spell(int spell, int mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 #ifdef JP
-	static const char s_dam[] = "Â»½ı:";
-	static const char s_random[] = "¥é¥ó¥À¥à";
+	static const char s_dam[] = "æå‚·:";
+	static const char s_random[] = "ãƒ©ãƒ³ãƒ€ãƒ ";
 #else
 	static const char s_dam[] = "dam ";
 	static const char s_random[] = "random";
@@ -4305,8 +4305,8 @@ static cptr do_death_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "ÌµÀ¸Ì¿´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÀ¸Ì¿¤Î¤Ê¤¤¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ç„¡ç”Ÿå‘½æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®ç”Ÿå‘½ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Unlife";
 		if (desc) return "Detects all nonliving monsters in your vicinity.";
@@ -4326,8 +4326,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "¼ö»¦ÃÆ";
-		if (desc) return "¤´¤¯¾®¤µ¤Ê¼Ù°­¤ÊÎÏ¤ò»ı¤Ä¥Ü¡¼¥ë¤òÊü¤Ä¡£Á±ÎÉ¤Ê¥â¥ó¥¹¥¿¡¼¤Ë¤ÏÂç¤­¤Ê¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "å‘ªæ®ºå¼¾";
+		if (desc) return "ã”ãå°ã•ãªé‚ªæ‚ªãªåŠ›ã‚’æŒã¤ãƒœãƒ¼ãƒ«ã‚’æ”¾ã¤ã€‚å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Malediction";
 		if (desc) return "Fires a tiny ball of evil power which hurts good monsters greatly.";
@@ -4374,8 +4374,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "¼Ù°­´¶ÃÎ";
-		if (desc) return "¶á¤¯¤Î¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "é‚ªæ‚ªæ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Evil";
 		if (desc) return "Detects all evil monsters in your vicinity.";
@@ -4395,8 +4395,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "°­½­±À";
-		if (desc) return "ÆÇ¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "æ‚ªè‡­é›²";
+		if (desc) return "æ¯’ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Stinking Cloud";
 		if (desc) return "Fires a ball of poison.";
@@ -4419,8 +4419,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "¹õ¤¤Ì²¤ê";
-		if (desc) return "1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ²¤é¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "é»’ã„çœ ã‚Š";
+		if (desc) return "1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’çœ ã‚‰ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Black Sleep";
 		if (desc) return "Attempts to sleep a monster.";
@@ -4442,8 +4442,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "ÂÑÆÇ";
-		if (desc) return "°ìÄê»ş´Ö¡¢ÆÇ¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€æ¯’";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€æ¯’ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Poison";
 		if (desc) return "Gives resistance to poison. This resistance can be added to which from equipment for more powerful resistance.";
@@ -4463,8 +4463,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "¶²¹²";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤ò¶²Éİ¤µ¤»¡¢Û¯Û°¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ææ…Œ";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’ææ€–ã•ã›ã€æœ¦æœ§ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Horrify";
 		if (desc) return "Attempts to scare and stun a monster.";
@@ -4487,8 +4487,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "¥¢¥ó¥Ç¥Ã¥É½¾Â°";
-		if (desc) return "¥¢¥ó¥Ç¥Ã¥É1ÂÎ¤òÌ¥Î»¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰å¾“å±";
+		if (desc) return "ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰1ä½“ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Enslave Undead";
 		if (desc) return "Attempts to charm an undead monster.";
@@ -4510,8 +4510,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "¥¨¥ó¥È¥í¥Ô¡¼¤Îµå";
-		if (desc) return "À¸Ì¿¤Î¤¢¤ë¼Ô¤Ë¸ú²Ì¤Î¤¢¤ëµå¤òÊü¤Ä¡£";
+		if (name) return "ã‚¨ãƒ³ãƒˆãƒ­ãƒ”ãƒ¼ã®çƒ";
+		if (desc) return "ç”Ÿå‘½ã®ã‚ã‚‹è€…ã«åŠ¹æœã®ã‚ã‚‹çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Orb of Entropy";
 		if (desc) return "Fires a ball which damages living monsters.";
@@ -4544,8 +4544,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "ÃÏ¹ö¤ÎÌğ";
-		if (desc) return "ÃÏ¹ö¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "åœ°ç„ã®çŸ¢";
+		if (desc) return "åœ°ç„ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Nether Bolt";
 		if (desc) return "Fires a bolt or beam of nether.";
@@ -4568,8 +4568,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "»¦Ù¤±À";
-		if (desc) return "¼«Ê¬¤òÃæ¿´¤È¤·¤¿ÆÇ¤Îµå¤òÈ¯À¸¤µ¤»¤ë¡£";
+		if (name) return "æ®ºæˆ®é›²";
+		if (desc) return "è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸæ¯’ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Cloud kill";
 		if (desc) return "Generate a ball of poison centered on you.";
@@ -4590,8 +4590,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "¥â¥ó¥¹¥¿¡¼¾ÃÌÇ";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤ò¾Ã¤·µî¤ë¡£·Ğ¸³ÃÍ¤ä¥¢¥¤¥Æ¥à¤Ï¼ê¤ËÆş¤é¤Ê¤¤¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ¶ˆæ»…";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’æ¶ˆã—å»ã‚‹ã€‚çµŒé¨“å€¤ã‚„ã‚¢ã‚¤ãƒ†ãƒ ã¯æ‰‹ã«å…¥ã‚‰ãªã„ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Genocide One";
 		if (desc) return "Attempts to vanish a monster.";
@@ -4613,8 +4613,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "ÆÇ¤Î¿Ï";
-		if (desc) return "Éğ´ï¤ËÆÇ¤ÎÂ°À­¤ò¤Ä¤±¤ë¡£";
+		if (name) return "æ¯’ã®åˆƒ";
+		if (desc) return "æ­¦å™¨ã«æ¯’ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Poison Branding";
 		if (desc) return "Makes current weapon poison branded.";
@@ -4630,8 +4630,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "µÛ·ì¥É¥ì¥¤¥ó";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤«¤éÀ¸Ì¿ÎÏ¤òµÛ¤¤¤È¤ë¡£µÛ¤¤¤È¤Ã¤¿À¸Ì¿ÎÏ¤Ë¤è¤Ã¤ÆËşÊ¢ÅÙ¤¬¾å¤¬¤ë¡£";
+		if (name) return "å¸è¡€ãƒ‰ãƒ¬ã‚¤ãƒ³";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‹ã‚‰ç”Ÿå‘½åŠ›ã‚’å¸ã„ã¨ã‚‹ã€‚å¸ã„ã¨ã£ãŸç”Ÿå‘½åŠ›ã«ã‚ˆã£ã¦æº€è…¹åº¦ãŒä¸ŠãŒã‚‹ã€‚";
 #else
 		if (name) return "Vampiric Drain";
 		if (desc) return "Absorbs some HP from a monster and gives them to you. You will also gain nutritional sustenance from this.";
@@ -4680,8 +4680,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "È¿º²¤Î½Ñ";
-		if (desc) return "¼ş°Ï¤Î»àÂÎ¤ä¹ü¤òÀ¸¤­ÊÖ¤¹¡£";
+		if (name) return "åé­‚ã®è¡“";
+		if (desc) return "å‘¨å›²ã®æ­»ä½“ã‚„éª¨ã‚’ç”Ÿãè¿”ã™ã€‚";
 #else
 		if (name) return "Animate dead";
 		if (desc) return "Resurrects nearby corpse and skeletons. And makes these your pets.";
@@ -4697,8 +4697,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "Ëõ»¦";
-		if (desc) return "»ØÄê¤·¤¿Ê¸»ú¤Î¥â¥ó¥¹¥¿¡¼¤ò¸½ºß¤Î³¬¤«¤é¾Ã¤·µî¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "æŠ¹æ®º";
+		if (desc) return "æŒ‡å®šã—ãŸæ–‡å­—ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ç¾åœ¨ã®éšã‹ã‚‰æ¶ˆã—å»ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Genocide";
 		if (desc) return "Eliminates an entire class of monster, exhausting you.  Powerful or unique monsters may resist.";
@@ -4718,8 +4718,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "¶¸Àï»Î²½";
-		if (desc) return "¶¸Àï»Î²½¤·¡¢¶²Éİ¤ò½üµî¤¹¤ë¡£";
+		if (name) return "ç‹‚æˆ¦å£«åŒ–";
+		if (desc) return "ç‹‚æˆ¦å£«åŒ–ã—ã€ææ€–ã‚’é™¤å»ã™ã‚‹ã€‚";
 #else
 		if (name) return "Berserk";
 		if (desc) return "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.";
@@ -4741,8 +4741,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "°­Îî¾¤´­";
-		if (desc) return "¥é¥ó¥À¥à¤ÇÍÍ¡¹¤Ê¸ú²Ì¤¬µ¯¤³¤ë¡£";
+		if (name) return "æ‚ªéœŠå¬å–š";
+		if (desc) return "ãƒ©ãƒ³ãƒ€ãƒ ã§æ§˜ã€…ãªåŠ¹æœãŒèµ·ã“ã‚‹ã€‚";
 #else
 		if (name) return "Invoke Spirits";
 		if (desc) return "Causes random effects.";
@@ -4762,8 +4762,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "°Å¹õ¤ÎÌğ";
-		if (desc) return "°Å¹õ¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "æš—é»’ã®çŸ¢";
+		if (desc) return "æš—é»’ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Dark Bolt";
 		if (desc) return "Fires a bolt or beam of darkness.";
@@ -4786,8 +4786,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "¶¸ÍğÀï»Î";
-		if (desc) return "¶¸Àï»Î²½¤·¡¢¶²Éİ¤ò½üµî¤·¡¢²ÃÂ®¤¹¤ë¡£";
+		if (name) return "ç‹‚ä¹±æˆ¦å£«";
+		if (desc) return "ç‹‚æˆ¦å£«åŒ–ã—ã€ææ€–ã‚’é™¤å»ã—ã€åŠ é€Ÿã™ã‚‹ã€‚";
 #else
 		if (name) return "Battle Frenzy";
 		if (desc) return "Gives another bonus to hit and HP, immunity to fear for a while. Hastes you. But decreases AC.";
@@ -4812,8 +4812,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "µÛ·ì¤Î¿Ï";
-		if (desc) return "Éğ´ï¤ËµÛ·ì¤ÎÂ°À­¤ò¤Ä¤±¤ë¡£";
+		if (name) return "å¸è¡€ã®åˆƒ";
+		if (desc) return "æ­¦å™¨ã«å¸è¡€ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Vampiric Branding";
 		if (desc) return "Makes current weapon Vampiric.";
@@ -4829,8 +4829,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "¿¿¡¦µÛ·ì";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤«¤éÀ¸Ì¿ÎÏ¤òµÛ¤¤¤È¤ë¡£µÛ¤¤¤È¤Ã¤¿À¸Ì¿ÎÏ¤Ë¤è¤Ã¤ÆÂÎÎÏ¤¬²óÉü¤¹¤ë¡£";
+		if (name) return "çœŸãƒ»å¸è¡€";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‹ã‚‰ç”Ÿå‘½åŠ›ã‚’å¸ã„ã¨ã‚‹ã€‚å¸ã„ã¨ã£ãŸç”Ÿå‘½åŠ›ã«ã‚ˆã£ã¦ä½“åŠ›ãŒå›å¾©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Vampirism True";
 		if (desc) return "Fires 3 bolts. Each of the bolts absorbs some HP from a monster and gives them to you.";
@@ -4861,8 +4861,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "»à¤Î¸Àº²";
-		if (desc) return "»ë³¦Æâ¤ÎÀ¸Ì¿¤Î¤¢¤ë¥â¥ó¥¹¥¿¡¼¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "æ­»ã®è¨€é­‚";
+		if (desc) return "è¦–ç•Œå†…ã®ç”Ÿå‘½ã®ã‚ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Nether Wave";
 		if (desc) return "Damages all living monsters in sight.";
@@ -4882,8 +4882,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "°Å¹õ¤ÎÍò";
-		if (desc) return "µğÂç¤Ê°Å¹õ¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "æš—é»’ã®åµ";
+		if (desc) return "å·¨å¤§ãªæš—é»’ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Darkness Storm";
 		if (desc) return "Fires a huge ball of darkness.";
@@ -4906,8 +4906,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "»à¤Î¸÷Àş";
-		if (desc) return "»à¤Î¸÷Àş¤òÊü¤Ä¡£";
+		if (name) return "æ­»ã®å…‰ç·š";
+		if (desc) return "æ­»ã®å…‰ç·šã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Death Ray";
 		if (desc) return "Fires a beam of death.";
@@ -4925,8 +4925,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "»à¼Ô¾¤´­";
-		if (desc) return "1ÂÎ¤Î¥¢¥ó¥Ç¥Ã¥É¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "æ­»è€…å¬å–š";
+		if (desc) return "1ä½“ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Raise the Dead";
 		if (desc) return "Summons an undead monster.";
@@ -4950,7 +4950,7 @@ static cptr do_death_spell(int spell, int mode)
 				if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, type, mode))
 				{
 #ifdef JP
-					msg_print("Îä¤¿¤¤É÷¤¬¤¢¤Ê¤¿¤Î¼ş¤ê¤Ë¿á¤­»Ï¤á¤¿¡£¤½¤ì¤ÏÉåÇÔ½­¤ò±¿¤ó¤Ç¤¤¤ë...");
+					msg_print("å†·ãŸã„é¢¨ãŒã‚ãªãŸã®å‘¨ã‚Šã«å¹ãå§‹ã‚ãŸã€‚ãã‚Œã¯è…æ•—è‡­ã‚’é‹ã‚“ã§ã„ã‚‹...");
 #else
 					msg_print("Cold winds begin to blow around you, carrying with them the stench of decay...");
 #endif
@@ -4959,7 +4959,7 @@ static cptr do_death_spell(int spell, int mode)
 					if (pet)
 					{
 #ifdef JP
-						msg_print("¸Å¤¨¤Î»à¤»¤ë¼Ô¶¦¤¬¤¢¤Ê¤¿¤Ë»Å¤¨¤ë¤¿¤áÅÚ¤«¤éá´¤Ã¤¿¡ª");
+						msg_print("å¤ãˆã®æ­»ã›ã‚‹è€…å…±ãŒã‚ãªãŸã«ä»•ãˆã‚‹ãŸã‚åœŸã‹ã‚‰ç”¦ã£ãŸï¼");
 #else
 						msg_print("Ancient, long-dead forms arise from the ground to serve you!");
 #endif
@@ -4967,7 +4967,7 @@ static cptr do_death_spell(int spell, int mode)
 					else
 					{
 #ifdef JP
-						msg_print("»à¼Ô¤¬á´¤Ã¤¿¡£Ì²¤ê¤òË¸¤²¤ë¤¢¤Ê¤¿¤òÈ³¤¹¤ë¤¿¤á¤Ë¡ª");
+						msg_print("æ­»è€…ãŒç”¦ã£ãŸã€‚çœ ã‚Šã‚’å¦¨ã’ã‚‹ã‚ãªãŸã‚’ç½°ã™ã‚‹ãŸã‚ã«ï¼");
 #else
 						msg_print("'The dead arise... to punish you for disturbing them!'");
 #endif
@@ -4981,8 +4981,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "»à¼Ô¤ÎÈëÅÁ";
-		if (desc) return "¥¢¥¤¥Æ¥à¤ò1¤Ä¼±ÊÌ¤¹¤ë¡£¥ì¥Ù¥ë¤¬¹â¤¤¤È¥¢¥¤¥Æ¥à¤ÎÇ½ÎÏ¤ò´°Á´¤ËÃÎ¤ë¤³¤È¤¬¤Ç¤­¤ë¡£";
+		if (name) return "æ­»è€…ã®ç§˜ä¼";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã‚’1ã¤è­˜åˆ¥ã™ã‚‹ã€‚ãƒ¬ãƒ™ãƒ«ãŒé«˜ã„ã¨ã‚¢ã‚¤ãƒ†ãƒ ã®èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚";
 #else
 		if (name) return "Esoteria";
 		if (desc) return "Identifies an item. Or *identifies* an item at higher level.";
@@ -5005,8 +5005,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "µÛ·ìµ´ÊÑ²½";
-		if (desc) return "°ìÄê»ş´Ö¡¢µÛ·ìµ´¤ËÊÑ²½¤¹¤ë¡£ÊÑ²½¤·¤Æ¤¤¤ë´Ö¤ÏËÜÍè¤Î¼ïÂ²¤ÎÇ½ÎÏ¤ò¼º¤¤¡¢Âå¤ï¤ê¤ËµÛ·ìµ´¤È¤·¤Æ¤ÎÇ½ÎÏ¤òÆÀ¤ë¡£";
+		if (name) return "å¸è¡€é¬¼å¤‰åŒ–";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€å¸è¡€é¬¼ã«å¤‰åŒ–ã™ã‚‹ã€‚å¤‰åŒ–ã—ã¦ã„ã‚‹é–“ã¯æœ¬æ¥ã®ç¨®æ—ã®èƒ½åŠ›ã‚’å¤±ã„ã€ä»£ã‚ã‚Šã«å¸è¡€é¬¼ã¨ã—ã¦ã®èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Polymorph Vampire";
 		if (desc) return "Mimic a vampire for a while. Loses abilities of original race and gets abilities as a vampire.";
@@ -5026,8 +5026,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "·Ğ¸³ÃÍÉü³è";
-		if (desc) return "¼º¤Ã¤¿·Ğ¸³ÃÍ¤ò²óÉü¤¹¤ë¡£";
+		if (name) return "çµŒé¨“å€¤å¾©æ´»";
+		if (desc) return "å¤±ã£ãŸçµŒé¨“å€¤ã‚’å›å¾©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Restore Life";
 		if (desc) return "Restore lost experience.";
@@ -5043,8 +5043,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "¼şÊÕËõ»¦";
-		if (desc) return "¼«Ê¬¤Î¼ş°Ï¤Ë¤¤¤ë¥â¥ó¥¹¥¿¡¼¤ò¸½ºß¤Î³¬¤«¤é¾Ã¤·µî¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "å‘¨è¾ºæŠ¹æ®º";
+		if (desc) return "è‡ªåˆ†ã®å‘¨å›²ã«ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ç¾åœ¨ã®éšã‹ã‚‰æ¶ˆã—å»ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Mass Genocide";
 		if (desc) return "Eliminates all nearby monsters, exhausting you.  Powerful or unique monsters may be able to resist.";
@@ -5064,8 +5064,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "ÃÏ¹ö¤Î¹å²Ğ";
-		if (desc) return "¼Ù°­¤ÊÎÏ¤ò»ı¤ÄÊõ¼î¤òÊü¤Ä¡£Á±ÎÉ¤Ê¥â¥ó¥¹¥¿¡¼¤Ë¤ÏÂç¤­¤Ê¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "åœ°ç„ã®åŠ«ç«";
+		if (desc) return "é‚ªæ‚ªãªåŠ›ã‚’æŒã¤å®ç ã‚’æ”¾ã¤ã€‚å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Hellfire";
 		if (desc) return "Fires a powerful ball of evil power. Hurts good monsters greatly.";
@@ -5083,7 +5083,7 @@ static cptr do_death_spell(int spell, int mode)
 
 				fire_ball(GF_HELL_FIRE, dir, dam, rad);
 #ifdef JP
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "ÃÏ¹ö¤Î¹å²Ğ¤Î¼öÊ¸¤ò¾§¤¨¤¿ÈèÏ«", -1);
+				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "åœ°ç„ã®åŠ«ç«ã®å‘ªæ–‡ã‚’å”±ãˆãŸç–²åŠ´", -1);
 #else
 				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "the strain of casting Hellfire", -1);
 #endif
@@ -5093,8 +5093,8 @@ static cptr do_death_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "Í©ÂÎ²½";
-		if (desc) return "°ìÄê»ş´Ö¡¢ÊÉ¤òÄÌ¤êÈ´¤±¤ë¤³¤È¤¬¤Ç¤­¼õ¤±¤ë¥À¥á¡¼¥¸¤¬·Ú¸º¤µ¤ì¤ëÍ©ÂÎ¤Î¾õÂÖ¤ËÊÑ¿È¤¹¤ë¡£";
+		if (name) return "å¹½ä½“åŒ–";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€å£ã‚’é€šã‚ŠæŠœã‘ã‚‹ã“ã¨ãŒã§ãå—ã‘ã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒè»½æ¸›ã•ã‚Œã‚‹å¹½ä½“ã®çŠ¶æ…‹ã«å¤‰èº«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Wraithform";
 		if (desc) return "Becomes wraith form which gives ability to pass walls and makes all damages half.";
@@ -5118,10 +5118,10 @@ static cptr do_death_spell(int spell, int mode)
 
 
 /*!
- * @brief ¥È¥é¥ó¥×ÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief ãƒˆãƒ©ãƒ³ãƒ—é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_trump_spell(int spell, int mode)
 {
@@ -5132,7 +5132,7 @@ static cptr do_trump_spell(int spell, int mode)
 	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
 
 #ifdef JP
-	static const char s_random[] = "¥é¥ó¥À¥à";
+	static const char s_random[] = "ãƒ©ãƒ³ãƒ€ãƒ ";
 #else
 	static const char s_random[] = "random";
 #endif
@@ -5144,8 +5144,8 @@ static cptr do_trump_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "¥·¥ç¡¼¥È¡¦¥Æ¥ì¥İ¡¼¥È";
-		if (desc) return "¶áµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£";
+		if (name) return "ã‚·ãƒ§ãƒ¼ãƒˆãƒ»ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ";
+		if (desc) return "è¿‘è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚";
 #else
 		if (name) return "Phase Door";
 		if (desc) return "Teleport short distance.";
@@ -5165,8 +5165,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "ÃØéá¤Î¥«¡¼¥É";
-		if (desc) return "ÃØéá¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "èœ˜è››ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "èœ˜è››ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Spiders";
 		if (desc) return "Summons spiders.";
@@ -5176,7 +5176,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast || fail)
 			{
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤ÏÃØéá¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯èœ˜è››ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of an spider...");
 #endif
@@ -5186,7 +5186,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿ÃØéá¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸèœ˜è››ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned spiders get angry!");
 #endif
@@ -5198,8 +5198,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "¥·¥ã¥Ã¥Õ¥ë";
-		if (desc) return "¥«¡¼¥É¤ÎÀê¤¤¤ò¤¹¤ë¡£";
+		if (name) return "ã‚·ãƒ£ãƒƒãƒ•ãƒ«";
+		if (desc) return "ã‚«ãƒ¼ãƒ‰ã®å ã„ã‚’ã™ã‚‹ã€‚";
 #else
 		if (name) return "Shuffle";
 		if (desc) return "Causes random effects.";
@@ -5217,8 +5217,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "¥Õ¥í¥¢¡¦¥ê¥»¥Ã¥È";
-		if (desc) return "ºÇ¿¼³¬¤òÊÑ¹¹¤¹¤ë¡£";
+		if (name) return "ãƒ•ãƒ­ã‚¢ãƒ»ãƒªã‚»ãƒƒãƒˆ";
+		if (desc) return "æœ€æ·±éšã‚’å¤‰æ›´ã™ã‚‹ã€‚";
 #else
 		if (name) return "Reset Recall";
 		if (desc) return "Resets the 'deepest' level for recall spell.";
@@ -5234,8 +5234,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È";
-		if (desc) return "±óµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ";
+		if (desc) return "é è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚";
 #else
 		if (name) return "Teleport";
 		if (desc) return "Teleport long distance.";
@@ -5255,8 +5255,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "´¶ÃÎ¤Î¥«¡¼¥É";
-		if (desc) return "°ìÄê»ş´Ö¡¢¥Æ¥ì¥Ñ¥·¡¼Ç½ÎÏ¤òÆÀ¤ë¡£";
+		if (name) return "æ„ŸçŸ¥ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Trump Spying";
 		if (desc) return "Gives telepathy for a while.";
@@ -5277,8 +5277,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È¡¦¥â¥ó¥¹¥¿¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¥Ó¡¼¥à¤òÊü¤Ä¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Teleport Away";
 		if (desc) return "Teleports all monsters on the line away unless resisted.";
@@ -5300,8 +5300,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "Æ°Êª¤Î¥«¡¼¥É";
-		if (desc) return "1ÂÎ¤ÎÆ°Êª¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "å‹•ç‰©ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ä½“ã®å‹•ç‰©ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Animals";
 		if (desc) return "Summons an animal.";
@@ -5313,7 +5313,7 @@ static cptr do_trump_spell(int spell, int mode)
 				int type = (!fail ? SUMMON_ANIMAL_RANGER : SUMMON_ANIMAL);
 
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤ÏÆ°Êª¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯å‹•ç‰©ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of an animal...");
 #endif
@@ -5323,7 +5323,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿Æ°Êª¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸå‹•ç‰©ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned animal gets angry!");
 #endif
@@ -5335,8 +5335,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "°ÜÆ°¤Î¥«¡¼¥É";
-		if (desc) return "¥¢¥¤¥Æ¥à¤ò¼«Ê¬¤ÎÂ­¸µ¤Ø°ÜÆ°¤µ¤»¤ë¡£";
+		if (name) return "ç§»å‹•ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã‚’è‡ªåˆ†ã®è¶³å…ƒã¸ç§»å‹•ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Trump Reach";
 		if (desc) return "Pulls a distant item close to you.";
@@ -5358,8 +5358,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "¥«¥ß¥«¥¼¤Î¥«¡¼¥É";
-		if (desc) return "Ê£¿ô¤ÎÇúÈ¯¤¹¤ë¥â¥ó¥¹¥¿¡¼¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "ã‚«ãƒŸã‚«ã‚¼ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "è¤‡æ•°ã®çˆ†ç™ºã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Kamikaze";
 		if (desc) return "Summons monsters which explode by itself.";
@@ -5390,7 +5390,7 @@ static cptr do_trump_spell(int spell, int mode)
 					type = SUMMON_KAMIKAZE;
 
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¥«¥ß¥«¥¼¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯ã‚«ãƒŸã‚«ã‚¼ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on several trumps at once...");
 #endif
@@ -5400,7 +5400,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿¥â¥ó¥¹¥¿¡¼¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned creatures get angry!");
 #endif
@@ -5412,8 +5412,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "¸¸Îî¾¤´­";
-		if (desc) return "1ÂÎ¤ÎÍ©Îî¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "å¹»éœŠå¬å–š";
+		if (desc) return "1ä½“ã®å¹½éœŠã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Phantasmal Servant";
 		if (desc) return "Summons a ghost.";
@@ -5428,7 +5428,7 @@ static cptr do_trump_spell(int spell, int mode)
 				if (trump_summoning(1, !fail, py, px, (summon_lev * 3 / 2), SUMMON_PHANTOM, 0L))
 				{
 #ifdef JP
-					msg_print("¸æÍÑ¤Ç¤´¤¶¤¤¤Ş¤¹¤«¡¢¸æ¼ç¿ÍÍÍ¡©");
+					msg_print("å¾¡ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€å¾¡ä¸»äººæ§˜ï¼Ÿ");
 #else
 					msg_print("'Your wish, master?'");
 #endif
@@ -5439,8 +5439,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "¥¹¥Ô¡¼¥É¡¦¥â¥ó¥¹¥¿¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤ò²ÃÂ®¤µ¤»¤ë¡£";
+		if (name) return "ã‚¹ãƒ”ãƒ¼ãƒ‰ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’åŠ é€Ÿã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Haste Monster";
 		if (desc) return "Hastes a monster.";
@@ -5469,8 +5469,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È¡¦¥ì¥Ù¥ë";
-		if (desc) return "½Ö»ş¤Ë¾å¤«²¼¤Î³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤¹¤ë¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¬ãƒ™ãƒ«";
+		if (desc) return "ç¬æ™‚ã«ä¸Šã‹ä¸‹ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚";
 #else
 		if (name) return "Teleport Level";
 		if (desc) return "Teleport to up or down stairs in a moment.";
@@ -5480,7 +5480,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				if (!get_check("ËÜÅö¤ËÂ¾¤Î³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤·¤Ş¤¹¤«¡©")) return NULL;
+				if (!get_check("æœ¬å½“ã«ä»–ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ")) return NULL;
 #else
 				if (!get_check("Are you sure? (Teleport Level)")) return NULL;
 #endif
@@ -5491,8 +5491,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "¼¡¸µ¤ÎÈâ";
-		if (desc) return "Ã»µ÷Î¥Æâ¤Î»ØÄê¤·¤¿¾ì½ê¤Ë¥Æ¥ì¥İ¡¼¥È¤¹¤ë¡£";
+		if (name) return "æ¬¡å…ƒã®æ‰‰";
+		if (desc) return "çŸ­è·é›¢å†…ã®æŒ‡å®šã—ãŸå ´æ‰€ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚";
 #else
 		if (name) return "Dimension Door";
 		if (desc) return "Teleport to given location.";
@@ -5506,7 +5506,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				msg_print("¼¡¸µ¤ÎÈâ¤¬³«¤¤¤¿¡£ÌÜÅªÃÏ¤òÁª¤ó¤Ç²¼¤µ¤¤¡£");
+				msg_print("æ¬¡å…ƒã®æ‰‰ãŒé–‹ã„ãŸã€‚ç›®çš„åœ°ã‚’é¸ã‚“ã§ä¸‹ã•ã„ã€‚");
 #else
 				msg_print("You open a dimensional gate. Choose a destination.");
 #endif
@@ -5518,8 +5518,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "µ¢´Ô¤Î¼öÊ¸";
-		if (desc) return "ÃÏ¾å¤Ë¤¤¤ë¤È¤­¤Ï¥À¥ó¥¸¥ç¥ó¤ÎºÇ¿¼³¬¤Ø¡¢¥À¥ó¥¸¥ç¥ó¤Ë¤¤¤ë¤È¤­¤ÏÃÏ¾å¤Ø¤È°ÜÆ°¤¹¤ë¡£";
+		if (name) return "å¸°é‚„ã®å‘ªæ–‡";
+		if (desc) return "åœ°ä¸Šã«ã„ã‚‹ã¨ãã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®æœ€æ·±éšã¸ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«ã„ã‚‹ã¨ãã¯åœ°ä¸Šã¸ã¨ç§»å‹•ã™ã‚‹ã€‚";
 #else
 		if (name) return "Word of Recall";
 		if (desc) return "Recalls player from dungeon to town, or from town to the deepest level of dungeon.";
@@ -5540,8 +5540,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "²øÊªÄÉÊü";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "æ€ªç‰©è¿½æ”¾";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Banish";
 		if (desc) return "Teleports all monsters in sight away unless resisted.";
@@ -5561,8 +5561,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "°ÌÃÖ¸ò´¹¤Î¥«¡¼¥É";
-		if (desc) return "1ÂÎ¤Î¥â¥ó¥¹¥¿¡¼¤È°ÌÃÖ¤ò¸ò´¹¤¹¤ë¡£";
+		if (name) return "ä½ç½®äº¤æ›ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¨ä½ç½®ã‚’äº¤æ›ã™ã‚‹ã€‚";
 #else
 		if (name) return "Swap Position";
 		if (desc) return "Swap positions of you and a monster.";
@@ -5590,8 +5590,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "¥¢¥ó¥Ç¥Ã¥É¤Î¥«¡¼¥É";
-		if (desc) return "1ÂÎ¤Î¥¢¥ó¥Ç¥Ã¥É¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ä½“ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Undead";
 		if (desc) return "Summons an undead monster.";
@@ -5601,7 +5601,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast || fail)
 			{
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¥¢¥ó¥Ç¥Ã¥É¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of an undead creature...");
 #endif
@@ -5611,7 +5611,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿¥¢¥ó¥Ç¥Ã¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned undead creature gets angry!");
 #endif
@@ -5623,8 +5623,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "à¨ÃîÎà¤Î¥«¡¼¥É";
-		if (desc) return "1ÂÎ¤Î¥Ò¥É¥é¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "çˆ¬è™«é¡ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ä½“ã®ãƒ’ãƒ‰ãƒ©ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Reptiles";
 		if (desc) return "Summons a hydra.";
@@ -5634,7 +5634,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast || fail)
 			{
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ïà¨ÃîÎà¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯çˆ¬è™«é¡ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of a reptile...");
 #endif
@@ -5644,7 +5644,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿à¨ÃîÎà¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸçˆ¬è™«é¡ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned reptile gets angry!");
 #endif
@@ -5656,8 +5656,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "¥â¥ó¥¹¥¿¡¼¤Î¥«¡¼¥É";
-		if (desc) return "Ê£¿ô¤Î¥â¥ó¥¹¥¿¡¼¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "è¤‡æ•°ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Monsters";
 		if (desc) return "Summons some monsters.";
@@ -5669,7 +5669,7 @@ static cptr do_trump_spell(int spell, int mode)
 				int type;
 
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¥â¥ó¥¹¥¿¡¼¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on several trumps at once...");
 #endif
@@ -5684,7 +5684,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿¥â¥ó¥¹¥¿¡¼¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned creatures get angry!");
 #endif
@@ -5697,8 +5697,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "¥Ï¥¦¥ó¥É¤Î¥«¡¼¥É";
-		if (desc) return "1¥°¥ë¡¼¥×¤Î¥Ï¥¦¥ó¥É¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "ãƒã‚¦ãƒ³ãƒ‰ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒã‚¦ãƒ³ãƒ‰ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Hounds";
 		if (desc) return "Summons a group of hounds.";
@@ -5708,7 +5708,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast || fail)
 			{
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¥Ï¥¦¥ó¥É¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯ãƒã‚¦ãƒ³ãƒ‰ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of a hound...");
 #endif
@@ -5718,7 +5718,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿¥Ï¥¦¥ó¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸãƒã‚¦ãƒ³ãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned hounds get angry!");
 #endif
@@ -5730,8 +5730,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "¥È¥é¥ó¥×¤Î¿Ï";
-		if (desc) return "Éğ´ï¤Ë¥È¥é¥ó¥×¤ÎÂ°À­¤ò¤Ä¤±¤ë¡£";
+		if (name) return "ãƒˆãƒ©ãƒ³ãƒ—ã®åˆƒ";
+		if (desc) return "æ­¦å™¨ã«ãƒˆãƒ©ãƒ³ãƒ—ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Trump Branding";
 		if (desc) return "Makes current weapon a Trump weapon.";
@@ -5747,8 +5747,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "¿Í´Ö¥È¥é¥ó¥×";
-		if (desc) return "¥é¥ó¥À¥à¤Ë¥Æ¥ì¥İ¡¼¥È¤¹¤ëÆÍÁ³ÊÑ°Û¤«¡¢¼«Ê¬¤Î°Õ»×¤Ç¥Æ¥ì¥İ¡¼¥È¤¹¤ëÆÍÁ³ÊÑ°Û¤¬¿È¤Ë¤Ä¤¯¡£";
+		if (name) return "äººé–“ãƒˆãƒ©ãƒ³ãƒ—";
+		if (desc) return "ãƒ©ãƒ³ãƒ€ãƒ ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹çªç„¶å¤‰ç•°ã‹ã€è‡ªåˆ†ã®æ„æ€ã§ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹çªç„¶å¤‰ç•°ãŒèº«ã«ã¤ãã€‚";
 #else
 		if (name) return "Living Trump";
 		if (desc) return "Gives mutation which makes you teleport randomly or makes you able to teleport at will.";
@@ -5770,7 +5770,7 @@ static cptr do_trump_spell(int spell, int mode)
 				if (gain_random_mutation(mutation))
 				{
 #ifdef JP
-					msg_print("¤¢¤Ê¤¿¤ÏÀ¸¤­¤Æ¤¤¤ë¥«¡¼¥É¤ËÊÑ¤ï¤Ã¤¿¡£");
+					msg_print("ã‚ãªãŸã¯ç”Ÿãã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰ã«å¤‰ã‚ã£ãŸã€‚");
 #else
 					msg_print("You have turned into a Living Trump.");
 #endif
@@ -5781,8 +5781,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¤Î¥«¡¼¥É";
-		if (desc) return "1ÂÎ¤Î¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "ã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ä½“ã®ã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Cyberdemon";
 		if (desc) return "Summons a cyber demon.";
@@ -5792,7 +5792,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast || fail)
 			{
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯ã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of a Cyberdemon...");
 #endif
@@ -5802,7 +5802,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned Cyberdemon gets angry!");
 #endif
@@ -5814,8 +5814,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "Í½¸«¤Î¥«¡¼¥É";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¡¢æ«¡¢Èâ¡¢³¬ÃÊ¡¢ºâÊõ¡¢¤½¤·¤Æ¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "äºˆè¦‹ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€ç½ ã€æ‰‰ã€éšæ®µã€è²¡å®ã€ãã—ã¦ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Divination";
 		if (desc) return "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.";
@@ -5835,8 +5835,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "ÃÎ¼±¤Î¥«¡¼¥É";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Î»ı¤ÄÇ½ÎÏ¤ò´°Á´¤ËÃÎ¤ë¡£";
+		if (name) return "çŸ¥è­˜ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚";
 #else
 		if (name) return "Trump Lore";
 		if (desc) return "*Identifies* an item.";
@@ -5852,8 +5852,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "²óÉü¥â¥ó¥¹¥¿¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤ÎÂÎÎÏ¤ò²óÉü¤µ¤»¤ë¡£";
+		if (name) return "å›å¾©ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã®ä½“åŠ›ã‚’å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Heal Monster";
 		if (desc) return "Heal a monster.";
@@ -5886,8 +5886,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "¥É¥é¥´¥ó¤Î¥«¡¼¥É";
-		if (desc) return "1ÂÎ¤Î¥É¥é¥´¥ó¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ä½“ã®ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Dragon";
 		if (desc) return "Summons a dragon.";
@@ -5897,7 +5897,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast || fail)
 			{
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¥É¥é¥´¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of a dragon...");
 #endif
@@ -5907,7 +5907,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿¥É¥é¥´¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸãƒ‰ãƒ©ã‚´ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned dragon gets angry!");
 #endif
@@ -5919,8 +5919,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "ğ¨ÀĞ¤Î¥«¡¼¥É";
-		if (desc) return "¼«Ê¬¤Î¼şÊÕ¤Ëğ¨ÀĞ¤òÍî¤È¤¹¡£";
+		if (name) return "éš•çŸ³ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "è‡ªåˆ†ã®å‘¨è¾ºã«éš•çŸ³ã‚’è½ã¨ã™ã€‚";
 #else
 		if (name) return "Trump Meteor";
 		if (desc) return "Makes meteor balls fall down to nearby random locations.";
@@ -5941,8 +5941,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "¥Ç¡¼¥â¥ó¤Î¥«¡¼¥É";
-		if (desc) return "1ÂÎ¤Î°­Ëâ¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "ãƒ‡ãƒ¼ãƒ¢ãƒ³ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ä½“ã®æ‚ªé­”ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Demon";
 		if (desc) return "Summons a demon.";
@@ -5952,7 +5952,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast || fail)
 			{
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¥Ç¡¼¥â¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯ãƒ‡ãƒ¼ãƒ¢ãƒ³ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of a demon...");
 #endif
@@ -5962,7 +5962,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿¥Ç¡¼¥â¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸãƒ‡ãƒ¼ãƒ¢ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned demon gets angry!");
 #endif
@@ -5974,8 +5974,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "ÃÏ¹ö¤Î¥«¡¼¥É";
-		if (desc) return "1ÂÎ¤Î¾åµé¥¢¥ó¥Ç¥Ã¥É¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "åœ°ç„ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ä½“ã®ä¸Šç´šã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Greater Undead";
 		if (desc) return "Summons a greater undead.";
@@ -5985,7 +5985,7 @@ static cptr do_trump_spell(int spell, int mode)
 			if (cast || fail)
 			{
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¶¯ÎÏ¤Ê¥¢¥ó¥Ç¥Ã¥É¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯å¼·åŠ›ãªã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of a greater undead being...");
 #endif
@@ -5995,7 +5995,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿¾åµé¥¢¥ó¥Ç¥Ã¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸä¸Šç´šã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned greater undead creature gets angry!");
 #endif
@@ -6007,8 +6007,8 @@ static cptr do_trump_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "¸ÅÂå¥É¥é¥´¥ó¤Î¥«¡¼¥É";
-		if (desc) return "1ÂÎ¤Î¸ÅÂå¥É¥é¥´¥ó¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "å¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚«ãƒ¼ãƒ‰";
+		if (desc) return "1ä½“ã®å¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trump Ancient Dragon";
 		if (desc) return "Summons an ancient dragon.";
@@ -6025,7 +6025,7 @@ static cptr do_trump_spell(int spell, int mode)
 					type = SUMMON_HI_DRAGON;
 
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¸ÅÂå¥É¥é¥´¥ó¤Î¥«¡¼¥É¤Ë½¸Ãæ¤¹¤ë...");
+				msg_print("ã‚ãªãŸã¯å¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...");
 #else
 				msg_print("You concentrate on the trump of an ancient dragon...");
 #endif
@@ -6036,7 +6036,7 @@ static cptr do_trump_spell(int spell, int mode)
 					if (fail)
 					{
 #ifdef JP
-						msg_print("¾¤´­¤µ¤ì¤¿¸ÅÂå¥É¥é¥´¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª");
+						msg_print("å¬å–šã•ã‚ŒãŸå¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼");
 #else
 						msg_print("The summoned ancient dragon gets angry!");
 #endif
@@ -6052,10 +6052,10 @@ static cptr do_trump_spell(int spell, int mode)
 
 
 /*!
- * @brief Èë½ÑÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief ç§˜è¡“é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_arcane_spell(int spell, int mode)
 {
@@ -6071,8 +6071,8 @@ static cptr do_arcane_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "ÅÅ·â";
-		if (desc) return "ÅÅ·â¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "é›»æ’ƒ";
+		if (desc) return "é›»æ’ƒã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Zap";
 		if (desc) return "Fires a bolt or beam of lightning.";
@@ -6095,8 +6095,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "ËâË¡¤Î»Ü¾û";
-		if (desc) return "Èâ¤Ë¸°¤ò¤«¤±¤ë¡£";
+		if (name) return "é­”æ³•ã®æ–½éŒ ";
+		if (desc) return "æ‰‰ã«éµã‚’ã‹ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Wizard Lock";
 		if (desc) return "Locks a door.";
@@ -6114,8 +6114,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "Æ©ÌÀÂÎ´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÆ©ÌÀ¤Ê¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "é€æ˜ä½“æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®é€æ˜ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Invisibility";
 		if (desc) return "Detects all invisible monsters in your vicinity.";
@@ -6135,8 +6135,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "¥â¥ó¥¹¥¿¡¼´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¸«¤¨¤ë¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®è¦‹ãˆã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Monsters";
 		if (desc) return "Detects all monsters in your vicinity unless invisible.";
@@ -6156,8 +6156,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "¥·¥ç¡¼¥È¡¦¥Æ¥ì¥İ¡¼¥È";
-		if (desc) return "¶áµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£";
+		if (name) return "ã‚·ãƒ§ãƒ¼ãƒˆãƒ»ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ";
+		if (desc) return "è¿‘è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚";
 #else
 		if (name) return "Blink";
 		if (desc) return "Teleport short distance.";
@@ -6177,8 +6177,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "¥é¥¤¥È¡¦¥¨¥ê¥¢";
-		if (desc) return "¸÷¸»¤¬¾È¤é¤·¤Æ¤¤¤ëÈÏ°Ï¤«Éô²°Á´ÂÎ¤ò±Êµ×¤ËÌÀ¤ë¤¯¤¹¤ë¡£";
+		if (name) return "ãƒ©ã‚¤ãƒˆãƒ»ã‚¨ãƒªã‚¢";
+		if (desc) return "å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚";
 #else
 		if (name) return "Light Area";
 		if (desc) return "Lights up nearby area and the inside of a room permanently.";
@@ -6200,8 +6200,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "æ«¤ÈÈâ ÇË²õ";
-		if (desc) return "°ìÄ¾Àş¾å¤ÎÁ´¤Æ¤Îæ«¤ÈÈâ¤òÇË²õ¤¹¤ë¡£";
+		if (name) return "ç½ ã¨æ‰‰ ç ´å£Š";
+		if (desc) return "ä¸€ç›´ç·šä¸Šã®å…¨ã¦ã®ç½ ã¨æ‰‰ã‚’ç ´å£Šã™ã‚‹ã€‚";
 #else
 		if (name) return "Trap & Door Destruction";
 		if (desc) return "Fires a beam which destroy traps and doors.";
@@ -6219,8 +6219,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "·Ú½ı¤Î¼£Ìş";
-		if (desc) return "²ø²æ¤ÈÂÎÎÏ¤ò¾¯¤·²óÉü¤µ¤»¤ë¡£";
+		if (name) return "è»½å‚·ã®æ²»ç™’";
+		if (desc) return "æ€ªæˆ‘ã¨ä½“åŠ›ã‚’å°‘ã—å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Cure Light Wounds";
 		if (desc) return "Heals cut and HP a little.";
@@ -6242,8 +6242,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "æ«¤ÈÈâ ´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Îæ«¤ÈÈâ¤È³¬ÃÊ¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ç½ ã¨æ‰‰ æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ç½ ã¨æ‰‰ã¨éšæ®µã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Doors & Traps";
 		if (desc) return "Detects traps, doors, and stairs in your vicinity.";
@@ -6265,8 +6265,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "Ç³ÁÇ";
-		if (desc) return "¸÷¸»¤ËÇ³ÎÁ¤òÊäµë¤¹¤ë¡£";
+		if (name) return "ç‡ƒç´ ";
+		if (desc) return "å…‰æºã«ç‡ƒæ–™ã‚’è£œçµ¦ã™ã‚‹ã€‚";
 #else
 		if (name) return "Phlogiston";
 		if (desc) return "Adds more turns of light to a lantern or torch.";
@@ -6282,8 +6282,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "ºâÊõ´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎºâÊõ¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "è²¡å®æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®è²¡å®ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Treasure";
 		if (desc) return "Detects all treasures in your vicinity.";
@@ -6304,8 +6304,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "ËâË¡ ´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎËâË¡¤¬¤«¤«¤Ã¤¿¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "é­”æ³• æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®é­”æ³•ãŒã‹ã‹ã£ãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Enchantment";
 		if (desc) return "Detects all magical items in your vicinity.";
@@ -6325,8 +6325,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "¥¢¥¤¥Æ¥à´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ã‚¢ã‚¤ãƒ†ãƒ æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Objects";
 		if (desc) return "Detects all items in your vicinity.";
@@ -6346,8 +6346,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "²òÆÇ";
-		if (desc) return "ÆÇ¤òÂÎÆâ¤«¤é´°Á´¤Ë¼è¤ê½ü¤¯¡£";
+		if (name) return "è§£æ¯’";
+		if (desc) return "æ¯’ã‚’ä½“å†…ã‹ã‚‰å®Œå…¨ã«å–ã‚Šé™¤ãã€‚";
 #else
 		if (name) return "Cure Poison";
 		if (desc) return "Cures poison status.";
@@ -6363,8 +6363,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "ÂÑÎä";
-		if (desc) return "°ìÄê»ş´Ö¡¢Îäµ¤¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€å†·";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€å†·æ°—ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Cold";
 		if (desc) return "Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.";
@@ -6384,8 +6384,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "ÂÑ²Ğ";
-		if (desc) return "°ìÄê»ş´Ö¡¢±ê¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€ç«";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ç‚ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Fire";
 		if (desc) return "Gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.";
@@ -6405,8 +6405,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "ÂÑÅÅ";
-		if (desc) return "°ìÄê»ş´Ö¡¢ÅÅ·â¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€é›»";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é›»æ’ƒã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Lightning";
 		if (desc) return "Gives resistance to electricity. This resistance can be added to which from equipment for more powerful resistance.";
@@ -6426,8 +6426,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "ÂÑ»À";
-		if (desc) return "°ìÄê»ş´Ö¡¢»À¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€é…¸";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é…¸ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Acid";
 		if (desc) return "Gives resistance to acid. This resistance can be added to which from equipment for more powerful resistance.";
@@ -6447,8 +6447,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "½Å½ı¤Î¼£Ìş";
-		if (desc) return "²ø²æ¤ÈÂÎÎÏ¤òÃæÄøÅÙ²óÉü¤µ¤»¤ë¡£";
+		if (name) return "é‡å‚·ã®æ²»ç™’";
+		if (desc) return "æ€ªæˆ‘ã¨ä½“åŠ›ã‚’ä¸­ç¨‹åº¦å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Cure Medium Wounds";
 		if (desc) return "Heals cut and HP more.";
@@ -6470,8 +6470,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È";
-		if (desc) return "±óµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ";
+		if (desc) return "é è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚";
 #else
 		if (name) return "Teleport";
 		if (desc) return "Teleport long distance.";
@@ -6491,8 +6491,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "´ÕÄê";
-		if (desc) return "¥¢¥¤¥Æ¥à¤ò¼±ÊÌ¤¹¤ë¡£";
+		if (name) return "é‘‘å®š";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã‚’è­˜åˆ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Identify";
 		if (desc) return "Identifies an item.";
@@ -6508,8 +6508,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "´äÀĞÍÏ²ò";
-		if (desc) return "ÊÉ¤òÍÏ¤«¤·¤Æ¾²¤Ë¤¹¤ë¡£";
+		if (name) return "å²©çŸ³æº¶è§£";
+		if (desc) return "å£ã‚’æº¶ã‹ã—ã¦åºŠã«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Stone to Mud";
 		if (desc) return "Turns one rock square to mud.";
@@ -6533,8 +6533,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "Á®¸÷";
-		if (desc) return "¸÷Àş¤òÊü¤Ä¡£¸÷¤ê¤ò·ù¤¦¥â¥ó¥¹¥¿¡¼¤Ë¸ú²Ì¤¬¤¢¤ë¡£";
+		if (name) return "é–ƒå…‰";
+		if (desc) return "å…‰ç·šã‚’æ”¾ã¤ã€‚å…‰ã‚Šã‚’å«Œã†ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«åŠ¹æœãŒã‚ã‚‹ã€‚";
 #else
 		if (name) return "Ray of Light";
 		if (desc) return "Fires a beam of light which damages to light-sensitive monsters.";
@@ -6551,7 +6551,7 @@ static cptr do_arcane_spell(int spell, int mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 #ifdef JP
-				msg_print("¸÷Àş¤¬Êü¤¿¤ì¤¿¡£");
+				msg_print("å…‰ç·šãŒæ”¾ãŸã‚ŒãŸã€‚");
 #else
 				msg_print("A line of light appears.");
 #endif
@@ -6563,8 +6563,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "¶õÊ¢½¼Â­";
-		if (desc) return "ËşÊ¢¤Ë¤¹¤ë¡£";
+		if (name) return "ç©ºè…¹å……è¶³";
+		if (desc) return "æº€è…¹ã«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Satisfy Hunger";
 		if (desc) return "Satisfies hunger.";
@@ -6580,8 +6580,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "Æ©ÌÀ»ëÇ§";
-		if (desc) return "°ìÄê»ş´Ö¡¢Æ©ÌÀ¤Ê¤â¤Î¤¬¸«¤¨¤ë¤è¤¦¤Ë¤Ê¤ë¡£";
+		if (name) return "é€æ˜è¦–èª";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é€æ˜ãªã‚‚ã®ãŒè¦‹ãˆã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "See Invisible";
 		if (desc) return "Gives see invisible for a while.";
@@ -6601,8 +6601,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "¥¨¥ì¥á¥ó¥¿¥ë¾¤´­";
-		if (desc) return "1ÂÎ¤Î¥¨¥ì¥á¥ó¥¿¥ë¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "ã‚¨ãƒ¬ãƒ¡ãƒ³ã‚¿ãƒ«å¬å–š";
+		if (desc) return "1ä½“ã®ã‚¨ãƒ¬ãƒ¡ãƒ³ã‚¿ãƒ«ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Conjure Elemental";
 		if (desc) return "Summons an elemental.";
@@ -6614,7 +6614,7 @@ static cptr do_arcane_spell(int spell, int mode)
 				if (!summon_specific(-1, py, px, plev, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 				{
 #ifdef JP
-					msg_print("¥¨¥ì¥á¥ó¥¿¥ë¤Ï¸½¤ì¤Ê¤«¤Ã¤¿¡£");
+					msg_print("ã‚¨ãƒ¬ãƒ¡ãƒ³ã‚¿ãƒ«ã¯ç¾ã‚Œãªã‹ã£ãŸã€‚");
 #else
 					msg_print("No Elementals arrive.");
 #endif
@@ -6625,8 +6625,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È¡¦¥ì¥Ù¥ë";
-		if (desc) return "½Ö»ş¤Ë¾å¤«²¼¤Î³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤¹¤ë¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¬ãƒ™ãƒ«";
+		if (desc) return "ç¬æ™‚ã«ä¸Šã‹ä¸‹ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚";
 #else
 		if (name) return "Teleport Level";
 		if (desc) return "Teleport to up or down stairs in a moment.";
@@ -6636,7 +6636,7 @@ static cptr do_arcane_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				if (!get_check("ËÜÅö¤ËÂ¾¤Î³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤·¤Ş¤¹¤«¡©")) return NULL;
+				if (!get_check("æœ¬å½“ã«ä»–ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ")) return NULL;
 #else
 				if (!get_check("Are you sure? (Teleport Level)")) return NULL;
 #endif
@@ -6647,8 +6647,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥İ¡¼¥È¡¦¥â¥ó¥¹¥¿¡¼";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¥Ó¡¼¥à¤òÊü¤Ä¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Teleport Away";
 		if (desc) return "Teleports all monsters on the line away unless resisted.";
@@ -6670,8 +6670,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "¸µÁÇ¤Îµå";
-		if (desc) return "±ê¡¢ÅÅ·â¡¢Îäµ¤¡¢»À¤Î¤É¤ì¤«¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "å…ƒç´ ã®çƒ";
+		if (desc) return "ç‚ã€é›»æ’ƒã€å†·æ°—ã€é…¸ã®ã©ã‚Œã‹ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Elemental Ball";
 		if (desc) return "Fires a ball of some elements.";
@@ -6704,8 +6704,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "Á´´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¡¢æ«¡¢Èâ¡¢³¬ÃÊ¡¢ºâÊõ¡¢¤½¤·¤Æ¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "å…¨æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€ç½ ã€æ‰‰ã€éšæ®µã€è²¡å®ã€ãã—ã¦ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detection";
 		if (desc) return "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.";
@@ -6725,8 +6725,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "µ¢´Ô¤Î¼öÊ¸";
-		if (desc) return "ÃÏ¾å¤Ë¤¤¤ë¤È¤­¤Ï¥À¥ó¥¸¥ç¥ó¤ÎºÇ¿¼³¬¤Ø¡¢¥À¥ó¥¸¥ç¥ó¤Ë¤¤¤ë¤È¤­¤ÏÃÏ¾å¤Ø¤È°ÜÆ°¤¹¤ë¡£";
+		if (name) return "å¸°é‚„ã®å‘ªæ–‡";
+		if (desc) return "åœ°ä¸Šã«ã„ã‚‹ã¨ãã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®æœ€æ·±éšã¸ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«ã„ã‚‹ã¨ãã¯åœ°ä¸Šã¸ã¨ç§»å‹•ã™ã‚‹ã€‚";
 #else
 		if (name) return "Word of Recall";
 		if (desc) return "Recalls player from dungeon to town, or from town to the deepest level of dungeon.";
@@ -6747,8 +6747,8 @@ static cptr do_arcane_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "ÀéÎ¤´ã";
-		if (desc) return "¤½¤Î³¬Á´ÂÎ¤ò±Êµ×¤Ë¾È¤é¤·¡¢¥À¥ó¥¸¥ç¥óÆâ¤¹¤Ù¤Æ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£¤µ¤é¤Ë¡¢°ìÄê»ş´Ö¥Æ¥ì¥Ñ¥·¡¼Ç½ÎÏ¤òÆÀ¤ë¡£";
+		if (name) return "åƒé‡Œçœ¼";
+		if (desc) return "ãã®éšå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚ã•ã‚‰ã«ã€ä¸€å®šæ™‚é–“ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Clairvoyance";
 		if (desc) return "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.";
@@ -6780,10 +6780,10 @@ static cptr do_arcane_spell(int spell, int mode)
 }
 
 /*!
- * @brief ¾¢ÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief åŒ é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_craft_spell(int spell, int mode)
 {
@@ -6798,8 +6798,8 @@ static cptr do_craft_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "ÀÖ³°Àş»ëÎÏ";
-		if (desc) return "°ìÄê»ş´Ö¡¢ÀÖ³°Àş»ëÎÏ¤¬Áı¶¯¤µ¤ì¤ë¡£";
+		if (name) return "èµ¤å¤–ç·šè¦–åŠ›";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€èµ¤å¤–ç·šè¦–åŠ›ãŒå¢—å¼·ã•ã‚Œã‚‹ã€‚";
 #else
 		if (name) return "Infravision";
 		if (desc) return "Gives infravision for a while.";
@@ -6819,8 +6819,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "²óÉüÎÏ¶¯²½";
-		if (desc) return "°ìÄê»ş´Ö¡¢²óÉüÎÏ¤¬Áı¶¯¤µ¤ì¤ë¡£";
+		if (name) return "å›å¾©åŠ›å¼·åŒ–";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€å›å¾©åŠ›ãŒå¢—å¼·ã•ã‚Œã‚‹ã€‚";
 #else
 		if (name) return "Regeneration";
 		if (desc) return "Gives regeneration ability for a while.";
@@ -6840,8 +6840,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "¶õÊ¢½¼Â­";
-		if (desc) return "ËşÊ¢¤Ë¤Ê¤ë¡£";
+		if (name) return "ç©ºè…¹å……è¶³";
+		if (desc) return "æº€è…¹ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "Satisfy Hunger";
 		if (desc) return "Satisfies hunger.";
@@ -6857,8 +6857,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "ÂÑÎäµ¤";
-		if (desc) return "°ìÄê»ş´Ö¡¢Îäµ¤¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€å†·æ°—";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€å†·æ°—ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Cold";
 		if (desc) return "Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.";
@@ -6878,8 +6878,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "ÂÑ²Ğ±ê";
-		if (desc) return "°ìÄê»ş´Ö¡¢±ê¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€ç«ç‚";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ç‚ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Fire";
 		if (desc) return "Gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.";
@@ -6899,8 +6899,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "»Îµ¤¹âÍÈ";
-		if (desc) return "°ìÄê»ş´Ö¡¢¥Ò¡¼¥í¡¼µ¤Ê¬¤Ë¤Ê¤ë¡£";
+		if (name) return "å£«æ°—é«˜æš";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "Heroism";
 		if (desc) return "Removes fear, and gives bonus to hit and 10 more HP for a while.";
@@ -6922,8 +6922,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "ÂÑÅÅ·â";
-		if (desc) return "°ìÄê»ş´Ö¡¢ÅÅ·â¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€é›»æ’ƒ";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é›»æ’ƒã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Lightning";
 		if (desc) return "Gives resistance to electricity. This resistance can be added to which from equipment for more powerful resistance.";
@@ -6943,8 +6943,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "ÂÑ»À";
-		if (desc) return "°ìÄê»ş´Ö¡¢»À¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€é…¸";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é…¸ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Acid";
 		if (desc) return "Gives resistance to acid. This resistance can be added to which from equipment for more powerful resistance.";
@@ -6964,8 +6964,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "Æ©ÌÀ»ëÇ§";
-		if (desc) return "°ìÄê»ş´Ö¡¢Æ©ÌÀ¤Ê¤â¤Î¤¬¸«¤¨¤ë¤è¤¦¤Ë¤Ê¤ë¡£";
+		if (name) return "é€æ˜è¦–èª";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é€æ˜ãªã‚‚ã®ãŒè¦‹ãˆã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "See Invisibility";
 		if (desc) return "Gives see invisible for a while.";
@@ -6985,8 +6985,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "²ò¼ö";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Ë¤«¤«¤Ã¤¿¼å¤¤¼ö¤¤¤ò²ò½ü¤¹¤ë¡£";
+		if (name) return "è§£å‘ª";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼±ã„å‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚";
 #else
 		if (name) return "Remove Curse";
 		if (desc) return "Removes normal curses from equipped items.";
@@ -6998,7 +6998,7 @@ static cptr do_craft_spell(int spell, int mode)
 				if (remove_curse())
 				{
 #ifdef JP
-					msg_print("Ã¯¤«¤Ë¸«¼é¤é¤ì¤Æ¤¤¤ë¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£");
+					msg_print("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚");
 #else
 					msg_print("You feel as if someone is watching over you.");
 #endif
@@ -7009,8 +7009,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "ÂÑÆÇ";
-		if (desc) return "°ìÄê»ş´Ö¡¢ÆÇ¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€æ¯’";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€æ¯’ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Poison";
 		if (desc) return "Gives resistance to poison. This resistance can be added to which from equipment for more powerful resistance.";
@@ -7030,8 +7030,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "¶¸Àï»Î²½";
-		if (desc) return "¶¸Àï»Î²½¤·¡¢¶²Éİ¤ò½üµî¤¹¤ë¡£";
+		if (name) return "ç‹‚æˆ¦å£«åŒ–";
+		if (desc) return "ç‹‚æˆ¦å£«åŒ–ã—ã€ææ€–ã‚’é™¤å»ã™ã‚‹ã€‚";
 #else
 		if (name) return "Berserk";
 		if (desc) return "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.";
@@ -7053,8 +7053,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "¼«¸ÊÊ¬ÀÏ";
-		if (desc) return "¸½ºß¤Î¼«Ê¬¤Î¾õÂÖ¤ò´°Á´¤ËÃÎ¤ë¡£";
+		if (name) return "è‡ªå·±åˆ†æ";
+		if (desc) return "ç¾åœ¨ã®è‡ªåˆ†ã®çŠ¶æ…‹ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚";
 #else
 		if (name) return "Self Knowledge";
 		if (desc) return "Gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.";
@@ -7070,8 +7070,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "ÂĞ¼Ù°­·ë³¦";
-		if (desc) return "¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤Î¹¶·â¤òËÉ¤°¥Ğ¥ê¥¢¤òÄ¥¤ë¡£";
+		if (name) return "å¯¾é‚ªæ‚ªçµç•Œ";
+		if (desc) return "é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ”»æ’ƒã‚’é˜²ããƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚";
 #else
 		if (name) return "Protection from Evil";
 		if (desc) return "Gives aura which protect you from evil monster's physical attack.";
@@ -7092,8 +7092,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "Ìş¤·";
-		if (desc) return "ÆÇ¡¢Û¯Û°¾õÂÖ¡¢Éé½ı¤òÁ´²÷¤µ¤»¡¢¸¸³Ğ¤òÄ¾¤¹¡£";
+		if (name) return "ç™’ã—";
+		if (desc) return "æ¯’ã€æœ¦æœ§çŠ¶æ…‹ã€è² å‚·ã‚’å…¨å¿«ã•ã›ã€å¹»è¦šã‚’ç›´ã™ã€‚";
 #else
 		if (name) return "Cure";
 		if (desc) return "Heals poison, stun, cut and hallucination completely.";
@@ -7112,8 +7112,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "ËâË¡·õ";
-		if (desc) return "°ìÄê»ş´Ö¡¢Éğ´ï¤ËÎäµ¤¡¢±ê¡¢ÅÅ·â¡¢»À¡¢ÆÇ¤Î¤¤¤º¤ì¤«¤ÎÂ°À­¤ò¤Ä¤±¤ë¡£Éğ´ï¤ò»ı¤¿¤Ê¤¤¤È»È¤¨¤Ê¤¤¡£";
+		if (name) return "é­”æ³•å‰£";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€æ­¦å™¨ã«å†·æ°—ã€ç‚ã€é›»æ’ƒã€é…¸ã€æ¯’ã®ã„ãšã‚Œã‹ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚æ­¦å™¨ã‚’æŒãŸãªã„ã¨ä½¿ãˆãªã„ã€‚";
 #else
 		if (name) return "Mana Branding";
 		if (desc) return "Makes current weapon some elemental branded. You must wield weapons.";
@@ -7133,8 +7133,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "¥Æ¥ì¥Ñ¥·¡¼";
-		if (desc) return "°ìÄê»ş´Ö¡¢¥Æ¥ì¥Ñ¥·¡¼Ç½ÎÏ¤òÆÀ¤ë¡£";
+		if (name) return "ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Telepathy";
 		if (desc) return "Gives telepathy for a while.";
@@ -7155,8 +7155,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "È©ÀĞ²½";
-		if (desc) return "°ìÄê»ş´Ö¡¢AC¤ò¾å¾º¤µ¤»¤ë¡£";
+		if (name) return "è‚ŒçŸ³åŒ–";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ACã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Stone Skin";
 		if (desc) return "Gives bonus to AC for a while.";
@@ -7177,8 +7177,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "Á´ÂÑÀ­";
-		if (desc) return "°ìÄê»ş´Ö¡¢»À¡¢ÅÅ·â¡¢±ê¡¢Îäµ¤¡¢ÆÇ¤ËÂĞ¤¹¤ëÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "å…¨è€æ€§";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é…¸ã€é›»æ’ƒã€ç‚ã€å†·æ°—ã€æ¯’ã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resistance";
 		if (desc) return "Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.";
@@ -7202,8 +7202,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "¥¹¥Ô¡¼¥É";
-		if (desc) return "°ìÄê»ş´Ö¡¢²ÃÂ®¤¹¤ë¡£";
+		if (name) return "ã‚¹ãƒ”ãƒ¼ãƒ‰";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€åŠ é€Ÿã™ã‚‹ã€‚";
 #else
 		if (name) return "Haste Self";
 		if (desc) return "Hastes you for a while.";
@@ -7224,8 +7224,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "ÊÉÈ´¤±";
-		if (desc) return "°ìÄê»ş´Ö¡¢È¾Êª¼Á²½¤·ÊÉ¤òÄÌ¤êÈ´¤±¤é¤ì¤ë¤è¤¦¤Ë¤Ê¤ë¡£";
+		if (name) return "å£æŠœã‘";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€åŠç‰©è³ªåŒ–ã—å£ã‚’é€šã‚ŠæŠœã‘ã‚‰ã‚Œã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "Walk through Wall";
 		if (desc) return "Gives ability to pass walls for a while.";
@@ -7245,8 +7245,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "½âËá¤­";
-		if (desc) return "½â¤ËÈ¿¼Í¤ÎÂ°À­¤ò¤Ä¤±¤ë¡£";
+		if (name) return "ç›¾ç£¨ã";
+		if (desc) return "ç›¾ã«åå°„ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Polish Shield";
 		if (desc) return "Makes a shield a shield of reflection.";
@@ -7262,8 +7262,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "¥´¡¼¥ì¥àÀ½Â¤";
-		if (desc) return "1ÂÎ¤Î¥´¡¼¥ì¥à¤òÀ½Â¤¤¹¤ë¡£";
+		if (name) return "ã‚´ãƒ¼ãƒ¬ãƒ è£½é€ ";
+		if (desc) return "1ä½“ã®ã‚´ãƒ¼ãƒ¬ãƒ ã‚’è£½é€ ã™ã‚‹ã€‚";
 #else
 		if (name) return "Create Golem";
 		if (desc) return "Creates a golem.";
@@ -7275,7 +7275,7 @@ static cptr do_craft_spell(int spell, int mode)
 				if (summon_specific(-1, py, px, plev, SUMMON_GOLEM, PM_FORCE_PET))
 				{
 #ifdef JP
-					msg_print("¥´¡¼¥ì¥à¤òºî¤Ã¤¿¡£");
+					msg_print("ã‚´ãƒ¼ãƒ¬ãƒ ã‚’ä½œã£ãŸã€‚");
 #else
 					msg_print("You make a golem.");
 #endif
@@ -7283,7 +7283,7 @@ static cptr do_craft_spell(int spell, int mode)
 				else
 				{
 #ifdef JP
-					msg_print("¤¦¤Ş¤¯¥´¡¼¥ì¥à¤òºî¤ì¤Ê¤«¤Ã¤¿¡£");
+					msg_print("ã†ã¾ãã‚´ãƒ¼ãƒ¬ãƒ ã‚’ä½œã‚Œãªã‹ã£ãŸã€‚");
 #else
 					msg_print("No Golems arrive.");
 #endif
@@ -7294,8 +7294,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "ËâË¡¤Î³»";
-		if (desc) return "°ìÄê»ş´Ö¡¢ËâË¡ËÉ¸æÎÏ¤ÈAC¤¬¾å¤¬¤ê¡¢º®Íğ¤ÈÌÕÌÜ¤ÎÂÑÀ­¡¢È¿¼ÍÇ½ÎÏ¡¢ËãáãÃÎ¤é¤º¡¢ÉâÍ·¤òÆÀ¤ë¡£";
+		if (name) return "é­”æ³•ã®é§";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é­”æ³•é˜²å¾¡åŠ›ã¨ACãŒä¸ŠãŒã‚Šã€æ··ä¹±ã¨ç›²ç›®ã®è€æ€§ã€åå°„èƒ½åŠ›ã€éº»ç—ºçŸ¥ã‚‰ãšã€æµ®éŠã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Magical armor";
 		if (desc) return "Gives resistance to magic, bonus to AC, resistance to confusion, blindness, reflection, free action and levitation for a while.";
@@ -7315,8 +7315,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "ÁõÈ÷ÌµÎÏ²½";
-		if (desc) return "Éğ´ï¡¦ËÉ¶ñ¤Ë¤«¤±¤é¤ì¤¿¤¢¤é¤æ¤ëËâÎÏ¤ò´°Á´¤Ë²ò½ü¤¹¤ë¡£";
+		if (name) return "è£…å‚™ç„¡åŠ›åŒ–";
+		if (desc) return "æ­¦å™¨ãƒ»é˜²å…·ã«ã‹ã‘ã‚‰ã‚ŒãŸã‚ã‚‰ã‚†ã‚‹é­”åŠ›ã‚’å®Œå…¨ã«è§£é™¤ã™ã‚‹ã€‚";
 #else
 		if (name) return "Remove Enchantment";
 		if (desc) return "Removes all magics completely from any weapon or armor.";
@@ -7332,8 +7332,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "¼ö¤¤Ê´ºÕ";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Ë¤«¤«¤Ã¤¿¶¯ÎÏ¤Ê¼ö¤¤¤ò²ò½ü¤¹¤ë¡£";
+		if (name) return "å‘ªã„ç²‰ç •";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼·åŠ›ãªå‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚";
 #else
 		if (name) return "Remove All Curse";
 		if (desc) return "Removes normal and heavy curse from equipped items.";
@@ -7345,7 +7345,7 @@ static cptr do_craft_spell(int spell, int mode)
 				if (remove_all_curse())
 				{
 #ifdef JP
-					msg_print("Ã¯¤«¤Ë¸«¼é¤é¤ì¤Æ¤¤¤ë¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£");
+					msg_print("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚");
 #else
 					msg_print("You feel as if someone is watching over you.");
 #endif
@@ -7356,8 +7356,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "´°Á´¤Ê¤ëÃÎ¼±";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Î»ı¤ÄÇ½ÎÏ¤ò´°Á´¤ËÃÎ¤ë¡£";
+		if (name) return "å®Œå…¨ãªã‚‹çŸ¥è­˜";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚";
 #else
 		if (name) return "Knowledge True";
 		if (desc) return "*Identifies* an item.";
@@ -7373,8 +7373,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "Éğ´ï¶¯²½";
-		if (desc) return "Éğ´ï¤ÎÌ¿ÃæÎ¨½¤Àµ¤È¥À¥á¡¼¥¸½¤Àµ¤ò¶¯²½¤¹¤ë¡£";
+		if (name) return "æ­¦å™¨å¼·åŒ–";
+		if (desc) return "æ­¦å™¨ã®å‘½ä¸­ç‡ä¿®æ­£ã¨ãƒ€ãƒ¡ãƒ¼ã‚¸ä¿®æ­£ã‚’å¼·åŒ–ã™ã‚‹ã€‚";
 #else
 		if (name) return "Enchant Weapon";
 		if (desc) return "Attempts to increase +to-hit, +to-dam of a weapon.";
@@ -7390,8 +7390,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "ËÉ¶ñ¶¯²½";
-		if (desc) return "³»¤ÎËÉ¸æ½¤Àµ¤ò¶¯²½¤¹¤ë¡£";
+		if (name) return "é˜²å…·å¼·åŒ–";
+		if (desc) return "é§ã®é˜²å¾¡ä¿®æ­£ã‚’å¼·åŒ–ã™ã‚‹ã€‚";
 #else
 		if (name) return "Enchant Armor";
 		if (desc) return "Attempts to increase +AC of an armor.";
@@ -7407,8 +7407,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "Éğ´ïÂ°À­ÉÕÍ¿";
-		if (desc) return "Éğ´ï¤Ë¥é¥ó¥À¥à¤ËÂ°À­¤ò¤Ä¤±¤ë¡£";
+		if (name) return "æ­¦å™¨å±æ€§ä»˜ä¸";
+		if (desc) return "æ­¦å™¨ã«ãƒ©ãƒ³ãƒ€ãƒ ã«å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Brand Weapon";
 		if (desc) return "Makes current weapon a random ego weapon.";
@@ -7424,8 +7424,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "¿Í´Ö¥È¥é¥ó¥×";
-		if (desc) return "¥é¥ó¥À¥à¤Ë¥Æ¥ì¥İ¡¼¥È¤¹¤ëÆÍÁ³ÊÑ°Û¤«¡¢¼«Ê¬¤Î°Õ»×¤Ç¥Æ¥ì¥İ¡¼¥È¤¹¤ëÆÍÁ³ÊÑ°Û¤¬¿È¤Ë¤Ä¤¯¡£";
+		if (name) return "äººé–“ãƒˆãƒ©ãƒ³ãƒ—";
+		if (desc) return "ãƒ©ãƒ³ãƒ€ãƒ ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹çªç„¶å¤‰ç•°ã‹ã€è‡ªåˆ†ã®æ„æ€ã§ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹çªç„¶å¤‰ç•°ãŒèº«ã«ã¤ãã€‚";
 #else
 		if (name) return "Living Trump";
 		if (desc) return "Gives mutation which makes you teleport randomly or makes you able to teleport at will.";
@@ -7447,7 +7447,7 @@ static cptr do_craft_spell(int spell, int mode)
 				if (gain_random_mutation(mutation))
 				{
 #ifdef JP
-					msg_print("¤¢¤Ê¤¿¤ÏÀ¸¤­¤Æ¤¤¤ë¥«¡¼¥É¤ËÊÑ¤ï¤Ã¤¿¡£");
+					msg_print("ã‚ãªãŸã¯ç”Ÿãã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰ã«å¤‰ã‚ã£ãŸã€‚");
 #else
 					msg_print("You have turned into a Living Trump.");
 #endif
@@ -7458,8 +7458,8 @@ static cptr do_craft_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "Â°À­¤Ø¤ÎÌÈ±Ö";
-		if (desc) return "°ìÄê»ş´Ö¡¢Îäµ¤¡¢±ê¡¢ÅÅ·â¡¢»À¤Î¤¤¤º¤ì¤«¤ËÂĞ¤¹¤ëÌÈ±Ö¤òÆÀ¤ë¡£";
+		if (name) return "å±æ€§ã¸ã®å…ç–«";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€å†·æ°—ã€ç‚ã€é›»æ’ƒã€é…¸ã®ã„ãšã‚Œã‹ã«å¯¾ã™ã‚‹å…ç–«ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Immunity";
 		if (desc) return "Gives an immunity to fire, cold, electricity or acid for a while.";
@@ -7482,10 +7482,10 @@ static cptr do_craft_spell(int spell, int mode)
 }
 
 /*!
- * @brief °­ËâÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief æ‚ªé­”é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_daemon_spell(int spell, int mode)
 {
@@ -7495,7 +7495,7 @@ static cptr do_daemon_spell(int spell, int mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 #ifdef JP
-	static const char s_dam[] = "Â»½ı:";
+	static const char s_dam[] = "æå‚·:";
 #else
 	static const char s_dam[] = "dam ";
 #endif
@@ -7507,8 +7507,8 @@ static cptr do_daemon_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "¥Ş¥¸¥Ã¥¯¡¦¥ß¥µ¥¤¥ë";
-		if (desc) return "¼å¤¤ËâË¡¤ÎÌğ¤òÊü¤Ä¡£";
+		if (name) return "ãƒã‚¸ãƒƒã‚¯ãƒ»ãƒŸã‚µã‚¤ãƒ«";
+		if (desc) return "å¼±ã„é­”æ³•ã®çŸ¢ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Magic Missile";
 		if (desc) return "Fires a weak bolt of magic.";
@@ -7531,8 +7531,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "ÌµÀ¸Ì¿´¶ÃÎ";
-		if (desc) return "¶á¤¯¤ÎÀ¸Ì¿¤Î¤Ê¤¤¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ç„¡ç”Ÿå‘½æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®ç”Ÿå‘½ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Unlife";
 		if (desc) return "Detects all nonliving monsters in your vicinity.";
@@ -7552,8 +7552,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "¼Ù¤Ê¤ë½ËÊ¡";
-		if (desc) return "°ìÄê»ş´Ö¡¢Ì¿ÃæÎ¨¤ÈAC¤Ë¥Ü¡¼¥Ê¥¹¤òÆÀ¤ë¡£";
+		if (name) return "é‚ªãªã‚‹ç¥ç¦";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€å‘½ä¸­ç‡ã¨ACã«ãƒœãƒ¼ãƒŠã‚¹ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Evil Bless";
 		if (desc) return "Gives bonus to hit and AC for a few turns.";
@@ -7573,8 +7573,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "ÂÑ²Ğ±ê";
-		if (desc) return "°ìÄê»ş´Ö¡¢±ê¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "è€ç«ç‚";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ç‚ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Resist Fire";
 		if (desc) return "Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.";
@@ -7594,8 +7594,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "¶²¹²";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤ò¶²Éİ¤µ¤»¡¢Û¯Û°¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ææ…Œ";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’ææ€–ã•ã›ã€æœ¦æœ§ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Horrify";
 		if (desc) return "Attempts to scare and stun a monster.";
@@ -7618,8 +7618,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "ÃÏ¹ö¤ÎÌğ";
-		if (desc) return "ÃÏ¹ö¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "åœ°ç„ã®çŸ¢";
+		if (desc) return "åœ°ç„ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Nether Bolt";
 		if (desc) return "Fires a bolt or beam of nether.";
@@ -7642,8 +7642,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "¸ÅÂå¤Î»àÎî¾¤´­";
-		if (desc) return "¸ÅÂå¤Î»àÎî¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "å¤ä»£ã®æ­»éœŠå¬å–š";
+		if (desc) return "å¤ä»£ã®æ­»éœŠã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Summon Manes";
 		if (desc) return "Summons a manes.";
@@ -7655,7 +7655,7 @@ static cptr do_daemon_spell(int spell, int mode)
 				if (!summon_specific(-1, py, px, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 				{
 #ifdef JP
-					msg_print("¸ÅÂå¤Î»àÎî¤Ï¸½¤ì¤Ê¤«¤Ã¤¿¡£");
+					msg_print("å¤ä»£ã®æ­»éœŠã¯ç¾ã‚Œãªã‹ã£ãŸã€‚");
 #else
 					msg_print("No Manes arrive.");
 #endif
@@ -7666,8 +7666,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "ÃÏ¹ö¤Î±ë";
-		if (desc) return "¼Ù°­¤ÊÎÏ¤ò»ı¤Ä¥Ü¡¼¥ë¤òÊü¤Ä¡£Á±ÎÉ¤Ê¥â¥ó¥¹¥¿¡¼¤Ë¤ÏÂç¤­¤Ê¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "åœ°ç„ã®ç„”";
+		if (desc) return "é‚ªæ‚ªãªåŠ›ã‚’æŒã¤ãƒœãƒ¼ãƒ«ã‚’æ”¾ã¤ã€‚å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Hellish Flame";
 		if (desc) return "Fires a ball of evil power. Hurts good monsters greatly.";
@@ -7700,8 +7700,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "¥Ç¡¼¥â¥ó»ÙÇÛ";
-		if (desc) return "°­Ëâ1ÂÎ¤òÌ¥Î»¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú";
+		if (name) return "ãƒ‡ãƒ¼ãƒ¢ãƒ³æ”¯é…";
+		if (desc) return "æ‚ªé­”1ä½“ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹";
 #else
 		if (name) return "Dominate Demon";
 		if (desc) return "Attempts to charm a demon.";
@@ -7723,8 +7723,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "¥Ó¥¸¥ç¥ó";
-		if (desc) return "¼şÊÕ¤ÎÃÏ·Á¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "ãƒ“ã‚¸ãƒ§ãƒ³";
+		if (desc) return "å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Vision";
 		if (desc) return "Maps nearby area.";
@@ -7744,8 +7744,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "ÂÑÃÏ¹ö";
-		if (desc) return "°ìÄê»ş´Ö¡¢ÃÏ¹ö¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£";
+		if (name) return "è€åœ°ç„";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€åœ°ç„ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Resist Nether";
 		if (desc) return "Gives resistance to nether for a while.";
@@ -7765,8 +7765,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "¥×¥é¥º¥Ş¡¦¥Ü¥ë¥È";
-		if (desc) return "¥×¥é¥º¥Ş¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "ãƒ—ãƒ©ã‚ºãƒãƒ»ãƒœãƒ«ãƒˆ";
+		if (desc) return "ãƒ—ãƒ©ã‚ºãƒã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Plasma bolt";
 		if (desc) return "Fires a bolt or beam of plasma.";
@@ -7789,8 +7789,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "¥Õ¥¡¥¤¥¢¡¦¥Ü¡¼¥ë";
-		if (desc) return "±ê¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ¼ãƒ«";
+		if (desc) return "ç‚ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Fire Ball";
 		if (desc) return "Fires a ball of fire.";
@@ -7813,8 +7813,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "±ê¤Î¿Ï";
-		if (desc) return "Éğ´ï¤Ë±ê¤ÎÂ°À­¤ò¤Ä¤±¤ë¡£";
+		if (name) return "ç‚ã®åˆƒ";
+		if (desc) return "æ­¦å™¨ã«ç‚ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Fire Branding";
 		if (desc) return "Makes current weapon fire branded.";
@@ -7830,8 +7830,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "ÃÏ¹öµå";
-		if (desc) return "Âç¤­¤ÊÃÏ¹ö¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "åœ°ç„çƒ";
+		if (desc) return "å¤§ããªåœ°ç„ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Nether Ball";
 		if (desc) return "Fires a huge ball of nether.";
@@ -7854,8 +7854,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "¥Ç¡¼¥â¥ó¾¤´­";
-		if (desc) return "°­Ëâ1ÂÎ¤ò¾¤´­¤¹¤ë¡£";
+		if (name) return "ãƒ‡ãƒ¼ãƒ¢ãƒ³å¬å–š";
+		if (desc) return "æ‚ªé­”1ä½“ã‚’å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Summon Demon";
 		if (desc) return "Summons a demon.";
@@ -7874,7 +7874,7 @@ static cptr do_daemon_spell(int spell, int mode)
 				if (summon_specific((pet ? -1 : 0), py, px, plev*2/3+randint1(plev/2), SUMMON_DEMON, mode))
 				{
 #ifdef JP
-					msg_print("Î²²«¤Î°­½­¤¬½¼Ëş¤·¤¿¡£");
+					msg_print("ç¡«é»„ã®æ‚ªè‡­ãŒå……æº€ã—ãŸã€‚");
 #else
 					msg_print("The area fills with a stench of sulphur and brimstone.");
 #endif
@@ -7883,7 +7883,7 @@ static cptr do_daemon_spell(int spell, int mode)
 					if (pet)
 					{
 #ifdef JP
-						msg_print("¡Ö¤´ÍÑ¤Ç¤´¤¶¤¤¤Ş¤¹¤«¡¢¤´¼ç¿ÍÍÍ¡×");
+						msg_print("ã€Œã”ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€ã”ä¸»äººæ§˜ã€");
 #else
 						msg_print("'What is thy bidding... Master?'");
 #endif
@@ -7891,7 +7891,7 @@ static cptr do_daemon_spell(int spell, int mode)
 					else
 					{
 #ifdef JP
-						msg_print("¡ÖÈÜ¤·¤­¼Ô¤è¡¢²æ¤ÏÆò¤Î²¼ËÍ¤Ë¤¢¤é¤º¡ª ¤ªÁ°¤Îº²¤òÄº¤¯¤¾¡ª¡×");
+						msg_print("ã€Œå‘ã—ãè€…ã‚ˆã€æˆ‘ã¯æ±ã®ä¸‹åƒ•ã«ã‚ã‚‰ãšï¼ ãŠå‰ã®é­‚ã‚’é ‚ããï¼ã€");
 #else
 						msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'");
 #endif
@@ -7900,7 +7900,7 @@ static cptr do_daemon_spell(int spell, int mode)
 				else
 				{
 #ifdef JP
-					msg_print("°­Ëâ¤Ï¸½¤ì¤Ê¤«¤Ã¤¿¡£");
+					msg_print("æ‚ªé­”ã¯ç¾ã‚Œãªã‹ã£ãŸã€‚");
 #else
 					msg_print("No demons arrive.");
 #endif
@@ -7912,8 +7912,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "°­Ëâ¤ÎÌÜ";
-		if (desc) return "°ìÄê»ş´Ö¡¢¥Æ¥ì¥Ñ¥·¡¼Ç½ÎÏ¤òÆÀ¤ë¡£";
+		if (name) return "æ‚ªé­”ã®ç›®";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Devilish Eye";
 		if (desc) return "Gives telepathy for a while.";
@@ -7934,8 +7934,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "°­Ëâ¤Î¥¯¥í¡¼¥¯";
-		if (desc) return "¶²Éİ¤ò¼è¤ê½ü¤­¡¢°ìÄê»ş´Ö¡¢±ê¤ÈÎäµ¤¤ÎÂÑÀ­¡¢±ê¤Î¥ª¡¼¥é¤òÆÀ¤ë¡£ÂÑÀ­¤ÏÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "æ‚ªé­”ã®ã‚¯ãƒ­ãƒ¼ã‚¯";
+		if (desc) return "ææ€–ã‚’å–ã‚Šé™¤ãã€ä¸€å®šæ™‚é–“ã€ç‚ã¨å†·æ°—ã®è€æ€§ã€ç‚ã®ã‚ªãƒ¼ãƒ©ã‚’å¾—ã‚‹ã€‚è€æ€§ã¯è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Devil Cloak";
 		if (desc) return "Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to which from equipment for more powerful resistances.";
@@ -7961,8 +7961,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "ÍÏ´äÎ®";
-		if (desc) return "¼«Ê¬¤òÃæ¿´¤È¤·¤¿±ê¤Îµå¤òºî¤ê½Ğ¤·¡¢¾²¤òÍÏ´ä¤ËÊÑ¤¨¤ë¡£";
+		if (name) return "æº¶å²©æµ";
+		if (desc) return "è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸç‚ã®çƒã‚’ä½œã‚Šå‡ºã—ã€åºŠã‚’æº¶å²©ã«å¤‰ãˆã‚‹ã€‚";
 #else
 		if (name) return "The Flow of Lava";
 		if (desc) return "Generates a ball of fire centered on you which transforms floors to magma.";
@@ -7984,8 +7984,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "¥×¥é¥º¥Şµå";
-		if (desc) return "¥×¥é¥º¥Ş¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ãƒ—ãƒ©ã‚ºãƒçƒ";
+		if (desc) return "ãƒ—ãƒ©ã‚ºãƒã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Plasma Ball";
 		if (desc) return "Fires a ball of plasma.";
@@ -8008,8 +8008,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "°­ËâÊÑ²½";
-		if (desc) return "°ìÄê»ş´Ö¡¢°­Ëâ¤ËÊÑ²½¤¹¤ë¡£ÊÑ²½¤·¤Æ¤¤¤ë´Ö¤ÏËÜÍè¤Î¼ïÂ²¤ÎÇ½ÎÏ¤ò¼º¤¤¡¢Âå¤ï¤ê¤Ë°­Ëâ¤È¤·¤Æ¤ÎÇ½ÎÏ¤òÆÀ¤ë¡£";
+		if (name) return "æ‚ªé­”å¤‰åŒ–";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€æ‚ªé­”ã«å¤‰åŒ–ã™ã‚‹ã€‚å¤‰åŒ–ã—ã¦ã„ã‚‹é–“ã¯æœ¬æ¥ã®ç¨®æ—ã®èƒ½åŠ›ã‚’å¤±ã„ã€ä»£ã‚ã‚Šã«æ‚ªé­”ã¨ã—ã¦ã®èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Polymorph Demon";
 		if (desc) return "Mimic a demon for a while. Loses abilities of original race and gets abilities as a demon.";
@@ -8029,8 +8029,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "ÃÏ¹ö¤ÎÇÈÆ°";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£Á±ÎÉ¤Ê¥â¥ó¥¹¥¿¡¼¤ËÆÃ¤ËÂç¤­¤Ê¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "åœ°ç„ã®æ³¢å‹•";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ç‰¹ã«å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Nather Wave";
 		if (desc) return "Damages all monsters in sight. Hurts good monsters greatly.";
@@ -8052,8 +8052,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "¥µ¥­¥å¥Ğ¥¹¤ÎÀÜÊ­";
-		if (desc) return "°ø²Ìº®Íğ¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ã‚µã‚­ãƒ¥ãƒã‚¹ã®æ¥å»";
+		if (desc) return "å› æœæ··ä¹±ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Kiss of Succubus";
 		if (desc) return "Fires a ball of nexus.";
@@ -8075,8 +8075,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "ÇËÌÇ¤Î¼ê";
-		if (desc) return "ÇËÌÇ¤Î¼ê¤òÊü¤Ä¡£¿©¤é¤Ã¤¿¥â¥ó¥¹¥¿¡¼¤Ï¤½¤Î¤È¤­¤ÎHP¤ÎÈ¾Ê¬Á°¸å¤Î¥À¥á¡¼¥¸¤ò¼õ¤±¤ë¡£";
+		if (name) return "ç ´æ»…ã®æ‰‹";
+		if (desc) return "ç ´æ»…ã®æ‰‹ã‚’æ”¾ã¤ã€‚é£Ÿã‚‰ã£ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ãã®ã¨ãã®HPã®åŠåˆ†å‰å¾Œã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Doom Hand";
 		if (desc) return "Attempts to make a monster's HP almost half.";
@@ -8087,7 +8087,7 @@ static cptr do_daemon_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 #ifdef JP
-				else msg_print("<ÇËÌÇ¤Î¼ê>¤òÊü¤Ã¤¿¡ª");
+				else msg_print("<ç ´æ»…ã®æ‰‹>ã‚’æ”¾ã£ãŸï¼");
 #else
 				else msg_print("You invoke the Hand of Doom!");
 #endif
@@ -8099,8 +8099,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "»Îµ¤¹âÍÈ";
-		if (desc) return "°ìÄê»ş´Ö¡¢¥Ò¡¼¥í¡¼µ¤Ê¬¤Ë¤Ê¤ë¡£";
+		if (name) return "å£«æ°—é«˜æš";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "Raise the Morale";
 		if (desc) return "Removes fear, and gives bonus to hit and 10 more HP for a while.";
@@ -8122,8 +8122,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "ÉÔÌÇ¤ÎÆùÂÎ";
-		if (desc) return "°ìÄê»ş´Ö¡¢»ş´ÖµÕÅ¾¤Ø¤ÎÂÑÀ­¤òÆÀ¤ë¡£";
+		if (name) return "ä¸æ»…ã®è‚‰ä½“";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€æ™‚é–“é€†è»¢ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Immortal Body";
 		if (desc) return "Gives resistance to time for a while.";
@@ -8143,8 +8143,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "¶¸µ¤¤Î±ß´Ä";
-		if (desc) return "¼«Ê¬¤òÃæ¿´¤È¤·¤¿¥«¥ª¥¹¤Îµå¡¢º®Íğ¤Îµå¤òÈ¯À¸¤µ¤»¡¢¶á¤¯¤Î¥â¥ó¥¹¥¿¡¼¤òÌ¥Î»¤¹¤ë¡£";
+		if (name) return "ç‹‚æ°—ã®å††ç’°";
+		if (desc) return "è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸã‚«ã‚ªã‚¹ã®çƒã€æ··ä¹±ã®çƒã‚’ç™ºç”Ÿã•ã›ã€è¿‘ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é­…äº†ã™ã‚‹ã€‚";
 #else
 		if (name) return "Insanity Circle";
 		if (desc) return "Generate balls of chaos, confusion and charm centered on you.";
@@ -8168,8 +8168,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "¥Ú¥Ã¥ÈÇúÇË";
-		if (desc) return "Á´¤Æ¤Î¥Ú¥Ã¥È¤ò¶¯À©Åª¤ËÇúÇË¤µ¤»¤ë¡£";
+		if (name) return "ãƒšãƒƒãƒˆçˆ†ç ´";
+		if (desc) return "å…¨ã¦ã®ãƒšãƒƒãƒˆã‚’å¼·åˆ¶çš„ã«çˆ†ç ´ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Explode Pets";
 		if (desc) return "Makes all pets explode.";
@@ -8185,8 +8185,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "¥°¥ì¡¼¥¿¡¼¥Ç¡¼¥â¥ó¾¤´­";
-		if (desc) return "¾åµé¥Ç¡¼¥â¥ó¤ò¾¤´­¤¹¤ë¡£¾¤´­¤¹¤ë¤Ë¤Ï¿Í´Ö('p','h','t'¤ÇÉ½¤µ¤ì¤ë¥â¥ó¥¹¥¿¡¼)¤Î»àÂÎ¤òÊû¤²¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£";
+		if (name) return "ã‚°ãƒ¬ãƒ¼ã‚¿ãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³å¬å–š";
+		if (desc) return "ä¸Šç´šãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¬å–šã™ã‚‹ã€‚å¬å–šã™ã‚‹ã«ã¯äººé–“('p','h','t'ã§è¡¨ã•ã‚Œã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼)ã®æ­»ä½“ã‚’æ§ã’ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚";
 #else
 		if (name) return "Summon Greater Demon";
 		if (desc) return "Summons greater demon. It need to sacrifice a corpse of human ('p','h' or 't').";
@@ -8202,8 +8202,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "ÃÏ¹öÍò";
-		if (desc) return "Ä¶µğÂç¤ÊÃÏ¹ö¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "åœ°ç„åµ";
+		if (desc) return "è¶…å·¨å¤§ãªåœ°ç„ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Nether Storm";
 		if (desc) return "Generate a huge ball of nether.";
@@ -8226,8 +8226,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "·ì¤Î¼ö¤¤";
-		if (desc) return "¼«Ê¬¤¬¥À¥á¡¼¥¸¤ò¼õ¤±¤ë¤³¤È¤Ë¤è¤Ã¤ÆÂĞ¾İ¤Ë¼ö¤¤¤ò¤«¤±¡¢¥À¥á¡¼¥¸¤òÍ¿¤¨ÍÍ¡¹¤Ê¸ú²Ì¤ò°ú¤­µ¯¤³¤¹¡£";
+		if (name) return "è¡€ã®å‘ªã„";
+		if (desc) return "è‡ªåˆ†ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã“ã¨ã«ã‚ˆã£ã¦å¯¾è±¡ã«å‘ªã„ã‚’ã‹ã‘ã€ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆæ§˜ã€…ãªåŠ¹æœã‚’å¼•ãèµ·ã“ã™ã€‚";
 #else
 		if (name) return "Bloody Curse";
 		if (desc) return "Puts blood curse which damages and causes various effects on a monster. You also take damage.";
@@ -8245,7 +8245,7 @@ static cptr do_daemon_spell(int spell, int mode)
 
 				fire_ball_hide(GF_BLOOD_CURSE, dir, dam, rad);
 #ifdef JP
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "·ì¤Î¼ö¤¤", -1);
+				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "è¡€ã®å‘ªã„", -1);
 #else
 				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "Blood curse", -1);
 #endif
@@ -8255,8 +8255,8 @@ static cptr do_daemon_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "Ëâ²¦ÊÑ²½";
-		if (desc) return "°­Ëâ¤Î²¦¤ËÊÑ²½¤¹¤ë¡£ÊÑ²½¤·¤Æ¤¤¤ë´Ö¤ÏËÜÍè¤Î¼ïÂ²¤ÎÇ½ÎÏ¤ò¼º¤¤¡¢Âå¤ï¤ê¤Ë°­Ëâ¤Î²¦¤È¤·¤Æ¤ÎÇ½ÎÏ¤òÆÀ¡¢ÊÉ¤òÇË²õ¤·¤Ê¤¬¤éÊâ¤¯¡£";
+		if (name) return "é­”ç‹å¤‰åŒ–";
+		if (desc) return "æ‚ªé­”ã®ç‹ã«å¤‰åŒ–ã™ã‚‹ã€‚å¤‰åŒ–ã—ã¦ã„ã‚‹é–“ã¯æœ¬æ¥ã®ç¨®æ—ã®èƒ½åŠ›ã‚’å¤±ã„ã€ä»£ã‚ã‚Šã«æ‚ªé­”ã®ç‹ã¨ã—ã¦ã®èƒ½åŠ›ã‚’å¾—ã€å£ã‚’ç ´å£Šã—ãªãŒã‚‰æ­©ãã€‚";
 #else
 		if (name) return "Polymorph Demonlord";
 		if (desc) return "Mimic a demon lord for a while. Loses abilities of original race and gets great abilities as a demon lord. Even hard walls can't stop your walking.";
@@ -8279,10 +8279,10 @@ static cptr do_daemon_spell(int spell, int mode)
 }
 
 /*!
- * @brief ÇË¼ÙÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief ç ´é‚ªé ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_crusade_spell(int spell, int mode)
 {
@@ -8298,8 +8298,8 @@ static cptr do_crusade_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "Ä¨È³";
-		if (desc) return "ÅÅ·â¤Î¥Ü¥ë¥È¤â¤·¤¯¤Ï¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "æ‡²ç½°";
+		if (desc) return "é›»æ’ƒã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Punishment";
 		if (desc) return "Fires a bolt or beam of lightning.";
@@ -8322,8 +8322,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "¼Ù°­Â¸ºß´¶ÃÎ";
-		if (desc) return "¶á¤¯¤Î¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "é‚ªæ‚ªå­˜åœ¨æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Evil";
 		if (desc) return "Detects all evil monsters in your vicinity.";
@@ -8343,8 +8343,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "¶²Éİ½üµî";
-		if (desc) return "¶²Éİ¤ò¼è¤ê½ü¤¯¡£";
+		if (name) return "ææ€–é™¤å»";
+		if (desc) return "ææ€–ã‚’å–ã‚Šé™¤ãã€‚";
 #else
 		if (name) return "Remove Fear";
 		if (desc) return "Removes fear.";
@@ -8360,8 +8360,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "°Ò°µ";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼1ÂÎ¤ò¶²Éİ¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "å¨åœ§";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’ææ€–ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Scare Monster";
 		if (desc) return "Attempts to scare a monster.";
@@ -8383,8 +8383,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "À»°è";
-		if (desc) return "ÎÙÀÜ¤·¤¿Á´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ²¤é¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "è–åŸŸ";
+		if (desc) return "éš£æ¥ã—ãŸå…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’çœ ã‚‰ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Sanctuary";
 		if (desc) return "Attempts to sleep monsters in the adjacent squares.";
@@ -8404,8 +8404,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "Æş¸ı";
-		if (desc) return "Ãæµ÷Î¥¤Î¥Æ¥ì¥İ¡¼¥È¤ò¤¹¤ë¡£";
+		if (name) return "å…¥å£";
+		if (desc) return "ä¸­è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚";
 #else
 		if (name) return "Portal";
 		if (desc) return "Teleport medium distance.";
@@ -8425,8 +8425,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "¥¹¥¿¡¼¥À¥¹¥È";
-		if (desc) return "¥¿¡¼¥²¥Ã¥ÈÉÕ¶á¤ËÁ®¸÷¤Î¥Ü¥ë¥È¤òÏ¢¼Í¤¹¤ë¡£";
+		if (name) return "ã‚¹ã‚¿ãƒ¼ãƒ€ã‚¹ãƒˆ";
+		if (desc) return "ã‚¿ãƒ¼ã‚²ãƒƒãƒˆä»˜è¿‘ã«é–ƒå…‰ã®ãƒœãƒ«ãƒˆã‚’é€£å°„ã™ã‚‹ã€‚";
 #else
 		if (name) return "Star Dust";
 		if (desc) return "Fires many bolts of light near the target.";
@@ -8448,8 +8448,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "¿ÈÂÎ¾ô²½";
-		if (desc) return "½ı¡¢ÆÇ¡¢Û¯Û°¤«¤éÁ´²÷¤¹¤ë¡£";
+		if (name) return "èº«ä½“æµ„åŒ–";
+		if (desc) return "å‚·ã€æ¯’ã€æœ¦æœ§ã‹ã‚‰å…¨å¿«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Purify";
 		if (desc) return "Heals all cut, stun and poison status.";
@@ -8467,8 +8467,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "¼Ù°­Èô¤Ğ¤·";
-		if (desc) return "¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼1ÂÎ¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "é‚ªæ‚ªé£›ã°ã—";
+		if (desc) return "é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Scatter Evil";
 		if (desc) return "Attempts to teleport an evil monster away.";
@@ -8489,8 +8489,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "À»¤Ê¤ë¸÷µå";
-		if (desc) return "À»¤Ê¤ëÎÏ¤ò¤â¤ÄÊõ¼î¤òÊü¤Ä¡£¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ËÂĞ¤·¤ÆÂç¤­¤Ê¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¤¬¡¢Á±ÎÉ¤Ê¥â¥ó¥¹¥¿¡¼¤Ë¤Ï¸ú²Ì¤¬¤Ê¤¤¡£";
+		if (name) return "è–ãªã‚‹å…‰çƒ";
+		if (desc) return "è–ãªã‚‹åŠ›ã‚’ã‚‚ã¤å®ç ã‚’æ”¾ã¤ã€‚é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ãŒã€å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯åŠ¹æœãŒãªã„ã€‚";
 #else
 		if (name) return "Holy Orb";
 		if (desc) return "Fires a ball with holy power. Hurts evil monsters greatly, but don't effect good monsters.";
@@ -8523,8 +8523,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "°­ËâÊ§¤¤";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥¢¥ó¥Ç¥Ã¥ÉµÚ¤Ó°­Ëâ¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¡¢¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ò¶²Éİ¤µ¤»¤ë¡£";
+		if (name) return "æ‚ªé­”æ‰•ã„";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰åŠã³æ‚ªé­”ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã€é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ææ€–ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Exorcism";
 		if (desc) return "Damages all undead and demons in sight, and scares all evil monsters in sight.";
@@ -8547,8 +8547,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "²ò¼ö";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Ë¤«¤«¤Ã¤¿¼å¤¤¼ö¤¤¤ò²ò½ü¤¹¤ë¡£";
+		if (name) return "è§£å‘ª";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼±ã„å‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚";
 #else
 		if (name) return "Remove Curse";
 		if (desc) return "Removes normal curses from equipped items.";
@@ -8560,7 +8560,7 @@ static cptr do_crusade_spell(int spell, int mode)
 				if (remove_curse())
 				{
 #ifdef JP
-					msg_print("Ã¯¤«¤Ë¸«¼é¤é¤ì¤Æ¤¤¤ë¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£");
+					msg_print("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚");
 #else
 					msg_print("You feel as if someone is watching over you.");
 #endif
@@ -8571,8 +8571,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "Æ©ÌÀ»ëÇ§";
-		if (desc) return "°ìÄê»ş´Ö¡¢Æ©ÌÀ¤Ê¤â¤Î¤¬¸«¤¨¤ë¤è¤¦¤Ë¤Ê¤ë¡£";
+		if (name) return "é€æ˜è¦–èª";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é€æ˜ãªã‚‚ã®ãŒè¦‹ãˆã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "Sense Unseen";
 		if (desc) return "Gives see invisible for a while.";
@@ -8592,8 +8592,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "ÂĞ¼Ù°­·ë³¦";
-		if (desc) return "¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤Î¹¶·â¤òËÉ¤°¥Ğ¥ê¥¢¤òÄ¥¤ë¡£";
+		if (name) return "å¯¾é‚ªæ‚ªçµç•Œ";
+		if (desc) return "é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ”»æ’ƒã‚’é˜²ããƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚";
 #else
 		if (name) return "Protection from Evil";
 		if (desc) return "Gives aura which protect you from evil monster's physical attack.";
@@ -8614,8 +8614,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "ºÛ¤­¤ÎÍë";
-		if (desc) return "¶¯ÎÏ¤ÊÅÅ·â¤Î¥Ü¥ë¥È¤òÊü¤Ä¡£";
+		if (name) return "è£ãã®é›·";
+		if (desc) return "å¼·åŠ›ãªé›»æ’ƒã®ãƒœãƒ«ãƒˆã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Judgment Thunder";
 		if (desc) return "Fires a powerful bolt of lightning.";
@@ -8636,8 +8636,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "À»¤Ê¤ë¸æ¸ÀÍÕ";
-		if (desc) return "»ë³¦Æâ¤Î¼Ù°­¤ÊÂ¸ºß¤ËÂç¤­¤Ê¥À¥á¡¼¥¸¤òÍ¿¤¨¡¢ÂÎÎÏ¤ò²óÉü¤·¡¢ÆÇ¡¢¶²Éİ¡¢Û¯Û°¾õÂÖ¡¢Éé½ı¤«¤éÁ´²÷¤¹¤ë¡£";
+		if (name) return "è–ãªã‚‹å¾¡è¨€è‘‰";
+		if (desc) return "è¦–ç•Œå†…ã®é‚ªæ‚ªãªå­˜åœ¨ã«å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã€ä½“åŠ›ã‚’å›å¾©ã—ã€æ¯’ã€ææ€–ã€æœ¦æœ§çŠ¶æ…‹ã€è² å‚·ã‹ã‚‰å…¨å¿«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Holy Word";
 		if (desc) return "Damages all evil monsters in sight, heals HP somewhat, and completely heals poison, fear, stun and cut status.";
@@ -8648,7 +8648,7 @@ static cptr do_crusade_spell(int spell, int mode)
 			int heal = 100;
 
 #ifdef JP
-			if (info) return format("Â»:1d%d/²ó%d", dam_sides, heal);
+			if (info) return format("æ:1d%d/å›%d", dam_sides, heal);
 #else
 			if (info) return format("dam:d%d/h%d", dam_sides, heal);
 #endif
@@ -8667,8 +8667,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "³«¤«¤ì¤¿Æ»";
-		if (desc) return "°ìÄ¾Àş¾å¤ÎÁ´¤Æ¤Îæ«¤ÈÈâ¤òÇË²õ¤¹¤ë¡£";
+		if (name) return "é–‹ã‹ã‚ŒãŸé“";
+		if (desc) return "ä¸€ç›´ç·šä¸Šã®å…¨ã¦ã®ç½ ã¨æ‰‰ã‚’ç ´å£Šã™ã‚‹ã€‚";
 #else
 		if (name) return "Unbarring Ways";
 		if (desc) return "Fires a beam which destroy traps and doors.";
@@ -8686,8 +8686,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "ÉõËâ";
-		if (desc) return "¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ÎÆ°¤­¤ò»ß¤á¤ë¡£";
+		if (name) return "å°é­”";
+		if (desc) return "é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‹•ãã‚’æ­¢ã‚ã‚‹ã€‚";
 #else
 		if (name) return "Arrest";
 		if (desc) return "Attempts to paralyze an evil monster.";
@@ -8708,8 +8708,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "À»¤Ê¤ë¥ª¡¼¥é";
-		if (desc) return "°ìÄê»ş´Ö¡¢¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ò½ı¤Ä¤±¤ëÀ»¤Ê¤ë¥ª¡¼¥é¤òÆÀ¤ë¡£";
+		if (name) return "è–ãªã‚‹ã‚ªãƒ¼ãƒ©";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å‚·ã¤ã‘ã‚‹è–ãªã‚‹ã‚ªãƒ¼ãƒ©ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Holy Aura";
 		if (desc) return "Gives aura of holy power which injures evil monsters which attacked you for a while.";
@@ -8729,8 +8729,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "¥¢¥ó¥Ç¥Ã¥É&°­ËâÂà»¶";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥¢¥ó¥Ç¥Ã¥ÉµÚ¤Ó°­Ëâ¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰&æ‚ªé­”é€€æ•£";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰åŠã³æ‚ªé­”ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Dispel Undead & Demons";
 		if (desc) return "Damages all undead and demons in sight.";
@@ -8751,8 +8751,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "¼Ù°­Âà»¶";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "é‚ªæ‚ªé€€æ•£";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Dispel Evil";
 		if (desc) return "Damages all evil monsters in sight.";
@@ -8772,8 +8772,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "À»¤Ê¤ë¿Ï";
-		if (desc) return "ÄÌ¾ï¤ÎÉğ´ï¤ËÌÇ¼Ù¤ÎÂ°À­¤ò¤Ä¤±¤ë¡£";
+		if (name) return "è–ãªã‚‹åˆƒ";
+		if (desc) return "é€šå¸¸ã®æ­¦å™¨ã«æ»…é‚ªã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Holy Blade";
 		if (desc) return "Makes current weapon especially deadly against evil monsters.";
@@ -8789,8 +8789,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "¥¹¥¿¡¼¥Ğ¡¼¥¹¥È";
-		if (desc) return "µğÂç¤ÊÁ®¸÷¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ã‚¹ã‚¿ãƒ¼ãƒãƒ¼ã‚¹ãƒˆ";
+		if (desc) return "å·¨å¤§ãªé–ƒå…‰ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Star Burst";
 		if (desc) return "Fires a huge ball of powerful light.";
@@ -8813,8 +8813,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "Å·»È¾¤´­";
-		if (desc) return "Å·»È¤ò1ÂÎ¾¤´­¤¹¤ë¡£";
+		if (name) return "å¤©ä½¿å¬å–š";
+		if (desc) return "å¤©ä½¿ã‚’1ä½“å¬å–šã™ã‚‹ã€‚";
 #else
 		if (name) return "Summon Angel";
 		if (desc) return "Summons an angel.";
@@ -8835,7 +8835,7 @@ static cptr do_crusade_spell(int spell, int mode)
 					if (pet)
 					{
 #ifdef JP
-						msg_print("¡Ö¤´ÍÑ¤Ç¤´¤¶¤¤¤Ş¤¹¤«¡¢¤´¼ç¿ÍÍÍ¡×");
+						msg_print("ã€Œã”ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€ã”ä¸»äººæ§˜ã€");
 #else
 						msg_print("'What is thy bidding... Master?'");
 #endif
@@ -8843,7 +8843,7 @@ static cptr do_crusade_spell(int spell, int mode)
 					else
 					{
 #ifdef JP
-						msg_print("¡Ö²æ¤ÏÆò¤Î²¼ËÍ¤Ë¤¢¤é¤º¡ª °­¹Ô¼Ô¤è¡¢²ù¤¤²ş¤á¤è¡ª¡×");
+						msg_print("ã€Œæˆ‘ã¯æ±ã®ä¸‹åƒ•ã«ã‚ã‚‰ãšï¼ æ‚ªè¡Œè€…ã‚ˆã€æ‚”ã„æ”¹ã‚ã‚ˆï¼ã€");
 #else
 						msg_print("Mortal! Repent of thy impiousness.");
 #endif
@@ -8855,8 +8855,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "»Îµ¤¹âÍÈ";
-		if (desc) return "°ìÄê»ş´Ö¡¢¥Ò¡¼¥í¡¼µ¤Ê¬¤Ë¤Ê¤ë¡£";
+		if (name) return "å£«æ°—é«˜æš";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "Heroism";
 		if (desc) return "Removes fear, and gives bonus to hit and 10 more HP for a while.";
@@ -8878,8 +8878,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "¼ö¤¤Âà»¶";
-		if (desc) return "¥¢¥¤¥Æ¥à¤Ë¤«¤«¤Ã¤¿¶¯ÎÏ¤Ê¼ö¤¤¤ò²ò½ü¤¹¤ë¡£";
+		if (name) return "å‘ªã„é€€æ•£";
+		if (desc) return "ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼·åŠ›ãªå‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚";
 #else
 		if (name) return "Dispel Curse";
 		if (desc) return "Removes normal and heavy curse from equipped items.";
@@ -8891,7 +8891,7 @@ static cptr do_crusade_spell(int spell, int mode)
 				if (remove_all_curse())
 				{
 #ifdef JP
-					msg_print("Ã¯¤«¤Ë¸«¼é¤é¤ì¤Æ¤¤¤ë¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£");
+					msg_print("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚");
 #else
 					msg_print("You feel as if someone is watching over you.");
 #endif
@@ -8902,8 +8902,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "¼Ù°­ÄÉÊü";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "é‚ªæ‚ªè¿½æ”¾";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Banish Evil";
 		if (desc) return "Teleports all evil monsters in sight away unless resisted.";
@@ -8919,7 +8919,7 @@ static cptr do_crusade_spell(int spell, int mode)
 				if (banish_evil(power))
 				{
 #ifdef JP
-					msg_print("¿ÀÀ»¤ÊÎÏ¤¬¼Ù°­¤òÂÇ¤ÁÊ§¤Ã¤¿¡ª");
+					msg_print("ç¥è–ãªåŠ›ãŒé‚ªæ‚ªã‚’æ‰“ã¡æ‰•ã£ãŸï¼");
 #else
 					msg_print("The holy power banishes evil!");
 #endif
@@ -8931,8 +8931,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "¥Ï¥ë¥Ş¥²¥É¥ó";
-		if (desc) return "¼şÊÕ¤Î¥¢¥¤¥Æ¥à¡¢¥â¥ó¥¹¥¿¡¼¡¢ÃÏ·Á¤òÇË²õ¤¹¤ë¡£";
+		if (name) return "ãƒãƒ«ãƒã‚²ãƒ‰ãƒ³";
+		if (desc) return "å‘¨è¾ºã®ã‚¢ã‚¤ãƒ†ãƒ ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€åœ°å½¢ã‚’ç ´å£Šã™ã‚‹ã€‚";
 #else
 		if (name) return "Armageddon";
 		if (desc) return "Destroy everything in nearby area.";
@@ -8951,8 +8951,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "ÌÜ¤Ë¤ÏÌÜ¤ò";
-		if (desc) return "°ìÄê»ş´Ö¡¢¼«Ê¬¤¬¥À¥á¡¼¥¸¤ò¼õ¤±¤¿¤È¤­¤Ë¹¶·â¤ò¹Ô¤Ã¤¿¥â¥ó¥¹¥¿¡¼¤ËÂĞ¤·¤ÆÆ±Åù¤Î¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "ç›®ã«ã¯ç›®ã‚’";
+		if (desc) return "ä¸€å®šæ™‚é–“ã€è‡ªåˆ†ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã¨ãã«æ”»æ’ƒã‚’è¡Œã£ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦åŒç­‰ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "An Eye for an Eye";
 		if (desc) return "Gives special aura for a while. When you are attacked by a monster, the monster are injured with same amount of damage as you take.";
@@ -8972,8 +8972,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "¿À¤ÎÅÜ¤ê";
-		if (desc) return "¥¿¡¼¥²¥Ã¥È¤Î¼ş°Ï¤ËÊ¬²ò¤Îµå¤òÂ¿¿ôÍî¤È¤¹¡£";
+		if (name) return "ç¥ã®æ€’ã‚Š";
+		if (desc) return "ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®å‘¨å›²ã«åˆ†è§£ã®çƒã‚’å¤šæ•°è½ã¨ã™ã€‚";
 #else
 		if (name) return "Wrath of the God";
 		if (desc) return "Drops many balls of disintegration near the target.";
@@ -8994,8 +8994,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "¿À°Ò";
-		if (desc) return "ÎÙÀÜ¤¹¤ë¥â¥ó¥¹¥¿¡¼¤ËÀ»¤Ê¤ë¥À¥á¡¼¥¸¤òÍ¿¤¨¡¢»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤Ë¥À¥á¡¼¥¸¡¢¸ºÂ®¡¢Û¯Û°¡¢º®Íğ¡¢¶²Éİ¡¢Ì²¤ê¤òÍ¿¤¨¤ë¡£¤µ¤é¤ËÂÎÎÏ¤ò²óÉü¤¹¤ë¡£";
+		if (name) return "ç¥å¨";
+		if (desc) return "éš£æ¥ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«è–ãªã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã€è¦–ç•Œå†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã€æ¸›é€Ÿã€æœ¦æœ§ã€æ··ä¹±ã€ææ€–ã€çœ ã‚Šã‚’ä¸ãˆã‚‹ã€‚ã•ã‚‰ã«ä½“åŠ›ã‚’å›å¾©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Divine Intervention";
 		if (desc) return "Damages all adjacent monsters with holy power. Damages and attempt to slow, stun, confuse, scare and freeze all monsters in sight. And heals HP.";
@@ -9008,7 +9008,7 @@ static cptr do_crusade_spell(int spell, int mode)
 			int power = plev * 4;
 
 #ifdef JP
-			if (info) return format("²ó%d/Â»%d+%d", heal, d_dam, b_dam/2);
+			if (info) return format("å›%d/æ%d+%d", heal, d_dam, b_dam/2);
 #else
 			if (info) return format("h%d/dm%d+%d", heal, d_dam, b_dam/2);
 #endif
@@ -9029,8 +9029,8 @@ static cptr do_crusade_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "À»Àï";
-		if (desc) return "»ë³¦Æâ¤ÎÁ±ÎÉ¤Ê¥â¥ó¥¹¥¿¡¼¤ò¥Ú¥Ã¥È¤Ë¤·¤è¤¦¤È¤·¡¢¤Ê¤é¤Ê¤«¤Ã¤¿¾ì¹çµÚ¤ÓÁ±ÎÉ¤Ç¤Ê¤¤¥â¥ó¥¹¥¿¡¼¤ò¶²Éİ¤µ¤»¤ë¡£¤µ¤é¤ËÂ¿¿ô¤Î²ÃÂ®¤µ¤ì¤¿µ³»Î¤ò¾¤´­¤·¡¢¥Ò¡¼¥í¡¼¡¢½ËÊ¡¡¢²ÃÂ®¡¢ÂĞ¼Ù°­·ë³¦¤òÆÀ¤ë¡£";
+		if (name) return "è–æˆ¦";
+		if (desc) return "è¦–ç•Œå†…ã®å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒšãƒƒãƒˆã«ã—ã‚ˆã†ã¨ã—ã€ãªã‚‰ãªã‹ã£ãŸå ´åˆåŠã³å–„è‰¯ã§ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ææ€–ã•ã›ã‚‹ã€‚ã•ã‚‰ã«å¤šæ•°ã®åŠ é€Ÿã•ã‚ŒãŸé¨å£«ã‚’å¬å–šã—ã€ãƒ’ãƒ¼ãƒ­ãƒ¼ã€ç¥ç¦ã€åŠ é€Ÿã€å¯¾é‚ªæ‚ªçµç•Œã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Crusade";
 		if (desc) return "Attempts to charm all good monsters in sight, and scare all non-charmed monsters, and summons great number of knights, and gives heroism, bless, speed and protection from evil.";
@@ -9075,10 +9075,10 @@ static cptr do_crusade_spell(int spell, int mode)
 
 
 /*!
- * @brief ²Î¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ²ÎID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP »ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief æ­Œã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell æ­ŒID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP æ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_music_spell(int spell, int mode)
 {
@@ -9091,7 +9091,7 @@ static cptr do_music_spell(int spell, int mode)
 	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
 
 #ifdef JP
-	static const char s_dam[] = "Â»½ı:";
+	static const char s_dam[] = "æå‚·:";
 #else
 	static const char s_dam[] = "dam ";
 #endif
@@ -9103,8 +9103,8 @@ static cptr do_music_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "ÃÙÆß¤Î²Î";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤ò¸ºÂ®¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "é…éˆã®æ­Œ";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ¸›é€Ÿã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Song of Holding";
 		if (desc) return "Attempts to slow all monsters in sight.";
@@ -9116,7 +9116,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¤æ¤Ã¤¯¤ê¤È¤·¤¿¥á¥í¥Ç¥£¤ò¸ı¤º¤µ¤ß»Ï¤á¤¿¡¥¡¥¡¥");
+			msg_print("ã‚†ã£ãã‚Šã¨ã—ãŸãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å£ãšã•ã¿å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 			msg_print("You start humming a slow, steady melody...");
 #endif
@@ -9137,8 +9137,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "½ËÊ¡¤Î²Î";
-		if (desc) return "Ì¿ÃæÎ¨¤ÈAC¤Î¥Ü¡¼¥Ê¥¹¤òÆÀ¤ë¡£";
+		if (name) return "ç¥ç¦ã®æ­Œ";
+		if (desc) return "å‘½ä¸­ç‡ã¨ACã®ãƒœãƒ¼ãƒŠã‚¹ã‚’å¾—ã‚‹ã€‚";
 #else
 		if (name) return "Song of Blessing";
 		if (desc) return "Gives bonus to hit and AC for a few turns.";
@@ -9150,7 +9150,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¸·¤«¤Ê¥á¥í¥Ç¥£¤òÁÕ¤Ç»Ï¤á¤¿¡¥¡¥¡¥");
+			msg_print("å³ã‹ãªãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 			msg_print("The holy power of the Music of the Ainur enters you...");
 #endif
@@ -9162,7 +9162,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->blessed)
 			{
 #ifdef JP
-				msg_print("¹â·é¤Êµ¤Ê¬¤¬¾Ã¤¨¼º¤»¤¿¡£");
+				msg_print("é«˜æ½”ãªæ°—åˆ†ãŒæ¶ˆãˆå¤±ã›ãŸã€‚");
 #else
 				msg_print("The prayer has expired.");
 #endif
@@ -9173,8 +9173,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "Êø²õ¤Î²»¿§";
-		if (desc) return "¹ì²»¤Î¥Ü¥ë¥È¤òÊü¤Ä¡£";
+		if (name) return "å´©å£Šã®éŸ³è‰²";
+		if (desc) return "è½ŸéŸ³ã®ãƒœãƒ«ãƒˆã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Wrecking Note";
 		if (desc) return "Fires a bolt of sound.";
@@ -9200,8 +9200,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "Û¯Û°¤ÎÀûÎ§";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤òÛ¯Û°¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "æœ¦æœ§ã®æ—‹å¾‹";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æœ¦æœ§ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Stun Pattern";
 		if (desc) return "Attempts to stun all monsters in sight.";
@@ -9213,7 +9213,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("âÁÏÇ¤µ¤»¤ë¥á¥í¥Ç¥£¤òÁÕ¤Ç»Ï¤á¤¿¡¥¡¥¡¥");
+			msg_print("çœ©æƒ‘ã•ã›ã‚‹ãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 			msg_print("You weave a pattern of sounds to bewilder and daze...");
 #endif
@@ -9236,8 +9236,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "À¸Ì¿¤ÎÎ®¤ì";
-		if (desc) return "ÂÎÎÏ¤ò¾¯¤·²óÉü¤µ¤»¤ë¡£";
+		if (name) return "ç”Ÿå‘½ã®æµã‚Œ";
+		if (desc) return "ä½“åŠ›ã‚’å°‘ã—å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Flow of Life";
 		if (desc) return "Heals HP a little.";
@@ -9249,7 +9249,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("²Î¤òÄÌ¤·¤ÆÂÎ¤Ë³èµ¤¤¬Ìá¤Ã¤Æ¤­¤¿¡¥¡¥¡¥");
+			msg_print("æ­Œã‚’é€šã—ã¦ä½“ã«æ´»æ°—ãŒæˆ»ã£ã¦ããŸï¼ï¼ï¼");
 #else
 			msg_print("Life flows through you as you sing a song of healing...");
 #endif
@@ -9272,8 +9272,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "ÂÀÍÛ¤Î²Î";
-		if (desc) return "¸÷¸»¤¬¾È¤é¤·¤Æ¤¤¤ëÈÏ°Ï¤«Éô²°Á´ÂÎ¤ò±Êµ×¤ËÌÀ¤ë¤¯¤¹¤ë¡£";
+		if (name) return "å¤ªé™½ã®æ­Œ";
+		if (desc) return "å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚";
 #else
 		if (name) return "Song of the Sun";
 		if (desc) return "Lights up nearby area and the inside of a room permanently.";
@@ -9292,7 +9292,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				msg_print("¸÷¤êµ±¤¯²Î¤¬ÊÕ¤ê¤ò¾È¤é¤·¤¿¡£");
+				msg_print("å…‰ã‚Šè¼ãæ­ŒãŒè¾ºã‚Šã‚’ç…§ã‚‰ã—ãŸã€‚");
 #else
 				msg_print("Your uplifting song brings brightness to dark places...");
 #endif
@@ -9304,8 +9304,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "¶²Éİ¤Î²Î";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤ò¶²Éİ¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ææ€–ã®æ­Œ";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ææ€–ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Song of Fear";
 		if (desc) return "Attempts to scare all monsters in sight.";
@@ -9317,7 +9317,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¤ª¤É¤í¤ª¤É¤í¤·¤¤¥á¥í¥Ç¥£¤òÁÕ¤Ç»Ï¤á¤¿¡¥¡¥¡¥");
+			msg_print("ãŠã©ã‚ãŠã©ã‚ã—ã„ãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 			msg_print("You start weaving a fearful pattern...");
 #endif
@@ -9339,8 +9339,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "Àï¤¤¤Î²Î";
-		if (desc) return "¥Ò¡¼¥í¡¼µ¤Ê¬¤Ë¤Ê¤ë¡£";
+		if (name) return "æˆ¦ã„ã®æ­Œ";
+		if (desc) return "ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "Heroic Ballad";
 		if (desc) return "Removes fear, and gives bonus to hit and 10 more HP for a while.";
@@ -9352,7 +9352,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("·ã¤·¤¤Àï¤¤¤Î²Î¤ò²Î¤Ã¤¿¡¥¡¥¡¥");
+			msg_print("æ¿€ã—ã„æˆ¦ã„ã®æ­Œã‚’æ­Œã£ãŸï¼ï¼ï¼");
 #else
 			msg_print("You start singing a song of intense fighting...");
 #endif
@@ -9371,7 +9371,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->hero)
 			{
 #ifdef JP
-				msg_print("¥Ò¡¼¥í¡¼¤Îµ¤Ê¬¤¬¾Ã¤¨¼º¤»¤¿¡£");
+				msg_print("ãƒ’ãƒ¼ãƒ­ãƒ¼ã®æ°—åˆ†ãŒæ¶ˆãˆå¤±ã›ãŸã€‚");
 #else
 				msg_print("The heroism wears off.");
 #endif
@@ -9384,8 +9384,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "ÎîÅªÃÎ³Ğ";
-		if (desc) return "¶á¤¯¤Îæ«/Èâ/³¬ÃÊ¤ò´¶ÃÎ¤¹¤ë¡£¥ì¥Ù¥ë15¤ÇÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¡¢20¤ÇºâÊõ¤È¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤ë¡£¥ì¥Ù¥ë25¤Ç¼şÊÕ¤ÎÃÏ·Á¤ò´¶ÃÎ¤·¡¢40¤Ç¤½¤Î³¬Á´ÂÎ¤ò±Êµ×¤Ë¾È¤é¤·¡¢¥À¥ó¥¸¥ç¥óÆâ¤Î¤¹¤Ù¤Æ¤Î¥¢¥¤¥Æ¥à¤ò´¶ÃÎ¤¹¤ë¡£¤³¤Î¸ú²Ì¤Ï²Î¤¤Â³¤±¤ë¤³¤È¤Ç½ç¤Ëµ¯¤³¤ë¡£";
+		if (name) return "éœŠçš„çŸ¥è¦š";
+		if (desc) return "è¿‘ãã®ç½ /æ‰‰/éšæ®µã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚ãƒ¬ãƒ™ãƒ«15ã§å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€20ã§è²¡å®ã¨ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã§ãã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚ãƒ¬ãƒ™ãƒ«25ã§å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã—ã€40ã§ãã®éšå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã®ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚ã“ã®åŠ¹æœã¯æ­Œã„ç¶šã‘ã‚‹ã“ã¨ã§é †ã«èµ·ã“ã‚‹ã€‚";
 #else
 		if (name) return "Clairaudience";
 		if (desc) return "Detects traps, doors and stairs in your vicinity. And detects all monsters at level 15, treasures and items at level 20. Maps nearby area at level 25. Lights and know the whole level at level 40. These effects occurs by turns while this song continues.";
@@ -9397,7 +9397,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("ÀÅ¤«¤Ê²»³Ú¤¬´¶³Ğ¤ò¸¦¤®À¡¤Ş¤µ¤»¤¿¡¥¡¥¡¥");
+			msg_print("é™ã‹ãªéŸ³æ¥½ãŒæ„Ÿè¦šã‚’ç ”ãæ¾„ã¾ã•ã›ãŸï¼ï¼ï¼");
 #else
 			msg_print("Your quiet music sharpens your sense of hearing...");
 #endif
@@ -9455,8 +9455,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "º²¤Î²Î";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤ËÂĞ¤·¤ÆÀº¿À¹¶·â¤ò¹Ô¤¦¡£";
+		if (name) return "é­‚ã®æ­Œ";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦ç²¾ç¥æ”»æ’ƒã‚’è¡Œã†ã€‚";
 #else
 		if (name) return "Soul Shriek";
 		if (desc) return "Damages all monsters in sight with PSI damages.";
@@ -9468,7 +9468,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("Àº¿À¤òÇ±¤¸¶Ê¤²¤ë²Î¤ò²Î¤Ã¤¿¡¥¡¥¡¥");
+			msg_print("ç²¾ç¥ã‚’æ»ã˜æ›²ã’ã‚‹æ­Œã‚’æ­Œã£ãŸï¼ï¼ï¼");
 #else
 			msg_print("You start singing a song of soul in pain...");
 #endif
@@ -9491,8 +9491,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "ÃÎ¼±¤Î²Î";
-		if (desc) return "¼«Ê¬¤Î¤¤¤ë¥Ş¥¹¤ÈÎÙ¤ê¤Î¥Ş¥¹¤ËÍî¤Á¤Æ¤¤¤ë¥¢¥¤¥Æ¥à¤ò´ÕÄê¤¹¤ë¡£";
+		if (name) return "çŸ¥è­˜ã®æ­Œ";
+		if (desc) return "è‡ªåˆ†ã®ã„ã‚‹ãƒã‚¹ã¨éš£ã‚Šã®ãƒã‚¹ã«è½ã¡ã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’é‘‘å®šã™ã‚‹ã€‚";
 #else
 		if (name) return "Song of Lore";
 		if (desc) return "Identifies all items which are in the adjacent squares.";
@@ -9504,7 +9504,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¤³¤ÎÀ¤³¦¤ÎÃÎ¼±¤¬Î®¤ì¹ş¤ó¤Ç¤­¤¿¡¥¡¥¡¥");
+			msg_print("ã“ã®ä¸–ç•Œã®çŸ¥è­˜ãŒæµã‚Œè¾¼ã‚“ã§ããŸï¼ï¼ï¼");
 #else
 			msg_print("You recall the rich lore of the world...");
 #endif
@@ -9517,8 +9517,8 @@ static cptr do_music_spell(int spell, int mode)
 			if (info) return info_radius(rad);
 
 			/*
-			 * ²Î¤Î³«»Ï»ş¤Ë¤â¸ú²ÌÈ¯Æ°¡§
-			 * MPÉÔÂ­¤Ç´ÕÄê¤¬È¯Æ°¤µ¤ì¤ëÁ°¤Ë²Î¤¬ÃæÃÇ¤·¤Æ¤·¤Ş¤¦¤Î¤òËÉ»ß¡£
+			 * æ­Œã®é–‹å§‹æ™‚ã«ã‚‚åŠ¹æœç™ºå‹•ï¼š
+			 * MPä¸è¶³ã§é‘‘å®šãŒç™ºå‹•ã•ã‚Œã‚‹å‰ã«æ­ŒãŒä¸­æ–­ã—ã¦ã—ã¾ã†ã®ã‚’é˜²æ­¢ã€‚
 			 */
 			if (cont || cast)
 			{
@@ -9530,8 +9530,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "±£ÆÛ¤Î²Î";
-		if (desc) return "±£Ì©¹ÔÆ°Ç½ÎÏ¤ò¾å¾º¤µ¤»¤ë¡£";
+		if (name) return "éš éã®æ­Œ";
+		if (desc) return "éš å¯†è¡Œå‹•èƒ½åŠ›ã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Hiding Tune";
 		if (desc) return "Gives improved stealth.";
@@ -9543,7 +9543,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¤¢¤Ê¤¿¤Î»Ñ¤¬·Ê¿§¤Ë¤È¤±¤³¤ó¤Ç¤¤¤Ã¤¿¡¥¡¥¡¥");
+			msg_print("ã‚ãªãŸã®å§¿ãŒæ™¯è‰²ã«ã¨ã‘ã“ã‚“ã§ã„ã£ãŸï¼ï¼ï¼");
 #else
 			msg_print("Your song carries you beyond the sight of mortal eyes...");
 #endif
@@ -9555,7 +9555,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->tim_stealth)
 			{
 #ifdef JP
-				msg_print("»Ñ¤¬¤Ï¤Ã¤­¤ê¤È¸«¤¨¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£");
+				msg_print("å§¿ãŒã¯ã£ãã‚Šã¨è¦‹ãˆã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚");
 #else
 				msg_print("You are no longer hided.");
 #endif
@@ -9566,8 +9566,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "¸¸±Æ¤ÎÀûÎ§";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤òº®Íğ¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "å¹»å½±ã®æ—‹å¾‹";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ··ä¹±ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Illusion Pattern";
 		if (desc) return "Attempts to confuse all monsters in sight.";
@@ -9579,7 +9579,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("ÊÕ¤ê°ìÌÌ¤Ë¸¸±Æ¤¬¸½¤ì¤¿¡¥¡¥¡¥");
+			msg_print("è¾ºã‚Šä¸€é¢ã«å¹»å½±ãŒç¾ã‚ŒãŸï¼ï¼ï¼");
 #else
 			msg_print("You weave a pattern of sounds to beguile and confuse...");
 #endif
@@ -9601,8 +9601,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "ÇËÌÇ¤Î¶«¤Ó";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤ËÂĞ¤·¤Æ¹ì²»¹¶·â¤ò¹Ô¤¦¡£";
+		if (name) return "ç ´æ»…ã®å«ã³";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦è½ŸéŸ³æ”»æ’ƒã‚’è¡Œã†ã€‚";
 #else
 		if (name) return "Doomcall";
 		if (desc) return "Damages all monsters in sight with booming sound.";
@@ -9614,7 +9614,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¹ì²»¤¬¶Á¤¤¤¿¡¥¡¥¡¥");
+			msg_print("è½ŸéŸ³ãŒéŸ¿ã„ãŸï¼ï¼ï¼");
 #else
 			msg_print("The fury of the Downfall of Numenor lashes out...");
 #endif
@@ -9637,8 +9637,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "¥Õ¥£¥ê¥¨¥ë¤Î²Î";
-		if (desc) return "¼ş°Ï¤Î»àÂÎ¤ä¹ü¤òÀ¸¤­ÊÖ¤¹¡£";
+		if (name) return "ãƒ•ã‚£ãƒªã‚¨ãƒ«ã®æ­Œ";
+		if (desc) return "å‘¨å›²ã®æ­»ä½“ã‚„éª¨ã‚’ç”Ÿãè¿”ã™ã€‚";
 #else
 		if (name) return "Firiel's Song";
 		if (desc) return "Resurrects nearby corpse and skeletons. And makes these your pets.";
@@ -9651,7 +9651,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				msg_print("À¸Ì¿¤ÈÉü³è¤Î¥Æ¡¼¥Ş¤òÁÕ¤Ç»Ï¤á¤¿¡¥¡¥¡¥");
+				msg_print("ç”Ÿå‘½ã¨å¾©æ´»ã®ãƒ†ãƒ¼ãƒã‚’å¥ã§å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 				msg_print("The themes of life and revival are woven into your song...");
 #endif
@@ -9663,8 +9663,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "Î¹¤ÎÃç´Ö";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤òÌ¥Î»¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "æ—…ã®ä»²é–“";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Fellowship Chant";
 		if (desc) return "Attempts to charm all monsters in sight.";
@@ -9676,7 +9676,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("°Â¤é¤«¤Ê¥á¥í¥Ç¥£¤òÁÕ¤Ç»Ï¤á¤¿¡¥¡¥¡¥");
+			msg_print("å®‰ã‚‰ã‹ãªãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 			msg_print("You weave a slow, soothing melody of imploration...");
 #endif
@@ -9699,8 +9699,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "Ê¬²ò²»ÇÈ";
-		if (desc) return "ÊÉ¤ò·¡¤ê¿Ê¤à¡£¼«Ê¬¤ÎÂ­¸µ¤Î¥¢¥¤¥Æ¥à¤Ï¾øÈ¯¤¹¤ë¡£";
+		if (name) return "åˆ†è§£éŸ³æ³¢";
+		if (desc) return "å£ã‚’æ˜ã‚Šé€²ã‚€ã€‚è‡ªåˆ†ã®è¶³å…ƒã®ã‚¢ã‚¤ãƒ†ãƒ ã¯è’¸ç™ºã™ã‚‹ã€‚";
 #else
 		if (name) return "Sound of disintegration";
 		if (desc) return "Makes you be able to burrow into walls. Objects under your feet evaporate.";
@@ -9712,7 +9712,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("Ê´ºÕ¤¹¤ë¥á¥í¥Ç¥£¤òÁÕ¤Ç»Ï¤á¤¿¡¥¡¥¡¥");
+			msg_print("ç²‰ç •ã™ã‚‹ãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 			msg_print("You weave a violent pattern of sounds to break wall.");
 #endif
@@ -9721,8 +9721,8 @@ static cptr do_music_spell(int spell, int mode)
 
 		{
 			/*
-			 * ²Î¤Î³«»Ï»ş¤Ë¤â¸ú²ÌÈ¯Æ°¡§
-			 * MPÉÔÂ­¤Ç¸ú²Ì¤¬È¯Æ°¤µ¤ì¤ëÁ°¤Ë²Î¤¬ÃæÃÇ¤·¤Æ¤·¤Ş¤¦¤Î¤òËÉ»ß¡£
+			 * æ­Œã®é–‹å§‹æ™‚ã«ã‚‚åŠ¹æœç™ºå‹•ï¼š
+			 * MPä¸è¶³ã§åŠ¹æœãŒç™ºå‹•ã•ã‚Œã‚‹å‰ã«æ­ŒãŒä¸­æ–­ã—ã¦ã—ã¾ã†ã®ã‚’é˜²æ­¢ã€‚
 			 */
 			if (cont || cast)
 			{
@@ -9734,8 +9734,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "¸µÁÇÂÑÀ­";
-		if (desc) return "»À¡¢ÅÅ·â¡¢±ê¡¢Îäµ¤¡¢ÆÇ¤ËÂĞ¤¹¤ëÂÑÀ­¤òÆÀ¤ë¡£ÁõÈ÷¤Ë¤è¤ëÂÑÀ­¤ËÎßÀÑ¤¹¤ë¡£";
+		if (name) return "å…ƒç´ è€æ€§";
+		if (desc) return "é…¸ã€é›»æ’ƒã€ç‚ã€å†·æ°—ã€æ¯’ã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Finrod's Resistance";
 		if (desc) return "Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to which from equipment for more powerful resistances.";
@@ -9747,7 +9747,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¸µÁÇ¤ÎÎÏ¤ËÂĞ¤¹¤ëÇ¦ÂÑ¤Î²Î¤ò²Î¤Ã¤¿¡£");
+			msg_print("å…ƒç´ ã®åŠ›ã«å¯¾ã™ã‚‹å¿è€ã®æ­Œã‚’æ­Œã£ãŸã€‚");
 #else
 			msg_print("You sing a song of perseverance against powers...");
 #endif
@@ -9759,7 +9759,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->oppose_acid)
 			{
 #ifdef JP
-				msg_print("»À¤Ø¤ÎÂÑÀ­¤¬Çö¤ì¤¿µ¤¤¬¤¹¤ë¡£");
+				msg_print("é…¸ã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 				msg_print("You feel less resistant to acid.");
 #endif
@@ -9768,7 +9768,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->oppose_elec)
 			{
 #ifdef JP
-				msg_print("ÅÅ·â¤Ø¤ÎÂÑÀ­¤¬Çö¤ì¤¿µ¤¤¬¤¹¤ë¡£");
+				msg_print("é›»æ’ƒã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 				msg_print("You feel less resistant to elec.");
 #endif
@@ -9777,7 +9777,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->oppose_fire)
 			{
 #ifdef JP
-				msg_print("²Ğ¤Ø¤ÎÂÑÀ­¤¬Çö¤ì¤¿µ¤¤¬¤¹¤ë¡£");
+				msg_print("ç«ã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 				msg_print("You feel less resistant to fire.");
 #endif
@@ -9786,7 +9786,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->oppose_cold)
 			{
 #ifdef JP
-				msg_print("Îäµ¤¤Ø¤ÎÂÑÀ­¤¬Çö¤ì¤¿µ¤¤¬¤¹¤ë¡£");
+				msg_print("å†·æ°—ã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 				msg_print("You feel less resistant to cold.");
 #endif
@@ -9795,7 +9795,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->oppose_pois)
 			{
 #ifdef JP
-				msg_print("ÆÇ¤Ø¤ÎÂÑÀ­¤¬Çö¤ì¤¿µ¤¤¬¤¹¤ë¡£");
+				msg_print("æ¯’ã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 				msg_print("You feel less resistant to pois.");
 #endif
@@ -9806,8 +9806,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "¥Û¥Ó¥Ã¥È¤Î¥á¥í¥Ç¥£";
-		if (desc) return "²ÃÂ®¤¹¤ë¡£";
+		if (name) return "ãƒ›ãƒ“ãƒƒãƒˆã®ãƒ¡ãƒ­ãƒ‡ã‚£";
+		if (desc) return "åŠ é€Ÿã™ã‚‹ã€‚";
 #else
 		if (name) return "Hobbit Melodies";
 		if (desc) return "Hastes you.";
@@ -9819,7 +9819,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("·Ú²÷¤Ê²Î¤ò¸ı¤º¤µ¤ß»Ï¤á¤¿¡¥¡¥¡¥");
+			msg_print("è»½å¿«ãªæ­Œã‚’å£ãšã•ã¿å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 			msg_print("You start singing joyful pop song...");
 #endif
@@ -9831,7 +9831,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->fast)
 			{
 #ifdef JP
-				msg_print("Æ°¤­¤ÎÁÇÁá¤µ¤¬¤Ê¤¯¤Ê¤Ã¤¿¤è¤¦¤À¡£");
+				msg_print("å‹•ãã®ç´ æ—©ã•ãŒãªããªã£ãŸã‚ˆã†ã ã€‚");
 #else
 				msg_print("You feel yourself slow down.");
 #endif
@@ -9842,8 +9842,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "ÏÄ¤ó¤ÀÀ¤³¦";
-		if (desc) return "¶á¤¯¤Î¥â¥ó¥¹¥¿¡¼¤ò¥Æ¥ì¥İ¡¼¥È¤µ¤»¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "æ­ªã‚“ã ä¸–ç•Œ";
+		if (desc) return "è¿‘ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "World Contortion";
 		if (desc) return "Teleports all nearby monsters away unless resisted.";
@@ -9861,7 +9861,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				msg_print("²Î¤¬¶õ´Ö¤òÏÄ¤á¤¿¡¥¡¥¡¥");
+				msg_print("æ­ŒãŒç©ºé–“ã‚’æ­ªã‚ãŸï¼ï¼ï¼");
 #else
 				msg_print("Reality whirls wildly as you sing a dizzying melody...");
 #endif
@@ -9873,8 +9873,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "Âà»¶¤Î²Î";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ËÆÃ¤ËÂç¤­¤Ê¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "é€€æ•£ã®æ­Œ";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ç‰¹ã«å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Dispelling chant";
 		if (desc) return "Damages all monsters in sight. Hurts evil monsters greatly.";
@@ -9886,7 +9886,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("ÂÑ¤¨¤é¤ì¤Ê¤¤ÉÔ¶¨ÏÂ²»¤¬Å¨¤òÀÕ¤áÎ©¤Æ¤¿¡¥¡¥¡¥");
+			msg_print("è€ãˆã‚‰ã‚Œãªã„ä¸å”å’ŒéŸ³ãŒæ•µã‚’è²¬ã‚ç«‹ã¦ãŸï¼ï¼ï¼");
 #else
 			msg_print("You cry out in an ear-wracking voice...");
 #endif
@@ -9909,8 +9909,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "¥µ¥ë¥Ş¥ó¤Î´Å¸À";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤ò¸ºÂ®¤µ¤»¡¢Ì²¤é¤»¤è¤¦¤È¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "ã‚µãƒ«ãƒãƒ³ã®ç”˜è¨€";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ¸›é€Ÿã•ã›ã€çœ ã‚‰ã›ã‚ˆã†ã¨ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "The Voice of Saruman";
 		if (desc) return "Attempts to slow and sleep all monsters in sight.";
@@ -9922,7 +9922,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("Í¥¤·¤¯¡¢Ì¥ÎÏÅª¤Ê²Î¤ò¸ı¤º¤µ¤ß»Ï¤á¤¿¡¥¡¥¡¥");
+			msg_print("å„ªã—ãã€é­…åŠ›çš„ãªæ­Œã‚’å£ãšã•ã¿å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 			msg_print("You start humming a gentle and attractive song...");
 #endif
@@ -9945,8 +9945,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "Íò¤Î²»¿§";
-		if (desc) return "¹ì²»¤Î¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "åµã®éŸ³è‰²";
+		if (desc) return "è½ŸéŸ³ã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Song of the Tempest";
 		if (desc) return "Fires a beam of sound.";
@@ -9972,8 +9972,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "¤â¤¦°ì¤Ä¤ÎÀ¤³¦";
-		if (desc) return "¸½ºß¤Î³¬¤òºÆ¹½À®¤¹¤ë¡£";
+		if (name) return "ã‚‚ã†ä¸€ã¤ã®ä¸–ç•Œ";
+		if (desc) return "ç¾åœ¨ã®éšã‚’å†æ§‹æˆã™ã‚‹ã€‚";
 #else
 		if (name) return "Ambarkanta";
 		if (desc) return "Recreates current dungeon level.";
@@ -9991,7 +9991,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				msg_print("¼ş°Ï¤¬ÊÑ²½¤·»Ï¤á¤¿¡¥¡¥¡¥");
+				msg_print("å‘¨å›²ãŒå¤‰åŒ–ã—å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 				msg_print("You sing of the primeval shaping of Middle-earth...");
 #endif
@@ -10003,8 +10003,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "ÇË²õ¤ÎÀûÎ§";
-		if (desc) return "¼ş°Ï¤Î¥À¥ó¥¸¥ç¥ó¤òÍÉ¤é¤·¡¢ÊÉ¤È¾²¤ò¥é¥ó¥À¥à¤ËÆş¤ìÊÑ¤¨¤ë¡£";
+		if (name) return "ç ´å£Šã®æ—‹å¾‹";
+		if (desc) return "å‘¨å›²ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’æºã‚‰ã—ã€å£ã¨åºŠã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«å…¥ã‚Œå¤‰ãˆã‚‹ã€‚";
 #else
 		if (name) return "Wrecking Pattern";
 		if (desc) return "Shakes dungeon structure, and results in random swapping of floors and walls.";
@@ -10016,7 +10016,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("ÇË²õÅª¤Ê²Î¤¬¶Á¤­¤ï¤¿¤Ã¤¿¡¥¡¥¡¥");
+			msg_print("ç ´å£Šçš„ãªæ­ŒãŒéŸ¿ãã‚ãŸã£ãŸï¼ï¼ï¼");
 #else
 			msg_print("You weave a pattern of sounds to contort and shatter...");
 #endif
@@ -10039,8 +10039,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "ÄäÂÚ¤Î²Î";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤òËãáã¤µ¤»¤è¤¦¤È¤¹¤ë¡£Äñ¹³¤µ¤ì¤ë¤ÈÌµ¸ú¡£";
+		if (name) return "åœæ»ã®æ­Œ";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’éº»ç—ºã•ã›ã‚ˆã†ã¨ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚";
 #else
 		if (name) return "Stationary Shriek";
 		if (desc) return "Attempts to freeze all monsters in sight.";
@@ -10052,7 +10052,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¤æ¤Ã¤¯¤ê¤È¤·¤¿¥á¥í¥Ç¥£¤òÁÕ¤Ç»Ï¤á¤¿¡¥¡¥¡¥");
+			msg_print("ã‚†ã£ãã‚Šã¨ã—ãŸãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼ï¼ï¼");
 #else
 			msg_print("You weave a very slow pattern which is almost likely to stop...");
 #endif
@@ -10074,8 +10074,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "¼é¤ê¤Î²Î";
-		if (desc) return "¼«Ê¬¤Î¤¤¤ë¾²¤Î¾å¤Ë¡¢¥â¥ó¥¹¥¿¡¼¤¬ÄÌ¤êÈ´¤±¤¿¤ê¾¤´­¤µ¤ì¤¿¤ê¤¹¤ë¤³¤È¤¬¤Ç¤­¤Ê¤¯¤Ê¤ë¥ë¡¼¥ó¤òÉÁ¤¯¡£";
+		if (name) return "å®ˆã‚Šã®æ­Œ";
+		if (desc) return "è‡ªåˆ†ã®ã„ã‚‹åºŠã®ä¸Šã«ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€šã‚ŠæŠœã‘ãŸã‚Šå¬å–šã•ã‚ŒãŸã‚Šã™ã‚‹ã“ã¨ãŒã§ããªããªã‚‹ãƒ«ãƒ¼ãƒ³ã‚’æãã€‚";
 #else
 		if (name) return "Endurance";
 		if (desc) return "Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.";
@@ -10088,7 +10088,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				msg_print("²Î¤¬¿ÀÀ»¤Ê¾ì¤òºî¤ê½Ğ¤·¤¿¡¥¡¥¡¥");
+				msg_print("æ­ŒãŒç¥è–ãªå ´ã‚’ä½œã‚Šå‡ºã—ãŸï¼ï¼ï¼");
 #else
 				msg_print("The holy power of the Music is creating sacred field...");
 #endif
@@ -10100,8 +10100,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "±ÑÍº¤Î»í";
-		if (desc) return "²ÃÂ®¤·¡¢¥Ò¡¼¥í¡¼µ¤Ê¬¤Ë¤Ê¤ê¡¢»ë³¦Æâ¤ÎÁ´¤Æ¤Î¥â¥ó¥¹¥¿¡¼¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "è‹±é›„ã®è©©";
+		if (desc) return "åŠ é€Ÿã—ã€ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚Šã€è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "The Hero's Poem";
 		if (desc) return "Hastes you. Gives heroism. Damages all monsters in sight.";
@@ -10113,7 +10113,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("±ÑÍº¤Î²Î¤ò¸ı¤º¤µ¤ó¤À¡¥¡¥¡¥");
+			msg_print("è‹±é›„ã®æ­Œã‚’å£ãšã•ã‚“ã ï¼ï¼ï¼");
 #else
 			msg_print("You chant a powerful, heroic call to arms...");
 #endif
@@ -10131,7 +10131,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->hero)
 			{
 #ifdef JP
-				msg_print("¥Ò¡¼¥í¡¼¤Îµ¤Ê¬¤¬¾Ã¤¨¼º¤»¤¿¡£");
+				msg_print("ãƒ’ãƒ¼ãƒ­ãƒ¼ã®æ°—åˆ†ãŒæ¶ˆãˆå¤±ã›ãŸã€‚");
 #else
 				msg_print("The heroism wears off.");
 #endif
@@ -10142,7 +10142,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->fast)
 			{
 #ifdef JP
-				msg_print("Æ°¤­¤ÎÁÇÁá¤µ¤¬¤Ê¤¯¤Ê¤Ã¤¿¤è¤¦¤À¡£");
+				msg_print("å‹•ãã®ç´ æ—©ã•ãŒãªããªã£ãŸã‚ˆã†ã ã€‚");
 #else
 				msg_print("You feel yourself slow down.");
 #endif
@@ -10164,8 +10164,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "¥ä¥ô¥¡¥ó¥Ê¤Î½õ¤±";
-		if (desc) return "¶¯ÎÏ¤Ê²óÉü¤Î²Î¤Ç¡¢Éé½ı¤ÈÛ¯Û°¾õÂÖ¤âÁ´²÷¤¹¤ë¡£";
+		if (name) return "ãƒ¤ãƒ´ã‚¡ãƒ³ãƒŠã®åŠ©ã‘";
+		if (desc) return "å¼·åŠ›ãªå›å¾©ã®æ­Œã§ã€è² å‚·ã¨æœ¦æœ§çŠ¶æ…‹ã‚‚å…¨å¿«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Relief of Yavanna";
 		if (desc) return "Powerful healing song. Also heals cut and stun completely.";
@@ -10177,7 +10177,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("²Î¤òÄÌ¤·¤ÆÂÎ¤Ë³èµ¤¤¬Ìá¤Ã¤Æ¤­¤¿¡¥¡¥¡¥");
+			msg_print("æ­Œã‚’é€šã—ã¦ä½“ã«æ´»æ°—ãŒæˆ»ã£ã¦ããŸï¼ï¼ï¼");
 #else
 			msg_print("Life flows through you as you sing the song...");
 #endif
@@ -10202,8 +10202,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "ºÆÀ¸¤Î²Î";
-		if (desc) return "¤¹¤Ù¤Æ¤Î¥¹¥Æ¡¼¥¿¥¹¤È·Ğ¸³ÃÍ¤ò²óÉü¤¹¤ë¡£";
+		if (name) return "å†ç”Ÿã®æ­Œ";
+		if (desc) return "ã™ã¹ã¦ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¨çµŒé¨“å€¤ã‚’å›å¾©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Goddess' rebirth";
 		if (desc) return "Restores all stats and experience.";
@@ -10216,7 +10216,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (cast)
 			{
 #ifdef JP
-				msg_print("°Å¹õ¤ÎÃæ¤Ë¸÷¤ÈÈş¤ò¤Õ¤ê¤Ş¤¤¤¿¡£ÂÎ¤¬¸µ¤Î³èÎÏ¤ò¼è¤êÌá¤·¤¿¡£");
+				msg_print("æš—é»’ã®ä¸­ã«å…‰ã¨ç¾ã‚’ãµã‚Šã¾ã„ãŸã€‚ä½“ãŒå…ƒã®æ´»åŠ›ã‚’å–ã‚Šæˆ»ã—ãŸã€‚");
 #else
 				msg_print("You strewed light and beauty in the dark as you sing. You feel refreshed.");
 #endif
@@ -10233,8 +10233,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "¥µ¥¦¥í¥ó¤ÎËâ½Ñ";
-		if (desc) return "Èó¾ï¤Ë¶¯ÎÏ¤Ç¤´¤¯¾®¤µ¤¤¹ì²»¤Îµå¤òÊü¤Ä¡£";
+		if (name) return "ã‚µã‚¦ãƒ­ãƒ³ã®é­”è¡“";
+		if (desc) return "éå¸¸ã«å¼·åŠ›ã§ã”ãå°ã•ã„è½ŸéŸ³ã®çƒã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Wizardry of Sauron";
 		if (desc) return "Fires an extremely powerful tiny ball of sound.";
@@ -10261,8 +10261,8 @@ static cptr do_music_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "¥Õ¥£¥ó¥´¥ë¥Õ¥£¥ó¤ÎÄ©Àï";
-		if (desc) return "¥À¥á¡¼¥¸¤ò¼õ¤±¤Ê¤¯¤Ê¤ë¥Ğ¥ê¥¢¤òÄ¥¤ë¡£";
+		if (name) return "ãƒ•ã‚£ãƒ³ã‚´ãƒ«ãƒ•ã‚£ãƒ³ã®æŒ‘æˆ¦";
+		if (desc) return "ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãªããªã‚‹ãƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚";
 #else
 		if (name) return "Fingolfin's Challenge";
 		if (desc) return "Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks.";
@@ -10274,7 +10274,7 @@ static cptr do_music_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-				msg_print("¥Õ¥£¥ó¥´¥ë¥Õ¥£¥ó¤ÎÌ½²¦¤Ø¤ÎÄ©Àï¤ò²Î¤Ã¤¿¡¥¡¥¡¥");
+				msg_print("ãƒ•ã‚£ãƒ³ã‚´ãƒ«ãƒ•ã‚£ãƒ³ã®å†¥ç‹ã¸ã®æŒ‘æˆ¦ã‚’æ­Œã£ãŸï¼ï¼ï¼");
 #else
 				msg_print("You recall the valor of Fingolfin's challenge to the Dark Lord...");
 #endif
@@ -10296,7 +10296,7 @@ static cptr do_music_spell(int spell, int mode)
 			if (!p_ptr->invuln)
 			{
 #ifdef JP
-				msg_print("ÌµÅ¨¤Ç¤Ï¤Ê¤¯¤Ê¤Ã¤¿¡£");
+				msg_print("ç„¡æ•µã§ã¯ãªããªã£ãŸã€‚");
 #else
 				msg_print("The invulnerability wears off.");
 #endif
@@ -10318,10 +10318,10 @@ static cptr do_music_spell(int spell, int mode)
 }
 
 /*!
- * @brief ·õ½Ñ¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ·õ½ÑID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST»ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief å‰£è¡“ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell å‰£è¡“ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_CAST)
+ * @return SPELL_NAME / SPELL_DESC æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_hissatsu_spell(int spell, int mode)
 {
@@ -10336,8 +10336,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 	{
 	case 0:
 #ifdef JP
-		if (name) return "ÈôÈÓ¹Ë";
-		if (desc) return "2¥Ş¥¹Î¥¤ì¤¿¤È¤³¤í¤Ë¤¤¤ë¥â¥ó¥¹¥¿¡¼¤ò¹¶·â¤¹¤ë¡£";
+		if (name) return "é£›é£¯ç¶±";
+		if (desc) return "2ãƒã‚¹é›¢ã‚ŒãŸã¨ã“ã‚ã«ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ”»æ’ƒã™ã‚‹ã€‚";
 #else
 		if (name) return "Tobi-Izuna";
 		if (desc) return "Attacks a two squares distant monster.";
@@ -10354,8 +10354,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "¸Ş·î±«»Â¤ê";
-		if (desc) return "3Êı¸ş¤ËÂĞ¤·¤Æ¹¶·â¤¹¤ë¡£";
+		if (name) return "äº”æœˆé›¨æ–¬ã‚Š";
+		if (desc) return "3æ–¹å‘ã«å¯¾ã—ã¦æ”»æ’ƒã™ã‚‹ã€‚";
 #else
 		if (name) return "3-Way Attack";
 		if (desc) return "Attacks in 3 directions in one time.";
@@ -10382,7 +10382,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, 0);
 			else
 #ifdef JP
-				msg_print("¹¶·â¤Ï¶õ¤òÀÚ¤Ã¤¿¡£");
+				msg_print("æ”»æ’ƒã¯ç©ºã‚’åˆ‡ã£ãŸã€‚");
 #else
 				msg_print("You attack the empty air.");
 #endif
@@ -10392,7 +10392,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, 0);
 			else
 #ifdef JP
-				msg_print("¹¶·â¤Ï¶õ¤òÀÚ¤Ã¤¿¡£");
+				msg_print("æ”»æ’ƒã¯ç©ºã‚’åˆ‡ã£ãŸã€‚");
 #else
 				msg_print("You attack the empty air.");
 #endif
@@ -10402,7 +10402,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, 0);
 			else
 #ifdef JP
-				msg_print("¹¶·â¤Ï¶õ¤òÀÚ¤Ã¤¿¡£");
+				msg_print("æ”»æ’ƒã¯ç©ºã‚’åˆ‡ã£ãŸã€‚");
 #else
 				msg_print("You attack the empty air.");
 #endif
@@ -10411,8 +10411,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "¥Ö¡¼¥á¥é¥ó";
-		if (desc) return "Éğ´ï¤ò¼ê¸µ¤ËÌá¤Ã¤Æ¤¯¤ë¤è¤¦¤ËÅê¤²¤ë¡£Ìá¤Ã¤Æ¤³¤Ê¤¤¤³¤È¤â¤¢¤ë¡£";
+		if (name) return "ãƒ–ãƒ¼ãƒ¡ãƒ©ãƒ³";
+		if (desc) return "æ­¦å™¨ã‚’æ‰‹å…ƒã«æˆ»ã£ã¦ãã‚‹ã‚ˆã†ã«æŠ•ã’ã‚‹ã€‚æˆ»ã£ã¦ã“ãªã„ã“ã¨ã‚‚ã‚ã‚‹ã€‚";
 #else
 		if (name) return "Boomerang";
 		if (desc) return "Throws current weapon. And it'll return to your hand unless failed.";
@@ -10426,8 +10426,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "±ëÎî";
-		if (desc) return "²Ğ±êÂÑÀ­¤Î¤Ê¤¤¥â¥ó¥¹¥¿¡¼¤ËÂç¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "ç„”éœŠ";
+		if (desc) return "ç«ç‚è€æ€§ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Burning Strike";
 		if (desc) return "Attacks a monster with more damage unless it has resistance to fire.";
@@ -10448,7 +10448,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10459,8 +10459,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "»¦µ¤´¶ÃÎ";
-		if (desc) return "¶á¤¯¤Î»×¹Í¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "æ®ºæ°—æ„ŸçŸ¥";
+		if (desc) return "è¿‘ãã®æ€è€ƒã™ã‚‹ã“ã¨ãŒã§ãã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Detect Ferocity";
 		if (desc) return "Detects all monsters except mindless in your vicinity.";
@@ -10474,8 +10474,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "¤ß¤ÍÂÇ¤Á";
-		if (desc) return "Áê¼ê¤Ë¥À¥á¡¼¥¸¤òÍ¿¤¨¤Ê¤¤¤¬¡¢Û¯Û°¤È¤µ¤»¤ë¡£";
+		if (name) return "ã¿ã­æ‰“ã¡";
+		if (desc) return "ç›¸æ‰‹ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆãªã„ãŒã€æœ¦æœ§ã¨ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Strike to Stun";
 		if (desc) return "Attempts to stun a monster in the adjacent.";
@@ -10496,7 +10496,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10507,8 +10507,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "¥«¥¦¥ó¥¿¡¼";
-		if (desc) return "Áê¼ê¤Ë¹¶·â¤µ¤ì¤¿¤È¤­¤ËÈ¿·â¤¹¤ë¡£È¿·â¤¹¤ë¤¿¤Ó¤ËMP¤ò¾ÃÈñ¡£";
+		if (name) return "ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼";
+		if (desc) return "ç›¸æ‰‹ã«æ”»æ’ƒã•ã‚ŒãŸã¨ãã«åæ’ƒã™ã‚‹ã€‚åæ’ƒã™ã‚‹ãŸã³ã«MPã‚’æ¶ˆè²»ã€‚";
 #else
 		if (name) return "Counter";
 		if (desc) return "Prepares to counterattack. When attack by a monster, strikes back using SP each time.";
@@ -10519,14 +10519,14 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			if (p_ptr->riding)
 			{
 #ifdef JP
-				msg_print("¾èÇÏÃæ¤Ë¤ÏÌµÍı¤À¡£");
+				msg_print("ä¹—é¦¬ä¸­ã«ã¯ç„¡ç†ã ã€‚");
 #else
 				msg_print("You cannot do it when riding.");
 #endif
 				return NULL;
 			}
 #ifdef JP
-			msg_print("Áê¼ê¤Î¹¶·â¤ËÂĞ¤·¤Æ¿È¹½¤¨¤¿¡£");
+			msg_print("ç›¸æ‰‹ã®æ”»æ’ƒã«å¯¾ã—ã¦èº«æ§‹ãˆãŸã€‚");
 #else
 			msg_print("You prepare to counter blow.");
 #endif
@@ -10536,8 +10536,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "Ê§¤¤È´¤±";
-		if (desc) return "¹¶·â¤·¤¿¸å¡¢È¿ÂĞÂ¦¤ËÈ´¤±¤ë¡£";
+		if (name) return "æ‰•ã„æŠœã‘";
+		if (desc) return "æ”»æ’ƒã—ãŸå¾Œã€åå¯¾å´ã«æŠœã‘ã‚‹ã€‚";
 #else
 		if (name) return "Harainuke";
 		if (desc) return "Attacks monster with your weapons normally, then move through counter side of the monster.";
@@ -10550,7 +10550,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			if (p_ptr->riding)
 			{
 #ifdef JP
-				msg_print("¾èÇÏÃæ¤Ë¤ÏÌµÍı¤À¡£");
+				msg_print("ä¹—é¦¬ä¸­ã«ã¯ç„¡ç†ã ã€‚");
 #else
 				msg_print("You cannot do it when riding.");
 #endif
@@ -10566,7 +10566,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			if (!cave[y][x].m_idx)
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10593,8 +10593,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 8:
 #ifdef JP
-		if (name) return "¥µ¡¼¥Ú¥ó¥Ä¥¿¥ó";
-		if (desc) return "ÆÇÂÑÀ­¤Î¤Ê¤¤¥â¥ó¥¹¥¿¡¼¤ËÂç¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "ã‚µãƒ¼ãƒšãƒ³ãƒ„ã‚¿ãƒ³";
+		if (desc) return "æ¯’è€æ€§ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Serpent's Tongue";
 		if (desc) return "Attacks a monster with more damage unless it has resistance to poison.";
@@ -10615,7 +10615,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10626,8 +10626,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "»ÂËâ·õÆõ¤ÎÂÀÅá";
-		if (desc) return "À¸Ì¿¤Î¤Ê¤¤¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ËÂç¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¤¬¡¢Â¾¤Î¥â¥ó¥¹¥¿¡¼¤Ë¤ÏÁ´¤¯¸ú²Ì¤¬¤Ê¤¤¡£";
+		if (name) return "æ–¬é­”å‰£å¼ã®å¤ªåˆ€";
+		if (desc) return "ç”Ÿå‘½ã®ãªã„é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ãŒã€ä»–ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯å…¨ãåŠ¹æœãŒãªã„ã€‚";
 #else
 		if (name) return "Zammaken";
 		if (desc) return "Attacks an evil unliving monster with great damage. No effect to other  monsters.";
@@ -10648,7 +10648,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10659,8 +10659,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "ÎöÉ÷·õ";
-		if (desc) return "¹¶·â¤·¤¿Áê¼ê¤ò¸åÊı¤Ø¿á¤­Èô¤Ğ¤¹¡£";
+		if (name) return "è£‚é¢¨å‰£";
+		if (desc) return "æ”»æ’ƒã—ãŸç›¸æ‰‹ã‚’å¾Œæ–¹ã¸å¹ãé£›ã°ã™ã€‚";
 #else
 		if (name) return "Wind Blast";
 		if (desc) return "Attacks an adjacent monster, and blow it away.";
@@ -10681,7 +10681,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10716,7 +10716,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				if ((ty != oy) || (tx != ox))
 				{
 #ifdef JP
-					msg_format("%s¤ò¿á¤­Èô¤Ğ¤·¤¿¡ª", m_name);
+					msg_format("%sã‚’å¹ãé£›ã°ã—ãŸï¼", m_name);
 #else
 					msg_format("You blow %s away!", m_name);
 #endif
@@ -10738,8 +10738,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "Åá¾¢¤ÎÌÜÍø¤­";
-		if (desc) return "Éğ´ï¡¦ËÉ¶ñ¤ò1¤Ä¼±ÊÌ¤¹¤ë¡£¥ì¥Ù¥ë45°Ê¾å¤ÇÉğ´ï¡¦ËÉ¶ñ¤ÎÇ½ÎÏ¤ò´°Á´¤ËÃÎ¤ë¤³¤È¤¬¤Ç¤­¤ë¡£";
+		if (name) return "åˆ€åŒ ã®ç›®åˆ©ã";
+		if (desc) return "æ­¦å™¨ãƒ»é˜²å…·ã‚’1ã¤è­˜åˆ¥ã™ã‚‹ã€‚ãƒ¬ãƒ™ãƒ«45ä»¥ä¸Šã§æ­¦å™¨ãƒ»é˜²å…·ã®èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚";
 #else
 		if (name) return "Judge";
 		if (desc) return "Identifies a weapon or armor. Or *identifies* these at level 45.";
@@ -10760,8 +10760,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "ÇË´ä»Â";
-		if (desc) return "´ä¤ò²õ¤·¡¢´äÀĞ·Ï¤Î¥â¥ó¥¹¥¿¡¼¤ËÂç¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "ç ´å²©æ–¬";
+		if (desc) return "å²©ã‚’å£Šã—ã€å²©çŸ³ç³»ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Rock Smash";
 		if (desc) return "Breaks rock. Or greatly damage a monster made by rocks.";
@@ -10792,8 +10792,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "Íğ¤ìÀã·î²Ö";
-		if (desc) return "¹¶·â²ó¿ô¤¬Áı¤¨¡¢Îäµ¤ÂÑÀ­¤Î¤Ê¤¤¥â¥ó¥¹¥¿¡¼¤ËÂç¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "ä¹±ã‚Œé›ªæœˆèŠ±";
+		if (desc) return "æ”»æ’ƒå›æ•°ãŒå¢—ãˆã€å†·æ°—è€æ€§ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Midare-Setsugekka";
 		if (desc) return "Attacks a monster with increased number of attacks and more damage unless it has resistance to cold.";
@@ -10814,7 +10814,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10825,8 +10825,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "µŞ½êÆÍ¤­";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼¤ò°ì·â¤ÇÅİ¤¹¹¶·â¤ò·«¤ê½Ğ¤¹¡£¼ºÇÔ¤¹¤ë¤È1ÅÀ¤·¤«¥À¥á¡¼¥¸¤òÍ¿¤¨¤é¤ì¤Ê¤¤¡£";
+		if (name) return "æ€¥æ‰€çªã";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ä¸€æ’ƒã§å€’ã™æ”»æ’ƒã‚’ç¹°ã‚Šå‡ºã™ã€‚å¤±æ•—ã™ã‚‹ã¨1ç‚¹ã—ã‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‰ã‚Œãªã„ã€‚";
 #else
 		if (name) return "Spot Aiming";
 		if (desc) return "Attempts to kill a monster instantly. If failed cause only 1HP of damage.";
@@ -10847,7 +10847,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10858,8 +10858,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "Ëâ¿À»Â¤ê";
-		if (desc) return "²ñ¿´¤Î°ì·â¤Ç¹¶·â¤¹¤ë¡£¹¶·â¤¬¤«¤ï¤µ¤ì¤ä¤¹¤¤¡£";
+		if (name) return "é­”ç¥æ–¬ã‚Š";
+		if (desc) return "ä¼šå¿ƒã®ä¸€æ’ƒã§æ”»æ’ƒã™ã‚‹ã€‚æ”»æ’ƒãŒã‹ã‚ã•ã‚Œã‚„ã™ã„ã€‚";
 #else
 		if (name) return "Majingiri";
 		if (desc) return "Attempts to attack with critical hit. But this attack is easy to evade for a monster.";
@@ -10880,7 +10880,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10891,8 +10891,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 16:
 #ifdef JP
-		if (name) return "¼Î¤Æ¿È";
-		if (desc) return "¶¯ÎÏ¤Ê¹¶·â¤ò·«¤ê½Ğ¤¹¡£¼¡¤Î¥¿¡¼¥ó¤Ş¤Ç¤Î´Ö¡¢¿©¤é¤¦¥À¥á¡¼¥¸¤¬Áı¤¨¤ë¡£";
+		if (name) return "æ¨ã¦èº«";
+		if (desc) return "å¼·åŠ›ãªæ”»æ’ƒã‚’ç¹°ã‚Šå‡ºã™ã€‚æ¬¡ã®ã‚¿ãƒ¼ãƒ³ã¾ã§ã®é–“ã€é£Ÿã‚‰ã†ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒå¢—ãˆã‚‹ã€‚";
 #else
 		if (name) return "Desperate Attack";
 		if (desc) return "Attacks with all of your power. But all damages you take will be doubled for one turn.";
@@ -10913,7 +10913,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10925,8 +10925,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "Íë·âÏÉÄŞ»Â";
-		if (desc) return "ÅÅ·âÂÑÀ­¤Î¤Ê¤¤¥â¥ó¥¹¥¿¡¼¤ËÈó¾ï¤ËÂç¤­¤¤¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "é›·æ’ƒé·²çˆªæ–¬";
+		if (desc) return "é›»æ’ƒè€æ€§ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«éå¸¸ã«å¤§ãã„ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Lightning Eagle";
 		if (desc) return "Attacks a monster with more damage unless it has resistance to electricity.";
@@ -10947,7 +10947,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
@@ -10958,8 +10958,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "Æş¿È";
-		if (desc) return "ÁÇÁá¤¯Áê¼ê¤Ë¶á´ó¤ê¹¶·â¤¹¤ë¡£";
+		if (name) return "å…¥èº«";
+		if (desc) return "ç´ æ—©ãç›¸æ‰‹ã«è¿‘å¯„ã‚Šæ”»æ’ƒã™ã‚‹ã€‚";
 #else
 		if (name) return "Rush Attack";
 		if (desc) return "Steps close to a monster and attacks at a time.";
@@ -10973,8 +10973,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "ÀÖÎ®±²";
-		if (desc) return "¼«Ê¬¼«¿È¤â½ı¤òºî¤ê¤Ä¤Ä¡¢¤½¤Î½ı¤¬¿¼¤¤¤Û¤ÉÂç¤­¤¤°ÒÎÏ¤ÇÁ´Êı¸ş¤ÎÅ¨¤ò¹¶·â¤Ç¤­¤ë¡£À¸¤­¤Æ¤¤¤Ê¤¤¥â¥ó¥¹¥¿¡¼¤Ë¤Ï¸ú²Ì¤¬¤Ê¤¤¡£";
+		if (name) return "èµ¤æµæ¸¦";
+		if (desc) return "è‡ªåˆ†è‡ªèº«ã‚‚å‚·ã‚’ä½œã‚Šã¤ã¤ã€ãã®å‚·ãŒæ·±ã„ã»ã©å¤§ãã„å¨åŠ›ã§å…¨æ–¹å‘ã®æ•µã‚’æ”»æ’ƒã§ãã‚‹ã€‚ç”Ÿãã¦ã„ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯åŠ¹æœãŒãªã„ã€‚";
 #else
 		if (name) return "Bloody Maelstrom";
 		if (desc) return "Attacks all adjacent monsters with power corresponding to your cut status. Then increases your cut status. No effect to unliving monsters.";
@@ -11010,7 +11010,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 	
 						monster_desc(m_name, m_ptr, 0);
 #ifdef JP
-						msg_format("%s¤Ë¤Ï¸ú²Ì¤¬¤Ê¤¤¡ª", m_name);
+						msg_format("%sã«ã¯åŠ¹æœãŒãªã„ï¼", m_name);
 #else
 						msg_format("%s is unharmed!", m_name);
 #endif
@@ -11023,8 +11023,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "·ã¿Ì·â";
-		if (desc) return "ÃÏ¿Ì¤òµ¯¤³¤¹¡£";
+		if (name) return "æ¿€éœ‡æ’ƒ";
+		if (desc) return "åœ°éœ‡ã‚’èµ·ã“ã™ã€‚";
 #else
 		if (name) return "Earthquake Blow";
 		if (desc) return "Shakes dungeon structure, and results in random swapping of floors and walls.";
@@ -11049,8 +11049,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "ÃÏÁö¤ê";
-		if (desc) return "¾×·âÇÈ¤Î¥Ó¡¼¥à¤òÊü¤Ä¡£";
+		if (name) return "åœ°èµ°ã‚Š";
+		if (desc) return "è¡æ’ƒæ³¢ã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Crack";
 		if (desc) return "Fires a beam of shock wave.";
@@ -11063,7 +11063,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			object_type *o_ptr;
 			if (!get_aim_dir(&dir)) return NULL;
 #ifdef JP
-			msg_print("Éğ´ï¤òÂç¤­¤¯¿¶¤ê²¼¤í¤·¤¿¡£");
+			msg_print("æ­¦å™¨ã‚’å¤§ããæŒ¯ã‚Šä¸‹ã‚ã—ãŸã€‚");
 #else
 			msg_print("You swing your weapon downward.");
 #endif
@@ -11099,8 +11099,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "µ¤Ç÷¤ÎÍº¶«¤Ó";
-		if (desc) return "»ë³¦Æâ¤ÎÁ´¥â¥ó¥¹¥¿¡¼¤ËÂĞ¤·¤Æ¹ì²»¤Î¹¶·â¤ò¹Ô¤¦¡£¤µ¤é¤Ë¡¢¶á¤¯¤Ë¤¤¤ë¥â¥ó¥¹¥¿¡¼¤òÅÜ¤é¤»¤ë¡£";
+		if (name) return "æ°—è¿«ã®é›„å«ã³";
+		if (desc) return "è¦–ç•Œå†…ã®å…¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦è½ŸéŸ³ã®æ”»æ’ƒã‚’è¡Œã†ã€‚ã•ã‚‰ã«ã€è¿‘ãã«ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ€’ã‚‰ã›ã‚‹ã€‚";
 #else
 		if (name) return "War Cry";
 		if (desc) return "Damages all monsters in sight with sound. Aggravate nearby monsters.";
@@ -11109,7 +11109,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("Íº¶«¤Ó¤ò¤¢¤²¤¿¡ª");
+			msg_print("é›„å«ã³ã‚’ã‚ã’ãŸï¼");
 #else
 			msg_print("You roar out!");
 #endif
@@ -11120,8 +11120,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "ÌµÁĞ»°ÃÊ";
-		if (desc) return "¶¯ÎÏ¤Ê3ÃÊ¹¶·â¤ò·«¤ê½Ğ¤¹¡£";
+		if (name) return "ç„¡åŒä¸‰æ®µ";
+		if (desc) return "å¼·åŠ›ãª3æ®µæ”»æ’ƒã‚’ç¹°ã‚Šå‡ºã™ã€‚";
 #else
 		if (name) return "Musou-Sandan";
 		if (desc) return "Attacks with powerful 3 strikes.";
@@ -11151,7 +11151,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				else
 				{
 #ifdef JP
-					msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+					msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 					msg_print("There is no monster.");
 #endif
@@ -11211,8 +11211,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 24:
 #ifdef JP
-		if (name) return "µÛ·ìµ´¤Î²ç";
-		if (desc) return "¹¶·â¤·¤¿Áê¼ê¤ÎÂÎÎÏ¤òµÛ¤¤¤È¤ê¡¢¼«Ê¬¤ÎÂÎÎÏ¤ò²óÉü¤µ¤»¤ë¡£À¸Ì¿¤ò»ı¤¿¤Ê¤¤¥â¥ó¥¹¥¿¡¼¤Ë¤ÏÄÌ¤¸¤Ê¤¤¡£";
+		if (name) return "å¸è¡€é¬¼ã®ç‰™";
+		if (desc) return "æ”»æ’ƒã—ãŸç›¸æ‰‹ã®ä½“åŠ›ã‚’å¸ã„ã¨ã‚Šã€è‡ªåˆ†ã®ä½“åŠ›ã‚’å›å¾©ã•ã›ã‚‹ã€‚ç”Ÿå‘½ã‚’æŒãŸãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯é€šã˜ãªã„ã€‚";
 #else
 		if (name) return "Vampire's Fang";
 		if (desc) return "Attacks with vampiric strikes which absorbs HP from a monster and gives them to you. No effect to unliving monsters.";
@@ -11233,7 +11233,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-					msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+					msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 					msg_print("There is no monster.");
 #endif
@@ -11244,8 +11244,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "¸¸ÏÇ";
-		if (desc) return "»ë³¦Æâ¤Îµ¯¤­¤Æ¤¤¤ëÁ´¥â¥ó¥¹¥¿¡¼¤ËÛ¯Û°¡¢º®Íğ¡¢Ì²¤ê¤òÍ¿¤¨¤è¤¦¤È¤¹¤ë¡£";
+		if (name) return "å¹»æƒ‘";
+		if (desc) return "è¦–ç•Œå†…ã®èµ·ãã¦ã„ã‚‹å…¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«æœ¦æœ§ã€æ··ä¹±ã€çœ ã‚Šã‚’ä¸ãˆã‚ˆã†ã¨ã™ã‚‹ã€‚";
 #else
 		if (name) return "Moon Dazzling";
 		if (desc) return "Attempts to stun, confuse and sleep all waking monsters.";
@@ -11254,7 +11254,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("Éğ´ï¤òÉÔµ¬Â§¤ËÍÉ¤é¤·¤¿¡¥¡¥¡¥");
+			msg_print("æ­¦å™¨ã‚’ä¸è¦å‰‡ã«æºã‚‰ã—ãŸï¼ï¼ï¼");
 #else
 			msg_print("You irregularly wave your weapon...");
 #endif
@@ -11266,8 +11266,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "É´¿Í»Â¤ê";
-		if (desc) return "Ï¢Â³¤·¤ÆÆş¿È¤Ç¥â¥ó¥¹¥¿¡¼¤ò¹¶·â¤¹¤ë¡£¹¶·â¤¹¤ë¤¿¤Ó¤ËMP¤ò¾ÃÈñ¡£MP¤¬¤Ê¤¯¤Ê¤ë¤«¡¢¥â¥ó¥¹¥¿¡¼¤òÅİ¤»¤Ê¤«¤Ã¤¿¤éÉ´¿Í»Â¤ê¤Ï½ªÎ»¤¹¤ë¡£";
+		if (name) return "ç™¾äººæ–¬ã‚Š";
+		if (desc) return "é€£ç¶šã—ã¦å…¥èº«ã§ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ”»æ’ƒã™ã‚‹ã€‚æ”»æ’ƒã™ã‚‹ãŸã³ã«MPã‚’æ¶ˆè²»ã€‚MPãŒãªããªã‚‹ã‹ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å€’ã›ãªã‹ã£ãŸã‚‰ç™¾äººæ–¬ã‚Šã¯çµ‚äº†ã™ã‚‹ã€‚";
 #else
 		if (name) return "Hundred Slaughter";
 		if (desc) return "Performs a series of rush attacks. The series continues while killing each monster in a time and SP remains.";
@@ -11308,8 +11308,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "Å·æÆÎ¶Á®";
-		if (desc) return "»ë³¦Æâ¤Î¾ì½ê¤ò»ØÄê¤·¤Æ¡¢¤½¤Î¾ì½ê¤È¼«Ê¬¤Î´Ö¤Ë¤¤¤ëÁ´¥â¥ó¥¹¥¿¡¼¤ò¹¶·â¤·¡¢¤½¤Î¾ì½ê¤Ë°ÜÆ°¤¹¤ë¡£";
+		if (name) return "å¤©ç¿”é¾é–ƒ";
+		if (desc) return "è¦–ç•Œå†…ã®å ´æ‰€ã‚’æŒ‡å®šã—ã¦ã€ãã®å ´æ‰€ã¨è‡ªåˆ†ã®é–“ã«ã„ã‚‹å…¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ”»æ’ƒã—ã€ãã®å ´æ‰€ã«ç§»å‹•ã™ã‚‹ã€‚";
 #else
 		if (name) return "Dragonic Flash";
 		if (desc) return "Runs toward given location while attacking all monsters on the path.";
@@ -11326,7 +11326,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			    !projectable(py, px, y, x))
 			{
 #ifdef JP
-				msg_print("¼ºÇÔ¡ª");
+				msg_print("å¤±æ•—ï¼");
 #else
 				msg_print("You cannot move to that place!");
 #endif
@@ -11335,7 +11335,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			if (p_ptr->anti_tele)
 			{
 #ifdef JP
-				msg_print("ÉÔ»×µÄ¤ÊÎÏ¤¬¥Æ¥ì¥İ¡¼¥È¤òËÉ¤¤¤À¡ª");
+				msg_print("ä¸æ€è­°ãªåŠ›ãŒãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’é˜²ã„ã ï¼");
 #else
 				msg_print("A mysterious force prevents you from teleporting!");
 #endif
@@ -11349,8 +11349,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "Æó½Å¤Î·õ·â";
-		if (desc) return "1¥¿¡¼¥ó¤Ç2ÅÙ¹¶·â¤ò¹Ô¤¦¡£";
+		if (name) return "äºŒé‡ã®å‰£æ’ƒ";
+		if (desc) return "1ã‚¿ãƒ¼ãƒ³ã§2åº¦æ”»æ’ƒã‚’è¡Œã†ã€‚";
 #else
 		if (name) return "Twin Slash";
 		if (desc) return "double attacks at a time.";
@@ -11377,7 +11377,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-	msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+	msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("You don't see any monster in this direction");
 #endif
@@ -11388,8 +11388,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "¸×ÉúÀäÅáÀª";
-		if (desc) return "¶¯ÎÏ¤Ê¹¶·â¤ò¹Ô¤¤¡¢¶á¤¯¤Î¾ì½ê¤Ë¤â¸ú²Ì¤¬µÚ¤Ö¡£";
+		if (name) return "è™ä¼çµ¶åˆ€å‹¢";
+		if (desc) return "å¼·åŠ›ãªæ”»æ’ƒã‚’è¡Œã„ã€è¿‘ãã®å ´æ‰€ã«ã‚‚åŠ¹æœãŒåŠã¶ã€‚";
 #else
 		if (name) return "Kofuku-Zettousei";
 		if (desc) return "Performs a powerful attack which even effect nearby monsters.";
@@ -11411,14 +11411,14 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
 			{
 #ifdef JP
-				msg_print("¤Ê¤¼¤«¹¶·â¤¹¤ë¤³¤È¤¬¤Ç¤­¤Ê¤¤¡£");
+				msg_print("ãªãœã‹æ”»æ’ƒã™ã‚‹ã“ã¨ãŒã§ããªã„ã€‚");
 #else
 				msg_print("Something prevent you from attacking.");
 #endif
 				return "";
 			}
 #ifdef JP
-			msg_print("Éğ´ï¤òÂç¤­¤¯¿¶¤ê²¼¤í¤·¤¿¡£");
+			msg_print("æ­¦å™¨ã‚’å¤§ããæŒ¯ã‚Šä¸‹ã‚ã—ãŸã€‚");
 #else
 			msg_print("You swing your weapon downward.");
 #endif
@@ -11453,8 +11453,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "·Ä±Àµ´Ç¦·õ";
-		if (desc) return "¼«Ê¬¤â¥À¥á¡¼¥¸¤ò¤¯¤é¤¦¤¬¡¢Áê¼ê¤ËÈó¾ï¤ËÂç¤­¤Ê¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£¥¢¥ó¥Ç¥Ã¥É¤Ë¤ÏÆÃ¤Ë¸ú²Ì¤¬¤¢¤ë¡£";
+		if (name) return "æ…¶é›²é¬¼å¿å‰£";
+		if (desc) return "è‡ªåˆ†ã‚‚ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ãã‚‰ã†ãŒã€ç›¸æ‰‹ã«éå¸¸ã«å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã«ã¯ç‰¹ã«åŠ¹æœãŒã‚ã‚‹ã€‚";
 #else
 		if (name) return "Keiun-Kininken";
 		if (desc) return "Attacks a monster with extremely powerful damage. But you also takes some damages. Hurts a undead monster greatly.";
@@ -11475,14 +11475,14 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤½¤ÎÊı¸ş¤Ë¤Ï¥â¥ó¥¹¥¿¡¼¤Ï¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("There is no monster.");
 #endif
 				return NULL;
 			}
 #ifdef JP
-			take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "·Ä±Àµ´Ç¦·õ¤ò»È¤Ã¤¿¾×·â", -1);
+			take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "æ…¶é›²é¬¼å¿å‰£ã‚’ä½¿ã£ãŸè¡æ’ƒ", -1);
 #else
 			take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "exhaustion on using Keiun-Kininken", -1);
 #endif
@@ -11491,8 +11491,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "ÀÚÊ¢";
-		if (desc) return "¡ÖÉğ»ÎÆ»¤È¤Ï¡¢»à¤Ì¤³¤È¤È¸«¤Ä¤±¤¿¤ê¡£¡×";
+		if (name) return "åˆ‡è…¹";
+		if (desc) return "ã€Œæ­¦å£«é“ã¨ã¯ã€æ­»ã¬ã“ã¨ã¨è¦‹ã¤ã‘ãŸã‚Šã€‚ã€";
 #else
 		if (name) return "Harakiri";
 		if (desc) return "'Busido is found in death'";
@@ -11502,13 +11502,13 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		{
 			int i;
 #ifdef JP
-	if (!get_check("ËÜÅö¤Ë¼«»¦¤·¤Ş¤¹¤«¡©")) return NULL;
+	if (!get_check("æœ¬å½“ã«è‡ªæ®ºã—ã¾ã™ã‹ï¼Ÿ")) return NULL;
 #else
 			if (!get_check("Do you really want to commit suicide? ")) return NULL;
 #endif
 				/* Special Verification for suicide */
 #ifdef JP
-	prt("³ÎÇ§¤Î¤¿¤á '@' ¤ò²¡¤·¤Æ²¼¤µ¤¤¡£", 0, 0);
+	prt("ç¢ºèªã®ãŸã‚ '@' ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚", 0, 0);
 #else
 			prt("Please verify SUICIDE by typing the '@' sign: ", 0, 0);
 #endif
@@ -11525,7 +11525,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("Éğ»ÎÆ»¤È¤Ï¡¢»à¤Ì¤³¤È¤È¸«¤Ä¤±¤¿¤ê¡£");
+				msg_print("æ­¦å£«é“ã¨ã¯ã€æ­»ã¬ã“ã¨ã¨è¦‹ã¤ã‘ãŸã‚Šã€‚");
 #else
 				msg_print("Meaning of Bushi-do is found in the death.");
 #endif
@@ -11539,9 +11539,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 }
 
 /*!
- * @brief ¼ö½ÑÎÎ°è¤ÎÉğ´ï¼öÇû¤ÎÂĞ¾İ¤Ë¤Ç¤­¤ëÉğ´ï¤«¤É¤¦¤«¤òÊÖ¤¹¡£ / An "item_tester_hook" for offer
- * @param o_ptr ¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return ¼öÇû²ÄÇ½¤ÊÉğ´ï¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief å‘ªè¡“é ˜åŸŸã®æ­¦å™¨å‘ªç¸›ã®å¯¾è±¡ã«ã§ãã‚‹æ­¦å™¨ã‹ã©ã†ã‹ã‚’è¿”ã™ã€‚ / An "item_tester_hook" for offer
+ * @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return å‘ªç¸›å¯èƒ½ãªæ­¦å™¨ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
 {
@@ -11560,9 +11560,9 @@ static bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
 }
 
 /*!
- * @brief ¼ö½ÑÎÎ°è¤Î³Æ½èÍı¤Ë»È¤¨¤ë¼ö¤ï¤ì¤¿ÁõÈ÷¤«¤É¤¦¤«¤òÊÖ¤¹¡£ / An "item_tester_hook" for offer
- * @param o_ptr ¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ¤Î»²¾È¥İ¥¤¥ó¥¿
- * @return »È¤¨¤ëÁõÈ÷¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief å‘ªè¡“é ˜åŸŸã®å„å‡¦ç†ã«ä½¿ãˆã‚‹å‘ªã‚ã‚ŒãŸè£…å‚™ã‹ã©ã†ã‹ã‚’è¿”ã™ã€‚ / An "item_tester_hook" for offer
+ * @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ä½¿ãˆã‚‹è£…å‚™ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool item_tester_hook_cursed(object_type *o_ptr)
 {
@@ -11570,10 +11570,10 @@ static bool item_tester_hook_cursed(object_type *o_ptr)
 }
 
 /*!
- * @brief ¼ö½ÑÎÎ°èËâË¡¤Î³Æ½èÍı¤ò¹Ô¤¦
- * @param spell ËâË¡ID
- * @param mode ½èÍıÆâÍÆ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO »ş¤Ë¤ÏÊ¸»úÎó¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£SPELL_CAST / SPELL_CONT / SPELL_STOP »ş¤ÏNULLÊ¸»úÎó¤òÊÖ¤¹¡£
+ * @brief å‘ªè¡“é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+ * @param spell é­”æ³•ID
+ * @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CAST / SPELL_CONT / SPELL_STOP æ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
  */
 static cptr do_hex_spell(int spell, int mode)
 {
@@ -11594,8 +11594,8 @@ static cptr do_hex_spell(int spell, int mode)
 	/*** 1st book (0-7) ***/
 	case 0:
 #ifdef JP
-		if (name) return "¼Ù¤Ê¤ë½ËÊ¡";
-		if (desc) return "½ËÊ¡¤Ë¤è¤ê¹¶·âÀºÅÙ¤ÈËÉ¸æÎÏ¤¬¾å¤¬¤ë¡£";
+		if (name) return "é‚ªãªã‚‹ç¥ç¦";
+		if (desc) return "ç¥ç¦ã«ã‚ˆã‚Šæ”»æ’ƒç²¾åº¦ã¨é˜²å¾¡åŠ›ãŒä¸ŠãŒã‚‹ã€‚";
 #else
 		if (name) return "Evily blessing";
 		if (desc) return "Attempts to increase +to_hit of a weapon and AC";
@@ -11605,7 +11605,7 @@ static cptr do_hex_spell(int spell, int mode)
 			if (!p_ptr->blessed)
 			{
 #ifdef JP
-				msg_print("¹â·é¤Êµ¤Ê¬¤Ë¤Ê¤Ã¤¿¡ª");
+				msg_print("é«˜æ½”ãªæ°—åˆ†ã«ãªã£ãŸï¼");
 #else
 				msg_print("You feel righteous!");
 #endif
@@ -11616,7 +11616,7 @@ static cptr do_hex_spell(int spell, int mode)
 			if (!p_ptr->blessed)
 			{
 #ifdef JP
-				msg_print("¹â·é¤Êµ¤Ê¬¤¬¾Ã¤¨¼º¤»¤¿¡£");
+				msg_print("é«˜æ½”ãªæ°—åˆ†ãŒæ¶ˆãˆå¤±ã›ãŸã€‚");
 #else
 				msg_print("The prayer has expired.");
 #endif
@@ -11626,8 +11626,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 1:
 #ifdef JP
-		if (name) return "·Ú½ı¤Î¼£Ìş";
-		if (desc) return "HP¤ä½ı¤ò¾¯¤·²óÉü¤µ¤»¤ë¡£";
+		if (name) return "è»½å‚·ã®æ²»ç™’";
+		if (desc) return "HPã‚„å‚·ã‚’å°‘ã—å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Cure light wounds";
 		if (desc) return "Heals cut and HP a little.";
@@ -11636,7 +11636,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("µ¤Ê¬¤¬ÎÉ¤¯¤Ê¤Ã¤Æ¤¯¤ë¡£");
+			msg_print("æ°—åˆ†ãŒè‰¯ããªã£ã¦ãã‚‹ã€‚");
 #else
 			msg_print("You feel better and better.");
 #endif
@@ -11650,8 +11650,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 2:
 #ifdef JP
-		if (name) return "°­Ëâ¤Î¥ª¡¼¥é";
-		if (desc) return "±ê¤Î¥ª¡¼¥é¤ò¿È¤Ë¤Ş¤È¤¤¡¢²óÉüÂ®ÅÙ¤¬Â®¤¯¤Ê¤ë¡£";
+		if (name) return "æ‚ªé­”ã®ã‚ªãƒ¼ãƒ©";
+		if (desc) return "ç‚ã®ã‚ªãƒ¼ãƒ©ã‚’èº«ã«ã¾ã¨ã„ã€å›å¾©é€Ÿåº¦ãŒé€Ÿããªã‚‹ã€‚";
 #else
 		if (name) return "Demonic aura";
 		if (desc) return "Gives fire aura and regeneration.";
@@ -11659,7 +11659,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("ÂÎ¤¬±ê¤Î¥ª¡¼¥é¤ÇÊ¤¤ï¤ì¤¿¡£");
+			msg_print("ä½“ãŒç‚ã®ã‚ªãƒ¼ãƒ©ã§è¦†ã‚ã‚ŒãŸã€‚");
 #else
 			msg_print("You have enveloped by fiery aura!");
 #endif
@@ -11667,7 +11667,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (stop)
 		{
 #ifdef JP
-			msg_print("±ê¤Î¥ª¡¼¥é¤¬¾Ã¤¨µî¤Ã¤¿¡£");
+			msg_print("ç‚ã®ã‚ªãƒ¼ãƒ©ãŒæ¶ˆãˆå»ã£ãŸã€‚");
 #else
 			msg_print("Fiery aura disappeared.");
 #endif
@@ -11676,8 +11676,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 3:
 #ifdef JP
-		if (name) return "°­½­Ì¸";
-		if (desc) return "»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤ËÈù¼åÎÌ¤ÎÆÇ¤Î¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "æ‚ªè‡­éœ§";
+		if (desc) return "è¦–ç•Œå†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¾®å¼±é‡ã®æ¯’ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Stinking mist";
 		if (desc) return "Deals few damages of poison to all monsters in your sight.";
@@ -11692,8 +11692,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 4:
 #ifdef JP
-		if (name) return "ÏÓÎÏ¶¯²½";
-		if (desc) return "½Ñ¼Ô¤ÎÏÓÎÏ¤ò¾å¾º¤µ¤»¤ë¡£";
+		if (name) return "è…•åŠ›å¼·åŒ–";
+		if (desc) return "è¡“è€…ã®è…•åŠ›ã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Extra might";
 		if (desc) return "Attempts to increase your strength.";
@@ -11701,7 +11701,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("²¿¤À¤«ÎÏ¤¬Í¯¤¤¤ÆÍè¤ë¡£");
+			msg_print("ä½•ã ã‹åŠ›ãŒæ¹§ã„ã¦æ¥ã‚‹ã€‚");
 #else
 			msg_print("You feel you get stronger.");
 #endif
@@ -11710,8 +11710,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 5:
 #ifdef JP
-		if (name) return "Éğ´ï¼öÇû";
-		if (desc) return "ÁõÈ÷¤·¤Æ¤¤¤ëÉğ´ï¤ò¼ö¤¦¡£";
+		if (name) return "æ­¦å™¨å‘ªç¸›";
+		if (desc) return "è£…å‚™ã—ã¦ã„ã‚‹æ­¦å™¨ã‚’å‘ªã†ã€‚";
 #else
 		if (name) return "Curse weapon";
 		if (desc) return "Curses your weapon.";
@@ -11726,8 +11726,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 			item_tester_hook = item_tester_hook_weapon_except_bow;
 #ifdef JP
-			q = "¤É¤ì¤ò¼ö¤¤¤Ş¤¹¤«¡©";
-			s = "Éğ´ï¤òÁõÈ÷¤·¤Æ¤¤¤Ê¤¤¡£";
+			q = "ã©ã‚Œã‚’å‘ªã„ã¾ã™ã‹ï¼Ÿ";
+			s = "æ­¦å™¨ã‚’è£…å‚™ã—ã¦ã„ãªã„ã€‚";
 #else
 			q = "Which weapon do you curse?";
 			s = "You wield no weapons.";
@@ -11740,16 +11740,16 @@ static cptr do_hex_spell(int spell, int mode)
 			object_flags(o_ptr, f);
 
 #ifdef JP
-			if (!get_check(format("ËÜÅö¤Ë %s ¤ò¼ö¤¤¤Ş¤¹¤«¡©", o_name))) return FALSE;
+			if (!get_check(format("æœ¬å½“ã« %s ã‚’å‘ªã„ã¾ã™ã‹ï¼Ÿ", o_name))) return FALSE;
 #else
-			if (!get_check(format("Do you curse %s, really¡©", o_name))) return FALSE;
+			if (!get_check(format("Do you curse %s, reallyï¼Ÿ", o_name))) return FALSE;
 #endif
 
 			if (!one_in_(3) &&
 				(object_is_artifact(o_ptr) || have_flag(f, TR_BLESSED)))
 			{
 #ifdef JP
-				msg_format("%s ¤Ï¼ö¤¤¤òÄ·¤ÍÊÖ¤·¤¿¡£", o_name);
+				msg_format("%s ã¯å‘ªã„ã‚’è·³ã­è¿”ã—ãŸã€‚", o_name);
 #else
 				msg_format("%s resists the effect.", o_name);
 #endif
@@ -11771,7 +11771,7 @@ static cptr do_hex_spell(int spell, int mode)
 						if (o_ptr->to_a < 0) o_ptr->to_a = 0;
 					}
 #ifdef JP
-					msg_format("%s ¤ÏÎô²½¤·¤Æ¤·¤Ş¤Ã¤¿¡£", o_name);
+					msg_format("%s ã¯åŠ£åŒ–ã—ã¦ã—ã¾ã£ãŸã€‚", o_name);
 #else
 					msg_format("Your %s was disenchanted!", o_name);
 #endif
@@ -11781,7 +11781,7 @@ static cptr do_hex_spell(int spell, int mode)
 			{
 				int power = 0;
 #ifdef JP
-				msg_format("¶²Éİ¤Î°Å¹õ¥ª¡¼¥é¤¬¤¢¤Ê¤¿¤Î%s¤òÊñ¤ß¹ş¤ó¤À¡ª", o_name);
+				msg_format("ææ€–ã®æš—é»’ã‚ªãƒ¼ãƒ©ãŒã‚ãªãŸã®%sã‚’åŒ…ã¿è¾¼ã‚“ã ï¼", o_name);
 #else
 				msg_format("A terrible black aura blasts your %s!", o_name);
 #endif
@@ -11800,7 +11800,7 @@ static cptr do_hex_spell(int spell, int mode)
 						add_flag(o_ptr->art_flags, TR_VORPAL);
 						add_flag(o_ptr->art_flags, TR_VAMPIRIC);
 #ifdef JP
-						msg_print("·ì¤À¡ª·ì¤À¡ª·ì¤À¡ª");
+						msg_print("è¡€ã ï¼è¡€ã ï¼è¡€ã ï¼");
 #else
 						msg_print("Blood, Blood, Blood!");
 #endif
@@ -11818,8 +11818,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 6:
 #ifdef JP
-		if (name) return "¼Ù°­´¶ÃÎ";
-		if (desc) return "¼ş°Ï¤Î¼Ù°­¤Ê¥â¥ó¥¹¥¿¡¼¤ò´¶ÃÎ¤¹¤ë¡£";
+		if (name) return "é‚ªæ‚ªæ„ŸçŸ¥";
+		if (desc) return "å‘¨å›²ã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚";
 #else
 		if (name) return "Evil detection";
 		if (desc) return "Detects evil monsters.";
@@ -11828,7 +11828,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¼Ù°­¤ÊÀ¸Êª¤ÎÂ¸ºß¤ò´¶¤¸¼è¤í¤¦¤È¤·¤¿¡£");
+			msg_print("é‚ªæ‚ªãªç”Ÿç‰©ã®å­˜åœ¨ã‚’æ„Ÿã˜å–ã‚ã†ã¨ã—ãŸã€‚");
 #else
 			msg_print("You attend to the presence of evil creatures.");
 #endif
@@ -11837,8 +11837,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 7:
 #ifdef JP
-		if (name) return "²æËı";
-		if (desc) return "¿ô¥¿¡¼¥ó¹¶·â¤òÂÑ¤¨¤¿¸å¡¢¼õ¤±¤¿¥À¥á¡¼¥¸¤òÃÏ¹ö¤Î¶È²Ğ¤È¤·¤Æ¼ş°Ï¤ËÊü½Ğ¤¹¤ë¡£";
+		if (name) return "æˆ‘æ…¢";
+		if (desc) return "æ•°ã‚¿ãƒ¼ãƒ³æ”»æ’ƒã‚’è€ãˆãŸå¾Œã€å—ã‘ãŸãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’åœ°ç„ã®æ¥­ç«ã¨ã—ã¦å‘¨å›²ã«æ”¾å‡ºã™ã‚‹ã€‚";
 #else
 		if (name) return "Patience";
 		if (desc) return "Bursts hell fire strongly after patients any damage while few turns.";
@@ -11853,7 +11853,7 @@ static cptr do_hex_spell(int spell, int mode)
 			if (p_ptr->magic_num2[2] > 0)
 			{
 #ifdef JP
-				msg_print("¤¹¤Ç¤Ë²æËı¤ò¤·¤Æ¤¤¤ë¡£");
+				msg_print("ã™ã§ã«æˆ‘æ…¢ã‚’ã—ã¦ã„ã‚‹ã€‚");
 #else
 				msg_print("You are already patienting.");
 #endif
@@ -11864,7 +11864,7 @@ static cptr do_hex_spell(int spell, int mode)
 			p_ptr->magic_num2[2] = r;
 			p_ptr->magic_num1[2] = 0;
 #ifdef JP
-			msg_print("¤¸¤Ã¤ÈÂÑ¤¨¤ë¤³¤È¤Ë¤·¤¿¡£");
+			msg_print("ã˜ã£ã¨è€ãˆã‚‹ã“ã¨ã«ã—ãŸã€‚");
 #else
 			msg_print("You decide to patient all damages.");
 #endif
@@ -11879,7 +11879,7 @@ static cptr do_hex_spell(int spell, int mode)
 			if ((p_ptr->magic_num2[2] <= 0) || (power >= 200))
 			{
 #ifdef JP
-				msg_print("²æËı¤¬²ò¤«¤ì¤¿¡ª");
+				msg_print("æˆ‘æ…¢ãŒè§£ã‹ã‚ŒãŸï¼");
 #else
 				msg_print("Time for end of patioence!");
 #endif
@@ -11891,7 +11891,7 @@ static cptr do_hex_spell(int spell, int mode)
 				if (p_ptr->wizard)
 				{
 #ifdef JP
-					msg_format("%dÅÀ¤Î¥À¥á¡¼¥¸¤òÊÖ¤·¤¿¡£", power);
+					msg_format("%dç‚¹ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¿”ã—ãŸã€‚", power);
 #else
 					msg_format("You return %d damages.", power);
 #endif
@@ -11908,8 +11908,8 @@ static cptr do_hex_spell(int spell, int mode)
 	/*** 2nd book (8-15) ***/
 	case 8:
 #ifdef JP
-		if (name) return "É¹¤Î³»";
-		if (desc) return "É¹¤Î¥ª¡¼¥é¤ò¿È¤Ë¤Ş¤È¤¤¡¢ËÉ¸æÎÏ¤¬¾å¾º¤¹¤ë¡£";
+		if (name) return "æ°·ã®é§";
+		if (desc) return "æ°·ã®ã‚ªãƒ¼ãƒ©ã‚’èº«ã«ã¾ã¨ã„ã€é˜²å¾¡åŠ›ãŒä¸Šæ˜‡ã™ã‚‹ã€‚";
 #else
 		if (name) return "Ice armor";
 		if (desc) return "Gives fire aura and bonus to AC.";
@@ -11917,7 +11917,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("ÂÎ¤¬É¹¤Î³»¤ÇÊ¤¤ï¤ì¤¿¡£");
+			msg_print("ä½“ãŒæ°·ã®é§ã§è¦†ã‚ã‚ŒãŸã€‚");
 #else
 			msg_print("You have enveloped by ice armor!");
 #endif
@@ -11925,7 +11925,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (stop)
 		{
 #ifdef JP
-			msg_print("É¹¤Î³»¤¬¾Ã¤¨µî¤Ã¤¿¡£");
+			msg_print("æ°·ã®é§ãŒæ¶ˆãˆå»ã£ãŸã€‚");
 #else
 			msg_print("Ice armor disappeared.");
 #endif
@@ -11934,8 +11934,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 9:
 #ifdef JP
-		if (name) return "½Å½ı¤Î¼£Ìş";
-		if (desc) return "ÂÎÎÏ¤ä½ı¤òÂ¿¾¯²óÉü¤µ¤»¤ë¡£";
+		if (name) return "é‡å‚·ã®æ²»ç™’";
+		if (desc) return "ä½“åŠ›ã‚„å‚·ã‚’å¤šå°‘å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Cure serious wounds";
 		if (desc) return "Heals cut and HP more.";
@@ -11944,7 +11944,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("µ¤Ê¬¤¬ÎÉ¤¯¤Ê¤Ã¤Æ¤¯¤ë¡£");
+			msg_print("æ°—åˆ†ãŒè‰¯ããªã£ã¦ãã‚‹ã€‚");
 #else
 			msg_print("You feel better and better.");
 #endif
@@ -11958,8 +11958,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 10:
 #ifdef JP
-		if (name) return "ÌôÉÊµÛÆş";
-		if (desc) return "¼öÊ¸±Ó¾§¤òÃæ»ß¤¹¤ë¤³¤È¤Ê¤¯¡¢Ìô¤Î¸ú²Ì¤òÆÀ¤ë¤³¤È¤¬¤Ç¤­¤ë¡£";
+		if (name) return "è–¬å“å¸å…¥";
+		if (desc) return "å‘ªæ–‡è© å”±ã‚’ä¸­æ­¢ã™ã‚‹ã“ã¨ãªãã€è–¬ã®åŠ¹æœã‚’å¾—ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚";
 #else
 		if (name) return "Inhail potion";
 		if (desc) return "Quaffs a potion without canceling of casting a spell.";
@@ -11975,8 +11975,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 11:
 #ifdef JP
-		if (name) return "µÛ·ìÌ¸";
-		if (desc) return "»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤ËÈù¼åÎÌ¤ÎÀ¸Ì¿ÎÏµÛ¼ı¤Î¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£Í¿¤¨¤¿¥À¥á¡¼¥¸¤ÎÊ¬¡¢ÂÎÎÏ¤¬²óÉü¤¹¤ë¡£";
+		if (name) return "å¸è¡€éœ§";
+		if (desc) return "è¦–ç•Œå†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¾®å¼±é‡ã®ç”Ÿå‘½åŠ›å¸åã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚ä¸ãˆãŸãƒ€ãƒ¡ãƒ¼ã‚¸ã®åˆ†ã€ä½“åŠ›ãŒå›å¾©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Vampiric mist";
 		if (desc) return "Deals few dameges of drain life to all monsters in your sight.";
@@ -11991,8 +11991,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 12:
 #ifdef JP
-		if (name) return "Ëâ·õ²½";
-		if (desc) return "Éğ´ï¤Î¹¶·âÎÏ¤ò¾å¤²¤ë¡£ÀÚ¤ìÌ£¤òÆÀ¡¢¼ö¤¤¤Ë±ş¤¸¤ÆÍ¿¤¨¤ë¥À¥á¡¼¥¸¤¬¾å¾º¤·¡¢Á±ÎÉ¤Ê¥â¥ó¥¹¥¿¡¼¤ËÂĞ¤¹¤ë¥À¥á¡¼¥¸¤¬2ÇÜ¤Ë¤Ê¤ë¡£";
+		if (name) return "é­”å‰£åŒ–";
+		if (desc) return "æ­¦å™¨ã®æ”»æ’ƒåŠ›ã‚’ä¸Šã’ã‚‹ã€‚åˆ‡ã‚Œå‘³ã‚’å¾—ã€å‘ªã„ã«å¿œã˜ã¦ä¸ãˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒä¸Šæ˜‡ã—ã€å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã™ã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒ2å€ã«ãªã‚‹ã€‚";
 #else
 		if (name) return "Swords to runeswords";
 		if (desc) return "Gives vorpal ability to your weapon. Increases damages by your weapon acccording to curse of your weapon.";
@@ -12000,7 +12000,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¤¢¤Ê¤¿¤ÎÉğ´ï¤¬¹õ¤¯µ±¤¤¤¿¡£");
+			msg_print("ã‚ãªãŸã®æ­¦å™¨ãŒé»’ãè¼ã„ãŸã€‚");
 #else
 			if (!empty_hands(FALSE))
 				msg_print("Your weapons glow bright black.");
@@ -12011,7 +12011,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (stop)
 		{
 #ifdef JP
-			msg_print("Éğ´ï¤Îµ±¤­¤¬¾Ã¤¨µî¤Ã¤¿¡£");
+			msg_print("æ­¦å™¨ã®è¼ããŒæ¶ˆãˆå»ã£ãŸã€‚");
 #else
 			msg_format("Brightness of weapon%s disappeared.", (empty_hands(FALSE)) ? "" : "s");
 #endif
@@ -12020,8 +12020,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 13:
 #ifdef JP
-		if (name) return "º®Íğ¤Î¼ê";
-		if (desc) return "¹¶·â¤·¤¿ºİ¥â¥ó¥¹¥¿¡¼¤òº®Íğ¤µ¤»¤ë¡£";
+		if (name) return "æ··ä¹±ã®æ‰‹";
+		if (desc) return "æ”»æ’ƒã—ãŸéš›ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ··ä¹±ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Touch of confusion";
 		if (desc) return "Confuses a monster when you attack.";
@@ -12029,7 +12029,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¤¢¤Ê¤¿¤Î¼ê¤¬ÀÖ¤¯µ±¤­»Ï¤á¤¿¡£");
+			msg_print("ã‚ãªãŸã®æ‰‹ãŒèµ¤ãè¼ãå§‹ã‚ãŸã€‚");
 #else
 			msg_print("Your hands glow bright red.");
 #endif
@@ -12037,7 +12037,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (stop)
 		{
 #ifdef JP
-			msg_print("¼ê¤Îµ±¤­¤¬¤Ê¤¯¤Ê¤Ã¤¿¡£");
+			msg_print("æ‰‹ã®è¼ããŒãªããªã£ãŸã€‚");
 #else
 			msg_print("Brightness on your hands disappeard.");
 #endif
@@ -12046,8 +12046,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 14:
 #ifdef JP
-		if (name) return "ÆùÂÎ¶¯²½";
-		if (desc) return "½Ñ¼Ô¤ÎÏÓÎÏ¡¢´ïÍÑ¤µ¡¢ÂÑµ×ÎÏ¤ò¾å¾º¤µ¤»¤ë¡£¹¶·â²ó¿ô¤Î¾å¸Â¤ò 1 Áı²Ã¤µ¤»¤ë¡£";
+		if (name) return "è‚‰ä½“å¼·åŒ–";
+		if (desc) return "è¡“è€…ã®è…•åŠ›ã€å™¨ç”¨ã•ã€è€ä¹…åŠ›ã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚æ”»æ’ƒå›æ•°ã®ä¸Šé™ã‚’ 1 å¢—åŠ ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Building up";
 		if (desc) return "Attempts to increases your strength, dexterity and constitusion.";
@@ -12055,7 +12055,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¿ÈÂÎ¤¬¶¯¤¯¤Ê¤Ã¤¿µ¤¤¬¤·¤¿¡£");
+			msg_print("èº«ä½“ãŒå¼·ããªã£ãŸæ°—ãŒã—ãŸã€‚");
 #else
 			msg_print("You feel your body is developed more now.");
 #endif
@@ -12064,8 +12064,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 15:
 #ifdef JP
-		if (name) return "È¿¥Æ¥ì¥İ¡¼¥È·ë³¦";
-		if (desc) return "»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤Î¥Æ¥ì¥İ¡¼¥È¤òÁË³²¤¹¤ë¥Ğ¥ê¥¢¤òÄ¥¤ë¡£";
+		if (name) return "åãƒ†ãƒ¬ãƒãƒ¼ãƒˆçµç•Œ";
+		if (desc) return "è¦–ç•Œå†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’é˜»å®³ã™ã‚‹ãƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚";
 #else
 		if (name) return "Anti teleport barrier";
 		if (desc) return "Obstructs all teleportations by monsters in your sight.";
@@ -12075,7 +12075,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¥Æ¥ì¥İ¡¼¥È¤òËÉ¤°¼ö¤¤¤ò¤«¤±¤¿¡£");
+			msg_print("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’é˜²ãå‘ªã„ã‚’ã‹ã‘ãŸã€‚");
 #else
 			msg_print("You feel anyone can not teleport except you.");
 #endif
@@ -12085,8 +12085,8 @@ static cptr do_hex_spell(int spell, int mode)
 	/*** 3rd book (16-23) ***/
 	case 16:
 #ifdef JP
-		if (name) return "¾×·â¤Î¥¯¥í¡¼¥¯";
-		if (desc) return "ÅÅµ¤¤Î¥ª¡¼¥é¤ò¿È¤Ë¤Ş¤È¤¤¡¢Æ°¤­¤¬Â®¤¯¤Ê¤ë¡£";
+		if (name) return "è¡æ’ƒã®ã‚¯ãƒ­ãƒ¼ã‚¯";
+		if (desc) return "é›»æ°—ã®ã‚ªãƒ¼ãƒ©ã‚’èº«ã«ã¾ã¨ã„ã€å‹•ããŒé€Ÿããªã‚‹ã€‚";
 #else
 		if (name) return "Cloak of shock";
 		if (desc) return "Gives lightning aura and a bonus to speed.";
@@ -12094,7 +12094,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("ÂÎ¤¬°ğºÊ¤Î¥ª¡¼¥é¤ÇÊ¤¤ï¤ì¤¿¡£");
+			msg_print("ä½“ãŒç¨²å¦»ã®ã‚ªãƒ¼ãƒ©ã§è¦†ã‚ã‚ŒãŸã€‚");
 #else
 			msg_print("You have enveloped by electrical aura!");
 #endif
@@ -12102,7 +12102,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (stop)
 		{
 #ifdef JP
-			msg_print("°ğºÊ¤Î¥ª¡¼¥é¤¬¾Ã¤¨µî¤Ã¤¿¡£");
+			msg_print("ç¨²å¦»ã®ã‚ªãƒ¼ãƒ©ãŒæ¶ˆãˆå»ã£ãŸã€‚");
 #else
 			msg_print("Electrical aura disappeared.");
 #endif
@@ -12111,8 +12111,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 17:
 #ifdef JP
-		if (name) return "Ã×Ì¿½ı¤Î¼£Ìş";
-		if (desc) return "ÂÎÎÏ¤ä½ı¤ò²óÉü¤µ¤»¤ë¡£";
+		if (name) return "è‡´å‘½å‚·ã®æ²»ç™’";
+		if (desc) return "ä½“åŠ›ã‚„å‚·ã‚’å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Cure critical wounds";
 		if (desc) return "Heals cut and HP greatry.";
@@ -12121,7 +12121,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("µ¤Ê¬¤¬ÎÉ¤¯¤Ê¤Ã¤Æ¤¯¤ë¡£");
+			msg_print("æ°—åˆ†ãŒè‰¯ããªã£ã¦ãã‚‹ã€‚");
 #else
 			msg_print("You feel better and better.");
 #endif
@@ -12137,8 +12137,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 18:
 #ifdef JP
-		if (name) return "¼öÎÏÉõÆş";
-		if (desc) return "ËâË¡¤ÎÆ»¶ñ¤ËËâÎÏ¤òºÆ½¼Å¶¤¹¤ë¡£";
+		if (name) return "å‘ªåŠ›å°å…¥";
+		if (desc) return "é­”æ³•ã®é“å…·ã«é­”åŠ›ã‚’å†å……å¡«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Recharging";
 		if (desc) return "Recharges a magic device.";
@@ -12154,8 +12154,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 19:
 #ifdef JP
-		if (name) return "»à¼ÔÉü³è";
-		if (desc) return "»àÂÎ¤òÁÉ¤é¤»¤Æ¥Ú¥Ã¥È¤Ë¤¹¤ë¡£";
+		if (name) return "æ­»è€…å¾©æ´»";
+		if (desc) return "æ­»ä½“ã‚’è˜‡ã‚‰ã›ã¦ãƒšãƒƒãƒˆã«ã™ã‚‹ã€‚";
 #else
 		if (name) return "Animate Dead";
 		if (desc) return "Raises corpses and skeletons from dead.";
@@ -12163,7 +12163,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("»à¼Ô¤Ø¤Î¸Æ¤Ó¤«¤±¤ò»Ï¤á¤¿¡£");
+			msg_print("æ­»è€…ã¸ã®å‘¼ã³ã‹ã‘ã‚’å§‹ã‚ãŸã€‚");
 #else
 			msg_print("You start to call deads.!");
 #endif
@@ -12176,8 +12176,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 20:
 #ifdef JP
-		if (name) return "ËÉ¶ñ¼öÇû";
-		if (desc) return "ÁõÈ÷¤·¤Æ¤¤¤ëËÉ¶ñ¤Ë¼ö¤¤¤ò¤«¤±¤ë¡£";
+		if (name) return "é˜²å…·å‘ªç¸›";
+		if (desc) return "è£…å‚™ã—ã¦ã„ã‚‹é˜²å…·ã«å‘ªã„ã‚’ã‹ã‘ã‚‹ã€‚";
 #else
 		if (name) return "Curse armor";
 		if (desc) return "Curse a piece of armour that you wielding.";
@@ -12192,8 +12192,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 			item_tester_hook = object_is_armour;
 #ifdef JP
-			q = "¤É¤ì¤ò¼ö¤¤¤Ş¤¹¤«¡©";
-			s = "ËÉ¶ñ¤òÁõÈ÷¤·¤Æ¤¤¤Ê¤¤¡£";
+			q = "ã©ã‚Œã‚’å‘ªã„ã¾ã™ã‹ï¼Ÿ";
+			s = "é˜²å…·ã‚’è£…å‚™ã—ã¦ã„ãªã„ã€‚";
 #else
 			q = "Which piece of armour do you curse?";
 			s = "You wield no piece of armours.";
@@ -12206,16 +12206,16 @@ static cptr do_hex_spell(int spell, int mode)
 			object_flags(o_ptr, f);
 
 #ifdef JP
-			if (!get_check(format("ËÜÅö¤Ë %s ¤ò¼ö¤¤¤Ş¤¹¤«¡©", o_name))) return FALSE;
+			if (!get_check(format("æœ¬å½“ã« %s ã‚’å‘ªã„ã¾ã™ã‹ï¼Ÿ", o_name))) return FALSE;
 #else
-			if (!get_check(format("Do you curse %s, really¡©", o_name))) return FALSE;
+			if (!get_check(format("Do you curse %s, reallyï¼Ÿ", o_name))) return FALSE;
 #endif
 
 			if (!one_in_(3) &&
 				(object_is_artifact(o_ptr) || have_flag(f, TR_BLESSED)))
 			{
 #ifdef JP
-				msg_format("%s ¤Ï¼ö¤¤¤òÄ·¤ÍÊÖ¤·¤¿¡£", o_name);
+				msg_format("%s ã¯å‘ªã„ã‚’è·³ã­è¿”ã—ãŸã€‚", o_name);
 #else
 				msg_format("%s resists the effect.", o_name);
 #endif
@@ -12237,7 +12237,7 @@ static cptr do_hex_spell(int spell, int mode)
 						if (o_ptr->to_a < 0) o_ptr->to_a = 0;
 					}
 #ifdef JP
-					msg_format("%s ¤ÏÎô²½¤·¤Æ¤·¤Ş¤Ã¤¿¡£", o_name);
+					msg_format("%s ã¯åŠ£åŒ–ã—ã¦ã—ã¾ã£ãŸã€‚", o_name);
 #else
 					msg_format("Your %s was disenchanted!", o_name);
 #endif
@@ -12247,7 +12247,7 @@ static cptr do_hex_spell(int spell, int mode)
 			{
 				int power = 0;
 #ifdef JP
-				msg_format("¶²Éİ¤Î°Å¹õ¥ª¡¼¥é¤¬¤¢¤Ê¤¿¤Î%s¤òÊñ¤ß¹ş¤ó¤À¡ª", o_name);
+				msg_format("ææ€–ã®æš—é»’ã‚ªãƒ¼ãƒ©ãŒã‚ãªãŸã®%sã‚’åŒ…ã¿è¾¼ã‚“ã ï¼", o_name);
 #else
 				msg_format("A terrible black aura blasts your %s!", o_name);
 #endif
@@ -12267,7 +12267,7 @@ static cptr do_hex_spell(int spell, int mode)
 						add_flag(o_ptr->art_flags, TR_RES_DARK);
 						add_flag(o_ptr->art_flags, TR_RES_NETHER);
 #ifdef JP
-						msg_print("·ì¤À¡ª·ì¤À¡ª·ì¤À¡ª");
+						msg_print("è¡€ã ï¼è¡€ã ï¼è¡€ã ï¼");
 #else
 						msg_print("Blood, Blood, Blood!");
 #endif
@@ -12285,8 +12285,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 21:
 #ifdef JP
-		if (name) return "±Æ¤Î¥¯¥í¡¼¥¯";
-		if (desc) return "±Æ¤Î¥ª¡¼¥é¤ò¿È¤Ë¤Ş¤È¤¤¡¢Å¨¤Ë±Æ¤Î¥À¥á¡¼¥¸¤òÍ¿¤¨¤ë¡£";
+		if (name) return "å½±ã®ã‚¯ãƒ­ãƒ¼ã‚¯";
+		if (desc) return "å½±ã®ã‚ªãƒ¼ãƒ©ã‚’èº«ã«ã¾ã¨ã„ã€æ•µã«å½±ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Cloak of shadow";
 		if (desc) return "Gives aura of shadow.";
@@ -12298,7 +12298,7 @@ static cptr do_hex_spell(int spell, int mode)
 			if (!o_ptr->k_idx)
 			{
 #ifdef JP
-				msg_print("¥¯¥í¡¼¥¯¤ò¿È¤Ë¤Ä¤±¤Æ¤¤¤Ê¤¤¡ª");
+				msg_print("ã‚¯ãƒ­ãƒ¼ã‚¯ã‚’èº«ã«ã¤ã‘ã¦ã„ãªã„ï¼");
 #else
 				msg_print("You don't ware any cloak.");
 #endif
@@ -12307,7 +12307,7 @@ static cptr do_hex_spell(int spell, int mode)
 			else if (!object_is_cursed(o_ptr))
 			{
 #ifdef JP
-				msg_print("¥¯¥í¡¼¥¯¤Ï¼ö¤ï¤ì¤Æ¤¤¤Ê¤¤¡ª");
+				msg_print("ã‚¯ãƒ­ãƒ¼ã‚¯ã¯å‘ªã‚ã‚Œã¦ã„ãªã„ï¼");
 #else
 				msg_print("Your cloak is not cursed.");
 #endif
@@ -12316,7 +12316,7 @@ static cptr do_hex_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("±Æ¤Î¥ª¡¼¥é¤ò¿È¤Ë¤Ş¤È¤Ã¤¿¡£");
+				msg_print("å½±ã®ã‚ªãƒ¼ãƒ©ã‚’èº«ã«ã¾ã¨ã£ãŸã€‚");
 #else
 				msg_print("You have enveloped by shadow aura!");
 #endif
@@ -12337,7 +12337,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (stop)
 		{
 #ifdef JP
-			msg_print("±Æ¤Î¥ª¡¼¥é¤¬¾Ã¤¨µî¤Ã¤¿¡£");
+			msg_print("å½±ã®ã‚ªãƒ¼ãƒ©ãŒæ¶ˆãˆå»ã£ãŸã€‚");
 #else
 			msg_print("Shadow aura disappeared.");
 #endif
@@ -12346,8 +12346,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 22:
 #ifdef JP
-		if (name) return "¶ìÄË¤òËâÎÏ¤Ë";
-		if (desc) return "»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤ËÀº¿À¥À¥á¡¼¥¸Í¿¤¨¡¢ËâÎÏ¤òµÛ¤¤¼è¤ë¡£";
+		if (name) return "è‹¦ç—›ã‚’é­”åŠ›ã«";
+		if (desc) return "è¦–ç•Œå†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ç²¾ç¥ãƒ€ãƒ¡ãƒ¼ã‚¸ä¸ãˆã€é­”åŠ›ã‚’å¸ã„å–ã‚‹ã€‚";
 #else
 		if (name) return "Pains to mana";
 		if (desc) return "Deals psychic damages to all monsters in sight, and drains some mana.";
@@ -12362,8 +12362,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 23:
 #ifdef JP
-		if (name) return "ÌÜ¤Ë¤ÏÌÜ¤ò";
-		if (desc) return "ÂÇ·â¤äËâË¡¤Ç¼õ¤±¤¿¥À¥á¡¼¥¸¤ò¡¢¹¶·â¸µ¤Î¥â¥ó¥¹¥¿¡¼¤Ë¤âÍ¿¤¨¤ë¡£";
+		if (name) return "ç›®ã«ã¯ç›®ã‚’";
+		if (desc) return "æ‰“æ’ƒã‚„é­”æ³•ã§å—ã‘ãŸãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ã€æ”»æ’ƒå…ƒã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã‚‚ä¸ãˆã‚‹ã€‚";
 #else
 		if (name) return "Eye for an eye";
 		if (desc) return "Returns same damage which you got to the monster which damaged you.";
@@ -12371,7 +12371,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("Éü½²¤·¤¿¤¤ÍßË¾¤Ë¤«¤é¤ì¤¿¡£");
+			msg_print("å¾©è®ã—ãŸã„æ¬²æœ›ã«ã‹ã‚‰ã‚ŒãŸã€‚");
 #else
 			msg_print("You wish strongly you want to revenge anything.");
 #endif
@@ -12381,8 +12381,8 @@ static cptr do_hex_spell(int spell, int mode)
 	/*** 4th book (24-31) ***/
 	case 24:
 #ifdef JP
-		if (name) return "È¿Áı¿£·ë³¦";
-		if (desc) return "¤½¤Î³¬¤ÎÁı¿£¤¹¤ë¥â¥ó¥¹¥¿¡¼¤ÎÁı¿£¤òÁË»ß¤¹¤ë¡£";
+		if (name) return "åå¢—æ®–çµç•Œ";
+		if (desc) return "ãã®éšã®å¢—æ®–ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å¢—æ®–ã‚’é˜»æ­¢ã™ã‚‹ã€‚";
 #else
 		if (name) return "Anti multiply barrier";
 		if (desc) return "Obstructs all multiplying by monsters in entire floor.";
@@ -12390,7 +12390,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("Áı¿£¤òÁË»ß¤¹¤ë¼ö¤¤¤ò¤«¤±¤¿¡£");
+			msg_print("å¢—æ®–ã‚’é˜»æ­¢ã™ã‚‹å‘ªã„ã‚’ã‹ã‘ãŸã€‚");
 #else
 			msg_print("You feel anyone can not already multiply.");
 #endif
@@ -12399,8 +12399,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 25:
 #ifdef JP
-		if (name) return "Á´Éü³è";
-		if (desc) return "·Ğ¸³ÃÍ¤ò½ù¡¹¤ËÉü³è¤·¡¢¸º¾¯¤·¤¿Ç½ÎÏÃÍ¤ò²óÉü¤µ¤»¤ë¡£";
+		if (name) return "å…¨å¾©æ´»";
+		if (desc) return "çµŒé¨“å€¤ã‚’å¾ã€…ã«å¾©æ´»ã—ã€æ¸›å°‘ã—ãŸèƒ½åŠ›å€¤ã‚’å›å¾©ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Restoration";
 		if (desc) return "Restores experience and status.";
@@ -12408,7 +12408,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("ÂÎ¤¬¸µ¤Î³èÎÏ¤ò¼è¤êÌá¤·»Ï¤á¤¿¡£");
+			msg_print("ä½“ãŒå…ƒã®æ´»åŠ›ã‚’å–ã‚Šæˆ»ã—å§‹ã‚ãŸã€‚");
 #else
 			msg_print("You feel your lost status starting to return.");
 #endif
@@ -12454,7 +12454,7 @@ static cptr do_hex_spell(int spell, int mode)
 			if (!flag)
 			{
 #ifdef JP
-				msg_format("%s¤Î¼öÊ¸¤Î±Ó¾§¤ò¤ä¤á¤¿¡£", do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
+				msg_format("%sã®å‘ªæ–‡ã®è© å”±ã‚’ã‚„ã‚ãŸã€‚", do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
 #else
 				msg_format("Finish casting '%^s'.", do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
 #endif
@@ -12473,8 +12473,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 26:
 #ifdef JP
-		if (name) return "¼öÎÏµÛ¼ı";
-		if (desc) return "¼ö¤ï¤ì¤¿Éğ´ï¤Î¼ö¤¤¤òµÛ¼ı¤·¤ÆËâÎÏ¤ò²óÉü¤¹¤ë¡£";
+		if (name) return "å‘ªåŠ›å¸å";
+		if (desc) return "å‘ªã‚ã‚ŒãŸæ­¦å™¨ã®å‘ªã„ã‚’å¸åã—ã¦é­”åŠ›ã‚’å›å¾©ã™ã‚‹ã€‚";
 #else
 		if (name) return "Drain curse power";
 		if (desc) return "Drains curse on your weapon and heals SP a little.";
@@ -12488,8 +12488,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 			item_tester_hook = item_tester_hook_cursed;
 #ifdef JP
-			q = "¤É¤ÎÁõÈ÷ÉÊ¤«¤éµÛ¼ı¤·¤Ş¤¹¤«¡©";
-			s = "¼ö¤ï¤ì¤¿¥¢¥¤¥Æ¥à¤òÁõÈ÷¤·¤Æ¤¤¤Ê¤¤¡£";
+			q = "ã©ã®è£…å‚™å“ã‹ã‚‰å¸åã—ã¾ã™ã‹ï¼Ÿ";
+			s = "å‘ªã‚ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’è£…å‚™ã—ã¦ã„ãªã„ã€‚";
 #else
 			q = "Which cursed equipment do you drain mana from?";
 			s = "You have no cursed equipment.";
@@ -12513,7 +12513,7 @@ static cptr do_hex_spell(int spell, int mode)
 				if (one_in_(7))
 				{
 #ifdef JP
-					msg_print("¼ö¤¤¤òÁ´¤ÆµÛ¤¤¼è¤Ã¤¿¡£");
+					msg_print("å‘ªã„ã‚’å…¨ã¦å¸ã„å–ã£ãŸã€‚");
 #else
 					msg_print("Heavy curse vanished away.");
 #endif
@@ -12523,7 +12523,7 @@ static cptr do_hex_spell(int spell, int mode)
 			else if ((o_ptr->curse_flags & (TRC_CURSED)) && one_in_(3))
 			{
 #ifdef JP
-				msg_print("¼ö¤¤¤òÁ´¤ÆµÛ¤¤¼è¤Ã¤¿¡£");
+				msg_print("å‘ªã„ã‚’å…¨ã¦å¸ã„å–ã£ãŸã€‚");
 #else
 				msg_print("Curse vanished away.");
 #endif
@@ -12536,8 +12536,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 27:
 #ifdef JP
-		if (name) return "µÛ·ì¤Î¿Ï";
-		if (desc) return "µÛ·ìÂ°À­¤Ç¹¶·â¤¹¤ë¡£";
+		if (name) return "å¸è¡€ã®åˆƒ";
+		if (desc) return "å¸è¡€å±æ€§ã§æ”»æ’ƒã™ã‚‹ã€‚";
 #else
 		if (name) return "Swords to vampires";
 		if (desc) return "Gives vampiric ability to your weapon.";
@@ -12545,7 +12545,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("¤¢¤Ê¤¿¤ÎÉğ´ï¤¬·ì¤òÍß¤·¤Æ¤¤¤ë¡£");
+			msg_print("ã‚ãªãŸã®æ­¦å™¨ãŒè¡€ã‚’æ¬²ã—ã¦ã„ã‚‹ã€‚");
 #else
 			if (!empty_hands(FALSE))
 				msg_print("Your weapons want more blood now.");
@@ -12556,7 +12556,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (stop)
 		{
 #ifdef JP
-			msg_print("Éğ´ï¤Î³éË¾¤¬¾Ã¤¨µî¤Ã¤¿¡£");
+			msg_print("æ­¦å™¨ã®æ¸‡æœ›ãŒæ¶ˆãˆå»ã£ãŸã€‚");
 #else
 			msg_format("Thirsty of weapon%s disappeared.", (empty_hands(FALSE)) ? "" : "s");
 #endif
@@ -12565,8 +12565,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 28:
 #ifdef JP
-		if (name) return "Û¯Û°¤Î¸ÀÍÕ";
-		if (desc) return "»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤òÛ¯Û°¤È¤µ¤»¤ë¡£";
+		if (name) return "æœ¦æœ§ã®è¨€è‘‰";
+		if (desc) return "è¦–ç•Œå†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æœ¦æœ§ã¨ã•ã›ã‚‹ã€‚";
 #else
 		if (name) return "Word of stun";
 		if (desc) return "Stuns all monsters in your sight.";
@@ -12581,8 +12581,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 29:
 #ifdef JP
-		if (name) return "±Æ°ÜÆ°";
-		if (desc) return "¥â¥ó¥¹¥¿¡¼¤ÎÎÙ¤Î¥Ş¥¹¤Ë½Ö´Ö°ÜÆ°¤¹¤ë¡£";
+		if (name) return "å½±ç§»å‹•";
+		if (desc) return "ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®éš£ã®ãƒã‚¹ã«ç¬é–“ç§»å‹•ã™ã‚‹ã€‚";
 #else
 		if (name) return "Moving into shadow";
 		if (desc) return "Teleports you close to a monster.";
@@ -12610,7 +12610,7 @@ static cptr do_hex_spell(int spell, int mode)
 					(distance(y, x, py, px) > plev + 2))
 				{
 #ifdef JP
-					msg_print("¤½¤³¤Ë¤Ï°ÜÆ°¤Ç¤­¤Ê¤¤¡£");
+					msg_print("ãã“ã«ã¯ç§»å‹•ã§ããªã„ã€‚");
 #else
 					msg_print("Can not teleport to there.");
 #endif
@@ -12626,7 +12626,7 @@ static cptr do_hex_spell(int spell, int mode)
 			else
 			{
 #ifdef JP
-				msg_print("¤ª¤Ã¤È¡ª");
+				msg_print("ãŠã£ã¨ï¼");
 #else
 				msg_print("Oops!");
 #endif
@@ -12639,8 +12639,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 30:
 #ifdef JP
-		if (name) return "È¿ËâË¡·ë³¦";
-		if (desc) return "»ë³¦Æâ¤Î¥â¥ó¥¹¥¿¡¼¤ÎËâË¡¤òÁË³²¤¹¤ë¥Ğ¥ê¥¢¤òÄ¥¤ë¡£";
+		if (name) return "åé­”æ³•çµç•Œ";
+		if (desc) return "è¦–ç•Œå†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®é­”æ³•ã‚’é˜»å®³ã™ã‚‹ãƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚";
 #else
 		if (name) return "Anti magic barrier";
 		if (desc) return "Obstructs all magic spell of monsters in your sight.";
@@ -12650,7 +12650,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 #ifdef JP
-			msg_print("ËâË¡¤òËÉ¤°¼ö¤¤¤ò¤«¤±¤¿¡£");
+			msg_print("é­”æ³•ã‚’é˜²ãå‘ªã„ã‚’ã‹ã‘ãŸã€‚");
 #else
 			msg_print("You feel anyone can not cast spells except you.");
 #endif
@@ -12659,8 +12659,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	case 31:
 #ifdef JP
-		if (name) return "Éü½²¤ÎÀë¹ğ";
-		if (desc) return "¿ô¥¿¡¼¥ó¸å¤Ë¤½¤ì¤Ş¤Ç¼õ¤±¤¿¥À¥á¡¼¥¸¤Ë±ş¤¸¤¿°ÒÎÏ¤ÎÃÏ¹ö¤Î¹å²Ğ¤ÎÃÆ¤òÊü¤Ä¡£";
+		if (name) return "å¾©è®ã®å®£å‘Š";
+		if (desc) return "æ•°ã‚¿ãƒ¼ãƒ³å¾Œã«ãã‚Œã¾ã§å—ã‘ãŸãƒ€ãƒ¡ãƒ¼ã‚¸ã«å¿œã˜ãŸå¨åŠ›ã®åœ°ç„ã®åŠ«ç«ã®å¼¾ã‚’æ”¾ã¤ã€‚";
 #else
 		if (name) return "Revenge sentence";
 		if (desc) return "Fires  a ball of hell fire to try revenging after few turns.";
@@ -12676,7 +12676,7 @@ static cptr do_hex_spell(int spell, int mode)
 			if (p_ptr->magic_num2[2] > 0)
 			{
 #ifdef JP
-				msg_print("¤¹¤Ç¤ËÉü½²¤ÏÀë¹ğºÑ¤ß¤À¡£");
+				msg_print("ã™ã§ã«å¾©è®ã¯å®£å‘Šæ¸ˆã¿ã ã€‚");
 #else
 				msg_print("You already pronounced your revenge.");
 #endif
@@ -12686,7 +12686,7 @@ static cptr do_hex_spell(int spell, int mode)
 			p_ptr->magic_num2[1] = 2;
 			p_ptr->magic_num2[2] = r;
 #ifdef JP
-			msg_format("¤¢¤Ê¤¿¤ÏÉü½²¤òÀë¹ğ¤·¤¿¡£¤¢¤È %d ¥¿¡¼¥ó¡£", r);
+			msg_format("ã‚ãªãŸã¯å¾©è®ã‚’å®£å‘Šã—ãŸã€‚ã‚ã¨ %d ã‚¿ãƒ¼ãƒ³ã€‚", r);
 #else
 			msg_format("You pronounce your revenge. %d turns left.", r);
 #endif
@@ -12707,7 +12707,7 @@ static cptr do_hex_spell(int spell, int mode)
 					do
 					{
 #ifdef JP
-						msg_print("Éü½²¤Î»ş¤À¡ª");
+						msg_print("å¾©è®ã®æ™‚ã ï¼");
 #else
 						msg_print("Time to revenge!");
 #endif
@@ -12719,7 +12719,7 @@ static cptr do_hex_spell(int spell, int mode)
 					if (p_ptr->wizard)
 					{
 #ifdef JP
-						msg_format("%dÅÀ¤Î¥À¥á¡¼¥¸¤òÊÖ¤·¤¿¡£", power);
+						msg_format("%dç‚¹ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¿”ã—ãŸã€‚", power);
 #else
 						msg_format("You return %d damages.", power);
 #endif
@@ -12728,7 +12728,7 @@ static cptr do_hex_spell(int spell, int mode)
 				else
 				{
 #ifdef JP
-					msg_print("Éü½²¤¹¤ëµ¤¤¬¼º¤»¤¿¡£");
+					msg_print("å¾©è®ã™ã‚‹æ°—ãŒå¤±ã›ãŸã€‚");
 #else
 					msg_print("You are not a mood to revenge.");
 #endif
@@ -12761,11 +12761,11 @@ static cptr do_hex_spell(int spell, int mode)
 
 
 /*!
- * @brief ËâË¡½èÍı¤Î¥á¥¤¥ó¥ë¡¼¥Á¥ó
- * @param realm ËâË¡ÎÎ°è¤ÎID
- * @param spell ³ÆÎÎ°è¤ÎËâË¡ID
- * @param mode µá¤á¤ë½èÍı
- * @return ³ÆÎÎ°èËâË¡¤Ë³Æ¼ï¥Æ¥­¥¹¥È¤òµá¤á¤¿¾ì¹ç¤ÏÊ¸»úÎó»²¾È¥İ¥¤¥ó¥¿¡¢¤½¤¦¤Ç¤Ê¤¤¾ì¹ç¤ÏNULL¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£
+ * @brief é­”æ³•å‡¦ç†ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
+ * @param realm é­”æ³•é ˜åŸŸã®ID
+ * @param spell å„é ˜åŸŸã®é­”æ³•ID
+ * @param mode æ±‚ã‚ã‚‹å‡¦ç†
+ * @return å„é ˜åŸŸé­”æ³•ã«å„ç¨®ãƒ†ã‚­ã‚¹ãƒˆã‚’æ±‚ã‚ãŸå ´åˆã¯æ–‡å­—åˆ—å‚ç…§ãƒã‚¤ãƒ³ã‚¿ã€ãã†ã§ãªã„å ´åˆã¯NULLãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚
  */
 cptr do_spell(int realm, int spell, int mode)
 {

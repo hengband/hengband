@@ -4,7 +4,7 @@
 
 # Name Old Man Willow Quest
 Q:$31:N:Old Man Willow Quest
-Q:31:N:��������
+Q:31:N:柳じじい
 
 # Definition 
 Q:$31:Q:6:0:0:0:22:0:0:0:6
@@ -17,22 +17,22 @@ Q:$31:T:of the forest against all men.  Kill everything you find in Old
 Q:$31:T:Man Willow's section of the forest.  You will be well rewarded 
 Q:$31:T:for completing this quest.  The quest is in a clearing east of
 Q:$31:T:the town.
-Q:31:T:�����������٤ι�ư�ϺǶ��٤��᤮�ޤ�����Ͽ��ΰ�������ۤ���
-Q:31:T:�ʹ֤�Ũ�Ф���褦�������ޤ��������������ο��˹Ԥä����Ƥ�
-Q:31:T:��ʪ�򻦤��Ʋ���������ʬ���󽷤򺹤��夲�ޤ���
-Q:31:T:�������Ȥϳ������ʿ�Ϥˤ���ޤ���
+Q:31:T:『柳じじい』の行動は最近度が過ぎます！彼は森の一部を支配し、
+Q:31:T:人間に敵対するようし向けました。柳じじいの森に行って全ての
+Q:31:T:怪物を殺して下さい。充分な報酬を差し上げます。
+Q:31:T:クエストは街の東の平地にあります。
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST31 3]
 Q:$31:T:Thank you!  Your reward is wating outside.
-Q:31:T:���꤬�Ȥ��������ޤ������ˤ��餬�֤��Ƥ���ޤ���
+Q:31:T:ありがとうございます！外にお礼が置いてあります。
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST31 5]
 Q:$31:T:The quest was more than you could handle.  Try another one.   
-Q:31:T:���Υ������ȤϤ��ʤ��μ�ˤ����ʤ��ä��褦�Ǥ��͡�¾�Τ��Ʋ�������
+Q:31:T:このクエストはあなたの手におえなかったようですね。他のを試して下さい。
 ?:1
 
 # The Monsters

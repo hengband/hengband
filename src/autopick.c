@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file autopick.c
- * @brief ¼«Æ°½¦¤¤µ¡Ç½¤Î¼ÂÁõ / Object Auto-picker/Destroyer
+ * @brief è‡ªå‹•æ‹¾ã„æ©Ÿèƒ½ã®å®Ÿè£… / Object Auto-picker/Destroyer
  * @date 2014/01/02
  * @author
  * Copyright (c) 2002  Mogami\n
@@ -73,55 +73,55 @@
 
 #ifdef JP
 
-static char KEY_ALL[] = "¤¹¤Ù¤Æ¤Î";
-static char KEY_UNAWARE[] = "Ì¤È½ÌÀ¤Î";
-static char KEY_UNIDENTIFIED[] = "Ì¤´ÕÄê¤Î";
-static char KEY_IDENTIFIED[] = "´ÕÄêºÑ¤ß¤Î";
-static char KEY_STAR_IDENTIFIED[] = "*´ÕÄê*ºÑ¤ß¤Î";
-static char KEY_COLLECTING[] = "¼ı½¸Ãæ¤Î";
-static char KEY_ARTIFACT[] = "¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È";
-static char KEY_EGO[] = "¥¨¥´";
-static char KEY_GOOD[] = "¾å¼Á¤Î";
-static char KEY_NAMELESS[] = "ÌµÌÃ¤Î";
-static char KEY_AVERAGE[] = "ÊÂ¤Î";
-static char KEY_WORTHLESS[] = "Ìµ²ÁÃÍ¤Î";
-static char KEY_RARE[] = "¥ì¥¢¤Ê";
-static char KEY_COMMON[] = "¤¢¤ê¤Õ¤ì¤¿";
-static char KEY_BOOSTED[] = "¥À¥¤¥¹ÌÜ¤Î°ã¤¦";
-static char KEY_MORE_THAN[] =  "¥À¥¤¥¹ÌÜ";
-static char KEY_DICE[] =  "°Ê¾å¤Î";
-static char KEY_MORE_BONUS[] =  "½¤ÀµÃÍ";
-static char KEY_MORE_BONUS2[] =  "°Ê¾å¤Î";
-static char KEY_WANTED[] = "¾Ş¶â¼ó¤Î";
-static char KEY_UNIQUE[] = "¥æ¥Ë¡¼¥¯¡¦¥â¥ó¥¹¥¿¡¼¤Î";
-static char KEY_HUMAN[] = "¿Í´Ö¤Î";
-static char KEY_UNREADABLE[] = "ÆÉ¤á¤Ê¤¤";
-static char KEY_REALM1[] = "Âè°ìÎÎ°è¤Î";
-static char KEY_REALM2[] = "ÂèÆóÎÎ°è¤Î";
-static char KEY_FIRST[] = "1ºıÌÜ¤Î";
-static char KEY_SECOND[] = "2ºıÌÜ¤Î";
-static char KEY_THIRD[] = "3ºıÌÜ¤Î";
-static char KEY_FOURTH[] = "4ºıÌÜ¤Î";
-static char KEY_ITEMS[] = "¥¢¥¤¥Æ¥à";
-static char KEY_WEAPONS[] = "Éğ´ï";
-static char KEY_FAVORITE_WEAPONS[] = "ÆÀ°ÕÉğ´ï";
-static char KEY_ARMORS[] = "ËÉ¶ñ";
-static char KEY_MISSILES[] = "Ìğ";
-static char KEY_DEVICES[] = "ËâË¡¥¢¥¤¥Æ¥à";
-static char KEY_LIGHTS[] = "¸÷¸»";
-static char KEY_JUNKS[] = "¤¬¤é¤¯¤¿";
-static char KEY_CORPSES[] = "»àÂÎ¤ä¹ü";
-static char KEY_SPELLBOOKS[] = "ËâË¡½ñ";
-static char KEY_HAFTED[] = "Æß´ï";
-static char KEY_SHIELDS[] = "½â";
-static char KEY_BOWS[] = "µİ";
-static char KEY_RINGS[] = "»ØÎØ";
-static char KEY_AMULETS[] = "¥¢¥ß¥å¥ì¥Ã¥È";
-static char KEY_SUITS[] = "³»";
-static char KEY_CLOAKS[] = "¥¯¥í¡¼¥¯";
-static char KEY_HELMS[] = "³õ";
-static char KEY_GLOVES[] = "äÆ¼ê";
-static char KEY_BOOTS[] = "·¤";
+static char KEY_ALL[] = "ã™ã¹ã¦ã®";
+static char KEY_UNAWARE[] = "æœªåˆ¤æ˜ã®";
+static char KEY_UNIDENTIFIED[] = "æœªé‘‘å®šã®";
+static char KEY_IDENTIFIED[] = "é‘‘å®šæ¸ˆã¿ã®";
+static char KEY_STAR_IDENTIFIED[] = "*é‘‘å®š*æ¸ˆã¿ã®";
+static char KEY_COLLECTING[] = "åé›†ä¸­ã®";
+static char KEY_ARTIFACT[] = "ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆ";
+static char KEY_EGO[] = "ã‚¨ã‚´";
+static char KEY_GOOD[] = "ä¸Šè³ªã®";
+static char KEY_NAMELESS[] = "ç„¡éŠ˜ã®";
+static char KEY_AVERAGE[] = "ä¸¦ã®";
+static char KEY_WORTHLESS[] = "ç„¡ä¾¡å€¤ã®";
+static char KEY_RARE[] = "ãƒ¬ã‚¢ãª";
+static char KEY_COMMON[] = "ã‚ã‚Šãµã‚ŒãŸ";
+static char KEY_BOOSTED[] = "ãƒ€ã‚¤ã‚¹ç›®ã®é•ã†";
+static char KEY_MORE_THAN[] =  "ãƒ€ã‚¤ã‚¹ç›®";
+static char KEY_DICE[] =  "ä»¥ä¸Šã®";
+static char KEY_MORE_BONUS[] =  "ä¿®æ­£å€¤";
+static char KEY_MORE_BONUS2[] =  "ä»¥ä¸Šã®";
+static char KEY_WANTED[] = "è³é‡‘é¦–ã®";
+static char KEY_UNIQUE[] = "ãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®";
+static char KEY_HUMAN[] = "äººé–“ã®";
+static char KEY_UNREADABLE[] = "èª­ã‚ãªã„";
+static char KEY_REALM1[] = "ç¬¬ä¸€é ˜åŸŸã®";
+static char KEY_REALM2[] = "ç¬¬äºŒé ˜åŸŸã®";
+static char KEY_FIRST[] = "1å†Šç›®ã®";
+static char KEY_SECOND[] = "2å†Šç›®ã®";
+static char KEY_THIRD[] = "3å†Šç›®ã®";
+static char KEY_FOURTH[] = "4å†Šç›®ã®";
+static char KEY_ITEMS[] = "ã‚¢ã‚¤ãƒ†ãƒ ";
+static char KEY_WEAPONS[] = "æ­¦å™¨";
+static char KEY_FAVORITE_WEAPONS[] = "å¾—æ„æ­¦å™¨";
+static char KEY_ARMORS[] = "é˜²å…·";
+static char KEY_MISSILES[] = "çŸ¢";
+static char KEY_DEVICES[] = "é­”æ³•ã‚¢ã‚¤ãƒ†ãƒ ";
+static char KEY_LIGHTS[] = "å…‰æº";
+static char KEY_JUNKS[] = "ãŒã‚‰ããŸ";
+static char KEY_CORPSES[] = "æ­»ä½“ã‚„éª¨";
+static char KEY_SPELLBOOKS[] = "é­”æ³•æ›¸";
+static char KEY_HAFTED[] = "éˆå™¨";
+static char KEY_SHIELDS[] = "ç›¾";
+static char KEY_BOWS[] = "å¼“";
+static char KEY_RINGS[] = "æŒ‡è¼ª";
+static char KEY_AMULETS[] = "ã‚¢ãƒŸãƒ¥ãƒ¬ãƒƒãƒˆ";
+static char KEY_SUITS[] = "é§";
+static char KEY_CLOAKS[] = "ã‚¯ãƒ­ãƒ¼ã‚¯";
+static char KEY_HELMS[] = "å…œ";
+static char KEY_GLOVES[] = "ç± æ‰‹";
+static char KEY_BOOTS[] = "é´";
 
 #else 
 
@@ -195,7 +195,7 @@ static char KEY_BOOTS[] = "boots";
 #define IS_FLG(FLG) (entry->flag[FLG / 32] & (1L << (FLG % 32)))
 
 #ifdef JP
-	static char kanji_colon[] = "¡§";
+	static char kanji_colon[] = "ï¼š";
 #endif
 
 
@@ -446,7 +446,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	bool name = TRUE;
 
 #ifdef JP
-	/* ¥¨¥´ÌÃ¤¬¼ÙËâ¤«¤â¤·¤ì¤Ê¤¤¤Î¤Ç¡¢¥Ç¥Õ¥©¥ë¥È¤Ç¡Ö^¡×¤ÏÉÕ¤±¤Ê¤¤ */
+	/* ã‚¨ã‚´éŠ˜ãŒé‚ªé­”ã‹ã‚‚ã—ã‚Œãªã„ã®ã§ã€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã€Œ^ã€ã¯ä»˜ã‘ãªã„ */
 	bool bol_mark = FALSE;
 #else
 	/* We can always use the ^ mark in English */
@@ -532,7 +532,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 				 */
 				ego_item_type *e_ptr = &e_info[o_ptr->name2];
 #ifdef JP
-				/* ¥¨¥´ÌÃ¤Ë¤Ï¡Ö^¡×¥Ş¡¼¥¯¤¬»È¤¨¤ë */
+				/* ã‚¨ã‚´éŠ˜ã«ã¯ã€Œ^ã€ãƒãƒ¼ã‚¯ãŒä½¿ãˆã‚‹ */
 				sprintf(name_str, "^%s", e_name + e_ptr->name);
 #else
 				/* We ommit the basename and cannot use the ^ mark */
@@ -774,7 +774,7 @@ void autopick_load_pref(bool disp_mes)
 	{
 		/* Success */
 #ifdef JP
-		msg_format("%s¤òÆÉ¤ß¹ş¤ß¤Ş¤·¤¿¡£", buf);
+		msg_format("%sã‚’èª­ã¿è¾¼ã¿ã¾ã—ãŸã€‚", buf);
 #else
 		msg_format("Loaded '%s'.", buf);
 #endif
@@ -793,7 +793,7 @@ void autopick_load_pref(bool disp_mes)
 		{
 			/* Success */
 #ifdef JP
-			msg_format("%s¤òÆÉ¤ß¹ş¤ß¤Ş¤·¤¿¡£", buf);
+			msg_format("%sã‚’èª­ã¿è¾¼ã¿ã¾ã—ãŸã€‚", buf);
 #else
 			msg_format("Loaded '%s'.", buf);
 #endif
@@ -804,7 +804,7 @@ void autopick_load_pref(bool disp_mes)
 	{
 		/* Failed */
 #ifdef JP
-		msg_print("¼«Æ°½¦¤¤ÀßÄê¥Õ¥¡¥¤¥ë¤ÎÆÉ¤ß¹ş¤ß¤Ë¼ºÇÔ¤·¤Ş¤·¤¿¡£");
+		msg_print("è‡ªå‹•æ‹¾ã„è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 #else
 		msg_print("Failed to reload autopick preference.");
 #endif
@@ -1605,7 +1605,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 
 		/* Message */
 #ifdef JP
-		msg_format("%s¤ÏÇË²õÉÔÇ½¤À¡£", o_name);
+		msg_format("%sã¯ç ´å£Šä¸èƒ½ã ã€‚", o_name);
 #else
 		msg_format("You cannot auto-destroy %s.", o_name);
 #endif
@@ -1660,7 +1660,7 @@ static void autopick_delayed_alter_aux(int item)
 
 		/* Print a message */
 #ifdef JP
-		msg_format("%s¤ò¼«Æ°ÇË²õ¤·¤Ş¤¹¡£", o_name);
+		msg_format("%sã‚’è‡ªå‹•ç ´å£Šã—ã¾ã™ã€‚", o_name);
 #else
 		msg_format("Auto-destroying %s.", o_name);
 #endif
@@ -1759,7 +1759,7 @@ void autopick_pickup_items(cave_type *c_ptr)
 
 				/* Message */
 #ifdef JP
-				msg_format("¥¶¥Ã¥¯¤Ë¤Ï%s¤òÆş¤ì¤ë·ä´Ö¤¬¤Ê¤¤¡£", o_name);
+				msg_format("ã‚¶ãƒƒã‚¯ã«ã¯%sã‚’å…¥ã‚Œã‚‹éš™é–“ãŒãªã„ã€‚", o_name);
 #else
 				msg_format("You have no room for %s.", o_name);
 #endif
@@ -1783,7 +1783,7 @@ void autopick_pickup_items(cave_type *c_ptr)
 				object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
-				sprintf(out_val, "%s¤ò½¦¤¤¤Ş¤¹¤«? ", o_name);
+				sprintf(out_val, "%sã‚’æ‹¾ã„ã¾ã™ã‹? ", o_name);
 #else
 				sprintf(out_val, "Pick up %s? ", o_name);
 #endif
@@ -1853,7 +1853,7 @@ static bool clear_auto_register(void)
 		fclose(pref_fff);
 
 #ifdef JP
-		msg_format("°ì»ş¥Õ¥¡¥¤¥ë %s ¤òºîÀ®¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿¡£", tmp_file);
+		msg_format("ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ« %s ã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", tmp_file);
 #else
 		msg_format("Failed to create temporary file %s.", tmp_file);
 #endif
@@ -1899,8 +1899,8 @@ static bool clear_auto_register(void)
 	if (num)
 	{
 #ifdef JP
-		msg_format("°ÊÁ°¤Î¥­¥ã¥é¥¯¥¿¡¼ÍÑ¤Î¼«Æ°ÀßÄê(%d¹Ô)¤¬»Ä¤Ã¤Æ¤¤¤Ş¤¹¡£", num);
-		strcpy(buf, "¸Å¤¤ÀßÄê¹Ô¤Ïºï½ü¤·¤Ş¤¹¡£¤è¤í¤·¤¤¤Ç¤¹¤«¡©");
+		msg_format("ä»¥å‰ã®ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ç”¨ã®è‡ªå‹•è¨­å®š(%dè¡Œ)ãŒæ®‹ã£ã¦ã„ã¾ã™ã€‚", num);
+		strcpy(buf, "å¤ã„è¨­å®šè¡Œã¯å‰Šé™¤ã—ã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ");
 #else
 		msg_format("Auto registered lines (%d lines) for previous character are remaining.", num);
 		strcpy(buf, "These lines will be deleted.  Are you sure? ");
@@ -1913,7 +1913,7 @@ static bool clear_auto_register(void)
 			autoregister = FALSE;
 
 #ifdef JP
-			msg_print("¥¨¥Ç¥£¥¿¤Î¥«¥Ã¥È&¥Ú¡¼¥¹¥ÈÅù¤ò»È¤Ã¤ÆÉ¬Í×¤Ê¹Ô¤òÈòÆñ¤·¤Æ¤¯¤À¤µ¤¤¡£");
+			msg_print("ã‚¨ãƒ‡ã‚£ã‚¿ã®ã‚«ãƒƒãƒˆ&ãƒšãƒ¼ã‚¹ãƒˆç­‰ã‚’ä½¿ã£ã¦å¿…è¦ãªè¡Œã‚’é¿é›£ã—ã¦ãã ã•ã„ã€‚");
 #else
 			msg_print("Use cut & paste of auto picker editor (_) to keep old prefs.");
 #endif
@@ -1962,12 +1962,12 @@ bool autopick_autoregister(object_type *o_ptr)
 		byte act = autopick_list[match_autopick].action;
 
 #ifdef JP
-		if (act & DO_AUTOPICK) what = "¼«Æ°¤Ç½¦¤¦";
-		else if (act & DO_AUTODESTROY) what = "¼«Æ°ÇË²õ¤¹¤ë";
-		else if (act & DONT_AUTOPICK) what = "ÊüÃÖ¤¹¤ë";
-		else /* if (act & DO_QUERY_AUTOPICK) */ what = "³ÎÇ§¤·¤Æ½¦¤¦";
+		if (act & DO_AUTOPICK) what = "è‡ªå‹•ã§æ‹¾ã†";
+		else if (act & DO_AUTODESTROY) what = "è‡ªå‹•ç ´å£Šã™ã‚‹";
+		else if (act & DONT_AUTOPICK) what = "æ”¾ç½®ã™ã‚‹";
+		else /* if (act & DO_QUERY_AUTOPICK) */ what = "ç¢ºèªã—ã¦æ‹¾ã†";
 
-		msg_format("¤½¤Î¥¢¥¤¥Æ¥à¤Ï´û¤Ë%s¤è¤¦¤ËÀßÄê¤µ¤ì¤Æ¤¤¤Ş¤¹¡£", what);
+		msg_format("ãã®ã‚¢ã‚¤ãƒ†ãƒ ã¯æ—¢ã«%sã‚ˆã†ã«è¨­å®šã•ã‚Œã¦ã„ã¾ã™ã€‚", what);
 #else
 		if (act & DO_AUTOPICK) what = "auto-pickup";
 		else if (act & DO_AUTODESTROY) what = "auto-destroy";
@@ -1992,7 +1992,7 @@ bool autopick_autoregister(object_type *o_ptr)
 
 		/* Message */
 #ifdef JP
-		msg_format("%s¤ÏÇË²õÉÔÇ½¤À¡£", o_name);
+		msg_format("%sã¯ç ´å£Šä¸èƒ½ã ã€‚", o_name);
 #else
 		msg_format("You cannot auto-destroy %s.", o_name);
 #endif
@@ -2049,7 +2049,7 @@ bool autopick_autoregister(object_type *o_ptr)
 	/* Failure */
 	if (!pref_fff) {
 #ifdef JP
-		msg_format("%s ¤ò³«¤¯¤³¤È¤¬¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿¡£", pref_file);
+		msg_format("%s ã‚’é–‹ãã“ã¨ãŒã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", pref_file);
 #else
 		msg_format("Failed to open %s.", pref_file);
 #endif
@@ -2065,8 +2065,8 @@ bool autopick_autoregister(object_type *o_ptr)
 		fprintf(pref_fff, "%s\n", autoregister_header);
 
 #ifdef JP
-		fprintf(pref_fff, "%s\n", "# *·Ù¹ğ!!* °Ê¹ß¤Î¹Ô¤Ï¼«Æ°ÅĞÏ¿¤µ¤ì¤¿¤â¤Î¤Ç¤¹¡£");
-		fprintf(pref_fff, "%s\n", "# ¸å¤Ç¼«Æ°Åª¤Ëºï½ü¤µ¤ì¤Ş¤¹¤Î¤Ç¡¢É¬Í×¤Ê¹Ô¤Ï¾å¤ÎÊı¤Ø°ÜÆ°¤·¤Æ¤ª¤¤¤Æ¤¯¤À¤µ¤¤¡£");
+		fprintf(pref_fff, "%s\n", "# *è­¦å‘Š!!* ä»¥é™ã®è¡Œã¯è‡ªå‹•ç™»éŒ²ã•ã‚ŒãŸã‚‚ã®ã§ã™ã€‚");
+		fprintf(pref_fff, "%s\n", "# å¾Œã§è‡ªå‹•çš„ã«å‰Šé™¤ã•ã‚Œã¾ã™ã®ã§ã€å¿…è¦ãªè¡Œã¯ä¸Šã®æ–¹ã¸ç§»å‹•ã—ã¦ãŠã„ã¦ãã ã•ã„ã€‚");
 #else
 		fprintf(pref_fff, "%s\n", "# *Waring!* The lines below will be deleated later.");
 		fprintf(pref_fff, "%s\n", "# Keep it by cut & paste if you need these lines for future characters.");
@@ -2180,227 +2180,227 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	cptr before_str[100], body_str;
 	int before_n = 0;
 
-	body_str = "¥¢¥¤¥Æ¥à";
+	body_str = "ã‚¢ã‚¤ãƒ†ãƒ ";
 
 	/*** Collecting items ***/
 	/*** Which can be absorbed into a slot as a bundle ***/
 	if (IS_FLG(FLG_COLLECTING))
-		before_str[before_n++] = "¼ı½¸Ãæ¤Ç´û¤Ë»ı¤Ã¤Æ¤¤¤ë¥¹¥í¥Ã¥È¤Ë¤Ş¤È¤á¤é¤ì¤ë";
+		before_str[before_n++] = "åé›†ä¸­ã§æ—¢ã«æŒã£ã¦ã„ã‚‹ã‚¹ãƒ­ãƒƒãƒˆã«ã¾ã¨ã‚ã‚‰ã‚Œã‚‹";
 	
 	/*** Unaware items ***/
 	if (IS_FLG(FLG_UNAWARE))
-		before_str[before_n++] = "Ì¤´ÕÄê¤Ç¤½¤Î¸ú²Ì¤âÈ½ÌÀ¤·¤Æ¤¤¤Ê¤¤";
+		before_str[before_n++] = "æœªé‘‘å®šã§ãã®åŠ¹æœã‚‚åˆ¤æ˜ã—ã¦ã„ãªã„";
 
 	/*** Unidentified ***/
 	if (IS_FLG(FLG_UNIDENTIFIED))
-		before_str[before_n++] = "Ì¤´ÕÄê¤Î";
+		before_str[before_n++] = "æœªé‘‘å®šã®";
 
 	/*** Identified ***/
 	if (IS_FLG(FLG_IDENTIFIED))
-		before_str[before_n++] = "´ÕÄêºÑ¤ß¤Î";
+		before_str[before_n++] = "é‘‘å®šæ¸ˆã¿ã®";
 
 	/*** *Identified* ***/
 	if (IS_FLG(FLG_STAR_IDENTIFIED))
-		before_str[before_n++] = "´°Á´¤Ë´ÕÄêºÑ¤ß¤Î";
+		before_str[before_n++] = "å®Œå…¨ã«é‘‘å®šæ¸ˆã¿ã®";
 
 	/*** Dice boosted (weapon of slaying) ***/
 	if (IS_FLG(FLG_BOOSTED))
 	{
-		before_str[before_n++] = "¥À¥á¡¼¥¸¥À¥¤¥¹¤¬ÄÌ¾ï¤è¤êÂç¤­¤¤";
-		body_str = "Éğ´ï";
+		before_str[before_n++] = "ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒ€ã‚¤ã‚¹ãŒé€šå¸¸ã‚ˆã‚Šå¤§ãã„";
+		body_str = "æ­¦å™¨";
 	}
 
 	/*** Weapons whose dd*ds is more than nn ***/
 	if (IS_FLG(FLG_MORE_DICE))
 	{
 		static char more_than_desc_str[] = "___";
-		before_str[before_n++] = "¥À¥á¡¼¥¸¥À¥¤¥¹¤ÎºÇÂçÃÍ¤¬";
-		body_str = "Éğ´ï";
+		before_str[before_n++] = "ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒ€ã‚¤ã‚¹ã®æœ€å¤§å€¤ãŒ";
+		body_str = "æ­¦å™¨";
 			
 		sprintf(more_than_desc_str,"%d", entry->dice);
 		before_str[before_n++] = more_than_desc_str;
-		before_str[before_n++] = "°Ê¾å¤Î";
+		before_str[before_n++] = "ä»¥ä¸Šã®";
 	}
 
 	/*** Items whose magical bonus is more than nn ***/
 	if (IS_FLG(FLG_MORE_BONUS))
 	{
 		static char more_bonus_desc_str[] = "___";
-		before_str[before_n++] = "½¤ÀµÃÍ¤¬(+";
+		before_str[before_n++] = "ä¿®æ­£å€¤ãŒ(+";
 			
 		sprintf(more_bonus_desc_str,"%d", entry->bonus);
 		before_str[before_n++] = more_bonus_desc_str;
-		before_str[before_n++] = ")°Ê¾å¤Î";
+		before_str[before_n++] = ")ä»¥ä¸Šã®";
 	}
 
 	/*** Worthless items ***/
 	if (IS_FLG(FLG_WORTHLESS))
-		before_str[before_n++] = "Å¹¤ÇÌµ²ÁÃÍ¤ÈÈ½Äê¤µ¤ì¤ë";
+		before_str[before_n++] = "åº—ã§ç„¡ä¾¡å€¤ã¨åˆ¤å®šã•ã‚Œã‚‹";
 
 	/*** Artifact ***/
 	if (IS_FLG(FLG_ARTIFACT))
 	{
-		before_str[before_n++] = "¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Î";
-		body_str = "ÁõÈ÷";
+		before_str[before_n++] = "ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã®";
+		body_str = "è£…å‚™";
 	}
 
 	/*** Ego ***/
 	if (IS_FLG(FLG_EGO))
 	{
-		before_str[before_n++] = "¥¨¥´¥¢¥¤¥Æ¥à¤Î";
-		body_str = "ÁõÈ÷";
+		before_str[before_n++] = "ã‚¨ã‚´ã‚¢ã‚¤ãƒ†ãƒ ã®";
+		body_str = "è£…å‚™";
 	}
 
 	/*** Good ***/
 	if (IS_FLG(FLG_GOOD))
 	{
-		before_str[before_n++] = "¾å¼Á¤Î";
-		body_str = "ÁõÈ÷";
+		before_str[before_n++] = "ä¸Šè³ªã®";
+		body_str = "è£…å‚™";
 	}
 
 	/*** Nameless ***/
 	if (IS_FLG(FLG_NAMELESS))
 	{
-		before_str[before_n++] = "¥¨¥´¤Ç¤â¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Ç¤â¤Ê¤¤";
-		body_str = "ÁõÈ÷";
+		before_str[before_n++] = "ã‚¨ã‚´ã§ã‚‚ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã§ã‚‚ãªã„";
+		body_str = "è£…å‚™";
 	}
 
 	/*** Average ***/
 	if (IS_FLG(FLG_AVERAGE))
 	{
-		before_str[before_n++] = "ÊÂ¤Î";
-		body_str = "ÁõÈ÷";
+		before_str[before_n++] = "ä¸¦ã®";
+		body_str = "è£…å‚™";
 	}
 
 	/*** Rare equipments ***/
 	if (IS_FLG(FLG_RARE))
 	{
-		before_str[before_n++] = "¥É¥é¥´¥óÁõÈ÷¤ä¥«¥ª¥¹¡¦¥Ö¥ì¡¼¥ÉÅù¤ò´Ş¤àÄÁ¤·¤¤";
-		body_str = "ÁõÈ÷";
+		before_str[before_n++] = "ãƒ‰ãƒ©ã‚´ãƒ³è£…å‚™ã‚„ã‚«ã‚ªã‚¹ãƒ»ãƒ–ãƒ¬ãƒ¼ãƒ‰ç­‰ã‚’å«ã‚€çã—ã„";
+		body_str = "è£…å‚™";
 	}
 
 	/*** Common equipments ***/
 	if (IS_FLG(FLG_COMMON))
 	{
-		before_str[before_n++] = "¤¢¤ê¤Õ¤ì¤¿(¥É¥é¥´¥óÁõÈ÷¤ä¥«¥ª¥¹¡¦¥Ö¥ì¡¼¥ÉÅù¤ÎÄÁ¤·¤¤Êª¤Ç¤Ï¤Ê¤¤)";
-		body_str = "ÁõÈ÷";
+		before_str[before_n++] = "ã‚ã‚Šãµã‚ŒãŸ(ãƒ‰ãƒ©ã‚´ãƒ³è£…å‚™ã‚„ã‚«ã‚ªã‚¹ãƒ»ãƒ–ãƒ¬ãƒ¼ãƒ‰ç­‰ã®çã—ã„ç‰©ã§ã¯ãªã„)";
+		body_str = "è£…å‚™";
 	}
 
 	/*** Wanted monster's corpse/skeletons ***/
 	if (IS_FLG(FLG_WANTED))
 	{
-		before_str[before_n++] = "¥Ï¥ó¥¿¡¼»öÌ³½ê¤Ç¾Ş¶â¼ó¤È¤µ¤ì¤Æ¤¤¤ë";
-		body_str = "»àÂÎ¤ä¹ü";
+		before_str[before_n++] = "ãƒãƒ³ã‚¿ãƒ¼äº‹å‹™æ‰€ã§è³é‡‘é¦–ã¨ã•ã‚Œã¦ã„ã‚‹";
+		body_str = "æ­»ä½“ã‚„éª¨";
 	}
 
 	/*** Human corpse/skeletons (for Daemon magic) ***/
 	if (IS_FLG(FLG_HUMAN))
 	{
-		before_str[before_n++] = "°­ËâËâË¡¤Ç»È¤¦¤¿¤á¤Î¿Í´Ö¤ä¥Ò¥å¡¼¥Ş¥Î¥¤¥É¤Î";
-		body_str = "»àÂÎ¤ä¹ü";
+		before_str[before_n++] = "æ‚ªé­”é­”æ³•ã§ä½¿ã†ãŸã‚ã®äººé–“ã‚„ãƒ’ãƒ¥ãƒ¼ãƒãƒã‚¤ãƒ‰ã®";
+		body_str = "æ­»ä½“ã‚„éª¨";
 	}
 
 	/*** Unique monster's corpse/skeletons/statues ***/
 	if (IS_FLG(FLG_UNIQUE))
 	{
-		before_str[before_n++] = "¥æ¥Ë¡¼¥¯¥â¥ó¥¹¥¿¡¼¤Î";
-		body_str = "»àÂÎ¤ä¹ü";
+		before_str[before_n++] = "ãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®";
+		body_str = "æ­»ä½“ã‚„éª¨";
 	}
 
 	/*** Unreadable spellbooks ***/
 	if (IS_FLG(FLG_UNREADABLE))
 	{
-		before_str[before_n++] = "¤¢¤Ê¤¿¤¬ÆÉ¤á¤Ê¤¤ÎÎ°è¤Î";
-		body_str = "ËâË¡½ñ";
+		before_str[before_n++] = "ã‚ãªãŸãŒèª­ã‚ãªã„é ˜åŸŸã®";
+		body_str = "é­”æ³•æ›¸";
 	}
 
 	/*** First realm spellbooks ***/
 	if (IS_FLG(FLG_REALM1))
 	{
-		before_str[before_n++] = "Âè°ìÎÎ°è¤Î";
-		body_str = "ËâË¡½ñ";
+		before_str[before_n++] = "ç¬¬ä¸€é ˜åŸŸã®";
+		body_str = "é­”æ³•æ›¸";
 	}
 
 	/*** Second realm spellbooks ***/
 	if (IS_FLG(FLG_REALM2))
 	{
-		before_str[before_n++] = "ÂèÆóÎÎ°è¤Î";
-		body_str = "ËâË¡½ñ";
+		before_str[before_n++] = "ç¬¬äºŒé ˜åŸŸã®";
+		body_str = "é­”æ³•æ›¸";
 	}
 
 	/*** First rank spellbooks ***/
 	if (IS_FLG(FLG_FIRST))
 	{
-		before_str[before_n++] = "Á´4ºı¤ÎÆâ¤Î1ºıÌÜ¤Î";
-		body_str = "ËâË¡½ñ";
+		before_str[before_n++] = "å…¨4å†Šã®å†…ã®1å†Šç›®ã®";
+		body_str = "é­”æ³•æ›¸";
 	}
 
 	/*** Second rank spellbooks ***/
 	if (IS_FLG(FLG_SECOND))
 	{
-		before_str[before_n++] = "Á´4ºı¤ÎÆâ¤Î2ºıÌÜ¤Î";
-		body_str = "ËâË¡½ñ";
+		before_str[before_n++] = "å…¨4å†Šã®å†…ã®2å†Šç›®ã®";
+		body_str = "é­”æ³•æ›¸";
 	}
 
 	/*** Third rank spellbooks ***/
 	if (IS_FLG(FLG_THIRD))
 	{
-		before_str[before_n++] = "Á´4ºı¤ÎÆâ¤Î3ºıÌÜ¤Î";
-		body_str = "ËâË¡½ñ";
+		before_str[before_n++] = "å…¨4å†Šã®å†…ã®3å†Šç›®ã®";
+		body_str = "é­”æ³•æ›¸";
 	}
 
 	/*** Fourth rank spellbooks ***/
 	if (IS_FLG(FLG_FOURTH))
 	{
-		before_str[before_n++] = "Á´4ºı¤ÎÆâ¤Î4ºıÌÜ¤Î";
-		body_str = "ËâË¡½ñ";
+		before_str[before_n++] = "å…¨4å†Šã®å†…ã®4å†Šç›®ã®";
+		body_str = "é­”æ³•æ›¸";
 	}
 
 	/*** Items ***/
 	if (IS_FLG(FLG_ITEMS))
 		; /* Nothing to do */
 	else if (IS_FLG(FLG_WEAPONS))
-		body_str = "Éğ´ï";
+		body_str = "æ­¦å™¨";
 	else if (IS_FLG(FLG_FAVORITE_WEAPONS))
-		body_str = "ÆÀ°ÕÉğ´ï";
+		body_str = "å¾—æ„æ­¦å™¨";
 	else if (IS_FLG(FLG_ARMORS))
-		body_str = "ËÉ¶ñ";
+		body_str = "é˜²å…·";
 	else if (IS_FLG(FLG_MISSILES))
-		body_str = "ÃÆ¤äÌğ¤ä¥¯¥í¥¹¥Ü¥¦¤ÎÌğ";
+		body_str = "å¼¾ã‚„çŸ¢ã‚„ã‚¯ãƒ­ã‚¹ãƒœã‚¦ã®çŸ¢";
 	else if (IS_FLG(FLG_DEVICES))
-		body_str = "´¬Êª¤äËâË¡ËÀ¤ä¾ó¤ä¥í¥Ã¥É";
+		body_str = "å·»ç‰©ã‚„é­”æ³•æ£’ã‚„æ–ã‚„ãƒ­ãƒƒãƒ‰";
 	else if (IS_FLG(FLG_LIGHTS))
-		body_str = "¸÷¸»ÍÑ¤Î¥¢¥¤¥Æ¥à";
+		body_str = "å…‰æºç”¨ã®ã‚¢ã‚¤ãƒ†ãƒ ";
 	else if (IS_FLG(FLG_JUNKS))
-		body_str = "ÀŞ¤ì¤¿ËÀÅù¤Î¥¬¥é¥¯¥¿";
+		body_str = "æŠ˜ã‚ŒãŸæ£’ç­‰ã®ã‚¬ãƒ©ã‚¯ã‚¿";
 	else if (IS_FLG(FLG_CORPSES))
-		body_str = "»àÂÎ¤ä¹ü";
+		body_str = "æ­»ä½“ã‚„éª¨";
 	else if (IS_FLG(FLG_SPELLBOOKS))
-		body_str = "ËâË¡½ñ";
+		body_str = "é­”æ³•æ›¸";
 	else if (IS_FLG(FLG_HAFTED))
-		body_str = "Æß´ï";
+		body_str = "éˆå™¨";
 	else if (IS_FLG(FLG_SHIELDS))
-		body_str = "½â";
+		body_str = "ç›¾";
 	else if (IS_FLG(FLG_BOWS))
-		body_str = "¥¹¥ê¥ó¥°¤äµİ¤ä¥¯¥í¥¹¥Ü¥¦";
+		body_str = "ã‚¹ãƒªãƒ³ã‚°ã‚„å¼“ã‚„ã‚¯ãƒ­ã‚¹ãƒœã‚¦";
 	else if (IS_FLG(FLG_RINGS))
-		body_str = "»ØÎØ";
+		body_str = "æŒ‡è¼ª";
 	else if (IS_FLG(FLG_AMULETS))
-		body_str = "¥¢¥ß¥å¥ì¥Ã¥È";
+		body_str = "ã‚¢ãƒŸãƒ¥ãƒ¬ãƒƒãƒˆ";
 	else if (IS_FLG(FLG_SUITS))
-		body_str = "³»";
+		body_str = "é§";
 	else if (IS_FLG(FLG_CLOAKS))
-		body_str = "¥¯¥í¡¼¥¯";
+		body_str = "ã‚¯ãƒ­ãƒ¼ã‚¯";
 	else if (IS_FLG(FLG_HELMS))
-		body_str = "¥Ø¥ë¥á¥Ã¥È¤ä´§";
+		body_str = "ãƒ˜ãƒ«ãƒ¡ãƒƒãƒˆã‚„å† ";
 	else if (IS_FLG(FLG_GLOVES))
-		body_str = "äÆ¼ê";
+		body_str = "ç± æ‰‹";
 	else if (IS_FLG(FLG_BOOTS))
-		body_str = "¥Ö¡¼¥Ä";
+		body_str = "ãƒ–ãƒ¼ãƒ„";
 
 	*buff = '\0';
 	if (!before_n) 
-		strcat(buff, "Á´¤Æ¤Î");
+		strcat(buff, "å…¨ã¦ã®");
 	else for (i = 0; i < before_n && before_str[i]; i++)
 		strcat(buff, before_str[i]);
 
@@ -2414,52 +2414,52 @@ static void describe_autopick(char *buff, autopick_type *entry)
 			top = TRUE;
 		}
 
-		strcat(buff, "¤Ç¡¢Ì¾Á°¤¬¡Ö");
+		strcat(buff, "ã§ã€åå‰ãŒã€Œ");
 		strncat(buff, str, 80);
 		if (top)
-			strcat(buff, "¡×¤Ç»Ï¤Ş¤ë¤â¤Î");
+			strcat(buff, "ã€ã§å§‹ã¾ã‚‹ã‚‚ã®");
 		else
-			strcat(buff, "¡×¤ò´Ş¤à¤â¤Î");
+			strcat(buff, "ã€ã‚’å«ã‚€ã‚‚ã®");
 	}
 
 	if (insc)
 	{
-		strncat(buff, format("¤Ë¡Ö%s¡×", insc), 80);
+		strncat(buff, format("ã«ã€Œ%sã€", insc), 80);
 
 		if (my_strstr(insc, "%%all"))
-			strcat(buff, "(%%all¤ÏÁ´Ç½ÎÏ¤òÉ½¤¹±Ñ»ú¤Îµ­¹æ¤ÇÃÖ´¹)");
+			strcat(buff, "(%%allã¯å…¨èƒ½åŠ›ã‚’è¡¨ã™è‹±å­—ã®è¨˜å·ã§ç½®æ›)");
 		else if (my_strstr(insc, "%all"))
-			strcat(buff, "(%all¤ÏÁ´Ç½ÎÏ¤òÉ½¤¹µ­¹æ¤ÇÃÖ´¹)");
+			strcat(buff, "(%allã¯å…¨èƒ½åŠ›ã‚’è¡¨ã™è¨˜å·ã§ç½®æ›)");
 		else if (my_strstr(insc, "%%"))
-			strcat(buff, "(%%¤ÏÄÉ²ÃÇ½ÎÏ¤òÉ½¤¹±Ñ»ú¤Îµ­¹æ¤ÇÃÖ´¹)");
+			strcat(buff, "(%%ã¯è¿½åŠ èƒ½åŠ›ã‚’è¡¨ã™è‹±å­—ã®è¨˜å·ã§ç½®æ›)");
 		else if (my_strstr(insc, "%"))
-			strcat(buff, "(%¤ÏÄÉ²ÃÇ½ÎÏ¤òÉ½¤¹µ­¹æ¤ÇÃÖ´¹)");
+			strcat(buff, "(%ã¯è¿½åŠ èƒ½åŠ›ã‚’è¡¨ã™è¨˜å·ã§ç½®æ›)");
 
-		strcat(buff, "¤È¹ï¤ó¤Ç");
+		strcat(buff, "ã¨åˆ»ã‚“ã§");
 	}
 	else
-		strcat(buff, "¤ò");
+		strcat(buff, "ã‚’");
 
 	if (act & DONT_AUTOPICK)
-		strcat(buff, "ÊüÃÖ¤¹¤ë¡£");
+		strcat(buff, "æ”¾ç½®ã™ã‚‹ã€‚");
 	else if (act & DO_AUTODESTROY)
-		strcat(buff, "ÇË²õ¤¹¤ë¡£");
+		strcat(buff, "ç ´å£Šã™ã‚‹ã€‚");
 	else if (act & DO_QUERY_AUTOPICK)
-		strcat(buff, "³ÎÇ§¤Î¸å¤Ë½¦¤¦¡£");
+		strcat(buff, "ç¢ºèªã®å¾Œã«æ‹¾ã†ã€‚");
 	else
-		strcat(buff, "½¦¤¦¡£");
+		strcat(buff, "æ‹¾ã†ã€‚");
 
 	if (act & DO_DISPLAY)
 	{
 		if (act & DONT_AUTOPICK)
-			strcat(buff, "Á´ÂÎ¥Ş¥Ã¥×('M')¤Ç'N'¤ò²¡¤·¤¿¤È¤­¤ËÉ½¼¨¤¹¤ë¡£");
+			strcat(buff, "å…¨ä½“ãƒãƒƒãƒ—('M')ã§'N'ã‚’æŠ¼ã—ãŸã¨ãã«è¡¨ç¤ºã™ã‚‹ã€‚");
 		else if (act & DO_AUTODESTROY)
-			strcat(buff, "Á´ÂÎ¥Ş¥Ã¥×('M')¤Ç'K'¤ò²¡¤·¤¿¤È¤­¤ËÉ½¼¨¤¹¤ë¡£");
+			strcat(buff, "å…¨ä½“ãƒãƒƒãƒ—('M')ã§'K'ã‚’æŠ¼ã—ãŸã¨ãã«è¡¨ç¤ºã™ã‚‹ã€‚");
 		else
-			strcat(buff, "Á´ÂÎ¥Ş¥Ã¥×('M')¤Ç'M'¤ò²¡¤·¤¿¤È¤­¤ËÉ½¼¨¤¹¤ë¡£");
+			strcat(buff, "å…¨ä½“ãƒãƒƒãƒ—('M')ã§'M'ã‚’æŠ¼ã—ãŸã¨ãã«è¡¨ç¤ºã™ã‚‹ã€‚");
 	}
 	else
-		strcat(buff, "Á´ÂÎ¥Ş¥Ã¥×¤Ë¤ÏÉ½¼¨¤·¤Ê¤¤¡£");
+		strcat(buff, "å…¨ä½“ãƒãƒƒãƒ—ã«ã¯è¡¨ç¤ºã—ãªã„ã€‚");
 
 #else /* JP */
 
@@ -2850,9 +2850,9 @@ static void prepare_default_pickpref(void)
 {
 	const cptr messages[] = {
 #ifdef JP
-		"¤¢¤Ê¤¿¤Ï¡Ö¼«Æ°½¦¤¤¥¨¥Ç¥£¥¿¡×¤ò½é¤á¤Æµ¯Æ°¤·¤Ş¤·¤¿¡£",
-		"¼«Æ°½¦¤¤¤Î¥æ¡¼¥¶¡¼ÀßÄê¥Õ¥¡¥¤¥ë¤¬¤Ş¤À½ñ¤«¤ì¤Æ¤¤¤Ê¤¤¤Î¤Ç¡¢",
-		"´ğËÜÅª¤Ê¼«Æ°½¦¤¤ÀßÄê¥Õ¥¡¥¤¥ë¤òlib/pref/picktype.prf¤«¤é¥³¥Ô¡¼¤·¤Ş¤¹¡£",
+		"ã‚ãªãŸã¯ã€Œè‡ªå‹•æ‹¾ã„ã‚¨ãƒ‡ã‚£ã‚¿ã€ã‚’åˆã‚ã¦èµ·å‹•ã—ã¾ã—ãŸã€‚",
+		"è‡ªå‹•æ‹¾ã„ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ãŒã¾ã æ›¸ã‹ã‚Œã¦ã„ãªã„ã®ã§ã€",
+		"åŸºæœ¬çš„ãªè‡ªå‹•æ‹¾ã„è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’lib/pref/picktype.prfã‹ã‚‰ã‚³ãƒ”ãƒ¼ã—ã¾ã™ã€‚",
 		NULL
 #else
 		"You have activated the Auto-Picker Editor for the first time.",
@@ -3345,8 +3345,8 @@ static bool entry_from_choosed_object(autopick_type *entry)
 
 	/* Get an item */
 #ifdef JP
-	q = "¤É¤Î¥¢¥¤¥Æ¥à¤òÅĞÏ¿¤·¤Ş¤¹¤«? ";
-	s = "¥¢¥¤¥Æ¥à¤ò»ı¤Ã¤Æ¤¤¤Ê¤¤¡£";
+	q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ç™»éŒ²ã—ã¾ã™ã‹? ";
+	s = "ã‚¢ã‚¤ãƒ†ãƒ ã‚’æŒã£ã¦ã„ãªã„ã€‚";
 #else
 	q = "Enter which item? ";
 	s = "You have nothing to enter.";
@@ -3370,8 +3370,8 @@ static byte get_object_for_search(object_type **o_handle, cptr *search_strp)
 
 	/* Get an item */
 #ifdef JP
-	q = "¤É¤Î¥¢¥¤¥Æ¥à¤ò¸¡º÷¤·¤Ş¤¹¤«? ";
-	s = "¥¢¥¤¥Æ¥à¤ò»ı¤Ã¤Æ¤¤¤Ê¤¤¡£";
+	q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ¤œç´¢ã—ã¾ã™ã‹? ";
+	s = "ã‚¢ã‚¤ãƒ†ãƒ ã‚’æŒã£ã¦ã„ãªã„ã€‚";
 #else
 	q = "Enter which item? ";
 	s = "You have nothing to enter.";
@@ -3423,7 +3423,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 	const int len = 80;
 
 #ifdef JP
-	char prompt[] = "¸¡º÷(^I:»ı¤ÁÊª ^L:ÇË²õ¤µ¤ì¤¿Êª): ";
+	char prompt[] = "æ¤œç´¢(^I:æŒã¡ç‰© ^L:ç ´å£Šã•ã‚ŒãŸç‰©): ";
 #else
 	char prompt[] = "Search key(^I:inven ^L:destroyed): ";
 #endif
@@ -3958,74 +3958,74 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 /* Manu names */
 #ifdef JP
 
-static char MN_QUIT[] = "¥»¡¼¥ÖÌµ¤·¤Ç½ªÎ»";
-static char MN_SAVEQUIT[] = "¥»¡¼¥Ö¤·¤Æ½ªÎ»";
-static char MN_REVERT[] = "Á´¤Æ¤ÎÊÑ¹¹¤òÇË´ş";
-static char MN_HELP[] = "¥Ø¥ë¥×";
+static char MN_QUIT[] = "ã‚»ãƒ¼ãƒ–ç„¡ã—ã§çµ‚äº†";
+static char MN_SAVEQUIT[] = "ã‚»ãƒ¼ãƒ–ã—ã¦çµ‚äº†";
+static char MN_REVERT[] = "å…¨ã¦ã®å¤‰æ›´ã‚’ç ´æ£„";
+static char MN_HELP[] = "ãƒ˜ãƒ«ãƒ—";
 
-static char MN_MOVE[] = "¥«¡¼¥½¥ë°ÜÆ°";
-static char MN_LEFT[] =   "º¸          (¢«Ìğ°õ¥­¡¼)";
-static char MN_DOWN[] =   "²¼          (¢­Ìğ°õ¥­¡¼)";
-static char MN_UP[] =     "¾å          (¢¬Ìğ°õ¥­¡¼)";
-static char MN_RIGHT[] =  "±¦          (¢ªÌğ°õ¥­¡¼)";
-static char MN_BOL[] =    "¹Ô¤ÎÀèÆ¬";
-static char MN_EOL[] =    "¹Ô¤Î½ªÃ¼";
-static char MN_PGUP[] =   "¾å¤Î¥Ú¡¼¥¸  (PageUp¥­¡¼)";
-static char MN_PGDOWN[] = "²¼¤Î¥Ú¡¼¥¸  (PageDown¥­¡¼)";
-static char MN_TOP[] =    "1¹ÔÌÜ¤Ø°ÜÆ° (Home¥­¡¼)";
-static char MN_BOTTOM[] = "ºÇ²¼¹Ô¤Ø°ÜÆ°(End¥­¡¼)";
+static char MN_MOVE[] = "ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•";
+static char MN_LEFT[] =   "å·¦          (â†çŸ¢å°ã‚­ãƒ¼)";
+static char MN_DOWN[] =   "ä¸‹          (â†“çŸ¢å°ã‚­ãƒ¼)";
+static char MN_UP[] =     "ä¸Š          (â†‘çŸ¢å°ã‚­ãƒ¼)";
+static char MN_RIGHT[] =  "å³          (â†’çŸ¢å°ã‚­ãƒ¼)";
+static char MN_BOL[] =    "è¡Œã®å…ˆé ­";
+static char MN_EOL[] =    "è¡Œã®çµ‚ç«¯";
+static char MN_PGUP[] =   "ä¸Šã®ãƒšãƒ¼ã‚¸  (PageUpã‚­ãƒ¼)";
+static char MN_PGDOWN[] = "ä¸‹ã®ãƒšãƒ¼ã‚¸  (PageDownã‚­ãƒ¼)";
+static char MN_TOP[] =    "1è¡Œç›®ã¸ç§»å‹• (Homeã‚­ãƒ¼)";
+static char MN_BOTTOM[] = "æœ€ä¸‹è¡Œã¸ç§»å‹•(Endã‚­ãƒ¼)";
 
-static char MN_EDIT[] = "ÊÔ½¸";
-static char MN_CUT[] = "¥«¥Ã¥È";
-static char MN_COPY[] = "¥³¥Ô¡¼";
-static char MN_PASTE[] = "¥Ú¡¼¥¹¥È";
-static char MN_BLOCK[] = "ÁªÂòÈÏ°Ï¤Î»ØÄê";
-static char MN_KILL_LINE[] = "¹Ô¤Î»Ä¤ê¤òºï½ü";
-static char MN_DELETE_CHAR[] = "1Ê¸»úºï½ü";
-static char MN_BACKSPACE[] = "¥Ğ¥Ã¥¯¥¹¥Ú¡¼¥¹";
-static char MN_RETURN[] = "²ş¹Ô";
+static char MN_EDIT[] = "ç·¨é›†";
+static char MN_CUT[] = "ã‚«ãƒƒãƒˆ";
+static char MN_COPY[] = "ã‚³ãƒ”ãƒ¼";
+static char MN_PASTE[] = "ãƒšãƒ¼ã‚¹ãƒˆ";
+static char MN_BLOCK[] = "é¸æŠç¯„å›²ã®æŒ‡å®š";
+static char MN_KILL_LINE[] = "è¡Œã®æ®‹ã‚Šã‚’å‰Šé™¤";
+static char MN_DELETE_CHAR[] = "1æ–‡å­—å‰Šé™¤";
+static char MN_BACKSPACE[] = "ãƒãƒƒã‚¯ã‚¹ãƒšãƒ¼ã‚¹";
+static char MN_RETURN[] = "æ”¹è¡Œ";
 
-static char MN_SEARCH[] = "¸¡º÷";
-static char MN_SEARCH_STR[] = "Ê¸»úÎó¤Ç¸¡º÷";
-static char MN_SEARCH_FORW[] = "Á°Êı¤ØºÆ¸¡º÷";
-static char MN_SEARCH_BACK[] = "¸åÊı¤ØºÆ¸¡º÷";
-static char MN_SEARCH_OBJ[] = "¥¢¥¤¥Æ¥à¤òÁªÂò¤·¤Æ¸¡º÷";
-static char MN_SEARCH_DESTROYED[] = "¼«Æ°ÇË²õ¤µ¤ì¤¿¥¢¥¤¥Æ¥à¤Ç¸¡º÷";
+static char MN_SEARCH[] = "æ¤œç´¢";
+static char MN_SEARCH_STR[] = "æ–‡å­—åˆ—ã§æ¤œç´¢";
+static char MN_SEARCH_FORW[] = "å‰æ–¹ã¸å†æ¤œç´¢";
+static char MN_SEARCH_BACK[] = "å¾Œæ–¹ã¸å†æ¤œç´¢";
+static char MN_SEARCH_OBJ[] = "ã‚¢ã‚¤ãƒ†ãƒ ã‚’é¸æŠã—ã¦æ¤œç´¢";
+static char MN_SEARCH_DESTROYED[] = "è‡ªå‹•ç ´å£Šã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ã§æ¤œç´¢";
 
-static char MN_INSERT[] = "¿§¡¹ÁŞÆş";
-static char MN_INSERT_OBJECT[] = "ÁªÂò¤·¤¿¥¢¥¤¥Æ¥à¤ÎÌ¾Á°¤òÁŞÆş";
-static char MN_INSERT_DESTROYED[] = "¼«Æ°ÇË²õ¤µ¤ì¤¿¥¢¥¤¥Æ¥à¤ÎÌ¾Á°¤òÁŞÆş";
-static char MN_INSERT_BLOCK[] = "¾ò·ïÊ¬´ô¥Ö¥í¥Ã¥¯¤ÎÎã¤òÁŞÆş";
-static char MN_INSERT_MACRO[] = "¥Ş¥¯¥íÄêµÁ¤òÁŞÆş";
-static char MN_INSERT_KEYMAP[] = "¥­¡¼¥Ş¥Ã¥×ÄêµÁ¤òÁŞÆş";
+static char MN_INSERT[] = "è‰²ã€…æŒ¿å…¥";
+static char MN_INSERT_OBJECT[] = "é¸æŠã—ãŸã‚¢ã‚¤ãƒ†ãƒ ã®åå‰ã‚’æŒ¿å…¥";
+static char MN_INSERT_DESTROYED[] = "è‡ªå‹•ç ´å£Šã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ã®åå‰ã‚’æŒ¿å…¥";
+static char MN_INSERT_BLOCK[] = "æ¡ä»¶åˆ†å²ãƒ–ãƒ­ãƒƒã‚¯ã®ä¾‹ã‚’æŒ¿å…¥";
+static char MN_INSERT_MACRO[] = "ãƒã‚¯ãƒ­å®šç¾©ã‚’æŒ¿å…¥";
+static char MN_INSERT_KEYMAP[] = "ã‚­ãƒ¼ãƒãƒƒãƒ—å®šç¾©ã‚’æŒ¿å…¥";
 
-static char MN_COMMAND_LETTER[] = "½¦¤¤/ÇË²õ/ÊüÃÖ¤ÎÁªÂò";
-static char MN_CL_AUTOPICK[] = "¡Ö ¡× (¼«Æ°½¦¤¤)";
-static char MN_CL_DESTROY[] = "¡Ö!¡× (¼«Æ°ÇË²õ)";
-static char MN_CL_LEAVE[] = "¡Ö~¡× (ÊüÃÖ)";
-static char MN_CL_QUERY[] = "¡Ö;¡× (³ÎÇ§¤·¤Æ½¦¤¦)";
-static char MN_CL_NO_DISP[] = "¡Ö(¡× (¥Ş¥Ã¥×¥³¥Ş¥ó¥É¤ÇÉ½¼¨¤·¤Ê¤¤)";
+static char MN_COMMAND_LETTER[] = "æ‹¾ã„/ç ´å£Š/æ”¾ç½®ã®é¸æŠ";
+static char MN_CL_AUTOPICK[] = "ã€Œ ã€ (è‡ªå‹•æ‹¾ã„)";
+static char MN_CL_DESTROY[] = "ã€Œ!ã€ (è‡ªå‹•ç ´å£Š)";
+static char MN_CL_LEAVE[] = "ã€Œ~ã€ (æ”¾ç½®)";
+static char MN_CL_QUERY[] = "ã€Œ;ã€ (ç¢ºèªã—ã¦æ‹¾ã†)";
+static char MN_CL_NO_DISP[] = "ã€Œ(ã€ (ãƒãƒƒãƒ—ã‚³ãƒãƒ³ãƒ‰ã§è¡¨ç¤ºã—ãªã„)";
 
-static char MN_ADJECTIVE_GEN[] = "·ÁÍÆ»ì(°ìÈÌ)¤ÎÁªÂò";
-static char MN_RARE[] = "¥ì¥¢¤Ê (ÁõÈ÷)";
-static char MN_COMMON[] = "¤¢¤ê¤Õ¤ì¤¿ (ÁõÈ÷)";
+static char MN_ADJECTIVE_GEN[] = "å½¢å®¹è©(ä¸€èˆ¬)ã®é¸æŠ";
+static char MN_RARE[] = "ãƒ¬ã‚¢ãª (è£…å‚™)";
+static char MN_COMMON[] = "ã‚ã‚Šãµã‚ŒãŸ (è£…å‚™)";
 
-static char MN_ADJECTIVE_SPECIAL[] = "·ÁÍÆ»ì(ÆÃ¼ì)¤ÎÁªÂò";
-static char MN_BOOSTED[] = "¥À¥¤¥¹ÌÜ¤Î°ã¤¦ (Éğ´ï)";
-static char MN_MORE_DICE[] = "¥À¥¤¥¹ÌÜ # °Ê¾å¤Î (Éğ´ï)";
-static char MN_MORE_BONUS[] = "½¤ÀµÃÍ # °Ê¾å¤Î (»ØÎØÅù)";
-static char MN_WANTED[] = "¾Ş¶â¼ó¤Î (»àÂÎ)";
-static char MN_UNIQUE[] = "¥æ¥Ë¡¼¥¯¡¦¥â¥ó¥¹¥¿¡¼¤Î (»àÂÎ)";
-static char MN_HUMAN[] = "¿Í´Ö¤Î (»àÂÎ)";
-static char MN_UNREADABLE[] = "ÆÉ¤á¤Ê¤¤ (ËâË¡½ñ)";
-static char MN_REALM1[] = "Âè°ìÎÎ°è¤Î (ËâË¡½ñ)";
-static char MN_REALM2[] = "ÂèÆóÎÎ°è¤Î (ËâË¡½ñ)";
-static char MN_FIRST[] = "1ºıÌÜ¤Î (ËâË¡½ñ)";
-static char MN_SECOND[] = "2ºıÌÜ¤Î (ËâË¡½ñ)";
-static char MN_THIRD[] = "3ºıÌÜ¤Î (ËâË¡½ñ)";
-static char MN_FOURTH[] = "4ºıÌÜ¤Î (ËâË¡½ñ)";
+static char MN_ADJECTIVE_SPECIAL[] = "å½¢å®¹è©(ç‰¹æ®Š)ã®é¸æŠ";
+static char MN_BOOSTED[] = "ãƒ€ã‚¤ã‚¹ç›®ã®é•ã† (æ­¦å™¨)";
+static char MN_MORE_DICE[] = "ãƒ€ã‚¤ã‚¹ç›® # ä»¥ä¸Šã® (æ­¦å™¨)";
+static char MN_MORE_BONUS[] = "ä¿®æ­£å€¤ # ä»¥ä¸Šã® (æŒ‡è¼ªç­‰)";
+static char MN_WANTED[] = "è³é‡‘é¦–ã® (æ­»ä½“)";
+static char MN_UNIQUE[] = "ãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã® (æ­»ä½“)";
+static char MN_HUMAN[] = "äººé–“ã® (æ­»ä½“)";
+static char MN_UNREADABLE[] = "èª­ã‚ãªã„ (é­”æ³•æ›¸)";
+static char MN_REALM1[] = "ç¬¬ä¸€é ˜åŸŸã® (é­”æ³•æ›¸)";
+static char MN_REALM2[] = "ç¬¬äºŒé ˜åŸŸã® (é­”æ³•æ›¸)";
+static char MN_FIRST[] = "1å†Šç›®ã® (é­”æ³•æ›¸)";
+static char MN_SECOND[] = "2å†Šç›®ã® (é­”æ³•æ›¸)";
+static char MN_THIRD[] = "3å†Šç›®ã® (é­”æ³•æ›¸)";
+static char MN_FOURTH[] = "4å†Šç›®ã® (é­”æ³•æ›¸)";
 
-static char MN_NOUN[] = "Ì¾»ì¤ÎÁªÂò";
+static char MN_NOUN[] = "åè©ã®é¸æŠ";
 
 #else
 
@@ -4310,7 +4310,7 @@ static int do_command_menu(int level, int start)
 				if (menu_data[i].com_id == -1)
 				{
 #ifdef JP
-					strcpy(com_key_str, "¢§");
+					strcpy(com_key_str, "â–¼");
 #else
 					strcpy(com_key_str, ">");
 #endif
@@ -4340,7 +4340,7 @@ static int do_command_menu(int level, int start)
 			redraw = FALSE;
 		}
 #ifdef JP
-		prt(format("(a-%c) ¥³¥Ş¥ó¥É:", menu_key + 'a' - 1), 0, 0);
+		prt(format("(a-%c) ã‚³ãƒãƒ³ãƒ‰:", menu_key + 'a' - 1), 0, 0);
 #else
 		prt(format("(a-%c) Command:", menu_key + 'a' - 1), 0, 0);
 #endif
@@ -4763,7 +4763,7 @@ static void draw_text_editor(text_body_type *tb)
 		if (tb->dirty_flags & DIRTY_NOT_FOUND)
 		{
 #ifdef JP
-			str1 = format("¥Ñ¥¿¡¼¥ó¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó: %s", tb->search_str);
+			str1 = format("ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: %s", tb->search_str);
 #else
 			str1 = format("Pattern not found: %s", tb->search_str);
 #endif
@@ -4771,7 +4771,7 @@ static void draw_text_editor(text_body_type *tb)
 		else if (tb->dirty_flags & DIRTY_SKIP_INACTIVE)
 		{
 #ifdef JP
-			str1 = format("Ìµ¸ú¾õÂÖ¤Î¹Ô¤ò¥¹¥­¥Ã¥×¤·¤Ş¤·¤¿¡£(%s¤ò¸¡º÷Ãæ)", tb->search_str);
+			str1 = format("ç„¡åŠ¹çŠ¶æ…‹ã®è¡Œã‚’ã‚¹ã‚­ãƒƒãƒ—ã—ã¾ã—ãŸã€‚(%sã‚’æ¤œç´¢ä¸­)", tb->search_str);
 #else
 			str1 = format("Some inactive lines are skipped. (Searching %s)", tb->search_str);
 #endif
@@ -4779,7 +4779,7 @@ static void draw_text_editor(text_body_type *tb)
 		else if (tb->dirty_flags & DIRTY_INACTIVE)
 		{
 #ifdef JP
-			str1 = format("Ìµ¸ú¾õÂÖ¤Î¹Ô¤À¤±¤¬¸«ÉÕ¤«¤ê¤Ş¤·¤¿¡£(%s¤ò¸¡º÷Ãæ)", tb->search_str);
+			str1 = format("ç„¡åŠ¹çŠ¶æ…‹ã®è¡Œã ã‘ãŒè¦‹ä»˜ã‹ã‚Šã¾ã—ãŸã€‚(%sã‚’æ¤œç´¢ä¸­)", tb->search_str);
 #else
 			str1 = format("Found only an inactive line. (Searching %s)", tb->search_str);
 #endif
@@ -4787,7 +4787,7 @@ static void draw_text_editor(text_body_type *tb)
 		else if (tb->dirty_flags & DIRTY_NO_SEARCH)
 		{
 #ifdef JP
-			str1 = "¸¡º÷¤¹¤ë¥Ñ¥¿¡¼¥ó¤¬¤¢¤ê¤Ş¤»¤ó(^S ¤Ç¸¡º÷)¡£";
+			str1 = "æ¤œç´¢ã™ã‚‹ãƒ‘ã‚¿ãƒ¼ãƒ³ãŒã‚ã‚Šã¾ã›ã‚“(^S ã§æ¤œç´¢)ã€‚";
 #else
 			str1 = "No pattern to search. (Press ^S to search.)";
 #endif
@@ -4795,7 +4795,7 @@ static void draw_text_editor(text_body_type *tb)
 		else if (tb->lines_list[tb->cy][0] == '#')
 		{
 #ifdef JP
-			str1 = "¤³¤Î¹Ô¤Ï¥³¥á¥ó¥È¤Ç¤¹¡£";
+			str1 = "ã“ã®è¡Œã¯ã‚³ãƒ¡ãƒ³ãƒˆã§ã™ã€‚";
 #else
 			str1 = "This line is a comment.";
 #endif
@@ -4806,7 +4806,7 @@ static void draw_text_editor(text_body_type *tb)
 			{
 			case '?':
 #ifdef JP
-				str1 = "¤³¤Î¹Ô¤Ï¾ò·ïÊ¬´ô¼°¤Ç¤¹¡£";
+				str1 = "ã“ã®è¡Œã¯æ¡ä»¶åˆ†å²å¼ã§ã™ã€‚";
 #else
 				str1 = "This line is a Conditional Expression.";
 #endif
@@ -4814,21 +4814,21 @@ static void draw_text_editor(text_body_type *tb)
 				break;
 			case 'A':
 #ifdef JP
-				str1 = "¤³¤Î¹Ô¤Ï¥Ş¥¯¥í¤Î¼Â¹ÔÆâÍÆ¤òÄêµÁ¤·¤Ş¤¹¡£";
+				str1 = "ã“ã®è¡Œã¯ãƒã‚¯ãƒ­ã®å®Ÿè¡Œå†…å®¹ã‚’å®šç¾©ã—ã¾ã™ã€‚";
 #else
 				str1 = "This line defines a Macro action.";
 #endif
 				break;
 			case 'P':
 #ifdef JP
-				str1 = "¤³¤Î¹Ô¤Ï¥Ş¥¯¥í¤Î¥È¥ê¥¬¡¼¡¦¥­¡¼¤òÄêµÁ¤·¤Ş¤¹¡£";
+				str1 = "ã“ã®è¡Œã¯ãƒã‚¯ãƒ­ã®ãƒˆãƒªã‚¬ãƒ¼ãƒ»ã‚­ãƒ¼ã‚’å®šç¾©ã—ã¾ã™ã€‚";
 #else
 				str1 = "This line defines a Macro trigger key.";
 #endif
 				break;
 			case 'C':
 #ifdef JP
-				str1 = "¤³¤Î¹Ô¤Ï¥­¡¼ÇÛÃÖ¤òÄêµÁ¤·¤Ş¤¹¡£";
+				str1 = "ã“ã®è¡Œã¯ã‚­ãƒ¼é…ç½®ã‚’å®šç¾©ã—ã¾ã™ã€‚";
 #else
 				str1 = "This line defines a Keymap.";
 #endif
@@ -4841,7 +4841,7 @@ static void draw_text_editor(text_body_type *tb)
 				if (tb->states[tb->cy] & LSTAT_BYPASS)
 				{
 #ifdef JP
-					str2 = "¸½ºß¤Î¼°¤ÎÃÍ¤Ï¡Öµ¶(=0)¡×¤Ç¤¹¡£";
+					str2 = "ç¾åœ¨ã®å¼ã®å€¤ã¯ã€Œå½(=0)ã€ã§ã™ã€‚";
 #else
 					str2 = "The expression is 'False'(=0) currently.";
 #endif
@@ -4849,7 +4849,7 @@ static void draw_text_editor(text_body_type *tb)
 				else
 				{
 #ifdef JP
-					str2 = "¸½ºß¤Î¼°¤ÎÃÍ¤Ï¡Ö¿¿(=1)¡×¤Ç¤¹¡£";
+					str2 = "ç¾åœ¨ã®å¼ã®å€¤ã¯ã€ŒçœŸ(=1)ã€ã§ã™ã€‚";
 #else
 					str2 = "The expression is 'True'(=1) currently.";
 #endif
@@ -4860,7 +4860,7 @@ static void draw_text_editor(text_body_type *tb)
 				if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
 				{
 #ifdef JP
-					str2 = "¤³¤Î¹Ô¤Ï¸å¤Çºï½ü¤µ¤ì¤Ş¤¹¡£";
+					str2 = "ã“ã®è¡Œã¯å¾Œã§å‰Šé™¤ã•ã‚Œã¾ã™ã€‚";
 #else
 					str2 = "This line will be delete later.";
 #endif
@@ -4869,7 +4869,7 @@ static void draw_text_editor(text_body_type *tb)
 				else if (tb->states[tb->cy] & LSTAT_BYPASS)
 				{
 #ifdef JP
-					str2 = "¤³¤Î¹Ô¤Ï¸½ºß¤ÏÌµ¸ú¤Ê¾õÂÖ¤Ç¤¹¡£";
+					str2 = "ã“ã®è¡Œã¯ç¾åœ¨ã¯ç„¡åŠ¹ãªçŠ¶æ…‹ã§ã™ã€‚";
 #else
 					str2 = "This line is bypassed currently.";
 #endif
@@ -4890,7 +4890,7 @@ static void draw_text_editor(text_body_type *tb)
 			if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
 			{
 #ifdef JP
-				strcat(buf, "¤³¤Î¹Ô¤Ï¸å¤Çºï½ü¤µ¤ì¤Ş¤¹¡£");
+				strcat(buf, "ã“ã®è¡Œã¯å¾Œã§å‰Šé™¤ã•ã‚Œã¾ã™ã€‚");
 #else
 				strcat(buf, "  This line will be delete later.");
 #endif
@@ -4899,7 +4899,7 @@ static void draw_text_editor(text_body_type *tb)
 			if (tb->states[tb->cy] & LSTAT_BYPASS)
 			{
 #ifdef JP
-				strcat(buf, "¤³¤Î¹Ô¤Ï¸½ºß¤ÏÌµ¸ú¤Ê¾õÂÖ¤Ç¤¹¡£");
+				strcat(buf, "ã“ã®è¡Œã¯ç¾åœ¨ã¯ç„¡åŠ¹ãªçŠ¶æ…‹ã§ã™ã€‚");
 #else
 				strcat(buf, "  This line is bypassed currently.");
 #endif
@@ -5138,7 +5138,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		if (tb->changed)
 		{
 #ifdef JP
-			if (!get_check("Á´¤Æ¤ÎÊÑ¹¹¤òÇË´ş¤·¤Æ¤«¤é½ªÎ»¤·¤Ş¤¹¡£¤è¤í¤·¤¤¤Ç¤¹¤«¡© ")) break;
+			if (!get_check("å…¨ã¦ã®å¤‰æ›´ã‚’ç ´æ£„ã—ã¦ã‹ã‚‰çµ‚äº†ã—ã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ ")) break;
 #else
 			if (!get_check("Discard all changes and quit. Are you sure? ")) break;
 #endif
@@ -5151,7 +5151,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_REVERT:
 		/* Revert to original */
 #ifdef JP
-		if (!get_check("Á´¤Æ¤ÎÊÑ¹¹¤òÇË´ş¤·¤Æ¸µ¤Î¾õÂÖ¤ËÌá¤·¤Ş¤¹¡£¤è¤í¤·¤¤¤Ç¤¹¤«¡© ")) break;
+		if (!get_check("å…¨ã¦ã®å¤‰æ›´ã‚’ç ´æ£„ã—ã¦å…ƒã®çŠ¶æ…‹ã«æˆ»ã—ã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ ")) break;
 #else
 		if (!get_check("Discard all changes and revert to original file. Are you sure? ")) break;
 #endif
@@ -5903,7 +5903,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		/* Prompt */
 #ifdef JP
-		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, "P:<¥È¥ê¥¬¡¼¥­¡¼>: ");
+		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, "P:<ãƒˆãƒªã‚¬ãƒ¼ã‚­ãƒ¼>: ");
 #else
 		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, "P:<Trigger key>: ");
 #endif
@@ -5930,7 +5930,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		/* Prompt */
 #ifdef JP
-		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, format("C:%d:<¥³¥Ş¥ó¥É¥­¡¼>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
+		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, format("C:%d:<ã‚³ãƒãƒ³ãƒ‰ã‚­ãƒ¼>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
 #else
 		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, format("C:%d:<Keypress>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
 #endif
@@ -6251,7 +6251,7 @@ void do_cmd_edit_autopick(void)
 
 		/* Display header line */
 #ifdef JP
-		prt("(^Q:½ªÎ» ^W:¥»¡¼¥Ö¤·¤Æ½ªÎ», ESC:¥á¥Ë¥å¡¼, ¤½¤ÎÂ¾:ÆşÎÏ)", 0, 0);
+		prt("(^Q:çµ‚äº† ^W:ã‚»ãƒ¼ãƒ–ã—ã¦çµ‚äº†, ESC:ãƒ¡ãƒ‹ãƒ¥ãƒ¼, ãã®ä»–:å…¥åŠ›)", 0, 0);
 #else	
 		prt("(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)", 0, 0);
 #endif

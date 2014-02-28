@@ -1,4 +1,4 @@
-/* File: main.c */
+﻿/* File: main.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others

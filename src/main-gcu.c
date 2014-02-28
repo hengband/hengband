@@ -1,4 +1,4 @@
-/* File: main-gcu.c */
+﻿/* File: main-gcu.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others

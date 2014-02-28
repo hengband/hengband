@@ -1,2 +1,2 @@
-h_scores.raw �� scores.raw ��̾�����ѹ�����С�
-˿��Υ������ե����뤬���ѤǤ��ޤ���
+h_scores.raw を scores.raw に名前を変更すれば、
+某所のスコアファイルが使用できます。

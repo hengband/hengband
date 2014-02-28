@@ -1,18 +1,18 @@
-ËÉ¸æ¤ÈËÉ¶ñ
+é˜²å¾¡ã¨é˜²å…·
 
-»²¾È¤·¤¿¤¤¥ª¥ó¥é¥¤¥ó¡¦¥Ø¥ë¥×¤Îµ­¹æ¤ò²¡¤·¤Æ²¼¤µ¤¤:
+å‚ç…§ã—ãŸã„ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ»ãƒ˜ãƒ«ãƒ—ã®è¨˜å·ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„:
 
-    (a) ËÉ¸æ¤ÈËÉ¶ñ                        (jdefend.txt)
-    (b) ¥¢¡¼¥Ş¡¼¥¯¥é¥¹                    (jdefend.txt#Armor)
-    (c) ËâË¡¹¶·â¤Ø¤ÎÂÑÀ­                  (jdefend.txt#ResistingMagic)
-    (d) Ì¾¤Î¤¢¤ëËÉ¶ñ¤ÈÅÁÀâ¤ÎËÉ¶ñ          (jdefend.txt#EgoArtifact)
-    (e) ÂÑÀ­                              (jdefend.txt#Resistances)
-    (f) ÂÑÀ­¤Î¤Ê¤¤¹¶·â                    (jdefend.txt#Unresistable)
-    (g) ´°Á´¤ÊÂÑÀ­(ÌÈ±Ö)                  (jdefend.txt#Immunities)
-    (h) ¤½¤ÎÂ¾                            (jdefend.txt#Miscellaneous)
-    (i) ¹¶·â¤«¤é¤Î²óÉü                    (jdefend.txt#Recovering)
+    (a) é˜²å¾¡ã¨é˜²å…·                        (jdefend.txt)
+    (b) ã‚¢ãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹                    (jdefend.txt#Armor)
+    (c) é­”æ³•æ”»æ’ƒã¸ã®è€æ€§                  (jdefend.txt#ResistingMagic)
+    (d) åã®ã‚ã‚‹é˜²å…·ã¨ä¼èª¬ã®é˜²å…·          (jdefend.txt#EgoArtifact)
+    (e) è€æ€§                              (jdefend.txt#Resistances)
+    (f) è€æ€§ã®ãªã„æ”»æ’ƒ                    (jdefend.txt#Unresistable)
+    (g) å®Œå…¨ãªè€æ€§(å…ç–«)                  (jdefend.txt#Immunities)
+    (h) ãã®ä»–                            (jdefend.txt#Miscellaneous)
+    (i) æ”»æ’ƒã‹ã‚‰ã®å›å¾©                    (jdefend.txt#Recovering)
 
-    (?) ¥Ø¥ë¥×¥·¥¹¥Æ¥à¤Î»ÈÍÑË¡            (jhelpinfo.txt)
+    (?) ãƒ˜ãƒ«ãƒ—ã‚·ã‚¹ãƒ†ãƒ ã®ä½¿ç”¨æ³•            (jhelpinfo.txt)
  
 
 ***** [a] jdefend.txt

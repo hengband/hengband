@@ -1,4 +1,4 @@
-/* File: z-virt.h */
+﻿/* File: z-virt.h */
 
 /*
  * Copyright (c) 1997 Ben Harrison

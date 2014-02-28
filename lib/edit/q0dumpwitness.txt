@@ -3,7 +3,7 @@
 # Name
 # from Dumb Witness -- Christie
 Q:$34:N:Dump Witness
-Q:34:N:¤â¤Î¸À¤¨¤Ì¾Ú¿Í
+Q:34:N:ã‚‚ã®è¨€ãˆã¬è¨¼äºº
 
 # Definition
 Q:$34:Q:6:0:0:0:5:0:0:0:6
@@ -14,25 +14,25 @@ Q:34:Q:6:0:0:0:5:0:0:0:6
 Q:$34:T:Adventures are dead in the building behind this one. All windows and 
 Q:$34:T:doors are locked, we guess the murderer still hide in the house.
 Q:$34:T:Your task is to clean everything up in the room.
-Q:34:T:¤³¤Î·úÊª¤ÎÎ¢¤Î°ì¸®²È¤ÇËÁ¸±¼Ô¤¬ÉÔ¿³¤Ê»à¤ËÊı¤ò¤·¤Æ¤¤¤ë¤È¤ÎÊó¹ğ¤¬¤¢¤ê¤Ş¤·¤¿¡£
-Q:34:T:Áë¤Ë¤âÈâ¤Ë¤â¸°¤¬¤«¤«¤Ã¤Æ¤ª¤ê¡¢»¦Ù¤¼Ô¤Ï¤Ş¤ÀÆâÉô¤ËÀø¤ó¤Ç¤¤¤ë¤È»×¤ï¤ì¤Ş¤¹¡£
-Q:34:T:¤É¤¦¤«¤¢¤Î²È¤ËÀø¤à¶¼°Ò¤òÇÓ½ü¤·¤Æ²¼¤µ¤¤¡£
+Q:34:T:ã“ã®å»ºç‰©ã®è£ã®ä¸€è»’å®¶ã§å†’é™ºè€…ãŒä¸å¯©ãªæ­»ã«æ–¹ã‚’ã—ã¦ã„ã‚‹ã¨ã®å ±å‘ŠãŒã‚ã‚Šã¾ã—ãŸã€‚
+Q:34:T:çª“ã«ã‚‚æ‰‰ã«ã‚‚éµãŒã‹ã‹ã£ã¦ãŠã‚Šã€æ®ºæˆ®è€…ã¯ã¾ã å†…éƒ¨ã«æ½œã‚“ã§ã„ã‚‹ã¨æ€ã‚ã‚Œã¾ã™ã€‚
+Q:34:T:ã©ã†ã‹ã‚ã®å®¶ã«æ½œã‚€è„…å¨ã‚’æ’é™¤ã—ã¦ä¸‹ã•ã„ã€‚
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST34 3]
 Q:$34:T:Thank you for cleaning the room! A small reward
 Q:$34:T:awaits you outside.
-Q:34:T:²øÊª¤É¤â¤òÂà¼£¤·¤Æ²¼¤µ¤Ã¤ÆÍ­Æñ¤¦¤´¤¶¤¤¤Ş¤¹¡ª
-Q:34:T:¤µ¤µ¤ä¤«¤Ê¤ªÎé¤ò³°¤ËÍÑ°Õ¤·¤Æ¤ª¤­¤Ş¤·¤¿¡£
+Q:34:T:æ€ªç‰©ã©ã‚‚ã‚’é€€æ²»ã—ã¦ä¸‹ã•ã£ã¦æœ‰é›£ã†ã”ã–ã„ã¾ã™ï¼
+Q:34:T:ã•ã•ã‚„ã‹ãªãŠç¤¼ã‚’å¤–ã«ç”¨æ„ã—ã¦ãŠãã¾ã—ãŸã€‚
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST34 5]
 Q:$34:T:It seems like this task was too difficult for you.  Good that I
 Q:$34:T:hired another adventurer to clean up the remaining monsters.
-Q:34:T:¤³¤Î»Å»ö¤Ï¤¢¤Ê¤¿¤Ë¤ÏÆñ¤·¤«¤Ã¤¿¤è¤¦¤Ç¤¹¤Í¡£Â¾¤ÎËÁ¸±¼Ô¤ò¸Û¤Ã¤Æ
-Q:34:T:»Ä¤ê¤Î²øÊª¤òÂà¼£¤·¤Ş¤¹¤«¤é¡¢¤â¤¦¤¤¤¤¤Ç¤¹¤è¡£
+Q:34:T:ã“ã®ä»•äº‹ã¯ã‚ãªãŸã«ã¯é›£ã—ã‹ã£ãŸã‚ˆã†ã§ã™ã­ã€‚ä»–ã®å†’é™ºè€…ã‚’é›‡ã£ã¦
+Q:34:T:æ®‹ã‚Šã®æ€ªç‰©ã‚’é€€æ²»ã—ã¾ã™ã‹ã‚‰ã€ã‚‚ã†ã„ã„ã§ã™ã‚ˆã€‚
 ?:1
 
 # Hard-Locked Glass Door

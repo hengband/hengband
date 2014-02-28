@@ -1,18 +1,18 @@
-¹¶·â¤ÈÉğ´ï
+æ”»æ’ƒã¨æ­¦å™¨
 
-»²¾È¤·¤¿¤¤¥ª¥ó¥é¥¤¥ó¡¦¥Ø¥ë¥×¤Îµ­¹æ¤ò²¡¤·¤Æ²¼¤µ¤¤:
+å‚ç…§ã—ãŸã„ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ»ãƒ˜ãƒ«ãƒ—ã®è¨˜å·ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„:
 
-    (a) ¹¶·â¤ÈÉğ´ï                       (jattack.txt)
-    (b) ¼Í·âÍÑÉğ´ï                       (jattack.txt#DistanceAttack)
-    (c) ÊÉ¤ÎÃæ¤Î¥â¥ó¥¹¥¿¡¼¤Ø¤Î¹¶·â       (jattack.txt#AttackWalls)
-    (d) Ä¾ÀÜ¹¶·âÍÑÉğ´ï                   (jattack.txt#MeleeWeapons)
-    (e) ¼Í·âÍÑÉğ´ï                       (jattack.txt#MissileLaunch)
-    (f) Ì¾¤Î¤¢¤ëÉğ´ï¤ÈÅÁÀâ¤ÎÉğ´ï         (jattack.txt#EgoArtifact)
-    (g) ÀïÆ®Êä½õ¤ÎËâË¡                   (jattack.txt#MagicalAids)
-    (h) ½¤¹ÔÁÎ¤Î¹¶·â                     (jattack.txt#MonkAttacks)
-    (i) ´ğËÜÅª¤ÊÀïÎ¬                     (jattack.txt#MeleeTactics)
+    (a) æ”»æ’ƒã¨æ­¦å™¨                       (jattack.txt)
+    (b) å°„æ’ƒç”¨æ­¦å™¨                       (jattack.txt#DistanceAttack)
+    (c) å£ã®ä¸­ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¸ã®æ”»æ’ƒ       (jattack.txt#AttackWalls)
+    (d) ç›´æ¥æ”»æ’ƒç”¨æ­¦å™¨                   (jattack.txt#MeleeWeapons)
+    (e) å°„æ’ƒç”¨æ­¦å™¨                       (jattack.txt#MissileLaunch)
+    (f) åã®ã‚ã‚‹æ­¦å™¨ã¨ä¼èª¬ã®æ­¦å™¨         (jattack.txt#EgoArtifact)
+    (g) æˆ¦é—˜è£œåŠ©ã®é­”æ³•                   (jattack.txt#MagicalAids)
+    (h) ä¿®è¡Œåƒ§ã®æ”»æ’ƒ                     (jattack.txt#MonkAttacks)
+    (i) åŸºæœ¬çš„ãªæˆ¦ç•¥                     (jattack.txt#MeleeTactics)
 
-    (?) ¥Ø¥ë¥×¥·¥¹¥Æ¥à¤Î»ÈÍÑË¡           (jhelpinfo.txt)
+    (?) ãƒ˜ãƒ«ãƒ—ã‚·ã‚¹ãƒ†ãƒ ã®ä½¿ç”¨æ³•           (jhelpinfo.txt)
  
 
 ***** [a] jattack.txt

@@ -1,15 +1,15 @@
-¥À¥ó¥¸¥ç¥ó
+ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³
 
-»²¾È¤·¤¿¤¤¥ª¥ó¥é¥¤¥ó¡¦¥Ø¥ë¥×¤Îµ­¹æ¤ò²¡¤·¤Æ²¼¤µ¤¤:
+å‚ç…§ã—ãŸã„ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ»ãƒ˜ãƒ«ãƒ—ã®è¨˜å·ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„:
 
-    (a) ³¹¤È¥À¥ó¥¸¥ç¥ó                        (jdungeon.txt)
-    (b) ²èÌÌ¾å¤ÎÊ¸»ú                          (jdungeon.txt#MapSymbols)
-    (c) ¥À¥ó¥¸¥ç¥ó¤ÎÆâÉô                      (jdungeon.txt#WithinDungeon)
-    (d) ¥À¥ó¥¸¥ç¥ó¤Ç¸«¤Ä¤«¤ë¥¢¥¤¥Æ¥à          (jdungeon.txt#Objects)
-    (e) ºÎ·¡                                  (jdungeon.txt#Mining)
-    (f) ³¬ÃÊ¡¢±£¤·¥É¥¢¡¢ÄÌÏ©¡¢Éô²°            (jdungeon.txt#StairsDoorsEtc)
-    (g) ³¬¤ÎÊ·°Ïµ¤                            (jdungeon.txt#Feelings)
-    (h) ¥é¥ó¥À¥à¥¯¥¨¥¹¥È                      (jdungeon.txt#RandomQuests)
+    (a) è¡—ã¨ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³                        (jdungeon.txt)
+    (b) ç”»é¢ä¸Šã®æ–‡å­—                          (jdungeon.txt#MapSymbols)
+    (c) ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®å†…éƒ¨                      (jdungeon.txt#WithinDungeon)
+    (d) ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã§è¦‹ã¤ã‹ã‚‹ã‚¢ã‚¤ãƒ†ãƒ           (jdungeon.txt#Objects)
+    (e) æ¡æ˜                                  (jdungeon.txt#Mining)
+    (f) éšæ®µã€éš ã—ãƒ‰ã‚¢ã€é€šè·¯ã€éƒ¨å±‹            (jdungeon.txt#StairsDoorsEtc)
+    (g) éšã®é›°å›²æ°—                            (jdungeon.txt#Feelings)
+    (h) ãƒ©ãƒ³ãƒ€ãƒ ã‚¯ã‚¨ã‚¹ãƒˆ                      (jdungeon.txt#RandomQuests)
 
     (?) Help System Commands                  (helpinfo.txt)
 

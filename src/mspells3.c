@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file mspells3.c
- * @brief ÀÄËâË¡¤Î½èÍı¼ÂÁõ / Blue magic
+ * @brief é’é­”æ³•ã®å‡¦ç†å®Ÿè£… / Blue magic
  * @date 2014/01/15
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -12,16 +12,16 @@
 
 #include "angband.h"
 
-#define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130) /*!< ¥â¥ó¥¹¥¿¡¼ËâË¡¤ò¥×¥ì¥¤¥ä¡¼¤¬»ÈÍÑ¤¹¤ë¾ì¹ç¤Î´¹»»¥ì¥Ù¥ë */
+#define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130) /*!< ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é­”æ³•ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒä½¿ç”¨ã™ã‚‹å ´åˆã®æ›ç®—ãƒ¬ãƒ™ãƒ« */
 
 
 /*!
-* @brief Ê¸»úÎó¤ËÀÄËâÆ³»Õ¤Î¼öÊ¸¤Î¹¶·âÎÏ¤ò²Ã¤¨¤ë
-* @param r_idx ¥â¥ó¥¹¥¿¡¼¤Î¼ïÂ²ID
-* @param SPELL_NUM ¼öÊ¸ÈÖ¹æ
-* @param msg É½¼¨¤¹¤ëÊ¸»úÎó
-* @param tmp ÊÖ¤¹¥á¥Ã¥»¡¼¥¸¤ò³ÊÇ¼¤¹¤ëÇÛÎó
-* @return ¤Ê¤·
+* @brief æ–‡å­—åˆ—ã«é’é­”å°å¸«ã®å‘ªæ–‡ã®æ”»æ’ƒåŠ›ã‚’åŠ ãˆã‚‹
+* @param r_idx ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+* @param SPELL_NUM å‘ªæ–‡ç•ªå·
+* @param msg è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—
+* @param tmp è¿”ã™ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æ ¼ç´ã™ã‚‹é…åˆ—
+* @return ãªã—
 */
 void set_bluemage_damage(int SPELL_NUM, int plev, cptr msg, char* tmp)
 {
@@ -36,10 +36,10 @@ void set_bluemage_damage(int SPELL_NUM, int plev, cptr msg, char* tmp)
 }
 
 /*!
- * @brief ¼õ¤±¼è¤Ã¤¿¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID¤Ë±ş¤¸¤ÆÀÄËâË¡¤Î¸ú²Ì¾ğÊó¤ò¤Ş¤È¤á¤¿¥Õ¥©¡¼¥Ş¥Ã¥È¤òÊÖ¤¹
- * @param p ¾ğÊó¤òÊÖ¤¹Ê¸»úÎó»²¾È¥İ¥¤¥ó¥¿
- * @param power ¥â¥ó¥¹¥¿¡¼ËâË¡¤ÎID
- * @return ¤Ê¤·
+ * @brief å—ã‘å–ã£ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é­”æ³•ã®IDã«å¿œã˜ã¦é’é­”æ³•ã®åŠ¹æœæƒ…å ±ã‚’ã¾ã¨ã‚ãŸãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’è¿”ã™
+ * @param p æƒ…å ±ã‚’è¿”ã™æ–‡å­—åˆ—å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param power ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é­”æ³•ã®ID
+ * @return ãªã—
  */
 static void learned_info(char *p, int power)
 {
@@ -47,10 +47,10 @@ static void learned_info(char *p, int power)
 	int hp = p_ptr->chp;
 
 #ifdef JP
-	cptr s_dam = " Â»½ı:%s";
-	cptr s_dur = "´ü´Ö:";
-	cptr s_range = "ÈÏ°Ï:";
-	cptr s_heal = " ²óÉü:%s";
+	cptr s_dam = " æå‚·:%s";
+	cptr s_dur = "æœŸé–“:";
+	cptr s_range = "ç¯„å›²:";
+	cptr s_heal = " å›å¾©:%s";
 #else
 	cptr s_dam = " dam %s";
 	cptr s_dur = "dur ";
@@ -184,10 +184,10 @@ static void learned_info(char *p, int power)
 
 
 /*!
- * @brief »ÈÍÑ²ÄÇ½¤ÊÀÄËâË¡¤òÁªÂò¤¹¤ë /
+ * @brief ä½¿ç”¨å¯èƒ½ãªé’é­”æ³•ã‚’é¸æŠã™ã‚‹ /
  * Allow user to choose a imitation.
- * @param sn ÁªÂò¤·¤¿¥â¥ó¥¹¥¿¡¼¹¶·âID¡¢¥­¥ã¥ó¥»¥ë¤Î¾ì¹ç-1¡¢ÉÔÀµ¤ÊÁªÂò¤Î¾ì¹ç-2¤òÊÖ¤¹
- * @return È¯Æ°²ÄÇ½¤ÊËâË¡¤òÁªÂò¤·¤¿¾ì¹çTRUE¡¢¥­¥ã¥ó¥»¥ë½èÍı¤«ÉÔÀµ¤ÊÁªÂò¤¬¹Ô¤ï¤ì¤¿¾ì¹çFALSE¤òÊÖ¤¹¡£
+ * @param sn é¸æŠã—ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ”»æ’ƒIDã€ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã®å ´åˆ-1ã€ä¸æ­£ãªé¸æŠã®å ´åˆ-2ã‚’è¿”ã™
+ * @return ç™ºå‹•å¯èƒ½ãªé­”æ³•ã‚’é¸æŠã—ãŸå ´åˆTRUEã€ã‚­ãƒ£ãƒ³ã‚»ãƒ«å‡¦ç†ã‹ä¸æ­£ãªé¸æŠãŒè¡Œã‚ã‚ŒãŸå ´åˆFALSEã‚’è¿”ã™ã€‚
  * @details
  * If a valid spell is chosen, saves it in '*sn' and returns TRUE\n
  * If the user hits escape, returns FALSE, and set '*sn' to -1\n
@@ -217,7 +217,7 @@ static int get_learned_power(int *sn)
 	char            comment[80];
 	s32b            f4 = 0, f5 = 0, f6 = 0;
 #ifdef JP
-cptr            p = "ËâË¡";
+cptr            p = "é­”æ³•";
 #else
 	cptr            p = "magic";
 #endif
@@ -253,12 +253,12 @@ cptr            p = "ËâË¡";
 		while(!mode)
 		{
 #ifdef JP
-			prt(format(" %s ¥Ü¥ë¥È", (menu_line == 1) ? "¡Õ" : "  "), 2, 14);
-			prt(format(" %s ¥Ü¡¼¥ë", (menu_line == 2) ? "¡Õ" : "  "), 3, 14);
-			prt(format(" %s ¥Ö¥ì¥¹", (menu_line == 3) ? "¡Õ" : "  "), 4, 14);
-			prt(format(" %s ¾¤´­", (menu_line == 4) ? "¡Õ" : "  "), 5, 14);
-			prt(format(" %s ¤½¤ÎÂ¾", (menu_line == 5) ? "¡Õ" : "  "), 6, 14);
-			prt("¤É¤Î¼ïÎà¤ÎËâË¡¤ò»È¤¤¤Ş¤¹¤«¡©", 0, 0);
+			prt(format(" %s ãƒœãƒ«ãƒˆ", (menu_line == 1) ? "ã€‹" : "  "), 2, 14);
+			prt(format(" %s ãƒœãƒ¼ãƒ«", (menu_line == 2) ? "ã€‹" : "  "), 3, 14);
+			prt(format(" %s ãƒ–ãƒ¬ã‚¹", (menu_line == 3) ? "ã€‹" : "  "), 4, 14);
+			prt(format(" %s å¬å–š", (menu_line == 4) ? "ã€‹" : "  "), 5, 14);
+			prt(format(" %s ãã®ä»–", (menu_line == 5) ? "ã€‹" : "  "), 6, 14);
+			prt("ã©ã®ç¨®é¡ã®é­”æ³•ã‚’ä½¿ã„ã¾ã™ã‹ï¼Ÿ", 0, 0);
 #else
 			prt(format(" %s bolt", (menu_line == 1) ? "> " : "  "), 2, 14);
 			prt(format(" %s ball", (menu_line == 2) ? "> " : "  "), 3, 14);
@@ -298,7 +298,7 @@ cptr            p = "ËâË¡";
 	else
 	{
 #ifdef JP
-	sprintf(comment, "[A]¥Ü¥ë¥È, [B]¥Ü¡¼¥ë, [C]¥Ö¥ì¥¹, [D]¾¤´­, [E]¤½¤ÎÂ¾:");
+	sprintf(comment, "[A]ãƒœãƒ«ãƒˆ, [B]ãƒœãƒ¼ãƒ«, [C]ãƒ–ãƒ¬ã‚¹, [D]å¬å–š, [E]ãã®ä»–:");
 #else
 	sprintf(comment, "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:");
 #endif
@@ -361,7 +361,7 @@ cptr            p = "ËâË¡";
 	if (i == num)
 	{
 #ifdef JP
-		msg_print("¤½¤Î¼ïÎà¤ÎËâË¡¤Ï³Ğ¤¨¤Æ¤¤¤Ê¤¤¡ª");
+		msg_print("ãã®ç¨®é¡ã®é­”æ³•ã¯è¦šãˆã¦ã„ãªã„ï¼");
 #else
 		msg_print("You don't know any spell of this type.");
 #endif
@@ -371,7 +371,7 @@ cptr            p = "ËâË¡";
 	/* Build a prompt (accept all spells) */
 	(void)strnfmt(out_val, 78, 
 #ifdef JP
-		      "(%c-%c, '*'¤Ç°ìÍ÷, ESC) ¤É¤Î%s¤ò¾§¤¨¤Ş¤¹¤«¡©",
+		      "(%c-%c, '*'ã§ä¸€è¦§, ESC) ã©ã®%sã‚’å”±ãˆã¾ã™ã‹ï¼Ÿ",
 #else
 		      "(%c-%c, *=List, ESC=exit) Use which %s? ",
 #endif
@@ -466,13 +466,13 @@ cptr            p = "ËâË¡";
 				/* Display a list of spells */
 				prt("", y, x);
 #ifdef JP
-put_str("Ì¾Á°", y, x + 5);
+put_str("åå‰", y, x + 5);
 #else
 				put_str("Name", y, x + 5);
 #endif
 
 #ifdef JP
-put_str("MP ¼ºÎ¨ ¸ú²Ì", y, x + 33);
+put_str("MP å¤±ç‡ åŠ¹æœ", y, x + 33);
 #else
 				put_str("SP Fail Info", y, x + 32);
 #endif
@@ -529,7 +529,7 @@ put_str("MP ¼ºÎ¨ ¸ú²Ì", y, x + 33);
 					if (use_menu)
 					{
 #ifdef JP
-						if (i == (menu_line-1)) strcpy(psi_desc, "  ¡Õ");
+						if (i == (menu_line-1)) strcpy(psi_desc, "  ã€‹");
 #else
 						if (i == (menu_line-1)) strcpy(psi_desc, "  > ");
 #endif
@@ -591,7 +591,7 @@ put_str("MP ¼ºÎ¨ ¸ú²Ì", y, x + 33);
 
 			/* Prompt */
 #ifdef JP
-			(void) strnfmt(tmp_val, 78, "%s¤ÎËâË¡¤ò¾§¤¨¤Ş¤¹¤«¡©", monster_powers[spellnum[i]].name);
+			(void) strnfmt(tmp_val, 78, "%sã®é­”æ³•ã‚’å”±ãˆã¾ã™ã‹ï¼Ÿ", monster_powers[spellnum[i]].name);
 #else
 			(void)strnfmt(tmp_val, 78, "Use %s? ", monster_powers[spellnum[i]].name);
 #endif
@@ -632,11 +632,11 @@ put_str("MP ¼ºÎ¨ ¸ú²Ì", y, x + 33);
 
 
 /*!
- * @brief ÀÄËâË¡¤ÎÈ¯Æ° /
+ * @brief é’é­”æ³•ã®ç™ºå‹• /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
- * @param spell È¯Æ°¤¹¤ë¥â¥ó¥¹¥¿¡¼¹¶·â¤ÎID
- * @param success TRUE¤ÏÀ®¸ù»ş¡¢FALSE¤Ï¼ºÇÔ»ş¤Î½èÍı¤ò¹Ô¤¦
- * @return ½èÍı¤ò¼Â¹Ô¤·¤¿¤éTRUE¡¢¥­¥ã¥ó¥»¥ë¤·¤¿¾ì¹çFALSE¤òÊÖ¤¹¡£
+ * @param spell ç™ºå‹•ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ”»æ’ƒã®ID
+ * @param success TRUEã¯æˆåŠŸæ™‚ã€FALSEã¯å¤±æ•—æ™‚ã®å‡¦ç†ã‚’è¡Œã†
+ * @return å‡¦ç†ã‚’å®Ÿè¡Œã—ãŸã‚‰TRUEã€ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸå ´åˆFALSEã‚’è¿”ã™ã€‚
  */
 static bool cast_learned_spell(int spell, bool success)
 {
@@ -666,7 +666,7 @@ static bool cast_learned_spell(int spell, bool success)
 	switch (spell)
 	{
 	case MS_SHRIEK:
-        msg_print(_("¤«¤ó¹â¤¤¶âÀÚ¤êÀ¼¤ò¤¢¤²¤¿¡£", "You make a high pitched shriek."));
+        msg_print(_("ã‹ã‚“é«˜ã„é‡‘åˆ‡ã‚Šå£°ã‚’ã‚ã’ãŸã€‚", "You make a high pitched shriek."));
 		aggravate_monsters(0);
 		break;
 	case MS_XXX1:
@@ -686,7 +686,7 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_ROCKET:
 		if (!get_aim_dir(&dir)) return FALSE;
 		
-        msg_print(_("¥í¥±¥Ã¥È¤òÈ¯¼Í¤·¤¿¡£", "You fire a rocket."));
+        msg_print(_("ãƒ­ã‚±ãƒƒãƒˆã‚’ç™ºå°„ã—ãŸã€‚", "You fire a rocket."));
         damage = monspell_bluemage_damage((MS_ROCKET), plev, DAM_ROLL);
 		fire_rocket(GF_ROCKET, dir, damage, 2);
 		break;
@@ -696,7 +696,7 @@ static bool cast_learned_spell(int spell, bool success)
 
 		if (!get_aim_dir(&dir)) return FALSE;
 		
-        msg_print(_("Ìğ¤òÊü¤Ã¤¿¡£", "You fire an arrow."));
+        msg_print(_("çŸ¢ã‚’æ”¾ã£ãŸã€‚", "You fire an arrow."));
         damage = monspell_bluemage_damage((MS_SHOOT), plev, DAM_ROLL);
 		fire_bolt(GF_ARROW, dir, damage);
 		break;
@@ -710,231 +710,231 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_BR_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("»À¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe acid."));
+        msg_print(_("é…¸ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe acid."));
         damage = monspell_bluemage_damage((MS_BR_ACID), plev, DAM_ROLL);
 		fire_ball(GF_ACID, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("°ğºÊ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe lightning."));
+        msg_print(_("ç¨²å¦»ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe lightning."));
         damage = monspell_bluemage_damage((MS_BR_ELEC), plev, DAM_ROLL);
 		fire_ball(GF_ELEC, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("²Ğ±ê¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe fire."));
+        msg_print(_("ç«ç‚ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe fire."));
         damage = monspell_bluemage_damage((MS_BR_FIRE), plev, DAM_ROLL);
 		fire_ball(GF_FIRE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_COLD:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("Îäµ¤¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe frost."));
+        msg_print(_("å†·æ°—ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe frost."));
         damage = monspell_bluemage_damage((MS_BR_COLD), plev, DAM_ROLL);
 		fire_ball(GF_COLD, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_POIS:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥¬¥¹¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe gas."));
+        msg_print(_("ã‚¬ã‚¹ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe gas."));
         damage = monspell_bluemage_damage((MS_BR_POIS), plev, DAM_ROLL);
 		fire_ball(GF_POIS, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_NETHER:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("ÃÏ¹ö¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe nether."));
+        msg_print(_("åœ°ç„ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe nether."));
         damage = monspell_bluemage_damage((MS_BR_NETHER), plev, DAM_ROLL);
 		fire_ball(GF_NETHER, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_LITE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("Á®¸÷¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe light."));
+        msg_print(_("é–ƒå…‰ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe light."));
         damage = monspell_bluemage_damage((MS_BR_LITE), plev, DAM_ROLL);
 		fire_ball(GF_LITE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("°Å¹õ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe darkness."));
+        msg_print(_("æš—é»’ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe darkness."));
         damage = monspell_bluemage_damage((MS_BR_DARK), plev, DAM_ROLL);
 		fire_ball(GF_DARK, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("º®Íğ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe confusion."));
+        msg_print(_("æ··ä¹±ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe confusion."));
         damage = monspell_bluemage_damage((MS_BR_CONF), plev, DAM_ROLL);
 		fire_ball(GF_CONFUSION, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_SOUND:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¹ì²»¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe sound."));
+        msg_print(_("è½ŸéŸ³ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe sound."));
         damage = monspell_bluemage_damage((MS_BR_SOUND), plev, DAM_ROLL);
 		fire_ball(GF_SOUND, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥«¥ª¥¹¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe chaos."));
+        msg_print(_("ã‚«ã‚ªã‚¹ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe chaos."));
         damage = monspell_bluemage_damage((MS_BR_CHAOS), plev, DAM_ROLL);
 		fire_ball(GF_CHAOS, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_DISEN:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("Îô²½¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe disenchantment."));
+        msg_print(_("åŠ£åŒ–ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe disenchantment."));
         damage = monspell_bluemage_damage((MS_BR_DISEN), plev, DAM_ROLL);
 		fire_ball(GF_DISENCHANT, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_NEXUS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("°ø²Ìº®Íğ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe nexus."));
+        msg_print(_("å› æœæ··ä¹±ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe nexus."));
         damage = monspell_bluemage_damage((MS_BR_NEXUS), plev, DAM_ROLL);
 		fire_ball(GF_NEXUS, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_TIME:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("»ş´ÖµÕÅ¾¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe time."));
+        msg_print(_("æ™‚é–“é€†è»¢ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe time."));
         damage = monspell_bluemage_damage((MS_BR_TIME), plev, DAM_ROLL);
 		fire_ball(GF_TIME, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_INERTIA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("ÃÙÆß¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe inertia."));
+        msg_print(_("é…éˆã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe inertia."));
         damage = monspell_bluemage_damage((MS_BR_INERTIA), plev, DAM_ROLL);
 		fire_ball(GF_INERTIA, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_GRAVITY:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("½ÅÎÏ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe gravity."));
+        msg_print(_("é‡åŠ›ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe gravity."));
         damage = monspell_bluemage_damage((MS_BR_GRAVITY), plev, DAM_ROLL);
 		fire_ball(GF_GRAVITY, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_SHARDS:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("ÇËÊÒ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe shards."));
+        msg_print(_("ç ´ç‰‡ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe shards."));
         damage = monspell_bluemage_damage((MS_BR_SHARDS), plev, DAM_ROLL);
 		fire_ball(GF_SHARDS, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_PLASMA:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥×¥é¥º¥Ş¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe plasma."));
+        msg_print(_("ãƒ—ãƒ©ã‚ºãƒã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe plasma."));
         damage = monspell_bluemage_damage((MS_BR_PLASMA), plev, DAM_ROLL);
 		fire_ball(GF_PLASMA, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_FORCE:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥Õ¥©¡¼¥¹¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe force."));
+        msg_print(_("ãƒ•ã‚©ãƒ¼ã‚¹ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe force."));
         damage = monspell_bluemage_damage((MS_BR_FORCE), plev, DAM_ROLL);
 		fire_ball(GF_FORCE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("ËâÎÏ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe mana."));
+        msg_print(_("é­”åŠ›ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe mana."));
         damage = monspell_bluemage_damage((MS_BR_MANA), plev, DAM_ROLL);
 		fire_ball(GF_MANA, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BALL_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("Êü¼ÍÇ½µå¤òÊü¤Ã¤¿¡£", "You cast a ball of radiation."));
+        msg_print(_("æ”¾å°„èƒ½çƒã‚’æ”¾ã£ãŸã€‚", "You cast a ball of radiation."));
         damage = monspell_bluemage_damage((MS_BALL_NUKE), plev, DAM_ROLL);
 		fire_ball(GF_NUKE, dir, damage, 2);
 		break;
 	case MS_BR_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("Êü¼ÍÀ­ÇÑ´şÊª¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe toxic waste."));
+        msg_print(_("æ”¾å°„æ€§å»ƒæ£„ç‰©ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe toxic waste."));
         damage = monspell_bluemage_damage((MS_BR_NUKE), plev, DAM_ROLL);
 		fire_ball(GF_NUKE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BALL_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("½ã¥í¥°¥ë¥¹¤òÊü¤Ã¤¿¡£", "You invoke a raw Logrus."));
+        msg_print(_("ç´”ãƒ­ã‚°ãƒ«ã‚¹ã‚’æ”¾ã£ãŸã€‚", "You invoke a raw Logrus."));
         damage = monspell_bluemage_damage((MS_BALL_CHAOS), plev, DAM_ROLL);
 		fire_ball(GF_CHAOS, dir, damage, 4);
 		break;
 	case MS_BR_DISI:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("Ê¬²ò¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£", "You breathe disintegration."));
+        msg_print(_("åˆ†è§£ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe disintegration."));
         damage = monspell_bluemage_damage((MS_BR_DISI), plev, DAM_ROLL);
 		fire_ball(GF_DISINTEGRATE, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BALL_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥¢¥·¥Ã¥É¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast an acid ball."));
+        msg_print(_("ã‚¢ã‚·ãƒƒãƒ‰ãƒ»ãƒœãƒ¼ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast an acid ball."));
         damage = monspell_bluemage_damage((MS_BALL_ACID), plev, DAM_ROLL);
 		fire_ball(GF_ACID, dir, damage, 2);
 		break;
 	case MS_BALL_ELEC:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥µ¥ó¥À¡¼¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a lightning ball."));
+        msg_print(_("ã‚µãƒ³ãƒ€ãƒ¼ãƒ»ãƒœãƒ¼ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a lightning ball."));
         damage = monspell_bluemage_damage((MS_BALL_ELEC), plev, DAM_ROLL);
 		fire_ball(GF_ELEC, dir, damage, 2);
 		break;
 	case MS_BALL_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥Õ¥¡¥¤¥¢¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a fire ball."));
+        msg_print(_("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ¼ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a fire ball."));
         damage = monspell_bluemage_damage((MS_BALL_FIRE), plev, DAM_ROLL);
 		fire_ball(GF_FIRE, dir, damage, 2);
 		break;
 	case MS_BALL_COLD:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥¢¥¤¥¹¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a frost ball."));
+        msg_print(_("ã‚¢ã‚¤ã‚¹ãƒ»ãƒœãƒ¼ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a frost ball."));
         damage = monspell_bluemage_damage((MS_BALL_COLD), plev, DAM_ROLL);
 		fire_ball(GF_COLD, dir, damage, 2);
 		break;
 	case MS_BALL_POIS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("°­½­±À¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a stinking cloud."));
+        msg_print(_("æ‚ªè‡­é›²ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a stinking cloud."));
         damage = monspell_bluemage_damage((MS_BALL_POIS), plev, DAM_ROLL);
 		fire_ball(GF_POIS, dir, damage, 2);
 		break;
 	case MS_BALL_NETHER:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("ÃÏ¹öµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a nether ball."));
+        msg_print(_("åœ°ç„çƒã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a nether ball."));
         damage = monspell_bluemage_damage((MS_BALL_NETHER), plev, DAM_ROLL);
 		fire_ball(GF_NETHER, dir, damage, 2);
 		break;
 	case MS_BALL_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("Î®¤ì¤ë¤è¤¦¤Ê¿È¿¶¤ê¤ò¤·¤¿¡£", "You gesture fluidly."));
+        msg_print(_("æµã‚Œã‚‹ã‚ˆã†ãªèº«æŒ¯ã‚Šã‚’ã—ãŸã€‚", "You gesture fluidly."));
         damage = monspell_bluemage_damage((MS_BALL_WATER), plev, DAM_ROLL);
 		fire_ball(GF_WATER, dir, damage, 4);
 		break;
 	case MS_BALL_MANA:
         if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("ËâÎÏ¤ÎÍò¤Î¼öÊ¸¤òÇ°¤¸¤¿¡£", "You invoke a mana storm."));
+        msg_print(_("é­”åŠ›ã®åµã®å‘ªæ–‡ã‚’å¿µã˜ãŸã€‚", "You invoke a mana storm."));
         damage = monspell_bluemage_damage((MS_BALL_MANA), plev, DAM_ROLL);
 		fire_ball(GF_MANA, dir, damage, 4);
 		break;
 	case MS_BALL_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("°Å¹õ¤ÎÍò¤Î¼öÊ¸¤òÇ°¤¸¤¿¡£", "You invoke a darkness storm."));
+        msg_print(_("æš—é»’ã®åµã®å‘ªæ–‡ã‚’å¿µã˜ãŸã€‚", "You invoke a darkness storm."));
         damage = monspell_bluemage_damage((MS_BALL_DARK), plev, DAM_ROLL);
 		fire_ball(GF_DARK, dir, damage, 4);
 		break;
@@ -983,84 +983,84 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_BOLT_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥¢¥·¥Ã¥É¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast an acid bolt."));
+        msg_print(_("ã‚¢ã‚·ãƒƒãƒ‰ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast an acid bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_ACID), plev, DAM_ROLL);
         fire_bolt(GF_ACID, dir, damage);
 		break;
 	case MS_BOLT_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥µ¥ó¥À¡¼¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a lightning bolt."));
+        msg_print(_("ã‚µãƒ³ãƒ€ãƒ¼ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a lightning bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_ELEC), plev, DAM_ROLL);
 		fire_bolt(GF_ELEC, dir, damage);
 		break;
 	case MS_BOLT_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥Õ¥¡¥¤¥¢¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a fire bolt."));
+        msg_print(_("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a fire bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_FIRE), plev, DAM_ROLL);
 		fire_bolt(GF_FIRE, dir, damage);
 		break;
 	case MS_BOLT_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥¢¥¤¥¹¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a frost bolt."));
+        msg_print(_("ã‚¢ã‚¤ã‚¹ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a frost bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_COLD), plev, DAM_ROLL);
 		fire_bolt(GF_COLD, dir, damage);
 		break;
 	case MS_STARBURST:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥¹¥¿¡¼¥Ğ¡¼¥¹¥È¤Î¼öÊ¸¤òÇ°¤¸¤¿¡£", "You invoke a starburst."));
+        msg_print(_("ã‚¹ã‚¿ãƒ¼ãƒãƒ¼ã‚¹ãƒˆã®å‘ªæ–‡ã‚’å¿µã˜ãŸã€‚", "You invoke a starburst."));
         damage = monspell_bluemage_damage((MS_STARBURST), plev, DAM_ROLL);
 		fire_ball(GF_LITE, dir, damage, 4);
 		break;
 	case MS_BOLT_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("ÃÏ¹ö¤ÎÌğ¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a nether bolt."));
+        msg_print(_("åœ°ç„ã®çŸ¢ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a nether bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_NETHER), plev, DAM_ROLL);
 		fire_bolt(GF_NETHER, dir, damage);
 		break;
 	case MS_BOLT_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥¦¥©¡¼¥¿¡¼¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a water bolt."));
+        msg_print(_("ã‚¦ã‚©ãƒ¼ã‚¿ãƒ¼ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a water bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_WATER), plev, DAM_ROLL);
 		fire_bolt(GF_WATER, dir, damage);
 		break;
 	case MS_BOLT_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("ËâÎÏ¤ÎÌğ¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a mana bolt."));
+        msg_print(_("é­”åŠ›ã®çŸ¢ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a mana bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_MANA), plev, DAM_ROLL);
 		fire_bolt(GF_MANA, dir, damage);
 		break;
 	case MS_BOLT_PLASMA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥×¥é¥º¥Ş¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a plasma bolt."));
+        msg_print(_("ãƒ—ãƒ©ã‚ºãƒãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a plasma bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_PLASMA), plev, DAM_ROLL);
 		fire_bolt(GF_PLASMA, dir, damage);
 		break;
 	case MS_BOLT_ICE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¶Ë´¨¤ÎÌğ¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a ice bolt."));
+        msg_print(_("æ¥µå¯’ã®çŸ¢ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a ice bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_ICE), plev, DAM_ROLL);
 		fire_bolt(GF_ICE, dir, damage);
 		break;
 	case MS_MAGIC_MISSILE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¥Ş¥¸¥Ã¥¯¡¦¥ß¥µ¥¤¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a magic missile."));
+        msg_print(_("ãƒã‚¸ãƒƒã‚¯ãƒ»ãƒŸã‚µã‚¤ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a magic missile."));
         damage = monspell_bluemage_damage((MS_MAGIC_MISSILE), plev, DAM_ROLL);
 		fire_bolt(GF_MISSILE, dir, damage);
 		break;
 	case MS_SCARE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¶²¤í¤·¤²¤Ê¸¸³Ğ¤òºî¤ê½Ğ¤·¤¿¡£", "You cast a fearful illusion."));
+        msg_print(_("æã‚ã—ã’ãªå¹»è¦šã‚’ä½œã‚Šå‡ºã—ãŸã€‚", "You cast a fearful illusion."));
 		fear_monster(dir, plev+10);
 		break;
 	case MS_BLIND:
@@ -1070,7 +1070,7 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("Í¶ÏÇÅª¤Ê¸¸³Ğ¤ò¤Ä¤¯¤ê½Ğ¤·¤¿¡£", "You cast a mesmerizing illusion."));
+        msg_print(_("èª˜æƒ‘çš„ãªå¹»è¦šã‚’ã¤ãã‚Šå‡ºã—ãŸã€‚", "You cast a mesmerizing illusion."));
 		confuse_monster(dir, plev * 2);
 		break;
 	case MS_SLOW:
@@ -1088,18 +1088,18 @@ static bool cast_learned_spell(int spell, bool success)
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("<ÇËÌÇ¤Î¼ê>¤òÊü¤Ã¤¿¡ª", "You invoke the Hand of Doom!"));
+        msg_print(_("<ç ´æ»…ã®æ‰‹>ã‚’æ”¾ã£ãŸï¼", "You invoke the Hand of Doom!"));
 		fire_ball_hide(GF_HAND_DOOM, dir, plev * 3, 0);
 		break;
 	}
 	case MS_HEAL:
-        msg_print(_("¼«Ê¬¤Î½ı¤ËÇ°¤ò½¸Ãæ¤·¤¿¡£", "You concentrate on your wounds!"));
+        msg_print(_("è‡ªåˆ†ã®å‚·ã«å¿µã‚’é›†ä¸­ã—ãŸã€‚", "You concentrate on your wounds!"));
 		(void)hp_player(plev*4);
 		(void)set_stun(0);
 		(void)set_cut(0);
 		break;
 	case MS_INVULNER:
-        msg_print(_("Ìµ½ı¤Îµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a Globe of Invulnerability."));
+        msg_print(_("ç„¡å‚·ã®çƒã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a Globe of Invulnerability."));
 		(void)set_invuln(randint1(4) + 4, FALSE);
 		break;
 	case MS_BLINK:
@@ -1110,7 +1110,7 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
 	case MS_WORLD:
         world_player = TRUE;
-        msg_print(_("¡Ö»ş¤è¡ª¡×", "'Time!'"));
+        msg_print(_("ã€Œæ™‚ã‚ˆï¼ã€", "'Time!'"));
 		msg_print(NULL);
 
 		/* Hack */
@@ -1147,17 +1147,17 @@ static bool cast_learned_spell(int spell, bool success)
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                msg_format(_("%s¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", "%s is unaffected!"), m_name);
+                msg_format(_("%sã«ã¯åŠ¹æœãŒãªã‹ã£ãŸï¼", "%s is unaffected!"), m_name);
 				break;
 			}
 			else if (r_ptr->level > randint1(100))
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                msg_format(_("%s¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", "%s resists!"), m_name);
+                msg_format(_("%sã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", "%s resists!"), m_name);
 				break;
 			}
 		}
-        msg_format(_("%s¤ò°ú¤­Ìá¤·¤¿¡£", "You command %s to return."), m_name);
+        msg_format(_("%sã‚’å¼•ãæˆ»ã—ãŸã€‚", "You command %s to return."), m_name);
 		teleport_monster_to(cave[target_row][target_col].m_idx, py, px, 100, TELEPORT_PASSIVE);
 		break;
 	}
@@ -1181,12 +1181,12 @@ static bool cast_learned_spell(int spell, bool success)
 		m_ptr = &m_list[target_m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
-        msg_format(_("%^s¤ÎÂ­¤ò»Ø¤µ¤·¤¿¡£", "You gesture at %^s's feet."), m_name);
+        msg_format(_("%^sã®è¶³ã‚’æŒ‡ã•ã—ãŸã€‚", "You gesture at %^s's feet."), m_name);
 
 		if ((r_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE)) ||
 			(r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > plev + randint1(60)))
 		{
-            msg_format(_("¤·¤«¤·¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", "%^s is unaffected!"), m_name);
+            msg_format(_("ã—ã‹ã—åŠ¹æœãŒãªã‹ã£ãŸï¼", "%^s is unaffected!"), m_name);
 		}
 		else teleport_level(target_m_idx);
 		break;
@@ -1194,38 +1194,38 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_PSY_SPEAR:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-        msg_print(_("¸÷¤Î·õ¤òÊü¤Ã¤¿¡£", "You throw a psycho-spear."));
+        msg_print(_("å…‰ã®å‰£ã‚’æ”¾ã£ãŸã€‚", "You throw a psycho-spear."));
         damage = monspell_bluemage_damage((MS_PSY_SPEAR), plev, DAM_ROLL);
 		(void)fire_beam(GF_PSY_SPEAR, dir, damage);
 		break;
 	case MS_DARKNESS:
 
-        msg_print(_("°Å°Ç¤ÎÃæ¤Ç¼ê¤ò¿¶¤Ã¤¿¡£", "You gesture in shadow."));
+        msg_print(_("æš—é—‡ã®ä¸­ã§æ‰‹ã‚’æŒ¯ã£ãŸã€‚", "You gesture in shadow."));
 		(void)unlite_area(10, 3);
 		break;
 	case MS_MAKE_TRAP:
 		if (!target_set(TARGET_KILL)) return FALSE;
 
-        msg_print(_("¼öÊ¸¤ò¾§¤¨¤Æ¼Ù°­¤ËÈù¾Ğ¤ó¤À¡£", "You cast a spell and cackle evilly."));
+        msg_print(_("å‘ªæ–‡ã‚’å”±ãˆã¦é‚ªæ‚ªã«å¾®ç¬‘ã‚“ã ã€‚", "You cast a spell and cackle evilly."));
 		trap_creation(target_row, target_col);
 		break;
 	case MS_FORGET:
-        msg_print(_("¤·¤«¤·²¿¤âµ¯¤­¤Ê¤«¤Ã¤¿¡£", "Nothing happen."));
+        msg_print(_("ã—ã‹ã—ä½•ã‚‚èµ·ããªã‹ã£ãŸã€‚", "Nothing happen."));
 		break;
     case MS_RAISE_DEAD:
-        msg_print(_("»à¼ÔÉü³è¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£", "You cast a animate dead."));
+        msg_print(_("æ­»è€…å¾©æ´»ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚", "You cast a animate dead."));
 		(void)animate_dead(0, py, px);
 		break;
 	case MS_S_KIN:
 	{
 		int k;
 
-        msg_print(_("±ç·³¤ò¾¤´­¤·¤¿¡£", "You summon minions."));
+        msg_print(_("æ´è»ã‚’å¬å–šã—ãŸã€‚", "You summon minions."));
 		for (k = 0;k < 1; k++)
 		{
 			if (summon_kin_player(summon_lev, py, px, (pet ? PM_FORCE_PET : 0L)))
 			{
-				if (!pet) msg_print(_("¾¤´­¤µ¤ì¤¿Ãç´Ö¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned fellows are angry!"));
+				if (!pet) msg_print(_("å¬å–šã•ã‚ŒãŸä»²é–“ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned fellows are angry!"));
 			}
 			else
 			{
@@ -1238,12 +1238,12 @@ static bool cast_learned_spell(int spell, bool success)
 	{
 		int k;
 
-        msg_print(_("¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¤ò¾¤´­¤·¤¿¡ª", "You summon a Cyberdemon!"));
+        msg_print(_("ã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¬å–šã—ãŸï¼", "You summon a Cyberdemon!"));
 		for (k = 0 ;k < 1 ; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_CYBER, p_mode))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "The summoned Cyberdemon are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned Cyberdemon are angry!"));
 			}
 			else
 			{
@@ -1254,12 +1254,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_MONSTER:
 	{
 		int k;
-        msg_print(_("Ãç´Ö¤ò¾¤´­¤·¤¿¡£", "You summon help."));
+        msg_print(_("ä»²é–“ã‚’å¬å–šã—ãŸã€‚", "You summon help."));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, p_mode))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥â¥ó¥¹¥¿¡¼¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "The summoned monster is angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned monster is angry!"));
 			}
 			else
 			{
@@ -1270,12 +1270,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_MONSTERS:
 	{
 		int k;
-        msg_print(_("¥â¥ó¥¹¥¿¡¼¤ò¾¤´­¤·¤¿¡ª", "You summon monsters!"));
+        msg_print(_("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å¬å–šã—ãŸï¼", "You summon monsters!"));
 		for (k = 0;k < plev / 15 + 2; k++)
 			if(summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, (p_mode | u_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥â¥ó¥¹¥¿¡¼¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "The summoned monsters are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned monsters are angry!"));
 			}
 			else
 			{
@@ -1286,12 +1286,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_ANT:
 	{
 		int k;
-        msg_print(_("¥¢¥ê¤ò¾¤´­¤·¤¿¡£", "You summon ants."));
+        msg_print(_("ã‚¢ãƒªã‚’å¬å–šã—ãŸã€‚", "You summon ants."));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥¢¥ê¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "The summoned ants are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸã‚¢ãƒªã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned ants are angry!"));
 			}
 			else
 			{
@@ -1302,12 +1302,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_SPIDER:
 	{
 		int k;
-        msg_print(_("ÃØéá¤ò¾¤´­¤·¤¿¡£", "You summon spiders."));
+        msg_print(_("èœ˜è››ã‚’å¬å–šã—ãŸã€‚", "You summon spiders."));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_SPIDER, (PM_ALLOW_GROUP | p_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿ÃØéá¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned spiders are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸèœ˜è››ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned spiders are angry!"));
 			}
 			else
 			{
@@ -1318,12 +1318,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_HOUND:
 	{
 		int k;
-        msg_print(_("¥Ï¥¦¥ó¥É¤ò¾¤´­¤·¤¿¡£", "You summon hounds."));
+        msg_print(_("ãƒã‚¦ãƒ³ãƒ‰ã‚’å¬å–šã—ãŸã€‚", "You summon hounds."));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HOUND, (PM_ALLOW_GROUP | p_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥Ï¥¦¥ó¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned hounds are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸãƒã‚¦ãƒ³ãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned hounds are angry!"));
 			}
 			else
 			{
@@ -1334,12 +1334,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_HYDRA:
 	{
 		int k;
-        msg_print(_("¥Ò¥É¥é¤ò¾¤´­¤·¤¿¡£", "You summon a hydras."));
+        msg_print(_("ãƒ’ãƒ‰ãƒ©ã‚’å¬å–šã—ãŸã€‚", "You summon a hydras."));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HYDRA, (g_mode | p_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥Ò¥É¥é¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned hydras are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸãƒ’ãƒ‰ãƒ©ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned hydras are angry!"));
 			}
 			else
 			{
@@ -1350,12 +1350,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_ANGEL:
 	{
 		int k;
-        msg_print(_("Å·»È¤ò¾¤´­¤·¤¿¡ª", "You summon an angel!"));
+        msg_print(_("å¤©ä½¿ã‚’å¬å–šã—ãŸï¼", "You summon an angel!"));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANGEL, (g_mode | p_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿Å·»È¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned angels are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸå¤©ä½¿ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned angels are angry!"));
 			}
 			else
 			{
@@ -1366,12 +1366,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_DEMON:
 	{
 		int k;
-        msg_print(_("º®ÆÙ¤ÎµÜÄî¤«¤é°­Ëâ¤ò¾¤´­¤·¤¿¡ª", "You summon a demon from the Courts of Chaos!"));
+        msg_print(_("æ··æ²Œã®å®®å»·ã‹ã‚‰æ‚ªé­”ã‚’å¬å–šã—ãŸï¼", "You summon a demon from the Courts of Chaos!"));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DEMON, (g_mode | p_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥Ç¡¼¥â¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned demons are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸãƒ‡ãƒ¼ãƒ¢ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned demons are angry!"));
 			}
 			else
 			{
@@ -1382,12 +1382,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_UNDEAD:
 	{
 		int k;
-        msg_print(_("¥¢¥ó¥Ç¥Ã¥É¤Î¶¯Å¨¤ò¾¤´­¤·¤¿¡ª", "You summon an undead adversary!"));
+        msg_print(_("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®å¼·æ•µã‚’å¬å–šã—ãŸï¼", "You summon an undead adversary!"));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNDEAD, (g_mode | p_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥¢¥ó¥Ç¥Ã¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned undeads are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned undeads are angry!"));
 			}
 			else
 			{
@@ -1398,12 +1398,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_DRAGON:
 	{
 		int k;
-        msg_print(_("¥É¥é¥´¥ó¤ò¾¤´­¤·¤¿¡ª", "You summon a dragon!"));
+        msg_print(_("ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¬å–šã—ãŸï¼", "You summon a dragon!"));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DRAGON, (g_mode | p_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥É¥é¥´¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned dragons are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸãƒ‰ãƒ©ã‚´ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned dragons are angry!"));
 			}
 			else
 			{
@@ -1414,12 +1414,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_HI_UNDEAD:
 	{
 		int k;
-        msg_print(_("¶¯ÎÏ¤Ê¥¢¥ó¥Ç¥Ã¥É¤ò¾¤´­¤·¤¿¡ª", "You summon a greater undead!"));
+        msg_print(_("å¼·åŠ›ãªã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’å¬å–šã—ãŸï¼", "You summon a greater undead!"));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | u_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¾åµé¥¢¥ó¥Ç¥Ã¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned greater undeads are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸä¸Šç´šã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned greater undeads are angry!"));
 			}
 			else
 			{
@@ -1430,12 +1430,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_HI_DRAGON:
 	{
 		int k;
-        msg_print(_("¸ÅÂå¥É¥é¥´¥ó¤ò¾¤´­¤·¤¿¡ª", "You summon an ancient dragon!"));
+        msg_print(_("å¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¬å–šã—ãŸï¼", "You summon an ancient dragon!"));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_DRAGON, (g_mode | p_mode | u_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¸ÅÂå¥É¥é¥´¥ó¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned ancient dragons are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸå¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned ancient dragons are angry!"));
 			}
 			else
 			{
@@ -1446,12 +1446,12 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_AMBERITE:
 	{
 		int k;
-        msg_print(_("¥¢¥ó¥Ğ¡¼¤Î²¦Â²¤ò¾¤´­¤·¤¿¡ª", "You summon a Lord of Amber!"));
+        msg_print(_("ã‚¢ãƒ³ãƒãƒ¼ã®ç‹æ—ã‚’å¬å–šã—ãŸï¼", "You summon a Lord of Amber!"));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_AMBERITES, (g_mode | p_mode | u_mode)))
 			{
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥¢¥ó¥Ğ¡¼¤Î²¦Â²¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned Lords of Amber are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸã‚¢ãƒ³ãƒãƒ¼ã®ç‹æ—ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned Lords of Amber are angry!"));
 			}
 			else
 			{
@@ -1462,20 +1462,20 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_UNIQUE:
 	{
 		int k, count = 0;
-        msg_print(_("ÆÃÊÌ¤Ê¶¯Å¨¤ò¾¤´­¤·¤¿¡ª", "You summon a special opponent!"));
+        msg_print(_("ç‰¹åˆ¥ãªå¼·æ•µã‚’å¬å–šã—ãŸï¼", "You summon a special opponent!"));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNIQUE, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¥æ¥Ë¡¼¥¯¡¦¥â¥ó¥¹¥¿¡¼¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned special opponents are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned special opponents are angry!"));
 			}
 		for (k = count;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
                 if (!pet)
-                    msg_print(_("¾¤´­¤µ¤ì¤¿¾åµé¥¢¥ó¥Ç¥Ã¥É¤ÏÅÜ¤Ã¤Æ¤¤¤ë¡ª", "Summoned greater undeads are angry!"));
+                    msg_print(_("å¬å–šã•ã‚ŒãŸä¸Šç´šã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "Summoned greater undeads are angry!"));
 			}
 		if (!count)
 		{
@@ -1488,16 +1488,16 @@ static bool cast_learned_spell(int spell, bool success)
 	}
 	if (no_trump)
     {
-        msg_print(_("²¿¤â¸½¤ì¤Ê¤«¤Ã¤¿¡£", "No one have appeared."));
+        msg_print(_("ä½•ã‚‚ç¾ã‚Œãªã‹ã£ãŸã€‚", "No one have appeared."));
 	}
 
 	return TRUE;
 }
 
 /*!
- * @brief ÀÄËâË¡¥³¥Ş¥ó¥É¤Î¥á¥¤¥ó¥ë¡¼¥Á¥ó /
+ * @brief é’é­”æ³•ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * do_cmd_cast calls this function if the player's class is 'Blue-Mage'.
- * @return ½èÍı¤ò¼Â¹Ô¤·¤¿¤éTRUE¡¢¥­¥ã¥ó¥»¥ë¤·¤¿¾ì¹çFALSE¤òÊÖ¤¹¡£
+ * @return å‡¦ç†ã‚’å®Ÿè¡Œã—ãŸã‚‰TRUEã€ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸå ´åˆFALSEã‚’è¿”ã™ã€‚
  */
 bool do_cmd_cast_learned(void)
 {
@@ -1514,7 +1514,7 @@ bool do_cmd_cast_learned(void)
 	if (p_ptr->confused)
 	{
 #ifdef JP
-msg_print("º®Íğ¤·¤Æ¤¤¤Æ¾§¤¨¤é¤ì¤Ê¤¤¡ª");
+msg_print("æ··ä¹±ã—ã¦ã„ã¦å”±ãˆã‚‰ã‚Œãªã„ï¼");
 #else
 		msg_print("You are too confused!");
 #endif
@@ -1534,7 +1534,7 @@ msg_print("º®Íğ¤·¤Æ¤¤¤Æ¾§¤¨¤é¤ì¤Ê¤¤¡ª");
 	{
 		/* Warning */
 #ifdef JP
-msg_print("£Í£Ğ¤¬Â­¤ê¤Ş¤»¤ó¡£");
+msg_print("ï¼­ï¼°ãŒè¶³ã‚Šã¾ã›ã‚“ã€‚");
 #else
 		msg_print("You do not have enough mana to use this power.");
 #endif
@@ -1544,7 +1544,7 @@ msg_print("£Í£Ğ¤¬Â­¤ê¤Ş¤»¤ó¡£");
 
 		/* Verify */
 #ifdef JP
-if (!get_check("¤½¤ì¤Ç¤âÄ©Àï¤·¤Ş¤¹¤«? ")) return FALSE;
+if (!get_check("ãã‚Œã§ã‚‚æŒ‘æˆ¦ã—ã¾ã™ã‹? ")) return FALSE;
 #else
 		if (!get_check("Attempt it anyway? ")) return FALSE;
 #endif
@@ -1589,7 +1589,7 @@ if (!get_check("¤½¤ì¤Ç¤âÄ©Àï¤·¤Ş¤¹¤«? ")) return FALSE;
 	{
 		if (flush_failure) flush();
 #ifdef JP
-msg_print("ËâË¡¤ò¤¦¤Ş¤¯¾§¤¨¤é¤ì¤Ê¤«¤Ã¤¿¡£");
+msg_print("é­”æ³•ã‚’ã†ã¾ãå”±ãˆã‚‰ã‚Œãªã‹ã£ãŸã€‚");
 #else
 		msg_print("You failed to concentrate hard enough!");
 #endif
@@ -1626,7 +1626,7 @@ msg_print("ËâË¡¤ò¤¦¤Ş¤¯¾§¤¨¤é¤ì¤Ê¤«¤Ã¤¿¡£");
 
 		/* Message */
 #ifdef JP
-msg_print("Àº¿À¤ò½¸Ãæ¤·¤¹¤®¤Æµ¤¤ò¼º¤Ã¤Æ¤·¤Ş¤Ã¤¿¡ª");
+msg_print("ç²¾ç¥ã‚’é›†ä¸­ã—ã™ãã¦æ°—ã‚’å¤±ã£ã¦ã—ã¾ã£ãŸï¼");
 #else
 		msg_print("You faint from the effort!");
 #endif
@@ -1644,7 +1644,7 @@ msg_print("Àº¿À¤ò½¸Ãæ¤·¤¹¤®¤Æµ¤¤ò¼º¤Ã¤Æ¤·¤Ş¤Ã¤¿¡ª");
 
 			/* Message */
 #ifdef JP
-msg_print("ÂÎ¤ò°­¤¯¤·¤Æ¤·¤Ş¤Ã¤¿¡ª");
+msg_print("ä½“ã‚’æ‚ªãã—ã¦ã—ã¾ã£ãŸï¼");
 #else
 			msg_print("You have damaged your health!");
 #endif
@@ -1667,9 +1667,9 @@ msg_print("ÂÎ¤ò°­¤¯¤·¤Æ¤·¤Ş¤Ã¤¿¡ª");
 }
 
 /*!
- * @brief ÀÄËâË¡¤Î¥é¡¼¥Ë¥ó¥°È½Äê¤ÈÀ®¸ù¤·¤¿¾ì¹ç¤Î¥é¡¼¥Ë¥ó¥°½èÍı
- * @param monspell ¥é¡¼¥Ë¥ó¥°¤ò»î¤ß¤ë¥â¥ó¥¹¥¿¡¼¹¶·â¤ÎID
- * @return ¤Ê¤·
+ * @brief é’é­”æ³•ã®ãƒ©ãƒ¼ãƒ‹ãƒ³ã‚°åˆ¤å®šã¨æˆåŠŸã—ãŸå ´åˆã®ãƒ©ãƒ¼ãƒ‹ãƒ³ã‚°å‡¦ç†
+ * @param monspell ãƒ©ãƒ¼ãƒ‹ãƒ³ã‚°ã‚’è©¦ã¿ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ”»æ’ƒã®ID
+ * @return ãªã—
  */
 void learn_spell(int monspell)
 {
@@ -1681,7 +1681,7 @@ void learn_spell(int monspell)
 	{
 		p_ptr->magic_num2[monspell] = 1;
 #ifdef JP
-		msg_format("%s¤ò³Ø½¬¤·¤¿¡ª", monster_powers[monspell].name);
+		msg_format("%sã‚’å­¦ç¿’ã—ãŸï¼", monster_powers[monspell].name);
 #else
 		msg_format("You have learned %s!", monster_powers[monspell].name);
 #endif
@@ -1697,13 +1697,13 @@ void learn_spell(int monspell)
 
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼ÆÃ¼ìÇ½ÎÏ¤Î¥Õ¥é¥°ÇÛÎó¤«¤éÆÃÄê¾ò·ï¤ÎËâË¡¤À¤±¤òÈ´¤­½Ğ¤¹½èÍı
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç‰¹æ®Šèƒ½åŠ›ã®ãƒ•ãƒ©ã‚°é…åˆ—ã‹ã‚‰ç‰¹å®šæ¡ä»¶ã®é­”æ³•ã ã‘ã‚’æŠœãå‡ºã™å‡¦ç†
  * Extract monster spells mask for the given mode
- * @param f4 ¥â¥ó¥¹¥¿¡¼ÆÃ¼ìÇ½ÎÏ¤Î4ÈÖÌÜ¤Î¥Õ¥é¥°ÇÛÎó
- * @param f5 ¥â¥ó¥¹¥¿¡¼ÆÃ¼ìÇ½ÎÏ¤Î5ÈÖÌÜ¤Î¥Õ¥é¥°ÇÛÎó
- * @param f6 ¥â¥ó¥¹¥¿¡¼ÆÃ¼ìÇ½ÎÏ¤Î6ÈÖÌÜ¤Î¥Õ¥é¥°ÇÛÎó
- * @param mode È´¤­½Ğ¤·¤¿¤¤¾ò·ï
- * @return ¤Ê¤·
+ * @param f4 ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç‰¹æ®Šèƒ½åŠ›ã®4ç•ªç›®ã®ãƒ•ãƒ©ã‚°é…åˆ—
+ * @param f5 ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç‰¹æ®Šèƒ½åŠ›ã®5ç•ªç›®ã®ãƒ•ãƒ©ã‚°é…åˆ—
+ * @param f6 ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç‰¹æ®Šèƒ½åŠ›ã®6ç•ªç›®ã®ãƒ•ãƒ©ã‚°é…åˆ—
+ * @param mode æŠœãå‡ºã—ãŸã„æ¡ä»¶
+ * @return ãªã—
  */
 /*
  */

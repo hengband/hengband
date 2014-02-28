@@ -1,4 +1,4 @@
-/* File: h-system.h */
+﻿/* File: h-system.h */
 
 #ifndef INCLUDED_H_SYSTEM_H
 #define INCLUDED_H_SYSTEM_H

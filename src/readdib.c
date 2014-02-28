@@ -1,4 +1,4 @@
-/* File: readbits.c */
+﻿/* File: readbits.c */
 
 /*
  * This package provides a routine to read a DIB file and set up the

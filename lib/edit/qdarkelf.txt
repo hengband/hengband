@@ -4,7 +4,7 @@
 
 # Name Dark Elven Lords Quest
 Q:$32:N:Dark Elven Lords Quest
-Q:32:N:����������դβ�
+Q:32:N:ダークエルフの王
 
 # Definition 
 Q:$32:Q:6:0:0:0:25:0:0:0:6
@@ -17,22 +17,22 @@ Q:$32:T:in town.  I do not need any competition, so kill everything
 Q:$32:T:in their shop.  You will be very well rewarded.  There shop
 Q:$32:T:is located in a building behind this one.  They are well
 Q:$32:T:guarded so be careful.
-Q:32:T:����������դβ��ξ����Ĥ����γ��˾�����Ź����Ƥޤ�����
-Q:32:T:��ˤϾ���Ũ��ɬ�פ���ޤ���Ź����������򻦤��Ʋ�������
-Q:32:T:�󽷤ϤϤ��ߤޤ�������Ź�Ϥ��η�ʪ��΢�ˤ���ޤ���
-Q:32:T:���������Ҥ����ޤ��������դ��Ʋ�������
+Q:32:T:ダークエルフの王の小集団がこの街に小さな店を建てました。
+Q:32:T:私には商売敵は必要ありません。店の中の全員を殺して下さい。
+Q:32:T:報酬ははずみます。その店はこの建物の裏にあります。
+Q:32:T:たくさん護衛がいますから注意して下さい。
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST32 3]
 Q:$32:T:Thank you!  Your reward is wating outside.
-Q:32:T:���꤬�Ȥ��������ޤ������ˤ��餬�֤��Ƥ���ޤ���
+Q:32:T:ありがとうございます！外にお礼が置いてあります。
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST32 5]
 Q:$32:T:The quest was more than you could handle.  Try another one.   
-Q:32:T:���Υ������ȤϤ��ʤ��μ�ˤ����ʤ��ä��褦�Ǥ��͡�¾�Τ��Ʋ�������
+Q:32:T:このクエストはあなたの手におえなかったようですね。他のを試して下さい。
 ?:1
 
 # The Monsters

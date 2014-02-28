@@ -1,160 +1,160 @@
 N:*:Default
 #What game do you think you are playing anyway?
-�ʤ�Υ������äƤ�Ĥ�������
+なんのゲームやってるつもりだい？
 #Aivan sairas kaveri kun tuollaista aikoo puuhata!
-�Ԥޤä������µ��ʤΤˤ����Ĥϲ���Ǯ����Ư���������!��
+《まったく、病気なのにあいつは何て熱心に働くんだろう!》
 #Insufficient data for further analysis.
-�ǡ�����­��������ǽ
+データ不足：解析不能
 #Non sequitur. Your facts are uncoordinated.
-�����ʿ����Ǥ��롣���ηǤ������¤ϸߤ��˴ط��Ϥʤ���
+不当な推論である。君の掲げた事実は互いに関係はない。
 #Type '?' or '\' for help.
-'?' �� '\' �ǥإ�פ�ɽ�����ޤ���
+'?' か '\' でヘルプを表示します。
 #Invalid command.
-̵���ʥ��ޥ�ɤǤ���
+無効なコマンドです。
 #What?
-����
+何？
 #WHAT?!
-�Ϥ���
+はぁ？
 #You must be out of your mind!
-���ʤ��������򼺤äƤ���˰㤤�ʤ���
+あなたは正気を失っているに違いない！
 #You're killing me.
-�������Ĥ��Ǥ���?
+殺すおつもりですか?
 #Are you sure?
-�ܵ��Ǥ�����
+本気ですか？
 #Are you sure you know what you are doing?
-��ʬ�Ǥʤˤ��äƤ��뤫�ΤäƤ��ޤ�����
+自分でなにをやっているか知っていますか？
 #Aww, come on!
-���������衪
+おい、頼むよ！
 #That makes no sense.
-��̣������ޤ���
+意味がありません。
 #I beg your pardon.
-�����ޤ���
+すいません？
 #Degreelessness mode on.
-��ꤹ���⡼�ɤ򥪥�ˤ��ޤ�����
+やりすぎモードをオンにしました。
 #Degreelessness mode off.
-��ꤹ���⡼�ɤ򥪥դˤ��ޤ�����
+やりすぎモードをオフにしました。
 #Syntax error.
 Syntax error.
 #That doesn't compute.
-�ڤ��̤�ޤ���
+筋が通りません。
 #I don't understand you.
-����Ǥ��ޤ���
+理解できません。
 ???
 #Sure. Piece of cake.
-�狼��ޤ���������������Ǥ���
+わかりました。ちょろいもんです。
 #Error.
-���顼�Ǥ���
+エラーです。
 #You can't do that!
-����ϤǤ��ޤ���
+それはできません。
 #Help!
-�����ơ�
+助けて！
 #Come again?
-�⤦���١�
+もう一度？
 #Sorry?
-���Ρ������ޤ���
+あの、すいません？
 #Sorry, I'm not sure I understand you.
-�����ޤ�������Ǥ��ʤ��ΤǤ�����
+すいません、理解できないのですが。
 #What's your point?
-�������������ΤǤ�����
+何が言いたいのですか？
 #Unknown command.
-�����ʥ��ޥ�ɤǤ���
+不明なコマンドです。
 #Command not found.
-���ޥ�ɤ��ߤĤ���ޤ���
+コマンドがみつかりません。
 #An unexpected error has occurred because an error of type 42 occurred.
-������42�Υ��顼��ȯ���Τ��ᡢ��¬�Υ��顼��ȯ�����ޤ�����
+タイプ42のエラーの発生のため、不測のエラーが発生しました。
 #Somehow, you think that would never work.
-�ɤ������櫓��������Ͻ���ʤ��������롣
+どういうわけか、それは出来ない気がする。
 #Welcome to level 42.
-��٥� 42 �ؤ褦������
+レベル 42 へようこそ。
 #Don't be ridiculous!
-�ϼ����ä��㤤���ޤ���
+馬鹿いっちゃいけません！
 #lfae aierty agnxzcg?
-��դ� ��������Ȥ� ���ˤ夹?
+るふぇ えぃえるとゅ あにゅす?
 #Soyha, azho bouate!
-���䡢���� �֥��åȥ�!
+ソヤ、アゾ ブアットゥ!
 #I don't fully understand you.
-����ä�ʬ����ʤ��ΤǤ�����
+ちょっと分からないのですが。
 #Why would anybody want to do THAT?
-�ʤ�Ǥߤ�ʤ���ʤ��Ȥ�ꤿ��������
+なんでみんなそんなことやりたがるんだ？
 #Yes, yes, now tell me about your childhood.
-�Ϥ����Ϥ��������Ǥ��͡��ǤϤ��ʤ��λҶ�����ˤĤ����ä��Ƥ���������
+はい、はい、そうですね。ではあなたの子供時代について話してください。
 #Satisfied?
-��­�Ǥ�����
+満足ですか？
 #Something is wrong here.
-�������ѤǤ���
+何かが変です。
 #There's something wrong with YOU.
-�����ʤ������ְ�äƤޤ���
+＊あなたが＊間違ってます。
 #You leap up 9' and perform a miraculous 5xSpiral in the air.
-���ʤ��� 3m �����פ��ƥߥ饯����棵��ž���ä���
+あなたは 3m ジャンプしてミラクル空中５回転をやった。
 #Aw, shaddap!
-���ޤ�ä��㤤��
+だまらっしゃい！
 #Shut up, smartass!
-���뤵�����������ܥ����ᡪ
+うるさい！屁理屈ボウズめ！
 #I see little point in doing that.
-����Ϥ��ޤ��̣������Ȥϻפ��ޤ���
+それはあまり意味があるとは思えません。
 #Oh, really?
-�ޥ���
+マジ？
 #Very funny.
-���ˤ��������Ǥ��͡�
+非常におかしいですね。
 #You've got to be kidding!
-���̤Ǥ��礦��
+冗談でしょう！
 #I'm not amused.
-���򤯤ʤ��Ǥ��͡�
+面白くないですね。
 #I must have misheard you.
-���Ȥ��ä���ä��ΤǤ�����
+何とおっしゃったのですか？
 #Nothing happens.
-���ⵯ����ʤ��ä���
+何も起こらなかった。
 #Where did you learn THAT command?
-����ʥ��ޥ�ɤɤ��ǳФ�����Ǥ�����
+そんなコマンドどこで覚えたんですか？
 #When all else fails, read the instructions.
-�����äƤ⤦�ޤ������ʤ��Ȥ��ˤ���������ɤߤޤ��礦��
+何をやってもうまくいかないときには説明書を読みましょう。
 #Why not read the instructions first?
-������������ɤߤޤ��礦��
+初めに説明書を読みましょう。
 #Cut it out!
-���Ȥ���
+やめとけ！
 #Nothing interesting happens.
-�������򤤤��ȤϤ�����ʤ��ä���
+何も面白いことはおこらなかった。
 #Just how exactly am I supposed to do THAT?
-���β�����Ȥ���Ǥ�����
+一体何をやれといんですか？
 #That's morally wrong and I won't do it.
-���Τ褦����ƻ��Ū�ʤ��ȤϽ���ޤ���
+そのような非道徳的なことは出来ません。
 #I'm not gonna take this abuse.
-����ʶ����������ڹ礤�Ϥ���ޤ���
+そんな屈辱を受ける筋合いはありません！
 #AAAAAAAAAAAAAHHHHHHHHHHHHHHHRRRRRRRRRRRGGGGGGGGGGG!
-�����������������������á�
+グアアアアアァァァァァッ！
 #No more, if you value your character's life!
-����饯������̿���ˤ�����Ф���ʾ夷�ʤ��ۤ��������Ǥ���!
+キャラクターの命が惜しければそれ以上しないほうがいいですよ!
 #Give it up, guy.
-�����������ʡ�
+あきらめるんだな。
 #Disk error. (a)bort, (r)etry, (f)ail?
-�ǥ������ɤ߼����˥��顼��ȯ�����ޤ�����(a)���, (r)�ƻ�� , (f)���� ?
+ディスク読み取り中にエラーが発生しました。(a)中止, (r)再試行 , (f)失敗 ?
 #Are you sure you want to use borg commands?
-�����˥ܡ������ޥ�ɤ���Ѥ��ޤ���?
+本当にボーグコマンドを使用しますか?
 #You feel oddly normal.
-��̯�ʤۤ����̤ʵ������롣
+奇妙なほど普通な気がする。
 #You cannot cast spells!
-��ʸ�򾧤��뤳�ȤϤǤ��ޤ���!
+呪文を唱えることはできません!
 #'I grow tired of thee, mortal.'
-�ֲ��ͤ衢;�����˰�ߤ��ꡣ��
+「下僕よ、余は汝に飽みたり。」
 #You just completed your quest!
-�������Ȥ�ã������!
+クエストを達成した!
 #You hear a bell toll three times!
-�٥뤬�����Ĥ�Τ�ʹ������!
+ベルが三回鳴るのが聞こえた!
 #Successfully created a spoiler file.
-���ݥ��顼�ե������������ޤ�����
+スポイラーファイルを作成しました。
 #Hmmm, it seems to be cursed.
-�ա��ࡢ�ɤ��������Ƥ���褦����
+ふーむ、どうやら呪われているようだ。
 #There is a malignant black aura surrounding you...
-���դ����������������餬���ʤ���Ȥ�ޤ���...
+悪意に満ちた黒いオーラがあなたをとりまいた...
 #A terrible black aura blasts your weapon!
-��郎���������Ź��Υ��������ޤ줿!
+武器が恐ろしい暗黒のオーラに包まれた!
 #You feel your life draining away!
-��̿�Ϥ�ȴ���������������!
+生命力が抜け落ちた気がする!
 #A mysterious force prevents you from doing that.
-�Ի׵Ĥ��Ϥ��ɤ���ƽ���ʤ��ä���
+不思議な力に防がれて出来なかった。
 #This will mark the savefile as a cheater. Continue? (Y)
-�����֥ե�����˥�������򤷤����Ȥ���Ͽ����ޤ���³���ޤ���?(Y)
+セーブファイルにインチキをしたことが記録されます。続けますか?(Y)
 #You can't do that while wielding a weapon!
-�����������Ƥ���֤ϤǤ��ޤ���!
+武器を装備している間はできません!
 #You must first select a target.
-�������åȤ���ꤷ�Ƥ���Ǥʤ��ȤǤ��ޤ���
+ターゲットを指定してからでないとできません。

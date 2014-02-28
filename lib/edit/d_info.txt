@@ -39,9 +39,9 @@ V:2.8.1
 
 ### Wilderness(purely cosmetic, never used) ###
 
-N:0:����
+N:0:荒野
 E:Wilderness
-D:����
+D:荒野
 D:$wilderness
 P:0:0
 W:0:0:0:0:14:160:75:20:0x0000:0x0000
@@ -52,10 +52,10 @@ F:MONSTER_DIV_64
 
 ### The principal dungeons, they were created by spliting the vanilla dungeon ###
 
-N:1:Ŵ��
+N:1:鉄獄
 E:Angband
 D:$the entrance to the Dungeon of Angband
-D:Ŵ���ؤ������
+D:鉄獄への入り口
 P:40:57
 W:1:127:30:0:14:160:75:20:0xffff:0xffff
 L:FLOOR:100:FLOOR:0:FLOOR:0:50
@@ -64,10 +64,10 @@ F:CAVERN | WATER_RIVER | LAVA_RIVER | ARENA | DESTROY | CURTAIN | GLASS_ROOM |
 F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE | ARCADE
 F:MONSTER_DIV_64
 
-N:2:��������ƶ��
+N:2:イークの洞穴
 E:Yeek cave
 D:$the entrance to the cave leading to the Yeek's den
-D:�������ν��ߤ��ؤ�³��������ƶ��
+D:イークの住みかへと続く小さな洞穴
 P:48:5
 W:1:13:1:0:14:240:75:20:0x0000:0x0000
 L:FLOOR:100:FLOOR:0:FLOOR:0:8
@@ -76,10 +76,10 @@ F:FINAL_GUARDIAN_237 | FINAL_OBJECT_426
 F:NO_VAULT | BEGINNER
 F:MONSTER_DIV_0
 
-N:3:��������ƶ��
+N:3:オークの洞窟
 E:Orc cave
 D:$a dark tunnel leading to an Orc Cave
-D:��������ƶ����³�����Ť��ȥ�ͥ�
+D:オークの洞窟へ続く薄暗いトンネル
 P:45:30
 W:10:23:5:3:18:200:75:20:0x0031:0x006d
 L:DIRT:70:GRASS:30:FLOOR:0:14
@@ -89,10 +89,10 @@ F:LAKE_TREE | DESTROY | BIG
 F:MONSTER_DIV_32
 M:ORC | R_CHAR_koO | ANIMAL
 
-N:4:�µ�
+N:4:迷宮
 E:Labyrinth
 D:$the frightening entrance to the Labyrinth
-D:����٤���̯���µ�
+D:恐るべき奇妙な迷宮
 P:57:31
 W:10:18:1:0:80:160:75:20:0x0000:0x0000
 L:FLOOR:100:FLOOR:0:FLOOR:0:100
@@ -100,10 +100,10 @@ A:GRANITE:98:SECRET_DOOR:2:GRANITE:0:GRANITE:GRANITE:MAGMA_VEIN:QUARTZ_VEIN
 F:MAZE | SMALLEST | FORGET
 F:MONSTER_DIV_64 | FINAL_GUARDIAN_1034 | FINAL_OBJECT_354
 
-N:5:ε�ν��ߤ�
+N:5:竜の住みか
 E:Dragon's lair
 D:$a big tunnel leading to a Dragon's Lair
-D:ε�ν��ߤ���³���礭�������Ť�����٤��ȥ�ͥ�
+D:竜の住みかへ続く大きく、薄暗い恐るべきトンネル
 P:28:74
 W:60:72:25:3:20:140:75:20:0x00a6:0x00c1
 L:DIRT:100:FLOOR:0:FLOOR:0:0
@@ -114,10 +114,10 @@ F:CAVE | LAKE_LAVA | LAKE_TREE | LAKE_RUBBLE
 M:DRAGON | R_CHAR_dD
 
 # Vecna is there, guarding Soulsword
-N:6:����
+N:6:墓地
 E:Graveyard
 D:$a hole to the Graveyard underground
-D:���Ϥ��ϲ��ؤη�
+D:墓地の地下への穴
 P:19:85
 W:40:70:18:3:14:160:75:20:0x0128:0x027b
 L:FLOOR:85:SHALLOW_WATER:15:FLOOR:0:30
@@ -126,10 +126,10 @@ F:MONSTER_DIV_4 | FINAL_GUARDIAN_804 | FINAL_ARTIFACT_89
 F:WATER_RIVER | DESTROY | ARENA | LAKE_WATER | LAKE_RUBBLE | DESTROY
 M:UNDEAD | NONLIVING
 
-N:7:��
+N:7:森
 E:Forest
 D:$a path leading to a Forest
-D:����³�����ƻ
+D:森へ続く草の道
 P:53:63
 W:15:32:5:3:14:160:75:20:0x0001:0x0052
 L:GRASS:85:FLOWER:5:SHALLOW_WATER:10:15
@@ -138,10 +138,10 @@ F:NO_DOORS | WATER_RIVER | MONSTER_DIV_15
 F:FINAL_GUARDIAN_481 | FINAL_OBJECT_592
 M:ANIMAL | R_CHAR_SJZ# | WILD_WOOD
 
-N:8:�л�
+N:8:火山
 E:Volcano
 D:$a hole to the center of the Volcano
-D:�л����濴�ؤη�
+D:火山の中心への穴
 P:53:13
 W:50:60:18:3:14:160:80:30:0x01bf:0x02fd
 L:DIRT:40:SHALLOW_LAVA:40:DEEP_LAVA:20:0
@@ -150,10 +150,10 @@ F:CAVE | MONSTER_DIV_0 | CAVERN | LAKE_LAVA | LAVA_RIVER | DESTROY
 F:FINAL_GUARDIAN_972 | FINAL_OBJECT_629
 M:IM_FIRE | CAN_FLY | WILD_VOLCANO
 
-N:9:�Ϲ�
+N:9:地獄
 E:Hell
 D:$the stairway to the Hell
-D:�Ϲ��ؤγ���
+D:地獄への階段
 P:62:94
 W:666:696:50:1:14:160:90:77:0x0188:0x0280
 L:SHALLOW_LAVA:80:DEEP_LAVA:20:FLOOR:0:0
@@ -162,10 +162,10 @@ F:CAVERN | MONSTER_DIV_0 | LAKE_LAVA | LAVA_RIVER | WINNER
 F:BIG
 M:IM_FIRE | EVIL
 
-N:10:ŷ��
+N:10:天界
 E:Heaven
 D:$the way to the heaven
-D:ŷ���ؤ��̤���ƻ
+D:天界へと通じる道
 P:2:94
 W:555:585:50:1:18:160:85:35:0x0040:0x0104
 L:FLOOR:100:FLOOR:0:FLOOR:0:1000
@@ -174,10 +174,10 @@ F:MONSTER_DIV_0 | WATER_RIVER | WINNER | BIG | GLASS_ROOM
 M:GOOD
 
 # Wrath
-N:11:���פ�������
+N:11:水没した遺跡
 E:Numenor
 D:$a submerged way to the lost land of Numenor
-D:����줿�ϥ̥�Ρ���ؤο��פ���ƻ
+D:失われた地ヌメノールへの水没した道
 P:27:30
 W:55:75:30:3:14:160:80:30:0x0000:0x0000
 L:FLOOR:80:SHALLOW_WATER:20:FLOOR:0:100
@@ -186,10 +186,10 @@ F:MONSTER_DIV_0 | LAKE_WATER | WATER_RIVER | DESTROY
 F:FINAL_GUARDIAN_854 | FINAL_ARTIFACT_107
 M:CAN_SWIM | CAN_FLY | AQUATIC | WILD_OCEAN
 
-N:12:��
+N:12:城
 E:Castle
 D:$the entrance to the Castle
-D:��
+D:城
 P:34:88
 W:20:65:30:3:14:160:75:20:0x037f:0x033f
 L:FLOOR:100:FLOOR:0:FLOOR:0:100
@@ -198,10 +198,10 @@ F:MONSTER_DIV_16 | ARENA | NO_CAVE | CURTAIN | GLASS_ROOM | FINAL_GUARDIAN_882
 M:DEMON | R_CHAR_phHg
 
 # Cth and Razorback
-N:13:��륤��
+N:13:ルルイエ
 E:R'lyeh
 D:$a way to R'lyeh
-D:��륤��
+D:ルルイエ
 P:3:40
 W:80:96:45:3:14:160:75:20:0x01a8:0x023f
 L:FLOOR:50:SHALLOW_WATER:30:DEEP_WATER:20:100
@@ -210,10 +210,10 @@ F:MONSTER_DIV_16 | ARENA | WATER_RIVER | LAKE_WATER |
 F:FINAL_GUARDIAN_857 | FINAL_ARTIFACT_129
 M:DEMON | ELDRITCH_HORROR
 
-N:14:��
+N:14:山
 E:Mountain
 D:$a way leading to the mountain
-D:��
+D:山
 P:46:76
 W:25:50:20:3:14:160:75:20:0x00b7:0x00df
 L:GRASS:100:GRASS:0:GRASS:0:0
@@ -222,10 +222,10 @@ F:FINAL_GUARDIAN_468 | FINAL_OBJECT_239 |
 F:MONSTER_DIV_16 | WATER_RIVER | CAVE | CAVERN | NO_DOORS | BIG
 M:TROLL | GIANT | CAN_FLY | ANIMAL | WILD_MOUNTAIN | R_CHAR_OYH
 
-N:15:���
+N:15:金鉱
 E:Mine
 D:$the entrance to the Mine
-D:���
+D:金鉱
 P:23:49
 W:75:80:50:3:18:80:80:25:0x0000:0x0010
 L:FLOOR:100:FLOOR:0:FLOOR:0:0
@@ -234,10 +234,10 @@ F:MONSTER_DIV_1 | WATER_RIVER | CAVE | CAVERN | SMALLEST
 F:LAVA_RIVER | DESTROY
 M:R_CHAR_$
 
-N:16:ȿ��ˡ��ƶ��
+N:16:反魔法の洞窟
 E:Anti-magic cave
 D:$the entrance to the cave filled with anti-magic cloud
-D:ȿ��ˡ��ƶ��
+D:反魔法の洞窟
 P:6:84
 W:40:50:30:0:14:160:75:20:0x01ff:0x01ed
 L:FLOOR:100:FLOOR:0:FLOOR:0:50
@@ -246,10 +246,10 @@ F:CAVERN | WATER_RIVER | LAVA_RIVER | ARENA | DESTROY
 F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE
 F:MONSTER_DIV_0 | NO_MAGIC
 
-N:17:ȿ�����ƶ��
+N:17:反攻撃の洞窟
 E:Anti-melee cave
 D:$the entrance to the cave filled with restricting magical field
-D:ȿ�����ƶ��
+D:反攻撃の洞窟
 P:45:47
 W:40:50:30:0:14:160:75:20:0x01ff:0x01ed
 L:FLOOR:100:FLOOR:0:FLOOR:0:50
@@ -258,10 +258,10 @@ F:CAVERN | WATER_RIVER | LAVA_RIVER | ARENA | DESTROY | GLASS_ROOM |
 F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE
 F:MONSTER_DIV_0 | NO_MELEE
 
-N:18:����쥪��ƶ
+N:18:カメレオン洞
 E:Chameleon cave
 D:$the entrance to the chameleon's den
-D:����쥪���������©����ƶ��
+D:カメレオンだけが棲息する洞窟
 P:52:94
 W:30:45:30:3:30:160:75:20:0x0000:0x0000
 L:FLOOR:100:FLOOR:0:FLOOR:0:50
@@ -271,10 +271,10 @@ F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE | CHAMELEON
 F:MONSTER_DIV_0 | FINAL_GUARDIAN_1041 | FINAL_OBJECT_617
 M:CHAMELEON
 
-N:19:�ŰǤ�ƶ��
+N:19:暗闇の洞窟
 E:Dark cave
 D:$the dark entrance to the cave filled with magical darkness
-D:�ŰǤ�ƶ��
+D:暗闇の洞窟
 P:12:57
 W:55:72:30:0:14:160:80:30:0xffff:0xffff
 L:FLOOR:100:FLOOR:0:FLOOR:0:50
@@ -283,10 +283,10 @@ F:CAVERN | WATER_RIVER | LAVA_RIVER | ARENA | DESTROY | GLASS_ROOM |
 F:LAKE_WATER | LAKE_LAVA | LAKE_RUBBLE | LAKE_TREE
 F:MONSTER_DIV_64 | DARKNESS | FINAL_GUARDIAN_803
 
-N:20:���饹�ξ�
+N:20:ガラスの城
 E:Glass castle
 D:$the entrance to the glass castle
-D:���饹�ξ�
+D:ガラスの城
 P:40:37
 W:40:60:30:3:14:160:75:20:0x01f8:0x033d
 L:GLASS_FLOOR:100:GLASS_FLOOR:0:GLASS_FLOOR:0:100

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
  * File: streams.c
  * Purpose: Used by dungeon generation. This file holds all the
  * functions that are applied to a level after the rest has been
@@ -291,7 +291,7 @@ void build_streamer(int feat, int chance)
 							char o_name[MAX_NLEN];
 							object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 #ifdef JP
-							msg_format("ÅÁÀâ¤Î¥¢¥¤¥Æ¥à (%s) ¤Ï¥¹¥È¥ê¡¼¥Ş¡¼¤Ë¤è¤êºï½ü¤µ¤ì¤¿¡£", o_name);
+							msg_format("ä¼èª¬ã®ã‚¢ã‚¤ãƒ†ãƒ  (%s) ã¯ã‚¹ãƒˆãƒªãƒ¼ãƒãƒ¼ã«ã‚ˆã‚Šå‰Šé™¤ã•ã‚ŒãŸã€‚", o_name);
 #else
 							msg_format("Artifact (%s) was deleted by streamer.", o_name);
 #endif
@@ -300,7 +300,7 @@ void build_streamer(int feat, int chance)
 					else if (cheat_peek && o_ptr->art_name)
 					{
 #ifdef JP
-						msg_print("¥é¥ó¥À¥à¡¦¥¢¡¼¥Æ¥£¥Õ¥¡¥¯¥È¤Î1¤Ä¤Ï¥¹¥È¥ê¡¼¥Ş¡¼¤Ë¤è¤êºï½ü¤µ¤ì¤¿¡£");
+						msg_print("ãƒ©ãƒ³ãƒ€ãƒ ãƒ»ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã®1ã¤ã¯ã‚¹ãƒˆãƒªãƒ¼ãƒãƒ¼ã«ã‚ˆã‚Šå‰Šé™¤ã•ã‚ŒãŸã€‚");
 #else
 						msg_print("One of the random artifacts was deleted by streamer.");
 #endif
@@ -339,7 +339,7 @@ void build_streamer(int feat, int chance)
 			if (cheat_room)
 			{
 #ifdef JP
-msg_print("·Ù¹ğ¡ª¥¹¥È¥ê¡¼¥Ş¡¼¤òÇÛÃÖ¤Ç¤­¤Ş¤»¤ó¡ª");
+msg_print("è­¦å‘Šï¼ã‚¹ãƒˆãƒªãƒ¼ãƒãƒ¼ã‚’é…ç½®ã§ãã¾ã›ã‚“ï¼");
 #else
 				msg_print("Warning! Could not place streamer!");
 #endif
@@ -429,7 +429,7 @@ void destroy_level(void)
 
 	/* Note destroyed levels */
 #ifdef JP
-	if (cheat_room) msg_print("ÇË²õ¤µ¤ì¤¿³¬");
+	if (cheat_room) msg_print("ç ´å£Šã•ã‚ŒãŸéš");
 #else
 	if (cheat_room) msg_print("Destroyed Level");
 #endif

@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file mane.c
- * @brief ¤â¤Î¤Ş¤Í¤Î½èÍı¼ÂÁõ / Imitation code
+ * @brief ã‚‚ã®ã¾ã­ã®å‡¦ç†å®Ÿè£… / Imitation code
  * @date 2014/01/14
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -15,20 +15,20 @@
 static int damage;
 
 /*!
- * @brief ¼õ¤±¼è¤Ã¤¿¥Ñ¥é¥á¡¼¥¿¤Ë±ş¤¸¤Æ¤â¤Î¤Ş¤Í¤Î¸ú²Ì¾ğÊó¤ò¤Ş¤È¤á¤¿¥Õ¥©¡¼¥Ş¥Ã¥È¤òÊÖ¤¹
- * @param p ¾ğÊó¤òÊÖ¤¹Ê¸»úÎó»²¾È¥İ¥¤¥ó¥¿
- * @param power ¤â¤Î¤Ş¤Í¤Î¸úÎÏ¤Î¼ïÎà
- * @param dam ¤â¤Î¤Ş¤Í¤Î°ÒÎÏ
- * @return ¤Ê¤·
+ * @brief å—ã‘å–ã£ãŸãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«å¿œã˜ã¦ã‚‚ã®ã¾ã­ã®åŠ¹æœæƒ…å ±ã‚’ã¾ã¨ã‚ãŸãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’è¿”ã™
+ * @param p æƒ…å ±ã‚’è¿”ã™æ–‡å­—åˆ—å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param power ã‚‚ã®ã¾ã­ã®åŠ¹åŠ›ã®ç¨®é¡
+ * @param dam ã‚‚ã®ã¾ã­ã®å¨åŠ›
+ * @return ãªã—
  */
 static void mane_info(char *p, int power, int dam)
 {
 	int plev = p_ptr->lev;
 #ifdef JP
-	cptr s_dam = "Â»½ı:";
-	cptr s_dur = "´ü´Ö:";
-	cptr s_range = "ÈÏ°Ï:";
-	cptr s_heal = "²óÉü:";
+	cptr s_dam = "æå‚·:";
+	cptr s_dur = "æœŸé–“:";
+	cptr s_range = "ç¯„å›²:";
+	cptr s_heal = "å›å¾©:";
 #else
 	cptr s_dam = "dam ";
 	cptr s_dur = "dur ";
@@ -73,11 +73,11 @@ static void mane_info(char *p, int power, int dam)
 
 
 /*!
- * @brief ¤É¤Î¤â¤Î¤Ş¤Í¤òÈ¯Æ°¤¹¤ë¤«ÁªÂò¤¹¤ë½èÍı /
+ * @brief ã©ã®ã‚‚ã®ã¾ã­ã‚’ç™ºå‹•ã™ã‚‹ã‹é¸æŠã™ã‚‹å‡¦ç† /
  * Allow user to choose a imitation.
- * @param sn ¼Â¹Ô¤·¤¿¤â¤Î¤Ş¤Í¤ÎID¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿¡Ê¥­¥ã¥ó¥»¥ë¤Ê¤É¤Î¾ì¹ç-1¤òÊÖ¤¹¡Ë
- * @param baigaesi TRUE¤Ê¤é¤ĞÇÜÊÖ¤·¾å¤Î½èÍı¤È¤·¤Æ¹Ô¤¦
- * @return ½èÍı¤ò¼Â¹Ô¤·¤¿¤éTRUE¡¢¥­¥ã¥ó¥»¥ë¤·¤¿¾ì¹çFALSE¤òÊÖ¤¹¡£
+ * @param sn å®Ÿè¡Œã—ãŸã‚‚ã®ã¾ã­ã®IDã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿ï¼ˆã‚­ãƒ£ãƒ³ã‚»ãƒ«ãªã©ã®å ´åˆ-1ã‚’è¿”ã™ï¼‰
+ * @param baigaesi TRUEãªã‚‰ã°å€è¿”ã—ä¸Šã®å‡¦ç†ã¨ã—ã¦è¡Œã†
+ * @return å‡¦ç†ã‚’å®Ÿè¡Œã—ãŸã‚‰TRUEã€ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸå ´åˆFALSEã‚’è¿”ã™ã€‚
  * @details
  * If a valid spell is chosen, saves it in '*sn' and returns TRUE
  * If the user hits escape, returns FALSE, and set '*sn' to -1
@@ -104,7 +104,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 	char            out_val[160];
 	char            comment[80];
 #ifdef JP
-cptr            p = "Ç½ÎÏ";
+cptr            p = "èƒ½åŠ›";
 #else
 	cptr            p = "power";
 #endif
@@ -126,7 +126,7 @@ cptr            p = "Ç½ÎÏ";
 	/* Build a prompt (accept all spells) */
 	(void)strnfmt(out_val, 78, 
 #ifdef JP
-		      "(%c-%c, '*'¤Ç°ìÍ÷, ESC) ¤É¤Î%s¤ò¤Ş¤Í¤Ş¤¹¤«¡©",
+		      "(%c-%c, '*'ã§ä¸€è¦§, ESC) ã©ã®%sã‚’ã¾ã­ã¾ã™ã‹ï¼Ÿ",
 #else
 		      "(%c-%c, *=List, ESC=exit) Use which %s? ",
 #endif
@@ -157,13 +157,13 @@ cptr            p = "Ç½ÎÏ";
 				/* Display a list of spells */
 				prt("", y, x);
 #ifdef JP
-put_str("Ì¾Á°", y, x + 5);
+put_str("åå‰", y, x + 5);
 #else
 				put_str("Name", y, x + 5);
 #endif
 
 #ifdef JP
-put_str("¼ºÎ¨ ¸ú²Ì", y, x + 36);
+put_str("å¤±ç‡ åŠ¹æœ", y, x + 36);
 #else
 				put_str("Fail Info", y, x + 35);
 #endif
@@ -254,7 +254,7 @@ put_str("¼ºÎ¨ ¸ú²Ì", y, x + 36);
 
 			/* Prompt */
 #ifdef JP
-			(void) strnfmt(tmp_val, 78, "%s¤ò¤Ş¤Í¤Ş¤¹¤«¡©", monster_powers[p_ptr->mane_spell[i]].name);
+			(void) strnfmt(tmp_val, 78, "%sã‚’ã¾ã­ã¾ã™ã‹ï¼Ÿ", monster_powers[p_ptr->mane_spell[i]].name);
 #else
 			(void)strnfmt(tmp_val, 78, "Use %s? ", monster_powers[p_ptr->mane_spell[i]].name);
 #endif
@@ -291,10 +291,10 @@ put_str("¼ºÎ¨ ¸ú²Ì", y, x + 36);
 
 
 /*!
- * @brief ¤â¤Î¤Ş¤Í½èÍı¤ÎÈ¯Æ° /
+ * @brief ã‚‚ã®ã¾ã­å‡¦ç†ã®ç™ºå‹• /
  * do_cmd_cast calls this function if the player's class is 'imitator'.
- * @param spell È¯Æ°¤¹¤ë¥â¥ó¥¹¥¿¡¼¹¶·â¤ÎID
- * @return ½èÍı¤ò¼Â¹Ô¤·¤¿¤éTRUE¡¢¥­¥ã¥ó¥»¥ë¤·¤¿¾ì¹çFALSE¤òÊÖ¤¹¡£
+ * @param spell ç™ºå‹•ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ”»æ’ƒã®ID
+ * @return å‡¦ç†ã‚’å®Ÿè¡Œã—ãŸã‚‰TRUEã€ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸå ´åˆFALSEã‚’è¿”ã™ã€‚
  */
 static bool use_mane(int spell)
 {
@@ -311,7 +311,7 @@ static bool use_mane(int spell)
 	{
 	case MS_SHRIEK:
 #ifdef JP
-msg_print("¤«¤ó¹â¤¤¶âÀÚ¤êÀ¼¤ò¤¢¤²¤¿¡£");
+msg_print("ã‹ã‚“é«˜ã„é‡‘åˆ‡ã‚Šå£°ã‚’ã‚ã’ãŸã€‚");
 #else
 		msg_print("You make a high pitched shriek.");
 #endif
@@ -335,7 +335,7 @@ msg_print("¤«¤ó¹â¤¤¶âÀÚ¤êÀ¼¤ò¤¢¤²¤¿¡£");
 	case MS_ROCKET:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥í¥±¥Ã¥È¤òÈ¯¼Í¤·¤¿¡£");
+else msg_print("ãƒ­ã‚±ãƒƒãƒˆã‚’ç™ºå°„ã—ãŸã€‚");
 #else
 			else msg_print("You fire a rocket.");
 #endif
@@ -345,7 +345,7 @@ else msg_print("¥í¥±¥Ã¥È¤òÈ¯¼Í¤·¤¿¡£");
 	case MS_SHOOT:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("Ìğ¤òÊü¤Ã¤¿¡£");
+else msg_print("çŸ¢ã‚’æ”¾ã£ãŸã€‚");
 #else
 			else msg_print("You fire an arrow.");
 #endif
@@ -361,7 +361,7 @@ else msg_print("Ìğ¤òÊü¤Ã¤¿¡£");
 	case MS_BR_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("»À¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("é…¸ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe acid.");
 #endif
@@ -371,7 +371,7 @@ else msg_print("»À¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("°ğºÊ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("ç¨²å¦»ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe lightning.");
 #endif
@@ -381,7 +381,7 @@ else msg_print("°ğºÊ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("²Ğ±ê¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("ç«ç‚ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe fire.");
 #endif
@@ -391,7 +391,7 @@ else msg_print("²Ğ±ê¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("Îäµ¤¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("å†·æ°—ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe frost.");
 #endif
@@ -401,7 +401,7 @@ else msg_print("Îäµ¤¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_POIS:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥¬¥¹¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("ã‚¬ã‚¹ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe gas.");
 #endif
@@ -411,7 +411,7 @@ else msg_print("¥¬¥¹¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("ÃÏ¹ö¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("åœ°ç„ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe nether.");
 #endif
@@ -421,7 +421,7 @@ else msg_print("ÃÏ¹ö¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_LITE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("Á®¸÷¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("é–ƒå…‰ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe light.");
 #endif
@@ -431,7 +431,7 @@ else msg_print("Á®¸÷¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("°Å¹õ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("æš—é»’ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe darkness.");
 #endif
@@ -441,7 +441,7 @@ else msg_print("°Å¹õ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("º®Íğ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("æ··ä¹±ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe confusion.");
 #endif
@@ -451,7 +451,7 @@ else msg_print("º®Íğ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_SOUND:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¹ì²»¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("è½ŸéŸ³ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe sound.");
 #endif
@@ -461,7 +461,7 @@ else msg_print("¹ì²»¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥«¥ª¥¹¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("ã‚«ã‚ªã‚¹ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe chaos.");
 #endif
@@ -471,7 +471,7 @@ else msg_print("¥«¥ª¥¹¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_DISEN:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("Îô²½¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("åŠ£åŒ–ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe disenchantment.");
 #endif
@@ -481,7 +481,7 @@ else msg_print("Îô²½¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_NEXUS:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("°ø²Ìº®Íğ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("å› æœæ··ä¹±ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe nexus.");
 #endif
@@ -491,7 +491,7 @@ else msg_print("°ø²Ìº®Íğ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_TIME:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("»ş´ÖµÕÅ¾¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("æ™‚é–“é€†è»¢ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe time.");
 #endif
@@ -501,7 +501,7 @@ else msg_print("»ş´ÖµÕÅ¾¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_INERTIA:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("ÃÙÆß¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("é…éˆã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe inertia.");
 #endif
@@ -511,7 +511,7 @@ else msg_print("ÃÙÆß¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_GRAVITY:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("½ÅÎÏ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("é‡åŠ›ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe gravity.");
 #endif
@@ -521,7 +521,7 @@ else msg_print("½ÅÎÏ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_SHARDS:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("ÇËÊÒ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("ç ´ç‰‡ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe shards.");
 #endif
@@ -531,7 +531,7 @@ else msg_print("ÇËÊÒ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_PLASMA:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥×¥é¥º¥Ş¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("ãƒ—ãƒ©ã‚ºãƒã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe plasma.");
 #endif
@@ -541,7 +541,7 @@ else msg_print("¥×¥é¥º¥Ş¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_FORCE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥Õ¥©¡¼¥¹¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("ãƒ•ã‚©ãƒ¼ã‚¹ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe force.");
 #endif
@@ -551,7 +551,7 @@ else msg_print("¥Õ¥©¡¼¥¹¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BR_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("ËâÎÏ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("é­”åŠ›ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe mana.");
 #endif
@@ -561,7 +561,7 @@ else msg_print("ËâÎÏ¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BALL_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("Êü¼ÍÇ½µå¤òÊü¤Ã¤¿¡£");
+else msg_print("æ”¾å°„èƒ½çƒã‚’æ”¾ã£ãŸã€‚");
 #else
 			else msg_print("You cast a ball of radiation.");
 #endif
@@ -571,7 +571,7 @@ else msg_print("Êü¼ÍÇ½µå¤òÊü¤Ã¤¿¡£");
 	case MS_BR_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("Êü¼ÍÀ­ÇÑ´şÊª¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("æ”¾å°„æ€§å»ƒæ£„ç‰©ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe toxic waste.");
 #endif
@@ -581,7 +581,7 @@ else msg_print("Êü¼ÍÀ­ÇÑ´şÊª¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BALL_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("½ã¥í¥°¥ë¥¹¤òÊü¤Ã¤¿¡£");
+else msg_print("ç´”ãƒ­ã‚°ãƒ«ã‚¹ã‚’æ”¾ã£ãŸã€‚");
 #else
 			else msg_print("You invoke a raw Logrus.");
 #endif
@@ -591,7 +591,7 @@ else msg_print("½ã¥í¥°¥ë¥¹¤òÊü¤Ã¤¿¡£");
 	case MS_BR_DISI:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("Ê¬²ò¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
+else msg_print("åˆ†è§£ã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚");
 #else
 			else msg_print("You breathe disintegration.");
 #endif
@@ -601,7 +601,7 @@ else msg_print("Ê¬²ò¤Î¥Ö¥ì¥¹¤òÅÇ¤¤¤¿¡£");
 	case MS_BALL_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥¢¥·¥Ã¥É¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ã‚¢ã‚·ãƒƒãƒ‰ãƒ»ãƒœãƒ¼ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast an acid ball.");
 #endif
@@ -611,7 +611,7 @@ else msg_print("¥¢¥·¥Ã¥É¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BALL_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥µ¥ó¥À¡¼¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ã‚µãƒ³ãƒ€ãƒ¼ãƒ»ãƒœãƒ¼ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a lightning ball.");
 #endif
@@ -621,7 +621,7 @@ else msg_print("¥µ¥ó¥À¡¼¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BALL_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥Õ¥¡¥¤¥¢¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ¼ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a fire ball.");
 #endif
@@ -631,7 +631,7 @@ else msg_print("¥Õ¥¡¥¤¥¢¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BALL_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥¢¥¤¥¹¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ã‚¢ã‚¤ã‚¹ãƒ»ãƒœãƒ¼ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a frost ball.");
 #endif
@@ -641,7 +641,7 @@ else msg_print("¥¢¥¤¥¹¡¦¥Ü¡¼¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BALL_POIS:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("°­½­±À¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("æ‚ªè‡­é›²ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a stinking cloud.");
 #endif
@@ -651,7 +651,7 @@ else msg_print("°­½­±À¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BALL_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("ÃÏ¹öµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("åœ°ç„çƒã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a nether ball.");
 #endif
@@ -661,7 +661,7 @@ else msg_print("ÃÏ¹öµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BALL_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("Î®¤ì¤ë¤è¤¦¤Ê¿È¿¶¤ê¤ò¤·¤¿¡£");
+else msg_print("æµã‚Œã‚‹ã‚ˆã†ãªèº«æŒ¯ã‚Šã‚’ã—ãŸã€‚");
 #else
 			else msg_print("You gesture fluidly.");
 #endif
@@ -671,7 +671,7 @@ else msg_print("Î®¤ì¤ë¤è¤¦¤Ê¿È¿¶¤ê¤ò¤·¤¿¡£");
 	case MS_BALL_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("ËâÎÏ¤ÎÍò¤Î¼öÊ¸¤òÇ°¤¸¤¿¡£");
+else msg_print("é­”åŠ›ã®åµã®å‘ªæ–‡ã‚’å¿µã˜ãŸã€‚");
 #else
 			else msg_print("You invoke a mana storm.");
 #endif
@@ -681,7 +681,7 @@ else msg_print("ËâÎÏ¤ÎÍò¤Î¼öÊ¸¤òÇ°¤¸¤¿¡£");
 	case MS_BALL_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("°Å¹õ¤ÎÍò¤Î¼öÊ¸¤òÇ°¤¸¤¿¡£");
+else msg_print("æš—é»’ã®åµã®å‘ªæ–‡ã‚’å¿µã˜ãŸã€‚");
 #else
 			else msg_print("You invoke a darkness storm.");
 #endif
@@ -719,7 +719,7 @@ else msg_print("°Å¹õ¤ÎÍò¤Î¼öÊ¸¤òÇ°¤¸¤¿¡£");
 	case MS_BOLT_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥¢¥·¥Ã¥É¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ã‚¢ã‚·ãƒƒãƒ‰ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast an acid bolt.");
 #endif
@@ -729,7 +729,7 @@ else msg_print("¥¢¥·¥Ã¥É¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BOLT_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥µ¥ó¥À¡¼¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ã‚µãƒ³ãƒ€ãƒ¼ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a lightning bolt.");
 #endif
@@ -739,7 +739,7 @@ else msg_print("¥µ¥ó¥À¡¼¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BOLT_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥Õ¥¡¥¤¥¢¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a fire bolt.");
 #endif
@@ -749,7 +749,7 @@ else msg_print("¥Õ¥¡¥¤¥¢¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BOLT_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥¢¥¤¥¹¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ã‚¢ã‚¤ã‚¹ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a frost bolt.");
 #endif
@@ -759,7 +759,7 @@ else msg_print("¥¢¥¤¥¹¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_STARBURST:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥¹¥¿¡¼¥Ğ¡¼¥¹¥È¤Î¼öÊ¸¤òÇ°¤¸¤¿¡£");
+else msg_print("ã‚¹ã‚¿ãƒ¼ãƒãƒ¼ã‚¹ãƒˆã®å‘ªæ–‡ã‚’å¿µã˜ãŸã€‚");
 #else
 			else msg_print("You invoke a starburst.");
 #endif
@@ -769,7 +769,7 @@ else msg_print("¥¹¥¿¡¼¥Ğ¡¼¥¹¥È¤Î¼öÊ¸¤òÇ°¤¸¤¿¡£");
 	case MS_BOLT_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("ÃÏ¹ö¤ÎÌğ¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("åœ°ç„ã®çŸ¢ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a nether bolt.");
 #endif
@@ -779,7 +779,7 @@ else msg_print("ÃÏ¹ö¤ÎÌğ¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BOLT_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥¦¥©¡¼¥¿¡¼¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ã‚¦ã‚©ãƒ¼ã‚¿ãƒ¼ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a water bolt.");
 #endif
@@ -789,7 +789,7 @@ else msg_print("¥¦¥©¡¼¥¿¡¼¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BOLT_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("ËâÎÏ¤ÎÌğ¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("é­”åŠ›ã®çŸ¢ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a mana bolt.");
 #endif
@@ -799,7 +799,7 @@ else msg_print("ËâÎÏ¤ÎÌğ¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BOLT_PLASMA:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥×¥é¥º¥Ş¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ãƒ—ãƒ©ã‚ºãƒãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a plasma bolt.");
 #endif
@@ -809,7 +809,7 @@ else msg_print("¥×¥é¥º¥Ş¡¦¥Ü¥ë¥È¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_BOLT_ICE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¶Ë´¨¤ÎÌğ¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("æ¥µå¯’ã®çŸ¢ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a ice bolt.");
 #endif
@@ -819,7 +819,7 @@ else msg_print("¶Ë´¨¤ÎÌğ¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_MAGIC_MISSILE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¥Ş¥¸¥Ã¥¯¡¦¥ß¥µ¥¤¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+else msg_print("ãƒã‚¸ãƒƒã‚¯ãƒ»ãƒŸã‚µã‚¤ãƒ«ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			else msg_print("You cast a magic missile.");
 #endif
@@ -829,7 +829,7 @@ else msg_print("¥Ş¥¸¥Ã¥¯¡¦¥ß¥µ¥¤¥ë¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 	case MS_SCARE:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("¶²¤í¤·¤²¤Ê¸¸³Ğ¤òºî¤ê½Ğ¤·¤¿¡£");
+else msg_print("æã‚ã—ã’ãªå¹»è¦šã‚’ä½œã‚Šå‡ºã—ãŸã€‚");
 #else
 			else msg_print("You cast a fearful illusion.");
 #endif
@@ -843,7 +843,7 @@ else msg_print("¶²¤í¤·¤²¤Ê¸¸³Ğ¤òºî¤ê½Ğ¤·¤¿¡£");
 	case MS_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("Í¶ÏÇÅª¤Ê¸¸³Ğ¤ò¤Ä¤¯¤ê½Ğ¤·¤¿¡£");
+else msg_print("èª˜æƒ‘çš„ãªå¹»è¦šã‚’ã¤ãã‚Šå‡ºã—ãŸã€‚");
 #else
 			else msg_print("You cast a mesmerizing illusion.");
 #endif
@@ -865,7 +865,7 @@ else msg_print("Í¶ÏÇÅª¤Ê¸¸³Ğ¤ò¤Ä¤¯¤ê½Ğ¤·¤¿¡£");
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
 #ifdef JP
-else msg_print("<ÇËÌÇ¤Î¼ê>¤òÊü¤Ã¤¿¡ª");
+else msg_print("<ç ´æ»…ã®æ‰‹>ã‚’æ”¾ã£ãŸï¼");
 #else
 		else msg_print("You invoke the Hand of Doom!");
 #endif
@@ -875,7 +875,7 @@ else msg_print("<ÇËÌÇ¤Î¼ê>¤òÊü¤Ã¤¿¡ª");
 	}
 	case MS_HEAL:
 #ifdef JP
-msg_print("¼«Ê¬¤Î½ı¤ËÇ°¤ò½¸Ãæ¤·¤¿¡£");
+msg_print("è‡ªåˆ†ã®å‚·ã«å¿µã‚’é›†ä¸­ã—ãŸã€‚");
 #else
 			msg_print("You concentrate on your wounds!");
 #endif
@@ -885,7 +885,7 @@ msg_print("¼«Ê¬¤Î½ı¤ËÇ°¤ò½¸Ãæ¤·¤¿¡£");
 		break;
 	case MS_INVULNER:
 #ifdef JP
-msg_print("Ìµ½ı¤Îµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+msg_print("ç„¡å‚·ã®çƒã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 			msg_print("You cast a Globe of Invulnerability.");
 #endif
@@ -901,13 +901,13 @@ msg_print("Ìµ½ı¤Îµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 		world_player = TRUE;
 		if (damage == 1 || damage == 2)
 #ifdef JP
-			msg_print("¡Ö¡Ø¥¶¡¦¥ï¡¼¥ë¥É¡Ù¡ª»ş¤Ï»ß¤Ş¤Ã¤¿¡ª¡×");
+			msg_print("ã€Œã€ã‚¶ãƒ»ãƒ¯ãƒ¼ãƒ«ãƒ‰ã€ï¼æ™‚ã¯æ­¢ã¾ã£ãŸï¼ã€");
 #else
 			msg_print("You yell 'The World! Time has stopped!'");
 #endif
 		else if (damage == 3 || damage == 6)
 #ifdef JP
-			msg_print("¡Ö»ş¤è¡ª¡×");
+			msg_print("ã€Œæ™‚ã‚ˆï¼ã€");
 #else
 			msg_print("You yell 'Time!'");
 #endif
@@ -950,7 +950,7 @@ msg_print("Ìµ½ı¤Îµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
-				msg_format("%s¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", m_name);
+				msg_format("%sã«ã¯åŠ¹æœãŒãªã‹ã£ãŸï¼", m_name);
 #else
 				msg_format("%s is unaffected!", m_name);
 #endif
@@ -961,7 +961,7 @@ msg_print("Ìµ½ı¤Îµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 #ifdef JP
-				msg_format("%s¤Ë¤ÏÂÑÀ­¤¬¤¢¤ë¡ª", m_name);
+				msg_format("%sã«ã¯è€æ€§ãŒã‚ã‚‹ï¼", m_name);
 #else
 				msg_format("%s resists!", m_name);
 #endif
@@ -970,7 +970,7 @@ msg_print("Ìµ½ı¤Îµå¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 			}
 		}
 #ifdef JP
-msg_format("%s¤ò°ú¤­Ìá¤·¤¿¡£", m_name);
+msg_format("%sã‚’å¼•ãæˆ»ã—ãŸã€‚", m_name);
 #else
 		msg_format("You command %s to return.", m_name);
 #endif
@@ -999,7 +999,7 @@ msg_format("%s¤ò°ú¤­Ìá¤·¤¿¡£", m_name);
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
 #ifdef JP
-		msg_format("%^s¤ÎÂ­¤ò»Ø¤µ¤·¤¿¡£", m_name);
+		msg_format("%^sã®è¶³ã‚’æŒ‡ã•ã—ãŸã€‚", m_name);
 #else
 		msg_format("You gesture at %^s's feet.", m_name);
 #endif
@@ -1008,7 +1008,7 @@ msg_format("%s¤ò°ú¤­Ìá¤·¤¿¡£", m_name);
 			(r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > plev + randint1(60)))
 		{
 #ifdef JP
-			msg_print("¤·¤«¤·¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª");
+			msg_print("ã—ã‹ã—åŠ¹æœãŒãªã‹ã£ãŸï¼");
 #else
 			msg_format("%^s is unaffected!", m_name);
 #endif
@@ -1020,7 +1020,7 @@ msg_format("%s¤ò°ú¤­Ìá¤·¤¿¡£", m_name);
 		if (!get_aim_dir(&dir)) return FALSE;
 
 #ifdef JP
-else msg_print("¸÷¤Î·õ¤òÊü¤Ã¤¿¡£");
+else msg_print("å…‰ã®å‰£ã‚’æ”¾ã£ãŸã€‚");
 #else
 			else msg_print("You throw a psycho-spear.");
 #endif
@@ -1028,7 +1028,7 @@ else msg_print("¸÷¤Î·õ¤òÊü¤Ã¤¿¡£");
 		break;
 	case MS_DARKNESS:
 #ifdef JP
-msg_print("°Å°Ç¤ÎÃæ¤Ç¼ê¤ò¿¶¤Ã¤¿¡£");
+msg_print("æš—é—‡ã®ä¸­ã§æ‰‹ã‚’æŒ¯ã£ãŸã€‚");
 #else
 			msg_print("You gesture in shadow.");
 #endif
@@ -1037,7 +1037,7 @@ msg_print("°Å°Ç¤ÎÃæ¤Ç¼ê¤ò¿¶¤Ã¤¿¡£");
 	case MS_MAKE_TRAP:
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¼öÊ¸¤ò¾§¤¨¤Æ¼Ù°­¤ËÈù¾Ğ¤ó¤À¡£");
+msg_print("å‘ªæ–‡ã‚’å”±ãˆã¦é‚ªæ‚ªã«å¾®ç¬‘ã‚“ã ã€‚");
 #else
 			msg_print("You cast a spell and cackles evilly.");
 #endif
@@ -1045,14 +1045,14 @@ msg_print("¼öÊ¸¤ò¾§¤¨¤Æ¼Ù°­¤ËÈù¾Ğ¤ó¤À¡£");
 		break;
 	case MS_FORGET:
 #ifdef JP
-msg_print("¤·¤«¤·²¿¤âµ¯¤­¤Ê¤«¤Ã¤¿¡£");
+msg_print("ã—ã‹ã—ä½•ã‚‚èµ·ããªã‹ã£ãŸã€‚");
 #else
 			msg_print("Nothing happen.");
 #endif
 		break;
 	case MS_RAISE_DEAD:
 #ifdef JP
-msg_print("»à¼ÔÉü³è¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
+msg_print("æ­»è€…å¾©æ´»ã®å‘ªæ–‡ã‚’å”±ãˆãŸã€‚");
 #else
 		msg_print("You cast a animate dead.");
 #endif
@@ -1064,7 +1064,7 @@ msg_print("»à¼ÔÉü³è¤Î¼öÊ¸¤ò¾§¤¨¤¿¡£");
 		if (!target_set(TARGET_KILL)) return FALSE;
 
 #ifdef JP
-msg_print("±ç·³¤ò¾¤´­¤·¤¿¡£");
+msg_print("æ´è»ã‚’å¬å–šã—ãŸã€‚");
 #else
 			msg_print("You summon minions.");
 #endif
@@ -1080,7 +1080,7 @@ msg_print("±ç·³¤ò¾¤´­¤·¤¿¡£");
 		int max_cyber = (dun_level / 50) + randint1(3);
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¤ò¾¤´­¤·¤¿¡ª");
+msg_print("ã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon Cyberdemons!");
 #endif
@@ -1094,7 +1094,7 @@ msg_print("¥µ¥¤¥Ğ¡¼¥Ç¡¼¥â¥ó¤ò¾¤´­¤·¤¿¡ª");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("Ãç´Ö¤ò¾¤´­¤·¤¿¡£");
+msg_print("ä»²é–“ã‚’å¬å–šã—ãŸã€‚");
 #else
 			msg_print("You summon help.");
 #endif
@@ -1107,7 +1107,7 @@ msg_print("Ãç´Ö¤ò¾¤´­¤·¤¿¡£");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¥â¥ó¥¹¥¿¡¼¤ò¾¤´­¤·¤¿¡ª");
+msg_print("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon monsters!");
 #endif
@@ -1120,7 +1120,7 @@ msg_print("¥â¥ó¥¹¥¿¡¼¤ò¾¤´­¤·¤¿¡ª");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¥¢¥ê¤ò¾¤´­¤·¤¿¡£");
+msg_print("ã‚¢ãƒªã‚’å¬å–šã—ãŸã€‚");
 #else
 			msg_print("You summon ants.");
 #endif
@@ -1133,7 +1133,7 @@ msg_print("¥¢¥ê¤ò¾¤´­¤·¤¿¡£");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("ÃØéá¤ò¾¤´­¤·¤¿¡£");
+msg_print("èœ˜è››ã‚’å¬å–šã—ãŸã€‚");
 #else
 			msg_print("You summon spiders.");
 #endif
@@ -1146,7 +1146,7 @@ msg_print("ÃØéá¤ò¾¤´­¤·¤¿¡£");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¥Ï¥¦¥ó¥É¤ò¾¤´­¤·¤¿¡£");
+msg_print("ãƒã‚¦ãƒ³ãƒ‰ã‚’å¬å–šã—ãŸã€‚");
 #else
 			msg_print("You summon hounds.");
 #endif
@@ -1159,7 +1159,7 @@ msg_print("¥Ï¥¦¥ó¥É¤ò¾¤´­¤·¤¿¡£");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¥Ò¥É¥é¤ò¾¤´­¤·¤¿¡£");
+msg_print("ãƒ’ãƒ‰ãƒ©ã‚’å¬å–šã—ãŸã€‚");
 #else
 			msg_print("You summon hydras.");
 #endif
@@ -1172,7 +1172,7 @@ msg_print("¥Ò¥É¥é¤ò¾¤´­¤·¤¿¡£");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("Å·»È¤ò¾¤´­¤·¤¿¡ª");
+msg_print("å¤©ä½¿ã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon angel!");
 #endif
@@ -1185,7 +1185,7 @@ msg_print("Å·»È¤ò¾¤´­¤·¤¿¡ª");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("º®ÆÙ¤ÎµÜÄî¤«¤é°­Ëâ¤ò¾¤´­¤·¤¿¡ª");
+msg_print("æ··æ²Œã®å®®å»·ã‹ã‚‰æ‚ªé­”ã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon a demon from the Courts of Chaos!");
 #endif
@@ -1198,7 +1198,7 @@ msg_print("º®ÆÙ¤ÎµÜÄî¤«¤é°­Ëâ¤ò¾¤´­¤·¤¿¡ª");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¥¢¥ó¥Ç¥Ã¥É¤Î¶¯Å¨¤ò¾¤´­¤·¤¿¡ª");
+msg_print("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®å¼·æ•µã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon an undead adversary!");
 #endif
@@ -1211,7 +1211,7 @@ msg_print("¥¢¥ó¥Ç¥Ã¥É¤Î¶¯Å¨¤ò¾¤´­¤·¤¿¡ª");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¥É¥é¥´¥ó¤ò¾¤´­¤·¤¿¡ª");
+msg_print("ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon dragon!");
 #endif
@@ -1224,7 +1224,7 @@ msg_print("¥É¥é¥´¥ó¤ò¾¤´­¤·¤¿¡ª");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¶¯ÎÏ¤Ê¥¢¥ó¥Ç¥Ã¥É¤ò¾¤´­¤·¤¿¡ª");
+msg_print("å¼·åŠ›ãªã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon greater undead!");
 #endif
@@ -1237,7 +1237,7 @@ msg_print("¶¯ÎÏ¤Ê¥¢¥ó¥Ç¥Ã¥É¤ò¾¤´­¤·¤¿¡ª");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¸ÅÂå¥É¥é¥´¥ó¤ò¾¤´­¤·¤¿¡ª");
+msg_print("å¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon ancient dragons!");
 #endif
@@ -1250,7 +1250,7 @@ msg_print("¸ÅÂå¥É¥é¥´¥ó¤ò¾¤´­¤·¤¿¡ª");
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("¥¢¥ó¥Ğ¡¼¤Î²¦Â²¤ò¾¤´­¤·¤¿¡ª");
+msg_print("ã‚¢ãƒ³ãƒãƒ¼ã®ç‹æ—ã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon Lords of Amber!");
 #endif
@@ -1263,7 +1263,7 @@ msg_print("¥¢¥ó¥Ğ¡¼¤Î²¦Â²¤ò¾¤´­¤·¤¿¡ª");
 		int k, count = 0;
 		if (!target_set(TARGET_KILL)) return FALSE;
 #ifdef JP
-msg_print("ÆÃÊÌ¤Ê¶¯Å¨¤ò¾¤´­¤·¤¿¡ª");
+msg_print("ç‰¹åˆ¥ãªå¼·æ•µã‚’å¬å–šã—ãŸï¼");
 #else
 			msg_print("You summon special opponents!");
 #endif
@@ -1282,10 +1282,10 @@ msg_print("ÆÃÊÌ¤Ê¶¯Å¨¤ò¾¤´­¤·¤¿¡ª");
 
 
 /*!
- * @brief ¤â¤Î¤Ş¤Í¥³¥Ş¥ó¥É¤Î¥á¥¤¥ó¥ë¡¼¥Á¥ó /
+ * @brief ã‚‚ã®ã¾ã­ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * do_cmd_cast calls this function if the player's class is 'imitator'.
- * @param baigaesi TRUE¤Ê¤é¤ĞÇÜÊÖ¤·¾å¤Î½èÍı¤È¤·¤Æ¹Ô¤¦
- * @return ½èÍı¤ò¼Â¹Ô¤·¤¿¤éTRUE¡¢¥­¥ã¥ó¥»¥ë¤·¤¿¾ì¹çFALSE¤òÊÖ¤¹¡£
+ * @param baigaesi TRUEãªã‚‰ã°å€è¿”ã—ä¸Šã®å‡¦ç†ã¨ã—ã¦è¡Œã†
+ * @return å‡¦ç†ã‚’å®Ÿè¡Œã—ãŸã‚‰TRUEã€ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸå ´åˆFALSEã‚’è¿”ã™ã€‚
  * @details
  * If a valid spell is chosen, saves it in '*sn' and returns TRUE
  * If the user hits escape, returns FALSE, and set '*sn' to -1
@@ -1312,7 +1312,7 @@ bool do_cmd_mane(bool baigaesi)
 	if (p_ptr->confused)
 	{
 #ifdef JP
-msg_print("º®Íğ¤·¤Æ¤¤¤Æ½¸Ãæ¤Ç¤­¤Ê¤¤¡ª");
+msg_print("æ··ä¹±ã—ã¦ã„ã¦é›†ä¸­ã§ããªã„ï¼");
 #else
 		msg_print("You are too confused!");
 #endif
@@ -1323,7 +1323,7 @@ msg_print("º®Íğ¤·¤Æ¤¤¤Æ½¸Ãæ¤Ç¤­¤Ê¤¤¡ª");
 	if (!p_ptr->mane_num)
 	{
 #ifdef JP
-msg_print("¤Ş¤Í¤é¤ì¤ë¤â¤Î¤¬²¿¤â¤Ê¤¤¡ª");
+msg_print("ã¾ã­ã‚‰ã‚Œã‚‹ã‚‚ã®ãŒä½•ã‚‚ãªã„ï¼");
 #else
 		msg_print("You don't remember any action!");
 #endif
@@ -1367,7 +1367,7 @@ msg_print("¤Ş¤Í¤é¤ì¤ë¤â¤Î¤¬²¿¤â¤Ê¤¤¡ª");
 	{
 		if (flush_failure) flush();
 #ifdef JP
-msg_print("¤â¤Î¤Ş¤Í¤Ë¼ºÇÔ¤·¤¿¡ª");
+msg_print("ã‚‚ã®ã¾ã­ã«å¤±æ•—ã—ãŸï¼");
 #else
 		msg_print("You failed to concentrate hard enough!");
 #endif

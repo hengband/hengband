@@ -2,7 +2,7 @@
 
 # Name
 Q:$24:N:The Rise and Fall of Micro$oft
-Q:24:N:�ޥ�������եȤζ�˴
+Q:24:N:マイクロンフトの興亡
 
 # type:num_mon:cur_num:max_num:level:r_idx:k_idx
 Q:$24:Q:1:0:0:1:50:732:0:0:6
@@ -17,19 +17,19 @@ Q:$24:T:turned into mindless zombies. Beware -- it is rumoured that the
 Q:$24:T:Dark Lord who dwells inside this mansion of vast evil is the
 Q:$24:T:Apocalyptic Beast himself! Who knows what unspeakable secrets lurk
 Q:$24:T:inside?
-Q:24:T:�ɤˤ��ɤ����ɤ������֣͡�פȤ����롼��ʸ������ޤ�Ƥ��롢���
-Q:24:T:��ʪ������ޤ��������η�ʪ�ϰ��Υ������ȯ���Ƥ��ޤ���
-Q:24:T:�᤯��¼�ο͡��϶�������򼺤�����������̥���ӤȤʤäƤ��ޤ�
-Q:24:T:�ޤ���������Ĥ��Ʋ����������ε���ʰ��ξ������Ź����벦��
-Q:24:T:�ۼ�Ͽ�νä��Τ�ΤǤ���ȱ�����Ƥ��ޤ��������Ƥ��η�ʪ����ˤɤ��
-Q:24:T:�����⤪���ޤ�����̩������Ǥ���Τ���ï���Τ�ޤ���
+Q:24:T:壁におどろおどろしい「Ｍ＄」というルーン文字が刻まれている、謎の
+Q:24:T:建物が現れました。この建物は悪のオーラを発しています。
+Q:24:T:近くの村の人々は金と理性を失い、心を持たぬゾンビとなってしまい
+Q:24:T:ました。気をつけて下さい！あの巨大な悪の城に棲む暗黒の帝王は
+Q:24:T:黙示録の獣そのものであると噂されています。そしてあの建物の中にどんな
+Q:24:T:言うもおぞましい秘密が潜んでいるのかは誰も知りません。
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST24 3]
 Q:$24:T:Thank you for killing the demon! A small reward awaits you outside.
-Q:24:T:������Ǥ��ݤ��Ƥ���Ƥ��꤬�Ȥ��������ޤ��������䤫�ʤ����
-Q:24:T:�����֤��Ƥ����ޤ�����
+Q:24:T:悪魔を打ち倒してくれてありがとうございます！ささやかなお礼を
+Q:24:T:外に置いておきました。
 ?:1
 
 # Description for quest failed
@@ -42,13 +42,13 @@ Q:$24:T:the overall quality of the wares will improve...
 Q:$24:T:I notice that you have not received the Official M$ Licence 
 Q:$24:T:number on your forehead yet. I don't know if anyone will sell
 Q:$24:T:you anything before you get one.
-Q:24:T:���ʤ��϶����������Ȥ򤷤Ƥ��ޤä����ޥ�������եȤϺ�����
-Q:24:T:�������䤳�ι񡢤��������������ƤλԾ�����ꤷ�Ƥ��롪
-Q:24:T:��������Τ����뾦�ʤϣ͡�Υ饤���󥹾��ʤȤʤꡢ
-Q:24:T:�͡����פ�ħ�����Ƥ��롣�����⾭���ʼ������������
-Q:24:T:�ݾڤ�����̵���Τ������ʤ��Ϥޤ��ۤ˥ޥ�������եȤ�
-Q:24:T:�����饤�����ֹ��Ĥ��Ƥʤ��褦�������ֹ�����ʤ����
-Q:24:T:���ä�ï�⤢�ʤ���ʪ����äƤ���ʤ��衣
+Q:24:T:あなたは恐ろしいことをしてしまった！マイクロンフトは今この
+Q:24:T:街、いやこの国、いや全世界で全ての市場を独占している！
+Q:24:T:あらゆる場所のあらゆる商品はＭ＄のライセンス商品となり、
+Q:24:T:Ｍ＄が利益を徴収している。しかも将来品質が改善される
+Q:24:T:保証は全く無いのだ！あなたはまだ額にマイクロンフトの
+Q:24:T:公式ライセンス番号をつけてないようだが、番号をもらわない内は
+Q:24:T:きっと誰もあなたに物を売ってくれないよ。
 ?:1
 
 # Trap

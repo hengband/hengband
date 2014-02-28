@@ -1,4 +1,4 @@
-/* File: h-config.h */
+﻿/* File: h-config.h */
 
 #ifndef INCLUDED_H_CONFIG_H
 #define INCLUDED_H_CONFIG_H

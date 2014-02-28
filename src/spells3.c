@@ -1,4 +1,4 @@
-/* File: spells3.c */
+ï»¿/* File: spells3.c */
 
 /*
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
@@ -329,7 +329,7 @@ bool teleport_player_aux(int dis, u32b mode)
 	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
 #ifdef JP
-		msg_print("ÉÔ»×µÄ¤ÊÎÏ¤¬¥Æ¥ì¥İ¡¼¥È¤òËÉ¤¤¤À¡ª");
+		msg_print("ä¸æ€è­°ãªåŠ›ãŒãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’é˜²ã„ã ï¼");
 #else
 		msg_print("A mysterious force prevents you from teleporting!");
 #endif
@@ -419,7 +419,7 @@ bool teleport_player_aux(int dis, u32b mode)
 
 #ifdef JP
 	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-		msg_format("¡Ø¤³¤Ã¤Á¤À¤¡¡¢%s¡Ù", player_name);
+		msg_format("ã€ã“ã£ã¡ã ãã€%sã€", player_name);
 #endif
 
 	/* Move the player */
@@ -517,7 +517,7 @@ void teleport_player_to(int ny, int nx, u32b mode)
 	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
 #ifdef JP
-		msg_print("ÉÔ»×µÄ¤ÊÎÏ¤¬¥Æ¥ì¥İ¡¼¥È¤òËÉ¤¤¤À¡ª");
+		msg_print("ä¸æ€è­°ãªåŠ›ãŒãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’é˜²ã„ã ï¼");
 #else
 		msg_print("A mysterious force prevents you from teleporting!");
 #endif
@@ -597,7 +597,7 @@ void teleport_away_followable(int m_idx)
 		if (follow)
 		{
 #ifdef JP
-			if (get_check_strict("¤Ä¤¤¤Æ¤¤¤­¤Ş¤¹¤«¡©", CHECK_OKAY_CANCEL))
+			if (get_check_strict("ã¤ã„ã¦ã„ãã¾ã™ã‹ï¼Ÿ", CHECK_OKAY_CANCEL))
 #else
 			if (get_check_strict("Do you follow it? ", CHECK_OKAY_CANCEL))
 #endif
@@ -606,7 +606,7 @@ void teleport_away_followable(int m_idx)
 				{
 					teleport_player(200, TELEPORT_PASSIVE);
 #ifdef JP
-					msg_print("¼ºÇÔ¡ª");
+					msg_print("å¤±æ•—ï¼");
 #else
 					msg_print("Failed!");
 #endif
@@ -632,7 +632,7 @@ void teleport_level(int m_idx)
 	if (m_idx <= 0) /* To player */
 	{
 #ifdef JP
-		strcpy(m_name, "¤¢¤Ê¤¿");
+		strcpy(m_name, "ã‚ãªãŸ");
 #else
 		strcpy(m_name, "you");
 #endif
@@ -651,7 +651,7 @@ void teleport_level(int m_idx)
 	if (TELE_LEVEL_IS_INEFF(m_idx))
 	{
 #ifdef JP
-		if (see_m) msg_print("¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡£");
+		if (see_m) msg_print("åŠ¹æœãŒãªã‹ã£ãŸã€‚");
 #else
 		if (see_m) msg_print("There is no effect.");
 #endif
@@ -662,7 +662,7 @@ void teleport_level(int m_idx)
 	if ((m_idx <= 0) && p_ptr->anti_tele) /* To player */
 	{
 #ifdef JP
-		msg_print("ÉÔ»×µÄ¤ÊÎÏ¤¬¥Æ¥ì¥İ¡¼¥È¤òËÉ¤¤¤À¡ª");
+		msg_print("ä¸æ€è­°ãªåŠ›ãŒãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’é˜²ã„ã ï¼");
 #else
 		msg_print("A mysterious force prevents you from teleporting!");
 #endif
@@ -683,7 +683,7 @@ void teleport_level(int m_idx)
 	if ((ironman_downward && (m_idx <= 0)) || (dun_level <= d_info[dungeon_type].mindepth))
 	{
 #ifdef JP
-		if (see_m) msg_format("%^s¤Ï¾²¤òÆÍ¤­ÇË¤Ã¤ÆÄÀ¤ó¤Ç¤¤¤¯¡£", m_name);
+		if (see_m) msg_format("%^sã¯åºŠã‚’çªãç ´ã£ã¦æ²ˆã‚“ã§ã„ãã€‚", m_name);
 #else
 		if (see_m) msg_format("%^s sink%s through the floor.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
@@ -719,7 +719,7 @@ void teleport_level(int m_idx)
 	else if (quest_number(dun_level) || (dun_level >= d_info[dungeon_type].maxdepth))
 	{
 #ifdef JP
-		if (see_m) msg_format("%^s¤ÏÅ·°æ¤òÆÍ¤­ÇË¤Ã¤ÆÃè¤ØÉâ¤¤¤Æ¤¤¤¯¡£", m_name);
+		if (see_m) msg_format("%^sã¯å¤©äº•ã‚’çªãç ´ã£ã¦å®™ã¸æµ®ã„ã¦ã„ãã€‚", m_name);
 #else
 		if (see_m) msg_format("%^s rise%s up through the ceiling.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
@@ -743,7 +743,7 @@ void teleport_level(int m_idx)
 	else if (go_up)
 	{
 #ifdef JP
-		if (see_m) msg_format("%^s¤ÏÅ·°æ¤òÆÍ¤­ÇË¤Ã¤ÆÃè¤ØÉâ¤¤¤Æ¤¤¤¯¡£", m_name);
+		if (see_m) msg_format("%^sã¯å¤©äº•ã‚’çªãç ´ã£ã¦å®™ã¸æµ®ã„ã¦ã„ãã€‚", m_name);
 #else
 		if (see_m) msg_format("%^s rise%s up through the ceiling.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
@@ -764,7 +764,7 @@ void teleport_level(int m_idx)
 	else
 	{
 #ifdef JP
-		if (see_m) msg_format("%^s¤Ï¾²¤òÆÍ¤­ÇË¤Ã¤ÆÄÀ¤ó¤Ç¤¤¤¯¡£", m_name);
+		if (see_m) msg_format("%^sã¯åºŠã‚’çªãç ´ã£ã¦æ²ˆã‚“ã§ã„ãã€‚", m_name);
 #else
 		if (see_m) msg_format("%^s sink%s through the floor.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
@@ -823,7 +823,7 @@ int choose_dungeon(cptr note, int y, int x)
 		else
 		{
 #ifdef JP
-			msg_format("¤Ş¤À%s¤ËÆş¤Ã¤¿¤³¤È¤Ï¤Ê¤¤¡£", d_name + d_info[DUNGEON_ANGBAND].name);
+			msg_format("ã¾ã %sã«å…¥ã£ãŸã“ã¨ã¯ãªã„ã€‚", d_name + d_info[DUNGEON_ANGBAND].name);
 #else
 			msg_format("You haven't entered %s yet.", d_name + d_info[DUNGEON_ANGBAND].name);
 #endif
@@ -850,7 +850,7 @@ int choose_dungeon(cptr note, int y, int x)
 		else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
 
 #ifdef JP
-		sprintf(buf,"      %c) %c%-12s : ºÇÂç %d ³¬", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+		sprintf(buf,"      %c) %c%-12s : æœ€å¤§ %d éš", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
 #else
 		sprintf(buf,"      %c) %c%-16s : Max level %d", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
 #endif
@@ -861,14 +861,14 @@ int choose_dungeon(cptr note, int y, int x)
 	if (!num)
 	{
 #ifdef JP
-		prt("      Áª¤Ù¤ë¥À¥ó¥¸¥ç¥ó¤¬¤Ê¤¤¡£", y, x);
+		prt("      é¸ã¹ã‚‹ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ãŒãªã„ã€‚", y, x);
 #else
 		prt("      No dungeon is available.", y, x);
 #endif
 	}
 
 #ifdef JP
-	prt(format("¤É¤Î¥À¥ó¥¸¥ç¥ó%s¤·¤Ş¤¹¤«:", note), 0, 0);
+	prt(format("ã©ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³%sã—ã¾ã™ã‹:", note), 0, 0);
 #else
 	prt(format("Which dungeon do you %s?: ", note), 0, 0);
 #endif
@@ -913,7 +913,7 @@ bool recall_player(int turns)
 	if (p_ptr->inside_arena || ironman_downward)
 	{
 #ifdef JP
-msg_print("²¿¤âµ¯¤³¤é¤Ê¤«¤Ã¤¿¡£");
+msg_print("ä½•ã‚‚èµ·ã“ã‚‰ãªã‹ã£ãŸã€‚");
 #else
 		msg_print("Nothing happens.");
 #endif
@@ -924,7 +924,7 @@ msg_print("²¿¤âµ¯¤³¤é¤Ê¤«¤Ã¤¿¡£");
 	if (dun_level && (max_dlv[dungeon_type] > dun_level) && !p_ptr->inside_quest && !p_ptr->word_recall)
 	{
 #ifdef JP
-if (get_check("¤³¤³¤ÏºÇ¿¼ÅşÃ£³¬¤è¤êÀõ¤¤³¬¤Ç¤¹¡£¤³¤Î³¬¤ËÌá¤Ã¤ÆÍè¤Ş¤¹¤«¡© "))
+if (get_check("ã“ã“ã¯æœ€æ·±åˆ°é”éšã‚ˆã‚Šæµ…ã„éšã§ã™ã€‚ã“ã®éšã«æˆ»ã£ã¦æ¥ã¾ã™ã‹ï¼Ÿ "))
 #else
 		if (get_check("Reset recall depth? "))
 #endif
@@ -932,7 +932,7 @@ if (get_check("¤³¤³¤ÏºÇ¿¼ÅşÃ£³¬¤è¤êÀõ¤¤³¬¤Ç¤¹¡£¤³¤Î³¬¤ËÌá¤Ã¤ÆÍè¤Ş¤¹¤«¡© "))
 			max_dlv[dungeon_type] = dun_level;
 			if (record_maxdepth)
 #ifdef JP
-				do_cmd_write_nikki(NIKKI_TRUMP, dungeon_type, "µ¢´Ô¤Î¤È¤­¤Ë");
+				do_cmd_write_nikki(NIKKI_TRUMP, dungeon_type, "å¸°é‚„ã®ã¨ãã«");
 #else
 				do_cmd_write_nikki(NIKKI_TRUMP, dungeon_type, "when recall from dungeon");
 #endif
@@ -945,7 +945,7 @@ if (get_check("¤³¤³¤ÏºÇ¿¼ÅşÃ£³¬¤è¤êÀõ¤¤³¬¤Ç¤¹¡£¤³¤Î³¬¤ËÌá¤Ã¤ÆÍè¤Ş¤¹¤«¡© "))
 		{
 			int select_dungeon;
 #ifdef JP
-			select_dungeon = choose_dungeon("¤Ëµ¢´Ô", 2, 14);
+			select_dungeon = choose_dungeon("ã«å¸°é‚„", 2, 14);
 #else
 			select_dungeon = choose_dungeon("recall", 2, 14);
 #endif
@@ -954,7 +954,7 @@ if (get_check("¤³¤³¤ÏºÇ¿¼ÅşÃ£³¬¤è¤êÀõ¤¤³¬¤Ç¤¹¡£¤³¤Î³¬¤ËÌá¤Ã¤ÆÍè¤Ş¤¹¤«¡© "))
 		}
 		p_ptr->word_recall = turns;
 #ifdef JP
-msg_print("²ó¤ê¤ÎÂçµ¤¤¬Ä¥¤ê¤Ä¤á¤Æ¤­¤¿...");
+msg_print("å›ã‚Šã®å¤§æ°—ãŒå¼µã‚Šã¤ã‚ã¦ããŸ...");
 #else
 		msg_print("The air about you becomes charged...");
 #endif
@@ -965,7 +965,7 @@ msg_print("²ó¤ê¤ÎÂçµ¤¤¬Ä¥¤ê¤Ä¤á¤Æ¤­¤¿...");
 	{
 		p_ptr->word_recall = 0;
 #ifdef JP
-msg_print("Ä¥¤ê¤Ä¤á¤¿Âçµ¤¤¬Î®¤ìµî¤Ã¤¿...");
+msg_print("å¼µã‚Šã¤ã‚ãŸå¤§æ°—ãŒæµã‚Œå»ã£ãŸ...");
 #else
 		msg_print("A tension leaves the air around you...");
 #endif
@@ -989,7 +989,7 @@ bool reset_recall(void)
 	char tmp_val[160];
 
 #ifdef JP
-	select_dungeon = choose_dungeon("¤ò¥»¥Ã¥È", 2, 14);
+	select_dungeon = choose_dungeon("ã‚’ã‚»ãƒƒãƒˆ", 2, 14);
 #else
 	select_dungeon = choose_dungeon("reset", 2, 14);
 #endif
@@ -998,7 +998,7 @@ bool reset_recall(void)
 	if (ironman_downward)
 	{
 #ifdef JP
-		msg_print("²¿¤âµ¯¤³¤é¤Ê¤«¤Ã¤¿¡£");
+		msg_print("ä½•ã‚‚èµ·ã“ã‚‰ãªã‹ã£ãŸã€‚");
 #else
 		msg_print("Nothing happens.");
 #endif
@@ -1009,7 +1009,7 @@ bool reset_recall(void)
 	if (!select_dungeon) return FALSE;
 	/* Prompt */
 #ifdef JP
-sprintf(ppp, "²¿³¬¤Ë¥»¥Ã¥È¤·¤Ş¤¹¤« (%d-%d):", d_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
+sprintf(ppp, "ä½•éšã«ã‚»ãƒƒãƒˆã—ã¾ã™ã‹ (%d-%d):", d_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
 #else
 	sprintf(ppp, "Reset to which level (%d-%d): ", d_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
 #endif
@@ -1035,13 +1035,13 @@ sprintf(ppp, "²¿³¬¤Ë¥»¥Ã¥È¤·¤Ş¤¹¤« (%d-%d):", d_info[select_dungeon].mindepth, m
 
 		if (record_maxdepth)
 #ifdef JP
-			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "¥Õ¥í¥¢¡¦¥ê¥»¥Ã¥È¤Ç");
+			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "ãƒ•ãƒ­ã‚¢ãƒ»ãƒªã‚»ãƒƒãƒˆã§");
 #else
 			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "using a scroll of reset recall");
 #endif
 					/* Accept request */
 #ifdef JP
-msg_format("%s¤Îµ¢´Ô¥ì¥Ù¥ë¤ò %d ³¬¤Ë¥»¥Ã¥È¡£", d_name+d_info[select_dungeon].name, dummy, dummy * 50);
+msg_format("%sã®å¸°é‚„ãƒ¬ãƒ™ãƒ«ã‚’ %d éšã«ã‚»ãƒƒãƒˆã€‚", d_name+d_info[select_dungeon].name, dummy, dummy * 50);
 #else
 		msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif
@@ -1109,7 +1109,7 @@ bool apply_disenchant(int mode)
 	{
 		/* Message */
 #ifdef JP
-msg_format("%s(%c)¤ÏÎô²½¤òÄ·¤ÍÊÖ¤·¤¿¡ª",o_name, index_to_label(t) );
+msg_format("%s(%c)ã¯åŠ£åŒ–ã‚’è·³ã­è¿”ã—ãŸï¼",o_name, index_to_label(t) );
 #else
 		msg_format("Your %s (%c) resist%s disenchantment!",
 			   o_name, index_to_label(t),
@@ -1149,7 +1149,7 @@ msg_format("%s(%c)¤ÏÎô²½¤òÄ·¤ÍÊÖ¤·¤¿¡ª",o_name, index_to_label(t) );
 	{
 		/* Message */
 #ifdef JP
-		msg_format("%s(%c)¤ÏÎô²½¤·¤Æ¤·¤Ş¤Ã¤¿¡ª",
+		msg_format("%s(%c)ã¯åŠ£åŒ–ã—ã¦ã—ã¾ã£ãŸï¼",
 			   o_name, index_to_label(t) );
 #else
 		msg_format("Your %s (%c) %s disenchanted!",
@@ -1226,7 +1226,7 @@ void apply_nexus(monster_type *m_ptr)
 			if (randint0(100) < p_ptr->skill_sav)
 			{
 #ifdef JP
-msg_print("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª");
+msg_print("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼");
 #else
 				msg_print("You resist the effects!");
 #endif
@@ -1244,7 +1244,7 @@ msg_print("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª");
 			if (randint0(100) < p_ptr->skill_sav)
 			{
 #ifdef JP
-msg_print("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª");
+msg_print("ã—ã‹ã—åŠ¹åŠ›ã‚’è·³ã­è¿”ã—ãŸï¼");
 #else
 				msg_print("You resist the effects!");
 #endif
@@ -1253,7 +1253,7 @@ msg_print("¤·¤«¤·¸úÎÏ¤òÄ·¤ÍÊÖ¤·¤¿¡ª");
 			}
 
 #ifdef JP
-msg_print("ÂÎ¤¬¤Í¤¸¤ì»Ï¤á¤¿...");
+msg_print("ä½“ãŒã­ã˜ã‚Œå§‹ã‚ãŸ...");
 #else
 			msg_print("Your body starts to scramble...");
 #endif
@@ -1289,7 +1289,7 @@ void phlogiston(void)
 	else
 	{
 #ifdef JP
-msg_print("Ç³ÁÇ¤ò¾ÃÈñ¤¹¤ë¥¢¥¤¥Æ¥à¤òÁõÈ÷¤·¤Æ¤¤¤Ş¤»¤ó¡£");
+msg_print("ç‡ƒç´ ã‚’æ¶ˆè²»ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’è£…å‚™ã—ã¦ã„ã¾ã›ã‚“ã€‚");
 #else
 		msg_print("You are not wielding anything which uses phlogiston.");
 #endif
@@ -1300,7 +1300,7 @@ msg_print("Ç³ÁÇ¤ò¾ÃÈñ¤¹¤ë¥¢¥¤¥Æ¥à¤òÁõÈ÷¤·¤Æ¤¤¤Ş¤»¤ó¡£");
 	if (o_ptr->xtra4 >= max_flog)
 	{
 #ifdef JP
-msg_print("¤³¤Î¥¢¥¤¥Æ¥à¤Ë¤Ï¤³¤ì°Ê¾åÇ³ÁÇ¤òÊä½¼¤Ç¤­¤Ş¤»¤ó¡£");
+msg_print("ã“ã®ã‚¢ã‚¤ãƒ†ãƒ ã«ã¯ã“ã‚Œä»¥ä¸Šç‡ƒç´ ã‚’è£œå……ã§ãã¾ã›ã‚“ã€‚");
 #else
 		msg_print("No more phlogiston can be put in this item.");
 #endif
@@ -1313,7 +1313,7 @@ msg_print("¤³¤Î¥¢¥¤¥Æ¥à¤Ë¤Ï¤³¤ì°Ê¾åÇ³ÁÇ¤òÊä½¼¤Ç¤­¤Ş¤»¤ó¡£");
 
 	/* Message */
 #ifdef JP
-msg_print("¾ÈÌÀÍÑ¥¢¥¤¥Æ¥à¤ËÇ³ÁÇ¤òÊä½¼¤·¤¿¡£");
+msg_print("ç…§æ˜ç”¨ã‚¢ã‚¤ãƒ†ãƒ ã«ç‡ƒç´ ã‚’è£œå……ã—ãŸã€‚");
 #else
 	msg_print("You add phlogiston to your light item.");
 #endif
@@ -1324,7 +1324,7 @@ msg_print("¾ÈÌÀÍÑ¥¢¥¤¥Æ¥à¤ËÇ³ÁÇ¤òÊä½¼¤·¤¿¡£");
 	{
 		o_ptr->xtra4 = max_flog;
 #ifdef JP
-msg_print("¾ÈÌÀÍÑ¥¢¥¤¥Æ¥à¤ÏËş¥¿¥ó¤Ë¤Ê¤Ã¤¿¡£");
+msg_print("ç…§æ˜ç”¨ã‚¢ã‚¤ãƒ†ãƒ ã¯æº€ã‚¿ãƒ³ã«ãªã£ãŸã€‚");
 #else
 		msg_print("Your light item is full.");
 #endif
@@ -1352,8 +1352,8 @@ void brand_weapon(int brand_type)
 
 	/* Get an item */
 #ifdef JP
-q = "¤É¤ÎÉğ´ï¤ò¶¯²½¤·¤Ş¤¹¤«? ";
-s = "¶¯²½¤Ç¤­¤ëÉğ´ï¤¬¤Ê¤¤¡£";
+q = "ã©ã®æ­¦å™¨ã‚’å¼·åŒ–ã—ã¾ã™ã‹? ";
+s = "å¼·åŒ–ã§ãã‚‹æ­¦å™¨ãŒãªã„ã€‚";
 #else
 	q = "Enchant which weapon? ";
 	s = "You have nothing to enchant.";
@@ -1395,7 +1395,7 @@ s = "¶¯²½¤Ç¤­¤ëÉğ´ï¤¬¤Ê¤¤¡£";
 			if (o_ptr->tval == TV_SWORD)
 			{
 #ifdef JP
-act = "¤Ï±Ô¤µ¤òÁı¤·¤¿¡ª";
+act = "ã¯é‹­ã•ã‚’å¢—ã—ãŸï¼";
 #else
 				act = "becomes very sharp!";
 #endif
@@ -1409,7 +1409,7 @@ act = "¤Ï±Ô¤µ¤òÁı¤·¤¿¡ª";
 			else
 			{
 #ifdef JP
-act = "¤ÏÇË²õÎÏ¤òÁı¤·¤¿¡ª";
+act = "ã¯ç ´å£ŠåŠ›ã‚’å¢—ã—ãŸï¼";
 #else
 				act = "seems very powerful.";
 #endif
@@ -1420,7 +1420,7 @@ act = "¤ÏÇË²õÎÏ¤òÁı¤·¤¿¡ª";
 			break;
 		case 16:
 #ifdef JP
-act = "¤Ï¿Í´Ö¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯äººé–“ã®è¡€ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "seems to be looking for humans!";
 #endif
@@ -1429,7 +1429,7 @@ act = "¤Ï¿Í´Ö¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 15:
 #ifdef JP
-act = "¤ÏÅÅ·â¤ËÊ¤¤ï¤ì¤¿¡ª";
+act = "ã¯é›»æ’ƒã«è¦†ã‚ã‚ŒãŸï¼";
 #else
 			act = "covered with lightning!";
 #endif
@@ -1438,7 +1438,7 @@ act = "¤ÏÅÅ·â¤ËÊ¤¤ï¤ì¤¿¡ª";
 			break;
 		case 14:
 #ifdef JP
-act = "¤Ï»À¤ËÊ¤¤ï¤ì¤¿¡ª";
+act = "ã¯é…¸ã«è¦†ã‚ã‚ŒãŸï¼";
 #else
 			act = "coated with acid!";
 #endif
@@ -1447,7 +1447,7 @@ act = "¤Ï»À¤ËÊ¤¤ï¤ì¤¿¡ª";
 			break;
 		case 13:
 #ifdef JP
-act = "¤Ï¼Ù°­¤Ê¤ë²øÊª¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯é‚ªæ‚ªãªã‚‹æ€ªç‰©ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "seems to be looking for evil monsters!";
 #endif
@@ -1456,7 +1456,7 @@ act = "¤Ï¼Ù°­¤Ê¤ë²øÊª¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 12:
 #ifdef JP
-act = "¤Ï°ÛÀ¤³¦¤Î½»¿Í¤ÎÆùÂÎ¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯ç•°ä¸–ç•Œã®ä½äººã®è‚‰ä½“ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "seems to be looking for demons!";
 #endif
@@ -1465,7 +1465,7 @@ act = "¤Ï°ÛÀ¤³¦¤Î½»¿Í¤ÎÆùÂÎ¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 11:
 #ifdef JP
-act = "¤Ï»Ó¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯å±ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "seems to be looking for undead!";
 #endif
@@ -1474,7 +1474,7 @@ act = "¤Ï»Ó¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 10:
 #ifdef JP
-act = "¤ÏÆ°Êª¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯å‹•ç‰©ã®è¡€ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "seems to be looking for animals!";
 #endif
@@ -1483,7 +1483,7 @@ act = "¤ÏÆ°Êª¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 9:
 #ifdef JP
-act = "¤Ï¥É¥é¥´¥ó¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯ãƒ‰ãƒ©ã‚´ãƒ³ã®è¡€ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "seems to be looking for dragons!";
 #endif
@@ -1492,7 +1492,7 @@ act = "¤Ï¥É¥é¥´¥ó¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 8:
 #ifdef JP
-act = "¤Ï¥È¥í¥ë¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯ãƒˆãƒ­ãƒ«ã®è¡€ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "seems to be looking for troll!s";
 #endif
@@ -1501,7 +1501,7 @@ act = "¤Ï¥È¥í¥ë¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 7:
 #ifdef JP
-act = "¤Ï¥ª¡¼¥¯¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯ã‚ªãƒ¼ã‚¯ã®è¡€ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "seems to be looking for orcs!";
 #endif
@@ -1510,7 +1510,7 @@ act = "¤Ï¥ª¡¼¥¯¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 6:
 #ifdef JP
-act = "¤Ïµğ¿Í¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯å·¨äººã®è¡€ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "seems to be looking for giants!";
 #endif
@@ -1519,7 +1519,7 @@ act = "¤Ïµğ¿Í¤Î·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 5:
 #ifdef JP
-act = "¤ÏÈó¾ï¤ËÉÔ°ÂÄê¤Ë¤Ê¤Ã¤¿¤è¤¦¤À¡£";
+act = "ã¯éå¸¸ã«ä¸å®‰å®šã«ãªã£ãŸã‚ˆã†ã ã€‚";
 #else
 			act = "seems very unstable now.";
 #endif
@@ -1529,7 +1529,7 @@ act = "¤ÏÈó¾ï¤ËÉÔ°ÂÄê¤Ë¤Ê¤Ã¤¿¤è¤¦¤À¡£";
 			break;
 		case 4:
 #ifdef JP
-act = "¤Ï·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
+act = "ã¯è¡€ã‚’æ±‚ã‚ã¦ã„ã‚‹ï¼";
 #else
 			act = "thirsts for blood!";
 #endif
@@ -1538,7 +1538,7 @@ act = "¤Ï·ì¤òµá¤á¤Æ¤¤¤ë¡ª";
 			break;
 		case 3:
 #ifdef JP
-act = "¤ÏÆÇ¤ËÊ¤¤ï¤ì¤¿¡£";
+act = "ã¯æ¯’ã«è¦†ã‚ã‚ŒãŸã€‚";
 #else
 			act = "is coated with poison.";
 #endif
@@ -1547,7 +1547,7 @@ act = "¤ÏÆÇ¤ËÊ¤¤ï¤ì¤¿¡£";
 			break;
 		case 2:
 #ifdef JP
-act = "¤Ï½ã¥í¥°¥ë¥¹¤Ë°û¤ß¹ş¤Ş¤ì¤¿¡£";
+act = "ã¯ç´”ãƒ­ã‚°ãƒ«ã‚¹ã«é£²ã¿è¾¼ã¾ã‚ŒãŸã€‚";
 #else
 			act = "is engulfed in raw Logrus!";
 #endif
@@ -1556,7 +1556,7 @@ act = "¤Ï½ã¥í¥°¥ë¥¹¤Ë°û¤ß¹ş¤Ş¤ì¤¿¡£";
 			break;
 		case 1:
 #ifdef JP
-act = "¤Ï±ê¤Î¥·¡¼¥ë¥É¤ËÊ¤¤ï¤ì¤¿¡ª";
+act = "ã¯ç‚ã®ã‚·ãƒ¼ãƒ«ãƒ‰ã«è¦†ã‚ã‚ŒãŸï¼";
 #else
 			act = "is covered in a fiery shield!";
 #endif
@@ -1565,7 +1565,7 @@ act = "¤Ï±ê¤Î¥·¡¼¥ë¥É¤ËÊ¤¤ï¤ì¤¿¡ª";
 			break;
 		default:
 #ifdef JP
-act = "¤Ï¿¼¤¯Îä¤¿¤¤¥Ö¥ë¡¼¤Ëµ±¤¤¤¿¡ª";
+act = "ã¯æ·±ãå†·ãŸã„ãƒ–ãƒ«ãƒ¼ã«è¼ã„ãŸï¼";
 #else
 			act = "glows deep, icy blue!";
 #endif
@@ -1575,7 +1575,7 @@ act = "¤Ï¿¼¤¯Îä¤¿¤¤¥Ö¥ë¡¼¤Ëµ±¤¤¤¿¡ª";
 		}
 
 #ifdef JP
-msg_format("¤¢¤Ê¤¿¤Î%s%s", o_name, act);
+msg_format("ã‚ãªãŸã®%s%s", o_name, act);
 #else
 		msg_format("Your %s %s", o_name, act);
 #endif
@@ -1591,7 +1591,7 @@ msg_format("¤¢¤Ê¤¿¤Î%s%s", o_name, act);
 		if (flush_failure) flush();
 
 #ifdef JP
-msg_print("Â°À­ÉÕ²Ã¤Ë¼ºÇÔ¤·¤¿¡£");
+msg_print("å±æ€§ä»˜åŠ ã«å¤±æ•—ã—ãŸã€‚");
 #else
 		msg_print("The Branding failed.");
 #endif
@@ -1648,7 +1648,7 @@ static bool vanish_dungeon(void)
 
 					/* Dump a message */
 #ifdef JP
-					msg_format("%^s¤¬ÌÜ¤ò³Ğ¤Ş¤·¤¿¡£", m_name);
+					msg_format("%^sãŒç›®ã‚’è¦šã¾ã—ãŸã€‚", m_name);
 #else
 					msg_format("%^s wakes up.", m_name);
 #endif
@@ -1790,7 +1790,7 @@ void call_the_(void)
 	else if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
 	{
 #ifdef JP
-		msg_print("ÃÏÌÌ¤¬ÍÉ¤ì¤¿¡£");
+		msg_print("åœ°é¢ãŒæºã‚ŒãŸã€‚");
 #else
 		msg_print("The ground trembles.");
 #endif
@@ -1799,9 +1799,9 @@ void call_the_(void)
 	else
 	{
 #ifdef JP
-		msg_format("¤¢¤Ê¤¿¤Ï%s¤òÊÉ¤Ë¶á¤¹¤®¤ë¾ì½ê¤Ç¾§¤¨¤Æ¤·¤Ş¤Ã¤¿¡ª",
-			((mp_ptr->spell_book == TV_LIFE_BOOK) ? "µ§¤ê" : "¼öÊ¸"));
-		msg_print("Âç¤­¤ÊÇúÈ¯²»¤¬¤¢¤Ã¤¿¡ª");
+		msg_format("ã‚ãªãŸã¯%sã‚’å£ã«è¿‘ã™ãã‚‹å ´æ‰€ã§å”±ãˆã¦ã—ã¾ã£ãŸï¼",
+			((mp_ptr->spell_book == TV_LIFE_BOOK) ? "ç¥ˆã‚Š" : "å‘ªæ–‡"));
+		msg_print("å¤§ããªçˆ†ç™ºéŸ³ãŒã‚ã£ãŸï¼");
 #else
 		msg_format("You %s the %s too close to a wall!",
 			((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"),
@@ -1812,7 +1812,7 @@ void call_the_(void)
 		if (one_in_(666))
 		{
 #ifdef JP
-			if (!vanish_dungeon()) msg_print("¥À¥ó¥¸¥ç¥ó¤Ï°ì½ÖÀÅ¤Ş¤êÊÖ¤Ã¤¿¡£");
+			if (!vanish_dungeon()) msg_print("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã¯ä¸€ç¬é™ã¾ã‚Šè¿”ã£ãŸã€‚");
 #else
 			if (!vanish_dungeon()) msg_print("The dungeon silences a moment.");
 #endif
@@ -1821,21 +1821,21 @@ void call_the_(void)
 		{
 			if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11), FALSE))
 #ifdef JP
-				msg_print("¥À¥ó¥¸¥ç¥ó¤¬Êø²õ¤·¤¿...");
+				msg_print("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ãŒå´©å£Šã—ãŸ...");
 #else
 				msg_print("The dungeon collapses...");
 #endif
 
 			else
 #ifdef JP
-				msg_print("¥À¥ó¥¸¥ç¥ó¤ÏÂç¤­¤¯ÍÉ¤ì¤¿¡£");
+				msg_print("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã¯å¤§ããæºã‚ŒãŸã€‚");
 #else
 				msg_print("The dungeon trembles.");
 #endif
 		}
 
 #ifdef JP
-		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "¼«»¦Åª¤ÊµõÌµ¾·Íè", -1);
+		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "è‡ªæ®ºçš„ãªè™šç„¡æ‹›æ¥", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "a suicidal Call the Void", -1);
 #endif
@@ -1857,7 +1857,7 @@ void fetch(int dir, int wgt, bool require_los)
 	if (cave[py][px].o_idx)
 	{
 #ifdef JP
-msg_print("¼«Ê¬¤ÎÂ­¤Î²¼¤Ë¤¢¤ëÊª¤Ï¼è¤ì¤Ş¤»¤ó¡£");
+msg_print("è‡ªåˆ†ã®è¶³ã®ä¸‹ã«ã‚ã‚‹ç‰©ã¯å–ã‚Œã¾ã›ã‚“ã€‚");
 #else
 		msg_print("You can't fetch when you're already standing on something.");
 #endif
@@ -1874,7 +1874,7 @@ msg_print("¼«Ê¬¤ÎÂ­¤Î²¼¤Ë¤¢¤ëÊª¤Ï¼è¤ì¤Ş¤»¤ó¡£");
 		if (distance(py, px, ty, tx) > MAX_RANGE)
 		{
 #ifdef JP
-msg_print("¤½¤ó¤Ê¤Ë±ó¤¯¤Ë¤¢¤ëÊª¤Ï¼è¤ì¤Ş¤»¤ó¡ª");
+msg_print("ãã‚“ãªã«é ãã«ã‚ã‚‹ç‰©ã¯å–ã‚Œã¾ã›ã‚“ï¼");
 #else
 			msg_print("You can't fetch something that far away!");
 #endif
@@ -1888,7 +1888,7 @@ msg_print("¤½¤ó¤Ê¤Ë±ó¤¯¤Ë¤¢¤ëÊª¤Ï¼è¤ì¤Ş¤»¤ó¡ª");
 		if (!c_ptr->o_idx)
 		{
 #ifdef JP
-msg_print("¤½¤³¤Ë¤Ï²¿¤â¤¢¤ê¤Ş¤»¤ó¡£");
+msg_print("ãã“ã«ã¯ä½•ã‚‚ã‚ã‚Šã¾ã›ã‚“ã€‚");
 #else
 			msg_print("There is no object at this place.");
 #endif
@@ -1900,7 +1900,7 @@ msg_print("¤½¤³¤Ë¤Ï²¿¤â¤¢¤ê¤Ş¤»¤ó¡£");
 		if (c_ptr->info & CAVE_ICKY)
 		{
 #ifdef JP
-msg_print("¥¢¥¤¥Æ¥à¤¬¥³¥ó¥È¥í¡¼¥ë¤ò³°¤ì¤ÆÍî¤Á¤¿¡£");
+msg_print("ã‚¢ã‚¤ãƒ†ãƒ ãŒã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’å¤–ã‚Œã¦è½ã¡ãŸã€‚");
 #else
 			msg_print("The item slips from your control.");
 #endif
@@ -1914,7 +1914,7 @@ msg_print("¥¢¥¤¥Æ¥à¤¬¥³¥ó¥È¥í¡¼¥ë¤ò³°¤ì¤ÆÍî¤Á¤¿¡£");
 			if (!player_has_los_bold(ty, tx))
 			{
 #ifdef JP
-				msg_print("¤½¤³¤Ï¤¢¤Ê¤¿¤Î»ë³¦¤ËÆş¤Ã¤Æ¤¤¤Ş¤»¤ó¡£");
+				msg_print("ãã“ã¯ã‚ãªãŸã®è¦–ç•Œã«å…¥ã£ã¦ã„ã¾ã›ã‚“ã€‚");
 #else
 				msg_print("You have no direct line of sight to that location.");
 #endif
@@ -1924,7 +1924,7 @@ msg_print("¥¢¥¤¥Æ¥à¤¬¥³¥ó¥È¥í¡¼¥ë¤ò³°¤ì¤ÆÍî¤Á¤¿¡£");
 			else if (!projectable(py, px, ty, tx))
 			{
 #ifdef JP
-				msg_print("¤½¤³¤ÏÊÉ¤Î¸ş¤³¤¦¤Ç¤¹¡£");
+				msg_print("ãã“ã¯å£ã®å‘ã“ã†ã§ã™ã€‚");
 #else
 				msg_print("You have no direct line of sight to that location.");
 #endif
@@ -1957,7 +1957,7 @@ msg_print("¥¢¥¤¥Æ¥à¤¬¥³¥ó¥È¥í¡¼¥ë¤ò³°¤ì¤ÆÍî¤Á¤¿¡£");
 	{
 		/* Too heavy to 'fetch' */
 #ifdef JP
-msg_print("¤½¤Î¥¢¥¤¥Æ¥à¤Ï½Å²á¤®¤Ş¤¹¡£");
+msg_print("ãã®ã‚¢ã‚¤ãƒ†ãƒ ã¯é‡éãã¾ã™ã€‚");
 #else
 		msg_print("The object is too heavy.");
 #endif
@@ -1974,7 +1974,7 @@ msg_print("¤½¤Î¥¢¥¤¥Æ¥à¤Ï½Å²á¤®¤Ş¤¹¡£");
 
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 #ifdef JP
-msg_format("%^s¤¬¤¢¤Ê¤¿¤ÎÂ­¸µ¤ËÈô¤ó¤Ç¤­¤¿¡£", o_name);
+msg_format("%^sãŒã‚ãªãŸã®è¶³å…ƒã«é£›ã‚“ã§ããŸã€‚", o_name);
 #else
 	msg_format("%^s flies through the air to your feet.", o_name);
 #endif
@@ -1991,7 +1991,7 @@ void alter_reality(void)
 	if (p_ptr->inside_arena || ironman_downward)
 	{
 #ifdef JP
-		msg_print("²¿¤âµ¯¤³¤é¤Ê¤«¤Ã¤¿¡£");
+		msg_print("ä½•ã‚‚èµ·ã“ã‚‰ãªã‹ã£ãŸã€‚");
 #else
 		msg_print("Nothing happens.");
 #endif
@@ -2004,7 +2004,7 @@ void alter_reality(void)
 
 		p_ptr->alter_reality = turns;
 #ifdef JP
-		msg_print("²ó¤ê¤Î·Ê¿§¤¬ÊÑ¤ï¤ê»Ï¤á¤¿...");
+		msg_print("å›ã‚Šã®æ™¯è‰²ãŒå¤‰ã‚ã‚Šå§‹ã‚ãŸ...");
 #else
 		msg_print("The view around you begins to change...");
 #endif
@@ -2015,7 +2015,7 @@ void alter_reality(void)
 	{
 		p_ptr->alter_reality = 0;
 #ifdef JP
-		msg_print("·Ê¿§¤¬¸µ¤ËÌá¤Ã¤¿...");
+		msg_print("æ™¯è‰²ãŒå…ƒã«æˆ»ã£ãŸ...");
 #else
 		msg_print("The view around you got back...");
 #endif
@@ -2035,7 +2035,7 @@ bool warding_glyph(void)
 	if (!cave_clean_bold(py, px))
 	{
 #ifdef JP
-msg_print("¾²¾å¤Î¥¢¥¤¥Æ¥à¤¬¼öÊ¸¤òÄ·¤ÍÊÖ¤·¤¿¡£");
+msg_print("åºŠä¸Šã®ã‚¢ã‚¤ãƒ†ãƒ ãŒå‘ªæ–‡ã‚’è·³ã­è¿”ã—ãŸã€‚");
 #else
 		msg_print("The object resists the spell.");
 #endif
@@ -2062,7 +2062,7 @@ bool place_mirror(void)
 	if (!cave_clean_bold(py, px))
 	{
 #ifdef JP
-msg_print("¾²¾å¤Î¥¢¥¤¥Æ¥à¤¬¼öÊ¸¤òÄ·¤ÍÊÖ¤·¤¿¡£");
+msg_print("åºŠä¸Šã®ã‚¢ã‚¤ãƒ†ãƒ ãŒå‘ªæ–‡ã‚’è·³ã­è¿”ã—ãŸã€‚");
 #else
 		msg_print("The object resists the spell.");
 #endif
@@ -2098,7 +2098,7 @@ bool explosive_rune(void)
 	if (!cave_clean_bold(py, px))
 	{
 #ifdef JP
-msg_print("¾²¾å¤Î¥¢¥¤¥Æ¥à¤¬¼öÊ¸¤òÄ·¤ÍÊÖ¤·¤¿¡£");
+msg_print("åºŠä¸Šã®ã‚¢ã‚¤ãƒ†ãƒ ãŒå‘ªæ–‡ã‚’è·³ã­è¿”ã—ãŸã€‚");
 #else
 		msg_print("The object resists the spell.");
 #endif
@@ -2255,8 +2255,8 @@ bool alchemy(void)
 
 	/* Get an item */
 #ifdef JP
-q = "¤É¤Î¥¢¥¤¥Æ¥à¤ò¶â¤ËÊÑ¤¨¤Ş¤¹¤«¡©";
-s = "¶â¤ËÊÑ¤¨¤é¤ì¤ëÊª¤¬¤¢¤ê¤Ş¤»¤ó¡£";
+q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’é‡‘ã«å¤‰ãˆã¾ã™ã‹ï¼Ÿ";
+s = "é‡‘ã«å¤‰ãˆã‚‰ã‚Œã‚‹ç‰©ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
 #else
 	q = "Turn which item to gold? ";
 	s = "You have nothing to turn to gold.";
@@ -2301,7 +2301,7 @@ s = "¶â¤ËÊÑ¤¨¤é¤ì¤ëÊª¤¬¤¢¤ê¤Ş¤»¤ó¡£";
 		{
 			/* Make a verification */
 #ifdef JP
-sprintf(out_val, "ËÜÅö¤Ë%s¤ò¶â¤ËÊÑ¤¨¤Ş¤¹¤«¡©", o_name);
+sprintf(out_val, "æœ¬å½“ã«%sã‚’é‡‘ã«å¤‰ãˆã¾ã™ã‹ï¼Ÿ", o_name);
 #else
 			sprintf(out_val, "Really turn %s to gold? ", o_name);
 #endif
@@ -2315,7 +2315,7 @@ sprintf(out_val, "ËÜÅö¤Ë%s¤ò¶â¤ËÊÑ¤¨¤Ş¤¹¤«¡©", o_name);
 	{
 		/* Message */
 #ifdef JP
-		msg_format("%s¤ò¶â¤ËÊÑ¤¨¤ë¤³¤È¤Ë¼ºÇÔ¤·¤¿¡£", o_name);
+		msg_format("%sã‚’é‡‘ã«å¤‰ãˆã‚‹ã“ã¨ã«å¤±æ•—ã—ãŸã€‚", o_name);
 #else
 		msg_format("You fail to turn %s to gold!", o_name);
 #endif
@@ -2330,7 +2330,7 @@ sprintf(out_val, "ËÜÅö¤Ë%s¤ò¶â¤ËÊÑ¤¨¤Ş¤¹¤«¡©", o_name);
 	{
 		/* Message */
 #ifdef JP
-msg_format("%s¤ò¥Ë¥»¤Î¶â¤ËÊÑ¤¨¤¿¡£", o_name);
+msg_format("%sã‚’ãƒ‹ã‚»ã®é‡‘ã«å¤‰ãˆãŸã€‚", o_name);
 #else
 		msg_format("You turn %s to fool's gold.", o_name);
 #endif
@@ -2344,7 +2344,7 @@ msg_format("%s¤ò¥Ë¥»¤Î¶â¤ËÊÑ¤¨¤¿¡£", o_name);
 
 		if (price > 30000) price = 30000;
 #ifdef JP
-msg_format("%s¤ò¡ğ%d ¤Î¶â¤ËÊÑ¤¨¤¿¡£", o_name, price);
+msg_format("%sã‚’ï¼„%d ã®é‡‘ã«å¤‰ãˆãŸã€‚", o_name, price);
 #else
 		msg_format("You turn %s to %ld coins worth of gold.", o_name, price);
 #endif
@@ -2387,7 +2387,7 @@ static void break_curse(object_type *o_ptr)
 	if (object_is_cursed(o_ptr) && !(o_ptr->curse_flags & TRC_PERMA_CURSE) && !(o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint0(100) < 25))
 	{
 #ifdef JP
-msg_print("¤«¤±¤é¤ì¤Æ¤¤¤¿¼ö¤¤¤¬ÂÇ¤ÁÇË¤é¤ì¤¿¡ª");
+msg_print("ã‹ã‘ã‚‰ã‚Œã¦ã„ãŸå‘ªã„ãŒæ‰“ã¡ç ´ã‚‰ã‚ŒãŸï¼");
 #else
 		msg_print("The curse is broken!");
 #endif
@@ -2539,8 +2539,8 @@ bool enchant_spell(int num_hit, int num_dam, int num_ac)
 
 	/* Get an item */
 #ifdef JP
-q = "¤É¤Î¥¢¥¤¥Æ¥à¤ò¶¯²½¤·¤Ş¤¹¤«? ";
-s = "¶¯²½¤Ç¤­¤ë¥¢¥¤¥Æ¥à¤¬¤Ê¤¤¡£";
+q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’å¼·åŒ–ã—ã¾ã™ã‹? ";
+s = "å¼·åŒ–ã§ãã‚‹ã‚¢ã‚¤ãƒ†ãƒ ãŒãªã„ã€‚";
 #else
 	q = "Enchant which item? ";
 	s = "You have nothing to enchant.";
@@ -2566,7 +2566,7 @@ s = "¶¯²½¤Ç¤­¤ë¥¢¥¤¥Æ¥à¤¬¤Ê¤¤¡£";
 
 	/* Describe */
 #ifdef JP
-msg_format("%s ¤ÏÌÀ¤ë¤¯µ±¤¤¤¿¡ª",
+msg_format("%s ã¯æ˜ã‚‹ãè¼ã„ãŸï¼",
     o_name);
 #else
 	msg_format("%s %s glow%s brightly!",
@@ -2588,7 +2588,7 @@ msg_format("%s ¤ÏÌÀ¤ë¤¯µ±¤¤¤¿¡ª",
 
 		/* Message */
 #ifdef JP
-msg_print("¶¯²½¤Ë¼ºÇÔ¤·¤¿¡£");
+msg_print("å¼·åŒ–ã«å¤±æ•—ã—ãŸã€‚");
 #else
 		msg_print("The enchantment failed.");
 #endif
@@ -2637,8 +2637,8 @@ bool artifact_scroll(void)
 
 	/* Get an item */
 #ifdef JP
-	q = "¤É¤Î¥¢¥¤¥Æ¥à¤ò¶¯²½¤·¤Ş¤¹¤«? ";
-	s = "¶¯²½¤Ç¤­¤ë¥¢¥¤¥Æ¥à¤¬¤Ê¤¤¡£";
+	q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’å¼·åŒ–ã—ã¾ã™ã‹? ";
+	s = "å¼·åŒ–ã§ãã‚‹ã‚¢ã‚¤ãƒ†ãƒ ãŒãªã„ã€‚";
 #else
 	q = "Enchant which item? ";
 	s = "You have nothing to enchant.";
@@ -2664,7 +2664,7 @@ bool artifact_scroll(void)
 
 	/* Describe */
 #ifdef JP
-	msg_format("%s ¤ÏâÁ¤¤¸÷¤òÈ¯¤·¤¿¡ª",o_name);
+	msg_format("%s ã¯çœ©ã„å…‰ã‚’ç™ºã—ãŸï¼",o_name);
 #else
 	msg_format("%s %s radiate%s a blinding light!",
 		  ((item >= 0) ? "Your" : "The"), o_name,
@@ -2674,7 +2674,7 @@ bool artifact_scroll(void)
 	if (object_is_artifact(o_ptr))
 	{
 #ifdef JP
-		msg_format("%s¤Ï´û¤ËÅÁÀâ¤Î¥¢¥¤¥Æ¥à¤Ç¤¹¡ª", o_name  );
+		msg_format("%sã¯æ—¢ã«ä¼èª¬ã®ã‚¢ã‚¤ãƒ†ãƒ ã§ã™ï¼", o_name  );
 #else
 		msg_format("The %s %s already %s!",
 		    o_name, ((o_ptr->number > 1) ? "are" : "is"),
@@ -2687,7 +2687,7 @@ bool artifact_scroll(void)
 	else if (object_is_ego(o_ptr))
 	{
 #ifdef JP
-		msg_format("%s¤Ï´û¤ËÌ¾¤Î¤¢¤ë¥¢¥¤¥Æ¥à¤Ç¤¹¡ª", o_name );
+		msg_format("%sã¯æ—¢ã«åã®ã‚ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã§ã™ï¼", o_name );
 #else
 		msg_format("The %s %s already %s!",
 		    o_name, ((o_ptr->number > 1) ? "are" : "is"),
@@ -2700,7 +2700,7 @@ bool artifact_scroll(void)
 	else if (o_ptr->xtra3)
 	{
 #ifdef JP
-		msg_format("%s¤Ï´û¤Ë¶¯²½¤µ¤ì¤Æ¤¤¤Ş¤¹¡ª", o_name );
+		msg_format("%sã¯æ—¢ã«å¼·åŒ–ã•ã‚Œã¦ã„ã¾ã™ï¼", o_name );
 #else
 		msg_format("The %s %s already %s!",
 		    o_name, ((o_ptr->number > 1) ? "are" : "is"),
@@ -2713,8 +2713,8 @@ bool artifact_scroll(void)
 		if (o_ptr->number > 1)
 		{
 #ifdef JP
-			msg_print("Ê£¿ô¤Î¥¢¥¤¥Æ¥à¤ËËâË¡¤ò¤«¤±¤ë¤À¤±¤Î¥¨¥Í¥ë¥®¡¼¤Ï¤¢¤ê¤Ş¤»¤ó¡ª");
-			msg_format("%d ¸Ä¤Î%s¤¬²õ¤ì¤¿¡ª",(o_ptr->number)-1, o_name);
+			msg_print("è¤‡æ•°ã®ã‚¢ã‚¤ãƒ†ãƒ ã«é­”æ³•ã‚’ã‹ã‘ã‚‹ã ã‘ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼ã¯ã‚ã‚Šã¾ã›ã‚“ï¼");
+			msg_format("%d å€‹ã®%sãŒå£Šã‚ŒãŸï¼",(o_ptr->number)-1, o_name);
 #else
 			msg_print("Not enough enough energy to enchant more than one object!");
 			msg_format("%d of your %s %s destroyed!",(o_ptr->number)-1, o_name, (o_ptr->number>2?"were":"was"));
@@ -2740,7 +2740,7 @@ bool artifact_scroll(void)
 
 		/* Message */
 #ifdef JP
-		msg_print("¶¯²½¤Ë¼ºÇÔ¤·¤¿¡£");
+		msg_print("å¼·åŒ–ã«å¤±æ•—ã—ãŸã€‚");
 #else
 		msg_print("The enchantment failed.");
 #endif
@@ -2843,7 +2843,7 @@ bool ident_spell(bool only_equip)
 	if (can_get_item())
 	{
 #ifdef JP
-		q = "¤É¤Î¥¢¥¤¥Æ¥à¤ò´ÕÄê¤·¤Ş¤¹¤«? ";
+		q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’é‘‘å®šã—ã¾ã™ã‹? ";
 #else
 		q = "Identify which item? ";
 #endif
@@ -2856,7 +2856,7 @@ bool ident_spell(bool only_equip)
 			item_tester_hook = NULL;
 
 #ifdef JP
-		q = "¤¹¤Ù¤Æ´ÕÄêºÑ¤ß¤Ç¤¹¡£ ";
+		q = "ã™ã¹ã¦é‘‘å®šæ¸ˆã¿ã§ã™ã€‚ ";
 #else
 		q = "All items are identified. ";
 #endif
@@ -2864,7 +2864,7 @@ bool ident_spell(bool only_equip)
 
 	/* Get an item */
 #ifdef JP
-	s = "´ÕÄê¤¹¤ë¤Ù¤­¥¢¥¤¥Æ¥à¤¬¤Ê¤¤¡£";
+	s = "é‘‘å®šã™ã‚‹ã¹ãã‚¢ã‚¤ãƒ†ãƒ ãŒãªã„ã€‚";
 #else
 	s = "You have nothing to identify.";
 #endif
@@ -2893,7 +2893,7 @@ bool ident_spell(bool only_equip)
 	if (item >= INVEN_RARM)
 	{
 #ifdef JP
-		msg_format("%^s: %s(%c)¡£", describe_use(item), o_name, index_to_label(item));
+		msg_format("%^s: %s(%c)ã€‚", describe_use(item), o_name, index_to_label(item));
 #else
 		msg_format("%^s: %s (%c).", describe_use(item), o_name, index_to_label(item));
 #endif
@@ -2901,7 +2901,7 @@ bool ident_spell(bool only_equip)
 	else if (item >= 0)
 	{
 #ifdef JP
-		msg_format("¥¶¥Ã¥¯Ãæ: %s(%c)¡£", o_name, index_to_label(item));
+		msg_format("ã‚¶ãƒƒã‚¯ä¸­: %s(%c)ã€‚", o_name, index_to_label(item));
 #else
 		msg_format("In your pack: %s (%c).", o_name, index_to_label(item));
 #endif
@@ -2909,7 +2909,7 @@ bool ident_spell(bool only_equip)
 	else
 	{
 #ifdef JP
-		msg_format("¾²¾å: %s¡£", o_name);
+		msg_format("åºŠä¸Š: %sã€‚", o_name);
 #else
 		msg_format("On the ground: %s.", o_name);
 #endif
@@ -2939,8 +2939,8 @@ bool mundane_spell(bool only_equip)
 
 	/* Get an item */
 #ifdef JP
-q = "¤É¤ì¤ò»È¤¤¤Ş¤¹¤«¡©";
-s = "»È¤¨¤ë¤â¤Î¤¬¤¢¤ê¤Ş¤»¤ó¡£";
+q = "ã©ã‚Œã‚’ä½¿ã„ã¾ã™ã‹ï¼Ÿ";
+s = "ä½¿ãˆã‚‹ã‚‚ã®ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
 #else
 	q = "Use which item? ";
 	s = "You have nothing you can use.";
@@ -2962,7 +2962,7 @@ s = "»È¤¨¤ë¤â¤Î¤¬¤¢¤ê¤Ş¤»¤ó¡£";
 
 	/* Oops */
 #ifdef JP
-	msg_print("¤Ş¤Ğ¤æ¤¤Á®¸÷¤¬Áö¤Ã¤¿¡ª");
+	msg_print("ã¾ã°ã‚†ã„é–ƒå…‰ãŒèµ°ã£ãŸï¼");
 #else
 	msg_print("There is a bright flash of light!");
 #endif
@@ -3025,7 +3025,7 @@ bool identify_fully(bool only_equip)
 	if (can_get_item())
 	{
 #ifdef JP
-		q = "¤É¤Î¥¢¥¤¥Æ¥à¤ò*´ÕÄê*¤·¤Ş¤¹¤«? ";
+		q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’*é‘‘å®š*ã—ã¾ã™ã‹? ";
 #else
 		q = "*Identify* which item? ";
 #endif
@@ -3038,7 +3038,7 @@ bool identify_fully(bool only_equip)
 			item_tester_hook = NULL;
 
 #ifdef JP
-		q = "¤¹¤Ù¤Æ*´ÕÄê*ºÑ¤ß¤Ç¤¹¡£ ";
+		q = "ã™ã¹ã¦*é‘‘å®š*æ¸ˆã¿ã§ã™ã€‚ ";
 #else
 		q = "All items are *identified*. ";
 #endif
@@ -3046,7 +3046,7 @@ bool identify_fully(bool only_equip)
 
 	/* Get an item */
 #ifdef JP
-	s = "*´ÕÄê*¤¹¤ë¤Ù¤­¥¢¥¤¥Æ¥à¤¬¤Ê¤¤¡£";
+	s = "*é‘‘å®š*ã™ã‚‹ã¹ãã‚¢ã‚¤ãƒ†ãƒ ãŒãªã„ã€‚";
 #else
 	s = "You have nothing to *identify*.";
 #endif
@@ -3081,7 +3081,7 @@ bool identify_fully(bool only_equip)
 	if (item >= INVEN_RARM)
 	{
 #ifdef JP
-		msg_format("%^s: %s(%c)¡£", describe_use(item), o_name, index_to_label(item));
+		msg_format("%^s: %s(%c)ã€‚", describe_use(item), o_name, index_to_label(item));
 #else
 		msg_format("%^s: %s (%c).", describe_use(item), o_name, index_to_label(item));
 #endif
@@ -3091,7 +3091,7 @@ bool identify_fully(bool only_equip)
 	else if (item >= 0)
 	{
 #ifdef JP
-		msg_format("¥¶¥Ã¥¯Ãæ: %s(%c)¡£", o_name, index_to_label(item));
+		msg_format("ã‚¶ãƒƒã‚¯ä¸­: %s(%c)ã€‚", o_name, index_to_label(item));
 #else
 		msg_format("In your pack: %s (%c).", o_name, index_to_label(item));
 #endif
@@ -3099,7 +3099,7 @@ bool identify_fully(bool only_equip)
 	else
 	{
 #ifdef JP
-		msg_format("¾²¾å: %s¡£", o_name);
+		msg_format("åºŠä¸Š: %sã€‚", o_name);
 #else
 		msg_format("On the ground: %s.", o_name);
 #endif
@@ -3173,8 +3173,8 @@ bool recharge(int power)
 
 	/* Get an item */
 #ifdef JP
-q = "¤É¤Î¥¢¥¤¥Æ¥à¤ËËâÎÏ¤ò½¼Å¶¤·¤Ş¤¹¤«? ";
-s = "ËâÎÏ¤ò½¼Å¶¤¹¤Ù¤­¥¢¥¤¥Æ¥à¤¬¤Ê¤¤¡£";
+q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã«é­”åŠ›ã‚’å……å¡«ã—ã¾ã™ã‹? ";
+s = "é­”åŠ›ã‚’å……å¡«ã™ã¹ãã‚¢ã‚¤ãƒ†ãƒ ãŒãªã„ã€‚";
 #else
 	q = "Recharge which item? ";
 	s = "You have nothing to recharge.";
@@ -3299,7 +3299,7 @@ s = "ËâÎÏ¤ò½¼Å¶¤¹¤Ù¤­¥¢¥¤¥Æ¥à¤¬¤Ê¤¤¡£";
 		{
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 #ifdef JP
-msg_format("ËâÎÏ¤¬µÕÎ®¤·¤¿¡ª%s¤Ï´°Á´¤ËËâÎÏ¤ò¼º¤Ã¤¿¡£", o_name);
+msg_format("é­”åŠ›ãŒé€†æµã—ãŸï¼%sã¯å®Œå…¨ã«é­”åŠ›ã‚’å¤±ã£ãŸã€‚", o_name);
 #else
 			msg_format("The recharging backfires - %s is completely drained!", o_name);
 #endif
@@ -3373,7 +3373,7 @@ msg_format("ËâÎÏ¤¬µÕÎ®¤·¤¿¡ª%s¤Ï´°Á´¤ËËâÎÏ¤ò¼º¤Ã¤¿¡£", o_name);
 				if (o_ptr->tval == TV_ROD)
 				{
 #ifdef JP
-msg_print("ËâÎÏ¤¬µÕÊ®¼Í¤·¤Æ¡¢¥í¥Ã¥É¤«¤é¤µ¤é¤ËËâÎÏ¤òµÛ¤¤¼è¤Ã¤Æ¤·¤Ş¤Ã¤¿¡ª");
+msg_print("é­”åŠ›ãŒé€†å™´å°„ã—ã¦ã€ãƒ­ãƒƒãƒ‰ã‹ã‚‰ã•ã‚‰ã«é­”åŠ›ã‚’å¸ã„å–ã£ã¦ã—ã¾ã£ãŸï¼");
 #else
 					msg_print("The recharge backfires, draining the rod further!");
 #endif
@@ -3384,7 +3384,7 @@ msg_print("ËâÎÏ¤¬µÕÊ®¼Í¤·¤Æ¡¢¥í¥Ã¥É¤«¤é¤µ¤é¤ËËâÎÏ¤òµÛ¤¤¼è¤Ã¤Æ¤·¤Ş¤Ã¤¿¡ª");
 				else if (o_ptr->tval == TV_WAND)
 				{
 #ifdef JP
-msg_format("%s¤ÏÇËÂ»¤òÌÈ¤ì¤¿¤¬¡¢ËâÎÏ¤¬Á´¤Æ¼º¤ï¤ì¤¿¡£", o_name);
+msg_format("%sã¯ç ´æã‚’å…ã‚ŒãŸãŒã€é­”åŠ›ãŒå…¨ã¦å¤±ã‚ã‚ŒãŸã€‚", o_name);
 #else
 					msg_format("You save your %s from destruction, but all charges are lost.", o_name);
 #endif
@@ -3399,14 +3399,14 @@ msg_format("%s¤ÏÇËÂ»¤òÌÈ¤ì¤¿¤¬¡¢ËâÎÏ¤¬Á´¤Æ¼º¤ï¤ì¤¿¡£", o_name);
 			{
 				if (o_ptr->number > 1)
 #ifdef JP
-msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬°ìËÜ²õ¤ì¤¿¡ª", o_name);
+msg_format("ä¹±æš´ãªé­”æ³•ã®ãŸã‚ã«%sãŒä¸€æœ¬å£Šã‚ŒãŸï¼", o_name);
 #else
 					msg_format("Wild magic consumes one of your %s!", o_name);
 #endif
 
 				else
 #ifdef JP
-msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬²õ¤ì¤¿¡ª", o_name);
+msg_format("ä¹±æš´ãªé­”æ³•ã®ãŸã‚ã«%sãŒå£Šã‚ŒãŸï¼", o_name);
 #else
 					msg_format("Wild magic consumes your %s!", o_name);
 #endif
@@ -3438,14 +3438,14 @@ msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬²õ¤ì¤¿¡ª", o_name);
 			{
 				if (o_ptr->number > 1)
 #ifdef JP
-msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬Á´¤Æ²õ¤ì¤¿¡ª", o_name);
+msg_format("ä¹±æš´ãªé­”æ³•ã®ãŸã‚ã«%sãŒå…¨ã¦å£Šã‚ŒãŸï¼", o_name);
 #else
 					msg_format("Wild magic consumes all your %s!", o_name);
 #endif
 
 				else
 #ifdef JP
-msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬²õ¤ì¤¿¡ª", o_name);
+msg_format("ä¹±æš´ãªé­”æ³•ã®ãŸã‚ã«%sãŒå£Šã‚ŒãŸï¼", o_name);
 #else
 					msg_format("Wild magic consumes your %s!", o_name);
 #endif
@@ -3500,8 +3500,8 @@ bool bless_weapon(void)
 
 	/* Get an item */
 #ifdef JP
-q = "¤É¤Î¥¢¥¤¥Æ¥à¤ò½ËÊ¡¤·¤Ş¤¹¤«¡©";
-s = "½ËÊ¡¤Ç¤­¤ëÉğ´ï¤¬¤¢¤ê¤Ş¤»¤ó¡£";
+q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ç¥ç¦ã—ã¾ã™ã‹ï¼Ÿ";
+s = "ç¥ç¦ã§ãã‚‹æ­¦å™¨ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
 #else
 	q = "Bless which weapon? ";
 	s = "You have weapon to bless.";
@@ -3537,7 +3537,7 @@ s = "½ËÊ¡¤Ç¤­¤ëÉğ´ï¤¬¤¢¤ê¤Ş¤»¤ó¡£";
 		    (o_ptr->curse_flags & TRC_PERMA_CURSE))
 		{
 #ifdef JP
-msg_format("%s¤òÊ¤¤¦¹õ¤¤¥ª¡¼¥é¤Ï½ËÊ¡¤òÄ·¤ÍÊÖ¤·¤¿¡ª",
+msg_format("%sã‚’è¦†ã†é»’ã„ã‚ªãƒ¼ãƒ©ã¯ç¥ç¦ã‚’è·³ã­è¿”ã—ãŸï¼",
     o_name);
 #else
 			msg_format("The black aura on %s %s disrupts the blessing!",
@@ -3548,7 +3548,7 @@ msg_format("%s¤òÊ¤¤¦¹õ¤¤¥ª¡¼¥é¤Ï½ËÊ¡¤òÄ·¤ÍÊÖ¤·¤¿¡ª",
 		}
 
 #ifdef JP
-msg_format("%s ¤«¤é¼Ù°­¤Ê¥ª¡¼¥é¤¬¾Ã¤¨¤¿¡£",
+msg_format("%s ã‹ã‚‰é‚ªæ‚ªãªã‚ªãƒ¼ãƒ©ãŒæ¶ˆãˆãŸã€‚",
     o_name);
 #else
 		msg_format("A malignant aura leaves %s %s.",
@@ -3583,7 +3583,7 @@ msg_format("%s ¤«¤é¼Ù°­¤Ê¥ª¡¼¥é¤¬¾Ã¤¨¤¿¡£",
 	if (have_flag(flgs, TR_BLESSED))
 	{
 #ifdef JP
-msg_format("%s ¤Ï´û¤Ë½ËÊ¡¤µ¤ì¤Æ¤¤¤ë¡£",
+msg_format("%s ã¯æ—¢ã«ç¥ç¦ã•ã‚Œã¦ã„ã‚‹ã€‚",
     o_name    );
 #else
 		msg_format("%s %s %s blessed already.",
@@ -3598,7 +3598,7 @@ msg_format("%s ¤Ï´û¤Ë½ËÊ¡¤µ¤ì¤Æ¤¤¤ë¡£",
 	{
 		/* Describe */
 #ifdef JP
-msg_format("%s¤Ïµ±¤¤¤¿¡ª",
+msg_format("%sã¯è¼ã„ãŸï¼",
      o_name);
 #else
 		msg_format("%s %s shine%s!",
@@ -3614,7 +3614,7 @@ msg_format("%s¤Ïµ±¤¤¤¿¡ª",
 		bool dis_happened = FALSE;
 
 #ifdef JP
-msg_print("¤½¤ÎÉğ´ï¤Ï½ËÊ¡¤ò·ù¤Ã¤Æ¤¤¤ë¡ª");
+msg_print("ãã®æ­¦å™¨ã¯ç¥ç¦ã‚’å«Œã£ã¦ã„ã‚‹ï¼");
 #else
 		msg_print("The weapon resists your blessing!");
 #endif
@@ -3650,13 +3650,13 @@ msg_print("¤½¤ÎÉğ´ï¤Ï½ËÊ¡¤ò·ù¤Ã¤Æ¤¤¤ë¡ª");
 		if (dis_happened)
 		{
 #ifdef JP
-msg_print("¼ş°Ï¤¬ËŞÍÇ¤ÊÊ·°Ïµ¤¤ÇËş¤Á¤¿...");
+msg_print("å‘¨å›²ãŒå‡¡åº¸ãªé›°å›²æ°—ã§æº€ã¡ãŸ...");
 #else
 			msg_print("There is a static feeling in the air...");
 #endif
 
 #ifdef JP
-msg_format("%s ¤ÏÎô²½¤·¤¿¡ª",
+msg_format("%s ã¯åŠ£åŒ–ã—ãŸï¼",
      o_name    );
 #else
 			msg_format("%s %s %s disenchanted!",
@@ -3696,8 +3696,8 @@ bool pulish_shield(void)
 
 	/* Get an item */
 #ifdef JP
-q = "¤É¤Î½â¤òËá¤­¤Ş¤¹¤«¡©";
-s = "Ëá¤¯½â¤¬¤¢¤ê¤Ş¤»¤ó¡£";
+q = "ã©ã®ç›¾ã‚’ç£¨ãã¾ã™ã‹ï¼Ÿ";
+s = "ç£¨ãç›¾ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
 #else
 	q = "Pulish which weapon? ";
 	s = "You have weapon to pulish.";
@@ -3729,7 +3729,7 @@ s = "Ëá¤¯½â¤¬¤¢¤ê¤Ş¤»¤ó¡£";
 	    !object_is_cursed(o_ptr) && (o_ptr->sval != SV_MIRROR_SHIELD))
 	{
 #ifdef JP
-msg_format("%s¤Ïµ±¤¤¤¿¡ª", o_name);
+msg_format("%sã¯è¼ã„ãŸï¼", o_name);
 #else
 		msg_format("%s %s shine%s!",
 		    ((item >= 0) ? "Your" : "The"), o_name,
@@ -3748,7 +3748,7 @@ msg_format("%s¤Ïµ±¤¤¤¿¡ª", o_name);
 		if (flush_failure) flush();
 
 #ifdef JP
-msg_print("¼ºÇÔ¤·¤¿¡£");
+msg_print("å¤±æ•—ã—ãŸã€‚");
 #else
 		msg_print("Failed.");
 #endif
@@ -3973,8 +3973,8 @@ void display_spell_list(void)
 		/* Display a list of spells */
 		prt("", y, x);
 #ifdef JP
-put_str("Ì¾Á°", y, x + 5);
-put_str("Lv   MP ¼ºÎ¨ ¸ú²Ì", y, x + 35);
+put_str("åå‰", y, x + 5);
+put_str("Lv   MP å¤±ç‡ åŠ¹æœ", y, x + 35);
 #else
 		put_str("Name", y, x + 5);
 		put_str("Lv Mana Fail Info", y, x + 35);
@@ -4094,7 +4094,7 @@ put_str("Lv   MP ¼ºÎ¨ ¸ú²Ì", y, x + 35);
 			{
 				/* Illegible */
 #ifdef JP
-strcpy(name, "(È½ÆÉÉÔÇ½)");
+strcpy(name, "(åˆ¤èª­ä¸èƒ½)");
 #else
 				strcpy(name, "(illegible)");
 #endif
@@ -4402,7 +4402,7 @@ void print_spells(int target_spell, byte *spells, int num, int y, int x, int use
 
 	if (((use_realm <= REALM_NONE) || (use_realm > MAX_REALM)) && p_ptr->wizard)
 #ifdef JP
-msg_print("·Ù¹ğ¡ª print_spell ¤¬ÎÎ°è¤Ê¤·¤Ë¸Æ¤Ğ¤ì¤¿");
+msg_print("è­¦å‘Šï¼ print_spell ãŒé ˜åŸŸãªã—ã«å‘¼ã°ã‚ŒãŸ");
 #else
 		msg_print("Warning! print_spells called with null realm");
 #endif
@@ -4418,13 +4418,13 @@ msg_print("·Ù¹ğ¡ª print_spell ¤¬ÎÎ°è¤Ê¤·¤Ë¸Æ¤Ğ¤ì¤¿");
 #endif
 	else
 #ifdef JP
-		strcpy(buf,"½ÏÎıÅÙ Lv   MP ¼ºÎ¨ ¸ú²Ì");
+		strcpy(buf,"ç†Ÿç·´åº¦ Lv   MP å¤±ç‡ åŠ¹æœ");
 #else
 		strcpy(buf,"Profic Lv   SP Fail Effect");
 #endif
 
 #ifdef JP
-put_str("Ì¾Á°", y, x + 5);
+put_str("åå‰", y, x + 5);
 put_str(buf, y, x + 29);
 #else
 	put_str("Name", y, x + 5);
@@ -4478,7 +4478,7 @@ put_str(buf, y, x + 29);
 		{
 			if (i == (target_spell-1))
 #ifdef JP
-				strcpy(out_val, "  ¡Õ ");
+				strcpy(out_val, "  ã€‹ ");
 #else
 				strcpy(out_val, "  >  ");
 #endif
@@ -4490,7 +4490,7 @@ put_str(buf, y, x + 29);
 		if (s_ptr->slevel >= 99)
 		{
 #ifdef JP
-strcat(out_val, format("%-30s", "(È½ÆÉÉÔÇ½)"));
+strcat(out_val, format("%-30s", "(åˆ¤èª­ä¸èƒ½)"));
 #else
 				strcat(out_val, format("%-30s", "(illegible)"));
 #endif
@@ -4516,7 +4516,7 @@ strcat(out_val, format("%-30s", "(È½ÆÉÉÔÇ½)"));
 			if (s_ptr->slevel > p_ptr->max_plv)
 			{
 #ifdef JP
-comment = "Ì¤ÃÎ";
+comment = "æœªçŸ¥";
 #else
 				comment = "unknown";
 #endif
@@ -4526,7 +4526,7 @@ comment = "Ì¤ÃÎ";
 			else if (s_ptr->slevel > p_ptr->lev)
 			{
 #ifdef JP
-comment = "ËºµÑ";
+comment = "å¿˜å´";
 #else
 				comment = "forgotten";
 #endif
@@ -4537,7 +4537,7 @@ comment = "ËºµÑ";
 		else if ((use_realm != p_ptr->realm1) && (use_realm != p_ptr->realm2))
 		{
 #ifdef JP
-comment = "Ì¤ÃÎ";
+comment = "æœªçŸ¥";
 #else
 			comment = "unknown";
 #endif
@@ -4549,7 +4549,7 @@ comment = "Ì¤ÃÎ";
 		    ((p_ptr->spell_forgotten2 & (1L << spell))))
 		{
 #ifdef JP
-comment = "ËºµÑ";
+comment = "å¿˜å´";
 #else
 			comment = "forgotten";
 #endif
@@ -4561,7 +4561,7 @@ comment = "ËºµÑ";
 		    (p_ptr->spell_learned2 & (1L << spell))))
 		{
 #ifdef JP
-comment = "Ì¤ÃÎ";
+comment = "æœªçŸ¥";
 #else
 			comment = "unknown";
 #endif
@@ -4573,7 +4573,7 @@ comment = "Ì¤ÃÎ";
 		    (p_ptr->spell_worked2 & (1L << spell))))
 		{
 #ifdef JP
-comment = "Ì¤·Ğ¸³";
+comment = "æœªçµŒé¨“";
 #else
 			comment = "untried";
 #endif
@@ -4861,7 +4861,7 @@ int inven_damage(inven_func typ, int perc)
 
 				/* Message */
 #ifdef JP
-msg_format("%s(%c)¤¬%s²õ¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª",
+msg_format("%s(%c)ãŒ%så£Šã‚Œã¦ã—ã¾ã£ãŸï¼",
 #else
 				msg_format("%sour %s (%c) %s destroyed!",
 #endif
@@ -4869,8 +4869,8 @@ msg_format("%s(%c)¤¬%s²õ¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª",
 #ifdef JP
 o_name, index_to_label(i),
     ((o_ptr->number > 1) ?
-    ((amt == o_ptr->number) ? "Á´Éô" :
-    (amt > 1 ? "²¿¸Ä¤«" : "°ì¸Ä")) : "")    );
+    ((amt == o_ptr->number) ? "å…¨éƒ¨" :
+    (amt > 1 ? "ä½•å€‹ã‹" : "ä¸€å€‹")) : "")    );
 #else
 				    ((o_ptr->number > 1) ?
 				    ((amt == o_ptr->number) ? "All of y" :
@@ -4881,7 +4881,7 @@ o_name, index_to_label(i),
 
 #ifdef JP
 				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-					msg_print("¤ä¤ê¤ä¤¬¤Ã¤¿¤Ê¡ª");
+					msg_print("ã‚„ã‚Šã‚„ãŒã£ãŸãªï¼");
 #endif
 
 				/* Potions smash open */
@@ -4953,7 +4953,7 @@ static int minus_ac(void)
 	if (have_flag(flgs, TR_IGNORE_ACID))
 	{
 #ifdef JP
-msg_format("¤·¤«¤·%s¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", o_name);
+msg_format("ã—ã‹ã—%sã«ã¯åŠ¹æœãŒãªã‹ã£ãŸï¼", o_name);
 #else
 		msg_format("Your %s is unaffected!", o_name);
 #endif
@@ -4964,7 +4964,7 @@ msg_format("¤·¤«¤·%s¤Ë¤Ï¸ú²Ì¤¬¤Ê¤«¤Ã¤¿¡ª", o_name);
 
 	/* Message */
 #ifdef JP
-msg_format("%s¤¬¥À¥á¡¼¥¸¤ò¼õ¤±¤¿¡ª", o_name);
+msg_format("%sãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸï¼", o_name);
 #else
 	msg_format("Your %s is damaged!", o_name);
 #endif
@@ -5171,8 +5171,8 @@ bool rustproof(void)
 
 	/* Get an item */
 #ifdef JP
-q = "¤É¤ÎËÉ¶ñ¤Ë»¬»ß¤á¤ò¤·¤Ş¤¹¤«¡©";
-s = "»¬»ß¤á¤Ç¤­¤ë¤â¤Î¤¬¤¢¤ê¤Ş¤»¤ó¡£";
+q = "ã©ã®é˜²å…·ã«éŒ†æ­¢ã‚ã‚’ã—ã¾ã™ã‹ï¼Ÿ";
+s = "éŒ†æ­¢ã‚ã§ãã‚‹ã‚‚ã®ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
 #else
 	q = "Rustproof which piece of armour? ";
 	s = "You have nothing to rustproof.";
@@ -5201,7 +5201,7 @@ s = "»¬»ß¤á¤Ç¤­¤ë¤â¤Î¤¬¤¢¤ê¤Ş¤»¤ó¡£";
 	if ((o_ptr->to_a < 0) && !object_is_cursed(o_ptr))
 	{
 #ifdef JP
-msg_format("%s¤Ï¿·ÉÊÆ±ÍÍ¤Ë¤Ê¤Ã¤¿¡ª",o_name);
+msg_format("%sã¯æ–°å“åŒæ§˜ã«ãªã£ãŸï¼",o_name);
 #else
 		msg_format("%s %s look%s as good as new!",
 			((item >= 0) ? "Your" : "The"), o_name,
@@ -5212,7 +5212,7 @@ msg_format("%s¤Ï¿·ÉÊÆ±ÍÍ¤Ë¤Ê¤Ã¤¿¡ª",o_name);
 	}
 
 #ifdef JP
-msg_format("%s¤ÏÉå¿©¤·¤Ê¤¯¤Ê¤Ã¤¿¡£", o_name);
+msg_format("%sã¯è…é£Ÿã—ãªããªã£ãŸã€‚", o_name);
 #else
 	msg_format("%s %s %s now protected against corrosion.",
 		((item >= 0) ? "Your" : "The"), o_name,
@@ -5252,8 +5252,8 @@ bool curse_armor(void)
 	{
 		/* Cool */
 #ifdef JP
-msg_format("%s¤¬%s¤òÊñ¤ß¹ş¤â¤¦¤È¤·¤¿¤¬¡¢%s¤Ï¤½¤ì¤òÄ·¤ÍÊÖ¤·¤¿¡ª",
-"¶²Éİ¤Î°Å¹õ¥ª¡¼¥é", "ËÉ¶ñ", o_name);
+msg_format("%sãŒ%sã‚’åŒ…ã¿è¾¼ã‚‚ã†ã¨ã—ãŸãŒã€%sã¯ãã‚Œã‚’è·³ã­è¿”ã—ãŸï¼",
+"ææ€–ã®æš—é»’ã‚ªãƒ¼ãƒ©", "é˜²å…·", o_name);
 #else
 		msg_format("A %s tries to %s, but your %s resists the effects!",
 			   "terrible black aura", "surround your armor", o_name);
@@ -5266,7 +5266,7 @@ msg_format("%s¤¬%s¤òÊñ¤ß¹ş¤â¤¦¤È¤·¤¿¤¬¡¢%s¤Ï¤½¤ì¤òÄ·¤ÍÊÖ¤·¤¿¡ª",
 	{
 		/* Oops */
 #ifdef JP
-msg_format("¶²Éİ¤Î°Å¹õ¥ª¡¼¥é¤¬¤¢¤Ê¤¿¤Î%s¤òÊñ¤ß¹ş¤ó¤À¡ª", o_name);
+msg_format("ææ€–ã®æš—é»’ã‚ªãƒ¼ãƒ©ãŒã‚ãªãŸã®%sã‚’åŒ…ã¿è¾¼ã‚“ã ï¼", o_name);
 #else
 		msg_format("A terrible black aura blasts your %s!", o_name);
 #endif
@@ -5325,8 +5325,8 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 	{
 		/* Cool */
 #ifdef JP
-		msg_format("%s¤¬%s¤òÊñ¤ß¹ş¤â¤¦¤È¤·¤¿¤¬¡¢%s¤Ï¤½¤ì¤òÄ·¤ÍÊÖ¤·¤¿¡ª",
-				"¶²Éİ¤Î°Å¹õ¥ª¡¼¥é", "Éğ´ï", o_name);
+		msg_format("%sãŒ%sã‚’åŒ…ã¿è¾¼ã‚‚ã†ã¨ã—ãŸãŒã€%sã¯ãã‚Œã‚’è·³ã­è¿”ã—ãŸï¼",
+				"ææ€–ã®æš—é»’ã‚ªãƒ¼ãƒ©", "æ­¦å™¨", o_name);
 #else
 		msg_format("A %s tries to %s, but your %s resists the effects!",
 				"terrible black aura", "surround your weapon", o_name);
@@ -5338,7 +5338,7 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 	{
 		/* Oops */
 #ifdef JP
-		if (!force) msg_format("¶²Éİ¤Î°Å¹õ¥ª¡¼¥é¤¬¤¢¤Ê¤¿¤Î%s¤òÊñ¤ß¹ş¤ó¤À¡ª", o_name);
+		if (!force) msg_format("ææ€–ã®æš—é»’ã‚ªãƒ¼ãƒ©ãŒã‚ãªãŸã®%sã‚’åŒ…ã¿è¾¼ã‚“ã ï¼", o_name);
 #else
 		if (!force) msg_format("A terrible black aura blasts your %s!", o_name);
 #endif
@@ -5411,7 +5411,7 @@ bool brand_bolts(void)
 
 		/* Message */
 #ifdef JP
-msg_print("¥¯¥í¥¹¥Ü¥¦¤ÎÌğ¤¬±ê¤Î¥ª¡¼¥é¤ËÊñ¤Ş¤ì¤¿¡ª");
+msg_print("ã‚¯ãƒ­ã‚¹ãƒœã‚¦ã®çŸ¢ãŒç‚ã®ã‚ªãƒ¼ãƒ©ã«åŒ…ã¾ã‚ŒãŸï¼");
 #else
 		msg_print("Your bolts are covered in a fiery aura!");
 #endif
@@ -5432,7 +5432,7 @@ msg_print("¥¯¥í¥¹¥Ü¥¦¤ÎÌğ¤¬±ê¤Î¥ª¡¼¥é¤ËÊñ¤Ş¤ì¤¿¡ª");
 
 	/* Fail */
 #ifdef JP
-msg_print("±ê¤Ç¶¯²½¤¹¤ë¤Î¤Ë¼ºÇÔ¤·¤¿¡£");
+msg_print("ç‚ã§å¼·åŒ–ã™ã‚‹ã®ã«å¤±æ•—ã—ãŸã€‚");
 #else
 	msg_print("The fiery enchantment failed.");
 #endif
@@ -5633,7 +5633,7 @@ bool dimension_door(void)
 	if (dimension_door_aux(x, y)) return TRUE;
 
 #ifdef JP
-	msg_print("ÀºÎî³¦¤«¤éÊª¼Á³¦¤ËÌá¤ë»ş¤¦¤Ş¤¯¤¤¤«¤Ê¤«¤Ã¤¿¡ª");
+	msg_print("ç²¾éœŠç•Œã‹ã‚‰ç‰©è³ªç•Œã«æˆ»ã‚‹æ™‚ã†ã¾ãã„ã‹ãªã‹ã£ãŸï¼");
 #else
 	msg_print("You fail to exit the astral plane correctly!");
 #endif
@@ -5655,7 +5655,7 @@ bool mirror_tunnel(void)
 	if (dimension_door_aux(x, y)) return TRUE;
 
 #ifdef JP
-	msg_print("¶À¤ÎÀ¤³¦¤ò¤¦¤Ş¤¯ÄÌ¤ì¤Ê¤«¤Ã¤¿¡ª");
+	msg_print("é¡ã®ä¸–ç•Œã‚’ã†ã¾ãé€šã‚Œãªã‹ã£ãŸï¼");
 #else
 	msg_print("You fail to pass the mirror plane correctly!");
 #endif
@@ -5681,8 +5681,8 @@ bool eat_magic(int power)
 
 	/* Get an item */
 #ifdef JP
-q = "¤É¤Î¥¢¥¤¥Æ¥à¤«¤éËâÎÏ¤òµÛ¼ı¤·¤Ş¤¹¤«¡©";
-s = "ËâÎÏ¤òµÛ¼ı¤Ç¤­¤ë¥¢¥¤¥Æ¥à¤¬¤¢¤ê¤Ş¤»¤ó¡£";
+q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‹ã‚‰é­”åŠ›ã‚’å¸åã—ã¾ã™ã‹ï¼Ÿ";
+s = "é­”åŠ›ã‚’å¸åã§ãã‚‹ã‚¢ã‚¤ãƒ†ãƒ ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
 #else
 	q = "Drain which item? ";
 	s = "You have nothing to drain.";
@@ -5717,7 +5717,7 @@ s = "ËâÎÏ¤òµÛ¼ı¤Ç¤­¤ë¥¢¥¤¥Æ¥à¤¬¤¢¤ê¤Ş¤»¤ó¡£";
 			if (o_ptr->timeout > (o_ptr->number - 1) * k_ptr->pval)
 			{
 #ifdef JP
-msg_print("½¼Å¶Ãæ¤Î¥í¥Ã¥É¤«¤éËâÎÏ¤òµÛ¼ı¤¹¤ë¤³¤È¤Ï¤Ç¤­¤Ş¤»¤ó¡£");
+msg_print("å……å¡«ä¸­ã®ãƒ­ãƒƒãƒ‰ã‹ã‚‰é­”åŠ›ã‚’å¸åã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚");
 #else
 				msg_print("You can't absorb energy from a discharged rod.");
 #endif
@@ -5776,7 +5776,7 @@ msg_print("½¼Å¶Ãæ¤Î¥í¥Ã¥É¤«¤éËâÎÏ¤òµÛ¼ı¤¹¤ë¤³¤È¤Ï¤Ç¤­¤Ş¤»¤ó¡£");
 
 					/* Message */
 #ifdef JP
-					msg_print("¾ó¤ò¤Ş¤È¤á¤Ê¤ª¤·¤¿¡£");
+					msg_print("æ–ã‚’ã¾ã¨ã‚ãªãŠã—ãŸã€‚");
 #else
 					msg_print("You unstack your staff.");
 #endif
@@ -5786,7 +5786,7 @@ msg_print("½¼Å¶Ãæ¤Î¥í¥Ã¥É¤«¤éËâÎÏ¤òµÛ¼ı¤¹¤ë¤³¤È¤Ï¤Ç¤­¤Ş¤»¤ó¡£");
 			else
 			{
 #ifdef JP
-msg_print("µÛ¼ı¤Ç¤­¤ëËâÎÏ¤¬¤¢¤ê¤Ş¤»¤ó¡ª");
+msg_print("å¸åã§ãã‚‹é­”åŠ›ãŒã‚ã‚Šã¾ã›ã‚“ï¼");
 #else
 				msg_print("There's no energy there to absorb!");
 #endif
@@ -5804,7 +5804,7 @@ msg_print("µÛ¼ı¤Ç¤­¤ëËâÎÏ¤¬¤¢¤ê¤Ş¤»¤ó¡ª");
 		{
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 #ifdef JP
-msg_format("ËâÎÏ¤¬µÕÎ®¤·¤¿¡ª%s¤Ï´°Á´¤ËËâÎÏ¤ò¼º¤Ã¤¿¡£", o_name);
+msg_format("é­”åŠ›ãŒé€†æµã—ãŸï¼%sã¯å®Œå…¨ã«é­”åŠ›ã‚’å¤±ã£ãŸã€‚", o_name);
 #else
 			msg_format("The recharging backfires - %s is completely drained!", o_name);
 #endif
@@ -5878,7 +5878,7 @@ msg_format("ËâÎÏ¤¬µÕÎ®¤·¤¿¡ª%s¤Ï´°Á´¤ËËâÎÏ¤ò¼º¤Ã¤¿¡£", o_name);
 				if (o_ptr->tval == TV_ROD)
 				{
 #ifdef JP
-msg_print("¥í¥Ã¥É¤ÏÇËÂ»¤òÌÈ¤ì¤¿¤¬¡¢ËâÎÏ¤ÏÁ´¤Æ¼º¤Ê¤ï¤ì¤¿¡£");
+msg_print("ãƒ­ãƒƒãƒ‰ã¯ç ´æã‚’å…ã‚ŒãŸãŒã€é­”åŠ›ã¯å…¨ã¦å¤±ãªã‚ã‚ŒãŸã€‚");
 #else
 					msg_format("You save your rod from destruction, but all charges are lost.", o_name);
 #endif
@@ -5888,7 +5888,7 @@ msg_print("¥í¥Ã¥É¤ÏÇËÂ»¤òÌÈ¤ì¤¿¤¬¡¢ËâÎÏ¤ÏÁ´¤Æ¼º¤Ê¤ï¤ì¤¿¡£");
 				else if (o_ptr->tval == TV_WAND)
 				{
 #ifdef JP
-msg_format("%s¤ÏÇËÂ»¤òÌÈ¤ì¤¿¤¬¡¢ËâÎÏ¤¬Á´¤Æ¼º¤ï¤ì¤¿¡£", o_name);
+msg_format("%sã¯ç ´æã‚’å…ã‚ŒãŸãŒã€é­”åŠ›ãŒå…¨ã¦å¤±ã‚ã‚ŒãŸã€‚", o_name);
 #else
 					msg_format("You save your %s from destruction, but all charges are lost.", o_name);
 #endif
@@ -5904,7 +5904,7 @@ msg_format("%s¤ÏÇËÂ»¤òÌÈ¤ì¤¿¤¬¡¢ËâÎÏ¤¬Á´¤Æ¼º¤ï¤ì¤¿¡£", o_name);
 				if (o_ptr->number > 1)
 				{
 #ifdef JP
-msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬°ìËÜ²õ¤ì¤¿¡ª", o_name);
+msg_format("ä¹±æš´ãªé­”æ³•ã®ãŸã‚ã«%sãŒä¸€æœ¬å£Šã‚ŒãŸï¼", o_name);
 #else
 					msg_format("Wild magic consumes one of your %s!", o_name);
 #endif
@@ -5916,7 +5916,7 @@ msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬°ìËÜ²õ¤ì¤¿¡ª", o_name);
 				}
 				else
 #ifdef JP
-msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬²¿ËÜ¤«²õ¤ì¤¿¡ª", o_name);
+msg_format("ä¹±æš´ãªé­”æ³•ã®ãŸã‚ã«%sãŒä½•æœ¬ã‹å£Šã‚ŒãŸï¼", o_name);
 #else
 					msg_format("Wild magic consumes your %s!", o_name);
 #endif
@@ -5943,14 +5943,14 @@ msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬²¿ËÜ¤«²õ¤ì¤¿¡ª", o_name);
 			{
 				if (o_ptr->number > 1)
 #ifdef JP
-msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬Á´¤Æ²õ¤ì¤¿¡ª", o_name);
+msg_format("ä¹±æš´ãªé­”æ³•ã®ãŸã‚ã«%sãŒå…¨ã¦å£Šã‚ŒãŸï¼", o_name);
 #else
 					msg_format("Wild magic consumes all your %s!", o_name);
 #endif
 
 				else
 #ifdef JP
-msg_format("ÍğË½¤ÊËâË¡¤Î¤¿¤á¤Ë%s¤¬²õ¤ì¤¿¡ª", o_name);
+msg_format("ä¹±æš´ãªé­”æ³•ã®ãŸã‚ã«%sãŒå£Šã‚ŒãŸï¼", o_name);
 #else
 					msg_format("Wild magic consumes your %s!", o_name);
 #endif

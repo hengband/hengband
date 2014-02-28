@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file wild.c
- * @brief ¹ÓÌî¥Ş¥Ã¥×¤ÎÀ¸À®¤È¥ë¡¼¥ë´ÉÍı / Wilderness generation
+ * @brief è’é‡ãƒãƒƒãƒ—ã®ç”Ÿæˆã¨ãƒ«ãƒ¼ãƒ«ç®¡ç† / Wilderness generation
  * @date 2014/02/13
  * @author
  * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
@@ -13,10 +13,10 @@
 #include "angband.h"
 
 /*!
- * @brief ÃÏ·ÁÀ¸À®³ÎÎ¨¤ò·è¤á¤ëÍ×ÁÇ100¤ÎÇÛÎó¤ò³ÎÎ¨¥Æ¡¼¥Ö¥ë¤«¤éºîÀ®¤¹¤ë
- * @param feat_type Èó°ìÍÍ³ÎÎ¨¤òºÆ¸½¤¹¤ë¤¿¤á¤ÎÍ×ÁÇ¿ô100¤ÎÇÛÎó
- * @param prob ¸µ¤Î³ÎÎ¨¥Æ¡¼¥Ö¥ë
- * @return ¤Ê¤·
+ * @brief åœ°å½¢ç”Ÿæˆç¢ºç‡ã‚’æ±ºã‚ã‚‹è¦ç´ 100ã®é…åˆ—ã‚’ç¢ºç‡ãƒ†ãƒ¼ãƒ–ãƒ«ã‹ã‚‰ä½œæˆã™ã‚‹
+ * @param feat_type éä¸€æ§˜ç¢ºç‡ã‚’å†ç¾ã™ã‚‹ãŸã‚ã®è¦ç´ æ•°100ã®é…åˆ—
+ * @param prob å…ƒã®ç¢ºç‡ãƒ†ãƒ¼ãƒ–ãƒ«
+ * @return ãªã—
  */
 static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_FEAT_PROB_NUM])
 {
@@ -36,10 +36,10 @@ static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_F
 }
 
 /*!
- * @brief ¥À¥ó¥¸¥ç¥ó¤ÎÃÏ·Á¤ò»ØÄê³ÎÎ¨¤Ë±ş¤¸¤Æ³Æ¥Ş¥¹¤Ø¥é¥ó¥À¥à¤ËÉß¤­µÍ¤á¤ë
+ * @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®åœ°å½¢ã‚’æŒ‡å®šç¢ºç‡ã«å¿œã˜ã¦å„ãƒã‚¹ã¸ãƒ©ãƒ³ãƒ€ãƒ ã«æ•·ãè©°ã‚ã‚‹
  * / Fill the arrays of floors and walls in the good proportions
- * @param type ¥À¥ó¥¸¥ç¥óID
- * @return ¤Ê¤·
+ * @param type ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ID
+ * @return ãªã—
  */
 void set_floor_and_wall(byte type)
 {
@@ -62,17 +62,17 @@ void set_floor_and_wall(byte type)
 
 
 /*!
- * @brief ¥×¥é¥º¥Ş¥Õ¥é¥¯¥¿¥ëÅªÃÏ·ÁÀ¸À®¤ÎºÆµ¢Ãæ´Ö½èÍı
+ * @brief ãƒ—ãƒ©ã‚ºãƒãƒ•ãƒ©ã‚¯ã‚¿ãƒ«çš„åœ°å½¢ç”Ÿæˆã®å†å¸°ä¸­é–“å‡¦ç†
  * / Helper for plasma generation.
- * @param x1 º¸¾åÃ¼¤Î¿¼¤ß
- * @param x2 ±¦¾åÃ¼¤Î¿¼¤ß
- * @param x3 º¸²¼Ã¼¤Î¿¼¤ß
- * @param x4 ±¦²¼Ã¼¤Î¿¼¤ß
- * @param xmid Ãæ±ûºÂÉ¸X
- * @param ymid Ãæ±ûºÂÉ¸Y
- * @param rough ¥é¥ó¥À¥àÉı
- * @param depth_max ¿¼¤ß¤ÎºÇÂçÃÍ
- * @return ¤Ê¤·
+ * @param x1 å·¦ä¸Šç«¯ã®æ·±ã¿
+ * @param x2 å³ä¸Šç«¯ã®æ·±ã¿
+ * @param x3 å·¦ä¸‹ç«¯ã®æ·±ã¿
+ * @param x4 å³ä¸‹ç«¯ã®æ·±ã¿
+ * @param xmid ä¸­å¤®åº§æ¨™X
+ * @param ymid ä¸­å¤®åº§æ¨™Y
+ * @param rough ãƒ©ãƒ³ãƒ€ãƒ å¹…
+ * @param depth_max æ·±ã¿ã®æœ€å¤§å€¤
+ * @return ãªã—
  */
 static void perturb_point_mid(int x1, int x2, int x3, int x4,
 			  int xmid, int ymid, int rough, int depth_max)
@@ -100,16 +100,16 @@ static void perturb_point_mid(int x1, int x2, int x3, int x4,
 
 
 /*!
- * @brief ¥×¥é¥º¥Ş¥Õ¥é¥¯¥¿¥ëÅªÃÏ·ÁÀ¸À®¤ÎºÆµ¢ËöÃ¼½èÍı
+ * @brief ãƒ—ãƒ©ã‚ºãƒãƒ•ãƒ©ã‚¯ã‚¿ãƒ«çš„åœ°å½¢ç”Ÿæˆã®å†å¸°æœ«ç«¯å‡¦ç†
  * / Helper for plasma generation.
- * @param x1 Ãæ´ÖËöÃ¼Éô1¤Î½Å¤ß
- * @param x2 Ãæ´ÖËöÃ¼Éô2¤Î½Å¤ß
- * @param x3 Ãæ´ÖËöÃ¼Éô3¤Î½Å¤ß
- * @param xmid ºÇ½ªËöÃ¼ÉôºÂÉ¸X
- * @param ymid ºÇ½ªËöÃ¼ÉôºÂÉ¸Y
- * @param rough ¥é¥ó¥À¥àÉı
- * @param depth_max ¿¼¤ß¤ÎºÇÂçÃÍ
- * @return ¤Ê¤·
+ * @param x1 ä¸­é–“æœ«ç«¯éƒ¨1ã®é‡ã¿
+ * @param x2 ä¸­é–“æœ«ç«¯éƒ¨2ã®é‡ã¿
+ * @param x3 ä¸­é–“æœ«ç«¯éƒ¨3ã®é‡ã¿
+ * @param xmid æœ€çµ‚æœ«ç«¯éƒ¨åº§æ¨™X
+ * @param ymid æœ€çµ‚æœ«ç«¯éƒ¨åº§æ¨™Y
+ * @param rough ãƒ©ãƒ³ãƒ€ãƒ å¹…
+ * @param depth_max æ·±ã¿ã®æœ€å¤§å€¤
+ * @return ãªã—
  */
 static void perturb_point_end(int x1, int x2, int x3,
 			  int xmid, int ymid, int rough, int depth_max)
@@ -136,15 +136,15 @@ static void perturb_point_end(int x1, int x2, int x3,
 
 
 /*!
- * @brief ¥×¥é¥º¥Ş¥Õ¥é¥¯¥¿¥ëÅªÃÏ·ÁÀ¸À®¤Î³«»Ï½èÍı
+ * @brief ãƒ—ãƒ©ã‚ºãƒãƒ•ãƒ©ã‚¯ã‚¿ãƒ«çš„åœ°å½¢ç”Ÿæˆã®é–‹å§‹å‡¦ç†
  * / Helper for plasma generation.
- * @param x1 ½èÍıÈÏ°Ï¤Îº¸¾åXºÂÉ¸
- * @param y1 ½èÍıÈÏ°Ï¤Îº¸¾åYºÂÉ¸
- * @param x2 ½èÍıÈÏ°Ï¤Î±¦²¼XºÂÉ¸
- * @param y2 ½èÍıÈÏ°Ï¤Î±¦²¼YºÂÉ¸
- * @param depth_max ¿¼¤ß¤ÎºÇÂçÃÍ
- * @param rough ¥é¥ó¥À¥àÉı
- * @return ¤Ê¤·
+ * @param x1 å‡¦ç†ç¯„å›²ã®å·¦ä¸ŠXåº§æ¨™
+ * @param y1 å‡¦ç†ç¯„å›²ã®å·¦ä¸ŠYåº§æ¨™
+ * @param x2 å‡¦ç†ç¯„å›²ã®å³ä¸‹Xåº§æ¨™
+ * @param y2 å‡¦ç†ç¯„å›²ã®å³ä¸‹Yåº§æ¨™
+ * @param depth_max æ·±ã¿ã®æœ€å¤§å€¤
+ * @param rough ãƒ©ãƒ³ãƒ€ãƒ å¹…
+ * @return ãªã—
  * @details
  * <pre>
  * A generic function to generate the plasma fractal.
@@ -196,12 +196,12 @@ static void plasma_recursive(int x1, int y1, int x2, int y2,
 static s16b terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
 
 /*!
- * @brief ¹ÓÌî¥Õ¥í¥¢À¸À®¤Î¥µ¥Ö¥ë¡¼¥Á¥ó
- * @param terrain ¹ÓÌîÃÏ·ÁID
- * @param seed Íğ¿ô¤Î¸ÇÄê¥·¡¼¥É
- * @param border Ì¤»ÈÍÑ
- * @param corner ¹­°è¥Ş¥Ã¥×¤Î³ÑÉôÊ¬¤È¤·¤Æ¤ÎÀ¸À®¤Ê¤é¤ĞTRUE
- * @return ¤Ê¤·
+ * @brief è’é‡ãƒ•ãƒ­ã‚¢ç”Ÿæˆã®ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³
+ * @param terrain è’é‡åœ°å½¢ID
+ * @param seed ä¹±æ•°ã®å›ºå®šã‚·ãƒ¼ãƒ‰
+ * @param border æœªä½¿ç”¨
+ * @param corner åºƒåŸŸãƒãƒƒãƒ—ã®è§’éƒ¨åˆ†ã¨ã—ã¦ã®ç”Ÿæˆãªã‚‰ã°TRUE
+ * @return ãªã—
  */
 static void generate_wilderness_area(int terrain, u32b seed, bool border, bool corner)
 {
@@ -298,13 +298,13 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 
 
 /*!
- * @brief ¹ÓÌî¥Õ¥í¥¢À¸À®¤Î¥á¥¤¥ó¥ë¡¼¥Á¥ó /
+ * @brief è’é‡ãƒ•ãƒ­ã‚¢ç”Ÿæˆã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Load a town or generate a terrain level using "plasma" fractals.
- * @param y ¹­°è¥Ş¥Ã¥×YºÂÉ¸
- * @param x ¹­°è¥Ş¥Ã¥×YºÂÉ¸
- * @param border ¹­°è¥Ş¥Ã¥×¤ÎÊÕÉôÊ¬¤È¤·¤Æ¤ÎÀ¸À®¤Ê¤é¤ĞTRUE
- * @param corner ¹­°è¥Ş¥Ã¥×¤Î³ÑÉôÊ¬¤È¤·¤Æ¤ÎÀ¸À®¤Ê¤é¤ĞTRUE
- * @return ¤Ê¤·
+ * @param y åºƒåŸŸãƒãƒƒãƒ—Yåº§æ¨™
+ * @param x åºƒåŸŸãƒãƒƒãƒ—Yåº§æ¨™
+ * @param border åºƒåŸŸãƒãƒƒãƒ—ã®è¾ºéƒ¨åˆ†ã¨ã—ã¦ã®ç”Ÿæˆãªã‚‰ã°TRUE
+ * @param corner åºƒåŸŸãƒãƒƒãƒ—ã®è§’éƒ¨åˆ†ã¨ã—ã¦ã®ç”Ÿæˆãªã‚‰ã°TRUE
+ * @return ãªã—
  * @details
  * <pre>
  * x and y are the coordinates of the area in the wilderness.
@@ -441,9 +441,9 @@ static border_type border;
 
 
 /*!
- * @brief ¹­°è¥Ş¥Ã¥×¤ÎÀ¸À® /
+ * @brief åºƒåŸŸãƒãƒƒãƒ—ã®ç”Ÿæˆ /
  * Build the wilderness area outside of the town.
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 void wilderness_gen(void)
 {
@@ -689,9 +689,9 @@ void wilderness_gen(void)
 static s16b conv_terrain2feat[MAX_WILDERNESS];
 
 /*!
- * @brief ¹­°è¥Ş¥Ã¥×¤ÎÀ¸À®(´Ê°×½èÍıÈÇ) /
+ * @brief åºƒåŸŸãƒãƒƒãƒ—ã®ç”Ÿæˆ(ç°¡æ˜“å‡¦ç†ç‰ˆ) /
  * Build the wilderness area. -DG-
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 void wilderness_gen_small()
 {
@@ -761,16 +761,16 @@ static wilderness_grid w_letter[255];
 
 
 /*!
- * @brief w_info.txt¤Î¥Ç¡¼¥¿²òÀÏ /
+ * @brief w_info.txtã®ãƒ‡ãƒ¼ã‚¿è§£æ /
  * Parse a sub-file of the "extra info"
- * @param buf ÆÉ¤ß¼è¤Ã¤¿¥Ç¡¼¥¿¹Ô¤Î¥Ğ¥Ã¥Õ¥¡
- * @param ymin Ì¤»ÈÍÑ
- * @param xmin ¹­°èÃÏ·Á¥Ş¥Ã¥×¤òÆÉ¤ß¹ş¤ß¤¿¤¤xºÂÉ¸¤Î³«»Ï°ÌÃÖ
- * @param ymax Ì¤»ÈÍÑ
- * @param xmax ¹­°èÃÏ·Á¥Ş¥Ã¥×¤òÆÉ¤ß¹ş¤ß¤¿¤¤xºÂÉ¸¤Î½ªÎ»°ÌÃÖ
- * @param y ¹­°è¥Ş¥Ã¥×¤Î¹â¤µ¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @param x ¹­°è¥Ş¥Ã¥×¤ÎÉı¤òÊÖ¤¹»²¾È¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @param buf èª­ã¿å–ã£ãŸãƒ‡ãƒ¼ã‚¿è¡Œã®ãƒãƒƒãƒ•ã‚¡
+ * @param ymin æœªä½¿ç”¨
+ * @param xmin åºƒåŸŸåœ°å½¢ãƒãƒƒãƒ—ã‚’èª­ã¿è¾¼ã¿ãŸã„xåº§æ¨™ã®é–‹å§‹ä½ç½®
+ * @param ymax æœªä½¿ç”¨
+ * @param xmax åºƒåŸŸåœ°å½¢ãƒãƒƒãƒ—ã‚’èª­ã¿è¾¼ã¿ãŸã„xåº§æ¨™ã®çµ‚äº†ä½ç½®
+ * @param y åºƒåŸŸãƒãƒƒãƒ—ã®é«˜ã•ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param x åºƒåŸŸãƒãƒƒãƒ—ã®å¹…ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
@@ -915,9 +915,9 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 
 
 /*!
- * @brief ¥²¡¼¥à³«»Ï»ş¤Ë³Æ¹ÓÌî¥Õ¥í¥¢¤ÎÍğ¿ô¥·¡¼¥É¤ò»ØÄê¤¹¤ë /
+ * @brief ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ã«å„è’é‡ãƒ•ãƒ­ã‚¢ã®ä¹±æ•°ã‚·ãƒ¼ãƒ‰ã‚’æŒ‡å®šã™ã‚‹ /
  * Generate the random seeds for the wilderness
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 void seed_wilderness(void)
 {
@@ -942,9 +942,9 @@ typedef wilderness_type *wilderness_type_ptr;
 
 
 /*!
- * @brief ¥²¡¼¥à³«»Ï»ş¤Î¹ÓÌî½é´ü²½¥á¥¤¥ó¥ë¡¼¥Á¥ó /
+ * @brief ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ã®è’é‡åˆæœŸåŒ–ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize wilderness array
- * @return ¥¨¥é¡¼¥³¡¼¥É
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_wilderness(void)
 {
@@ -964,12 +964,12 @@ errr init_wilderness(void)
 }
 
 /*!
- * @brief ¹ÓÌî¤ÎÃÏÀªÀßÄê¤ò½é´ü²½¤¹¤ë /
+ * @brief è’é‡ã®åœ°å‹¢è¨­å®šã‚’åˆæœŸåŒ–ã™ã‚‹ /
  * Initialize wilderness array
- * @param terrain ½é´ü²½¤·¤¿¤¤ÃÏÀªID
- * @param feat_global ´ğËÜÅª¤ÊÃÏ·ÁID
- * @param fmt ÃÏÀªÆâ¤ÎÃÏ·Á¿ô¤ò»²¾È¤¹¤ë¤¿¤á¤ÎÆÈ¼«¥Õ¥©¡¼¥Ş¥Ã¥È
- * @return ¤Ê¤·
+ * @param terrain åˆæœŸåŒ–ã—ãŸã„åœ°å‹¢ID
+ * @param feat_global åŸºæœ¬çš„ãªåœ°å½¢ID
+ * @param fmt åœ°å‹¢å†…ã®åœ°å½¢æ•°ã‚’å‚ç…§ã™ã‚‹ãŸã‚ã®ç‹¬è‡ªãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+ * @return ãªã—
  */
 static void init_terrain_table(int terrain, s16b feat_global, cptr fmt, ...)
 {
@@ -1021,9 +1021,9 @@ static void init_terrain_table(int terrain, s16b feat_global, cptr fmt, ...)
 
 
 /*!
- * @brief ¹ÓÌî¤ÎÃÏÀªÀßÄêÁ´ÂÎ¤ò½é´ü²½¤¹¤ë¥á¥¤¥ó¥ë¡¼¥Á¥ó /
+ * @brief è’é‡ã®åœ°å‹¢è¨­å®šå…¨ä½“ã‚’åˆæœŸåŒ–ã™ã‚‹ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize arrays for wilderness terrains
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 void init_wilderness_terrains(void)
 {
@@ -1101,9 +1101,9 @@ void init_wilderness_terrains(void)
 }
 
 /*!
- * @brief ¹ÓÌî¤«¤é¹­°è¥Ş¥Ã¥×¤Ø¤ÎÀÚ¤êÂØ¤¨½èÍı /
+ * @brief è’é‡ã‹ã‚‰åºƒåŸŸãƒãƒƒãƒ—ã¸ã®åˆ‡ã‚Šæ›¿ãˆå‡¦ç† /
  * Initialize arrays for wilderness terrains
- * @return ÀÚ¤êÂØ¤¨¤¬¹Ô¤ï¤ì¤¿¾ì¹ç¤ÏTRUE¤òÊÖ¤¹¡£
+ * @return åˆ‡ã‚Šæ›¿ãˆãŒè¡Œã‚ã‚ŒãŸå ´åˆã¯TRUEã‚’è¿”ã™ã€‚
  */
 bool change_wild_mode(void)
 {
@@ -1117,7 +1117,7 @@ bool change_wild_mode(void)
 	if (lite_town || vanilla_town)
 	{
 #ifdef JP
-		msg_print("¹ÓÌî¤Ê¤ó¤Æ¤Ê¤¤¡£");
+		msg_print("è’é‡ãªã‚“ã¦ãªã„ã€‚");
 #else
 		msg_print("No global map.");
 #endif
@@ -1153,7 +1153,7 @@ bool change_wild_mode(void)
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 		if (!is_hostile(m_ptr)) continue;
 #ifdef JP
-		msg_print("Å¨¤¬¤¹¤°¶á¤¯¤Ë¤¤¤ë¤È¤­¤Ï¹­°è¥Ş¥Ã¥×¤ËÆş¤ì¤Ê¤¤¡ª");
+		msg_print("æ•µãŒã™ãè¿‘ãã«ã„ã‚‹ã¨ãã¯åºƒåŸŸãƒãƒƒãƒ—ã«å…¥ã‚Œãªã„ï¼");
 #else
 		msg_print("You cannot enter global map, since there is some monsters nearby!");
 #endif
@@ -1164,7 +1164,7 @@ bool change_wild_mode(void)
 	if (have_pet)
 	{
 #ifdef JP
-		cptr msg = "¥Ú¥Ã¥È¤òÃÖ¤¤¤Æ¹­°è¥Ş¥Ã¥×¤ËÆş¤ê¤Ş¤¹¤«¡©";
+		cptr msg = "ãƒšãƒƒãƒˆã‚’ç½®ã„ã¦åºƒåŸŸãƒãƒƒãƒ—ã«å…¥ã‚Šã¾ã™ã‹ï¼Ÿ";
 #else
 		cptr msg = "Do you leave your pets behind? ";
 #endif

@@ -1,17 +1,17 @@
-ÊÑ¶òÈÚÅÜ¤Î¥â¥ó¥¹¥¿¡¼
+å¤‰æ„šè›®æ€’ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼
 
-»²¾È¤·¤¿¤¤¥ª¥ó¥é¥¤¥ó¡¦¥Ø¥ë¥×¤Îµ­¹æ¤ò²¡¤·¤Æ²¼¤µ¤¤:
+å‚ç…§ã—ãŸã„ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ»ãƒ˜ãƒ«ãƒ—ã®è¨˜å·ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„:
 
-    (a) ÊÑ¶òÈÚÅÜ¤Î¥â¥ó¥¹¥¿¡¼        (jmonster.txt)
-    (b) ¥â¥ó¥¹¥¿¡¼¤Îµ­¹æ            (jmonster.txt#MonsterSymbols)
-    (c) ¥â¥ó¥¹¥¿¡¼¤Î¿§              (jmonster.txt#MonsterColors)
-    (d) ¥â¥ó¥¹¥¿¡¼¤Î»×¤¤½Ğ          (jmonster.txt#MonsterMemory)
-    (e) ¥æ¥Ë¡¼¥¯¥â¥ó¥¹¥¿¡¼          (jmonster.txt#Uniques)
-    (f) Àµµ¤ÅÙ¥Á¥§¥Ã¥¯              (jmonster.txt#EldritchHorror)
-    (g) ¥Ú¥Ã¥È                      (jmonster.txt#Pets)
-    (h) Í§¹¥Åª¤Ê¥â¥ó¥¹¥¿¡¼          (jmonster.txt#Friendly)
+    (a) å¤‰æ„šè›®æ€’ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼        (jmonster.txt)
+    (b) ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®è¨˜å·            (jmonster.txt#MonsterSymbols)
+    (c) ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®è‰²              (jmonster.txt#MonsterColors)
+    (d) ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ€ã„å‡º          (jmonster.txt#MonsterMemory)
+    (e) ãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼          (jmonster.txt#Uniques)
+    (f) æ­£æ°—åº¦ãƒã‚§ãƒƒã‚¯              (jmonster.txt#EldritchHorror)
+    (g) ãƒšãƒƒãƒˆ                      (jmonster.txt#Pets)
+    (h) å‹å¥½çš„ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼          (jmonster.txt#Friendly)
 
-    (?) ¥Ø¥ë¥×¥·¥¹¥Æ¥à¤Î»ÈÍÑË¡      (jhelpinfo.txt)
+    (?) ãƒ˜ãƒ«ãƒ—ã‚·ã‚¹ãƒ†ãƒ ã®ä½¿ç”¨æ³•      (jhelpinfo.txt)
 
 
 ***** [a] jmonster.txt

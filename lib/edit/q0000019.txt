@@ -3,7 +3,7 @@
 
 # Name
 Q:$19:N:Doom Quest 1
-Q:19:N:���ǤΥ������ȣ�
+Q:19:N:破滅のクエスト１
 
 # Definition
 Q:$19:Q:6:0:0:0:15:0:0:0:6
@@ -17,25 +17,25 @@ Q:$19:T:of our townspeople investigated it unwittingly and barely
 Q:$19:T:escaped with his life!  Please destroy these demons and 
 Q:$19:T:ensure the continued safety of our town, else we are surely
 Q:$19:T:doomed.
-Q:19:T:�������͡����ʤ����Ϥ��ߤ������������γ���������
-Q:19:T:�꤬���򳫤���������Ǵ�̯�ʰ���ɤ⤬�����ᤤ�Ƥ��ޤ���
-Q:19:T:��̱�ΰ�ͤ��������Τ餺��������ߡ�̿���餬��ƨ�����ä�
-Q:19:T:��ޤ������ɤ���������Ǥ��ݤ�������ޤ��̤�ʿ�¤ʳ��ˤ��Ʋ�������
-Q:19:T:����ʤ���в桹�ϳμ¤����Ǥ��뤳�Ȥˤʤ�Ǥ��礦��
+Q:19:T:冒険者様、あなたの力をお貸し下さい。この街の北西に
+Q:19:T:穴が口を開け、その中で奇妙な悪魔どもがうごめいています。
+Q:19:T:住民の一人がそうと知らずに入り込み、命からがら逃げ帰って
+Q:19:T:来ました！どうか悪魔を打ち倒し、これまで通り平和な街にして下さい。
+Q:19:T:さもなければ我々は確実に破滅することになるでしょう。
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST19 3]
 Q:$19:T:Thank you for killing the demons! A small reward
 Q:$19:T:awaits you outside.
-Q:19:T:����ɤ���༣���Ʋ����ä�ͭ�񤦤������ޤ���
-Q:19:T:�����䤫�ʤ���򳰤��Ѱդ��Ƥ����ޤ�����
+Q:19:T:悪魔どもを退治して下さって有難うございます！
+Q:19:T:ささやかなお礼を外に用意しておきました。
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST19 5]
 Q:$19:T:I've sent out someone else to do the job.  Now leave me alone!
-Q:19:T:����¾�μԤ˻Ż���Ǥ���Ƥ���ޤ������Ф餯����ͤˤ����Ƥ���������
+Q:19:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
 ?:1
 
 # Floor with Manes

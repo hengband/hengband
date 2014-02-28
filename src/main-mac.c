@@ -1,4 +1,4 @@
-/* File: main-mac.c */
+ï»¿/* File: main-mac.c */
 
 /* Purpose: Simple support for MACINTOSH Angband */
 
@@ -1993,7 +1993,7 @@ static void play_sound(int num, SInt16 vol)
 
 				/* Notify error */
 #ifdef JP
-				plog("¥µ¥¦¥ó¥É¥Á¥ã¥ó¥Í¥ë¤ò½é´ü²½½ĞÍè¤Ş¤»¤ó!");
+				plog("ã‚µã‚¦ãƒ³ãƒ‰ãƒãƒ£ãƒ³ãƒãƒ«ã‚’åˆæœŸåŒ–å‡ºæ¥ã¾ã›ã‚“!");
 #else
 				plog("Cannot initialise sound channels!");
 #endif
@@ -2500,7 +2500,7 @@ static errr Term_xtra_mac_react(void)
 		if ((graf_mode_req != GRAF_MODE_NONE) && !frameP && (globe_init() != 0))
 		{
 #ifdef JP
-			plog("¥°¥é¥Õ¥£¥Ã¥¯¤Î½é´ü²½¤Ï½ĞÍè¤Ş¤»¤ó¤Ç¤·¤¿.");
+			plog("ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã®åˆæœŸåŒ–ã¯å‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸ.");
 #else
 			plog("Cannot initialize graphics!");
 #endif
@@ -3186,7 +3186,7 @@ static void SetupAppDir(void)
 	if (err != noErr)
 	{
 #ifdef JP
-		sprintf(errString, "PBGetFCBInfo ¥¨¥é¡¼ #%d.\r ½ªÎ»¤·¤Ş¤¹.", err);
+		sprintf(errString, "PBGetFCBInfo ã‚¨ãƒ©ãƒ¼ #%d.\r çµ‚äº†ã—ã¾ã™.", err);
 #else
 		sprintf(errString, "Fatal PBGetFCBInfo Error #%d.\r Exiting.", err);
 #endif
@@ -3203,7 +3203,7 @@ static void SetupAppDir(void)
 	if (err != noErr)
 	{
 #ifdef JP
-		sprintf(errString, "HSetVol ¥¨¥é¡¼ #%d.\r ½ªÎ»¤·¤Ş¤¹.", err);
+		sprintf(errString, "HSetVol ã‚¨ãƒ©ãƒ¼ #%d.\r çµ‚äº†ã—ã¾ã™.", err);
 #else
 		sprintf(errString, "Fatal HSetVol Error #%d.\r Exiting.", err);
 #endif
@@ -3397,7 +3397,7 @@ static void cf_load_prefs()
 	{
 		/* This may be the first run */
 #ifdef JP
-		mac_warning("½é´üÀßÄê¥Õ¥¡¥¤¥ë¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó¡£");
+		mac_warning("åˆæœŸè¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚");
 #else
 		mac_warning("Preferences are not found.");
 #endif
@@ -3562,7 +3562,7 @@ static void load_prefs(void)
 	{
 		/* Message */
 		#ifdef JP
-		mac_warning("¸Å¤¤½é´üÀßÄê¥Õ¥¡¥¤¥ë¤òÌµ»ë¤·¤Ş¤¹.");
+		mac_warning("å¤ã„åˆæœŸè¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç„¡è¦–ã—ã¾ã™.");
 		#else
 		mac_warning("Ignoring old preferences.");
 		#endif
@@ -3618,15 +3618,15 @@ static void term_data_hack(term_data *td)
 #if TARGET_API_MAC_CARBON
 #ifdef JP
 	/* Default to Osaka font (Japanese) */
-	fid = FMGetFontFamilyFromName( "\pOsaka¡İÅùÉı" );
+	fid = FMGetFontFamilyFromName( "\pOsakaâˆ’ç­‰å¹…" );
 #else
 	/* Default to Monaco font */
 	fid = FMGetFontFamilyFromName("\pmonaco");
 #endif
 #else
 #ifdef JP
-	/* Default to ÅùÉıÌÀÄ« font (Japanese) */
-	GetFNum( "\pÅùÉıÌÀÄ«", &fid);
+	/* Default to ç­‰å¹…æ˜æœ font (Japanese) */
+	GetFNum( "\pç­‰å¹…æ˜æœ", &fid);
 	SetFScaleDisable( true );
 #else
 	/* Default to Monaco font */
@@ -4656,7 +4656,7 @@ static void init_menubar(void)
 
 	/* Whoops! */
 #ifdef JP
-	if (mbar == nil) quit("¥á¥Ë¥å¡¼¥Ğ¡¼ ID 128¤ò¸«¤Ä¤±¤ë»ö¤¬¤Ç¤­¤Ş¤»¤ó!");
+	if (mbar == nil) quit("ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ¼ ID 128ã‚’è¦‹ã¤ã‘ã‚‹äº‹ãŒã§ãã¾ã›ã‚“!");
 #else
 	if (mbar == nil) quit("Cannot find menubar('MBAR') id 128!");
 #endif
@@ -5764,7 +5764,7 @@ static void menu(long mc)
 				{
 					if (!can_save){
 #ifdef JP
-						plog("º£¤Ï¥»¡¼¥Ö¤¹¤ë¤³¤È¤Ï½ĞÍè¤Ş¤»¤ó¡£");
+						plog("ä»Šã¯ã‚»ãƒ¼ãƒ–ã™ã‚‹ã“ã¨ã¯å‡ºæ¥ã¾ã›ã‚“ã€‚");
 #else
 						plog("You may not do that right now.");
 #endif
@@ -5788,7 +5788,7 @@ static void menu(long mc)
 					{
 						if (!can_save){
 #ifdef JP
-							plog("º£¤Ï¥»¡¼¥Ö¤¹¤ë¤³¤È¤Ï½ĞÍè¤Ş¤»¤ó¡£");
+							plog("ä»Šã¯ã‚»ãƒ¼ãƒ–ã™ã‚‹ã“ã¨ã¯å‡ºæ¥ã¾ã›ã‚“ã€‚");
 #else
 							plog("You may not do that right now.");
 #endif
@@ -6216,7 +6216,7 @@ static pascal OSErr AEH_Quit(const AppleEvent *theAppleEvent,
 	{
 			if (!can_save){
 #ifdef JP
-				plog("º£¤Ï¥»¡¼¥Ö¤¹¤ë¤³¤È¤Ï½ĞÍè¤Ş¤»¤ó¡£");
+				plog("ä»Šã¯ã‚»ãƒ¼ãƒ–ã™ã‚‹ã“ã¨ã¯å‡ºæ¥ã¾ã›ã‚“ã€‚");
 #else
 				plog("You may not do that right now.");
 #endif
@@ -6793,7 +6793,7 @@ static bool CheckEvents(bool wait)
 			if (AEProcessAppleEvent(&event) != noErr)
 			{
 				#ifdef JP
-				plog("Apple Event Handler¤Î¥¨¥é¡¼¤Ç¤¹.");
+				plog("Apple Event Handlerã®ã‚¨ãƒ©ãƒ¼ã§ã™.");
 				#else
 				plog("Error in Apple Event Handler!");
 				#endif
@@ -6905,7 +6905,7 @@ static vptr hook_rpanic(huge size)
 
 		/* Mega-Hack -- Warning */
 		#ifdef JP
-		mac_warning("¥á¥â¥ê¡¼¤¬Â­¤ê¤Ş¤»¤ó!\rº£¤¹¤°½ªÎ»¤·¤Æ²¼¤µ¤¤!");
+		mac_warning("ãƒ¡ãƒ¢ãƒªãƒ¼ãŒè¶³ã‚Šã¾ã›ã‚“!\rä»Šã™ãçµ‚äº†ã—ã¦ä¸‹ã•ã„!");
 		#else
 		mac_warning("Running out of Memory!\rAbort this process now!");
 		#endif
@@ -6963,14 +6963,14 @@ static void hook_core(cptr str)
 
 	/* Warn, then save player */
 	#ifdef JP
-	mac_warning("Ã×Ì¿Åª¤Ê¥¨¥é¡¼¤Ç¤¹.\r¶¯À©Åª¤Ë¥»¡¼¥Ö¤·¤Æ½ªÎ»¤·¤Ş¤¹.");
+	mac_warning("è‡´å‘½çš„ãªã‚¨ãƒ©ãƒ¼ã§ã™.\rå¼·åˆ¶çš„ã«ã‚»ãƒ¼ãƒ–ã—ã¦çµ‚äº†ã—ã¾ã™.");
 	#else
 	mac_warning("Fatal error.\rI will now attempt to save and quit.");
 	#endif
 
 	/* Attempt to save */
 	#ifdef JP
-	if (!save_player()) mac_warning("·Ù¹ğ -- ¥»¡¼¥Ö¤Ë¼ºÇÔ¤·¤Ş¤·¤¿!");
+	if (!save_player()) mac_warning("è­¦å‘Š -- ã‚»ãƒ¼ãƒ–ã«å¤±æ•—ã—ã¾ã—ãŸ!");
 	#else
 	if (!save_player()) mac_warning("Warning -- save failed!");
 	#endif
@@ -7070,14 +7070,14 @@ static void init_stuff(void)
 
 		/* Warning */
 #ifdef JP
-		plog_fmt("'%s' ¥Õ¥¡¥¤¥ë¤ò¥ª¡¼¥×¥ó½ĞÍè¤Ş¤»¤ó.", path);
+		plog_fmt("'%s' ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚ªãƒ¼ãƒ—ãƒ³å‡ºæ¥ã¾ã›ã‚“.", path);
 #else
 		plog_fmt("Unable to open the '%s' file.", path);
 #endif
 
 		/* Warning */
 #ifdef JP
-		plog("Hengband¤Î'lib'¥Õ¥©¥ë¥À¤¬Â¸ºß¤·¤Ê¤¤¤«Àµ¤·¤¯Ìµ¤¤²ÄÇ½À­¤¬¤¢¤ê¤Ş¤¹.");
+		plog("Hengbandã®'lib'ãƒ•ã‚©ãƒ«ãƒ€ãŒå­˜åœ¨ã—ãªã„ã‹æ­£ã—ãç„¡ã„å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™.");
 #else
 		plog("The Angband 'lib' folder is probably missing or misplaced.");
 #endif
@@ -7276,7 +7276,7 @@ int main(void)
 		if ((err != noErr) || (versionNumber < 0x0700))
 		{
 			#ifdef JP
-			quit("¤³¤Î¥×¥í¥°¥é¥à¤Ï´Á»úTalk7.x.x°Ê¹ß¤ÇÆ°ºî¤·¤Ş¤¹.");
+			quit("ã“ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯æ¼¢å­—Talk7.x.xä»¥é™ã§å‹•ä½œã—ã¾ã™.");
 			#else
 			quit("You must have System 7 to use this program.");
 			#endif
@@ -7292,7 +7292,7 @@ int main(void)
 		if (SysEnvirons(1, &env) != noErr)
 		{
 			#ifdef JP
-			quit("SysEnvirons ¥³¡¼¥ë¤Ï¼ºÇÔ¤·¤Ş¤·¤¿¡ª");
+			quit("SysEnvirons ã‚³ãƒ¼ãƒ«ã¯å¤±æ•—ã—ã¾ã—ãŸï¼");
 			#else
 			quit("The SysEnvirons call failed!");
 			#endif
@@ -7302,7 +7302,7 @@ int main(void)
 		if (env.systemVersion < 0x0700)
 		{
 			#ifdef JP
-			quit("¤³¤Î¥×¥í¥°¥é¥à¤Ï´Á»úTalk7.x.x°Ê¹ß¤ÇÆ°ºî¤·¤Ş¤¹.");
+			quit("ã“ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯æ¼¢å­—Talk7.x.xä»¥é™ã§å‹•ä½œã—ã¾ã™.");
 			#else
 			quit("You must have System 7 to use this program.");
 			#endif
@@ -7312,7 +7312,7 @@ int main(void)
 		if (!env.hasColorQD)
 		{
 			#ifdef JP
-			quit("¤³¤Î¥×¥í¥°¥é¥à¤ÏColor Quickdraw¤¬Ìµ¤¤¤ÈÆ°ºî¤·¤Ş¤»¤ó.");
+			quit("ã“ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯Color QuickdrawãŒç„¡ã„ã¨å‹•ä½œã—ã¾ã›ã‚“.");
 			#else
 			quit("You must have Color Quickdraw to use this program.");
 			#endif
@@ -7465,7 +7465,7 @@ int main(void)
 
 	/* Prompt the user */
 #ifdef JP
-	prt("'¥Õ¥¡¥¤¥ë'¥á¥Ë¥å¡¼¤è¤ê'¿·µ¬'¤Ş¤¿¤Ï'³«¤¯...'¤òÁªÂò¤·¤Æ¤¯¤À¤µ¤¤¡£", 23, 10);
+	prt("'ãƒ•ã‚¡ã‚¤ãƒ«'ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚ˆã‚Š'æ–°è¦'ã¾ãŸã¯'é–‹ã...'ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚", 23, 10);
 #else
 	prt("[Choose 'New' or 'Open' from the 'File' menu]", 23, 15);
 #endif

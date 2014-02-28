@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
     @file dungeon.c
-    @brief Angband¥²¡¼¥à¥¨¥ó¥¸¥ó / Angband game engine
+    @brief Angbandã‚²ãƒ¼ãƒ ã‚¨ãƒ³ã‚¸ãƒ³ / Angband game engine
     @date 2013/12/31
     @author
     Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
@@ -12,16 +12,16 @@
 
 #include "angband.h"
 
-#define TY_CURSE_CHANCE 200 /*!<ÂÀ¸Å¤Î±åÇ°¤Î1¥¿¡¼¥óËè¤ÎÈ¯Æ°³ÎÎ¨(1/n)*/
-#define CHAINSWORD_NOISE 100 /*!<¥Á¥§¥ó¥½¡¼¤Î1¥¿¡¼¥óËè¤ÎÈ¯Æ°³ÎÎ¨(1/n)*/
+#define TY_CURSE_CHANCE 200 /*!<å¤ªå¤ã®æ€¨å¿µã®1ã‚¿ãƒ¼ãƒ³æ¯ã®ç™ºå‹•ç¢ºç‡(1/n)*/
+#define CHAINSWORD_NOISE 100 /*!<ãƒã‚§ãƒ³ã‚½ãƒ¼ã®1ã‚¿ãƒ¼ãƒ³æ¯ã®ç™ºå‹•ç¢ºç‡(1/n)*/
 
-static bool load = TRUE; /*!<¥í¡¼¥É½èÍıÃæ¤ÎÊ¬´ô¥Õ¥é¥°*/
-static int wild_regen = 20; /*!<¹­°è¥Ş¥Ã¥×°ÜÆ°»ş¤Î¼«Á³²óÉü½èÍı¥«¥¦¥ó¥¿¡Ê¹­°è¥Ş¥Ã¥×1¥Ş¥¹Ëè¤Ë20²ó½èÍı¤ò´ğËÜ¤È¤¹¤ë¡Ë*/
+static bool load = TRUE; /*!<ãƒ­ãƒ¼ãƒ‰å‡¦ç†ä¸­ã®åˆ†å²ãƒ•ãƒ©ã‚°*/
+static int wild_regen = 20; /*!<åºƒåŸŸãƒãƒƒãƒ—ç§»å‹•æ™‚ã®è‡ªç„¶å›å¾©å‡¦ç†ã‚«ã‚¦ãƒ³ã‚¿ï¼ˆåºƒåŸŸãƒãƒƒãƒ—1ãƒã‚¹æ¯ã«20å›å‡¦ç†ã‚’åŸºæœ¬ã¨ã™ã‚‹ï¼‰*/
 
 /*!
- * @brief ½ÅÅÙµ¼»÷´ÕÄê¤ÎÈ½ÃÇ½èÍı / Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
- * @param o_ptr µ¼»÷´ÕÄê¤ò¹Ô¤¦¥ª¥Ö¥¸¥§¥¯¥È¤Î»²¾È¥İ¥¤¥ó¥¿¡£
- * @return µ¼»÷´ÕÄê·ë²Ì¤ÎID¤òÊÖ¤¹¡£
+ * @brief é‡åº¦æ“¬ä¼¼é‘‘å®šã®åˆ¤æ–­å‡¦ç† / Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
+ * @param o_ptr æ“¬ä¼¼é‘‘å®šã‚’è¡Œã†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿ã€‚
+ * @return æ“¬ä¼¼é‘‘å®šçµæœã®IDã‚’è¿”ã™ã€‚
  */
 static byte value_check_aux1(object_type *o_ptr)
 {
@@ -64,9 +64,9 @@ static byte value_check_aux1(object_type *o_ptr)
 }
 
 /*!
- * @brief ·ÚÅÙµ¼»÷´ÕÄê¤ÎÈ½ÃÇ½èÍı / Return a "feeling" (or NULL) about an item.  Method 2 (Light).
- * @param o_ptr µ¼»÷´ÕÄê¤ò¹Ô¤¦¥ª¥Ö¥¸¥§¥¯¥È¤Î»²¾È¥İ¥¤¥ó¥¿¡£
- * @return µ¼»÷´ÕÄê·ë²Ì¤ÎID¤òÊÖ¤¹¡£
+ * @brief è»½åº¦æ“¬ä¼¼é‘‘å®šã®åˆ¤æ–­å‡¦ç† / Return a "feeling" (or NULL) about an item.  Method 2 (Light).
+ * @param o_ptr æ“¬ä¼¼é‘‘å®šã‚’è¡Œã†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿ã€‚
+ * @return æ“¬ä¼¼é‘‘å®šçµæœã®IDã‚’è¿”ã™ã€‚
  */
 static byte value_check_aux2(object_type *o_ptr)
 {
@@ -94,10 +94,10 @@ static byte value_check_aux2(object_type *o_ptr)
 
 
 /*!
- * @brief µ¼»÷´ÕÄê¤ò¼Âºİ¤Ë¹Ô¤¤È½Äê¤òÈ¿±Ç¤¹¤ë
- * @param slot µ¼»÷´ÕÄê¤ò¹Ô¤¦¥×¥ì¥¤¥ä¡¼¤Î½ê»ı¥ê¥¹¥ÈID
- * @param heavy ½ÅÅÙ¤Îµ¼»÷´ÕÄê¤ò¹Ô¤¦¤Ê¤é¤ĞTRUE
- * @return ¤Ê¤·
+ * @brief æ“¬ä¼¼é‘‘å®šã‚’å®Ÿéš›ã«è¡Œã„åˆ¤å®šã‚’åæ˜ ã™ã‚‹
+ * @param slot æ“¬ä¼¼é‘‘å®šã‚’è¡Œã†ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ‰€æŒãƒªã‚¹ãƒˆID
+ * @param heavy é‡åº¦ã®æ“¬ä¼¼é‘‘å®šã‚’è¡Œã†ãªã‚‰ã°TRUE
+ * @return ãªã—
  */
 static void sense_inventory_aux(int slot, bool heavy)
 {
@@ -176,7 +176,7 @@ static void sense_inventory_aux(int slot, bool heavy)
 	if (slot >= INVEN_RARM)
 	{
 #ifdef JP
-msg_format("%s%s(%c)¤Ï%s¤È¤¤¤¦´¶¤¸¤¬¤¹¤ë...",
+msg_format("%s%s(%c)ã¯%sã¨ã„ã†æ„Ÿã˜ãŒã™ã‚‹...",
 describe_use(slot),o_name, index_to_label(slot),game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) you are %s %s %s...",
@@ -191,7 +191,7 @@ describe_use(slot),o_name, index_to_label(slot),game_inscriptions[feel]);
 	else
 	{
 #ifdef JP
-msg_format("¥¶¥Ã¥¯¤ÎÃæ¤Î%s(%c)¤Ï%s¤È¤¤¤¦´¶¤¸¤¬¤¹¤ë...",
+msg_format("ã‚¶ãƒƒã‚¯ã®ä¸­ã®%s(%c)ã¯%sã¨ã„ã†æ„Ÿã˜ãŒã™ã‚‹...",
 o_name, index_to_label(slot),game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) in your pack %s %s...",
@@ -221,8 +221,8 @@ o_name, index_to_label(slot),game_inscriptions[feel]);
 
 
 /*!
- * @brief 1¥×¥ì¥¤¥ä¡¼¥¿¡¼¥óËè¤ËÉğ´ï¡¢ËÉ¶ñ¤Îµ¼»÷´ÕÄê¤¬¹Ô¤ï¤ì¤ë¤«¤òÈ½Äê¤¹¤ë¡£
- * @return ¤Ê¤·
+ * @brief 1ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¿ãƒ¼ãƒ³æ¯ã«æ­¦å™¨ã€é˜²å…·ã®æ“¬ä¼¼é‘‘å®šãŒè¡Œã‚ã‚Œã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
+ * @return ãªã—
  * @details
  * Sense the inventory\n
  *\n
@@ -468,8 +468,8 @@ static void sense_inventory1(void)
 }
 
 /*!
- * @brief 1¥×¥ì¥¤¥ä¡¼¥¿¡¼¥óËè¤ËÉğ´ï¡¢ËÉ¶ñ°Ê³°¤Îµ¼»÷´ÕÄê¤¬¹Ô¤ï¤ì¤ë¤«¤òÈ½Äê¤¹¤ë¡£
- * @return ¤Ê¤·
+ * @brief 1ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¿ãƒ¼ãƒ³æ¯ã«æ­¦å™¨ã€é˜²å…·ä»¥å¤–ã®æ“¬ä¼¼é‘‘å®šãŒè¡Œã‚ã‚Œã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
+ * @return ãªã—
  */
 static void sense_inventory2(void)
 {
@@ -595,8 +595,8 @@ static void sense_inventory2(void)
 }
 
 /*!
- * @brief ¥Ñ¥¿¡¼¥ó½ªÅÀÅşÃ£»ş¤Î¥Æ¥ì¥İ¡¼¥È½èÍı¤ò¹Ô¤¦
- * @return ¤Ê¤·
+ * @brief ãƒ‘ã‚¿ãƒ¼ãƒ³çµ‚ç‚¹åˆ°é”æ™‚ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆå‡¦ç†ã‚’è¡Œã†
+ * @return ãªã—
  */
 static void pattern_teleport(void)
 {
@@ -605,7 +605,7 @@ static void pattern_teleport(void)
 
 	/* Ask for level */
 #ifdef JP
-	if (get_check("Â¾¤Î³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤·¤Ş¤¹¤«¡©"))
+	if (get_check("ä»–ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ"))
 #else
 	if (get_check("Teleport level? "))
 #endif
@@ -634,7 +634,7 @@ static void pattern_teleport(void)
 
 		/* Prompt */
 #ifdef JP
-		sprintf(ppp, "¥Æ¥ì¥İ¡¼¥ÈÀè:(%d-%d)", min_level, max_level);
+		sprintf(ppp, "ãƒ†ãƒ¬ãƒãƒ¼ãƒˆå…ˆ:(%d-%d)", min_level, max_level);
 #else
 		sprintf(ppp, "Teleport to level (%d-%d): ", min_level, max_level);
 #endif
@@ -650,7 +650,7 @@ static void pattern_teleport(void)
 		command_arg = atoi(tmp_val);
 	}
 #ifdef JP
-	else if (get_check("ÄÌ¾ï¥Æ¥ì¥İ¡¼¥È¡©"))
+	else if (get_check("é€šå¸¸ãƒ†ãƒ¬ãƒãƒ¼ãƒˆï¼Ÿ"))
 #else
 	else if (get_check("Normal teleport? "))
 #endif
@@ -671,7 +671,7 @@ static void pattern_teleport(void)
 
 	/* Accept request */
 #ifdef JP
-	msg_format("%d ³¬¤Ë¥Æ¥ì¥İ¡¼¥È¤·¤Ş¤·¤¿¡£", command_arg);
+	msg_format("%d éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã—ãŸã€‚", command_arg);
 #else
 	msg_format("You teleport to dungeon level %d.", command_arg);
 #endif
@@ -700,8 +700,8 @@ static void pattern_teleport(void)
 }
 
 /*!
- * @brief ¼ïÂ²¥¢¥ó¥Ğ¥é¥¤¥È¤¬½Ğ·ì»ş¥Ñ¥¿¡¼¥ó¤Î¾å¤Ë¾è¤Ã¤¿ºİ¤Î¥Ú¥Ê¥ë¥Æ¥£½èÍı
- * @return ¤Ê¤·
+ * @brief ç¨®æ—ã‚¢ãƒ³ãƒãƒ©ã‚¤ãƒˆãŒå‡ºè¡€æ™‚ãƒ‘ã‚¿ãƒ¼ãƒ³ã®ä¸Šã«ä¹—ã£ãŸéš›ã®ãƒšãƒŠãƒ«ãƒ†ã‚£å‡¦ç†
+ * @return ãªã—
  */
 static void wreck_the_pattern(void)
 {
@@ -715,8 +715,8 @@ static void wreck_the_pattern(void)
 	}
 
 #ifdef JP
-	msg_print("¥Ñ¥¿¡¼¥ó¤ò·ì¤Ç±ø¤·¤Æ¤·¤Ş¤Ã¤¿¡ª");
-	msg_print("²¿¤«¶²¤í¤·¤¤»ö¤¬µ¯¤³¤Ã¤¿¡ª");
+	msg_print("ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’è¡€ã§æ±šã—ã¦ã—ã¾ã£ãŸï¼");
+	msg_print("ä½•ã‹æã‚ã—ã„äº‹ãŒèµ·ã“ã£ãŸï¼");
 #else
 	msg_print("You bleed on the Pattern!");
 	msg_print("Something terrible happens!");
@@ -724,7 +724,7 @@ static void wreck_the_pattern(void)
 
 	if (!IS_INVULN())
 #ifdef JP
-		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "¥Ñ¥¿¡¼¥óÂ»²õ", -1);
+		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "ãƒ‘ã‚¿ãƒ¼ãƒ³æå£Š", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "corrupting the Pattern", -1);
 #endif
@@ -746,8 +746,8 @@ static void wreck_the_pattern(void)
 }
 
 /*!
- * @brief ³Æ¼ï¥Ñ¥¿¡¼¥óÃÏ·Á¾å¤ÎÆÃÊÌ¤Ê½èÍı / Returns TRUE if we are on the Pattern...
- * @return ¼Âºİ¤Ë¥Ñ¥¿¡¼¥óÃÏ·Á¾å¤Ë¥×¥ì¥¤¥ä¡¼¤¬µï¤¿¾ì¹ç¤ÏTRUE¤òÊÖ¤¹¡£
+ * @brief å„ç¨®ãƒ‘ã‚¿ãƒ¼ãƒ³åœ°å½¢ä¸Šã®ç‰¹åˆ¥ãªå‡¦ç† / Returns TRUE if we are on the Pattern...
+ * @return å®Ÿéš›ã«ãƒ‘ã‚¿ãƒ¼ãƒ³åœ°å½¢ä¸Šã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå±…ãŸå ´åˆã¯TRUEã‚’è¿”ã™ã€‚
  */
 static bool pattern_effect(void)
 {
@@ -784,7 +784,7 @@ static bool pattern_effect(void)
 		cave_set_feat(py, px, feat_pattern_old);
 
 #ifdef JP
-		msg_print("¡Ö¥Ñ¥¿¡¼¥ó¡×¤Î¤³¤ÎÉôÊ¬¤ÏÂ¾¤ÎÉôÊ¬¤è¤ê¶¯ÎÏ¤Ç¤Ê¤¤¤è¤¦¤À¡£");
+		msg_print("ã€Œãƒ‘ã‚¿ãƒ¼ãƒ³ã€ã®ã“ã®éƒ¨åˆ†ã¯ä»–ã®éƒ¨åˆ†ã‚ˆã‚Šå¼·åŠ›ã§ãªã„ã‚ˆã†ã ã€‚");
 #else
 		msg_print("This section of the Pattern looks less powerful.");
 #endif
@@ -808,7 +808,7 @@ static bool pattern_effect(void)
 	case PATTERN_TILE_WRECKED:
 		if (!IS_INVULN())
 #ifdef JP
-			take_hit(DAMAGE_NOESCAPE, 200, "²õ¤ì¤¿¡Ö¥Ñ¥¿¡¼¥ó¡×¤òÊâ¤¤¤¿¥À¥á¡¼¥¸", -1);
+			take_hit(DAMAGE_NOESCAPE, 200, "å£Šã‚ŒãŸã€Œãƒ‘ã‚¿ãƒ¼ãƒ³ã€ã‚’æ­©ã„ãŸãƒ€ãƒ¡ãƒ¼ã‚¸", -1);
 #else
 			take_hit(DAMAGE_NOESCAPE, 200, "walking the corrupted Pattern", -1);
 #endif
@@ -819,7 +819,7 @@ static bool pattern_effect(void)
 			return TRUE;
 		else if (!IS_INVULN())
 #ifdef JP
-			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "¡Ö¥Ñ¥¿¡¼¥ó¡×¤òÊâ¤¤¤¿¥À¥á¡¼¥¸", -1);
+			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "ã€Œãƒ‘ã‚¿ãƒ¼ãƒ³ã€ã‚’æ­©ã„ãŸãƒ€ãƒ¡ãƒ¼ã‚¸", -1);
 #else
 			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "walking the Pattern", -1);
 #endif
@@ -831,9 +831,9 @@ static bool pattern_effect(void)
 
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤ÎHP¼«Á³²óÉü½èÍı / Regenerate hit points -RAK-
- * @param percent ²óÉüÈæÎ¨
- * @return ¤Ê¤·
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPè‡ªç„¶å›å¾©å‡¦ç† / Regenerate hit points -RAK-
+ * @param percent å›å¾©æ¯”ç‡
+ * @return ãªã—
  */
 static void regenhp(int percent)
 {
@@ -884,10 +884,10 @@ static void regenhp(int percent)
 
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤ÎMP¼«Á³²óÉü½èÍı(regen_magic()¤Î¥µ¥Ö¥»¥Ã¥È) / Regenerate mana points
- * @param upkeep_factor ¥Ú¥Ã¥È°İ»ı¤Ë¤è¤ëMP¥³¥¹¥ÈÎÌ
- * @param regen_amount ²óÉüÎÌ
- * @return ¤Ê¤·
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®MPè‡ªç„¶å›å¾©å‡¦ç†(regen_magic()ã®ã‚µãƒ–ã‚»ãƒƒãƒˆ) / Regenerate mana points
+ * @param upkeep_factor ãƒšãƒƒãƒˆç¶­æŒã«ã‚ˆã‚‹MPã‚³ã‚¹ãƒˆé‡
+ * @param regen_amount å›å¾©é‡
+ * @return ãªã—
  */
 static void regenmana(int upkeep_factor, int regen_amount)
 {
@@ -977,9 +977,9 @@ static void regenmana(int upkeep_factor, int regen_amount)
 }
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤ÎMP¼«Á³²óÉü½èÍı / Regenerate magic regen_amount: PY_REGEN_NORMAL * 2 (if resting) * 2 (if having regenarate)
- * @param regen_amount ²óÉüÎÌ
- * @return ¤Ê¤·
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®MPè‡ªç„¶å›å¾©å‡¦ç† / Regenerate magic regen_amount: PY_REGEN_NORMAL * 2 (if resting) * 2 (if having regenarate)
+ * @param regen_amount å›å¾©é‡
+ * @return ãªã—
  */
 static void regenmagic(int regen_amount)
 {
@@ -1022,8 +1022,8 @@ static void regenmagic(int regen_amount)
 
 
 /*!
- * @brief 100¥²¡¼¥à¥¿¡¼¥óËè¤Î¥â¥ó¥¹¥¿¡¼¤ÎHP¼«Á³²óÉü½èÍı / Regenerate the monsters (once per 100 game turns)
- * @return ¤Ê¤·
+ * @brief 100ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³æ¯ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®HPè‡ªç„¶å›å¾©å‡¦ç† / Regenerate the monsters (once per 100 game turns)
+ * @return ãªã—
  * @note XXX XXX XXX Should probably be done during monster turns.
  */
 static void regen_monsters(void)
@@ -1069,8 +1069,8 @@ static void regen_monsters(void)
 
 
 /*!
- * @brief 30¥²¡¼¥à¥¿¡¼¥óËè¤Î¥Ü¡¼¥ëÃæ¥â¥ó¥¹¥¿¡¼¤ÎHP¼«Á³²óÉü½èÍı / Regenerate the captured monsters (once per 30 game turns)
- * @return ¤Ê¤·
+ * @brief 30ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³æ¯ã®ãƒœãƒ¼ãƒ«ä¸­ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®HPè‡ªç„¶å›å¾©å‡¦ç† / Regenerate the captured monsters (once per 30 game turns)
+ * @return ãªã—
  * @note XXX XXX XXX Should probably be done during monster turns.
  */
 static void regen_captured_monsters(void)
@@ -1125,9 +1125,9 @@ static void regen_captured_monsters(void)
 }
 
 /*!
- * @brief ¼÷Ì¿¤Ä¤­¸÷¸»¤Î·Ù¹ğ¥á¥Ã¥»¡¼¥¸½èÍı
- * @param o_ptr ¸½ºß¸÷¸»¤È¤·¤Æ»È¤Ã¤Æ¤¤¤ë¥ª¥Ö¥¸¥§¥¯¥È¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief å¯¿å‘½ã¤ãå…‰æºã®è­¦å‘Šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†
+ * @param o_ptr ç¾åœ¨å…‰æºã¨ã—ã¦ä½¿ã£ã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void notice_lite_change(object_type *o_ptr)
 {
@@ -1150,7 +1150,7 @@ static void notice_lite_change(object_type *o_ptr)
 	{
 		disturb(0, 1);
 #ifdef JP
-msg_print("ÌÀ¤«¤ê¤¬¾Ã¤¨¤Æ¤·¤Ş¤Ã¤¿¡ª");
+msg_print("æ˜ã‹ã‚ŠãŒæ¶ˆãˆã¦ã—ã¾ã£ãŸï¼");
 #else
 		msg_print("Your light has gone out!");
 #endif
@@ -1170,7 +1170,7 @@ msg_print("ÌÀ¤«¤ê¤¬¾Ã¤¨¤Æ¤·¤Ş¤Ã¤¿¡ª");
 		{
 			if (disturb_minor) disturb(0, 1);
 #ifdef JP
-msg_print("ÌÀ¤«¤ê¤¬Èù¤«¤Ë¤Ê¤Ã¤Æ¤­¤Æ¤¤¤ë¡£");
+msg_print("æ˜ã‹ã‚ŠãŒå¾®ã‹ã«ãªã£ã¦ãã¦ã„ã‚‹ã€‚");
 #else
 			msg_print("Your light is growing faint.");
 #endif
@@ -1183,7 +1183,7 @@ msg_print("ÌÀ¤«¤ê¤¬Èù¤«¤Ë¤Ê¤Ã¤Æ¤­¤Æ¤¤¤ë¡£");
 	{
 		if (disturb_minor) disturb(0, 1);
 #ifdef JP
-msg_print("ÌÀ¤«¤ê¤¬Èù¤«¤Ë¤Ê¤Ã¤Æ¤­¤Æ¤¤¤ë¡£");
+msg_print("æ˜ã‹ã‚ŠãŒå¾®ã‹ã«ãªã£ã¦ãã¦ã„ã‚‹ã€‚");
 #else
 		msg_print("Your light is growing faint.");
 #endif
@@ -1192,8 +1192,8 @@ msg_print("ÌÀ¤«¤ê¤¬Èù¤«¤Ë¤Ê¤Ã¤Æ¤­¤Æ¤¤¤ë¡£");
 }
 
 /*!
- * @brief ¥¯¥¨¥¹¥È³¬ÁØ¤«¤éÎ¥Ã¦¤¹¤ëºİ¤Î½èÍı
- * @return ¤Ê¤·
+ * @brief ã‚¯ã‚¨ã‚¹ãƒˆéšå±¤ã‹ã‚‰é›¢è„±ã™ã‚‹éš›ã®å‡¦ç†
+ * @return ãªã—
  */
 void leave_quest_check(void)
 {
@@ -1245,8 +1245,8 @@ void leave_quest_check(void)
 }
 
 /*!
- * @brief ¡ÖÅã¡×¥¯¥¨¥¹¥È¤Î³Æ³¬ÁØ¤«¤éÎ¥Ã¦¤¹¤ëºİ¤Î½èÍı
- * @return ¤Ê¤·
+ * @brief ã€Œå¡”ã€ã‚¯ã‚¨ã‚¹ãƒˆã®å„éšå±¤ã‹ã‚‰é›¢è„±ã™ã‚‹éš›ã®å‡¦ç†
+ * @return ãªã—
  */
 void leave_tower_check(void)
 {
@@ -1267,9 +1267,9 @@ void leave_tower_check(void)
 }
 
 /*!
- * @brief Ä¶Ç½ÎÏ¼Ô¤Î¥µ¥¤¥³¥á¥È¥ê¡¼½èÍı/ Forcibly pseudo-identify an object in the inventory (or on the floor)
- * @return ¤Ê¤·
- * @todo mind.c¤Ë¤³¤Î´Ø¿ô¤ò°ÜÆ°¤µ¤»¤ë¤Ù¤­¡£
+ * @brief è¶…èƒ½åŠ›è€…ã®ã‚µã‚¤ã‚³ãƒ¡ãƒˆãƒªãƒ¼å‡¦ç†/ Forcibly pseudo-identify an object in the inventory (or on the floor)
+ * @return ãªã—
+ * @todo mind.cã«ã“ã®é–¢æ•°ã‚’ç§»å‹•ã•ã›ã‚‹ã¹ãã€‚
  * @note
  * currently this function allows pseudo-id of any object,
  * including silly ones like potions & scrolls, which always
@@ -1291,8 +1291,8 @@ bool psychometry(void)
 	item_tester_no_ryoute = TRUE;
 	/* Get an item */
 #ifdef JP
-q = "¤É¤Î¥¢¥¤¥Æ¥à¤òÄ´¤Ù¤Ş¤¹¤«¡©";
-s = "Ä´¤Ù¤ë¥¢¥¤¥Æ¥à¤¬¤¢¤ê¤Ş¤»¤ó¡£";
+q = "ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’èª¿ã¹ã¾ã™ã‹ï¼Ÿ";
+s = "èª¿ã¹ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
 #else
 	q = "Meditate on which item? ";
 	s = "You have nothing appropriate.";
@@ -1316,7 +1316,7 @@ s = "Ä´¤Ù¤ë¥¢¥¤¥Æ¥à¤¬¤¢¤ê¤Ş¤»¤ó¡£";
 	if (object_is_known(o_ptr))
 	{
 #ifdef JP
-msg_print("²¿¤â¿·¤·¤¤¤³¤È¤ÏÈ½¤é¤Ê¤«¤Ã¤¿¡£");
+msg_print("ä½•ã‚‚æ–°ã—ã„ã“ã¨ã¯åˆ¤ã‚‰ãªã‹ã£ãŸã€‚");
 #else
 		msg_print("You cannot find out anything more about that.");
 #endif
@@ -1334,7 +1334,7 @@ msg_print("²¿¤â¿·¤·¤¤¤³¤È¤ÏÈ½¤é¤Ê¤«¤Ã¤¿¡£");
 	if (!feel)
 	{
 #ifdef JP
-msg_format("%s¤«¤é¤ÏÆÃ¤ËÊÑ¤ï¤Ã¤¿»ö¤Ï´¶¤¸¤È¤ì¤Ê¤«¤Ã¤¿¡£", o_name);
+msg_format("%sã‹ã‚‰ã¯ç‰¹ã«å¤‰ã‚ã£ãŸäº‹ã¯æ„Ÿã˜ã¨ã‚Œãªã‹ã£ãŸã€‚", o_name);
 #else
 		msg_format("You do not perceive anything unusual about the %s.", o_name);
 #endif
@@ -1343,7 +1343,7 @@ msg_format("%s¤«¤é¤ÏÆÃ¤ËÊÑ¤ï¤Ã¤¿»ö¤Ï´¶¤¸¤È¤ì¤Ê¤«¤Ã¤¿¡£", o_name);
 	}
 
 #ifdef JP
-msg_format("%s¤Ï%s¤È¤¤¤¦´¶¤¸¤¬¤¹¤ë...",
+msg_format("%sã¯%sã¨ã„ã†æ„Ÿã˜ãŒã™ã‚‹...",
     o_name,  game_inscriptions[feel]);
 #else
 	msg_format("You feel that the %s %s %s...",
@@ -1404,9 +1404,9 @@ msg_format("%s¤Ï%s¤È¤¤¤¦´¶¤¸¤¬¤¹¤ë...",
 }
 
 /*!
- * @brief !!¤ò¹ï¤ó¤ÀËâÆ»¶ñ¤Î»ş´Ö·Ğ²á¤Ë¤è¤ëºÆ½¼Å¶¤òÃÎ¤é¤»¤ë½èÍı / If player has inscribed the object with "!!", let him know when it's recharged. -LM-
- * @param o_ptr ÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È¤Î¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿
- * @return ¤Ê¤·
+ * @brief !!ã‚’åˆ»ã‚“ã é­”é“å…·ã®æ™‚é–“çµŒéã«ã‚ˆã‚‹å†å……å¡«ã‚’çŸ¥ã‚‰ã›ã‚‹å‡¦ç† / If player has inscribed the object with "!!", let him know when it's recharged. -LM-
+ * @param o_ptr å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void recharged_notice(object_type *o_ptr)
 {
@@ -1431,7 +1431,7 @@ static void recharged_notice(object_type *o_ptr)
 
 			/* Notify the player */
 #ifdef JP
-			msg_format("%s¤ÏºÆ½¼Å¶¤µ¤ì¤¿¡£", o_name);
+			msg_format("%sã¯å†å……å¡«ã•ã‚ŒãŸã€‚", o_name);
 #else
 			if (o_ptr->number > 1)
 				msg_format("Your %s are recharged.", o_name);
@@ -1451,8 +1451,8 @@ static void recharged_notice(object_type *o_ptr)
 }
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤Î²Î¤Ë´Ø¤¹¤ë·ÑÂ³½èÍı
- * @return ¤Ê¤·
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ­Œã«é–¢ã™ã‚‹ç¶™ç¶šå‡¦ç†
+ * @return ãªã—
  */
 static void check_music(void)
 {
@@ -1495,7 +1495,7 @@ static void check_music(void)
 			p_ptr->magic_num1[0] = p_ptr->magic_num1[1];
 			p_ptr->magic_num1[1] = 0;
 #ifdef JP
-			msg_print("²Î¤òºÆ³«¤·¤¿¡£");
+			msg_print("æ­Œã‚’å†é–‹ã—ãŸã€‚");
 #else
 			msg_print("You restart singing.");
 #endif
@@ -1528,10 +1528,10 @@ static void check_music(void)
 }
 
 /*!
- * @brief ¸½ºß¼ö¤¤¤òÊİ»ı¤·¤Æ¤¤¤ëÁõÈ÷ÉÊ¤ò°ì¤Ä¥é¥ó¥À¥à¤ËÃµ¤·½Ğ¤¹ / Choose one of items that have cursed flag
- * @param flag Ãµ¤·½Ğ¤·¤¿¤¤¼ö¤¤¥Õ¥é¥°ÇÛÎó
- * @return ³ºÅö¤Î¼ö¤¤¤¬°ì¤Ä¤Ç¤â¤¢¤Ã¤¿¾ì¹ç¤Ë¥é¥ó¥À¥à¤ËÁª¤Ğ¤ì¤¿ÁõÈ÷ÉÊ¤Î¥ª¥Ö¥¸¥§¥¯¥È¹½Â¤ÂÎ»²¾È¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£\n
- * ¼ö¤¤¤¬¤Ê¤¤¾ì¹çNULL¤òÊÖ¤¹¡£
+ * @brief ç¾åœ¨å‘ªã„ã‚’ä¿æŒã—ã¦ã„ã‚‹è£…å‚™å“ã‚’ä¸€ã¤ãƒ©ãƒ³ãƒ€ãƒ ã«æ¢ã—å‡ºã™ / Choose one of items that have cursed flag
+ * @param flag æ¢ã—å‡ºã—ãŸã„å‘ªã„ãƒ•ãƒ©ã‚°é…åˆ—
+ * @return è©²å½“ã®å‘ªã„ãŒä¸€ã¤ã§ã‚‚ã‚ã£ãŸå ´åˆã«ãƒ©ãƒ³ãƒ€ãƒ ã«é¸ã°ã‚ŒãŸè£…å‚™å“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚\n
+ * å‘ªã„ãŒãªã„å ´åˆNULLã‚’è¿”ã™ã€‚
  */
 static object_type *choose_cursed_obj_name(u32b flag)
 {
@@ -1601,9 +1601,9 @@ static object_type *choose_cursed_obj_name(u32b flag)
 }
 
 /*!
- * @brief 10¥²¡¼¥à¥¿¡¼¥ó¤¬¿Ê¹Ô¤¹¤ë¤´¤È¤Ë¥×¥ì¥¤¥ä¡¼¤ÎHP¤ÈMP¤ÎÁı¸º½èÍı¤ò¹Ô¤¦¡£
+ * @brief 10ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³ãŒé€²è¡Œã™ã‚‹ã”ã¨ã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPã¨MPã®å¢—æ¸›å‡¦ç†ã‚’è¡Œã†ã€‚
  *  / Handle timed damage and regeneration every 10 game turns
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void process_world_aux_hp_and_sp(void)
 {
@@ -1622,7 +1622,7 @@ static void process_world_aux_hp_and_sp(void)
 	{
 		/* Take damage */
 #ifdef JP
-		take_hit(DAMAGE_NOESCAPE, 1, "ÆÇ", -1);
+		take_hit(DAMAGE_NOESCAPE, 1, "æ¯’", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, 1, "poison", -1);
 #endif
@@ -1674,7 +1674,7 @@ static void process_world_aux_hp_and_sp(void)
 
 		/* Take damage */
 #ifdef JP
-		take_hit(DAMAGE_NOESCAPE, dam, "Ã×Ì¿½ı", -1);
+		take_hit(DAMAGE_NOESCAPE, dam, "è‡´å‘½å‚·", -1);
 #else
 		take_hit(DAMAGE_NOESCAPE, dam, "a fatal wound", -1);
 #endif
@@ -1691,8 +1691,8 @@ static void process_world_aux_hp_and_sp(void)
 			{
 				/* Take damage */
 #ifdef JP
-msg_print("Æü¸÷¤¬¤¢¤Ê¤¿¤Î¥¢¥ó¥Ç¥Ã¥É¤ÎÆùÂÎ¤ò¾Æ¤­¾Ç¤¬¤·¤¿¡ª");
-take_hit(DAMAGE_NOESCAPE, 1, "Æü¸÷", -1);
+msg_print("æ—¥å…‰ãŒã‚ãªãŸã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®è‚‰ä½“ã‚’ç„¼ãç„¦ãŒã—ãŸï¼");
+take_hit(DAMAGE_NOESCAPE, 1, "æ—¥å…‰", -1);
 #else
 				msg_print("The sun's rays scorch your undead flesh!");
 				take_hit(DAMAGE_NOESCAPE, 1, "sunlight", -1);
@@ -1713,7 +1713,7 @@ take_hit(DAMAGE_NOESCAPE, 1, "Æü¸÷", -1);
 			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
-msg_format("%s¤¬¤¢¤Ê¤¿¤Î¥¢¥ó¥Ç¥Ã¥É¤ÎÆùÂÎ¤ò¾Æ¤­¾Ç¤¬¤·¤¿¡ª", o_name);
+msg_format("%sãŒã‚ãªãŸã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®è‚‰ä½“ã‚’ç„¼ãç„¦ãŒã—ãŸï¼", o_name);
 #else
 			msg_format("The %s scorches your undead flesh!", o_name);
 #endif
@@ -1725,7 +1725,7 @@ msg_format("%s¤¬¤¢¤Ê¤¿¤Î¥¢¥ó¥Ç¥Ã¥É¤ÎÆùÂÎ¤ò¾Æ¤­¾Ç¤¬¤·¤¿¡ª", o_name);
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 
 #ifdef JP
-sprintf(ouch, "%s¤òÁõÈ÷¤·¤¿¥À¥á¡¼¥¸", o_name);
+sprintf(ouch, "%sã‚’è£…å‚™ã—ãŸãƒ€ãƒ¡ãƒ¼ã‚¸", o_name);
 #else
 			sprintf(ouch, "wielding %s", o_name);
 #endif
@@ -1760,8 +1760,8 @@ sprintf(ouch, "%s¤òÁõÈ÷¤·¤¿¥À¥á¡¼¥¸", o_name);
 			if (p_ptr->levitation)
 			{
 #ifdef JP
-				msg_print("Ç®¤Ç²Ğ½ı¤·¤¿¡ª");
-				take_hit(DAMAGE_NOESCAPE, damage, format("%s¤Î¾å¤ËÉâÍ·¤·¤¿¥À¥á¡¼¥¸", f_name + f_info[get_feat_mimic(&cave[py][px])].name), -1);
+				msg_print("ç†±ã§ç«å‚·ã—ãŸï¼");
+				take_hit(DAMAGE_NOESCAPE, damage, format("%sã®ä¸Šã«æµ®éŠã—ãŸãƒ€ãƒ¡ãƒ¼ã‚¸", f_name + f_info[get_feat_mimic(&cave[py][px])].name), -1);
 #else
 				msg_print("The heat burns you!");
 				take_hit(DAMAGE_NOESCAPE, damage, format("flying over %s", f_name + f_info[get_feat_mimic(&cave[py][px])].name), -1);
@@ -1771,7 +1771,7 @@ sprintf(ouch, "%s¤òÁõÈ÷¤·¤¿¥À¥á¡¼¥¸", o_name);
 			{
 				cptr name = f_name + f_info[get_feat_mimic(&cave[py][px])].name;
 #ifdef JP
-				msg_format("%s¤Ç²Ğ½ı¤·¤¿¡ª", name);
+				msg_format("%sã§ç«å‚·ã—ãŸï¼", name);
 #else
 				msg_format("The %s burns you!", name);
 #endif
@@ -1789,8 +1789,8 @@ sprintf(ouch, "%s¤òÁõÈ÷¤·¤¿¥À¥á¡¼¥¸", o_name);
 		{
 			/* Take damage */
 #ifdef JP
-			msg_print("Å®¤ì¤Æ¤¤¤ë¡ª");
-			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "Å®¤ì", -1);
+			msg_print("æººã‚Œã¦ã„ã‚‹ï¼");
+			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "æººã‚Œ", -1);
 #else
 			msg_print("You are drowning!");
 			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "drowning", -1);
@@ -1810,8 +1810,8 @@ sprintf(ouch, "%s¤òÁõÈ÷¤·¤¿¥À¥á¡¼¥¸", o_name);
 			if (p_ptr->resist_fire) damage = damage / 3;
 			if (IS_OPPOSE_FIRE()) damage = damage / 3;
 #ifdef JP
-msg_print("Ç®¤¤¡ª");
-take_hit(DAMAGE_NOESCAPE, damage, "±ê¤Î¥ª¡¼¥é", -1);
+msg_print("ç†±ã„ï¼");
+take_hit(DAMAGE_NOESCAPE, damage, "ç‚ã®ã‚ªãƒ¼ãƒ©", -1);
 #else
 			msg_print("It's hot!");
 			take_hit(DAMAGE_NOESCAPE, damage, "Fire aura", -1);
@@ -1824,8 +1824,8 @@ take_hit(DAMAGE_NOESCAPE, damage, "±ê¤Î¥ª¡¼¥é", -1);
 			if (p_ptr->resist_elec) damage = damage / 3;
 			if (IS_OPPOSE_ELEC()) damage = damage / 3;
 #ifdef JP
-msg_print("ÄË¤¤¡ª");
-take_hit(DAMAGE_NOESCAPE, damage, "ÅÅµ¤¤Î¥ª¡¼¥é", -1);
+msg_print("ç—›ã„ï¼");
+take_hit(DAMAGE_NOESCAPE, damage, "é›»æ°—ã®ã‚ªãƒ¼ãƒ©", -1);
 #else
 			msg_print("It hurts!");
 			take_hit(DAMAGE_NOESCAPE, damage, "Elec aura", -1);
@@ -1837,8 +1837,8 @@ take_hit(DAMAGE_NOESCAPE, damage, "ÅÅµ¤¤Î¥ª¡¼¥é", -1);
 			if (p_ptr->resist_cold) damage = damage / 3;
 			if (IS_OPPOSE_COLD()) damage = damage / 3;
 #ifdef JP
-msg_print("Îä¤¿¤¤¡ª");
-take_hit(DAMAGE_NOESCAPE, damage, "Îäµ¤¤Î¥ª¡¼¥é", -1);
+msg_print("å†·ãŸã„ï¼");
+take_hit(DAMAGE_NOESCAPE, damage, "å†·æ°—ã®ã‚ªãƒ¼ãƒ©", -1);
 #else
 			msg_print("It's cold!");
 			take_hit(DAMAGE_NOESCAPE, damage, "Cold aura", -1);
@@ -1865,8 +1865,8 @@ take_hit(DAMAGE_NOESCAPE, damage, "Îäµ¤¤Î¥ª¡¼¥é", -1);
 			if (p_ptr->pass_wall)
 			{
 #ifdef JP
-				msg_print("ÂÎ¤ÎÊ¬»Ò¤¬Ê¬²ò¤·¤¿µ¤¤¬¤¹¤ë¡ª");
-				dam_desc = "Ì©ÅÙ";
+				msg_print("ä½“ã®åˆ†å­ãŒåˆ†è§£ã—ãŸæ°—ãŒã™ã‚‹ï¼");
+				dam_desc = "å¯†åº¦";
 #else
 				msg_print("Your molecules feel disrupted!");
 				dam_desc = "density";
@@ -1875,8 +1875,8 @@ take_hit(DAMAGE_NOESCAPE, damage, "Îäµ¤¤Î¥ª¡¼¥é", -1);
 			else
 			{
 #ifdef JP
-				msg_print("Êø¤ì¤¿´ä¤Ë²¡¤·ÄÙ¤µ¤ì¤¿¡ª");
-				dam_desc = "¹Å¤¤´ä";
+				msg_print("å´©ã‚ŒãŸå²©ã«æŠ¼ã—æ½°ã•ã‚ŒãŸï¼");
+				dam_desc = "ç¡¬ã„å²©";
 #else
 				msg_print("You are being crushed!");
 				dam_desc = "solid rock";
@@ -1962,7 +1962,7 @@ take_hit(DAMAGE_NOESCAPE, damage, "Îäµ¤¤Î¥ª¡¼¥é", -1);
 		while (upkeep_factor > 100)
 		{
 #ifdef JP
-			msg_print("¤³¤ó¤Ê¤ËÂ¿¤¯¤Î¥Ú¥Ã¥È¤òÀ©¸æ¤Ç¤­¤Ê¤¤¡ª");
+			msg_print("ã“ã‚“ãªã«å¤šãã®ãƒšãƒƒãƒˆã‚’åˆ¶å¾¡ã§ããªã„ï¼");
 #else
 			msg_print("Too many pets to control at once!");
 #endif
@@ -1972,7 +1972,7 @@ take_hit(DAMAGE_NOESCAPE, damage, "Îäµ¤¤Î¥ª¡¼¥é", -1);
 			upkeep_factor = calculate_upkeep();
 
 #ifdef JP
-			msg_format("°İ»ı£Í£Ğ¤Ï %d%%", upkeep_factor);
+			msg_format("ç¶­æŒï¼­ï¼°ã¯ %d%%", upkeep_factor);
 #else
 			msg_format("Upkeep: %d%% mana.", upkeep_factor);
 #endif
@@ -1997,9 +1997,9 @@ take_hit(DAMAGE_NOESCAPE, damage, "Îäµ¤¤Î¥ª¡¼¥é", -1);
 }
 
 /*!
- * @brief 10¥²¡¼¥à¥¿¡¼¥ó¤¬¿Ê¹Ô¤¹¤ë¤´¤È¤ËËâË¡¸ú²Ì¤Î»Ä¤ê¥¿¡¼¥ó¤ò¸º¤é¤·¤Æ¤¤¤¯½èÍı
+ * @brief 10ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³ãŒé€²è¡Œã™ã‚‹ã”ã¨ã«é­”æ³•åŠ¹æœã®æ®‹ã‚Šã‚¿ãƒ¼ãƒ³ã‚’æ¸›ã‚‰ã—ã¦ã„ãå‡¦ç†
  * / Handle timeout every 10 game turns
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void process_world_aux_timeout(void)
 {
@@ -2310,9 +2310,9 @@ static void process_world_aux_timeout(void)
 
 
 /*!
- * @brief 10¥²¡¼¥à¥¿¡¼¥ó¤¬¿Ê¹Ô¤¹¤ëËè¤Ë¸÷¸»¤Î¼÷Ì¿¤ò¸º¤é¤¹½èÍı
+ * @brief 10ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³ãŒé€²è¡Œã™ã‚‹æ¯ã«å…‰æºã®å¯¿å‘½ã‚’æ¸›ã‚‰ã™å‡¦ç†
  * / Handle burning fuel every 10 game turns
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void process_world_aux_light(void)
 {
@@ -2340,9 +2340,9 @@ static void process_world_aux_light(void)
 
 
 /*!
- * @brief 10¥²¡¼¥à¥¿¡¼¥ó¤¬¿Ê¹Ô¤¹¤ë¤´¤È¤ËÆÍÁ³ÊÑ°Û¤ÎÈ¯Æ°È½Äê¤ò¹Ô¤¦½èÍı
+ * @brief 10ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³ãŒé€²è¡Œã™ã‚‹ã”ã¨ã«çªç„¶å¤‰ç•°ã®ç™ºå‹•åˆ¤å®šã‚’è¡Œã†å‡¦ç†
  * / Handle mutation effects once every 10 game turns
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void process_world_aux_mutation(void)
 {
@@ -2360,8 +2360,8 @@ static void process_world_aux_mutation(void)
 	{
 		disturb(0, 1);
 #ifdef JP
-		msg_print("¥¦¥¬¥¡¥¡¥¢¡ª");
-		msg_print("·ãÅÜ¤ÎÈ¯ºî¤Ë½±¤ï¤ì¤¿¡ª");
+		msg_print("ã‚¦ã‚¬ã‚¡ã‚¡ã‚¢ï¼");
+		msg_print("æ¿€æ€’ã®ç™ºä½œã«è¥²ã‚ã‚ŒãŸï¼");
 #else
 		msg_print("RAAAAGHH!");
 		msg_print("You feel a fit of rage coming over you!");
@@ -2377,7 +2377,7 @@ static void process_world_aux_mutation(void)
 		{
 			disturb(0, 1);
 #ifdef JP
-			msg_print("¤È¤Æ¤â°Å¤¤... ¤È¤Æ¤â¶²¤¤¡ª");
+			msg_print("ã¨ã¦ã‚‚æš—ã„... ã¨ã¦ã‚‚æã„ï¼");
 #else
 			msg_print("It's so dark... so scary!");
 #endif
@@ -2395,7 +2395,7 @@ static void process_world_aux_mutation(void)
 
 			/* Teleport player */
 #ifdef JP
-			msg_print("¤¢¤Ê¤¿¤Î°ÌÃÖ¤ÏÆÍÁ³¤Ò¤¸¤ç¤¦¤ËÉÔ³ÎÄê¤Ë¤Ê¤Ã¤¿...");
+			msg_print("ã‚ãªãŸã®ä½ç½®ã¯çªç„¶ã²ã˜ã‚‡ã†ã«ä¸ç¢ºå®šã«ãªã£ãŸ...");
 #else
 			msg_print("Your position suddenly seems very uncertain...");
 #endif
@@ -2412,7 +2412,7 @@ static void process_world_aux_mutation(void)
 			disturb(0, 1);
 			p_ptr->redraw |= PR_EXTRA;
 #ifdef JP
-			msg_print("¤¤¤Ò¤­¤¬¤â¡¼¤í¡¼¤È¤Ò¤Æ¤­¤¿¤­¤¬¤Õ¤ë...¥Ò¥Ã¥¯¡ª");
+			msg_print("ã„ã²ããŒã‚‚ãƒ¼ã‚ãƒ¼ã¨ã²ã¦ããŸããŒãµã‚‹...ãƒ’ãƒƒã‚¯ï¼");
 #else
 			msg_print("You feel a SSSCHtupor cOmINg over yOu... *HIC*!");
 #endif
@@ -2434,8 +2434,8 @@ static void process_world_aux_mutation(void)
 				(void)teleport_player_aux(100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 				wiz_dark();
 #ifdef JP
-				msg_print("¤¢¤Ê¤¿¤Ï¸«ÃÎ¤é¤Ì¾ì½ê¤ÇÌÜ¤¬ÀÃ¤á¤¿...Æ¬¤¬ÄË¤¤¡£");
-				msg_print("²¿¤â³Ğ¤¨¤Æ¤¤¤Ê¤¤¡£¤É¤¦¤ä¤Ã¤Æ¤³¤³¤ËÍè¤¿¤«¤âÊ¬¤«¤é¤Ê¤¤¡ª");
+				msg_print("ã‚ãªãŸã¯è¦‹çŸ¥ã‚‰ã¬å ´æ‰€ã§ç›®ãŒé†’ã‚ãŸ...é ­ãŒç—›ã„ã€‚");
+				msg_print("ä½•ã‚‚è¦šãˆã¦ã„ãªã„ã€‚ã©ã†ã‚„ã£ã¦ã“ã“ã«æ¥ãŸã‹ã‚‚åˆ†ã‹ã‚‰ãªã„ï¼");
 #else
 				msg_print("You wake up somewhere with a sore head...");
 				msg_print("You can't remember a thing, or how you got here!");
@@ -2447,7 +2447,7 @@ static void process_world_aux_mutation(void)
 				if (one_in_(3))
 				{
 #ifdef JP
-					msg_print("¤­¡Á¤ì¤¤¤Ê¤Á¤ç¤ª¤Á¤ç¤é¤È¤ó¤ì¤¤¤ë¡Á");
+					msg_print("ãï½ã‚Œã„ãªã¡ã‚‡ãŠã¡ã‚‡ã‚‰ã¨ã‚“ã‚Œã„ã‚‹ï½");
 #else
 					msg_print("Thishcischs GooDSChtuff!");
 #endif
@@ -2473,7 +2473,7 @@ static void process_world_aux_mutation(void)
 		disturb(0, 1);
 
 #ifdef JP
-		msg_print("¥Ö¥¥¡¼¡¼¥Ã¡ª¤ª¤Ã¤È¡£");
+		msg_print("ãƒ–ã‚¥ãƒ¼ãƒ¼ãƒƒï¼ãŠã£ã¨ã€‚");
 #else
 		msg_print("BRRAAAP! Oops.");
 #endif
@@ -2488,7 +2488,7 @@ static void process_world_aux_mutation(void)
 		int dire = 0;
 		disturb(0, 1);
 #ifdef JP
-		msg_print("ËâË¡¤Î¥¨¥Í¥ë¥®¡¼¤¬ÆÍÁ³¤¢¤Ê¤¿¤ÎÃæ¤ËÎ®¤ì¹ş¤ó¤Ç¤­¤¿¡ª¥¨¥Í¥ë¥®¡¼¤ò²òÊü¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡ª");
+		msg_print("é­”æ³•ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼ãŒçªç„¶ã‚ãªãŸã®ä¸­ã«æµã‚Œè¾¼ã‚“ã§ããŸï¼ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’è§£æ”¾ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ï¼");
 #else
 		msg_print("Magical energy flows through you! You must release it!");
 #endif
@@ -2512,7 +2512,7 @@ static void process_world_aux_mutation(void)
 				    dun_level, SUMMON_DEMON, mode))
 		{
 #ifdef JP
-			msg_print("¤¢¤Ê¤¿¤Ï¥Ç¡¼¥â¥ó¤ò°ú¤­´ó¤»¤¿¡ª");
+			msg_print("ã‚ãªãŸã¯ãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¼•ãå¯„ã›ãŸï¼");
 #else
 			msg_print("You have attracted a demon!");
 #endif
@@ -2527,7 +2527,7 @@ static void process_world_aux_mutation(void)
 		if (one_in_(2))
 		{
 #ifdef JP
-			msg_print("ÀºÎÏÅª¤Ç¤Ê¤¯¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£");
+			msg_print("ç²¾åŠ›çš„ã§ãªããªã£ãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 			msg_print("You feel less energetic.");
 #endif
@@ -2544,7 +2544,7 @@ static void process_world_aux_mutation(void)
 		else
 		{
 #ifdef JP
-			msg_print("ÀºÎÏÅª¤Ë¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£");
+			msg_print("ç²¾åŠ›çš„ã«ãªã£ãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 			msg_print("You feel more energetic.");
 #endif
@@ -2564,7 +2564,7 @@ static void process_world_aux_mutation(void)
 	{
 		disturb(0, 1);
 #ifdef JP
-		msg_print("ÆÍÁ³¤Û¤È¤ó¤É¸ÉÆÈ¤Ë¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£");
+		msg_print("çªç„¶ã»ã¨ã‚“ã©å­¤ç‹¬ã«ãªã£ãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 		msg_print("You suddenly feel almost lonely.");
 #endif
@@ -2582,7 +2582,7 @@ static void process_world_aux_mutation(void)
 			while ((n == STORE_HOME) || (n == STORE_MUSEUM));
 
 #ifdef JP
-			msg_print("Å¹¤Î¼ç¿Í¤¬µÖ¤Ë¸ş¤«¤Ã¤ÆÁö¤Ã¤Æ¤¤¤ë¡ª");
+			msg_print("åº—ã®ä¸»äººãŒä¸˜ã«å‘ã‹ã£ã¦èµ°ã£ã¦ã„ã‚‹ï¼");
 #else
 			msg_print("You see one of the shopkeepers running for the hills!");
 #endif
@@ -2597,7 +2597,7 @@ static void process_world_aux_mutation(void)
 		object_type *o_ptr;
 
 #ifdef JP
-		msg_print("±Æ¤Ë¤Ä¤Ä¤Ş¤ì¤¿¡£");
+		msg_print("å½±ã«ã¤ã¤ã¾ã‚ŒãŸã€‚");
 #else
 		msg_print("A shadow passes over you.");
 #endif
@@ -2625,7 +2625,7 @@ static void process_world_aux_mutation(void)
 				o_ptr->xtra4 /= 2;
 
 #ifdef JP
-				msg_print("¸÷¸»¤«¤é¥¨¥Í¥ë¥®¡¼¤òµÛ¼ı¤·¤¿¡ª");
+				msg_print("å…‰æºã‹ã‚‰ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’å¸åã—ãŸï¼");
 #else
 				msg_print("You absorb energy from your light!");
 #endif
@@ -2655,7 +2655,7 @@ static void process_world_aux_mutation(void)
 		if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_ANIMAL, mode))
 		{
 #ifdef JP
-			msg_print("Æ°Êª¤ò°ú¤­´ó¤»¤¿¡ª");
+			msg_print("å‹•ç‰©ã‚’å¼•ãå¯„ã›ãŸï¼");
 #else
 			msg_print("You have attracted an animal!");
 #endif
@@ -2669,7 +2669,7 @@ static void process_world_aux_mutation(void)
 	{
 		disturb(0, 1);
 #ifdef JP
-		msg_print("¼ş¤ê¤Î¶õ´Ö¤¬ÏÄ¤ó¤Ç¤¤¤ëµ¤¤¬¤¹¤ë¡ª");
+		msg_print("å‘¨ã‚Šã®ç©ºé–“ãŒæ­ªã‚“ã§ã„ã‚‹æ°—ãŒã™ã‚‹ï¼");
 #else
 		msg_print("You feel the world warping around you!");
 #endif
@@ -2681,7 +2681,7 @@ static void process_world_aux_mutation(void)
 	{
 		if (!lose_mutation(0))
 #ifdef JP
-			msg_print("´ñÌ¯¤Ê¤¯¤é¤¤ÉáÄÌ¤Ë¤Ê¤Ã¤¿µ¤¤¬¤¹¤ë¡£");
+			msg_print("å¥‡å¦™ãªãã‚‰ã„æ™®é€šã«ãªã£ãŸæ°—ãŒã™ã‚‹ã€‚");
 #else
 		msg_print("You feel oddly normal.");
 #endif
@@ -2691,7 +2691,7 @@ static void process_world_aux_mutation(void)
 	{
 		disturb(0, 1);
 #ifdef JP
-		msg_print("ÈóÊª¼Á²½¤·¤¿¡ª");
+		msg_print("éç‰©è³ªåŒ–ã—ãŸï¼");
 #else
 		msg_print("You feel insubstantial!");
 #endif
@@ -2730,7 +2730,7 @@ static void process_world_aux_mutation(void)
 			break;
 		default:
 #ifdef JP
-			msg_print("ÉÔÀµ¤Ê¾õÂÖ¡ª");
+			msg_print("ä¸æ­£ãªçŠ¶æ…‹ï¼");
 #else
 			msg_print("Invalid stat chosen!");
 #endif
@@ -2742,7 +2742,7 @@ static void process_world_aux_mutation(void)
 		{
 			disturb(0, 1);
 #ifdef JP
-			msg_print("¼«Ê¬¤¬¿ê¼å¤·¤Æ¤¤¤¯¤Î¤¬Ê¬¤«¤ë¡ª");
+			msg_print("è‡ªåˆ†ãŒè¡°å¼±ã—ã¦ã„ãã®ãŒåˆ†ã‹ã‚‹ï¼");
 #else
 			msg_print("You can feel yourself wasting away!");
 #endif
@@ -2763,7 +2763,7 @@ static void process_world_aux_mutation(void)
 		if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_DRAGON, mode))
 		{
 #ifdef JP
-			msg_print("¥É¥é¥´¥ó¤ò°ú¤­´ó¤»¤¿¡ª");
+			msg_print("ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¼•ãå¯„ã›ãŸï¼");
 #else
 			msg_print("You have attracted a dragon!");
 #endif
@@ -2777,7 +2777,7 @@ static void process_world_aux_mutation(void)
 		if (p_ptr->tim_esp > 0)
 		{
 #ifdef JP
-			msg_print("Àº¿À¤Ë¤â¤ä¤¬¤«¤«¤Ã¤¿¡ª");
+			msg_print("ç²¾ç¥ã«ã‚‚ã‚„ãŒã‹ã‹ã£ãŸï¼");
 #else
 			msg_print("Your mind feels cloudy!");
 #endif
@@ -2787,7 +2787,7 @@ static void process_world_aux_mutation(void)
 		else
 		{
 #ifdef JP
-			msg_print("Àº¿À¤¬¹­¤¬¤Ã¤¿¡ª");
+			msg_print("ç²¾ç¥ãŒåºƒãŒã£ãŸï¼");
 #else
 			msg_print("Your mind expands!");
 #endif
@@ -2800,7 +2800,7 @@ static void process_world_aux_mutation(void)
 	{
 		disturb(0, 1);
 #ifdef JP
-		msg_print("°ß¤¬áÛÚ»¤·¡¢¿©»ö¤ò¼º¤Ã¤¿¡ª");
+		msg_print("èƒƒãŒç—™æ”£ã—ã€é£Ÿäº‹ã‚’å¤±ã£ãŸï¼");
 #else
 		msg_print("Your stomach roils, and you lose your lunch!");
 #endif
@@ -2838,42 +2838,42 @@ static void process_world_aux_mutation(void)
 
 		if (danger_amount > 100)
 #ifdef JP
-			msg_print("Èó¾ï¤Ë¶²¤í¤·¤¤µ¤¤¬¤¹¤ë¡ª");
+			msg_print("éå¸¸ã«æã‚ã—ã„æ°—ãŒã™ã‚‹ï¼");
 #else
 		msg_print("You feel utterly terrified!");
 #endif
 
 		else if (danger_amount > 50)
 #ifdef JP
-			msg_print("¶²¤í¤·¤¤µ¤¤¬¤¹¤ë¡ª");
+			msg_print("æã‚ã—ã„æ°—ãŒã™ã‚‹ï¼");
 #else
 		msg_print("You feel terrified!");
 #endif
 
 		else if (danger_amount > 20)
 #ifdef JP
-			msg_print("Èó¾ï¤Ë¿´ÇÛ¤Êµ¤¤¬¤¹¤ë¡ª");
+			msg_print("éå¸¸ã«å¿ƒé…ãªæ°—ãŒã™ã‚‹ï¼");
 #else
 		msg_print("You feel very worried!");
 #endif
 
 		else if (danger_amount > 10)
 #ifdef JP
-			msg_print("¿´ÇÛ¤Êµ¤¤¬¤¹¤ë¡ª");
+			msg_print("å¿ƒé…ãªæ°—ãŒã™ã‚‹ï¼");
 #else
 		msg_print("You feel paranoid!");
 #endif
 
 		else if (danger_amount > 5)
 #ifdef JP
-			msg_print("¤Û¤È¤ó¤É°ÂÁ´¤Êµ¤¤¬¤¹¤ë¡£");
+			msg_print("ã»ã¨ã‚“ã©å®‰å…¨ãªæ°—ãŒã™ã‚‹ã€‚");
 #else
 		msg_print("You feel almost safe.");
 #endif
 
 		else
 #ifdef JP
-			msg_print("¼ä¤·¤¤µ¤¤¬¤¹¤ë¡£");
+			msg_print("å¯‚ã—ã„æ°—ãŒã™ã‚‹ã€‚");
 #else
 		msg_print("You feel lonely.");
 #endif
@@ -2884,7 +2884,7 @@ static void process_world_aux_mutation(void)
 	{
 		disturb(0, 1);
 #ifdef JP
-		msg_print("ÌµÅ¨¤Êµ¤¤¬¤¹¤ë¡ª");
+		msg_print("ç„¡æ•µãªæ°—ãŒã™ã‚‹ï¼");
 #else
 		msg_print("You feel invincible!");
 #endif
@@ -2931,7 +2931,7 @@ static void process_world_aux_mutation(void)
 			/* Redraw mana */
 			p_ptr->redraw |= (PR_MANA);
 #ifdef JP
-			take_hit(DAMAGE_LOSELIFE, healing, "Æ¬¤Ë¾º¤Ã¤¿·ì", -1);
+			take_hit(DAMAGE_LOSELIFE, healing, "é ­ã«æ˜‡ã£ãŸè¡€", -1);
 #else
 			take_hit(DAMAGE_LOSELIFE, healing, "blood rushing to the head", -1);
 #endif
@@ -2945,8 +2945,8 @@ static void process_world_aux_mutation(void)
 
 		disturb(0, 1);
 #ifdef JP
-		msg_print("Â­¤¬¤â¤Ä¤ì¤ÆÅ¾¤ó¤À¡ª");
-		take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), "Å¾Åİ", -1);
+		msg_print("è¶³ãŒã‚‚ã¤ã‚Œã¦è»¢ã‚“ã ï¼");
+		take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), "è»¢å€’", -1);
 #else
 		msg_print("You trip over your own feet!");
 		take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), "tripping", -1);
@@ -2973,7 +2973,7 @@ static void process_world_aux_mutation(void)
 		if (slot && !object_is_cursed(o_ptr))
 		{
 #ifdef JP
-			msg_print("Éğ´ï¤òÍî¤È¤·¤Æ¤·¤Ş¤Ã¤¿¡ª");
+			msg_print("æ­¦å™¨ã‚’è½ã¨ã—ã¦ã—ã¾ã£ãŸï¼");
 #else
 			msg_print("You drop your weapon!");
 #endif
@@ -2983,9 +2983,9 @@ static void process_world_aux_mutation(void)
 }
 
 /*!
- * @brief 10¥²¡¼¥à¥¿¡¼¥ó¤¬¿Ê¹Ô¤¹¤ë¤´¤È¤ËÁõÈ÷¸ú²Ì¤ÎÈ¯Æ°È½Äê¤ò¹Ô¤¦½èÍı
+ * @brief 10ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³ãŒé€²è¡Œã™ã‚‹ã”ã¨ã«è£…å‚™åŠ¹æœã®ç™ºå‹•åˆ¤å®šã‚’è¡Œã†å‡¦ç†
  * / Handle curse effects once every 10 game turns
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void process_world_aux_curse(void)
 {
@@ -3028,13 +3028,13 @@ static void process_world_aux_curse(void)
 			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
-			msg_format("%s¤¬¥Æ¥ì¥İ¡¼¥È¤ÎÇ½ÎÏ¤òÈ¯Æ°¤µ¤»¤è¤¦¤È¤·¤Æ¤¤¤ë¡£", o_name);
+			msg_format("%sãŒãƒ†ãƒ¬ãƒãƒ¼ãƒˆã®èƒ½åŠ›ã‚’ç™ºå‹•ã•ã›ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã€‚", o_name);
 #else
 			msg_format("Your %s is activating teleportation.", o_name);
 #endif
 
 #ifdef JP
-			if (get_check_strict("¥Æ¥ì¥İ¡¼¥È¤·¤Ş¤¹¤«¡©", CHECK_OKAY_CANCEL))
+			if (get_check_strict("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ", CHECK_OKAY_CANCEL))
 #else
 			if (get_check_strict("Teleport? ", CHECK_OKAY_CANCEL))
 #endif
@@ -3045,7 +3045,7 @@ static void process_world_aux_curse(void)
 			else
 			{
 #ifdef JP
-				msg_format("%s¤Ë{.}(¥Ô¥ê¥ª¥É)¤ÈÌÃ¤ò¹ï¤à¤ÈÈ¯Æ°¤òÍŞÀ©¤Ç¤­¤Ş¤¹¡£", o_name);
+				msg_format("%sã«{.}(ãƒ”ãƒªã‚ªãƒ‰)ã¨éŠ˜ã‚’åˆ»ã‚€ã¨ç™ºå‹•ã‚’æŠ‘åˆ¶ã§ãã¾ã™ã€‚", o_name);
 #else
 				msg_format("You can inscribe {.} on your %s to disable random teleportation. ", o_name);
 #endif
@@ -3092,7 +3092,7 @@ static void process_world_aux_curse(void)
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 				o_ptr->curse_flags |= new_curse;
-				msg_format(_("°­°Õ¤ËËş¤Á¤¿¹õ¤¤¥ª¡¼¥é¤¬%s¤ò¤È¤ê¤Ş¤¤¤¿...", "There is a malignant black aura surrounding your %s..."), o_name);
+				msg_format(_("æ‚ªæ„ã«æº€ã¡ãŸé»’ã„ã‚ªãƒ¼ãƒ©ãŒ%sã‚’ã¨ã‚Šã¾ã„ãŸ...", "There is a malignant black aura surrounding your %s..."), o_name);
 
 				o_ptr->feeling = FEEL_NONE;
 
@@ -3115,7 +3115,7 @@ static void process_world_aux_curse(void)
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 				o_ptr->curse_flags |= new_curse;
-				msg_format(_("°­°Õ¤ËËş¤Á¤¿¹õ¤¤¥ª¡¼¥é¤¬%s¤ò¤È¤ê¤Ş¤¤¤¿...", "There is a malignant black aura surrounding your %s..."), o_name);
+				msg_format(_("æ‚ªæ„ã«æº€ã¡ãŸé»’ã„ã‚ªãƒ¼ãƒ©ãŒ%sã‚’ã¨ã‚Šã¾ã„ãŸ...", "There is a malignant black aura surrounding your %s..."), o_name);
 				o_ptr->feeling = FEEL_NONE;
 
 				p_ptr->update |= (PU_BONUS);
@@ -3130,7 +3130,7 @@ static void process_world_aux_curse(void)
 				char o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-				msg_format(_("%s¤¬Æ°Êª¤ò°ú¤­´ó¤»¤¿¡ª", "Your %s have attracted an animal!"), o_name);
+				msg_format(_("%sãŒå‹•ç‰©ã‚’å¼•ãå¯„ã›ãŸï¼", "Your %s have attracted an animal!"), o_name);
 				disturb(0, 1);
 			}
 		}
@@ -3142,7 +3142,7 @@ static void process_world_aux_curse(void)
 				char o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-				msg_format(_("%s¤¬°­Ëâ¤ò°ú¤­´ó¤»¤¿¡ª", "Your %s have attracted a demon!"), o_name);
+				msg_format(_("%sãŒæ‚ªé­”ã‚’å¼•ãå¯„ã›ãŸï¼", "Your %s have attracted a demon!"), o_name);
 				disturb(0, 1);
 			}
 		}
@@ -3155,7 +3155,7 @@ static void process_world_aux_curse(void)
 				char o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-				msg_format(_("%s¤¬¥É¥é¥´¥ó¤ò°ú¤­´ó¤»¤¿¡ª", "Your %s have attracted an dragon!"), o_name);
+				msg_format(_("%sãŒãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¼•ãå¯„ã›ãŸï¼", "Your %s have attracted an dragon!"), o_name);
 				disturb(0, 1);
 			}
 		}
@@ -3168,7 +3168,7 @@ static void process_world_aux_curse(void)
 				char o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-				msg_format(_("%s¤¬»àÎî¤ò°ú¤­´ó¤»¤¿¡ª", "Your %s have attracted an undead!"), o_name);
+				msg_format(_("%sãŒæ­»éœŠã‚’å¼•ãå¯„ã›ãŸï¼", "Your %s have attracted an undead!"), o_name);
 				disturb(0, 1);
 			}
 		}
@@ -3177,7 +3177,7 @@ static void process_world_aux_curse(void)
 			if (!p_ptr->resist_fear)
 			{
 				disturb(0, 1);
-				msg_print(_("¤È¤Æ¤â°Å¤¤... ¤È¤Æ¤â¶²¤¤¡ª", "It's so dark... so scary!"));
+				msg_print(_("ã¨ã¦ã‚‚æš—ã„... ã¨ã¦ã‚‚æã„ï¼", "It's so dark... so scary!"));
 				set_afraid(p_ptr->afraid + 13 + randint1(26));
 			}
 		}
@@ -3195,7 +3195,7 @@ static void process_world_aux_curse(void)
 			char o_name[MAX_NLEN];
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-			msg_format(_("%s¤Ï¤¢¤Ê¤¿¤ÎÂÎÎÏ¤òµÛ¼ı¤·¤¿¡ª", "Your %s drains HP from you!"), o_name);
+			msg_format(_("%sã¯ã‚ãªãŸã®ä½“åŠ›ã‚’å¸åã—ãŸï¼", "Your %s drains HP from you!"), o_name);
 			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev*2, 100), o_name, -1);
 		}
 		/* Handle mana draining */
@@ -3204,7 +3204,7 @@ static void process_world_aux_curse(void)
 			char o_name[MAX_NLEN];
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-			msg_format(_("%s¤Ï¤¢¤Ê¤¿¤ÎËâÎÏ¤òµÛ¼ı¤·¤¿¡ª", "Your %s drains mana from you!"), o_name);
+			msg_format(_("%sã¯ã‚ãªãŸã®é­”åŠ›ã‚’å¸åã—ãŸï¼", "Your %s drains mana from you!"), o_name);
 			p_ptr->csp -= MIN(p_ptr->lev, 50);
 			if (p_ptr->csp < 0)
 			{
@@ -3224,10 +3224,10 @@ static void process_world_aux_curse(void)
 		{
 #ifdef JP
 			if (object_is_known(o_ptr))
-				msg_print("¡Ø¿³È½¤ÎÊõÀĞ¡Ù¤Ï¤¢¤Ê¤¿¤ÎÂÎÎÏ¤òµÛ¼ı¤·¤¿¡ª");
+				msg_print("ã€å¯©åˆ¤ã®å®çŸ³ã€ã¯ã‚ãªãŸã®ä½“åŠ›ã‚’å¸åã—ãŸï¼");
 			else
-				msg_print("¤Ê¤Ë¤«¤¬¤¢¤Ê¤¿¤ÎÂÎÎÏ¤òµÛ¼ı¤·¤¿¡ª");
-			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "¿³È½¤ÎÊõÀĞ", -1);
+				msg_print("ãªã«ã‹ãŒã‚ãªãŸã®ä½“åŠ›ã‚’å¸åã—ãŸï¼");
+			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "å¯©åˆ¤ã®å®çŸ³", -1);
 #else
 			if (object_is_known(o_ptr))
 				msg_print("The Jewel of Judgement drains life from you!");
@@ -3241,9 +3241,9 @@ static void process_world_aux_curse(void)
 
 
 /*!
- * @brief 10¥²¡¼¥à¥¿¡¼¥ó¤¬¿Ê¹Ô¤¹¤ë¤´¤È¤ËËâÆ»¶ñ¤Î¼«Á³½¼Å¶¤ò¹Ô¤¦½èÍı
+ * @brief 10ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³ãŒé€²è¡Œã™ã‚‹ã”ã¨ã«é­”é“å…·ã®è‡ªç„¶å……å¡«ã‚’è¡Œã†å‡¦ç†
  * / Handle recharging objects once every 10 game turns
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void process_world_aux_recharge(void)
 {
@@ -3354,9 +3354,9 @@ static void process_world_aux_recharge(void)
 
 
 /*!
- * @brief 10¥²¡¼¥à¥¿¡¼¥ó¤¬¿Ê¹Ô¤¹¤ë¤´¤È¤Ëµ¢´Ô¤ä¸½¼ÂÊÑÍÆ¤Ê¤É¤Î»Ä¤ê»ş´Ö¥«¥¦¥ó¥È¥À¥¦¥ó¤ÈÈ¯Æ°¤ò½èÍı¤¹¤ë¡£
+ * @brief 10ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³ãŒé€²è¡Œã™ã‚‹ã”ã¨ã«å¸°é‚„ã‚„ç¾å®Ÿå¤‰å®¹ãªã©ã®æ®‹ã‚Šæ™‚é–“ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã¨ç™ºå‹•ã‚’å‡¦ç†ã™ã‚‹ã€‚
  * / Handle involuntary movement once every 10 game turns
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void process_world_aux_movement(void)
 {
@@ -3385,7 +3385,7 @@ static void process_world_aux_movement(void)
 			/* Determine the level */
 			if (dun_level || p_ptr->inside_quest || p_ptr->enter_dungeon)
 			{
-				msg_print(_("¾å¤Ë°ú¤ÃÄ¥¤ê¤¢¤²¤é¤ì¤ë´¶¤¸¤¬¤¹¤ë¡ª",
+				msg_print(_("ä¸Šã«å¼•ã£å¼µã‚Šã‚ã’ã‚‰ã‚Œã‚‹æ„Ÿã˜ãŒã™ã‚‹ï¼",
 							"You feel yourself yanked upwards!"));
 
 				if (dungeon_type) p_ptr->recall_dungeon = dungeon_type;
@@ -3404,7 +3404,7 @@ static void process_world_aux_movement(void)
 			}
 			else
 			{
-				msg_print(_("²¼¤Ë°ú¤­¤º¤ê¹ß¤í¤µ¤ì¤ë´¶¤¸¤¬¤¹¤ë¡ª",
+				msg_print(_("ä¸‹ã«å¼•ããšã‚Šé™ã‚ã•ã‚Œã‚‹æ„Ÿã˜ãŒã™ã‚‹ï¼",
 							"You feel yourself yanked downwards!"));
 
 				dungeon_type = p_ptr->recall_dungeon;
@@ -3505,7 +3505,7 @@ static void process_world_aux_movement(void)
 			if (!quest_number(dun_level) && dun_level)
 			{
 #ifdef JP
-				msg_print("À¤³¦¤¬ÊÑ¤ï¤Ã¤¿¡ª");
+				msg_print("ä¸–ç•ŒãŒå¤‰ã‚ã£ãŸï¼");
 #else
 				msg_print("The world changes!");
 #endif
@@ -3522,7 +3522,7 @@ static void process_world_aux_movement(void)
 			else
 			{
 #ifdef JP
-				msg_print("À¤³¦¤¬¾¯¤·¤Î´ÖÊÑ²½¤·¤¿¤è¤¦¤À¡£");
+				msg_print("ä¸–ç•ŒãŒå°‘ã—ã®é–“å¤‰åŒ–ã—ãŸã‚ˆã†ã ã€‚");
 #else
 				msg_print("The world seems to change for a moment!");
 #endif
@@ -3536,10 +3536,10 @@ static void process_world_aux_movement(void)
 
 
 /*!
- * @brief »ØÄê¤·¤¿¥â¥ó¥¹¥¿¡¼¤ËÎÙÀÜ¤·¤Æ¤¤¤ë¥â¥ó¥¹¥¿¡¼¤Î¿ô¤òÊÖ¤¹¡£
+ * @brief æŒ‡å®šã—ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«éš£æ¥ã—ã¦ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ•°ã‚’è¿”ã™ã€‚
  * / Count number of adjacent monsters
- * @param m_idx ÎÙÀÜ¿ô¤òÄ´¤Ù¤¿¤¤¥â¥ó¥¹¥¿¡¼¤ÎID
- * @return ÎÙÀÜ¤·¤Æ¤¤¤ë¥â¥ó¥¹¥¿¡¼¤Î¿ô
+ * @param m_idx éš£æ¥æ•°ã‚’èª¿ã¹ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ID
+ * @return éš£æ¥ã—ã¦ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ•°
  */
 static int get_monster_crowd_number(int m_idx)
 {
@@ -3566,14 +3566,14 @@ static int get_monster_crowd_number(int m_idx)
 
 
 /*!
- * ¥À¥ó¥¸¥ç¥ó¤ÎÊ·°Ïµ¤¤ò·×»»¤¹¤ë¤¿¤á¤ÎÈóÀş·Á´ğ½àÃÍ / Dungeon rating is no longer linear
+ * ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®é›°å›²æ°—ã‚’è¨ˆç®—ã™ã‚‹ãŸã‚ã®éç·šå½¢åŸºæº–å€¤ / Dungeon rating is no longer linear
  */
 #define RATING_BOOST(delta) (delta * delta + 50 * delta)
 
 /*!
- * @brief ¥À¥ó¥¸¥ç¥ó¤ÎÊ·°Ïµ¤¤ò»»½Ğ¤¹¤ë¡£
+ * @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®é›°å›²æ°—ã‚’ç®—å‡ºã™ã‚‹ã€‚
  * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
- * @return »»½Ğ¤µ¤ì¤¿¥À¥ó¥¸¥ç¥ó¤ÎÊ·°Ïµ¤¥é¥ó¥¯
+ * @return ç®—å‡ºã•ã‚ŒãŸãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®é›°å›²æ°—ãƒ©ãƒ³ã‚¯
  */
 static byte get_dungeon_feeling(void)
 {
@@ -3719,9 +3719,9 @@ static byte get_dungeon_feeling(void)
 }
 
 /*!
- * @brief ¥À¥ó¥¸¥ç¥ó¤ÎÊ·°Ïµ¤¤ò¹¹¿·¤·¡¢ÊÑ²½¤¬¤¢¤Ã¤¿¾ì¹ç¥á¥Ã¥»¡¼¥¸¤òÉ½¼¨¤¹¤ë
+ * @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®é›°å›²æ°—ã‚’æ›´æ–°ã—ã€å¤‰åŒ–ãŒã‚ã£ãŸå ´åˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã™ã‚‹
  * / Update dungeon feeling, and announce it if changed
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void update_dungeon_feeling(void)
 {
@@ -3776,9 +3776,9 @@ static void update_dungeon_feeling(void)
 }
 
 /*!
- * @brief 10¥²¡¼¥à¥¿¡¼¥ó¤¬¿Ê¹Ô¤¹¤ëËè¤Ë¥²¡¼¥àÀ¤³¦Á´ÂÎ¤Î½èÍı¤ò¹Ô¤¦¡£
+ * @brief 10ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³ãŒé€²è¡Œã™ã‚‹æ¯ã«ã‚²ãƒ¼ãƒ ä¸–ç•Œå…¨ä½“ã®å‡¦ç†ã‚’è¡Œã†ã€‚
  * / Handle certain things once every 10 game turns
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void process_world(void)
 {
@@ -3816,7 +3816,7 @@ static void process_world(void)
 		if (number_mon == 0)
 		{
 #ifdef JP
-			msg_print("ÁêÂÇ¤Á¤Ë½ª¤ï¤ê¤Ş¤·¤¿¡£");
+			msg_print("ç›¸æ‰“ã¡ã«çµ‚ã‚ã‚Šã¾ã—ãŸã€‚");
 #else
 			msg_print("They have kill each other at the same time.");
 #endif
@@ -3833,7 +3833,7 @@ static void process_world(void)
 
 			monster_desc(m_name, wm_ptr, 0);
 #ifdef JP
-			msg_format("%s¤¬¾¡Íø¤·¤¿¡ª", m_name);
+			msg_format("%sãŒå‹åˆ©ã—ãŸï¼", m_name);
 #else
 			msg_format("%s is winner!", m_name);
 #endif
@@ -3842,12 +3842,12 @@ static void process_world(void)
 			if (win_m_idx == (sel_monster+1))
 			{
 #ifdef JP
-				msg_print("¤ª¤á¤Ç¤È¤¦¤´¤¶¤¤¤Ş¤¹¡£");
+				msg_print("ãŠã‚ã§ã¨ã†ã”ã–ã„ã¾ã™ã€‚");
 #else
 				msg_print("Congratulations.");
 #endif
 #ifdef JP
-				msg_format("%d¡ğ¤ò¼õ¤±¼è¤Ã¤¿¡£", battle_odds);
+				msg_format("%dï¼„ã‚’å—ã‘å–ã£ãŸã€‚", battle_odds);
 #else
 				msg_format("You received %d gold.", battle_odds);
 #endif
@@ -3856,7 +3856,7 @@ static void process_world(void)
 			else
 			{
 #ifdef JP
-				msg_print("»ÄÇ°¤Ç¤·¤¿¡£");
+				msg_print("æ®‹å¿µã§ã—ãŸã€‚");
 #else
 				msg_print("You lost gold.");
 #endif
@@ -3868,7 +3868,7 @@ static void process_world(void)
 		else if (turn - old_turn == 150*TURNS_PER_TICK)
 		{
 #ifdef JP
-			msg_print("¿½¤·Ê¬¤±¤¢¤ê¤Ş¤»¤ó¤¬¡¢¤³¤Î¾¡Éé¤Ï°ú¤­Ê¬¤±¤È¤µ¤»¤Æ¤¤¤¿¤À¤­¤Ş¤¹¡£");
+			msg_print("ç”³ã—åˆ†ã‘ã‚ã‚Šã¾ã›ã‚“ãŒã€ã“ã®å‹è² ã¯å¼•ãåˆ†ã‘ã¨ã•ã›ã¦ã„ãŸã ãã¾ã™ã€‚");
 #else
 			msg_format("This battle have ended in a draw.");
 #endif
@@ -3900,8 +3900,8 @@ static void process_world(void)
 
 				/* Message */
 #ifdef JP
-msg_print("¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¸¤«¤«¤Ã¤Æ¤¤¤Ş¤¹...");
-msg_print("¥²¡¼¥à¤ò½ªÎ»¤¹¤ë¤«¥»¡¼¥Ö¤¹¤ë¤«¤·¤Æ²¼¤µ¤¤¡£");
+msg_print("ã‚¢ãƒ³ã‚°ãƒãƒ³ãƒ‰ã¸ã®é–€ãŒé–‰ã˜ã‹ã‹ã£ã¦ã„ã¾ã™...");
+msg_print("ã‚²ãƒ¼ãƒ ã‚’çµ‚äº†ã™ã‚‹ã‹ã‚»ãƒ¼ãƒ–ã™ã‚‹ã‹ã—ã¦ä¸‹ã•ã„ã€‚");
 #else
 				msg_print("The gates to ANGBAND are closing...");
 				msg_print("Please finish up and/or save your game.");
@@ -3914,7 +3914,7 @@ msg_print("¥²¡¼¥à¤ò½ªÎ»¤¹¤ë¤«¥»¡¼¥Ö¤¹¤ë¤«¤·¤Æ²¼¤µ¤¤¡£");
 			{
 				/* Message */
 #ifdef JP
-msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
+msg_print("ä»Šã€ã‚¢ãƒ³ã‚°ãƒãƒ³ãƒ‰ã¸ã®é–€ãŒé–‰ã–ã•ã‚Œã¾ã—ãŸã€‚");
 #else
 				msg_print("The gates to ANGBAND are now closed.");
 #endif
@@ -3939,7 +3939,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 	if (mon_fight && !ignore_unview)
 	{
 #ifdef JP
-		msg_print("²¿¤«¤¬Ê¹¤³¤¨¤¿¡£");
+		msg_print("ä½•ã‹ãŒèã“ãˆãŸã€‚");
 #else
 		msg_print("You hear noise.");
 #endif
@@ -3965,7 +3965,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 
 				/* Message */
 #ifdef JP
-				msg_print("Ìë¤¬ÌÀ¤±¤¿¡£");
+				msg_print("å¤œãŒæ˜ã‘ãŸã€‚");
 #else
 				msg_print("The sun has risen.");
 #endif
@@ -4000,7 +4000,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 
 				/* Message */
 #ifdef JP
-				msg_print("Æü¤¬ÄÀ¤ó¤À¡£");
+				msg_print("æ—¥ãŒæ²ˆã‚“ã ã€‚");
 #else
 				msg_print("The sun has fallen.");
 #endif
@@ -4094,7 +4094,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 					{
 						/* Message */
 #ifdef JP
-						if (cheat_xtra) msg_format("%s¤ÎÅ¹¼ç¤ò¥·¥ã¥Ã¥Õ¥ë¤·¤Ş¤¹¡£", f_name + f_ptr->name);
+						if (cheat_xtra) msg_format("%sã®åº—ä¸»ã‚’ã‚·ãƒ£ãƒƒãƒ•ãƒ«ã—ã¾ã™ã€‚", f_name + f_ptr->name);
 #else
 						if (cheat_xtra) msg_format("Shuffle a Shopkeeper of %s.", f_name + f_ptr->name);
 #endif
@@ -4163,7 +4163,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 			{
 			case 0:
 #ifdef JP
-				msg_print("±ó¤¯¤ÇÉÔµ¤Ì£¤Ê¾â¤Î²»¤¬ÌÄ¤Ã¤¿¡£");
+				msg_print("é ãã§ä¸æ°—å‘³ãªé˜ã®éŸ³ãŒé³´ã£ãŸã€‚");
 #else
 				msg_print("You hear a distant bell toll ominously.");
 #endif
@@ -4171,7 +4171,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 
 			case 1:
 #ifdef JP
-				msg_print("±ó¤¯¤Ç¾â¤¬Æó²óÌÄ¤Ã¤¿¡£");
+				msg_print("é ãã§é˜ãŒäºŒå›é³´ã£ãŸã€‚");
 #else
 				msg_print("A distant bell sounds twice.");
 #endif
@@ -4179,7 +4179,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 
 			case 2:
 #ifdef JP
-				msg_print("±ó¤¯¤Ç¾â¤¬»°²óÌÄ¤Ã¤¿¡£");
+				msg_print("é ãã§é˜ãŒä¸‰å›é³´ã£ãŸã€‚");
 #else
 				msg_print("A distant bell sounds three times.");
 #endif
@@ -4187,7 +4187,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 
 			case 3:
 #ifdef JP
-				msg_print("±ó¤¯¤Ç¾â¤¬»Í²óÌÄ¤Ã¤¿¡£");
+				msg_print("é ãã§é˜ãŒå››å›é³´ã£ãŸã€‚");
 #else
 				msg_print("A distant bell tolls four times.");
 #endif
@@ -4202,7 +4202,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 
 			disturb(1, 1);
 #ifdef JP
-			msg_print("±ó¤¯¤Ç¾â¤¬²¿²ó¤âÌÄ¤ê¡¢»à¤ó¤À¤è¤¦¤ÊÀÅ¤±¤µ¤ÎÃæ¤Ø¾Ã¤¨¤Æ¤¤¤Ã¤¿¡£");
+			msg_print("é ãã§é˜ãŒä½•å›ã‚‚é³´ã‚Šã€æ­»ã‚“ã ã‚ˆã†ãªé™ã‘ã•ã®ä¸­ã¸æ¶ˆãˆã¦ã„ã£ãŸã€‚");
 #else
 			msg_print("A distant bell tolls many times, fading into an deathly silence.");
 #endif
@@ -4259,7 +4259,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 			{
 				/* Message */
 #ifdef JP
-				msg_print("¤¢¤Ş¤ê¤Ë¤â¶õÊ¢¤Çµ¤Àä¤·¤Æ¤·¤Ş¤Ã¤¿¡£");
+				msg_print("ã‚ã¾ã‚Šã«ã‚‚ç©ºè…¹ã§æ°—çµ¶ã—ã¦ã—ã¾ã£ãŸã€‚");
 #else
 				msg_print("You faint from the lack of food.");
 #endif
@@ -4278,7 +4278,7 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 
 				/* Take damage */
 #ifdef JP
-				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, "¶õÊ¢", -1);
+				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, "ç©ºè…¹", -1);
 #else
 				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, "starvation", -1);
 #endif
@@ -4315,9 +4315,9 @@ msg_print("º£¡¢¥¢¥ó¥°¥Ğ¥ó¥É¤Ø¤ÎÌç¤¬ÊÄ¤¶¤µ¤ì¤Ş¤·¤¿¡£");
 }
 
 /*!
- * @brief ¥¦¥£¥¶¡¼¥É¥â¡¼¥É¤Ø¤ÎÆ³Æş½èÍı
+ * @brief ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã¸ã®å°å…¥å‡¦ç†
  * / Verify use of "wizard" mode
- * @return ¼Âºİ¤Ë¥¦¥£¥¶¡¼¥É¥â¡¼¥É¤Ø°Ü¹Ô¤·¤¿¤éTRUE¤òÊÖ¤¹¡£
+ * @return å®Ÿéš›ã«ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã¸ç§»è¡Œã—ãŸã‚‰TRUEã‚’è¿”ã™ã€‚
  */
 static bool enter_wizard_mode(void)
 {
@@ -4328,7 +4328,7 @@ static bool enter_wizard_mode(void)
 		if (!allow_debug_opts || arg_wizard)
 		{
 #ifdef JP
-			msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥É¤Ïµö²Ä¤µ¤ì¤Æ¤¤¤Ş¤»¤ó¡£ ");
+			msg_print("ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã¯è¨±å¯ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚ ");
 #else
 			msg_print("Wizard mode is not permitted.");
 #endif
@@ -4337,8 +4337,8 @@ static bool enter_wizard_mode(void)
 
 		/* Mention effects */
 #ifdef JP
-		msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥É¤Ï¥Ç¥Ğ¥Ã¥°¤È¼Â¸³¤Î¤¿¤á¤Î¥â¡¼¥É¤Ç¤¹¡£ ");
-		msg_print("°ìÅÙ¥¦¥£¥¶¡¼¥É¥â¡¼¥É¤ËÆş¤ë¤È¥¹¥³¥¢¤Ïµ­Ï¿¤µ¤ì¤Ş¤»¤ó¡£");
+		msg_print("ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã¯ãƒ‡ãƒãƒƒã‚°ã¨å®Ÿé¨“ã®ãŸã‚ã®ãƒ¢ãƒ¼ãƒ‰ã§ã™ã€‚ ");
+		msg_print("ä¸€åº¦ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã«å…¥ã‚‹ã¨ã‚¹ã‚³ã‚¢ã¯è¨˜éŒ²ã•ã‚Œã¾ã›ã‚“ã€‚");
 #else
 		msg_print("Wizard mode is for debugging and experimenting.");
 		msg_print("The game will not be scored if you enter wizard mode.");
@@ -4348,7 +4348,7 @@ static bool enter_wizard_mode(void)
 
 		/* Verify request */
 #ifdef JP
-		if (!get_check("ËÜÅö¤Ë¥¦¥£¥¶¡¼¥É¥â¡¼¥É¤ËÆş¤ê¤¿¤¤¤Î¤Ç¤¹¤«? "))
+		if (!get_check("æœ¬å½“ã«ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã«å…¥ã‚ŠãŸã„ã®ã§ã™ã‹? "))
 #else
 		if (!get_check("Are you sure you want to enter wizard mode? "))
 #endif
@@ -4357,7 +4357,7 @@ static bool enter_wizard_mode(void)
 		}
 
 #ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "¥¦¥£¥¶¡¼¥É¥â¡¼¥É¤ËÆÍÆş¤·¤Æ¥¹¥³¥¢¤ò»Ä¤»¤Ê¤¯¤Ê¤Ã¤¿¡£");
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã«çªå…¥ã—ã¦ã‚¹ã‚³ã‚¢ã‚’æ®‹ã›ãªããªã£ãŸã€‚");
 #else
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up recording score to enter wizard mode.");
 #endif
@@ -4373,9 +4373,9 @@ static bool enter_wizard_mode(void)
 #ifdef ALLOW_WIZARD
 
 /*!
- * @brief ¥Ç¥Ğ¥Ã¥°¥³¥Ş¥ó¥É¤Ø¤ÎÆ³Æş½èÍı
+ * @brief ãƒ‡ãƒãƒƒã‚°ã‚³ãƒãƒ³ãƒ‰ã¸ã®å°å…¥å‡¦ç†
  * / Verify use of "debug" commands
- * @return ¼Âºİ¤Ë¥Ç¥Ğ¥Ã¥°¥³¥Ş¥ó¥É¤Ø°Ü¹Ô¤·¤¿¤éTRUE¤òÊÖ¤¹¡£
+ * @return å®Ÿéš›ã«ãƒ‡ãƒãƒƒã‚°ã‚³ãƒãƒ³ãƒ‰ã¸ç§»è¡Œã—ãŸã‚‰TRUEã‚’è¿”ã™ã€‚
  */
 static bool enter_debug_mode(void)
 {
@@ -4386,7 +4386,7 @@ static bool enter_debug_mode(void)
 		if (!allow_debug_opts)
 		{
 #ifdef JP
-			msg_print("¥Ç¥Ğ¥Ã¥°¥³¥Ş¥ó¥É¤Ïµö²Ä¤µ¤ì¤Æ¤¤¤Ş¤»¤ó¡£ ");
+			msg_print("ãƒ‡ãƒãƒƒã‚°ã‚³ãƒãƒ³ãƒ‰ã¯è¨±å¯ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚ ");
 #else
 			msg_print("Use of debug command is not permitted.");
 #endif
@@ -4395,8 +4395,8 @@ static bool enter_debug_mode(void)
 
 		/* Mention effects */
 #ifdef JP
-		msg_print("¥Ç¥Ğ¥Ã¥°¡¦¥³¥Ş¥ó¥É¤Ï¥Ç¥Ğ¥Ã¥°¤È¼Â¸³¤Î¤¿¤á¤Î¥³¥Ş¥ó¥É¤Ç¤¹¡£ ");
-		msg_print("¥Ç¥Ğ¥Ã¥°¡¦¥³¥Ş¥ó¥É¤ò»È¤¦¤È¥¹¥³¥¢¤Ïµ­Ï¿¤µ¤ì¤Ş¤»¤ó¡£");
+		msg_print("ãƒ‡ãƒãƒƒã‚°ãƒ»ã‚³ãƒãƒ³ãƒ‰ã¯ãƒ‡ãƒãƒƒã‚°ã¨å®Ÿé¨“ã®ãŸã‚ã®ã‚³ãƒãƒ³ãƒ‰ã§ã™ã€‚ ");
+		msg_print("ãƒ‡ãƒãƒƒã‚°ãƒ»ã‚³ãƒãƒ³ãƒ‰ã‚’ä½¿ã†ã¨ã‚¹ã‚³ã‚¢ã¯è¨˜éŒ²ã•ã‚Œã¾ã›ã‚“ã€‚");
 #else
 		msg_print("The debug commands are for debugging and experimenting.");
 		msg_print("The game will not be scored if you use debug commands.");
@@ -4406,7 +4406,7 @@ static bool enter_debug_mode(void)
 
 		/* Verify request */
 #ifdef JP
-		if (!get_check("ËÜÅö¤Ë¥Ç¥Ğ¥Ã¥°¡¦¥³¥Ş¥ó¥É¤ò»È¤¤¤Ş¤¹¤«? "))
+		if (!get_check("æœ¬å½“ã«ãƒ‡ãƒãƒƒã‚°ãƒ»ã‚³ãƒãƒ³ãƒ‰ã‚’ä½¿ã„ã¾ã™ã‹? "))
 #else
 		if (!get_check("Are you sure you want to use debug commands? "))
 #endif
@@ -4415,7 +4415,7 @@ static bool enter_debug_mode(void)
 		}
 
 #ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "¥Ç¥Ğ¥Ã¥°¥â¡¼¥É¤ËÆÍÆş¤·¤Æ¥¹¥³¥¢¤ò»Ä¤»¤Ê¤¯¤Ê¤Ã¤¿¡£");
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ãƒ‡ãƒãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰ã«çªå…¥ã—ã¦ã‚¹ã‚³ã‚¢ã‚’æ®‹ã›ãªããªã£ãŸã€‚");
 #else
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up sending score to use debug commands.");
 #endif
@@ -4438,9 +4438,9 @@ extern void do_cmd_debug(void);
 #ifdef ALLOW_BORG
 
 /*!
- * @brief ¥Ü¡¼¥°¥³¥Ş¥ó¥É¤Ø¤ÎÆ³Æş½èÍı
+ * @brief ãƒœãƒ¼ã‚°ã‚³ãƒãƒ³ãƒ‰ã¸ã®å°å…¥å‡¦ç†
  * / Verify use of "borg" commands
- * @return ¼Âºİ¤Ë¥Ü¡¼¥°¥³¥Ş¥ó¥É¤Ø°Ü¹Ô¤·¤¿¤éTRUE¤òÊÖ¤¹¡£
+ * @return å®Ÿéš›ã«ãƒœãƒ¼ã‚°ã‚³ãƒãƒ³ãƒ‰ã¸ç§»è¡Œã—ãŸã‚‰TRUEã‚’è¿”ã™ã€‚
  */
 static bool enter_borg_mode(void)
 {
@@ -4449,8 +4449,8 @@ static bool enter_borg_mode(void)
 	{
 		/* Mention effects */
 #ifdef JP
-		msg_print("¥Ü¡¼¥°¡¦¥³¥Ş¥ó¥É¤Ï¥Ç¥Ğ¥Ã¥°¤È¼Â¸³¤Î¤¿¤á¤Î¥³¥Ş¥ó¥É¤Ç¤¹¡£ ");
-		msg_print("¥Ü¡¼¥°¡¦¥³¥Ş¥ó¥É¤ò»È¤¦¤È¥¹¥³¥¢¤Ïµ­Ï¿¤µ¤ì¤Ş¤»¤ó¡£");
+		msg_print("ãƒœãƒ¼ã‚°ãƒ»ã‚³ãƒãƒ³ãƒ‰ã¯ãƒ‡ãƒãƒƒã‚°ã¨å®Ÿé¨“ã®ãŸã‚ã®ã‚³ãƒãƒ³ãƒ‰ã§ã™ã€‚ ");
+		msg_print("ãƒœãƒ¼ã‚°ãƒ»ã‚³ãƒãƒ³ãƒ‰ã‚’ä½¿ã†ã¨ã‚¹ã‚³ã‚¢ã¯è¨˜éŒ²ã•ã‚Œã¾ã›ã‚“ã€‚");
 #else
 		msg_print("The borg commands are for debugging and experimenting.");
 		msg_print("The game will not be scored if you use borg commands.");
@@ -4460,7 +4460,7 @@ static bool enter_borg_mode(void)
 
 		/* Verify request */
 #ifdef JP
-		if (!get_check("ËÜÅö¤Ë¥Ü¡¼¥°¡¦¥³¥Ş¥ó¥É¤ò»È¤¤¤Ş¤¹¤«? "))
+		if (!get_check("æœ¬å½“ã«ãƒœãƒ¼ã‚°ãƒ»ã‚³ãƒãƒ³ãƒ‰ã‚’ä½¿ã„ã¾ã™ã‹? "))
 #else
 		if (!get_check("Are you sure you want to use borg commands? "))
 #endif
@@ -4469,7 +4469,7 @@ static bool enter_borg_mode(void)
 		}
 
 #ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "¥Ü¡¼¥°¡¦¥³¥Ş¥ó¥É¤ò»ÈÍÑ¤·¤Æ¥¹¥³¥¢¤ò»Ä¤»¤Ê¤¯¤Ê¤Ã¤¿¡£");
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ãƒœãƒ¼ã‚°ãƒ»ã‚³ãƒãƒ³ãƒ‰ã‚’ä½¿ç”¨ã—ã¦ã‚¹ã‚³ã‚¢ã‚’æ®‹ã›ãªããªã£ãŸã€‚");
 #else
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up recording score to use borg commands.");
 #endif
@@ -4490,10 +4490,10 @@ extern void do_cmd_borg(void);
 
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤«¤é¼õ¤±¤¿ÆşÎÏ¥³¥Ş¥ó¥É¤ÎÊ¬´ô½èÍı¡£
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰å—ã‘ãŸå…¥åŠ›ã‚³ãƒãƒ³ãƒ‰ã®åˆ†å²å‡¦ç†ã€‚
  * / Parse and execute the current command Give "Warning" on illegal commands.
  * @todo XXX XXX XXX Make some "blocks"
- * @return ¤Ê¤·
+ * @return ãªã—
  */
 static void process_command(void)
 {
@@ -4538,7 +4538,7 @@ static void process_command(void)
 			{
 				p_ptr->wizard = FALSE;
 #ifdef JP
-msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥É²ò½ü¡£");
+msg_print("ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰è§£é™¤ã€‚");
 #else
 				msg_print("Wizard mode off.");
 #endif
@@ -4548,7 +4548,7 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥É²ò½ü¡£");
 			{
 				p_ptr->wizard = TRUE;
 #ifdef JP
-msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆş¡£");
+msg_print("ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰çªå…¥ã€‚");
 #else
 				msg_print("Wizard mode on.");
 #endif
@@ -4789,7 +4789,7 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆş¡£");
 				if (ambush_flag)
 				{
 #ifdef JP
-					msg_print("½±·â¤«¤éÆ¨¤²¤ë¤Ë¤Ï¥Ş¥Ã¥×¤ÎÃ¼¤Ş¤Ç°ÜÆ°¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£");
+					msg_print("è¥²æ’ƒã‹ã‚‰é€ƒã’ã‚‹ã«ã¯ãƒãƒƒãƒ—ã®ç«¯ã¾ã§ç§»å‹•ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚");
 #else
 					msg_print("To flee the ambush you have to reach the edge of the map.");
 #endif
@@ -4799,7 +4799,7 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆş¡£");
 				if (p_ptr->food < PY_FOOD_WEAK)
 				{
 #ifdef JP
-					msg_print("¤½¤ÎÁ°¤Ë¿©»ö¤ò¤È¤é¤Ê¤¤¤È¡£");
+					msg_print("ãã®å‰ã«é£Ÿäº‹ã‚’ã¨ã‚‰ãªã„ã¨ã€‚");
 #else
 					msg_print("You must eat something here.");
 #endif
@@ -4867,7 +4867,7 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆş¡£");
 		{
 			if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
 #ifdef JP
-				msg_print("¼öÊ¸¤ò³Ø½¬¤¹¤ëÉ¬Í×¤Ï¤Ê¤¤¡ª");
+				msg_print("å‘ªæ–‡ã‚’å­¦ç¿’ã™ã‚‹å¿…è¦ã¯ãªã„ï¼");
 #else
 				msg_print("You don't have to learn spells!");
 #endif
@@ -4907,7 +4907,7 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆş¡£");
 				if ((p_ptr->pclass == CLASS_WARRIOR) || (p_ptr->pclass == CLASS_ARCHER) || (p_ptr->pclass == CLASS_CAVALRY))
 				{
 #ifdef JP
-					msg_print("¼öÊ¸¤ò¾§¤¨¤é¤ì¤Ê¤¤¡ª");
+					msg_print("å‘ªæ–‡ã‚’å”±ãˆã‚‰ã‚Œãªã„ï¼");
 #else
 					msg_print("You cannot cast spells!");
 #endif
@@ -4915,7 +4915,7 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆş¡£");
 				else if (dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && (p_ptr->pclass != CLASS_BERSERKER) && (p_ptr->pclass != CLASS_SMITH))
 				{
 #ifdef JP
-					msg_print("¥À¥ó¥¸¥ç¥ó¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
+					msg_print("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ãŒé­”æ³•ã‚’å¸åã—ãŸï¼");
 #else
 					msg_print("The dungeon absorbs all attempted magic!");
 #endif
@@ -4925,49 +4925,49 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆş¡£");
 				{
 #ifdef JP
 
-					cptr which_power = "ËâË¡";
+					cptr which_power = "é­”æ³•";
 #else
 					cptr which_power = "magic";
 #endif
 					if (p_ptr->pclass == CLASS_MINDCRAFTER)
 #ifdef JP
-						which_power = "Ä¶Ç½ÎÏ";
+						which_power = "è¶…èƒ½åŠ›";
 #else
 						which_power = "psionic powers";
 #endif
 					else if (p_ptr->pclass == CLASS_IMITATOR)
 #ifdef JP
-						which_power = "¤â¤Î¤Ş¤Í";
+						which_power = "ã‚‚ã®ã¾ã­";
 #else
 						which_power = "imitation";
 #endif
 					else if (p_ptr->pclass == CLASS_SAMURAI)
 #ifdef JP
-						which_power = "É¬»¦·õ";
+						which_power = "å¿…æ®ºå‰£";
 #else
 						which_power = "hissatsu";
 #endif
 					else if (p_ptr->pclass == CLASS_MIRROR_MASTER)
 #ifdef JP
-						which_power = "¶ÀËâË¡";
+						which_power = "é¡é­”æ³•";
 #else
 						which_power = "mirror magic";
 #endif
 					else if (p_ptr->pclass == CLASS_NINJA)
 #ifdef JP
-						which_power = "Ç¦½Ñ";
+						which_power = "å¿è¡“";
 #else
 						which_power = "ninjutsu";
 #endif
 					else if (mp_ptr->spell_book == TV_LIFE_BOOK)
 #ifdef JP
-						which_power = "µ§¤ê";
+						which_power = "ç¥ˆã‚Š";
 #else
 						which_power = "prayer";
 #endif
 
 #ifdef JP
-					msg_format("È¿ËâË¡¥Ğ¥ê¥¢¤¬%s¤ò¼ÙËâ¤·¤¿¡ª", which_power);
+					msg_format("åé­”æ³•ãƒãƒªã‚¢ãŒ%sã‚’é‚ªé­”ã—ãŸï¼", which_power);
 #else
 					msg_format("An anti-magic shell disrupts your %s!", which_power);
 #endif
@@ -4976,7 +4976,7 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆş¡£");
 				else if (p_ptr->shero && (p_ptr->pclass != CLASS_BERSERKER))
 				{
 #ifdef JP
-					msg_format("¶¸Àï»Î²½¤·¤Æ¤¤¤ÆÆ¬¤¬²ó¤é¤Ê¤¤¡ª");
+					msg_format("ç‹‚æˆ¦å£«åŒ–ã—ã¦ã„ã¦é ­ãŒå›ã‚‰ãªã„ï¼");
 #else
 					msg_format("You cannot think directly!");
 #endif
@@ -5042,7 +5042,7 @@ msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥ÉÆÍÆş¡£");
 			else
 			{
 #ifdef JP
-msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
+msg_print("ã‚¢ãƒªãƒ¼ãƒŠãŒé­”æ³•ã‚’å¸åã—ãŸï¼");
 #else
 				msg_print("The arena absorbs all attempted magic!");
 #endif
@@ -5094,7 +5094,7 @@ msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
 			else
 			{
 #ifdef JP
-msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
+msg_print("ã‚¢ãƒªãƒ¼ãƒŠãŒé­”æ³•ã‚’å¸åã—ãŸï¼");
 #else
 				msg_print("The arena absorbs all attempted magic!");
 #endif
@@ -5113,7 +5113,7 @@ msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
 			if (p_ptr->inside_arena)
 			{
 #ifdef JP
-msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
+msg_print("ã‚¢ãƒªãƒ¼ãƒŠãŒé­”æ³•ã‚’å¸åã—ãŸï¼");
 #else
 				msg_print("The arena absorbs all attempted magic!");
 #endif
@@ -5142,7 +5142,7 @@ msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
 			else
 			{
 #ifdef JP
-msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
+msg_print("ã‚¢ãƒªãƒ¼ãƒŠãŒé­”æ³•ã‚’å¸åã—ãŸï¼");
 #else
 				msg_print("The arena absorbs all attempted magic!");
 #endif
@@ -5163,7 +5163,7 @@ msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
 			else
 			{
 #ifdef JP
-msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
+msg_print("ã‚¢ãƒªãƒ¼ãƒŠãŒé­”æ³•ã‚’å¸åã—ãŸï¼");
 #else
 				msg_print("The arena absorbs all attempted magic!");
 #endif
@@ -5182,7 +5182,7 @@ msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
 			if (p_ptr->inside_arena)
 			{
 #ifdef JP
-msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
+msg_print("ã‚¢ãƒªãƒ¼ãƒŠãŒé­”æ³•ã‚’å¸åã—ãŸï¼");
 #else
 				msg_print("The arena absorbs all attempted magic!");
 #endif
@@ -5478,7 +5478,7 @@ msg_print("¥¢¥ê¡¼¥Ê¤¬ËâË¡¤òµÛ¼ı¤·¤¿¡ª");
 			}
 			else
 #ifdef JP
-prt(" '?' ¤Ç¥Ø¥ë¥×¤¬É½¼¨¤µ¤ì¤Ş¤¹¡£", 0, 0);
+prt(" '?' ã§ãƒ˜ãƒ«ãƒ—ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚", 0, 0);
 #else
 				prt("Type '?' for help.", 0, 0);
 #endif
@@ -5491,9 +5491,9 @@ prt(" '?' ¤Ç¥Ø¥ë¥×¤¬É½¼¨¤µ¤ì¤Ş¤¹¡£", 0, 0);
 }
 
 /*!
- * @brief ¥â¥ó¥¹¥¿¡¼¼ïÂ²¤¬Äà¤ì¤ë¼ïÂ²¤«¤É¤¦¤«¤òÈ½Äê¤¹¤ë¡£
- * @param r_idx È½Äê¤·¤¿¤¤¥â¥ó¥¹¥¿¡¼¼ïÂ²¤ÎID
- * @return Äà¤ì¤ëÂĞ¾İ¤Ê¤é¤ĞTRUE¤òÊÖ¤¹
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ãŒé‡£ã‚Œã‚‹ç¨®æ—ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
+ * @param r_idx åˆ¤å®šã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ã®ID
+ * @return é‡£ã‚Œã‚‹å¯¾è±¡ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool monster_tsuri(int r_idx)
 {
@@ -5507,8 +5507,8 @@ static bool monster_tsuri(int r_idx)
 
 
 /*!
- * @brief ¥¢¥¤¥Æ¥à¤Î½ê»ı¼ïÎà¿ô¤¬Ä¶¤¨¤¿¾ì¹ç¤Ë¥¢¥¤¥Æ¥à¤ò¾²¤ËÍî¤È¤¹½èÍı / Hack -- Pack Overflow
- * @return ¤Ê¤·
+ * @brief ã‚¢ã‚¤ãƒ†ãƒ ã®æ‰€æŒç¨®é¡æ•°ãŒè¶…ãˆãŸå ´åˆã«ã‚¢ã‚¤ãƒ†ãƒ ã‚’åºŠã«è½ã¨ã™å‡¦ç† / Hack -- Pack Overflow
+ * @return ãªã—
  */
 static void pack_overflow(void)
 {
@@ -5529,7 +5529,7 @@ static void pack_overflow(void)
 
 		/* Warning */
 #ifdef JP
-		msg_print("¥¶¥Ã¥¯¤«¤é¥¢¥¤¥Æ¥à¤¬¤¢¤Õ¤ì¤¿¡ª");
+		msg_print("ã‚¶ãƒƒã‚¯ã‹ã‚‰ã‚¢ã‚¤ãƒ†ãƒ ãŒã‚ãµã‚ŒãŸï¼");
 #else
 		msg_print("Your pack overflows!");
 #endif
@@ -5539,7 +5539,7 @@ static void pack_overflow(void)
 
 		/* Message */
 #ifdef JP
-		msg_format("%s(%c)¤òÍî¤È¤·¤¿¡£", o_name, index_to_label(INVEN_PACK));
+		msg_format("%s(%c)ã‚’è½ã¨ã—ãŸã€‚", o_name, index_to_label(INVEN_PACK));
 #else
 		msg_format("You drop %s (%c).", o_name, index_to_label(INVEN_PACK));
 #endif
@@ -5561,8 +5561,8 @@ static void pack_overflow(void)
 }
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤Î¹ÔÆ°¥¨¥Í¥ë¥®¡¼¤¬½¼Å¶¤µ¤ì¤ë¡Ê¡á¥×¥ì¥¤¥ä¡¼¤Î¥¿¡¼¥ó¤¬²ó¤ë¡ËËè¤Ë¹Ô¤ï¤ì¤ë½èÍı  / process the effects per 100 energy at player speed.
- * @return ¤Ê¤·
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¡Œå‹•ã‚¨ãƒãƒ«ã‚®ãƒ¼ãŒå……å¡«ã•ã‚Œã‚‹ï¼ˆï¼ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¿ãƒ¼ãƒ³ãŒå›ã‚‹ï¼‰æ¯ã«è¡Œã‚ã‚Œã‚‹å‡¦ç†  / process the effects per 100 energy at player speed.
+ * @return ãªã—
  */
 static void process_upkeep_with_speed(void)
 {
@@ -5590,8 +5590,8 @@ static void process_upkeep_with_speed(void)
 }
 
 /*!
- * @brief ¥×¥ì¥¤¥ä¡¼¤Î¹ÔÆ°½èÍı / Process the player
- * @return ¤Ê¤·
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¡Œå‹•å‡¦ç† / Process the player
+ * @return ãªã—
  * @note
  * Notice the annoying code to handle "pack overflow", which\n
  * must come first just in case somebody manages to corrupt\n
@@ -5606,7 +5606,7 @@ static void process_player(void)
 	if (hack_mutation)
 	{
 #ifdef JP
-msg_print("²¿¤«ÊÑ¤ï¤Ã¤¿µ¤¤¬¤¹¤ë¡ª");
+msg_print("ä½•ã‹å¤‰ã‚ã£ãŸæ°—ãŒã™ã‚‹ï¼");
 #else
 		msg_print("You feel different!");
 #endif
@@ -5697,7 +5697,7 @@ msg_print("²¿¤«ÊÑ¤ï¤Ã¤¿µ¤¤¬¤¹¤ë¡ª");
 					char m_name[80];
 					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
 #ifdef JP
-					msg_format("%s¤¬Äà¤ì¤¿¡ª", m_name);
+					msg_format("%sãŒé‡£ã‚ŒãŸï¼", m_name);
 #else
 					msg_format("You have a good catch!", m_name);
 #endif
@@ -5707,7 +5707,7 @@ msg_print("²¿¤«ÊÑ¤ï¤Ã¤¿µ¤¤¬¤¹¤ë¡ª");
 			if (!success)
 			{
 #ifdef JP
-				msg_print("±Â¤À¤±¿©¤ï¤ì¤Æ¤·¤Ş¤Ã¤¿¡ª¤¯¤Ã¤½¡Á¡ª");
+				msg_print("é¤Œã ã‘é£Ÿã‚ã‚Œã¦ã—ã¾ã£ãŸï¼ãã£ãï½ï¼");
 #else
 				msg_print("Damn!  The fish stole your bait!");
 #endif
@@ -5736,7 +5736,7 @@ msg_print("²¿¤«ÊÑ¤ï¤Ã¤¿µ¤¤¬¤¹¤ë¡ª");
 
 				/* Hack -- Show a Message */
 #ifdef JP
-msg_print("ÃæÃÇ¤·¤Ş¤·¤¿¡£");
+msg_print("ä¸­æ–­ã—ã¾ã—ãŸã€‚");
 #else
 				msg_print("Canceled.");
 #endif
@@ -5760,7 +5760,7 @@ msg_print("ÃæÃÇ¤·¤Ş¤·¤¿¡£");
 			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
 #ifdef JP
-			msg_format("%^s¤òµ¯¤³¤·¤¿¡£", m_name);
+			msg_format("%^sã‚’èµ·ã“ã—ãŸã€‚", m_name);
 #else
 			msg_format("You have waked %s up.", m_name);
 #endif
@@ -5779,7 +5779,7 @@ msg_print("ÃæÃÇ¤·¤Ş¤·¤¿¡£");
 
 				/* Dump a message */
 #ifdef JP
-				msg_format("%^s¤òÛ¯Û°¾õÂÖ¤«¤éÎ©¤ÁÄ¾¤é¤»¤¿¡£", m_name);
+				msg_format("%^sã‚’æœ¦æœ§çŠ¶æ…‹ã‹ã‚‰ç«‹ã¡ç›´ã‚‰ã›ãŸã€‚", m_name);
 #else
 				msg_format("%^s is no longer stunned.", m_name);
 #endif
@@ -5799,7 +5799,7 @@ msg_print("ÃæÃÇ¤·¤Ş¤·¤¿¡£");
 
 				/* Dump a message */
 #ifdef JP
-				msg_format("%^s¤òº®Íğ¾õÂÖ¤«¤éÎ©¤ÁÄ¾¤é¤»¤¿¡£", m_name);
+				msg_format("%^sã‚’æ··ä¹±çŠ¶æ…‹ã‹ã‚‰ç«‹ã¡ç›´ã‚‰ã›ãŸã€‚", m_name);
 #else
 				msg_format("%^s is no longer confused.", m_name);
 #endif
@@ -5819,7 +5819,7 @@ msg_print("ÃæÃÇ¤·¤Ş¤·¤¿¡£");
 
 				/* Dump a message */
 #ifdef JP
-				msg_format("%^s¤ò¶²Éİ¤«¤éÎ©¤ÁÄ¾¤é¤»¤¿¡£", m_name);
+				msg_format("%^sã‚’ææ€–ã‹ã‚‰ç«‹ã¡ç›´ã‚‰ã›ãŸã€‚", m_name);
 #else
 				msg_format("%^s is no longer fear.", m_name);
 #endif
@@ -6171,7 +6171,7 @@ msg_print("ÃæÃÇ¤·¤Ş¤·¤¿¡£");
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 #ifdef JP
-				msg_print("¡Ö»ş¤ÏÆ°¤­¤À¤¹¡Ä¡×");
+				msg_print("ã€Œæ™‚ã¯å‹•ãã ã™â€¦ã€");
 #else
 				msg_print("You feel time flowing around you once more.");
 #endif
@@ -6203,8 +6203,8 @@ msg_print("ÃæÃÇ¤·¤Ş¤·¤¿¡£");
 }
 
 /*!
- * @brief ¸½ºß¥×¥ì¥¤¥ä¡¼¤¬¤¤¤ë¥À¥ó¥¸¥ç¥ó¤ÎÁ´ÂÎ½èÍı / Interact with the current dungeon level.
- * @return ¤Ê¤·
+ * @brief ç¾åœ¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ã‚‹ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®å…¨ä½“å‡¦ç† / Interact with the current dungeon level.
+ * @return ãªã—
  * @note
  * This function will not exit until the level is completed,\n
  * the user dies, or the game is terminated.\n
@@ -6345,7 +6345,7 @@ static void dungeon(bool load_game)
 		else
 		{
 #ifdef JP
-msg_print("»î¹ç³«»Ï¡ª");
+msg_print("è©¦åˆé–‹å§‹ï¼");
 #else
 			msg_format("Ready..Fight!");
 #endif
@@ -6369,7 +6369,7 @@ msg_print("»î¹ç³«»Ï¡ª");
 	{
 		if (r_info[d_info[dungeon_type].final_guardian].max_num)
 #ifdef JP
-			msg_format("¤³¤Î³¬¤Ë¤Ï%s¤Î¼ç¤Ç¤¢¤ë%s¤¬À³¤ó¤Ç¤¤¤ë¡£",
+			msg_format("ã“ã®éšã«ã¯%sã®ä¸»ã§ã‚ã‚‹%sãŒæ£²ã‚“ã§ã„ã‚‹ã€‚",
 				   d_name+d_info[dungeon_type].name, 
 				   r_name+r_info[d_info[dungeon_type].final_guardian].name);
 #else
@@ -6518,8 +6518,8 @@ msg_print("»î¹ç³«»Ï¡ª");
 
 
 /*!
- * @brief Á´¥æ¡¼¥¶¥×¥í¥Õ¥¡¥¤¥ë¤ò¥í¡¼¥É¤¹¤ë / Load some "user pref files"
- * @return ¤Ê¤·
+ * @brief å…¨ãƒ¦ãƒ¼ã‚¶ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ / Load some "user pref files"
+ * @return ãªã—
  * @note
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.
@@ -6583,8 +6583,8 @@ static void load_all_pref_files(void)
 
 
 /*!
- * @brief ¥Ó¥Ã¥È¥»¥Ã¥È¤«¤é¥²¡¼¥à¥ª¥×¥·¥ç¥ó¤òÅ¸³«¤¹¤ë / Extract option variables from bit sets
- * @return ¤Ê¤·
+ * @brief ãƒ“ãƒƒãƒˆã‚»ãƒƒãƒˆã‹ã‚‰ã‚²ãƒ¼ãƒ ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’å±•é–‹ã™ã‚‹ / Extract option variables from bit sets
+ * @return ãªã—
  */
 void extract_option_vars(void)
 {
@@ -6617,8 +6617,8 @@ void extract_option_vars(void)
 
 
 /*!
- * @brief ¾Ş¶â¼ó¤È¤Ê¤ë¥æ¥Ë¡¼¥¯¤ò³ÎÄê¤¹¤ë / Determine bounty uniques
- * @return ¤Ê¤·
+ * @brief è³é‡‘é¦–ã¨ãªã‚‹ãƒ¦ãƒ‹ãƒ¼ã‚¯ã‚’ç¢ºå®šã™ã‚‹ / Determine bounty uniques
+ * @return ãªã—
  */
 void determine_bounty_uniques(void)
 {
@@ -6665,8 +6665,8 @@ void determine_bounty_uniques(void)
 
 
 /*!
- * @brief º£Æü¤Î¾Ş¶â¼ó¤ò³ÎÄê¤¹¤ë / Determine today's bounty monster
- * @return ¤Ê¤·
+ * @brief ä»Šæ—¥ã®è³é‡‘é¦–ã‚’ç¢ºå®šã™ã‚‹ / Determine today's bounty monster
+ * @return ãªã—
  * @note conv_old is used if loaded 0.0.3 or older save file
  */
 void determine_today_mon(bool conv_old)
@@ -6707,8 +6707,8 @@ void determine_today_mon(bool conv_old)
 }
 
 /*!
- * @brief 1¥²¡¼¥à¥×¥ì¥¤¤Î¼çÍ×¥ë¡¼¥Á¥ó / Actually play a game
- * @return ¤Ê¤·
+ * @brief 1ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤ã®ä¸»è¦ãƒ«ãƒ¼ãƒãƒ³ / Actually play a game
+ * @return ãªã—
  * @note
  * If the "new_game" parameter is true, then, after loading the
  * savefile, we will commit suicide, if necessary, to allow the
@@ -6771,7 +6771,7 @@ void play_game(bool new_game)
 	{
 		/* Oops */
 #ifdef JP
-quit("¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤¬²õ¤ì¤Æ¤¤¤Ş¤¹");
+quit("ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ãŒå£Šã‚Œã¦ã„ã¾ã™");
 #else
 		quit("broken savefile");
 #endif
@@ -6788,7 +6788,7 @@ quit("¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤¬²õ¤ì¤Æ¤¤¤Ş¤¹");
 		bool success;
 
 #ifdef JP
-		if (!get_check_strict("ÂÔµ¡¤·¤Æ¤¤¤¿¥¹¥³¥¢ÅĞÏ¿¤òº£¹Ô¤Ê¤¤¤Ş¤¹¤«¡©", CHECK_NO_HISTORY))
+		if (!get_check_strict("å¾…æ©Ÿã—ã¦ã„ãŸã‚¹ã‚³ã‚¢ç™»éŒ²ã‚’ä»Šè¡Œãªã„ã¾ã™ã‹ï¼Ÿ", CHECK_NO_HISTORY))
 #else
 		if (!get_check_strict("Do you register score now? ", CHECK_NO_HISTORY))
 #endif
@@ -6820,13 +6820,13 @@ quit("¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤¬²õ¤ì¤Æ¤¤¤Ş¤¹");
 		success = send_world_score(TRUE);
 
 #ifdef JP
-		if (!success && !get_check_strict("¥¹¥³¥¢ÅĞÏ¿¤òÄü¤á¤Ş¤¹¤«¡©", CHECK_NO_HISTORY))
+		if (!success && !get_check_strict("ã‚¹ã‚³ã‚¢ç™»éŒ²ã‚’è«¦ã‚ã¾ã™ã‹ï¼Ÿ", CHECK_NO_HISTORY))
 #else
 		if (!success && !get_check_strict("Do you give up score registration? ", CHECK_NO_HISTORY))
 #endif
 		{
 #ifdef JP
-			prt("°ú¤­Â³¤­ÂÔµ¡¤·¤Ş¤¹¡£", 0, 0);
+			prt("å¼•ãç¶šãå¾…æ©Ÿã—ã¾ã™ã€‚", 0, 0);
 #else
 			prt("standing by for future registration...", 0, 0);
 #endif
@@ -6837,7 +6837,7 @@ quit("¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤¬²õ¤ì¤Æ¤¤¤Ş¤¹");
 			p_ptr->wait_report_score = FALSE;
 			top_twenty();
 #ifdef JP
-			if (!save_player()) msg_print("¥»¡¼¥Ö¼ºÇÔ¡ª");
+			if (!save_player()) msg_print("ã‚»ãƒ¼ãƒ–å¤±æ•—ï¼");
 #else
 			if (!save_player()) msg_print("death save failed!");
 #endif
@@ -6944,14 +6944,14 @@ quit("¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤¬²õ¤ì¤Æ¤¤¤Ş¤¹");
 		write_level = FALSE;
 
 #ifdef JP
-		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "                            ----¥²¡¼¥àºÆ³«----");
+		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "                            ----ã‚²ãƒ¼ãƒ å†é–‹----");
 #else
 		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "                            ---- Restart Game ----");
 #endif
 
 /*
- * 1.0.9 °ÊÁ°¤Ï¥»¡¼¥ÖÁ°¤Ë p_ptr->riding = -1 ¤È¤·¤Æ¤¤¤¿¤Î¤Ç¡¢ºÆÀßÄê¤¬É¬Í×¤À¤Ã¤¿¡£
- * ¤â¤¦ÉÔÍ×¤À¤¬¡¢°ÊÁ°¤Î¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤È¤Î¸ß´¹¤Î¤¿¤á¤Ë»Ä¤·¤Æ¤ª¤¯¡£
+ * 1.0.9 ä»¥å‰ã¯ã‚»ãƒ¼ãƒ–å‰ã« p_ptr->riding = -1 ã¨ã—ã¦ã„ãŸã®ã§ã€å†è¨­å®šãŒå¿…è¦ã ã£ãŸã€‚
+ * ã‚‚ã†ä¸è¦ã ãŒã€ä»¥å‰ã®ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã®äº’æ›ã®ãŸã‚ã«æ®‹ã—ã¦ãŠãã€‚
  */
 		if (p_ptr->riding == -1)
 		{
@@ -6993,7 +6993,7 @@ quit("¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤¬²õ¤ì¤Æ¤¤¤Ş¤¹");
 
 	/* Flash a message */
 #ifdef JP
-prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
+prt("ãŠå¾…ã¡ä¸‹ã•ã„...", 0, 0);
 #else
 	prt("Please wait...", 0, 0);
 #endif
@@ -7059,7 +7059,7 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 			if (!py || !px)
 			{
 #ifdef JP
-				msg_print("¥×¥ì¥¤¥ä¡¼¤Î°ÌÃÖ¤¬¤ª¤«¤·¤¤¡£¥Õ¥í¥¢¤òºÆÀ¸À®¤·¤Ş¤¹¡£");
+				msg_print("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ãŒãŠã‹ã—ã„ã€‚ãƒ•ãƒ­ã‚¢ã‚’å†ç”Ÿæˆã—ã¾ã™ã€‚");
 #else
 				msg_print("What a strange player location.  Regenerate the dungeon floor.");
 #endif
@@ -7087,7 +7087,7 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 		char buf[80];
 
 #ifdef JP
-		sprintf(buf, "%s¤Ë¹ß¤êÎ©¤Ã¤¿¡£", map_name());
+		sprintf(buf, "%sã«é™ã‚Šç«‹ã£ãŸã€‚", map_name());
 #else
 		sprintf(buf, "You are standing in the %s.", map_name());
 #endif
@@ -7225,7 +7225,7 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 			{
 				/* Mega-Hack -- Allow player to cheat death */
 #ifdef JP
-				if ((p_ptr->wizard || cheat_live) && !get_check("»à¤Ë¤Ş¤¹¤«? "))
+				if ((p_ptr->wizard || cheat_live) && !get_check("æ­»ã«ã¾ã™ã‹? "))
 #else
 				if ((p_ptr->wizard || cheat_live) && !get_check("Die? "))
 #endif
@@ -7241,7 +7241,7 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 
 					/* Message */
 #ifdef JP
-					msg_print("¥¦¥£¥¶¡¼¥É¥â¡¼¥É¤ËÇ°¤òÁ÷¤ê¡¢»à¤òµ½¤¤¤¿¡£");
+					msg_print("ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã«å¿µã‚’é€ã‚Šã€æ­»ã‚’æ¬ºã„ãŸã€‚");
 #else
 					msg_print("You invoke wizard mode and cheat death.");
 #endif
@@ -7271,7 +7271,7 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 					{
 						/* Message */
 #ifdef JP
-						msg_print("Ä¥¤ê¤Ä¤á¤¿Âçµ¤¤¬Î®¤ìµî¤Ã¤¿...");
+						msg_print("å¼µã‚Šã¤ã‚ãŸå¤§æ°—ãŒæµã‚Œå»ã£ãŸ...");
 #else
 						msg_print("A tension leaves the air around you...");
 #endif
@@ -7293,7 +7293,7 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 
 					/* Note cause of death XXX XXX XXX */
 #ifdef JP
-					(void)strcpy(p_ptr->died_from, "»à¤Îµ½¤­");
+					(void)strcpy(p_ptr->died_from, "æ­»ã®æ¬ºã");
 #else
 					(void)strcpy(p_ptr->died_from, "Cheating death");
 #endif
@@ -7349,7 +7349,7 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 					p_ptr->leaving = TRUE;
 
 #ifdef JP
-					do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "                            ¤·¤«¤·¡¢À¸¤­ÊÖ¤Ã¤¿¡£");
+					do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "                            ã—ã‹ã—ã€ç”Ÿãè¿”ã£ãŸã€‚");
 #else
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "                            but revived.");
 #endif
@@ -7376,10 +7376,10 @@ prt("¤ªÂÔ¤Á²¼¤µ¤¤...", 0, 0);
 }
 
 /*!
- * @brief ¥²¡¼¥à¥¿¡¼¥ó¤«¤é¤Î¼Â»ş´Ö´¹»»¤ò¹Ô¤¦¤¿¤á¤ÎÊäÀµ¤ò¤«¤±¤ë
- * @param hoge ¥²¡¼¥à¥¿¡¼¥ó
- * @details ¥¢¥ó¥Ç¥Ã¥É¼ïÂ²¤Ï18:00¤«¤é¥²¡¼¥à¤ò³«»Ï¤¹¤ë¤Î¤Ç¡¢¤³¤Î½¤Àµ¤òÍ½¤á¹Ô¤¦¡£
- * @return ½¤Àµ¤ò¤«¤±¤¿¸å¤Î¥²¡¼¥à¥¿¡¼¥ó
+ * @brief ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³ã‹ã‚‰ã®å®Ÿæ™‚é–“æ›ç®—ã‚’è¡Œã†ãŸã‚ã®è£œæ­£ã‚’ã‹ã‘ã‚‹
+ * @param hoge ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³
+ * @details ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ç¨®æ—ã¯18:00ã‹ã‚‰ã‚²ãƒ¼ãƒ ã‚’é–‹å§‹ã™ã‚‹ã®ã§ã€ã“ã®ä¿®æ­£ã‚’äºˆã‚è¡Œã†ã€‚
+ * @return ä¿®æ­£ã‚’ã‹ã‘ãŸå¾Œã®ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³
  */
 s32b turn_real(s32b hoge)
 {
@@ -7396,9 +7396,9 @@ s32b turn_real(s32b hoge)
 }
 
 /*!
- * @brief ¥¿¡¼¥ó¤Î¥ª¡¼¥Ğ¡¼¥Õ¥í¡¼¤ËÂĞ¤¹¤ëÂĞ½è
- * @details ¥¿¡¼¥óµÚ¤Ó¥¿¡¼¥ó¤òµ­Ï¿¤¹¤ëÊÑ¿ô¤ò¥¿¡¼¥ó¤Î¸Â³¦¤Î1ÆüÁ°¤Ş¤Ç´¬¤­Ìá¤¹.
- * @return ½¤Àµ¤ò¤«¤±¤¿¸å¤Î¥²¡¼¥à¥¿¡¼¥ó
+ * @brief ã‚¿ãƒ¼ãƒ³ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼ã«å¯¾ã™ã‚‹å¯¾å‡¦
+ * @details ã‚¿ãƒ¼ãƒ³åŠã³ã‚¿ãƒ¼ãƒ³ã‚’è¨˜éŒ²ã™ã‚‹å¤‰æ•°ã‚’ã‚¿ãƒ¼ãƒ³ã®é™ç•Œã®1æ—¥å‰ã¾ã§å·»ãæˆ»ã™.
+ * @return ä¿®æ­£ã‚’ã‹ã‘ãŸå¾Œã®ã‚²ãƒ¼ãƒ ã‚¿ãƒ¼ãƒ³
  */
 void prevent_turn_overflow(void)
 {
