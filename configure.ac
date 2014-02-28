@@ -51,7 +51,7 @@ AC_ARG_ENABLE(chuukei,
 
 dnl -fno-strength-reduce prevents a bug in some versions of gcc
 if test "$GCC" = yes; then
-  CFLAGS="$CFLAGS -fno-strength-reduce"
+  CFLAGS="$CFLAGS -fno-strength-reduce --exec-charset=EUC-JP"
 fi
 
 dnl Checks for libraries.
