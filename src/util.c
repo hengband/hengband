@@ -452,7 +452,10 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 	/* Read a line */
 	if (fgets(tmp, 1024, fff))
 	{
+#ifdef JP
 		guess_convert_to_system_encoding(tmp, sizeof(tmp));
+#endif
+
 		/* Convert weirdness */
 		for (s = tmp; *s; s++)
 		{
