@@ -4,7 +4,7 @@
 
 # Name The Cloning Pits
 Q:$33:N:The Cloning Pits
-Q:33:N:���������Ϲ�
+Q:33:N:クローン地獄
 
 # Definition 
 Q:$33:Q:6:0:0:0:45:0:0:0:6
@@ -20,26 +20,26 @@ Q:$33:T:clones can use magic, teleport, summon, etc..   "The Ultimate Dungeon
 Q:$33:T:Cleaner" security bots are no longer controlled, so you will 
 Q:$33:T:eliminate them too.  Levitation and a good distance weapon are
 Q:$33:T:needed.  The entrance to the pits is in a building behind the inn.  
-Q:33:T:������ǯ���桹�϶�����Ʈ�Τη������뤿�ᡢ���̤˶��Ϥ���ʪ��
-Q:33:T:����������ä���ޤ������������������󸦵��ǲ������ˤޤ���
-Q:33:T:���Ȥ������Ƥ��ޤ��ޤ������ɤ������ƤΥ���������˲����Ʋ�������
-Q:33:T:�󽷤ϤϤ��ߤޤ��������μ�ư�ݰ¥����ƥ�ϻߤޤäƤ��ޤä����ᡢ
-Q:33:T:�����������ˡ��ƥ�ݡ��Ȥ侤���򤹤뤳�Ȥ�����ޤ���
-Q:33:T:�ݰ¥��ܥåȤǤ���ص�˥��󥸥�󥯥꡼�ʡ��٤�˽�����Ƥ��ޤä�
-Q:33:T:�Τǡ��������˲����Ʋ���������ͷ�ȶ��Ϥ�����ƻ��ɬ�פˤʤ�
-Q:33:T:�Ǥ��礦�������Ͻɲ���΢�η�ʪ�ˤ���ޤ���
+Q:33:T:ここ数年、我々は強い剣闘士の軍勢を作るため、特別に強力な生物の
+Q:33:T:クローンを作って来ました。しかしクローン研究所で何か非常にまずい
+Q:33:T:ことが起きてしまいました。どうか全てのクローンを破壊して下さい。
+Q:33:T:報酬ははずみます。内部の自動保安システムは止まってしまったため、
+Q:33:T:クローンは魔法やテレポートや召喚をすることが出来ます。
+Q:33:T:保安ロボットである『究極ダンジョンクリーナー』も暴走してしまった
+Q:33:T:ので、それらも破壊して下さい。浮遊と強力な飛び道具が必要になる
+Q:33:T:でしょう。入口は宿屋の裏の建物にあります。
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST33 3]
 Q:$33:T:Impressive!! Your reward is waiting for you outside.
-Q:33:T:�����餷��!! ����򳰤��֤��Ƥ����ޤ�����
+Q:33:T:素晴らしい!! お礼を外に置いておきました。
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST33 5]
 Q:$33:T:It seems like this task was too difficult for you.
-Q:33:T:���λŻ��Ϥ��ʤ��ˤ��񤷤��ä��褦�Ǥ��͡�
+Q:33:T:この仕事はあなたには難しかったようですね。
 ?:1
 
 # The Monsters

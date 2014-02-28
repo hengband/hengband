@@ -1,22 +1,22 @@
 
                   ***************************************
-                  **           ÊÑ¶òÈÚÅÜ  2.1.4(³«È¯ÈÇ) **
+                  **           å¤‰æ„šè›®æ€’  2.1.4(é–‹ç™ºç‰ˆ) **
                   ***************************************
 
           Based on Moria:    Copyright (c) 1985 Robert Alan Koeneke
               and Umoria:    Copyright (c) 1989 James E. Wilson
 
        Angband 2.7 - 2.9:    Ben Harrison (benh@phial.com)
-            ÆüËÜ¸ìÈÇ 1.2:    ¤·¤È¤·¤ó, sayu, FIRST, TeO
+            æ—¥æœ¬èªç‰ˆ 1.2:    ã—ã¨ã—ã‚“, sayu, FIRST, TeO
 
-       Old ZAngband code:    (Mr) Topi Ylinen < f1toyl¡÷uta.fi >
-       New ZAngband code:    Robert Ruehlmann < rr9¡÷thangorodrim.net >
+       Old ZAngband code:    (Mr) Topi Ylinen < f1toylï¼ uta.fi >
+       New ZAngband code:    Robert Ruehlmann < rr9ï¼ thangorodrim.net >
     ZAngband 2.3.0 - ???:    The ZAngband DevTeam
-       ZAngband ÆüËÜ¸ìÈÇ:    ÈÄÁÒ½¼ÍÎ < itakura¡÷users.sourceforge.net >
+       ZAngband æ—¥æœ¬èªç‰ˆ:    æ¿å€‰å……æ´‹ < itakuraï¼ users.sourceforge.net >
 
 
-          ÊÑ¶òÈÚÅÜ: Mr.hoge (echizen¡÷users.sourceforge.jp) ¡õ Â¿¤¯¤ÎÊı¡¹
+          å¤‰æ„šè›®æ€’: Mr.hoge (echizenï¼ users.sourceforge.jp) ï¼† å¤šãã®æ–¹ã€…
                      http://hengband.sourceforge.jp/
 
-       ÊÑ¶òÈÚÅÜ ¤Ï UNIX/X11, Windows, Macintosh ¤ÇÆ°ºî¤·¤Æ¤¤¤Ş¤¹¡£
-          ¥Ğ¥°¾ğÊó¤Ê¤É¤Ï¾åµ­ URL ¤Ë¤¢¤ë·Ç¼¨ÈÄ¤Ø¤ª´ê¤¤¤·¤Ş¤¹¡£
+       å¤‰æ„šè›®æ€’ ã¯ UNIX/X11, Windows, Macintosh ã§å‹•ä½œã—ã¦ã„ã¾ã™ã€‚
+          ãƒã‚°æƒ…å ±ãªã©ã¯ä¸Šè¨˜ URL ã«ã‚ã‚‹æ²ç¤ºæ¿ã¸ãŠé¡˜ã„ã—ã¾ã™ã€‚

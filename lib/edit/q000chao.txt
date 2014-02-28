@@ -4,7 +4,7 @@
 
 # Name
 Q:$11:N:Node of Chaos
-Q:11:N:���������ð���
+Q:11:N:カオスの特異点
 
 # Definition
 Q:$11:Q:6:0:0:0:65:0:0:0:6
@@ -16,15 +16,15 @@ Q:$11:T:The Wizards of Chaos have discovered a magical Node of
 Q:$11:T:Chaos in a nearby volcano. You must seek the Node and
 Q:$11:T:dispatch its guardians so that the Tower of Chaos can
 Q:$11:T:claim the mystical energies of the Node.
-Q:11:T:��������ˡ�θ��Ԥ��������᤯�βл��˥��������ͥ륮�����ð�����¸�ߤ��ǧ
-Q:11:T:�������桹��������ˡ���㤬�������Ϥν�ͭ����������褦�ˡ����ޤ���
-Q:11:T:�����ð����ξ��򸫤Ĥ��Ƥ������㿩����󥹥������ҤŤ��Ƥ���Τ���
+Q:11:T:カオス魔法の賢者たちが、近くの火山にカオスエネルギーの特異点の存在を確認
+Q:11:T:した。我々カオス魔法の塔がその魔力の所有権を得られるように、おまえは
+Q:11:T:その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST11 3]
 Q:$11:T:You have done well. A powerful spellbook awaits you outside.
-Q:11:T:�褯��ä������Ϥ���ˡ��򳰤��֤��Ƥ�������
+Q:11:T:よくやった。強力な魔法書を外に置いておいた。
 ?:1
 
 # Description for quest failed
@@ -32,9 +32,9 @@ Q:11:T:�褯��ä������Ϥ���ˡ��򳰤��֤��Ƥ�������
 Q:$11:T:Begone, incompetent fool! The dimensional energies of the 
 Q:$11:T:mystic Node have faded away and are lost forever! You had
 Q:$11:T:your chance and botched the job. 
-Q:11:T:Ω����졢̵ǽ���ϼ��Ԥᡪ��ˡ���ð����μ������ͥ륮����
-Q:11:T:�ä���äƱʱ�˼���줿�Τ����������Ϥ��ä����Υ���󥹤�
-Q:11:T:���ˤդä��Τ���
+Q:11:T:立ち去れ、無能な馬鹿者め！魔法の特異点の次元エネルギーは
+Q:11:T:消え去って永遠に失われたのだぞ！お前はせっかくのチャンスを
+Q:11:T:棒にふったのだ。
 ?:1
 
 # Floor with Chaos spawn

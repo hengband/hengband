@@ -3,7 +3,7 @@
 
 # Name
 Q:$22:N:Orc Camp
-Q:22:N:�������Υ�����
+Q:22:N:オークのキャンプ
 
 # Definition
 Q:$22:Q:6:0:0:0:15:0:0:0:6
@@ -17,26 +17,26 @@ Q:$22:T:lies a valley where our scouts have found an orc raiding party,
 Q:$22:T:preparing to overrun Angwil once and for all.  Our forces are
 Q:$22:T:committed elsewhere; please repel this threat before they reach
 Q:$22:T:our borders.
-Q:22:T:�������ʤ���������¿ʬ�ˤ�줺�����Ť��ʳ��ˤ⥪�����ο�ά�⤬
-Q:22:T:����ޤǤˤʤ��ܶᤷ�Ƥ��ޤ������γ�����ˤ���ë�ǡ��桹���͸���
-Q:22:T:�������ο�ά����ȯ�����ޤ��������ϥ��󥰥�����������ϤǺǽ�Ū
-Q:22:T:�ʿ����򤹤뤿��ν����򤷤Ƥ��ޤ����桹�η�����¾�ξ����ɸ���
-Q:22:T:�Ƥ��ޤäƤ��ޤ����ɤ����������ɤ⤬����ã���������ɤ�ʧ�äƲ�������
+Q:22:T:この厄介なご時勢、ご多分にもれずこの静かな街にもオークの侵略隊が
+Q:22:T:これまでになく接近しています。この街の南にある谷で、我々の斥候が
+Q:22:T:オークの侵略軍を発見しました。彼らはアングウィルに全勢力で最終的
+Q:22:T:な侵攻をするための準備をしています。我々の軍勢は他の場所へ派遣し
+Q:22:T:てしまっています。どうかオークどもが街に達する前に追い払って下さい。
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST22 3]
 Q:$22:T:Thank you for your assistance.  Please accept this token of our
 Q:$22:T:appreciation.  We may have need for your help in future, as well.
-Q:22:T:���Ϥ��Ʋ�����ͭ�񤦤������ޤ������δ��դΰ��򤪼����Ȥ겼������
-Q:22:T:�ޤ��ᤤ��������Ƥ����������Ȥˤʤ뤫�⤷��ޤ���
-Q:22:T:����������ꤤ���ޤ���
+Q:22:T:協力して下さり有難うございます。この感謝の印をお受けとり下さい。
+Q:22:T:また近い将来助けていただくことになるかもしれません。
+Q:22:T:よろしくお願いします。
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST22 5]
 Q:$22:T:I've sent out someone else to do the job.  Now leave me alone!
-Q:22:T:����¾�μԤ˻Ż���Ǥ���Ƥ���ޤ������Ф餯����ͤˤ����Ƥ���������
+Q:22:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
 ?:1
 
 # Floor with Snaga

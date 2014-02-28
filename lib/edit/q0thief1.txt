@@ -4,7 +4,7 @@
 
 # Name The Mimic's Treasure
 Q:$29:N:The Mimic's Treasure
-Q:29:N:¥ß¥ß¥Ã¥¯¤ÎºâÊõ
+Q:29:N:ãƒŸãƒŸãƒƒã‚¯ã®è²¡å®
 
 # Definition 
 Q:$29:Q:6:0:0:0:25:0:0:0:6
@@ -16,24 +16,24 @@ Q:$29:T:The Black Market's owner is thinking of opening another Thieves Guild.
 Q:$29:T:I do not need the competition, here is the key to the Black Market's
 Q:$29:T:treasure room.  Destroy everything you find there and you will
 Q:$29:T:be rewarded.  The quest is located in the Black Market building.
-Q:29:T:¥Ö¥é¥Ã¥¯¥Ş¡¼¥±¥Ã¥È¤ÎÅ¹¼ç¤¬¿·¤·¤¤ÅğÂ±¥®¥ë¥É¤ò³«¶È¤·¤è¤¦¤È¤·¤Æ¤¤¤ë¤é¤·¤¤¡£
-Q:29:T:²¶¤Ë¤Ï¶¥ÁèÁê¼ê¤ÏÍ×¤é¤Ê¤¤¡£¤³¤³¤Ë¥Ö¥é¥Ã¥¯¥Ş¡¼¥±¥Ã¥È¤ÎÎ¢¤ÎÊõÊª¸Ë¤Î¸°¤¬¤¢¤ë¡£
-Q:29:T:¤ªÁ°¤¬¤½¤ÎÃæ¤ÎÁ´¤Æ¤ÎÊª¤ò²õ¤·¤Æ¤¯¤ì¤ĞË«Èş¤ò¤ä¤ë¡£
-Q:29:T:¾ì½ê¤Ï¥Ö¥é¥Ã¥¯¥Ş¡¼¥±¥Ã¥È¤ÎÎ¢¤À¡£
+Q:29:T:ãƒ–ãƒ©ãƒƒã‚¯ãƒãƒ¼ã‚±ãƒƒãƒˆã®åº—ä¸»ãŒæ–°ã—ã„ç›—è³Šã‚®ãƒ«ãƒ‰ã‚’é–‹æ¥­ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã‚‰ã—ã„ã€‚
+Q:29:T:ä¿ºã«ã¯ç«¶äº‰ç›¸æ‰‹ã¯è¦ã‚‰ãªã„ã€‚ã“ã“ã«ãƒ–ãƒ©ãƒƒã‚¯ãƒãƒ¼ã‚±ãƒƒãƒˆã®è£ã®å®ç‰©åº«ã®éµãŒã‚ã‚‹ã€‚
+Q:29:T:ãŠå‰ãŒãã®ä¸­ã®å…¨ã¦ã®ç‰©ã‚’å£Šã—ã¦ãã‚Œã°è¤’ç¾ã‚’ã‚„ã‚‹ã€‚
+Q:29:T:å ´æ‰€ã¯ãƒ–ãƒ©ãƒƒã‚¯ãƒãƒ¼ã‚±ãƒƒãƒˆã®è£ã ã€‚
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST29 3]
 Q:$29:T:You have done well, your reward is outside the door.  
-Q:29:T:¤è¤¯¤ä¤Ã¤¿¡£Êó½·¤Ï³°¤ËÃÖ¤¤¤Æ¤¢¤ë¡£
+Q:29:T:ã‚ˆãã‚„ã£ãŸã€‚å ±é…¬ã¯å¤–ã«ç½®ã„ã¦ã‚ã‚‹ã€‚
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST29 5]
 Q:$29:T:You have failed this quest, but keep what you have found.  
 Q:$29:T:Proceed to the next quest.
-Q:29:T:¤³¤Î¥¯¥¨¥¹¥È¤Ë¤Ï¼ºÇÔ¤·¤¿¤è¤¦¤À¤¬¡¢¸«¤Ä¤±¤¿¥¢¥¤¥Æ¥à¤Ï¤ªÁ°¤Î¤â¤Î¤À¡£
-Q:29:T:¼¡¤Î¥¯¥¨¥¹¥È¤Ë¿Ê¤á¡£
+Q:29:T:ã“ã®ã‚¯ã‚¨ã‚¹ãƒˆã«ã¯å¤±æ•—ã—ãŸã‚ˆã†ã ãŒã€è¦‹ã¤ã‘ãŸã‚¢ã‚¤ãƒ†ãƒ ã¯ãŠå‰ã®ã‚‚ã®ã ã€‚
+Q:29:T:æ¬¡ã®ã‚¯ã‚¨ã‚¹ãƒˆã«é€²ã‚ã€‚
 ?:1
 
 # The Monsters

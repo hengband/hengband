@@ -1,16 +1,16 @@
-Hengband ¥³¥Ş¥ó¥É²òÀâ
+Hengband ã‚³ãƒãƒ³ãƒ‰è§£èª¬
 
- »²¾È¤·¤¿¤¤¥ª¥ó¥é¥¤¥ó¡¦¥Ø¥ë¥×¤òÁª¤ó¤Ç²¼¤µ¤¤:
+ å‚ç…§ã—ãŸã„ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ»ãƒ˜ãƒ«ãƒ—ã‚’é¸ã‚“ã§ä¸‹ã•ã„:
 
-    (a) Hengband ¥³¥Ş¥ó¥É³µÀâ       (jcommand.txt)
-    (b) ¥ª¥ê¥¸¥Ê¥ë¥­¡¼ÇÛÃÖ          (jcommand.txt#OriginalKeyset)
-    (c) ¥í¡¼¥°É÷¥­¡¼ÇÛÃÖ            (jcommand.txt#RogueKeyset)
-    (d) ÆÃ¼ì¤Ê¥­¡¼                  (jcommand.txt#SpecialKeys)
-    (e) ²ó¿ô»ØÄê                    (jcommand.txt#CommandCounts)
-    (f) ¥¢¥¤¥Æ¥à¤ÎÁªÂò              (jcommand.txt#ObjectSelection)
-    (g) ¥³¥Ş¥ó¥É¾ÜÀâ                (jcommdesc.hlp)
+    (a) Hengband ã‚³ãƒãƒ³ãƒ‰æ¦‚èª¬       (jcommand.txt)
+    (b) ã‚ªãƒªã‚¸ãƒŠãƒ«ã‚­ãƒ¼é…ç½®          (jcommand.txt#OriginalKeyset)
+    (c) ãƒ­ãƒ¼ã‚°é¢¨ã‚­ãƒ¼é…ç½®            (jcommand.txt#RogueKeyset)
+    (d) ç‰¹æ®Šãªã‚­ãƒ¼                  (jcommand.txt#SpecialKeys)
+    (e) å›æ•°æŒ‡å®š                    (jcommand.txt#CommandCounts)
+    (f) ã‚¢ã‚¤ãƒ†ãƒ ã®é¸æŠ              (jcommand.txt#ObjectSelection)
+    (g) ã‚³ãƒãƒ³ãƒ‰è©³èª¬                (jcommdesc.hlp)
 
-    (?) ¥Ø¥ë¥×¥·¥¹¥Æ¥à¤Î»ÈÍÑË¡      (jhelpinfo.txt)
+    (?) ãƒ˜ãƒ«ãƒ—ã‚·ã‚¹ãƒ†ãƒ ã®ä½¿ç”¨æ³•      (jhelpinfo.txt)
 
 
 ***** [a] jcommand.txt

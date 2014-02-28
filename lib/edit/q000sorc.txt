@@ -4,7 +4,7 @@
 
 # Name
 Q:$10:N:Node of Sorcery
-Q:10:N:��ѥ��ͥ륮���ð���
+Q:10:N:仙術エネルギー特異点
 
 # Definition
 Q:$10:Q:6:0:0:0:65:0:0:0:6
@@ -16,15 +16,15 @@ Q:$10:T:The Wizards of Sorcery have discovered a magical Node of Sorcery
 Q:$10:T:in a damp area nearby. You must seek the Node and dispatch 
 Q:$10:T:its guardians so that the Tower of Sorcery can claim the 
 Q:$10:T:mystical energies of the Node.
-Q:10:T:�����ˡ�θ��Ԥ��������᤯�μ��Ϥ���ѥ��ͥ륮�����ð�����¸�ߤ��ǧ
-Q:10:T:�������桹�����ˡ���㤬�������Ϥν�ͭ����������褦�ˡ����ޤ���
-Q:10:T:�����ð����ξ��򸫤Ĥ��Ƥ������㿩����󥹥������ҤŤ��Ƥ���Τ���
+Q:10:T:仙術魔法の賢者たちが、近くの湿地に仙術エネルギーの特異点の存在を確認
+Q:10:T:した。我々仙術魔法の塔がその魔力の所有権を得られるように、おまえは
+Q:10:T:その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。
 ?:1
 
 # Description for quest reward
 ?:[EQU $QUEST10 3]
 Q:$10:T:You have done well. A powerful spellbook awaits you outside.
-Q:10:T:�褯��ä������Ϥ���ˡ��򳰤��֤��Ƥ�������
+Q:10:T:よくやった。強力な魔法書を外に置いておいた。
 ?:1
 
 # Description for quest failed
@@ -32,9 +32,9 @@ Q:10:T:�褯��ä������Ϥ���ˡ��򳰤��֤��Ƥ�������
 Q:$10:T:Begone, incompetent fool! The dimensional energies of the 
 Q:$10:T:mystic Node have faded away and are lost forever! You had
 Q:$10:T:your chance and botched the job. 
-Q:10:T:Ω����졢̵ǽ���ϼ��Ԥᡪ��ˡ���ð����μ������ͥ륮����
-Q:10:T:�ä���äƱʱ�˼���줿�Τ����������Ϥ��ä����Υ���󥹤�
-Q:10:T:���ˤդä��Τ���
+Q:10:T:立ち去れ、無能な馬鹿者め！魔法の特異点の次元エネルギーは
+Q:10:T:消え去って永遠に失われたのだぞ！お前はせっかくのチャンスを
+Q:10:T:棒にふったのだ。
 ?:1
 
 # Shallow water with Guardian naga

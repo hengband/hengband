@@ -1,60 +1,60 @@
 **********************************************************************
-                 �Ѷ����ܤ�����Ȼ��ѵ����ˤĤ���
+                 変愚蛮怒の著作権と使用許諾について
 **********************************************************************
 
 
 --------------
-����ˤĤ���
+著作権について
 --------------
 
-    �Ѷ����ܤΡ����ܸ��ǥ��󥰥Х�ɤ�������ܸ��� Zangband������
-  ����ʬ�ˤĤ��Ƥϰʲ��μԤ���ɽ���������ͭ���ޤ���
+    変愚蛮怒の、日本語版アングバンドおよび日本語版 Zangbandよりの変
+  更部分については以下の者が代表して著作権を有します。
 
-    Mr.hoge          Email: echizen��users.spamblock.sourceforge.jp
-
-
-    ���ܸ��� Zangband�Ρ�Zangband ��ͭ�����ܸ첽��ʬ�ˤĤ��Ƥϰʲ��μ�
-  ����ɽ���������ͭ���ޤ���
-
-    ����             Email: itakura��users.spamblock.sourceforge.net
+    Mr.hoge          Email: echizen＠users.spamblock.sourceforge.jp
 
 
-    ���ܸ��ǥ��󥰥Х�� 2.8.3-1.2.6 �ǤΥ��ꥸ�ʥ� angband 2.8.3 ���
-  �������ﶦ�̤��ѹ���ʬ�ˤĤ��Ƥϰʲ��μԤ������ͭ���ޤ���
+    日本語版 Zangbandの、Zangband 固有の日本語化部分については以下の者
+  が代表して著作権を有します。
 
-    ���Ȥ���(�ⳤ����)      iris��bf.mbn.or.jp
-    ������å�              CXK01336��niftyserve.or.jp
-    �ƣɣңӣ�(��������Ϻ)  argrath��yo.rim.or.jp
-    sayu(YOKOYAMA Atsushi)  sayu��gol.com
-    �߹���                  kis-��ca2.so-net.or.jp
-    TeO                     CXE00237��niftyserve.or.jp
-    ����β˿�(�������)    KFF02766��niftyserve.or.jp
-    VOLKO(��ͥ�����)       ���BBS: VOLKO
+    板倉             Email: itakura＠users.spamblock.sourceforge.net
 
 
-    ���ܸ��ǥ��󥰥Х�� 2.8.3-1.2.6 �ǤΥ��ꥸ�ʥ� angband 2.8.3 ���
-  �γƵ���ˤ������ѹ���ʬ�ˤĤ��ƤϤ��줾��ʲ��ΰܿ��Ԥ������ͭ��
-  �ޤ���
+    日本語版アングバンド 2.8.3-1.2.6 でのオリジナル angband 2.8.3 より
+  の全機種共通の変更部分については以下の者が著作権を有します。
 
-    PC-98x1   �ؤΰܿ��� : ���Ȥ���(iris��bf.mbn.or.jp)
-                           ������å�(CXK01336��niftyserve.or.jp)
-    X680x0    �ؤΰܿ��� : �ƣɣңӣ�(argrath��yo.rim.or.jp)
-    DOS/V     �ؤΰܿ��� : sayu(sayu��gol.com)
-    UNIX/X11  �ؤΰܿ��� : �߹���(kis-��ca2.so-net.or.jp)
-                           ������(ri��kuis.kyoto-u.ac.jp)
-    NeXTSTEP  �ؤΰܿ��� : �ⶶ��(���:ks7098tr��ex.ecip.osaka-u.ac.jp)
-                                 (����:rei0��osk2.3web.ne.jp)
-    FM-TOWNS  �ؤΰܿ��� : �һ����Ϻ(ken_katayama��geocities.co.jp)
-    Windows95 �ؤΰܿ��� : TeO (CXE00237��niftyserve.or.jp)
+    しとしん(内海清秀)      iris＠bf.mbn.or.jp
+    エルロック              CXK01336＠niftyserve.or.jp
+    ＦＩＲＳＴ(白方健太郎)  argrath＠yo.rim.or.jp
+    sayu(YOKOYAMA Atsushi)  sayu＠gol.com
+    岸康司                  kis-＠ca2.so-net.or.jp
+    TeO                     CXE00237＠niftyserve.or.jp
+    怒涛の暇人(金光寛峯)    KFF02766＠niftyserve.or.jp
+    VOLKO(城戸イサム)       東京BBS: VOLKO
+
+
+    日本語版アングバンド 2.8.3-1.2.6 でのオリジナル angband 2.8.3 より
+  の各機種における変更部分についてはそれぞれ以下の移植者が著作権を有し
+  ます。
+
+    PC-98x1   への移植者 : しとしん(iris＠bf.mbn.or.jp)
+                           エルロック(CXK01336＠niftyserve.or.jp)
+    X680x0    への移植者 : ＦＩＲＳＴ(argrath＠yo.rim.or.jp)
+    DOS/V     への移植者 : sayu(sayu＠gol.com)
+    UNIX/X11  への移植者 : 岸康司(kis-＠ca2.so-net.or.jp)
+                           李晃伸(ri＠kuis.kyoto-u.ac.jp)
+    NeXTSTEP  への移植者 : 高橋令(大学:ks7098tr＠ex.ecip.osaka-u.ac.jp)
+                                 (自宅:rei0＠osk2.3web.ne.jp)
+    FM-TOWNS  への移植者 : 片山健一郎(ken_katayama＠geocities.co.jp)
+    Windows95 への移植者 : TeO (CXE00237＠niftyserve.or.jp)
 
 
 
 --------
-���ѵ���
+使用許諾
 --------
 
-�Ѷ����ܤϡ��١����Ǥ��� Angband �� ZAngband ��Ʊ�ͤ˰ʲ��� 
-Moria/Angband���ѵ����˽��ä����ۤ���Ƥ��ޤ���
+変愚蛮怒は、ベースである Angband や ZAngband と同様に以下の 
+Moria/Angband使用許諾に従って配布されています。
 
 Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
 
@@ -62,45 +62,45 @@ This software may be copied and distributed for educational, research,
 and not for profit purposes provided that this copyright and statement
 are included in all such copies.  Other copyrights may also apply.
 
-���Υ��եȥ������϶���並��Τ���ʤ�С����������פ���Ū�Ȥ��ʤ��Τ�
-���ʣ�̤�������ۤ��Ƥ褤�������������ۤ������ƤΥ��ԡ��ˤ������ɽ
-���Ȼ��ѵ���ʸ�Ϥ����ܤ���Ƥ��ʤ���Фʤ�ʤ�������ɽ���˲ä����̤���
-���Ŭ�Ѥ�������Ǥ��롣
-(�������Ǹ��ʸ�ϡ����3�ͤ�¾��¿���ι׸��Ԥ����뤿�ᡢ���ο͡�������
-�����̤�Ŭ�Ѥ������ˤĤ�����­������Τ��Ȼפ��ޤ���)
+このソフトウェアは教育や研究のためならば、そして利益を目的としないのな
+らば複写および配布してよい。ただし、配布する全てのコピーにこの著作権表
+記と使用許諾文章が記載されていなければならない。この表記に加えて別の著
+作権も適用する事ができる。
+(訳注：最後の文は、上の3人の他に多くの貢献者がいるため、その人々の著作
+権が別に適用される事について補足したものかと思われます。)
 
 
-�Ѷ����ܤ��ѹ���ä����ץ�����फ���ޤ����Ѷ����ܤΥץ������ΰ�����
-�ޤ��̤Υץ����������ۤ�����ϡ�Moria/Angband���ѵ����˲ä��ưʲ�
-�ξ������������Τ����ۤ���Ĥ��ޤ����������ѹ��Ȥ����ۤ���륢����
-���֤˴ޤޤ��ġ��Υե�������ѹ��ڤӥե�������ɲá������ؤ��ޤ���
+変愚蛮怒に変更を加えたプログラムか、または変愚蛮怒のプログラムの一部を
+含む別のプログラムを配布する場合は、Moria/Angband使用許諾に加えて以下
+の条項を満たす場合のみ配布を許可します。ここで変更とは配布されるアーカ
+イブに含まれる個々のファイルの変更及びファイルの追加・削除を指します。
 
-  (1) ���Ƥ����ɽ���򤽤Τޤޤη��Ǵޤ����
+  (1) 全ての著作権表記をそのままの形で含む事。
 
-  (2) �ѹ���ä������µڤ��ѹ����ƤˤĤ������Τ˵��ܤ������
+  (2) 変更を加えた事実及び変更内容について明確に記載する事。
 
-  (3) �Ѷ����ܤΥ����������С��˥������������Ǥ��ʤ��褦��ɬ�פ��ѹ���
-      �ä������(������������ǽ��̵���ˤ��뤫�������襵���С��ξ���
-      �Ѥ��롢������ˡ��) �����������Ƥ��ѹ����Ѷ����ܤΥ��������Ƽ���
-      �������ƶ���Ϳ���ʤ����Ϥ��ξ���Ŭ�Ѥ���ʤ�ʪ�Ȥ��ޤ���
+  (3) 変愚蛮怒のスコアサーバーにスコアを送信できないように必要な変更を
+      加える事。(スコア送信機能を無効にするか、送信先サーバーの場所を
+      変える、等の方法で) ただし、全ての変更が変愚蛮怒のゲーム内容自体
+      に全く影響を与えない場合はこの条項は適用されない物とします。
 
 
-��Ҥλ��ѵ���ɽ���� Angband �� dual license (���)�ˤ�ä� GPL �Τߤ�
-���ä����ۤ�����ǽ�����ӽ������ΤǤϤ���ޤ��󡣸��ߤ� GPL �˽���
-���Ѷ����ܤ����ۤ�������Բ�ǽ�Ǥ���������Ū�ˤ��줬��ǽ�ˤʤä����� 
-GPL �ˤ�ä����ۤ�������ԤϾ�Ҥλ��ѵ���ɽ���˽�����̳�Ϥ���ޤ���
+上述の使用許諾表記は Angband の dual license (後述)によって GPL のみに
+従って配布される可能性を排除するものではありません。現在は GPL に従っ
+て変愚蛮怒を配布する事は不可能ですが、将来的にそれが可能になった時は 
+GPL によって配布を受けた者は上述の使用許諾表示に従う義務はありません。
 
 
 ----
-�ݾ�
+保証
 ----
-    �ܥץ���������Ѥ������Ȥˤ�ä������������ʤ�»���ˤĤ��Ƥ�����
-  �ԤϤ�����Ǥ���餤�ޤ���
+    本プログラムを使用したことによって生じたいかなる損害についても製作
+  者はその責任を負いません。
 
 
 
 -----------------------------------
-�Ѹ��� Angband ������ڤӻ��ѵ���
+英語版 Angband の著作権及び使用許諾
 -----------------------------------
 Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
 
@@ -108,13 +108,13 @@ This software may be copied and distributed for educational, research,
 and not for profit purposes provided that this copyright and statement
 are included in all such copies.  Other copyrights may also apply.
 
-���Υ��եȥ������϶���並��Τ���ʤ�С����������פ���Ū�Ȥ��ʤ��Τ�
-���ʣ�̤�������ۤ��Ƥ褤�������������ۤ������ƤΥ��ԡ��ˤ������ɽ
-���Ȼ��ѵ���ʸ�Ϥ����ܤ���Ƥ��ʤ���Фʤ�ʤ�������ɽ���˲ä����̤���
-���Ŭ�Ѥ�������Ǥ���(?)��
+このソフトウェアは教育や研究のためならば、そして利益を目的としないのな
+らば複写および配布してよい。ただし、配布する全てのコピーにこの著作権表
+記と使用許諾文章が記載されていなければならない。この表記に加えて別の著
+作権も適用する事ができる(?)。
 
-(�������Ǹ��ʸ�ϡ����3�ͤ�¾��¿���ι׸��Ԥ����뤿�ᡢ���ο͡�������
-�����̤�Ŭ�Ѥ������ˤĤ�����­������Τ��Ȼפ��ޤ���)
+(訳注：最後の文は、上の3人の他に多くの貢献者がいるため、その人々の著作
+権が別に適用される事について補足したものかと思われます。)
 
 
 All changes made by Ben Harrison and Robert Ruehlmann are also available
@@ -124,128 +124,128 @@ available under the old Moria/Angband license.  Until all parts of
 Angband are distributed under the GPL the only valid license remains
 the original Moria/Angband license.
 
-Ben Harrison �� Robert Ruehlmann �ˤ�äƲä���줿���Ƥ��ѹ���ʬ�Ͼ�
-�Ҥλ��ѵ���(Moria/Angband license)������ GNU GENERAL PUBLIC LICENSE 
-�˽��ä����ۤ����������Ǥ��ޤ������ա����Υ��եȥ������ΰ���ʬ�ϰ���
-�Ȥ��Ƶ���� Moria/Angband license �Τߤˤ�ä����ۤ���Ƥ���١�����
-���ϸ��Ԥ������Ǥˤϱƶ����ޤ���Angband�����Ƥ���ʬ�� GPL �ˤ�ä�
-���۲�ǽ�ˤʤ�ޤǤ�ͭ���ʻ��ѵ����� Moria/Angband license �����Ǥ���
+Ben Harrison と Robert Ruehlmann によって加えられた全ての変更部分は上
+述の使用許諾(Moria/Angband license)の代りに GNU GENERAL PUBLIC LICENSE 
+に従って配布を受ける事ができます。注意：このソフトウェアの一部分は依然
+として旧来の Moria/Angband license のみによって配布されている為、この
+条項は現行の配布版には影響しません。Angbandの全ての部分が GPL によって
+配布可能になるまでは有効な使用許諾は Moria/Angband license だけです。
 
 
 ---------------------
-dual license �ˤĤ���
+dual license について
 ---------------------
-���ߡ�Robert Ru:hlmann �����Ƥˤ��Angband�Ȥ��ΥХꥢ��Ȥ� GPL ��
-��ä����۲�ǽ�ˤ���٤����Ϥ�����Ƥ��ޤ����ܤ�����Angband�����ۡ���
-�ڡ����� Angband OpenSource Initiative �ˤĤ��ƤΥڡ����򻲾Ȥ��Ƥ���
-������
+現在、Robert Ru:hlmann 氏の提案によりAngbandとそのバリアントを GPL に
+よって配布可能にする為の努力がされています。詳しくはAngband公式ホーム
+ページの Angband OpenSource Initiative についてのページを参照してくだ
+さい。
 
 http://www.thangorodrim.net/development/opensource.html
 
-����(��������)��
+翻訳(一部意訳)：
 
-Angband �Ȥ������Ȥ� Moria �� OpenSource �γ�ǰ�����̤˹������������
-�������˺���ޤ����������κ�Ԥ� Angband �� Moria �����̵��������
-���������ݾڤ�����ѵ�������ޤ�����
-(���������줬������ Moria/Angband license �Ǥ���)
+Angband とその前身の Moria は OpenSource の概念が一般に広く受け入れら
+れる以前に作られましたが、その作者は Angband と Moria が常に無料で配布
+される事を保証する使用許諾を作りました。
+(訳注：これがいわゆる Moria/Angband license です。)
 
 Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
 
 This software may be copied and distributed for educational, research,
 and not for profit purposes provided that this copyright and statement
 are included in all such copies.  Other copyrights may also apply.
-�֤��Υ��եȥ������϶���並��Τ���ʤ�С����������פ���Ū�Ȥ��ʤ���
-�ʤ��ʣ�̤�������ۤ��Ƥ褤�������������ۤ������ƤΥ��ԡ��ˤ������
-ɽ���Ȼ��ѵ���ʸ�Ϥ����ܤ���Ƥ��ʤ���Фʤ�ʤ�������ɽ���˲ä����̤�
-�����Ŭ�Ѥ�������Ǥ��롣��
+「このソフトウェアは教育や研究のためならば、そして利益を目的としないの
+ならば複写および配布してよい。ただし、配布する全てのコピーにこの著作権
+表記と使用許諾文章が記載されていなければならない。この表記に加えて別の
+著作権も適用する事ができる。」
 
-�����������λ��ѵ����� OpenSource �Ȥ��Ƥξ����������Ƥ��餺���ѹ���
-�ä������ۤ���Ȥ��˥���������������̳�Ϥ���ޤ��󤷡�����¾�ˤ����
-��������������ޤ��������η�̤Ȥ��� Angband �Ϲ�ˡŪ�� Linux �Υǥ���
-�ȥ�ӥ塼�����˴ޤ������Ǥ��ޤ��󤷡�OpenSource �Υץ��������Ȥ�
-�٤��Ѱդ��줿¿���Υ����ӥ�(SourceForge��)����Ѥ������Ǥ��ޤ���
-�ޤ� GPL �����ۤ��줿�����ɤ� Angband �ΰ����Ȥ������Ѥ������Ǥ��ޤ�
-��
+しかし、この使用許諾は OpenSource としての条件は満たしておらず、変更を
+加えて配布するときにソースを公開する義務はありませんし、その他にも幾つ
+か問題点がありました。その結果として Angband は合法的に Linux のディス
+トリビューションに含める事ができませんし、OpenSource のプロジェクトの
+為に用意された多くのサービス(SourceForge等)を使用する事もできません。
+また GPL で配布されたコードを Angband の一部として利用する事もできませ
+ん。
 
-�� (Robert Ru:hlmann��) �Ϥ�������������������뤿��ˡ�Angband
-OpenSource Initiative (Angband OpenSource����ư) �򳫻Ϥ���Angband (��
-�Ӥ��λ��ѵ������ѹ��β��ä�ͭ�������Хꥢ���) �� GNU General
-Public License �˽��ä����ۤ�������ǽ�ˤ��褦�����Ϥ��Ƥ��ޤ���
+私 (Robert Ru:hlmann氏) はこれらの問題点を克服するために、Angband
+OpenSource Initiative (Angband OpenSource化運動) を開始し、Angband (及
+びこの使用許諾の変更の恩恵を共有したいバリアント) を GNU General
+Public License に従って配布する事を可能にしようと努力しています。
 
-���ѵ������ѹ��򤹤�٤ˤ� Angband �˴ޤޤ�����ƤΥ����ɤ�񤤤�����
-�ο�ã���鿷�������ѵ����ؤ��ѹ����Ф���Ʊ�դ����뤫������ʤ���п���
-�����ѵ�����Ʊ�դ��Ƥ��ʤ����Ԥˤ�äƽ񤫤줿��ʬ�����ƴ����˿�������
-��ľ��ɬ�פ�����ޤ���
+使用許諾の変更をする為には Angband に含まれる全てのコードを書いた全て
+の人達から新しい使用許諾への変更に対する同意を得るか、さもなければ新し
+い使用許諾に同意していない著者によって書かれた部分を全て完全に新しく書
+き直す必要があります。
 
-Angband �� GPL �Τߤ˰ܹԤ��Ƥ��ޤ��ȡ�Angband �򸵤ˤ������ƤΥХꥢ
-��Ȥκ����Ԥ��Ф��Ƥ���ѵ����� GPL ���ѹ�������������Ƥ��ޤ����
-�ˤʤ�ޤ���������򤱤뤿��ˡ���ϥ����ɤ� GPL �� Angband license ��
-ξ�������ۤ����dual license�פ���ˡ���Ѥ�����˷��ޤ��������ΰ٥Х�
-����Ȥκ����Ԥ�˾��ʤ� Angband license ��Ȥ�³��������Ǥ��ޤ���ɬ
-������Хꥢ��Ȥλ��ѵ����� GPL ���ѹ�����ɬ�פϤ���ޤ���
+Angband を GPL のみに移行してしまうと、Angband を元にした全てのバリア
+ントの作成者に対しても使用許諾を GPL に変更する事を強制してしまう結果
+になります。それを避けるために、私はコードを GPL と Angband license の
+両方で配布する「dual license」の方法を用いる事に決めました。その為バリ
+アントの作成者は望むなら Angband license を使い続ける事ができます、必
+ずしもバリアントの使用許諾を GPL に変更する必要はありません。
 
-���դ���٤��ϡ����ߤν�� dual license ��Ŭ�Ѳ�ǽ�Ǥ���Τ� Angband
-OpenSource����ư �˻�Ʊ�����͡��ˤ�äƽ񤫤줿����ʬ�Υ����������Ǥ�
-����Ǥ����̤���ʬ�ϰ����Ȥ��� Moria/Angband license �Τߤˤ�ä�����
-����Ƥ���Τǡ�dual license �ϸ������ۤ���Ƥ��� Angband ���Τˤϱƶ�
-���ޤ���Angband�����Ƥ���ʬ��ξ���λ��ѵ��������ۤǤ���ޤǤϥץ�����
-�����Τ�ͭ���ʻ��ѵ����� Moria/Angband license �����Ǥ���
+注意するべきは、現在の所は dual license が適用可能であるのは Angband
+OpenSource化運動 に賛同した人々によって書かれた一部分のソースだけであ
+る事です。別の部分は依然として Moria/Angband license のみによって配布
+されているので、dual license は現在配布されている Angband 全体には影響
+しませんAngbandの全ての部分が両方の使用許諾で配布できるまではプログラ
+ム全体に有効な使用許諾は Moria/Angband license だけです。
 
-���ʤ����ѹ���ʬ�� dual license �˽��ä����ۤ���٤ˤϡ��ʲ���û����ʸ
-�Ϥ�Ȥ���������˥᡼�����������Ǥ��ޤ���
+あなたの変更部分を dual license に従って配布する為には、以下の短かい文
+章を使い、これを私にメールで送る事ができます。
 
-(���������̤ˤϡ����ʤ���̾�����ޤޤ�ʤ���Ф����ޤ���(�˥å��͡����
-������Ϥʤ��Ȼפ����Ȥλ��Ǥ�)�����ν��̤ˤ�ä� dual license �ε���
-��Ϳ����줿 Angband�����Υ��ƥʤϤ����ѹ���ʬ��ޤ�Angband (�ڤӥ�
-�ꥢ���)�� GPL �Ǥ����ۤ�������Ǥ�����������ۤ�������Ƴ�ȯ�Ԥ���
-GPL �Ǥ⼫ʬ�ΥХꥢ��Ȥ�����ۤ�������Ǥ��ޤ���)
+(訳注：書面には、あなたの名前が含まれなければいけません(ニックネームで
+も問題はないと思う、との事です)。この書面によって dual license の許可
+を与えられた Angband公式のメンテナはその変更部分を含むAngband (及びバ
+リアント)を GPL でも配布する事ができ、さらに配布を受けた各開発者が、
+GPL でも自分のバリアントを再配布する事ができます。)
 
-I hereby release [�����ˤ��ʤ��Υѥå���̾���ޤ���'all my changes to
-the Angband code'�Ȥ���ʸ�Ϥ�����], under the terms of the GNU General
+I hereby release [ここにあなたのパッチの名前または'all my changes to
+the Angband code'という文章を挿入], under the terms of the GNU General
 Public License (version 2), as well as under the traditional Angband
 license.  It may be redistributed under the terms of the GPL (version
 2 or any later version), or under the terms of the traditional Angband
 license.
 
-(ľ��) �ֻ�Ϥ�����������롢[Angband�����ɤ��Ф������Ƥλ���ѹ���ʬ] 
-�򡢵���� Angband license �����Ǥʤ� GNU General Public License �С�
-�����2 �Ǥ�������롣����� GPL(�С������2�ʹ�)���ޤ��ϵ���� 
-Angband license �Ǻ����ۤ����ɤ�����
+(直訳) 「私はここに宣言する、[Angbandコードに対する全ての私の変更部分] 
+を、旧来の Angband license だけでなく GNU General Public License バー
+ジョン2 でも公開する。それは GPL(バージョン2以降)、または旧来の 
+Angband license で再配布して良い。」
 
 
-�ޤ������ʤ��� Angband �˲ä������Ƥ��ѹ���ʬ�� public domain �Ȥ��Ƹ�
-���������Ƥθ�������������������򤹤����Ǥ��ޤ������ξ��ϻ�ˤ���
-�ݤ�Ϣ�����Ƥ���������
+また、あなたは Angband に加えた全ての変更部分を public domain として公
+開し、全ての権利を放棄する事を選択する事もできます。その場合は私にその
+旨を連絡してください。
 
 
-���νꡢAngband OpenSource����ư�ˤϰʲ��γ�ȯ��ã���黿Ʊ�����Ƥ��ޤ���
- �� Robert Ru:hlmann
- �� Ben Harrison
- �� Greg Wooledge (Random artifact generation)
- �� Tim Baker
- �� William Tanksley
- �� Dr. Andrew White (APW Borg)
- �� Dennis van Es (BorgBand, DvEband)
- �� Julian Lighton
- �� Billy Tanksley
- �� Dean Anderson (CthAngband)
- �� Chris Weisiger (new Angband vaults)
- �� Shayne Steele
- �� Topi Ylinen
- �� Steven Fuerst
- �� Jonathan Ellis (edit files patch)
- �� Eytan Zweig (EyAngband) - public domain
- �� Matthias Kurzke (PsiAngband, ego-item patch)
- �� Sheldon Simms (random artifact names)
- �� Dave Blackston (squelch patch)
- �� Greg Flint
- �� John I'anson-Holton
- �� Aram Harrow
- �� Leon Marrick
- �� Daniel Nash
- �� Keldon Jones
- �� Jim Wilson (UMoria author)
- �� Mark Kvale (labyrinthine room patch)
+今の所、Angband OpenSource化運動には以下の開発者達から賛同を得ています。
+ ・ Robert Ru:hlmann
+ ・ Ben Harrison
+ ・ Greg Wooledge (Random artifact generation)
+ ・ Tim Baker
+ ・ William Tanksley
+ ・ Dr. Andrew White (APW Borg)
+ ・ Dennis van Es (BorgBand, DvEband)
+ ・ Julian Lighton
+ ・ Billy Tanksley
+ ・ Dean Anderson (CthAngband)
+ ・ Chris Weisiger (new Angband vaults)
+ ・ Shayne Steele
+ ・ Topi Ylinen
+ ・ Steven Fuerst
+ ・ Jonathan Ellis (edit files patch)
+ ・ Eytan Zweig (EyAngband) - public domain
+ ・ Matthias Kurzke (PsiAngband, ego-item patch)
+ ・ Sheldon Simms (random artifact names)
+ ・ Dave Blackston (squelch patch)
+ ・ Greg Flint
+ ・ John I'anson-Holton
+ ・ Aram Harrow
+ ・ Leon Marrick
+ ・ Daniel Nash
+ ・ Keldon Jones
+ ・ Jim Wilson (UMoria author)
+ ・ Mark Kvale (labyrinthine room patch)
 
 
-:::�ʾ����������
+:::以上で翻訳終り

@@ -1,36 +1,36 @@
 # File: a_info.txt
-#JZ# Zangband ���ܸ���: ����
-#JZ# ��#J0#�פǻϤޤ륳���Ȥ����ܸ��� Angband �Τ��Ȥ��󤵤�ˤ��
-#JZ# ��Τǡ���#JZ#�פǻϤޤ륳���Ȥ����ܸ��� Zangband �ǿ�����
-#JZ# �ä�ä����ܤǤ������ܸ쥢�󥰥Х��Ʊ�͡�������ҡ˰ʳ�������
-#JZ# �����ȤˤϤ�������̾���򵭺ܤ��Ƥ��ޤ���
+#JZ# Zangband 日本語訳: 板倉
+#JZ# 「#J0#」で始まるコメントは日本語板 Angband のしとしんさんによる
+#JZ# もので、「#JZ#」で始まるコメントは日本語版 Zangband で新たに
+#JZ# 加わった項目です。日本語アングバンド同様、私（板倉）以外の方の
+#JZ# コメントにはその方の名前を記載しています。
 #JZ#
-#JZ# ������ �ʲ������ܸ��� Angband �ˤ��륳���ȤǤ� ������
-#J0# ���ܸ��������ܸ������� : ���Ȥ���
+#JZ# ＃＃＃ 以下は日本語版 Angband にあるコメントです ＃＃＃
+#J0# 日本語訳と日本語版製作 : しとしん
 #J0#
-#J0# ���ܸ��ǤǤϥ��ꥸ�ʥ����Ӥ���������ܤ���������Ƥ��ޤ���
+#J0# 日本語版ではオリジナルと比較して設定項目が一つ増えています。
 #J0#
 #J0#
-#J0# �����˺ݤ��Ƥʤ�٤��������ǧ����褦�ˤ��ޤ�����
-#J0# p.--  �Ȥ���Τϡ֥ȡ��륭�����ʪ�켭ŵ�פǤΥڡ�������
-#J0# wp. --�Ȥ���Τϡֿ�������ʪ�������ԡפǤΥڡ������򤢤�路�ޤ���
-#J0# Ko -- �Ȥ���ΤϾ��ӷ�줵��˶����Ƥ��ä���ΤǤ���
-#J0# ??? --�Ȥ���Τ�Ĵ�٤��Ĥ��ʤ��ä���ΤǤ���
+#J0# 翻訳に際してなるべく資料を確認するようにしました。
+#J0# p.--  とあるのは「トールキン指輪物語辞典」でのページ数、
+#J0# wp. --とあるのは「新訳指輪物語追補編」でのページ数をあらわします。
+#J0# Ko -- とあるのは小林健一さんに教えてもらったものです。
+#J0# ??? --とあるのは調べがつかなかったものです。
 #J0#
-#J0# ����Υ����ƥ�������˴ؤ��Ƥ� �ԡ��ܤ��Ȥ� ��������Ѥ����äˤʤ�ޤ�����
+#J0# 伝説のアイテムの翻訳に関しては 都々目さとし さんに大変お世話になりました。
 #J0#
-#J0# �꡹�ˤ��륳���Ȥ� ���� ����� �ԡ��ܤ��Ȥ� ����Τ�ΤǤ������ä����ȯ
-#J0# ���Ԥ򵭺ܤ��ޤ�����
+#J0# 所々にあるコメントは 小林 さんと 都々目さとし さんのものです。かっこ内に発
+#J0# 言者を記載しました。
 #J0#
-#J0#�֥����ȡפǸ����Ǥ��ޤ���
+#J0#「コメント」で検索できます。
 #J0#
-#J0# (��������Ǥβ��̽���)
+#J0# (ゲーム中での画面出力)
 #J0#
-#J0# �ء٤ǰϤޤ줿̾���ϥ����ƥ�̾�θ�ˤĤ��ޤ���
-#J0#      ex) ���⡼�롦�����ɡؤĤ�̤��ݡ�
+#J0# 『』で囲まれた名前はアイテム名の後につきます。
+#J0#      ex) スモール・ソード『つらぬき丸』
 #J0#                         ~~~~~~~~~~~~~~
-#J0# ����ʳ��ϥ����ƥ�̾�����ˤĤ��ޤ���
-#J0#      ex) ���饤��Υ���������
+#J0# それ以外はアイテム名の前につきます。
+#J0#      ex) スラインのアーケン石
 #J0#          ~~~~~~~~~~
 
 # This file is used to initialize the "lib/raw/a_info.raw" file, which
@@ -87,7 +87,7 @@ V:2.8.1
 
 # The Phial of Galadriel
 
-N:1:����ɥꥨ���
+N:1:ガラドリエルの
 E:of Galadriel
 I:39:4:1
 W:30:1:10:10000
@@ -96,22 +96,22 @@ F:ACTIVATE | SEARCH | INSTA_ART | LITE_3 |
 U:LIGHT
 D:$A small crystal phial, with the light of Earendil's Star contained inside.  
 D:$Its light is imperishable, and near it darkness cannot endure.
-D:�����ʿ徽���Ӥǡ�����ɥꥨ������˱Ǥä�
-D:�������ǥ������(����ޥ��)�θ����Ĥ�����Ƥ��롣
-D:�������Ǥθ��Ϥ�����ŰǤ��ɤ�ʧ����
+D:小さな水晶の瓶で、ガラドリエルの泉に映った
+D:エアレンディルの星(シルマリル)の光が閉じ込めてある。
+D:その不滅の光はあらゆる暗闇を追い払う。
 
 
 # The Star of Elendil
 
-#J0# (������)
+#J0# (コメント)
 #J0#
-#J0# (�ԡ���)
-#J0#��a_info.txt���ɤޤ���ĺ���ޤ��������ؾ����Ǥ�Ƥ��ߤ��勞�褦�����ܸ첽��
-#J0#�ֲ��פʤɤ򤤤줿��Ȥ��Ƥߤޤ������٤Ȥλ��Ǥ�����������ʤ餳�����٤���
-#J0#�Ȼפ��ޤ�(�����ǥ���Ͼ�⤭�����ǥ���ȸƤФ줿)�������դ��Ƥ���ز���
-#J0#�ȱ������񤭤��ϿƤ��ߤ��勞�Ȼפ��ޤ�(��)��
+#J0# (都々目)
+#J0#＊a_info.txtを読ませて頂きましたが、『少しでも親しみがわくように日本語化や
+#J0#「王」などをいれたりとしてみました。』との事でしたが、それならこうすべきだ
+#J0#と思います(エレンディルは丈高きエレンディルと呼ばれた)。皆に付いている『王』
+#J0#と云う肩書きよりは親しみがわくと思います(笑)。
 #J0#
-N:2:��⤭�����ǥ����
+N:2:丈高きエレンディルの
 E:of Elendil
 I:39:5:1
 W:50:25:5:32500
@@ -119,15 +119,15 @@ P:0:1d1:0:0:0
 F:ACTIVATE | SEE_INVIS | HOLD_EXP | INSTA_ART | SPEED | LITE_3 |
 U:MAP_LIGHT
 D:$The shining Star of the West, a famed heirloom of Elendil's house.
-D:����������������٤ǡ������ǥ���βȷϤ�������������
-D:��κ��������Ф��Ĥ��Ƥ��롣
+D:輝く『西方国の星』で、エレンディルの家系に伝わる家宝だ。
+D:銀の鎖に白い宝石がついている。
 
 
 # The Arkenstone of Thrain -> JoJ
 # Was +2 WIS/DEX
 
-#JZ# ����С����꡼���˽ФƤ�����ץ����ƥ�
-N:3:��Ƚ��
+#JZ# アンバーシリーズに出てくる重要アイテム
+N:3:審判の
 E:of Judgement
 I:39:6:3
 W:70:90:5:150000
@@ -138,57 +138,57 @@ U:JUDGE
 D:$This crimson jewelry which is chained with a gold chain is
 D:$ deeply related to creation of this universe.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.3-10)
-D:��κ��˼���դ���줿�����α���������˿����ؤ�����Ŀ��Ȥ����С�
-D:��R.���饺�˥�������������С����꡼�� 3��10����
+D:金の鎖に取り付けられた、この宇宙の創世に深い関わりを持つ真紅の宝石。
+D:（R.ゼラズニイ、真世界アンバーシリーズ 3〜10巻）
 
 
 # The Amulet of Carlammas
 
-#J0# (������)
+#J0# (コメント)
 #J0#
-#J0#(����)
-#J0# > > >The Amulet of Carlammas         ������ޥ��������ޥ�
-#J0# > > >'Belegennon'                    �٥쥲��Υ󢪥٥쥲�Υ�
-#J0# > > >'Holhenneth'                    �ۥ�إ�ͥ����ۥ�إͥ�
-#J0# > > >'Cammithrim'                    ����ߥ���ࢪ���ߥ����
-#J0# > > >'Paurnimmen'                    �ѥ���˥��󢪥ѥ����˥��
+#J0#(小林)
+#J0# > > >The Amulet of Carlammas         カルランマス→カルラマス
+#J0# > > >'Belegennon'                    ベレゲンノン→ベレゲノン
+#J0# > > >'Holhenneth'                    ホルヘンネス→ホルヘネス
+#J0# > > >'Cammithrim'                    カンミスリム→カミスリム
+#J0# > > >'Paurnimmen'                    パウルニンメン→パウアニメン
 #J0# > 
-#J0# > ���Ȥǡ��ͤ�ľ���Ƥߤ�������ɡ�-mm- �� -nn- �äơ�����������
-#J0# > �Ų��ˤʤä�����ñ���ˤʤä���������äȺ��������ʤ��Ǥ����Ҥ�ä�
-#J0# > ������֥�����ޥ��פ����������˶ᤤ�����Τ�ޤ���Ĵ�٤Ƥ�����
-#J0# > ���������������̾"Annatar"�ϡ֥��ʥ�����פ��ɤ���Ϥ��Ǥ����ġ�
-#J0# > ���ʤߤ˾�Σ��Ĥ�ʪ����Ǥϸ������Ȥʤ��Ǥ���
+#J0# > あとで，考え直してみたんだけど，-mm- や -nn- って，シンダリン語で
+#J0# > 重音になったか，単音になったか，ちょっと今自信がないです．ひょっと
+#J0# > したら「カルランマス」の方が原音に近いかも知れません．調べておきま
+#J0# > す．サウロンの別名"Annatar"は「アナタール」と読んだはずですが…．
+#J0# > ちなみに上の５つは物語中では見たことないです．
 #J0#
-#J0# Ĵ�٤Ƥ��ޤ������ŤʤäƤ�Ҳ��ϥ��������ǤϽŲ��ˤʤ�褦�Ǥ���
-#J0# �֥�����ޥ���
-#J0# �֥٥쥲��Υ��
-#J0# �֥ۥ�إ�ͥ���
-#J0# �֥���ߥ�����
-#J0# �֥ѥ����˥����
-#J0# �Ǥ褤�褦�Ǥ������������Ƥ����������ְ�äƤ����褦�Ǥ���
-#J0# ���餷�ޤ�����
-#J0# # �äƤ��Ȥϥ���ޥ��ꥪ��������Ԥ��ְ㤨���Τ��ʤ���
+#J0# 調べてきました．重なってる子音はシンダリン語では重音になるようです．
+#J0# 「カルランマス」
+#J0# 「ベレゲンノン」
+#J0# 「ホルヘンネス」
+#J0# 「カンミスリム」
+#J0# 「パウアニンメン」
+#J0# でよいようでした．記憶していた資料が間違っていたようです．
+#J0# 失礼しました．
+#J0# # ってことはシルマリルリオンの翻訳者が間違えたのかなあ？
 #J0#
-N:4:������ޥ���
+N:4:カルランマスの
 E:of Carlammas
 I:40:10:2
 W:50:30:3:60000
 F:CON | HIDE_TYPE | ACTIVATE | RES_FIRE | INSTA_ART
 U:PROT_EVIL
 D:$A fiery circle of bronze, with mighty spells to ward off evil.
-D:�֥��󥺤�ǳ����褦�ʼ����ǡ��ٰ��ʼԤ򤫤路���໶������
-D:���Ϥʼ�ʸ��������Ƥ��롣
+D:ブロンズの燃えるような首飾りで、邪悪な者をかわして退散させる
+D:強力な呪文が込められている。
 
 
 # The Amulet of Ingwe
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# p.308
-#J0# (�ԡ���)
-#J0#������ޥ���ʪ��˽����������ǥ����Ʊ����ͳ�Ǥ���
+#J0# (都々目)
+#J0#＊シルマリルの物語に従う。エレンディルと同じ理由です。
 #J0#
-N:5:��鲦���󥰥�����
+N:5:上級王イングウェの
 E:of Ingwe
 I:40:11:3
 W:65:50:3:90000
@@ -199,14 +199,14 @@ F:INSTA_ART
 U:DISP_EVIL
 D:$The ancient heirloom of Ingwe, high lord of the Vanyar, against whom nothing 
 D:$of evil could stand. 
-D:�����顼�������Ϥ���Ĺ����뤳�ȤΤʤ��ä�
-D:������䡼��²�ξ�鲦���󥰥����βȷ�����β�����
-D:���󥰥������й��Ǥ���ٰ��ʤ�ΤϤ��ʤ��ä���
+D:ヴァラールの島に渡り中つ国に戻ることのなかった
+D:ヴァンヤール族の上級王イングウェの家系伝来の家宝。
+D:イングウェに対抗できる邪悪なものはいなかった。
 
 
 # The Necklace of the Dwarves
 
-N:6:�ɥ�դ�
+N:6:ドワーフの
 E:of the Dwarves
 I:40:12:3
 W:70:70:3:75000
@@ -216,11 +216,11 @@ D:$The Nauglamir; a carencet of gold set with a multitude of shining gems of
 D:$Valinor, accenting a radiant Silmaril.  The sturdy spirits of Dwarvish 
 D:$craftsmen who labored long in mountain smithies lie within it still, and 
 D:$as gossamer it rests upon the bearer.
-D:�����ȵ�������ޥ��ȡ���������Ω������
-D:��������Υ�����Ρ�������ФǾ���줿��μ�������
-D:�������������Ĺ�����ʤ��ǤäƤ���
-D:�趯�ʥɥ�դο��ͺ������ä���ȽɤäƤ��ꡢ
-D:����λ�Τ褦�˿Ȥ��դ���Ԥ˥ե��åȤ��롣
+D:燦然と輝くシルマリルと、それを引き立たせる
+D:たくさんのヴァリノールの宝石で飾られた金の首飾りだ。
+D:山の中の鍛冶場で長い間鎚を打ってきた
+D:頑強なドワーフの職人魂がしっかりと宿っており、
+D:蜘蛛の糸のように身に付ける者にフィットする。
 
 
 # The Incandescent Light of Yeduson
@@ -229,7 +229,7 @@ D:����λ�Τ褦�˿Ȥ��դ���Ԥ˥ե��åȤ��롣
 # inventor of the incandescent lightbulb
 # Default reward for The Dark Elven Lords Quest
 
-N:7:��ť����
+N:7:ヱヅソンの
 E:of Yeduson
 I:39:3:3
 W:40:20:5:20000
@@ -239,13 +239,13 @@ D:$The Incandescent Light of Yeduson
 D:$Thomas Alva Yeduson the "Wizard of Menlo Park" 
 D:$patented 1,093 inventions.  
 D:$Inventor of the incandescent lightbulb.
-D:�����˿ʤ���ʳؤ���Ѥȸ�ʬ�����Ĥ��ʤ�����
+D:「非常に進んだ科学は魔術と見分けがつかない。」
 
 
 # The Ring of Barahir -> Frakir
 
 #JZ#
-N:8:�ԥե饭���դȤ���
+N:8:《フラキア》という
 E:'Frakir'
 I:45:32:1
 W:50:40:2:75000
@@ -257,33 +257,33 @@ D:$ the prince of chaos. It is  invisible but it sometimes
 D:$ ripples to warn owner's dangers. It can morph to strangle
 D:$ enemy's neck, if owner commands to it.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.6-10)
-D:���٤β��ҥޡ���󤬥����륹�������߽Ф����ջפ���ä����ؤ���
-D:���ʤ��ܤ˸����ʤ���̮ư���ƴ������Τ餻�Ƥ���롣���������Τ�
-D:̿����ȷ����Ѥ���Ũ�μ������뤳�Ȥ��Ǥ��롣
-D:��R.���饺�˥�������������С����꡼�� 6��10����
+D:混沌の王子マーリンがログルスから生み出した意思を持った腕輪だ。
+D:普段は目に見えないが脈動して危険を知らせてくれる。装備するものが
+D:命ずると形を変えて敵の首を締めることができる。
+D:（R.ゼラズニイ、真世界アンバーシリーズ 6〜10巻）
 
 
 # The Ring of Tulkas
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# p.343
-#J0# (�ԡ���)
-#J0#������ޥ���ʪ���ꡣ�������ǥ���ι��Ʊ����ͳ�Ǥ���
+#J0# (都々目)
+#J0#＊シルマリルの物語より。エアレンディルの項と同じ理由です。
 #J0#
-N:9:ͦ�Ԥʤ�ȥ��륫����
+N:9:勇猛なるトゥルカスの
 E:of Tulkas
 I:45:33:4
 W:70:90:2:175000
 F:STR | DEX | CON | HIDE_TYPE | ACTIVATE | SPEED | INSTA_ART
 U:XTRA_SPEED
 D:$The treasure of Tulkas, most fleet and wrathful of the Valar.
-D:�����顼�����Ǥ�Ǥ����᤯����ͦ�Ԥʥȥ��륫����������
+D:ヴァラールの中でも最も素早くかつ勇猛なトゥルカスの宝だ。
 
 
 # The Ring of Power (Narya)
 
-N:10:�ԥʥ��դȤ���
+N:10:《ナルヤ》という
 E:of Power (Narya)
 I:45:34:1
 W:70:100:2:100000
@@ -296,14 +296,14 @@ U:BA_FIRE_2
 D:$The Ring of Fire, set with a ruby that glows like flame.  Narya is one 
 D:$of the three Rings of Power created by the Elves and hidden by them from 
 D:$Sauron.
-D:��Τ褦�˵�����ӡ����Ϥ��줿�Фλ��ؤǡ�
-D:����դˤ����쥵�����󤫤鱣���줿���Ĥ��Ϥλ��ؤΤ����ΰ�Ĥ���
-#D:��Ĺ�Ǥϥ�������ȥ������դ���ͭ���Ƥ�����
+D:炎のように輝くルビーがはめられた火の指輪で、
+D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
+#D:中つ国ではキアダンとガンダルフが所有していた。
 
 
 # The Ring of Power (Nenya)
 
-N:11:�ԥͥ��դȤ���
+N:11:《ネンヤ》という
 E:of Power (Nenya)
 I:45:35:2
 W:80:140:2:200000
@@ -317,14 +317,14 @@ U:BA_COLD_3
 D:$The Ring of Adamant, with a pure white stone as centerpiece.  Nenya is one 
 D:$of the three Rings of Power created by the Elves and hidden by them from 
 D:$Sauron.
-D:�䵤�ζŽ̤�������������Ф��Ϥ��줿���ؤ���
-D:����դˤ����쥵�����󤫤鱣���줿���Ĥ��Ϥλ��ؤΤ����ΰ�Ĥ���
-#D:��Ĺ�Ǥϥ���ɥꥨ�뤬��ͭ���Ƥ�����
+D:冷気の凝縮した真っ白な宝石がはめられた指輪だ。
+D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
+#D:中つ国ではガラドリエルが所有していた。
 
 
 # The Ring of Power (Vilya)
 
-N:12:�ԥ������դȤ���
+N:12:《ヴィルヤ》という
 E:of Power (Vilya)
 I:45:36:3
 W:90:170:2:300000
@@ -339,14 +339,14 @@ D:$The Ring of Sapphire, with clear blue gems that shine like stars,
 D:$glittering untouchable despite all that Morgoth ever wrought.  Vilya is 
 D:$one of the three Rings of Power created by the Elves and hidden by them 
 D:$from Sauron.
-D:�����ͤ˵���Ʃ���̤ä����ե������λ��ؤ���
-D:����դˤ����쥵�����󤫤鱣���줿���Ĥ��Ϥλ��ؤΤ����ΰ�Ĥ���
-#D:��Ĺ�Ǥϥ������ɤ���ͭ���Ƥ�����
+D:星の様に輝く透き通ったサファイアの指輪だ。
+D:エルフにより作られサウロンから隠された三つの力の指輪のうちの一つだ。
+#D:中つ国ではエルロンドが所有していた。
 
 
 # The Ring of Power (The One Ring)
 
-N:13:�԰�Ĥλ��ءդȤ���
+N:13:《一つの指輪》という
 E:of Power (The One Ring)
 I:45:37:5
 W:100:255:2:5000000
@@ -365,14 +365,14 @@ D:$them all and in the darkness bind them."  Made of massive gold, and
 D:$set with runes in the foul speech of Mordor, Isildur's Bane possesses 
 D:$powers so great that it inevitably twists and masters any earthly being 
 D:$who wears it.
-D:�ְ�Ĥλ��ؤ����Ƥ����١���Ĥλ��ؤϤ��٤Ƥ򸫤Ĥ���
-D:��Ĥλ��ؤϤ��٤Ƥ��ᤨ�Ƥ����ߤΤʤ��ˤĤʤ��Ȥ�롣��
-D:�Ÿ��ʶ�λ��ؤǡ����ɡ���δ��ޤ路�����դǥ롼��ʸ����
-D:���Ǥ��롣���Υ�����ɥ����βҤ��ϤϤ��ޤ�ˤ⶯��ʤΤǡ�
-D:���̤μԤϤ����Ȥ��դ���������Ĥ�����ۤ���Ƥ��ޤ���
+D:「一つの指輪は全てを統べ、一つの指輪はすべてを見つけ、
+D:一つの指輪はすべてを捕えてくらやみのなかにつなぎとめる。」
+D:重厚な金の指輪で、モルドールの忌まわしい言葉でルーン文字が
+D:刻んである。このイシルドゥアの禍の力はあまりにも強大なので、
+D:普通の者はそれを身に付けるだけで歪められ支配されてしまう。
 
 
-N:14:�ԥ��ۥ�դȤ���
+N:14:《アホヤ》という
 E:of Cower (Darnya)
 I:45:50:-5
 W:100:100:2:0
@@ -385,12 +385,12 @@ U:BIZARRE
 D:$Adorned, showy gilding, 
 D:$set with runes in the strange speech of Heheh, with power so great that it 
 D:$inevitably twists and masters any earthly being who wears it.
-D:�¤äݤ����å��λ��ؤǡ��ؤ����ʸ��դǥ롼��ʸ����
-D:���Ǥ��롣���Τ櫓�狼���Ҥ��ϤϤ��ޤ�ˤ⶯��ʤΤǡ�
-D:���̤μԤϤ����Ȥ��դ���������Ĥ�����ۤ���Ƥ��ޤ���
+D:安っぽい金メッキの指輪で、へけけな言葉でルーン文字が
+D:刻んである。このわけわからん禍の力はあまりにも強大なので、
+D:普通の者はそれを身に付けるだけで歪められ支配されてしまう。
 
 
-N:15:�ѥ��ƥ�������
+N:15:パランティアの石
 E:Palantir~ of Westernesse
 I:39:8:3
 W:60:50:10:60000
@@ -400,12 +400,12 @@ U:DETECT_UNIQUE
 D:$A shining white ball of unbreakable crystal, the ancient palantiri, 
 D:$or 'far-watchers', were used by kings of Numenor and later by the Exiles 
 D:$for rapid communication between distant lands. 
-D:�����򤯵������Ǥο徽��ϡ��Ť��ϥ̥�Ρ��������β��ˡ�
-D:��ˤϥ����ǥ����Ϥ���Ȥ���ήϲ��̱�ˤ�äơ�Υ�줿���Ϥδ֤�
-D:��®�̿����Ѥ���줿�ֱ�˾�פ��Ф���
+D:この白く輝く不滅の水晶球は、古くはヌメノールの歴代の王に、
+D:後にはエレンディルをはじめとする流浪の民によって、離れた土地の間の
+D:高速通信に用いられた「遠望」の石だ。
 
 
-N:16:�إ���ॾ���
+N:16:『クリムゾン』
 E:'Crimson'
 I:19:50:4
 W:60:150:100:100000
@@ -418,13 +418,13 @@ D:$ This gun gotten by Echizen unexpectedly, 'Crimson', helped
 D:$ him in his missions, and it evolved into greater weapon
 D:$ after his every battle. --"
 D:$(Ecole Software, 'DEATH CRIMSON')
-D:�֡������ϳ����Τ���ʪ�ν���Ȳ����Ƥ��������ΤȤ��פ鷺
-D:�Ȥä��ơݥ���ॾ�󤬱���������������ơ������������Ȥˡ�
-D:����ॾ��Ϥ�궯�Ϥ����ؤȿʲ����Ƥ��ä�������(�ǥ���
-D:��ॾ�󡤥������륽�եȥ�����)
+D:「―そこは街全体が魔物の住処と化していた。そのとき思わず
+D:使った銃−クリムゾンが越前を助け、そして、たたかうごとに、
+D:クリムゾンはより強力な武器へと進化していった。―」(デスク
+D:リムゾン，エコールソフトウェア)
 
 
-N:17:�μ���
+N:17:知識の
 E:of Lore
 I:39:7:0
 W:15:12:15:20000
@@ -433,11 +433,11 @@ F:ACTIVATE | INSTA_ART | LITE_3 |
 U:LORE
 D:$A great emerald that fills your mind with images of knowledge and dreadful 
 D:$understanding as you stare into its depths.
-D:�����礭�ʥ�����ɤ�����Фο�ʥ��Τ����������
-D:���ʤ����������μ��ο��ݤȶ���٤�����ˤ�ä���������롣
+D:この大きなエメラルドの中の緑の深淵をのぞき込む時、
+D:あなたの精神は知識の心象と恐るべき理解によって満たされる。
 
 
-N:18:�ե���ߥ���
+N:18:ファラミアの
 E:of Faramir
 I:40:17:3
 W:30:60:2:20000
@@ -448,16 +448,16 @@ F:INSTA_ART
 U:PESTICIDE
 D:$A slim neckpiece of True-silver, with quiet spells of Ithilien to aid and 
 D:$protect the wearer.
-D:�֤ޤ��Ȥζ�פǺ��줿�����ǡ��Ȥ��դ���Ԥ�����Ƽ�륤���ꥨ��
-D:���Ť�����ˡ�������Ƥ��롣
+D:「まことの銀」で作られた首飾りで、身に付ける者を助けて守るイシリエン
+D:の静かな魔法が秘められている。
 
 
 # The Adamantite Plate Mail 'Soulkeeper'
 
-#J0# ���ܸ첽, Ko
-#J0#N:19:�غ��ݻ��ԡ�
-#J0#N:19:�ؼ���
-N:19:�غ��μ����
+#J0# 日本語化, Ko
+#J0#N:19:『魂保持者』
+#J0#N:19:『守護魂』
+N:19:『魂の守り手』
 E:'Soulkeeper'
 I:37:30:2
 W:75:9:420:200000
@@ -469,15 +469,15 @@ U:CURE_1000
 D:$A suit of imperishable adamant, with conquerable strength to endure evil 
 D:$and disruptive magics, that protects the life force of its wearer like 
 D:$nothing else can.
-D:�ʱ����ǤΥ����ޥ󥿥��ȤǺ��줿���ǡ�������
-D:�ٰ����Ϥ��˲�Ū����ˡ��ķ���֤����Ϥ���ᡢ
-D:���ѼԤ���̿�Ϥ��뤳�Ȥˤ����Ƥϲ�ʪ�ˤ�ͥ�롣
+D:永遠不滅のアダマンタイトで作られた鎧で、あらゆる
+D:邪悪な力や破壊的な魔法を跳ね返す霊力を秘め、
+D:着用者の生命力を守ることにかけては何物にも優る。
 
 
 # The Full Plate Armour of Isildur
 
 #J0# wp.273
-N:20:������ɥ�����
+N:20:イシルドゥアの
 E:of Isildur
 I:37:15:2
 W:30:3:300:50000
@@ -486,39 +486,39 @@ F:CON | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
 F:RES_SOUND | RES_CONF | RES_NEXUS
 D:$A gleaming steel suit covering the wearer from neck to foot, with runes of 
 D:$warding and stability deeply engraved into its surface.
-D:��������Ԥμ󤫤�­�ޤǤ򥫥С����뵱����Ŵ�γ��ǡ�
-D:�ٰ��ʤ�Τ��ऱ�趯��������
-D:�롼��ʸ����ɽ�̤˿�����ޤ�Ƥ��롣
-D:���Ĥƥ������󤫤���ؤ�å���Τ��������������ǥ����©�ҥ�����ɥ���
-D:���Ȥ��դ��Ƥ�����
+D:装備する者の首から足までをカバーする輝く鋼鉄の鎧で、
+D:邪悪なものを退け頑強さを増す
+D:ルーン文字が表面に深く刻まれている。
+D:かつてサウロンから指輪を奪うのに成功したエレンディルの息子イシルドゥア
+D:が身に付けていた。
 
 
 # The Metal Brigandine Armour of the Rohirrim
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# wp.245, p.237
 #J0#
-#J0# (���Ȥ���Υ�����)
-#J0# > �ǡ���ͭ̾��ط��ʤΤǤ������㤨��
-#J0# > of the Rohirrim                 ���ҥ���ࢪ���ҥ��
-#J0# > �Ǥ���������ϰ���¾���������֥��ҥ��פ����Ȼ�Ŧ���줿��
-#J0# > �Ǥ��������ǻ���ʪ�������� p.245 �Ǥϡ֥��ҥ����פȤʤä�
-#J0# > ���ޤ����ǡ�������������顢�ɤ��������Ԥˤ�äƿ�����
-#J0# > �㤦���Ȥ�Ƚ�����ޤ������������Τˤʤ�ȣ��������य�餤
-#J0# > �ɤ��������ä���(^_^;���ɤ�����٤�����ʬ�Ǥ�Ƚ�Ǥ��Ĥ���
-#J0# > ����Ǥ����Τǡ�������ǻ���ʪ�������Ԥ��ɤ����ˤ��Ƥ���
-#J0# > �ޤ���������Ū�ˤϡ֥륷����פȤ��֥������פȤ���
-#J0# > �������Ȼפ��ޤ���
+#J0# (しとしんのコメント)
+#J0# > で、固有名詞関係なのですが、例えば
+#J0# > of the Rohirrim                 ロヒアリム→ロヒリム
+#J0# > ですが、これは以前他の方からも「ロヒリム」だ、と指摘されたの
+#J0# > ですが、新版指輪物語追補編 p.245 では「ロヒアリム」となって
+#J0# > います。で、それを伝えたら、どうも翻訳者によって色々と
+#J0# > 違うことが判明しました。すごいのになると５、６種類くらい
+#J0# > 読み方があったり(^_^;。どうするべきか自分でも判断がつきま
+#J0# > せんでしたので、一応新版指輪物語追補編の読み方にしておき
+#J0# > ました。具体的には「ルシアン」とか「オロリン」とかが
+#J0# > そうだと思います。
 #J0#
-#J0# (���Ӥ���Υ�����)
-#J0# ��Ͽ��Ǥ��ɤ�Ǥʤ���Τ�(^_^)��
+#J0# (小林さんのコメント)
+#J0# 私は新版は読んでないもので(^_^)．
 #J0#
-#J0# �ºݤΡ֥��ҥ��ס֥륷����ס֥��������פȡ֥��ҥ����ס֥륷
-#J0# ����ס֥������פΰ㤤�ϡ����ܸ�ǽ񤯤��礭�����ɡ����Ȥ��Ƥ���
-#J0# ̯�ǡ��ѹ�ͤ�ʹ���Ƥ�ʹ���ͤ��Ѥ�ä����Ȼפ��ޤ���
+#J0# 実際の「ロヒリム」「ルシエン」「オローリン」と「ロヒアリム」「ルシ
+#J0# アン」「オロリン」の違いは，日本語で書くと大きいけど，音としては微
+#J0# 妙で，英国人が聞いても聞き様で変わって来ると思います．
 #J0#
-N:21:���ҥ�����
+N:21:ロヒアリムの
 E:of the Rohirrim
 I:37:9:2
 W:30:3:200:30000
@@ -528,15 +528,15 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_CONF | RES_SOUND
 D:$Small metal plates cover an inner layer of sturdy canvas, and both bear 
 D:$scenes of hunting and war.  You feel the spirit of Eorl the Young, matchless 
 D:$in combat, around you as you put his armour on.
-D:������Ŵ�Ĥ����ۤβ��Ϥ��臘��Ťγ��ǡ������˼������θ��ʤ�������Ƥ��롣
-D:���γ���Ȥ��դ���ȡ�Ʈ�����餱�Τ餺���ä������ϥ����β���
-D:��ǯ��������κ��򴶤��뤳�Ȥ��Ǥ��롣
+D:小さな鉄板が麻布の下地を被う二重の鎧で、双方に狩りと戦の光景が描かれている。
+D:この鎧を身に付けると、闘いで負け知らずだったローハン初代の王、
+D:青年王エオルの魂を感じることができる。
 
 
 # The Mithril Chain Mail 'Belegennon' -> of Lohengrin
 
-#JZ# ����ʡ�
-N:22:���Υ������󥰥���
+#JZ# ワーグナー
+N:22:騎士ローエングリンの
 E:of Lohengrin
 I:37:20:4
 W:40:9:150:135000
@@ -549,15 +549,15 @@ U:CHOIR_SINGS
 D:$The shining armor of Lohengrin the son of Parsifal.
 D:$ If you wears it, the holy grail gives to you the devine protection
 D:$  from all evils. (W.R.Wagner, 'Parsifal')
-D:���ռ��ε��Υѥ른�ե����©�ҡ��������󥰥��ε���������
-D:�Ȥ��դ���ԤϤ�����ٰ��ʤ�Τ��ऱ���դβø�����롣
-D:(����ʡ����֥ѥ른�ե����)
+D:聖杯守護の騎士パルジファルの息子、ローエングリンの輝く鎧だ。
+D:身に付ける者はあらゆる邪悪なものを退け聖杯の加護を得る。
+D:(ワーグナー、「パルジファル」)
 
 
 # The Mithril Plate Mail of Celeborn -> Julian
 
 #JZ#
-N:23:�����ǥ�ο��μ祸��ꥢ���
+N:23:アーデンの森の主ジュリアンの
 E:of Julian
 I:37:3:4
 W:40:15:250:120000
@@ -567,40 +567,40 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK |
 F:RES_DISEN | XTRA_H_RES | ACTIVATE | ESP_ANIMAL
 U:GENOCIDE
 D:$The silver armor of Julian who defends the forest of Arden.
-D:����������С��Υ����ǥ�ο����른��ꥢ��ζ�γ�����
+D:真世界アンバーのアーデンの森を守るジュリアンの銀の鎧だ。
 
 
 # The Chain Mail of Arvedui
 
-#J0# (������)
+#J0# (コメント)
 #J0#
-#J0#(�ԡ���)
-#J0#������Ū��̾�ˤϸ��񤭤��դ��Ƥ���褦�Ǥ�������������ɥ����ϥ���Ρ����
-#J0#�Ǹ�β�(����������p15,p21)�ʤΤǡ�
+#J0#(都々目)
+#J0#＊基本的に名には肩書きを付けているようですし、アルヴェドゥイはアルノールの
+#J0#最後の王(新版追補編p15,p21)なので。
 #J0#
-N:24:��������ɥ�������
+N:24:アルヴェドゥイ王の
 E:of Arvedui
 I:37:4:2
 W:20:3:220:32000
 P:14:1d4:-2:0:15
 F:STR | CHR | HIDE_TYPE | XTRA_H_RES |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_SHARDS | RES_NEXUS
-D:������ɥ���������Ǥ��ꡢ���󥰥ޡ���������ä�
-D:������ī���륻�������κǸ�β���������ɥ������Ȥ��դ��Ƥ�������Ҥ���
-D:�������������ԤϤ��β���ǡ���϶����򴶤��롣
+D:イシルドゥアの末裔であり、アングマール魔国と戦った
+D:北方王朝アルセダイン国の最後の王アルヴェドゥイが身に付けていた鎖帷子だ。
+D:これを装備する者はかの王の如き力強さを感じる。
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, well padded 
 D:$with leather. You feel strong and tall as Arvedui, last king of Arnor, 
 D:$as you put it on.
-#D:�Τ˥ե��åȤ���褦��εͤ�ʪ�򤷤���Ŵ���ؤ��Ԥ��
-#D:����Ҥȶ�­�ȸ�������ʤ롣
-#D:�������������Ԥϥ���Ρ���κǸ�β���������ɥ����Τ褦��
-#D:�϶����򴶤���
+#D:体にフィットするよう皮の詰め物をした、鉄の輪を編んだ
+#D:鎖帷子と具足と肩当からなる。
+#D:これを装備する者はアルノールの最後の王アルヴェドゥイのような
+#D:力強さを感じる
 
 
 # The Augmented Chain Mail of Caspanion
 
 #J0# ???
-N:25:�����ѥ˥����
+N:25:カスパニオンの
 E:of Caspanion
 I:37:6:3
 W:25:9:270:40000
@@ -611,15 +611,15 @@ U:DEST_DOOR
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, strategically 
 D:$reinforced at vital locations with a second layer of chain.  Magics to 
 D:$enhance body and mind lie within, and no door can bar the wearer's path.
-D:���פ���ʬ����Ťˤʤä������­�⥫�С����뺿��Ҥ���
-D:���������Τ򶯲�������ˡ�������äƤ��ꡢ�����ʤ�㳲��
-D:���ѼԤ�ƻ��˸���뤳�ȤϽ���ʤ���
+D:重要な部分が二重になった、手と足もカバーする鎖帷子だ。
+D:精神と肉体を強化する魔法がかかっており、いかなる障害も
+D:着用者の道を妨げることは出来ない。
 
 
 # The Leather Jacket 'of Shiva's Avatar'
 # A reward for 'The Old Castle' quest
 
-N:26:�������β��Ȥ�
+N:26:シヴァの化身の
 E:of Shiva's Avatar
 I:36:12:1
 W:30:50:120:100000
@@ -628,14 +628,14 @@ F:BLOWS | RES_SHARDS | HOLD_EXP | SLOW_DIGEST |
 F:SUST_STR | SUST_DEX | SUST_CON | SUST_INT | SUST_WIS | SUST_CHR |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
 D:$The leather armor which has a power of Shiva the god of destruction.
-D:�ҥ󥺡����κǹ������¤�ο��֥�եޥ󡢰ݻ��ο���������̡�
-D:�������˲�����������������Ϥ�����Ǥ�Ǥ⶯�Ϥʥ��������Ϥ��ɤä�
-D:������
+D:ヒンズー教の最高神は創造の神ブラフマン、維持の神ヴィシュヌ、
+D:そして破壊神シヴァだ。これはその中でも最も強力なシヴァの力が宿った
+D:鎧だ。
 
 # The Soft Leather Armour 'Hithlomir'
 
 #J0# ???, Ko
-N:27:�إҥ����ߥ���
+N:27:『ヒスロミア』
 E:'Hithlomir'
 I:36:4:4
 W:20:3:80:45000
@@ -643,13 +643,13 @@ P:4:0d0:0:0:20
 F:STEALTH | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK | XTRA_H_RES
 D:$Familar with the secret ways hidden in darkness, this leather cuirass is 
 D:$truly more than it appears.
-D:��̸�����Сפ��̣����̾����ġ����γפ�ƹ���ϡ�
-D:�ŰǤ˱������̩�μ��ʤˡ����θ����������ڤ���Ŭ���Ƥ��롣
+D:「霧の宝石」を意味する名を持つ、この革の胴鎧は、
+D:暗闇に隠れる秘密の手段に、その見かけよりも遥かに適している。
 
 # The Leather Scale Mail 'Thalkettoth'
 
 #J0# ???
-N:28:�إ��륱�åȥ���
+N:28:『サルケットス』
 E:'Thalkettoth'
 I:36:11:3
 W:20:3:60:25000
@@ -657,8 +657,8 @@ P:11:1d1:-1:0:25
 F:DEX | HIDE_TYPE | RES_ACID | RES_SHARDS | XTRA_H_RES
 D:$An amazingly light tunic and skirt sewn with thick, overlapping scales of 
 D:$hardened leather whose wearer moves with agility and assurance.
-D:�Ť������������ڤ����ʤ���褦��˥���դ����ä��ۤɷڤ����Ǥ��ꡢ
-D:���Ԥ˵��Ҥ��ȼ�����Ϳ���롣
+D:硬くした革製の鱗を厚く覆うように縫い付けた驚くほど軽い鎧であり、
+D:着る者に機敏さと自信を与える。
 
 
 #  Artifact 29 is unused
@@ -666,7 +666,7 @@ D:���Ԥ˵��Ҥ��ȼ�����Ϳ���롣
 
 # The Small Metal Shield of Thorin
 
-N:30:�ȡ���󲦤�
+N:30:トーリン王の
 E:of Thorin
 I:34:3:4
 W:40:12:65:120000
@@ -675,18 +675,18 @@ F:STR | CON | HIDE_TYPE | FREE_ACT | IM_ACID | RES_SOUND | RES_CHAOS
 F:XTRA_H_RES
 D:$Invoking the strength and endurance of Thorin, King under the Mountain, 
 D:$this little metal shield is proof against the Element of Earth.
-D:���β��β��ȡ���󡦥������󥷡���ɤζ����ȴ�椵������Ѥ���
-D:���ξ����ʶ�°�ν�ϡ��ϤΥ�����Ȥ��Ф��봰�����ɸ���ǽ�ˤ��롣
+D:山の下の王トーリン・オーケンシールドの強さと頑丈さを受け継いだ
+D:この小さな金属の盾は、地のエレメントに対する完全な防御を可能にする。
 
 
 # The Large Leather Shield of Celegorm
 
-#J0# (������)
+#J0# (コメント)
 #J0#
-#J0#(�ԡ���)
-#J0#������ޥ���ʪ����
+#J0#(都々目)
+#J0#＊シルマリルの物語より
 #J0#
-N:31:��ȱ�Υ��쥴����
+N:31:金髪のケレゴルムの
 E:of Celegorm
 I:34:4:0
 W:30:3:60:30000
@@ -695,22 +695,22 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_LITE | RES_DARK | XTRA_H_RES
 D:$This shield emblazoned with a multitude of creatures not seen for ages 
 D:$once protected Celegorm, lord of Himlad; around it lies a mystic balance  
 D:$that contains the conflicts of the elements.
-D:���ޤǤϸ����ʤ��ʤä����������������ʪ��
-D:�������ܤ��줿���ν�ϡ����Ĥƥҥ��ɤβ����쥴����
-D:��äƤ������Ͽ�����Υ�����ȤΤ��᤮�礤�����񤷡�
-D:�����ο���Ū�ʥХ�󥹤��ݤäƤ��롣
+D:いまでは見られなくなった数々の伝説の生き物の
+D:装飾が施されたこの盾は、かつてヒムラドの王ケレゴルムを
+D:守っていた。地水火風のエレメントのせめぎ合いを内包し、
+D:それらの神秘的なバランスを保っている。
 
 
 # The Large Metal Shield of Anarion
 
-#J0# (������)
+#J0# (コメント)
 #J0#
-#J0#(�ԡ���)
-#J0#��������ɥ����ˡز��٤��դ��ʤ��ʤ饢�ʥꥪ��ˤ��դ���٤��ǤϤʤ��Ǥ���
-#J0#��(���ʥꥪ��ϥ�����ɥ�������)��������ɥ����ȥ��ʥꥪ�����ͤǥ���ɡ�
-#J0#��(���륮�ꥢ��)���������Ƥ����������ȱ������񤭤������ФƤ��Ƥ��ʤ��Τǡ�
+#J0#(都々目)
+#J0#＊イシルドゥアに『王』を付けないならアナリオンにも付けるべきではないでしょ
+#J0#う(アナリオンはイシルドゥアの弟)。イシルドゥアとアナリオンは二人でゴンドー
+#J0#ル(オルギリアス)を統治していたし、王と云う肩書きは全然出てきていないので。
 #J0#
-N:32:���ʥꥪ���
+N:32:アナリオンの
 E:of Anarion
 I:34:5:0
 W:40:9:120:160000
@@ -719,28 +719,28 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | SUST_STR | SUST_INT |
 F:SUST_WIS | SUST_DEX | SUST_CON | SUST_CHR | XTRA_H_RES
 D:$The great metal-bound shield of Anarion, son of Elendil, who Sauron found 
 D:$himself powerless to wither or diminish.
-D:���Ĥƥ��������ͦ������ä�
-D:�����ǥ����©�ҥ��ʥꥪ��ζ�°�ν����
+D:かつてサウロンと勇敢に戦った
+D:エレンディルの息子アナリオンの金属の盾だ。
 
 
 # A reward for 'The Old Castle' quest
 
-#JZ#�٥󥸥�ߥ� �ե�󥯥�󡢤���褥����ʤΡ�
-#JZ#���饺�˥��Ρָ��β��פ���ʲ��Τ褦���ѹ�����������������
-#JZ#���äƤ��롣
-N:33:����ɥ��
+#JZ#ベンジャミン フランクリン、やだよぅそんなの。
+#JZ#ゼラズニイの「光の王」から以下のように変更。雷の槍ヴァジュラを
+#JZ#持っている。
+N:33:インドラの
 E:of Indra
 I:32:2:5
 W:30:50:15:100000
 P:2:0d0:0:0:18
 F:INT | WIS | CHR | SUST_INT | SUST_WIS | SUST_CHR | RES_BLIND | IM_ELEC
 D:$This is the helm of Indra the god of thunderstorms.
-D:�������ɥ�γ�����
+D:雷神インドラの兜だ。
 
 # The Massive Iron Crown of Morgoth
 
 #JZ#
-N:34:���٤�
+N:34:混沌の
 E:of Chaos
 I:33:50:125
 W:100:1:20:10000000
@@ -752,19 +752,19 @@ F:LITE | SEE_INVIS | TELEPATHY |
 F:CURSED | HEAVY_CURSE | PERMA_CURSE | NO_TELE | INSTA_ART | QUESTITEM
 D:$The crown existed from before creation of the universe, and is
 D:$ the symbol of the throne in the court of chaos.
-D:�����������������¸�ߤ��Ƥ������٤ε���ˤ����Ʋ��̤��ħ����
-D:��������
+D:宇宙の創世以前から存在していた混沌の宮廷において王位を象徴する
+D:王冠だ。
 
 # The Iron Crown of Beruthiel
 
-#J0# (������)
+#J0# (コメント)
 #J0#
-#J0#(�ԡ���)
-#J0#��ι����ֲ���(���ʸ���Ǥ������äƤ��ʤ��Τǥڡ������Ͼʤ��ޤ�)����ꥢ��
-#J0#ƻ��ǥ��饴�������ˡإ٥륷���벦�ޡ٤ȱ������դ��ФƤ��ޤ������ݥ���
-#J0#�ǤⲦ��(������)�ȤʤäƤ���ޤ��Τǡ�
+#J0#(都々目)
+#J0#＊旅の仲間下巻(私は文庫版しか持っていないのでページ数は省きます)、モリア坑
+#J0#道内でアラゴルンの台詞に『ベルシエル王妃』と云う言葉が出てきます。スポイラ
+#J0#でも王妃(女王？)となっておりますので。
 #J0#
-N:35:�٥륷���벦�ޤ�
+N:35:ベルシエル王妃の
 E:of Beruthiel
 I:33:10:-25
 W:40:12:20:0
@@ -774,14 +774,14 @@ F:FREE_ACT | SEE_INVIS | TELEPATHY | CURSED | XTRA_POWER
 D:$The midnight-hued steel circlet of the sorceress-queen Beruthiel, which 
 D:$grants extraordinary powers of sight and awareness at a terrible physical 
 D:$cost.
-D:��ˡ�Ȥ��ν����٥륷���벦�ޤΡ�������ο��򤷤���������åȤ���
-D:���������礭������Ū����Ȱ����ؤ�����ۤ������Ϥ��γФ�����롣
+D:魔法使いの女王ベルシエル王妃の、真夜中の色をしたサークレットだ。
+D:恐ろしく大きな肉体的代償と引き替えに卓越した眼力と知覚を授ける。
 
 
 # The Hard Leather Cap of Thranduil
 
 #J0# wp.261
-N:36:�����ɥ����벦��
+N:36:スランドゥイル王の
 E:of Thranduil
 I:32:2:2
 W:20:2:15:50000
@@ -789,14 +789,14 @@ P:2:0d0:0:0:10
 F:INT | WIS | HIDE_TYPE | RES_BLIND | TELEPATHY | XTRA_H_RES
 D:$The hunting cap of King Thranduil, to whose ears come all the secrets of 
 D:$his forest domain.
-D:�쥴�饹����Ǥ��ꡢ���ڤο��Τ���������Τ륹���ɥ����벦
-D:�Υϥ�ƥ���˹����
+D:レゴラスの父であり、領土の森のあらゆる事を知るスランドウィル王
+D:のハンティング帽だ。
 
 
 # The Metal Cap of Thengel
 
 #J0# wp.261
-N:37:���󥲥벦��
+N:37:センゲル王の
 E:of Thengel
 I:32:3:3
 W:10:2:20:22000
@@ -805,18 +805,18 @@ F:WIS | CHR | HIDE_TYPE
 D:$A ridged helmet made of steel, and embossed with scenes of valor in fine-
 D:$engraved silver.  It grants the wearer nobility, clearness of thought and 
 D:$understanding.
-D:����ۤβ������ǥ���㥻�󥲥뤬�Ȥ��դ��Ƥ���
-D:��������ä�Ŵ���ǡ���ͦ�򼨤����������餷����ٹ��ˤ�ä�
-D:�⤭Ħ��ˤ���Ƥ��롣���γ��ϿȤ��դ���Ԥ˹⵮�����θ��Ȥ�����롣
+D:黄金館の王セオデンの父センゲルが身に付けていた
+D:中央の尖った鉄兜で、武勇を示す絵が素晴らしい銀細工によって
+D:浮き彫りにされている。この兜は身に付ける者に高貴さと知見とを授ける。
 
 
 # The Steel Helm of Hammerhand
 
-#J0# (������)
+#J0# (コメント)
 #J0#
-#J0# KOHKO-P ����˶����ޤ�����
+#J0# KOHKO-P さんに教わりました。
 #J0#
-N:38:�ȼ겦��
+N:38:槌手王の
 E:of Hammerhand
 I:32:6:3
 W:20:2:60:45000
@@ -824,20 +824,20 @@ P:6:1d3:0:0:20
 F:STR | DEX | CON | HIDE_TYPE | RES_ACID | RES_NEXUS
 D:$A great helm as steady as the heroes of the Westdike. Mighty were the 
 D:$blows of Helm, the Hammerhand!
-D:���Ȥ�������Ԥ��Ǽ�η�Ʈ��
-D:���껦�����ʼ겦�ȸƤФ줿�����ϥ������񲦤δ趯�ʥ��졼�ȥإ�����
+D:王家を侮辱した者を素手の決闘で
+D:殴り殺し、鎚手王と呼ばれたローハン第九代国王の頑強なグレートヘルムだ。
 
 
 # The _DRAGON_ Helm of Dor-Lomin
 
-#J0# (������)
+#J0# (コメント)
 #J0#
-#J0# (�ԡ���)
-#J0#������ޥ���ʪ��Ǥ����ơإɥ������ߥ�٤�ɽ������Ƥ��ޤ������ˡ�����
-#J0#��Ǥ����Τ��Τ褦�ˡ�ε�γ��٤Ƚ񤫤�Ƥ����Τǡ��־����Ǥ�Ƥ��ߤ��勞��
-#J0#���ˡ����ܸ첽�����Τʤ餳�����٤����Ȼפ��ޤ���
+#J0# (都々目)
+#J0#＊シルマリルの物語では全て『ドル＝ローミン』と表記されています。更に、原作
+#J0#中では大体このように『竜の兜』と書かれていたので、「少しでも親しみがわくよ
+#J0#うに」日本語化されるのならこうすべきだと思います。
 #J0#
-N:39:�ɥ�=�����ߥ��
+N:39:ドル=ローミンの
 E:of Dor-Lomin
 I:32:7:4
 W:70:12:75:300000
@@ -848,14 +848,14 @@ F:LITE | SEE_INVIS | TELEPATHY | ACTIVATE
 U:TERROR
 D:$The legendary dragon helm of Turin Turambar, a object of dread to the 
 D:$servants of Morgoth.
-D:�ȥ�����󡦥ȥ����С���������ε���ǡ���르���μ겼�ɤ�
-D:�ˤȤäƤ϶��ݤ��оݤǤ��롣
+D:トゥーリン・トゥランバールの伝説の竜兜で、モルゴスの手下ども
+D:にとっては恐怖の対象である。
 
 
 # The Iron Helm 'Holhenneth'
 
 #J0# ???
-N:40:�إۥ�إ�ͥ���
+N:40:『ホルヘンネス』
 E:'Holhenneth'
 I:32:5:2
 W:20:5:75:100000
@@ -864,14 +864,14 @@ F:INT | WIS | SEARCH | HIDE_TYPE | RES_BLIND | SEE_INVIS | ACTIVATE
 U:DETECT_ALL
 D:$A famous helm of forged iron granting extraordinary powers of mind and 
 D:$awareness. 
-D:�³��줿�����Ϥ��γФȤ�����롢��Ŵ����̾�⤤������
-D:����̾�ϥ���������ǡ�̩���ʤ��ܤγ��פ��̣���롣
+D:並外れた精神力と知覚とを授ける、鍛鉄製の名高い兜だ。
+D:その名はシンダール語で「密かなる目の兜」を意味する。
 
 
 # The Iron Helm of Gorlim -> Terror Mask (for warriors only...)
 
 #JZ#
-N:41:�ض��ݤβ��̡�
+N:41:『恐怖の仮面』
 E:'Terror Mask'
 I:32:5:-1
 W:50:3:75:200000
@@ -883,14 +883,14 @@ F:TELEPORT
 U:TERROR
 D:$This is terrible, scary, fearful, dreadful, bloodcurding, hair-rising
 D:$ frightening mask.
-D:�ʤ�Ȥⶲ���������Ե�̣�ǡ����ɤ����ɤ�������ȱ����Ω���������ꡢ
-D:���äȤ���Ļȩ��Ω�Ĥ褦�ʲ��̤���
-D:���̤α���Ʒ���ˤޤ��С��ݤ���ƨ���Ф����ˤϤ����ʤ���
+D:なんとも恐ろしい、不気味で、おどろおどろしく、髪が逆立ち、血も凍り、
+D:ぞっとして鳥肌が立つような仮面だ。
+D:仮面の奥の瞳に睨まれれば、怖くて逃げ出さずにはいられない。
 
 # The Golden Crown of Gondor -> Amber
 
 #JZ#
-N:42:����������С���
+N:42:真世界アンバーの
 E:of Amber
 I:33:11:3
 W:40:40:30:125000
@@ -902,17 +902,17 @@ F:XTRA_POWER | XTRA_H_RES
 U:CURE_700
 D:$The gold grown which is decorated with much jewerly is the symbol
 D:$ of the throne of Amber. Princes of Amber scrambled for it violently.
-D:����С��β��̤ξ�ħ�Ǥ��롢¿�������ФǾ���줿��β�������
-D:�����ᤰ�äƹ������褤�����Ҥ����δ֤Ƿ��깭����줿��
+D:アンバーの王位の象徴である、多数の宝石で飾られた金の王冠だ。
+D:これをめぐって骨肉の争いが王子たちの間で繰り広げられた。
 
 
 # The Cloak of Houdini
 # Escape Artist and Spiritualist
 # A reward for 'The Old Castle' quest
 
-#JZ#����ŷ���Τ褦�ʿͤ餷��������褦��
-#JZ#���饺�˥��ΡֱƤΥ���å��פ���
-N:43:�ƤΥ���å���
+#JZ#引田天攻のような人らしい。やだよう。
+#JZ#ゼラズニイの「影のジャック」から
+N:43:影のジャックの
 E:of Jack of Shadows
 I:35:1:7
 W:30:20:10:100000
@@ -921,14 +921,14 @@ F:STEALTH | SEARCH | FREE_ACT | SEE_INVIS | HOLD_EXP | TELEPATHY
 D:$The cloak of Jack of Shadows. He is one of the kings who rule
 D:$ night side of the earth at which rotetion stopped.
 D:$(R.Zelazny, 'Jack of Shadows')
-D:��ž���ߤޤä��ϵ�������������ۤ��벦�ΰ�͡�
-D:ť���β��Ǥ����Ի�ȤΡرƤΥ���å��٤Υ�����������
-D:��R.���饺�˥��ֱƤΥ���å��ס�
+D:自転が止まった地球で夜の世界を支配する王の一人、
+D:泥棒の王である不死身の『影のジャック』のクロークだ。
+D:（R.ゼラズニイ「影のジャック」）
 
 # The Cloak 'Colluin'
 
 #J0# ???
-N:44:�إ��륤���
+N:44:『コルイン』
 E:'Colluin'
 I:35:1:0
 W:5:45:10:80000
@@ -937,13 +937,13 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS | ACTIVATE
 U:RESIST_ALL
 D:$A cape worn by a hero from Valinor, a land utterly beyond the strife 
 D:$of Elements.
-D:����ã���褦������ϥ�����Ρ���α�ͺ���Ȥ��դ��Ƥ����ޥ�Ȥ���
+D:精霊達が争う渦中の地ヴァリノールの英雄が身に付けていたマントだ。
 
 
 # The Cloak 'Holcolleth'
 
 #J0# ???
-N:45:�إۥ륳��쥹��
+N:45:『ホルコルレス』
 E:'Holcolleth'
 I:35:2:2
 W:20:15:5:43000
@@ -953,19 +953,19 @@ U:SLEEP
 D:$This elven-grey mantle possesses great powers of tranquility and of 
 D:$concealment, and grants the wearer the knowledge and understanding of 
 D:$the Sindar.
-D:�ż�ȱ�̩�ΰ���ʤ��Ϥ���ĥ���դγ����γ���Ǥ��ꡢ���ѼԤˤϥ���������
-D:�μ��Ȼ�θ��Ϳ���롣
+D:静寂と隠密の偉大なる力を持つエルフの灰色の外套であり、着用者にはシンダールの
+D:知識と思慮を与える。
 
 
 # The Cloak of Thingol
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# wp.262 p.334
-#J0#(�ԡ���)
-#J0#������ޥ���ʪ����
+#J0#(都々目)
+#J0#＊シルマリルの物語より
 #J0#
-N:46:�����ޥ�Ȳ����󥴥��
+N:46:灰色マント王シンゴルの
 E:of Thingol
 I:35:1:3
 W:10:90:10:45000
@@ -975,19 +975,19 @@ F:FREE_ACT | RES_ACID | RES_FIRE | RES_COLD | ACTIVATE
 U:RECHARGE
 D:$A sable-hued cloak, with glowing elven-runes to restore magic showing calm 
 D:$and clear as moonlight on still water.
-D:ȾƩ���ǿ���Τ褦�ʳ����Υ��������ǡ����Ϥ���᤿��������դΥ롼��ʸ����
-D:���̤˱Ǥä���Τ��Ȥ����Ť��ˤ����ƤϤä�����⤫�Ӿ夬�äƤ��롣
+D:半透明で真珠のような灰色のクロークで、魔力を秘めた輝くエルフのルーン文字が
+D:水面に映った月のごとく、静かにそしてはっきりと浮かび上がっている。
 
 
 # The Cloak of Thorongil
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# wp.260
-#J0#(�ԡ���)
-#J0#������ʪ�������Ԥ��
+#J0#(都々目)
+#J0#＊指輪物語追補編より
 #J0#
-N:47:�羭�����󥮥��
+N:47:大将ソロンギルの
 E:of Thorongil
 I:35:1:0
 W:5:20:10:13000
@@ -996,16 +996,16 @@ F:FREE_ACT | RES_ACID | SEE_INVIS
 D:$A cloak of shimmering green and brown that grants sight beyond sight and 
 D:$shakes off holding magics, worn by Aragorn son of Arathorn in his youth 
 D:$as he adventured under the name of Thorongil.
-D:�����Ф��㿧�ε������������Ϥ��Ĥ�
-D:����ɡ����Ƭ�Ǥ��ꡢ����Φ����ͦ���ڤ��Ƥ���
-D:�Ԥ��ܤμ㤭���饴���
-D:�Ȥ��դ��Ƥ�����Τ���
+D:この緑と茶色の輝くクロークはかつて
+D:ゴンドールの頭であり、海に陸に武勇を馳せていた
+D:鋭い目の若きアラゴルンが
+D:身に付けていたものだ。
 
 
 # The Cloak 'Colannon'
 
 #J0# ???
-N:48:�إ����Υ��
+N:48:『コランノン』
 E:'Colannon'
 I:35:1:3
 W:3:10:10:15000
@@ -1015,12 +1015,12 @@ U:TELEPORT
 D:$A crystal-blue cape of fine silk worn by a silent messenger of 
 D:$the forces of Law. Somehow, its wearer is always able to escape 
 D:$trouble.
-D:��������Ϥ��Ť��ʤ�ȼԤ���Ƥ��������ˤθ��Υޥ�Ȥ���
+D:秩序の勢力の静かなる使者が着ていた、紺碧の絹のマントだ。
 
 # The Shadow Cloak of Luthien
 
 #J0# p.369, wp.246
-N:49:�륷���󲦽���
+N:49:ルシエン王女の
 E:of Luthien
 I:35:6:2
 W:40:40:5:80000
@@ -1033,15 +1033,15 @@ D:$The opaque midnight folds, inset with a multitude of tiny diamonds, of
 D:$this cloak swirl around you and you feel a hint, a fragment of the 
 D:$knowledge and power to restore that lay in Luthien, the most beautiful 
 D:$being that ever knew death.
-D:����ʱ�μ�̿���������
-D:���ƨ�줨�̼�ã����ǤϺǤ��������ԤȤʤä��륷���󲦽��Υ��������ϡ�
-D:���ʤӤ������ΰǤ�̵���ξ����ʥ��������ɤ����äƤ��롣
-D:�Ȥ��դ���Ԥϲ������μ����Ϥ����������ɤäƤ���Τ򴶤��롣
+D:自ら永遠の寿命を手放し、
+D:死を逃れえぬ者達の内では最も美しい者となったルシエン王女のクロークは、
+D:たなびく漆黒の闇を無数の小さなダイアモンドが飾っている。
+D:身に付ける者は王女の知識と力が自らの内に蘇ってくるのを感じる。
 
 # The Shadow Cloak of Tuor
 
 #J0# p.342
-N:50:�ȥ������
+N:50:トゥオルの
 E:of Tuor
 I:35:6:4
 W:40:40:5:50000
@@ -1050,10 +1050,10 @@ F:STEALTH | FREE_ACT | IM_ACID | SEE_INVIS |
 F:RES_DARK | RES_LITE | XTRA_H_RES
 D:$From the ruin of Gondolin did Tuor escape, through secret ways and travail, 
 D:$shielded by his cloak from a multitude of hostile eyes.
-D:�����٤륦���������ꤷ���Ԥΰ�˿Ȥ���ߡ�
-D:�ȥ�����ϥ���ɡ��������Ҥ��
-D:�����Ũ���ܤ򤫤��������뤵�줿��ϩ�ˤ�
-D:ƨ�����������ꡣ
+D:海統べるウルモより授かりし王者の衣に身を包み、
+D:トゥオルはゴンドーリンの廃墟より
+D:幾千の敵の目をかいくぐり秘されたる路にて
+D:逃げおおせたり。
 
 # Artifact 51 is unused
 
@@ -1061,20 +1061,20 @@ D:ƨ�����������ꡣ
 # The Set of Leather Gloves 'Cambeleg'
 
 #J0# ???
-N:52:�إ���٥쥰��
+N:52:『カンベレグ』
 E:'Cambeleg'
 I:31:1:2
 W:10:6:5:36000
 P:1:0d0:8:8:15
 F:STR | CON | HIDE_TYPE | FREE_ACT | SHOW_MODS
 D:$A hero's handgear that lends great prowess in battle.
-D:�ֹ䤭���פ��̣����̾����ġ����α�ͺ�μ�äϡ�
-D:�襤�ˤ��������ʤ���ͦ��⤿�餹��
+D:「剛き掌」を意味する名を持つ、この英雄の手甲は、
+D:戦いにおける偉大なる武勇をもたらす。
 
 # The Set of Leather Gloves 'Cammithrim'
 
 #J0# ???, Ko
-N:53:�إ���ߥ�����
+N:53:『カンミスリム』
 E:'Cammithrim'
 I:31:1:0
 W:10:3:5:30000
@@ -1083,14 +1083,14 @@ F:FREE_ACT | RES_LITE | SUST_CON | LITE | ACTIVATE
 U:BO_MISS_1
 D:$These gloves glow so brightly as to light the way for their owner and cast 
 D:$magical bolts with great frequency.
-D:����϶��ϻ��ѼԤ�ƻ��Ȥ餹�ۤ����뤯����������û����������ˡ�����
-D:���Ĥ��Ȥ��Ǥ��롣
+D:この篭手は使用者の道を照らすほど明るく輝き、非常に短い周期で魔法の矢を
+D:放つことができる。
 
 
 # The Set of Gauntlets 'Paurhach'
 
 #J0# ???, Ko
-N:54:�إѥ����ϥåϡ�
+N:54:『パウアハッハ』
 E:'Paurhach'
 I:31:2:1
 W:10:20:25:15000
@@ -1099,25 +1099,25 @@ F:STR | RES_FIRE | MAGIC_MASTERY | ACTIVATE
 U:BO_FIRE_1
 D:$A firey set of gauntlets that can even shoot fire from the user's 
 D:$hands. 
-D:����������ǡ�ķ�ͤ��η��פ�̾����Ĥ���϶��ϱ��
-D:��ޤ�Ƥ��ꡢ�Ȥ��դ���ԤϲФε�����Ф����Ȥ����롣
+D:シンダール語で「跳ねる炎の拳」の名を持つこの篭手は炎に
+D:包まれており、身に付ける者は火の球を撃ち出すことも出来る。
 
 
 # The Set of Gauntlets 'Paurnimmen' -> of Corwin
 
 #JZ#
-N:55:����������μ祳���������
+N:55:アヴァロンの主コーウィンの
 E:of Corwin
 I:31:2:4
 W:10:40:25:43000
 P:2:1d1:0:0:15
 F:SUST_CON | CON | REGEN | RES_COLD
-D:�³��줿���٤�����ĥ���С��β��ҥ���������Υ���ȥ�åȤ���
+D:並外れた強靭さを持つアンバーの王子コーウィンのガントレットだ。
 
 # The Set of Gauntlets 'Pauraegen'
 
 #J0# ???, Ko
-N:56:�إѥ��饨�����
+N:56:『パウラエゲン』
 E:'Pauraegen'
 I:31:2:1
 W:10:20:25:11000
@@ -1126,13 +1126,13 @@ F:DEX | RES_ELEC | LITE | ACTIVATE
 U:BO_ELEC_1
 D:$A set of handgear with sparks surrounding it, able to fire 
 D:$bolts of electricity.
-D:����������ǡֱԤ����פ��̣����̾����Ĥ����Ƽ�Ͼ��
-D:�в֤򻶤餷�Ƥ��ơ��ŷ��������Ĥ��Ȥ��Ǥ��롣
+D:シンダール語で「鋭き拳」を意味する名を持つこの籠手は常に
+D:火花を散らしていて、電撃の矢を放つことができる。
 
 # The Set of Gauntlets 'Paurnen'
 
 #J0# ???, Ko
-N:57:�إѥ����ͥ��
+N:57:『パウアネン』
 E:'Paurnen'
 I:31:2:1
 W:10:20:25:12000
@@ -1140,13 +1140,13 @@ P:2:1d1:0:0:15
 F:WIS | RES_ACID | FREE_ACT | ACTIVATE
 U:BO_ACID_1
 D:$A set of handgear so corrosive that it may fire bolts of acid.
-D:����������ǡֿ�η��פ��̣����̾����Ĥ����Ƽ�Ͼ��
-D:���ǤƤ��äƤ��ơ�����������Ĥ��Ȥ��Ǥ��롣
+D:シンダール語で「水の拳」を意味する名を持つこの籠手は常に
+D:酸でてかっていて、酸の矢を放つことができる。
 
 # The Set of Gauntlets 'Camlost' -> of Thanos
 
-#JZ# ??? ���ץ��� �ޡ������륹���ѡ��ҡ��������˽ФƤ��ۡ�
-N:58:���Υ���
+#JZ# ??? カプコン マーヴェルスーパーヒーローズに出てる奴？
+N:58:サノスの
 E:of Thanos
 I:31:2:2
 W:10:20:25:0
@@ -1158,13 +1158,13 @@ F:RANDOM_CURSE1
 
 # The Set of Cesti of Fingolfin
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# p.354
-#J0#(�ԡ���)
-#J0#������ޥ���ʪ���ꡣ
+#J0#(都々目)
+#J0#＊シルマリルの物語より。
 #J0#
-N:59:��鲦�ե��󥴥�ե����
+N:59:上級王フィンゴルフィンの
 E:of Fingolfin
 I:31:5:4
 W:40:15:40:110000
@@ -1174,21 +1174,21 @@ F:FREE_ACT | RES_ACID | ACTIVATE | SHOW_MODS | XTRA_POWER
 U:BO_MANA
 D:$The hand-sheathing of Fingolfin, warrior-king of Elves and Men, who gave 
 D:$Morgoth seven mighty wounds and pain that will last forever.
-D:�ե����Ρ���˴������Ĺ�ΥΥ�ɡ����Ψ����̽������ä�
-D:��鲦�ե��󥴥�ե����϶�������Ϥ�����ͤǥ�르����
-D:�襤��ĩ�ߡ������Τ˱ʱ���ˤ�³����Ȭ�Ĥν����ߤĤ�����
+D:フェアノール亡き後中つ国のノルドールを率いて冥王と戦った
+D:上級王フィンゴルフィンの篭手だ。彼はただ一人でモルゴスに
+D:戦いを挑み、その体に永遠に痛み続ける八つの傷を刻みつけた。
 
 # The Pair of Hard Leather Boots of Feanor
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# p.356
-#J0#(�ԡ���)
-#J0# �ե����Ρ��벦�Ҥ� �� �ե����Ρ��벦��
-#J0#���ز��ҡ٤ȸ����ʤ�ز��٤ȸ����ۤ���Ŭ���Ǥ��礦��ή��ΥΥ�ɡ���λش�
-#J0#���ä��ΤǤ����顣
+#J0#(都々目)
+#J0# フェアノール王子の → フェアノール王の
+#J0#＊『王子』と言うなら『王』と言うほうが適当でしょう。流謫のノルドールの指揮
+#J0#を取ったのですから。
 #J0#
-N:60:�ե����Ρ��벦��
+N:60:フェアノール王の
 E:of Feanor
 I:30:3:15
 W:40:120:40:300000
@@ -1199,15 +1199,15 @@ U:SPEED
 D:$This wondrous pair of leather boots once sped Feanor, creator of the 
 D:$Simarils and the mightiest of the Eldar, along the Grinding Ice and to 
 D:$Middle Earth at last. 
-D:���������餷���鷤�ϡ�����ޥ������ߤοƤǤ��ꡢ���ĤƺǶ��Υ��������
-D:�Ǥ��ä��ե����Ρ��������ŷ�η��ǡ���르����
-D:��°������줿��Ĺ��å���֤���α�ͺŪĩ��ν����Ȥʤä���
+D:この素晴らしい皮靴は、シルマリルの生みの親であり、かつて最強のエルダール
+D:であったフェアノールの韋駄天の靴で、モルゴスに
+D:隷属させられた中つ国を奪い返す彼の英雄的挑戦の助けとなった。
 
 
 # The Pair of Soft Leather Boots 'Dal-i-thalion' -> of Flora
 
 #JZ#
-N:61:����С��β����ե������
+N:61:アンバーの王女フローラの
 E:of Flora
 I:30:2:5
 W:10:25:20:70000
@@ -1215,21 +1215,21 @@ P:2:1d1:0:0:15
 U:CURE_POISON
 F:DEX | HIDE_TYPE | CHR | SUST_CHR | ACTIVATE | FREE_ACT |
 F:RES_NETHER | RES_CHAOS | SUST_CON
-D:�ե�����ϤۤȤ�ɤλ��֥���С��ε��¤�Υ��Ƥ��ơ�
-D:�Ƥ������ǿ������ܡ����ե��ɤ򸫤Ĥ��Ƥϳڤ���Ǥ��롣
-D:����Υ֡��ĤˤϿȤ��դ����Ԥ�̥��Ū�˸�������ˡ�������äƤ��롣
+D:フローラはほとんどの時間アンバーの宮殿を離れていて、
+D:影の世界で新しいボーイフレンドを見つけては楽しんでいる。
+D:彼女のブーツには身に付けた者を魅力的に見せる魔法がかかっている。
 
 # The Pair of Metal Shod Boots of Thror
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# wp.261
-#J0#(�ԡ���)
-#J0# �������벦�Ҥ� �� �������벦��
-#J0#����������ϥɥ����Ȥ�Ѿ����Ƥ��ޤ����Ǥ����餳���ز��٤Ȥ���٤��Ǥ���
-#J0#����
+#J0#(都々目)
+#J0# スロール王子の → スロール王の
+#J0#＊スロールはドゥリン家を継承しています。ですからこれも『王』とするべきでしょ
+#J0#う。
 #J0#
-N:62:�������벦��
+N:62:スロール王の
 E:of Thror
 I:30:6:3
 W:30:25:80:85000
@@ -1238,33 +1238,33 @@ F:STR | CON | HIDE_TYPE | SPEED | XTRA_H_RES
 D:$Sturdy footwear of leather and steel as enduring as the long-suffering 
 D:$Dwarven King-in-exile who wore them.  Of dwarven make, the wearer of 
 D:$these boots will be completely at home in the mountains.
-D:���ޥ����ν���ˤ��ήϲ�οȤȤʤä���������������Ѥ���
-D:�ɥ�ղ����������Ŵ����ǽ��褿���ǡ�
-D:������δ趯��������Ѥ��Ǥ��롣
+D:スマウグの襲来により流浪の身となったダイン一世の世継ぎ、
+D:ドワーフ王スロールの鉄と皮で出来た靴で、
+D:持ち主の頑強さを受け継いでいる。
 
 
 # The Pair of Soft Leather Boots of Shiva's Avatar
 # Default reward for The Cloning Pits
 
-N:63:�������β��Ȥ�
+N:63:シヴァの化身の
 E:of Shiva's Avatar
 I:30:2:4
 W:30:20:20:100000
 P:4:1d1:5:5:16
 F:SPEED | DEX | SUST_DEX | RES_NEXUS | FREE_ACT | LEVITATION
 D:$The boots has an agility of Shiva the god of destruction.
-D:�˲������������Ϥ���ä��פη�����
+D:破壊神シヴァの力を持った革の靴だ。
 
 
 # The Main Gauche of Maedhros
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0#
-#J0# (�ԡ���)
-#J0#������ޥ���ʪ���ꡣ
+#J0# (都々目)
+#J0#＊シルマリルの物語より。
 #J0#
-N:64:��⤭�ޥ���������
+N:64:丈高きマエズロスの
 E:of Maedhros
 I:23:5:3
 W:15:30:30:62500
@@ -1275,14 +1275,14 @@ F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$A short thrusting blade with a large guard worn by Maedhros the Tall, 
 D:$eldest son of Feanor, and wielded with his left hand after the loss of 
 D:$his right hand in the pits of Thangorodrim.
-D:�褬���ä�û���ǡ��ե����Ρ����Ĺ�ҤǤ����⤭�ޥ�������
-D:���ȤäƤ�����Τ�����ϥ��󥴥��ɥ�फ��߽Ф��줿�ݤ˱����
-D:���ä�������˺���ǰ�����깪�ߤ˷�����ä��Ȥ�����
+D:先が尖った短剣で、フェアノールの長子である丈高きマエズロス
+D:が使っていたものだ。彼はサンゴロドリムから救出された際に右手を
+D:失ったが、後に左手で以前より巧みに剣を操ったという。
 
 # The Dagger 'Angrist' -> of Caine
 
 #JZ#
-N:65:���Ųȥ������
+N:65:陰謀家ケインの
 E:of Caine
 I:23:4:4
 W:20:80:12:125000
@@ -1291,12 +1291,12 @@ F:DEX | HIDE_TYPE | STEALTH | SEARCH | SLAY_HUMAN |
 F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | BRAND_POIS |
 F:FREE_ACT | RES_DARK | SUST_DEX | SEE_INVIS | SHOW_MODS | THROW
 D:$The dagger of Caine the leader of Amber fleets.
-D:����С��δ����ش����륱����Υ���������
+D:アンバーの艦隊を指揮するケインのダガーだ。
 
 # The Dagger 'Narthanc'
 
 #J0# ???
-N:66:�إʥ륵�󥯡�
+N:66:『ナルサンク』
 E:'Narthanc'
 I:23:4:0
 W:4:10:12:12000
@@ -1304,13 +1304,13 @@ P:0:1d4:4:6:0
 F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE | THROW | XTRA_H_RES
 U:BO_FIRE_1
 D:$A fiery dagger finely balanced for deadly throws.
-D:�ֱ�β�פ��̣����̾����Ĥ���ǳ������û���ϡ�
-D:���οϤ�����������餻���Ϥ��ġ�
+D:「焔の牙」を意味する名を持つこの燃え盛る短剣は、
+D:その刃から焔の矢を迸らせる力をもつ。
 
 # The Dagger 'Nimthanc'
 
 #J0# ???
-N:67:�إ˥ॵ�󥯡�
+N:67:『ニムサンク』
 E:'Nimthanc'
 I:23:4:0
 W:3:10:12:11000
@@ -1318,14 +1318,14 @@ P:0:1d4:4:6:0
 F:BRAND_COLD | RES_COLD | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
 U:BO_COLD_1
 D:$A frosty dagger finely balanced for deadly throws.
-D:���򤭲�פ��̣����̾����Ĥ���û����ɬ�����䵤���ä�
-D:Ũ����ƤĤ������Ϥ����ɹ��������餻���Ϥ��ġ�
+D:「白き牙」を意味する名を持つこの短剣は必殺の冷気をもって
+D:敵を凍てつかせ、刃からは氷の矢を迸らせる力をもつ。
 
 
 # The Dagger 'Dethanc'
 
 #J0# ???
-N:68:�إǥ��󥯡�
+N:68:『デサンク』
 E:'Dethanc'
 I:23:4:0
 W:5:10:12:13000
@@ -1333,13 +1333,13 @@ P:0:1d4:4:6:0
 F:BRAND_ELEC | RES_ELEC | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
 U:BO_ELEC_1
 D:$A dagger covered in sparks and finely balanced for deadly throws.
-D:�ֹ��β�פ��̣����̾����ġ�����û���������ʤ��졢
-D:���οϤ������������餻���Ϥ��ġ�
+D:「黒の牙」を意味する名を持つ、この短剣は雷光に覆われ、
+D:その刃から雷の矢を迸らせる力をもつ。
 
 # The Dagger of Rilia
 
 #J0# ???
-N:69:��ꥢ��
+N:69:リリアの
 E:of Rilia
 I:23:4:0
 W:5:40:12:35000
@@ -1348,15 +1348,15 @@ F:SLAY_ORC | RES_POIS | RES_DISEN | ACTIVATE | SHOW_MODS | BRAND_POIS | THROW
 U:BA_POIS_1
 D:$A large stiletto dagger that glistens with odorless poison, to which the 
 D:$wearer seems oddly immune.
-D:����������ǡ��Ϲ��ε����פ��̣����̾�����
-D:�緿�Υ������ǡ��Ǥǵ����Ƥ��뤬
-D:���������Τϲ��Τ��Ǥαƶ�������ʤ���
+D:シンダール語で「地獄の輝き」を意味する名を持つ
+D:大型のダガーで、毒で輝いているが
+D:装備するものは何故か毒の影響を受けない。
 
 
 # The Dagger 'Belangil' -> of Fiona
 
 #JZ#
-N:70:����ѻեե����ʤ�
+N:70:女魔術師フィオナの
 E:of Fiona
 I:23:4:2
 W:10:40:12:50000
@@ -1367,13 +1367,13 @@ F:ACTIVATE | SHOW_MODS | BRAND_POIS | THROW
 U:BA_COLD_1
 D:$Fiona is good at plots and magic although she has
 D:$ devilish charm.
-D:������Ū̥�Ϥ�դ�ޤ��ե����ʤϡ��������ˤ�餺
-D:��ά����ˡ��Ĺ���Ƥ��롣
+D:小悪魔的魅力をふりまくフィオナは、見かけによらず
+D:策略と魔法に長けている。
 
 # The Bastard Sword 'Calris'
 
 #J0# ???
-N:71:�إ���ꥹ��
+N:71:『カルリス』
 E:'Calris'
 I:23:21:5
 W:30:15:140:100000
@@ -1384,16 +1384,16 @@ F:AGGRAVATE | CURSED | HEAVY_CURSE | SHOW_MODS
 D:$This sword has runes of power incused on its ornate hint, and a single 
 D:$blood channel that gleams coldly blue as you grasp this mighty weapon of 
 D:$peril.
-D:�������줿�����ϤΥ롼��ʸ������ޤ졢��Ȥη��̤���
-D:�䤿���Ŀ��˵����Ƥ��롣���ΥХ�����إ�󥴥륷��٤�
-D:���Ǥ��ꡢ�ɥ饴����ưפ����ۤɤη�����
+D:装飾された柄に力のルーン文字が刻まれ、刀身の血通しは
+D:冷たい青色に輝いている。白炎のバルログ『ルンゴルシン』の
+D:剣であり、ドラゴンを容易く葬るほどの剣だ。
 
 
 # The Broad Sword 'Arunruth' -> 'Grayswandir'
 
-#JZ# ����С����꡼����Ⱦ�Ǽ�͸�����������λ��äƤ����Υ����٥�
-#JZ# ��θ����ä���줿��
-N:72:�إ��쥤����������
+#JZ# アンバーシリーズ前半で主人公コーウィンの持っている銀のサーベル
+#JZ# 月の光で鍛えられた。
+N:72:『グレイスワンダー』
 E:'Grayswandir'
 I:23:11:4
 W:20:45:50:125000
@@ -1407,27 +1407,27 @@ F:SLOW_DIGEST | SHOW_MODS | HIDE_TYPE | BLESSED | RIDING
 D:$The silver sable forged by moonlights, which Corwin the prince of
 D:$ Amber wielded. It shows contrasts between silver and black like
 D:$ its owner does.
-D:����С��β��ҥ��������󤬻ȤäƤ�������θ��ˤ��
-D:�ä���줿��Υ����٥롣�������Ʊ�������ȶ�Υ���ȥ饹��
-D:�򸫤��롣
-D:�֥��쥤���������ˤ�<�ѥ�����>�ΰ�����ʣ������Ƥ��
-D:�פäƤ�������ɡ��ס֤����¿ʬ���դ��ʡ���
-D:�ʥ����㡼�����饺�˥�������С������ֺ��٤β��ҡס�
+D:アンバーの王子コーウィンが使っていた、月の光により
+D:鍛えられた銀のサーベル。持ち主と同じく黒と銀のコントラスト
+D:を見せる。
+D:「グレイスワンダーには<パターン>の一部が複製されてると
+D:思ってたんだけど。」「それは多分、逆だな。」
+D:（ロジャー・ゼラズニイ、アンバー１０「混沌の王子」）
 
 
 # The Broad Sword 'Glamdring'
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0#
-#J0# (�ԡ���)
-#J0#�ؤʤ���ݡ� �� �إ����ɥ�󥰡�
-#J0#���ؤʤ���ݡ٤ϥ������������ɤ�Ǥ���̾�ǡ��褷��������̾�ǤϤ���ޤ���
-#J0#�ۥӥåȤ������Ǥ����ʪ��Ǥ⤺�äȡإ����ɥ�󥰡٤�ɽ������Ƥ���Τǡ�
-#J0#�������٤��Ǥ���
+#J0# (都々目)
+#J0#『なぐり丸』 → 『グラムドリング』
+#J0#＊『なぐり丸』はオークたちが読んでいた名で、決して正式な名ではありません。
+#J0#ホビットの冒険でも指輪物語でもずっと『グラムドリング』と表記されているので、
+#J0#こうすべきです。
 #J0#
-#J0#N:73:�ؤʤ���ݡ�
-N:73:�إ����ɥ�󥰡�
+#J0#N:73:『なぐり丸』
+N:73:『グラムドリング』
 E:'Glamdring'
 I:23:16:1
 W:20:20:150:40000
@@ -1438,16 +1438,16 @@ F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER |
 F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$This fiery, shining blade earned its sobriquet "Foe-Hammer" from dying orcs 
 D:$who dared to come near hidden Gondolin.
-D:����ǳ����褦�˵������ϡإ��륯�ꥹ�ȡ٤��Ф�������
-D:���첦�񥴥�ɡ����˴����ƿ����������줿��������������
-D:�֤ʤ���ݡפȤ�����̾������ä����ȥ������ǥӥ�ܤ����ˤ��
-D:ȯ�����졢����ʹߥ������դ�ʪ�Ȥʤ롣
+D:この燃えるように輝く剣は『オルクリスト』と対を成し、
+D:隠れ王国ゴンドーリンに敢えて侵入し殺されたオークたちから
+D:「なぐり丸」という仇名を授かった。トロルの巣でビルボたちにより
+D:発見され、それ以降ガンダルフの物となる。
 
 
 # The Broad Sword 'Aeglin' -> 'Nothung'
 
-#JZ# ����ʡ�:�������ե꡼�ɤ�ζ�ե��եʡ����ݤ���
-N:74:�إΡ��ȥ��󥰡�
+#JZ# ワーグナー:ジーグフリードが龍ファフナーを倒す剣
+N:74:『ノートゥング』
 E:'Nothung'
 I:23:16:4
 W:20:90:150:95000
@@ -1458,43 +1458,43 @@ F:SLOW_DIGEST | SHOW_MODS | RIDING
 D:$The sword of Sigurd which is alos called Balmung or Gram.
 D:$ He slashed the anvil of Mime's blacksmith and used to
 D:$ kill the dragon Fafnir.
-D:�֥Ρ��ȥ��󥰤�������̾�ϡ����������󤬤Ȥͤꤳ�δ�
-D:���ͤ�Ω�Ƥ���������������ȴ�����ȤΤǤ�
-D:���Ԥ��������郎��ΤȤ�����櫓������
-D:(��ҥ��ȡ�����ʡ����ⶶ���顦�ⶶ�����֥������ե꡼�ɡ�,�����)
-D:�ָ��衢���줬�������ե꡼�ɤη����ڤ�̣�����פ������ä����
-D:�ߡ���������ζ⾲�򿿤���Ĥ�á���ڤä������η������
-D:ζ�ե��եʡ����ˤä��Τ��ä���
+D:「ノートゥングさ、その名は。ヴォータンがとねりこの幹
+D:に突き立てた剣だ。それを引き抜くことのでき
+D:た者だけが、わがものとしうるわけだ。」
+D:(リヒャルト・ワーグナー、高橋康也・高橋迪訳「ジーグフリード」,新書館)
+D:「見よ、これがジーグフリードの剣の切れ味だ！」そういって彼は
+D:ミーメの鍛冶場の金床を真っ二つに叩き切った。その剣で彼は
+D:龍ファフナーを屠ったのだった。
 
 # The Broad Sword 'Orcrist'
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# wp.218
-#J0# ���ܸ�
+#J0# 日本語
 #J0#
-#J0# >(���Ȥ���Υ�����)
-#J0# > ���Ȥϡ֤��ߤĤ��ݡפȤ��⤽���Ǥ������Ȥˤ������شط����μ����ʤ���
-#J0# > �����ƥ��ե����ȴط��ϥ������ʤ�����ǿƤ��ߤ��Ҥ��礦�ˤ來�ˤ���
-#J0# > �Ȥ�������������ޤ�������������� japanese.doc �ǽ񤤤��褦��
-#J0# > ï�Ǥ�ʬ����פ��Ȥ����ݥꥷ���Ǥ����Τǡ������Ǥ�Ƥ��ߤ��勞�褦
-#J0# > �����ܸ첽��ֲ��פʤɤ򤤤줿��Ȥ��Ƥߤޤ������Ǥ�ɤ������
-#J0# > �ե���ˤ���ɾ�Τ褦��(^_^;���ɤ���ˤ⹥ɾ�Ȥ����ΤϤऺ�������Ǥ���(^_^;
+#J0# >(しとしんのコメント)
+#J0# > あとは「かみつき丸」とかもそうですが、とにかく指輪関係の知識がないと
+#J0# > アーティファクト関係はカタカナの羅列で親しみがひじょうにわきにくい
+#J0# > という欠点があります。それで翻訳は japanese.doc で書いたように
+#J0# > 誰でも分かり易いというポリシーでしたので、少しでも親しみがわくよう
+#J0# > に日本語化や「王」などをいれたりとしてみました。でもどうも指輪
+#J0# > ファンには不評のようで(^_^;。どちらにも好評というのはむずかしいですね(^_^;
 #J0#
-#J0# (���Ӥ���Υ�����)
-#J0# �֤��ߤĤ��ݡפμ����ϡ֥��å��ɤ��ʤ��פ��Ȥʤ�Ǥ��͡�(;_;)
-#J0# # �������줸�㤷�礦���ʤ�����
-#J0# �Ǥ�֤Ĥ�̤��ݡפ�Sting���֤Ĥ�̤��ݡפ����������Ǥ��礦�͡�
-#J0# Ǻ��ǲ����졥(^_^)
+#J0# (小林さんのコメント)
+#J0# 「かみつき丸」の弱点は「カッコ良くない」ことなんですね．(;_;)
+#J0# # オーク語じゃしょうがないか．
+#J0# でも「つらぬき丸」はStingより「つらぬき丸」の方がいいでしょうね．
+#J0# 悩んで下され．(^_^)
 #J0#
-#J0# (�ԡ���)
-#J0#�ؤ��ߤĤ��ݡ� �� �إ��륯�ꥹ�ȡ�
-#J0#������⥰���ɥ�󥰤�Ʊ����ͳ�Ǥ������������Ȥ����Կ�ʸƤ�̾�����ƤϤ�
-#J0#��ʤ�����Ǥ�ʤ�����a_info.txt���ɤޤ���ĺ���ޤ���������������Ͼ���ޤ�
-#J0#��(��)��
+#J0# (都々目)
+#J0#『かみつき丸』 → 『オルクリスト』
+#J0#＊これもグラムドリングと同じ理由です。オークごときの不粋な呼び名を当てはめ
+#J0#るなど飛んでもない！　a_info.txtは読ませて頂きましたが、これだけは譲れませ
+#J0#ん(笑)。
 #J0#
-#J0#N:75:�ؤ��ߤĤ��ݡ�
-N:75:�إ��륯�ꥹ�ȡ�
+#J0#N:75:『かみつき丸』
+N:75:『オルクリスト』
 E:'Orcrist'
 I:23:16:3
 W:20:20:150:40000
@@ -1504,20 +1504,20 @@ F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER |
 F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$This coldly gleaming blade is called simply "Biter", by orcs who came to 
 D:$know its power all too well.
-D:�����䤿���������ϡإ����ɥ�󥰡٤��Ф����������������������
-D:�֤��ߤĤ��ݡפȸƤФ�����˶�����Ƥ��롣�ȥ������ǥӥ�ܤ����ˤ��
-D:ȯ�����졢����ʹߥɥ�դβ��ȡ���󡦥������󥷡���ɤ�ʪ�Ȥʤ롣
+D:この冷たく輝く剣は『グラムドリング』と対を成し、オークたちからは
+D:「かみつき丸」と呼ばれて非常に恐れられている。トロルの巣でビルボたちにより
+D:発見され、それ以降ドワーフの王トーリン・オーケンシールドの物となる。
 
 
 # The Two-Handed Sword 'Gurthang'
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0#
-#J0# (�ԡ���)
-#J0#������ޥ���ʪ��ǤϤ��Τ褦��ɽ������Ƥ��ޤ���
+#J0# (都々目)
+#J0#＊シルマリルの物語ではこのように表記されています。
 #J0#
-N:76:�إ������󥰡�
+N:76:『グアサング』
 E:'Gurthang'
 I:23:25:2
 W:30:30:200:100000
@@ -1528,15 +1528,15 @@ F:FREE_ACT | SLOW_DIGEST | REGEN | SHOW_MODS
 D:$A giant sword once wielded by mighty Turin, and a great dragonbane which 
 D:$bathed in Glaurung's blood:  but beware, it will drink the blood of those 
 D:$who wield it eventually.
-D:����ʤ��ͺ�ȥ������ι�������ǡ�����ʤ���ζ�η�����
-D:���Ĥ�ζ���ĥ��饦��󥰤η���ᤷ�����οϤˡ������ʤ�磻�����ब
-D:�Ѥ��뤳�Ȥ��Ǥ��褦��
+D:偉大なる英雄トゥーリンの黒き大剣で、比類なき屠龍の剣だ。
+D:かつて龍の祖グラウルングの血に浴したこの刃に、いかなるワイアームが
+D:耐えることができよう。
 
 
 # The Two-Handed Sword 'Zarcuthra'
 
 #J0# ???
-N:77:�إ��륯�����
+N:77:『ザルクスラ』
 E:'Zarcuthra'
 I:23:25:4
 W:30:180:250:205000
@@ -1549,14 +1549,14 @@ F:SHOW_MODS
 D:$Dark and deadly runes stand stark against the naked steel of this awesome 
 D:$weapon, and you feel a stunning power of slaying and rending as you 
 D:$slowly approach.
-D:���ݤι����롼��ʸ�����ݤοϿȤˤ��ä�����⤫�Ӿ夬�äƤ���
-D:����٤�����Ũ�˶��դ��ˤĤ�㤷����٤�Υ��ͥ륮����ȯ���롣
+D:恐怖の黒いルーン文字が鋼の刃身にくっきりと浮かび上がっている
+D:恐るべき剣。敵に近付くにつれ激しい殺戮のエネルギーを発する。
 
 
 # The Two-Handed Sword 'Mormegil' -> Twilight
 
-#JZ# ��ε�ͥ���Ȥ������˲Ф����ä�ǳ�����
-N:78:�ؿ����β�����
+#JZ# 炎の巨人スルトが世界に火を放った燃える剣
+N:78:『神々の黄昏』
 E:'Twilight'
 I:23:25:10
 W:30:15:250:0
@@ -1566,12 +1566,12 @@ F:AGGRAVATE | CURSED | HEAVY_CURSE | SHOW_MODS | TY_CURSE | LITE
 F:RANDOM_CURSE2
 D:$The flame sword with which Surtr set fire all over the world
 D:$ at Ragnarok.
-D:�̲����äˤ����Ʊ�ε�ͥ���Ȥ������˲Ф����ä�ǳ���������
+D:北欧神話において炎の巨人スルトが世界に火を放った燃える剣だ。
 
 # The Cutlass 'Gondricam'
 
 #J0# ???
-N:79:�إ���ɥꥫ���
+N:79:『ゴンドリカム』
 E:'Gondricam'
 I:23:12:3
 W:20:8:110:28000
@@ -1582,14 +1582,14 @@ F:SEE_INVIS | REGEN | SHOW_MODS
 D:$Famed sea-defender of Lebennin.  A short, slightly curved chopping blade 
 D:$with a perfect edge shining cleanly in the sun, an object of hate to the 
 D:$men of Umbar who met it in combat.
-D:̾�⤭��٥�˥�γ��μ��Ԥ����۸��˵��������ʿϤϡ�����С���
-D:�γ�±ã��������Ū�Ǥ��ä���
+D:名高きレベンニンの海の守護者だ。陽光に輝く完璧な刃は、ウンバール
+D:の海賊達の憎悪の的であった。
 
 
 # The Executioner's Sword 'Crisdurian'
 
 #J0# ???
-N:80:�إ��ꥹ�ɥ��ꥢ���
+N:80:『クリスドゥリアン』
 E:'Crisdurian'
 I:23:28:0
 W:40:15:260:111000
@@ -1599,13 +1599,13 @@ F:SLAY_HUMAN | SLAY_ORC | SEE_INVIS | SHOW_MODS | VORPAL | BRAND_POIS
 D:$A giant's weapon, with a long blade tall and straight thrusting out from a 
 D:$massive double-pronged hint.  On its blade are written doomspells against 
 D:$both the living and undead.
-D:�Ÿ��������������鿿�ä����ͤ��Ф�Ĺ����Ȥ���ĵ�ͤ�������
-D:��Ȥˤ�������Ԥ��Ի�μԤ������ˤȤäƤ����Ǥμ�ʸ����ޤ�Ƥ��롣
+D:重厚な二又の柄から真っすぐ突き出た長い刀身を持つ巨人の武器だ。
+D:刀身には生ける者と不死の者の双方にとっての破滅の呪文が刻まれている。
 
 
 # The Katana 'Aglarang'
 
-N:81:�إ������󥰡�
+N:81:『アグララング』
 E:'Aglarang'
 I:23:20:2
 W:50:25:50:150000
@@ -1615,16 +1615,16 @@ F:SUST_DEX | SHOW_MODS | SPEED
 D:$An utterly perfect, cleanly chiseled sword, with a edge that effortlessly
 D:$ slices rock and bone and spells to render the wearer lithe and nimble. It
 D:$ is combat incarnate.
-D:����������ǡ����ιݡפ��̣��������������̵��������
-D:���οϤϴ�������ʤ��ڤ�������
-D:��ˤ���Ԥˤ��ʤ䤫���Ҿ���ư����������ˡ��������Ƥ��롣
-D:����Ϥޤ����襤�β��Ȥ���
+D:シンダール語で「誉の鋼」を意味する美しい完全無欠の刀だ。
+D:その刃は岩や骨を苦もなく切り裂き、
+D:手にする者にしなやかで敏捷な動作を授ける魔法が込められている。
+D:それはまさに戦いの化身だ。
 
 
 # The Long Sword 'Ringil'
 
 #J0# ???
-N:82:�إ�󥮥��
+N:82:『リンギル』
 E:'Ringil'
 I:23:17:10
 W:20:120:130:300000
@@ -1637,18 +1637,18 @@ U:BA_COLD_2
 D:$The weapon of Fingolfin, High King of the Noldor; it shines like a column 
 D:$of ice lit by light unquenchable.  Morgoth came but unwillingly to meet it 
 D:$of old; his lame foot will remind him of its might should be meet it again.
-D:�Υ�ɡ���ξ�鲦�ե��󥴥�ե������ɹ�����ǡ�������Ƥ��롣
-D:���Ĥƥ�르���ϴ��������Ƥ��η�����ֵ����������
-D:��߹��ޤ줿����Ϥ��η����Ϥ�Ƥӻפ��Τ뤳�Ȥˤʤ��������
+D:ノルドールの上級王フィンゴルフィンの武器。氷の柱の如く輝いている。
+D:かつてモルゴスは期せずしてこの剣に対峙し深い傷を
+D:刻み込まれた。彼はこの剣の力を再び思い知ることになるだろう。
 
 
 # The Long Sword 'Anduril'
 
 #J0# wp.219
-#J0# ���ܸ�
-#J0#N:83:�����α��
-#J0#N:83:�إʥ륷���
-N:83:�إ���ɥ�����
+#J0# 日本語
+#J0#N:83:『西の焔』
+#J0#N:83:『ナルシル』
+N:83:『アンドゥリル』
 E:'Anduril'
 I:23:17:4
 W:20:40:130:80000
@@ -1661,17 +1661,17 @@ D:$The famed "Flame of the West", the sword that was broken and is forged
 D:$again.  It glows with the essence of fire, its wearer is mighty in combat, 
 D:$and no creature of Sauron can withstand it.  It will never be stained or 
 D:$broken even in defeat.
-D:̾�⤭�������α�פǤ��ꡢ
-D:�ޤ줿����Ȥ��Ƥ��Τ��뤳�η��ϡ������ǥ��뤬�ݤ��Τ�
-D:�����ޤ줿������Ĥλ��ؤ�ȯ�����줿��
-D:�ä�ľ���쥢�饴���Τ�ΤȤʤä���
-D:��ε��ˤ�굱�����η��Ͽ��뤦�Ԥ򶯤�������������Τ����ʤ�
-D:�겼�⤽�οϤ��Ѥ��뤳�ȤϤǤ��ʤ���
+D:名高き「西方の焔」であり、
+D:折れたる剣としても知られるこの剣は、エレンディルが倒れるのと
+D:供に折れたが、一つの指輪が発見された後
+D:鍛え直されアラゴルンのものとなった。
+D:焔の気により輝くこの剣は振るう者を強くし、サウロンのいかなる
+D:手下もその刃に耐えることはできない。
 
 # The Long Sword 'Anguirel' -> Werewindle
 
-#JZ# ����С���Ⱦ�Ǥ���ͤ��Ȥ��餷��
-N:84:�إ������ɥ��
+#JZ# アンバー後半である人が使うらしい
+N:84:『ワーウィンドル』
 E:'Werewindle'
 I:23:17:2
 W:20:40:130:120000
@@ -1684,18 +1684,18 @@ F:RES_DISEN | RES_FEAR | BLOWS
 U:ESCAPE
 D:$The day sword included mana of Trump, which is a companion to
 D:$ the night sword Grayswandir.
-D:��η����쥤�����������Ф�ʤ���η��ǡ��ȥ��פ����Ϥ�������Ƥ��롣
-D:�֤���ϲ���������餷���ǽФ����ͤ��ܤ��줿��Ĺ��ǻ�п��ξ���ä���
-D:���������ͤ��ФƤ���������϶��å�����Ƥ���餷������Ƭ�ˤ�
-D:�����餷��������ɤ�����դ����Ƥ������ͤϷ����˼��Ⱦ�Фޤ�ȴ���Ƥߤ���
-D:����Ȥˤϵ������ͤ�������Ƥ������������ͤ�---�������� <�ѥ�����>�ΰ�������
-D:���쥤�������������ͤ�<�ѥ�����>�ε����ն�ΰ���ʬ���ä���������Ͻ�������ʬ������
-D:��R.���饺�˥�������������С����ֱƤε��Ρס�
+D:夜の剣グレイスワンダーと対をなす昼の剣で、トランプの魔力が込められている。
+D:「それは黄金の素晴らしい打出し模様が施された、長い濃緑色の鞘だった。
+D:そこから突き出ている剣の柄は金メッキされているらしく、柄頭には
+D:素晴らしいエメラルドが取り付けられていた。僕は剣を手に取り半ばまで抜いてみた。
+D:…刀身には輝く模様が描かれていた。その模様は---そうだ、 <パターン>の一部だ。
+D:グレイスワンダーの模様は<パターン>の起点付近の一部分だったが、これは終点の部分だ。」
+D:（R.ゼラズニイ、真世界アンバー９「影の騎士」）
 
 # The Long Sword 'Elvagil'-> 'Chainsword'
 
-#JZ# ����������Ǥ���
-N:85:�إ����󥽡���
+#JZ# ジェイソンですね
+N:85:『チェンソー』
 E:'Chainsword'
 I:23:16:-2
 W:50:50:130:66666
@@ -1705,13 +1705,13 @@ F:SLAY_HUMAN | SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS |
 F:ESP_ORC | ESP_TROLL | ESP_HUMAN
 D:$Take care! This sword will make you a murderer if you wield it.
 D:$ Do you hear cries of this sword that want more blood thirstily?
-D:���ä��Ԥ�٤�ޥ�������Ѥ������줿���������ʤ��ˤϤ��η���
-D:��˵��������Ӥ�ʹ�������������
+D:持った者を殺戮マシーンに変える呪われた剣だ。あなたにはこの剣の
+D:血に飢えた叫びが聞こえるだろう。
 
 # The Rapier 'Forasgil'
 
 #J0# ???
-N:86:�إե��饹�����
+N:86:『フォラスギル』
 E:'Forasgil'
 I:23:7:0
 W:15:8:40:15000
@@ -1719,13 +1719,13 @@ P:0:1d6:12:19:0
 F:SLAY_ANIMAL | BRAND_COLD | RES_COLD | RES_LITE | LITE | SHOW_MODS
 D:$A slender, tapered blade whose wielder strikes icy blows with deadly 
 D:$accuracy.
-D:�ٿȤ��褬�٤����Ǥ��ꡢ���ѼԤ϶���٤����Τ�����ƤĤ�����򷫤�Ф���
+D:細身で先が細い剣であり、使用者は恐るべき正確さで凍てつく攻撃を繰り出す。
 
 
 # The Sabre 'Careth Asdriag'
 
 #J0# ???
-N:87:�إ��쥹�������ɥꥢ����
+N:87:『カレス・アスドリアグ』
 E:'Careth Asdriag'
 I:23:11:1
 W:15:8:50:25000
@@ -1734,13 +1734,13 @@ F:BLOWS | SLAY_DRAGON | SLAY_ANIMAL | SLAY_TROLL | SLAY_GIANT | SLAY_HUMAN |
 F:SLAY_ORC | SHOW_MODS | RIDING
 D:$An heirloom of the Lords of Rhun far to the east, and a name of 
 D:$dismay to creatures natural and unnatural.
-D:�ڤ���ι����ι����ʲ��ΰ�²�����������ǡ�
-D:����̾�Ϥ���������ʪ�ˤȤä���˾���̣���롣
+D:遥か東の国リュンの豪胆な王の一族に伝わる家宝で、
+D:その名はあらゆる生き物にとって絶望を意味する。
 
 # The Small Sword 'Sting'
 
-#J0# ���ܸ�
-N:88:�ؤĤ�̤��ݡ�
+#J0# 日本語
+N:88:『つらぬき丸』
 E:'Sting'
 I:23:8:2
 W:20:15:75:100000
@@ -1752,16 +1752,16 @@ D:$"I will give you a name, and I shall call you Sting."  The perfect size
 D:$for Bilbo, and stamped forever by the courage he found in Mirkwood, this 
 D:$sturdy little blade grants the wearer combat prowess and survival 
 D:$abilities they did not know they had.
-D:�֤��ޤ���̾�ޤ���Ĥ��Ƥ�������褷���Ĥ�̤��ݤȤ�ܤ�����
-D:�ӥ�ܤˤȤä������ɤ��礭�����ä�����û���ˤϡ�
-D:�ब�Ǥο��Ǿ����Ȥä�ͦ�����ʱ�˹�߹��ޤ�Ƥ��롣
-D:���ξ��פǾ����ʷ��ϻ��ѼԤ�
-D:��ʤ�ͦ���Ȼ������ڤ�̤����Ϥ�ƤӳФޤ���
+D:「おまえに名まえをつけてやろう！よし，つらぬき丸とよぼう。」
+D:ビルボにとって丁度良い大きさだったこの短剣には、
+D:彼が闇の森で勝ちとった勇気が永遠に刻み込まれている。
+D:この丈夫で小さな剣は使用者の
+D:内なる勇気と試練を切りぬける力を呼び覚ます。
 
 # The Scimitar 'Haradekket' -> Soulsword
 
 #JZ# ???
-N:89:�إ����륽���ɡ�
+N:89:『ソウルソード』
 E:'Soulsword'
 I:23:18:2
 W:20:20:130:111111
@@ -1772,13 +1772,13 @@ F:RES_CHAOS | RES_DISEN | RES_NEXUS | RES_NETHER | HOLD_EXP |
 F:SHOW_MODS | XTRA_RES_OR_POWER
 D:$This sword will help you to kill your evil enemies and will protect
 D:$ your soul from many evils.
-D:�������Ϥ���Ŀ���Ū�ʷ��������ټ�ˤ���С��ٰ���Ũ���Ǥ�����
-D:���Ȥ��ưפȤʤ��������
+D:魂を守る力を持つ神秘的な剣だ。一度手にすれば、邪悪な敵に打ち勝つ
+D:ことも容易となるだろう。
 
 # The Short Sword Gilettar -> of Merlin
 
-#JZ#����С����꡼����Ⱦ�μ�͸���
-N:90:���٤β��ҥޡ�����
+#JZ#アンバーシリーズ後半の主人公。
+N:90:混沌の王子マーリンの
 E:of Merlin
 I:23:10:2
 W:20:8:80:35000
@@ -1789,16 +1789,16 @@ D:$Merlin the prince of chaos hates carrying a heavy sword, so he invokes
 D:$ a power of chaos to take his sword from another dimension when he
 D:$ needs. This sword is also one of such things.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.6-10)
-D:�ϵ���餷��Ĺ���ޡ����ϸ���ûҤ餷���Ť�Ĺ����������⤯�Τ������ǡ�
-D:ɬ�פʻ����������ϤǷ��������������󤻤롣���η��⤽������ʪ��
-D:��Ĥ�����R.���饺�˥�������������С����꡼�� 6-10 ����
+D:地球暮らしの長いマーリンは現代っ子らしく重く長い剣を持ち歩くのが嫌いで、
+D:必要な時カオスの力で剣を異世界から取り寄せる。この剣もそうした物の
+D:一つだ。（R.ゼラズニイ、真世界アンバーシリーズ 6-10 巻）
 
 # The Blade of Chaos 'Doomcaller'
 # Was (-5) CON | HIDE_TYPE, +0 armor
 
-#J0# ���ܸ첽, Ko
-#J0#N:91:�ذ������׼ԡ�
-N:91:�غҤ��򾷤��ԡ�
+#J0# 日本語化, Ko
+#J0#N:91:『悪運招致者』
+N:91:『災いを招く者』
 E:'Doomcaller'
 I:23:30:0
 W:70:25:180:250000
@@ -1810,15 +1810,15 @@ F:SLAY_HUMAN | CHAOTIC | VORPAL | BRAND_FIRE | BRAND_POIS | LITE
 D:$This weapon of wrath, cursed with a violent anger, dives hungrily 
 D:$into the flesh of its enemies. It gathers shadows of death into its 
 D:$owner as they inflict wounds that will never heal.
-D:��˵�������Ʈ���ˤ���ä���줿�����ܤ�η���
-D:Ũ�����Τ����ߤ˿������ࡣ
+D:血に飢えた戦闘狂により鍛えられたこの怒りの剣は
+D:敵の肉体に貪欲に食い込む。
 
 
 # The Long Sword 'Vorpal Blade'
 
-#JZ#����С������å��������ܸ����Ǥϡؤ����ˤ��η���/�ؤޤ����ʤ��ʷ���
-#JZ#���������줸��ʬ����ʤ��ΤǱѸ�Τޤޤ�
-N:92:�إ������ѥ�֥졼�ɡ�
+#JZ#ジャバーウォッキーの日本語訳では『けしにぐの剣』/『まきれもなぎな剣』
+#JZ#しかしそれじゃ分からないので英語のままに
+N:92:『ヴォーパルブレード』
 E:'Vorpal Blade'
 I:23:17:2
 W:50:240:150:250000
@@ -1827,18 +1827,18 @@ F:VORPAL | SLAY_EVIL | HIDE_TYPE |
 F:FREE_ACT | LITE | SEE_INVIS | SLOW_DIGEST | REGEN | SPEED | STR | DEX
 D:$"One, two! One, two!  And through, and through, the vorpal blade 
 D:$went snicker-snack!"
-D:�֤ޤ����ʤ��ʷ����ڤ�̣�ޤ���ʤ�����
-D:��L.������롢���������� ����Х����å�����
+D:「まきれもなぎな剣の切れ味まぎれなし！」
+D:（L.キャロル、柳瀬尚紀訳 ジャバウォッキー）
 
 # The Beaked Axe of Theoden
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# wp.261
-#J0#(�ԡ���)
-#J0#�������Ԥ�ꡣ
+#J0#(都々目)
+#J0#＊追補編より。
 #J0#
-N:93:�������륻���ǥ󲦤�
+N:93:更正せるセオデン王の
 E:of Theoden
 I:22:10:3
 W:20:30:120:40000
@@ -1849,15 +1849,15 @@ U:DRAIN_2
 D:$The narrow axe head of this weapon, finely balanced by a crow's beak, 
 D:$would pierce even the armour of Smaug, and its wielder becomes aware of 
 D:$the minds of their enemies.
-D:�襤���դ�������ۤβ������ǥ󤬼�ˤȤä����αԤ���ϡ�
-D:���ޥ����ιŤ��ڤǤ����Ӥ��̤�
-D:Ũ��������̵�����˻����Ф����롣
+D:戦いを決意した黄金館の王セオデンが手にとったこの鋭い斧は、
+D:スマウグの硬い鱗でさえ貫き通し
+D:敵の精神を無防備に晒け出させる。
 
 
 # The Glaive of Pain
 
-#J0# ���ܸ첽, Ko
-N:94:���ˤ�
+#J0# 日本語化, Ko
+N:94:苦痛の
 E:of Pain
 I:22:13:0
 W:30:25:190:50000
@@ -1866,13 +1866,13 @@ F:SHOW_MODS | RIDING
 D:$The massive chopper that crowns this glaive glows blood-red and black; 
 D:$fell spells of annihilation swirl and dance as you swing death's myrmidon 
 D:$down.
-D:���Υ��쥤�֤��դ���줿������ڤ������ϤϷ���֤ȹ����ε��������ġ�
-D:���λ���ѿ����򿶤�ߤ���������˽ɤ�ҡ������˲������Ϥ����������٤롣
+D:このグレイブに付けられた巨大な切り裂き刃は血の赤と黒色の輝きを放つ。
+D:この死の用心棒を振り降ろす時、内に宿る禍々しい破壊の魔力が渦巻いて踊る。
 
 # The Halberd 'Osondir'
 
 #J0# ???
-N:95:�إ�����ǥ�����
+N:95:『オソンディア』
 E:'Osondir'
 I:22:15:3
 W:20:8:190:22000
@@ -1882,14 +1882,14 @@ F:BRAND_FIRE | SLAY_UNDEAD | SLAY_GIANT | RES_FIRE | RES_SOUND |
 F:LEVITATION | SEE_INVIS | SHOW_MODS | LITE
 D:$Lordly and tall did Osondir stand against the wrath of giants, and 
 D:$clear-eyed in barrows fell, wielding a halberd glowing ruby red.
-D:��ͤ��ܤ��Ω���������褦�˥�����ǥ�����Ʋ���Ȥ��ƹ⤯��
-D:������ϥ�٥�Ȥϥ�ӡ����˵������ͻ�����Ǥ���Ϥ�˸���ʤ���
+D:巨人の怒りに立ち向かうようにオソンディアは堂々として高く、
+D:構えるハルベルトはルビー色に輝き、塚山の中でも視力を妨げない。
 
 
 # The Pike 'Til-i-arc'
 
 #J0# ???
-N:96:�إƥ���=��=���륯��
+N:96:『ティル=イ=アルク』
 E:'Til-i-arc'
 I:22:8:2
 W:20:15:160:32000
@@ -1899,14 +1899,14 @@ F:BRAND_COLD | BRAND_FIRE | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT |
 F:RES_FIRE | RES_COLD | SUST_INT | SLOW_DIGEST | SHOW_MODS | LITE
 D:$Within this long thrusting spear lie the spirits of frost giants and fire 
 D:$demons, who war forever, trapped by magely spells.  
-D:����ξ�������Ĺ�����ˤ�
-D:ɹ�ε�ͤȱ�ΰ������Ĥκ�����ˡ�ˤ��
-D:��������Ƥ��Ʊʱ����äƤ��롣
+D:この両手持ちの長槍の中には
+D:氷の巨人と炎の悪魔の二つの魂が魔法により
+D:封印されていて永遠に争っている。
 
 # The Spear 'Aeglos' -> Runespear (of Odin)
 
-#JZ#�����ǥ�����䡣������̾��������ޤ���
-N:97:�إ��󥰥˥��
+#JZ#オーディンの槍。ちゃんと名前があります。
+N:97:『グングニル』
 E:'Runespear'
 I:22:7:4
 W:15:50:100:180000
@@ -1918,19 +1918,19 @@ F:SLOW_DIGEST | ACTIVATE | BLESSED | SHOW_MODS | LITE | RIDING
 U:BA_ELEC_2
 D:$The spear which Odin created from a branch of the world tree.
 D:$It is craved magical runes.
-D:��������ǥ����������λޤ�����夲����ǡ����Ϥ���᤿
-D:�롼��ʸ������ޤ�Ƥ��롣���̲����á�
+D:主神オーディンが世界樹の枝から作り上げた槍で、魔力を込めた
+D:ルーン文字が刻まれている。（北欧神話）
 
 # The Spear of Orome -> Destiny
 
-#JZ#ľ�ܤΤ�Ȥͤ��ϥ���ʡ��Υ��ڥ�֥ѥ른�ե����
-#JZ#���Υ�����դȤʤä��Τϥ������������⡣
-#JZ#����ȿ��äθ�����ȡ����ꥹ�Ȥ�ɤ������󥮥̥����䤬
-#JZ#Ʊ��뤵��ơ�����פȤʤä����ޤ����ꥹ�Ȥη��������դ�
-#JZ#����(Holy Grail)�����Ρֱ�̿����פ��ˤ����Ԥ�������
-#JZ#���ۤ���Ȥ���졢�ҥȥ顼��ɬ���õ�����Τ�ͭ̾���á�
-#JZ#�����Ǥϥ�������ʤ�Ȥ���ͭ̾�ˤʤä�̾����Ȥä���
-N:98:�إ��󥮥̥���
+#JZ#直接のもとねたはワーグナーのオペラ「パルジファル」
+#JZ#そのモチーフとなったのはアーサー王伝説。
+#JZ#ケルト神話の光の槍と、キリストを刺したロンギヌスの槍が
+#JZ#同一視されて「聖槍」となった。またキリストの血を受けた杯が
+#JZ#聖杯(Holy Grail)。この「運命の槍」を手にした者は世界を
+#JZ#支配するといわれ、ヒトラーが必死で探したのは有名な話。
+#JZ#ここではエヴァンなんとかで有名になった名前を使った。
+N:98:『ロンギヌス』
 E:of Destiny
 I:22:7:4
 W:15:40:100:80000
@@ -1942,13 +1942,13 @@ F:LITE | SEE_INVIS | ACTIVATE | BLESSED | SHOW_MODS | RIDING
 U:STONE_MUD
 D:$It is said that the person wielding this spear which is known as
 D:$ the Holy Lance can rule all over the world.
-D:��������ˤ���������Ȥ����Τ��Ƥ��뤳�������ļԤ�
-D:��������ۤ���ȸ����Ƥ��롣�ʥ���ʡ����֥ѥ른�ե����¾��
+D:聖剣伝説において聖槍として知られているこの槍を持つ者は
+D:世界を支配すると言われている。（ワーグナー、「パルジファル」他）
 
 # The Spear 'Nimloth' -> Hagen
 
-#JZ# ����ʡ�
-N:99:�ϡ������
+#JZ# ワーグナー
+N:99:ハーゲンの
 E:of Hagen
 I:22:2:3
 W:15:12:50:30000
@@ -1957,18 +1957,18 @@ F:STEALTH | RES_DARK | INFRA | SPEED | RIDING |
 F:BRAND_COLD | SLAY_UNDEAD | RES_COLD | SEE_INVIS | SHOW_MODS | THROW
 D:$The spear of Hagen on which Sigurd took the oath that it kills him 
 D:$when he tell a lie.
-D:�ϡ����󤬿ʤ߽Ф���
-D:�֤錄�������ɤ������������褬�����ξڿͤȤʤ�ޤ��礦����
-D:�������ե꡼�ɤȥϡ������Ϥ�ǲ��褿�����ؤ��ä���
-D:�ϡ�������򤫤ޤ���ȡ��������ե꡼�ɤϤ�������˱���λؤ�����
-D:�Τ��ơ��ֵ�����衪���ʤ����衪�Ȥ��������������Ϥ��ߤ����ޤ���
-D:����᤯�ڤ���ˤ������������⤷�ܤ������¤򵶤�ʤ顢�⤷�ܤ������
-D:�ͤ���ʤ顢��衢���ޤ������ο�¡�˰���Ϳ���Ƥ��졣�ġ�
-D:(��ҥ��ȡ�����ʡ����ⶶ���顦�ⶶ�����ֿ����β�����,�����)
+D:ハーゲンが進み出た。
+D:「わたしの槍をどうぞ。この穂先が誓いの証人となりましょう。」
+D:ジーグフリードとハーゲンを囲んで家来たちは輪を作った。
+D:ハーゲンが槍をかまえると、ジーグフリードはその穂先に右手の指を二本
+D:のせて、「輝く槍よ！聖なる武器よ！とこしえの誓いに力を貸したまえ！
+D:きらめく切っ先にかけて誓う。もしぼくが真実を偽るなら、もしぼくが死に
+D:値するなら、槍よ、おまえがこの心臓に一撃を与えてくれ。…」
+D:(リヒャルト・ワーグナー、高橋康也・高橋迪訳「神々の黄昏」,新書館)
 
 # The Lance of Eorlingas
 
-N:100:������Ȥ�
+N:100:エオル家の
 E:of Eorlingas
 I:22:20:3
 W:20:33:360:100000
@@ -1978,14 +1978,14 @@ F:SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS | RIDING
 D:$"Forth Eorlingas!". To the field of Cormallen came Eorl the Young 
 D:$to save beleaguered Gondor, and from his lance fled massive trolls 
 D:$and dire wolves.
-D:�ֿʤᡢ������λҤ�衪����Ϥ��줿����ɡ����ߤ����ᡢ
-D:��ǯ��������ϥ���ޥ���ι���ؤ����褷����Υ�󥹤����Ԥʤ�ȥ���
-D:����ϵ������������������
+D:「進め、エオルの子らよ！」包囲されたゴンドールを救うため、
+D:青年王エオルはコルマルレンの荒野へと到来し、彼のランスは獰猛なるトロル
+D:と魔狼たちを敗走させた。
 
 # The Great Axe of Durin
 
 #J0# p.342 wp.258
-N:101:�Ի�ɥ�����
+N:101:不死ドゥリンの
 E:of Durin
 I:22:25:3
 W:30:90:230:150000
@@ -1996,16 +1996,16 @@ F:RES_ACID | RES_FIRE | RES_LITE | RES_DARK | RES_CHAOS | SHOW_MODS
 D:$The twin massive axe heads of this ancient demon's dread gleam with 
 D:$mithril inlay, which tell sagas of endurance, invoking the powers of 
 D:$Khazad-dum to protect the wearer and slay all evils found underground.
-D:���Ťΰ���ã�����줿�����翶���ξ�Ϥ���Ƭ�ϥߥ����κٹ�
-D:�ˤ�굱���Ƥ��롣���αʤ�Ǧ�Ѥ���ˤ�ʪ��뵱����
-D:������=�ɥ�����Ϥ�ƤӳФޤ������ļԤ����ϲ�������ٰ���
-D:�Զ����Ǥ��ݤ���
+D:太古の悪魔達が恐れたこの大振りな両刃の斧頭はミスリルの細工
+D:により輝いている。その永き忍耐の歴史を物語る輝きは
+D:カザド=ドゥムの力を呼び覚まし、持つ者を護り地下に潜む邪悪な
+D:者共を打ち倒す。
 
 
 # The Great Axe of Eonwe
 
 #J0# p.312, Ko
-N:102:���ꥨ���󥦥���
+N:102:旗手エオンウェの
 E:of Eonwe
 I:22:25:2
 W:30:120:230:200000
@@ -2018,16 +2018,16 @@ U:MASS_GENO
 D:$The axe of Eonwe, leader of the Hosts of the West before the gates of 
 D:$Thangorodrim, strikes with icy wrath at the undead, disperses hosts of 
 D:$evil at a word, and grants Maia-like powers of body and mind.
-D:�������Ϥ�����Ĺ���Ϥꡢ���󥴥��ɥ�����˽��뤷������
-D:��Ψ����ޥ��������ꥨ���󥦥����������������ɹ��ǡ��
-D:�����ǥ���ǥåɤ�
-D:�Ǥ��ݤ�����������θ��դǼٰ��ʷ������ɤ����餹���Ȥ�����롣
-D:�����ƿ���ξ�̤˱����ƻ��ļԤ˥ޥ�����ǡ���Ϥ�����롣
+D:西方の地から中つ国に渡り、サンゴロドリムの門に集結した軍勢
+D:を率いるマイア、旗手エオンウェの斧だ。この武器は氷の如き
+D:気勢でアンデッドを
+D:打ち倒し、ただ一言の言葉で邪悪な軍勢を追い散らすことが出来る。
+D:そして心身両面に於いて持つ者にマイアの如き力を授ける。
 
 # The Battle Axe of Balli Stonehand
 
 #J0# ???
-N:103:�Фμ�Х��
+N:103:石の手バリの
 E:of Balli Stonehand
 I:22:22:3
 W:30:15:170:90000
@@ -2038,14 +2038,14 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_BLIND | LEVITATION |
 F:SEE_INVIS | REGEN | SHOW_MODS
 D:$The twin blades of this weapon were forged in Belegost, and powerful forces 
 D:$to resist and endure lie ready for he who shall wield it once more.
-D:�ŤΥ٥쥴���Ȥ�����Υɥ�����ꡢ�Фμ�Х꤬�ä���ξ�Ϥ������
-D:���ζ��Ϥ����ϤϺ��������ꤨ�Ƥ��餺���ƤӼ�ˤ���Ԥ˴趯����
-D:�͡��ʹ���ؤ��ɸ��Ϳ���Ƥ�����������
+D:古のベレゴストの伝説のドワーフ鍛冶、石の手バリが鍛えた両刃の斧だ。
+D:その強力な霊力は今も全く衰えておらず、再び手にする者に頑強さと
+D:様々な攻撃への防御を与えてくれるだろう。
 
 # The Battle Axe 'Lotharang'
 
 #J0# ???
-N:104:�إ�����󥰡�
+N:104:『ロサラング』
 E:'Lotharang'
 I:22:22:1
 W:30:15:170:21000
@@ -2055,12 +2055,12 @@ F:SLAY_TROLL | SLAY_ORC | ACTIVATE | SHOW_MODS
 U:CURE_MW
 D:$A superbly crafted double-bladed axe that slays the creatures of earth and 
 D:$allows rapid recovery from their blows.
-D:����Ρ����������Ƭ�Υ��륵���󤬻ȤäƤ�����
-D:�����餷������ξ�Ϥ����ࡣ
+D:アルノールの野伏の頭領ケルサインが使っていた、
+D:素晴らしい作りの両刃の戦斧。
 
 # The Lochaber Axe 'Mundwine' -> of the Dwarves
 
-N:105:�ɥ�դ�
+N:105:ドワーフの
 E:of the Dwarves
 I:22:28:10
 W:30:8:250:80000
@@ -2071,31 +2071,31 @@ F:SHOW_MODS
 D:$A massive axe with twin razor-sharp heads, so large that it usually 
 D:$requires two hands to wield, intricately engraved in gold with spells 
 D:$to ward off the elements and smite evil.
-D:����Τ褦�˱Ԥ�2��οϤ���ĽŸ�����ǡ������礭���ι�����Τˤ��Ф���ξ��
-D:��ɬ�פˤʤ뤬�����Ǥ��Ϥ��ɤ��ٰ����Ǥ��ݤ���ʸ�����ʣ���˹�ޤ�Ƥ��롣
+D:剃刀のように鋭い2枚の刃を持つ重厚な斧で、その大きさ故構えるのにしばしば両手
+D:が必要になるが、元素の力を防ぎ邪悪を打ち倒す呪文が金で複雑に刻まれている。
 
 
 # The Broad Axe 'Barukkheled'
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0#
-#J0#(����)
-#J0# > >'Barukkheled'                   �Х�å��إ�ɢ��Х륯�����
-#J0# ������ϥ����ɥ���줫�Ź���Ǥ��͡��Ҥ�äȤ����顤�֥Х�å���ɡ�
-#J0# �����Τ�ʤ���������⺣��Ĵ�٤Ƥ����ޤ���
-#J0# ���ʤߤˤ����ʪ����Ǥϸ������Ȥʤ��Ǥ���"Kheled"�Ȥ����Τϥ����ɥ�
-#J0# ���ǡָСפ餷����"Bar-"�ϡ��֡פ��ä����ʡļ����ʤ��䡥
+#J0#(小林)
+#J0# > >'Barukkheled'                   バルックヘレド→バルクケレド
+#J0# こちらはクズドゥル語か暗黒語ですね．ひょっとしたら，「バルッケレド」
+#J0# かも知れない．こちらも今度調べておきます．
+#J0# ちなみにこれも物語中では見たことないです．"Kheled"というのはクズドゥ
+#J0# ル語で「湖」らしい．"Bar-"は「赤」だったかな…自信ないや．
 #J0#
-#J0# ����⡤Baruk + Kheled ���Ȥ����顤�����ɥ����ǡ֥Х륯�إ�ɡ�
-#J0# �Ǥ��礦�͡�
+#J0# これも，Baruk + Kheled だとしたら，クズドゥル語で「バルクヘレド」
+#J0# でしょうね．
 #J0#
-#J0# �ְ㤤��
-#J0# Khuzdul��Ǥ�Kh��ȯ���ϡ֥��פ˶ᤤ���ʤΤǡ�
-#J0# �֥Х륯����ɡפޤ��ϡ֥Х륱��ɡפ��Ȼפ��ޤ���
-#J0# �Ǥ�֥Х�å���ɡפβ�ǽ���ϼΤ��ڤ�ޤ���
+#J0# 間違い．
+#J0# Khuzdul語でのKhの発音は「ク」に近い音なので，
+#J0# 「バルクケレド」または「バルケレド」だと思います．
+#J0# でも「バルッケレド」の可能性は捨て切れません．
 #J0#
-N:106:�إХ륯����ɡ�
+N:106:『バルクケレド』
 E:'Barukkheled'
 I:22:11:3
 W:20:8:130:50000
@@ -2105,15 +2105,15 @@ F:SLAY_EVIL | SLAY_TROLL | SLAY_GIANT | SLAY_ORC |
 F:SEE_INVIS | SHOW_MODS
 D:$A royal heirloom of the southern coast, strong in combat against evil 
 D:$creatures of the earth.
-D:�ɥ�դθ��դǡֶ�����פ��̣���뤳����ϡ�
-D:�����Υɥ�դβ��Ȥ��������������Ϥ�����ٰ���
-D:����ʪ�˶��Ϥʰ��Ϥ�ȯ�����롣
+D:ドワーフの言葉で「鏡の斧」を意味するこの斧は、
+D:南方のドワーフの王家に伝わる家宝だ。地に潜む邪悪な
+D:生き物に強力な威力を発揮する。
 
 
 # The Trident of Wrath
 
-#J0# ���ܸ�, Ko
-N:107:ʰ�ܤ�
+#J0# 日本語, Ko
+N:107:憤怒の
 E:of Wrath
 I:22:26:2
 W:35:12:300:90000
@@ -2124,21 +2124,21 @@ F:BLESSED | SHOW_MODS | RIDING
 D:$A massive triple-pronged spear, so great it normally requires two hands to 
 D:$wield, evoking the spirit of Osse who with it pierced legions of 
 D:$evil and undead.
-D:���ܤ����褬�����翶�����ǡ����ĤƤ�������˼ٰ��ʼԶ���
-D:̽���μԶ��η�����ɤ��Ӥ��������������Ϥ�ɤ��Ƥ��롣
+D:三本の切先がある大振りな槍で、かつてこの槍を手に邪悪な者共や
+D:冥界の者共の軍勢を刺し貫いたオスセの霊力を宿している。
 
 
 # The Trident of Ulmo
 
-#J0# (������)
+#J0# (コメント)
 #J0#
 #J0# p.309
-#J0#(�ԡ���)
-#J0#���������� �� ��β�������
-#J0#������ޥ���ʪ���ꡣ������Ϥ�������ή��λ��ۼԤǤ����������ǤϤ�
-#J0#��ޤ��󡣸�����⤳�Τ褦��ɽ������Ƥ��ޤ���
+#J0#(都々目)
+#J0#海王ウルモの → 水の王ウルモの
+#J0#＊シルマリルの物語より。オロメはあらゆる水の流れの支配者です。海だけではあ
+#J0#りません。原作中もこのように表記されています。
 #J0#
-N:108:��β�������
+N:108:水の王ウルモの
 E:of Ulmo
 I:22:5:4
 W:30:90:70:120000
@@ -2151,15 +2151,15 @@ U:TELE_AWAY
 D:$The awesome weapon of the Vala Ulmo, Lord of Waters. Mightest of all the 
 D:$powers of good save Manwe himself, Ulmo laughs in scorn at the dread powers 
 D:$of the undead, and is utterly in command of the element of water.
-D:��β��Ǥ�������顢�����ζ����������ޥ󥦥����Ȥ������
-D:�������Ϥ���ǺǶ��Ǥ��륦���ϡ�����ǥåɤζ���٤��Ϥ���
-D:�޾Ф������Υ�����Ȥε��Ū�����Ϥ���ġ�
+D:水の王であるヴァラ、ウルモの恐ろしい武器。マンウェ自身を除けば
+D:善き勢力の内で最強であるウルモは、アンデッドの恐るべき力さえ
+D:嘲笑い、酸のエレメントの究極的支配力を持つ。
 
 
 # The Scythe 'Avavir'
 
 #J0# ???
-N:109:�إ������ӥ���
+N:109:『アヴァビア』
 E:'Avavir'
 I:22:17:3
 W:40:8:250:18000
@@ -2171,15 +2171,15 @@ U:RECALL
 D:$With elemental powers whose struggles turn this weapon red and purest 
 D:$white, this shining reaper bears within it a power of going forth and 
 D:$returning.
-D:�����᤿�㤷��������Ȥ��Ϥ���Ǯ���Ƥ�������ǡ����󥸥���
-D:�Ԥ��褹��ǽ�Ϥ���äƤ��롣
+D:内に秘めた激しいエレメントの力で白熱している大鎌で、ダンジョンを
+D:行き来する能力を持っている。
 
 
 # The Long Sword of the Dawn
 
-#JZ# M.�ॢ���å��Υ������ʥ롦�����ԥ��󥷥꡼������ŵ
-#JZ# ���� G.P.S. ����
-N:110:�ضǤη���
+#JZ# M.ムアコックのエターナル・チャンピオンシリーズが出典
+#JZ# 訳は G.P.S. さん
+N:110:『暁の剣』
 E:of the Dawn
 I:23:17:3
 W:40:120:130:250000
@@ -2192,8 +2192,8 @@ U:SUMMON_DAWN
 D:$Forged in the farthest East by a race of mighty spellcasters, this 
 D:$shiny pale sword gleams with the rays of rising sun as you invoke 
 D:$its power of commanding legions of powerful immortal warriors...
-D:�ۡ����ࡼ��λ��Ĺ��η����ضǤη��٤��鯿��θ���������
-D:���������ضǤη��ġ٤򾤽������Ϥ����롣
+D:ホークムーンの持つ黒の剣、『暁の剣』は薔薇色の光を放ち、
+D:異世界より『暁の軍団』を召集する力がある。
 
 
 # The Mighty Hammer 'Grond'
@@ -2202,7 +2202,7 @@ D:���������ضǤη��ġ٤򾤽������Ϥ����롣
 # Note that it takes 18/200 strength to wield Grond correctly
 
 #J0# Note that it takes 18/200 strength to wield Grond correctly
-N:111:�إ�����ɡ�
+N:111:『グロンド』
 E:'Grond'
 I:21:50:0
 W:100:1:1000:500000
@@ -2213,14 +2213,14 @@ F:RES_COLD | SEE_INVIS | TELEPATHY | AGGRAVATE | SHOW_MODS | INSTA_ART |
 F:SLAY_HUMAN | RIDING | QUESTITEM
 D:$The mighty Hammer of the Underworld, blackened by doomspells of shattering, 
 D:$whose wielder holds the lives of all Morgoth's servants in his hand.
-D:������ʪ��ʴ�դ���Ź���ˡ�ˤ���������
-D:̽������Ŵ��ǡ�������ˤ���Ԥϥ�르�������Ƥμ겼��̿��ޤ�
-D:����˼���롣
+D:あらゆる物を粉砕する暗黒魔法により黒く輝く
+D:冥界の大鉄杖で、これを手にする者はモルゴスの全ての手下の命もまた
+D:手中に収める。
 
 
 # The Flail 'Totila'
 
-N:112:�إȥƥ����
+N:112:『トティラ』
 E:'Totila'
 I:21:13:2
 W:20:8:150:55000
@@ -2231,14 +2231,14 @@ F:SHOW_MODS | LITE | RIDING
 U:CONFUSE
 D:$A flail whose head befuddles those who stare as you whirl it around, and 
 D:$becomes a fiery comet as you bring it down. 
-D:���Υե쥤�����ü�򿶤�󤹤��ȤǸ����Τ��Ǥ碌�롣������
-D:����ߤ����б��ή���Ȥʤä�Ũ���Ǥġ�
+D:このフレイルは先端を振り回すことで見るものを惑わせる。そして
+D:振り降ろせば炎の流星となって敵を打つ。
 
 
 # The Two-Handed Flail 'Thunderfist'
 
-#J0# ���ܸ첽
-N:113:�ذ�ʤη���
+#J0# 日本語化
+N:113:『稲妻の拳』
 E:'Thunderfist'
 I:21:18:4
 W:45:38:300:160000
@@ -2249,15 +2249,15 @@ F:RES_ELEC | RES_FIRE | RES_DARK | SHOW_MODS | LITE
 D:$The long-lost weapon of Kzurin, Dwarven champion of ancient Belegost, 
 D:$with runes of strength in its handle, and flames and sparks that roar and 
 D:$crackle around its massive head.
-D:�ŤΥ٥쥴���Ȥ�̾���ڤ����ɥ�դα�ͺ����������������
-D:Ĺ�������Ƥ�����Τ��������ϤΥ롼��ʸ������ޤ졢�Ÿ�����ü���ˤ�
-D:��Ȳв֤��졹�Ȳ���Ω�Ʊ������Ƥ��롣
+D:古のベレゴストで名を馳せたドワーフの英雄、クズーリンの武器で
+D:長く失われていたものだ。柄に力のルーン文字が刻まれ、重厚な先端部には
+D:炎と火花が轟々と音を立て渦巻いている。
 
 
 # The Morning Star 'Bloodspike'
 
-#J0# ���ܸ첽
-N:114:�ط�ή�λɡ�
+#J0# 日本語化
+N:114:『血流の刺』
 E:'Bloodspike'
 I:21:12:4
 W:20:30:150:50000
@@ -2267,14 +2267,14 @@ F:SLAY_ANIMAL | SLAY_TROLL | SLAY_ORC | RES_NEXUS | SEE_INVIS |
 F:SHOW_MODS
 D:$You feel strong and firm of foot as you whip the chain-suspended spiked orb 
 D:$around - and bathe it in the blood of your foes.
-D:���ǤĤʤ��줿���դ��ε�򿶤�󤹻��������ä���Ȥ���­���򴶤���
-D:Ŵ���Ũ�η�˿����롣
+D:鎖でつながれた刺付きの球を振り回す時強くしっかりとした足取りを感じ、
+D:鉄球は敵の血に浸かる。
 
 
 # The Morning Star 'Firestar'
 
-#J0# ���ܸ첽
-N:115:�ر������
+#J0# 日本語化
+N:115:『焔の星』
 E:'Firestar'
 I:21:12:0
 W:20:15:150:35000
@@ -2283,14 +2283,14 @@ F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE
 U:BA_FIRE_2
 D:$A famed battle-lord of old with a ruddy head, colored as embers are that
 D:$ can yet rise up in wrath.
-D:�礭�ʥ�ӡ��ε夬��������դ���줿���Ť�̾�⤭���ʤ���
-D:���ο��Ȥε�����Ũ�˿��겼�������С��ʤ�����Ф����Ǥ�
-D:���Ф�ǡ���Ƥ��ܤ��ǳ���夬�롣
+D:大きなルビーの球が鎖の先に付けられた、古の名高き戦鎚だ。
+D:その真紅の輝きは敵に振り下ろされれば、永き時を経た今でも
+D:燠火の如く再び怒りに燃え上がる。
 
 
 # The Mace 'Taratol'
 
-N:116:�إ���ȥ��
+N:116:『タラトル』
 E:'Taratol'
 I:21:5:0
 W:20:15:200:50000
@@ -2300,15 +2300,15 @@ U:SPEED
 D:$A great ridged mace that calls around you a nimbus of living lightning; 
 D:$you remain utterly untouched even as fat sparks arc around your 
 D:$fingers and eyebrows. 
-D:���ļԤ�㤷���Ÿ�������礭�ʳ��ʤ���
-D:�����ʥ��ѡ������ؤ����δ֤ǲв֤򻶤餻�뤬
-D:��ˤ��Ƥ���Ԥ������ƶ�������ʤ���
+D:持つ者を激しい電光で包む大きな角鎚だ。
+D:強烈なスパークが指や眉の間で火花を散らせるが
+D:手にしている者は全く影響を受けない。
 
 
 # The War Hammer of Aule
 
 #J0# p.304, Ko
-N:117:����λʥ������
+N:117:鍛冶の司アウレの
 E:of Aule
 I:21:8:4
 W:40:75:120:250000
@@ -2320,16 +2320,16 @@ F:SEE_INVIS | SHOW_MODS | XTRA_POWER | XTRA_H_RES
 D:$The wondrous hammer of Aule, creator of the wise Dwarven lords of old.  
 D:$It bears magics of demolishing that no serpent or demon can withstand, and 
 D:$invokes the strength of mountains to ward off the tumult of the elements.
-D:������ηä�����뤿�ᡢ�������������ΰդ��ؤ���̩���˼��ͤ�
-D:�ɥ�դ����Ĥ����������������顢����λʥ�����������餷���ϥ�ޡ�
-D:�����������ϤϤ�����ζ�䰭���ʴ�դ����Ͽ�����Υ�����Ȥ�
-D:������ऱ�뻳�����Ϥ򴭵����롣
+D:自らの知恵を授けるため、イルヴァタールの意に背いて密かに七人の
+D:ドワーフの父祖を誕生させたヴァラ、鍛冶の司アウレの素晴らしいハンマー
+D:だ。その魔力はあらゆる龍や悪魔を粉砕し、地水火風のエレメントの
+D:攻撃を退ける山々の力を喚起する。
 
 
 # The Quarterstaff 'Nar-i-vagil'
 
 #J0# ???
-N:118:�إʥ�=��=�Х����
+N:118:『ナル=イ=バギル』
 E:'Nar-i-vagil'
 I:21:3:3
 W:30:20:150:100000
@@ -2339,13 +2339,13 @@ F:KILL_ANIMAL | BRAND_FIRE | FORCE_WEAPON | ESP_ANIMAL |
 F:RES_FIRE | HOLD_EXP | SEE_INVIS | FREE_ACT | SLOW_DIGEST | SHOW_MODS |
 D:$Named for a fiery star and set with gems of great worth binding mystic 
 D:$virtues of protection and thought.
-D:ǳ��������̾�դ���졢���Ȼ�θ�ο���Ū���Ϥ���������������Ф��դ��Ƥ��롣
+D:燃える星と名付けられ、守りと思慮の神秘的な力を封じた高価な宝石が付いている。
 
 
 # The Quarterstaff 'Eriril'
 
 #J0# ???
-N:119:�إ������
+N:119:『エリリル』
 E:'Eriril'
 I:21:21:4
 W:20:5:40:80000
@@ -2356,14 +2356,14 @@ F:SLAY_EVIL | RES_FEAR | RES_LITE | RES_BLIND | ACTIVATE | SHOW_MODS
 U:ID_PLAIN
 D:$The radiant golden staff of an Istari of legend, this wizard's companion 
 D:$grants keen sight and the knowledge of many hidden things.
-D:�ֽ��Ǥ������פ��̣����̾����ġ�����Υ�������β���˵��������åդ���
-D:������ˡ�Ȥ�ͧ�ϡ�¿���α����줿ʪ�����Ф��롢�Ԥ��������������μ���
-D:�⤿�餹��
+D:「秀でし輝き」を意味する名を持つ、伝説のイスタリの黄金に輝くスタッフだ。
+D:この魔法使の友は、多くの隠された物事に対する、鋭い視点と鮮明な知識を
+D:もたらす。
 
 # The Quarterstaff of Olorin -> Gandalf
 
 #JZ#
-N:120:���ԥ������դ�
+N:120:賢者ガンダルフの
 E:of Gandalf
 I:21:21:4
 W:50:30:40:140000
@@ -2377,15 +2377,15 @@ D:$The staff of the great wizard Gandalf.
 D:$It is tall and sturdy, with rough-hewn runes that invoke the element of 
 D:$Earth, and which strikes down all creatures who live in the shadow of 
 D:$mountains.
-D:�������դ����ĤƻȤäƤ���Ĺ�����פʾ��᤯��Ω�ä�ɽ�̤ˤ�
-D:�ϤΥ�����Ȥ��Ϥ�Ƥӵ������Ӻ��ʥ롼��ʸ������ޤ졢
-D:�Ƥ�������ԤϤ����Ƿ���Ѥ��뤳�ȤϽ���ʤ���
+D:ガンダルフがかつて使っていた長く丈夫な杖。節くれ立った表面には
+D:地のエレメントの力を呼び起こす荒削りなルーン文字が刻まれ、
+D:影に生きる者はその打撃に耐えることは出来ない。
 
 
 # The Mace of Disruption 'Deathwreaker'
 
-#J0# ���ܸ첽
-N:121:�ػ�������ԡ�
+#J0# 日本語化
+N:121:『死の復讐者』
 E:'Deathwreaker'
 I:21:20:6
 W:80:38:400:444444
@@ -2399,16 +2399,16 @@ D:$the might of giants within you as you heft it.  As you grip the handle
 D:$of ebony and steel, coronas of fire blaze and mighty spells to preserve 
 D:$magic activate around you.  You wield the Fear of Dragons and the Despair 
 D:$of the Undead!
-D:��̿�μԤ��Ϥ��ڤ��˱ۤ����Ť��������������
-D:��ˤ���е�ͤ��Ϥ�ͯ���夬�äƤ���Τ��������롣
-D:���ɤ�Ŵ�Ǻ��줿���������Ϥ�����뤬ǳ��Ω�ä�����줿
-D:��ˡ��©��᤭�֤��Τ���߹��ࡣ���μ�˰����Ƥ���Τ�
-D:��ζ�ɤ�ΰ��ݡפǤ����˴�Զ�����˾�פʤΤ���
+D:定命の者の力を遥かに越えた重さを持つ武器だが、
+D:手にすれば巨人の力が湧き上がってくるのが感じられる。
+D:黒檀と鉄で作られたその柄を掴む時、焔が燃え立って秘められた
+D:魔法が息を吹き返し体を包み込む。その手に握られているのは
+D:「龍どもの畏怖」であり「亡者共の絶望」なのだ！
 
 # The Lucerne Hammer 'Turmil'
 
 #J0# ???
-N:122:�إȥ����ߥ��
+N:122:『トゥアミル』
 E:'Turmil'
 I:22:12:4
 W:20:15:120:30000
@@ -2420,26 +2420,26 @@ U:DRAIN_2
 D:$Wielded by the High Priest of Meneltarma, this great mace gleams coldly as 
 D:$though moonlit, and it can strike as mighty a blow spiritually as 
 D:$physically.
-D:��ͥ륿��ޤι��Τ��ȤäƤ������ʤǡ���θ��Τ褦���䤿�������Ƥ��롣
-D:�����Ƿ��Ũ�����Τ����Ǥʤ���������Ǥ��դ����Ȥ��Ǥ��롣
+D:メネルタルマの高僧が使っていた大鎚で、月の光のように冷たく輝いている。
+D:その打撃は敵の肉体だけでなく精神をも打ち砕くことができる。
 
 
 # The Executioner's Sword 'Slayer'
 
-N:123:�إ��쥤�䡼��
+N:123:『スレイヤー』
 E:'Slayer'
 I:23:28:2
 W:30:60:260:200000
 P:0:4d5:15:15:0
 F:BLOWS | VAMPIRIC | HOLD_EXP | SLAY_UNDEAD | SLAY_EVIL | SLAY_HUMAN |
 F:REGEN | RES_FEAR | RES_BLIND | SLOW_DIGEST | SHOW_MODS
-D:�����ڤ�ʤ��ۤɤμ����Ȥ��Ƥ������η�˵������Ϥ�
-D:Ũ�η�Ⱥ���ۤäƼ�ˤ���Ԥ��Τ�������
+D:数え切れないほどの首を落としてきたこの血に飢えた刃は
+D:敵の血と魂を吸って手にする者の体を癒す。
 
 # The Long Bow 'Belthronding'
 
 #J0# ???
-N:124:�إ٥륹����ǥ��󥰡�
+N:124:『ベルスロンディング』
 E:'Belthronding'
 I:19:13:3
 W:40:20:40:60000
@@ -2447,14 +2447,14 @@ P:0:0d0:20:22:0
 F:DEX | STEALTH | HIDE_TYPE | RES_DISEN | XTRA_SHOTS | SHOW_MODS
 D:$The great bow of Beleg Cuthalion, made of black yew and strung with elven 
 D:$hair that faintly shimmers a pale clear gold.
-D:����ʤ�٥쥰���������ꥪ��ι��������εݤǡ�
-D:ø���⿧�ε��������������ĥ���դ�ȱ�򸹤�ĥ�äƤ��롣
+D:偉大なるベレグ・クーサリオンの黒いちいの弓で、
+D:淡い金色の輝きを微かに放つエルフの髪を弦に張ってある。
 
 
 # The Long Bow of Bard
 
 #J0# p.350
-N:125:�ͼ�Х�ɲ���
+N:125:射手バルド王の
 E:of Bard
 I:19:13:3
 W:30:20:40:40000
@@ -2462,15 +2462,15 @@ P:0:0d0:17:19:0
 F:DEX | HIDE_TYPE | FREE_ACT | XTRA_MIGHT | SHOW_MODS
 D:$The great yew bow of grim-faced Bard, who shot the mightiest arrow that 
 D:$songs record.
-D:��˲��Ȥʤ�Фγ��α����̥Х�ɤ�ε���ȴ��������Τ������εݤ���
-D:�बζ���ȴ������ϲΤ˱������Ѥ���Ƥ��롣
+D:後に王となる湖の街の陰気面バルドが竜を射抜いた伝説のいちいの弓だ。
+D:彼が龍を射抜いた矢は歌に唄われ語り継がれている。
 
 
 # The Light Crossbow 'Cubragol' -> of Brand
 
-#JZ#�Х�ɤ�¹��ë�ι�λ����ܤβ��������������ह�롣
-#JZ#���Ȼפä����ɥ���С��β��ҤǤ��礦�͡�
-N:126:������̴�۲ȥ֥��ɤ�
+#JZ#バルドの孫で谷の国の三代目の王。指輪戦争で戦死する。
+#JZ#かと思ったけどアンバーの王子でしょうね。
+N:126:狂気の夢想家ブランドの
 E:of Brand
 I:19:23:10
 W:50:25:110:100000
@@ -2479,12 +2479,12 @@ F:SPEED | RES_FIRE | XTRA_MIGHT | ACTIVATE | SHOW_MODS | XTRA_RES_OR_POWER
 U:BRAND_FIRE_BOLTS
 D:$Magic power of this crossbow of Brand the prince of Amber will enable
 D:$ you to move faster.
-D:�ȥ��פ����Ϥ�ʬ��ʪ�ˤ��������ʱ������¤���褦�Ȥ���
-D:����С��β��ҥ֥��ɤ��ȤäƤ����������ܥ�����
-D:�������Ϥˤ�����������Τ��������᤯��ư�Ǥ��롣
+D:トランプの魔力を自分の物にし、新たな宇宙を創造しようとした
+D:アンバーの王子ブランドが使っていたクロスボウだ。
+D:その魔力により装備するものは非常に素早く行動できる。
 
 
-N:127:�ҥ��󥰤�
+N:127:ヒムリングの
 E:of Himring
 I:36:6:0
 W:25:6:100:35000
@@ -2493,10 +2493,10 @@ F:RES_CHAOS | RES_NETHER | RES_POIS | SH_COLD | ACTIVATE
 U:PROT_EVIL
 D:$Contained within this studded cuirass of pliable leather is the memory of 
 D:$unvanquished Himring, defiant fortress surrounded by the legions of Morgoth.
-D:����ʳפǺ��줿����ƹ���ˤϡ���르���η�������Ϥ���Ƥ�
-D:ͦ����Ʈ��ȴ����������׺ɥҥ��󥰤ε�������߹��ޤ�Ƥ��롣
+D:柔軟な革で作られたこの胴鎧には、モルゴスの軍勢に包囲されても
+D:勇敢に闘い抜いた不落の要塞ヒムリングの記憶が刻み込まれている。
 
-N:128:������Ƿ����
+N:128:『草薙之剣』
 E:'Kusanagi-no-tsurugi'
 I:23:20:3
 W:50:20:120:123456
@@ -2510,21 +2510,21 @@ D:$One of the three imperial spiritual artifacts of Japan.
 D:$Susanoo found this tsurugi at Izumo, then Yamato Takeru
 D:$got and used for conquesting Japan.
 D:$It guards its owner from many dangers by its spiritual power.
-D:����ο���ΰ�ġ��б��ι��������º(�����Τ��Τߤ���)�ˤ��
-D:���Ф��졢���������º(��ޤȤ�����Τߤ���)�η��Ȥʤ롣
-D:�Ȥ��Ԥ��͡��ʴ������������Ϥ�����äƤ��롣
+D:三種の神器の一つ。出雲の国で素戔嗚尊(すさのおのみこと)により
+D:見出され、後に日本武尊(やまとたけるのみこと)の剣となる。
+D:使う者を様々な危機から守る霊力が備わっている。
 
 # The Multi-Hued Dragon Scale Mail 'Razorback'
 # Was (-2) INT | WIS | STEALTH | HIDE_TYPE, (-3) to hit, 30 pounds (?)
 
-#J0# ���ܸ첽
-#J0# (������)
+#J0# 日本語化
+#J0# (コメント)
 #J0#
-#J0#(�ԡ���)
-#J0#��Razorback�ˤ�1.�ʤ��������� 2.�������� 3.�Ȥ��ä��� �ȱ�����̣�����뤽��
-#J0#�Ǥ����Ȥ��ä��ء����ƥ������륹�ȱ������Ȥǡ������������ˤ��Ƥߤޤ���(��)��
+#J0#(都々目)
+#J0#＊Razorbackには1.ながすくじら 2.野生の豚 3.とがった背 と云う意味があるそう
+#J0#です。とがった背〜ステゴサウルスと云うことで、こういう風にしてみました(笑)。
 #J0#
-N:129:�ط�ε�γ���
+N:129:『剣竜の鎧』
 E:'Razorback'
 I:38:6:0
 W:90:9:500:400000
@@ -2536,16 +2536,16 @@ U:CAST_BA_STAR
 D:$A massive suit of heavy dragon scales deeply saturated with many colors.  
 D:$It throbs with angry energies, and you feel the raw elemental might of 
 D:$untamed Lightning as you put it on.
-D:�͡��ʿ��̤��Ž̤����Ÿ��ʥɥ饴����ڤǺ��줿������
-D:�ܤ�Υ��ͥ륮����̮�Ǥ�������Τ�
-D:�ӡ���������Υ��ͥ륮����ľ�˴����롣
+D:様々な色彩が凝縮した重厚なドラゴンの鱗で作られた鎧だ。
+D:怒りのエネルギーを脈打ち、着るものは
+D:荒々しい稲光のエネルギーを直に感じる。
 
 
 # The Power Dragon Scale Mail 'Bladeturner'
 # Was (-3) DEX | HIDE_TYPE, (-4) to hit, 50 pounds (?)
 
-#J0# ���ܸ첽
-N:130:�����֤���
+#J0# 日本語化
+N:130:『刀返し』
 E:'Bladeturner'
 I:38:30:0
 W:95:3:600:500000
@@ -2560,11 +2560,11 @@ U:BLADETURNER
 D:$A suit of adamant, set with scales of every color, surrounded in a nimbus 
 D:$of perfectly untramelled yet inextricably intermingled and utterly mastered 
 D:$powers elemental and ethereal.
-D:�����뿧�̤��ڤ����줿�����ޥ󥿥��Ȥγ��ǡ������˥���ȥ����뤵�줿
-D:�ϡ��塢�С����������Ū���Ϥ�Ĵ�¤�
-D:�������ΤȤʤꡢ��������ȤʤäƤ��γ������Ǥ��롣
+D:あらゆる色彩の鱗に被われたアダマンタイトの鎧で、完璧にコントロールされた
+D:地、水、火、風および霊的な力が調和し
+D:渾然一体となり、輝く護光となってこの鎧を包んでいる。
 
-N:131:���󥫥̥���
+N:131:インカヌスの
 E:of Incanus
 I:36:2:3
 W:50:40:20:100000
@@ -2578,11 +2578,11 @@ D:$lands of the South. It is proof against elements, for neither the
 D:$heat of the South, nor the ice of the North, nor the acidy pits of Dol 
 D:$Guldur were able to hold back the defiant Maia in the pursuit of 
 D:$his mission 
-D:�����Ǥϥ��󥫥̥���̾���Τ����縭�ԥ������դΥ����֤����͡��ʥ������
-D:����Ȥ��뤳�Υ����֤Τ������ǡ����Ǯ�롢�̤�ɹ�롢�ɥ롦����ɥ�����
-D:���ξ¤Ǥ����⡢����ĩ��Ū�ʥޥ�����Ǥ̳��˸������Ϥʤ��ä��Τ���
+D:南方ではインカヌスの名で知られる大賢者ガンダルフのローブだ。様々なエレメント
+D:から身を護るこのローブのおかげで、南の熱暑、北の氷結、ドル・グルドゥアの
+D:酸の沼でさえも、かの挑戦的なマイアの任務を妨げる事はなかったのだ。
 
-N:132:�̥�Ρ����
+N:132:ヌメノールの
 E:of Numenor
 I:33:12:3
 W:60:15:40:50000
@@ -2592,10 +2592,10 @@ F:RES_SHARDS | RES_SOUND | RES_LITE |
 F:LITE |
 D:$A crown of massive gold, set with wondrous jewels of thought and warding,
 D:$ worn by the kings of ancient Numenor.
-D:�ŤΥ̥�Ρ���β�ã���Ѥ��Ƥ����Ÿ��ʲ���β����ǡ�
-D:�ηä����Ũ���ऱ�������餷�����Ф����Ĥ����Ƥ��롣
+D:古のヌメノールの王達が用いていた重厚な黄金の王冠で、
+D:知恵を授け敵を退ける素晴らしい宝石が取りつけられている。
 
-N:133:�ա���󲦤�
+N:133:フーリン王の
 E:of Hurin
 I:22:10:3
 W:30:30:180:120000
@@ -2608,15 +2608,15 @@ D:$ smoked in the black blood of the troll-guard of Gothmog, until it withered,
 D:$ and each time that he slew Hurin cried 'Aure entuluva! Day shall come
 D:$ again!'. Seventy times he uttered that cry, but they took him at last
 D:$ alive, by the command of Morgoth..."
-D:�ֺǸ�ˤ�����ͥա���󤬻Ĥä�������Ͻ��Τơ�ξ���
-D:����Ϥ�ǿ���󤷤�����ϥ����⥰���Ҥ���ȥ��뤿����
-D:�������ή���٤˷���夲���ա����ϰ�ͻ¤���ˡ֥���
-D:�졡����ȥ������������Ƥ����󡪡פȶ�����ȲΤ˲Τ�
-D:��Ƥ��롣��������Ϥ��ζ��Ӥ�夲������������ˤ���ϥ�
-D:�르����̿��ˤ�������ʤ�����館��줿����
-D:(J.R.R.�ȡ��륭������������������ޥ���ʪ��)
+D:「最後にただ一人フーリンが残った。かれは盾を捨て、両手に
+D:鉞を掴んで振り回した。鉞はゴズモグを護衛するトロルたちの
+D:黒い血を流す度に血煙を上げ、フーリンは一人斬る毎に「アウ
+D:レ　エントゥルヴァ！　昼再び来らん！」と叫んだと歌に歌わ
+D:れている。七十度彼はこの叫びを上げた。しかし遂にかれはモ
+D:ルゴスの命令により生きながら捕らえられた。」
+D:(J.R.R.トールキン、田中明子訳、シルマリルの物語)
 
-N:134:�Хå�����
+N:134:バック郷の
 E:of Buckland
 I:19:2:3
 W:40:35:20:50000
@@ -2625,10 +2625,10 @@ F:SPEED | XTRA_MIGHT |
 F:RES_FEAR | RES_BLIND | RES_CONF | SHOW_MODS | XTRA_RES_OR_POWER
 D:$A sling granting extraordinary clarity of mind amidst darkness and 
 D:$confusion, and which hurls shot with deadly speed.
-D:���Υ���󥰤ϰŰǤȺ���Τ�����˱����Ƥ����ä��ۤ�����ʻ׹ͤ��ǽ�ˤ���
-D:�Ƥ򶲤��������Ϥ˷�Ĥ��Ȥ��Ǥ��롣
+D:このスリングは暗闇と混乱のただ中に於いてさえ驚くほど明晰な思考を可能にし、
+D:弾を恐ろしく強力に撃つことができる。
 
-N:135:�ɥ�ղ����������
+N:135:ドワーフ王アザガルの
 E:of Azaghal
 I:23:5:0
 W:15:30:30:40000
@@ -2638,12 +2638,12 @@ D:$At the Nirnaeth the Dwarves stayed the onslaught of Glaurung, and
 D:$Azaghal their lord drove this short blade into the drake's belly before 
 D:$he was trampled underfoot. The black blood of the Father of Dragons 
 D:$now serves as a rememberance for all dragons that come near it. 
-D:���Ĥơ��˥��ʥ����ˤ����ƥɥ��ã�����饦��󥰤��Թ����
-D:�����ߤ��ݡ��������벦�ϼ�ε��Ƨ���٤�������ᡢ����û���Ϥ�
-D:ε��ʢ�����ͤ��ɤ��������οϤ˻Ĥ�ε���Ĥι�����϶�Ť����Ƥ�
-D:�ɥ饴��ˤ��ĤƤζ��ݤ�פ�����������ΤǤ��롣
+D:かつて、ニアナイスにおいてドワーフ達がグラウルングの猛攻撃を
+D:食い止める際、アザガル王は邪竜に踏み潰される刹那、この短い刃を
+D:竜の腹部に突き刺した。この刃に残る竜の祖の黒き血は近づく全ての
+D:ドラゴンにかつての恐怖を思い起こさせるのである。
 
-N:136:�إߥ��ˡ����
+N:136:『ミュルニール』
 E:'Mjollnir'
 I:21:8:4
 W:30:30:150:100000
@@ -2651,22 +2651,22 @@ P:0:5d3:3:15:0
 F:BRAND_ELEC | IM_ELEC | STR | DEX | THROW | SLAY_GIANT
 D:$The famous throwing hammer of the Norse god Thor, it crackles with 
 D:$lightning as you swing it at your opponents. 
-D:����ͭ̾���ꤲ�ϥ�ޡ����̲��ο��ȡ���Τ�Τǡ�Ũ���Ф��ƿ��뤨�С�
-D:��ʤȤȤ�����Ĥ������錄�롣
+D:この有名な投げハンマーは北欧の神トールのもので、敵に対して振るえば、
+D:稲妻とともに雷鳴が響きわたる。
 
-N:137:�إ���󡦥Υ�����
+N:137:『ゴルン・ノヴァ』
 E:'Goln Nova'
 I:23:16:2
 W:30:50:150:100000
 P:0:2d5:15:15:0
 F:STR | DEX | HIDE_TYPE | FORCE_WEAPON |
 F:SHOW_MODS | RIDING | KILL_DEMON
-D:���Ĥ���Ƴ�Իԥ����顼�����˲��Ĥ�������á����ʥåե�����
-D:������Ǥܤ����Ȥ�����Τ���������������Ǥ��롣
-D:���ļԤΡ��ջפ��Ϥ�Ϥ������ơ���²�����ξ�Ǥ��롣
-D:(����졢���쥤�䡼��5��������á�)
+D:かつて魔導都市サイラーグを破壊つくした魔獣、ザナッファー。
+D:それを滅ぼしたといわれるのが、この伝説の武器である。
+D:持つ者の、意思の力を刃と成して、魔族すらも両断する。
+D:(神坂一、スレイヤーズ5「白銀の魔獣」)
 
-N:138:��鲦����=����ɤ�
+N:138:上級王ギル=ガラドの
 E:of Gil-Galad
 I:34:10:4
 W:70:4:100:65000
@@ -2676,12 +2676,12 @@ F:SUST_WIS | SUST_CHR | ACTIVATE
 U:BLINDING_LIGHT
 D:$The legendary shield of Gil-Galad, who fought his way to the gates of
 D:$ the Dark Tower, and with whom came light even to Gorgoroth.
-D:�Υ�ɡ���κǸ�ξ�鲦������=����ɤ�����ν������ϥХ��=�ɥ�������ޤ�
-D:Ũ��Ƥ���ˤäƿʤߡ����르�������Ϥˤ�������⤿�餷����
-D:��ŷ�������̵�������ϡ�
-D:���ζ�ν�ˡ��Ǥꤿ�ꡣ��
+D:ノルドールの最後の上級王、ギル=ガラドの伝説の盾だ。彼はバラド=ドゥアの門まで
+D:敵を討ち破って進み、ゴルゴロスの地にさえ光をもたらした。
+D:「天が広野の無数の星は、
+D:その銀の盾に、映りたり。」
 
-N:139:�إ�����֥�������
+N:139:『ウィンブロウズ』
 E:'Winblows'
 I:21:13:-4
 W:30:20:500:0
@@ -2691,10 +2691,10 @@ F:SHOW_MODS | CHAOTIC | IMPACT | SPEED
 F:RANDOM_CURSE0
 D:$This is disruptive heave thing made by Micro$oft.
 D:$It will bring many troubles to its user.
-D:�ޥ�������եȤˤ�äƺ��줿��Τǡ��Ť����˲��Ϥ����롣
-D:���Ѥ���Ԥ˺Ҥ���⤿�餹��
+D:マイクロンフトによって作られたもので、重くて破壊力がある。
+D:使用する者に災いをもたらす。
 
-N:140:�إ���С�����ꥪ�åġ�
+N:140:『シルバーチャリオッツ』
 E:'Silver Chariot'
 I:23:7:2
 W:30:15:75:100000
@@ -2703,11 +2703,11 @@ F:DEX | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_DEMON |
 F:FREE_ACT | SEE_INVIS | SHOW_MODS | RES_DARK | RES_DISEN | SPEED
 D:$The silver light sabre of Polnareff's stand Silver Chariot.
 D:$It can pierce enemies rapidly.
-D:�ݥ�ʥ�դΥ�����ɡ֥���С�����ꥪ�åġפ���ˤ��Ƥ���
-D:���̤Υ����٥������֤ˤ���Ũ��̵��������򤢤��뤳�Ȥ���
-D:����Ϥ����á�
+D:ポルナレフのスタンド「シルバーチャリオッツ」が手にしていた
+D:軽量のサーベルだ。一瞬にして敵に無数の風穴をあけることがで
+D:きるはずだッ！
 
-N:141:�ץ���ʥ�����������������ץ쥹������
+N:141:プラチナイェンダー印エクスプレスカード
 E:& Platinum Yendorian Express Card~
 I:50:0:3
 W:127:1:2:1000000
@@ -2720,19 +2720,19 @@ U:RECHARGE_XTRA
 D:$Yaaaaaaaaay! Platinum card of Yendorian Express!!!
 D:$Wait a minute, you can not pay any more with this card.
 D:$You must think other way of using it.
-D:�⿧�˸��굱��������������Υץ���ʥ����ɤ���
-D:�ޤ�ǲ���Ĺ�Ԥˤʤä���ʬ�����롣���ٳۤޤǻȤ����⤦��
+D:金色に光り輝くイェンダー印のプラチナカードだ。
+D:まるで億万長者になった気分がする。限度額まで使い込もう。
 
-N:142:�إ������ѥ�֥졼�ɡ�
+N:142:『ウォーパルブレード』
 E:'Worpal Blade'
 I:23:17:2
 W:50:5:150:100
 P:0:5d5:32:32:0
 F:TY_CURSE | AGGRAVATE | DRAIN_EXP | INFRA | NO_TELE | NO_MAGIC | HIDE_TYPE
 D:$It is a look-alike for the strongest sword!
-D:�Ƕ��η��Ȥ��ä������
+D:最強の剣とそっくりだ。
 
-N:143:�ܥ��ߥ���
+N:143:ボロミアの
 E:of Boromir
 I:40:18:2
 W:30:60:2:25000
@@ -2743,10 +2743,10 @@ F:INSTA_ART
 U:SCARE_AREA
 D:$A massive golden torque, made of innumerable strands of gold and steel 
 D:$intermingled, with great golden hounds set at either end.
-D:����ȹ��ݤ�̵���Τ�����Ԥ߾夲��줿�Ÿ��ʶ�μ����ǡ�
-D:�礭�ʶ���ĸ���������ξü�˼���դ����Ƥ��롣
+D:黄金と黒鋼の無数のより糸で編み上げられた重厚な金の首飾りで、
+D:大きな金の猟犬の装飾が両端に取り付けられている。
 
-N:144:��¼����
+N:144:『村正』
 E:'Muramasa'
 I:23:20:2
 W:60:200:200:1000000
@@ -2758,12 +2758,12 @@ U:MURAMASA
 D:$Muramasa the legendaly bracksmith forged this sword 'Muramasa'.
 D:$ It always wants more blood thirstily, although it already
 D:$ drained blood from many person.
-D:����ʪ�������Ƥ���ʪ��¤ꡢ���������ƤϿ���¤롣��
-D:������ᾢ¼������������������ä������������
-D:�����ڤ�ʤ��ʹ֤η��ӵ�äƤ��������οϤ�
-D:��˵�������˳�ʪ����Ƥ��롣
+D:「魔物に遭うては魔物を斬り、神に遭うては神を斬る。」
+D:伝説の刀匠村正が全身全霊を込めて鍛えたこの妖刀は
+D:数え切れない人間の血を啜ってきた。その刃は
+D:血に飢え、常に獲物を求めている。
 
-N:145:��ζ�����
+N:145:『龍争虎鬪』
 E:of Xiaolong
 I:21:4:3
 W:45:14:30:100000
@@ -2772,12 +2772,12 @@ F:STEALTH | SUST_STR | SUST_DEX | SUST_CON |
 F:SPEED | RES_FIRE | BRAND_FIRE |
 F:SLAY_ANIMAL | SLAY_DRAGON | RES_FEAR | FREE_ACT |
 F:REGEN | SHOW_MODS | HIDE_TYPE
-D:����γ�Ʈ�Ȥ����Ϥ��ɤä����Ϥʥ̥���㥯����
-D:��ˡ�����Ԥ���ˤ���м�����Τΰ����Τ褦��
-D:��뤳�Ȥ��Ǥ����Ǽ�λ���Ʊ�����餤���ᤤ���⤬
-D:��ǽ����
+D:伝説の格闘家の霊力が宿った強力なヌンチャクだ。
+D:拳法を操る者が手にすれば自らの体の一部のように
+D:操ることができ、素手の時と同じくらい素早い攻撃が
+D:可能だ。
 
-N:146:���в��̡�
+N:146:『石仮面』
 E:'Stone Mask'
 I:32:5:3
 W:60:66:75:0
@@ -2787,29 +2787,29 @@ F:RES_CONF | RES_NETHER | RES_COLD | RES_POIS | RES_DARK | RES_FEAR |
 F:SEE_INVIS | ACTIVATE | DRAIN_EXP |
 F:SH_COLD | HOLD_EXP | LEVITATION | REGEN
 U:TERROR
-D:���������Ԥ�۷쵴���Ѥ��Ƥ��ޤ��Ȥ����ǥ������в��̤���
+D:装備した者を吸血鬼に変えてしまうというディオの石仮面だ。
 
-N:147:����
+N:147:飛行
 E:of Laputa
 I:39:9:2
 W:60:60:10:60000
 P:0:1d1:0:0:0
 F:INT | CHR | SPEED | ACTIVATE | LEVITATION | HOLD_EXP | INSTA_ART | LITE_3 | 
 U:BA_MANA
-D:��ͷ���Ϥ�Ϳ���Ƥ�����Ĥ�м�������Ф���
+D:浮遊の力を与えてくれる青く仄光る宝石だ。
 
-N:148:��Ϳ��εݡ�
+N:148:『与一の弓』
 E:of Yoichi
 I:19:13:4
 W:35:30:40:30000
 P:0:0d0:40:13:0
 F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
-D:��Ϳ��ŭ���Ĥ��֤ҡ�ǽ�İ����ƤҤ䤦�����ġ���ʼ�Ȥ��վ�
-D:����«�������ݤϤĤ褷��ŭ�ϱ������ۤɤ�Ĺ�Ĥ��ơ��᤿�����
-D:�פ��ϰ����Ф����֤��ơ��Ҥ��դĤȤ����ڤĤ��롣��(ʿ��ʪ��)��
-D:���Ϳ��εݤ������򳰤����Ϥʤ���
+D:「与一鏑を取つて番ひ、能つ引いてひやうと放つ。小兵といふ条、
+D:十二束三伏、弓はつよし、鏑は浦響くほどに長鳴して、過たず扇の
+D:要ぎは一寸ばかり置いて、ひいふつとぞ射切つたる。」(平家物語)。
+D:那須与一の弓は狙いを外す事はない。
 
-N:149:Ȭ��
+N:149:八尺
 E:'Yasaka-no-Magatama'
 I:40:19:3
 W:65:50:3:90000
@@ -2819,15 +2819,15 @@ F:RES_FIRE | RES_COLD | RES_ELEC |
 F:INSTA_ART
 U:RECALL
 
-N:150:�ػ�Ŵ����
+N:150:『斬鉄剣』
 E:'Zantetsuken'
 I:23:20:2
 W:30:25:120:80000
 P:0:10d4:17:21:0
 F:STR | DEX | VORPAL | TUNNEL | SHOW_MODS
-D:�ݤ���ڤ��������ڤ�̣ȴ�������������
+D:鋼をも切り裂く、切れ味抜群の日本刀だ。
 
-N:151:Ȭӡ
+N:151:八咫
 E:'Yata-no-Kagami'
 I:34:50:3
 W:65:65:50:150000
@@ -2836,17 +2836,17 @@ F:INSTA_ART | ACTIVATE | SEE_INVIS | REFLECT | LITE | INFRA |
 F:INT | WIS | TELEPATHY | HOLD_EXP | HIDE_TYPE
 U:DISP_EVIL
 
-N:152:��¢˷�۷Ĥ�
+N:152:武蔵坊弁慶の
 E:of Benkei
 I:22:9:4
 W:40:20:400:98765
 P:0:3d6:5:23:5
 F:STR | CON | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_TROLL | RES_FEAR |
 F:FREE_ACT | REGEN | SHOW_MODS
-D:��˵��Ф˻Ť������Ρ���¢˷�۷Ĥϡ��������������ʪ�����Ϥ򿶤뤤��
-D:�޾��綶�ξ��999�ܤ������ä���
+D:後に義経に仕えた怪僧・武蔵坊弁慶は、この大薙刀を得物に武力を振るい、
+D:五条大橋の上で999本の刀を狩った。
 
-N:153:�ͼ�Х�ɲ��ι���
+N:153:射手バルド王の黒い
 E:of Bard
 I:17:10:0
 W:35:35:2:5000
@@ -2854,12 +2854,12 @@ P:0:8d4:30:19:0
 F:KILL_DRAGON | INSTA_ART | SHOW_MODS
 D:$Dealiest of arrows, imbued with elemental strength, this shaft is 
 D:$feared especially by the wyrmkin.
-D:��˲��Ȥʤ�Фγ��α����̥Х�ɤ�ζ���ȴ��������ι��������
-D:�बζ���ȴ����������ϲΤ˱������Ѥ���Ƥ��롣
+D:後に王となる湖の街の陰気面バルドが龍を射抜いた伝説の黒い矢だ。
+D:彼が龍を射抜いたこの矢は歌に唄われ語り継がれている。
 
 # The Blade of Chaos 'Soulcrusher'
 
-N:154:�إ����륯��å����
+N:154:『ソウルクラッシュ』
 E:'Soulcrusher'
 I:23:30:4
 W:70:25:180:250000
@@ -2871,7 +2871,7 @@ F:CHAOTIC | CURSED | HEAVY_CURSE | LITE
 
 # The Long Sword of Falis
 
-N:155:�����ե��ꥹ��
+N:155:至高神ファリスの
 E:of Falis
 I:23:17:5
 W:70:25:130:80000
@@ -2880,7 +2880,7 @@ F:KILL_DEMON | STR | KILL_EVIL | KILL_UNDEAD | BRAND_FIRE | KILL_TROLL |
 F:KILL_ORC | FREE_ACT | RES_FIRE | RES_ACID | RES_COLD | RES_ELEC | 
 F:SUST_STR | SEE_INVIS | SHOW_MODS | LITE | BLESSED
 
-N:156:�إե��ƥ󥰡�
+N:156:『フランテング』
 E:'Hrunting'
 I:23:25:4
 W:30:90:250:100000
@@ -2888,17 +2888,17 @@ P:0:4d6:13:21:0
 F:STR | HIDE_TYPE |
 F:VORPAL | SLAY_DRAGON | KILL_GIANT |
 F:FREE_ACT | LITE | LEVITATION | SHOW_MODS
-D:����̵�ФΥǥ�ޡ����α�ͺ���١�������դ����²����å����
-D:�Ǹ���襤�ǤϤ��η��ˤ�ä�ε���༣������
+D:剛力無双のデンマークの英雄王ベーオウルフが巨人族から奪い、
+D:最後の戦いではこの剣によって竜を退治した。
 
-N:157:��ǡ�ն������Ű��������ɴ�ԡ�
+N:157:『如意金葹棒重一万三千五百斤』
 E:'Nyoi-bou'
 I:21:16:5
 W:80:70:500:300000
 P:0:7d7:5:25:10
 F:STR | SLAY_EVIL | SEE_INVIS | RIDING
 
-N:158:���̥ӥ�����
+N:158:アヌビス神の
 E:of Anubis
 I:23:20:4
 W:30:90:120:200000
@@ -2906,28 +2906,28 @@ P:0:3d4:28:22:-30
 F:DEX | CHAOTIC | CURSED | HEAVY_CURSE | TUNNEL | AGGRAVATE | BLOWS |
 F:RES_CONF | RES_CHAOS | RES_FEAR | RES_DISEN | NO_TELE
 
-N:159:����˾��
+N:159:太公望の
 E:of Taikobo
 I:22:40:0
 W:10:150:30:10000
 P:0:1d1:0:0:0
 F:ACTIVATE | INSTA_ART
 U:FISHING
-D:����˾�Ϥ������Ȥ��Ѥ�������ڤ���Τ����ݤǤ��ä�����
-D:��ɤ��༫�Ȥ�����ʸ��������Ƥ��ޤä��ΤǤ��ä���
+D:太公望はこの釣り竿を用いて釣りを楽しむのが日課であったが、
+D:結局は彼自身が周の文王に釣られてしまったのであった。
 
 #The Long Sword 'Gurenki'
-N:160:�ع�ϡɱ��
+N:160:『紅蓮姫』
 E:'Gurenki'
 I:23:17:2
 W:60:150:130:100000
 P:0:4d5:-10:25:0
 F:VORPAL | VAMPIRIC | SLAY_EVIL | KILL_DEMON | ESP_DEMON |
 F:AGGRAVATE | LITE | CON 
-D:����ϻ˾�Ƕ������������
-D:���˵�����Ȥ������ο�¡��Ĥ�̤�������̿�򿩤٤Ĥ�����
+D:彼女は史上最強の破妖刀だ。
+D:朱金に輝く刀身で魔性の心臓をつらぬき、その命を食べつくす。
 
-N:161:�������ڡ�
+N:161:『蜻蛉切』
 E:'Tonbo giri'
 I:22:7:3
 W:35:70:350:250000
@@ -2938,10 +2938,10 @@ F:RES_ELEC | RES_ACID | RES_FEAR | SHOW_MODS | RIDING
 D:$Because of very superb sharpness such as dragon flies are 
 D:$cut which perches on the tip of this spear, it is called
 D:$'Tonbo giri' which means 'dragon fry cutter'. 
-D:�����ŷ���Σ�����¿�龡�ΰ��Ѥ������
-D:�����ڤ�̣������˻ߤޤä����٤��ڤ�������ۤɤǤ��롣
+D:徳川四天王の１人本多忠勝の愛用の槍だ。
+D:その切れ味は穂先に止まった蜻蛉が切れて落ちるほどである。
 
-N:162:���硼����Τ�
+N:162:ジョーンズ博士の
 E:of Dr. Jones
 I:21:2:1
 W:8:5:30:18000
@@ -2949,11 +2949,11 @@ P:0:1d6:16:13:0
 F:INT | WIS | LEVITATION | SHOW_MODS | ACTIVATE | SEE_INVIS
 U:TELEKINESIS
 D:$This is the whip of the famous archaeologist Prof. Jones.
-D:������̾�ʹ͸ųؼԥ��硼����ΤΥ������
-D:ɬ���䡢�����ѡ������������ǽ�ˤ����������
+D:あの著名な考古学者ジョーンズ博士のムチだ。
+D:必ずや、スーパーアクションを可能にするだろう。
 
 # The Spear 'GaeBolg'
-N:163:�إ����ܥ륰��
+N:163:『ガエボルグ』
 E:'GaeBolg'
 I:22:2:4
 W:45:90:80:150000
@@ -2963,12 +2963,12 @@ F:BRAND_ELEC | SLAY_EVIL | SLAY_GIANT |
 F:RES_ELEC | RES_LITE | RES_DARK |
 F:LITE | SEE_INVIS | RES_BLIND | SHOW_MODS | RIDING
 U:BA_STAR
-D:����Ȥα�ͺ�����ա����Ρ���ε�ι�������줿Ĺ�����
-D:�Ĥͤ��ܱǤ�ȯ�����뤽��������Ũ���ܤ򤯤�ޤ���
-D:�դ˽�ͭ�Ԥλ��Ϥ��롣
+D:ケルトの英雄クーフーリンの、海竜の骨から削られた長槍だ。
+D:つねに目映く発せられるその閃光は敵の目をくらまし、
+D:逆に所有者の視力を守る。
 
 # The Trident of Arryu-Chien-Kun
-N:164:������Ϻ������
+N:164:顕聖二郎真君の
 E:of Arryu-Chien-Kun
 I:22:5:2
 W:30:45:70:120000
@@ -2979,10 +2979,10 @@ F:RES_COLD | RES_NEXUS |
 F:SEE_INVIS | SLOW_DIGEST | REGEN | ACTIVATE | 
 F:BLESSED | SHOW_MODS | RIDING | ESP_ANIMAL
 U:SUMMON_HOUND
-D:��̾������̯ƻ����������²���äƤ�����Ǥ�����Ϻ�����λ��������
-D:��ϰ�ε������������������¿��ƤȲ������
+D:仙名を清源妙道真君、神仙族きっての武神である二郎真君の三尖刀だ。
+D:彼は悪竜や魔神、自然の妖魔を多数討伐した。
 
-N:165:���饹�η�
+N:165:ガラスの靴
 E:Pair~ of Glass Slippers
 I:30:2:-3
 W:40:40:20:40000
@@ -2991,16 +2991,16 @@ F:DEX | HIDE_TYPE | SUST_CHR | STEALTH | SPEED |
 F:RES_LITE | RES_DARK | RES_NEXUS |
 F:RES_NETHER | RES_CHAOS | LITE | FULL_NAME
 
-N:166:��Ͳ����
+N:166:水戸黄門の
 E:of Mito Koumon
 I:40:20:2
 W:30:80:3:100000
 F:INT | WIS | CHR | SEARCH | INFRA | SEE_INVIS | ACTIVATE |
 F:HIDE_TYPE | INSTA_ART
 U:INROU
-D:�轵��������20:45��������Ϥ�ȯ������餷����
+D:毎週月曜日の20:45に絶大な力を発揮するらしい。
 
-N:167:�س������
+N:167:『噛尾刀』
 E:'Tailbiter'
 I:23:16:2
 W:20:30:150:35000
@@ -3008,14 +3008,14 @@ P:0:2d5:18:9:0
 F:CON | SEARCH | BLOWS |
 F:SLAY_EVIL | KILL_DRAGON | ESP_DRAGON |
 F:SHOW_MODS
-D:�֡Ĥ���̾��ͭ̾�ʥ����ǥ��������������Ĥޤ�ʪ����ܤʤ�
-D:�Ǥ��ʤ��ߤΡ�����¯�ˤ����������Ǥ��뤾����ε�����ޥ�
-D:�����˶��դ��ȡ��������ˤϤ����ޤäƤ��ʤ��Τ��㡣����
-D:��ͦ�Ԥμ�ˤˤ�����С������ʤ�ε�⤿�������ϤǤ���Ȥ�
-D:�������㤾����
-D:(J.R.R.�ȡ��륭�󡢵��Ŀ����������ץ��㥤�륺������)
+D:「…その名も有名なカウディモルダクス剣、つまり物語の本など
+D:でおなじみの、あの俗にいわゆる噛尾刀であるぞ。…竜が５マイ
+D:ル以内に近付くと、さやの中にはおさまっていないのじゃ。これ
+D:が勇者の手ににぎられれば、いかなる竜もたちうちはできんとい
+D:う剣じゃぞ。」
+D:(J.R.R.トールキン、吉田新一訳、農夫ジャイルズの冒険)
 
-N:168:���ץ��㥤�륺��
+N:168:農夫ジャイルズの
 E:of Giles
 I:37:2:-2
 W:20:20:200:30000
@@ -3023,36 +3023,36 @@ P:12:1d4:-2:0:18
 F:STEALTH | 
 F:RES_FIRE | RES_CHAOS | RES_NEXUS | RES_COLD
 F:HIDE_TYPE
-D:�֤फ����ι񤫤��äѤ���ʪ�κ������Ӥ���㤨�ʤ��ä�
-D:�Ԥϡ��פΥ���Ĥ�Ŵ���ؤ�˥���դ��ơ�����Ǥ��ޤ󤷤���
-D:�������Ȥ�ʹ�������Ȥ����롣�ҤȤĤ��μ�Ǥ�äƤߤ뤳��
-D:�ˤ��뤫����
-D:(J.R.R.�ȡ��륭�󡢵��Ŀ����������ץ��㥤�륺������)
+D:「むかし南の国からりっぱな本物の鎖かたびらを買えなかった
+D:者は、革のシャツに鉄の輪を縫い付けて、それでがまんしたと
+D:いうことを聞いたことがある。ひとつその手でやってみること
+D:にするか！」
+D:(J.R.R.トールキン、吉田新一訳、農夫ジャイルズの冒険)
 
-N:169:������ڡ�
+N:169:『拍子木』
 E:'Hyousi-gi'
 I:21:4:3
 W:25:5:15:808
 P:0:1d2:-3:-7:6
 F:SEARCH | ACTIVATE | SHOW_MODS | HIDE_TYPE
 U:AGGRAVATE
-D:�������ܤθߤ���ü�����٤���Ƿ�Ф�Ƥ��롣
-D:���Ȥ��Ƥϸ��뤫������������ �ɲФ򤽤�Ǥ�Ȥ���һΤ������Ȥä���
-D:ͳ�������������Ȥ����Ƥ��롣
+D:角柱二本の互いの端が、細い縄で結ばれている。
+D:武器としては見るからに貧相だが、 防火をその任とする衛士たちが使った、
+D:由緒正しい武器だといわれている。
 
-N:170:��Ż��
+N:170:『纏』
 E:'Matoi'
 I:21:7:3
 W:40:5:100:808
 P:0:1d7:-5:10:3
 F:STR | CHR | RES_FIRE | ACTIVATE | 
 U:HELO
-D:�òк�Ȥˤ����äơ��ε�����񤹤٤����ꤿ�Ƥ�줿�����
-D:��������Υޡ�������α��פ����ꡢ���β�¦����
-D:Ĺ���Ӿ��ξ��꤬���ܤ�ΤӤƤ��롣
-D:���ξ����ξ�ħ�Ǥ��ꡢ�Ǥ�ͦ�������Τ������Ȥ��줿��
+D:消火作業にあたって、士気を鼓舞すべく振りたてられた杖だ。
+D:杖の先に隊のマーク入りの円盤があり、その下側から
+D:長い帯状の飾りが幾本ものびている。
+D:この杖は隊の象徴であり、最も勇気あるものが扱うとされた。
 
-N:171:��ŷ��ή���ĵ�����¢��
+N:171:二天一流開祖宮本武蔵の
 E:of Musashi
 I:23:20:3
 W:50:15:120:60000
@@ -3060,10 +3060,10 @@ P:0:3d4:28:17:0
 F:DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
 D:$It is the katana of the famed creator of the dual sword technique, 
 D:$Miyamoto Musashi, and wielded with his right hand in combat.
-D:̾�⤭��ŷ��ή���ϻϼԡ�������¢���ȤäƤ����������
-D:�襤�ˤ����Ƥϱ������ᡢ���˾������äƿ���ä��Ȥ�����
+D:名高き二天一流の創始者、宮本武蔵が使っていた大刀だ。
+D:戦いにおいては右に大刀、左に小刀を持って振るったという。
 
-N:172:��ŷ��ή���ĵ�����¢��
+N:172:二天一流開祖宮本武蔵の
 E:of Musashi
 I:23:13:3
 W:50:5:90:60000
@@ -3071,46 +3071,46 @@ P:0:2d4:28:17:0
 F:DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
 D:$It is the wakizashi of the famed creator of the dual sword technique, 
 D:$Miyamoto Musashi, and wielded with his left hand in combat.
-D:̾�⤭��ŷ��ή���ϻϼԡ�������¢���ȤäƤ����������
-D:�襤�ˤ����Ƥϱ������ᡢ���˾������äƿ���ä��Ȥ�����
+D:名高き二天一流の創始者、宮本武蔵が使っていた小刀だ。
+D:戦いにおいては右に大刀、左に小刀を持って振るったという。
 
-N:173:�ؿ�ȳ��Ŵ���
+N:173:『神罰の鉄球』
 E:'Iron ball'
 I:21:6:-6
 W:45:40:666:66666
 P:0:25d4:-30:0:20
 F:SPEED | STEALTH | WIS | IMPACT | SHOW_MODS | HIDE_TYPE |
 F:CURSED | HEAVY_CURSE
-D:�Կ����Ԥ�­�ˤ�����Ĥ���졢����ư�����˳����롣
-D:�Ť������Ȥ��Ƥ�Ȥ��ʤ����Ϥʤ���
+D:不信心者の足にくくりつけられ、その動きを阻害する。
+D:重いが武器としても使えない事はない。
 
-#�Ѹ�̾��Ŭ���Ǥ��������å������������鯤������פ�ꡣ
-N:174:�ؤ��Ф䤭�ɡ�
+#英語名は適当です。エルリックサーガ８「薔薇の復讐」より。
+N:174:『すばやき刺』
 E:'Quickthorn'
 I:23:7:3
 W:30:15:55:75000
 P:0:1d7:27:9:0
 F:DEX | BLOWS | SLAY_DEMON | RIDING
 F:FREE_ACT | SEE_INVIS | SHOW_MODS | RES_CHAOS | RES_DISEN |
-D:�����Τ��ᡢ�������õ���ƻ���ή��ι������鯡�ȸƤФ������η�����
-D:����٤�®�٤�������Ϥ��������Τ������Ƥ��롣
-D:�ؾ������ɡ٤��Ф������Ƥ��롣
+D:復讐のため、三姉妹を探して時間流を旅する＜薔薇＞と呼ばれる女性の剣だ。
+D:恐るべき速度と狙いをはずさぬ正確さを秘めている。
+D:『小さき刺』と対を成している。
 
-#�Ѹ�̾��Ŭ���Ǥ��������å������������鯤������פ�ꡣ
-N:175:�ؾ������ɡ�
+#英語名は適当です。エルリックサーガ８「薔薇の復讐」より。
+N:175:『小さき刺』
 E:'Littlethorn'
 I:23:5:3
 W:20:6:30:22500
 P:0:1d5:18:6:0
 F:INT | CHR | REGEN | SLAY_EVIL |
 F:RES_NEXUS | FREE_ACT | SEE_INVIS | SHOW_MODS |
-D:�����Τ��ᡢ�������õ���ƻ���ή��ι������鯡�ȸƤФ������η�����
-D:�ؤ��Ф䤭�ɡ٤��Ф������Ƥ��롣
+D:復讐のため、三姉妹を探して時間流を旅する＜薔薇＞と呼ばれる女性の剣だ。
+D:『すばやき刺』と対を成している。
 
-#N:*:�إ��쥤�ɥ���ա�
-#N:*:�إ���ɥ�����ҡ�
-#N:*:�إ����С����
-N:176:�إ���������С���
+#N:*:『カレイドウルフ』
+#N:*:『カラドヴォルヒ』
+#N:*:『キャリバーン』
+N:176:『エクスカリバー』
 E:'Excalibur'
 I:23:17:3
 W:50:180:130:300000
@@ -3120,30 +3120,30 @@ F:VORPAL | TUNNEL | RIDING |
 F:SLAY_EVIL | SLAY_UNDEAD | SLAY_DEMON |
 F:RES_SHARDS | RES_FEAR | BLESSED | HOLD_EXP | 
 F:SEE_INVIS | WARNING | SHOW_MODS
-D:���������ˤ��ä���줷��Ϥ���⤭�Ϥʤ�ơ����������������Ȥʤ���
-D:�ʥȥޥ����ޥ��꡼�������������λ��
+D:「妖精郷にて鍛えられし我はいや高き刃なりて、相応しき王の佩刀とならん」
+D:（トマス・マロリー、アーサー王の死）
 
-N:177:�إ���������ѡ���
+N:177:『エクスカリパー』
 E:'Excalipur'
 I:23:17:-3
 W:50:30:130:0
 P:0:5d5:-50:-50:-5
 F:WIS | CHR | 
 F:TY_CURSE | AGGRAVATE | DRAIN_EXP | SHOW_MODS | THROW
-D:�֤ʤ������ϡ��Ƕ��η�����ʤ��Τ�������
-D:��FINAL FANTASY V��
+D:「なんだこれは！最強の剣じゃないのか！？」
+D:（FINAL FANTASY V）
 
-N:178:���ϥ��ॽ���
+N:178:怪力サムソンの
 E:of Samson
 I:21:1:3
 W:10:20:50:40000
 P:0:2d4:8:10:0
 F:STR | CON | RES_FEAR | SEE_INVIS | SLAY_EVIL | SLAY_UNDEAD
-D:���ϥ��ॽ�󤬥ڥ륷����ʼ�Τ���Ϥ����ˤä��Ȥ��˻ȤäƤ���
-D:���������ǤǤ��Ƥ��뤿��˷ڤ����������ʤ��Ϥϼٰ��ʥ�󥹥���
-D:���Ǥ�ʧ����
+D:怪力サムソンがペルシア人兵士の包囲を撃ち破ったときに使っていた
+D:棍棒。骨でできているために軽く、その聖なる力は邪悪なモンスター
+D:を打ち払う。
 
-N:179:�إ���������С�������˥���
+N:179:『エクスカリバー・ジュニア』
 E:'Excalibur Jr.'
 I:23:8:2
 W:35:15:80:60000
@@ -3152,11 +3152,11 @@ F:BLOWS
 F:SLAY_UNDEAD | SLAY_DRAGON | SLAY_ANIMAL |
 F:RES_FIRE | RES_FEAR | BLESSED | 
 F:SLOW_DIGEST | SHOW_MODS
-D:������������������С��˻������Ρ����������η�����
-D:��ʬ�Τ��Ȥ��E.J.�פȸƤӡ��������ޤ��ä⤹�롣
-D:�������ֵ����ȡ�����Τ��ޤ�ץ��Τ褦�ˤפ�פ�ȿ̤��롣
+D:かの宝剣エクスカリバーに似た作りの、少し小型の剣だ。
+D:自分のことを「E.J.」と呼び、ごくたまに話もする。
+D:蜘蛛と対峙すると、恐れのあまりプリンのようにぷるぷると震える。
 
-N:180:�ϥ�ɤ�
+N:180:ハラドの
 E:of Harad
 I:19:24:-2
 W:60:120:200:35000
@@ -3165,10 +3165,10 @@ F:WIS | STEALTH | XTRA_SHOTS | XTRA_MIGHT | AGGRAVATE | RES_LITE | RES_DARK |
 F:HIDE_TYPE | SHOW_MODS | TY_CURSE
 D:$A great brazen arbalest with arms of gleaming steel shooting quarrels with 
 D:$speed and power for those brave enough to risk betrayal.
-D:΢�ڤ�δ���������ͦ���Τ���Ԥ��Ѥ��뿿������礭��׸�ݤǤ��ꡢ�������
-D:ĥ��줿������Ŵ���θ�����Ϲ�®�����϶�����������롣
+D:裏切りの危険を冒す勇気のある者が用いる真鍮製の大きな弩弓であり、アームに
+D:張られた輝く鋼鉄製の弦からは高速かつ力強い矢が放たれる。
 
-N:181:Ŭ����
+N:181:適当な
 E:of halfheart
 I:21:63:7
 W:127:1:50:1000000
@@ -3179,9 +3179,9 @@ F:SLAY_UNDEAD | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT | SLAY_ORC | WARNING |
 F:IM_FIRE | RES_SHARDS | RES_FEAR | TUNNEL | INFRA | SEARCH | REFLECT |
 F:LITE | TELEPATHY | REGEN | BRAND_FIRE | BRAND_COLD | BRAND_POIS |
 F:SLAY_HUMAN | HIDE_TYPE | SHOW_MODS | RIDING | QUESTITEM | INSTA_ART
-D:�ʤ�Ȥ�����Ŭ���˺��줿������
+D:なんというか適当に作られた棒だ。
 
-N:182:�����������
+N:182:いいかげんな
 E:of irresponsibility
 I:19:63:7
 W:127:1:50:1000000
@@ -3190,9 +3190,9 @@ F:SPEED | INT | WIS | SUST_INT | SUST_WIS | XTRA_SHOTS | XTRA_MIGHT |
 F:DEC_MANA |
 F:RES_DARK | RES_LITE | RES_DISEN | RES_BLIND | IM_COLD | SLOW_DIGEST |
 F:HIDE_TYPE | SHOW_MODS | QUESTITEM | INSTA_ART
-D:����������������ʺ��εݤ���
+D:すごくいいかげんな作りの弓だ。
 
-N:183:��뵤�Τʤ�
+N:183:やる気のない
 E:of idler
 I:36:63:7
 W:127:1:10:1000000
@@ -3201,19 +3201,19 @@ F:STEALTH | CON | CHR | SUST_CON | SUST_CHR | IM_ELEC | RES_ACID |
 F:RES_CONF | RES_SOUND | RES_NETHER | RES_NEXUS | RES_CHAOS |
 F:SH_FIRE | SH_ELEC | SH_COLD | RES_POIS | HOLD_EXP | LEVITATION |
 F:HIDE_TYPE | SHOW_MODS | QUESTITEM | INSTA_ART
-D:�ɤ����Ƥ��뵤�Τʤ�������������
+D:どう見てもやる気のない感じの服だ。
 
 # The Broad Sword 'Arunruth'
 
-# (������)
+# (コメント)
 #
 #
-# (����)
-# ����ϡ�ʸ���ɤ�����ȡ֥����롼���פʤ�����ɡ�����ޥ��ꥪ��
-# �˽ФƤ������������'Aranruth'�����󥴥벦���塹�Υ̥�Ρ���β���
-# ���Ǥ������֤󸵤Υ��������֤��ְ㤨����ä������͡�
+# (小林)
+# これは，文字どおりだと「アルンルース」なんだけど，シルマリルリオン
+# に出てくる剣は本当は'Aranruth'．シンゴル王と代々のヌメノールの王の
+# 剣です．たぶん元のソースが綴りを間違えちゃったんだよね．
 #
-N:184:�إ����롼����
+N:184:『アランルース』
 E:'Aranruth'
 I:23:16:4
 W:20:45:150:50000
@@ -3226,14 +3226,14 @@ U:BA_COLD_2
 D:$The beautiful sword of Thingol, justly named "King's Ire".  It glistens
 D:$ icy enough to freeze the hearts of demons, and you feel supple and
 D:$ lightfooted as you clasp its hilt of gold and silver inlay.
-D:���ߤ�����ֲ����ܤ�פ�̾�դ���줿�������ޥ�Ȳ����󥴥��������������
-D:���οϤ�ɹ��ǡ������������ο�¡�����ƤĤ����롣���κٹ����ܤ��줿
-D:���������ˤ���С����ʤ䤫�ʿȤΤ��ʤ��ȷڤ䤫��­��򴶤������������
+D:いみじくも「王の怒り」と名付けられた、灰色マント王シンゴルの美しい剣だ。
+D:その刃は氷の如く輝き、悪魔の心臓をも凍てつかせる。金銀の細工が施された
+D:その柄を手にすれば、しなやかな身のこなしと軽やかな足取を感じられるだろう。
 
 # The Set of Gauntlets 'Paurnimmen'
 
 # ???, Ko
-N:185:�إѥ����˥����
+N:185:『パウアニンメン』
 E:'Paurnimmen'
 I:31:2:1
 W:10:20:25:13000
@@ -3241,10 +3241,10 @@ P:2:1d1:0:0:15
 F:INT | RES_COLD | EASY_SPELL | ACTIVATE
 U:BO_COLD_1
 D:$A set of handgear so icy as to be able to fire frost bolts.
-D:����������ǡ��򤭷��פ��̣����̾����Ĥ����Ƽ�Ͼ��
-D:�䤿��������ɹ��������Ĥ��Ȥ��Ǥ��롣
+D:シンダール語で「白き拳」を意味する名を持つこの籠手は常に
+D:冷たく輝き、氷の矢を放つことができる。
 
-N:186:�ҳ��ԥ������ǥ����
+N:186:航海者エアレンディルの
 E:of Earendil
 I:34:7:0
 W:50:6:160:90000
@@ -3254,28 +3254,28 @@ F:ACTIVATE | ESP_GOOD
 U:CURING
 D:$A shining shield, once borne by the great mariner Earendil, "scored with 
 D:$runes to keep all wounds and harm from him".
-D:���Ĥư���ʤ�����ꥨ�����ǥ��뤬�Ȥ��դ��Ƥ������������
-#D:�����볲�ʤ���Τ��ऱ��롼��ʸ������ޤ�Ƥ��롣
-D:�ֵ�����ˤϤ��������������򤵤���롼��ʸ�����߹��������
-D:(J.R.R.�ȡ��륭�������������������� ���ǻ���ʪ��) 
+D:かつて偉大なる船乗りエアレンディルが身に付けていた輝く盾だ。
+#D:あらゆる害なすものを退けるルーン文字が刻まれている。
+D:「輝く盾にはあらゆる危害や傷害をさけるルーン文字を刻み込んだ。」
+D:(J.R.R.トールキン、瀬田貞二・田中明子訳 新版指輪物語) 
 
 # The Spear 'Aeglos'
 
-# (������)
+# (コメント)
 #
 # wp.220
 #
-#(�ԡ���)
-#�ؤĤ��٤Ȥ������ԥ� �� �إ����������٤Ȥ������ԥ�
-#������ʪ��ǤϤ���ɽ������Ƥ��ޤ���
-#���ؿƤ��ߤ�Ф�����ˡ����ܸ�Ǥȸ����ޤ���������������ȥ���ո�������
-#���ܸ�������ʤ��ƤϤʤ�ޤ��󡣰�����������ո줫�����ܸ��������Τ��Լ�
-#���Ǥ����ޤ�������ʪ��ˤĤ��ƤΥȡ��륭����ä��ˡرѸ�ȥ���ո��������
-#�Ф����Ȥ����ȸ������ȤǤ����顢�Ѹ�����ܸ������������ո�ϥ���ո�Ȥ�
-#�ƻĤ��Ƥ����٤��Ǥ�������ʪ������ܸ��ǤǤ����Ū�ˤ��ιͤ����ˤ�ä�����
-#��Ƥ��ޤ���������ˡؤĤ��٤ϳʹ��������ޤ줽����(��)��
+#(都々目)
+#『つらら』というスピア → 『アイグロス』というスピア
+#＊指輪物語ではこう表記されています。
+#　『親しみを出すために』日本語でと言われましたが、そうするとエルフ語全部を
+#日本語に訳さなくてはなりません。一部だけエルフ語から日本語に訳するのは不自
+#然です。また、指輪物語についてのトールキンの話しに『英語とエルフ語の対比を』
+#出そうとしたと言うことですから、英語は日本語に訳し、エルフ語はエルフ語とし
+#て残しておくべきです。指輪物語の日本語版でも基本的にこの考え方によって訳さ
+#れていますし。それに『つらら』は格好悪いし折れそうだ(笑)。
 #
-N:187:�إ�����������
+N:187:『アイグロス』
 E:'Aeglos'
 I:22:2:4
 W:15:45:80:140000
@@ -3286,13 +3286,13 @@ F:SLOW_DIGEST | ACTIVATE | BLESSED | SHOW_MODS
 U:BA_COLD_2
 D:$The mighty spear of Gil-galad, famed as "Snow-point" in the songs of Elves, 
 D:$against which all the foul corruptions of Sauron dashed in vain.
-D:��鲦����=����ɤζ��Ϥ���ǡ����������פȤ���̾�⤤��
-D:�֤��η���Ĺ����������ϱԤ����������ϡ��󤯤��˾�ߤ����ꡣ��
-D:�ȥ���դβΤ˲Τ��뤳����ˤϡ�
-D:��������Τ����ʤ���ޤ路�����ͤɤ��
-D:�����Ǥ��Ǥ��ʤ��ä���
+D:上級王ギル=ガラドの強力な槍で、「雪の切先」として名高い。
+D:「その剣は長く、その槍は鋭く、輝く兜は、遠くより望みえたり。」
+D:とエルフの歌に歌われるこの槍には、
+D:サウロンのいかなる忌まわしい下僕どもも
+D:太刀打ちできなかった。
 
-N:188:�ܥꥷ�祤��
+N:188:ボリショイの
 E:of Bolshoi
 I:21:2:4
 W:15:8:30:22500
@@ -3300,21 +3300,21 @@ P:0:2d6:6:9:0
 F:DEX | CHR | HIDE_TYPE | RIDING |
 F:KILL_ANIMAL | ESP_ANIMAL | BRAND_FIRE | ACTIVATE
 U:CHARM_ANIMAL
-D:˿�񥵡������Ĥǻ��Ѥ��줿ͳ���������ԽûȤ��ξڤ���
-D:���Υ���β��Ϥɤ���ԽäǤ�̤��夬�餻�뤳�Ȥ��Ǥ��롣
+D:某国サーカス団で使用された由緒正しい猛獣使いの証だ。
+D:このムチの音はどんな猛獣でも震え上がらせることができる。
 
-N:189:�˲���
+N:189:破壊の
 E:of Destruction
 I:23:33:3
 W:70:8:30:100000
 P:0:3d6:-25:25:0
 F:STR | DEX | BLOWS | CHAOTIC | CURSED | HEAVY_CURSE | TY_CURSE | AGGRAVATE
 F:BRAND_FIRE | BRAND_COLD | BRAND_ELEC | BRAND_ACID | BRAND_POIS
-D:���Ϥ��˲��Ϥ�ۤ���֤Ϥ����ΤĤ뤮�פ����᤯����򷫤����
-D:�֤Ϥ�֤��Τ���פ��碌�����������η���Ȥ����˲������ɡ����ݤ����Ȥʤ�
-D:�ֻҤμ��Ǳ��褦�ʤ�Τ���
+D:強力な破壊力をほこる「はかいのつるぎ」と素早く攻撃を繰りだす
+D:「はやぶさのけん」を合わせた武器だ。この剣を使えば破壊神シドーを倒すことなど
+D:赤子の手を捻るようなものだ。
 
-N:190:�إ��ȡ���֥�󥬡���
+N:190:『ストームブリンガー』
 E:'Stormbringer'
 I:23:30:2
 W:45:1:180:100000
@@ -3322,13 +3322,13 @@ P:0:6d6:16:16:0
 F:VAMPIRIC | STR | CON | FREE_ACT | HOLD_EXP | RES_NETHER | RES_CONF |
 F:RES_CHAOS | CURSED | HEAVY_CURSE | DRAIN_EXP | AGGRAVATE | QUESTITEM
 F:SLAY_HUMAN |
-D:����ǯ��Ĺ���ˤ錄�ꡢ�ɲڤ�ؤꤷ���˥ܥͤθ��������������礤�ʤ�
-D:����ŷ�Ϥˤ���ơ��ͤȿ����α�̿�ϡҽ�̿�ӤΤ��ʤƤ��ξ���äؤ�졢
-D:���������蘆���ꡢ�������η����ԤʤϤ줿�ꡣ���ΤȤ����ޤ���ͦ��
-D:�ڽФ��ꡣ�ʤ�ɽ���ͥ�줿��ϥ��˥ܥͺǸ�β������å����롼���
-D:��ޤ줷�������ΤˤʤҼ�ʤ꤭��
+D:一万年の長きにわたり、栄華を誇りしメルニボネの光の帝国の末期、大いなる
+D:異変天地にありて、人と神々の運命は〈宿命〉のかなてこの上に鍛へられ、
+D:恐ろしき戦さあり、もろもろの勲し行なはれたり。このときあまたの勇者
+D:輩出せり。なれど衆に優れたるはメルニボネ最後の王エルリック、ルーンの
+D:刻まれし黒き剣のになひ手なりき。
 
-N:191:�إʥ륷���
+N:191:『ナルシル』
 E:'Narsil'
 I:23:2:1
 W:20:4:130:20000
@@ -3337,65 +3337,65 @@ F:STR | BLOWS | HIDE_TYPE |
 F:SLAY_ORC | SLAY_TROLL | RES_FIRE
 D:$A blade of Elendil that was broken by his fall as the battled Sauron upon
 D:$ the steps of Barad-Dur.
-D:�ֶ�Ϥ��٤Ƹ���Ȥϸ¤�̡�
-D:��ϲ����Ԥ��٤Ƥ����ޤ褦�ԤǤϤʤ���
-D:ǯ�դ�⡢�����ϸϤ�̡�
-D:�������ˡ������Ϥ��̡�
-D:�����椫��ФϤ�ߤ����ꡢ
-D:�Ƥ�����꤬�����������������
-D:�ޤ줿�Ϥϡ������˸����졢
-D:̵���μԤ����ޤ����Ȥʤ�������
+D:「金はすべて光るとは限らぬ、
+D:放浪する者すべてが、まよう者ではない。
+D:年ふるも、強きは枯れぬ、
+D:深き根に、霜は届かぬ。
+D:灰の中から火はよみがえり、
+D:影から光りがさしいずるだろう。
+D:折れた刃は、新たに研がれ、
+D:無冠の者が、また王となろう。」
 
-N:192:��GHB ���ݤ������ɤ���ʷ��ʣԥ���Ĥ����������ʤ��ä��衪��
+N:192:『GHB を倒したけどこんな嫌なＴシャツしか手に入らなかったよ！』
 E:'I killed the GHB and all I got was this lousy t-shirt!'
 I:36:0:0
 W:0:0:10:1
 P:1:1d1:0:0:0
 F:QUESTITEM
 
-N:193:�������ر���
+N:193:美髯公関羽の
 E:of Guan Yu
 I:23:22:3
 W:60:60:320:200000
 P:0:4d5:20:20:5
 F:STR | DEX | CON | SLAY_EVIL | SLAY_HUMAN |
 F:VORPAL | SHOW_MODS
-D:˭���������ߤ������͡��ر��Ϥ�����ζ���¿���ι����Ϥ�
-D:á���������褿��
+D:豊かな髯を蓄えた義人・関羽はこの青龍刀で多くの豪傑を地に
+D:叩き伏せて来た。
 
-N:194:����Ƹ�Ҥ�
+N:194:酒呑童子の
 E:of Shuten-douji
 I:21:16:6
 W:40:40:350:100000
 P:0:4d7:0:20:10
 F:STR | RES_FEAR
-D:�繾���ε��μ��Τ������Ƹ�ҤνŤ���������
+D:大江山の鬼の首領たる酒呑童子の重い金棒だ。
 
-N:195:�إ�����ǥ�ϥ�ޡ���
+N:195:『ゴールデンハンマー』
 E:'Golden Hammer'
 I:21:19:0
 W:45:5:50:300000
 P:0:2d6:0:0:0
-D:���Υϥ�ޡ����Ѥ������ޤ줿�����ƥब����᤻��餷����
+D:このハンマーを用いると盗まれたアイテムが取り戻せるらしい。
 
-N:196:�إ����ȥ�������
+N:196:『グリムトゥース』
 E:'Grimtooth'
 I:23:4:1
 W:7:15:12:25000
 P:0:1d4:5:5:0
 F:DEX | BLOWS | BRAND_POIS | SHOW_MODS | THROW
 
-N:197:�ڥ륻������
+N:197:ペルセウスの
 E:of Perseus
 I:34:3:2
 W:30:10:65:45000
 P:5:1d2:0:0:15
 F:STR | RES_ACID | RES_COLD | RES_FEAR |
 F:REFLECT | SUST_STR | 
-D:�ؤ�ȱ����ĥ�ɥ��������в����ˤߤ⡢����ȿ�ͤν�����ˤ�
-D:���̤��ʤ��ä���
+D:蛇の髪を持つメドゥーサの石化の睨みも、この反射の盾の前には
+D:効果がなかった。
 
-N:198:ȴ��Ǧ���।��
+N:198:抜け忍カムイの
 E:of Kamui the Escapee
 I:23:19:4
 W:20:8:100:60000
@@ -3404,7 +3404,7 @@ F:DEX | STEALTH | SEARCH | RES_FIRE | BRAND_POIS |
 F:ACTIVATE | SEE_INVIS | SHOW_MODS | WARNING
 U:TELEPORT
 
-N:199:�إ֥�åǥ����ࡼ���
+N:199:『ブラッディ・ムーン』
 E:'Bloody Moon'
 I:22:30:2
 W:70:12:250:180000
@@ -3412,15 +3412,15 @@ P:0:8d4:8:8:8
 F:ACTIVATE | SHOW_MODS
 U:BLOODY_MOON
 
-N:200:��
+N:200:ダ
 E:'Dasai'
 I:36:8:-10
 W:20:3:110:0
 P:8:1d1:-1:0:64
 F:AGGRAVATE | SUST_CHR | CHR
-D:�ʤ�ȥ��ĥ��ĤȤ����������ȡ�
+D:なんとゴツゴツとした鎧だこと。
 
-N:201:����ζ�����ڡ�
+N:201:『青龍の霊鱗』
 E:'Elemental of Ching-Rong'
 I:38:2:0
 W:80:9:300:200000
@@ -3429,10 +3429,10 @@ F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC |
 F:RES_DARK | RES_CONF | RES_POIS |
 F:FREE_ACT | SEE_INVIS | ACTIVATE
 U:RESIST_ALL
-D:������ס�����ȤȤ�˻ͽäȸƤФ����ζ���ڳ���
-D:�Ȥ�Ż���С�����ǡ�������Ϥ������롣
+D:玄武、白虎、朱雀とともに四獣と呼ばれる青龍の鱗鎧を
+D:身に纏えば、神の如き守護の力が得られる。
 
-N:202:��ŷ�ξ�̷��
+N:202:『天の沼矛』
 E:'Ama-no-NumaHoko'
 I:22:4:4
 W:50:40:240:150000
@@ -3442,16 +3442,16 @@ F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD |
 F:RES_ACID | RES_COLD | RES_BLIND | RES_CHAOS |
 F:LITE | ACTIVATE | BLESSED | SEE_INVIS | SHOW_MODS
 U:BA_WATER
-D:������ŷ�Ŀ�������̿�ʤ��ơ��˼����̿���˼�����̿��
-D:����ο��ˡ�������¿������ή��򽤤�����Ǥ���������
-D:�Ⱦۤ�ơ�ŷ�ξ�̷���Ҥơ����ͤ�����Ҥ����Ρ�����
-D:�ο���ŷ���ⶶ��Ω�����ơ����ξ�̷��ؤ��������Ʋ褭
-D:���ޤؤС��������ϡ�Ϥ�����褭�Ĥ��ư����夲���ޤջ���
-D:¶��̷�����������Ĥ�����ߤʤ��Ѥ���������꤭��
-D:������ǽ��Ϥ��ʤꡣ��(�Ż���)�� 
+D:「是に天つ神、諸の命以ちて、伊邪那岐命、伊邪那美命、
+D:二柱の神に、『是の多陀用弊流国を修め理り固め成せ。』
+D:と詔りて、天の沼矛を賜ひて、言依さし賜ひき。故、二柱
+D:の神、天の浮橋に立たして、その沼矛を指し下ろして画き
+D:たまへば、塩許々袁々呂々迩画き鳴して引き上げたまふ時、
+D:其の矛の末より垂り落つる塩、累なり積もりて島と成りき。
+D:是れ淤能碁呂島なり。」(古事記)。 
 
-# �⡼���å��ι��Τλ��Ӥ��������Ӥ�
-N:203:�⡼���å��ι��Τ�
+# モーロックの高僧の錆びた鎖かたびら
+N:203:モーロックの高僧の
 E:of The High Preist of Morlok
 I:37:1:-2
 W:90:8:200:100000
@@ -3460,12 +3460,12 @@ F:INT | WIS | CHR | HIDE_TYPE | RES_LITE | RES_DARK |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
 F:RES_POIS | RES_CONF | RES_CHAOS | RES_NETHER |
 F:RES_NEXUS | AGGRAVATE | CURSED | HEAVY_CURSE | TY_CURSE
-D:�����֡��Ȼ��Ӥ����ˤ������ꤽ���ʺ������Ӥ�ˤϡ�
-D:���Ĥƶ򤫤ˤ�����������å������̤Ƥ���
-D:���Ťι��Τα�ǰ������äƤ��롣
+D:この赤々と錆びた今にも崩れ去りそうな鎖かたびらには、
+D:かつて愚かにも守護する魔除けを奪われ朽ち果てた、
+D:太古の高僧の怨念がこもっている。
 
-# �˳��ز��Ѳ󤷡�
-N:204:�ز��Ѳ󤷡�
+# 綱鎧『化粧回し』
+N:204:『化粧回し』
 E:'Sumo wrestler's loincloth'
 I:36:9:4
 W:20:10:60:50000
@@ -3473,34 +3473,34 @@ P:4:0d0:0:0:0
 F:STR | CON | SUST_STR | SUST_CON |
 F:RES_FEAR | FREE_ACT | ACTIVATE
 U:SHIKOFUMI
-D:�ڤ���ι�Υ��⡼��Τ��ȤˤĤ�����������
-D:���ι�ڤ��������϶����򴶤������롣
+D:遥か東の国のスモー戦士が身につける正装だ。
+D:その豪華な宝飾は力強さを感じさせる。
 
-N:205:�̶ˤ����å�å���
+N:205:北極の聖獣ムックの
 E:of Mook
 I:35:3:0
 W:20:20:30:50000
 P:3:0d0:0:0:20
 F:RES_COLD | RES_ACID | RES_CHAOS | LEVITATION | ACTIVATE
 U:RESIST_COLD
-D:������ԥ���Ф�ʤ��֤��ä�����Υ�����������
+D:ガチャピンと対をなす赤い獣の毛皮のクロークだ。
 
-# ��°�����顼�������ޡ��إХƥ�󳻡�
-# ��̴����ǡ���פȤ���̡��ǡ����Ŀ�Ĺ�����γ�����ޤ���
-# REFLECT�ϡ���Ǥ�Ŵˤ�Ǥ���ä��褤���äƤ��Ȥ�(��)��
-N:206:�إХƥ�󳻡�
+# 金属製ラメラー・アーマー『バテレン鎧』
+# 「夢幻の如く」という漫画で，織田信長が西洋鎧を着ます。
+# REFLECTは，矢でも鉄砲でも持って来い！ってことで(笑)。
+N:206:『バテレン鎧』
 E:of The Padre
 I:37:13:2
 W:45:5:340:80000
 P:23:1d6:5:5:17
 F:CHR | REFLECT |
 F:RES_FIRE | RES_CHAOS | LITE
-D:���Ŀ�Ĺ�ΰ��Ѥ������굱�����Τγ�����
+D:織田信長の愛用した光り輝く西洋の鎧だ。
 
-# ���졼�ȡ������ɡؿ����ε���� (from ������������)
-# �����ο��㡤ε�����Х��η���
-# ȯư�ǥ�������ܡ���(�������֥쥤���ΤĤ��)
-N:207:�ؿ����ε����
+# グレート・ソード『真魔剛竜剣』 (from ダイの大冒険)
+# ダイの親父，竜騎将バランの剣。
+# 発動でサンダーボール(ギガ・ブレイクのつもり)
+N:207:『真魔剛竜剣』
 E:'Dragonic Sword'
 I:23:25:3
 W:50:160:200:180000
@@ -3509,10 +3509,10 @@ F:STR | SLAY_EVIL | SLAY_DEMON | BRAND_ELEC |
 F:RES_ELEC | RES_FIRE | RES_NETHER |
 F:LITE | SEE_INVIS | SHOW_MODS | ACTIVATE
 U:BA_ELEC_3
-D:ŷ���⳦�ΥХ�󥹤��ݤĻ�̿�����ε�ε��Τ��塹�����
-D:����ϥ륳��η��ǡ�ε�����Х�󤬽�ͭ���Ƥ��롣
+D:天地魔界のバランスを保つ使命を持つ竜の騎士に代々伝わる
+D:オリハルコンの剣で、竜騎将バランが所有している。
 
-N:208:�إ����������ե��󥰡�
+N:208:『イージス・ファング』
 E:'Aegis Fang'
 I:21:8:2
 W:30:40:100:100000
@@ -3521,15 +3521,15 @@ F:STR | DEX | CHR | TUNNEL | BLESSED |
 F:SLAY_EVIL | SLAY_DRAGON | SLAY_ORC | SLAY_GIANT | SLAY_DEMON |
 F:RES_COLD | SEE_INVIS | RES_FEAR | REGEN
 U:HELO
-D:�Хȥ�ϥ�ޡ���²�Υɥ�դ�Ĺ�ˤ��ơ�������ԥߥ���롦�ۡ���β���
-D:�֥롼�Ρ����Хȥ�ϥ�ޡ��������ǹ������
-D:�֤ʤ�ۤɤ͡ץɥ�å��ɤϡ��ϥ�ޡ���֥롼�Ρ����֤�����
-D:�ָŤ��ϥ�ޡ��������λҤˤϤ��礦�ɤ�������ʡ��ߥ����䡢�����ޥ�
-D:�����Ȥ䡢���������ɤ�虜�虜�ȤäƤ��뤯�餤����Τʡ�
-D:���ٻθ���˼�֥�����������ɡ������������Ф������ R��A����������ȡ�������
-D:����������
+D:バトルハンマー氏族のドワーフの長にして、伝説の都ミスリル・ホールの王、
+D:ブルーノー・バトルハンマーの生涯最高傑作だ。
+D:「なるほどね」ドリッズドは、ハンマーをブルーノーに返した。
+D:「古いハンマーか。あの子にはちょうどいいかもな。ミスリルや、アダマン
+D:タイトや、ダイアモンドをわざわざ使ってあるくらいだものな」
+D:（富士見書房「アイスウインド・サーガ１魔石の復活」 R・A・サルヴァトーレ著、
+D:風見潤訳）
 
-N:209:�ر��Ԥλ��
+N:209:『隠者の紫』
 E:'hermit's purple'
 I:21:2:2
 W:40:40:30:40000
@@ -3537,22 +3537,22 @@ P:0:1d6:10:5:0
 F:INT | WIS | FORCE_WEAPON |
 F:SEE_INVIS | TELEPATHY
 U:PROT_EVIL
-D:Ⱦͩ�β������Ի׵Ĥʰ���ܤ�����ͭ�Ԥ������Ϥ򹶷��Ϥ��Ѵ�����
-D:������ϤǿȤ��뤳�Ȥ��Ǥ��롣
-D:�ȤˤĤ���ȱ󤤾��ν�������狼�롣
+D:半幽体化した不思議な茨の鞭だ。所有者の精神力を攻撃力に変換し、
+D:波紋の力で身を守ることができる。
+D:身につけると遠い場所の出来事がわかる。
 
-N:210:�ر��Ŵ������
+N:210:『炎の鉄ゲタ』
 E:'Tetsu-geta of Flame'
 I:30:6:-1
 W:20:15:150:40000
 P:6:1d1:-5:10:20
 F:INT | WIS | CHR | STEALTH | SPEED | RES_FIRE |
 F:SUST_STR | SUST_CON | SH_FIRE | REGEN | RES_FEAR
-D:����������롢�ˤ��᤯����η�����
-D:�դ���Ȥ��դ��Ƥ���С��������Ȥ��˼�ʬ�Τ�����������Τ褦��
-D:�ڤ����������������
+D:古来より伝わる、男を磨くための靴だ。
+D:ふだん身に付けていれば、外したときに自分のからだが羽根のように
+D:軽く感じられるだろう。
 
-N:211:�ʥ����
+N:211:ナインの
 E:of Nain
 I:20:7:6
 W:60:5:250:80000
@@ -3565,17 +3565,17 @@ U:STONE_MUD
 D:$Wielded by Nain of the Iron Hills at the Battle of Azanulbizar, this great 
 D:$mattock brought victory to the Dwarves over Azog's Orcs - though Nain 
 D:$himself fell at the last, even with victory already assured.
-D:�����̥�ӥ�������襤�ˤ����ơ��������벦��
-D:�ؤ�Ƥ�Ĥ��ᥢ�����˷�Ʈ��ĩ����ʥ���
-D:�ȤäƤ����Ĥ�Ϥ�����
-D:�֤���Ȥ��λ�����������Ϣ���ΰ�²����ä���ơ�
-D:�����ɤ���Ѥ������ΤǤ��롣�����٤�ƿ��������夷��
-D:���������©�ҥʥ����Ψ���롢�������Ӥ�˿Ȥ�Ǥ᤿��Τ�����
-D:�إ����������������٤ȸƤФ�ꡢ����Ω���Ϥ�����Ԥ������
-D:�Ĥ�Ϥ���������򤵤��襤�¤��ݤ��ʤ��顢�����������δ֤�
-D:��ꥢ�������˸����ä��Ϳʤ��Ƥ��ä�����
+D:アザヌルビザールの戦いにおいて、スロール王の
+D:仇を討つためアゾグに決闘を挑んだナインが
+D:使っていたつるはしだ。
+D:「するとその時、くろがね連山の一族がやって来て、
+D:遂に戦局を一変させたのである。戦場に遅れて新たに到着した
+D:グロールの息子ナインの率いる、鎖かたびらに身を固めた戦士たちは
+D:『アゾグ！アゾグ！』と呼ばわり、前に立ちはだかる者があれば
+D:つるはしで当たるをさいわい斬り倒しながら、オークたちの間を
+D:モリアの入口に向かって突進していった。」
 
-N:212:�Х������Ĺ�����⥰��
+N:212:バルログの長ゴスモグの
 E:of Gothmog
 I:21:2:-2
 W:60:35:90:66666
@@ -3588,10 +3588,10 @@ F:ACTIVATE | SHOW_MODS
 U:BA_FIRE_2
 D:$With this unbearably bright whip of flame, the Balrog Gothmog has become
 D:$ known for never having lost in combat.
-D:�������뤹��⤫�ʤ��������Υ����ҤȤ��Ӽ�˼��С�
-D:�Х������Ĺ�����⥰����ˤ������餱�Τ餺�Ǥ��ä���
+D:この正視するもかなわぬ眩い炎のムチをひとたび手に取れば、
+D:バルログの長ゴズモグは戦において負け知らずであった。
 
-N:213:ŷ��������¢º��ϻ��
+N:213:天性寺聖地蔵尊の六環
 E:of The Bonze Octopus
 I:21:7:2
 W:35:40:70:125000
@@ -3599,13 +3599,13 @@ P:0:1d7:8:8:8
 F:STR | WIS | BLOWS | TUNNEL | ACTIVATE | RES_ACID | RES_ELEC
 F:REGEN | FREE_ACT | BRAND_ELEC | BLESSED | XTRA_H_RES
 U:SUMMON_OCTOPUS
-D:�����Ρ��������Ϣ��ƴ����Ĥ��Ϥ��뤿����狼�ä��Ȥ���
-D:��ˡ�դ�����¢����β��Ȥ��ȤäƤ���ϻ�Ĥμ�����
-D:�֡Ĥ��λ�����ͤ�ˡ�դ��ɤ�����Ȥ�ʤ�����ơ������Ȥ���Ũ�����Ӥ����ꡢ
-D:��˻��ä�����֤�֤�ȿ��������Ũʼ���央�ݤ����������������ޤ������ȡ�
-D:ŷ����������Ϥ��ɤ�ư���褦��ä������ʡ���
+D:その昔、蛸を引き連れて岸和田の地を守るために戦かったという
+D:蛸法師こと地蔵大菩薩の化身が使っていた六環の錫杖だ。
+D:「…その時。一人の法師がどこからともなく現れて、何万という敵に飛びかかり、
+D:手に持った錫杖をぶんぶんと振り廻して敵兵を薙ぎ倒す、その勢いの凄まじいこと。
+D:天が稲光し、地が揺れ動くようやったそうな。」
 
-N:214:�Ĥ���Υե�ǥ����
+N:214:青き衣のフンディンの
 E:of Fundin Bluecloak
 I:21:6:4
 W:65:65:130:150000
@@ -3618,11 +3618,11 @@ U:DISP_EVIL
 D:$The weapon of one of the great dwarven priests, with powers 
 D:$to preserve body and soul, and the bane of those 
 D:$who seek life beyond death.
-D:��äȤ����ʥɥ�դλʺפΤҤȤꡢ�Ĥ���Ρإե�ǥ���٤�
-D:���Ǥ��롣��ͭ�Ԥ����ΤȺ���
-D:���ȴ�����ष�Ƥʤ����ˤ�����Ĥ����Ȥ���Ԥɤ���Ǥ��Ǥܤ���
+D:もっとも偉大なドワーフの司祭のひとり、青き衣の『フンディン』の
+D:武器である。所有者の肉体と魂魄を
+D:護り抜き、死してなお生にすがりつこうとする者どもを打ち滅ぼす。
 
-N:215:���Ǥ�
+N:215:宵闇の
 E:of The Pitch Dark Night
 I:40:24:4
 W:50:150:2:50000
@@ -3631,12 +3631,12 @@ F:STEALTH | SEARCH | HIDE_TYPE | SEE_INVIS |
 F:RES_DARK | ACTIVATE | LITE_M1 |
 F:INSTA_ART
 U:BA_DARK
-D:���������̤��Ĥ���줿���������
-D:�Ȥ��դ���ȼ�ʬ���ŰǤ���ˤ���Τ򴶤��롣
+D:漆黒の宝玉がつけられた頸飾りだ。
+D:身に付けると自分が暗闇の中にいるのを感じる。
 
 # The Bastard Sword of Eowyn
 
-N:216:����������ɱ��
+N:216:エオウィン姫の
 E:of Eowyn
 I:23:21:4
 W:30:50:140:120000
@@ -3644,12 +3644,12 @@ P:0:4d4:12:16:0
 F:STR | CHR | STEALTH | SPEED | 
 F:SLAY_EVIL | KILL_UNDEAD | SLAY_GIANT | SLAY_ANIMAL | 
 F:RES_NETHER | RES_FEAR | RES_DARK | RES_COLD
-D:�ֽ���Ĳ����פ��ȥ����ϥ󲦹�Υ���������ɱ����
-D:�٥��Ρ������ˤ������Ⲧ�˿���ä�������
-D:�֤������錄���������Ȥοʹ֤��ˤǤϤʤ���������������ä�
-D:����ΤϽ������錄���ϥ��������󡢥������ɤ�̼������
+D:「盾持つ乙女」ことローハン王国のエオウィン姫が、
+D:ベレンノールの野において魔王に振るった剣だ。
+D:「しかしわたしは生き身の人間の男ではない！お前が向き合って
+D:いるのは女だ。わたしはエオウィン、エオムンドの娘だ。」
 
-N:217:�����Τ�
+N:217:聖騎士の
 E:of Sacred Knights
 I:40:25:2
 W:50:50:2:77777
@@ -3659,9 +3659,9 @@ F:RES_CONF | RES_CHAOS | BLESSED |
 F:SEE_INVIS | FREE_ACT | REGEN | HOLD_EXP | ACTIVATE |
 F:INSTA_ART
 U:DISP_CURSE_XTRA
-D:�����ȤˤĤ����ץ쥤�䡼�ϼ�����Ϥ��֤����Ȥ��Ǥ��롣
+D:これを身につけたプレイヤーは呪いをはね返すことができる。
 
-N:218:�Ϲ���
+N:218:地獄の
 E:of the Hell
 I:40:26:-2
 W:50:40:30:66666
@@ -3671,9 +3671,9 @@ F:RES_DARK | RES_NETHER |
 F:SEE_INVIS | AGGRAVATE | ESP_UNDEAD | ACTIVATE |
 F:INSTA_ART
 U:BA_DARK
-D:�Ϲ��μ��ͤ�«������ؤ���¿���μ��ͤα�ǰ��������Ƥ��롣
+D:地獄の囚人を拘束する首輪だ。多くの囚人の怨念が込められている。
 
-N:219:�����ϥڥ�����
+N:219:帯魔力ペンダント
 E:Charmed Pendant
 I:40:27:2
 W:50:100:2:100000
@@ -3684,7 +3684,7 @@ F:SH_FIRE | SH_ELEC | SH_COLD | ACTIVATE |
 F:INSTA_ART
 U:CURE_MANA_FULL
 
-N:220:��Τޤͤλ��ĥ�����
+N:220:ものまねの始祖ゴゴの
 E:of Gogo
 I:40:28:4
 W:50:100:2:55555
@@ -3693,7 +3693,7 @@ F:INT | WIS | DEX |
 F:SEE_INVIS | LITE |
 F:INSTA_ART
 
-N:221:���μ��ͥ��ӥ�եåɤ�
+N:221:森の狩人ロビンフッドの
 E:of Robin Hood
 I:19:12:2
 W:20:15:30:50000
@@ -3701,10 +3701,10 @@ P:0:2d1:15:17:0
 F:DEX | CHR | STEALTH |
 F:XTRA_MIGHT | HIDE_TYPE | SHOW_MODS | XTRA_H_RES
 D:$This is of Robin Hood who live in the deep forest.
-D:���㡼���åɤο��˽����±���ӥ󡦥եåɤεݤ���
+D:シャーウッドの森に住む義賊ロビン・フッドの弓だ。
 
 # from Slash'EM
-N:222:�إإ�ե�������
+N:222:『ヘルファイア』
 E:of 'Hellfire'
 I:19:23:4
 W:30:15:110:60000
@@ -3713,10 +3713,10 @@ F:STR | INFRA | RES_FIRE | SH_FIRE |
 F:ACTIVATE | HIDE_TYPE | SHOW_MODS
 U:BRAND_FIRE_BOLTS
 D:$This crossbow gives flame energy to bolts which it fires.
-D:����ǳ����褦�ʿ��Υ������ܥ��ϡ�ȯ�ͤ���ܥ�Ȥ˱���Ϥ�
-D:Ϳ���뤳�Ȥ��Ǥ��롣
+D:この燃えるような色のクロスボウは、発射するボルトに炎の力を
+D:与えることができる。
 
-N:223:̾�ͼꥦ���ꥢ�ࡦ�ƥ��
+N:223:名射手ウィリアム・テルの
 E:of Wilhelm Tell
 I:19:23:4
 W:35:30:110:50000
@@ -3725,11 +3725,11 @@ F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
 D:$With this crossbow, Swiss hero Tell shot an apple exactly 
 D:$though it was on his son's head, and then he defeated evil 
 D:$magistrate Gessler.
-D:�������α�ͺ�����ꥢ�ࡦ�ƥ�λȤä��������ܥ�����
-D:��ϲ椬�Ҥ�Ƭ�ξ�Υ�󥴤����Τ˷��ȴ����̱����줷���
-D:���崱�����顼���Ǥ��ˤä���
+D:スイスの英雄ウィリアム・テルの使ったクロスボウだ。
+D:彼は我が子の頭の上のリンゴを正確に撃ち抜き、民衆を苦しめる
+D:悪代官ゲスラーを打ち破った。
 
-N:224:̾�ͼꥦ���ꥢ�ࡦ�ƥ��
+N:224:名射手ウィリアム・テルの
 E:of Wilhelm Tell
 I:18:1:0
 W:35:35:2:5000
@@ -3737,11 +3737,11 @@ P:0:6d5:20:16:0
 F:KILL_HUMAN
 D:$It is said that this bolt sticked onto the heart of Gessler 
 D:$when Wilhelm Tell shot it.
-D:���Ĥƥ����ꥢ�ࡦ�ƥ뤬������ä�1�ܤΥ������ܥ��������
-D:���崱�����顼��̿�����Τ�å�ä��Ȥ�����
+D:かつてウィリアム・テルが撃ち放った1本のクロスボウの矢だ。
+D:悪代官ゲスラーの命を正確に奪ったという。
 
 #JX#
-N:225:��������ԥ�����
+N:225:アスクレピオスの
 E:of Aesculapius
 I:21:14:3
 W:40:45:160:300000
@@ -3754,11 +3754,11 @@ F:RES_POIS | RES_CONF | RES_CHAOS |
 U:REST_ALL
 D:$This is the staff of Aesculapius, who is a greek god of 
 D:$the medicine.
-D:����ϡ���ؤο���������ԥ����δ��פ�ϻ��������
-D:�ɤ�ʲ���⤿���ޤ������Ƥ��ޤ���
+D:これは、医学の神アスクレピオスの奇跡の六尺棒だ。
+D:どんな怪我もたちまち癒してしまう。
 
 #JX#
-N:226:ͩ�Υɥ饴�󡦥�������ᥤ��
+N:226:幽体ドラゴン・スケイルメイル
 E:Spectral Dragon Scale Mail
 I:38:3:0
 W:75:30:100:350000
@@ -3769,10 +3769,10 @@ F:SEE_INVIS | HOLD_EXP | LEVITATION |
 F:CURSED | HEAVY_CURSE | DRAIN_EXP | FULL_NAME
 D:$A white transparent dragon scale mail which was made from
 D:$the tortured soul of a once powerful wyrm.
-D:���Υɥ饴����ڳ��ϡ����Ĥƶ�����Ϥ�ؤäƤ����磻������
-D:�α�����ڤ�����줿��Τ������ä������Ʃ���̤äƤ��롣
+D:このドラゴンの鱗鎧は、かつて強大な力を誇っていたワイアーム
+D:の怨霊の鱗から作られたものだ。うっすらと白く透き通っている。
 
-N:227:�ع��������
+N:227:『降妖宝杖』
 E:of Sha Wujing
 I:22:14:2
 W:30:30:175:100000
@@ -3784,11 +3784,11 @@ F:RES_ACID | RES_COLD | RES_DARK | RES_FEAR
 D:$This lajatang looks like a staff because it has only a 
 D:$blade which looks like a half moon. Sha Wujing helped a 
 D:$long journy of Tang Sanzang with it.
-D:��Ƹ���Ų�������λȤä���������������οϤ�������ü�ˤ�
-D:���Ƥ��뤿�ᡢ���Τ褦�˸����롣����Ϥ��������˻�¢
-D:ˡ�դ�ι���������
+D:河童の妖怪沙悟浄の使った武器だ。三日月状の刃が棒の先端につ
+D:いているため、錫杖のように見える。悟浄はこの武器を手に三蔵
+D:法師の旅を助けた。
 
-N:228:���͵�����ߤ�
+N:228:殺人鬼エルミの
 E:of Elmi the Murderer
 I:22:1:2
 W:15:10:60:50000
@@ -3797,12 +3797,12 @@ F:DEX | STEALTH | HIDE_TYPE | FORCE_WEAPON |
 F:KILL_HUMAN | VORPAL | SEE_INVIS |
 D:$This is a hatchet of Elmi who was a horrible muder of 
 D:$Raffnor.
-D:��եΡ������̤��夬�餻�����͵�����ߤλȤä��������
-D:��եΡ���Ϥ��λ��͵�����館�뤿��ˡ�20�Ͱʾ�ιԼ�
-D:(�����ѡ�)�����������Ȥ������֤��μ���ˤϸ��Ф�������ġ�
-D:(��ͪ����Ķ�ͥ��å��ظ��η��١�)
+D:ラフノール中を震え上がらせた殺人鬼エルミの使った手斧だ。
+D:ラフノールはこの殺人鬼を捕らえるために、20人以上の行者
+D:(エスパー)を投入したという。「この手口には見覚えがある…」
+D:(聖悠紀「超人ロック『光の剣』」)
 
-N:229:����Ϻ�����
+N:229:『太郎太刀』
 E:'Taro Dachi'
 I:23:27:4
 W:40:25:300:120000
@@ -3811,31 +3811,31 @@ F:STR | RES_FEAR | VORPAL |
 F:SLAY_HUMAN | SLAY_ORC | SLAY_TROLL | SLAY_GIANT
 D:$Asakura's captain Naotaka Magara defeated a lot of soldiers
 D:$with this large katana.
-D:��ȸ޼ܻ�����Ĺ���ƽŤ��������ī�ҲȲȿÿ���ľδ�ϡ�����
-D:�礭��������ˤ���¿����Ũʼ��̿��å�����ä������ζ�����
-D:����Ũ�ؤ��ͤù��ߤ������Ȥ�����
+D:刀身五尺三寸の長くて重い太刀だ。朝倉家家臣真柄直隆は、この
+D:大きな太刀を手にして多くの敵兵の命を奪いさった。その強さゆ
+D:えに敵陣に突っ込みすぎたという。
 
-N:230:���ʻդ�
+N:230:手品師の
 E:of Magician
 I:23:1:0
 W:1:1:5:3000
 P:0:1d1:0:0:0
 D:$This dagger can not injure someone almostly.
-D:���Υ������Ͽͤ���Ĥ��뤳�ȤϤʤ���������
+D:このダガーは人を傷つけることはないだろう。
 
-N:231:�Ż��Է��Ƥ�
+N:231:暗殺者荊軻の
 E:of Jing Ke
 I:23:6:1
 W:15:15:20:50000
 P:0:2d5:-2:13:0
 F:DEX | BLOWS | SPEED | HIDE_TYPE |
 F:BRAND_COLD | BRAND_POIS | VORPAL | RES_FEAR
-D:���ǤοϤ���ıԤ�Ҹ������¤���Ф����ޤ���˻���������
-D:���λɵҷ��Ƥϡ�����Ҹ����Ѥ��ƿ��λϹ���ΰŻ����ߤ���
-D:���ޤ⤽�μ�ǰ���ɤ롣
-D:��¶������ǡ����ͭ���(ƫʥ���ֱӷ��ơ�)
+D:猛毒の刃を持つ鋭い匕首だ。斬られればたちまち死に至るだろう。
+D:燕の刺客荊軻は、この匕首を用いて秦の始皇帝の暗殺を試みた。
+D:いまもその執念が宿る。
+D:「其人雖已歿　千載有餘情」(陶淵明「詠荊軻」)
 
-N:232:���ץޥ��åȤ�
+N:232:農夫マゴットの
 E:of Maggot
 I:22:3:1
 W:10:4:70:10000
@@ -3843,10 +3843,10 @@ P:0:2d3:7:9:0
 F:STR | DEX | RES_FIRE | RES_LITE | VORPAL |
 D:$This is farmer Maggot's sickle. He left it behind on his 
 D:$farm.
-D:��������ץޥ��åȤ�������Ѥγ������ɤ����������֤�˺��
-D:�Ƥ��ޤä��褦����
+D:これは農夫マゴットの農作業用の鎌だ。どうやら農場に置き忘れ
+D:てしまったようだ。
 
-N:233:��ŷ���α����
+N:233:『天女の羽衣』
 E:of the Heavenly Maiden
 I:35:5:4
 W:50:3:0:45000
@@ -3857,13 +3857,13 @@ U:RECALL
 D:$This is a heavenly cloak of the maiden which was stolen 
 D:$by a man, when she was having a bath at a lake with her 
 D:$friend maidens.
-D:Ю�Ͽ������˻ҡ�������ͭϻ�����������Ӱᡤ������Ļ��
-D:ҵҶ����¶�������Ӱᡤ���Ƿ��¨������Ļ��
-D:��Ļ�������Ļ��������˻Ҽ�ʰ��ء���������
-D:¶�칡�Ƚ����㡤�ΰ�����˲�����Ƿ���Ἡ��������ʷ޻�����
-D:���������(�ܿ���)
+D:豫章新喩縣男子，見田中有六七女，皆衣毛衣，不知是鳥。
+D:匍匐往得其一女所解毛衣，取藏之，即往就諸鳥。
+D:諸鳥各飛去，一鳥獨不得去。男子取以為婦。生三女。
+D:其母后使女問父，知衣在積稻下，得之，衣而飛去，後復以迎三女，
+D:女亦得飛去。(捜神記)
 
-N:234:�����Ф�
+N:234:源義経の
 E:of Yositsune
 I:32:8:2
 W:50:20:60:96000
@@ -3873,10 +3873,10 @@ F:RES_FEAR | RES_BLIND | RES_SOUND |
 F:WARNING | ESP_HUMAN |
 D:$This is Yositsune's kabuto. It defended his head against 
 D:$many arrows and blades from his ememies.
-D:�����ͦ�Ը����Фξ���ΤĤ��������������ФϤ���򤫤֤ꡢ
-D:ʿ�ᤫ��οϤ���ι�����ɤ�����
+D:源氏の勇者源義経の飾りのついた星兜だ。義経はこれをかぶり、
+D:平氏からの刃や矢の攻撃を防いだ。
 
-N:235:�����Ф�
+N:235:源義経の
 E:of Yositsune
 I:37:14:2
 W:50:20:200:192000
@@ -3888,10 +3888,10 @@ F:RES_CHAOS | RES_NEXUS |
 D:$This is the haramakido of Yositsune who is the best brave 
 D:$warrior of Genji. You can feel his agility and dexterity, 
 D:$when you put it on.
-D:�����Ф��ֻ��ƹ�ݳ��������ФϤ������ƽ����齮�ؤ����Ӱ�
-D:�ä����ȤˤĤ������οȷڤ��ȴ��Ѥ��򴶤��뤳�Ȥ��Ǥ��롣
+D:源義経の赤糸威胴丸鎧だ。義経はこれを着て舟から舟へと飛び移
+D:った。身につけると彼の身軽さと器用さを感じることができる。
 
-N:236:ȫ��������ֻ��
+N:236:畠山重忠の赤糸威
 E:of the Bando Musha
 I:37:16:2
 W:45:15:320:90000
@@ -3902,28 +3902,28 @@ F:RES_FEAR | XTRA_H_RES
 D:$This is Shigetada Hatakeyama's O-yoroi. He is brave, wise 
 D:$and honest warrior, so he was called the best model of 
 D:$eastern samurai. This O-yoroi is majestical like him.
-D:��ͦ���������ȫ��������ֻ���系��������������ä��Τ�
-D:�줿����ϡֺ�����ΤδաפȾΤ��줿�������系�ϡ���������
-D:�ब�����ˤ��뤫�Τ褦�˰���Ʋ���Ȥ��Ƥ��롣
+D:知勇兼備の武者畠山重忠の赤糸威大鎧だ。清廉潔白をもって知ら
+D:れた重忠は「坂東武士の鑑」と称された。この大鎧は、あたかも
+D:彼がここにいるかのように威風堂々としている。
 
-N:237:�إǡ����١����
+N:237:『デーモンベーン』
 E:'Demonbane'
 I:23:17:0
 W:10:0:130:2500
 P:0:2d5:5:0:0
 F:SLAY_DEMON | RIDING
-D:����β��ͤ����߷�����������餷����
+D:秩序の下僕が忌み嫌う剣があるらしい。
 
-N:238:�إǡ����١����
+N:238:『デーモンベーン』
 E:'Demonbane'
 I:21:5:0
 W:45:18:250:2500
 P:0:4d6:15:15:0
 F:RIDING | WARNING | SLAY_EVIL | KILL_DEMON | ESP_DEMON
-D:�ʤ�����ޤ�������Ω�����η��������䡩����ä��ԤƤ�ġ�
+D:なんだ、またこの役立たずの剣か。おや？ちょっと待てよ……
 
 # The Light Crossbow 'Wiizapper' (x3)
-N:239:�إ������åѡ���
+N:239:『ウィザッパー』
 E:'Wiizapper'
 I:19:23:4
 W:30:10:110:77777
@@ -3934,12 +3934,12 @@ F:HIDE_TYPE | SHOW_MODS
 D:$The white light crossbow that the fighter Link, wearing green clothes,
 D:$bought for training of shooting.'Enjoy shootings at the living room.'
 D:$(Nintendo)
-D:�Ф�������Υ�󥯤��ܥ�����Υȥ졼�˥󥰤Τ���˹�������
-D:�ȸ�����ڤ����򤤥������ܥ������֥�ӥ󥰤Ǽͷ��ڤ����
+D:緑の服の戦士リンクがボウガンのトレーニングのために購入した
+D:と言われる軽くて白いクロスボウだ。「リビングで射撃を楽しむ」
 D:(Nintendo)
 
 # The Heavy Crossbow 'Lion Slayer' (x5)
-N:240:�ػ�һ�����
+N:240:『獅子殺し』
 E:'Lion Slayer'
 I:19:24:2
 W:40:30:200:119929
@@ -3949,10 +3949,10 @@ F:RES_FEAR | XTRA_POWER |
 F:HIDE_TYPE | SHOW_MODS
 D:$This heavily heavy Crossbow shines black uncannily.
 D:$The shot also breaks the Lion Heart.
-D:�����Ե�̣�˹����륯�����ܥ��Ϥ��ä���ȽŤ������ΰ��ϻ�Ҥο����դ���
+D:この不気味に黒光るクロスボウはずっしりと重い。その一撃は獅子の心をも砕く。
 
 # The Heavy Crossbow of Guanzi (x4)
-N:241:�ɻҤ�
+N:241:管子の
 I:19:24:3
 W:40:20:200:99999
 P:0:4d1:10:15:0
@@ -3962,11 +3962,11 @@ F:HIDE_TYPE | SHOW_MODS
 D:$This is Guan Zhong's heavy crossbow for assassinating.
 D:$He took prime minister's post of Qi, although he failed to
 D:$take the life of the prince of Qi.
-D:�Ƥδ��礬�Ż��Ѥ��Ѥ����Ť�׸�������Ҿ�����ȴ�����ȤϤǤ��ʤ��ä�
-D:��������Ƥκ���κ¤򸫻��˼ͻߤ᤿��
+D:斉の管仲が暗殺用に用いた重い弩だ。公子小白を射抜くことはできなかった
+D:が、後に斉の宰相の座を見事に射止めた。
 
 # The Flamberge 'Fusberta'
-N:242:�إե��٥륿��
+N:242:『フスベルタ』
 E:'Fusberta'
 I:23:26:1
 W:40:20:230:90000
@@ -3976,11 +3976,11 @@ F:VORPAL | BRAND_FIRE | RES_FEAR | RES_FIRE | RES_LITE |
 F:REGEN | BLESSED | RIDING | SHOW_MODS
 D:$The flame shaped magic sword of Renaud de Montauban.
 D:$It can cut up an enemy's armor easily.
-D:��Ρ����ɡ����ȥС������ˡ�η�������Ȥ���Τ褦��
-D:���ǤäƤ��롣Ũ�γ����ưפ��ڤ��������Ȥ��Ǥ��롣
+D:ルノー・ド・モントバーンの魔法の剣だ。刀身が炎のように
+D:波打っている。敵の鎧を容易く切り裂くことができる。
 
 # The Bronze Dragon Scale Mail 'Dragon Cloth'
-N:243:�إɥ饴�󡦥�������
+N:243:『ドラゴン・クロス』
 E:'Dragon Cloth'
 I:38:14:0
 W:30:3:100:100000
@@ -3991,12 +3991,12 @@ U:CAST_OFF
 D:$A suit of scales, gleaming in rich engraved bronze. It shapes like
 D:$a green dragon if putting its parts together. You can feel a cosmo
 D:$of Draco when you wear it.
-D:��ήľ������ܤ������ת���������ۤˤ�ä��ä��夲��줿��Ƽ�γ�����
-D:����Υ��ƥʤμ����Τ��ȤˤޤȤ������ƥʤ˹ߤ꤫��������δ������
-D:�ä��ȸ����롣�ѡ��Ĥ��Ȥ�Ω�Ƥ����ζ�η����Ȥߤ����롣
-D:�ȤˤޤȤ���ζ���¤ξ�����򴶤��뤳�Ȥ��Ǥ��롣
+D:飛流直下三千尺と謳われる廬山の大瀑布によって鍛え上げられた青銅の鎧だ。
+D:伝説のアテナの守護戦士が身にまとい、アテナに降りかかる数々の危機を救
+D:ったと言われる。パーツを組み立てると緑龍の形に組みあがる。
+D:身にまとうと龍星座の小宇宙を感じることができる。
 
-N:244:�إ�����ѥ��������顼��
+N:244:『ヴァンパイア・キラー』
 E:'Vampire Killer'
 I:21:2:3
 W:50:55:75:220000
@@ -4006,32 +4006,32 @@ F:SLAY_EVIL | BRAND_FIRE | SLAY_DEMON | KILL_UNDEAD |
 F:FREE_ACT | RES_NETHER | HOLD_EXP | SEE_INVIS | REGEN |
 F:ESP_UNDEAD | ESP_DEMON | DRAIN_EXP
 U:GRAND_CROSS
-D:�������ʤ��ܤϡ�ϣ��ѻդ��ηäȲ���������ˤ�ä����߽Ф��졢
-D:����η�²�٥���ɲ��塹�μ�ǿ�����Ƥ�����
-D:�����Ϥϼٰ�����ΰ�²���Ф�����Ǥ��Τ�ΤǤ��ꡢ
-D:���줿����᤿������Ǥܤ���������
+D:この聖なる鞭は、錬金術師の知恵と乙女の代償によって生み出され、
+D:退魔の血族ベルモンド家代々の手で振るわれてきた。
+D:その力は邪悪な夜の一族に対する呪詛そのものであり、
+D:汚れた魂を過たず撃ち滅ぼすだろう。
 D:$This holy whip was generated with wise of a alchemist and a maiden's
 D:$sacrifice, wielded by Belmond family, the vampire hunters.
 D:$That power is indeed curse of evil household of night
 D:$and vanish the poisonous souls.
 
-N:245:��̿�Υ�����
+N:245:運命のオーブ
 E:The Orb of Fate 
 I:39:10:3
 W:70:70:15:45000
 P:0:1d1:0:0:20
 F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 |
 U:TELEPORT_LEVEL
-D:�ֱ�̿�Υ����֤���äƤ����ʤ������錄���ϱ�̿�Υ����֤���
-D:�ʹ֤μ�˿���ƤϤʤ��̤���𤲤��Ϥ�������ޤ�����
-D:�������ʤ��鱿̿�Υ����֤�¾���Ϥϡ����ʤ��λפ��̤��
-D:���Ƥ��ޤ��ޤ���
-D:���ʤ��ϥ��塼���̾�Τ�ȥ�����������������õ���ͤФʤ�ޤ���
-D:���ʤ��οʤ�ƻ�����塼���Ƴ���ˤ�곫����ޤ��褦�ˡ�
-D:�錄��������
-D:(�Υ��JNethack)
+D:「運命のオーブを持っていきなさい。わたしは運命のオーブから
+D:人間の手に触れてはならぬ未来を告げる力を取り除きました。
+D:しかしながら運命のオーブの他の力は，あなたの思い通りに
+D:してかまいません。
+D:あなたはチュールの名のもとイェンダーの魔除けを探さねばなりません。
+D:あなたの進む道がチュールの導きにより開かれますように。
+D:わたしの妹よ」
+D:(ノルン，JNethack)
 
-N:246:�ﲵ���ߥ���
+N:246:戦乙女ミリムの
 E:of Milim the Valkyrie
 I:36:50:0
 W:60:2:60:80000
@@ -4040,10 +4040,10 @@ F:SUST_CHR | SUST_CON |
 F:RES_SOUND | RES_DISEN | REFLECT | FREE_ACT | ACTIVATE
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | AGGRAVATE
 U:STRAIN_HASTE
-D:�ɥ�դ�ɱ����Ŵ���ť桼�ߥ�θ�������̤���
-D:Ķ��ư���ꥹ���뤬�⤤�ɸ��Ϥ�⤿�餷�Ƥ���餷����
+D:ドワーフの姫、鋼鉄参謀ユーミルの研究の成果だ。
+D:超振動クリスタルが高い防御力をもたらしているらしい。
 
-N:247:�������ܿϡ�
+N:247:『薔薇棘鞭刃』
 E:Rose
 I:21:2:2
 W:30:20:60:70000
@@ -4051,9 +4051,9 @@ P:0:3d8:20:12:0
 F:SHOW_MODS | VORPAL |
 F:SPEED | DEX | CHR | SLAY_DEMON | SLAY_ORC | SLAY_TROLL |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:�����ʥХ�ˤϡ���������Τ��פȤ����ŸѤ����Ѥ��Ƥ�������ܤ���
+D:「綺麗なバラには、棘があるのさ」とある妖狐が愛用していた茨の鞭だ。
 
-N:248:�ظ׻�����ǰʩ��
+N:248:『虎殺七丁念仏』
 E:'Toragoroshi-Nanacho-Nenbutsu'
 I:23:20:3
 W:40:30:120:65000
@@ -4061,34 +4061,34 @@ P:0:6d4:11:23:-15
 F:VORPAL | HIDE_TYPE | SHOW_MODS | AGGRAVATE
 F:ACTIVATE | KILL_ANIMAL | KILL_HUMAN
 U:ARTS_FALLING_STAR
-D:�Ի¤�ˤ��ä���˷�礬�ڤ�줿���Ȥˤ��鵤�Ť�����
-D:ǰʩ�򾧤��ʤ��鼷�����⤤�������̿�����Ȥ����������
-D:������˺Ҥ���⤿�餹�ȸ���졢���μ礿���ͭ�ԤǤ��ä�
-D:���ܸ״�λ�ˤ��ָ׻��פ��ä��ä���줿��
+D:辻斬りにあった乞食坊主が切られたことにすら気づかず、
+D:念仏を唱えながら七丁も歩いた後に絶命したという妖刀だ。
+D:持ち主に災いをもたらすと言われ、その主たる所有者であった
+D:岩本虎眼の死により「虎殺」の銘が加えられた。
 
-N:249:����ꥷ�󥷥���
+N:249:身代りシンシアの
 E:of Eliza the hero's scapegoat
 I:32:2:0
 W:5:4:12:10000
 P:2:0d0:0:0:0
 F:HIDE_TYPE | XTRA_H_RES
-D:ŷ���ͤη�����ͦ�Ԥ���μ꤫��ƨ�������
-D:�����ˤʤä��Ȥ���������Ľ�����˹�Ҥ���
-D:����ȤƱ�������������ʲø�ʾ����ɮ���٤����ݤϤʤ���
+D:天空人の血を引く勇者を魔の手から逃すために
+D:犠牲になったとの伝承を持つ女性の帽子だ。
+D:さりとて羽根飾りと微かな加護以上に特筆すべき印象はない。
 
-N:250:�إץ饰��
+N:250:『プラグ』
 E:'Plag'
 I:40:29:3
 W:60:100:0:60000
 P:0:1d1:0:0:0
 F:INSTA_ART | STR | WIS | DEX | CON | SPEED |
 F:SLOW_DIGEST | REGEN | PERMA_CURSE | ESP_UNIQUE |
-D:��������륫������୸���������������˼����롢Ǿ��ľ��������˾���ʪ�Τ���
-D:�����ޤ줿�Ԥ�ǽ�Ϥ��������������졢��Ϸ�Ի�ˤ���ʤ�Ȥ�����
-D:�֤ʤ�����ʤ�Τ���������������ξڤ���������Ȥ�̾�����ȻפäƤ���Τ�
-D:������ԥ塼�����Ρ��Ȥ��Τƥ����ߥʥ�ˤʤ뤳�Ȥ���(��ͪ����Ķ�ͥ��å���)
+D:銀河帝国皇帝カルダームIV世が一部の部下に授ける、脳に直接埋め込む針状の物体だ。
+D:埋め込まれた者は能力が大幅に増強され、不老不死にすらなるという。
+D:「なぜそんなものを埋め込んだ？忠誠の証しか？それとも名誉だと思っているのか
+D:　コンピューターの　使い捨てターミナルになることが」(聖悠紀「超人ロック」)
 
-N:251:è�׻ե��ӥ�ȥ��
+N:251:竪琴師ロビントンの
 E:of Robinton, the masterharper
 I:19:51:3
 W:50:150:120:75000

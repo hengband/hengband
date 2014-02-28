@@ -2,7 +2,7 @@
 
 # Name
 Q:$25:N:Haunted House
-Q:25:N:ͩ���
+Q:25:N:幽霊屋敷
 
 # Definition
 Q:$25:Q:6:0:0:0:48:0:0:0:6
@@ -14,9 +14,9 @@ Q:$25:T:There is something evil going on in the old, thatched house
 Q:$25:T:near the south-west corner of the city wall. People say that
 Q:$25:T:the house is haunted and refuse to go near it. We need someone
 Q:$25:T:to exorcise the evil spirits that are infesting the house.
-Q:25:T:���ξ��ɤ������γѤˤ��롢�Ť���᤭�βȤǲ����������Ȥ������äƤ��ޤ���
-Q:25:T:���βȤϼ����Ƥ��ơ��͡����󤻤ʤ��Ȥ����Ƥ��ޤ���
-Q:25:T:�桹�Ϥ��βȤ˽����夤�Ƥ��밭����༣���Ƥ����ͤ�õ���Ƥ��ޤ���
+Q:25:T:街の城壁の南西の角にある、古い草吹きの家で何か悪いことが起こっています。
+Q:25:T:その家は呪われていて、人々を近寄せないといわれています。
+Q:25:T:我々はその家に住み着いている悪霊を退治してくれる人を探しています。
 ?:1
 
 # Description for quest reward (Staff of Dispel Evil)
@@ -24,9 +24,9 @@ Q:25:T:�桹�Ϥ��βȤ˽����夤�Ƥ��밭����༣���Ƥ����ͤ�õ���Ƥ��ޤ���
 Q:$25:T:Well done, indeed! Our citizens can finally sigh in relief.
 Q:$25:T:As a reward, we would like to give you something that will
 Q:$25:T:help you sence enemy even more efficiently!
-Q:25:T:�������ɤ���äƤ���ޤ������桹��̱�Ϥ褦�䤯�¿����뤳�Ȥ�����ޤ���
-Q:25:T:����Ȥ��ơ��ٰ��ʼԤɤ�򹹤˸���Ū�˴��Τ��뤳�Ȥ��Ǥ��륢���ƥ��
-Q:25:T:�����夲�ޤ���
+Q:25:T:本当に良くやってくれました！我々住民はようやく安心することが出来ます。
+Q:25:T:お礼として、邪悪な者どもを更に効果的に感知することができるアイテムを
+Q:25:T:差し上げます。
 ?:1
 
 # Description for quest failed
@@ -37,13 +37,13 @@ Q:$25:T:out to be ultra-elite paladins on their pilgrimage to the
 Q:$25:T:holy city, and -- as a spiritual exercise -- the cleaned up
 Q:$25:T:the house without even asking for a reward. Maybe you should
 Q:$25:T:try to find them, you could learn a thing or two from them.
-Q:25:T:���������ƥ��ޤǤ��礦��
-Q:25:T:�����ˤ⡢���γ����̤꤬���ä���������ν���Ԥ�����
-Q:25:T:���ʤ볹�ؤν��������Ǥ��롢Ķ���꡼�ȥѥ�ǥ���Ǥ��뤳�Ȥ�
-Q:25:T:ʬ����ޤ��������������Ͻ��Ԥΰ�ĤȤ��ơ����ߤ�˴��ɤ��
-Q:25:T:�ɤ�ʧ�äƤ��������ޤ����������󽷤ˤĤ��ƿҤͤ������ޤ���
-Q:25:T:�Ǥ����衣���ʤ������򸫤Ĥ����ޤΥ����Ǥ������ư��ޤ���
-Q:25:T:���äƤϤ������Ǥ�����
+Q:25:T:あぁ、何てザマでしょう！
+Q:25:T:幸運にも、この街を通りがかったたくさんの巡礼者たちは
+Q:25:T:聖なる街への巡礼の途中である、超エリートパラディンであることが
+Q:25:T:分かりました。そして彼らは修行の一環として、屋敷の亡霊どもを
+Q:25:T:追い払ってくださいました。彼らは報酬について尋ねさえしません
+Q:25:T:でしたよ。あなたも彼らを見つけて爪のアカでも煎じて飲ませて
+Q:25:T:もらってはいかがですか？
 ?:1
 
 # Trap or OOD item

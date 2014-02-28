@@ -28,95 +28,95 @@
 
 N:8:Farmer Maggot
 #seems sad about something.
-�ϲ����ᤷ��������
+は何か悲しそうだ。
 #asks if you have seen his dogs.
-����θ��򸫤ʤ��ä�����ʹ���Ƥ��롣
+は彼の犬を見なかったかと聞いている。
 #tells you to get off his land.
-�ϡ֤路�����Ϥ���ФƤ����פȸ��äƤ��롣
+は「わしの土地から出ていけ」と言っている。
 #says, "Grip! Fang! Wolf! Come on, lads!"
-�֤����Ĥ������С��������ߡ��ߤ���褤����
+「くいつき！きば！おおかみ！みんな来い！」
 #says, "They won't harm you -- not unless I tell 'em to!"
-�֤����Ĥ�ϳ��ߤĤ����ꤻ��衣�路��̿�᤻�󤫤���ʡ���
+「あいつらは噛みついたりせんよ。わしが命令せんかぎりな！」
 #says, "Here, Grip! Fang! Heel!"
-�֤������������Ĥ������С��褤����
+「ここだ、くいつき！きば！来い！」
 exclaims, "Well, if that isn't queerer than ever?"
 #asks, "Were you coming to visit me?"
-�֤路�˲񤤤ˤ����Τ�������
+「わしに会いにきたのかい？」
 #says, "I'll not light my lanterns till I turn for home."
-�֤路�ϲȤ˵���ޤǥ�󥿡���˲Ф������ʤ��褦�ˤ��褦����
+「わしは家に帰るまでランターンに火を灯さないようにしよう。」
 #says, "I see you are in some kind of trouble."
-�ֲ�����ä������˴������ޤ줿�褦����ʡ���
+「何かやっかい事に巻き込まれたようじゃな。」
 yells, "Hallo there!"
 says, "It's been a queer day, and no mistake."
 
 N:19:Lion Heart
-�ֵ�͹���ʤΤ櫓�Τ狼��ʤ������ϥ���������դˤ����Ѥ��ʤ�����
-�ֻ�Ϸ�ǽ�ͤ���ʤ��������Ȥʤ�Ǥ��衣��
-�֢��ʤ�Ƥä��äƥ������ߡ���
-�ֻ�������鼫̱�ޤ�֤������ޤ����顣��
-�ֺ�����X-JAPAN��CD�ץ쥼��ȡ���
-�֢��ե������С���
-�֤褯�Ż�����ͤϤ褯ͷ�֡���
-�ָ���Ԥ�ǳ���ʤ��㡢ͭ���Ԥ�ǳ���ʤ��衣��
-�ּ�̱�ޤ��������ͤȷ������ä����顢29������ɼ�˹Ԥ�������
-�֤ޤ�ޤ�ݤ��ݤ��ޤ�ޤ롣��
-���ˤߤ��Ѥ��Ƥ褯��ĥ�ä�����ư��������
-�֤��줫�餵�ޤ��ޤ�˸�����񹳤����롣��
-�ֻ����դ�ȿ�Ф����ΤϤ��٤������Ϥ�����
-��͹��̱�Ĳ���̱�Ĳ���Ŵƻ�����ä�̵���ʤ�ޤ���������
-�ֹ�¤���פʤ����Ʒʵ������Ϥ��ꤨ�ʤ�����
-�ֺ����ˤߤ��Ѥ��ơ�������˭������ɴɶ����������
+「旧郵政省のわけのわからない論理はコイ○ミ内閣には通用しない！」
+「私は芸能人じゃない。政治家なんですよ。」
+「♪なんてったってコイ○ミ〜」
+「私の方から自民党をぶち壊しますから。」
+「今日はX-JAPANのCDプレゼント！」
+「♪フォ〜エバ〜」
+「よく仕事する人はよく遊ぶ。」
+「候補者が燃えなきゃ、有権者も燃えないよ。」
+「自民党が、いいねと君が言ったから、29日は投票に行こう。」
+「まんまる丸く丸くまんまる。」
+「痛みに耐えてよく頑張った！感動した！」
+「これからさまざまな妨害や抵抗がある。」
+「私の内閣に反対するものはすべて抵抗勢力だ。」
+「郵政民営化、民営化で鉄道や電話が無くなりましたか？」
+「構造改革なくして景気回復はありえない。」
+「今の痛みに耐えて、明日の豊かさ米百俵の精神。」
 
 N:1059:Noborta Kesyta
-�֤魯�ΰ첯������ɤǥ����η��ƤʤϤä����ʤ��ɤ��ʤä���ޤ������Ρ�
-�֤魯�Ϥ��󤴤᡼��硢����դ᡼�Ǥ�����Ρ�
+「わすの一億ゴールドでカズノ建てなはったさながどげなっちょますかいの」
+「わすはげんごめーりょ、えめふめーですけんの」
 
 N:1060:Mori troll
-�����ܤι񡢤ޤ���ŷ�Ĥ��濴�ˤ��Ƥ�����ι�Ǥ��뤾�Ȥ������Ȥ򡢹�̱�Τߤʤ���ˤ��ä���Ⱦ��Τ򤷤Ƥ��������ġ�
-�֤ޤ����Ƥ��ʤ��ͤ������󤰤餤���롣���Τޤ޴ؿ����ʤ����Ȥ��äƿ��Ƥ��ޤäƤ����Ф�����Ǥ�����ɤ⡣��
-�ֲ��ⶵ��ļ����᤻�Ȥ�Ķ���Ū�ʤ��Ȥ˻������Ƥ������ǤϤʤ�����
-�ֶ���ļ��ˤϻ����Ķ��������Ūů�ؤ����롣��
-�ַ빽���˻ĤäƤ��ޤ��Τϡ����ͤ�����ˤ��Ƥ��뤫����������������Ƥ�館��Τ��ʤ��ȡ���
-�ֻ䤬�������Ĥ˹Ԥ��ȡ�����Ȥ򤷤Ƥ������Ȥ����������Ȥ����äƤ��ä�����
-�����ϡȤ���ĤܡɤȤ�����Τ�̵������̤��ȡ���⤦��������ͤ���¤˱������ˤʤä�����
-�֥���ꥫ�Ǥ����Ť���������ɬ������󥰤仦��������äƤ��롣��
-�ֲ���������뤳�Ȥ�ġġ�
-�־�޼����Ϥʤ�Ȥ�����������������������Ȥ����פ����ä������������
-�ֽƸ�Τ��ȡ���������äƤޤ���ޤ��Τǡ������϶�Ϥߤʤ���Ǥ���ꤤ��������������
-�ֶ����ޤϹ��Τ��Ѥ��ʤ��ȸ��äƤ��롣ŷ������ǧ��ʤ�����������ϲ򻶡����ư��ݤ���ǧ���ʤ�����
-�����ܤΰ��������ܤΡֹ��Ρפ�ɤ���뤳�Ȥ��Ǥ��뤫��̱���ޤϺ��äƤ���Ǥ��礦����
-�ֶ����ޤ��Ȥ�ȤϤ����ʤ�����
-�ּ����Ǥⲿ�Ǥ�ʤ�����
-��ī��Ⱦ��ϣ��Ĥ�̱²��ʬ�Ǥ���Ƥ����櫓�Ǥ���ޤ����ġġ�
-�ֿ��ͤ��ä򤹤�Ȥޤ��ܤ��ޤ����ġġ�
-�֤�������ɤˤ��ƤϤ����ʤ����ޤ��˵����סġġ�
-�֤�����Ϥ���ޤ��󡣡�
-�ֻ䤬���Ȥ������ʤ��������夬�뤫�顣��
-�֣УȣӤäƤʤ�������Ӥο����ʤʤΤ�����
-���ͤ��ä��ϼ�����ʤ�����
-�ּ�ʬ��ȯ�����ɤ������ƶ���Ϳ���뤫�ϡ������ȹͤ��Ƥ��롣��
-�֥٥꡼���ե����󡦥ȥ��ǡ���
-�ֽ�ʬ�˰դ�Ԥ����ʤ�ɽ���ˤ�ꡢ¿���������˸����Ϳ�������Ȥ򿼤�ȿ�ʤ�����̱�˿�������Ӥ��롣��
-�ְִ�ä����Ȥ���ä��ȤϻפäƤ��ʤ�����
-�֥ѥ����󤬻Ȥ��ʤ��ͤϡ����դϰ����������ԤȤ����������
-�ֿ��ζ���ϻ�Ω�Τۤ��������͡���
-�ֽ����϶彣������ή��Ƥ��äƤ����Ф�������
-�֤ա������桼����
+「日本の国、まさに天皇を中心にしている神の国であるぞということを、国民のみなさんにしっかりと承知をしていただく…」
+「まだ決めていない人が４０％ぐらいある。そのまま関心がない、といって寝てしまってくれればいいんですけれども。」
+「何も教育勅語に戻せとか超国家的なことに賛成している訳ではない。」
+「教育勅語には時代を超えて普遍的哲学がある。」
+「結構国会に残っていますのは、神様を大事にしているからちゃんと当選させてもらえるのだなあと。」
+「私があいさつに行くと、農作業をしている農家の方が全部家に入っていった。」
+「大阪は“たんつぼ”といわれるのは無理からぬこと。金もうけだけを考える実に汚い街になった。」
+「アメリカでは停電が起きたら必ずギャングや殺し屋がやってくる。」
+「沖縄で万博やることも……」
+「小渕さんはなんとか万博だけは成功させたいという思いだったんだろう。」
+「銃後のこと、前線で戦ってまいりますので、この地区はみなさんでお守りいただきたい。」
+「共産党は綱領は変えないと言っている。天皇制も認めないし、自衛隊は解散、日米安保も容認しない。」
+「日本の安全を、日本の「国体」をどう守ることができるか。民主党は困っているでしょう。」
+「共産党と組むとはいかない。」
+「失言でも何でもない。」
+「朝鮮半島は２つの民族に分断されていたわけでありますが……」
+「神様の話をするとまた怒られますが……」
+「これは政局にしてはいけない、まさに挙国一致……」
+「あん時はすんません。」
+「私が来るといい。なぜか。モリ上がるから。」
+「ＰＨＳってなんだ？携帯の新製品なのか？」
+「僕だって馬鹿じゃない。」
+「自分の発言がどういう影響を与えるかは、ちゃんと考えている。」
+「ベリー・ファイン・トゥデー」
+「十分に意を尽くさない表現により、多くの方々に誤解を与えたことを深く反省し、国民に深くおわびする。」
+「間違ったことを言ったとは思っていない。」
+「パソコンが使えない人は、言葉は悪いが日陰者というんだ。」
+「心の教育は私立のほうがいいね。」
+「重油は九州の方に流れていってくれればいい。」
+「ふーあーゆー？」
 
 N:1083:Hato Poppo
-�֥ȥ饹�ȡ��ߡ�����
-��ȷ����դ�����Ȥ�Τϡ�̵���ʿ���ݿ��٤�����
-��ɬ�������޻��ϤȤ��Ʋ����¸�ߤ��ʤ���Фʤ�ʤ���ͳ�ˤϤʤ�ʤ��ȻפäƤޤ�������
-�ֹ�Ȥ�����Τ��褯ʬ����ʤ��ΤǤ�������
-�ֿʹ֤����ʤ��ʤ�Τ������ϵ�ˤȤä�ͥ��������
-��������������ܿͤ����ν�ͭʪ����ʤ���Ǥ����顣��
-�������Ȥ��ϼ��ԤǤ��ꡢ���Υȥåפ�������ä����ϼ��ԤǤ��롣����ʹ�����Ū�ˤ�ǧ�����Ϥ����ʤ�����
-�ֺ��������Ѥ���ŷ���Ǥ�����
-��ͧ�������˴�Ť����ؿʹ֤Τ���ηкѡ٤����ܤο�������Ĺ��Ĥ��롣��
-����ľ���������夹�����������ڤ��ä���̾���ˤϡػ��٤��Ĥ�����ë�Ф��������
-�ָ���Ȥ����Τ�����λ����ޤιͤ����Ȥ������ȡ���
-�����Ѥʤ��Ȥˤʤä���ͽ�ۤ��Ƥʤ��ä������ä��ʤ�����
-�ַäޤ줿�����˰�ä���ΤǤ����顣��
+「トラスト・ミー。」
+「鳩山内閣が取り組むのは『無血の平成維新』だ。」
+「必ずしも抑止力として沖縄に存在しなければならない理由にはならないと思ってました。」
+「国というものがよく分からないのですが。」
+「人間がいなくなるのが一番地球にとって優しい。」
+「日本列島は日本人だけの所有物じゃないんですから。」
+「政治家が馬鹿者であり、そのトップの総理大臣が大馬鹿者である。そんな国が世界的にも認められるはずがない。」
+「今日は大変いい天気です。」
+「友愛精神に基づいた『人間のための経済』が日本の新たな成長をつくる。」
+「正直、政権交代する前の方が楽だった。名前には『山』がつくが、谷ばかりだ。」
+「公約というのは選挙の時の党の考え方ということ。」
+「大変なことになった、予想してなかった。困ったなあ。」
+「恵まれた家庭に育ったものですから。」
 
 #N:19:Martti Ihrasaari
 
@@ -124,140 +124,140 @@ N:53:Grip, Farmer Maggot's dog
 N:54:Wolf, Farmer Maggot's dog
 N:55:Fang, Farmer Maggot's dog
 #chases its tail.
-�ϼ�ʬ�ο������ɤ���������
+は自分の尻尾を追いかけた。
 #barks loudly.
-�Ϥ��뤵���ʤ�����
+はうるさく吠えた。
 #froths at the mouth.
-��ˢ��դ��Ƥ��롣
+は泡をふいている。
 #wags its tail.
-�Ͽ�����դäƤ��롣
+は尻尾をふっている。
 #rolls over.
-�Ϥ�����ȿ����������
+はごろんと寝ころんだ。
 #growls.
-�Ϥ��ʤä���
+はうなった。
 
-#���ᥢ������ ���ܤ����ͼ� Tessi ����˴ƽ����Ƥ��������ޤ�����
+#スメアゴル語は 日本の第一人者 Tessi さんに監修していただきました。
 N:63:Smeagol
 #mutters, 'My precious, wheres my precious?'
-#�֤��Ȥ������ȡ��ɤ��ˤ���Τ��Ȥ������ȡ�
-#������ϰ�ͤΤȤ��ϸ�Ĵ���Ӥ��Τ�
-#�֤��Ȥ������ȡ��ɤ����衢���Ȥ������ȡ��פǤ⤤�����⤷��ޤ���
-�֤��Ȥ������ȡ��ɤ����衢���Ȥ������ȡ���
+#「いとしいしと、どこにいるのいとしいしと」
+#ゴクリは一人のときは口調が荒いので
+#「いとしいしと、どこだよ、いとしいしと？」でもいいかもしれません
+「いとしいしと、どこだよ、いとしいしと？」
 #
 #screams, 'Nasty Hobbitsisisisis...'
-#�֤��ɤ��ۥӥåȤ��󤿤����衪��
-#�֤��ɤ��ۥӥåȡפΤȤ���
-#�֤���פϤĤ��ʤ����ȤΤۤ����������������ޤ���
-#�֤��ɤ��ۥӥåȤ����פ⤷���ϡ֤��ɤ��ۥӥåȤ���---����������---��
-#�Ȥ������󤸤Ǥ��礦��
-�֤��ɤ��ۥӥåȤ���---����������---��
+#「しどいホビットさんたちだよ！」
+#「しどいホビット」のときは
+#「さん」はつかないことのほうがおおいきがします．
+#「しどいホビットだ！」もしくは「しどいホビットだ！---ス、ス、ス---」
+#というかんじでしょうか
+「しどいホビットだ！---ス、ス、ス---」
 #
 #says, 'Come on, quickly, follow Smeagol'
-#�֤��顢�᤯�����ᥢ����ˤĤ��Ƥ���Τ��
-#'follow Smeagol'�ϡ֥��ᥢ����ˤĤ��Ƥ����ǡ���
-#�ߤ����ʤ��󤸤Ǥ⤤�����⤷��ޤ���
-�֤��顢�᤯�����ᥢ����ˤĤ��Ƥ����ǡ���
+#「そら、早く！スメアゴルについてくるのよ」
+#'follow Smeagol'は「スメアゴルについておいで！」
+#みたいなかんじでもいいかもしれません
+「そら、早く！スメアゴルについておいで！」
 #
 #says, 'Nasty Bagginis, stole my precious.'
-�֤��ɤ��Х��󥺡����Ȥ������Ȥ������衣��
+「しどいバギンズ！いとしいしとを盗んだよ。」
 #says, 'She will kill them oh yes she will precious.'
-#�֤��Τ��Ȥ����äȤ�äĤ��Ƥ����衢�����衢��äĤ���衢���Ȥ������ȡ�
-#'She'�ˤ����������ܸ�Ǥϡ֤��ФСפȤ����Ƥ���Ȥ����ȡ֤��Τ��ȡ�
-#�Ȥ����Ƥ���Ȥ���������ޤ���
-#�Ȥ����櫓�Ǥɤä��Ǥ⤤���Ȥ��⤤�ޤ�
-#���ȡ�'oh yes'�ϡ֤�����������פǤ⤤�����⤷��ޤ���
-�֤��Τ��Ȥ����äȤ�äĤ��Ƥ����衢�����������衢��äĤ���衢���Ȥ������ȡ�
+#「あのしとがきっとやっつけてくれるよ、そうよ、やっつけるよ、いとしいしと」
+#'She'にたいして日本語では「おばば」とかいてあるところと「あのしと」
+#とかいてあるところがありました
+#というわけでどっちでもいいとおもいます
+#あと，'oh yes'は「ああ、そうよ」でもいいかもしれません
+「あのしとがきっとやっつけてくれるよ、ああ、そうよ、やっつけるよ、いとしいしと」
 #
 #says, 'Whats has its got in its pocketses, hmmm?'
-�֥ݥ��åȤΤʤ��ˤϲ������롩��󡩡�
+「ポケットのなかには何がある？んん？」
 #sniggers.
-�ϥ��������Фä���
+はクスクス笑った。
 #grovels.
-�ϻͤ��礤���⤤�Ƥ��롣
+は四ん這いで歩いている。
 #picks his nose.
-��ɡ��ۤ��äƤ��롣
+は鼻をほじっている。
 #pines for his precious.
-�Ϥ��Ȥ������Ȥ��������äƤ��롣
+はいとしいしとを恋しがっている。
 #searches his pockets.
-�ϥݥ��åȤ����õ���Ƥ��롣
+はポケットの中を探している。
 #eats some slimy creatures.
-�ϲ����٥ȥ٥Ȥ�������ʪ�򿩤٤Ƥ��롣
+は何かベトベトした生き物を食べている。
 #shouts, 'No Master Hobbitsisisisis!'
-�֤褯�ʤ��衪�ۥӥåȤ�ö�ᡪ��
+「よくないよ！ホビットの旦那！」
 #cries, 'The ring was ours for agesisisisis!'
-�֤��λ��ؤϤ������äȤ路���ʪ���ä�����
+「あの指輪はずーーっとわしらの物だった！」
 #says, 'Smeagol sneeking! ME! Shneekingsisis!'
-�֥��ᥢ����᤯�ˤ���衪�᤯�衪������������
+「スメアゴル近くにいるよ！近くよ！ス、ス、ス」
 says, 'Every way is guarded, silly foolsis!'
 #whines, 'Weees wants some fishises.'
-�֤路���������������
+「わしら魚が食いたい」
 #whimpers, 'We've lost itses we have.'
-�֤路�餺�äȻ��äƤ���Τ�ʤ����Ƥ��ޤä��衣��
+「わしらずっと持ってたものをなくしてしまったよ。」
 says, 'He'll eastus all the world if he getsitses it.'
 #says, 'No food, no rest; Smeagol a SNEAK!'
-# Tessi ������
-�ֿ��٤��Τʤ����٤ߤʤ������ᥢ���뤳���������͡�
+# Tessi さん訳
+「食べるものない、休みない．スメアゴルこそこそやるね」
 #says, 'What a dainty little dish you will be for her.'
-�֤��ޤ��Ϥ��Τ��ȤΤ����������������ˤʤ���
+「おまえはあのしとのおいしいごちそうになるよ」
 #says, 'Hobbitses always SOOOO Polite.'
-# Tessi ������
-�֥ۥӥåȤ���Ϥ��Ĥ��äƤȤƤ��鵷�������
+# Tessi さん訳
+「ホビットさんはいつだってとても礼儀がある」
 #screams, 'Stop, Thief!'
-�ֻߤޤ졪�ɤ��ܤ�����
+「止まれ！どろぼう！」
 #says, 'Makeses him drop his weapon precious.'
-�֤����Ĥ�������Ȥ��������衢���Ȥ������ȡ���
+「あいつに武器を落とさせるんだよ、いとしいしと。」
 #grovels, 'He has only four fingers on the black hand.'
-# Tessi ������
-�֤����Ĥι�����ˤϻ��ܤ����ؤ��ʤ����
+# Tessi さん訳
+「あいつの黒い手には四本しか指がないよ」
 #growls, 'Not nice Hobbits, not sensible!'
-# Tessi ������
-�֤褯�ʤ��ۥӥåȤ��补ʪ�狼��褯�ʤ����
+# Tessi さん訳
+「よくないホビットだよ．物わかりよくないよ」
 #says, 'If you findesis it, give it us back.'
-�֤⤷���Ĥ����顢�路����֤��ʤ衣��
+「もし見つけたら、わしらに返しなよ。」
 
 N:135:Mughash the Kobold Lord
 #says, 'I may be a kobold, but I'll kick your arse!'
-�ֲ��ϥ��ܥ�ɤ��⤷��ʤ������ͤ�á���Τᤷ�Ƥ�뤾����
+「俺はコボルドかもしれないが貴様を叩きのめしてやるぞ！」
 #says, 'Feel my wrath, fool!'
-�ֲ����ܤ��פ��Τ졪�Х��ᡪ��
+「俺の怒りを思い知れ！バカめ！」
 #says, 'Death and destruction make me happy!'
-�ֻ���˲��������椬��Ӥ�����
+「死と破壊こそが我が喜びだ！」
 #snickers evilly.
-�ϼٰ��˾Фä���
+は邪悪に笑った。
 
 N:137:Wormtongue, Agent of Saruman
 #whines and sniggers.
-���ܶ��˾ФäƤ��롣
+は卑屈に笑っている。
 #whispers nasty things.
-�������ʻ����줤����
+は卑劣な事を呟いた。
 #says, 'I'll slaughter you slowly...'
-�֤�ä��껦���Ƥ�롢������
+「ゆっくり殺してやる、、、」
 #says, 'Lathspell I name you, Ill-news; and Ill-news is an ill guest they say.'
-�֤ҤȤĤ��󤿤Τ��Ȥ�饹���ڥ�Ȥ��ƤӤ��褦���Ĥޤ궧��Ȥ������ȤǤ��ʡ���
+「ひとつあんたのことをラススペルとお呼びしよう。つまり凶報ということですな。」
 #says, 'Forbid his staff!'
-�֤��μԤ˾���������ʡ���
+「その者に杖を持たせるな！」
 #yells, 'You lie!'
-�ϡ֤��������פȶ������
+は「うそだ！」と叫んだ。
 #says, 'Let me go, let me go!  I know the way!'
-�ֹԤ����Ʋ��������Ԥ����Ʋ��������ɤ���äƹԤ����狼�äƤޤ�����
+「行かせて下さい、行かせて下さい！どうやって行くかわかってます！」
 #says, 'My messages are useless now!'
-�֤錄�����Τ��Ȥ����ä��ѷ�Ϻ��ȤʤäƤϤ���Ǥ�����
+「わたくしのことずかった用件は今となってはむだです。」
 #says, 'No no!'
-�֤���������������
+「いやだ！いやだ！」
 #hisses, 'You told me to; you made me do it!'
-�֤��󤿤������Ĥ�����������󤿤��������������
+「あんたがいいつけたんだ、あんたがさせたんだ！」
 
 N:138:Robin Hood, the Outlaw
-�Ϥ��ʤ��κ��ۤ�ʪ�ߤ������˸��Ĥ�Ƥ��롣
+はあなたの財布を物欲しそうに見つめている。
 #says, 'You look like Nottingham's man to me!'
-�֤����ϥΥåƥ��󥬥�μԤΤ褦���ʡ���
+「お前はノッティンガムの者のようだな！」
 #says, 'I bet I can shoot better than you...'
-�����Ф�������꤯���ͤäƤ�뤼...��
+「絶対お前より上手く矢を射ってやるぜ...」
 says, 'Give 'til it hurts!'
 #says, 'Don't force me to put an arrow in your skull...'
-�ֲ��ˤ�����Ƭ���ȴ�����ʤ��Ǥ���...��
+「俺にお前の頭を射抜かせないでくれ...」
 #says, 'Kevin Costner has soiled my name!'
-�֥��ӥ󡦥����ʡ��ϲ���̾�����Ϥ���Ȥ�������
+「ケビン・コスナーは俺の名前を地に落とした！」
 
 #N:169:Brodda, the Easterling
 #N:291:Ulfast, Son of Ulfang
@@ -265,34 +265,34 @@ says, 'Give 'til it hurts!'
 N:180:Orfax, Son of Boldor
 N:237:Boldor, King of the Yeeks
 #wonders aloud about your sexual orientation.
-�Ϥ��ʤ������ָƤФ�ꤷ�Ƥ�ᤤ�Ƥ��롣
+はあなたを変態呼ばわりしてわめいている。
 #spouts torrents of obscenities.
-�ϤҤ襤�ʸ��դ�ޤ������Ƥ���
+はひわいな言葉をまくしたてた。
 #shouts, 'YEEK! YEEK! YEEK!'
-�֥�������������������������
+「イーク！イーク！イーク！」
 #says, 'I'll teach you to respect Yeeks!
-�֥�������Х��ˤǤ��ʤ��äƤ��Ȥ򶵤��Ƥ��������'
+「イークもバカにできないってことを教えてやろう！」'
 #says, 'Feel lucky, punk?'
-�ϥ����ƥ����ϥ꡼�ο����򤷤ơ�̿���Ҥ��Ƥߤ뤫������ԥ���Ϻ�פȸ��äƤ��롣
+はダーティーハリーの真似をして「命を賭けてみるか、チンピラ野郎」と言っている。
 
 N:200:Hobbes the Tiger
 #says, 'Why were people put here? TIGER FOOD!'
-�ֿʹ֤ϲ��Τ���ˤ���Τ��ʡ��פα¤ǡ�������
+「人間は何のためにいるのかな？虎の餌でーす！」
 #says, 'Yum! Adventurer sandwiches!'
-�֤��ޤ����������ԥ���ɥ��å�����
+「うまそう！冒険者サンドイッチ！」
 #says, 'I killed Calvin, now I'll kill YOU!'
-�֥��������򻦤�����ä����顢���Ϸ�������
+「カルヴィンを殺しちゃったから、次は君だ！」
 #says, 'I'll make your short life nasty and brutish!'
-�ַ���û��������󤯤ƻ���ʤ�Τˤ��Ƥ����褦����
+「君の短い人生を酷くて惨めなものにしてあげよう！」
 
 N:140:Lagduf, the Snaga
 N:186:Grishnakh, the Hill Orc
 says, 'Saruman is a fool, and a dirty treacherous fool.'
 says, 'I left a fool.'
 yells, 'Nazgul, Nazgul!'
-says, 'Fine leadership!��I hope the great Ugluk will lead us out again.'
+says, 'Fine leadership!　I hope the great Ugluk will lead us out again.'
 hisses, 'My dear tender little fools.'
-says, 'Well, my little ones!��Enjoying your nice rest?'
+says, 'Well, my little ones!　Enjoying your nice rest?'
 snarls, 'Have you got it -- either of you?'
 
 N:215:Golfimbul, the Hill Orc Chief
@@ -304,97 +304,97 @@ N:350:Ugluk, the Uruk
 N:356:Lugdush, the Uruk
 N:373:Azog, King of the Uruk-Hai
 #fingers his blade and grins evilly.
-�����˼�򤫤��Ƥˤ��ȾФä���
+は武器に手をかけてにやりと笑った。
 snickers, 'Now, I strike a blow for *our* side!'
 says, 'Orcs don't get no respect... I'm gonna change that!'
 calls your mother nasty names.
 #says, 'I'll bet your innards would taste real sweet...'
-�ֵ��ͤΥϥ�勵�Ϥ��äȤ��������������ʡ�
+「貴様のハラワタはきっとおいしいだろうな」
 #belches and spits.
-�Ϥ��äפ򤷤ƤĤФ��Ǥ���������
+はげっぷをしてつばを吐きかけた。
 #scratches his armpits.
-�Ϥ來�β����ߤ�����
+はわきの下を掻いた。
 #says, 'I love the smell of fresh blood.'
-�ֲ��Ͽ����ʷ�Τˤ������繥���ʤ���衣��
+「俺は新鮮な血のにおいが大好きなんだよ。」
 #says, 'Yeeha! Another idiot to slaughter!'
-�֤⤦��ɤ��Х���Ϻ�����������䤬�ä�����
+「もう一匹大バカ野郎が殺されに来やがった！」
 hawks a loogie in your direction.
 farts thunderously.
 #wonders aloud how many experience points you're worth.
-�ϡ����ʤ��������ηи��ͤˤʤ뤫�ͤ��Ƥ��롣
+は、あなたが何点の経験値になるか考えている。
 #says, 'I love being psychotic!'
-�ֲ��ϥ֥������Τ��繥���ʤ��������
+「俺はブチキレんのが大好きなんだぜ！」
 #says, 'My brain's on fire with the feeling to kill!'
-�ֲ��ΥΡ��ߥ��ϵ��ͤ򻦤��פ��ǾƤ��դ�������������
+「俺のノーミソは貴様を殺す思いで焼け付きそうだぜ！」
 #says, 'I shall torture you slowly.'
-�ֵ��ͤ��ä�����䤷�Ƥ�롣��
+「貴様をゆっくり拷問してやる。」
 #calls you a scum-sucking pig-dog.
-�Ϥ��ʤ��Τ��Ȥ���쥫����Ϻ�Υ��Ĥ��ӤȸƤ�Ǥ��롣
+はあなたのことを腐れカス野郎のケツの毛と呼んでいる。
 says, 'I shall have my way with your women!'
 says, 'You're not so tough, buttmunch!'
 #says, 'Heh-heh, heh-heh, killing people is cool.'
-�֤ؤء��ؤء��ͤ򻦤��Τϳڤ����ʤ�����
+「へへ、へへ。人を殺すのは楽しいなあ。」
 
 N:382:Mime, the Nibelung
 #says, 'Get away! This spot is mine!'
-�֤��ä��عԤ��������ϲ��ξ�������
+「あっちへ行け！ここは俺の場所だ！」
 #says, 'I will soon close your eyes in eternal sleep.'
-�֤⤦�����ʱ��̲��˽������Ƥ��������
+「もうすぐ永遠の眠りに就かせてやろう。」
 #says, 'I'll mess up all your stuff!'
-����������㤯����ˤ��Ƥ�롪��
+「全部めちゃくちゃにしてやる！」
 #says, 'Give me the Rheingold, or die!'
-�֥饤��β�����Ϥ�������ʤ��л������
+「ラインの黄金を渡せ！さもなくば死だ！」
 #cries, 'You must pay me... with your life!'
-�ֵ��ͤˤ������ʧ�äƤ�餦�Ĥ���̿�Ǥʡ���
+「貴様には代償を払ってもらう…その命でな！」
 #grins.
-�ϥ˥��ȾФäƤ��롣
+はニヤリと笑っている。
 says, 'Maybe I will just hack your head off.'
 
 N:383:Hagen, son of Alberich
 #says, 'Did you hear what the ravens said? Revenge, that is what they cry!'
-�֥��饹���θ������Ȥ�ʹ�������� ��Ĥ�ϡ������ɤ��Ĥ��Ƥ���������
+「カラス共の言うことを聞いたか？ やつらは”復讐”と鳴いているんだ！」
 shouts, 'Hoiho! Hoiho! To arms! To arms!'
 #grumbles, 'I hate the happy, and I am never glad.'
-�ֻ�Ϲ��������������������򤷤��ä����Ȥʤɤʤ�����
+「私は幸せな奴等が嫌いだ。嬉しかったことなどない。」
 #cries, 'Keep away from the Ring!'
-�֤��λ��ؤ˶�Ť��ʡ���
+「あの指輪に近づくな！」
 #boasts, 'My spear will certainly cut down the wrongful one.'
-�ֻ���䤬�褳���ޤʼԤ�ɬ�����ڤ�ΤƤƤ���褦��
+「私の槍がよこしまな者を必ずや切り捨ててくれよう」
 cries, 'There! There shall my spear strike!'
 grins, 'You will die soon, handsome hero!'
 #states, 'I am but avenging perjury.'
-�ֻ�ϵ����Ԥ�ȳ���Ƥ���ˤ����ʤ�����
+「私は偽誓者を罰しているにすぎない。」
 #shouts, 'Give the Ring here!'
-�ֺ������ǻ��ؤ��Ϥ��Τ�����
+「今ここで指輪を渡すのだ！」
 shouts, 'Hoiho! Hoiho-hoho!'
 
 N:419:Alberich the Nibelung King
 #says, 'I'll mess up all your stuff!'
-����������㤯����ˤ��Ƥ�롪��
+「全部めちゃくちゃにしてやる！」
 #says, 'Give me the Rheingold, or die!'
-�֥饤��β�����Ϥ�������ʤ��л������
+「ラインの黄金を渡せ！さもなくば死だ！」
 #states, 'As I have renounced love, all who live shall soon renounce it!'
-�ֻ�ϰ���ΤƤ�����ä�������Ԥ����ư���ΤƤ뤳�Ȥˤʤ�������
+「私は愛を捨てた。よって生ある者は全て愛を捨てることになろう！」
 #laughs insanely.
-�϶��ä��褦�˾Фä���
+は狂ったように笑った。
 #asks, 'Did you hear it? The nibelung hordes are rising from the depths!'
-��ʹ�����뤫���ˡ��٥�󥰤��緳�����ϲ����������äƤ��벻�򡪡�
+「聞こえるか？ニーベルングの大軍勢が地下深くからやってくる音を！」
 #laughs, 'Ha ha ha ha! Beware!'
-�ϾФäƤ��롣�֥ϥåϥåϡ�����Ĥ�������
+は笑っている。「ハッハッハ！気をつけろ！」
 says, 'Beware, fool! Beware!'
 #says, 'Envy led you here, pitiful rogue!'
-�ּ��ʤˤ����Ƥ����ޤ��褿��������ʰ��ޤᡪ��
+「嫉妬にかられてここまで来たか、哀れな悪党め！」
 boasts, 'I dauntlessly defy everyone, everyone!'
 #yells, 'Tremble, on your knees before the master of the Ring.'
-�֤��ΤΤ��̤��衪���ؤλ��ۼԤ����ˤҤ��ޤŤ��Ƥʡ���
+「おののき震えよ！指輪の支配者の前にひざまづいてな！」
 #yells, 'Tremble with terror, abject throng!'
-�ֶ��ݤ˿̤��衪����ʷ����衪��
+「恐怖に震えよ！惨めな群衆よ！」
 says, 'I am watching you everywhere, expect me where you do not perceive me!'
 says, 'Feel my wrath, idle rascal!'
 #says, 'I have discovered you, you stupid thief!'
-�֤Ĥ��˸��Ĥ��������򤫤�ť���ᡪ��
+「ついに見つけたぞ！愚かな泥棒め！」
 #says, 'Are you still not afraid? You should be!'
-���ݤ��ʤ��Ȥ����Τ��������줿�����Ȥΰ٤�������
+「怖くないというのか？！恐れた方が身の為だぞ！」
 
 #N:392:Sangahyando of Umbar
 #N:380:Angamaite of Umbar
@@ -403,29 +403,29 @@ says, 'Feel my wrath, idle rascal!'
 
 N:393:It
 #says, 'Nyah, nyah, betcha can't find me!'
-�֤���ˤ㡢����ˤ㡢���ߤϥߡ��򸫤Ĥ���ʤ��͡���
+「うんにゃ、うんにゃ、ちみはミーを見つけれないね！」
 #says, 'Come get some!'
-�֤����äƤ�������
+「かかってこい！」
 #magically summons mighty undead opponents!
-����ˡ�Ƕ��Ϥʥ���ǥåɤ򾤴�������
+が魔法で強力なアンデッドを召喚した！
 #chuckles evilly.
-�ϼٰ��˾ФäƤ��롣
+は邪悪に笑っている。
 #magically summons Cyberdemons!
-�ϥ����С��ǡ����򾤴�������
+はサイバーデーモンを召喚した！
 #summons special opponents!
-����ˡ�����̤ʶ�Ũ�򾤴�������
+は魔法で特別な強敵を召喚した！
 #concentrates on its wounds.
-����ʬ�ν��˽��椷����
+が自分の傷に集中した。
 #concentrates on its body. It starts moving faster.
-����ʬ���Τ�ǰ�����ä��������ư����®���ʤä���
+が自分の体に念を送った。それの動きが速くなった。
 #teleports away.
-���ƥ�ݡ��Ȥ�����
+がテレポートした。
 
 N:409:Kharis the Powerslave
 #says, 'Open the gates of my hell, I will strike from the grave!'
-�ֻ���Ϲ�����򳫤����褤���褫��ᴤäƤ�����Ƥ�äƤ��������
+「私の地獄の門を開くがよい。墓から甦ってお前を討ってやろう。」
 #curses you.
-�ϼ����򤫤��Ƥ��롣
+は呪いをかけている。
 
 #N:413:Ulwarth, Son of Ulfang
 #N:431:Grendel
@@ -433,68 +433,68 @@ N:409:Kharis the Powerslave
 N:441:Gachapin
 N:1061:Barney the Dinosaur
 #says, 'Cooperation! That's the magic word!'
-�ֽ����礤���������ˡ�θ��ա���
+「助け合い♪それは魔法の言葉！」
 #mutters, 'I *hate* those Teletubbies...'
-�֤ܤ��Ϥ��Υƥ쥿�ӡ�����Ķ�������...��
+「ぼくはあのテレタビーズが超大嫌いだ...」
 #says, 'Won't you be my friend?'
-�֤Ȥ�����ˤʤ������
+「ともだちになろうよ」
 #says, 'Let's all sing a HAPPY SONG!'
-�֤ߤ�ʤǳڤ����Τ򤦤���������
+「みんなで楽しい歌をうたおう！」
 #mugs for the camera.
-�ϥ������������
+はカメラ目線だ。
 #simpers disgustingly.
-�Ϥ���餷���˥�˥�ФäƤ��롣
+はいやらしくニヤニヤ笑っている。
 #chews up a 'Tinky Winky' doll.
-�ְ��ˤ����ܤ��衢�ͤΤȤ�������ҥɥ鷯��������
+「一緒にあそぼうよ、僕のともだち！ヒドラ君たち！」
 
 #N:489:Bokrug
 N:493:Bert the Stone Troll
 N:494:Bill the Stone Troll
 N:495:Tom the Stone Troll
 #complains, 'What's a burrahobbit got to do with my pocket, anyways?'
-�֤��Υ��ΥӥåȤ����ʤ�Ǥ���ΤդȤ����򡢤ͤ�ä�����������
+「そのシノビットが、なんでおれのふところを、ねらったんだ、こら」
 #rejoices, 'No more roast mutton! Roast adventurer today!'
-�ϡ��ӤΤ��֤����Ϥ⤦�����������������ԤΤ��֤��������פȴ��Ǥ��롣
+は「羊のあぶり肉はもうやめだ！今日は冒険者のあぶり肉だ！」と喜んでいる。
 #says, 'That'll teach yer!'
-�֤������Ϥ���뤬���������
+「すこしはこりるがいいぞや」
 #says, 'I won't take that from you!'
-�֤Ȥ�ޤϤ����������餢����
+「とんまはおかえしすらあ！」
 
 N:505:Goemon
-�ֺ����λ�Ŵ���ϤҤ�̣�㤦������
-�֤ޤ��Ĥޤ�̤�Τ�¤äƤ��ޤä���������
-�֡�����������
+「今宵の斬鉄剣はひと味違うぞ！」
+「またつまらぬものを斬ってしまった．．．」
+「．．．．．」
 
 N:1062:Groo the Wanderer
 #says: 'A fray! A fray!'
-�֤��󤫤������󤫤�����
+「けんかだ！けんかだ！」
 
 N:506:Fasolt the Giant
 #grumbles: 'Stop, greedy one! Leave something for me!'
-���Ԥơ����߼Ԥᡪ����ʬ��Ĥ��Ƥ�������
+「待て、強欲者め！俺の分を残しておけ！」
 shouts: 'Back, over-bold one!'
 whines: 'You swindler, do you seek to vilify me?'
 
 N:517:Jurt the Living Trump
-���������ͤΤ���������
-�ֵ��ͤ���ͤв��⤫���褹��������
-�ֲ���ɥ��ȸƤ֤ʡ���
+「全部貴様のせいだ！」
+「貴様が死ねば何もかも解決するんだ！」
+「俺をドジと呼ぶな！」
 
 #N:551:Rogrog the Black Troll
 
 N:573:Lord Borel of Hendrake
-�ֲ椳���ϥإ�ɥ쥤��ή��ѻ���ܥ����ߤʤꡪ��
-�������졪���¼Ԥᡪ��
-�ֵ��ͤϥޥ�Ȥ��ꤲ��褦���ܶ��ԤǤʤ��������ʡ���
+「我こそはヘンドレイク流武術指南、ボレル公爵なり！」
+「武器を取れ！臆病者め！」
+「貴様はマントを投げるような卑怯者でないだろうな！」
 
 #N:595:Father Dagon
 #N:596:Mother Hydra
 
 N:598:Mandor, Master of the Logrus
-����Ʈ�ι�֤˥����ץ�å���̣��äƤ��롣
-�ֲ椬���ͤ����ʤ������򤷤Ƥ����Ǥ��礦����
-�ּ��顢��ϤĤޤ���褤�򤷤Ƥ���ˤϤʤ��ΤǤ͡���
-�֤դࡢ�פ��֤�˹��Τ������Ȥ����碌�Ǥ��Ƹ��ɻ�ˡ���
+は戦闘の合間にエスプレッソを味わっている。
+「我が下僕があなたの相手をしてくれるでしょう。」
+「失礼、私はつまらぬ争いをしている暇はないのでね。」
+「ふむ、久しぶりに骨のある方とお手合わせできて光栄至極。」
 
 #N:606:Loge, Spirit of Fire
 #N:615:Moire, Queen of Rebma
@@ -502,12 +502,12 @@ N:598:Mandor, Master of the Logrus
 #N:628:Malekith the Accursed
 
 N:642:Jasra, Brand's Mistress
-�֥����Ȳͤ��ˤ��Ƥ�롣��
-�ֻͳ��κ֤λ��ۼԤˤϤफ���Ĥ�꤫����
+「コート架けにしてやる。」
+「四界の砦の支配者にはむかうつもりか？」
 
 N:651:Strygalldwir
-��������ǤӤ�Τ�����
-�ֺ��٤��Ϥ˶�������Τ�����
+「秩序は滅びるのだ！」
+「混沌の力に屈服するのだ！」
 
 N:654:Judge Fire
 N:656:Judge Mortis
@@ -519,106 +519,106 @@ hisses, 'The sssentencce isss death!'
 hisses, 'Your crime issss life. The sssentencce isss death.'
 
 N:660:Rinaldo, son of Brand
-�ֲ��ϥ�ʥ�ɰ�����������ե��β��ˤ��ƥС����졼��бĳز�´������
-����¢�ˤäƲ����褯��ʹ���Ƥ���ޤ��������λ��Τ�����Ȥ�Ȣ���衪��
-��Grand-D �Υޥ�����㤨�Х������ɥ�򤪤ޤ����դ��Ƥ�뤼����
-�Ϥ��ʤ����򼰥��åȤ����Ĥ��褦�Ȥ��Ƥ��롣
-�ְ������ɻ��Ǥ�餦������
-�֥�������äƤ��Ƥ������������Ȥ⥢��ߤ�������ͥ��ߤ�����
+「俺はリナルド一世、カシュファの王にしてバークレー大経営学科卒だ！」
+「冷蔵庫って何？よくぞ聞いてくれました。君の死体を入れとく箱だよ！」
+「Grand-D のマシンを買えばワーウィンドルをおまけに付けてやるぜ。」
+はあなたに葬式セットを売りつけようとしている。
+「悪いけど死んでもらうぜ。」
+「チキンを取ってきてやろうか？それともアルミで包んだ白ネズミか？」
 
 N:670:Jack of Shadows
-�ֲ椬�Ź��ΰ��Ϥ�פ��Τ뤬��������
-�ֱƤ��Ϥ�̵�¤ʤΤ�����
-�֥��륦���˥��θ��������줿����Ũ�Ϥʤ��Τ�����
-�ֺ������줬������ˤ��ĤȤ����������
+「我が暗黒の威力を思い知るがいい！」
+「影の力は無限なのだ！」
+「コルウィニアの鍵を手に入れた俺に敵はないのだ！」
+「魂？それが何の役にたつというんだ。」
 
 N:685:Shoggoth
 #barrels towards you horrifyingly.
-�����ʤ��˸����äƶ����������Ϳʤ��Ƥ��롣
+があなたに向かって恐ろしげに突進してくる。
 #wails, 'Tekeli-li!  Tekeli-li!'
-�֥ƥ��ꡦ�ꡪ �ƥ��ꡦ�ꡪ��
+「テキリ・リ！ テキリ・リ！」
 
 #N:681:Chaugnar Faugn, Horror from the Hills
 #N:687:Ariel, Queen of Air
 
 N:697:Smaug the Golden
 #speaks, 'I smell you and I feel your air. I hear your breath. Come along!'
-�֤ˤ������������ޤζ�����ʬ����襤��©�Ť�����ʹ������ʡ����ä����褤����
+「におうぞ、きさまの空気が分かるわい。息づかいも聞こえるな。こっちへ来い！」
 #says, 'If you get off alive, you will be lucky.'
-�֤����ޤ������Ƥ�����Ф�줿�鹬�����Ȼפ�����
+「きさまが生きてここを出られたら幸運だと思え。」
 #grimaces.
-�ϴ�򤷤���Ƥ��롣
+は顔をしかめている。
 #laughs with a devastating sound which shakes the ground.
-�����Ϥ��ɤ뤬�������������ǾФä���
+は大地を揺るがす恐ろしい声で笑った。
 #asks, 'Where are those who dare approach me?'
-�֤���˶�Ť��򤫼ԤϤɤ�������
+「おれに近づく愚か者はどこだ？」
 #gloats, 'I am old and strong, strong, strong.'
-�ֺ�����ǯϷ���ơ������Τ����Ф��Ƥ���������ϲ����⶯���Τ�������
+「今俺は年老いて、強いのだ。覚えておけ、おれは何よりも強いのだぞ。」
 #boasts, 'My armour is like tenfold shields, no blade can pierce me.'
-�ֲ��Τ������Ͻ��Ťν⡢�ɤ�ʷ����̤��Ϥ��ʤ�����
+「俺のうろこは十重の盾、どんな剣も通しはしない。」
 #boasts, 'My teeth are swords, my claws are spears, my breath is death.'
-�ֲ��λ��Ϸ����ޤ��䡢�Ǥ�©�ϡ����ʤ���������
+「俺の歯は剣、爪は槍、吐く息は、すなわち死だ！」
 
 N:712:Fafner the Dragon
 #says: 'You will make a fine meal.'
-�֤����ĤϤ������ˤʤꤽ��������
+「こいつはご馳走になりそうだ。」
 #says: 'I wanted a drink, now I have also found food.'
-�ֲ��������Τ��ߤ����ä���������ʪ�ޤǼ�����ä��ߤ������ʡ���
+「何か飲むものが欲しかったが、食い物まで手に入ったみたいだな。」
 #says: 'My fangs are not for chattering, soon you will feel them.'
-�ֲ��β�Ϥ�����٤�ΰ٤�ʪ����ʤ��������ˤ����̣���碌�Ƥ�롣��
+「俺の牙はおしゃべりの為の物じゃない。すぐにそれを味あわせてやる。」
 #says: 'My throat is well made to gulp you down.'
-�ֲ��ι��ϵ��ͤ�ݰ��ߤǤ��뤾����
+「俺の喉は貴様を丸飲みできるぞ。」
 #growls: 'Come here, young braggart.'
-���褤�������첰�μ�¤����
+「来い！自惚れ屋の若造！」
 
 #N:713:Fangorn the Treebeard
 
 N:715:Glaurung, Father of the Dragons
 N:766:Ancalagon the Black
-�������Ǥ�ƨ��뤳��ǽ�鷺����
-�ֶ򤫤ʤ���̿�μԤ衣;�α�ǳ����˵������褤����
+「汝、破滅を逃るること能わず。」
+「愚かなる定命の者よ。余の炎で灰燼に帰すがよい。」
 
 #N:729:Ulik the Troll
 #N:730:Baphomet the Minotaur Lord
 
 N:732:Bull Gates
 #says, '640K should be enough for ANYBODY!'
-��640K����Фߤ�ʽ�ʬ�ʤϤ�������
+「640Kあればみんな十分なはずだ！」
 #says, 'Buy Windows 2000; the filesystem rocks!'
-�֥�����ɥ���2000���㤦�Τ����ե����륷���ƥब�����餷��������
+「ウィンドウズ2000を買うのだ。ファイルシステムが素晴らしいぞ！」
 #says, 'Linux?  Never heard of it...'
-��Linux? ʹ�������Ȥʤ��ʡ�������
+「Linux? 聞いたことないな、、、」
 #says, 'Resistance is futile--you will be assimilated.'
-���񹳤�̵�̤���������Ʊ��������
+「抵抗は無駄だ。お前は同化される」
 #says, 'NT is the solution for ALL your needs!'
-�֣ΣԤϷ������Ƥ���­�����뤾����
+「ＮＴは君の全てを満足させるぞ！」
 #hacks out some code and calls it a Service Pack.
-�Ϥʤˤ������ɤ򤤤��äơ������ӥ��ѥå����ȸ��äƤ��롣
+はなにかコードをいじって、サービスパックだと言っている。
 #says, 'We don't have a monopoly... MacOS still exists!'
-�ֲ桹�ϲ���ǤϤʤ���MacOS�Ϥޤ�¸�ߤ����
+「我々は寡占ではない。MacOSはまだ存在する」
 #wonders if he should buy a small country.
-�Ͼ��������ޤ뤴���㤪�����ȹͤ��Ƥ��롣
+は小さい国をまるごと買おうかと考えている。
 #says, 'Where will we let you go today?  HELL!'
-�ַ���ɤ���Ϣ��Ƥ����Τ��äơ��Ϲ�������
+「君をどこへ連れていくのかって？地獄だ！」
 #cackles diabolically.
-�ϰ���Τ褦�˾Фä���
+は悪魔のように笑った。
 
 N:733:Santa Claus
 #says, 'Ho ho ho! You're gonna die!'
-�֥ۡ��ۡ��ۡ�����̤Τ��㡪��
+「ホーホーホー！死ぬのじゃ！」
 #says, 'You're gettin' COAL in your stocking!'
-�ַ��η����ˤϥ���������Ƥ����褦����
+「君の靴下にはクソを入れてあげよう！」
 says, 'On Smasher, on Whoop-Ass, now dash away all!'
 #chortles sadistically.
-�ϻ�Ǧ�����˾Фä���
+は残忍そうに笑った。
 #says, 'You're on the Naughty List!'
-�ַ��ϰ����ҥꥹ�Ȥ˺ܤäƤ뤾����
+「君は悪い子リストに載ってるぞ！」
 #says, 'No presents for you, ever!'
-�ַ��ˤϥץ쥼�������̵������
+「君にはプレゼント絶対無し！」
 #says, 'I'll sic my man-eating reindeer on you!'
-�֤路�οͶ����ȥʥ����򤱤������Ƥ��������
+「わしの人喰いトナカイをけしかけてやろう！」
 #says, 'I hate Christmas so much that I've gone psychotic!'
-�֤路�ϥ��ꥹ�ޥ�����������㡪�����᤮�ƥ�������ޤä�������
+「わしはクリスマスが大嫌いじゃ！嫌い過ぎてイカれちまったぞ！」
 
 #N:738:Khamul the Easterling
 #N:743:The Phoenix
@@ -632,27 +632,27 @@ N:764:Uriel, Angel of Fire
 N:765:Azriel, Angel of Death
 N:769:Raphael, the Messenger
 #says, 'Repent, evildoer!'
-�ֲ�������衪���ԼԤ衪��
+「悔い改めよ！悪行者よ！」
 #says, 'My righteousness shall cleanse you!'
-�ֻ��������������������롪��
+「私の正義がお前を浄化する！」
 says, 'Don't EVER steal from the collection plate!'
 #says, 'God may love you, but *I* don't!'
-�ּ����򰦤��뤬��������Ϸ���������
+「主は汝を愛するが、＊私＊は嫌いだ！」
 says, 'I shall smite thee with extreme prejudice!'
 #says, 'Hope you like eternal damnation!'
-�ֱʱ�μ����򵤤����äƤ����Ȥ������ʡ���
+「永遠の呪いを気に入ってくれるといいがな。」
 says, 'Verily, it is too late for thee.'
 
 #N:767:Daoloth, the Render of the Veils
 #N:770:Artsi the Champion of Chaos
 #N:771:Saruman of Many Colours
 N:772:Gandalf the Grey
-�֤路�Ͽ���βФ˻Ť����Ρ����Ρ���α�λȤ��ꤸ�㡣�����ޤ��Ϥ뤳�ȤϤǤ��̡���
-�ְŤ��С����ǥ��α�Ϥ����ޤν����ȤϤʤ�̡���İǤ���뤬�褤�������ޤ��Ϥ�̤�����
+「わしは神秘の火に仕えるもの、アノールの焔の使い手じゃ。きさまは渡ることはできぬ。」
+「暗き火、ウデュンの焔はきさまの助けとはならぬ。常つ闇に戻るがよい！きさまは渡れぬぞ。」
 
 N:773:Brand, Mad Visionary of Amber
-�ֲ��ηײ����⤵���Ϥ��ʤ�����
-�֥���С���Ũ�˲󤷤ƾ��Ƥ�ȤǤ�פäƤ���Τ�����
+「俺の計画を邪魔させはしない！」
+「アンバーを敵に回して勝てるとでも思っているのか？」
 
 #N:777:Bast, Goddess of Cats
 #N:780:Vlad Dracula, Prince of Darkness
@@ -660,46 +660,46 @@ N:773:Brand, Mad Visionary of Amber
 
 N:789:Bleys, Master of Manipulation
 N:799:Caine, the Conspirator
-�֥���С���Ũ�˲󤷤ƾ��Ƥ�ȤǤ�פäƤ���Τ�����
-�֤�����ï�˸ۤ�줿������å��������������󤫡���
-�ֲ桹���褤�˼���ͤù���л���Ȥ�󤾡���
+「アンバーを敵に回して勝てるとでも思っているのか？」
+「お前は誰に雇われた？エリックか？コーウィンか？」
+「我々の争いに首を突っ込めば死は免れんぞ！」
 
 N:791:Fiona the Sorceress
-�ֻ��Ť����ʤ��ۤ���������衣��
-�֥���С���Ũ�˲󤷤ƾ��Ƥ�ȻפäƤ���Ρ���
-�Ͼ�����Ū�����Ф����
+「私を甘く見ないほうがいいわよ。」
+「アンバーを敵に回して勝てると思っているの？」
+は小悪魔的に微笑んだ。
 
 #N:792:Tselakus, the Dreadlord
 
 N:794:Julian, Master of Forest Amber
-�ϳ�ū���餫�˿᤭�Ĥ餷�Ƥ��롣
-�ֺ����γ�ʪ�ϼ���������뤾����
-�֤����Ϥ��������ˤʤꤽ��������
+は角笛を高らかに吹き鳴らしている。
+「今日の獲物は手応えがあるぞ！」
+「お前はいい剥製になりそうだ！」
 
 #N:796:The Norsa
 #N:805:Omarax the Eye Tyrant
 
 N:807:Gerard, Strongman of Amber
-��̵�����Ϳʤ�����롣
+は無言で突進して来る。
 
 #N:809:Atlach-Nacha, the Spider God
 
 N:813:Eric the Usurper
-�ֵ��ͤ⥳���������Ʊ���ܤ����碌�Ƥ����������
-�֥���С��β���Ũ�˲󤷤��򤫤����������������
+「貴様もコーウィンと同じ目に遭わせてやろうか。」
+「アンバーの王を敵に回した愚かさを呪うがいい。」
 
 #N:814:Yig, Father of Serpents
 #N:817:Hela, Queen of the Dead
 
 N:820:Corwin, Lord of Avalon
-�֥��쥤�����������ڤ�̣�򶵤��Ƥ��������
-�ϥޥ�Ȥ��ꤲ����
-�ְ���������ʲ�����褤�򤷤Ƥ�ˤϤʤ��������
+「グレイスワンダーの切れ味を教えてやろう。」
+はマントを投げた。
+「悪いがこんな下らん争いをしてる暇はないんだ。」
 
 N:824:Benedict, the Ideal Warrior
-�ֹ������������ξ����ǻ䤬���ĤΤ�ͽ¬�Ѥߤ�����
-�֤���ͦ�����ˤϷɰդ�ɽ���롣������̿������ˤ��뤳�Ȥ�����
-�ֻ�Ƚв�ä��Τ��Ա����ä��ʡ���
+「降伏しろ。この状況で私が勝つのは予測済みだ。」
+「その勇敢さには敬意を表する。しかし命は大事にすることだ。」
+「私と出会ったのは不運だったな。」
 
 #N:825:The Witch-King of Angmar
 #N:828:Ithaqua the Windwalker
@@ -707,9 +707,9 @@ N:824:Benedict, the Ideal Warrior
 #N:835:Loki the Trickster
 
 N:837:Surtur the Giant Fire Demon
-�ֻ���ݤ��Ƥ�ر�̿�Υ����֡٤ϼ������󤾡�
-��ǳ���������ˤʤ�Τ�����
-�������褿��٥룱���Υ�륭�塼��������������ä�������
+「私を倒しても『運命のオーブ』は手に入らんぞ」
+「燃えろ！灰になるのだ！」
+「前に来たレベル１４のワルキューレの方が骨があったぞ！」
 
 N:655:Ubbo-Sathla, the Unbegotten Source
 N:695:Zoth-Ommog
@@ -731,33 +731,33 @@ N:848:Shub-Niggurath, Black Goat of the Woods
 N:849:Nodens, Lord of the Great Abyss
 N:851:Nyarlathotep, the Crawling Chaos
 N:857:Great Cthulhu
-�֥����奦���奦�����
+「ウジュウジュウジュ」
 #slurps and gibbers disgustingly.
-�ϵ�����������ȯ���Ƥ��롣
+は気持悪い音を発している。
 #shrieks fit to wake the dead.
-�϶���ǻ�Ԥ�ᴤ餻�褦�Ȥ��Ƥ��롣
+は叫んで死者を甦らせようとしている。
 #oozes nasty, glistening slime all over the dungeon.
-���Է�ˤƤ��ä�Ǵ�դ���󥸥����˿��ή���Ƥ��롣
+は不潔にてかった粘液をダンジョン中に垂れ流している。
 #farts thunderously.
-#���ȤϤؤ򤳤��ʤ�
+#クトはへをこかない
 #lets off a mind-numbing stench.
-��Ƭ���ܤ��ꤹ��褦�ʰ��������äƤ��롣
+は頭がぼんやりするような悪臭を放っている。
 #howls, 'Tekeli-li!  Tekeli-li!'
-�ϡ֥ƥ���=�ꡢ�ƥ���=��פ��ʤ��Ƥ��롣
+は「テキリ=リ、テキリ=リ」と吠えている。
 #makes a chilling slithering sound.
-���ضڤ����褦�ʲ���Ω�Ƥ��礤���äƤ��롣
+は背筋の凍るような音を立てて這いずっている。
 #howls, 'The OTHER GODS will feast on your brain!'
 #hisses, 'I'll feed you to the Hounds of Tindalos...'
-�֤��ޤ��ϥƥ�����������ĸ��α¤ˤʤ�Τ�����
+「おまえはティンダロスの猟犬の餌になるのだ。」
 #hisses, 'Randolph Carter got off easy; you won't!'
-�֥��ɥ�ա����������ϴ�ñ���ä��������Ϥ������褦������
+「ランドルフ・カーターは簡単だったがお前はちがうようだ。」
 seethes and fumes sickeningly.
 hisses, 'I'll send you beyond Known Space to Azathoth!'
 #waves nasty-looking tentacles about.
-�ε������������Ӥ������Ƥ��롣
+の気持ち悪い触腕が蠕いている。
 picks its teeth with the bones of former players.
 #opens your mind to a vista of nameless cosmic horror!
-�����ʤ���������̾��������������Ū���ݤ˴٤줿��
+があなたの精神を名状しがたい宇宙的恐怖に陥れた。
 #opens your mind to a vista of endless 'Three's Company' reruns!
 snorts and slobbers with glee.
 
@@ -767,31 +767,31 @@ N:840:Draugluin, Sire of All Werewolves
 barks and bellows frighteningly!
 says, 'Oh good, another chew toy!'
 #says, 'Yummy! I was getting tired of chicken...'
-�֥����á�������ˤ�˰���Ƥ��Ȥ���������
+「ゴクッ！チキンには飽きてたところだ！」
 #lets out an earsplitting howl.
-�ϼ���Ĥ󤶤������ʤ�����
+は耳をつんざく声で吠えた。
 #drools all over the dungeon.
-���µ���ˤ����򤿤餷����
+は迷宮中によだれをたらした。
 #lifts his leg at the nearest wall.
-���ɤ˸����ä���­��夲����
+は壁に向かって片足を上げた。
 #says, 'Bad adventurer! No more living for you!'
-�ֹԵ��ΰ��������Ԥ���������̿�Ϥ�������������
+「行儀の悪い冒険者だ！お前の命はおあずけだ！」
 #snarls and howls.
-�Ϥ��ʤä��ʤ�����
+はうなって吠えた。
 
 N:819:Klingsor, Evil Master of Magic
 #states, 'The time has come.'
-�ֻ��ϻ��ꡪ��
+「時は至れり！」
 #bellows, 'Your master calls! Obey!'
-����μ��̿���롪�������衪��
+「汝の主は命ずる！服従せよ！」
 #grunts, 'Beware!'
-�ֵ���Ĥ�������
+「気をつけろ！」
 #states, 'You will fall into my power, you will remain my slave!'
-�֤����ϲ椬�Ϥ˶�����������Ǥ�³����Τ�����
+「お前は我が力に屈服し、奴隷でい続けるのだ。」
 #cries, 'Halt! I have the right weapon to fell you!'
-�ֻߤޤ졪��Ϥ������ݤ��Τ�������������äƤ��뤾����
+「止まれ！私はお前を倒すのに相応しい武器をもっているぞ！」
 #yells, 'I will cut you down with your master's spear!'
-�֤����μ����ǻɤ������Ƥ�롪��
+「お前の主の槍で刺し殺してやる！」
 
 N:830:Cantoras, the Skeletal Lord
 N:831:Mephistopheles, Lord of Hell
@@ -803,412 +803,412 @@ N:856:Gothmog, the High Captain of Balrogs
 #N:860:Oberon, King of Amber
 brags, 'My power is beyond compare!'
 #snorts, 'A mere mortal dares challenge my might? HA!'
-�ֵ��ͤ��Ȥ���̿�μԤ����ĩ��ȤϤʡ��ϥá���
+「貴様ごとき定命の者が私に挑むとはな、ハッ！」
 #says, 'Not another one! I just finished chewing on the last!'
-�֤ޤ��褿�������ä����ۤ���߽��ä��Ф����������
+「また来たか！さっきの奴を噛み終ったばかりだぞ！」
 #wonders aloud how many XP you're worth.
-�ϡ����ʤ��������ηи��ͤˤʤ뤫�ͤ��Ƥ��롣
+は、あなたが何点の経験値になるか考えている。
 leafs through 'Evil Geniuses For Dummies'.
 #mutters, 'Another damn loser to kill...'
-�֤⤦��ɤ�������������褿��...��
+「もう一匹ウジ虫が殺されに来たか...」
 #says, 'Hell shall claim your remains!'
-���Ϲ��ϵ��ͤλ��Τ����ᤷ�褦����
+「地獄は貴様の死体を請求しよう！」
 #says, 'Another 12 skulls and I get that reward from the Boss!'
-�֤��ȣ����Ĥ�Ƭ�����ǲ��Υܥ�����˫������館��������
+「あと１２個の頭蓋骨で俺のボスから褒美がもらえるんだ！」
 #yawns at your pathetic efforts to kill him.
-�Ϥ��ʤ��ΰ�������Ϥ��Ф��Ƥ����Ӥ򤷤���
+はあなたの哀れな努力に対してあくびをした。
 #says, 'Minions, slaughter this fool!'
-�֤���٤ɤ�衢�����ϼ��Ԥ������������
+「しもべどもよ、この馬鹿者を始末しろ！」
 #says, 'Set thine house in order, for thou shalt die...'
-����βȤ������衢��ह���ʤ�С���
+「汝の家を整えよ、汝死す定めなれば。」
 #says, 'I'm no god... God has MERCY!'
-�ֻ�Ͽ��ǤϤʤ�...���ʤ�������äƤ��롪��
+「私は神ではない...神なら慈悲を持っている！」
 
 N:862:The Serpent of Chaos
 N:883:Zombified Serpent of Chaos
 #says, 'Foolish worm, you are DOOMED!'
-�֥ޥ̥��ʥ���ॷ�������ͤα�̿�⤳��ޤǤ�����
+「マヌケなイモムシが！貴様の運命もこれまでだ！」
 #says, 'I'm the Big Bad Guy, and you're toast!'
-�ֻ䤬���ΰ������ͤϱ¿�������
+「私が真の悪、貴様は餌食だ！」
 #shouts, 'MOO HA HA HA! I am DEATH incarnate!'
-�֥॥�åϥåϥåϥ����á���ϻ�θ����ʤΤ�����
+「ムゥッハッハッハァーッ！私は死の権化なのだ！」
 #says, 'Prepare for your untimely demise!'
-�����ˤ�������򤹤뤬��������
+「早死にする準備をするがいい！」
 #opens up a can of Whoop-Ass (tm).
-�� Whoop Ass (tm) �δ̤򳫤��Ƥ��롣
+は Whoop Ass (tm) の缶を開けている。
 #picks its teeth with former adventurers' bones.
-�ϻ��ˤϤ��ޤä������������Ԥι���ۤ��äƤ��롣
+は歯にはさまった以前の冒険者の骨をほじっている。
 #says, 'Maybe I won't kill you... NOT!'
-�ֻ�Ϥ����餯���ͤ򻦤��ʡġĤ��Ϥʤ�����
+「私はおそらく貴様を殺さな……くはない！」
 #yawns at your pathetic efforts to kill it.
-�Ϥ��ʤ��ΰ�������Ϥ��Ф��Ƥ����Ӥ򤷤���
+はあなたの哀れな努力に対してあくびをした。
 #says, 'Another day, another bastard to slaughter...'
-�֤���ʤ����ˤϤ���ʤ�ޥ̥����ʤ֤껦��������ġġ�
+「さらなる日にはさらなるマヌケがなぶり殺されに来る……」
 #says, 'I can't be bothered... minions, slaughter this fool!'
-�����ݤ��ġĲ��ͤɤ⡢���Υޥ̥���֥���������
+「面倒だ……下僕ども、このマヌケをブチ殺せ！」
 #says, 'Such a doomed, pathetic gesture as yours  verges on the heroic!'
-�֤���ۤɤޤǤ�����Ū�ǰ���ʤ����ι�ư�ϱ�ͺŪ�Ǥ������롪��
+「これほどまでに破滅的で哀れなお前の行動は英雄的でさえある！」
 #says, 'Mere mortals such as you should not meddle the affair of the Powers!'
-�֤������Ȥ���̿�μԤ�<��>Ʊ�Τ��褤�˼���ͤù�����ʤ����äƤϤʤ�̡���
-�֤����ϱʱ��³�����٤�������褤��ƻ��ˤ����̡���
+「お前ごとき定命の者が<力>同士の争いに首を突っ込む事なぞあってはならぬ！」
+「お前は永遠に続く混沌と秩序の争いの道具にすぎぬ。」
 
 N:873:Combat-Echizen, SEKKAKUDAKARA
-�־夫����뤾������Ĥ�������
-�֤ʤ�����γ��ʤϡ���
-�֤��ä��������顢���Ϥ����֤�������֤�����
-�ֺ����ޤ���ï����̿����Ȥ���������
+「上から来るぞ！気をつけろ！」
+「なんだこの階段は！」
+「せっかくだから、俺はこの赤の扉を選ぶぜ！」
+「今夜もまた、誰かが命を落とす．．．」
 
 N:878:Dio Brando
-��ƨ��뤳�ȤϤǤ���á���
-�֤����ޤϥ������侭���Ǥ����صͤߡ٤ˤϤޤä��Τ��á���
-�֥ե��褪������
-���ϼ塪�ϼ奥����
-�֤��ޤ��Ϸ��ۤäƻ�����ͽ�𤷤褦����
-��̵��̵��̵�̥����á����礲�����äƤ�������
-��̵��̵��̵��̵��̵��̵��̵��̵��̵��̵��̵��̵��̵��̵��̵��̵��̵��̵�̡�
-�֤���ʤͤ�ä��ޤ������ʤΤ���ư���Ǥ��Υǥ������ݤ��뤫������������������
-�ֱ�ʹ֤��ɤ��Ĥ��뤫���á����ޤ��Ϥ��Υǥ����ˤȤäƤΥ�󥭡��ʤ���衽���á�����
-�֣ףң٣٣٣٣٣٣٣١��������á�����
-�ֵ��ͤϸ��ह�뤿��ˤ������褿�Τ�����
-�֤��礤�ȤǤ⤪��ˤ��ʤ��ȤǤ�פä������ޥ̥������������á���
-�ֲ��ͤ�̿��ۤ���ä������ȡ����ޤ��Ϻ��ޤǿ��ä��ѥ������򤪤ܤ��Ƥ���Τ�����
+「逃れることはできんッ！」
+「きさまはチェスや将棋でいう『詰み』にはまったのだッ！」
+「フン！来おい！」
+「貧弱！貧弱ゥ！」
+「おまえは血を吸って殺すと予告しよう！」
+「無駄無駄無駄ァーッ！しょげかえってろォ！」
+「無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄」
+「そんなねむっちまいそうなのろい動きでこのディオが倒せるかァ—————！？」
+「猿が人間に追いつけるかーッ！おまえはこのディオにとってのモンキーなんだよ——ッ！！」
+「ＷＲＹＹＹＹＹＹＹＹ————ッ！！」
+「貴様は犬死するためにここへ来たのだ！」
+「ちょいとでもおれにかなうとでも思ったか！マヌケがァ〜〜〜ッ！」
+「何人の命を吸い取ったかだと？おまえは今まで食ったパンの枚数をおぼえているのか？」
 
 N:880:Wong
-�ּ�ʬ�����̤�¬��ʤ��ΤǤ����������ͤʹԤ���[˽���Ȳ�]�ȸ����ΤǤ��衣��
-�֤��ʤ�����뤳�Ȥ�ͽ�Τ��Ƥ��ޤ����衣��
-��[����̴��]�Ĥ��ʤ��ΰ�����ʪ���ˤդ��路�����դǤ��ͤ��ġ�
-��[���ε������˿臘]�Ĥ��ξ�硢���ʤ��˾ä��Ƥ��������Τ������ν��֤��Ȥ������Ǥ�����
-�֤��ʤ����Ϥ�����Ǥ��ʤ���д��������ޤ��ġ�[��Ͻ���ܤ����򡢽���ʤ��]�Ȥ�����ޤ����ͤ�����
-�֤��ʤ����Ϥʤ�[�ꧤ���]���ͤʤ�Ρ���ˤ��ˤ��⡢�ڤ��⤢��ޤ��󡣡�
-�֤��ʤ��ˤϤ�Ϥ䡢¸�߲��ͤ�����ޤ������ˡ�[��������]�Ȥ��ä��Ȥ����Ǥ��ͤ�����
-��[����Ϳå]�ġ��եաĤ��ʤ��Τ������ǡ����Ťʥǡ��������ޤ��衣��
-�֤��ʤ��ηײ�ʤɽ�����[����ϰ��]���������˲᤮�ʤ��ä��ΤǤ��衣��
-�ָ��������¤ä��顢̴��³���򴰿뤵���Ƥ�����������
-�֤��������λ�������������Τϡ���Ϥ��򤪤���¾�ˤϤ��ʤ��ġ���
-�ֿʤ���᤹�⡢���Ƥϻ�ΰդΤޤޡġ���
-�֤������ػ��٤衢���Υ���㡼�ɡ�������ΰ٤�ư���Ф��ΤǤ�����
-�֤Ȥ��[�Ӽ�����]�Ǥ��͡ġ���
-�ֻ䤬���ۤ���Τϡȿʹ֡ɤǤϤʤ��Ȼ��ɤǤ���ġ���
-�ֻ��ϡ��ͤ����������ư������¨��[ͣ����º]�ʤ�Ǥ��衣��
-�ֿͤ�̿��īϪ���ͤ�ʪ�ġ�[�����Υ]�ȸ�����������Ʋ���������
-�������Ϥ�ᾮɾ�����Ƥ��뤫��Ǥ��衣�����[�ҳ�δ�]�ȸ����ޤ�����
-�ּ�ʬ�����̤��Τ�ʤ��Ȥϡġ�[��ť��Τ]�Ǥ��ͤ��ġ���
-�ֲ��줿���פϡ��ͤι�ư�˰��ƶ�����Ϳ���ޤ���ͤ�����
-��[��ϧ����]�ġġ��Ȥ��ʤ��ʤä�ʪ�ϼΤƤ�˸¤�ޤ�����
-��������٤ˤϷ�²�Ǥ�Ƨ����ˤ���ġ����������λ��Ǥ��衣��
-�����Ƥ�[����ŷ��]������ή�����̣�����Ƥ���ΤǤ��衣��
-�֡ġĤ⤦�����������ġ���������������μ�ˡġġ���
-�֤⤦��ï�����ή���ߤ���ʤ��ġ���
-�֡Ĥ��줫��ϡ��䤬���Ȥʤ�ġ���
-�֤���ʾ����Ϥ����ޤ���衣��
-�ֻ�ηײ�˷��Ͼ�������ʤΤǤ��衣���Ǥ�餤�ޤ��礦�ġ���
-�����Ƥ���λפ��̤�Ĥդäդäդáġ���
+「自分の力量も測れないのですか。その様な行いを[暴虎馮河]と言うのですよ。」
+「あなたが来ることは予知していましたよ。」
+「[酔生夢死]…あなたの一生を物語るにふさわしい言葉ですねぇ…」
+「[時の宜しきに随う]…この場合、あなたに消えていただくのが最善の処置だという訳です。」
+「あなたの力は制御できなければ危険すぎます…。[水は舟を載せ、亦、舟を覆す]とも言いますしねぇ。」
+「あなたの力など[蟷螂の斧]の様なもの。私には痛くも、痒くもありません。」
+「あなたにはもはや、存在価値がありません。正に、[行尸走肉]といったところですねぇ。」
+「[生殺与奪]…。フフ…あなたのおかげで、貴重なデータが取れますよ。」
+「あなたの計画など所詮は[空中楼閣]。絵空事に過ぎなかったのですよ。」
+「向こうに逝ったら、夢の続きを完遂させてください。」
+「この世界の時を刻む事が出来るのは、もはや私をおいて他にはいない…。」
+「進むも戻すも、全ては私の意のまま…。」
+「さぁ、『時』よ、このリチャード・ウォンの為に動き出すのです！」
+「とんだ[羊質虎皮]ですね…。」
+「私が支配するのは“人間”ではなく“時”ですよ…。」
+「時は、人を操り世界を動かす。即ち[唯我独尊]なんですよ。」
+「人の命は朝露の様な物…。[会者定離]と言う事で諦めて下さい。」
+「相手の力を過小評価しているからですよ。これを[子且の患]と言います。」
+「自分の力量も知らないとは…。[雲泥万里]ですねぇ…。」
+「壊れた時計は、人の行動に悪影響しか与えませんねぇ。」
+「[夏炉冬扇]……。使えなくなった物は捨てるに限ります。」
+「生きる為には血族でも踏み台にする…。当たり前の事ですよ。」
+「全ては[運否天賦]、時の流れも私に味方しているのですよ。」
+「……もうすぐここが…、そして世界が私の手に……。」
+「もう…誰も時の流れを止められない…。」
+「…これからは、私が時となる…。」
+「これ以上邪魔はさせませんよ。」
+「私の計画に君は少々邪魔なのですよ。死んでもらいましょう…。」
+「全てが私の思い通り…ふっふっふっ…。」
 
 N:921:Internet Exploder
-�ϽŤ���
-��̯�ʥѥ��åȤ�ȯ���Ƥ��롣
+は重い。
+は妙なパケットを発している。
 
 N:931:Caldarm the third
-�����äƤ����С���������Ǥ������������
-�ֿ���ˤϻ䤬ɬ�פʤΤ�����
-�ֻ�򻦤����ȤϿ����̤����������뤳�Ȥ�����
-�ּ���򤹤뵤������������Ǥ��ɤ����Ĥ�꤫����
-��̵�̤����ϤϤ��ơ����ä��ȵ��ꤿ�ޤ�����
-�����ϺƤӤ��ĤƤαɸ���Ȥ��᤹�����������λ�μ�ˤ�äơ���
-�ֻ�ˤϸ¤�ʤ�̤�褬���롣��
+「放っておけば、人類は破滅するだろう。」
+「人類には私が必要なのだ！」
+「私を殺すことは人類の未来を抹殺することだ！」
+「邪魔をする気か！人類を破滅へ追いやるつもりか！」
+「無駄な努力はやめて、さっさと帰りたまえ。」
+「帝国は再びかつての栄光をとり戻すだろう。この私の手によって！」
+「私には限りない未来がある。」
 
 N:936:Kenshirou of hokuto
-��3�Ŀ����Ƥߤ�����̤ΤϤ���������
-�֤��ޤ����ݤ����ᡢ�Ϲ�����Ϥ���ɤä�������
-�����Ϳ�����̵Ũ��������
-�֤�����������������������������������������������������
-�֤��ޤ��ϴ��˻��Ǥ��롣��
+「3つ数えてみろ、死ぬのはお前だ。」
+「おまえを倒すため、地獄からはいもどったぜ。」
+「北斗神拳は無敵だ！！」
+「あーたたたたたたたたたたたたたたたたたたたた！！！！」
+「おまえは既に死んでいる。」
 
 N:945:Biketal of Fire
-�ֲ��Τˡ��ʹ֤ϡ����������褦�Ȥ���Τ�����
-�ֲ��Τˡ��ʹ֤ϡ����ʤ�̿����Τ�����
-�֤ҤȻפ��˻����������ڤǤϤʤ�������
-�ֲ��Τˡ��ʹ֤ϡ����ξ������Τǡ��礭�����Ϥ����Τ�����
-�ֲ��Τˡ��ʹ֤ϡ����ʤ�̿��鷺���ˤΤФ����ᡢ¾�Τ�Τ�̿�򤦤Ф��Τ�����
-�ֿʹ֤�����ȡ��������Ϥϻ��Ǥ�������
-�ֿʹ֤ϰ�ͤ⡢�������ϤˤϤ���󡣤������Ϥϻ��ʪ������
-�֤����ޤϤ����ǡ��Ǵ���������
+「何故に、人間は、そう生きようとするのだ。」
+「何故に、人間は、少ない命を削るのだ。」
+「ひと思いに死んだ方が、楽ではないか。」
+「何故に、人間は、その小さな体で、大きな土地を求めるのだ。」
+「何故に、人間は、少ない命をわずかにのばすため、他のものの命をうばうのだ。」
+「人間がいると、この大地は死んでいく。」
+「人間は一人も、この大地にはいらん。この大地は私の物だ。」
+「きさまはここで、最期だ！！」
 
 N:1003:The ghost 'Q'
-�֤�����ꡪ��
-��������󡢤��ʤ������������
+「おかわり！」
+「正ちゃん、おなか空いたよ〜」
 
 N:1004:Pip, the Braver from Another World
-�ֲФζ̡�ȯ�͡���
-�ֲФλ�1����
-�ֲФλ�2����
-�֤Ǥ��Τܤ��ᡪ��
+「火の玉、発射！」
+「火の指1！」
+「火の指2！」
+「でくのぼうめ！」
 
 N:1005:Antharom, Magic Master in the Castle of Darkness
-�֣����عԤ�����
-��˺���ʡ����񿴤ϺҤ��Τ�Ȥʤꡪ��
-�֤褯�褿�ʡ��㤤�Ρ�������
+「１４へ行け！」
+「忘れるな、好奇心は災いのもとなり！」
+「よく来たな、若いの・・・」
 
 N:1018:Raou the Conqueror
-���ܻؤ���ŷ������򤹤�ʤ��㤨���Ǥ������Ȥ��ݤ��ޤǡ���
-�֤�Ϥϡ������̤��
-��ŷ�򸫤衪���ޤ��ˤϻ������������Ƥ���Ϥ�������
-�����Ƥη��ΤϤ��η��������ˤҤ������Τ�����
-�֤��ޤ��ʤɤ��οƻذ��ܤǽ�ʬ���� 
+「目指すは天！邪魔をするなら例え神であろうとも倒すまで！」
+「わはは、効かぬわ！」
+「天を見よ！おまえには死兆星が見えているはずだ。」
+「全ての拳士はこの拳王の前にひれ伏すのだ。」
+「おまえなどこの親指一本で十分！」 
 
 N:1029:Baby satan
-�������С��ǡ����򾤴�������������MP��­��ʤ���
-����ˡ�����̤ʶ�Ũ�򾤴�������������MP��­��ʤ���
-�����Ϥ���μ�ʸ��ǰ������������MP��­��ʤ���
-���Ź�����μ�ʸ��ǰ������������MP��­��ʤ���
-���������С����Ȥμ�ʸ��ǰ������������MP��­��ʤ���
-�����η������ä���������MP��­��ʤ���
-�����Ǥμ�����ä���������MP��­��ʤ���
-��̵���ε�μ�ʸ�򾧤�����������MP��­��ʤ���
-������С��β��򾤴�������������MP��­��ʤ���
-�֡إ������ɡ١����ϻߤޤä����פ�����MP��­��ʤ���
+がサイバーデーモンを召喚した！しかしMPが足りない！
+が魔法で特別な強敵を召喚した！しかしMPが足りない！
+が魔力の嵐の呪文を念じた。しかしMPが足りない！
+が暗黒の嵐の呪文を念じた。しかしMPが足りない！
+がスターバーストの呪文を念じた。しかしMPが足りない！
+が光の剣を放った。しかしMPが足りない！
+が破滅の手を放った！しかしMPが足りない！
+は無傷の球の呪文を唱えた。しかしMPが足りない！
+がアンバーの王を召喚した！しかしMPが足りない！
+「『ザ・ワールド』！時は止まった！」しかしMPが足りない！
 
 N:1063:lousy, the King of louses
-�֤��ޤ��⥷��ߤˤʤä��㤨����
-�֤���ʥ���ߤ򸫤�褦���ܤǲ��򸫤�ʡ���
-�֤��饷��ߡ�����
-�ֻ�͡���͡������襳���ġ���
+「おまえもシラミになっちゃえ！」
+「そんなシラミを見るような目で俺を見るな！」
+「そらシラミ〜♪」
+「死ね，死ね，強いよコイツ！」
 
-N:1069:��ͥ���������
-��ʪ�������ƿФ˵���ġġġġ�
-��Ʈ�����������٤ơĻ�٤�������������ġġġġ�
-��Ǯ�������ҡ��Ϥʤ��Τ�����
-�֤褦������ˬ�ԡ���
-�֤����λ�����ϻ�̤��Ȥ�궲��������
-�֤錄���⤪�ޤ���Ʊ�����ġġġز�ʪ�٤�����
-�֤��μ��ľ�ܰǤ�����������Ƥ������
+N:1069:魔人ウォーケン
+「物質は全て塵に帰る…………」
+「闘いこそがすべて…殺戮こそ生きがい…………」
+「熱いコーヒーはないのか！」
+「ようこそ来訪者！」
+「ある種の事がらは死ぬことより恐ろしい」
+「わたしもおまえも同じだ………『化物』だ！」
+「この手で直接闇の彼方へ沈めてやろう」
 
-N:1081:���㡼���ޥ�ظ���
-�֥��㡼�������󥰡ĥ�������
-�֤����Ф졪���������ͤᡪ��
-������ˤ����������
-�֤衼���ҤȤޤȤ�����դ��Ƥ���
-�֤褯�⤢��ʥ��������쥳���ɤ򡪡�
-�ֺ��٤Ȥ������٤ϵ����ʤ�������
-�ֺ��Τ��ʤ��Ͽʹ֥��ܥåȤʤ������
-�֥ܥ륬��Ρ�������������������
-�ֹԤ������������åɡ���
-�ֱ�Ĺ�����ʤ��϶��äƤ���������
-�֤ɤ���������Ȼפä��� ��äѤ� �������ä��Τ���
+N:1081:チャージマン『研』
+「チャージーーング…ゴー！」
+「くたばれ！ジュラル星人め！」
+「盛大にやろうぜ！」
+「よーしひとまとめに片付けてやる」
+「よくもあんなキ○ガイレコードを！」
+「今度という今度は許さないぞ！」
+「今のあなたは人間ロボットなんだ！」
+「ボルガ博士、お許しください！」
+「行け！スカイロッド！」
+「院長、あなたは狂っているんだ！」
+「どうも怪しいと思ったら やっぱり そうだったのか」
 
-N:1096:ǻ��̵�Сش��ܸ״��
-�ˤĤ��ơַ���ή��Ͽ�פϤ��Τ褦�ʻ��򵭤��������ۤ�������Τ��Ȥ�����ϤΤܤ�ꡡ��ᤪ���������������������
-������������ή��η����ɤ餻�����ޤ路�������������Ǥ��ä������ܤ����Ρ������ΰ���̵�ط��Ǥ��뤳�Ȥ����Τ���������
-�ˤĤ��ơַ���ή��Ͽ�פϤ��������Ƥ��롽���ظ״�ή�ˡ�ή�����פʤ�������ꡡ�����羾ʿ�������꾡�򤷤ơֿ�̯�ź�������ʤ��פȸ��路�᤿���
-��Ǿ΢���⤫�֤ϡ������ʤ뾡���θ� �״�ή�����ή�����ס����ͤ⤳���⵻����ƨ��뤳�ȤϽ���ʤ���
-�ˤĤ��ơַ���ή��Ͽ�פϤ��������Ƥ��롽����ͤ�����¿���״�α�����Ϥߤϡ�ǭ��ưʪ���ޤ�Ω�Ƥ뤬ǡ�����ͤʤ�Ρ�����Ĥ���Ȥ����Ϥ�ǡ���Ϥຸ���¸��
-�֤�����ѯ���ؤ���������Ͻ��뤬�ؿޡ��Ϥ��ä��ǡ��Ϥ��äƤ��줿�ǡ�
+N:1096:濃尾無双『岩本虎眼』
+について「剣術流祖録」はこのような詩を記す—　狂ほしく　血のごとき　月はのぼれり　秘めおきし　魔剣　いずこぞや
+が構えたる星流れの型が蘇らせた忌まわしき記憶は鮮明であったが　目の前の＠がその一件と無関係であることは明確だろうか？
+について「剣術流祖録」はこう記している—　『虎眼流に「流れ星」なる秘剣あり　掛川城主松平隠岐守定勝をして「神妙古今に比類なし」と言わしめたり』
+の脳裏に浮かぶは　鮮明なる勝利の幻 虎眼流秘剣「流れ星」　何人もこの魔技から逃れることは出来ない　
+について「剣術流祖録」はこう記している—　常人よりも一指多い虎眼の右手の掴みは　猫科動物が爪を立てるが如き異様なもの　今一つは刀身を万力の如く掴む左手の存在
+「あの折儂が指を伏せたるは宗矩が指図　はかった喃　はかってくれた喃」
 
 N:*:Default lines
 #cackles evilly.
-�ϼٰ��˾ФäƤ��롣
+は邪悪に笑っている。
 #cackles diabolically.
-�ϰ���Τ褦�˾ФäƤ��롣
+は悪魔のように笑っている。
 #says: 'Surrender, miserable flea!'
-�ֹ�������������ʥ����ᡪ��
+「降伏しろ、哀れなザコめ！」
 #says: 'Come get some!'
-�֤����ä��褤����
+「かかって来い！」
 #says: 'Let's rock!'
-�֤�������Ʈ������
+「さあ、死闘だ！」
 #laughs devilishly.
-�ϰ���Τ褦�˾Фä���
+は悪魔のように笑った。
 #says: 'Flee while you can, gnat!'
-��ƨ����졪�����
+「逃げ回れ！羽虫！」
 #says: 'You are about to die, maggot!'
-�֤����ϻ�̤Τ�������ᡪ��
+「お前は死ぬのだ！蛆虫め！」
 #says: 'Read your prayers!'
-�ֵ�����ɤ߾夲�뤬��������
+「祈りを読み上げるがいい！」
 #hisses: 'Die!'
-�ֻ�͡���
+「死ね！」
 #says: 'You don't have a chance, moron!'
-�ֵ��ͤ˾�����̵��������Ǿ����
+「貴様に勝機は無いぞ、低脳！」
 #says: 'Fear my wrath, fool!'
-�ֲ椬�ܤ��פ��Τ졪�Х��ᡪ��
+「我が怒りを思い知れ！バカめ！」
 #says: 'Feel my fury, dolt!'
-�ֲ椬�ܤ��פ��Τ졪�ޥ̥�������
+「我が怒りを思い知れ！マヌケが！」
 #says: 'Groo is a genius, compared to you!'
-�֥��롼�Ϥ�������٤���ŷ�ͤ�����
+「グルーはお前と比べたら天才だ！」
 #gives you a contemptuous glance.
-�Ϸ���Ū�ʤޤʤ���������Ƥ��롣
+は軽蔑的なまなざしを向けている。
 #says: 'Prepare to meet your Maker, fool!'
-�ֵ��ͤ���¤��˲񤦽����򤹤뤬�������򤫼ԡ���
+「貴様の創造主に会う準備をするがいい、愚か者！」
 #says: 'Perish, mortal!'
-�־ä���졢�ह�٤��Ԥ衪��
+「消え去れ、死すべき者よ！」
 #says: 'Your puny efforts make me laugh!'
-�֤�������������Ϥ���ʢ�ˤ����
+「お前の貧相な努力は片腹痛いわ！」
 #says: 'Drop dead, wimp!'
-�ֻ��������೼����Ȥ�����������
+「雑魚が！死骸を落とすがいい！」
 #says: 'You should have fled while you had the chance.'
-�֥���󥹤����뤦���ˤ��ä���ƨ���Ƥ����Ф�����Τ��
+「チャンスがあるうちにさっさと逃げておけばいいものを」
 #screams: 'Die by my hand!'
-�ֲ椬��ˤ�äƻ�͡���
+「我が手によって死ね！」
 #says: 'Your last wish, punk?'
-�ֺǸ��˾�ߤϤʤ��������ԥ�衩��
+「最後の望みはなんだ、チンピラよ？」
 #says: 'Your death shall be a slow, painful one.'
-�ֵ��ͤλ�Ϥ�ä���ȡ����ˤ���������Τˤʤ��������
+「貴様の死はゆっくりと、苦痛に満ちたものになるだろう」
 #says: 'Your head shall be my next trophy.'
-�ֵ��ͤ�Ƭ�����μ��Υȥ��ե���������
+「貴様の頭が俺の次のトロフィーだ。」
 #screams: 'You are DOOMED!'
-�ֵ��ͤα�̿�⤳��ޤǤ�������
+「貴様の運命もこれまでだ！！」
 #grins sadistically.
-�ϻĵԤʾФߤ��⤫�٤���
+は残虐な笑みを浮かべた。
 #says: 'This dungeon shall be your TOMB!'
-�֤��γ�����������������
+「この階がお前の墓場だ！」
 #laughs fiendishly.
-�ϰ���Τ褦�˾Фä���
+は悪魔のように笑った。
 #says: 'Your fate is sealed, worm.'
-�ֵ��ͤιԤ�������������Ƥ��뤾������
+「貴様の行く末は封印されているぞ、虫ケラ」
 #says: 'Resistance is useless.'
-���񹳤�̵�̤���
+「抵抗は無駄だ」
 #says: 'Hell shall soon claim your remains.'
-���Ϲ��Ϥޤ�ʤ����ͤλ��Τ����ᤷ�褦��
+「地獄はまもなく貴様の死体を請求しよう」
 #says: 'Thou shalt repent of thy cunning.'
-���򡢼�����Ĥ���������٤���
+「汝、自らの狡を悔い改めるベし」
 #says: 'Verily, thou shalt be one dead cretin.'
-�֤ޤ��ȡ�����Τλऻ�����ԤǤ���٤���
+「まこと、汝一体の死せる白痴であるべし」
 #says: 'Surrender or die!'
-�ֹ߻����뤫����̤�������
+「降参するか、死ぬかだ！」
 #says: 'Savor thy breath, it be thine last.'
-��©��̣��äƤ�������κǴ��λ�����
+「息を味わっておけ、汝の最期の時だ」
 #says: 'Prepare do die, miscreant!'
-�ֻ�������衪�˰���ƻ�μԤ衪��
+「死に備えよ！極悪非道の者よ！」
 #says: 'You're history, dude!'
-�ֵ��ͤϸ���ʩ������
+「貴様は御陀仏だ！」
 #says: 'Feeling lucky, punk?'
-��̿���Ҥ��Ƥߤ뤫������ԥ���Ϻ����
+「命を賭けてみるか、チンピラ野郎？」
 #says: 'You're toast!'
-�ִ����˵��ͤ��餱������
+「完全に貴様の負けだ！」
 #says: 'You're dead meat.'
-�ֵ��ͤϻ�������
+「貴様は死肉だ」
 #says: 'Make my day.'
-�ֳڤ��ޤ��Ƥߤ���
+「楽しませてみろ」
 #says: 'I shall flatten you!'
-�ֻ䤬���ͤ��٤�����
+「私が貴様を潰す！」
 #says: 'I could spare you, but why?'
-�ֻ�ϵ��ͤ��������Ƥ������Ȥ�Ǥ��롢�����������ͳ�Ϥʤ��ʡ�
+「私は貴様を生かしておくこともできる、が、そんな理由はないな」
 #says: 'Take this, you sissy!'
-�֤���Ǥ⤯�館������ᡪ��
+「これでもくらえ、弱虫め！」
 #says: 'Nothing can save you now!'
-�֤�Ϥ䵮�ͤ���ʪ�ϲ���ʤ�������
+「もはや貴様を護る物は何もないぞ！」
 #says: 'This dungeon ain't big enough for the both of us.'
-�֤����µܤϲ���ξ���Ȥ⤬�����ۤ��礭���Ϥʤ��Τ����
+「この迷宮は我等両方ともが居られるほど大きくはないのだよ」
 #says: 'I'm gonna break your face!'
-�ֵ��ͤδ��á�������Ƥ��������
+「貴様の顔を叩き壊してやろう！」
 #says: 'I hope you enjoy pain!'
-�ֶ��ˤ�ڤ���Ǥ����Ȥ���������ʡ���
+「苦痛を楽しんでくれるといいんだがな！」
 #says: 'Give me your best blow!'
-�ֺǹ�ΰ��򤯤�Ƥߤ�����
+「最高の一撃をくれてみろ！」
 #says: 'Draw, if you are a man!'
-���ˤʤ����ȴ������
+「男なら剣を抜け！」
 #says: 'A time to die, fool!'
-�ֻ�̻����褿�����ޥ̥��ᡪ��
+「死ぬ時が来たぞ！マヌケめ！」
 #bellows frighteningly!
-�϶���٤������򤢤�����
+は恐るべき怒声をあげた！
 #says: 'You will never leave this dungeon alive!'
-�֤��γ����������ƽФ���Ȼפ��ʡ���
+「この階から生きて出られると思うな！」
 #says: 'You'll leave this dungeon only in a wooden box!'
-�ֵ��ͤ�������Ф�ˤϴ��������äƽФ뤷���ʤ�������
+「貴様がここを出るには棺桶に入って出るしかないぞ！」
 #says: 'Your mother wears army boots!'
-�ֵ��ͤ���Ƥϥ����ߡ��֡��Ĥ������Ƥ��뤾����
+「貴様の母親はアーミーブーツを履いているぞ！」
 #says: 'Drop that weapon, NOW!'
-�������֤����������ˡ���
+「武器を置け！今すぐに！」
 #says: 'Life ain't for you, and I'm the cure!'
-��̿�ϵ��ͤΤ���ˤʤ�󡣻䤬�����Ƥ��������
+「命は貴様のためにならん。私が治してやろう！」
 #says: 'Resistance is futile. You will be terminated.'
-���񹳤�̵�̤������ͤ�����������
+「抵抗は無駄だ。貴様は抹殺される」
 #says: 'Sight and smell of this, it gets me going.'
-�֤��θ��ʤ����������ޤ�ʤ�������
+「この光景と匂い、たまらないぜ。」
 #says: 'Victim is your name and you shall fall.'
-�����Ӥ����ͤ�̾�Ǥ��ꡢ���ͤ��ݤ���������
+「生贄が貴様の名であり、貴様は倒れるだろう」
 #says: 'Stepping out? You'll feel our hell on your back!'
-��ƨ���Ф��Τ������ͤ��ظ���Ϲ��򴶤������������
+「逃げ出すのか？貴様は背後に地獄を感じるだろう！」
 #says: 'Now I will waste my hate on you.'
-�ֺ����������ߤ��ͤ���䤹�Ȥ��褦��
+「今こそ憎しみを貴様に費やすとしよう」
 #says: 'Don't tread on me!'
-�ֻ��Ƨ�ߤ���󤸤�ʤ�����
+「私に踏みこむんじゃない！」
 #says: 'So be it! Threaten no more!'
-�֤���˷����������������Ƥ�󤸤㤢�ʤ�����
+「それに決めろ！ぐずぐずしてるんじゃあない！」
 #says: 'Kill for gain or shoot to maim, but I don't need a reason.'
-��å������˻���������̵���ˤ��뤿��˷�Ĥ��������������ͳ��ɬ�פȤ��ʤ���
+「奪うために殺すか、台無しにするために撃つか。だが、私は理由を必要としない」
 #says: 'You'll die as you lived, in a flash of the blade.'
-�ֵ��ͤϷ����������桢�����Ƥ����褦�˻�̤�������
+「貴様は剣の閃きの中、生きてきたように死ぬだろう」
 #says: 'You'd better stand cos there's no turning back.'
-��Ω���ߤޤ�Ȥ���������������ƻ�ʤɤʤ��Τ�����ʡ�
+「立ち止まるといいだろう、帰る道などないのだからな」
 #says: 'I just want to see your blood, I just want to stand and stare.'
-�ֻ�ϵ��ͤη줬���������������ä���Ȥͤ�Ĥ�������������
+「私は貴様の血が見たいだけ、じっくりとねめつけたいだけだ」
 #says: 'I've been looking so long for you; you won't get away from my grasp.'
-�ֻ��Ĺ���ֵ��ͤ��ɤ�³���Ƥ��������ͤϻ�μ꤫��ƨ��뤳�ȤϤǤ����
+「私は長い間貴様を追い続けてきた。貴様は私の手から逃れることはできん」
 #says: 'I'm coming after you; you can kiss your arse goodbye.'
-�ֺ��Ԥ�������ʬ�Υ��Ĥˤ���ʤ�Υ����Ǥ⤹�����ʡ�
+「今行くぞ。自分のケツにさよならのキスでもするんだな」
 #says: 'It's official; you suck!'
-�ֵ��ͤϥ����������������
+「貴様はクソだ。これ定説」
 #sings: 'I hate you, you hate me, we're a helluva family.'
-�֢������إ����塼���桼�إ��ȥߡ��������������إ�����ե��ߥ꡼��
+「♪アイヘイチュー、ユーヘイトミー、ウィーアーヘラヴァファミリー」
 #says: 'A mere mortal dares challenge *ME*?!'
-�֤�����̿�ˤ����ʤ��ڤ�*��*��ĩ�魯��ȤϤʡ�����
+「ただ定命にすぎない輩が*私*に挑戦するとはな！？」
 #says: 'There is no escape and that's for sure.'
-��ƨ��ƻ�ʤɤʤ�������ϳΤ�����
+「逃げ道などない、それは確かだ」
 #says: 'This is the end; I won't take anymore.'
-�֤���ǽ��������⤦����ʾ��դ��礤������
+「これで終わりだ。もうこれ以上付き合いきれん」
 #says: 'Say goodbye to the world you live in.'
-�ֵ��ͤ������Ƥ��������ˤ���ʤ�������
+「貴様の生きている世界にさよならを言え」
 #says: 'You've always been taking, but now you're giving.'
-�ֵ��ͤϺ��ޤ�å�äƤ��������٤�å�����֤�����
+「貴様は今まで奪ってきたが今度は奪われる番だ！」
 #says: 'My brain's on fire with the feeling to kill.'
-�ֲ��ΥΡ��ߥ��ϵ��ͤ򻦤��פ��ǾƤ��դ�������������
+「俺のノーミソは貴様を殺す思いで焼け付きそうだぜ！」
 #says: 'Don't try running away, because you're the one I'll find.'
-��ƨ���褦�ʤɤȤ��ʤ����Ȥ����ʤ��ʤ鵮�ͤϻ䤬��ޤ���Ϥ�������ʳ�ʪ�ʤΤ���
+「逃げようなどとしないことだ、なぜなら貴様は私が捕まえるはずの大事な獲物なのだ」
 #says: 'I was looking for you to start up a fight.'
-���襤��Ϥ�褦�ȵ��ͤ�õ���Ƥ�������
+「戦いを始めようと貴様を探していたぞ」
 #says: 'My innocent victims are slaughtered with wrath and despise!'
-�ֻ�κ�̵�����Ӥɤ��ʰ�ܤȷ��Τ��äƤʤ֤껦����Ƥ��뤾����
+「私の罪無き生贄どもは憤怒と軽蔑をもってなぶり殺されているぞ！」
 #says: 'I have found you, and there is no place to run.'
-�ָ��Ĥ������������Ƥɤ��ˤ�ƨ����Ϥʤ���
+「見つけたぞ、そしてどこにも逃げ場はない」
 #says: 'My blood lust defies all my needs.'
-�ֻ�γ���¾�����Ƥ���˾���ޤ����
+「私の渇血は他の全ての欲望を霞ませる」
 #says: 'And damn'd be him that first cries: Hold, enough!'
-�֤�����������񤵤��Ϻǽ�ζ��ӡ��ԤäƤ��졢�⤦��ʬ������
+「そして彼の非難されるは最初の叫び：待ってくれ、もう充分だ！」
 #says: 'I can smell your blood, human!'
-�ֻ�ϵ��ͤη�ν������̤��Ĥ����뤾���ʹ֤衪��
+「私は貴様の血の臭いを嗅ぎつけられるぞ！人間よ！」
 #says: 'Has your folly led to this?'
-�ֵ��ͤζ�Ԥ�����ͭ���ͤ�Ƴ�����Τ��͡���
+「貴様の愚行がこの有り様を導いたのかね？」
 #wonders aloud how many experience points you're worth...
-�Ϥ��ʤ������ݥ���Ȥηи��ͤˤʤ���������Ȥ����餵�ޤ˿֤��Ƥ��롣
+はあなたが何ポイントの経験値になるだろう、とあからさまに訊いている。
 #says: 'Pride yourself on this, that you were slain by a champion.'
-�ְ�ή��Ʈ�Τ��ݤ���뤳�Ȥ��ͤθؤ�ˤ��뤬������
+「一流の闘士に倒されることを貴様の誇りにするがいい」
 #thunders: 'May heaven have mercy on your soul, for I will have none.'
-�ֵ��ͤκ���ŷ�λ���򡪻�ϻ���ʤɻ��äƤʤ�����ʡ���
+「貴様の魂に天の慈悲を！私は慈悲など持ってないからな！」
 #screams for your blood!
-�Ϥ��ʤ��η����ƶ������
+はあなたの血を求めて叫んだ！
 #sighs: 'They send a poorer grade of adventurers down each year than the last.'
-��ί©��Ĥ������֤�Ĥ��ǯ�����β����ä������Ԥ����ꤳ��Ǥ��䤬��ʤ���
+は溜息をついた：「やつらは年々質の下がった冒険者を送りこんできやがるなあ」
 #says: 'Your life-blood will baptise my blade!'
-�ֵ��ͤ�����ǻ�η������餹��Ȥ��褦����
+「貴様の鮮血で私の剣を洗礼するとしよう！」
 #shouts: 'You will serve me in Valhalla!'
-�϶�������ֵ��ͤϥ�����ϥ�ǻ�˻Ť���Τ�����
+は叫んだ：「貴様はヴァルハラで私に仕えるのだ！」
 #snickers: 'Mommy's not here to save you now!'
-�ϥ��������Фä����֥ޥޤϤ����ˤϽ����ˤ��ʤ�������
+はクスクス笑った：「ママはここには助けにこないぞ！」
 #says: 'You're almost not worth killing...almost!'
-�ֵ��ͤϤۤȤ�ɻ������ͤ�̵���ġĤۤȤ�ɤʡ���
+「貴様はほとんど殺す価値も無い……ほとんどな！」
 #leaps towards you with death in its eye.
-�ϻ�����ܤ˽ɤ餻�����ʤ��˸����ä�ķ��������
+は死神を目に宿らせ、あなたに向かって跳躍した。
 #sings: 'Cuts yer if ye stand, shoot yer if ye run.'
-�֢�Ω���������ʤ顡�¼ΤƤ롡����ƨ����ʤ顡���������
+「♪立ち向かうなら　斬捨てる　走り逃げるなら　撃ち殺す」
 #says: 'Another adventurer?  I just got through picking my teeth with the last.'
-���̤������ԡ����ä��Ǹ�Τ�Ĥ򿩤����ä��Ȥ���������
+「別の冒険者？さっき最後のやつを食い終ったところだぞ」
 #says: 'Your two ears will decorate my belt.'
-�ֵ��ͤ���Ĥμ��ϻ�Υ٥�Ȥ���뤳�Ȥˤʤ뤾��
+「貴様の二つの耳は私のベルトを飾ることになるぞ」
 #says: 'I love all that blood.'
-�ֻ�Ϥ���ۤɤޤǤ˷줬�繥���ʤΤ���
+「私はそれほどまでに血が大好きなのだ」
 #says: 'I don't want to hurt you, I only want to kill you.'
-�ֵ��ͤ��ˤ�Ĥ������櫓����ʤ�����������������������
+「貴様を痛めつけたいわけじゃない、ただ殺したいだけだ」
 #says: 'I like killing people, because it's so much fun.'
-�ֻ�Ͽͤ򻦤��Τ����������ȤƤ�ڤ�������ʡ�
+「私は人を殺すのが好きだ、とても楽しいからな」
 #screams: 'I'm out to destroy and I will cut you down!'
-�϶�������ֻ���˲����뤿��˸��줿�����ͤ�¤�ΤƤ롪��
+は叫んだ：「私は破壊するために現れた、貴様を斬り捨てる！」
 

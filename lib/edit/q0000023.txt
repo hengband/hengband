@@ -3,7 +3,7 @@
 
 # Name
 Q:$23:N:Spawning Pits
-Q:23:N:�����Ϲ�
+Q:23:N:増殖地獄
 
 # Definition
 Q:$23:Q:6:0:0:0:65:0:0:0:6
@@ -21,16 +21,16 @@ Q:$23:T:I am hesistant to ask for your help, knowing you may be sent
 Q:$23:T:to your doom, and yet you are the last hope for Angwil.  
 Q:$23:T:Approach each nook carefully, as evil lies in unexpected places.
 Q:$23:T:Please prepare well, and strike hard in our names.
-Q:23:T:���������������ȤƤⶲ�������ٰ��ʻ������������Ȥ��Ƥ��ޤ������γ���
-Q:23:T:�����ޤ��Ǥ��礦���桹���廡��ϻ������졢���Τϲ������������äˤ�ä�
-Q:23:T:����㤯����˲����٤���Ƥ��ޤ��������ʤ��������з褹����ˤʤ�Τ�
-Q:23:T:��ˤ�ʬ����ޤ��󡣥�󥹥����ɤ�Ϥ������ⲿ��ʤ��꤫�鸽��뤫��
-Q:23:T:�褦�ǡ����ʤ����������ɤ���ݤ������˶ᤤ�����ë�ˤ���ҡ�����
-Q:23:T:���Ťˤ�����߽Ф���Ƥ���褦�Ǥ������줬���ʤ������Ǥˤʤ�
-Q:23:T:���⤷��ʤ����Τ�ĤĽ��������ΤϤ������ޤ������������ʤ���
-Q:23:T:���󥰥�����κǸ�δ�˾�ʤΤǤ������󥸥��Ǥϡ����ù�������ˤ�
-Q:23:T:���տ������դ��褦�ˤ��Ƥ����������ٰ��ʤ�Τ�ͽ�����ʤ����������
-Q:23:T:���뤫�⤷��ޤ��󡣽�ʬ���ѿ���������̾�β���Ũ��Ƥ���Τᤷ�Ʋ�������
+Q:23:T:何か恐ろしい、とても恐ろしい邪悪な事が起ころうとしています。この街は
+Q:23:T:おしまいでしょう。我々の偵察隊は惨殺され、死体は何か恐ろしい獣によって
+Q:23:T:めちゃくちゃに押し潰されていました。あなたが何と対決する事になるのか
+Q:23:T:私には分かりません。モンスターどもはあたかも何もない所から現れるかの
+Q:23:T:ようで、あなたがオークどもを倒した場所に近い、南の谷にある禍々しい
+Q:23:T:祭壇により生み出されているようです。これがあなたの破滅になる
+Q:23:T:かもしれないと知りつつ助けを求めるのはためらわれます。しかしあなたは
+Q:23:T:アングウィルの最後の希望なのです！ダンジョンでは、引っ込んだ場所には
+Q:23:T:注意深く近付くようにしてください。邪悪なものが予期しない場所に潜んで
+Q:23:T:いるかもしれません。充分に用心し、我らの名の下に敵を討ちのめして下さい！
 ?:1
 
 # Description for quest reward
@@ -40,17 +40,17 @@ Q:$23:T:sung by elvenkind for ages to come.  Hail the conquering hero!
 Q:$23:T:May your battles with the Serpent be as successful.
 Q:$23:T:
 Q:$23:T:Use our gift wisely, and may the light shine on you.
-Q:23:T:���ʤ��αɸ�������Ȥ��Ƹ��Ѥ���뤳�ȤǤ��礦�������Ʋ桹����դ�
-Q:23:T:��²�Ϥ��ʤ���̾���򤳤줫��������Τ˾������ȤǤ��礦��
-Q:23:T:����ʤ��ͺ�˱ɸ����졪�����ƥ����ڥ�ȤȤ��襤�ˤ⾡�����󤳤Ȥ�
+Q:23:T:あなたの栄光は伝説として語り継がれることでしょう。そして我々エルフの
+Q:23:T:一族はあなたの名前をこれから幾世代も歌に唱うことでしょう。
+Q:23:T:偉大なる英雄に栄光あれ！そしてサーペントとの戦いにも勝利せんことを！
 Q:23:T:
-Q:23:T:����£ʪ����˻ȤäƲ�������ͦ���������Ԥ˸����졪
+Q:23:T:この贈物を上手に使って下さい。勇敢な冒険者に光あれ！
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST23 5]
 Q:$23:T:I've sent out someone else to do the job.  Now leave me alone!
-Q:23:T:����¾�μԤ˻Ż���Ǥ���Ƥ���ޤ������Ф餯����ͤˤ����Ƥ���������
+Q:23:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
 ?:1
 
 # Floor with Quylthulg

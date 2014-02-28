@@ -2,7 +2,7 @@
 
 # Name
 Q:$28:N:The Royal Crypt
-Q:28:N:���Ȥ���
+Q:28:N:王家の墓
 
 # type:num_mon:cur_num:max_num:level:r_idx:k_idx
 Q:$28:Q:1:0:0:5:70:776:0:0:6
@@ -17,10 +17,10 @@ Q:$28:T:enslaved and forcibly turned to evil.  You must enter the
 Q:$28:T:crypt and seek out the Archliches.  Once they have been
 Q:$28:T:eliminated, my guards should be able to take care of the
 Q:$28:T:rest.
-Q:28:T:�Ի׵Ĥ��Ϥ����Ȥ����Ϥ�������ߡ����ͤι⵮�����Ĥ�������������
-Q:28:T:���ޤ������Ĥΰ��Τ���ˡ�����졢���κ��ϰ�������ȤʤäƤ��ޤ��ޤ�����
-Q:28:T:���ʤ������Ϥ˹Ԥ����Τ���äƤ��륢������å��ɤ�򸫤Ĥ��Ф��ʤ��Ƥ�
-Q:28:T:�ʤ�ޤ����ۤ餵���ݤ��С��Ĥ�ϲ桹�α�ʼ�����դ��Ƥ����Ǥ��礦��
+Q:28:T:不思議な力が王家の墓地に入り込み、王様の高貴な先祖たちの墓を汚して
+Q:28:T:います。先祖の遺体は魔法で操られ、その魂は悪の奴隷となってしまいました。
+Q:28:T:あなたは墓地に行き死体を操っているアーチリッチどもを見つけ出さなくては
+Q:28:T:なりません。奴らさえ倒せば、残りは我々の衛兵が片付けてくれるでしょう。
 ?:1
 
 # Description for quest reward
@@ -30,19 +30,19 @@ Q:$28:T:of legend walks this day in Outpost. My treasurer tells me
 Q:$28:T:a number of rather valuable heirlooms seem to be missing
 Q:$28:T:from the crypt - how about I turn a blind eye and we call
 Q:$28:T:it quits?
-Q:28:T:�ʤ�Ȥ��餹��Ф褤�ΤǤ��礦����Ф������ȤǤ���
-Q:28:T:����α�ͺ�������λ����γ������Ǥ���ΤǤ����Ȥ����ǻ�ΤȤ�����
-Q:28:T:�⻺�����ͤ������Ϥˤ��ä����Ĥ�����������β��������������ˤʤä���
-Q:28:T:�����Ƥ���ޤ�������ϸ��Ƹ��̤դ�򤷤ޤ����顢����Ǥ��������Ȥ���
-Q:28:T:���ȤǤ������Ǥ��礦��
+Q:28:T:なんとお礼すればよいのでしょう！喜ばしいことです。
+Q:28:T:伝説の英雄が今この時この街を歩んでいるのです。ところで私のところの
+Q:28:T:財産管理人が、墓地にあった幾つかの先祖伝来の家宝が行方不明になったと
+Q:28:T:教えてくれました。私は見て見ぬふりをしますから、これでおあいこという
+Q:28:T:ことでいかがでしょう。
 ?:1
 
 # Description for quest failed
 ?:[EQU $QUEST28 5]
 Q:$28:T:I trusted you and you have failed me. Heaven knows how
 Q:$28:T:we will appease the spirits of the king's ancestors now!
-Q:28:T:��ο����΢�ڤäƤ���ޤ����͡��⤦���ȤʤäƤϲ�������
-Q:28:T:�κ����ä�뤳�Ȥ�ï�ˤ����ޤ���
+Q:28:T:私の信頼を裏切ってくれましたね。もう今となっては王の祖先
+Q:28:T:の魂を鎮めることは誰にも出来ません！
 ?:1
 
 # Floor, dark, no teleport
