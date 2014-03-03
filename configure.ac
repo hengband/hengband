@@ -67,6 +67,8 @@ if test "$ac_cv_lib_ncursesw_initscr" != yes; then
   fi
 fi
 
+AC_CHECK_LIB(iconv, iconv_open)
+
 dnl Checks for header files.
 AC_PATH_XTRA
 if test "$have_x" = yes; then
