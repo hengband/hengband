@@ -3151,7 +3151,7 @@ void c_roff(byte a, cptr str)
 
 		/* Clean up the char */
 #ifdef JP
-		ch = ((isprint(*s) || k_flag) ? *s : ' ');
+		ch = ((k_flag || isprint(*s)) ? *s : ' ');
 #else
 		ch = (isprint(*s) ? *s : ' ');
 #endif
