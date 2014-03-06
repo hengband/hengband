@@ -27,6 +27,8 @@ doxygen/html/
 Hengband.exe
 
 # game data files auto generated
+Hengband.INI
+lib/user/
 lib/save/
 *.raw
 
