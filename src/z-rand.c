@@ -96,6 +96,8 @@ static u32b Rand_Xorshift(u32b* state)
 	return state[3];
 }
 
+static const u32b Rand_Xorshift_max = 0xFFFFFFFF;
+
 /*
  * Initialize the RNG using a new seed
  */
@@ -132,13 +134,28 @@ void Rand_state_restore(u32b* backup_state)
 /*
  * Extract a "random" number from 0 to m-1, via "division"
  */
-s32b Rand_div(u32b m)
+static s32b Rand_div_impl(s32b m, u32b* state)
 {
+	u32b scaling;
+	u32b past;
+	u32b ret;
+
 	/* Hack -- simple case */
 	if (m <= 1) return (0);
 
-	/* Use the value */
-	return Rand_Xorshift(Rand_state) % m;
+	scaling = Rand_Xorshift_max / m;
+	past = scaling * m;
+
+	do {
+		ret = Rand_Xorshift(state);
+	} while (ret >= past);
+
+	return ret / scaling;
+}
+
+s32b Rand_div(s32b m)
+{
+	return Rand_div_impl(m, Rand_state);
 }
 
 
@@ -332,5 +349,5 @@ u32b Rand_external(u32b m)
 		initialized = TRUE;
 	}
 
-	return Rand_Xorshift(Rand_state_external) % m;
+	return Rand_div_impl(m, Rand_state_external);
 }

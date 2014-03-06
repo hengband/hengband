@@ -92,7 +92,7 @@ extern u32b Rand_state[RAND_DEG];
 extern void Rand_state_init(u32b seed);
 extern void Rand_state_backup(u32b* backup_state);
 extern void Rand_state_restore(u32b* backup_state);
-extern s32b Rand_div(u32b m);
+extern s32b Rand_div(s32b m);
 extern s16b randnor(int mean, int stand);
 extern s16b damroll(int num, int sides);
 extern s16b maxroll(int num, int sides);
