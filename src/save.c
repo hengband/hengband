@@ -1245,7 +1245,7 @@ static bool wr_savefile_new(void)
 	xor_byte = 0;
 
 	/* Initial value of xor_byte */
-	tmp8u = (byte)randint0(256);
+	tmp8u = (byte)Rand_external(256);
 	wr_byte(tmp8u);
 
 
