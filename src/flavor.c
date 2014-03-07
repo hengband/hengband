@@ -298,7 +298,7 @@ void flavor_init(void)
 	Rand_state_backup(state_backup);
 
 	/* Hack -- Induce consistant flavors */
-	Rand_state_init(seed_flavor);
+	Rand_state_set(seed_flavor);
 
 
 	/* Initialize flavor index of each object by itself */

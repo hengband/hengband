@@ -69,7 +69,7 @@ u32b Rand_state[RAND_DEG] = {
 /*
  * Initialize Xorshift Algorithm state
  */
-static void Rand_Xorshift_init(u32b seed, u32b* state)
+static void Rand_Xorshift_seed(u32b seed, u32b* state)
 {
 	int i;
 
@@ -101,9 +101,35 @@ static const u32b Rand_Xorshift_max = 0xFFFFFFFF;
 /*
  * Initialize the RNG using a new seed
  */
-void Rand_state_init(u32b seed)
+void Rand_state_set(u32b seed)
 {
-	Rand_Xorshift_init(seed, Rand_state);
+	Rand_Xorshift_seed(seed, Rand_state);
+}
+
+void Rand_state_init(void)
+{
+#ifdef RNG_DEVICE
+
+	FILE *fp = fopen(RNG_DEVICE, "r");
+	u32b buf[4];
+	do {
+		fread(buf, sizeof(buf[0]), 4, fp);
+	} while ((buf[0] | buf[1] | buf[2] | buf[3]) == 0);
+	memcpy(Rand_state, buf, sizeof(buf));
+	fclose(fp);
+
+#else
+
+	/* Basic seed */
+	u32b seed = (time(NULL));
+#ifdef SET_UID
+	/* Mutate the seed on Unix machines */
+	seed = ((seed >> 3) * (getpid() << 1));
+#endif
+	/* Seed the RNG */
+	Rand_state_set(seed);
+
+#endif
 }
 
 /*
@@ -336,7 +362,7 @@ s32b div_round(s32b n, s32b d)
  *
  * Could also use rand() from <stdlib.h> directly. XXX XXX XXX
  */
-u32b Rand_external(u32b m)
+s32b Rand_external(s32b m)
 {
 	static bool initialized = FALSE;
 	static u32b Rand_state_external[4];
@@ -345,7 +371,7 @@ u32b Rand_external(u32b m)
 	{
 		/* Initialize with new seed */
 		u32b seed = time(NULL);
-		Rand_Xorshift_init(seed, Rand_state_external);
+		Rand_Xorshift_seed(seed, Rand_state_external);
 		initialized = TRUE;
 	}
 
