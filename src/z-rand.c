@@ -11,6 +11,10 @@
 
 /* Purpose: a simple random number generator -BEN- */
 
+#if defined(WINDOWS)
+#include <Windows.h>
+#endif
+
 #include "z-rand.h"
 
 
@@ -117,6 +121,19 @@ void Rand_state_init(void)
 	} while ((buf[0] | buf[1] | buf[2] | buf[3]) == 0);
 	memcpy(Rand_state, buf, sizeof(buf));
 	fclose(fp);
+
+#elif defined(WINDOWS)
+
+	HCRYPTPROV hProvider;
+	u32b buf[4];
+
+	CryptAcquireContext(&hProvider, NULL, NULL, PROV_RSA_FULL, 0);
+
+	do {
+		CryptGenRandom(hProvider, sizeof(buf[0]) * 4, (BYTE*)buf);
+	} while ((buf[0] | buf[1] | buf[2] | buf[3]) == 0);
+
+	CryptReleaseContext(hProvider, 0);	
 
 #else
 
