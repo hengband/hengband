@@ -6889,20 +6889,7 @@ quit("セーブファイルが壊れています");
 	/* Init the RNG */
 	if (init_random_seed)
 	{
-		u32b seed;
-
-		/* Basic seed */
-		seed = (time(NULL));
-
-#ifdef SET_UID
-
-		/* Mutate the seed on Unix machines */
-		seed = ((seed >> 3) * (getpid() << 1));
-
-#endif
-
-		/* Seed the RNG */
-		Rand_state_init(seed);
+		Rand_state_init();
 	}
 
 	/* Roll new character */

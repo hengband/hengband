@@ -3432,16 +3432,6 @@ if (arg_fiddle) note("アイテムの記録をロードしました");
 	if (arg_fiddle) note("Loaded Object Memory");
 #endif
 
-
-	/* Init the wilderness seeds */
-	for (i = 0; i < max_wild_x; i++)
-	{
-		for (j = 0; j < max_wild_y; j++)
-		{
-			wilderness[j][i].seed = randint0(0x10000000);
-		}
-	}
-
 	/* 2.1.3 or newer version */
 	{
 		u16b max_towns_load;

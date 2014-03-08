@@ -234,7 +234,7 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 	Rand_state_backup(state_backup);
 
 	/* Hack -- Induce consistant flavors */
-	Rand_state_init(seed);
+	Rand_state_set(seed);
 
 	if (!corner)
 	{
@@ -420,7 +420,7 @@ static void generate_area(int y, int x, bool border, bool corner)
 		Rand_state_backup(state_backup);
 
 		/* Hack -- Induce consistant flavors */
-		Rand_state_init(wilderness[y][x].seed);
+		Rand_state_set(wilderness[y][x].seed);
 
 		dy = rand_range(6, cur_hgt - 6);
 		dx = rand_range(6, cur_wid - 6);
