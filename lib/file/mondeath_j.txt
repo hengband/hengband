@@ -29,7 +29,7 @@ N:873:Combat-Echizen, SEKKAKUDAKARA
 「おーのー。」
 
 N:878:Dio Brando
-「ば，ばかなッ！このディオが．．．このディオがァァァァ〜〜〜〜！！」
+「ば，ばかなッ！このディオが．．．このディオがァァァァ～～～～！！」
 
 N:880:Wong, Master of Time
 「この私がぁ！」

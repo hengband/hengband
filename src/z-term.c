@@ -572,7 +572,7 @@ void Term_queue_bigchar(int x, int y, byte a, char c, byte ta, char tc)
 	 * 「■」は二倍幅豆腐の内部コードに使用。
 	 */
 	static char ascii_to_zenkaku[] =
-		"　！”＃＄％＆’（）＊＋，─．／"
+		"　！”＃＄％＆’（）＊＋，―．／"
 		"０１２３４５６７８９：；＜＝＞？"
 		"＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯ"
 		"ＰＱＲＳＴＵＶＷＸＹＺ［＼］＾＿"

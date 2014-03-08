@@ -1,12 +1,12 @@
 N:*:Default
 油断大敵、慢心強敵。死して屍拾うものなし。
 テッ、テレポー……ぼふぅ！！
-死んだ〜！！！
+死んだ～！！！
 やっぱ無理か。
 いやーまだまだだわ、、、
 あぁーだめじゃん、、、
 死んじゃった……ふぅ、疲れた。
-うわあ〜〜〜〜〜〜〜
+うわあ～～～～～～～
 なめんな。
 んもー！
 油断した！！
@@ -17,7 +17,7 @@ N:*:Default
 死んで当然かもな。
 やれやれ。
 ふざけんな！
-やっちまった〜！
+やっちまった～！
 なんとぉぉっ！？
 なんでこぉなるの！？
 ？？？？？
@@ -143,7 +143,7 @@ Sucker shot!
 I didn't want to live anyway.
 -<sob>-
 #Hah haa! Missed me! Ha---
-ワハハ！当たらないぞ！ワハ——
+ワハハ！当たらないぞ！ワハ――
 Was that as close as I think it was?
 #Monsters rejoice: the hero has been defeated.
 怪物どもは喜んでいる。英雄が倒れたのだ。
@@ -193,7 +193,7 @@ Don't worry, be happy!
 #Oops.
 くっそー。
 #Oups.
-くっそ〜。
+くっそ～。
 #Can't you take a joke?
 あんたジョークが分かんないのか？
 #Well, I didn't much like this character, anyway...

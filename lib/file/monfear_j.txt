@@ -276,7 +276,7 @@ groans in disbelief.
 roars furiously.
 #Bard の射た黒い矢でスマウグは死にます。
 #howls, 'Black Arrow? NOOOO!'
-「黒い矢？やめてくれ〜〜！」
+「黒い矢？やめてくれ～～！」
 #howls, 'This CAN'T be happening!'
 「そんなバカな！」
 
@@ -466,7 +466,7 @@ N:883:Zombified Serpent of Chaos
 「そんなバカな！」
 
 N:873:Combat-Echizen, SEKKAKUDAKARA
-「くっそ〜！」
+「くっそ～！」
 「このやろー！」
 「やりやがったな！」
 
@@ -512,7 +512,7 @@ N:1081:チャージマン『研』
 「いくら悪い奴らでも、人間にアルファガンは撃てないよ」
 「弱いものいじめはやめるんだ！」
 「僕は世話をかけないよ！」
-「ちぇっ、…くっそぉ〜」
+「ちぇっ、…くっそぉ～」
 
 N:1096:濃尾無双『岩本虎眼』
 「い、いくぅ・・・」
