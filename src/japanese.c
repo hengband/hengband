@@ -412,7 +412,7 @@ static bool utf8_to_sys(char* utf8_str, char* sys_str_buffer, size_t sys_str_buf
 {
 #if defined(EUC)
 
-        iconv_t cd = iconv_open("EUC-JP", "UTF-8");
+        iconv_t cd = iconv_open("EUC-JP-MS", "UTF-8");
         size_t utf8_len = strlen(utf8_str) + 1; /* include termination character */
         char *from = utf8_str;
         int ret = iconv(cd, &from, &utf8_len, &sys_str_buffer, &sys_str_buflen);
