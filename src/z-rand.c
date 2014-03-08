@@ -115,23 +115,22 @@ void Rand_state_init(void)
 #ifdef RNG_DEVICE
 
 	FILE *fp = fopen(RNG_DEVICE, "r");
-	u32b buf[4];
+	
 	do {
-		fread(buf, sizeof(buf[0]), 4, fp);
-	} while ((buf[0] | buf[1] | buf[2] | buf[3]) == 0);
-	memcpy(Rand_state, buf, sizeof(buf));
+		fread(Rand_state, sizeof(Rand_state[0]), 4, fp);
+	} while ((Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
+	
 	fclose(fp);
 
 #elif defined(WINDOWS)
 
 	HCRYPTPROV hProvider;
-	u32b buf[4];
 
 	CryptAcquireContext(&hProvider, NULL, NULL, PROV_RSA_FULL, 0);
 
 	do {
-		CryptGenRandom(hProvider, sizeof(buf[0]) * 4, (BYTE*)buf);
-	} while ((buf[0] | buf[1] | buf[2] | buf[3]) == 0);
+		CryptGenRandom(hProvider, sizeof(Rand_state[0]) * 4, (BYTE*)Rand_state);
+	} while ((Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
 
 	CryptReleaseContext(hProvider, 0);	
 
