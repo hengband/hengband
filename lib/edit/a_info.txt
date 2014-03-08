@@ -139,7 +139,7 @@ D:$This crimson jewelry which is chained with a gold chain is
 D:$ deeply related to creation of this universe.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.3-10)
 D:金の鎖に取り付けられた、この宇宙の創世に深い関わりを持つ真紅の宝石。
-D:（R.ゼラズニイ、真世界アンバーシリーズ 3〜10巻）
+D:（R.ゼラズニイ、真世界アンバーシリーズ 3～10巻）
 
 
 # The Amulet of Carlammas
@@ -260,7 +260,7 @@ D:$ (R.Zelazny, 'The Chronicles of Amber', vol.6-10)
 D:混沌の王子マーリンがログルスから生み出した意思を持った腕輪だ。
 D:普段は目に見えないが脈動して危険を知らせてくれる。装備するものが
 D:命ずると形を変えて敵の首を締めることができる。
-D:（R.ゼラズニイ、真世界アンバーシリーズ 6〜10巻）
+D:（R.ゼラズニイ、真世界アンバーシリーズ 6～10巻）
 
 
 # The Ring of Tulkas
@@ -2522,7 +2522,7 @@ D:使う者を様々な危機から守る霊力が備わっている。
 #J0#
 #J0#(都々目)
 #J0#＊Razorbackには1.ながすくじら 2.野生の豚 3.とがった背 と云う意味があるそう
-#J0#です。とがった背〜ステゴサウルスと云うことで、こういう風にしてみました(笑)。
+#J0#です。とがった背～ステゴサウルスと云うことで、こういう風にしてみました(笑)。
 #J0#
 N:129:『剣竜の鎧』
 E:'Razorback'
