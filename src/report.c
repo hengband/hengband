@@ -32,18 +32,18 @@
 #define HTTP_PROXY ""                   /* Default proxy url */
 #define HTTP_PROXY_PORT 0               /* Default proxy port */
 #define HTTP_TIMEOUT    20              /* Timeout length (second) */
-#define SCORE_SERVER "www.kmc.gr.jp"    /* Default score server url */
+#define SCORE_SERVER "moon.kmc.gr.jp"    /* Default score server url */
 #define SCORE_PORT 80                   /* Default score server port */
 
 #ifdef JP
-#define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/hengscore/score.cgi"
+#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore/score.cgi"
 #else
-#define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/hengscore-en/score.cgi"
+#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi"
 #endif
 
 /* for debug */
 #if 0
-#define SCORE_PATH "http://www.kmc.gr.jp/~habu/local/scoretest/score.cgi"
+#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/scoretest/score.cgi"
 #endif
 
 /*
