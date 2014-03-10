@@ -49,11 +49,6 @@ AC_ARG_ENABLE(worldscore,
 AC_ARG_ENABLE(chuukei,
 [  --enable-chuukei        enable internet chuukei support], AC_DEFINE(CHUUKEI, 1, [Chuukei mode]))
 
-dnl -fno-strength-reduce prevents a bug in some versions of gcc
-if test "$GCC" = yes; then
-  CFLAGS="$CFLAGS -fno-strength-reduce --exec-charset=EUC-JP-MS"
-fi
-
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lncurses:
 AC_CHECK_LIB(ncursesw, initscr, [AC_DEFINE(USE_GCU, 1, [Allow -mGCU environment]) AC_DEFINE(USE_NCURSES, 1, [Use ncurses]) LIBS="$LIBS -lncursesw"])
@@ -98,6 +93,13 @@ if test "$have_x" = yes; then
     fi
     AC_CHECK_LIB(X11, _Xsetlocale, AC_DEFINE(X_LOCALE, 1, [Use XLocale]))
     AC_CHECK_LIB(xpg4, setlocale, LIBS="$LIBS -lxpg4")
+  fi
+fi
+
+if test "$use_japanese" != no; then
+  AC_CHECK_PROG(NKF, nkf, yes)
+  if test x"$NKF" != x"yes"; then
+    AC_MSG_ERROR([nkf is not found. Please install nkf.])
   fi
 fi
 

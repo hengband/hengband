@@ -398,6 +398,40 @@ static bool is_utf8_str(cptr str)
 
 #if defined(EUC)
 #include <iconv.h>
+
+static const struct ms_to_jis_unicode_conv_t {
+	char from[3];
+	char to[3];
+} ms_to_jis_unicode_conv[] = {
+	{{0xef, 0xbd, 0x9e}, {0xe3, 0x80, 0x9c}}, /* FULLWIDTH TILDE -> WAVE DASH */
+	{{0xef, 0xbc, 0x8d}, {0xe2, 0x88, 0x92}}, /* FULLWIDTH HYPHEN-MINUS -> MINUS SIGN */
+};
+
+static void ms_to_jis_unicode(char* str)
+{
+	unsigned char* p;
+	for (p = (unsigned char*)str; *p; p++) {
+		int subseq_num = 0;
+		if (0x00 < *p && *p <= 0x7f) continue;
+
+		if ((*p & 0xe0) == 0xc0) subseq_num = 1;
+		if ((*p & 0xf0) == 0xe0) {
+			int i;
+			for (i = 0; i < sizeof(ms_to_jis_unicode_conv) / sizeof(ms_to_jis_unicode_conv[0]); ++ i) {
+				const struct ms_to_jis_unicode_conv_t *c = &ms_to_jis_unicode_conv[i];
+				if (memcmp(p, c->from, 3) == 0) {
+					printf("hoge\n");
+					memcpy(p, c->to, 3);
+				}
+			}
+			subseq_num = 2;
+                }
+		if ((*p & 0xf8) == 0xf0) subseq_num = 3;
+
+		p += subseq_num;
+	}
+}
+
 #elif defined(SJIS) && defined(WINDOWS)
 #include <Windows.h>
 #endif
@@ -412,12 +446,15 @@ static bool utf8_to_sys(char* utf8_str, char* sys_str_buffer, size_t sys_str_buf
 {
 #if defined(EUC)
 
-        iconv_t cd = iconv_open("EUC-JP-MS", "UTF-8");
-        size_t utf8_len = strlen(utf8_str) + 1; /* include termination character */
-        char *from = utf8_str;
-        int ret = iconv(cd, &from, &utf8_len, &sys_str_buffer, &sys_str_buflen);
-        iconv_close(cd);
-        return (ret >= 0);
+	iconv_t cd = iconv_open("EUC-JP", "UTF-8");
+	size_t utf8_len = strlen(utf8_str) + 1; /* include termination character */
+	char *from = utf8_str;
+	int ret;
+
+	ms_to_jis_unicode(utf8_str);
+	ret = iconv(cd, &from, &utf8_len, &sys_str_buffer, &sys_str_buflen);
+	iconv_close(cd);
+	return (ret >= 0);
 
 #elif defined(SJIS) && defined(WINDOWS)
 
