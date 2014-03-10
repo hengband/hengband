@@ -419,7 +419,7 @@ D:$ him in his missions, and it evolved into greater weapon
 D:$ after his every battle. --"
 D:$(Ecole Software, 'DEATH CRIMSON')
 D:「―そこは街全体が魔物の住処と化していた。そのとき思わず
-D:使った銃−クリムゾンが越前を助け、そして、たたかうごとに、
+D:使った銃―クリムゾンが越前を助け、そして、たたかうごとに、
 D:クリムゾンはより強力な武器へと進化していった。―」(デスク
 D:リムゾン，エコールソフトウェア)
 

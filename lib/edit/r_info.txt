@@ -15166,8 +15166,8 @@ D:$self-sufficiency -- untamed mastery -- what else can we find
 D:$these things with even half the perfection and completeness 
 D:$that mark their incarnation in the peerless and softly gliding 
 D:$cat?"
-D:「美しさ−冷静さ−超然とした態度−落ち着き−尊大さ−飼い慣らし得ない
-D:支配者的風格−静かに滑るように歩む猫。このような完全無欠さの半分でも
+D:「美しさ―冷静さ―超然とした態度―落ち着き―尊大さ―飼い慣らし得ない
+D:支配者的風格―静かに滑るように歩む猫。このような完全無欠さの半分でも
 D:備えた生き物がほかにいるだろうか？」
 
 #JZ#
@@ -18859,9 +18859,9 @@ F:FEMALE | IM_COLD | DROP_1D2 | NONLIVING | AURA_COLD |
 S:1_IN_5
 S:BR_COLD | BO_COLD | BA_COLD
 D:顔に雪がさかんに降りかかるので、巳之吉は目をさました。
-D:小屋の戸はむりにこじ開けられて、小屋の中に一人の女−すっかり白い装いをした
+D:小屋の戸はむりにこじ開けられて、小屋の中に一人の女―すっかり白い装いをした
 D:女がいるのが、雪明かりで見えた。女は茂作のうえに身をかがめて、
-D:息を吹きかけていた。−その息は、きらきらする白い煙のようであった。
+D:息を吹きかけていた。―その息は、きらきらする白い煙のようであった。
 D:(怪談・奇談 ラフカディオ・ハーン、田代三千稔訳 角川文庫)
 
 # Description in English by Nick Keulmann
