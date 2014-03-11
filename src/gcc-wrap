@@ -6,7 +6,7 @@ if test $jp -eq 1; then
     eval src_file=\${$#}
 
     trap '' INT
-    backup=`mktemp`
+    backup=`mktemp tmp.XXXXXX`
     mv $src_file $backup
     nkf -e $backup > $src_file
     $@
