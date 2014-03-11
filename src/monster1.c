@@ -798,8 +798,11 @@ static void roff_aux(int r_idx, int mode)
 		for (r = 0, m = 0; m < 4; m++)
 		{
 			if (r_ptr->blow[m].method == RBM_SHOOT)
-			{
-				sprintf(tmp_msg[vn], _("威力 %dd%d の射撃をする","fire an arrow (Power:%dd%d)"), r_ptr->blow[m].d_side, r_ptr->blow[m].d_dice);
+            {
+                if (know_armour(r_idx))
+				    sprintf(tmp_msg[vn], _("威力 %dd%d の射撃をする","fire an arrow (Power:%dd%d)"), r_ptr->blow[m].d_side, r_ptr->blow[m].d_dice);
+                else
+                    sprintf(tmp_msg[vn], _("射撃をする", "fire an arrow"));
                 vp[vn] = tmp_msg[vn]; color[vn++] = TERM_UMBER;
 				break;
 			}
