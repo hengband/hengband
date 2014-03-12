@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file birth.c
  * @brief プレイヤーの作成を行う / Create a player character
  * @date 2013/12/28

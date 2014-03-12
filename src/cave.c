@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file cave.c
  * @brief ダンジョンの基礎部分実装(主にマスの実装) / low level dungeon routines -BEN-
  * @date 2013/12/30
@@ -1848,11 +1848,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 	if (p_ptr->image)
 	{
 		attr = TERM_WHITE;
-#ifdef JP
-		strcpy(buf, "何か奇妙な物");
-#else
-		strcpy(buf, "something strange");
-#endif
+		strcpy(buf, _("何か奇妙な物", "something strange"));
 	}
 
 	for (c = buf; *c; c++)
@@ -2208,11 +2204,7 @@ void do_cmd_view_map(void)
 	screen_save();
 
 	/* Note */
-#ifdef JP
-prt("お待ち下さい...", 0, 0);
-#else
-	prt("Please wait...", 0, 0);
-#endif
+	prt(_("お待ち下さい...", "Please wait..."), 0, 0);
 
 	/* Flush */
 	Term_fresh();
@@ -2240,11 +2232,8 @@ prt("お待ち下さい...", 0, 0);
 			Term_get_size(&wid, &hgt);
 			row_message = hgt - 1;
 
-#ifdef JP
-			put_str("何かキーを押してください('M':拾う 'N':放置 'D':M+N 'K':壊すアイテムを表示)", row_message, 1);
-#else
-			put_str(" Hit M, N(for ~), K(for !), or D(same as M+N) to display auto-picker items.", row_message, 1);
-#endif
+			put_str(_("何かキーを押してください('M':拾う 'N':放置 'D':M+N 'K':壊すアイテムを表示)",
+					  " Hit M, N(for ~), K(for !), or D(same as M+N) to display auto-picker items."), row_message, 1);
 
 			/* Hilite the player */
 			move_cursor(cy, cx);
@@ -2277,11 +2266,8 @@ prt("お待ち下さい...", 0, 0);
 	}
 	else
 	{
-#ifdef JP
-		put_str("何かキーを押すとゲームに戻ります", 23, 30);
-#else
-		put_str("Hit any key to continue", 23, 30);
-#endif		/* Hilite the player */
+		put_str(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"), 23, 30);		
+		/* Hilite the player */
 		move_cursor(cy, cx);
 		/* Get any key */
 		inkey();
@@ -3304,19 +3290,11 @@ void update_mon_lite(void)
 		{
 			if (p_ptr->monlite)
 			{
-#ifdef JP
-				msg_print("影の覆いが薄れた気がする。");
-#else
-				msg_print("Your mantle of shadow become thin.");
-#endif
+				msg_print(_("影の覆いが薄れた気がする。", "Your mantle of shadow become thin."));
 			}
 			else
 			{
-#ifdef JP
-				msg_print("影の覆いが濃くなった！");
-#else
-				msg_print("Your mantle of shadow restored its original darkness.");
-#endif
+				msg_print(_("影の覆いが濃くなった！", "Your mantle of shadow restored its original darkness."));
 			}
 		}
 	}
@@ -4775,11 +4753,7 @@ void cave_alter_feat(int y, int x, int action)
 
 		if (found && character_dungeon && player_can_see_bold(y, x))
 		{
-#ifdef JP
-			msg_print("何かを発見した！");
-#else
-			msg_print("You have found something!");
-#endif
+			msg_print(_("何かを発見した！", "You have found something!"));
 		}
 	}
 

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file cmd4.c
  * @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
  * @date 2014/01/02
@@ -96,11 +96,7 @@ static void remove_auto_dump(cptr orig_file)
 
 	if (!tmp_fff)
 	{
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", tmp_file);
-#else
-	    msg_format("Failed to create temporary file %s.", tmp_file);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
 	    msg_print(NULL);
 	    return;
 	}
@@ -284,11 +280,7 @@ static bool open_auto_dump(cptr buf, cptr mark)
 
 	/* Failure */
 	if (!auto_dump_stream) {
-#ifdef JP
-		msg_format("%s を開くことができませんでした。", buf);
-#else
-		msg_format("Failed to open %s.", buf);
-#endif
+		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
 		msg_print(NULL);
 
 		/* Failed */
@@ -301,14 +293,10 @@ static bool open_auto_dump(cptr buf, cptr mark)
 	/* Initialize counter */
 	auto_dump_line_num = 0;
 
-#ifdef JP
-	auto_dump_printf("# *警告!!* 以降の行は自動生成されたものです。\n");
-	auto_dump_printf("# *警告!!* 後で自動的に削除されるので編集しないでください。\n");
-#else
-	auto_dump_printf("# *Warning!*  The lines below are an automatic dump.\n");
-	auto_dump_printf("# Don't edit them; changes will be deleted and replaced automatically.\n");
-#endif
-
+	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
+					   "# *Warning!*  The lines below are an automatic dump.\n"));
+	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", 
+					   "# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	/* Success */
 	return TRUE;
 }
@@ -325,14 +313,10 @@ static void close_auto_dump(void)
 	/* Prepare a footer mark string */
 	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
 
-#ifdef JP
-	auto_dump_printf("# *警告!!* 以上の行は自動生成されたものです。\n");
-	auto_dump_printf("# *警告!!* 後で自動的に削除されるので編集しないでください。\n");
-#else
-	auto_dump_printf("# *Warning!*  The lines above are an automatic dump.\n");
-	auto_dump_printf("# Don't edit them; changes will be deleted and replaced automatically.\n");
-#endif
-
+	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
+					   "# *Warning!*  The lines below are an automatic dump.\n"));
+	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", 
+					   "# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	/* End of dump */
 	fprintf(auto_dump_stream, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
 
@@ -413,12 +397,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		p_ptr->inside_quest = old_quest;
 	}
 
-#ifdef JP
-	sprintf(file_name,"playrecord-%s.txt",savefile_base);
-#else
 	/* different filne name to avoid mixing */
-	sprintf(file_name,"playrec-%s.txt",savefile_base);
-#endif
+	sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
@@ -431,11 +411,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	/* Failure */
 	if (!fff)
 	{
-#ifdef JP
-		msg_format("%s を開くことができませんでした。プレイ記録を一時停止します。", buf);
-#else
-		msg_format("Failed to open %s. Play-Record is disabled temporally.", buf);
-#endif
+		msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporally."), buf);
 		msg_format(NULL);
 		disable_nikki=TRUE;
 		return (-1);
@@ -446,24 +422,12 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	if (write_level)
 	{
 		if (p_ptr->inside_arena)
-#ifdef JP
-			note_level = "アリーナ:";
-#else
-			note_level = "Arane:";
-#endif
+			note_level = _("アリーナ:", "Arane:");
 		else if (!dun_level)
-#ifdef JP
-			note_level = "地上:";
-#else
-			note_level = "Surface:";
-#endif
+			note_level = _("地上:", "Surface:");
 		else if (q_idx && (is_fixed_quest_idx(q_idx)
 		         && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
-#ifdef JP
-			note_level = "クエスト:";
-#else
-			note_level = "Quest:";
-#endif
+			note_level = _("クエスト:", "Quest:");
 		else
 		{
 #ifdef JP
@@ -479,13 +443,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	{
 		case NIKKI_HIGAWARI:
 		{
-#ifdef JP
-			if (day < MAX_DAYS) fprintf(fff, "%d日目\n", day);
-			else fputs("*****日目\n", fff);
-#else
-			if (day < MAX_DAYS) fprintf(fff, "Day %d\n", day);
-			else fputs("Day *****\n", fff);
-#endif
+			if (day < MAX_DAYS) fprintf(fff, _("%d日目\n", "Day %d\n"), day);
+			else fputs(_("*****日目\n", "Day *****\n"), fff);
 			do_level = FALSE;
 			break;
 		}
@@ -502,80 +461,54 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_ART:
 		{
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %sを発見した。\n", hour, min, note_level, note);
-#else
-			fprintf(fff, " %2d:%02d %20s discovered %s.\n", hour, min, note_level, note);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %sを発見した。\n", " %2d:%02d %20s discovered %s.\n"), hour, min, note_level, note);
 			break;
 		}
 		case NIKKI_UNIQUE:
 		{
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %sを倒した。\n", hour, min, note_level, note);
-#else
-			fprintf(fff, " %2d:%02d %20s defeated %s.\n", hour, min, note_level, note);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %sを倒した。\n", " %2d:%02d %20s defeated %s.\n"), hour, min, note_level, note);
 			break;
 		}
 		case NIKKI_FIX_QUEST_C:
 		{
 			if (quest[num].flags & QUEST_FLAG_SILENT) break;
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s クエスト「%s」を達成した。\n", hour, min, note_level, quest[num].name);
-#else
-			fprintf(fff, " %2d:%02d %20s completed quest '%s'.\n", hour, min, note_level, quest[num].name);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n",
+						   " %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level, quest[num].name);
 			break;
 		}
 		case NIKKI_FIX_QUEST_F:
 		{
 			if (quest[num].flags & QUEST_FLAG_SILENT) break;
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", hour, min, note_level, quest[num].name);
-#else
-			fprintf(fff, " %2d:%02d %20s run away from quest '%s'.\n", hour, min, note_level, quest[num].name);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n",
+						   " %2d:%02d %20s run away from quest '%s'.\n"), hour, min, note_level, quest[num].name);
 			break;
 		}
 		case NIKKI_RAND_QUEST_C:
 		{
 			char name[80];
 			strcpy(name, r_name+r_info[quest[num].r_idx].name);
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", hour, min, note_level, name);
-#else
-			fprintf(fff, " %2d:%02d %20s completed random quest '%s'\n", hour, min, note_level, name);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n",
+						   " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
 			break;
 		}
 		case NIKKI_RAND_QUEST_F:
 		{
 			char name[80];
 			strcpy(name, r_name+r_info[quest[num].r_idx].name);
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", hour, min, note_level, name);
-#else
-			fprintf(fff, " %2d:%02d %20s ran away from quest '%s'.\n", hour, min, note_level, name);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n",
+						   " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
 			break;
 		}
 		case NIKKI_MAXDEAPTH:
 		{
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %sの最深階%d階に到達した。\n", hour, min, note_level, d_name+d_info[dungeon_type].name, num);
-#else
-			fprintf(fff, " %2d:%02d %20s reached level %d of %s for the first time.\n", hour, min, note_level, num, d_name+d_info[dungeon_type].name);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
+						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level, d_name+d_info[dungeon_type].name, num);
 			break;
 		}
 		case NIKKI_TRUMP:
 		{
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %s%sの最深階を%d階にセットした。\n", hour, min, note_level, note, d_name + d_info[num].name, max_dlv[num]);
-#else
-			fprintf(fff, " %2d:%02d %20s reset recall level of %s to %d %s.\n", hour, min, note_level, d_name + d_info[num].name, max_dlv[num], note);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n",
+						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note, d_name + d_info[num].name, max_dlv[num]);
 			break;
 		}
 		case NIKKI_STAIR:
@@ -584,173 +517,101 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 			if (q_idx && (is_fixed_quest_idx(q_idx)
 			     && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 			{
-#ifdef JP
-				to = "地上";
-#else
-				to = "the surface";
-#endif
+				to = _("地上", "the surface");
 			}
 			else
 			{
-#ifdef JP
-				if (!(dun_level+num)) to = "地上";
-				else to = format("%d階", dun_level+num);
-#else
-				if (!(dun_level+num)) to = "the surface";
-				else to = format("level %d", dun_level+num);
-#endif
+				if (!(dun_level+num)) to = _("地上", "the surface");
+				else to = format(_("%d階", "level %d"), dun_level+num);
 			}
-
-#ifdef JP 
-			fprintf(fff, " %2d:%02d %20s %sへ%s。\n", hour, min, note_level, to, note);
-#else
-			fprintf(fff, " %2d:%02d %20s %s %s.\n", hour, min, note_level, note, to);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n"), hour, min, note_level, _(to, note), _(note, to));
 			break;
 		}
 		case NIKKI_RECALL:
 		{
 			if (!num)
-#ifdef JP
-				fprintf(fff, " %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", hour, min, note_level, d_name+d_info[dungeon_type].name, max_dlv[dungeon_type]);
-#else
-				fprintf(fff, " %2d:%02d %20s recalled to dungeon level %d of %s.\n", hour, min, note_level, max_dlv[dungeon_type], d_name+d_info[dungeon_type].name);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"), 
+						hour, min, note_level, _(d_name+d_info[dungeon_type].name, max_dlv[dungeon_type]), 
+											   _(max_dlv[dungeon_type], d_name+d_info[dungeon_type].name));
 			else
-#ifdef JP
-				fprintf(fff, " %2d:%02d %20s 帰還を使って地上へと戻った。\n", hour, min, note_level);
-#else
-				fprintf(fff, " %2d:%02d %20s recalled from dungeon to surface.\n", hour, min, note_level);
-#endif
+				fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
 			break;
 		}
 		case NIKKI_TO_QUEST:
 		{
 			if (quest[num].flags & QUEST_FLAG_SILENT) break;
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s クエスト「%s」へと突入した。\n", hour, min, note_level, quest[num].name);
-#else
-			fprintf(fff, " %2d:%02d %20s entered the quest '%s'.\n", hour, min, note_level, quest[num].name);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
+						hour, min, note_level, quest[num].name);
 			break;
 		}
 		case NIKKI_TELE_LEV:
 		{
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s レベル・テレポートで脱出した。\n", hour, min, note_level);
-#else
-			fprintf(fff, " %2d:%02d %20s Got out using teleport level.\n", hour, min, note_level);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s Got out using teleport level.\n"),
+						hour, min, note_level);
 			break;
 		}
 		case NIKKI_BUY:
 		{
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %sを購入した。\n", hour, min, note_level, note);
-#else
-			fprintf(fff, " %2d:%02d %20s bought %s.\n", hour, min, note_level, note);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %sを購入した。\n", " %2d:%02d %20s bought %s.\n"), hour, min, note_level, note);
 			break;
 		}
 		case NIKKI_SELL:
 		{
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %sを売却した。\n", hour, min, note_level, note);
-#else
-			fprintf(fff, " %2d:%02d %20s sold %s.\n", hour, min, note_level, note);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %sを売却した。\n", " %2d:%02d %20s sold %s.\n"), hour, min, note_level, note);
 			break;
 		}
 		case NIKKI_ARENA:
 		{
 			if (num < 0)
 			{
-#ifdef JP
-				fprintf(fff, " %2d:%02d %20s 闘技場の%d回戦で、%sの前に敗れ去った。\n", hour, min, note_level, -num, note);
-#else
 				int n = -num;
-				fprintf(fff, " %2d:%02d %20s beaten by %s in the %d%s fight.\n", hour, min, note_level, note, n, get_ordinal_number_suffix(n));
-#endif
+				fprintf(fff, _(" %2d:%02d %20s 闘技場の%d回戦で、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in the %d%s fight.\n"),
+							hour, min, note_level, _(n, note), _(note, n), _("", get_ordinal_number_suffix(n)));
 				break;
 			}
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s 闘技場の%d回戦(%s)に勝利した。\n", hour, min, note_level, num, note);
-#else
-			fprintf(fff, " %2d:%02d %20s won the %d%s fight (%s).\n", hour, min, note_level, num, get_ordinal_number_suffix(num), note);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s 闘技場の%d回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n"), 
+						hour, min, note_level, num, _(note, get_ordinal_number_suffix(num)), note);
+			
 			if (num == MAX_ARENA_MONS)
 			{
-#ifdef JP
-				fprintf(fff, "                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n");
-#else
-				fprintf(fff, "                 won all fight to become a Chanpion.\n");
-#endif
+				fprintf(fff, _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
+							   "                 won all fight to become a Chanpion.\n"));
 				do_level = FALSE;
 			}
 			break;
 		}
 		case NIKKI_HANMEI:
 		{
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %sを識別した。\n", hour, min, note_level, note);
-#else
-			fprintf(fff, " %2d:%02d %20s identified %s.\n", hour, min, note_level, note);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %sを識別した。\n", " %2d:%02d %20s identified %s.\n"), hour, min, note_level, note);
 			break;
 		}
 		case NIKKI_WIZ_TELE:
 		{
 			cptr to;
 			if (!dun_level)
-#ifdef JP
-				to = "地上";
-#else
-				to = "the surface";
-#endif
+				to = _("地上", "the surface");
 			else
-#ifdef JP
-				to = format("%d階(%s)", dun_level, d_name+d_info[dungeon_type].name);
-#else
-				to = format("level %d of %s", dun_level, d_name+d_info[dungeon_type].name);
-#endif
+				to = format(_("%d階(%s)", "level %d of %s"), dun_level, d_name+d_info[dungeon_type].name);
 
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n", hour, min, note_level, to);
-#else
-			fprintf(fff, " %2d:%02d %20s wizard-teleport to %s.\n", hour, min, note_level, to);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
+						   " %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
 			break;
 		}
 		case NIKKI_PAT_TELE:
 		{
 			cptr to;
 			if (!dun_level)
-#ifdef JP
-				to = "地上";
-#else
-				to = "the surface";
-#endif
+				to = _("地上", "the surface");
 			else
-#ifdef JP
-				to = format("%d階(%s)", dun_level, d_name+d_info[dungeon_type].name);
-#else
-				to = format("level %d of %s", dun_level, d_name+d_info[dungeon_type].name);
-#endif
+				to = format(_("%d階(%s)", "level %d of %s"), dun_level, d_name+d_info[dungeon_type].name);
 
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s %sへとパターンの力で移動した。\n", hour, min, note_level, to);
-#else
-			fprintf(fff, " %2d:%02d %20s used Pattern to teleport to %s.\n", hour, min, note_level, to);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",
+						   " %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
 			break;
 		}
 		case NIKKI_LEVELUP:
 		{
-#ifdef JP
-			fprintf(fff, " %2d:%02d %20s レベルが%dに上がった。\n", hour, min, note_level, num);
-#else
-			fprintf(fff, " %2d:%02d %20s reached player level %d.\n", hour, min, note_level, num);
-#endif
+			fprintf(fff, _(" %2d:%02d %20s レベルが%dに上がった。\n", " %2d:%02d %20s reached player level %d.\n"), hour, min, note_level, num);
 			break;
 		}
 		case NIKKI_GAMESTART:
@@ -771,109 +632,49 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 			switch (num)
 			{
 				case RECORD_NAMED_PET_NAME:
-#ifdef JP
-					fprintf(fff, "%sを旅の友にすることに決めた。\n", note);
-#else
-					fprintf(fff, "decided to travel together with %s.\n", note);
-#endif
+					fprintf(fff, _("%sを旅の友にすることに決めた。\n", "decided to travel together with %s.\n"), note);
 					break;
 				case RECORD_NAMED_PET_UNNAME:
-#ifdef JP
-					fprintf(fff, "%sの名前を消した。\n", note);
-#else
-					fprintf(fff, "unnamed %s.\n", note);
-#endif
+					fprintf(fff, _("%sの名前を消した。\n", "unnamed %s.\n"), note);
 					break;
 				case RECORD_NAMED_PET_DISMISS:
-#ifdef JP
-					fprintf(fff, "%sを解放した。\n", note);
-#else
-					fprintf(fff, "dismissed %s.\n", note);
-#endif
+					fprintf(fff, _("%sを解放した。\n", "dismissed %s.\n"), note);
 					break;
 				case RECORD_NAMED_PET_DEATH:
-#ifdef JP
-					fprintf(fff, "%sが死んでしまった。\n", note);
-#else
-					fprintf(fff, "%s died.\n", note);
-#endif
+					fprintf(fff, _("%sが死んでしまった。\n", "%s died.\n"), note);
 					break;
 				case RECORD_NAMED_PET_MOVED:
-#ifdef JP
-					fprintf(fff, "%sをおいて別のマップへ移動した。\n", note);
-#else
-					fprintf(fff, "moved to another map leaving %s behind.\n", note);
-#endif
+					fprintf(fff, _("%sをおいて別のマップへ移動した。\n", "moved to another map leaving %s behind.\n"), note);
 					break;
 				case RECORD_NAMED_PET_LOST_SIGHT:
-#ifdef JP
-					fprintf(fff, "%sとはぐれてしまった。\n", note);
-#else
-					fprintf(fff, "lost sight of %s.\n", note);
-#endif
+					fprintf(fff, _("%sとはぐれてしまった。\n", "lost sight of %s.\n"), note);
 					break;
 				case RECORD_NAMED_PET_DESTROY:
-#ifdef JP
-					fprintf(fff, "%sが*破壊*によって消え去った。\n", note);
-#else
-					fprintf(fff, "%s was made disappeared by *destruction*.\n", note);
-#endif
+					fprintf(fff, _("%sが*破壊*によって消え去った。\n", "%s was made disappeared by *destruction*.\n"), note);
 					break;
 				case RECORD_NAMED_PET_EARTHQUAKE:
-#ifdef JP
-					fprintf(fff, "%sが岩石に押し潰された。\n", note);
-#else
-					fprintf(fff, "%s was crushed by falling rocks.\n", note);
-#endif
+					fprintf(fff, _("%sが岩石に押し潰された。\n", "%s was crushed by falling rocks.\n"), note);
 					break;
 				case RECORD_NAMED_PET_GENOCIDE:
-#ifdef JP
-					fprintf(fff, "%sが抹殺によって消え去った。\n", note);
-#else
-					fprintf(fff, "%s was made disappeared by genocide.\n", note);
-#endif
+					fprintf(fff, _("%sが抹殺によって消え去った。\n", "%s was made disappeared by genocide.\n"), note);
 					break;
 				case RECORD_NAMED_PET_WIZ_ZAP:
-#ifdef JP
-					fprintf(fff, "%sがデバッグコマンドによって消え去った。\n", note);
-#else
-					fprintf(fff, "%s was removed by debug command.\n", note);
-#endif
+					fprintf(fff, _("%sがデバッグコマンドによって消え去った。\n", "%s was removed by debug command.\n"), note);
 					break;
 				case RECORD_NAMED_PET_TELE_LEVEL:
-#ifdef JP
-					fprintf(fff, "%sがテレポート・レベルによって消え去った。\n", note);
-#else
-					fprintf(fff, "%s was made disappeared by teleport level.\n", note);
-#endif
+					fprintf(fff, _("%sがテレポート・レベルによって消え去った。\n", "%s was made disappeared by teleport level.\n"), note);
 					break;
 				case RECORD_NAMED_PET_BLAST:
-#ifdef JP
-					fprintf(fff, "%sを爆破した。\n", note);
-#else
-					fprintf(fff, "blasted %s.\n", note);
-#endif
+					fprintf(fff, _("%sを爆破した。\n", "blasted %s.\n"), note);
 					break;
 				case RECORD_NAMED_PET_HEAL_LEPER:
-#ifdef JP
-					fprintf(fff, "%sの病気が治り旅から外れた。\n", note);
-#else
-					fprintf(fff, "%s was healed and left.\n", note);
-#endif
+					fprintf(fff, _("%sの病気が治り旅から外れた。\n", "%s was healed and left.\n"), note);
 					break;
 				case RECORD_NAMED_PET_COMPACT:
-#ifdef JP
-					fprintf(fff, "%sがモンスター情報圧縮によって消え去った。\n", note);
-#else
-					fprintf(fff, "%s was made disappeared by compacting monsters.\n", note);
-#endif
+					fprintf(fff, _("%sがモンスター情報圧縮によって消え去った。\n", "%s was made disappeared by compacting monsters.\n"), note);
 					break;
 				case RECORD_NAMED_PET_LOSE_PARENT:
-#ifdef JP
-					fprintf(fff, "%sの召喚者が既にいないため消え去った。\n", note);
-#else
-					fprintf(fff, "%s disappeared because there does not exist summoner.\n", note);
-#endif
+					fprintf(fff, _("%sの召喚者が既にいないため消え去った。\n", "%s disappeared because there does not exist summoner.\n"), note);
 					break;
 				default:
 					fprintf(fff, "\n");
@@ -971,11 +772,7 @@ static void do_cmd_disp_nikki(void)
 					   "Time is money.",
 					   "Quest of The World's Greatest Brain"};
 #endif
-#ifdef JP
-	sprintf(file_name,"playrecord-%s.txt",savefile_base);
-#else
-	sprintf(file_name,"playrec-%s.txt",savefile_base);
-#endif
+	sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
@@ -1007,11 +804,7 @@ static void do_cmd_bunshou(void)
 	char tmp[80] = "\0";
 	char bunshou[80] = "\0";
 
-#ifdef JP
-	if (get_string("内容: ", tmp, 79))
-#else
-	if (get_string("diary note: ", tmp, 79))
-#endif
+	if (get_string(_("内容: ", "diary note: "), tmp, 79))
 	{
 		strcpy(bunshou, tmp);
 
@@ -1030,20 +823,12 @@ static void do_cmd_last_get(void)
 
 	if (record_o_name[0] == '\0') return;
 
-#ifdef JP
-	sprintf(buf,"%sの入手を記録します。",record_o_name);
-#else
-	sprintf(buf,"Do you really want to record getting %s? ",record_o_name);
-#endif
+	sprintf(buf,_("%sの入手を記録します。", "Do you really want to record getting %s? "),record_o_name);
 	if (!get_check(buf)) return;
 
 	turn_tmp = turn;
 	turn = record_turn;
-#ifdef JP
-	sprintf(buf,"%sを手に入れた。", record_o_name);
-#else
-	sprintf(buf,"descover %s.", record_o_name);
-#endif
+	sprintf(buf,_("%sを手に入れた。", "descover %s."), record_o_name);
 	do_cmd_write_nikki(NIKKI_BUNSHOU, 0, buf);
 	turn = turn_tmp;
 }
@@ -1054,17 +839,8 @@ static void do_cmd_erase_nikki(void)
 	char buf[256];
 	FILE *fff = NULL;
 
-#ifdef JP
-	if (!get_check("本当に記録を消去しますか？")) return;
-#else
-	if (!get_check("Do you really want to delete all your record? ")) return;
-#endif
-
-#ifdef JP
-	sprintf(file_name,"playrecord-%s.txt",savefile_base);
-#else
-	sprintf(file_name,"playrec-%s.txt",savefile_base);
-#endif
+	if (!get_check(_("本当に記録を消去しますか？", "Do you really want to delete all your record? "))) return;
+		sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
@@ -1075,17 +851,9 @@ static void do_cmd_erase_nikki(void)
 	fff = my_fopen(buf, "w");
 	if(fff){
 		my_fclose(fff);
-#ifdef JP
-		msg_format("記録を消去しました。");
-#else
-		msg_format("deleted record.");
-#endif
+		msg_format(_("記録を消去しました。", "deleted record."));
 	}else{
-#ifdef JP
-		msg_format("%s の消去に失敗しました。", buf);
-#else
-		msg_format("failed to delete %s.", buf);
-#endif
+		msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), buf);
 	}
 	msg_print(NULL);
 }
@@ -1111,38 +879,18 @@ void do_cmd_nikki(void)
 		Term_clear();
 
 		/* Ask for a choice */
-#ifdef JP
-		prt("[ 記録の設定 ]", 2, 0);
-#else
-		prt("[ Play Record ]", 2, 0);
-#endif
-
+		prt(_("[ 記録の設定 ]", "[ Play Record ]"), 2, 0);
 
 		/* Give some choices */
-#ifdef JP
-		prt("(1) 記録を見る", 4, 5);
-		prt("(2) 文章を記録する", 5, 5);
-		prt("(3) 直前に入手又は鑑定したものを記録する", 6, 5);
-		prt("(4) 記録を消去する", 7, 5);
+		prt(_("(1) 記録を見る", "(1) Display your record"), 4, 5);
+		prt(_("(2) 文章を記録する", "(2) Add record"), 5, 5);
+		prt(_("(3) 直前に入手又は鑑定したものを記録する", "(3) Record item you last get/identify"), 6, 5);
+		prt(_("(4) 記録を消去する", "(4) Delete your record"), 7, 5);
 
-		prt("(R) プレイ動画を記録する/中止する", 9, 5);
-#else
-		prt("(1) Display your record", 4, 5);
-		prt("(2) Add record", 5, 5);
-		prt("(3) Record item you last get/identify", 6, 5);
-		prt("(4) Delete your record", 7, 5);
-
-		prt("(R) Record playing movie / or stop it", 9, 5);
-#endif
-
+		prt(_("(R) プレイ動画を記録する/中止する", "(R) Record playing movie / or stop it"), 9, 5);
 
 		/* Prompt */
-#ifdef JP
-		prt("コマンド:", 18, 0);
-#else
-		prt("Command: ", 18, 0);
-#endif
-
+		prt(_("コマンド:", "Command: "), 18, 0);
 
 		/* Prompt */
 		i = inkey();
@@ -1323,12 +1071,7 @@ void do_cmd_change_name(void)
 		else if (c == 'f')
 		{
 			sprintf(tmp, "%s.txt", player_base);
-#ifdef JP
-			if (get_string("ファイル名: ", tmp, 80))
-#else
-			if (get_string("File name: ", tmp, 80))
-#endif
-
+			if (get_string(_("ファイル名: ", "File name: "), tmp, 80))
 			{
 				if (tmp[0] && (tmp[0] != ' '))
 				{
@@ -1481,11 +1224,8 @@ void do_cmd_messages(int num_now)
 #endif
 
 		/* Display prompt (not very informative) */
-#ifdef JP
-		prt("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]", hgt - 1, 0);
-#else
-		prt("[Press 'p' for older, 'n' for newer, ..., or ESCAPE]", hgt - 1, 0);
-#endif
+		prt(_("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]",
+			  "[Press 'p' for older, 'n' for newer, ..., or ESCAPE]"), hgt - 1, 0);
 
 		/* Get a command */
 		skey = inkey_special(TRUE);
@@ -1501,11 +1241,7 @@ void do_cmd_messages(int num_now)
 		/* Hack -- handle show */
 		case '=':
 			/* Prompt */
-#ifdef JP
-			prt("強調: ", hgt - 1, 0);
-#else
-			prt("Show: ", hgt - 1, 0);
-#endif
+			prt(_("強調: ", "Show: "), hgt - 1, 0);
 
 			/* Get a "shower" string, or continue */
 			strcpy(back_str, shower_str);
@@ -1526,11 +1262,7 @@ void do_cmd_messages(int num_now)
 				int z;
 
 				/* Prompt */
-#ifdef JP
-				prt("検索: ", hgt - 1, 0);
-#else
-				prt("Find: ", hgt - 1, 0);
-#endif
+				prt(_("検索: ", "Find: "), hgt - 1, 0);
 
 				/* Get a "finder" string, or continue */
 				strcpy(back_str, finder_str);
@@ -1645,59 +1377,31 @@ void do_cmd_messages(int num_now)
 static option_type cheat_info[CHEAT_MAX] =
 {
 	{ &cheat_peek,		FALSE,	255,	0x01, 0x00,
-#ifdef JP
-	"cheat_peek",		"アイテムの生成をのぞき見る"
-#else
-	"cheat_peek",		"Peek into object creation"
-#endif
+		"cheat_peek",		_("アイテムの生成をのぞき見る", "Peek into object creation")
 	},
 
 	{ &cheat_hear,		FALSE,	255,	0x02, 0x00,
-#ifdef JP
-	"cheat_hear",		"モンスターの生成をのぞき見る"
-#else
-	"cheat_hear",		"Peek into monster creation"
-#endif
+		"cheat_hear",		_("モンスターの生成をのぞき見る", "Peek into monster creation")
 	},
 
 	{ &cheat_room,		FALSE,	255,	0x04, 0x00,
-#ifdef JP
-	"cheat_room",		"ダンジョンの生成をのぞき見る"
-#else
-	"cheat_room",		"Peek into dungeon creation"
-#endif
+		"cheat_room",		_("ダンジョンの生成をのぞき見る", "Peek into dungeon creation")
 	},
 
 	{ &cheat_xtra,		FALSE,	255,	0x08, 0x00,
-#ifdef JP
-	"cheat_xtra",		"その他の事をのぞき見る"
-#else
-	"cheat_xtra",		"Peek into something else"
-#endif
+		"cheat_xtra",		_("その他の事をのぞき見る", "Peek into something else")
 	},
 
 	{ &cheat_know,		FALSE,	255,	0x10, 0x00,
-#ifdef JP
-	"cheat_know",		"完全なモンスターの思い出を知る"
-#else
-	"cheat_know",		"Know complete monster info"
-#endif
+		"cheat_know",		_("完全なモンスターの思い出を知る", "Know complete monster info")
 	},
 
 	{ &cheat_live,		FALSE,	255,	0x20, 0x00,
-#ifdef JP
-	"cheat_live",		"死を回避することを可能にする"
-#else
-	"cheat_live",		"Allow player to avoid death"
-#endif
+		"cheat_live",		_("死を回避することを可能にする", "Allow player to avoid death")
 	},
 
 	{ &cheat_save,		FALSE,	255,	0x40, 0x00,
-#ifdef JP
-	"cheat_save",		"死んだ時セーブするか確認する"
-#else
-	"cheat_save",		"Ask for saving death"
-#endif
+		"cheat_save",		_("死んだ時セーブするか確認する", "Ask for saving death")
 	}
 };
 
@@ -1725,11 +1429,7 @@ static void do_cmd_options_cheat(cptr info)
 		int dir;
 
 		/* Prompt XXX XXX XXX */
-#ifdef JP
-		sprintf(buf, "%s ( リターンで次へ, y/n でセット, ESC で決定 )", info);
-#else
-		sprintf(buf, "%s (RET to advance, y/n to set, ESC to accept) ", info);
-#endif
+		sprintf(buf, _("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info);
 
 		prt(buf, 0, 0);
 
@@ -1751,12 +1451,7 @@ static void do_cmd_options_cheat(cptr info)
 			/* Display the option text */
 			sprintf(buf, "%-48s: %s (%s)",
 			    cheat_info[i].o_desc,
-#ifdef JP
-			    (*cheat_info[i].o_var ? "はい  " : "いいえ"),
-#else
-			    (*cheat_info[i].o_var ? "yes" : "no "),
-#endif
-
+			    (*cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
 			    cheat_info[i].o_text);
 			c_prt(a, buf, i + 2, 0);
 		}
@@ -1804,11 +1499,8 @@ static void do_cmd_options_cheat(cptr info)
 			case '6':
 			{
 				if(!p_ptr->noscore)
-#ifdef JP
-					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "詐欺オプションをONにして、スコアを残せなくなった。");
-#else
-					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up sending score to use cheating options.");
-#endif
+				do_cmd_write_nikki(NIKKI_BUNSHOU, 0,
+							_("詐欺オプションをONにして、スコアを残せなくなった。", "give up sending score to use cheating options."));
 				p_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
 				(*cheat_info[k].o_var) = TRUE;
 				k = (k + 1) % n;
@@ -1826,11 +1518,7 @@ static void do_cmd_options_cheat(cptr info)
 
 			case '?':
 			{
-#ifdef JP
-				strnfmt(buf, sizeof(buf), "joption.txt#%s", cheat_info[k].o_text);
-#else
-				strnfmt(buf, sizeof(buf), "option.txt#%s", cheat_info[k].o_text);
-#endif
+				strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), cheat_info[k].o_text);
 				/* Peruse the help file */
 				(void)show_file(TRUE, buf, NULL, 0, 0);
 
@@ -1854,20 +1542,10 @@ static void do_cmd_options_cheat(cptr info)
 static option_type autosave_info[2] =
 {
 	{ &autosave_l,      FALSE, 255, 0x01, 0x00,
-#ifdef JP
-	    "autosave_l",    "新しい階に入る度に自動セーブする" },
-#else
-	    "autosave_l",    "Autosave when entering new levels" },
-#endif
-
+	    "autosave_l",    _("新しい階に入る度に自動セーブする", "Autosave when entering new levels") },
 
 	{ &autosave_t,      FALSE, 255, 0x02, 0x00,
-#ifdef JP
-	    "autosave_t",   "一定ターン毎に自動セーブする" },
-#else
-	    "autosave_t",   "Timed autosave" },
-#endif
-
+	    "autosave_t",   _("一定ターン毎に自動セーブする", "Timed autosave") },
 };
 
 /*!
@@ -1914,11 +1592,8 @@ static void do_cmd_options_autosave(cptr info)
 	while (TRUE)
 	{
 		/* Prompt XXX XXX XXX */
-#ifdef JP
-		sprintf(buf, "%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", info);
-#else
-		sprintf(buf, "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) ", info);
-#endif
+		sprintf(buf, _("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", 
+					   "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info);
 
 		prt(buf, 0, 0);
 
@@ -1933,23 +1608,11 @@ static void do_cmd_options_autosave(cptr info)
 			/* Display the option text */
 			sprintf(buf, "%-48s: %s (%s)",
 			    autosave_info[i].o_desc,
-#ifdef JP
-			    (*autosave_info[i].o_var ? "はい  " : "いいえ"),
-#else
-			    (*autosave_info[i].o_var ? "yes" : "no "),
-#endif
-
+			    (*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
 			    autosave_info[i].o_text);
 			c_prt(a, buf, i + 2, 0);
 		}
-
-#ifdef JP
-		prt(format("自動セーブの頻度： %d ターン毎",  autosave_freq), 5, 0);
-#else
-		prt(format("Timed autosave frequency: every %d turns",  autosave_freq), 5, 0);
-#endif
-
-
+		prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"),  autosave_freq), 5, 0);
 
 		/* Hilite current option */
 		move_cursor(k + 2, 50);
@@ -2004,25 +1667,13 @@ static void do_cmd_options_autosave(cptr info)
 			case 'F':
 			{
 				autosave_freq = toggle_frequency(autosave_freq);
-#ifdef JP
-				prt(format("自動セーブの頻度： %d ターン毎", 
-					   autosave_freq), 5, 0);
-#else
-				prt(format("Timed autosave frequency: every %d turns",
-					   autosave_freq), 5, 0);
-#endif
+				prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
 				break;
 			}
 
 			case '?':
 			{
-#ifdef JP
-				(void)show_file(TRUE, "joption.txt#Autosave", NULL, 0, 0);
-#else
-				(void)show_file(TRUE, "option.txt#Autosave", NULL, 0, 0);
-#endif
-
-
+				(void)show_file(TRUE, _("joption.txt#Autosave", "option.txt#Autosave"), NULL, 0, 0);
 				Term_clear(); 
 				break;
 			}
@@ -2074,21 +1725,14 @@ void do_cmd_options_aux(int page, cptr info)
 		int dir;
 
 		/* Prompt XXX XXX XXX */
-#ifdef JP
-		sprintf(buf, "%s (リターン:次, %sESC:終了, ?:ヘルプ) ", info, browse_only ? "" : "y/n:変更, ");
-#else
-		sprintf(buf, "%s (RET:next, %s, ?:help) ", info, browse_only ? "ESC:exit" : "y/n:change, ESC:accept");
-#endif
-
+		sprintf(buf, _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "),
+					info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept"));
 		prt(buf, 0, 0);
 
-
 		/* HACK -- description for easy-auto-destroy options */
-#ifdef JP
-		if (page == OPT_PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "以下のオプションは、簡易自動破壊を使用するときのみ有効", 6, 6);
-#else
-		if (page == OPT_PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 6, 3);
-#endif
+		if (page == OPT_PAGE_AUTODESTROY) 
+			c_prt(TERM_YELLOW, _("以下のオプションは、簡易自動破壊を使用するときのみ有効", 
+								 "Following options will protect items from easy auto-destroyer."), 6, _(6, 3));
 
 		/* Display the options */
 		for (i = 0; i < n; i++)
@@ -2101,12 +1745,7 @@ void do_cmd_options_aux(int page, cptr info)
 			/* Display the option text */
 			sprintf(buf, "%-48s: %s (%.19s)",
 				option_info[opt[i]].o_desc,
-#ifdef JP
-				(*option_info[opt[i]].o_var ? "はい  " : "いいえ"),
-#else
-				(*option_info[opt[i]].o_var ? "yes" : "no "),
-#endif
-
+				(*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
 				option_info[opt[i]].o_text);
 			if ((page == OPT_PAGE_AUTODESTROY) && i > 2) c_prt(a, buf, i + 5, 0);
 			else c_prt(a, buf, i + 2, 0);
@@ -2182,11 +1821,7 @@ void do_cmd_options_aux(int page, cptr info)
 
 			case '?':
 			{
-#ifdef JP
-				strnfmt(buf, sizeof(buf), "joption.txt#%s", option_info[opt[k]].o_text);
-#else
-				strnfmt(buf, sizeof(buf), "option.txt#%s", option_info[opt[k]].o_text);
-#endif
+				strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), option_info[opt[k]].o_text);
 				/* Peruse the help file */
 				(void)show_file(TRUE, buf, NULL, 0, 0);
 
@@ -2238,12 +1873,7 @@ static void do_cmd_options_win(void)
 	while (go)
 	{
 		/* Prompt XXX XXX XXX */
-#ifdef JP
-		prt("ウィンドウ・フラグ (<方向>で移動, tでチェンジ, y/n でセット, ESC)", 0, 0);
-#else
-		prt("Window Flags (<dir>, t, y, n, ESC) ", 0, 0);
-#endif
-
+		prt(_("ウィンドウ・フラグ (<方向>で移動, tでチェンジ, y/n でセット, ESC)", "Window Flags (<dir>, t, y, n, ESC) "), 0, 0);
 
 		/* Display the windows */
 		for (j = 0; j < 8; j++)
@@ -2270,12 +1900,7 @@ static void do_cmd_options_win(void)
 			if (i == y) a = TERM_L_BLUE;
 
 			/* Unused option */
-#ifdef JP
-			if (!str) str = "(未使用)";
-#else
-			if (!str) str = "(Unused option)";
-#endif
-
+			if (!str) str = _("(未使用)", "(Unused option)");
 
 			/* Flag name */
 			Term_putstr(0, i + 5, -1, a, str);
@@ -2352,12 +1977,7 @@ static void do_cmd_options_win(void)
 
 			case '?':
 			{
-#ifdef JP
-				(void)show_file(TRUE, "joption.txt#Window", NULL, 0, 0);
-#else
-				(void)show_file(TRUE, "option.txt#Window", NULL, 0, 0);
-#endif
-
+				(void)show_file(TRUE, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
 
 				Term_clear(); 
 				break;
@@ -2483,11 +2103,7 @@ void do_cmd_options(void)
 		Term_clear();
 
 		/* Why are we here */
-#ifdef JP
-		prt("[ オプションの設定 ]", 1, 0);
-#else
-		prt("TinyAngband options", 1, 0);
-#endif
+		prt(_("[ オプションの設定 ]", "TinyAngband options"), 1, 0);
 
 		while(1)
 		{
@@ -2500,11 +2116,7 @@ void do_cmd_options(void)
 					format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name));
 			}
 
-#ifdef JP
-			prt("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", 21, 0);
-#else
-			prt("Move to <dir>, Select to Enter, Cancel to ESC, ? to help: ", 21, 0);
-#endif
+			prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
 
 			/* Get command */
 			skey = inkey_special(TRUE);
@@ -2548,66 +2160,42 @@ void do_cmd_options(void)
 			case '1':
 			{
 				/* Process the general options */
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_INPUT, "キー入力オプション");
-#else
-				do_cmd_options_aux(OPT_PAGE_INPUT, "Input Options");
-#endif
+				do_cmd_options_aux(OPT_PAGE_INPUT, _("キー入力オプション", "Input Options"));
 				break;
 			}
 
 			case '2':
 			{
 				/* Process the general options */
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_MAPSCREEN, "マップ画面オプション");
-#else
-				do_cmd_options_aux(OPT_PAGE_MAPSCREEN, "Map Screen Options");
-#endif
+				do_cmd_options_aux(OPT_PAGE_MAPSCREEN, _("マップ画面オプション", "Map Screen Options"));
 				break;
 			}
 
 			case '3':
 			{
 				/* Spawn */
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_TEXT, "テキスト表示オプション");
-#else
-				do_cmd_options_aux(OPT_PAGE_TEXT, "Text Display Options");
-#endif
+				do_cmd_options_aux(OPT_PAGE_TEXT, _("テキスト表示オプション", "Text Display Options"));
 				break;
 			}
 
 			case '4':
 			{
 				/* Spawn */
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_GAMEPLAY, "ゲームプレイ・オプション");
-#else
-				do_cmd_options_aux(OPT_PAGE_GAMEPLAY, "Game-Play Options");
-#endif
+				do_cmd_options_aux(OPT_PAGE_GAMEPLAY, _("ゲームプレイ・オプション", "Game-Play Options"));
 				break;
 			}
 
 			case '5':
 			{
 				/* Spawn */
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_DISTURBANCE, "行動中止関係のオプション");
-#else
-				do_cmd_options_aux(OPT_PAGE_DISTURBANCE, "Disturbance Options");
-#endif
+				do_cmd_options_aux(OPT_PAGE_DISTURBANCE, _("行動中止関係のオプション", "Disturbance Options"));
 				break;
 			}
 
 			case '6':
 			{
 				/* Spawn */
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_AUTODESTROY, "簡易自動破壊オプション");
-#else
-				do_cmd_options_aux(OPT_PAGE_AUTODESTROY, "Easy Auto-Destroyer Options");
-#endif
+				do_cmd_options_aux(OPT_PAGE_AUTODESTROY, _("簡易自動破壊オプション", "Easy Auto-Destroyer Options"));
 				break;
 			}
 
@@ -2616,11 +2204,7 @@ void do_cmd_options(void)
 			case 'r':
 			{
 				/* Spawn */
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_PLAYRECORD, "プレイ記録オプション");
-#else
-				do_cmd_options_aux(OPT_PAGE_PLAYRECORD, "Play-record Options");
-#endif
+				do_cmd_options_aux(OPT_PAGE_PLAYRECORD, _("プレイ記録オプション", "Play-record Options"));
 				break;
 			}
 
@@ -2629,11 +2213,9 @@ void do_cmd_options(void)
 			case 'b':
 			{
 				/* Spawn */
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_BIRTH, (!p_ptr->wizard || !allow_debug_opts) ? "初期オプション(参照のみ)" : "初期オプション((*)はスコアに影響)");
-#else
-				do_cmd_options_aux(OPT_PAGE_BIRTH, (!p_ptr->wizard || !allow_debug_opts) ? "Birth Options(browse only)" : "Birth Options((*)s effect score)");
-#endif
+				do_cmd_options_aux(OPT_PAGE_BIRTH, (!p_ptr->wizard || !allow_debug_opts) ? 
+							_("初期オプション(参照のみ)", "Birth Options(browse only)") : 
+							_("初期オプション((*)はスコアに影響)", "Birth Options((*)s effect score)"));
 				break;
 			}
 
@@ -2648,22 +2230,14 @@ void do_cmd_options(void)
 				}
 
 				/* Spawn */
-#ifdef JP
-				do_cmd_options_cheat("詐欺師は決して勝利できない！");
-#else
-				do_cmd_options_cheat("Cheaters never win");
-#endif
+				do_cmd_options_cheat(_("詐欺師は決して勝利できない！", "Cheaters never win"));
 				break;
 			}
 
 			case 'a':
 			case 'A':
 			{
-#ifdef JP
-				do_cmd_options_autosave("自動セーブ");
-#else
-				do_cmd_options_autosave("Autosave");
-#endif
+				do_cmd_options_autosave(_("自動セーブ", "Autosave"));
 				break;
 			}
 
@@ -2695,39 +2269,19 @@ void do_cmd_options(void)
 			{
 				/* Prompt */
 				clear_from(18);
-#ifdef JP
-				prt("コマンド: 基本ウェイト量", 19, 0);
-#else
-				prt("Command: Base Delay Factor", 19, 0);
-#endif
+				prt(_("コマンド: 基本ウェイト量", "Command: Base Delay Factor"), 19, 0);
 
 				/* Get a new value */
 				while (1)
 				{
 					int msec = delay_factor * delay_factor * delay_factor;
-#ifdef JP
-					prt(format("現在のウェイト: %d (%dミリ秒)",
-						   delay_factor, msec), 22, 0);
-#else
-					prt(format("Current base delay factor: %d (%d msec)",
-						   delay_factor, msec), 22, 0);
-#endif
-
-#ifdef JP
-					prt("ウェイト (0-9) ESCで決定: ", 20, 0);
-#else
-					prt("Delay Factor (0-9 or ESC to accept): ", 20, 0);
-#endif
-
+					prt(format(_("現在のウェイト: %d (%dミリ秒)", "Current base delay factor: %d (%d msec)"), delay_factor, msec), 22, 0);
+					prt(_("ウェイト (0-9) ESCで決定: ", "Delay Factor (0-9 or ESC to accept): "), 20, 0);
 					k = inkey();
 					if (k == ESCAPE) break;
 					else if (k == '?')
 					{
-#ifdef JP
-						(void)show_file(TRUE, "joption.txt#BaseDelay", NULL, 0, 0);
-#else
-						(void)show_file(TRUE, "option.txt#BaseDelay", NULL, 0, 0);
-#endif
+						(void)show_file(TRUE, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), NULL, 0, 0);
 						Term_clear(); 
 					}
 					else if (isdigit(k)) delay_factor = D2I(k);
@@ -2743,38 +2297,18 @@ void do_cmd_options(void)
 			{
 				/* Prompt */
 				clear_from(18);
-#ifdef JP
-				prt("コマンド: 低ヒットポイント警告", 19, 0);
-#else
-				prt("Command: Hitpoint Warning", 19, 0);
-#endif
+				prt(_("コマンド: 低ヒットポイント警告", "Command: Hitpoint Warning"), 19, 0);
 
 				/* Get a new value */
 				while (1)
 				{
-#ifdef JP
-					prt(format("現在の低ヒットポイント警告: %d0%%",
-						   hitpoint_warn), 22, 0);
-#else
-					prt(format("Current hitpoint warning: %d0%%",
-						   hitpoint_warn), 22, 0);
-#endif
-
-#ifdef JP
-					prt("低ヒットポイント警告 (0-9) ESCで決定: ", 20, 0);
-#else
-					prt("Hitpoint Warning (0-9 or ESC to accept): ", 20, 0);
-#endif
-
+					prt(format(_("現在の低ヒットポイント警告: %d0%%", "Current hitpoint warning: %d0%%"), hitpoint_warn), 22, 0);
+					prt(_("低ヒットポイント警告 (0-9) ESCで決定: ", "Hitpoint Warning (0-9 or ESC to accept): "), 20, 0);
 					k = inkey();
 					if (k == ESCAPE) break;
 					else if (k == '?')
 					{
-#ifdef JP
-						(void)show_file(TRUE, "joption.txt#Hitpoint", NULL, 0, 0);
-#else
-						(void)show_file(TRUE, "option.txt#Hitpoint", NULL, 0, 0);
-#endif
+						(void)show_file(TRUE, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), NULL, 0, 0);
 						Term_clear(); 
 					}
 					else if (isdigit(k)) hitpoint_warn = D2I(k);
@@ -2790,38 +2324,18 @@ void do_cmd_options(void)
 			{
 				/* Prompt */
 				clear_from(18);
-#ifdef JP
-				prt("コマンド: 低魔力色閾値", 19, 0);
-#else
-				prt("Command: Mana Color Threshold", 19, 0);
-#endif
-
+				prt(_("コマンド: 低魔力色閾値", "Command: Mana Color Threshold"), 19, 0);
+				
 				/* Get a new value */
 				while (1)
 				{
-#ifdef JP
-					prt(format("現在の低魔力色閾値: %d0%%",
-						   mana_warn), 22, 0);
-#else
-					prt(format("Current mana color threshold: %d0%%",
-						   mana_warn), 22, 0);
-#endif
-
-#ifdef JP
-					prt("低魔力閾値 (0-9) ESCで決定: ", 20, 0);
-#else
-					prt("Mana color Threshold (0-9 or ESC to accept): ", 20, 0);
-#endif
-
+					prt(format(_("現在の低魔力色閾値: %d0%%", "Current mana color threshold: %d0%%"), mana_warn), 22, 0);
+					prt(_("低魔力閾値 (0-9) ESCで決定: ", "Mana color Threshold (0-9 or ESC to accept): "), 20, 0);
 					k = inkey();
 					if (k == ESCAPE) break;
 					else if (k == '?')
 					{
-#ifdef JP
-						(void)show_file(TRUE, "joption.txt#Manapoint", NULL, 0, 0);
-#else
-						(void)show_file(TRUE, "option.txt#Manapoint", NULL, 0, 0);
-#endif
+						(void)show_file(TRUE, _("joption.txt#Manapoint", "option.txt#Manapoint"), NULL, 0, 0);
 						Term_clear(); 
 					}
 					else if (isdigit(k)) mana_warn = D2I(k);
@@ -2832,11 +2346,7 @@ void do_cmd_options(void)
 			}
 
 			case '?':
-#ifdef JP
-				(void)show_file(TRUE, "joption.txt", NULL, 0, 0);
-#else
-				(void)show_file(TRUE, "option.txt", NULL, 0, 0);
-#endif
+				(void)show_file(TRUE, _("joption.txt", "option.txt"), NULL, 0, 0);
 				Term_clear(); 
 				break;
 
@@ -2878,12 +2388,7 @@ void do_cmd_pref(void)
 	strcpy(buf, "");
 
 	/* Ask for a "user pref command" */
-#ifdef JP
-	if (!get_string("設定変更コマンド: ", buf, 80)) return;
-#else
-	if (!get_string("Pref: ", buf, 80)) return;
-#endif
-
+	if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) return;
 
 	/* Process that pref command */
 	(void)process_pref_file_command(buf);
@@ -2895,12 +2400,7 @@ void do_cmd_pref(void)
  */
 void do_cmd_reload_autopick(void)
 {
-#ifdef JP
-	if (!get_check("自動拾い設定ファイルをロードしますか? ")) return;
-#else
-	if (!get_check("Reload auto-pick preference file? ")) return;
-#endif
-
+	if (!get_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? "))) return;
 	/* Load the file with messages */
 	autopick_load_pref(TRUE);
 }
@@ -2930,12 +2430,8 @@ static errr macro_dump(cptr fname)
 	if (!open_auto_dump(buf, mark)) return (-1);
 
 	/* Start dumping */
-#ifdef JP
-	auto_dump_printf("\n# 自動マクロセーブ\n\n");
-#else
-	auto_dump_printf("\n# Automatic macro dump\n\n");
-#endif
-
+	auto_dump_printf(_("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
+	
 	/* Dump them */
 	for (i = 0; i < macro__num; i++)
 	{
@@ -3100,12 +2596,8 @@ static errr keymap_dump(cptr fname)
 	if (!open_auto_dump(buf, mark)) return -1;
 
 	/* Start dumping */
-#ifdef JP
-	auto_dump_printf("\n# 自動キー配置セーブ\n\n");
-#else
-	auto_dump_printf("\n# Automatic keymap dump\n\n");
-#endif
-
+	auto_dump_printf(_("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
+	
 	/* Dump them */
 	for (i = 0; i < 256; i++)
 	{
@@ -3187,21 +2679,10 @@ void do_cmd_macros(void)
 		Term_clear();
 
 		/* Describe */
-#ifdef JP
-		prt("[ マクロの設定 ]", 2, 0);
-#else
-		prt("Interact with Macros", 2, 0);
-#endif
-
-
+		prt(_("[ マクロの設定 ]", "Interact with Macros"), 2, 0);
 
 		/* Describe that action */
-#ifdef JP
-		prt("マクロ行動が(もしあれば)下に表示されます:", 20, 0);
-#else
-		prt("Current action (if any) shown below:", 20, 0);
-#endif
-
+		prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
 
 		/* Analyze the current action */
 		ascii_to_text(buf, macro__buf);
@@ -3211,44 +2692,21 @@ void do_cmd_macros(void)
 
 
 		/* Selections */
-#ifdef JP
-		prt("(1) ユーザー設定ファイルのロード", 4, 5);
-#else
-		prt("(1) Load a user pref file", 4, 5);
-#endif
-
+		prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
 #ifdef ALLOW_MACROS
-#ifdef JP
-		prt("(2) ファイルにマクロを追加", 5, 5);
-		prt("(3) マクロの確認", 6, 5);
-		prt("(4) マクロの作成", 7, 5);
-		prt("(5) マクロの削除", 8, 5);
-		prt("(6) ファイルにキー配置を追加", 9, 5);
-		prt("(7) キー配置の確認", 10, 5);
-		prt("(8) キー配置の作成", 11, 5);
-		prt("(9) キー配置の削除", 12, 5);
-		prt("(0) マクロ行動の入力", 13, 5);
-#else
-		prt("(2) Append macros to a file", 5, 5);
-		prt("(3) Query a macro", 6, 5);
-		prt("(4) Create a macro", 7, 5);
-		prt("(5) Remove a macro", 8, 5);
-		prt("(6) Append keymaps to a file", 9, 5);
-		prt("(7) Query a keymap", 10, 5);
-		prt("(8) Create a keymap", 11, 5);
-		prt("(9) Remove a keymap", 12, 5);
-		prt("(0) Enter a new action", 13, 5);
-#endif
-
+		prt(_("(2) ファイルにマクロを追加", "(2) Append macros to a file"), 5, 5);
+		prt(_("(3) マクロの確認", "(3) Query a macro"), 6, 5);
+		prt(_("(4) マクロの作成", "(4) Create a macro"), 7, 5);
+		prt(_("(5) マクロの削除", "(5) Remove a macro"), 8, 5);
+		prt(_("(6) ファイルにキー配置を追加", "(6) Append keymaps to a file"), 9, 5);
+		prt(_("(7) キー配置の確認", "(7) Query a keymap"), 10, 5);
+		prt(_("(8) キー配置の作成", "(8) Create a keymap"), 11, 5);
+		prt(_("(9) キー配置の削除", "(9) Remove a keymap"), 12, 5);
+		prt(_("(0) マクロ行動の入力", "(0) Enter a new action"), 13, 5);
 #endif /* ALLOW_MACROS */
 
 		/* Prompt */
-#ifdef JP
-		prt("コマンド: ", 16, 0);
-#else
-		prt("Command: ", 16, 0);
-#endif
-
+		prt(_("コマンド: ", "Command: "), 16, 0);
 
 		/* Get a command */
 		i = inkey();
@@ -3262,20 +2720,10 @@ void do_cmd_macros(void)
 			errr err;
 
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: ユーザー設定ファイルのロード", 16, 0);
-#else
-			prt("Command: Load a user pref file", 16, 0);
-#endif
-
+			prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 16, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("ファイル: ", 18, 0);
-#else
-			prt("File: ", 18, 0);
-#endif
-
+			prt(_("ファイル: ", "File: "), 18, 0);
 
 			/* Default filename */
 			sprintf(tmp, "%s.prf", player_base);
@@ -3287,28 +2735,16 @@ void do_cmd_macros(void)
 			err = process_pref_file(tmp);
 			if (-2 == err)
 			{
-#ifdef JP
-				msg_format("標準の設定ファイル'%s'を読み込みました。", tmp);
-#else
-				msg_format("Loaded default '%s'.", tmp);
-#endif
+				msg_format(_("標準の設定ファイル'%s'を読み込みました。", "Loaded default '%s'."), tmp);
 			}
 			else if (err)
 			{
 				/* Prompt */
-#ifdef JP
-				msg_format("'%s'の読み込みに失敗しました！", tmp);
-#else
-				msg_format("Failed to load '%s'!");
-#endif
+				msg_format(_("'%s'の読み込みに失敗しました！", "Failed to load '%s'!"), tmp);
 			}
 			else
 			{
-#ifdef JP
-				msg_format("'%s'を読み込みました。", tmp);
-#else
-				msg_format("Loaded '%s'.", tmp);
-#endif
+				msg_format(_("'%s'を読み込みました。", "Loaded '%s'."), tmp);
 			}
 		}
 
@@ -3318,20 +2754,10 @@ void do_cmd_macros(void)
 		else if (i == '2')
 		{
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: マクロをファイルに追加する", 16, 0);
-#else
-			prt("Command: Append macros to a file", 16, 0);
-#endif
-
+			prt(_("コマンド: マクロをファイルに追加する", "Command: Append macros to a file"), 16, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("ファイル: ", 18, 0);
-#else
-			prt("File: ", 18, 0);
-#endif
-
+			prt(_("ファイル: ", "File: "), 18, 0);
 
 			/* Default filename */
 			sprintf(tmp, "%s.prf", player_base);
@@ -3343,12 +2769,7 @@ void do_cmd_macros(void)
 			(void)macro_dump(tmp);
 
 			/* Prompt */
-#ifdef JP
-			msg_print("マクロを追加しました。");
-#else
-			msg_print("Appended macros.");
-#endif
-
+			msg_print(_("マクロを追加しました。", "Appended macros."));
 		}
 
 		/* Query a macro */
@@ -3357,20 +2778,11 @@ void do_cmd_macros(void)
 			int k;
 
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: マクロの確認", 16, 0);
-#else
-			prt("Command: Query a macro", 16, 0);
-#endif
+			prt(_("コマンド: マクロの確認", "Command: Query a macro"), 16, 0);
 
 
 			/* Prompt */
-#ifdef JP
-			prt("トリガーキー: ", 18, 0);
-#else
-			prt("Trigger: ", 18, 0);
-#endif
-
+			prt(_("トリガーキー: ", "Trigger: "), 18, 0);
 
 			/* Get a macro trigger */
 			do_cmd_macro_aux(buf);
@@ -3382,12 +2794,7 @@ void do_cmd_macros(void)
 			if (k < 0)
 			{
 				/* Prompt */
-#ifdef JP
-				msg_print("そのキーにはマクロは定義されていません。");
-#else
-				msg_print("Found no macro.");
-#endif
-
+				msg_print(_("そのキーにはマクロは定義されていません。", "Found no macro."));
 			}
 
 			/* Found one */
@@ -3403,12 +2810,7 @@ void do_cmd_macros(void)
 				prt(buf, 22, 0);
 
 				/* Prompt */
-#ifdef JP
-				msg_print("マクロを確認しました。");
-#else
-				msg_print("Found a macro.");
-#endif
-
+				msg_print(_("マクロを確認しました。", "Found a macro."));
 			}
 		}
 
@@ -3416,20 +2818,10 @@ void do_cmd_macros(void)
 		else if (i == '4')
 		{
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: マクロの作成", 16, 0);
-#else
-			prt("Command: Create a macro", 16, 0);
-#endif
-
+			prt(_("コマンド: マクロの作成", "Command: Create a macro"), 16, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("トリガーキー: ", 18, 0);
-#else
-			prt("Trigger: ", 18, 0);
-#endif
-
+			prt(_("トリガーキー: ", "Trigger: "), 18, 0);
 
 			/* Get a macro trigger */
 			do_cmd_macro_aux(buf);
@@ -3438,19 +2830,11 @@ void do_cmd_macros(void)
 			clear_from(20);
 
 			/* Help message */
-#ifdef JP
-			c_prt(TERM_L_RED, "カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。", 22, 0);
-#else
-			c_prt(TERM_L_RED, "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char.", 22, 0);
-#endif
+			c_prt(TERM_L_RED, _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
+								"Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."), 22, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("マクロ行動: ", 20, 0);
-#else
-			prt("Action: ", 20, 0);
-#endif
-
+			prt(_("マクロ行動: ", "Action: "), 20, 0);
 
 			/* Convert to text */
 			ascii_to_text(tmp, macro__buf);
@@ -3465,12 +2849,7 @@ void do_cmd_macros(void)
 				macro_add(buf, macro__buf);
 
 				/* Prompt */
-#ifdef JP
-				msg_print("マクロを追加しました。");
-#else
-				msg_print("Added a macro.");
-#endif
-
+				msg_print(_("マクロを追加しました。", "Added a macro."));
 			}
 		}
 
@@ -3478,20 +2857,10 @@ void do_cmd_macros(void)
 		else if (i == '5')
 		{
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: マクロの削除", 16, 0);
-#else
-			prt("Command: Remove a macro", 16, 0);
-#endif
-
+			prt(_("コマンド: マクロの削除", "Command: Remove a macro"), 16, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("トリガーキー: ", 18, 0);
-#else
-			prt("Trigger: ", 18, 0);
-#endif
-
+			prt(_("トリガーキー: ", "Trigger: "), 18, 0);
 
 			/* Get a macro trigger */
 			do_cmd_macro_aux(buf);
@@ -3500,32 +2869,17 @@ void do_cmd_macros(void)
 			macro_add(buf, buf);
 
 			/* Prompt */
-#ifdef JP
-			msg_print("マクロを削除しました。");
-#else
-			msg_print("Removed a macro.");
-#endif
-
+			msg_print(_("マクロを削除しました。", "Removed a macro."));
 		}
 
 		/* Save keymaps */
 		else if (i == '6')
 		{
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: キー配置をファイルに追加する", 16, 0);
-#else
-			prt("Command: Append keymaps to a file", 16, 0);
-#endif
-
+			prt(_("コマンド: キー配置をファイルに追加する", "Command: Append keymaps to a file"), 16, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("ファイル: ", 18, 0);
-#else
-			prt("File: ", 18, 0);
-#endif
-
+			prt(_("ファイル: ", "File: "), 18, 0);
 
 			/* Default filename */
 			sprintf(tmp, "%s.prf", player_base);
@@ -3537,12 +2891,7 @@ void do_cmd_macros(void)
 			(void)keymap_dump(tmp);
 
 			/* Prompt */
-#ifdef JP
-			msg_print("キー配置を追加しました。");
-#else
-			msg_print("Appended keymaps.");
-#endif
-
+			msg_print(_("キー配置を追加しました。", "Appended keymaps."));
 		}
 
 		/* Query a keymap */
@@ -3551,20 +2900,10 @@ void do_cmd_macros(void)
 			cptr act;
 
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: キー配置の確認", 16, 0);
-#else
-			prt("Command: Query a keymap", 16, 0);
-#endif
-
+			prt(_("コマンド: キー配置の確認", "Command: Query a keymap"), 16, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("押すキー: ", 18, 0);
-#else
-			prt("Keypress: ", 18, 0);
-#endif
-
+			prt(_("押すキー: ", "Keypress: "), 18, 0);
 
 			/* Get a keymap trigger */
 			do_cmd_macro_aux_keymap(buf);
@@ -3576,12 +2915,7 @@ void do_cmd_macros(void)
 			if (!act)
 			{
 				/* Prompt */
-#ifdef JP
-				msg_print("キー配置は定義されていません。");
-#else
-				msg_print("Found no keymap.");
-#endif
-
+				msg_print(_("キー配置は定義されていません。", "Found no keymap."));
 			}
 
 			/* Found one */
@@ -3597,12 +2931,7 @@ void do_cmd_macros(void)
 				prt(buf, 22, 0);
 
 				/* Prompt */
-#ifdef JP
-				msg_print("キー配置を確認しました。");
-#else
-				msg_print("Found a keymap.");
-#endif
-
+				msg_print(_("キー配置を確認しました。", "Found a keymap."));
 			}
 		}
 
@@ -3610,20 +2939,10 @@ void do_cmd_macros(void)
 		else if (i == '8')
 		{
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: キー配置の作成", 16, 0);
-#else
-			prt("Command: Create a keymap", 16, 0);
-#endif
-
+			prt(_("コマンド: キー配置の作成", "Command: Create a keymap"), 16, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("押すキー: ", 18, 0);
-#else
-			prt("Keypress: ", 18, 0);
-#endif
-
+			prt(_("押すキー: ", "Keypress: "), 18, 0);
 
 			/* Get a keymap trigger */
 			do_cmd_macro_aux_keymap(buf);
@@ -3632,19 +2951,11 @@ void do_cmd_macros(void)
 			clear_from(20);
 
 			/* Help message */
-#ifdef JP
-			c_prt(TERM_L_RED, "カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。", 22, 0);
-#else
-			c_prt(TERM_L_RED, "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char.", 22, 0);
-#endif
+			c_prt(TERM_L_RED, _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
+							    "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."), 22, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("行動: ", 20, 0);
-#else
-			prt("Action: ", 20, 0);
-#endif
-
+			prt(_("行動: ", "Action: "), 20, 0);
 
 			/* Convert to text */
 			ascii_to_text(tmp, macro__buf);
@@ -3662,12 +2973,7 @@ void do_cmd_macros(void)
 				keymap_act[mode][(byte)(buf[0])] = string_make(macro__buf);
 
 				/* Prompt */
-#ifdef JP
-				msg_print("キー配置を追加しました。");
-#else
-				msg_print("Added a keymap.");
-#endif
-
+				msg_print(_("キー配置を追加しました。", "Added a keymap."));
 			}
 		}
 
@@ -3675,20 +2981,10 @@ void do_cmd_macros(void)
 		else if (i == '9')
 		{
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: キー配置の削除", 16, 0);
-#else
-			prt("Command: Remove a keymap", 16, 0);
-#endif
-
+			prt(_("コマンド: キー配置の削除", "Command: Remove a keymap"), 16, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("押すキー: ", 18, 0);
-#else
-			prt("Keypress: ", 18, 0);
-#endif
-
+			prt(_("押すキー: ", "Keypress: "), 18, 0);
 
 			/* Get a keymap trigger */
 			do_cmd_macro_aux_keymap(buf);
@@ -3700,40 +2996,24 @@ void do_cmd_macros(void)
 			keymap_act[mode][(byte)(buf[0])] = NULL;
 
 			/* Prompt */
-#ifdef JP
-			msg_print("キー配置を削除しました。");
-#else
-			msg_print("Removed a keymap.");
-#endif
-
+			msg_print(_("キー配置を削除しました。", "Removed a keymap."));
 		}
 
 		/* Enter a new action */
 		else if (i == '0')
 		{
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: マクロ行動の入力", 16, 0);
-#else
-			prt("Command: Enter a new action", 16, 0);
-#endif
+			prt(_("コマンド: マクロ行動の入力", "Command: Enter a new action"), 16, 0);
 
 			/* Clear */
 			clear_from(20);
 
 			/* Help message */
-#ifdef JP
-			c_prt(TERM_L_RED, "カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。", 22, 0);
-#else
-			c_prt(TERM_L_RED, "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char.", 22, 0);
-#endif
+			c_prt(TERM_L_RED, _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
+								"Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."), 22, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("マクロ行動: ", 20, 0);
-#else
-			prt("Action: ", 20, 0);
-#endif
+			prt(_("マクロ行動: ", "Action: "), 20, 0);
 
 			/* Hack -- limit the value */
 			tmp[80] = '\0';
@@ -3803,56 +3083,27 @@ static bool cmd_visuals_aux(int i, int *num, int max)
 
 static void print_visuals_menu(cptr choice_msg)
 {
-#ifdef JP
-	prt("[ 画面表示の設定 ]", 1, 0);
-#else
-	prt("Interact with Visuals", 1, 0);
-#endif
-
+	prt(_("[ 画面表示の設定 ]", "Interact with Visuals"), 1, 0);
+	
 	/* Give some choices */
-#ifdef JP
-	prt("(0) ユーザー設定ファイルのロード", 3, 5);
-#else
-	prt("(0) Load a user pref file", 3, 5);
-#endif
-
+	prt(_("(0) ユーザー設定ファイルのロード", "(0) Load a user pref file"), 3, 5);
+	
 #ifdef ALLOW_VISUALS
-#ifdef JP
-	prt("(1) モンスターの 色/文字 をファイルに書き出す", 4, 5);
-	prt("(2) アイテムの   色/文字 をファイルに書き出す", 5, 5);
-	prt("(3) 地形の       色/文字 をファイルに書き出す", 6, 5);
-	prt("(4) モンスターの 色/文字 を変更する (数値操作)", 7, 5);
-	prt("(5) アイテムの   色/文字 を変更する (数値操作)", 8, 5);
-	prt("(6) 地形の       色/文字 を変更する (数値操作)", 9, 5);
-	prt("(7) モンスターの 色/文字 を変更する (シンボルエディタ)", 10, 5);
-	prt("(8) アイテムの   色/文字 を変更する (シンボルエディタ)", 11, 5);
-	prt("(9) 地形の       色/文字 を変更する (シンボルエディタ)", 12, 5);
-#else
-	prt("(1) Dump monster attr/chars", 4, 5);
-	prt("(2) Dump object attr/chars", 5, 5);
-	prt("(3) Dump feature attr/chars", 6, 5);
-	prt("(4) Change monster attr/chars (numeric operation)", 7, 5);
-	prt("(5) Change object attr/chars (numeric operation)", 8, 5);
-	prt("(6) Change feature attr/chars (numeric operation)", 9, 5);
-	prt("(7) Change monster attr/chars (visual mode)", 10, 5);
-	prt("(8) Change object attr/chars (visual mode)", 11, 5);
-	prt("(9) Change feature attr/chars (visual mode)", 12, 5);
-#endif
-
+	prt(_("(1) モンスターの 色/文字 をファイルに書き出す", "(1) Dump monster attr/chars"), 4, 5);
+	prt(_("(2) アイテムの   色/文字 をファイルに書き出す", "(2) Dump object attr/chars"), 5, 5);
+	prt(_("(3) 地形の       色/文字 をファイルに書き出す", "(3) Dump feature attr/chars"), 6, 5);
+	prt(_("(4) モンスターの 色/文字 を変更する (数値操作)", "(4) Change monster attr/chars (numeric operation)"), 7, 5);
+	prt(_("(5) アイテムの   色/文字 を変更する (数値操作)", "(5) Change object attr/chars (numeric operation)"), 8, 5);
+	prt(_("(6) 地形の       色/文字 を変更する (数値操作)", "(6) Change feature attr/chars (numeric operation)"), 9, 5);
+	prt(_("(7) モンスターの 色/文字 を変更する (シンボルエディタ)", "(7) Change monster attr/chars (visual mode)"), 10, 5);
+	prt(_("(8) アイテムの   色/文字 を変更する (シンボルエディタ)", "(8) Change object attr/chars (visual mode)"), 11, 5);
+	prt(_("(9) 地形の       色/文字 を変更する (シンボルエディタ)", "(9) Change feature attr/chars (visual mode)"), 12, 5);
 #endif /* ALLOW_VISUALS */
 
-#ifdef JP
-	prt("(R) 画面表示方法の初期化", 13, 5);
-#else
-	prt("(R) Reset visuals", 13, 5);
-#endif
+	prt(_("(R) 画面表示方法の初期化", "(R) Reset visuals"), 13, 5);
 
 	/* Prompt */
-#ifdef JP
-	prt(format("コマンド: %s", choice_msg ? choice_msg : ""), 15, 0);
-#else
-	prt(format("Command: %s", choice_msg ? choice_msg : ""), 15, 0);
-#endif
+	prt(format("コマンド: %s", choice_msg ? choice_msg : _("", "")), 15, 0);
 }
 
 static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int direct_r_idx);
@@ -3898,18 +3149,10 @@ void do_cmd_visuals(void)
 		/* Load a 'pref' file */
 		case '0':
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: ユーザー設定ファイルのロード", 15, 0);
-#else
-			prt("Command: Load a user pref file", 15, 0);
-#endif
+			prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 15, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("ファイル: ", 17, 0);
-#else
-			prt("File: ", 17, 0);
-#endif
+			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
 			sprintf(tmp, "%s.prf", player_base);
@@ -3931,18 +3174,10 @@ void do_cmd_visuals(void)
 			static cptr mark = "Monster attr/chars";
 
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: モンスターの[色/文字]をファイルに書き出します", 15, 0);
-#else
-			prt("Command: Dump monster attr/chars", 15, 0);
-#endif
+			prt(_("コマンド: モンスターの[色/文字]をファイルに書き出します", "Command: Dump monster attr/chars"), 15, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("ファイル: ", 17, 0);
-#else
-			prt("File: ", 17, 0);
-#endif
+			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
 			sprintf(tmp, "%s.prf", player_base);
@@ -3957,11 +3192,7 @@ void do_cmd_visuals(void)
 			if (!open_auto_dump(buf, mark)) continue;
 
 			/* Start dumping */
-#ifdef JP
-			auto_dump_printf("\n# モンスターの[色/文字]の設定\n\n");
-#else
-			auto_dump_printf("\n# Monster attr/char definitions\n\n");
-#endif
+			auto_dump_printf(_("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
 
 			/* Dump monsters */
 			for (i = 0; i < max_r_idx; i++)
@@ -3983,11 +3214,7 @@ void do_cmd_visuals(void)
 			close_auto_dump();
 
 			/* Message */
-#ifdef JP
-			msg_print("モンスターの[色/文字]をファイルに書き出しました。");
-#else
-			msg_print("Dumped monster attr/chars.");
-#endif
+			msg_print(_("モンスターの[色/文字]をファイルに書き出しました。", "Dumped monster attr/chars."));
 
 			break;
 		}
@@ -3998,18 +3225,10 @@ void do_cmd_visuals(void)
 			static cptr mark = "Object attr/chars";
 
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: アイテムの[色/文字]をファイルに書き出します", 15, 0);
-#else
-			prt("Command: Dump object attr/chars", 15, 0);
-#endif
+			prt(_("コマンド: アイテムの[色/文字]をファイルに書き出します", "Command: Dump object attr/chars"), 15, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("ファイル: ", 17, 0);
-#else
-			prt("File: ", 17, 0);
-#endif
+			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
 			sprintf(tmp, "%s.prf", player_base);
@@ -4024,11 +3243,7 @@ void do_cmd_visuals(void)
 			if (!open_auto_dump(buf, mark)) continue;
 
 			/* Start dumping */
-#ifdef JP
-			auto_dump_printf("\n# アイテムの[色/文字]の設定\n\n");
-#else
-			auto_dump_printf("\n# Object attr/char definitions\n\n");
-#endif
+			auto_dump_printf(_("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
 
 			/* Dump objects */
 			for (i = 0; i < max_k_idx; i++)
@@ -4067,11 +3282,7 @@ void do_cmd_visuals(void)
 			close_auto_dump();
 
 			/* Message */
-#ifdef JP
-			msg_print("アイテムの[色/文字]をファイルに書き出しました。");
-#else
-			msg_print("Dumped object attr/chars.");
-#endif
+			msg_print(_("アイテムの[色/文字]をファイルに書き出しました。", "Dumped object attr/chars."));
 
 			break;
 		}
@@ -4082,18 +3293,10 @@ void do_cmd_visuals(void)
 			static cptr mark = "Feature attr/chars";
 
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: 地形の[色/文字]をファイルに書き出します", 15, 0);
-#else
-			prt("Command: Dump feature attr/chars", 15, 0);
-#endif
+			prt(_("コマンド: 地形の[色/文字]をファイルに書き出します", "Command: Dump feature attr/chars"), 15, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("ファイル: ", 17, 0);
-#else
-			prt("File: ", 17, 0);
-#endif
+			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
 			sprintf(tmp, "%s.prf", player_base);
@@ -4108,11 +3311,7 @@ void do_cmd_visuals(void)
 			if (!open_auto_dump(buf, mark)) continue;
 
 			/* Start dumping */
-#ifdef JP
-			auto_dump_printf("\n# 地形の[色/文字]の設定\n\n");
-#else
-			auto_dump_printf("\n# Feature attr/char definitions\n\n");
-#endif
+			auto_dump_printf(_("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
 
 			/* Dump features */
 			for (i = 0; i < max_f_idx; i++)
@@ -4139,11 +3338,7 @@ void do_cmd_visuals(void)
 			close_auto_dump();
 
 			/* Message */
-#ifdef JP
-			msg_print("地形の[色/文字]をファイルに書き出しました。");
-#else
-			msg_print("Dumped feature attr/chars.");
-#endif
+			msg_print(_("地形の[色/文字]をファイルに書き出しました。", "Dumped feature attr/chars."));
 
 			break;
 		}
@@ -4151,18 +3346,10 @@ void do_cmd_visuals(void)
 		/* Modify monster attr/chars (numeric operation) */
 		case '4':
 		{
-#ifdef JP
-			static cptr choice_msg = "モンスターの[色/文字]を変更します";
-#else
-			static cptr choice_msg = "Change monster attr/chars";
-#endif
+			static cptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
 			static int r = 0;
 
-#ifdef JP
-			prt(format("コマンド: %s", choice_msg), 15, 0);
-#else
-			prt(format("Command: %s", choice_msg), 15, 0);
-#endif
+			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
 			while (1)
@@ -4177,48 +3364,26 @@ void do_cmd_visuals(void)
 				byte cc = r_ptr->x_char;
 
 				/* Label the object */
-#ifdef JP
 				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format("モンスター = %d, 名前 = %-40.40s",
-						   r, (r_name + r_ptr->name)));
-#else
-				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format("Monster = %d, Name = %-40.40s",
-						   r, (r_name + r_ptr->name)));
-#endif
+					 format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, (r_name + r_ptr->name)));
 
 				/* Label the Default values */
-#ifdef JP
 				Term_putstr(10, 19, -1, TERM_WHITE,
-					    format("初期値  色 / 文字 = %3u / %3u", da, dc));
-#else
-				Term_putstr(10, 19, -1, TERM_WHITE,
-					    format("Default attr/char = %3u / %3u", da, dc));
-#endif
+					format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), da, dc));
 
 				Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
 				Term_queue_bigchar(43, 19, da, dc, 0, 0);
 
 				/* Label the Current values */
-#ifdef JP
 				Term_putstr(10, 20, -1, TERM_WHITE,
-					    format("現在値  色 / 文字 = %3u / %3u", ca, cc));
-#else
-				Term_putstr(10, 20, -1, TERM_WHITE,
-					    format("Current attr/char = %3u / %3u", ca, cc));
-#endif
+					format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), ca, cc));
 
 				Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
 				Term_queue_bigchar(43, 20, ca, cc, 0, 0);
 
 				/* Prompt */
-#ifdef JP
-				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ");
-#else
-				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ");
-#endif
+				Term_putstr(0, 22, -1, TERM_WHITE, 
+					_("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
 				/* Get a command */
 				i = inkey();
@@ -4274,18 +3439,9 @@ void do_cmd_visuals(void)
 		/* Modify object attr/chars (numeric operation) */
 		case '5':
 		{
-#ifdef JP
-			static cptr choice_msg = "アイテムの[色/文字]を変更します";
-#else
-			static cptr choice_msg = "Change object attr/chars";
-#endif
+			static cptr choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
 			static int k = 0;
-
-#ifdef JP
-			prt(format("コマンド: %s", choice_msg), 15, 0);
-#else
-			prt(format("Command: %s", choice_msg), 15, 0);
-#endif
+			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
 			while (1)
@@ -4300,48 +3456,27 @@ void do_cmd_visuals(void)
 				byte cc = k_ptr->x_char;
 
 				/* Label the object */
-#ifdef JP
 				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format("アイテム = %d, 名前 = %-40.40s",
+					    format(_("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"),
 						   k, k_name + (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name)));
-#else
-				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format("Object = %d, Name = %-40.40s",
-						   k, k_name + (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name)));
-#endif
 
 				/* Label the Default values */
-#ifdef JP
 				Term_putstr(10, 19, -1, TERM_WHITE,
-					    format("初期値  色 / 文字 = %3d / %3d", da, dc));
-#else
-				Term_putstr(10, 19, -1, TERM_WHITE,
-					    format("Default attr/char = %3d / %3d", da, dc));
-#endif
+					    format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
 
 				Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
 				Term_queue_bigchar(43, 19, da, dc, 0, 0);
 
 				/* Label the Current values */
-#ifdef JP
 				Term_putstr(10, 20, -1, TERM_WHITE,
-					    format("現在値  色 / 文字 = %3d / %3d", ca, cc));
-#else
-				Term_putstr(10, 20, -1, TERM_WHITE,
-					    format("Current attr/char = %3d / %3d", ca, cc));
-#endif
+					    format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
 
 				Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
 				Term_queue_bigchar(43, 20, ca, cc, 0, 0);
 
 				/* Prompt */
-#ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ");
-#else
-				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ");
-#endif
+					    _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
 				/* Get a command */
 				i = inkey();
@@ -4397,19 +3532,10 @@ void do_cmd_visuals(void)
 		/* Modify feature attr/chars (numeric operation) */
 		case '6':
 		{
-#ifdef JP
-			static cptr choice_msg = "地形の[色/文字]を変更します";
-#else
-			static cptr choice_msg = "Change feature attr/chars";
-#endif
+			static cptr choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
 			static int f = 0;
 			static int lighting_level = F_LIT_STANDARD;
-
-#ifdef JP
-			prt(format("コマンド: %s", choice_msg), 15, 0);
-#else
-			prt(format("Command: %s", choice_msg), 15, 0);
-#endif
+			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
 			while (1)
@@ -4425,27 +3551,15 @@ void do_cmd_visuals(void)
 
 				/* Label the object */
 				prt("", 17, 5);
-#ifdef JP
 				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format("地形 = %d, 名前 = %s, 明度 = %s",
+					    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"),
 						   f, (f_name + f_ptr->name), lighting_level_str[lighting_level]));
-#else
-				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format("Terrain = %d, Name = %s, Lighting = %s",
-						   f, (f_name + f_ptr->name), lighting_level_str[lighting_level]));
-#endif
 
 				/* Label the Default values */
-#ifdef JP
 				Term_putstr(10, 19, -1, TERM_WHITE,
-					    format("初期値  色 / 文字 = %3d / %3d", da, dc));
-#else
-				Term_putstr(10, 19, -1, TERM_WHITE,
-					    format("Default attr/char = %3d / %3d", da, dc));
-#endif
+					    format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
 
 				Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-
 				Term_queue_bigchar(43, 19, da, dc, 0, 0);
 
 				/* Label the Current values */
@@ -4554,12 +3668,7 @@ void do_cmd_visuals(void)
 			reset_visuals();
 
 			/* Message */
-#ifdef JP
-			msg_print("画面上の[色/文字]を初期値にリセットしました。");
-#else
-			msg_print("Visual attr/char tables reset.");
-#endif
-
+			msg_print(_("画面上の[色/文字]を初期値にリセットしました。", "Visual attr/char tables reset."));
 			need_redraw = TRUE;
 			break;
 
@@ -4607,39 +3716,18 @@ void do_cmd_colors(void)
 		Term_clear();
 
 		/* Ask for a choice */
-#ifdef JP
-		prt("[ カラーの設定 ]", 2, 0);
-#else
-		prt("Interact with Colors", 2, 0);
-#endif
-
+		prt(_("[ カラーの設定 ]", "Interact with Colors"), 2, 0);
 
 		/* Give some choices */
-#ifdef JP
-		prt("(1) ユーザー設定ファイルのロード", 4, 5);
-#else
-		prt("(1) Load a user pref file", 4, 5);
-#endif
+		prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
 
 #ifdef ALLOW_COLORS
-#ifdef JP
-		prt("(2) カラーの設定をファイルに書き出す", 5, 5);
-		prt("(3) カラーの設定を変更する", 6, 5);
-#else
-		prt("(2) Dump colors", 5, 5);
-		prt("(3) Modify colors", 6, 5);
-#endif
-
+		prt(_("(2) カラーの設定をファイルに書き出す", "(2) Dump colors"), 5, 5);
+		prt(_("(3) カラーの設定を変更する", "(3) Modify colors"), 6, 5);
 #endif
 
 		/* Prompt */
-#ifdef JP
-		prt("コマンド: ", 8, 0);
-#else
-		prt("Command: ", 8, 0);
-#endif
-
-
+		prt(_("コマンド: ", "Command: "), 8, 0);
 		/* Prompt */
 		i = inkey();
 
@@ -4650,20 +3738,10 @@ void do_cmd_colors(void)
 		if (i == '1')
 		{
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: ユーザー設定ファイルをロードします", 8, 0);
-#else
-			prt("Command: Load a user pref file", 8, 0);
-#endif
-
+			prt(_("コマンド: ユーザー設定ファイルをロードします", "Command: Load a user pref file"), 8, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("ファイル: ", 10, 0);
-#else
-			prt("File: ", 10, 0);
-#endif
-
+			prt(_("ファイル: ", "File: "), 10, 0);
 
 			/* Default file */
 			sprintf(tmp, "%s.prf", player_base);
@@ -4689,20 +3767,10 @@ void do_cmd_colors(void)
 			static cptr mark = "Colors";
 
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: カラーの設定をファイルに書き出します", 8, 0);
-#else
-			prt("Command: Dump colors", 8, 0);
-#endif
-
+			prt(_("コマンド: カラーの設定をファイルに書き出します", "Command: Dump colors"), 8, 0);
 
 			/* Prompt */
-#ifdef JP
-			prt("ファイル: ", 10, 0);
-#else
-			prt("File: ", 10, 0);
-#endif
-
+			prt(_("ファイル: ", "File: "), 10, 0);
 
 			/* Default filename */
 			sprintf(tmp, "%s.prf", player_base);
@@ -4717,12 +3785,8 @@ void do_cmd_colors(void)
 			if (!open_auto_dump(buf, mark)) continue;
 
 			/* Start dumping */
-#ifdef JP
-			auto_dump_printf("\n# カラーの設定\n\n");
-#else
-			auto_dump_printf("\n# Color redefinitions\n\n");
-#endif
-
+			auto_dump_printf(_("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
+			
 			/* Dump colors */
 			for (i = 0; i < 256; i++)
 			{
@@ -4731,12 +3795,7 @@ void do_cmd_colors(void)
 				int gv = angband_color_table[i][2];
 				int bv = angband_color_table[i][3];
 
-#ifdef JP
-				cptr name = "未知";
-#else
-				cptr name = "unknown";
-#endif
-
+				cptr name = _("未知", "unknown");
 
 				/* Skip non-entries */
 				if (!kv && !rv && !gv && !bv) continue;
@@ -4745,12 +3804,8 @@ void do_cmd_colors(void)
 				if (i < 16) name = color_names[i];
 
 				/* Dump a comment */
-#ifdef JP
-				auto_dump_printf("# カラー '%s'\n", name);
-#else
-				auto_dump_printf("# Color '%s'\n", name);
-#endif
-
+				auto_dump_printf(_("# カラー '%s'\n", "# Color '%s'\n"), name);
+				
 				/* Dump the monster attr/char info */
 				auto_dump_printf("V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
 					i, kv, rv, gv, bv);
@@ -4760,12 +3815,7 @@ void do_cmd_colors(void)
 			close_auto_dump();
 
 			/* Message */
-#ifdef JP
-			msg_print("カラーの設定をファイルに書き出しました。");
-#else
-			msg_print("Dumped color redefinitions.");
-#endif
-
+			msg_print(_("カラーの設定をファイルに書き出しました。", "Dumped color redefinitions."));
 		}
 
 		/* Edit colors */
@@ -4774,12 +3824,7 @@ void do_cmd_colors(void)
 			static byte a = 0;
 
 			/* Prompt */
-#ifdef JP
-			prt("コマンド: カラーの設定を変更します", 8, 0);
-#else
-			prt("Command: Modify colors", 8, 0);
-#endif
-
+			prt(_("コマンド: カラーの設定を変更します", "Command: Modify colors"), 8, 0);
 
 			/* Hack -- query until done */
 			while (1)
@@ -4801,22 +3846,11 @@ void do_cmd_colors(void)
 				}
 
 				/* Describe the color */
-#ifdef JP
-				name = ((a < 16) ? color_names[a] : "未定義");
-#else
-				name = ((a < 16) ? color_names[a] : "undefined");
-#endif
-
+				name = ((a < 16) ? color_names[a] : _("未定義", "undefined"));
 
 				/* Describe the color */
-#ifdef JP
 				Term_putstr(5, 10, -1, TERM_WHITE,
-					    format("カラー = %d, 名前 = %s", a, name));
-#else
-				Term_putstr(5, 10, -1, TERM_WHITE,
-					    format("Color = %d, Name = %s", a, name));
-#endif
-
+					    format(_("カラー = %d, 名前 = %s", "Color = %d, Name = %s"), a, name));
 
 				/* Label the Current values */
 				Term_putstr(5, 12, -1, TERM_WHITE,
@@ -4827,13 +3861,8 @@ void do_cmd_colors(void)
 						   angband_color_table[a][3]));
 
 				/* Prompt */
-#ifdef JP
 				Term_putstr(0, 14, -1, TERM_WHITE,
-					    "コマンド (n/N/k/K/r/R/g/G/b/B): ");
-#else
-				Term_putstr(0, 14, -1, TERM_WHITE,
-					    "Command (n/N/k/K/r/R/g/G/b/B): ");
-#endif
+					_("コマンド (n/N/k/K/r/R/g/G/b/B): ", "Command (n/N/k/K/r/R/g/G/b/B): "));
 
 
 				/* Get a command */
@@ -4891,23 +3920,13 @@ void do_cmd_note(void)
 	strcpy(buf, "");
 
 	/* Input */
-#ifdef JP
-	if (!get_string("メモ: ", buf, 60)) return;
-#else
-	if (!get_string("Note: ", buf, 60)) return;
-#endif
-
+	if (!get_string(_("メモ: ", "Note: "), buf, 60)) return;
 
 	/* Ignore empty notes */
 	if (!buf[0] || (buf[0] == ' ')) return;
 
 	/* Add the note to the message recall */
-#ifdef JP
-	msg_format("メモ: %s", buf);
-#else
-	msg_format("Note: %s", buf);
-#endif
-
+	msg_format(_("メモ: %s", "Note: %s"), buf);
 }
 
 
@@ -4916,15 +3935,9 @@ void do_cmd_note(void)
  */
 void do_cmd_version(void)
 {
-
 	/* Silly message */
-#ifdef JP
-	msg_format("変愚蛮怒(Hengband) %d.%d.%d",
-		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#else
-	msg_format("You are playing Hengband %d.%d.%d.",
-		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#endif
+	msg_format(_("変愚蛮怒(Hengband) %d.%d.%d", "You are playing Hengband %d.%d.%d."),
+				FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 }
 
 
@@ -4934,171 +3947,47 @@ void do_cmd_version(void)
  */
 static cptr do_cmd_feeling_text[11] =
 {
-#ifdef JP
-	"この階の雰囲気を感じとれなかった...",
-#else
-	"Looks like any other level.",
-#endif
-
-#ifdef JP
-	"この階には何か特別なものがあるような気がする。",
-#else
-	"You feel there is something special about this level.",
-#endif
-
-#ifdef JP
-	"恐ろしい死の幻が目に浮かび、気絶しそうになった！",
-#else
-	"You nearly faint as horrible visions of death fill your mind!",
-#endif
-
-#ifdef JP
-	"この階はとても危険なようだ。",
-#else
-	"This level looks very dangerous.",
-#endif
-
-#ifdef JP
-	"とても悪い予感がする...",
-#else
-	"You have a very bad feeling...",
-#endif
-
-#ifdef JP
-	"悪い予感がする...",
-#else
-	"You have a bad feeling...",
-#endif
-
-#ifdef JP
-	"何か緊張する。",
-#else
-	"You feel nervous.",
-#endif
-
-#ifdef JP
-	"少し不運な気がする...",
-#else
-	"You feel your luck is turning...",
-#endif
-
-#ifdef JP
-	"この場所は好きになれない。",
-#else
-	"You don't like the look of this place.",
-#endif
-
-#ifdef JP
-	"この階はそれなりに安全なようだ。",
-#else
-	"This level looks reasonably safe.",
-#endif
-
-#ifdef JP
-	"なんて退屈なところだ..."
-#else
-	"What a boring place..."
-#endif
-
+	_("この階の雰囲気を感じとれなかった...", "Looks like any other level."),
+	_("この階には何か特別なものがあるような気がする。", "You feel there is something special about this level."),
+	_("恐ろしい死の幻が目に浮かび、気絶しそうになった！", "You nearly faint as horrible visions of death fill your mind!"),
+	_("この階はとても危険なようだ。", "This level looks very dangerous."),
+	_("とても悪い予感がする...", "You have a very bad feeling..."),
+	_("悪い予感がする...", "You have a bad feeling..."),
+	_("何か緊張する。", "You feel nervous."),
+	_("少し不運な気がする...", "You feel your luck is turning..."),
+	_("この場所は好きになれない。", "You don't like the look of this place."),
+	_("この階はそれなりに安全なようだ。", "This level looks reasonably safe."),
+	_("なんて退屈なところだ...", "What a boring place...")
 };
 
 static cptr do_cmd_feeling_text_combat[11] =
 {
-#ifdef JP
-	"この階の雰囲気を感じとれなかった...",
-#else
-	"Looks like any other level.",
-#endif
-
-#ifdef JP
-	"この階には何か特別なものがあるような気がする。",
-#else
-	"You feel there is something special about this level.",
-#endif
-
-#ifdef JP
-	"今夜もまた、誰かが命を落とす...",
-#else
-	"You nearly faint as horrible visions of death fill your mind!",
-#endif
-
-#ifdef JP
-	"この階はとても危険なようだ。",
-#else
-	"This level looks very dangerous.",
-#endif
-
-#ifdef JP
-	"とても悪い予感がする...",
-#else
-	"You have a very bad feeling...",
-#endif
-
-#ifdef JP
-	"悪い予感がする...",
-#else
-	"You have a bad feeling...",
-#endif
-
-#ifdef JP
-	"何か緊張する。",
-#else
-	"You feel nervous.",
-#endif
-
-#ifdef JP
-	"少し不運な気がする...",
-#else
-	"You feel your luck is turning...",
-#endif
-
-#ifdef JP
-	"この場所は好きになれない。",
-#else
-	"You don't like the look of this place.",
-#endif
-
-#ifdef JP
-	"この階はそれなりに安全なようだ。",
-#else
-	"This level looks reasonably safe.",
-#endif
-
-#ifdef JP
-	"なんて退屈なところだ..."
-#else
-	"What a boring place..."
-#endif
-
+	_("この階の雰囲気を感じとれなかった...", "Looks like any other level."),
+	_("この階には何か特別なものがあるような気がする。", "You feel there is something special about this level."),
+	_("今夜もまた、誰かが命を落とす...", "You nearly faint as horrible visions of death fill your mind!"),
+	_("この階はとても危険なようだ。", "This level looks very dangerous."),
+	_("とても悪い予感がする...", "You have a very bad feeling..."),
+	_("悪い予感がする...", "You have a bad feeling..."),
+	_("何か緊張する。", "You feel nervous."),
+	_("少し不運な気がする...", "You feel your luck is turning..."),
+	_("この場所は好きになれない。", "You don't like the look of this place."),
+	_("この階はそれなりに安全なようだ。", "This level looks reasonably safe."),
+	_("なんて退屈なところだ...", "What a boring place...")
 };
 
 static cptr do_cmd_feeling_text_lucky[11] =
 {
-#ifdef JP
-	"この階の雰囲気を感じとれなかった...",
-	"この階には何か特別なものがあるような気がする。",
-	"この階はこの上なく素晴らしい感じがする。",
-	"素晴らしい感じがする...",
-	"とても良い感じがする...",
-	"良い感じがする...",
-	"ちょっと幸運な感じがする...",
-	"多少は運が向いてきたか...",
-	"見た感じ悪くはない...",
-	"全然駄目ということはないが...",
-	"なんて退屈なところだ..."
-#else
-	"Looks like any other level.",
-	"You feel there is something special about this level.",
-	"You have a superb feeling about this level.",
-	"You have an excellent feeling...",
-	"You have a very good feeling...",
-	"You have a good feeling...",
-	"You feel strangely lucky...",
-	"You feel your luck is turning...",
-	"You like the look of this place...",
-	"This level can't be all bad...",
-	"What a boring place..."
-#endif
+	_("この階の雰囲気を感じとれなかった...", "Looks like any other level."),
+	_("この階には何か特別なものがあるような気がする。", "You feel there is something special about this level."),
+	_("この階はこの上なく素晴らしい感じがする。", "You have a superb feeling about this level."),
+	_("素晴らしい感じがする...", "You have an excellent feeling..."),
+	_("とても良い感じがする...", "You have a very good feeling..."),
+	_("良い感じがする...", "You have a good feeling..."),
+	_("ちょっと幸運な感じがする...", "You feel strangely lucky..."),
+	_("多少は運が向いてきたか...", "You feel your luck is turning..."),
+	_("見た感じ悪くはない...", "You like the look of this place..."),
+	_("全然駄目ということはないが...", "This level can't be all bad..."),
+	_("なんて退屈なところだ...", "What a boring place...")
 };
 
 
@@ -5111,40 +4000,21 @@ void do_cmd_feeling(void)
 	/* No useful feeling in quests */
 	if (p_ptr->inside_quest && !random_quest_number(dun_level))
 	{
-#ifdef JP
-		msg_print("典型的なクエストのダンジョンのようだ。");
-#else
-		msg_print("Looks like a typical quest level.");
-#endif
-
+		msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
 		return;
 	}
 
 	/* No useful feeling in town */
 	else if (p_ptr->town_num && !dun_level)
 	{
-#ifdef JP
-		if (!strcmp(town[p_ptr->town_num].name, "荒野"))
-#else
-		if (!strcmp(town[p_ptr->town_num].name, "wilderness"))
-#endif
+		if (!strcmp(town[p_ptr->town_num].name, _("荒野", "wilderness")))
 		{
-#ifdef JP
-			msg_print("何かありそうな荒野のようだ。");
-#else
-			msg_print("Looks like a strange wilderness.");
-#endif
-
+			msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
 			return;
 		}
 		else
 		{
-#ifdef JP
-			msg_print("典型的な町のようだ。");
-#else
-			msg_print("Looks like a typical town.");
-#endif
-
+			msg_print(_("典型的な町のようだ。", "Looks like a typical town."));
 			return;
 		}
 	}
@@ -5152,12 +4022,7 @@ void do_cmd_feeling(void)
 	/* No useful feeling in the wilderness */
 	else if (!dun_level)
 	{
-#ifdef JP
-		msg_print("典型的な荒野のようだ。");
-#else
-		msg_print("Looks like a typical wilderness.");
-#endif
-
+		msg_print(_("典型的な荒野のようだ。", "Looks like a typical wilderness."));
 		return;
 	}
 
@@ -5843,11 +4708,7 @@ void do_cmd_load_screen(void)
 
 	/* Oops */
 	if (!fff) {
-#ifdef JP
-		msg_format("%s を開くことができませんでした。", buf);
-#else
-		msg_format("Failed to open %s.", buf);
-#endif
+		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
 		msg_print(NULL);
 		return;
 	}
@@ -5922,11 +4783,7 @@ void do_cmd_load_screen(void)
 
 
 	/* Message */
-#ifdef JP
-	prt("ファイルに書き出された画面(記念撮影)をロードしました。", 0, 0);
-#else
-	msg_print("Screen dump loaded.");
-#endif
+	prt(_("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded."), 0, 0);
 
 	flush();
 	inkey();
@@ -5939,23 +4796,13 @@ void do_cmd_load_screen(void)
 
 
 
-cptr inven_res_label = 
-#ifdef JP
- "                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮";
-#else
- "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSeHlEpSdRgLv";
-#endif
+cptr inven_res_label = _("                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",
+						 "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSeHlEpSdRgLv");
 
 
-#ifdef JP
-#define IM_FLAG_STR  "＊"
-#define HAS_FLAG_STR "＋"
-#define NO_FLAG_STR  "・"
-#else
-#define IM_FLAG_STR  "* "
-#define HAS_FLAG_STR "+ "
-#define NO_FLAG_STR  ". "
-#endif
+#define IM_FLAG_STR  _("＊", "* ")
+#define HAS_FLAG_STR _("＋", "+ ")
+#define NO_FLAG_STR  _("・", ". ")
 
 #define print_im_or_res_flag(IM, RES) \
 { \
@@ -6018,11 +4865,8 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, by
 
 		if (!(o_ptr->ident & (IDENT_MENTAL)))
 		{
-#ifdef JP
-			fputs("-------不明--------------- -------不明---------\n", fff);
-#else
-			fputs("-------unknown------------ -------unknown------\n", fff);
-#endif
+			fputs(_("-------不明--------------- -------不明---------\n", 
+					"-------unknown------------ -------unknown------\n"), fff);
 		}
 		else
 		{
@@ -6087,11 +4931,7 @@ static void do_cmd_knowledge_inven(void)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -6105,34 +4945,19 @@ static void do_cmd_knowledge_inven(void)
 			j = 0;
 			fprintf(fff, "%s\n", inven_res_label);
 		}
-
-#ifdef JP
-		strcpy(where, "装");
-#else
-		strcpy(where, "E ");
-#endif
+		strcpy(where, _("装", "E "));
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
 			do_cmd_knowledge_inven_aux(fff, &inventory[i], &j, tval, where);
 		}
-
-#ifdef JP
-		strcpy(where, "持");
-#else
-		strcpy(where, "I ");
-#endif
+		strcpy(where, _("持", "I "));
 		for (i = 0; i < INVEN_PACK; i++)
 		{
 			do_cmd_knowledge_inven_aux(fff, &inventory[i], &j, tval, where);
 		}
 
 		st_ptr = &town[1].store[STORE_HOME];
-#ifdef JP
-		strcpy(where, "家");
-#else
-		strcpy(where, "H ");
-#endif
-
+		strcpy(where, _("家", "H "));
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
 			do_cmd_knowledge_inven_aux(fff, &st_ptr->stock[i], &j, tval, where);
@@ -6143,11 +4968,7 @@ static void do_cmd_knowledge_inven(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "*鑑定*済み武器/防具の耐性リスト", 0, 0);
-#else
-	show_file(TRUE, file_name, "Resistances of *identified* equipment", 0, 0);
-#endif
+	show_file(TRUE, file_name, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -6196,11 +5017,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	/* Oops */
 	if (!fff) {
 		if (message) {
-#ifdef JP
-		    msg_format("ファイル %s を開けませんでした。", filename);
-#else
-		    msg_format("Failed to open file %s.", filename);
-#endif
+		    msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename);
 		    msg_print(NULL);
 		}
 		
@@ -6305,11 +5122,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 
 	/* Message */
 	if (message) {
-#ifdef JP
-	msg_print("画面(記念撮影)をファイルに書き出しました。");
-#else
-		msg_print("Screen dump saved.");
-#endif
+		msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
 		msg_print(NULL);
 	}
 
@@ -6325,11 +5138,7 @@ static void do_cmd_save_screen_html(void)
 {
 	char buf[1024], tmp[256] = "screen.html";
 
-#ifdef JP
-	if (!get_string("ファイル名: ", tmp, 80))
-#else
-	if (!get_string("File name: ", tmp, 80))
-#endif
+	if (!get_string(_("ファイル名: ", "File name: "), tmp, 80))
 		return;
 
 	/* Build the filename */
@@ -6357,11 +5166,7 @@ void do_cmd_save_screen(void)
 
 	int wid, hgt;
 
-#ifdef JP
-	prt("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", 0, 0);
-#else
-	prt("Save screen dump? [(y)es/(h)tml/(n)o] ", 0, 0);
-#endif
+	prt(_("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", "Save screen dump? [(y)es/(h)tml/(n)o] "), 0, 0);
 	while(TRUE)
 	{
 		char c = inkey();
@@ -6428,11 +5233,7 @@ void do_cmd_save_screen(void)
 		/* Oops */
 		if (!fff)
 		{
-#ifdef JP
-			msg_format("ファイル %s を開けませんでした。", buf);
-#else
-			msg_format("Failed to open file %s.", buf);
-#endif
+			msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
 			msg_print(NULL);
 			return;
 		}
@@ -6494,14 +5295,8 @@ void do_cmd_save_screen(void)
 		my_fclose(fff);
 
 		/* Message */
-#ifdef JP
-	msg_print("画面(記念撮影)をファイルに書き出しました。");
-#else
-		msg_print("Screen dump saved.");
-#endif
-
+		msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
 		msg_print(NULL);
-
 
 		/* Restore the screen */
 		screen_load();
@@ -6625,11 +5420,7 @@ static void do_cmd_knowledge_artifacts(void)
 	fff = my_fopen_temp(file_name, 1024);
 
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -6726,12 +5517,7 @@ static void do_cmd_knowledge_artifacts(void)
 		artifact_type *a_ptr = &a_info[who[k]];
 
 		/* Paranoia */
-#ifdef JP
-		strcpy(base_name, "未知の伝説のアイテム");
-#else
-		strcpy(base_name, "Unknown Artifact");
-#endif
-
+		strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
 
 		/* Obtain the base object type */
 		z = lookup_kind(a_ptr->tval, a_ptr->sval);
@@ -6759,12 +5545,7 @@ static void do_cmd_knowledge_artifacts(void)
 		}
 
 		/* Hack -- Build the artifact name */
-#ifdef JP
-		fprintf(fff, "     %s\n", base_name);
-#else
-		fprintf(fff, "     The %s\n", base_name);
-#endif
-
+		fprintf(fff, _("     %s\n", "     The %s\n"), base_name);
 	}
 
 	/* Free the "who" array */
@@ -6777,12 +5558,7 @@ static void do_cmd_knowledge_artifacts(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "既知の伝説のアイテム", 0, 0);
-#else
-	show_file(TRUE, file_name, "Artifacts Seen", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("既知の伝説のアイテム", "Artifacts Seen"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -6816,11 +5592,7 @@ static void do_cmd_knowledge_uniques(void)
 
 	if (!fff)
 	{
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -6873,49 +5645,28 @@ static void do_cmd_knowledge_uniques(void)
 
 	if (n_alive_surface)
 	{
-#ifdef JP
-		fprintf(fff, "     地上  生存: %3d体\n", n_alive_surface);
-#else
-		fprintf(fff, "      Surface  alive: %3d\n", n_alive_surface);
-#endif
+		fprintf(fff, _("     地上  生存: %3d体\n", "      Surface  alive: %3d\n"), n_alive_surface);
 		n_alive_total += n_alive_surface;
 	}
 	for (i = 0; i <= max_lev; i++)
 	{
-#ifdef JP
-		fprintf(fff, "%3d-%3d階  生存: %3d体\n", 1 + i * 10, 10 + i * 10, n_alive[i]);
-#else
-		fprintf(fff, "Level %3d-%3d  alive: %3d\n", 1 + i * 10, 10 + i * 10, n_alive[i]);
-#endif
+		fprintf(fff, _("%3d-%3d階  生存: %3d体\n", "Level %3d-%3d  alive: %3d\n"), 1 + i * 10, 10 + i * 10, n_alive[i]);
 		n_alive_total += n_alive[i];
 	}
 	if (n_alive_over100)
 	{
-#ifdef JP
-		fprintf(fff, "101-   階  生存: %3d体\n", n_alive_over100);
-#else
-		fprintf(fff, "Level 101-     alive: %3d\n", n_alive_over100);
-#endif
+		fprintf(fff, _("101-   階  生存: %3d体\n", "Level 101-     alive: %3d\n"), n_alive_over100);
 		n_alive_total += n_alive_over100;
 	}
 
 	if (n_alive_total)
 	{
-#ifdef JP
-		fputs("---------  -----------\n", fff);
-		fprintf(fff, "     合計  生存: %3d体\n\n", n_alive_total);
-#else
-		fputs("-------------  ----------\n", fff);
-		fprintf(fff, "        Total  alive: %3d\n\n", n_alive_total);
-#endif
+		fputs(_("---------  -----------\n", "-------------  ----------\n"), fff);
+		fprintf(fff, _("     合計  生存: %3d体\n\n", "        Total  alive: %3d\n\n"), n_alive_total);
 	}
 	else
 	{
-#ifdef JP
-		fputs("現在は既知の生存ユニークはいません。\n", fff);
-#else
-		fputs("No known uniques alive.\n", fff);
-#endif
+		fputs(_("現在は既知の生存ユニークはいません。\n", "No known uniques alive.\n"), fff);
 	}
 
 	/* Scan the monster races */
@@ -6924,11 +5675,7 @@ static void do_cmd_knowledge_uniques(void)
 		monster_race *r_ptr = &r_info[who[k]];
 
 		/* Print a message */
-#ifdef JP
-		fprintf(fff, "     %s (レベル%d)\n", r_name + r_ptr->name, r_ptr->level);
-#else
-		fprintf(fff, "     %s (level %d)\n", r_name + r_ptr->name, r_ptr->level);
-#endif
+		fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_name + r_ptr->name, r_ptr->level);
 	}
 
 	/* Free the "who" array */
@@ -6938,12 +5685,7 @@ static void do_cmd_knowledge_uniques(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "まだ生きているユニーク・モンスター", 0, 0);
-#else
-	show_file(TRUE, file_name, "Alive Uniques", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("まだ生きているユニーク・モンスター", "Alive Uniques"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -6965,11 +5707,7 @@ static void do_cmd_knowledge_weapon_exp(void)
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -7004,12 +5742,7 @@ static void do_cmd_knowledge_weapon_exp(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "武器の経験値", 0, 0);
-#else
-	show_file(TRUE, file_name, "Weapon Proficiency", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("武器の経験値", "Weapon Proficiency"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -7033,22 +5766,14 @@ static void do_cmd_knowledge_spell_exp(void)
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
 
 	if (p_ptr->realm1 != REALM_NONE)
 	{
-#ifdef JP
-		fprintf(fff, "%sの魔法書\n", realm_names[p_ptr->realm1]);
-#else
-		fprintf(fff, "%s Spellbook\n", realm_names[p_ptr->realm1]);
-#endif
+		fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), realm_names[p_ptr->realm1]);
 		for (i = 0; i < 32; i++)
 		{
 			if (!is_magic(p_ptr->realm1))
@@ -7078,11 +5803,7 @@ static void do_cmd_knowledge_spell_exp(void)
 
 	if (p_ptr->realm2 != REALM_NONE)
 	{
-#ifdef JP
-		fprintf(fff, "%sの魔法書\n", realm_names[p_ptr->realm2]);
-#else
-		fprintf(fff, "\n%s Spellbook\n", realm_names[p_ptr->realm2]);
-#endif
+		fprintf(fff, _("%sの魔法書\n", "\n%s Spellbook\n"), realm_names[p_ptr->realm2]);
 		for (i = 0; i < 32; i++)
 		{
 			if (!is_magic(p_ptr->realm1))
@@ -7110,12 +5831,7 @@ static void do_cmd_knowledge_spell_exp(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "魔法の経験値", 0, 0);
-#else
-	show_file(TRUE, file_name, "Spell Proficiency", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("魔法の経験値", "Spell Proficiency"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -7134,20 +5850,14 @@ static void do_cmd_knowledge_skill_exp(void)
 	FILE *fff;
 
 	char file_name[1024];
-#ifdef JP
-	char skill_name[3][17]={"マーシャルアーツ", "二刀流          ", "乗馬            "};
-#else
-	char skill_name[3][20]={"Martial Arts    ", "Dual Wielding   ", "Riding          "};
-#endif
+	char skill_name[3][20]={_("マーシャルアーツ", "Martial Arts    "),
+							_("二刀流          ", "Dual Wielding   "), 
+							_("乗馬            ", "Riding          ")};
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -7167,12 +5877,7 @@ static void do_cmd_knowledge_skill_exp(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "技能の経験値", 0, 0);
-#else
-	show_file(TRUE, file_name, "Miscellaneous Proficiency", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("技能の経験値", "Miscellaneous Proficiency"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -7323,11 +6028,7 @@ static void do_cmd_knowledge_pets(void)
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -7368,12 +6069,7 @@ static void do_cmd_knowledge_pets(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "現在のペット", 0, 0);
-#else
-	show_file(TRUE, file_name, "Current Pets", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("現在のペット", "Current Pets"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -7403,11 +6099,7 @@ static void do_cmd_knowledge_kill_count(void)
 	fff = my_fopen_temp(file_name, 1024);
 
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -7444,11 +6136,7 @@ static void do_cmd_knowledge_kill_count(void)
 		}
 
 		if (Total < 1)
-#ifdef JP
-			fprintf(fff,"あなたはまだ敵を倒していない。\n\n");
-#else
-			fprintf(fff,"You have defeated no enemies yet.\n\n");
-#endif
+			fprintf(fff,_("あなたはまだ敵を倒していない。\n\n", "You have defeated no enemies yet.\n\n"));
 		else
 #ifdef JP
 			fprintf(fff,"あなたは%ld体の敵を倒している。\n\n", (long int)Total);
@@ -7547,12 +6235,7 @@ static void do_cmd_knowledge_kill_count(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "倒した敵の数", 0, 0);
-#else
-	show_file(TRUE, file_name, "Kill Count", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -7965,12 +6648,11 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		if (!visual_only)
 		{
 			/* Display kills */
-			if (!(r_ptr->flags1 & RF1_UNIQUE)) put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
-#ifdef JP
-			else c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? "死亡" : "生存"), row + i, 74);
-#else
-			else c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? " dead" : "alive"), row + i, 73);
-#endif
+			if (!(r_ptr->flags1 & RF1_UNIQUE)) 
+				put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
+			else 
+				c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), 
+						  (r_ptr->max_num == 0 ? _("死亡", " dead") : _("生存", "alive")), row + i, 74);
 		}
 	}
 
@@ -8352,11 +7034,7 @@ static void desc_obj_fake(int k_idx)
 
 	if (!screen_object(o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL))
 	{
-#ifdef JP
-		msg_print("特に変わったところはないようだ。");
-#else
-		msg_print("You see nothing special.");
-#endif
+		msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
 		msg_print(NULL);
 	}
 }
@@ -9081,11 +7759,7 @@ static void do_cmd_knowledge_kubi(void)
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -9117,11 +7791,7 @@ static void do_cmd_knowledge_kubi(void)
 
 		if (!listed)
 		{
-#ifdef JP
-			fprintf(fff,"\n%s\n", "賞金首はもう残っていません。");
-#else
-			fprintf(fff,"\n%s\n", "There is no more wanted monster.");
-#endif
+			fprintf(fff,"\n%s\n", _("賞金首はもう残っていません。", "There is no more wanted monster."));
 		}
 	}
 	
@@ -9129,12 +7799,7 @@ static void do_cmd_knowledge_kubi(void)
 	my_fclose(fff);
 	
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "賞金首の一覧", 0, 0);
-#else
-	show_file(TRUE, file_name, "Wanted monsters", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
 	
 	/* Remove the file */
 	fd_kill(file_name);
@@ -9153,22 +7818,14 @@ static void do_cmd_knowledge_virtues(void)
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
 	
 	if (fff)
 	{
-#ifdef JP
-		fprintf(fff, "現在の属性 : %s\n\n", your_alignment());
-#else
-		fprintf(fff, "Your alighnment : %s\n\n", your_alignment());
-#endif
+		fprintf(fff, _("現在の属性 : %s\n\n", "Your alighnment : %s\n\n"), your_alignment());
 		dump_virtues(fff);
 	}
 	
@@ -9176,12 +7833,7 @@ static void do_cmd_knowledge_virtues(void)
 	my_fclose(fff);
 	
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "八つの徳", 0, 0);
-#else
-	show_file(TRUE, file_name, "Virtues", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("八つの徳", "Virtues"), 0, 0);
 	
 	/* Remove the file */
 	fd_kill(file_name);
@@ -9202,11 +7854,7 @@ static void do_cmd_knowledge_dungeon(void)
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -9224,11 +7872,8 @@ static void do_cmd_knowledge_dungeon(void)
 				if (!r_info[d_info[i].final_guardian].max_num) seiha = TRUE;
 			}
 			else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
-#ifdef JP
-			fprintf(fff,"%c%-12s :  %3d 階\n", seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
-#else
-			fprintf(fff,"%c%-16s :  level %3d\n", seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
-#endif
+			
+			fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
 		}
 	}
 	
@@ -9236,12 +7881,7 @@ static void do_cmd_knowledge_dungeon(void)
 	my_fclose(fff);
 	
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "今までに入ったダンジョン", 0, 0);
-#else
-	show_file(TRUE, file_name, "Dungeon", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
 	
 	/* Remove the file */
 	fd_kill(file_name);
@@ -9261,11 +7901,7 @@ static void do_cmd_knowledge_stat(void)
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -9298,12 +7934,7 @@ static void do_cmd_knowledge_stat(void)
 	my_fclose(fff);
 	
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "自分に関する情報", 0, 0);
-#else
-	show_file(TRUE, file_name, "HP-rate & Max stat", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("自分に関する情報", "HP-rate & Max stat"), 0, 0);
 	
 	/* Remove the file */
 	fd_kill(file_name);
@@ -9323,11 +7954,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 	int rand_level = 100;
 	int total = 0;
 
-#ifdef JP
-	fprintf(fff, "《遂行中のクエスト》\n");
-#else
-	fprintf(fff, "< Current Quest >\n");
-#endif
+	fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
 	for (i = 1; i < max_quests; i++)
 	{
@@ -9382,11 +8009,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 #endif
 						}
 						else
-#ifdef JP
-							sprintf(note," - %sを倒す。",name);
-#else
-							sprintf(note," - kill %s.",name);
-#endif
+							sprintf(note,_(" - %sを倒す。", " - kill %s."),name);
 						break;
 
 					case QUEST_TYPE_FIND_ARTIFACT:
@@ -9401,18 +8024,10 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 							q_ptr->ident = IDENT_STORE;
 							object_desc(name, q_ptr, OD_NAME_ONLY);
 						}
-#ifdef JP
-						sprintf(note,"\n   - %sを見つけ出す。", name);
-#else
-						sprintf(note,"\n   - Find out %s.", name);
-#endif
+						sprintf(note,_("\n   - %sを見つけ出す。", "\n   - Find out %s."), name);
 						break;
 					case QUEST_TYPE_FIND_EXIT:
-#ifdef JP
-						sprintf(note," - 出口に到達する。");
-#else
-						sprintf(note," - Reach to Exit.");
-#endif
+						sprintf(note,_(" - 出口に到達する。", " - Reach to Exit."));
 						break;
 
 					case QUEST_TYPE_KILL_NUMBER:
@@ -9427,11 +8042,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 
 					case QUEST_TYPE_KILL_ALL:
 					case QUEST_TYPE_TOWER:
-#ifdef JP
-						sprintf(note," - 全てのモンスターを倒す。");
-#else
-						sprintf(note," - Kill all monsters.");
-#endif
+						sprintf(note,_(" - 全てのモンスターを倒す。", " - Kill all monsters."));
 						break;
 					}
 				}
@@ -9449,11 +8060,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 
 				if (quest[i].status == QUEST_STATUS_COMPLETED)
 				{
-#ifdef JP
-					sprintf(tmp_str, "    クエスト達成 - まだ報酬を受けとってない。\n");
-#else
-					sprintf(tmp_str, "    Quest Completed - Unrewarded\n");
-#endif
+					sprintf(tmp_str, _("    クエスト達成 - まだ報酬を受けとってない。\n", "    Quest Completed - Unrewarded\n"));
 					fputs(tmp_str, fff);
 				}
 				else
@@ -9510,11 +8117,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 	/* Print the current random quest  */
 	if (rand_tmp_str[0]) fputs(rand_tmp_str, fff);
 
-#ifdef JP
-	if (!total) fprintf(fff, "  なし\n");
-#else
-	if (!total) fprintf(fff, "  Nothing.\n");
-#endif
+	if (!total) fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
 
@@ -9590,11 +8193,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 	int i;
 	int total = 0;
 
-#ifdef JP
-	fprintf(fff, "《達成したクエスト》\n");
-#else
-	fprintf(fff, "< Completed Quest >\n");
-#endif
+	fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
 	for (i = 1; i < max_quests; i++)
 	{
 		int q_idx = quest_num[i];
@@ -9606,11 +8205,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 			++ total;
 		}
 	}
-#ifdef JP
-	if (!total) fprintf(fff, "  なし\n");
-#else
-	if (!total) fprintf(fff, "  Nothing.\n");
-#endif
+	if (!total) fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
 
@@ -9622,11 +8217,7 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 	int i;
 	int total = 0;
 
-#ifdef JP
-	fprintf(fff, "《失敗したクエスト》\n");
-#else
-	fprintf(fff, "< Failed Quest >\n");
-#endif
+	fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
 	for (i = 1; i < max_quests; i++)
 	{
 		int q_idx = quest_num[i];
@@ -9638,11 +8229,7 @@ void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
 			++ total;
 		}
 	}
-#ifdef JP
-	if (!total) fprintf(fff, "  なし\n");
-#else
-	if (!total) fprintf(fff, "  Nothing.\n");
-#endif
+	if (!total) fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
 
@@ -9655,11 +8242,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 	int i;
 	int total = 0;
 
-#ifdef JP
-	fprintf(fff, "《残りのランダムクエスト》\n");
-#else
-	fprintf(fff, "< Remaining Random Quest >\n");
-#endif
+	fprintf(fff, _("《残りのランダムクエスト》\n", "< Remaining Random Quest >\n"));
 	for (i = 1; i < max_quests; i++)
 	{
 		/* No info from "silent" quests */
@@ -9680,11 +8263,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 			fputs(tmp_str, fff);
 		}
 	}
-#ifdef JP
-	if (!total) fprintf(fff, "  なし\n");
-#else
-	if (!total) fprintf(fff, "  Nothing.\n");
-#endif
+	if (!total) fprintf(fff, _("  なし\n", "  Nothing.\n"));
 }
 
 
@@ -9727,11 +8306,7 @@ static void do_cmd_knowledge_quests(void)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
@@ -9761,11 +8336,7 @@ static void do_cmd_knowledge_quests(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "クエスト達成状況", 0, 0);
-#else
-	show_file(TRUE, file_name, "Quest status", 0, 0);
-#endif
+	show_file(TRUE, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -9793,11 +8364,7 @@ static void do_cmd_knowledge_home(void)
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
-#ifdef JP
-		msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-		msg_format("Failed to create temporary file %s.", file_name);
-#endif
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 		msg_print(NULL);
 		return;
 	}
@@ -9814,11 +8381,7 @@ static void do_cmd_knowledge_home(void)
 			int x = 1;
 #endif
 			/* Header with name of the town */
-#ifdef JP
-			fprintf(fff, "  [ 我が家のアイテム ]\n");
-#else
-			fprintf(fff, "  [Home Inventory]\n");
-#endif
+			fprintf(fff, _("  [ 我が家のアイテム ]\n", "  [Home Inventory]\n"));
 
 			/* Dump all available items */
 			for (i = 0; i < st_ptr->stock_num; i++)
@@ -9857,12 +8420,7 @@ static void do_cmd_knowledge_home(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "我が家のアイテム", 0, 0);
-#else
-	show_file(TRUE, file_name, "Home Inventory", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("我が家のアイテム", "Home Inventory"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -9883,30 +8441,19 @@ static void do_cmd_knowledge_autopick(void)
 
 	if (!fff)
 	{
-#ifdef JP
-	    msg_format("一時ファイル %s を作成できませんでした。", file_name);
-#else
-	    msg_format("Failed to create temporary file %s.", file_name);
-#endif
+	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	    msg_print(NULL);
 	    return;
 	}
 
 	if (!max_autopick)
 	{
-#ifdef JP
-	    fprintf(fff, "自動破壊/拾いには何も登録されていません。");
-#else
-	    fprintf(fff, "No preference for auto picker/destroyer.");
-#endif
+	    fprintf(fff, _("自動破壊/拾いには何も登録されていません。", "No preference for auto picker/destroyer."));
 	}
 	else
 	{
-#ifdef JP
-	    fprintf(fff, "   自動拾い/破壊には現在 %d行登録されています。\n\n", max_autopick);
-#else
-	    fprintf(fff, "   There are %d registered lines for auto picker/destroyer.\n\n", max_autopick);
-#endif
+		fprintf(fff, _("   自動拾い/破壊には現在 %d行登録されています。\n\n",
+					   "   There are %d registered lines for auto picker/destroyer.\n\n"), max_autopick);
 	}
 
 	for (k = 0; k < max_autopick; k++)
@@ -9915,35 +8462,19 @@ static void do_cmd_knowledge_autopick(void)
 		byte act = autopick_list[k].action;
 		if (act & DONT_AUTOPICK)
 		{
-#ifdef JP
-			tmp = "放置";
-#else
-			tmp = "Leave";
-#endif
+			tmp = _("放置", "Leave");
 		}
 		else if (act & DO_AUTODESTROY)
 		{
-#ifdef JP
-			tmp = "破壊";
-#else
-			tmp = "Destroy";
-#endif
+			tmp = _("破壊", "Destroy");
 		}
 		else if (act & DO_AUTOPICK)
 		{
-#ifdef JP
-			tmp = "拾う";
-#else
-			tmp = "Pickup";
-#endif
+			tmp = _("拾う", "Pickup");
 		}
 		else /* if (act & DO_QUERY_AUTOPICK) */ /* Obvious */
 		{
-#ifdef JP
-			tmp = "確認";
-#else
-			tmp = "Query";
-#endif
+			tmp = _("確認", "Query");
 		}
 
 		if (act & DO_DISPLAY)
@@ -9959,11 +8490,7 @@ static void do_cmd_knowledge_autopick(void)
 	/* Close the file */
 	my_fclose(fff);
 	/* Display the file contents */
-#ifdef JP
-	show_file(TRUE, file_name, "自動拾い/破壊 設定リスト", 0, 0);
-#else
-	show_file(TRUE, file_name, "Auto-picker/Destroyer", 0, 0);
-#endif
+	show_file(TRUE, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -10196,12 +8723,7 @@ void do_cmd_time(void)
 
 	num = 0;
 
-#ifdef JP
-	strcpy(desc, "変な時刻だ。");
-#else
-	strcpy(desc, "It is a strange time.");
-#endif
-
+	strcpy(desc, _("変な時刻だ。", "It is a strange time."));
 
 	if (day < MAX_DAYS) sprintf(day_buf, "%d", day);
 	else strcpy(day_buf, "*****");
@@ -10221,21 +8743,11 @@ void do_cmd_time(void)
 	/* Find the path */
 	if (!randint0(10) || p_ptr->image)
 	{
-#ifdef JP
-		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timefun_j.txt");
-#else
-		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timefun.txt");
-#endif
-
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
 	}
 	else
 	{
-#ifdef JP
-		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timenorm_j.txt");
-#else
-		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "timenorm.txt");
-#endif
-
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));
 	}
 
 	/* Open this file */

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  *  @file cmd3.c
  *  @brief プレイヤーのアイテムに関するコマンドの実装1 / Inventory commands
  *  @date 2014/01/02
@@ -245,13 +245,8 @@ void do_cmd_wield(void)
 	item_tester_hook = item_tester_hook_wear;
 
 	/* Get an item */
-#ifdef JP
-	q = "どれを装備しますか? ";
-	s = "装備可能なアイテムがない。";
-#else
-	q = "Wear/Wield which item? ";
-	s = "You have nothing you can wear or wield.";
-#endif
+	q = _("どれを装備しますか? ", "Wear/Wield which item? ");
+	s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -285,14 +280,8 @@ void do_cmd_wield(void)
 			item_tester_no_ryoute = TRUE;
 
 			/* Choose a weapon from the equipment only */
-#ifdef JP
-			q = "どちらの武器と取り替えますか?";
-			s = "おっと。";
-#else
-			q = "Replace which weapon? ";
-			s = "Oops.";
-#endif
-
+			q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
+			s = _("おっと。", "Oops.");
 			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
 			if (slot == INVEN_RARM) need_switch_wielding = INVEN_LARM;
 		}
@@ -307,14 +296,8 @@ void do_cmd_wield(void)
 			item_tester_hook = item_tester_hook_mochikae;
 
 			/* Choose a hand */
-#ifdef JP
-			q = "どちらの手に装備しますか?";
-			s = "おっと。";
-#else
-			q = "Equip which hand? ";
-			s = "Oops.";
-#endif
-
+			q = _("どちらの手に装備しますか?", "Equip which hand? ");
+			s = _("おっと。", "Oops.");
 			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
 		}
 		break;
@@ -327,20 +310,12 @@ void do_cmd_wield(void)
 		/* Asking for dual wielding */
 		if (slot == INVEN_LARM)
 		{
-#ifdef JP
-			if (!get_check("二刀流で戦いますか？")) slot = INVEN_RARM;
-#else
-			if (!get_check("Dual wielding? ")) slot = INVEN_RARM;
-#endif
+			if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) slot = INVEN_RARM;
 		}
 
 		else if (!inventory[INVEN_RARM].k_idx && buki_motteruka(INVEN_LARM))
 		{
-#ifdef JP
-			if (!get_check("二刀流で戦いますか？")) slot = INVEN_LARM;
-#else
-			if (!get_check("Dual wielding? ")) slot = INVEN_LARM;
-#endif
+			if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) slot = INVEN_LARM;
 		}
 
 		/* Both arms are already used */
@@ -350,14 +325,9 @@ void do_cmd_wield(void)
 			item_tester_hook = item_tester_hook_mochikae;
 
 			/* Choose a hand */
-#ifdef JP
-			q = "どちらの手に装備しますか?";
-			s = "おっと。";
-#else
-			q = "Equip which hand? ";
-			s = "Oops.";
-#endif
-
+			q = _("どちらの手に装備しますか?", "Equip which hand? ");
+			s = _("おっと。", "Oops.");
+			
 			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
 			if ((slot == INVEN_LARM) && !buki_motteruka(INVEN_RARM))
 				need_switch_wielding = INVEN_RARM;
@@ -369,26 +339,13 @@ void do_cmd_wield(void)
 		/* Choose a ring slot */
 		if (inventory[INVEN_LEFT].k_idx && inventory[INVEN_RIGHT].k_idx)
 		{
-#ifdef JP
-			q = "どちらの指輪と取り替えますか?";
-#else
-			q = "Replace which ring? ";
-#endif
+			q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
 		}
 		else
 		{
-#ifdef JP
-			q = "どちらの手に装備しますか?";
-#else
-			q = "Equip which hand? ";
-#endif
+			q = _("どちらの手に装備しますか?", "Equip which hand? ");
 		}
-
-#ifdef JP
-		s = "おっと。";
-#else
-		s = "Oops.";
-#endif
+		s = _("おっと。", "Oops.");
 
 		/* Restrict the choices */
 		select_ring_slot = TRUE;
@@ -431,12 +388,7 @@ void do_cmd_wield(void)
 
 		/* Describe it */
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-#ifdef JP
-sprintf(dummy, "本当に%s{呪われている}を使いますか？", o_name);
-#else
-		sprintf(dummy, "Really use the %s {cursed}? ", o_name);
-#endif
+		sprintf(dummy, _("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), o_name);
 
 		if (!get_check(dummy)) return;
 	}
@@ -449,7 +401,7 @@ sprintf(dummy, "本当に%s{呪われている}を使いますか？", o_name);
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
-sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいですか？", o_name);
+		sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいですか？", o_name);
 #else
 		msg_format("%s will transforms you into a vampire permanently when equiped.", o_name);
 		sprintf(dummy, "Do you become a vampire?");
@@ -471,12 +423,10 @@ sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいで�
 		object_copy(otmp_ptr, switch_o_ptr);
 		object_copy(switch_o_ptr, slot_o_ptr);
 		object_copy(slot_o_ptr, otmp_ptr);
-#ifdef JP
-		msg_format("%sを%sに構えなおした。", switch_name, (slot == INVEN_RARM) ? (left_hander ? "左手" : "右手") : (left_hander ? "右手" : "左手"));
-#else
-		msg_format("You wield %s at %s hand.", switch_name, (slot == INVEN_RARM) ? (left_hander ? "left" : "right") : (left_hander ? "right" : "left"));
-#endif
-
+		
+		msg_format(_("%sを%sに構えなおした。", "You wield %s at %s hand."), switch_name, 
+					(slot == INVEN_RARM) ? (left_hander ? _("左手", "left") : _("右手", "right")) : 
+										   (left_hander ? _("右手", "right") : _("左手", "left")));
 		slot = need_switch_wielding;
 	}
 
@@ -566,27 +516,15 @@ sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいで�
 		break;
 
 	case INVEN_BOW:
-#ifdef JP
-		act = "%s(%c)を射撃用に装備した。";
-#else
-		act = "You are shooting with %s (%c).";
-#endif
+		act = _("%s(%c)を射撃用に装備した。", "You are shooting with %s (%c).");
 		break;
 
 	case INVEN_LITE:
-#ifdef JP
-		act = "%s(%c)を光源にした。";
-#else
-		act = "Your light source is %s (%c).";
-#endif
+		act = _("%s(%c)を光源にした。", "Your light source is %s (%c).");
 		break;
 
 	default:
-#ifdef JP
-		act = "%s(%c)を装備した。";
-#else
-		act = "You are wearing %s (%c).";
-#endif
+		act = _("%s(%c)を装備した。", "You are wearing %s (%c).");
 		break;
 	}
 
@@ -601,13 +539,7 @@ sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいで�
 	if (object_is_cursed(o_ptr))
 	{
 		/* Warn the player */
-#ifdef JP
-		msg_print("うわ！ すさまじく冷たい！");
-#else
-		msg_print("Oops! It feels deathly cold!");
-#endif
-
-
+		msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));
 		chg_virtue(V_HARMONY, -1);
 
 		/* Note the curse */
@@ -663,26 +595,15 @@ void kamaenaoshi(int item)
 				inven_item_increase(INVEN_LARM, -((int)o_ptr->number));
 				inven_item_optimize(INVEN_LARM);
 				if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
-#ifdef JP
-					msg_format("%sを両手で構えた。", o_name);
-#else
-					msg_format("You are wielding %s with both hands.", o_name);
-#endif
+					msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 				 else
-#ifdef JP
-					msg_format("%sを%sで構えた。", o_name, (left_hander ? "左手" : "右手"));
-#else
-					msg_format("You are wielding %s in your %s hand.", o_name, (left_hander ? "left":"right"));
-#endif
+				msg_format(_("%sを%sで構えた。", "You are wielding %s in your %s hand."), o_name, 
+							(left_hander ? _("左手", "left") : _("右手", "right")));
 			}
 			else
 			{
 				if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
-#ifdef JP
-					msg_format("%sを両手で構えた。", o_name);
-#else
-					msg_format("You are wielding %s with both hands.", o_name);
-#endif
+					msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 			}
 		}
 	}
@@ -694,11 +615,7 @@ void kamaenaoshi(int item)
 		if (buki_motteruka(INVEN_RARM))
 		{
 			if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
-#ifdef JP
-				msg_format("%sを両手で構えた。", o_name);
-#else
-				msg_format("You are wielding %s with both hands.", o_name);
-#endif
+				msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 		}
 		else if (!(empty_hands(FALSE) & EMPTY_HAND_RARM) && !object_is_cursed(o_ptr))
 		{
@@ -707,11 +624,7 @@ void kamaenaoshi(int item)
 			p_ptr->total_weight += o_ptr->weight;
 			inven_item_increase(INVEN_RARM, -((int)o_ptr->number));
 			inven_item_optimize(INVEN_RARM);
-#ifdef JP
-			msg_format("%sを持ち替えた。", o_name);
-#else
-			msg_format("You switched hand of %s.", o_name);
-#endif
+			msg_format(_("%sを持ち替えた。", "You switched hand of %s."), o_name);
 		}
 	}
 }
@@ -765,11 +678,7 @@ void do_cmd_takeoff(void)
 		if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (p_ptr->pclass != CLASS_BERSERKER))
 		{
 			/* Oops */
-#ifdef JP
-			msg_print("ふーむ、どうやら呪われているようだ。");
-#else
-			msg_print("Hmmm, it seems to be cursed.");
-#endif
+			msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
 
 			/* Nope */
 			return;
@@ -777,11 +686,7 @@ void do_cmd_takeoff(void)
 
 		if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && one_in_(7)) || one_in_(4))
 		{
-#ifdef JP
-			msg_print("呪われた装備を力づくで剥がした！");
-#else
-			msg_print("You teared a cursed equipment off by sheer strength!");
-#endif
+			msg_print(_("呪われた装備を力づくで剥がした！", "You teared a cursed equipment off by sheer strength!"));
 
 			/* Hack -- Assume felt */
 			o_ptr->ident |= (IDENT_SENSE);
@@ -797,19 +702,11 @@ void do_cmd_takeoff(void)
 			/* Window stuff */
 			p_ptr->window |= (PW_EQUIP);
 
-#ifdef JP
-			msg_print("呪いを打ち破った。");
-#else
-			msg_print("You break the curse.");
-#endif
+			msg_print(_("呪いを打ち破った。", "You break the curse."));
 		}
 		else
 		{
-#ifdef JP
-			msg_print("装備を外せなかった。");
-#else
-			msg_print("You couldn't remove the equipment.");
-#endif
+			msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
 			energy_use = 50;
 			return;
 		}
@@ -875,13 +772,7 @@ void do_cmd_drop(void)
 	if ((item >= INVEN_RARM) && object_is_cursed(o_ptr))
 	{
 		/* Oops */
-#ifdef JP
-		msg_print("ふーむ、どうやら呪われているようだ。");
-#else
-		msg_print("Hmmm, it seems to be cursed.");
-#endif
-
-
+		msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
 		/* Nope */
 		return;
 	}
@@ -1001,14 +892,7 @@ void do_cmd_destroy(void)
 		object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 		/* Make a verification */
-		sprintf(out_val, 
-#ifdef JP
-			"本当に%sを壊しますか? [y/n/Auto]",
-#else
-			"Really destroy %s? [y/n/Auto]",
-#endif
-			o_name);
-
+		sprintf(out_val, _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), o_name);
 		msg_print(NULL);
 
 		/* HACK : Add the line to message buffer */
@@ -1080,12 +964,7 @@ void do_cmd_destroy(void)
 		energy_use = 0;
 
 		/* Message */
-#ifdef JP
-		msg_format("%sは破壊不可能だ。", o_name);
-#else
-		msg_format("You cannot destroy %s.", o_name);
-#endif
-
+		msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), o_name);
 		/* Done */
 		return;
 	}
@@ -1093,12 +972,7 @@ void do_cmd_destroy(void)
 	object_copy(q_ptr, o_ptr);
 
 	/* Message */
-#ifdef JP
-	msg_format("%sを壊した。", o_name);
-#else
-	msg_format("You destroy %s.", o_name);
-#endif
-
+	msg_format(_("%sを壊した。", "You destroy %s."), o_name);
 	sound(SOUND_DESTITEM);
 
 	/* Reduce the charges of rods/wands */
@@ -1150,12 +1024,7 @@ void do_cmd_destroy(void)
 			if (q_ptr->sval < 3) tester_exp /= 4;
 			if (tester_exp<1) tester_exp = 1;
 
-#ifdef JP
-msg_print("更に経験を積んだような気がする。");
-#else
-			msg_print("You feel more experienced.");
-#endif
-
+			msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
 			gain_exp(tester_exp * amt);
 		}
 		if (high_level_book(q_ptr) && q_ptr->tval == TV_LIFE_BOOK)
@@ -1228,12 +1097,7 @@ void do_cmd_observe(void)
 	/* Require full knowledge */
 	if (!(o_ptr->ident & IDENT_MENTAL))
 	{
-#ifdef JP
-		msg_print("このアイテムについて特に知っていることはない。");
-#else
-		msg_print("You have no special knowledge about that item.");
-#endif
-
+		msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
 		return;
 	}
 
@@ -1242,19 +1106,9 @@ void do_cmd_observe(void)
 	object_desc(o_name, o_ptr, 0);
 
 	/* Describe */
-#ifdef JP
-	msg_format("%sを調べている...", o_name);
-#else
-	msg_format("Examining %s...", o_name);
-#endif
-
+	msg_format(_("%sを調べている...", "Examining %s..."), o_name);
 	/* Describe it fully */
-#ifdef JP
-	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL)) msg_print("特に変わったところはないようだ。");
-#else
-	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL)) msg_print("You see nothing special.");
-#endif
-
+	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL)) msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
 }
 
 
@@ -1299,22 +1153,12 @@ void do_cmd_uninscribe(void)
 	/* Nothing to remove */
 	if (!o_ptr->inscription)
 	{
-#ifdef JP
-		msg_print("このアイテムには消すべき銘がない。");
-#else
-		msg_print("That item had no inscription to remove.");
-#endif
-
+		msg_print(_("このアイテムには消すべき銘がない。", "That item had no inscription to remove."));
 		return;
 	}
 
 	/* Message */
-#ifdef JP
-	msg_print("銘を消した。");
-#else
-	msg_print("Inscription removed.");
-#endif
-
+	msg_print(_("銘を消した。", "Inscription removed."));
 
 	/* Remove the incription */
 	o_ptr->inscription = 0;
@@ -1376,12 +1220,7 @@ void do_cmd_inscribe(void)
 	object_desc(o_name, o_ptr, OD_OMIT_INSCRIPTION);
 
 	/* Message */
-#ifdef JP
-	msg_format("%sに銘を刻む。", o_name);
-#else
-	msg_format("Inscribing %s.", o_name);
-#endif
-
+	msg_format(_("%sに銘を刻む。", "Inscribing %s."), o_name);
 	msg_print(NULL);
 
 	/* Start with nothing */
@@ -1395,11 +1234,7 @@ void do_cmd_inscribe(void)
 	}
 
 	/* Get a new inscription (possibly empty) */
-#ifdef JP
-	if (get_string("銘: ", out_val, 80))
-#else
-	if (get_string("Inscription: ", out_val, 80))
-#endif
+	if (get_string(_("銘: ", "Inscription: "), out_val, 80))
 	{
 		/* Save the inscription */
 		o_ptr->inscription = quark_add(out_val);
@@ -1489,40 +1324,23 @@ static void do_cmd_refill_lamp(void)
 	j_ptr->xtra4 += o_ptr->xtra4;
 
 	/* Message */
-#ifdef JP
-	msg_print("ランプに油を注いだ。");
-#else
-	msg_print("You fuel your lamp.");
-#endif
+	msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
 
 	/* Comment */
 	if ((o_ptr->name2 == EGO_LITE_DARKNESS) && (j_ptr->xtra4 > 0))
 	{
 		j_ptr->xtra4 = 0;
-#ifdef JP
-		msg_print("ランプが消えてしまった！");
-#else
-		msg_print("Your lamp has gone out!");
-#endif
+		msg_print(_("ランプが消えてしまった！", "Your lamp has gone out!"));
 	}
 	else if ((o_ptr->name2 == EGO_LITE_DARKNESS) || (j_ptr->name2 == EGO_LITE_DARKNESS))
 	{
 		j_ptr->xtra4 = 0;
-#ifdef JP
-		msg_print("しかしランプは全く光らない。");
-#else
-		msg_print("Curiously, your lamp doesn't light.");
-#endif
+		msg_print(_("しかしランプは全く光らない。", "Curiously, your lamp doesn't light."));
 	}
 	else if (j_ptr->xtra4 >= FUEL_LAMP)
 	{
 		j_ptr->xtra4 = FUEL_LAMP;
-#ifdef JP
-		msg_print("ランプの油は一杯だ。");
-#else
-		msg_print("Your lamp is full.");
-#endif
-
+		msg_print(_("ランプの油は一杯だ。", "Your lamp is full."));
 	}
 
 	/* Decrease the item (from the pack) */
@@ -1615,53 +1433,30 @@ static void do_cmd_refill_torch(void)
 	j_ptr->xtra4 += o_ptr->xtra4 + 5;
 
 	/* Message */
-#ifdef JP
-	msg_print("松明を結合した。");
-#else
-	msg_print("You combine the torches.");
-#endif
-
+	msg_print(_("松明を結合した。", "You combine the torches."));
 
 	/* Comment */
 	if ((o_ptr->name2 == EGO_LITE_DARKNESS) && (j_ptr->xtra4 > 0))
 	{
 		j_ptr->xtra4 = 0;
-#ifdef JP
-		msg_print("松明が消えてしまった！");
-#else
-		msg_print("Your torch has gone out!");
-#endif
+		msg_print(_("松明が消えてしまった！", "Your torch has gone out!"));
 	}
 	else if ((o_ptr->name2 == EGO_LITE_DARKNESS) || (j_ptr->name2 == EGO_LITE_DARKNESS))
 	{
 		j_ptr->xtra4 = 0;
-#ifdef JP
-		msg_print("しかし松明は全く光らない。");
-#else
-		msg_print("Curiously, your torche don't light.");
-#endif
+		msg_print(_("しかし松明は全く光らない。", "Curiously, your torche don't light."));
 	}
 	/* Over-fuel message */
 	else if (j_ptr->xtra4 >= FUEL_TORCH)
 	{
 		j_ptr->xtra4 = FUEL_TORCH;
-#ifdef JP
-		msg_print("松明の寿命は十分だ。");
-#else
-		msg_print("Your torch is fully fueled.");
-#endif
-
+		msg_print(_("松明の寿命は十分だ。", "Your torch is fully fueled."));
 	}
 
 	/* Refuel message */
 	else
 	{
-#ifdef JP
-		msg_print("松明はいっそう明るく輝いた。");
-#else
-		msg_print("Your torch glows more brightly.");
-#endif
-
+		msg_print(_("松明はいっそう明るく輝いた。", "Your torch glows more brightly."));
 	}
 
 	/* Decrease the item (from the pack) */
@@ -1705,12 +1500,7 @@ void do_cmd_refill(void)
 	/* It is nothing */
 	if (o_ptr->tval != TV_LITE)
 	{
-#ifdef JP
-		msg_print("光源を装備していない。");
-#else
-		msg_print("You are not wielding a light.");
-#endif
-
+		msg_print(_("光源を装備していない。", "You are not wielding a light."));
 	}
 
 	/* It's a lamp */
@@ -1728,12 +1518,7 @@ void do_cmd_refill(void)
 	/* No torch to refill */
 	else
 	{
-#ifdef JP
-		msg_print("この光源は寿命を延ばせない。");
-#else
-		msg_print("Your light cannot be refilled.");
-#endif
-
+		msg_print(_("この光源は寿命を延ばせない。", "Your light cannot be refilled."));
 	}
 }
 
@@ -1748,23 +1533,13 @@ void do_cmd_target(void)
 	/* Target set */
 	if (target_set(TARGET_KILL))
 	{
-#ifdef JP
-		msg_print("ターゲット決定。");
-#else
-		msg_print("Target Selected.");
-#endif
-
+		msg_print(_("ターゲット決定。", "Target Selected."));
 	}
 
 	/* Target aborted */
 	else
 	{
-#ifdef JP
-		msg_print("ターゲット解除。");
-#else
-		msg_print("Target Aborted.");
-#endif
-
+		msg_print(_("ターゲット解除。", "Target Aborted."));
 	}
 }
 
@@ -1785,12 +1560,7 @@ void do_cmd_look(void)
 	/* Look around */
 	if (target_set(TARGET_LOOK))
 	{
-#ifdef JP
-		msg_print("ターゲット決定。");
-#else
-		msg_print("Target Selected.");
-#endif
-
+		msg_print(_("ターゲット決定。", "Target Selected."));
 	}
 }
 
@@ -1846,13 +1616,8 @@ void do_cmd_locate(void)
 		}
 
 		/* Prepare to ask which way to look */
-		sprintf(out_val,
-#ifdef JP
-			"マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?",
-#else
-			"Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?",
-#endif
-
+		sprintf(out_val, _("マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?", 
+					       "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?"),
 			y2 / (hgt / 2), y2 % (hgt / 2),
 			x2 / (wid / 2), x2 % (wid / 2), tmp_val);
 
@@ -2046,11 +1811,8 @@ void do_cmd_query_symbol(void)
 	u16b	*who;
 
 	/* Get a character, or abort */
-#ifdef JP
-	if (!get_com("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ", &sym, FALSE)) return;
-#else
-	if (!get_com("Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): ", &sym, FALSE)) return;
-#endif
+	if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ", 
+				   "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "), &sym, FALSE)) return;
 
 	/* Find that character info, and describe it */
 	for (i = 0; ident_info[i]; ++i)
@@ -2062,57 +1824,33 @@ void do_cmd_query_symbol(void)
 	if (sym == KTRL('A'))
 	{
 		all = TRUE;
-#ifdef JP
-		strcpy(buf, "全モンスターのリスト");
-#else
-		strcpy(buf, "Full monster list.");
-#endif
+		strcpy(buf, _("全モンスターのリスト", "Full monster list."));
 	}
 	else if (sym == KTRL('U'))
 	{
 		all = uniq = TRUE;
-#ifdef JP
-		strcpy(buf, "ユニーク・モンスターのリスト");
-#else
-		strcpy(buf, "Unique monster list.");
-#endif
+		strcpy(buf, _("ユニーク・モンスターのリスト", "Unique monster list."));
 	}
 	else if (sym == KTRL('N'))
 	{
 		all = norm = TRUE;
-#ifdef JP
-		strcpy(buf, "ユニーク外モンスターのリスト");
-#else
-		strcpy(buf, "Non-unique monster list.");
-#endif
+		strcpy(buf, _("ユニーク外モンスターのリスト", "Non-unique monster list."));
 	}
 	else if (sym == KTRL('R'))
 	{
 		all = ride = TRUE;
-#ifdef JP
-		strcpy(buf, "乗馬可能モンスターのリスト");
-#else
-		strcpy(buf, "Ridable monster list.");
-#endif
+		strcpy(buf, _("乗馬可能モンスターのリスト", "Ridable monster list."));
 	}
 	/* XTRA HACK WHATSEARCH */
 	else if (sym == KTRL('M'))
 	{
 		all = TRUE;
-#ifdef JP
-		if (!get_string("名前(英語の場合小文字で可)",temp, 70))
-#else
-		if (!get_string("Enter name:",temp, 70))
-#endif
+		if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"),temp, 70))
 		{
 			temp[0]=0;
 			return;
 		}
-#ifdef JP
-		sprintf(buf, "名前:%sにマッチ",temp);
-#else
-		sprintf(buf, "Monsters with a name \"%s\"",temp);
-#endif
+		sprintf(buf, _("名前:%sにマッチ", "Monsters with a name \"%s\""),temp);
 	}
 	else if (ident_info[i])
 	{
@@ -2120,11 +1858,7 @@ void do_cmd_query_symbol(void)
 	}
 	else
 	{
-#ifdef JP
-		sprintf(buf, "%c - %s", sym, "無効な文字");
-#else
-		sprintf(buf, "%c - %s.", sym, "Unknown Symbol");
-#endif
+		sprintf(buf, "%c - %s", sym, _("無効な文字", "Unknown Symbol"));
 	}
 
 	/* Display the result */
@@ -2195,11 +1929,7 @@ void do_cmd_query_symbol(void)
 
 
 	/* Prompt XXX XXX XXX */
-#ifdef JP
-	put_str("思い出を見ますか? (k:殺害順/y/n): ", 0, 36);
-#else
-	put_str("Recall details? (k/y/n): ", 0, 40);
-#endif
+	put_str(_("思い出を見ますか? (k:殺害順/y/n): ", "Recall details? (k/y/n): "), 0, _(36, 40));
 
 
 	/* Query */
@@ -2277,11 +2007,7 @@ void do_cmd_query_symbol(void)
 			roff_top(r_idx);
 
 			/* Hack -- Complete the prompt */
-#ifdef JP
-			Term_addstr(-1, TERM_WHITE, " ['r'思い出, ESC]");
-#else
-			Term_addstr(-1, TERM_WHITE, " [(r)ecall, ESC]");
-#endif
+			Term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ESC]", " [(r)ecall, ESC]"));
 
 			/* Command */
 			query = inkey();

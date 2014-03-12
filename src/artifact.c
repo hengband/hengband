@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file artifact.c
  * @brief アーティファクトの生成と管理 / Artifact code
  * @date 2013/12/11
@@ -1673,64 +1673,32 @@ static void get_random_name(char *return_name, bool armour, int power)
 				switch (power)
 				{
 					case 0:
-#ifdef JP
-						filename = "a_cursed_j.txt";
-#else
-						filename = "a_cursed.txt";
-#endif
+						filename = _("a_cursed_j.txt", "a_cursed.txt");
 						break;
 					case 1:
-#ifdef JP
-						filename = "a_low_j.txt";
-#else
-						filename = "a_low.txt";
-#endif
+						filename = _("a_low_j.txt", "a_low.txt");
 						break;
 					case 2:
-#ifdef JP
-						filename = "a_med_j.txt";
-#else
-						filename = "a_med.txt";
-#endif
+						filename = _("a_med_j.txt", "a_med.txt");
 						break;
 					default:
-#ifdef JP
-						filename = "a_high_j.txt";
-#else
-						filename = "a_high.txt";
-#endif
+						filename = _("a_high_j.txt", "a_high.txt");
 				}
 				break;
 			default:
 				switch (power)
 				{
 					case 0:
-#ifdef JP
-						filename = "w_cursed_j.txt";
-#else
-						filename = "w_cursed.txt";
-#endif
+						filename = _("w_cursed_j.txt", "w_cursed.txt");
 						break;
 					case 1:
-#ifdef JP
-						filename = "w_low_j.txt";
-#else
-						filename = "w_low.txt";
-#endif
+						filename = _("w_low_j.txt", "w_low.txt");
 						break;
 					case 2:
-#ifdef JP
-						filename = "w_med_j.txt";
-#else
-						filename = "w_med.txt";
-#endif
+						filename = _("w_med_j.txt", "w_med.txt");
 						break;
 					default:
-#ifdef JP
-						filename = "w_high_j.txt";
-#else
-						filename = "w_high.txt";
-#endif
+						filename = _("w_high_j.txt", "w_high.txt");
 				}
 		}
 
@@ -2024,11 +1992,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	if (a_scroll)
 	{
 		char dummy_name[80] = "";
-#ifdef JP
-		cptr ask_msg = "このアーティファクトを何と名付けますか？";
-#else
-		cptr ask_msg = "What do you want to call the artifact? ";
-#endif
+		cptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
 
 		/* Identify it fully */
 		object_aware(o_ptr);
@@ -2055,13 +2019,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 				get_table_name_aux(dummy_name);
 			}
 		}
-
-#ifdef JP
-		sprintf(new_name, "《%s》", dummy_name);
-#else
-		sprintf(new_name, "'%s'", dummy_name);
-#endif
-
+		sprintf(new_name, _("《%s》", "'%s'"), dummy_name);
 		chg_virtue(V_INDIVIDUALISM, 2);
 		chg_virtue(V_ENCHANT, 5);
 	}
@@ -3117,22 +3075,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_LIGHT:
 		{
-#ifdef JP
-			msg_format("%sから澄んだ光があふれ出た...", name);
-#else
-			msg_format("The %s wells with clear light...", name);
-#endif
+			msg_format(_("%sから澄んだ光があふれ出た...", "The %s wells with clear light..."), name);
 			lite_area(damroll(2, 15), 3);
 			break;
 		}
 
 		case ACT_MAP_LIGHT:
 		{
-#ifdef JP
-			msg_print("眩しく輝いた...");
-#else
-			msg_print("It shines brightly...");
-#endif
+			msg_print(_("眩しく輝いた...", "It shines brightly..."));
 			map_area(DETECT_RAD_MAP);
 			lite_area(damroll(2, 15), 3);
 			break;
@@ -3140,24 +3090,15 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_DETECT_ALL:
 		{
-#ifdef JP
-			msg_print("白く明るく輝いている...");
-			msg_print("心にイメージが浮かんできた...");
-#else
-			msg_print("It glows bright white...");
-			msg_print("An image forms in your mind...");
-#endif
+			msg_print(_("白く明るく輝いている...", "It glows bright white..."));
+			msg_print(_("心にイメージが浮かんできた...", "An image forms in your mind..."));
 			detect_all(DETECT_RAD_DEFAULT);
 			break;
 		}
 
 		case ACT_DETECT_XTRA:
 		{
-#ifdef JP
-			msg_print("明るく輝いている...");
-#else
-			msg_print("It glows brightly...");
-#endif
+			msg_print(_("明るく輝いている...", "It glows brightly..."));
 			detect_all(DETECT_RAD_DEFAULT);
 			probing();
 			identify_fully(FALSE);
@@ -3166,11 +3107,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_ID_FULL:
 		{
-#ifdef JP
-			msg_print("黄色く輝いている...");
-#else
-			msg_print("It glows yellow...");
-#endif
+			msg_print(_("黄色く輝いている...", "It glows yellow..."));
 			identify_fully(FALSE);
 			break;
 		}
@@ -3183,22 +3120,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_RUNE_EXPLO:
 		{
-#ifdef JP
-			msg_print("明るい赤色に輝いている...");
-#else
-			msg_print("It glows bright red...");
-#endif
+			msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
 			explosive_rune();
 			break;
 		}
 
 		case ACT_RUNE_PROT:
 		{
-#ifdef JP
-			msg_print("ブルーに明るく輝いている...");
-#else
-			msg_print("It glows light blue...");
-#endif
+			msg_print(_("ブルーに明るく輝いている...", "It glows light blue..."));
 			warding_glyph();
 			break;
 		}
@@ -3211,22 +3140,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_DEST_DOOR:
 		{
-#ifdef JP
-			msg_print("明るい赤色に輝いている...");
-#else
-			msg_print("It glows bright red...");
-#endif
+			msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
 			destroy_doors_touch();
 			break;
 		}
 
 		case ACT_STONE_MUD:
 		{
-#ifdef JP
-			msg_print("鼓動している...");
-#else
-			msg_print("It pulsates...");
-#endif
+			msg_print(_("鼓動している...", "It pulsates..."));
 			if (!get_aim_dir(&dir)) return FALSE;
 			wall_to_mud(dir, 20 + randint1(30));
 			break;
@@ -3240,22 +3161,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_ALCHEMY:
 		{
-#ifdef JP
-			msg_print("明るい黄色に輝いている...");
-#else
-			msg_print("It glows bright yellow...");
-#endif
+			msg_print(_("明るい黄色に輝いている...", "It glows bright yellow..."));
 			(void)alchemy();
 			break;
 		}
 
 		case ACT_DIM_DOOR:
 		{
-#ifdef JP
-			msg_print("次元の扉が開いた。目的地を選んで下さい。");
-#else
-			msg_print("You open a dimensional gate. Choose a destination.");
-#endif
+			msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
 			if (!dimension_door()) return FALSE;
 			break;
 		}
@@ -3263,51 +3176,33 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_TELEPORT:
 		{
-#ifdef JP
-			msg_print("周りの空間が歪んでいる...");
-#else
-			msg_print("It twists space around you...");
-#endif
+			msg_print(_("周りの空間が歪んでいる...", "It twists space around you..."));
 			teleport_player(100, 0L);
 			break;
 		}
 
 		case ACT_RECALL:
 		{
-#ifdef JP
-			msg_print("やわらかな白色に輝いている...");
-#else
-			msg_print("It glows soft white...");
-#endif
+			msg_print(_("やわらかな白色に輝いている...", "It glows soft white..."));
 			if (!word_of_recall()) return FALSE;
 			break;
 		}
 
 		case ACT_JUDGE:
 		{
-#ifdef JP
-			msg_format("%sは赤く明るく光った！", name);
-#else
-			msg_format("The %s flashes bright red!", name);
-#endif
+			msg_format(_("%sは赤く明るく光った！", "The %s flashes bright red!"), name);
 			chg_virtue(V_KNOWLEDGE, 1);
 			chg_virtue(V_ENLIGHTEN, 1);
 			wiz_lite(FALSE);
-#ifdef JP
-			msg_format("%sはあなたの体力を奪った...", name);
-			take_hit(DAMAGE_LOSELIFE, damroll(3,8), "審判の宝石", -1);
-#else
-			msg_format("The %s drains your vitality...", name);
-			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "the Jewel of Judgement", -1);
-#endif
+			
+			msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
+			take_hit(DAMAGE_LOSELIFE, damroll(3,8), _("審判の宝石", "the Jewel of Judgement"), -1);
+			
 			(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 			(void)detect_doors(DETECT_RAD_DEFAULT);
 			(void)detect_stairs(DETECT_RAD_DEFAULT);
-#ifdef JP
-			if (get_check("帰還の力を使いますか？"))
-#else
-			if (get_check("Activate recall? "))
-#endif
+			
+			if (get_check(_("帰還の力を使いますか？", "Activate recall? ")))
 			{
 				(void)word_of_recall();
 			}
@@ -3318,11 +3213,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_TELEKINESIS:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-#ifdef JP
-			msg_format("%sを伸ばした。", name);
-#else
-			msg_format("You stretched your %s.", name);
-#endif
+			msg_format(_("%sを伸ばした。", "You stretched your %s."), name);
 			fetch(dir, 500, TRUE);
 			break;
 		}
@@ -3332,11 +3223,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			int i;
 			monster_type *m_ptr;
 			monster_race *r_ptr;
-#ifdef JP
-			msg_print("奇妙な場所が頭の中に浮かんだ．．．");
-#else
-			msg_print("Some strange places show up in your mind. And you see ...");
-#endif
+			msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
 			/* Process the monsters (backwards) */
 			for (i = m_max - 1; i >= 1; i--)
 			{
@@ -3350,11 +3237,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 				if(r_ptr->flags1 & RF1_UNIQUE)
 				{
-#ifdef JP
-					msg_format("%s． ",r_name + r_ptr->name);
-#else
-					msg_format("%s. ",r_name + r_ptr->name);
-#endif
+					msg_format(_("%s． ", "%s. "),r_name + r_ptr->name);
 				}
 			}
 			break;
@@ -3374,11 +3257,7 @@ bool activate_random_artifact(object_type *o_ptr)
 				(void)stair_creation();
 				break;
 			default:
-#ifdef JP
-				if (get_check("この階を去りますか？"))
-#else
-				if (get_check("Leave this level? "))
-#endif
+				if (get_check(_("この階を去りますか？", "Leave this level? ")))
 				{
 					if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -3391,18 +3270,10 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_DISP_CURSE_XTRA:
 		{
-#ifdef JP
-			msg_format("%sが真実を照らし出す...", name);
-#else
-			msg_format("The %s exhibits the truth...", name);
-#endif
+			msg_format(_("%sが真実を照らし出す...", "The %s exhibits the truth..."), name);
 			if (remove_all_curse())
 			{
-#ifdef JP
-				msg_print("誰かに見守られているような気がする。");
-#else
-				msg_print("You feel as if someone is watching over you.");
-#endif
+				msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 			}
 			(void)probing();
 			break;
@@ -3410,33 +3281,21 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_BRAND_FIRE_BOLTS:
 		{
-#ifdef JP
-			msg_format("%sが深紅に輝いた...", name);
-#else
-			msg_format("Your %s glows deep red...", name);
-#endif
+			msg_format(_("%sが深紅に輝いた...", "Your %s glows deep red..."), name);
 			(void)brand_bolts();
 			break;
 		}
 
 		case ACT_RECHARGE_XTRA:
 		{
-#ifdef JP
-			msg_format("%sが白く輝いた．．．", name);
-#else
-			msg_format("The %s gleams with blinding light...", name);
-#endif
+			msg_format(_("%sが白く輝いた．．．", "The %s gleams with blinding light..."), name);
 			if (!recharge(1000)) return FALSE;
 			break;
 		}
 
 		case ACT_LORE:
 		{
-#ifdef JP
-			msg_print("石が隠された秘密を写し出した．．．");
-#else
-			msg_print("The stone reveals hidden mysteries...");
-#endif
+			msg_print(_("石が隠された秘密を写し出した．．．", "The stone reveals hidden mysteries..."));
 			if (!ident_spell(FALSE)) return FALSE;
 
 			if (mp_ptr->spell_book)
@@ -3458,11 +3317,7 @@ bool activate_random_artifact(object_type *o_ptr)
 					p_ptr->csp_frac = 0;
 
 					/* Message */
-#ifdef JP
-					msg_print("石を制御できない！");
-#else
-					msg_print("You are too weak to control the stone!");
-#endif
+					msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
 					/* Hack -- Bypass free action */
 					(void)set_paralyzed(p_ptr->paralyzed +
 						randint1(5 * oops + 1));
@@ -3475,32 +3330,20 @@ bool activate_random_artifact(object_type *o_ptr)
 				/* Redraw mana */
 				p_ptr->redraw |= (PR_MANA);
 			}
-#ifdef JP
-			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), "危険な秘密", -1);
-#else
-			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), "perilous secrets", -1);
-#endif
+			take_hit(DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"), -1);
 			/* Confusing. */
 			if (one_in_(5)) (void)set_confused(p_ptr->confused +
 				randint1(10));
 
 			/* Exercise a little care... */
 			if (one_in_(20))
-#ifdef JP
-				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "危険な秘密", -1);
-#else
-				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), "perilous secrets", -1);
-#endif
+				take_hit(DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"), -1);
 			break;
 		}
 
 		case ACT_SHIKOFUMI:
 		{
-#ifdef JP
-			msg_print("力強く四股を踏んだ。");
-#else
-			msg_print("You stamp. (as if you are in a ring.)");
-#endif
+			msg_print(_("力強く四股を踏んだ。", "You stamp. (as if you are in a ring.)"));
 			(void)set_afraid(0);
 			(void)set_hero(randint1(20) + 20, FALSE);
 			dispel_evil(p_ptr->lev * 3);
@@ -3599,11 +3442,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_TELEPORT_LEVEL:
 		{
-#ifdef JP
-			if (!get_check("本当に他の階にテレポートしますか？")) return FALSE;
-#else
-			if (!get_check("Are you sure? (Teleport Level)")) return FALSE;
-#endif
+			if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) return FALSE;
 			teleport_level(0);
 			break;
 		}
@@ -3611,13 +3450,8 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_STRAIN_HASTE:
 		{
 			int t;
-#ifdef JP
-			msg_format("%sはあなたの体力を奪った...", name);
-			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "加速した疲労", -1);
-#else
-			msg_format("The %s drains your vitality...", name);
-			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "the strain of haste", -1);
-#endif
+			msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
+			take_hit(DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"), -1);
 			t = 25 + randint1(25);
 			(void)set_fast(p_ptr->fast + t, FALSE);
 			break;
@@ -3633,22 +3467,14 @@ bool activate_random_artifact(object_type *o_ptr)
 			tsuri_dir = dir;
 			if (!cave_have_flag_bold(y, x, FF_WATER))
 			{
-#ifdef JP
-				msg_print("そこは水辺ではない。");
-#else
-				msg_print("There is no fishing place.");
-#endif
+				msg_print(_("そこは水辺ではない。", "There is no fishing place."));
 				return FALSE;
 			}
 			else if (cave[y][x].m_idx)
 			{
 				char m_name[80];
 				monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
-#ifdef JP
-				msg_format("%sが邪魔だ！", m_name);
-#else
-				msg_format("%^s is stand in your way.", m_name);
-#endif
+				msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
 				energy_use = 0;
 				return FALSE;
 			}
@@ -3661,27 +3487,18 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			int count = 0, i;
 			monster_type *m_ptr;
-#ifndef JP
 			cptr kakusan = "";
-#endif
+			
 			if (summon_named_creature(0, py, px, MON_SUKE, PM_FORCE_PET))
 			{
-#ifdef JP
-				msg_print("『助さん』が現れた。");
-#else
-				msg_print("Suke-san apperars.");
+				msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
 				kakusan = "Suke-san";
-#endif
 				count++;
 			}
 			if (summon_named_creature(0, py, px, MON_KAKU, PM_FORCE_PET))
 			{
-#ifdef JP
-				msg_print("『格さん』が現れた。");
-#else
-				msg_print("Kaku-san appears.");
+				msg_print(_("『格さん』が現れた。", "Kaku-san appears."));
 				kakusan = "Kaku-san";
-#endif
 				count++;
 			}
 			if (!count)
@@ -3700,11 +3517,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 			if (count)
 			{
-#ifdef JP
-				msg_print("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」");
-#else
-				msg_format("%^s says 'WHO do you think this person is! Bow your head, down your knees!'", kakusan);
-#endif
+				msg_format(_("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」", 
+							"%^s says 'WHO do you think this person is! Bow your head, down your knees!'"), kakusan);
 				sukekaku = TRUE;
 				stun_monsters(120);
 				confuse_monsters(120);
@@ -3714,11 +3528,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			}
 			else
 			{
-#ifdef JP
-				msg_print("しかし、何も起きなかった。");
-#else
-				msg_print("Nothing happen.");
-#endif
+				msg_print(_("しかし、何も起きなかった。", "Nothing happen."));
 			}
 			break;
 		}
@@ -3727,25 +3537,13 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			/* Only for Muramasa */
 			if (o_ptr->name1 != ART_MURAMASA) return FALSE;
-#ifdef JP
-			if (get_check("本当に使いますか？"))
-#else
-			if (get_check("Are you sure?!"))
-#endif
+			if (get_check(_("本当に使いますか？", "Are you sure?!")))
 			{
-#ifdef JP
-				msg_print("村正が震えた．．．");
-#else
-				msg_print("The Muramasa pulsates...");
-#endif
+				msg_print(_("村正が震えた．．．", "The Muramasa pulsates..."));
 				do_inc_stat(A_STR);
 				if (one_in_(2))
 				{
-#ifdef JP
-					msg_print("村正は壊れた！");
-#else
-					msg_print("The Muramasa is destroyed!");
-#endif
+					msg_print(_("村正は壊れた！", "The Muramasa is destroyed!"));
 					curse_weapon_object(TRUE, o_ptr);
 				}
 			}
@@ -3756,11 +3554,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			/* Only for Bloody Moon */
 			if (o_ptr->name1 != ART_BLOOD) return FALSE;
-#ifdef JP
-			msg_print("鎌が明るく輝いた...");
-#else
-			msg_print("Your scythe glows brightly!");
-#endif
+			msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));
 			get_bloody_moon_flags(o_ptr);
 			if (p_ptr->prace == RACE_ANDROID) calc_android_exp();
 			p_ptr->update |= (PU_BONUS | PU_HP);
@@ -3777,11 +3571,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			/* Only for Crimson */
 			if (o_ptr->name1 != ART_CRIMSON) return FALSE;
 
-#ifdef JP
-			msg_print("せっかくだから『クリムゾン』をぶっぱなすぜ！");
-#else
-			msg_print("I'll fire CRIMSON! SEKKAKUDAKARA!");
-#endif
+			msg_print(_("せっかくだから『クリムゾン』をぶっぱなすぜ！", "I'll fire CRIMSON! SEKKAKUDAKARA!"));
 
 			if (!get_aim_dir(&dir)) return FALSE;
 
@@ -3815,11 +3605,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		default:
 		{
-#ifdef JP
-			msg_format("Unknown activation effect: %d.", act_ptr->index);
-#else
-			msg_format("Unknown activation effect: %d.", act_ptr->index);
-#endif
+			msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
 			return FALSE;
 		}
 	}

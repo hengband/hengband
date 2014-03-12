@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file autopick.c
  * @brief 自動拾い機能の実装 / Object Auto-picker/Destroyer
  * @date 2014/01/02
@@ -733,11 +733,7 @@ static void init_autopick(void)
  */
 static cptr pickpref_filename(int filename_mode)
 {
-#ifdef JP
-	static const char namebase[] = "picktype";
-#else
-	static const char namebase[] = "pickpref";
-#endif
+	static const char namebase[] = _("picktype", "pickpref");
 
 	switch (filename_mode)
 	{
@@ -773,11 +769,7 @@ void autopick_load_pref(bool disp_mes)
 	if (err == 0 && disp_mes)
 	{
 		/* Success */
-#ifdef JP
-		msg_format("%sを読み込みました。", buf);
-#else
-		msg_format("Loaded '%s'.", buf);
-#endif
+		msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
 	}
 
 	/* No file found */
@@ -792,22 +784,14 @@ void autopick_load_pref(bool disp_mes)
 		if (err == 0 && disp_mes)
 		{
 			/* Success */
-#ifdef JP
-			msg_format("%sを読み込みました。", buf);
-#else
-			msg_format("Loaded '%s'.", buf);
-#endif
+			msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
 		}
 	}
 
 	if (err && disp_mes)
 	{
 		/* Failed */
-#ifdef JP
-		msg_print("自動拾い設定ファイルの読み込みに失敗しました。");
-#else
-		msg_print("Failed to reload autopick preference.");
-#endif
+		msg_print(_("自動拾い設定ファイルの読み込みに失敗しました。", "Failed to reload autopick preference."));
 	}
 }
 
@@ -1604,11 +1588,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 		object_desc(o_name, o_ptr, 0);
 
 		/* Message */
-#ifdef JP
-		msg_format("%sは破壊不能だ。", o_name);
-#else
-		msg_format("You cannot auto-destroy %s.", o_name);
-#endif
+		msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), o_name);
 
 		/* Done */
 		return;
@@ -1659,11 +1639,7 @@ static void autopick_delayed_alter_aux(int item)
 		}
 
 		/* Print a message */
-#ifdef JP
-		msg_format("%sを自動破壊します。", o_name);
-#else
-		msg_format("Auto-destroying %s.", o_name);
-#endif
+		msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), o_name);
 	}
 }
 
@@ -1758,11 +1734,7 @@ void autopick_pickup_items(cave_type *c_ptr)
 				object_desc(o_name, o_ptr, 0);
 
 				/* Message */
-#ifdef JP
-				msg_format("ザックには%sを入れる隙間がない。", o_name);
-#else
-				msg_format("You have no room for %s.", o_name);
-#endif
+				msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 				/* Hack - remember that the item has given a message here. */
 				o_ptr->marked |= OM_NOMSG;
 
@@ -1782,11 +1754,7 @@ void autopick_pickup_items(cave_type *c_ptr)
 				/* Describe the object */
 				object_desc(o_name, o_ptr, 0);
 
-#ifdef JP
-				sprintf(out_val, "%sを拾いますか? ", o_name);
-#else
-				sprintf(out_val, "Pick up %s? ", o_name);
-#endif
+				sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
 
 				if (!get_check(out_val))
 				{
@@ -1851,12 +1819,7 @@ static bool clear_auto_register(void)
 	{
 		/* Close the preference file */
 		fclose(pref_fff);
-
-#ifdef JP
-		msg_format("一時ファイル %s を作成できませんでした。", tmp_file);
-#else
-		msg_format("Failed to create temporary file %s.", tmp_file);
-#endif
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
 		msg_print(NULL);
 		return FALSE;
 	}
@@ -1898,13 +1861,9 @@ static bool clear_auto_register(void)
 
 	if (num)
 	{
-#ifdef JP
-		msg_format("以前のキャラクター用の自動設定(%d行)が残っています。", num);
-		strcpy(buf, "古い設定行は削除します。よろしいですか？");
-#else
-		msg_format("Auto registered lines (%d lines) for previous character are remaining.", num);
-		strcpy(buf, "These lines will be deleted.  Are you sure? ");
-#endif
+		msg_format(_("以前のキャラクター用の自動設定(%d行)が残っています。",
+					 "Auto registered lines (%d lines) for previous character are remaining."), num);
+		strcpy(buf, _("古い設定行は削除します。よろしいですか？", "These lines will be deleted.  Are you sure? "));
 
 		/* You can cancel it */
 		if (!get_check(buf))
@@ -1912,11 +1871,8 @@ static bool clear_auto_register(void)
 			okay = FALSE;
 			autoregister = FALSE;
 
-#ifdef JP
-			msg_print("エディタのカット&ペースト等を使って必要な行を避難してください。");
-#else
-			msg_print("Use cut & paste of auto picker editor (_) to keep old prefs.");
-#endif
+			msg_print(_("エディタのカット&ペースト等を使って必要な行を避難してください。",
+						"Use cut & paste of auto picker editor (_) to keep old prefs."));
 		}
 	}
 
@@ -1961,22 +1917,12 @@ bool autopick_autoregister(object_type *o_ptr)
 		cptr what;
 		byte act = autopick_list[match_autopick].action;
 
-#ifdef JP
-		if (act & DO_AUTOPICK) what = "自動で拾う";
-		else if (act & DO_AUTODESTROY) what = "自動破壊する";
-		else if (act & DONT_AUTOPICK) what = "放置する";
-		else /* if (act & DO_QUERY_AUTOPICK) */ what = "確認して拾う";
+		if (act & DO_AUTOPICK) what = _("自動で拾う", "auto-pickup");
+		else if (act & DO_AUTODESTROY) what = _("自動破壊する", "auto-destroy");
+		else if (act & DONT_AUTOPICK) what = _("放置する", "leave on floor");
+		else /* if (act & DO_QUERY_AUTOPICK) */ what = _("確認して拾う", "query auto-pickup");
 
-		msg_format("そのアイテムは既に%sように設定されています。", what);
-#else
-		if (act & DO_AUTOPICK) what = "auto-pickup";
-		else if (act & DO_AUTODESTROY) what = "auto-destroy";
-		else if (act & DONT_AUTOPICK) what = "leave on floor";
-		else /* if (act & DO_QUERY_AUTOPICK) */ what = "query auto-pickup";
-
-		msg_format("The object is already registered to %s.", what);
-#endif
-		
+		msg_format(_("そのアイテムは既に%sように設定されています。", "The object is already registered to %s."), what);
 		return FALSE;
 	}
 
@@ -1991,11 +1937,7 @@ bool autopick_autoregister(object_type *o_ptr)
 		object_desc(o_name, o_ptr, 0);
 
 		/* Message */
-#ifdef JP
-		msg_format("%sは破壊不能だ。", o_name);
-#else
-		msg_format("You cannot auto-destroy %s.", o_name);
-#endif
+		msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), o_name);
 
 		/* Done */
 		return FALSE;
@@ -2048,11 +1990,7 @@ bool autopick_autoregister(object_type *o_ptr)
 
 	/* Failure */
 	if (!pref_fff) {
-#ifdef JP
-		msg_format("%s を開くことができませんでした。", pref_file);
-#else
-		msg_format("Failed to open %s.", pref_file);
-#endif
+		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), pref_file);
 		msg_print(NULL);
 
 		/* Failed */
@@ -2064,13 +2002,10 @@ bool autopick_autoregister(object_type *o_ptr)
 		/* Add the header */
 		fprintf(pref_fff, "%s\n", autoregister_header);
 
-#ifdef JP
-		fprintf(pref_fff, "%s\n", "# *警告!!* 以降の行は自動登録されたものです。");
-		fprintf(pref_fff, "%s\n", "# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。");
-#else
-		fprintf(pref_fff, "%s\n", "# *Waring!* The lines below will be deleated later.");
-		fprintf(pref_fff, "%s\n", "# Keep it by cut & paste if you need these lines for future characters.");
-#endif
+		fprintf(pref_fff, "%s\n", _("# *警告!!* 以降の行は自動登録されたものです。",
+						            "# *Waring!* The lines below will be deleated later."));
+		fprintf(pref_fff, "%s\n", _("# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。", 
+						            "# Keep it by cut & paste if you need these lines for future characters."));
 
 		/* Now auto register is in-use */
 		p_ptr->autopick_autoregister = TRUE;
@@ -3422,11 +3357,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 	char buf[MAX_NLEN+20];
 	const int len = 80;
 
-#ifdef JP
-	char prompt[] = "検索(^I:持ち物 ^L:破壊された物): ";
-#else
-	char prompt[] = "Search key(^I:inven ^L:destroyed): ";
-#endif
+	char prompt[] = _("検索(^I:持ち物 ^L:破壊された物): ", "Search key(^I:inven ^L:destroyed): ");
 	int col = sizeof(prompt) - 1;
 
 	/* Prepare string buffer for edit */
@@ -4309,11 +4240,7 @@ static int do_command_menu(int level, int start)
 
 				if (menu_data[i].com_id == -1)
 				{
-#ifdef JP
-					strcpy(com_key_str, "▼");
-#else
-					strcpy(com_key_str, ">");
-#endif
+					strcpy(com_key_str, _("▼", ">"));
 				}
 				else if (menu_data[i].key != -1)
 				{
@@ -4339,11 +4266,7 @@ static int do_command_menu(int level, int start)
 			/* The menu was shown */
 			redraw = FALSE;
 		}
-#ifdef JP
-		prt(format("(a-%c) コマンド:", menu_key + 'a' - 1), 0, 0);
-#else
-		prt(format("(a-%c) Command:", menu_key + 'a' - 1), 0, 0);
-#endif
+		prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
 		key = inkey();
 
 		if (key == ESCAPE) return 0;
@@ -4762,76 +4685,41 @@ static void draw_text_editor(text_body_type *tb)
 		/* Display information */
 		if (tb->dirty_flags & DIRTY_NOT_FOUND)
 		{
-#ifdef JP
-			str1 = format("パターンが見つかりません: %s", tb->search_str);
-#else
-			str1 = format("Pattern not found: %s", tb->search_str);
-#endif
+			str1 = format(_("パターンが見つかりません: %s", "Pattern not found: %s"), tb->search_str);
 		}
 		else if (tb->dirty_flags & DIRTY_SKIP_INACTIVE)
 		{
-#ifdef JP
-			str1 = format("無効状態の行をスキップしました。(%sを検索中)", tb->search_str);
-#else
-			str1 = format("Some inactive lines are skipped. (Searching %s)", tb->search_str);
-#endif
+			str1 = format(_("無効状態の行をスキップしました。(%sを検索中)", 
+							"Some inactive lines are skipped. (Searching %s)"), tb->search_str);
 		}
 		else if (tb->dirty_flags & DIRTY_INACTIVE)
 		{
-#ifdef JP
-			str1 = format("無効状態の行だけが見付かりました。(%sを検索中)", tb->search_str);
-#else
-			str1 = format("Found only an inactive line. (Searching %s)", tb->search_str);
-#endif
+			str1 = format(_("無効状態の行だけが見付かりました。(%sを検索中)",
+							"Found only an inactive line. (Searching %s)"), tb->search_str);
 		}
 		else if (tb->dirty_flags & DIRTY_NO_SEARCH)
 		{
-#ifdef JP
-			str1 = "検索するパターンがありません(^S で検索)。";
-#else
-			str1 = "No pattern to search. (Press ^S to search.)";
-#endif
+			str1 = _("検索するパターンがありません(^S で検索)。", "No pattern to search. (Press ^S to search.)");
 		}
 		else if (tb->lines_list[tb->cy][0] == '#')
 		{
-#ifdef JP
-			str1 = "この行はコメントです。";
-#else
-			str1 = "This line is a comment.";
-#endif
+			str1 = _("この行はコメントです。", "This line is a comment.");
 		}
 		else if (tb->lines_list[tb->cy][0] && tb->lines_list[tb->cy][1] == ':')
 		{
 			switch(tb->lines_list[tb->cy][0])
 			{
 			case '?':
-#ifdef JP
-				str1 = "この行は条件分岐式です。";
-#else
-				str1 = "This line is a Conditional Expression.";
-#endif
-
+				str1 = _("この行は条件分岐式です。", "This line is a Conditional Expression.");
 				break;
 			case 'A':
-#ifdef JP
-				str1 = "この行はマクロの実行内容を定義します。";
-#else
-				str1 = "This line defines a Macro action.";
-#endif
+				str1 = _("この行はマクロの実行内容を定義します。", "This line defines a Macro action.");
 				break;
 			case 'P':
-#ifdef JP
-				str1 = "この行はマクロのトリガー・キーを定義します。";
-#else
-				str1 = "This line defines a Macro trigger key.";
-#endif
+				str1 = _("この行はマクロのトリガー・キーを定義します。", "This line defines a Macro trigger key.");
 				break;
 			case 'C':
-#ifdef JP
-				str1 = "この行はキー配置を定義します。";
-#else
-				str1 = "This line defines a Keymap.";
-#endif
+				str1 = _("この行はキー配置を定義します。", "This line defines a Keymap.");
 				break;
 			}
 
@@ -4840,39 +4728,23 @@ static void draw_text_editor(text_body_type *tb)
 			case '?':
 				if (tb->states[tb->cy] & LSTAT_BYPASS)
 				{
-#ifdef JP
-					str2 = "現在の式の値は「偽(=0)」です。";
-#else
-					str2 = "The expression is 'False'(=0) currently.";
-#endif
+					str2 = _("現在の式の値は「偽(=0)」です。", "The expression is 'False'(=0) currently.");
 				}
 				else
 				{
-#ifdef JP
-					str2 = "現在の式の値は「真(=1)」です。";
-#else
-					str2 = "The expression is 'True'(=1) currently.";
-#endif
+					str2 = _("現在の式の値は「真(=1)」です。", "The expression is 'True'(=1) currently.");
 				}
 				break;
 
 			default:
 				if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
 				{
-#ifdef JP
-					str2 = "この行は後で削除されます。";
-#else
-					str2 = "This line will be delete later.";
-#endif
+					str2 = _("この行は後で削除されます。", "This line will be delete later.");
 				}
 
 				else if (tb->states[tb->cy] & LSTAT_BYPASS)
 				{
-#ifdef JP
-					str2 = "この行は現在は無効な状態です。";
-#else
-					str2 = "This line is bypassed currently.";
-#endif
+					str2 = _("この行は現在は無効な状態です。", "This line is bypassed currently.");
 				}
 				break;
 			}
@@ -4889,20 +4761,12 @@ static void draw_text_editor(text_body_type *tb)
 
 			if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
 			{
-#ifdef JP
-				strcat(buf, "この行は後で削除されます。");
-#else
-				strcat(buf, "  This line will be delete later.");
-#endif
+				strcat(buf, _("この行は後で削除されます。", "  This line will be delete later."));
 			}
 
 			if (tb->states[tb->cy] & LSTAT_BYPASS)
 			{
-#ifdef JP
-				strcat(buf, "この行は現在は無効な状態です。");
-#else
-				strcat(buf, "  This line is bypassed currently.");
-#endif
+				strcat(buf, _("この行は現在は無効な状態です。", "  This line is bypassed currently."));
 			}
 
 			roff_to_buf(buf, 81, temp, sizeof(temp));
@@ -5137,11 +5001,8 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 	case EC_QUIT:
 		if (tb->changed)
 		{
-#ifdef JP
-			if (!get_check("全ての変更を破棄してから終了します。よろしいですか？ ")) break;
-#else
-			if (!get_check("Discard all changes and quit. Are you sure? ")) break;
-#endif
+			if (!get_check(_("全ての変更を破棄してから終了します。よろしいですか？ ",
+							 "Discard all changes and quit. Are you sure? "))) break;
 		}
 		return QUIT_WITHOUT_SAVE;
 
@@ -5150,11 +5011,8 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 	case EC_REVERT:
 		/* Revert to original */
-#ifdef JP
-		if (!get_check("全ての変更を破棄して元の状態に戻します。よろしいですか？ ")) break;
-#else
-		if (!get_check("Discard all changes and revert to original file. Are you sure? ")) break;
-#endif
+		if (!get_check(_("全ての変更を破棄して元の状態に戻します。よろしいですか？ ",
+						 "Discard all changes and revert to original file. Are you sure? "))) break;
 
 		free_text_lines(tb->lines_list);
 		tb->lines_list = read_pickpref_text_lines(&tb->filename_mode);
@@ -5168,11 +5026,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 	case EC_HELP:
 		/* Peruse the main help file */
-#ifdef JP
-		(void)show_file(TRUE, "jeditor.txt", NULL, 0, 0);
-#else
-		(void)show_file(TRUE, "editor.txt", NULL, 0, 0);
-#endif
+		(void)show_file(TRUE, _("jeditor.txt", "editor.txt"), NULL, 0, 0);
 		/* Redraw all */
 		tb->dirty_flags |= DIRTY_SCREEN;
 
@@ -5902,11 +5756,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
 
 		/* Prompt */
-#ifdef JP
-		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, "P:<トリガーキー>: ");
-#else
-		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, "P:<Trigger key>: ");
-#endif
+		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, _("P:<トリガーキー>: ", "P:<Trigger key>: "));
 		if (insert_macro_line(tb))
 		{
 			/* Prepare to input action */
@@ -5929,11 +5779,8 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
 
 		/* Prompt */
-#ifdef JP
-		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, format("C:%d:<コマンドキー>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
-#else
-		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, format("C:%d:<Keypress>: ", (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
-#endif
+		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, 
+					format(_("C:%d:<コマンドキー>: ", "C:%d:<Keypress>: "), (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
 
 		if (insert_keymap_line(tb))
 		{
@@ -6250,11 +6097,8 @@ void do_cmd_edit_autopick(void)
 		draw_text_editor(tb);
 
 		/* Display header line */
-#ifdef JP
-		prt("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)", 0, 0);
-#else	
-		prt("(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)", 0, 0);
-#endif
+		prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)", 
+		      "(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)"), 0, 0);
 		if (!tb->mark)
 		{
 			/* Display current position */

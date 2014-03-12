@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file cmd6.c
  * @brief プレイヤーのアイテムに関するコマンドの実装2 / Spell/Prayer commands
  * @date 2014/01/27
@@ -171,12 +171,7 @@ static void do_cmd_eat_food_aux(int item)
 
 			case SV_FOOD_WEAKNESS:
 			{
-#ifdef JP
-				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "毒入り食料", -1);
-#else
-				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "poisonous food", -1);
-#endif
-
+				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
 				(void)do_dec_stat(A_STR);
 				ident = TRUE;
 				break;
@@ -184,12 +179,7 @@ static void do_cmd_eat_food_aux(int item)
 
 			case SV_FOOD_SICKNESS:
 			{
-#ifdef JP
-				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "毒入り食料", -1);
-#else
-				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "poisonous food", -1);
-#endif
-
+				take_hit(DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
 				(void)do_dec_stat(A_CON);
 				ident = TRUE;
 				break;
@@ -197,12 +187,7 @@ static void do_cmd_eat_food_aux(int item)
 
 			case SV_FOOD_STUPIDITY:
 			{
-#ifdef JP
-				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "毒入り食料", -1);
-#else
-				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "poisonous food", -1);
-#endif
-
+				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
 				(void)do_dec_stat(A_INT);
 				ident = TRUE;
 				break;
@@ -210,12 +195,7 @@ static void do_cmd_eat_food_aux(int item)
 
 			case SV_FOOD_NAIVETY:
 			{
-#ifdef JP
-				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "毒入り食料", -1);
-#else
-				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "poisonous food", -1);
-#endif
-
+				take_hit(DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
 				(void)do_dec_stat(A_WIS);
 				ident = TRUE;
 				break;
@@ -223,12 +203,7 @@ static void do_cmd_eat_food_aux(int item)
 
 			case SV_FOOD_UNHEALTH:
 			{
-#ifdef JP
-				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "毒入り食料", -1);
-#else
-				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "poisonous food", -1);
-#endif
-
+				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
 				(void)do_dec_stat(A_CON);
 				ident = TRUE;
 				break;
@@ -236,12 +211,7 @@ static void do_cmd_eat_food_aux(int item)
 
 			case SV_FOOD_DISEASE:
 			{
-#ifdef JP
-				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "毒入り食料", -1);
-#else
-				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "poisonous food", -1);
-#endif
-
+				take_hit(DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
 				(void)do_dec_stat(A_STR);
 				ident = TRUE;
 				break;
@@ -345,12 +315,7 @@ static void do_cmd_eat_food_aux(int item)
 
 			case SV_FOOD_WAYBREAD:
 			{
-#ifdef JP
-				msg_print("これはひじょうに美味だ。");
-#else
-				msg_print("That tastes good.");
-#endif
-
+				msg_print(_("これはひじょうに美味だ。", "That tastes good."));
 				(void)set_poisoned(0);
 				(void)hp_player(damroll(4, 8));
 				ident = TRUE;
@@ -413,19 +378,12 @@ static void do_cmd_eat_food_aux(int item)
 	{
 		/* Reduced nutritional benefit */
 		(void)set_food(p_ptr->food + (o_ptr->pval / 10));
-#ifdef JP
-msg_print("あなたのような者にとって食糧など僅かな栄養にしかならない。");
-#else
-		msg_print("Mere victuals hold scant sustenance for a being such as yourself.");
-#endif
+		msg_print(_("あなたのような者にとって食糧など僅かな栄養にしかならない。", 
+					"Mere victuals hold scant sustenance for a being such as yourself."));
 
 		if (p_ptr->food < PY_FOOD_ALERT)   /* Hungry */
-#ifdef JP
-msg_print("あなたの飢えは新鮮な血によってのみ満たされる！");
-#else
-			msg_print("Your hunger can only be satisfied with fresh blood!");
-#endif
-
+		msg_print(_("あなたの飢えは新鮮な血によってのみ満たされる！", 
+					"Your hunger can only be satisfied with fresh blood!"));
 	}
 	else if ((prace_is_(RACE_SKELETON) ||
 		  prace_is_(RACE_GOLEM) ||
@@ -438,29 +396,15 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！
 		if (o_ptr->tval == TV_STAFF &&
 		    (item < 0) && (o_ptr->number > 1))
 		{
-#ifdef JP
-			msg_print("まずは杖を拾わなければ。");
-#else
-			msg_print("You must first pick up the staffs.");
-#endif
+			msg_print(_("まずは杖を拾わなければ。", "You must first pick up the staffs."));
 			return;
 		}
-
-#ifdef JP
-		staff = (o_ptr->tval == TV_STAFF) ? "杖" : "魔法棒";
-#else
-		staff = (o_ptr->tval == TV_STAFF) ? "staff" : "wand";
-#endif
+		staff = (o_ptr->tval == TV_STAFF) ? _("杖", "staff") : _("魔法棒", "wand");
 
 		/* "Eat" charges */
 		if (o_ptr->pval == 0)
 		{
-#ifdef JP
-			msg_format("この%sにはもう魔力が残っていない。", staff);
-#else
-			msg_format("The %s has no charges left.", staff);
-#endif
-
+			msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
 			o_ptr->ident |= (IDENT_EMPTY);
 
 			/* Combine / Reorder the pack (later) */
@@ -469,12 +413,7 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！
 
 			return;
 		}
-
-#ifdef JP
-		msg_format("あなたは%sの魔力をエネルギー源として吸収した。", staff);
-#else
-		msg_format("You absorb mana of the %s as your energy.", staff);
-#endif
+		msg_format(_("あなたは%sの魔力をエネルギー源として吸収した。", "You absorb mana of the %s as your energy."), staff);
 
 		/* Use a single charge */
 		o_ptr->pval--;
@@ -507,11 +446,7 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！
 			item = inven_carry(q_ptr);
 
 			/* Message */
-#ifdef JP
-			msg_format("杖をまとめなおした。");
-#else
-			msg_print("You unstack your staff.");
-#endif
+			msg_format(_("杖をまとめなおした。", "You unstack your staff."));
 		}
 
 		/* Describe charges in the pack */
@@ -539,14 +474,8 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！
 	{
 		/* Drain vitality of humanoids */
 		char o_name[MAX_NLEN];
-
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-#ifdef JP
-		msg_format("%sは燃え上り灰になった。精力を吸収した気がする。", o_name);
-#else
-		msg_format("%^s is burnt to ashes.  You absorb its vitality!", o_name);
-#endif
+		msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
 		(void)set_food(PY_FOOD_MAX - 1);
 	}
 	else if (prace_is_(RACE_SKELETON))
@@ -555,11 +484,7 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！
 		if (o_ptr->tval == TV_SKELETON ||
 		    (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
 		{
-#ifdef JP
-			msg_print("あなたは骨で自分の体を補った。");
-#else
-			msg_print("Your body absorbs the bone.");
-#endif
+			msg_print(_("あなたは骨で自分の体を補った。", "Your body absorbs the bone."));
 			set_food(p_ptr->food + 5000);
 		}
 		else 
@@ -570,13 +495,8 @@ msg_print("あなたの飢えは新鮮な血によってのみ満たされる！
 		{
 			object_type forge;
 			object_type *q_ptr = &forge;
-
-#ifdef JP
-msg_print("食べ物がアゴを素通りして落ちた！");
-#else
-			msg_print("The food falls through your jaws!");
-#endif
-
+			
+			msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
 
 			/* Create the item */
 			object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
@@ -586,12 +506,7 @@ msg_print("食べ物がアゴを素通りして落ちた！");
 		}
 		else
 		{
-#ifdef JP
-msg_print("食べ物がアゴを素通りして落ち、消えた！");
-#else
-			msg_print("The food falls through your jaws and vanishes!");
-#endif
-
+			msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
 		}
 	}
 	else if (prace_is_(RACE_GOLEM) ||
@@ -602,12 +517,7 @@ msg_print("食べ物がアゴを素通りして落ち、消えた！");
 		 prace_is_(RACE_SPECTRE) ||
 		 (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
 	{
-#ifdef JP
-msg_print("生者の食物はあなたにとってほとんど栄養にならない。");
-#else
-		msg_print("The food of mortals is poor sustenance for you.");
-#endif
-
+		msg_print(_("生者の食物はあなたにとってほとんど栄養にならない。", "The food of mortals is poor sustenance for you."));
 		set_food(p_ptr->food + ((o_ptr->pval) / 20));
 	}
 	else if (o_ptr->tval == TV_FOOD && o_ptr->sval == SV_FOOD_WAYBREAD)
@@ -736,11 +646,7 @@ static void do_cmd_quaff_potion_aux(int item)
 	if (world_player)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("瓶から水が流れ出てこない！");
-#else
-		msg_print("The potion doesn't flow out from a bottle.");
-#endif
+		msg_print(_("瓶から水が流れ出てこない！", "The potion doesn't flow out from a bottle."));
 
 		sound(SOUND_FAIL);
 		return;
@@ -838,11 +744,7 @@ static void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_SALT_WATER:
-#ifdef JP
-			msg_print("うぇ！思わず吐いてしまった。");
-#else
-			msg_print("The potion makes you vomit!");
-#endif
+			msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
 
 			if (!(prace_is_(RACE_GOLEM) ||
 			      prace_is_(RACE_ZOMBIE) ||
@@ -922,21 +824,11 @@ static void do_cmd_quaff_potion_aux(int item)
 		case SV_POTION_SLEEP:
 			if (!p_ptr->free_act)
 			{
-#ifdef JP
-		msg_print("あなたは眠ってしまった。");
-#else
-		msg_print("You fall asleep.");
-#endif
-
+				msg_print(_("あなたは眠ってしまった。", "You fall asleep."));
 
 				if (ironman_nightmare)
 				{
-#ifdef JP
-msg_print("恐ろしい光景が頭に浮かんできた。");
-#else
-					msg_print("A horrible vision enters your mind.");
-#endif
-
+					msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 
 					/* Pick a nightmare */
 					get_mon_num_prep(get_nightmare, NULL);
@@ -957,11 +849,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 		case SV_POTION_LOSE_MEMORIES:
 			if (!p_ptr->hold_exp && (p_ptr->exp > 0))
 			{
-#ifdef JP
-				msg_print("過去の記憶が薄れていく気がする。");
-#else
-				msg_print("You feel your memories fade.");
-#endif
+				msg_print(_("過去の記憶が薄れていく気がする。", "You feel your memories fade."));
 				chg_virtue(V_KNOWLEDGE, -5);
 
 				lose_exp(p_ptr->exp / 4);
@@ -1150,12 +1038,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 		case SV_POTION_LIFE:
 			chg_virtue(V_VITALITY, 1);
 			chg_virtue(V_UNLIFE, -5);
-#ifdef JP
-			msg_print("体中に生命力が満ちあふれてきた！");
-#else
-			msg_print("You feel life flow through your body!");
-#endif
-
+			msg_print(_("体中に生命力が満ちあふれてきた！", "You feel life flow through your body!"));
 			restore_level();
 			(void)set_poisoned(0);
 			(void)set_blind(0);
@@ -1190,11 +1073,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 					p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
 					if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 				}
-#ifdef JP
-				msg_print("頭がハッキリとした。");
-#else
-				msg_print("You feel your head clear.");
-#endif
+				msg_print(_("頭がハッキリとした。", "You feel your head clear."));
 				p_ptr->window |= (PW_PLAYER);
 				ident = TRUE;
 			}
@@ -1202,11 +1081,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			{
 				p_ptr->csp = p_ptr->msp;
 				p_ptr->csp_frac = 0;
-#ifdef JP
-				msg_print("頭がハッキリとした。");
-#else
-				msg_print("You feel your head clear.");
-#endif
+				msg_print(_("頭がハッキリとした。", "You feel your head clear."));
 
 				p_ptr->redraw |= (PR_MANA);
 				p_ptr->window |= (PW_PLAYER);
@@ -1278,12 +1153,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			break;
 
 		case SV_POTION_ENLIGHTENMENT:
-#ifdef JP
-			msg_print("自分の置かれている状況が脳裏に浮かんできた...");
-#else
-			msg_print("An image of your surroundings forms in your mind...");
-#endif
-
+			msg_print(_("自分の置かれている状況が脳裏に浮かんできた...", "An image of your surroundings forms in your mind..."));
 			chg_virtue(V_KNOWLEDGE, 1);
 			chg_virtue(V_ENLIGHTEN, 1);
 			wiz_lite(FALSE);
@@ -1291,12 +1161,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			break;
 
 		case SV_POTION_STAR_ENLIGHTENMENT:
-#ifdef JP
-			msg_print("更なる啓蒙を感じた...");
-#else
-			msg_print("You begin to feel more enlightened...");
-#endif
-
+			msg_print(_("更なる啓蒙を感じた...", "You begin to feel more enlightened..."));
 			chg_virtue(V_KNOWLEDGE, 1);
 			chg_virtue(V_ENLIGHTEN, 2);
 			msg_print(NULL);
@@ -1315,12 +1180,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			break;
 
 		case SV_POTION_SELF_KNOWLEDGE:
-#ifdef JP
-			msg_print("自分自身のことが少しは分かった気がする...");
-#else
-			msg_print("You begin to know yourself a little better...");
-#endif
-
+			msg_print(_("自分自身のことが少しは分かった気がする...", "You begin to know yourself a little better..."));
 			msg_print(NULL);
 			self_knowledge();
 			ident = TRUE;
@@ -1333,12 +1193,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			{
 				s32b ee = (p_ptr->exp / 2) + 10;
 				if (ee > 100000L) ee = 100000L;
-#ifdef JP
-				msg_print("更に経験を積んだような気がする。");
-#else
-				msg_print("You feel more experienced.");
-#endif
-
+				msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
 				gain_exp(ee);
 				ident = TRUE;
 			}
@@ -1375,12 +1230,7 @@ msg_print("恐ろしい光景が頭に浮かんできた。");
 			if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
 			{
 				chg_virtue(V_CHANCE, -5);
-#ifdef JP
-msg_print("全ての突然変異が治った。");
-#else
-				msg_print("You are cured of all mutations.");
-#endif
-
+				msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
 				p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
 				p_ptr->update |= PU_BONUS;
 				handle_stuff();
@@ -1396,11 +1246,7 @@ msg_print("全ての突然変異が治った。");
 			break;
 
 		case SV_POTION_TSUYOSHI:
-#ifdef JP
-msg_print("「オクレ兄さん！」");
-#else
-			msg_print("Brother OKURE!");
-#endif
+			msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
 			msg_print(NULL);
 			p_ptr->tsuyoshi = 1;
 			(void)set_tsuyoshi(0, TRUE);
@@ -1415,12 +1261,7 @@ msg_print("「オクレ兄さん！」");
 			if ((p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3) && one_in_(23))
 			{
 				chg_virtue(V_CHANCE, -5);
-#ifdef JP
-msg_print("全ての突然変異が治った。");
-#else
-				msg_print("You are cured of all mutations.");
-#endif
-
+				msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
 				p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
 				p_ptr->update |= PU_BONUS;
 				handle_stuff();
@@ -1442,12 +1283,7 @@ msg_print("全ての突然変異が治った。");
 
 	if (prace_is_(RACE_SKELETON))
 	{
-#ifdef JP
-msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
-#else
-		msg_print("Some of the fluid falls through your jaws!");
-#endif
-
+		msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
 		(void)potion_smash_effect(0, py, px, q_ptr->k_idx);
 	}
 
@@ -1495,11 +1331,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 			case RACE_ANDROID:
 				if (q_ptr->tval == TV_FLASK)
 				{
-#ifdef JP
-					msg_print("オイルを補給した。");
-#else
-					msg_print("You replenish yourself with the oil.");
-#endif
+					msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
 					set_food(p_ptr->food + 5000);
 				}
 				else
@@ -1508,11 +1340,7 @@ msg_print("液体の一部はあなたのアゴを素通りして落ちた！");
 				}
 				break;
 			case RACE_ENT:
-#ifdef JP
-				msg_print("水分を取り込んだ。");
-#else
-				msg_print("You are moistened.");
-#endif
+				msg_print(_("水分を取り込んだ。", "You are moistened."));
 				set_food(MIN(p_ptr->food + q_ptr->pval + MAX(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
 				break;
 			default:
@@ -1625,23 +1453,14 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 	if (world_player)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("止まった時の中ではうまく働かないようだ。");
-#else
-		msg_print("Nothing happen.");
-#endif
-
+		msg_print(_("止まった時の中ではうまく働かないようだ。", "Nothing happen."));
 		sound(SOUND_FAIL);
 		return;
 	}
 
 	if (p_ptr->pclass == CLASS_BERSERKER)
 	{
-#ifdef JP
-		msg_print("巻物なんて読めない。");
-#else
-		msg_print("You cannot read.");
-#endif
+		msg_print(_("巻物なんて読めない。", "You cannot read."));
 		return;
 	}
 
@@ -1676,12 +1495,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 		case SV_SCROLL_AGGRAVATE_MONSTER:
 		{
-#ifdef JP
-			msg_print("カン高くうなる様な音が辺りを覆った。");
-#else
-			msg_print("There is a high pitched humming noise.");
-#endif
-
+			msg_print(_("カン高くうなる様な音が辺りを覆った。", "There is a high pitched humming noise."));
 			aggravate_monsters(0);
 			ident = TRUE;
 			break;
@@ -1800,12 +1614,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 		{
 			if (remove_curse())
 			{
-#ifdef JP
-				msg_print("誰かに見守られているような気がする。");
-#else
-				msg_print("You feel as if someone is watching over you.");
-#endif
-
+				msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 				ident = TRUE;
 			}
 			break;
@@ -1815,11 +1624,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 		{
 			if (remove_all_curse())
 			{
-#ifdef JP
-				msg_print("誰かに見守られているような気がする。");
-#else
-				msg_print("You feel as if someone is watching over you.");
-#endif
+				msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 			}
 			ident = TRUE;
 			break;
@@ -1947,12 +1752,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 		{
 			if (!(p_ptr->special_attack & ATTACK_CONFUSE))
 			{
-#ifdef JP
-				msg_print("手が輝き始めた。");
-#else
-				msg_print("Your hands begin to glow.");
-#endif
-
+				msg_print(_("手が輝き始めた。", "Your hands begin to glow."));
 				p_ptr->special_attack |= ATTACK_CONFUSE;
 				p_ptr->redraw |= (PR_STATUS);
 				ident = TRUE;
@@ -1985,12 +1785,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 			if (destroy_area(py, px, 13 + randint0(5), FALSE))
 				ident = TRUE;
 			else
-#ifdef JP
-msg_print("ダンジョンが揺れた...");
-#else
-				msg_print("The dungeon trembles...");
-#endif
-
+				msg_print(_("ダンジョンが揺れた...", "The dungeon trembles..."));
 
 			break;
 		}
@@ -2058,11 +1853,7 @@ msg_print("ダンジョンが揺れた...");
 			fire_ball(GF_FIRE, 0, 666, 4);
 			/* Note: "Double" damage since it is centered on the player ... */
 			if (!(IS_OPPOSE_FIRE() || p_ptr->resist_fire || p_ptr->immune_fire))
-#ifdef JP
-take_hit(DAMAGE_NOESCAPE, 50+randint1(50), "炎の巻物", -1);
-#else
-				take_hit(DAMAGE_NOESCAPE, 50 + randint1(50), "a Scroll of Fire", -1);
-#endif
+				take_hit(DAMAGE_NOESCAPE, 50+randint1(50), _("炎の巻物", "a Scroll of Fire"), -1);
 
 			ident = TRUE;
 			break;
@@ -2073,11 +1864,7 @@ take_hit(DAMAGE_NOESCAPE, 50+randint1(50), "炎の巻物", -1);
 		{
 			fire_ball(GF_ICE, 0, 777, 4);
 			if (!(IS_OPPOSE_COLD() || p_ptr->resist_cold || p_ptr->immune_cold))
-#ifdef JP
-take_hit(DAMAGE_NOESCAPE, 100+randint1(100), "氷の巻物", -1);
-#else
-				take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "a Scroll of Ice", -1);
-#endif
+				take_hit(DAMAGE_NOESCAPE, 100+randint1(100), _("氷の巻物", "a Scroll of Ice"), -1);
 
 			ident = TRUE;
 			break;
@@ -2087,11 +1874,7 @@ take_hit(DAMAGE_NOESCAPE, 100+randint1(100), "氷の巻物", -1);
 		{
 			fire_ball(GF_CHAOS, 0, 1000, 4);
 			if (!p_ptr->resist_chaos)
-#ifdef JP
-take_hit(DAMAGE_NOESCAPE, 111+randint1(111), "ログルスの巻物", -1);
-#else
-				take_hit(DAMAGE_NOESCAPE, 111 + randint1(111), "a Scroll of Logrus", -1);
-#endif
+				take_hit(DAMAGE_NOESCAPE, 111+randint1(111), _("ログルスの巻物", "a Scroll of Logrus"), -1);
 
 			ident = TRUE;
 			break;
@@ -2099,20 +1882,11 @@ take_hit(DAMAGE_NOESCAPE, 111+randint1(111), "ログルスの巻物", -1);
 
 		case SV_SCROLL_RUMOR:
 		{
-#ifdef JP
-			msg_print("巻物にはメッセージが書かれている:");
-#else
-			msg_print("There is message on the scroll. It says:");
-#endif
-
+			msg_print(_("巻物にはメッセージが書かれている:", "There is message on the scroll. It says:"));
 			msg_print(NULL);
 			display_rumor(TRUE);
 			msg_print(NULL);
-#ifdef JP
-			msg_print("巻物は煙を立てて消え去った！");
-#else
-			msg_print("The scroll disappears in a puff of smoke!");
-#endif
+			msg_print(_("巻物は煙を立てて消え去った！", "The scroll disappears in a puff of smoke!"));
 
 			ident = TRUE;
 			break;
@@ -2288,32 +2062,17 @@ void do_cmd_read_scroll(void)
 	/* Check some conditions */
 	if (p_ptr->blind)
 	{
-#ifdef JP
-		msg_print("目が見えない。");
-#else
-		msg_print("You can't see anything.");
-#endif
-
+		msg_print(_("目が見えない。", "You can't see anything."));
 		return;
 	}
 	if (no_lite())
 	{
-#ifdef JP
-		msg_print("明かりがないので、暗くて読めない。");
-#else
-		msg_print("You have no light to read by.");
-#endif
-
+		msg_print(_("明かりがないので、暗くて読めない。", "You have no light to read by."));
 		return;
 	}
 	if (p_ptr->confused)
 	{
-#ifdef JP
-		msg_print("混乱していて読めない。");
-#else
-		msg_print("You are too confused!");
-#endif
-
+		msg_print(_("混乱していて読めない。", "You are too confused!"));
 		return;
 	}
 
@@ -2427,19 +2186,11 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 			{
 				if (magic)
 				{
-#ifdef JP
-					msg_print("誰かに見守られているような気がする。");
-#else
-					msg_print("You feel as if someone is watching over you.");
-#endif
+					msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 				}
 				else if (!p_ptr->blind)
 				{
-#ifdef JP
-					msg_print("杖は一瞬ブルーに輝いた...");
-#else
-					msg_print("The staff glows blue for a moment...");
-#endif
+					msg_print(_("杖は一瞬ブルーに輝いた...", "The staff glows blue for a moment..."));
 
 				}
 				ident = TRUE;
@@ -2455,12 +2206,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 
 			if (!p_ptr->blind && !magic)
 			{
-#ifdef JP
-				msg_print("杖の先が明るく輝いた...");
-#else
-				msg_print("The end of the staff glows brightly...");
-#endif
-
+				msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
 			}
 			for (k = 0; k < num; k++)
 			{
@@ -2574,11 +2320,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 				p_ptr->csp = p_ptr->msp;
 				p_ptr->csp_frac = 0;
 				ident = TRUE;
-#ifdef JP
-				msg_print("頭がハッキリとした。");
-#else
-				msg_print("You feel your head clear.");
-#endif
+				msg_print(_("頭がハッキリとした。", "You feel your head clear."));
 
 				p_ptr->redraw |= (PR_MANA);
 				p_ptr->window |= (PW_PLAYER);
@@ -2650,12 +2392,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 			if (earthquake(py, px, (powerful ? 15 : 10)))
 				ident = TRUE;
 			else
-#ifdef JP
-msg_print("ダンジョンが揺れた。");
-#else
-				msg_print("The dungeon trembles.");
-#endif
-
+				msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));
 
 			break;
 		}
@@ -2678,20 +2415,12 @@ msg_print("ダンジョンが揺れた。");
 
 		case SV_STAFF_MSTORM:
 		{
-#ifdef JP
-			msg_print("強力な魔力が敵を引き裂いた！");
-#else
-			msg_print("Mighty magics rend your enemies!");
-#endif
+			msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
 			project(0, (powerful ? 7 : 5), py, px,
 				(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 			if ((p_ptr->pclass != CLASS_MAGE) && (p_ptr->pclass != CLASS_HIGH_MAGE) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_MAGIC_EATER) && (p_ptr->pclass != CLASS_BLUE_MAGE))
 			{
-#ifdef JP
-				(void)take_hit(DAMAGE_NOESCAPE, 50, "コントロールし難い強力な魔力の解放", -1);
-#else
-				(void)take_hit(DAMAGE_NOESCAPE, 50, "unleashing magics too mighty to control", -1);
-#endif
+				(void)take_hit(DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
 			}
 			ident = TRUE;
 
@@ -2700,18 +2429,10 @@ msg_print("ダンジョンが揺れた。");
 
 		case SV_STAFF_NOTHING:
 		{
-#ifdef JP
-			msg_print("何も起らなかった。");
-#else
-			msg_print("Nothing happen.");
-#endif
+			msg_print(_("何も起らなかった。", "Nothing happen."));
 			if (prace_is_(RACE_SKELETON) || prace_is_(RACE_GOLEM) ||
 				prace_is_(RACE_ZOMBIE) || prace_is_(RACE_SPECTRE))
-#ifdef JP
-				msg_print("もったいない事をしたような気がする。食べ物は大切にしなくては。");
-#else
-				msg_print("What a waste.  It's your food!");
-#endif
+				msg_print(_("もったいない事をしたような気がする。食べ物は大切にしなくては。", "What a waste.  It's your food!"));
 			break;
 		}
 	}
@@ -2753,12 +2474,7 @@ static void do_cmd_use_staff_aux(int item)
 	/* Mega-Hack -- refuse to use a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
 	{
-#ifdef JP
-		msg_print("まずは杖を拾わなければ。");
-#else
-		msg_print("You must first pick up the staffs.");
-#endif
-
+		msg_print(_("まずは杖を拾わなければ。", "You must first pick up the staffs."));
 		return;
 	}
 
@@ -2788,12 +2504,7 @@ static void do_cmd_use_staff_aux(int item)
 	if (world_player)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("止まった時の中ではうまく働かないようだ。");
-#else
-		msg_print("Nothing happen. Maybe this staff is freezing too.");
-#endif
-
+		msg_print(_("止まった時の中ではうまく働かないようだ。", "Nothing happen. Maybe this staff is freezing too."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -2802,12 +2513,7 @@ static void do_cmd_use_staff_aux(int item)
 	if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (p_ptr->pclass == CLASS_BERSERKER))
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("杖をうまく使えなかった。");
-#else
-		msg_print("You failed to use the staff properly.");
-#endif
-
+		msg_print(_("杖をうまく使えなかった。", "You failed to use the staff properly."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -2816,12 +2522,7 @@ static void do_cmd_use_staff_aux(int item)
 	if (o_ptr->pval <= 0)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("この杖にはもう魔力が残っていない。");
-#else
-		msg_print("The staff has no charges left.");
-#endif
-
+		msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
 		o_ptr->ident |= (IDENT_EMPTY);
 
 		/* Combine / Reorder the pack (later) */
@@ -2892,12 +2593,7 @@ static void do_cmd_use_staff_aux(int item)
 		item = inven_carry(q_ptr);
 
 		/* Message */
-#ifdef JP
-		msg_print("杖をまとめなおした。");
-#else
-		msg_print("You unstack your staff.");
-#endif
-
+		msg_print(_("杖をまとめなおした。", "You unstack your staff."));
 	}
 
 	/* Describe charges in the pack */
@@ -3034,12 +2730,7 @@ static int wand_effect(int sval, int dir, bool powerful, bool magic)
 		case SV_WAND_LITE:
 		{
 			int dam = damroll((powerful ? 12 : 6), 8);
-#ifdef JP
-			msg_print("青く輝く光線が放たれた。");
-#else
-			msg_print("A line of blue shimmering light appears.");
-#endif
-
+			msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
 			(void)lite_line(dir, dam);
 			ident = TRUE;
 			break;
@@ -3153,12 +2844,7 @@ static int wand_effect(int sval, int dir, bool powerful, bool magic)
 
 		case SV_WAND_WONDER:
 		{
-#ifdef JP
-			msg_print("おっと、謎の魔法棒を始動させた。");
-#else
-			msg_print("Oops.  Wand of wonder activated.");
-#endif
-
+			msg_print(_("おっと、謎の魔法棒を始動させた。", "Oops.  Wand of wonder activated."));
 			break;
 		}
 
@@ -3222,12 +2908,7 @@ static int wand_effect(int sval, int dir, bool powerful, bool magic)
 
 		case SV_WAND_ROCKETS:
 		{
-#ifdef JP
-msg_print("ロケットを発射した！");
-#else
-			msg_print("You launch a rocket!");
-#endif
-
+			msg_print(_("ロケットを発射した！", "You launch a rocket!"));
 			fire_rocket(GF_ROCKET, dir, 250 + lev * 3, rad);
 			ident = TRUE;
 			break;
@@ -3292,12 +2973,7 @@ static void do_cmd_aim_wand_aux(int item)
 	/* Mega-Hack -- refuse to aim a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
 	{
-#ifdef JP
-		msg_print("まずは魔法棒を拾わなければ。");
-#else
-		msg_print("You must first pick up the wands.");
-#endif
-
+		msg_print(_("まずは魔法棒を拾わなければ。", "You must first pick up the wands."));
 		return;
 	}
 
@@ -3338,12 +3014,7 @@ static void do_cmd_aim_wand_aux(int item)
 	if (world_player)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("止まった時の中ではうまく働かないようだ。");
-#else
-		msg_print("Nothing happen. Maybe this wand is freezing too.");
-#endif
-
+		msg_print(_("止まった時の中ではうまく働かないようだ。", "Nothing happen. Maybe this wand is freezing too."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -3352,12 +3023,7 @@ static void do_cmd_aim_wand_aux(int item)
 	if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (p_ptr->pclass == CLASS_BERSERKER))
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("魔法棒をうまく使えなかった。");
-#else
-		msg_print("You failed to use the wand properly.");
-#endif
-
+		msg_print(_("魔法棒をうまく使えなかった。", "You failed to use the wand properly."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -3366,12 +3032,7 @@ static void do_cmd_aim_wand_aux(int item)
 	if (o_ptr->pval <= 0)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("この魔法棒にはもう魔力が残っていない。");
-#else
-		msg_print("The wand has no charges left.");
-#endif
-
+		msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
 		o_ptr->ident |= (IDENT_EMPTY);
 
 		/* Combine / Reorder the pack (later) */
@@ -3600,12 +3261,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool powerful, bool m
 		case SV_ROD_LITE:
 		{
 			int dam = damroll((powerful ? 12 : 6), 8);
-#ifdef JP
-			msg_print("青く輝く光線が放たれた。");
-#else
-			msg_print("A line of blue shimmering light appears.");
-#endif
-
+			msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
 			(void)lite_line(dir, dam);
 			ident = TRUE;
 			break;
@@ -3756,12 +3412,7 @@ static void do_cmd_zap_rod_aux(int item)
 	/* Mega-Hack -- refuse to zap a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
 	{
-#ifdef JP
-		msg_print("まずはロッドを拾わなければ。");
-#else
-		msg_print("You must first pick up the rods.");
-#endif
-
+		msg_print(_("まずはロッドを拾わなければ。", "You must first pick up the rods."));
 		return;
 	}
 
@@ -3796,12 +3447,7 @@ static void do_cmd_zap_rod_aux(int item)
 	if (world_player)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("止まった時の中ではうまく働かないようだ。");
-#else
-		msg_print("Nothing happen. Maybe this rod is freezing too.");
-#endif
-
+		msg_print(_("止まった時の中ではうまく働かないようだ。", "Nothing happen. Maybe this rod is freezing too."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -3822,12 +3468,7 @@ static void do_cmd_zap_rod_aux(int item)
 	if (!success)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("うまくロッドを使えなかった。");
-#else
-		msg_print("You failed to use the rod properly.");
-#endif
-
+		msg_print(_("うまくロッドを使えなかった。", "You failed to use the rod properly."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -3838,24 +3479,14 @@ static void do_cmd_zap_rod_aux(int item)
 	if ((o_ptr->number == 1) && (o_ptr->timeout))
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("このロッドはまだ魔力を充填している最中だ。");
-#else
-		msg_print("The rod is still charging.");
-#endif
-
+		msg_print(_("このロッドはまだ魔力を充填している最中だ。", "The rod is still charging."));
 		return;
 	}
 	/* A stack of rods lacks enough energy. */
 	else if ((o_ptr->number > 1) && (o_ptr->timeout > k_ptr->pval * (o_ptr->number - 1)))
 	{
 		if (flush_failure) flush();
-#ifdef JP
-msg_print("そのロッドはまだ充填中です。");
-#else
-		msg_print("The rods are all still charging.");
-#endif
-
+		msg_print(_("そのロッドはまだ充填中です。", "The rods are all still charging."));
 		return;
 	}
 
@@ -3961,12 +3592,7 @@ void ring_of_power(int dir)
 		case 2:
 		{
 			/* Message */
-#ifdef JP
-			msg_print("あなたは悪性のオーラに包み込まれた。");
-#else
-			msg_print("You are surrounded by a malignant aura.");
-#endif
-
+			msg_print(_("あなたは悪性のオーラに包み込まれた。", "You are surrounded by a malignant aura."));
 			sound(SOUND_EVIL);
 
 			/* Decrease all stats (permanently) */
@@ -3988,12 +3614,7 @@ void ring_of_power(int dir)
 		case 3:
 		{
 			/* Message */
-#ifdef JP
-			msg_print("あなたは強力なオーラに包み込まれた。");
-#else
-			msg_print("You are surrounded by a powerful aura.");
-#endif
-
+			msg_print(_("あなたは強力なオーラに包み込まれた。", "You are surrounded by a powerful aura."));
 
 			/* Dispel monsters */
 			dispel_monsters(1000);
@@ -4128,11 +3749,7 @@ static void do_cmd_activate_aux(int item)
 	if (world_player)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("止まった時の中ではうまく働かないようだ。");
-#else
-		msg_print("It shows no reaction.");
-#endif
+		msg_print(_("止まった時の中ではうまく働かないようだ。", "It shows no reaction."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -4153,11 +3770,7 @@ static void do_cmd_activate_aux(int item)
 	if (!success)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-		msg_print("うまく始動させることができなかった。");
-#else
-		msg_print("You failed to activate it properly.");
-#endif
+		msg_print(_("うまく始動させることができなかった。", "You failed to activate it properly."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -4165,11 +3778,7 @@ static void do_cmd_activate_aux(int item)
 	/* Check the recharge */
 	if (o_ptr->timeout)
 	{
-#ifdef JP
-		msg_print("それは微かに音を立て、輝き、消えた...");
-#else
-		msg_print("It whines, glows and fades...");
-#endif
+		msg_print(_("それは微かに音を立て、輝き、消えた...", "It whines, glows and fades..."));
 		return;
 	}
 
@@ -4177,22 +3786,13 @@ static void do_cmd_activate_aux(int item)
 	if (!o_ptr->xtra4 && (o_ptr->tval == TV_FLASK) &&
 		((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
 	{
-#ifdef JP
-		msg_print("燃料がない。");
-#else
-		msg_print("It has no fuel.");
-#endif
+		msg_print(_("燃料がない。", "It has no fuel."));
 		energy_use = 0;
 		return;
 	}
 
 	/* Activate the artifact */
-#ifdef JP
-	msg_print("始動させた...");
-#else
-	msg_print("You activate it...");
-#endif
-
+	msg_print(_("始動させた...", "You activate it..."));
 
 	/* Sound */
 	sound(SOUND_ZAP);
@@ -4218,11 +3818,7 @@ static void do_cmd_activate_aux(int item)
 #if 0
 		if (object_is_cursed(o_ptr))
 		{
-#ifdef JP
-			msg_print("カン高い音が響き渡った。");
-#else
-			msg_print("You produce a shrill whistling sound.");
-#endif
+			msg_print(_("カン高い音が響き渡った。", "You produce a shrill whistling sound."));
 			aggravate_monsters(0);
 		}
 		else
@@ -4394,22 +3990,13 @@ static void do_cmd_activate_aux(int item)
 				}
 			}
 			if (!success)
-#ifdef JP
-				msg_print("おっと、解放に失敗した。");
-#else
-				msg_print("Oops.  You failed to release your pet.");
-#endif
+				msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
 		}
 		return;
 	}
 
 	/* Mistake */
-#ifdef JP
-	msg_print("おっと、このアイテムは始動できない。");
-#else
-	msg_print("Oops.  That object cannot be activated.");
-#endif
-
+	msg_print(_("おっと、このアイテムは始動できない。", "Oops.  That object cannot be activated."));
 }
 
 /*!
@@ -4596,32 +4183,17 @@ s = "使えるものがありません。";
 			/* Check some conditions */
 			if (p_ptr->blind)
 			{
-#ifdef JP
-msg_print("目が見えない。");
-#else
-				msg_print("You can't see anything.");
-#endif
-
+				msg_print(_("目が見えない。", "You can't see anything."));
 				return;
 			}
 			if (no_lite())
 			{
-#ifdef JP
-msg_print("明かりがないので、暗くて読めない。");
-#else
-				msg_print("You have no light to read by.");
-#endif
-
+				msg_print(_("明かりがないので、暗くて読めない。", "You have no light to read by."));
 				return;
 			}
 			if (p_ptr->confused)
 			{
-#ifdef JP
-msg_print("混乱していて読めない！");
-#else
-				msg_print("You are too confused!");
-#endif
-
+				msg_print(_("混乱していて読めない！", "You are too confused!"));
 				return;
 			}
 
@@ -4682,11 +4254,7 @@ static int select_magic_eater(bool only_browse)
 	}
 	if (i == 108)
 	{
-#ifdef JP
-		msg_print("魔法を覚えていない！");
-#else
-		msg_print("You don't have any magic!");
-#endif
+		msg_print(_("魔法を覚えていない！", "You don't have any magic!"));
 		return -1;
 	}
 
@@ -4744,11 +4312,7 @@ static int select_magic_eater(bool only_browse)
 	{
 	while (TRUE)
 	{
-#ifdef JP
-		if (!get_com("[A] 杖, [B] 魔法棒, [C] ロッド:", &choice, TRUE))
-#else
-		if (!get_com("[A] staff, [B] wand, [C] rod:", &choice, TRUE))
-#endif
+		if (!get_com(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, TRUE))
 		{
 			return -1;
 		}
@@ -4782,11 +4346,7 @@ static int select_magic_eater(bool only_browse)
 	}
 	if (i == ext+EATER_EXT)
 	{
-#ifdef JP
-		msg_print("その種類の魔法は覚えていない！");
-#else
-		msg_print("You don't have that type of magic!");
-#endif
+		msg_print(_("その種類の魔法は覚えていない！", "You don't have that type of magic!"));
 		return -1;
 	}
 
@@ -4841,13 +4401,9 @@ static int select_magic_eater(bool only_browse)
 				if (use_menu)
 				{
 					if (ctr == (menu_line-1))
-#ifdef JP
-						strcpy(dummy, "》");
-#else
-					strcpy(dummy, "> ");
-#endif
-					else strcpy(dummy, "  ");
-						
+						strcpy(dummy, _("》", "> "));
+					else
+						strcpy(dummy, "  ");
 				}
 				/* letter/number for power selection */
 				else
@@ -4886,11 +4442,7 @@ static int select_magic_eater(bool only_browse)
 					if (tval == TV_ROD)
 					{
 						strcat(dummy, format(
-#ifdef JP
-							       " %-22.22s 充填:%2d/%2d%3d%%",
-#else
-							       " %-22.22s   (%2d/%2d) %3d%%",
-#endif
+							       _(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"),
 							       k_name + k_info[k_idx].name, 
 							       p_ptr->magic_num1[ctr+ext] ? 
 							       (p_ptr->magic_num1[ctr+ext] - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) +1 : 0, 
@@ -5046,11 +4598,7 @@ static int select_magic_eater(bool only_browse)
 				char tmp_val[160];
 
 				/* Prompt */
-#ifdef JP
-				(void) strnfmt(tmp_val, 78, "%sを使いますか？ ", k_name + k_info[lookup_kind(tval ,i)].name);
-#else
-				(void) strnfmt(tmp_val, 78, "Use %s?", k_name + k_info[lookup_kind(tval ,i)].name);
-#endif
+				(void) strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s?"), k_name + k_info[lookup_kind(tval ,i)].name);
 
 				/* Belay that order */
 				if (!get_check(tmp_val)) continue;
@@ -5059,11 +4607,7 @@ static int select_magic_eater(bool only_browse)
 			{
 				if (p_ptr->magic_num1[ext+i]  > k_info[lookup_kind(tval, i)].pval * (p_ptr->magic_num2[ext+i] - 1) * EATER_ROD_CHARGE)
 				{
-#ifdef JP
-					msg_print("その魔法はまだ充填している最中だ。");
-#else
-					msg_print("The magic are still charging.");
-#endif
+					msg_print(_("その魔法はまだ充填している最中だ。", "The magic are still charging."));
 					msg_print(NULL);
 					if (use_menu) ask = TRUE;
 					continue;
@@ -5073,11 +4617,7 @@ static int select_magic_eater(bool only_browse)
 			{
 				if (p_ptr->magic_num1[ext+i] < EATER_CHARGE)
 				{
-#ifdef JP
-					msg_print("その魔法は使用回数が切れている。");
-#else
-					msg_print("The magic has no charges left.");
-#endif
+					msg_print(_("その魔法は使用回数が切れている。", "The magic has no charges left."));
 					msg_print(NULL);
 					if (use_menu) ask = TRUE;
 					continue;
@@ -5138,12 +4678,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	/* Not when confused */
 	if (!only_browse && p_ptr->confused)
 	{
-#ifdef JP
-msg_print("混乱していて唱えられない！");
-#else
-		msg_print("You are too confused!");
-#endif
-
+		msg_print(_("混乱していて唱えられない！", "You are too confused!"));
 		return FALSE;
 	}
 
@@ -5179,13 +4714,8 @@ msg_print("混乱していて唱えられない！");
 	if (randint0(100) < chance)
 	{
 		if (flush_failure) flush();
-
-#ifdef JP
-msg_print("呪文をうまく唱えられなかった！");
-#else
-		msg_format("You failed to get the magic off!");
-#endif
-
+		
+		msg_print(_("呪文をうまく唱えられなかった！", "You failed to get the magic off!"));
 		sound(SOUND_FAIL);
 		if (randint1(100) >= chance)
 			chg_virtue(V_CHANCE,-1);

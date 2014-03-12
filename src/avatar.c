@@ -1,4 +1,4 @@
-﻿/*!
+/*!
     @file avatar.c
     @brief ウルティマ４を参考にした徳のシステムの実装 / Enable an Ultima IV style "avatar" game where you try to achieve perfection in various virtues.
     @date 2013/12/23
@@ -21,45 +21,24 @@
  */
 cptr virtue[MAX_VIRTUE] =
 {
-#ifdef JP
-	"情",
-	"誉",
-	"正",
-	"犠",
-	"識",
-	"誠",
-	"啓",
-	"秘",
-	"運",
-	"然",
-	"調",
-	"活",
-	"死",
-	"忍",
-	"節",
-	"勤",
-	"勇",
-	"個",
-#else
-	"Compassion",
-	"Honour",
-	"Justice",
-	"Sacrifice",
-	"Knowledge",
-	"Faith",
-	"Enlightenment",
-	"Mysticism",
-	"Chance",
-	"Nature",
-	"Harmony",
-	"Vitality",
-	"Unlife",
-	"Patience",
-	"Temperance",
-	"Diligence",
-	"Valour",
-	"Individualism",
-#endif
+	_("情", "Compassion"),
+	_("誉", "Honour"),
+	_("正", "Justice"),
+	_("犠", "Sacrifice"),
+	_("識", "Knowledge"),
+	_("誠", "Faith"),
+	_("啓", "Enlightenment"),
+	_("秘", "Mysticism"),
+	_("運", "Chance"),
+	_("然", "Nature"),
+	_("調", "Harmony"),
+	_("活", "Vitality"),
+	_("死", "Unlife"),
+	_("忍", "Patience"),
+	_("節", "Temperance"),
+	_("勤", "Diligence"),
+	_("勇", "Valour"),
+	_("個", "Individualism"),
 };
 
 /*!
@@ -517,116 +496,34 @@ void dump_virtues(FILE *OutFile)
 		strcpy(v_name, virtue[(p_ptr->vir_types[v_nr])-1]);
 
 		if (p_ptr->vir_types[v_nr] == 0 || p_ptr->vir_types[v_nr] > MAX_VIRTUE)
-#ifdef JP
-			fprintf(OutFile, "おっと。%sの情報なし。", v_name);
-#else
-			fprintf(OutFile, "Oops. No info about %s.", v_name);
-#endif
+			fprintf(OutFile, _("おっと。%sの情報なし。", "Oops. No info about %s."), v_name);
 
 		else if (tester < -100)
-#ifdef JP
-			fprintf(OutFile, "[%s]の対極",
-#else
-			fprintf(OutFile, "You are the polar opposite of %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile, _("[%s]の対極", "You are the polar opposite of %s."), v_name);
 		else if (tester < -80)
-#ifdef JP
-			fprintf(OutFile, "[%s]の大敵",
-#else
-			fprintf(OutFile, "You are an arch-enemy of %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile, _("[%s]の大敵", "You are an arch-enemy of %s."), v_name);
 		else if (tester < -60)
-#ifdef JP
-			fprintf(OutFile, "[%s]の強敵",
-#else
-			fprintf(OutFile, "You are a bitter enemy of %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile, _("[%s]の強敵", "You are a bitter enemy of %s."), v_name);
 		else if (tester < -40)
-#ifdef JP
-			fprintf(OutFile, "[%s]の敵",
-#else
-			fprintf(OutFile, "You are an enemy of %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile, _("[%s]の敵", "You are an enemy of %s."), v_name);
 		else if (tester < -20)
-#ifdef JP
-			fprintf(OutFile, "[%s]の罪者",
-#else
-			fprintf(OutFile, "You have sinned against %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile, _("[%s]の罪者", "You have sinned against %s."), v_name);
 		else if (tester < 0)
-#ifdef JP
-			fprintf(OutFile, "[%s]の迷道者",
-#else
-			fprintf(OutFile, "You have strayed from the path of %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile, _("[%s]の迷道者", "You have strayed from the path of %s."), v_name);
 		else if (tester == 0)
-#ifdef JP
-			fprintf(OutFile,"[%s]の中立者",
-#else
-			fprintf(OutFile,"You are neutral to %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile,_("[%s]の中立者", "You are neutral to %s."), v_name);
 		else if (tester < 20)
-#ifdef JP
-			fprintf(OutFile,"[%s]の小徳者",
-#else
-			fprintf(OutFile,"You are somewhat virtuous in %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile,_("[%s]の小徳者", "You are somewhat virtuous in %s."), v_name);
 		else if (tester < 40)
-#ifdef JP
-			fprintf(OutFile,"[%s]の中徳者",
-#else
-			fprintf(OutFile,"You are virtuous in %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile,_("[%s]の中徳者", "You are virtuous in %s."), v_name);
 		else if (tester < 60)
-#ifdef JP
-			fprintf(OutFile,"[%s]の高徳者",
-#else
-			fprintf(OutFile,"You are very virtuous in %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile,_("[%s]の高徳者", "You are very virtuous in %s."), v_name);
 		else if (tester < 80)
-#ifdef JP
-			fprintf(OutFile,"[%s]の覇者",
-#else
-			fprintf(OutFile,"You are a champion of %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile,_("[%s]の覇者", "You are a champion of %s."), v_name);
 		else if (tester < 100)
-#ifdef JP
-			fprintf(OutFile,"[%s]の偉大な覇者",
-#else
-			fprintf(OutFile,"You are a great champion of %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile,_("[%s]の偉大な覇者", "You are a great champion of %s."), v_name);
 		else
-#ifdef JP
-			fprintf(OutFile,"[%s]の具現者",
-#else
-			fprintf(OutFile,"You are the living embodiment of %s.",
-#endif
-
-			        v_name);
+			fprintf(OutFile,_("[%s]の具現者", "You are the living embodiment of %s."), v_name);
 
 	    fprintf(OutFile, "\n");
 	}

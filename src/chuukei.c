@@ -1,4 +1,4 @@
-﻿/*!
+/*!
     @file chuukei.c
     @brief 中継機能の実装
     @date 2014/01/02
@@ -652,20 +652,12 @@ void prepare_movie_hooks(void)
 		disable_chuukei_server();
 #endif
 		fd_close(movie_fd);
-#ifdef JP
-		msg_print("録画を終了しました。");
-#else
-		msg_print("Stopped recording.");
-#endif
+		msg_print(_("録画を終了しました。", "Stopped recording."));
 	}
 	else
 	{
 		sprintf(tmp, "%s.amv", player_base);
-#ifdef JP
-		if (get_string("ムービー記録ファイル: ", tmp, 80))
-#else
-		if (get_string("Movie file name: ", tmp, 80))
-#endif
+		if (get_string(_("ムービー記録ファイル: ", "Movie file name: "), tmp, 80))
 		{
 			int fd;
 
@@ -682,11 +674,7 @@ void prepare_movie_hooks(void)
 				(void)fd_close(fd);
 
 				/* Build query */
-#ifdef JP
-				(void)sprintf(out_val, "現存するファイルに上書きしますか? (%s)", buf);
-#else
-				(void)sprintf(out_val, "Replace existing file %s? ", buf);
-#endif
+				(void)sprintf(out_val, _("現存するファイルに上書きしますか? (%s)", "Replace existing file %s? "), buf);
 
 				/* Ask */
 				if (!get_check(out_val)) return;
@@ -700,11 +688,7 @@ void prepare_movie_hooks(void)
 
 			if (!movie_fd)
 			{
-#ifdef JP
-				msg_print("ファイルを開けません！");
-#else
-				msg_print("Can not open file.");
-#endif
+				msg_print(_("ファイルを開けません！", "Can not open file."));
 				return;
 			}
 
