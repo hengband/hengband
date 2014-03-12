@@ -1,4 +1,4 @@
-/*!
+﻿/*!
     @file avatar.c
     @brief ウルティマ４を参考にした徳のシステムの実装 / Enable an Ultima IV style "avatar" game where you try to achieve perfection in various virtues.
     @date 2013/12/23

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  *  @file cmd5.c
  *  @brief プレイヤーの魔法に関するコマンドの実装 / Spell/Prayer commands
  *  @date 2014/01/02

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  *  @file cmd1.c
  *  @brief プレイヤーのコマンド処理1 / Movement commands (part 1)
  *  @date 2014/01/02

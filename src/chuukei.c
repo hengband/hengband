@@ -1,4 +1,4 @@
-/*!
+﻿/*!
     @file chuukei.c
     @brief 中継機能の実装
     @date 2014/01/02

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  *  @file cmd3.c
  *  @brief プレイヤーのアイテムに関するコマンドの実装1 / Inventory commands
  *  @date 2014/01/02

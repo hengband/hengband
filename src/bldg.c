@@ -1,4 +1,4 @@
-/*!
+﻿/*!
     @file bldg.c
     @brief 町の施設処理 / Building commands
     @date 2013/12/23

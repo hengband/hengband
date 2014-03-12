@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @file cave.c
  * @brief ダンジョンの基礎部分実装(主にマスの実装) / low level dungeon routines -BEN-
  * @date 2013/12/30

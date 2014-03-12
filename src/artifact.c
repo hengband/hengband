@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @file artifact.c
  * @brief アーティファクトの生成と管理 / Artifact code
  * @date 2013/12/11
