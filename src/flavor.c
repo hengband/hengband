@@ -147,12 +147,7 @@ void get_table_name(char *out_string)
 {
 	char buff[80];
 	get_table_name_aux(buff);
-
-#ifdef JP
-	sprintf(out_string, "『%s』", buff);
-#else
-	sprintf(out_string, "'%s'", buff);
-#endif
+	sprintf(out_string, _("『%s』", "'%s'"), buff);
 }
 
 /*!
@@ -194,12 +189,7 @@ void get_table_sindarin(char *out_string)
 {
 	char buff[80];
 	get_table_sindarin_aux(buff);
-
-#ifdef JP
-	sprintf(out_string, "『%s』", buff);
-#else
-	sprintf(out_string, "'%s'", buff);
-#endif
+	sprintf(out_string, _("『%s』", "'%s'"), buff);
 }
 
 
@@ -1422,11 +1412,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			{
 				if (!o_ptr->pval)
 				{
-#ifdef JP
-					modstr = " (空)";
-#else
-					modstr = " (empty)";
-#endif
+					modstr = _(" (空)", " (empty)");
 				}
 				else
 				{
@@ -1707,11 +1693,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 
 		case TV_PARCHMENT:
 		{
-#ifdef JP
-			basenm = "羊皮紙 - %";
-#else
-			basenm = "& Parchment~ - %";
-#endif
+			basenm = _("羊皮紙 - %", "& Parchment~ - %");
 			break;
 		}
 
@@ -1858,23 +1840,13 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 
 		case TV_MUSIC_BOOK:
 		{
-#ifdef JP
-			basenm = "歌集%";
-#else
-			basenm = "& Song Book~ %";
-#endif
-
+			basenm = _("歌集%", "& Song Book~ %");
 			break;
 		}
 
 		case TV_HISSATSU_BOOK:
 		{
-#ifdef JP
-			basenm = "& 武芸の書%";
-#else
-			basenm = "Book~ of Kendo %";
-#endif
-
+			basenm = _("& 武芸の書%", "Book~ of Kendo %");
 			break;
 		}
 
@@ -1902,12 +1874,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		/* Used in the "inventory" routine */
 		default:
 		{
-#ifdef JP
-			strcpy(buf, "(なし)");
-#else
-			strcpy(buf, "(nothing)");
-#endif
-
+			strcpy(buf, _("(なし)", "(nothing)"));
 			return;
 		}
 	}
@@ -2281,11 +2248,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		/* May be "empty" */
 		else if (!o_ptr->pval)
 		{
-#ifdef JP
-			t = object_desc_str(t, "(空)");
-#else
-			t = object_desc_str(t, " (empty)");
-#endif
+			t = object_desc_str(t, _("(空)", " (empty)"));
 		}
 
 		/* May be "disarmed" */
@@ -2293,19 +2256,11 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		{
 			if (chest_traps[0 - o_ptr->pval])
 			{
-#ifdef JP
-				t = object_desc_str(t, "(解除済)");
-#else
-				t = object_desc_str(t, " (disarmed)");
-#endif
+				t = object_desc_str(t, _("(解除済)", " (disarmed)"));
 			}
 			else
 			{
-#ifdef JP
-				t = object_desc_str(t, "(非施錠)");
-#else
-				t = object_desc_str(t, " (unlocked)");
-#endif
+				t = object_desc_str(t, _("(非施錠)", " (unlocked)"));
 			}
 		}
 
@@ -2317,56 +2272,32 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			{
 				case 0:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(施錠)");
-#else
-					t = object_desc_str(t, " (Locked)");
-#endif
+					t = object_desc_str(t, _("(施錠)", " (Locked)"));
 					break;
 				}
 				case CHEST_LOSE_STR:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(毒針)");
-#else
-					t = object_desc_str(t, " (Poison Needle)");
-#endif
+					t = object_desc_str(t, _("(毒針)", " (Poison Needle)"));
 					break;
 				}
 				case CHEST_LOSE_CON:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(毒針)");
-#else
-					t = object_desc_str(t, " (Poison Needle)");
-#endif
+					t = object_desc_str(t, _("(毒針)", " (Poison Needle)"));
 					break;
 				}
 				case CHEST_POISON:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(ガス・トラップ)");
-#else
-					t = object_desc_str(t, " (Gas Trap)");
-#endif
+					t = object_desc_str(t, _("(ガス・トラップ)", " (Gas Trap)"));
 					break;
 				}
 				case CHEST_PARALYZE:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(ガス・トラップ)");
-#else
-					t = object_desc_str(t, " (Gas Trap)");
-#endif
+					t = object_desc_str(t, _("(ガス・トラップ)", " (Gas Trap)"));
 					break;
 				}
 				case CHEST_EXPLODE:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(爆発装置)");
-#else
-					t = object_desc_str(t, " (Explosion Device)");
-#endif
+					t = object_desc_str(t, _("(爆発装置)", " (Explosion Device)"));
 					break;
 				}
 				case CHEST_SUMMON:
@@ -2374,38 +2305,22 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 				case CHEST_E_SUMMON:
 				case CHEST_H_SUMMON:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(召喚のルーン)");
-#else
-					t = object_desc_str(t, " (Summoning Runes)");
-#endif
+					t = object_desc_str(t, _("(召喚のルーン)", " (Summoning Runes)"));
 					break;
 				}
 				case CHEST_RUNES_OF_EVIL:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(邪悪なルーン)");
-#else
-					t = object_desc_str(t, " (Gleaming Black Runes)");
-#endif
+					t = object_desc_str(t, _("(邪悪なルーン)", " (Gleaming Black Runes)"));
 					break;
 				}
 				case CHEST_ALARM:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(警報装置)");
-#else
-					t = object_desc_str(t, " (Alarm)");
-#endif
+					t = object_desc_str(t, _("(警報装置)", " (Alarm)"));
 					break;
 				}
 				default:
 				{
-#ifdef JP
-					t = object_desc_str(t, "(マルチ・トラップ)");
-#else
-					t = object_desc_str(t, " (Multiple Traps)");
-#endif
+					t = object_desc_str(t, _("(マルチ・トラップ)", " (Multiple Traps)"));
 					break;
 				}
 			}
@@ -2712,21 +2627,13 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 					/* Display prettily. */
 					t = object_desc_str(t, " (");
 					t = object_desc_num(t, power);
-#ifdef JP
-					t = object_desc_str(t, "本 充填中)");
-#else
-					t = object_desc_str(t, " charging)");
-#endif
+					t = object_desc_str(t, _("本 充填中)", " charging)"));
 				}
 
 				/* "one Rod of Perception (1 charging)" would look tacky. */
 				else
 				{
-#ifdef JP
-					t = object_desc_str(t, "(充填中)");
-#else
-					t = object_desc_str(t, " (charging)");
-#endif
+					t = object_desc_str(t, _("(充填中)", " (charging)"));
 				}
 			}
 		}
@@ -2751,11 +2658,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			else if (have_flag(flgs, TR_SPEED))
 			{
 				/* Dump " to speed" */
-#ifdef JP
-				t = object_desc_str(t, "加速");
-#else
-				t = object_desc_str(t, " to speed");
-#endif
+				t = object_desc_str(t, _("加速", " to speed"));
 			}
 
 			/* Attack speed */
@@ -2776,33 +2679,21 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			else if (have_flag(flgs, TR_STEALTH))
 			{
 				/* Dump " to stealth" */
-#ifdef JP
-				t = object_desc_str(t, "隠密");
-#else
-				t = object_desc_str(t, " to stealth");
-#endif
+				t = object_desc_str(t, _("隠密", " to stealth"));
 			}
 
 			/* Search */
 			else if (have_flag(flgs, TR_SEARCH))
 			{
 				/* Dump " to searching" */
-#ifdef JP
-				t = object_desc_str(t, "探索");
-#else
-				t = object_desc_str(t, " to searching");
-#endif
+				t = object_desc_str(t, _("探索", " to searching"));
 			}
 
 			/* Infravision */
 			else if (have_flag(flgs, TR_INFRA))
 			{
 				/* Dump " to infravision" */
-#ifdef JP
-				t = object_desc_str(t, "赤外線視力");
-#else
-				t = object_desc_str(t, " to infravision");
-#endif
+				t = object_desc_str(t, _("赤外線視力", " to infravision"));
 			}
 
 			/* Finish the display */
@@ -2821,22 +2712,14 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 
 			if (o_ptr->name2 == EGO_LITE_LONG) t = object_desc_num(t, o_ptr->xtra4 * 2);
 			else t = object_desc_num(t, o_ptr->xtra4);
-#ifdef JP
-			t = object_desc_str(t, "ターンの寿命)");
-#else
-			t = object_desc_str(t, " turns of light)");
-#endif
+			t = object_desc_str(t, _("ターンの寿命)", " turns of light)"));
 		}
 
 		/* Indicate charging objects, but not rods. */
 		if (o_ptr->timeout && (o_ptr->tval != TV_ROD))
 		{
 			/* Hack -- Dump " (charging)" if relevant */
-#ifdef JP
-			t = object_desc_str(t, "(充填中)");
-#else
-			t = object_desc_str(t, " (charging)");
-#endif
+			t = object_desc_str(t, _("(充填中)", " (charging)"));
 		}
 	}
 
@@ -2893,11 +2776,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	/* Note "cursed" if the item is known to be cursed */
 	else if (object_is_cursed(o_ptr) && (known || (o_ptr->ident & IDENT_SENSE)))
 	{
-#ifdef JP
-		strcpy(fake_insc_buf, "呪われている");
-#else
-		strcpy(fake_insc_buf, "cursed");
-#endif
+		strcpy(fake_insc_buf, _("呪われている", "cursed"));
 	}
 
 	/* Note "unidentified" if the item is unidentified */
@@ -2906,31 +2785,19 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 		 && aware && !known
 		 && !(o_ptr->ident & IDENT_SENSE))
 	{
-#ifdef JP
-		strcpy(fake_insc_buf, "未鑑定");
-#else
-		strcpy(fake_insc_buf, "unidentified");
-#endif
+		strcpy(fake_insc_buf, _("未鑑定", "unidentified"));
 	}
 
 	/* Mega-Hack -- note empty wands/staffs */
 	else if (!known && (o_ptr->ident & IDENT_EMPTY))
 	{
-#ifdef JP
-		strcpy(fake_insc_buf, "空");
-#else
-		strcpy(fake_insc_buf, "empty");
-#endif
+		strcpy(fake_insc_buf, _("空", "empty"));
 	}
 
 	/* Note "tried" if the object has been tested unsuccessfully */
 	else if (!aware && object_is_tried(o_ptr))
 	{
-#ifdef JP
-		strcpy(fake_insc_buf, "未判明");
-#else
-		strcpy(fake_insc_buf, "tried");
-#endif
+		strcpy(fake_insc_buf, _("未判明", "tried"));
 	}
 
 	/* Note the discount, if any */
@@ -2946,11 +2813,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 
 			(void)object_desc_num(discount_num_buf, o_ptr->discount);
 			strcat(fake_insc_buf, discount_num_buf);
-#ifdef JP
-			strcat(fake_insc_buf, "%引き");
-#else
-			strcat(fake_insc_buf, "% off");
-#endif
+			strcat(fake_insc_buf, _("%引き", "% off"));
 		}
 	}
 

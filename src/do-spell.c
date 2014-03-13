@@ -43,11 +43,7 @@ static cptr info_string_dice(cptr str, int dice, int sides, int base)
  */
 static cptr info_damage(int dice, int sides, int base)
 {
-#ifdef JP
-	return info_string_dice("損傷:", dice, sides, base);
-#else
-	return info_string_dice("dam ", dice, sides, base);
-#endif
+	return info_string_dice(_("損傷:", "dam "), dice, sides, base);
 }
 
 /*!
@@ -58,11 +54,7 @@ static cptr info_damage(int dice, int sides, int base)
  */
 static cptr info_duration(int base, int sides)
 {
-#ifdef JP
-	return format("期間:%d+1d%d", base, sides);
-#else
-	return format("dur %d+1d%d", base, sides);
-#endif
+	return format(_("期間:%d+1d%d", "dur %d+1d%d"), base, sides);
 }
 
 /*!
@@ -72,11 +64,7 @@ static cptr info_duration(int base, int sides)
  */
 static cptr info_range(int range)
 {
-#ifdef JP
-	return format("範囲:%d", range);
-#else
-	return format("range %d", range);
-#endif
+	return format(_("範囲:%d", "range %d"), range);
 }
 
 /*!
@@ -88,11 +76,7 @@ static cptr info_range(int range)
  */
 static cptr info_heal(int dice, int sides, int base)
 {
-#ifdef JP
-	return info_string_dice("回復:", dice, sides, base);
-#else
-	return info_string_dice("heal ", dice, sides, base);
-#endif
+	return info_string_dice(_("回復:", "heal "), dice, sides, base);
 }
 
 /*!
@@ -103,11 +87,7 @@ static cptr info_heal(int dice, int sides, int base)
  */
 static cptr info_delay(int base, int sides)
 {
-#ifdef JP
-	return format("遅延:%d+1d%d", base, sides);
-#else
-	return format("delay %d+1d%d", base, sides);
-#endif
+	return format(_("遅延:%d+1d%d", "delay %d+1d%d"), base, sides);
 }
 
 
@@ -118,11 +98,7 @@ static cptr info_delay(int base, int sides)
  */
 static cptr info_multi_damage(int dam)
 {
-#ifdef JP
-	return format("損傷:各%d", dam);
-#else
-	return format("dam %d each", dam);
-#endif
+	return format(_("損傷:各%d", "dam %d each"), dam);
 }
 
 
@@ -134,11 +110,7 @@ static cptr info_multi_damage(int dam)
  */
 static cptr info_multi_damage_dice(int dice, int sides)
 {
-#ifdef JP
-	return format("損傷:各%dd%d", dice, sides);
-#else
-	return format("dam %dd%d each", dice, sides);
-#endif
+	return format(_("損傷:各%dd%d", "dam %dd%d each"), dice, sides);
 }
 
 /*!
@@ -148,11 +120,7 @@ static cptr info_multi_damage_dice(int dice, int sides)
  */
 static cptr info_power(int power)
 {
-#ifdef JP
-	return format("効力:%d", power);
-#else
-	return format("power %d", power);
-#endif
+	return format(_("効力:%d", "power %d"), power);
 }
 
 
@@ -167,11 +135,7 @@ static cptr info_power(int power)
  */
 static cptr info_power_dice(int dice, int sides)
 {
-#ifdef JP
-	return format("効力:%dd%d", dice, sides);
-#else
-	return format("power %dd%d", dice, sides);
-#endif
+	return format(_("効力:%dd%d", "power %dd%d"), dice, sides);
 }
 
 
@@ -182,11 +146,7 @@ static cptr info_power_dice(int dice, int sides)
  */
 static cptr info_radius(int rad)
 {
-#ifdef JP
-	return format("半径:%d", rad);
-#else
-	return format("rad %d", rad);
-#endif
+	return format(_("半径:%d", "rad %d"), rad);
 }
 
 
@@ -277,11 +237,7 @@ static bool trump_summoning(int num, bool pet, int y, int x, int lev, int type, 
 
 	if (!success)
 	{
-#ifdef JP
-		msg_print("誰もあなたのカードの呼び声に答えない。");
-#else
-		msg_print("Nobody answers to your Trump call.");
-#endif
+		msg_print(_("誰もあなたのカードの呼び声に答えない。", "Nobody answers to your Trump call."));
 	}
 
 	return success;
@@ -322,11 +278,7 @@ static void cast_wonder(int dir)
 
 	if (die > 100)
 	{
-#ifdef JP
-		msg_print("あなたは力がみなぎるのを感じた！");
-#else
-		msg_print("You feel a surge of power!");
-#endif
+		msg_print(_("あなたは力がみなぎるのを感じた！", "You feel a surge of power!"));
 	}
 
 	if (die < 8) clone_monster(dir);
@@ -403,52 +355,34 @@ static void cast_invoke_spirits(int dir)
 		}
 	}
 
-#ifdef JP
-	msg_print("あなたは死者たちの力を招集した...");
-#else
-	msg_print("You call on the power of the dead...");
-#endif
+	msg_print(_("あなたは死者たちの力を招集した...", "You call on the power of the dead..."));
 	if (die < 26)
 		chg_virtue(V_CHANCE, 1);
 
 	if (die > 100)
 	{
-#ifdef JP
-		msg_print("あなたはおどろおどろしい力のうねりを感じた！");
-#else
-		msg_print("You feel a surge of eldritch force!");
-#endif
+		msg_print(_("あなたはおどろおどろしい力のうねりを感じた！", "You feel a surge of eldritch force!"));
 	}
 
 
 	if (die < 8)
 	{
-#ifdef JP
-		msg_print("なんてこった！あなたの周りの地面から朽ちた人影が立ち上がってきた！");
-#else
-		msg_print("Oh no! Mouldering forms rise from the earth around you!");
-#endif
+		msg_print(_("なんてこった！あなたの周りの地面から朽ちた人影が立ち上がってきた！", 
+					"Oh no! Mouldering forms rise from the earth around you!"));
 
 		(void)summon_specific(0, py, px, dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		chg_virtue(V_UNLIFE, 1);
 	}
 	else if (die < 14)
 	{
-#ifdef JP
-		msg_print("名状し難い邪悪な存在があなたの心を通り過ぎて行った...");
-#else
-		msg_print("An unnamable evil brushes against your mind...");
-#endif
+		msg_print(_("名状し難い邪悪な存在があなたの心を通り過ぎて行った...", "An unnamable evil brushes against your mind..."));
 
 		set_afraid(p_ptr->afraid + randint1(4) + 4);
 	}
 	else if (die < 26)
 	{
-#ifdef JP
-		msg_print("あなたの頭に大量の幽霊たちの騒々しい声が押し寄せてきた...");
-#else
-		msg_print("Your head is invaded by a horde of gibbering spectral voices...");
-#endif
+		msg_print(_("あなたの頭に大量の幽霊たちの騒々しい声が押し寄せてきた...",
+					"Your head is invaded by a horde of gibbering spectral voices..."));
 
 		set_confused(p_ptr->confused + randint1(4) + 4);
 	}
@@ -543,11 +477,8 @@ static void cast_invoke_spirits(int dir)
 
 	if (die < 31)
 	{
-#ifdef JP
-		msg_print("陰欝な声がクスクス笑う。「もうすぐおまえは我々の仲間になるだろう。弱き者よ。」");
-#else
-		msg_print("Sepulchral voices chuckle. 'Soon you will join us, mortal.'");
-#endif
+		msg_print(_("陰欝な声がクスクス笑う。「もうすぐおまえは我々の仲間になるだろう。弱き者よ。」",
+					"Sepulchral voices chuckle. 'Soon you will join us, mortal.'"));
 	}
 }
 
@@ -687,246 +618,130 @@ static void cast_shuffle(void)
 		}
 	}
 
-#ifdef JP
-	msg_print("あなたはカードを切って一枚引いた...");
-#else
-	msg_print("You shuffle the deck and draw a card...");
-#endif
+	msg_print(_("あなたはカードを切って一枚引いた...", "You shuffle the deck and draw a card..."));
 
 	if (die < 30)
 		chg_virtue(V_CHANCE, 1);
 
 	if (die < 7)
 	{
-#ifdef JP
-		msg_print("なんてこった！《死》だ！");
-#else
-		msg_print("Oh no! It's Death!");
-#endif
+		msg_print(_("なんてこった！《死》だ！", "Oh no! It's Death!"));
 
 		for (i = 0; i < randint1(3); i++)
 			activate_hi_summon(py, px, FALSE);
 	}
 	else if (die < 14)
 	{
-#ifdef JP
-		msg_print("なんてこった！《悪魔》だ！");
-#else
-		msg_print("Oh no! It's the Devil!");
-#endif
-
+		msg_print(_("なんてこった！《悪魔》だ！", "Oh no! It's the Devil!"));
 		summon_specific(0, py, px, dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 	}
 	else if (die < 18)
 	{
 		int count = 0;
-#ifdef JP
-		msg_print("なんてこった！《吊られた男》だ！");
-#else
-		msg_print("Oh no! It's the Hanged Man.");
-#endif
-
+		msg_print(_("なんてこった！《吊られた男》だ！", "Oh no! It's the Hanged Man."));
 		activate_ty_curse(FALSE, &count);
 	}
 	else if (die < 22)
 	{
-#ifdef JP
-		msg_print("《不調和の剣》だ。");
-#else
-		msg_print("It's the swords of discord.");
-#endif
-
+		msg_print(_("《不調和の剣》だ。", "It's the swords of discord."));
 		aggravate_monsters(0);
 	}
 	else if (die < 26)
 	{
-#ifdef JP
-		msg_print("《愚者》だ。");
-#else
-		msg_print("It's the Fool.");
-#endif
-
+		msg_print(_("《愚者》だ。", "It's the Fool."));
 		do_dec_stat(A_INT);
 		do_dec_stat(A_WIS);
 	}
 	else if (die < 30)
 	{
-#ifdef JP
-		msg_print("奇妙なモンスターの絵だ。");
-#else
-		msg_print("It's the picture of a strange monster.");
-#endif
-
+		msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
 		trump_summoning(1, FALSE, py, px, (dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
 	}
 	else if (die < 33)
 	{
-#ifdef JP
-		msg_print("《月》だ。");
-#else
-		msg_print("It's the Moon.");
-#endif
-
+		msg_print(_("《月》だ。", "It's the Moon."));
 		unlite_area(10, 3);
 	}
 	else if (die < 38)
 	{
-#ifdef JP
-		msg_print("《運命の輪》だ。");
-#else
-		msg_print("It's the Wheel of Fortune.");
-#endif
-
+		msg_print(_("《運命の輪》だ。", "It's the Wheel of Fortune."));
 		wild_magic(randint0(32));
 	}
 	else if (die < 40)
 	{
-#ifdef JP
-		msg_print("テレポート・カードだ。");
-#else
-		msg_print("It's a teleport trump card.");
-#endif
-
+		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
 		teleport_player(10, TELEPORT_PASSIVE);
 	}
 	else if (die < 42)
 	{
-#ifdef JP
-		msg_print("《正義》だ。");
-#else
-		msg_print("It's Justice.");
-#endif
-
+		msg_print(_("《正義》だ。", "It's Justice."));
 		set_blessed(p_ptr->lev, FALSE);
 	}
 	else if (die < 47)
 	{
-#ifdef JP
-		msg_print("テレポート・カードだ。");
-#else
-		msg_print("It's a teleport trump card.");
-#endif
-
+		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
 		teleport_player(100, TELEPORT_PASSIVE);
 	}
 	else if (die < 52)
 	{
-#ifdef JP
-		msg_print("テレポート・カードだ。");
-#else
-		msg_print("It's a teleport trump card.");
-#endif
-
+		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
 		teleport_player(200, TELEPORT_PASSIVE);
 	}
 	else if (die < 60)
 	{
-#ifdef JP
-		msg_print("《塔》だ。");
-#else
-		msg_print("It's the Tower.");
-#endif
-
+		msg_print(_("《塔》だ。", "It's the Tower."));
 		wall_breaker();
 	}
 	else if (die < 72)
 	{
-#ifdef JP
-		msg_print("《節制》だ。");
-#else
-		msg_print("It's Temperance.");
-#endif
-
+		msg_print(_("《節制》だ。", "It's Temperance."));
 		sleep_monsters_touch();
 	}
 	else if (die < 80)
 	{
-#ifdef JP
-		msg_print("《塔》だ。");
-#else
-		msg_print("It's the Tower.");
-#endif
+		msg_print(_("《塔》だ。", "It's the Tower."));
 
 		earthquake(py, px, 5);
 	}
 	else if (die < 82)
 	{
-#ifdef JP
-		msg_print("友好的なモンスターの絵だ。");
-#else
-		msg_print("It's the picture of a friendly monster.");
-#endif
-
+		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_BIZARRE1, 0L);
 	}
 	else if (die < 84)
 	{
-#ifdef JP
-		msg_print("友好的なモンスターの絵だ。");
-#else
-		msg_print("It's the picture of a friendly monster.");
-#endif
-
+		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_BIZARRE2, 0L);
 	}
 	else if (die < 86)
 	{
-#ifdef JP
-		msg_print("友好的なモンスターの絵だ。");
-#else
-		msg_print("It's the picture of a friendly monster.");
-#endif
-
+		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_BIZARRE4, 0L);
 	}
 	else if (die < 88)
 	{
-#ifdef JP
-		msg_print("友好的なモンスターの絵だ。");
-#else
-		msg_print("It's the picture of a friendly monster.");
-#endif
-
+		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_BIZARRE5, 0L);
 	}
 	else if (die < 96)
 	{
-#ifdef JP
-		msg_print("《恋人》だ。");
-#else
-		msg_print("It's the Lovers.");
-#endif
+		msg_print(_("《恋人》だ。", "It's the Lovers."));
 
 		if (get_aim_dir(&dir))
 			charm_monster(dir, MIN(p_ptr->lev, 20));
 	}
 	else if (die < 101)
 	{
-#ifdef JP
-		msg_print("《隠者》だ。");
-#else
-		msg_print("It's the Hermit.");
-#endif
-
+		msg_print(_("《隠者》だ。", "It's the Hermit."));
 		wall_stone();
 	}
 	else if (die < 111)
 	{
-#ifdef JP
-		msg_print("《審判》だ。");
-#else
-		msg_print("It's the Judgement.");
-#endif
-
+		msg_print(_("《審判》だ。", "It's the Judgement."));
 		do_cmd_rerate(FALSE);
 		if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
 		{
-#ifdef JP
-			msg_print("全ての突然変異が治った。");
-#else
-			msg_print("You are cured of all mutations.");
-#endif
-
+			msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
 			p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
 			p_ptr->update |= PU_BONUS;
 			handle_stuff();
@@ -934,34 +749,19 @@ static void cast_shuffle(void)
 	}
 	else if (die < 120)
 	{
-#ifdef JP
-		msg_print("《太陽》だ。");
-#else
-		msg_print("It's the Sun.");
-#endif
-
+		msg_print(_("《太陽》だ。", "It's the Sun."));
 		chg_virtue(V_KNOWLEDGE, 1);
 		chg_virtue(V_ENLIGHTEN, 1);
 		wiz_lite(FALSE);
 	}
 	else
 	{
-#ifdef JP
-		msg_print("《世界》だ。");
-#else
-		msg_print("It's the World.");
-#endif
-
+		msg_print(_("《世界》だ。", "It's the World."));
 		if (p_ptr->exp < PY_MAX_EXP)
 		{
 			s32b ee = (p_ptr->exp / 25) + 1;
 			if (ee > 5000) ee = 5000;
-#ifdef JP
-			msg_print("更に経験を積んだような気がする。");
-#else
-			msg_print("You feel more experienced.");
-#endif
-
+			msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
 			gain_exp(ee);
 		}
 	}
@@ -1132,13 +932,8 @@ static bool cast_summon_greater_demon(void)
 	object_type *o_ptr;
 
 	item_tester_hook = item_tester_offer;
-#ifdef JP
-	q = "どの死体を捧げますか? ";
-	s = "捧げられる死体を持っていない。";
-#else
-	q = "Sacrifice which corpse? ";
-	s = "You have nothing to scrifice.";
-#endif
+	q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
+	s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return FALSE;
 
 	/* Get the item (in the pack) */
@@ -1157,18 +952,8 @@ static bool cast_summon_greater_demon(void)
 
 	if (summon_specific(-1, py, px, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 	{
-#ifdef JP
-		msg_print("硫黄の悪臭が充満した。");
-#else
-		msg_print("The area fills with a stench of sulphur and brimstone.");
-#endif
-
-
-#ifdef JP
-		msg_print("「ご用でございますか、ご主人様」");
-#else
-		msg_print("'What is thy bidding... Master?'");
-#endif
+		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
+		msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
 
 		/* Decrease the item (from the pack) */
 		if (item >= 0)
@@ -1188,11 +973,7 @@ static bool cast_summon_greater_demon(void)
 	}
 	else
 	{
-#ifdef JP
-		msg_print("悪魔は現れなかった。");
-#else
-		msg_print("No Greater Demon arrive.");
-#endif
+		msg_print(_("悪魔は現れなかった。", "No Greater Demon arrive."));
 	}
 
 	return TRUE;
@@ -1279,14 +1060,8 @@ static cptr do_life_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "軽傷の治癒";
-		if (desc) return "怪我と体力を少し回復させる。";
-#else
-		if (name) return "Cure Light Wounds";
-		if (desc) return "Heals cut and HP a little.";
-#endif
-    
+		if (name) return _("軽傷の治癒", "Cure Light Wounds");
+		if (desc) return _("怪我と体力を少し回復させる。", "Heals cut and HP a little.");
 		{
 			int dice = 2;
 			int sides = 10;
@@ -1302,14 +1077,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "祝福";
-		if (desc) return "一定時間、命中率とACにボーナスを得る。";
-#else
-		if (name) return "Bless";
-		if (desc) return "Gives bonus to hit and AC for a few turns.";
-#endif
-    
+		if (name) return _("祝福", "Bless");
+		if (desc) return _("一定時間、命中率とACにボーナスを得る。", "Gives bonus to hit and AC for a few turns.");
 		{
 			int base = 12;
 
@@ -1323,14 +1092,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "軽傷";
-		if (desc) return "1体のモンスターに小ダメージを与える。抵抗されると無効。";
-#else
-		if (name) return "Cause Light Wounds";
-		if (desc) return "Wounds a monster a little unless resisted.";
-#endif
-    
+		if (name) return _("軽傷", "Cause Light Wounds");
+		if (desc) return _("1体のモンスターに小ダメージを与える。抵抗されると無効。", "Wounds a monster a little unless resisted.");
 		{
 			int dice = 3 + (plev - 1) / 5;
 			int sides = 4;
@@ -1346,14 +1109,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "光の召喚";
-		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
-#else
-		if (name) return "Call Light";
-		if (desc) return "Lights up nearby area and the inside of a room permanently.";
-#endif
-    
+		if (name) return _("光の召喚", "Call Light");
+		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
 		{
 			int dice = 2;
 			int sides = plev / 2;
@@ -1369,14 +1126,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "罠 & 隠し扉感知";
-		if (desc) return "近くの全ての罠と扉と階段を感知する。";
-#else
-		if (name) return "Detect Doors & Traps";
-		if (desc) return "Detects traps, doors, and stairs in your vicinity.";
-#endif
-    
+		if (name) return _("罠 & 隠し扉感知", "Detect Doors & Traps");
+		if (desc) return _("近くの全ての罠と扉と階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
 		{
 			int rad = DETECT_RAD_DEFAULT;
 
@@ -1392,14 +1143,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "重傷の治癒";
-		if (desc) return "怪我と体力を中程度回復させる。";
-#else
-		if (name) return "Cure Medium Wounds";
-		if (desc) return "Heals cut and HP more.";
-#endif
-    
+		if (name) return _("重傷の治癒", "Cure Medium Wounds");
+		if (desc) return _("怪我と体力を中程度回復させる。", "Heals cut and HP more.");
 		{
 			int dice = 4;
 			int sides = 10;
@@ -1415,14 +1160,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "解毒";
-		if (desc) return "体内の毒を取り除く。";
-#else
-		if (name) return "Cure Poison";
-		if (desc) return "Cure poison status.";
-#endif
-    
+		if (name) return _("解毒", "Cure Poison");
+		if (desc) return _("体内の毒を取り除く。", "Cure poison status.");
 		{
 			if (cast)
 			{
@@ -1432,14 +1171,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "空腹充足";
-		if (desc) return "満腹にする。";
-#else
-		if (name) return "Satisfy Hunger";
-		if (desc) return "Satisfies hunger.";
-#endif
-    
+		if (name) return _("空腹充足", "Satisfy Hunger");
+		if (desc) return _("満腹にする。", "Satisfies hunger.");
 		{
 			if (cast)
 			{
@@ -1449,38 +1182,22 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "解呪";
-		if (desc) return "アイテムにかかった弱い呪いを解除する。";
-#else
-		if (name) return "Remove Curse";
-		if (desc) return "Removes normal curses from equipped items.";
-#endif
-
+		if (name) return _("解呪", "Remove Curse");
+		if (desc) return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
 		{
 			if (cast)
 			{
 				if (remove_curse())
 				{
-#ifdef JP
-					msg_print("誰かに見守られているような気がする。");
-#else
-					msg_print("You feel as if someone is watching over you.");
-#endif
+					msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "重傷";
-		if (desc) return "1体のモンスターに中ダメージを与える。抵抗されると無効。";
-#else
-		if (name) return "Cause Medium Wounds";
-		if (desc) return "Wounds a monster unless resisted.";
-#endif
-    
+		if (name) return _("重傷", "Cause Medium Wounds");
+		if (desc) return _("1体のモンスターに中ダメージを与える。抵抗されると無効。", "Wounds a monster unless resisted.");
 		{
 			int sides = 8 + (plev - 5) / 4;
 			int dice = 8;
@@ -1496,14 +1213,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "致命傷の治癒";
-		if (desc) return "体力を大幅に回復させ、負傷と朦朧状態も全快する。";
-#else
-		if (name) return "Cure Critical Wounds";
-		if (desc) return "Heals cut, stun and HP greatly.";
-#endif
-    
+		if (name) return _("致命傷の治癒", "Cure Critical Wounds");
+		if (desc) return _("体力を大幅に回復させ、負傷と朦朧状態も全快する。", "Heals cut, stun and HP greatly.");
 		{
 			int dice = 8;
 			int sides = 10;
@@ -1520,13 +1231,9 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "耐熱耐寒";
-		if (desc) return "一定時間、火炎と冷気に対する耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Heat and Cold";
-		if (desc) return "Gives resistance to fire and cold. These resistances can be added to which from equipment for more powerful resistances.";
-#endif
+		if (name) return _("耐熱耐寒", "Resist Heat and Cold");
+		if (desc) return _("一定時間、火炎と冷気に対する耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to fire and cold. These resistances can be added to which from equipment for more powerful resistances.");
     
 		{
 			int base = 20;
@@ -1542,13 +1249,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "周辺感知";
-		if (desc) return "周辺の地形を感知する。";
-#else
-		if (name) return "Sense Surroundings";
-		if (desc) return "Maps nearby area.";
-#endif
+		if (name) return _("周辺感知", "Sense Surroundings");
+		if (desc) return _("周辺の地形を感知する。", "Maps nearby area.");
     
 		{
 			int rad = DETECT_RAD_MAP;
@@ -1563,13 +1265,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "パニック・アンデッド";
-		if (desc) return "視界内のアンデッドを恐怖させる。抵抗されると無効。";
-#else
-		if (name) return "Turn Undead";
-		if (desc) return "Attempts to scare undead monsters in sight.";
-#endif
+		if (name) return _("パニック・アンデッド", "Turn Undead");
+		if (desc) return _("視界内のアンデッドを恐怖させる。抵抗されると無効。", "Attempts to scare undead monsters in sight.");
     
 		{
 			if (cast)
@@ -1580,13 +1277,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "体力回復";
-		if (desc) return "極めて強力な回復呪文で、負傷と朦朧状態も全快する。";
-#else
-		if (name) return "Healing";
-		if (desc) return "Much powerful healing magic, and heals cut and stun completely.";
-#endif
+		if (name) return _("体力回復", "Healing");
+		if (desc) return _("極めて強力な回復呪文で、負傷と朦朧状態も全快する。", "Much powerful healing magic, and heals cut and stun completely.");
     
 		{
 			int heal = 300;
@@ -1603,13 +1295,9 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "結界の紋章";
-		if (desc) return "自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。";
-#else
-		if (name) return "Glyph of Warding";
-		if (desc) return "Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.";
-#endif
+		if (name) return _("結界の紋章", "Glyph of Warding");
+		if (desc) return _("自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
+			"Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.");
     
 		{
 			if (cast)
@@ -1620,37 +1308,23 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "*解呪*";
-		if (desc) return "アイテムにかかった強力な呪いを解除する。";
-#else
-		if (name) return "Dispel Curse";
-		if (desc) return "Removes normal and heavy curse from equipped items.";
-#endif
+		if (name) return _("*解呪*", "Dispel Curse");
+		if (desc) return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curse from equipped items.");
     
 		{
 			if (cast)
 			{
 				if (remove_all_curse())
 				{
-#ifdef JP
-					msg_print("誰かに見守られているような気がする。");
-#else
-					msg_print("You feel as if someone is watching over you.");
-#endif
+					msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "鑑識";
-		if (desc) return "アイテムを識別する。";
-#else
-		if (name) return "Perception";
-		if (desc) return "Identifies an item.";
-#endif
+		if (name) return _("鑑識", "Perception");
+		if (desc) return _("アイテムを識別する。", "Identifies an item.");
     
 		{
 			if (cast)
@@ -1661,13 +1335,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "アンデッド退散";
-		if (desc) return "視界内の全てのアンデッドにダメージを与える。";
-#else
-		if (name) return "Dispel Undead";
-		if (desc) return "Damages all undead monsters in sight.";
-#endif
+		if (name) return _("アンデッド退散", "Dispel Undead");
+		if (desc) return _("視界内の全てのアンデッドにダメージを与える。", "Damages all undead monsters in sight.");
     
 		{
 			int dice = 1;
@@ -1683,13 +1352,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "凪の刻";
-		if (desc) return "視界内の全てのモンスターを魅了する。抵抗されると無効。";
-#else
-		if (name) return "Day of the Dove";
-		if (desc) return "Attempts to charm all monsters in sight.";
-#endif
+		if (name) return _("凪の刻", "Day of the Dove");
+		if (desc) return _("視界内の全てのモンスターを魅了する。抵抗されると無効。", "Attempts to charm all monsters in sight.");
     
 		{
 			int power = plev * 2;
@@ -1704,13 +1368,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "致命傷";
-		if (desc) return "1体のモンスターに大ダメージを与える。抵抗されると無効。";
-#else
-		if (name) return "Cause Critical Wounds";
-		if (desc) return "Wounds a monster critically unless resisted.";
-#endif
+		if (name) return _("致命傷", "Cause Critical Wounds");
+		if (desc) return _("1体のモンスターに大ダメージを与える。抵抗されると無効。", "Wounds a monster critically unless resisted.");
     
 		{
 			int dice = 5 + (plev - 5) / 3;
@@ -1727,13 +1386,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "帰還の詔";
-		if (desc) return "地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。";
-#else
-		if (name) return "Word of Recall";
-		if (desc) return "Recalls player from dungeon to town, or from town to the deepest level of dungeon.";
-#endif
+		if (name) return _("帰還の詔", "Word of Recall");
+		if (desc) return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。", "Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
     
 		{
 			int base = 15;
@@ -1749,13 +1403,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "真実の祭壇";
-		if (desc) return "現在の階を再構成する。";
-#else
-		if (name) return "Alter Reality";
-		if (desc) return "Recreates current dungeon level.";
-#endif
+		if (name) return _("真実の祭壇", "Alter Reality");
+		if (desc) return _("現在の階を再構成する。", "Recreates current dungeon level.");
     
 		{
 			int base = 15;
@@ -1771,13 +1420,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "真・結界";
-		if (desc) return "自分のいる床と周囲8マスの床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。";
-#else
-		if (name) return "Warding True";
-		if (desc) return "Creates glyphs in all adjacent squares and under you.";
-#endif
+		if (name) return _("真・結界", "Warding True");
+		if (desc) return _("自分のいる床と周囲8マスの床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。", "Creates glyphs in all adjacent squares and under you.");
     
 		{
 			int rad = 1;
@@ -1793,13 +1437,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "不毛化";
-		if (desc) return "この階の増殖するモンスターが増殖できなくなる。";
-#else
-		if (name) return "Sterilization";
-		if (desc) return "Prevents any breeders on current level from breeding.";
-#endif
+		if (name) return _("不毛化", "Sterilization");
+		if (desc) return _("この階の増殖するモンスターが増殖できなくなる。", "Prevents any breeders on current level from breeding.");
     
 		{
 			if (cast)
@@ -1810,13 +1449,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "全感知";
-		if (desc) return "近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。";
-#else
-		if (name) return "Detection";
-		if (desc) return "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.";
-#endif
+		if (name) return _("全感知", "Detection");
+		if (desc) return _("近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。", "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -1831,13 +1465,9 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "アンデッド消滅";
-		if (desc) return "自分の周囲にいるアンデッドを現在の階から消し去る。抵抗されると無効。";
-#else
-		if (name) return "Annihilate Undead";
-		if (desc) return "Eliminates all nearby undead monsters, exhausting you.  Powerful or unique monsters may be able to resist.";
-#endif
+		if (name) return _("アンデッド消滅", "Annihilate Undead");
+		if (desc) return _("自分の周囲にいるアンデッドを現在の階から消し去る。抵抗されると無効。",
+			"Eliminates all nearby undead monsters, exhausting you.  Powerful or unique monsters may be able to resist.");
     
 		{
 			int power = plev + 50;
@@ -1852,13 +1482,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "千里眼";
-		if (desc) return "その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。";
-#else
-		if (name) return "Clairvoyance";
-		if (desc) return "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.";
-#endif
+		if (name) return _("千里眼", "Clairvoyance");
+		if (desc) return _("その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。", "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.");
     
 		{
 			if (cast)
@@ -1869,13 +1494,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "全復活";
-		if (desc) return "すべてのステータスと経験値を回復する。";
-#else
-		if (name) return "Restoration";
-		if (desc) return "Restores all stats and experience.";
-#endif
+		if (name) return _("全復活", "Restoration");
+		if (desc) return _("すべてのステータスと経験値を回復する。", "Restores all stats and experience.");
     
 		{
 			if (cast)
@@ -1892,13 +1512,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "*体力回復*";
-		if (desc) return "最強の治癒の魔法で、負傷と朦朧状態も全快する。";
-#else
-		if (name) return "Healing True";
-		if (desc) return "The greatest healing magic. Heals all HP, cut and stun.";
-#endif
+		if (name) return _("*体力回復*", "Healing True");
+		if (desc) return _("最強の治癒の魔法で、負傷と朦朧状態も全快する。", "The greatest healing magic. Heals all HP, cut and stun.");
     
 		{
 			int heal = 2000;
@@ -1915,13 +1530,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "聖なるビジョン";
-		if (desc) return "アイテムの持つ能力を完全に知る。";
-#else
-		if (name) return "Holy Vision";
-		if (desc) return "*Identifies* an item.";
-#endif
+		if (name) return _("聖なるビジョン", "Holy Vision");
+		if (desc) return _("アイテムの持つ能力を完全に知る。", "*Identifies* an item.");
     
 		{
 			if (cast)
@@ -1932,13 +1542,8 @@ static cptr do_life_spell(int spell, int mode)
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "究極の耐性";
-		if (desc) return "一定時間、あらゆる耐性を付け、ACと魔法防御能力を上昇させる。";
-#else
-		if (name) return "Ultimate Resistance";
-		if (desc) return "Gives ultimate resistance, bonus to AC and speed.";
-#endif
+		if (name) return _("究極の耐性", "Ultimate Resistance");
+		if (desc) return _("一定時間、あらゆる耐性を付け、ACと魔法防御能力を上昇させる。", "Gives ultimate resistance, bonus to AC and speed.");
     
 		{
 			int base = plev / 2;
@@ -1982,13 +1587,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "モンスター感知";
-		if (desc) return "近くの全ての見えるモンスターを感知する。";
-#else
-		if (name) return "Detect Monsters";
-		if (desc) return "Detects all monsters in your vicinity unless invisible.";
-#endif
+		if (name) return _("モンスター感知", "Detect Monsters");
+		if (desc) return _("近くの全ての見えるモンスターを感知する。", "Detects all monsters in your vicinity unless invisible.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -2003,13 +1603,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "ショート・テレポート";
-		if (desc) return "近距離のテレポートをする。";
-#else
-		if (name) return "Phase Door";
-		if (desc) return "Teleport short distance.";
-#endif
+		if (name) return _("ショート・テレポート", "Phase Door");
+		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
     
 		{
 			int range = 10;
@@ -2024,13 +1619,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "罠と扉感知";
-		if (desc) return "近くの全ての扉と罠を感知する。";
-#else
-		if (name) return "Detect Doors and Traps";
-		if (desc) return "Detects traps, doors, and stairs in your vicinity.";
-#endif
+		if (name) return _("罠と扉感知", "Detect Doors and Traps");
+		if (desc) return _("近くの全ての扉と罠を感知する。", "Detects traps, doors, and stairs in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -2047,13 +1637,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "ライト・エリア";
-		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
-#else
-		if (name) return "Light Area";
-		if (desc) return "Lights up nearby area and the inside of a room permanently.";
-#endif
+		if (name) return _("ライト・エリア", "Light Area");
+		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
     
 		{
 			int dice = 2;
@@ -2070,13 +1655,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "パニック・モンスター";
-		if (desc) return "モンスター1体を混乱させる。抵抗されると無効。";
-#else
-		if (name) return "Confuse Monster";
-		if (desc) return "Attempts to confuse a monster.";
-#endif
+		if (name) return _("パニック・モンスター", "Confuse Monster");
+		if (desc) return _("モンスター1体を混乱させる。抵抗されると無効。", "Attempts to confuse a monster.");
     
 		{
 			int power = (plev * 3) / 2;
@@ -2093,13 +1673,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "テレポート";
-		if (desc) return "遠距離のテレポートをする。";
-#else
-		if (name) return "Teleport";
-		if (desc) return "Teleport long distance.";
-#endif
+		if (name) return _("テレポート", "Teleport");
+		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
 			int range = plev * 5;
@@ -2114,13 +1689,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "スリープ・モンスター";
-		if (desc) return "モンスター1体を眠らせる。抵抗されると無効。";
-#else
-		if (name) return "Sleep Monster";
-		if (desc) return "Attempts to sleep a monster.";
-#endif
+		if (name) return _("スリープ・モンスター", "Sleep Monster");
+		if (desc) return _("モンスター1体を眠らせる。抵抗されると無効。", "Attempts to sleep a monster.");
     
 		{
 			int power = plev;
@@ -2137,13 +1707,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "魔力充填";
-		if (desc) return "杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。";
-#else
-		if (name) return "Recharging";
-		if (desc) return "Recharges staffs, wands or rods.";
-#endif
+		if (name) return _("魔力充填", "Recharging");
+		if (desc) return _("杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。", "Recharges staffs, wands or rods.");
     
 		{
 			int power = plev * 4;
@@ -2158,13 +1723,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "魔法の地図";
-		if (desc) return "周辺の地形を感知する。";
-#else
-		if (name) return "Magic Mapping";
-		if (desc) return "Maps nearby area.";
-#endif
+		if (name) return _("魔法の地図", "Magic Mapping");
+		if (desc) return _("周辺の地形を感知する。", "Maps nearby area.");
     
 		{
 			int rad = DETECT_RAD_MAP;
@@ -2179,13 +1739,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "鑑定";
-		if (desc) return "アイテムを識別する。";
-#else
-		if (name) return "Identify";
-		if (desc) return "Identifies an item.";
-#endif
+		if (name) return _("鑑定", "Identify");
+		if (desc) return _("アイテムを識別する。", "Identifies an item.");
     
 		{
 			if (cast)
@@ -2196,13 +1751,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "スロウ・モンスター";
-		if (desc) return "モンスター1体を減速さる。抵抗されると無効。";
-#else
-		if (name) return "Slow Monster";
-		if (desc) return "Attempts to slow a monster.";
-#endif
+		if (name) return _("スロウ・モンスター", "Slow Monster");
+		if (desc) return _("モンスター1体を減速さる。抵抗されると無効。", "Attempts to slow a monster.");
     
 		{
 			int power = plev;
@@ -2219,13 +1769,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "周辺スリープ";
-		if (desc) return "視界内の全てのモンスターを眠らせる。抵抗されると無効。";
-#else
-		if (name) return "Mass Sleep";
-		if (desc) return "Attempts to sleep all monsters in sight.";
-#endif
+		if (name) return _("周辺スリープ", "Mass Sleep");
+		if (desc) return _("視界内の全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to sleep all monsters in sight.");
     
 		{
 			int power = plev;
@@ -2240,13 +1785,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "テレポート・モンスター";
-		if (desc) return "モンスターをテレポートさせるビームを放つ。抵抗されると無効。";
-#else
-		if (name) return "Teleport Away";
-		if (desc) return "Teleports all monsters on the line away unless resisted.";
-#endif
+		if (name) return _("テレポート・モンスター", "Teleport Away");
+		if (desc) return _("モンスターをテレポートさせるビームを放つ。抵抗されると無効。", "Teleports all monsters on the line away unless resisted.");
     
 		{
 			int power = plev;
@@ -2263,13 +1803,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "スピード";
-		if (desc) return "一定時間、加速する。";
-#else
-		if (name) return "Haste Self";
-		if (desc) return "Hastes you for a while.";
-#endif
+		if (name) return _("スピード", "Haste Self");
+		if (desc) return _("一定時間、加速する。", "Hastes you for a while.");
     
 		{
 			int base = plev;
@@ -2285,13 +1820,9 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "真・感知";
-		if (desc) return "近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。";
-#else
-		if (name) return "Detection True";
-		if (desc) return "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.";
-#endif
+		if (name) return _("真・感知", "Detection True");
+		if (desc) return _("近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。",
+			"Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -2306,13 +1837,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "真・鑑定";
-		if (desc) return "アイテムの持つ能力を完全に知る。";
-#else
-		if (name) return "Identify True";
-		if (desc) return "*Identifies* an item.";
-#endif
+		if (name) return _("真・鑑定", "Identify True");
+		if (desc) return _("アイテムの持つ能力を完全に知る。", "*Identifies* an item.");
     
 		{
 			if (cast)
@@ -2323,13 +1849,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "物体と財宝感知";
-		if (desc) return "近くの全てのアイテムと財宝を感知する。";
-#else
-		if (name) return "Detect items and Treasure";
-		if (desc) return "Detects all treasures and items in your vicinity.";
-#endif
+		if (name) return _("物体と財宝感知", "Detect items and Treasure");
+		if (desc) return _("近くの全てのアイテムと財宝を感知する。", "Detects all treasures and items in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -2346,13 +1867,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "チャーム・モンスター";
-		if (desc) return "モンスター1体を魅了する。抵抗されると無効。";
-#else
-		if (name) return "Charm Monster";
-		if (desc) return "Attempts to charm a monster.";
-#endif
+		if (name) return _("チャーム・モンスター", "Charm Monster");
+		if (desc) return _("モンスター1体を魅了する。抵抗されると無効。", "Attempts to charm a monster.");
     
 		{
 			int power = plev;
@@ -2369,13 +1885,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "精神感知";
-		if (desc) return "一定時間、テレパシー能力を得る。";
-#else
-		if (name) return "Sense Minds";
-		if (desc) return "Gives telepathy for a while.";
-#endif
+		if (name) return _("精神感知", "Sense Minds");
+		if (desc) return _("一定時間、テレパシー能力を得る。", "Gives telepathy for a while.");
     
 		{
 			int base = 25;
@@ -2391,13 +1902,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "街移動";
-		if (desc) return "街へ移動する。地上にいるときしか使えない。";
-#else
-		if (name) return "Teleport to town";
-		if (desc) return "Teleport to a town which you choose in a moment. Can only be used outdoors.";
-#endif
+		if (name) return _("街移動", "Teleport to town");
+		if (desc) return _("街へ移動する。地上にいるときしか使えない。", "Teleport to a town which you choose in a moment. Can only be used outdoors.");
     
 		{
 			if (cast)
@@ -2408,13 +1914,9 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "自己分析";
-		if (desc) return "現在の自分の状態を完全に知る。";
-#else
-		if (name) return "Self Knowledge";
-		if (desc) return "Gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.";
-#endif
+		if (name) return _("自己分析", "Self Knowledge");
+		if (desc) return _("現在の自分の状態を完全に知る。",
+			"Gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.");
     
 		{
 			if (cast)
@@ -2425,35 +1927,22 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "テレポート・レベル";
-		if (desc) return "瞬時に上か下の階にテレポートする。";
-#else
-		if (name) return "Teleport Level";
-		if (desc) return "Teleport to up or down stairs in a moment.";
-#endif
+		if (name) return _("テレポート・レベル", "Teleport Level");
+		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleport to up or down stairs in a moment.");
     
 		{
 			if (cast)
 			{
-#ifdef JP
-				if (!get_check("本当に他の階にテレポートしますか？")) return NULL;
-#else
-				if (!get_check("Are you sure? (Teleport Level)")) return NULL;
-#endif
+				if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) return NULL;
 				teleport_level(0);
 			}
 		}
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "帰還の呪文";
-		if (desc) return "地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。";
-#else
-		if (name) return "Word of Recall";
-		if (desc) return "Recalls player from dungeon to town, or from town to the deepest level of dungeon.";
-#endif
+		if (name) return _("帰還の呪文", "Word of Recall");
+		if (desc) return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。", 
+			"Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
     
 		{
 			int base = 15;
@@ -2469,13 +1958,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "次元の扉";
-		if (desc) return "短距離内の指定した場所にテレポートする。";
-#else
-		if (name) return "Dimension Door";
-		if (desc) return "Teleport to given location.";
-#endif
+		if (name) return _("次元の扉", "Dimension Door");
+		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleport to given location.");
     
 		{
 			int range = plev / 2 + 10;
@@ -2484,25 +1968,16 @@ static cptr do_sorcery_spell(int spell, int mode)
 
 			if (cast)
 			{
-#ifdef JP
-				msg_print("次元の扉が開いた。目的地を選んで下さい。");
-#else
-				msg_print("You open a dimensional gate. Choose a destination.");
-#endif
-
+				msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
 				if (!dimension_door()) return NULL;
 			}
 		}
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "調査";
-		if (desc) return "モンスターの属性、残り体力、最大体力、スピード、正体を知る。";
-#else
-		if (name) return "Probing";
-		if (desc) return "Proves all monsters' alignment, HP, speed and their true character.";
-#endif
+		if (name) return _("調査", "Probing");
+		if (desc) return _("モンスターの属性、残り体力、最大体力、スピード、正体を知る。",
+			"Proves all monsters' alignment, HP, speed and their true character.");
     
 		{
 			if (cast)
@@ -2513,13 +1988,9 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "爆発のルーン";
-		if (desc) return "自分のいる床の上に、モンスターが通ると爆発してダメージを与えるルーンを描く。";
-#else
-		if (name) return "Explosive Rune";
-		if (desc) return "Sets a glyph under you. The glyph will explode when a monster moves on it.";
-#endif
+		if (name) return _("爆発のルーン", "Explosive Rune");
+		if (desc) return _("自分のいる床の上に、モンスターが通ると爆発してダメージを与えるルーンを描く。", 
+			"Sets a glyph under you. The glyph will explode when a monster moves on it.");
     
 		{
 			int dice = 7;
@@ -2536,13 +2007,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "念動力";
-		if (desc) return "アイテムを自分の足元へ移動させる。";
-#else
-		if (name) return "Telekinesis";
-		if (desc) return "Pulls a distant item close to you.";
-#endif
+		if (name) return _("念動力", "Telekinesis");
+		if (desc) return _("アイテムを自分の足元へ移動させる。", "Pulls a distant item close to you.");
     
 		{
 			int weight = plev * 15;
@@ -2559,13 +2025,9 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "千里眼";
-		if (desc) return "その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。さらに、一定時間テレパシー能力を得る。";
-#else
-		if (name) return "Clairvoyance";
-		if (desc) return "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.";
-#endif
+		if (name) return _("千里眼", "Clairvoyance");
+		if (desc) return _("その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。さらに、一定時間テレパシー能力を得る。",
+			"Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.");
     
 		{
 			int base = 25;
@@ -2589,13 +2051,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "魅了の視線";
-		if (desc) return "視界内の全てのモンスターを魅了する。抵抗されると無効。";
-#else
-		if (name) return "Charm monsters";
-		if (desc) return "Attempts to charm all monsters in sight.";
-#endif
+		if (name) return _("魅了の視線", "Charm monsters");
+		if (desc) return _("視界内の全てのモンスターを魅了する。抵抗されると無効。", "Attempts to charm all monsters in sight.");
     
 		{
 			int power = plev * 2;
@@ -2610,13 +2067,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "錬金術";
-		if (desc) return "アイテム1つをお金に変える。";
-#else
-		if (name) return "Alchemy";
-		if (desc) return "Turns an item into 1/3 of its value in gold.";
-#endif
+		if (name) return _("錬金術", "Alchemy");
+		if (desc) return _("アイテム1つをお金に変える。", "Turns an item into 1/3 of its value in gold.");
     
 		{
 			if (cast)
@@ -2627,13 +2079,8 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "怪物追放";
-		if (desc) return "視界内の全てのモンスターをテレポートさせる。抵抗されると無効。";
-#else
-		if (name) return "Banishment";
-		if (desc) return "Teleports all monsters in sight away unless resisted.";
-#endif
+		if (name) return _("怪物追放", "Banishment");
+		if (desc) return _("視界内の全てのモンスターをテレポートさせる。抵抗されると無効。", "Teleports all monsters in sight away unless resisted.");
     
 		{
 			int power = plev * 4;
@@ -2648,13 +2095,9 @@ static cptr do_sorcery_spell(int spell, int mode)
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "無傷の球";
-		if (desc) return "一定時間、ダメージを受けなくなるバリアを張る。切れた瞬間に少しターンを消費するので注意。";
-#else
-		if (name) return "Globe of Invulnerability";
-		if (desc) return "Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.";
-#endif
+		if (name) return _("無傷の球", "Globe of Invulnerability");
+		if (desc) return _("一定時間、ダメージを受けなくなるバリアを張る。切れた瞬間に少しターンを消費するので注意。",
+			"Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.");
     
 		{
 			int base = 4;
@@ -2686,13 +2129,8 @@ static cptr do_nature_spell(int spell, int mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-#ifdef JP
-	static const char s_dam[] = "損傷:";
-	static const char s_rng[] = "射程";
-#else
-	static const char s_dam[] = "dam ";
-	static const char s_rng[] = "rng ";
-#endif
+	static const char s_dam[] = _("損傷:", "dam ");
+	static const char s_rng[] = _("射程", "rng ");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -2700,13 +2138,8 @@ static cptr do_nature_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "モンスター感知";
-		if (desc) return "近くの全ての見えるモンスターを感知する。";
-#else
-		if (name) return "Detect Creatures";
-		if (desc) return "Detects all monsters in your vicinity unless invisible.";
-#endif
+		if (name) return _("モンスター感知", "Detect Creatures");
+		if (desc) return _("近くの全ての見えるモンスターを感知する。", "Detects all monsters in your vicinity unless invisible.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -2721,13 +2154,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "稲妻";
-		if (desc) return "電撃の短いビームを放つ。";
-#else
-		if (name) return "Lightning";
-		if (desc) return "Fires a short beam of lightning.";
-#endif
+		if (name) return _("稲妻", "Lightning");
+		if (desc) return _("電撃の短いビームを放つ。", "Fires a short beam of lightning.");
     
 		{
 			int dice = 3 + (plev - 1) / 5;
@@ -2748,13 +2176,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "罠と扉感知";
-		if (desc) return "近くの全ての罠と扉を感知する。";
-#else
-		if (name) return "Detect Doors and Traps";
-		if (desc) return "Detects traps, doors, and stairs in your vicinity.";
-#endif
+		if (name) return _("罠と扉感知", "Detect Doors and Traps");
+		if (desc) return _("近くの全ての罠と扉を感知する。", "Detects traps, doors, and stairs in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -2771,24 +2194,14 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "食糧生成";
-		if (desc) return "食料を一つ作り出す。";
-#else
-		if (name) return "Produce Food";
-		if (desc) return "Produces a Ration of Food.";
-#endif
+		if (name) return _("食糧生成", "Produce Food");
+		if (desc) return _("食料を一つ作り出す。", "Produces a Ration of Food.");
     
 		{
 			if (cast)
 			{
 				object_type forge, *q_ptr = &forge;
-
-#ifdef JP
-				msg_print("食料を生成した。");
-#else
-				msg_print("A food ration is produced.");
-#endif
+				msg_print(_("食料を生成した。", "A food ration is produced."));
 
 				/* Create the food ration */
 				object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
@@ -2800,13 +2213,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "日の光";
-		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
-#else
-		if (name) return "Daylight";
-		if (desc) return "Lights up nearby area and the inside of a room permanently.";
-#endif
+		if (name) return _("日の光", "Daylight");
+		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
     
 		{
 			int dice = 2;
@@ -2821,30 +2229,16 @@ static cptr do_nature_spell(int spell, int mode)
 
 				if ((prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
 				{
-#ifdef JP
-					msg_print("日の光があなたの肉体を焦がした！");
-#else
-					msg_print("The daylight scorches your flesh!");
-#endif
-
-#ifdef JP
-					take_hit(DAMAGE_NOESCAPE, damroll(2, 2), "日の光", -1);
-#else
-					take_hit(DAMAGE_NOESCAPE, damroll(2, 2), "daylight", -1);
-#endif
+					msg_print(_("日の光があなたの肉体を焦がした！", "The daylight scorches your flesh!"));
+					take_hit(DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"), -1);
 				}
 			}
 		}
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "動物習し";
-		if (desc) return "動物1体を魅了する。抵抗されると無効。";
-#else
-		if (name) return "Animal Taming";
-		if (desc) return "Attempts to charm an animal.";
-#endif
+		if (name) return _("動物習し", "Animal Taming");
+		if (desc) return _("動物1体を魅了する。抵抗されると無効。", "Attempts to charm an animal.");
     
 		{
 			int power = plev;
@@ -2861,13 +2255,9 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "環境への耐性";
-		if (desc) return "一定時間、冷気、炎、電撃に対する耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Environment";
-		if (desc) return "Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.";
-#endif
+		if (name) return _("環境への耐性", "Resist Environment");
+		if (desc) return _("一定時間、冷気、炎、電撃に対する耐性を得る。装備による耐性に累積する。",
+			"Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.");
     
 		{
 			int base = 20;
@@ -2884,13 +2274,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "傷と毒治療";
-		if (desc) return "怪我を全快させ、毒を体から完全に取り除き、体力を少し回復させる。";
-#else
-		if (name) return "Cure Wounds & Poison";
-		if (desc) return "Heals all cut and poison status. Heals HP a little.";
-#endif
+		if (name) return _("傷と毒治療", "Cure Wounds & Poison");
+		if (desc) return _("怪我を全快させ、毒を体から完全に取り除き、体力を少し回復させる。", "Heals all cut and poison status. Heals HP a little.");
     
 		{
 			int dice = 2;
@@ -2908,13 +2293,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "岩石溶解";
-		if (desc) return "壁を溶かして床にする。";
-#else
-		if (name) return "Stone to Mud";
-		if (desc) return "Turns one rock square to mud.";
-#endif
+		if (name) return _("岩石溶解", "Stone to Mud");
+		if (desc) return _("壁を溶かして床にする。", "Turns one rock square to mud.");
     
 		{
 			int dice = 1;
@@ -2933,13 +2313,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "アイス・ボルト";
-		if (desc) return "冷気のボルトもしくはビームを放つ。";
-#else
-		if (name) return "Frost Bolt";
-		if (desc) return "Fires a bolt or beam of cold.";
-#endif
+		if (name) return _("アイス・ボルト", "Frost Bolt");
+		if (desc) return _("冷気のボルトもしくはビームを放つ。", "Fires a bolt or beam of cold.");
     
 		{
 			int dice = 3 + (plev - 5) / 4;
@@ -2956,13 +2331,9 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "自然の覚醒";
-		if (desc) return "周辺の地形を感知し、近くの罠、扉、階段、全てのモンスターを感知する。";
-#else
-		if (name) return "Nature Awareness";
-		if (desc) return "Maps nearby area. Detects all monsters, traps, doors and stairs.";
-#endif
+		if (name) return _("自然の覚醒", "Nature Awareness");
+		if (desc) return _("周辺の地形を感知し、近くの罠、扉、階段、全てのモンスターを感知する。",
+			"Maps nearby area. Detects all monsters, traps, doors and stairs.");
     
 		{
 			int rad1 = DETECT_RAD_MAP;
@@ -2982,13 +2353,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "ファイア・ボルト";
-		if (desc) return "火炎のボルトもしくはビームを放つ。";
-#else
-		if (name) return "Fire Bolt";
-		if (desc) return "Fires a bolt or beam of fire.";
-#endif
+		if (name) return _("ファイア・ボルト", "Fire Bolt");
+		if (desc) return _("火炎のボルトもしくはビームを放つ。", "Fires a bolt or beam of fire.");
     
 		{
 			int dice = 5 + (plev - 5) / 4;
@@ -3005,13 +2371,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "太陽光線";
-		if (desc) return "光線を放つ。光りを嫌うモンスターに効果がある。";
-#else
-		if (name) return "Ray of Sunlight";
-		if (desc) return "Fires a beam of light which damages to light-sensitive monsters.";
-#endif
+		if (name) return _("太陽光線", "Ray of Sunlight");
+		if (desc) return _("光線を放つ。光りを嫌うモンスターに効果がある。", "Fires a beam of light which damages to light-sensitive monsters.");
     
 		{
 			int dice = 6;
@@ -3022,25 +2383,15 @@ static cptr do_nature_spell(int spell, int mode)
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-#ifdef JP
-				msg_print("太陽光線が現れた。");
-#else
-				msg_print("A line of sunlight appears.");
-#endif
-
+				msg_print(_("太陽光線が現れた。", "A line of sunlight appears."));
 				lite_line(dir, damroll(6, 8));
 			}
 		}
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "足かせ";
-		if (desc) return "視界内の全てのモンスターを減速させる。抵抗されると無効。";
-#else
-		if (name) return "Entangle";
-		if (desc) return "Attempts to slow all monsters in sight.";
-#endif
+		if (name) return _("足かせ", "Entangle");
+		if (desc) return _("視界内の全てのモンスターを減速させる。抵抗されると無効。", "Attempts to slow all monsters in sight.");
     
 		{
 			int power = plev;
@@ -3055,24 +2406,15 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "動物召喚";
-		if (desc) return "動物を1体召喚する。";
-#else
-		if (name) return "Summon Animal";
-		if (desc) return "Summons an animal.";
-#endif
+		if (name) return _("動物召喚", "Summon Animal");
+		if (desc) return _("動物を1体召喚する。", "Summons an animal.");
     
 		{
 			if (cast)
 			{
 				if (!(summon_specific(-1, py, px, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET))))
 				{
-#ifdef JP
-					msg_print("動物は現れなかった。");
-#else
-					msg_print("No animals arrive.");
-#endif
+					msg_print(_("動物は現れなかった。", "No animals arrive."));
 				}
 				break;
 			}
@@ -3080,13 +2422,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "薬草治療";
-		if (desc) return "体力を大幅に回復させ、負傷、朦朧状態、毒から全快する。";
-#else
-		if (name) return "Herbal Healing";
-		if (desc) return "Heals HP greatly. And heals cut, stun and poison completely.";
-#endif
+		if (name) return _("薬草治療", "Herbal Healing");
+		if (desc) return _("体力を大幅に回復させ、負傷、朦朧状態、毒から全快する。", "Heals HP greatly. And heals cut, stun and poison completely.");
     
 		{
 			int heal = 500;
@@ -3104,13 +2441,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "階段生成";
-		if (desc) return "自分のいる位置に階段を作る。";
-#else
-		if (name) return "Stair Building";
-		if (desc) return "Creates a stair which goes down or up.";
-#endif
+		if (name) return _("階段生成", "Stair Building");
+		if (desc) return _("自分のいる位置に階段を作る。", "Creates a stair which goes down or up.");
     
 		{
 			if (cast)
@@ -3121,13 +2453,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "肌石化";
-		if (desc) return "一定時間、ACを上昇させる。";
-#else
-		if (name) return "Stone Skin";
-		if (desc) return "Gives bonus to AC for a while.";
-#endif
+		if (name) return _("肌石化", "Stone Skin");
+		if (desc) return _("一定時間、ACを上昇させる。", "Gives bonus to AC for a while.");
     
 		{
 			int base = 20;
@@ -3143,13 +2470,9 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "真・耐性";
-		if (desc) return "一定時間、酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resistance True";
-		if (desc) return "Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.";
-#endif
+		if (name) return _("真・耐性", "Resistance True");
+		if (desc) return _("一定時間、酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.");
     
 		{
 			int base = 20;
@@ -3168,13 +2491,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "森林創造";
-		if (desc) return "周囲に木を作り出す。";
-#else
-		if (name) return "Forest Creation";
-		if (desc) return "Creates trees in all adjacent squares.";
-#endif
+		if (name) return _("森林創造", "Forest Creation");
+		if (desc) return _("周囲に木を作り出す。", "Creates trees in all adjacent squares.");
     
 		{
 			if (cast)
@@ -3185,13 +2503,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "動物友和";
-		if (desc) return "視界内の全ての動物を魅了する。抵抗されると無効。";
-#else
-		if (name) return "Animal Friendship";
-		if (desc) return "Attempts to charm all animals in sight.";
-#endif
+		if (name) return _("動物友和", "Animal Friendship");
+		if (desc) return _("視界内の全ての動物を魅了する。抵抗されると無効。", "Attempts to charm all animals in sight.");
     
 		{
 			int power = plev * 2;
@@ -3206,13 +2519,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "試金石";
-		if (desc) return "アイテムの持つ能力を完全に知る。";
-#else
-		if (name) return "Stone Tell";
-		if (desc) return "*Identifies* an item.";
-#endif
+		if (name) return _("試金石", "Stone Tell");
+		if (desc) return _("アイテムの持つ能力を完全に知る。", "*Identifies* an item.");
     
 		{
 			if (cast)
@@ -3223,13 +2531,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "石の壁";
-		if (desc) return "自分の周囲に花崗岩の壁を作る。";
-#else
-		if (name) return "Wall of Stone";
-		if (desc) return "Creates granite walls in all adjacent squares.";
-#endif
+		if (name) return _("石の壁", "Wall of Stone");
+		if (desc) return _("自分の周囲に花崗岩の壁を作る。", "Creates granite walls in all adjacent squares.");
     
 		{
 			if (cast)
@@ -3240,13 +2543,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "腐食防止";
-		if (desc) return "アイテムを酸で傷つかないよう加工する。";
-#else
-		if (name) return "Protect from Corrosion";
-		if (desc) return "Makes an equipment acid-proof.";
-#endif
+		if (name) return _("腐食防止", "Protect from Corrosion");
+		if (desc) return _("アイテムを酸で傷つかないよう加工する。", "Makes an equipment acid-proof.");
     
 		{
 			if (cast)
@@ -3257,13 +2555,9 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "地震";
-		if (desc) return "周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。";
-#else
-		if (name) return "Earthquake";
-		if (desc) return "Shakes dungeon structure, and results in random swapping of floors and walls.";
-#endif
+		if (name) return _("地震", "Earthquake");
+		if (desc) return _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", 
+			"Shakes dungeon structure, and results in random swapping of floors and walls.");
     
 		{
 			int rad = 10;
@@ -3278,13 +2572,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "カマイタチ";
-		if (desc) return "全方向に向かって攻撃する。";
-#else
-		if (name) return "Cyclone";
-		if (desc) return "Attacks all adjacent monsters.";
-#endif
+		if (name) return _("カマイタチ", "Cyclone");
+		if (desc) return _("全方向に向かって攻撃する。", "Attacks all adjacent monsters.");
     
 		{
 			if (cast)
@@ -3311,13 +2600,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "ブリザード";
-		if (desc) return "巨大な冷気の球を放つ。";
-#else
-		if (name) return "Blizzard";
-		if (desc) return "Fires a huge ball of cold.";
-#endif
+		if (name) return _("ブリザード", "Blizzard");
+		if (desc) return _("巨大な冷気の球を放つ。", "Fires a huge ball of cold.");
     
 		{
 			int dam = 70 + plev * 3 / 2;
@@ -3335,13 +2619,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "稲妻嵐";
-		if (desc) return "巨大な電撃の球を放つ。";
-#else
-		if (name) return "Lightning Storm";
-		if (desc) return "Fires a huge electric ball.";
-#endif
+		if (name) return _("稲妻嵐", "Lightning Storm");
+		if (desc) return _("巨大な電撃の球を放つ。", "Fires a huge electric ball.");
     
 		{
 			int dam = 90 + plev * 3 / 2;
@@ -3359,13 +2638,8 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "渦潮";
-		if (desc) return "巨大な水の球を放つ。";
-#else
-		if (name) return "Whirlpool";
-		if (desc) return "Fires a huge ball of water.";
-#endif
+		if (name) return _("渦潮", "Whirlpool");
+		if (desc) return _("巨大な水の球を放つ。", "Fires a huge ball of water.");
     
 		{
 			int dam = 100 + plev * 3 / 2;
@@ -3382,13 +2656,9 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "陽光召喚";
-		if (desc) return "自分を中心とした光の球を発生させる。さらに、その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。";
-#else
-		if (name) return "Call Sunlight";
-		if (desc) return "Generates ball of light centered on you. Maps and lights whole dungeon level. Knows all objects location.";
-#endif
+		if (name) return _("陽光召喚", "Call Sunlight");
+		if (desc) return _("自分を中心とした光の球を発生させる。さらに、その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。",
+			"Generates ball of light centered on you. Maps and lights whole dungeon level. Knows all objects location.");
     
 		{
 			int dam = 150;
@@ -3405,30 +2675,16 @@ static cptr do_nature_spell(int spell, int mode)
 
 				if ((prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
 				{
-#ifdef JP
-					msg_print("日光があなたの肉体を焦がした！");
-#else
-					msg_print("The sunlight scorches your flesh!");
-#endif
-
-#ifdef JP
-					take_hit(DAMAGE_NOESCAPE, 50, "日光", -1);
-#else
-					take_hit(DAMAGE_NOESCAPE, 50, "sunlight", -1);
-#endif
+					msg_print(_("日光があなたの肉体を焦がした！", "The sunlight scorches your flesh!"));
+					take_hit(DAMAGE_NOESCAPE, 50, _("日光", "sunlight"), -1);
 				}
 			}
 		}
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "精霊の刃";
-		if (desc) return "武器に炎か冷気の属性をつける。";
-#else
-		if (name) return "Elemental Branding";
-		if (desc) return "Makes current weapon fire or frost branded.";
-#endif
+		if (name) return _("精霊の刃", "Elemental Branding");
+		if (desc) return _("武器に炎か冷気の属性をつける。", "Makes current weapon fire or frost branded.");
     
 		{
 			if (cast)
@@ -3439,13 +2695,9 @@ static cptr do_nature_spell(int spell, int mode)
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "自然の脅威";
-		if (desc) return "近くの全てのモンスターにダメージを与え、地震を起こし、自分を中心とした分解の球を発生させる。";
-#else
-		if (name) return "Nature's Wrath";
-		if (desc) return "Damages all monsters in sight. Makes quake. Generates disintegration ball centered on you.";
-#endif
+		if (name) return _("自然の脅威", "Nature's Wrath");
+		if (desc) return _("近くの全てのモンスターにダメージを与え、地震を起こし、自分を中心とした分解の球を発生させる。", 
+			"Damages all monsters in sight. Makes quake. Generates disintegration ball centered on you.");
     
 		{
 			int d_dam = 4 * plev;
@@ -3482,13 +2734,8 @@ static cptr do_chaos_spell(int spell, int mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-#ifdef JP
-	static const char s_dam[] = "損傷:";
-	static const char s_random[] = "ランダム";
-#else
-	static const char s_dam[] = "dam ";
-	static const char s_random[] = "random";
-#endif
+	static const char s_dam[] = _("損傷:", "dam ");
+	static const char s_random[] = _("ランダム", "random");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -3496,13 +2743,8 @@ static cptr do_chaos_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "マジック・ミサイル";
-		if (desc) return "弱い魔法の矢を放つ。";
-#else
-		if (name) return "Magic Missile";
-		if (desc) return "Fires a weak bolt of magic.";
-#endif
+		if (name) return _("マジック・ミサイル", "Magic Missile");
+		if (desc) return _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
     
 		{
 			int dice = 3 + ((plev - 1) / 5);
@@ -3520,13 +2762,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "トラップ/ドア破壊";
-		if (desc) return "隣接する罠と扉を破壊する。";
-#else
-		if (name) return "Trap / Door Destruction";
-		if (desc) return "Destroys all traps in adjacent squares.";
-#endif
+		if (name) return _("トラップ/ドア破壊", "Trap / Door Destruction");
+		if (desc) return _("隣接する罠と扉を破壊する。", "Destroys all traps in adjacent squares.");
     
 		{
 			int rad = 1;
@@ -3541,13 +2778,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "閃光";
-		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
-#else
-		if (name) return "Flash of Light";
-		if (desc) return "Lights up nearby area and the inside of a room permanently.";
-#endif
+		if (name) return _("閃光", "Flash of Light");
+		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
     
 		{
 			int dice = 2;
@@ -3564,25 +2796,15 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "混乱の手";
-		if (desc) return "相手を混乱させる攻撃をできるようにする。";
-#else
-		if (name) return "Touch of Confusion";
-		if (desc) return "Attempts to confuse the next monster that you hit.";
-#endif
+		if (name) return _("混乱の手", "Touch of Confusion");
+		if (desc) return _("相手を混乱させる攻撃をできるようにする。", "Attempts to confuse the next monster that you hit.");
     
 		{
 			if (cast)
 			{
 				if (!(p_ptr->special_attack & ATTACK_CONFUSE))
 				{
-#ifdef JP
-					msg_print("あなたの手は光り始めた。");
-#else
-					msg_print("Your hands start glowing.");
-#endif
-
+					msg_print(_("あなたの手は光り始めた。", "Your hands start glowing."));
 					p_ptr->special_attack |= ATTACK_CONFUSE;
 					p_ptr->redraw |= (PR_STATUS);
 				}
@@ -3591,13 +2813,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "魔力炸裂";
-		if (desc) return "魔法の球を放つ。";
-#else
-		if (name) return "Mana Burst";
-		if (desc) return "Fires a ball of magic.";
-#endif
+		if (name) return _("魔力炸裂", "Mana Burst");
+		if (desc) return _("魔法の球を放つ。", "Fires a ball of magic.");
     
 		{
 			int dice = 3;
@@ -3631,13 +2848,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "ファイア・ボルト";
-		if (desc) return "炎のボルトもしくはビームを放つ。";
-#else
-		if (name) return "Fire Bolt";
-		if (desc) return "Fires a bolt or beam of fire.";
-#endif
+		if (name) return _("ファイア・ボルト", "Fire Bolt");
+		if (desc) return _("炎のボルトもしくはビームを放つ。", "Fires a bolt or beam of fire.");
     
 		{
 			int dice = 8 + (plev - 5) / 4;
@@ -3655,13 +2867,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "力の拳";
-		if (desc) return "ごく小さな分解の球を放つ。";
-#else
-		if (name) return "Fist of Force";
-		if (desc) return "Fires a tiny ball of disintegration.";
-#endif
+		if (name) return _("力の拳", "Fist of Force");
+		if (desc) return _("ごく小さな分解の球を放つ。", "Fires a tiny ball of disintegration.");
     
 		{
 			int dice = 8 + ((plev - 5) / 4);
@@ -3680,13 +2887,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "テレポート";
-		if (desc) return "遠距離のテレポートをする。";
-#else
-		if (name) return "Teleport Self";
-		if (desc) return "Teleport long distance.";
-#endif
+		if (name) return _("テレポート", "Teleport Self");
+		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
 			int range = plev * 5;
@@ -3701,13 +2903,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "ワンダー";
-		if (desc) return "モンスターにランダムな効果を与える。";
-#else
-		if (name) return "Wonder";
-		if (desc) return "Fires something with random effects.";
-#endif
+		if (name) return _("ワンダー", "Wonder");
+		if (desc) return _("モンスターにランダムな効果を与える。", "Fires something with random effects.");
     
 		{
 			if (info) return s_random;
@@ -3723,13 +2920,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "カオス・ボルト";
-		if (desc) return "カオスのボルトもしくはビームを放つ。";
-#else
-		if (name) return "Chaos Bolt";
-		if (desc) return "Fires a bolt or ball of chaos.";
-#endif
+		if (name) return _("カオス・ボルト", "Chaos Bolt");
+		if (desc) return _("カオスのボルトもしくはビームを放つ。", "Fires a bolt or ball of chaos.");
     
 		{
 			int dice = 10 + (plev - 5) / 4;
@@ -3747,13 +2939,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "ソニック・ブーム";
-		if (desc) return "自分を中心とした轟音の球を発生させる。";
-#else
-		if (name) return "Sonic Boom";
-		if (desc) return "Generates a ball of sound centered on you.";
-#endif
+		if (name) return _("ソニック・ブーム", "Sonic Boom");
+		if (desc) return _("自分を中心とした轟音の球を発生させる。", "Generates a ball of sound centered on you.");
     
 		{
 			int dam = 60 + plev;
@@ -3763,25 +2950,15 @@ static cptr do_chaos_spell(int spell, int mode)
 
 			if (cast)
 			{
-#ifdef JP
-				msg_print("ドーン！部屋が揺れた！");
-#else
-				msg_print("BOOM! Shake the room!");
-#endif
-
+				msg_print(_("ドーン！部屋が揺れた！", "BOOM! Shake the room!"));
 				project(0, rad, py, px, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
 			}
 		}
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "破滅の矢";
-		if (desc) return "純粋な魔力のビームを放つ。";
-#else
-		if (name) return "Doom Bolt";
-		if (desc) return "Fires a beam of pure mana.";
-#endif
+		if (name) return _("破滅の矢", "Doom Bolt");
+		if (desc) return _("純粋な魔力のビームを放つ。", "Fires a beam of pure mana.");
     
 		{
 			int dice = 11 + (plev - 5) / 4;
@@ -3799,13 +2976,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "ファイア・ボール";
-		if (desc) return "炎の球を放つ。";
-#else
-		if (name) return "Fire Ball";
-		if (desc) return "Fires a ball of fire.";
-#endif
+		if (name) return _("ファイア・ボール", "Fire Ball");
+		if (desc) return _("炎の球を放つ。", "Fires a ball of fire.");
     
 		{
 			int dam = plev + 55;
@@ -3823,13 +2995,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "テレポート・アウェイ";
-		if (desc) return "モンスターをテレポートさせるビームを放つ。抵抗されると無効。";
-#else
-		if (name) return "Teleport Other";
-		if (desc) return "Teleports all monsters on the line away unless resisted.";
-#endif
+		if (name) return _("テレポート・アウェイ", "Teleport Other");
+		if (desc) return _("モンスターをテレポートさせるビームを放つ。抵抗されると無効。", "Teleports all monsters on the line away unless resisted.");
     
 		{
 			int power = plev;
@@ -3846,13 +3013,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "破壊の言葉";
-		if (desc) return "周辺のアイテム、モンスター、地形を破壊する。";
-#else
-		if (name) return "Word of Destruction";
-		if (desc) return "Destroy everything in nearby area.";
-#endif
+		if (name) return _("破壊の言葉", "Word of Destruction");
+		if (desc) return _("周辺のアイテム、モンスター、地形を破壊する。", "Destroy everything in nearby area.");
     
 		{
 			int base = 12;
@@ -3866,13 +3028,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "ログルス発動";
-		if (desc) return "巨大なカオスの球を放つ。";
-#else
-		if (name) return "Invoke Logrus";
-		if (desc) return "Fires a huge ball of chaos.";
-#endif
+		if (name) return _("ログルス発動", "Invoke Logrus");
+		if (desc) return _("巨大なカオスの球を放つ。", "Fires a huge ball of chaos.");
     
 		{
 			int dam = plev * 2 + 99;
@@ -3890,13 +3047,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "他者変容";
-		if (desc) return "モンスター1体を変身させる。抵抗されると無効。";
-#else
-		if (name) return "Polymorph Other";
-		if (desc) return "Attempts to polymorph a monster.";
-#endif
+		if (name) return _("他者変容", "Polymorph Other");
+		if (desc) return _("モンスター1体を変身させる。抵抗されると無効。", "Attempts to polymorph a monster.");
     
 		{
 			int power = plev;
@@ -3913,13 +3065,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "連鎖稲妻";
-		if (desc) return "全方向に対して電撃のビームを放つ。";
-#else
-		if (name) return "Chain Lightning";
-		if (desc) return "Fires lightning beams in all directions.";
-#endif
+		if (name) return _("連鎖稲妻", "Chain Lightning");
+		if (desc) return _("全方向に対して電撃のビームを放つ。", "Fires lightning beams in all directions.");
     
 		{
 			int dice = 5 + plev / 10;
@@ -3936,13 +3083,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "魔力封入";
-		if (desc) return "杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。";
-#else
-		if (name) return "Arcane Binding";
-		if (desc) return "Recharges staffs, wands or rods.";
-#endif
+		if (name) return _("魔力封入", "Arcane Binding");
+		if (desc) return _("杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。", "Recharges staffs, wands or rods.");
     
 		{
 			int power = 90;
@@ -3957,13 +3099,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "原子分解";
-		if (desc) return "巨大な分解の球を放つ。";
-#else
-		if (name) return "Disintegrate";
-		if (desc) return "Fires a huge ball of disintegration.";
-#endif
+		if (name) return _("原子分解", "Disintegrate");
+		if (desc) return _("巨大な分解の球を放つ。", "Fires a huge ball of disintegration.");
     
 		{
 			int dam = plev + 70;
@@ -3981,13 +3118,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "現実変容";
-		if (desc) return "現在の階を再構成する。";
-#else
-		if (name) return "Alter Reality";
-		if (desc) return "Recreates current dungeon level.";
-#endif
+		if (name) return _("現実変容", "Alter Reality");
+		if (desc) return _("現在の階を再構成する。", "Recreates current dungeon level.");
     
 		{
 			int base = 15;
@@ -4003,13 +3135,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "マジック・ロケット";
-		if (desc) return "ロケットを発射する。";
-#else
-		if (name) return "Magic Rocket";
-		if (desc) return "Fires a magic rocket.";
-#endif
+		if (name) return _("マジック・ロケット", "Magic Rocket");
+		if (desc) return _("ロケットを発射する。", "Fires a magic rocket.");
     
 		{
 			int dam = 120 + plev * 2;
@@ -4021,25 +3148,15 @@ static cptr do_chaos_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-#ifdef JP
-				msg_print("ロケット発射！");
-#else
-				msg_print("You launch a rocket!");
-#endif
-
+				msg_print(_("ロケット発射！", "You launch a rocket!"));
 				fire_rocket(GF_ROCKET, dir, dam, rad);
 			}
 		}
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "混沌の刃";
-		if (desc) return "武器にカオスの属性をつける。";
-#else
-		if (name) return "Chaos Branding";
-		if (desc) return "Makes current weapon a Chaotic weapon.";
-#endif
+		if (name) return _("混沌の刃", "Chaos Branding");
+		if (desc) return _("武器にカオスの属性をつける。", "Makes current weapon a Chaotic weapon.");
     
 		{
 			if (cast)
@@ -4050,13 +3167,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "悪魔召喚";
-		if (desc) return "悪魔を1体召喚する。";
-#else
-		if (name) return "Summon Demon";
-		if (desc) return "Summons a demon.";
-#endif
+		if (name) return _("悪魔召喚", "Summon Demon");
+		if (desc) return _("悪魔を1体召喚する。", "Summons a demon.");
     
 		{
 			if (cast)
@@ -4070,27 +3182,15 @@ static cptr do_chaos_spell(int spell, int mode)
 
 				if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, SUMMON_DEMON, mode))
 				{
-#ifdef JP
-					msg_print("硫黄の悪臭が充満した。");
-#else
-					msg_print("The area fills with a stench of sulphur and brimstone.");
-#endif
-
+					msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 					if (pet)
 					{
-#ifdef JP
-						msg_print("「ご用でございますか、ご主人様」");
-#else
-						msg_print("'What is thy bidding... Master?'");
-#endif
+						msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
 					}
 					else
 					{
-#ifdef JP
-						msg_print("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」");
-#else
-						msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'");
-#endif
+						msg_print(_("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」",
+									"'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
 					}
 				}
 			}
@@ -4098,13 +3198,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "重力光線";
-		if (desc) return "重力のビームを放つ。";
-#else
-		if (name) return "Beam of Gravity";
-		if (desc) return "Fires a beam of gravity.";
-#endif
+		if (name) return _("重力光線", "Beam of Gravity");
+		if (desc) return _("重力のビームを放つ。", "Fires a beam of gravity.");
     
 		{
 			int dice = 9 + (plev - 5) / 4;
@@ -4122,13 +3217,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "流星群";
-		if (desc) return "自分の周辺に隕石を落とす。";
-#else
-		if (name) return "Meteor Swarm";
-		if (desc) return "Makes meteor balls fall down to nearby random locations.";
-#endif
+		if (name) return _("流星群", "Meteor Swarm");
+		if (desc) return _("自分の周辺に隕石を落とす。", "Makes meteor balls fall down to nearby random locations.");
     
 		{
 			int dam = plev * 2;
@@ -4144,13 +3234,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "焔の一撃";
-		if (desc) return "自分を中心とした超巨大な炎の球を発生させる。";
-#else
-		if (name) return "Flame Strike";
-		if (desc) return "Generate a huge ball of fire centered on you.";
-#endif
+		if (name) return _("焔の一撃", "Flame Strike");
+		if (desc) return _("自分を中心とした超巨大な炎の球を発生させる。", "Generate a huge ball of fire centered on you.");
     
 		{
 			int dam = 300 + 3 * plev;
@@ -4166,13 +3251,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "混沌召来";
-		if (desc) return "ランダムな属性の球やビームを発生させる。";
-#else
-		if (name) return "Call Chaos";
-		if (desc) return "Generate random kind of balls or beams.";
-#endif
+		if (name) return _("混沌召来", "Call Chaos");
+		if (desc) return _("ランダムな属性の球やビームを発生させる。", "Generate random kind of balls or beams.");
     
 		{
 			if (info) return format("%s150 / 250", s_dam);
@@ -4185,35 +3265,21 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "自己変容";
-		if (desc) return "自分を変身させようとする。";
-#else
-		if (name) return "Polymorph Self";
-		if (desc) return "Polymorphs yourself.";
-#endif
+		if (name) return _("自己変容", "Polymorph Self");
+		if (desc) return _("自分を変身させようとする。", "Polymorphs yourself.");
     
 		{
 			if (cast)
 			{
-#ifdef JP
-				if (!get_check("変身します。よろしいですか？")) return NULL;
-#else
-				if (!get_check("You will polymorph yourself. Are you sure? ")) return NULL;
-#endif
+				if (!get_check(_("変身します。よろしいですか？", "You will polymorph yourself. Are you sure? "))) return NULL;
 				do_poly_self();
 			}
 		}
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "魔力の嵐";
-		if (desc) return "非常に強力で巨大な純粋な魔力の球を放つ。";
-#else
-		if (name) return "Mana Storm";
-		if (desc) return "Fires an extremely powerful huge ball of pure mana.";
-#endif
+		if (name) return _("魔力の嵐", "Mana Storm");
+		if (desc) return _("非常に強力で巨大な純粋な魔力の球を放つ。", "Fires an extremely powerful huge ball of pure mana.");
     
 		{
 			int dam = 300 + plev * 4;
@@ -4231,13 +3297,8 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "ログルスのブレス";
-		if (desc) return "非常に強力なカオスの球を放つ。";
-#else
-		if (name) return "Breathe Logrus";
-		if (desc) return "Fires an extremely powerful ball of chaos.";
-#endif
+		if (name) return _("ログルスのブレス", "Breathe Logrus");
+		if (desc) return _("非常に強力なカオスの球を放つ。", "Fires an extremely powerful ball of chaos.");
     
 		{
 			int dam = p_ptr->chp;
@@ -4255,13 +3316,9 @@ static cptr do_chaos_spell(int spell, int mode)
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "虚無召来";
-		if (desc) return "自分に周囲に向かって、ロケット、純粋な魔力の球、放射性廃棄物の球を放つ。ただし、壁に隣接して使用すると広範囲を破壊する。";
-#else
-		if (name) return "Call the Void";
-		if (desc) return "Fires rockets, mana balls and nuclear waste balls in all directions each unless you are not adjacent to any walls. Otherwise *destroys* huge area.";
-#endif
+		if (name) return _("虚無召来", "Call the Void");
+		if (desc) return _("自分に周囲に向かって、ロケット、純粋な魔力の球、放射性廃棄物の球を放つ。ただし、壁に隣接して使用すると広範囲を破壊する。", 
+			"Fires rockets, mana balls and nuclear waste balls in all directions each unless you are not adjacent to any walls. Otherwise *destroys* huge area.");
     
 		{
 			if (info) return format("%s3 * 175", s_dam);
@@ -4290,13 +3347,8 @@ static cptr do_death_spell(int spell, int mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-#ifdef JP
-	static const char s_dam[] = "損傷:";
-	static const char s_random[] = "ランダム";
-#else
-	static const char s_dam[] = "dam ";
-	static const char s_random[] = "random";
-#endif
+	static const char s_dam[] = _("損傷:", "dam ");
+	static const char s_random[] = _("ランダム", "random");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -4304,13 +3356,8 @@ static cptr do_death_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "無生命感知";
-		if (desc) return "近くの生命のないモンスターを感知する。";
-#else
-		if (name) return "Detect Unlife";
-		if (desc) return "Detects all nonliving monsters in your vicinity.";
-#endif
+		if (name) return _("無生命感知", "Detect Unlife");
+		if (desc) return _("近くの生命のないモンスターを感知する。", "Detects all nonliving monsters in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -4325,13 +3372,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "呪殺弾";
-		if (desc) return "ごく小さな邪悪な力を持つボールを放つ。善良なモンスターには大きなダメージを与える。";
-#else
-		if (name) return "Malediction";
-		if (desc) return "Fires a tiny ball of evil power which hurts good monsters greatly.";
-#endif
+		if (name) return _("呪殺弾", "Malediction");
+		if (desc) return _("ごく小さな邪悪な力を持つボールを放つ。善良なモンスターには大きなダメージを与える。", 
+			"Fires a tiny ball of evil power which hurts good monsters greatly.");
     
 		{
 			int dice = 3 + (plev - 1) / 5;
@@ -4373,13 +3416,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "邪悪感知";
-		if (desc) return "近くの邪悪なモンスターを感知する。";
-#else
-		if (name) return "Detect Evil";
-		if (desc) return "Detects all evil monsters in your vicinity.";
-#endif
+		if (name) return _("邪悪感知", "Detect Evil");
+		if (desc) return _("近くの邪悪なモンスターを感知する。", "Detects all evil monsters in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -4394,13 +3432,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "悪臭雲";
-		if (desc) return "毒の球を放つ。";
-#else
-		if (name) return "Stinking Cloud";
-		if (desc) return "Fires a ball of poison.";
-#endif
+		if (name) return _("悪臭雲", "Stinking Cloud");
+		if (desc) return _("毒の球を放つ。", "Fires a ball of poison.");
     
 		{
 			int dam = 10 + plev / 2;
@@ -4418,13 +3451,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "黒い眠り";
-		if (desc) return "1体のモンスターを眠らせる。抵抗されると無効。";
-#else
-		if (name) return "Black Sleep";
-		if (desc) return "Attempts to sleep a monster.";
-#endif
+		if (name) return _("黒い眠り", "Black Sleep");
+		if (desc) return _("1体のモンスターを眠らせる。抵抗されると無効。", "Attempts to sleep a monster.");
     
 		{
 			int power = plev;
@@ -4441,13 +3469,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "耐毒";
-		if (desc) return "一定時間、毒への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Poison";
-		if (desc) return "Gives resistance to poison. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐毒", "Resist Poison");
+		if (desc) return _("一定時間、毒への耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to poison. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -4462,13 +3486,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "恐慌";
-		if (desc) return "モンスター1体を恐怖させ、朦朧させる。抵抗されると無効。";
-#else
-		if (name) return "Horrify";
-		if (desc) return "Attempts to scare and stun a monster.";
-#endif
+		if (name) return _("恐慌", "Horrify");
+		if (desc) return _("モンスター1体を恐怖させ、朦朧させる。抵抗されると無効。", "Attempts to scare and stun a monster.");
     
 		{
 			int power = plev;
@@ -4486,13 +3505,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "アンデッド従属";
-		if (desc) return "アンデッド1体を魅了する。抵抗されると無効。";
-#else
-		if (name) return "Enslave Undead";
-		if (desc) return "Attempts to charm an undead monster.";
-#endif
+		if (name) return _("アンデッド従属", "Enslave Undead");
+		if (desc) return _("アンデッド1体を魅了する。抵抗されると無効。", "Attempts to charm an undead monster.");
     
 		{
 			int power = plev;
@@ -4509,13 +3523,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "エントロピーの球";
-		if (desc) return "生命のある者に効果のある球を放つ。";
-#else
-		if (name) return "Orb of Entropy";
-		if (desc) return "Fires a ball which damages living monsters.";
-#endif
+		if (name) return _("エントロピーの球", "Orb of Entropy");
+		if (desc) return _("生命のある者に効果のある球を放つ。", "Fires a ball which damages living monsters.");
     
 		{
 			int dice = 3;
@@ -4543,13 +3552,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "地獄の矢";
-		if (desc) return "地獄のボルトもしくはビームを放つ。";
-#else
-		if (name) return "Nether Bolt";
-		if (desc) return "Fires a bolt or beam of nether.";
-#endif
+		if (name) return _("地獄の矢", "Nether Bolt");
+		if (desc) return _("地獄のボルトもしくはビームを放つ。", "Fires a bolt or beam of nether.");
     
 		{
 			int dice = 8 + (plev - 5) / 4;
@@ -4567,13 +3571,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "殺戮雲";
-		if (desc) return "自分を中心とした毒の球を発生させる。";
-#else
-		if (name) return "Cloud kill";
-		if (desc) return "Generate a ball of poison centered on you.";
-#endif
+		if (name) return _("殺戮雲", "Cloud kill");
+		if (desc) return _("自分を中心とした毒の球を発生させる。", "Generate a ball of poison centered on you.");
     
 		{
 			int dam = (30 + plev) * 2;
@@ -4589,13 +3588,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "モンスター消滅";
-		if (desc) return "モンスター1体を消し去る。経験値やアイテムは手に入らない。抵抗されると無効。";
-#else
-		if (name) return "Genocide One";
-		if (desc) return "Attempts to vanish a monster.";
-#endif
+		if (name) return _("モンスター消滅", "Genocide One");
+		if (desc) return _("モンスター1体を消し去る。経験値やアイテムは手に入らない。抵抗されると無効。", "Attempts to vanish a monster.");
     
 		{
 			int power = plev + 50;
@@ -4612,13 +3606,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "毒の刃";
-		if (desc) return "武器に毒の属性をつける。";
-#else
-		if (name) return "Poison Branding";
-		if (desc) return "Makes current weapon poison branded.";
-#endif
+		if (name) return _("毒の刃", "Poison Branding");
+		if (desc) return _("武器に毒の属性をつける。", "Makes current weapon poison branded.");
     
 		{
 			if (cast)
@@ -4629,13 +3618,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "吸血ドレイン";
-		if (desc) return "モンスター1体から生命力を吸いとる。吸いとった生命力によって満腹度が上がる。";
-#else
-		if (name) return "Vampiric Drain";
-		if (desc) return "Absorbs some HP from a monster and gives them to you. You will also gain nutritional sustenance from this.";
-#endif
+		if (name) return _("吸血ドレイン", "Vampiric Drain");
+		if (desc) return _("モンスター1体から生命力を吸いとる。吸いとった生命力によって満腹度が上がる。", 
+			"Absorbs some HP from a monster and gives them to you. You will also gain nutritional sustenance from this.");
     
 		{
 			int dice = 1;
@@ -4679,13 +3664,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "反魂の術";
-		if (desc) return "周囲の死体や骨を生き返す。";
-#else
-		if (name) return "Animate dead";
-		if (desc) return "Resurrects nearby corpse and skeletons. And makes these your pets.";
-#endif
+		if (name) return _("反魂の術", "Animate dead");
+		if (desc) return _("周囲の死体や骨を生き返す。", "Resurrects nearby corpse and skeletons. And makes these your pets.");
     
 		{
 			if (cast)
@@ -4696,13 +3676,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "抹殺";
-		if (desc) return "指定した文字のモンスターを現在の階から消し去る。抵抗されると無効。";
-#else
-		if (name) return "Genocide";
-		if (desc) return "Eliminates an entire class of monster, exhausting you.  Powerful or unique monsters may resist.";
-#endif
+		if (name) return _("抹殺", "Genocide");
+		if (desc) return _("指定した文字のモンスターを現在の階から消し去る。抵抗されると無効。", 
+			"Eliminates an entire class of monster, exhausting you.  Powerful or unique monsters may resist.");
     
 		{
 			int power = plev+50;
@@ -4717,13 +3693,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "狂戦士化";
-		if (desc) return "狂戦士化し、恐怖を除去する。";
-#else
-		if (name) return "Berserk";
-		if (desc) return "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.";
-#endif
+		if (name) return _("狂戦士化", "Berserk");
+		if (desc) return _("狂戦士化し、恐怖を除去する。", "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.");
     
 		{
 			int base = 25;
@@ -4740,13 +3711,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "悪霊召喚";
-		if (desc) return "ランダムで様々な効果が起こる。";
-#else
-		if (name) return "Invoke Spirits";
-		if (desc) return "Causes random effects.";
-#endif
+		if (name) return _("悪霊召喚", "Invoke Spirits");
+		if (desc) return _("ランダムで様々な効果が起こる。", "Causes random effects.");
     
 		{
 			if (info) return s_random;
@@ -4761,13 +3727,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "暗黒の矢";
-		if (desc) return "暗黒のボルトもしくはビームを放つ。";
-#else
-		if (name) return "Dark Bolt";
-		if (desc) return "Fires a bolt or beam of darkness.";
-#endif
+		if (name) return _("暗黒の矢", "Dark Bolt");
+		if (desc) return _("暗黒のボルトもしくはビームを放つ。", "Fires a bolt or beam of darkness.");
     
 		{
 			int dice = 4 + (plev - 5) / 4;
@@ -4785,13 +3746,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "狂乱戦士";
-		if (desc) return "狂戦士化し、恐怖を除去し、加速する。";
-#else
-		if (name) return "Battle Frenzy";
-		if (desc) return "Gives another bonus to hit and HP, immunity to fear for a while. Hastes you. But decreases AC.";
-#endif
+		if (name) return _("狂乱戦士", "Battle Frenzy");
+		if (desc) return _("狂戦士化し、恐怖を除去し、加速する。", 
+			"Gives another bonus to hit and HP, immunity to fear for a while. Hastes you. But decreases AC.");
     
 		{
 			int b_base = 25;
@@ -4811,13 +3768,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "吸血の刃";
-		if (desc) return "武器に吸血の属性をつける。";
-#else
-		if (name) return "Vampiric Branding";
-		if (desc) return "Makes current weapon Vampiric.";
-#endif
+		if (name) return _("吸血の刃", "Vampiric Branding");
+		if (desc) return _("武器に吸血の属性をつける。", "Makes current weapon Vampiric.");
     
 		{
 			if (cast)
@@ -4828,13 +3780,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "真・吸血";
-		if (desc) return "モンスター1体から生命力を吸いとる。吸いとった生命力によって体力が回復する。";
-#else
-		if (name) return "Vampirism True";
-		if (desc) return "Fires 3 bolts. Each of the bolts absorbs some HP from a monster and gives them to you.";
-#endif
+		if (name) return _("真・吸血", "Vampirism True");
+		if (desc) return _("モンスター1体から生命力を吸いとる。吸いとった生命力によって体力が回復する。", 
+			"Fires 3 bolts. Each of the bolts absorbs some HP from a monster and gives them to you.");
     
 		{
 			int dam = 100;
@@ -4860,13 +3808,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "死の言魂";
-		if (desc) return "視界内の生命のあるモンスターにダメージを与える。";
-#else
-		if (name) return "Nether Wave";
-		if (desc) return "Damages all living monsters in sight.";
-#endif
+		if (name) return _("死の言魂", "Nether Wave");
+		if (desc) return _("視界内の生命のあるモンスターにダメージを与える。", "Damages all living monsters in sight.");
     
 		{
 			int sides = plev * 3;
@@ -4881,13 +3824,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "暗黒の嵐";
-		if (desc) return "巨大な暗黒の球を放つ。";
-#else
-		if (name) return "Darkness Storm";
-		if (desc) return "Fires a huge ball of darkness.";
-#endif
+		if (name) return _("暗黒の嵐", "Darkness Storm");
+		if (desc) return _("巨大な暗黒の球を放つ。", "Fires a huge ball of darkness.");
     
 		{
 			int dam = 100 + plev * 2;
@@ -4905,13 +3843,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "死の光線";
-		if (desc) return "死の光線を放つ。";
-#else
-		if (name) return "Death Ray";
-		if (desc) return "Fires a beam of death.";
-#endif
+		if (name) return _("死の光線", "Death Ray");
+		if (desc) return _("死の光線を放つ。", "Fires a beam of death.");
     
 		{
 			if (cast)
@@ -4924,13 +3857,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "死者召喚";
-		if (desc) return "1体のアンデッドを召喚する。";
-#else
-		if (name) return "Raise the Dead";
-		if (desc) return "Summons an undead monster.";
-#endif
+		if (name) return _("死者召喚", "Raise the Dead");
+		if (desc) return _("1体のアンデッドを召喚する。", "Summons an undead monster.");
     
 		{
 			if (cast)
@@ -4949,28 +3877,19 @@ static cptr do_death_spell(int spell, int mode)
 
 				if (summon_specific((pet ? -1 : 0), py, px, (plev * 3) / 2, type, mode))
 				{
-#ifdef JP
-					msg_print("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...");
-#else
-					msg_print("Cold winds begin to blow around you, carrying with them the stench of decay...");
-#endif
+					msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
+								"Cold winds begin to blow around you, carrying with them the stench of decay..."));
 
 
 					if (pet)
 					{
-#ifdef JP
-						msg_print("古えの死せる者共があなたに仕えるため土から甦った！");
-#else
-						msg_print("Ancient, long-dead forms arise from the ground to serve you!");
-#endif
+						msg_print(_("古えの死せる者共があなたに仕えるため土から甦った！",
+									"Ancient, long-dead forms arise from the ground to serve you!"));
 					}
 					else
 					{
-#ifdef JP
-						msg_print("死者が甦った。眠りを妨げるあなたを罰するために！");
-#else
-						msg_print("'The dead arise... to punish you for disturbing them!'");
-#endif
+						msg_print(_("死者が甦った。眠りを妨げるあなたを罰するために！",
+									"'The dead arise... to punish you for disturbing them!'"));
 					}
 
 					chg_virtue(V_UNLIFE, 1);
@@ -4980,13 +3899,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "死者の秘伝";
-		if (desc) return "アイテムを1つ識別する。レベルが高いとアイテムの能力を完全に知ることができる。";
-#else
-		if (name) return "Esoteria";
-		if (desc) return "Identifies an item. Or *identifies* an item at higher level.";
-#endif
+		if (name) return _("死者の秘伝", "Esoteria");
+		if (desc) return _("アイテムを1つ識別する。レベルが高いとアイテムの能力を完全に知ることができる。",
+			"Identifies an item. Or *identifies* an item at higher level.");
     
 		{
 			if (cast)
@@ -5004,13 +3919,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "吸血鬼変化";
-		if (desc) return "一定時間、吸血鬼に変化する。変化している間は本来の種族の能力を失い、代わりに吸血鬼としての能力を得る。";
-#else
-		if (name) return "Polymorph Vampire";
-		if (desc) return "Mimic a vampire for a while. Loses abilities of original race and gets abilities as a vampire.";
-#endif
+		if (name) return _("吸血鬼変化", "Polymorph Vampire");
+		if (desc) return _("一定時間、吸血鬼に変化する。変化している間は本来の種族の能力を失い、代わりに吸血鬼としての能力を得る。", 
+			"Mimic a vampire for a while. Loses abilities of original race and gets abilities as a vampire.");
     
 		{
 			int base = 10 + plev / 2;
@@ -5025,13 +3936,8 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "経験値復活";
-		if (desc) return "失った経験値を回復する。";
-#else
-		if (name) return "Restore Life";
-		if (desc) return "Restore lost experience.";
-#endif
+		if (name) return _("経験値復活", "Restore Life");
+		if (desc) return _("失った経験値を回復する。", "Restore lost experience.");
     
 		{
 			if (cast)
@@ -5042,13 +3948,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "周辺抹殺";
-		if (desc) return "自分の周囲にいるモンスターを現在の階から消し去る。抵抗されると無効。";
-#else
-		if (name) return "Mass Genocide";
-		if (desc) return "Eliminates all nearby monsters, exhausting you.  Powerful or unique monsters may be able to resist.";
-#endif
+		if (name) return _("周辺抹殺", "Mass Genocide");
+		if (desc) return _("自分の周囲にいるモンスターを現在の階から消し去る。抵抗されると無効。", 
+			"Eliminates all nearby monsters, exhausting you.  Powerful or unique monsters may be able to resist.");
     
 		{
 			int power = plev + 50;
@@ -5063,13 +3965,9 @@ static cptr do_death_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "地獄の劫火";
-		if (desc) return "邪悪な力を持つ宝珠を放つ。善良なモンスターには大きなダメージを与える。";
-#else
-		if (name) return "Hellfire";
-		if (desc) return "Fires a powerful ball of evil power. Hurts good monsters greatly.";
-#endif
+		if (name) return _("地獄の劫火", "Hellfire");
+		if (desc) return _("邪悪な力を持つ宝珠を放つ。善良なモンスターには大きなダメージを与える。", 
+			"Fires a powerful ball of evil power. Hurts good monsters greatly.");
     
 		{
 			int dam = 666;
@@ -5082,23 +3980,15 @@ static cptr do_death_spell(int spell, int mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 				fire_ball(GF_HELL_FIRE, dir, dam, rad);
-#ifdef JP
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "地獄の劫火の呪文を唱えた疲労", -1);
-#else
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "the strain of casting Hellfire", -1);
-#endif
+				take_hit(DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"), -1);
 			}
 		}
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "幽体化";
-		if (desc) return "一定時間、壁を通り抜けることができ受けるダメージが軽減される幽体の状態に変身する。";
-#else
-		if (name) return "Wraithform";
-		if (desc) return "Becomes wraith form which gives ability to pass walls and makes all damages half.";
-#endif
+		if (name) return _("幽体化", "Wraithform");
+		if (desc) return _("一定時間、壁を通り抜けることができ受けるダメージが軽減される幽体の状態に変身する。", 
+			"Becomes wraith form which gives ability to pass walls and makes all damages half.");
     
 		{
 			int base = plev / 2;
@@ -5130,12 +4020,7 @@ static cptr do_trump_spell(int spell, int mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
-
-#ifdef JP
-	static const char s_random[] = "ランダム";
-#else
-	static const char s_random[] = "random";
-#endif
+	static const char s_random[] = _("ランダム", "random");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -5143,13 +4028,8 @@ static cptr do_trump_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "ショート・テレポート";
-		if (desc) return "近距離のテレポートをする。";
-#else
-		if (name) return "Phase Door";
-		if (desc) return "Teleport short distance.";
-#endif
+		if (name) return _("ショート・テレポート", "Phase Door");
+		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
     
 		{
 			int range = 10;
@@ -5164,32 +4044,18 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "蜘蛛のカード";
-		if (desc) return "蜘蛛を召喚する。";
-#else
-		if (name) return "Trump Spiders";
-		if (desc) return "Summons spiders.";
-#endif
+		if (name) return _("蜘蛛のカード", "Trump Spiders");
+		if (desc) return _("蜘蛛を召喚する。", "Summons spiders.");
     
 		{
 			if (cast || fail)
 			{
-#ifdef JP
-				msg_print("あなたは蜘蛛のカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of an spider...");
-#endif
-
+				msg_print(_("あなたは蜘蛛のカードに集中する...", "You concentrate on the trump of an spider..."));
 				if (trump_summoning(1, !fail, py, px, 0, SUMMON_SPIDER, PM_ALLOW_GROUP))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚された蜘蛛は怒っている！");
-#else
-						msg_print("The summoned spiders get angry!");
-#endif
+						msg_print(_("召喚された蜘蛛は怒っている！", "The summoned spiders get angry!"));
 					}
 				}
 			}
@@ -5197,13 +4063,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "シャッフル";
-		if (desc) return "カードの占いをする。";
-#else
-		if (name) return "Shuffle";
-		if (desc) return "Causes random effects.";
-#endif
+		if (name) return _("シャッフル", "Shuffle");
+		if (desc) return _("カードの占いをする。", "Causes random effects.");
     
 		{
 			if (info) return s_random;
@@ -5216,13 +4077,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "フロア・リセット";
-		if (desc) return "最深階を変更する。";
-#else
-		if (name) return "Reset Recall";
-		if (desc) return "Resets the 'deepest' level for recall spell.";
-#endif
+		if (name) return _("フロア・リセット", "Reset Recall");
+		if (desc) return _("最深階を変更する。", "Resets the 'deepest' level for recall spell.");
     
 		{
 			if (cast)
@@ -5233,13 +4089,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "テレポート";
-		if (desc) return "遠距離のテレポートをする。";
-#else
-		if (name) return "Teleport";
-		if (desc) return "Teleport long distance.";
-#endif
+		if (name) return _("テレポート", "Teleport");
+		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
 			int range = plev * 4;
@@ -5254,13 +4105,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "感知のカード";
-		if (desc) return "一定時間、テレパシー能力を得る。";
-#else
-		if (name) return "Trump Spying";
-		if (desc) return "Gives telepathy for a while.";
-#endif
+		if (name) return _("感知のカード", "Trump Spying");
+		if (desc) return _("一定時間、テレパシー能力を得る。", "Gives telepathy for a while.");
     
 		{
 			int base = 25;
@@ -5276,13 +4122,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "テレポート・モンスター";
-		if (desc) return "モンスターをテレポートさせるビームを放つ。抵抗されると無効。";
-#else
-		if (name) return "Teleport Away";
-		if (desc) return "Teleports all monsters on the line away unless resisted.";
-#endif
+		if (name) return _("テレポート・モンスター", "Teleport Away");
+		if (desc) return _("モンスターをテレポートさせるビームを放つ。抵抗されると無効。", "Teleports all monsters on the line away unless resisted.");
     
 		{
 			int power = plev;
@@ -5299,34 +4140,19 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "動物のカード";
-		if (desc) return "1体の動物を召喚する。";
-#else
-		if (name) return "Trump Animals";
-		if (desc) return "Summons an animal.";
-#endif
+		if (name) return _("動物のカード", "Trump Animals");
+		if (desc) return _("1体の動物を召喚する。", "Summons an animal.");
     
 		{
 			if (cast || fail)
 			{
 				int type = (!fail ? SUMMON_ANIMAL_RANGER : SUMMON_ANIMAL);
-
-#ifdef JP
-				msg_print("あなたは動物のカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of an animal...");
-#endif
-
+				msg_print(_("あなたは動物のカードに集中する...", "You concentrate on the trump of an animal..."));
 				if (trump_summoning(1, !fail, py, px, 0, type, 0L))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚された動物は怒っている！");
-#else
-						msg_print("The summoned animal gets angry!");
-#endif
+						msg_print(_("召喚された動物は怒っている！", "The summoned animal gets angry!"));
 					}
 				}
 			}
@@ -5334,13 +4160,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "移動のカード";
-		if (desc) return "アイテムを自分の足元へ移動させる。";
-#else
-		if (name) return "Trump Reach";
-		if (desc) return "Pulls a distant item close to you.";
-#endif
+		if (name) return _("移動のカード", "Trump Reach");
+		if (desc) return _("アイテムを自分の足元へ移動させる。", "Pulls a distant item close to you.");
     
 		{
 			int weight = plev * 15;
@@ -5357,13 +4178,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "カミカゼのカード";
-		if (desc) return "複数の爆発するモンスターを召喚する。";
-#else
-		if (name) return "Trump Kamikaze";
-		if (desc) return "Summons monsters which explode by itself.";
-#endif
+		if (name) return _("カミカゼのカード", "Trump Kamikaze");
+		if (desc) return _("複数の爆発するモンスターを召喚する。", "Summons monsters which explode by itself.");
     
 		{
 			if (cast || fail)
@@ -5389,21 +4205,12 @@ static cptr do_trump_spell(int spell, int mode)
 				else
 					type = SUMMON_KAMIKAZE;
 
-#ifdef JP
-				msg_print("あなたはカミカゼのカードに集中する...");
-#else
-				msg_print("You concentrate on several trumps at once...");
-#endif
-
+				msg_print(_("あなたはカミカゼのカードに集中する...", "You concentrate on several trumps at once..."));
 				if (trump_summoning(2 + randint0(plev / 7), !fail, y, x, 0, type, 0L))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚されたモンスターは怒っている！");
-#else
-						msg_print("The summoned creatures get angry!");
-#endif
+						msg_print(_("召喚されたモンスターは怒っている！", "The summoned creatures get angry!"));
 					}
 				}
 			}
@@ -5411,13 +4218,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "幻霊召喚";
-		if (desc) return "1体の幽霊を召喚する。";
-#else
-		if (name) return "Phantasmal Servant";
-		if (desc) return "Summons a ghost.";
-#endif
+		if (name) return _("幻霊召喚", "Phantasmal Servant");
+		if (desc) return _("1体の幽霊を召喚する。", "Summons a ghost.");
     
 		{
 			/* Phantasmal Servant is not summoned as enemy when failed */
@@ -5427,24 +4229,15 @@ static cptr do_trump_spell(int spell, int mode)
 
 				if (trump_summoning(1, !fail, py, px, (summon_lev * 3 / 2), SUMMON_PHANTOM, 0L))
 				{
-#ifdef JP
-					msg_print("御用でございますか、御主人様？");
-#else
-					msg_print("'Your wish, master?'");
-#endif
+					msg_print(_("御用でございますか、御主人様？", "'Your wish, master?'"));
 				}
 			}
 		}
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "スピード・モンスター";
-		if (desc) return "モンスター1体を加速させる。";
-#else
-		if (name) return "Haste Monster";
-		if (desc) return "Hastes a monster.";
-#endif
+		if (name) return _("スピード・モンスター", "Haste Monster");
+		if (desc) return _("モンスター1体を加速させる。", "Hastes a monster.");
     
 		{
 			if (cast)
@@ -5468,35 +4261,21 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "テレポート・レベル";
-		if (desc) return "瞬時に上か下の階にテレポートする。";
-#else
-		if (name) return "Teleport Level";
-		if (desc) return "Teleport to up or down stairs in a moment.";
-#endif
+		if (name) return _("テレポート・レベル", "Teleport Level");
+		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleport to up or down stairs in a moment.");
     
 		{
 			if (cast)
 			{
-#ifdef JP
-				if (!get_check("本当に他の階にテレポートしますか？")) return NULL;
-#else
-				if (!get_check("Are you sure? (Teleport Level)")) return NULL;
-#endif
+				if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) return NULL;
 				teleport_level(0);
 			}
 		}
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "次元の扉";
-		if (desc) return "短距離内の指定した場所にテレポートする。";
-#else
-		if (name) return "Dimension Door";
-		if (desc) return "Teleport to given location.";
-#endif
+		if (name) return _("次元の扉", "Dimension Door");
+		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleport to given location.");
     
 		{
 			int range = plev / 2 + 10;
@@ -5505,25 +4284,16 @@ static cptr do_trump_spell(int spell, int mode)
 
 			if (cast)
 			{
-#ifdef JP
-				msg_print("次元の扉が開いた。目的地を選んで下さい。");
-#else
-				msg_print("You open a dimensional gate. Choose a destination.");
-#endif
-
+				msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
 				if (!dimension_door()) return NULL;
 			}
 		}
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "帰還の呪文";
-		if (desc) return "地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。";
-#else
-		if (name) return "Word of Recall";
-		if (desc) return "Recalls player from dungeon to town, or from town to the deepest level of dungeon.";
-#endif
+		if (name) return _("帰還の呪文", "Word of Recall");
+		if (desc) return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。",
+			"Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
     
 		{
 			int base = 15;
@@ -5539,13 +4309,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "怪物追放";
-		if (desc) return "視界内の全てのモンスターをテレポートさせる。抵抗されると無効。";
-#else
-		if (name) return "Banish";
-		if (desc) return "Teleports all monsters in sight away unless resisted.";
-#endif
+		if (name) return _("怪物追放", "Banish");
+		if (desc) return _("視界内の全てのモンスターをテレポートさせる。抵抗されると無効。", "Teleports all monsters in sight away unless resisted.");
     
 		{
 			int power = plev * 4;
@@ -5560,13 +4325,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "位置交換のカード";
-		if (desc) return "1体のモンスターと位置を交換する。";
-#else
-		if (name) return "Swap Position";
-		if (desc) return "Swap positions of you and a monster.";
-#endif
+		if (name) return _("位置交換のカード", "Swap Position");
+		if (desc) return _("1体のモンスターと位置を交換する。", "Swap positions of you and a monster.");
     
 		{
 			if (cast)
@@ -5589,32 +4349,18 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "アンデッドのカード";
-		if (desc) return "1体のアンデッドを召喚する。";
-#else
-		if (name) return "Trump Undead";
-		if (desc) return "Summons an undead monster.";
-#endif
+		if (name) return _("アンデッドのカード", "Trump Undead");
+		if (desc) return _("1体のアンデッドを召喚する。", "Summons an undead monster.");
     
 		{
 			if (cast || fail)
 			{
-#ifdef JP
-				msg_print("あなたはアンデッドのカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of an undead creature...");
-#endif
-
+				msg_print(_("あなたはアンデッドのカードに集中する...", "You concentrate on the trump of an undead creature..."));
 				if (trump_summoning(1, !fail, py, px, 0, SUMMON_UNDEAD, 0L))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚されたアンデッドは怒っている！");
-#else
-						msg_print("The summoned undead creature gets angry!");
-#endif
+						msg_print(_("召喚されたアンデッドは怒っている！", "The summoned undead creature gets angry!"));
 					}
 				}
 			}
@@ -5622,32 +4368,18 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "爬虫類のカード";
-		if (desc) return "1体のヒドラを召喚する。";
-#else
-		if (name) return "Trump Reptiles";
-		if (desc) return "Summons a hydra.";
-#endif
+		if (name) return _("爬虫類のカード", "Trump Reptiles");
+		if (desc) return _("1体のヒドラを召喚する。", "Summons a hydra.");
     
 		{
 			if (cast || fail)
 			{
-#ifdef JP
-				msg_print("あなたは爬虫類のカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of a reptile...");
-#endif
-
+				msg_print(_("あなたは爬虫類のカードに集中する...", "You concentrate on the trump of a reptile..."));
 				if (trump_summoning(1, !fail, py, px, 0, SUMMON_HYDRA, 0L))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚された爬虫類は怒っている！");
-#else
-						msg_print("The summoned reptile gets angry!");
-#endif
+						msg_print(_("召喚された爬虫類は怒っている！", "The summoned reptile gets angry!"));
 					}
 				}
 			}
@@ -5655,25 +4387,14 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "モンスターのカード";
-		if (desc) return "複数のモンスターを召喚する。";
-#else
-		if (name) return "Trump Monsters";
-		if (desc) return "Summons some monsters.";
-#endif
+		if (name) return _("モンスターのカード", "Trump Monsters");
+		if (desc) return _("複数のモンスターを召喚する。", "Summons some monsters.");
     
 		{
 			if (cast || fail)
 			{
 				int type;
-
-#ifdef JP
-				msg_print("あなたはモンスターのカードに集中する...");
-#else
-				msg_print("You concentrate on several trumps at once...");
-#endif
-
+				msg_print(_("あなたはモンスターのカードに集中する...", "You concentrate on several trumps at once..."));
 				if (p_ptr->pclass == CLASS_BEASTMASTER)
 					type = SUMMON_LIVING;
 				else
@@ -5683,11 +4404,7 @@ static cptr do_trump_spell(int spell, int mode)
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚されたモンスターは怒っている！");
-#else
-						msg_print("The summoned creatures get angry!");
-#endif
+						msg_print(_("召喚されたモンスターは怒っている！", "The summoned creatures get angry!"));
 					}
 				}
 
@@ -5696,32 +4413,18 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "ハウンドのカード";
-		if (desc) return "1グループのハウンドを召喚する。";
-#else
-		if (name) return "Trump Hounds";
-		if (desc) return "Summons a group of hounds.";
-#endif
+		if (name) return _("ハウンドのカード", "Trump Hounds");
+		if (desc) return _("1グループのハウンドを召喚する。", "Summons a group of hounds.");
     
 		{
 			if (cast || fail)
 			{
-#ifdef JP
-				msg_print("あなたはハウンドのカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of a hound...");
-#endif
-
+				msg_print(_("あなたはハウンドのカードに集中する...", "You concentrate on the trump of a hound..."));
 				if (trump_summoning(1, !fail, py, px, 0, SUMMON_HOUND, PM_ALLOW_GROUP))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚されたハウンドは怒っている！");
-#else
-						msg_print("The summoned hounds get angry!");
-#endif
+						msg_print(_("召喚されたハウンドは怒っている！", "The summoned hounds get angry!"));
 					}
 				}
 			}
@@ -5729,13 +4432,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "トランプの刃";
-		if (desc) return "武器にトランプの属性をつける。";
-#else
-		if (name) return "Trump Branding";
-		if (desc) return "Makes current weapon a Trump weapon.";
-#endif
+		if (name) return _("トランプの刃", "Trump Branding");
+		if (desc) return _("武器にトランプの属性をつける。", "Makes current weapon a Trump weapon.");
     
 		{
 			if (cast)
@@ -5746,13 +4444,9 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "人間トランプ";
-		if (desc) return "ランダムにテレポートする突然変異か、自分の意思でテレポートする突然変異が身につく。";
-#else
-		if (name) return "Living Trump";
-		if (desc) return "Gives mutation which makes you teleport randomly or makes you able to teleport at will.";
-#endif
+		if (name) return _("人間トランプ", "Living Trump");
+		if (desc) return _("ランダムにテレポートする突然変異か、自分の意思でテレポートする突然変異が身につく。", 
+			"Gives mutation which makes you teleport randomly or makes you able to teleport at will.");
     
 		{
 			if (cast)
@@ -5769,43 +4463,25 @@ static cptr do_trump_spell(int spell, int mode)
 				/* Gain the mutation */
 				if (gain_random_mutation(mutation))
 				{
-#ifdef JP
-					msg_print("あなたは生きているカードに変わった。");
-#else
-					msg_print("You have turned into a Living Trump.");
-#endif
+					msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
 				}
 			}
 		}
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "サイバーデーモンのカード";
-		if (desc) return "1体のサイバーデーモンを召喚する。";
-#else
-		if (name) return "Trump Cyberdemon";
-		if (desc) return "Summons a cyber demon.";
-#endif
+		if (name) return _("サイバーデーモンのカード", "Trump Cyberdemon");
+		if (desc) return _("1体のサイバーデーモンを召喚する。", "Summons a cyber demon.");
     
 		{
 			if (cast || fail)
 			{
-#ifdef JP
-				msg_print("あなたはサイバーデーモンのカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of a Cyberdemon...");
-#endif
-
+				msg_print(_("あなたはサイバーデーモンのカードに集中する...", "You concentrate on the trump of a Cyberdemon..."));
 				if (trump_summoning(1, !fail, py, px, 0, SUMMON_CYBER, 0L))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚されたサイバーデーモンは怒っている！");
-#else
-						msg_print("The summoned Cyberdemon gets angry!");
-#endif
+						msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon gets angry!"));
 					}
 				}
 			}
@@ -5813,13 +4489,9 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "予見のカード";
-		if (desc) return "近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。";
-#else
-		if (name) return "Trump Divination";
-		if (desc) return "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.";
-#endif
+		if (name) return _("予見のカード", "Trump Divination");
+		if (desc) return _("近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。",
+			"Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -5834,13 +4506,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "知識のカード";
-		if (desc) return "アイテムの持つ能力を完全に知る。";
-#else
-		if (name) return "Trump Lore";
-		if (desc) return "*Identifies* an item.";
-#endif
+		if (name) return _("知識のカード", "Trump Lore");
+		if (desc) return _("アイテムの持つ能力を完全に知る。", "*Identifies* an item.");
     
 		{
 			if (cast)
@@ -5851,13 +4518,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "回復モンスター";
-		if (desc) return "モンスター1体の体力を回復させる。";
-#else
-		if (name) return "Heal Monster";
-		if (desc) return "Heal a monster.";
-#endif
+		if (name) return _("回復モンスター", "Heal Monster");
+		if (desc) return _("モンスター1体の体力を回復させる。", "Heal a monster.");
     
 		{
 			int heal = plev * 10 + 200;
@@ -5885,32 +4547,18 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "ドラゴンのカード";
-		if (desc) return "1体のドラゴンを召喚する。";
-#else
-		if (name) return "Trump Dragon";
-		if (desc) return "Summons a dragon.";
-#endif
+		if (name) return _("ドラゴンのカード", "Trump Dragon");
+		if (desc) return _("1体のドラゴンを召喚する。", "Summons a dragon.");
     
 		{
 			if (cast || fail)
 			{
-#ifdef JP
-				msg_print("あなたはドラゴンのカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of a dragon...");
-#endif
-
+				msg_print(_("あなたはドラゴンのカードに集中する...", "You concentrate on the trump of a dragon..."));
 				if (trump_summoning(1, !fail, py, px, 0, SUMMON_DRAGON, 0L))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚されたドラゴンは怒っている！");
-#else
-						msg_print("The summoned dragon gets angry!");
-#endif
+						msg_print(_("召喚されたドラゴンは怒っている！", "The summoned dragon gets angry!"));
 					}
 				}
 			}
@@ -5918,13 +4566,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "隕石のカード";
-		if (desc) return "自分の周辺に隕石を落とす。";
-#else
-		if (name) return "Trump Meteor";
-		if (desc) return "Makes meteor balls fall down to nearby random locations.";
-#endif
+		if (name) return _("隕石のカード", "Trump Meteor");
+		if (desc) return _("自分の周辺に隕石を落とす。", "Makes meteor balls fall down to nearby random locations.");
     
 		{
 			int dam = plev * 2;
@@ -5940,32 +4583,18 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "デーモンのカード";
-		if (desc) return "1体の悪魔を召喚する。";
-#else
-		if (name) return "Trump Demon";
-		if (desc) return "Summons a demon.";
-#endif
+		if (name) return _("デーモンのカード", "Trump Demon");
+		if (desc) return _("1体の悪魔を召喚する。", "Summons a demon.");
     
 		{
 			if (cast || fail)
 			{
-#ifdef JP
-				msg_print("あなたはデーモンのカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of a demon...");
-#endif
-
+				msg_print(_("あなたはデーモンのカードに集中する...", "You concentrate on the trump of a demon..."));
 				if (trump_summoning(1, !fail, py, px, 0, SUMMON_DEMON, 0L))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚されたデーモンは怒っている！");
-#else
-						msg_print("The summoned demon gets angry!");
-#endif
+						msg_print(_("召喚されたデーモンは怒っている！", "The summoned demon gets angry!"));
 					}
 				}
 			}
@@ -5973,32 +4602,19 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "地獄のカード";
-		if (desc) return "1体の上級アンデッドを召喚する。";
-#else
-		if (name) return "Trump Greater Undead";
-		if (desc) return "Summons a greater undead.";
-#endif
+		if (name) return _("地獄のカード", "Trump Greater Undead");
+		if (desc) return _("1体の上級アンデッドを召喚する。", "Summons a greater undead.");
     
 		{
 			if (cast || fail)
 			{
-#ifdef JP
-				msg_print("あなたは強力なアンデッドのカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of a greater undead being...");
-#endif
+				msg_print(_("あなたは強力なアンデッドのカードに集中する...", "You concentrate on the trump of a greater undead being..."));
 				/* May allow unique depend on level and dice roll */
 				if (trump_summoning(1, !fail, py, px, 0, SUMMON_HI_UNDEAD, PM_ALLOW_UNIQUE))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚された上級アンデッドは怒っている！");
-#else
-						msg_print("The summoned greater undead creature gets angry!");
-#endif
+						msg_print(_("召喚された上級アンデッドは怒っている！", "The summoned greater undead creature gets angry!"));
 					}
 				}
 			}
@@ -6006,13 +4622,8 @@ static cptr do_trump_spell(int spell, int mode)
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "古代ドラゴンのカード";
-		if (desc) return "1体の古代ドラゴンを召喚する。";
-#else
-		if (name) return "Trump Ancient Dragon";
-		if (desc) return "Summons an ancient dragon.";
-#endif
+		if (name) return _("古代ドラゴンのカード", "Trump Ancient Dragon");
+		if (desc) return _("1体の古代ドラゴンを召喚する。", "Summons an ancient dragon.");
     
 		{
 			if (cast)
@@ -6024,22 +4635,13 @@ static cptr do_trump_spell(int spell, int mode)
 				else
 					type = SUMMON_HI_DRAGON;
 
-#ifdef JP
-				msg_print("あなたは古代ドラゴンのカードに集中する...");
-#else
-				msg_print("You concentrate on the trump of an ancient dragon...");
-#endif
-
+				msg_print(_("あなたは古代ドラゴンのカードに集中する...", "You concentrate on the trump of an ancient dragon..."));
 				/* May allow unique depend on level and dice roll */
 				if (trump_summoning(1, !fail, py, px, 0, type, PM_ALLOW_UNIQUE))
 				{
 					if (fail)
 					{
-#ifdef JP
-						msg_print("召喚された古代ドラゴンは怒っている！");
-#else
-						msg_print("The summoned ancient dragon gets angry!");
-#endif
+						msg_print(_("召喚された古代ドラゴンは怒っている！", "The summoned ancient dragon gets angry!"));
 					}
 				}
 			}
@@ -6070,13 +4672,8 @@ static cptr do_arcane_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "電撃";
-		if (desc) return "電撃のボルトもしくはビームを放つ。";
-#else
-		if (name) return "Zap";
-		if (desc) return "Fires a bolt or beam of lightning.";
-#endif
+		if (name) return _("電撃", "Zap");
+		if (desc) return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
     
 		{
 			int dice = 3 + (plev - 1) / 5;
@@ -6094,13 +4691,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "魔法の施錠";
-		if (desc) return "扉に鍵をかける。";
-#else
-		if (name) return "Wizard Lock";
-		if (desc) return "Locks a door.";
-#endif
+		if (name) return _("魔法の施錠", "Wizard Lock");
+		if (desc) return _("扉に鍵をかける。", "Locks a door.");
     
 		{
 			if (cast)
@@ -6113,13 +4705,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "透明体感知";
-		if (desc) return "近くの透明なモンスターを感知する。";
-#else
-		if (name) return "Detect Invisibility";
-		if (desc) return "Detects all invisible monsters in your vicinity.";
-#endif
+		if (name) return _("透明体感知", "Detect Invisibility");
+		if (desc) return _("近くの透明なモンスターを感知する。", "Detects all invisible monsters in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -6134,13 +4721,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "モンスター感知";
-		if (desc) return "近くの全ての見えるモンスターを感知する。";
-#else
-		if (name) return "Detect Monsters";
-		if (desc) return "Detects all monsters in your vicinity unless invisible.";
-#endif
+		if (name) return _("モンスター感知", "Detect Monsters");
+		if (desc) return _("近くの全ての見えるモンスターを感知する。", "Detects all monsters in your vicinity unless invisible.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -6155,13 +4737,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "ショート・テレポート";
-		if (desc) return "近距離のテレポートをする。";
-#else
-		if (name) return "Blink";
-		if (desc) return "Teleport short distance.";
-#endif
+		if (name) return _("ショート・テレポート", "Blink");
+		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
     
 		{
 			int range = 10;
@@ -6176,13 +4753,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "ライト・エリア";
-		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
-#else
-		if (name) return "Light Area";
-		if (desc) return "Lights up nearby area and the inside of a room permanently.";
-#endif
+		if (name) return _("ライト・エリア", "Light Area");
+		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
     
 		{
 			int dice = 2;
@@ -6199,13 +4771,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "罠と扉 破壊";
-		if (desc) return "一直線上の全ての罠と扉を破壊する。";
-#else
-		if (name) return "Trap & Door Destruction";
-		if (desc) return "Fires a beam which destroy traps and doors.";
-#endif
+		if (name) return _("罠と扉 破壊", "Trap & Door Destruction");
+		if (desc) return _("一直線上の全ての罠と扉を破壊する。", "Fires a beam which destroy traps and doors.");
     
 		{
 			if (cast)
@@ -6218,13 +4785,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "軽傷の治癒";
-		if (desc) return "怪我と体力を少し回復させる。";
-#else
-		if (name) return "Cure Light Wounds";
-		if (desc) return "Heals cut and HP a little.";
-#endif
+		if (name) return _("軽傷の治癒", "Cure Light Wounds");
+		if (desc) return _("怪我と体力を少し回復させる。", "Heals cut and HP a little.");
     
 		{
 			int dice = 2;
@@ -6241,13 +4803,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "罠と扉 感知";
-		if (desc) return "近くの全ての罠と扉と階段を感知する。";
-#else
-		if (name) return "Detect Doors & Traps";
-		if (desc) return "Detects traps, doors, and stairs in your vicinity.";
-#endif
+		if (name) return _("罠と扉 感知", "Detect Doors & Traps");
+		if (desc) return _("近くの全ての罠と扉と階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -6264,13 +4821,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "燃素";
-		if (desc) return "光源に燃料を補給する。";
-#else
-		if (name) return "Phlogiston";
-		if (desc) return "Adds more turns of light to a lantern or torch.";
-#endif
+		if (name) return _("燃素", "Phlogiston");
+		if (desc) return _("光源に燃料を補給する。", "Adds more turns of light to a lantern or torch.");
     
 		{
 			if (cast)
@@ -6281,13 +4833,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "財宝感知";
-		if (desc) return "近くの財宝を感知する。";
-#else
-		if (name) return "Detect Treasure";
-		if (desc) return "Detects all treasures in your vicinity.";
-#endif
+		if (name) return _("財宝感知", "Detect Treasure");
+		if (desc) return _("近くの財宝を感知する。", "Detects all treasures in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -6303,13 +4850,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "魔法 感知";
-		if (desc) return "近くの魔法がかかったアイテムを感知する。";
-#else
-		if (name) return "Detect Enchantment";
-		if (desc) return "Detects all magical items in your vicinity.";
-#endif
+		if (name) return _("魔法 感知", "Detect Enchantment");
+		if (desc) return _("近くの魔法がかかったアイテムを感知する。", "Detects all magical items in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -6324,13 +4866,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "アイテム感知";
-		if (desc) return "近くの全てのアイテムを感知する。";
-#else
-		if (name) return "Detect Objects";
-		if (desc) return "Detects all items in your vicinity.";
-#endif
+		if (name) return _("アイテム感知", "Detect Objects");
+		if (desc) return _("近くの全てのアイテムを感知する。", "Detects all items in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -6345,13 +4882,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "解毒";
-		if (desc) return "毒を体内から完全に取り除く。";
-#else
-		if (name) return "Cure Poison";
-		if (desc) return "Cures poison status.";
-#endif
+		if (name) return _("解毒", "Cure Poison");
+		if (desc) return _("毒を体内から完全に取り除く。", "Cures poison status.");
     
 		{
 			if (cast)
@@ -6362,13 +4894,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "耐冷";
-		if (desc) return "一定時間、冷気への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Cold";
-		if (desc) return "Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐冷", "Resist Cold");
+		if (desc) return _("一定時間、冷気への耐性を得る。装備による耐性に累積する。", "Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -6383,13 +4910,9 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "耐火";
-		if (desc) return "一定時間、炎への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Fire";
-		if (desc) return "Gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐火", "Resist Fire");
+		if (desc) return _("一定時間、炎への耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -6404,13 +4927,9 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "耐電";
-		if (desc) return "一定時間、電撃への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Lightning";
-		if (desc) return "Gives resistance to electricity. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐電", "Resist Lightning");
+		if (desc) return _("一定時間、電撃への耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to electricity. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -6425,13 +4944,9 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "耐酸";
-		if (desc) return "一定時間、酸への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Acid";
-		if (desc) return "Gives resistance to acid. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐酸", "Resist Acid");
+		if (desc) return _("一定時間、酸への耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to acid. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -6446,13 +4961,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "重傷の治癒";
-		if (desc) return "怪我と体力を中程度回復させる。";
-#else
-		if (name) return "Cure Medium Wounds";
-		if (desc) return "Heals cut and HP more.";
-#endif
+		if (name) return _("重傷の治癒", "Cure Medium Wounds");
+		if (desc) return _("怪我と体力を中程度回復させる。", "Heals cut and HP more.");
     
 		{
 			int dice = 4;
@@ -6469,13 +4979,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "テレポート";
-		if (desc) return "遠距離のテレポートをする。";
-#else
-		if (name) return "Teleport";
-		if (desc) return "Teleport long distance.";
-#endif
+		if (name) return _("テレポート", "Teleport");
+		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
 			int range = plev * 5;
@@ -6490,13 +4995,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "鑑定";
-		if (desc) return "アイテムを識別する。";
-#else
-		if (name) return "Identify";
-		if (desc) return "Identifies an item.";
-#endif
+		if (name) return _("鑑定", "Identify");
+		if (desc) return _("アイテムを識別する。", "Identifies an item.");
     
 		{
 			if (cast)
@@ -6507,13 +5007,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "岩石溶解";
-		if (desc) return "壁を溶かして床にする。";
-#else
-		if (name) return "Stone to Mud";
-		if (desc) return "Turns one rock square to mud.";
-#endif
+		if (name) return _("岩石溶解", "Stone to Mud");
+		if (desc) return _("壁を溶かして床にする。", "Turns one rock square to mud.");
     
 		{
 			int dice = 1;
@@ -6532,13 +5027,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "閃光";
-		if (desc) return "光線を放つ。光りを嫌うモンスターに効果がある。";
-#else
-		if (name) return "Ray of Light";
-		if (desc) return "Fires a beam of light which damages to light-sensitive monsters.";
-#endif
+		if (name) return _("閃光", "Ray of Light");
+		if (desc) return _("光線を放つ。光りを嫌うモンスターに効果がある。", "Fires a beam of light which damages to light-sensitive monsters.");
     
 		{
 			int dice = 6;
@@ -6550,25 +5040,15 @@ static cptr do_arcane_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-#ifdef JP
-				msg_print("光線が放たれた。");
-#else
-				msg_print("A line of light appears.");
-#endif
-
+				msg_print(_("光線が放たれた。", "A line of light appears."));
 				lite_line(dir, damroll(6, 8));
 			}
 		}
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "空腹充足";
-		if (desc) return "満腹にする。";
-#else
-		if (name) return "Satisfy Hunger";
-		if (desc) return "Satisfies hunger.";
-#endif
+		if (name) return _("空腹充足", "Satisfy Hunger");
+		if (desc) return _("満腹にする。", "Satisfies hunger.");
     
 		{
 			if (cast)
@@ -6579,13 +5059,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "透明視認";
-		if (desc) return "一定時間、透明なものが見えるようになる。";
-#else
-		if (name) return "See Invisible";
-		if (desc) return "Gives see invisible for a while.";
-#endif
+		if (name) return _("透明視認", "See Invisible");
+		if (desc) return _("一定時間、透明なものが見えるようになる。", "Gives see invisible for a while.");
     
 		{
 			int base = 24;
@@ -6600,59 +5075,36 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "エレメンタル召喚";
-		if (desc) return "1体のエレメンタルを召喚する。";
-#else
-		if (name) return "Conjure Elemental";
-		if (desc) return "Summons an elemental.";
-#endif
+		if (name) return _("エレメンタル召喚", "Conjure Elemental");
+		if (desc) return _("1体のエレメンタルを召喚する。", "Summons an elemental.");
     
 		{
 			if (cast)
 			{
 				if (!summon_specific(-1, py, px, plev, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 				{
-#ifdef JP
-					msg_print("エレメンタルは現れなかった。");
-#else
-					msg_print("No Elementals arrive.");
-#endif
+					msg_print(_("エレメンタルは現れなかった。", "No Elementals arrive."));
 				}
 			}
 		}
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "テレポート・レベル";
-		if (desc) return "瞬時に上か下の階にテレポートする。";
-#else
-		if (name) return "Teleport Level";
-		if (desc) return "Teleport to up or down stairs in a moment.";
-#endif
+		if (name) return _("テレポート・レベル", "Teleport Level");
+		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleport to up or down stairs in a moment.");
     
 		{
 			if (cast)
 			{
-#ifdef JP
-				if (!get_check("本当に他の階にテレポートしますか？")) return NULL;
-#else
-				if (!get_check("Are you sure? (Teleport Level)")) return NULL;
-#endif
+				if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) return NULL;
 				teleport_level(0);
 			}
 		}
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "テレポート・モンスター";
-		if (desc) return "モンスターをテレポートさせるビームを放つ。抵抗されると無効。";
-#else
-		if (name) return "Teleport Away";
-		if (desc) return "Teleports all monsters on the line away unless resisted.";
-#endif
+		if (name) return _("テレポート・モンスター", "Teleport Away");
+		if (desc) return _("モンスターをテレポートさせるビームを放つ。抵抗されると無効。", "Teleports all monsters on the line away unless resisted.");
     
 		{
 			int power = plev;
@@ -6669,13 +5121,8 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "元素の球";
-		if (desc) return "炎、電撃、冷気、酸のどれかの球を放つ。";
-#else
-		if (name) return "Elemental Ball";
-		if (desc) return "Fires a ball of some elements.";
-#endif
+		if (name) return _("元素の球", "Elemental Ball");
+		if (desc) return _("炎、電撃、冷気、酸のどれかの球を放つ。", "Fires a ball of some elements.");
     
 		{
 			int dam = 75 + plev;
@@ -6703,13 +5150,9 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "全感知";
-		if (desc) return "近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。";
-#else
-		if (name) return "Detection";
-		if (desc) return "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.";
-#endif
+		if (name) return _("全感知", "Detection");
+		if (desc) return _("近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。", 
+			"Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -6724,13 +5167,9 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "帰還の呪文";
-		if (desc) return "地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。";
-#else
-		if (name) return "Word of Recall";
-		if (desc) return "Recalls player from dungeon to town, or from town to the deepest level of dungeon.";
-#endif
+		if (name) return _("帰還の呪文", "Word of Recall");
+		if (desc) return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。", 
+			"Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
     
 		{
 			int base = 15;
@@ -6746,13 +5185,9 @@ static cptr do_arcane_spell(int spell, int mode)
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "千里眼";
-		if (desc) return "その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。さらに、一定時間テレパシー能力を得る。";
-#else
-		if (name) return "Clairvoyance";
-		if (desc) return "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.";
-#endif
+		if (name) return _("千里眼", "Clairvoyance");
+		if (desc) return _("その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。さらに、一定時間テレパシー能力を得る。", 
+			"Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.");
     
 		{
 			int base = 25;
@@ -6797,13 +5232,8 @@ static cptr do_craft_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "赤外線視力";
-		if (desc) return "一定時間、赤外線視力が増強される。";
-#else
-		if (name) return "Infravision";
-		if (desc) return "Gives infravision for a while.";
-#endif
+		if (name) return _("赤外線視力", "Infravision");
+		if (desc) return _("一定時間、赤外線視力が増強される。", "Gives infravision for a while.");
     
 		{
 			int base = 100;
@@ -6818,13 +5248,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "回復力強化";
-		if (desc) return "一定時間、回復力が増強される。";
-#else
-		if (name) return "Regeneration";
-		if (desc) return "Gives regeneration ability for a while.";
-#endif
+		if (name) return _("回復力強化", "Regeneration");
+		if (desc) return _("一定時間、回復力が増強される。", "Gives regeneration ability for a while.");
     
 		{
 			int base = 80;
@@ -6839,13 +5264,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "空腹充足";
-		if (desc) return "満腹になる。";
-#else
-		if (name) return "Satisfy Hunger";
-		if (desc) return "Satisfies hunger.";
-#endif
+		if (name) return _("空腹充足", "Satisfy Hunger");
+		if (desc) return _("満腹になる。", "Satisfies hunger.");
     
 		{
 			if (cast)
@@ -6856,13 +5276,9 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "耐冷気";
-		if (desc) return "一定時間、冷気への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Cold";
-		if (desc) return "Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐冷気", "Resist Cold");
+		if (desc) return _("一定時間、冷気への耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -6877,13 +5293,9 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "耐火炎";
-		if (desc) return "一定時間、炎への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Fire";
-		if (desc) return "Gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐火炎", "Resist Fire");
+		if (desc) return _("一定時間、炎への耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -6898,13 +5310,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "士気高揚";
-		if (desc) return "一定時間、ヒーロー気分になる。";
-#else
-		if (name) return "Heroism";
-		if (desc) return "Removes fear, and gives bonus to hit and 10 more HP for a while.";
-#endif
+		if (name) return _("士気高揚", "Heroism");
+		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
     
 		{
 			int base = 25;
@@ -6921,13 +5328,9 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "耐電撃";
-		if (desc) return "一定時間、電撃への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Lightning";
-		if (desc) return "Gives resistance to electricity. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐電撃", "Resist Lightning");
+		if (desc) return _("一定時間、電撃への耐性を得る。装備による耐性に累積する。",
+			"Gives resistance to electricity. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -6942,13 +5345,9 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "耐酸";
-		if (desc) return "一定時間、酸への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Acid";
-		if (desc) return "Gives resistance to acid. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐酸", "Resist Acid");
+		if (desc) return _("一定時間、酸への耐性を得る。装備による耐性に累積する。",
+			"Gives resistance to acid. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -6963,13 +5362,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "透明視認";
-		if (desc) return "一定時間、透明なものが見えるようになる。";
-#else
-		if (name) return "See Invisibility";
-		if (desc) return "Gives see invisible for a while.";
-#endif
+		if (name) return _("透明視認", "See Invisibility");
+		if (desc) return _("一定時間、透明なものが見えるようになる。", "Gives see invisible for a while.");
     
 		{
 			int base = 24;
@@ -6984,37 +5378,24 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "解呪";
-		if (desc) return "アイテムにかかった弱い呪いを解除する。";
-#else
-		if (name) return "Remove Curse";
-		if (desc) return "Removes normal curses from equipped items.";
-#endif
+		if (name) return _("解呪", "Remove Curse");
+		if (desc) return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
     
 		{
 			if (cast)
 			{
 				if (remove_curse())
 				{
-#ifdef JP
-					msg_print("誰かに見守られているような気がする。");
-#else
-					msg_print("You feel as if someone is watching over you.");
-#endif
+					msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "耐毒";
-		if (desc) return "一定時間、毒への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Poison";
-		if (desc) return "Gives resistance to poison. This resistance can be added to which from equipment for more powerful resistance.";
-#endif
+		if (name) return _("耐毒", "Resist Poison");
+		if (desc) return _("一定時間、毒への耐性を得る。装備による耐性に累積する。",
+			"Gives resistance to poison. This resistance can be added to which from equipment for more powerful resistance.");
     
 		{
 			int base = 20;
@@ -7029,13 +5410,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "狂戦士化";
-		if (desc) return "狂戦士化し、恐怖を除去する。";
-#else
-		if (name) return "Berserk";
-		if (desc) return "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.";
-#endif
+		if (name) return _("狂戦士化", "Berserk");
+		if (desc) return _("狂戦士化し、恐怖を除去する。", "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.");
     
 		{
 			int base = 25;
@@ -7052,13 +5428,9 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "自己分析";
-		if (desc) return "現在の自分の状態を完全に知る。";
-#else
-		if (name) return "Self Knowledge";
-		if (desc) return "Gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.";
-#endif
+		if (name) return _("自己分析", "Self Knowledge");
+		if (desc) return _("現在の自分の状態を完全に知る。",
+			"Gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.");
     
 		{
 			if (cast)
@@ -7069,13 +5441,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "対邪悪結界";
-		if (desc) return "邪悪なモンスターの攻撃を防ぐバリアを張る。";
-#else
-		if (name) return "Protection from Evil";
-		if (desc) return "Gives aura which protect you from evil monster's physical attack.";
-#endif
+		if (name) return _("対邪悪結界", "Protection from Evil");
+		if (desc) return _("邪悪なモンスターの攻撃を防ぐバリアを張る。", "Gives aura which protect you from evil monster's physical attack.");
     
 		{
 			int base = 3 * plev;
@@ -7091,13 +5458,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "癒し";
-		if (desc) return "毒、朦朧状態、負傷を全快させ、幻覚を直す。";
-#else
-		if (name) return "Cure";
-		if (desc) return "Heals poison, stun, cut and hallucination completely.";
-#endif
+		if (name) return _("癒し", "Cure");
+		if (desc) return _("毒、朦朧状態、負傷を全快させ、幻覚を直す。", "Heals poison, stun, cut and hallucination completely.");
     
 		{
 			if (cast)
@@ -7111,13 +5473,9 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "魔法剣";
-		if (desc) return "一定時間、武器に冷気、炎、電撃、酸、毒のいずれかの属性をつける。武器を持たないと使えない。";
-#else
-		if (name) return "Mana Branding";
-		if (desc) return "Makes current weapon some elemental branded. You must wield weapons.";
-#endif
+		if (name) return _("魔法剣", "Mana Branding");
+		if (desc) return _("一定時間、武器に冷気、炎、電撃、酸、毒のいずれかの属性をつける。武器を持たないと使えない。",
+			"Makes current weapon some elemental branded. You must wield weapons.");
     
 		{
 			int base = plev / 2;
@@ -7132,13 +5490,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "テレパシー";
-		if (desc) return "一定時間、テレパシー能力を得る。";
-#else
-		if (name) return "Telepathy";
-		if (desc) return "Gives telepathy for a while.";
-#endif
+		if (name) return _("テレパシー", "Telepathy");
+		if (desc) return _("一定時間、テレパシー能力を得る。", "Gives telepathy for a while.");
     
 		{
 			int base = 25;
@@ -7154,13 +5507,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "肌石化";
-		if (desc) return "一定時間、ACを上昇させる。";
-#else
-		if (name) return "Stone Skin";
-		if (desc) return "Gives bonus to AC for a while.";
-#endif
+		if (name) return _("肌石化", "Stone Skin");
+		if (desc) return _("一定時間、ACを上昇させる。", "Gives bonus to AC for a while.");
     
 		{
 			int base = 30;
@@ -7176,13 +5524,9 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "全耐性";
-		if (desc) return "一定時間、酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resistance";
-		if (desc) return "Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.";
-#endif
+		if (name) return _("全耐性", "Resistance");
+		if (desc) return _("一定時間、酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.");
     
 		{
 			int base = 20;
@@ -7201,13 +5545,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "スピード";
-		if (desc) return "一定時間、加速する。";
-#else
-		if (name) return "Haste Self";
-		if (desc) return "Hastes you for a while.";
-#endif
+		if (name) return _("スピード", "Haste Self");
+		if (desc) return _("一定時間、加速する。", "Hastes you for a while.");
     
 		{
 			int base = plev;
@@ -7223,13 +5562,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "壁抜け";
-		if (desc) return "一定時間、半物質化し壁を通り抜けられるようになる。";
-#else
-		if (name) return "Walk through Wall";
-		if (desc) return "Gives ability to pass walls for a while.";
-#endif
+		if (name) return _("壁抜け", "Walk through Wall");
+		if (desc) return _("一定時間、半物質化し壁を通り抜けられるようになる。", "Gives ability to pass walls for a while.");
     
 		{
 			int base = plev / 2;
@@ -7244,13 +5578,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "盾磨き";
-		if (desc) return "盾に反射の属性をつける。";
-#else
-		if (name) return "Polish Shield";
-		if (desc) return "Makes a shield a shield of reflection.";
-#endif
+		if (name) return _("盾磨き", "Polish Shield");
+		if (desc) return _("盾に反射の属性をつける。", "Makes a shield a shield of reflection.");
     
 		{
 			if (cast)
@@ -7261,45 +5590,28 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "ゴーレム製造";
-		if (desc) return "1体のゴーレムを製造する。";
-#else
-		if (name) return "Create Golem";
-		if (desc) return "Creates a golem.";
-#endif
+		if (name) return _("ゴーレム製造", "Create Golem");
+		if (desc) return _("1体のゴーレムを製造する。", "Creates a golem.");
     
 		{
 			if (cast)
 			{
 				if (summon_specific(-1, py, px, plev, SUMMON_GOLEM, PM_FORCE_PET))
 				{
-#ifdef JP
-					msg_print("ゴーレムを作った。");
-#else
-					msg_print("You make a golem.");
-#endif
+					msg_print(_("ゴーレムを作った。", "You make a golem."));
 				}
 				else
 				{
-#ifdef JP
-					msg_print("うまくゴーレムを作れなかった。");
-#else
-					msg_print("No Golems arrive.");
-#endif
+					msg_print(_("うまくゴーレムを作れなかった。", "No Golems arrive."));
 				}
 			}
 		}
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "魔法の鎧";
-		if (desc) return "一定時間、魔法防御力とACが上がり、混乱と盲目の耐性、反射能力、麻痺知らず、浮遊を得る。";
-#else
-		if (name) return "Magical armor";
-		if (desc) return "Gives resistance to magic, bonus to AC, resistance to confusion, blindness, reflection, free action and levitation for a while.";
-#endif
+		if (name) return _("魔法の鎧", "Magical armor");
+		if (desc) return _("一定時間、魔法防御力とACが上がり、混乱と盲目の耐性、反射能力、麻痺知らず、浮遊を得る。",
+			"Gives resistance to magic, bonus to AC, resistance to confusion, blindness, reflection, free action and levitation for a while.");
     
 		{
 			int base = 20;
@@ -7314,13 +5626,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "装備無力化";
-		if (desc) return "武器・防具にかけられたあらゆる魔力を完全に解除する。";
-#else
-		if (name) return "Remove Enchantment";
-		if (desc) return "Removes all magics completely from any weapon or armor.";
-#endif
+		if (name) return _("装備無力化", "Remove Enchantment");
+		if (desc) return _("武器・防具にかけられたあらゆる魔力を完全に解除する。", "Removes all magics completely from any weapon or armor.");
     
 		{
 			if (cast)
@@ -7331,37 +5638,23 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "呪い粉砕";
-		if (desc) return "アイテムにかかった強力な呪いを解除する。";
-#else
-		if (name) return "Remove All Curse";
-		if (desc) return "Removes normal and heavy curse from equipped items.";
-#endif
+		if (name) return _("呪い粉砕", "Remove All Curse");
+		if (desc) return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curse from equipped items.");
     
 		{
 			if (cast)
 			{
 				if (remove_all_curse())
 				{
-#ifdef JP
-					msg_print("誰かに見守られているような気がする。");
-#else
-					msg_print("You feel as if someone is watching over you.");
-#endif
+					msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "完全なる知識";
-		if (desc) return "アイテムの持つ能力を完全に知る。";
-#else
-		if (name) return "Knowledge True";
-		if (desc) return "*Identifies* an item.";
-#endif
+		if (name) return _("完全なる知識", "Knowledge True");
+		if (desc) return _("アイテムの持つ能力を完全に知る。", "*Identifies* an item.");
     
 		{
 			if (cast)
@@ -7372,13 +5665,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "武器強化";
-		if (desc) return "武器の命中率修正とダメージ修正を強化する。";
-#else
-		if (name) return "Enchant Weapon";
-		if (desc) return "Attempts to increase +to-hit, +to-dam of a weapon.";
-#endif
+		if (name) return _("武器強化", "Enchant Weapon");
+		if (desc) return _("武器の命中率修正とダメージ修正を強化する。", "Attempts to increase +to-hit, +to-dam of a weapon.");
     
 		{
 			if (cast)
@@ -7389,13 +5677,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "防具強化";
-		if (desc) return "鎧の防御修正を強化する。";
-#else
-		if (name) return "Enchant Armor";
-		if (desc) return "Attempts to increase +AC of an armor.";
-#endif
+		if (name) return _("防具強化", "Enchant Armor");
+		if (desc) return _("鎧の防御修正を強化する。", "Attempts to increase +AC of an armor.");
     
 		{
 			if (cast)
@@ -7406,13 +5689,8 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "武器属性付与";
-		if (desc) return "武器にランダムに属性をつける。";
-#else
-		if (name) return "Brand Weapon";
-		if (desc) return "Makes current weapon a random ego weapon.";
-#endif
+		if (name) return _("武器属性付与", "Brand Weapon");
+		if (desc) return _("武器にランダムに属性をつける。", "Makes current weapon a random ego weapon.");
     
 		{
 			if (cast)
@@ -7423,13 +5701,9 @@ static cptr do_craft_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "人間トランプ";
-		if (desc) return "ランダムにテレポートする突然変異か、自分の意思でテレポートする突然変異が身につく。";
-#else
-		if (name) return "Living Trump";
-		if (desc) return "Gives mutation which makes you teleport randomly or makes you able to teleport at will.";
-#endif
+		if (name) return _("人間トランプ", "Living Trump");
+		if (desc) return _("ランダムにテレポートする突然変異か、自分の意思でテレポートする突然変異が身につく。",
+			"Gives mutation which makes you teleport randomly or makes you able to teleport at will.");
     
 		{
 			if (cast)
@@ -7446,24 +5720,16 @@ static cptr do_craft_spell(int spell, int mode)
 				/* Gain the mutation */
 				if (gain_random_mutation(mutation))
 				{
-#ifdef JP
-					msg_print("あなたは生きているカードに変わった。");
-#else
-					msg_print("You have turned into a Living Trump.");
-#endif
+					msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
 				}
 			}
 		}
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "属性への免疫";
-		if (desc) return "一定時間、冷気、炎、電撃、酸のいずれかに対する免疫を得る。";
-#else
-		if (name) return "Immunity";
-		if (desc) return "Gives an immunity to fire, cold, electricity or acid for a while.";
-#endif
+		if (name) return _("属性への免疫", "Immunity");
+		if (desc) return _("一定時間、冷気、炎、電撃、酸のいずれかに対する免疫を得る。",
+			"Gives an immunity to fire, cold, electricity or acid for a while.");
     
 		{
 			int base = 13;
@@ -7493,12 +5759,7 @@ static cptr do_daemon_spell(int spell, int mode)
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
-
-#ifdef JP
-	static const char s_dam[] = "損傷:";
-#else
-	static const char s_dam[] = "dam ";
-#endif
+	static const char s_dam[] = _("損傷:", "dam ");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -7506,13 +5767,8 @@ static cptr do_daemon_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "マジック・ミサイル";
-		if (desc) return "弱い魔法の矢を放つ。";
-#else
-		if (name) return "Magic Missile";
-		if (desc) return "Fires a weak bolt of magic.";
-#endif
+		if (name) return _("マジック・ミサイル", "Magic Missile");
+		if (desc) return _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
     
 		{
 			int dice = 3 + (plev - 1) / 5;
@@ -7530,13 +5786,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "無生命感知";
-		if (desc) return "近くの生命のないモンスターを感知する。";
-#else
-		if (name) return "Detect Unlife";
-		if (desc) return "Detects all nonliving monsters in your vicinity.";
-#endif
+		if (name) return _("無生命感知", "Detect Unlife");
+		if (desc) return _("近くの生命のないモンスターを感知する。", "Detects all nonliving monsters in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -7551,13 +5802,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "邪なる祝福";
-		if (desc) return "一定時間、命中率とACにボーナスを得る。";
-#else
-		if (name) return "Evil Bless";
-		if (desc) return "Gives bonus to hit and AC for a few turns.";
-#endif
+		if (name) return _("邪なる祝福", "Evil Bless");
+		if (desc) return _("一定時間、命中率とACにボーナスを得る。", "Gives bonus to hit and AC for a few turns.");
     
 		{
 			int base = 12;
@@ -7572,13 +5818,9 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "耐火炎";
-		if (desc) return "一定時間、炎への耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Resist Fire";
-		if (desc) return "Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.";
-#endif
+		if (name) return _("耐火炎", "Resist Fire");
+		if (desc) return _("一定時間、炎への耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.");
     
 		{
 			int base = 20;
@@ -7593,13 +5835,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "恐慌";
-		if (desc) return "モンスター1体を恐怖させ、朦朧させる。抵抗されると無効。";
-#else
-		if (name) return "Horrify";
-		if (desc) return "Attempts to scare and stun a monster.";
-#endif
+		if (name) return _("恐慌", "Horrify");
+		if (desc) return _("モンスター1体を恐怖させ、朦朧させる。抵抗されると無効。", "Attempts to scare and stun a monster.");
     
 		{
 			int power = plev;
@@ -7617,13 +5854,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "地獄の矢";
-		if (desc) return "地獄のボルトもしくはビームを放つ。";
-#else
-		if (name) return "Nether Bolt";
-		if (desc) return "Fires a bolt or beam of nether.";
-#endif
+		if (name) return _("地獄の矢", "Nether Bolt");
+		if (desc) return _("地獄のボルトもしくはビームを放つ。", "Fires a bolt or beam of nether.");
     
 		{
 			int dice = 6 + (plev - 5) / 4;
@@ -7641,37 +5873,24 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "古代の死霊召喚";
-		if (desc) return "古代の死霊を召喚する。";
-#else
-		if (name) return "Summon Manes";
-		if (desc) return "Summons a manes.";
-#endif
+		if (name) return _("古代の死霊召喚", "Summon Manes");
+		if (desc) return _("古代の死霊を召喚する。", "Summons a manes.");
     
 		{
 			if (cast)
 			{
 				if (!summon_specific(-1, py, px, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 				{
-#ifdef JP
-					msg_print("古代の死霊は現れなかった。");
-#else
-					msg_print("No Manes arrive.");
-#endif
+					msg_print(_("古代の死霊は現れなかった。", "No Manes arrive."));
 				}
 			}
 		}
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "地獄の焔";
-		if (desc) return "邪悪な力を持つボールを放つ。善良なモンスターには大きなダメージを与える。";
-#else
-		if (name) return "Hellish Flame";
-		if (desc) return "Fires a ball of evil power. Hurts good monsters greatly.";
-#endif
+		if (name) return _("地獄の焔", "Hellish Flame");
+		if (desc) return _("邪悪な力を持つボールを放つ。善良なモンスターには大きなダメージを与える。",
+			"Fires a ball of evil power. Hurts good monsters greatly.");
     
 		{
 			int dice = 3;
@@ -7699,13 +5918,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "デーモン支配";
-		if (desc) return "悪魔1体を魅了する。抵抗されると無効";
-#else
-		if (name) return "Dominate Demon";
-		if (desc) return "Attempts to charm a demon.";
-#endif
+		if (name) return _("デーモン支配", "Dominate Demon");
+		if (desc) return _("悪魔1体を魅了する。抵抗されると無効", "Attempts to charm a demon.");
     
 		{
 			int power = plev;
@@ -7722,13 +5936,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "ビジョン";
-		if (desc) return "周辺の地形を感知する。";
-#else
-		if (name) return "Vision";
-		if (desc) return "Maps nearby area.";
-#endif
+		if (name) return _("ビジョン", "Vision");
+		if (desc) return _("周辺の地形を感知する。", "Maps nearby area.");
     
 		{
 			int rad = DETECT_RAD_MAP;
@@ -7743,13 +5952,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "耐地獄";
-		if (desc) return "一定時間、地獄への耐性を得る。";
-#else
-		if (name) return "Resist Nether";
-		if (desc) return "Gives resistance to nether for a while.";
-#endif
+		if (name) return _("耐地獄", "Resist Nether");
+		if (desc) return _("一定時間、地獄への耐性を得る。", "Gives resistance to nether for a while.");
     
 		{
 			int base = 20;
@@ -7764,13 +5968,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "プラズマ・ボルト";
-		if (desc) return "プラズマのボルトもしくはビームを放つ。";
-#else
-		if (name) return "Plasma bolt";
-		if (desc) return "Fires a bolt or beam of plasma.";
-#endif
+		if (name) return _("プラズマ・ボルト", "Plasma bolt");
+		if (desc) return _("プラズマのボルトもしくはビームを放つ。", "Fires a bolt or beam of plasma.");
     
 		{
 			int dice = 11 + (plev - 5) / 4;
@@ -7788,13 +5987,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "ファイア・ボール";
-		if (desc) return "炎の球を放つ。";
-#else
-		if (name) return "Fire Ball";
-		if (desc) return "Fires a ball of fire.";
-#endif
+		if (name) return _("ファイア・ボール", "Fire Ball");
+		if (desc) return _("炎の球を放つ。", "Fires a ball of fire.");
     
 		{
 			int dam = plev + 55;
@@ -7812,13 +6006,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "炎の刃";
-		if (desc) return "武器に炎の属性をつける。";
-#else
-		if (name) return "Fire Branding";
-		if (desc) return "Makes current weapon fire branded.";
-#endif
+		if (name) return _("炎の刃", "Fire Branding");
+		if (desc) return _("武器に炎の属性をつける。", "Makes current weapon fire branded.");
     
 		{
 			if (cast)
@@ -7829,13 +6018,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "地獄球";
-		if (desc) return "大きな地獄の球を放つ。";
-#else
-		if (name) return "Nether Ball";
-		if (desc) return "Fires a huge ball of nether.";
-#endif
+		if (name) return _("地獄球", "Nether Ball");
+		if (desc) return _("大きな地獄の球を放つ。", "Fires a huge ball of nether.");
     
 		{
 			int dam = plev * 3 / 2 + 100;
@@ -7853,13 +6037,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "デーモン召喚";
-		if (desc) return "悪魔1体を召喚する。";
-#else
-		if (name) return "Summon Demon";
-		if (desc) return "Summons a demon.";
-#endif
+		if (name) return _("デーモン召喚", "Summon Demon");
+		if (desc) return _("悪魔1体を召喚する。", "Summons a demon.");
     
 		{
 			if (cast)
@@ -7873,37 +6052,21 @@ static cptr do_daemon_spell(int spell, int mode)
 
 				if (summon_specific((pet ? -1 : 0), py, px, plev*2/3+randint1(plev/2), SUMMON_DEMON, mode))
 				{
-#ifdef JP
-					msg_print("硫黄の悪臭が充満した。");
-#else
-					msg_print("The area fills with a stench of sulphur and brimstone.");
-#endif
-
+					msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 
 					if (pet)
 					{
-#ifdef JP
-						msg_print("「ご用でございますか、ご主人様」");
-#else
-						msg_print("'What is thy bidding... Master?'");
-#endif
+						msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
 					}
 					else
 					{
-#ifdef JP
-						msg_print("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」");
-#else
-						msg_print("'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'");
-#endif
+						msg_print(_("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」",
+									"'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
 					}
 				}
 				else
 				{
-#ifdef JP
-					msg_print("悪魔は現れなかった。");
-#else
-					msg_print("No demons arrive.");
-#endif
+					msg_print(_("悪魔は現れなかった。", "No demons arrive."));
 				}
 				break;
 			}
@@ -7911,13 +6074,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "悪魔の目";
-		if (desc) return "一定時間、テレパシー能力を得る。";
-#else
-		if (name) return "Devilish Eye";
-		if (desc) return "Gives telepathy for a while.";
-#endif
+		if (name) return _("悪魔の目", "Devilish Eye");
+		if (desc) return _("一定時間、テレパシー能力を得る。", "Gives telepathy for a while.");
     
 		{
 			int base = 30;
@@ -7933,13 +6091,9 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "悪魔のクローク";
-		if (desc) return "恐怖を取り除き、一定時間、炎と冷気の耐性、炎のオーラを得る。耐性は装備による耐性に累積する。";
-#else
-		if (name) return "Devil Cloak";
-		if (desc) return "Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to which from equipment for more powerful resistances.";
-#endif
+		if (name) return _("悪魔のクローク", "Devil Cloak");
+		if (desc) return _("恐怖を取り除き、一定時間、炎と冷気の耐性、炎のオーラを得る。耐性は装備による耐性に累積する。", 
+			"Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to which from equipment for more powerful resistances.");
     
 		{
 			int base = 20;
@@ -7960,13 +6114,9 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "溶岩流";
-		if (desc) return "自分を中心とした炎の球を作り出し、床を溶岩に変える。";
-#else
-		if (name) return "The Flow of Lava";
-		if (desc) return "Generates a ball of fire centered on you which transforms floors to magma.";
-#endif
+		if (name) return _("溶岩流", "The Flow of Lava");
+		if (desc) return _("自分を中心とした炎の球を作り出し、床を溶岩に変える。", 
+			"Generates a ball of fire centered on you which transforms floors to magma.");
     
 		{
 			int dam = (55 + plev) * 2;
@@ -7983,13 +6133,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "プラズマ球";
-		if (desc) return "プラズマの球を放つ。";
-#else
-		if (name) return "Plasma Ball";
-		if (desc) return "Fires a ball of plasma.";
-#endif
+		if (name) return _("プラズマ球", "Plasma Ball");
+		if (desc) return _("プラズマの球を放つ。", "Fires a ball of plasma.");
     
 		{
 			int dam = plev * 3 / 2 + 80;
@@ -8007,13 +6152,9 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "悪魔変化";
-		if (desc) return "一定時間、悪魔に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔としての能力を得る。";
-#else
-		if (name) return "Polymorph Demon";
-		if (desc) return "Mimic a demon for a while. Loses abilities of original race and gets abilities as a demon.";
-#endif
+		if (name) return _("悪魔変化", "Polymorph Demon");
+		if (desc) return _("一定時間、悪魔に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔としての能力を得る。", 
+			"Mimic a demon for a while. Loses abilities of original race and gets abilities as a demon.");
     
 		{
 			int base = 10 + plev / 2;
@@ -8028,13 +6169,9 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "地獄の波動";
-		if (desc) return "視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。";
-#else
-		if (name) return "Nather Wave";
-		if (desc) return "Damages all monsters in sight. Hurts good monsters greatly.";
-#endif
+		if (name) return _("地獄の波動", "Nather Wave");
+		if (desc) return _("視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。", 
+			"Damages all monsters in sight. Hurts good monsters greatly.");
     
 		{
 			int sides1 = plev * 2;
@@ -8051,13 +6188,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "サキュバスの接吻";
-		if (desc) return "因果混乱の球を放つ。";
-#else
-		if (name) return "Kiss of Succubus";
-		if (desc) return "Fires a ball of nexus.";
-#endif
+		if (name) return _("サキュバスの接吻", "Kiss of Succubus");
+		if (desc) return _("因果混乱の球を放つ。", "Fires a ball of nexus.");
     
 		{
 			int dam = 100 + plev * 2;
@@ -8074,37 +6206,25 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "破滅の手";
-		if (desc) return "破滅の手を放つ。食らったモンスターはそのときのHPの半分前後のダメージを受ける。";
-#else
-		if (name) return "Doom Hand";
-		if (desc) return "Attempts to make a monster's HP almost half.";
-#endif
+		if (name) return _("破滅の手", "Doom Hand");
+		if (desc) return _("破滅の手を放つ。食らったモンスターはそのときのHPの半分前後のダメージを受ける。", "Attempts to make a monster's HP almost half.");
     
 		{
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
-#ifdef JP
-				else msg_print("<破滅の手>を放った！");
-#else
-				else msg_print("You invoke the Hand of Doom!");
-#endif
-
+				if (!get_aim_dir(&dir))
+					return NULL;
+				else 
+					msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
+				
 				fire_ball_hide(GF_HAND_DOOM, dir, plev * 2, 0);
 			}
 		}
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "士気高揚";
-		if (desc) return "一定時間、ヒーロー気分になる。";
-#else
-		if (name) return "Raise the Morale";
-		if (desc) return "Removes fear, and gives bonus to hit and 10 more HP for a while.";
-#endif
+		if (name) return _("士気高揚", "Raise the Morale");
+		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
     
 		{
 			int base = 25;
@@ -8121,13 +6241,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "不滅の肉体";
-		if (desc) return "一定時間、時間逆転への耐性を得る。";
-#else
-		if (name) return "Immortal Body";
-		if (desc) return "Gives resistance to time for a while.";
-#endif
+		if (name) return _("不滅の肉体", "Immortal Body");
+		if (desc) return _("一定時間、時間逆転への耐性を得る。", "Gives resistance to time for a while.");
     
 		{
 			int base = 20;
@@ -8142,13 +6257,9 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "狂気の円環";
-		if (desc) return "自分を中心としたカオスの球、混乱の球を発生させ、近くのモンスターを魅了する。";
-#else
-		if (name) return "Insanity Circle";
-		if (desc) return "Generate balls of chaos, confusion and charm centered on you.";
-#endif
+		if (name) return _("狂気の円環", "Insanity Circle");
+		if (desc) return _("自分を中心としたカオスの球、混乱の球を発生させ、近くのモンスターを魅了する。", 
+			"Generate balls of chaos, confusion and charm centered on you.");
     
 		{
 			int dam = 50 + plev;
@@ -8167,13 +6278,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "ペット爆破";
-		if (desc) return "全てのペットを強制的に爆破させる。";
-#else
-		if (name) return "Explode Pets";
-		if (desc) return "Makes all pets explode.";
-#endif
+		if (name) return _("ペット爆破", "Explode Pets");
+		if (desc) return _("全てのペットを強制的に爆破させる。", "Makes all pets explode.");
     
 		{
 			if (cast)
@@ -8184,13 +6290,9 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "グレーターデーモン召喚";
-		if (desc) return "上級デーモンを召喚する。召喚するには人間('p','h','t'で表されるモンスター)の死体を捧げなければならない。";
-#else
-		if (name) return "Summon Greater Demon";
-		if (desc) return "Summons greater demon. It need to sacrifice a corpse of human ('p','h' or 't').";
-#endif
+		if (name) return _("グレーターデーモン召喚", "Summon Greater Demon");
+		if (desc) return _("上級デーモンを召喚する。召喚するには人間('p','h','t'で表されるモンスター)の死体を捧げなければならない。", 
+			"Summons greater demon. It need to sacrifice a corpse of human ('p','h' or 't').");
     
 		{
 			if (cast)
@@ -8201,13 +6303,8 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "地獄嵐";
-		if (desc) return "超巨大な地獄の球を放つ。";
-#else
-		if (name) return "Nether Storm";
-		if (desc) return "Generate a huge ball of nether.";
-#endif
+		if (name) return _("地獄嵐", "Nether Storm");
+		if (desc) return _("超巨大な地獄の球を放つ。", "Generate a huge ball of nether.");
     
 		{
 			int dam = plev * 15;
@@ -8225,13 +6322,9 @@ static cptr do_daemon_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "血の呪い";
-		if (desc) return "自分がダメージを受けることによって対象に呪いをかけ、ダメージを与え様々な効果を引き起こす。";
-#else
-		if (name) return "Bloody Curse";
-		if (desc) return "Puts blood curse which damages and causes various effects on a monster. You also take damage.";
-#endif
+		if (name) return _("血の呪い", "Bloody Curse");
+		if (desc) return _("自分がダメージを受けることによって対象に呪いをかけ、ダメージを与え様々な効果を引き起こす。",
+			"Puts blood curse which damages and causes various effects on a monster. You also take damage.");
     
 		{
 			int dam = 600;
@@ -8244,23 +6337,15 @@ static cptr do_daemon_spell(int spell, int mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 				fire_ball_hide(GF_BLOOD_CURSE, dir, dam, rad);
-#ifdef JP
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "血の呪い", -1);
-#else
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), "Blood curse", -1);
-#endif
+				take_hit(DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"), -1);
 			}
 		}
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "魔王変化";
-		if (desc) return "悪魔の王に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔の王としての能力を得、壁を破壊しながら歩く。";
-#else
-		if (name) return "Polymorph Demonlord";
-		if (desc) return "Mimic a demon lord for a while. Loses abilities of original race and gets great abilities as a demon lord. Even hard walls can't stop your walking.";
-#endif
+		if (name) return _("魔王変化", "Polymorph Demonlord");
+		if (desc) return _("悪魔の王に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔の王としての能力を得、壁を破壊しながら歩く。",
+			"Mimic a demon lord for a while. Loses abilities of original race and gets great abilities as a demon lord. Even hard walls can't stop your walking.");
     
 		{
 			int base = 15;
@@ -8297,13 +6382,8 @@ static cptr do_crusade_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "懲罰";
-		if (desc) return "電撃のボルトもしくはビームを放つ。";
-#else
-		if (name) return "Punishment";
-		if (desc) return "Fires a bolt or beam of lightning.";
-#endif
+		if (name) return _("懲罰", "Punishment");
+		if (desc) return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
     
 		{
 			int dice = 3 + (plev - 1) / 5;
@@ -8321,13 +6401,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "邪悪存在感知";
-		if (desc) return "近くの邪悪なモンスターを感知する。";
-#else
-		if (name) return "Detect Evil";
-		if (desc) return "Detects all evil monsters in your vicinity.";
-#endif
+		if (name) return _("邪悪存在感知", "Detect Evil");
+		if (desc) return _("近くの邪悪なモンスターを感知する。", "Detects all evil monsters in your vicinity.");
     
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -8342,13 +6417,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "恐怖除去";
-		if (desc) return "恐怖を取り除く。";
-#else
-		if (name) return "Remove Fear";
-		if (desc) return "Removes fear.";
-#endif
+		if (name) return _("恐怖除去", "Remove Fear");
+		if (desc) return _("恐怖を取り除く。", "Removes fear.");
     
 		{
 			if (cast)
@@ -8359,13 +6429,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "威圧";
-		if (desc) return "モンスター1体を恐怖させる。抵抗されると無効。";
-#else
-		if (name) return "Scare Monster";
-		if (desc) return "Attempts to scare a monster.";
-#endif
+		if (name) return _("威圧", "Scare Monster");
+		if (desc) return _("モンスター1体を恐怖させる。抵抗されると無効。", "Attempts to scare a monster.");
     
 		{
 			int power = plev;
@@ -8382,13 +6447,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "聖域";
-		if (desc) return "隣接した全てのモンスターを眠らせる。抵抗されると無効。";
-#else
-		if (name) return "Sanctuary";
-		if (desc) return "Attempts to sleep monsters in the adjacent squares.";
-#endif
+		if (name) return _("聖域", "Sanctuary");
+		if (desc) return _("隣接した全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to sleep monsters in the adjacent squares.");
     
 		{
 			int power = plev;
@@ -8403,13 +6463,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "入口";
-		if (desc) return "中距離のテレポートをする。";
-#else
-		if (name) return "Portal";
-		if (desc) return "Teleport medium distance.";
-#endif
+		if (name) return _("入口", "Portal");
+		if (desc) return _("中距離のテレポートをする。", "Teleport medium distance.");
     
 		{
 			int range = 25 + plev / 2;
@@ -8424,13 +6479,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "スターダスト";
-		if (desc) return "ターゲット付近に閃光のボルトを連射する。";
-#else
-		if (name) return "Star Dust";
-		if (desc) return "Fires many bolts of light near the target.";
-#endif
+		if (name) return _("スターダスト", "Star Dust");
+		if (desc) return _("ターゲット付近に閃光のボルトを連射する。", "Fires many bolts of light near the target.");
     
 		{
 			int dice = 3 + (plev - 1) / 9;
@@ -8447,13 +6497,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "身体浄化";
-		if (desc) return "傷、毒、朦朧から全快する。";
-#else
-		if (name) return "Purify";
-		if (desc) return "Heals all cut, stun and poison status.";
-#endif
+		if (name) return _("身体浄化", "Purify");
+		if (desc) return _("傷、毒、朦朧から全快する。", "Heals all cut, stun and poison status.");
     
 		{
 			if (cast)
@@ -8466,13 +6511,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "邪悪飛ばし";
-		if (desc) return "邪悪なモンスター1体をテレポートさせる。抵抗されると無効。";
-#else
-		if (name) return "Scatter Evil";
-		if (desc) return "Attempts to teleport an evil monster away.";
-#endif
+		if (name) return _("邪悪飛ばし", "Scatter Evil");
+		if (desc) return _("邪悪なモンスター1体をテレポートさせる。抵抗されると無効。", "Attempts to teleport an evil monster away.");
     
 		{
 			int power = MAX_SIGHT * 5;
@@ -8488,13 +6528,9 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "聖なる光球";
-		if (desc) return "聖なる力をもつ宝珠を放つ。邪悪なモンスターに対して大きなダメージを与えるが、善良なモンスターには効果がない。";
-#else
-		if (name) return "Holy Orb";
-		if (desc) return "Fires a ball with holy power. Hurts evil monsters greatly, but don't effect good monsters.";
-#endif
+		if (name) return _("聖なる光球", "Holy Orb");
+		if (desc) return _("聖なる力をもつ宝珠を放つ。邪悪なモンスターに対して大きなダメージを与えるが、善良なモンスターには効果がない。", 
+			"Fires a ball with holy power. Hurts evil monsters greatly, but don't effect good monsters.");
     
 		{
 			int dice = 3;
@@ -8522,13 +6558,9 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "悪魔払い";
-		if (desc) return "視界内の全てのアンデッド及び悪魔にダメージを与え、邪悪なモンスターを恐怖させる。";
-#else
-		if (name) return "Exorcism";
-		if (desc) return "Damages all undead and demons in sight, and scares all evil monsters in sight.";
-#endif
+		if (name) return _("悪魔払い", "Exorcism");
+		if (desc) return _("視界内の全てのアンデッド及び悪魔にダメージを与え、邪悪なモンスターを恐怖させる。", 
+			"Damages all undead and demons in sight, and scares all evil monsters in sight.");
     
 		{
 			int sides = plev;
@@ -8546,37 +6578,23 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "解呪";
-		if (desc) return "アイテムにかかった弱い呪いを解除する。";
-#else
-		if (name) return "Remove Curse";
-		if (desc) return "Removes normal curses from equipped items.";
-#endif
+		if (name) return _("解呪", "Remove Curse");
+		if (desc) return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
     
 		{
 			if (cast)
 			{
 				if (remove_curse())
 				{
-#ifdef JP
-					msg_print("誰かに見守られているような気がする。");
-#else
-					msg_print("You feel as if someone is watching over you.");
-#endif
+					msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "透明視認";
-		if (desc) return "一定時間、透明なものが見えるようになる。";
-#else
-		if (name) return "Sense Unseen";
-		if (desc) return "Gives see invisible for a while.";
-#endif
+		if (name) return _("透明視認", "Sense Unseen");
+		if (desc) return _("一定時間、透明なものが見えるようになる。", "Gives see invisible for a while.");
     
 		{
 			int base = 24;
@@ -8591,13 +6609,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "対邪悪結界";
-		if (desc) return "邪悪なモンスターの攻撃を防ぐバリアを張る。";
-#else
-		if (name) return "Protection from Evil";
-		if (desc) return "Gives aura which protect you from evil monster's physical attack.";
-#endif
+		if (name) return _("対邪悪結界", "Protection from Evil");
+		if (desc) return _("邪悪なモンスターの攻撃を防ぐバリアを張る。", "Gives aura which protect you from evil monster's physical attack.");
     
 		{
 			int base = 25;
@@ -8613,13 +6626,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "裁きの雷";
-		if (desc) return "強力な電撃のボルトを放つ。";
-#else
-		if (name) return "Judgment Thunder";
-		if (desc) return "Fires a powerful bolt of lightning.";
-#endif
+		if (name) return _("裁きの雷", "Judgment Thunder");
+		if (desc) return _("強力な電撃のボルトを放つ。", "Fires a powerful bolt of lightning.");
     
 		{
 			int dam = plev * 5;
@@ -8635,24 +6643,15 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "聖なる御言葉";
-		if (desc) return "視界内の邪悪な存在に大きなダメージを与え、体力を回復し、毒、恐怖、朦朧状態、負傷から全快する。";
-#else
-		if (name) return "Holy Word";
-		if (desc) return "Damages all evil monsters in sight, heals HP somewhat, and completely heals poison, fear, stun and cut status.";
-#endif
+		if (name) return _("聖なる御言葉", "Holy Word");
+		if (desc) return _("視界内の邪悪な存在に大きなダメージを与え、体力を回復し、毒、恐怖、朦朧状態、負傷から全快する。",
+			"Damages all evil monsters in sight, heals HP somewhat, and completely heals poison, fear, stun and cut status.");
     
 		{
 			int dam_sides = plev * 6;
 			int heal = 100;
 
-#ifdef JP
-			if (info) return format("損:1d%d/回%d", dam_sides, heal);
-#else
-			if (info) return format("dam:d%d/h%d", dam_sides, heal);
-#endif
-
+			if (info) return format(_("損:1d%d/回%d", "dam:d%d/h%d"), dam_sides, heal);
 			if (cast)
 			{
 				dispel_evil(randint1(dam_sides));
@@ -8666,13 +6665,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "開かれた道";
-		if (desc) return "一直線上の全ての罠と扉を破壊する。";
-#else
-		if (name) return "Unbarring Ways";
-		if (desc) return "Fires a beam which destroy traps and doors.";
-#endif
+		if (name) return _("開かれた道", "Unbarring Ways");
+		if (desc) return _("一直線上の全ての罠と扉を破壊する。", "Fires a beam which destroy traps and doors.");
     
 		{
 			if (cast)
@@ -8685,13 +6679,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "封魔";
-		if (desc) return "邪悪なモンスターの動きを止める。";
-#else
-		if (name) return "Arrest";
-		if (desc) return "Attempts to paralyze an evil monster.";
-#endif
+		if (name) return _("封魔", "Arrest");
+		if (desc) return _("邪悪なモンスターの動きを止める。", "Attempts to paralyze an evil monster.");
     
 		{
 			int power = plev * 2;
@@ -8707,13 +6696,9 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "聖なるオーラ";
-		if (desc) return "一定時間、邪悪なモンスターを傷つける聖なるオーラを得る。";
-#else
-		if (name) return "Holy Aura";
-		if (desc) return "Gives aura of holy power which injures evil monsters which attacked you for a while.";
-#endif
+		if (name) return _("聖なるオーラ", "Holy Aura");
+		if (desc) return _("一定時間、邪悪なモンスターを傷つける聖なるオーラを得る。",
+			"Gives aura of holy power which injures evil monsters which attacked you for a while.");
     
 		{
 			int base = 20;
@@ -8728,13 +6713,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "アンデッド&悪魔退散";
-		if (desc) return "視界内の全てのアンデッド及び悪魔にダメージを与える。";
-#else
-		if (name) return "Dispel Undead & Demons";
-		if (desc) return "Damages all undead and demons in sight.";
-#endif
+		if (name) return _("アンデッド&悪魔退散", "Dispel Undead & Demons");
+		if (desc) return _("視界内の全てのアンデッド及び悪魔にダメージを与える。", "Damages all undead and demons in sight.");
     
 		{
 			int sides = plev * 4;
@@ -8750,13 +6730,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "邪悪退散";
-		if (desc) return "視界内の全ての邪悪なモンスターにダメージを与える。";
-#else
-		if (name) return "Dispel Evil";
-		if (desc) return "Damages all evil monsters in sight.";
-#endif
+		if (name) return _("邪悪退散", "Dispel Evil");
+		if (desc) return _("視界内の全ての邪悪なモンスターにダメージを与える。", "Damages all evil monsters in sight.");
     
 		{
 			int sides = plev * 4;
@@ -8771,13 +6746,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "聖なる刃";
-		if (desc) return "通常の武器に滅邪の属性をつける。";
-#else
-		if (name) return "Holy Blade";
-		if (desc) return "Makes current weapon especially deadly against evil monsters.";
-#endif
+		if (name) return _("聖なる刃", "Holy Blade");
+		if (desc) return _("通常の武器に滅邪の属性をつける。", "Makes current weapon especially deadly against evil monsters.");
     
 		{
 			if (cast)
@@ -8788,13 +6758,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "スターバースト";
-		if (desc) return "巨大な閃光の球を放つ。";
-#else
-		if (name) return "Star Burst";
-		if (desc) return "Fires a huge ball of powerful light.";
-#endif
+		if (name) return _("スターバースト", "Star Burst");
+		if (desc) return _("巨大な閃光の球を放つ。", "Fires a huge ball of powerful light.");
     
 		{
 			int dam = 100 + plev * 2;
@@ -8812,13 +6777,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "天使召喚";
-		if (desc) return "天使を1体召喚する。";
-#else
-		if (name) return "Summon Angel";
-		if (desc) return "Summons an angel.";
-#endif
+		if (name) return _("天使召喚", "Summon Angel");
+		if (desc) return _("天使を1体召喚する。", "Summons an angel.");
     
 		{
 			if (cast)
@@ -8834,19 +6794,11 @@ static cptr do_crusade_spell(int spell, int mode)
 				{
 					if (pet)
 					{
-#ifdef JP
-						msg_print("「ご用でございますか、ご主人様」");
-#else
-						msg_print("'What is thy bidding... Master?'");
-#endif
+						msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
 					}
 					else
 					{
-#ifdef JP
-						msg_print("「我は汝の下僕にあらず！ 悪行者よ、悔い改めよ！」");
-#else
-						msg_print("Mortal! Repent of thy impiousness.");
-#endif
+						msg_print(_("「我は汝の下僕にあらず！ 悪行者よ、悔い改めよ！」", "Mortal! Repent of thy impiousness."));
 					}
 				}
 			}
@@ -8854,13 +6806,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "士気高揚";
-		if (desc) return "一定時間、ヒーロー気分になる。";
-#else
-		if (name) return "Heroism";
-		if (desc) return "Removes fear, and gives bonus to hit and 10 more HP for a while.";
-#endif
+		if (name) return _("士気高揚", "Heroism");
+		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
     
 		{
 			int base = 25;
@@ -8877,37 +6824,24 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "呪い退散";
-		if (desc) return "アイテムにかかった強力な呪いを解除する。";
-#else
-		if (name) return "Dispel Curse";
-		if (desc) return "Removes normal and heavy curse from equipped items.";
-#endif
+		if (name) return _("呪い退散", "Dispel Curse");
+		if (desc) return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curse from equipped items.");
     
 		{
 			if (cast)
 			{
 				if (remove_all_curse())
 				{
-#ifdef JP
-					msg_print("誰かに見守られているような気がする。");
-#else
-					msg_print("You feel as if someone is watching over you.");
-#endif
+					msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "邪悪追放";
-		if (desc) return "視界内の全ての邪悪なモンスターをテレポートさせる。抵抗されると無効。";
-#else
-		if (name) return "Banish Evil";
-		if (desc) return "Teleports all evil monsters in sight away unless resisted.";
-#endif
+		if (name) return _("邪悪追放", "Banish Evil");
+		if (desc) return _("視界内の全ての邪悪なモンスターをテレポートさせる。抵抗されると無効。", 
+			"Teleports all evil monsters in sight away unless resisted.");
     
 		{
 			int power = 100;
@@ -8918,25 +6852,15 @@ static cptr do_crusade_spell(int spell, int mode)
 			{
 				if (banish_evil(power))
 				{
-#ifdef JP
-					msg_print("神聖な力が邪悪を打ち払った！");
-#else
-					msg_print("The holy power banishes evil!");
-#endif
-
+					msg_print(_("神聖な力が邪悪を打ち払った！", "The holy power banishes evil!"));
 				}
 			}
 		}
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "ハルマゲドン";
-		if (desc) return "周辺のアイテム、モンスター、地形を破壊する。";
-#else
-		if (name) return "Armageddon";
-		if (desc) return "Destroy everything in nearby area.";
-#endif
+		if (name) return _("ハルマゲドン", "Armageddon");
+		if (desc) return _("周辺のアイテム、モンスター、地形を破壊する。", "Destroy everything in nearby area.");
     
 		{
 			int base = 12;
@@ -8950,13 +6874,9 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "目には目を";
-		if (desc) return "一定時間、自分がダメージを受けたときに攻撃を行ったモンスターに対して同等のダメージを与える。";
-#else
-		if (name) return "An Eye for an Eye";
-		if (desc) return "Gives special aura for a while. When you are attacked by a monster, the monster are injured with same amount of damage as you take.";
-#endif
+		if (name) return _("目には目を", "An Eye for an Eye");
+		if (desc) return _("一定時間、自分がダメージを受けたときに攻撃を行ったモンスターに対して同等のダメージを与える。", 
+			"Gives special aura for a while. When you are attacked by a monster, the monster are injured with same amount of damage as you take.");
     
 		{
 			int base = 10;
@@ -8971,13 +6891,8 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "神の怒り";
-		if (desc) return "ターゲットの周囲に分解の球を多数落とす。";
-#else
-		if (name) return "Wrath of the God";
-		if (desc) return "Drops many balls of disintegration near the target.";
-#endif
+		if (name) return _("神の怒り", "Wrath of the God");
+		if (desc) return _("ターゲットの周囲に分解の球を多数落とす。", "Drops many balls of disintegration near the target.");
     
 		{
 			int dam = plev * 3 + 25;
@@ -8993,13 +6908,9 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "神威";
-		if (desc) return "隣接するモンスターに聖なるダメージを与え、視界内のモンスターにダメージ、減速、朦朧、混乱、恐怖、眠りを与える。さらに体力を回復する。";
-#else
-		if (name) return "Divine Intervention";
-		if (desc) return "Damages all adjacent monsters with holy power. Damages and attempt to slow, stun, confuse, scare and freeze all monsters in sight. And heals HP.";
-#endif
+		if (name) return _("神威", "Divine Intervention");
+		if (desc) return _("隣接するモンスターに聖なるダメージを与え、視界内のモンスターにダメージ、減速、朦朧、混乱、恐怖、眠りを与える。さらに体力を回復する。", 
+			"Damages all adjacent monsters with holy power. Damages and attempt to slow, stun, confuse, scare and freeze all monsters in sight. And heals HP.");
     
 		{
 			int b_dam = plev * 11;
@@ -9007,12 +6918,7 @@ static cptr do_crusade_spell(int spell, int mode)
 			int heal = 100;
 			int power = plev * 4;
 
-#ifdef JP
-			if (info) return format("回%d/損%d+%d", heal, d_dam, b_dam/2);
-#else
-			if (info) return format("h%d/dm%d+%d", heal, d_dam, b_dam/2);
-#endif
-
+			if (info) return format(_("回%d/損%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam/2);
 			if (cast)
 			{
 				project(0, 1, py, px, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
@@ -9028,13 +6934,9 @@ static cptr do_crusade_spell(int spell, int mode)
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "聖戦";
-		if (desc) return "視界内の善良なモンスターをペットにしようとし、ならなかった場合及び善良でないモンスターを恐怖させる。さらに多数の加速された騎士を召喚し、ヒーロー、祝福、加速、対邪悪結界を得る。";
-#else
-		if (name) return "Crusade";
-		if (desc) return "Attempts to charm all good monsters in sight, and scare all non-charmed monsters, and summons great number of knights, and gives heroism, bless, speed and protection from evil.";
-#endif
+		if (name) return _("聖戦", "Crusade");
+		if (desc) return _("視界内の善良なモンスターをペットにしようとし、ならなかった場合及び善良でないモンスターを恐怖させる。さらに多数の加速された騎士を召喚し、ヒーロー、祝福、加速、対邪悪結界を得る。", 
+			"Attempts to charm all good monsters in sight, and scare all non-charmed monsters, and summons great number of knights, and gives heroism, bless, speed and protection from evil.");
     
 		{
 			if (cast)
@@ -9089,12 +6991,7 @@ static cptr do_music_spell(int spell, int mode)
 	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
 	bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
 	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
-
-#ifdef JP
-	static const char s_dam[] = "損傷:";
-#else
-	static const char s_dam[] = "dam ";
-#endif
+	static const char s_dam[] = _("損傷:", "dam ");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -9102,24 +6999,15 @@ static cptr do_music_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "遅鈍の歌";
-		if (desc) return "視界内の全てのモンスターを減速させる。抵抗されると無効。";
-#else
-		if (name) return "Song of Holding";
-		if (desc) return "Attempts to slow all monsters in sight.";
-#endif
+		if (name) return _("遅鈍の歌", "Song of Holding");
+		if (desc) return _("視界内の全てのモンスターを減速させる。抵抗されると無効。", "Attempts to slow all monsters in sight.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("ゆっくりとしたメロディを口ずさみ始めた．．．");
-#else
-			msg_print("You start humming a slow, steady melody...");
-#endif
+			msg_print(_("ゆっくりとしたメロディを口ずさみ始めた．．．", "You start humming a slow, steady melody..."));
 			start_singing(spell, MUSIC_SLOW);
 		}
 
@@ -9136,24 +7024,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "祝福の歌";
-		if (desc) return "命中率とACのボーナスを得る。";
-#else
-		if (name) return "Song of Blessing";
-		if (desc) return "Gives bonus to hit and AC for a few turns.";
-#endif
+		if (name) return _("祝福の歌", "Song of Blessing");
+		if (desc) return _("命中率とACのボーナスを得る。", "Gives bonus to hit and AC for a few turns.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("厳かなメロディを奏で始めた．．．");
-#else
-			msg_print("The holy power of the Music of the Ainur enters you...");
-#endif
+			msg_print(_("厳かなメロディを奏で始めた．．．", "The holy power of the Music of the Ainur enters you..."));
 			start_singing(spell, MUSIC_BLESS);
 		}
 
@@ -9161,24 +7040,15 @@ static cptr do_music_spell(int spell, int mode)
 		{
 			if (!p_ptr->blessed)
 			{
-#ifdef JP
-				msg_print("高潔な気分が消え失せた。");
-#else
-				msg_print("The prayer has expired.");
-#endif
+				msg_print(_("高潔な気分が消え失せた。", "The prayer has expired."));
 			}
 		}
 
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "崩壊の音色";
-		if (desc) return "轟音のボルトを放つ。";
-#else
-		if (name) return "Wrecking Note";
-		if (desc) return "Fires a bolt of sound.";
-#endif
+		if (name) return _("崩壊の音色", "Wrecking Note");
+		if (desc) return _("轟音のボルトを放つ。", "Fires a bolt of sound.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
@@ -9199,24 +7069,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "朦朧の旋律";
-		if (desc) return "視界内の全てのモンスターを朦朧させる。抵抗されると無効。";
-#else
-		if (name) return "Stun Pattern";
-		if (desc) return "Attempts to stun all monsters in sight.";
-#endif
+		if (name) return _("朦朧の旋律", "Stun Pattern");
+		if (desc) return _("視界内の全てのモンスターを朦朧させる。抵抗されると無効。", "Attempts to stun all monsters in sight.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("眩惑させるメロディを奏で始めた．．．");
-#else
-			msg_print("You weave a pattern of sounds to bewilder and daze...");
-#endif
+			msg_print(_("眩惑させるメロディを奏で始めた．．．", "You weave a pattern of sounds to bewilder and daze..."));
 			start_singing(spell, MUSIC_STUN);
 		}
 
@@ -9235,24 +7096,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "生命の流れ";
-		if (desc) return "体力を少し回復させる。";
-#else
-		if (name) return "Flow of Life";
-		if (desc) return "Heals HP a little.";
-#endif
+		if (name) return _("生命の流れ", "Flow of Life");
+		if (desc) return _("体力を少し回復させる。", "Heals HP a little.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("歌を通して体に活気が戻ってきた．．．");
-#else
-			msg_print("Life flows through you as you sing a song of healing...");
-#endif
+			msg_print(_("歌を通して体に活気が戻ってきた．．．", "Life flows through you as you sing a song of healing..."));
 			start_singing(spell, MUSIC_L_LIFE);
 		}
 
@@ -9271,13 +7123,8 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "太陽の歌";
-		if (desc) return "光源が照らしている範囲か部屋全体を永久に明るくする。";
-#else
-		if (name) return "Song of the Sun";
-		if (desc) return "Lights up nearby area and the inside of a room permanently.";
-#endif
+		if (name) return _("太陽の歌", "Song of the Sun");
+		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
@@ -9291,36 +7138,22 @@ static cptr do_music_spell(int spell, int mode)
 
 			if (cast)
 			{
-#ifdef JP
-				msg_print("光り輝く歌が辺りを照らした。");
-#else
-				msg_print("Your uplifting song brings brightness to dark places...");
-#endif
-
+				msg_print(_("光り輝く歌が辺りを照らした。", "Your uplifting song brings brightness to dark places..."));
 				lite_area(damroll(dice, sides), rad);
 			}
 		}
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "恐怖の歌";
-		if (desc) return "視界内の全てのモンスターを恐怖させる。抵抗されると無効。";
-#else
-		if (name) return "Song of Fear";
-		if (desc) return "Attempts to scare all monsters in sight.";
-#endif
+		if (name) return _("恐怖の歌", "Song of Fear");
+		if (desc) return _("視界内の全てのモンスターを恐怖させる。抵抗されると無効。", "Attempts to scare all monsters in sight.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("おどろおどろしいメロディを奏で始めた．．．");
-#else
-			msg_print("You start weaving a fearful pattern...");
-#endif
+			msg_print(_("おどろおどろしいメロディを奏で始めた．．．", "You start weaving a fearful pattern..."));
 			start_singing(spell, MUSIC_FEAR);			
 		}
 
@@ -9338,24 +7171,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "戦いの歌";
-		if (desc) return "ヒーロー気分になる。";
-#else
-		if (name) return "Heroic Ballad";
-		if (desc) return "Removes fear, and gives bonus to hit and 10 more HP for a while.";
-#endif
+		if (name) return _("戦いの歌", "Heroic Ballad");
+		if (desc) return _("ヒーロー気分になる。", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("激しい戦いの歌を歌った．．．");
-#else
-			msg_print("You start singing a song of intense fighting...");
-#endif
+			msg_print(_("激しい戦いの歌を歌った．．．", "You start singing a song of intense fighting..."));
 
 			(void)hp_player(10);
 			(void)set_afraid(0);
@@ -9370,11 +7194,7 @@ static cptr do_music_spell(int spell, int mode)
 		{
 			if (!p_ptr->hero)
 			{
-#ifdef JP
-				msg_print("ヒーローの気分が消え失せた。");
-#else
-				msg_print("The heroism wears off.");
-#endif
+				msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
 				/* Recalculate hitpoints */
 				p_ptr->update |= (PU_HP);
 			}
@@ -9383,25 +7203,16 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "霊的知覚";
-		if (desc) return "近くの罠/扉/階段を感知する。レベル15で全てのモンスター、20で財宝とアイテムを感知できるようになる。レベル25で周辺の地形を感知し、40でその階全体を永久に照らし、ダンジョン内のすべてのアイテムを感知する。この効果は歌い続けることで順に起こる。";
-#else
-		if (name) return "Clairaudience";
-		if (desc) return "Detects traps, doors and stairs in your vicinity. And detects all monsters at level 15, treasures and items at level 20. Maps nearby area at level 25. Lights and know the whole level at level 40. These effects occurs by turns while this song continues.";
-#endif
+		if (name) return _("霊的知覚", "Clairaudience");
+		if (desc) return _("近くの罠/扉/階段を感知する。レベル15で全てのモンスター、20で財宝とアイテムを感知できるようになる。レベル25で周辺の地形を感知し、40でその階全体を永久に照らし、ダンジョン内のすべてのアイテムを感知する。この効果は歌い続けることで順に起こる。", 
+			"Detects traps, doors and stairs in your vicinity. And detects all monsters at level 15, treasures and items at level 20. Maps nearby area at level 25. Lights and know the whole level at level 40. These effects occurs by turns while this song continues.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("静かな音楽が感覚を研ぎ澄まさせた．．．");
-#else
-			msg_print("Your quiet music sharpens your sense of hearing...");
-#endif
-
+			msg_print(_("静かな音楽が感覚を研ぎ澄まさせた．．．", "Your quiet music sharpens your sense of hearing..."));
 			/* Hack -- Initialize the turn count */
 			p_ptr->magic_num1[2] = 0;
 
@@ -9454,24 +7265,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "魂の歌";
-		if (desc) return "視界内の全てのモンスターに対して精神攻撃を行う。";
-#else
-		if (name) return "Soul Shriek";
-		if (desc) return "Damages all monsters in sight with PSI damages.";
-#endif
+		if (name) return _("魂の歌", "Soul Shriek");
+		if (desc) return _("視界内の全てのモンスターに対して精神攻撃を行う。", "Damages all monsters in sight with PSI damages.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("精神を捻じ曲げる歌を歌った．．．");
-#else
-			msg_print("You start singing a song of soul in pain...");
-#endif
+			msg_print(_("精神を捻じ曲げる歌を歌った．．．", "You start singing a song of soul in pain..."));
 			start_singing(spell, MUSIC_PSI);
 		}
 
@@ -9490,24 +7292,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "知識の歌";
-		if (desc) return "自分のいるマスと隣りのマスに落ちているアイテムを鑑定する。";
-#else
-		if (name) return "Song of Lore";
-		if (desc) return "Identifies all items which are in the adjacent squares.";
-#endif
+		if (name) return _("知識の歌", "Song of Lore");
+		if (desc) return _("自分のいるマスと隣りのマスに落ちているアイテムを鑑定する。", "Identifies all items which are in the adjacent squares.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("この世界の知識が流れ込んできた．．．");
-#else
-			msg_print("You recall the rich lore of the world...");
-#endif
+			msg_print(_("この世界の知識が流れ込んできた．．．", "You recall the rich lore of the world..."));
 			start_singing(spell, MUSIC_ID);
 		}
 
@@ -9529,24 +7322,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "隠遁の歌";
-		if (desc) return "隠密行動能力を上昇させる。";
-#else
-		if (name) return "Hiding Tune";
-		if (desc) return "Gives improved stealth.";
-#endif
+		if (name) return _("隠遁の歌", "Hiding Tune");
+		if (desc) return _("隠密行動能力を上昇させる。", "Gives improved stealth.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("あなたの姿が景色にとけこんでいった．．．");
-#else
-			msg_print("Your song carries you beyond the sight of mortal eyes...");
-#endif
+			msg_print(_("あなたの姿が景色にとけこんでいった．．．", "Your song carries you beyond the sight of mortal eyes..."));
 			start_singing(spell, MUSIC_STEALTH);
 		}
 
@@ -9554,35 +7338,22 @@ static cptr do_music_spell(int spell, int mode)
 		{
 			if (!p_ptr->tim_stealth)
 			{
-#ifdef JP
-				msg_print("姿がはっきりと見えるようになった。");
-#else
-				msg_print("You are no longer hided.");
-#endif
+				msg_print(_("姿がはっきりと見えるようになった。", "You are no longer hided."));
 			}
 		}
 
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "幻影の旋律";
-		if (desc) return "視界内の全てのモンスターを混乱させる。抵抗されると無効。";
-#else
-		if (name) return "Illusion Pattern";
-		if (desc) return "Attempts to confuse all monsters in sight.";
-#endif
+		if (name) return _("幻影の旋律", "Illusion Pattern");
+		if (desc) return _("視界内の全てのモンスターを混乱させる。抵抗されると無効。", "Attempts to confuse all monsters in sight.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("辺り一面に幻影が現れた．．．");
-#else
-			msg_print("You weave a pattern of sounds to beguile and confuse...");
-#endif
+			msg_print(_("辺り一面に幻影が現れた．．．", "You weave a pattern of sounds to beguile and confuse..."));
 			start_singing(spell, MUSIC_CONF);
 		}
 
@@ -9600,24 +7371,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "破滅の叫び";
-		if (desc) return "視界内の全てのモンスターに対して轟音攻撃を行う。";
-#else
-		if (name) return "Doomcall";
-		if (desc) return "Damages all monsters in sight with booming sound.";
-#endif
+		if (name) return _("破滅の叫び", "Doomcall");
+		if (desc) return _("視界内の全てのモンスターに対して轟音攻撃を行う。", "Damages all monsters in sight with booming sound.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("轟音が響いた．．．");
-#else
-			msg_print("The fury of the Downfall of Numenor lashes out...");
-#endif
+			msg_print(_("轟音が響いた．．．", "The fury of the Downfall of Numenor lashes out..."));
 			start_singing(spell, MUSIC_SOUND);
 		}
 
@@ -9636,13 +7398,8 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "フィリエルの歌";
-		if (desc) return "周囲の死体や骨を生き返す。";
-#else
-		if (name) return "Firiel's Song";
-		if (desc) return "Resurrects nearby corpse and skeletons. And makes these your pets.";
-#endif
+		if (name) return _("フィリエルの歌", "Firiel's Song");
+		if (desc) return _("周囲の死体や骨を生き返す。", "Resurrects nearby corpse and skeletons. And makes these your pets.");
     
 		{
 			/* Stop singing before start another */
@@ -9650,36 +7407,22 @@ static cptr do_music_spell(int spell, int mode)
 
 			if (cast)
 			{
-#ifdef JP
-				msg_print("生命と復活のテーマを奏で始めた．．．");
-#else
-				msg_print("The themes of life and revival are woven into your song...");
-#endif
-
+				msg_print(_("生命と復活のテーマを奏で始めた．．．", "The themes of life and revival are woven into your song..."));
 				animate_dead(0, py, px);
 			}
 		}
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "旅の仲間";
-		if (desc) return "視界内の全てのモンスターを魅了する。抵抗されると無効。";
-#else
-		if (name) return "Fellowship Chant";
-		if (desc) return "Attempts to charm all monsters in sight.";
-#endif
+		if (name) return _("旅の仲間", "Fellowship Chant");
+		if (desc) return _("視界内の全てのモンスターを魅了する。抵抗されると無効。", "Attempts to charm all monsters in sight.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("安らかなメロディを奏で始めた．．．");
-#else
-			msg_print("You weave a slow, soothing melody of imploration...");
-#endif
+			msg_print(_("安らかなメロディを奏で始めた．．．", "You weave a slow, soothing melody of imploration..."));
 			start_singing(spell, MUSIC_CHARM);
 		}
 
@@ -9698,24 +7441,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "分解音波";
-		if (desc) return "壁を掘り進む。自分の足元のアイテムは蒸発する。";
-#else
-		if (name) return "Sound of disintegration";
-		if (desc) return "Makes you be able to burrow into walls. Objects under your feet evaporate.";
-#endif
+		if (name) return _("分解音波", "Sound of disintegration");
+		if (desc) return _("壁を掘り進む。自分の足元のアイテムは蒸発する。", "Makes you be able to burrow into walls. Objects under your feet evaporate.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("粉砕するメロディを奏で始めた．．．");
-#else
-			msg_print("You weave a violent pattern of sounds to break wall.");
-#endif
+			msg_print(_("粉砕するメロディを奏で始めた．．．", "You weave a violent pattern of sounds to break wall."));
 			start_singing(spell, MUSIC_WALL);
 		}
 
@@ -9733,24 +7467,16 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "元素耐性";
-		if (desc) return "酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。";
-#else
-		if (name) return "Finrod's Resistance";
-		if (desc) return "Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to which from equipment for more powerful resistances.";
-#endif
+		if (name) return _("元素耐性", "Finrod's Resistance");
+		if (desc) return _("酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。", 
+			"Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to which from equipment for more powerful resistances.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("元素の力に対する忍耐の歌を歌った。");
-#else
-			msg_print("You sing a song of perseverance against powers...");
-#endif
+			msg_print(_("元素の力に対する忍耐の歌を歌った。", "You sing a song of perseverance against powers..."));
 			start_singing(spell, MUSIC_RESIST);
 		}
 
@@ -9758,71 +7484,42 @@ static cptr do_music_spell(int spell, int mode)
 		{
 			if (!p_ptr->oppose_acid)
 			{
-#ifdef JP
-				msg_print("酸への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to acid.");
-#endif
+				msg_print(_("酸への耐性が薄れた気がする。", "You feel less resistant to acid."));
 			}
 
 			if (!p_ptr->oppose_elec)
 			{
-#ifdef JP
-				msg_print("電撃への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to elec.");
-#endif
+				msg_print(_("電撃への耐性が薄れた気がする。", "You feel less resistant to elec."));
 			}
 
 			if (!p_ptr->oppose_fire)
 			{
-#ifdef JP
-				msg_print("火への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to fire.");
-#endif
+				msg_print(_("火への耐性が薄れた気がする。", "You feel less resistant to fire."));
 			}
 
 			if (!p_ptr->oppose_cold)
 			{
-#ifdef JP
-				msg_print("冷気への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to cold.");
-#endif
+				msg_print(_("冷気への耐性が薄れた気がする。", "You feel less resistant to cold."));
 			}
 
 			if (!p_ptr->oppose_pois)
 			{
-#ifdef JP
-				msg_print("毒への耐性が薄れた気がする。");
-#else
-				msg_print("You feel less resistant to pois.");
-#endif
+				msg_print(_("毒への耐性が薄れた気がする。", "You feel less resistant to pois."));
 			}
 		}
 
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "ホビットのメロディ";
-		if (desc) return "加速する。";
-#else
-		if (name) return "Hobbit Melodies";
-		if (desc) return "Hastes you.";
-#endif
+		if (name) return _("ホビットのメロディ", "Hobbit Melodies");
+		if (desc) return _("加速する。", "Hastes you.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("軽快な歌を口ずさみ始めた．．．");
-#else
-			msg_print("You start singing joyful pop song...");
-#endif
+			msg_print(_("軽快な歌を口ずさみ始めた．．．", "You start singing joyful pop song..."));
 			start_singing(spell, MUSIC_SPEED);
 		}
 
@@ -9830,24 +7527,15 @@ static cptr do_music_spell(int spell, int mode)
 		{
 			if (!p_ptr->fast)
 			{
-#ifdef JP
-				msg_print("動きの素早さがなくなったようだ。");
-#else
-				msg_print("You feel yourself slow down.");
-#endif
+				msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
 			}
 		}
 
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "歪んだ世界";
-		if (desc) return "近くのモンスターをテレポートさせる。抵抗されると無効。";
-#else
-		if (name) return "World Contortion";
-		if (desc) return "Teleports all nearby monsters away unless resisted.";
-#endif
+		if (name) return _("歪んだ世界", "World Contortion");
+		if (desc) return _("近くのモンスターをテレポートさせる。抵抗されると無効。", "Teleports all nearby monsters away unless resisted.");
     
 		{
 			int rad = plev / 15 + 1;
@@ -9860,36 +7548,23 @@ static cptr do_music_spell(int spell, int mode)
 
 			if (cast)
 			{
-#ifdef JP
-				msg_print("歌が空間を歪めた．．．");
-#else
-				msg_print("Reality whirls wildly as you sing a dizzying melody...");
-#endif
-
+				msg_print(_("歌が空間を歪めた．．．", "Reality whirls wildly as you sing a dizzying melody..."));
 				project(0, rad, py, px, power, GF_AWAY_ALL, PROJECT_KILL, -1);
 			}
 		}
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "退散の歌";
-		if (desc) return "視界内の全てのモンスターにダメージを与える。邪悪なモンスターに特に大きなダメージを与える。";
-#else
-		if (name) return "Dispelling chant";
-		if (desc) return "Damages all monsters in sight. Hurts evil monsters greatly.";
-#endif
+		if (name) return _("退散の歌", "Dispelling chant");
+		if (desc) return _("視界内の全てのモンスターにダメージを与える。邪悪なモンスターに特に大きなダメージを与える。", 
+			"Damages all monsters in sight. Hurts evil monsters greatly.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("耐えられない不協和音が敵を責め立てた．．．");
-#else
-			msg_print("You cry out in an ear-wracking voice...");
-#endif
+			msg_print(_("耐えられない不協和音が敵を責め立てた．．．", "You cry out in an ear-wracking voice..."));
 			start_singing(spell, MUSIC_DISPEL);
 		}
 
@@ -9908,24 +7583,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "サルマンの甘言";
-		if (desc) return "視界内の全てのモンスターを減速させ、眠らせようとする。抵抗されると無効。";
-#else
-		if (name) return "The Voice of Saruman";
-		if (desc) return "Attempts to slow and sleep all monsters in sight.";
-#endif
+		if (name) return _("サルマンの甘言", "The Voice of Saruman");
+		if (desc) return _("視界内の全てのモンスターを減速させ、眠らせようとする。抵抗されると無効。", "Attempts to slow and sleep all monsters in sight.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("優しく、魅力的な歌を口ずさみ始めた．．．");
-#else
-			msg_print("You start humming a gentle and attractive song...");
-#endif
+			msg_print(_("優しく、魅力的な歌を口ずさみ始めた．．．", "You start humming a gentle and attractive song..."));
 			start_singing(spell, MUSIC_SARUMAN);
 		}
 
@@ -9944,13 +7610,8 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "嵐の音色";
-		if (desc) return "轟音のビームを放つ。";
-#else
-		if (name) return "Song of the Tempest";
-		if (desc) return "Fires a beam of sound.";
-#endif
+		if (name) return _("嵐の音色", "Song of the Tempest");
+		if (desc) return _("轟音のビームを放つ。", "Fires a beam of sound.");
     
 		{
 			int dice = 15 + (plev - 1) / 2;
@@ -9971,13 +7632,8 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "もう一つの世界";
-		if (desc) return "現在の階を再構成する。";
-#else
-		if (name) return "Ambarkanta";
-		if (desc) return "Recreates current dungeon level.";
-#endif
+		if (name) return _("もう一つの世界", "Ambarkanta");
+		if (desc) return _("現在の階を再構成する。", "Recreates current dungeon level.");
     
 		{
 			int base = 15;
@@ -9990,36 +7646,23 @@ static cptr do_music_spell(int spell, int mode)
 
 			if (cast)
 			{
-#ifdef JP
-				msg_print("周囲が変化し始めた．．．");
-#else
-				msg_print("You sing of the primeval shaping of Middle-earth...");
-#endif
-
+				msg_print(_("周囲が変化し始めた．．．", "You sing of the primeval shaping of Middle-earth..."));
 				alter_reality();
 			}
 		}
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "破壊の旋律";
-		if (desc) return "周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。";
-#else
-		if (name) return "Wrecking Pattern";
-		if (desc) return "Shakes dungeon structure, and results in random swapping of floors and walls.";
-#endif
+		if (name) return _("破壊の旋律", "Wrecking Pattern");
+		if (desc) return _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", 
+			"Shakes dungeon structure, and results in random swapping of floors and walls.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("破壊的な歌が響きわたった．．．");
-#else
-			msg_print("You weave a pattern of sounds to contort and shatter...");
-#endif
+			msg_print(_("破壊的な歌が響きわたった．．．", "You weave a pattern of sounds to contort and shatter..."));
 			start_singing(spell, MUSIC_QUAKE);
 		}
 
@@ -10038,24 +7681,15 @@ static cptr do_music_spell(int spell, int mode)
 
 
 	case 25:
-#ifdef JP
-		if (name) return "停滞の歌";
-		if (desc) return "視界内の全てのモンスターを麻痺させようとする。抵抗されると無効。";
-#else
-		if (name) return "Stationary Shriek";
-		if (desc) return "Attempts to freeze all monsters in sight.";
-#endif
+		if (name) return _("停滞の歌", "Stationary Shriek");
+		if (desc) return _("視界内の全てのモンスターを麻痺させようとする。抵抗されると無効。", "Attempts to freeze all monsters in sight.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("ゆっくりとしたメロディを奏で始めた．．．");
-#else
-			msg_print("You weave a very slow pattern which is almost likely to stop...");
-#endif
+			msg_print(_("ゆっくりとしたメロディを奏で始めた．．．", "You weave a very slow pattern which is almost likely to stop..."));
 			start_singing(spell, MUSIC_STASIS);
 		}
 
@@ -10073,13 +7707,9 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "守りの歌";
-		if (desc) return "自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。";
-#else
-		if (name) return "Endurance";
-		if (desc) return "Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.";
-#endif
+		if (name) return _("守りの歌", "Endurance");
+		if (desc) return _("自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。", 
+			"Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.");
     
 		{
 			/* Stop singing before start another */
@@ -10087,36 +7717,23 @@ static cptr do_music_spell(int spell, int mode)
 
 			if (cast)
 			{
-#ifdef JP
-				msg_print("歌が神聖な場を作り出した．．．");
-#else
-				msg_print("The holy power of the Music is creating sacred field...");
-#endif
-
+				msg_print(_("歌が神聖な場を作り出した．．．", "The holy power of the Music is creating sacred field..."));
 				warding_glyph();
 			}
 		}
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "英雄の詩";
-		if (desc) return "加速し、ヒーロー気分になり、視界内の全てのモンスターにダメージを与える。";
-#else
-		if (name) return "The Hero's Poem";
-		if (desc) return "Hastes you. Gives heroism. Damages all monsters in sight.";
-#endif
+		if (name) return _("英雄の詩", "The Hero's Poem");
+		if (desc) return _("加速し、ヒーロー気分になり、視界内の全てのモンスターにダメージを与える。", 
+			"Hastes you. Gives heroism. Damages all monsters in sight.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("英雄の歌を口ずさんだ．．．");
-#else
-			msg_print("You chant a powerful, heroic call to arms...");
-#endif
+			msg_print(_("英雄の歌を口ずさんだ．．．", "You chant a powerful, heroic call to arms..."));
 			(void)hp_player(10);
 			(void)set_afraid(0);
 
@@ -10130,22 +7747,14 @@ static cptr do_music_spell(int spell, int mode)
 		{
 			if (!p_ptr->hero)
 			{
-#ifdef JP
-				msg_print("ヒーローの気分が消え失せた。");
-#else
-				msg_print("The heroism wears off.");
-#endif
+				msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
 				/* Recalculate hitpoints */
 				p_ptr->update |= (PU_HP);
 			}
 
 			if (!p_ptr->fast)
 			{
-#ifdef JP
-				msg_print("動きの素早さがなくなったようだ。");
-#else
-				msg_print("You feel yourself slow down.");
-#endif
+				msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
 			}
 		}
 
@@ -10163,24 +7772,15 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "ヤヴァンナの助け";
-		if (desc) return "強力な回復の歌で、負傷と朦朧状態も全快する。";
-#else
-		if (name) return "Relief of Yavanna";
-		if (desc) return "Powerful healing song. Also heals cut and stun completely.";
-#endif
+		if (name) return _("ヤヴァンナの助け", "Relief of Yavanna");
+		if (desc) return _("強力な回復の歌で、負傷と朦朧状態も全快する。", "Powerful healing song. Also heals cut and stun completely.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-			msg_print("歌を通して体に活気が戻ってきた．．．");
-#else
-			msg_print("Life flows through you as you sing the song...");
-#endif
+			msg_print(_("歌を通して体に活気が戻ってきた．．．", "Life flows through you as you sing the song..."));
 			start_singing(spell, MUSIC_H_LIFE);
 		}
 
@@ -10201,13 +7801,8 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "再生の歌";
-		if (desc) return "すべてのステータスと経験値を回復する。";
-#else
-		if (name) return "Goddess' rebirth";
-		if (desc) return "Restores all stats and experience.";
-#endif
+		if (name) return _("再生の歌", "Goddess' rebirth");
+		if (desc) return _("すべてのステータスと経験値を回復する。", "Restores all stats and experience.");
     
 		{
 			/* Stop singing before start another */
@@ -10215,11 +7810,8 @@ static cptr do_music_spell(int spell, int mode)
 
 			if (cast)
 			{
-#ifdef JP
-				msg_print("暗黒の中に光と美をふりまいた。体が元の活力を取り戻した。");
-#else
-				msg_print("You strewed light and beauty in the dark as you sing. You feel refreshed.");
-#endif
+				msg_print(_("暗黒の中に光と美をふりまいた。体が元の活力を取り戻した。",
+							"You strewed light and beauty in the dark as you sing. You feel refreshed."));
 				(void)do_res_stat(A_STR);
 				(void)do_res_stat(A_INT);
 				(void)do_res_stat(A_WIS);
@@ -10232,13 +7824,8 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "サウロンの魔術";
-		if (desc) return "非常に強力でごく小さい轟音の球を放つ。";
-#else
-		if (name) return "Wizardry of Sauron";
-		if (desc) return "Fires an extremely powerful tiny ball of sound.";
-#endif
+		if (name) return _("サウロンの魔術", "Wizardry of Sauron");
+		if (desc) return _("非常に強力でごく小さい轟音の球を放つ。", "Fires an extremely powerful tiny ball of sound.");
     
 		{
 			int dice = 50 + plev;
@@ -10260,46 +7847,35 @@ static cptr do_music_spell(int spell, int mode)
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "フィンゴルフィンの挑戦";
-		if (desc) return "ダメージを受けなくなるバリアを張る。";
-#else
-		if (name) return "Fingolfin's Challenge";
-		if (desc) return "Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks.";
-#endif
+		if (name) return _("フィンゴルフィンの挑戦", "Fingolfin's Challenge");
+		if (desc) return _("ダメージを受けなくなるバリアを張る。", 
+			"Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks.");
     
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-#ifdef JP
-				msg_print("フィンゴルフィンの冥王への挑戦を歌った．．．");
-#else
-				msg_print("You recall the valor of Fingolfin's challenge to the Dark Lord...");
-#endif
+			msg_print(_("フィンゴルフィンの冥王への挑戦を歌った．．．",
+						"You recall the valor of Fingolfin's challenge to the Dark Lord..."));
 
-				/* Redraw map */
-				p_ptr->redraw |= (PR_MAP);
+			/* Redraw map */
+			p_ptr->redraw |= (PR_MAP);
 		
-				/* Update monsters */
-				p_ptr->update |= (PU_MONSTERS);
+			/* Update monsters */
+			p_ptr->update |= (PU_MONSTERS);
 		
-				/* Window stuff */
-				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+			/* Window stuff */
+			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-				start_singing(spell, MUSIC_INVULN);
+			start_singing(spell, MUSIC_INVULN);
 		}
 
 		if (stop)
 		{
 			if (!p_ptr->invuln)
 			{
-#ifdef JP
-				msg_print("無敵ではなくなった。");
-#else
-				msg_print("The invulnerability wears off.");
-#endif
+				msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
 				/* Redraw map */
 				p_ptr->redraw |= (PR_MAP);
 
@@ -10335,13 +7911,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 	switch (spell)
 	{
 	case 0:
-#ifdef JP
-		if (name) return "飛飯綱";
-		if (desc) return "2マス離れたところにいるモンスターを攻撃する。";
-#else
-		if (name) return "Tobi-Izuna";
-		if (desc) return "Attacks a two squares distant monster.";
-#endif
+		if (name) return _("飛飯綱", "Tobi-Izuna");
+		if (desc) return _("2マス離れたところにいるモンスターを攻撃する。", "Attacks a two squares distant monster.");
     
 		if (cast)
 		{
@@ -10353,13 +7924,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "五月雨斬り";
-		if (desc) return "3方向に対して攻撃する。";
-#else
-		if (name) return "3-Way Attack";
-		if (desc) return "Attacks in 3 directions in one time.";
-#endif
+		if (name) return _("五月雨斬り", "3-Way Attack");
+		if (desc) return _("3方向に対して攻撃する。", "Attacks in 3 directions in one time.");
     
 		if (cast)
 		{
@@ -10381,42 +7947,28 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			if (cave[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
-#ifdef JP
-				msg_print("攻撃は空を切った。");
-#else
-				msg_print("You attack the empty air.");
-#endif
+				msg_print(_("攻撃は空を切った。", "You attack the empty air."));
+			
 			y = py + ddy_cdd[(cdir + 7) % 8];
 			x = px + ddx_cdd[(cdir + 7) % 8];
 			if (cave[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
-#ifdef JP
-				msg_print("攻撃は空を切った。");
-#else
-				msg_print("You attack the empty air.");
-#endif
+				msg_print(_("攻撃は空を切った。", "You attack the empty air."));
+			
 			y = py + ddy_cdd[(cdir + 1) % 8];
 			x = px + ddx_cdd[(cdir + 1) % 8];
 			if (cave[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
-#ifdef JP
-				msg_print("攻撃は空を切った。");
-#else
-				msg_print("You attack the empty air.");
-#endif
+				msg_print(_("攻撃は空を切った。", "You attack the empty air."));
 		}
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "ブーメラン";
-		if (desc) return "武器を手元に戻ってくるように投げる。戻ってこないこともある。";
-#else
-		if (name) return "Boomerang";
-		if (desc) return "Throws current weapon. And it'll return to your hand unless failed.";
-#endif
+		if (name) return _("ブーメラン", "Boomerang");
+		if (desc) return _("武器を手元に戻ってくるように投げる。戻ってこないこともある。", 
+			"Throws current weapon. And it'll return to your hand unless failed.");
     
 		if (cast)
 		{
@@ -10425,13 +7977,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "焔霊";
-		if (desc) return "火炎耐性のないモンスターに大ダメージを与える。";
-#else
-		if (name) return "Burning Strike";
-		if (desc) return "Attacks a monster with more damage unless it has resistance to fire.";
-#endif
+		if (name) return _("焔霊", "Burning Strike");
+		if (desc) return _("火炎耐性のないモンスターに大ダメージを与える。", "Attacks a monster with more damage unless it has resistance to fire.");
     
 		if (cast)
 		{
@@ -10447,24 +7994,15 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_FIRE);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "殺気感知";
-		if (desc) return "近くの思考することができるモンスターを感知する。";
-#else
-		if (name) return "Detect Ferocity";
-		if (desc) return "Detects all monsters except mindless in your vicinity.";
-#endif
+		if (name) return _("殺気感知", "Detect Ferocity");
+		if (desc) return _("近くの思考することができるモンスターを感知する。", "Detects all monsters except mindless in your vicinity.");
     
 		if (cast)
 		{
@@ -10473,13 +8011,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "みね打ち";
-		if (desc) return "相手にダメージを与えないが、朦朧とさせる。";
-#else
-		if (name) return "Strike to Stun";
-		if (desc) return "Attempts to stun a monster in the adjacent.";
-#endif
+		if (name) return _("みね打ち", "Strike to Stun");
+		if (desc) return _("相手にダメージを与えないが、朦朧とさせる。", "Attempts to stun a monster in the adjacent.");
     
 		if (cast)
 		{
@@ -10495,53 +8028,33 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_MINEUCHI);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "カウンター";
-		if (desc) return "相手に攻撃されたときに反撃する。反撃するたびにMPを消費。";
-#else
-		if (name) return "Counter";
-		if (desc) return "Prepares to counterattack. When attack by a monster, strikes back using SP each time.";
-#endif
+		if (name) return _("カウンター", "Counter");
+		if (desc) return _("相手に攻撃されたときに反撃する。反撃するたびにMPを消費。", 
+			"Prepares to counterattack. When attack by a monster, strikes back using SP each time.");
     
 		if (cast)
 		{
 			if (p_ptr->riding)
 			{
-#ifdef JP
-				msg_print("乗馬中には無理だ。");
-#else
-				msg_print("You cannot do it when riding.");
-#endif
+				msg_print(_("乗馬中には無理だ。", "You cannot do it when riding."));
 				return NULL;
 			}
-#ifdef JP
-			msg_print("相手の攻撃に対して身構えた。");
-#else
-			msg_print("You prepare to counter blow.");
-#endif
+			msg_print(_("相手の攻撃に対して身構えた。", "You prepare to counter blow."));
 			p_ptr->counter = TRUE;
 		}
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "払い抜け";
-		if (desc) return "攻撃した後、反対側に抜ける。";
-#else
-		if (name) return "Harainuke";
-		if (desc) return "Attacks monster with your weapons normally, then move through counter side of the monster.";
-#endif
+		if (name) return _("払い抜け", "Harainuke");
+		if (desc) return _("攻撃した後、反対側に抜ける。", 
+			"Attacks monster with your weapons normally, then move through counter side of the monster.");
     
 		if (cast)
 		{
@@ -10549,11 +8062,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 			if (p_ptr->riding)
 			{
-#ifdef JP
-				msg_print("乗馬中には無理だ。");
-#else
-				msg_print("You cannot do it when riding.");
-#endif
+				msg_print(_("乗馬中には無理だ。", "You cannot do it when riding."));
 				return NULL;
 			}
 	
@@ -10565,11 +8074,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 	
 			if (!cave[y][x].m_idx)
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 	
@@ -10592,13 +8097,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 8:
-#ifdef JP
-		if (name) return "サーペンツタン";
-		if (desc) return "毒耐性のないモンスターに大ダメージを与える。";
-#else
-		if (name) return "Serpent's Tongue";
-		if (desc) return "Attacks a monster with more damage unless it has resistance to poison.";
-#endif
+		if (name) return _("サーペンツタン", "Serpent's Tongue");
+		if (desc) return _("毒耐性のないモンスターに大ダメージを与える。", "Attacks a monster with more damage unless it has resistance to poison.");
     
 		if (cast)
 		{
@@ -10614,24 +8114,16 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_POISON);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "斬魔剣弐の太刀";
-		if (desc) return "生命のない邪悪なモンスターに大ダメージを与えるが、他のモンスターには全く効果がない。";
-#else
-		if (name) return "Zammaken";
-		if (desc) return "Attacks an evil unliving monster with great damage. No effect to other  monsters.";
-#endif
+		if (name) return _("斬魔剣弐の太刀", "Zammaken");
+		if (desc) return _("生命のない邪悪なモンスターに大ダメージを与えるが、他のモンスターには全く効果がない。", 
+			"Attacks an evil unliving monster with great damage. No effect to other  monsters.");
     
 		if (cast)
 		{
@@ -10647,24 +8139,15 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_ZANMA);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "裂風剣";
-		if (desc) return "攻撃した相手を後方へ吹き飛ばす。";
-#else
-		if (name) return "Wind Blast";
-		if (desc) return "Attacks an adjacent monster, and blow it away.";
-#endif
+		if (name) return _("裂風剣", "Wind Blast");
+		if (desc) return _("攻撃した相手を後方へ吹き飛ばす。", "Attacks an adjacent monster, and blow it away.");
     
 		if (cast)
 		{
@@ -10680,11 +8163,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, 0);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 			if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
@@ -10715,11 +8194,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				}
 				if ((ty != oy) || (tx != ox))
 				{
-#ifdef JP
-					msg_format("%sを吹き飛ばした！", m_name);
-#else
-					msg_format("You blow %s away!", m_name);
-#endif
+					msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
 					cave[oy][ox].m_idx = 0;
 					cave[ty][tx].m_idx = m_idx;
 					m_ptr->fy = ty;
@@ -10737,13 +8212,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "刀匠の目利き";
-		if (desc) return "武器・防具を1つ識別する。レベル45以上で武器・防具の能力を完全に知ることができる。";
-#else
-		if (name) return "Judge";
-		if (desc) return "Identifies a weapon or armor. Or *identifies* these at level 45.";
-#endif
+		if (name) return _("刀匠の目利き", "Judge");
+		if (desc) return _("武器・防具を1つ識別する。レベル45以上で武器・防具の能力を完全に知ることができる。", 
+			"Identifies a weapon or armor. Or *identifies* these at level 45.");
     
 		if (cast)
 		{
@@ -10759,13 +8230,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "破岩斬";
-		if (desc) return "岩を壊し、岩石系のモンスターに大ダメージを与える。";
-#else
-		if (name) return "Rock Smash";
-		if (desc) return "Breaks rock. Or greatly damage a monster made by rocks.";
-#endif
+		if (name) return _("破岩斬", "Rock Smash");
+		if (desc) return _("岩を壊し、岩石系のモンスターに大ダメージを与える。", "Breaks rock. Or greatly damage a monster made by rocks.");
     
 		if (cast)
 		{
@@ -10791,13 +8257,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "乱れ雪月花";
-		if (desc) return "攻撃回数が増え、冷気耐性のないモンスターに大ダメージを与える。";
-#else
-		if (name) return "Midare-Setsugekka";
-		if (desc) return "Attacks a monster with increased number of attacks and more damage unless it has resistance to cold.";
-#endif
+		if (name) return _("乱れ雪月花", "Midare-Setsugekka");
+		if (desc) return _("攻撃回数が増え、冷気耐性のないモンスターに大ダメージを与える。", 
+			"Attacks a monster with increased number of attacks and more damage unless it has resistance to cold.");
     
 		if (cast)
 		{
@@ -10813,24 +8275,16 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_COLD);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "急所突き";
-		if (desc) return "モンスターを一撃で倒す攻撃を繰り出す。失敗すると1点しかダメージを与えられない。";
-#else
-		if (name) return "Spot Aiming";
-		if (desc) return "Attempts to kill a monster instantly. If failed cause only 1HP of damage.";
-#endif
+		if (name) return _("急所突き", "Spot Aiming");
+		if (desc) return _("モンスターを一撃で倒す攻撃を繰り出す。失敗すると1点しかダメージを与えられない。", 
+			"Attempts to kill a monster instantly. If failed cause only 1HP of damage.");
     
 		if (cast)
 		{
@@ -10846,24 +8300,16 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_KYUSHO);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "魔神斬り";
-		if (desc) return "会心の一撃で攻撃する。攻撃がかわされやすい。";
-#else
-		if (name) return "Majingiri";
-		if (desc) return "Attempts to attack with critical hit. But this attack is easy to evade for a monster.";
-#endif
+		if (name) return _("魔神斬り", "Majingiri");
+		if (desc) return _("会心の一撃で攻撃する。攻撃がかわされやすい。", 
+			"Attempts to attack with critical hit. But this attack is easy to evade for a monster.");
     
 		if (cast)
 		{
@@ -10879,24 +8325,16 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_MAJIN);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 16:
-#ifdef JP
-		if (name) return "捨て身";
-		if (desc) return "強力な攻撃を繰り出す。次のターンまでの間、食らうダメージが増える。";
-#else
-		if (name) return "Desperate Attack";
-		if (desc) return "Attacks with all of your power. But all damages you take will be doubled for one turn.";
-#endif
+		if (name) return _("捨て身", "Desperate Attack");
+		if (desc) return _("強力な攻撃を繰り出す。次のターンまでの間、食らうダメージが増える。", 
+			"Attacks with all of your power. But all damages you take will be doubled for one turn.");
     
 		if (cast)
 		{
@@ -10912,11 +8350,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_SUTEMI);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 			p_ptr->sutemi = TRUE;
@@ -10924,13 +8358,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "雷撃鷲爪斬";
-		if (desc) return "電撃耐性のないモンスターに非常に大きいダメージを与える。";
-#else
-		if (name) return "Lightning Eagle";
-		if (desc) return "Attacks a monster with more damage unless it has resistance to electricity.";
-#endif
+		if (name) return _("雷撃鷲爪斬", "Lightning Eagle");
+		if (desc) return _("電撃耐性のないモンスターに非常に大きいダメージを与える。", 
+			"Attacks a monster with more damage unless it has resistance to electricity.");
     
 		if (cast)
 		{
@@ -10946,24 +8376,15 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_ELEC);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "入身";
-		if (desc) return "素早く相手に近寄り攻撃する。";
-#else
-		if (name) return "Rush Attack";
-		if (desc) return "Steps close to a monster and attacks at a time.";
-#endif
+		if (name) return _("入身", "Rush Attack");
+		if (desc) return _("素早く相手に近寄り攻撃する。", "Steps close to a monster and attacks at a time.");
     
 		if (cast)
 		{
@@ -10972,13 +8393,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "赤流渦";
-		if (desc) return "自分自身も傷を作りつつ、その傷が深いほど大きい威力で全方向の敵を攻撃できる。生きていないモンスターには効果がない。";
-#else
-		if (name) return "Bloody Maelstrom";
-		if (desc) return "Attacks all adjacent monsters with power corresponding to your cut status. Then increases your cut status. No effect to unliving monsters.";
-#endif
+		if (name) return _("赤流渦", "Bloody Maelstrom");
+		if (desc) return _("自分自身も傷を作りつつ、その傷が深いほど大きい威力で全方向の敵を攻撃できる。生きていないモンスターには効果がない。", 
+			"Attacks all adjacent monsters with power corresponding to your cut status. Then increases your cut status. No effect to unliving monsters.");
     
 		if (cast)
 		{
@@ -11009,11 +8426,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 						char m_name[80];
 	
 						monster_desc(m_name, m_ptr, 0);
-#ifdef JP
-						msg_format("%sには効果がない！", m_name);
-#else
-						msg_format("%s is unharmed!", m_name);
-#endif
+						msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name);
 					}
 					else py_attack(y, x, HISSATSU_SEKIRYUKA);
 				}
@@ -11022,13 +8435,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "激震撃";
-		if (desc) return "地震を起こす。";
-#else
-		if (name) return "Earthquake Blow";
-		if (desc) return "Shakes dungeon structure, and results in random swapping of floors and walls.";
-#endif
+		if (name) return _("激震撃", "Earthquake Blow");
+		if (desc) return _("地震を起こす。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
     
 		if (cast)
 		{
@@ -11048,13 +8456,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "地走り";
-		if (desc) return "衝撃波のビームを放つ。";
-#else
-		if (name) return "Crack";
-		if (desc) return "Fires a beam of shock wave.";
-#endif
+		if (name) return _("地走り", "Crack");
+		if (desc) return _("衝撃波のビームを放つ。", "Fires a beam of shock wave.");
     
 		if (cast)
 		{
@@ -11062,11 +8465,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			u32b flgs[TR_FLAG_SIZE];
 			object_type *o_ptr;
 			if (!get_aim_dir(&dir)) return NULL;
-#ifdef JP
-			msg_print("武器を大きく振り下ろした。");
-#else
-			msg_print("You swing your weapon downward.");
-#endif
+			msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
 			for (i = 0; i < 2; i++)
 			{
 				int damage;
@@ -11098,34 +8497,21 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "気迫の雄叫び";
-		if (desc) return "視界内の全モンスターに対して轟音の攻撃を行う。さらに、近くにいるモンスターを怒らせる。";
-#else
-		if (name) return "War Cry";
-		if (desc) return "Damages all monsters in sight with sound. Aggravate nearby monsters.";
-#endif
+		if (name) return _("気迫の雄叫び", "War Cry");
+		if (desc) return _("視界内の全モンスターに対して轟音の攻撃を行う。さらに、近くにいるモンスターを怒らせる。", 
+			"Damages all monsters in sight with sound. Aggravate nearby monsters.");
     
 		if (cast)
 		{
-#ifdef JP
-			msg_print("雄叫びをあげた！");
-#else
-			msg_print("You roar out!");
-#endif
+			msg_print(_("雄叫びをあげた！", "You roar out!"));
 			project_hack(GF_SOUND, randint1(plev * 3));
 			aggravate_monsters(0);
 		}
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "無双三段";
-		if (desc) return "強力な3段攻撃を繰り出す。";
-#else
-		if (name) return "Musou-Sandan";
-		if (desc) return "Attacks with powerful 3 strikes.";
-#endif
+		if (name) return _("無双三段", "Musou-Sandan");
+		if (desc) return _("強力な3段攻撃を繰り出す。", "Attacks with powerful 3 strikes.");
     
 		if (cast)
 		{
@@ -11150,11 +8536,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 					py_attack(y, x, HISSATSU_3DAN);
 				else
 				{
-#ifdef JP
-					msg_print("その方向にはモンスターはいません。");
-#else
-					msg_print("There is no monster.");
-#endif
+					msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 					return NULL;
 				}
 	
@@ -11210,13 +8592,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 24:
-#ifdef JP
-		if (name) return "吸血鬼の牙";
-		if (desc) return "攻撃した相手の体力を吸いとり、自分の体力を回復させる。生命を持たないモンスターには通じない。";
-#else
-		if (name) return "Vampire's Fang";
-		if (desc) return "Attacks with vampiric strikes which absorbs HP from a monster and gives them to you. No effect to unliving monsters.";
-#endif
+		if (name) return _("吸血鬼の牙", "Vampire's Fang");
+		if (desc) return _("攻撃した相手の体力を吸いとり、自分の体力を回復させる。生命を持たないモンスターには通じない。", 
+			"Attacks with vampiric strikes which absorbs HP from a monster and gives them to you. No effect to unliving monsters.");
     
 		if (cast)
 		{
@@ -11232,32 +8610,19 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_DRAIN);
 			else
 			{
-#ifdef JP
-					msg_print("その方向にはモンスターはいません。");
-#else
-					msg_print("There is no monster.");
-#endif
+					msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "幻惑";
-		if (desc) return "視界内の起きている全モンスターに朦朧、混乱、眠りを与えようとする。";
-#else
-		if (name) return "Moon Dazzling";
-		if (desc) return "Attempts to stun, confuse and sleep all waking monsters.";
-#endif
+		if (name) return _("幻惑", "Moon Dazzling");
+		if (desc) return _("視界内の起きている全モンスターに朦朧、混乱、眠りを与えようとする。", "Attempts to stun, confuse and sleep all waking monsters.");
     
 		if (cast)
 		{
-#ifdef JP
-			msg_print("武器を不規則に揺らした．．．");
-#else
-			msg_print("You irregularly wave your weapon...");
-#endif
+			msg_print(_("武器を不規則に揺らした．．．", "You irregularly wave your weapon..."));
 			project_hack(GF_ENGETSU, plev * 4);
 			project_hack(GF_ENGETSU, plev * 4);
 			project_hack(GF_ENGETSU, plev * 4);
@@ -11265,13 +8630,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "百人斬り";
-		if (desc) return "連続して入身でモンスターを攻撃する。攻撃するたびにMPを消費。MPがなくなるか、モンスターを倒せなかったら百人斬りは終了する。";
-#else
-		if (name) return "Hundred Slaughter";
-		if (desc) return "Performs a series of rush attacks. The series continues while killing each monster in a time and SP remains.";
-#endif
+		if (name) return _("百人斬り", "Hundred Slaughter");
+		if (desc) return _("連続して入身でモンスターを攻撃する。攻撃するたびにMPを消費。MPがなくなるか、モンスターを倒せなかったら百人斬りは終了する。", 
+			"Performs a series of rush attacks. The series continues while killing each monster in a time and SP remains.");
     
 		if (cast)
 		{
@@ -11307,13 +8668,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "天翔龍閃";
-		if (desc) return "視界内の場所を指定して、その場所と自分の間にいる全モンスターを攻撃し、その場所に移動する。";
-#else
-		if (name) return "Dragonic Flash";
-		if (desc) return "Runs toward given location while attacking all monsters on the path.";
-#endif
+		if (name) return _("天翔龍閃", "Dragonic Flash");
+		if (desc) return _("視界内の場所を指定して、その場所と自分の間にいる全モンスターを攻撃し、その場所に移動する。", 
+			"Runs toward given location while attacking all monsters on the path.");
     
 		if (cast)
 		{
@@ -11325,21 +8682,12 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			    (distance(y, x, py, px) > MAX_SIGHT / 2) ||
 			    !projectable(py, px, y, x))
 			{
-#ifdef JP
-				msg_print("失敗！");
-#else
-				msg_print("You cannot move to that place!");
-#endif
+				msg_print(_("失敗！", "You cannot move to that place!"));
 				break;
 			}
 			if (p_ptr->anti_tele)
 			{
-#ifdef JP
-				msg_print("不思議な力がテレポートを防いだ！");
-#else
-				msg_print("A mysterious force prevents you from teleporting!");
-#endif
-	
+				msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 				break;
 			}
 			project(0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL, -1);
@@ -11348,13 +8696,8 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "二重の剣撃";
-		if (desc) return "1ターンで2度攻撃を行う。";
-#else
-		if (name) return "Twin Slash";
-		if (desc) return "double attacks at a time.";
-#endif
+		if (name) return _("二重の剣撃", "Twin Slash");
+		if (desc) return _("1ターンで2度攻撃を行う。", "double attacks at a time.");
     
 		if (cast)
 		{
@@ -11376,24 +8719,15 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			}
 			else
 			{
-#ifdef JP
-	msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("You don't see any monster in this direction");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
 				return NULL;
 			}
 		}
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "虎伏絶刀勢";
-		if (desc) return "強力な攻撃を行い、近くの場所にも効果が及ぶ。";
-#else
-		if (name) return "Kofuku-Zettousei";
-		if (desc) return "Performs a powerful attack which even effect nearby monsters.";
-#endif
+		if (name) return _("虎伏絶刀勢", "Kofuku-Zettousei");
+		if (desc) return _("強力な攻撃を行い、近くの場所にも効果が及ぶ。", "Performs a powerful attack which even effect nearby monsters.");
     
 		if (cast)
 		{
@@ -11410,18 +8744,10 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 			if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
 			{
-#ifdef JP
-				msg_print("なぜか攻撃することができない。");
-#else
-				msg_print("Something prevent you from attacking.");
-#endif
+				msg_print(_("なぜか攻撃することができない。", "Something prevent you from attacking."));
 				return "";
 			}
-#ifdef JP
-			msg_print("武器を大きく振り下ろした。");
-#else
-			msg_print("You swing your weapon downward.");
-#endif
+			msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
 			for (i = 0; i < 2; i++)
 			{
 				int damage;
@@ -11452,13 +8778,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "慶雲鬼忍剣";
-		if (desc) return "自分もダメージをくらうが、相手に非常に大きなダメージを与える。アンデッドには特に効果がある。";
-#else
-		if (name) return "Keiun-Kininken";
-		if (desc) return "Attacks a monster with extremely powerful damage. But you also takes some damages. Hurts a undead monster greatly.";
-#endif
+		if (name) return _("慶雲鬼忍剣", "Keiun-Kininken");
+		if (desc) return _("自分もダメージをくらうが、相手に非常に大きなダメージを与える。アンデッドには特に効果がある。", 
+			"Attacks a monster with extremely powerful damage. But you also takes some damages. Hurts a undead monster greatly.");
     
 		if (cast)
 		{
@@ -11474,44 +8796,23 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				py_attack(y, x, HISSATSU_UNDEAD);
 			else
 			{
-#ifdef JP
-				msg_print("その方向にはモンスターはいません。");
-#else
-				msg_print("There is no monster.");
-#endif
+				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
-#ifdef JP
-			take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "慶雲鬼忍剣を使った衝撃", -1);
-#else
-			take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "exhaustion on using Keiun-Kininken", -1);
-#endif
+			take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), _("慶雲鬼忍剣を使った衝撃", "exhaustion on using Keiun-Kininken"), -1);
 		}
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "切腹";
-		if (desc) return "「武士道とは、死ぬことと見つけたり。」";
-#else
-		if (name) return "Harakiri";
-		if (desc) return "'Busido is found in death'";
-#endif
+		if (name) return _("切腹", "Harakiri");
+		if (desc) return _("「武士道とは、死ぬことと見つけたり。」", "'Busido is found in death'");
 
 		if (cast)
 		{
 			int i;
-#ifdef JP
-	if (!get_check("本当に自殺しますか？")) return NULL;
-#else
-			if (!get_check("Do you really want to commit suicide? ")) return NULL;
-#endif
+			if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) return NULL;
 				/* Special Verification for suicide */
-#ifdef JP
-	prt("確認のため '@' を押して下さい。", 0, 0);
-#else
-			prt("Please verify SUICIDE by typing the '@' sign: ", 0, 0);
-#endif
+			prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
 	
 			flush();
 			i = inkey();
@@ -11524,11 +8825,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			}
 			else
 			{
-#ifdef JP
-				msg_print("武士道とは、死ぬことと見つけたり。");
-#else
-				msg_print("Meaning of Bushi-do is found in the death.");
-#endif
+				msg_print(_("武士道とは、死ぬことと見つけたり。", "Meaning of Bushi-do is found in the death."));
 				take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
 			}
 		}
@@ -11593,53 +8890,31 @@ static cptr do_hex_spell(int spell, int mode)
 	{
 	/*** 1st book (0-7) ***/
 	case 0:
-#ifdef JP
-		if (name) return "邪なる祝福";
-		if (desc) return "祝福により攻撃精度と防御力が上がる。";
-#else
-		if (name) return "Evily blessing";
-		if (desc) return "Attempts to increase +to_hit of a weapon and AC";
-#endif
+		if (name) return _("邪なる祝福", "Evily blessing");
+		if (desc) return _("祝福により攻撃精度と防御力が上がる。", "Attempts to increase +to_hit of a weapon and AC");
 		if (cast)
 		{
 			if (!p_ptr->blessed)
 			{
-#ifdef JP
-				msg_print("高潔な気分になった！");
-#else
-				msg_print("You feel righteous!");
-#endif
+				msg_print(_("高潔な気分になった！", "You feel righteous!"));
 			}
 		}
 		if (stop)
 		{
 			if (!p_ptr->blessed)
 			{
-#ifdef JP
-				msg_print("高潔な気分が消え失せた。");
-#else
-				msg_print("The prayer has expired.");
-#endif
+				msg_print(_("高潔な気分が消え失せた。", "The prayer has expired."));
 			}
 		}
 		break;
 
 	case 1:
-#ifdef JP
-		if (name) return "軽傷の治癒";
-		if (desc) return "HPや傷を少し回復させる。";
-#else
-		if (name) return "Cure light wounds";
-		if (desc) return "Heals cut and HP a little.";
-#endif
+		if (name) return _("軽傷の治癒", "Cure light wounds");
+		if (desc) return _("HPや傷を少し回復させる。", "Heals cut and HP a little.");
 		if (info) return info_heal(1, 10, 0);
 		if (cast)
 		{
-#ifdef JP
-			msg_print("気分が良くなってくる。");
-#else
-			msg_print("You feel better and better.");
-#endif
+			msg_print(_("気分が良くなってくる。", "You feel better and better."));
 		}
 		if (cast || cont)
 		{
@@ -11649,39 +8924,21 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 2:
-#ifdef JP
-		if (name) return "悪魔のオーラ";
-		if (desc) return "炎のオーラを身にまとい、回復速度が速くなる。";
-#else
-		if (name) return "Demonic aura";
-		if (desc) return "Gives fire aura and regeneration.";
-#endif
+		if (name) return _("悪魔のオーラ", "Demonic aura");
+		if (desc) return _("炎のオーラを身にまとい、回復速度が速くなる。", "Gives fire aura and regeneration.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("体が炎のオーラで覆われた。");
-#else
-			msg_print("You have enveloped by fiery aura!");
-#endif
+			msg_print(_("体が炎のオーラで覆われた。", "You have enveloped by fiery aura!"));
 		}
 		if (stop)
 		{
-#ifdef JP
-			msg_print("炎のオーラが消え去った。");
-#else
-			msg_print("Fiery aura disappeared.");
-#endif
+			msg_print(_("炎のオーラが消え去った。", "Fiery aura disappeared."));
 		}
 		break;
 
 	case 3:
-#ifdef JP
-		if (name) return "悪臭霧";
-		if (desc) return "視界内のモンスターに微弱量の毒のダメージを与える。";
-#else
-		if (name) return "Stinking mist";
-		if (desc) return "Deals few damages of poison to all monsters in your sight.";
-#endif
+		if (name) return _("悪臭霧", "Stinking mist");
+		if (desc) return _("視界内のモンスターに微弱量の毒のダメージを与える。", "Deals few damages of poison to all monsters in your sight.");
 		power = plev / 2 + 5;
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
@@ -11691,31 +8948,17 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 4:
-#ifdef JP
-		if (name) return "腕力強化";
-		if (desc) return "術者の腕力を上昇させる。";
-#else
-		if (name) return "Extra might";
-		if (desc) return "Attempts to increase your strength.";
-#endif
+		if (name) return _("腕力強化", "Extra might");
+		if (desc) return _("術者の腕力を上昇させる。", "Attempts to increase your strength.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("何だか力が湧いて来る。");
-#else
-			msg_print("You feel you get stronger.");
-#endif
+			msg_print(_("何だか力が湧いて来る。", "You feel you get stronger."));
 		}
 		break;
 
 	case 5:
-#ifdef JP
-		if (name) return "武器呪縛";
-		if (desc) return "装備している武器を呪う。";
-#else
-		if (name) return "Curse weapon";
-		if (desc) return "Curses your weapon.";
-#endif
+		if (name) return _("武器呪縛", "Curse weapon");
+		if (desc) return _("装備している武器を呪う。", "Curses your weapon.");
 		if (cast)
 		{
 			int item;
@@ -11725,13 +8968,8 @@ static cptr do_hex_spell(int spell, int mode)
 			u32b f[TR_FLAG_SIZE];
 
 			item_tester_hook = item_tester_hook_weapon_except_bow;
-#ifdef JP
-			q = "どれを呪いますか？";
-			s = "武器を装備していない。";
-#else
-			q = "Which weapon do you curse?";
-			s = "You wield no weapons.";
-#endif
+			q = _("どれを呪いますか？", "Which weapon do you curse?");
+			s = _("武器を装備していない。", "You wield no weapons.");
 
 			if (!get_item(&item, q, s, (USE_EQUIP))) return FALSE;
 
@@ -11739,20 +8977,12 @@ static cptr do_hex_spell(int spell, int mode)
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			object_flags(o_ptr, f);
 
-#ifdef JP
-			if (!get_check(format("本当に %s を呪いますか？", o_name))) return FALSE;
-#else
-			if (!get_check(format("Do you curse %s, really？", o_name))) return FALSE;
-#endif
+			if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name))) return FALSE;
 
 			if (!one_in_(3) &&
 				(object_is_artifact(o_ptr) || have_flag(f, TR_BLESSED)))
 			{
-#ifdef JP
-				msg_format("%s は呪いを跳ね返した。", o_name);
-#else
-				msg_format("%s resists the effect.", o_name);
-#endif
+				msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
 				if (one_in_(3))
 				{
 					if (o_ptr->to_d > 0)
@@ -11770,21 +9000,13 @@ static cptr do_hex_spell(int spell, int mode)
 						o_ptr->to_a -= randint1(3) % 2;
 						if (o_ptr->to_a < 0) o_ptr->to_a = 0;
 					}
-#ifdef JP
-					msg_format("%s は劣化してしまった。", o_name);
-#else
-					msg_format("Your %s was disenchanted!", o_name);
-#endif
+					msg_format(_("%s は劣化してしまった。", "Your %s was disenchanted!"), o_name);
 				}
 			}
 			else
 			{
 				int power = 0;
-#ifdef JP
-				msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
-#else
-				msg_format("A terrible black aura blasts your %s!", o_name);
-#endif
+				msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
 				o_ptr->curse_flags |= (TRC_CURSED);
 
 				if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
@@ -11799,11 +9021,7 @@ static cptr do_hex_spell(int spell, int mode)
 						add_flag(o_ptr->art_flags, TR_AGGRAVATE);
 						add_flag(o_ptr->art_flags, TR_VORPAL);
 						add_flag(o_ptr->art_flags, TR_VAMPIRIC);
-#ifdef JP
-						msg_print("血だ！血だ！血だ！");
-#else
-						msg_print("Blood, Blood, Blood!");
-#endif
+						msg_print(_("血だ！血だ！血だ！", "Blood, Blood, Blood!"));
 						power = 2;
 					}
 				}
@@ -11817,32 +9035,19 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 6:
-#ifdef JP
-		if (name) return "邪悪感知";
-		if (desc) return "周囲の邪悪なモンスターを感知する。";
-#else
-		if (name) return "Evil detection";
-		if (desc) return "Detects evil monsters.";
-#endif
+		if (name) return _("邪悪感知", "Evil detection");
+		if (desc) return _("周囲の邪悪なモンスターを感知する。", "Detects evil monsters.");
 		if (info) return info_range(MAX_SIGHT);
 		if (cast)
 		{
-#ifdef JP
-			msg_print("邪悪な生物の存在を感じ取ろうとした。");
-#else
-			msg_print("You attend to the presence of evil creatures.");
-#endif
+			msg_print(_("邪悪な生物の存在を感じ取ろうとした。", "You attend to the presence of evil creatures."));
 		}
 		break;
 
 	case 7:
-#ifdef JP
-		if (name) return "我慢";
-		if (desc) return "数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。";
-#else
-		if (name) return "Patience";
-		if (desc) return "Bursts hell fire strongly after patients any damage while few turns.";
-#endif
+		if (name) return _("我慢", "Patience");
+		if (desc) return _("数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。", 
+			"Bursts hell fire strongly after patients any damage while few turns.");
 		power = MIN(200, (p_ptr->magic_num1[2] * 2));
 		if (info) return info_damage(0, 0, power);
 		if (cast)
@@ -11852,22 +9057,14 @@ static cptr do_hex_spell(int spell, int mode)
 
 			if (p_ptr->magic_num2[2] > 0)
 			{
-#ifdef JP
-				msg_print("すでに我慢をしている。");
-#else
-				msg_print("You are already patienting.");
-#endif
+				msg_print(_("すでに我慢をしている。", "You are already patienting."));
 				return NULL;
 			}
 
 			p_ptr->magic_num2[1] = 1;
 			p_ptr->magic_num2[2] = r;
 			p_ptr->magic_num1[2] = 0;
-#ifdef JP
-			msg_print("じっと耐えることにした。");
-#else
-			msg_print("You decide to patient all damages.");
-#endif
+			msg_print(_("じっと耐えることにした。", "You decide to patient all damages."));
 			add = FALSE;
 		}
 		if (cont)
@@ -11878,11 +9075,7 @@ static cptr do_hex_spell(int spell, int mode)
 
 			if ((p_ptr->magic_num2[2] <= 0) || (power >= 200))
 			{
-#ifdef JP
-				msg_print("我慢が解かれた！");
-#else
-				msg_print("Time for end of patioence!");
-#endif
+				msg_print(_("我慢が解かれた！", "Time for end of patioence!"));
 				if (power)
 				{
 					project(0, rad, py, px, power, GF_HELL_FIRE,
@@ -11890,11 +9083,7 @@ static cptr do_hex_spell(int spell, int mode)
 				}
 				if (p_ptr->wizard)
 				{
-#ifdef JP
-					msg_format("%d点のダメージを返した。", power);
-#else
-					msg_format("You return %d damages.", power);
-#endif
+					msg_format(_("%d点のダメージを返した。", "You return %d damages."), power);
 				}
 
 				/* Reset */
@@ -11907,47 +9096,25 @@ static cptr do_hex_spell(int spell, int mode)
 
 	/*** 2nd book (8-15) ***/
 	case 8:
-#ifdef JP
-		if (name) return "氷の鎧";
-		if (desc) return "氷のオーラを身にまとい、防御力が上昇する。";
-#else
-		if (name) return "Ice armor";
-		if (desc) return "Gives fire aura and bonus to AC.";
-#endif
+		if (name) return _("氷の鎧", "Ice armor");
+		if (desc) return _("氷のオーラを身にまとい、防御力が上昇する。", "Gives fire aura and bonus to AC.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("体が氷の鎧で覆われた。");
-#else
-			msg_print("You have enveloped by ice armor!");
-#endif
+			msg_print(_("体が氷の鎧で覆われた。", "You have enveloped by ice armor!"));
 		}
 		if (stop)
 		{
-#ifdef JP
-			msg_print("氷の鎧が消え去った。");
-#else
-			msg_print("Ice armor disappeared.");
-#endif
+			msg_print(_("氷の鎧が消え去った。", "Ice armor disappeared."));
 		}
 		break;
 
 	case 9:
-#ifdef JP
-		if (name) return "重傷の治癒";
-		if (desc) return "体力や傷を多少回復させる。";
-#else
-		if (name) return "Cure serious wounds";
-		if (desc) return "Heals cut and HP more.";
-#endif
+		if (name) return _("重傷の治癒", "Cure serious wounds");
+		if (desc) return _("体力や傷を多少回復させる。", "Heals cut and HP more.");
 		if (info) return info_heal(2, 10, 0);
 		if (cast)
 		{
-#ifdef JP
-			msg_print("気分が良くなってくる。");
-#else
-			msg_print("You feel better and better.");
-#endif
+			msg_print(_("気分が良くなってくる。", "You feel better and better."));
 		}
 		if (cast || cont)
 		{
@@ -11957,13 +9124,8 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 10:
-#ifdef JP
-		if (name) return "薬品吸入";
-		if (desc) return "呪文詠唱を中止することなく、薬の効果を得ることができる。";
-#else
-		if (name) return "Inhail potion";
-		if (desc) return "Quaffs a potion without canceling of casting a spell.";
-#endif
+		if (name) return _("薬品吸入", "Inhail potion");
+		if (desc) return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling of casting a spell.");
 		if (cast)
 		{
 			p_ptr->magic_num1[0] |= (1L << HEX_INHAIL);
@@ -11974,13 +9136,9 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 11:
-#ifdef JP
-		if (name) return "吸血霧";
-		if (desc) return "視界内のモンスターに微弱量の生命力吸収のダメージを与える。与えたダメージの分、体力が回復する。";
-#else
-		if (name) return "Vampiric mist";
-		if (desc) return "Deals few dameges of drain life to all monsters in your sight.";
-#endif
+		if (name) return _("吸血霧", "Vampiric mist");
+		if (desc) return _("視界内のモンスターに微弱量の生命力吸収のダメージを与える。与えたダメージの分、体力が回復する。", 
+			"Deals few dameges of drain life to all monsters in your sight.");
 		power = (plev / 2) + 5;
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
@@ -11990,13 +9148,9 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 12:
-#ifdef JP
-		if (name) return "魔剣化";
-		if (desc) return "武器の攻撃力を上げる。切れ味を得、呪いに応じて与えるダメージが上昇し、善良なモンスターに対するダメージが2倍になる。";
-#else
-		if (name) return "Swords to runeswords";
-		if (desc) return "Gives vorpal ability to your weapon. Increases damages by your weapon acccording to curse of your weapon.";
-#endif
+		if (name) return _("魔剣化", "Swords to runeswords");
+		if (desc) return _("武器の攻撃力を上げる。切れ味を得、呪いに応じて与えるダメージが上昇し、善良なモンスターに対するダメージが2倍になる。", 
+			"Gives vorpal ability to your weapon. Increases damages by your weapon acccording to curse of your weapon.");
 		if (cast)
 		{
 #ifdef JP
@@ -12019,112 +9173,60 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 13:
-#ifdef JP
-		if (name) return "混乱の手";
-		if (desc) return "攻撃した際モンスターを混乱させる。";
-#else
-		if (name) return "Touch of confusion";
-		if (desc) return "Confuses a monster when you attack.";
-#endif
+		if (name) return _("混乱の手", "Touch of confusion");
+		if (desc) return _("攻撃した際モンスターを混乱させる。", "Confuses a monster when you attack.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("あなたの手が赤く輝き始めた。");
-#else
-			msg_print("Your hands glow bright red.");
-#endif
+			msg_print(_("あなたの手が赤く輝き始めた。", "Your hands glow bright red."));
 		}
 		if (stop)
 		{
-#ifdef JP
-			msg_print("手の輝きがなくなった。");
-#else
-			msg_print("Brightness on your hands disappeard.");
-#endif
+			msg_print(_("手の輝きがなくなった。", "Brightness on your hands disappeard."));
 		}
 		break;
 
 	case 14:
-#ifdef JP
-		if (name) return "肉体強化";
-		if (desc) return "術者の腕力、器用さ、耐久力を上昇させる。攻撃回数の上限を 1 増加させる。";
-#else
-		if (name) return "Building up";
-		if (desc) return "Attempts to increases your strength, dexterity and constitusion.";
-#endif
+		if (name) return _("肉体強化", "Building up");
+		if (desc) return _("術者の腕力、器用さ、耐久力を上昇させる。攻撃回数の上限を 1 増加させる。", 
+			"Attempts to increases your strength, dexterity and constitusion.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("身体が強くなった気がした。");
-#else
-			msg_print("You feel your body is developed more now.");
-#endif
+			msg_print(_("身体が強くなった気がした。", "You feel your body is developed more now."));
 		}
 		break;
 
 	case 15:
-#ifdef JP
-		if (name) return "反テレポート結界";
-		if (desc) return "視界内のモンスターのテレポートを阻害するバリアを張る。";
-#else
-		if (name) return "Anti teleport barrier";
-		if (desc) return "Obstructs all teleportations by monsters in your sight.";
-#endif
+		if (name) return _("反テレポート結界", "Anti teleport barrier");
+		if (desc) return _("視界内のモンスターのテレポートを阻害するバリアを張る。", "Obstructs all teleportations by monsters in your sight.");
 		power = plev * 3 / 2;
 		if (info) return info_power(power);
 		if (cast)
 		{
-#ifdef JP
-			msg_print("テレポートを防ぐ呪いをかけた。");
-#else
-			msg_print("You feel anyone can not teleport except you.");
-#endif
+			msg_print(_("テレポートを防ぐ呪いをかけた。", "You feel anyone can not teleport except you."));
 		}
 		break;
 
 	/*** 3rd book (16-23) ***/
 	case 16:
-#ifdef JP
-		if (name) return "衝撃のクローク";
-		if (desc) return "電気のオーラを身にまとい、動きが速くなる。";
-#else
-		if (name) return "Cloak of shock";
-		if (desc) return "Gives lightning aura and a bonus to speed.";
-#endif
+		if (name) return _("衝撃のクローク", "Cloak of shock");
+		if (desc) return _("電気のオーラを身にまとい、動きが速くなる。", "Gives lightning aura and a bonus to speed.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("体が稲妻のオーラで覆われた。");
-#else
-			msg_print("You have enveloped by electrical aura!");
-#endif
+			msg_print(_("体が稲妻のオーラで覆われた。", "You have enveloped by electrical aura!"));
 		}
 		if (stop)
 		{
-#ifdef JP
-			msg_print("稲妻のオーラが消え去った。");
-#else
-			msg_print("Electrical aura disappeared.");
-#endif
+			msg_print(_("稲妻のオーラが消え去った。", "Electrical aura disappeared."));
 		}
 		break;
 
 	case 17:
-#ifdef JP
-		if (name) return "致命傷の治癒";
-		if (desc) return "体力や傷を回復させる。";
-#else
-		if (name) return "Cure critical wounds";
-		if (desc) return "Heals cut and HP greatry.";
-#endif
+		if (name) return _("致命傷の治癒", "Cure critical wounds");
+		if (desc) return _("体力や傷を回復させる。", "Heals cut and HP greatry.");
 		if (info) return info_heal(4, 10, 0);
 		if (cast)
 		{
-#ifdef JP
-			msg_print("気分が良くなってくる。");
-#else
-			msg_print("You feel better and better.");
-#endif
+			msg_print(_("気分が良くなってくる。", "You feel better and better."));
 		}
 		if (cast || cont)
 		{
@@ -12136,13 +9238,8 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 18:
-#ifdef JP
-		if (name) return "呪力封入";
-		if (desc) return "魔法の道具に魔力を再充填する。";
-#else
-		if (name) return "Recharging";
-		if (desc) return "Recharges a magic device.";
-#endif
+		if (name) return _("呪力封入", "Recharging");
+		if (desc) return _("魔法の道具に魔力を再充填する。", "Recharges a magic device.");
 		power = plev * 2;
 		if (info) return info_power(power);
 		if (cast)
@@ -12153,20 +9250,11 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 19:
-#ifdef JP
-		if (name) return "死者復活";
-		if (desc) return "死体を蘇らせてペットにする。";
-#else
-		if (name) return "Animate Dead";
-		if (desc) return "Raises corpses and skeletons from dead.";
-#endif
+		if (name) return _("死者復活", "Animate Dead");
+		if (desc) return _("死体を蘇らせてペットにする。", "Raises corpses and skeletons from dead.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("死者への呼びかけを始めた。");
-#else
-			msg_print("You start to call deads.!");
-#endif
+			msg_print(_("死者への呼びかけを始めた。", "You start to call deads.!"));
 		}
 		if (cast || cont)
 		{
@@ -12175,13 +9263,8 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 20:
-#ifdef JP
-		if (name) return "防具呪縛";
-		if (desc) return "装備している防具に呪いをかける。";
-#else
-		if (name) return "Curse armor";
-		if (desc) return "Curse a piece of armour that you wielding.";
-#endif
+		if (name) return _("防具呪縛", "Curse armor");
+		if (desc) return _("装備している防具に呪いをかける。", "Curse a piece of armour that you wielding.");
 		if (cast)
 		{
 			int item;
@@ -12191,13 +9274,8 @@ static cptr do_hex_spell(int spell, int mode)
 			u32b f[TR_FLAG_SIZE];
 
 			item_tester_hook = object_is_armour;
-#ifdef JP
-			q = "どれを呪いますか？";
-			s = "防具を装備していない。";
-#else
-			q = "Which piece of armour do you curse?";
-			s = "You wield no piece of armours.";
-#endif
+			q = _("どれを呪いますか？", "Which piece of armour do you curse?");
+			s = _("防具を装備していない。", "You wield no piece of armours.");
 
 			if (!get_item(&item, q, s, (USE_EQUIP))) return FALSE;
 
@@ -12205,20 +9283,12 @@ static cptr do_hex_spell(int spell, int mode)
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			object_flags(o_ptr, f);
 
-#ifdef JP
-			if (!get_check(format("本当に %s を呪いますか？", o_name))) return FALSE;
-#else
-			if (!get_check(format("Do you curse %s, really？", o_name))) return FALSE;
-#endif
+			if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name))) return FALSE;
 
 			if (!one_in_(3) &&
 				(object_is_artifact(o_ptr) || have_flag(f, TR_BLESSED)))
 			{
-#ifdef JP
-				msg_format("%s は呪いを跳ね返した。", o_name);
-#else
-				msg_format("%s resists the effect.", o_name);
-#endif
+				msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
 				if (one_in_(3))
 				{
 					if (o_ptr->to_d > 0)
@@ -12236,21 +9306,13 @@ static cptr do_hex_spell(int spell, int mode)
 						o_ptr->to_a -= randint1(3) % 2;
 						if (o_ptr->to_a < 0) o_ptr->to_a = 0;
 					}
-#ifdef JP
-					msg_format("%s は劣化してしまった。", o_name);
-#else
-					msg_format("Your %s was disenchanted!", o_name);
-#endif
+					msg_format(_("%s は劣化してしまった。", "Your %s was disenchanted!"), o_name);
 				}
 			}
 			else
 			{
 				int power = 0;
-#ifdef JP
-				msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
-#else
-				msg_format("A terrible black aura blasts your %s!", o_name);
-#endif
+				msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
 				o_ptr->curse_flags |= (TRC_CURSED);
 
 				if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
@@ -12266,11 +9328,7 @@ static cptr do_hex_spell(int spell, int mode)
 						add_flag(o_ptr->art_flags, TR_RES_POIS);
 						add_flag(o_ptr->art_flags, TR_RES_DARK);
 						add_flag(o_ptr->art_flags, TR_RES_NETHER);
-#ifdef JP
-						msg_print("血だ！血だ！血だ！");
-#else
-						msg_print("Blood, Blood, Blood!");
-#endif
+						msg_print(_("血だ！血だ！血だ！", "Blood, Blood, Blood!"));
 						power = 2;
 					}
 				}
@@ -12284,42 +9342,25 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 21:
-#ifdef JP
-		if (name) return "影のクローク";
-		if (desc) return "影のオーラを身にまとい、敵に影のダメージを与える。";
-#else
-		if (name) return "Cloak of shadow";
-		if (desc) return "Gives aura of shadow.";
-#endif
+		if (name) return _("影のクローク", "Cloak of shadow");
+		if (desc) return _("影のオーラを身にまとい、敵に影のダメージを与える。", "Gives aura of shadow.");
 		if (cast)
 		{
 			object_type *o_ptr = &inventory[INVEN_OUTER];
 
 			if (!o_ptr->k_idx)
 			{
-#ifdef JP
-				msg_print("クロークを身につけていない！");
-#else
-				msg_print("You don't ware any cloak.");
-#endif
+				msg_print(_("クロークを身につけていない！", "You don't ware any cloak."));
 				return NULL;
 			}
 			else if (!object_is_cursed(o_ptr))
 			{
-#ifdef JP
-				msg_print("クロークは呪われていない！");
-#else
-				msg_print("Your cloak is not cursed.");
-#endif
+				msg_print(_("クロークは呪われていない！", "Your cloak is not cursed."));
 				return NULL;
 			}
 			else
 			{
-#ifdef JP
-				msg_print("影のオーラを身にまとった。");
-#else
-				msg_print("You have enveloped by shadow aura!");
-#endif
+				msg_print(_("影のオーラを身にまとった。", "You have enveloped by shadow aura!"));
 			}
 		}
 		if (cont)
@@ -12336,22 +9377,13 @@ static cptr do_hex_spell(int spell, int mode)
 		}
 		if (stop)
 		{
-#ifdef JP
-			msg_print("影のオーラが消え去った。");
-#else
-			msg_print("Shadow aura disappeared.");
-#endif
+			msg_print(_("影のオーラが消え去った。", "Shadow aura disappeared."));
 		}
 		break;
 
 	case 22:
-#ifdef JP
-		if (name) return "苦痛を魔力に";
-		if (desc) return "視界内のモンスターに精神ダメージ与え、魔力を吸い取る。";
-#else
-		if (name) return "Pains to mana";
-		if (desc) return "Deals psychic damages to all monsters in sight, and drains some mana.";
-#endif
+		if (name) return _("苦痛を魔力に", "Pains to mana");
+		if (desc) return _("視界内のモンスターに精神ダメージ与え、魔力を吸い取る。", "Deals psychic damages to all monsters in sight, and drains some mana.");
 		power = plev * 3 / 2;
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
@@ -12361,57 +9393,30 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 23:
-#ifdef JP
-		if (name) return "目には目を";
-		if (desc) return "打撃や魔法で受けたダメージを、攻撃元のモンスターにも与える。";
-#else
-		if (name) return "Eye for an eye";
-		if (desc) return "Returns same damage which you got to the monster which damaged you.";
-#endif
+		if (name) return _("目には目を", "Eye for an eye");
+		if (desc) return _("打撃や魔法で受けたダメージを、攻撃元のモンスターにも与える。", "Returns same damage which you got to the monster which damaged you.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("復讐したい欲望にかられた。");
-#else
-			msg_print("You wish strongly you want to revenge anything.");
-#endif
+			msg_print(_("復讐したい欲望にかられた。", "You wish strongly you want to revenge anything."));
 		}
 		break;
 
 	/*** 4th book (24-31) ***/
 	case 24:
-#ifdef JP
-		if (name) return "反増殖結界";
-		if (desc) return "その階の増殖するモンスターの増殖を阻止する。";
-#else
-		if (name) return "Anti multiply barrier";
-		if (desc) return "Obstructs all multiplying by monsters in entire floor.";
-#endif
+		if (name) return _("反増殖結界", "Anti multiply barrier");
+		if (desc) return _("その階の増殖するモンスターの増殖を阻止する。", "Obstructs all multiplying by monsters in entire floor.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("増殖を阻止する呪いをかけた。");
-#else
-			msg_print("You feel anyone can not already multiply.");
-#endif
+			msg_print(_("増殖を阻止する呪いをかけた。", "You feel anyone can not already multiply."));
 		}
 		break;
 
 	case 25:
-#ifdef JP
-		if (name) return "全復活";
-		if (desc) return "経験値を徐々に復活し、減少した能力値を回復させる。";
-#else
-		if (name) return "Restoration";
-		if (desc) return "Restores experience and status.";
-#endif
+		if (name) return _("全復活", "Restoration");
+		if (desc) return _("経験値を徐々に復活し、減少した能力値を回復させる。", "Restores experience and status.");
 		if (cast)
 		{
-#ifdef JP
-			msg_print("体が元の活力を取り戻し始めた。");
-#else
-			msg_print("You feel your lost status starting to return.");
-#endif
+			msg_print(_("体が元の活力を取り戻し始めた。", "You feel your lost status starting to return."));
 		}
 		if (cast || cont)
 		{
@@ -12453,11 +9458,7 @@ static cptr do_hex_spell(int spell, int mode)
 
 			if (!flag)
 			{
-#ifdef JP
-				msg_format("%sの呪文の詠唱をやめた。", do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
-#else
-				msg_format("Finish casting '%^s'.", do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
-#endif
+				msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
 				p_ptr->magic_num1[0] &= ~(1L << HEX_RESTORE);
 				if (cont) p_ptr->magic_num2[0]--;
 				if (p_ptr->magic_num2) p_ptr->action = ACTION_NONE;
@@ -12472,13 +9473,8 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 26:
-#ifdef JP
-		if (name) return "呪力吸収";
-		if (desc) return "呪われた武器の呪いを吸収して魔力を回復する。";
-#else
-		if (name) return "Drain curse power";
-		if (desc) return "Drains curse on your weapon and heals SP a little.";
-#endif
+		if (name) return _("呪力吸収", "Drain curse power");
+		if (desc) return _("呪われた武器の呪いを吸収して魔力を回復する。", "Drains curse on your weapon and heals SP a little.");
 		if (cast)
 		{
 			int item;
@@ -12487,13 +9483,8 @@ static cptr do_hex_spell(int spell, int mode)
 			object_type *o_ptr;
 
 			item_tester_hook = item_tester_hook_cursed;
-#ifdef JP
-			q = "どの装備品から吸収しますか？";
-			s = "呪われたアイテムを装備していない。";
-#else
-			q = "Which cursed equipment do you drain mana from?";
-			s = "You have no cursed equipment.";
-#endif
+			q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
+			s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
 
 			if (!get_item(&item, q, s, (USE_EQUIP))) return FALSE;
 
@@ -12512,21 +9503,13 @@ static cptr do_hex_spell(int spell, int mode)
 			{
 				if (one_in_(7))
 				{
-#ifdef JP
-					msg_print("呪いを全て吸い取った。");
-#else
-					msg_print("Heavy curse vanished away.");
-#endif
+					msg_print(_("呪いを全て吸い取った。", "Heavy curse vanished away."));
 					o_ptr->curse_flags = 0L;
 				}
 			}
 			else if ((o_ptr->curse_flags & (TRC_CURSED)) && one_in_(3))
 			{
-#ifdef JP
-				msg_print("呪いを全て吸い取った。");
-#else
-				msg_print("Curse vanished away.");
-#endif
+				msg_print(_("呪いを全て吸い取った。", "Curse vanished away."));
 				o_ptr->curse_flags = 0L;
 			}
 
@@ -12535,13 +9518,8 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 27:
-#ifdef JP
-		if (name) return "吸血の刃";
-		if (desc) return "吸血属性で攻撃する。";
-#else
-		if (name) return "Swords to vampires";
-		if (desc) return "Gives vampiric ability to your weapon.";
-#endif
+		if (name) return _("吸血の刃", "Swords to vampires");
+		if (desc) return _("吸血属性で攻撃する。", "Gives vampiric ability to your weapon.");
 		if (cast)
 		{
 #ifdef JP
@@ -12564,13 +9542,8 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 28:
-#ifdef JP
-		if (name) return "朦朧の言葉";
-		if (desc) return "視界内のモンスターを朦朧とさせる。";
-#else
-		if (name) return "Word of stun";
-		if (desc) return "Stuns all monsters in your sight.";
-#endif
+		if (name) return _("朦朧の言葉", "Word of stun");
+		if (desc) return _("視界内のモンスターを朦朧とさせる。", "Stuns all monsters in your sight.");
 		power = plev * 4;
 		if (info) return info_power(power);
 		if (cast || cont)
@@ -12580,13 +9553,8 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 29:
-#ifdef JP
-		if (name) return "影移動";
-		if (desc) return "モンスターの隣のマスに瞬間移動する。";
-#else
-		if (name) return "Moving into shadow";
-		if (desc) return "Teleports you close to a monster.";
-#endif
+		if (name) return _("影移動", "Moving into shadow");
+		if (desc) return _("モンスターの隣のマスに瞬間移動する。", "Teleports you close to a monster.");
 		if (cast)
 		{
 			int i, y, x, dir;
@@ -12609,11 +9577,7 @@ static cptr do_hex_spell(int spell, int mode)
 				if (!cave_empty_bold(y, x) || (cave[y][x].info & CAVE_ICKY) ||
 					(distance(y, x, py, px) > plev + 2))
 				{
-#ifdef JP
-					msg_print("そこには移動できない。");
-#else
-					msg_print("Can not teleport to there.");
-#endif
+					msg_print(_("そこには移動できない。", "Can not teleport to there."));
 					continue;
 				}
 				break;
@@ -12625,11 +9589,7 @@ static cptr do_hex_spell(int spell, int mode)
 			}
 			else
 			{
-#ifdef JP
-				msg_print("おっと！");
-#else
-				msg_print("Oops!");
-#endif
+				msg_print(_("おっと！", "Oops!"));
 				teleport_player(30, 0L);
 			}
 
@@ -12638,33 +9598,20 @@ static cptr do_hex_spell(int spell, int mode)
 		break;
 
 	case 30:
-#ifdef JP
-		if (name) return "反魔法結界";
-		if (desc) return "視界内のモンスターの魔法を阻害するバリアを張る。";
-#else
-		if (name) return "Anti magic barrier";
-		if (desc) return "Obstructs all magic spell of monsters in your sight.";
-#endif
+		if (name) return _("反魔法結界", "Anti magic barrier");
+		if (desc) return _("視界内のモンスターの魔法を阻害するバリアを張る。", "Obstructs all magic spell of monsters in your sight.");
 		power = plev * 3 / 2;
 		if (info) return info_power(power);
 		if (cast)
 		{
-#ifdef JP
-			msg_print("魔法を防ぐ呪いをかけた。");
-#else
-			msg_print("You feel anyone can not cast spells except you.");
-#endif
+			msg_print(_("魔法を防ぐ呪いをかけた。", "You feel anyone can not cast spells except you."));
 		}
 		break;
 
 	case 31:
-#ifdef JP
-		if (name) return "復讐の宣告";
-		if (desc) return "数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。";
-#else
-		if (name) return "Revenge sentence";
-		if (desc) return "Fires  a ball of hell fire to try revenging after few turns.";
-#endif
+		if (name) return _("復讐の宣告", "Revenge sentence");
+		if (desc) return _("数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。", 
+			"Fires  a ball of hell fire to try revenging after few turns.");
 		power = p_ptr->magic_num1[2];
 		if (info) return info_damage(0, 0, power);
 		if (cast)
@@ -12675,21 +9622,13 @@ static cptr do_hex_spell(int spell, int mode)
 
 			if (p_ptr->magic_num2[2] > 0)
 			{
-#ifdef JP
-				msg_print("すでに復讐は宣告済みだ。");
-#else
-				msg_print("You already pronounced your revenge.");
-#endif
+				msg_print(_("すでに復讐は宣告済みだ。", "You already pronounced your revenge."));
 				return NULL;
 			}
 
 			p_ptr->magic_num2[1] = 2;
 			p_ptr->magic_num2[2] = r;
-#ifdef JP
-			msg_format("あなたは復讐を宣告した。あと %d ターン。", r);
-#else
-			msg_format("You pronounce your revenge. %d turns left.", r);
-#endif
+			msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You pronounce your revenge. %d turns left."), r);
 			add = FALSE;
 		}
 		if (cont)
@@ -12706,11 +9645,7 @@ static cptr do_hex_spell(int spell, int mode)
 
 					do
 					{
-#ifdef JP
-						msg_print("復讐の時だ！");
-#else
-						msg_print("Time to revenge!");
-#endif
+						msg_print(_("復讐の時だ！", "Time to revenge!"));
 					}
 					while (!get_aim_dir(&dir));
 
@@ -12718,20 +9653,12 @@ static cptr do_hex_spell(int spell, int mode)
 
 					if (p_ptr->wizard)
 					{
-#ifdef JP
-						msg_format("%d点のダメージを返した。", power);
-#else
-						msg_format("You return %d damages.", power);
-#endif
+						msg_format(_("%d点のダメージを返した。", "You return %d damages."), power);
 					}
 				}
 				else
 				{
-#ifdef JP
-					msg_print("復讐する気が失せた。");
-#else
-					msg_print("You are not a mood to revenge.");
-#endif
+					msg_print(_("復讐する気が失せた。", "You are not a mood to revenge."));
 				}
 				p_ptr->magic_num1[2] = 0;
 			}

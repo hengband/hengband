@@ -604,12 +604,7 @@ static void pattern_teleport(void)
 	int max_level = 99;
 
 	/* Ask for level */
-#ifdef JP
-	if (get_check("他の階にテレポートしますか？"))
-#else
-	if (get_check("Teleport level? "))
-#endif
-
+	if (get_check(_("他の階にテレポートしますか？", "Teleport level? ")))
 	{
 		char	ppp[80];
 		char	tmp_val[160];
@@ -633,12 +628,7 @@ static void pattern_teleport(void)
 		}
 
 		/* Prompt */
-#ifdef JP
-		sprintf(ppp, "テレポート先:(%d-%d)", min_level, max_level);
-#else
-		sprintf(ppp, "Teleport to level (%d-%d): ", min_level, max_level);
-#endif
-
+		sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), min_level, max_level);
 
 		/* Default */
 		sprintf(tmp_val, "%d", dun_level);
@@ -649,11 +639,7 @@ static void pattern_teleport(void)
 		/* Extract request */
 		command_arg = atoi(tmp_val);
 	}
-#ifdef JP
-	else if (get_check("通常テレポート？"))
-#else
-	else if (get_check("Normal teleport? "))
-#endif
+	else if (get_check(_("通常テレポート？", "Normal teleport? ")))
 	{
 		teleport_player(200, 0L);
 		return;
@@ -670,12 +656,7 @@ static void pattern_teleport(void)
 	if (command_arg > max_level) command_arg = max_level;
 
 	/* Accept request */
-#ifdef JP
-	msg_format("%d 階にテレポートしました。", command_arg);
-#else
-	msg_format("You teleport to dungeon level %d.", command_arg);
-#endif
-
+	msg_format(_("%d 階にテレポートしました。", "You teleport to dungeon level %d."), command_arg);
 
 	if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -714,20 +695,11 @@ static void wreck_the_pattern(void)
 		return;
 	}
 
-#ifdef JP
-	msg_print("パターンを血で汚してしまった！");
-	msg_print("何か恐ろしい事が起こった！");
-#else
-	msg_print("You bleed on the Pattern!");
-	msg_print("Something terrible happens!");
-#endif
+	msg_print(_("パターンを血で汚してしまった！", "You bleed on the Pattern!"));
+	msg_print(_("何か恐ろしい事が起こった！", "Something terrible happens!"));
 
 	if (!IS_INVULN())
-#ifdef JP
-		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "パターン損壊", -1);
-#else
-		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "corrupting the Pattern", -1);
-#endif
+		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
 
 	to_ruin = randint1(45) + 35;
 
@@ -782,12 +754,7 @@ static bool pattern_effect(void)
 		(void)hp_player(1000);
 
 		cave_set_feat(py, px, feat_pattern_old);
-
-#ifdef JP
-		msg_print("「パターン」のこの部分は他の部分より強力でないようだ。");
-#else
-		msg_print("This section of the Pattern looks less powerful.");
-#endif
+		msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));
 
 		/*
 		 * We could make the healing effect of the
@@ -807,22 +774,14 @@ static bool pattern_effect(void)
 
 	case PATTERN_TILE_WRECKED:
 		if (!IS_INVULN())
-#ifdef JP
-			take_hit(DAMAGE_NOESCAPE, 200, "壊れた「パターン」を歩いたダメージ", -1);
-#else
-			take_hit(DAMAGE_NOESCAPE, 200, "walking the corrupted Pattern", -1);
-#endif
+			take_hit(DAMAGE_NOESCAPE, 200, _("壊れた「パターン」を歩いたダメージ", "walking the corrupted Pattern"), -1);
 		break;
 
 	default:
 		if (prace_is_(RACE_AMBERITE) && !one_in_(2))
 			return TRUE;
 		else if (!IS_INVULN())
-#ifdef JP
-			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "「パターン」を歩いたダメージ", -1);
-#else
-			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "walking the Pattern", -1);
-#endif
+			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"), -1);
 		break;
 	}
 
@@ -1149,11 +1108,7 @@ static void notice_lite_change(object_type *o_ptr)
 	else if (o_ptr->xtra4 == 0)
 	{
 		disturb(0, 1);
-#ifdef JP
-msg_print("明かりが消えてしまった！");
-#else
-		msg_print("Your light has gone out!");
-#endif
+		msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
 
 		/* Recalculate torch radius */
 		p_ptr->update |= (PU_TORCH);
@@ -1169,12 +1124,7 @@ msg_print("明かりが消えてしまった！");
 		    && (turn % (TURNS_PER_TICK*2)))
 		{
 			if (disturb_minor) disturb(0, 1);
-#ifdef JP
-msg_print("明かりが微かになってきている。");
-#else
-			msg_print("Your light is growing faint.");
-#endif
-
+			msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
 		}
 	}
 
@@ -1182,12 +1132,7 @@ msg_print("明かりが微かになってきている。");
 	else if ((o_ptr->xtra4 < 100) && (!(o_ptr->xtra4 % 10)))
 	{
 		if (disturb_minor) disturb(0, 1);
-#ifdef JP
-msg_print("明かりが微かになってきている。");
-#else
-		msg_print("Your light is growing faint.");
-#endif
-
+			msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
 	}
 }
 
@@ -1290,13 +1235,8 @@ bool psychometry(void)
 
 	item_tester_no_ryoute = TRUE;
 	/* Get an item */
-#ifdef JP
-q = "どのアイテムを調べますか？";
-s = "調べるアイテムがありません。";
-#else
-	q = "Meditate on which item? ";
-	s = "You have nothing appropriate.";
-#endif
+	q = _("どのアイテムを調べますか？", "Meditate on which item? ");
+	s = _("調べるアイテムがありません。", "You have nothing appropriate.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
 
@@ -1315,12 +1255,7 @@ s = "調べるアイテムがありません。";
 	/* It is fully known, no information needed */
 	if (object_is_known(o_ptr))
 	{
-#ifdef JP
-msg_print("何も新しいことは判らなかった。");
-#else
-		msg_print("You cannot find out anything more about that.");
-#endif
-
+		msg_print(_("何も新しいことは判らなかった。", "You cannot find out anything more about that."));
 		return TRUE;
 	}
 
@@ -1333,12 +1268,7 @@ msg_print("何も新しいことは判らなかった。");
 	/* Skip non-feelings */
 	if (!feel)
 	{
-#ifdef JP
-msg_format("%sからは特に変わった事は感じとれなかった。", o_name);
-#else
-		msg_format("You do not perceive anything unusual about the %s.", o_name);
-#endif
-
+		msg_format(_("%sからは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the %s."), o_name);
 		return TRUE;
 	}
 
@@ -1494,11 +1424,7 @@ static void check_music(void)
 		{
 			p_ptr->magic_num1[0] = p_ptr->magic_num1[1];
 			p_ptr->magic_num1[1] = 0;
-#ifdef JP
-			msg_print("歌を再開した。");
-#else
-			msg_print("You restart singing.");
-#endif
+			msg_print(_("歌を再開した。", "You restart singing."));
 			p_ptr->action = ACTION_SING;
 
 			/* Recalculate bonuses */
@@ -1621,12 +1547,7 @@ static void process_world_aux_hp_and_sp(void)
 	if (p_ptr->poisoned && !IS_INVULN())
 	{
 		/* Take damage */
-#ifdef JP
-		take_hit(DAMAGE_NOESCAPE, 1, "毒", -1);
-#else
-		take_hit(DAMAGE_NOESCAPE, 1, "poison", -1);
-#endif
-
+		take_hit(DAMAGE_NOESCAPE, 1, _("毒", "poison"), -1);
 	}
 
 	/* Take damage from cuts */
@@ -1673,12 +1594,7 @@ static void process_world_aux_hp_and_sp(void)
 		}
 
 		/* Take damage */
-#ifdef JP
-		take_hit(DAMAGE_NOESCAPE, dam, "致命傷", -1);
-#else
-		take_hit(DAMAGE_NOESCAPE, dam, "a fatal wound", -1);
-#endif
-
+		take_hit(DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound"), -1);
 	}
 
 
@@ -1690,13 +1606,8 @@ static void process_world_aux_hp_and_sp(void)
 			if ((cave[py][px].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 			{
 				/* Take damage */
-#ifdef JP
-msg_print("日光があなたのアンデッドの肉体を焼き焦がした！");
-take_hit(DAMAGE_NOESCAPE, 1, "日光", -1);
-#else
-				msg_print("The sun's rays scorch your undead flesh!");
-				take_hit(DAMAGE_NOESCAPE, 1, "sunlight", -1);
-#endif
+				msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
+				take_hit(DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
 
 				cave_no_regen = TRUE;
 			}
@@ -1711,24 +1622,13 @@ take_hit(DAMAGE_NOESCAPE, 1, "日光", -1);
 
 			/* Get an object description */
 			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-#ifdef JP
-msg_format("%sがあなたのアンデッドの肉体を焼き焦がした！", o_name);
-#else
-			msg_format("The %s scorches your undead flesh!", o_name);
-#endif
-
+			msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), o_name);
 
 			cave_no_regen = TRUE;
 
 			/* Get an object description */
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
-
-#ifdef JP
-sprintf(ouch, "%sを装備したダメージ", o_name);
-#else
-			sprintf(ouch, "wielding %s", o_name);
-#endif
+			sprintf(ouch, _("%sを装備したダメージ", "wielding %s"), o_name);
 
 			if (!IS_INVULN()) take_hit(DAMAGE_NOESCAPE, 1, ouch, -1);
 		}
@@ -1759,22 +1659,14 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 
 			if (p_ptr->levitation)
 			{
-#ifdef JP
-				msg_print("熱で火傷した！");
-				take_hit(DAMAGE_NOESCAPE, damage, format("%sの上に浮遊したダメージ", f_name + f_info[get_feat_mimic(&cave[py][px])].name), -1);
-#else
-				msg_print("The heat burns you!");
-				take_hit(DAMAGE_NOESCAPE, damage, format("flying over %s", f_name + f_info[get_feat_mimic(&cave[py][px])].name), -1);
-#endif
+				msg_print(_("熱で火傷した！", "The heat burns you!"));
+				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), 
+								f_name + f_info[get_feat_mimic(&cave[py][px])].name), -1);
 			}
 			else
 			{
 				cptr name = f_name + f_info[get_feat_mimic(&cave[py][px])].name;
-#ifdef JP
-				msg_format("%sで火傷した！", name);
-#else
-				msg_format("The %s burns you!", name);
-#endif
+				msg_format(_("%sで火傷した！", "The %s burns you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
 
@@ -1788,14 +1680,8 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 		if (p_ptr->total_weight > weight_limit())
 		{
 			/* Take damage */
-#ifdef JP
-			msg_print("溺れている！");
-			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "溺れ", -1);
-#else
-			msg_print("You are drowning!");
-			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "drowning", -1);
-#endif
-
+			msg_print(_("溺れている！", "You are drowning!"));
+			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), _("溺れ", "drowning"), -1);
 			cave_no_regen = TRUE;
 		}
 	}
@@ -1809,13 +1695,8 @@ sprintf(ouch, "%sを装備したダメージ", o_name);
 			if (prace_is_(RACE_ENT)) damage += damage / 3;
 			if (p_ptr->resist_fire) damage = damage / 3;
 			if (IS_OPPOSE_FIRE()) damage = damage / 3;
-#ifdef JP
-msg_print("熱い！");
-take_hit(DAMAGE_NOESCAPE, damage, "炎のオーラ", -1);
-#else
-			msg_print("It's hot!");
-			take_hit(DAMAGE_NOESCAPE, damage, "Fire aura", -1);
-#endif
+			msg_print(_("熱い！", "It's hot!"));
+			take_hit(DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
 		}
 		if ((r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !p_ptr->immune_elec)
 		{
@@ -1823,26 +1704,16 @@ take_hit(DAMAGE_NOESCAPE, damage, "炎のオーラ", -1);
 			if (prace_is_(RACE_ANDROID)) damage += damage / 3;
 			if (p_ptr->resist_elec) damage = damage / 3;
 			if (IS_OPPOSE_ELEC()) damage = damage / 3;
-#ifdef JP
-msg_print("痛い！");
-take_hit(DAMAGE_NOESCAPE, damage, "電気のオーラ", -1);
-#else
-			msg_print("It hurts!");
-			take_hit(DAMAGE_NOESCAPE, damage, "Elec aura", -1);
-#endif
+			msg_print(_("痛い！", "It hurts!"));
+			take_hit(DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
 		}
 		if ((r_info[m_list[p_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !p_ptr->immune_cold)
 		{
 			damage = r_info[m_list[p_ptr->riding].r_idx].level / 2;
 			if (p_ptr->resist_cold) damage = damage / 3;
 			if (IS_OPPOSE_COLD()) damage = damage / 3;
-#ifdef JP
-msg_print("冷たい！");
-take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
-#else
-			msg_print("It's cold!");
-			take_hit(DAMAGE_NOESCAPE, damage, "Cold aura", -1);
-#endif
+			msg_print(_("冷たい！", "It's cold!"));
+			take_hit(DAMAGE_NOESCAPE, damage, _("冷気のオーラ", "Cold aura"), -1);
 		}
 	}
 
@@ -1864,23 +1735,13 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 
 			if (p_ptr->pass_wall)
 			{
-#ifdef JP
-				msg_print("体の分子が分解した気がする！");
-				dam_desc = "密度";
-#else
-				msg_print("Your molecules feel disrupted!");
-				dam_desc = "density";
-#endif
+				msg_print(_("体の分子が分解した気がする！", "Your molecules feel disrupted!"));
+				dam_desc = _("密度", "density");
 			}
 			else
 			{
-#ifdef JP
-				msg_print("崩れた岩に押し潰された！");
-				dam_desc = "硬い岩";
-#else
-				msg_print("You are being crushed!");
-				dam_desc = "solid rock";
-#endif
+				msg_print(_("崩れた岩に押し潰された！", "You are being crushed!"));
+				dam_desc = _("硬い岩", "solid rock");
 			}
 
 			take_hit(DAMAGE_NOESCAPE, 1 + (p_ptr->lev / 5), dam_desc, -1);
@@ -1961,21 +1822,13 @@ take_hit(DAMAGE_NOESCAPE, damage, "冷気のオーラ", -1);
 	{
 		while (upkeep_factor > 100)
 		{
-#ifdef JP
-			msg_print("こんなに多くのペットを制御できない！");
-#else
-			msg_print("Too many pets to control at once!");
-#endif
+			msg_print(_("こんなに多くのペットを制御できない！", "Too many pets to control at once!"));
 			msg_print(NULL);
 			do_cmd_pet_dismiss();
 
 			upkeep_factor = calculate_upkeep();
 
-#ifdef JP
-			msg_format("維持ＭＰは %d%%", upkeep_factor);
-#else
-			msg_format("Upkeep: %d%% mana.", upkeep_factor);
-#endif
+			msg_format(_("維持ＭＰは %d%%", "Upkeep: %d%% mana."), upkeep_factor);
 			msg_print(NULL);
 		}
 	}
@@ -2359,13 +2212,8 @@ static void process_world_aux_mutation(void)
 	if ((p_ptr->muta2 & MUT2_BERS_RAGE) && one_in_(3000))
 	{
 		disturb(0, 1);
-#ifdef JP
-		msg_print("ウガァァア！");
-		msg_print("激怒の発作に襲われた！");
-#else
-		msg_print("RAAAAGHH!");
-		msg_print("You feel a fit of rage coming over you!");
-#endif
+		msg_print(_("ウガァァア！", "RAAAAGHH!"));
+		msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
 
 		(void)set_shero(10 + randint1(p_ptr->lev), FALSE);
 		(void)set_afraid(0);
@@ -2376,12 +2224,7 @@ static void process_world_aux_mutation(void)
 		if (!p_ptr->resist_fear)
 		{
 			disturb(0, 1);
-#ifdef JP
-			msg_print("とても暗い... とても恐い！");
-#else
-			msg_print("It's so dark... so scary!");
-#endif
-
+			msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
 			set_afraid(p_ptr->afraid + 13 + randint1(26));
 		}
 	}
@@ -2394,12 +2237,7 @@ static void process_world_aux_mutation(void)
 			disturb(0, 1);
 
 			/* Teleport player */
-#ifdef JP
-			msg_print("あなたの位置は突然ひじょうに不確定になった...");
-#else
-			msg_print("Your position suddenly seems very uncertain...");
-#endif
-
+			msg_print(_("あなたの位置は突然ひじょうに不確定になった...", "Your position suddenly seems very uncertain..."));
 			msg_print(NULL);
 			teleport_player(40, TELEPORT_PASSIVE);
 		}
@@ -2411,12 +2249,7 @@ static void process_world_aux_mutation(void)
 		{
 			disturb(0, 1);
 			p_ptr->redraw |= PR_EXTRA;
-#ifdef JP
-			msg_print("いひきがもーろーとひてきたきがふる...ヒック！");
-#else
-			msg_print("You feel a SSSCHtupor cOmINg over yOu... *HIC*!");
-#endif
-
+			msg_print(_("いひきがもーろーとひてきたきがふる...ヒック！", "You feel a SSSCHtupor cOmINg over yOu... *HIC*!"));
 		}
 
 		if (!p_ptr->resist_conf)
@@ -2433,25 +2266,14 @@ static void process_world_aux_mutation(void)
 				else wiz_dark();
 				(void)teleport_player_aux(100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 				wiz_dark();
-#ifdef JP
-				msg_print("あなたは見知らぬ場所で目が醒めた...頭が痛い。");
-				msg_print("何も覚えていない。どうやってここに来たかも分からない！");
-#else
-				msg_print("You wake up somewhere with a sore head...");
-				msg_print("You can't remember a thing, or how you got here!");
-#endif
-
+				msg_print(_("あなたは見知らぬ場所で目が醒めた...頭が痛い。", "You wake up somewhere with a sore head..."));
+				msg_print(_("何も覚えていない。どうやってここに来たかも分からない！", "You can't remember a thing, or how you got here!"));
 			}
 			else
 			{
 				if (one_in_(3))
 				{
-#ifdef JP
-					msg_print("き～れいなちょおちょらとんれいる～");
-#else
-					msg_print("Thishcischs GooDSChtuff!");
-#endif
-
+					msg_print(_("き～れいなちょおちょらとんれいる～", "Thishcischs GooDSChtuff!"));
 					(void)set_image(p_ptr->image + randint0(150) + 150);
 				}
 			}
@@ -2472,11 +2294,7 @@ static void process_world_aux_mutation(void)
 	{
 		disturb(0, 1);
 
-#ifdef JP
-		msg_print("ブゥーーッ！おっと。");
-#else
-		msg_print("BRRAAAP! Oops.");
-#endif
+		msg_print(_("ブゥーーッ！おっと。", "BRRAAAP! Oops."));
 
 		msg_print(NULL);
 		fire_ball(GF_POIS, 0, p_ptr->lev, 3);
@@ -2487,11 +2305,8 @@ static void process_world_aux_mutation(void)
 	{
 		int dire = 0;
 		disturb(0, 1);
-#ifdef JP
-		msg_print("魔法のエネルギーが突然あなたの中に流れ込んできた！エネルギーを解放しなければならない！");
-#else
-		msg_print("Magical energy flows through you! You must release it!");
-#endif
+		msg_print(_("魔法のエネルギーが突然あなたの中に流れ込んできた！エネルギーを解放しなければならない！", 
+						"Magical energy flows through you! You must release it!"));
 
 		flush();
 		msg_print(NULL);
@@ -2511,12 +2326,7 @@ static void process_world_aux_mutation(void)
 		if (summon_specific((pet ? -1 : 0), py, px,
 				    dun_level, SUMMON_DEMON, mode))
 		{
-#ifdef JP
-			msg_print("あなたはデーモンを引き寄せた！");
-#else
-			msg_print("You have attracted a demon!");
-#endif
-
+			msg_print(_("あなたはデーモンを引き寄せた！", "You have attracted a demon!"));
 			disturb(0, 1);
 		}
 	}
@@ -2526,11 +2336,7 @@ static void process_world_aux_mutation(void)
 		disturb(0, 1);
 		if (one_in_(2))
 		{
-#ifdef JP
-			msg_print("精力的でなくなった気がする。");
-#else
-			msg_print("You feel less energetic.");
-#endif
+			msg_print(_("精力的でなくなった気がする。", "You feel less energetic."));
 
 			if (p_ptr->fast > 0)
 			{
@@ -2543,11 +2349,7 @@ static void process_world_aux_mutation(void)
 		}
 		else
 		{
-#ifdef JP
-			msg_print("精力的になった気がする。");
-#else
-			msg_print("You feel more energetic.");
-#endif
+			msg_print(_("精力的になった気がする。", "You feel more energetic."));
 
 			if (p_ptr->slow > 0)
 			{
@@ -2563,11 +2365,7 @@ static void process_world_aux_mutation(void)
 	if ((p_ptr->muta2 & MUT2_BANISH_ALL) && one_in_(9000))
 	{
 		disturb(0, 1);
-#ifdef JP
-		msg_print("突然ほとんど孤独になった気がする。");
-#else
-		msg_print("You suddenly feel almost lonely.");
-#endif
+		msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
 
 		banish_monsters(100);
 		if (!dun_level && p_ptr->town_num)
@@ -2581,12 +2379,7 @@ static void process_world_aux_mutation(void)
 			}
 			while ((n == STORE_HOME) || (n == STORE_MUSEUM));
 
-#ifdef JP
-			msg_print("店の主人が丘に向かって走っている！");
-#else
-			msg_print("You see one of the shopkeepers running for the hills!");
-#endif
-
+			msg_print(_("店の主人が丘に向かって走っている！", "You see one of the shopkeepers running for the hills!"));
 			store_shuffle(n);
 		}
 		msg_print(NULL);
@@ -2596,12 +2389,7 @@ static void process_world_aux_mutation(void)
 	{
 		object_type *o_ptr;
 
-#ifdef JP
-		msg_print("影につつまれた。");
-#else
-		msg_print("A shadow passes over you.");
-#endif
-
+		msg_print(_("影につつまれた。", "A shadow passes over you."));
 		msg_print(NULL);
 
 		/* Absorb light from the current possition */
@@ -2623,13 +2411,7 @@ static void process_world_aux_mutation(void)
 
 				/* Decrease life-span of lite */
 				o_ptr->xtra4 /= 2;
-
-#ifdef JP
-				msg_print("光源からエネルギーを吸収した！");
-#else
-				msg_print("You absorb energy from your light!");
-#endif
-
+				msg_print(_("光源からエネルギーを吸収した！", "You absorb energy from your light!"));
 
 				/* Notice interesting fuel steps */
 				notice_lite_change(o_ptr);
@@ -2654,12 +2436,7 @@ static void process_world_aux_mutation(void)
 
 		if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_ANIMAL, mode))
 		{
-#ifdef JP
-			msg_print("動物を引き寄せた！");
-#else
-			msg_print("You have attracted an animal!");
-#endif
-
+			msg_print(_("動物を引き寄せた！", "You have attracted an animal!"));
 			disturb(0, 1);
 		}
 	}
@@ -2668,11 +2445,7 @@ static void process_world_aux_mutation(void)
 	    !p_ptr->anti_magic && one_in_(8000))
 	{
 		disturb(0, 1);
-#ifdef JP
-		msg_print("周りの空間が歪んでいる気がする！");
-#else
-		msg_print("You feel the world warping around you!");
-#endif
+		msg_print(_("周りの空間が歪んでいる気がする！", "You feel the world warping around you!"));
 
 		msg_print(NULL);
 		fire_ball(GF_CHAOS, 0, p_ptr->lev, 8);
@@ -2680,21 +2453,12 @@ static void process_world_aux_mutation(void)
 	if ((p_ptr->muta2 & MUT2_NORMALITY) && one_in_(5000))
 	{
 		if (!lose_mutation(0))
-#ifdef JP
-			msg_print("奇妙なくらい普通になった気がする。");
-#else
-		msg_print("You feel oddly normal.");
-#endif
-
+			msg_print(_("奇妙なくらい普通になった気がする。", "You feel oddly normal."));
 	}
 	if ((p_ptr->muta2 & MUT2_WRAITH) && !p_ptr->anti_magic && one_in_(3000))
 	{
 		disturb(0, 1);
-#ifdef JP
-		msg_print("非物質化した！");
-#else
-		msg_print("You feel insubstantial!");
-#endif
+		msg_print(_("非物質化した！", "You feel insubstantial!"));
 
 		msg_print(NULL);
 		set_wraith_form(randint1(p_ptr->lev / 2) + (p_ptr->lev / 2), FALSE);
@@ -2729,24 +2493,14 @@ static void process_world_aux_mutation(void)
 			if (p_ptr->sustain_chr) sustained = TRUE;
 			break;
 		default:
-#ifdef JP
-			msg_print("不正な状態！");
-#else
-			msg_print("Invalid stat chosen!");
-#endif
-
+			msg_print(_("不正な状態！", "Invalid stat chosen!"));
 			sustained = TRUE;
 		}
 
 		if (!sustained)
 		{
 			disturb(0, 1);
-#ifdef JP
-			msg_print("自分が衰弱していくのが分かる！");
-#else
-			msg_print("You can feel yourself wasting away!");
-#endif
-
+			msg_print(_("自分が衰弱していくのが分かる！", "You can feel yourself wasting away!"));
 			msg_print(NULL);
 			(void)dec_stat(which_stat, randint1(6) + 6, one_in_(3));
 		}
@@ -2762,12 +2516,7 @@ static void process_world_aux_mutation(void)
 
 		if (summon_specific((pet ? -1 : 0), py, px, dun_level, SUMMON_DRAGON, mode))
 		{
-#ifdef JP
-			msg_print("ドラゴンを引き寄せた！");
-#else
-			msg_print("You have attracted a dragon!");
-#endif
-
+			msg_print(_("ドラゴンを引き寄せた！", "You have attracted a dragon!"));
 			disturb(0, 1);
 		}
 	}
@@ -2776,22 +2525,12 @@ static void process_world_aux_mutation(void)
 	{
 		if (p_ptr->tim_esp > 0)
 		{
-#ifdef JP
-			msg_print("精神にもやがかかった！");
-#else
-			msg_print("Your mind feels cloudy!");
-#endif
-
+			msg_print(_("精神にもやがかかった！", "Your mind feels cloudy!"));
 			set_tim_esp(0, TRUE);
 		}
 		else
 		{
-#ifdef JP
-			msg_print("精神が広がった！");
-#else
-			msg_print("Your mind expands!");
-#endif
-
+			msg_print(_("精神が広がった！", "Your mind expands!"));
 			set_tim_esp(p_ptr->lev, FALSE);
 		}
 	}
@@ -2799,12 +2538,7 @@ static void process_world_aux_mutation(void)
 	    one_in_(9000))
 	{
 		disturb(0, 1);
-#ifdef JP
-		msg_print("胃が痙攣し、食事を失った！");
-#else
-		msg_print("Your stomach roils, and you lose your lunch!");
-#endif
-
+		msg_print(_("胃が痙攣し、食事を失った！", "Your stomach roils, and you lose your lunch!"));
 		msg_print(NULL);
 		set_food(PY_FOOD_WEAK);
 		if (music_singing_any()) stop_singing();
@@ -2837,58 +2571,23 @@ static void process_world_aux_mutation(void)
 		}
 
 		if (danger_amount > 100)
-#ifdef JP
-			msg_print("非常に恐ろしい気がする！");
-#else
-		msg_print("You feel utterly terrified!");
-#endif
-
+			msg_print(_("非常に恐ろしい気がする！", "You feel utterly terrified!"));
 		else if (danger_amount > 50)
-#ifdef JP
-			msg_print("恐ろしい気がする！");
-#else
-		msg_print("You feel terrified!");
-#endif
-
+			msg_print(_("恐ろしい気がする！", "You feel terrified!"));
 		else if (danger_amount > 20)
-#ifdef JP
-			msg_print("非常に心配な気がする！");
-#else
-		msg_print("You feel very worried!");
-#endif
-
+			msg_print(_("非常に心配な気がする！", "You feel very worried!"));
 		else if (danger_amount > 10)
-#ifdef JP
-			msg_print("心配な気がする！");
-#else
-		msg_print("You feel paranoid!");
-#endif
-
+			msg_print(_("心配な気がする！", "You feel paranoid!"));
 		else if (danger_amount > 5)
-#ifdef JP
-			msg_print("ほとんど安全な気がする。");
-#else
-		msg_print("You feel almost safe.");
-#endif
-
+			msg_print(_("ほとんど安全な気がする。", "You feel almost safe."));
 		else
-#ifdef JP
-			msg_print("寂しい気がする。");
-#else
-		msg_print("You feel lonely.");
-#endif
-
+			msg_print(_("寂しい気がする。", "You feel lonely."));
 	}
 	if ((p_ptr->muta2 & MUT2_INVULN) && !p_ptr->anti_magic &&
 	    one_in_(5000))
 	{
 		disturb(0, 1);
-#ifdef JP
-		msg_print("無敵な気がする！");
-#else
-		msg_print("You feel invincible!");
-#endif
-
+		msg_print(_("無敵な気がする！", "You feel invincible!"));
 		msg_print(NULL);
 		(void)set_invuln(randint1(8) + 8, FALSE);
 	}
@@ -2930,12 +2629,7 @@ static void process_world_aux_mutation(void)
 
 			/* Redraw mana */
 			p_ptr->redraw |= (PR_MANA);
-#ifdef JP
-			take_hit(DAMAGE_LOSELIFE, healing, "頭に昇った血", -1);
-#else
-			take_hit(DAMAGE_LOSELIFE, healing, "blood rushing to the head", -1);
-#endif
-
+			take_hit(DAMAGE_LOSELIFE, healing, _("頭に昇った血", "blood rushing to the head"), -1);
 		}
 	}
 	if ((p_ptr->muta2 & MUT2_DISARM) && one_in_(10000))
@@ -2944,13 +2638,8 @@ static void process_world_aux_mutation(void)
 		object_type *o_ptr = NULL;
 
 		disturb(0, 1);
-#ifdef JP
-		msg_print("足がもつれて転んだ！");
-		take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), "転倒", -1);
-#else
-		msg_print("You trip over your own feet!");
-		take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), "tripping", -1);
-#endif
+		msg_print(_("足がもつれて転んだ！", "You trip over your own feet!"));
+		take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), _("転倒", "tripping"), -1);
 
 		msg_print(NULL);
 		if (buki_motteruka(INVEN_RARM))
@@ -2972,11 +2661,7 @@ static void process_world_aux_mutation(void)
 
 		if (slot && !object_is_cursed(o_ptr))
 		{
-#ifdef JP
-			msg_print("武器を落としてしまった！");
-#else
-			msg_print("You drop your weapon!");
-#endif
+			msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
 			inven_drop(slot, 1);
 		}
 	}
@@ -3026,29 +2711,16 @@ static void process_world_aux_curse(void)
 
 			o_ptr = &inventory[i_keep];
 			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-#ifdef JP
-			msg_format("%sがテレポートの能力を発動させようとしている。", o_name);
-#else
-			msg_format("Your %s is activating teleportation.", o_name);
-#endif
-
-#ifdef JP
-			if (get_check_strict("テレポートしますか？", CHECK_OKAY_CANCEL))
-#else
-			if (get_check_strict("Teleport? ", CHECK_OKAY_CANCEL))
-#endif
+			msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
+			if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL))
 			{
 				disturb(0, 1);
 				teleport_player(50, 0L);
 			}
 			else
 			{
-#ifdef JP
-				msg_format("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。", o_name);
-#else
-				msg_format("You can inscribe {.} on your %s to disable random teleportation. ", o_name);
-#endif
+				msg_format(_("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。", 
+							 "You can inscribe {.} on your %s to disable random teleportation. "), o_name);
 				disturb(1, 1);
 			}
 		}
@@ -3504,11 +3176,7 @@ static void process_world_aux_movement(void)
 			/* Determine the level */
 			if (!quest_number(dun_level) && dun_level)
 			{
-#ifdef JP
-				msg_print("世界が変わった！");
-#else
-				msg_print("The world changes!");
-#endif
+				msg_print(_("世界が変わった！", "The world changes!"));
 
 				/*
 				 * Clear all saved floors
@@ -3521,11 +3189,7 @@ static void process_world_aux_movement(void)
 			}
 			else
 			{
-#ifdef JP
-				msg_print("世界が少しの間変化したようだ。");
-#else
-				msg_print("The world seems to change for a moment!");
-#endif
+				msg_print(_("世界が少しの間変化したようだ。", "The world seems to change for a moment!"));
 			}
 
 			/* Sound */
@@ -3815,11 +3479,7 @@ static void process_world(void)
 
 		if (number_mon == 0)
 		{
-#ifdef JP
-			msg_print("相打ちに終わりました。");
-#else
-			msg_print("They have kill each other at the same time.");
-#endif
+			msg_print(_("相打ちに終わりました。", "They have kill each other at the same time."));
 			msg_print(NULL);
 			p_ptr->energy_need = 0;
 			battle_monsters();
@@ -3832,34 +3492,18 @@ static void process_world(void)
 			wm_ptr = &m_list[win_m_idx];
 
 			monster_desc(m_name, wm_ptr, 0);
-#ifdef JP
-			msg_format("%sが勝利した！", m_name);
-#else
-			msg_format("%s is winner!", m_name);
-#endif
+			msg_format(_("%sが勝利した！", "%s is winner!"), m_name);
 			msg_print(NULL);
 
 			if (win_m_idx == (sel_monster+1))
 			{
-#ifdef JP
-				msg_print("おめでとうございます。");
-#else
-				msg_print("Congratulations.");
-#endif
-#ifdef JP
-				msg_format("%d＄を受け取った。", battle_odds);
-#else
-				msg_format("You received %d gold.", battle_odds);
-#endif
+				msg_print(_("おめでとうございます。", "Congratulations."));
+				msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
 				p_ptr->au += battle_odds;
 			}
 			else
 			{
-#ifdef JP
-				msg_print("残念でした。");
-#else
-				msg_print("You lost gold.");
-#endif
+				msg_print(_("残念でした。", "You lost gold."));
 			}
 			msg_print(NULL);
 			p_ptr->energy_need = 0;
@@ -3867,11 +3511,7 @@ static void process_world(void)
 		}
 		else if (turn - old_turn == 150*TURNS_PER_TICK)
 		{
-#ifdef JP
-			msg_print("申し分けありませんが、この勝負は引き分けとさせていただきます。");
-#else
-			msg_format("This battle have ended in a draw.");
-#endif
+			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle have ended in a draw."));
 			p_ptr->au += kakekin;
 			msg_print(NULL);
 			p_ptr->energy_need = 0;
@@ -3899,13 +3539,8 @@ static void process_world(void)
 				closing_flag++;
 
 				/* Message */
-#ifdef JP
-msg_print("アングバンドへの門が閉じかかっています...");
-msg_print("ゲームを終了するかセーブするかして下さい。");
-#else
-				msg_print("The gates to ANGBAND are closing...");
-				msg_print("Please finish up and/or save your game.");
-#endif
+				msg_print(_("アングバンドへの門が閉じかかっています...", "The gates to ANGBAND are closing..."));
+				msg_print(_("ゲームを終了するかセーブするかして下さい。", "Please finish up and/or save your game."));
 
 			}
 
@@ -3913,12 +3548,7 @@ msg_print("ゲームを終了するかセーブするかして下さい。");
 			else
 			{
 				/* Message */
-#ifdef JP
-msg_print("今、アングバンドへの門が閉ざされました。");
-#else
-				msg_print("The gates to ANGBAND are now closed.");
-#endif
-
+				msg_print(_("今、アングバンドへの門が閉ざされました。", "The gates to ANGBAND are now closed."));
 
 				/* Stop playing */
 				p_ptr->playing = FALSE;
@@ -3938,11 +3568,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 
 	if (mon_fight && !ignore_unview)
 	{
-#ifdef JP
-		msg_print("何かが聞こえた。");
-#else
-		msg_print("You hear noise.");
-#endif
+		msg_print(_("何かが聞こえた。", "You hear noise."));
 	}
 
 	/*** Handle the wilderness/town (sunshine) ***/
@@ -3964,11 +3590,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 				int y, x;
 
 				/* Message */
-#ifdef JP
-				msg_print("夜が明けた。");
-#else
-				msg_print("The sun has risen.");
-#endif
+				msg_print(_("夜が明けた。", "The sun has risen."));
 
 				if (!p_ptr->wild_mode)
 				{
@@ -3999,11 +3621,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 				int y, x;
 
 				/* Message */
-#ifdef JP
-				msg_print("日が沈んだ。");
-#else
-				msg_print("The sun has fallen.");
-#endif
+				msg_print(_("日が沈んだ。", "The sun has fallen."));
 
 				if (!p_ptr->wild_mode)
 				{
@@ -4093,11 +3711,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 					if (f_ptr->subtype == n)
 					{
 						/* Message */
-#ifdef JP
-						if (cheat_xtra) msg_format("%sの店主をシャッフルします。", f_name + f_ptr->name);
-#else
-						if (cheat_xtra) msg_format("Shuffle a Shopkeeper of %s.", f_name + f_ptr->name);
-#endif
+						if (cheat_xtra) msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_name + f_ptr->name);
 
 						/* Shuffle it */
 						store_shuffle(n);
@@ -4162,35 +3776,19 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 			switch (min / 15)
 			{
 			case 0:
-#ifdef JP
-				msg_print("遠くで不気味な鐘の音が鳴った。");
-#else
-				msg_print("You hear a distant bell toll ominously.");
-#endif
+				msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
 				break;
 
 			case 1:
-#ifdef JP
-				msg_print("遠くで鐘が二回鳴った。");
-#else
-				msg_print("A distant bell sounds twice.");
-#endif
+				msg_print(_("遠くで鐘が二回鳴った。", "A distant bell sounds twice."));
 				break;
 
 			case 2:
-#ifdef JP
-				msg_print("遠くで鐘が三回鳴った。");
-#else
-				msg_print("A distant bell sounds three times.");
-#endif
+				msg_print(_("遠くで鐘が三回鳴った。", "A distant bell sounds three times."));
 				break;
 
 			case 3:
-#ifdef JP
-				msg_print("遠くで鐘が四回鳴った。");
-#else
-				msg_print("A distant bell tolls four times.");
-#endif
+				msg_print(_("遠くで鐘が四回鳴った。", "A distant bell tolls four times."));
 				break;
 			}
 		}
@@ -4201,12 +3799,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 			int count = 0;
 
 			disturb(1, 1);
-#ifdef JP
-			msg_print("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。");
-#else
-			msg_print("A distant bell tolls many times, fading into an deathly silence.");
-#endif
-
+			msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
 			activate_ty_curse(FALSE, &count);
 		}
 	}
@@ -4258,12 +3851,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 			if (!p_ptr->paralyzed && (randint0(100) < 10))
 			{
 				/* Message */
-#ifdef JP
-				msg_print("あまりにも空腹で気絶してしまった。");
-#else
-				msg_print("You faint from the lack of food.");
-#endif
-
+				msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
 				disturb(1, 1);
 
 				/* Hack -- faint (bypass free action) */
@@ -4277,11 +3865,7 @@ msg_print("今、アングバンドへの門が閉ざされました。");
 				int dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
 
 				/* Take damage */
-#ifdef JP
-				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, "空腹", -1);
-#else
-				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, "starvation", -1);
-#endif
+				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
 			}
 		}
 	}
@@ -4327,40 +3911,22 @@ static bool enter_wizard_mode(void)
 		/* Wizard mode is not permitted */
 		if (!allow_debug_opts || arg_wizard)
 		{
-#ifdef JP
-			msg_print("ウィザードモードは許可されていません。 ");
-#else
-			msg_print("Wizard mode is not permitted.");
-#endif
+			msg_print(_("ウィザードモードは許可されていません。 ", "Wizard mode is not permitted."));
 			return FALSE;
 		}
 
 		/* Mention effects */
-#ifdef JP
-		msg_print("ウィザードモードはデバッグと実験のためのモードです。 ");
-		msg_print("一度ウィザードモードに入るとスコアは記録されません。");
-#else
-		msg_print("Wizard mode is for debugging and experimenting.");
-		msg_print("The game will not be scored if you enter wizard mode.");
-#endif
-
+		msg_print(_("ウィザードモードはデバッグと実験のためのモードです。 ", "Wizard mode is for debugging and experimenting."));
+		msg_print(_("一度ウィザードモードに入るとスコアは記録されません。", "The game will not be scored if you enter wizard mode."));
 		msg_print(NULL);
 
 		/* Verify request */
-#ifdef JP
-		if (!get_check("本当にウィザードモードに入りたいのですか? "))
-#else
-		if (!get_check("Are you sure you want to enter wizard mode? "))
-#endif
+		if (!get_check(_("本当にウィザードモードに入りたいのですか? ", "Are you sure you want to enter wizard mode? ")))
 		{
 			return (FALSE);
 		}
 
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ウィザードモードに突入してスコアを残せなくなった。");
-#else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up recording score to enter wizard mode.");
-#endif
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "give up recording score to enter wizard mode."));
 		/* Mark savefile */
 		p_ptr->noscore |= 0x0002;
 	}
@@ -4385,40 +3951,23 @@ static bool enter_debug_mode(void)
 		/* Debug mode is not permitted */
 		if (!allow_debug_opts)
 		{
-#ifdef JP
-			msg_print("デバッグコマンドは許可されていません。 ");
-#else
-			msg_print("Use of debug command is not permitted.");
-#endif
+			msg_print(_("デバッグコマンドは許可されていません。 ", "Use of debug command is not permitted."));
 			return FALSE;
 		}
 
 		/* Mention effects */
-#ifdef JP
-		msg_print("デバッグ・コマンドはデバッグと実験のためのコマンドです。 ");
-		msg_print("デバッグ・コマンドを使うとスコアは記録されません。");
-#else
-		msg_print("The debug commands are for debugging and experimenting.");
-		msg_print("The game will not be scored if you use debug commands.");
-#endif
+		msg_print(_("デバッグ・コマンドはデバッグと実験のためのコマンドです。 ", "The debug commands are for debugging and experimenting."));
+		msg_print(_("デバッグ・コマンドを使うとスコアは記録されません。", "The game will not be scored if you use debug commands."));
 
 		msg_print(NULL);
 
 		/* Verify request */
-#ifdef JP
-		if (!get_check("本当にデバッグ・コマンドを使いますか? "))
-#else
-		if (!get_check("Are you sure you want to use debug commands? "))
-#endif
+		if (!get_check(_("本当にデバッグ・コマンドを使いますか? ", "Are you sure you want to use debug commands? ")))
 		{
 			return (FALSE);
 		}
 
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "デバッグモードに突入してスコアを残せなくなった。");
-#else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up sending score to use debug commands.");
-#endif
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("デバッグモードに突入してスコアを残せなくなった。", "give up sending score to use debug commands."));
 		/* Mark savefile */
 		p_ptr->noscore |= 0x0008;
 	}
@@ -4448,31 +3997,18 @@ static bool enter_borg_mode(void)
 	if (!(p_ptr->noscore & 0x0010))
 	{
 		/* Mention effects */
-#ifdef JP
-		msg_print("ボーグ・コマンドはデバッグと実験のためのコマンドです。 ");
-		msg_print("ボーグ・コマンドを使うとスコアは記録されません。");
-#else
-		msg_print("The borg commands are for debugging and experimenting.");
-		msg_print("The game will not be scored if you use borg commands.");
-#endif
+		msg_print(_("ボーグ・コマンドはデバッグと実験のためのコマンドです。 ", "The borg commands are for debugging and experimenting."));
+		msg_print(_("ボーグ・コマンドを使うとスコアは記録されません。", "The game will not be scored if you use borg commands."));
 
 		msg_print(NULL);
 
 		/* Verify request */
-#ifdef JP
-		if (!get_check("本当にボーグ・コマンドを使いますか? "))
-#else
-		if (!get_check("Are you sure you want to use borg commands? "))
-#endif
+		if (!get_check(_("本当にボーグ・コマンドを使いますか? ", "Are you sure you want to use borg commands? ")))
 		{
 			return (FALSE);
 		}
 
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ボーグ・コマンドを使用してスコアを残せなくなった。");
-#else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up recording score to use borg commands.");
-#endif
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("ボーグ・コマンドを使用してスコアを残せなくなった。", "give up recording score to use borg commands."));
 		/* Mark savefile */
 		p_ptr->noscore |= 0x0010;
 	}
@@ -4537,22 +4073,12 @@ static void process_command(void)
 			if (p_ptr->wizard)
 			{
 				p_ptr->wizard = FALSE;
-#ifdef JP
-msg_print("ウィザードモード解除。");
-#else
-				msg_print("Wizard mode off.");
-#endif
-
+				msg_print(_("ウィザードモード解除。", "Wizard mode off."));
 			}
 			else if (enter_wizard_mode())
 			{
 				p_ptr->wizard = TRUE;
-#ifdef JP
-msg_print("ウィザードモード突入。");
-#else
-				msg_print("Wizard mode on.");
-#endif
-
+				msg_print(_("ウィザードモード突入。", "Wizard mode on."));
 			}
 
 			/* Update monsters */
@@ -4788,21 +4314,13 @@ msg_print("ウィザードモード突入。");
 
 				if (ambush_flag)
 				{
-#ifdef JP
-					msg_print("襲撃から逃げるにはマップの端まで移動しなければならない。");
-#else
-					msg_print("To flee the ambush you have to reach the edge of the map.");
-#endif
+					msg_print(_("襲撃から逃げるにはマップの端まで移動しなければならない。", "To flee the ambush you have to reach the edge of the map."));
 					break;
 				}
 
 				if (p_ptr->food < PY_FOOD_WEAK)
 				{
-#ifdef JP
-					msg_print("その前に食事をとらないと。");
-#else
-					msg_print("You must eat something here.");
-#endif
+					msg_print(_("その前に食事をとらないと。", "You must eat something here."));
 					break;
 				}
 
@@ -4866,11 +4384,7 @@ msg_print("ウィザードモード突入。");
 		case 'G':
 		{
 			if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
-#ifdef JP
-				msg_print("呪文を学習する必要はない！");
-#else
-				msg_print("You don't have to learn spells!");
-#endif
+				msg_print(_("呪文を学習する必要はない！", "You don't have to learn spells!"));
 			else if (p_ptr->pclass == CLASS_SAMURAI)
 				do_cmd_gain_hissatsu();
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
@@ -4906,80 +4420,35 @@ msg_print("ウィザードモード突入。");
 			{
 				if ((p_ptr->pclass == CLASS_WARRIOR) || (p_ptr->pclass == CLASS_ARCHER) || (p_ptr->pclass == CLASS_CAVALRY))
 				{
-#ifdef JP
-					msg_print("呪文を唱えられない！");
-#else
-					msg_print("You cannot cast spells!");
-#endif
+					msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
 				}
 				else if (dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && (p_ptr->pclass != CLASS_BERSERKER) && (p_ptr->pclass != CLASS_SMITH))
 				{
-#ifdef JP
-					msg_print("ダンジョンが魔法を吸収した！");
-#else
-					msg_print("The dungeon absorbs all attempted magic!");
-#endif
+					msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
 					msg_print(NULL);
 				}
 				else if (p_ptr->anti_magic && (p_ptr->pclass != CLASS_BERSERKER) && (p_ptr->pclass != CLASS_SMITH))
 				{
-#ifdef JP
-
-					cptr which_power = "魔法";
-#else
-					cptr which_power = "magic";
-#endif
+					cptr which_power = _("魔法", "magic");
 					if (p_ptr->pclass == CLASS_MINDCRAFTER)
-#ifdef JP
-						which_power = "超能力";
-#else
-						which_power = "psionic powers";
-#endif
+						which_power = _("超能力", "psionic powers");
 					else if (p_ptr->pclass == CLASS_IMITATOR)
-#ifdef JP
-						which_power = "ものまね";
-#else
-						which_power = "imitation";
-#endif
+						which_power = _("ものまね", "imitation");
 					else if (p_ptr->pclass == CLASS_SAMURAI)
-#ifdef JP
-						which_power = "必殺剣";
-#else
-						which_power = "hissatsu";
-#endif
+						which_power = _("必殺剣", "hissatsu");
 					else if (p_ptr->pclass == CLASS_MIRROR_MASTER)
-#ifdef JP
-						which_power = "鏡魔法";
-#else
-						which_power = "mirror magic";
-#endif
+						which_power = _("鏡魔法", "mirror magic");
 					else if (p_ptr->pclass == CLASS_NINJA)
-#ifdef JP
-						which_power = "忍術";
-#else
-						which_power = "ninjutsu";
-#endif
+						which_power = _("忍術", "ninjutsu");
 					else if (mp_ptr->spell_book == TV_LIFE_BOOK)
-#ifdef JP
-						which_power = "祈り";
-#else
-						which_power = "prayer";
-#endif
+						which_power = _("祈り", "prayer");
 
-#ifdef JP
-					msg_format("反魔法バリアが%sを邪魔した！", which_power);
-#else
-					msg_format("An anti-magic shell disrupts your %s!", which_power);
-#endif
+					msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
 					energy_use = 0;
 				}
 				else if (p_ptr->shero && (p_ptr->pclass != CLASS_BERSERKER))
 				{
-#ifdef JP
-					msg_format("狂戦士化していて頭が回らない！");
-#else
-					msg_format("You cannot think directly!");
-#endif
+					msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
 					energy_use = 0;
 				}
 				else
@@ -5041,12 +4510,7 @@ msg_print("ウィザードモード突入。");
 				do_cmd_activate();
 			else
 			{
-#ifdef JP
-msg_print("アリーナが魔法を吸収した！");
-#else
-				msg_print("The arena absorbs all attempted magic!");
-#endif
-
+				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
 				msg_print(NULL);
 			}
 			}
@@ -5093,12 +4557,7 @@ msg_print("アリーナが魔法を吸収した！");
 				do_cmd_aim_wand();
 			else
 			{
-#ifdef JP
-msg_print("アリーナが魔法を吸収した！");
-#else
-				msg_print("The arena absorbs all attempted magic!");
-#endif
-
+				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
 				msg_print(NULL);
 			}
 			}
@@ -5112,12 +4571,7 @@ msg_print("アリーナが魔法を吸収した！");
 			{
 			if (p_ptr->inside_arena)
 			{
-#ifdef JP
-msg_print("アリーナが魔法を吸収した！");
-#else
-				msg_print("The arena absorbs all attempted magic!");
-#endif
-
+				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
 				msg_print(NULL);
 			}
 			else if (use_command && rogue_like_commands)
@@ -5141,12 +4595,7 @@ msg_print("アリーナが魔法を吸収した！");
 				do_cmd_quaff_potion();
 			else
 			{
-#ifdef JP
-msg_print("アリーナが魔法を吸収した！");
-#else
-				msg_print("The arena absorbs all attempted magic!");
-#endif
-
+				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
 				msg_print(NULL);
 			}
 			}
@@ -5162,12 +4611,7 @@ msg_print("アリーナが魔法を吸収した！");
 				do_cmd_read_scroll();
 			else
 			{
-#ifdef JP
-msg_print("アリーナが魔法を吸収した！");
-#else
-				msg_print("The arena absorbs all attempted magic!");
-#endif
-
+				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
 				msg_print(NULL);
 			}
 			}
@@ -5181,12 +4625,7 @@ msg_print("アリーナが魔法を吸収した！");
 			{
 			if (p_ptr->inside_arena)
 			{
-#ifdef JP
-msg_print("アリーナが魔法を吸収した！");
-#else
-				msg_print("The arena absorbs all attempted magic!");
-#endif
-
+				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
 				msg_print(NULL);
 			}
 			else if (use_command && !rogue_like_commands)
@@ -5468,20 +4907,13 @@ msg_print("アリーナが魔法を吸収した！");
 			{
 				char error_m[1024];
 				sound(SOUND_ILLEGAL);
-#ifdef JP
-				if (!get_rnd_line("error_j.txt", 0, error_m))
-#else
-				if (!get_rnd_line("error.txt", 0, error_m))
-#endif
-
+				if (!get_rnd_line(_("error_j.txt", "error.txt"), 0, error_m))
 					msg_print(error_m);
 			}
 			else
-#ifdef JP
-prt(" '?' でヘルプが表示されます。", 0, 0);
-#else
-				prt("Type '?' for help.", 0, 0);
-#endif
+			{
+				prt(_(" '?' でヘルプが表示されます。", "Type '?' for help."), 0, 0);
+			}
 
 			break;
 		}
@@ -5528,21 +4960,13 @@ static void pack_overflow(void)
 		disturb(0, 1);
 
 		/* Warning */
-#ifdef JP
-		msg_print("ザックからアイテムがあふれた！");
-#else
-		msg_print("Your pack overflows!");
-#endif
+		msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
 
 		/* Describe */
 		object_desc(o_name, o_ptr, 0);
 
 		/* Message */
-#ifdef JP
-		msg_format("%s(%c)を落とした。", o_name, index_to_label(INVEN_PACK));
-#else
-		msg_format("You drop %s (%c).", o_name, index_to_label(INVEN_PACK));
-#endif
+		msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
 
 		/* Drop it (carefully) near the player */
 		(void)drop_near(o_ptr, 0, py, px);
@@ -5605,11 +5029,7 @@ static void process_player(void)
 
 	if (hack_mutation)
 	{
-#ifdef JP
-msg_print("何か変わった気がする！");
-#else
-		msg_print("You feel different!");
-#endif
+		msg_print(_("何か変わった気がする！", "You feel different!"));
 
 		(void)gain_random_mutation(0);
 		hack_mutation = FALSE;
@@ -5696,21 +5116,13 @@ msg_print("何か変わった気がする！");
 				{
 					char m_name[80];
 					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
-#ifdef JP
-					msg_format("%sが釣れた！", m_name);
-#else
-					msg_format("You have a good catch!", m_name);
-#endif
+					msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
 					success = TRUE;
 				}
 			}
 			if (!success)
 			{
-#ifdef JP
-				msg_print("餌だけ食われてしまった！くっそ～！");
-#else
-				msg_print("Damn!  The fish stole your bait!");
-#endif
+				msg_print(_("餌だけ食われてしまった！くっそ～！", "Damn!  The fish stole your bait!"));
 			}
 			disturb(0, 1);
 		}
@@ -5735,12 +5147,7 @@ msg_print("何か変わった気がする！");
 				disturb(0, 1);
 
 				/* Hack -- Show a Message */
-#ifdef JP
-msg_print("中断しました。");
-#else
-				msg_print("Canceled.");
-#endif
-
+				msg_print(_("中断しました。", "Canceled."));
 			}
 		}
 	}
@@ -5759,11 +5166,7 @@ msg_print("中断しました。");
 
 			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
-#ifdef JP
-			msg_format("%^sを起こした。", m_name);
-#else
-			msg_format("You have waked %s up.", m_name);
-#endif
+			msg_format(_("%^sを起こした。", "You have waked %s up."), m_name);
 		}
 
 		if (MON_STUNNED(m_ptr))
@@ -5778,11 +5181,7 @@ msg_print("中断しました。");
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
-#ifdef JP
-				msg_format("%^sを朦朧状態から立ち直らせた。", m_name);
-#else
-				msg_format("%^s is no longer stunned.", m_name);
-#endif
+				msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
 			}
 		}
 
@@ -5798,11 +5197,7 @@ msg_print("中断しました。");
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
-#ifdef JP
-				msg_format("%^sを混乱状態から立ち直らせた。", m_name);
-#else
-				msg_format("%^s is no longer confused.", m_name);
-#endif
+				msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
 			}
 		}
 
@@ -5818,11 +5213,7 @@ msg_print("中断しました。");
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
-#ifdef JP
-				msg_format("%^sを恐怖から立ち直らせた。", m_name);
-#else
-				msg_format("%^s is no longer fear.", m_name);
-#endif
+				msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer fear."), m_name);
 			}
 		}
 
@@ -6170,11 +5561,7 @@ msg_print("中断しました。");
 				/* Window stuff */
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-#ifdef JP
-				msg_print("「時は動きだす…」");
-#else
-				msg_print("You feel time flowing around you once more.");
-#endif
+				msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
 				msg_print(NULL);
 				world_player = FALSE;
 				p_ptr->energy_need = ENERGY_NEED();
@@ -6344,11 +5731,7 @@ static void dungeon(bool load_game)
 		}
 		else
 		{
-#ifdef JP
-msg_print("試合開始！");
-#else
-			msg_format("Ready..Fight!");
-#endif
+			msg_print(_("試合開始！", "Ready..Fight!"));
 			msg_print(NULL);
 		}
 	}
@@ -6770,12 +6153,7 @@ void play_game(bool new_game)
 	if (!load_player())
 	{
 		/* Oops */
-#ifdef JP
-quit("セーブファイルが壊れています");
-#else
-		quit("broken savefile");
-#endif
-
+		quit(_("セーブファイルが壊れています", "broken savefile"));
 	}
 
 	/* Extract the options */
@@ -6787,11 +6165,7 @@ quit("セーブファイルが壊れています");
 		char buf[1024];
 		bool success;
 
-#ifdef JP
-		if (!get_check_strict("待機していたスコア登録を今行ないますか？", CHECK_NO_HISTORY))
-#else
-		if (!get_check_strict("Do you register score now? ", CHECK_NO_HISTORY))
-#endif
+		if (!get_check_strict(_("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
 			quit(0);
 
 		/* Update stuff */
@@ -6819,28 +6193,16 @@ quit("セーブファイルが壊れています");
 		/* Handle score, show Top scores */
 		success = send_world_score(TRUE);
 
-#ifdef JP
-		if (!success && !get_check_strict("スコア登録を諦めますか？", CHECK_NO_HISTORY))
-#else
-		if (!success && !get_check_strict("Do you give up score registration? ", CHECK_NO_HISTORY))
-#endif
+		if (!success && !get_check_strict(_("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY))
 		{
-#ifdef JP
-			prt("引き続き待機します。", 0, 0);
-#else
-			prt("standing by for future registration...", 0, 0);
-#endif
+			prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
 			(void)inkey();
 		}
 		else
 		{
 			p_ptr->wait_report_score = FALSE;
 			top_twenty();
-#ifdef JP
-			if (!save_player()) msg_print("セーブ失敗！");
-#else
-			if (!save_player()) msg_print("death save failed!");
-#endif
+			if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
 		}
 		/* Shut the high score file */
 		(void)fd_close(highscore_fd);
@@ -6930,11 +6292,9 @@ quit("セーブファイルが壊れています");
 	{
 		write_level = FALSE;
 
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "                            ----ゲーム再開----");
-#else
-		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "                            ---- Restart Game ----");
-#endif
+		do_cmd_write_nikki(NIKKI_GAMESTART, 1, 
+					  _("                            ----ゲーム再開----",
+						"                            ---- Restart Game ----"));
 
 /*
  * 1.0.9 以前はセーブ前に p_ptr->riding = -1 としていたので、再設定が必要だった。
@@ -6979,12 +6339,7 @@ quit("セーブファイルが壊れています");
 	flavor_init();
 
 	/* Flash a message */
-#ifdef JP
-prt("お待ち下さい...", 0, 0);
-#else
-	prt("Please wait...", 0, 0);
-#endif
-
+	prt(_("お待ち下さい...", "Please wait..."), 0, 0);
 
 	/* Flush the message */
 	Term_fresh();
@@ -7045,11 +6400,7 @@ prt("お待ち下さい...", 0, 0);
 			/* No player?  -- Try to regenerate floor */
 			if (!py || !px)
 			{
-#ifdef JP
-				msg_print("プレイヤーの位置がおかしい。フロアを再生成します。");
-#else
-				msg_print("What a strange player location.  Regenerate the dungeon floor.");
-#endif
+				msg_print(_("プレイヤーの位置がおかしい。フロアを再生成します。", "What a strange player location.  Regenerate the dungeon floor."));
 				change_floor();
 			}
 
@@ -7072,12 +6423,7 @@ prt("お待ち下さい...", 0, 0);
 	if (new_game)
 	{
 		char buf[80];
-
-#ifdef JP
-		sprintf(buf, "%sに降り立った。", map_name());
-#else
-		sprintf(buf, "You are standing in the %s.", map_name());
-#endif
+		sprintf(buf, _("%sに降り立った。", "You are standing in the %s."), map_name());
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, buf);
 	}
 
@@ -7211,11 +6557,7 @@ prt("お待ち下さい...", 0, 0);
 			else
 			{
 				/* Mega-Hack -- Allow player to cheat death */
-#ifdef JP
-				if ((p_ptr->wizard || cheat_live) && !get_check("死にますか? "))
-#else
-				if ((p_ptr->wizard || cheat_live) && !get_check("Die? "))
-#endif
+				if ((p_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
 				{
 					/* Mark social class, reset age, if needed */
 					if (p_ptr->sc) p_ptr->sc = p_ptr->age = 0;
@@ -7227,11 +6569,7 @@ prt("お待ち下さい...", 0, 0);
 					p_ptr->noscore |= 0x0001;
 
 					/* Message */
-#ifdef JP
-					msg_print("ウィザードモードに念を送り、死を欺いた。");
-#else
-					msg_print("You invoke wizard mode and cheat death.");
-#endif
+					msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
 					msg_print(NULL);
 
 					/* Restore hit points */
@@ -7257,12 +6595,7 @@ prt("お待ち下さい...", 0, 0);
 					if (p_ptr->word_recall)
 					{
 						/* Message */
-#ifdef JP
-						msg_print("張りつめた大気が流れ去った...");
-#else
-						msg_print("A tension leaves the air around you...");
-#endif
-
+						msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
 						msg_print(NULL);
 
 						/* Hack -- Prevent recall */
@@ -7279,11 +6612,7 @@ prt("お待ち下さい...", 0, 0);
 					}
 
 					/* Note cause of death XXX XXX XXX */
-#ifdef JP
-					(void)strcpy(p_ptr->died_from, "死の欺き");
-#else
-					(void)strcpy(p_ptr->died_from, "Cheating death");
-#endif
+					(void)strcpy(p_ptr->died_from, _("死の欺き", "Cheating death"));
 
 					/* Do not die */
 					p_ptr->is_dead = FALSE;
@@ -7335,11 +6664,9 @@ prt("お待ち下さい...", 0, 0);
 					p_ptr->wild_mode = FALSE;
 					p_ptr->leaving = TRUE;
 
-#ifdef JP
-					do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "                            しかし、生き返った。");
-#else
-					do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "                            but revived.");
-#endif
+					do_cmd_write_nikki(NIKKI_BUNSHOU, 1, 
+								_("                            しかし、生き返った。", 
+								  "                            but revived."));
 
 					/* Prepare next floor */
 					leave_floor();

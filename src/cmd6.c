@@ -611,13 +611,8 @@ void do_cmd_eat_food(void)
 	item_tester_hook = item_tester_hook_eatable;
 
 	/* Get an item */
-#ifdef JP
-	q = "どれを食べますか? ";
-	s = "食べ物がない。";
-#else
-	q = "Eat which item? ";
-	s = "You have nothing to eat.";
-#endif
+	q = _("どれを食べますか? ", "Eat which item? ");
+	s = _("食べ物がない。", "You have nothing to eat.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -710,34 +705,24 @@ static void do_cmd_quaff_potion_aux(int item)
 	{
 		switch (q_ptr->sval)
 		{
-#ifdef JP
 			/* 飲みごたえをオリジナルより細かく表現 */
 		case SV_POTION_WATER:
-			msg_print("口の中がさっぱりした。");
-			msg_print("のどの渇きが少しおさまった。");
+			msg_print(_("口の中がさっぱりした。", ""));
+			msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
 			ident = TRUE;
 			break;
 
 		case SV_POTION_APPLE_JUICE:
-			msg_print("甘くてサッパリとしていて、とてもおいしい。");
-			msg_print("のどの渇きが少しおさまった。");
+			msg_print(_("甘くてサッパリとしていて、とてもおいしい。", ""));
+			msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
 			ident = TRUE;
 			break;
 
 		case SV_POTION_SLIME_MOLD:
-			msg_print("なんとも不気味な味だ。");
-			msg_print("のどの渇きが少しおさまった。");
+			msg_print(_("なんとも不気味な味だ。", ""));
+			msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
 			ident = TRUE;
 			break;
-
-#else
-		case SV_POTION_WATER:
-		case SV_POTION_APPLE_JUICE:
-		case SV_POTION_SLIME_MOLD:
-			msg_print("You feel less thirsty.");
-			ident = TRUE;
-			break;
-#endif
 
 		case SV_POTION_SLOWNESS:
 			if (set_slow(randint1(25) + 15, FALSE)) ident = TRUE;
@@ -809,14 +794,8 @@ static void do_cmd_quaff_potion_aux(int item)
 					else wiz_dark();
 					(void)teleport_player_aux(100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 					wiz_dark();
-#ifdef JP
-					msg_print("知らない場所で目が醒めた。頭痛がする。");
-					msg_print("何も思い出せない。どうやってここへ来たのかも分からない！");
-#else
-					msg_print("You wake up somewhere with a sore head...");
-					msg_print("You can't remember a thing, or how you got here!");
-#endif
-
+					msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
+					msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing, or how you got here!"));
 				}
 			}
 			break;
@@ -858,13 +837,8 @@ static void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_RUINATION:
-#ifdef JP
-			msg_print("身も心も弱ってきて、精気が抜けていくようだ。");
-			take_hit(DAMAGE_LOSELIFE, damroll(10, 10), "破滅の薬", -1);
-#else
-			msg_print("Your nerves and muscles feel weak and lifeless!");
-			take_hit(DAMAGE_LOSELIFE, damroll(10, 10), "a potion of Ruination", -1);
-#endif
+			msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
+			take_hit(DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"), -1);
 
 			(void)dec_stat(A_DEX, 25, TRUE);
 			(void)dec_stat(A_WIS, 25, TRUE);
@@ -900,13 +874,8 @@ static void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_DETONATIONS:
-#ifdef JP
-			msg_print("体の中で激しい爆発が起きた！");
-			take_hit(DAMAGE_NOESCAPE, damroll(50, 20), "爆発の薬", -1);
-#else
-			msg_print("Massive explosions rupture your body!");
-			take_hit(DAMAGE_NOESCAPE, damroll(50, 20), "a potion of Detonation", -1);
-#endif
+			msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
+			take_hit(DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"), -1);
 
 			(void)set_stun(p_ptr->stun + 75);
 			(void)set_cut(p_ptr->cut + 5000);
@@ -916,14 +885,8 @@ static void do_cmd_quaff_potion_aux(int item)
 		case SV_POTION_DEATH:
 			chg_virtue(V_VITALITY, -1);
 			chg_virtue(V_UNLIFE, 5);
-#ifdef JP
-			msg_print("死の予感が体中を駆けめぐった。");
-			take_hit(DAMAGE_LOSELIFE, 5000, "死の薬", -1);
-#else
-			msg_print("A feeling of Death flows through your body.");
-			take_hit(DAMAGE_LOSELIFE, 5000, "a potion of Death", -1);
-#endif
-
+			msg_print(_("死の予感が体中を駆けめぐった。", "A feeling of Death flows through your body."));
+			take_hit(DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"), -1);
 			ident = TRUE;
 			break;
 
@@ -1400,13 +1363,8 @@ void do_cmd_quaff_potion(void)
 	item_tester_hook = item_tester_hook_quaff;
 
 	/* Get an item */
-#ifdef JP
-	q = "どの薬を飲みますか? ";
-	s = "飲める薬がない。";
-#else
-	q = "Quaff which potion? ";
-	s = "You have no potions to quaff.";
-#endif
+	q = _("どの薬を飲みますか? ", "Quaff which potion? ");
+	s = _("飲める薬がない。", "You have no potions to quaff.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -1923,34 +1881,19 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 	}
 	else if (o_ptr->name1 == ART_GHB)
 	{
-#ifdef JP
-		msg_print("私は苦労して『グレーター・ヘル=ビースト』を倒した。");
-		msg_print("しかし手に入ったのはこのきたないＴシャツだけだった。");
-#else
-		msg_print("I had a very hard time to kill the Greater hell-beast, ");
-		msg_print("but all I got was this lousy t-shirt!");
-#endif
+		msg_print(_("私は苦労して『グレーター・ヘル=ビースト』を倒した。", "I had a very hard time to kill the Greater hell-beast, "));
+		msg_print(_("しかし手に入ったのはこのきたないＴシャツだけだった。", "but all I got was this lousy t-shirt!"));
 		used_up = FALSE;
 	}
 	else if (o_ptr->name1 == ART_POWER)
 	{
-#ifdef JP
-		msg_print("「一つの指輪は全てを統べ、");
+		msg_print(_("「一つの指輪は全てを統べ、", "'One Ring to rule them all, "));
 		msg_print(NULL);
-		msg_print("一つの指輪は全てを見つけ、");
+		msg_print(_("一つの指輪は全てを見つけ、", "One Ring to find them, "));
 		msg_print(NULL);
-		msg_print("一つの指輪は全てを捕らえて");
+		msg_print(_("一つの指輪は全てを捕らえて", "One Ring to bring them all "));
 		msg_print(NULL);
-		msg_print("暗闇の中に繋ぎとめる。」");
-#else
-		msg_print("'One Ring to rule them all, ");
-		msg_print(NULL);
-		msg_print("One Ring to find them, ");
-		msg_print(NULL);
-		msg_print("One Ring to bring them all ");
-		msg_print(NULL);
-		msg_print("and in the darkness bind them.'");
-#endif
+		msg_print(_("暗闇の中に繋ぎとめる。」", "and in the darkness bind them.'"));
 		used_up = FALSE;
 	}
 	else if (o_ptr->tval==TV_PARCHMENT)
@@ -2081,13 +2024,8 @@ void do_cmd_read_scroll(void)
 	item_tester_hook = item_tester_hook_readable;
 
 	/* Get an item */
-#ifdef JP
-	q = "どの巻物を読みますか? ";
-	s = "読める巻物がない。";
-#else
-	q = "Read which scroll? ";
-	s = "You have no scrolls to read.";
-#endif
+	q = _("どの巻物を読みますか? ", "Read which scroll? ");
+	s = _("読める巻物がない。", "You have no scrolls to read.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -2627,13 +2565,8 @@ void do_cmd_use_staff(void)
 	item_tester_tval = TV_STAFF;
 
 	/* Get an item */
-#ifdef JP
-	q = "どの杖を使いますか? ";
-	s = "使える杖がない。";
-#else
-	q = "Use which staff? ";
-	s = "You have no staff to use.";
-#endif
+	q = _("どの杖を使いますか? ", "Use which staff? ");
+	s = _("使える杖がない。", "You have no staff to use.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -3105,14 +3038,9 @@ void do_cmd_aim_wand(void)
 	}
 
 	/* Get an item */
-#ifdef JP
-	q = "どの魔法棒で狙いますか? ";
-	s = "使える魔法棒がない。";
-#else
-	q = "Aim which wand? ";
-	s = "You have no wand to aim.";
-#endif
-
+	q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
+	s = _("使える魔法棒がない。", "You have no wand to aim.");
+	
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
 	/* Aim the wand */
@@ -3540,13 +3468,8 @@ void do_cmd_zap_rod(void)
 	item_tester_tval = TV_ROD;
 
 	/* Get an item */
-#ifdef JP
-	q = "どのロッドを振りますか? ";
-	s = "使えるロッドがない。";
-#else
-	q = "Zap which rod? ";
-	s = "You have no rod to zap.";
-#endif
+	q = _("どのロッドを振りますか? ", "Zap which rod? ");
+	s = _("使えるロッドがない。", "You have no rod to zap.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -4019,13 +3942,8 @@ void do_cmd_activate(void)
 	item_tester_hook = item_tester_hook_activate;
 
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムを始動させますか? ";
-	s = "始動できるアイテムを装備していない。";
-#else
-	q = "Activate which item? ";
-	s = "You have nothing to activate.";
-#endif
+	q = _("どのアイテムを始動させますか? ", "Activate which item? ");
+	s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP))) return;
 
@@ -4112,13 +4030,8 @@ void do_cmd_use(void)
 	item_tester_hook = item_tester_hook_use;
 
 	/* Get an item */
-#ifdef JP
-q = "どれを使いますか？";
-s = "使えるものがありません。";
-#else
-	q = "Use which item? ";
-	s = "You have nothing to use.";
-#endif
+	q = _("どれを使いますか？", "Use which item? ");
+	s = _("使えるものがありません。", "You have nothing to use.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR))) return;
 

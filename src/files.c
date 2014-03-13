@@ -36,42 +36,22 @@ void safe_setuid_drop(void)
 
 	if (setuid(getuid()) != 0)
 	{
-#ifdef JP
-quit("setuid(): 正しく許可が取れません！");
-#else
-		quit("setuid(): cannot set permissions correctly!");
-#endif
-
+		quit(_("setuid(): 正しく許可が取れません！", "setuid(): cannot set permissions correctly!"));
 	}
 	if (setgid(getgid()) != 0)
 	{
-#ifdef JP
-quit("setgid(): 正しく許可が取れません！");
-#else
-		quit("setgid(): cannot set permissions correctly!");
-#endif
-
+		quit(_("setgid(): 正しく許可が取れません！", "setgid(): cannot set permissions correctly!"));
 	}
 
 #  else
 
 	if (setreuid(geteuid(), getuid()) != 0)
 	{
-#ifdef JP
-quit("setreuid(): 正しく許可が取れません！");
-#else
-		quit("setreuid(): cannot set permissions correctly!");
-#endif
-
+		quit(_("setreuid(): 正しく許可が取れません！", "setreuid(): cannot set permissions correctly!"));
 	}
 	if (setregid(getegid(), getgid()) != 0)
 	{
-#ifdef JP
-quit("setregid(): 正しく許可が取れません！");
-#else
-		quit("setregid(): cannot set permissions correctly!");
-#endif
-
+		quit(_("setregid(): 正しく許可が取れません！", "setregid(): cannot set permissions correctly!"));
 	}
 
 #  endif
@@ -97,42 +77,22 @@ void safe_setuid_grab(void)
 
 	if (setuid(player_euid) != 0)
 	{
-#ifdef JP
-quit("setuid(): 正しく許可が取れません！");
-#else
-		quit("setuid(): cannot set permissions correctly!");
-#endif
-
+		quit(_("setuid(): 正しく許可が取れません！", "setuid(): cannot set permissions correctly!"));
 	}
 	if (setgid(player_egid) != 0)
 	{
-#ifdef JP
-quit("setgid(): 正しく許可が取れません！");
-#else
-		quit("setgid(): cannot set permissions correctly!");
-#endif
-
+		quit(_("setgid(): 正しく許可が取れません！", "setgid(): cannot set permissions correctly!"));
 	}
 
 #  else
 
 	if (setreuid(geteuid(), getuid()) != 0)
 	{
-#ifdef JP
-quit("setreuid(): 正しく許可が取れません！");
-#else
-		quit("setreuid(): cannot set permissions correctly!");
-#endif
-
+		quit(_("setreuid(): 正しく許可が取れません！", "setreuid(): cannot set permissions correctly!"));
 	}
 	if (setregid(getegid(), getgid()) != 0)
 	{
-#ifdef JP
-quit("setregid(): 正しく許可が取れません！");
-#else
-		quit("setregid(): cannot set permissions correctly!");
-#endif
-
+		quit(_("setregid(): 正しく許可が取れません！", "setregid(): cannot set permissions correctly!"));
 	}
 
 #  endif /* SAFE_SETUID_POSIX */
@@ -608,11 +568,7 @@ errr process_pref_file_command(char *buf)
 				if ((p_ptr->playing || character_xtra) &&
 					(OPT_PAGE_BIRTH == option_info[i].o_page) && !p_ptr->wizard)
 				{
-#ifdef JP
-					msg_format("初期オプションは変更できません! '%s'", buf);
-#else
-					msg_format("Birth options can not changed! '%s'", buf);
-#endif
+					msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not changed! '%s'"), buf);
 					msg_print(NULL);
 					return 0;
 				}
@@ -634,11 +590,7 @@ errr process_pref_file_command(char *buf)
 		}
 
 		/* don't know that option. ignore it.*/
-#ifdef JP
-		msg_format("オプションの名前が正しくありません： %s", buf);
-#else
-		msg_format("Ignored invalid option: %s", buf);
-#endif
+		msg_format(_("オプションの名前が正しくありません： %s", "Ignored invalid option: %s"), buf);
 		msg_print(NULL);
 		return 0;
 
@@ -743,11 +695,7 @@ errr process_pref_file_command(char *buf)
 			char *t, *s;
 			if (max_macrotrigger >= MAX_MACRO_TRIG)
 			{
-#ifdef JP
-				msg_print("マクロトリガーの設定が多すぎます!");
-#else
-				msg_print("Too many macro triggers!");
-#endif
+				msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
 				return 1;
 			}
 			m = max_macrotrigger;
@@ -1233,13 +1181,9 @@ static errr process_pref_file_aux(cptr name, int preftype)
 	{
 		/* Print error message */
 		/* ToDo: Add better error messages */
-#ifdef JP
-	      msg_format("ファイル'%s'の%d行でエラー番号%dのエラー。", name, line, err);
-	      msg_format("('%s'を解析中)", old);
-#else
-		msg_format("Error %d in line %d of file '%s'.", err, line, name);
-		msg_format("Parsing '%s'", old);
-#endif
+		msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."), 
+					_(name, err), line, _(err, name));
+		msg_format(_("('%s'を解析中)", "Parsing '%s'"), old);
 		msg_print(NULL);
 	}
 
@@ -1801,18 +1745,10 @@ static void display_player_middle(void)
 				if ((p_ptr->special_defense >> i) & KAMAE_GENBU) break;
 			}
 			if (i < MAX_KAMAE)
-#ifdef JP
-				display_player_one_line(ENTRY_POSTURE, format("%sの構え", kamae_shurui[i].desc), TERM_YELLOW);
-#else
-				display_player_one_line(ENTRY_POSTURE, format("%s form", kamae_shurui[i].desc), TERM_YELLOW);
-#endif
+				display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), kamae_shurui[i].desc), TERM_YELLOW);
 		}
 		else
-#ifdef JP
-				display_player_one_line(ENTRY_POSTURE, "構えなし", TERM_YELLOW);
-#else
-				display_player_one_line(ENTRY_POSTURE, "none", TERM_YELLOW);
-#endif
+				display_player_one_line(ENTRY_POSTURE, _("構えなし", "none"), TERM_YELLOW);
 	}
 
 	/* Apply weapon bonuses */
@@ -1895,11 +1831,7 @@ static void display_player_middle(void)
 			if (!p_ptr->riding)
 				sprintf(buf, "(%+d%+d)", i-tmp_speed, tmp_speed);
 			else
-#ifdef JP
-				sprintf(buf, "乗馬中 (%+d%+d)", i-tmp_speed, tmp_speed);
-#else
-				sprintf(buf, "Riding (%+d%+d)", i-tmp_speed, tmp_speed);
-#endif
+				sprintf(buf, _("乗馬中 (%+d%+d)", "Riding (%+d%+d)"), i-tmp_speed, tmp_speed);
 
 			if (tmp_speed > 0)
 				attr = TERM_YELLOW;
@@ -1911,11 +1843,7 @@ static void display_player_middle(void)
 			if (!p_ptr->riding)
 				sprintf(buf, "(%+d)", i);
 			else
-#ifdef JP
-				sprintf(buf, "乗馬中 (%+d)", i);
-#else
-				sprintf(buf, "Riding (%+d)", i);
-#endif
+				sprintf(buf, _("乗馬中 (%+d)", "Riding (%+d)"), i);
 		}
 	
 		display_player_one_line(ENTRY_SPEED, buf, attr);
@@ -1958,13 +1886,8 @@ static void display_player_middle(void)
 		int day, hour, min;
 		extract_day_hour_min(&day, &hour, &min);
 
-#ifdef JP
-		if (day < MAX_DAYS) sprintf(buf, "%d日目 %2d:%02d", day, hour, min);
-		else sprintf(buf, "*****日目 %2d:%02d", hour, min);
-#else
-		if (day < MAX_DAYS) sprintf(buf, "Day %d %2d:%02d", day, hour, min);
-		else sprintf(buf, "Day ***** %2d:%02d", hour, min);
-#endif
+		if (day < MAX_DAYS) sprintf(buf, _("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
+		else sprintf(buf, _("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);
 	}
 	display_player_one_line(ENTRY_DAY, buf, TERM_L_GREEN);
 
@@ -2013,11 +1936,7 @@ static cptr likert(int x, int y)
 	if (x < 0)
 	{
 		likert_color = TERM_L_DARK;
-#ifdef JP
-		return "最低";
-#else
-		return "Very Bad";
-#endif
+		return _("最低", "Very Bad");
 	}
 
 	/* Analyze the value */
@@ -2026,53 +1945,29 @@ static cptr likert(int x, int y)
 	case 0:
 	case 1:
 		likert_color = TERM_RED;
-#ifdef JP
-		return "悪い";
-#else
-		return "Bad";
-#endif
+		return _("悪い", "Bad");
 
 	case 2:
 		likert_color = TERM_L_RED;
-#ifdef JP
-		return "劣る";
-#else
-		return "Poor";
-#endif
+		return _("劣る", "Poor");
 
 	case 3:
 	case 4:
 		likert_color = TERM_ORANGE;
-#ifdef JP
-		return "普通";
-#else
-		return "Fair";
-#endif
+		return _("普通", "Fair");
 
 	case 5:
 		likert_color = TERM_YELLOW;
-#ifdef JP
-		return "良い";
-#else
-		return "Good";
-#endif
+		return _("良い", "Good");
 
 	case 6:
 		likert_color = TERM_YELLOW;
-#ifdef JP
-		return "大変良い";
-#else
-		return "Very Good";
-#endif
+		return _("大変良い", "Very Good");
 
 	case 7:
 	case 8:
 		likert_color = TERM_L_GREEN;
-#ifdef JP
-		return "卓越";
-#else
-		return "Excellent";
-#endif
+		return _("卓越", "Excellent");
 
 	case 9:
 	case 10:
@@ -2080,30 +1975,18 @@ static cptr likert(int x, int y)
 	case 12:
 	case 13:
 		likert_color = TERM_GREEN;
-#ifdef JP
-		return "超越";
-#else
-		return "Superb";
-#endif
+		return _("超越", "Superb");
 
 	case 14:
 	case 15:
 	case 16:
 	case 17:
 		likert_color = TERM_BLUE;
-#ifdef JP
-		return "英雄的";
-#else
-		return "Heroic";
-#endif
+		return _("英雄的", "Heroic");
 
 	default:
 		likert_color = TERM_VIOLET;
-#ifdef JP
-		sprintf(dummy, "伝説的[%d]", (int)((((x / y) - 17) * 5) / 2));
-#else
-		sprintf(dummy, "Legendary[%d]", (int)((((x / y) - 17) * 5) / 2));
-#endif
+		sprintf(dummy, _("伝説的[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2));
 		return dummy;
 	}
 }
@@ -3691,11 +3574,7 @@ c_put_str(TERM_YELLOW, "現在", row, stat_col+35);
 		cnv_stat(p_ptr->stat_max[i], buf);
 		if (p_ptr->stat_max[i] == p_ptr->stat_max_max[i])
 		{
-#ifdef JP
-			c_put_str(TERM_WHITE, "!", row + i+1, stat_col + 6);
-#else
-			c_put_str(TERM_WHITE, "!", row + i+1, stat_col + 4);
-#endif
+			c_put_str(TERM_WHITE, "!", row + i+1, _(stat_col + 6, stat_col + 4));
 		}
 		c_put_str(TERM_BLUE, buf, row + i+1, stat_col + 13 - strlen(buf));
 
@@ -3726,12 +3605,7 @@ c_put_str(TERM_YELLOW, "現在", row, stat_col+35);
 
 	/* Header and Footer */
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row, col);
-#ifdef JP
-c_put_str(TERM_L_GREEN, "能力修正", row - 1, col);
-#else
-	c_put_str(TERM_L_GREEN, "Modification", row - 1, col);
-#endif
-
+	c_put_str(TERM_L_GREEN, _("能力修正", "Modification"), row - 1, col);
 
 	/* Process equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
@@ -4012,11 +3886,7 @@ void display_player(int mode)
 
 			if (p_ptr->stat_max[i] == p_ptr->stat_max_max[i])
 			{
-#ifdef JP
-				c_put_str(TERM_WHITE, "!", 3 + i, 58);
-#else
-				c_put_str(TERM_WHITE, "!", 3 + i, 58-2);
-#endif
+				c_put_str(TERM_WHITE, "!", 3 + i, _(58, 58-2));
 			}
 		}
 
@@ -4024,12 +3894,7 @@ void display_player(int mode)
 		if (mode == 1)
 		{
 			char statmsg[1000];
-
-#ifdef JP
-			put_str("(キャラクターの生い立ち)", 11, 25);
-#else
-			put_str("(Character Background)", 11, 25);
-#endif
+			put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
 
 			for (i = 0; i < 4; i++)
 			{
@@ -4083,11 +3948,7 @@ void display_player(int mode)
 			{
 				if (!dun_level)
 				{
-#ifdef JP
-					sprintf(statmsg, "…あなたは現在、 %s にいる。", map_name());
-#else
-					sprintf(statmsg, "...Now, you are in %s.", map_name());
-#endif
+					sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name());
 				}
 				else if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest))
 				{
@@ -4104,11 +3965,7 @@ void display_player(int mode)
 
 					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
-#ifdef JP
-					sprintf(statmsg, "…あなたは現在、 クエスト「%s」を遂行中だ。", quest[p_ptr->inside_quest].name);
-#else
-					sprintf(statmsg, "...Now, you are in the quest '%s'.", quest[p_ptr->inside_quest].name);
-#endif
+					sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[p_ptr->inside_quest].name);
 				}
 				else
 				{
@@ -4205,12 +4062,7 @@ static void dump_aux_display_player(FILE *fff)
 		while ((x > 0) && (buf[x-1] == ' ')) buf[--x] = '\0';
 
 		/* End the row */
-#ifdef JP
-		fprintf(fff, "%s\n", buf);
-#else
-		fprintf(fff, "%s\n", buf);
-#endif
-
+		fprintf(fff, _("%s\n", "%s\n"), buf);
 	}
 
 	/* Display history */
@@ -4327,11 +4179,7 @@ static void dump_aux_pet(FILE *fff)
 		if (!m_ptr->nickname && (p_ptr->riding != i)) continue;
 		if (!pet)
 		{
-#ifdef JP
-			fprintf(fff, "\n\n  [主なペット]\n\n");
-#else
-			fprintf(fff, "\n\n  [Leading Pets]\n\n");
-#endif
+			fprintf(fff, _("\n\n  [主なペット]\n\n", "\n\n  [Leading Pets]\n\n"));
 			pet = TRUE;
 		}
 		monster_desc(pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
@@ -4340,47 +4188,25 @@ static void dump_aux_pet(FILE *fff)
 
 	if (pet_settings)
 	{
-#ifdef JP
-		fprintf(fff, "\n\n  [ペットへの命令]\n");
-#else
-		fprintf(fff, "\n\n  [Command for Pets]\n");
-#endif
+		fprintf(fff, _("\n\n  [ペットへの命令]\n", "\n\n  [Command for Pets]\n"));
 
-#ifdef JP
-		fprintf(fff, "\n ドアを開ける:                       %s", (p_ptr->pet_extra_flags & PF_OPEN_DOORS) ? "ON" : "OFF");
-#else
-		fprintf(fff, "\n Pets open doors:                    %s", (p_ptr->pet_extra_flags & PF_OPEN_DOORS) ? "ON" : "OFF");
-#endif
+		fprintf(fff, _("\n ドアを開ける:                       %s", "\n Pets open doors:                    %s"), 
+					(p_ptr->pet_extra_flags & PF_OPEN_DOORS) ? "ON" : "OFF");
 
-#ifdef JP
-		fprintf(fff, "\n アイテムを拾う:                     %s", (p_ptr->pet_extra_flags & PF_PICKUP_ITEMS) ? "ON" : "OFF");
-#else
-		fprintf(fff, "\n Pets pick up items:                 %s", (p_ptr->pet_extra_flags & PF_PICKUP_ITEMS) ? "ON" : "OFF");
-#endif
+		fprintf(fff, _("\n アイテムを拾う:                     %s", "\n Pets pick up items:                 %s"),
+					(p_ptr->pet_extra_flags & PF_PICKUP_ITEMS) ? "ON" : "OFF");
 
-#ifdef JP
-		fprintf(fff, "\n テレポート系魔法を使う:             %s", (p_ptr->pet_extra_flags & PF_TELEPORT) ? "ON" : "OFF");
-#else
-		fprintf(fff, "\n Allow teleport:                     %s", (p_ptr->pet_extra_flags & PF_TELEPORT) ? "ON" : "OFF");
-#endif
+		fprintf(fff, _("\n テレポート系魔法を使う:             %s", "\n Allow teleport:                     %s"),
+					(p_ptr->pet_extra_flags & PF_TELEPORT) ? "ON" : "OFF");
 
-#ifdef JP
-		fprintf(fff, "\n 攻撃魔法を使う:                     %s", (p_ptr->pet_extra_flags & PF_ATTACK_SPELL) ? "ON" : "OFF");
-#else
-		fprintf(fff, "\n Allow cast attack spell:            %s", (p_ptr->pet_extra_flags & PF_ATTACK_SPELL) ? "ON" : "OFF");
-#endif
+		fprintf(fff, _("\n 攻撃魔法を使う:                     %s", "\n Allow cast attack spell:            %s"),
+					(p_ptr->pet_extra_flags & PF_ATTACK_SPELL) ? "ON" : "OFF");
 
-#ifdef JP
-		fprintf(fff, "\n 召喚魔法を使う:                     %s", (p_ptr->pet_extra_flags & PF_SUMMON_SPELL) ? "ON" : "OFF");
-#else
-		fprintf(fff, "\n Allow cast summon spell:            %s", (p_ptr->pet_extra_flags & PF_SUMMON_SPELL) ? "ON" : "OFF");
-#endif
+		fprintf(fff, _("\n 召喚魔法を使う:                     %s", "\n Allow cast summon spell:            %s"),
+					(p_ptr->pet_extra_flags & PF_SUMMON_SPELL) ? "ON" : "OFF");
 
-#ifdef JP
-		fprintf(fff, "\n プレイヤーを巻き込む範囲魔法を使う: %s", (p_ptr->pet_extra_flags & PF_BALL_SPELL) ? "ON" : "OFF");
-#else
-		fprintf(fff, "\n Allow involve player in area spell: %s", (p_ptr->pet_extra_flags & PF_BALL_SPELL) ? "ON" : "OFF");
-#endif
+		fprintf(fff, _("\n プレイヤーを巻き込む範囲魔法を使う: %s", "\n Allow involve player in area spell: %s"),
+					(p_ptr->pet_extra_flags & PF_BALL_SPELL) ? "ON" : "OFF");
 
 		fputc('\n', fff);
 	}
@@ -4409,12 +4235,7 @@ static void dump_aux_class_special(FILE *fff)
 
 		for (i=0;i<60;i++) { p[i][0] = '\0'; }
 
-#ifdef JP
-		strcat(p[col], "\n\n  [学習済みの青魔法]\n");
-#else
-		strcat(p[col], "\n\n  [Learned Blue Magic]\n");
-#endif
-
+		strcat(p[col], _("\n\n  [学習済みの青魔法]\n", "\n\n  [Learned Blue Magic]\n"));
 
 		for (j=1;j<6;j++)
 		{
@@ -4423,43 +4244,23 @@ static void dump_aux_class_special(FILE *fff)
 			switch(j)
 			{
 				case MONSPELL_TYPE_BOLT:
-#ifdef JP
-					strcat(p[col], "\n     [ボルト型]\n");
-#else
-					strcat(p[col], "\n     [Bolt  Type]\n");
-#endif
+					strcat(p[col], _("\n     [ボルト型]\n", "\n     [Bolt  Type]\n"));
 					break;
 
 				case MONSPELL_TYPE_BALL:
-#ifdef JP
-					strcat(p[col], "\n     [ボール型]\n");
-#else
-					strcat(p[col], "\n     [Ball  Type]\n");
-#endif
+					strcat(p[col], _("\n     [ボール型]\n", "\n     [Ball  Type]\n"));
 					break;
 
 				case MONSPELL_TYPE_BREATH:
-#ifdef JP
-					strcat(p[col], "\n     [ブレス型]\n");
-#else
-					strcat(p[col], "\n     [  Breath  ]\n");
-#endif
+					strcat(p[col], _("\n     [ブレス型]\n", "\n     [  Breath  ]\n"));
 					break;
 
 				case MONSPELL_TYPE_SUMMON:
-#ifdef JP
-					strcat(p[col], "\n     [召喚魔法]\n");
-#else
-					strcat(p[col], "\n     [Summonning]\n");
-#endif
+					strcat(p[col], _("\n     [召喚魔法]\n", "\n     [Summonning]\n"));
 					break;
 
 				case MONSPELL_TYPE_OTHER:
-#ifdef JP
-					strcat(p[col], "\n     [ その他 ]\n");
-#else
-					strcat(p[col], "\n     [Other Type]\n");
-#endif
+					strcat(p[col], _("\n     [ その他 ]\n", "\n     [Other Type]\n"));
 					break;
 			}
 
@@ -4501,11 +4302,7 @@ static void dump_aux_class_special(FILE *fff)
 			
 			if (!pcol)
 			{
-#ifdef JP
-				strcat(p[col], "なし");
-#else
-				strcat(p[col], "None");
-#endif
+				strcat(p[col], _("なし", "None"));
 			}
 			else
 			{
@@ -4533,11 +4330,7 @@ static void dump_aux_class_special(FILE *fff)
 		int tval, ext, k_idx;
 		int i, magic_num;
 
-#ifdef JP
-		fprintf(fff, "\n\n  [取り込んだ魔法道具]\n");
-#else
-		fprintf(fff, "\n\n  [Magic devices eaten]\n");
-#endif
+		fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
 
 		for (ext = 0; ext < 3; ext++)
 		{
@@ -4548,27 +4341,15 @@ static void dump_aux_class_special(FILE *fff)
 			{
 			case 0:
 				tval = TV_STAFF;
-#ifdef JP
-				fprintf(fff, "\n[杖]\n");
-#else
-				fprintf(fff, "\n[Staffs]\n");
-#endif
+				fprintf(fff, _("\n[杖]\n", "\n[Staffs]\n"));
 				break;
 			case 1:
 				tval = TV_WAND;
-#ifdef JP
-				fprintf(fff, "\n[魔法棒]\n");
-#else
-				fprintf(fff, "\n[Wands]\n");
-#endif
+				fprintf(fff, _("\n[魔法棒]\n", "\n[Wands]\n"));
 				break;
 			case 2:
 				tval = TV_ROD;
-#ifdef JP
-				fprintf(fff, "\n[ロッド]\n");
-#else
-				fprintf(fff, "\n[Rods]\n");
-#endif
+				fprintf(fff, _("\n[ロッド]\n", "\n[Rods]\n"));
 				break;
 			}
 
@@ -4600,11 +4381,7 @@ static void dump_aux_class_special(FILE *fff)
 			}
 			else /* Not found */
 			{
-#ifdef JP
-				fputs("  (なし)\n", fff);
-#else
-				fputs("  (none)\n", fff);
-#endif
+				fputs(_("  (なし)\n", "  (none)\n"), fff);
 			}
 		}
 	}
@@ -4612,17 +4389,9 @@ static void dump_aux_class_special(FILE *fff)
 	{
 		int i, id[250], n = 0, row;
 
-#ifdef JP
-		fprintf(fff, "\n\n  [手に入れたエッセンス]\n\n");
-#else
-		fprintf(fff, "\n\n  [Get Essence]\n\n");
-#endif
-
-#ifdef JP
-		fprintf(fff, "エッセンス   個数     エッセンス   個数     エッセンス   個数");
-#else
-		fprintf(fff, "Essence      Num      Essence      Num      Essence      Num ");
-#endif
+		fprintf(fff, _("\n\n  [手に入れたエッセンス]\n\n", "\n\n  [Get Essence]\n\n"));
+		fprintf(fff, _("エッセンス   個数     エッセンス   個数     エッセンス   個数", 
+					   "Essence      Num      Essence      Num      Essence      Num "));
 		for (i = 0; essence_name[i]; i++)
 		{
 			if (!essence_name[i][0]) continue;
@@ -4657,12 +4426,7 @@ static void dump_aux_quest(FILE *fff)
 	int *quest_num;
 	int dummy;
 
-
-#ifdef JP
-	fprintf(fff, "\n\n  [クエスト情報]\n");
-#else
-	fprintf(fff, "\n\n  [Quest Information]\n");
-#endif
+	fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
 
 	/* Allocate Memory */
 	C_MAKE(quest_num, max_quests, int);
@@ -4698,11 +4462,7 @@ static void dump_aux_last_message(FILE *fff)
 		{
 			int i;
 
-#ifdef JP
-			fprintf(fff, "\n  [死ぬ直前のメッセージ]\n\n");
-#else
-			fprintf(fff, "\n  [Last Messages]\n\n");
-#endif
+			fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
 			for (i = MIN(message_num(), 30); i >= 0; i--)
 			{
 				fprintf(fff,"> %s\n",message_str((s16b)i));
@@ -4713,11 +4473,7 @@ static void dump_aux_last_message(FILE *fff)
 		/* Hack -- *Winning* message */
 		else if (p_ptr->last_message)
 		{
-#ifdef JP
-			fprintf(fff, "\n  [*勝利*メッセージ]\n\n");
-#else
-			fprintf(fff, "\n  [*Winning* Message]\n\n");
-#endif
+			fprintf(fff, _("\n  [*勝利*メッセージ]\n\n", "\n  [*Winning* Message]\n\n"));
 			fprintf(fff,"  %s\n", p_ptr->last_message);
 			fputc('\n', fff);
 		}
@@ -4732,12 +4488,7 @@ static void dump_aux_last_message(FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
 	int y;
-
-#ifdef JP
-	fprintf(fff, "\n  [帰還場所]\n\n");
-#else
-	fprintf(fff, "\n  [Recall Depth]\n\n");
-#endif
+	fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
 
 	for (y = 1; y < max_d_idx; y++)
 	{
@@ -4767,134 +4518,54 @@ static void dump_aux_recall(FILE *fff)
  */
 static void dump_aux_options(FILE *fff)
 {
-#ifdef JP
-	fprintf(fff, "\n  [オプション設定]\n");
-#else
-	fprintf(fff, "\n  [Option Settings]\n");
-#endif
-
+	fprintf(fff, _("\n  [オプション設定]\n", "\n  [Option Settings]\n"));
 
 	if (preserve_mode)
-#ifdef JP
-		fprintf(fff, "\n 保存モード:         ON");
-#else
-		fprintf(fff, "\n Preserve Mode:      ON");
-#endif
+		fprintf(fff, _("\n 保存モード:         ON", "\n Preserve Mode:      ON"));
 
 	else
-#ifdef JP
-		fprintf(fff, "\n 保存モード:         OFF");
-#else
-		fprintf(fff, "\n Preserve Mode:      OFF");
-#endif
-
+		fprintf(fff, _("\n 保存モード:         OFF", "\n Preserve Mode:      OFF"));
 
 	if (ironman_small_levels)
-#ifdef JP
-		fprintf(fff, "\n 小さいダンジョン:   ALWAYS");
-#else
-		fprintf(fff, "\n Small Levels:       ALWAYS");
-#endif
-
+		fprintf(fff, _("\n 小さいダンジョン:   ALWAYS", "\n Small Levels:       ALWAYS"));
 	else if (always_small_levels)
-#ifdef JP
-		fprintf(fff, "\n 小さいダンジョン:   ON");
-#else
-		fprintf(fff, "\n Small Levels:       ON");
-#endif
-
+		fprintf(fff, _("\n 小さいダンジョン:   ON", "\n Small Levels:       ON"));
 	else if (small_levels)
-#ifdef JP
-		fprintf(fff, "\n 小さいダンジョン:   ENABLED");
-#else
-		fprintf(fff, "\n Small Levels:       ENABLED");
-#endif
-
+		fprintf(fff, _("\n 小さいダンジョン:   ENABLED", "\n Small Levels:       ENABLED"));
 	else
-#ifdef JP
-		fprintf(fff, "\n 小さいダンジョン:   OFF");
-#else
-		fprintf(fff, "\n Small Levels:       OFF");
-#endif
+		fprintf(fff, _("\n 小さいダンジョン:   OFF", "\n Small Levels:       OFF"));
 
 
 	if (vanilla_town)
-#ifdef JP
-		fprintf(fff, "\n 元祖の町のみ:       ON");
-#else
-		fprintf(fff, "\n Vanilla Town:       ON");
-#endif
-
+		fprintf(fff, _("\n 元祖の町のみ:       ON", "\n Vanilla Town:       ON"));
 	else if (lite_town)
-#ifdef JP
-		fprintf(fff, "\n 小規模な町:         ON");
-#else
-		fprintf(fff, "\n Lite Town:          ON");
-#endif
+		fprintf(fff, _("\n 小規模な町:         ON", "\n Lite Town:          ON"));
 
 
 	if (ironman_shops)
-#ifdef JP
-		fprintf(fff, "\n 店なし:             ON");
-#else
-		fprintf(fff, "\n No Shops:           ON");
-#endif
-
+		fprintf(fff, _("\n 店なし:             ON", "\n No Shops:           ON"));
 
 	if (ironman_downward)
-#ifdef JP
-		fprintf(fff, "\n 階段を上がれない:   ON");
-#else
-		fprintf(fff, "\n Diving Only:        ON");
-#endif
-
+		fprintf(fff, _("\n 階段を上がれない:   ON", "\n Diving Only:        ON"));
 
 	if (ironman_rooms)
-#ifdef JP
-		fprintf(fff, "\n 普通でない部屋:     ON");
-#else
-		fprintf(fff, "\n Unusual Rooms:      ON");
-#endif
-
+		fprintf(fff, _("\n 普通でない部屋:     ON", "\n Unusual Rooms:      ON"));
 
 	if (ironman_nightmare)
-#ifdef JP
-		fprintf(fff, "\n 悪夢モード:         ON");
-#else
-		fprintf(fff, "\n Nightmare Mode:     ON");
-#endif
+		fprintf(fff, _("\n 悪夢モード:         ON", "\n Nightmare Mode:     ON"));
 
 
 	if (ironman_empty_levels)
-#ifdef JP
-		fprintf(fff, "\n アリーナ:           ALWAYS");
-#else
-		fprintf(fff, "\n Arena Levels:       ALWAYS");
-#endif
-
+		fprintf(fff, _("\n アリーナ:           ALWAYS", "\n Arena Levels:       ALWAYS"));
 	else if (empty_levels)
-#ifdef JP
-		fprintf(fff, "\n アリーナ:           ENABLED");
-#else
-		fprintf(fff, "\n Arena Levels:       ENABLED");
-#endif
-
+		fprintf(fff, _("\n アリーナ:           ENABLED", "\n Arena Levels:       ENABLED"));
 	else
-#ifdef JP
-		fprintf(fff, "\n アリーナ:           OFF");
-#else
-		fprintf(fff, "\n Arena Levels:       OFF");
-#endif
-
+		fprintf(fff, _("\n アリーナ:           OFF", "\n Arena Levels:       OFF"));
 
 	fputc('\n', fff);
 
 	if (p_ptr->noscore)
-#ifdef JP
-		fprintf(fff, "\n 何か不正なことをしてしまっています。\n");
-#else
-		fprintf(fff, "\n You have done something illegal.\n");
-#endif
+		fprintf(fff, _("\n 何か不正なことをしてしまっています。\n", "\n You have done something illegal.\n"));
 
 	fputc('\n', fff);
 }
@@ -4913,11 +4584,7 @@ static void dump_aux_arena(FILE *fff)
 	{
 		if (p_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
 		{
-#ifdef JP
-			fprintf(fff, "\n 闘技場: 敗北\n");
-#else
-			fprintf(fff, "\n Arena: Defeated\n");
-#endif
+			fprintf(fff, _("\n 闘技場: 敗北\n", "\n Arena: Defeated\n"));
 		}
 		else
 		{
@@ -4933,19 +4600,11 @@ static void dump_aux_arena(FILE *fff)
 	}
 	else if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
 	{
-#ifdef JP
-		fprintf(fff, "\n 闘技場: 真のチャンピオン\n");
-#else
-		fprintf(fff, "\n Arena: True Champion\n");
-#endif
+		fprintf(fff, _("\n 闘技場: 真のチャンピオン\n", "\n Arena: True Champion\n"));
 	}
 	else if (p_ptr->arena_number > MAX_ARENA_MONS - 1)
 	{
-#ifdef JP
-		fprintf(fff, "\n 闘技場: チャンピオン\n");
-#else
-		fprintf(fff, "\n Arena: Champion\n");
-#endif
+		fprintf(fff, _("\n 闘技場: チャンピオン\n", "\n Arena: Champion\n"));
 	}
 	else
 	{
@@ -4977,11 +4636,7 @@ static void dump_aux_monsters(FILE *fff)
 	/* Sort by monster level */
 	u16b why = 2;
 
-#ifdef JP
-	fprintf(fff, "\n  [倒したモンスター]\n\n");
-#else
-	fprintf(fff, "\n  [Defeated Monsters]\n\n");
-#endif
+	fprintf(fff, _("\n  [倒したモンスター]\n\n", "\n  [Defeated Monsters]\n\n"));
 
 	/* Allocate the "who" array */
 	C_MAKE(who, max_r_idx, s16b);
@@ -5021,11 +4676,7 @@ static void dump_aux_monsters(FILE *fff)
 	/* No monsters is defeated */
 	if (norm_total < 1)
 	{
-#ifdef JP
-		fprintf(fff,"まだ敵を倒していません。\n");
-#else
-		fprintf(fff,"You have defeated no enemies yet.\n");
-#endif
+		fprintf(fff,_("まだ敵を倒していません。\n", "You have defeated no enemies yet.\n"));
 	}
 
 	/* Defeated more than one normal monsters */
@@ -5054,23 +4705,13 @@ static void dump_aux_monsters(FILE *fff)
 
 		/* Sort the array by dungeon depth of monsters */
 		ang_sort(who, &why, uniq_total);
-
-#ifdef JP
-		fprintf(fff, "\n《上位%ld体のユニーク・モンスター》\n", MIN(uniq_total, 10));
-#else
-		fprintf(fff, "\n< Unique monsters top %ld >\n", MIN(uniq_total, 10));
-#endif
+		fprintf(fff, _("\n《上位%ld体のユニーク・モンスター》\n", "\n< Unique monsters top %ld >\n"), MIN(uniq_total, 10));
 
 		/* Print top 10 */
 		for (k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--)
 		{
 			monster_race *r_ptr = &r_info[who[k]];
-
-#ifdef JP
-			fprintf(fff, "  %-40s (レベル%3d)\n", (r_name + r_ptr->name), r_ptr->level); 
-#else
-			fprintf(fff, "  %-40s (level %3d)\n", (r_name + r_ptr->name), r_ptr->level); 
-#endif
+			fprintf(fff, _("  %-40s (レベル%3d)\n", "  %-40s (level %3d)\n"), (r_name + r_ptr->name), r_ptr->level); 
 		}
 
 	}
@@ -5091,11 +4732,7 @@ static void dump_aux_race_history(FILE *fff)
 	{
 		int i;
 
-#ifdef JP
-		fprintf(fff, "\n\n あなたは%sとして生まれた。", race_info[p_ptr->start_race].title);
-#else
-		fprintf(fff, "\n\n You were born as %s.", race_info[p_ptr->start_race].title);
-#endif
+		fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[p_ptr->start_race].title);
 		for (i = 0; i < MAX_RACES; i++)
 		{
 			if (p_ptr->start_race == i) continue;
@@ -5107,11 +4744,7 @@ static void dump_aux_race_history(FILE *fff)
 			{
 				if (!(p_ptr->old_race2 & 1L << (i-32))) continue;
 			}
-#ifdef JP
-			fprintf(fff, "\n あなたはかつて%sだった。", race_info[i].title);
-#else
-			fprintf(fff, "\n You were a %s before.", race_info[i].title);
-#endif
+			fprintf(fff, _("\n あなたはかつて%sだった。", "\n You were a %s before."), race_info[i].title);
 		}
 
 		fputc('\n', fff);
@@ -5134,11 +4767,7 @@ static void dump_aux_realm_history(FILE *fff)
 		for (i = 0; i < MAX_MAGIC; i++)
 		{
 			if (!(p_ptr->old_realm & 1L << i)) continue;
-#ifdef JP
-			fprintf(fff, "\n あなたはかつて%s魔法を使えた。", realm_names[i+1]);
-#else
-			fprintf(fff, "\n You were able to use %s magic before.", realm_names[i+1]);
-#endif
+			fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), realm_names[i+1]);
 		}
 		fputc('\n', fff);
 	}
@@ -5154,11 +4783,7 @@ static void dump_aux_virtues(FILE *fff)
 {
 	int v_nr, percent;
 
-#ifdef JP
-	fprintf(fff, "\n\n  [自分に関する情報]\n\n");
-#else
-	fprintf(fff, "\n\n  [HP-rate & Max stat & Virtues]\n\n");
-#endif
+	fprintf(fff, _("\n\n  [自分に関する情報]\n\n", "\n\n  [HP-rate & Max stat & Virtues]\n\n"));
 
 	percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
 		(2 * p_ptr->hitdie +
@@ -5179,12 +4804,7 @@ static void dump_aux_virtues(FILE *fff)
 			else fprintf(fff, "%s ???\n", stat_names[v_nr]);
 		}
 
-#ifdef JP
-	fprintf(fff, "\n属性 : %s\n", your_alignment());
-#else
-	fprintf(fff, "\nYour alighnment : %s\n", your_alignment());
-#endif
-
+	fprintf(fff, _("\n属性 : %s\n", "\nYour alighnment : %s\n"), your_alignment());
 	fprintf(fff, "\n");
 	dump_virtues(fff);
 }
@@ -5199,12 +4819,7 @@ static void dump_aux_mutations(FILE *fff)
 {
 	if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
 	{
-#ifdef JP
-		fprintf(fff, "\n\n  [突然変異]\n\n");
-#else
-		fprintf(fff, "\n\n  [Mutations]\n\n");
-#endif
-
+		fprintf(fff, _("\n\n  [突然変異]\n\n", "\n\n  [Mutations]\n\n"));
 		dump_mutations(fff);
 	}
 }
@@ -5223,21 +4838,12 @@ static void dump_aux_equipment_inventory(FILE *fff)
 	/* Dump the equipment */
 	if (equip_cnt)
 	{
-#ifdef JP
-		fprintf(fff, "  [キャラクタの装備]\n\n");
-#else
-		fprintf(fff, "  [Character Equipment]\n\n");
-#endif
-
+		fprintf(fff, _("  [キャラクタの装備]\n\n", "  [Character Equipment]\n\n"));
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
 			object_desc(o_name, &inventory[i], 0);
 			if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
-#ifdef JP
-				strcpy(o_name, "(武器を両手持ち)");
-#else
-				strcpy(o_name, "(wielding with two-hands)");
-#endif
+				strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 
 			fprintf(fff, "%c) %s\n",
 				index_to_label(i), o_name);
@@ -5246,11 +4852,7 @@ static void dump_aux_equipment_inventory(FILE *fff)
 	}
 
 	/* Dump the inventory */
-#ifdef JP
-	fprintf(fff, "  [キャラクタの持ち物]\n\n");
-#else
-	fprintf(fff, "  [Character Inventory]\n\n");
-#endif
+	fprintf(fff, _("  [キャラクタの持ち物]\n\n", "  [Character Inventory]\n\n"));
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
@@ -5289,21 +4891,13 @@ static void dump_aux_home_museum(FILE *fff)
 		int i;
 		int x = 1;
 
-#ifdef JP
-		fprintf(fff, "  [我が家のアイテム]\n");
-#else
-		fprintf(fff, "  [Home Inventory]\n");
-#endif
+		fprintf(fff, _("  [我が家のアイテム]\n", "  [Home Inventory]\n"));
 
 		/* Dump all available items */
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
 			if ((i % 12) == 0)
-#ifdef JP
-				fprintf(fff, "\n ( %d ページ )\n", x++);
-#else
-				fprintf(fff, "\n ( page %d )\n", x++);
-#endif
+				fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), x++);
 			object_desc(o_name, &st_ptr->stock[i], 0);
 			fprintf(fff, "%c) %s\n", I2A(i%12), o_name);
 		}
@@ -5322,11 +4916,7 @@ static void dump_aux_home_museum(FILE *fff)
 		int i;
 		int x = 1;
 
-#ifdef JP
-		fprintf(fff, "  [博物館のアイテム]\n");
-#else
-		fprintf(fff, "  [Museum]\n");
-#endif
+		fprintf(fff, _("  [博物館のアイテム]\n", "  [Museum]\n"));
 
 		/* Dump all available items */
 		for (i = 0; i < st_ptr->stock_num; i++)
@@ -5384,12 +4974,7 @@ errr make_character_dump(FILE *fff)
 	dump_aux_equipment_inventory(fff);
 	dump_aux_home_museum(fff);
 
-#ifdef JP
-	fprintf(fff, "  [チェックサム: \"%s\"]\n\n", get_check_sum());
-#else
-	fprintf(fff, "  [Check Sum: \"%s\"]\n\n", get_check_sum());
-#endif
-
+	fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), get_check_sum());
 	return 0;
 }
 
@@ -5426,12 +5011,7 @@ errr file_character(cptr name)
 		(void)fd_close(fd);
 
 		/* Build query */
-#ifdef JP
-		(void)sprintf(out_val, "現存するファイル %s に上書きしますか? ", buf);
-#else
-		(void)sprintf(out_val, "Replace existing file %s? ", buf);
-#endif
-
+		(void)sprintf(out_val, _("現存するファイル %s に上書きしますか? ", "Replace existing file %s? "), buf);
 
 		/* Ask */
 		if (get_check_strict(out_val, CHECK_NO_HISTORY)) fd = -1;
@@ -5444,11 +5024,7 @@ errr file_character(cptr name)
 	if (!fff)
 	{
 		/* Message */
-#ifdef JP
-		prt("キャラクタ情報のファイルへの書き出しに失敗しました！", 0, 0);
-#else
-		prt("Character dump failed!", 0, 0);
-#endif
+		prt(_("キャラクタ情報のファイルへの書き出しに失敗しました！", "Character dump failed!"), 0, 0);
 
 		(void)inkey();
 
@@ -5463,12 +5039,7 @@ errr file_character(cptr name)
 
 
 	/* Message */
-#ifdef JP
-msg_print("キャラクタ情報のファイルへの書き出しに成功しました。");
-#else
-	msg_print("Character dump successful.");
-#endif
-
+	msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
 	msg_print(NULL);
 
 	/* Success */
@@ -5727,12 +5298,7 @@ bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
 	if (!fff)
 	{
 		/* Caption */
-#ifdef JP
-sprintf(caption, "ヘルプ・ファイル'%s'", name);
-#else
-		sprintf(caption, "Help file '%s'", name);
-#endif
-
+		sprintf(caption, _("ヘルプ・ファイル'%s'", "Help file '%s'"), name);
 
 		/* Build the filename */
 		path_build(path, sizeof(path), ANGBAND_DIR_HELP, name);
@@ -5745,12 +5311,7 @@ sprintf(caption, "ヘルプ・ファイル'%s'", name);
 	if (!fff)
 	{
 		/* Caption */
-#ifdef JP
-sprintf(caption, "スポイラー・ファイル'%s'", name);
-#else
-		sprintf(caption, "Info file '%s'", name);
-#endif
-
+		sprintf(caption, _("スポイラー・ファイル'%s'", "Info file '%s'"), name);
 
 		/* Build the filename */
 		path_build(path, sizeof(path), ANGBAND_DIR_INFO, name);
@@ -5770,11 +5331,7 @@ sprintf(caption, "スポイラー・ファイル'%s'", name);
 				path[i] = PATH_SEP[0];
 
 		/* Caption */
-#ifdef JP
-sprintf(caption, "スポイラー・ファイル'%s'", name);
-#else
-		sprintf(caption, "Info file '%s'", name);
-#endif
+		sprintf(caption, _("スポイラー・ファイル'%s'", "Info file '%s'"), name);
 
 		/* Open the file */
 		fff = my_fopen(path, "r");
@@ -5784,12 +5341,7 @@ sprintf(caption, "スポイラー・ファイル'%s'", name);
 	if (!fff)
 	{
 		/* Message */
-#ifdef JP
-msg_format("'%s'をオープンできません。", name);
-#else
-		msg_format("Cannot open '%s'.", name);
-#endif
-
+		msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name);
 		msg_print(NULL);
 
 		/* Oops */
@@ -5951,24 +5503,13 @@ msg_format("'%s'をオープンできません。", name);
 		/* Show a general "title" */
 		if (show_version)
 		{
-			prt(format(
-#ifdef JP
-				"[変愚蛮怒 %d.%d.%d, %s, %d/%d]",
-#else
-				"[Hengband %d.%d.%d, %s, Line %d/%d]",
-#endif
-
+			prt(format(_("[変愚蛮怒 %d.%d.%d, %s, %d/%d]", "[Hengband %d.%d.%d, %s, Line %d/%d]"),
 			   FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH,
 			   caption, line, size), 0, 0);
 		}
 		else
 		{
-			prt(format(
-#ifdef JP
-				"[%s, %d/%d]",
-#else
-				"[%s, Line %d/%d]",
-#endif
+			prt(format(_("[%s, %d/%d]", "[%s, Line %d/%d]"),
 				caption, line, size), 0, 0);
 		}
 
@@ -5976,12 +5517,7 @@ msg_format("'%s'をオープンできません。", name);
 		if (size <= rows)
 		{
 			/* Wait for it */
-#ifdef JP
-prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
-#else
-			prt("[Press ESC to exit.]", hgt - 1, 0);
-#endif
-
+			prt(_("[キー:(?)ヘルプ (ESC)終了]", "[Press ESC to exit.]"), hgt - 1, 0);
 		}
 
 		/* Prompt -- large files */
@@ -6005,23 +5541,14 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		/* Show the help for the help */
 		case '?':
 			/* Hack - prevent silly recursion */
-#ifdef JP
-			if (strcmp(name, "jhelpinfo.txt") != 0)
-				show_file(TRUE, "jhelpinfo.txt", NULL, 0, mode);
-#else
-			if (strcmp(name, "helpinfo.txt") != 0)
-				show_file(TRUE, "helpinfo.txt", NULL, 0, mode);
-#endif
+			if (strcmp(name, _("jhelpinfo.txt", "helpinfo.txt")) != 0)
+				show_file(TRUE, _("jhelpinfo.txt", "helpinfo.txt"), NULL, 0, mode);
 			break;
 
 		/* Hack -- try showing */
 		case '=':
 			/* Get "shower" */
-#ifdef JP
-			prt("強調: ", hgt - 1, 0);
-#else
-			prt("Show: ", hgt - 1, 0);
-#endif
+			prt(_("強調: ", "Show: "), hgt - 1, 0);
 
 			strcpy(back_str, shower_str);
 			if (askfor(shower_str, 80))
@@ -6043,11 +5570,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		case '/':
 		case KTRL('s'):
 			/* Get "finder" */
-#ifdef JP
-			prt("検索: ", hgt - 1, 0);
-#else
-			prt("Find: ", hgt - 1, 0);
-#endif
+			prt(_("検索: ", "Find: "), hgt - 1, 0);
 
 			strcpy(back_str, finder_str);
 			if (askfor(finder_str, 80))
@@ -6074,12 +5597,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		case '#':
 			{
 				char tmp[81];
-#ifdef JP
-				prt("行: ", hgt - 1, 0);
-#else
-				prt("Goto Line: ", hgt - 1, 0);
-#endif
-
+				prt(_("行: ", "Goto Line: "), hgt - 1, 0);
 				strcpy(tmp, "0");
 
 				if (askfor(tmp, 80)) line = atoi(tmp);
@@ -6100,13 +5618,8 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 		case '%':
 			{
 				char tmp[81];
-#ifdef JP
-				prt("ファイル・ネーム: ", hgt - 1, 0);
-				strcpy(tmp, "jhelp.hlp");
-#else
-				prt("Goto File: ", hgt - 1, 0);
-				strcpy(tmp, "help.hlp");
-#endif
+				prt(_("ファイル・ネーム: ", "Goto File: "), hgt - 1, 0);
+				strcpy(tmp, _("jhelp.hlp", "help.hlp"));
 
 				if (askfor(tmp, 80))
 				{
@@ -6183,11 +5696,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 
 			strcpy (xtmp, "");
 
-#ifdef JP
-			if (!get_string("ファイル名: ", xtmp, 80)) continue;
-#else
-			if (!get_string("File name: ", xtmp, 80)) continue;
-#endif
+			if (!get_string(_("ファイル名: ", "File name: "), xtmp, 80)) continue;
 
 			/* Close it */
 			my_fclose(fff);
@@ -6203,11 +5712,7 @@ prt("[キー:(?)ヘルプ (ESC)終了]", hgt - 1, 0);
 			/* Oops */
 			if (!(fff && ffp))
 			{
-#ifdef JP
-				msg_print("ファイルを開けません。");
-#else
-				msg_print("Failed to open file.");
-#endif
+				msg_print(_("ファイルを開けません。", "Failed to open file."));
 				skey = ESCAPE;
 				break;
 			}
@@ -6260,12 +5765,7 @@ void do_cmd_help(void)
 	screen_save();
 
 	/* Peruse the main help file */
-#ifdef JP
-(void)show_file(TRUE, "jhelp.hlp", NULL, 0, 0);
-#else
-	(void)show_file(TRUE, "help.hlp", NULL, 0, 0);
-#endif
-
+	(void)show_file(TRUE, _("jhelp.hlp", "help.hlp"), NULL, 0, 0);
 
 	/* Load screen */
 	screen_load();
@@ -6297,12 +5797,7 @@ void process_player_name(bool sf)
 #endif
 	{
 		/* Name too long */
-#ifdef JP
-quit_fmt("'%s'という名前は長すぎます！", player_name);
-#else
-		quit_fmt("The name '%s' is too long!", player_name);
-#endif
-
+		quit_fmt(_("'%s'という名前は長すぎます！", "The name '%s' is too long!"), player_name);
 	}
 #endif
 
@@ -6319,12 +5814,7 @@ quit_fmt("'%s'という名前は長すぎます！", player_name);
 
 		{
 			/* Illegal characters */
-#ifdef JP
-quit_fmt("'%s' という名前は不正なコントロールコードを含んでいます。", player_name);
-#else
-			quit_fmt("The name '%s' contains control chars!", player_name);
-#endif
-
+			quit_fmt(_("'%s' という名前は不正なコントロールコードを含んでいます。", "The name '%s' contains control chars!"), player_name);
 		}
 	}
 
@@ -6479,11 +5969,7 @@ void get_name(void)
 	strcpy(tmp, player_name);
 
 	/* Prompt for a new name */
-#ifdef JP
-	if (get_string("キャラクターの名前を入力して下さい: ", tmp, 15))
-#else
-	if (get_string("Enter a name for your character: ", tmp, 15))
-#endif
+	if (get_string(_("キャラクターの名前を入力して下さい: ", "Enter a name for your character: "), tmp, 15))
 	{
 		/* Use the name */
 		strcpy(player_name, tmp);
@@ -6531,34 +6017,21 @@ void do_cmd_suicide(void)
 	if (p_ptr->total_winner)
 	{
 		/* Verify */
-#ifdef JP
-if (!get_check_strict("引退しますか? ", CHECK_NO_HISTORY)) return;
-#else
-		if (!get_check_strict("Do you want to retire? ", CHECK_NO_HISTORY)) return;
-#endif
-
+		if (!get_check_strict(_("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) return;
 	}
 
 	/* Verify Suicide */
 	else
 	{
 		/* Verify */
-#ifdef JP
-if (!get_check("本当に自殺しますか？")) return;
-#else
-		if (!get_check("Do you really want to commit suicide? ")) return;
-#endif
+		if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) return;
 	}
 
 
 	if (!p_ptr->noscore)
 	{
 		/* Special Verification for suicide */
-#ifdef JP
-prt("確認のため '@' を押して下さい。", 0, 0);
-#else
-		prt("Please verify SUICIDE by typing the '@' sign: ", 0, 0);
-#endif
+		prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
 
 		flush();
 		i = inkey();
@@ -6579,17 +6052,9 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
 		do
 		{
-#ifdef JP
-			while (!get_string("*勝利*メッセージ: ", buf, sizeof buf)) ;
-#else
-			while (!get_string("*Winning* message: ", buf, sizeof buf)) ;
-#endif
+			while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof buf)) ;
 		}
-#ifdef JP
-		while (!get_check_strict("よろしいですか？", CHECK_NO_HISTORY));
-#else
-		while (!get_check_strict("Are you sure? ", CHECK_NO_HISTORY));
-#endif
+		while (!get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
 		if (buf[0])
 		{
@@ -6609,23 +6074,13 @@ prt("確認のため '@' を押して下さい。", 0, 0);
 
 	if (!p_ptr->total_winner)
 	{
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ダンジョンの探索に絶望して自殺した。");
-		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "-------- ゲームオーバー --------");
-#else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "give up all hope to commit suicide.");
-		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "--------   Game  Over   --------");
-#endif
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("ダンジョンの探索に絶望して自殺した。", "give up all hope to commit suicide."));
+		do_cmd_write_nikki(NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "\n\n\n\n");
 	}
 
 	/* Cause of death */
-#ifdef JP
-(void)strcpy(p_ptr->died_from, "途中終了");
-#else
-	(void)strcpy(p_ptr->died_from, "Quitting");
-#endif
-
+	(void)strcpy(p_ptr->died_from, _("途中終了", "Quitting"));
 }
 
 
@@ -6641,12 +6096,7 @@ void do_cmd_save_game(int is_autosave)
 	/* Autosaves do not disturb */
 	if (is_autosave)
 	{
-#ifdef JP
-msg_print("自動セーブ中");
-#else
-		msg_print("Autosaving the game...");
-#endif
-
+		msg_print(_("自動セーブ中", "Autosaving the game..."));
 	}
 	else
 	{
@@ -6661,23 +6111,13 @@ msg_print("自動セーブ中");
 	handle_stuff();
 
 	/* Message */
-#ifdef JP
-prt("ゲームをセーブしています...", 0, 0);
-#else
-	prt("Saving game...", 0, 0);
-#endif
-
+	prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
 
 	/* Refresh */
 	Term_fresh();
 
 	/* The player is not dead */
-#ifdef JP
-(void)strcpy(p_ptr->died_from, "(セーブ)");
-#else
-	(void)strcpy(p_ptr->died_from, "(saved)");
-#endif
-
+	(void)strcpy(p_ptr->died_from, _("(セーブ)", "(saved)"));
 
 	/* Forbid suspend */
 	signals_ignore_tstp();
@@ -6685,23 +6125,13 @@ prt("ゲームをセーブしています...", 0, 0);
 	/* Save the player */
 	if (save_player())
 	{
-#ifdef JP
-prt("ゲームをセーブしています... 終了", 0, 0);
-#else
-		prt("Saving game... done.", 0, 0);
-#endif
-
+		prt(_("ゲームをセーブしています... 終了", "Saving game... done."), 0, 0);
 	}
 
 	/* Save failed (oops) */
 	else
 	{
-#ifdef JP
-prt("ゲームをセーブしています... 失敗！", 0, 0);
-#else
-		prt("Saving game... failed!", 0, 0);
-#endif
-
+		prt(_("ゲームをセーブしています... 失敗！", "Saving game... failed!"), 0, 0);
 	}
 
 	/* Allow suspend again */
@@ -6711,11 +6141,7 @@ prt("ゲームをセーブしています... 失敗！", 0, 0);
 	Term_fresh();
 
 	/* Note that the player is not dead */
-#ifdef JP
-(void)strcpy(p_ptr->died_from, "(元気に生きている)");
-#else
-	(void)strcpy(p_ptr->died_from, "(alive and well)");
-#endif
+	(void)strcpy(p_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
 
 	/* HACK -- don't get sanity blast on updating view */
 	hack_mind = FALSE;
@@ -6743,11 +6169,7 @@ void do_cmd_save_and_exit(void)
 
 	/* Leaving */
 	p_ptr->leaving = TRUE;
-#ifdef JP
-	do_cmd_write_nikki(NIKKI_GAMESTART, 0, "----ゲーム中断----");
-#else
-	do_cmd_write_nikki(NIKKI_GAMESTART, 0, "---- Save and Exit Game ----");
-#endif
+	do_cmd_write_nikki(NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 }
 
 
@@ -6948,11 +6370,7 @@ static void print_tomb(void)
 		Term_clear();
 
 		/* Build the filename */
-#ifdef JP
-		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "dead_j.txt");
-#else
-		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "dead.txt");
-#endif
+		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
 
 		/* Open the News file */
 		fp = my_fopen(buf, "r");
@@ -7004,27 +6422,15 @@ static void print_tomb(void)
 		center_string(buf, cp_ptr->title);
 		put_str(buf, 10, 11);
 
-#ifdef JP
-		(void)sprintf(tmp, "レベル: %d", (int)p_ptr->lev);
-#else
-		(void)sprintf(tmp, "Level: %d", (int)p_ptr->lev);
-#endif
+		(void)sprintf(tmp, _("レベル: %d", "Level: %d"), (int)p_ptr->lev);
 		center_string(buf, tmp);
 		put_str(buf, 11, 11);
 
-#ifdef JP
-		(void)sprintf(tmp, "経験値: %ld", (long)p_ptr->exp);
-#else
-		(void)sprintf(tmp, "Exp: %ld", (long)p_ptr->exp);
-#endif
+		(void)sprintf(tmp, _("経験値: %ld", "Exp: %ld"), (long)p_ptr->exp);
 		center_string(buf, tmp);
 		put_str(buf, 12, 11);
 
-#ifdef JP
-		(void)sprintf(tmp, "所持金: %ld", (long)p_ptr->au);
-#else
-		(void)sprintf(tmp, "AU: %ld", (long)p_ptr->au);
-#endif
+		(void)sprintf(tmp, _("所持金: %ld", "AU: %ld"), (long)p_ptr->au);
 		center_string(buf, tmp);
 		put_str(buf, 13, 11);
 
@@ -7137,12 +6543,7 @@ static void print_tomb(void)
 		(void)sprintf(tmp, "%-.24s", ctime(&ct));
 		center_string(buf, tmp);
 		put_str(buf, 17, 11);
-
-#ifdef JP
-		msg_format("さようなら、%s!", player_name);
-#else
-		msg_format("Goodbye, %s!", player_name);
-#endif
+		msg_format(_("さようなら、%s!", "Goodbye, %s!"), player_name);
 	}
 }
 
@@ -7203,14 +6604,8 @@ static void show_info(void)
 
 
 	/* Describe options */
-#ifdef JP
-prt("キャラクターの記録をファイルに書き出すことができます。", 21, 0);
-prt("リターンキーでキャラクターを見ます。ESCで中断します。", 22, 0);
-#else
-	prt("You may now dump a character record to one or more files.", 21, 0);
-	prt("Then, hit RETURN to see the character, or ESC to abort.", 22, 0);
-#endif
-
+	prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
+	prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
 
 	/* Dump character records as requested */
 	while (TRUE)
@@ -7218,12 +6613,7 @@ prt("リターンキーでキャラクターを見ます。ESCで中断します
 		char out_val[160];
 
 		/* Prompt */
-#ifdef JP
-put_str("ファイルネーム: ", 23, 0);
-#else
-		put_str("Filename: ", 23, 0);
-#endif
-
+		put_str(_("ファイルネーム: ", "Filename: "), 23, 0);
 
 		/* Default */
 		strcpy(out_val, "");
@@ -7250,12 +6640,7 @@ put_str("ファイルネーム: ", 23, 0);
 	display_player(0);
 
 	/* Prompt for inventory */
-#ifdef JP
-prt("何かキーを押すとさらに情報が続きます (ESCで中断): ", 23, 0);
-#else
-	prt("Hit any key to see more information (ESC to abort): ", 23, 0);
-#endif
-
+	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
 
 	/* Allow abort at this point */
 	if (inkey() == ESCAPE) return;
@@ -7269,11 +6654,7 @@ prt("何かキーを押すとさらに情報が続きます (ESCで中断): ", 2
 		Term_clear();
 		item_tester_full = TRUE;
 		(void)show_equip(0);
-#ifdef JP
-prt("装備していたアイテム: -続く-", 0, 0);
-#else
-		prt("You are using: -more-", 0, 0);
-#endif
+		prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;
 	}
@@ -7284,11 +6665,7 @@ prt("装備していたアイテム: -続く-", 0, 0);
 		Term_clear();
 		item_tester_full = TRUE;
 		(void)show_inven(0);
-#ifdef JP
-prt("持っていたアイテム: -続く-", 0, 0);
-#else
-		prt("You are carrying: -more-", 0, 0);
-#endif
+		prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;
 	}
@@ -7326,12 +6703,7 @@ prt("持っていたアイテム: -続く-", 0, 0);
 				}
 
 				/* Caption */
-#ifdef JP
-prt(format("我が家に置いてあったアイテム ( %d ページ): -続く-", k+1), 0, 0);
-#else
-				prt(format("Your home contains (page %d): -more-", k+1), 0, 0);
-#endif
-
+				prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k+1), 0, 0);
 
 				/* Wait for it */
 				if (inkey() == ESCAPE) return;
@@ -7353,12 +6725,7 @@ static bool check_score(void)
 	/* No score file */
 	if (highscore_fd < 0)
 	{
-#ifdef JP
-msg_print("スコア・ファイルが使用できません。");
-#else
-		msg_print("Score file unavailable.");
-#endif
-
+		msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
 		msg_print(NULL);
 		return FALSE;
 	}
@@ -7367,12 +6734,7 @@ msg_print("スコア・ファイルが使用できません。");
 	/* Wizard-mode pre-empts scoring */
 	if (p_ptr->noscore & 0x000F)
 	{
-#ifdef JP
-msg_print("ウィザード・モードではスコアが記録されません。");
-#else
-		msg_print("Score not registered for wizards.");
-#endif
-
+		msg_print(_("ウィザード・モードではスコアが記録されません。", "Score not registered for wizards."));
 		msg_print(NULL);
 		return FALSE;
 	}
@@ -7382,12 +6744,7 @@ msg_print("ウィザード・モードではスコアが記録されません。
 	/* Borg-mode pre-empts scoring */
 	if (p_ptr->noscore & 0x00F0)
 	{
-#ifdef JP
-msg_print("ボーグ・モードではスコアが記録されません。");
-#else
-		msg_print("Score not registered for borgs.");
-#endif
-
+		msg_print(_("ボーグ・モードではスコアが記録されません。", "Score not registered for borgs."));
 		msg_print(NULL);
 		return FALSE;
 	}
@@ -7397,49 +6754,24 @@ msg_print("ボーグ・モードではスコアが記録されません。");
 	/* Cheaters are not scored */
 	if (p_ptr->noscore & 0xFF00)
 	{
-#ifdef JP
-msg_print("詐欺をやった人はスコアが記録されません。");
-#else
-		msg_print("Score not registered for cheaters.");
-#endif
-
+		msg_print(_("詐欺をやった人はスコアが記録されません。", "Score not registered for cheaters."));
 		msg_print(NULL);
 		return FALSE;
 	}
 #endif
 
 	/* Interupted */
-#ifdef JP
-if (!p_ptr->total_winner && streq(p_ptr->died_from, "強制終了"))
-#else
-	if (!p_ptr->total_winner && streq(p_ptr->died_from, "Interrupting"))
-#endif
-
+	if (!p_ptr->total_winner && streq(p_ptr->died_from, _("強制終了", "Interrupting")))
 	{
-#ifdef JP
-msg_print("強制終了のためスコアが記録されません。");
-#else
-		msg_print("Score not registered due to interruption.");
-#endif
-
+		msg_print(_("強制終了のためスコアが記録されません。", "Score not registered due to interruption."));
 		msg_print(NULL);
 		return FALSE;
 	}
 
 	/* Quitter */
-#ifdef JP
-if (!p_ptr->total_winner && streq(p_ptr->died_from, "途中終了"))
-#else
-	if (!p_ptr->total_winner && streq(p_ptr->died_from, "Quitting"))
-#endif
-
+	if (!p_ptr->total_winner && streq(p_ptr->died_from, _("途中終了", "Quitting")))
 	{
-#ifdef JP
-msg_print("途中終了のためスコアが記録されません。");
-#else
-		msg_print("Score not registered due to quitting.");
-#endif
-
+		msg_print(_("途中終了のためスコアが記録されません。", "Score not registered due to quitting."));
 		msg_print(NULL);
 		return FALSE;
 	}
@@ -7499,18 +6831,9 @@ void close_game(void)
 		if (p_ptr->total_winner) kingly();
 
 		/* Save memories */
-#ifdef JP
-		if (!cheat_save || get_check("死んだデータをセーブしますか？ "))
-#else
-		if (!cheat_save || get_check("Save death? "))
-#endif
+		if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? ")))
 		{
-
-#ifdef JP
-if (!save_player()) msg_print("セーブ失敗！");
-#else
-			if (!save_player()) msg_print("death save failed!");
-#endif
+			if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
 		}
 		else do_send = FALSE;
 
@@ -7529,19 +6852,12 @@ if (!save_player()) msg_print("セーブ失敗！");
 		{
 			if ((!send_world_score(do_send)))
 			{
-#ifdef JP
-				if (get_check_strict("後でスコアを登録するために待機しますか？", (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
-#else
-				if (get_check_strict("Stand by for later score registration? ", (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
-#endif
+				if (get_check_strict(_("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
+								(CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
 				{
 					p_ptr->wait_report_score = TRUE;
 					p_ptr->is_dead = FALSE;
-#ifdef JP
-					if (!save_player()) msg_print("セーブ失敗！");
-#else
-					if (!save_player()) msg_print("death save failed!");
-#endif
+					if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
 				}
 			}
 			if (!p_ptr->wait_report_score)
@@ -7564,12 +6880,7 @@ if (!save_player()) msg_print("セーブ失敗！");
 		do_cmd_save_game(FALSE);
 
 		/* Prompt for scores XXX XXX XXX */
-#ifdef JP
-		prt("リターンキーか ESC キーを押して下さい。", 0, 40);
-#else
-		prt("Press Return (or Escape).", 0, 40);
-#endif
-
+		prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
 
 		/* Predict score (or ESCAPE) */
@@ -7606,11 +6917,7 @@ if (!save_player()) msg_print("セーブ失敗！");
 void exit_game_panic(void)
 {
 	/* If nothing important has happened, just quit */
-#ifdef JP
-	if (!character_generated || character_saved) quit("緊急事態");
-#else
-	if (!character_generated || character_saved) quit("panic");
-#endif
+	if (!character_generated || character_saved) quit(_("緊急事態", "panic"));
 
 	/* Mega-Hack -- see "msg_print()" */
 	msg_flag = FALSE;
@@ -7631,27 +6938,13 @@ void exit_game_panic(void)
 	signals_ignore_tstp();
 
 	/* Indicate panic save */
-#ifdef JP
-	(void)strcpy(p_ptr->died_from, "(緊急セーブ)");
-#else
-	(void)strcpy(p_ptr->died_from, "(panic save)");
-#endif
-
+	(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
 
 	/* Panic save, or get worried */
-#ifdef JP
-	if (!save_player()) quit("緊急セーブ失敗！");
-#else
-	if (!save_player()) quit("panic save failed!");
-#endif
-
+	if (!save_player()) quit(_("緊急セーブ失敗！", "panic save failed!"));
 
 	/* Successful panic save */
-#ifdef JP
-	quit("緊急セーブ成功！");
-#else
-	quit("panic save succeeded!");
-#endif
+	quit(_("緊急セーブ成功！", "panic save succeeded!"));
 }
 
 
@@ -7903,11 +7196,7 @@ u32b counts_read(int where)
 	u32b count = 0;
 	char buf[1024];
 
-#ifdef JP
-	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info_j.raw");
-#else
-	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info.raw");
-#endif
+	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
 	fd = fd_open(buf, O_RDONLY);
 
 	if (counts_seek(fd, where, FALSE) ||
@@ -7932,11 +7221,7 @@ errr counts_write(int where, u32b count)
 	char buf[1024];
 	errr err;
 
-#ifdef JP
-	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info_j.raw");
-#else
-	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, "z_info.raw");
-#endif
+	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
 
 	/* Grab permissions */
 	safe_setuid_grab();
@@ -8069,11 +7354,7 @@ static void handle_signal_simple(int sig)
 	if (p_ptr->is_dead)
 	{
 		/* Mark the savefile */
-#ifdef JP
-(void)strcpy(p_ptr->died_from, "強制終了");
-#else
-		(void)strcpy(p_ptr->died_from, "Abortion");
-#endif
+		(void)strcpy(p_ptr->died_from, _("強制終了", "Abortion"));
 
 		forget_lite();
 		forget_view();
@@ -8083,24 +7364,14 @@ static void handle_signal_simple(int sig)
 		close_game();
 
 		/* Quit */
-#ifdef JP
-quit("強制終了");
-#else
-		quit("interrupt");
-#endif
-
+		quit(_("強制終了", "interrupt"));
 	}
 
 	/* Allow suicide (after 5) */
 	else if (signal_count >= 5)
 	{
 		/* Cause of "death" */
-#ifdef JP
-(void)strcpy(p_ptr->died_from, "強制終了中");
-#else
-		(void)strcpy(p_ptr->died_from, "Interrupting");
-#endif
-
+		(void)strcpy(p_ptr->died_from, _("強制終了中", "Interrupting"));
 
 		forget_lite();
 		forget_view();
@@ -8119,12 +7390,7 @@ quit("強制終了");
 		close_game();
 
 		/* Quit */
-#ifdef JP
-quit("強制終了");
-#else
-		quit("interrupt");
-#endif
-
+		quit(_("強制終了", "interrupt"));
 	}
 
 	/* Give warning (after 4) */
@@ -8137,12 +7403,7 @@ quit("強制終了");
 		Term_erase(0, 0, 255);
 
 		/* Display the cause */
-#ifdef JP
-Term_putstr(0, 0, -1, TERM_WHITE, "熟慮の上の自殺！");
-#else
-		Term_putstr(0, 0, -1, TERM_WHITE, "Contemplating suicide!");
-#endif
-
+		Term_putstr(0, 0, -1, TERM_WHITE, _("熟慮の上の自殺！", "Contemplating suicide!"));
 
 		/* Flush */
 		Term_fresh();
@@ -8200,26 +7461,13 @@ static void handle_signal_abort(int sig)
 
 	/* Give a warning */
 	Term_putstr(0, hgt - 1, -1, TERM_RED,
-#ifdef JP
-"恐ろしいソフトのバグが飛びかかってきた！");
-#else
-		    "A gruesome software bug LEAPS out at you!");
-#endif
+	_("恐ろしいソフトのバグが飛びかかってきた！", "A gruesome software bug LEAPS out at you!"));
 
 
 	/* Message */
-#ifdef JP
-Term_putstr(45, hgt - 1, -1, TERM_RED, "緊急セーブ...");
-#else
-	Term_putstr(45, hgt - 1, -1, TERM_RED, "Panic save...");
-#endif
+	Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ...", "Panic save..."));
 
-
-#ifdef JP
-	do_cmd_write_nikki(NIKKI_GAMESTART, 0, "----ゲーム異常終了----");
-#else
-	do_cmd_write_nikki(NIKKI_GAMESTART, 0, "---- Panic Save and Abort Game ----");
-#endif
+	do_cmd_write_nikki(NIKKI_GAMESTART, 0, _("----ゲーム異常終了----", "---- Panic Save and Abort Game ----"));
 
 	/* Flush output */
 	Term_fresh();
@@ -8228,12 +7476,7 @@ Term_putstr(45, hgt - 1, -1, TERM_RED, "緊急セーブ...");
 	p_ptr->panic_save = 1;
 
 	/* Panic save */
-#ifdef JP
-(void)strcpy(p_ptr->died_from, "(緊急セーブ)");
-#else
-	(void)strcpy(p_ptr->died_from, "(panic save)");
-#endif
-
+	(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
 
 	/* Forbid suspend */
 	signals_ignore_tstp();
@@ -8241,35 +7484,20 @@ Term_putstr(45, hgt - 1, -1, TERM_RED, "緊急セーブ...");
 	/* Attempt to save */
 	if (save_player())
 	{
-#ifdef JP
-Term_putstr(45, hgt - 1, -1, TERM_RED, "緊急セーブ成功！");
-#else
-		Term_putstr(45, hgt - 1, -1, TERM_RED, "Panic save succeeded!");
-#endif
-
+		Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ成功！", "Panic save succeeded!"));
 	}
 
 	/* Save failed */
 	else
 	{
-#ifdef JP
-Term_putstr(45, hgt - 1, -1, TERM_RED, "緊急セーブ失敗！");
-#else
-		Term_putstr(45, hgt - 1, -1, TERM_RED, "Panic save failed!");
-#endif
-
+		Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ失敗！", "Panic save failed!"));
 	}
 
 	/* Flush output */
 	Term_fresh();
 
 	/* Quit */
-#ifdef JP
-quit("ソフトのバグ");
-#else
-	quit("software bug");
-#endif
-
+	quit(_("ソフトのバグ", "software bug"));
 }
 
 /*!
