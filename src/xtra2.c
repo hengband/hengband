@@ -177,11 +177,7 @@ msg_format("レベル %d にようこそ。", p_ptr->lev);
 					for(n = 0; n < 6; n++)
 						if (n != choice - 'a')
 							prt("",n+2,14);
-#ifdef JP
-					if (get_check("よろしいですか？")) break;
-#else
-					if (get_check("Are you sure? ")) break;
-#endif
+					if (get_check(_("よろしいですか？", "Are you sure? "))) break;
 				}
 				do_inc_stat(choice - 'a');
 				screen_load();
@@ -192,12 +188,7 @@ msg_format("レベル %d にようこそ。", p_ptr->lev);
 
 		if (level_mutation)
 		{
-#ifdef JP
-msg_print("あなたは変わった気がする...");
-#else
-			msg_print("You feel different...");
-#endif
-
+			msg_print(_("あなたは変わった気がする...", "You feel different..."));
 			(void)gain_random_mutation(0);
 			level_mutation = FALSE;
 		}
@@ -645,12 +636,7 @@ void check_quest_completion(monster_type *m_ptr)
 		}
 
 		/* Explain the staircase */
-#ifdef JP
-msg_print("魔法の階段が現れた...");
-#else
-		msg_print("A magical staircase appears...");
-#endif
-
+		msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
 
 		/* Create stairs down */
 		cave_set_feat(y, x, feat_down_stair);
@@ -722,27 +708,14 @@ cptr extract_note_dies(monster_race *r_ptr)
 		{
 			if (r_ptr->blow[i].method == RBM_EXPLODE)
 			{
-#ifdef JP
-				return "は爆発して粉々になった。";
-#else
-				return " explodes into tiny shreds.";
-#endif
+				return _("は爆発して粉々になった。", " explodes into tiny shreds.");
 			}
 		}
-
-#ifdef JP
-		return "を倒した。";
-#else
-		return " is destroyed.";
-#endif
+		return _("を倒した。", " is destroyed.");
 	}
 
 	/* Assume a default death */
-#ifdef JP
-	return "は死んだ。";
-#else
-	return " dies.";
-#endif
+	return _("は死んだ。", " dies.");
 }
 
 
@@ -845,19 +818,11 @@ void monster_death(int m_idx, bool drop_item)
 
 		if (p_ptr->arena_number > MAX_ARENA_MONS)
 		{
-#ifdef JP
-msg_print("素晴らしい！君こそ真の勝利者だ。");
-#else
-			msg_print("You are a Genuine Champion!");
-#endif
+			msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
 		}
 		else
 		{
-#ifdef JP
-msg_print("勝利！チャンピオンへの道を進んでいる。");
-#else
-			msg_print("Victorious! You're on your way to becoming Champion.");
-#endif
+			msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
 		}
 
 		if (arena_info[p_ptr->arena_number].tval)
@@ -891,11 +856,7 @@ msg_print("勝利！チャンピオンへの道を進んでいる。");
 	{
 		if (rakuba(-1, FALSE))
 		{
-#ifdef JP
-msg_print("地面に落とされた。");
-#else
-			msg_print("You have fallen from your riding pet.");
-#endif
+			msg_print(_("地面に落とされた。", "You have fallen from your riding pet."));
 		}
 	}
 
@@ -974,11 +935,7 @@ msg_print("地面に落とされた。");
 			}
 
 			if (notice)
-#ifdef JP
-				msg_print("ピンク・ホラーは分裂した！");
-#else
-				msg_print("The Pink horror divides!");
-#endif
+				msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
 		}
 		break;
 
@@ -1049,12 +1006,7 @@ msg_print("地面に落とされた。");
 					if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode))
 					{
 						if (player_can_see_bold(wy, wx))
-#ifdef JP
-							msg_print("新たな戦士が現れた！");
-#else
-							msg_print("A new warrior steps forth!");
-#endif
-
+							msg_print(_("新たな戦士が現れた！", "A new warrior steps forth!"));
 					}
 				}
 			}
@@ -1545,11 +1497,7 @@ msg_print("地面に落とされた。");
 				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
 			}
-#ifdef JP
-			msg_format("あなたは%sを制覇した！",d_name+d_info[dungeon_type].name);
-#else
-			msg_format("You have conquered %s!",d_name+d_info[dungeon_type].name);
-#endif
+			msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"),d_name+d_info[dungeon_type].name);
 		}
 	}
 
@@ -1637,41 +1585,18 @@ msg_print("地面に落とされた。");
 		/* Redraw the "title" */
 		p_ptr->redraw |= (PR_TITLE);
 
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "見事に変愚蛮怒の勝利者となった！");
-#else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "become *WINNER* of Hengband finely!");
-#endif
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("見事に変愚蛮怒の勝利者となった！", "become *WINNER* of Hengband finely!"));
 
 		if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) || (p_ptr->muta2 & MUT2_CHAOS_GIFT))
 		{
-#ifdef JP
-			msg_format("%sからの声が響いた。", chaos_patrons[p_ptr->chaos_patron]);
-			msg_print("『よくやった、定命の者よ！』");
-#else
-			msg_format("The voice of %s booms out:", chaos_patrons[p_ptr->chaos_patron]);
-			msg_print("'Thou art donst well, mortal!'");
-#endif
+			msg_format(_("%sからの声が響いた。", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
+			msg_print(_("『よくやった、定命の者よ！』", "'Thou art donst well, mortal!'"));
 		}
 
 		/* Congratulations */
-#ifdef JP
-		msg_print("*** おめでとう ***");
-#else
-		msg_print("*** CONGRATULATIONS ***");
-#endif
-
-#ifdef JP
-		msg_print("あなたはゲームをコンプリートしました。");
-#else
-		msg_print("You have won the game!");
-#endif
-
-#ifdef JP
-		msg_print("準備が整ったら引退(自殺コマンド)しても結構です。");
-#else
-		msg_print("You may retire (commit suicide) when you are ready.");
-#endif
+		msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));
+		msg_print(_("あなたはゲームをコンプリートしました。", "You have won the game!"));
+		msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));
 	}
 }
 
@@ -1706,11 +1631,7 @@ int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear)
 		{
 			if (!p_ptr->blind && is_seen(m_ptr))
 			{
-#ifdef JP
-				msg_print("バリアを切り裂いた！");
-#else
-				msg_print("The barrier is penetrated!");
-#endif
+				msg_print(_("バリアを切り裂いた！", "The barrier is penetrated!"));
 			}
 		}
 		else if (!one_in_(PENETRATE_INVULNERABILITY))
@@ -1967,12 +1888,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 			bool stop_ty = FALSE;
 			int count = 0;
 
-#ifdef JP
-msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
-#else
-			msg_format("%^s puts a terrible blood curse on you!", m_name);
-#endif
-
+			msg_format(_("%^sは恐ろしい血の呪いをあなたにかけた！", "%^s puts a terrible blood curse on you!"), m_name);
 			curse_equipment(100, 50);
 
 			do
@@ -1987,11 +1903,7 @@ msg_format("%^sは恐ろしい血の呪いをあなたにかけた！", m_name);
 			char line_got[1024];
 
 			/* Dump a message */
-#ifdef JP
-			if (!get_rnd_line("mondeath_j.txt", m_ptr->r_idx, line_got))
-#else
-			if (!get_rnd_line("mondeath.txt", m_ptr->r_idx, line_got))
-#endif
+			if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), m_ptr->r_idx, line_got))
 
 				msg_format("%^s %s", m_name, line_got);
 
@@ -2160,11 +2072,7 @@ msg_format("%sを殺した。", m_name);
 
 			/* Special note at death */
 			if (explode)
-#ifdef JP
-				msg_format("%sは爆発して粉々になった。", m_name);
-#else
-				msg_format("%^s explodes into tiny shreds.", m_name);
-#endif
+				msg_format(_("%sは爆発して粉々になった。", "%^s explodes into tiny shreds."), m_name);
 			else
 			{
 #ifdef JP
@@ -2197,11 +2105,7 @@ msg_format("%sを葬り去った。", m_name);
 			{
 				if ((kubi_r_idx[i] == m_ptr->r_idx) && !(m_ptr->mflag2 & MFLAG2_CHAMELEON))
 				{
-#ifdef JP
-msg_format("%sの首には賞金がかかっている。", m_name);
-#else
-					msg_format("There is a price on %s's head.", m_name);
-#endif
+					msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
 					break;
 				}
 			}
@@ -2225,11 +2129,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 
 			if (summon_named_creature(0, dummy_y, dummy_x, MON_BIKETAL, mode))
 			{
-#ifdef JP
-				msg_print("「ハァッハッハッハ！！私がバイケタルだ！！」");
-#else
-				msg_print("Uwa-hahaha!  *I* am Biketal!");
-#endif
+				msg_print(_("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!"));
 			}
 		}
 		else
@@ -2297,11 +2197,7 @@ msg_format("%sの首には賞金がかかっている。", m_name);
 		if (m_ptr->hp > m_ptr->maxhp/3) dam = (dam + 1) / 2;
 		if (rakuba((dam > 200) ? 200 : dam, FALSE))
 		{
-#ifdef JP
-msg_format("%^sに振り落とされた！", m_name);
-#else
-				msg_format("%^s has thrown you off!", m_name);
-#endif
+		msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name);
 		}
 	}
 #endif
@@ -2697,27 +2593,15 @@ cptr look_mon_desc(monster_type *m_ptr, u32b mode)
 	}
 	else if (is_pet(m_ptr))
 	{
-#ifdef JP
-		attitude = ", ペット";
-#else
-		attitude = ", pet";
-#endif
+		attitude = _(", ペット", ", pet");
 	}
 	else if (is_friendly(m_ptr))
 	{
-#ifdef JP
-		attitude = ", 友好的";
-#else
-		attitude = ", friendly";
-#endif
+		attitude = _(", 友好的", ", friendly");
 	}
 	else
 	{
-#ifdef JP
-		attitude = "";
-#else
-		attitude = "";
-#endif
+		attitude = _("", "");
 	}
 
 
@@ -2734,19 +2618,11 @@ cptr look_mon_desc(monster_type *m_ptr, u32b mode)
 	/* Display monster's level --- idea borrowed from ToME */
 	if (ap_r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG2_KAGE))
 	{
-#ifdef JP
-		return format("レベル%d, %s%s%s", ap_r_ptr->level, desc, attitude, clone);
-#else
-		return format("Level %d, %s%s%s", ap_r_ptr->level, desc, attitude, clone);
-#endif
+		return format(_("レベル%d, %s%s%s", "Level %d, %s%s%s"), ap_r_ptr->level, desc, attitude, clone);
 	}
 	else 
 	{
-#ifdef JP
-		return format("レベル???, %s%s%s", desc, attitude, clone);
-#else
-		return format("Level ???, %s%s%s", desc, attitude, clone);
-#endif
+		return format(_("レベル???, %s%s%s", "Level ???, %s%s%s"), desc, attitude, clone);
 	}
 }
 
@@ -3322,11 +3198,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
 		if (floor_num)
 		{
-#ifdef JP
-			x_info = "x物 ";
-#else
-			x_info = "x,";
-#endif
+			x_info = _("x物 ", "x,");
 		}
 	}
 
@@ -3349,22 +3221,13 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 	}
 	else
 	{
-#ifdef JP
-		s1 = "ターゲット:";
-#else
-		s1 = "Target:";
-#endif
+		s1 = _("ターゲット:", "Target:");
 	}
 
 	/* Hack -- hallucination */
 	if (p_ptr->image)
 	{
-#ifdef JP
-		cptr name = "何か奇妙な物";
-#else
-		cptr name = "something strange";
-#endif
-
+		cptr name = _("何か奇妙な物", "something strange");
 
 		/* Display a message */
 #ifdef JP
@@ -3423,11 +3286,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 				screen_roff(m_ptr->ap_r_idx, 0);
 
 				/* Hack -- Complete the prompt (again) */
-#ifdef JP
-				Term_addstr(-1, TERM_WHITE, format("  [r思 %s%s]", x_info, info));
-#else
-				Term_addstr(-1, TERM_WHITE, format("  [r,%s%s]", x_info, info));
-#endif
+				Term_addstr(-1, TERM_WHITE, format(_("  [r思 %s%s]", "  [r,%s%s]"), x_info, info));
 
 				/* Command */
 				query = inkey();
@@ -3478,26 +3337,11 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		if ((query == ' ') && !(mode & (TARGET_LOOK))) return query;
 
 		/* Change the intro */
-#ifdef JP
-		s1 = "それは";
-#else
-		s1 = "It is ";
-#endif
-
+		s1 = _("それは", "It is ");
 
 		/* Hack -- take account of gender */
-#ifdef JP
-		if (ap_r_ptr->flags1 & (RF1_FEMALE)) s1 = "彼女は";
-#else
-		if (ap_r_ptr->flags1 & (RF1_FEMALE)) s1 = "She is ";
-#endif
-
-#ifdef JP
-		else if (ap_r_ptr->flags1 & (RF1_MALE)) s1 = "彼は";
-#else
-		else if (ap_r_ptr->flags1 & (RF1_MALE)) s1 = "He is ";
-#endif
-
+		if (ap_r_ptr->flags1 & (RF1_FEMALE)) s1 = _("彼女は", "She is ");
+		else if (ap_r_ptr->flags1 & (RF1_MALE)) s1 = _("彼は", "He is ");
 
 		/* Use a preposition */
 #ifdef JP
@@ -3542,11 +3386,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			if ((query == ' ') && !(mode & (TARGET_LOOK))) return query;
 
 			/* Change the intro */
-#ifdef JP
-			s2 = "をまた";
-#else
-			s2 = "also carrying ";
-#endif
+			s2 = _("をまた", "also carrying ");
 		}
 
 		/* Use a preposition */
@@ -3724,20 +3564,10 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			if ((query == ' ') && !(mode & TARGET_LOOK)) return query;
 
 			/* Change the intro */
-#ifdef JP
-			s1 = "それは";
-#else
-			s1 = "It is ";
-#endif
-
+			s1 = _("それは", "It is ");
 
 			/* Plurals */
-#ifdef JP
-			if (o_ptr->number != 1) s1 = "それらは";
-#else
-			if (o_ptr->number != 1) s1 = "They are ";
-#endif
-
+			if (o_ptr->number != 1) s1 = _("それらは", "They are ");
 
 			/* Preposition */
 #ifdef JP
@@ -3786,11 +3616,8 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
 			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
-#ifdef JP
-			name = format("クエスト「%s」(%d階相当)", quest[c_ptr->special].name, quest[c_ptr->special].level);
-#else
-			name = format("the entrance to the quest '%s'(level %d)", quest[c_ptr->special].name, quest[c_ptr->special].level);
-#endif
+			name = format(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), 
+						quest[c_ptr->special].name, quest[c_ptr->special].level);
 
 			/* Reset the old quest number */
 			p_ptr->inside_quest = old_quest;
@@ -3803,11 +3630,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		}
 		else if (have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
-#ifdef JP
-			name = format("%s(%d階相当)", d_text + d_info[c_ptr->special].text, d_info[c_ptr->special].mindepth);
-#else
-			name = format("%s(level %d)", d_text + d_info[c_ptr->special].text, d_info[c_ptr->special].mindepth);
-#endif
+			name = format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[c_ptr->special].text, d_info[c_ptr->special].mindepth);
 		}
 		else if (have_flag(f_ptr->flags, FF_TOWN))
 		{
@@ -3815,11 +3638,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		}
 		else if (p_ptr->wild_mode && (feat == feat_floor))
 		{
-#ifdef JP
-			name = "道";
-#else
-			name = "road";
-#endif
+			name = _("道", "road");
 		}
 		else
 		{
@@ -3833,11 +3652,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		     (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE)) ||
 		     have_flag(f_ptr->flags, FF_TOWN)))
 		{
-#ifdef JP
-			s2 = "の中";
-#else
-			s2 = "in ";
-#endif
+			s2 = _("の中", "in ");
 		}
 
 		/* Hack -- special introduction for store & building doors -KMW- */
@@ -3998,23 +3813,13 @@ bool target_set(int mode)
 			/* Allow target */
 			if (target_able(c_ptr->m_idx))
 			{
-#ifdef JP
-strcpy(info, "q止 t決 p自 o現 +次 -前");
-#else
-				strcpy(info, "q,t,p,o,+,-,<dir>");
-#endif
-
+				strcpy(info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"));
 			}
 
 			/* Dis-allow target */
 			else
 			{
-#ifdef JP
-strcpy(info, "q止 p自 o現 +次 -前");
-#else
-				strcpy(info, "q,p,o,+,-,<dir>");
-#endif
-
+				strcpy(info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"));
 			}
 			
 			/* Describe and Prompt */
@@ -4243,12 +4048,7 @@ strcpy(info, "q止 p自 o現 +次 -前");
 			c_ptr = &cave[y][x];
 
 			/* Default prompt */
-#ifdef JP
-strcpy(info, "q止 t決 p自 m近 +次 -前");
-#else
-			strcpy(info, "q,t,p,m,+,-,<dir>");
-#endif
-
+			strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
 
 			/* Describe and Prompt (enable "TARGET_LOOK") */
 			while (!(query = target_set_aux(y, x, mode | TARGET_LOOK, info)));
@@ -4488,21 +4288,11 @@ bool get_aim_dir(int *dp)
 		/* Choose a prompt */
 		if (!target_okay())
 		{
-#ifdef JP
-p = "方向 ('*'でターゲット選択, ESCで中断)? ";
-#else
-			p = "Direction ('*' to choose a target, Escape to cancel)? ";
-#endif
-
+			p = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
 		}
 		else
 		{
-#ifdef JP
-p = "方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ";
-#else
-			p = "Direction ('5' for target, '*' to re-target, Escape to cancel)? ";
-#endif
-
+			p = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
 		}
 
 		/* Get a command (or Cancel) */
@@ -4574,12 +4364,7 @@ p = "方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中
 	if (command_dir != dir)
 	{
 		/* Warn the user */
-#ifdef JP
-msg_print("あなたは混乱している。");
-#else
-		msg_print("You are confused.");
-#endif
-
+		msg_print(_("あなたは混乱している。", "You are confused."));
 	}
 
 	/* Save direction */
@@ -4718,11 +4503,7 @@ bool get_rep_dir(int *dp, bool under)
 		if (p_ptr->confused)
 		{
 			/* Warn the user */
-#ifdef JP
-msg_print("あなたは混乱している。");
-#else
-			msg_print("You are confused.");
-#endif
+			msg_print(_("あなたは混乱している。", "You are confused."));
 		}
 		else
 		{
@@ -4732,20 +4513,11 @@ msg_print("あなたは混乱している。");
 			monster_desc(m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))
 			{
-#ifdef JP
-msg_format("%sは混乱している。", m_name);
-#else
- msg_format("%^s is confusing.", m_name);
-
-#endif
+				msg_format(_("%sは混乱している。", "%^s is confusing."), m_name);
 			}
 			else
 			{
-#ifdef JP
-msg_format("%sは思い通りに動いてくれない。", m_name);
-#else
-msg_format("You cannot control %s.", m_name);
-#endif
+				msg_format(_("%sは思い通りに動いてくれない。", "You cannot control %s."), m_name);
 			}
 		}
 	}
@@ -4791,12 +4563,7 @@ bool get_rep_dir2(int *dp)
 		char ch;
 
 		/* Get a command (or Cancel) */
-#ifdef JP
-if (!get_com("方向 (ESCで中断)? ", &ch, TRUE)) break;
-#else
-		if (!get_com("Direction (Escape to cancel)? ", &ch, TRUE)) break;
-#endif
-
+		if (!get_com(_("方向 (ESCで中断)? ", "Direction (Escape to cancel)? "), &ch, TRUE)) break;
 
 		/* Look up the direction */
 		dir = get_keymap_dir(ch);
@@ -4829,12 +4596,7 @@ if (!get_com("方向 (ESCで中断)? ", &ch, TRUE)) break;
 	if (command_dir != dir)
 	{
 		/* Warn the user */
-#ifdef JP
-msg_print("あなたは混乱している。");
-#else
-		msg_print("You are confused.");
-#endif
-
+		msg_print(_("あなたは混乱している。", "You are confused."));
 	}
 
 	/* Save direction */
@@ -4907,11 +4669,7 @@ msg_format("%^sは褒美としてあなたを突然変異させた。",
 #endif
 
 		(void)gain_random_mutation(0);
-#ifdef JP
-		reward = "変異した。";
-#else
-		reward = "mutation";
-#endif
+		reward = _("変異した。", "mutation");
 	}
 	else
 	{
@@ -4926,18 +4684,10 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「汝、新たなる姿を必要とせり！」");
-#else
-			msg_print("'Thou needst a new form, mortal!'");
-#endif
+			msg_print(_("「汝、新たなる姿を必要とせり！」", "'Thou needst a new form, mortal!'"));
 
 			do_poly_self();
-#ifdef JP
-			reward = "変異した。";
-#else
-			reward = "polymorphing";
-#endif
+			reward = _("変異した。", "polymorphing");
 			break;
 		case REW_GAIN_EXP:
 #ifdef JP
@@ -4948,36 +4698,20 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「汝は良く行いたり！続けよ！」");
-#else
-			msg_print("'Well done, mortal! Lead on!'");
-#endif
+			msg_print(_("「汝は良く行いたり！続けよ！」", "'Well done, mortal! Lead on!'"));
 
 			if (p_ptr->prace == RACE_ANDROID)
 			{
-#ifdef JP
-				msg_print("しかし何も起こらなかった。");
-#else
-				msg_print("But, nothing happen.");
-#endif
+				msg_print(_("しかし何も起こらなかった。", "But, nothing happen."));
 			}
 			else if (p_ptr->exp < PY_MAX_EXP)
 			{
 				s32b ee = (p_ptr->exp / 2) + 10;
 				if (ee > 100000L) ee = 100000L;
-#ifdef JP
-msg_print("更に経験を積んだような気がする。");
-#else
-				msg_print("You feel more experienced.");
-#endif
+				msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
 
 				gain_exp(ee);
-#ifdef JP
-				reward = "経験値を得た";
-#else
-				reward = "experience";
-#endif
+				reward = _("経験値を得た", "experience");
 			}
 			break;
 		case REW_LOSE_EXP:
@@ -4989,28 +4723,16 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「下僕よ、汝それに値せず。」");
-#else
-			msg_print("'Thou didst not deserve that, slave.'");
-#endif
+			msg_print(_("「下僕よ、汝それに値せず。」", "'Thou didst not deserve that, slave.'"));
 
 			if (p_ptr->prace == RACE_ANDROID)
 			{
-#ifdef JP
-				msg_print("しかし何も起こらなかった。");
-#else
-				msg_print("But, nothing happen.");
-#endif
+				msg_print(_("しかし何も起こらなかった。", "But, nothing happen."));
 			}
 			else
 			{
 				lose_exp(p_ptr->exp / 6);
-#ifdef JP
-				reward = "経験値を失った。";
-#else
-				reward = "losing experience";
-#endif
+				reward = _("経験値を失った。", "losing experience");
 			}
 			break;
 		case REW_GOOD_OBJ:
@@ -5022,18 +4744,10 @@ msg_format("%sの声がささやいた:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「我が与えし物を賢明に使うべし。」");
-#else
-			msg_print("'Use my gift wisely.'");
-#endif
+			msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
 			acquirement(py, px, 1, FALSE, FALSE, FALSE);
-#ifdef JP
-			reward = "上質なアイテムを手に入れた。";
-#else
-			reward = "a good item";
-#endif
+			reward = _("上質なアイテムを手に入れた。", "a good item");
 			break;
 		case REW_GREA_OBJ:
 #ifdef JP
@@ -5044,18 +4758,10 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「我が与えし物を賢明に使うべし。」");
-#else
-			msg_print("'Use my gift wisely.'");
-#endif
+			msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
 			acquirement(py, px, 1, TRUE, FALSE, FALSE);
-#ifdef JP
-			reward = "高級品のアイテムを手に入れた。";
-#else
-			reward = "an excellent item";
-#endif
+			reward = _("高級品のアイテムを手に入れた。", "an excellent item");
 			break;
 		case REW_CHAOS_WP:
 #ifdef JP
@@ -5066,11 +4772,7 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「汝の行いは貴き剣に値せり。」");
-#else
-			msg_print("'Thy deed hath earned thee a worthy blade.'");
-#endif
+			msg_print(_("「汝の行いは貴き剣に値せり。」", "'Thy deed hath earned thee a worthy blade.'"));
 
 			/* Get local object */
 			q_ptr = &forge;
@@ -5170,11 +4872,7 @@ msg_print("「汝の行いは貴き剣に値せり。」");
 
 			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, py, px);
-#ifdef JP
-			reward = "(混沌)の武器を手に入れた。";
-#else
-			reward = "chaos weapon";
-#endif
+			reward = _("(混沌)の武器を手に入れた。", "chaos weapon");
 			break;
 		case REW_GOOD_OBS:
 #ifdef JP
@@ -5185,18 +4883,10 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「汝の行いは貴き報いに値せり。」");
-#else
-			msg_print("'Thy deed hath earned thee a worthy reward.'");
-#endif
+			msg_print(_("「汝の行いは貴き報いに値せり。」", "'Thy deed hath earned thee a worthy reward.'"));
 
 			acquirement(py, px, randint1(2) + 1, FALSE, FALSE, FALSE);
-#ifdef JP
-			reward = "上質なアイテムを手に入れた。";
-#else
-			reward = "good items";
-#endif
+			reward = _("上質なアイテムを手に入れた。", "good items");
 			break;
 		case REW_GREA_OBS:
 #ifdef JP
@@ -5207,18 +4897,10 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「下僕よ、汝の献身への我が惜しみ無き報いを見るがよい。」");
-#else
-			msg_print("'Behold, mortal, how generously I reward thy loyalty.'");
-#endif
+			msg_print(_("「下僕よ、汝の献身への我が惜しみ無き報いを見るがよい。」", "'Behold, mortal, how generously I reward thy loyalty.'"));
 
 			acquirement(py, px, randint1(2) + 1, TRUE, FALSE, FALSE);
-#ifdef JP
-			reward = "高級品のアイテムを手に入れた。";
-#else
-			reward = "excellent items";
-#endif
+			reward = _("高級品のアイテムを手に入れた。", "excellent items");
 			break;
 		case REW_TY_CURSE:
 #ifdef JP
@@ -5229,18 +4911,10 @@ msg_format("%sの声が轟き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「下僕よ、汝傲慢なり。」");
-#else
-			msg_print("'Thou art growing arrogant, mortal.'");
-#endif
+			msg_print(_("「下僕よ、汝傲慢なり。」", "'Thou art growing arrogant, mortal.'"));
 
 			(void)activate_ty_curse(FALSE, &count);
-#ifdef JP
-			reward = "禍々しい呪いをかけられた。";
-#else
-			reward = "cursing";
-#endif
+			reward = _("禍々しい呪いをかけられた。", "cursing");
 			break;
 		case REW_SUMMON_M:
 #ifdef JP
@@ -5251,21 +4925,13 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「我が下僕たちよ、かの傲慢なる者を倒すべし！」");
-#else
-			msg_print("'My pets, destroy the arrogant mortal!'");
-#endif
+			msg_print(_("「我が下僕たちよ、かの傲慢なる者を倒すべし！」", "'My pets, destroy the arrogant mortal!'"));
 
 			for (dummy = 0; dummy < randint1(5) + 1; dummy++)
 			{
 				(void)summon_specific(0, py, px, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
-#ifdef JP
-			reward = "モンスターを召喚された。";
-#else
-			reward = "summoning hostile monsters";
-#endif
+			reward = _("モンスターを召喚された。", "summoning hostile monsters");
 			break;
 		case REW_H_SUMMON:
 #ifdef JP
@@ -5276,18 +4942,10 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「汝、より強き敵を必要とせり！」");
-#else
-			msg_print("'Thou needst worthier opponents!'");
-#endif
+			msg_print(_("「汝、より強き敵を必要とせり！」", "'Thou needst worthier opponents!'"));
 
 			activate_hi_summon(py, px, FALSE);
-#ifdef JP
-			reward = "モンスターを召喚された。";
-#else
-			reward = "summoning many hostile monsters";
-#endif
+			reward = _("モンスターを召喚された。", "summoning many hostile monsters");
 			break;
 		case REW_DO_HAVOC:
 #ifdef JP
@@ -5298,18 +4956,10 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「死と破壊こそ我が喜びなり！」");
-#else
-			msg_print("'Death and destruction! This pleaseth me!'");
-#endif
+			msg_print(_("「死と破壊こそ我が喜びなり！」", "'Death and destruction! This pleaseth me!'"));
 
 			call_chaos();
-#ifdef JP
-			reward = "カオスの力が渦巻いた。";
-#else
-			reward = "calling chaos";
-#endif
+			reward = _("カオスの力が渦巻いた。", "calling chaos");
 			break;
 		case REW_GAIN_ABL:
 #ifdef JP
@@ -5320,21 +4970,13 @@ msg_format("%sの声が鳴り響いた:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「留まるのだ、下僕よ。余が汝の肉体を鍛えん。」");
-#else
-			msg_print("'Stay, mortal, and let me mold thee.'");
-#endif
+			msg_print(_("「留まるのだ、下僕よ。余が汝の肉体を鍛えん。」", "'Stay, mortal, and let me mold thee.'"));
 
 			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
 				do_inc_stat(chaos_stats[p_ptr->chaos_patron]);
 			else
 				do_inc_stat(randint0(6));
-#ifdef JP
-			reward = "能力値が上がった。";
-#else
-			reward = "increasing a stat";
-#endif
+			reward = _("能力値が上がった。", "increasing a stat");
 			break;
 		case REW_LOSE_ABL:
 #ifdef JP
@@ -5345,21 +4987,13 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「下僕よ、余は汝に飽みたり。」");
-#else
-			msg_print("'I grow tired of thee, mortal.'");
-#endif
+			msg_print(_("「下僕よ、余は汝に飽みたり。」", "'I grow tired of thee, mortal.'"));
 
 			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
 				do_dec_stat(chaos_stats[p_ptr->chaos_patron]);
 			else
 				(void)do_dec_stat(randint0(6));
-#ifdef JP
-			reward = "能力値が下がった。";
-#else
-			reward = "decreasing a stat";
-#endif
+			reward = _("能力値が下がった。", "decreasing a stat");
 			break;
 		case REW_RUIN_ABL:
 #ifdef JP
@@ -5370,38 +5004,21 @@ msg_format("%sの声が轟き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「汝、謙虚たることを学ぶべし！」");
-msg_print("あなたは以前より弱くなった！");
-#else
-			msg_print("'Thou needst a lesson in humility, mortal!'");
-			msg_print("You feel less powerful!");
-#endif
+			msg_print(_("「汝、謙虚たることを学ぶべし！」", "'Thou needst a lesson in humility, mortal!'"));
+			msg_print(_("あなたは以前より弱くなった！", "You feel less powerful!"));
 
 			for (dummy = 0; dummy < 6; dummy++)
 			{
 				(void)dec_stat(dummy, 10 + randint1(15), TRUE);
 			}
-#ifdef JP
-			reward = "全能力値が下がった。";
-#else
-			reward = "decreasing all stats";
-#endif
+			reward = _("全能力値が下がった。", "decreasing all stats");
 			break;
 		case REW_POLY_WND:
-#ifdef JP
-msg_format("%sの力が触れるのを感じた。",
-#else
-			msg_format("You feel the power of %s touch you.",
-#endif
+			msg_format(_("%sの力が触れるのを感じた。", "You feel the power of %s touch you."),
 
 				chaos_patrons[p_ptr->chaos_patron]);
 			do_poly_wounds();
-#ifdef JP
-			reward = "傷が変化した。";
-#else
-			reward = "polymorphing wounds";
-#endif
+			reward = _("傷が変化した。", "polymorphing wounds");
 			break;
 		case REW_AUGM_ABL:
 #ifdef JP
@@ -5412,21 +5029,13 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「我がささやかなる賜物を受けとるがよい！」");
-#else
-			msg_print("'Receive this modest gift from me!'");
-#endif
+			msg_print(_("「我がささやかなる賜物を受けとるがよい！」", "'Receive this modest gift from me!'"));
 
 			for (dummy = 0; dummy < 6; dummy++)
 			{
 				(void)do_inc_stat(dummy);
 			}
-#ifdef JP
-			reward = "全能力値が上がった。";
-#else
-			reward = "increasing all stats";
-#endif
+			reward = _("全能力値が上がった。", "increasing all stats");
 			break;
 		case REW_HURT_LOT:
 #ifdef JP
@@ -5437,19 +5046,11 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「苦しむがよい、無能な愚か者よ！」");
-#else
-			msg_print("'Suffer, pathetic fool!'");
-#endif
+			msg_print(_("「苦しむがよい、無能な愚か者よ！」", "'Suffer, pathetic fool!'"));
 
 			fire_ball(GF_DISINTEGRATE, 0, p_ptr->lev * 4, 4);
 			take_hit(DAMAGE_NOESCAPE, p_ptr->lev * 4, wrath_reason, -1);
-#ifdef JP
-			reward = "分解の球が発生した。";
-#else
-			reward = "generating disintegration ball";
-#endif
+			reward = _("分解の球が発生した。", "generating disintegration ball");
 			break;
 	   case REW_HEAL_FUL:
 #ifdef JP
@@ -5460,11 +5061,7 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「甦るがよい、我が下僕よ！」");
-#else
-			msg_print("'Rise, my servant!'");
-#endif
+			msg_print(_("「甦るがよい、我が下僕よ！」", "'Rise, my servant!'"));
 
 			restore_level();
 			(void)set_poisoned(0);
@@ -5478,11 +5075,7 @@ msg_print("「甦るがよい、我が下僕よ！」");
 			{
 				(void)do_res_stat(dummy);
 			}
-#ifdef JP
-			reward = "体力が回復した。";
-#else
-			reward = "healing";
-#endif
+			reward = _("体力が回復した。", "healing");
 			break;
 		case REW_CURSE_WP:
 			if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM)) break;
@@ -5494,11 +5087,7 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「汝、武器に頼ることなかれ。」");
-#else
-			msg_print("'Thou reliest too much on thy weapon.'");
-#endif
+			msg_print(_("「汝、武器に頼ることなかれ。」", "'Thou reliest too much on thy weapon.'"));
 
 			dummy = INVEN_RARM;
 			if (buki_motteruka(INVEN_LARM))
@@ -5508,11 +5097,7 @@ msg_print("「汝、武器に頼ることなかれ。」");
 			}
 			object_desc(o_name, &inventory[dummy], OD_NAME_ONLY);
 			(void)curse_weapon(FALSE, dummy);
-#ifdef JP
-			reward = format("%sが破壊された。", o_name);
-#else
-			reward = format("destroying %s", o_name);
-#endif
+			reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 			break;
 		case REW_CURSE_AR:
 			if (!inventory[INVEN_BODY].k_idx) break;
@@ -5524,19 +5109,11 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「汝、防具に頼ることなかれ。」");
-#else
-			msg_print("'Thou reliest too much on thine equipment.'");
-#endif
+			msg_print(_("「汝、防具に頼ることなかれ。」", "'Thou reliest too much on thine equipment.'"));
 
 			object_desc(o_name, &inventory[INVEN_BODY], OD_NAME_ONLY);
 			(void)curse_armor();
-#ifdef JP
-			reward = format("%sが破壊された。", o_name);
-#else
-			reward = format("destroying %s", o_name);
-#endif
+			reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 			break;
 		case REW_PISS_OFF:
 #ifdef JP
@@ -5547,29 +5124,17 @@ msg_format("%sの声がささやいた:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「我を怒りしめた罪を償うべし。」");
-#else
-			msg_print("'Now thou shalt pay for annoying me.'");
-#endif
+			msg_print(_("「我を怒りしめた罪を償うべし。」", "'Now thou shalt pay for annoying me.'"));
 
 			switch (randint1(4))
 			{
 				case 1:
 					(void)activate_ty_curse(FALSE, &count);
-#ifdef JP
-					reward = "禍々しい呪いをかけられた。";
-#else
-					reward = "cursing";
-#endif
+					reward = _("禍々しい呪いをかけられた。", "cursing");
 					break;
 				case 2:
 					activate_hi_summon(py, px, FALSE);
-#ifdef JP
-					reward = "モンスターを召喚された。";
-#else
-					reward = "summoning hostile monsters";
-#endif
+					reward = _("モンスターを召喚された。", "summoning hostile monsters");
 					break;
 				case 3:
 					if (one_in_(2))
@@ -5583,22 +5148,14 @@ msg_print("「我を怒りしめた罪を償うべし。」");
 						}
 						object_desc(o_name, &inventory[dummy], OD_NAME_ONLY);
 						(void)curse_weapon(FALSE, dummy);
-#ifdef JP
-						reward = format("%sが破壊された。", o_name);
-#else
-						reward = format("destroying %s", o_name);
-#endif
+						reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 					}
 					else
 					{
 						if (!inventory[INVEN_BODY].k_idx) break;
 						object_desc(o_name, &inventory[INVEN_BODY], OD_NAME_ONLY);
 						(void)curse_armor();
-#ifdef JP
-						reward = format("%sが破壊された。", o_name);
-#else
-						reward = format("destroying %s", o_name);
-#endif
+						reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 					}
 					break;
 				default:
@@ -5606,27 +5163,15 @@ msg_print("「我を怒りしめた罪を償うべし。」");
 					{
 						(void)dec_stat(dummy, 10 + randint1(15), TRUE);
 					}
-#ifdef JP
-					reward = "全能力値が下がった。";
-#else
-					reward = "decreasing all stats";
-#endif
+					reward = _("全能力値が下がった。", "decreasing all stats");
 					break;
 			}
 			break;
 		case REW_WRATH:
-#ifdef JP
-msg_format("%sの声が轟き渡った:",
-#else
-			msg_format("The voice of %s thunders:",
-#endif
+			msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"),
 
 				chaos_patrons[p_ptr->chaos_patron]);
-#ifdef JP
-msg_print("「死ぬがよい、下僕よ！」");
-#else
-			msg_print("'Die, mortal!'");
-#endif
+			msg_print(_("「死ぬがよい、下僕よ！」", "'Die, mortal!'"));
 
 			take_hit(DAMAGE_LOSELIFE, p_ptr->lev * 4, wrath_reason, -1);
 			for (dummy = 0; dummy < 6; dummy++)
@@ -5659,18 +5204,10 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「死と破壊こそ我が喜びなり！」");
-#else
-			msg_print("'Death and destruction! This pleaseth me!'");
-#endif
+			msg_print(_("「死と破壊こそ我が喜びなり！」", "'Death and destruction! This pleaseth me!'"));
 
 			(void)destroy_area(py, px, 25, FALSE);
-#ifdef JP
-			reward = "ダンジョンが*破壊*された。";
-#else
-			reward = "*destruct*ing dungeon";
-#endif
+			reward = _("ダンジョンが*破壊*された。", "*destruct*ing dungeon");
 			break;
 		case REW_GENOCIDE:
 #ifdef JP
@@ -5681,18 +5218,10 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「我、汝の敵を抹殺せん！」");
-#else
-			msg_print("'Let me relieve thee of thine oppressors!'");
-#endif
+			msg_print(_("「我、汝の敵を抹殺せん！」", "'Let me relieve thee of thine oppressors!'"));
 
 			(void)symbol_genocide(0, FALSE);
-#ifdef JP
-			reward = "モンスターが抹殺された。";
-#else
-			reward = "genociding monsters";
-#endif
+			reward = _("モンスターが抹殺された。", "genociding monsters");
 			break;
 		case REW_MASS_GEN:
 #ifdef JP
@@ -5703,18 +5232,10 @@ msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
-#ifdef JP
-msg_print("「我、汝の敵を抹殺せん！」");
-#else
-			msg_print("'Let me relieve thee of thine oppressors!'");
-#endif
+			msg_print(_("「我、汝の敵を抹殺せん！」", "'Let me relieve thee of thine oppressors!'"));
 
 			(void)mass_genocide(0, FALSE);
-#ifdef JP
-			reward = "モンスターが抹殺された。";
-#else
-			reward = "genociding nearby monsters";
-#endif
+			reward = _("モンスターが抹殺された。", "genociding nearby monsters");
 			break;
 		case REW_DISPEL_C:
 #ifdef JP
@@ -5738,91 +5259,43 @@ msg_format("%sはあなたを無視した。",
 
 			break;
 		case REW_SER_DEMO:
-#ifdef JP
-msg_format("%sは褒美として悪魔の使いをよこした！",chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("%s rewards you with a demonic servant!",chaos_patrons[p_ptr->chaos_patron]);
-#endif
+			msg_format(_("%sは褒美として悪魔の使いをよこした！", "%s rewards you with a demonic servant!"),chaos_patrons[p_ptr->chaos_patron]);
 
 			if (!summon_specific(-1, py, px, dun_level, SUMMON_DEMON, PM_FORCE_PET))
-#ifdef JP
-msg_print("何も現れなかった...");
-#else
-				msg_print("Nobody ever turns up...");
-#endif
+				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
-#ifdef JP
-				reward = "悪魔がペットになった。";
-#else
-				reward = "a demonic servant";
-#endif
+				reward = _("悪魔がペットになった。", "a demonic servant");
 
 			break;
 		case REW_SER_MONS:
-#ifdef JP
-msg_format("%sは褒美として使いをよこした！",chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("%s rewards you with a servant!",chaos_patrons[p_ptr->chaos_patron]);
-#endif
+			msg_format(_("%sは褒美として使いをよこした！", "%s rewards you with a servant!"),chaos_patrons[p_ptr->chaos_patron]);
 
 			if (!summon_specific(-1, py, px, dun_level, 0, PM_FORCE_PET))
-#ifdef JP
-msg_print("何も現れなかった...");
-#else
-				msg_print("Nobody ever turns up...");
-#endif
+				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
-#ifdef JP
-				reward = "モンスターがペットになった。";
-#else
-				reward = "a servant";
-#endif
+				reward = _("モンスターがペットになった。", "a servant");
 
 			break;
 		case REW_SER_UNDE:
-#ifdef JP
-msg_format("%sは褒美としてアンデッドの使いをよこした。",chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("%s rewards you with an undead servant!",chaos_patrons[p_ptr->chaos_patron]);
-#endif
+			msg_format(_("%sは褒美としてアンデッドの使いをよこした。", "%s rewards you with an undead servant!"),chaos_patrons[p_ptr->chaos_patron]);
 
 			if (!summon_specific(-1, py, px, dun_level, SUMMON_UNDEAD, PM_FORCE_PET))
-#ifdef JP
-msg_print("何も現れなかった...");
-#else
-				msg_print("Nobody ever turns up...");
-#endif
+				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
-#ifdef JP
-				reward = "アンデッドがペットになった。";
-#else
-				reward = "an undead servant";
-#endif
+				reward = _("アンデッドがペットになった。", "an undead servant");
 
 			break;
 		default:
-#ifdef JP
-msg_format("%sの声がどもった:",
-#else
-			msg_format("The voice of %s stammers:",
-#endif
+			msg_format(_("%sの声がどもった:", "The voice of %s stammers:"),
 
 				chaos_patrons[p_ptr->chaos_patron]);
-#ifdef JP
-msg_format("「あー、あー、答えは %d/%d。質問は何？」", type, effect);
-#else
-			msg_format("'Uh... uh... the answer's %d/%d, what's the question?'", type, effect);
-#endif
+			msg_format(_("「あー、あー、答えは %d/%d。質問は何？」", "'Uh... uh... the answer's %d/%d, what's the question?'"), type, effect);
 
 	}
 	}
 	if (reward)
 	{
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, format("パトロンの報酬で%s", reward));
-#else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, format("The patron rewards you with %s.", reward));
-#endif
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, format(_("パトロンの報酬で%s", "The patron rewards you with %s."), reward));
 	}
 }
 
@@ -5923,11 +5396,7 @@ bool tgt_pt(int *x_ptr, int *y_ptr)
 		n = 0;
 	}
 
-#ifdef JP
-	msg_print("場所を選んでスペースキーを押して下さい。");
-#else
-	msg_print("Select a point and press space.");
-#endif
+	msg_print(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."));
 	msg_flag = FALSE; /* prevents "-more-" message. */
 
 	while ((ch != ESCAPE) && !success)
@@ -6114,21 +5583,11 @@ bool get_hack_dir(int *dp)
 		/* Choose a prompt */
 		if (!target_okay())
 		{
-#ifdef JP
-p = "方向 ('*'でターゲット選択, ESCで中断)? ";
-#else
-			p = "Direction ('*' to choose a target, Escape to cancel)? ";
-#endif
-
+			p = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
 		}
 		else
 		{
-#ifdef JP
-p = "方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ";
-#else
-			p = "Direction ('5' for target, '*' to re-target, Escape to cancel)? ";
-#endif
-
+			p = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
 		}
 
 		/* Get a command (or Cancel) */
@@ -6196,12 +5655,7 @@ p = "方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中
 	if (command_dir != dir)
 	{
 		/* Warn the user */
-#ifdef JP
-msg_print("あなたは混乱している。");
-#else
-		msg_print("You are confused.");
-#endif
-
+		msg_print(_("あなたは混乱している。", "You are confused."));
 	}
 
 	/* Save direction */
@@ -6451,13 +5905,8 @@ void display_rumor(bool ex)
 		if (randint0(3) == 0) section = 1;
 	}
 
-#ifdef JP
-	err = get_rnd_line_jonly("rumors_j.txt", section, Rumor, 10);
-	if (err) strcpy(Rumor, "嘘の噂もある。");
-#else
-	err = get_rnd_line("rumors.txt", section, Rumor);
-	if (err) strcpy(Rumor, "Some rumors are wrong.");
-#endif
+	err = get_rnd_line_jonly(_("rumors_j.txt", "rumors.txt"), section, Rumor, 10);
+	if (err) strcpy(Rumor, _("嘘の噂もある。", "Some rumors are wrong."));
 
 	err = TRUE;
 
@@ -6562,11 +6011,7 @@ void display_rumor(bool ex)
 			err = FALSE;
 		}
 	/* error */
-#ifdef JP
-		if (err) msg_print("この情報は間違っている。");
-#else
-		if (err) msg_print("This information is wrong.");
-#endif
+	if (err) msg_print(_("この情報は間違っている。", "This information is wrong."));
 	}
 			else
 	{

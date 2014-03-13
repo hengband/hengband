@@ -1497,11 +1497,7 @@ static errr grab_one_feat_flag(feature_type *f_ptr, cptr what)
 	}
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知の地形フラグ '%s'。", what);
-#else
-	msg_format("Unknown feature flag '%s'.", what);
-#endif
+	msg_format(_("未知の地形フラグ '%s'。", "Unknown feature flag '%s'."), what);
 
 	/* Error */
 	return PARSE_ERROR_GENERIC;
@@ -1531,11 +1527,7 @@ static errr grab_one_feat_action(feature_type *f_ptr, cptr what, int count)
 	}
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知の地形アクション '%s'。", what);
-#else
-	msg_format("Unknown feature action '%s'.", what);
-#endif
+	msg_format(_("未知の地形アクション '%s'。", "Unknown feature action '%s'."), what);
 
 	/* Error */
 	return PARSE_ERROR_GENERIC;
@@ -1880,11 +1872,7 @@ static void search_real_feat(s16b *feat)
 	}
 
 	/* Undefined tag */
-#ifdef JP
-	msg_format("未定義のタグ '%s'。", f_tag + (-(*feat)));
-#else
-	msg_format("%s is undefined.", f_tag + (-(*feat)));
-#endif
+	msg_format(_("未定義のタグ '%s'。", "%s is undefined."), f_tag + (-(*feat)));
 }
 
 
@@ -1938,12 +1926,7 @@ static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
 		return 0;
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知のアイテム・フラグ '%s'。", what);
-#else
-	msg_format("Unknown object flag '%s'.", what);
-#endif
-
+	msg_format(_("未知のアイテム・フラグ '%s'。", "Unknown object flag '%s'."), what);
 
 	/* Error */
 	return (1);
@@ -1976,11 +1959,7 @@ static byte grab_one_activation_flag(cptr what)
 	 }
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知の発動・フラグ '%s'。", what);
-#else
-	msg_format("Unknown activation flag '%s'.", what);
-#endif
+	msg_format(_("未知の発動・フラグ '%s'。", "Unknown activation flag '%s'."), what);
 
 	/* Error */
 	return (0);
@@ -2290,12 +2269,7 @@ static errr grab_one_artifact_flag(artifact_type *a_ptr, cptr what)
 		return 0;
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知の伝説のアイテム・フラグ '%s'。", what);
-#else
-	msg_format("Unknown artifact flag '%s'.", what);
-#endif
-
+	msg_format(_("未知の伝説のアイテム・フラグ '%s'。", "Unknown artifact flag '%s'."), what);
 
 	/* Error */
 	return (1);
@@ -2525,12 +2499,7 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, cptr what)
 		return 0;
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知の名のあるアイテム・フラグ '%s'。", what);
-#else
-	msg_format("Unknown ego-item flag '%s'.", what);
-#endif
-
+	msg_format(_("未知の名のあるアイテム・フラグ '%s'。", "Unknown ego-item flag '%s'."), what);
 
 	/* Error */
 	return (1);
@@ -2755,12 +2724,7 @@ static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
 		return 0;
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知のモンスター・フラグ '%s'。", what);
-#else
-	msg_format("Unknown monster flag '%s'.", what);
-#endif
-
+	msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
 
 	/* Failure */
 	return (1);
@@ -2786,12 +2750,7 @@ static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
 		return 0;
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知のモンスター・フラグ '%s'。", what);
-#else
-	msg_format("Unknown monster flag '%s'.", what);
-#endif
-
+	msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
 
 	/* Failure */
 	return (1);
@@ -3117,11 +3076,7 @@ static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, cptr what)
 		return 0;
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知のダンジョン・フラグ '%s'。", what);
-#else
-	msg_format("Unknown dungeon type flag '%s'.", what);
-#endif
+	msg_format(_("未知のダンジョン・フラグ '%s'。", "Unknown dungeon type flag '%s'."), what);
 
 	/* Failure */
 	return (1);
@@ -3158,11 +3113,7 @@ static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
 		return 0;
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知のモンスター・フラグ '%s'。", what);
-#else
-	msg_format("Unknown monster flag '%s'.", what);
-#endif
+	msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
 	/* Failure */
 	return (1);
 }
@@ -3187,11 +3138,7 @@ static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
 		return 0;
 
 	/* Oops */
-#ifdef JP
-	msg_format("未知のモンスター・フラグ '%s'。", what);
-#else
-	msg_format("Unknown monster flag '%s'.", what);
-#endif
+	msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
 
 	/* Failure */
 	return (1);
@@ -4593,41 +4540,25 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 			/* Race */
 			else if (streq(b+1, "RACE"))
 			{
-#ifdef JP
-				v = rp_ptr->E_title;
-#else
-				v = rp_ptr->title;
-#endif
+				v = _(rp_ptr->E_title, rp_ptr->title);
 			}
 
 			/* Class */
 			else if (streq(b+1, "CLASS"))
 			{
-#ifdef JP
-				v = cp_ptr->E_title;
-#else
-				v = cp_ptr->title;
-#endif
+				v = _(cp_ptr->E_title, cp_ptr->title);
 			}
 
 			/* First realm */
 			else if (streq(b+1, "REALM1"))
 			{
-#ifdef JP
-				v = E_realm_names[p_ptr->realm1];
-#else
-				v = realm_names[p_ptr->realm1];
-#endif
+				v = _(E_realm_names[p_ptr->realm1], realm_names[p_ptr->realm1]);
 			}
 
 			/* Second realm */
 			else if (streq(b+1, "REALM2"))
 			{
-#ifdef JP
-				v = E_realm_names[p_ptr->realm2];
-#else
-				v = realm_names[p_ptr->realm2];
-#endif
+				v = _(E_realm_names[p_ptr->realm2], realm_names[p_ptr->realm2]);
 			}
 
 			/* Player name */
@@ -4832,11 +4763,7 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 
 		/* Oops */
 		msg_format("Error %d (%s) at line %d of '%s'.", err, oops, num, name);
-#ifdef JP
-msg_format("'%s'を解析中。", buf);
-#else
-		msg_format("Parsing '%s'.", buf);
-#endif
+		msg_format(_("'%s'を解析中。", "Parsing '%s'."), buf);
 
 		msg_print(NULL);
 	}

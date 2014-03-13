@@ -111,46 +111,18 @@ typedef struct
  */
 static grouper group_item[] =
 {
-#ifdef JP
-	{ TV_SHOT,          "射撃物" },
-#else
-	{ TV_SHOT,          "Ammo" },
-#endif
-
+	{ TV_SHOT,          _("射撃物", "Ammo") },
 	{ TV_ARROW,         NULL },
 	{ TV_BOLT,          NULL },
-
-#ifdef JP
-	{ TV_BOW,           "弓" },
-#else
-	{ TV_BOW,           "Bows" },
-#endif
-
-#ifdef JP
-	{ TV_DIGGING,       "武器" },
-#else
-	{ TV_DIGGING,       "Weapons" },
-#endif
-
+	{ TV_BOW,           _("弓", "Bows") },
+	{ TV_DIGGING,       _("武器", "Weapons") },
 	{ TV_POLEARM,       NULL },
 	{ TV_HAFTED,        NULL },
 	{ TV_SWORD,         NULL },
-
-#ifdef JP
-	{ TV_SOFT_ARMOR,    "防具 (体)" },
-#else
-	{ TV_SOFT_ARMOR,    "Armour (Body)" },
-#endif
-
+	{ TV_SOFT_ARMOR,    _("防具 (体)", "Armour (Body)") },
 	{ TV_HARD_ARMOR,    NULL },
 	{ TV_DRAG_ARMOR,    NULL },
-
-#ifdef JP
-	{ TV_BOOTS,         "防具 (その他)" },
-#else
-	{ TV_BOOTS,         "Armour (Misc)" },
-#endif
-
+	{ TV_BOOTS,         _("防具 (その他)", "Armour (Misc)") },
 	{ TV_GLOVES,        NULL },
 	{ TV_HELM,          NULL },
 	{ TV_CROWN,         NULL },
@@ -227,11 +199,7 @@ static grouper group_item[] =
 	{ TV_CARD,          "Express Card" },
 #endif
 
-#ifdef JP
-	{ TV_CHEST,         "箱" },
-#else
-	{ TV_CHEST,         "Chests" },
-#endif
+	{ TV_CHEST,         _("箱", "Chests") },
 
 #ifdef JP
 	{ TV_FIGURINE,      "人形" },
@@ -243,12 +211,7 @@ static grouper group_item[] =
 	{ TV_CORPSE,        "Corpses" },
 #endif
 
-#ifdef JP
-	{ TV_SKELETON,      "その他" },
-#else
-	{ TV_SKELETON,      "Misc" },
-#endif
-
+	{ TV_SKELETON,      _("その他", "Misc") },
 	{ TV_BOTTLE,        NULL },
 	{ TV_JUNK,          NULL },
 	{ TV_SPIKE,         NULL },
@@ -1122,11 +1085,7 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *p_ptr)
 	    have_flag(flgs, TR_WIS) && have_flag(flgs, TR_DEX) &&
 	    have_flag(flgs, TR_CON) && have_flag(flgs, TR_CHR))
 	{
-#ifdef JP
-		*affects_list++ = "全能力";
-#else
-		*affects_list++ = "All stats";
-#endif
+		*affects_list++ = _("全能力", "All stats");
 	}
 
 	/* Are any stats affected? */
@@ -1250,11 +1209,7 @@ static void analyze_sustains(object_type *o_ptr, cptr *sustain_list)
 	    have_flag(flgs, TR_SUST_WIS) && have_flag(flgs, TR_SUST_DEX) &&
 	    have_flag(flgs, TR_SUST_CON) && have_flag(flgs, TR_SUST_CHR))
 	{
-#ifdef JP
-		*sustain_list++ = "全能力";
-#else
-		*sustain_list++ = "All stats";
-#endif
+		*sustain_list++ = _("全能力", "All stats");
 	}
 
 	/* Should we bother? */
@@ -1623,11 +1578,7 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
 	if (pval_ptr->pval_desc[0])
 	{
 		/* Mention the effects of pval */
-#ifdef JP
-		sprintf(buf, "%sの修正:", pval_ptr->pval_desc);
-#else
-		sprintf(buf, "%s to", pval_ptr->pval_desc);
-#endif
+		sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
 		spoiler_outlist(buf, pval_ptr->pval_affects, ITEM_SEP);
 	}
 
@@ -1650,21 +1601,13 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
 
 	if (art_ptr->addition[0])
 	{
-#ifdef JP
-		fprintf(fff, "%s追加: %s\n", INDENT1, art_ptr->addition);
-#else
-		fprintf(fff, "%sAdditional %s\n", INDENT1, art_ptr->addition);
-#endif
+		fprintf(fff, _("%s追加: %s\n", "%sAdditional %s\n"), INDENT1, art_ptr->addition);
 	}
 
 	/* Write out the possible activation at the primary indention level */
 	if (art_ptr->activation)
 	{
-#ifdef JP
-		fprintf(fff, "%s発動: %s\n", INDENT1, art_ptr->activation);
-#else
-		fprintf(fff, "%sActivates for %s\n", INDENT1, art_ptr->activation);
-#endif
+		fprintf(fff, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
 	}
 
 	/* End with the miscellaneous facts */
@@ -1892,11 +1835,7 @@ static void spoil_mon_desc(cptr fname)
 		}
 		else
 		{
-#ifdef JP
-			sprintf(nam, "    %s", name);
-#else
-			sprintf(nam, "The %s", name);
-#endif
+			sprintf(nam, _("    %s", "The %s"), name);
 		}
 
 
@@ -2243,11 +2182,7 @@ static void spoil_mon_info(cptr fname)
 		}
 
 		/* Name */
-#ifdef JP
-		sprintf(buf, "%s/%s  (", (r_name + r_ptr->name),(r_name+r_ptr->E_name));  /* ---)--- */
-#else
-		sprintf(buf, "%s  (", (r_name + r_ptr->name));  /* ---)--- */
-#endif
+		sprintf(buf, _("%s/%s  (", "%s  ("), (r_name + r_ptr->name),(r_name+r_ptr->E_name));  /* ---)--- */
 
 		spoil_out(buf);
 
@@ -2617,11 +2552,7 @@ void do_cmd_spoilers(void)
 		prt("(5) Monster Evolution Info (mon-evol.spo)", 9, 5);
 
 		/* Prompt */
-#ifdef JP
-		prt("コマンド:", 18, 0);
-#else
-		prt("Command: ", 12, 0);
-#endif
+		prt(_("コマンド:", "Command: "), _(18, 12), 0);
 
 		/* Get a choice */
 		switch (inkey())
@@ -2715,22 +2646,14 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 	/* unidentified */
 	if (!(o_ptr->ident & (IDENT_MENTAL)))
 	{
-#ifdef JP
-		fprintf(fff, "%s不明\n",INDENT1);
-#else
-		fprintf(fff, "%sUnknown\n",INDENT1);
-#endif
+		fprintf(fff, _("%s不明\n", "%sUnknown\n"),INDENT1);
 	}
 	else {
 		/* An "empty" pval description indicates that the pval affects nothing */
 		if (pval_ptr->pval_desc[0])
 		{
 			/* Mention the effects of pval */
-#ifdef JP
-			sprintf(buf, "%sの修正:", pval_ptr->pval_desc);
-#else
-			sprintf(buf, "%s to", pval_ptr->pval_desc);
-#endif
+			sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
 			spoiler_outlist(buf, pval_ptr->pval_affects, ITEM_SEP);
 		}
 
@@ -2754,11 +2677,7 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 		/* Write out the possible activation at the primary indention level */
 		if (art_ptr->activation)
 		{
-#ifdef JP
-			fprintf(fff, "%s発動: %s\n", INDENT1, art_ptr->activation);
-#else
-			fprintf(fff, "%sActivates for %s\n", INDENT1, art_ptr->activation);
-#endif
+			fprintf(fff, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
 		}
 	}
 	/* End with the miscellaneous facts */

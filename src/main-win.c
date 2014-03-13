@@ -774,11 +774,7 @@ static int init_bg(void)
 
 	hBG = LoadImage(NULL, bmfile,  IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	if (!hBG) {
-#ifdef JP
-		plog_fmt("壁紙用ビットマップ '%s' を読み込めません。", bmfile);
-#else
-		plog_fmt("Can't load the bitmap file '%s'.", bmfile);
-#endif
+		plog_fmt(_("壁紙用ビットマップ '%s' を読み込めません。", "Can't load the bitmap file '%s'."), bmfile);
 		use_bg = 0;
 		return 0;
 	}
@@ -1021,12 +1017,7 @@ static void validate_file(cptr s)
 	/* Verify or fail */
 	if (!check_file(s))
 	{
-#ifdef JP
-		quit_fmt("必要なファイル[%s]が見あたりません。", s);
-#else
-		quit_fmt("Cannot find required file:\n%s", s);
-#endif
-
+		quit_fmt(_("必要なファイル[%s]が見あたりません。", "Cannot find required file:\n%s"), s);
 	}
 }
 
@@ -1042,12 +1033,7 @@ static void validate_dir(cptr s, bool vital)
 		/* This directory contains needed data */
 		if (vital)
 		{
-#ifdef JP
-		quit_fmt("必要なディレクトリ[%s]が見あたりません。", s);
-#else
-			quit_fmt("Cannot find required directory:\n%s", s);
-#endif
-
+			quit_fmt(_("必要なディレクトリ[%s]が見あたりません。", "Cannot find required directory:\n%s"), s);
 		}
 		/* Attempt to create this directory */
 		else if (mkdir(s))
@@ -1597,12 +1583,7 @@ static int new_palette(void)
 		if ((nEntries == 0) || (nEntries > 220))
 		{
 			/* Warn the user */
-#ifdef JP
-			plog("画面を16ビットか24ビットカラーモードにして下さい。");
-#else
-			plog("Please switch to high- or true-color mode.");
-#endif
-
+			plog(_("画面を16ビットか24ビットカラーモードにして下さい。", "Please switch to high- or true-color mode."));
 
 			/* Cleanup */
 			rnfree(lppe, lppeSize);
@@ -1654,12 +1635,7 @@ static int new_palette(void)
 
 	/* Create a new palette, or fail */
 	hNewPal = CreatePalette(pLogPal);
-#ifdef JP
-	if (!hNewPal) quit("パレットを作成できません！");
-#else
-	if (!hNewPal) quit("Cannot create palette!");
-#endif
-
+	if (!hNewPal) quit(_("パレットを作成できません！", "Cannot create palette!"));
 
 	/* Free the palette */
 	rnfree(pLogPal, pLogPalSize);
@@ -1672,11 +1648,7 @@ static int new_palette(void)
 	SelectPalette(hdc, hNewPal, 0);
 	i = RealizePalette(hdc);
 	ReleaseDC(td->w, hdc);
-#ifdef JP
-	if (i == 0) quit("パレットをシステムエントリにマップできません！");
-#else
-	if (i == 0) quit("Cannot realize palette!");
-#endif
+	if (i == 0) quit(_("パレットをシステムエントリにマップできません！", "Cannot realize palette!"));
 
 
 	/* Sub-windows */
@@ -1765,12 +1737,7 @@ static bool init_graphics(void)
 		/* Load the bitmap or quit */
 		if (!ReadDIB(data[0].w, buf, &infGraph))
 		{
-#ifdef JP
-			plog_fmt("ビットマップ '%s' を読み込めません。", name);
-#else
-			plog_fmt("Cannot read bitmap file '%s'", name);
-#endif
-
+			plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
 			return (FALSE);
 		}
 
@@ -1813,12 +1780,7 @@ static bool init_graphics(void)
 			/* Free bitmap XXX XXX XXX */
 
 			/* Oops */
-#ifdef JP
-			plog("パレットを実現できません！");
-#else
-			plog("Cannot activate palette!");
-#endif
-
+			plog(_("パレットを実現できません！", "Cannot activate palette!"));
 			return (FALSE);
 		}
 
@@ -2269,12 +2231,7 @@ static errr Term_xtra_win_react(void)
 		if (arg_sound && !init_sound())
 		{
 			/* Warning */
-#ifdef JP
-			plog("サウンドを初期化できません！");
-#else
-			plog("Cannot initialize sound!");
-#endif
-
+			plog(_("サウンドを初期化できません！", "Cannot initialize sound!"));
 
 			/* Cannot enable */
 			arg_sound = FALSE;
@@ -2295,11 +2252,7 @@ static errr Term_xtra_win_react(void)
 		if (arg_music && !init_music())
 		{
 			/* Warning */
-#ifdef JP
-			plog("BGMを初期化できません！");
-#else
-			plog("Cannot initialize BGM!");
-#endif
+			plog(_("BGMを初期化できません！", "Cannot initialize BGM!"));
 			/* Cannot enable */
 			arg_music = FALSE;
 		}
@@ -2324,12 +2277,7 @@ static errr Term_xtra_win_react(void)
 		if (arg_graphics && !init_graphics())
 		{
 			/* Warning */
-#ifdef JP
-			plog("グラフィックスを初期化できません!");
-#else
-			plog("Cannot initialize graphics!");
-#endif
-
+			plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
 
 			/* Cannot enable */
 			arg_graphics = GRAPHICS_NONE;
@@ -3473,12 +3421,7 @@ static void init_windows(void)
 				       td->size_wid, td->size_hgt,
 				       HWND_DESKTOP, NULL, hInstance, NULL);
 		my_td = NULL;
-#ifdef JP
-		if (!td->w) quit("サブウィンドウに作成に失敗しました");
-#else
-		if (!td->w) quit("Failed to create sub-window");
-#endif
-
+		if (!td->w) quit(_("サブウィンドウに作成に失敗しました", "Failed to create sub-window"));
 
 		if (td->visible)
 		{
@@ -3518,12 +3461,7 @@ static void init_windows(void)
 			       td->size_wid, td->size_hgt,
 			       HWND_DESKTOP, NULL, hInstance, NULL);
 	my_td = NULL;
-#ifdef JP
-	if (!td->w) quit("メインウィンドウの作成に失敗しました");
-#else
-	if (!td->w) quit("Failed to create Angband window");
-#endif
-
+	if (!td->w) quit(_("メインウィンドウの作成に失敗しました", "Failed to create Angband window"));
 
 	term_data_link(td);
 	angband_term[0] = &td->t;
@@ -3835,21 +3773,11 @@ static void process_menus(WORD wCmd)
 		{
 			if (!initialized)
 			{
-#ifdef JP
-				plog("まだ初期化中です...");
-#else
-				plog("You cannot do that yet...");
-#endif
-
+				plog(_("まだ初期化中です...", "You cannot do that yet..."));
 			}
 			else if (game_in_progress)
 			{
-#ifdef JP
-				plog("プレイ中は新しいゲームを始めることができません！");
-#else
-				plog("You can't start a new game while you're still playing!");
-#endif
-
+				plog(_("プレイ中は新しいゲームを始めることができません！", "You can't start a new game while you're still playing!"));
 			}
 			else
 			{
@@ -3866,21 +3794,11 @@ static void process_menus(WORD wCmd)
 		{
 			if (!initialized)
 			{
-#ifdef JP
-				plog("まだ初期化中です...");
-#else
-				plog("You cannot do that yet...");
-#endif
-
+				plog(_("まだ初期化中です...", "You cannot do that yet..."));
 			}
 			else if (game_in_progress)
 			{
-#ifdef JP
-				plog("プレイ中はゲームをロードすることができません！");
-#else
-				plog("You can't open a new game while you're still playing!");
-#endif
-
+				plog(_("プレイ中はゲームをロードすることができません！", "You can't open a new game while you're still playing!"));
 			}
 			else
 			{
@@ -3915,12 +3833,7 @@ static void process_menus(WORD wCmd)
 				/* Paranoia */
 				if (!can_save)
 				{
-#ifdef JP
-					plog("今はセーブすることは出来ません。");
-#else
-					plog("You may not do that right now.");
-#endif
-
+					plog(_("今はセーブすることは出来ません。", "You may not do that right now."));
 					break;
 				}
 
@@ -3936,12 +3849,7 @@ static void process_menus(WORD wCmd)
 			}
 			else
 			{
-#ifdef JP
-				plog("今、セーブすることは出来ません。");
-#else
-				plog("You may not do that right now.");
-#endif
-
+				plog(_("今、セーブすることは出来ません。", "You may not do that right now."));
 			}
 			break;
 		}
@@ -3954,12 +3862,7 @@ static void process_menus(WORD wCmd)
 				/* Paranoia */
 				if (!can_save)
 				{
-#ifdef JP
-					plog("今は終了できません。");
-#else
-					plog("You may not do that right now.");
-#endif
-
+					plog(_("今は終了できません。", "You may not do that right now."));
 					break;
 				}
 
@@ -4031,19 +3934,11 @@ static void process_menus(WORD wCmd)
 		{
 			if (!initialized)
 			{
-#ifdef JP
-				plog("まだ初期化中です...");
-#else
-				plog("You cannot do that yet...");
-#endif
+				plog(_("まだ初期化中です...", "You cannot do that yet..."));
 			}
 			else if (game_in_progress)
 			{
-#ifdef JP
-				plog("プレイ中はムービーをロードすることができません！");
-#else
-				plog("You can't open a movie while you're playing!");
-#endif
+				plog(_("プレイ中はムービーをロードすることができません！", "You can't open a movie while you're playing!"));
 			}
 			else
 			{
@@ -4072,13 +3967,7 @@ static void process_menus(WORD wCmd)
 
 		case IDM_WINDOW_VIS_0:
 		{
-#ifdef JP
-			plog("メインウィンドウは非表示にできません！");
-#else
-			plog("You are not allowed to do that!");
-#endif
-
-
+			plog(_("メインウィンドウは非表示にできません！", "You are not allowed to do that!"));
 			break;
 		}
 
@@ -4495,11 +4384,7 @@ static void process_menus(WORD wCmd)
 				ofn.lpstrFile = bg_bitmap_file;
 				ofn.nMaxFile = 1023;
 				ofn.lpstrInitialDir = NULL;
-#ifdef JP
-				ofn.lpstrTitle = "壁紙を選んでね。";
-#else
-				ofn.lpstrTitle = "Choose wall paper.";
-#endif
+				ofn.lpstrTitle = _("壁紙を選んでね。", "Choose wall paper.");
 				ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
 				if (GetOpenFileName(&ofn))
@@ -4530,11 +4415,7 @@ static void process_menus(WORD wCmd)
 			ofn.nMaxFile = 1023;
 			ofn.lpstrDefExt = "html";
 			ofn.lpstrInitialDir = NULL;
-#ifdef JP
-			ofn.lpstrTitle = "HTMLでスクリーンダンプを保存";
-#else
-			ofn.lpstrTitle = "Save screen dump as HTML.";
-#endif
+			ofn.lpstrTitle = _("HTMLでスクリーンダンプを保存", "Save screen dump as HTML.");
 			ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 
 			if (GetSaveFileName(&ofn))
@@ -4570,12 +4451,7 @@ static void process_menus(WORD wCmd)
 				}
 				else
 				{
-#ifdef JP
-					plog("ウィンドウを作成出来ません");
-#else
-					plog("Failed to create saver window");
-#endif
-
+					plog(_("ウィンドウを作成出来ません", "Failed to create saver window"));
 				}
 			}
 			break;
@@ -4961,11 +4837,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			{
 				if (!can_save)
 				{
-#ifdef JP
-					plog("今は終了できません。");
-#else
-					plog("You may not do that right now.");
-#endif
+					plog(_("今は終了できません。", "You may not do that right now."));
 					return 0;
 				}
 
@@ -4998,12 +4870,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 
 				/* Mega-Hack -- Delay death */
 				if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
-
-#ifdef JP
-				do_cmd_write_nikki(NIKKI_GAMESTART, 0, "----ゲーム中断----");
-#else
-				do_cmd_write_nikki(NIKKI_GAMESTART, 0, "---- Save and Exit Game ----");
-#endif
+				do_cmd_write_nikki(NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 
 				/* Hardcode panic save */
 				p_ptr->panic_save = 1;
@@ -5012,11 +4879,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				signals_ignore_tstp();
 
 				/* Indicate panic save */
-#ifdef JP
-				(void)strcpy(p_ptr->died_from, "(緊急セーブ)");
-#else
-				(void)strcpy(p_ptr->died_from, "(panic save)");
-#endif
+				(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
 
 				/* Panic save */
 				(void)save_player();
@@ -5671,12 +5534,7 @@ static void init_stuff(void)
 	validate_dir(ANGBAND_DIR_XTRA, TRUE);
 
 	/* Build the filename */
-#ifdef JP
-	path_build(path, sizeof(path), ANGBAND_DIR_FILE, "news_j.txt");
-#else
-	path_build(path, sizeof(path), ANGBAND_DIR_FILE, "news.txt");
-#endif
-
+	path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
 	/* Hack -- Validate the "news.txt" file */
 	validate_file(path);
@@ -5962,11 +5820,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 #endif
 
 	/* Prompt the user */
-#ifdef JP
-	prt("[ファイル] メニューの [新規] または [開く] を選択してください。", 23, 8);
-#else
-	prt("[Choose 'New' or 'Open' from the 'File' menu]", 23, 17);
-#endif
+	prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
 
 	Term_fresh();
 

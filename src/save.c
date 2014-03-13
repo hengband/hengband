@@ -503,12 +503,7 @@ static void wr_ghost(void)
 	int i;
 
 	/* Name */
-#ifdef JP
-	wr_string("不正なゴースト");
-#else
-	wr_string("Broken Ghost");
-#endif
-
+	wr_string(_("不正なゴースト", "Broken Ghost"));
 
 	/* Hack -- stupid data */
 	for (i = 0; i < 60; i++) wr_byte(0);
@@ -1757,11 +1752,7 @@ bool load_player(void)
 	if (access(savefile, 0) < 0)
 	{
 		/* Give a message */
-#ifdef JP
-		msg_print("セーブファイルがありません。");
-#else
-		msg_print("Savefile does not exist.");
-#endif
+		msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
 
 		msg_print(NULL);
 
@@ -1795,12 +1786,7 @@ bool load_player(void)
 			my_fclose(fkk);
 
 			/* Message */
-#ifdef JP
-			msg_print("セーブファイルは現在使用中です。");
-#else
-			msg_print("Savefile is currently in use.");
-#endif
-
+			msg_print(_("セーブファイルは現在使用中です。", "Savefile is currently in use."));
 			msg_print(NULL);
 
 			/* Oops */
@@ -1830,12 +1816,7 @@ bool load_player(void)
 		if (fd < 0) err = -1;
 
 		/* Message (below) */
-#ifdef JP
-		if (err) what = "セーブファイルを開けません。";
-#else
-		if (err) what = "Cannot open savefile";
-#endif
-
+		if (err) what = _("セーブファイルを開けません。", "Cannot open savefile");
 	}
 
 	/* Process file */
@@ -1851,12 +1832,7 @@ bool load_player(void)
 		if (fd_read(fd, (char*)(vvv), 4)) err = -1;
 
 		/* What */
-#ifdef JP
-		if (err) what = "セーブファイルを読めません。";
-#else
-		if (err) what = "Cannot read savefile";
-#endif
-
+		if (err) what = _("セーブファイルを読めません。", "Cannot read savefile");
 
 		/* Close the file */
 		(void)fd_close(fd);
@@ -1880,12 +1856,7 @@ bool load_player(void)
 		err = rd_savefile_new();
 
 		/* Message (below) */
-#ifdef JP
-		if (err) what = "セーブファイルを解析出来ません。";
-#else
-		if (err) what = "Cannot parse savefile";
-#endif
-
+		if (err) what = _("セーブファイルを解析出来ません。", "Cannot parse savefile");
 	}
 
 	/* Paranoia */
@@ -1895,12 +1866,7 @@ bool load_player(void)
 		if (!turn) err = -1;
 
 		/* Message (below) */
-#ifdef JP
-		if (err) what = "セーブファイルが壊れています";
-#else
-		if (err) what = "Broken savefile";
-#endif
-
+		if (err) what = _("セーブファイルが壊れています", "Broken savefile");
 	}
 
 #ifdef VERIFY_TIMESTAMP
@@ -1912,12 +1878,7 @@ bool load_player(void)
 		    sf_when < (statbuf.st_ctime - 100))
 		{
 			/* Message */
-#ifdef JP
-			what = "無効なタイム・スタンプです";
-#else
-			what = "Invalid timestamp";
-#endif
-
+			what = _("無効なタイム・スタンプです", "Invalid timestamp");
 
 			/* Oops */
 			err = -1;
@@ -1936,12 +1897,7 @@ bool load_player(void)
 		{
 			if (z_major == 2 && z_minor == 0 && z_patch == 6)
 			{
-#ifdef JP
-				msg_print("バージョン 2.0.* 用のセーブファイルを変換しました。");
-#else
-				msg_print("Converted a 2.0.* savefile.");
-#endif
-
+				msg_print(_("バージョン 2.0.* 用のセーブファイルを変換しました。", "Converted a 2.0.* savefile."));
 			}
 			else
 			{

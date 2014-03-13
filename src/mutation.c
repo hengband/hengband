@@ -1999,12 +1999,7 @@ void do_cmd_knowledge_mutations(void)
 	my_fclose(fff);
 
 	/* Display the file contents */
-#ifdef JP
-show_file(TRUE, file_name, "突然変異", 0, 0);
-#else
-	show_file(TRUE, file_name, "Mutations", 0, 0);
-#endif
-
+	show_file(TRUE, file_name, _("突然変異", "Mutations"), 0, 0);
 
 	/* Remove the file */
 	fd_kill(file_name);
@@ -2230,11 +2225,7 @@ bool mutation_power_aux(u32b power)
 				}
 				else if (have_flag(f_ptr->flags, FF_PERMANENT))
 				{
-#ifdef JP
-					msg_format("いてっ！この%sはあなたの歯より硬い！", f_name + mimic_f_ptr->name);
-#else
-					msg_format("Ouch!  This %s is harder than your teeth!", f_name + mimic_f_ptr->name);
-#endif
+					msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), f_name + mimic_f_ptr->name);
 					break;
 				}
 				else if (c_ptr->m_idx)
@@ -2265,11 +2256,7 @@ bool mutation_power_aux(u32b power)
 				}
 				else
 				{
-#ifdef JP
-					msg_format("この%sはとてもおいしい！", f_name + mimic_f_ptr->name);
-#else
-					msg_format("This %s is very filling!", f_name + mimic_f_ptr->name);
-#endif
+					msg_format(_("この%sはとてもおいしい！", "This %s is very filling!"), f_name + mimic_f_ptr->name);
 					(void)set_food(p_ptr->food + 10000);
 				}
 
@@ -2325,11 +2312,7 @@ bool mutation_power_aux(u32b power)
 			break;
 
 		case MUT1_POLYMORPH:
-#ifdef JP
-			if (!get_check("変身します。よろしいですか？")) return FALSE;
-#else
-			if (!get_check("You will polymorph your self. Are you sure? ")) return FALSE;
-#endif
+			if (!get_check(_("変身します。よろしいですか？", "You will polymorph your self. Are you sure? "))) return FALSE;
 			do_poly_self();
 			break;
 
@@ -2523,12 +2506,7 @@ bool mutation_power_aux(u32b power)
 
 		default:
 			energy_use = 0;
-#ifdef JP
-			msg_format("能力 %s は実装されていません。", power);
-#else
-			msg_format("Power %s not implemented. Oops.", power);
-#endif
-
+			msg_format(_("能力 %s は実装されていません。", "Power %s not implemented. Oops."), power);
 	}
 
 	return TRUE;

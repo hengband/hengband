@@ -342,12 +342,7 @@ void compact_objects(int size)
 	if (size)
 	{
 		/* Message */
-#ifdef JP
-		msg_print("アイテム情報を圧縮しています...");
-#else
-		msg_print("Compacting objects...");
-#endif
-
+		msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
 
 		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
@@ -565,12 +560,7 @@ s16b o_pop(void)
 
 
 	/* Warn the player (except during dungeon creation) */
-#ifdef JP
-	if (character_dungeon) msg_print("アイテムが多すぎる！");
-#else
-	if (character_dungeon) msg_print("Too many objects!");
-#endif
-
+	if (character_dungeon) msg_print(_("アイテムが多すぎる！", "Too many objects!"));
 
 	/* Oops */
 	return (0);
@@ -1887,11 +1877,7 @@ s16b lookup_kind(int tval, int sval)
 
 #if 0
 	/* Oops */
-#ifdef JP
-	msg_format("アイテムがない (%d,%d)", tval, sval);
-#else
-	msg_format("No object (%d,%d)", tval, sval);
-#endif
+	msg_format(_("アイテムがない (%d,%d)", "No object (%d,%d)"), tval, sval);
 #endif
 
 
@@ -2085,47 +2071,27 @@ static void object_mention(object_type *o_ptr)
 	if (object_is_fixed_artifact(o_ptr))
 	{
 		/* Silly message */
-#ifdef JP
-		msg_format("伝説のアイテム (%s)", o_name);
-#else
-		msg_format("Artifact (%s)", o_name);
-#endif
-
+		msg_format(_("伝説のアイテム (%s)", "Artifact (%s)"), o_name);
 	}
 
 	/* Random Artifact */
 	else if (o_ptr->art_name)
 	{
-#ifdef JP
-		msg_print("ランダム・アーティファクト");
-#else
-		msg_print("Random artifact");
-#endif
-
+		msg_print(_("ランダム・アーティファクト", "Random artifact"));
 	}
 
 	/* Ego-item */
 	else if (object_is_ego(o_ptr))
 	{
 		/* Silly message */
-#ifdef JP
-		msg_format("名のあるアイテム (%s)", o_name);
-#else
-		msg_format("Ego-item (%s)", o_name);
-#endif
-
+		msg_format(_("名のあるアイテム (%s)", "Ego-item (%s)"), o_name);
 	}
 
 	/* Normal item */
 	else
 	{
 		/* Silly message */
-#ifdef JP
-		msg_format("アイテム (%s)", o_name);
-#else
-		msg_format("Object (%s)", o_name);
-#endif
-
+		msg_format(_("アイテム (%s)", "Object (%s)"), o_name);
 	}
 }
 
@@ -4182,12 +4148,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 			if (cheat_peek)
 			{
-#ifdef JP
-				msg_format("%sの人形, 深さ +%d%s",
-#else
-				msg_format("Figurine of %s, depth +%d%s",
-#endif
-
+				msg_format(_("%sの人形, 深さ +%d%s", "Figurine of %s, depth +%d%s"),
 							  r_name + r_ptr->name, check - 1,
 							  !object_is_cursed(o_ptr) ? "" : " {cursed}");
 			}
@@ -4241,12 +4202,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 			if (cheat_peek)
 			{
-#ifdef JP
-				msg_format("%sの死体, 深さ +%d",
-#else
-				msg_format("Corpse of %s, depth +%d",
-#endif
-
+				msg_format(_("%sの死体, 深さ +%d", "Corpse of %s, depth +%d"),
 							  r_name + r_ptr->name, check - 1);
 			}
 
@@ -4278,12 +4234,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 			if (cheat_peek)
 			{
-#ifdef JP
-				msg_format("%sの像", r_name + r_ptr->name);
-#else
-				msg_format("Statue of %s", r_name + r_ptr->name);
-#endif
-
+				msg_format(_("%sの像", "Statue of %s"), r_name + r_ptr->name);
 			}
 			object_aware(o_ptr);
 			object_known(o_ptr);
@@ -5201,12 +5152,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 
 		/* Debug */
-#ifdef JP
-		if (p_ptr->wizard) msg_print("(破損)");
-#else
-		if (p_ptr->wizard) msg_print("(breakage)");
-#endif
-
+		if (p_ptr->wizard) msg_print(_("(破損)", "(breakage)"));
 
 		/* Failure */
 		return (0);
@@ -5318,12 +5264,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 
 		/* Debug */
-#ifdef JP
-		if (p_ptr->wizard) msg_print("(床スペースがない)");
-#else
-		if (p_ptr->wizard) msg_print("(no floor space)");
-#endif
-
+		if (p_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
 
 		/* Failure */
 		return (0);
@@ -5376,11 +5317,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 #endif
 
 			/* Debug */
-#ifdef JP
-			if (p_ptr->wizard) msg_print("(床スペースがない)");
-#else
-			if (p_ptr->wizard) msg_print("(no floor space)");
-#endif
+			if (p_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
 
 			/* Mega-Hack -- preserve artifacts */
 			if (preserve_mode)
@@ -5465,12 +5402,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 
 
 		/* Debug */
-#ifdef JP
-		if (p_ptr->wizard) msg_print("(アイテムが多過ぎる)");
-#else
-		if (p_ptr->wizard) msg_print("(too many objects)");
-#endif
-
+		if (p_ptr->wizard) msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
 
 		/* Hack -- Preserve artifacts */
 		if (object_is_fixed_artifact(j_ptr))
@@ -5521,12 +5453,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 	/* Message when an object falls under the player */
 	if (chance && player_bold(by, bx))
 	{
-#ifdef JP
-		msg_print("何かが足下に転がってきた。");
-#else
-		msg_print("You feel something roll beneath your feet.");
-#endif
-
+		msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
 	}
 
 	/* XXX XXX XXX */
@@ -6456,45 +6383,25 @@ s16b inven_takeoff(int item, int amt)
 	if (((item == INVEN_RARM) || (item == INVEN_LARM)) &&
 	    object_is_melee_weapon(o_ptr))
 	{
-#ifdef JP
-		act = "を装備からはずした";
-#else
-		act = "You were wielding";
-#endif
-
+		act = _("を装備からはずした", "You were wielding");
 	}
 
 	/* Took off bow */
 	else if (item == INVEN_BOW)
 	{
-#ifdef JP
-		act = "を装備からはずした";
-#else
-		act = "You were holding";
-#endif
-
+		act = _("を装備からはずした", "You were holding");
 	}
 
 	/* Took off light */
 	else if (item == INVEN_LITE)
 	{
-#ifdef JP
-		act = "を光源からはずした";
-#else
-		act = "You were holding";
-#endif
-
+		act = _("を光源からはずした", "You were holding");
 	}
 
 	/* Took off something */
 	else
 	{
-#ifdef JP
-		act = "を装備からはずした";
-#else
-		act = "You were wearing";
-#endif
-
+		act = _("を装備からはずした", "You were wearing");
 	}
 
 	/* Modify, Optimize */
@@ -6573,12 +6480,7 @@ void inven_drop(int item, int amt)
 	object_desc(o_name, q_ptr, 0);
 
 	/* Message */
-#ifdef JP
-	msg_format("%s(%c)を落とした。", o_name, index_to_label(item));
-#else
-	msg_format("You drop %s (%c).", o_name, index_to_label(item));
-#endif
-
+	msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
 
 	/* Drop it near the player */
 	(void)drop_near(q_ptr, 0, py, px);
@@ -6699,11 +6601,7 @@ void combine_pack(void)
 	while (combined);
 
 	/* Message */
-#ifdef JP
-	if (flag) msg_print("ザックの中のアイテムをまとめ直した。");
-#else
-	if (flag) msg_print("You combine some items in your pack.");
-#endif
+	if (flag) msg_print(_("ザックの中のアイテムをまとめ直した。", "You combine some items in your pack."));
 }
 
 /*!
@@ -6771,12 +6669,7 @@ void reorder_pack(void)
 	}
 
 	/* Message */
-#ifdef JP
-	if (flag) msg_print("ザックの中のアイテムを並べ直した。");
-#else
-	if (flag) msg_print("You reorder some items in your pack.");
-#endif
-
+	if (flag) msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
 }
 
 /*!
@@ -7864,22 +7757,15 @@ static void display_essence(void)
 	{
 		prt("",i,0);
 	}
-#ifdef JP
-	prt("エッセンス   個数     エッセンス   個数     エッセンス   個数", 1, 8);
-#else
-	prt("Essence      Num      Essence      Num      Essence      Num ", 1, 8);
-#endif
+	prt(_("エッセンス   個数     エッセンス   個数     エッセンス   個数", 
+		  "Essence      Num      Essence      Num      Essence      Num "), 1, 8);
 	for (i = 0; essence_name[i]; i++)
 	{
 		if (!essence_name[i][0]) continue;
 		prt(format("%-11s %5d", essence_name[i], p_ptr->magic_num1[i]), 2+num%21, 8+num/21*22);
 		num++;
 	}
-#ifdef JP
-	prt("現在所持しているエッセンス", 0, 0);
-#else
-	prt("List of all essences you have.", 0, 0);
-#endif
+	prt(_("現在所持しているエッセンス", "List of all essences you have."), 0, 0);
 	(void)inkey();
 	screen_load();
 	return;
@@ -7909,13 +7795,8 @@ static void drain_essence(void)
 	item_tester_no_ryoute = TRUE;
 
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムから抽出しますか？";
-	s = "抽出できるアイテムがありません。";
-#else
-	q = "Extract from which item? ";
-	s = "You have nothing you can extract from.";
-#endif
+	q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
+	s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -7935,11 +7816,7 @@ static void drain_essence(void)
 	{
 		char o_name[MAX_NLEN];
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-#ifdef JP
-		if (!get_check(format("本当に%sから抽出してよろしいですか？", o_name))) return;
-#else
-		if (!get_check(format("Really extract from %s? ", o_name))) return;
-#endif
+		if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name))) return;
 	}
 
 	energy_use = 100;
@@ -8227,11 +8104,7 @@ static int choose_essence(void)
 			for (i = 0; i < mode_max; i++)
 				prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
 
-#ifdef JP
-			if (!get_com("何を付加しますか:", &choice, TRUE))
-#else
-			if (!get_com("Command :", &choice, TRUE))
-#endif
+			if (!get_com(_("何を付加しますか:", "Command :"), &choice, TRUE))
 			{
 				screen_load();
 				return 0;
@@ -8294,11 +8167,7 @@ static void add_essence(int mode)
 	redraw = FALSE;
 
 	/* Build a prompt */
-#ifdef JP
-	(void) strnfmt(out_val, 78, "('*'で一覧, ESCで中断) どの能力を付加しますか？");
-#else
-	(void)strnfmt(out_val, 78, "(*=List, ESC=exit) Add which ability? ");
-#endif
+	(void) strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの能力を付加しますか？", "(*=List, ESC=exit) Add which ability? "));
 	if (use_menu) screen_save();
 
 	/* Get a spell from the user */
@@ -8400,11 +8269,7 @@ static void add_essence(int mode)
 					if (use_menu)
 					{
 						if (ctr == (menu_line-1))
-#ifdef JP
-							strcpy(dummy, "》 ");
-#else
-							strcpy(dummy, ">  ");
-#endif
+							strcpy(dummy, _("》 ", ">  "));
 						else strcpy(dummy, "   ");
 						
 					}
@@ -8429,49 +8294,29 @@ static void add_essence(int mode)
 						switch(es_ptr->add)
 						{
 						case ESSENCE_SH_FIRE:
-#ifdef JP
-							strcat(dummy, "(焼棄+耐火炎)");
-#else
-							strcat(dummy, "(brand fire + res.fire)");
-#endif
+							strcat(dummy, _("(焼棄+耐火炎)", "(brand fire + res.fire)"));
 							if (p_ptr->magic_num1[TR_BRAND_FIRE] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SH_ELEC:
-#ifdef JP
-							strcat(dummy, "(電撃+耐電撃)");
-#else
-							strcat(dummy, "(brand elec. + res. elec.)");
-#endif
+							strcat(dummy, _("(電撃+耐電撃)", "(brand elec. + res. elec.)"));
 							if (p_ptr->magic_num1[TR_BRAND_ELEC] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SH_COLD:
-#ifdef JP
-							strcat(dummy, "(凍結+耐冷気)");
-#else
-							strcat(dummy, "(brand cold + res. cold)");
-#endif
+							strcat(dummy, _("(凍結+耐冷気)", "(brand cold + res. cold)"));
 							if (p_ptr->magic_num1[TR_BRAND_COLD] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[TR_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_RESISTANCE:
-#ifdef JP
-							strcat(dummy, "(耐火炎+耐冷気+耐電撃+耐酸)");
-#else
-							strcat(dummy, "(r.fire+r.cold+r.elec+r.acid)");
-#endif
+							strcat(dummy, _("(耐火炎+耐冷気+耐電撃+耐酸)", "(r.fire+r.cold+r.elec+r.acid)"));
 							if (p_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[TR_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[TR_RES_ACID] < es_ptr->value) able[ctr] = FALSE;
 							break;
 						case ESSENCE_SUSTAIN:
-#ifdef JP
-							strcat(dummy, "(耐火炎+耐冷気+耐電撃+耐酸)");
-#else
-							strcat(dummy, "(r.fire+r.cold+r.elec+r.acid)");
-#endif
+							strcat(dummy, _("(耐火炎+耐冷気+耐電撃+耐酸)", "(r.fire+r.cold+r.elec+r.acid)"));
 							if (p_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[TR_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
 							if (p_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
@@ -8534,11 +8379,7 @@ static void add_essence(int mode)
 			char tmp_val[160];
 
 			/* Prompt */
-#ifdef JP
-			(void) strnfmt(tmp_val, 78, "%sを付加しますか？ ", essence_info[num[i]].add_name);
-#else
-			(void) strnfmt(tmp_val, 78, "Add the abilitiy of %s? ", essence_info[num[i]].add_name);
-#endif
+			(void) strnfmt(tmp_val, 78, _("%sを付加しますか？ ", "Add the abilitiy of %s? "), essence_info[num[i]].add_name);
 
 			/* Belay that order */
 			if (!get_check(tmp_val)) continue;
@@ -8573,13 +8414,8 @@ static void add_essence(int mode)
 	item_tester_no_ryoute = TRUE;
 
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムを改良しますか？";
-	s = "改良できるアイテムがありません。";
-#else
-	q = "Improve which item? ";
-	s = "You have nothing to improve.";
-#endif
+	q = _("どのアイテムを改良しますか？", "Improve which item? ");
+	s = _("改良できるアイテムがありません。", "You have nothing to improve.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -8597,11 +8433,7 @@ static void add_essence(int mode)
 
 	if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(o_ptr)))
 	{
-#ifdef JP
-		msg_print("そのアイテムはこれ以上改良できない。");
-#else
-		msg_print("This item is no more able to be improved.");
-#endif
+		msg_print(_("そのアイテムはこれ以上改良できない。", "This item is no more able to be improved."));
 		return;
 	}
 
@@ -8612,62 +8444,37 @@ static void add_essence(int mode)
 	if (o_ptr->number > 1)
 	{
 		use_essence *= o_ptr->number;
-#ifdef JP
-		msg_format("%d個あるのでエッセンスは%d必要です。", o_ptr->number, use_essence);
-#else
-		msg_format("It will take %d essences.",use_essence);
-#endif
-
+		msg_format(_("%d個あるのでエッセンスは%d必要です。", "It will take %d essences."), o_ptr->number, use_essence);
 	}
 
 	if (es_ptr->essence != -1)
 	{
 		if (p_ptr->magic_num1[es_ptr->essence] < use_essence)
 		{
-#ifdef JP
-			msg_print("エッセンスが足りない。");
-#else
-			msg_print("You don't have enough essences.");
-#endif
+			msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
 			return;
 		}
 		if (is_pval_flag(es_ptr->add))
 		{
 			if (o_ptr->pval < 0)
 			{
-#ifdef JP
-				msg_print("このアイテムの能力修正を強化することはできない。");
-#else
-				msg_print("You cannot increase magic number of this item.");
-#endif
+				msg_print(_("このアイテムの能力修正を強化することはできない。", "You cannot increase magic number of this item."));
 				return;
 			}
 			else if (es_ptr->add == TR_BLOWS)
 			{
 				if (o_ptr->pval > 1)
 				{
-#ifdef JP
-					if (!get_check("修正値は1になります。よろしいですか？")) return;
-#else
-					if (!get_check("The magic number of this weapon will become 1. Are you sure? ")) return;
-#endif
+					if (!get_check(_("修正値は1になります。よろしいですか？", "The magic number of this weapon will become 1. Are you sure? "))) return;
 				}
 
 				o_ptr->pval = 1;
-#ifdef JP
-				msg_format("エッセンスを%d個使用します。", use_essence);
-#else
-				msg_format("It will take %d essences.", use_essence);
-#endif
+				msg_format(_("エッセンスを%d個使用します。", "It will take %d essences."), use_essence);
 			}
 			else if (o_ptr->pval > 0)
 			{
 				use_essence *= o_ptr->pval;
-#ifdef JP
-				msg_format("エッセンスを%d個使用します。", use_essence);
-#else
-				msg_format("It will take %d essences.", use_essence);
-#endif
+				msg_format(_("エッセンスを%d個使用します。", "It will take %d essences."), use_essence);
 			}
 			else
 			{
@@ -8676,11 +8483,7 @@ static void add_essence(int mode)
 				int pval;
 				int limit = MIN(5, p_ptr->magic_num1[es_ptr->essence]/es_ptr->value);
 
-#ifdef JP
-				sprintf(tmp, "いくつ付加しますか？ (1-%d): ", limit);
-#else
-				sprintf(tmp, "Enchant how many? (1-%d): ", limit);
-#endif
+				sprintf(tmp, _("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit);
 				strcpy(tmp_val, "1");
 
 				if (!get_string(tmp, tmp_val, 1)) return;
@@ -8689,20 +8492,12 @@ static void add_essence(int mode)
 				else if (pval < 1) pval = 1;
 				o_ptr->pval += pval;
 				use_essence *= pval;
-#ifdef JP
-				msg_format("エッセンスを%d個使用します。", use_essence);
-#else
-				msg_format("It will take %d essences.", use_essence);
-#endif
+				msg_format(_("エッセンスを%d個使用します。", "It will take %d essences."), use_essence);
 			}
 
 			if (p_ptr->magic_num1[es_ptr->essence] < use_essence)
 			{
-#ifdef JP
-				msg_print("エッセンスが足りない。");
-#else
-				msg_print("You don't have enough essences.");
-#endif
+				msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
 				return;
 			}
 		}
@@ -8713,27 +8508,15 @@ static void add_essence(int mode)
 			int get_to_h, get_to_d;
 
 			strcpy(tmp_val, "1");
-#ifdef JP
-			if (!get_string(format("いくつ付加しますか？ (1-%d):", p_ptr->lev/7+3), tmp_val, 2)) return;
-#else
-			if (!get_string(format("Enchant how many? (1-%d):", p_ptr->lev/7+3), tmp_val, 2)) return;
-#endif
+			if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), p_ptr->lev/7+3), tmp_val, 2)) return;
 			val = atoi(tmp_val);
 			if (val > p_ptr->lev/7+3) val = p_ptr->lev/7+3;
 			else if (val < 1) val = 1;
 			use_essence *= val;
-#ifdef JP
-			msg_format("エッセンスを%d個使用します。", use_essence);
-#else
-			msg_format("It will take %d essences.", use_essence);
-#endif
+			msg_format(_("エッセンスを%d個使用します。", "It will take %d essences."), use_essence);
 			if (p_ptr->magic_num1[es_ptr->essence] < use_essence)
 			{
-#ifdef JP
-				msg_print("エッセンスが足りない。");
-#else
-				msg_print("You don't have enough essences.");
-#endif
+				msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
 				return;
 			}
 			get_to_h = ((val+1)/2+randint0(val/2+1));
@@ -8747,11 +8530,7 @@ static void add_essence(int mode)
 		{
 			if ((o_ptr->to_h >= p_ptr->lev/5+5) && (o_ptr->to_d >= p_ptr->lev/5+5))
 			{
-#ifdef JP
-				msg_print("改良に失敗した。");
-#else
-				msg_print("You failed to enchant.");
-#endif
+				msg_print(_("改良に失敗した。", "You failed to enchant."));
 				energy_use = 100;
 				return;
 			}
@@ -8765,11 +8544,7 @@ static void add_essence(int mode)
 		{
 			if (o_ptr->to_a >= p_ptr->lev/5+5)
 			{
-#ifdef JP
-				msg_print("改良に失敗した。");
-#else
-				msg_print("You failed to enchant.");
-#endif
+				msg_print(_("改良に失敗した。", "You failed to enchant."));
 				energy_use = 100;
 				return;
 			}
@@ -8831,11 +8606,7 @@ static void add_essence(int mode)
 		}
 		if (!success)
 		{
-#ifdef JP
-			msg_print("エッセンスが足りない。");
-#else
-			msg_print("You don't have enough essences.");
-#endif
+			msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
 			return;
 		}
 		if (es_ptr->add == ESSENCE_SUSTAIN)
@@ -8881,13 +8652,8 @@ static void erase_essence(void)
 	item_tester_hook = object_is_smith;
 
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムのエッセンスを消去しますか？";
-	s = "エッセンスを付加したアイテムがありません。";
-#else
-	q = "Remove from which item? ";
-	s = "You have nothing to remove essence.";
-#endif
+	q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
+	s = _("エッセンスを付加したアイテムがありません。", "You have nothing to remove essence.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -8904,11 +8670,7 @@ static void erase_essence(void)
 	}
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-#ifdef JP
-	if (!get_check(format("よろしいですか？ [%s]", o_name))) return;
-#else
-	if (!get_check(format("Are you sure? [%s]", o_name))) return;
-#endif
+	if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), o_name))) return;
 
 	energy_use = 100;
 
@@ -8923,11 +8685,7 @@ static void erase_essence(void)
 	o_ptr->xtra3 = 0;
 	object_flags(o_ptr, flgs);
 	if (!(have_pval_flags(flgs))) o_ptr->pval = 0;
-#ifdef JP
-	msg_print("エッセンスを取り去った。");
-#else
-	msg_print("You removed all essence you have added.");
-#endif
+	msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
 
 	/* Combine the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
@@ -8952,32 +8710,17 @@ void do_cmd_kaji(bool only_browse)
 	{
 		if (p_ptr->confused)
 		{
-#ifdef JP
-			msg_print("混乱していて作業できない！");
-#else
-			msg_print("You are too confused!");
-#endif
-
+			msg_print(_("混乱していて作業できない！", "You are too confused!"));
 			return;
 		}
 		if (p_ptr->blind)
 		{
-#ifdef JP
-			msg_print("目が見えなくて作業できない！");
-#else
-			msg_print("You are blind!");
-#endif
-
+			msg_print(_("目が見えなくて作業できない！", "You are blind!"));
 			return;
 		}
 		if (p_ptr->image)
 		{
-#ifdef JP
-			msg_print("うまく見えなくて作業できない！");
-#else
-			msg_print("You are hallucinating!");
-#endif
-
+			msg_print(_("うまく見えなくて作業できない！", "You are hallucinating!"));
 			return;
 		}
 	}

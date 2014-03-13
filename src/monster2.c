@@ -400,11 +400,7 @@ void compact_monsters(int size)
 	int		cur_lev, cur_dis, chance;
 
 	/* Message (only if compacting) */
-#ifdef JP
-	if (size) msg_print("モンスター情報を圧縮しています...");
-#else
-	if (size) msg_print("Compacting monsters...");
-#endif
+	if (size) msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));
 
 
 	/* Compact at least 'size' objects */
@@ -604,12 +600,7 @@ s16b m_pop(void)
 
 
 	/* Warn the player (except during dungeon creation) */
-#ifdef JP
-	if (character_dungeon) msg_print("モンスターが多すぎる！");
-#else
-	if (character_dungeon) msg_print("Too many monsters!");
-#endif
-
+	if (character_dungeon) msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
 
 	/* Try not to crash */
 	return (0);
@@ -1486,12 +1477,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 	{
 		if (one_in_(2))
 		{
-#ifdef JP
-			if (!get_rnd_line("silly_j.txt", m_ptr->r_idx, silly_name))
-#else
-			if (!get_rnd_line("silly.txt", m_ptr->r_idx, silly_name))
-#endif
-
+			if (!get_rnd_line(_("silly_j.txt", "silly.txt"), m_ptr->r_idx, silly_name))
 				named = TRUE;
 		}
 
@@ -1534,12 +1520,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 
 
 		/* Assume simple result */
-#ifdef JP
-		res = "何か";
-#else
-		res = "it";
-#endif
-
+		res = _("何か", "it");
 
 		/* Brute force: split on the possibilities */
 		switch (kind + (mode & (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE)))
@@ -1683,11 +1664,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 				 !(p_ptr->riding && (&m_list[p_ptr->riding] == m_ptr)))
 			{
 				/* It is a fake unique monster */
-#ifdef JP
-				(void)sprintf(desc, "%sもどき", name);
-#else
-				(void)sprintf(desc, "fake %s", name);
-#endif
+				(void)sprintf(desc, _("%sもどき", "fake %s"), name);
 			}
 
 			else
@@ -1716,58 +1693,33 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 		{
 			/* Definite monsters need a definite article */
 			if (is_pet(m_ptr))
-#ifdef JP
-				(void)strcpy(desc, "あなたの");
-#else
-				(void)strcpy(desc, "your ");
-#endif
-
+				(void)strcpy(desc, _("あなたの", "your "));
 			else
-#ifdef JP
-				(void)strcpy(desc, "");
-#else
-				(void)strcpy(desc, "the ");
-#endif
+				(void)strcpy(desc, _("", "the "));
 
 			(void)strcat(desc, name);
 		}
 
 		if (m_ptr->nickname)
 		{
-#ifdef JP
-			sprintf(buf,"「%s」",quark_str(m_ptr->nickname));
-#else
-			sprintf(buf," called %s",quark_str(m_ptr->nickname));
-#endif
+			sprintf(buf,_("「%s」", " called %s"),quark_str(m_ptr->nickname));
 			strcat(desc,buf);
 		}
 
 		if (p_ptr->riding && (&m_list[p_ptr->riding] == m_ptr))
 		{
-#ifdef JP
-			strcat(desc,"(乗馬中)");
-#else
-			strcat(desc,"(riding)");
-#endif
+			strcat(desc,_("(乗馬中)", "(riding)"));
 		}
 
 		if ((mode & MD_IGNORE_HALLU) && (m_ptr->mflag2 & MFLAG2_CHAMELEON))
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 			{
-#ifdef JP
-				strcat(desc,"(カメレオンの王)");
-#else
-				strcat(desc,"(Chameleon Lord)");
-#endif
+				strcat(desc,_("(カメレオンの王)", "(Chameleon Lord)"));
 			}
 			else
 			{
-#ifdef JP
-				strcat(desc,"(カメレオン)");
-#else
-				strcat(desc,"(Chameleon)");
-#endif
+				strcat(desc,_("(カメレオン)", "(Chameleon)"));
 			}
 		}
 
@@ -1782,11 +1734,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 			/* XXX Check for trailing "s" */
 			
 			/* Simply append "apostrophe" and "s" */
-#ifdef JP
-			(void)strcat(desc, "の");
-#else
-			(void)strcat(desc, "'s");
-#endif
+			(void)strcat(desc, _("の", "'s"));
 		}
 	}
 }
@@ -2030,12 +1978,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	}
 	else
 	{
-#ifdef JP
-msg_print("ネクロノミコンを読んで正気を失った！");
-#else
-		msg_print("Your sanity is shaken by reading the Necronomicon!");
-#endif
-
+		msg_print(_("ネクロノミコンを読んで正気を失った！", "Your sanity is shaken by reading the Necronomicon!"));
 	}
 
 	if (!saving_throw(p_ptr->skill_sav - power)) /* Mind blast */
@@ -2083,11 +2026,7 @@ msg_print("ネクロノミコンを読んで正気を失った！");
 	{
 
 		if (lose_all_info())
-#ifdef JP
-msg_print("あまりの恐怖に全てのことを忘れてしまった！");
-#else
-			msg_print("You forget everything in your utmost terror!");
-#endif
+			msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
 
 		return;
 	}
@@ -2115,29 +2054,16 @@ msg_print("あまりの恐怖に全てのことを忘れてしまった！");
 				{
 					if ((p_ptr->stat_use[A_INT] < 4) && (p_ptr->stat_use[A_WIS] < 4))
 					{
-#ifdef JP
-msg_print("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。");
-#else
-						msg_print("You turn into an utter moron!");
-#endif
+						msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You turn into an utter moron!"));
 					}
 					else
 					{
-#ifdef JP
-msg_print("あなたは完璧な馬鹿になった！");
-#else
-						msg_print("You turn into an utter moron!");
-#endif
+						msg_print(_("あなたは完璧な馬鹿になった！", "You turn into an utter moron!"));
 					}
 
 					if (p_ptr->muta3 & MUT3_HYPER_INT)
 					{
-#ifdef JP
-msg_print("あなたの脳は生体コンピュータではなくなった。");
-#else
-						msg_print("Your brain is no longer a living computer.");
-#endif
-
+						msg_print(_("あなたの脳は生体コンピュータではなくなった。", "Your brain is no longer a living computer."));
 						p_ptr->muta3 &= ~(MUT3_HYPER_INT);
 					}
 					p_ptr->muta3 |= MUT3_MORONIC;
@@ -2156,22 +2082,12 @@ msg_print("あなたの脳は生体コンピュータではなくなった。");
 			case 11:
 				if (!(p_ptr->muta2 & MUT2_COWARDICE) && !p_ptr->resist_fear)
 				{
-#ifdef JP
-msg_print("あなたはパラノイアになった！");
-#else
-					msg_print("You become paranoid!");
-#endif
-
+					msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
 
 					/* Duh, the following should never happen, but anyway... */
 					if (p_ptr->muta3 & MUT3_FEARLESS)
 					{
-#ifdef JP
-msg_print("あなたはもう恐れ知らずではなくなった。");
-#else
-						msg_print("You are no longer fearless.");
-#endif
-
+						msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));
 						p_ptr->muta3 &= ~(MUT3_FEARLESS);
 					}
 
@@ -2191,12 +2107,7 @@ msg_print("あなたはもう恐れ知らずではなくなった。");
 			case 21:
 				if (!(p_ptr->muta2 & MUT2_HALLU) && !p_ptr->resist_chaos)
 				{
-#ifdef JP
-msg_print("幻覚をひき起こす精神錯乱に陥った！");
-#else
-					msg_print("You are afflicted by a hallucinatory insanity!");
-#endif
-
+					msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
 					p_ptr->muta2 |= MUT2_HALLU;
 					happened = TRUE;
 				}
@@ -2204,12 +2115,7 @@ msg_print("幻覚をひき起こす精神錯乱に陥った！");
 			default:
 				if (!(p_ptr->muta2 & MUT2_BERS_RAGE))
 				{
-#ifdef JP
-msg_print("激烈な感情の発作におそわれるようになった！");
-#else
-					msg_print("You become subject to fits of berserk rage!");
-#endif
-
+					msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
 					p_ptr->muta2 |= MUT2_BERS_RAGE;
 					happened = TRUE;
 				}
@@ -2830,17 +2736,9 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	{
 		char m_name[80];
 		monster_desc(m_name, m_ptr, 0);
-#ifdef JP
-		msg_format("突然%sが変身した。", old_m_name);
-#else
-		msg_format("Suddenly, %s transforms!", old_m_name);
-#endif
+		msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name);
 		if (!(r_ptr->flags7 & RF7_RIDING))
-#ifdef JP
-			if (rakuba(0, TRUE)) msg_print("地面に落とされた。");
-#else
-			if (rakuba(0, TRUE)) msg_format("You have fallen from %s.", m_name);
-#endif
+			if (rakuba(0, TRUE)) msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
 	}
 
 	/* Extract the monster base speed */
@@ -3053,12 +2951,7 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 			/* Describe observable breakage */
 			if (c_ptr->info & CAVE_MARK)
 			{
-#ifdef JP
-msg_print("守りのルーンが壊れた！");
-#else
-				msg_print("The rune of protection is broken!");
-#endif
-
+				msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
 			}
 
 			/* Forget the rune */
@@ -3081,22 +2974,14 @@ msg_print("守りのルーンが壊れた！");
 		if (r_ptr->flags1 & (RF1_UNIQUE))
 		{
 			/* Message for cheaters */
-#ifdef JP
-			if (cheat_hear) msg_format("深層のユニーク・モンスター (%s)。", name);
-#else
-			if (cheat_hear) msg_format("Deep Unique (%s).", name);
-#endif
+			if (cheat_hear) msg_format(_("深層のユニーク・モンスター (%s)。", "Deep Unique (%s)."), name);
 		}
 
 		/* Normal monsters */
 		else
 		{
 			/* Message for cheaters */
-#ifdef JP
-			if (cheat_hear) msg_format("深層のモンスター (%s)。", name);
-#else
-			if (cheat_hear) msg_format("Deep Monster (%s).", name);
-#endif
+			if (cheat_hear) msg_format(_("深層のモンスター (%s)。", "Deep Monster (%s)."), name);
 		}
 	}
 
@@ -3104,12 +2989,7 @@ msg_print("守りのルーンが壊れた！");
 	else if (r_ptr->flags1 & (RF1_UNIQUE))
 	{
 		/* Unique monsters induce message */
-#ifdef JP
-		if (cheat_hear) msg_format("ユニーク・モンスター (%s)。", name);
-#else
-		if (cheat_hear) msg_format("Unique (%s).", name);
-#endif
-
+		if (cheat_hear) msg_format(_("ユニーク・モンスター (%s)。", "Unique (%s)."), name);
 	}
 
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10)) mode &= ~PM_KAGE;
@@ -3327,59 +3207,27 @@ msg_print("守りのルーンが壊れた！");
 			char o_name[MAX_NLEN];
 
 			if (r_ptr->level > p_ptr->lev + 30)
-#ifdef JP
-				color = "黒く";
-#else
-				color = "black";
-#endif
+				color = _("黒く", "black");
 			else if (r_ptr->level > p_ptr->lev + 15)
-#ifdef JP
-				color = "紫色に";
-#else
-				color = "purple";
-#endif
+				color = _("紫色に", "purple");
 			else if (r_ptr->level > p_ptr->lev + 5)
-#ifdef JP
-				color = "ルビー色に";
-#else
-				color = "deep red";
-#endif
+				color = _("ルビー色に", "deep red");
 			else if (r_ptr->level > p_ptr->lev - 5)
-#ifdef JP
-				color = "赤く";
-#else
-				color = "red";
-#endif
+				color = _("赤く", "red");
 			else if (r_ptr->level > p_ptr->lev - 15)
-#ifdef JP
-				color = "ピンク色に";
-#else
-				color = "pink";
-#endif
+				color = _("ピンク色に", "pink");
 			else
-#ifdef JP
-				color = "白く";
-#else
-				color = "white";
-#endif
+				color = _("白く", "white");
 
 			o_ptr = choose_warning_item();
 			if (o_ptr)
 			{
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-#ifdef JP
-				msg_format("%sは%s光った。", o_name, color);
-#else
-				msg_format("%s glows %s.", o_name, color);
-#endif
+				msg_format(_("%sは%s光った。", "%s glows %s."), o_name, color);
 			}
 			else
 			{
-#ifdef JP
-				msg_format("%s光る物が頭に浮かんだ。", color);
-#else
-				msg_format("An %s image forms in your mind.");
-#endif
+				msg_format(_("%s光る物が頭に浮かんだ。", "An %s image forms in your mind."), color);
 			}
 		}
 	}
@@ -3392,22 +3240,13 @@ msg_print("守りのルーンが壊れた！");
 			/* Describe observable breakage */
 			if (c_ptr->info & CAVE_MARK)
 			{
-#ifdef JP
-msg_print("ルーンが爆発した！");
-#else
-				msg_print("The rune explodes!");
-#endif
-
+				msg_print(_("ルーンが爆発した！", "The rune explodes!"));
 				project(0, 2, y, x, 2 * (p_ptr->lev + damroll(7, 7)), GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 		}
 		else
 		{
-#ifdef JP
-msg_print("爆発のルーンは解除された。");
-#else
-			msg_print("An explosive rune was disarmed.");
-#endif
+			msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
 		}
 
 		/* Forget the rune */
@@ -3906,12 +3745,7 @@ bool alloc_monster(int dis, u32b mode)
 	{
 		if (cheat_xtra || cheat_hear)
 		{
-#ifdef JP
-msg_print("警告！新たなモンスターを配置できません。小さい階ですか？");
-#else
-			msg_print("Warning! Could not allocate a new monster. Small level?");
-#endif
-
+			msg_print(_("警告！新たなモンスターを配置できません。小さい階ですか？", "Warning! Could not allocate a new monster. Small level?"));
 		}
 
 		return (FALSE);
@@ -3923,12 +3757,7 @@ msg_print("警告！新たなモンスターを配置できません。小さい
 	{
 		if (alloc_horde(y, x))
 		{
-#ifdef JP
-			if (cheat_hear) msg_format("モンスターの大群(%c)", summon_kin_type);
-#else
-			if (cheat_hear) msg_format("Monster horde (%c).", summon_kin_type);
-#endif
-
+			if (cheat_hear) msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), summon_kin_type);
 			return (TRUE);
 		}
 	}
@@ -4137,11 +3966,7 @@ void message_pain(int m_idx, int dam)
 
 	if(dam == 0) // Notice non-damage
 	{
-#ifdef JP
-		msg_format("%^sはダメージを受けていない。", m_name);
-#else
-		msg_format("%^s is unharmed.", m_name);
-#endif
+		msg_format(_("%^sはダメージを受けていない。", "%^s is unharmed."), m_name);
 		return;
 	}
 

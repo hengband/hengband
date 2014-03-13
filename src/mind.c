@@ -333,11 +333,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 #endif
 		case 11: sprintf(p, " %s%dd6", s_dam, plev / 2);  break;
 		case 12: sprintf(p, " %sd%d+%d", s_dam, plev * 3, plev * 3); break;
-#ifdef JP
-		case 13: sprintf(p, " 行動:%ld回", (long int)(p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
-#else
-		case 13: sprintf(p, " %ld acts.", (p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
-#endif
+		case 13: sprintf(p, _(" 行動:%ld回", " %ld acts."), (long int)(p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
 		}
 		break;
 	case MIND_KI:
@@ -358,18 +354,10 @@ void mindcraft_info(char *p, int use_mind, int power)
 		case 7:  sprintf(p, " %s%dd8", s_dam, 8 + ((plev - 5) / 5) + boost / 12); break;
 		case 8:  sprintf(p, " %s10d6+%d", s_dam, plev * 3 / 2 + boost * 3 / 5); break;
 		case 9:  break;
-#ifdef JP
-		case 10: sprintf(p, " 最大%d体", 1+boost/100); break;
-#else
-		case 10: sprintf(p, " max %d", 1+boost/100); break;
-#endif
+		case 10: sprintf(p, _(" 最大%d体", " max %d"), 1+boost/100); break;
 		case 11: sprintf(p, " %s%d", s_dam, 100 + plev + boost); break;
 		case 12: sprintf(p, " %s%dd15", s_dam, 10 + plev / 2 + boost * 3 / 10); break;
-#ifdef JP
-		case 13: sprintf(p, " 行動:%d+d16回", 16+boost/20); break;
-#else
-		case 13: sprintf(p, " %d+d16 acts", 16+boost/20); break;
-#endif
+		case 13: sprintf(p, _(" 行動:%d+d16回", " %d+d16 acts"), 16+boost/20); break;
 		}
 		break;
 	}
@@ -475,61 +463,37 @@ void mindcraft_info(char *p, int use_mind, int power)
 	case CLASS_MINDCRAFTER:
 	  {
 	    use_mind = MIND_MINDCRAFTER;
-#ifdef JP
-	    p = "超能力";
-#else
-	    p = "mindcraft";
-#endif
+	    p = _("超能力", "mindcraft");
 	    break;
 	  }
 	case CLASS_FORCETRAINER:
 	  {
 	    use_mind = MIND_KI;
-#ifdef JP
-	    p = "練気術";
-#else
-	    p = "Force";
-#endif
+	    p = _("練気術", "Force");
 	    break;
 	  }
 	case CLASS_BERSERKER:
 	  {
 	    use_mind = MIND_BERSERKER;
-#ifdef JP
-	    p = "技";
-#else
-	    p = "brutal power";
-#endif
+	    p = _("技", "brutal power");
 	    break;
 	  }
 	case CLASS_MIRROR_MASTER:
 	  {
 	    use_mind = MIND_MIRROR_MASTER;
-#ifdef JP
-	    p = "鏡魔法";
-#else
-	    p = "magic";
-#endif
+	    p = _("鏡魔法", "magic");
 	    break;
 	  }
 	case CLASS_NINJA:
 	  {
 	    use_mind = MIND_NINJUTSU;
-#ifdef JP
-	    p = "忍術";
-#else
-	    p = "ninjutsu";
-#endif
+	    p = _("忍術", "ninjutsu");
 	    break;
 	  }
 	default:
 	  {
 	    use_mind = 0;
-#ifdef JP
-	    p = "超能力";
-#else
-	    p = "mindcraft";
-#endif
+	    p = _("超能力", "mindcraft");
 	    break;
 	  }
 	}
@@ -556,13 +520,13 @@ void mindcraft_info(char *p, int use_mind, int power)
 
 #endif /* ALLOW_REPEAT -- TNB */
 
-      /* Nothing chosen yet */
-      flag = FALSE;
+    /* Nothing chosen yet */
+    flag = FALSE;
 
-      /* No redraw yet */
-      redraw = FALSE;
+    /* No redraw yet */
+    redraw = FALSE;
 
-      for (i = 0; i < MAX_MIND_POWERS; i++)
+    for (i = 0; i < MAX_MIND_POWERS; i++)
 	{
 	  if (mind_ptr->info[i].min_lev <= plev)
 	    {
@@ -570,24 +534,18 @@ void mindcraft_info(char *p, int use_mind, int power)
 	    }
 	}
 
-      /* Build a prompt (accept all spells) */
-      if (only_browse)
+    /* Build a prompt (accept all spells) */
+    if (only_browse)
 	{
-#ifdef JP
-	  (void) strnfmt(out_val, 78, "(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？",
-#else
-	  (void) strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) Use which %s? ",
-#endif
+		(void) strnfmt(out_val, 78, 
+					_("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
 				       p, I2A(0), I2A(num - 1), p);
-	  }
+	}
 	else
-	  {
-#ifdef JP
-(void) strnfmt(out_val, 78, "(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？",
-#else
-		(void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) Use which %s? ",
-#endif
-		p, I2A(0), I2A(num - 1), p);
+	{
+		(void) strnfmt(out_val, 78, 
+					_("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
+						p, I2A(0), I2A(num - 1), p);
 	}
 
 	if (use_menu && !only_browse) screen_save();
@@ -654,11 +612,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 
 				/* Display a list of spells */
 				prt("", y, x);
-#ifdef JP
-put_str("名前", y, x + 5);
-#else
-				put_str("Name", y, x + 5);
-#endif
+				put_str(_("名前", "Name"), y, x + 5);
 
 #ifdef JP
 put_str(format("Lv   %s   失率 効果", ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y, x + 35);
@@ -738,11 +692,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 
 					if (use_menu)
 					{
-#ifdef JP
-						if (i == (menu_line-1)) strcpy(psi_desc, "  》 ");
-#else
-						if (i == (menu_line-1)) strcpy(psi_desc, "  >  ");
-#endif
+						if (i == (menu_line-1)) strcpy(psi_desc, _("  》 ", "  >  "));
 						else strcpy(psi_desc, "     ");
 					}
 					else
@@ -806,12 +756,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 			char tmp_val[160];
 
 			/* Prompt */
-#ifdef JP
-(void) strnfmt(tmp_val, 78, "%sを使いますか？", spell.name);
-#else
-			(void)strnfmt(tmp_val, 78, "Use %s? ", spell.name);
-#endif
-
+			(void) strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), spell.name);
 
 			/* Belay that order */
 			if (!get_check(tmp_val)) continue;
@@ -888,11 +833,7 @@ static bool cast_mindcrafter_spell(int spell)
 		if ((plev > 24) && (plev < 40))
 			set_tim_esp(plev, FALSE);
 
-#ifdef JP
-if (!b) msg_print("安全な気がする。");
-#else
-		if (!b) msg_print("You feel safe.");
-#endif
+		if (!b) msg_print(_("安全な気がする。", "You feel safe."));
 
 		break;
 	case 1:
@@ -949,11 +890,7 @@ if (!b) msg_print("安全な気がする。");
 			return ident_spell(FALSE);
 	case 8:
 		/* Mindwave */
-#ifdef JP
-msg_print("精神を捻じ曲げる波動を発生させた！");
-#else
-		msg_print("Mind-warping forces emanate from your brain!");
-#endif
+		msg_print(_("精神を捻じ曲げる波動を発生させた！", "Mind-warping forces emanate from your brain!"));
 
 		if (plev < 25)
 			project(0, 2 + plev / 10, py, px,
@@ -1007,19 +944,11 @@ msg_print("精神を捻じ曲げる波動を発生させた！");
 	{
 		if (world_player)
 		{
-#ifdef JP
-			msg_print("既に時は止まっている。");
-#else
-			msg_print("Time is already stopped.");
-#endif
+			msg_print(_("既に時は止まっている。", "Time is already stopped."));
 			return (FALSE);
 		}
 		world_player = TRUE;
-#ifdef JP
-		msg_print("「時よ！」");
-#else
-		msg_print("You yell 'Time!'");
-#endif
+		msg_print(_("「時よ！」", "You yell 'Time!'"));
 		msg_print(NULL);
 
 		/* Hack */
@@ -1038,12 +967,7 @@ msg_print("精神を捻じ曲げる波動を発生させた！");
 		break;
 	}
 	default:
-#ifdef JP
-msg_print("なに？");
-#else
-		msg_print("Zap?");
-#endif
-
+		msg_print(_("なに？", "Zap?"));
 	}
 
 	return TRUE;
@@ -1086,26 +1010,14 @@ static bool cast_force_spell(int spell)
 		set_resist_magic(randint1(20) + 20 + boost / 5, FALSE);
 		break;
 	case 5:
-#ifdef JP
-		msg_print("気を練った。");
-#else
-		msg_print("You improved the Force.");
-#endif
+		msg_print(_("気を練った。", "You improved the Force."));
 		p_ptr->magic_num1[0] += (70 + plev);
 		p_ptr->update |= (PU_BONUS);
 		if (randint1(p_ptr->magic_num1[0]) > (plev * 4 + 120))
 		{
-#ifdef JP
-			msg_print("気が暴走した！");
-#else
-			msg_print("The Force exploded!");
-#endif
+			msg_print(_("気が暴走した！", "The Force exploded!"));
 			fire_ball(GF_MANA, 0, p_ptr->magic_num1[0] / 2, 10);
-#ifdef JP
-			take_hit(DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, "気の暴走", -1);
-#else
-			take_hit(DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, "Explosion of the Force", -1);
-#endif
+			take_hit(DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"), -1);
 		}
 		else return TRUE;
 		break;
@@ -1136,11 +1048,7 @@ static bool cast_force_spell(int spell)
 
 			if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam/2)
 			{
-#ifdef JP
-				msg_format("%sは飛ばされなかった。", m_name);
-#else
-				msg_format("%^s was not blown away.", m_name);
-#endif
+				msg_format(_("%sは飛ばされなかった。", "%^s was not blown away."), m_name);
 			}
 			else
 			{
@@ -1157,11 +1065,7 @@ static bool cast_force_spell(int spell)
 				}
 				if ((ty != oy) || (tx != ox))
 				{
-#ifdef JP
-					msg_format("%sを吹き飛ばした！", m_name);
-#else
-					msg_format("You blow %s away!", m_name);
-#endif
+					msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
 					cave[oy][ox].m_idx = 0;
 					cave[ty][tx].m_idx = m_idx;
 					m_ptr->fy = ty;
@@ -1204,19 +1108,11 @@ static bool cast_force_spell(int spell)
 				success = TRUE;
 		if (success)
 		{
-#ifdef JP
-msg_print("御用でございますが、御主人様？");
-#else
-			msg_print("'Your wish, master?'");
-#endif
+			msg_print(_("御用でございますが、御主人様？", "'Your wish, master?'"));
 		}
 		else
 		{
-#ifdef JP
-			msg_print("何も現れなかった。");
-#else
-			msg_print("Nothing happen.");
-#endif
+			msg_print(_("何も現れなかった。", "Nothing happen."));
 		}
 		break;
 	}
@@ -1232,12 +1128,7 @@ msg_print("御用でございますが、御主人様？");
 		set_lightspeed(randint1(16) + 16 + boost / 20, FALSE);
 		break;
 	default:
-#ifdef JP
-msg_print("なに？");
-#else
-		msg_print("Zap?");
-#endif
-
+		msg_print(_("なに？", "Zap?"));
 	}
 	p_ptr->magic_num1[0] = 0;
 	p_ptr->update |= (PU_BONUS);
@@ -1286,11 +1177,7 @@ static bool cast_mirror_spell(int spell)
 	  if( plev + tmp > 28 )set_tim_esp(plev,FALSE);
 	  if( plev + tmp > 38 )map_area(DETECT_RAD_MAP);
 	  if( tmp == 0 && plev < 5 ){
-#ifdef JP
-	    msg_print("鏡がなくて集中できなかった！");
-#else
-	    msg_print("You need a mirror to concentrate!");
-#endif
+	    msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
 	  }
 	  break;
 	/* drip of light */
@@ -1299,11 +1186,7 @@ static bool cast_mirror_spell(int spell)
 	    place_mirror();
 	  }
 	  else {
-#ifdef JP
-msg_format("これ以上鏡は制御できない！");
-#else
-msg_format("There are too many mirrors to control!");
-#endif
+			msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
 	  }
 	  break;
 	case 2:
@@ -1386,22 +1269,14 @@ msg_format("There are too many mirrors to control!");
 	/* mirror shift */
 	case 15:
 	  if( !is_mirror_grid(&cave[py][px]) ){
-#ifdef JP
-		msg_print("鏡の国の場所がわからない！");
-#else
-		msg_print("You cannot find out where is the world of mirror!");
-#endif
+		msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
 		break;
 	  }
 	  alter_reality();
 	  break;
 	/* mirror tunnel */
 	case 16:
-#ifdef JP
-	  msg_print("鏡の世界を通り抜け…  ");
-#else
-	  msg_print("Go through the world of mirror...");
-#endif
+	  msg_print(_("鏡の世界を通り抜け…  ", "Go through the world of mirror..."));
 	  return mirror_tunnel();
 
 	/* mirror of recall */
@@ -1413,22 +1288,14 @@ msg_format("There are too many mirrors to control!");
 	  break;
 	/* binding field */
 	case 19:
-#ifdef JP
-	  if( !binding_field(plev*11+5) )msg_print("適当な鏡を選べなかった！");
-#else
-	  if( !binding_field(plev*11+5) )msg_print("You were not able to choose suitable mirrors!");
-#endif
+	  if( !binding_field(plev*11+5) )msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
 	  break;
 	/* mirror of Ruffnor */
 	case 20:
 	  (void)set_invuln(randint1(4)+4,FALSE);
 	  break;
 	default:
-#ifdef JP
-msg_print("なに？");
-#else
-		msg_print("Zap?");
-#endif
+		msg_print(_("なに？", "Zap?"));
 
 	}
 	p_ptr->magic_num1[0] = 0;
@@ -1457,11 +1324,7 @@ static bool cast_berserk_spell(int spell)
 	{
 		if (p_ptr->riding)
 		{
-#ifdef JP
-			msg_print("乗馬中には無理だ。");
-#else
-			msg_print("You cannot do it when riding.");
-#endif
+			msg_print(_("乗馬中には無理だ。", "You cannot do it when riding."));
 			return FALSE;
 		}
 
@@ -1473,11 +1336,7 @@ static bool cast_berserk_spell(int spell)
 
 		if (!cave[y][x].m_idx)
 		{
-#ifdef JP
-			msg_print("その方向にはモンスターはいません。");
-#else
-			msg_print("There is no monster.");
-#endif
+			msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 			return FALSE;
 		}
 
@@ -1513,11 +1372,7 @@ static bool cast_berserk_spell(int spell)
 		massacre(py, px);
 		break;
 	default:
-#ifdef JP
-msg_print("なに？");
-#else
-		msg_print("Zap?");
-#endif
+		msg_print(_("なに？", "Zap?"));
 
 	}
 	return TRUE;
@@ -1567,12 +1422,7 @@ static bool cast_ninja_spell(int spell)
 	{
 		if (!(p_ptr->special_defense & NINJA_KAWARIMI))
 		{
-#ifdef JP
-			msg_print("敵の攻撃に対して敏感になった。");
-#else
-			msg_print("You are now prepare to evade any attacks.");
-#endif
-
+			msg_print(_("敵の攻撃に対して敏感になった。", "You are now prepare to evade any attacks."));
 			p_ptr->special_defense |= NINJA_KAWARIMI;
 			p_ptr->redraw |= (PR_STATUS);
 		}
@@ -1592,24 +1442,13 @@ static bool cast_ninja_spell(int spell)
 		{
 			py_attack(y, x, 0);
 			if (randint0(p_ptr->skill_dis) < 7)
-#ifdef JP
-msg_print("うまく逃げられなかった。");
-#else
-				msg_print("You failed to run away.");
-#endif
+				msg_print(_("うまく逃げられなかった。", "You failed to run away."));
 			else
-			{
 				teleport_player(30, 0L);
-			}
 		}
 		else
 		{
-#ifdef JP
-msg_print("その方向にはモンスターはいません。");
-#else
-			msg_print("You don't see any monster in this direction");
-#endif
-
+			msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
 			msg_print(NULL);
 		}
 		break;
@@ -1680,12 +1519,7 @@ msg_print("その方向にはモンスターはいません。");
 		if (!projectable(py, px, target_row, target_col)) break;
 		m_ptr = &m_list[m_idx];
 		monster_desc(m_name, m_ptr, 0);
-#ifdef JP
-		msg_format("%sを引き戻した。", m_name);
-#else
-		msg_format("You pull back %s.", m_name);
-#endif
-
+		msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
 		path_n = project_path(path_g, MAX_RANGE, target_row, target_col, py, px, 0);
 		ty = target_row, tx = target_col;
 		for (i = 1; i < path_n; i++)
@@ -1791,11 +1625,7 @@ msg_print("その方向にはモンスターはいません。");
 		set_multishadow(6+randint1(6), FALSE);
 		break;
 	default:
-#ifdef JP
-msg_print("なに？");
-#else
-		msg_print("Zap?");
-#endif
+		msg_print(_("なに？", "Zap?"));
 
 	}
 	return TRUE;
@@ -1823,12 +1653,7 @@ void do_cmd_mind(void)
 	/* not if confused */
 	if (p_ptr->confused)
 	{
-#ifdef JP
-msg_print("混乱していて集中できない！");
-#else
-		msg_print("You are too confused!");
-#endif
-
+		msg_print(_("混乱していて集中できない！", "You are too confused!"));
 		return;
 	}
 
@@ -1882,32 +1707,19 @@ msg_print("混乱していて集中できない！");
 	{
 		if (mana_cost > p_ptr->chp)
 		{
-#ifdef JP
-msg_print("ＨＰが足りません。");
-#else
-			msg_print("You do not have enough hp to use this power.");
-#endif
+			msg_print(_("ＨＰが足りません。", "You do not have enough hp to use this power."));
 			return;
 		}
 	}
 	else if (mana_cost > p_ptr->csp)
 	{
 		/* Warning */
-#ifdef JP
-msg_print("ＭＰが足りません。");
-#else
-		msg_print("You do not have enough mana to use this power.");
-#endif
-
+		msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
 
 		if (!over_exert) return;
 
 		/* Verify */
-#ifdef JP
-if (!get_check("それでも挑戦しますか? ")) return;
-#else
-		if (!get_check("Attempt it anyway? ")) return;
-#endif
+		if (!get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "))) return;
 
 	}
 
@@ -1952,11 +1764,7 @@ if (!get_check("それでも挑戦しますか? ")) return;
 	if (randint0(100) < chance)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-msg_format("%sの集中に失敗した！",p);
-#else
-		msg_format("You failed to concentrate hard enough!");
-#endif
+		msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough!"),p);
 
 		sound(SOUND_FAIL);
 
@@ -1964,11 +1772,7 @@ msg_format("%sの集中に失敗した！",p);
 		{
 			if ((use_mind == MIND_KI) && (n != 5) && p_ptr->magic_num1[0])
 			{
-#ifdef JP
-				msg_print("気が散ってしまった．．．");
-#else
-				msg_print("Your improved Force has gone away...");
-#endif
+				msg_print(_("気が散ってしまった．．．", "Your improved Force has gone away..."));
 				p_ptr->magic_num1[0] = 0;
 			}
 
@@ -1980,32 +1784,17 @@ msg_format("%sの集中に失敗した！",p);
 			  if( use_mind == MIND_MINDCRAFTER ){
 				if (b < 5)
 				{
-#ifdef JP
-msg_print("なんてこった！頭の中が真っ白になった！");
-#else
-					msg_print("Oh, no! Your mind has gone blank!");
-#endif
-
+					msg_print(_("なんてこった！頭の中が真っ白になった！", "Oh, no! Your mind has gone blank!"));
 					lose_all_info();
 				}
 				else if (b < 15)
 				{
-#ifdef JP
-msg_print("奇妙な光景が目の前で踊っている...");
-#else
-					msg_print("Weird visions seem to dance before your eyes...");
-#endif
-
+					msg_print(_("奇妙な光景が目の前で踊っている...", "Weird visions seem to dance before your eyes..."));
 					set_image(p_ptr->image + 5 + randint1(10));
 				}
 				else if (b < 45)
 				{
-#ifdef JP
-msg_print("あなたの頭は混乱した！");
-#else
-					msg_print("Your brain is addled!");
-#endif
-
+					msg_print(_("あなたの頭は混乱した！", "Your brain is addled!"));
 					set_confused(p_ptr->confused + randint1(8));
 				}
 				else if (b < 90)
@@ -2015,11 +1804,7 @@ msg_print("あなたの頭は混乱した！");
 				else
 				{
 					/* Mana storm */
-#ifdef JP
-msg_format("%sの力が制御できない氾流となって解放された！", p);
-#else
-					msg_print("Your mind unleashes its power in an uncontrollable storm!");
-#endif
+					msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), p);
 
 					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, py, px, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
@@ -2033,31 +1818,18 @@ msg_format("%sの力が制御できない氾流となって解放された！", 
 				}
 				else if (b < 81)
 				{
-#ifdef JP
-msg_print("鏡の世界の干渉を受けた！");
-#else
-					msg_print("Weird visions seem to dance before your eyes...");
-#endif
+					msg_print(_("鏡の世界の干渉を受けた！", "Weird visions seem to dance before your eyes..."));
 					teleport_player(10, TELEPORT_PASSIVE);
 				}
 				else if (b < 96)
 				{
-#ifdef JP
-msg_print("まわりのものがキラキラ輝いている！");
-#else
-					msg_print("Your brain is addled!");
-#endif
-
+					msg_print(_("まわりのものがキラキラ輝いている！", "Your brain is addled!"));
 					set_image(p_ptr->image + 5 + randint1(10));
 				}
 				else
 				{
 					/* Mana storm */
-#ifdef JP
-msg_format("%sの力が制御できない氾流となって解放された！", p);
-#else
-					msg_print("Your mind unleashes its power in an uncontrollable storm!");
-#endif
+					msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), p);
 
 					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, py, px, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
@@ -2095,11 +1867,7 @@ msg_format("%sの力が制御できない氾流となって解放された！", 
 			cast = cast_ninja_spell(n);
 			break;
 		default:
-#ifdef JP
-			msg_format("謎の能力:%d, %d",use_mind, n);
-#else
-			msg_format("Mystery power:%d, %d",use_mind, n);
-#endif
+			msg_format(_("謎の能力:%d, %d", "Mystery power:%d, %d"),use_mind, n);
 			return;
 		}
 
@@ -2117,11 +1885,7 @@ msg_format("%sの力が制御できない氾流となって解放された！", 
 
 	if ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU))
 	{
-#ifdef JP
-		take_hit(DAMAGE_USELIFE, mana_cost, "過度の集中", -1);
-#else
-		take_hit(DAMAGE_USELIFE, mana_cost, "concentrating too hard", -1);
-#endif
+		take_hit(DAMAGE_USELIFE, mana_cost, _("過度の集中", "concentrating too hard"), -1);
 		/* Redraw hp */
 		p_ptr->redraw |= (PR_HP);
 	}
@@ -2153,12 +1917,7 @@ msg_format("%sの力が制御できない氾流となって解放された！", 
 		p_ptr->csp = MAX(0, p_ptr->csp - mana_cost);
 
 		/* Message */
-#ifdef JP
-msg_format("%sを集中しすぎて気を失ってしまった！",p);
-#else
-		msg_print("You faint from the effort!");
-#endif
-
+		msg_format(_("%sを集中しすぎて気を失ってしまった！", "You faint from the effort!"),p);
 
 		/* Hack -- Bypass free action */
 		(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
@@ -2169,12 +1928,7 @@ msg_format("%sを集中しすぎて気を失ってしまった！",p);
 			bool perm = (randint0(100) < 25);
 
 			/* Message */
-#ifdef JP
-msg_print("自分の精神を攻撃してしまった！");
-#else
-			msg_print("You have damaged your mind!");
-#endif
-
+			msg_print(_("自分の精神を攻撃してしまった！", "You have damaged your mind!"));
 
 			/* Reduce constitution */
 			(void)dec_stat(A_WIS, 15 + randint1(10), perm);
@@ -2237,11 +1991,7 @@ void do_cmd_mind_browse(void)
 		{
 		case MIND_MIRROR_MASTER:
 		case MIND_NINJUTSU:
-#ifdef JP
-		  prt("何かキーを押して下さい。",0,0);
-#else
-		  prt("Hit any key.",0,0);
-#endif
+		  prt(_("何かキーを押して下さい。", "Hit any key."),0,0);
 		  (void)inkey();
 		}
 	}

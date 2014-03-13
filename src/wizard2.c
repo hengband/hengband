@@ -78,20 +78,12 @@ void do_cmd_rerate(bool display)
 	/* Message */
 	if (display)
 	{
-#ifdef JP
-		msg_format("現在の体力ランクは %d/100 です。", percent);
-#else
-		msg_format("Your life rate is %d/100 now.", percent);
-#endif
+		msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
 		p_ptr->knowledge |= KNOW_HPRATE;
 	}
 	else
 	{
-#ifdef JP
-		msg_print("体力ランクが変わった。");
-#else
-		msg_print("Life rate is changed.");
-#endif
+		msg_print(_("体力ランクが変わった。", "Life rate is changed."));
 		p_ptr->knowledge &= ~(KNOW_HPRATE);
 	}
 }
@@ -377,11 +369,7 @@ static void do_cmd_wiz_change_aux(void)
 	sprintf(tmp_val, "%d", WEAPON_EXP_MASTER);
 
 	/* Query */
-#ifdef JP
-	if (!get_string("熟練度: ", tmp_val, 9)) return;
-#else
-	if (!get_string("Proficiency: ", tmp_val, 9)) return;
-#endif
+	if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 9)) return;
 
 	/* Extract */
 	tmp_s16b = atoi(tmp_val);
@@ -1704,11 +1692,7 @@ static void do_cmd_wiz_create_feature(void)
 	sprintf(tmp_val, "%d", prev_feat);
 
 	/* Query */
-#ifdef JP
-	if (!get_string("地形: ", tmp_val, 3)) return;
-#else
-	if (!get_string("Feature: ", tmp_val, 3)) return;
-#endif
+	if (!get_string(_("地形: ", "Feature: "), tmp_val, 3)) return;
 
 	/* Extract */
 	tmp_feat = atoi(tmp_val);
@@ -1719,11 +1703,7 @@ static void do_cmd_wiz_create_feature(void)
 	sprintf(tmp_val, "%d", prev_mimic);
 
 	/* Query */
-#ifdef JP
-	if (!get_string("地形 (mimic): ", tmp_val, 3)) return;
-#else
-	if (!get_string("Feature (mimic): ", tmp_val, 3)) return;
-#endif
+	if (!get_string(_("地形 (mimic): ", "Feature (mimic): "), tmp_val, 3)) return;
 
 	/* Extract */
 	tmp_mimic = atoi(tmp_val);
@@ -1780,11 +1760,7 @@ static void do_cmd_dump_options(void)
 	/* Oops */
 	if (!fff)
 	{
-#ifdef JP
-		msg_format("ファイル %s を開けませんでした。", buf);
-#else
-		msg_format("Failed to open file %s.", buf);
-#endif
+		msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
 		msg_print(NULL);
 		return;
 	}
@@ -1832,11 +1808,7 @@ static void do_cmd_dump_options(void)
 	/* Close it */
 	my_fclose(fff);
 
-#ifdef JP
-	msg_format("オプションbit使用状況をファイル %s に書き出しました。", buf);
-#else
-	msg_format("Option bits usage dump saved to file %s.", buf);
-#endif
+	msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);
 }
 
 

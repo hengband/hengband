@@ -2394,11 +2394,7 @@ static bool build_type5(void)
 	if (cheat_room)
 	{
 		/* Room type */
-#ifdef JP
-		msg_format("モンスター部屋(nest)(%s%s)", n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
-#else
-		msg_format("Monster nest (%s%s)", n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
-#endif
+		msg_format(_("モンスター部屋(nest)(%s%s)", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
 	}
 
 	/* Place some monsters */
@@ -2634,11 +2630,7 @@ static bool build_type6(void)
 	if (cheat_room)
 	{
 		/* Room type */
-#ifdef JP
-		msg_format("モンスター部屋(pit)(%s%s)", n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
-#else
-		msg_format("Monster pit (%s%s)", n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
-#endif
+		msg_format(_("モンスター部屋(pit)(%s%s)", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 	}
 
 	/* Select the entries */
@@ -3047,11 +3039,7 @@ static bool build_type7(void)
 	{
 		if (cheat_room)
 		{
-#ifdef JP
-			msg_print("警告！小さな地下室を配置できません！");
-#else
-			msg_print("Warning! Could not place lesser vault!");
-#endif
+			msg_print(_("警告！小さな地下室を配置できません！", "Warning! Could not place lesser vault!"));
 		}
 		return FALSE;
 	}
@@ -3098,11 +3086,7 @@ static bool build_type7(void)
 #endif
 
 	/* Message */
-#ifdef JP
-	if (cheat_room) msg_format("小さな地下室(%s)", v_name + v_ptr->name);
-#else
-	if (cheat_room) msg_format("Lesser vault (%s)", v_name + v_ptr->name);
-#endif
+	if (cheat_room) msg_format(_("小さな地下室(%s)", "Lesser vault (%s)"), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
@@ -3139,11 +3123,7 @@ static bool build_type8(void)
 	{
 		if (cheat_room)
 		{
-#ifdef JP
-			msg_print("警告！巨大な地下室を配置できません！");
-#else
-			msg_print("Warning! Could not place greater vault!");
-#endif
+			msg_print(_("警告！巨大な地下室を配置できません！", "Warning! Could not place greater vault!"));
 		}
 		return FALSE;
 	}
@@ -3196,11 +3176,7 @@ static bool build_type8(void)
 #endif
 
 	/* Message */
-#ifdef JP
-	if (cheat_room) msg_format("巨大な地下室(%s)", v_name + v_ptr->name);
-#else
-	if (cheat_room) msg_format("Greater vault (%s)", v_name + v_ptr->name);
-#endif
+	if (cheat_room) msg_format(_("巨大な地下室(%s)", "Greater vault (%s)"), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
@@ -5977,11 +5953,7 @@ static bool build_type13(void)
 	if (cheat_room)
 	{
 		/* Room type */
-#ifdef JP
-		msg_format("%s%sの罠ピット", n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
-#else
-		msg_format("Trapped monster pit (%s%s)", n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
-#endif
+		msg_format(_("%s%sの罠ピット", "Trapped monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 	}
 
 	/* Select the entries */
@@ -6088,11 +6060,7 @@ static bool build_type14(void)
 	/* Message */
 	if (cheat_room)
 	{
-#ifdef JP
-		msg_format("%sの部屋", f_name + f_info[trap].name);
-#else
-		msg_format("Room of %s", f_name + f_info[trap].name);
-#endif
+		msg_format(_("%sの部屋", "Room of %s"), f_name + f_info[trap].name);
 	}
 
 	return TRUE;
@@ -6382,11 +6350,7 @@ static bool build_type15(void)
 	/* Message */
 	if (cheat_room)
 	{
-#ifdef JP
-		msg_print("ガラスの部屋");
-#else
-		msg_print("Glass room");
-#endif
+		msg_print(_("ガラスの部屋", "Glass room"));
 	}
 
 	return TRUE;
@@ -6676,11 +6640,7 @@ static bool build_type16(void)
 	/* Build stores */
 	build_stores(y1, x1, stores, n);
 
-#ifdef JP
-	if (cheat_room) msg_print("地下街");
-#else
-	if (cheat_room) msg_print("Underground Arcade");
-#endif
+	if (cheat_room) msg_print(_("地下街", "Underground Arcade"));
 
 	/* Free buildings array */
 	C_KILL(ugbldg, n, ugbldg_type);
@@ -6936,11 +6896,7 @@ bool generate_rooms(void)
 
 	if (cheat_room)
 	{
-#ifdef JP
-		msg_format("部屋数: %d", rooms_built);
-#else
-		msg_format("Number of Rooms: %d", rooms_built);
-#endif
+		msg_format(_("部屋数: %d", "Number of Rooms: %d"), rooms_built);
 	}
 
 	return TRUE;

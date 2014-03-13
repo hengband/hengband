@@ -110,12 +110,7 @@ static bool snipe_concentrate(void)
 {
 	if ((int)p_ptr->concent < (2 + (p_ptr->lev + 5) / 10)) p_ptr->concent++;
 
-#ifdef JP
-	msg_format("集中した。(集中度 %d)", p_ptr->concent);
-#else
-	msg_format("You concentrate deeply. (lvl %d)", p_ptr->concent);
-#endif
-
+	msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), p_ptr->concent);
 	reset_concent = FALSE;
 
 	/* Recalculate bonuses */
@@ -138,11 +133,7 @@ void reset_concentration(bool msg)
 {
 	if (msg)
 	{
-#ifdef JP
-		msg_print("集中力が途切れてしまった。");
-#else
-		msg_print("Stop concentrating.");
-#endif
+		msg_print(_("集中力が途切れてしまった。", "Stop concentrating."));
 	}
 
 	p_ptr->concent = 0;
@@ -239,11 +230,7 @@ static int get_snipe_power(int *sn, bool only_browse)
 	int             ask;
 	char            choice;
 	char            out_val[160];
-#ifdef JP
-	cptr            p = "射撃術";
-#else
-	cptr            p = "power";
-#endif
+	cptr            p = _("射撃術", "power");
 	snipe_power     spell;
 	bool            flag, redraw;
 
@@ -286,21 +273,15 @@ static int get_snipe_power(int *sn, bool only_browse)
 	/* Build a prompt (accept all spells) */
 	if (only_browse)
 	{
-#ifdef JP
-		(void)strnfmt(out_val, 78, "(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？",
-#else
-		(void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) Use which %s? ",
-#endif
-			      p, I2A(0), I2A(num), p);
+		(void)strnfmt(out_val, 78, 
+					_("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
+					p, I2A(0), I2A(num), p);
 	}
 	else
 	{
-#ifdef JP
-		(void)strnfmt(out_val, 78, "(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？",
-#else
-		(void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) Use which %s? ",
-#endif
-			  p, I2A(0), I2A(num), p);
+		(void)strnfmt(out_val, 78, 
+					_("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
+					p, I2A(0), I2A(num), p);
 	}
 
 	/* Get a spell from the user */
@@ -397,11 +378,7 @@ static int get_snipe_power(int *sn, bool only_browse)
 			char tmp_val[160];
 
 			/* Prompt */
-#ifdef JP
-			(void) strnfmt(tmp_val, 78, "%sを使いますか？", snipe_powers[i].name);
-#else
-			(void)strnfmt(tmp_val, 78, "Use %s? ", snipe_powers[i].name);
-#endif
+			(void) strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), snipe_powers[i].name);
 
 			/* Belay that order */
 			if (!get_check(tmp_val)) continue;
@@ -547,11 +524,7 @@ static bool cast_sniper_spell(int spell)
 
 	if (o_ptr->tval != TV_BOW)
 	{
-#ifdef JP
-		msg_print("弓を装備していない！");
-#else
-		msg_print("You wield no bow!");
-#endif
+		msg_print(_("弓を装備していない！", "You wield no bow!"));
 		return (FALSE);
 	}
 
@@ -578,11 +551,7 @@ static bool cast_sniper_spell(int spell)
 	case 14: snipe_type = SP_NEEDLE; break;
 	case 15: snipe_type = SP_FINAL; break;
 	default:
-#ifdef JP
-		msg_print("なに？");
-#else
-		msg_print("Zap?");
-#endif
+		msg_print(_("なに？", "Zap?"));
 	}
 
 	command_cmd = 'f';
@@ -605,33 +574,21 @@ void do_cmd_snipe(void)
 	/* not if confused */
 	if (p_ptr->confused)
 	{
-#ifdef JP
-		msg_print("混乱していて集中できない！");
-#else
-		msg_print("You are too confused!");
-#endif
+		msg_print(_("混乱していて集中できない！", "You are too confused!"));
 		return;
 	}
 
 	/* not if hullucinated */
 	if (p_ptr->image)
 	{
-#ifdef JP
-		msg_print("幻覚が見えて集中できない！");
-#else
-		msg_print("You are too hallucinated!");
-#endif
+		msg_print(_("幻覚が見えて集中できない！", "You are too hallucinated!"));
 		return;
 	}
 
 	/* not if stuned */
 	if (p_ptr->stun)
 	{
-#ifdef JP
-		msg_print("頭が朦朧としていて集中できない！");
-#else
-		msg_print("You are too stuned!");
-#endif
+		msg_print(_("頭が朦朧としていて集中できない！", "You are too stuned!"));
 		return;
 	}
 

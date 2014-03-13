@@ -2276,12 +2276,7 @@ static errr rd_inventory(void)
 		else if (inven_cnt == INVEN_PACK)
 		{
 			/* Oops */
-#ifdef JP
-note("持ち物の中のアイテムが多すぎる！");
-#else
-			note("Too many items in the inventory!");
-#endif
-
+			note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory!"));
 
 			/* Fail */
 			return (54);
@@ -2650,12 +2645,7 @@ static errr rd_dungeon_old(void)
 	/* Verify maximum */
 	if (limit > max_o_idx)
 	{
-#ifdef JP
-note(format("アイテムの配列が大きすぎる(%d)！", limit));
-#else
-		note(format("Too many (%d) object entries!", limit));
-#endif
-
+		note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
 		return (151);
 	}
 
@@ -2673,12 +2663,7 @@ note(format("アイテムの配列が大きすぎる(%d)！", limit));
 		/* Oops */
 		if (i != o_idx)
 		{
-#ifdef JP
-note(format("アイテム配置エラー (%d <> %d)", i, o_idx));
-#else
-			note(format("Object allocation error (%d <> %d)", i, o_idx));
-#endif
-
+			note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
 			return (152);
 		}
 
@@ -2730,12 +2715,7 @@ note(format("アイテム配置エラー (%d <> %d)", i, o_idx));
 	/* Hack -- verify */
 	if (limit > max_m_idx)
 	{
-#ifdef JP
-note(format("モンスターの配列が大きすぎる(%d)！", limit));
-#else
-		note(format("Too many (%d) monster entries!", limit));
-#endif
-
+		note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
 		return (161);
 	}
 
@@ -2751,12 +2731,7 @@ note(format("モンスターの配列が大きすぎる(%d)！", limit));
 		/* Oops */
 		if (i != m_idx)
 		{
-#ifdef JP
-note(format("モンスター配置エラー (%d <> %d)", i, m_idx));
-#else
-			note(format("Monster allocation error (%d <> %d)", i, m_idx));
-#endif
-
+			note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
 			return (162);
 		}
 
@@ -3190,59 +3165,31 @@ static errr rd_dungeon(void)
 	switch (err)
 	{
 	case 151:
-#ifdef JP
-		note("アイテムの配列が大きすぎる！");
-#else
-		note("Too many object entries!");
-#endif
+		note(_("アイテムの配列が大きすぎる！", "Too many object entries!"));
 		break;
 
 	case 152:
-#ifdef JP
-		note("アイテム配置エラー");
-#else
-		note("Object allocation error");
-#endif
+		note(_("アイテム配置エラー", "Object allocation error"));
 		break;
 
 	case 161:
-#ifdef JP
-		note("モンスターの配列が大きすぎる！");
-#else
-		note("Too many monster entries!");
-#endif
+		note(_("モンスターの配列が大きすぎる！", "Too many monster entries!"));
 		break;
 
 	case 162:
-#ifdef JP
-		note("モンスター配置エラー");
-#else
-		note("Monster allocation error");
-#endif
+		note(_("モンスター配置エラー", "Monster allocation error"));
 		break;
 
 	case 171:
-#ifdef JP
-		note("保存されたフロアのダンジョンデータが壊れています！");
-#else
-		note("Dungeon data of saved floors are broken!");
-#endif
+		note(_("保存されたフロアのダンジョンデータが壊れています！", "Dungeon data of saved floors are broken!"));
 		break;
 
 	case 182:
-#ifdef JP
-		note("テンポラリ・ファイルを作成できません！");
-#else
-		note("Failed to make temporal files!");
-#endif
+		note(_("テンポラリ・ファイルを作成できません！", "Failed to make temporal files!"));
 		break;
 
 	case 183:
-#ifdef JP
-		note("Error 183");
-#else
-		note("Error 183");
-#endif
+		note(_("Error 183", "Error 183"));
 		break;
 	}
 
@@ -3277,11 +3224,7 @@ static errr rd_savefile_new_aux(void)
 
 	/* Mention the savefile version */
 	note(format(
-#ifdef JP
-		     "バージョン %d.%d.%d のセーブ・ファイルをロード中...",
-#else
-		     "Loading a %d.%d.%d savefile...",
-#endif
+		     _("バージョン %d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d savefile..."),
 		     (z_major > 9) ? z_major - 10 : z_major, z_minor, z_patch));
 
 
@@ -3330,31 +3273,15 @@ static errr rd_savefile_new_aux(void)
 
 	/* Read RNG state */
 	rd_randomizer();
-#ifdef JP
-if (arg_fiddle) note("乱数情報をロードしました");
-#else
-	if (arg_fiddle) note("Loaded Randomizer Info");
-#endif
-
-
+	if (arg_fiddle) note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
 
 	/* Then the options */
 	rd_options();
-#ifdef JP
-if (arg_fiddle) note("オプションをロードしました");
-#else
-	if (arg_fiddle) note("Loaded Option Flags");
-#endif
+	if (arg_fiddle) note(_("オプションをロードしました", "Loaded Option Flags"));
 
 	/* Then the "messages" */
 	rd_messages();
-#ifdef JP
-if (arg_fiddle) note("メッセージをロードしました");
-#else
-	if (arg_fiddle) note("Loaded Messages");
-#endif
-
-
+	if (arg_fiddle) note(_("メッセージをロードしました", "Loaded Messages"));
 
 	for (i = 0; i < max_r_idx; i++)
 	{
@@ -3376,12 +3303,7 @@ if (arg_fiddle) note("メッセージをロードしました");
 	/* Incompatible save files */
 	if (tmp16u > max_r_idx)
 	{
-#ifdef JP
-note(format("モンスターの種族が多すぎる(%u)！", tmp16u));
-#else
-		note(format("Too many (%u) monster races!", tmp16u));
-#endif
-
+		note(format(_("モンスターの種族が多すぎる(%u)！", "Too many (%u) monster races!"), tmp16u));
 		return (21);
 	}
 
@@ -3392,13 +3314,7 @@ note(format("モンスターの種族が多すぎる(%u)！", tmp16u));
 		rd_lore(i);
 	}
 
-#ifdef JP
-if (arg_fiddle) note("モンスターの思い出をロードしました");
-#else
-	if (arg_fiddle) note("Loaded Monster Memory");
-#endif
-
-
+	if (arg_fiddle) note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
 
 	/* Object Memory */
 	rd_u16b(&tmp16u);
@@ -3406,12 +3322,7 @@ if (arg_fiddle) note("モンスターの思い出をロードしました");
 	/* Incompatible save files */
 	if (tmp16u > max_k_idx)
 	{
-#ifdef JP
-note(format("アイテムの種類が多すぎる(%u)！", tmp16u));
-#else
-		note(format("Too many (%u) object kinds!", tmp16u));
-#endif
-
+		note(format(_("アイテムの種類が多すぎる(%u)！", "Too many (%u) object kinds!"), tmp16u));
 		return (22);
 	}
 
@@ -3426,11 +3337,7 @@ note(format("アイテムの種類が多すぎる(%u)！", tmp16u));
 		k_ptr->aware = (tmp8u & 0x01) ? TRUE: FALSE;
 		k_ptr->tried = (tmp8u & 0x02) ? TRUE: FALSE;
 	}
-#ifdef JP
-if (arg_fiddle) note("アイテムの記録をロードしました");
-#else
-	if (arg_fiddle) note("Loaded Object Memory");
-#endif
+	if (arg_fiddle) note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
 
 	/* 2.1.3 or newer version */
 	{
@@ -3445,12 +3352,7 @@ if (arg_fiddle) note("アイテムの記録をロードしました");
 		/* Incompatible save files */
 		if (max_towns_load > max_towns)
 		{
-#ifdef JP
-note(format("町が多すぎる(%u)！", max_towns_load));
-#else
-			note(format("Too many (%u) towns!", max_towns_load));
-#endif
-
+			note(format(_("町が多すぎる(%u)！", "Too many (%u) towns!"), max_towns_load));
 			return (23);
 		}
 
@@ -3469,12 +3371,7 @@ note(format("町が多すぎる(%u)！", max_towns_load));
 		/* Incompatible save files */
 		if (max_quests_load > max_quests)
 		{
-#ifdef JP
-note(format("クエストが多すぎる(%u)！", max_quests_load));
-#else
-			note(format("Too many (%u) quests!", max_quests_load));
-#endif
-
+			note(format(_("クエストが多すぎる(%u)！", "Too many (%u) quests!"), max_quests_load));
 			return (23);
 		}
 
@@ -3598,12 +3495,7 @@ note(format("クエストが多すぎる(%u)！", max_quests_load));
 		/* Incompatible save files */
 		if ((wild_x_size > max_wild_x) || (wild_y_size > max_wild_y))
 		{
-#ifdef JP
-note(format("荒野が大きすぎる(%u/%u)！", wild_x_size, wild_y_size));
-#else
-			note(format("Wilderness is too big (%u/%u)!", wild_x_size, wild_y_size));
-#endif
-
+			note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
 			return (23);
 		}
 
@@ -3617,11 +3509,7 @@ note(format("荒野が大きすぎる(%u/%u)！", wild_x_size, wild_y_size));
 		}
 	}
 
-#ifdef JP
-if (arg_fiddle) note("クエスト情報をロードしました");
-#else
-	if (arg_fiddle) note("Loaded Quests");
-#endif
+	if (arg_fiddle) note(_("クエスト情報をロードしました", "Loaded Quests"));
 
 	/* Load the Artifacts */
 	rd_u16b(&tmp16u);
@@ -3629,12 +3517,7 @@ if (arg_fiddle) note("クエスト情報をロードしました");
 	/* Incompatible save files */
 	if (tmp16u > max_a_idx)
 	{
-#ifdef JP
-note(format("伝説のアイテムが多すぎる(%u)！", tmp16u));
-#else
-		note(format("Too many (%u) artifacts!", tmp16u));
-#endif
-
+		note(format(_("伝説のアイテムが多すぎる(%u)！", "Too many (%u) artifacts!"), tmp16u));
 		return (24);
 	}
 
@@ -3659,23 +3542,13 @@ note(format("伝説のアイテムが多すぎる(%u)！", tmp16u));
 			rd_s16b(&a_ptr->floor_id);
 		}
 	}
-#ifdef JP
-if (arg_fiddle) note("伝説のアイテムをロードしました");
-#else
-	if (arg_fiddle) note("Loaded Artifacts");
-#endif
-
-
+	if (arg_fiddle) note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
 
 	/* Read the extra stuff */
 	rd_extra();
 	if (p_ptr->energy_need < -999) world_player = TRUE;
 
-#ifdef JP
-if (arg_fiddle) note("特別情報をロードしました");
-#else
-	if (arg_fiddle) note("Loaded extra information");
-#endif
+	if (arg_fiddle) note(_("特別情報をロードしました", "Loaded extra information"));
 
 
 	/* Read the player_hp array */
@@ -3684,12 +3557,7 @@ if (arg_fiddle) note("特別情報をロードしました");
 	/* Incompatible save files */
 	if (tmp16u > PY_MAX_LEVEL)
 	{
-#ifdef JP
-note(format("ヒットポイント配列が大きすぎる(%u)！", tmp16u));
-#else
-		note(format("Too many (%u) hitpoint entries!", tmp16u));
-#endif
-
+		note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
 		return (25);
 	}
 
@@ -3772,12 +3640,7 @@ note(format("ヒットポイント配列が大きすぎる(%u)！", tmp16u));
 	/* Read the inventory */
 	if (rd_inventory())
 	{
-#ifdef JP
-note("持ち物情報を読み込むことができません");
-#else
-		note("Unable to read inventory");
-#endif
-
+		note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
 		return (21);
 	}
 
@@ -3856,20 +3719,11 @@ note("持ち物情報を読み込むことができません");
 	if (!p_ptr->is_dead)
 	{
 		/* Dead players have no dungeon */
-#ifdef JP
-note("ダンジョン復元中...");
-#else
-		note("Restoring Dungeon...");
-#endif
+		note(_("ダンジョン復元中...", "Restoring Dungeon..."));
 
 		if (rd_dungeon())
 		{
-#ifdef JP
-note("ダンジョンデータ読み込み失敗");
-#else
-			note("Error reading dungeon data");
-#endif
-
+			note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
 			return (34);
 		}
 
@@ -3907,12 +3761,7 @@ note("ダンジョンデータ読み込み失敗");
 	/* Verify */
 	if (o_v_check != n_v_check)
 	{
-#ifdef JP
-note("チェックサムがおかしい");
-#else
-		note("Invalid checksum");
-#endif
-
+		note(_("チェックサムがおかしい", "Invalid checksum"));
 		return (11);
 	}
 
@@ -3927,12 +3776,7 @@ note("チェックサムがおかしい");
 	/* Verify */
 	if (o_x_check != n_x_check)
 	{
-#ifdef JP
-note("エンコードされたチェックサムがおかしい");
-#else
-		note("Invalid encoded checksum");
-#endif
-
+		note(_("エンコードされたチェックサムがおかしい", "Invalid encoded checksum"));
 		return (11);
 	}
 

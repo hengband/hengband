@@ -328,12 +328,7 @@ bool teleport_player_aux(int dis, u32b mode)
 
 	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
-#ifdef JP
-		msg_print("不思議な力がテレポートを防いだ！");
-#else
-		msg_print("A mysterious force prevents you from teleporting!");
-#endif
-
+		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 		return FALSE;
 	}
 
@@ -516,12 +511,7 @@ void teleport_player_to(int ny, int nx, u32b mode)
 
 	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
-#ifdef JP
-		msg_print("不思議な力がテレポートを防いだ！");
-#else
-		msg_print("A mysterious force prevents you from teleporting!");
-#endif
-
+		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 		return;
 	}
 
@@ -596,20 +586,12 @@ void teleport_away_followable(int m_idx)
 
 		if (follow)
 		{
-#ifdef JP
-			if (get_check_strict("ついていきますか？", CHECK_OKAY_CANCEL))
-#else
-			if (get_check_strict("Do you follow it? ", CHECK_OKAY_CANCEL))
-#endif
+			if (get_check_strict(_("ついていきますか？", "Do you follow it? "), CHECK_OKAY_CANCEL))
 			{
 				if (one_in_(3))
 				{
 					teleport_player(200, TELEPORT_PASSIVE);
-#ifdef JP
-					msg_print("失敗！");
-#else
-					msg_print("Failed!");
-#endif
+					msg_print(_("失敗！", "Failed!"));
 				}
 				else teleport_player_to(m_ptr->fy, m_ptr->fx, 0L);
 				p_ptr->energy_need += ENERGY_NEED();
@@ -631,11 +613,7 @@ void teleport_level(int m_idx)
 
 	if (m_idx <= 0) /* To player */
 	{
-#ifdef JP
-		strcpy(m_name, "あなた");
-#else
-		strcpy(m_name, "you");
-#endif
+		strcpy(m_name, _("あなた", "you"));
 	}
 	else /* To monster */
 	{
@@ -650,22 +628,13 @@ void teleport_level(int m_idx)
 	/* No effect in some case */
 	if (TELE_LEVEL_IS_INEFF(m_idx))
 	{
-#ifdef JP
-		if (see_m) msg_print("効果がなかった。");
-#else
-		if (see_m) msg_print("There is no effect.");
-#endif
-
+		if (see_m) msg_print(_("効果がなかった。", "There is no effect."));
 		return;
 	}
 
 	if ((m_idx <= 0) && p_ptr->anti_tele) /* To player */
 	{
-#ifdef JP
-		msg_print("不思議な力がテレポートを防いだ！");
-#else
-		msg_print("A mysterious force prevents you from teleporting!");
-#endif
+		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 		return;
 	}
 
@@ -822,11 +791,7 @@ int choose_dungeon(cptr note, int y, int x)
 		if (max_dlv[DUNGEON_ANGBAND]) return DUNGEON_ANGBAND;
 		else
 		{
-#ifdef JP
-			msg_format("まだ%sに入ったことはない。", d_name + d_info[DUNGEON_ANGBAND].name);
-#else
-			msg_format("You haven't entered %s yet.", d_name + d_info[DUNGEON_ANGBAND].name);
-#endif
+			msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), d_name + d_info[DUNGEON_ANGBAND].name);
 			msg_print(NULL);
 			return 0;
 		}
@@ -849,29 +814,18 @@ int choose_dungeon(cptr note, int y, int x)
 		}
 		else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
 
-#ifdef JP
-		sprintf(buf,"      %c) %c%-12s : 最大 %d 階", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
-#else
-		sprintf(buf,"      %c) %c%-16s : Max level %d", 'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
-#endif
+		sprintf(buf,_("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"), 
+					'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
 		prt(buf, y + num, x);
 		dun[num++] = i;
 	}
 
 	if (!num)
 	{
-#ifdef JP
-		prt("      選べるダンジョンがない。", y, x);
-#else
-		prt("      No dungeon is available.", y, x);
-#endif
+		prt(_("      選べるダンジョンがない。", "      No dungeon is available."), y, x);
 	}
 
-#ifdef JP
-	prt(format("どのダンジョン%sしますか:", note), 0, 0);
-#else
-	prt(format("Which dungeon do you %s?: ", note), 0, 0);
-#endif
+	prt(format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note), 0, 0);
 	while(1)
 	{
 		i = inkey();
@@ -912,30 +866,17 @@ bool recall_player(int turns)
 	/* Ironman option */
 	if (p_ptr->inside_arena || ironman_downward)
 	{
-#ifdef JP
-msg_print("何も起こらなかった。");
-#else
-		msg_print("Nothing happens.");
-#endif
-
+		msg_print(_("何も起こらなかった。", "Nothing happens."));
 		return TRUE;
 	}
 
 	if (dun_level && (max_dlv[dungeon_type] > dun_level) && !p_ptr->inside_quest && !p_ptr->word_recall)
 	{
-#ifdef JP
-if (get_check("ここは最深到達階より浅い階です。この階に戻って来ますか？ "))
-#else
-		if (get_check("Reset recall depth? "))
-#endif
+		if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? ")))
 		{
 			max_dlv[dungeon_type] = dun_level;
 			if (record_maxdepth)
-#ifdef JP
-				do_cmd_write_nikki(NIKKI_TRUMP, dungeon_type, "帰還のときに");
-#else
-				do_cmd_write_nikki(NIKKI_TRUMP, dungeon_type, "when recall from dungeon");
-#endif
+				do_cmd_write_nikki(NIKKI_TRUMP, dungeon_type, _("帰還のときに", "when recall from dungeon"));
 		}
 
 	}
@@ -944,32 +885,18 @@ if (get_check("ここは最深到達階より浅い階です。この階に戻�
 		if (!dun_level)
 		{
 			int select_dungeon;
-#ifdef JP
-			select_dungeon = choose_dungeon("に帰還", 2, 14);
-#else
-			select_dungeon = choose_dungeon("recall", 2, 14);
-#endif
+			select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
 			if (!select_dungeon) return FALSE;
 			p_ptr->recall_dungeon = select_dungeon;
 		}
 		p_ptr->word_recall = turns;
-#ifdef JP
-msg_print("回りの大気が張りつめてきた...");
-#else
-		msg_print("The air about you becomes charged...");
-#endif
-
+		msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
 		p_ptr->redraw |= (PR_STATUS);
 	}
 	else
 	{
 		p_ptr->word_recall = 0;
-#ifdef JP
-msg_print("張りつめた大気が流れ去った...");
-#else
-		msg_print("A tension leaves the air around you...");
-#endif
-
+		msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
 		p_ptr->redraw |= (PR_STATUS);
 	}
 	return TRUE;
@@ -988,32 +915,18 @@ bool reset_recall(void)
 	char ppp[80];
 	char tmp_val[160];
 
-#ifdef JP
-	select_dungeon = choose_dungeon("をセット", 2, 14);
-#else
-	select_dungeon = choose_dungeon("reset", 2, 14);
-#endif
+	select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
 
 	/* Ironman option */
 	if (ironman_downward)
 	{
-#ifdef JP
-		msg_print("何も起こらなかった。");
-#else
-		msg_print("Nothing happens.");
-#endif
-
+		msg_print(_("何も起こらなかった。", "Nothing happens."));
 		return TRUE;
 	}
 
 	if (!select_dungeon) return FALSE;
 	/* Prompt */
-#ifdef JP
-sprintf(ppp, "何階にセットしますか (%d-%d):", d_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
-#else
-	sprintf(ppp, "Reset to which level (%d-%d): ", d_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
-#endif
-
+	sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), d_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
 
 	/* Default */
 	sprintf(tmp_val, "%d", MAX(dun_level, 1));
@@ -1034,11 +947,7 @@ sprintf(ppp, "何階にセットしますか (%d-%d):", d_info[select_dungeon].m
 		max_dlv[select_dungeon] = dummy;
 
 		if (record_maxdepth)
-#ifdef JP
-			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "フロア・リセットで");
-#else
-			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, "using a scroll of reset recall");
-#endif
+			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
 					/* Accept request */
 #ifdef JP
 msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select_dungeon].name, dummy, dummy * 50);
@@ -1225,12 +1134,7 @@ void apply_nexus(monster_type *m_ptr)
 		{
 			if (randint0(100) < p_ptr->skill_sav)
 			{
-#ifdef JP
-msg_print("しかし効力を跳ね返した！");
-#else
-				msg_print("You resist the effects!");
-#endif
-
+				msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 				break;
 			}
 
@@ -1243,21 +1147,11 @@ msg_print("しかし効力を跳ね返した！");
 		{
 			if (randint0(100) < p_ptr->skill_sav)
 			{
-#ifdef JP
-msg_print("しかし効力を跳ね返した！");
-#else
-				msg_print("You resist the effects!");
-#endif
-
+				msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 				break;
 			}
 
-#ifdef JP
-msg_print("体がねじれ始めた...");
-#else
-			msg_print("Your body starts to scramble...");
-#endif
-
+			msg_print(_("体がねじれ始めた...", "Your body starts to scramble..."));
 			mutate_player();
 			break;
 		}
@@ -1288,23 +1182,13 @@ void phlogiston(void)
 	/* No torch to refill */
 	else
 	{
-#ifdef JP
-msg_print("燃素を消費するアイテムを装備していません。");
-#else
-		msg_print("You are not wielding anything which uses phlogiston.");
-#endif
-
+		msg_print(_("燃素を消費するアイテムを装備していません。", "You are not wielding anything which uses phlogiston."));
 		return;
 	}
 
 	if (o_ptr->xtra4 >= max_flog)
 	{
-#ifdef JP
-msg_print("このアイテムにはこれ以上燃素を補充できません。");
-#else
-		msg_print("No more phlogiston can be put in this item.");
-#endif
-
+		msg_print(_("このアイテムにはこれ以上燃素を補充できません。", "No more phlogiston can be put in this item."));
 		return;
 	}
 
@@ -1312,23 +1196,13 @@ msg_print("このアイテムにはこれ以上燃素を補充できません。
 	o_ptr->xtra4 += (max_flog / 2);
 
 	/* Message */
-#ifdef JP
-msg_print("照明用アイテムに燃素を補充した。");
-#else
-	msg_print("You add phlogiston to your light item.");
-#endif
-
+	msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light item."));
 
 	/* Comment */
 	if (o_ptr->xtra4 >= max_flog)
 	{
 		o_ptr->xtra4 = max_flog;
-#ifdef JP
-msg_print("照明用アイテムは満タンになった。");
-#else
-		msg_print("Your light item is full.");
-#endif
-
+		msg_print(_("照明用アイテムは満タンになった。", "Your light item is full."));
 	}
 
 	/* Recalculate torch */
@@ -1351,13 +1225,8 @@ void brand_weapon(int brand_type)
 	item_tester_no_ryoute = TRUE;
 
 	/* Get an item */
-#ifdef JP
-q = "どの武器を強化しますか? ";
-s = "強化できる武器がない。";
-#else
-	q = "Enchant which weapon? ";
-	s = "You have nothing to enchant.";
-#endif
+	q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
+	s = _("強化できる武器がない。", "You have nothing to enchant.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP))) return;
 
@@ -1394,11 +1263,7 @@ s = "強化できる武器がない。";
 		case 17:
 			if (o_ptr->tval == TV_SWORD)
 			{
-#ifdef JP
-act = "は鋭さを増した！";
-#else
-				act = "becomes very sharp!";
-#endif
+				act = _("は鋭さを増した！", "becomes very sharp!");
 
 				o_ptr->name2 = EGO_SHARPNESS;
 				o_ptr->pval = m_bonus(5, dun_level) + 1;
@@ -1408,179 +1273,83 @@ act = "は鋭さを増した！";
 			}
 			else
 			{
-#ifdef JP
-act = "は破壊力を増した！";
-#else
-				act = "seems very powerful.";
-#endif
-
+				act = _("は破壊力を増した！", "seems very powerful.");
 				o_ptr->name2 = EGO_EARTHQUAKES;
 				o_ptr->pval = m_bonus(3, dun_level);
 			}
 			break;
 		case 16:
-#ifdef JP
-act = "は人間の血を求めている！";
-#else
-			act = "seems to be looking for humans!";
-#endif
-
+			act = _("は人間の血を求めている！", "seems to be looking for humans!");
 			o_ptr->name2 = EGO_KILL_HUMAN;
 			break;
 		case 15:
-#ifdef JP
-act = "は電撃に覆われた！";
-#else
-			act = "covered with lightning!";
-#endif
-
+			act = _("は電撃に覆われた！", "covered with lightning!");
 			o_ptr->name2 = EGO_BRAND_ELEC;
 			break;
 		case 14:
-#ifdef JP
-act = "は酸に覆われた！";
-#else
-			act = "coated with acid!";
-#endif
-
+			act = _("は酸に覆われた！", "coated with acid!");
 			o_ptr->name2 = EGO_BRAND_ACID;
 			break;
 		case 13:
-#ifdef JP
-act = "は邪悪なる怪物を求めている！";
-#else
-			act = "seems to be looking for evil monsters!";
-#endif
-
+			act = _("は邪悪なる怪物を求めている！", "seems to be looking for evil monsters!");
 			o_ptr->name2 = EGO_KILL_EVIL;
 			break;
 		case 12:
-#ifdef JP
-act = "は異世界の住人の肉体を求めている！";
-#else
-			act = "seems to be looking for demons!";
-#endif
-
+			act = _("は異世界の住人の肉体を求めている！", "seems to be looking for demons!");
 			o_ptr->name2 = EGO_KILL_DEMON;
 			break;
 		case 11:
-#ifdef JP
-act = "は屍を求めている！";
-#else
-			act = "seems to be looking for undead!";
-#endif
-
+			act = _("は屍を求めている！", "seems to be looking for undead!");
 			o_ptr->name2 = EGO_KILL_UNDEAD;
 			break;
 		case 10:
-#ifdef JP
-act = "は動物の血を求めている！";
-#else
-			act = "seems to be looking for animals!";
-#endif
-
+			act = _("は動物の血を求めている！", "seems to be looking for animals!");
 			o_ptr->name2 = EGO_KILL_ANIMAL;
 			break;
 		case 9:
-#ifdef JP
-act = "はドラゴンの血を求めている！";
-#else
-			act = "seems to be looking for dragons!";
-#endif
-
+			act = _("はドラゴンの血を求めている！", "seems to be looking for dragons!");
 			o_ptr->name2 = EGO_KILL_DRAGON;
 			break;
 		case 8:
-#ifdef JP
-act = "はトロルの血を求めている！";
-#else
-			act = "seems to be looking for troll!s";
-#endif
-
+			act = _("はトロルの血を求めている！", "seems to be looking for troll!s");
 			o_ptr->name2 = EGO_KILL_TROLL;
 			break;
 		case 7:
-#ifdef JP
-act = "はオークの血を求めている！";
-#else
-			act = "seems to be looking for orcs!";
-#endif
-
+			act = _("はオークの血を求めている！", "seems to be looking for orcs!");
 			o_ptr->name2 = EGO_KILL_ORC;
 			break;
 		case 6:
-#ifdef JP
-act = "は巨人の血を求めている！";
-#else
-			act = "seems to be looking for giants!";
-#endif
-
+			act = _("は巨人の血を求めている！", "seems to be looking for giants!");
 			o_ptr->name2 = EGO_KILL_GIANT;
 			break;
 		case 5:
-#ifdef JP
-act = "は非常に不安定になったようだ。";
-#else
-			act = "seems very unstable now.";
-#endif
-
+			act = _("は非常に不安定になったようだ。", "seems very unstable now.");
 			o_ptr->name2 = EGO_TRUMP;
 			o_ptr->pval = randint1(2);
 			break;
 		case 4:
-#ifdef JP
-act = "は血を求めている！";
-#else
-			act = "thirsts for blood!";
-#endif
-
+			act = _("は血を求めている！", "thirsts for blood!");
 			o_ptr->name2 = EGO_VAMPIRIC;
 			break;
 		case 3:
-#ifdef JP
-act = "は毒に覆われた。";
-#else
-			act = "is coated with poison.";
-#endif
-
+			act = _("は毒に覆われた。", "is coated with poison.");
 			o_ptr->name2 = EGO_BRAND_POIS;
 			break;
 		case 2:
-#ifdef JP
-act = "は純ログルスに飲み込まれた。";
-#else
-			act = "is engulfed in raw Logrus!";
-#endif
-
+			act = _("は純ログルスに飲み込まれた。", "is engulfed in raw Logrus!");
 			o_ptr->name2 = EGO_CHAOTIC;
 			break;
 		case 1:
-#ifdef JP
-act = "は炎のシールドに覆われた！";
-#else
-			act = "is covered in a fiery shield!";
-#endif
-
+			act = _("は炎のシールドに覆われた！", "is covered in a fiery shield!");
 			o_ptr->name2 = EGO_BRAND_FIRE;
 			break;
 		default:
-#ifdef JP
-act = "は深く冷たいブルーに輝いた！";
-#else
-			act = "glows deep, icy blue!";
-#endif
-
+			act = _("は深く冷たいブルーに輝いた！", "glows deep, icy blue!");
 			o_ptr->name2 = EGO_BRAND_COLD;
 			break;
 		}
 
-#ifdef JP
-msg_format("あなたの%s%s", o_name, act);
-#else
-		msg_format("Your %s %s", o_name, act);
-#endif
-
-
+		msg_format(_("あなたの%s%s", "Your %s %s"), o_name, act);
 		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
 
 		o_ptr->discount = 99;
@@ -1590,12 +1359,7 @@ msg_format("あなたの%s%s", o_name, act);
 	{
 		if (flush_failure) flush();
 
-#ifdef JP
-msg_print("属性付加に失敗した。");
-#else
-		msg_print("The Branding failed.");
-#endif
-
+		msg_print(_("属性付加に失敗した。", "The Branding failed."));
 		chg_virtue(V_ENCHANT, -2);
 	}
 	calc_android_exp();
@@ -1647,11 +1411,7 @@ static bool vanish_dungeon(void)
 					monster_desc(m_name, m_ptr, 0);
 
 					/* Dump a message */
-#ifdef JP
-					msg_format("%^sが目を覚ました。", m_name);
-#else
-					msg_format("%^s wakes up.", m_name);
-#endif
+					msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 				}
 			}
 
@@ -1789,11 +1549,7 @@ void call_the_(void)
 	/* Prevent destruction of quest levels and town */
 	else if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
 	{
-#ifdef JP
-		msg_print("地面が揺れた。");
-#else
-		msg_print("The ground trembles.");
-#endif
+		msg_print(_("地面が揺れた。", "The ground trembles."));
 	}
 
 	else
@@ -1811,34 +1567,17 @@ void call_the_(void)
 
 		if (one_in_(666))
 		{
-#ifdef JP
-			if (!vanish_dungeon()) msg_print("ダンジョンは一瞬静まり返った。");
-#else
-			if (!vanish_dungeon()) msg_print("The dungeon silences a moment.");
-#endif
+			if (!vanish_dungeon()) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon silences a moment."));
 		}
 		else
 		{
 			if (destroy_area(py, px, 15 + p_ptr->lev + randint0(11), FALSE))
-#ifdef JP
-				msg_print("ダンジョンが崩壊した...");
-#else
-				msg_print("The dungeon collapses...");
-#endif
-
+				msg_print(_("ダンジョンが崩壊した...", "The dungeon collapses..."));
 			else
-#ifdef JP
-				msg_print("ダンジョンは大きく揺れた。");
-#else
-				msg_print("The dungeon trembles.");
-#endif
+				msg_print(_("ダンジョンは大きく揺れた。", "The dungeon trembles."));
 		}
 
-#ifdef JP
-		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "自殺的な虚無招来", -1);
-#else
-		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "a suicidal Call the Void", -1);
-#endif
+		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
 	}
 }
 
@@ -1856,12 +1595,7 @@ void fetch(int dir, int wgt, bool require_los)
 	/* Check to see if an object is already there */
 	if (cave[py][px].o_idx)
 	{
-#ifdef JP
-msg_print("自分の足の下にある物は取れません。");
-#else
-		msg_print("You can't fetch when you're already standing on something.");
-#endif
-
+		msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
 		return;
 	}
 
@@ -1873,12 +1607,7 @@ msg_print("自分の足の下にある物は取れません。");
 
 		if (distance(py, px, ty, tx) > MAX_RANGE)
 		{
-#ifdef JP
-msg_print("そんなに遠くにある物は取れません！");
-#else
-			msg_print("You can't fetch something that far away!");
-#endif
-
+			msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
 			return;
 		}
 
@@ -1887,24 +1616,14 @@ msg_print("そんなに遠くにある物は取れません！");
 		/* We need an item to fetch */
 		if (!c_ptr->o_idx)
 		{
-#ifdef JP
-msg_print("そこには何もありません。");
-#else
-			msg_print("There is no object at this place.");
-#endif
-
+			msg_print(_("そこには何もありません。", "There is no object at this place."));
 			return;
 		}
 
 		/* No fetching from vault */
 		if (c_ptr->info & CAVE_ICKY)
 		{
-#ifdef JP
-msg_print("アイテムがコントロールを外れて落ちた。");
-#else
-			msg_print("The item slips from your control.");
-#endif
-
+			msg_print(_("アイテムがコントロールを外れて落ちた。", "The item slips from your control."));
 			return;
 		}
 
@@ -1913,22 +1632,12 @@ msg_print("アイテムがコントロールを外れて落ちた。");
 		{
 			if (!player_has_los_bold(ty, tx))
 			{
-#ifdef JP
-				msg_print("そこはあなたの視界に入っていません。");
-#else
-				msg_print("You have no direct line of sight to that location.");
-#endif
-
+				msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
 				return;
 			}
 			else if (!projectable(py, px, ty, tx))
 			{
-#ifdef JP
-				msg_print("そこは壁の向こうです。");
-#else
-				msg_print("You have no direct line of sight to that location.");
-#endif
-
+				msg_print(_("そこは壁の向こうです。", "You have no direct line of sight to that location."));
 				return;
 			}
 		}
@@ -1956,12 +1665,7 @@ msg_print("アイテムがコントロールを外れて落ちた。");
 	if (o_ptr->weight > wgt)
 	{
 		/* Too heavy to 'fetch' */
-#ifdef JP
-msg_print("そのアイテムは重過ぎます。");
-#else
-		msg_print("The object is too heavy.");
-#endif
-
+		msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
 		return;
 	}
 
@@ -1973,12 +1677,7 @@ msg_print("そのアイテムは重過ぎます。");
 	o_ptr->ix = (byte)px;
 
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
-#ifdef JP
-msg_format("%^sがあなたの足元に飛んできた。", o_name);
-#else
-	msg_format("%^s flies through the air to your feet.", o_name);
-#endif
-
+	msg_format(_("%^sがあなたの足元に飛んできた。", "%^s flies through the air to your feet."), o_name);
 
 	note_spot(py, px);
 	p_ptr->redraw |= PR_MAP;
@@ -1990,11 +1689,7 @@ void alter_reality(void)
 	/* Ironman option */
 	if (p_ptr->inside_arena || ironman_downward)
 	{
-#ifdef JP
-		msg_print("何も起こらなかった。");
-#else
-		msg_print("Nothing happens.");
-#endif
+		msg_print(_("何も起こらなかった。", "Nothing happens."));
 		return;
 	}
 
@@ -2003,23 +1698,14 @@ void alter_reality(void)
 		int turns = randint0(21) + 15;
 
 		p_ptr->alter_reality = turns;
-#ifdef JP
-		msg_print("回りの景色が変わり始めた...");
-#else
-		msg_print("The view around you begins to change...");
-#endif
+		msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
 
 		p_ptr->redraw |= (PR_STATUS);
 	}
 	else
 	{
 		p_ptr->alter_reality = 0;
-#ifdef JP
-		msg_print("景色が元に戻った...");
-#else
-		msg_print("The view around you got back...");
-#endif
-
+		msg_print(_("景色が元に戻った...", "The view around you got back..."));
 		p_ptr->redraw |= (PR_STATUS);
 	}
 	return;
@@ -2034,12 +1720,7 @@ bool warding_glyph(void)
 	/* XXX XXX XXX */
 	if (!cave_clean_bold(py, px))
 	{
-#ifdef JP
-msg_print("床上のアイテムが呪文を跳ね返した。");
-#else
-		msg_print("The object resists the spell.");
-#endif
-
+		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return FALSE;
 	}
 
@@ -2061,12 +1742,7 @@ bool place_mirror(void)
 	/* XXX XXX XXX */
 	if (!cave_clean_bold(py, px))
 	{
-#ifdef JP
-msg_print("床上のアイテムが呪文を跳ね返した。");
-#else
-		msg_print("The object resists the spell.");
-#endif
-
+		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return FALSE;
 	}
 
@@ -2097,12 +1773,7 @@ bool explosive_rune(void)
 	/* XXX XXX XXX */
 	if (!cave_clean_bold(py, px))
 	{
-#ifdef JP
-msg_print("床上のアイテムが呪文を跳ね返した。");
-#else
-		msg_print("The object resists the spell.");
-#endif
-
+		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return FALSE;
 	}
 
@@ -2254,13 +1925,8 @@ bool alchemy(void)
 	if (command_arg > 0) force = TRUE;
 
 	/* Get an item */
-#ifdef JP
-q = "どのアイテムを金に変えますか？";
-s = "金に変えられる物がありません。";
-#else
-	q = "Turn which item to gold? ";
-	s = "You have nothing to turn to gold.";
-#endif
+	q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
+	s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return (FALSE);
 
@@ -2300,12 +1966,7 @@ s = "金に変えられる物がありません。";
 		if (confirm_destroy || (object_value(o_ptr) > 0))
 		{
 			/* Make a verification */
-#ifdef JP
-sprintf(out_val, "本当に%sを金に変えますか？", o_name);
-#else
-			sprintf(out_val, "Really turn %s to gold? ", o_name);
-#endif
-
+			sprintf(out_val, _("本当に%sを金に変えますか？", "Really turn %s to gold? "), o_name);
 			if (!get_check(out_val)) return FALSE;
 		}
 	}
@@ -2314,11 +1975,7 @@ sprintf(out_val, "本当に%sを金に変えますか？", o_name);
 	if (!can_player_destroy_object(o_ptr))
 	{
 		/* Message */
-#ifdef JP
-		msg_format("%sを金に変えることに失敗した。", o_name);
-#else
-		msg_format("You fail to turn %s to gold!", o_name);
-#endif
+		msg_format(_("%sを金に変えることに失敗した。", "You fail to turn %s to gold!"), o_name);
 
 		/* Done */
 		return FALSE;
@@ -2329,12 +1986,7 @@ sprintf(out_val, "本当に%sを金に変えますか？", o_name);
 	if (price <= 0)
 	{
 		/* Message */
-#ifdef JP
-msg_format("%sをニセの金に変えた。", o_name);
-#else
-		msg_format("You turn %s to fool's gold.", o_name);
-#endif
-
+		msg_format(_("%sをニセの金に変えた。", "You turn %s to fool's gold."), o_name);
 	}
 	else
 	{
@@ -2343,11 +1995,7 @@ msg_format("%sをニセの金に変えた。", o_name);
 		if (amt > 1) price *= amt;
 
 		if (price > 30000) price = 30000;
-#ifdef JP
-msg_format("%sを＄%d の金に変えた。", o_name, price);
-#else
-		msg_format("You turn %s to %ld coins worth of gold.", o_name, price);
-#endif
+		msg_format(_("%sを＄%d の金に変えた。", "You turn %s to %ld coins worth of gold."), o_name, price);
 
 		p_ptr->au += price;
 
@@ -2386,16 +2034,10 @@ static void break_curse(object_type *o_ptr)
 {
 	if (object_is_cursed(o_ptr) && !(o_ptr->curse_flags & TRC_PERMA_CURSE) && !(o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint0(100) < 25))
 	{
-#ifdef JP
-msg_print("かけられていた呪いが打ち破られた！");
-#else
-		msg_print("The curse is broken!");
-#endif
+		msg_print(_("かけられていた呪いが打ち破られた！", "The curse is broken!"));
 
 		o_ptr->curse_flags = 0L;
-
 		o_ptr->ident |= (IDENT_SENSE);
-
 		o_ptr->feeling = FEEL_NONE;
 	}
 }
@@ -2538,13 +2180,8 @@ bool enchant_spell(int num_hit, int num_dam, int num_ac)
 	if (num_ac) item_tester_hook = object_is_armour;
 
 	/* Get an item */
-#ifdef JP
-q = "どのアイテムを強化しますか? ";
-s = "強化できるアイテムがない。";
-#else
-	q = "Enchant which item? ";
-	s = "You have nothing to enchant.";
-#endif
+	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
+	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
 
@@ -2587,11 +2224,7 @@ msg_format("%s は明るく輝いた！",
 		if (flush_failure) flush();
 
 		/* Message */
-#ifdef JP
-msg_print("強化に失敗した。");
-#else
-		msg_print("The enchantment failed.");
-#endif
+		msg_print(_("強化に失敗した。", "The enchantment failed."));
 
 		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
 	}
@@ -2636,13 +2269,8 @@ bool artifact_scroll(void)
 	item_tester_hook = item_tester_hook_nameless_weapon_armour;
 
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムを強化しますか? ";
-	s = "強化できるアイテムがない。";
-#else
-	q = "Enchant which item? ";
-	s = "You have nothing to enchant.";
-#endif
+	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
+	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
 
@@ -2739,11 +2367,7 @@ bool artifact_scroll(void)
 		if (flush_failure) flush();
 
 		/* Message */
-#ifdef JP
-		msg_print("強化に失敗した。");
-#else
-		msg_print("The enchantment failed.");
-#endif
+		msg_print(_("強化に失敗した。", "The enchantment failed."));
 
 		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
 	}
@@ -2842,11 +2466,7 @@ bool ident_spell(bool only_equip)
 
 	if (can_get_item())
 	{
-#ifdef JP
-		q = "どのアイテムを鑑定しますか? ";
-#else
-		q = "Identify which item? ";
-#endif
+		q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
 	}
 	else
 	{
@@ -2855,19 +2475,11 @@ bool ident_spell(bool only_equip)
 		else
 			item_tester_hook = NULL;
 
-#ifdef JP
-		q = "すべて鑑定済みです。 ";
-#else
-		q = "All items are identified. ";
-#endif
+		q = _("すべて鑑定済みです。 ", "All items are identified. ");
 	}
 
 	/* Get an item */
-#ifdef JP
-	s = "鑑定するべきアイテムがない。";
-#else
-	s = "You have nothing to identify.";
-#endif
+	s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
 
@@ -2892,27 +2504,15 @@ bool ident_spell(bool only_equip)
 	/* Describe */
 	if (item >= INVEN_RARM)
 	{
-#ifdef JP
-		msg_format("%^s: %s(%c)。", describe_use(item), o_name, index_to_label(item));
-#else
-		msg_format("%^s: %s (%c).", describe_use(item), o_name, index_to_label(item));
-#endif
+		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(item), o_name, index_to_label(item));
 	}
 	else if (item >= 0)
 	{
-#ifdef JP
-		msg_format("ザック中: %s(%c)。", o_name, index_to_label(item));
-#else
-		msg_format("In your pack: %s (%c).", o_name, index_to_label(item));
-#endif
+		msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
 	}
 	else
 	{
-#ifdef JP
-		msg_format("床上: %s。", o_name);
-#else
-		msg_format("On the ground: %s.", o_name);
-#endif
+		msg_format(_("床上: %s。", "On the ground: %s."), o_name);
 	}
 
 	/* Auto-inscription/destroy */
@@ -2938,13 +2538,8 @@ bool mundane_spell(bool only_equip)
 	item_tester_no_ryoute = TRUE;
 
 	/* Get an item */
-#ifdef JP
-q = "どれを使いますか？";
-s = "使えるものがありません。";
-#else
-	q = "Use which item? ";
-	s = "You have nothing you can use.";
-#endif
+	q = _("どれを使いますか？", "Use which item? ");
+	s = _("使えるものがありません。", "You have nothing you can use.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
 
@@ -2961,11 +2556,7 @@ s = "使えるものがありません。";
 	}
 
 	/* Oops */
-#ifdef JP
-	msg_print("まばゆい閃光が走った！");
-#else
-	msg_print("There is a bright flash of light!");
-#endif
+	msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 	{
 		byte iy = o_ptr->iy;                 /* Y-position on map, or zero */
 		byte ix = o_ptr->ix;                 /* X-position on map, or zero */
@@ -3024,11 +2615,7 @@ bool identify_fully(bool only_equip)
 
 	if (can_get_item())
 	{
-#ifdef JP
-		q = "どのアイテムを*鑑定*しますか? ";
-#else
-		q = "*Identify* which item? ";
-#endif
+		q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
 	}
 	else
 	{
@@ -3037,19 +2624,11 @@ bool identify_fully(bool only_equip)
 		else
 			item_tester_hook = NULL;
 
-#ifdef JP
-		q = "すべて*鑑定*済みです。 ";
-#else
-		q = "All items are *identified*. ";
-#endif
+		q = _("すべて*鑑定*済みです。 ", "All items are *identified*. ");
 	}
 
 	/* Get an item */
-#ifdef JP
-	s = "*鑑定*するべきアイテムがない。";
-#else
-	s = "You have nothing to *identify*.";
-#endif
+	s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
 
@@ -3080,29 +2659,15 @@ bool identify_fully(bool only_equip)
 	/* Describe */
 	if (item >= INVEN_RARM)
 	{
-#ifdef JP
-		msg_format("%^s: %s(%c)。", describe_use(item), o_name, index_to_label(item));
-#else
-		msg_format("%^s: %s (%c).", describe_use(item), o_name, index_to_label(item));
-#endif
-
-
+		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(item), o_name, index_to_label(item));
 	}
 	else if (item >= 0)
 	{
-#ifdef JP
-		msg_format("ザック中: %s(%c)。", o_name, index_to_label(item));
-#else
-		msg_format("In your pack: %s (%c).", o_name, index_to_label(item));
-#endif
+		msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
 	}
 	else
 	{
-#ifdef JP
-		msg_format("床上: %s。", o_name);
-#else
-		msg_format("On the ground: %s.", o_name);
-#endif
+		msg_format(_("床上: %s。", "On the ground: %s."), o_name);
 	}
 
 	/* Describe it fully */
@@ -3172,13 +2737,8 @@ bool recharge(int power)
 	item_tester_hook = item_tester_hook_recharge;
 
 	/* Get an item */
-#ifdef JP
-q = "どのアイテムに魔力を充填しますか? ";
-s = "魔力を充填すべきアイテムがない。";
-#else
-	q = "Recharge which item? ";
-	s = "You have nothing to recharge.";
-#endif
+	q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
+	s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return (FALSE);
 
@@ -3298,12 +2858,7 @@ s = "魔力を充填すべきアイテムがない。";
 		if (object_is_fixed_artifact(o_ptr))
 		{
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
-#ifdef JP
-msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name);
-#else
-			msg_format("The recharging backfires - %s is completely drained!", o_name);
-#endif
-
+			msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
 
 			/* Artifact rods. */
 			if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout < 10000))
@@ -3372,23 +2927,14 @@ msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name
 			{
 				if (o_ptr->tval == TV_ROD)
 				{
-#ifdef JP
-msg_print("魔力が逆噴射して、ロッドからさらに魔力を吸い取ってしまった！");
-#else
-					msg_print("The recharge backfires, draining the rod further!");
-#endif
+					msg_print(_("魔力が逆噴射して、ロッドからさらに魔力を吸い取ってしまった！", "The recharge backfires, draining the rod further!"));
 
 					if (o_ptr->timeout < 10000)
 						o_ptr->timeout = (o_ptr->timeout + 100) * 2;
 				}
 				else if (o_ptr->tval == TV_WAND)
 				{
-#ifdef JP
-msg_format("%sは破損を免れたが、魔力が全て失われた。", o_name);
-#else
-					msg_format("You save your %s from destruction, but all charges are lost.", o_name);
-#endif
-
+					msg_format(_("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost."), o_name);
 					o_ptr->pval = 0;
 				}
 				/* Staffs aren't drained. */
@@ -3398,19 +2944,9 @@ msg_format("%sは破損を免れたが、魔力が全て失われた。", o_name
 			if (fail_type == 2)
 			{
 				if (o_ptr->number > 1)
-#ifdef JP
-msg_format("乱暴な魔法のために%sが一本壊れた！", o_name);
-#else
-					msg_format("Wild magic consumes one of your %s!", o_name);
-#endif
-
+					msg_format(_("乱暴な魔法のために%sが一本壊れた！", "Wild magic consumes one of your %s!"), o_name);
 				else
-#ifdef JP
-msg_format("乱暴な魔法のために%sが壊れた！", o_name);
-#else
-					msg_format("Wild magic consumes your %s!", o_name);
-#endif
-
+					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
 				/* Reduce rod stack maximum timeout, drain wands. */
 				if (o_ptr->tval == TV_ROD) o_ptr->timeout = (o_ptr->number - 1) * k_ptr->pval;
@@ -3437,20 +2973,9 @@ msg_format("乱暴な魔法のために%sが壊れた！", o_name);
 			if (fail_type == 3)
 			{
 				if (o_ptr->number > 1)
-#ifdef JP
-msg_format("乱暴な魔法のために%sが全て壊れた！", o_name);
-#else
-					msg_format("Wild magic consumes all your %s!", o_name);
-#endif
-
+					msg_format(_("乱暴な魔法のために%sが全て壊れた！", "Wild magic consumes all your %s!"), o_name);
 				else
-#ifdef JP
-msg_format("乱暴な魔法のために%sが壊れた！", o_name);
-#else
-					msg_format("Wild magic consumes your %s!", o_name);
-#endif
-
-
+					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
 				/* Reduce and describe inventory */
 				if (item >= 0)
@@ -3499,13 +3024,8 @@ bool bless_weapon(void)
 	item_tester_hook = object_is_weapon;
 
 	/* Get an item */
-#ifdef JP
-q = "どのアイテムを祝福しますか？";
-s = "祝福できる武器がありません。";
-#else
-	q = "Bless which weapon? ";
-	s = "You have weapon to bless.";
-#endif
+	q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
+	s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR)))
 		return FALSE;
@@ -3612,13 +3132,7 @@ msg_format("%sは輝いた！",
 	else
 	{
 		bool dis_happened = FALSE;
-
-#ifdef JP
-msg_print("その武器は祝福を嫌っている！");
-#else
-		msg_print("The weapon resists your blessing!");
-#endif
-
+		msg_print(_("その武器は祝福を嫌っている！", "The weapon resists your blessing!"));
 
 		/* Disenchant tohit */
 		if (o_ptr->to_h > 0)
@@ -3649,11 +3163,7 @@ msg_print("その武器は祝福を嫌っている！");
 
 		if (dis_happened)
 		{
-#ifdef JP
-msg_print("周囲が凡庸な雰囲気で満ちた...");
-#else
-			msg_print("There is a static feeling in the air...");
-#endif
+			msg_print(_("周囲が凡庸な雰囲気で満ちた...", "There is a static feeling in the air..."));
 
 #ifdef JP
 msg_format("%s は劣化した！",
@@ -3695,13 +3205,8 @@ bool pulish_shield(void)
 	item_tester_tval = TV_SHIELD;
 
 	/* Get an item */
-#ifdef JP
-q = "どの盾を磨きますか？";
-s = "磨く盾がありません。";
-#else
-	q = "Pulish which weapon? ";
-	s = "You have weapon to pulish.";
-#endif
+	q = _("どの盾を磨きますか？", "Pulish which weapon? ");
+	s = _("磨く盾がありません。", "You have weapon to pulish.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR)))
 		return FALSE;
@@ -3747,12 +3252,7 @@ msg_format("%sは輝いた！", o_name);
 	{
 		if (flush_failure) flush();
 
-#ifdef JP
-msg_print("失敗した。");
-#else
-		msg_print("Failed.");
-#endif
-
+		msg_print(_("失敗した。", "Failed."));
 		chg_virtue(V_ENCHANT, -2);
 	}
 	calc_android_exp();
@@ -3972,13 +3472,8 @@ void display_spell_list(void)
 
 		/* Display a list of spells */
 		prt("", y, x);
-#ifdef JP
-put_str("名前", y, x + 5);
-put_str("Lv   MP 失率 効果", y, x + 35);
-#else
-		put_str("Name", y, x + 5);
-		put_str("Lv Mana Fail Info", y, x + 35);
-#endif
+		put_str(_("名前", "Name"), y, x + 5);
+		put_str(_("Lv   MP 失率 効果", "Lv Mana Fail Info"), y, x + 35);
 
 		switch(p_ptr->pclass)
 		{
@@ -4093,12 +3588,7 @@ put_str("Lv   MP 失率 効果", y, x + 35);
 			if (s_ptr->slevel >= 99)
 			{
 				/* Illegible */
-#ifdef JP
-strcpy(name, "(判読不能)");
-#else
-				strcpy(name, "(illegible)");
-#endif
-
+				strcpy(name, _("(判読不能)", "(illegible)"));
 
 				/* Unusable */
 				a = TERM_L_DARK;
@@ -4401,35 +3891,17 @@ void print_spells(int target_spell, byte *spells, int num, int y, int x, int use
 
 
 	if (((use_realm <= REALM_NONE) || (use_realm > MAX_REALM)) && p_ptr->wizard)
-#ifdef JP
-msg_print("警告！ print_spell が領域なしに呼ばれた");
-#else
-		msg_print("Warning! print_spells called with null realm");
-#endif
-
+	msg_print(_("警告！ print_spell が領域なしに呼ばれた", "Warning! print_spells called with null realm"));
 
 	/* Title the list */
 	prt("", y, x);
 	if (use_realm == REALM_HISSATSU)
-#ifdef JP
-		strcpy(buf,"  Lv   MP");
-#else
-		strcpy(buf,"  Lv   SP");
-#endif
+		strcpy(buf,_("  Lv   MP", "  Lv   SP"));
 	else
-#ifdef JP
-		strcpy(buf,"熟練度 Lv   MP 失率 効果");
-#else
-		strcpy(buf,"Profic Lv   SP Fail Effect");
-#endif
+		strcpy(buf,_("熟練度 Lv   MP 失率 効果", "Profic Lv   SP Fail Effect"));
 
-#ifdef JP
-put_str("名前", y, x + 5);
-put_str(buf, y, x + 29);
-#else
-	put_str("Name", y, x + 5);
+	put_str(_("名前", "Name"), y, x + 5);
 	put_str(buf, y, x + 29);
-#endif
 
 	if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE)) increment = 0;
 	else if (use_realm == p_ptr->realm1) increment = 0;
@@ -4477,11 +3949,7 @@ put_str(buf, y, x + 29);
 		if (use_menu && target_spell)
 		{
 			if (i == (target_spell-1))
-#ifdef JP
-				strcpy(out_val, "  》 ");
-#else
-				strcpy(out_val, "  >  ");
-#endif
+				strcpy(out_val, _("  》 ", "  >  "));
 			else
 				strcpy(out_val, "     ");
 		}
@@ -4489,14 +3957,9 @@ put_str(buf, y, x + 29);
 		/* Skip illegible spells */
 		if (s_ptr->slevel >= 99)
 		{
-#ifdef JP
-strcat(out_val, format("%-30s", "(判読不能)"));
-#else
-				strcat(out_val, format("%-30s", "(illegible)"));
-#endif
-
-				c_prt(TERM_L_DARK, out_val, y + i + 1, x);
-				continue;
+			strcat(out_val, format("%-30s", _("(判読不能)", "(illegible)")));
+			c_prt(TERM_L_DARK, out_val, y + i + 1, x);
+			continue;
 		}
 
 		/* XXX XXX Could label spells above the players level */
@@ -4515,69 +3978,39 @@ strcat(out_val, format("%-30s", "(判読不能)"));
 		{
 			if (s_ptr->slevel > p_ptr->max_plv)
 			{
-#ifdef JP
-comment = "未知";
-#else
-				comment = "unknown";
-#endif
-
+				comment = _("未知", "unknown");
 				line_attr = TERM_L_BLUE;
 			}
 			else if (s_ptr->slevel > p_ptr->lev)
 			{
-#ifdef JP
-comment = "忘却";
-#else
-				comment = "forgotten";
-#endif
-
+				comment = _("忘却", "forgotten");
 				line_attr = TERM_YELLOW;
 			}
 		}
 		else if ((use_realm != p_ptr->realm1) && (use_realm != p_ptr->realm2))
 		{
-#ifdef JP
-comment = "未知";
-#else
-			comment = "unknown";
-#endif
-
+			comment = _("未知", "unknown");
 			line_attr = TERM_L_BLUE;
 		}
 		else if ((use_realm == p_ptr->realm1) ?
 		    ((p_ptr->spell_forgotten1 & (1L << spell))) :
 		    ((p_ptr->spell_forgotten2 & (1L << spell))))
 		{
-#ifdef JP
-comment = "忘却";
-#else
-			comment = "forgotten";
-#endif
-
+			comment = _("忘却", "forgotten");
 			line_attr = TERM_YELLOW;
 		}
 		else if (!((use_realm == p_ptr->realm1) ?
 		    (p_ptr->spell_learned1 & (1L << spell)) :
 		    (p_ptr->spell_learned2 & (1L << spell))))
 		{
-#ifdef JP
-comment = "未知";
-#else
-			comment = "unknown";
-#endif
-
+			comment = _("未知", "unknown");
 			line_attr = TERM_L_BLUE;
 		}
 		else if (!((use_realm == p_ptr->realm1) ?
 		    (p_ptr->spell_worked1 & (1L << spell)) :
 		    (p_ptr->spell_worked2 & (1L << spell))))
 		{
-#ifdef JP
-comment = "未経験";
-#else
-			comment = "untried";
-#endif
-
+			comment = _("未経験", "untried");
 			line_attr = TERM_L_GREEN;
 		}
 
@@ -4860,11 +4293,7 @@ int inven_damage(inven_func typ, int perc)
 				object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 				/* Message */
-#ifdef JP
-msg_format("%s(%c)が%s壊れてしまった！",
-#else
-				msg_format("%sour %s (%c) %s destroyed!",
-#endif
+				msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
 
 #ifdef JP
 o_name, index_to_label(i),
@@ -4952,23 +4381,12 @@ static int minus_ac(void)
 	/* Object resists */
 	if (have_flag(flgs, TR_IGNORE_ACID))
 	{
-#ifdef JP
-msg_format("しかし%sには効果がなかった！", o_name);
-#else
-		msg_format("Your %s is unaffected!", o_name);
-#endif
-
-
+		msg_format(_("しかし%sには効果がなかった！", "Your %s is unaffected!"), o_name);
 		return (TRUE);
 	}
 
 	/* Message */
-#ifdef JP
-msg_format("%sがダメージを受けた！", o_name);
-#else
-	msg_format("Your %s is damaged!", o_name);
-#endif
-
+	msg_format(_("%sがダメージを受けた！", "Your %s is damaged!"), o_name);
 
 	/* Damage the item */
 	o_ptr->to_a--;
@@ -5170,13 +4588,8 @@ bool rustproof(void)
 	item_tester_hook = object_is_armour;
 
 	/* Get an item */
-#ifdef JP
-q = "どの防具に錆止めをしますか？";
-s = "錆止めできるものがありません。";
-#else
-	q = "Rustproof which piece of armour? ";
-	s = "You have nothing to rustproof.";
-#endif
+	q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
+	s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return FALSE;
 
@@ -5265,12 +4678,7 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返し�
 	else
 	{
 		/* Oops */
-#ifdef JP
-msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
-#else
-		msg_format("A terrible black aura blasts your %s!", o_name);
-#endif
-
+		msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
 		chg_virtue(V_ENCHANT, -5);
 
 		/* Blast the armor */
@@ -5337,11 +4745,7 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 	else
 	{
 		/* Oops */
-#ifdef JP
-		if (!force) msg_format("恐怖の暗黒オーラがあなたの%sを包み込んだ！", o_name);
-#else
-		if (!force) msg_format("A terrible black aura blasts your %s!", o_name);
-#endif
+		if (!force) msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
 		chg_virtue(V_ENCHANT, -5);
 
 		/* Shatter the weapon */
@@ -5410,12 +4814,7 @@ bool brand_bolts(void)
 		if (randint0(100) < 75) continue;
 
 		/* Message */
-#ifdef JP
-msg_print("クロスボウの矢が炎のオーラに包まれた！");
-#else
-		msg_print("Your bolts are covered in a fiery aura!");
-#endif
-
+		msg_print(_("クロスボウの矢が炎のオーラに包まれた！", "Your bolts are covered in a fiery aura!"));
 
 		/* Ego-item */
 		o_ptr->name2 = EGO_FLAME;
@@ -5431,12 +4830,7 @@ msg_print("クロスボウの矢が炎のオーラに包まれた！");
 	if (flush_failure) flush();
 
 	/* Fail */
-#ifdef JP
-msg_print("炎で強化するのに失敗した。");
-#else
-	msg_print("The fiery enchantment failed.");
-#endif
-
+	msg_print(_("炎で強化するのに失敗した。", "The fiery enchantment failed."));
 
 	/* Notice */
 	return (TRUE);
@@ -5632,11 +5026,7 @@ bool dimension_door(void)
 
 	if (dimension_door_aux(x, y)) return TRUE;
 
-#ifdef JP
-	msg_print("精霊界から物質界に戻る時うまくいかなかった！");
-#else
-	msg_print("You fail to exit the astral plane correctly!");
-#endif
+	msg_print(_("精霊界から物質界に戻る時うまくいかなかった！", "You fail to exit the astral plane correctly!"));
 
 	return TRUE;
 }
@@ -5654,11 +5044,7 @@ bool mirror_tunnel(void)
 
 	if (dimension_door_aux(x, y)) return TRUE;
 
-#ifdef JP
-	msg_print("鏡の世界をうまく通れなかった！");
-#else
-	msg_print("You fail to pass the mirror plane correctly!");
-#endif
+	msg_print(_("鏡の世界をうまく通れなかった！", "You fail to pass the mirror plane correctly!"));
 
 	return TRUE;
 }
@@ -5680,13 +5066,8 @@ bool eat_magic(int power)
 	item_tester_hook = item_tester_hook_recharge;
 
 	/* Get an item */
-#ifdef JP
-q = "どのアイテムから魔力を吸収しますか？";
-s = "魔力を吸収できるアイテムがありません。";
-#else
-	q = "Drain which item? ";
-	s = "You have nothing to drain.";
-#endif
+	q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
+	s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return FALSE;
 
@@ -5716,12 +5097,7 @@ s = "魔力を吸収できるアイテムがありません。";
 		{
 			if (o_ptr->timeout > (o_ptr->number - 1) * k_ptr->pval)
 			{
-#ifdef JP
-msg_print("充填中のロッドから魔力を吸収することはできません。");
-#else
-				msg_print("You can't absorb energy from a discharged rod.");
-#endif
-
+				msg_print(_("充填中のロッドから魔力を吸収することはできません。", "You can't absorb energy from a discharged rod."));
 			}
 			else
 			{
@@ -5775,22 +5151,12 @@ msg_print("充填中のロッドから魔力を吸収することはできませ
 					item = inven_carry(q_ptr);
 
 					/* Message */
-#ifdef JP
-					msg_print("杖をまとめなおした。");
-#else
-					msg_print("You unstack your staff.");
-#endif
-
+					msg_print(_("杖をまとめなおした。", "You unstack your staff."));
 				}
 			}
 			else
 			{
-#ifdef JP
-msg_print("吸収できる魔力がありません！");
-#else
-				msg_print("There's no energy there to absorb!");
-#endif
-
+				msg_print(_("吸収できる魔力がありません！", "There's no energy there to absorb!"));
 			}
 			if (!o_ptr->pval) o_ptr->ident |= IDENT_EMPTY;
 		}
@@ -5803,12 +5169,7 @@ msg_print("吸収できる魔力がありません！");
 		if (object_is_fixed_artifact(o_ptr))
 		{
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
-#ifdef JP
-msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name);
-#else
-			msg_format("The recharging backfires - %s is completely drained!", o_name);
-#endif
-
+			msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
 
 			/* Artifact rods. */
 			if (o_ptr->tval == TV_ROD)
@@ -5877,22 +5238,13 @@ msg_format("魔力が逆流した！%sは完全に魔力を失った。", o_name
 			{
 				if (o_ptr->tval == TV_ROD)
 				{
-#ifdef JP
-msg_print("ロッドは破損を免れたが、魔力は全て失なわれた。");
-#else
-					msg_format("You save your rod from destruction, but all charges are lost.", o_name);
-#endif
-
+					msg_format(_("ロッドは破損を免れたが、魔力は全て失なわれた。",
+								 "You save your rod from destruction, but all charges are lost."), o_name);
 					o_ptr->timeout = k_ptr->pval * o_ptr->number;
 				}
 				else if (o_ptr->tval == TV_WAND)
 				{
-#ifdef JP
-msg_format("%sは破損を免れたが、魔力が全て失われた。", o_name);
-#else
-					msg_format("You save your %s from destruction, but all charges are lost.", o_name);
-#endif
-
+					msg_format(_("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost."), o_name);
 					o_ptr->pval = 0;
 				}
 				/* Staffs aren't drained. */
@@ -5903,24 +5255,16 @@ msg_format("%sは破損を免れたが、魔力が全て失われた。", o_name
 			{
 				if (o_ptr->number > 1)
 				{
-#ifdef JP
-msg_format("乱暴な魔法のために%sが一本壊れた！", o_name);
-#else
-					msg_format("Wild magic consumes one of your %s!", o_name);
-#endif
-
+					msg_format(_("乱暴な魔法のために%sが一本壊れた！", "Wild magic consumes one of your %s!"), o_name);
 					/* Reduce rod stack maximum timeout, drain wands. */
 					if (o_ptr->tval == TV_ROD) o_ptr->timeout = MIN(o_ptr->timeout, k_ptr->pval * (o_ptr->number - 1));
 					else if (o_ptr->tval == TV_WAND) o_ptr->pval = o_ptr->pval * (o_ptr->number - 1) / o_ptr->number;
-
 				}
 				else
-#ifdef JP
-msg_format("乱暴な魔法のために%sが何本か壊れた！", o_name);
-#else
-					msg_format("Wild magic consumes your %s!", o_name);
-#endif
-
+				{
+					msg_format(_("乱暴な魔法のために%sが何本か壊れた！", "Wild magic consumes your %s!"), o_name);
+				}
+				
 				/* Reduce and describe inventory */
 				if (item >= 0)
 				{
@@ -5942,20 +5286,9 @@ msg_format("乱暴な魔法のために%sが何本か壊れた！", o_name);
 			if (fail_type == 3)
 			{
 				if (o_ptr->number > 1)
-#ifdef JP
-msg_format("乱暴な魔法のために%sが全て壊れた！", o_name);
-#else
-					msg_format("Wild magic consumes all your %s!", o_name);
-#endif
-
+					msg_format(_("乱暴な魔法のために%sが全て壊れた！", "Wild magic consumes all your %s!"), o_name);
 				else
-#ifdef JP
-msg_format("乱暴な魔法のために%sが壊れた！", o_name);
-#else
-					msg_format("Wild magic consumes your %s!", o_name);
-#endif
-
-
+					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
 				/* Reduce and describe inventory */
 				if (item >= 0)

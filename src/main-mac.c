@@ -185,11 +185,7 @@
 /*
  * Cleaning up a couple of things to make these easier to change --AR
  */
-#ifdef JP
-#define PREF_FILE_NAME "Hengband Preferences"
-#else
-#define PREF_FILE_NAME "Hengband-E Preferences"
-#endif
+#define PREF_FILE_NAME _("Hengband Preferences", "Hengband-E Preferences")
 
 /*
  * Use "malloc()" instead of "NewPtr()"
@@ -1992,11 +1988,7 @@ static void play_sound(int num, SInt16 vol)
 				}
 
 				/* Notify error */
-#ifdef JP
-				plog("サウンドチャンネルを初期化出来ません!");
-#else
-				plog("Cannot initialise sound channels!");
-#endif
+				plog(_("サウンドチャンネルを初期化出来ません!", "Cannot initialise sound channels!"));
 
 				/* Cancel request */
 				use_sound = arg_sound = FALSE;
@@ -2499,11 +2491,7 @@ static errr Term_xtra_mac_react(void)
 
 		if ((graf_mode_req != GRAF_MODE_NONE) && !frameP && (globe_init() != 0))
 		{
-#ifdef JP
-			plog("グラフィックの初期化は出来ませんでした.");
-#else
-			plog("Cannot initialize graphics!");
-#endif
+			plog(_("グラフィックの初期化は出来ませんでした.", "Cannot initialize graphics!"));
 
 			/* reject request */
 			graf_mode_req = GRAF_MODE_NONE;
@@ -3185,11 +3173,7 @@ static void SetupAppDir(void)
 	err = PBGetFCBInfo(&fcbBlock, FALSE);
 	if (err != noErr)
 	{
-#ifdef JP
-		sprintf(errString, "PBGetFCBInfo エラー #%d.\r 終了します.", err);
-#else
-		sprintf(errString, "Fatal PBGetFCBInfo Error #%d.\r Exiting.", err);
-#endif
+		sprintf(errString, _("PBGetFCBInfo エラー #%d.\r 終了します.", "Fatal PBGetFCBInfo Error #%d.\r Exiting."), err);
 		mac_warning(errString);
 		ExitToShell();
 	}
@@ -3202,11 +3186,7 @@ static void SetupAppDir(void)
 	err = HSetVol(NULL, app_vol, app_dir);
 	if (err != noErr)
 	{
-#ifdef JP
-		sprintf(errString, "HSetVol エラー #%d.\r 終了します.", err);
-#else
-		sprintf(errString, "Fatal HSetVol Error #%d.\r Exiting.", err);
-#endif
+		sprintf(errString, _("HSetVol エラー #%d.\r 終了します.", "Fatal HSetVol Error #%d.\r Exiting."), err);
 		mac_warning(errString);
 		ExitToShell();
 	}
@@ -3396,11 +3376,7 @@ static void cf_load_prefs()
 	if (!ok)
 	{
 		/* This may be the first run */
-#ifdef JP
-		mac_warning("初期設定ファイルが見つかりません。");
-#else
-		mac_warning("Preferences are not found.");
-#endif
+		mac_warning(_("初期設定ファイルが見つかりません。", "Preferences are not found."));
 
 		/* Ignore the rest */
 		return;
@@ -4655,11 +4631,7 @@ static void init_menubar(void)
 	mbar = GetNewMBar(128);
 
 	/* Whoops! */
-#ifdef JP
-	if (mbar == nil) quit("メニューバー ID 128を見つける事ができません!");
-#else
-	if (mbar == nil) quit("Cannot find menubar('MBAR') id 128!");
-#endif
+	if (mbar == nil) quit(_("メニューバー ID 128を見つける事ができません!", "Cannot find menubar('MBAR') id 128!"));
 
 	/* Insert them into the current menu list */
 	SetMenuBar(mbar);
@@ -5763,11 +5735,7 @@ static void menu(long mc)
 				case ITEM_SAVE:
 				{
 					if (!can_save){
-#ifdef JP
-						plog("今はセーブすることは出来ません。");
-#else
-						plog("You may not do that right now.");
-#endif
+						plog(_("今はセーブすることは出来ません。", "You may not do that right now."));
 						break;
 					}
 					
@@ -5787,11 +5755,7 @@ static void menu(long mc)
 					if (game_in_progress && character_generated)
 					{
 						if (!can_save){
-#ifdef JP
-							plog("今はセーブすることは出来ません。");
-#else
-							plog("You may not do that right now.");
-#endif
+							plog(_("今はセーブすることは出来ません。", "You may not do that right now."));
 							break;
 						}
 						/* Hack -- Forget messages */
@@ -6215,11 +6179,7 @@ static pascal OSErr AEH_Quit(const AppleEvent *theAppleEvent,
 	if (game_in_progress && character_generated)
 	{
 			if (!can_save){
-#ifdef JP
-				plog("今はセーブすることは出来ません。");
-#else
-				plog("You may not do that right now.");
-#endif
+				plog(_("今はセーブすることは出来ません。", "You may not do that right now."));
 				return;
 			}
 			/* Hack -- Forget messages */
@@ -7059,35 +7019,19 @@ static void init_stuff(void)
 		init_file_paths(path);
 
 		/* Build the filename */
-#ifdef JP
-		path_build(path, sizeof(path), ANGBAND_DIR_FILE, "news_j.txt");
-#else
-		path_build(path, sizeof(path), ANGBAND_DIR_FILE, "news.txt");
-#endif
+		path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
 		/* Attempt to open and close that file */
 		if (0 == fd_close(fd_open(path, O_RDONLY))) break;
 
 		/* Warning */
-#ifdef JP
-		plog_fmt("'%s' ファイルをオープン出来ません.", path);
-#else
-		plog_fmt("Unable to open the '%s' file.", path);
-#endif
+		plog_fmt(_("'%s' ファイルをオープン出来ません.", "Unable to open the '%s' file."), path);
 
 		/* Warning */
-#ifdef JP
-		plog("Hengbandの'lib'フォルダが存在しないか正しく無い可能性があります.");
-#else
-		plog("The Angband 'lib' folder is probably missing or misplaced.");
-#endif
+		plog(_("Hengbandの'lib'フォルダが存在しないか正しく無い可能性があります.", "The Angband 'lib' folder is probably missing or misplaced."));
 
 		/* Warning */
-#ifdef JP
-		plog("Please 'open' any file in any sub-folder of the 'lib' folder.");
-#else
-		plog("Please 'open' any file in any sub-folder of the 'lib' folder.");
-#endif
+		plog(_("Please 'open' any file in any sub-folder of the 'lib' folder.", "Please 'open' any file in any sub-folder of the 'lib' folder."));
 		
 #if TARGET_API_MAC_CARBON
 		/* Ask the user to choose the lib folder */
@@ -7464,11 +7408,7 @@ int main(void)
 #endif
 
 	/* Prompt the user */
-#ifdef JP
-	prt("'ファイル'メニューより'新規'または'開く...'を選択してください。", 23, 10);
-#else
-	prt("[Choose 'New' or 'Open' from the 'File' menu]", 23, 15);
-#endif
+	prt(_("'ファイル'メニューより'新規'または'開く...'を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(10, 15));
 
 	/* Flush the prompt */
 	Term_fresh();

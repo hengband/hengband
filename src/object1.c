@@ -479,11 +479,7 @@ cptr item_activation(object_type *o_ptr)
 	object_flags(o_ptr, flgs);
 
 	/* Require activation ability */
-#ifdef JP
-	if (!(have_flag(flgs, TR_ACTIVATE))) return ("なし");
-#else
-	if (!(have_flag(flgs, TR_ACTIVATE))) return ("nothing");
-#endif
+	if (!(have_flag(flgs, TR_ACTIVATE))) return (_("なし", "nothing"));
 
 	/* Get an explain of an activation */
 	if (activation_index(o_ptr))
@@ -494,28 +490,16 @@ cptr item_activation(object_type *o_ptr)
 	/* Special items */
 	if (o_ptr->tval == TV_WHISTLE)
 	{
-#ifdef JP
-return "ペット呼び寄せ : 100+d100ターン毎";
-#else
-		return "call pet every 100+d100 turns";
-#endif
+		return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
 	}
 
 	if (o_ptr->tval == TV_CAPTURE)
 	{
-#ifdef JP
-return "モンスターを捕える、又は解放する。";
-#else
-		return "captures or releases a monster.";
-#endif
+		return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
 	}
 
 	/* Oops */
-#ifdef JP
-	return "何も起きない";
-#else
-	return "Nothing";
-#endif
+	return _("何も起きない", "Nothing");
 }
 
 
@@ -562,112 +546,57 @@ bool screen_object(object_type *o_ptr, u32b mode)
 	/* Mega-Hack -- describe activation */
 	if (have_flag(flgs, TR_ACTIVATE))
 	{
-#ifdef JP
-info[i++] = "始動したときの効果...";
-#else
-		info[i++] = "It can be activated for...";
-#endif
-
+		info[i++] = _("始動したときの効果...", "It can be activated for...");
 		info[i++] = item_activation(o_ptr);
-#ifdef JP
-info[i++] = "...ただし装備していなければならない。";
-#else
-		info[i++] = "...if it is being worn.";
-#endif
-
+		info[i++] = _("...ただし装備していなければならない。", "...if it is being worn.");
 	}
 
 	/* Figurines, a hack */
 	if (o_ptr->tval == TV_FIGURINE)
 	{
-#ifdef JP
-info[i++] = "それは投げた時ペットに変化する。";
-#else
-		info[i++] = "It will transform into a pet when thrown.";
-#endif
-
+		info[i++] = _("それは投げた時ペットに変化する。", "It will transform into a pet when thrown.");
 	}
 
 	/* Figurines, a hack */
 	if (o_ptr->name1 == ART_STONEMASK)
 	{
-#ifdef JP
-info[i++] = "それを装備した者は吸血鬼になる。";
-#else
-		info[i++] = "It makes you turn into a vampire permanently.";
-#endif
-
+		info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you turn into a vampire permanently.");
 	}
 
 	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI))
 	{
-#ifdef JP
-info[i++] = "それは相手を一撃で倒すことがある。";
-#else
-		info[i++] = "It will attempt to kill a monster instantly.";
-#endif
-
+		info[i++] = _("それは相手を一撃で倒すことがある。", "It will attempt to kill a monster instantly.");
 	}
 
 	if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE))
 	{
-#ifdef JP
-info[i++] = "それは自分自身に攻撃が返ってくることがある。";
-#else
-		info[i++] = "It causes you to strike yourself sometimes.";
-#endif
-
-#ifdef JP
-info[i++] = "それは無敵のバリアを切り裂く。";
-#else
-		info[i++] = "It always penetrates invulnerability barriers.";
-#endif
+		info[i++] = _("それは自分自身に攻撃が返ってくることがある。", "It causes you to strike yourself sometimes.");
+		info[i++] = _("それは無敵のバリアを切り裂く。", "It always penetrates invulnerability barriers.");
 	}
 
 	if (o_ptr->name2 == EGO_2WEAPON)
 	{
-#ifdef JP
-info[i++] = "それは二刀流での命中率を向上させる。";
-#else
-		info[i++] = "It affects your ability to hit when you are wielding two weapons.";
-#endif
-
+		info[i++] = _("それは二刀流での命中率を向上させる。", "It affects your ability to hit when you are wielding two weapons.");
 	}
 
 	if (have_flag(flgs, TR_EASY_SPELL))
 	{
-#ifdef JP
-info[i++] = "それは魔法の難易度を下げる。";
-#else
-		info[i++] = "It affects your ability to cast spells.";
-#endif
+		info[i++] = _("それは魔法の難易度を下げる。", "It affects your ability to cast spells.");
 	}
 
 	if (o_ptr->name2 == EGO_AMU_FOOL)
 	{
-#ifdef JP
-info[i++] = "それは魔法の難易度を上げる。";
-#else
-		info[i++] = "It interferes with casting spells.";
-#endif
+		info[i++] = _("それは魔法の難易度を上げる。", "It interferes with casting spells.");
 	}
 
 	if (o_ptr->name2 == EGO_RING_THROW)
 	{
-#ifdef JP
-info[i++] = "それは物を強く投げることを可能にする。";
-#else
-		info[i++] = "It provides great strength when you throw an item.";
-#endif
+		info[i++] = _("それは物を強く投げることを可能にする。", "It provides great strength when you throw an item.");
 	}
 
 	if (o_ptr->name2 == EGO_AMU_NAIVETY)
 	{
-#ifdef JP
-info[i++] = "それは魔法抵抗力を下げる。";
-#else
-		info[i++] = "It decreases your magic resistance.";
-#endif
+		info[i++] = _("それは魔法抵抗力を下げる。", "It decreases your magic resistance.");
 	}
 
 	if (o_ptr->tval == TV_STATUE)
@@ -675,23 +604,11 @@ info[i++] = "それは魔法抵抗力を下げる。";
 		monster_race *r_ptr = &r_info[o_ptr->pval];
 
 		if (o_ptr->pval == MON_BULLGATES)
-#ifdef JP
-			info[i++] = "それは部屋に飾ると恥ずかしい。";
-#else
-			info[i++] = "It is shameful.";
-#endif
+			info[i++] = _("それは部屋に飾ると恥ずかしい。", "It is shameful.");
 		else if ( r_ptr->flags2 & (RF2_ELDRITCH_HORROR))
-#ifdef JP
-			info[i++] = "それは部屋に飾ると恐い。";
-#else
-		info[i++] = "It is fearful.";
-#endif
+			info[i++] = _("それは部屋に飾ると恐い。", "It is fearful.");
 		else
-#ifdef JP
-			info[i++] = "それは部屋に飾ると楽しい。";
-#else
-		info[i++] = "It is cheerful.";
-#endif
+			info[i++] = _("それは部屋に飾ると楽しい。", "It is cheerful.");
 	}
 	
 	/* Hack -- describe lite's */
@@ -731,691 +648,326 @@ info[i++] = "それは魔法抵抗力を下げる。";
 	if (have_flag(flgs, TR_RIDING))
 	{
 		if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE)))
-#ifdef JP
-info[i++] = "それは乗馬中は非常に使いやすい。";
-#else
-			info[i++] = "It is made for use while riding.";
-#endif
+			info[i++] = _("それは乗馬中は非常に使いやすい。", "It is made for use while riding.");
 		else
 		{
-#ifdef JP
-			info[i++] = "それは乗馬中でも使いやすい。";
-#else
-			info[i++] = "It is suitable for use while riding.";
-#endif
+			info[i++] = _("それは乗馬中でも使いやすい。", "It is suitable for use while riding.");
 			/* This information is not important enough */
 			trivial_info++;
 		}
 	}
 	if (have_flag(flgs, TR_STR))
 	{
-#ifdef JP
-info[i++] = "それは腕力に影響を及ぼす。";
-#else
-		info[i++] = "It affects your strength.";
-#endif
-
+		info[i++] = _("それは腕力に影響を及ぼす。", "It affects your strength.");
 	}
 	if (have_flag(flgs, TR_INT))
 	{
-#ifdef JP
-info[i++] = "それは知能に影響を及ぼす。";
-#else
-		info[i++] = "It affects your intelligence.";
-#endif
-
+		info[i++] = _("それは知能に影響を及ぼす。", "It affects your intelligence.");
 	}
 	if (have_flag(flgs, TR_WIS))
 	{
-#ifdef JP
-info[i++] = "それは賢さに影響を及ぼす。";
-#else
-		info[i++] = "It affects your wisdom.";
-#endif
-
+		info[i++] = _("それは賢さに影響を及ぼす。", "It affects your wisdom.");
 	}
 	if (have_flag(flgs, TR_DEX))
 	{
-#ifdef JP
-info[i++] = "それは器用さに影響を及ぼす。";
-#else
-		info[i++] = "It affects your dexterity.";
-#endif
-
+		info[i++] = _("それは器用さに影響を及ぼす。", "It affects your dexterity.");
 	}
 	if (have_flag(flgs, TR_CON))
 	{
-#ifdef JP
-info[i++] = "それは耐久力に影響を及ぼす。";
-#else
-		info[i++] = "It affects your constitution.";
-#endif
-
+		info[i++] = _("それは耐久力に影響を及ぼす。", "It affects your constitution.");
 	}
 	if (have_flag(flgs, TR_CHR))
 	{
-#ifdef JP
-info[i++] = "それは魅力に影響を及ぼす。";
-#else
-		info[i++] = "It affects your charisma.";
-#endif
-
+		info[i++] = _("それは魅力に影響を及ぼす。", "It affects your charisma.");
 	}
 
 	if (have_flag(flgs, TR_MAGIC_MASTERY))
 	{
-#ifdef JP
-info[i++] = "それは魔法道具使用能力に影響を及ぼす。";
-#else
-		info[i++] = "It affects your ability to use magic devices.";
-#endif
+		info[i++] = _("それは魔法道具使用能力に影響を及ぼす。", "It affects your ability to use magic devices.");
 
 	}
 	if (have_flag(flgs, TR_STEALTH))
 	{
-#ifdef JP
-info[i++] = "それは隠密行動能力に影響を及ぼす。";
-#else
-		info[i++] = "It affects your stealth.";
-#endif
-
+		info[i++] = _("それは隠密行動能力に影響を及ぼす。", "It affects your stealth.");
 	}
 	if (have_flag(flgs, TR_SEARCH))
 	{
-#ifdef JP
-info[i++] = "それは探索能力に影響を及ぼす。";
-#else
-		info[i++] = "It affects your searching.";
-#endif
-
+		info[i++] = _("それは探索能力に影響を及ぼす。", "It affects your searching.");
 	}
 	if (have_flag(flgs, TR_INFRA))
 	{
-#ifdef JP
-info[i++] = "それは赤外線視力に影響を及ぼす。";
-#else
-		info[i++] = "It affects your infravision.";
-#endif
-
+		info[i++] = _("それは赤外線視力に影響を及ぼす。", "It affects your infravision.");
 	}
 	if (have_flag(flgs, TR_TUNNEL))
 	{
-#ifdef JP
-info[i++] = "それは採掘能力に影響を及ぼす。";
-#else
-		info[i++] = "It affects your ability to tunnel.";
-#endif
-
+		info[i++] = _("それは採掘能力に影響を及ぼす。", "It affects your ability to tunnel.");
 	}
 	if (have_flag(flgs, TR_SPEED))
 	{
-#ifdef JP
-info[i++] = "それはスピードに影響を及ぼす。";
-#else
-		info[i++] = "It affects your speed.";
-#endif
-
+		info[i++] = _("それはスピードに影響を及ぼす。", "It affects your speed.");
 	}
 	if (have_flag(flgs, TR_BLOWS))
 	{
-#ifdef JP
-info[i++] = "それは打撃回数に影響を及ぼす。";
-#else
-		info[i++] = "It affects your attack speed.";
-#endif
-
+		info[i++] = _("それは打撃回数に影響を及ぼす。", "It affects your attack speed.");
 	}
 
 	if (have_flag(flgs, TR_BRAND_ACID))
 	{
-#ifdef JP
-info[i++] = "それは酸によって大きなダメージを与える。";
-#else
-		info[i++] = "It does extra damage from acid.";
-#endif
-
+		info[i++] = _("それは酸によって大きなダメージを与える。", "It does extra damage from acid.");
 	}
 	if (have_flag(flgs, TR_BRAND_ELEC))
 	{
-#ifdef JP
-info[i++] = "それは電撃によって大きなダメージを与える。";
-#else
-		info[i++] = "It does extra damage from electricity.";
-#endif
-
+		info[i++] = _("それは電撃によって大きなダメージを与える。", "It does extra damage from electricity.");
 	}
 	if (have_flag(flgs, TR_BRAND_FIRE))
 	{
-#ifdef JP
-info[i++] = "それは火炎によって大きなダメージを与える。";
-#else
-		info[i++] = "It does extra damage from fire.";
-#endif
-
+		info[i++] = _("それは火炎によって大きなダメージを与える。", "It does extra damage from fire.");
 	}
 	if (have_flag(flgs, TR_BRAND_COLD))
 	{
-#ifdef JP
-info[i++] = "それは冷気によって大きなダメージを与える。";
-#else
-		info[i++] = "It does extra damage from frost.";
-#endif
-
+		info[i++] = _("それは冷気によって大きなダメージを与える。", "It does extra damage from frost.");
 	}
 
 	if (have_flag(flgs, TR_BRAND_POIS))
 	{
-#ifdef JP
-info[i++] = "それは敵を毒する。";
-#else
-		info[i++] = "It poisons your foes.";
-#endif
-
+		info[i++] = _("それは敵を毒する。", "It poisons your foes.");
 	}
 
 	if (have_flag(flgs, TR_CHAOTIC))
 	{
-#ifdef JP
-info[i++] = "それはカオス的な効果を及ぼす。";
-#else
-		info[i++] = "It produces chaotic effects.";
-#endif
-
+		info[i++] = _("それはカオス的な効果を及ぼす。", "It produces chaotic effects.");
 	}
 
 	if (have_flag(flgs, TR_VAMPIRIC))
 	{
-#ifdef JP
-info[i++] = "それは敵から生命力を吸収する。";
-#else
-		info[i++] = "It drains life from your foes.";
-#endif
-
+		info[i++] = _("それは敵から生命力を吸収する。", "It drains life from your foes.");
 	}
 
 	if (have_flag(flgs, TR_IMPACT))
 	{
-#ifdef JP
-info[i++] = "それは地震を起こすことができる。";
-#else
-		info[i++] = "It can cause earthquakes.";
-#endif
-
+		info[i++] = _("それは地震を起こすことができる。", "It can cause earthquakes.");
 	}
 
 	if (have_flag(flgs, TR_VORPAL))
 	{
-#ifdef JP
-info[i++] = "それは非常に切れ味が鋭く敵を切断することができる。";
-#else
-		info[i++] = "It is very sharp and can cut your foes.";
-#endif
-
+		info[i++] = _("それは非常に切れ味が鋭く敵を切断することができる。", "It is very sharp and can cut your foes.");
 	}
 
 	if (have_flag(flgs, TR_KILL_DRAGON))
 	{
-#ifdef JP
-info[i++] = "それはドラゴンにとっての天敵である。";
-#else
-		info[i++] = "It is a great bane of dragons.";
-#endif
-
+		info[i++] = _("それはドラゴンにとっての天敵である。", "It is a great bane of dragons.");
 	}
 	else if (have_flag(flgs, TR_SLAY_DRAGON))
 	{
-#ifdef JP
-info[i++] = "それはドラゴンに対して特に恐るべき力を発揮する。";
-#else
-		info[i++] = "It is especially deadly against dragons.";
-#endif
-
+		info[i++] = _("それはドラゴンに対して特に恐るべき力を発揮する。", "It is especially deadly against dragons.");
 	}
 
 	if (have_flag(flgs, TR_KILL_ORC))
 	{
-#ifdef JP
-info[i++] = "それはオークにとっての天敵である。";
-#else
-		info[i++] = "It is a great bane of orcs.";
-#endif
-
+		info[i++] = _("それはオークにとっての天敵である。", "It is a great bane of orcs.");
 	}
 	if (have_flag(flgs, TR_SLAY_ORC))
 	{
-#ifdef JP
-info[i++] = "それはオークに対して特に恐るべき力を発揮する。";
-#else
-		info[i++] = "It is especially deadly against orcs.";
-#endif
-
+		info[i++] = _("それはオークに対して特に恐るべき力を発揮する。", "It is especially deadly against orcs.");
 	}
 
 	if (have_flag(flgs, TR_KILL_TROLL))
 	{
-#ifdef JP
-info[i++] = "それはトロルにとっての天敵である。";
-#else
-		info[i++] = "It is a great bane of trolls.";
-#endif
-
+		info[i++] = _("それはトロルにとっての天敵である。", "It is a great bane of trolls.");
 	}
 	if (have_flag(flgs, TR_SLAY_TROLL))
 	{
-#ifdef JP
-info[i++] = "それはトロルに対して特に恐るべき力を発揮する。";
-#else
-		info[i++] = "It is especially deadly against trolls.";
-#endif
-
+		info[i++] = _("それはトロルに対して特に恐るべき力を発揮する。", "It is especially deadly against trolls.");
 	}
 
 	if (have_flag(flgs, TR_KILL_GIANT))
 	{
-#ifdef JP
-info[i++] = "それは巨人にとっての天敵である。";
-#else
-		info[i++] = "It is a great bane of giants.";
-#endif
+		info[i++] = _("それは巨人にとっての天敵である。", "It is a great bane of giants.");
 	}
 	else if (have_flag(flgs, TR_SLAY_GIANT))
 	{
-#ifdef JP
-info[i++] = "それはジャイアントに対して特に恐るべき力を発揮する。";
-#else
-		info[i++] = "It is especially deadly against giants.";
-#endif
-
+		info[i++] = _("それはジャイアントに対して特に恐るべき力を発揮する。", "It is especially deadly against giants.");
 	}
 
 	if (have_flag(flgs, TR_KILL_DEMON))
 	{
-#ifdef JP
-info[i++] = "それはデーモンにとっての天敵である。";
-#else
-		info[i++] = "It is a great bane of demons.";
-#endif
-
+		info[i++] = _("それはデーモンにとっての天敵である。", "It is a great bane of demons.");
 	}
 	if (have_flag(flgs, TR_SLAY_DEMON))
 	{
-#ifdef JP
-info[i++] = "それはデーモンに対して聖なる力を発揮する。";
-#else
-		info[i++] = "It strikes at demons with holy wrath.";
-#endif
-
+		info[i++] = _("それはデーモンに対して聖なる力を発揮する。", "It strikes at demons with holy wrath.");
 	}
 
 	if (have_flag(flgs, TR_KILL_UNDEAD))
 	{
-#ifdef JP
-info[i++] = "それはアンデッドにとっての天敵である。";
-#else
-		info[i++] = "It is a great bane of undead.";
-#endif
-
+		info[i++] = _("それはアンデッドにとっての天敵である。", "It is a great bane of undead.");
 	}
 	if (have_flag(flgs, TR_SLAY_UNDEAD))
 	{
-#ifdef JP
-info[i++] = "それはアンデッドに対して聖なる力を発揮する。";
-#else
-		info[i++] = "It strikes at undead with holy wrath.";
-#endif
-
+		info[i++] = _("それはアンデッドに対して聖なる力を発揮する。", "It strikes at undead with holy wrath.");
 	}
 
 	if (have_flag(flgs, TR_KILL_EVIL))
 	{
-#ifdef JP
-info[i++] = "それは邪悪なる存在にとっての天敵である。";
-#else
-		info[i++] = "It is a great bane of evil monsters.";
-#endif
-
+		info[i++] = _("それは邪悪なる存在にとっての天敵である。", "It is a great bane of evil monsters.");
 	}
 	if (have_flag(flgs, TR_SLAY_EVIL))
 	{
-#ifdef JP
-info[i++] = "それは邪悪なる存在に対して聖なる力で攻撃する。";
-#else
-		info[i++] = "It fights against evil with holy fury.";
-#endif
-
+		info[i++] = _("それは邪悪なる存在に対して聖なる力で攻撃する。", "It fights against evil with holy fury.");
 	}
 
 	if (have_flag(flgs, TR_KILL_ANIMAL))
 	{
-#ifdef JP
-info[i++] = "それは自然界の動物にとっての天敵である。";
-#else
-		info[i++] = "It is a great bane of natural creatures.";
-#endif
-
+		info[i++] = _("それは自然界の動物にとっての天敵である。", "It is a great bane of natural creatures.");
 	}
 	if (have_flag(flgs, TR_SLAY_ANIMAL))
 	{
-#ifdef JP
-info[i++] = "それは自然界の動物に対して特に恐るべき力を発揮する。";
-#else
-		info[i++] = "It is especially deadly against natural creatures.";
-#endif
-
+		info[i++] = _("それは自然界の動物に対して特に恐るべき力を発揮する。", "It is especially deadly against natural creatures.");
 	}
 
 	if (have_flag(flgs, TR_KILL_HUMAN))
 	{
-#ifdef JP
-info[i++] = "それは人間にとっての天敵である。";
-#else
-		info[i++] = "It is a great bane of humans.";
-#endif
-
+		info[i++] = _("それは人間にとっての天敵である。", "It is a great bane of humans.");
 	}
 	if (have_flag(flgs, TR_SLAY_HUMAN))
 	{
-#ifdef JP
-info[i++] = "それは人間に対して特に恐るべき力を発揮する。";
-#else
-		info[i++] = "It is especially deadly against humans.";
-#endif
-
+		info[i++] = _("それは人間に対して特に恐るべき力を発揮する。", "It is especially deadly against humans.");
 	}
 
 	if (have_flag(flgs, TR_FORCE_WEAPON))
 	{
-#ifdef JP
-info[i++] = "それは使用者の魔力を使って攻撃する。";
-#else
-		info[i++] = "It powerfully strikes at a monster using your mana.";
-#endif
-
+		info[i++] = _("それは使用者の魔力を使って攻撃する。", "It powerfully strikes at a monster using your mana.");
 	}
 	if (have_flag(flgs, TR_DEC_MANA))
 	{
-#ifdef JP
-info[i++] = "それは魔力の消費を押さえる。";
-#else
-		info[i++] = "It decreases your mana consumption.";
-#endif
-
+		info[i++] = _("それは魔力の消費を押さえる。", "It decreases your mana consumption.");
 	}
 	if (have_flag(flgs, TR_SUST_STR))
 	{
-#ifdef JP
-info[i++] = "それはあなたの腕力を維持する。";
-#else
-		info[i++] = "It sustains your strength.";
-#endif
-
+		info[i++] = _("それはあなたの腕力を維持する。", "It sustains your strength.");
 	}
 	if (have_flag(flgs, TR_SUST_INT))
 	{
-#ifdef JP
-info[i++] = "それはあなたの知能を維持する。";
-#else
-		info[i++] = "It sustains your intelligence.";
-#endif
-
+		info[i++] = _("それはあなたの知能を維持する。", "It sustains your intelligence.");
 	}
 	if (have_flag(flgs, TR_SUST_WIS))
 	{
-#ifdef JP
-info[i++] = "それはあなたの賢さを維持する。";
-#else
-		info[i++] = "It sustains your wisdom.";
-#endif
-
+		info[i++] = _("それはあなたの賢さを維持する。", "It sustains your wisdom.");
 	}
 	if (have_flag(flgs, TR_SUST_DEX))
 	{
-#ifdef JP
-info[i++] = "それはあなたの器用さを維持する。";
-#else
-		info[i++] = "It sustains your dexterity.";
-#endif
-
+		info[i++] = _("それはあなたの器用さを維持する。", "It sustains your dexterity.");
 	}
 	if (have_flag(flgs, TR_SUST_CON))
 	{
-#ifdef JP
-info[i++] = "それはあなたの耐久力を維持する。";
-#else
-		info[i++] = "It sustains your constitution.";
-#endif
-
+		info[i++] = _("それはあなたの耐久力を維持する。", "It sustains your constitution.");
 	}
 	if (have_flag(flgs, TR_SUST_CHR))
 	{
-#ifdef JP
-info[i++] = "それはあなたの魅力を維持する。";
-#else
-		info[i++] = "It sustains your charisma.";
-#endif
-
+		info[i++] = _("それはあなたの魅力を維持する。", "It sustains your charisma.");
 	}
 
 	if (have_flag(flgs, TR_IM_ACID))
 	{
-#ifdef JP
-info[i++] = "それは酸に対する完全な免疫を授ける。";
-#else
-		info[i++] = "It provides immunity to acid.";
-#endif
-
+		info[i++] = _("それは酸に対する完全な免疫を授ける。", "It provides immunity to acid.");
 	}
 	if (have_flag(flgs, TR_IM_ELEC))
 	{
-#ifdef JP
-info[i++] = "それは電撃に対する完全な免疫を授ける。";
-#else
-		info[i++] = "It provides immunity to electricity.";
-#endif
-
+		info[i++] = _("それは電撃に対する完全な免疫を授ける。", "It provides immunity to electricity.");
 	}
 	if (have_flag(flgs, TR_IM_FIRE))
 	{
-#ifdef JP
-info[i++] = "それは火に対する完全な免疫を授ける。";
-#else
-		info[i++] = "It provides immunity to fire.";
-#endif
-
+		info[i++] = _("それは火に対する完全な免疫を授ける。", "It provides immunity to fire.");
 	}
 	if (have_flag(flgs, TR_IM_COLD))
 	{
-#ifdef JP
-info[i++] = "それは寒さに対する完全な免疫を授ける。";
-#else
-		info[i++] = "It provides immunity to cold.";
-#endif
-
+		info[i++] = _("それは寒さに対する完全な免疫を授ける。", "It provides immunity to cold.");
 	}
 
 	if (have_flag(flgs, TR_THROW))
 	{
-#ifdef JP
-info[i++] = "それは敵に投げて大きなダメージを与えることができる。";
-#else
-		info[i++] = "It is perfectly balanced for throwing.";
-#endif
+		info[i++] = _("それは敵に投げて大きなダメージを与えることができる。", "It is perfectly balanced for throwing.");
 	}
 
 	if (have_flag(flgs, TR_FREE_ACT))
 	{
-#ifdef JP
-info[i++] = "それは麻痺に対する完全な免疫を授ける。";
-#else
-		info[i++] = "It provides immunity to paralysis.";
-#endif
-
+		info[i++] = _("それは麻痺に対する完全な免疫を授ける。", "It provides immunity to paralysis.");
 	}
 	if (have_flag(flgs, TR_HOLD_EXP))
 	{
-#ifdef JP
-info[i++] = "それは経験値吸収に対する耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to experience draining.";
-#endif
-
+		info[i++] = _("それは経験値吸収に対する耐性を授ける。", "It provides resistance to experience draining.");
 	}
 	if (have_flag(flgs, TR_RES_FEAR))
 	{
-#ifdef JP
-info[i++] = "それは恐怖への完全な耐性を授ける。";
-#else
-		info[i++] = "It makes you completely fearless.";
-#endif
-
+		info[i++] = _("それは恐怖への完全な耐性を授ける。", "It makes you completely fearless.");
 	}
 	if (have_flag(flgs, TR_RES_ACID))
 	{
-#ifdef JP
-info[i++] = "それは酸への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to acid.";
-#endif
-
+		info[i++] = _("それは酸への耐性を授ける。", "It provides resistance to acid.");
 	}
 	if (have_flag(flgs, TR_RES_ELEC))
 	{
-#ifdef JP
-info[i++] = "それは電撃への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to electricity.";
-#endif
-
+		info[i++] = _("それは電撃への耐性を授ける。", "It provides resistance to electricity.");
 	}
 	if (have_flag(flgs, TR_RES_FIRE))
 	{
-#ifdef JP
-info[i++] = "それは火への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to fire.";
-#endif
-
+		info[i++] = _("それは火への耐性を授ける。", "It provides resistance to fire.");
 	}
 	if (have_flag(flgs, TR_RES_COLD))
 	{
-#ifdef JP
-info[i++] = "それは寒さへの耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to cold.";
-#endif
-
+		info[i++] = _("それは寒さへの耐性を授ける。", "It provides resistance to cold.");
 	}
 	if (have_flag(flgs, TR_RES_POIS))
 	{
-#ifdef JP
-info[i++] = "それは毒への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to poison.";
-#endif
-
+		info[i++] = _("それは毒への耐性を授ける。", "It provides resistance to poison.");
 	}
 
 	if (have_flag(flgs, TR_RES_LITE))
 	{
-#ifdef JP
-info[i++] = "それは閃光への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to light.";
-#endif
-
+		info[i++] = _("それは閃光への耐性を授ける。", "It provides resistance to light.");
 	}
 	if (have_flag(flgs, TR_RES_DARK))
 	{
-#ifdef JP
-info[i++] = "それは暗黒への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to dark.";
-#endif
-
+		info[i++] = _("それは暗黒への耐性を授ける。", "It provides resistance to dark.");
 	}
 
 	if (have_flag(flgs, TR_RES_BLIND))
 	{
-#ifdef JP
-info[i++] = "それは盲目への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to blindness.";
-#endif
-
+		info[i++] = _("それは盲目への耐性を授ける。", "It provides resistance to blindness.");
 	}
 	if (have_flag(flgs, TR_RES_CONF))
 	{
-#ifdef JP
-info[i++] = "それは混乱への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to confusion.";
-#endif
-
+		info[i++] = _("それは混乱への耐性を授ける。", "It provides resistance to confusion.");
 	}
 	if (have_flag(flgs, TR_RES_SOUND))
 	{
-#ifdef JP
-info[i++] = "それは轟音への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to sound.";
-#endif
-
+		info[i++] = _("それは轟音への耐性を授ける。", "It provides resistance to sound.");
 	}
 	if (have_flag(flgs, TR_RES_SHARDS))
 	{
-#ifdef JP
-info[i++] = "それは破片への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to shards.";
-#endif
-
+		info[i++] = _("それは破片への耐性を授ける。", "It provides resistance to shards.");
 	}
 
 	if (have_flag(flgs, TR_RES_NETHER))
 	{
-#ifdef JP
-info[i++] = "それは地獄への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to nether.";
-#endif
-
+		info[i++] = _("それは地獄への耐性を授ける。", "It provides resistance to nether.");
 	}
 	if (have_flag(flgs, TR_RES_NEXUS))
 	{
-#ifdef JP
-info[i++] = "それは因果混乱への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to nexus.";
-#endif
-
+		info[i++] = _("それは因果混乱への耐性を授ける。", "It provides resistance to nexus.");
 	}
 	if (have_flag(flgs, TR_RES_CHAOS))
 	{
-#ifdef JP
-info[i++] = "それはカオスへの耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to chaos.";
-#endif
-
+		info[i++] = _("それはカオスへの耐性を授ける。", "It provides resistance to chaos.");
 	}
 	if (have_flag(flgs, TR_RES_DISEN))
 	{
-#ifdef JP
-info[i++] = "それは劣化への耐性を授ける。";
-#else
-		info[i++] = "It provides resistance to disenchantment.";
-#endif
-
+		info[i++] = _("それは劣化への耐性を授ける。", "It provides resistance to disenchantment.");
 	}
 
 	if (have_flag(flgs, TR_LEVITATION))
 	{
-#ifdef JP
-info[i++] = "それは宙に浮くことを可能にする。";
-#else
-		info[i++] = "It allows you to levitate.";
-#endif
-
+		info[i++] = _("それは宙に浮くことを可能にする。", "It allows you to levitate.");
 	}
 		
 	if (have_flag(flgs, TR_SEE_INVIS))
@@ -1424,147 +976,67 @@ info[i++] = "それは宙に浮くことを可能にする。";
 	}
 	if (have_flag(flgs, TR_TELEPATHY))
 	{
-#ifdef JP
-info[i++] = "それはテレパシー能力を授ける。";
-#else
-		info[i++] = "It gives telepathic powers.";
-#endif
-
+		info[i++] = _("それはテレパシー能力を授ける。", "It gives telepathic powers.");
 	}
 	if (have_flag(flgs, TR_ESP_ANIMAL))
 	{
-#ifdef JP
-info[i++] = "それは自然界の生物を感知する。";
-#else
-		info[i++] = "It senses natural creatures.";
-#endif
-
+		info[i++] = _("それは自然界の生物を感知する。", "It senses natural creatures.");
 	}
 	if (have_flag(flgs, TR_ESP_UNDEAD))
 	{
-#ifdef JP
-info[i++] = "それはアンデッドを感知する。";
-#else
-		info[i++] = "It senses undead.";
-#endif
-
+		info[i++] = _("それはアンデッドを感知する。", "It senses undead.");
 	}
 	if (have_flag(flgs, TR_ESP_DEMON))
 	{
-#ifdef JP
-info[i++] = "それは悪魔を感知する。";
-#else
-		info[i++] = "It senses demons.";
-#endif
-
+		info[i++] = _("それは悪魔を感知する。", "It senses demons.");
 	}
 	if (have_flag(flgs, TR_ESP_ORC))
 	{
-#ifdef JP
-info[i++] = "それはオークを感知する。";
-#else
-		info[i++] = "It senses orcs.";
-#endif
-
+		info[i++] = _("それはオークを感知する。", "It senses orcs.");
 	}
 	if (have_flag(flgs, TR_ESP_TROLL))
 	{
-#ifdef JP
-info[i++] = "それはトロルを感知する。";
-#else
-		info[i++] = "It senses trolls.";
-#endif
-
+		info[i++] = _("それはトロルを感知する。", "It senses trolls.");
 	}
 	if (have_flag(flgs, TR_ESP_GIANT))
 	{
-#ifdef JP
-info[i++] = "それは巨人を感知する。";
-#else
-		info[i++] = "It senses giants.";
-#endif
-
+		info[i++] = _("それは巨人を感知する。", "It senses giants.");
 	}
 	if (have_flag(flgs, TR_ESP_DRAGON))
 	{
-#ifdef JP
-info[i++] = "それはドラゴンを感知する。";
-#else
-		info[i++] = "It senses dragons.";
-#endif
-
+		info[i++] = _("それはドラゴンを感知する。", "It senses dragons.");
 	}
 	if (have_flag(flgs, TR_ESP_HUMAN))
 	{
-#ifdef JP
-info[i++] = "それは人間を感知する。";
-#else
-		info[i++] = "It senses humans.";
-#endif
-
+		info[i++] = _("それは人間を感知する。", "It senses humans.");
 	}
 	if (have_flag(flgs, TR_ESP_EVIL))
 	{
-#ifdef JP
-info[i++] = "それは邪悪な存在を感知する。";
-#else
-		info[i++] = "It senses evil creatures.";
-#endif
-
+		info[i++] = _("それは邪悪な存在を感知する。", "It senses evil creatures.");
 	}
 	if (have_flag(flgs, TR_ESP_GOOD))
 	{
-#ifdef JP
-info[i++] = "それは善良な存在を感知する。";
-#else
-		info[i++] = "It senses good creatures.";
-#endif
-
+		info[i++] = _("それは善良な存在を感知する。", "It senses good creatures.");
 	}
 	if (have_flag(flgs, TR_ESP_NONLIVING))
 	{
-#ifdef JP
-info[i++] = "それは活動する無生物体を感知する。";
-#else
-		info[i++] = "It senses non-living creatures.";
-#endif
-
+		info[i++] = _("それは活動する無生物体を感知する。", "It senses non-living creatures.");
 	}
 	if (have_flag(flgs, TR_ESP_UNIQUE))
 	{
-#ifdef JP
-info[i++] = "それは特別な強敵を感知する。";
-#else
-		info[i++] = "It senses unique monsters.";
-#endif
-
+		info[i++] = _("それは特別な強敵を感知する。", "It senses unique monsters.");
 	}
 	if (have_flag(flgs, TR_SLOW_DIGEST))
 	{
-#ifdef JP
-info[i++] = "それはあなたの新陳代謝を遅くする。";
-#else
-		info[i++] = "It slows your metabolism.";
-#endif
-
+		info[i++] = _("それはあなたの新陳代謝を遅くする。", "It slows your metabolism.");
 	}
 	if (have_flag(flgs, TR_REGEN))
 	{
-#ifdef JP
-info[i++] = "それは体力回復力を強化する。";
-#else
-		info[i++] = "It speeds your regenerative powers.";
-#endif
-
+		info[i++] = _("それは体力回復力を強化する。", "It speeds your regenerative powers.");
 	}
 	if (have_flag(flgs, TR_WARNING))
 	{
-#ifdef JP
-info[i++] = "それは危険に対して警告を発する。";
-#else
-		info[i++] = "It warns you of danger";
-#endif
-
+		info[i++] = _("それは危険に対して警告を発する。", "It warns you of danger");
 	}
 	if (have_flag(flgs, TR_REFLECT))
 	{
@@ -1580,87 +1052,43 @@ info[i++] = "それは危険に対して警告を発する。";
 	}
 	if (have_flag(flgs, TR_SH_COLD))
 	{
-#ifdef JP
-info[i++] = "それは冷気のバリアを張る。";
-#else
-		info[i++] = "It produces a sheath of coldness.";
-#endif
-
+		info[i++] = _("それは冷気のバリアを張る。", "It produces a sheath of coldness.");
 	}
 	if (have_flag(flgs, TR_NO_MAGIC))
 	{
-#ifdef JP
-info[i++] = "それは反魔法バリアを張る。";
-#else
-		info[i++] = "It produces an anti-magic shell.";
-#endif
-
+		info[i++] = _("それは反魔法バリアを張る。", "It produces an anti-magic shell.");
 	}
 	if (have_flag(flgs, TR_NO_TELE))
 	{
-#ifdef JP
-info[i++] = "それはテレポートを邪魔する。";
-#else
-		info[i++] = "It prevents teleportation.";
-#endif
-
+		info[i++] = _("それはテレポートを邪魔する。", "It prevents teleportation.");
 	}
 	if (have_flag(flgs, TR_XTRA_MIGHT))
 	{
-#ifdef JP
-info[i++] = "それは矢／ボルト／弾をより強力に発射することができる。";
-#else
-		info[i++] = "It fires missiles with extra might.";
-#endif
-
+		info[i++] = _("それは矢／ボルト／弾をより強力に発射することができる。", "It fires missiles with extra might.");
 	}
 	if (have_flag(flgs, TR_XTRA_SHOTS))
 	{
-#ifdef JP
-info[i++] = "それは矢／ボルト／弾を非常に早く発射することができる。";
-#else
-		info[i++] = "It fires missiles excessively fast.";
-#endif
-
+		info[i++] = _("それは矢／ボルト／弾を非常に早く発射することができる。", "It fires missiles excessively fast.");
 	}
 
 	if (have_flag(flgs, TR_BLESSED))
 	{
-#ifdef JP
-info[i++] = "それは神に祝福されている。";
-#else
-		info[i++] = "It has been blessed by the gods.";
-#endif
-
+		info[i++] = _("それは神に祝福されている。", "It has been blessed by the gods.");
 	}
 
 	if (object_is_cursed(o_ptr))
 	{
 		if (o_ptr->curse_flags & TRC_PERMA_CURSE)
 		{
-#ifdef JP
-info[i++] = "それは永遠の呪いがかけられている。";
-#else
-			info[i++] = "It is permanently cursed.";
-#endif
-
+			info[i++] = _("それは永遠の呪いがかけられている。", "It is permanently cursed.");
 		}
 		else if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 		{
-#ifdef JP
-info[i++] = "それは強力な呪いがかけられている。";
-#else
-			info[i++] = "It is heavily cursed.";
-#endif
-
+			info[i++] = _("それは強力な呪いがかけられている。", "It is heavily cursed.");
 		}
 		else
 		{
-#ifdef JP
-info[i++] = "それは呪われている。";
-#else
-			info[i++] = "It is cursed.";
-#endif
+			info[i++] = _("それは呪われている。", "It is cursed.");
 
 			/*
 			 * It's a trivial infomation since there is
@@ -1752,18 +1180,10 @@ info[i++] = "それは呪われている。";
 			switch (o_ptr->sval)
 			{
 			case SV_RING_LORDLY:
-#ifdef JP
-				info[i++] = "それは幾つかのランダムな耐性を授ける。";
-#else
-				info[i++] = "It provides some random resistances.";
-#endif
+				info[i++] = _("それは幾つかのランダムな耐性を授ける。", "It provides some random resistances.");
 				break;
 			case SV_RING_WARNING:
-#ifdef JP
-				info[i++] = "それはひとつの低級なESPを授ける事がある。";
-#else
-				info[i++] = "It may provide a low rank ESP.";
-#endif
+				info[i++] = _("それはひとつの低級なESPを授ける事がある。", "It may provide a low rank ESP.");
 				break;
 			}
 			break;
@@ -1772,23 +1192,11 @@ info[i++] = "それは呪われている。";
 			switch (o_ptr->sval)
 			{
 			case SV_AMULET_RESISTANCE:
-#ifdef JP
-				info[i++] = "それは毒への耐性を授ける事がある。";
-#else
-				info[i++] = "It may provides resistance to poison.";
-#endif
-#ifdef JP
-				info[i++] = "それはランダムな耐性を授ける事がある。";
-#else
-				info[i++] = "It may provide a random resistances.";
-#endif
+				info[i++] = _("それは毒への耐性を授ける事がある。", "It may provides resistance to poison.");
+				info[i++] = _("それはランダムな耐性を授ける事がある。", "It may provide a random resistances.");
 				break;
 			case SV_AMULET_THE_MAGI:
-#ifdef JP
-				info[i++] = "それは最大で３つまでの低級なESPを授ける。";
-#else
-				info[i++] = "It provides up to three low rank ESPs.";
-#endif
+				info[i++] = _("それは最大で３つまでの低級なESPを授ける。", "It provides up to three low rank ESPs.");
 				break;
 			}
 			break;
@@ -1800,45 +1208,25 @@ info[i++] = "それは呪われている。";
 	    have_flag(flgs, TR_IGNORE_FIRE) &&
 	    have_flag(flgs, TR_IGNORE_COLD))
 	{
-#ifdef JP
-		info[i++] = "それは酸・電撃・火炎・冷気では傷つかない。";
-#else
-		info[i++] = "It cannot be harmed by the elements.";
-#endif
+		info[i++] = _("それは酸・電撃・火炎・冷気では傷つかない。", "It cannot be harmed by the elements.");
 	}
 	else
 	{
 		if (have_flag(flgs, TR_IGNORE_ACID))
 		{
-#ifdef JP
-			info[i++] = "それは酸では傷つかない。";
-#else
-			info[i++] = "It cannot be harmed by acid.";
-#endif
+			info[i++] = _("それは酸では傷つかない。", "It cannot be harmed by acid.");
 		}
 		if (have_flag(flgs, TR_IGNORE_ELEC))
 		{
-#ifdef JP
-			info[i++] = "それは電撃では傷つかない。";
-#else
-			info[i++] = "It cannot be harmed by electricity.";
-#endif
+			info[i++] = _("それは電撃では傷つかない。", "It cannot be harmed by electricity.");
 		}
 		if (have_flag(flgs, TR_IGNORE_FIRE))
 		{
-#ifdef JP
-			info[i++] = "それは火炎では傷つかない。";
-#else
-			info[i++] = "It cannot be harmed by fire.";
-#endif
+			info[i++] = _("それは火炎では傷つかない。", "It cannot be harmed by fire.");
 		}
 		if (have_flag(flgs, TR_IGNORE_COLD))
 		{
-#ifdef JP
-			info[i++] = "それは冷気では傷つかない。";
-#else
-			info[i++] = "It cannot be harmed by cold.";
-#endif
+			info[i++] = _("それは冷気では傷つかない。", "It cannot be harmed by cold.");
 		}
 	}
 
@@ -1874,11 +1262,9 @@ info[i++] = "それは呪われている。";
 		prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
 	}
 	else
-#ifdef JP
-prt("     アイテムの能力:", 1, 15);
-#else
-	prt("     Item Attributes:", 1, 15);
-#endif
+	{
+		prt(_("     アイテムの能力:", "     Item Attributes:"), 1, 15);
+	}
 
 	/* We will print on top of the map (column 13) */
 	for (k = 2, j = 0; j < i; j++)
@@ -1889,22 +1275,14 @@ prt("     アイテムの能力:", 1, 15);
 		/* Every 20 entries (lines 2 to 21), start over */
 		if ((k == hgt - 2) && (j+1 < i))
 		{
-#ifdef JP
-prt("-- 続く --", k, 15);
-#else
-			prt("-- more --", k, 15);
-#endif
+			prt(_("-- 続く --", "-- more --"), k, 15);
 			inkey();
 			for (; k > 2; k--) prt("", k, 15);
 		}
 	}
 
 	/* Wait for it */
-#ifdef JP
-prt("[何かキーを押すとゲームに戻ります]", k, 15);
-#else
-	prt("[Press any key to continue]", k, 15);
-#endif
+	prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 15);
 
 	inkey();
 
@@ -2129,53 +1507,14 @@ cptr mention_use(int i)
 		case INVEN_LEFT:  p = (left_hander ? "On right hand" : "On left hand"); break;
 #endif
 
-#ifdef JP
-		case INVEN_NECK:  p = "  首"; break;
-#else
-		case INVEN_NECK:  p = "Around neck"; break;
-#endif
-
-#ifdef JP
-		case INVEN_LITE:  p = " 光源"; break;
-#else
-		case INVEN_LITE:  p = "Light source"; break;
-#endif
-
-#ifdef JP
-		case INVEN_BODY:  p = "  体"; break;
-#else
-		case INVEN_BODY:  p = "On body"; break;
-#endif
-
-#ifdef JP
-		case INVEN_OUTER: p = "体の上"; break;
-#else
-		case INVEN_OUTER: p = "About body"; break;
-#endif
-
-#ifdef JP
-		case INVEN_HEAD:  p = "  頭"; break;
-#else
-		case INVEN_HEAD:  p = "On head"; break;
-#endif
-
-#ifdef JP
-		case INVEN_HANDS: p = "  手"; break;
-#else
-		case INVEN_HANDS: p = "On hands"; break;
-#endif
-
-#ifdef JP
-		case INVEN_FEET:  p = "  足"; break;
-#else
-		case INVEN_FEET:  p = "On feet"; break;
-#endif
-
-#ifdef JP
-		default:          p = "ザック"; break;
-#else
-		default:          p = "In pack"; break;
-#endif
+		case INVEN_NECK:  p = _("  首", "Around neck"); break;
+		case INVEN_LITE:  p = _(" 光源", "Light source"); break;
+		case INVEN_BODY:  p = _("  体", "On body"); break;
+		case INVEN_OUTER: p = _("体の上", "About body"); break;
+		case INVEN_HEAD:  p = _("  頭", "On head"); break;
+		case INVEN_HANDS: p = _("  手", "On hands"); break;
+		case INVEN_FEET:  p = _("  足", "On feet"); break;
+		default:          p = _("ザック", "In pack"); break;
 	}
 
 	/* Return the result */
@@ -2227,53 +1566,14 @@ cptr describe_use(int i)
 		case INVEN_LEFT:  p = (left_hander ? "wearing on your right hand" : "wearing on your left hand"); break;
 #endif
 
-#ifdef JP
-		case INVEN_NECK:  p = "首にかけている"; break;
-#else
-		case INVEN_NECK:  p = "wearing around your neck"; break;
-#endif
-
-#ifdef JP
-		case INVEN_LITE:  p = "光源にしている"; break;
-#else
-		case INVEN_LITE:  p = "using to light the way"; break;
-#endif
-
-#ifdef JP
-		case INVEN_BODY:  p = "体に着ている"; break;
-#else
-		case INVEN_BODY:  p = "wearing on your body"; break;
-#endif
-
-#ifdef JP
-		case INVEN_OUTER: p = "身にまとっている"; break;
-#else
-		case INVEN_OUTER: p = "wearing on your back"; break;
-#endif
-
-#ifdef JP
-		case INVEN_HEAD:  p = "頭にかぶっている"; break;
-#else
-		case INVEN_HEAD:  p = "wearing on your head"; break;
-#endif
-
-#ifdef JP
-		case INVEN_HANDS: p = "手につけている"; break;
-#else
-		case INVEN_HANDS: p = "wearing on your hands"; break;
-#endif
-
-#ifdef JP
-		case INVEN_FEET:  p = "足にはいている"; break;
-#else
-		case INVEN_FEET:  p = "wearing on your feet"; break;
-#endif
-
-#ifdef JP
-		default:          p = "ザックに入っている"; break;
-#else
-		default:          p = "carrying in your pack"; break;
-#endif
+		case INVEN_NECK:  p = _("首にかけている", "wearing around your neck"); break;
+		case INVEN_LITE:  p = _("光源にしている", "using to light the way"); break;
+		case INVEN_BODY:  p = _("体に着ている", "wearing on your body"); break;
+		case INVEN_OUTER: p = _("身にまとっている", "wearing on your back"); break;
+		case INVEN_HEAD:  p = _("頭にかぶっている", "wearing on your head"); break;
+		case INVEN_HANDS: p = _("手につけている", "wearing on your hands"); break;
+		case INVEN_FEET:  p = _("足にはいている", "wearing on your feet"); break;
+		default:          p = _("ザックに入っている", "carrying in your pack"); break;
 	}
 
 	/* Return the result */
@@ -2487,11 +1787,7 @@ void display_equip(void)
 		/* Obtain an item description */
 		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
 		{
-#ifdef JP
-			strcpy(o_name, "(武器を両手持ち)");
-#else
-			strcpy(o_name, "(wielding with two-hands)");
-#endif
+			strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 			attr = TERM_WHITE;
 		}
 		else
@@ -2945,11 +2241,7 @@ int show_inven(int target_item)
 		{
 			if (j == (target_item-1))
 			{
-#ifdef JP
-				strcpy(tmp_val, "》");
-#else
-				strcpy(tmp_val, "> ");
-#endif
+				strcpy(tmp_val, _("》", "> "));
 				target_item_label = i;
 			}
 			else strcpy(tmp_val, "  ");
@@ -3132,11 +2424,7 @@ int show_equip(int target_item)
 		{
 			if (j == (target_item-1))
 			{
-#ifdef JP
-				strcpy(tmp_val, "》");
-#else
-				strcpy(tmp_val, "> ");
-#endif
+				strcpy(tmp_val, _("》", "> "));
 				target_item_label = i;
 			}
 			else strcpy(tmp_val, "  ");
@@ -3177,20 +2465,12 @@ int show_equip(int target_item)
 		if (show_labels)
 		{
 			/* Mention the use */
-#ifdef JP
-			(void)sprintf(tmp_val, "%-7s: ", mention_use(i));
-#else
-			(void)sprintf(tmp_val, "%-14s: ", mention_use(i));
-#endif
+			(void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(i));
 
 			put_str(tmp_val, j+1, cur_col);
 
 			/* Display the entry itself */
-#ifdef JP
-			c_put_str(out_color[j], out_desc[j], j+1, cur_col + 9);
-#else
-			c_put_str(out_color[j], out_desc[j], j+1, cur_col + 16);
-#endif
+			c_put_str(out_color[j], out_desc[j], j+1, _(cur_col + 9, cur_col + 16));
 		}
 
 		/* No labels */
@@ -3293,12 +2573,7 @@ static bool verify(cptr prompt, int item)
 	object_desc(o_name, o_ptr, 0);
 
 	/* Prompt */
-#ifdef JP
-(void)sprintf(out_val, "%s%sですか? ", prompt, o_name);
-#else
-	(void)sprintf(out_val, "%s %s? ", prompt, o_name);
-#endif
-
+	(void)sprintf(out_val, _("%s%sですか? ", "%s %s? "), prompt, o_name);
 
 	/* Query */
 	return (get_check(out_val));
@@ -3345,12 +2620,7 @@ static bool get_item_allow(int item)
 		if ((s[1] == command_cmd) || (s[1] == '*'))
 		{
 			/* Verify the choice */
-#ifdef JP
-if (!verify("本当に", item)) return (FALSE);
-#else
-			if (!verify("Really try", item)) return (FALSE);
-#endif
-
+			if (!verify(_("本当に", "Really try"), item)) return (FALSE);
 		}
 
 		/* Find another '!' */
@@ -3779,21 +3049,13 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 		if (!command_wrk)
 		{
 			/* Begin the prompt */
-#ifdef JP
-			sprintf(out_val, "持ち物:");
-#else
-			sprintf(out_val, "Inven:");
-#endif
+			sprintf(out_val, _("持ち物:", "Inven:"));
 
 			/* Some legal items */
 			if ((i1 <= i2) && !use_menu)
 			{
 				/* Build the prompt */
-#ifdef JP
-				sprintf(tmp_val, "%c-%c,'(',')',",
-#else
-				sprintf(tmp_val, " %c-%c,'(',')',",
-#endif
+				sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"),
 					index_to_label(i1), index_to_label(i2));
 
 				/* Append */
@@ -3801,11 +3063,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 			}
 
 			/* Indicate ability to "view" */
-#ifdef JP
-			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
-#else
-			if (!command_see && !use_menu) strcat(out_val, " * to see,");
-#endif
+			if (!command_see && !use_menu) strcat(out_val, _(" '*'一覧,", " * to see,"));
 
 			/* Append */
 #ifdef JP
@@ -3819,21 +3077,13 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 		else
 		{
 			/* Begin the prompt */
-#ifdef JP
-			sprintf(out_val, "装備品:");
-#else
-			sprintf(out_val, "Equip:");
-#endif
+			sprintf(out_val, _("装備品:", "Equip:"));
 
 			/* Some legal items */
 			if ((e1 <= e2) && !use_menu)
 			{
 				/* Build the prompt */
-#ifdef JP
-				sprintf(tmp_val, "%c-%c,'(',')',",
-#else
-				sprintf(tmp_val, " %c-%c,'(',')',",
-#endif
+				sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"),
 					index_to_label(e1), index_to_label(e2));
 
 				/* Append */
@@ -3841,11 +3091,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 			}
 
 			/* Indicate ability to "view" */
-#ifdef JP
-			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
-#else
-			if (!command_see) strcat(out_val, " * to see,");
-#endif
+			if (!command_see && !use_menu) strcat(out_val, _(" '*'一覧,", " * to see,"));
 
 			/* Append */
 #ifdef JP
@@ -3856,13 +3102,8 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 		}
 
 		/* Indicate legality of the "floor" item */
-#ifdef JP
-		if (allow_floor) strcat(out_val, " '-'床上,");
-		if (select_the_force) strcat(out_val, " 'w'練気術,");
-#else
-		if (allow_floor) strcat(out_val, " - for floor,");
-		if (select_the_force) strcat(out_val, " w for the Force,");
-#endif
+		if (allow_floor) strcat(out_val, _(" '-'床上,", " - for floor,"));
+		if (select_the_force) strcat(out_val, _(" 'w'練気術,", " w for the Force,"));
 
 		/* Finish the prompt */
 		strcat(out_val, " ESC");
@@ -4071,12 +3312,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 						k = 0 - this_o_idx;
 
 						/* Verify the item (if required) */
-#ifdef JP
-if (other_query_flag && !verify("本当に", k)) continue;
-#else
-						if (other_query_flag && !verify("Try", k)) continue;
-#endif
-
+						if (other_query_flag && !verify(_("本当に", "Try"), k)) continue;
 
 						/* Allow player to "refuse" certain actions */
 						if (!get_item_allow(k)) continue;
@@ -4253,12 +3489,7 @@ if (other_query_flag && !verify("本当に", k)) continue;
 				}
 
 				/* Verify the item */
-#ifdef JP
-if (ver && !verify("本当に", k))
-#else
-				if (ver && !verify("Try", k))
-#endif
-
+				if (ver && !verify(_("本当に", "Try"), k))
 				{
 					done = TRUE;
 					break;
@@ -4492,11 +3723,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 		{
 			if (j == (target_item-1))
 			{
-#ifdef JP
-				strcpy(tmp_val, "》");
-#else
-				strcpy(tmp_val, "> ");
-#endif
+				strcpy(tmp_val, _("》", "> "));
 				target_item_label = i;
 			}
 			else strcpy(tmp_val, "   ");
@@ -4886,20 +4113,12 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 		if (command_wrk == (USE_INVEN))
 		{
 			/* Begin the prompt */
-#ifdef JP
-			sprintf(out_val, "持ち物:");
-#else
-			sprintf(out_val, "Inven:");
-#endif
+			sprintf(out_val, _("持ち物:", "Inven:"));
 
 			if (!use_menu)
 			{
 				/* Build the prompt */
-#ifdef JP
-				sprintf(tmp_val, "%c-%c,'(',')',",
-#else
-				sprintf(tmp_val, " %c-%c,'(',')',",
-#endif
+				sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"),
 					index_to_label(i1), index_to_label(i2));
 
 				/* Append */
@@ -4907,11 +4126,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			}
 
 			/* Indicate ability to "view" */
-#ifdef JP
-			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
-#else
-			if (!command_see && !use_menu) strcat(out_val, " * to see,");
-#endif
+			if (!command_see && !use_menu) strcat(out_val, _(" '*'一覧,", " * to see,"));
 
 			/* Append */
 			if (allow_equip)
@@ -4958,20 +4173,12 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 		else if (command_wrk == (USE_EQUIP))
 		{
 			/* Begin the prompt */
-#ifdef JP
-			sprintf(out_val, "装備品:");
-#else
-			sprintf(out_val, "Equip:");
-#endif
+			sprintf(out_val, _("装備品:", "Equip:"));
 
 			if (!use_menu)
 			{
 				/* Build the prompt */
-#ifdef JP
-				sprintf(tmp_val, "%c-%c,'(',')',",
-#else
-				sprintf(tmp_val, " %c-%c,'(',')',",
-#endif
+				sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"),
 					index_to_label(e1), index_to_label(e2));
 
 				/* Append */
@@ -4979,11 +4186,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			}
 
 			/* Indicate ability to "view" */
-#ifdef JP
-			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
-#else
-			if (!command_see && !use_menu) strcat(out_val, " * to see,");
-#endif
+			if (!command_see && !use_menu) strcat(out_val, _(" '*'一覧,", " * to see,"));
 
 			/* Append */
 			if (allow_inven)
@@ -5030,94 +4233,54 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 		else if (command_wrk == (USE_FLOOR))
 		{
 			/* Begin the prompt */
-#ifdef JP
-			sprintf(out_val, "床上:");
-#else
-			sprintf(out_val, "Floor:");
-#endif
+			sprintf(out_val, _("床上:", "Floor:"));
 
 			if (!use_menu)
 			{
 				/* Build the prompt */
-#ifdef JP
-				sprintf(tmp_val, "%c-%c,'(',')',", n1, n2);
-#else
-				sprintf(tmp_val, " %c-%c,'(',')',", n1, n2);
-#endif
+				sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), n1, n2);
 
 				/* Append */
 				strcat(out_val, tmp_val);
 			}
 
 			/* Indicate ability to "view" */
-#ifdef JP
-			if (!command_see && !use_menu) strcat(out_val, " '*'一覧,");
-#else
-			if (!command_see && !use_menu) strcat(out_val, " * to see,");
-#endif
+			if (!command_see && !use_menu) strcat(out_val, _(" '*'一覧,", " * to see,"));
 
 			if (use_menu)
 			{
 				if (allow_inven && allow_equip)
 				{
-#ifdef JP
-					strcat(out_val, " '4' 装備品, '6' 持ち物,");
-#else
-					strcat(out_val, " 4 for Equip, 6 for Inven,");
-#endif
+					strcat(out_val, _(" '4' 装備品, '6' 持ち物,", " 4 for Equip, 6 for Inven,"));
 				}
 				else if (allow_inven)
 				{
-#ifdef JP
-					strcat(out_val, " '4'or'6' 持ち物,");
-#else
-					strcat(out_val, " 4 or 6 for Inven,");
-#endif
+					strcat(out_val, _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,"));
 				}
 				else if (allow_equip)
 				{
-#ifdef JP
-					strcat(out_val, " '4'or'6' 装備品,");
-#else
-					strcat(out_val, " 4 or 6 for Equip,");
-#endif
+					strcat(out_val, _(" '4'or'6' 装備品,", " 4 or 6 for Equip,"));
 				}
 			}
 			/* Append */
 			else if (allow_inven)
 			{
-#ifdef JP
-				strcat(out_val, " '/' 持ち物,");
-#else
-				strcat(out_val, " / for Inven,");
-#endif
+				strcat(out_val, _(" '/' 持ち物,", " / for Inven,"));
 			}
 			else if (allow_equip)
 			{
-#ifdef JP
-				strcat(out_val, " '/'装備品,");
-#else
-				strcat(out_val, " / for Equip,");
-#endif
+				strcat(out_val, _(" '/'装備品,", " / for Equip,"));
 			}
 
 			/* Append */
 			if (command_see && !use_menu)
 			{
-#ifdef JP
-				strcat(out_val, " Enter 次,");
-#else
-				strcat(out_val, " Enter for scroll down,");
-#endif
+				strcat(out_val, _(" Enter 次,", " Enter for scroll down,"));
 			}
 		}
 
 		/* Append */
-#ifdef JP
-		if (select_the_force) strcat(out_val, " 'w'練気術,");
-#else
-		if (select_the_force) strcat(out_val, " w for the Force,");
-#endif
+		if (select_the_force) strcat(out_val, _(" 'w'練気術,", " w for the Force,"));
 
 		/* Finish the prompt */
 		strcat(out_val, " ESC");
@@ -5749,12 +4912,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 				}
 
 				/* Verify the item */
-#ifdef JP
-if (ver && !verify("本当に", k))
-#else
-				if (ver && !verify("Try", k))
-#endif
-
+				if (ver && !verify(_("本当に", "Try"), k))
 				{
 					done = TRUE;
 					break;
@@ -5842,13 +5000,8 @@ static bool py_pickup_floor_aux(void)
 	item_tester_hook = inven_carry_okay;
 
 	/* Get an object */
-#ifdef JP
-	q = "どれを拾いますか？";
-	s = "もうザックには床にあるどのアイテムも入らない。";
-#else
-	q = "Get which item? ";
-	s = "You no longer have any room for the objects on the floor.";
-#endif
+	q = _("どれを拾いますか？", "Get which item? ");
+	s = _("もうザックには床にあるどのアイテムも入らない。", "You no longer have any room for the objects on the floor.");
 
 	if (get_item(&item, q, s, (USE_FLOOR)))
 	{
@@ -5977,24 +5130,14 @@ void py_pickup_floor(bool pickup)
 			object_desc(o_name, o_ptr, 0);
 
 			/* Message */
-#ifdef JP
-				msg_format("%sがある。", o_name);
-#else
-			msg_format("You see %s.", o_name);
-#endif
-
+			msg_format(_("%sがある。", "You see %s."), o_name);
 		}
 
 		/* Multiple objects */
 		else
 		{
 			/* Message */
-#ifdef JP
-			msg_format("%d 個のアイテムの山がある。", floor_num);
-#else
-			msg_format("You see a pile of %d items.", floor_num);
-#endif
-
+			msg_format(_("%d 個のアイテムの山がある。", "You see a pile of %d items."), floor_num);
 		}
 
 		/* Done */
@@ -6025,23 +5168,14 @@ void py_pickup_floor(bool pickup)
 			object_desc(o_name, o_ptr, 0);
 
 			/* Message */
-#ifdef JP
-				msg_format("ザックには%sを入れる隙間がない。", o_name);
-#else
-			msg_format("You have no room for %s.", o_name);
-#endif
-
+			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 		}
 
 		/* Multiple objects */
 		else
 		{
 			/* Message */
-#ifdef JP
-			msg_format("ザックには床にあるどのアイテムも入らない。", o_name);
-#else
-			msg_print("You have no room for any of the objects on the floor.");
-#endif
+			msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
 
 		}
 
@@ -6075,12 +5209,7 @@ void py_pickup_floor(bool pickup)
 			object_desc(o_name, o_ptr, 0);
 
 			/* Build a prompt */
-#ifdef JP
-			(void) sprintf(out_val, "%sを拾いますか? ", o_name);
-#else
-			(void) sprintf(out_val, "Pick up %s? ", o_name);
-#endif
-
+			(void) sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
 
 			/* Ask the user to confirm */
 			if (!get_check(out_val))

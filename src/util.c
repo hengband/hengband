@@ -72,13 +72,7 @@ int usleep(huge usecs)
 
 
 	/* Paranoia -- No excessive sleeping */
-#ifdef JP
-	if (usecs > 4000000L) core("不当な usleep() 呼び出し");
-#else
-	if (usecs > 4000000L) core("Illegal usleep() call");
-#endif
-
-
+	if (usecs > 4000000L) core(_("不当な usleep() 呼び出し", "Illegal usleep() call"));
 
 	/* Wait for it */
 	Timer.tv_sec = (usecs / 1000000L);
@@ -2773,12 +2767,7 @@ static void msg_flush(int x)
 	if (!p_ptr->playing || !nagasu)
 	{
 		/* Pause for response */
-#ifdef JP
-		Term_putstr(x, 0, -1, a, "-続く-");
-#else
-		Term_putstr(x, 0, -1, a, "-more-");
-#endif
-
+		Term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
 
 		/* Get an acceptable keypress */
 		while (1)
@@ -3806,12 +3795,7 @@ s16b get_quantity(cptr prompt, int max)
 	if (!prompt)
 	{
 		/* Build a prompt */
-#ifdef JP
-		sprintf(tmp, "いくつですか (1-%d): ", max);
-#else
-		sprintf(tmp, "Quantity (1-%d): ", max);
-#endif
-
+		sprintf(tmp, _("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
 
 		/* Use that prompt */
 		prompt = tmp;
@@ -3870,11 +3854,7 @@ s16b get_quantity(cptr prompt, int max)
 void pause_line(int row)
 {
 	prt("", row, 0);
-#ifdef JP
-	put_str("[ 何かキーを押して下さい ]", row, 26);
-#else
-	put_str("[Press any key to continue]", row, 23);
-#endif
+	put_str(_("[ 何かキーを押して下さい ]", "[Press any key to continue]"), row, _(26, 23));
 
 	(void)inkey();
 	prt("", row, 0);
@@ -4268,11 +4248,7 @@ static char inkey_from_menu(void)
 		}
 		max_num = i;
 		kisuu = max_num % 2;
-#ifdef JP
-		put_str("》",basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
-#else
-		put_str("> ",basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
-#endif
+		put_str(_("》", "> "),basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
 
 		/* Place the cursor on the player */
 		move_cursor_relative(py, px);
@@ -4456,12 +4432,7 @@ void request_command(int shopping)
 			command_arg = 0;
 
 			/* Begin the input */
-#ifdef JP
-			prt("回数: ", 0, 0);
-#else
-			prt("Count: ", 0, 0);
-#endif
-
+			prt(_("回数: ", "Count: "), 0, 0);
 
 			/* Get a command count */
 			while (1)
@@ -4476,12 +4447,7 @@ void request_command(int shopping)
 					command_arg = command_arg / 10;
 
 					/* Show current count */
-#ifdef JP
-					prt(format("回数: %d", command_arg), 0, 0);
-#else
-					prt(format("Count: %d", command_arg), 0, 0);
-#endif
-
+					prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
 				}
 
 				/* Actual numeric data */
@@ -4505,12 +4471,7 @@ void request_command(int shopping)
 					}
 
 					/* Show current count */
-#ifdef JP
-					prt(format("回数: %d", command_arg), 0, 0);
-#else
-					prt(format("Count: %d", command_arg), 0, 0);
-#endif
-
+					prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
 				}
 
 				/* Exit on "unusable" input */
@@ -4527,12 +4488,7 @@ void request_command(int shopping)
 				command_arg = 99;
 
 				/* Show current count */
-#ifdef JP
-				prt(format("回数: %d", command_arg), 0, 0);
-#else
-				prt(format("Count: %d", command_arg), 0, 0);
-#endif
-
+				prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
 			}
 
 			/* Hack -- Handle "old_arg" */
@@ -4542,24 +4498,14 @@ void request_command(int shopping)
 				command_arg = old_arg;
 
 				/* Show current count */
-#ifdef JP
-prt(format("回数: %d", command_arg), 0, 0);
-#else
-				prt(format("Count: %d", command_arg), 0, 0);
-#endif
-
+				prt(format(_("回数: %d", "Count: %d"), command_arg), 0, 0);
 			}
 
 			/* Hack -- white-space means "enter command now" */
 			if ((cmd == ' ') || (cmd == '\n') || (cmd == '\r'))
 			{
 				/* Get a real command */
-#ifdef JP
-				if (!get_com("コマンド: ", (char *)&cmd, FALSE))
-#else
-				if (!get_com("Command: ", (char *)&cmd, FALSE))
-#endif
-
+				if (!get_com(_("コマンド: ", "Command: "), (char *)&cmd, FALSE))
 				{
 					/* Clear count */
 					command_arg = 0;
@@ -4575,12 +4521,7 @@ prt(format("回数: %d", command_arg), 0, 0);
 		if (cmd == '\\')
 		{
 			/* Get a real command */
-#ifdef JP
-			(void)get_com("コマンド: ", (char *)&cmd, FALSE);
-#else
-			(void)get_com("Command: ", (char *)&cmd, FALSE);
-#endif
-
+			(void)get_com(_("コマンド: ", "Command: "), (char *)&cmd, FALSE);
 
 			/* Hack -- bypass keymaps */
 			if (!inkey_next) inkey_next = "";
@@ -4591,12 +4532,7 @@ prt(format("回数: %d", command_arg), 0, 0);
 		if (cmd == '^')
 		{
 			/* Get a new command and controlify it */
-#ifdef JP
-			if (get_com("CTRL: ", (char *)&cmd, FALSE)) cmd = KTRL(cmd);
-#else
-			if (get_com("Control: ", (char *)&cmd, FALSE)) cmd = KTRL(cmd);
-#endif
-
+			if (get_com(_("CTRL: ", "Control: "), (char *)&cmd, FALSE)) cmd = KTRL(cmd);
 		}
 
 
@@ -4704,12 +4640,7 @@ prt(format("回数: %d", command_arg), 0, 0);
 
 			{
 				/* Hack -- Verify command */
-#ifdef JP
-				if (!get_check("本当ですか? "))
-#else
-				if (!get_check("Are you sure? "))
-#endif
-
+				if (!get_check(_("本当ですか? ", "Are you sure? ")))
 				{
 					/* Hack -- Use space */
 					command_cmd = ' ';

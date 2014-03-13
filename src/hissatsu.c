@@ -43,11 +43,7 @@ static int get_hissatsu_power(int *sn)
 	char            choice;
 	char            out_val[160];
 	char sentaku[32];
-#ifdef JP
-cptr            p = "必殺剣";
-#else
-	cptr            p = "special attack";
-#endif
+	cptr            p = _("必殺剣", "special attack");
 
 	magic_type spell;
 	bool            flag, redraw;
@@ -88,11 +84,7 @@ cptr            p = "必殺剣";
 
 	/* Build a prompt (accept all spells) */
 	(void) strnfmt(out_val, 78, 
-#ifdef JP
-		       "(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？",
-#else
-		       "(%^ss %c-%c, *=List, ESC=exit) Use which %s? ",
-#endif
+		       _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
 		       p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num-1], p);
 
 	if (use_menu) screen_save();
@@ -198,11 +190,8 @@ cptr            p = "必殺剣";
 
 				/* Display a list of spells */
 				prt("", y, x);
-#ifdef JP
-put_str("名前              Lv  MP      名前              Lv  MP ", y, x + 5);
-#else
-put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
-#endif
+				put_str(_("名前              Lv  MP      名前              Lv  MP ", 
+						  "name              Lv  SP      name              Lv  SP "), y, x + 5);
 				prt("", y+1, x);
 				/* Dump the spells */
 				for (i = 0, line = 0; i < 32; i++)
@@ -219,11 +208,7 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 					if (use_menu)
 					{
 						if (i == (menu_line-1))
-#ifdef JP
-							strcpy(psi_desc, "  》");
-#else
-							strcpy(psi_desc, "  > ");
-#endif
+							strcpy(psi_desc, _("  》", "  > "));
 						else strcpy(psi_desc, "    ");
 						
 					}
@@ -296,12 +281,7 @@ put_str("name              Lv  SP      name              Lv  SP ", y, x + 5);
 			char tmp_val[160];
 
 			/* Prompt */
-#ifdef JP
-			(void) strnfmt(tmp_val, 78, "%sを使いますか？", do_spell(REALM_HISSATSU, j, SPELL_NAME));
-#else
-			(void)strnfmt(tmp_val, 78, "Use %s? ", do_spell(REALM_HISSATSU, j, SPELL_NAME));
-#endif
-
+			(void) strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), do_spell(REALM_HISSATSU, j, SPELL_NAME));
 
 			/* Belay that order */
 			if (!get_check(tmp_val)) continue;
@@ -351,33 +331,18 @@ void do_cmd_hissatsu(void)
 	/* not if confused */
 	if (p_ptr->confused)
 	{
-#ifdef JP
-msg_print("混乱していて集中できない！");
-#else
-		msg_print("You are too confused!");
-#endif
-
+		msg_print(_("混乱していて集中できない！", "You are too confused!"));
 		return;
 	}
 	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
 	{
 		if (flush_failure) flush();
-#ifdef JP
-msg_print("武器を持たないと必殺技は使えない！");
-#else
-		msg_print("You need to wield a weapon!");
-#endif
-
+		msg_print(_("武器を持たないと必殺技は使えない！", "You need to wield a weapon!"));
 		return;
 	}
 	if (!p_ptr->spell_learned1)
 	{
-#ifdef JP
-msg_print("何も技を知らない。");
-#else
-		msg_print("You don't know any special attacks.");
-#endif
-
+		msg_print(_("何も技を知らない。", "You don't know any special attacks."));
 		return;
 	}
 
@@ -396,11 +361,7 @@ msg_print("何も技を知らない。");
 	{
 		if (flush_failure) flush();
 		/* Warning */
-#ifdef JP
-msg_print("ＭＰが足りません。");
-#else
-		msg_print("You do not have enough mana to use this power.");
-#endif
+		msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
 		msg_print(NULL);
 		return;
 	}
@@ -448,34 +409,19 @@ void do_cmd_gain_hissatsu(void)
 
 	if (p_ptr->blind || no_lite())
 	{
-#ifdef JP
-msg_print("目が見えない！");
-#else
-		msg_print("You cannot see!");
-#endif
-
+		msg_print(_("目が見えない！", "You cannot see!"));
 		return;
 	}
 
 	if (p_ptr->confused)
 	{
-#ifdef JP
-msg_print("混乱していて読めない！");
-#else
-		msg_print("You are too confused!");
-#endif
-
+		msg_print(_("混乱していて読めない！", "You are too confused!"));
 		return;
 	}
 
 	if (!(p_ptr->new_spells))
 	{
-#ifdef JP
-msg_print("新しい必殺技を覚えることはできない！");
-#else
-		msg_print("You cannot learn any new special attacks!");
-#endif
-
+		msg_print(_("新しい必殺技を覚えることはできない！", "You cannot learn any new special attacks!"));
 		return;
 	}
 
@@ -493,17 +439,8 @@ msg_print("新しい必殺技を覚えることはできない！");
 	item_tester_tval = TV_HISSATSU_BOOK;
 
 	/* Get an item */
-#ifdef JP
-q = "どの書から学びますか? ";
-#else
-	q = "Study which book? ";
-#endif
-
-#ifdef JP
-s = "読める書がない。";
-#else
-	s = "You have no books that you can read.";
-#endif
+	q = _("どの書から学びますか? ", "Study which book? ");
+	s = _("読める書がない。", "You have no books that you can read.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -526,11 +463,7 @@ s = "読める書がない。";
 
 		p_ptr->spell_learned1 |= (1L << i);
 		p_ptr->spell_worked1 |= (1L << i);
-#ifdef JP
-		msg_format("%sの技を覚えた。", do_spell(REALM_HISSATSU, i, SPELL_NAME));
-#else
-		msg_format("You have learned the special attack of %s.", do_spell(REALM_HISSATSU, i, SPELL_NAME));
-#endif
+		msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), do_spell(REALM_HISSATSU, i, SPELL_NAME));
 		for (j = 0; j < 64; j++)
 		{
 			/* Stop at the first empty space */
@@ -542,11 +475,7 @@ s = "読める書がない。";
 
 	/* No gain ... */
 	if (!gain)
-#ifdef JP
-		msg_print("何も覚えられなかった。");
-#else
-		msg_print("You were not able to learn any special attacks.");
-#endif
+		msg_print(_("何も覚えられなかった。", "You were not able to learn any special attacks."));
 
 	/* Take a turn */
 	else

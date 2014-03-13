@@ -216,11 +216,7 @@ static int get_learned_power(int *sn)
 	char            out_val[160];
 	char            comment[80];
 	s32b            f4 = 0, f5 = 0, f6 = 0;
-#ifdef JP
-cptr            p = "魔法";
-#else
-	cptr            p = "magic";
-#endif
+	cptr            p = _("魔法", "magic");
 
 	monster_power   spell;
 	bool            flag, redraw;
@@ -297,11 +293,7 @@ cptr            p = "魔法";
 	}
 	else
 	{
-#ifdef JP
-	sprintf(comment, "[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:");
-#else
-	sprintf(comment, "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:");
-#endif
+	sprintf(comment, _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:"));
 	while (TRUE)
 	{
 		if (!get_com(comment, &ch, TRUE))
@@ -360,21 +352,13 @@ cptr            p = "魔法";
 	}
 	if (i == num)
 	{
-#ifdef JP
-		msg_print("その種類の魔法は覚えていない！");
-#else
-		msg_print("You don't know any spell of this type.");
-#endif
+		msg_print(_("その種類の魔法は覚えていない！", "You don't know any spell of this type."));
 		return (FALSE);
 	}
 
 	/* Build a prompt (accept all spells) */
 	(void)strnfmt(out_val, 78, 
-#ifdef JP
-		      "(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？",
-#else
-		      "(%c-%c, *=List, ESC=exit) Use which %s? ",
-#endif
+		      _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
 		      I2A(0), I2A(num - 1), p);
 
 	if (use_menu) screen_save();
@@ -465,17 +449,8 @@ cptr            p = "魔法";
 
 				/* Display a list of spells */
 				prt("", y, x);
-#ifdef JP
-put_str("名前", y, x + 5);
-#else
-				put_str("Name", y, x + 5);
-#endif
-
-#ifdef JP
-put_str("MP 失率 効果", y, x + 33);
-#else
-				put_str("SP Fail Info", y, x + 32);
-#endif
+				put_str(_("名前", "Name"), y, x + 5);
+				put_str(_("MP 失率 効果", "SP Fail Info"), y, x + 33);
 
 
 				/* Dump the spells */
@@ -528,11 +503,7 @@ put_str("MP 失率 効果", y, x + 33);
 
 					if (use_menu)
 					{
-#ifdef JP
-						if (i == (menu_line-1)) strcpy(psi_desc, "  》");
-#else
-						if (i == (menu_line-1)) strcpy(psi_desc, "  > ");
-#endif
+						if (i == (menu_line-1)) strcpy(psi_desc, _("  》", "  > "));
 						else strcpy(psi_desc, "    ");
 					}
 					else sprintf(psi_desc, "  %c)", I2A(i));
@@ -590,12 +561,7 @@ put_str("MP 失率 効果", y, x + 33);
 			char tmp_val[160];
 
 			/* Prompt */
-#ifdef JP
-			(void) strnfmt(tmp_val, 78, "%sの魔法を唱えますか？", monster_powers[spellnum[i]].name);
-#else
-			(void)strnfmt(tmp_val, 78, "Use %s? ", monster_powers[spellnum[i]].name);
-#endif
-
+			(void) strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[spellnum[i]].name);
 
 			/* Belay that order */
 			if (!get_check(tmp_val)) continue;
@@ -1513,12 +1479,7 @@ bool do_cmd_cast_learned(void)
 	/* not if confused */
 	if (p_ptr->confused)
 	{
-#ifdef JP
-msg_print("混乱していて唱えられない！");
-#else
-		msg_print("You are too confused!");
-#endif
-
+		msg_print(_("混乱していて唱えられない！", "You are too confused!"));
 		return TRUE;
 	}
 
@@ -1533,22 +1494,12 @@ msg_print("混乱していて唱えられない！");
 	if (need_mana > p_ptr->csp)
 	{
 		/* Warning */
-#ifdef JP
-msg_print("ＭＰが足りません。");
-#else
-		msg_print("You do not have enough mana to use this power.");
-#endif
-
+		msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
 
 		if (!over_exert) return FALSE;
 
 		/* Verify */
-#ifdef JP
-if (!get_check("それでも挑戦しますか? ")) return FALSE;
-#else
-		if (!get_check("Attempt it anyway? ")) return FALSE;
-#endif
-
+		if (!get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "))) return FALSE;
 	}
 
 	/* Spell failure chance */
@@ -1588,11 +1539,7 @@ if (!get_check("それでも挑戦しますか? ")) return FALSE;
 	if (randint0(100) < chance)
 	{
 		if (flush_failure) flush();
-#ifdef JP
-msg_print("魔法をうまく唱えられなかった。");
-#else
-		msg_print("You failed to concentrate hard enough!");
-#endif
+		msg_print(_("魔法をうまく唱えられなかった。", "You failed to concentrate hard enough!"));
 
 		sound(SOUND_FAIL);
 
@@ -1625,12 +1572,7 @@ msg_print("魔法をうまく唱えられなかった。");
 		p_ptr->csp_frac = 0;
 
 		/* Message */
-#ifdef JP
-msg_print("精神を集中しすぎて気を失ってしまった！");
-#else
-		msg_print("You faint from the effort!");
-#endif
-
+		msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
 
 		/* Hack -- Bypass free action */
 		(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
@@ -1643,12 +1585,7 @@ msg_print("精神を集中しすぎて気を失ってしまった！");
 			bool perm = (randint0(100) < 25);
 
 			/* Message */
-#ifdef JP
-msg_print("体を悪くしてしまった！");
-#else
-			msg_print("You have damaged your health!");
-#endif
-
+			msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
 
 			/* Reduce constitution */
 			(void)dec_stat(A_CON, 15 + randint1(10), perm);
@@ -1680,11 +1617,7 @@ void learn_spell(int monspell)
 	if (randint1(p_ptr->lev + 70) > monster_powers[monspell].level + 40)
 	{
 		p_ptr->magic_num2[monspell] = 1;
-#ifdef JP
-		msg_format("%sを学習した！", monster_powers[monspell].name);
-#else
-		msg_format("You have learned %s!", monster_powers[monspell].name);
-#endif
+		msg_format(_("%sを学習した！", "You have learned %s!"), monster_powers[monspell].name);
 		gain_exp(monster_powers[monspell].level * monster_powers[monspell].smana);
 
 		/* Sound */

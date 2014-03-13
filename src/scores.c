@@ -177,22 +177,12 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 		Term_clear();
 
 		/* Title */
-#ifdef JP
-put_str("                変愚蛮怒: 勇者の殿堂", 0, 0);
-#else
-		put_str("                Hengband Hall of Fame", 0, 0);
-#endif
-
+		put_str(_("                変愚蛮怒: 勇者の殿堂", "                Hengband Hall of Fame"), 0, 0);
 
 		/* Indicate non-top scores */
 		if (k > 0)
 		{
-#ifdef JP
-sprintf(tmp_val, "( %d 位以下 )", k + 1);
-#else
-			sprintf(tmp_val, "(from position %d)", k + 1);
-#endif
-
+			sprintf(tmp_val, _("( %d 位以下 )", "(from position %d)"), k + 1);
 			put_str(tmp_val, 0, 40);
 		}
 
@@ -271,12 +261,7 @@ sprintf(tmp_val, "( %d 位以下 )", k + 1);
 
 
 			/* Append a "maximum level" */
-#ifdef JP
-if (mlev > clev) strcat(out_val, format(" (最高%d)", mlev));
-#else
-			if (mlev > clev) strcat(out_val, format(" (Max %d)", mlev));
-#endif
-
+			if (mlev > clev) strcat(out_val, format(_(" (最高%d)", " (Max %d)"), mlev));
 
 			/* Dump the first line */
 			c_put_str(attr, out_val, n*4 + 2, 0);
@@ -362,11 +347,7 @@ if (mlev > clev) strcat(out_val, format(" (最高%d)", mlev));
 
 
 		/* Wait for response */
-#ifdef JP
-prt("[ ESCで中断, その他のキーで続けます ]", hgt - 1, 21);
-#else
-		prt("[Press ESC to quit, any other key to continue.]", hgt - 1, 17);
-#endif
+		prt(_("[ ESCで中断, その他のキーで続けます ]", "[Press ESC to quit, any other key to continue.]"), hgt - 1, _(21, 17));
 
 		j = inkey();
 		prt("", hgt - 1, 0);
@@ -394,12 +375,7 @@ void display_scores(int from, int to)
 	highscore_fd = fd_open(buf, O_RDONLY);
 
 	/* Paranoia -- No score file */
-#ifdef JP
-if (highscore_fd < 0) quit("スコア・ファイルが使用できません。");
-#else
-	if (highscore_fd < 0) quit("Score file unavailable.");
-#endif
-
+	if (highscore_fd < 0) quit(_("スコア・ファイルが使用できません。", "Score file unavailable."));
 
 	/* Clear screen */
 	Term_clear();
@@ -426,25 +402,15 @@ bool send_world_score(bool do_send)
 	{
 		if(easy_band)
 		{
-#ifdef JP
-			msg_print("初心者モードではワールドスコアに登録できません。");
-#else
-			msg_print("Since you are in the Easy Mode, you cannot send score to world score server.");
-#endif
+			msg_print(_("初心者モードではワールドスコアに登録できません。",
+			"Since you are in the Easy Mode, you cannot send score to world score server."));
 		}
-#ifdef JP
-		else if(get_check_strict("スコアをスコア・サーバに登録しますか? ", (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
-#else
-		else if(get_check_strict("Do you send score to the world score sever? ", (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
-#endif
+		else if(get_check_strict(_("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score sever? "), 
+				(CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
 		{
 			errr err;
 			prt("",0,0);
-#ifdef JP
-			prt("送信中．．",0,0);
-#else
-			prt("Sending...",0,0);
-#endif
+			prt(_("送信中．．", "Sending..."),0,0);
 			Term_fresh();
 			screen_save();
 			err = report_score();
@@ -453,11 +419,7 @@ bool send_world_score(bool do_send)
 			{
 				return FALSE;
 			}
-#ifdef JP
-			prt("完了。何かキーを押してください。", 0, 0);
-#else
-			prt("Completed.  Hit any key.", 0, 0);
-#endif
+			prt(_("完了。何かキーを押してください。", "Completed.  Hit any key."), 0, 0);
 			(void)inkey();
 		}
 		else return FALSE;
@@ -601,12 +563,7 @@ errr predict_score(void)
 	/* No score file */
 	if (highscore_fd < 0)
 	{
-#ifdef JP
-msg_print("スコア・ファイルが使用できません。");
-#else
-		msg_print("Score file unavailable.");
-#endif
-
+		msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
 		msg_print(NULL);
 		return (0);
 	}
@@ -626,12 +583,7 @@ msg_print("スコア・ファイルが使用できません。");
 	sprintf(the_score.turns, "%9lu", (long)turn_real(turn));
 
 	/* Hack -- no time needed */
-#ifdef JP
-strcpy(the_score.day, "今日");
-#else
-	strcpy(the_score.day, "TODAY");
-#endif
-
+	strcpy(the_score.day, _("今日", "TODAY"));
 
 	/* Save the player name (15 chars) */
 	sprintf(the_score.who, "%-.15s", player_name);
@@ -650,14 +602,8 @@ strcpy(the_score.day, "今日");
 	sprintf(the_score.max_dun, "%3d", max_dlv[dungeon_type]);
 
 	/* Hack -- no cause of death */
-#ifdef JP
 	/* まだ死んでいないときの識別文字 */
-	strcpy(the_score.how, "yet");
-#else
-	strcpy(the_score.how, "nobody (yet!)");
-#endif
-
-
+	strcpy(the_score.how, _("yet", "nobody (yet!)"));
 
 	/* See where the entry would be placed */
 	j = highscore_where(&the_score);
@@ -704,12 +650,7 @@ void show_highclass(void)
 
 	if (highscore_fd < 0)
 	{
-#ifdef JP
-msg_print("スコア・ファイルが使用できません。");
-#else
-		msg_print("Score file unavailable.");
-#endif
-
+		msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
 		msg_print(NULL);
 		return;
 	}
@@ -755,11 +696,7 @@ msg_print("スコア・ファイルが使用できません。");
 
 	(void)fd_close(highscore_fd);
 	highscore_fd = -1;
-#ifdef JP
-	prt("何かキーを押すとゲームに戻ります",0,0);
-#else
-	prt("Hit any key to continue",0,0);
-#endif
+	prt(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"),0,0);
 
 	(void)inkey();
 
@@ -782,11 +719,7 @@ void race_score(int race_num)
 	lastlev = 0;
 
 	/* rr9: TODO - pluralize the race */
-#ifdef JP
-sprintf(tmp_str,"最高の%s", race_info[race_num].title);
-#else
-	sprintf(tmp_str,"The Greatest of all the %s", race_info[race_num].title);
-#endif
+	sprintf(tmp_str,_("最高の%s", "The Greatest of all the %s"), race_info[race_num].title);
 
 	prt(tmp_str, 5, 15);
 
@@ -797,12 +730,7 @@ sprintf(tmp_str,"最高の%s", race_info[race_num].title);
 
 	if (highscore_fd < 0)
 	{
-#ifdef JP
-msg_print("スコア・ファイルが使用できません。");
-#else
-		msg_print("Score file unavailable.");
-#endif
-
+		msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
 		msg_print(NULL);
 		return;
 	}
@@ -873,12 +801,7 @@ void race_legends(void)
 	for (i = 0; i < MAX_RACES; i++)
 	{
 		race_score(i);
-#ifdef JP
-msg_print("何かキーを押すとゲームに戻ります");
-#else
-		msg_print("Hit any key to continue");
-#endif
-
+		msg_print(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"));
 		msg_print(NULL);
 		for (j = 5; j < 19; j++)
 			prt("", j, 0);
@@ -900,13 +823,8 @@ void kingly(void)
 
 	/* Fake death */
 	if (!seppuku)
-#ifdef JP
 		/* 引退したときの識別文字 */
-		(void)strcpy(p_ptr->died_from, "ripe");
-#else
-		(void)strcpy(p_ptr->died_from, "Ripe Old Age");
-#endif
-
+		(void)strcpy(p_ptr->died_from, _("ripe", "Ripe Old Age"));
 
 	/* Restore the experience */
 	p_ptr->exp = p_ptr->max_exp;
@@ -952,13 +870,8 @@ void kingly(void)
 	/* If player did Seppuku, that is already written in playrecord */
 	if (!seppuku)
 	{
-#ifdef JP
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "ダンジョンの探索から引退した。");
-		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "-------- ゲームオーバー --------");
-#else
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, "retired exploring dungeons.");
-		do_cmd_write_nikki(NIKKI_GAMESTART, 1, "--------   Game  Over   --------");
-#endif
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
+		do_cmd_write_nikki(NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "\n\n\n\n");
 	}
 
