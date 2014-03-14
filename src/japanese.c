@@ -420,7 +420,6 @@ static void ms_to_jis_unicode(char* str)
 			for (i = 0; i < sizeof(ms_to_jis_unicode_conv) / sizeof(ms_to_jis_unicode_conv[0]); ++ i) {
 				const struct ms_to_jis_unicode_conv_t *c = &ms_to_jis_unicode_conv[i];
 				if (memcmp(p, c->from, 3) == 0) {
-					printf("hoge\n");
 					memcpy(p, c->to, 3);
 				}
 			}
