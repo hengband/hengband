@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  *  @file wizard1.c
  *  @brief ウィザードモードの処理(スポイラー出力中心) / Spoiler generation -BEN-
  *  @date 2014/02/17

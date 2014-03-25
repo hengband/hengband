@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @file xtra2.c
  * @brief 雑多なその他の処理2 / effects of various "objects"
  * @date 2014/02/06

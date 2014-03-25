@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @file melee1.c
  * @brief モンスターの打撃処理 / Monster attacks
  * @date 2014/01/17
