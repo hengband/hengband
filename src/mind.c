@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file mind.c
  * @brief 各職業の特殊技能実装 / Special magics
  * @date 2014/01/15
@@ -1645,9 +1645,7 @@ void do_cmd_mind(void)
 	mind_type       spell;
 	bool            cast;
 	int             use_mind, mana_cost;
-#ifdef JP
 	cptr            p;
-#endif
 	bool		on_mirror = FALSE;
 
 	/* not if confused */
@@ -1764,7 +1762,7 @@ void do_cmd_mind(void)
 	if (randint0(100) < chance)
 	{
 		if (flush_failure) flush();
-		msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough!"),p);
+		msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough!"), p);
 
 		sound(SOUND_FAIL);
 

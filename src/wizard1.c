@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  *  @file wizard1.c
  *  @brief ウィザードモードの処理(スポイラー出力中心) / Spoiler generation -BEN-
  *  @date 2014/02/17
@@ -2182,7 +2182,7 @@ static void spoil_mon_info(cptr fname)
 		}
 
 		/* Name */
-		sprintf(buf, _("%s/%s  (", "%s  ("), (r_name + r_ptr->name),(r_name+r_ptr->E_name));  /* ---)--- */
+		sprintf(buf, _("%s/%s  (", "%s  ("), (r_name + r_ptr->name), _(r_name+r_ptr->E_name, ""));  /* ---)--- */
 
 		spoil_out(buf);
 

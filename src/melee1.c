@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file melee1.c
  * @brief モンスターの打撃処理 / Monster attacks
  * @date 2014/01/17
@@ -171,9 +171,7 @@ bool make_attack_normal(int m_idx)
 	bool explode = FALSE;
 	bool do_silly_attack = (one_in_(2) && p_ptr->image);
 	int get_damage = 0;
-#ifdef JP
 	int abbreviate = 0;
-#endif
 
 	/* Not allowed to attack */
 	if (r_ptr->flags1 & (RF1_NEVER_BLOW)) return (FALSE);
@@ -387,13 +385,8 @@ bool make_attack_normal(int m_idx)
 
 				case RBM_CHARGE:
 				{
-#ifdef JP
 					abbreviate = -1;
-					act = "は請求書をよこした。";
-#else
-					act = "charges you.";
-#endif
-
+					act = _("は請求書をよこした。", "charges you.");
 					touched = TRUE;
 					sound(SOUND_BUY); /* Note! This is "charges", not "charges at". */
 					break;

@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file object2.c
  * @brief オブジェクトの実装 / Object code, part 2
  * @date 2014/01/11
@@ -7642,7 +7642,7 @@ cptr essence_name[] =
 
 #else
 
-static cptr essence_name[] = 
+cptr essence_name[] = 
 {
 	"strength",
 	"intelligen.",

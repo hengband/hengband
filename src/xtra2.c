@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file xtra2.c
  * @brief 雑多なその他の処理2 / effects of various "objects"
  * @date 2014/02/06
@@ -5905,7 +5905,8 @@ void display_rumor(bool ex)
 		if (randint0(3) == 0) section = 1;
 	}
 
-	err = get_rnd_line_jonly(_("rumors_j.txt", "rumors.txt"), section, Rumor, 10);
+	err = _(get_rnd_line_jonly("rumors_j.txt", section, Rumor, 10),
+			get_rnd_line("rumors.txt", section, Rumor));
 	if (err) strcpy(Rumor, _("嘘の噂もある。", "Some rumors are wrong."));
 
 	err = TRUE;
