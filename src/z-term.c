@@ -1503,7 +1503,9 @@ errr Term_fresh(void)
 
 	term_win *old = Term->old;
 	term_win *scr = Term->scr;
-
+	
+	/* Before initialize (Advice from Mr.shimitei)*/
+	if (!old || !scr) return (1);
 
 	/* Do nothing unless "mapped" */
 	if (!Term->mapped_flag) return (1);
