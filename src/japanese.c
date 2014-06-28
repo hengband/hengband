@@ -53,7 +53,13 @@ static const convert_key s2j_table[] = {
 	{NULL,NULL}
 };
 
-/* シンダリンを日本語の読みに変換する */
+/*!
+ * @brief シンダリンを日本語の読みに変換する
+ * @param kana 変換後の日本語文字列ポインタ
+ * @param sindarin 変換前のシンダリン文字列ポインタ
+ * @return なし
+ * @details
+ */
 void sindarin_to_kana(char *kana, const char *sindarin)
 {
 	char buf[256];
@@ -105,11 +111,10 @@ void sindarin_to_kana(char *kana, const char *sindarin)
 }
 
 
-/*日本語動詞活用 (打つ＞打って,打ち etc) */
-/* JVERB_AND: 殴る,蹴る > 殴り,蹴る */
-/* JVERB_TO:  殴る,蹴る > 殴って蹴る */
-/* JVERB_OR:  殴る,蹴る > 殴ったり蹴ったり */
-
+/*! 日本語動詞活用 (打つ＞打って,打ち etc)
+ * JVERB_AND: 殴る,蹴る > 殴り,蹴る
+ * JVERB_TO:  殴る,蹴る > 殴って蹴る
+ * JVERB_OR:  殴る,蹴る > 殴ったり蹴ったり */
 static const struct jverb_table_t {
 	const char* from;
 	const char* to[3];
@@ -145,7 +150,15 @@ static const struct jverb_table_t {
 	{ NULL, {"そして", "ことにより", "ことや"}},
 };
 
-void jverb(const char *in , char *out , int flag)
+/*!
+ * @brief jverb_table_tに従って動詞を活用する
+ * @param in 変換元文字列ポインタ
+ * @param out 変換先文字列ポインタ
+ * @param flag 変換種類を指定(JVERB_AND/JVERB_TO/JVERB_OR)
+ * @return なし
+ * @details
+ */
+void jverb(const char *in, char *out, int flag)
 {
 	const struct jverb_table_t * p;
 	int in_len = strlen(in);
@@ -164,9 +177,11 @@ void jverb(const char *in , char *out , int flag)
 		strcpy(&out[in_len], p->to[flag - 1]);
 }
 
-
-/*
- * Convert SJIS string to EUC string
+/*!
+ * @brief 文字コードをSJISからEUCに変換する / Convert SJIS string to EUC string
+ * @param str 変換する文字列のポインタ
+ * @return なし
+ * @details
  */
 void sjis2euc(char *str)
 {
@@ -208,8 +223,11 @@ void sjis2euc(char *str)
 }  
 
 
-/*
- * Convert EUC string to SJIS string
+/*!
+ * @brief 文字コードをEUCからSJISに変換する / Convert EUC string to SJIS string
+ * @param str 変換する文字列のポインタ
+ * @return なし
+ * @details
  */
 void euc2sjis(char *str)
 {
@@ -252,14 +270,14 @@ void euc2sjis(char *str)
 }  
 
 
-/*
- * strを環境に合った文字コードに変換し、変換前の文字コードを返す。
- * strの長さに制限はない。
- *
- * 0: Unknown
- * 1: ASCII (Never known to be ASCII in this function.)
- * 2: EUC
- * 3: SJIS
+/*!
+ * @brief strを環境に合った文字コードに変換し、変換前の文字コードを返す。strの長さに制限はない。
+ * @param str 変換する文字列のポインタ
+ * @return 
+ * 0: Unknown<br>
+ * 1: ASCII (Never known to be ASCII in this function.)<br>
+ * 2: EUC<br>
+ * 3: SJIS<br>
  */
 byte codeconv(char *str)
 {
@@ -343,7 +361,12 @@ byte codeconv(char *str)
 	return code;
 }
 
-/* 文字列sのxバイト目が漢字の1バイト目かどうか判定する */
+/*!
+ * @brief 文字列sのxバイト目が漢字の1バイト目かどうか判定する
+ * @param s 判定する文字列のポインタ
+ * @param x 判定する位置(バイト)
+ * @return 漢字の1バイト目ならばTRUE
+ */
 bool iskanji2(cptr s, int x)
 {
 	int i;
@@ -407,6 +430,11 @@ static const struct ms_to_jis_unicode_conv_t {
 	{{0xef, 0xbc, 0x8d}, {0xe2, 0x88, 0x92}}, /* FULLWIDTH HYPHEN-MINUS -> MINUS SIGN */
 };
 
+/*!
+ * @brief EUCがシステムコードである環境下向けにUTF-8から変換処理を行うサブルーチン
+ * @param str 変換する文字列のポインタ
+ * @return なし
+ */
 static void ms_to_jis_unicode(char* str)
 {
 	unsigned char* p;
