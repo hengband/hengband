@@ -583,8 +583,10 @@ static void rd_item_old(object_type *o_ptr)
 }
 
 
-/*
- * Read an object (New method)
+/*!
+ * @brief アイテムオブジェクトを読み込む(現版) / Read an object (New method)
+ * @param o_ptr アイテムオブジェクト保存先ポインタ
+ * @return なし
  */
 static void rd_item(object_type *o_ptr)
 {
@@ -763,8 +765,10 @@ static void rd_item(object_type *o_ptr)
 }
 
 
-/*
- * Read a monster (Old method)
+/*!
+ * @brief モンスターを読み込む(変愚ver1.5.0以前) / Read a monster (Old method)
+ * @param m_ptr モンスター保存先ポインタ
+ * @return なし
  */
 static void rd_monster_old(monster_type *m_ptr)
 {
@@ -905,8 +909,10 @@ static void rd_monster_old(monster_type *m_ptr)
 }
 
 
-/*
- * Read a monster (New method)
+/*!
+ * @brief モンスターを読み込む(現版) / Read a monster (New method)
+ * @param m_ptr モンスター保存先ポインタ
+ * @return なし
  */
 static void rd_monster(monster_type *m_ptr)
 {
@@ -1066,8 +1072,11 @@ static void rd_monster(monster_type *m_ptr)
 #define RF4_BR_GRAV         0x00800000  /* Breathe Gravity */
 #define RF4_BR_SHAR         0x01000000  /* Breathe Shards */
 #define RF4_BR_WALL         0x04000000  /* Breathe Force */
-/*
- * Read the monster lore
+
+/*!
+ * @brief モンスターの思い出を読み込む / Read the monster lore
+ * @param r_idx 読み込み先モンスターID
+ * @return なし
  */
 static void rd_lore(int r_idx)
 {
@@ -1178,12 +1187,12 @@ static void rd_lore(int r_idx)
 	r_ptr->r_flagsr &= r_ptr->flagsr;
 }
 
-
-
-
-/*
- * Add the item "o_ptr" to the inventory of the "Home"
- *
+/*!
+ * @brief 店置きのアイテムオブジェクトを読み込む / Add the item "o_ptr" to the inventory of the "Home"
+ * @param st_ptr 店舗の参照ポインタ
+ * @param o_ptr アイテムオブジェクト参照ポインタ
+ * @return なし
+ * @details
  * In all cases, return the slot (or -1) where the object was placed
  *
  * Note that this is a hacked up version of "inven_carry()".
@@ -1248,9 +1257,11 @@ static void home_carry(store_type *st_ptr, object_type *o_ptr)
 	return;
 }
 
-
-/*
- * Read a store
+/*!
+ * @brief 店舗情報を読み込む / Read a store
+ * @param town_number 街ID 
+ * @param store_number 店舗ID
+ * @return エラーID
  */
 static errr rd_store(int town_number, int store_number)
 {
@@ -1334,9 +1345,9 @@ static errr rd_store(int town_number, int store_number)
 }
 
 
-
-/*
- * Read RNG state (added in 2.8.0)
+/*!
+ * @brief 乱数状態を読み込む / Read RNG state (added in 2.8.0)
+ * @return なし
  */
 static void rd_randomizer(void)
 {
