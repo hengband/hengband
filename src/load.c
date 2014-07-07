@@ -157,11 +157,13 @@ static void note(cptr msg)
 }
 
 
-/*
+/*!
+ * @brief ロードファイルポインタから1バイトを読み込む
+ * @return 読み込んだバイト値
+ * @details
  * The following functions are used to load the basic building blocks
  * of savefiles.  They also maintain the "checksum" info for 2.7.0+
  */
-
 static byte sf_get(void)
 {
 	byte c, v;
@@ -179,22 +181,42 @@ static byte sf_get(void)
 	return (v);
 }
 
+/*!
+ * @brief ロードファイルポインタから1バイトを読み込んでポインタに渡す
+ * @param ip 読み込みポインタ
+ * @return なし
+ */
 static void rd_byte(byte *ip)
 {
 	*ip = sf_get();
 }
 
+/*!
+ * @brief ロードファイルポインタから符号なし16bit値を読み込んでポインタに渡す
+ * @param ip 読み込みポインタ
+ * @return なし
+ */
 static void rd_u16b(u16b *ip)
 {
 	(*ip) = sf_get();
 	(*ip) |= ((u16b)(sf_get()) << 8);
 }
 
+/*!
+ * @brief ロードファイルポインタから符号つき16bit値を読み込んでポインタに渡す
+ * @param ip 読み込みポインタ
+ * @return なし
+ */
 static void rd_s16b(s16b *ip)
 {
 	rd_u16b((u16b*)ip);
 }
 
+/*!
+ * @brief ロードファイルポインタから符号なし32bit値を読み込んでポインタに渡す
+ * @param ip 読み込みポインタ
+ * @return なし
+ */
 static void rd_u32b(u32b *ip)
 {
 	(*ip) = sf_get();
@@ -203,14 +225,22 @@ static void rd_u32b(u32b *ip)
 	(*ip) |= ((u32b)(sf_get()) << 24);
 }
 
+/*!
+ * @brief ロードファイルポインタから符号つき32bit値を読み込んでポインタに渡す
+ * @param ip 読み込みポインタ
+ * @return なし
+ */
 static void rd_s32b(s32b *ip)
 {
 	rd_u32b((u32b*)ip);
 }
 
 
-/*
- * Hack -- read a string
+/*!
+ * @brief ロードファイルポインタから文字列を読み込んでポインタに渡す / Hack -- read a string
+ * @param ip 読み込みポインタ
+ * @param max 最大読み取りバイト数
+ * @return なし
  */
 static void rd_string(char *str, int max)
 {
@@ -271,8 +301,10 @@ static void rd_string(char *str, int max)
 }
 
 
-/*
- * Hack -- strip some bytes
+/*!
+ * @brief ロードファイルポインタを指定バイト分飛ばして進める / Hack -- strip some bytes
+ * @param n スキップバイト数
+ * @return なし
  */
 static void strip_bytes(int n)
 {
@@ -284,9 +316,11 @@ static void strip_bytes(int n)
 
 #define OLD_MAX_MANE 22
 
-/*
- * Read an object (Old method)
- *
+/*!
+ * @brief アイテムオブジェクト１件を読み込む(変愚ver1.5.0以前) / Read an object (Old method)
+ * @param o_ptr アイテムオブジェクト読み取り先ポインタ
+ * @return なし
+ * @details
  * This function attempts to "repair" old savefiles, and to extract
  * the most up to date values for various object fields.
  *
