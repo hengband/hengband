@@ -2820,7 +2820,7 @@ static errr rd_dungeon_old(void)
 
 
 /*!
- * @bried 保存されたフロアを読み込む / Read the saved floor
+ * @brief 保存されたフロアを読み込む / Read the saved floor
  * @return なし
  * @details
  * The monsters/objects must be loaded in the same order
@@ -3111,9 +3111,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 }
 
 
-/*
- * Read the dungeon (new method)
- *
+/*!
+ * @brief 保存されたフロアを読み込む(現版) / Read the dungeon (new method)
+ * @return なし
+ * @details
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
@@ -3254,8 +3255,9 @@ static errr rd_dungeon(void)
 }
 
 
-/*
- * Actually read the savefile
+/*!
+ * @brief ロード処理全体のサブ関数 / Actually read the savefile
+ * @return エラーコード
  */
 static errr rd_savefile_new_aux(void)
 {
@@ -3839,9 +3841,9 @@ static errr rd_savefile_new_aux(void)
 	return (0);
 }
 
-
-/*
- * Actually read the savefile
+/*!
+ * @brief ロード処理全体のメイン関数 / Actually read the savefile
+ * @return エラーコード
  */
 errr rd_savefile_new(void)
 {
@@ -3873,8 +3875,10 @@ errr rd_savefile_new(void)
 }
 
 
-/*
- * Actually load and verify a floor save data
+/*!
+ * @brief 保存フロア読み込みのサブ関数 / Actually load and verify a floor save data
+ * @param sf_ptr 保存フロア読み込み先
+ * @return 成功したらtrue
  */
 static bool load_floor_aux(saved_floor_type *sf_ptr)
 {
@@ -3934,8 +3938,11 @@ static bool load_floor_aux(saved_floor_type *sf_ptr)
 }
 
 
-/*
- * Attempt to load the temporally saved-floor data
+/*!
+ * @brief 一時保存フロア情報を読み込む / Attempt to load the temporally saved-floor data
+ * @param sf_ptr 保存フロア読み込み先
+ * @param mode オプション
+ * @return 成功したらtrue
  */
 bool load_floor(saved_floor_type *sf_ptr, u32b mode)
 {
