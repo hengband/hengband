@@ -1,19 +1,14 @@
-﻿/* File: load.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, and others
+﻿/*!
+ * @file load.c
+ * @brief セーブファイル読み込み処理 / Purpose: support for loading savefiles -BEN-
+ * @date 2014/07/07
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
- */
-
-/* Purpose: support for loading savefiles -BEN- */
-
-#include "angband.h"
-
-
-/*
+ * @details
  * This file loads savefiles from Angband 2.7.X and 2.8.X
  *
  * Ancient savefiles (pre-2.7.0) are loaded by another file.
@@ -45,6 +40,7 @@
  * XXX XXX XXX
  */
 
+#include "angband.h"
 
 
 /*
@@ -82,9 +78,13 @@ static u32b	x_check = 0L;
  */
 static byte kanji_code = 0;
 
-/*
- * This function determines if the version of the savefile
- * currently being read is older than version "major.minor.patch.extra".
+/*!
+ * @brief 変愚蛮怒のバージョン比較処理 / This function determines if the version of the savefile currently being read is older than version "major.minor.patch.extra".
+ * @param major メジャーバージョン値
+ * @param minor マイナーバージョン値
+ * @param patch パッチバージョン値
+ * @param extra エクストラパージョン値
+ * @return 現在のバージョンより値が古いならtrue
  */
 static bool h_older_than(byte major, byte minor, byte patch, byte extra)
 {
@@ -109,8 +109,12 @@ static bool h_older_than(byte major, byte minor, byte patch, byte extra)
 }
 
 
-/*
- * The above function, adapted for Zangband
+/*!
+ * @brief Zangbandのバージョン比較処理 / The above function, adapted for Zangband
+ * @param x メジャーバージョン値
+ * @param y マイナーバージョン値
+ * @param z パッチバージョン値
+ * @return 現在のバージョンより値が古いならtrue
  */
 static bool z_older_than(byte x, byte y, byte z)
 {
@@ -131,9 +135,11 @@ static bool z_older_than(byte x, byte y, byte z)
 }
 
 
-/*
- * Hack -- Show information on the screen, one line at a time.
- *
+/*!
+ * @brief ゲームスクリーンにメッセージを表示する / Hack -- Show information on the screen, one line at a time.
+ * @param cptr 表示文字列
+ * @return なし
+ * @details
  * Avoid the top two lines, to avoid interference with "msg_print()".
  */
 static void note(cptr msg)
