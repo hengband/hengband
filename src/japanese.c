@@ -1,5 +1,8 @@
-﻿/* File: japanese.c */
-
+﻿/*!
+ *  @file japanese.c
+ *  @brief 日本語処理関数
+ *  @date 2014/07/07
+ */
 
 #include "angband.h"
 
