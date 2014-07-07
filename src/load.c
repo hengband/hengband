@@ -1370,9 +1370,10 @@ static void rd_randomizer(void)
 
 
 
-/*
- * Read options (ignore most pre-2.8.0 options)
- *
+/*!
+ * @brief ゲームオプションを読み込む / Read options (ignore most pre-2.8.0 options)
+ * @return なし
+ * @details
  * Note that the normal options are now stored as a set of 256 bit flags,
  * plus a set of 256 bit masks to indicate which bit flags were defined
  * at the time the savefile was created.  This will allow new options
@@ -1546,11 +1547,10 @@ static void rd_options(void)
 
 
 
-
-
-/*
- * Hack -- strip the "ghost" info
- *
+/*!
+ * @brief ダミー情報スキップ / Hack -- strip the "ghost" info
+ * @return なし
+ * @details
  * XXX XXX XXX This is such a nasty hack it hurts.
  */
 static void rd_ghost(void)
@@ -1565,8 +1565,9 @@ static void rd_ghost(void)
 }
 
 
-/*
- * Save quick start data
+/*!
+ * @brief クイックスタート情報を読み込む / Load quick start data
+ * @return なし
  */
 static void load_quick_start(void)
 {
@@ -1610,8 +1611,9 @@ static void load_quick_start(void)
 	previous_char.quick_ok = (bool)tmp8u;
 }
 
-/*
- * Read the "extra" information
+/*!
+ * @brief その他の情報を読み込む / Read the "extra" information
+ * @return なし
  */
 static void rd_extra(void)
 {
@@ -2257,11 +2259,10 @@ static void rd_extra(void)
 }
 
 
-
-
-/*
- * Read the player inventory
- *
+/*!
+ * @brief プレイヤーの所持品情報を読み込む / Read the player inventory
+ * @return なし
+ * @details
  * Note that the inventory changed in Angband 2.7.4.  Two extra
  * pack slots were added and the equipment was rearranged.  Note
  * that these two features combine when parsing old save-files, in
@@ -2358,9 +2359,9 @@ static errr rd_inventory(void)
 }
 
 
-
-/*
- * Read the saved messages
+/*!
+ * @brief メッセージログを読み込む / Read the saved messages
+ * @return なし
  */
 static void rd_messages(void)
 {
@@ -2404,9 +2405,10 @@ static void rd_messages(void)
 #define QUEST_OLD_CASTLE  27
 #define QUEST_ROYAL_CRYPT 28
 
-/*
- * Read the dungeon (old method)
- *
+/*!
+ * @brief メッセージログを読み込む / Read the dungeon (old method)
+ * @return なし
+ * @details
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
@@ -2817,10 +2819,10 @@ static errr rd_dungeon_old(void)
 }
 
 
-
-/*
- * Read the saved floor
- *
+/*!
+ * @bried 保存されたフロアを読み込む / Read the saved floor
+ * @return なし
+ * @details
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
