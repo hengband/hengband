@@ -2858,8 +2858,10 @@ static bool monster_hook_tanuki(int r_idx)
 }
 
 
-/*
- *  Set initial racial appearance of a monster
+/*!
+ * @brief モンスターの表層IDを設定する / Set initial racial appearance of a monster
+ * @param r_idx モンスター種族ID
+ * @return モンスター種族の表層ID
  */
 static int initial_r_appearance(int r_idx)
 {
@@ -2883,8 +2885,10 @@ static int initial_r_appearance(int r_idx)
 }
 
 
-/*
- * Get initial monster speed
+/*!
+ * @brief モンスターの個体加速を設定する / Get initial monster spee\d
+ * @param r_ptr モンスター種族の参照ポインタ
+ * @return 加速値
  */
 byte get_mspeed(monster_race *r_ptr)
 {
@@ -2905,9 +2909,15 @@ byte get_mspeed(monster_race *r_ptr)
 }
 
 
-/*
- * Attempt to place a monster of the given race at the given location.
- *
+/*!
+ * @brief モンスターを一体生成する / Attempt to place a monster of the given race at the given location.
+ * @param who 召喚を行ったモンスターID
+ * @param y 生成位置y座標
+ * @param x 生成位置x座標
+ * @param r_idx 生成モンスター種族
+ * @param mode 生成オプション
+ * @return 成功したらtrue
+ * @details 
  * To give the player a sporting chance, any monster that appears in
  * line-of-sight and is extremely dangerous can be marked as
  * "FORCE_SLEEP", which will cause them to be placed with low energy,
@@ -3333,12 +3343,20 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 }
 
 
-/*
- *  improved version of scatter() for place monster
- */
 
 #define MON_SCAT_MAXD 10
 
+/*!
+ * @brief モンスター1体を目標地点に可能ながり近い位置に生成する / improved version of scatter() for place monster
+ * @param r_idx 生成モンスター種族
+ * @param yp 結果生成位置y座標
+ * @param xp 結果生成位置x座標
+ * @param y 中心生成位置y座標
+ * @param x 中心生成位置x座標
+ * @param max_dist 生成位置の最大半径
+ * @return 成功したらtrue
+ *  
+ */
 static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
 {
 	int place_x[MON_SCAT_MAXD];
@@ -3414,9 +3432,14 @@ static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
  */
 #define GROUP_MAX	32
 
-
-/*
- * Attempt to place a "group" of monsters around the given location
+/*!
+ * @brief モンスターを目標地点に集団生成する / Attempt to place a "group" of monsters around the given location
+ * @param who 召喚主のモンスター情報ID
+ * @param y 中心生成位置y座標
+ * @param x 中心生成位置x座標
+ * @param r_idx 生成モンスター種族
+ * @param mode 生成オプション
+ * @return 成功したらtrue
  */
 static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 {
@@ -3506,8 +3529,10 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 static int place_monster_idx = 0;
 static int place_monster_m_idx = 0;
 
-/*
- * Hack -- help pick an escort type
+/*!
+ * @brief モンスター種族が召喚主の護衛となれるかどうかをチェックする / Hack -- help pick an escort type
+ * @param r_idx チェックするモンスター種族のID
+ * @return 護衛にできるならばtrue
  */
 static bool place_monster_okay(int r_idx)
 {
@@ -3547,9 +3572,15 @@ static bool place_monster_okay(int r_idx)
 }
 
 
-/*
- * Attempt to place a monster of the given race at the given location
- *
+/*!
+ * @brief 一般的なモンスター生成処理のサブルーチン / Attempt to place a monster of the given race at the given location
+ * @param who 召喚主のモンスター情報ID
+ * @param y 生成地点y座標
+ * @param x 生成地点x座標
+ * @param r_idx 生成するモンスターの種族ID
+ * @param mode 生成オプション
+ * @return 生成に成功したらtrue
+ * @details
  * Note that certain monsters are now marked as requiring "friends".
  * These monsters, if successfully placed, and if the "grp" parameter
  * is TRUE, will be surrounded by a "group" of identical monsters.
@@ -3644,11 +3675,12 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 	return (TRUE);
 }
 
-
-/*
- * Hack -- attempt to place a monster at the given location
- *
- * Attempt to find a monster appropriate to the "monster_level"
+/*!
+ * @brief 一般的なモンスター生成処理のメインルーチン / Attempt to place a monster of the given race at the given location
+ * @param y 生成地点y座標
+ * @param x 生成地点x座標
+ * @param mode 生成オプション
+ * @return 生成に成功したらtrue
  */
 bool place_monster(int y, int x, u32b mode)
 {
