@@ -1441,7 +1441,7 @@ s16b get_mon_num(int level)
 }
 
 
-/*
+/*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.
  * @param desc 記述出力先の文字列参照ポインタ
  * @param m_ptr モンスターの参照ポインタ
@@ -1780,7 +1780,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 
 
 
-/*
+/*!
  * @brief モンスターの調査による思い出補完処理 / Learn about a monster (by "probing" it)
  * @param r_idx 補完されるモンスター種族ID
  * @return 明らかになった情報の度数
@@ -1888,9 +1888,13 @@ int lore_do_probe(int r_idx)
 }
 
 
-/*
- * Take note that the given monster just dropped some treasure
- *
+/*!
+ * @brief モンスターの撃破に伴うドロップ情報の保管処理 / Take note that the given monster just dropped some treasure
+ * @param m_idx モンスター情報のID
+ * @param num_item 手に入れたアイテム数
+ * @param num_gold 手に入れた財宝の単位数
+ * @return なし
+ * @details
  * Note that learning the "GOOD"/"GREAT" flags gives information
  * about the treasure (even when the monster is killed for the first
  * time, such as uniques, and the treasure has not been examined yet).
@@ -1927,7 +1931,12 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
 }
 
 
-
+/*!
+ * @brief ELDRITCH_HORRORによるプレイヤーの精神破壊処理
+ * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ
+ * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
+ * @return なし
+ */
 void sanity_blast(monster_type *m_ptr, bool necro)
 {
 	bool happened = FALSE;
@@ -2167,10 +2176,12 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	handle_stuff();
 }
 
-
-/*
- * This function updates the monster record of the given monster
- *
+/*!
+ * @brief モンスターの各情報を更新する / This function updates the monster record of the given monster
+ * @param m_idx 更新するモンスター情報のID
+ * @param full プレイヤーとの距離更新を行うならばtrue
+ * @return なし
+ * @detail 
  * This involves extracting the distance to the player (if requested),
  * and then checking for visibility (natural, infravision, see-invis,
  * telepathy), updating the monster visibility flag, redrawing (or
@@ -2615,8 +2626,10 @@ void update_mon(int m_idx, bool full)
 }
 
 
-/*
- * This function simply updates all the (non-dead) monsters (see above).
+/*!
+ * @brief 単純に生存している全モンスターの更新処理を行う / This function simply updates all the (non-dead) monsters (see above).
+ * @param full 距離更新を行うならtrue
+ * @return なし
  */
 void update_monsters(bool full)
 {
@@ -2636,8 +2649,10 @@ void update_monsters(bool full)
 }
 
 
-/*
- * Hack -- the index of the summoning monster
+/*!
+ * @brief カメレオンの王の変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
+ * @param r_idx モンスター種族ID
+ * @return 対象にできるならtrueを返す
  */
 static bool monster_hook_chameleon_lord(int r_idx)
 {
@@ -2670,6 +2685,11 @@ static bool monster_hook_chameleon_lord(int r_idx)
 	return TRUE;
 }
 
+/*!
+ * @brief カメレオンの変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
+ * @param r_idx モンスター種族ID
+ * @return 対象にできるならtrueを返す
+ */
 static bool monster_hook_chameleon(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -2702,7 +2722,13 @@ static bool monster_hook_chameleon(int r_idx)
 	return (*(get_monster_hook()))(r_idx);
 }
 
-
+/*!
+ * @brief モンスターの変身処理
+ * @param m_idx 変身処理を受けるモンスター情報のID
+ * @param born 生成時の初変身先指定ならばtrue
+ * @param r_idx 旧モンスター種族のID
+ * @return なし
+ */
 void choose_new_monster(int m_idx, bool born, int r_idx)
 {
 	int oldmaxhp;
@@ -2811,8 +2837,10 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 }
 
 
-/*
- *  Hook for Tanuki
+/*!
+ * @brief たぬきの変身対象となるモンスターかどうか判定する / Hook for Tanuki
+ * @param r_idx モンスター種族ID
+ * @return 対象にできるならtrueを返す
  */
 static bool monster_hook_tanuki(int r_idx)
 {
