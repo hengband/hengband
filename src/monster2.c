@@ -311,8 +311,11 @@ void delete_monster(int y, int x)
 }
 
 
-/*
- * Move an object from index i1 to index i2 in the object list
+/*!
+ * @brief モンスター情報を配列内移動する / Move an object from index i1 to index i2 in the object list
+ * @param i1 配列移動元添字
+ * @param i2 配列移動先添字
+ * @return なし
  */
 static void compact_monsters_aux(int i1, int i2)
 {
@@ -396,9 +399,11 @@ static void compact_monsters_aux(int i1, int i2)
 }
 
 
-/*
- * Compact and Reorder the monster list
- *
+/*!
+ * @brief モンスター情報配列を圧縮する / Compact and Reorder the monster list
+ * @param size 圧縮後のモンスター件数目標
+ * @return なし
+ * @details
  * This function can be very dangerous, use with caution!
  *
  * When actually "compacting" monsters, we base the saving throw
@@ -491,9 +496,10 @@ void compact_monsters(int size)
 }
 
 
-/*
- * Delete/Remove all the monsters when the player leaves the level
- *
+/*!
+ * @brief プレイヤーのフロア離脱に伴う全モンスター配列の消去 / Delete/Remove all the monsters when the player leaves the level
+ * @return なし
+ * @details
  * This is an efficient method of simulating multiple calls to the
  * "delete_monster()" function, with no visual effects.
  */
@@ -567,9 +573,10 @@ void wipe_m_list(void)
 }
 
 
-/*
- * Acquires and returns the index of a "free" monster.
- *
+/*!
+ * @brief モンスター配列の空きを探す / Acquires and returns the index of a "free" monster.
+ * @return 利用可能なモンスター配列の添字
+ * @details
  * This routine should almost never fail, but it *can* happen.
  */
 s16b m_pop(void)
