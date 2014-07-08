@@ -645,6 +645,11 @@ static int summon_specific_who = -1;
 static bool summon_unique_okay = FALSE;
 
 
+/*!
+ * @brief 指定されたモンスター種族がsummon_specific_typeで指定された召喚条件に合うかどうかを返す
+ * @return 召喚条件が一致するならtrue
+ * @details
+ */
 static bool summon_specific_aux(int r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -951,9 +956,10 @@ static bool summon_specific_aux(int r_idx)
 static int chameleon_change_m_idx = 0;
 
 
-/*
- * Some dungeon types restrict the possible monsters.
- * Return TRUE is the monster is OK and FALSE otherwise
+/*!
+ * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
+ * @param r_idx チェックするモンスター種族ID
+ * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
 static bool restrict_monster_to_dungeon(int r_idx)
 {
@@ -1141,8 +1147,11 @@ static bool restrict_monster_to_dungeon(int r_idx)
 	return TRUE;
 }
 
-/*
- * Apply a "monster restriction function" to the "monster allocation table"
+/*!
+ * @brief モンスター生成制限関数最大2つから / Apply a "monster restriction function" to the "monster allocation table"
+ * @param monnster_hook 制限関数1
+ * @param monnster_hook2 制限関数2
+ * @return エラーコード
  */
 errr get_mon_num_prep(monster_hook_type monster_hook,
 					  monster_hook_type monster_hook2)
@@ -1202,7 +1211,11 @@ errr get_mon_num_prep(monster_hook_type monster_hook,
 	return (0);
 }
 
-
+/*!
+ * @brief 平方根を切り捨て整数で返す
+ * @param n 数値
+ * @return 平方根
+ */
 static int mysqrt(int n)
 {
 	int tmp = n>>1;
