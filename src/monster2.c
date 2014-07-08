@@ -1,14 +1,14 @@
-﻿/* File: monster2.c */
-
-/*
+﻿/*!
+ * @file monster2.c
+ * @brief モンスター処理 / misc code for monsters
+ * @date 2014/07/08
+ * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * 2014 Deskull rearranged comment for Doxygen.
  */
-
-/* Purpose: misc code for monsters */
 
 #include "angband.h"
 
@@ -149,8 +149,12 @@ cptr funny_comments[MAX_SAN_COMMENT] =
 };
 
 
-/*
- * Set the target of counter attack
+/*!
+ * @brief モンスターの目標地点をセットする / Set the target of counter attack
+ * @param m_ptr モンスターの参照ポインタ
+ * @param y 目標y座標
+ * @param x 目標x座標
+ * @return なし
  */
 void set_target(monster_type *m_ptr, int y, int x)
 {
@@ -159,8 +163,10 @@ void set_target(monster_type *m_ptr, int y, int x)
 }
 
 
-/*
- * Reset the target of counter attack
+/*!
+ * @brief モンスターの目標地点をリセットする / Reset the target of counter attack
+ * @param m_ptr モンスターの参照ポインタ
+ * @return なし
  */
 void reset_target(monster_type *m_ptr)
 {
@@ -168,8 +174,10 @@ void reset_target(monster_type *m_ptr)
 }
 
 
-/*
- *  Extract monster race pointer of a monster's true form
+/*!
+ * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
+ * @param m_ptr モンスターの参照ポインタ
+ * @return 本当のモンスター種族参照ポインタ
  */
 monster_race *real_r_ptr(monster_type *m_ptr)
 {
@@ -190,9 +198,12 @@ monster_race *real_r_ptr(monster_type *m_ptr)
 }
 
 
-/*
- * Delete a monster by index.
- *
+/*!
+ * @brief モンスター配列からモンスターを消去する / Delete a monster by index.
+ * @param i 消去するモンスターのID
+ * @return なし
+ * @details
+ * モンスターを削除するとそのモンスターが拾っていたアイテムも同時に削除される。 /
  * When a monster is deleted, all of its objects are deleted.
  */
 void delete_monster_idx(int i)
@@ -279,8 +290,11 @@ void delete_monster_idx(int i)
 }
 
 
-/*
- * Delete the monster, if any, at a given location
+/*!
+ * @brief 指定位置に存在するモンスターを削除する / Delete the monster, if any, at a given location
+ * @param x 削除位置x座標
+ * @param y 削除位置y座標
+ * @return なし
  */
 void delete_monster(int y, int x)
 {
