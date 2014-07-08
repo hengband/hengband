@@ -1253,7 +1253,11 @@ static int mysqrt(int n)
 	return kaeriti;
 }
 
-/*
+/*!
+ * @brief 生成モンスター種族を1種生成テーブルから選択する
+ * @param level 生成階
+ * @return 選択されたモンスター生成種族
+ * @details
  * Choose a monster race that seems "appropriate" to the given level
  *
  * This function uses the "prob2" field of the "monster allocation table",
@@ -1437,12 +1441,13 @@ s16b get_mon_num(int level)
 }
 
 
-
-
-
 /*
- * Build a string describing a monster in some way.
- *
+ * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.
+ * @param desc 記述出力先の文字列参照ポインタ
+ * @param m_ptr モンスターの参照ポインタ
+ * @param mode 呼称オプション
+ * @return なし
+ * @details
  * We can correctly describe monsters based on their visibility.
  * We can force all monsters to be treated as visible or invisible.
  * We can build nominatives, objectives, possessives, or reflexives.
@@ -1775,10 +1780,11 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
 
 
 
-
 /*
- * Learn about a monster (by "probing" it)
- *
+ * @brief モンスターの調査による思い出補完処理 / Learn about a monster (by "probing" it)
+ * @param r_idx 補完されるモンスター種族ID
+ * @return 明らかになった情報の度数
+ * @details
  * Return the number of new flags learnt.  -Mogami-
  */
 int lore_do_probe(int r_idx)
