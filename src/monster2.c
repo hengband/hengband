@@ -3705,6 +3705,12 @@ bool place_monster(int y, int x, u32b mode)
 
 #ifdef MONSTER_HORDES
 
+/*!
+ * @brief 指定地点に1種類のモンスター種族による群れを生成する
+ * @param y 生成地点y座標
+ * @param x 生成地点x座標
+ * @return 生成に成功したらtrue
+ */
 bool alloc_horde(int y, int x)
 {
 	monster_race *r_ptr = NULL;
@@ -3765,8 +3771,10 @@ bool alloc_horde(int y, int x)
 #endif /* MONSTER_HORDES */
 
 
-/*
- * Put the Guardian
+/*!
+ * @brief ダンジョンの主生成を試みる / Put the Guardian
+ * @param def_val 現在の主の生成状態
+ * @return 生成に成功したらtrue
  */
 bool alloc_guardian(bool def_val)
 {
@@ -3803,13 +3811,14 @@ bool alloc_guardian(bool def_val)
 }
 
 
-/*
- * Attempt to allocate a random monster in the dungeon.
- *
+/*!
+ * @brief ダンジョンの初期配置モンスターを生成1回生成する / Attempt to allocate a random monster in the dungeon.
+ * @param dis プレイヤーから離れるべき最低距離
+ * @param mode 生成オプション
+ * @return 生成に成功したらtrue
+ * @details
  * Place the monster at least "dis" distance from the player.
- *
  * Use "slp" to choose the initial "sleep" status
- *
  * Use "monster_level" for the monster level
  */
 bool alloc_monster(int dis, u32b mode)
@@ -3877,10 +3886,10 @@ bool alloc_monster(int dis, u32b mode)
 }
 
 
-
-
-/*
- * Hack -- help decide if a monster race is "okay" to summon
+/*!
+ * @brief モンスターが召喚の基本条件に合っているかをチェックする / Hack -- help decide if a monster race is "okay" to summon
+ * @param r_idx チェックするモンスター種族ID
+ * @return 召喚対象にできるならばTRUE
  */
 static bool summon_specific_okay(int r_idx)
 {
@@ -3925,9 +3934,16 @@ static bool summon_specific_okay(int r_idx)
 }
 
 
-/*
- * Place a monster (of the specified "type") near the given
- * location.  Return TRUE if a monster was actually summoned.
+/*!
+ * @brief モンスターを召喚により配置する / Place a monster (of the specified "type") near the given location. Return TRUE if a monster was actually summoned.
+ * @param who 召喚主のモンスター情報ID
+ * @param y1 目標地点y座標
+ * @param x1 目標地点x座標
+ * @param lev 相当生成階
+ * @param type 召喚種別
+ * @param mode 生成オプション 
+ * @return 召喚できたらtrueを返す
+ * @details
  *
  * We will attempt to place the monster up to 10 times before giving up.
  *
@@ -3992,7 +4008,16 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 	return (TRUE);
 }
 
-/* A "dangerous" function, creates a pet of the specified type */
+
+/*!
+ * @brief 特定モンスター種族を召喚により生成する / A "dangerous" function, creates a pet of the specified type
+ * @param who 召喚主のモンスター情報ID
+ * @param oy 目標地点y座標
+ * @param ox 目標地点x座標
+ * @param r_idx 生成するモンスター種族ID
+ * @param mode 生成オプション 
+ * @return 召喚できたらtrueを返す
+ */
 bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
 {
 	int x, y;
@@ -4012,9 +4037,13 @@ bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
 }
 
 
-/*
- * Let the given monster attempt to reproduce.
- *
+/*!
+ * @brief モンスターを増殖生成する / Let the given monster attempt to reproduce.
+ * @param m_idx 増殖するモンスター情報ID
+ * @param clone クローン・モンスター処理ならばtrue
+ * @param mode 生成オプション 
+ * @return 生成できたらtrueを返す
+ * @details
  * Note that "reproduction" REQUIRES empty space.
  */
 bool multiply_monster(int m_idx, bool clone, u32b mode)
@@ -4044,11 +4073,12 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 
 
 
-
-
-/*
- * Dump a message describing a monster's reaction to damage
- *
+/*!
+ * @brief ダメージを受けたモンスターの様子を記述する / Dump a message describing a monster's reaction to damage
+ * @param m_idx モンスター情報ID
+ * @param dam 与えたダメージ
+ * @return なし
+ * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */
 void message_pain(int m_idx, int dam)
