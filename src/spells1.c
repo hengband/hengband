@@ -1,14 +1,15 @@
-﻿/* File: spells1.c */
-
-/*
+﻿/*!
+ * @file spells1.c
+ * @brief 魔法による遠隔処理の実装 / Spell projection
+ * @date 2014/07/10
+ * @author
+ * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * </pre>
  */
-
-/* Purpose: Spell projection */
 
 #include "angband.h"
 
@@ -22,8 +23,14 @@ static int rakubadam_p;
 
 int project_length = 0;
 
-/*
+
+/*!
+ * @brief 配置した鏡リストの次を取得する /
  * Get another mirror. for SEEKER 
+ * @param next_y 次の鏡のy座標を返す参照ポインタ
+ * @param next_x 次の鏡のx座標を返す参照ポインタ
+ * @param cury 現在の鏡のy座標
+ * @param curx 現在の鏡のx座標
  */
 static void next_mirror( int* next_y , int* next_x , int cury, int curx)
 {
@@ -55,8 +62,11 @@ static void next_mirror( int* next_y , int* next_x , int cury, int curx)
 	return;
 }
 		
-/*
+/*!
+ * @brief 万色表現用にランダムな色を選択する関数 /
  * Get a legal "multi-hued" color for drawing "spells"
+ * @param max 色IDの最大値
+ * @return 選択した色ID
  */
 static byte mh_attr(int max)
 {
@@ -83,8 +93,11 @@ static byte mh_attr(int max)
 }
 
 
-/*
+/*!
+ * @brief 魔法属性に応じたエフェクトの色を返す /
  * Return a color to use for the bolt/ball spells
+ * @param type 魔法属性
+ * @return 対応する色ID
  */
 static byte spell_color(int type)
 {
@@ -182,12 +195,19 @@ static byte spell_color(int type)
 }
 
 
-/*
+/*!
+ * @brief 始点から終点にかけた方向毎にボルトのキャラクタを返す /
  * Find the attr/char pair to use for a spell effect
- *
+ * @param y 始点Y座標
+ * @param x 始点X座標
+ * @param ny 終点Y座標
+ * @param nx 終点X座標
+ * @return 方向キャラID
+ * @details
+ * <pre>
  * It is moving (or has moved) from (x,y) to (nx,ny).
- *
  * If the distance is not "one", we (may) return "*".
+ * </pre>
  */
 u16b bolt_pict(int y, int x, int ny, int nx, int typ)
 {
@@ -228,9 +248,19 @@ u16b bolt_pict(int y, int x, int ny, int nx, int typ)
 }
 
 
-/*
+/*!
+ * @brief 始点から終点への経路を返す /
  * Determine the path taken by a projection.
- *
+ * @param gp 経路座標リストを返す参照ポインタ
+ * @param range 距離
+ * @param y1 始点Y座標
+ * @param x1 始点X座標
+ * @param y2 終点Y座標
+ * @param x2 終点X座標
+ * @param flg フラグID
+ * @return リストの長さ
+ * @details
+ * <pre>
  * The projection will always start from the grid (y1,x1), and will travel
  * towards the grid (y2,x2), touching one grid per unit of distance along
  * the major axis, and stopping when it enters the destination grid or a
@@ -267,6 +297,7 @@ u16b bolt_pict(int y, int x, int ny, int nx, int typ)
  *
  * This algorithm is similar to, but slightly different from, the one used
  * by "update_view_los()", and very different from the one used by "los()".
+ * </pre>
  */
 sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 {
