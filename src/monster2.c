@@ -4403,9 +4403,11 @@ void message_pain(int m_idx, int dam)
 
 
 
-
-/*
- * Learn about an "observed" resistance.
+/*!
+ * @brief SMART(適格に攻撃を行う)モンスターの学習状況を更新する / Learn about an "observed" resistance.
+ * @param m_idx 更新を行う「モンスター情報ID
+ * @param what 学習対象ID
+ * @return なし
  */
 void update_smart_learn(int m_idx, int what)
 {
@@ -4518,8 +4520,11 @@ void update_smart_learn(int m_idx, int what)
 }
 
 
-/*
- * Place the player in the dungeon XXX XXX
+/*!
+ * @brief プレイヤーを指定座標に配置する / Place the player in the dungeon XXX XXX
+ * @param x 配置先X座標
+ * @param y 配置先Y座標
+ * @return 配置に成功したらTRUE
  */
 bool player_place(int y, int x)
 {
@@ -4535,8 +4540,10 @@ bool player_place(int y, int x)
 }
 
 
-/*
- * Drop all items carried by a monster
+/*!
+ * @brief モンスターが盗みや拾いで確保していたアイテムを全てドロップさせる / Drop all items carried by a monster
+ * @param m_ptr モンスター参照ポインタ
+ * @return なし
  */
 void monster_drop_carried_objects(monster_type *m_ptr)
 {
