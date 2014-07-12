@@ -1,14 +1,16 @@
-﻿/* File: save.c */
-
-/*
+﻿/*!
+ * @file save.c
+ * @brief セーブファイル書き込み処理 / Purpose: interact with savefiles
+ * @date 2014/07/12
+ * @author
+ * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * </pre>
  */
-
-/* Purpose: interact with savefiles */
 
 #include "angband.h"
 
@@ -27,10 +29,11 @@ static u32b     x_stamp = 0L;   /* A simple "checksum" on the encoded bytes */
 
 
 
-/*
- * These functions place information into a savefile a byte at a time
+/*!
+ * @brief 1バイトをファイルに書き込む / These functions place information into a savefile a byte at a time
+ * @param v 書き込むバイト値
+ * @return なし
  */
-
 static void sf_put(byte v)
 {
 	/* Encode the value, write a character */
@@ -42,22 +45,42 @@ static void sf_put(byte v)
 	x_stamp += xor_byte;
 }
 
+/*!
+ * @brief 1バイトをファイルに書き込む(sf_put()の糖衣)
+ * @param v 書き込むバイト
+ * @return なし
+ */
 static void wr_byte(byte v)
 {
 	sf_put(v);
 }
 
+/*!
+ * @brief 符号なし16ビットをファイルに書き込む
+ * @param v 書き込む符号なし16bit値
+ * @return なし
+ */
 static void wr_u16b(u16b v)
 {
 	sf_put((byte)(v & 0xFF));
 	sf_put((byte)((v >> 8) & 0xFF));
 }
 
+/*!
+ * @brief 符号あり16ビットをファイルに書き込む
+ * @param v 書き込む符号あり16bit値
+ * @return なし
+ */
 static void wr_s16b(s16b v)
 {
 	wr_u16b((u16b)v);
 }
 
+/*!
+ * @brief 符号なし32ビットをファイルに書き込む
+ * @param v 書き込む符号なし32bit値
+ * @return なし
+ */
 static void wr_u32b(u32b v)
 {
 	sf_put((byte)(v & 0xFF));
@@ -66,11 +89,21 @@ static void wr_u32b(u32b v)
 	sf_put((byte)((v >> 24) & 0xFF));
 }
 
+/*!
+ * @brief 符号あり32ビットをファイルに書き込む
+ * @param v 書き込む符号あり32bit値
+ * @return なし
+ */
 static void wr_s32b(s32b v)
 {
 	wr_u32b((u32b)v);
 }
 
+/*!
+ * @brief 文字列をファイルに書き込む
+ * @param str 書き込む文字列
+ * @return なし
+ */
 static void wr_string(cptr str)
 {
 	while (*str)
