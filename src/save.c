@@ -120,8 +120,10 @@ static void wr_string(cptr str)
  */
 
 
-/*
- * Write an "item" record
+/*!
+ * @brief アイテムオブジェクトを書き込む / Write an "item" record
+ * @param o_ptr アイテムオブジェクト保存元ポインタ
+ * @return なし
  */
 static void wr_item(object_type *o_ptr)
 {
@@ -215,8 +217,10 @@ static void wr_item(object_type *o_ptr)
 }
 
 
-/*
- * Write a "monster" record
+/*!
+ * @brief モンスター情報を書き込む / Write a "monster" record
+ * @param m_ptr モンスター情報保存元ポインタ
+ * @return なし
  */
 static void wr_monster(monster_type *m_ptr)
 {
@@ -302,8 +306,10 @@ static void wr_monster(monster_type *m_ptr)
 }
 
 
-/*
- * Write a "lore" record
+/*!
+ * @brief モンスターの思い出を書き込む / Write a "lore" record
+ * @param r_idx モンスター種族ID
+ * @return なし
  */
 static void wr_lore(int r_idx)
 {
@@ -358,9 +364,10 @@ static void wr_lore(int r_idx)
 	wr_byte(0);
 }
 
-
-/*
- * Write an "xtra" record
+/*!
+ * @brief その他のゲーム情報を書き込む(実質はアイテムの鑑定情報のみ) / Write an "xtra" record
+ * @param k_idx ベースアイテムのID
+ * @return なし
  */
 static void wr_xtra(int k_idx)
 {
@@ -375,8 +382,10 @@ static void wr_xtra(int k_idx)
 }
 
 
-/*
- * Write a "store" record
+/*!
+ * @brief 店舗情報を書き込む / Write a "store" record
+ * @param k_idx 店舗情報の参照ポインタ
+ * @return なし
  */
 static void wr_store(store_type *st_ptr)
 {
@@ -409,8 +418,9 @@ static void wr_store(store_type *st_ptr)
 }
 
 
-/*
- * Write RNG state
+/*!
+ * @brief 乱数情報を書き込む / Write RNG state
+ * @return なし
  */
 static errr wr_randomizer(void)
 {
@@ -433,8 +443,9 @@ static errr wr_randomizer(void)
 }
 
 
-/*
- * Write the "options"
+/*!
+ * @brief ゲームオプション情報を書き込む / Write the "options"
+ * @return なし
  */
 static void wr_options(void)
 {
