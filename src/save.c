@@ -539,8 +539,9 @@ static void wr_options(void)
 }
 
 
-/*
- * Hack -- Write the "ghost" info
+/*!
+ * @brief ダミー情報スキップを書き込む / Hack -- Write the "ghost" info
+ * @return なし
  */
 static void wr_ghost(void)
 {
@@ -554,8 +555,9 @@ static void wr_ghost(void)
 }
 
 
-/*
- * Save quick start data
+/*!
+ * @brief クイック・スタート情報を書き込む / Save quick start data
+ * @return なし
  */
 static void save_quick_start(void)
 {
@@ -594,8 +596,10 @@ static void save_quick_start(void)
 	wr_byte((byte)previous_char.quick_ok);
 }
 
-/*
- * Write some "extra" info
+
+/*!
+ * @brief その他の情報を書き込む / Write some "extra" info
+ * @return なし
  */
 static void wr_extra(void)
 {
@@ -853,9 +857,13 @@ static void wr_extra(void)
 }
 
 
-
-/*
- * hook function to sort monsters by level
+/*!
+ * @brief フロア保存時のcave情報テンプレートをソートするための比較処理
+ * @param u caveテンプレートの参照ポインタ
+ * @param v 未使用
+ * @param a スワップするモンスター種族のID1
+ * @param b スワップするモンスター種族のID2
+ * @return aの方が大きければtrue
  */
 static bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
 {
@@ -871,8 +879,13 @@ static bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
 }
 
 
-/*
- * Sorting hook -- Swap function
+/*!
+ * @brief フロア保存時のcave情報テンプレートをソートするためのスワップ処理 / Sorting hook -- Swap function
+ * @param u caveテンプレートの参照ポインタ
+ * @param v 未使用
+ * @param a スワップするモンスター種族のID1
+ * @param b スワップするモンスター種族のID2
+ * @return なし
  */
 static void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b)
 {
@@ -890,9 +903,10 @@ static void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b)
 }
 
 
-/*
- * Actually write a saved floor data
- * using effectively compressed format.
+/*!
+ * @brief 保存フロアの書き込み / Actually write a saved floor data using effectively compressed format.
+ * @param sf_ptr 保存したいフロアの参照ポインタ
+ * @return なし
  */
 static void wr_saved_floor(saved_floor_type *sf_ptr)
 {
