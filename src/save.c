@@ -1149,8 +1149,10 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 }
 
 
-/*
+/*!
+ * @brief 現在フロアの書き込み /
  * Write the current dungeon (new method)
+ * @return なし
  */
 static bool wr_dungeon(void)
 {
@@ -1253,9 +1255,10 @@ static bool wr_dungeon(void)
 }
 
 
-
-/*
+/*!
+ * @brief セーブデータの書き込み /
  * Actually write a save-file
+ * @return 成功すればtrue
  */
 static bool wr_savefile_new(void)
 {
@@ -1554,9 +1557,11 @@ static bool wr_savefile_new(void)
 }
 
 
-/*
+/*!
+ * @brief セーブデータ書き込みのサブルーチン /
  * Medium level player saver
- *
+ * @return 成功すればtrue
+ * @details
  * XXX XXX XXX Angband 2.8.0 will use "fd" instead of "fff" if possible
  */
 static bool save_player_aux(char *name)
@@ -1635,8 +1640,10 @@ static bool save_player_aux(char *name)
 
 
 
-/*
+/*!
+ * @brief セーブデータ書き込みのメインルーチン /
  * Attempt to save the player in a savefile
+ * @return 成功すればtrue
  */
 bool save_player(void)
 {
@@ -1752,10 +1759,12 @@ bool save_player(void)
 }
 
 
-
-/*
+/*!
+ * @brief セーブデータ読み込みのメインルーチン /
  * Attempt to Load a "savefile"
- *
+ * @return 成功すればtrue
+ * @details
+ * <pre>
  * Version 2.7.0 introduced a slightly different "savefile" format from
  * older versions, requiring a completely different parsing method.
  *
@@ -1775,6 +1784,7 @@ bool save_player(void)
  *
  * Note that we always try to load the "current" savefile, even if
  * there is no such file, so we must check for "empty" savefile names.
+ * </pre>
  */
 bool load_player(void)
 {
