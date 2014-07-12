@@ -2053,7 +2053,10 @@ bool load_player(void)
 	return (FALSE);
 }
 
-
+/*!
+ * @brief ファイルロック処理
+ * @return なし
+ */
 void remove_loc(void)
 {
 #ifdef VERIFY_SAVEFILE
@@ -2092,8 +2095,10 @@ void remove_loc(void)
 }
 
 
-/*
- * Actually write a temporal saved floor file
+/*!
+ * @brief ゲームプレイ中のフロア一時保存出力処理サブルーチン / Actually write a temporal saved floor file
+ * @param sf_ptr 保存フロア参照ポインタ
+ * @return なし
  */
 static bool save_floor_aux(saved_floor_type *sf_ptr)
 {
@@ -2139,8 +2144,11 @@ static bool save_floor_aux(saved_floor_type *sf_ptr)
 }
 
 
-/*
- * Attempt to save the temporally saved-floor data
+/*!
+ * @brief ゲームプレイ中のフロア一時保存出力処理メインルーチン / Attempt to save the temporally saved-floor data
+ * @param sf_ptr 保存フロア参照ポインタ
+ * @param mode 保存オプション
+ * @return なし
  */
 bool save_floor(saved_floor_type *sf_ptr, u32b mode)
 {
