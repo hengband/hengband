@@ -574,9 +574,10 @@ errr top_twenty(void)
 	return (0);
 }
 
-
-/*
+/*!
+ * @brief プレイヤーの現在のスコアをランキングに挟む /
  * Predict the players location, and display it.
+ * @return エラーコード
  */
 errr predict_score(void)
 {
@@ -653,10 +654,10 @@ errr predict_score(void)
 }
 
 
-
-/*
- * show_highclass - selectively list highscores based on class
- * -KMW-
+/*!
+ * @brief スコアランキングの簡易表示 /
+ * show_highclass - selectively list highscores based on class -KMW-
+ * @return なし
  */
 void show_highclass(void)
 {
@@ -729,10 +730,11 @@ void show_highclass(void)
 	screen_load();
 }
 
-
-/*
- * Race Legends
- * -KMW-
+/*!
+ * @brief スコアランキングの簡易表示(種族毎)サブルーチン /
+ * Race Legends -KMW-
+ * @param race_num 種族ID
+ * @return なし
  */
 void race_score(int race_num)
 {
@@ -815,9 +817,10 @@ void race_score(int race_num)
 }
 
 
-/*
- * Race Legends
- * -KMW-
+/*!
+ * @brief スコアランキングの簡易表示(種族毎)メインルーチン /
+ * Race Legends -KMW-
+ * @return なし
  */
 void race_legends(void)
 {
@@ -833,9 +836,10 @@ void race_legends(void)
 	}
 }
 
-
-/*
- * Change the player into a King!			-RAK-
+/*!
+ * @brief 勝利者用の引退演出処理 /
+ * Change the player into a King! -RAK-
+ * @return なし
  */
 void kingly(void)
 {
