@@ -1,20 +1,21 @@
-﻿/* File: scores.c */
-
-/*
+﻿/*!
+ * @file scores.c
+ * @brief ハイスコア処理 / Highscores handling
+ * @date 2014/07/14
+ * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * 2014 Deskull rearranged comment for Doxygen.
  */
-
-/* Purpose: Highscores handling */
 
 #include "angband.h"
 
-
-/*
- * Seek score 'i' in the highscore file
+/*!
+ * @brief i番目のスコア情報にバッファ位置をシークする / Seek score 'i' in the highscore file
+ * @param i スコア情報ID
+ * @return 問題がなければ0を返す
  */
 static int highscore_seek(int i)
 {
@@ -23,8 +24,10 @@ static int highscore_seek(int i)
 }
 
 
-/*
- * Read one score from the highscore file
+/*!
+ * @brief 所定ポインタからスコア情報を読み取る / Read one score from the highscore file
+ * @param score スコア情報参照ポインタ
+ * @return エラーコード
  */
 static errr highscore_read(high_score *score)
 {
@@ -33,8 +36,10 @@ static errr highscore_read(high_score *score)
 }
 
 
-/*
- * Write one score to the highscore file
+/*!
+ * @brief 所定ポインタへスコア情報を書き込む / Write one score to the highscore file
+ * @param score スコア情報参照ポインタ
+ * @return エラーコード(問題がなければ0を返す)
  */
 static int highscore_write(high_score *score)
 {
@@ -42,10 +47,10 @@ static int highscore_write(high_score *score)
 	return (fd_write(highscore_fd, (char*)(score), sizeof(high_score)));
 }
 
-
-/*
- * Just determine where a new score *would* be placed
- * Return the location (0 is best) or -1 on failure
+/*!
+ * @brief スコア情報を全て得るまで繰り返し取得する / Just determine where a new score *would* be placed
+ * @param score スコア情報参照ポインタ
+ * @return 正常ならば(MAX_HISCORES - 1)、問題があれば-1を返す
  */
 static int highscore_where(high_score *score)
 {
@@ -77,9 +82,10 @@ static int highscore_where(high_score *score)
 }
 
 
-/*
- * Actually place an entry into the high score file
- * Return the location (0 is best) or -1 on "failure"
+/*!
+ * @brief スコア情報をバッファの末尾に追加する / Actually place an entry into the high score file
+ * @param score スコア情報参照ポインタ
+ * @return 正常ならば書き込んだスロット位置、問題があれば-1を返す / Return the location (0 is best) or -1 on "failure"
  */
 static int highscore_add(high_score *score)
 {
