@@ -1831,8 +1831,8 @@ static void shoukinkubi(void)
  * 賞金首の報酬テーブル / List of prize object
  */
 static struct {
-	s16b tval;
-	s16b sval;
+	s16b tval; /*!< ベースアイテムのメイン種別ID */
+	s16b sval; /*!< ベースアイテムのサブ種別ID */
 } prize_list[MAX_KUBI] = 
 {
 	{TV_POTION, SV_POTION_CURING},
