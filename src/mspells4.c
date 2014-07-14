@@ -1,4 +1,12 @@
-﻿#include "angband.h"
+﻿/*!
+ * @file mspells4.c
+ * @brief スペル実行処理 / Spell launch
+ * @date 2014/07/14
+ * @author Habu
+ */
+
+
+#include "angband.h"
 
 /*!
 * @brief モンスターIDを取り、モンスター名をm_nameに代入する /
