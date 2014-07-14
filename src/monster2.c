@@ -12,8 +12,9 @@
 
 #include "angband.h"
 
-#define HORDE_NOGOOD 0x01
-#define HORDE_NOEVIL 0x02
+#define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
+#define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */
+
 
 /*!
  * @var horror_desc
@@ -971,7 +972,11 @@ static bool summon_specific_aux(int r_idx)
 	return (bool)(okay ? TRUE : FALSE);
 }
 
-
+/*!
+ * @var chameleon_change_m_idx
+ * @brief カメレオンの変身先モンスターIDを受け渡すためのグローバル変数
+ * @todo 変数渡しの問題などもあるができればchameleon_change_m_idxのグローバル変数を除去し、関数引き渡しに移行すること
+ */
 static int chameleon_change_m_idx = 0;
 
 
@@ -3363,7 +3368,7 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 
 
 
-#define MON_SCAT_MAXD 10
+#define MON_SCAT_MAXD 10 /*!< mon_scatter()関数によるモンスター配置で許される中心からの最大距離 */
 
 /*!
  * @brief モンスター1体を目標地点に可能ながり近い位置に生成する / improved version of scatter() for place monster
@@ -3445,11 +3450,7 @@ static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
 	return TRUE;
 }
 
-
-/*
- * Maximum size of a group of monsters
- */
-#define GROUP_MAX	32
+#define GROUP_MAX 32 /*!< place_monster_group() 関数によるモンスターのGROUP生成時の配置最大数 / Maximum size of a group of monsters */
 
 /*!
  * @brief モンスターを目標地点に集団生成する / Attempt to place a "group" of monsters around the given location
@@ -3541,11 +3542,18 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 	return (TRUE);
 }
 
-
-/*
- * Hack -- help pick an escort type
+/*!
+ * @var place_monster_idx
+ * @brief 護衛対象となるモンスター種族IDを渡すグローバル変数 / Hack -- help pick an escort type
+ * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_idxを除去し、関数引数化する
  */
 static int place_monster_idx = 0;
+
+/*!
+ * @var place_monster_m_idx
+ * @brief 護衛対象となるモンスターIDを渡すグローバル変数 / Hack -- help pick an escort type
+ * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_m_idxを除去し、関数引数化する
+ */
 static int place_monster_m_idx = 0;
 
 /*!
