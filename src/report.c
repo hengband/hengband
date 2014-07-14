@@ -54,7 +54,6 @@
 /*
  * simple buffer library
  */
-
 typedef struct {
 	size_t max_size;
 	size_t size;
@@ -63,6 +62,10 @@ typedef struct {
 
 #define	BUFSIZE	(65536) /*!< スコアサーバ転送バッファサイズ */
 
+/*!
+ * @brief 転送用バッファの確保
+ * @return 確保したバッファの参照ポインタ
+ */
 static BUF* buf_new(void)
 {
 	BUF *p;
@@ -80,12 +83,23 @@ static BUF* buf_new(void)
 	return p;
 }
 
+/*!
+ * @brief 転送用バッファの解放
+ * @param b 解放するバッファの参照ポインタ
+ */
 static void buf_delete(BUF *b)
 {
 	free(b->data);
 	free(b);
 }
 
+/*!
+ * @brief 転送用バッファにデータを追加する
+ * @param buf 追加先バッファの参照ポインタ
+ * @param data 追加元データ
+ * @param size 追加サイズ
+ * @return 追加後のバッファ容量
+ */
 static int buf_append(BUF *buf, const char *data, size_t size)
 {
 	while (buf->size + size > buf->max_size)
@@ -106,6 +120,12 @@ static int buf_append(BUF *buf, const char *data, size_t size)
 	return buf->size;
 }
 
+/*!
+ * @brief 転送用バッファにフォーマット指定した文字列データを追加する
+ * @param buf 追加先バッファの参照ポインタ
+ * @param fmt 文字列フォーマット
+ * @return 追加後のバッファ容量
+ */
 static int buf_sprintf(BUF *buf, const char *fmt, ...)
 {
 	int		ret;
@@ -201,6 +221,13 @@ static BUF * buf_subbuf(BUF *buf, int pos1, size_t sz)
 }
 #endif
 
+/*!
+ * @brief HTTPによるダンプ内容伝送
+ * @param sd ソケットID
+ * @param url 伝送先URL
+ * @param buf 伝送内容バッファ
+ * @return なし
+ */
 static void http_post(int sd, cptr url, BUF *buf)
 {
 	BUF *output;
@@ -219,8 +246,11 @@ static void http_post(int sd, cptr url, BUF *buf)
 	soc_write(sd, output->data, output->size);
 }
 
-
-/* キャラクタダンプを作って BUFに保存 */
+/*!
+ * @brief キャラクタダンプを作って BUFに保存
+ * @param dumpbuf 伝送内容バッファ
+ * @return エラーコード
+ */
 static errr make_dump(BUF* dumpbuf)
 {
 	char		buf[1024];
@@ -264,8 +294,9 @@ static errr make_dump(BUF* dumpbuf)
 	return (0);
 }
 
-/*
- * Make screen dump to buffer
+/*!
+ * @brief スクリーンダンプを作成する/ Make screen dump to buffer
+ * @return 作成したスクリーンダンプの参照ポインタ
  */
 cptr make_screen_dump(void)
 {
@@ -392,7 +423,10 @@ cptr make_screen_dump(void)
 	return ret;
 }
 
-
+/*!
+ * @brief スコア転送処理のメインルーチン
+ * @return エラーコード
+ */
 errr report_score(void)
 {
 #ifdef MACINTOSH
