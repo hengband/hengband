@@ -128,12 +128,20 @@ static int highscore_add(high_score *score)
 
 
 
-/*
- * Display the scores in a given range.
+/*!
+ * @brief 指定された順位範囲でスコアを並べて表示する / Display the scores in a given range.
+ * @param from 順位先頭
+ * @param to 順位末尾
+ * @param note 黄色表示でハイライトする順位
+ * @param score スコア配列参照ポインタ
+ * @return なし
+ * @details
+ * <pre>
  * Assumes the high score list is already open.
  * Only five entries per line, too much info.
  *
  * Mega-Hack -- allow "fake" entry at the given position.
+ * </pre>
  */
 void display_scores_aux(int from, int to, int note, high_score *score)
 {
@@ -364,11 +372,16 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 }
 
 
-/*
- * Hack -- Display the scores in a given range and quit.
- *
+/*!
+ * @brief スコア表示処理メインルーチン / Hack -- Display the scores in a given range and quit.
+ * @param from 順位先頭
+ * @param to 順位末尾
+ * @return なし
+ * @details
+ * <pre>
  * This function is only called from "main.c" when the user asks
  * to see the "high scores".
+ * </pre>
  */
 void display_scores(int from, int to)
 {
@@ -400,7 +413,11 @@ void display_scores(int from, int to)
 }
 
 
-
+/*!
+ * @brief スコアサーバへの転送処理
+ * @param do_send 実際に転送ア処置を行うか否か
+ * @return 転送が成功したらTRUEを返す
+ */
 bool send_world_score(bool do_send)
 {
 #ifdef WORLD_SCORE
@@ -434,10 +451,12 @@ bool send_world_score(bool do_send)
 	return TRUE;
 }
 
-/*
+/*!
+ * @brief スコアの過去二十位内ランキングを表示する
  * Enters a players name on a hi-score table, if "legal", and in any
  * case, displays some relevant portion of the high score list.
- *
+ * @return エラーコード
+ * @details
  * Assumes "signals_ignore_tstp()" has been called.
  */
 errr top_twenty(void)
