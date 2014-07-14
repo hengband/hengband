@@ -1,6 +1,11 @@
-﻿/* File: report.c */
+﻿/*!
+ * @file report.c
+ * @brief スコアサーバ転送機能の実装
+ * @date 2014/07/14
+ * @author Hengband Team
+ */
 
-#define _GNU_SOURCE
+#define _GNU_SOURCE /*!< 未使用*/
 #include "angband.h"
 
 #ifdef WORLD_SCORE
@@ -29,21 +34,21 @@
 /*
  * internet resource value
  */
-#define HTTP_PROXY ""                   /* Default proxy url */
-#define HTTP_PROXY_PORT 0               /* Default proxy port */
-#define HTTP_TIMEOUT    20              /* Timeout length (second) */
-#define SCORE_SERVER "moon.kmc.gr.jp"    /* Default score server url */
-#define SCORE_PORT 80                   /* Default score server port */
+#define HTTP_PROXY ""                   /*!< デフォルトのプロキシURL / Default proxy url */
+#define HTTP_PROXY_PORT 0               /*!< デフォルトのプロキシポート / Default proxy port */
+#define HTTP_TIMEOUT    20              /*!< デフォルトのタイムアウト時間(秒) / Timeout length (second) */
+#define SCORE_SERVER "moon.kmc.gr.jp"   /*!< デフォルトのスコアサーバURL / Default score server url */
+#define SCORE_PORT 80                   /*!< デフォルトのスコアサーバポート / Default score server port */
 
 #ifdef JP
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore/score.cgi"
+#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore/score.cgi" /*!< スコア開示URL */
 #else
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi"
+#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
 
 /* for debug */
 #if 0
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/scoretest/score.cgi"
+#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/scoretest/score.cgi" /*!< スコア開示URL */
 #endif
 
 /*
@@ -56,7 +61,7 @@ typedef struct {
 	char *data;
 } BUF;
 
-#define	BUFSIZE	(65536)
+#define	BUFSIZE	(65536) /*!< スコアサーバ転送バッファサイズ */
 
 static BUF* buf_new(void)
 {
