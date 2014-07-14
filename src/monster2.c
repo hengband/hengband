@@ -15,6 +15,10 @@
 #define HORDE_NOGOOD 0x01
 #define HORDE_NOEVIL 0x02
 
+/*!
+ * @var horror_desc
+ * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ（通常時）
+ */
 cptr horror_desc[MAX_SAN_HORROR] =
 {
 #ifdef JP
@@ -69,6 +73,10 @@ cptr horror_desc[MAX_SAN_HORROR] =
 
 };
 
+/*!
+ * @var funny_desc
+ * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ(幻覚状態時)
+ */
 cptr funny_desc[MAX_SAN_FUNNY] =
 {
 #ifdef JP
@@ -129,6 +137,10 @@ cptr funny_desc[MAX_SAN_FUNNY] =
 
 };
 
+/*!
+ * @var funny_comment
+ * @brief ELDRITCH HORROR効果時の幻覚時間延長を示す錯乱表現
+ */
 cptr funny_comments[MAX_SAN_COMMENT] =
 {
 #ifdef JP
@@ -630,20 +642,27 @@ s16b m_pop(void)
 
 
 
-/*
- * Hack -- the "type" of the current "summon specific"
+/*!
+ * @var summon_specific_type
+ * @brief 召喚条件を指定するグローバル変数 / Hack -- the "type" of the current "summon specific"
+ * @todo summon_specific_typeグローバル変数の除去と関数引数への代替を行う
  */
 static int summon_specific_type = 0;
 
 
-/*
- * Hack -- the index of the summoning monster
+/*!
+ * @var summon_specific_who
+ * @brief 召喚を行ったプレイヤーあるいはモンスターのIDを示すグローバル変数 / Hack -- the index of the summoning monster
+ * @todo summon_specific_who グローバル変数の除去と関数引数への代替を行う
  */
 static int summon_specific_who = -1;
 
-
+/*!
+ * @var summon_unique_okay
+ * @brief 召喚対象にユニークを含めるかを示すグローバル変数 / summoning unique enable
+ * @todo summon_unique_okay グローバル変数の除去と関数引数への代替を行う
+ */
 static bool summon_unique_okay = FALSE;
-
 
 /*!
  * @brief 指定されたモンスター種族がsummon_specific_typeで指定された召喚条件に合うかどうかを返す
