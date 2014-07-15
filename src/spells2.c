@@ -2920,8 +2920,14 @@ void aggravate_monsters(int who)
 }
 
 
-/*
- * Delete a non-unique/non-quest monster
+/*!
+ * @brief モンスターへの単体抹殺処理サブルーチン / Delete a non-unique/non-quest monster
+ * @param m_idx 抹殺するモンスターID
+ * @param power 抹殺の威力
+ * @param player_cast プレイヤーの魔法によるものならば TRUE
+ * @param dam_side プレイヤーへの負担ダメージ量(1d(dam_side))
+ * @param spell_name 抹殺効果を起こした魔法の名前
+ * @return 効力があった場合TRUEを返す
  */
 bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spell_name)
 {
@@ -3016,8 +3022,11 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
 }
 
 
-/*
- * Delete all non-unique/non-quest monsters of a given "type" from the level
+/*!
+ * @brief モンスターへのシンボル抹殺処理ルーチン / Delete all non-unique/non-quest monsters of a given "type" from the level
+ * @param power 抹殺の威力
+ * @param player_cast プレイヤーの魔法によるものならば TRUE
+ * @return 効力があった場合TRUEを返す
  */
 bool symbol_genocide(int power, bool player_cast)
 {
@@ -3060,8 +3069,11 @@ bool symbol_genocide(int power, bool player_cast)
 }
 
 
-/*
- * Delete all nearby (non-unique) monsters
+/*!
+ * @brief モンスターへの周辺抹殺処理ルーチン / Delete all nearby (non-unique) monsters
+ * @param power 抹殺の威力
+ * @param player_cast プレイヤーの魔法によるものならば TRUE
+ * @return 効力があった場合TRUEを返す
  */
 bool mass_genocide(int power, bool player_cast)
 {
@@ -3099,9 +3111,11 @@ bool mass_genocide(int power, bool player_cast)
 }
 
 
-
-/*
- * Delete all nearby (non-unique) undead
+/*!
+ * @brief アンデッド・モンスターへの周辺抹殺処理ルーチン / Delete all nearby (non-unique) undead
+ * @param power 抹殺の威力
+ * @param player_cast プレイヤーの魔法によるものならば TRUE
+ * @return 効力があった場合TRUEを返す
  */
 bool mass_genocide_undead(int power, bool player_cast)
 {
@@ -3142,9 +3156,9 @@ bool mass_genocide_undead(int power, bool player_cast)
 }
 
 
-
-/*
- * Probe nearby monsters
+/*!
+ * @brief 周辺モンスターを調査する / Probe nearby monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool probing(void)
 {
@@ -3303,13 +3317,20 @@ sprintf(buf, "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:", m_name, align, m_
 
 
 
-/*
- * The spell of destruction
- *
+/*!
+ * @brief *破壊*処理を行う / The spell of destruction
+ * @param y1 破壊の中心Y座標
+ * @param x1 破壊の中心X座標 
+ * @param r 破壊の半径
+ * @param in_generate ダンジョンフロア生成中の処理ならばTRUE
+ * @return 効力があった場合TRUEを返す
+ * @details
+ * <pre>
  * This spell "deletes" monsters (instead of "killing" them).
  *
  * Later we may use one function for both "destruction" and
  * "earthquake" by using the "full" to select "destruction".
+ * </pre>
  */
 bool destroy_area(int y1, int x1, int r, bool in_generate)
 {
@@ -3580,8 +3601,16 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 }
 
 
-/*
+/*!
+ * @brief 地震処理 /
  * Induce an "earthquake" of the given radius at the given location.
+ * @return 効力があった場合TRUEを返す
+ * @param cy 中心Y座標
+ * @param cx 中心X座標
+ * @param r 効果半径
+ * @param m_idx 地震を起こしたモンスターID(0ならばプレイヤー)
+ * @details
+ * <pre>
  *
  * This will turn some walls into floors and some floors into walls.
  *
@@ -3597,6 +3626,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
  * Note that as of now (2.7.8) no monster may occupy a "wall" grid, even
  * for a single turn, unless that monster can pass_walls or kill_walls.
  * This has allowed massive simplification of the "monster" code.
+ * </pre>
  */
 bool earthquake_aux(int cy, int cx, int r, int m_idx)
 {
