@@ -1815,7 +1815,7 @@ void report_magics(void)
 }
 
 /*!
- * @brief プレイヤー周辺の地形を明かす
+ * @brief プレイヤー周辺の地形を感知する
  * @param range 効果範囲
  * @param flag 特定地形ID
  * @param known 地形から危険フラグを外すならTRUE
@@ -1878,8 +1878,11 @@ static bool detect_feat_flag(int range, int flag, bool known)
 }
 
 
-/*
- * Detect all traps on current panel
+/*!
+ * @brief プレイヤー周辺のトラップを感知する / Detect all traps on current panel
+ * @param range 効果範囲
+ * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_traps(int range, bool known)
 {
@@ -1900,8 +1903,10 @@ bool detect_traps(int range, bool known)
 }
 
 
-/*
- * Detect all doors on current panel
+/*!
+ * @brief プレイヤー周辺のドアを感知する / Detect all doors on current panel
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_doors(int range)
 {
@@ -1920,8 +1925,10 @@ bool detect_doors(int range)
 }
 
 
-/*
- * Detect all stairs on current panel
+/*!
+ * @brief プレイヤー周辺の階段を感知する / Detect all stairs on current panel
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_stairs(int range)
 {
@@ -1940,8 +1947,10 @@ bool detect_stairs(int range)
 }
 
 
-/*
- * Detect any treasure on the current panel
+/*!
+ * @brief プレイヤー周辺の地形財宝を感知する / Detect any treasure on the current panel
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_treasure(int range)
 {
@@ -1960,8 +1969,10 @@ bool detect_treasure(int range)
 }
 
 
-/*
- * Detect all "gold" objects on the current panel
+/*!
+ * @brief プレイヤー周辺のアイテム財宝を感知する / Detect all "gold" objects on the current panel
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_objects_gold(int range)
 {
@@ -2022,8 +2033,10 @@ bool detect_objects_gold(int range)
 }
 
 
-/*
- * Detect all "normal" objects on the current panel
+/*!
+ * @brief 通常のアイテムオブジェクトを感知する / Detect all "normal" objects on the current panel
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_objects_normal(int range)
 {
@@ -2084,14 +2097,18 @@ bool detect_objects_normal(int range)
 }
 
 
-/*
- * Detect all "magic" objects on the current panel.
- *
+/*!
+ * @brief 魔法効果のあるのアイテムオブジェクトを感知する / Detect all "magic" objects on the current panel.
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
+ * @details
+ * <pre>
  * This will light up all spaces with "magic" items, including artifacts,
  * ego-items, potions, scrolls, books, rods, wands, staves, amulets, rings,
  * and "enchanted" items of the "good" variety.
  *
  * It can probably be argued that this function is now too powerful.
+ * </pre>
  */
 bool detect_objects_magic(int range)
 {
@@ -2170,8 +2187,10 @@ bool detect_objects_magic(int range)
 }
 
 
-/*
- * Detect all "normal" monsters on the current panel
+/*!
+ * @brief 一般のモンスターを感知する / Detect all "normal" monsters on the current panel
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_monsters_normal(int range)
 {
@@ -2228,8 +2247,10 @@ bool detect_monsters_normal(int range)
 }
 
 
-/*
- * Detect all "invisible" monsters around the player
+/*!
+ * @brief 不可視のモンスターを感知する / Detect all "invisible" monsters around the player
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_monsters_invis(int range)
 {
