@@ -604,9 +604,17 @@ static s16b monster_target_x;
 static s16b monster_target_y;
 
 
-/*
- * We are called from "project()" to "damage" terrain features
- *
+/*!
+ * @brief 汎用的なビーム/ボルト/ボール系による地形効果処理 / We are called from "project()" to "damage" terrain features
+ * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
+ * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
+ * @param y 目標Y座標 / Target y location (or location to travel "towards")
+ * @param x 目標X座標 / Target x location (or location to travel "towards")
+ * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
+ * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
+ * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
+ * @details
+ * <pre>
  * We are called both for "beam" effects and "ball" effects.
  *
  * The "r" parameter is the "distance from ground zero".
@@ -619,6 +627,7 @@ static s16b monster_target_y;
  * XXX XXX XXX We also "see" grids which are "memorized", probably a hack
  *
  * XXX XXX XXX Perhaps we should affect doors?
+ * </pre>
  */
 static bool project_f(int who, int r, int y, int x, int dam, int typ)
 {
@@ -1163,7 +1172,17 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
 
 
 
-/*
+/*!
+ * @brief 汎用的なビーム/ボルト/ボール系によるアイテムオブジェクトへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
+ * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
+ * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
+ * @param y 目標Y座標 / Target y location (or location to travel "towards")
+ * @param x 目標X座標 / Target x location (or location to travel "towards")
+ * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
+ * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
+ * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
+ * @details
+ * <pre>
  * We are called from "project()" to "damage" objects
  *
  * We are called both for "beam" effects and "ball" effects.
@@ -1178,6 +1197,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
  * XXX XXX XXX We also "see" grids which are "memorized", probably a hack
  *
  * We return "TRUE" if the effect of the projection is "obvious".
+ * </pre>
  */
 static bool project_o(int who, int r, int y, int x, int dam, int typ)
 {
@@ -1498,11 +1518,19 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 }
 
 
-/*
- * Helper function for "project()" below.
- *
- * Handle a beam/bolt/ball causing damage to a monster.
- *
+/*!
+ * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
+ * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
+ * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
+ * @param y 目標Y座標 / Target y location (or location to travel "towards")
+ * @param x 目標X座標 / Target x location (or location to travel "towards")
+ * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
+ * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param flg 効果フラグ
+ * @param see_s_msg TRUEならばメッセージを表示する
+ * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
+ * @details
+ * <pre>
  * This routine takes a "source monster" (by index) which is mostly used to
  * determine if the player is causing the damage, and a "radius" (see below),
  * which is used to decrease the power of explosions with distance, and a
@@ -5116,10 +5144,20 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 	return (obvious);
 }
 
-
-/*
- * Helper function for "project()" below.
- *
+/*!
+ * @brief 汎用的なビーム/ボルト/ボール系によるプレイヤーへの効果処理 / Helper function for "project()" below.
+ * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
+ * @param who_name 効果を起こしたモンスターの名前
+ * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
+ * @param y 目標Y座標 / Target y location (or location to travel "towards")
+ * @param x 目標X座標 / Target x location (or location to travel "towards")
+ * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
+ * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param flg 効果フラグ
+ * @param monspell モンスター魔法効果ID
+ * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
+ * @details
+ * <pre>
  * Handle a beam/bolt/ball causing damage to the player.
  *
  * This routine takes a "source monster" (by index), a "distance", a default
@@ -5135,6 +5173,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
  *
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
+ * </pre>
  */
 static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int flg, int monspell)
 {
