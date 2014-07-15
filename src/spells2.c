@@ -4370,7 +4370,13 @@ static int next_to_open(int cy, int cx, bool (*pass_bold)(int, int))
 	return (MAX(len, blen));
 }
 
-
+/*!
+ * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
+ * @param cy Y座標
+ * @param cx X座標
+ * @param pass_bold 地形条件を返す関数ポインタ
+ * @return 該当地形の数
+ */
 static int next_to_walls_adj(int cy, int cx, bool (*pass_bold)(int, int))
 {
 	int i;
@@ -4391,8 +4397,13 @@ static int next_to_walls_adj(int cy, int cx, bool (*pass_bold)(int, int))
 }
 
 
-/*
- * Aux function -- see below
+/*!
+ * @brief 部屋内にある一点が該当地形数かどうかを返す / Aux function -- see below
+ * @param y 部屋内のy座標1点
+ * @param x 部屋内のx座標1点
+ * @param only_room 部屋内地形のみをチェック対象にするならば TRUE
+ * @param pass_bold 地形条件を返す関数ポインタ
+ * @return 該当地形の数
  */
 static void cave_temp_room_aux(int y, int x, bool only_room, bool (*pass_bold)(int, int))
 {
