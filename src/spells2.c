@@ -3602,7 +3602,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
 
 
 /*!
- * @brief 地震処理 /
+ * @brief 地震処理(サブルーチン) /
  * Induce an "earthquake" of the given radius at the given location.
  * @return 効力があった場合TRUEを返す
  * @param cy 中心Y座標
@@ -4083,12 +4083,22 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 	return (TRUE);
 }
 
+/*!
+ * @brief 地震処理(プレイヤーの中心発動) /
+ * Induce an "earthquake" of the given radius at the given location.
+ * @return 効力があった場合TRUEを返す
+ * @param cy 中心Y座標
+ * @param cx 中心X座標
+ */
 bool earthquake(int cy, int cx, int r)
 {
 	return earthquake_aux(cy, cx, r, 0);
 }
 
-
+/*!
+ * @brief ペット爆破処理 /
+ * @return なし
+ */
 void discharge_minion(void)
 {
 	int i;
@@ -4144,20 +4154,21 @@ void discharge_minion(void)
 }
 
 
-/*
+/*!
+ * @brief 部屋全体を照らすサブルーチン
+ * @return なし
+ * @details
+ * <pre>
  * This routine clears the entire "temp" set.
- *
  * This routine will Perma-Lite all "temp" grids.
- *
  * This routine is used (only) by "lite_room()"
- *
  * Dark grids are illuminated.
- *
  * Also, process all affected monsters.
  *
  * SMART monsters always wake up when illuminated
  * NORMAL monsters wake up 1/4 the time when illuminated
  * STUPID monsters wake up 1/10 the time when illuminated
+ * </pre>
  */
 static void cave_temp_room_lite(void)
 {
@@ -4233,16 +4244,17 @@ static void cave_temp_room_lite(void)
 
 
 
-/*
+/*!
+ * @brief 部屋全体を暗くするサブルーチン
+ * @return なし
+ * @details
+ * <pre>
  * This routine clears the entire "temp" set.
- *
  * This routine will "darken" all "temp" grids.
- *
  * In addition, some of these grids will be "unmarked".
- *
  * This routine is used (only) by "unlite_room()"
- *
  * Also, process all affected monsters
+ * </pre>
  */
 static void cave_temp_room_unlite(void)
 {
@@ -4317,8 +4329,12 @@ static void cave_temp_room_unlite(void)
 }
 
 
-/*
- * Determine how much contiguous open space this grid is next to
+/*!
+ * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
+ * @param cy Y座標
+ * @param cx X座標
+ * @param pass_bold 地形条件を返す関数ポインタ
+ * @return 該当地形の数
  */
 static int next_to_open(int cy, int cx, bool (*pass_bold)(int, int))
 {
