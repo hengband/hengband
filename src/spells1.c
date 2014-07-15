@@ -6599,20 +6599,18 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
 }
 
 
-/*
- * Generic "beam"/"bolt"/"ball" projection routine.
- *
- * Input:
- *   who: Index of "source" monster (zero for "player")
- *   rad: Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
- *   y,x: Target location (or location to travel "towards")
- *   dam: Base damage roll to apply to affected monsters (or player)
- *   typ: Type of damage to apply to monsters (and objects)
- *   flg: Extra bit flags (see PROJECT_xxxx in "defines.h")
- *
- * Return:
- *   TRUE if any "effects" of the projection were observed, else FALSE
- *
+/*!
+ * @brief 汎用的なビーム/ボルト/ボール系処理のルーチン Generic "beam"/"bolt"/"ball" projection routine.
+ * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
+ * @param rad 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
+ * @param y 目標Y座標 / Target y location (or location to travel "towards")
+ * @param x 目標X座標 / Target x location (or location to travel "towards")
+ * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
+ * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param flg 効果フラグ / Extra bit flags (see PROJECT_xxxx in "defines.h")
+ * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
+ * @details
+ * <pre>
  * Allows a monster (or player) to project a beam/bolt/ball of a given kind
  * towards a given location (optionally passing over the heads of interposing
  * monsters), and have it do a given amount of damage to the monsters (and
@@ -6740,6 +6738,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
  * Note that we must call "handle_stuff()" after affecting terrain features
  * in the blast radius, in case the "illumination" of the grid was changed,
  * and "update_view()" and "update_monsters()" need to be called.
+ * </pre>
  */
 bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int monspell)
 {
