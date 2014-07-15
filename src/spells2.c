@@ -2684,13 +2684,18 @@ bool detect_all(int range)
 }
 
 
-/*
- * Apply a "project()" directly to all viewable monsters
- *
+/*!
+ * @brief 視界内モンスターに魔法効果を与える / Apply a "project()" directly to all viewable monsters
+ * @param typ 属性効果
+ * @param dam 効果量
+ * @return 効力があった場合TRUEを返す
+ * @details
+ * <pre>
  * Note that affected monsters are NOT auto-tracked by this usage.
  *
  * To avoid misbehavior when monster deaths have side-effects,
  * this is done in two passes. -- JDL
+ * </pre>
  */
 bool project_hack(int typ, int dam)
 {
@@ -2742,42 +2747,45 @@ bool project_hack(int typ, int dam)
 }
 
 
-/*
- * Speed monsters
+/*!
+ * @brief 視界内モンスターを加速する処理 / Speed monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool speed_monsters(void)
 {
 	return (project_hack(GF_OLD_SPEED, p_ptr->lev));
 }
 
-/*
- * Slow monsters
+/*!
+ * @brief 視界内モンスターを加速する処理 / Slow monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool slow_monsters(int power)
 {
 	return (project_hack(GF_OLD_SLOW, power));
 }
 
-/*
- * Sleep monsters
+/*!
+ * @brief 視界内モンスターを眠らせる処理 / Sleep monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool sleep_monsters(int power)
 {
 	return (project_hack(GF_OLD_SLEEP, power));
 }
 
-
-/*
- * Banish evil monsters
+/*!
+ * @brief 視界内の邪悪なモンスターをテレポート・アウェイさせる処理 / Banish evil monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool banish_evil(int dist)
 {
 	return (project_hack(GF_AWAY_EVIL, dist));
 }
 
-
-/*
- * Turn undead
+/*!
+ * @brief 視界内のアンデッド・モンスターを恐怖させる処理 / Turn undead
+ * @return 効力があった場合TRUEを返す
  */
 bool turn_undead(void)
 {
@@ -2787,9 +2795,9 @@ bool turn_undead(void)
 	return tester;
 }
 
-
-/*
- * Dispel undead monsters
+/*!
+ * @brief 視界内のアンデッド・モンスターにダメージを与える処理 / Dispel undead monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool dispel_undead(int dam)
 {
@@ -2799,58 +2807,64 @@ bool dispel_undead(int dam)
 	return tester;
 }
 
-/*
- * Dispel evil monsters
+/*!
+ * @brief 視界内の邪悪なモンスターにダメージを与える処理 / Dispel evil monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool dispel_evil(int dam)
 {
 	return (project_hack(GF_DISP_EVIL, dam));
 }
 
-/*
- * Dispel good monsters
+/*!
+ * @brief 視界内の善良なモンスターにダメージを与える処理 / Dispel good monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool dispel_good(int dam)
 {
 	return (project_hack(GF_DISP_GOOD, dam));
 }
 
-/*
- * Dispel all monsters
+/*!
+ * @brief 視界内のあらゆるモンスターにダメージを与える処理 / Dispel all monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool dispel_monsters(int dam)
 {
 	return (project_hack(GF_DISP_ALL, dam));
 }
 
-/*
- * Dispel 'living' monsters
+/*!
+ * @brief 視界内の生命のあるモンスターにダメージを与える処理 / Dispel 'living' monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool dispel_living(int dam)
 {
 	return (project_hack(GF_DISP_LIVING, dam));
 }
 
-/*
- * Dispel demons
+/*!
+ * @brief 視界内の悪魔系モンスターにダメージを与える処理 / Dispel 'living' monsters
+ * @return 効力があった場合TRUEを返す
  */
 bool dispel_demons(int dam)
 {
 	return (project_hack(GF_DISP_DEMON, dam));
 }
 
-
-/*
- * Crusade
+/*!
+ * @brief 視界内のモンスターに「聖戦」効果を与える処理
+ * @return 効力があった場合TRUEを返す
  */
 bool crusade(void)
 {
 	return (project_hack(GF_CRUSADE, p_ptr->lev*4));
 }
 
-
-/*
- * Wake up all monsters, and speed up "los" monsters.
+/*!
+ * @brief 視界内モンスターを怒らせる処理 / Wake up all monsters, and speed up "los" monsters.
+ * @param who 怒らせる原因を起こしたモンスター(0ならばプレイヤー)
+ * @return なし
  */
 void aggravate_monsters(int who)
 {
