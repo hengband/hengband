@@ -2312,10 +2312,10 @@ bool detect_monsters_invis(int range)
 	return (flag);
 }
 
-
-
-/*
- * Detect all "evil" monsters on current panel
+/*!
+ * @brief 邪悪なモンスターを感知する / Detect all "evil" monsters on current panel
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_monsters_evil(int range)
 {
@@ -2381,11 +2381,10 @@ bool detect_monsters_evil(int range)
 	return (flag);
 }
 
-
-
-
-/*
- * Detect all "nonliving", "undead" or "demonic" monsters on current panel
+/*!
+ * @brief 無生命のモンスターを感知する(アンデッド、悪魔系を含む) / Detect all "nonliving", "undead" or "demonic" monsters on current panel
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_monsters_nonliving(int range)
 {
@@ -2445,9 +2444,10 @@ bool detect_monsters_nonliving(int range)
 	return (flag);
 }
 
-
-/*
- * Detect all monsters it has mind on current panel
+/*!
+ * @brief 精神のあるモンスターを感知する / Detect all monsters it has mind on current panel
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_monsters_mind(int range)
 {
@@ -2508,8 +2508,11 @@ bool detect_monsters_mind(int range)
 }
 
 
-/*
- * Detect all (string) monsters on current panel
+/*!
+ * @brief 該当シンボルのモンスターを感知する / Detect all (string) monsters on current panel
+ * @param range 効果範囲
+ * @param Match 対応シンボルの混じったモンスター文字列(複数指定化)
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_monsters_string(int range, cptr Match)
 {
@@ -2571,9 +2574,11 @@ bool detect_monsters_string(int range, cptr Match)
 	return (flag);
 }
 
-
-/*
- * A "generic" detect monsters routine, tagged to flags3
+/*!
+ * @brief flags3に対応するモンスターを感知する / A "generic" detect monsters routine, tagged to flags3
+ * @param range 効果範囲
+ * @param match_flag 感知フラグ
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_monsters_xxx(int range, u32b match_flag)
 {
@@ -2652,8 +2657,10 @@ bool detect_monsters_xxx(int range, u32b match_flag)
 }
 
 
-/*
- * Detect everything
+/*!
+ * @brief 全感知処理 / Detect everything
+ * @param range 効果範囲
+ * @return 効力があった場合TRUEを返す
  */
 bool detect_all(int range)
 {
