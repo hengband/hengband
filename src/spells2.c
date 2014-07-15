@@ -1,21 +1,25 @@
-﻿/* File: spells2.c */
-
-/*
+﻿/*!
+ * @file spells2.c
+ * @brief 魔法効果の実装/ Spell code (part 2)
+ * @date 2014/07/15
+ * @author
+ * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * </pre>
  */
-
-/* Purpose: Spell code (part 2) */
 
 #include "angband.h"
 #include "grid.h"
 
-
-/*
- * self-knowledge... idea from nethack.  Useful for determining powers and
+/*!
+ * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
+ * @return なし
+ * @details
+ * <pre>
+ * Useful for determining powers and
  * resistences of items.  It saves the screen, clears it, then starts listing
  * attributes, a screenful at a time.  (There are a LOT of attributes to
  * list.  It will probably take 2 or 3 screens for a powerful character whose
@@ -26,6 +30,7 @@
  * See also "identify_fully()".
  *
  * XXX XXX XXX Use the "show_file()" method, perhaps.
+ * </pre>
  */
 void self_knowledge(void)
 {
@@ -1600,7 +1605,11 @@ void self_knowledge(void)
 	screen_load();
 }
 
-
+/*!
+ * @brief 魔法効果時間のターン数に基づいて表現IDを返す。
+ * @param dur 効果ターン数
+ * @return 効果時間の表現ID
+ */
 static int report_magics_aux(int dur)
 {
 	if (dur <= 5)
@@ -1657,9 +1666,9 @@ static cptr report_magic_durations[] =
 
 };
 
-
-/*
- * Report all currently active magical effects.
+/*!
+ * @brief 現在の一時的効果一覧を返す / Report all currently active magical effects.
+ * @return なし
  */
 void report_magics(void)
 {
@@ -1805,7 +1814,13 @@ void report_magics(void)
 	screen_load();
 }
 
-
+/*!
+ * @brief プレイヤー周辺の地形を明かす
+ * @param range 効果範囲
+ * @param flag 特定地形ID
+ * @param known 地形から危険フラグを外すならTRUE
+ * @return 効力があった場合TRUEを返す
+ */
 static bool detect_feat_flag(int range, int flag, bool known)
 {
 	int       x, y;
