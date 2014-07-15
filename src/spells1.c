@@ -14,14 +14,12 @@
 #include "angband.h"
 
 /* ToDo: Make this global */
-/* 1/x chance of reducing stats (for elemental attacks) */
-#define HURT_CHANCE 16
+#define HURT_CHANCE 16 /*!< 属性攻撃を受けた際に能力値低下を起こす確率(1/X) / 1/x chance of reducing stats (for elemental attacks) */
 
+static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
+static int rakubadam_p; /*!< 落馬した際のダメージ量 */
 
-static int rakubadam_m;
-static int rakubadam_p;
-
-int project_length = 0;
+int project_length = 0; /*!< 投射の射程距離 */
 
 
 /*!
@@ -596,12 +594,12 @@ sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
 /*
  * Mega-Hack -- track "affected" monsters (see "project()" comments)
  */
-static int project_m_n;
-static int project_m_x;
-static int project_m_y;
+static int project_m_n; /*!< 魔法効果範囲内にいるモンスターの数 */
+static int project_m_x; /*!< 処理中のモンスターX座標 */
+static int project_m_y; /*!< 処理中のモンスターY座標 */
 /* Mega-Hack -- monsters target */
-static s16b monster_target_x;
-static s16b monster_target_y;
+static s16b monster_target_x; /*!< モンスターの攻撃目標X座標 */
+static s16b monster_target_y; /*!< モンスターの攻撃目標Y座標 */
 
 
 /*!
@@ -7846,6 +7844,11 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	return (notice);
 }
 
+/*!
+ * @brief 鏡魔法「封魔結界」の効果処理
+ * @param dam ダメージ量
+ * @return 効果があったらTRUEを返す
+ */
 bool binding_field( int dam )
 {
 	int mirror_x[10],mirror_y[10]; /* 鏡はもっと少ない */
@@ -7990,6 +7993,11 @@ bool binding_field( int dam )
 	return TRUE;
 }
 
+/*!
+ * @brief 鏡魔法「鏡の封印」の効果処理
+ * @param dam ダメージ量
+ * @return 効果があったらTRUEを返す
+ */
 void seal_of_mirror( int dam )
 {
 	int x,y;
