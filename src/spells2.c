@@ -4398,7 +4398,7 @@ static int next_to_walls_adj(int cy, int cx, bool (*pass_bold)(int, int))
 
 
 /*!
- * @brief 部屋内にある一点が該当地形数かどうかを返す / Aux function -- see below
+ * @brief 部屋内にある一点の周囲に該当する地形数かいくつあるかをグローバル変数temp_nに返す / Aux function -- see below
  * @param y 部屋内のy座標1点
  * @param x 部屋内のx座標1点
  * @param only_room 部屋内地形のみをチェック対象にするならば TRUE
@@ -4451,32 +4451,45 @@ static void cave_temp_room_aux(int y, int x, bool only_room, bool (*pass_bold)(i
 	temp_n++;
 }
 
-/*
- * Aux function -- see below
+/*!
+ * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
+ * @param y 指定Y座標
+ * @param y 指定X座標
+ * @return 光を通すならばtrueを返す。
  */
 static bool cave_pass_lite_bold(int y, int x)
 {
 	return cave_los_bold(y, x);
 }
 
-/*
- * Aux function -- see below
+/*!
+ * @brief 部屋内にある一点の周囲がいくつ光を通すかをグローバル変数temp_nに返す / Aux function -- see below
+ * @param y 指定Y座標
+ * @param y 指定X座標
+ * @return なし
  */
 static void cave_temp_lite_room_aux(int y, int x)
 {
 	cave_temp_room_aux(y, x, FALSE, cave_pass_lite_bold);
 }
 
-/*
- * Aux function -- see below
+/*!
+ * @brief 指定のマスが光を通さず射線のみを通すかを返す。 / Aux function -- see below
+ * @param y 指定Y座標
+ * @param y 指定X座標
+ * @return 射線を通すならばtrueを返す。
  */
 static bool cave_pass_dark_bold(int y, int x)
 {
 	return cave_have_flag_bold(y, x, FF_PROJECT);
 }
 
-/*
- * Aux function -- see below
+
+/*!
+ * @brief 部屋内にある一点の周囲がいくつ射線を通すかをグローバル変数temp_nに返す / Aux function -- see below
+ * @param y 指定Y座標
+ * @param y 指定X座標
+ * @return なし
  */
 static void cave_temp_unlite_room_aux(int y, int x)
 {
