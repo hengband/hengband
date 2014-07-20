@@ -5297,19 +5297,30 @@ bool wall_stone(void)
 	return dummy;
 }
 
-
+/*!
+ * @brief ドア破壊処理(プレイヤー中心に周囲1マス)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool destroy_doors_touch(void)
 {
 	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, py, px, 0, GF_KILL_DOOR, flg, -1));
 }
 
+/*!
+ * @brief トラップ解除処理(プレイヤー中心に周囲1マス)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool disarm_traps_touch(void)
 {
 	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, py, px, 0, GF_KILL_TRAP, flg, -1));
 }
 
+/*!
+ * @brief スリープモンスター処理(プレイヤー中心に周囲1マス)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool sleep_monsters_touch(void)
 {
 	int flg = PROJECT_KILL | PROJECT_HIDE;
@@ -5317,13 +5328,23 @@ bool sleep_monsters_touch(void)
 }
 
 
+/*!
+ * @brief 死者復活処理(起点より周囲5マス)
+ * @param who 術者モンスターID(0ならばプレイやー)
+ * @param y 起点Y座標
+ * @param x 起点X座標
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool animate_dead(int who, int y, int x)
 {
 	int flg = PROJECT_ITEM | PROJECT_HIDE;
 	return (project(who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
 }
 
-
+/*!
+ * @brief 混沌招来処理
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 void call_chaos(void)
 {
 	int Chaos_type, dummy, dir;
@@ -5372,11 +5393,16 @@ void call_chaos(void)
 	}
 }
 
-
-/*
- * Activate the evil Topi Ylinen curse
+/*!
+ * @brief TY_CURSE処理発動 / Activate the evil Topi Ylinen curse
+ * @param stop_ty 再帰処理停止フラグ
+ * @param count 発動回数
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details
+ * <pre>
  * rr9: Stop the nasty things when a Cyberdemon is summoned
  * or the player gets paralyzed.
+ * </pre>
  */
 bool activate_ty_curse(bool stop_ty, int *count)
 {
