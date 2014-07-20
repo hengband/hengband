@@ -4754,13 +4754,23 @@ bool fire_ball_hide(int typ, int dir, int dam, int rad)
 }
 
 
-/*
+/*!
+ * @brief メテオ系スペルの発動 / Cast a meteor spell
+ * @param who スぺル詠唱者のモンスターID(0=プレイヤー)
+ * @param typ 効果属性
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @param rad 半径
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details
+ * <pre>
  * Cast a meteor spell, defined as a ball spell cast by an arbitary monster, 
  * player, or outside source, that starts out at an arbitrary location, and 
  * leaving no trail from the "caster" to the target.  This function is 
  * especially useful for bombardments and similar. -LM-
  *
  * Option to hurt the player.
+ * </pre>
  */
 bool fire_meteor(int who, int typ, int y, int x, int dam, int rad)
 {
@@ -4771,6 +4781,17 @@ bool fire_meteor(int who, int typ, int y, int x, int dam, int rad)
 }
 
 
+/*!
+ * @brief ブラスト系スペルの発動 / Cast a blast spell
+ * @param who スぺル詠唱者のモンスターID(0=プレイヤー)
+ * @param typ 効果属性
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dd 威力ダイス数
+ * @param ds 威力ダイス目
+ * @param num 基本回数
+ * @param dev 回数分散
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
 {
 	int ly, lx, ld;
@@ -4824,8 +4845,10 @@ bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
 }
 
 
-/*
- * Switch position with a monster.
+/*!
+ * @brief モンスターとの位置交換処理 / Switch position with a monster.
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool teleport_swap(int dir)
 {
@@ -4893,8 +4916,13 @@ bool teleport_swap(int dir)
 }
 
 
-/*
- * Hack -- apply a "projection()" in a direction (or at the target)
+/*!
+ * @brief 指定方向に飛び道具を飛ばす（フラグ任意指定） / Hack -- apply a "projection()" in a direction (or at the target)
+ * @param typ 効果属性
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @param flg フラグ
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool project_hook(int typ, int dir, int dam, int flg)
 {
