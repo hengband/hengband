@@ -4947,10 +4947,17 @@ bool project_hook(int typ, int dir, int dam, int flg)
 }
 
 
-/*
- * Cast a bolt spell.
+/*!
+ * @brief ボルト系スペルの発動 / Cast a bolt spell.
+ * @param typ 効果属性
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details
+ * <pre>
  * Stop if we hit a monster, as a "bolt".
  * Affect monsters and grids (not objects).
+ * </pre>
  */
 bool fire_bolt(int typ, int dir, int dam)
 {
@@ -4960,10 +4967,17 @@ bool fire_bolt(int typ, int dir, int dam)
 }
 
 
-/*
- * Cast a beam spell.
+/*!
+ * @brief ビーム系スペルの発動 / Cast a beam spell.
+ * @param typ 効果属性
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details
+ * <pre>
  * Pass through monsters, as a "beam".
  * Affect monsters, grids and objects.
+ * </pre>
  */
 bool fire_beam(int typ, int dir, int dam)
 {
@@ -4972,8 +4986,18 @@ bool fire_beam(int typ, int dir, int dam)
 }
 
 
-/*
- * Cast a bolt spell, or rarely, a beam spell
+/*!
+ * @brief 確率に応じたボルト系/ビーム系スペルの発動 / Cast a bolt spell, or rarely, a beam spell.
+ * @param prob ビーム化する確率(%)
+ * @param typ 効果属性
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details
+ * <pre>
+ * Pass through monsters, as a "beam".
+ * Affect monsters, grids and objects.
+ * </pre>
  */
 bool fire_bolt_or_beam(int prob, int typ, int dir, int dam)
 {
@@ -4987,9 +5011,11 @@ bool fire_bolt_or_beam(int prob, int typ, int dir, int dam)
 	}
 }
 
-
-/*
- * Some of the old functions
+/*!
+ * @brief LITE_WEAK属性による光源ビーム処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool lite_line(int dir, int dam)
 {
@@ -4997,42 +5023,69 @@ bool lite_line(int dir, int dam)
 	return (project_hook(GF_LITE_WEAK, dir, dam, flg));
 }
 
-
+/*!
+ * @brief 吸血ボルト処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool drain_life(int dir, int dam)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_DRAIN, dir, dam, flg));
 }
 
-
+/*!
+ * @brief 岩石溶解処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool wall_to_mud(int dir, int dam)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project_hook(GF_KILL_WALL, dir, dam, flg));
 }
 
-
+/*!
+ * @brief 魔法の施錠処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool wizard_lock(int dir)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project_hook(GF_JAM_DOOR, dir, 20 + randint1(30), flg));
 }
 
-
+/*!
+ * @brief ドア破壊処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool destroy_door(int dir)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(GF_KILL_DOOR, dir, 0, flg));
 }
 
-
+/*!
+ * @brief トラップ解除処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool disarm_trap(int dir)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(GF_KILL_TRAP, dir, 0, flg));
 }
 
-
+/*!
+ * @brief モンスター回復処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool heal_monster(int dir, int dam)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
