@@ -4497,10 +4497,11 @@ static void cave_temp_unlite_room_aux(int y, int x)
 }
 
 
-
-
-/*
- * Illuminate any room containing the given location.
+/*!
+ * @brief 指定された部屋内を照らす / Illuminate any room containing the given location.
+ * @param y 指定Y座標
+ * @param y 指定X座標
+ * @return なし
  */
 void lite_room(int y1, int x1)
 {
@@ -4540,8 +4541,11 @@ void lite_room(int y1, int x1)
 }
 
 
-/*
- * Darken all rooms containing the given location
+/*!
+ * @brief 指定された部屋内を暗くする / Darken all rooms containing the given location
+ * @param y 指定Y座標
+ * @param y 指定X座標
+ * @return なし
  */
 void unlite_room(int y1, int x1)
 {
@@ -4577,9 +4581,11 @@ void unlite_room(int y1, int x1)
 
 
 
-/*
- * Hack -- call light around the player
- * Affect all monsters in the projection radius
+/*!
+ * @brief プレイヤー位置を中心にLITE_WEAK属性を通じた照明処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
+ * @param y 指定Y座標
+ * @param y 指定X座標
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool lite_area(int dam, int rad)
 {
@@ -4608,9 +4614,11 @@ bool lite_area(int dam, int rad)
 }
 
 
-/*
- * Hack -- call darkness around the player
- * Affect all monsters in the projection radius
+/*!
+ * @brief プレイヤー位置を中心にLITE_DARK属性を通じた消灯処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
+ * @param y 指定Y座標
+ * @param y 指定X座標
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool unlite_area(int dam, int rad)
 {
@@ -4634,11 +4642,19 @@ bool unlite_area(int dam, int rad)
 
 
 
-/*
- * Cast a ball spell
+/*!
+ * @brief ボール系スペルの発動 / Cast a ball spell
+ * @param typ 効果属性
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @param rad 半径
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details
+ * <pre>
  * Stop if we hit a monster, act as a "ball"
  * Allow "target" mode to pass over monsters
  * Affect grids, objects, and monsters
+ * </pre>
  */
 bool fire_ball(int typ, int dir, int dam, int rad)
 {
@@ -4664,11 +4680,20 @@ bool fire_ball(int typ, int dir, int dam, int rad)
 }
 
 
-/*
- * Cast a ball spell
+
+/*!
+ * @brief ロケット系スペルの発動(詳細な差は確認中) / Cast a ball spell
+ * @param typ 効果属性
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @param rad 半径
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details
+ * <pre>
  * Stop if we hit a monster, act as a "ball"
  * Allow "target" mode to pass over monsters
  * Affect grids, objects, and monsters
+ * </pre>
  */
 bool fire_rocket(int typ, int dir, int dam, int rad)
 {
@@ -4692,11 +4717,19 @@ bool fire_rocket(int typ, int dir, int dam, int rad)
 }
 
 
-/*
- * Cast a ball spell
+/*!
+ * @brief ボール(ハイド)系スペルの発動 / Cast a ball spell
+ * @param typ 効果属性
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param dam 威力
+ * @param rad 半径
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details
+ * <pre>
  * Stop if we hit a monster, act as a "ball"
  * Allow "target" mode to pass over monsters
  * Affect grids, objects, and monsters
+ * </pre>
  */
 bool fire_ball_hide(int typ, int dir, int dam, int rad)
 {
