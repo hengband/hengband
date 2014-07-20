@@ -5200,29 +5200,45 @@ bool clone_monster(int dir)
 	return (project_hook(GF_OLD_CLONE, dir, 0, flg));
 }
 
-
+/*!
+ * @brief モンスター恐慌処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param plev プレイヤーレベル(=効力)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool fear_monster(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_TURN_ALL, dir, plev, flg));
 }
 
-
+/*!
+ * @brief 死の光線処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param plev プレイヤーレベル(効力はplev*200)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool death_ray(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_DEATH_RAY, dir, plev * 200, flg));
 }
 
-
+/*!
+ * @brief モンスター用テレポート処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param distance 移動距離
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool teleport_monster(int dir, int distance)
 {
 	int flg = PROJECT_BEAM | PROJECT_KILL;
 	return (project_hook(GF_AWAY_ALL, dir, distance, flg));
 }
 
-/*
- * Hooks -- affect adjacent grids (radius 1 ball attack)
+/*!
+ * @brief ドア生成処理(プレイヤー中心に周囲1マス) / Hooks -- affect adjacent grids (radius 1 ball attack)
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool door_creation(void)
 {
@@ -5230,28 +5246,42 @@ bool door_creation(void)
 	return (project(0, 1, py, px, 0, GF_MAKE_DOOR, flg, -1));
 }
 
-
+/*!
+ * @brief トラップ生成処理(起点から周囲1マス)
+ * @param y 起点Y座標
+ * @param x 起点X座標
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool trap_creation(int y, int x)
 {
 	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
 }
 
-
+/*!
+ * @brief 森林生成処理(プレイヤー中心に周囲1マス)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool tree_creation(void)
 {
 	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, py, px, 0, GF_MAKE_TREE, flg, -1));
 }
 
-
+/*!
+ * @brief 魔法のルーン生成処理(プレイヤー中心に周囲1マス)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool glyph_creation(void)
 {
 	int flg = PROJECT_GRID | PROJECT_ITEM;
 	return (project(0, 1, py, px, 0, GF_MAKE_GLYPH, flg, -1));
 }
 
-
+/*!
+ * @brief 壁生成処理(プレイヤー中心に周囲1マス)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool wall_stone(void)
 {
 	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
