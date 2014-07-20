@@ -5092,54 +5092,94 @@ bool heal_monster(int dir, int dam)
 	return (project_hook(GF_OLD_HEAL, dir, dam, flg));
 }
 
-
+/*!
+ * @brief モンスター加速処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param power 効力
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool speed_monster(int dir, int power)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SPEED, dir, power, flg));
 }
 
-
+/*!
+ * @brief モンスター減速処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param power 効力
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool slow_monster(int dir, int power)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SLOW, dir, power, flg));
 }
 
-
+/*!
+ * @brief モンスター催眠処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param power 効力
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool sleep_monster(int dir, int power)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SLEEP, dir, power, flg));
 }
 
-
+/*!
+ * @brief モンスター拘束(STASIS)処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details 威力はプレイヤーレベル*2に固定
+ */
 bool stasis_monster(int dir)
 {
 	return (fire_ball_hide(GF_STASIS, dir, p_ptr->lev*2, 0));
 }
 
-
+/*!
+ * @brief 邪悪なモンスター拘束(STASIS)処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @return 作用が実際にあった場合TRUEを返す
+ * @details 威力はプレイヤーレベル*2に固定
+ */
 bool stasis_evil(int dir)
 {
 	return (fire_ball_hide(GF_STASIS_EVIL, dir, p_ptr->lev*2, 0));
 }
 
-
+/*!
+ * @brief モンスター混乱処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param plev プレイヤーレベル(=効力)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool confuse_monster(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_CONF, dir, plev, flg));
 }
 
-
+/*!
+ * @brief モンスター朦朧処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param plev プレイヤーレベル(=効力)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool stun_monster(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_STUN, dir, plev, flg));
 }
 
-
+/*!
+ * @brief チェンジモンスター処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param power 効力
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool poly_monster(int dir, int power)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
@@ -5149,7 +5189,11 @@ bool poly_monster(int dir, int power)
 	return(tester);
 }
 
-
+/*!
+ * @brief クローンモンスター処理
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool clone_monster(int dir)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
