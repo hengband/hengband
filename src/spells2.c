@@ -5511,7 +5511,13 @@ bool activate_ty_curse(bool stop_ty, int *count)
 	return stop_ty;
 }
 
-
+/*!
+ * @brief HI_SUMMON(上級召喚)処理発動
+ * @param y 召喚位置Y座標
+ * @param x 召喚位置X座標
+ * @param can_pet プレイヤーのペットとなる可能性があるならばTRUEにする
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 int activate_hi_summon(int y, int x, bool can_pet)
 {
 	int i;
@@ -5594,7 +5600,13 @@ int activate_hi_summon(int y, int x, bool can_pet)
 }
 
 
-/* ToDo: check */
+/*!
+ * @brief サイバーデーモンの召喚
+ * @param who 召喚主のモンスターID(0ならばプレイヤー)
+ * @param y 召喚位置Y座標
+ * @param x 召喚位置X座標
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 int summon_cyber(int who, int y, int x)
 {
 	int i;
