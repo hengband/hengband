@@ -5778,50 +5778,80 @@ bool turn_monsters(int dam)
 }
 
 
-/*
- * Death-ray all monsters (note: OBSCENELY powerful)
+/*!
+ * @brief 死の光線(プレイヤー視界範囲内) / Death-ray all monsters (note: OBSCENELY powerful)
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool deathray_monsters(void)
 {
 	return (project_hack(GF_DEATH_RAY, p_ptr->lev * 200));
 }
 
-
+/*!
+ * @brief チャーム・モンスター(1体)
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param plev パワー
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool charm_monster(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CHARM, dir, plev, flg));
 }
 
-
+/*!
+ * @brief アンデッド支配(1体)
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param plev パワー
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool control_one_undead(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_UNDEAD, dir, plev, flg));
 }
 
-
+/*!
+ * @brief 悪魔支配(1体)
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param plev パワー
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool control_one_demon(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_DEMON, dir, plev, flg));
 }
 
-
+/*!
+ * @brief 動物支配(1体)
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param plev パワー
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool charm_animal(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_ANIMAL, dir, plev, flg));
 }
 
-
+/*!
+ * @brief 生物支配(1体)
+ * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+ * @param plev パワー
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool charm_living(int dir, int plev)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_LIVING, dir, plev, flg));
 }
 
-
+/*!
+ * @brief 変わり身処理
+ * @param success 判定成功上の処理ならばTRUE
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 bool kawarimi(bool success)
 {
 	object_type forge;
@@ -5870,9 +5900,10 @@ bool kawarimi(bool success)
 }
 
 
-/*
- * "Rush Attack" routine for Samurai or Ninja
- * Return value is for checking "done"
+/*!
+ * @brief 入身処理 / "Rush Attack" routine for Samurai or Ninja
+ * @param mdeath 目標モンスターが死亡したかを返す
+ * @return 作用が実際にあった場合TRUEを返す /  Return value is for checking "done"
  */
 bool rush_attack(bool *mdeath)
 {
@@ -5986,8 +6017,10 @@ bool rush_attack(bool *mdeath)
 }
 
 
-/*
- * Remove all mirrors in this floor
+/*!
+ * @brief 全鏡の消去 / Remove all mirrors in this floor
+ * @param explode 爆発処理を伴うならばTRUE
+ * @return なし
  */
 void remove_all_mirrors(bool explode)
 {
