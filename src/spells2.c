@@ -5631,7 +5631,10 @@ int summon_cyber(int who, int y, int x)
 	return count;
 }
 
-
+/*!
+ * @brief 周辺破壊効果(プレイヤー中心)
+ * @return 作用が実際にあった場合TRUEを返す
+ */
 void wall_breaker(void)
 {
 	int i;
@@ -5676,8 +5679,10 @@ void wall_breaker(void)
 }
 
 
-/*
- * Confuse monsters
+/*!
+ * @brief パニック・モンスター効果(プレイヤー視界範囲内) / Confuse monsters
+ * @dam 効力
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool confuse_monsters(int dam)
 {
@@ -5685,8 +5690,10 @@ bool confuse_monsters(int dam)
 }
 
 
-/*
- * Charm monsters
+/*!
+ * @brief チャーム・モンスター効果(プレイヤー視界範囲内) / Charm monsters
+ * @dam 効力
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool charm_monsters(int dam)
 {
@@ -5694,8 +5701,10 @@ bool charm_monsters(int dam)
 }
 
 
-/*
- * Charm animals
+/*!
+ * @brief 動物魅了効果(プレイヤー視界範囲内) / Charm Animals
+ * @dam 効力
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool charm_animals(int dam)
 {
@@ -5703,8 +5712,10 @@ bool charm_animals(int dam)
 }
 
 
-/*
- * Stun monsters
+/*!
+ * @brief モンスター朦朧効果(プレイヤー視界範囲内) / Stun monsters
+ * @dam 効力
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool stun_monsters(int dam)
 {
@@ -5712,8 +5723,10 @@ bool stun_monsters(int dam)
 }
 
 
-/*
- * Stasis monsters
+/*!
+ * @brief モンスター停止効果(プレイヤー視界範囲内) / Stasis monsters
+ * @dam 効力
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool stasis_monsters(int dam)
 {
@@ -5721,8 +5734,10 @@ bool stasis_monsters(int dam)
 }
 
 
-/*
- * Mindblast monsters
+/*!
+ * @brief モンスター精神攻撃効果(プレイヤー視界範囲内) / Mindblast monsters
+ * @dam 効力
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool mindblast_monsters(int dam)
 {
@@ -5730,8 +5745,10 @@ bool mindblast_monsters(int dam)
 }
 
 
-/*
- * Banish all monsters
+/*!
+ * @brief モンスター追放効果(プレイヤー視界範囲内) / Banish all monsters
+ * @dist 効力（距離）
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool banish_monsters(int dist)
 {
@@ -5739,8 +5756,10 @@ bool banish_monsters(int dist)
 }
 
 
-/*
- * Turn evil
+/*!
+ * @brief 邪悪退散効果(プレイヤー視界範囲内) / Turn evil
+ * @dam 効力
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool turn_evil(int dam)
 {
@@ -5748,8 +5767,10 @@ bool turn_evil(int dam)
 }
 
 
-/*
- * Turn everyone
+/*!
+ * @brief 全モンスター退散効果(プレイヤー視界範囲内) / Turn everyone
+ * @dam 効力
+ * @return 作用が実際にあった場合TRUEを返す
  */
 bool turn_monsters(int dam)
 {
