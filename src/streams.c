@@ -1,16 +1,21 @@
-﻿/*
- * File: streams.c
- * Purpose: Used by dungeon generation. This file holds all the
- * functions that are applied to a level after the rest has been
- * generated, ie streams and level destruction.
- */
-
-/*
+﻿/*!
+ * @file streams.c
+ * @brief ダンジョン生成に利用する関数群 / Used by dungeon generation.
+ * @date 2014/07/15
+ * @author
+ * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * </pre>
+ * @details
+ * <pre>
+ * Purpose:  This file holds all the
+ * functions that are applied to a level after the rest has been
+ * generated, ie streams and level destruction.
+ * </pre>
  */
 
 #include "angband.h"
@@ -19,8 +24,17 @@
 #include "grid.h"
 
 
-/*
+/*!
+ * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する /
  * Recursive fractal algorithm to place water through the dungeon.
+ * @param x1 起点x座標
+ * @param y1 起点y座標
+ * @param x2 終点x座標
+ * @param y2 終点y座標
+ * @param feat1 中央部地形ID
+ * @param feat2 境界部地形ID
+ * @param width 基本幅
+ * @return なし
  */
 static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2, int width)
 {
@@ -137,8 +151,12 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
 }
 
 
-/*
+/*!
+ * @brief ランダムに川/溶岩流をダンジョンに配置する /
  * Places water /lava through dungeon.
+ * @param feat1 中央部地形ID
+ * @param feat2 境界部地形ID
+ * @return なし
  */
 void add_river(int feat1, int feat2)
 {
@@ -197,13 +215,19 @@ void add_river(int feat1, int feat2)
 }
 
 
-/*
+/*!
+ * @brief ダンジョンの壁部にストリーマー（地質の変化）を与える /
  * Places "streamers" of rock through dungeon
- *
+ * @param feat ストリーマー地形ID
+ * @param chance 生成密度
+ * @return なし
+ * @details
+ * <pre>
  * Note that their are actually six different terrain features used
  * to represent streamers.  Three each of magma and quartz, one for
  * basic vein, one with hidden gold, and one with known gold.  The
  * hidden gold types are currently unused.
+ * </pre>
  */
 void build_streamer(int feat, int chance)
 {
@@ -365,9 +389,17 @@ msg_print("警告！ストリーマーを配置できません！");
 }
 
 
-/*
+/*!
+ * @brief ダンジョンの指定位置近辺に森林を配置する /
+ * Places "streamers" of rock through dungeon
+ * @param x 指定X座標
+ * @param y 指定Y座標
+ * @return なし
+ * @details
+ * <pre>
  * Put trees near a hole in the dungeon roof  (rubble on ground + up stairway)
  * This happens in real world lava tubes.
+ * </pre>
  */
 void place_trees(int x, int y)
 {
@@ -420,8 +452,10 @@ void place_trees(int x, int y)
 }
 
 
-/*
+/*!
+ * @brief ダンジョンに＊破壊＊済み地形ランダムに施す /
  * Build a destroyed level
+ * @return なし
  */
 void destroy_level(void)
 {
