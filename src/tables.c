@@ -3598,12 +3598,16 @@ const cptr realm_names[]
 };
 
 
-/*
+/*!
+ * @brief 箱のトラップテーブル
+ * @details
+ * <pre>
  * Each chest has a certain set of traps, determined by pval
  * Each chest has a "pval" from 1 to the chest level (max 55)
  * If the "pval" is negative then the trap has been disarmed
  * The "pval" of a chest determines the quality of its treasure
  * Note that disarming a trap on a chest also removes the lock.
+ * </pre>
  */
 const int chest_traps[64] =
 {
@@ -3674,11 +3678,12 @@ const int chest_traps[64] =
 };
 
 
-/*
- * Class titles for the player.
- *
+/*!
+ * @brief 職業とレベル毎のプレイヤー称号テーブル / Class titles for the player.
+ * <pre>
  * The player gets a new title every five levels, so each class
  * needs only ten titles total.
+ * </pre>
  */
 #ifdef JP
 const cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
@@ -4479,9 +4484,13 @@ const cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 };
 #endif
 
+/*!
+ * @brief 青魔法テーブル
+ * @details
+ * level,  smana,  %fail,  manedam,  %manefail,  use_stat, name
+ */
 const monster_power monster_powers[MAX_MONSPELLS] =
 {
-/* level,  smana,  %fail,  manedam,  %manefail,  use_stat, name */
 #ifdef JP
 {  1,   1,  10,    0,  15, A_CON,  "叫ぶ"},
 { 10,   4,  35,   89,  40, A_INT,  "何か"},
@@ -4680,7 +4689,9 @@ const monster_power monster_powers[MAX_MONSPELLS] =
 
 };
 
-
+/*!
+ * @brief モンスター魔法名テーブル
+ */
 const cptr monster_powers_short[MAX_MONSPELLS] = {
 #ifdef JP
 
@@ -4720,8 +4731,8 @@ const cptr monster_powers_short[MAX_MONSPELLS] = {
 };
 
 
-/*
- * Hack -- the "basic" color names (see "TERM_xxx")
+/*!
+ * @brief 色名称テーブル / Hack -- the "basic" color names (see "TERM_xxx")
  */
 const cptr color_names[16] =
 {
@@ -4764,8 +4775,8 @@ const cptr color_names[16] =
 };
 
 
-/*
- * Abbreviations of healthy stats
+/*!
+ * @brief 能力値テーブル / Abbreviations of healthy stats
  */
 const cptr stat_names[6] =
 {
@@ -4777,8 +4788,8 @@ const cptr stat_names[6] =
 
 };
 
-/*
- * Abbreviations of damaged stats
+/*!
+ * @brief 能力値テーブル(能力低下時) / Abbreviations of damaged stats
  */
 const cptr stat_names_reduced[6] =
 {
@@ -4791,7 +4802,10 @@ const cptr stat_names_reduced[6] =
 };
 
 
-/*
+/*!
+ * @brief サブウィンドウ名称テーブル
+ * @details
+ * <pre>
  * Certain "screens" always use the main screen, including News, Birth,
  * Dungeon, Tomb-stone, High-scores, Macros, Colors, Visuals, Options.
  *
@@ -4804,6 +4818,7 @@ const cptr stat_names_reduced[6] =
  *
  * The "ctrl-g" command (or pseudo-command) should perhaps grab a snapshot
  * of the main screen into any interested windows.
+ * </pre>
  */
 const cptr window_flag_desc[32] =
 {
