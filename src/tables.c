@@ -101,7 +101,7 @@ const cptr color_char = "dwsorgbuDWvyRGBU";
 
 
 /*!
- * 知力/賢さによるレベル毎の習得可能魔法数
+ * 知力/賢さによるレベル毎の習得可能魔法数テーブル
  * Stat Table (INT/WIS) -- Number of half-spells per level
  */
 const byte adj_mag_study[] =
@@ -195,7 +195,7 @@ const byte adj_mag_mana[] =
 
 
 /*!
- * 知力/賢さによる最低魔法失敗率
+ * 知力/賢さによる最低魔法失敗率テーブル
  * Stat Table (INT/WIS) -- Minimum failure rate (percentage)
  */
 const byte adj_mag_fail[] =
@@ -242,7 +242,7 @@ const byte adj_mag_fail[] =
 
 
 /*!
- * 知力/賢さによる魔法失敗率修正
+ * 知力/賢さによる魔法失敗率修正テーブル
  * Stat Table (INT/WIS) -- Various things
  */
 const byte adj_mag_stat[] =
@@ -288,7 +288,8 @@ const byte adj_mag_stat[] =
 };
 
 
-/*
+/*!
+ * 魅力による店での取引修正テーブル
  * Stat Table (CHR) -- payment percentages
  */
 const byte adj_chr_gold[] =
@@ -334,7 +335,8 @@ const byte adj_chr_gold[] =
 };
 
 
-/*
+/*!
+ * 知力による魔道具使用修正テーブル
  * Stat Table (INT) -- Magic devices
  */
 const byte adj_int_dev[] =
@@ -380,7 +382,8 @@ const byte adj_int_dev[] =
 };
 
 
-/*
+/*!
+ * 賢さによる魔法防御修正テーブル
  * Stat Table (WIS) -- Saving throw
  */
 const byte adj_wis_sav[] =
@@ -426,7 +429,8 @@ const byte adj_wis_sav[] =
 };
 
 
-/*
+/*!
+ * 器用さによるトラップ解除修正テーブル
  * Stat Table (DEX) -- disarming
  */
 const byte adj_dex_dis[] =
@@ -472,7 +476,8 @@ const byte adj_dex_dis[] =
 };
 
 
-/*
+/*!
+ * 知力によるトラップ解除修正テーブル
  * Stat Table (INT) -- disarming
  */
 const byte adj_int_dis[] =
@@ -518,7 +523,8 @@ const byte adj_int_dis[] =
 };
 
 
-/*
+/*!
+ * 器用さによるAC修正テーブル
  * Stat Table (DEX) -- bonus to ac (plus 128)
  */
 const byte adj_dex_ta[] =
@@ -564,7 +570,8 @@ const byte adj_dex_ta[] =
 };
 
 
-/*
+/*!
+ * 腕力によるダメージ修正テーブル
  * Stat Table (STR) -- bonus to dam (plus 128)
  */
 const byte adj_str_td[] =
@@ -610,7 +617,8 @@ const byte adj_str_td[] =
 };
 
 
-/*
+/*!
+ * 器用度による命中修正テーブル
  * Stat Table (DEX) -- bonus to hit (plus 128)
  */
 const byte adj_dex_th[] =
@@ -656,7 +664,8 @@ const byte adj_dex_th[] =
 };
 
 
-/*
+/*!
+ * 腕力による命中修正テーブル
  * Stat Table (STR) -- bonus to hit (plus 128)
  */
 const byte adj_str_th[] =
@@ -702,7 +711,8 @@ const byte adj_str_th[] =
 };
 
 
-/*
+/*!
+ * 腕力による基本所持重量値テーブル
  * Stat Table (STR) -- weight limit in deca-pounds
  */
 const byte adj_str_wgt[] =
@@ -748,7 +758,8 @@ const byte adj_str_wgt[] =
 };
 
 
-/*
+/*!
+ * 腕力による武器重量限界値テーブル
  * Stat Table (STR) -- weapon weight limit in pounds
  */
 const byte adj_str_hold[] =
@@ -794,7 +805,8 @@ const byte adj_str_hold[] =
 };
 
 
-/*
+/*!
+ * 腕力による採掘能力修正値テーブル
  * Stat Table (STR) -- digging value
  */
 const byte adj_str_dig[] =
@@ -840,7 +852,8 @@ const byte adj_str_dig[] =
 };
 
 
-/*
+/*!
+ * 腕力による攻撃回数算定値テーブル
  * Stat Table (STR) -- help index into the "blow" table
  */
 const byte adj_str_blow[] =
@@ -886,7 +899,8 @@ const byte adj_str_blow[] =
 };
 
 
-/*
+/*!
+ * 器用さによる攻撃回数インデックステーブル
  * Stat Table (DEX) -- index into the "blow" table
  */
 const byte adj_dex_blow[] =
@@ -932,7 +946,8 @@ const byte adj_dex_blow[] =
 };
 
 
-/*
+/*!
+ * 器用さによる盗難防止＆体当たり成功判定修正テーブル
  * Stat Table (DEX) -- chance of avoiding "theft" and "falling"
  */
 const byte adj_dex_safe[] =
@@ -978,7 +993,8 @@ const byte adj_dex_safe[] =
 };
 
 
-/*
+/*!
+ * 耐久による基本HP自然治癒値テーブル /
  * Stat Table (CON) -- base regeneration rate
  */
 const byte adj_con_fix[] =
@@ -1024,7 +1040,8 @@ const byte adj_con_fix[] =
 };
 
 
-/*
+/*!
+ * 耐久による基本HP自然治癒値テーブル /
  * Stat Table (CON) -- extra 1/4-hitpoints per level (plus 128)
  */
 const byte adj_con_mhp[] =
@@ -1070,7 +1087,8 @@ const byte adj_con_mhp[] =
 };
 
 
-/*
+/*!
+ * 魅力による魅了能力修正テーブル /
  * Stat Table (CHR) -- charm
  */
 const byte adj_chr_chm[] =
@@ -1116,10 +1134,13 @@ const byte adj_chr_chm[] =
 };
 
 
-/*
+/*!
+ * @brief
+ * 魅力による魅了能力修正テーブル /
  * This table is used to help calculate the number of blows the player can
  * make in a single round of attacks (one player turn) with a normal weapon.
- *
+ * @details
+ * <pre>
  * This number ranges from a single blow/round for weak players to up to six
  * blows/round for powerful warriors.
  *
@@ -1160,6 +1181,7 @@ const byte adj_chr_chm[] =
  *
  * The player gets "blows_table[P][D]" blows/round, as shown below,
  * up to a maximum of "num" blows/round, plus any "bonus" blows/round.
+ * </pre>
  */
 const byte blows_table[12][12] =
 {
@@ -1181,7 +1203,9 @@ const byte blows_table[12][12] =
 
 };
 
-
+/*!
+ * @brief 闘技場のモンスターID及び報酬アイテムテーブル
+ */
 const arena_type arena_info[MAX_ARENA_MONS + 2] =
 {
 	{ MON_NOBORTA,       TV_AMULET, SV_AMULET_ADORNMENT           },
@@ -1230,8 +1254,11 @@ const arena_type arena_info[MAX_ARENA_MONS + 2] =
 };
 
 
-/*
+/*!
+ * @brief 闘技場のモンスターID及び報酬アイテムテーブル /
  * Store owners (exactly four "possible" owners per store, chosen randomly)
+ * @details
+ * <pre>
  * { name, purse, max greed, min greed, haggle_per, tolerance, race, unused }
  *
  * Lifted extra shopkeepers from CthAngband (don't you just love open source
@@ -1242,6 +1269,7 @@ const arena_type arena_info[MAX_ARENA_MONS + 2] =
  *
  * I want to do 50k owners, but the purse is currently s16b. Perhaps
  * we should just store 1/10th of the purse?
+ * </pre>
  */
 const owner_type owners[MAX_STORES][MAX_OWNERS] =
 {
@@ -1967,10 +1995,11 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] =
 };
 
 
-
-
-/*
+/*!
+ * @brief 加速値による実質速度修正倍率テーブル /
  * This table allows quick conversion from "speed" to "energy"
+ * @details
+ * <pre>
  * The basic function WAS ((S>=110) ? (S-110) : (100 / (120-S)))
  * Note that table access is *much* quicker than computation.
  *
@@ -1991,6 +2020,7 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] =
  * 100 units to 50 units, though this may interact badly with
  * the (compiled out) small random energy boost code.  It may
  * also tend to cause more "clumping" at high speeds.
+ * </pre>
  */
 const byte extract_energy[200] =
 {
