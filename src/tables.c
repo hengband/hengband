@@ -66,7 +66,8 @@ const s16b ddy_cdd[8] =
 
 
 
-/*
+/*!
+ * 10進数から16進数への変換テーブル /
  * Global array for converting numbers to uppercase hecidecimal digit
  * This array can also be used to convert a number to an octal digit
  */
@@ -77,7 +78,8 @@ const char hexsym[16] =
 };
 
 
-/*
+/*!
+ * 選択処理用キーコード /
  * Global array for converting numbers to a logical list symbol
  */
 const char listsym[] =
@@ -91,13 +93,15 @@ const char listsym[] =
 };
 
 
-/*
+/*!
+ * スクリーン表示色キャラクタ /
  * Encode the screen colors
  */
 const cptr color_char = "dwsorgbuDWvyRGBU";
 
 
-/*
+/*!
+ * 知力/賢さによるレベル毎の習得可能魔法数
  * Stat Table (INT/WIS) -- Number of half-spells per level
  */
 const byte adj_mag_study[] =
@@ -143,7 +147,8 @@ const byte adj_mag_study[] =
 };
 
 
-/*
+/*!
+ * 知力/賢さによるMP修正テーブル
  * Stat Table (INT/WIS) -- extra 1/4-mana-points per level
  */
 const byte adj_mag_mana[] =
@@ -189,7 +194,8 @@ const byte adj_mag_mana[] =
 };
 
 
-/*
+/*!
+ * 知力/賢さによる最低魔法失敗率
  * Stat Table (INT/WIS) -- Minimum failure rate (percentage)
  */
 const byte adj_mag_fail[] =
@@ -235,7 +241,8 @@ const byte adj_mag_fail[] =
 };
 
 
-/*
+/*!
+ * 知力/賢さによる魔法失敗率修正
  * Stat Table (INT/WIS) -- Various things
  */
 const byte adj_mag_stat[] =
