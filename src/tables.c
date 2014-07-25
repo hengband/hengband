@@ -4922,9 +4922,9 @@ const cptr window_flag_desc[32] =
 };
 
 
-/*
+/*!
+ * @brief オプションテーブル /
  * Available Options
- *
  */
 const option_type option_info[] =
 {
@@ -5311,6 +5311,9 @@ const option_type option_info[] =
 
 
 #ifdef JP
+/*!
+ * @brief カオスパトロン名テーブル
+ */
 const cptr chaos_patrons[MAX_PATRON] =
 {
 	"スローター",
@@ -5359,6 +5362,9 @@ const cptr chaos_patrons[MAX_PATRON] =
 #endif
 
 
+/*!
+ * @brief カオスパトロンの報酬能力値テーブル
+ */
 const int chaos_stats[MAX_PATRON] =
 {
 	A_CON,  /* Slortar */
@@ -5383,8 +5389,9 @@ const int chaos_stats[MAX_PATRON] =
 };
 
 
-
-
+/*!
+ * @brief カオスパトロンの報酬テーブル
+ */
 const int chaos_rewards[MAX_PATRON][20] =
 {
 	/* Slortar the Old: */
@@ -5517,6 +5524,9 @@ const int chaos_rewards[MAX_PATRON][20] =
 	}
 };
 
+/*!
+ * @brief マーシャルアーツ打撃テーブル
+ */
 const martial_arts ma_blows[MAX_MA] =
 {
 #ifdef JP
@@ -5559,6 +5569,9 @@ const martial_arts ma_blows[MAX_MA] =
 
 };
 
+/*!
+ * @brief 修行僧のターンダメージ算出テーブル
+ */
 const int monk_ave_damage[PY_MAX_LEVEL+1][3] =
 {
   {0, 0, 0},
@@ -5614,9 +5627,9 @@ const int monk_ave_damage[PY_MAX_LEVEL+1][3] =
   {4486, 5636, 1702},
 };
 
-/*
- * Table of game-generated inscriptions (indexed by the defines in
- * defines.h). -- RG
+/*!
+ * @brief アイテムの価値記述テーブル /
+ * Table of game-generated inscriptions (indexed by the defines in defines.h). -- RG
  */
 const cptr game_inscriptions[] =
 {
@@ -5645,6 +5658,9 @@ const cptr game_inscriptions[] =
 
 };
 
+/*!
+ * @brief 修行僧の構え能力テーブル
+ */
 const kamae kamae_shurui[MAX_KAMAE] =
 {
 #ifdef JP
@@ -5660,6 +5676,9 @@ const kamae kamae_shurui[MAX_KAMAE] =
 #endif
 };
 
+/*!
+ * @brief 剣術家の構え能力テーブル
+ */
 const kamae kata_shurui[MAX_KATA] =
 {
 #ifdef JP
@@ -5675,6 +5694,9 @@ const kamae kata_shurui[MAX_KATA] =
 #endif
 };
 
+/*!
+ * @brief 技能値到達表記テーブル
+ */
 const cptr exp_level_str[5]=
 #ifdef JP
 {"[初心者]", "[入門者]", "[熟練者]", "[エキスパート]", "[達人]"};
@@ -5682,7 +5704,9 @@ const cptr exp_level_str[5]=
 {"[Unskilled]", "[Beginner]", "[Skilled]", "[Expert]", "[Master]"};
 #endif
 
-/* Weird melee attack types when hallucinating */
+/*!
+ * @brief 幻覚時の打撃記述テーブル / Weird melee attack types when hallucinating
+ */
 #ifdef JP
 const cptr silly_attacks[MAX_SILLY_ATTACK] =
 {
@@ -5729,7 +5753,9 @@ const cptr silly_attacks[MAX_SILLY_ATTACK] =
 	"は言った。「変愚蛮怒、絶賛公開中！」",
 };
 
-/* Note: %s for strfmt() */
+/*!
+ * @brief 幻覚時の打撃記述テーブル(フォーマットつき) / Weird melee attack types when hallucinating (%s for strfmt())
+ */
 const cptr silly_attacks2[MAX_SILLY_ATTACK] =
 {
 	"%sに小便をかけた。",
@@ -5815,9 +5841,9 @@ const cptr silly_attacks[MAX_SILLY_ATTACK] =
 #endif
 
 
-/*
- * The table of "symbol info" -- each entry is a string of the form
- * "X:desc" where "X" is the trigger, and "desc" is the "info".
+/*!
+ * @brief シンボル解説テーブル /
+ * The table of "symbol info" -- each entry is a string of the form "X:desc" where "X" is the trigger, and "desc" is the "info".
  */
 const cptr ident_info[] =
 {
@@ -6018,8 +6044,8 @@ const cptr ident_info[] =
 	NULL
 };
 
-
-/*
+/*!
+ * @brief モンスターの打撃効力テーブル /
  * The table of monsters' blow effects
  */
 const mbe_info_type mbe_info[] =
@@ -6061,7 +6087,8 @@ const mbe_info_type mbe_info[] =
 };
 
 
-/*
+/*!
+ * @brief 地形状態フラグテーブル /
  * The table of features' actions
  */
 const byte feature_action_flags[FF_FLAG_MAX] =
@@ -6185,7 +6212,8 @@ const byte feature_action_flags[FF_FLAG_MAX] =
 };
 
 
-/*
+/*!
+ * @brief 装備耐性に準じたブレス効果の選択テーブル /
  * Define flags, effect type, name for dragon breath activation
  */
 const dragonbreath_type dragonbreath_info[] = {
@@ -6206,7 +6234,8 @@ const dragonbreath_type dragonbreath_info[] = {
 	{ 0, 0, NULL }
 };
 
-/*
+/*!
+ * @brief アイテムの発動効果テーブル /
  * Define flags, levels, values of activations
  */
 const activation_type activation_info[] =
@@ -6479,6 +6508,9 @@ const activation_type activation_info[] =
 };
 
 #ifdef JP
+/*!
+ * @brief ランダムアーティファクトのバイアス名称テーブル
+ */
 const cptr artifact_bias_name[MAX_BIAS] =
 {
 	"なし",
