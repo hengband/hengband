@@ -2048,8 +2048,8 @@ const byte extract_energy[200] =
 
 
 
-
-/*
+/*!
+ * @brief 基本必要経験値テーブル /
  * Base experience levels, may be adjusted up for race and/or class
  */
 const s32b player_exp[PY_MAX_LEVEL] =
@@ -2107,6 +2107,9 @@ const s32b player_exp[PY_MAX_LEVEL] =
 };
 
 
+/*!
+ * @brief 基本必要強化値テーブル(アンドロイド専用)
+ */
 const s32b player_exp_a[PY_MAX_LEVEL] =
 {
 	20,
@@ -2162,11 +2165,14 @@ const s32b player_exp_a[PY_MAX_LEVEL] =
 };
 
 
-/*
+/*!
+ * @brief 性別表記 /
  * Player Sexes
- *
+ * @details
+ * <pre>
  *      Title,
  *      Winner
+ * </pre>
  */
 const player_sex sex_info[MAX_SEXES] =
 {
@@ -2189,9 +2195,11 @@ const player_sex sex_info[MAX_SEXES] =
 };
 
 
-/*
+/*!
+ * @brief 種族情報 /
  * Player Races
- *
+ * @details
+ * <pre>
  *      Title,
  *      {STR,INT,WIS,DEX,CON,CHR},
  *      r_dis, r_dev, r_sav, r_stl, r_srh, r_fos, r_thn, r_thb,
@@ -2201,6 +2209,7 @@ const player_sex sex_info[MAX_SEXES] =
  *      Female (Hgt, Wgt)
  *      infra,
  *      class-choices
+ * </pre>
  */
 const player_race race_info[MAX_RACES] =
 {
@@ -2763,14 +2772,17 @@ const player_race race_info[MAX_RACES] =
 };
 
 
-/*
+/*!
+ * @brief 職業情報 /
  * Player Classes
- *
+ * @details
+ * <pre>
  *      Title,
  *      {STR,INT,WIS,DEX,CON,CHR},
  *      c_dis, c_dev, c_sav, c_stl, c_srh, c_fos, c_thn, c_thb,
  *      x_dis, x_dev, x_sav, x_stl, x_srh, x_fos, x_thn, x_thb,
  *      HD, Exp, pet_upkeep_div
+ * </pre>
  */
 const player_class class_info[MAX_CLASS] =
 {
@@ -3104,6 +3116,10 @@ const player_class class_info[MAX_CLASS] =
 	},
 };
 
+/*!
+ * @brief 性格情報 /
+ * Player Character
+ */
 const player_seikaku seikaku_info[MAX_SEIKAKU] =
 {
 	{
@@ -3228,7 +3244,9 @@ const player_seikaku seikaku_info[MAX_SEIKAKU] =
 };
 
 
-
+/*!
+ * @brief 変身種族情報
+ */
 const player_race mimic_info[] =
 {
 	{
@@ -3294,7 +3312,9 @@ const player_race mimic_info[] =
 };
 
 
-
+/*!
+ * @brief 歌、剣術、呪術領域情報テーブル
+ */
 const magic_type technic_info[NUM_TECHNIC][32] =
 {
 	{
@@ -3416,7 +3436,8 @@ const magic_type technic_info[NUM_TECHNIC][32] =
 };
 
 
-/*
+/*!
+ * 魔法領域フラグ管理テーブル /
  * Zangband uses this array instead of the spell flags table, as there
  * are 5 realms of magic, each with 4 spellbooks and 8 spells per book -- TY
  */
@@ -3428,7 +3449,9 @@ const u32b fake_spell_flags[4]=
 	0xff000000
 };
 
-
+/*!
+ * 職業毎に選択可能な第一領域魔法テーブル
+ */
 const s32b realm_choices1[MAX_CLASS] =
 {
 	(CH_NONE),				/* Warrior */
@@ -3471,7 +3494,9 @@ const s32b realm_choices1[MAX_CLASS] =
 	(CH_NONE),				/* Sniper */
 };
 
-
+/*!
+ * 職業毎に選択可能な第二領域魔法テーブル
+ */
 const s32b realm_choices2[MAX_CLASS] =
 {
 	(CH_NONE),                              /* Warrior */
@@ -3516,6 +3541,9 @@ const s32b realm_choices2[MAX_CLASS] =
 
 
 #ifdef JP
+/*!
+ * 領域魔法名称
+ */
 const cptr realm_names[] =
 {
 	"魔法なし",
