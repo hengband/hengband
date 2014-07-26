@@ -1,24 +1,31 @@
-﻿/* File: spells3.c */
-
-/*
+﻿/*!
+ * @file spells3.c
+ * @brief 魔法効果の実装/ Spell code (part 3)
+ * @date 2014/07/26
+ * @author
+ * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
+ * </pre>
  */
-
-/* Purpose: Spell code (part 3) */
 
 #include "angband.h"
 
-/* Maximum number of tries for teleporting */
+/*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
 #define MAX_TRIES 100
 
-/* 1/x chance of reducing stats (for elemental attacks) */
+/*! 能力値現象の基本確率(1 / HURT_CHANCE) / 1/x chance of reducing stats (for elemental attacks) */
 #define HURT_CHANCE 16
 
-
+/*!
+ * @brief 指定されたマスがモンスターのテレポート可能先かどうかを判定する。
+ * @param m_idx モンスターID
+ * @param y 移動先Y座標
+ * @param x 移動先X座標
+ * @param mode オプション
+ */
 static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
 {
 	monster_type *m_ptr = &m_list[m_idx];
@@ -44,11 +51,14 @@ static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
 }
 
 
-/*
+/*!
+ * @brief モンスターのテレポートアウェイ処理 /
  * Teleport a monster, normally up to "dis" grids away.
- *
+ * @param m_idx モンスターID
+ * @param dis テレポート距離
+ * @param mode オプション
+ * @details
  * Attempt to move the monster at least "dis/2" grids away.
- *
  * But allow variation to prevent infinite loops.
  */
 bool teleport_away(int m_idx, int dis, u32b mode)
@@ -156,9 +166,14 @@ bool teleport_away(int m_idx, int dis, u32b mode)
 }
 
 
-
-/*
+/*!
+ * @brief モンスターを指定された座標付近にテレポートする /
  * Teleport monster next to a grid near the given location
+ * @param m_idx モンスターID
+ * @param ty 目安Y座標
+ * @param tx 目安X座標
+ * @param power テレポート成功確率
+ * @param mode オプション
  */
 void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode)
 {
