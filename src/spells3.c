@@ -25,6 +25,7 @@
  * @param y 移動先Y座標
  * @param x 移動先X座標
  * @param mode オプション
+ * @return テレポート先として妥当ならばtrue
  */
 static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
 {
@@ -57,6 +58,7 @@ static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
  * @param m_idx モンスターID
  * @param dis テレポート距離
  * @param mode オプション
+ * @return テレポートが実際に行われたらtrue
  * @details
  * Attempt to move the monster at least "dis/2" grids away.
  * But allow variation to prevent infinite loops.
@@ -174,6 +176,7 @@ bool teleport_away(int m_idx, int dis, u32b mode)
  * @param tx 目安X座標
  * @param power テレポート成功確率
  * @param mode オプション
+ * @return なし
  */
 void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode)
 {
@@ -268,7 +271,13 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode)
 		p_ptr->update |= (PU_MON_LITE);
 }
 
-
+/*!
+ * @brief 指定されたマスにプレイヤーがテレポート可能かどうかを判定する。
+ * @param y 移動先Y座標
+ * @param x 移動先X座標
+ * @param mode オプション
+ * @return テレポート先として妥当ならばtrue
+ */
 bool cave_player_teleportable_bold(int y, int x, u32b mode)
 {
 	cave_type    *c_ptr = &cave[y][x];
@@ -309,9 +318,17 @@ bool cave_player_teleportable_bold(int y, int x, u32b mode)
 }
 
 
-/*
+/*! テレポート最大距離 */
+#define MAX_TELEPORT_DISTANCE 200
+
+/*!
+ * @brief プレイヤーのテレポート先選定と移動処理 /
  * Teleport the player to a location up to "dis" grids away.
- *
+ * @param dis 基本移動距離
+ * @param mode オプション
+ * @return 実際にテレポート処理が行われたらtrue
+ * @details
+ * <pre>
  * If no such spaces are readily available, the distance may increase.
  * Try very hard to move the player at least a quarter that distance.
  *
@@ -324,9 +341,8 @@ bool cave_player_teleportable_bold(int y, int x, u32b mode)
  * candidates is selected first, which includes at least 50% of all
  * floor grids within the distance, and any single grid in this list
  * of candidates has equal possibility to be choosen as a destination.
+ * </pre>
  */
-
-#define MAX_TELEPORT_DISTANCE 200
 
 bool teleport_player_aux(int dis, u32b mode)
 {
@@ -438,6 +454,12 @@ bool teleport_player_aux(int dis, u32b mode)
 	return TRUE;
 }
 
+/*!
+ * @brief プレイヤーのテレポート処理メインルーチン
+ * @param dis 基本移動距離
+ * @param mode オプション
+ * @return なし
+ */
 void teleport_player(int dis, u32b mode)
 {
 	int yy, xx;
