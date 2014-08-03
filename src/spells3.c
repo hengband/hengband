@@ -910,8 +910,11 @@ int choose_dungeon(cptr note, int y, int x)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの帰還発動及び中止処理 /
  * Recall the player to town or dungeon
+ * @param turn 発動までのターン数
+ * @return 常にTRUEを返す
  */
 bool recall_player(int turns)
 {
@@ -959,13 +962,20 @@ bool recall_player(int turns)
 	return TRUE;
 }
 
-
+/*!
+ * @brief 帰還用メインルーチン
+ * @param turn 発動までのターン数
+ * @return 常にTRUEを返す
+ */
 bool word_of_recall(void)
 {
 	return(recall_player(randint0(21) + 15));
 }
 
-
+/*!
+ * @brief フロア・リセット処理
+ * @return リセット処理が実際に行われたらTRUEを返す
+ */
 bool reset_recall(void)
 {
 	int select_dungeon, dummy = 0;
@@ -1021,11 +1031,11 @@ msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの装備劣化処理 /
  * Apply disenchantment to the player's stuff
- *
- * XXX XXX XXX This function is also called from the "melee" code
- *
+ * @param mode 最下位ビットが1ならば劣化処理が若干低減される
+ * @return 劣化処理に関するメッセージが発せられた場合はTRUEを返す /
  * Return "TRUE" if the player notices anything
  */
 bool apply_disenchant(int mode)
@@ -1139,7 +1149,10 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 	return (TRUE);
 }
 
-
+/*!
+ * @brief プレイヤーの突然変異処理
+ * @return なし
+ */
 void mutate_player(void)
 {
 	int max1, cur1, max2, cur2, ii, jj, i;
@@ -1168,8 +1181,10 @@ void mutate_player(void)
 }
 
 
-/*
- * Apply Nexus
+/*!
+ * @brief プレイヤーの因果混乱処理 / Apply Nexus
+ * @param m_ptr 因果混乱をプレイヤーに与えたモンスターの情報参照ポインタ
+ * @return なし
  */
 void apply_nexus(monster_type *m_ptr)
 {
@@ -1216,8 +1231,10 @@ void apply_nexus(monster_type *m_ptr)
 }
 
 
-/*
+/*!
+ * @brief 寿命つき光源の燃素追加処理 /
  * Charge a lite (torch or latern)
+ * @return なし
  */
 void phlogiston(void)
 {
