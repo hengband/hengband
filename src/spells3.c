@@ -2384,7 +2384,10 @@ static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
 	return TRUE;
 }
 
-
+/*!
+ * @brief アーティファクト生成の巻物処理 /
+ * @return 生成が実際に試みられたらTRUEを返す
+ */
 bool artifact_scroll(void)
 {
 	int             item;
@@ -2512,8 +2515,11 @@ bool artifact_scroll(void)
 }
 
 
-/*
+/*!
+ * @brief アイテム鑑定処理 /
  * Identify an object
+ * @param o_ptr 鑑定されるアイテムの情報参照ポインタ
+ * @return 実際に鑑定できたらTRUEを返す
  */
 bool identify_item(object_type *o_ptr)
 {
@@ -2562,12 +2568,21 @@ bool identify_item(object_type *o_ptr)
 	return old_known;
 }
 
-
+/*!
+ * @brief アイテムが鑑定済みかを判定する /
+ * @param o_ptr 判定するアイテムの情報参照ポインタ
+ * @return 実際に鑑定済みならばTRUEを返す
+ */
 static bool item_tester_hook_identify(object_type *o_ptr)
 {
 	return (bool)!object_is_known(o_ptr);
 }
 
+/*!
+ * @brief アイテムが鑑定済みの武器防具かを判定する /
+ * @param o_ptr 判定するアイテムの情報参照ポインタ
+ * @return 実際に鑑定済みならばTRUEを返す
+ */
 static bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
 {
 	if (object_is_known(o_ptr))
@@ -2575,8 +2590,12 @@ static bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
 	return object_is_weapon_armour_ammo(o_ptr);
 }
 
-/*
+/*!
+ * @brief アイテム鑑定のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
+ * @param only_equip 装備品のみを対象とするならばTRUEを返す
+ * @return 実際に鑑定を行ったならばTRUEを返す
+ * @details
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was identified, else FALSE.
  */
@@ -2654,10 +2673,17 @@ bool ident_spell(bool only_equip)
 }
 
 
-/*
+/*!
+ * @brief アイテム凡庸化のメインルーチン処理 /
+ * Identify an object in the inventory (or on the floor)
+ * @param only_equip 装備品のみを対象とするならばTRUEを返す
+ * @return 実際に凡庸化をを行ったならばTRUEを返す
+ * @details
+ * <pre>
  * Mundanify an object in the inventory (or on the floor)
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was mundanified, else FALSE.
+ * </pre>
  */
 bool mundane_spell(bool only_equip)
 {
@@ -2712,13 +2738,21 @@ bool mundane_spell(bool only_equip)
 	return TRUE;
 }
 
-
-
+/*!
+ * @brief アイテムが*鑑定*済みかを判定する /
+ * @param o_ptr 判定するアイテムの情報参照ポインタ
+ * @return 実際に鑑定済みならばTRUEを返す
+ */
 static bool item_tester_hook_identify_fully(object_type *o_ptr)
 {
 	return (bool)(!object_is_known(o_ptr) || !(o_ptr->ident & IDENT_MENTAL));
 }
 
+/*!
+ * @brief アイテムが*鑑定*済みの武器防具かを判定する /
+ * @param o_ptr 判定するアイテムの情報参照ポインタ
+ * @return 実際に鑑定済みならばTRUEを返す
+ */
 static bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
 {
 	if (!item_tester_hook_identify_fully(o_ptr))
@@ -2726,7 +2760,12 @@ static bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
 	return object_is_weapon_armour_ammo(o_ptr);
 }
 
-/*
+/*!
+ * @brief アイテム*鑑定*のメインルーチン処理 /
+ * Identify an object in the inventory (or on the floor)
+ * @param only_equip 装備品のみを対象とするならばTRUEを返す
+ * @return 実際に鑑定を行ったならばTRUEを返す
+ * @details
  * Fully "identify" an object in the inventory  -BEN-
  * This routine returns TRUE if an item was identified.
  */
@@ -2810,8 +2849,6 @@ bool identify_fully(bool only_equip)
 	/* Success */
 	return (TRUE);
 }
-
-
 
 
 /*
