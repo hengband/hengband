@@ -2017,8 +2017,10 @@ bool remove_all_curse(void)
 }
 
 
-/*
+/*!
+ * @brief アイテムの価値に応じた錬金術処理 /
  * Turns an object into gold, gain some of its value in a shop
+ * @return 処理が実際に行われたらTRUEを返す
  */
 bool alchemy(void)
 {
@@ -2138,8 +2140,11 @@ bool alchemy(void)
 }
 
 
-/*
+/*!
+ * @brief 呪いの打ち破り処理 /
  * Break the curse of an item
+ * @param o_ptr 呪い装備情報の参照ポインタ
+ * @return なし
  */
 static void break_curse(object_type *o_ptr)
 {
@@ -2154,9 +2159,15 @@ static void break_curse(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 装備修正強化処理 /
  * Enchants a plus onto an item. -RAK-
- *
+ * @param o_ptr 強化するアイテムの参照ポインタ
+ * @param n 強化基本量
+ * @param eflag 強化オプション(命中/ダメージ/AC)
+ * @return 強化に成功した場合TRUEを返す
+ * @details
+ * <pre>
  * Revamped!  Now takes item pointer, number of times to try enchanting,
  * and a flag of what to try enchanting.  Artifacts resist enchantment
  * some of the time, and successful enchantment to at least +0 might
@@ -2168,6 +2179,7 @@ static void break_curse(object_type *o_ptr)
  *
  * Note that this function can now be used on "piles" of items, and
  * the larger the pile, the lower the chance of success.
+ * </pre>
  */
 bool enchant(object_type *o_ptr, int n, int eflag)
 {
@@ -2268,9 +2280,14 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 }
 
 
-
-/*
+/*!
+ * @brief 装備修正強化処理のメインルーチン /
  * Enchant an item (in the inventory or on the floor)
+ * @param num_hit 命中修正量
+ * @param num_dam ダメージ修正量
+ * @param num_ac AC修正量
+ * @return 強化に成功した場合TRUEを返す
+ * @details
  * Note that "num_ac" requires armour, else weapon
  * Returns TRUE if attempted, FALSE if cancelled
  */
@@ -2349,8 +2366,11 @@ msg_format("%s は明るく輝いた！",
 }
 
 
-/*
+/*!
+ * @brief アイテムが並の価値のアイテムかどうか判定する /
  * Check if an object is nameless weapon or armour
+ * @param 判定するアイテムの情報参照ポインタ
+ * @return 並ならばTRUEを返す
  */
 static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
 {
