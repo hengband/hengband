@@ -1284,8 +1284,11 @@ void phlogiston(void)
 }
 
 
-/*
+/*!
+ * @brief 武器へのエゴ付加処理 /
  * Brand the current weapon
+ * @param brand_type エゴ化ID(e_info.txtとは連動していない)
+ * @return なし
  */
 void brand_weapon(int brand_type)
 {
@@ -1440,8 +1443,10 @@ void brand_weapon(int brand_type)
 }
 
 
-/*
+/*!
+ * @brief 虚無招来によるフロア中の全壁除去処理 /
  * Vanish all walls in this floor
+ * @return 実際に処理が反映された場合TRUE
  */
 static bool vanish_dungeon(void)
 {
@@ -1580,7 +1585,10 @@ static bool vanish_dungeon(void)
 	return TRUE;
 }
 
-
+/*!
+ * @brief 虚無招来処理 /
+ * @return なし
+ */
 void call_the_(void)
 {
 	int i;
@@ -1656,8 +1664,13 @@ void call_the_(void)
 }
 
 
-/*
+/*!
+ * @brief アイテム引き寄せ処理 /
  * Fetch an item (teleport it right underneath the caster)
+ * @param dir 魔法の発動方向
+ * @param wgt 許容重量
+ * @param require_los 射線の通りを要求するならばTRUE
+ * @return なし
  */
 void fetch(int dir, int wgt, bool require_los)
 {
@@ -1757,7 +1770,10 @@ void fetch(int dir, int wgt, bool require_los)
 	p_ptr->redraw |= PR_MAP;
 }
 
-
+/*!
+ * @brief 現実変容処理
+ * @return なし
+ */
 void alter_reality(void)
 {
 	/* Ironman option */
@@ -1786,8 +1802,10 @@ void alter_reality(void)
 }
 
 
-/*
+/*!
+ * @brief 守りのルーン設置処理 /
  * Leave a "glyph of warding" which prevents monster movement
+ * @return 実際に設置が行われた場合TRUEを返す
  */
 bool warding_glyph(void)
 {
@@ -1811,6 +1829,10 @@ bool warding_glyph(void)
 	return TRUE;
 }
 
+/*!
+ * @brief 鏡設置処理
+ * @return 実際に設置が行われた場合TRUEを返す
+ */
 bool place_mirror(void)
 {
 	/* XXX XXX XXX */
@@ -1839,8 +1861,10 @@ bool place_mirror(void)
 }
 
 
-/*
+/*!
+ * @brief 爆発のルーン設置処理 /
  * Leave an "explosive rune" which prevents monster movement
+ * @return 実際に設置が行われた場合TRUEを返す
  */
 bool explosive_rune(void)
 {
