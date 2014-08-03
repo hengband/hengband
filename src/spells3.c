@@ -498,6 +498,12 @@ void teleport_player(int dis, u32b mode)
 }
 
 
+/*!
+ * @brief プレイヤーのテレポートアウェイ処理 /
+ * @param m_idx アウェイを試みたプレイヤーID
+ * @param dis テレポート距離
+ * @return なし
+ */
 void teleport_player_away(int m_idx, int dis)
 {
 	int yy, xx;
@@ -536,11 +542,18 @@ void teleport_player_away(int m_idx, int dis)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーを指定位置近辺にテレポートさせる
  * Teleport player to a grid near the given location
- *
+ * @param ny 目標Y座標
+ * @param nx 目標X座標
+ * @param mode オプションフラグ
+ * @return なし
+ * @details
+ * <pre>
  * This function is slightly obsessive about correctness.
  * This function allows teleporting into vaults (!)
+ * </pre>
  */
 void teleport_player_to(int ny, int nx, u32b mode)
 {
@@ -638,9 +651,11 @@ void teleport_away_followable(int m_idx)
 }
 
 
-/*
+/*!
+ * @brief プレイヤー及びモンスターをレベルテレポートさせる /
  * Teleport the player one level up or down (random when legal)
- * Note: If m_idx <= 0, target is player.
+ * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
+ * @return なし
  */
 void teleport_level(int m_idx)
 {
@@ -815,7 +830,12 @@ void teleport_level(int m_idx)
 }
 
 
-
+/*!
+ * @brief プレイヤー及びモンスターをレベルテレポートさせる /
+ * Teleport the player one level up or down (random when legal)
+ * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
+ * @return なし
+ */
 int choose_dungeon(cptr note, int y, int x)
 {
 	int select_dungeon;
