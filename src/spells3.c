@@ -1889,9 +1889,11 @@ bool explosive_rune(void)
 }
 
 
-/*
+/*!
+ * @brief 自己分析の薬による全所持アイテム鑑定処理 /
  * Identify everything being carried.
  * Done by a potion of "self knowledge".
+ * @return なし
  */
 void identify_pack(void)
 {
@@ -1914,9 +1916,11 @@ void identify_pack(void)
 }
 
 
-/*
+/*!
+ * @brief 装備強化処理の失敗率定数（千分率） /
  * Used by the "enchant" function (chance of failure)
  * (modified for Zangband, we need better stuff there...) -- TY
+ * @return なし
  */
 static int enchant_table[16] =
 {
@@ -1927,15 +1931,20 @@ static int enchant_table[16] =
 };
 
 
-/*
+/*!
+ * @brief 装備の解呪処理 /
  * Removes curses from items in inventory
- *
+ * @param all 軽い呪いまでの解除ならば0
+ * @return 解呪されたアイテムの数
+ * @details
+ * <pre>
  * Note that Items which are "Perma-Cursed" (The One Ring,
  * The Crown of Morgoth) can NEVER be uncursed.
  *
  * Note that if "all" is FALSE, then Items which are
  * "Heavy-Cursed" (Mormegil, Calris, and Weapons of Morgul)
  * will not be uncursed.
+ * </pre>
  */
 static int remove_curse_aux(int all)
 {
@@ -1987,16 +1996,20 @@ static int remove_curse_aux(int all)
 }
 
 
-/*
+/*!
+ * @brief 装備の軽い呪い解呪処理 /
  * Remove most curses
+ * @return 解呪に成功した装備数
  */
 bool remove_curse(void)
 {
 	return (remove_curse_aux(FALSE));
 }
 
-/*
+/*!
+ * @brief 装備の重い呪い解呪処理 /
  * Remove all curses
+ * @return 解呪に成功した装備数
  */
 bool remove_all_curse(void)
 {
