@@ -3884,9 +3884,13 @@ int mod_need_mana(int need_mana, int spell, int realm)
 }
 
 
-/*
+/*!
+ * @brief 呪文の失敗率修正処理1(呪い、消費魔力減少、呪文簡易化) /
  * Modify spell fail rate
  * Using p_ptr->to_m_chance, p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
+ * @param need_mana 基本失敗率
+ * @return 失敗率(%)
+ * @todo 統合を検討
  */
 int mod_spell_chance_1(int chance)
 {
@@ -3902,10 +3906,16 @@ int mod_spell_chance_1(int chance)
 }
 
 
-/*
+/*!
+ * @brief 呪文の失敗率修正処理2(消費魔力減少、呪い、負値修正) /
+ * Modify spell fail rate
+ * Using p_ptr->to_m_chance, p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
+ * @param need_mana 基本失敗率
+ * @return 失敗率(%)
  * Modify spell fail rate (as "suffix" process)
  * Using p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
  * Note: variable "chance" cannot be negative.
+ * @todo 統合を検討
  */
 int mod_spell_chance_2(int chance)
 {
@@ -3917,8 +3927,12 @@ int mod_spell_chance_2(int chance)
 }
 
 
-/*
+/*!
+ * @brief 呪文の失敗率計算メインルーチン /
  * Returns spell chance of failure for spell -RAK-
+ * @param spell 呪文ID
+ * @param use_realm 魔法領域ID
+ * @return 失敗率(%)
  */
 s16b spell_chance(int spell, int use_realm)
 {
