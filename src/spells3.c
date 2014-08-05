@@ -4261,13 +4261,12 @@ void print_spells(int target_spell, byte *spells, int num, int y, int x, int use
 }
 
 
-/*
+/*!
+ * @brief アイテムが酸で破損するかどうかを判定する
+ * @param o_ptr アイテムの情報参照ポインタ
+ * @return 破損するならばTRUEを返す
  * Note that amulets, rods, and high-level spell books are immune
  * to "inventory damage" of any kind.  Also sling ammo and shovels.
- */
-
-
-/*
  * Does a given class of objects (usually) hate acid?
  * Note that acid can either melt or corrode something.
  */
@@ -4322,8 +4321,11 @@ bool hates_acid(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムが電撃で破損するかどうかを判定する /
  * Does a given object (usually) hate electricity?
+ * @param o_ptr アイテムの情報参照ポインタ
+ * @return 破損するならばTRUEを返す
  */
 bool hates_elec(object_type *o_ptr)
 {
@@ -4340,8 +4342,12 @@ bool hates_elec(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムが火炎で破損するかどうかを判定する /
  * Does a given object (usually) hate fire?
+ * @param o_ptr アイテムの情報参照ポインタ
+ * @return 破損するならばTRUEを返す
+ * @details
  * Hafted/Polearm weapons have wooden shafts.
  * Arrows/Bows are mostly wooden.
  */
@@ -4400,8 +4406,11 @@ bool hates_fire(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムが冷気で破損するかどうかを判定する /
  * Does a given object (usually) hate cold?
+ * @param o_ptr アイテムの情報参照ポインタ
+ * @return 破損するならばTRUEを返す
  */
 bool hates_cold(object_type *o_ptr)
 {
@@ -4419,8 +4428,12 @@ bool hates_cold(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムが酸で破損するかどうかを判定する(メインルーチン) /
  * Melt something
+ * @param o_ptr アイテムの情報参照ポインタ
+ * @return 破損するならばTRUEを返す
+ * @todo 統合を検討
  */
 int set_acid_destroy(object_type *o_ptr)
 {
@@ -4432,8 +4445,12 @@ int set_acid_destroy(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムが電撃で破損するかどうかを判定する(メインルーチン) /
  * Electrical damage
+ * @param o_ptr アイテムの情報参照ポインタ
+ * @return 破損するならばTRUEを返す
+ * @todo 統合を検討
  */
 int set_elec_destroy(object_type *o_ptr)
 {
@@ -4445,8 +4462,12 @@ int set_elec_destroy(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムが火炎で破損するかどうかを判定する(メインルーチン) /
  * Burn something
+ * @param o_ptr アイテムの情報参照ポインタ
+ * @return 破損するならばTRUEを返す
+ * @todo 統合を検討
  */
 int set_fire_destroy(object_type *o_ptr)
 {
@@ -4458,8 +4479,12 @@ int set_fire_destroy(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムが冷気で破損するかどうかを判定する(メインルーチン) /
  * Freeze things
+ * @param o_ptr アイテムの情報参照ポインタ
+ * @return 破損するならばTRUEを返す
+ * @todo 統合を検討
  */
 int set_cold_destroy(object_type *o_ptr)
 {
@@ -4471,8 +4496,13 @@ int set_cold_destroy(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムが指定確率で破損するかどうかを判定する /
  * Destroys a type of item on a given percent chance
+ * @param typ 破損判定関数ポインタ
+ * @param perc 基本確率
+ * @return 破損したアイテムの数
+ * @details
  * Note that missiles are no longer necessarily all destroyed
  * Destruction taken from "melee.c" code for "stealing".
  * New-style wands and rods handled correctly. -LM-
