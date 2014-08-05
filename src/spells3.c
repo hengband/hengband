@@ -4592,11 +4592,12 @@ o_name, index_to_label(i),
 }
 
 
-/*
+/*!
+ * @brief 酸攻撃による装備のAC劣化処理 /
  * Acid has hit the player, attempt to affect some armor.
- *
+ * @return ACが実際に劣化したらTRUEを返す
+ * @details
  * Note that the "base armor" of an object never changes.
- *
  * If any armor is damaged (or resists), the player takes less damage.
  */
 static int minus_ac(void)
@@ -4659,8 +4660,14 @@ static int minus_ac(void)
 }
 
 
-/*
+/*!
+ * @brief 酸属性によるプレイヤー損害処理 /
  * Hurt the player with Acid
+ * @param dam 基本ダメージ量
+ * @param kb_str ダメージ原因記述
+ * @param monspell 原因となったモンスター特殊攻撃ID
+ * @param aura オーラよるダメージが原因ならばTRUE
+ * @return 修正HPダメージ量
  */
 int acid_dam(int dam, cptr kb_str, int monspell, bool aura)
 {
@@ -4703,8 +4710,14 @@ int acid_dam(int dam, cptr kb_str, int monspell, bool aura)
 }
 
 
-/*
+/*!
+ * @brief 電撃属性によるプレイヤー損害処理 /
  * Hurt the player with electricity
+ * @param dam 基本ダメージ量
+ * @param kb_str ダメージ原因記述
+ * @param monspell 原因となったモンスター特殊攻撃ID
+ * @param aura オーラよるダメージが原因ならばTRUE
+ * @return 修正HPダメージ量
  */
 int elec_dam(int dam, cptr kb_str, int monspell, bool aura)
 {
@@ -4746,8 +4759,14 @@ int elec_dam(int dam, cptr kb_str, int monspell, bool aura)
 }
 
 
-/*
+/*!
+ * @brief 火炎属性によるプレイヤー損害処理 /
  * Hurt the player with Fire
+ * @param dam 基本ダメージ量
+ * @param kb_str ダメージ原因記述
+ * @param monspell 原因となったモンスター特殊攻撃ID
+ * @param aura オーラよるダメージが原因ならばTRUE
+ * @return 修正HPダメージ量
  */
 int fire_dam(int dam, cptr kb_str, int monspell, bool aura)
 {
@@ -4789,8 +4808,14 @@ int fire_dam(int dam, cptr kb_str, int monspell, bool aura)
 }
 
 
-/*
+/*!
+ * @brief 冷気属性によるプレイヤー損害処理 /
  * Hurt the player with Cold
+ * @param dam 基本ダメージ量
+ * @param kb_str ダメージ原因記述
+ * @param monspell 原因となったモンスター特殊攻撃ID
+ * @param aura オーラよるダメージが原因ならばTRUE
+ * @return 修正HPダメージ量
  */
 int cold_dam(int dam, cptr kb_str, int monspell, bool aura)
 {
