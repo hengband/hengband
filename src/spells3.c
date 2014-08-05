@@ -3181,8 +3181,10 @@ bool recharge(int power)
 }
 
 
-/*
+/*!
+ * @brief 武器の祝福処理 /
  * Bless a weapon
+ * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
 bool bless_weapon(void)
 {
@@ -3363,8 +3365,10 @@ msg_format("%s は劣化した！",
 }
 
 
-/*
+/*!
+ * @brief 盾磨き処理 /
  * pulish shield
+ * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
 bool pulish_shield(void)
 {
