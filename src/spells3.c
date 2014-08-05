@@ -1890,7 +1890,7 @@ bool explosive_rune(void)
 
 
 /*!
- * @brief 自己分析の薬による全所持アイテム鑑定処理 /
+ * @brief 全所持アイテム鑑定処理 /
  * Identify everything being carried.
  * Done by a potion of "self knowledge".
  * @return なし
@@ -2851,8 +2851,11 @@ bool identify_fully(bool only_equip)
 }
 
 
-/*
+/*!
+ * @brief 魔力充填が可能なアイテムかどうか判定する /
  * Hook for "get_item()".  Determine if something is rechargable.
+ * @param o_ptr 判定するアイテムの情報参照ポインタ
+ * @return 魔力充填が可能ならばTRUEを返す
  */
 bool item_tester_hook_recharge(object_type *o_ptr)
 {
@@ -2870,9 +2873,12 @@ bool item_tester_hook_recharge(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 魔力充填処理 /
  * Recharge a wand/staff/rod from the pack or on the floor.
  * This function has been rewritten in Oangband and ZAngband.
+ * @param power 充填パワー
+ * @return ターン消費を要する処理まで進んだらTRUEを返す
  *
  * Sorcery/Arcane -- Recharge  --> recharge(plev * 4)
  * Chaos -- Arcane Binding     --> recharge(90)
