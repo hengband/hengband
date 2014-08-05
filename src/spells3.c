@@ -3439,8 +3439,16 @@ msg_format("%sは輝いた！", o_name);
 }
 
 
-/*
+/*!
+ * @brief 薬の破損効果処理 /
  * Potions "smash open" and cause an area effect when
+ * @param who 薬破損の主体ID(プレイヤー所持アイテムが壊れた場合0、床上のアイテムの場合モンスターID)
+ * @param y 破壊時のY座標
+ * @param x 破壊時のX座標
+ * @param k_idx 破損した薬のアイテムID
+ * @return 薬を浴びたモンスターが起こるならばTRUEを返す
+ * @details
+ * <pre>
  * (1) they are shattered while in the player's inventory,
  * due to cold (etc) attacks;
  * (2) they are thrown at a monster, or obstacle;
@@ -3456,6 +3464,7 @@ msg_format("%sは輝いた！", o_name);
  *    y, x  --- coordinates of the potion (or player if
  *          the potion was in her inventory);
  *    o_ptr --- pointer to the potion object.
+ * </pre>
  */
 bool potion_smash_effect(int who, int y, int x, int k_idx)
 {
