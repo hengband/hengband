@@ -3607,11 +3607,12 @@ bool potion_smash_effect(int who, int y, int x, int k_idx)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの全既知呪文を表示する /
  * Hack -- Display all known spells in a window
- *
+ * return なし
+ * @details
  * XXX XXX XXX Need to analyze size of the window.
- *
  * XXX XXX XXX Need more color coding.
  */
 void display_spell_list(void)
@@ -3825,8 +3826,12 @@ void display_spell_list(void)
 }
 
 
-/*
+/*!
+ * @brief 呪文の経験値を返す /
  * Returns experience of a spell
+ * @param spell 呪文ID
+ * @param use_realm 魔法領域
+ * @return 経験値
  */
 s16b experience_of_spell(int spell, int use_realm)
 {
@@ -3838,8 +3843,13 @@ s16b experience_of_spell(int spell, int use_realm)
 }
 
 
-/*
+/*!
+ * @brief 呪文の消費MPを返す /
  * Modify mana consumption rate using spell exp and p_ptr->dec_mana
+ * @param need_mana 基本消費MP
+ * @param spell 呪文ID
+ * @param realm 魔法領域
+ * @return 消費MP
  */
 int mod_need_mana(int need_mana, int spell, int realm)
 {
