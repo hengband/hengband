@@ -4035,11 +4035,16 @@ s16b spell_chance(int spell, int use_realm)
 }
 
 
-
-/*
+/*!
+ * @brief 魔法が利用可能かどうかを返す /
  * Determine if a spell is "okay" for the player to cast or study
  * The spell must be legible, not forgotten, and also, to cast,
  * it must be known, and to study, it must not be known.
+ * @param spell 呪文ID
+ * @param learned 使用可能な判定ならばTRUE、学習可能かどうかの判定ならばFALSE
+ * @param study_pray 祈りの学習判定目的ならばTRUE
+ * @param use_realm 魔法領域ID
+ * @return 失敗率(%)
  */
 bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 {
@@ -4084,8 +4089,17 @@ bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 }
 
 
-/*
+
+/*!
+ * @brief 呪文情報の表示処理 /
  * Print a list of spells (for browsing or casting or viewing)
+ * @spells target_spell 呪文ID
+ * @spells spells アクセス開始するスペルの参照ポイント
+ * @spells num 表示する
+ * @spells y 表示メッセージ左上Y座標
+ * @spells x 表示メッセージ左上X座標
+ * @spells use_realm 魔法領域ID
+ * @return なし
  */
 void print_spells(int target_spell, byte *spells, int num, int y, int x, int use_realm)
 {
