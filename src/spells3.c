@@ -5292,9 +5292,12 @@ bool polymorph_monster(int y, int x)
 	return polymorphed;
 }
 
-
-/*
+/*!
+ * @brief 次元の扉処理 /
  * Dimension Door
+ * @param x テレポート先のX座標
+ * @param y テレポート先のY座標
+ * @return 目標に指定通りテレポートできたならばTRUEを返す
  */
 static bool dimension_door_aux(int x, int y)
 {
@@ -5322,8 +5325,10 @@ static bool dimension_door_aux(int x, int y)
 }
 
 
-/*
+/*!
+ * @brief 次元の扉処理のメインルーチン /
  * Dimension Door
+ * @return ターンを消費した場合TRUEを返す
  */
 bool dimension_door(void)
 {
@@ -5340,8 +5345,12 @@ bool dimension_door(void)
 }
 
 
-/*
+/*!
+ * @brief 鏡抜け処理のメインルーチン /
  * Mirror Master's Dimension Door
+ * @param x テレポート先のX座標
+ * @param y テレポート先のY座標
+ * @return ターンを消費した場合TRUEを返す
  */
 bool mirror_tunnel(void)
 {
@@ -5357,7 +5366,11 @@ bool mirror_tunnel(void)
 	return TRUE;
 }
 
-
+/*!
+ * @brief 魔力食い処理
+ * @param power 基本効力
+ * @return ターンを消費した場合TRUEを返す
+ */
 bool eat_magic(int power)
 {
 	object_type * o_ptr;
@@ -5631,7 +5644,14 @@ bool eat_magic(int power)
 	return TRUE;
 }
 
-
+/*!
+ * @brief 同族召喚(援軍)処理
+ * @param level 召喚基準レベル
+ * @param y 召喚先Y座標
+ * @param x 召喚先X座標
+ * @param mode 召喚オプション
+ * @return ターンを消費した場合TRUEを返す
+ */
 bool summon_kin_player(int level, int y, int x, u32b mode)
 {
 	bool pet = (bool)(mode & PM_FORCE_PET);
@@ -5740,6 +5760,12 @@ bool summon_kin_player(int level, int y, int x, u32b mode)
 	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
 }
 
+/*!
+ * @brief 皆殺し(全方向攻撃)処理
+ * @param py プレイヤーY座標
+ * @param px プレイヤーX座標
+ * @return なし
+ */
 void massacre(int py, int px)
 {
 	int x, y;
