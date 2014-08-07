@@ -5083,8 +5083,12 @@ bool curse_weapon(bool force, int slot)
 }
 
 
-/*
+/*!
+ * @brief ボルトのエゴ化処理(火炎エゴのみ) /
  * Enchant some bolts
+ * @param force 無条件に呪縛を行うならばTRUE
+ * @param slot 呪縛する武器の装備スロット
+ * @return 常にTRUEを返す
  */
 bool brand_bolts(void)
 {
@@ -5132,9 +5136,12 @@ bool brand_bolts(void)
 }
 
 
-/*
+/*!
+ * @brief 変身処理向けにモンスターの近隣レベル帯モンスターを返す /
  * Helper function -- return a "nearby" race for polymorphing
- *
+ * @param r_idx 基準となるモンスター種族ID
+ * @return 変更先のモンスター種族ID
+ * @details
  * Note that this function is one of the more "dangerous" ones...
  */
 static s16b poly_r_idx(int r_idx)
@@ -5181,7 +5188,13 @@ static s16b poly_r_idx(int r_idx)
 	return (r_idx);
 }
 
-
+/*!
+ * @brief 指定座標にいるモンスターを変身させる /
+ * Helper function -- return a "nearby" race for polymorphing
+ * @param y 指定のY座標
+ * @param x 指定のX座標
+ * @return 実際に変身したらTRUEを返す
+ */
 bool polymorph_monster(int y, int x)
 {
 	cave_type *c_ptr = &cave[y][x];
