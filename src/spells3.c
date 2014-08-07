@@ -4855,7 +4855,10 @@ int cold_dam(int dam, cptr kb_str, int monspell, bool aura)
 	return get_damage;
 }
 
-
+/*!
+ * @brief 防具の錆止め防止処理
+ * @return ターン消費を要する処理を行ったならばTRUEを返す
+ */
 bool rustproof(void)
 {
 	int         item;
@@ -4919,8 +4922,10 @@ msg_format("%sは腐食しなくなった。", o_name);
 }
 
 
-/*
+/*!
+ * @brief 防具呪縛処理 /
  * Curse the players armor
+ * @return 実際に呪縛されたらTRUEを返す
  */
 bool curse_armor(void)
 {
@@ -4993,9 +4998,12 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返し�
 	return (TRUE);
 }
 
-
-/*
+/*!
+ * @brief 武器呪縛処理 /
  * Curse the players weapon
+ * @param force 無条件に呪縛を行うならばTRUE
+ * @param o_ptr 呪縛する武器のアイテム情報参照ポインタ
+ * @return 実際に呪縛されたらTRUEを返す
  */
 bool curse_weapon_object(bool force, object_type *o_ptr)
 {
@@ -5061,6 +5069,13 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 	return (TRUE);
 }
 
+/*!
+ * @brief 武器呪縛処理のメインルーチン /
+ * Curse the players weapon
+ * @param force 無条件に呪縛を行うならばTRUE
+ * @param slot 呪縛する武器の装備スロット
+ * @return 実際に呪縛されたらTRUEを返す
+ */
 bool curse_weapon(bool force, int slot)
 {
 	/* Curse the weapon */
