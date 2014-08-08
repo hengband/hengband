@@ -1,9 +1,9 @@
-﻿/* File: readbits.c */
-
-/*
- * This package provides a routine to read a DIB file and set up the
- * device dependent version of the image.
- *
+﻿/*!
+ * @file readbits.c
+ * @brief Windows用ビットマップファイル読み込み処理パッケージ /
+ * This package provides a routine to read a DIB file and set up the device dependent version of the image.
+ * @date 2014/08/08
+ * @author
  * This file has been modified for use with "Angband 2.8.2"
  *
  * COPYRIGHT:
@@ -15,6 +15,9 @@
  *   any way you find useful, provided that you agree that
  *   Microsoft has no warranty obligations or liability for any
  *   Sample Application Files which are modified.
+ * @details
+ * mind.cとあるが実際には超能力者、練気術師、狂戦士、鏡使い、忍者までの
+ * 特殊技能を揃えて実装している。
  */
 
 #include <windows.h>
@@ -48,16 +51,19 @@
 #endif
 
 
-/*
- * Number of bytes to be read during each read operation
+/*!
+ * 一度にファイルから読み込むデータ量 / Number of bytes to be read during each read operation
  */
 #define MAXREAD  32768
 
-/*
- * Private routine to read more than 64K at a time
- *
- * Reads data in steps of 32k till all the data has been read.
- *
+/*!
+ * @brief 32KBのデータ読み取りを繰り返すことで、64KB以上のデータを一度に読み取るサブルーチン
+ * Private routine to read more than 64K at a time Reads data in steps of 32k till all the data has been read.
+ * @param fh ファイルヘッダ
+ * @param pv 読み取りポインタ
+ * @param ul 読み込むバイト数
+ * @return
+ * 取得できたデータ量をバイトで返す。0ならば何らかのエラー。
  * Returns number of bytes requested, or zero if something went wrong.
  */
 static DWORD PASCAL lread(int fh, VOID FAR *pv, DWORD ul)
@@ -77,10 +83,12 @@ static DWORD PASCAL lread(int fh, VOID FAR *pv, DWORD ul)
 	return ulT;
 }
 
-
-/*
+/*!
+ * @brief BITMAPINFOHEADERを取得してカラーテーブルを基本としたパレットを作成する。
  * Given a BITMAPINFOHEADER, create a palette based on the color table.
- *
+ * @param lpInfo BITMAPINFOHEADERのポインタ
+ * @return
+ * パレットの参照を返す。NULLならばエラー。
  * Returns the handle of a palette, or zero if something went wrong.
  */
 static HPALETTE PASCAL NEAR MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
@@ -133,10 +141,17 @@ static HPALETTE PASCAL NEAR MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 }
 
 
-/*
+/*!
+ * @brief
+ * ビットマップファイルを受け取り、画像のデバイス依存の描画のために使われる共通パレットとビットマップを作成する
  * Given a DIB, create a bitmap and corresponding palette to be used for a
  * device-dependent representation of the image.
- *
+ * @param hDC デバイスコンテキストハンドル
+ * @param hDIB ビットマップ画像ハンドル
+ * @param phPal パレット取得ハンドル
+ * @param phBitmap ビットマップ取得ハンドル
+ * @return
+ * 成功したならばTRUEを返す。失敗の場合FALSE。
  * Returns TRUE on success (phPal and phBitmap are filled with appropriate
  * handles.  Caller is responsible for freeing objects) and FALSE on failure
  * (unable to create objects, both pointer are invalid).
@@ -181,14 +196,24 @@ static BOOL NEAR PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
 
 
 
-/*
+/*!
+ * @brief
+ * ビットマップファイルを読み込み、BITMAPINFO構造体にハンドルを取得する。
  * Reads a DIB from a file, obtains a handle to its BITMAPINFO struct, and
  * loads the DIB.  Once the DIB is loaded, the function also creates a bitmap
  * and palette out of the DIB for a device-dependent form.
- *
+ * device-dependent representation of the image.
+ * @param hwnd ウィンドウハンドル
+ * @param lpFileName 読み込むビットマップファイル
+ * @param pInfo 取得情報を補完するビットマップ情報構造体ポインタ
+ * @return
  * Returns TRUE if the DIB is loaded and the bitmap/palette created, in which
  * case, the DIBINIT structure pointed to by pInfo is filled with the appropriate
  * handles, and FALSE if something went wrong.
+ * @details
+ * Reads a DIB from a file, obtains a handle to its BITMAPINFO struct, and
+ * loads the DIB.  Once the DIB is loaded, the function also creates a bitmap
+ * and palette out of the DIB for a device-dependent form.
  */
 BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 {
