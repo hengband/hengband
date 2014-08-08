@@ -1,19 +1,20 @@
-﻿/* File: angband.h */
-
-/* Main "Angband" header file */
-
-#ifndef INCLUDED_ANGBAND_H
-#define INCLUDED_ANGBAND_H
-
-/*
+﻿/*!
+ * @file angband.h
+ * @brief Angband(変愚蛮怒)メインヘッダファイル
+ * Main "Angband" header file
+ * @date 2014/08/08
+ * @author
  * Copyright (c) 1989 James E. Wilson
- *
+ * @details *
  * This software may be copied and distributed for educational, research, and
  * not for profit purposes provided that this copyright and statement are
  * included in all such copies.
+ * This file has been modified for use with "Angband 2.8.2"
  */
 
 
+#ifndef INCLUDED_ANGBAND_H
+#define INCLUDED_ANGBAND_H
 
 /*
  * First, include the low-level includes.  Be sure to edit "h-config.h"
