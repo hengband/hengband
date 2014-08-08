@@ -1,17 +1,25 @@
-﻿#define ALLOW_CAVERNS_AND_LAKES
+﻿/*!
+ * @file generate.h
+ * @brief ダンジョン生成処理のヘッダーファイル
+ * @date 2014/08/08
+ * @author
+ * 不明(変愚蛮怒スタッフ？)
+ */
 
-#define SAFE_MAX_ATTEMPTS 5000
+#define ALLOW_CAVERNS_AND_LAKES
+
+#define SAFE_MAX_ATTEMPTS 5000 /*!< 生成処理基本試行回数 */
 
 /*
  * Dungeon generation values
  */
-#define DUN_UNUSUAL 250 /* Level/chance of unusual room (was 200) */
-#define DUN_DEST    18  /* 1/chance of having a destroyed level */
-#define SMALL_LEVEL 3   /* 1/chance of smaller size (3) */
-#define EMPTY_LEVEL 24  /* 1/chance of being 'empty' (15) */
-#define LAKE_LEVEL  24  /* 1/chance of being a lake on the level */
-#define DARK_EMPTY  5   /* 1/chance of arena level NOT being lit (2) */
-#define DUN_CAVERN  20	/* 1/chance of having a cavern level */
+#define DUN_UNUSUAL 250 /*!< 通常ではない部屋が生成される基本確率(レベル/定数) / Level/chance of unusual room (was 200) */
+#define DUN_DEST    18  /*!< 破壊地形がフロアに発生する基本確率(1/定数) / 1/chance of having a destroyed level */
+#define SMALL_LEVEL 3   /*!< 小さいフロアの生成される基本確率(1/定数) / 1/chance of smaller size (3) */
+#define EMPTY_LEVEL 24  /*!< アリーナレベル(外壁のないフロア)の生成される基本確率(1/定数) / 1/chance of being 'empty' (15) */
+#define LAKE_LEVEL  24  /*!< 川や湖のあるフロアの生成される確率(1/定数) / 1/chance of being a lake on the level */
+#define DARK_EMPTY  5   /*!< フロア全体が暗い可能性の基本確率(1/定数) / 1/chance of arena level NOT being lit (2) */
+#define DUN_CAVERN  20	/*!< 洞窟状のダンジョンが生成される基本確率(1/定数) / 1/chance of having a cavern level */
 
 /*
  * Dungeon tunnel generation values
