@@ -40,7 +40,7 @@
  * in "header_type", and the "m_idx" and "o_idx" fields in "cave_type".  All
  * of these could be removed, but this would, in general, slow down the game
  * and increase the complexity of the code.
- * <pre>
+ * </pre>
  */
 
 

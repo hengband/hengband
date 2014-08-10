@@ -10,7 +10,8 @@
  */
 
 /*!
- * @struct ビットマップファイル情報構造体 / Information about a bitmap
+ * @struct DIBINIT
+ * @brief ビットマップファイル情報構造体 / Information about a bitmap
  */
 typedef struct {
 	HANDLE hDIB;
