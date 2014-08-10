@@ -7034,7 +7034,6 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int *max)
 * @brief 警告基準を定めるために魔法の効果属性に基づいて最大魔法ダメージを計算する。 /
 * Calculate spell damages
 * @param spell_num RF4ならRF4_SPELL_STARTのように32区切りのベースとなる数値
-* @param spell_flag RF4_SHRIEKなどのスペルフラグ
 * @param typ 効果属性のID
 * @param m_idx 魔法を行使するモンスターのID
 * @param max 算出した最大ダメージを返すポインタ

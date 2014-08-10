@@ -203,7 +203,7 @@ static BOOL NEAR PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
  * loads the DIB.  Once the DIB is loaded, the function also creates a bitmap
  * and palette out of the DIB for a device-dependent form.
  * device-dependent representation of the image.
- * @param hwnd ウィンドウハンドル
+ * @param hWnd ウィンドウハンドル
  * @param lpFileName 読み込むビットマップファイル
  * @param pInfo 取得情報を補完するビットマップ情報構造体ポインタ
  * @return

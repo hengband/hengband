@@ -5152,10 +5152,9 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flg 効果フラグ
- * @param mon_spell 効果元のモンスター魔法ID
+ * @param monspell 効果元のモンスター魔法ID
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  * @details
- * <pre>
  * Handle a beam/bolt/ball causing damage to the player.
  * This routine takes a "source monster" (by index), a "distance", a default
  * "damage", and a "damage type".  See "project_m()" above.
@@ -5166,7 +5165,6 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
  * to know if this is actually a ball or a bolt spell
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
- * </pre>
  */
 static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int flg, int monspell)
 {

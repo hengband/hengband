@@ -383,7 +383,7 @@ static void wr_xtra(int k_idx)
 
 /*!
  * @brief 店舗情報を書き込む / Write a "store" record
- * @param k_idx 店舗情報の参照ポインタ
+ * @param st_ptr 店舗情報の参照ポインタ
  * @return なし
  */
 static void wr_store(store_type *st_ptr)
