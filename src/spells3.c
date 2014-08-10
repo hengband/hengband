@@ -831,9 +831,10 @@ void teleport_level(int m_idx)
 
 
 /*!
- * @brief プレイヤー及びモンスターをレベルテレポートさせる /
- * Teleport the player one level up or down (random when legal)
- * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
+ * @brief これまでに入ったダンジョンの一覧を表示する
+ * @param note ダンジョンに施す処理記述
+ * @param y コンソールY座標
+ * @param x コンソールX座標
  * @return なし
  */
 int choose_dungeon(cptr note, int y, int x)
@@ -2368,7 +2369,7 @@ msg_format("%s は明るく輝いた！",
 /*!
  * @brief アイテムが並の価値のアイテムかどうか判定する /
  * Check if an object is nameless weapon or armour
- * @param 判定するアイテムの情報参照ポインタ
+ * @param o_ptr 判定するアイテムの情報参照ポインタ
  * @return 並ならばTRUEを返す
  */
 static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
@@ -3887,7 +3888,7 @@ int mod_need_mana(int need_mana, int spell, int realm)
  * @brief 呪文の失敗率修正処理1(呪い、消費魔力減少、呪文簡易化) /
  * Modify spell fail rate
  * Using p_ptr->to_m_chance, p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
- * @param need_mana 基本失敗率
+ * @param chance 修正前失敗率
  * @return 失敗率(%)
  * @todo 統合を検討
  */

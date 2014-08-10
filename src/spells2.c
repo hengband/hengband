@@ -4454,7 +4454,7 @@ static void cave_temp_room_aux(int y, int x, bool only_room, bool (*pass_bold)(i
 /*!
  * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
  * @param y 指定Y座標
- * @param y 指定X座標
+ * @param x 指定X座標
  * @return 光を通すならばtrueを返す。
  */
 static bool cave_pass_lite_bold(int y, int x)
@@ -4465,7 +4465,7 @@ static bool cave_pass_lite_bold(int y, int x)
 /*!
  * @brief 部屋内にある一点の周囲がいくつ光を通すかをグローバル変数temp_nに返す / Aux function -- see below
  * @param y 指定Y座標
- * @param y 指定X座標
+ * @param x 指定X座標
  * @return なし
  */
 static void cave_temp_lite_room_aux(int y, int x)
@@ -4488,7 +4488,7 @@ static bool cave_pass_dark_bold(int y, int x)
 /*!
  * @brief 部屋内にある一点の周囲がいくつ射線を通すかをグローバル変数temp_nに返す / Aux function -- see below
  * @param y 指定Y座標
- * @param y 指定X座標
+ * @param x 指定X座標
  * @return なし
  */
 static void cave_temp_unlite_room_aux(int y, int x)
@@ -4499,8 +4499,8 @@ static void cave_temp_unlite_room_aux(int y, int x)
 
 /*!
  * @brief 指定された部屋内を照らす / Illuminate any room containing the given location.
- * @param y 指定Y座標
- * @param y 指定X座標
+ * @param y1 指定Y座標
+ * @param x1 指定X座標
  * @return なし
  */
 void lite_room(int y1, int x1)
@@ -4583,8 +4583,8 @@ void unlite_room(int y1, int x1)
 
 /*!
  * @brief プレイヤー位置を中心にLITE_WEAK属性を通じた照明処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
- * @param y 指定Y座標
- * @param y 指定X座標
+ * @param dam 威力
+ * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool lite_area(int dam, int rad)
@@ -4616,8 +4616,8 @@ bool lite_area(int dam, int rad)
 
 /*!
  * @brief プレイヤー位置を中心にLITE_DARK属性を通じた消灯処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
- * @param y 指定Y座標
- * @param y 指定X座標
+ * @param dam 威力
+ * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool unlite_area(int dam, int rad)
