@@ -59,35 +59,36 @@ struct feature_state
 };
 
 
-/*
- * Information about terrain "features"
+/*!
+ * @struct feature_type
+ * @brief 地形情報の構造体 / Information about terrain "features"
  */
 
 typedef struct feature_type feature_type;
 
 struct feature_type
 {
-	u32b name;                /* Name (offset) */
-	u32b text;                /* Text (offset) */
-	s16b tag;                 /* Tag (offset) */
+	u32b name;                /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
+	u32b text;                /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
+	s16b tag;                 /*!< 地形特性タグ参照のためのネームバッファオフセット値 /  Tag (offset) */
 
-	s16b mimic;               /* Feature to mimic */
+	s16b mimic;               /*!< 未確定時の外形地形ID / Feature to mimic */
 
-	u32b flags[FF_FLAG_SIZE]; /* Flags */
+	u32b flags[FF_FLAG_SIZE]; /*!< 地形の基本特性ビット配列 / Flags */
 
-	u16b priority;            /* Map priority */
-	s16b destroyed;           /* Default destroyed state */
+	u16b priority;            /*!< 縮小表示で省略する際の表示優先度 / Map priority */
+	s16b destroyed;           /*!< 一度*破壊*に巻き込まれたかどうかのフラグ / Default destroyed state */
 
-	feature_state state[MAX_FEAT_STATES];
+	feature_state state[MAX_FEAT_STATES]; /*!< feature_state テーブル */
 
-	byte subtype;
-	byte power;
+	byte subtype;  /*!< 副特性値 */
+	byte power;    /*!< 地形強度 */
 
-	byte d_attr[F_LIT_MAX];   /* Default feature attribute */
-	byte d_char[F_LIT_MAX];   /* Default feature character */
+	byte d_attr[F_LIT_MAX];   /*!< デフォルトの地形シンボルカラー / Default feature attribute */
+	byte d_char[F_LIT_MAX];   /*!< デフォルトの地形シンボルアルファベット / Default feature character */
 
-	byte x_attr[F_LIT_MAX];   /* Desired feature attribute */
-	byte x_char[F_LIT_MAX];   /* Desired feature character */
+	byte x_attr[F_LIT_MAX];   /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
+	byte x_char[F_LIT_MAX];   /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
 };
 
 
@@ -138,7 +139,7 @@ struct object_kind
 	byte d_char;		/*!< デフォルトのアイテムシンボルアルファベット / Default object character */
 
 	byte x_attr;		/*!< 設定変更後のアイテムシンボルカラー /  Desired object attribute */
-	byte x_char;		/*!< 設定変更後のアイテムシンボルカラー /  Desired object character */
+	byte x_char;		/*!< 設定変更後のアイテムシンボルアルファベット /  Desired object character */
 
 	s16b flavor;		/*!< 調査中(TODO) / Special object flavor (or zero) */
 

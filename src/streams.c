@@ -11,11 +11,9 @@
  * are included in all such copies.  Other copyrights may also apply.
  * </pre>
  * @details
- * <pre>
  * Purpose:  This file holds all the
  * functions that are applied to a level after the rest has been
  * generated, ie streams and level destruction.
- * </pre>
  */
 
 #include "angband.h"

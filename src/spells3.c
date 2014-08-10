@@ -913,7 +913,7 @@ int choose_dungeon(cptr note, int y, int x)
 /*!
  * @brief プレイヤーの帰還発動及び中止処理 /
  * Recall the player to town or dungeon
- * @param turn 発動までのターン数
+ * @param turns 発動までのターン数
  * @return 常にTRUEを返す
  */
 bool recall_player(int turns)
@@ -4093,12 +4093,12 @@ bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 /*!
  * @brief 呪文情報の表示処理 /
  * Print a list of spells (for browsing or casting or viewing)
- * @spells target_spell 呪文ID
- * @spells spells アクセス開始するスペルの参照ポイント
- * @spells num 表示する
- * @spells y 表示メッセージ左上Y座標
- * @spells x 表示メッセージ左上X座標
- * @spells use_realm 魔法領域ID
+ * @param target_spell 呪文ID
+ * @param spells アクセス開始するスペルの参照ポイント
+ * @param num 表示する
+ * @param y 表示メッセージ左上Y座標
+ * @param x 表示メッセージ左上X座標
+ * @param use_realm 魔法領域ID
  * @return なし
  */
 void print_spells(int target_spell, byte *spells, int num, int y, int x, int use_realm)
