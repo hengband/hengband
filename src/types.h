@@ -1,21 +1,19 @@
-﻿/* File: types.h */
-
-/*
+﻿/*!
+ * @file types.h
+ * @brief グローバルな構造体の定義 / global type declarations
+ * @date 2014/08/10
+ * @author
+ * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
- */
-
-/* Purpose: global type declarations */
-
-
-/*
+ * </pre>
+ * @details
+ * <pre>
+ * このファイルはangband.hでのみインクルードすること。
  * This file should ONLY be included by "angband.h"
- */
-
-/*
+ *
  * Note that "char" may or may not be signed, and that "signed char"
  * may or may not work on all machines.  So always use "s16b" or "s32b"
  * for signed values.  Also, note that unsigned values cause math problems
@@ -42,10 +40,8 @@
  * in "header_type", and the "m_idx" and "o_idx" fields in "cave_type".  All
  * of these could be removed, but this would, in general, slow down the game
  * and increase the complexity of the code.
+ * <pre>
  */
-
-
-
 
 
 /*
@@ -95,9 +91,11 @@ struct feature_type
 };
 
 
-/*
- * Information about object "kinds", including player knowledge.
- *
+/*!
+ * @struct object_kind
+ * @brief ベースアイテム上右方の構造体 / Information about object "kinds", including player knowledge.
+ * @details
+ * ゲーム進行用のセーブファイル上では aware と tried のみ保存対象とすること。 /
  * Only "aware" and "tried" are saved in the savefile
  */
 
