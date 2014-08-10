@@ -1536,28 +1536,32 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
  * (polymorph and teleport being the obvious ones), a default damage, which
  * is modified as needed based on various properties, and finally a "damage
  * type" (see below).
- *
+ * </pre>
+ * <pre>
  * Note that this routine can handle "no damage" attacks (like teleport) by
  * taking a "zero" damage, and can even take "parameters" to attacks (like
  * confuse) by accepting a "damage", using it to calculate the effect, and
  * then setting the damage to zero.  Note that the "damage" parameter is
  * divided by the radius, so monsters not at the "epicenter" will not take
  * as much damage (or whatever)...
- *
+ * <pre>
  * Note that "polymorph" is dangerous, since a failure in "place_monster()"'
  * may result in a dereference of an invalid pointer.  XXX XXX XXX
- *
+ * </pre>
+ * <pre>
+ * </pre>
+ * <pre>
  * Various messages are produced, and damage is applied.
- *
+ * </pre>
+ * <pre>
  * Just "casting" a substance (i.e. plasma) does not make you immune, you must
  * actually be "made" of that substance, or "breathe" big balls of it.
- *
  * We assume that "Plasma" monsters, and "Plasma" breathers, are immune
  * to plasma.
- *
  * We assume "Nether" is an evil, necromantic force, so it doesn't hurt undead,
  * and hurts evil less.  If can breath nether, then it resists it as well.
- *
+ * </pre>
+ * <pre>
  * Damage reductions use the following formulas:
  *   Note that "dam = dam * 6 / (randint1(6) + 6);"
  *     gives avg damage of .655, ranging from .858 to .500
@@ -1569,15 +1573,18 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
  *     gives avg damage of .327, ranging from .427 to .250
  *   Note that "dam = dam * 2 / (randint1(6) + 6);"
  *     gives something simple.
- *
+ * </pre>
+ * <pre>
  * In this function, "result" messages are postponed until the end, where
  * the "note" string is appended to the monster name, if not NULL.  So,
  * to make a spell have "no effect" just set "note" to NULL.  You should
  * also set "notice" to FALSE, or the player will learn what the spell does.
- *
+ * </pre>
+ * <pre>
  * We attempt to return "TRUE" if the player saw anything "useful" happen.
+ * "flg" was added.
+ * </pre>
  */
-/* "flg" was added. */
 static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see_s_msg)
 {
 	int tmp;
