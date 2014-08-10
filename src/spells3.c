@@ -964,7 +964,6 @@ bool recall_player(int turns)
 
 /*!
  * @brief 帰還用メインルーチン
- * @param turn 発動までのターン数
  * @return 常にTRUEを返す
  */
 bool word_of_recall(void)
@@ -3910,7 +3909,7 @@ int mod_spell_chance_1(int chance)
  * @brief 呪文の失敗率修正処理2(消費魔力減少、呪い、負値修正) /
  * Modify spell fail rate
  * Using p_ptr->to_m_chance, p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
- * @param need_mana 基本失敗率
+ * @param chance 修正前失敗率
  * @return 失敗率(%)
  * Modify spell fail rate (as "suffix" process)
  * Using p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
@@ -5086,8 +5085,6 @@ bool curse_weapon(bool force, int slot)
 /*!
  * @brief ボルトのエゴ化処理(火炎エゴのみ) /
  * Enchant some bolts
- * @param force 無条件に呪縛を行うならばTRUE
- * @param slot 呪縛する武器の装備スロット
  * @return 常にTRUEを返す
  */
 bool brand_bolts(void)
@@ -5348,8 +5345,6 @@ bool dimension_door(void)
 /*!
  * @brief 鏡抜け処理のメインルーチン /
  * Mirror Master's Dimension Door
- * @param x テレポート先のX座標
- * @param y テレポート先のY座標
  * @return ターンを消費した場合TRUEを返す
  */
 bool mirror_tunnel(void)
