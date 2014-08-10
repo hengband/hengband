@@ -4476,7 +4476,7 @@ static void cave_temp_lite_room_aux(int y, int x)
 /*!
  * @brief 指定のマスが光を通さず射線のみを通すかを返す。 / Aux function -- see below
  * @param y 指定Y座標
- * @param y 指定X座標
+ * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
 static bool cave_pass_dark_bold(int y, int x)
@@ -4758,9 +4758,10 @@ bool fire_ball_hide(int typ, int dir, int dam, int rad)
  * @brief メテオ系スペルの発動 / Cast a meteor spell
  * @param who スぺル詠唱者のモンスターID(0=プレイヤー)
  * @param typ 効果属性
- * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @param rad 半径
+ * @param y 中心点Y座標
+ * @param x 中心点X座標
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
@@ -4783,7 +4784,6 @@ bool fire_meteor(int who, int typ, int y, int x, int dam, int rad)
 
 /*!
  * @brief ブラスト系スペルの発動 / Cast a blast spell
- * @param who スぺル詠唱者のモンスターID(0=プレイヤー)
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dd 威力ダイス数
@@ -5681,7 +5681,7 @@ void wall_breaker(void)
 
 /*!
  * @brief パニック・モンスター効果(プレイヤー視界範囲内) / Confuse monsters
- * @dam 効力
+ * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool confuse_monsters(int dam)
@@ -5692,7 +5692,7 @@ bool confuse_monsters(int dam)
 
 /*!
  * @brief チャーム・モンスター効果(プレイヤー視界範囲内) / Charm monsters
- * @dam 効力
+ * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool charm_monsters(int dam)
@@ -5703,7 +5703,7 @@ bool charm_monsters(int dam)
 
 /*!
  * @brief 動物魅了効果(プレイヤー視界範囲内) / Charm Animals
- * @dam 効力
+ * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool charm_animals(int dam)
@@ -5714,7 +5714,7 @@ bool charm_animals(int dam)
 
 /*!
  * @brief モンスター朦朧効果(プレイヤー視界範囲内) / Stun monsters
- * @dam 効力
+ * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool stun_monsters(int dam)
@@ -5725,7 +5725,7 @@ bool stun_monsters(int dam)
 
 /*!
  * @brief モンスター停止効果(プレイヤー視界範囲内) / Stasis monsters
- * @dam 効力
+ * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool stasis_monsters(int dam)
@@ -5736,7 +5736,7 @@ bool stasis_monsters(int dam)
 
 /*!
  * @brief モンスター精神攻撃効果(プレイヤー視界範囲内) / Mindblast monsters
- * @dam 効力
+ * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool mindblast_monsters(int dam)
@@ -5747,7 +5747,7 @@ bool mindblast_monsters(int dam)
 
 /*!
  * @brief モンスター追放効果(プレイヤー視界範囲内) / Banish all monsters
- * @dist 効力（距離）
+ * @param dist 効力（距離）
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool banish_monsters(int dist)
@@ -5758,7 +5758,7 @@ bool banish_monsters(int dist)
 
 /*!
  * @brief 邪悪退散効果(プレイヤー視界範囲内) / Turn evil
- * @dam 効力
+ * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool turn_evil(int dam)
@@ -5769,7 +5769,7 @@ bool turn_evil(int dam)
 
 /*!
  * @brief 全モンスター退散効果(プレイヤー視界範囲内) / Turn everyone
- * @dam 効力
+ * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool turn_monsters(int dam)
