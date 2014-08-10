@@ -4089,6 +4089,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
  * @return 効力があった場合TRUEを返す
  * @param cy 中心Y座標
  * @param cx 中心X座標
+ * @param r 効果半径
  */
 bool earthquake(int cy, int cx, int r)
 {
@@ -4769,7 +4770,6 @@ bool fire_ball_hide(int typ, int dir, int dam, int rad)
  * player, or outside source, that starts out at an arbitrary location, and 
  * leaving no trail from the "caster" to the target.  This function is 
  * especially useful for bombardments and similar. -LM-
- *
  * Option to hurt the player.
  * </pre>
  */
