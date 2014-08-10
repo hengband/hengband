@@ -95,7 +95,7 @@ struct feature_type
  * @struct object_kind
  * @brief ベースアイテム上右方の構造体 / Information about object "kinds", including player knowledge.
  * @details
- * ゲーム進行用のセーブファイル上では aware と tried のみ保存対象とすること。 /
+ * ゲーム進行用のセーブファイル上では aware と tried のみ保存対象とすること。と英文ではあるが実際はもっとある様子である。 /
  * Only "aware" and "tried" are saved in the savefile
  */
 
@@ -103,56 +103,52 @@ typedef struct object_kind object_kind;
 
 struct object_kind
 {
-	u32b name;			/* Name (offset) */
-	u32b text;			/* Text (offset) */
-	u32b flavor_name;		/* Flavor name (offset) */
+	u32b name;			/*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
+	u32b text;			/*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
+	u32b flavor_name;	/*!< 未確定名参照のためのネームバッファオフセット値 / Flavor name (offset) */
 
-	byte tval;			/* Object type */
-	byte sval;			/* Object sub type */
+	byte tval;			/*!< ベースアイテム種別の大項目値 Object type */
+	byte sval;			/*!< ベースアイテム種別の小項目値 Object sub type */
 
-	s16b pval;			/* Object extra info */
+	s16b pval;			/*!< ベースアイテムのpval（能力修正共通値） Object extra info */
 
-	s16b to_h;			/* Bonus to hit */
-	s16b to_d;			/* Bonus to damage */
-	s16b to_a;			/* Bonus to armor */
+	s16b to_h;			/*!< ベースアイテムの命中修正値 / Bonus to hit */
+	s16b to_d;			/*!< ベースアイテムのダメージ修正値 / Bonus to damage */
+	s16b to_a;			/*!< ベースアイテムのAC修正値 / Bonus to armor */
 
-	s16b ac;			/* Base armor */
+	s16b ac;			/*!< ベースアイテムのAC基本値 /  Base armor */
 
-	byte dd, ds;		/* Damage dice/sides */
+	byte dd, ds;		/*!< ダメージダイスの数と大きさ / Damage dice/sides */
 
-	s16b weight;		/* Weight */
+	s16b weight;		/*!< ベースアイテムの重量 / Weight */
 
-	s32b cost;			/* Object "base cost" */
+	s32b cost;			/*!< ベースアイテムの基本価値 / Object "base cost" */
 
-	u32b flags[TR_FLAG_SIZE];	/* Flags */
+	u32b flags[TR_FLAG_SIZE];	/*!< ベースアイテムの基本特性ビット配列 / Flags */
 
-	u32b gen_flags;		/* flags for generate */
+	u32b gen_flags;		/*!< ベースアイテムの生成特性ビット配列 / flags for generate */
 
-	byte locale[4];		/* Allocation level(s) */
-	byte chance[4];		/* Allocation chance(s) */
+	byte locale[4];		/*!< ベースアイテムの生成階テーブル / Allocation level(s) */
+	byte chance[4];		/*!< ベースアイテムの生成確率テーブル / Allocation chance(s) */
 
-	byte level;			/* Level */
-	byte extra;			/* Something */
+	byte level;			/*!< ベースアイテムの基本生成階 / Level */
+	byte extra;			/*!< その他色々のビットフラグ配列 / Something */
 
+	byte d_attr;		/*!< デフォルトのアイテムシンボルカラー / Default object attribute */
+	byte d_char;		/*!< デフォルトのアイテムシンボルアルファベット / Default object character */
 
-	byte d_attr;		/* Default object attribute */
-	byte d_char;		/* Default object character */
+	byte x_attr;		/*!< 設定変更後のアイテムシンボルカラー /  Desired object attribute */
+	byte x_char;		/*!< 設定変更後のアイテムシンボルカラー /  Desired object character */
 
+	s16b flavor;		/*!< 調査中(TODO) / Special object flavor (or zero) */
 
-	byte x_attr;		/* Desired object attribute */
-	byte x_char;		/* Desired object character */
+	bool easy_know;		/*!< ベースアイテムが初期からベース名を判断可能かどうか / This object is always known (if aware) */
 
+	bool aware;			/*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */
 
-	s16b flavor;		/* Special object flavor (or zero) */
+	bool tried;			/*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 
-	bool easy_know;		/* This object is always known (if aware) */
-
-
-	bool aware;			/* The player is "aware" of the item's effects */
-
-	bool tried;			/* The player has "tried" one of the items */
-
-	byte act_idx;		/* Activative ability index */
+	byte act_idx;		/*!< 発動能力のID /  Activative ability index */
 };
 
 
