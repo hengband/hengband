@@ -36,25 +36,23 @@
  * You have been warned.\n
  */
 
+#define VERSION_NAME "Hengband" /*!< バリアント名称 / Name of the version/variant */
 
-/*
- * Name of the version/variant
- */
-#define VERSION_NAME "Hengband"
-
-
-/*
- * "Program Version Number" of the game
- *
+/*!
+ * @brief ゲームのバージョン番号定義 / "Program Version Number" of the game
+ * @details
+ * 本FAKE_VERSIONそのものは未使用である。Zangと整合性を合わせるための疑似的処理のためFAKE_VER_MAJORは実値-10が該当のバージョン番号となる。
+ * <pre>
  * FAKE_VER_MAJOR=1,2 were reserved for ZAngband version 1.x.x/2.x.x .
- *
  * Program Version of Hengband version is
  *   "(FAKE_VER_MAJOR-10).(FAKE_VER_MINOR).(FAKE_VER_PATCH)".
+ * </pre>
  */
 #define FAKE_VERSION   0
-#define FAKE_VER_MAJOR 12
-#define FAKE_VER_MINOR 1
-#define FAKE_VER_PATCH 5
+
+#define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 - 10) */
+#define FAKE_VER_MINOR 1 /*!< ゲームのバージョン番号定義(マイナー番号) */
+#define FAKE_VER_PATCH 5 /*!< ゲームのバージョン番号定義(パッチ番号) */
 
 
 /*
