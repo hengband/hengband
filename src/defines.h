@@ -124,21 +124,24 @@
  */
 #define MAX_WID         198
 
-
 /*
  * Quest constants
  */
-#define MIN_RANDOM_QUEST    40
-#define MAX_RANDOM_QUEST    49
+#define MIN_RANDOM_QUEST    40 /*<! ランダムクエストを割り当てるクエストIDの開始値 */
+#define MAX_RANDOM_QUEST    49 /*<! ランダムクエストを割り当てるクエストIDの終了値 */
 
-/* Check is the quest index is "fixed" */
+/*!
+ * @brief 該当IDが固定クエストかどうかを判定する / Check is the quest index is "fixed"
+ * @param Q_IDX クエストID
+ * @return 固定クエストならばTRUEを返す
+ */
 #define is_fixed_quest_idx(Q_IDX) (((Q_IDX) < MIN_RANDOM_QUEST) || ((Q_IDX) > MAX_RANDOM_QUEST))
 
-#define QUEST_TOWER1         5
-#define QUEST_TOWER2         6
-#define QUEST_TOWER3         7
-#define QUEST_OBERON         8
-#define QUEST_SERPENT        9
+#define QUEST_TOWER1         5 /*<! 塔クエスト(第1階層)に割り振るクエストID */
+#define QUEST_TOWER2         6 /*<! 塔クエスト(第2階層)に割り振るクエストID */
+#define QUEST_TOWER3         7 /*<! 塔クエスト(第3階層)に割り振るクエストID */
+#define QUEST_OBERON         8 /*<! オベロン打倒クエストに割り振るクエストID */
+#define QUEST_SERPENT        9 /*<! サーペント打倒クエストに割り振るクエストID */
 
 /*
  * Arena constants
