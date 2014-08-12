@@ -150,30 +150,22 @@
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT))
 
 
-/*
- * Total number of stores (see "store.c", etc)
- */
-#define MAX_STORES      10
-
-/*
- * Number of buildings
- */
-#define MAX_BLDG		32
+#define MAX_STORES      10 /*!< store.c用の店舗の種類最大数 / Total number of stores (see "store.c", etc) */
+#define MAX_BLDG		32 /*!< 施設の種類最大数 / Number of buildings */
 
 /*
  * Store types
  */
-#define STORE_GENERAL   0
-#define STORE_ARMOURY   1
-#define STORE_WEAPON    2
-#define STORE_TEMPLE    3
-#define STORE_ALCHEMIST 4
-#define STORE_MAGIC     5
-#define STORE_BLACK     6
-#define STORE_HOME      7
-#define STORE_BOOK      8
-#define STORE_MUSEUM    9
-
+#define STORE_GENERAL   0 /*!> 店舗の種類: 雑貨屋 */
+#define STORE_ARMOURY   1 /*!> 店舗の種類: 防具屋 */
+#define STORE_WEAPON    2 /*!> 店舗の種類: 武器屋 */
+#define STORE_TEMPLE    3 /*!> 店舗の種類: 寺院 */
+#define STORE_ALCHEMIST 4 /*!> 店舗の種類: 錬金術の店 */
+#define STORE_MAGIC     5 /*!> 店舗の種類: 魔道具屋 */
+#define STORE_BLACK     6 /*!> 店舗の種類: ブラック・マーケット */
+#define STORE_HOME      7 /*!> 店舗の種類: 我が家 */
+#define STORE_BOOK      8 /*!> 店舗の種類: 書店 */
+#define STORE_MUSEUM    9 /*!> 店舗の種類: 博物館 */
 
 #define BUILDING_NON_MEMBER 0
 #define BUILDING_MEMBER     1
