@@ -167,29 +167,15 @@
 #define STORE_BOOK      8 /*!> 店舗の種類: 書店 */
 #define STORE_MUSEUM    9 /*!> 店舗の種類: 博物館 */
 
-#define BUILDING_NON_MEMBER 0
-#define BUILDING_MEMBER     1
-#define BUILDING_OWNER      2
+#define BUILDING_NON_MEMBER 0 /*!> 不明(現在未使用) */
+#define BUILDING_MEMBER     1 /*!> 不明(現在未使用) */
+#define BUILDING_OWNER      2 /*!> 施設の種族/職業条件が一致している状態値 */
 
-/*
- * Total number of owners per store (see "store.c", etc)
- */
-#define MAX_OWNERS      32
-
-/*
- * Maximum number of player "sex" types (see "table.c", etc)
- */
-#define MAX_SEXES            2
-
-/*
- * Maximum number of player "class" types (see "table.c", etc)
- */
-#define MAX_CLASS            28
-
-#define MAX_SEIKAKU          12
-
-/* The number of "patrons" available (for Chaos Warriors) */
-#define MAX_PATRON          16
+#define MAX_OWNERS      32 /*!< 各店舗毎の店主定義最大数 / Total number of owners per store (see "store.c", etc) */
+#define MAX_SEXES        2 /*! 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */
+#define MAX_CLASS       28 /*! 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
+#define MAX_SEIKAKU     12 /*! 性格の最大定義数 */
+#define MAX_PATRON      16 /*! カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
 
 /* Number of entries in the sanity-blast descriptions */
 #define MAX_SAN_HORROR 20
