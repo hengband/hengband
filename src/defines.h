@@ -50,81 +50,77 @@
  */
 #define FAKE_VERSION   0
 
-#define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 - 10) */
+#define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 1 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 5 /*!< ゲームのバージョン番号定義(パッチ番号) */
 
 
-/*
- * "Savefile Version Number" for Hengband 1.1.1 and later
- *
+/*!
+ * @brief セーブファイル上のバージョン定義(メジャー番号) / "Savefile Version Number" for Hengband 1.1.1 and later
+ * @details
+ * <pre>
  * First three digits may be same as the Program Version.  But not
  * always same.  It means that newer version may preserves lower
  * compatibility with the older version.
- *
  * For example, newer Hengband 1.4.4 creates savefiles marked with
  * Savefile Version 1.4.0.0 .  It means that Hengband 1.4.0 can load a
  * savefile of Hengband 1.4.4 (lower compatibility!).
- *
  * Upper compatibility is always guaranteed.
+ * </pre>
  */
 #define H_VER_MAJOR 2
-#define H_VER_MINOR 1
-#define H_VER_PATCH 2
-#define H_VER_EXTRA 4
+#define H_VER_MINOR 1 /*!< セーブファイル上のバージョン定義(マイナー番号) */
+#define H_VER_PATCH 2 /*!< セーブファイル上のバージョン定義(パッチ番号) */
+#define H_VER_EXTRA 4 /*!< セーブファイル上のバージョン定義(エクストラ番号) */
 
+#define ANGBAND_2_8_1 /*!< Angband 2.8.1以降から有効な処理分岐を定義 */
+#define ZANGBAND /*!< Zangband 以降から有効な処理分岐を定義 */
 
-#define ANGBAND_2_8_1
-#define ZANGBAND
-
-/*
- * Number of grids in each block (vertically)
- * Probably hard-coded to 11, see "generate.c"
+/*!
+ * @brief generate.cで用いられる基本的なブロック数単位(垂直方向)
+ * Number of grids in each block (vertically) Probably hard-coded to 11, see "generate.c"
  */
 #define BLOCK_HGT	11
 
-/*
- * Number of grids in each block (horizontally)
- * Probably hard-coded to 11, see "generate.c"
+/*!
+ * @brief generate.cで用いられる基本的なブロック数単位(水平方向)
+ * Number of grids in each block (horizontally) Probably hard-coded to 11, see "generate.c"
  */
 #define BLOCK_WID	11
 
-
-/*
- * Number of grids in each panel (vertically)
- * Must be a multiple of BLOCK_HGT
+/*!
+ * @brief 表示上の基本的なパネル単位(垂直方向、BLOCK_HGTの倍数で設定すること)
+ * Number of grids in each panel (vertically) Must be a multiple of BLOCK_HGT
  */
 #define PANEL_HGT	11
 
-/*
- * Number of grids in each panel (horizontally)
- * Must be a multiple of BLOCK_WID
+/*!
+ * @brief 表示上の基本的なパネル単位(水平方向、BLOCK_WIDの倍数で設定すること)
+ * Number of grids in each panel (horizontally) Must be a multiple of BLOCK_WID
  */
 #define PANEL_WID	33
 
-
-/*
- * Number of grids used to display the dungeon (vertically).
- * Must be a multiple of 11, probably hard-coded to 22.
+/*!
+ * @brief 表示上の基本的なブロック単位(垂直方向、PANEL_HGTの倍数で設定すること)
+ * Number of grids used to display the dungeon (vertically). Must be a multiple of 11, probably hard-coded to 22.
  */
 #define SCREEN_HGT      22
 
-/*
- * Number of grids used to display the dungeon (horizontally).
- * Must be a multiple of 33, probably hard-coded to 66.
+/*!
+ * @brief 表示上の基本的なブロック単位(水平方向、PANEL_WIDの倍数で設定すること)
+ * Number of grids used to display the dungeon (horizontally). Must be a multiple of 33, probably hard-coded to 66.
  */
 #define SCREEN_WID      66
 
-
-/*
- * Maximum dungeon height in grids, must be a multiple of SCREEN_HGT,
- * probably hard-coded to SCREEN_HGT * 3.
+/*!
+ * @brief 表示上のダンジョンの最大垂直サイズ(SCREEN_HGTの3倍が望ましい)
+ * Maximum dungeon height in grids, must be a multiple of SCREEN_HGT, probably hard-coded to SCREEN_HGT * 3.
  */
 #define MAX_HGT         66
 
-/*
- * Maximum dungeon width in grids, must be a multiple of SCREEN_WID,
- * probably hard-coded to SCREEN_WID * 3.
+/*!
+ * @brief 表示上のダンジョンの最大水平サイズ(SCREEN_WIDの3倍が望ましい)
+ * Maximum dungeon width in grids, must be a multiple of SCREEN_WID, probably hard-coded to SCREEN_WID * 3.
  */
 #define MAX_WID         198
 
