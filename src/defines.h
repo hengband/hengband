@@ -256,7 +256,7 @@
 #define MUT1_COLD_TOUCH                 0x40000000L /*!< 突然変異: 凍結の手 */
 #define MUT1_LAUNCHER                   0x80000000L /*!< 突然変異: アイテム投げ */
 
-/* 常時効果つきの変異 / Randomly activating mutations must be MUT2_* */
+/* 常時効果つきの変異1 / Randomly activating mutations must be MUT2_* */
 #define MUT2_BERS_RAGE                  0x00000001L /*!< 突然変異: 狂戦士化の発作 */
 #define MUT2_COWARDICE                  0x00000002L /*!< 突然変異: 臆病 */
 #define MUT2_RTELEPORT                  0x00000004L /*!< 突然変異: ランダムテレポート / Random teleport, instability */
@@ -291,41 +291,39 @@
 #define MUT2_DISARM                     0x80000000L /*!< 突然変異: ランダムな武器落とし */
 
 
-
-/* Other mutations will be mainly in MUT3_* */
-
-#define MUT3_HYPER_STR                  0x00000001L
-#define MUT3_PUNY                       0x00000002L
-#define MUT3_HYPER_INT                  0x00000004L
-#define MUT3_MORONIC                    0x00000008L
-#define MUT3_RESILIENT                  0x00000010L
-#define MUT3_XTRA_FAT                   0x00000020L
-#define MUT3_ALBINO                     0x00000040L
-#define MUT3_FLESH_ROT                  0x00000080L
-#define MUT3_SILLY_VOI                  0x00000100L
-#define MUT3_BLANK_FAC                  0x00000200L
-#define MUT3_ILL_NORM                   0x00000400L
-#define MUT3_XTRA_EYES                  0x00000800L
-#define MUT3_MAGIC_RES                  0x00001000L
-#define MUT3_XTRA_NOIS                  0x00002000L
-#define MUT3_INFRAVIS                   0x00004000L
-#define MUT3_XTRA_LEGS                  0x00008000L
-#define MUT3_SHORT_LEG                  0x00010000L
-#define MUT3_ELEC_TOUC                  0x00020000L
-#define MUT3_FIRE_BODY                  0x00040000L
-#define MUT3_WART_SKIN                  0x00080000L
-#define MUT3_SCALES                     0x00100000L
-#define MUT3_IRON_SKIN                  0x00200000L
-#define MUT3_WINGS                      0x00400000L
-#define MUT3_FEARLESS                   0x00800000L
-#define MUT3_REGEN                      0x01000000L
-#define MUT3_ESP                        0x02000000L
-#define MUT3_LIMBER                     0x04000000L
-#define MUT3_ARTHRITIS                  0x08000000L
-#define MUT3_BAD_LUCK                   0x10000000L
-#define MUT3_VULN_ELEM                  0x20000000L
-#define MUT3_MOTION                     0x40000000L
-#define MUT3_GOOD_LUCK                  0x80000000L
+/* 常時効果つきの変異2 / Other mutations will be mainly in MUT3_* */
+#define MUT3_HYPER_STR                  0x00000001L /*!< 突然変異: 超人的な力 */
+#define MUT3_PUNY                       0x00000002L /*!< 突然変異: 虚弱 */
+#define MUT3_HYPER_INT                  0x00000004L /*!< 突然変異: 生体コンピュータ */
+#define MUT3_MORONIC                    0x00000008L /*!< 突然変異: 精神薄弱 */
+#define MUT3_RESILIENT                  0x00000010L /*!< 突然変異: 弾力のある体 */
+#define MUT3_XTRA_FAT                   0x00000020L /*!< 突然変異: 異常な肥満 */
+#define MUT3_ALBINO                     0x00000040L /*!< 突然変異: アルビノ */
+#define MUT3_FLESH_ROT                  0x00000080L /*!< 突然変異: 腐敗した肉体 */
+#define MUT3_SILLY_VOI                  0x00000100L /*!< 突然変異: 間抜けなキーキー声 */
+#define MUT3_BLANK_FAC                  0x00000200L /*!< 突然変異: のっぺらぼう */
+#define MUT3_ILL_NORM                   0x00000400L /*!< 突然変異: 幻影に覆われた体 */
+#define MUT3_XTRA_EYES                  0x00000800L /*!< 突然変異: 第三の目 */
+#define MUT3_MAGIC_RES                  0x00001000L /*!< 突然変異: 魔法防御 */
+#define MUT3_XTRA_NOIS                  0x00002000L /*!< 突然変異: 騒音 */
+#define MUT3_INFRAVIS                   0x00004000L /*!< 突然変異: 赤外線視力 */
+#define MUT3_XTRA_LEGS                  0x00008000L /*!< 突然変異: 追加の脚 */
+#define MUT3_SHORT_LEG                  0x00010000L /*!< 突然変異: 短い脚 */
+#define MUT3_ELEC_TOUC                  0x00020000L /*!< 突然変異: 電撃オーラ */
+#define MUT3_FIRE_BODY                  0x00040000L /*!< 突然変異: 火炎オーラ */
+#define MUT3_WART_SKIN                  0x00080000L /*!< 突然変異: イボ肌 */
+#define MUT3_SCALES                     0x00100000L /*!< 突然変異: 鱗肌 */
+#define MUT3_IRON_SKIN                  0x00200000L /*!< 突然変異: 鉄の肌 */
+#define MUT3_WINGS                      0x00400000L /*!< 突然変異: 翼 */
+#define MUT3_FEARLESS                   0x00800000L /*!< 突然変異: 恐れ知らず */
+#define MUT3_REGEN                      0x01000000L /*!< 突然変異: 急回復 */
+#define MUT3_ESP                        0x02000000L /*!< 突然変異: テレパシー */
+#define MUT3_LIMBER                     0x04000000L /*!< 突然変異: しなやかな肉体 */
+#define MUT3_ARTHRITIS                  0x08000000L /*!< 突然変異: 間接の痛み */
+#define MUT3_BAD_LUCK                   0x10000000L /*!< 突然変異: 黒いオーラ(不運) */
+#define MUT3_VULN_ELEM                  0x20000000L /*!< 突然変異: 元素攻撃弱点 */
+#define MUT3_MOTION                     0x40000000L /*!< 突然変異: 正確で力強い動作 */
+#define MUT3_GOOD_LUCK                  0x80000000L /*!< 突然変異: 白いオーラ(幸運) */
 
 
 /* Monk martial arts... */
