@@ -256,39 +256,39 @@
 #define MUT1_COLD_TOUCH                 0x40000000L /*!< 突然変異: 凍結の手 */
 #define MUT1_LAUNCHER                   0x80000000L /*!< 突然変異: アイテム投げ */
 
-/* Randomly activating mutations must be MUT2_* */
-#define MUT2_BERS_RAGE                  0x00000001L
-#define MUT2_COWARDICE                  0x00000002L
-#define MUT2_RTELEPORT                  0x00000004L /* Random teleport, instability */
-#define MUT2_ALCOHOL                    0x00000008L
-#define MUT2_HALLU                      0x00000010L
-#define MUT2_FLATULENT                  0x00000020L
-#define MUT2_SCOR_TAIL                  0x00000040L
-#define MUT2_HORNS                      0x00000080L
-#define MUT2_BEAK                       0x00000100L
-#define MUT2_ATT_DEMON                  0x00000200L
-#define MUT2_PROD_MANA                  0x00000400L
-#define MUT2_SPEED_FLUX                 0x00000800L
-#define MUT2_BANISH_ALL                 0x00001000L
-#define MUT2_EAT_LIGHT                  0x00002000L
-#define MUT2_TRUNK                      0x00004000L
-#define MUT2_ATT_ANIMAL                 0x00008000L
-#define MUT2_TENTACLES                  0x00010000L
-#define MUT2_RAW_CHAOS                  0x00020000L
-#define MUT2_NORMALITY                  0x00040000L
-#define MUT2_WRAITH                     0x00080000L
-#define MUT2_POLY_WOUND                 0x00100000L
-#define MUT2_WASTING                    0x00200000L
-#define MUT2_ATT_DRAGON                 0x00400000L
-#define MUT2_WEIRD_MIND                 0x00800000L
-#define MUT2_NAUSEA                     0x01000000L
-#define MUT2_CHAOS_GIFT                 0x02000000L
-#define MUT2_WALK_SHAD                  0x04000000L
-#define MUT2_WARNING                    0x08000000L
-#define MUT2_INVULN                     0x10000000L
-#define MUT2_SP_TO_HP                   0x20000000L
-#define MUT2_HP_TO_SP                   0x40000000L
-#define MUT2_DISARM                     0x80000000L
+/* 常時効果つきの変異 / Randomly activating mutations must be MUT2_* */
+#define MUT2_BERS_RAGE                  0x00000001L /*!< 突然変異: 狂戦士化の発作 */
+#define MUT2_COWARDICE                  0x00000002L /*!< 突然変異: 臆病 */
+#define MUT2_RTELEPORT                  0x00000004L /*!< 突然変異: ランダムテレポート / Random teleport, instability */
+#define MUT2_ALCOHOL                    0x00000008L /*!< 突然変異: アルコール分泌 */
+#define MUT2_HALLU                      0x00000010L /*!< 突然変異: 幻覚を引き起こす精神錯乱 */
+#define MUT2_FLATULENT                  0x00000020L /*!< 突然変異: 猛烈な屁 */
+#define MUT2_SCOR_TAIL                  0x00000040L /*!< 突然変異: サソリの尻尾 */
+#define MUT2_HORNS                      0x00000080L /*!< 突然変異: ツノ */
+#define MUT2_BEAK                       0x00000100L /*!< 突然変異: クチバシ */
+#define MUT2_ATT_DEMON                  0x00000200L /*!< 突然変異: デーモンを引き付ける */
+#define MUT2_PROD_MANA                  0x00000400L /*!< 突然変異: 制御できない魔力のエネルギー */
+#define MUT2_SPEED_FLUX                 0x00000800L /*!< 突然変異: ランダムな加減速 */
+#define MUT2_BANISH_ALL                 0x00001000L /*!< 突然変異: ランダムなモンスター消滅 */
+#define MUT2_EAT_LIGHT                  0x00002000L /*!< 突然変異: 光源喰い */
+#define MUT2_TRUNK                      0x00004000L /*!< 突然変異: 象の鼻 */
+#define MUT2_ATT_ANIMAL                 0x00008000L /*!< 突然変異: 動物を引き寄せる */
+#define MUT2_TENTACLES                  0x00010000L /*!< 突然変異: 邪悪な触手 */
+#define MUT2_RAW_CHAOS                  0x00020000L /*!< 突然変異: 純カオス */
+#define MUT2_NORMALITY                  0x00040000L /*!< 突然変異: ランダムな変異の消滅 */
+#define MUT2_WRAITH                     0x00080000L /*!< 突然変異: ランダムな幽体化 */
+#define MUT2_POLY_WOUND                 0x00100000L /*!< 突然変異: ランダムな傷の変化 */
+#define MUT2_WASTING                    0x00200000L /*!< 突然変異: 衰弱 */
+#define MUT2_ATT_DRAGON                 0x00400000L /*!< 突然変異: ドラゴンを引き寄せる */
+#define MUT2_WEIRD_MIND                 0x00800000L /*!< 突然変異: ランダムなテレパシー */
+#define MUT2_NAUSEA                     0x01000000L /*!< 突然変異: 落ち着きの無い胃 */
+#define MUT2_CHAOS_GIFT                 0x02000000L /*!< 突然変異: カオスパトロン */
+#define MUT2_WALK_SHAD                  0x04000000L /*!< 突然変異: ランダムな現実変容 */
+#define MUT2_WARNING                    0x08000000L /*!< 突然変異: 警告 */
+#define MUT2_INVULN                     0x10000000L /*!< 突然変異: ランダムな無敵化 */
+#define MUT2_SP_TO_HP                   0x20000000L /*!< 突然変異: ランダムなMPからHPへの変換 */
+#define MUT2_HP_TO_SP                   0x40000000L /*!< 突然変異: ランダムなHPからMPへの変換 */
+#define MUT2_DISARM                     0x80000000L /*!< 突然変異: ランダムな武器落とし */
 
 
 
