@@ -220,41 +220,41 @@
 #define REW_SER_DEMO    35  /*!< カオスパトロンからの報酬: 悪魔の下僕下賜 */
 #define REW_SER_MONS    36  /*!< カオスパトロンからの報酬: モンスターの下僕下賜 */
 
-/* Chaos mutations */
+/* カオスの変異 / Chaos mutations */
 
-/* "Activatable" mutations must be in MUT1_* */
-#define MUT1_SPIT_ACID                  0x00000001L
-#define MUT1_BR_FIRE                    0x00000002L
-#define MUT1_HYPN_GAZE                  0x00000004L
-#define MUT1_TELEKINES                  0x00000008L
-#define MUT1_VTELEPORT                  0x00000010L /* Voluntary teleport */
-#define MUT1_MIND_BLST                  0x00000020L
-#define MUT1_RADIATION                  0x00000040L
-#define MUT1_VAMPIRISM                  0x00000080L
-#define MUT1_SMELL_MET                  0x00000100L
-#define MUT1_SMELL_MON                  0x00000200L
-#define MUT1_BLINK                      0x00000400L
-#define MUT1_EAT_ROCK                   0x00000800L
-#define MUT1_SWAP_POS                   0x00001000L
-#define MUT1_SHRIEK                     0x00002000L
-#define MUT1_ILLUMINE                   0x00004000L
-#define MUT1_DET_CURSE                  0x00008000L
-#define MUT1_BERSERK                    0x00010000L
-#define MUT1_POLYMORPH                  0x00020000L
-#define MUT1_MIDAS_TCH                  0x00040000L
-#define MUT1_GROW_MOLD                  0x00080000L
-#define MUT1_RESIST                     0x00100000L
-#define MUT1_EARTHQUAKE                 0x00200000L
-#define MUT1_EAT_MAGIC                  0x00400000L
-#define MUT1_WEIGH_MAG                  0x00800000L
-#define MUT1_STERILITY                  0x01000000L
-#define MUT1_PANIC_HIT                  0x02000000L
-#define MUT1_DAZZLE                     0x04000000L
-#define MUT1_LASER_EYE                  0x08000000L
-#define MUT1_RECALL                     0x10000000L
-#define MUT1_BANISH                     0x20000000L
-#define MUT1_COLD_TOUCH                 0x40000000L
-#define MUT1_LAUNCHER                   0x80000000L
+/* レイシャル型の変異 / "Activatable" mutations must be in MUT1_* */
+#define MUT1_SPIT_ACID                  0x00000001L /*!< 突然変異: 酸の唾 */
+#define MUT1_BR_FIRE                    0x00000002L /*!< 突然変異: 炎のブレス */
+#define MUT1_HYPN_GAZE                  0x00000004L /*!< 突然変異: 催眠睨み */
+#define MUT1_TELEKINES                  0x00000008L /*!< 突然変異: 念動力 */
+#define MUT1_VTELEPORT                  0x00000010L /*!< 突然変異: テレポート / Voluntary teleport */
+#define MUT1_MIND_BLST                  0x00000020L /*!< 突然変異: 精神攻撃 */
+#define MUT1_RADIATION                  0x00000040L /*!< 突然変異: 放射能 */
+#define MUT1_VAMPIRISM                  0x00000080L /*!< 突然変異: 吸血ドレイン */
+#define MUT1_SMELL_MET                  0x00000100L /*!< 突然変異: 金属嗅覚 */
+#define MUT1_SMELL_MON                  0x00000200L /*!< 突然変異: 敵臭嗅覚 */
+#define MUT1_BLINK                      0x00000400L /*!< 突然変異: ショート・テレポート */
+#define MUT1_EAT_ROCK                   0x00000800L /*!< 突然変異: 岩喰い */
+#define MUT1_SWAP_POS                   0x00001000L /*!< 突然変異: 位置交換 */
+#define MUT1_SHRIEK                     0x00002000L /*!< 突然変異: 叫び */
+#define MUT1_ILLUMINE                   0x00004000L /*!< 突然変異: 照明 */
+#define MUT1_DET_CURSE                  0x00008000L /*!< 突然変異: 呪い感知 */
+#define MUT1_BERSERK                    0x00010000L /*!< 突然変異: 狂戦士化 */
+#define MUT1_POLYMORPH                  0x00020000L /*!< 突然変異: 変身 */
+#define MUT1_MIDAS_TCH                  0x00040000L /*!< 突然変異: ミダスの手 */
+#define MUT1_GROW_MOLD                  0x00080000L /*!< 突然変異: カビ発生 */
+#define MUT1_RESIST                     0x00100000L /*!< 突然変異: エレメント耐性 */
+#define MUT1_EARTHQUAKE                 0x00200000L /*!< 突然変異: 地震 */
+#define MUT1_EAT_MAGIC                  0x00400000L /*!< 突然変異: 魔力喰い */
+#define MUT1_WEIGH_MAG                  0x00800000L /*!< 突然変異: 魔力感知 */
+#define MUT1_STERILITY                  0x01000000L /*!< 突然変異: 増殖阻止 */
+#define MUT1_PANIC_HIT                  0x02000000L /*!< 突然変異: ヒットアンドアウェイ */
+#define MUT1_DAZZLE                     0x04000000L /*!< 突然変異: 眩惑 */
+#define MUT1_LASER_EYE                  0x08000000L /*!< 突然変異: レーザー・アイ */
+#define MUT1_RECALL                     0x10000000L /*!< 突然変異: 帰還 */
+#define MUT1_BANISH                     0x20000000L /*!< 突然変異: 邪悪消滅 */
+#define MUT1_COLD_TOUCH                 0x40000000L /*!< 突然変異: 凍結の手 */
+#define MUT1_LAUNCHER                   0x80000000L /*!< 突然変異: アイテム投げ */
 
 /* Randomly activating mutations must be MUT2_* */
 #define MUT2_BERS_RAGE                  0x00000001L
