@@ -326,26 +326,25 @@
 #define MUT3_GOOD_LUCK                  0x80000000L /*!< 突然変異: 白いオーラ(幸運) */
 
 
-/* Monk martial arts... */
-# define MAX_MA 17
-# define MA_KNEE 1
-# define MA_SLOW 2
 
-/* Mindcraft */
-#define MAX_MIND_POWERS  21
+# define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
+# define MA_KNEE 1 /*!< 金的効果ID */
+# define MA_SLOW 2 /*!< 膝蹴り効果ID */
 
-/* Hallucination stuff */
+#define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
+
+
 #ifdef JP
-#define MAX_SILLY_ATTACK 41
+#define MAX_SILLY_ATTACK 41 /*!< 幻覚時のジョークメッセージ最大数 */
 #else
-#define MAX_SILLY_ATTACK 29
+#define MAX_SILLY_ATTACK 29 /*!< Hallucination stuff */
 #endif
 
-#define MIND_MINDCRAFTER    0
-#define MIND_KI             1
-#define MIND_BERSERKER      2
-#define MIND_MIRROR_MASTER  3
-#define MIND_NINJUTSU       4
+#define MIND_MINDCRAFTER    0 /*!< 特殊能力: 超能力 */
+#define MIND_KI             1 /*!< 特殊能力: 練気 */
+#define MIND_BERSERKER      2 /*!< 特殊能力: 怒り */
+#define MIND_MIRROR_MASTER  3 /*!< 特殊能力: 鏡魔法 */
+#define MIND_NINJUTSU       4 /*!< 特殊能力: 忍術 */
 
 
 /*
