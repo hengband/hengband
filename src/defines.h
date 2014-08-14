@@ -350,57 +350,51 @@
 /*
  * Size of memory reserved for initialization of some arrays
  */
-#define FAKE_NAME_SIZE  40 * 1024L
-#define FAKE_TEXT_SIZE 150 * 1024L
-#define FAKE_TAG_SIZE   10 * 1024L
+#define FAKE_NAME_SIZE  40 * 1024L /*!< ゲーム情報の種別毎に用意される名前用バッファの容量 */
+#define FAKE_TEXT_SIZE 150 * 1024L /*!< ゲーム情報の種別毎に用意されるテキスト用バッファの容量 */
+#define FAKE_TAG_SIZE   10 * 1024L /*!< ゲーム情報の種別毎に用意されるタグ用バッファの容量 */
+
+#define MAX_HISCORES    999 /*!< スコア情報保存の最大数 / Maximum number of high scores in the high score file */
 
 
-/*
- * Maximum number of high scores in the high score file
- */
-#define MAX_HISCORES    999
 
-
-/*
- * Maximum dungeon level.  The player can never reach this level
+/*!
+ * @brief ダンジョンの最深層 / Maximum dungeon level. 
+ * @details
+ * The player can never reach this level
  * in the dungeon, and this value is used for various calculations
  * involving object and monster creation.  It must be at least 100.
  * Setting it below 128 may prevent the creation of some objects.
  */
-#define MAX_DEPTH       128
+#define MAX_DEPTH       128 
 
+#define MAX_SAVED_FLOORS       20 /*!< 保存フロアの最大数 / Maximum number of saved floors. */
 
-/*
- * Maximum number of saved floors.
- */
-#define MAX_SAVED_FLOORS       20
-
-
-/*
- * Maximum size of the "lite" array (see "cave.c")
- * Note that the "lite radius" will NEVER exceed 14, and we would
+/*!
+ * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "cave.c")
+ * @details Note that the "lite radius" will NEVER exceed 14, and we would
  * never require more than 581 entries in the array for circular "lite".
  */
 #define LITE_MAX 600
 
-/*
- * Maximum size of the "mon_lite" array (see "cave.c")
- * Note that the "view radius" will NEVER exceed 20, monster illumination
+/*!
+ * @brief モンスター用光源処理配列サイズ / Maximum size of the "mon_lite" array (see "cave.c")
+ * @details Note that the "view radius" will NEVER exceed 20, monster illumination
  * flags are dependent on CAVE_VIEW, and even if the "view" was octagonal,
  * we would never require more than 1520 entries in the array.
  */
 #define MON_LITE_MAX 1536
 
-/*
- * Maximum size of the "view" array (see "cave.c")
- * Note that the "view radius" will NEVER exceed 20, and even if the "view"
+/*!
+ * @brief 視界処理配列サイズ / Maximum size of the "view" array (see "cave.c")
+ * @details Note that the "view radius" will NEVER exceed 20, and even if the "view"
  * was octagonal, we would never require more than 1520 entries in the array.
  */
 #define VIEW_MAX 1536
 
-/*
- * Maximum size of the "temp" array (see "cave.c")
- * We must be as large as "VIEW_MAX" and "LITE_MAX" for proper functioning
+/*!
+ * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array (see "cave.c")
+ * @details We must be as large as "VIEW_MAX" and "LITE_MAX" for proper functioning
  * of "update_view()" and "update_lite()".  We must also be as large as the
  * largest illuminatable room, but no room is larger than 800 grids.  We
  * must also be large enough to allow "good enough" use as a circular queue,
@@ -408,9 +402,9 @@
  */
 #define TEMP_MAX 2298
 
-/*
- * Maximum size of the "redraw" array (see "cave.c")
- * We must be large for proper functioning of delayed redrawing.
+/*!
+ * @brief 再描画処理用配列サイズ / Maximum size of the "redraw" array (see "cave.c")
+ * @details We must be large for proper functioning of delayed redrawing.
  * We must also be as large as two times of the largest view area.
  * Note that maximum view grids are 1149 entries.
  */
