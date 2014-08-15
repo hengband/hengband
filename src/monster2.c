@@ -1173,8 +1173,8 @@ static bool restrict_monster_to_dungeon(int r_idx)
 
 /*!
  * @brief モンスター生成制限関数最大2つから / Apply a "monster restriction function" to the "monster allocation table"
- * @param monnster_hook 制限関数1
- * @param monnster_hook2 制限関数2
+ * @param monster_hook 制限関数1
+ * @param monster_hook2 制限関数2
  * @return エラーコード
  */
 errr get_mon_num_prep(monster_hook_type monster_hook,
@@ -2910,7 +2910,7 @@ static int initial_r_appearance(int r_idx)
 
 
 /*!
- * @brief モンスターの個体加速を設定する / Get initial monster spee\d
+ * @brief モンスターの個体加速を設定する / Get initial monster speed
  * @param r_ptr モンスター種族の参照ポインタ
  * @return 加速値
  */

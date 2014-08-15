@@ -1,5 +1,5 @@
 ﻿/*!
- * @file readbits.c
+ * @file readdib.c
  * @brief Windows用ビットマップファイル読み込み処理パッケージ /
  * This package provides a routine to read a DIB file and set up the device dependent version of the image.
  * @date 2014/08/08
