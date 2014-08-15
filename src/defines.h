@@ -156,31 +156,31 @@
 /*
  * Store types
  */
-#define STORE_GENERAL   0 /*!> 店舗の種類: 雑貨屋 */
-#define STORE_ARMOURY   1 /*!> 店舗の種類: 防具屋 */
-#define STORE_WEAPON    2 /*!> 店舗の種類: 武器屋 */
-#define STORE_TEMPLE    3 /*!> 店舗の種類: 寺院 */
-#define STORE_ALCHEMIST 4 /*!> 店舗の種類: 錬金術の店 */
-#define STORE_MAGIC     5 /*!> 店舗の種類: 魔道具屋 */
-#define STORE_BLACK     6 /*!> 店舗の種類: ブラック・マーケット */
-#define STORE_HOME      7 /*!> 店舗の種類: 我が家 */
-#define STORE_BOOK      8 /*!> 店舗の種類: 書店 */
-#define STORE_MUSEUM    9 /*!> 店舗の種類: 博物館 */
+#define STORE_GENERAL   0 /*!< 店舗の種類: 雑貨屋 */
+#define STORE_ARMOURY   1 /*!< 店舗の種類: 防具屋 */
+#define STORE_WEAPON    2 /*!< 店舗の種類: 武器屋 */
+#define STORE_TEMPLE    3 /*!< 店舗の種類: 寺院 */
+#define STORE_ALCHEMIST 4 /*!< 店舗の種類: 錬金術の店 */
+#define STORE_MAGIC     5 /*!< 店舗の種類: 魔道具屋 */
+#define STORE_BLACK     6 /*!< 店舗の種類: ブラック・マーケット */
+#define STORE_HOME      7 /*!< 店舗の種類: 我が家 */
+#define STORE_BOOK      8 /*!< 店舗の種類: 書店 */
+#define STORE_MUSEUM    9 /*!< 店舗の種類: 博物館 */
 
-#define BUILDING_NON_MEMBER 0 /*!> 不明(現在未使用) */
-#define BUILDING_MEMBER     1 /*!> 不明(現在未使用) */
-#define BUILDING_OWNER      2 /*!> 施設の種族/職業条件が一致している状態値 */
+#define BUILDING_NON_MEMBER 0 /*!< 不明(現在未使用) */
+#define BUILDING_MEMBER     1 /*!< 不明(現在未使用) */
+#define BUILDING_OWNER      2 /*!< 施設の種族/職業条件が一致している状態値 */
 
 #define MAX_OWNERS      32 /*!< 各店舗毎の店主定義最大数 / Total number of owners per store (see "store.c", etc) */
-#define MAX_SEXES        2 /*! 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */
-#define MAX_CLASS       28 /*! 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
-#define MAX_SEIKAKU     12 /*! 性格の最大定義数 */
-#define MAX_PATRON      16 /*! カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
+#define MAX_SEXES        2 /*!< 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */
+#define MAX_CLASS       28 /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
+#define MAX_SEIKAKU     12 /*!< 性格の最大定義数 */
+#define MAX_PATRON      16 /*!< カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
 
 /* ELDRITCH_HORRORによるsanity blast処理に関するメッセージの最大数 / Number of entries in the sanity-blast descriptions */
-#define MAX_SAN_HORROR 20 /*! 恐ろしい対象の形容数(正常時) */
-#define MAX_SAN_FUNNY 22  /*! 恐ろしい対象の形容数(幻覚時) */
-#define MAX_SAN_COMMENT 5 /*! 恐ろしい対象を見たときの絶叫メッセージ数(幻覚時) */
+#define MAX_SAN_HORROR 20 /*!< 恐ろしい対象の形容数(正常時) */
+#define MAX_SAN_FUNNY 22  /*!< 恐ろしい対象の形容数(幻覚時) */
+#define MAX_SAN_COMMENT 5 /*!< 恐ろしい対象を見たときの絶叫メッセージ数(幻覚時) */
 
 /* カオスパトロンからの報酬種別定義 / Chaos Warrior: Reward types: */
 #define REW_POLY_SLF    1   /*!< カオスパトロンからの報酬: 自己変容 */
@@ -410,21 +410,12 @@
  */
 #define REDRAW_MAX 2298
 
+#define KEYMAP_MODE_ORIG	0 /*!< オリジナルキー配置 / Mode for original keyset commands */
+#define KEYMAP_MODE_ROGUE	1 /*!< ローグライクキー配置 / Mode for roguelike keyset commands */
+#define KEYMAP_MODES		2 /*!< キー配置の数 / Number of keymap modes */
 
-/*
- * Number of keymap modes
- */
-#define KEYMAP_MODES	2
 
-/*
- * Mode for original keyset commands
- */
-#define KEYMAP_MODE_ORIG	0
 
-/*
- * Mode for roguelike keyset commands
- */
-#define KEYMAP_MODE_ROGUE	1
 
 
 /*
