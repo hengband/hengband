@@ -1,17 +1,16 @@
-﻿/*
- * File: grid.h
+﻿/*!
+ * @file grid.h
+ * @brief ダンジョンの生成処理の基幹部分ヘッダーファイル
+ * @date 2014/08/15
+ * @details
  * Purpose: header file for grid.c, used only in dungeon generation
  * files (generate.c, rooms.c)
- */
-
-/*
+ * @author
  * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research, and
  * not for profit purposes provided that this copyright and statement are
  * included in all such copies.
  */
-
 
 /* Macros */
 
@@ -21,12 +20,39 @@
 /* This should not be used */
 /*#define set_cave_info(Y,X,I)    (cave[(Y)][(X)].info = (I)) */
 
+/*!
+ * @brief 指定座標が瓦礫かどうかを返す
+ * @param Y 指定Y座標
+ * @param X 指定X座標
+ * @return 瓦礫ならばTRUE
+ */
 #define place_rubble(Y,X)       set_cave_feat(Y,X,feat_rubble)
+
+/*!
+ * @brief 指定座標が上り階段かどうかを返す
+ * @param Y 指定Y座標
+ * @param X 指定X座標
+ * @return 上り階段ならばTRUE
+ */
 #define place_up_stairs(Y,X)    set_cave_feat(Y,X,feat_up_stair)
+
+/*!
+ * @brief 指定座標が下り階段かどうかを返す
+ * @param Y 指定Y座標
+ * @param X 指定X座標
+ * @return 下り階段ならばTRUE
+ */
 #define place_down_stairs(Y,X)  set_cave_feat(Y,X,feat_down_stair)
 
+/*!
+ * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す
+ * @param Y 指定Y座標
+ * @param X 指定X座標
+ * @return FLOOR属性を持っているならばTRUE
+ */
 #define is_floor_bold(Y,X) (cave[Y][X].info & CAVE_FLOOR)
 #define is_extra_bold(Y,X) (cave[Y][X].info & CAVE_EXTRA)
+
 #define is_inner_bold(Y,X) (cave[Y][X].info & CAVE_INNER)
 #define is_outer_bold(Y,X) (cave[Y][X].info & CAVE_OUTER)
 #define is_solid_bold(Y,X) (cave[Y][X].info & CAVE_SOLID)
