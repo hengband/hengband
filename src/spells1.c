@@ -1545,11 +1545,10 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
  * then setting the damage to zero.  Note that the "damage" parameter is
  * divided by the radius, so monsters not at the "epicenter" will not take
  * as much damage (or whatever)...
+ * </pre>
  * <pre>
  * Note that "polymorph" is dangerous, since a failure in "place_monster()"'
  * may result in a dereference of an invalid pointer.  XXX XXX XXX
- * </pre>
- * <pre>
  * </pre>
  * <pre>
  * Various messages are produced, and damage is applied.

@@ -139,7 +139,7 @@ cptr funny_desc[MAX_SAN_FUNNY] =
 };
 
 /*!
- * @var funny_comment
+ * @var funny_comments
  * @brief ELDRITCH HORROR効果時の幻覚時間延長を示す錯乱表現
  */
 cptr funny_comments[MAX_SAN_COMMENT] =

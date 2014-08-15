@@ -137,7 +137,7 @@ static bool z_older_than(byte x, byte y, byte z)
 
 /*!
  * @brief ゲームスクリーンにメッセージを表示する / Hack -- Show information on the screen, one line at a time.
- * @param cptr 表示文字列
+ * @param msg 表示文字列
  * @return なし
  * @details
  * Avoid the top two lines, to avoid interference with "msg_print()".
@@ -238,7 +238,7 @@ static void rd_s32b(s32b *ip)
 
 /*!
  * @brief ロードファイルポインタから文字列を読み込んでポインタに渡す / Hack -- read a string
- * @param ip 読み込みポインタ
+ * @param str 読み込みポインタ
  * @param max 最大読み取りバイト数
  * @return なし
  */
