@@ -200,6 +200,7 @@ static byte spell_color(int type)
  * @param x 始点X座標
  * @param ny 終点Y座標
  * @param nx 終点X座標
+ * @param typ 魔法の効果属性
  * @return 方向キャラID
  * @details
  * <pre>

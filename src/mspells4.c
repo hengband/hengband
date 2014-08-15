@@ -100,7 +100,7 @@ u32b monster_u_mode(int m_idx)
 
 /*!
 * @brief モンスターを起こす /
-* @param m_idx モンスターID
+* @param t_idx モンスターID
 */
 void monster_wakeup(int t_idx)
 {
@@ -3447,6 +3447,7 @@ void spell_RF6_S_UNIQUE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 
 /*!
 * @brief モンスターからプレイヤーへの呪文の振り分け関数。 /
+* @param SPELL_NUM モンスター魔法ID
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -3558,6 +3559,7 @@ int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx)
 
 /*!
 * @brief モンスターからモンスターへの呪文の振り分け関数。 /
+* @param SPELL_NUM モンスター魔法ID
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -3703,6 +3705,7 @@ int monspell_damage_roll(int dam, int dice_num, int dice_side, int mult, int div
 * @param powerful 呪文を唱えるモンスターのpowerfulフラグ
 * @param shoot_dd 射撃のダイス数
 * @param shoot_ds 射撃のダイス面
+* @param shoot_base 射撃の固定威力値
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */

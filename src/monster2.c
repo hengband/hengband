@@ -2205,7 +2205,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
  * @param m_idx 更新するモンスター情報のID
  * @param full プレイヤーとの距離更新を行うならばtrue
  * @return なし
- * @detail 
+ * @details
  * This involves extracting the distance to the player (if requested),
  * and then checking for visibility (natural, infravision, see-invis,
  * telepathy), updating the monster visibility flag, redrawing (or

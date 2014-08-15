@@ -17,8 +17,8 @@
 
 /*!
 * @brief 文字列に青魔導師の呪文の攻撃力を加える
-* @param r_idx モンスターの種族ID
 * @param SPELL_NUM 呪文番号
+* @param plev プレイヤーレベル
 * @param msg 表示する文字列
 * @param tmp 返すメッセージを格納する配列
 * @return なし
