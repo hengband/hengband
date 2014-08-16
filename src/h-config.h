@@ -1,22 +1,25 @@
-﻿/* File: h-config.h */
+﻿/*!
+ * @file h-config.h
+ * @brief 変愚時追加された基本事項ののヘッダーファイル /
+ * The most basic "include" file. This file simply includes other low level header files.
+ * @date 2014/08/15
+ * @author
+ * 不明(変愚蛮怒スタッフ？)
+ * @details
+ * <pre>
+ * Choose the hardware, operating system, and compiler.
+ * Also, choose various "system level" compilation options.
+ * A lot of these definitions take effect in "h-system.h"
+ * Note that you may find it simpler to define some of these
+ * options in the "Makefile", especially any options describing
+ * what "system" is being used.
+ * no system definitions are needed for 4.3BSD, SUN OS, DG/UX
+ * </pre>
+ */
 
 #ifndef INCLUDED_H_CONFIG_H
 #define INCLUDED_H_CONFIG_H
 
-/*
- * Choose the hardware, operating system, and compiler.
- * Also, choose various "system level" compilation options.
- * A lot of these definitions take effect in "h-system.h"
- *
- * Note that you may find it simpler to define some of these
- * options in the "Makefile", especially any options describing
- * what "system" is being used.
- */
-
-
-/*
- * no system definitions are needed for 4.3BSD, SUN OS, DG/UX
- */
 
 /*
  * OPTION: Compile on a Macintosh (see "A-mac-h" or "A-mac-pch")

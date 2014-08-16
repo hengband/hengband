@@ -1,13 +1,15 @@
-﻿/* File: h-basic.h */
+﻿/*!
+ * @file h-basic.h
+ * @brief 変愚時追加された基本事項ののヘッダーファイル /
+ * The most basic "include" file. This file simply includes other low level header files.
+ * @date 2014/08/15
+ * @author
+ * 不明(変愚蛮怒スタッフ？)
+ */
+
 
 #ifndef INCLUDED_H_BASIC_H
 #define INCLUDED_H_BASIC_H
-
-/*
- * The most basic "include" file.
- *
- * This file simply includes other low level header files.
- */
 
 #ifdef HAVE_CONFIG_H
 #include "autoconf.h"

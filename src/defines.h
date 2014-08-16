@@ -2592,7 +2592,7 @@
 #define CAVE_MNDK       0x8000    /* Darken by monster */
 
 /* Used only while cave generation */
-#define CAVE_FLOOR      0x0200
+#define CAVE_FLOOR      0x0200	/*!< フロア属性のあるマス */
 #define CAVE_EXTRA      0x0400
 #define CAVE_INNER      0x0800
 #define CAVE_OUTER      0x1000
