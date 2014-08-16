@@ -2865,40 +2865,42 @@
 
 
 /*
- * Bit flags for the "p_ptr->special_attack" variable. -LM-
+ * p_ptr->special_attackによるプレイヤーの攻撃状態の定義 / Bit flags for the "p_ptr->special_attack" variable. -LM-
  *
  * Note:  The elemental and poison attacks should be managed using the 
  * function "set_ele_attack", in spell2.c.  This provides for timeouts and
  * prevents the player from getting more than one at a time.
  */
-#define ATTACK_CONFUSE		0x00000001
-#define ATTACK_XXX1		0x00000002
-#define ATTACK_XXX2		0x00000004
-#define ATTACK_XXX3	        0x00000008
-#define ATTACK_ACID		0x00000010
-#define ATTACK_ELEC		0x00000020
-#define ATTACK_FIRE		0x00000040
-#define ATTACK_COLD		0x00000080
-#define ATTACK_POIS		0x00000100
-#define ATTACK_HOLY		0x00000200
-#define ATTACK_SUIKEN		0x00000400
+#define ATTACK_CONFUSE	0x00000001 /*!< プレイヤーのステータス:混乱打撃 */
+#define ATTACK_XXX1		0x00000002 /*!< プレイヤーのステータス:未使用1 */
+#define ATTACK_XXX2		0x00000004 /*!< プレイヤーのステータス:未使用2 */
+#define ATTACK_XXX3	    0x00000008 /*!< プレイヤーのステータス:未使用3 */
+#define ATTACK_ACID		0x00000010 /*!< プレイヤーのステータス:魔法剣/溶解 */
+#define ATTACK_ELEC		0x00000020 /*!< プレイヤーのステータス:魔法剣/電撃 */
+#define ATTACK_FIRE		0x00000040 /*!< プレイヤーのステータス:魔法剣/火炎 */
+#define ATTACK_COLD		0x00000080 /*!< プレイヤーのステータス:魔法剣/冷凍 */
+#define ATTACK_POIS		0x00000100 /*!< プレイヤーのステータス:魔法剣/毒殺 */
+#define ATTACK_HOLY		0x00000200 /*!< プレイヤーのステータス:対邪?(未使用) */
+#define ATTACK_SUIKEN	0x00000400 /*!< プレイヤーのステータス:酔拳 */
 
-
-#define DEFENSE_ACID		0x00000001
-#define DEFENSE_ELEC		0x00000002
-#define DEFENSE_FIRE		0x00000004
-#define DEFENSE_COLD		0x00000008
-#define DEFENSE_POIS		0x00000010
-#define KAMAE_GENBU             0x00000020
-#define KAMAE_BYAKKO            0x00000040
-#define KAMAE_SEIRYU            0x00000080
-#define KAMAE_SUZAKU            0x00000100
-#define KATA_IAI                0x00000200
-#define KATA_FUUJIN             0x00000400
-#define KATA_KOUKIJIN           0x00000800
-#define KATA_MUSOU              0x00001000
-#define NINJA_KAWARIMI          0x00002000
-#define NINJA_S_STEALTH         0x00004000
+/*
+ * p_ptr->special_defenseによるプレイヤーの防御状態の定義 / Bit flags for the "p_ptr->special_defense" variable. -LM-
+ */
+#define DEFENSE_ACID	0x00000001 /*!< プレイヤーのステータス:酸免疫 */
+#define DEFENSE_ELEC	0x00000002 /*!< プレイヤーのステータス:電撃免疫 */
+#define DEFENSE_FIRE	0x00000004 /*!< プレイヤーのステータス:火炎免疫 */
+#define DEFENSE_COLD	0x00000008 /*!< プレイヤーのステータス:冷気免疫 */
+#define DEFENSE_POIS	0x00000010 /*!< プレイヤーのステータス:毒免疫 */
+#define KAMAE_GENBU     0x00000020 /*!< プレイヤーのステータス:玄武の構え */
+#define KAMAE_BYAKKO    0x00000040 /*!< プレイヤーのステータス:白虎の構え */
+#define KAMAE_SEIRYU    0x00000080 /*!< プレイヤーのステータス:青竜の構え */
+#define KAMAE_SUZAKU    0x00000100 /*!< プレイヤーのステータス:朱雀の構え */
+#define KATA_IAI        0x00000200 /*!< プレイヤーのステータス:居合 */
+#define KATA_FUUJIN     0x00000400 /*!< プレイヤーのステータス:風塵 */
+#define KATA_KOUKIJIN   0x00000800 /*!< プレイヤーのステータス:降鬼陣 */
+#define KATA_MUSOU      0x00001000 /*!< プレイヤーのステータス:無想 */
+#define NINJA_KAWARIMI  0x00002000 /*!< プレイヤーのステータス:変わり身 */
+#define NINJA_S_STEALTH 0x00004000 /*!< プレイヤーのステータス:超隠密 */
 
 #define MAX_KAMAE 4
 #define KAMAE_MASK (KAMAE_GENBU | KAMAE_BYAKKO | KAMAE_SEIRYU | KAMAE_SUZAKU)
