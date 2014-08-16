@@ -586,39 +586,30 @@
 #define NASTY_MON_MAX      3
 #define NASTY_MON_PLUS_MAX 25
 
-/* 1/x chance of hurting even if invulnerable! */
-#define PENETRATE_INVULNERABILITY 13
+#define PENETRATE_INVULNERABILITY 13 /*! 無敵化が破られる確率(1/x) / 1/x chance of hurting even if invulnerable! */
 
 
 
 /*
  * Refueling constants
  */
-#define FUEL_TORCH      5000    /* Maximum amount of fuel in a torch */
-#define FUEL_LAMP       15000   /* Maximum amount of fuel in a lantern */
-
+#define FUEL_TORCH      5000    /*! 松明の基本寿命値 / Maximum amount of fuel in a torch */
+#define FUEL_LAMP       15000   /*! ランタンの基本寿命値 / Maximum amount of fuel in a lantern */
 
 /*
  * More maximum values
  */
-#define MAX_SIGHT       20      /* Maximum view distance */
-#define MAX_RANGE       (p_ptr->inside_battle ? 36 : 18)      /* Maximum range (spells, etc) */
-#define AAF_LIMIT       100     /* Limit of sensing radius */
+#define MAX_SIGHT       20      /*!< プレイヤーの最大視界範囲(マス) / Maximum view distance */
+#define MAX_RANGE       (p_ptr->inside_battle ? 36 : 18)      /*!< プレイヤーの攻撃射程(マス) / Maximum range (spells, etc) */
+#define AAF_LIMIT       100     /*!< モンスターの限界感知範囲(マス) Limit of sensing radius */
+
+#define MIN_M_ALLOC_TD          4 /*!< 街(昼間)の最低住人配置数 / The town starts out with 4 residents during the day */
+#define MIN_M_ALLOC_TN          8 /*!< 街(夜間)の最低住人配置数 / The town starts out with 8 residents during the night */
 
 
-
-/*
- * The town starts out with 4 residents during the day
- */
-#define MIN_M_ALLOC_TD          4
-
-/*
- * The town starts out with 8 residents during the night
- */
-#define MIN_M_ALLOC_TN          8
-
-
-/*
+/*!
+ * @brief モンスター増殖の最大数
+ * @details
  * A monster can only "multiply" (reproduce) if there are fewer than 100
  * monsters on the level capable of such spontaneous reproduction.  This
  * is a hack which prevents the "m_list[]" array from exploding due to
