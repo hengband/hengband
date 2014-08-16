@@ -480,18 +480,11 @@
 #define STORE_SHUFFLE   21              /* 1/Chance (per day) of an owner changing */
 #define STORE_TICKS     1000            /* Number of ticks between turnovers */
 
-
-/*
- * Random energy
- */
+/*! @brief 消費する行動エネルギー値を正規乱数で返す(中央100/分散25) / Random energy */
 #define ENERGY_NEED() (randnor(100, 25))
 
-
-/*
- * Extract energy from speed (Assumes that SPEED is unsigned)
- */
-#define SPEED_TO_ENERGY(SPEED) \
-	(((SPEED) > 199) ? 49 : extract_energy[(SPEED)])
+/*! @brief 加速値に応じた基本行動エネルギー消費量を返す / Extract energy from speed (Assumes that SPEED is unsigned) */
+#define SPEED_TO_ENERGY(SPEED) (((SPEED) > 199) ? 49 : extract_energy[(SPEED)])
 
 
 /*
@@ -502,11 +495,11 @@
 #define MAX_DAYS          20000    /*!< 内部処理中で保持される最大日数 / Maximum days */
 #define BREAK_GLYPH       550      /*!< 守りのルーンの強靭度 / Rune of protection resistance */
 #define BREAK_MINOR_GLYPH 299      /*!< 爆発のルーンの発動しやすさ / For explosive runes */
-#define BTH_PLUS_ADJ       3       /*!< Adjust BTH per plus-to-hit */
-#define MON_MULT_ADJ  	   8       /*!< High value slows multiplication */
-#define MON_SUMMON_ADJ	   2       /*!< Adjust level of summoned creatures */
-#define MON_DRAIN_LIFE	   2       /*!< Percent of player exp drained per hit */
-#define USE_DEVICE    	   3       /*!< x> Harder devices x< Easier devices     */
+#define BTH_PLUS_ADJ       3       /*!< 武器経験値及びプレイヤーの打撃/射撃能力に応じた修正値倍率 / Adjust BTH per plus-to-hit */
+#define MON_MULT_ADJ  	   8       /*!< モンスターの増殖しにくさの基本倍率 / High value slows multiplication */
+#define MON_SUMMON_ADJ	   2       /*!< 現在未使用 Adjust level of summoned creatures */
+#define MON_DRAIN_LIFE	   2       /*!< モンスターの打撃によるプレイヤーの経験値吸収基本倍率(%) / Percent of player exp drained per hit */
+#define USE_DEVICE    	   3       /*!< 魔道具の最低失敗基準値 x> Harder devices x< Easier devices     */
 
 
 /* "Biases" for random artifact gen */
