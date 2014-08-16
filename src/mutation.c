@@ -2326,7 +2326,7 @@ bool mutation_power_aux(u32b power)
 				int i;
 				for (i = 0; i < 8; i++)
 				{
-					summon_specific(-1, py, px, lvl, SUMMON_BIZARRE1, PM_FORCE_PET);
+					summon_specific(-1, py, px, lvl, SUMMON_MOLD, PM_FORCE_PET);
 				}
 			}
 			break;

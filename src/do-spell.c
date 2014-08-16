@@ -490,10 +490,10 @@ static void cast_invoke_spirits(int dir)
 static void wild_magic(int spell)
 {
 	int counter = 0;
-	int type = SUMMON_BIZARRE1 + randint0(6);
+	int type = SUMMON_MOLD + randint0(6);
 
-	if (type < SUMMON_BIZARRE1) type = SUMMON_BIZARRE1;
-	else if (type > SUMMON_BIZARRE6) type = SUMMON_BIZARRE6;
+	if (type < SUMMON_MOLD) type = SUMMON_MOLD;
+	else if (type > SUMMON_MIMIC) type = SUMMON_MIMIC;
 
 	switch (randint1(spell) + randint1(8) + 1)
 	{
@@ -706,22 +706,22 @@ static void cast_shuffle(void)
 	else if (die < 82)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_BIZARRE1, 0L);
+		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_MOLD, 0L);
 	}
 	else if (die < 84)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_BIZARRE2, 0L);
+		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_BAT, 0L);
 	}
 	else if (die < 86)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_BIZARRE4, 0L);
+		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_VORTEX, 0L);
 	}
 	else if (die < 88)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_BIZARRE5, 0L);
+		trump_summoning(1, TRUE, py, px, (dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
 	}
 	else if (die < 96)
 	{

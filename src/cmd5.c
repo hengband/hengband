@@ -946,10 +946,10 @@ void do_cmd_study(void)
 static void wild_magic(int spell)
 {
 	int counter = 0;
-	int type = SUMMON_BIZARRE1 + randint0(6);
+	int type = SUMMON_MOLD + randint0(6);
 
-	if (type < SUMMON_BIZARRE1) type = SUMMON_BIZARRE1;
-	else if (type > SUMMON_BIZARRE6) type = SUMMON_BIZARRE6;
+	if (type < SUMMON_MOLD) type = SUMMON_MOLD;
+	else if (type > SUMMON_MIMIC) type = SUMMON_MIMIC;
 
 	switch (randint1(spell) + randint1(8) + 1)
 	{
