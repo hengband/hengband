@@ -226,8 +226,10 @@ static void prt_dungeon(void)
 }
 
 
-/*
- * Print character stat in given row, column
+/*!
+ * @brief プレイヤー能力値を描画する / Print character stat in given row, column
+ * @param stat 描画するステータスのID
+ * @return なし
  */
 static void prt_stat(int stat)
 {
@@ -264,75 +266,75 @@ static void prt_stat(int stat)
 
 
 /*
- *  Data structure for status bar
+ * 画面下部に表示する状態表示定義ID / Data structure for status bar
  */
-#define BAR_TSUYOSHI 0
-#define BAR_HALLUCINATION 1
-#define BAR_BLINDNESS 2
-#define BAR_PARALYZE 3
-#define BAR_CONFUSE 4
-#define BAR_POISONED 5
-#define BAR_AFRAID 6
-#define BAR_LEVITATE 7
-#define BAR_REFLECTION 8
-#define BAR_PASSWALL 9
-#define BAR_WRAITH 10
-#define BAR_PROTEVIL 11
-#define BAR_KAWARIMI 12
-#define BAR_MAGICDEFENSE 13
-#define BAR_EXPAND 14
-#define BAR_STONESKIN 15
-#define BAR_MULTISHADOW 16
-#define BAR_REGMAGIC 17
-#define BAR_ULTIMATE 18
-#define BAR_INVULN 19
-#define BAR_IMMACID 20
-#define BAR_RESACID 21
-#define BAR_IMMELEC 22
-#define BAR_RESELEC 23
-#define BAR_IMMFIRE 24
-#define BAR_RESFIRE 25
-#define BAR_IMMCOLD 26
-#define BAR_RESCOLD 27
-#define BAR_RESPOIS 28
-#define BAR_RESNETH 29
-#define BAR_RESTIME 30
-#define BAR_DUSTROBE 31
-#define BAR_SHFIRE 32
-#define BAR_TOUKI 33
-#define BAR_SHHOLY 34
-#define BAR_EYEEYE 35
-#define BAR_BLESSED 36
-#define BAR_HEROISM 37
-#define BAR_BERSERK 38
-#define BAR_ATTKFIRE 39
-#define BAR_ATTKCOLD 40
-#define BAR_ATTKELEC 41
-#define BAR_ATTKACID 42
-#define BAR_ATTKPOIS 43
-#define BAR_ATTKCONF 44
-#define BAR_SENSEUNSEEN 45
-#define BAR_TELEPATHY 46
-#define BAR_REGENERATION 47
-#define BAR_INFRAVISION 48
-#define BAR_STEALTH 49
-#define BAR_SUPERSTEALTH 50
-#define BAR_RECALL 51
-#define BAR_ALTER 52
-#define BAR_SHCOLD 53
-#define BAR_SHELEC 54
-#define BAR_SHSHADOW 55
-#define BAR_MIGHT 56
-#define BAR_BUILD 57
-#define BAR_ANTIMULTI 58
-#define BAR_ANTITELE 59
-#define BAR_ANTIMAGIC 60
-#define BAR_PATIENCE 61
-#define BAR_REVENGE 62
-#define BAR_RUNESWORD 63
-#define BAR_VAMPILIC 64
-#define BAR_CURE 65
-#define BAR_ESP_EVIL 66
+#define BAR_TSUYOSHI 0      /*!< 下部ステータス表示: オクレ兄さん状態 */
+#define BAR_HALLUCINATION 1 /*!< 下部ステータス表示: 幻覚 */
+#define BAR_BLINDNESS 2     /*!< 下部ステータス表示: 盲目 */
+#define BAR_PARALYZE 3      /*!< 下部ステータス表示: 麻痺 */
+#define BAR_CONFUSE 4       /*!< 下部ステータス表示: 混乱 */
+#define BAR_POISONED 5      /*!< 下部ステータス表示: 毒 */
+#define BAR_AFRAID 6        /*!< 下部ステータス表示: 恐怖 */
+#define BAR_LEVITATE 7      /*!< 下部ステータス表示: 浮遊 */
+#define BAR_REFLECTION 8    /*!< 下部ステータス表示: 反射 */
+#define BAR_PASSWALL 9      /*!< 下部ステータス表示: 壁抜け */
+#define BAR_WRAITH 10       /*!< 下部ステータス表示: 幽体化 */
+#define BAR_PROTEVIL 11     /*!< 下部ステータス表示: 対邪悪結界 */
+#define BAR_KAWARIMI 12     /*!< 下部ステータス表示: 変わり身 */
+#define BAR_MAGICDEFENSE 13 /*!< 下部ステータス表示: 魔法の鎧 */
+#define BAR_EXPAND 14       /*!< 下部ステータス表示: 横伸び */
+#define BAR_STONESKIN 15    /*!< 下部ステータス表示: 石肌化 */
+#define BAR_MULTISHADOW 16  /*!< 下部ステータス表示: 影分身 */
+#define BAR_REGMAGIC 17     /*!< 下部ステータス表示: 魔法防御 */
+#define BAR_ULTIMATE 18     /*!< 下部ステータス表示: 究極の耐性 */
+#define BAR_INVULN 19       /*!< 下部ステータス表示: 無敵化 */
+#define BAR_IMMACID 20      /*!< 下部ステータス表示: 酸免疫 */
+#define BAR_RESACID 21      /*!< 下部ステータス表示: 酸耐性 */
+#define BAR_IMMELEC 22      /*!< 下部ステータス表示: 電撃免疫 */
+#define BAR_RESELEC 23      /*!< 下部ステータス表示: 電撃耐性 */
+#define BAR_IMMFIRE 24      /*!< 下部ステータス表示: 火炎免疫 */
+#define BAR_RESFIRE 25      /*!< 下部ステータス表示: 火炎耐性 */
+#define BAR_IMMCOLD 26      /*!< 下部ステータス表示: 冷気免疫 */
+#define BAR_RESCOLD 27      /*!< 下部ステータス表示: 冷気耐性 */
+#define BAR_RESPOIS 28      /*!< 下部ステータス表示: 毒耐性 */
+#define BAR_RESNETH 29      /*!< 下部ステータス表示: 地獄耐性 */
+#define BAR_RESTIME 30      /*!< 下部ステータス表示: 時間逆転耐性 */
+#define BAR_DUSTROBE 31     /*!< 下部ステータス表示: 破片オーラ */
+#define BAR_SHFIRE 32       /*!< 下部ステータス表示: 火炎オーラ */
+#define BAR_TOUKI 33        /*!< 下部ステータス表示: 闘気 */
+#define BAR_SHHOLY 34       /*!< 下部ステータス表示: 聖なるオーラ */
+#define BAR_EYEEYE 35       /*!< 下部ステータス表示: 目には目を */
+#define BAR_BLESSED 36      /*!< 下部ステータス表示: 祝福 */
+#define BAR_HEROISM 37      /*!< 下部ステータス表示: 士気高揚 */
+#define BAR_BERSERK 38      /*!< 下部ステータス表示: 狂戦士化 */
+#define BAR_ATTKFIRE 39     /*!< 下部ステータス表示: 焼棄スレイ */
+#define BAR_ATTKCOLD 40     /*!< 下部ステータス表示: 冷凍スレイ */
+#define BAR_ATTKELEC 41     /*!< 下部ステータス表示: 電撃スレイ */
+#define BAR_ATTKACID 42     /*!< 下部ステータス表示: 溶解スレイ */
+#define BAR_ATTKPOIS 43     /*!< 下部ステータス表示: 毒殺スレイ */
+#define BAR_ATTKCONF 44     /*!< 下部ステータス表示: 混乱打撃 */
+#define BAR_SENSEUNSEEN 45  /*!< 下部ステータス表示: 透明視 */
+#define BAR_TELEPATHY 46    /*!< 下部ステータス表示: テレパシー */
+#define BAR_REGENERATION 47 /*!< 下部ステータス表示: 急回復 */
+#define BAR_INFRAVISION 48  /*!< 下部ステータス表示: 赤外線視力 */
+#define BAR_STEALTH 49      /*!< 下部ステータス表示: 隠密 */
+#define BAR_SUPERSTEALTH 50 /*!< 下部ステータス表示: 超隠密 */
+#define BAR_RECALL 51       /*!< 下部ステータス表示: 帰還待ち */
+#define BAR_ALTER 52        /*!< 下部ステータス表示: 現実変容待ち */
+#define BAR_SHCOLD 53       /*!< 下部ステータス表示: 冷気オーラ */
+#define BAR_SHELEC 54       /*!< 下部ステータス表示: 電撃オーラ */
+#define BAR_SHSHADOW 55     /*!< 下部ステータス表示: 影のオーラ */
+#define BAR_MIGHT 56        /*!< 下部ステータス表示: 腕力強化 */
+#define BAR_BUILD 57        /*!< 下部ステータス表示: 肉体強化 */
+#define BAR_ANTIMULTI 58    /*!< 下部ステータス表示: 反増殖 */
+#define BAR_ANTITELE 59     /*!< 下部ステータス表示: 反テレポート */
+#define BAR_ANTIMAGIC 60    /*!< 下部ステータス表示: 反魔法 */
+#define BAR_PATIENCE 61     /*!< 下部ステータス表示: 我慢 */
+#define BAR_REVENGE 62      /*!< 下部ステータス表示: 宣告 */
+#define BAR_RUNESWORD 63    /*!< 下部ステータス表示: 魔剣化 */
+#define BAR_VAMPILIC 64     /*!< 下部ステータス表示: 吸血 */
+#define BAR_CURE 65         /*!< 下部ステータス表示: 回復 */
+#define BAR_ESP_EVIL 66     /*!< 下部ステータス表示: 邪悪感知 */
 
 static struct {
 	byte attr;
