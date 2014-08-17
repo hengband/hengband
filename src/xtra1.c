@@ -101,8 +101,13 @@ s16b modify_stat_value(int value, int amount)
 
 
 
-/*
+/*!
+ * @brief 画面左の能力値表示を行うために指定位置から13キャラ分を空白消去後指定のメッセージを明るい青で描画する /
  * Print character info at given row, column in a 13 char field
+ * @param info 表示文字列
+ * @param row 描画列
+ * @param col 描画行
+ * @return なし
  */
 static void prt_field(cptr info, int row, int col)
 {
@@ -114,8 +119,10 @@ static void prt_field(cptr info, int row, int col)
 }
 
 
-/*
- *  Whether daytime or not
+/*!
+ * @brief ゲーム時間が日中かどうかを返す /
+ * Whether daytime or not
+ * @param 日中ならばTRUE、夜ならばFALSE
  */
 bool is_daytime(void)
 {
@@ -126,8 +133,12 @@ bool is_daytime(void)
 		return FALSE;
 }
 
-/*
+/*!
+ * @brief 現在の日数、時刻を返す /
  * Extract day, hour, min
+ * @param day 日数を返すための参照ポインタ
+ * @param hour 時数を返すための参照ポインタ
+ * @param min 分数を返すための参照ポインタ
  */
 void extract_day_hour_min(int *day, int *hour, int *min)
 {
@@ -150,8 +161,10 @@ void extract_day_hour_min(int *day, int *hour, int *min)
 	*min = (1440 * turn_in_today / A_DAY) % 60;
 }
 
-/*
+/*!
+ * @brief ゲーム時刻を表示する /
  * Print time
+ * @return なし
  */
 void prt_time(void)
 {
@@ -169,7 +182,10 @@ void prt_time(void)
 	c_put_str(TERM_WHITE, format("%2d:%02d", hour, min), ROW_DAY, COL_DAY+7);
 }
 
-
+/*!
+ * @brief 現在のマップ名を返す /
+ * @return マップ名の文字列参照ポインタ
+ */
 cptr map_name(void)
 {
 	if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)
@@ -187,8 +203,9 @@ cptr map_name(void)
 		return d_name+d_info[dungeon_type].name;
 }
 
-/*
- * Print dungeon
+/*!
+ * @brief 現在のマップ名を描画する / Print dungeon
+ * @return なし
  */
 static void prt_dungeon(void)
 {
@@ -207,8 +224,6 @@ static void prt_dungeon(void)
 	c_put_str(TERM_L_UMBER, format("%s",dungeon_name),
 		  ROW_DUNGEON, col);
 }
-
-
 
 
 /*
