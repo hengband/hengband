@@ -1,23 +1,22 @@
-﻿
-/* File: misc.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+﻿/*!
+ * @file xtra1.c
+ * @brief 雑多なその他の処理1 / misc code
+ * @date 2014/08/17
+ * @author
+ * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
+ * This software may be copied and distributed for educational, research, and\n
+ * not for profit purposes provided that this copyright and statement are\n
+ * included in all such copies.\n
+ * 2014 Deskull rearranged comment for Doxygen.
  */
-
-/* Purpose: misc code */
 
 #include "angband.h"
 
-
-
-
-/*
- * Converts stat num into a six-char (right justified) string
+/*!
+ * @brief 現在の修正後能力値を3～17及び18/xxx形式に変換する / Converts stat num into a six-char (right justified) string
+ * @param val 能力値
+ * @param out_val 出力先文字列ポインタ
+ * @return なし
  */
 void cnv_stat(int val, char *out_val)
 {
@@ -47,16 +46,19 @@ void cnv_stat(int val, char *out_val)
 	}
 }
 
-
-
-/*
+/*!
+ * @brief 能力値現在値から3～17及び18/xxx様式に基づく加減算を行う。
  * Modify a stat value by a "modifier", return new value
- *
+ * @param value 現在値
+ * @param amount 加減算値
+ * @return 加減算後の値
+ * @details
+ * <pre>
  * Stats go up: 3,4,...,17,18,18/10,18/20,...,18/220
  * Or even: 18/13, 18/23, 18/33, ..., 18/220
- *
  * Stats go down: 18/220, 18/210,..., 18/10, 18, 17, ..., 3
  * Or even: 18/13, 18/03, 18, 17, ..., 3
+ * </pre>
  */
 s16b modify_stat_value(int value, int amount)
 {
