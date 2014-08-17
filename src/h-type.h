@@ -55,29 +55,17 @@ typedef double real;      /*!< doubleをreal型として定義 / Since float's a
  */
 typedef int errr;
 
-/*
- * Hack -- prevent problems with non-MACINTOSH
- */
 #undef uint
-#define uint uint_hack
+#define uint uint_hack /*!< 非マッキントッシュ環境で重複を避けるためのuint_hack型定義 / Hack -- prevent problems with non-MACINTOSH */
 
-/*
- * Hack -- prevent problems with MSDOS and WINDOWS
- */
 #undef huge
-#define huge huge_hack
+#define huge huge_hack /*!< MSDOS及びWINDOWS環境で重複を避けるためのhuge_hack定義 / Hack -- prevent problems with MSDOS and WINDOWS */
 
-/*
- * Hack -- prevent problems with AMIGA
- */
 #undef byte
-#define byte byte_hack
+#define byte byte_hack /*!< AMIGA環境で重複を避けるためのbyte_hack定義 / Hack -- prevent problems with AMIGA */
 
-/*
- * Hack -- prevent problems with C++
- */
 #undef bool
-#define bool bool_hack
+#define bool bool_hack /*!< C++環境で重複を避けるためのbool_hack定義 Hack -- prevent problems with C++ */
 
 
 /* Note that "signed char" is not always "defined" */
@@ -85,28 +73,16 @@ typedef int errr;
 /* A signed byte of memory */
 /* typedef signed char syte; */
 
-/* Note that unsigned values can cause math problems */
-/* An unsigned byte of memory */
-typedef unsigned char byte;
-
-/* Note that a bool is smaller than a full "int" */
-/* Simple True/False type */
-typedef char bool;
-
-
-/* A signed, standard integer (at least 2 bytes) */
-typedef int sint;
-
-/* An unsigned, "standard" integer (often pre-defined) */
-typedef unsigned int uint;
-
+typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note that unsigned values can cause math problems / An unsigned byte of memory */
+typedef char bool; /*!< bool型をcharとして定義 / Note that a bool is smaller than a full "int" / Simple True/False type */
+typedef int sint; /*!< sint型をintとして定義 / A signed, standard integer (at least 2 bytes) */
+typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
 
 /* The largest possible signed integer (pre-defined) */
 /* typedef long long; */
 
 /* The largest possible unsigned integer */
 typedef unsigned long huge;
-
 
 /* Signed/Unsigned 16 bit value */
 #ifdef HAVE_STDINT_H
