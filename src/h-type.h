@@ -1,43 +1,40 @@
-﻿/* File: h-type.h */
-
-#ifndef INCLUDED_H_TYPE_H
-#define INCLUDED_H_TYPE_H
-
-/*
+﻿/*!
+ * @file h-type.h
+ * @brief ゲーム中に用いる変数型定義 /
  * Basic "types".
- *
+ * @date 2014/08/17
+ * @author
+ * 不明(変愚蛮怒スタッフ？)
+ * @details
+ * <pre>
  * Note the attempt to make all basic types have 4 letters.
  * This improves readibility and standardizes the code.
- *
  * Likewise, all complex types are at least 4 letters.
  * Thus, almost every three letter word is a legal variable.
  * But beware of certain reserved words ('for' and 'if' and 'do').
- *
  * Note that the type used in structures for bit flags should be uint.
  * As long as these bit flags are sequential, they will be space smart.
- *
  * Note that on some machines, apparently "signed char" is illegal.
- *
  * It must be true that char/byte takes exactly 1 byte
  * It must be true that sind/uind takes exactly 2 bytes
  * It must be true that sbig/ubig takes exactly 4 bytes
- *
  * On Sparc's, a sint takes 4 bytes (2 is legal)
  * On Sparc's, a uint takes 4 bytes (2 is legal)
  * On Sparc's, a long takes 4 bytes (8 is legal)
  * On Sparc's, a huge takes 4 bytes (8 is legal)
  * On Sparc's, a vptr takes 4 bytes (8 is legal)
  * On Sparc's, a real takes 8 bytes (4 is legal)
- *
  * Note that some files have already been included by "h-include.h"
  * These include <stdio.h> and <sys/types>, which define some types
  * In particular, uint is defined so we do not have to define it
- *
  * Also, see <limits.h> for min/max values for sind, uind, long, huge
  * (SHRT_MIN, SHRT_MAX, USHRT_MAX, LONG_MIN, LONG_MAX, ULONG_MAX)
  * These limits should be verified and coded into "h-constant.h".
+ * </pre>
  */
 
+#ifndef INCLUDED_H_TYPE_H
+#define INCLUDED_H_TYPE_H
 
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
@@ -45,22 +42,18 @@
 
 /*** Special 4 letter names for some standard types ***/
 
-
-/* A standard pointer (to "void" because ANSI C says so) */
-typedef void *vptr;
-
-/* A simple pointer (to unmodifiable strings) */
-typedef const char *cptr;
+typedef void *vptr;       /*!< void型ポインタ定義 / A standard pointer (to "void" because ANSI C says so) */
+typedef const char *cptr; /*!< 文字列定数用ポインタ定義 / A simple pointer (to unmodifiable strings) */
+typedef double real;      /*!< doubleをreal型として定義 / Since float's are silly, hard code real numbers as doubles */
 
 
-/* Since float's are silly, hard code real numbers as doubles */
-typedef double real;
-
-
-/* Error codes for function return values */
-/* Success = 0, Failure = -N, Problem = +N */
+/*!
+ * @brief エラーコードの定義 / Error codes for function return values
+ * @details
+ * 一般に成功時0、失敗時負数、何らかの問題時整数とする。
+ * Success = 0, Failure = -N, Problem = +N 
+ */
 typedef int errr;
-
 
 /*
  * Hack -- prevent problems with non-MACINTOSH
