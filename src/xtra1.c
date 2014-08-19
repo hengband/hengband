@@ -487,12 +487,24 @@ static struct {
 };
 #endif
 
+/*!
+ * @brief 32ビット変数配列の指定位置のビットフラグを1にする。
+ * @param FLG フラグ位置(ビット)
+ * @return なし
+ */
 #define ADD_FLG(FLG) (bar_flags[FLG / 32] |= (1L << (FLG % 32)))
+
+/*!
+ * @brief 32ビット変数配列の指定位置のビットフラグが1かどうかを返す。
+ * @param FLG フラグ位置(ビット)
+ * @return 1ならば0以外を返す
+ */
 #define IS_FLG(FLG) (bar_flags[FLG / 32] & (1L << (FLG % 32)))
 
 
-/*
- *  Show status bar
+/*!
+ * @param 下部に状態表示を行う / Show status bar
+ * @return なし
  */
 static void prt_status(void)
 {
@@ -723,9 +735,9 @@ static void prt_status(void)
 }
 
 
-
-/*
- * Prints "title", including "wizard" or "winner" as needed.
+/*!
+ * @param プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
+ * @return なし
  */
 static void prt_title(void)
 {
@@ -778,8 +790,9 @@ static void prt_title(void)
 }
 
 
-/*
- * Prints level
+/*!
+ * @param プレイヤーのレベルを表示する / Prints level
+ * @return なし
  */
 static void prt_level(void)
 {
@@ -812,8 +825,9 @@ static void prt_level(void)
 }
 
 
-/*
- * Display the experience
+/*!
+ * @param プレイヤーの経験値を表示する / Display the experience
+ * @return なし
  */
 static void prt_exp(void)
 {
