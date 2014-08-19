@@ -879,8 +879,9 @@ static void prt_exp(void)
 	}
 }
 
-/*
- * Prints current gold
+/*!
+ * @param プレイヤーの所持金を表示する / Prints current gold
+ * @return なし
  */
 static void prt_gold(void)
 {
@@ -891,9 +892,9 @@ static void prt_gold(void)
 }
 
 
-
-/*
- * Prints current AC
+/*!
+ * @param プレイヤーのACを表示する / Prints current AC
+ * @return なし
  */
 static void prt_ac(void)
 {
@@ -913,8 +914,9 @@ static void prt_ac(void)
 }
 
 
-/*
- * Prints Cur/Max hit points
+/*!
+ * @param プレイヤーのHPを表示する / Prints Cur/Max hit points
+ * @return なし
  */
 static void prt_hp(void)
 {
@@ -957,8 +959,9 @@ static void prt_hp(void)
 }
 
 
-/*
- * Prints players max/cur spell points
+/*!
+ * @param プレイヤーのMPを表示する / Prints players max/cur spell points
+ * @return なし
  */
 static void prt_sp(void)
 {
@@ -1003,8 +1006,9 @@ static void prt_sp(void)
 }
 
 
-/*
- * Prints depth in stat area
+/*!
+ * @param 現在のフロアの深さを表示する / Prints depth in stat area
+ * @return なし
  */
 static void prt_depth(void)
 {
@@ -1051,8 +1055,9 @@ static void prt_depth(void)
 }
 
 
-/*
- * Prints status of hunger
+/*!
+ * @param プレイヤーの空腹状態を表示する / Prints status of hunger
+ * @return なし
  */
 static void prt_hunger(void)
 {
@@ -1096,10 +1101,11 @@ static void prt_hunger(void)
 }
 
 
-/*
- * Prints Searching, Resting, Paralysis, or 'count' status
+/*!
+ * @param プレイヤーの行動状態を表示する / Prints Searching, Resting, Paralysis, or 'count' status
+ * @return なし
+ * @details
  * Display is always exactly 10 characters wide (see below)
- *
  * This function was a major bottleneck when resting, so a lot of
  * the text formatting code was optimized in place below.
  */
@@ -1249,8 +1255,9 @@ static void prt_state(void)
 }
 
 
-/*
- * Prints the speed of a character.			-CJS-
+/*!
+ * @param プレイヤーの行動速度を表示する / Prints the speed of a character.			-CJS-
+ * @return なし
  */
 static void prt_speed(void)
 {
