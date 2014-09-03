@@ -1838,8 +1838,9 @@ void print_monster_list(int x, int y, int max_lines){
 	}
 }
 
-/*
- * Hack -- display monster list in sub-windows
+/*!
+ * @briefs 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
+ * @return なし
  */
 static void fix_monster_list(void)
 {
@@ -1876,9 +1877,10 @@ static void fix_monster_list(void)
 
 
 
-
-/*
+/*!
+ * @briefs 現在の装備品をサブウィンドウに表示する / 
  * Hack -- display equipment in sub-windows
+ * @return なし
  */
 static void fix_equip(void)
 {
@@ -1910,8 +1912,10 @@ static void fix_equip(void)
 }
 
 
-/*
- * Hack -- display equipment in sub-windows
+/*!
+ * @briefs 現在の習得済魔法をサブウィンドウに表示する / 
+ * Hack -- display spells in sub-windows
+ * @return なし
  */
 static void fix_spell(void)
 {
@@ -1943,8 +1947,10 @@ static void fix_spell(void)
 }
 
 
-/*
+/*!
+ * @briefs 現在のプレイヤーステータスをサブウィンドウに表示する / 
  * Hack -- display character in sub-windows
+ * @return なし
  */
 static void fix_player(void)
 {
@@ -1977,12 +1983,11 @@ static void fix_player(void)
 	}
 }
 
-
-
-/*
+/*!
+ * @briefs ゲームメッセージ履歴をサブウィンドウに表示する / 
  * Hack -- display recent messages in sub-windows
- *
  * XXX XXX XXX Adjust for width and split messages
+ * @return なし
  */
 static void fix_message(void)
 {
@@ -2029,9 +2034,12 @@ static void fix_message(void)
 }
 
 
-/*
+/*!
+ * @briefs 簡易マップをサブウィンドウに表示する / 
  * Hack -- display overhead view in sub-windows
- *
+ * XXX XXX XXX Adjust for width and split messages
+ * @return なし
+ * @details
  * Note that the "player" symbol does NOT appear on the map.
  */
 static void fix_overhead(void)
@@ -2072,8 +2080,10 @@ static void fix_overhead(void)
 }
 
 
-/*
+/*!
+ * @briefs ダンジョンの地形をサブウィンドウに表示する / 
  * Hack -- display dungeon view in sub-windows
+ * @return なし
  */
 static void fix_dungeon(void)
 {
@@ -2105,8 +2115,10 @@ static void fix_dungeon(void)
 }
 
 
-/*
- * Hack -- display monster recall in sub-windows
+/*!
+ * @briefs モンスターの思い出をサブウィンドウに表示する / 
+ * Hack -- display dungeon view in sub-windows
+ * @return なし
  */
 static void fix_monster(void)
 {
@@ -2138,8 +2150,10 @@ static void fix_monster(void)
 }
 
 
-/*
+/*!
+ * @briefs ベースアイテム情報をサブウィンドウに表示する / 
  * Hack -- display object recall in sub-windows
+ * @return なし
  */
 static void fix_object(void)
 {
