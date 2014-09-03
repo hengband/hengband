@@ -1326,6 +1326,10 @@ static void prt_speed(void)
 }
 
 
+/*!
+ * @param プレイヤーの呪文学習可能状態を表示する
+ * @return なし
+ */
 static void prt_study(void)
 {
 	int wid, hgt, row_study, col_study;
@@ -1345,6 +1349,10 @@ static void prt_study(void)
 }
 
 
+/*!
+ * @param プレイヤーのものまね可能状態を表示する
+ * @return なし
+ */
 static void prt_imitation(void)
 {
 	int wid, hgt, row_study, col_study;
@@ -1369,7 +1377,10 @@ static void prt_imitation(void)
 	}
 }
 
-
+/*!
+ * @param プレイヤーの負傷状態を表示する
+ * @return なし
+ */
 static void prt_cut(void)
 {
 	int c = p_ptr->cut;
@@ -1409,7 +1420,10 @@ static void prt_cut(void)
 }
 
 
-
+/*!
+ * @param プレイヤーの朦朧状態を表示する
+ * @return なし
+ */
 static void prt_stun(void)
 {
 	int s = p_ptr->stun;
@@ -1434,7 +1448,12 @@ static void prt_stun(void)
 
 
 
-/*
+/*!
+ * @param モンスターの体力ゲージを表示する
+ * @param riding TRUEならば騎乗中のモンスターの体力、FALSEならターゲットモンスターの体力を表示する。表示位置は固定。
+ * @return なし
+ * @details
+ * <pre>
  * Redraw the "monster health bar"	-DRS-
  * Rather extensive modifications by	-BEN-
  *
@@ -1447,6 +1466,7 @@ static void prt_stun(void)
  * "health-o-meter").  Clear health bar if nothing is being tracked.
  * Auto-track current target monster when bored.  Note that the
  * health-bar stops tracking any monster that "disappears".
+ * </pre>
  */
 static void health_redraw(bool riding)
 {
