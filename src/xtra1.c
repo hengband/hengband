@@ -1603,8 +1603,9 @@ static void health_redraw(bool riding)
 
 
 
-/*
- * Display basic info (mostly left of map)
+/*!
+ * @param プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
+ * @return なし
  */
 static void prt_frame_basic(void)
 {
@@ -1654,8 +1655,9 @@ static void prt_frame_basic(void)
 }
 
 
-/*
- * Display extra info (mostly below map)
+/*!
+ * @param プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
+ * @return なし
  */
 static void prt_frame_extra(void)
 {
@@ -1681,8 +1683,9 @@ static void prt_frame_extra(void)
 }
 
 
-/*
- * Hack -- display inventory in sub-windows
+/*!
+ * @param サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
+ * @return なし
  */
 static void fix_inven(void)
 {
@@ -1714,13 +1717,21 @@ static void fix_inven(void)
 }
 
 
-/*
- * Print monster info in line
+/*!
+ * @briefs モンスターの現在数を一行で表現する / Print monster info in line
+ * @param x 表示列
+ * @param y 表示行
+ * @param m_ptr 思い出を表示するモンスター情報の参照ポインタ
+ * @param n_same モンスターの数の現在数
+ * @details
+ * <pre>
  * nnn X LV name
  *  nnn : number or unique(U) or wanted unique(W)
  *  X   : symbol of monster
  *  LV  : monster lv if known
  *  name: name of monster
+ * @return なし
+ * </pre>
  */
 static void print_monster_line(int x, int y, monster_type* m_ptr, int n_same){
 	char buf[256];
@@ -1763,9 +1774,12 @@ static void print_monster_line(int x, int y, monster_type* m_ptr, int n_same){
 	//Term_addstr(-1, TERM_WHITE, look_mon_desc(m_ptr, 0));
 }
 
- /*
-	max_lines : 最大何行描画するか．
-*/
+/*!
+ * @briefs モンスターの出現リストを表示する / Print monster info in line
+ * @param x 表示列
+ * @param y 表示行
+ * @param max_lines 最大何行描画するか
+ */
 void print_monster_list(int x, int y, int max_lines){
 	int line = y;
 	monster_type* last_mons = NULL;
@@ -1823,6 +1837,7 @@ void print_monster_list(int x, int y, int max_lines){
 		if(last_mons)print_monster_line(x, line++, last_mons, n_same);
 	}
 }
+
 /*
  * Hack -- display monster list in sub-windows
  */
