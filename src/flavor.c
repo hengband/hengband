@@ -2509,6 +2509,10 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 				t = object_desc_chr(t, '/');
 				t = object_desc_num(t, percent / 100);
 				t = object_desc_chr(t, '.');
+                if(percent % 100 < 10)
+                {
+				    t = object_desc_chr(t, '0');
+                }
 				t = object_desc_num(t, percent % 100);
 				t = object_desc_str(t, show_ammo_detail ? "% crit" : "%");
 			}

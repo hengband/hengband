@@ -332,7 +332,6 @@ static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 		if (int_outof(r_ptr, 150)) f5 &= ~(RF5_BO_PLAS);
 		if (int_outof(r_ptr, 150)) f5 &= ~(RF5_BO_ICEE);
 		if (int_outof(r_ptr, 150)) f5 &= ~(RF5_MISSILE);
-		if (int_outof(r_ptr, 150)) f4 &= ~(RF4_SHOOT);
 	}
 
 	if (smart & (SM_IMM_FREE))
