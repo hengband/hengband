@@ -503,7 +503,7 @@ static struct {
 
 
 /*!
- * @param 下部に状態表示を行う / Show status bar
+ * @briefs 下部に状態表示を行う / Show status bar
  * @return なし
  */
 static void prt_status(void)
@@ -736,7 +736,7 @@ static void prt_status(void)
 
 
 /*!
- * @param プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
+ * @briefs プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
  * @return なし
  */
 static void prt_title(void)
@@ -791,7 +791,7 @@ static void prt_title(void)
 
 
 /*!
- * @param プレイヤーのレベルを表示する / Prints level
+ * @briefs プレイヤーのレベルを表示する / Prints level
  * @return なし
  */
 static void prt_level(void)
@@ -826,7 +826,7 @@ static void prt_level(void)
 
 
 /*!
- * @param プレイヤーの経験値を表示する / Display the experience
+ * @briefs プレイヤーの経験値を表示する / Display the experience
  * @return なし
  */
 static void prt_exp(void)
@@ -880,7 +880,7 @@ static void prt_exp(void)
 }
 
 /*!
- * @param プレイヤーの所持金を表示する / Prints current gold
+ * @briefs プレイヤーの所持金を表示する / Prints current gold
  * @return なし
  */
 static void prt_gold(void)
@@ -893,7 +893,7 @@ static void prt_gold(void)
 
 
 /*!
- * @param プレイヤーのACを表示する / Prints current AC
+ * @briefs プレイヤーのACを表示する / Prints current AC
  * @return なし
  */
 static void prt_ac(void)
@@ -915,7 +915,7 @@ static void prt_ac(void)
 
 
 /*!
- * @param プレイヤーのHPを表示する / Prints Cur/Max hit points
+ * @briefs プレイヤーのHPを表示する / Prints Cur/Max hit points
  * @return なし
  */
 static void prt_hp(void)
@@ -960,7 +960,7 @@ static void prt_hp(void)
 
 
 /*!
- * @param プレイヤーのMPを表示する / Prints players max/cur spell points
+ * @briefs プレイヤーのMPを表示する / Prints players max/cur spell points
  * @return なし
  */
 static void prt_sp(void)
@@ -1007,7 +1007,7 @@ static void prt_sp(void)
 
 
 /*!
- * @param 現在のフロアの深さを表示する / Prints depth in stat area
+ * @briefs 現在のフロアの深さを表示する / Prints depth in stat area
  * @return なし
  */
 static void prt_depth(void)
@@ -1056,7 +1056,7 @@ static void prt_depth(void)
 
 
 /*!
- * @param プレイヤーの空腹状態を表示する / Prints status of hunger
+ * @briefs プレイヤーの空腹状態を表示する / Prints status of hunger
  * @return なし
  */
 static void prt_hunger(void)
@@ -1102,7 +1102,7 @@ static void prt_hunger(void)
 
 
 /*!
- * @param プレイヤーの行動状態を表示する / Prints Searching, Resting, Paralysis, or 'count' status
+ * @briefs プレイヤーの行動状態を表示する / Prints Searching, Resting, Paralysis, or 'count' status
  * @return なし
  * @details
  * Display is always exactly 10 characters wide (see below)
@@ -1256,7 +1256,7 @@ static void prt_state(void)
 
 
 /*!
- * @param プレイヤーの行動速度を表示する / Prints the speed of a character.			-CJS-
+ * @briefs プレイヤーの行動速度を表示する / Prints the speed of a character.			-CJS-
  * @return なし
  */
 static void prt_speed(void)
@@ -1327,7 +1327,7 @@ static void prt_speed(void)
 
 
 /*!
- * @param プレイヤーの呪文学習可能状態を表示する
+ * @briefs プレイヤーの呪文学習可能状態を表示する
  * @return なし
  */
 static void prt_study(void)
@@ -1350,7 +1350,7 @@ static void prt_study(void)
 
 
 /*!
- * @param プレイヤーのものまね可能状態を表示する
+ * @briefs プレイヤーのものまね可能状態を表示する
  * @return なし
  */
 static void prt_imitation(void)
@@ -1378,7 +1378,7 @@ static void prt_imitation(void)
 }
 
 /*!
- * @param プレイヤーの負傷状態を表示する
+ * @briefs プレイヤーの負傷状態を表示する
  * @return なし
  */
 static void prt_cut(void)
@@ -1421,7 +1421,7 @@ static void prt_cut(void)
 
 
 /*!
- * @param プレイヤーの朦朧状態を表示する
+ * @briefs プレイヤーの朦朧状態を表示する
  * @return なし
  */
 static void prt_stun(void)
@@ -1449,7 +1449,7 @@ static void prt_stun(void)
 
 
 /*!
- * @param モンスターの体力ゲージを表示する
+ * @briefs モンスターの体力ゲージを表示する
  * @param riding TRUEならば騎乗中のモンスターの体力、FALSEならターゲットモンスターの体力を表示する。表示位置は固定。
  * @return なし
  * @details
@@ -1604,7 +1604,7 @@ static void health_redraw(bool riding)
 
 
 /*!
- * @param プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
+ * @briefs プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
  * @return なし
  */
 static void prt_frame_basic(void)
@@ -1656,7 +1656,7 @@ static void prt_frame_basic(void)
 
 
 /*!
- * @param プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
+ * @briefs プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
  * @return なし
  */
 static void prt_frame_extra(void)
@@ -1684,7 +1684,7 @@ static void prt_frame_extra(void)
 
 
 /*!
- * @param サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
+ * @briefs サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
  * @return なし
  */
 static void fix_inven(void)
