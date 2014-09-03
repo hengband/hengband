@@ -2185,10 +2185,13 @@ static void fix_object(void)
 }
 
 
-/*
+
+/*!
+ * @briefs プレイヤーの現在学習可能な魔法数を計算し、増減に応じて魔法の忘却、再学習を処置する。 /
  * Calculate number of spells player should have, and forget,
  * or remember, spells until that number is properly reflected.
- *
+ * @return なし
+ * @details
  * Note that this function induces various "status" messages,
  * which must be bypasses until the character is created.
  */
@@ -2537,11 +2540,12 @@ static void calc_spells(void)
 	}
 }
 
-
-/*
+/*!
+ * @briefs プレイヤーの最大MPを計算する /
  * Calculate maximum mana.  You do not need to know any spells.
  * Note that mana is lowered by heavy (or inappropriate) armor.
- *
+ * @return なし
+ * @details
  * This function induces status messages.
  */
 static void calc_mana(void)
@@ -2856,9 +2860,12 @@ static void calc_mana(void)
 
 
 
-/*
+/*!
+ * @briefs プレイヤーの最大HPを計算する /
  * Calculate the players (maximal) hit points
  * Adjust current hitpoints if necessary
+ * @return なし
+ * @details
  */
 static void calc_hitpoints(void)
 {
@@ -2937,13 +2944,11 @@ static void calc_hitpoints(void)
 	}
 }
 
-
-
-/*
- * Extract and set the current "lite radius"
- *
+/*!
+ * @brief プレイヤーの光源半径を計算する / Extract and set the current "lite radius"
+ * @return なし
+ * @details
  * SWD: Experimental modification: multiple light sources have additive effect.
- *
  */
 static void calc_torch(void)
 {
