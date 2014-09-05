@@ -3025,9 +3025,10 @@ static void calc_torch(void)
 }
 
 
-
-/*
+/*!
+ * @brief プレイヤーの所持重量制限を計算する /
  * Computes current weight limit.
+ * @return 制限重量(ポンド)
  */
 u32b weight_limit(void)
 {
@@ -3041,12 +3042,21 @@ u32b weight_limit(void)
 	return i;
 }
 
-
+/*!
+ * @brief プレイヤーが現在右手/左手に武器を持っているか判定する /
+ * @param i 判定する手のID(右手:0 左手:1)
+ * @return 持っているならばTRUE
+ */
 bool buki_motteruka(int i)
 {
 	return ((inventory[i].k_idx && object_is_melee_weapon(&inventory[i])) ? TRUE : FALSE);
 }
 
+/*!
+ * @brief 射撃武器がプレイヤーにとって重すぎるかどうかの判定 /
+ * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
+ * @return 重すぎるならばTRUE
+ */
 bool is_heavy_shoot(object_type *o_ptr)
 {
 	int hold = adj_str_hold[p_ptr->stat_ind[A_STR]];
