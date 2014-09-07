@@ -6271,7 +6271,11 @@ void handle_stuff(void)
 	if (p_ptr->window) window_stuff();
 }
 
-
+/*!
+ * @brief プレイヤーの現在開いている手の状態を返す
+ * @param riding_control 乗馬中により片手を必要としている状態ならばTRUEを返す。
+ * @return 開いている手のビットフラグ
+ */
 s16b empty_hands(bool riding_control)
 {
 	s16b status = EMPTY_HAND_NONE;
@@ -6289,6 +6293,10 @@ s16b empty_hands(bool riding_control)
 }
 
 
+/*!
+ * @brief プレイヤーが防具重量制限のある職業時にペナルティを受ける状態にあるかどうかを返す。
+ * @return ペナルティが適用されるならばTRUE。
+ */
 bool heavy_armor(void)
 {
 	u16b monk_arm_wgt = 0;
@@ -6307,6 +6315,9 @@ bool heavy_armor(void)
 	return (monk_arm_wgt > (100 + (p_ptr->lev * 4)));
 }
 
+/*!
+ * @brief 実ゲームプレイ時間を更新する
+ */
 void update_playtime(void)
 {
 	/* Check if the game has started */
