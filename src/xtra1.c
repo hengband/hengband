@@ -503,7 +503,7 @@ static struct {
 
 
 /*!
- * @briefs 下部に状態表示を行う / Show status bar
+ * @brief 下部に状態表示を行う / Show status bar
  * @return なし
  */
 static void prt_status(void)
@@ -736,7 +736,7 @@ static void prt_status(void)
 
 
 /*!
- * @briefs プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
+ * @brief プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
  * @return なし
  */
 static void prt_title(void)
@@ -791,7 +791,7 @@ static void prt_title(void)
 
 
 /*!
- * @briefs プレイヤーのレベルを表示する / Prints level
+ * @brief プレイヤーのレベルを表示する / Prints level
  * @return なし
  */
 static void prt_level(void)
@@ -826,7 +826,7 @@ static void prt_level(void)
 
 
 /*!
- * @briefs プレイヤーの経験値を表示する / Display the experience
+ * @brief プレイヤーの経験値を表示する / Display the experience
  * @return なし
  */
 static void prt_exp(void)
@@ -880,7 +880,7 @@ static void prt_exp(void)
 }
 
 /*!
- * @briefs プレイヤーの所持金を表示する / Prints current gold
+ * @brief プレイヤーの所持金を表示する / Prints current gold
  * @return なし
  */
 static void prt_gold(void)
@@ -893,7 +893,7 @@ static void prt_gold(void)
 
 
 /*!
- * @briefs プレイヤーのACを表示する / Prints current AC
+ * @brief プレイヤーのACを表示する / Prints current AC
  * @return なし
  */
 static void prt_ac(void)
@@ -915,7 +915,7 @@ static void prt_ac(void)
 
 
 /*!
- * @briefs プレイヤーのHPを表示する / Prints Cur/Max hit points
+ * @brief プレイヤーのHPを表示する / Prints Cur/Max hit points
  * @return なし
  */
 static void prt_hp(void)
@@ -960,7 +960,7 @@ static void prt_hp(void)
 
 
 /*!
- * @briefs プレイヤーのMPを表示する / Prints players max/cur spell points
+ * @brief プレイヤーのMPを表示する / Prints players max/cur spell points
  * @return なし
  */
 static void prt_sp(void)
@@ -1007,7 +1007,7 @@ static void prt_sp(void)
 
 
 /*!
- * @briefs 現在のフロアの深さを表示する / Prints depth in stat area
+ * @brief 現在のフロアの深さを表示する / Prints depth in stat area
  * @return なし
  */
 static void prt_depth(void)
@@ -1056,7 +1056,7 @@ static void prt_depth(void)
 
 
 /*!
- * @briefs プレイヤーの空腹状態を表示する / Prints status of hunger
+ * @brief プレイヤーの空腹状態を表示する / Prints status of hunger
  * @return なし
  */
 static void prt_hunger(void)
@@ -1102,7 +1102,7 @@ static void prt_hunger(void)
 
 
 /*!
- * @briefs プレイヤーの行動状態を表示する / Prints Searching, Resting, Paralysis, or 'count' status
+ * @brief プレイヤーの行動状態を表示する / Prints Searching, Resting, Paralysis, or 'count' status
  * @return なし
  * @details
  * Display is always exactly 10 characters wide (see below)
@@ -1256,7 +1256,7 @@ static void prt_state(void)
 
 
 /*!
- * @briefs プレイヤーの行動速度を表示する / Prints the speed of a character.			-CJS-
+ * @brief プレイヤーの行動速度を表示する / Prints the speed of a character.			-CJS-
  * @return なし
  */
 static void prt_speed(void)
@@ -1327,7 +1327,7 @@ static void prt_speed(void)
 
 
 /*!
- * @briefs プレイヤーの呪文学習可能状態を表示する
+ * @brief プレイヤーの呪文学習可能状態を表示する
  * @return なし
  */
 static void prt_study(void)
@@ -1350,7 +1350,7 @@ static void prt_study(void)
 
 
 /*!
- * @briefs プレイヤーのものまね可能状態を表示する
+ * @brief プレイヤーのものまね可能状態を表示する
  * @return なし
  */
 static void prt_imitation(void)
@@ -1378,7 +1378,7 @@ static void prt_imitation(void)
 }
 
 /*!
- * @briefs プレイヤーの負傷状態を表示する
+ * @brief プレイヤーの負傷状態を表示する
  * @return なし
  */
 static void prt_cut(void)
@@ -1421,7 +1421,7 @@ static void prt_cut(void)
 
 
 /*!
- * @briefs プレイヤーの朦朧状態を表示する
+ * @brief プレイヤーの朦朧状態を表示する
  * @return なし
  */
 static void prt_stun(void)
@@ -1449,7 +1449,7 @@ static void prt_stun(void)
 
 
 /*!
- * @briefs モンスターの体力ゲージを表示する
+ * @brief モンスターの体力ゲージを表示する
  * @param riding TRUEならば騎乗中のモンスターの体力、FALSEならターゲットモンスターの体力を表示する。表示位置は固定。
  * @return なし
  * @details
@@ -1604,7 +1604,7 @@ static void health_redraw(bool riding)
 
 
 /*!
- * @briefs プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
+ * @brief プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
  * @return なし
  */
 static void prt_frame_basic(void)
@@ -1656,7 +1656,7 @@ static void prt_frame_basic(void)
 
 
 /*!
- * @briefs プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
+ * @brief プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
  * @return なし
  */
 static void prt_frame_extra(void)
@@ -1684,7 +1684,7 @@ static void prt_frame_extra(void)
 
 
 /*!
- * @briefs サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
+ * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
  * @return なし
  */
 static void fix_inven(void)
@@ -1718,7 +1718,7 @@ static void fix_inven(void)
 
 
 /*!
- * @briefs モンスターの現在数を一行で表現する / Print monster info in line
+ * @brief モンスターの現在数を一行で表現する / Print monster info in line
  * @param x 表示列
  * @param y 表示行
  * @param m_ptr 思い出を表示するモンスター情報の参照ポインタ
@@ -1775,7 +1775,7 @@ static void print_monster_line(int x, int y, monster_type* m_ptr, int n_same){
 }
 
 /*!
- * @briefs モンスターの出現リストを表示する / Print monster info in line
+ * @brief モンスターの出現リストを表示する / Print monster info in line
  * @param x 表示列
  * @param y 表示行
  * @param max_lines 最大何行描画するか
@@ -1839,7 +1839,7 @@ void print_monster_list(int x, int y, int max_lines){
 }
 
 /*!
- * @briefs 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
+ * @brief 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
  * @return なし
  */
 static void fix_monster_list(void)
@@ -1878,7 +1878,7 @@ static void fix_monster_list(void)
 
 
 /*!
- * @briefs 現在の装備品をサブウィンドウに表示する / 
+ * @brief 現在の装備品をサブウィンドウに表示する / 
  * Hack -- display equipment in sub-windows
  * @return なし
  */
@@ -1913,7 +1913,7 @@ static void fix_equip(void)
 
 
 /*!
- * @briefs 現在の習得済魔法をサブウィンドウに表示する / 
+ * @brief 現在の習得済魔法をサブウィンドウに表示する / 
  * Hack -- display spells in sub-windows
  * @return なし
  */
@@ -1948,7 +1948,7 @@ static void fix_spell(void)
 
 
 /*!
- * @briefs 現在のプレイヤーステータスをサブウィンドウに表示する / 
+ * @brief 現在のプレイヤーステータスをサブウィンドウに表示する / 
  * Hack -- display character in sub-windows
  * @return なし
  */
@@ -1984,7 +1984,7 @@ static void fix_player(void)
 }
 
 /*!
- * @briefs ゲームメッセージ履歴をサブウィンドウに表示する / 
+ * @brief ゲームメッセージ履歴をサブウィンドウに表示する / 
  * Hack -- display recent messages in sub-windows
  * XXX XXX XXX Adjust for width and split messages
  * @return なし
@@ -2035,7 +2035,7 @@ static void fix_message(void)
 
 
 /*!
- * @briefs 簡易マップをサブウィンドウに表示する / 
+ * @brief 簡易マップをサブウィンドウに表示する / 
  * Hack -- display overhead view in sub-windows
  * XXX XXX XXX Adjust for width and split messages
  * @return なし
@@ -2081,7 +2081,7 @@ static void fix_overhead(void)
 
 
 /*!
- * @briefs ダンジョンの地形をサブウィンドウに表示する / 
+ * @brief ダンジョンの地形をサブウィンドウに表示する / 
  * Hack -- display dungeon view in sub-windows
  * @return なし
  */
@@ -2116,7 +2116,7 @@ static void fix_dungeon(void)
 
 
 /*!
- * @briefs モンスターの思い出をサブウィンドウに表示する / 
+ * @brief モンスターの思い出をサブウィンドウに表示する / 
  * Hack -- display dungeon view in sub-windows
  * @return なし
  */
@@ -2151,7 +2151,7 @@ static void fix_monster(void)
 
 
 /*!
- * @briefs ベースアイテム情報をサブウィンドウに表示する / 
+ * @brief ベースアイテム情報をサブウィンドウに表示する / 
  * Hack -- display object recall in sub-windows
  * @return なし
  */
@@ -2187,7 +2187,7 @@ static void fix_object(void)
 
 
 /*!
- * @briefs プレイヤーの現在学習可能な魔法数を計算し、増減に応じて魔法の忘却、再学習を処置する。 /
+ * @brief プレイヤーの現在学習可能な魔法数を計算し、増減に応じて魔法の忘却、再学習を処置する。 /
  * Calculate number of spells player should have, and forget,
  * or remember, spells until that number is properly reflected.
  * @return なし
@@ -2541,7 +2541,7 @@ static void calc_spells(void)
 }
 
 /*!
- * @briefs プレイヤーの最大MPを計算する /
+ * @brief プレイヤーの最大MPを計算する /
  * Calculate maximum mana.  You do not need to know any spells.
  * Note that mana is lowered by heavy (or inappropriate) armor.
  * @return なし
@@ -2861,7 +2861,7 @@ static void calc_mana(void)
 
 
 /*!
- * @briefs プレイヤーの最大HPを計算する /
+ * @brief プレイヤーの最大HPを計算する /
  * Calculate the players (maximal) hit points
  * Adjust current hitpoints if necessary
  * @return なし

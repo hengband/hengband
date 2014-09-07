@@ -1,4 +1,14 @@
-﻿#ifdef JP
+﻿/*!
+ * @file mindtips.h
+ * @brief プレイヤーの特殊能力解説をまとめる
+ * @date 2014/09/07
+ * @author
+ * 不明(変愚蛮怒スタッフ)
+ */
+
+
+#ifdef JP
+/*! 特殊能力の解説文字列 */
 static cptr mind_tips[5][MAX_MIND_POWERS] =
 {
 {
@@ -118,6 +128,7 @@ static cptr mind_tips[5][MAX_MIND_POWERS] =
 },
 };
 #else
+/*! scripts for mind spell tips. */
 static cptr mind_tips[5][MAX_MIND_POWERS] =
 {
 {
