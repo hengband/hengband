@@ -332,8 +332,9 @@ static void do_cmd_wiz_reset_class(void)
 }
 
 
-/*
- * Hack -- Teleport to the target
+/*!
+ * @brief ウィザードモード用処理としてターゲット中の相手をテレポートバックする / Hack -- Teleport to the target
+ * @return なし
  */
 static void do_cmd_wiz_bamf(void)
 {
@@ -345,8 +346,10 @@ static void do_cmd_wiz_bamf(void)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの現能力値を調整する
  * Aux function for "do_cmd_wiz_change()".	-RAK-
+ * @return なし
  */
 static void do_cmd_wiz_change_aux(void)
 {
@@ -455,8 +458,10 @@ static void do_cmd_wiz_change_aux(void)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーの現能力値を調整する(メインルーチン)
  * Change various "permanent" player variables.
+ * @return なし
  */
 static void do_cmd_wiz_change(void)
 {
@@ -468,7 +473,12 @@ static void do_cmd_wiz_change(void)
 }
 
 
-/*
+/*!
+ * @brief アイテムの詳細ステータスを表示する / 
+ * Change various "permanent" player variables.
+ * @param o_ptr 詳細を表示するアイテム情報の参照ポインタ
+ * @return なし
+ * @details
  * Wizard routines for creating objects		-RAK-
  * And for manipulating them!                   -Bernd-
  *
@@ -522,9 +532,6 @@ static void do_cmd_wiz_change(void)
  *
  * Hack -- this function will allow you to create multiple artifacts.
  * This "feature" may induce crashes or other nasty effects.
- */
-
-/*
  * Just display an item's properties (debug-info)
  * Originally by David Reeve Sward <sward+@CMU.EDU>
  * Verbose item flags by -Bernd-
