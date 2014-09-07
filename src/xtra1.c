@@ -3064,6 +3064,11 @@ bool is_heavy_shoot(object_type *o_ptr)
 	return (hold < o_ptr->weight / 10);
 }
 
+/*!
+ * @brief 射撃武器に対応する矢/弾薬のベースアイテムIDを返す /
+ * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
+ * @return 対応する矢/弾薬のベースアイテムID
+ */
 int bow_tval_ammo(object_type *o_ptr)
 {
 	/* Analyze the launcher */
@@ -3095,7 +3100,12 @@ int bow_tval_ammo(object_type *o_ptr)
 	return 0;
 }
 
-/* calcurate the fire rate of target object */
+/*!
+ * @brief 装備中の射撃武器の威力倍率を返す /
+ * calcurate the fire rate of target object
+ * @param o_ptr 計算する射撃武器のアイテム情報参照ポインタ
+ * @return 射撃倍率の値(100で1.00倍)
+ */
 s16b calc_num_fire(object_type *o_ptr)
 {
 	int extra_shots = 0;
@@ -3172,11 +3182,14 @@ s16b calc_num_fire(object_type *o_ptr)
 	return num;
 }
 
-/*
+/*!
+ * @brief プレイヤーの全ステータスを更新する / 
  * Calculate the players current "state", taking into account
  * not only race/class intrinsics, but also objects being worn
  * and temporary spell effects.
- *
+ * @return なし
+ * @details
+ * <pre>
  * See also calc_mana() and calc_hitpoints().
  *
  * Take note of the new "speed code", in particular, a very strong
@@ -3191,6 +3204,7 @@ s16b calc_num_fire(object_type *o_ptr)
  * are actually added in later, at the appropriate place.
  *
  * This function induces various "status" messages.
+ * </pre>
  */
 void calc_bonuses(void)
 {
@@ -5795,8 +5809,10 @@ void calc_bonuses(void)
 
 
 
-/*
- * Handle "p_ptr->notice"
+/*! 
+ * @brief p_ptr->notice の状態に応じた更新をまとめて行う /  Handle "p_ptr->notice"
+ * @return なし
+ * @details 行う更新処理の対象はアイテムの自動破壊/アイテムの結合/アイテムの並び替え。
  */
 void notice_stuff(void)
 {
