@@ -3,13 +3,10 @@
  * @brief 部屋生成処理の定義ヘッダー / Header file for rooms.c, used only in generate.c
  * @date 2014/09/07
  * @author
- * <pre>
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke<br>
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
- * </pre>
+ * are included in all such copies.  Other copyrights may also apply.<br
  */
 
 #define DUN_ROOMS_MAX	40 /*!< 部屋生成処理の最大試行数 / Number of rooms to attempt (was 50) */

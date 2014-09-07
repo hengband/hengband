@@ -122,7 +122,7 @@ static void prt_field(cptr info, int row, int col)
 /*!
  * @brief ゲーム時間が日中かどうかを返す /
  * Whether daytime or not
- * @param 日中ならばTRUE、夜ならばFALSE
+ * @return 日中ならばTRUE、夜ならばFALSE
  */
 bool is_daytime(void)
 {
