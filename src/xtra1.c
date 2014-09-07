@@ -5810,9 +5810,9 @@ void calc_bonuses(void)
 
 
 /*! 
- * @brief p_ptr->notice の状態に応じた更新をまとめて行う /  Handle "p_ptr->notice"
+ * @brief p_ptr->notice のフラグに応じた更新をまとめて行う / Handle "p_ptr->notice"
  * @return なし
- * @details 行う更新処理の対象はアイテムの自動破壊/アイテムの結合/アイテムの並び替え。
+ * @details 更新処理の対象はアイテムの自動破壊/アイテムの結合/アイテムの並び替え。
  */
 void notice_stuff(void)
 {
@@ -5843,8 +5843,10 @@ void notice_stuff(void)
 }
 
 
-/*
- * Handle "p_ptr->update"
+/*! 
+ * @brief p_ptr->update のフラグに応じた更新をまとめて行う / Handle "p_ptr->update"
+ * @return なし
+ * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
  */
 void update_stuff(void)
 {
@@ -5956,8 +5958,10 @@ void update_stuff(void)
 }
 
 
-/*
- * Handle "p_ptr->redraw"
+/*! 
+ * @brief p_ptr->redraw のフラグに応じた更新をまとめて行う / Handle "p_ptr->redraw"
+ * @return なし
+ * @details 更新処理の対象はゲーム中の全描画処理
  */
 void redraw_stuff(void)
 {
@@ -6149,8 +6153,10 @@ void redraw_stuff(void)
 }
 
 
-/*
- * Handle "p_ptr->window"
+/*! 
+ * @brief p_ptr->window のフラグに応じた更新をまとめて行う / Handle "p_ptr->window"
+ * @return なし
+ * @details 更新処理の対象はサブウィンドウ全般
  */
 void window_stuff(void)
 {
@@ -6248,8 +6254,10 @@ void window_stuff(void)
 }
 
 
-/*
+/*!
+ * @brief 全更新処理をチェックして処理していく
  * Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window"
+ * @return なし
  */
 void handle_stuff(void)
 {
