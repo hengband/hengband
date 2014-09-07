@@ -1,20 +1,21 @@
-﻿/* File: wizard2.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, and others
- *
+﻿/*!
+ * @file wizard2.c
+ * @brief ウィザードモードの処理(特別処理中心) / Wizard commands
+ * @date 2014/09/07
+ * @author
+ * Copyright (c) 1997 Ben Harrison, and others<br>
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+ * are included in all such copies.  Other copyrights may also apply.<br>
+ * 2014 Deskull rearranged comment for Doxygen.<br>
  */
-
-/* Purpose: Wizard commands */
 
 #include "angband.h"
 
 
-/*
- * Roll the hitdie -- aux of do_cmd_rerate()
+/*!
+ * @brief プレイヤーヒットダイスを振り直す / Roll the hitdie -- aux of do_cmd_rerate()
+ * @return なし
  */
 void do_cmd_rerate_aux(void)
 {
