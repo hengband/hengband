@@ -14,7 +14,7 @@
 
 
 /*!
- * @brief プレイヤーヒットダイスを振り直す / Roll the hitdie -- aux of do_cmd_rerate()
+ * @brief プレイヤーのヒットダイスを振り直す / Roll the hitdie -- aux of do_cmd_rerate()
  * @return なし
  */
 void do_cmd_rerate_aux(void)
@@ -51,8 +51,10 @@ void do_cmd_rerate_aux(void)
 }
 
 
-/*
- * Hack -- Rerate Hitpoints
+/*!
+ * @brief プレイヤーのヒットダイスを振り直した後明示を行う / Hack -- Rerate Hitpoints
+ * @param display TRUEならば体力ランクを明示する
+ * @return なし
  */
 void do_cmd_rerate(bool display)
 {
@@ -92,8 +94,9 @@ void do_cmd_rerate(bool display)
 
 #ifdef ALLOW_WIZARD
 
-/*
- * Dimension Door
+/*!
+ * @brief 必ず成功するウィザードモード用次元の扉処理 / Wizard Dimension Door
+ * @return 実際にテレポートを行ったらTRUEを返す
  */
 static bool wiz_dimension_door(void)
 {
@@ -107,9 +110,9 @@ static bool wiz_dimension_door(void)
 }
 
 
-/*
- * Create the artifact of the specified number -- DAN
- *
+/*!
+ * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
+ * @return なし
  */
 static void wiz_create_named_art(void)
 {
@@ -132,8 +135,9 @@ static void wiz_create_named_art(void)
 }
 
 
-/*
- * Hack -- quick debugging hook
+/*!
+ * @brief ウィザードモード用モンスター調査 / Hack -- quick debugging hook
+ * @return なし
  */
 static void do_cmd_wiz_hack_ben(void)
 {
@@ -143,10 +147,12 @@ static void do_cmd_wiz_hack_ben(void)
 }
 
 
-
 #ifdef MONSTER_HORDES
 
-/* Summon a horde of monsters */
+/*!
+ * @brief ウィザードモード用モンスターの群れ生成 / Summon a horde of monsters
+ * @return なし
+ */
 static void do_cmd_summon_horde(void)
 {
 	int wy = py, wx = px;
@@ -163,9 +169,9 @@ static void do_cmd_summon_horde(void)
 
 #endif /* MONSTER_HORDES */
 
-
-/*
- * Output a long int in binary format.
+/*!
+ * @brief 32ビット変数のビット配列を並べて描画する / Output a long int in binary format.
+ * @return なし
  */
 static void prt_binary(u32b flags, int row, int col)
 {
@@ -190,10 +196,15 @@ static void prt_binary(u32b flags, int row, int col)
 }
 
 
-#define K_MAX_DEPTH 110
+#define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
 
-/*
- * Output a rarity graph for a type of object.
+/*!
+ * @brief アイテムの階層毎生成率を表示する / Output a rarity graph for a type of object.
+ * @param tval ベースアイテムの大項目ID
+ * @param sval ベースアイテムの小項目ID
+ * @param row 表示列
+ * @param col 表示行
+ * @return なし
  */
 static void prt_alloc(byte tval, byte sval, int row, int col)
 {
@@ -282,6 +293,11 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 	prt(r, row, col);
 }
 
+/*!
+ * @brief プレイヤーの職業を変更する
+ * @return なし
+ * @todo 魔法領域の再選択などがまだ不完全、要実装。
+ */
 static void do_cmd_wiz_reset_class(void)
 {
 	int tmp_int;
