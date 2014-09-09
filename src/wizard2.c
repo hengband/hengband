@@ -815,14 +815,15 @@ static int wiz_create_itemtype(void)
 }
 
 
-/*
- * Tweak an item
+/*!
+ * @briefアイテムの基礎能力値を調整する / Tweak an item
+ * @param o_ptr 調整するアイテムの参照ポインタ
+ * @return なし
  */
 static void wiz_tweak_item(object_type *o_ptr)
 {
 	cptr p;
 	char tmp_val[80];
-
 
 	/* Hack -- leave artifacts alone */
 	if (object_is_artifact(o_ptr)) return;
@@ -853,8 +854,11 @@ static void wiz_tweak_item(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief アイテムの質を選択して再生成する /
  * Apply magic to an item or turn it into an artifact. -Bernd-
+ * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
+ * @return なし
  */
 static void wiz_reroll_item(object_type *o_ptr)
 {
@@ -985,9 +989,11 @@ static void wiz_reroll_item(object_type *o_ptr)
 
 
 
-/*
+/*!
+ * @brief 検査対象のアイテムを基準とした生成テストを行う /
  * Try to create an item again. Output some statistics.    -Bernd-
- *
+ * @param o_ptr 生成テストの基準となるアイテム情報の参照ポインタ
+ * @return なし
  * The statistics are correct now.  We acquire a clean grid, and then
  * repeatedly place an object in this grid, copying it into an item
  * holder, and then deleting the object.  We fiddle with the artifact
