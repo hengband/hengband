@@ -609,17 +609,17 @@ static void wiz_display_item(object_type *o_ptr)
 }
 
 
-/*
- * A structure to hold a tval and its description
+/*!
+ * ベースアイテムの大項目IDの種別名をまとめる構造体 / A structure to hold a tval and its description
  */
 typedef struct tval_desc
 {
-	int        tval;
-	cptr       desc;
+	int        tval; /*!< 大項目のID */
+	cptr       desc; /*!< 大項目名 */
 } tval_desc;
 
-/*
- * A list of tvals and their textual names
+/*!
+ * ベースアイテムの大項目IDの種別名定義 / A list of tvals and their textual names
  */
 static tval_desc tvals[] =
 {
@@ -678,8 +678,11 @@ static tval_desc tvals[] =
 };
 
 
-/*
- * Strip an "object name" into a buffer
+/*!
+ * @brief nameバッファ内からベースアイテム名を返す / Strip an "object name" into a buffer
+ * @param buf ベースアイテム格納先の参照ポインタ
+ * @param k_idx ベースアイテムID
+ * @return なし
  */
 void strip_name(char *buf, int k_idx)
 {
@@ -707,12 +710,13 @@ void strip_name(char *buf, int k_idx)
 }
 
 
-/*
+/*!
+ * @brief ベースアイテムのウィザード生成のために大項目IDと小項目IDを取得する /
  * Specify tval and sval (type and subtype of object) originally
+ * @return ベースアイテムID
+ * @details
  * by RAK, heavily modified by -Bernd-
- *
  * This function returns the k_idx of an object type, or zero if failed
- *
  * List up to 50 choices in three columns
  */
 static int wiz_create_itemtype(void)
