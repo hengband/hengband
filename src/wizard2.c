@@ -1638,11 +1638,11 @@ static void do_cmd_wiz_summon(int num)
 
 
 /*!
- * @brief モンスターを種族IDを指定して召喚する /
+ * @brief モンスターを種族IDを指定して敵対的に召喚する /
  * Summon a creature of the specified type
  * @param r_idx モンスター種族ID
  * @return なし
- * @ details
+ * @details
  * XXX XXX XXX This function is rather dangerous
  */
 static void do_cmd_wiz_named(int r_idx)
@@ -1651,9 +1651,12 @@ static void do_cmd_wiz_named(int r_idx)
 }
 
 
-/*
+/*!
+ * @brief モンスターを種族IDを指定してペット召喚する /
  * Summon a creature of the specified type
- *
+ * @param r_idx モンスター種族ID
+ * @return なし
+ * @details
  * XXX XXX XXX This function is rather dangerous
  */
 static void do_cmd_wiz_named_friendly(int r_idx)
@@ -1663,8 +1666,10 @@ static void do_cmd_wiz_named_friendly(int r_idx)
 
 
 
-/*
+/*!
+ * @brief プレイヤー近辺の全モンスターを消去する /
  * Hack -- Delete all nearby monsters
+ * @return なし
  */
 static void do_cmd_wiz_zap(void)
 {
@@ -1699,8 +1704,10 @@ static void do_cmd_wiz_zap(void)
 }
 
 
-/*
+/*!
+ * @brief フロアに存在する全モンスターを消去する /
  * Hack -- Delete all monsters
+ * @return なし
  */
 static void do_cmd_wiz_zap_all(void)
 {
@@ -1731,8 +1738,10 @@ static void do_cmd_wiz_zap_all(void)
 }
 
 
-/*
+/*!
+ * @brief 指定された地点の地形IDを変更する /
  * Create desired feature
+ * @return なし
  */
 static void do_cmd_wiz_create_feature(void)
 {
@@ -1798,8 +1807,10 @@ static void do_cmd_wiz_create_feature(void)
 #define NUM_O_SET 8
 #define NUM_O_BIT 32
 
-/*
+/*!
+ * @brief 現在のオプション設定をダンプ出力する /
  * Hack -- Dump option bits usage
+ * @return なし
  */
 static void do_cmd_dump_options(void)
 {
@@ -1890,9 +1901,11 @@ extern void do_cmd_debug(void);
 
 
 
-/*
+/*!
+ * @brief デバッグコマンドを選択する処理のメインルーチン /
  * Ask for and parse a "debug command"
  * The "command_arg" may have been set.
+ * @return なし
  */
 void do_cmd_debug(void)
 {
