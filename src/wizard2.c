@@ -1503,8 +1503,10 @@ static void do_cmd_wiz_cure_all(void)
 }
 
 
-/*
+/*!
+ * @brief 任意のダンジョン及び階層に飛ぶ /
  * Go to any level
+ * @return なし
  */
 static void do_cmd_wiz_jump(void)
 {
@@ -1584,8 +1586,10 @@ static void do_cmd_wiz_jump(void)
 }
 
 
-/*
+/*!
+ * @brief 全ベースアイテムを鑑定済みにする /
  * Become aware of a lot of objects
+ * @return なし
  */
 static void do_cmd_wiz_learn(void)
 {
@@ -1615,8 +1619,11 @@ static void do_cmd_wiz_learn(void)
 }
 
 
-/*
+/*!
+ * @brief 現在のフロアに合ったモンスターをランダムに召喚する /
  * Summon some creatures
+ * @param num 生成処理回数
+ * @return なし
  */
 static void do_cmd_wiz_summon(int num)
 {
@@ -1629,9 +1636,13 @@ static void do_cmd_wiz_summon(int num)
 }
 
 
-/*
+
+/*!
+ * @brief モンスターを種族IDを指定して召喚する /
  * Summon a creature of the specified type
- *
+ * @param r_idx モンスター種族ID
+ * @return なし
+ * @ details
  * XXX XXX XXX This function is rather dangerous
  */
 static void do_cmd_wiz_named(int r_idx)
