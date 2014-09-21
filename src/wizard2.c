@@ -1234,12 +1234,15 @@ static void do_cmd_wiz_blue_mage(void)
 }
 
 
-/*
+/*!
+ * @brief アイテム検査のメインルーチン /
  * Play with an item. Options include:
- *   - Output statistics (via wiz_roll_item)
- *   - Reroll item (via wiz_reroll_item)
- *   - Change properties (via wiz_tweak_item)
- *   - Change the number of items (via wiz_quantity_item)
+ * @return なし
+ * @details 
+ *   - Output statistics (via wiz_roll_item)<br>
+ *   - Reroll item (via wiz_reroll_item)<br>
+ *   - Change properties (via wiz_tweak_item)<br>
+ *   - Change the number of items (via wiz_quantity_item)<br>
  */
 static void do_cmd_wiz_play(void)
 {
@@ -1369,8 +1372,11 @@ static void do_cmd_wiz_play(void)
 }
 
 
-/*
+/*!
+ * @brief 任意のベースアイテム生成のメインルーチン /
  * Wizard routine for creating objects		-RAK-
+ * @return なし
+ * @details
  * Heavily modified to allow magification and artifactification  -Bernd-
  *
  * Note that wizards cannot create objects on top of other objects.
@@ -1439,8 +1445,10 @@ static void wiz_create_item(void)
 }
 
 
-/*
+/*!
+ * @brief プレイヤーを完全回復する /
  * Cure everything instantly
+ * @return なし
  */
 static void do_cmd_wiz_cure_all(void)
 {
