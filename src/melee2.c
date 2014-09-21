@@ -3501,7 +3501,7 @@ void process_monsters(void)
 		}
 
 		/* Handle "sight" and "aggravation" */
-		else if ((m_ptr->cdis <= MAX_SIGHT) &&
+        else if ((m_ptr->cdis <= MAX_SIGHT || p_ptr->inside_battle) &&
 			(player_has_los_bold(fy, fx) || (p_ptr->cursed & TRC_AGGRAVATE)))
 		{
 			/* We can "see" or "feel" the player */
