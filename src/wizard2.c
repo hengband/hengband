@@ -1159,8 +1159,11 @@ static void wiz_statistics(object_type *o_ptr)
 }
 
 
-/*
+/*!
+ * @brief 検査対象のアイテムの数を変更する /
  * Change the quantity of a the item
+ * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
+ * @return なし
  */
 static void wiz_quantity_item(object_type *o_ptr)
 {
@@ -1198,7 +1201,11 @@ static void wiz_quantity_item(object_type *o_ptr)
 	}
 }
 
-/* debug command for blue mage */
+/*!
+ * @brief 青魔導師の魔法を全て習得済みにする /
+ * debug command for blue mage
+ * @return なし
+ */
 static void do_cmd_wiz_blue_mage(void)
 {
 
