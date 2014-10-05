@@ -1675,14 +1675,15 @@ typedef struct
 } cave_template_type;
 
 
-/*
- * A structure type for arena entry
+/*!
+ * @struct arena_type
+ * @brief 闘技場のモンスターエントリー構造体 / A structure type for arena entry
  */
 typedef struct
 {
-	s16b r_idx; /* Monster (0 means victory prizing) */
-	byte tval;  /* tval of prize (0 means no prize) */
-	byte sval;  /* sval of prize */
+	s16b r_idx; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
+	byte tval;  /*!< モンスター打倒後に得られるアイテムの大カテゴリID / tval of prize (0 means no prize) */
+	byte sval;  /*!< モンスター打倒後に得られるアイテムの小カテゴリID / sval of prize */
 } arena_type;
 
 
