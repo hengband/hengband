@@ -5488,7 +5488,7 @@ extern int PlayerUID;
  * Max numbers of macro trigger names
  */
 #define MAX_MACRO_MOD 12
-#define MAX_MACRO_TRIG 200
+#define MAX_MACRO_TRIG 200 /*!< 登録を許すマクロ（トリガー）の最大数 */
 
 /* Max size of screen dump buffer */
 #define SCREEN_BUF_SIZE 65536

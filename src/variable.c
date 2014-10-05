@@ -1,19 +1,19 @@
-﻿/* File: variable.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
+﻿/*!
+ * @file variable.c
+ * @brief グローバル変数定義 / Angband variables
+ * @date 2014/10/05
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke<br>
+ * <br>
+ * This software may be copied and distributed for educational, research,<br>
+ * and not for profit purposes provided that this copyright and statement<br>
+ * are included in all such copies.  Other copyrights may also apply.<br>
  */
-
-/* Purpose: Angband variables */
 
 #include "angband.h"
 
-
-/*
+/*!
+ * コピーライト情報 /
  * Hack -- Link a copyright message into the executable
  */
 const cptr copyright[5] =
@@ -26,15 +26,15 @@ const cptr copyright[5] =
 };
 
 
-int max_macrotrigger = 0;
-cptr macro_template = NULL;
-cptr macro_modifier_chr;
-cptr macro_modifier_name[MAX_MACRO_MOD];
-cptr macro_trigger_name[MAX_MACRO_TRIG];
-cptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
+int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
+cptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
+cptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
+cptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
+cptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
+cptr macro_trigger_keycode[2][MAX_MACRO_TRIG];  /*!< マクロの内容 */
 
-/* レベルアップの時に上昇量を表示するのに使う */
-int level_up = 0;
+int level_up = 0; /*!< レベルアップの際に遅延してcalc_mana()関数上で上昇量を表示するかどうかの判定フラグ */
+
 
 /* 
  *  List for auto-picker/destroyer entries
