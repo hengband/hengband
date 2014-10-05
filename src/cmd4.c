@@ -699,6 +699,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 /*!
  * @brief 日記のタイトル表記と内容出力 /
  * @return なし
+ * @details
+ * 日記のタイトルは本関数の subtitle ローカル変数で定義されている。
  */
 static void do_cmd_disp_nikki(void)
 {
@@ -707,6 +709,7 @@ static void do_cmd_disp_nikki(void)
 	char buf[1024];
 	char tmp[80];
 #ifdef JP
+	/*! */
 	static const char subtitle[][30] = {"最強の肉体を求めて",
 					   "人生それははかない",
 					   "明日に向かって",
@@ -833,6 +836,10 @@ static void do_cmd_last_get(void)
 	turn = turn_tmp;
 }
 
+/*!
+ * @brief ファイル中の全日記記録を消去する /
+ * @return なし
+ */
 static void do_cmd_erase_nikki(void)
 {
 	char file_name[80];
@@ -3042,7 +3049,9 @@ void do_cmd_macros(void)
 	screen_load();
 }
 
-
+/*!
+ * @brief キャラクタ色の明暗表現
+ */
 static cptr lighting_level_str[F_LIT_MAX] =
 {
 #ifdef JP
@@ -3057,6 +3066,13 @@ static cptr lighting_level_str[F_LIT_MAX] =
 };
 
 
+/*!
+ * @brief キャラクタのビジュアルIDを変更する際の対象指定関数
+ * @param i 指定対象となるキャラクタコード
+ * @param num 指定されたビジュアルIDを返す参照ポインタ
+ * @param max ビジュアルIDの最大数
+ * @return 指定が実際に行われた場合TRUE、キャンセルされた場合FALSE
+ */
 static bool cmd_visuals_aux(int i, int *num, int max)
 {
 	if (iscntrl(i))
@@ -3081,6 +3097,11 @@ static bool cmd_visuals_aux(int i, int *num, int max)
 	return TRUE;
 }
 
+/*!
+ * @brief キャラクタの変更メニュー表示
+ * @param choice_msg 選択メッセージ
+ * @return なし
+ */
 static void print_visuals_menu(cptr choice_msg)
 {
 	prt(_("[ 画面表示の設定 ]", "Interact with Visuals"), 1, 0);
