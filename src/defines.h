@@ -418,18 +418,19 @@
 
 
 
-/*
- * OPTION: Maximum number of macros (see "io.c")
- * Default: assume at most 256 macros are used
+/*!
+ * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
+ * @note Default: assume at most 256 macros are used
  */
 #define MACRO_MAX       256
 
-/*
- * OPTION: Maximum number of "quarks" (see "io.c")
- * Default: assume at most 512 different inscriptions are used
+/*!
+ * @brief 銘情報の最大数 / Maximum number of "quarks" (see "io.c")
+ * @note 
+ * Default: assume at most 512 different inscriptions are used<br>
+ * Was 512... 256 quarks added for random artifacts<br>
  */
 #define QUARK_MAX       768
-/* Was 512... 256 quarks added for random artifacts */
 
 /*
  * OPTION: Maximum number of messages to remember (see "io.c")
@@ -529,24 +530,24 @@
 
 
 /*
- * Commands
+ * ペットに関するコマンド群 / Pet Commands
  */
-#define PET_DISMISS		1
-#define PET_TARGET		2
-#define PET_STAY_CLOSE		3
-#define PET_FOLLOW_ME		4
-#define PET_SEEK_AND_DESTROY	5
-#define PET_ALLOW_SPACE		6
-#define PET_STAY_AWAY		7
-#define PET_OPEN_DOORS          8
-#define PET_TAKE_ITEMS		9
-#define PET_TELEPORT		10
-#define PET_ATTACK_SPELL	11
-#define PET_SUMMON_SPELL	12
-#define PET_BALL_SPELL		13
-#define PET_RIDING		14
-#define PET_NAME		15
-#define PET_RYOUTE		16
+#define PET_DISMISS				1  /*!< ペットに関するコマンド: ペットを離す */
+#define PET_TARGET				2  /*!< ペットに関するコマンド: ペットのターゲットを指定 */
+#define PET_STAY_CLOSE			3  /*!< ペットに関するコマンド: 近くにいろ */
+#define PET_FOLLOW_ME			4  /*!< ペットに関するコマンド: ついて来い */
+#define PET_SEEK_AND_DESTROY	5  /*!< ペットに関するコマンド: 敵を見つけて倒せ */
+#define PET_ALLOW_SPACE			6  /*!< ペットに関するコマンド: 少し離れていろ */
+#define PET_STAY_AWAY			7  /*!< ペットに関するコマンド: 離れていろ */
+#define PET_OPEN_DOORS			8  /*!< ペットに関するコマンド: ドア解放の許可 */
+#define PET_TAKE_ITEMS			9  /*!< ペットに関するコマンド: アイテム取得の許可 */
+#define PET_TELEPORT			10 /*!< ペットに関するコマンド: テレポートの許可 */
+#define PET_ATTACK_SPELL		11 /*!< ペットに関するコマンド: 攻撃魔法の許可 */
+#define PET_SUMMON_SPELL		12 /*!< ペットに関するコマンド: 召喚魔法の許可 */
+#define PET_BALL_SPELL			13 /*!< ペットに関するコマンド: プレイヤーを魔法に巻き込む許可 */
+#define PET_RIDING				14 /*!< ペットに関するコマンド: ペットに乗る */
+#define PET_NAME				15 /*!< ペットに関するコマンド: ペットに名前をつける */
+#define PET_RYOUTE				16 /*!< ペットに関するコマンド: 騎乗中に両手で武器を使うかどうか */
 
 /*
  * Follow distances
