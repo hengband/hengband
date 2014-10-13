@@ -2105,73 +2105,63 @@ static void object_mention(object_type *o_ptr)
  * "apply_magic()" is called immediately after we return.\n
  *\n
  * Note -- see "make_artifact()" and "apply_magic()"\n
+ * @todo 生成基準を dun_level から obj_level に直すか検討。
  */
 static bool make_artifact_special(object_type *o_ptr)
 {
 	int i;
 	int k_idx = 0;
 
-
-	/* No artifacts in the town */
+	/*! @note 地上ではキャンセルする / No artifacts in the town */
 	if (!dun_level) return (FALSE);
 
-	/* Themed object */
+	/*! @note get_obj_num_hookによる指定がある場合は生成をキャンセルする / Themed object */
 	if (get_obj_num_hook) return (FALSE);
 
-	/* Check the artifact list (just the "specials") */
+	/*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
 	for (i = 0; i < max_a_idx; i++)
 	{
 		artifact_type *a_ptr = &a_info[i];
 
-		/* Skip "empty" artifacts */
+		/*! @note アーティファクト名が空の不正なデータは除外する / Skip "empty" artifacts */
 		if (!a_ptr->name) continue;
 
-		/* Cannot make an artifact twice */
+		/*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
 		if (a_ptr->cur_num) continue;
-
 		if (a_ptr->gen_flags & TRG_QUESTITEM) continue;
 		if (!(a_ptr->gen_flags & TRG_INSTA_ART)) continue;
 
-		/* XXX XXX Enforce minimum "depth" (loosely) */
+		/*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /
+		 *  XXX XXX Enforce minimum "depth" (loosely) */
 		if (a_ptr->level > dun_level)
 		{
-			/* Acquire the "out-of-depth factor" */
+			/* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
 			int d = (a_ptr->level - dun_level) * 2;
-
-			/* Roll for out-of-depth creation */
 			if (!one_in_(d)) continue;
 		}
 
-		/* Artifact "rarity roll" */
+		/*! @note 1/(レア度)の確率を満たさないと除外される / Artifact "rarity roll" */
 		if (!one_in_(a_ptr->rarity)) continue;
 
-		/* Find the base object */
+		/*! @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。ベースアイテムの生成階層が足りない場合1/(不足階層*5) を満たさないと除外される。 /
+		 *  Find the base object. XXX XXX Enforce minimum "object" level (loosely). Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
 		k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
-
-		/* XXX XXX Enforce minimum "object" level (loosely) */
 		if (k_info[k_idx].level > object_level)
 		{
-			/* Acquire the "out-of-depth factor" */
 			int d = (k_info[k_idx].level - object_level) * 5;
-
-			/* Roll for out-of-depth creation */
 			if (!one_in_(d)) continue;
 		}
 
-		/* Assign the template */
+		/*! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す /
+		 * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
 		object_prep(o_ptr, k_idx);
 
-		/* Mega-Hack -- mark the item as an artifact */
 		o_ptr->name1 = i;
-
-		/* Hack: Some artifacts get random extra powers */
 		random_artifact_resistance(o_ptr, a_ptr);
-
-		/* Success */
 		return (TRUE);
 	}
 
-	/* Failure */
+	/*! @note 全INSTA_ART固定アーティファクトを試行しても決まらなかった場合 FALSEを返す / Failure */
 	return (FALSE);
 }
 
