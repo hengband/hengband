@@ -2064,33 +2064,26 @@ static void object_mention(object_type *o_ptr)
 {
 	char o_name[MAX_NLEN];
 
-	/* Describe */
+	/*!
+	 * @note アイテム名取得後アイテムの価値に応じたデバッグメッセージを出力する。
+	 * Get Describe and view, Artifact, Random Artifact, Ego-item, and Normal item.
+	 */
 	object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 
-	/* Artifact */
 	if (object_is_fixed_artifact(o_ptr))
 	{
-		/* Silly message */
 		msg_format(_("伝説のアイテム (%s)", "Artifact (%s)"), o_name);
 	}
-
-	/* Random Artifact */
 	else if (o_ptr->art_name)
 	{
 		msg_print(_("ランダム・アーティファクト", "Random artifact"));
 	}
-
-	/* Ego-item */
 	else if (object_is_ego(o_ptr))
 	{
-		/* Silly message */
 		msg_format(_("名のあるアイテム (%s)", "Ego-item (%s)"), o_name);
 	}
-
-	/* Normal item */
 	else
 	{
-		/* Silly message */
 		msg_format(_("アイテム (%s)", "Object (%s)"), o_name);
 	}
 }
