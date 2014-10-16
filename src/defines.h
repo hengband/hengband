@@ -3455,34 +3455,35 @@
 /*** Monster blow constants ***/
 
 
-/*
- * New monster blow methods
+/*!
+ * @note モンスターの打撃方法 / New monster blow methods
+ * 打撃の種別に応じて傷と朦朧が発生するかがコメントの通りに決まる
  */
-#define RBM_HIT          1
-#define RBM_TOUCH        2
-#define RBM_PUNCH        3
-#define RBM_KICK         4
-#define RBM_CLAW         5
-#define RBM_BITE         6
-#define RBM_STING        7
-#define RBM_SLASH        8
-#define RBM_BUTT         9
-#define RBM_CRUSH       10
-#define RBM_ENGULF      11
-#define RBM_CHARGE      12
-#define RBM_CRAWL       13
-#define RBM_DROOL       14
-#define RBM_SPIT        15
-#define RBM_EXPLODE     16
-#define RBM_GAZE        17
-#define RBM_WAIL        18
-#define RBM_SPORE       19
-#define RBM_XXX4        20
-#define RBM_BEG         21
-#define RBM_INSULT      22
-#define RBM_MOAN        23
-#define RBM_SHOW        24
-#define RBM_SHOOT       25
+#define RBM_HIT          1 /*!< モンスターの攻撃種別:殴る(傷/朦朧が半々) */
+#define RBM_TOUCH        2 /*!< モンスターの攻撃種別:触る */
+#define RBM_PUNCH        3 /*!< モンスターの攻撃種別:パンチする(朦朧) */
+#define RBM_KICK         4 /*!< モンスターの攻撃種別:蹴る(朦朧) */
+#define RBM_CLAW         5 /*!< モンスターの攻撃種別:ひっかく(傷) */
+#define RBM_BITE         6 /*!< モンスターの攻撃種別:噛む(傷) */
+#define RBM_STING        7 /*!< モンスターの攻撃種別:刺す */
+#define RBM_SLASH        8 /*!< モンスターの攻撃種別:斬る(傷) */
+#define RBM_BUTT         9 /*!< モンスターの攻撃種別:角で突く(朦朧) */
+#define RBM_CRUSH       10 /*!< モンスターの攻撃種別:体当たりする(朦朧) */
+#define RBM_ENGULF      11 /*!< モンスターの攻撃種別:飲み込む */
+#define RBM_CHARGE      12 /*!< モンスターの攻撃種別:請求書を寄越す */
+#define RBM_CRAWL       13 /*!< モンスターの攻撃種別:体の上を這い回る */
+#define RBM_DROOL       14 /*!< モンスターの攻撃種別:よだれをたらす */
+#define RBM_SPIT        15 /*!< モンスターの攻撃種別:つばを吐く */
+#define RBM_EXPLODE     16 /*!< モンスターの攻撃種別:爆発する */
+#define RBM_GAZE        17 /*!< モンスターの攻撃種別:にらむ */
+#define RBM_WAIL        18 /*!< モンスターの攻撃種別:泣き叫ぶ */
+#define RBM_SPORE       19 /*!< モンスターの攻撃種別:胞子を飛ばす */
+#define RBM_XXX4        20 /*!< モンスターの攻撃種別:未定義 */
+#define RBM_BEG         21 /*!< モンスターの攻撃種別:金をせがむ */
+#define RBM_INSULT      22 /*!< モンスターの攻撃種別:侮辱する */
+#define RBM_MOAN        23 /*!< モンスターの攻撃種別:うめく */
+#define RBM_SHOW        24 /*!< モンスターの攻撃種別:歌う */
+#define RBM_SHOOT       25 /*!< モンスターの攻撃種別:射撃(非打撃) */
 
 
 /*
