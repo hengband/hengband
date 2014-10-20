@@ -3676,38 +3676,38 @@
 /*
  * New monster race bit flags
  */
-#define RF5_BA_ACID         0x00000001  /* Acid Ball */
-#define RF5_BA_ELEC         0x00000002  /* Elec Ball */
-#define RF5_BA_FIRE         0x00000004  /* Fire Ball */
-#define RF5_BA_COLD         0x00000008  /* Cold Ball */
-#define RF5_BA_POIS         0x00000010  /* Poison Ball */
-#define RF5_BA_NETH         0x00000020  /* Nether Ball */
-#define RF5_BA_WATE         0x00000040  /* Water Ball */
-#define RF5_BA_MANA         0x00000080  /* Mana Storm */
-#define RF5_BA_DARK         0x00000100  /* Darkness Storm */
-#define RF5_DRAIN_MANA      0x00000200  /* Drain Mana */
-#define RF5_MIND_BLAST      0x00000400  /* Blast Mind */
-#define RF5_BRAIN_SMASH     0x00000800  /* Smash Brain */
-#define RF5_CAUSE_1         0x00001000  /* Cause Light Wound */
-#define RF5_CAUSE_2         0x00002000  /* Cause Serious Wound */
-#define RF5_CAUSE_3         0x00004000  /* Cause Critical Wound */
-#define RF5_CAUSE_4         0x00008000  /* Cause Mortal Wound */
-#define RF5_BO_ACID         0x00010000  /* Acid Bolt */
-#define RF5_BO_ELEC         0x00020000  /* Elec Bolt */
-#define RF5_BO_FIRE         0x00040000  /* Fire Bolt */
-#define RF5_BO_COLD         0x00080000  /* Cold Bolt */
-#define RF5_BA_LITE         0x00100000  /* StarBurst */
-#define RF5_BO_NETH         0x00200000  /* Nether Bolt */
-#define RF5_BO_WATE         0x00400000  /* Water Bolt */
-#define RF5_BO_MANA         0x00800000  /* Mana Bolt */
-#define RF5_BO_PLAS         0x01000000  /* Plasma Bolt */
-#define RF5_BO_ICEE         0x02000000  /* Ice Bolt */
-#define RF5_MISSILE         0x04000000  /* Magic Missile */
-#define RF5_SCARE           0x08000000  /* Frighten Player */
-#define RF5_BLIND           0x10000000  /* Blind Player */
-#define RF5_CONF            0x20000000  /* Confuse Player */
-#define RF5_SLOW            0x40000000  /* Slow Player */
-#define RF5_HOLD            0x80000000  /* Paralyze Player */
+#define RF5_BA_ACID         0x00000001  /*!< モンスター能力: アシッド・ボール / Acid Ball */
+#define RF5_BA_ELEC         0x00000002  /*!< モンスター能力: サンダー・ボール / Elec Ball */
+#define RF5_BA_FIRE         0x00000004  /*!< モンスター能力: ファイア・ボール / Fire Ball */
+#define RF5_BA_COLD         0x00000008  /*!< モンスター能力: アイス・ボール / Cold Ball */
+#define RF5_BA_POIS         0x00000010  /*!< モンスター能力: 悪臭雲 / Poison Ball */
+#define RF5_BA_NETH         0x00000020  /*!< モンスター能力: 地獄球 / Nether Ball */
+#define RF5_BA_WATE         0x00000040  /*!< モンスター能力: ウォーター・ボール / Water Ball */
+#define RF5_BA_MANA         0x00000080  /*!< モンスター能力: 魔力の嵐 / Mana Storm */
+#define RF5_BA_DARK         0x00000100  /*!< モンスター能力: 暗黒の嵐 / Darkness Storm */
+#define RF5_DRAIN_MANA      0x00000200  /*!< モンスター能力: 魔力吸収 / Drain Mana */
+#define RF5_MIND_BLAST      0x00000400  /*!< モンスター能力: 精神攻撃 / Blast Mind */
+#define RF5_BRAIN_SMASH     0x00000800  /*!< モンスター能力: 脳攻撃 / Smash Brain */
+#define RF5_CAUSE_1         0x00001000  /*!< モンスター能力: 軽傷の呪い / Cause Light Wound */
+#define RF5_CAUSE_2         0x00002000  /*!< モンスター能力: 重症の頃い / Cause Serious Wound */
+#define RF5_CAUSE_3         0x00004000  /*!< モンスター能力: 致命傷の呪い / Cause Critical Wound */
+#define RF5_CAUSE_4         0x00008000  /*!< モンスター能力: 秘孔を突く / Cause Mortal Wound */
+#define RF5_BO_ACID         0x00010000  /*!< モンスター能力: アシッド・ボルト / Acid Bolt */
+#define RF5_BO_ELEC         0x00020000  /*!< モンスター能力: サンダー・ボルト / Elec Bolt */
+#define RF5_BO_FIRE         0x00040000  /*!< モンスター能力: ファイア・ボルト / Fire Bolt */
+#define RF5_BO_COLD         0x00080000  /*!< モンスター能力: アイス・ボルト / Cold Bolt */
+#define RF5_BA_LITE         0x00100000  /*!< モンスター能力: スター・バースト / StarBurst */
+#define RF5_BO_NETH         0x00200000  /*!< モンスター能力: 地獄の矢 / Nether Bolt */
+#define RF5_BO_WATE         0x00400000  /*!< モンスター能力: ウォーター・ボルト / Water Bolt */
+#define RF5_BO_MANA         0x00800000  /*!< モンスター能力: 魔力の矢 / Mana Bolt */
+#define RF5_BO_PLAS         0x01000000  /*!< モンスター能力: プラズマ・ボルト / Plasma Bolt */
+#define RF5_BO_ICEE         0x02000000  /*!< モンスター能力: 極寒の矢 / Ice Bolt */
+#define RF5_MISSILE         0x04000000  /*!< モンスター能力: マジック・ミサイルt / Magic Missile */
+#define RF5_SCARE           0x08000000  /*!< モンスター能力: 恐慌 / Frighten Player */
+#define RF5_BLIND           0x10000000  /*!< モンスター能力: 盲目 / Blind Player */
+#define RF5_CONF            0x20000000  /*!< モンスター能力: 混乱 / Confuse Player */
+#define RF5_SLOW            0x40000000  /*!< モンスター能力: 減速 / Slow Player */
+#define RF5_HOLD            0x80000000  /*!< モンスター能力: 麻痺 / Paralyze Player */
 
 /*
  * New monster race bit flags
