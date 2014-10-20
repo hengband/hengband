@@ -3640,38 +3640,38 @@
 /*
  * New monster race bit flags
  */
-#define RF4_SHRIEK          0x00000001  /* Shriek for help */
-#define RF4_XXX1            0x00000002  /* XXX */
-#define RF4_DISPEL          0x00000004  /* Dispel magic */
-#define RF4_ROCKET          0x00000008  /* TY: Rocket */
-#define RF4_SHOOT           0x00000010  /* Fire missiles */
-#define RF4_XXX2            0x00000020
-#define RF4_XXX3            0x00000040
-#define RF4_XXX4            0x00000080
-#define RF4_BR_ACID         0x00000100  /* Breathe Acid */
-#define RF4_BR_ELEC         0x00000200  /* Breathe Elec */
-#define RF4_BR_FIRE         0x00000400  /* Breathe Fire */
-#define RF4_BR_COLD         0x00000800  /* Breathe Cold */
-#define RF4_BR_POIS         0x00001000  /* Breathe Poison */
-#define RF4_BR_NETH         0x00002000  /* Breathe Nether */
-#define RF4_BR_LITE         0x00004000  /* Breathe Lite */
-#define RF4_BR_DARK         0x00008000  /* Breathe Dark */
-#define RF4_BR_CONF         0x00010000  /* Breathe Confusion */
-#define RF4_BR_SOUN         0x00020000  /* Breathe Sound */
-#define RF4_BR_CHAO         0x00040000  /* Breathe Chaos */
-#define RF4_BR_DISE         0x00080000  /* Breathe Disenchant */
-#define RF4_BR_NEXU         0x00100000  /* Breathe Nexus */
-#define RF4_BR_TIME         0x00200000  /* Breathe Time */
-#define RF4_BR_INER         0x00400000  /* Breathe Inertia */
-#define RF4_BR_GRAV         0x00800000  /* Breathe Gravity */
-#define RF4_BR_SHAR         0x01000000  /* Breathe Shards */
-#define RF4_BR_PLAS         0x02000000  /* Breathe Plasma */
-#define RF4_BR_WALL         0x04000000  /* Breathe Force */
-#define RF4_BR_MANA         0x08000000  /* Breathe Mana */
-#define RF4_BA_NUKE         0x10000000  /* TY: Nuke Ball */
-#define RF4_BR_NUKE         0x20000000  /* TY: Toxic Breath */
-#define RF4_BA_CHAO         0x40000000  /* TY: Logrus Ball */
-#define RF4_BR_DISI         0x80000000  /* Breathe Disintegration */
+#define RF4_SHRIEK          0x00000001  /*!< モンスター能力: 叫ぶ / Shriek for help */
+#define RF4_XXX1            0x00000002  /*!< モンスター能力: 未使用 / XXX */
+#define RF4_DISPEL          0x00000004  /*!< モンスター能力: 魔力消去 / Dispel magic */
+#define RF4_ROCKET          0x00000008  /*!< モンスター能力: ロケット / TY: Rocket */
+#define RF4_SHOOT           0x00000010  /*!< モンスター能力: 射撃/ Fire missiles */
+#define RF4_XXX2            0x00000020  /*!< モンスター能力: 未使用 / XXX */
+#define RF4_XXX3            0x00000040  /*!< モンスター能力: 未使用 / XXX */
+#define RF4_XXX4            0x00000080  /*!< モンスター能力: 未使用 / XXX */
+#define RF4_BR_ACID         0x00000100  /*!< モンスター能力: 酸のブレス / Breathe Acid */
+#define RF4_BR_ELEC         0x00000200  /*!< モンスター能力: 電撃のブレス / Breathe Elec */
+#define RF4_BR_FIRE         0x00000400  /*!< モンスター能力: 火炎のブレス / Breathe Fire */
+#define RF4_BR_COLD         0x00000800  /*!< モンスター能力: 冷気のブレス / Breathe Cold */
+#define RF4_BR_POIS         0x00001000  /*!< モンスター能力: 毒のブレス / Breathe Poison */
+#define RF4_BR_NETH         0x00002000  /*!< モンスター能力: 地獄のブレス / Breathe Nether */
+#define RF4_BR_LITE         0x00004000  /*!< モンスター能力: 閃光のブレス / Breathe Lite */
+#define RF4_BR_DARK         0x00008000  /*!< モンスター能力: 暗黒のブレス / Breathe Dark */
+#define RF4_BR_CONF         0x00010000  /*!< モンスター能力: 混乱のブレス / Breathe Confusion */
+#define RF4_BR_SOUN         0x00020000  /*!< モンスター能力: 轟音のブレス / Breathe Sound */
+#define RF4_BR_CHAO         0x00040000  /*!< モンスター能力: カオスのブレス / Breathe Chaos */
+#define RF4_BR_DISE         0x00080000  /*!< モンスター能力: 劣化のブレス / Breathe Disenchant */
+#define RF4_BR_NEXU         0x00100000  /*!< モンスター能力: 因果混乱のブレス / Breathe Nexus */
+#define RF4_BR_TIME         0x00200000  /*!< モンスター能力: 時間逆転のブレス / Breathe Time */
+#define RF4_BR_INER         0x00400000  /*!< モンスター能力: 遅鈍のブレス / Breathe Inertia */
+#define RF4_BR_GRAV         0x00800000  /*!< モンスター能力: 重力のブレス / Breathe Gravity */
+#define RF4_BR_SHAR         0x01000000  /*!< モンスター能力: 破片のブレス / Breathe Shards */
+#define RF4_BR_PLAS         0x02000000  /*!< モンスター能力: プラズマのブレス / Breathe Plasma */
+#define RF4_BR_WALL         0x04000000  /*!< モンスター能力: フォースのブレス / Breathe Force */
+#define RF4_BR_MANA         0x08000000  /*!< モンスター能力: 魔力のブレス / Breathe Mana */
+#define RF4_BA_NUKE         0x10000000  /*!< モンスター能力: 放射能球 / TY: Nuke Ball */
+#define RF4_BR_NUKE         0x20000000  /*!< モンスター能力: 放射性廃棄物のブレス / TY: Toxic Breath */
+#define RF4_BA_CHAO         0x40000000  /*!< モンスター能力: ログルス球 / TY: Logrus Ball */
+#define RF4_BR_DISI         0x80000000  /*!< モンスター能力: 分解のブレス / Breathe Disintegration */
 
 /*
  * New monster race bit flags
