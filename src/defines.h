@@ -2598,35 +2598,29 @@
  * Bit flags for the "project()" function
  *
  *   JUMP: Jump directly to the target location (this is a hack)
- *   BEAM: Work as a beam weapon (affect every grid passed through)
  *   THRU: Continue "through" the target (used for "bolts"/"beams")
- *   STOP: Stop as soon as we hit a monster (used for "bolts")
- *   GRID: Affect each grid in the "blast area" in some way
- *   ITEM: Affect each object in the "blast area" in some way
- *   KILL: Affect each monster in the "blast area" in some way
  *   HIDE: Hack -- disable "visual" feedback from projection
  *   DISI: Disintegrate non-permanent features
  *   PLAYER: Main target is player (used for riding player)
  *   AIMED: Target is only player or monster, so don't affect another.
  *          Depend on PROJECT_PLAYER.
  *          (used for minimum (rad == 0) balls on riding player)
- *   REFLECTABLE: Refrectable spell attacks (used for "bolts")
  *   NO_HANGEKI: Avoid counter attacks of monsters
  *   PATH: Only used for printing project path
  *   FAST: Hide "visual" of flying bolts until blast
  */
 #define PROJECT_JUMP        0x01
-#define PROJECT_BEAM        0x02
+#define PROJECT_BEAM        0x02   /*!< 遠隔攻撃特性: ビーム範囲を持つ / Work as a beam weapon (affect every grid passed through) */
 #define PROJECT_THRU        0x04
 #define PROJECT_STOP        0x08
-#define PROJECT_GRID        0x10
-#define PROJECT_ITEM        0x20
-#define PROJECT_KILL        0x40
+#define PROJECT_GRID        0x10   /*!< 遠隔攻撃特性: 射程内の地形に影響を及ぼす / Affect each grid in the "blast area" in some way */
+#define PROJECT_ITEM        0x20   /*!< 遠隔攻撃特性: 射程内のアイテムに影響を及ぼす / Affect each object in the "blast area" in some way */
+#define PROJECT_KILL        0x40   /*!< 遠隔攻撃特性: 射程内のモンスターに影響を及ぼす / Affect each monster in the "blast area" in some way */
 #define PROJECT_HIDE        0x80
 #define PROJECT_DISI        0x100
 #define PROJECT_PLAYER      0x200
 #define PROJECT_AIMED       0x400
-#define PROJECT_REFLECTABLE 0x800
+#define PROJECT_REFLECTABLE 0x800  /*!< 遠隔攻撃特性: 反射可能(ボルト系魔法に利用) / Refrectable spell attacks (used for "bolts") */
 #define PROJECT_NO_HANGEKI  0x1000
 #define PROJECT_PATH        0x2000
 #define PROJECT_FAST        0x4000
