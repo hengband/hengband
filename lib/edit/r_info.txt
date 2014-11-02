@@ -3912,7 +3912,7 @@ B:BITE:HURT:3d4
 F:WEIRD_MIND | BASH_DOOR | CAN_FLY | DROP_CORPSE
 F:ANIMAL
 D:$It is a vicious insect with a tough carapace.
-D:それは頑丈な甲羅を持った邪悪な昆虫だ。
+D:それは頑丈な甲羅を持った凶暴な昆虫だ。
 
 #J0#
 N:237:イークの大王『ボルドール』
