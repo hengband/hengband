@@ -2533,21 +2533,10 @@
 #define SV_FOOD_PINT_OF_WINE            39
 
 
-/*
- * Special "sval" limit -- first "normal" food
- */
-#define SV_FOOD_MIN_FOOD                32
+#define SV_ROD_MIN_DIRECTION    12 /*!< この値以降の小項目IDを持ったロッドは使用時にターゲットを要求する / Special "sval" limit -- first "aimed" rod */
 
-/*
- * Special "sval" limit -- first "aimed" rod
- */
-#define SV_ROD_MIN_DIRECTION    12
-
-/*
- * Special "sval" limit -- first "large" chest
- */
-#define SV_CHEST_MIN_LARGE      4
-#define SV_CHEST_KANDUME        50
+#define SV_CHEST_MIN_LARGE      4  /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
+#define SV_CHEST_KANDUME        50 /*!< 箱アイテムの小項目ID: おもちゃのカンヅメ
 
 /*
  * Special "sval" limit -- first "good" magic/prayer book
