@@ -2692,44 +2692,44 @@
 
 
 /*
- * Bit flags for the "get_item" function
+ * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function
  */
-#define USE_EQUIP	0x01	/* Allow equip items */
-#define USE_INVEN	0x02	/* Allow inven items */
-#define USE_FLOOR	0x04	/* Allow floor items */
+#define USE_EQUIP	0x01	/*!< アイテム選択範囲: 装備品からの選択を許可する / Allow equip items */
+#define USE_INVEN	0x02	/*!< アイテム選択範囲: 所持品からの選択を許可する /  Allow inven items */
+#define USE_FLOOR	0x04	/*!< アイテム選択範囲: 床下のアイテムからの選択を許可する /  Allow floor items */
 
 
 /*
- * Bit flags for the "p_ptr->notice" variable
+ * p_ptr->noticeに充てるアイテム更新処理要求 / Bit flags for the "p_ptr->notice" variable
  */
-#define PN_COMBINE      0x00000001L     /* Combine the pack */
-#define PN_REORDER      0x00000002L     /* Reorder the pack */
-#define PN_AUTODESTROY  0x00000004L     /* Auto-destroy marked item */
+#define PN_COMBINE      0x00000001L     /*!< アイテム処理フラグ: アイテムの結合を要する / Combine the pack */
+#define PN_REORDER      0x00000002L     /*!< アイテム処理フラグ: アイテムの並び替えを要する / Reorder the pack */
+#define PN_AUTODESTROY  0x00000004L     /*!< アイテム処理フラグ: アイテムの自動破壊を要する / Auto-destroy marked item */
 /* xxx (many) */
 
 
 /*
- * Bit flags for the "p_ptr->update" variable
+ * p_ptr->updateに充てるプレイヤーステータス更新処理要求 / Bit flags for the "p_ptr->update" variable
  */
-#define PU_BONUS        0x00000001L     /* Calculate bonuses */
-#define PU_TORCH        0x00000002L     /* Calculate torch radius */
+#define PU_BONUS        0x00000001L     /*!< ステータス更新フラグ: 能力値修正 / Calculate bonuses */
+#define PU_TORCH        0x00000002L     /*!< ステータス更新フラグ: 光源半径 / Calculate torch radius */
 /* xxx (many) */
-#define PU_HP           0x00000010L     /* Calculate chp and mhp */
-#define PU_MANA         0x00000020L     /* Calculate csp and msp */
-#define PU_SPELLS       0x00000040L     /* Calculate spells */
+#define PU_HP           0x00000010L     /*!< ステータス更新フラグ: HP / Calculate chp and mhp */
+#define PU_MANA         0x00000020L     /*!< ステータス更新フラグ: MP / Calculate csp and msp */
+#define PU_SPELLS       0x00000040L     /*!< ステータス更新フラグ: 魔法学習数 / Calculate spells */
 /* xxx (many) */
 /* xxx (many) */
-#define PU_UN_VIEW      0x00010000L     /* Forget view */
-#define PU_UN_LITE      0x00020000L     /* Forget lite */
+#define PU_UN_VIEW      0x00010000L     /*!< ステータス更新フラグ: 地形の視界外化 / Forget view */
+#define PU_UN_LITE      0x00020000L     /*!< ステータス更新フラグ: 明暗範囲の視界外化 / Forget lite */
 /* xxx (many) */
-#define PU_VIEW         0x00100000L     /* Update view */
-#define PU_LITE         0x00200000L     /* Update lite */
-#define PU_MON_LITE     0x00400000L     /* Monster illumination */
-#define PU_DELAY_VIS    0x00800000L     /* Mega-Hack -- Delayed visual update */
-#define PU_MONSTERS     0x01000000L     /* Update monsters */
-#define PU_DISTANCE     0x02000000L     /* Update distances */
+#define PU_VIEW         0x00100000L     /*!< ステータス更新フラグ: 視界 / Update view */
+#define PU_LITE         0x00200000L     /*!< ステータス更新フラグ: 明暗範囲 / Update lite */
+#define PU_MON_LITE     0x00400000L     /*!< ステータス更新フラグ: モンスターの光源範囲 / Monster illumination */
+#define PU_DELAY_VIS    0x00800000L     /*!< ステータス更新フラグ: 視界の追加更新 / Mega-Hack -- Delayed visual update */
+#define PU_MONSTERS     0x01000000L     /*!< ステータス更新フラグ: モンスターのステータス / Update monsters */
+#define PU_DISTANCE     0x02000000L     /*!< ステータス更新フラグ: プレイヤーとモンスターの距離 / Update distances */
 /* xxx */
-#define PU_FLOW         0x10000000L     /* Update flow */
+#define PU_FLOW         0x10000000L     /*!< ステータス更新フラグ: プレイヤーから各マスへの到達距離 / Update flow */
 /* xxx (many) */
 
 
