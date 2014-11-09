@@ -22052,3 +22052,15 @@ D:$the bane of all Kjeldorans. Their great size and ferocity made
 D:$them the subject of countless nightmares- 
 D:$they embodied the worst of the Ice Age
 
+N:1101:紫ぷよ
+E:Purple puyo
+G:j:v
+I:120:3d1:15:20:50
+W:25:10:0:50:0:0
+B:EXPLODE:POISON:12d2
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID |
+F:NEVER_MOVE | MULTIPLY |
+F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
+D:$A mysterious purple jelly thing.  It looks ready to explode.
+D:紫でぷよぷよした謎の生物だ。
+
