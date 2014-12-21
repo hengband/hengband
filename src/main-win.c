@@ -3376,8 +3376,8 @@ static void init_windows(void)
 		td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
 		/* Activate the chosen font */
 		term_force_font(td, NULL);
-		td->tile_wid = td->font_wid;
-		td->tile_hgt = td->font_hgt;
+		if(!td->tile_wid) td->tile_wid = td->font_wid;
+		if(!td->tile_hgt) td->tile_hgt = td->font_hgt;
 #else
 		/* Access the standard font file */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_FONT, td->font_want);
