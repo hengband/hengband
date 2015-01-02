@@ -6487,8 +6487,14 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
 	return i == n;
 }
 
-/*
- * Actually create buildings
+/*!
+ * @brief タイプ16の部屋…地下都市生成のサブルーチン / Actually create buildings
+ * @return なし
+ * @param ltcy 生成基準Y座標
+ * @param ltcx 生成基準X座標
+ * @param stotes[] 生成する店舗のリスト
+ * @param n 生成する店舗の数
+ * @note
  * Note: ltcy and ltcx indicate "left top corner".
  */
 static void build_stores(int ltcy, int ltcx, int stores[], int n)
@@ -6649,11 +6655,11 @@ static bool build_type16(void)
 }
 
 
-/*
- * Attempt to build a room of the given type at the given block
- *
- * Note that we restrict the number of "crowded" rooms to reduce
- * the chance of overflowing the monster list during level creation.
+/*!
+ * @brief 与えられた部屋型IDに応じて部屋の生成処理分岐を行い結果を返す / Attempt to build a room of the given type at the given block
+ * @param type 部屋型ID
+ * @note that we restrict the number of "crowded" rooms to reduce the chance of overflowing the monster list during level creation.
+ * @return 部屋の精製に成功した場合 TRUE を返す。
  */
 static bool room_build(int typ)
 {
@@ -6683,8 +6689,12 @@ static bool room_build(int typ)
 	return FALSE;
 }
 
-
-#define MOVE_PLIST(dst, src) (prob_list[dst] += prob_list[src], prob_list[src] = 0)
+/*!
+ * @brief 指定した部屋の生成確率を別の部屋に加算し、指定した部屋の生成率を0にする
+ * @param dst 確率を移す先の部屋種ID
+ * @param src 確率を与える元の部屋種ID
+ */
+#define MOVE_PLIST(dst, src) (prob_list[dst] += prob_list[src], prob_list[src] = 0) 
 
 /*!
  * @brief 部屋生成処理のメインルーチン(Sangbandを経由してOangbandからの実装を引用) / Generate rooms in dungeon.  Build bigger rooms at first.　[from SAngband (originally from OAngband)]
