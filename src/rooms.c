@@ -6686,10 +6686,9 @@ static bool room_build(int typ)
 
 #define MOVE_PLIST(dst, src) (prob_list[dst] += prob_list[src], prob_list[src] = 0)
 
-/*
- * [from SAngband (originally from OAngband)]
- * 
- * Generate rooms in dungeon.  Build bigger rooms at first.
+/*!
+ * @brief 部屋生成処理のメインルーチン(Sangbandを経由してOangbandからの実装を引用) / Generate rooms in dungeon.  Build bigger rooms at first.　[from SAngband (originally from OAngband)]
+ * @return 部屋生成に成功した場合 TRUE を返す。
  */
 bool generate_rooms(void)
 {
@@ -6731,7 +6730,7 @@ bool generate_rooms(void)
 	 * XXX -- Various dungeon types and options.
 	 */
 
-	/* Ironman sees only Greater Vaults */
+	/*! @details ダンジョンにBEGINNER、CHAMELEON、SMALLESTいずれのフラグもなく、かつ「常に通常でない部屋を生成する」フラグがONならば、GRATER_VAULTのみを生成対象とする。 / Ironman sees only Greater Vaults */
 	if (ironman_rooms && !((d_info[dungeon_type].flags1 & (DF1_BEGINNER | DF1_CHAMELEON | DF1_SMALLEST))))
 	{
 		for (i = 0; i < ROOM_T_MAX; i++)
@@ -6741,7 +6740,7 @@ bool generate_rooms(void)
 		}
 	}
 
-	/* Forbidden vaults */
+	/*! @details ダンジョンにNO_VAULTフラグがあるならば、LESSER_VAULT / GREATER_VAULT/ RANDOM_VAULTを除外 / Forbidden vaults */
 	else if (d_info[dungeon_type].flags1 & DF1_NO_VAULT)
 	{
 		prob_list[ROOM_T_LESSER_VAULT] = 0;
@@ -6749,8 +6748,7 @@ bool generate_rooms(void)
 		prob_list[ROOM_T_RANDOM_VAULT] = 0;
 	}
 
-
-	/* NO_CAVE dungeon (Castle)*/
+	/*! @details ダンジョンにNO_CAVEフラグがある場合、FRACAVEの生成枠がNORMALに与えられる。CRIPT、OVALの生成枠がINNER_Fに与えられる。/ NO_CAVE dungeon (Castle)*/
 	if (d_info[dungeon_type].flags1 & DF1_NO_CAVE)
 	{
 		MOVE_PLIST(ROOM_T_NORMAL, ROOM_T_FRACAVE);
@@ -6758,24 +6756,25 @@ bool generate_rooms(void)
 		MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_OVAL);
 	}
 
-	/* CAVE dungeon (Orc cave etc.) */
+	/*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc cave etc.) */
 	else if (d_info[dungeon_type].flags1 & DF1_CAVE)
 	{
 		MOVE_PLIST(ROOM_T_FRACAVE, ROOM_T_NORMAL);
 	}
 
-	/* No caves when a (random) cavern exists: they look bad */
+	/*! @details ダンジョンの基本地形が最初から渓谷かアリーナ型の場合 FRACAVE は生成から除外。 /  No caves when a (random) cavern exists: they look bad */
 	else if (dun->cavern || dun->empty_level)
 	{
 		prob_list[ROOM_T_FRACAVE] = 0;
 	}
 
-	/* Forbidden glass rooms */
+	/*! @details ダンジョンに最初からGLASS_ROOMフラグがある場合、GLASS を生成から除外。/ Forbidden glass rooms */
 	if (!(d_info[dungeon_type].flags1 & DF1_GLASS_ROOM))
 	{
 		prob_list[ROOM_T_GLASS] = 0;
 	}
 
+	/*! @details ARCADEは同フラグがダンジョンにないと生成されない。 / Forbidden glass rooms */
 	if (!(d_info[dungeon_type].flags1 & DF1_ARCADE))
 	{
 		prob_list[ROOM_T_ARCADE] = 0;
@@ -6892,7 +6891,7 @@ bool generate_rooms(void)
 		if (!remain) break;
 	}
 
-	if (rooms_built < 2) return FALSE;
+	if (rooms_built < 2) return FALSE; /*! @details 部屋生成数が2未満の場合生成失敗を返す */
 
 	if (cheat_room)
 	{
