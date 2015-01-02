@@ -94,7 +94,7 @@ struct feature_type
 
 /*!
  * @struct object_kind
- * @brief ベースアイテム上右方の構造体 / Information about object "kinds", including player knowledge.
+ * @brief ベースアイテム情報の構造体 / Information about object "kinds", including player knowledge.
  * @details
  * ゲーム進行用のセーブファイル上では aware と tried のみ保存対象とすること。と英文ではあるが実際はもっとある様子である。 /
  * Only "aware" and "tried" are saved in the savefile
@@ -154,51 +154,51 @@ struct object_kind
 
 
 
-/*
- * Information about "artifacts".
- *
- * Note that the save-file only writes "cur_num" to the savefile.
- *
- * Note that "max_num" is always "1" (if that artifact "exists")
- */
-
 typedef struct artifact_type artifact_type;
 
+/*!
+ * @struct artifact_type
+ * @brief 固定アーティファクト情報の構造体 / Artifact structure.
+ * @details
+ * @note
+ * the save-file only writes "cur_num" to the savefile.
+ * "max_num" is always "1" (if that artifact "exists")
+ */
 struct artifact_type
 {
-	u32b name;			/* Name (offset) */
-	u32b text;			/* Text (offset) */
+	u32b name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
+	u32b text;			/*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
 
-	byte tval;			/* Artifact type */
-	byte sval;			/* Artifact sub type */
+	byte tval;			/*!< ベースアイテム大項目ID / Artifact type */
+	byte sval;			/*!< ベースアイテム小項目ID / Artifact sub type */
 
-	s16b pval;			/* Artifact extra info */
+	s16b pval;			/*!< pval修正値 / Artifact extra info */
 
-	s16b to_h;			/* Bonus to hit */
-	s16b to_d;			/* Bonus to damage */
-	s16b to_a;			/* Bonus to armor */
+	s16b to_h;			/*!< 命中ボーナス値 /  Bonus to hit */
+	s16b to_d;			/*!< ダメージボーナス値 / Bonus to damage */
+	s16b to_a;			/*!< ACボーナス値 / Bonus to armor */
 
-	s16b ac;			/* Base armor */
+	s16b ac;			/*!< 上書きベースAC値 / Base armor */
 
-	byte dd, ds;		/* Damage when hits */
+	byte dd, ds;		/*!< ダイス値 / Damage when hits */
 
-	s16b weight;		/* Weight */
+	s16b weight;		/*!< 重量 / Weight */
 
-	s32b cost;			/* Artifact "cost" */
+	s32b cost;			/*!< 基本価格 / Artifact "cost" */
 
-	u32b flags[TR_FLAG_SIZE];       /* Artifact Flags */
+	u32b flags[TR_FLAG_SIZE];       /*! アイテムフラグ / Artifact Flags */
 
-	u32b gen_flags;		/* flags for generate */
+	u32b gen_flags;		/*! アイテム生成フラグ / flags for generate */
 
-	byte level;			/* Artifact level */
-	byte rarity;		/* Artifact rarity */
+	byte level;			/*! 基本生成階 / Artifact level */
+	byte rarity;		/*! レアリティ / Artifact rarity */
 
-	byte cur_num;		/* Number created (0 or 1) */
-	byte max_num;		/* Unused (should be "1") */
+	byte cur_num;		/*! 現在の生成数 / Number created (0 or 1) */
+	byte max_num;		/*! (未使用)最大生成数 / Unused (should be "1") */
 
-	s16b floor_id;          /* Leaved on this location last time */
+	s16b floor_id;      /*! アイテムを落としたフロアのID / Leaved on this location last time */
 
-	byte act_idx;		/* Activative ability index */
+	byte act_idx;		/*! 発動能力ID / Activative ability index */
 };
 
 

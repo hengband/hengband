@@ -1,8 +1,10 @@
-﻿/* File: init.h */
-
-/*
+﻿/*!
+ * @file init.h
+ * @brief ゲームデータ初期化処理のヘッダファイル
+ * @date 2015/01/02
+ * @author
  * Copyright (c) 2000 Robert Ruehlmann
- *
+ * @details
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.
@@ -41,9 +43,10 @@ typedef struct header header;
 
 typedef errr (*parse_info_txt_func)(char *buf, header *head);
 
-/*
- * Template file header information (see "init.c").  16 bytes.
- *
+/*!
+ * @struct header
+ * @brief 各初期データ用ヘッダ構造体 / Template file header information (see "init.c").  16 bytes.
+ * @details
  * Note that the sizes of many of the "arrays" are between 32768 and
  * 65535, and so we must use "unsigned" values to hold the "sizes" of
  * these arrays below.  Normally, I try to avoid using unsigned values,
