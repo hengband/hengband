@@ -205,15 +205,13 @@ void spell_RF4_SHRIEK(int m_idx, int t_idx, int TARGET_TYPE)
 }
 
 /*!
-* @brief RF4_DISPELの処理。魔力消去。 /
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-*/
+ * @brief RF4_DISPELの処理。魔力消去。 /
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ */
 void spell_RF4_DISPEL(int m_idx, int t_idx, int TARGET_TYPE)
 {
-    bool known = monster_near_player(m_idx, t_idx);
-    bool see_m = see_monster(m_idx);
 	char m_name[80], t_name[80];
     monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
@@ -1249,7 +1247,6 @@ int spell_RF5_BO_NETH(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 int spell_RF5_BO_WATE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int dam;
-    int rlev = monster_level_idx(m_idx);
 
     monspell_message(m_idx, t_idx,
         _("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1278,7 +1275,6 @@ int spell_RF5_BO_WATE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 int spell_RF5_BO_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int dam;
-    int rlev = monster_level_idx(m_idx);
 
     monspell_message(m_idx, t_idx,
         _("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1307,7 +1303,6 @@ int spell_RF5_BO_MANA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 int spell_RF5_BO_PLAS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int dam;
-    int rlev = monster_level_idx(m_idx);
 
     monspell_message(m_idx, t_idx,
         _("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1336,7 +1331,6 @@ int spell_RF5_BO_PLAS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 int spell_RF5_BO_ICEE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int dam;
-    int rlev = monster_level_idx(m_idx);
 
     monspell_message(m_idx, t_idx,
         _("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1366,7 +1360,6 @@ int spell_RF5_BO_ICEE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 int spell_RF5_MISSILE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int dam;
-    int rlev = monster_level_idx(m_idx);
 
     monspell_message(m_idx, t_idx,
         _("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -2393,7 +2386,6 @@ void spell_RF6_TELE_LEVEL(int m_idx, int t_idx, int TARGET_TYPE)
 int spell_RF6_PSY_SPEAR(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int dam;
-    int rlev = monster_level_idx(m_idx);
 
     monspell_message(m_idx, t_idx,
         _("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -2578,13 +2570,13 @@ int summon_EAGLE(int y, int x, int rlev, int m_idx)
 }
 
 /*!
-* @brief インターネット・エクスプローダー召喚の処理。 /
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param rlev 呪文を唱えるモンスターのレベル
-* @param m_idx 呪文を唱えるモンスターID
-* @return 召喚したモンスターの数を返す。
-*/
+ * @brief インターネット・エクスプローダー召喚の処理。 /
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param rlev 呪文を唱えるモンスターのレベル
+ * @param m_idx 呪文を唱えるモンスターID
+ * @return 召喚したモンスターの数を返す。
+ */
 int summon_IE(int y, int x, int rlev, int m_idx)
 {
     u32b mode = 0L;
@@ -2598,15 +2590,15 @@ int summon_IE(int y, int x, int rlev, int m_idx)
 }
 
 /*!
-* @brief ダンジョン・ガーディアン召喚の処理。 /
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param rlev 呪文を唱えるモンスターのレベル
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-* @return 召喚したモンスターの数を返す。
-*/
+ * @brief ダンジョン・ガーディアン召喚の処理。 /
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param rlev 呪文を唱えるモンスターのレベル
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @return 召喚したモンスターの数を返す。
+ */
 int summon_Guardian(int y, int x, int rlev, int m_idx, int t_idx, int TARGET_TYPE)
 {
 	int k, count = 0;	

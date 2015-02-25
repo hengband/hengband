@@ -5638,7 +5638,7 @@ int summon_cyber(int who, int y, int x)
 void wall_breaker(void)
 {
 	int i;
-	int y, x;
+	int y = 0, x = 0;
 	int attempts = 1000;
 
 	if (randint1(80 + p_ptr->lev) < 70)

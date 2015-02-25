@@ -5379,7 +5379,7 @@ static void tgt_pt_prepare(void)
 bool tgt_pt(int *x_ptr, int *y_ptr)
 {
 	char ch = 0;
-	int d, x, y, n;
+	int d, x, y, n = 0;
 	bool success = FALSE;
 
 	int wid, hgt;
@@ -5393,7 +5393,6 @@ bool tgt_pt(int *x_ptr, int *y_ptr)
 	if (expand_list) 
 	{
 		tgt_pt_prepare();
-		n = 0;
 	}
 
 	msg_print(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."));
