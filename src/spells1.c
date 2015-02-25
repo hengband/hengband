@@ -5890,7 +5890,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 			{
                 msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 				/* Have some nightmares */
-				have_nightmare();
+				sanity_blast(NULL, FALSE);
 			}
 
 			set_paralyzed(p_ptr->paralyzed + dam);

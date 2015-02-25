@@ -1241,7 +1241,7 @@ static void hit_trap(bool break_trap)
 					msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
 
 					/* Have some nightmares */
-					have_nightmare();
+					sanity_blast(NULL, FALSE);
 
 				}
 				(void)set_paralyzed(p_ptr->paralyzed + randint0(10) + 5);

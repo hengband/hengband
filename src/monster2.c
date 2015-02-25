@@ -1962,7 +1962,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 
 	if (p_ptr->inside_battle || !character_dungeon) return;
 
-	if (!necro)
+	if (!necro && m_ptr)
 	{
 		char            m_name[80];
 		monster_race    *r_ptr = &r_info[m_ptr->ap_r_idx];
@@ -2041,6 +2041,97 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		    (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD))
 		{
 			if (saving_throw(25 + p_ptr->lev)) return;
+		}
+	}
+	else if(!necro)
+	{
+		bool happened = FALSE;
+		monster_race *r_ptr;
+		int power;
+		char m_name[80];
+		cptr desc;
+
+		get_mon_num_prep(get_nightmare, NULL);
+
+		r_ptr = &r_info[get_mon_num(MAX_DEPTH)];
+		power = r_ptr->level + 10;
+		desc = r_name + r_ptr->name;
+
+		get_mon_num_prep(NULL, NULL);
+
+		/* Describe it */
+#ifndef JP
+		if (!(r_ptr->flags1 & RF1_UNIQUE))
+			sprintf(m_name, "%s %s", (is_a_vowel(desc[0]) ? "an" : "a"), desc);
+		else
+#endif
+		sprintf(m_name, "%s", desc);
+
+		if (!(r_ptr->flags1 & RF1_UNIQUE))
+		{
+			if (r_ptr->flags1 & RF1_FRIENDS) power /= 2;
+		}
+		else power *= 2;
+
+		if (saving_throw(p_ptr->skill_sav * 100 / power))
+		{
+			msg_format(_("夢の中で%sに追いかけられた。", "%^s chases you through your dreams."), m_name);
+			/* Safe */
+			return;
+		}
+
+		if (p_ptr->image)
+		{
+			/* Something silly happens... */
+			msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
+						funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
+
+			if (one_in_(3))
+			{
+				msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
+				p_ptr->image = p_ptr->image + randint1(r_ptr->level);
+			}
+
+			/* Never mind; we can't see it clearly enough */
+			return;
+		}
+
+		/* Something frightening happens... */
+		msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
+				  horror_desc[randint0(MAX_SAN_HORROR)], desc);
+
+		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+
+		if (!p_ptr->mimic_form)
+		{
+			switch (p_ptr->prace)
+			{
+			/* Demons may make a saving throw */
+			case RACE_IMP:
+			case RACE_DEMON:
+				if (saving_throw(20 + p_ptr->lev)) return;
+				break;
+			/* Undead may make a saving throw */
+			case RACE_SKELETON:
+			case RACE_ZOMBIE:
+			case RACE_SPECTRE:
+			case RACE_VAMPIRE:
+				if (saving_throw(10 + p_ptr->lev)) return;
+				break;
+			}
+		}
+		else
+		{
+			/* Demons may make a saving throw */
+			if (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)
+			{
+				if (saving_throw(20 + p_ptr->lev)) return;
+			}
+			/* Undead may make a saving throw */
+			else if (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)
+			{
+				if (saving_throw(10 + p_ptr->lev)) return;
+			}
 		}
 	}
 	else
