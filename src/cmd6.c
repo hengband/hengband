@@ -809,14 +809,8 @@ static void do_cmd_quaff_potion_aux(int item)
 				{
 					msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 
-					/* Pick a nightmare */
-					get_mon_num_prep(get_nightmare, NULL);
-
 					/* Have some nightmares */
-					have_nightmare(get_mon_num(MAX_DEPTH));
-
-					/* Remove the monster restriction */
-					get_mon_num_prep(NULL, NULL);
+					have_nightmare();
 				}
 				if (set_paralyzed(p_ptr->paralyzed + randint0(4) + 4))
 				{

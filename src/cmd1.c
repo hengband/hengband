@@ -1240,14 +1240,9 @@ static void hit_trap(bool break_trap)
 				{
 					msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
 
-					/* Pick a nightmare */
-					get_mon_num_prep(get_nightmare, NULL);
-
 					/* Have some nightmares */
-					have_nightmare(get_mon_num(MAX_DEPTH));
+					have_nightmare();
 
-					/* Remove the monster restriction */
-					get_mon_num_prep(NULL, NULL);
 				}
 				(void)set_paralyzed(p_ptr->paralyzed + randint0(10) + 5);
 			}

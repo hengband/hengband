@@ -2092,13 +2092,22 @@ bool get_nightmare(int r_idx)
  * @return なし
  * @todo 重複関数あり、要リファクタリング。
  */
-void have_nightmare(int r_idx)
+void have_nightmare()
 {
 	bool happened = FALSE;
-	monster_race *r_ptr = &r_info[r_idx];
-	int power = r_ptr->level + 10;
+	monster_race *r_ptr;
+	int power;
 	char m_name[80];
-	cptr desc = r_name + r_ptr->name;
+	cptr desc;
+
+	get_mon_num_prep(get_nightmare, NULL);
+
+	r_ptr = &r_info[get_mon_num(MAX_DEPTH)];
+	power = r_ptr->level + 10;
+	desc = r_name + r_ptr->name;
+
+	get_mon_num_prep(NULL, NULL);
+
 
 	/* Describe it */
 #ifndef JP
@@ -2376,19 +2385,13 @@ static bool inn_comm(int cmd)
 				{
 					msg_print(_("眠りに就くと恐ろしい光景が心をよぎった。", "Horrible visions flit through your mind as you sleep."));
 
-					/* Pick a nightmare */
-					get_mon_num_prep(get_nightmare, NULL);
-
 					/* Have some nightmares */
 					while(1)
 					{
-						have_nightmare(get_mon_num(MAX_DEPTH));
+						have_nightmare();
 
 						if (!one_in_(3)) break;
 					}
-
-					/* Remove the monster restriction */
-					get_mon_num_prep(NULL, NULL);
 
 					msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
