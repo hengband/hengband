@@ -2098,7 +2098,6 @@ static void object_mention(object_type *o_ptr)
  * "apply_magic()" is called immediately after we return.\n
  *\n
  * Note -- see "make_artifact()" and "apply_magic()"\n
- * @todo 生成基準を dun_level から obj_level に直すか検討。
  */
 static bool make_artifact_special(object_type *o_ptr)
 {
@@ -2126,10 +2125,10 @@ static bool make_artifact_special(object_type *o_ptr)
 
 		/*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /
 		 *  XXX XXX Enforce minimum "depth" (loosely) */
-		if (a_ptr->level > dun_level)
+		if (a_ptr->level > object_level)
 		{
 			/* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
-			int d = (a_ptr->level - dun_level) * 2;
+			int d = (a_ptr->level - object_level) * 2;
 			if (!one_in_(d)) continue;
 		}
 
