@@ -212,8 +212,7 @@ static void prt_alloc(byte tval, byte sval, int row, int col)
 	int home = 0;
 	u32b rarity[K_MAX_DEPTH];
 	u32b total[K_MAX_DEPTH];
-	s32b maxd = 1, display[22];
-	byte c = TERM_WHITE;
+	s32b display[22];
 	cptr r = "+---Rate---+";
 	object_kind *k_ptr;
 

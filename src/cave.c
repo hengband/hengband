@@ -1569,8 +1569,8 @@ void display_dungeon(void)
 	byte a;
 	char c;
 
-	byte ta;
-	char tc;
+	byte ta = 0;
+	char tc = '\0';
 
 	for (x = px - Term->wid / 2 + 1; x <= px + Term->wid / 2; x++)
 	{

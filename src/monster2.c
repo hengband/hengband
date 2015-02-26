@@ -2045,7 +2045,6 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	}
 	else if(!necro)
 	{
-		bool happened = FALSE;
 		monster_race *r_ptr;
 		int power;
 		char m_name[80];

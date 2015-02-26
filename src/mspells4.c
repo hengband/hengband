@@ -1760,7 +1760,7 @@ void spell_RF6_HASTE(int m_idx, int t_idx, int TARGET_TYPE)
 */
 int spell_RF6_HAND_DOOM(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
-    int dam;
+    int dam = 0;
 
     simple_monspell_message(m_idx, t_idx,
         _("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"),

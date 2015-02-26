@@ -579,7 +579,7 @@ void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, 
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool learnable = spell_learnable(m_idx);
-	int flg;
+	int flg = 0x00;
 
     switch (target_type)
     {
@@ -1453,7 +1453,6 @@ bool make_attack_spell(int m_idx)
 	bool            no_inate = FALSE;
 	bool            do_spell = DO_SPELL_NONE;
 	int             dam = 0;
-	int rad = 0; //For elemental spells
 
 	/* Target location */
 	int x = px;
@@ -1462,9 +1461,6 @@ bool make_attack_spell(int m_idx)
 	/* Target location for lite breath */
 	int x_br_lite = 0;
 	int y_br_lite = 0;
-
-	/* Summon count */
-	int count = 0;
 
 	/* Extract the "see-able-ness" */
     bool seen = (!p_ptr->blind && m_ptr->ml);

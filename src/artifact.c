@@ -2501,7 +2501,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_CAST_BA_STAR:
 		{
 			int num = damroll(5, 3);
-			int y, x;
+			int y = 0, x = 0;
 			int attempts;
 			msg_format(_("%sが稲妻で覆われた...","The %s is surrounded by lightning..."), name);
 			for (k = 0; k < num; k++)

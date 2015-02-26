@@ -44,7 +44,6 @@ void set_bluemage_damage(int SPELL_NUM, int plev, cptr msg, char* tmp)
 static void learned_info(char *p, int power)
 {
 	int plev = pseudo_plev();
-	int hp = p_ptr->chp;
 
 #ifdef JP
 	cptr s_dam = " 損傷:%s";
@@ -609,7 +608,6 @@ static bool cast_learned_spell(int spell, bool success)
 	int             dir;
 	int             plev = pseudo_plev();
 	int     summon_lev = p_ptr->lev * 2 / 3 + randint1(p_ptr->lev/2);
-	int             hp = p_ptr->chp;
 	int             damage = 0;
 	bool   pet = success;
 	bool   no_trump = FALSE;
@@ -658,8 +656,6 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
 	case MS_SHOOT:
 	{
-		object_type *o_ptr = NULL;
-
 		if (!get_aim_dir(&dir)) return FALSE;
 		
         msg_print(_("矢を放った。", "You fire an arrow."));

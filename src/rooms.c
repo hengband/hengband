@@ -3017,7 +3017,7 @@ static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
  */
 static bool build_type7(void)
 {
-	vault_type *v_ptr;
+	vault_type *v_ptr = NULL;
 	int dummy;
 	int x, y;
 	int xval, yval;

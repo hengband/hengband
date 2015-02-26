@@ -257,11 +257,10 @@ bool monst_spell_monst(int m_idx)
 {
 	int y = 0, x = 0;
 	int i, k, t_idx = 0;
-	int thrown_spell, count = 0;
+	int thrown_spell;
 	int dam = 0;
 	int start;
 	int plus = 1;
-	int rad = 0; //For elemental balls
 
 	byte spell[96], num = 0;
 
@@ -290,10 +289,7 @@ bool monst_spell_monst(int m_idx)
 		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
 
 	bool can_use_lite_area = FALSE;
-
 	bool can_remember;
-
-	bool resists_tele = FALSE;
 
 	/* Cannot cast spells when confused */
 	if (MON_CONFUSED(m_ptr)) return (FALSE);
