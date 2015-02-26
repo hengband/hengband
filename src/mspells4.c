@@ -2154,8 +2154,6 @@ int spell_RF6_SPECIAL(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-    u32b mode = 0L;
-    int count=0;
 
     disturb(1, 1);
     switch (m_ptr->r_idx)
@@ -2256,7 +2254,6 @@ void spell_RF6_TELE_TO(int m_idx, int t_idx, int TARGET_TYPE)
 */
 void spell_RF6_TELE_AWAY(int m_idx, int t_idx, int TARGET_TYPE)
 {
-    monster_type    *m_ptr = &m_list[m_idx];
     monster_type    *t_ptr = &m_list[t_idx];
     monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
 
@@ -2696,7 +2693,6 @@ void spell_RF6_S_KIN(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
     int count = 0;
-    u32b mode = 0L;
 	char m_name[80], t_name[80], m_poss[80];
     monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
@@ -2822,7 +2818,6 @@ void spell_RF6_S_CYBER(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_MONSTER(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -2861,7 +2856,6 @@ void spell_RF6_S_MONSTER(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_MONSTERS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -2900,7 +2894,6 @@ void spell_RF6_S_MONSTERS(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_ANT(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -2935,10 +2928,9 @@ void spell_RF6_S_ANT(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_SPIDER(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
-    int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    int rlev = monster_level_idx(m_idx);
 	
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -2970,7 +2962,6 @@ void spell_RF6_S_SPIDER(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_HOUND(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -3005,7 +2996,6 @@ void spell_RF6_S_HOUND(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_HYDRA(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -3045,7 +3035,6 @@ void spell_RF6_S_ANGEL(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -3090,10 +3079,8 @@ void spell_RF6_S_ANGEL(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_DEMON(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -3125,10 +3112,8 @@ void spell_RF6_S_DEMON(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_UNDEAD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -3160,10 +3145,8 @@ void spell_RF6_S_UNDEAD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_DRAGON(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -3255,7 +3238,6 @@ void spell_RF6_S_HI_UNDEAD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     monster_type    *m_ptr = &m_list[m_idx];
-    monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = monster_level_idx(m_idx);
     int k, count = 0;
 	char m_name[80];
@@ -3307,7 +3289,6 @@ void spell_RF6_S_HI_UNDEAD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_HI_DRAGON(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -3348,7 +3329,6 @@ void spell_RF6_S_HI_DRAGON(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 void spell_RF6_S_AMBERITES(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
-    monster_type    *m_ptr = &m_list[m_idx];
     int rlev = monster_level_idx(m_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
