@@ -4137,7 +4137,6 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 			cave_type *c_ptr = &cave[y][x];
 
 			monster_type *m_ptr = &m_list[c_ptr->m_idx];
-			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Check the visibility */
 			visible = m_ptr->ml;

@@ -237,7 +237,7 @@ static void kill_saved_floor(saved_floor_type *sf_ptr)
  */
 s16b get_new_floor_id(void)
 {
-	saved_floor_type *sf_ptr;
+	saved_floor_type *sf_ptr = NULL;
 	int i;
 
 	/* Look for empty space */
@@ -523,7 +523,7 @@ static void place_pet(void)
 
 	for (i = 0; i < max_num; i++)
 	{
-		int cy, cx, m_idx;
+		int cy = 0, cx = 0, m_idx;
 
 		if (!(party_mon[i].r_idx)) continue;
 

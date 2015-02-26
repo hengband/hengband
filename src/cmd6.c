@@ -2133,7 +2133,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 		case SV_STAFF_STARLITE:
 		{
 			int num = damroll(5, 3);
-			int y, x;
+			int y = 0, x = 0;
 			int attempts;
 
 			if (!p_ptr->blind && !magic)

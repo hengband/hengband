@@ -781,7 +781,7 @@ static void cast_meteor(int dam, int rad)
 
 	for (i = 0; i < b; i++)
 	{
-		int y, x;
+		int y = 0, x = 0;
 		int count;
 
 		for (count = 0; count <= 20; count++)
@@ -6950,7 +6950,7 @@ static cptr do_crusade_spell(int spell, int mode)
 				for (i = 0; i < 12; i++)
 				{
 					int attempt = 10;
-					int my, mx;
+					int my = 0, mx = 0;
 
 					while (attempt--)
 					{

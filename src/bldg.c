@@ -2370,7 +2370,7 @@ static void town_history(void)
  * @param dam 基本ダメージ量
  * @return ダメージ期待値
  */
-s16b calc_crit_ratio_shot(int weight, int plus_ammo, int plus_bow,  int dam)
+s16b calc_crit_ratio_shot(int weight, int plus_ammo, int plus_bow, int dam)
 {
 	int i;
 	object_type *j_ptr =  &inventory[INVEN_BOW];

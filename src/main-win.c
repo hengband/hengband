@@ -2484,7 +2484,7 @@ static errr Term_xtra_win_sound(int v)
 static errr Term_xtra_win_music(int n, int v)
 {
 #ifdef USE_MUSIC
-	int i;
+	int i = 0;
 	char buf[1024];
 #endif /* USE_MUSIC */
 
@@ -3020,10 +3020,10 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 
 	int i;
 	int x1, y1, w1, h1, tw1, th1;
-	int x2, y2, w2, h2, tw2;
+	int x2, y2, w2, h2, tw2 = 0;
 	int x3, y3;
 
-	HDC hdcMask;
+	HDC hdcMask = NULL;
 
 	HDC hdc;
 	HDC hdcSrc;

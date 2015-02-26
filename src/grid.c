@@ -23,7 +23,7 @@
  */
 bool new_player_spot(void)
 {
-	int	y, x;
+	int	y = 0, x = 0;
 	int max_attempts = 10000;
 
 	cave_type *c_ptr;

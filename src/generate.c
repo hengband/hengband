@@ -525,7 +525,7 @@ bool place_quest_monsters(void)
 
 			for (k = 0; k < SAFE_MAX_ATTEMPTS; k++)
 			{
-				int x, y;
+				int x = 0, y = 0;
 				int l;
 
 				/* Find an empty grid */
