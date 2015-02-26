@@ -1445,14 +1445,12 @@ void spell_badstatus_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr ms
 }
 
 /*!
-* @brief RF5_SCAREの処理。恐怖。 /
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-*/
-void spell_RF5_SCARE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+ * @brief RF5_SCAREの処理。恐怖。 /
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ */
+void spell_RF5_SCARE(int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *t_ptr = &m_list[t_idx];
     monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
@@ -1497,14 +1495,12 @@ void spell_RF5_SCARE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 }
 
 /*!
-* @brief RF5_BLINDの処理。盲目。 /
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-*/
-void spell_RF5_BLIND(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+ * @brief RF5_BLINDの処理。盲目。 /
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ */
+void spell_RF5_BLIND(int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *t_ptr = &m_list[t_idx];
     monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
@@ -1562,14 +1558,12 @@ void spell_RF5_BLIND(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 }
 
 /*!
-* @brief RF5_CONFの処理。混乱。 /
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-*/
-void spell_RF5_CONF(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+ * @brief RF5_CONFの処理。混乱。/
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ */
+void spell_RF5_CONF(int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *t_ptr = &m_list[t_idx];
     monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
@@ -1614,14 +1608,12 @@ void spell_RF5_CONF(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 }
 
 /*!
-* @brief RF5_SLOWの処理。減速。 /
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-*/
-void spell_RF5_SLOW(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+ * @brief RF5_SLOWの処理。減速。 /
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ */
+void spell_RF5_SLOW(int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *t_ptr = &m_list[t_idx];
     monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
@@ -1679,14 +1671,12 @@ void spell_RF5_SLOW(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 }
 
 /*!
-* @brief RF5_HOLDの処理。麻痺。 /
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-*/
-void spell_RF5_HOLD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+ * @brief RF5_HOLDの処理。麻痺。 /
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ */
+void spell_RF5_HOLD(int m_idx, int t_idx, int TARGET_TYPE)
 {
     monster_type    *t_ptr = &m_list[t_idx];
     monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
@@ -3508,11 +3498,11 @@ int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx)
     case RF5_SPELL_START + 24: return spell_RF5_BO_PLAS(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_PLAS */
     case RF5_SPELL_START + 25: return spell_RF5_BO_ICEE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ICEE */
     case RF5_SPELL_START + 26: return spell_RF5_MISSILE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MISSILE */
-    case RF5_SPELL_START + 27: spell_RF5_SCARE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF5_SCARE */
-    case RF5_SPELL_START + 28: spell_RF5_BLIND(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF5_BLIND */
-    case RF5_SPELL_START + 29: spell_RF5_CONF(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_CONF */
-    case RF5_SPELL_START + 30: spell_RF5_SLOW(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_SLOW */
-    case RF5_SPELL_START + 31: spell_RF5_HOLD(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_HOLD */
+    case RF5_SPELL_START + 27: spell_RF5_SCARE(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF5_SCARE */
+    case RF5_SPELL_START + 28: spell_RF5_BLIND(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF5_BLIND */
+    case RF5_SPELL_START + 29: spell_RF5_CONF(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_CONF */
+    case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_SLOW */
+    case RF5_SPELL_START + 31: spell_RF5_HOLD(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_HOLD */
     case RF6_SPELL_START + 0:  spell_RF6_HASTE(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_HASTE */
     case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HAND_DOOM */
     case RF6_SPELL_START + 2:  spell_RF6_HEAL(m_idx, 0, MONSTER_TO_PLAYER); break;    /* RF6_HEAL */
@@ -3621,11 +3611,11 @@ int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx)
     case RF5_SPELL_START + 24: return spell_RF5_BO_PLAS(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_PLAS */
     case RF5_SPELL_START + 25: return spell_RF5_BO_ICEE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_BO_ICEE */
     case RF5_SPELL_START + 26: return spell_RF5_MISSILE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF5_MISSILE */
-    case RF5_SPELL_START + 27: spell_RF5_SCARE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_SCARE */
-    case RF5_SPELL_START + 28: spell_RF5_BLIND(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_BLIND */
-    case RF5_SPELL_START + 29: spell_RF5_CONF(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_CONF */
-    case RF5_SPELL_START + 30: spell_RF5_SLOW(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_SLOW */
-    case RF5_SPELL_START + 31: spell_RF5_HOLD(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_HOLD */
+    case RF5_SPELL_START + 27: spell_RF5_SCARE(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_SCARE */
+    case RF5_SPELL_START + 28: spell_RF5_BLIND(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_BLIND */
+    case RF5_SPELL_START + 29: spell_RF5_CONF(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_CONF */
+    case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_SLOW */
+    case RF5_SPELL_START + 31: spell_RF5_HOLD(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_HOLD */
     case RF6_SPELL_START + 0:  spell_RF6_HASTE(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_HASTE */
     case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF6_HAND_DOOM */
     case RF6_SPELL_START + 2:  spell_RF6_HEAL(m_idx, t_idx, MONSTER_TO_MONSTER); break;    /* RF6_HEAL */
