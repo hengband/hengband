@@ -37,12 +37,11 @@
 
 extern int dun_rooms;
 
-extern int dun_tun_rnd;
-extern int dun_tun_chg;
-extern int dun_tun_con;
-extern int dun_tun_pen;
-extern int dun_tun_jct;
-
+extern int dun_tun_rnd; /*!< ダンジョンの通路方向を掻き回す頻度(一回の試行ごとに%で判定している) */
+extern int dun_tun_chg; /*!< ダンジョンの通路をクランクさせる頻度(一回の試行ごとに%で判定している) */
+extern int dun_tun_con; /*!< ダンジョンの通路を継続して引き延ばす頻度(一回の試行ごとに%で判定している) */
+extern int dun_tun_pen; /*!< ダンジョンの部屋入口にドアを設置する頻度(一回の試行ごとに%で判定している) */
+extern int dun_tun_jct; /*!< ダンジョンの通路交差地点付近にドアを設置する頻度(一回の試行ごとに%で判定している) */
 /*
  * Dungeon streamer generation values
  */

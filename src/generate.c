@@ -102,7 +102,7 @@
 #include "rooms.h"
 #include "streams.h"
 
-int dun_tun_rnd;
+int dun_tun_rnd; 
 int dun_tun_chg;
 int dun_tun_con;
 int dun_tun_pen;
