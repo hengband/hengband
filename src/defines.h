@@ -68,7 +68,7 @@
  * Upper compatibility is always guaranteed.
  * </pre>
  */
-#define H_VER_MAJOR 2
+#define H_VER_MAJOR 2 /*!< セーブファイル上のバージョン定義(メジャー番号) */
 #define H_VER_MINOR 1 /*!< セーブファイル上のバージョン定義(マイナー番号) */
 #define H_VER_PATCH 2 /*!< セーブファイル上のバージョン定義(パッチ番号) */
 #define H_VER_EXTRA 4 /*!< セーブファイル上のバージョン定義(エクストラ番号) */
@@ -146,8 +146,8 @@
 /*
  * Arena constants
  */
-#define MAX_ARENA_MONS		41	/* -KMW- */
-#define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT))
+#define MAX_ARENA_MONS		41	/*<! 闘技場のイベント件数 -KMW- */
+#define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT)) /*<! 旧バージョンの闘技場敗北定義 */
 
 
 #define MAX_STORES      10 /*!< store.c用の店舗の種類最大数 / Total number of stores (see "store.c", etc) */
@@ -4408,22 +4408,22 @@ extern int PlayerUID;
  * The "(R,G,B)" codes are given in "fourths" of the "maximal" value,
  * and should "gamma corrected" on most (non-Macintosh) machines.
  */
-#define TERM_DARK                0  /* 'd' */   /* 0,0,0 */
-#define TERM_WHITE               1  /* 'w' */   /* 4,4,4 */
-#define TERM_SLATE               2  /* 's' */   /* 2,2,2 */
-#define TERM_ORANGE              3  /* 'o' */   /* 4,2,0 */
-#define TERM_RED                 4  /* 'r' */   /* 3,0,0 */
-#define TERM_GREEN               5  /* 'g' */   /* 0,2,1 */
-#define TERM_BLUE                6  /* 'b' */   /* 0,0,4 */
-#define TERM_UMBER               7  /* 'u' */   /* 2,1,0 */
-#define TERM_L_DARK              8  /* 'D' */   /* 1,1,1 */
-#define TERM_L_WHITE             9  /* 'W' */   /* 3,3,3 */
-#define TERM_VIOLET             10  /* 'v' */   /* 4,0,4 */
-#define TERM_YELLOW             11  /* 'y' */   /* 4,4,0 */
-#define TERM_L_RED              12  /* 'R' */   /* 4,0,0 */
-#define TERM_L_GREEN            13  /* 'G' */   /* 0,4,0 */
-#define TERM_L_BLUE             14  /* 'B' */   /* 0,4,4 */
-#define TERM_L_UMBER            15  /* 'U' */   /* 3,2,1 */
+#define TERM_DARK                0  /*!< 'd' - 黒 0,0,0 */
+#define TERM_WHITE               1  /*!< 'w' - 白 4,4,4 */
+#define TERM_SLATE               2  /*!< 's' - 灰 2,2,2 */
+#define TERM_ORANGE              3  /*!< 'o' - 橙 4,2,0 */
+#define TERM_RED                 4  /*!< 'r' - 赤 3,0,0 */
+#define TERM_GREEN               5  /*!< 'g' - 緑 0,2,1 */
+#define TERM_BLUE                6  /*!< 'b' - 青 0,0,4 */
+#define TERM_UMBER               7  /*!< 'u' - 琥珀 2,1,0 */
+#define TERM_L_DARK              8  /*!< 'D' - 暗い灰 1,1,1 */
+#define TERM_L_WHITE             9  /*!< 'W' - 明るい灰 3,3,3 */
+#define TERM_VIOLET             10  /*!< 'v' - 紫 4,0,4 */
+#define TERM_YELLOW             11  /*!< 'y' - 黄 4,4,0 */
+#define TERM_L_RED              12  /*!< 'R' - 明るい赤 4,0,0 */
+#define TERM_L_GREEN            13  /*!< 'G' - 明るい緑 0,4,0 */
+#define TERM_L_BLUE             14  /*!< 'B' - 明るい青 0,4,4 */
+#define TERM_L_UMBER            15  /*!< 'U' - 明るい琥珀 3,2,1 */
 
 
 /*
@@ -4488,43 +4488,43 @@ extern int PlayerUID;
 #define SOUND_BUY	    26
 #define SOUND_SELL	    27
 #define SOUND_WARN	    28
-#define SOUND_ROCKET    29 /* Somebody's shooting rockets */
-#define SOUND_N_KILL    30 /* The player kills a non-living/undead monster */
-#define SOUND_U_KILL    31 /* The player kills a unique */
-#define SOUND_QUEST     32 /* The player has just completed a quest */
-#define SOUND_HEAL      33 /* The player was healed a little bit */
-#define SOUND_X_HEAL    34 /* The player was healed full health */
-#define SOUND_BITE      35 /* A monster bites you */
-#define SOUND_CLAW      36 /* A monster claws you */
-#define SOUND_M_SPELL   37 /* A monster casts a miscellaneous spell */
-#define SOUND_SUMMON    38 /* A monster casts a summoning spell  */
-#define SOUND_BREATH    39 /* A monster breathes */
-#define SOUND_BALL      40 /* A monster casts a ball / bolt spell */
-#define SOUND_M_HEAL    41 /* A monster heals itself somehow */
-#define SOUND_ATK_SPELL 42 /* A monster casts a misc. offensive spell */
-#define SOUND_EVIL      43 /* Something nasty has just happened! */
-#define SOUND_TOUCH     44 /* A monster touches you */
-#define SOUND_STING     45 /* A monster stings you */
-#define SOUND_CRUSH     46 /* A monster crushes / envelopes you */
-#define SOUND_SLIME     47 /* A monster drools/spits/etc on you */
-#define SOUND_WAIL      48 /* A monster wails */
-#define SOUND_WINNER    49 /* Just won the game! */
-#define SOUND_FIRE      50 /* An item was burned  */
-#define SOUND_ACID      51 /* An item was destroyed by acid */
-#define SOUND_ELEC      52 /* An item was destroyed by electricity */
-#define SOUND_COLD      53 /* An item was shattered */
-#define SOUND_ILLEGAL   54 /* Illegal command attempted */
-#define SOUND_FAIL      55 /* Fail to get a spell off / activate an item */
-#define SOUND_WAKEUP    56 /* A monster wakes up */
-#define SOUND_INVULN    57 /* Invulnerability! */
-#define SOUND_FALL      58 /* Falling through a trapdoor... */
-#define SOUND_PAIN      59 /* A monster is in pain! */
-#define SOUND_DESTITEM  60 /* An item was destroyed by misc. means */
-#define SOUND_MOAN      61 /* A monster makes a moan/beg/insult attack */
-#define SOUND_SHOW      62 /* A monster makes a "show" attack */
-#define SOUND_UNUSED    63 /* (no sound for gaze attacks) */
-#define SOUND_EXPLODE   64 /* Something (or somebody) explodes */
-#define SOUND_GLASS     65 /* A glass feature was crashed */
+#define SOUND_ROCKET    29 /*!< Somebody's shooting rockets */
+#define SOUND_N_KILL    30 /*!< The player kills a non-living/undead monster */
+#define SOUND_U_KILL    31 /*!< The player kills a unique */
+#define SOUND_QUEST     32 /*!< The player has just completed a quest */
+#define SOUND_HEAL      33 /*!< The player was healed a little bit */
+#define SOUND_X_HEAL    34 /*!< The player was healed full health */
+#define SOUND_BITE      35 /*!< A monster bites you */
+#define SOUND_CLAW      36 /*!< A monster claws you */
+#define SOUND_M_SPELL   37 /*!< A monster casts a miscellaneous spell */
+#define SOUND_SUMMON    38 /*!< A monster casts a summoning spell  */
+#define SOUND_BREATH    39 /*!< A monster breathes */
+#define SOUND_BALL      40 /*!< A monster casts a ball / bolt spell */
+#define SOUND_M_HEAL    41 /*!< A monster heals itself somehow */
+#define SOUND_ATK_SPELL 42 /*!< A monster casts a misc. offensive spell */
+#define SOUND_EVIL      43 /*!< Something nasty has just happened! */
+#define SOUND_TOUCH     44 /*!< A monster touches you */
+#define SOUND_STING     45 /*!< A monster stings you */
+#define SOUND_CRUSH     46 /*!< A monster crushes / envelopes you */
+#define SOUND_SLIME     47 /*!< A monster drools/spits/etc on you */
+#define SOUND_WAIL      48 /*!< A monster wails */
+#define SOUND_WINNER    49 /*!< Just won the game! */
+#define SOUND_FIRE      50 /*!< An item was burned  */
+#define SOUND_ACID      51 /*!< An item was destroyed by acid */
+#define SOUND_ELEC      52 /*!< An item was destroyed by electricity */
+#define SOUND_COLD      53 /*!< An item was shattered */
+#define SOUND_ILLEGAL   54 /*!< Illegal command attempted */
+#define SOUND_FAIL      55 /*!< Fail to get a spell off / activate an item */
+#define SOUND_WAKEUP    56 /*!< A monster wakes up */
+#define SOUND_INVULN    57 /*!< Invulnerability! */
+#define SOUND_FALL      58 /*!< Falling through a trapdoor... */
+#define SOUND_PAIN      59 /*!< A monster is in pain! */
+#define SOUND_DESTITEM  60 /*!< An item was destroyed by misc. means */
+#define SOUND_MOAN      61 /*!< A monster makes a moan/beg/insult attack */
+#define SOUND_SHOW      62 /*!< A monster makes a "show" attack */
+#define SOUND_UNUSED    63 /*!< (no sound for gaze attacks) */
+#define SOUND_EXPLODE   64 /*!< Something (or somebody) explodes */
+#define SOUND_GLASS     65 /*!< A glass feature was crashed */
 
 /*
  * Mega-Hack -- maximum known sounds
