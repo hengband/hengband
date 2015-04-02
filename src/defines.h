@@ -552,20 +552,20 @@
 /*
  * Follow distances
  */
-#define PET_CLOSE_DIST				1
-#define PET_FOLLOW_DIST				6
-#define PET_SEEK_DIST				10
-#define PET_DESTROY_DIST			255
-#define PET_SPACE_DIST				(-10)
-#define PET_AWAY_DIST				(-25)
+#define PET_CLOSE_DIST				1		/*!<ペットの行動範囲…近くにいろ */
+#define PET_FOLLOW_DIST				6		/*!<ペットの行動範囲…ついて来い */
+#define PET_SEEK_DIST				10		/*!<ペットの行動範囲…特になし? */
+#define PET_DESTROY_DIST			255		/*!<ペットの行動範囲…敵を見つけて倒せ */
+#define PET_SPACE_DIST				(-10)	/*!<ペットの行動範囲…少し離れていろ */
+#define PET_AWAY_DIST				(-25)	/*!<ペットの行動範囲…離れていろ */
 
-#define PF_OPEN_DOORS   0x0001
-#define PF_PICKUP_ITEMS 0x0002
-#define PF_TELEPORT     0x0004
-#define PF_ATTACK_SPELL 0x0008
-#define PF_SUMMON_SPELL 0x0010
-#define PF_BALL_SPELL   0x0020
-#define PF_RYOUTE       0x0040
+#define PF_OPEN_DOORS   0x0001 /*!< ペットの行動許可…ドアを開けてよい */
+#define PF_PICKUP_ITEMS 0x0002 /*!< ペットの行動許可…アイテムを拾ってよい */
+#define PF_TELEPORT     0x0004 /*!< ペットの行動許可…テレポート魔法を使ってよい */
+#define PF_ATTACK_SPELL 0x0008 /*!< ペットの行動許可…攻撃魔法を使ってよい */
+#define PF_SUMMON_SPELL 0x0010 /*!< ペットの行動許可…召喚魔法を使ってよい */
+#define PF_BALL_SPELL   0x0020 /*!< ペットの行動許可…ボール魔法でプレイヤーを巻き込んでよい */
+#define PF_RYOUTE       0x0040 /*!< プレイヤーの騎乗フラグ…武器を片手で持つ */
 
 
 #define CAN_TWO_HANDS_WIELDING() (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))
