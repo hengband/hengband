@@ -72,7 +72,7 @@
 # include <io.h>
 #endif
 
-#if !defined(MACINTOSH) && !defined(AMIGA) && \
+#if !defined(MACINTOSH) && \
     !defined(ACORN) && !defined(VM)
 # if defined(__TURBOC__) || defined(__WATCOMC__)
 #  include <mem.h>

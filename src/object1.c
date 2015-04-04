@@ -2267,11 +2267,6 @@ int show_inven(int target_item)
 		{
 			byte  a = object_attr(o_ptr);
 			char c = object_char(o_ptr);
-
-#ifdef AMIGA
-			if (a & 0x80) a |= 0x40;
-#endif
-
 			Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
 			if (use_bigtile) cur_col++;
 
@@ -2450,11 +2445,6 @@ int show_equip(int target_item)
 		{
 			byte a = object_attr(o_ptr);
 			char c = object_char(o_ptr);
-
-#ifdef AMIGA
-			if (a & 0x80) a |= 0x40;
-#endif
-
 			Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
 			if (use_bigtile) cur_col++;
 

@@ -101,7 +101,7 @@
  * Currently used whenever available, if you get a warning about
  * "nodelay()" undefined, then make sure to undefine this.
  */
-#if defined(SYS_V) || defined(AMIGA)
+#if defined(SYS_V)
 # define USE_GETCH
 #endif
 
@@ -387,7 +387,7 @@
  * this also gives a method of "bypassing" the "VERIFY_TIMESTAMP" code.
  */
 /*
-#if defined(MACINTOSH) || defined(WINDOWS) || defined(AMIGA)
+#if defined(MACINTOSH) || defined(WINDOWS)
 # define SAVEFILE_MUTABLE
 #endif
 */

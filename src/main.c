@@ -44,16 +44,6 @@ static void quit_hook(cptr s)
 }
 
 
-
-/*
- * Set the stack size (for the Amiga)
- */
-#ifdef AMIGA
-# include <dos.h>
-__near long __stack = 32768L;
-#endif
-
-
 /*
  * Set the stack size and overlay buffer (see main-286.c")
  */
@@ -107,9 +97,6 @@ static void create_user_dir(void)
  * since the "init_file_paths()" function will simply append the
  * relevant "sub-directory names" to the given path.
  *
- * Note that the "path" must be "Angband:" for the Amiga, and it
- * is ignored for "VM/ESA", so I just combined the two.
- *
  * Make sure that the path doesn't overflow the buffer.  We have
  * to leave enough space for the path separator, directory, and
  * filenames.
@@ -118,12 +105,12 @@ static void init_stuff(void)
 {
 	char path[1024];
 
-#if defined(AMIGA) || defined(VM)
+#if defined(VM)
 
 	/* Hack -- prepare "path" */
 	strcpy(path, "Angband:");
 
-#else /* AMIGA / VM */
+#else /* VM */
 
 	cptr tail;
 
@@ -139,7 +126,7 @@ static void init_stuff(void)
 	/* Hack -- Add a path separator (only if needed) */
 	if (!suffix(path, PATH_SEP)) strcat(path, PATH_SEP);
 
-#endif /* AMIGA / VM */
+#endif /* VM */
 
 	/* Initialize */
 	init_file_paths(path);
@@ -599,10 +586,6 @@ int main(int argc, char *argv[])
 #ifdef USE_LSL
 				puts("  -mlsl    To use LSL (Linux-SVGALIB)");
 #endif /* USE_LSL */
-
-#ifdef USE_AMI
-				puts("  -mami    To use AMI (Amiga)");
-#endif /* USE_AMI */
 
 #ifdef USE_VME
 				puts("  -mvme    To use VME (VAX/ESA)");

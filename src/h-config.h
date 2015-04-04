@@ -210,7 +210,7 @@
  */
 #if !defined(MACINTOSH) && !defined(WINDOWS) && \
     !defined(MSDOS) && !defined(USE_EMX) && \
-    !defined(AMIGA) && !defined(ACORN) && !defined(VM)
+    !defined(ACORN) && !defined(VM)
 # define SET_UID
 #endif
 
@@ -254,10 +254,6 @@
 #if defined(MSDOS) || defined(OS2) || defined(USE_EMX)
 # undef PATH_SEP
 # define PATH_SEP "\\"
-#endif
-#ifdef AMIGA
-# undef PATH_SEP
-# define PATH_SEP "/"
 #endif
 #ifdef __GO32__
 # undef PATH_SEP

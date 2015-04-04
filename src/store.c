@@ -2286,11 +2286,6 @@ static void display_entry(int pos)
 		byte a = object_attr(o_ptr);
 		char c = object_char(o_ptr);
 
-#ifdef AMIGA
-		if (a & 0x80)
-			a |= 0x40;
-#endif
-
 		Term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
 		if (use_bigtile) cur_col++;
 
