@@ -508,7 +508,7 @@
 /*
  * Hack -- Special "ancient machine" versions
  */
-#if defined(USE_286) || defined(ANGBAND_LITE_MAC)
+#if defined(ANGBAND_LITE_MAC)
 # ifndef ANGBAND_LITE
 #  define ANGBAND_LITE
 # endif
