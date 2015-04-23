@@ -59,7 +59,7 @@ typedef int errr;
 #define uint uint_hack /*!< 非マッキントッシュ環境で重複を避けるためのuint_hack型定義 / Hack -- prevent problems with non-MACINTOSH */
 
 #undef huge
-#define huge huge_hack /*!< MSDOS及びWINDOWS環境で重複を避けるためのhuge_hack定義 / Hack -- prevent problems with MSDOS and WINDOWS */
+#define huge huge_hack /*!< WINDOWS環境で重複を避けるためのhuge_hack定義 / Hack -- prevent problems with WINDOWS */
 
 #undef byte
 #define byte byte_hack /*!< AMIGA環境で重複を避けるためのbyte_hack定義 / Hack -- prevent problems with AMIGA */

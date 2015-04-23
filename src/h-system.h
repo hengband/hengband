@@ -68,7 +68,7 @@
 #endif
 
 
-#if defined(WINDOWS) || defined(MSDOS) || defined(USE_EMX)
+#if defined(WINDOWS) || defined(USE_EMX)
 # include <io.h>
 #endif
 

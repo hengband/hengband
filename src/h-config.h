@@ -51,14 +51,6 @@
 
 #ifdef USE_IBM
 
-  /*
-   * OPTION: Compile on an IBM (automatic)
-   */
-  #ifndef MSDOS
-    #define MSDOS
-  #endif
-
-
   /* Use the new SVGA code */
   #ifndef USE_IBM_SVGA
     #define USE_IBM_SVGA
@@ -165,15 +157,6 @@
 #endif
 
 /*
- * Extract the "MSDOS" flag from the compiler
- */
-#ifdef __MSDOS__
-# ifndef MSDOS
-#  define MSDOS
-# endif
-#endif
-
-/*
  * Extract the "WINDOWS" flag from the compiler
  */
 #if defined(_Windows) || defined(__WINDOWS__) || \
@@ -209,7 +192,7 @@
  * or for the "Atari" platform which is Unix-like, apparently
  */
 #if !defined(MACINTOSH) && !defined(WINDOWS) && \
-    !defined(MSDOS) && !defined(USE_EMX) && \
+    !defined(USE_EMX) && \
     !defined(ACORN) && !defined(VM)
 # define SET_UID
 #endif
@@ -251,7 +234,7 @@
 # undef PATH_SEP
 # define PATH_SEP "\\"
 #endif
-#if defined(MSDOS) || defined(OS2) || defined(USE_EMX)
+#if defined(OS2) || defined(USE_EMX)
 # undef PATH_SEP
 # define PATH_SEP "\\"
 #endif
@@ -318,11 +301,9 @@
 # elif defined(SJIS)
 #  define iskanji(x) ((0x81 <= (unsigned char)(x) && (unsigned char)(x) <= 0x9f) || (0xe0 <= (unsigned char)(x) && (unsigned char)(x) <= 0xfc))
 #  define iskana(x)  (((unsigned char)(x) >= 0xA0) && ((unsigned char)(x) <= 0xDF))
-# elif defined(MSDOS)
-#  include <jctype.h>
 # else
 #  error Oops! Please define "EUC" or "SJIS" for kanji-code of your system.
-# endif /* MSDOS */
+# endif
 #endif
 
 #endif /* INCLUDED_H_CONFIG_H */

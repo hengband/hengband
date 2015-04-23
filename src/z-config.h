@@ -557,7 +557,7 @@
 /* Zangband options: */
 
 /* Allow hordes of 'similar' monsters */
-# define MONSTER_HORDES
+#define MONSTER_HORDES
 
 /*
  * OPTION: Repeat last command -- TNB
@@ -595,12 +595,5 @@
 
 
 #ifndef HAVE_CONFIG_H
-
-#ifndef MSDOS
-/*
- * Use world score server
- */
 #define WORLD_SCORE
-#endif
-
 #endif /* HAVE_CONFIG_H */

@@ -5789,12 +5789,8 @@ void process_player_name(bool sf)
 	if (character_generated) strcpy(old_player_base, player_base);
 
 	/* Cannot be too long */
-#if defined(MACINTOSH) || defined(MSDOS) || defined(USE_EMX) || defined(ACORN) || defined(VM)
-#ifdef MSDOS
-	if (strlen(player_name) > 8)
-#else
+#if defined(MACINTOSH) || defined(USE_EMX) || defined(ACORN) || defined(VM)
 	if (strlen(player_name) > 15)
-#endif
 	{
 		/* Name too long */
 		quit_fmt(_("'%s'という名前は長すぎます！", "The name '%s' is too long!"), player_name);
@@ -5868,21 +5864,11 @@ void process_player_name(bool sf)
 			i += strlen(PATH_SEP);
 		}
 		/* Convert some characters to underscore */
-#ifdef MSDOS
-		else if (my_strchr(" \"*+,./:;<=>?[\\]|", c)) player_base[k++] = '_';
-#elif defined(WINDOWS)
+#if defined(WINDOWS)
 		else if (my_strchr("\"*,/:;<>?\\|", c)) player_base[k++] = '_';
 #endif
 		else if (isprint(c)) player_base[k++] = c;
 	}
-
-#endif
-
-
-#if defined(MSDOS)
-
-	/* Hack -- max length */
-	if (k > 8) k = 8;
 
 #endif
 
