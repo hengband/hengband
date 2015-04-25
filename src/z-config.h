@@ -94,27 +94,6 @@
  */
 /* #define USE_TCHARS */
 
-
-/*
- * OPTION: Use "blocking getch() calls" in "main-gcu.c".
- * Hack -- Note that this option will NOT work on many BSD machines
- * Currently used whenever available, if you get a warning about
- * "nodelay()" undefined, then make sure to undefine this.
- */
-#if defined(SYS_V)
-# define USE_GETCH
-#endif
-
-
-/*
- * OPTION: Use the "curs_set()" call in "main-gcu.c".
- * Hack -- This option will not work on most BSD machines
- */
-#ifdef SYS_V
-# define USE_CURS_SET
-#endif
-
-
 /*
  * OPTION: Include "ncurses.h" instead of "curses.h" in "main-gcu.c"
  */
@@ -145,7 +124,7 @@
  * Prevent problems on (non-Solaris) Suns using "SAFE_SETUID".
  * The SAFE_SETUID code is weird, use it at your own risk...
  */
-#if defined(SUNOS) && !defined(SOLARIS)
+#if !defined(SOLARIS)
 # undef SAFE_SETUID_POSIX
 #endif
 
