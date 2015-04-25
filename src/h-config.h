@@ -60,20 +60,6 @@
 #endif
 
 /*
- * OPTION: Compile on a SYS III version of UNIX
- */
-#ifndef SYS_III
-/* #define SYS_III */
-#endif
-
-/*
- * OPTION: Compile on a SYS V version of UNIX (not Solaris)
- */
-#ifndef SYS_V
-/* #define SYS_V */
-#endif
-
-/*
  * OPTION: Compile on a HPUX version of UNIX
  */
 #ifndef HPUX
@@ -126,15 +112,6 @@
 #if defined(ultrix) || defined(Pyramid)
 # ifndef ULTRIX
 #  define ULTRIX
-# endif
-#endif
-
-/*
- * Extract the "ATARI" flag from the compiler [cjh]
- */
-#if defined(__atarist) || defined(__atarist__)
-# ifndef ATARI
-#  define ATARI
 # endif
 #endif
 
@@ -206,8 +183,8 @@
  * involving userid's, or multiple users on a single machine, etc.
  */
 #ifdef SET_UID
-# if defined(SYS_III) || defined(SYS_V) || defined(SOLARIS) || \
-     defined(HPUX) || defined(SGI) || defined(ATARI)
+# if defined(SOLARIS) || \
+     defined(HPUX) || defined(SGI)
 #  ifndef USG
 #   define USG
 #  endif
