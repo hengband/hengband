@@ -205,46 +205,45 @@
 
 #ifdef USE_DEBUG
 
-/*
- * OPTION: Hack -- Compile in support for "Wizard Commands"
+/*!
+ * @brief ウィザードモードへの移行を許可する / OPTION: Hack -- Compile in support for "Wizard Commands"
  */
 #define ALLOW_WIZARD
 
-/*
- * OPTION: Hack -- Compile in support for "Spoiler Generation"
+/*!
+ * @brief スポイラー出力を許可する / OPTION: Hack -- Compile in support for "Spoiler Generation"
  */
 #define ALLOW_SPOILERS
 
 #endif /* USE_DEBUG */
 
-/*
- * OPTION: Allow "do_cmd_colors" at run-time
+/*!
+ * @brief キャラクターの色変更機能を付加する / OPTION: Allow "do_cmd_colors" at run-time
  */
 #define ALLOW_COLORS
 
-/*
- * OPTION: Allow "do_cmd_visuals" at run-time
+/*!
+ * @brief キャラクターのシンボル変更機能を付加する / OPTION: Allow "do_cmd_visuals" at run-time
  */
 #define ALLOW_VISUALS
 
-/*
- * OPTION: Allow "do_cmd_macros" at run-time
+/*!
+ * @brief マクロ機能を付加する / OPTION: Allow "do_cmd_macros" at run-time
  */
 #define ALLOW_MACROS
 
-/*
- * OPTION: Allow characteres to be "auto-rolled"
+/*!
+ * @brief オートローラー機能を付加する / OPTION: Allow characteres to be "auto-rolled"
  */
 #define ALLOW_AUTOROLLER
 
-
-/*
- * OPTION: Allow monsters to "flee" when hit hard
+/*!
+ * @brief 一定以上のダメージを受けたモンスターが恐怖して逃走する / OPTION: Allow monsters to "flee" when hit hard
  */
 #define ALLOW_FEAR
 
-/*
- * OPTION: Allow monsters to "flee" from strong players
+/*!
+ * @brief 一定以上のレベルを持ったプレイヤーが相手ならば、弱いモンスターは逃げ出す/ OPTION: Allow monsters to "flee" from strong players
  */
 #define ALLOW_TERROR
 
