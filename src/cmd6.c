@@ -502,7 +502,7 @@ static void do_cmd_eat_food_aux(int item)
 			object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
 
 			/* Drop the object from heaven */
-			(void)drop_near(q_ptr, -1, py, px);
+			(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
 		}
 		else
 		{
@@ -1241,7 +1241,7 @@ static void do_cmd_quaff_potion_aux(int item)
 	if (prace_is_(RACE_SKELETON))
 	{
 		msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
-		(void)potion_smash_effect(0, py, px, q_ptr->k_idx);
+		(void)potion_smash_effect(0, p_ptr->y, p_ptr->x, q_ptr->k_idx);
 	}
 
 	/* Combine / Reorder the pack (later) */
@@ -1476,7 +1476,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 		{
 			for (k = 0; k < randint1(3); k++)
 			{
-				if (summon_specific(0, py, px, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				if (summon_specific(0, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -1488,7 +1488,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 		{
 			for (k = 0; k < randint1(3); k++)
 			{
-				if (summon_specific(0, py, px, dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				if (summon_specific(0, p_ptr->y, p_ptr->x, dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -1498,7 +1498,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 		case SV_SCROLL_SUMMON_PET:
 		{
-			if (summon_specific(-1, py, px, dun_level, 0, (PM_ALLOW_GROUP | PM_FORCE_PET)))
+			if (summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 			{
 				ident = TRUE;
 			}
@@ -1507,7 +1507,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 		case SV_SCROLL_SUMMON_KIN:
 		{
-			if (summon_kin_player(p_ptr->lev, py, px, (PM_FORCE_PET | PM_ALLOW_GROUP)))
+			if (summon_kin_player(p_ptr->lev, p_ptr->y, p_ptr->x, (PM_FORCE_PET | PM_ALLOW_GROUP)))
 			{
 				ident = TRUE;
 			}
@@ -1516,7 +1516,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 		case SV_SCROLL_TRAP_CREATION:
 		{
-			if (trap_creation(py, px)) ident = TRUE;
+			if (trap_creation(p_ptr->y, p_ptr->x)) ident = TRUE;
 			break;
 		}
 
@@ -1734,7 +1734,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 		case SV_SCROLL_STAR_DESTRUCTION:
 		{
-			if (destroy_area(py, px, 13 + randint0(5), FALSE))
+			if (destroy_area(p_ptr->y, p_ptr->x, 13 + randint0(5), FALSE))
 				ident = TRUE;
 			else
 				msg_print(_("ダンジョンが揺れた...", "The dungeon trembles..."));
@@ -1787,14 +1787,14 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 		case SV_SCROLL_ACQUIREMENT:
 		{
-			acquirement(py, px, 1, TRUE, FALSE, FALSE);
+			acquirement(p_ptr->y, p_ptr->x, 1, TRUE, FALSE, FALSE);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_STAR_ACQUIREMENT:
 		{
-			acquirement(py, px, randint1(2) + 1, TRUE, FALSE, FALSE);
+			acquirement(p_ptr->y, p_ptr->x, randint1(2) + 1, TRUE, FALSE, FALSE);
 			ident = TRUE;
 			break;
 		}
@@ -1861,14 +1861,14 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 		case SV_SCROLL_AMUSEMENT:
 		{
 			ident = TRUE;
-			amusement(py, px, 1, FALSE);
+			amusement(p_ptr->y, p_ptr->x, 1, FALSE);
 			break;
 		}
 
 		case SV_SCROLL_STAR_AMUSEMENT:
 		{
 			ident = TRUE;
-			amusement(py, px,  randint1(2) + 1, FALSE);
+			amusement(p_ptr->y, p_ptr->x,  randint1(2) + 1, FALSE);
 			break;
 		}
 	}
@@ -2085,7 +2085,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 			const int times = randint1(powerful ? 8 : 4);
 			for (k = 0; k < times; k++)
 			{
-				if (summon_specific(0, py, px, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				if (summon_specific(0, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -2146,7 +2146,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 
 				while (attempts--)
 				{
-					scatter(&y, &x, py, px, 4, 0);
+					scatter(&y, &x, p_ptr->y, p_ptr->x, 4, 0);
 
 					if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
@@ -2321,7 +2321,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 
 		case SV_STAFF_EARTHQUAKES:
 		{
-			if (earthquake(py, px, (powerful ? 15 : 10)))
+			if (earthquake(p_ptr->y, p_ptr->x, (powerful ? 15 : 10)))
 				ident = TRUE;
 			else
 				msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));
@@ -2331,7 +2331,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 
 		case SV_STAFF_DESTRUCTION:
 		{
-			if (destroy_area(py, px, (powerful ? 18 : 13) + randint0(5), FALSE))
+			if (destroy_area(p_ptr->y, p_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE))
 				ident = TRUE;
 
 			break;
@@ -2339,7 +2339,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 
 		case SV_STAFF_ANIMATE_DEAD:
 		{
-			if (animate_dead(0, py, px))
+			if (animate_dead(0, p_ptr->y, p_ptr->x))
 				ident = TRUE;
 
 			break;
@@ -2348,7 +2348,7 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 		case SV_STAFF_MSTORM:
 		{
 			msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
-			project(0, (powerful ? 7 : 5), py, px,
+			project(0, (powerful ? 7 : 5), p_ptr->y, p_ptr->x,
 				(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 			if ((p_ptr->pclass != CLASS_MAGE) && (p_ptr->pclass != CLASS_HIGH_MAGE) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_MAGIC_EATER) && (p_ptr->pclass != CLASS_BLUE_MAGE))
 			{
@@ -3766,7 +3766,7 @@ static void do_cmd_activate_aux(int item)
 			for (i = 0; i < max_pet; i++)
 			{
 				pet_ctr = who[i];
-				teleport_monster_to(pet_ctr, py, px, 100, TELEPORT_PASSIVE);
+				teleport_monster_to(pet_ctr, p_ptr->y, p_ptr->x, 100, TELEPORT_PASSIVE);
 			}
 
 			/* Free the "who" array */
@@ -3837,9 +3837,9 @@ static void do_cmd_activate_aux(int item)
 		{
 			bool success = FALSE;
 			if (!get_rep_dir2(&dir)) return;
-			if (monster_can_enter(py + ddy[dir], px + ddx[dir], &r_info[o_ptr->pval], 0))
+			if (monster_can_enter(p_ptr->y + ddy[dir], p_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0))
 			{
-				if (place_monster_aux(0, py + ddy[dir], px + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
+				if (place_monster_aux(0, p_ptr->y + ddy[dir], p_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
 				{
 					if (o_ptr->xtra3) m_list[hack_m_idx_ii].mspeed = o_ptr->xtra3;
 					if (o_ptr->xtra5) m_list[hack_m_idx_ii].max_maxhp = o_ptr->xtra5;

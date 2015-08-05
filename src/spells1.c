@@ -2355,7 +2355,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			if (seen) obvious = TRUE;
 
 			/* PSI only works if the monster can see you! -- RG */
-			if (!(los(m_ptr->fy, m_ptr->fx, py, px)))
+			if (!(los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)))
 			{
 				if (seen_msg) 
                     msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), m_name);
@@ -5038,7 +5038,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				if (pet) mode |= PM_FORCE_PET;
 				else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
 
-				count += summon_specific((pet ? -1 : 0), py, px, (pet ? p_ptr->lev*2/3+randint1(p_ptr->lev/2) : dun_level), 0, mode);
+				count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev*2/3+randint1(p_ptr->lev/2) : dun_level), 0, mode);
 				if (!one_in_(6)) break;
 			}
 			case 23: case 24: case 25:
@@ -5137,7 +5137,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 		q_ptr->ident |= (IDENT_MENTAL);
 
 		/* Drop it in the dungeon */
-		(void)drop_near(q_ptr, -1, py, px);
+		(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
 	}
 
 	/* Track it */
@@ -5236,7 +5236,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 				t_x = m_list[who].fx - 1 + randint1(3);
 				max_attempts--;
 			}
-			while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(py, px, t_y, t_x));
+			while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(p_ptr->y, p_ptr->x, t_y, t_x));
 
 			if (max_attempts < 1)
 			{
@@ -5246,8 +5246,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		}
 		else
 		{
-			t_y = py - 1 + randint1(3);
-			t_x = px - 1 + randint1(3);
+			t_y = p_ptr->y - 1 + randint1(3);
+			t_x = p_ptr->x - 1 + randint1(3);
 		}
 
 		project(0, 0, t_y, t_x, dam, typ, (PROJECT_STOP|PROJECT_KILL|PROJECT_REFLECTABLE), monspell);
@@ -6835,8 +6835,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	rakubadam_m = 0;
 
 	/* Default target of monsterspell is player */
-	monster_target_y=py;
-	monster_target_x=px;
+	monster_target_y=p_ptr->y;
+	monster_target_x=p_ptr->x;
 
 	/* Hack -- Jump to target */
 	if (flg & (PROJECT_JUMP))
@@ -6853,8 +6853,8 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	/* Start at player */
 	else if (who <= 0)
 	{
-		x1 = px;
-		y1 = py;
+		x1 = p_ptr->x;
+		y1 = p_ptr->y;
 	}
 
 	/* Start at monster */
@@ -7478,7 +7478,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 	if (flg & PROJECT_KILL)
 	{
 		see_s_msg = (who > 0) ? is_seen(&m_list[who]) :
-			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(py, px, y1, x1)));
+			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(p_ptr->y, p_ptr->x, y1, x1)));
 	}
 
 
@@ -7858,18 +7858,18 @@ bool binding_field( int dam )
 	int point_y[3];
 
 	/* Default target of monsterspell is player */
-	monster_target_y=py;
-	monster_target_x=px;
+	monster_target_y=p_ptr->y;
+	monster_target_x=p_ptr->x;
 
 	for( x=0 ; x < cur_wid ; x++ )
 	{
 		for( y=0 ; y < cur_hgt ; y++ )
 		{
 			if( is_mirror_grid(&cave[y][x]) &&
-			    distance(py,px,y,x) <= MAX_RANGE &&
-			    distance(py,px,y,x) != 0 &&
+			    distance(p_ptr->y,p_ptr->x,y,x) <= MAX_RANGE &&
+			    distance(p_ptr->y,p_ptr->x,y,x) != 0 &&
 			    player_has_los_bold(y,x) &&
-			    projectable(py, px, y, x)
+			    projectable(p_ptr->y, p_ptr->x, y, x)
 			    ){
 				mirror_y[mirror_num]=y;
 				mirror_x[mirror_num]=x;
@@ -7890,8 +7890,8 @@ bool binding_field( int dam )
 	point_x[0]=mirror_x[point_x[0]];
 	point_y[1]=mirror_y[point_x[1]];
 	point_x[1]=mirror_x[point_x[1]];
-	point_y[2]=py;
-	point_x[2]=px;
+	point_y[2]=p_ptr->y;
+	point_x[2]=p_ptr->x;
 
 	x=point_x[0]+point_x[1]+point_x[2];
 	y=point_y[0]+point_y[1]+point_y[2];
@@ -7919,7 +7919,7 @@ bool binding_field( int dam )
 			    centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
-				if (player_has_los_bold(y, x) && projectable(py, px, y, x)) {
+				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
 					/* Visual effects */
 					if(!(p_ptr->blind)
 					   && panel_contains(y,x)){
@@ -7942,7 +7942,7 @@ bool binding_field( int dam )
 			    centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
-				if (player_has_los_bold(y, x) && projectable(py, px, y, x)) {
+				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
 					(void)project_f(0,0,y,x,dam,GF_MANA); 
 				}
 			}
@@ -7957,7 +7957,7 @@ bool binding_field( int dam )
 			    centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
-				if (player_has_los_bold(y, x) && projectable(py, px, y, x)) {
+				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
 					(void)project_o(0,0,y,x,dam,GF_MANA); 
 				}
 			}
@@ -7972,7 +7972,7 @@ bool binding_field( int dam )
 			    centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
-				if (player_has_los_bold(y, x) && projectable(py, px, y, x)) {
+				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
 					(void)project_m(0,0,y,x,dam,GF_MANA,
 					  (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP),TRUE);
 				}

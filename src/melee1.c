@@ -235,7 +235,7 @@ bool make_attack_normal(int m_idx)
 
 		/* Stop if player is dead or gone */
 		if (!p_ptr->playing || p_ptr->is_dead) break;
-		if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) break;
+		if (distance(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx) > 1) break;
 
 		/* Handle "leaving" */
 		if (p_ptr->leaving) break;
@@ -1816,7 +1816,7 @@ bool make_attack_normal(int m_idx)
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
 					}
 
-					if (is_mirror_grid(&cave[py][px]))
+					if (is_mirror_grid(&cave[p_ptr->y][p_ptr->x]))
 					{
 						teleport_player(10, 0L);
 					}

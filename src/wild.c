@@ -738,8 +738,8 @@ void wilderness_gen_small()
 	panel_col_min = cur_wid;
 
 	/* Place the player */
-	px = p_ptr->wilderness_x;
-	py = p_ptr->wilderness_y;
+	p_ptr->x = p_ptr->wilderness_x;
+	p_ptr->y = p_ptr->wilderness_y;
 
 	p_ptr->town_num = 0;
 }
@@ -1127,8 +1127,8 @@ bool change_wild_mode(void)
 	if (p_ptr->wild_mode)
 	{
 		/* Save the location in the global map */
-		p_ptr->wilderness_x = px;
-		p_ptr->wilderness_y = py;
+		p_ptr->wilderness_x = p_ptr->x;
+		p_ptr->wilderness_y = p_ptr->y;
 
 		/* Give first move to the player */
 		p_ptr->energy_need = 0;
@@ -1180,8 +1180,8 @@ bool change_wild_mode(void)
 	p_ptr->energy_use = 1000;
 
 	/* Remember the position */
-	p_ptr->oldpx = px;
-	p_ptr->oldpy = py;
+	p_ptr->oldpx = p_ptr->x;
+	p_ptr->oldpy = p_ptr->y;
 
 	/* Cancel hex spelling */
 	if (hex_spelling_any()) stop_hex_spell_all();

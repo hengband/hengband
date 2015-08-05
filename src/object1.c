@@ -2656,7 +2656,7 @@ bool can_get_item(void)
 		if (item_tester_okay(&inventory[j]))
 			return TRUE;
 
-	floor_num = scan_floor(floor_list, py, px, 0x03);
+	floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
 	if (floor_num)
 		return TRUE;
 
@@ -2906,7 +2906,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		for (this_o_idx = cave[py][px].o_idx; this_o_idx; this_o_idx = next_o_idx)
+		for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
 
@@ -3285,7 +3285,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 				if (allow_floor)
 				{
 					/* Scan all objects in the grid */
-					for (this_o_idx = cave[py][px].o_idx; this_o_idx; this_o_idx = next_o_idx)
+					for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 					{
 						object_type *o_ptr;
 
@@ -3815,7 +3815,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			if (prev_tag && command_cmd)
 			{
 				/* Scan all objects in the grid */
-				floor_num = scan_floor(floor_list, py, px, 0x03);
+				floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
 
 				/* Look up the tag */
 				if (get_tag_floor(&k, prev_tag, floor_list, floor_num))
@@ -3953,7 +3953,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		floor_num = scan_floor(floor_list, py, px, 0x03);
+		floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
 	}
 
 	/* Accept inventory */
@@ -4096,7 +4096,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			n2 = I2A(k - floor_top);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_floor(menu_line, py, px, &min_width);
+			if (command_see) get_item_label = show_floor(menu_line, p_ptr->y, p_ptr->x, &min_width);
 		}
 
 		/* Viewing inventory */
@@ -4527,7 +4527,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			case '+':
 			{
 				int i, o_idx;
-				cave_type *c_ptr = &cave[py][px];
+				cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 				if (command_wrk != (USE_FLOOR)) break;
 
@@ -4549,7 +4549,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 				o_list[i].next_o_idx = o_idx;
 
 				/* Re-scan floor list */ 
-				floor_num = scan_floor(floor_list, py, px, 0x03);
+				floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
 
 				/* Hack -- Fix screen */
 				if (command_see)
@@ -5027,7 +5027,7 @@ void py_pickup_floor(bool pickup)
 	int can_pickup = 0;
 
 	/* Scan the pile of objects */
-	for (this_o_idx = cave[py][px].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 

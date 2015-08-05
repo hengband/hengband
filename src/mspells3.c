@@ -643,7 +643,7 @@ static bool cast_learned_spell(int spell, bool success)
 		m_idx = cave[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(py, px, target_row, target_col)) break;
+		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -1100,7 +1100,7 @@ static bool cast_learned_spell(int spell, bool success)
 		if (!target_set(TARGET_KILL)) return FALSE;
 		if (!cave[target_row][target_col].m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(py, px, target_row, target_col)) break;
+		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		m_ptr = &m_list[cave[target_row][target_col].m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
@@ -1120,7 +1120,7 @@ static bool cast_learned_spell(int spell, bool success)
 			}
 		}
         msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
-		teleport_monster_to(cave[target_row][target_col].m_idx, py, px, 100, TELEPORT_PASSIVE);
+		teleport_monster_to(cave[target_row][target_col].m_idx, p_ptr->y, p_ptr->x, 100, TELEPORT_PASSIVE);
 		break;
 	}
 	case MS_TELE_AWAY:
@@ -1139,7 +1139,7 @@ static bool cast_learned_spell(int spell, bool success)
 		target_m_idx = cave[target_row][target_col].m_idx;
 		if (!target_m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(py, px, target_row, target_col)) break;
+		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		m_ptr = &m_list[target_m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
@@ -1176,7 +1176,7 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
     case MS_RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You cast a animate dead."));
-		(void)animate_dead(0, py, px);
+		(void)animate_dead(0, p_ptr->y, p_ptr->x);
 		break;
 	case MS_S_KIN:
 	{
@@ -1185,7 +1185,7 @@ static bool cast_learned_spell(int spell, bool success)
         msg_print(_("援軍を召喚した。", "You summon minions."));
 		for (k = 0;k < 1; k++)
 		{
-			if (summon_kin_player(summon_lev, py, px, (pet ? PM_FORCE_PET : 0L)))
+			if (summon_kin_player(summon_lev, p_ptr->y, p_ptr->x, (pet ? PM_FORCE_PET : 0L)))
 			{
 				if (!pet) msg_print(_("召喚された仲間は怒っている！", "Summoned fellows are angry!"));
 			}
@@ -1202,7 +1202,7 @@ static bool cast_learned_spell(int spell, bool success)
 
         msg_print(_("サイバーデーモンを召喚した！", "You summon a Cyberdemon!"));
 		for (k = 0 ;k < 1 ; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_CYBER, p_mode))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_CYBER, p_mode))
 			{
                 if (!pet)
                     msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon are angry!"));
@@ -1218,7 +1218,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("仲間を召喚した。", "You summon help."));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, p_mode))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, 0, p_mode))
 			{
                 if (!pet)
                     msg_print(_("召喚されたモンスターは怒っている！", "The summoned monster is angry!"));
@@ -1234,7 +1234,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("モンスターを召喚した！", "You summon monsters!"));
 		for (k = 0;k < plev / 15 + 2; k++)
-			if(summon_specific((pet ? -1 : 0), py, px, summon_lev, 0, (p_mode | u_mode)))
+			if(summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, 0, (p_mode | u_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたモンスターは怒っている！", "The summoned monsters are angry!"));
@@ -1250,7 +1250,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("アリを召喚した。", "You summon ants."));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたアリは怒っている！", "The summoned ants are angry!"));
@@ -1266,7 +1266,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("蜘蛛を召喚した。", "You summon spiders."));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_SPIDER, (PM_ALLOW_GROUP | p_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_SPIDER, (PM_ALLOW_GROUP | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚された蜘蛛は怒っている！", "Summoned spiders are angry!"));
@@ -1282,7 +1282,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("ハウンドを召喚した。", "You summon hounds."));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HOUND, (PM_ALLOW_GROUP | p_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HOUND, (PM_ALLOW_GROUP | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたハウンドは怒っている！", "Summoned hounds are angry!"));
@@ -1298,7 +1298,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("ヒドラを召喚した。", "You summon a hydras."));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HYDRA, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HYDRA, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたヒドラは怒っている！", "Summoned hydras are angry!"));
@@ -1314,7 +1314,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("天使を召喚した！", "You summon an angel!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_ANGEL, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_ANGEL, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚された天使は怒っている！", "Summoned angels are angry!"));
@@ -1330,7 +1330,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("混沌の宮廷から悪魔を召喚した！", "You summon a demon from the Courts of Chaos!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DEMON, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_DEMON, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたデーモンは怒っている！", "Summoned demons are angry!"));
@@ -1346,7 +1346,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("アンデッドの強敵を召喚した！", "You summon an undead adversary!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNDEAD, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_UNDEAD, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたアンデッドは怒っている！", "Summoned undeads are angry!"));
@@ -1362,7 +1362,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("ドラゴンを召喚した！", "You summon a dragon!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_DRAGON, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_DRAGON, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたドラゴンは怒っている！", "Summoned dragons are angry!"));
@@ -1378,7 +1378,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("強力なアンデッドを召喚した！", "You summon a greater undead!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | u_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | u_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚された上級アンデッドは怒っている！", "Summoned greater undeads are angry!"));
@@ -1394,7 +1394,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("古代ドラゴンを召喚した！", "You summon an ancient dragon!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_DRAGON, (g_mode | p_mode | u_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_DRAGON, (g_mode | p_mode | u_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚された古代ドラゴンは怒っている！", "Summoned ancient dragons are angry!"));
@@ -1410,7 +1410,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("アンバーの王族を召喚した！", "You summon a Lord of Amber!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_AMBERITES, (g_mode | p_mode | u_mode)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_AMBERITES, (g_mode | p_mode | u_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたアンバーの王族は怒っている！", "Summoned Lords of Amber are angry!"));
@@ -1426,14 +1426,14 @@ static bool cast_learned_spell(int spell, bool success)
 		int k, count = 0;
         msg_print(_("特別な強敵を召喚した！", "You summon a special opponent!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_UNIQUE, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_UNIQUE, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
                 if (!pet)
                     msg_print(_("召喚されたユニーク・モンスターは怒っている！", "Summoned special opponents are angry!"));
 			}
 		for (k = count;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), py, px, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
                 if (!pet)

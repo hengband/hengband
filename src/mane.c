@@ -301,7 +301,7 @@ static bool use_mane(int spell)
 		m_idx = cave[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(py, px, target_row, target_col)) break;
+		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -701,7 +701,7 @@ static bool use_mane(int spell)
 		if (!target_set(TARGET_KILL)) return FALSE;
 		if (!cave[target_row][target_col].m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(py, px, target_row, target_col)) break;
+		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		m_ptr = &m_list[cave[target_row][target_col].m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
@@ -724,7 +724,7 @@ static bool use_mane(int spell)
 		}
 		msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
 
-		teleport_monster_to(cave[target_row][target_col].m_idx, py, px, 100, TELEPORT_PASSIVE);
+		teleport_monster_to(cave[target_row][target_col].m_idx, p_ptr->y, p_ptr->x, 100, TELEPORT_PASSIVE);
 		break;
 	}
 	case MS_TELE_AWAY:
@@ -743,7 +743,7 @@ static bool use_mane(int spell)
 		target_m_idx = cave[target_row][target_col].m_idx;
 		if (!target_m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(py, px, target_row, target_col)) break;
+		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		m_ptr = &m_list[target_m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
@@ -776,7 +776,7 @@ static bool use_mane(int spell)
 		break;
 	case MS_RAISE_DEAD:
 		msg_print(_("死者復活の呪文を唱えた。", "You cast a animate dead."));
-		(void)animate_dead(0, py, px);
+		(void)animate_dead(0, p_ptr->y, p_ptr->x);
 		break;
 	case MS_S_KIN:
 	{

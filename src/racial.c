@@ -94,8 +94,8 @@ static bool do_cmd_archer(void)
 		cave_type *c_ptr;
 
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 		c_ptr = &cave[y][x];
 
 		if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_CAN_DIG))
@@ -780,8 +780,8 @@ static bool cmd_racial_power_aux(s32b command)
 			for (i = 0; i < 6; i++)
 			{
 				dir = randint0(8);
-				y = py + ddy_ddd[dir];
-				x = px + ddx_ddd[dir];
+				y = p_ptr->y + ddy_ddd[dir];
+				x = p_ptr->x + ddx_ddd[dir];
 				c_ptr = &cave[y][x];
 
 				/* Hack -- attack monsters */
@@ -827,8 +827,8 @@ static bool cmd_racial_power_aux(s32b command)
 			int x, y;
 
 			if (!get_rep_dir(&dir, FALSE)) return FALSE;
-			y = py + ddy[dir];
-			x = px + ddx[dir];
+			y = p_ptr->y + ddy[dir];
+			x = p_ptr->x + ddx[dir];
 			if (cave[y][x].m_idx)
 			{
 				py_attack(y, x, 0);
@@ -928,8 +928,8 @@ static bool cmd_racial_power_aux(s32b command)
 				int x, y;
 
 				if (!get_rep_dir(&dir, FALSE)) return FALSE;
-				y = py + ddy[dir];
-				x = px + ddx[dir];
+				y = p_ptr->y + ddy[dir];
+				x = p_ptr->x + ddx[dir];
 				if (cave[y][x].m_idx)
 				{
 					if (one_in_(2)) 
@@ -1167,7 +1167,7 @@ static bool cmd_racial_power_aux(s32b command)
 					msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
 					return FALSE;
 				}
-				if (is_mirror_grid(&cave[py][px]))
+				if (is_mirror_grid(&cave[p_ptr->y][p_ptr->x]))
 				{
 					msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
 
@@ -1196,7 +1196,7 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			else
 			{
-				cave_type *c_ptr = &cave[py][px];
+				cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 				feature_type *f_ptr = &f_info[c_ptr->feat];
 
 				if (!have_flag(f_ptr->flags, FF_PROJECT) ||
@@ -1249,8 +1249,8 @@ static bool cmd_racial_power_aux(s32b command)
 
 				/* Only works on adjacent monsters */
 				if (!get_rep_dir(&dir, FALSE)) return FALSE;   /* was get_aim_dir */
-				y = py + ddy[dir];
-				x = px + ddx[dir];
+				y = p_ptr->y + ddy[dir];
+				x = p_ptr->x + ddx[dir];
 				c_ptr = &cave[y][x];
 
 				ratial_stop_mouth();
@@ -1310,7 +1310,7 @@ static bool cmd_racial_power_aux(s32b command)
 				object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
 
 				/* Drop the object from heaven */
-				(void)drop_near(q_ptr, -1, py, px);
+				(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
 				msg_print(_("食事を料理して作った。", "You cook some food."));
 			}
 			break;
@@ -1603,8 +1603,8 @@ static bool cmd_racial_power_aux(s32b command)
 
 				/* Only works on adjacent monsters */
 				if (!get_rep_dir(&dir,FALSE)) return FALSE;   /* was get_aim_dir */
-				y = py + ddy[dir];
-				x = px + ddx[dir];
+				y = p_ptr->y + ddy[dir];
+				x = p_ptr->x + ddx[dir];
 				c_ptr = &cave[y][x];
 
 				ratial_stop_mouth();

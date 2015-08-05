@@ -390,7 +390,7 @@ static bool player_has_no_spellbooks(void)
 		if (o_ptr->k_idx && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
 	}
 
-	for (i = cave[py][px].o_idx; i; i = o_ptr->next_o_idx)
+	for (i = cave[p_ptr->y][p_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
 	{
 		o_ptr = &o_list[i];
 		if (o_ptr->k_idx && (o_ptr->marked & OM_FOUND) && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
@@ -987,7 +987,7 @@ static void wild_magic(int spell)
 		break;
 	case 19:
 	case 20:
-		trap_creation(py, px);
+		trap_creation(p_ptr->y, p_ptr->x);
 		break;
 	case 21:
 	case 22:
@@ -999,7 +999,7 @@ static void wild_magic(int spell)
 		aggravate_monsters(0);
 		break;
 	case 26:
-		earthquake(py, px, 5);
+		earthquake(p_ptr->y, p_ptr->x, 5);
 		break;
 	case 27:
 	case 28:
@@ -1022,15 +1022,15 @@ static void wild_magic(int spell)
 	case 35:
 		while (counter++ < 8)
 		{
-			(void)summon_specific(0, py, px, (dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
+			(void)summon_specific(0, p_ptr->y, p_ptr->x, (dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
 		}
 		break;
 	case 36:
 	case 37:
-		activate_hi_summon(py, px, FALSE);
+		activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 		break;
 	case 38:
-		(void)summon_cyber(-1, py, px);
+		(void)summon_cyber(-1, p_ptr->y, p_ptr->x);
 		break;
 	default:
 		{
@@ -1892,8 +1892,8 @@ bool rakuba(int dam, bool force)
 			cave_type *c_ptr;
 
 			/* Access the location */
-			y = py + ddy_ddd[i];
-			x = px + ddx_ddd[i];
+			y = p_ptr->y + ddy_ddd[i];
+			x = p_ptr->x + ddx_ddd[i];
 
 			c_ptr = &cave[y][x];
 
@@ -1929,17 +1929,17 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった
 			return FALSE;
 		}
 
-		oy = py;
-		ox = px;
+		oy = p_ptr->y;
+		ox = p_ptr->x;
 
-		py = sy;
-		px = sx;
+		p_ptr->y = sy;
+		p_ptr->x = sx;
 
 		/* Redraw the old spot */
 		lite_spot(oy, ox);
 
 		/* Redraw the new spot */
-		lite_spot(py, px);
+		lite_spot(p_ptr->y, p_ptr->x);
 
 		/* Check for new panel */
 		verify_panel();
@@ -1977,7 +1977,7 @@ msg_format("%sから振り落とされそうになって、壁にぶつかった
 
 	/* Move the player */
 	if (sy && !p_ptr->is_dead)
-		(void)move_player_effect(py, px, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
+		(void)move_player_effect(p_ptr->y, p_ptr->x, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
 	return fall_dam;
 }
@@ -1994,8 +1994,8 @@ bool do_riding(bool force)
 	monster_type *m_ptr;
 
 	if (!get_rep_dir2(&dir)) return FALSE;
-	y = py + ddy[dir];
-	x = px + ddx[dir];
+	y = p_ptr->y + ddy[dir];
+	x = p_ptr->x + ddx[dir];
 	c_ptr = &cave[y][x];
 
 	if (p_ptr->special_defense & KATA_MUSOU) set_action(ACTION_NONE);
@@ -2009,7 +2009,7 @@ bool do_riding(bool force)
 			return FALSE;
 		}
 
-		if (!pattern_seq(py, px, y, x)) return FALSE;
+		if (!pattern_seq(p_ptr->y, p_ptr->x, y, x)) return FALSE;
 
 		if (c_ptr->m_idx)
 		{
@@ -2053,7 +2053,7 @@ bool do_riding(bool force)
 			return FALSE;
 		}
 
-		if (!pattern_seq(py, px, y, x)) return FALSE;
+		if (!pattern_seq(p_ptr->y, p_ptr->x, y, x)) return FALSE;
 
 		if (!player_can_ride_aux(c_ptr, TRUE))
 		{

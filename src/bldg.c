@@ -2263,7 +2263,7 @@ static void castle_quest(void)
 	clear_bldg(4, 18);
 
 	/* Current quest of the building */
-	q_index = cave[py][px].special;
+	q_index = cave[p_ptr->y][p_ptr->x].special;
 
 	/* Is there a quest available at the building? */
 	if (!q_index)
@@ -4588,7 +4588,7 @@ void do_cmd_quest(void)
 {
 	p_ptr->energy_use = 100;
 
-	if (!cave_have_flag_bold(py, px, FF_QUEST_ENTER))
+	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_QUEST_ENTER))
 	{
 		msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
 		return;
@@ -4607,7 +4607,7 @@ void do_cmd_quest(void)
 		leave_quest_check();
 
 		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) dun_level = 1;
-		p_ptr->inside_quest = cave[py][px].special;
+		p_ptr->inside_quest = cave[p_ptr->y][p_ptr->x].special;
 
 		p_ptr->leaving = TRUE;
 	}
@@ -4628,13 +4628,13 @@ void do_cmd_bldg(void)
 
 	p_ptr->energy_use = 100;
 
-	if (!cave_have_flag_bold(py, px, FF_BLDG))
+	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_BLDG))
 	{
 		msg_print(_("ここには建物はない。", "You see no building here."));
 		return;
 	}
 
-	which = f_info[cave[py][px].feat].subtype;
+	which = f_info[cave[p_ptr->y][p_ptr->x].feat].subtype;
 
 	bldg = &building[which];
 
@@ -4687,8 +4687,8 @@ void do_cmd_bldg(void)
 	}
 	else
 	{
-		p_ptr->oldpy = py;
-		p_ptr->oldpx = px;
+		p_ptr->oldpy = p_ptr->y;
+		p_ptr->oldpx = p_ptr->x;
 	}
 
 	/* Forget the lite */

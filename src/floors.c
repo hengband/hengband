@@ -338,11 +338,11 @@ static void build_dead_end(void)
 	}
 
 	/* Place at center of the floor */
-	py = cur_hgt / 2;
-	px = cur_wid / 2;
+	p_ptr->y = cur_hgt / 2;
+	p_ptr->x = cur_wid / 2;
 
 	/* Give one square */
-	place_floor_bold(py, px);
+	place_floor_bold(p_ptr->y, p_ptr->x);
 
 	wipe_generate_cave_flags();
 }
@@ -406,7 +406,7 @@ static void preserve_pet(void)
 			}
 			else
 			{
-				int dis = distance(py, px, m_ptr->fy, m_ptr->fx);
+				int dis = distance(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx);
 
 				/* Confused (etc.) monsters don't follow. */
 				if (MON_CONFUSED(m_ptr) || MON_STUNNED(m_ptr) || MON_CSLEEP(m_ptr)) continue;
@@ -419,8 +419,8 @@ static void preserve_pet(void)
 				 * when you or the pet can see the other.
 				 */
 				if (m_ptr->nickname && 
-				    ((player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(py, px, m_ptr->fy, m_ptr->fx)) ||
-				     (los(m_ptr->fy, m_ptr->fx, py, px) && projectable(m_ptr->fy, m_ptr->fx, py, px))))
+				    ((player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) ||
+				     (los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x) && projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x))))
 				{
 					if (dis > 3) continue;
 				}
@@ -533,8 +533,8 @@ static void place_pet(void)
 			p_ptr->riding = m_idx;
 			if (m_idx)
 			{
-				cy = py;
-				cx = px;
+				cy = p_ptr->y;
+				cx = p_ptr->x;
 			}
 		}
 		else
@@ -545,7 +545,7 @@ static void place_pet(void)
 			{
 				for (j = 1000; j > 0; j--)
 				{
-					scatter(&cy, &cx, py, px, d, 0);
+					scatter(&cy, &cx, p_ptr->y, p_ptr->x, d, 0);
 					if (monster_can_enter(cy, cx, &r_info[party_mon[i].r_idx], 0)) break;
 				}
 				if (j) break;
@@ -687,8 +687,8 @@ static void get_out_monster(void)
 {
 	int tries = 0;
 	int dis = 1;
-	int oy = py;
-	int ox = px;
+	int oy = p_ptr->y;
+	int ox = p_ptr->x;
 	int m_idx = cave[oy][ox].m_idx;
 
 	/* Nothing to do if no monster */
@@ -830,8 +830,8 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 	if (sx)
 	{
 		/* Already fixed */
-		py = sy;
-		px = sx;
+		p_ptr->y = sy;
+		p_ptr->x = sx;
 	}
 	else if (!num)
 	{
@@ -839,7 +839,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 		prepare_change_floor_mode(CFM_RAND_PLACE | CFM_NO_RETURN);
 
 		/* Mega Hack -- It's not the stairs you enter.  Disable it.  */
-		if (!feat_uses_special(cave[py][px].feat)) cave[py][px].special = 0;
+		if (!feat_uses_special(cave[p_ptr->y][p_ptr->x].feat)) cave[p_ptr->y][p_ptr->x].special = 0;
 	}
 	else
 	{
@@ -847,8 +847,8 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 		i = randint0(num);
 
 		/* Point stair location */
-		py = y_table[i];
-		px = x_table[i];
+		p_ptr->y = y_table[i];
+		p_ptr->x = x_table[i];
 	}
 }
 
@@ -951,7 +951,7 @@ void leave_floor(void)
 	if (change_floor_mode & CFM_SAVE_FLOORS)
 	{
 		/* Extract stair position */
-		c_ptr = &cave[py][px];
+		c_ptr = &cave[p_ptr->y][p_ptr->x];
 		f_ptr = &f_info[c_ptr->feat];
 
 		/* Get back to old saved floor? */
@@ -1155,7 +1155,7 @@ void change_floor(void)
 				/* Forbid return stairs */
 				if (change_floor_mode & CFM_NO_RETURN)
 				{
-					cave_type *c_ptr = &cave[py][px];
+					cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 					if (!feat_uses_special(c_ptr->feat))
 					{
@@ -1336,7 +1336,7 @@ void change_floor(void)
 			if (!(change_floor_mode & CFM_NO_RETURN))
 			{
 				/* Extract stair position */
-				cave_type *c_ptr = &cave[py][px];
+				cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 				/*** Create connected stairs ***/
 
@@ -1467,7 +1467,7 @@ void stair_creation(void)
 	}
 
 	/* Artifacts resists */
-	if (!cave_valid_bold(py, px))
+	if (!cave_valid_bold(p_ptr->y, p_ptr->x))
 	{
 #ifdef JP
 		msg_print("床上のアイテムが呪文を跳ね返した。");
@@ -1479,7 +1479,7 @@ void stair_creation(void)
 	}
 
 	/* Destroy all objects in the grid */
-	delete_object(py, px);
+	delete_object(p_ptr->y, p_ptr->x);
 
 	/* Extract current floor data */
 	sf_ptr = get_sf_ptr(p_ptr->floor_id);
@@ -1551,18 +1551,18 @@ void stair_creation(void)
 	/* Create a staircase */
 	if (up)
 	{
-		cave_set_feat(py, px,
+		cave_set_feat(p_ptr->y, p_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= dun_level - 2)) ?
 			feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
 	}
 	else
 	{
-		cave_set_feat(py, px,
+		cave_set_feat(p_ptr->y, p_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= dun_level + 2)) ?
 			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
 	}
 
 
 	/* Connect this stairs to the destination */
-	cave[py][px].special = dest_floor_id;
+	cave[p_ptr->y][p_ptr->x].special = dest_floor_id;
 }

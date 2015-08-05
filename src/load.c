@@ -2437,17 +2437,17 @@ static errr rd_dungeon_old(void)
 
 	rd_s16b(&num_repro);
 	rd_s16b(&tmp16s);
-	py = (int)tmp16s;
+	p_ptr->y = (int)tmp16s;
 	rd_s16b(&tmp16s);
-	px = (int)tmp16s;
-	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {py = 33;px = 131;}
+	p_ptr->x = (int)tmp16s;
+	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
 	rd_s16b(&cur_hgt);
 	rd_s16b(&cur_wid);
 	rd_s16b(&tmp16s); /* max_panel_rows */
 	rd_s16b(&tmp16s); /* max_panel_cols */
 
 #if 0
-	if (!py || !px) {py = 10;px = 10;}/* ダンジョン生成に失敗してセグメンテったときの復旧用 */
+	if (!p_ptr->y || !p_ptr->x) {p_ptr->y = 10;p_ptr->x = 10;}/* ダンジョン生成に失敗してセグメンテったときの復旧用 */
 #endif
 
 	/* Maximal size */
@@ -2887,10 +2887,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_s16b(&num_repro);
 
 	rd_u16b(&tmp16u);
-	py = (int)tmp16u;
+	p_ptr->y = (int)tmp16u;
 
 	rd_u16b(&tmp16u);
-	px = (int)tmp16u;
+	p_ptr->x = (int)tmp16u;
 
 	rd_s16b(&cur_hgt);
 	rd_s16b(&cur_wid);

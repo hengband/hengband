@@ -893,7 +893,7 @@ static bool cast_mindcrafter_spell(int spell)
 		msg_print(_("精神を捻じ曲げる波動を発生させた！", "Mind-warping forces emanate from your brain!"));
 
 		if (plev < 25)
-			project(0, 2 + plev / 10, py, px,
+			project(0, 2 + plev / 10, p_ptr->y, p_ptr->x,
 			(plev * 3), GF_PSI, PROJECT_KILL, -1);
 		else
 			(void)mindblast_monsters(randint1(plev * ((plev - 5) / 10 + 1)));
@@ -1030,8 +1030,8 @@ static bool cast_force_spell(int spell)
 		project_length = 1;
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 		dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
 		fire_beam(GF_MISSILE, dir, dam);
 		if (cave[y][x].m_idx)
@@ -1094,7 +1094,7 @@ static bool cast_force_spell(int spell)
 		m_idx = cave[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(py, px, target_row, target_col)) break;
+		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -1104,7 +1104,7 @@ static bool cast_force_spell(int spell)
 		bool success = FALSE;
 
 		for (i = 0; i < 1 + boost/100; i++)
-			if (summon_specific(-1, py, px, plev, SUMMON_PHANTOM, PM_FORCE_PET))
+			if (summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET))
 				success = TRUE;
 		if (success)
 		{
@@ -1171,7 +1171,7 @@ static bool cast_mirror_spell(int spell)
 	{
 	/* mirror of seeing */
 	case 0:
-	  tmp = is_mirror_grid(&cave[py][px]) ? 4 : 0;
+	  tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 0;
 	  if( plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
 	  if( plev + tmp > 18 )detect_monsters_invis(DETECT_RAD_DEFAULT);
 	  if( plev + tmp > 28 )set_tim_esp(plev,FALSE);
@@ -1191,7 +1191,7 @@ static bool cast_mirror_spell(int spell)
 	  break;
 	case 2:
 	  if (!get_aim_dir(&dir)) return FALSE;
-	  if ( plev > 9 && is_mirror_grid(&cave[py][px]) ) {
+	  if ( plev > 9 && is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ) {
 	    fire_beam(GF_LITE, dir,damroll(3+((plev-1)/5),4));
 	  }
 	  else {
@@ -1258,7 +1258,7 @@ static bool cast_mirror_spell(int spell)
 	  break;
 	/* illusion light */
 	case 14:
-	  tmp = is_mirror_grid(&cave[py][px]) ? 4 : 3;
+	  tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 3;
 	  slow_monsters(plev);
 	  stun_monsters(plev*tmp);
 	  confuse_monsters(plev*tmp);
@@ -1268,7 +1268,7 @@ static bool cast_mirror_spell(int spell)
 	  break;
 	/* mirror shift */
 	case 15:
-	  if( !is_mirror_grid(&cave[py][px]) ){
+	  if( !is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ){
 		msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
 		break;
 	  }
@@ -1331,8 +1331,8 @@ static bool cast_berserk_spell(int spell)
 		if (!get_rep_dir2(&dir)) return FALSE;
 
 		if (dir == 5) return FALSE;
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 
 		if (!cave[y][x].m_idx)
 		{
@@ -1360,16 +1360,16 @@ static bool cast_berserk_spell(int spell)
 	case 2:
 	{
 		if (!get_rep_dir2(&dir)) return FALSE;
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 		move_player(dir, easy_disarm, TRUE);
 		break;
 	}
 	case 3:
-		earthquake(py, px, 8+randint0(5));
+		earthquake(p_ptr->y, p_ptr->x, 8+randint0(5));
 		break;
 	case 4:
-		massacre(py, px);
+		massacre(p_ptr->y, p_ptr->x);
 		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
@@ -1436,8 +1436,8 @@ static bool cast_ninja_spell(int spell)
 	case 5:
 	{
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 		if (cave[y][x].m_idx)
 		{
 			py_attack(y, x, 0);
@@ -1516,11 +1516,11 @@ static bool cast_ninja_spell(int spell)
 		if (!m_idx) break;
 		if (m_idx == p_ptr->riding) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(py, px, target_row, target_col)) break;
+		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		m_ptr = &m_list[m_idx];
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
-		path_n = project_path(path_g, MAX_RANGE, target_row, target_col, py, px, 0);
+		path_n = project_path(path_g, MAX_RANGE, target_row, target_col, p_ptr->y, p_ptr->x, 0);
 		ty = target_row, tx = target_col;
 		for (i = 1; i < path_n; i++)
 		{
@@ -1612,7 +1612,7 @@ static bool cast_ninja_spell(int spell)
 
 			while (attempts--)
 			{
-				scatter(&y, &x, py, px, 4, 0);
+				scatter(&y, &x, p_ptr->y, p_ptr->x, 4, 0);
 
 				if (!player_bold(y, x)) break;
 			}
@@ -1804,7 +1804,7 @@ void do_cmd_mind(void)
 					/* Mana storm */
 					msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), p);
 
-					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, py, px, plev * 2,
+					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, p_ptr->y, p_ptr->x, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
 					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
 				}
@@ -1829,7 +1829,7 @@ void do_cmd_mind(void)
 					/* Mana storm */
 					msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), p);
 
-					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, py, px, plev * 2,
+					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, p_ptr->y, p_ptr->x, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
 					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
 				}
@@ -1857,7 +1857,7 @@ void do_cmd_mind(void)
 			break;
 		case MIND_MIRROR_MASTER:
 			/* Cast the spell */
-			if( is_mirror_grid(&cave[py][px]) )on_mirror = TRUE;
+			if( is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) )on_mirror = TRUE;
 			cast = cast_mirror_spell(n);
 			break;
 		case MIND_NINJUTSU:

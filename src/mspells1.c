@@ -1209,7 +1209,7 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
 	}
 
 	/* Player is close and we have attack spells, blink away */
-	if ((distance(py, px, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->flags6 & RF6_TRAPS)) && (randint0(100) < 75) && !world_monster)
+	if ((distance(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->flags6 & RF6_TRAPS)) && (randint0(100) < 75) && !world_monster)
 	{
 		/* Choose tactical spell */
 		if (tactic_num) return (tactic[randint0(tactic_num)]);
@@ -1348,9 +1348,9 @@ static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
 			                     {-1,  0,  1, -1,  1, -1,  0,  1},
 			                     { 1,  0, -1,  1, -1,  1,  0, -1}};
 
-	if (m_ptr->fy < py && m_ptr->fx < px) tonari = 0;
-	else if (m_ptr->fy < py) tonari = 1;
-	else if (m_ptr->fx < px) tonari = 2;
+	if (m_ptr->fy < p_ptr->y && m_ptr->fx < p_ptr->x) tonari = 0;
+	else if (m_ptr->fy < p_ptr->y) tonari = 1;
+	else if (m_ptr->fx < p_ptr->x) tonari = 2;
 	else tonari = 3;
 
 	for (i = 0; i < 8; i++)
@@ -1455,8 +1455,8 @@ bool make_attack_spell(int m_idx)
 	int             dam = 0;
 
 	/* Target location */
-	int x = px;
-	int y = py;
+	int x = p_ptr->x;
+	int y = p_ptr->y;
 
 	/* Target location for lite breath */
 	int x_br_lite = 0;
@@ -1685,7 +1685,7 @@ bool make_attack_spell(int m_idx)
 		if (((f4 & RF4_BOLT_MASK) ||
 		     (f5 & RF5_BOLT_MASK) ||
 		     (f6 & RF6_BOLT_MASK)) &&
-		    !clean_shot(m_ptr->fy, m_ptr->fx, py, px, FALSE))
+		    !clean_shot(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x, FALSE))
 		{
 			/* Remove spells that will only hurt friends */
 			f4 &= ~(RF4_BOLT_MASK);

@@ -1659,7 +1659,7 @@ void autopick_delayed_alter(void)
 		autopick_delayed_alter_aux(item);
 
 	/* Scan the pile of objects */
-	item = cave[py][px].o_idx;
+	item = cave[p_ptr->y][p_ptr->x].o_idx;
 	while (item)
 	{
 		int next = o_list[item].next_o_idx;

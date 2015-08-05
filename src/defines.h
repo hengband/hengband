@@ -4055,7 +4055,7 @@
  */
 #define is_seen(A) \
 	((bool)((A)->ml && (!ignore_unview || p_ptr->inside_battle || \
-	 (player_can_see_bold((A)->fy, (A)->fx) && projectable(py, px, (A)->fy, (A)->fx)))))
+	 (player_can_see_bold((A)->fy, (A)->fx) && projectable(p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
 
 
 /*** Option Definitions ***/
@@ -4224,14 +4224,14 @@
  * Determine if player is on this grid
  */
 #define player_bold(Y,X) \
-	(((Y) == py) && ((X) == px))
+	(((Y) == p_ptr->y) && ((X) == p_ptr->x))
 
 
 /*
  * Grid based version of "player_bold()"
  */
 #define player_grid(C) \
-	((C) == &cave[py][px])
+	((C) == &cave[p_ptr->y][p_ptr->x])
 
 
 #define cave_have_flag_bold(Y,X,INDEX) \

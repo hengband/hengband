@@ -2382,8 +2382,8 @@ void update_mon(int m_idx, bool full)
 	if (full)
 	{
 		/* Distance components */
-		int dy = (py > fy) ? (py - fy) : (fy - py);
-		int dx = (px > fx) ? (px - fx) : (fx - px);
+		int dy = (p_ptr->y > fy) ? (p_ptr->y - fy) : (fy - p_ptr->y);
+		int dx = (p_ptr->x > fx) ? (p_ptr->x - fx) : (fx - p_ptr->x);
 
 		/* Approximate distance */
 		d = (dy > dx) ? (dy + (dx>>1)) : (dx + (dy>>1));
@@ -2662,7 +2662,7 @@ void update_mon(int m_idx, bool full)
 			}
 
 			/* Disturb on appearance */
-			if (disturb_near && (projectable(m_ptr->fy, m_ptr->fx, py, px) && projectable(py, px, m_ptr->fy, m_ptr->fx)))
+			if (disturb_near && (projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)))
 			{
 				if (disturb_pets || is_hostile(m_ptr))
 					disturb(1, 1);
@@ -3958,7 +3958,7 @@ bool alloc_monster(int dis, u32b mode)
 		}
 
 		/* Accept far away grids */
-		if (distance(y, x, py, px) > dis) break;
+		if (distance(y, x, p_ptr->y, p_ptr->x) > dis) break;
 	}
 
 	if (!attempts_left)
@@ -4643,8 +4643,8 @@ bool player_place(int y, int x)
 	if (cave[y][x].m_idx != 0) return FALSE;
 
 	/* Save player location */
-	py = y;
-	px = x;
+	p_ptr->y = y;
+	p_ptr->x = x;
 
 	/* Success */
 	return TRUE;

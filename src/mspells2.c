@@ -147,17 +147,17 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 		if (flg & PROJECT_DISI)
 		{
 			if (in_disintegration_range(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (in_disintegration_range(y1, x1, py, px) && (distance(y1, x1, py, px) <= rad)) hityou = TRUE;
+			if (in_disintegration_range(y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
 		}
 		else if (flg & PROJECT_LOS)
 		{
 			if (los(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (los(y1, x1, py, px) && (distance(y1, x1, py, px) <= rad)) hityou = TRUE;
+			if (los(y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
 		}
 		else
 		{
 			if (projectable(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (projectable(y1, x1, py, px) && (distance(y1, x1, py, px) <= rad)) hityou = TRUE;
+			if (projectable(y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
 		}
 	}
 	else
@@ -482,9 +482,9 @@ bool monst_spell_monst(int m_idx)
 
 				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
 
-				if (projectable(real_y, real_x, py, px))
+				if (projectable(real_y, real_x, p_ptr->y, p_ptr->x))
 				{
-					int dist = distance(real_y, real_x, py, px);
+					int dist = distance(real_y, real_x, p_ptr->y, p_ptr->x);
 
 					if (dist <= 2)
 					{
@@ -501,7 +501,7 @@ bool monst_spell_monst(int m_idx)
 				}
 				else if (f5 & RF5_BA_LITE)
 				{
-					if ((distance(real_y, real_x, py, px) <= 4) && los(real_y, real_x, py, px))
+					if ((distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 4) && los(real_y, real_x, p_ptr->y, p_ptr->x))
 						f5 &= ~(RF5_BA_LITE);
 				}
 			}
@@ -512,7 +512,7 @@ bool monst_spell_monst(int m_idx)
 				int real_x = x;
 
 				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
-				if (projectable(real_y, real_x, py, px) && (distance(real_y, real_x, py, px) <= 2))
+				if (projectable(real_y, real_x, p_ptr->y, p_ptr->x) && (distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 2))
 					f4 &= ~(RF4_ROCKET);
 			}
 

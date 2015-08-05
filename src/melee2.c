@@ -485,7 +485,7 @@ static bool get_moves_aux2(int m_idx, int *yp, int *xp)
 	x1 = m_ptr->fx;
 
 	/* Monster can already cast spell to player */
-	if (projectable(y1, x1, py, px)) return (FALSE);
+	if (projectable(y1, x1, p_ptr->y, p_ptr->x)) return (FALSE);
 
 	/* Set current grid cost */
 	now_cost = cave[y1][x1].cost;
@@ -528,7 +528,7 @@ static bool get_moves_aux2(int m_idx, int *yp, int *xp)
 
 		if (now_cost < cost) continue;
 
-		if (!projectable(y, x, py, px)) continue;
+		if (!projectable(y, x, p_ptr->y, p_ptr->x)) continue;
 
 		/* Accept louder sounds */
 		if (best < cost) continue;
@@ -605,7 +605,7 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 	x1 = m_ptr->fx;
 
 	/* Hack -- Player can see us, run towards him */
-	if (player_has_los_bold(y1, x1) && projectable(py, px, y1, x1)) return (FALSE);
+	if (player_has_los_bold(y1, x1) && projectable(p_ptr->y, p_ptr->x, y1, x1)) return (FALSE);
 
 	/* Monster grid */
 	c_ptr = &cave[y1][x1];
@@ -620,7 +620,7 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 	else if (c_ptr->when)
 	{
 		/* Too old smell */
-		if (cave[py][px].when - c_ptr->when > 127) return (FALSE);
+		if (cave[p_ptr->y][p_ptr->x].when - c_ptr->when > 127) return (FALSE);
 
 		use_scent = TRUE;
 		best = 0;
@@ -669,8 +669,8 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 		}
 
 		/* Hack -- Save the "twiddled" location */
-		(*yp) = py + 16 * ddy_ddd[i];
-		(*xp) = px + 16 * ddx_ddd[i];
+		(*yp) = p_ptr->y + 16 * ddy_ddd[i];
+		(*xp) = p_ptr->x + 16 * ddx_ddd[i];
 	}
 
 	/* No legal move (?) */
@@ -957,10 +957,10 @@ static bool find_safety(int m_idx, int *yp, int *xp)
 			}
 
 			/* Check for absence of shot (more or less) */
-			if (!projectable(py, px, y, x))
+			if (!projectable(p_ptr->y, p_ptr->x, y, x))
 			{
 				/* Calculate distance from player */
-				dis = distance(y, x, py, px);
+				dis = distance(y, x, p_ptr->y, p_ptr->x);
 
 				/* Remember if further than previous */
 				if (dis > gdis)
@@ -1037,10 +1037,10 @@ static bool find_hiding(int m_idx, int *yp, int *xp)
 			if (!monster_can_enter(y, x, r_ptr, 0)) continue;
 
 			/* Check for hidden, available grid */
-			if (!projectable(py, px, y, x) && clean_shot(fy, fx, y, x, FALSE))
+			if (!projectable(p_ptr->y, p_ptr->x, y, x) && clean_shot(fy, fx, y, x, FALSE))
 			{
 				/* Calculate distance from player */
-				dis = distance(y, x, py, px);
+				dis = distance(y, x, p_ptr->y, p_ptr->x);
 
 				/* Remember if closer than previous */
 				if (dis < gdis && dis >= 2)
@@ -1082,8 +1082,8 @@ static bool get_moves(int m_idx, int *mm)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	int          y = 0, ay, x = 0, ax;
 	int          move_val = 0;
-	int          y2 = py;
-	int          x2 = px;
+	int          y2 = p_ptr->y;
+	int          x2 = p_ptr->x;
 	bool         done = FALSE;
 	bool         will_run = mon_will_run(m_idx);
 	cave_type    *c_ptr;
@@ -1110,7 +1110,7 @@ static bool get_moves(int m_idx, int *mm)
 
 	if (!done && !will_run && is_hostile(m_ptr) &&
 	    (r_ptr->flags1 & RF1_FRIENDS) &&
-	    ((los(m_ptr->fy, m_ptr->fx, py, px) && projectable(m_ptr->fy, m_ptr->fx, py, px)) ||
+	    ((los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x) && projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) ||
 	    (cave[m_ptr->fy][m_ptr->fx].dist < MAX_SIGHT / 2)))
 	{
 	/*
@@ -1125,8 +1125,8 @@ static bool get_moves(int m_idx, int *mm)
 			/* Count room grids next to player */
 			for (i = 0; i < 8; i++)
 			{
-				int xx = px + ddx_ddd[i];
-				int yy = py + ddy_ddd[i];
+				int xx = p_ptr->x + ddx_ddd[i];
+				int yy = p_ptr->y + ddy_ddd[i];
 
 				if (!in_bounds2(yy, xx)) continue;
 
@@ -1139,7 +1139,7 @@ static bool get_moves(int m_idx, int *mm)
 					room++;
 				}
 			}
-			if (cave[py][px].info & CAVE_ROOM) room -= 2;
+			if (cave[p_ptr->y][p_ptr->x].info & CAVE_ROOM) room -= 2;
 			if (!r_ptr->flags4 && !r_ptr->flags5 && !r_ptr->flags6) room -= 2;
 
 			/* Not in a room and strong player */
@@ -1160,15 +1160,15 @@ static bool get_moves(int m_idx, int *mm)
 			for (i = 0; i < 8; i++)
 			{
 				/* Pick squares near player (semi-randomly) */
-				y2 = py + ddy_ddd[(m_idx + i) & 7];
-				x2 = px + ddx_ddd[(m_idx + i) & 7];
+				y2 = p_ptr->y + ddy_ddd[(m_idx + i) & 7];
+				x2 = p_ptr->x + ddx_ddd[(m_idx + i) & 7];
 
 				/* Already there? */
 				if ((m_ptr->fy == y2) && (m_ptr->fx == x2))
 				{
 					/* Attack the player */
-					y2 = py;
-					x2 = px;
+					y2 = p_ptr->y;
+					x2 = p_ptr->x;
 
 					break;
 				}
@@ -2274,7 +2274,7 @@ static void process_monster(int m_idx)
 				if (see_m)
 				{
 					if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG) &&
-					    player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(m_ptr->fy, m_ptr->fx, py, px))
+					    player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x))
 					{
 						msg_format(_("%^s「ピンチだ！退却させてもらう！」", "%^s says 'It is the pinch! I will retreat'."), m_name);
 					}
@@ -2458,7 +2458,7 @@ static void process_monster(int m_idx)
 		if ((ap_r_ptr->flags2 & RF2_CAN_SPEAK) && aware &&
 		    one_in_(SPEAK_CHANCE) &&
 		    player_has_los_bold(oy, ox) &&
-		    projectable(oy, ox, py, px))
+		    projectable(oy, ox, p_ptr->y, p_ptr->x))
 		{
 			char m_name[80];
 			char monmessage[1024];
@@ -3119,7 +3119,7 @@ static void process_monster(int m_idx)
 			/* Possible disturb */
 			if (m_ptr->ml &&
 			    (disturb_move ||
-			     (disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(py, px, m_ptr->fy, m_ptr->fx)) ||
+			     (disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) ||
 			     (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)))
 			{
 				/* Disturb */
@@ -3508,12 +3508,12 @@ void process_monsters(void)
 			test = TRUE;
 		}
 
-#if 0 /* (cave[py][px].when == cave[fy][fx].when) is always FALSE... */
+#if 0 /* (cave[p_ptr->y][p_ptr->x].when == cave[fy][fx].when) is always FALSE... */
 		/* Hack -- Monsters can "smell" the player from far away */
 		/* Note that most monsters have "aaf" of "20" or so */
 		else if (!(m_ptr->mflag2 & MFLAG2_NOFLOW) &&
-			cave_have_flag_bold(py, px, FF_MOVE) &&
-			(cave[py][px].when == cave[fy][fx].when) &&
+			cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_MOVE) &&
+			(cave[p_ptr->y][p_ptr->x].when == cave[fy][fx].when) &&
 			(cave[fy][fx].dist < MONSTER_FLOW_DEPTH) &&
 			(cave[fy][fx].dist < r_ptr->aaf))
 		{
@@ -4333,7 +4333,7 @@ bool process_the_world(int num, int who, bool vs_player)
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	world_monster = 0;
-	if (vs_player || (player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(py, px, m_ptr->fy, m_ptr->fx)))
+	if (vs_player || (player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)))
 	{
 		msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
 		msg_print(NULL);

@@ -2379,8 +2379,8 @@ bool activate_random_artifact(object_type *o_ptr)
 
 				for (dir = 0; dir <= 9; dir++)
 				{
-					y = py + ddy[dir];
-					x = px + ddx[dir];
+					y = p_ptr->y + ddy[dir];
+					x = p_ptr->x + ddx[dir];
 					c_ptr = &cave[y][x];
 
 					/* Get the monster */
@@ -2510,7 +2510,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 				while (attempts--)
 				{
-					scatter(&y, &x, py, px, 4, 0);
+					scatter(&y, &x, p_ptr->y, p_ptr->x, 4, 0);
 
 					if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
@@ -2587,7 +2587,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_QUAKE:
 		{
-			earthquake(py, px, 5);
+			earthquake(p_ptr->y, p_ptr->x, 5);
 			break;
 		}
 
@@ -2688,14 +2688,14 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SUMMON_ANIMAL:
 		{
-			(void)summon_specific(-1, py, px, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
+			(void)summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			break;
 		}
 
 		case ACT_SUMMON_PHANTOM:
 		{
 			msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
-			(void)summon_specific(-1, py, px, dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
+			(void)summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			break;
 		}
 
@@ -2708,7 +2708,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= PM_NO_PET;
 
-			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_ELEMENTAL, mode))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((plev * 3) / 2), SUMMON_ELEMENTAL, mode))
 			{
 				msg_print(_("エレメンタルが現れた...", "An elemental materializes..."));
 				if (pet)
@@ -2729,7 +2729,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= PM_NO_PET;
 
-			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), SUMMON_DEMON, mode))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((plev * 3) / 2), SUMMON_DEMON, mode))
 			{
 				msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 				if (pet)
@@ -2753,7 +2753,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-			if (summon_specific((pet ? -1 : 0), py, px, ((plev * 3) / 2), type, mode))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((plev * 3) / 2), type, mode))
 			{
 				msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
 						"Cold winds begin to blow around you, carrying with them the stench of decay..."));
@@ -2775,7 +2775,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= PM_NO_PET;
 
-			if (summon_specific((pet ? -1 : 0), py, px, ((p_ptr->lev * 3) / 2), SUMMON_HOUND, mode))
+			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((p_ptr->lev * 3) / 2), SUMMON_HOUND, mode))
 			{
 
 				if (pet)
@@ -2792,7 +2792,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_SUMMON_DAWN:
 		{
 			msg_print(_("暁の師団を召喚した。","You summon the Legion of the Dawn."));
-			(void)summon_specific(-1, py, px, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
+			(void)summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
 			break;
 		}
 
@@ -2802,7 +2802,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			bool pet = !one_in_(5);
 			if (pet) mode |= PM_FORCE_PET;
 
-			if (summon_named_creature(0, py, px, MON_JIZOTAKO, mode))
+			if (summon_named_creature(0, p_ptr->y, p_ptr->x, MON_JIZOTAKO, mode))
 			{
 				if (pet)
 					msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servant."));
@@ -3399,7 +3399,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			object_copy(&forge, o_ptr);
 			inven_item_increase(inv, (0 - o_ptr->number));
 			inven_item_optimize(inv);
-			o_idx = drop_near(&forge, 0, py, px);
+			o_idx = drop_near(&forge, 0, p_ptr->y, p_ptr->x);
 			o_ptr = &o_list[o_idx];
 
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
@@ -3429,14 +3429,14 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			msg_print(_("あなたは妖刀に魅入られた…", "You are enchanted by cursed blade..."));
 			msg_print(_("「狂ほしく 血のごとき 月はのぼれり 秘めおきし 魔剣 いずこぞや」", "'Behold the blade arts.'"));
-			massacre(py, px);
+			massacre(p_ptr->y, p_ptr->x);
 			break;
 		}
 
 		case ACT_GRAND_CROSS:
 		{
 			msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
-			project(0, 8, py, px, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+			project(0, 8, p_ptr->y, p_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 			break;
 		}
 
@@ -3462,8 +3462,8 @@ bool activate_random_artifact(object_type *o_ptr)
 			int x, y;
 
 			if (!get_rep_dir2(&dir)) return FALSE;
-			y = py+ddy[dir];
-			x = px+ddx[dir];
+			y = p_ptr->y+ddy[dir];
+			x = p_ptr->x+ddx[dir];
 			tsuri_dir = dir;
 			if (!cave_have_flag_bold(y, x, FF_WATER))
 			{
@@ -3489,13 +3489,13 @@ bool activate_random_artifact(object_type *o_ptr)
 			monster_type *m_ptr;
 			cptr kakusan = "";
 			
-			if (summon_named_creature(0, py, px, MON_SUKE, PM_FORCE_PET))
+			if (summon_named_creature(0, p_ptr->y, p_ptr->x, MON_SUKE, PM_FORCE_PET))
 			{
 				msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
 				kakusan = "Suke-san";
 				count++;
 			}
-			if (summon_named_creature(0, py, px, MON_KAKU, PM_FORCE_PET))
+			if (summon_named_creature(0, p_ptr->y, p_ptr->x, MON_KAKU, PM_FORCE_PET))
 			{
 				msg_print(_("『格さん』が現れた。", "Kaku-san appears."));
 				kakusan = "Kaku-san";
@@ -3508,8 +3508,8 @@ bool activate_random_artifact(object_type *o_ptr)
 					m_ptr = &m_list[i];
 					if (!m_ptr->r_idx) continue;
 					if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
-					if (!los(m_ptr->fy, m_ptr->fx, py, px)) continue;
-					if (!projectable(m_ptr->fy, m_ptr->fx, py, px)) continue;
+					if (!los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;
+					if (!projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;
 					count++;
 					break;
 				}
@@ -3576,8 +3576,8 @@ bool activate_random_artifact(object_type *o_ptr)
 			if (!get_aim_dir(&dir)) return FALSE;
 
 			/* Use the given direction */
-			tx = px + 99 * ddx[dir];
-			ty = py + 99 * ddy[dir];
+			tx = p_ptr->x + 99 * ddx[dir];
+			ty = p_ptr->y + 99 * ddy[dir];
 
 			/* Hack -- Use an actual "target" */
 			if ((dir == 5) && target_okay())

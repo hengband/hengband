@@ -55,7 +55,7 @@ void do_cmd_go_up(void)
 	bool go_up = FALSE;
 
 	/* Player grid */
-	cave_type *c_ptr = &cave[py][px];
+	cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	int up_num = 0;
@@ -205,7 +205,7 @@ void do_cmd_go_up(void)
 void do_cmd_go_down(void)
 {
 	/* Player grid */
-	cave_type *c_ptr = &cave[py][px];
+	cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	bool fall_trap = FALSE;
@@ -300,8 +300,8 @@ void do_cmd_go_down(void)
 			}
 
 			/* Save old player position */
-			p_ptr->oldpx = px;
-			p_ptr->oldpy = py;
+			p_ptr->oldpx = p_ptr->x;
+			p_ptr->oldpy = p_ptr->y;
 			dungeon_type = (byte)target_dungeon;
 
 			/*
@@ -648,7 +648,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 		for (i = 0; i < num; i++)
 		{
 			if (randint1(100)<dun_level)
-				activate_hi_summon(py, px, FALSE);
+				activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			else
 				(void)summon_specific(0, y, x, mon_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
@@ -908,8 +908,8 @@ static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
 		if ((d == 8) && !under) continue;
 
 		/* Extract adjacent (legal) location */
-		yy = py + ddy_ddd[d];
-		xx = px + ddx_ddd[d];
+		yy = p_ptr->y + ddy_ddd[d];
+		xx = p_ptr->x + ddx_ddd[d];
 
 		/* Get the cave */
 		c_ptr = &cave[yy][xx];
@@ -959,8 +959,8 @@ static int count_chests(int *y, int *x, bool trapped)
 	for (d = 0; d < 9; d++)
 	{
 		/* Extract adjacent (legal) location */
-		int yy = py + ddy_ddd[d];
-		int xx = px + ddx_ddd[d];
+		int yy = p_ptr->y + ddy_ddd[d];
+		int xx = p_ptr->x + ddx_ddd[d];
 
 		/* No (visible) chest is there */
 		if ((o_idx = chest_check(yy, xx, FALSE)) == 0) continue;
@@ -1000,8 +1000,8 @@ static int coords_to_dir(int y, int x)
 	int d[3][3] = { {7, 4, 1}, {8, 5, 2}, {9, 6, 3} };
 	int dy, dx;
 
-	dy = y - py;
-	dx = x - px;
+	dy = y - p_ptr->y;
+	dx = x - p_ptr->x;
 
 	/* Paranoia */
 	if (ABS(dx) > 1 || ABS(dy) > 1) return (0);
@@ -1174,8 +1174,8 @@ void do_cmd_open(void)
 		cave_type *c_ptr;
 
 		/* Get requested location */
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 
 		/* Get requested grid */
 		c_ptr = &cave[y][x];
@@ -1338,8 +1338,8 @@ void do_cmd_close(void)
 		s16b feat;
 
 		/* Get requested location */
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 
 		/* Get grid and contents */
 		c_ptr = &cave[y][x];
@@ -1593,8 +1593,8 @@ void do_cmd_tunnel(void)
 	if (get_rep_dir(&dir,FALSE))
 	{
 		/* Get location */
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 
 		/* Get grid */
 		c_ptr = &cave[y][x];
@@ -2011,8 +2011,8 @@ void do_cmd_disarm(void)
 		s16b feat;
 
 		/* Get location */
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 
 		/* Get grid and contents */
 		c_ptr = &cave[y][x];
@@ -2209,8 +2209,8 @@ void do_cmd_bash(void)
 		s16b feat;
 
 		/* Bash location */
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 
 		/* Get grid */
 		c_ptr = &cave[y][x];
@@ -2300,8 +2300,8 @@ void do_cmd_alter(void)
 		feature_type *f_ptr;
 
 		/* Get location */
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 
 		/* Get grid */
 		c_ptr = &cave[y][x];
@@ -2428,8 +2428,8 @@ void do_cmd_spike(void)
 		s16b feat;
 
 		/* Get location */
-		y = py + ddy[dir];
-		x = px + ddx[dir];
+		y = p_ptr->y + ddy[dir];
+		x = p_ptr->x + ddx[dir];
 
 		/* Get grid and contents */
 		c_ptr = &cave[y][x];
@@ -2533,12 +2533,12 @@ void do_cmd_walk(bool pickup)
 	}
 
 	/* Hack again -- Is there a special encounter ??? */
-	if (p_ptr->wild_mode && !cave_have_flag_bold(py, px, FF_TOWN))
+	if (p_ptr->wild_mode && !cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_TOWN))
 	{
-		int tmp = 120 + p_ptr->lev*10 - wilderness[py][px].level + 5;
+		int tmp = 120 + p_ptr->lev*10 - wilderness[p_ptr->y][p_ptr->x].level + 5;
 		if (tmp < 1) 
 			tmp = 1;
-		if (((wilderness[py][px].level + 5) > (p_ptr->lev / 2)) && randint0(tmp) < (21-p_ptr->skill_stl))
+		if (((wilderness[p_ptr->y][p_ptr->x].level + 5) > (p_ptr->lev / 2)) && randint0(tmp) < (21-p_ptr->skill_stl))
 		{
 			/* Inform the player of his horrible fate :=) */
 			msg_print(_("襲撃だ！", "You are ambushed !"));
@@ -2622,7 +2622,7 @@ void do_cmd_stay(bool pickup)
 	p_ptr->energy_use = 100;
 
 	if (pickup) mpe_mode |= MPE_DO_PICKUP;
-	(void)move_player_effect(py, px, mpe_mode);
+	(void)move_player_effect(p_ptr->y, p_ptr->x, mpe_mode);
 }
 
 
@@ -3281,8 +3281,8 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	}
 
 	/* Predict the "target" location */
-	tx = px + 99 * ddx[dir];
-	ty = py + 99 * ddy[dir];
+	tx = p_ptr->x + 99 * ddx[dir];
+	ty = p_ptr->y + 99 * ddy[dir];
 
 	/* Check for "target request" */
 	if ((dir == 5) && target_okay())
@@ -3292,12 +3292,12 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	}
 
 	/* Get projection path length */
-	tdis = project_path(path_g, project_length, py, px, ty, tx, PROJECT_PATH|PROJECT_THRU) - 1;
+	tdis = project_path(path_g, project_length, p_ptr->y, p_ptr->x, ty, tx, PROJECT_PATH|PROJECT_THRU) - 1;
 
 	project_length = 0; /* reset to default */
 
 	/* Don't shoot at my feet */
-	if (tx == px && ty == py)
+	if (tx == p_ptr->x && ty == p_ptr->y)
 	{
 		p_ptr->energy_use = 0;
 
@@ -3319,8 +3319,8 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	{
 
 	/* Start at the player */
-	y = py;
-	x = px;
+	y = p_ptr->y;
+	x = p_ptr->x;
 
 	/* Get local object */
 	q_ptr = &forge;
@@ -3370,7 +3370,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		/* Calculate the new location (see "project()") */
 		ny = y;
 		nx = x;
-		mmove2(&ny, &nx, py, px, ty, tx);
+		mmove2(&ny, &nx, p_ptr->y, p_ptr->x, ty, tx);
 
 		/* Shatter Arrow */
 		if (snipe_type == SP_KILL_WALL)
@@ -3651,7 +3651,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 						msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 					}
 
-					set_target(m_ptr, py, px);
+					set_target(m_ptr, p_ptr->y, p_ptr->x);
 
 					/* Sniper */
 					if (snipe_type == SP_RUSH)
@@ -3667,7 +3667,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 							if (!n) break;
 
 							/* Calculate the new location (see "project()") */
-							mmove2(&ny, &nx, py, px, ty, tx);
+							mmove2(&ny, &nx, p_ptr->y, p_ptr->x, ty, tx);
 
 							/* Stopped by wilderness boundary */
 							if (!in_bounds2(ny, nx)) break;
@@ -4002,8 +4002,8 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 
 	if (shuriken >= 0)
 	{
-		ty = randint0(101)-50+py;
-		tx = randint0(101)-50+px;
+		ty = randint0(101)-50+p_ptr->y;
+		tx = randint0(101)-50+p_ptr->x;
 	}
 	else
 	{
@@ -4013,8 +4013,8 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		if (!get_aim_dir(&dir)) return FALSE;
 
 		/* Predict the "target" location */
-		tx = px + 99 * ddx[dir];
-		ty = py + 99 * ddy[dir];
+		tx = p_ptr->x + 99 * ddx[dir];
+		ty = p_ptr->y + 99 * ddy[dir];
 
 		/* Check for "target request" */
 		if ((dir == 5) && target_okay())
@@ -4059,8 +4059,8 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		p_ptr->energy_use -= p_ptr->lev;
 
 	/* Start at the player */
-	y = py;
-	x = px;
+	y = p_ptr->y;
+	x = p_ptr->x;
 
 
 	/* Hack -- Handle stuff */
@@ -4089,7 +4089,7 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 		/* Calculate the new location (see "project()") */
 		ny[cur_dis] = y;
 		nx[cur_dis] = x;
-		mmove2(&ny[cur_dis], &nx[cur_dis], py, px, ty, tx);
+		mmove2(&ny[cur_dis], &nx[cur_dis], p_ptr->y, p_ptr->x, ty, tx);
 
 		/* Stopped by walls/doors */
 		if (!cave_have_flag_bold(ny[cur_dis], nx[cur_dis], FF_PROJECT))
@@ -4359,8 +4359,8 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 				{
 					msg_format(_("%sが返ってきた。", "%s comes back."), o2_name);
 				}
-				y = py;
-				x = px;
+				y = p_ptr->y;
+				x = p_ptr->x;
 			}
 		}
 		else
@@ -4581,7 +4581,7 @@ static void travel_flow(int ty, int tx)
 {
 	int x, y, d;
 	bool wall = FALSE;
-	feature_type *f_ptr = &f_info[cave[py][px].feat];
+	feature_type *f_ptr = &f_info[cave[p_ptr->y][p_ptr->x].feat];
 
 	/* Reset the "queue" */
 	flow_head = flow_tail = 0;
@@ -4635,7 +4635,7 @@ void do_cmd_travel(void)
 	}
 	else if (!tgt_pt(&x, &y)) return;
 
-	if ((x == px) && (y == py))
+	if ((x == p_ptr->x) && (y == p_ptr->y))
 	{
 		msg_print(_("すでにそこにいます！", "You are already there!!"));
 		return;
@@ -4665,10 +4665,10 @@ void do_cmd_travel(void)
 	travel.dir = 0;
 
 	/* Decides first direction */
-	dx = abs(px - x);
-	dy = abs(py - y);
-	sx = ((x == px) || (dx < dy)) ? 0 : ((x > px) ? 1 : -1);
-	sy = ((y == py) || (dy < dx)) ? 0 : ((y > py) ? 1 : -1);
+	dx = abs(p_ptr->x - x);
+	dy = abs(p_ptr->y - y);
+	sx = ((x == p_ptr->x) || (dx < dy)) ? 0 : ((x > p_ptr->x) ? 1 : -1);
+	sy = ((y == p_ptr->y) || (dy < dx)) ? 0 : ((y > p_ptr->y) ? 1 : -1);
 
 	for (i = 1; i <= 9; i++)
 	{

@@ -1342,6 +1342,10 @@ struct player_type
 	byte pspeed;		/* Current speed */
 
 	s16b energy_use;	/* Energy use this turn */
+
+	int y;	/* Player location in dungeon */
+	int x;	/* Player location in dungeon */
+
 };
 
 

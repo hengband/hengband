@@ -4197,7 +4197,7 @@ static char inkey_from_menu(void)
 	int menu = 0;
 	bool kisuu;
 
-	if (py - panel_row_min > 10) basey = 2;
+	if (p_ptr->y - panel_row_min > 10) basey = 2;
 	else basey = 13;
 	basex = 15;
 
@@ -4251,7 +4251,7 @@ static char inkey_from_menu(void)
 		put_str(_("》", "> "),basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
 
 		/* Place the cursor on the player */
-		move_cursor_relative(py, px);
+		move_cursor_relative(p_ptr->y, p_ptr->x);
 
 		/* Get a command */
 		sub_cmd = inkey();

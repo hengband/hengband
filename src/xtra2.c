@@ -2287,7 +2287,7 @@ void resize_map(void)
 	 * Waiting command;
 	 * Place the cursor on the player
 	 */
-	if (can_save) move_cursor_relative(py, px);
+	if (can_save) move_cursor_relative(p_ptr->y, p_ptr->x);
 
 	/* Refresh */
 	Term_fresh();
@@ -2413,8 +2413,8 @@ bool change_panel_xy(int y, int x)
  */
 void verify_panel(void)
 {
-	int y = py;
-	int x = px;
+	int y = p_ptr->y;
+	int x = p_ptr->x;
 	int wid, hgt;
 
 	int prow_min;
@@ -2726,7 +2726,7 @@ bool target_able(int m_idx)
 	if (p_ptr->riding && (p_ptr->riding == m_idx)) return (TRUE);
 
 	/* Monster must be projectable */
-	if (!projectable(py, px, m_ptr->fy, m_ptr->fx)) return (FALSE);
+	if (!projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) return (FALSE);
 
 	/* XXX XXX XXX Hack -- Never target trappers */
 	/* if (CLEAR_ATTR && (CLEAR_CHAR)) return (FALSE); */
@@ -2784,15 +2784,15 @@ static bool ang_sort_comp_distance(vptr u, vptr v, int a, int b)
 	int da, db, kx, ky;
 
 	/* Absolute distance components */
-	kx = x[a]; kx -= px; kx = ABS(kx);
-	ky = y[a]; ky -= py; ky = ABS(ky);
+	kx = x[a]; kx -= p_ptr->x; kx = ABS(kx);
+	ky = y[a]; ky -= p_ptr->y; ky = ABS(ky);
 
 	/* Approximate Double Distance to the first point */
 	da = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
 
 	/* Absolute distance components */
-	kx = x[b]; kx -= px; kx = ABS(kx);
-	ky = y[b]; ky -= py; ky = ABS(ky);
+	kx = x[b]; kx -= p_ptr->x; kx = ABS(kx);
+	ky = y[b]; ky -= p_ptr->y; ky = ABS(ky);
 
 	/* Approximate Double Distance to the first point */
 	db = ((kx > ky) ? (kx + kx + ky) : (ky + ky + kx));
@@ -2819,8 +2819,8 @@ static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 	monster_race *ap_ra_ptr, *ap_rb_ptr;
 
 	/* The player grid */
-	if (y[a] == py && x[a] == px) return TRUE;
-	if (y[b] == py && x[b] == px) return FALSE;
+	if (y[a] == p_ptr->y && x[a] == p_ptr->x) return TRUE;
+	if (y[b] == p_ptr->y && x[b] == p_ptr->x) return FALSE;
 
 	/* Extract monster race */
 	if (ca_ptr->m_idx && ma_ptr->ml) ap_ra_ptr = &r_info[ma_ptr->ap_r_idx];
@@ -3024,10 +3024,10 @@ static void target_set_prepare(int mode)
 	if (mode & TARGET_KILL)
 	{
 		/* Inner range */
-		min_hgt = MAX((py - MAX_RANGE), 0);
-		max_hgt = MIN((py + MAX_RANGE), cur_hgt - 1);
-		min_wid = MAX((px - MAX_RANGE), 0);
-		max_wid = MIN((px + MAX_RANGE), cur_wid - 1);
+		min_hgt = MAX((p_ptr->y - MAX_RANGE), 0);
+		max_hgt = MIN((p_ptr->y + MAX_RANGE), cur_hgt - 1);
+		min_wid = MAX((p_ptr->x - MAX_RANGE), 0);
+		max_wid = MIN((p_ptr->x + MAX_RANGE), cur_wid - 1);
 	}
 	else /* not targetting */
 	{
@@ -3761,8 +3761,8 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 bool target_set(int mode)
 {
 	int		i, d, m, t, bd;
-	int		y = py;
-	int		x = px;
+	int		y = p_ptr->y;
+	int		x = p_ptr->x;
 
 	bool	done = FALSE;
 
@@ -3911,8 +3911,8 @@ bool target_set(int mode)
 					/* Recalculate interesting grids */
 					target_set_prepare(mode);
 
-					y = py;
-					x = px;
+					y = p_ptr->y;
+					x = p_ptr->x;
 				}
 
 				case 'o':
@@ -4106,8 +4106,8 @@ bool target_set(int mode)
 					/* Recalculate interesting grids */
 					target_set_prepare(mode);
 
-					y = py;
-					x = px;
+					y = p_ptr->y;
+					x = p_ptr->x;
 				}
 
 				case 'o':
@@ -4746,7 +4746,7 @@ msg_format("%sの声がささやいた:",
 
 			msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
-			acquirement(py, px, 1, FALSE, FALSE, FALSE);
+			acquirement(p_ptr->y, p_ptr->x, 1, FALSE, FALSE, FALSE);
 			reward = _("上質なアイテムを手に入れた。", "a good item");
 			break;
 		case REW_GREA_OBJ:
@@ -4760,7 +4760,7 @@ msg_format("%sの声が響き渡った:",
 
 			msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
-			acquirement(py, px, 1, TRUE, FALSE, FALSE);
+			acquirement(p_ptr->y, p_ptr->x, 1, TRUE, FALSE, FALSE);
 			reward = _("高級品のアイテムを手に入れた。", "an excellent item");
 			break;
 		case REW_CHAOS_WP:
@@ -4871,7 +4871,7 @@ msg_format("%sの声が響き渡った:",
 			q_ptr->name2 = EGO_CHAOTIC;
 
 			/* Drop it in the dungeon */
-			(void)drop_near(q_ptr, -1, py, px);
+			(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
 			reward = _("(混沌)の武器を手に入れた。", "chaos weapon");
 			break;
 		case REW_GOOD_OBS:
@@ -4885,7 +4885,7 @@ msg_format("%sの声が響き渡った:",
 
 			msg_print(_("「汝の行いは貴き報いに値せり。」", "'Thy deed hath earned thee a worthy reward.'"));
 
-			acquirement(py, px, randint1(2) + 1, FALSE, FALSE, FALSE);
+			acquirement(p_ptr->y, p_ptr->x, randint1(2) + 1, FALSE, FALSE, FALSE);
 			reward = _("上質なアイテムを手に入れた。", "good items");
 			break;
 		case REW_GREA_OBS:
@@ -4899,7 +4899,7 @@ msg_format("%sの声が響き渡った:",
 
 			msg_print(_("「下僕よ、汝の献身への我が惜しみ無き報いを見るがよい。」", "'Behold, mortal, how generously I reward thy loyalty.'"));
 
-			acquirement(py, px, randint1(2) + 1, TRUE, FALSE, FALSE);
+			acquirement(p_ptr->y, p_ptr->x, randint1(2) + 1, TRUE, FALSE, FALSE);
 			reward = _("高級品のアイテムを手に入れた。", "excellent items");
 			break;
 		case REW_TY_CURSE:
@@ -4929,7 +4929,7 @@ msg_format("%sの声が響き渡った:",
 
 			for (dummy = 0; dummy < randint1(5) + 1; dummy++)
 			{
-				(void)summon_specific(0, py, px, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+				(void)summon_specific(0, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 			reward = _("モンスターを召喚された。", "summoning hostile monsters");
 			break;
@@ -4944,7 +4944,7 @@ msg_format("%sの声が響き渡った:",
 
 			msg_print(_("「汝、より強き敵を必要とせり！」", "'Thou needst worthier opponents!'"));
 
-			activate_hi_summon(py, px, FALSE);
+			activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			reward = _("モンスターを召喚された。", "summoning many hostile monsters");
 			break;
 		case REW_DO_HAVOC:
@@ -5133,7 +5133,7 @@ msg_format("%sの声がささやいた:",
 					reward = _("禍々しい呪いをかけられた。", "cursing");
 					break;
 				case 2:
-					activate_hi_summon(py, px, FALSE);
+					activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 					reward = _("モンスターを召喚された。", "summoning hostile monsters");
 					break;
 				case 3:
@@ -5178,7 +5178,7 @@ msg_format("%sの声がささやいた:",
 			{
 				(void)dec_stat(dummy, 10 + randint1(15), FALSE);
 			}
-			activate_hi_summon(py, px, FALSE);
+			activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			(void)activate_ty_curse(FALSE, &count);
 			if (one_in_(2))
 			{
@@ -5206,7 +5206,7 @@ msg_format("%sの声が響き渡った:",
 
 			msg_print(_("「死と破壊こそ我が喜びなり！」", "'Death and destruction! This pleaseth me!'"));
 
-			(void)destroy_area(py, px, 25, FALSE);
+			(void)destroy_area(p_ptr->y, p_ptr->x, 25, FALSE);
 			reward = _("ダンジョンが*破壊*された。", "*destruct*ing dungeon");
 			break;
 		case REW_GENOCIDE:
@@ -5261,7 +5261,7 @@ msg_format("%sはあなたを無視した。",
 		case REW_SER_DEMO:
 			msg_format(_("%sは褒美として悪魔の使いをよこした！", "%s rewards you with a demonic servant!"),chaos_patrons[p_ptr->chaos_patron]);
 
-			if (!summon_specific(-1, py, px, dun_level, SUMMON_DEMON, PM_FORCE_PET))
+			if (!summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_DEMON, PM_FORCE_PET))
 				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
 				reward = _("悪魔がペットになった。", "a demonic servant");
@@ -5270,7 +5270,7 @@ msg_format("%sはあなたを無視した。",
 		case REW_SER_MONS:
 			msg_format(_("%sは褒美として使いをよこした！", "%s rewards you with a servant!"),chaos_patrons[p_ptr->chaos_patron]);
 
-			if (!summon_specific(-1, py, px, dun_level, 0, PM_FORCE_PET))
+			if (!summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, 0, PM_FORCE_PET))
 				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
 				reward = _("モンスターがペットになった。", "a servant");
@@ -5279,7 +5279,7 @@ msg_format("%sはあなたを無視した。",
 		case REW_SER_UNDE:
 			msg_format(_("%sは褒美としてアンデッドの使いをよこした。", "%s rewards you with an undead servant!"),chaos_patrons[p_ptr->chaos_patron]);
 
-			if (!summon_specific(-1, py, px, dun_level, SUMMON_UNDEAD, PM_FORCE_PET))
+			if (!summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_UNDEAD, PM_FORCE_PET))
 				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
 				reward = _("アンデッドがペットになった。", "an undead servant");
@@ -5312,7 +5312,7 @@ static bool tgt_pt_accept(int y, int x)
 	if (!(in_bounds(y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
-	if ((y == py) && (x == px)) return (TRUE);
+	if ((y == p_ptr->y) && (x == p_ptr->x)) return (TRUE);
 
 	/* Handle hallucination */
 	if (p_ptr->image) return (FALSE);
@@ -5387,8 +5387,8 @@ bool tgt_pt(int *x_ptr, int *y_ptr)
 	/* Get size */
 	get_screen_size(&wid, &hgt);
 
-	x = px;
-	y = py;
+	x = p_ptr->x;
+	y = p_ptr->y;
 
 	if (expand_list) 
 	{
@@ -5448,8 +5448,8 @@ bool tgt_pt(int *x_ptr, int *y_ptr)
 				if (n == temp_n)	/* Loop out taget list */
 				{
 					n = 0;
-					y = py;
-					x = px;
+					y = p_ptr->y;
+					x = p_ptr->x;
 					verify_panel();	/* Move cursor to player */
 
 					/* Update stuff */

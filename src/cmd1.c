@@ -648,7 +648,7 @@ void search(void)
 		/* Sometimes, notice things */
 		if (randint0(100) < chance)
 		{
-			discover_hidden_things(py + ddy_ddd[i], px + ddx_ddd[i]);
+			discover_hidden_things(p_ptr->y + ddy_ddd[i], p_ptr->x + ddx_ddd[i]);
 		}
 	}
 }
@@ -761,7 +761,7 @@ void py_pickup_aux(int o_idx)
  */
 void carry(bool pickup)
 {
-	cave_type *c_ptr = &cave[py][px];
+	cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 	s16b this_o_idx, next_o_idx = 0;
 
@@ -1077,7 +1077,7 @@ static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*
 static void hit_trap(bool break_trap)
 {
 	int i, num, dam;
-	int x = px, y = py;
+	int x = p_ptr->x, y = p_ptr->y;
 
 	/* Get the cave grid */
 	cave_type *c_ptr = &cave[y][x];
@@ -1299,7 +1299,7 @@ static void hit_trap(bool break_trap)
 					if (!in_bounds(y1, x1)) continue;
 
 					/* Require line of projection */
-					if (!projectable(py, px, y1, x1)) continue;
+					if (!projectable(p_ptr->y, p_ptr->x, y1, x1)) continue;
 
 					if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET)))
 						evil_idx = hack_m_idx_ii;
@@ -2447,7 +2447,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	/* Mega-Hack -- apply earthquake brand */
 	if (do_quake)
 	{
-		earthquake(py, px, 10);
+		earthquake(p_ptr->y, p_ptr->x, 10);
 		if (!cave[y][x].m_idx) *mdeath = TRUE;
 	}
 }
@@ -2824,15 +2824,15 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 
 	if (!(mpe_mode & MPE_STAYING))
 	{
-		int oy = py;
-		int ox = px;
+		int oy = p_ptr->y;
+		int ox = p_ptr->x;
 		cave_type *oc_ptr = &cave[oy][ox];
 		int om_idx = oc_ptr->m_idx;
 		int nm_idx = c_ptr->m_idx;
 
 		/* Move the player */
-		py = ny;
-		px = nx;
+		p_ptr->y = ny;
+		p_ptr->x = nx;
 
 		/* Hack -- For moving monster or riding player's moving */
 		if (!(mpe_mode & MPE_DONT_SWAP_MON))
@@ -2912,7 +2912,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 	{
 		if (music_singing(MUSIC_WALL))
 		{
-			(void)project(0, 0, py, px, (60 + p_ptr->lev), GF_DISINTEGRATE,
+			(void)project(0, 0, p_ptr->y, p_ptr->x, (60 + p_ptr->lev), GF_DISINTEGRATE,
 				PROJECT_KILL | PROJECT_ITEM, -1);
 
 			if (!player_bold(ny, nx) || p_ptr->is_dead || p_ptr->leaving) return FALSE;
@@ -3000,7 +3000,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 			msg_print(_("トラップだ！", "You found a trap!"));
 
 			/* Pick a trap */
-			disclose_grid(py, px);
+			disclose_grid(p_ptr->y, p_ptr->x);
 		}
 
 		/* Hit the trap */
@@ -3104,8 +3104,8 @@ bool trap_can_be_ignored(int feat)
 void move_player(int dir, bool do_pickup, bool break_trap)
 {
 	/* Find the result of moving */
-	int y = py + ddy[dir];
-	int x = px + ddx[dir];
+	int y = p_ptr->y + ddy[dir];
+	int x = p_ptr->x + ddx[dir];
 
 	/* Examine the destination */
 	cave_type *c_ptr = &cave[y][x];
@@ -3236,7 +3236,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		if (!is_hostile(m_ptr) &&
 		    !(p_ptr->confused || p_ptr->image || !m_ptr->ml || p_ptr->stun ||
 		    ((p_ptr->muta2 & MUT2_BERS_RAGE) && p_ptr->shero)) &&
-		    pattern_seq(py, px, y, x) && (p_can_enter || p_can_kill_walls))
+		    pattern_seq(p_ptr->y, p_ptr->x, y, x) && (p_can_enter || p_can_kill_walls))
 		{
 			/* Disturb the monster */
 			(void)set_monster_csleep(c_ptr->m_idx, 0);
@@ -3259,7 +3259,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 				py_attack(y, x, 0);
 				oktomove = FALSE;
 			}
-			else if (monster_can_cross_terrain(cave[py][px].feat, r_ptr, 0))
+			else if (monster_can_cross_terrain(cave[p_ptr->y][p_ptr->x].feat, r_ptr, 0))
 			{
 				do_past = TRUE;
 			}
@@ -3324,7 +3324,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		}
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
-			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&cave[py][px])].name);
+			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name);
 			p_ptr->energy_use = 0;
 			oktomove = FALSE;
 			disturb(0, 1);
@@ -3461,7 +3461,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 	}
 
 	/* Normal movement */
-	if (oktomove && !pattern_seq(py, px, y, x))
+	if (oktomove && !pattern_seq(p_ptr->y, p_ptr->x, y, x))
 	{
 		if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
 		{
@@ -3685,12 +3685,12 @@ static void run_init(int dir)
 	deepleft = deepright = FALSE;
 	shortright = shortleft = FALSE;
 
-	p_ptr->run_py = py;
-	p_ptr->run_px = px;
+	p_ptr->run_py = p_ptr->y;
+	p_ptr->run_px = p_ptr->x;
 
 	/* Find the destination grid */
-	row = py + ddy[dir];
-	col = px + ddx[dir];
+	row = p_ptr->y + ddy[dir];
+	col = p_ptr->x + ddx[dir];
 
 	ignore_avoid_run = cave_have_flag_bold(row, col, FF_AVOID_RUN);
 
@@ -3698,7 +3698,7 @@ static void run_init(int dir)
 	i = chome[dir];
 
 	/* Check for walls */
-	if (see_wall(cycle[i+1], py, px))
+	if (see_wall(cycle[i+1], p_ptr->y, p_ptr->x))
 	{
 		find_breakleft = TRUE;
 		shortleft = TRUE;
@@ -3710,7 +3710,7 @@ static void run_init(int dir)
 	}
 
 	/* Check for walls */
-	if (see_wall(cycle[i-1], py, px))
+	if (see_wall(cycle[i-1], p_ptr->y, p_ptr->x))
 	{
 		find_breakright = TRUE;
 		shortright = TRUE;
@@ -3782,13 +3782,13 @@ static bool run_test(void)
 
 	/* break run when leaving trap detected region */
 	if ((disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(cave[py][px].info & CAVE_IN_DETECT))
+	    && p_ptr->dtrap && !(cave[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
 		p_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(cave[py][px].info & CAVE_UNSAFE))
+		if (!(cave[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -3812,8 +3812,8 @@ static bool run_test(void)
 		new_dir = cycle[chome[prev_dir] + i];
 
 		/* New location */
-		row = py + ddy[new_dir];
-		col = px + ddx[new_dir];
+		row = p_ptr->y + ddy[new_dir];
+		col = p_ptr->x + ddx[new_dir];
 
 		/* Access grid */
 		c_ptr = &cave[row][col];
@@ -3963,7 +3963,7 @@ static bool run_test(void)
 		for (i = -max; i < 0; i++)
 		{
 			/* Unknown grid or non-wall */
-			if (!see_wall(cycle[chome[prev_dir] + i], py, px))
+			if (!see_wall(cycle[chome[prev_dir] + i], p_ptr->y, p_ptr->x))
 			{
 				/* Looking to break right */
 				if (find_breakright)
@@ -3987,7 +3987,7 @@ static bool run_test(void)
 		for (i = max; i > 0; i--)
 		{
 			/* Unknown grid or non-wall */
-			if (!see_wall(cycle[chome[prev_dir] + i], py, px))
+			if (!see_wall(cycle[chome[prev_dir] + i], p_ptr->y, p_ptr->x))
 			{
 				/* Looking to break left */
 				if (find_breakleft)
@@ -4041,8 +4041,8 @@ static bool run_test(void)
 		else
 		{
 			/* Get next location */
-			row = py + ddy[option];
-			col = px + ddx[option];
+			row = p_ptr->y + ddy[option];
+			col = p_ptr->x + ddx[option];
 
 			/* Don't see that it is closed off. */
 			/* This could be a potential corner or an intersection. */
@@ -4083,7 +4083,7 @@ static bool run_test(void)
 	}
 
 	/* About to hit a known wall, stop */
-	if (see_wall(find_current, py, px))
+	if (see_wall(find_current, p_ptr->y, p_ptr->x))
 	{
 		return (TRUE);
 	}
@@ -4109,7 +4109,7 @@ void run_step(int dir)
 		ignore_avoid_run = TRUE;
 
 		/* Hack -- do not start silly run */
-		if (see_wall(dir, py, px))
+		if (see_wall(dir, p_ptr->y, p_ptr->x))
 		{
 			/* Message */
 			msg_print(_("その方向には走れません。", "You cannot run in that direction."));
@@ -4189,13 +4189,13 @@ static int travel_test(int prev_dir)
 
 	/* break run when leaving trap detected region */
 	if ((disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(cave[py][px].info & CAVE_IN_DETECT))
+	    && p_ptr->dtrap && !(cave[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
 		p_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(cave[py][px].info & CAVE_UNSAFE))
+		if (!(cave[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -4220,8 +4220,8 @@ static int travel_test(int prev_dir)
 		int dir = cycle[chome[prev_dir] + i];
 
 		/* New location */
-		int row = py + ddy[dir];
-		int col = px + ddx[dir];
+		int row = p_ptr->y + ddy[dir];
+		int col = p_ptr->x + ddx[dir];
 
 		/* Access grid */
 		c_ptr = &cave[row][col];
@@ -4238,11 +4238,11 @@ static int travel_test(int prev_dir)
 	}
 
 	/* Travel cost of current grid */
-	cost = travel.cost[py][px];
+	cost = travel.cost[p_ptr->y][p_ptr->x];
 
 	/* Determine travel direction */
 	for (i = 0; i < 8; ++ i) {
-		int dir_cost = travel.cost[py+ddy_ddd[i]][px+ddx_ddd[i]];
+		int dir_cost = travel.cost[p_ptr->y+ddy_ddd[i]][p_ptr->x+ddx_ddd[i]];
 
 		if (dir_cost < cost)
 		{
@@ -4254,7 +4254,7 @@ static int travel_test(int prev_dir)
 	if (!new_dir) return (0);
 
 	/* Access newly move grid */
-	c_ptr = &cave[py+ddy[new_dir]][px+ddx[new_dir]];
+	c_ptr = &cave[p_ptr->y+ddy[new_dir]][p_ptr->x+ddx[new_dir]];
 
 	/* Close door abort traveling */
 	if (!easy_open && is_closed_door(c_ptr->feat)) return (0);
@@ -4293,7 +4293,7 @@ void travel_step(void)
 
 	move_player(travel.dir, always_pickup, FALSE);
 
-	if ((py == travel.y) && (px == travel.x))
+	if ((p_ptr->y == travel.y) && (p_ptr->x == travel.x))
 	{
 		travel.run = 0;
 		travel.y = travel.x = 0;

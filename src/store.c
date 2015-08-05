@@ -4904,7 +4904,7 @@ void do_cmd_store(void)
 	store_bottom = MIN_STOCK + xtra_stock;
 
 	/* Access the player grid */
-	c_ptr = &cave[py][px];
+	c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 	/* Verify a store */
 	if (!cave_have_flag_grid(c_ptr, FF_STORE))

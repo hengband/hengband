@@ -4237,13 +4237,13 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 					int y, x;
 
 					/* Delete the monster (if any) */
-					delete_monster(py, px);
+					delete_monster(p_ptr->y, p_ptr->x);
 
 					y = atoi(zz[0]);
 					x = atoi(zz[1]);
 
-					py = y;
-					px = x;
+					p_ptr->y = y;
+					p_ptr->x = x;
 				}
 				/* Place player in the town */
 				else if (!p_ptr->oldpx && !p_ptr->oldpy)

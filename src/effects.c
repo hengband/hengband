@@ -1904,7 +1904,7 @@ bool set_superstealth(bool set)
 	{
 		if (!(p_ptr->special_defense & NINJA_S_STEALTH))
 		{
-			if (cave[py][px].info & CAVE_MNLT)
+			if (cave[p_ptr->y][p_ptr->x].info & CAVE_MNLT)
 			{
 				msg_print(_("敵の目から薄い影の中に覆い隠された。", "You are mantled in weak shadow from ordinary eyes."));
 				p_ptr->monlite = p_ptr->old_monlite = TRUE;
@@ -4246,7 +4246,7 @@ void change_race(int new_race, cptr effect_msg)
 	if (old_race != p_ptr->prace) autopick_load_pref(FALSE);
 
 	/* Player's graphic tile may change */
-	lite_spot(py, px);
+	lite_spot(p_ptr->y, p_ptr->x);
 }
 
 

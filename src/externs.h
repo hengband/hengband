@@ -394,8 +394,6 @@ extern bool closing_flag;
 extern s16b panel_row_min, panel_row_max;
 extern s16b panel_col_min, panel_col_max;
 extern s16b panel_col_prt, panel_row_prt;
-extern int py;
-extern int px;
 extern s16b target_who;
 extern s16b target_col;
 extern s16b target_row;

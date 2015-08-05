@@ -397,7 +397,7 @@ void compact_objects(int size)
 			}
 
 			/* Nearby objects start out "immune" */
-			if ((cur_dis > 0) && (distance(py, px, y, x) < cur_dis)) continue;
+			if ((cur_dis > 0) && (distance(p_ptr->y, p_ptr->x, y, x) < cur_dis)) continue;
 
 			/* Saving throw */
 			chance = 90;
@@ -6465,7 +6465,7 @@ void inven_drop(int item, int amt)
 	msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
 
 	/* Drop it near the player */
-	(void)drop_near(q_ptr, 0, py, px);
+	(void)drop_near(q_ptr, 0, p_ptr->y, p_ptr->x);
 
 	/* Modify, Describe, Optimize */
 	inven_item_increase(item, -amt);
