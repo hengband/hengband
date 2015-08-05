@@ -2111,16 +2111,16 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			if (mon_take_hit(c_ptr->m_idx, k, fear, NULL))
 			{
 				*mdeath = TRUE;
-				if ((p_ptr->pclass == CLASS_BERSERKER) && energy_use)
+				if ((p_ptr->pclass == CLASS_BERSERKER) && p_ptr->energy_use)
 				{
 					if (p_ptr->migite && p_ptr->hidarite)
 					{
-						if (hand) energy_use = energy_use*3/5+energy_use*num*2/(p_ptr->num_blow[hand]*5);
-						else energy_use = energy_use*num*3/(p_ptr->num_blow[hand]*5);
+						if (hand) p_ptr->energy_use = p_ptr->energy_use*3/5+p_ptr->energy_use*num*2/(p_ptr->num_blow[hand]*5);
+						else p_ptr->energy_use = p_ptr->energy_use*num*3/(p_ptr->num_blow[hand]*5);
 					}
 					else
 					{
-						energy_use = energy_use*num/p_ptr->num_blow[hand];
+						p_ptr->energy_use = p_ptr->energy_use*num/p_ptr->num_blow[hand];
 					}
 				}
 				if ((o_ptr->name1 == ART_ZANTETSU) && is_lowlevel)
@@ -2475,7 +2475,7 @@ bool py_attack(int y, int x, int mode)
 	/* Disturb the player */
 	disturb(0, 1);
 
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	if (!p_ptr->migite && !p_ptr->hidarite &&
 	    !(p_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES)))
@@ -2943,7 +2943,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 		/* Disturb */
 		disturb(0, 1);
 
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		/* Hack -- Enter store */
 		command_new = SPECIAL_KEY_STORE;
 	}
@@ -2954,7 +2954,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 		/* Disturb */
 		disturb(0, 1);
 
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		/* Hack -- Enter building */
 		command_new = SPECIAL_KEY_BUILDING;
 	}
@@ -2965,7 +2965,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
 		/* Disturb */
 		disturb(0, 1);
 
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		/* Hack -- Enter quest level */
 		command_new = SPECIAL_KEY_QUEST;
 	}
@@ -3204,7 +3204,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			}
 
 			p_ptr->leaving = TRUE;
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 
 			return;
 		}
@@ -3266,7 +3266,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			else
 			{
 				msg_format(_("%^sが邪魔だ！", "%^s is in your way!"), m_name);
-				energy_use = 0;
+				p_ptr->energy_use = 0;
 				oktomove = FALSE;
 			}
 
@@ -3284,7 +3284,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		if (riding_r_ptr->flags1 & RF1_NEVER_MOVE)
 		{
 			msg_print(_("動けない！", "Can't move!"));
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 			oktomove = FALSE;
 			disturb(0, 1);
 		}
@@ -3318,21 +3318,21 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			(have_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE)))
 		{
 			msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(c_ptr)].name);
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 			oktomove = FALSE;
 			disturb(0, 1);
 		}
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
 			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&cave[py][px])].name);
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 			oktomove = FALSE;
 			disturb(0, 1);
 		}
 		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 		{
 			msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(c_ptr)].name);
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 			oktomove = FALSE;
 			disturb(0, 1);
 		}
@@ -3354,7 +3354,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 	else if (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation)
 	{
 		msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_name + f_info[get_feat_mimic(c_ptr)].name);
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		running = 0;
 		oktomove = FALSE;
 	}
@@ -3366,7 +3366,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 	 */
 	else if (have_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls)
 	{
-		if ((p_ptr->pclass != CLASS_RANGER) && !p_ptr->levitation && (!p_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) energy_use *= 2;
+		if ((p_ptr->pclass != CLASS_RANGER) && !p_ptr->levitation && (!p_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) p_ptr->energy_use *= 2;
 	}
 
 #ifdef ALLOW_EASY_DISARM /* TNB */
@@ -3425,7 +3425,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 			{
 				msg_print(_("それ以上先には進めない。", "You cannot go any more."));
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
-					energy_use = 0;
+					p_ptr->energy_use = 0;
 			}
 
 			/* Wall (or secret door) */
@@ -3449,7 +3449,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 				 * typing mistakes should not cost you a turn...
 				 */
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
-					energy_use = 0;
+					p_ptr->energy_use = 0;
 			}
 		}
 
@@ -3465,7 +3465,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 	{
 		if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
 		{
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 		}
 
 		/* To avoid a loop with running */
@@ -3483,7 +3483,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		{
 			if (!process_warning(x, y))
 			{
-				energy_use = 25;
+				p_ptr->energy_use = 25;
 				return;
 			}
 		}
@@ -4143,7 +4143,7 @@ void run_step(int dir)
 	if (--running <= 0) return;
 
 	/* Take time */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Move the player, using the "pickup" flag */
 #ifdef ALLOW_EASY_DISARM /* TNB */
@@ -4289,7 +4289,7 @@ void travel_step(void)
 		return;
 	}
 
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	move_player(travel.dir, always_pickup, FALSE);
 

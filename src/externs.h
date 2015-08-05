@@ -156,7 +156,6 @@ extern s16b command_see;
 extern s16b command_gap;
 extern s16b command_wrk;
 extern s16b command_new;
-extern s16b energy_use;
 extern bool msg_flag;
 extern s16b running;
 extern s16b resting;

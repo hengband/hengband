@@ -5240,7 +5240,7 @@ void do_cmd_store(void)
 	p_ptr->town_num = old_town_num;
 
 	/* Free turn XXX XXX XXX */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 
 	/* Hack -- Character is no longer in "icky" mode */

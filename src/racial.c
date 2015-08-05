@@ -362,7 +362,7 @@ bool gain_magic(void)
 		floor_item_describe(0 - item);
 		floor_item_optimize(0 - item);
 	}
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 	return TRUE;
 }
 
@@ -692,7 +692,7 @@ static int racial_aux(power_desc_type *pd_ptr)
 		msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", 
 					 "You need to attain level %d to use this power."), min_level);
 
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		return 0;
 	}
 
@@ -700,7 +700,7 @@ static int racial_aux(power_desc_type *pd_ptr)
 	else if (p_ptr->confused)
 	{
 		msg_print(_("混乱していてその能力は使えない。", "You are too confused to use this power."));
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		return 0;
 	}
 
@@ -709,7 +709,7 @@ static int racial_aux(power_desc_type *pd_ptr)
 	{
 		if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? ")))
 		{
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 			return 0;
 		}
 	}
@@ -733,7 +733,7 @@ static int racial_aux(power_desc_type *pd_ptr)
 	}
 
 	/* take time and pay the price */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Success? */
 	if (randint1(p_ptr->stat_cur[use_stat]) >=
@@ -798,7 +798,7 @@ static bool cmd_racial_power_aux(s32b command)
 		if (p_ptr->realm1 == REALM_HEX)
 		{
 			bool retval = stop_hex_spell();
-			if (retval) energy_use = 10;
+			if (retval) p_ptr->energy_use = 10;
 			return (retval);
 		}
 		case CLASS_MAGE:
@@ -1030,7 +1030,7 @@ static bool cmd_racial_power_aux(s32b command)
 			if (!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return FALSE;
 
 			stop_singing();
-			energy_use = 10;
+			p_ptr->energy_use = 10;
 			break;
 		}
 		case CLASS_RED_MAGE:
@@ -1093,7 +1093,7 @@ static bool cmd_racial_power_aux(s32b command)
 			{
 				set_action(ACTION_LEARN);
 			}
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 			break;
 		}
 		case CLASS_CAVALRY:
@@ -1211,7 +1211,7 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 
 
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 			break;
 		}
 
@@ -1701,7 +1701,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		default:
 			msg_print(_("この種族は特殊な能力を持っていません。", "This race has no bonus power."));
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 	}
 	}
 	return TRUE;
@@ -1735,7 +1735,7 @@ void do_cmd_racial_power(void)
 	if (p_ptr->confused)
 	{
 		msg_print(_("混乱していて特殊能力を使えません！", "You are too confused to use any powers!"));
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		return;
 	}
 
@@ -2721,7 +2721,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 				case '0':
 				{
 					screen_load();
-					energy_use = 0;
+					p_ptr->energy_use = 0;
 					return;
 				}
 
@@ -2891,7 +2891,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 	/* Abort if needed */
 	if (!flag)
 	{
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		return;
 	}
 #ifdef ALLOW_REPEAT
@@ -2936,7 +2936,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 			p_ptr->window |= (PW_PLAYER | PW_SPELL);
 		}
 	}
-	else energy_use = 0;
+	else p_ptr->energy_use = 0;
 
 	/* Success */
 	return;

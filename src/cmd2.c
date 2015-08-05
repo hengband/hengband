@@ -117,7 +117,7 @@ void do_cmd_go_up(void)
 		p_ptr->oldpy = 0;
 		
 		/* Hack -- take a turn */
-		energy_use = 100;
+		p_ptr->energy_use = 100;
 
 		/* End the command */
 		return;
@@ -136,7 +136,7 @@ void do_cmd_go_up(void)
 	if (!go_up) return;
 
 	/* Hack -- take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -276,7 +276,7 @@ void do_cmd_go_down(void)
 		
 		
         /* Hack -- take a turn */
-        energy_use = 100;
+        p_ptr->energy_use = 100;
 	}
 
 	else
@@ -312,7 +312,7 @@ void do_cmd_go_down(void)
 		}
 
 		/* Hack -- take a turn */
-		energy_use = 100;
+		p_ptr->energy_use = 100;
 
 		if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -398,7 +398,7 @@ void do_cmd_search(void)
 	}
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Search */
 	search();
@@ -811,7 +811,7 @@ static bool do_cmd_open_chest(int y, int x, s16b o_idx)
 
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Attempt to unlock it */
 	if (o_ptr->pval > 0)
@@ -1036,7 +1036,7 @@ static bool do_cmd_open_aux(int y, int x)
 
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Seeing true feature code (ignore mimic) */
 
@@ -1197,7 +1197,7 @@ void do_cmd_open(void)
 		else if (c_ptr->m_idx && p_ptr->riding != c_ptr->m_idx)
 		{
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 
 			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
@@ -1246,7 +1246,7 @@ static bool do_cmd_close_aux(int y, int x)
 	bool      more = FALSE;
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Seeing true feature code (ignore mimic) */
 
@@ -1358,7 +1358,7 @@ void do_cmd_close(void)
 		else if (c_ptr->m_idx)
 		{
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 
 			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
@@ -1439,7 +1439,7 @@ static bool do_cmd_tunnel_aux(int y, int x)
 	if (!do_cmd_tunnel_test(y, x)) return (FALSE);
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Get grid */
 	c_ptr = &cave[y][x];
@@ -1619,7 +1619,7 @@ void do_cmd_tunnel(void)
 		else if (c_ptr->m_idx)
 		{
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 
 			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
@@ -1767,7 +1767,7 @@ static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
 
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Get the "disarm" factor */
 	i = p_ptr->skill_dis;
@@ -1875,7 +1875,7 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
 	int j;
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Penalize some conditions */
 	if (p_ptr->blind || no_lite()) i = i / 10;
@@ -2094,7 +2094,7 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 	cptr name = f_name + f_info[get_feat_mimic(c_ptr)].name;
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Message */
 	msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
@@ -2229,7 +2229,7 @@ void do_cmd_bash(void)
 		else if (c_ptr->m_idx)
 		{
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 
 			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
@@ -2311,7 +2311,7 @@ void do_cmd_alter(void)
 		f_ptr = &f_info[feat];
 
 		/* Take a turn */
-		energy_use = 100;
+		p_ptr->energy_use = 100;
 
 		/* Attack monsters */
 		if (c_ptr->m_idx)
@@ -2455,7 +2455,7 @@ void do_cmd_spike(void)
 		else if (c_ptr->m_idx)
 		{
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 
 			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
@@ -2468,7 +2468,7 @@ void do_cmd_spike(void)
 		else
 		{
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 
 			/* Successful jamming */
 			msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_name + f_info[feat].name);
@@ -2514,7 +2514,7 @@ void do_cmd_walk(bool pickup)
 	if (get_rep_dir(&dir,FALSE))
 	{
 		/* Take a turn */
-		energy_use = 100;
+		p_ptr->energy_use = 100;
 
 		if ((dir != 5) && (p_ptr->special_defense & KATA_MUSOU))
 		{
@@ -2522,8 +2522,8 @@ void do_cmd_walk(bool pickup)
 		}
 
 		/* Hack -- In small scale wilderness it takes MUCH more time to move */
-		if (p_ptr->wild_mode) energy_use *= ((MAX_HGT + MAX_WID) / 2);
-		if (p_ptr->action == ACTION_HAYAGAKE) energy_use = energy_use * (45-(p_ptr->lev/2)) / 100;
+		if (p_ptr->wild_mode) p_ptr->energy_use *= ((MAX_HGT + MAX_WID) / 2);
+		if (p_ptr->action == ACTION_HAYAGAKE) p_ptr->energy_use = p_ptr->energy_use * (45-(p_ptr->lev/2)) / 100;
 
 		/* Actually move the character */
 		move_player(dir, pickup, FALSE);
@@ -2549,7 +2549,7 @@ void do_cmd_walk(bool pickup)
 			change_wild_mode();
 
 			/* Give first move to monsters */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 
 			/* HACk -- set the encouter flag for the wilderness generation */
 			generate_encounter = TRUE;
@@ -2619,7 +2619,7 @@ void do_cmd_stay(bool pickup)
 	}
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	if (pickup) mpe_mode |= MPE_DO_PICKUP;
 	(void)move_player_effect(py, px, mpe_mode);
@@ -2686,7 +2686,7 @@ void do_cmd_rest(void)
 	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(FALSE);
 
 	/* Take a turn XXX XXX XXX (?) */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* The sin of sloth */
 	if (command_arg > 100)
@@ -3244,7 +3244,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	else
 		chance = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
 
-	energy_use = bow_energy(j_ptr->sval);
+	p_ptr->energy_use = bow_energy(j_ptr->sval);
 	tmul = bow_tmul(j_ptr->sval);
 
 	/* Get extra "power" from "extra might" */
@@ -3271,7 +3271,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	/* Get a direction (or cancel) */
 	if (!get_aim_dir(&dir))
 	{
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 
 		if (snipe_type == SP_AWAY) snipe_type = SP_NONE;
 
@@ -3299,7 +3299,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 	/* Don't shoot at my feet */
 	if (tx == px && ty == py)
 	{
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 
 		/* project_length is already reset to 0 */
 
@@ -3308,7 +3308,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 
 	/* Take a (partial) turn */
-	energy_use = (energy_use / thits);
+	p_ptr->energy_use = (p_ptr->energy_use / thits);
 	is_fired = TRUE;
 
 	/* Sniper - Difficult to shot twice at 1 turn */
@@ -4052,11 +4052,11 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 	}
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Rogue and Ninja gets bonus */
 	if ((p_ptr->pclass == CLASS_ROGUE) || (p_ptr->pclass == CLASS_NINJA))
-		energy_use -= p_ptr->lev;
+		p_ptr->energy_use -= p_ptr->lev;
 
 	/* Start at the player */
 	y = py;

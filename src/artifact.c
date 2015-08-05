@@ -3475,7 +3475,7 @@ bool activate_random_artifact(object_type *o_ptr)
 				char m_name[80];
 				monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
 				msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
-				energy_use = 0;
+				p_ptr->energy_use = 0;
 				return FALSE;
 			}
 			set_action(ACTION_FISH);

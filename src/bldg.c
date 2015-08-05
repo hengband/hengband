@@ -4586,7 +4586,7 @@ static void bldg_process_command(building_type *bldg, int i)
  */
 void do_cmd_quest(void)
 {
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	if (!cave_have_flag_bold(py, px, FF_QUEST_ENTER))
 	{
@@ -4626,7 +4626,7 @@ void do_cmd_bldg(void)
 	building_type   *bldg;
 
 
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	if (!cave_have_flag_bold(py, px, FF_BLDG))
 	{
@@ -4664,7 +4664,7 @@ void do_cmd_bldg(void)
 			command_new = SPECIAL_KEY_BUILDING;
 
 			/* No energy needed to re-enter the arena */
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 		}
 
 		return;
@@ -4681,7 +4681,7 @@ void do_cmd_bldg(void)
 		command_new = SPECIAL_KEY_BUILDING;
 
 		/* No energy needed to re-enter the arena */
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 
 		return;
 	}

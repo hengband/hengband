@@ -84,7 +84,7 @@ static void do_cmd_eat_food_aux(int item)
 	sound(SOUND_EAT);
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Identity not known yet */
 	ident = FALSE;
@@ -636,7 +636,7 @@ static void do_cmd_quaff_potion_aux(int item)
 
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	if (world_player)
 	{
@@ -1400,7 +1400,7 @@ static void do_cmd_read_scroll_aux(int item, bool known)
 
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	if (world_player)
 	{
@@ -2412,7 +2412,7 @@ static void do_cmd_use_staff_aux(int item)
 
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;
@@ -2917,7 +2917,7 @@ static void do_cmd_aim_wand_aux(int item)
 	target_pet = old_target_pet;
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Get the level */
 	lev = k_info[o_ptr->k_idx].level;
@@ -3349,7 +3349,7 @@ static void do_cmd_zap_rod_aux(int item)
 
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;
@@ -3635,7 +3635,7 @@ static void do_cmd_activate_aux(int item)
 	}
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;
@@ -3704,7 +3704,7 @@ static void do_cmd_activate_aux(int item)
 		((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
 	{
 		msg_print(_("燃料がない。", "It has no fuel."));
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		return;
 	}
 
@@ -4592,7 +4592,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	item = select_magic_eater(only_browse);
 	if (item == -1)
 	{
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		return FALSE;
 	}
 	if (item >= EATER_EXT*2) {tval = TV_ROD;sval = item - EATER_EXT*2;}
@@ -4626,7 +4626,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 		sound(SOUND_FAIL);
 		if (randint1(100) >= chance)
 			chg_virtue(V_CHANCE,-1);
-		energy_use = 100;
+		p_ptr->energy_use = 100;
 
 		return TRUE;
 	}
@@ -4654,7 +4654,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 		if (randint1(100) < chance)
 			chg_virtue(V_CHANCE,1);
 	}
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 	if (tval == TV_ROD) p_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
 	else p_ptr->magic_num1[item] -= EATER_CHARGE;
 

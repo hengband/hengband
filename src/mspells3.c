@@ -1589,7 +1589,7 @@ bool do_cmd_cast_learned(void)
 	}
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Window stuff */
 	p_ptr->redraw |= (PR_MANA);

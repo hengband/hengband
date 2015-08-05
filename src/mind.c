@@ -1497,7 +1497,7 @@ static bool cast_ninja_spell(int spell)
 			/* Gives a multiplier of 2 at first, up to 3 at 40th */
 			do_cmd_throw_aux(1, FALSE, slot);
 
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 		}
 		break;
 	}
@@ -1874,11 +1874,11 @@ void do_cmd_mind(void)
 
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 	/* teleport from mirror costs small energy */
 	if( on_mirror && p_ptr->pclass == CLASS_MIRROR_MASTER )
 	{
-	  if( n==3 || n==5 || n==7 || n==16 )energy_use = 50;
+	  if( n==3 || n==5 || n==7 || n==16 ) p_ptr->energy_use = 50;
 	}
 
 	if ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU))

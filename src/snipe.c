@@ -533,7 +533,7 @@ static bool cast_sniper_spell(int spell)
 	{
 	case 0: /* Concentration */
 		if (!snipe_concentrate()) return (FALSE);
-		energy_use = 100;
+		p_ptr->energy_use = 100;
 		return (TRUE);
 	case 1: snipe_type = SP_LITE; break;
 	case 2: snipe_type = SP_AWAY; break;
@@ -603,7 +603,7 @@ void do_cmd_snipe(void)
 	if (!cast) return;
 #if 0
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 #endif
 	/* Redraw mana */
 	p_ptr->redraw |= (PR_HP | PR_MANA);

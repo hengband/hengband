@@ -892,7 +892,7 @@ void do_cmd_study(void)
 	}
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	switch (mp_ptr->spell_book)
 	{
@@ -1453,7 +1453,7 @@ msg_format("その%sを%sのに十分なマジックポイントがない。",pr
 	}
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 
 	/* Over-exert the player */
@@ -2014,7 +2014,7 @@ bool do_riding(bool force)
 		if (c_ptr->m_idx)
 		{
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 
 			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
@@ -2076,7 +2076,7 @@ bool do_riding(bool force)
 		if (r_info[m_ptr->r_idx].level > randint1((p_ptr->skill_exp[GINOU_RIDING] / 50 + p_ptr->lev / 2 + 20)))
 		{
 			msg_print(_("うまく乗れなかった。", "You failed to ride."));
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 			return FALSE;
 		}
 
@@ -2096,7 +2096,7 @@ bool do_riding(bool force)
 		if (p_ptr->riding == p_ptr->health_who) health_track(0);
 	}
 
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Mega-Hack -- Forget the view and lite */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
@@ -2552,7 +2552,7 @@ void do_cmd_pet(void)
 	/* Abort if needed */
 	if (!flag)
 	{
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		return;
 	}
 

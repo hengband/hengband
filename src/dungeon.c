@@ -668,7 +668,7 @@ static void pattern_teleport(void)
 	if (record_stair) do_cmd_write_nikki(NIKKI_PAT_TELE,0,NULL);
 
 	p_ptr->inside_quest = 0;
-	energy_use = 0;
+	p_ptr->energy_use = 0;
 
 	/*
 	 * Clear all saved floors
@@ -4444,12 +4444,12 @@ static void process_command(void)
 						which_power = _("祈り", "prayer");
 
 					msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
-					energy_use = 0;
+					p_ptr->energy_use = 0;
 				}
 				else if (p_ptr->shero && (p_ptr->pclass != CLASS_BERSERKER))
 				{
 					msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
-					energy_use = 0;
+					p_ptr->energy_use = 0;
 				}
 				else
 				{
@@ -4918,7 +4918,7 @@ static void process_command(void)
 			break;
 		}
 	}
-	if (!energy_use && !now_message)
+	if (!p_ptr->energy_use && !now_message)
 		now_message = old_now_message;
 }
 
@@ -5309,7 +5309,7 @@ static void process_player(void)
 
 
 		/* Assume free turn */
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 
 
 		if (p_ptr->inside_battle)
@@ -5327,7 +5327,7 @@ static void process_player(void)
 		else if (p_ptr->paralyzed || (p_ptr->stun >= 100))
 		{
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 		}
 
 		/* Resting */
@@ -5346,14 +5346,14 @@ static void process_player(void)
 			}
 
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 		}
 
 		/* Fishing */
 		else if (p_ptr->action == ACTION_FISH)
 		{
 			/* Take a turn */
-			energy_use = 100;
+			p_ptr->energy_use = 100;
 		}
 
 		/* Running */
@@ -5417,18 +5417,18 @@ static void process_player(void)
 		/*** Clean up ***/
 
 		/* Significant */
-		if (energy_use)
+		if (p_ptr->energy_use)
 		{
 			/* Use some energy */
-			if (world_player || energy_use > 400)
+			if (world_player || p_ptr->energy_use > 400)
 			{
 				/* The Randomness is irrelevant */
-				p_ptr->energy_need += energy_use * TURNS_PER_TICK / 10;
+				p_ptr->energy_need += p_ptr->energy_use * TURNS_PER_TICK / 10;
 			}
 			else
 			{
 				/* There is some randomness of needed energy */
-				p_ptr->energy_need += (s16b)((s32b)energy_use * ENERGY_NEED() / 100L);
+				p_ptr->energy_need += (s16b)((s32b)p_ptr->energy_use * ENERGY_NEED() / 100L);
 			}
 
 			/* Hack -- constant hallucination */
@@ -5579,7 +5579,7 @@ static void process_player(void)
 		}
 
 		/* Sniper */
-		if (energy_use && reset_concent) reset_concentration(TRUE);
+		if (p_ptr->energy_use && reset_concent) reset_concentration(TRUE);
 
 		/* Handle "leaving" */
 		if (p_ptr->leaving) break;

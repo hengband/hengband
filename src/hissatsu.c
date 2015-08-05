@@ -372,7 +372,7 @@ void do_cmd_hissatsu(void)
 	if (!do_spell(REALM_HISSATSU, n, SPELL_CAST)) return;
 
 	/* Take a turn */
-	energy_use = 100;
+	p_ptr->energy_use = 100;
 
 	/* Use some mana */
 	p_ptr->csp -= spell.smana;
@@ -479,7 +479,7 @@ void do_cmd_gain_hissatsu(void)
 
 	/* Take a turn */
 	else
-		energy_use = 100;
+		p_ptr->energy_use = 100;
 
 	p_ptr->update |= (PU_SPELLS);
 }

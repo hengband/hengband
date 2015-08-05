@@ -72,7 +72,7 @@ void set_action(int typ)
 			case ACTION_HAYAGAKE:
 			{
 				msg_print(_("足が重くなった。", "You are no longer walking extremely fast."));
-				energy_use = 100;
+				p_ptr->energy_use = 100;
 				break;
 			}
 			case ACTION_SPELL:

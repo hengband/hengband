@@ -1157,7 +1157,7 @@ bool change_wild_mode(void)
 #else
 		msg_print("You cannot enter global map, since there is some monsters nearby!");
 #endif
-		energy_use = 0;
+		p_ptr->energy_use = 0;
 		return FALSE;
 	}
 
@@ -1171,13 +1171,13 @@ bool change_wild_mode(void)
 
 		if (!get_check_strict(msg, CHECK_OKAY_CANCEL))
 		{
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 			return FALSE;
 		}
 	}
 
 	/* HACK */
-	energy_use = 1000;
+	p_ptr->energy_use = 1000;
 
 	/* Remember the position */
 	p_ptr->oldpx = px;

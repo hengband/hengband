@@ -2505,7 +2505,7 @@ bool mutation_power_aux(u32b power)
 			break;
 
 		default:
-			energy_use = 0;
+			p_ptr->energy_use = 0;
 			msg_format(_("能力 %s は実装されていません。", "Power %s not implemented. Oops."), power);
 	}
 
