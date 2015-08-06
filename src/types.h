@@ -1345,7 +1345,7 @@ struct player_type
 
 	int y;	/* Player location in dungeon */
 	int x;	/* Player location in dungeon */
-
+	char name[32]; /* Current player's character name */
 };
 
 

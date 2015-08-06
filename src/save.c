@@ -605,7 +605,7 @@ static void wr_extra(void)
 	int i,j;
 	byte tmp8u;
 
-	wr_string(player_name);
+	wr_string(p_ptr->name);
 
 	wr_string(p_ptr->died_from);
 

@@ -445,7 +445,7 @@ bool teleport_player_aux(int dis, u32b mode)
 
 #ifdef JP
 	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-		msg_format("『こっちだぁ、%s』", player_name);
+		msg_format("『こっちだぁ、%s』", p_ptr->name);
 #endif
 
 	/* Move the player */

@@ -499,7 +499,7 @@ errr top_twenty(void)
 #endif
 
 	/* Save the player name (15 chars) */
-	sprintf(the_score.who, "%-.15s", player_name);
+	sprintf(the_score.who, "%-.15s", p_ptr->name);
 
 	/* Save the player info XXX XXX XXX */
 	sprintf(the_score.uid, "%7u", player_uid);
@@ -612,7 +612,7 @@ errr predict_score(void)
 	strcpy(the_score.day, _("今日", "TODAY"));
 
 	/* Save the player name (15 chars) */
-	sprintf(the_score.who, "%-.15s", player_name);
+	sprintf(the_score.who, "%-.15s", p_ptr->name);
 
 	/* Save the player info XXX XXX XXX */
 	sprintf(the_score.uid, "%7u", player_uid);
@@ -712,10 +712,10 @@ void show_highclass(void)
 
 #ifdef JP
 	sprintf(out_val, "あなた) %sの%s (レベル %2d)",
-	    race_info[p_ptr->prace].title,player_name, p_ptr->lev);
+	    race_info[p_ptr->prace].title,p_ptr->name, p_ptr->lev);
 #else
 	sprintf(out_val, "You) %s the %s (Level %2d)",
-	    player_name, race_info[p_ptr->prace].title, p_ptr->lev);
+	    p_ptr->name, race_info[p_ptr->prace].title, p_ptr->lev);
 #endif
 
 	prt(out_val, (m + 8), 0);
@@ -803,10 +803,10 @@ void race_score(int race_num)
 	{
 #ifdef JP
 	sprintf(out_val, "あなた) %sの%s (レベル %2d)",
-		     race_info[p_ptr->prace].title,player_name, p_ptr->lev);
+		     race_info[p_ptr->prace].title,p_ptr->name, p_ptr->lev);
 #else
 		sprintf(out_val, "You) %s the %s (Level %3d)",
-		    player_name, race_info[p_ptr->prace].title, p_ptr->lev);
+		    p_ptr->name, race_info[p_ptr->prace].title, p_ptr->lev);
 #endif
 
 		prt(out_val, (m + 8), 0);

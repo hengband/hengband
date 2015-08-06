@@ -4789,7 +4789,7 @@ static bool get_player_seikaku(void)
 	strcpy(tmp, ap_ptr->title);
 	strcat(tmp," ");
 #endif
-	strcat(tmp,player_name);
+	strcat(tmp,p_ptr->name);
 
 
 	/* Display */
@@ -5768,7 +5768,7 @@ static bool player_birth_aux(void)
 
 
 	/* Dump the default name */
-	c_put_str(TERM_L_BLUE, player_name, 1, 34);
+	c_put_str(TERM_L_BLUE, p_ptr->name, 1, 34);
 
 
 	/*** Instructions ***/
@@ -6005,8 +6005,8 @@ static bool player_birth_aux(void)
 #else
 		if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
 #endif
-		c_put_str(TERM_L_BLUE, player_name, 1, 34);
-		prt("", 1, 34+strlen(player_name));
+		c_put_str(TERM_L_BLUE, p_ptr->name, 1, 34);
+		prt("", 1, 34+strlen(p_ptr->name));
 	}
 
 	/* Clean up */

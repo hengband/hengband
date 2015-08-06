@@ -4575,7 +4575,7 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 			{
 				static char tmp_player_name[32];
 				char *pn, *tpn;
-				for (pn = player_name, tpn = tmp_player_name; *pn; pn++, tpn++)
+				for (pn = p_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++)
 				{
 #ifdef JP
 					if (iskanji(*pn))

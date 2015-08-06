@@ -2020,7 +2020,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 #ifdef JP
 	if (object_is_smith(o_ptr))
 	{
-		t = object_desc_str(t, format("鍛冶師%sの", player_name));
+		t = object_desc_str(t, format("鍛冶師%sの", p_ptr->name));
 	}
 
 	/* 伝説のアイテム、名のあるアイテムの名前を付加する */
@@ -2186,7 +2186,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 #else
 	if (object_is_smith(o_ptr))
 	{
-		t = object_desc_str(t,format(" of %s the Smith",player_name));
+		t = object_desc_str(t,format(" of %s the Smith",p_ptr->name));
 	}
 
 	/* Hack -- Append "Artifact" or "Special" names */

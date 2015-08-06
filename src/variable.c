@@ -401,11 +401,6 @@ int player_euid;
 int player_egid;
 
 /*
- * Current player's character name
- */
-char player_name[32];
-
-/*
  * Stripped version of "player_name"
  */
 char player_base[32];

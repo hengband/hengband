@@ -718,9 +718,9 @@ void py_pickup_aux(int o_idx)
 #ifdef JP
 	if ((o_ptr->name1 == ART_CRIMSON) && (p_ptr->pseikaku == SEIKAKU_COMBAT))
 	{
-		msg_format("こうして、%sは『クリムゾン』を手に入れた。", player_name);
+		msg_format("こうして、%sは『クリムゾン』を手に入れた。", p_ptr->name);
 		msg_print("しかし今、『混沌のサーペント』の放ったモンスターが、");
-		msg_format("%sに襲いかかる．．．", player_name);
+		msg_format("%sに襲いかかる．．．", p_ptr->name);
 	}
 	else
 	{

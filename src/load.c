@@ -1623,7 +1623,7 @@ static void rd_extra(void)
 	s16b tmp16s;
 	u16b tmp16u;
 
-	rd_string(player_name, sizeof(player_name));
+	rd_string(p_ptr->name, sizeof(p_ptr->name));
 
 	rd_string(p_ptr->died_from, sizeof(p_ptr->died_from));
 
