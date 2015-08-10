@@ -2364,13 +2364,12 @@ static void town_history(void)
 
 /*!
  * @brief 射撃時クリティカルによるダメージ期待値修正計算（スナイパーの集中処理と武器経験値） / critical happens at i / 10000
- * @param weight 武器の重量
  * @param plus_ammo 矢弾のダメージ修正
  * @param plus_bow 弓のダメージ修正
- * @param dam 基本ダメージ量
  * @return ダメージ期待値
+ * @note 基本ダメージ量と重量はこの部位では計算に加わらない。
  */
-s16b calc_crit_ratio_shot(int weight, int plus_ammo, int plus_bow, int dam)
+s16b calc_crit_ratio_shot(int plus_ammo, int plus_bow)
 {
 	int i;
 	object_type *j_ptr =  &inventory[INVEN_BOW];
@@ -2407,7 +2406,7 @@ s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 {
 	u32b num;
 	int i, k, crit;
-	i = calc_crit_ratio_shot(weight, plus_ammo, plus_bow, dam);
+	i = calc_crit_ratio_shot(plus_ammo, plus_bow);
 	
 	k = 0;
 	num = 0;

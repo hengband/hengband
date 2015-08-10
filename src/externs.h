@@ -1299,7 +1299,7 @@ extern void quest_discovery(int q_idx);
 extern int quest_number(int level);
 extern int random_quest_number(int level);
 extern bool tele_town(void);
-extern s16b calc_crit_ratio_shot(int weight, int plus_ammo,int plus_bow, int dam);
+extern s16b calc_crit_ratio_shot(int plus_ammo,int plus_bow);
 extern s16b calc_expect_crit_shot(int weight, int plus_ammo,int plus_bow, int dam);
 extern s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari);
 
