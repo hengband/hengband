@@ -3066,7 +3066,7 @@ errr parse_r_info(char *buf, header *head)
 	/* Process 'A' for "Artifact Flags" (multiple lines) */
 	else if (buf[0] == 'A')
 	{
-		u16b id, per, rarity;
+		int id, per, rarity;
 
 		/* Find the next empty blow slot (if any) */
 		for (i = 0; i < 4; i++) if (!r_ptr->artifact_id[i]) break;
