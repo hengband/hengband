@@ -328,6 +328,10 @@ struct monster_race
 	u16b reinforce_dd[6];
 	u16b reinforce_ds[6];
 
+	u16b artifact_id[4];	/* 特定アーティファクトドロップID */
+	u16b artifact_rarity[4];	/* 特定アーティファクトレア度 */
+	u16b artifact_percent[4]; /* 特定アーティファクトドロップ率 */
+
 	s16b next_r_idx;
 	u32b next_exp;
 

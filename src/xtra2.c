@@ -1247,8 +1247,16 @@ void monster_death(int m_idx, bool drop_item)
 	/* Mega-Hack -- drop fixed items */
 	if (drop_chosen_item)
 	{
+		int i;
 		int a_idx = 0;
 		int chance = 0;
+
+		for(i = 0; i < 4; i++)
+		{
+			if(!r_ptr->artifact_id[i]) break;
+			a_idx = r_ptr->artifact_id[i];
+			chance = r_ptr->artifact_percent[i];
+		}
 
 		switch (m_ptr->r_idx)
 		{

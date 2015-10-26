@@ -3063,6 +3063,24 @@ errr parse_r_info(char *buf, header *head)
 		}
 	}
 
+	/* Process 'A' for "Artifact Flags" (multiple lines) */
+	else if (buf[0] == 'A')
+	{
+		u16b id, per, rarity;
+
+		/* Find the next empty blow slot (if any) */
+		for (i = 0; i < 4; i++) if (!r_ptr->artifact_id[i]) break;
+
+		/* Oops, no more slots */
+		if (i == 4) return (1);
+
+		if (3 != sscanf(buf+2, "%d:%d:%d", &id, &rarity, &per)) return (1);
+		r_ptr->artifact_id[i] = id;
+		r_ptr->artifact_rarity[i] = rarity;
+		r_ptr->artifact_percent[i] = per;
+	}
+
+
 	/* Oops */
 	else return (6);
 
