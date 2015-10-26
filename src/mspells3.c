@@ -772,7 +772,7 @@ static bool cast_learned_spell(int spell, bool success)
 
         msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
         damage = monspell_bluemage_damage((MS_BR_INERTIA), plev, DAM_ROLL);
-		fire_ball(GF_INERTIA, dir, damage, (plev > 40 ? -3 : -2));
+		fire_ball(GF_INERTIAL, dir, damage, (plev > 40 ? -3 : -2));
 		break;
 	case MS_BR_GRAVITY:
 		if (!get_aim_dir(&dir)) return FALSE;

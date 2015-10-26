@@ -411,7 +411,7 @@ static bool use_mane(int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
 		
-			fire_ball(GF_INERTIA, dir, damage, (plev > 35 ? -3 : -2));
+			fire_ball(GF_INERTIAL, dir, damage, (plev > 35 ? -3 : -2));
 		break;
 	case MS_BR_GRAVITY:
 		if (!get_aim_dir(&dir)) return FALSE;

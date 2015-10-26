@@ -2975,7 +2975,7 @@
 #define GF_SOUND        21
 #define GF_CONFUSION    22
 #define GF_FORCE        23
-#define GF_INERTIA      24
+#define GF_INERTIAL      24
 #define GF_MANA         26
 #define GF_METEOR       27
 #define GF_ICE          28

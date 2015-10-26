@@ -129,7 +129,7 @@ static byte spell_color(int type)
 			case GF_SOUND:          return (0x09);
 			case GF_SHARDS:         return (0x08);
 			case GF_FORCE:          return (0x09);
-			case GF_INERTIA:        return (0x09);
+			case GF_INERTIAL:        return (0x09);
 			case GF_GRAVITY:        return (0x09);
 			case GF_TIME:           return (0x09);
 			case GF_LITE_WEAK:      return (0x06);
@@ -2175,7 +2175,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 		}
 
 		/* Inertia -- breathers resist */
-		case GF_INERTIA:
+		case GF_INERTIAL:
 		{
 			if (seen) obvious = TRUE;
 
@@ -5682,7 +5682,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		}
 
 		/* Inertia -- slowness */
-		case GF_INERTIA:
+		case GF_INERTIAL:
 		{
 			if (fuzzy) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
 			if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);

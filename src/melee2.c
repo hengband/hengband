@@ -1846,7 +1846,7 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 				break;
 
 			case RBE_INERTIA:
-				pt = GF_INERTIA;
+				pt = GF_INERTIAL;
 				break;
 
 			case RBE_STUN:

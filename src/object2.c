@@ -7174,7 +7174,7 @@ bool process_warning(int xx, int yy)
                 if (f4 & RF4_BR_DISE) spell_damcalc_by_spellnum(MS_BR_DISEN, GF_DISENCHANT, c_ptr->m_idx, &dam_max0);
                 if (f4 & RF4_BR_NEXU) spell_damcalc_by_spellnum(MS_BR_NEXUS, GF_NEXUS, c_ptr->m_idx, &dam_max0);
                 if (f4 & RF4_BR_TIME) spell_damcalc_by_spellnum(MS_BR_TIME, GF_TIME, c_ptr->m_idx, &dam_max0);
-                if (f4 & RF4_BR_INER) spell_damcalc_by_spellnum(MS_BR_INERTIA, GF_INERTIA, c_ptr->m_idx, &dam_max0);
+                if (f4 & RF4_BR_INER) spell_damcalc_by_spellnum(MS_BR_INERTIA, GF_INERTIAL, c_ptr->m_idx, &dam_max0);
                 if (f4 & RF4_BR_GRAV) spell_damcalc_by_spellnum(MS_BR_GRAVITY, GF_GRAVITY, c_ptr->m_idx, &dam_max0);
                 if (f4 & RF4_BR_SHAR) spell_damcalc_by_spellnum(MS_BR_SHARDS, GF_SHARDS, c_ptr->m_idx, &dam_max0);
                 if (f4 & RF4_BR_PLAS) spell_damcalc_by_spellnum(MS_BR_PLASMA, GF_PLASMA, c_ptr->m_idx, &dam_max0);

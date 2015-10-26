@@ -401,7 +401,7 @@ int spell_RF4_BREATH(int GF_TYPE, int y, int x, int m_idx, int t_idx, int TARGET
         ms_type = MS_BR_TIME;
         smart_learn = FALSE;
         break;
-    case GF_INERTIA:
+    case GF_INERTIAL:
         dam = monspell_damage((MS_BR_INERTIA), m_idx, DAM_ROLL);
         type_s = _("遅鈍", "inertia");
         ms_type = MS_BR_INERTIA;
@@ -3441,7 +3441,7 @@ int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx)
     case RF4_SPELL_START + 19:  return spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_DISE */
     case RF4_SPELL_START + 20:  return spell_RF4_BREATH(GF_NEXUS, y, x, m_idx, 0, MONSTER_TO_PLAYER);    /* RF4_BR_NEXU */
     case RF4_SPELL_START + 21:  return spell_RF4_BREATH(GF_TIME, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_TIME */
-    case RF4_SPELL_START + 22:  return spell_RF4_BREATH(GF_INERTIA, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_INER */
+    case RF4_SPELL_START + 22:  return spell_RF4_BREATH(GF_INERTIAL, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_INER */
     case RF4_SPELL_START + 23:  return spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_GRAV */
     case RF4_SPELL_START + 24:  return spell_RF4_BREATH(GF_SHARDS, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_SHAR */
     case RF4_SPELL_START + 25:  return spell_RF4_BREATH(GF_PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_PLAS */
@@ -3554,7 +3554,7 @@ int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx)
     case RF4_SPELL_START + 19:  return spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_DISE */
     case RF4_SPELL_START + 20:  return spell_RF4_BREATH(GF_NEXUS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_NEXU */
     case RF4_SPELL_START + 21:  return spell_RF4_BREATH(GF_TIME, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);    /* RF4_BR_TIME */
-    case RF4_SPELL_START + 22:  return spell_RF4_BREATH(GF_INERTIA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_INER */
+    case RF4_SPELL_START + 22:  return spell_RF4_BREATH(GF_INERTIAL, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_INER */
     case RF4_SPELL_START + 23:  return spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_GRAV */
     case RF4_SPELL_START + 24:  return spell_RF4_BREATH(GF_SHARDS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_SHAR */
     case RF4_SPELL_START + 25:  return spell_RF4_BREATH(GF_PLASMA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_PLAS */

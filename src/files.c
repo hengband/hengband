@@ -215,7 +215,7 @@ static named_num gf_desc[] =
 	{"GF_SOUND",				GF_SOUND				},
 	{"GF_CONFUSION",			GF_CONFUSION		},
 	{"GF_FORCE",				GF_FORCE				},
-	{"GF_INERTIA",				GF_INERTIA			},
+	{"GF_INERTIA",				GF_INERTIAL			},
 	{"GF_MANA",					GF_MANA				},
 	{"GF_METEOR",				GF_METEOR			},
 	{"GF_ICE",					GF_ICE				},
