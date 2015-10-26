@@ -332,6 +332,8 @@ struct monster_race
 	u16b artifact_rarity[4];	/* 特定アーティファクトレア度 */
 	u16b artifact_percent[4]; /* 特定アーティファクトドロップ率 */
 
+	u32b arena_ratio; /* アリーナの評価修正値(%基準 / 0=100%)*/
+
 	s16b next_r_idx;
 	u32b next_exp;
 

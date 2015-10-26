@@ -3080,6 +3080,13 @@ errr parse_r_info(char *buf, header *head)
 		r_ptr->artifact_percent[i] = per;
 	}
 
+	/* Process 'V' for "Arena power value ratio" */
+	else if (buf[0] == 'V')
+	{
+		int val;
+		if (3 != sscanf(buf+2, "%d", &val)) return (1);
+		r_ptr->arena_ratio = val;
+	}
 
 	/* Oops */
 	else return (6);
