@@ -1671,6 +1671,7 @@ F:RAND_50 | RAND_25 |
 F:DROP_60 | DROP_90 | CAN_FLY |
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | 
 F:EVIL | UNDEAD | RES_NETH | NO_CONF | NO_SLEEP
+V:25
 D:$It is a very ugly green ghost with a voracious appetite.
 D:それは尽きることのない旺盛な食欲を持った、緑色の醜いゴーストだ。
 
@@ -2165,6 +2166,7 @@ F:EVIL | UNDEAD |
 F:IM_COLD | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:TPORT | DRAIN_MANA
+V:50
 D:$It is almost insubstantial.
 D:それはほとんど実体を持っていない。
 
@@ -2266,6 +2268,7 @@ F:EAT_GIVE_DEX | EAT_LOSE_WIS
 S:1_IN_5
 S:SHOOT | HEAL | TRAPS
 A:221:1:5
+V:75
 D:$The legendary archer steals from the rich (you qualify).
 D:この伝説の射手は金持ち（あなたは合格）から金を盗む
 
@@ -3390,6 +3393,7 @@ F:BASH_DOOR | WILD_MOUNTAIN | DROP_CORPSE
 F:ANIMAL
 S:1_IN_8
 S:BLINK
+V:133
 D:$It looks very cute, except for the razor sharp teeth. It moans 
 D:$ominously as it jumps at your throat!
 D:そのカミソリのように鋭い前歯以外は可愛く見える。それは不気味にうなって
@@ -4705,6 +4709,7 @@ F:BASH_DOOR | KILL_WALL | DROP_SKELETON
 F:ANIMAL | EVIL | 
 F:IM_POIS | 
 F:HURT_ROCK | NO_CONF | NO_SLEEP
+V:150
 D:$This bizarre creature has glaring eyes and large mandibles capable of 
 D:$slicing through rock.
 D:この奇怪な生物はギラギラ光る目と、岩をも切り裂く巨大なアゴを持っている。
@@ -5230,6 +5235,7 @@ F:ESCORT | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | ORC | IM_POIS | RES_DARK
+V:133
 D:$He is an Uruk of power and great cunning.
 D:彼はかなり悪賢くて力のあるウルクだ。
 
@@ -5249,6 +5255,7 @@ F:ESCORT | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | ORC | IM_POIS | RES_DARK
+V:133
 D:$A gruesomely ugly but cunning orc, his eyes regard you with hatred.  His 
 D:$powerful arms flex menacingly as he advances.
 D:見た目は極度に醜悪で、かなりのずる賢さを持つオークだ。彼は冒険者を憎む
@@ -5943,6 +5950,7 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL | AURA_FIRE | HURT_COLD |
 F:IM_FIRE | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |  NONLIVING
 S:1_IN_6 | 
 S:BR_FIRE
+V:150
 D:$A whirling maelstrom of fire.
 D:グルグルと回って燃えさかる火炎の渦巻きだ。
 
@@ -5958,6 +5966,7 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL | CAN_FLY |
 F:IM_ACID | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |  NONLIVING
 S:1_IN_6 | 
 S:BR_ACID
+V:150
 D:$A caustic spinning whirlpool of water.
 D:回転する腐食性の水の渦巻きだ。
 
@@ -5994,6 +6003,7 @@ F:OPEN_DOOR | BASH_DOOR | COLD_BLOOD |
 F:IM_FIRE | RES_NETH | NO_CONF | NO_SLEEP | NONLIVING | NO_STUN
 S:1_IN_3 |
 S:BA_FIRE | ANIM_DEAD
+V:200
 D:$A pale, corpse-like lesser demon, who moves very fast and spawns evil 
 D:$everywhere.
 D:青白い死体のような下級悪魔で、非常に素早く動き回り、
@@ -6011,6 +6021,7 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL | CAN_FLY | HURT_FIRE |
 F:IM_COLD | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN | NONLIVING
 S:1_IN_6 | 
 S:BR_COLD
+V:150
 D:$A twisting whirlpool of frost.
 D:回転する冷気の渦巻きだ。
 
@@ -6026,6 +6037,7 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL | AURA_ELEC |
 F:IM_ELEC | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |  NONLIVING
 S:1_IN_6 | 
 S:BR_ELEC
+V:150
 D:$A shimmering tornado of air, sparks crackle along its length.
 D:光を放つ空気の竜巻で、その回りには火花が閃光を発している。
 
@@ -6486,6 +6498,7 @@ B:HIT:HURT:44d2
 B:HIT:HURT:44d2
 F:PASS_WALL | NO_SLEEP | COLD_BLOOD | NONLIVING | NO_FEAR |
 F:FORCE_MAXHP | RES_TELE | EMPTY_MIND | CAN_FLY 
+V:200
 D:$A creature that is half real, half illusion.
 D:その生き物は半分は実在で、半分は幻影だ。
 
@@ -7537,6 +7550,7 @@ F:EAT_INSANITY | RES_CHAO
 S:1_IN_3
 S:SHRIEK | CONF | S_HYDRA | SLOW | BLIND | DRAIN_MANA
 S:BA_POIS | BR_CHAO | FORGET | DARKNESS | BR_NUKE
+V:150
 D:$The lovable green reptile is making a guest appearance here.
 D:あのカワイイ緑の恐竜ちゃんがゲスト出演です。
 
@@ -8249,6 +8263,7 @@ F:EVIL | UNDEAD | IM_COLD | CAN_FLY |
 F:IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_15 | 
 S:BLIND | HOLD | DRAIN_MANA
+V:50
 D:$You don't believe in them.
 D:あなたはその存在を信じていない。
 
@@ -8665,6 +8680,7 @@ F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP | EAT_CONF | EAT_INSANITY |
 S:1_IN_6 | 
 S:HEAL | 
 S:S_SPIDER | BA_CHAO | S_DEMON
+V:133
 D:$An adept of chaos, feared for his skill of invoking raw Logrus.
 D:カオスの達人で、ログルスを操る能力により怖れられている。
 
@@ -9054,6 +9070,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL |
 S:1_IN_6
 S:TPORT | BLINK | BA_CHAO
+V:133
 D:$A magical treatment has turned Jurt, an adept of Logrus, 
 D:$into a Living Trump.
 D:混沌の宮廷の女王ダラの息子で、ログルス使いである彼の心は
@@ -9080,6 +9097,7 @@ F:NO_CONF | NO_SLEEP
 S:1_IN_4 | 
 S:BLINK | TELE_TO | TELE_AWAY | BLIND | HOLD | SLOW | SCARE | 
 S:CAUSE_3 | DRAIN_MANA | BRAIN_SMASH
+V:75
 D:$It is a skeletal form dressed in robes.  It radiates vastly evil power.
 D:それはローブに身を包んだ骸骨のようだ。それは邪悪な力を広範囲に渡って
 D:放射している。
@@ -9513,6 +9531,7 @@ F:BASH_DOOR |
 F:ANIMAL | RES_GRAV | NO_CONF | NO_SLEEP | 
 S:1_IN_5 | 
 S:BR_GRAV
+V:133
 D:$Unfettered by the usual constraints of gravity, these unnatural creatures 
 D:$are walking on the walls and even the ceiling!  The earth suddenly feels 
 D:$rather less solid as you see gravity warp all round the monsters.
@@ -9817,6 +9836,7 @@ F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY | RES_NETH |
 F:EVIL | UNDEAD | HURT_LITE | IM_COLD | IM_POIS | RES_DARK | NO_CONF | NO_SLEEP
 S:1_IN_4|
 S:BO_FIRE
+V:150
 D:$Back from the grave, to wreak vengeance upon the living. A gaunt, tall, 
 D:$skeletal figure wearing a ruined plate mail.
 D:生ける者たちへ復讐するために墓から甦った亡霊だ。
@@ -9879,6 +9899,7 @@ F:IM_POIS | NONLIVING | REFLECTING |
 F:NO_CONF | NO_SLEEP | NO_FEAR | HURT_ROCK
 S:1_IN_8
 S:SHOOT
+V:75
 D:$An enormous construct resembling a titan made from stone.  It strides 
 D:$purposefully towards you, swinging its slow fists with earth-shattering 
 D:$power.
@@ -10272,6 +10293,7 @@ F:NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:BLINK | TELE_TO | TELE_AWAY | TELE_LEVEL |
 S:CAUSE_3 | DRAIN_MANA | BRAIN_SMASH
+V:75
 D:$It is a skeletal form dressed in robes. 
 D:$It looks evil and devious...
 D:襤褸を纏った骸骨のような姿をしている、邪悪で捻曲がった亡者だ。
@@ -10486,6 +10508,7 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL | RES_TELE |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |  NONLIVING
 S:1_IN_6 | 
 S:BR_NEXU
+V:150
 D:$A maelstrom of potent magical energy.
 D:生命を持った魔法のエネルギーの竜巻だ。
 
@@ -10503,6 +10526,7 @@ F:IM_ELEC | IM_FIRE | CAN_FLY |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |  NONLIVING
 S:1_IN_6 | 
 S:BR_PLAS
+V:150
 D:$A whirlpool of intense flame, charring the stones at your feet.
 D:強烈な火炎の渦巻きで、冒険者の足下の床を焦がしている。
 
@@ -10727,6 +10751,7 @@ F:EVIL | RES_TELE
 S:1_IN_2 |
 S:BO_FIRE | BO_COLD | HOLD | BO_MANA | S_MONSTER
 S:TRAPS | BO_ICEE | HEAL | BO_PLAS | BA_CHAO
+V:150
 D:$Mandor is one of the greatest Logrus Masters, a formidable magician.
 D:マンドールは混沌の宮廷きっての伊達男であるが、
 D:最強のログルス使いの一人でもあり、手強い魔法使いだ。
@@ -10749,6 +10774,7 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL | CAN_FLY |
 F:RES_TIME | NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |  NONLIVING
 S:1_IN_6 | 
 S:BR_TIME
+V:150
 D:$You haven't seen it yet.
 D:かつてそれに会ったことはない。
 
@@ -10765,6 +10791,7 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL | RES_TELE |
 F:RES_LITE | NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING
 S:1_IN_4 | 
 S:BR_LITE | SHRIEK
+V:133
 D:$A strange pillar of shining light that hurts your eyes.  Its shape changes 
 D:$constantly as it cuts through the air towards you.  It is like a beacon, 
 D:$waking monsters from their slumber.
@@ -11144,6 +11171,7 @@ F:NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_SOUN | BR_CONF | 
 S:BR_SHAR | BR_GRAV | BR_NEXU
+V:150
 D:$A large dragon with a selection of heads, all shouting and arguing as they 
 D:$look for prey, but each with its own deadly breath weapon.
 D:多くの首を使い分ける巨大なドラゴンだ。獲物を探しているときは首同士が
@@ -11629,6 +11657,7 @@ B:CRUSH:HURT:8d12
 B:HIT:ELEC:12d12
 F:BASH_DOOR | CAN_FLY | WILD_MOUNTAIN | WILD_WOOD |
 F:ANIMAL | IM_ELEC | DROP_CORPSE | RIDING
+V:133
 D:$A vast legendary bird, its iron talons rake the most impenetrable of 
 D:$surfaces and its screech echoes through the many winding dungeon corridors.
 D:巨大な伝説の鳥であり、その鉄の爪はどんな堅いものでも引き裂き、その鳴き声は
@@ -11794,6 +11823,7 @@ F:OPEN_DOOR | BASH_DOOR | POWERFUL | NONLIVING |
 F:EVIL | DEMON | IM_FIRE | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:BLIND | CONF
+V:133
 D:$It is a demon swinging wildly with two clubs.
 D:二本の棍棒を乱暴に振り回す悪魔だ。
 
@@ -12044,6 +12074,7 @@ S:1_IN_3 |
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:DRAIN_MANA | BRAIN_SMASH | 
 S:S_UNDEAD
+V:75
 D:$A skeletal form wrapped in robes.  Powerful magic crackles along its bony 
 D:$fingers.
 D:ローブに身を包んだ骸骨だ。骨ばった指の先には強力な魔力が火花をあげている。
@@ -12105,6 +12136,7 @@ F:SMART | OPEN_DOOR | BASH_DOOR |
 F:IM_ACID | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_2 | 
 S:CAUSE_3 | BO_WATE | BO_MANA | BA_CHAO
+V:150
 D:$The madman's son is a Logrus Master, almost as great a 
 D:$menace as his father.
 D:かの狂人の息子はログルス使いで、父親と同じくらい危険だ。
@@ -12220,6 +12252,7 @@ S:1_IN_2 |
 S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET | 
 S:BO_MANA | ANIM_DEAD 
 S:S_UNDEAD
+V:60
 D:$A disembodied eye, floating in the air.  Black nether storms rage around 
 D:$its bloodshot pupil and light seems to bend as it sucks its power from the 
 D:$very air around it.  Your soul chills as it drains your vitality for its 
@@ -12682,6 +12715,7 @@ F:SMART | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS | RES_GRAV |
 S:1_IN_4 | 
 S:BR_WALL | TELE_AWAY | BR_GRAV |
 S:S_KIN | MIND_BLAST | BLIND | BLINK
+V:133
 D:$"Invisible ones from the stars... They sometimes took forms... 
 D:$but existed as vortices of power in their natural state."
 D:「どこか遠い星からやって来た透明な物体... かれらもときには... 
@@ -12897,6 +12931,7 @@ F:EVIL | UNDEAD | IM_COLD | IM_POIS | NO_CONF | RES_NETH | NO_SLEEP
 S:1_IN_9 | 
 S:TELE_LEVEL | BLIND | HOLD | CONF | CAUSE_4 | DRAIN_MANA | BO_NETH | 
 S:S_UNDEAD
+V:75
 D:$It is an unlife of power almost unequaled.  An affront to existence, its 
 D:$very touch abuses and disrupts the flow of life, and its unearthly limbs, 
 D:$of purest black, crush rock and flesh with ease.
@@ -13108,6 +13143,7 @@ F:FORCE_SLEEP | UNIQUE | FORCE_MAXHP | CAN_FLY |
 F:COLD_BLOOD | BASH_DOOR | NONLIVING |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 A:190:1:100
+V:150
 D:$The mightiest of hellblades, a black runesword which thirsts for 
 D:$your soul.
 D:最も強力な魔剣である、この黒いルーンソードはあなたの魂を渇望している。
@@ -13749,6 +13785,7 @@ F:OPEN_DOOR | BASH_DOOR |
 F:ANIMAL | RES_TIME | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:BR_TIME
+V:150
 D:$You get a terrible sense of deja vu, or is it a premonition?  All at once 
 D:$you see a little puppy and a toothless old dog.  Perhaps you should give 
 D:$up and go to bed.
@@ -13771,6 +13808,7 @@ F:OPEN_DOOR | BASH_DOOR |
 F:ANIMAL | IM_ELEC | IM_FIRE | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:BR_PLAS
+V:150
 D:$The very air warps as pure elemental energy stalks towards you in the 
 D:$shape of a giant hound.  Your hair stands on end and your palms itch as 
 D:$you sense trouble.
@@ -13937,7 +13975,8 @@ F:COLD_BLOOD | RES_TELE
 S:1_IN_3 |
 S:CAUSE_4 | HOLD | DRAIN_MANA | SCARE | BLIND | 
 S:S_UNDEAD | S_HI_UNDEAD | S_HI_DRAGON | S_UNIQUE | 
-S:BA_NETH | FORGET | TRAPS | BRAIN_SMASH | TELE_AWAY 
+S:BA_NETH | FORGET | TRAPS | BRAIN_SMASH | TELE_AWAY
+V:60
 D:$Why would anybody want to kill Santa Claus? To get all the presents, 
 D:$of course!
 D:なぜみんなサンタクロースを倒そうとするのでしょう？もちろんプレゼントを
@@ -14116,6 +14155,7 @@ F:INVISIBLE | PASS_WALL | EVIL | CAN_FLY |
 F:ANIMAL | NO_CONF | NO_SLEEP
 S:1_IN_5 |
 S:BLINK | TELE_TO | BR_NETH | BR_TIME
+V:150
 D:$"They are lean and athirst!... All the evil in the universe
 D:$was concentrated in their lean, hungry bodies. Or had they 
 D:$bodies? I saw them only for a moment, I cannot be certain."
@@ -14205,6 +14245,7 @@ S:1_IN_3 |
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:DRAIN_MANA | BRAIN_SMASH | S_HI_UNDEAD | S_UNDEAD | FORGET |
 S:TPORT | HEAL | ANIM_DEAD
+V:75
 D:$A lich who is partially immaterial, on its way to a new, ethereal form.
 D:部分的に非物質化したリッチで、霊的な存在に生まれ変わる過程にある。
 
@@ -14255,6 +14296,7 @@ S:BLIND | SCARE | BRAIN_SMASH |
 S:BO_MANA | BO_NETH | BA_NETH | 
 S:BR_NETH | 
 S:S_UNDEAD
+V:133
 D:$This intensely evil creature bears the form of a gargantuan black worm.  
 D:$Its gaping maw is a void of blackness, acid drips from its steely hide.  
 D:$It is like nothing you have ever seen before, and a terrible chill runs 
@@ -14424,6 +14466,7 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL |
 F:RES_CHAO | NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING
 S:1_IN_6 | 
 S:BR_CHAO
+V:150
 D:$Void, nothingness, spinning destructively.
 D:空虚で実体を持たない破壊的な渦巻きだ。
 
@@ -14450,6 +14493,7 @@ S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS |
 S:BR_LITE | BR_DARK | BR_SOUN | BR_CONF | BR_CHAO |
 S:BR_NETH | BR_DISE | BR_WALL | BR_INER | BR_TIME | 
 S:BR_GRAV | BR_PLAS | BR_NEXU | BR_SHAR | BR_NUKE
+V:150
 D:$An awesome vortex of pure magic, power radiates from its frame.
 D:純粋に魔力のみでできた恐るべき渦巻きで、辺りに魔力を発散している。
 
@@ -14917,6 +14961,7 @@ S:1_IN_4 |
 S:BLIND | SCARE | BRAIN_SMASH | 
 S:BO_MANA | BO_NETH | BA_NETH | 
 S:S_UNDEAD
+V:133
 D:$A huge giant garbed in black, more massive than a titan and stronger than 
 D:$a dragon.  With terrible blows, it breaks your armour from your back, 
 D:$leaving you defenseless against its evil wrath.  It can smell your fear, 
@@ -14948,6 +14993,7 @@ S:1_IN_2 |
 S:TELE_TO | BLIND | BO_MANA | S_ANGEL | S_KIN | INVULNER | DISPEL | PSY_SPEAR
 S:BR_MANA | BR_LITE | BR_ELEC | BA_MANA | HAND_DOOM | S_HI_DRAGON |
 S:BRAIN_SMASH | S_MONSTERS | HEAL | BR_DISE | BA_LITE
+V:133
 D:$Commanding a legion of angels, Raphael will destroy you for your sins.  He 
 D:$will crush you like the pitiful insignificant being he sees you to be.  
 D:$Your very soul will be taken into judgement by his supreme authority as he 
@@ -15103,6 +15149,7 @@ S:1_IN_3 |
 S:HOLD | DRAIN_MANA | BLIND | S_UNDEAD | CONF |
 S:SCARE | TELE_TO | TPORT | BRAIN_SMASH | ANIM_DEAD
 S:BA_NETH | DARKNESS | SHRIEK
+V:75
 D:$An aura of hatred, cowardice and falsehood surrounds you as this 
 D:$cloaked figure floats towards you.
 D:この浮遊する影があなたに忍び寄るにつれ、憎しみと臆病さと虚偽の
@@ -15148,6 +15195,7 @@ S:1_IN_3 |
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:DRAIN_MANA | BRAIN_SMASH | S_HI_UNDEAD | S_UNDEAD | FORGET |
 S:TPORT | HEAL | S_KIN | S_DEMON | BA_NETH | ANIM_DEAD | DISPEL
+V:75
 D:$A lich who has reached its ultimate evolutionary stage: a completely 
 D:$immaterial state.
 D:進化の最終段階に達したリッチで、完全に非物質化している。
@@ -15270,6 +15318,7 @@ F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:BLIND | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
 S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD | S_KIN | BO_MANA | DISPEL
+V:60
 D:$A disembodied eye, surrounded by twelve smaller eyes on stalks. 
 D:$This is a beholder hive-mother, far more powerful than normal 
 D:$beholders.
@@ -15389,6 +15438,7 @@ F:BASH_DOOR | OPEN_DOOR | POWERFUL | MOVE_BODY |
 F:NO_CONF | NO_SLEEP | EVIL 
 S:1_IN_3 |
 S:BR_ELEC
+V:133
 D:$This elemental creature is power incarnate; it looks like a huge polar bear 
 D:$with a huge gaping maw instead of a head.
 D:このエレメンタルは力の化身だ。巨大な北極熊に似ていて、頭があるべき
@@ -15501,6 +15551,7 @@ S:1_IN_3 |
 S:SCARE | BLIND | CONF | TPORT | BLINK | TELE_AWAY | TELE_TO
 S:TELE_LEVEL | BA_COLD | BA_FIRE | TRAPS | MIND_BLAST | 
 S:S_MONSTERS 
+V:75
 D:$This cunning Amberite is the master of subtle ploys. "...a fiery bearded, 
 D:$flame-crowned man, dressed all in red and orange, mainly of silk stuff, 
 D:$and he held a sword in his right hand and a glass of wine in his left, 
@@ -15617,6 +15668,7 @@ S:1_IN_3 |
 S:BR_ELEC | BR_GRAV | BR_LITE |
 S:S_DRAGON | S_HI_DRAGON |
 S:SCARE | BLIND
+V:133
 D:$The mightiest elemental dragon of air, it can destroy you with ease.
 D:空のエレメンタルの最強のドラゴンだ。あなたを何の苦もなく倒すだろう。
 
@@ -15641,6 +15693,7 @@ S:S_ANT | S_SPIDER | S_HOUND | S_HYDRA | TRAPS | BO_WATE | BO_ELEC
 R:151:1d6
 R:829:5d10
 A:23:1:45
+V:75
 D:$Julian is at home in wild woodlands. He enjoys hunting a challenging 
 D:$prey: you. "Julian, dark hair hanging long, blue eyes containing neither 
 D:$passion nor compassion. He was dressed completely in scaled white armor, 
@@ -15796,6 +15849,7 @@ S:TPORT | TELE_TO | SCARE | DARKNESS |
 S:S_DRAGON | TRAPS | BO_WATE | BO_NETH | S_UNDEAD | S_DEMON |
 S:CONF | BO_ACID | FORGET | MIND_BLAST | CAUSE_4
 A:65:1:50
+V:75
 D:$Caine is perhaps the least reliable Amberite, always ready to ignore 
 D:$his pacts and promises when it suits him. "...the swarthy, dark-eyed 
 D:$countenance of Caine, dressed all in satin that was black and green, 
@@ -15995,6 +16049,7 @@ F:EVIL | IM_POIS | IM_ACID | IM_FIRE | REGENERATE
 F:OPEN_DOOR | BASH_DOOR |
 S:1_IN_4 |
 S:HEAL | TPORT | TELE_TO | SCARE | BLIND | S_MONSTERS
+V:133
 D:$Gerard may not be quite as devious as the other Amberites, but 
 D:$he is certainly stronger than the rest of them put together. "...a big, 
 D:$powerful man... (He) resembled (Corwin) quite strongly, save that 
@@ -16034,6 +16089,7 @@ S:1_IN_3 |
 S:HEAL | BLIND | SLOW | CONF | SCARE | DARKNESS | BA_DARK | 
 S:BR_POIS | BR_DARK | 
 S:S_SPIDER
+V:60
 D:$This enormous, hideous spirit of void is in the form of a spider of 
 D:$immense proportions.  She is surrounded by a cloud of Unlight as she sucks 
 D:$in all living light into her bloated body.  She is always ravenously 
@@ -16066,6 +16122,7 @@ F:ANIMAL | EVIL | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_3 |
 S:SCARE | BLIND | CONF | HOLD | BR_POIS |
 S:DARKNESS | BA_DARK | BR_DARK | S_SPIDER | S_DEMON
+V:60
 D:$"...there was a kind of face on the squat ebon body, low down amid 
 D:$the several-jointed legs. The face peered up with a weird expression 
 D:$of doubt and inquiry..."
@@ -16105,6 +16162,7 @@ S:1_IN_3 |
 S:SCARE | BLIND | CONF | HOLD | HASTE | DRAIN_MANA |
 S:CAUSE_3 | CAUSE_4 | DARKNESS | FORGET | S_DEMON | S_HOUND |
 S:TPORT | TELE_TO
+V:60
 D:$"He saw why the shadow on the frosted pane yesterday had been 
 D:$headless and he screamed... but before he could scream out his 
 D:$protest his breath was cut off, as the hands descended on his 
@@ -16138,6 +16196,7 @@ S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS |
 S:BR_LITE | BR_DARK | BR_SOUN | BR_CONF | BR_CHAO |
 S:BR_NETH | BR_DISE | BR_WALL | BR_INER | BR_TIME | 
 S:BR_GRAV | BR_PLAS | BR_NEXU | BR_SHAR | BR_NUKE
+V:150
 D:$A shifting, swirling form.  It seems to be all colours and sizes and 
 D:$shapes, though the dominant form is that of a huge dog.  You feel very 
 D:$uncertain all of a sudden.
@@ -16289,6 +16348,7 @@ F:DROP_2D2 | DROP_GOOD | ONLY_ITEM | RES_TELE |
 F:IM_POIS | IM_FIRE | FORCE_SLEEP | FORCE_MAXHP | NONLIVING
 S:1_IN_4 |
 S:ROCKET
+V:166
 D:$Reverbrant metal steps announce the arrival of this huge creature, 
 D:$half demon half machine. It has an unsurpassable firepower.
 D:響き渡る金属的な足音がこの巨大な、半悪魔半機械の怪物の
@@ -16722,6 +16782,7 @@ S:1_IN_1 |
 S:TELE_TO | SLOW | SCARE | CAUSE_4 | BRAIN_SMASH | 
 S:BO_ICEE | BO_MANA | BA_WATE | BA_NETH | 
 S:S_HI_UNDEAD | ANIM_DEAD | PSY_SPEAR
+V:150
 D:$A legion of evil undead druj animating the skeleton of a once mighty 
 D:$sorcerer.  His power is devastating and his speed unmatched in the 
 D:$underworld.  Flee his wrath!
@@ -16771,6 +16832,7 @@ F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY |
 F:EVIL | IM_FIRE | IM_COLD | NO_CONF | NO_SLEEP | IM_POIS
 S:1_IN_2 | 
 S:BR_DISE | BR_PLAS | BR_NUKE | BR_POIS | BR_ACID
+V:150
 D:$Godzilla rose from the contaminated sea. 
 D:$Fear its anger, for its devastation is unmatched!
 D:『ゴヂラ』は汚染された海から現れた。
@@ -16958,6 +17020,7 @@ F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY |
 F:EVIL | IM_FIRE | IM_COLD | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:BR_FIRE | BR_COLD | BR_DISE
+V:150
 D:$The Tarrasque is a massive reptile of legend, rumoured to be unkillable 
 D:$and immune to magic.  Fear its anger, for its devastation is unmatched!
 D:巨大な伝説の爬虫類であるタラスクは、魔法に対する免疫を持ち、殺すことができ
@@ -17092,6 +17155,7 @@ F:DROP_2D2 | DROP_GOOD | ONLY_ITEM | RES_TELE | DROP_GREAT | UNIQUE |
 F:IM_POIS | IM_FIRE | FORCE_SLEEP | FORCE_MAXHP | NONLIVING
 S:1_IN_3 |
 S:ROCKET | S_CYBER
+V:166
 D:$The mightiest of Cyberdemons, their lord and ruler.
 D:最強のサイバーデーモンで、彼らの王であり支配者である。
 
@@ -17218,6 +17282,7 @@ S:BR_COLD | BR_POIS | BR_NETH | BR_LITE | BR_DARK |
 S:BR_CONF | BR_SOUN | BR_CHAO | BR_DISE | BR_NEXU |
 S:BR_TIME | BR_INER | BR_GRAV | BR_SHAR | BR_PLAS |
 S:BR_WALL | BR_MANA | BR_DISI
+V:200
 D:$The mightiest of all dragonkind, a great wyrm of power is seldom 
 D:$encountered in our world. It can crush stars with its might.
 D:龍族の中でも最強であるパワー・ワイアームには、この世界では滅多に
@@ -17279,6 +17344,7 @@ S:TELE_AWAY | TELE_TO | TELE_LEVEL | TPORT |
 S:BO_MANA | BA_MANA | S_MONSTERS | HEAL |
 S:HASTE | HAND_DOOM | 
 S:S_ANGEL | S_UNIQUE | DISPEL | PSY_SPEAR
+V:300
 D:$The hoary Lord of the Great Abyss seems a wizened man, but appearances
 D:$can be deceiving.
 D:大いなる深淵の神々しい主はしわくちゃ老人のように見えるが、その見
@@ -17462,6 +17528,7 @@ F:NO_CONF | NO_SLEEP | CAN_FLY |
 F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR | POWERFUL |
 S:1_IN_3 |
 S:BR_DISI | BO_MANA
+V:150
 D:$The Destroyer was built by the Norse deities to be their ultimate weapon 
 D:$against the space gods who had arrived to judge the world. Unfortunately, 
 D:$the Destroyer has gone berserk and is destroying everything it sees. The 
@@ -17528,6 +17595,7 @@ S:BR_POIS | BR_ACID | BR_FIRE | CONF | DARKNESS | FORGET | S_HI_UNDEAD |
 S:BR_NUKE | BR_NETH | BR_CHAO | BR_DISE | BR_DARK | BR_PLAS | BR_CONF
 S:BR_NEXU | S_DEMON | S_CYBER | S_KIN | BR_DISI | HAND_DOOM
 S:ANIM_DEAD
+V:133
 D:$This creature is death incarnate. "A monster of vaguely anthropoid 
 D:$outline, but with an octopus-like head whose face was a mass of 
 D:$feelers, a scaly, rubbery-looking body, prodigious claws on hind 
@@ -17604,6 +17672,7 @@ S:SHRIEK | BR_SOUN | BR_LITE | BR_INER | BR_TIME | BR_SHAR |
 S:BR_PLAS | BR_MANA | BR_DISI | DRAIN_MANA | HEAL | HASTE |
 S:TELE_AWAY | BLINK | TPORT | FORGET | DISPEL |
 S:S_MONSTERS | S_HI_DRAGON | S_UNIQUE | S_ANGEL
+V:166
 D:$The Unicorn of Order, who once stole an eye from the great Serpent 
 D:$of chaos, is watching the events unfold with growing distress. It 
 D:$regards you as a mortal meddling in the affairs of immortals, and 
@@ -17703,6 +17772,7 @@ S:1_IN_3 |
 S:BRAIN_SMASH | DISPEL |
 S:BA_MANA | BO_MANA | BA_NETH | ANIM_DEAD 
 S:S_MONSTERS | S_UNIQUE | S_HI_UNDEAD | S_HI_DRAGON
+V:150
 D:$He is the Master of the Pits of Angband.  His figure is like a black 
 D:$mountain crowned with Lightning.  He rages with everlasting anger, his 
 D:$body scarred by Fingolfin's eight mighty wounds.  He can never rest from 
@@ -17753,6 +17823,7 @@ S:1_IN_3 |
 S:S_MONSTERS | BR_CHAO | BA_CHAO | ROCKET | S_CYBER | S_KIN |
 S:BR_NETH | BR_MANA | S_HI_UNDEAD | S_HI_DRAGON | S_UNIQUE |
 S:BR_NUKE | BR_DISI | HAND_DOOM | DISPEL
+V:150
 D:$The Big Boss himself. Before the universe the Serpent was. The Unicorn 
 D:$of Order fought with Serpent and stole one of its eyes, known as the 
 D:$Jewel of Judgement. With the Jewel, Dworkin drew the Pattern and thus 
@@ -17872,6 +17943,7 @@ B:SHOOT:HURT:4d6
 F:NEVER_BLOW | RAND_25 | ANIMAL | WILD_WOOD |
 S:1_IN_1
 S:SHOOT |
+V:300
 D:$A many legged scuttling thing, it spits pebbles with deadly force.
 D:たくさんの脚で逃げ回り、小石を恐ろしいスピードで口から発射する虫。
 D:「で、その《ビハインダー》とやらは、どんな格好をしているのかね？」
@@ -17979,6 +18051,7 @@ F:EVIL | IM_FIRE | IM_COLD | IM_POIS | IM_ELEC | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:BR_FIRE | BR_NEXU | BR_CHAO | BR_POIS | BR_DISE | BR_PLAS | BR_NUKE | BR_DARK
 A:128:1:25
+V:150
 D:出雲の国に棲む伝説の蛇で、八つの首と八つの尾を持つ。
 D:いけにえを拒むと洪水を起こして人々を全滅させる。
 
@@ -18002,6 +18075,7 @@ F:RES_TELE | NO_CONF | NO_SLEEP | NO_STUN |
 S:1_IN_2 | 
 S:ROCKET | HEAL | BLINK | INVULNER
 A:16:1:50
+V:900
 D:$His favorite food is roasting rice noodle. 
 D:$He is the lone wolf filled with the adventurous spirit. 
 D:$His righteousness and courage are more than the average. 
@@ -18032,6 +18106,7 @@ S:1_IN_3 |
 S:BR_NEXU | BR_NETH | BR_DISE |
 S:S_HI_DRAGON
 S:SCARE | BLINK | SHRIEK
+V:133
 D:$The tortured soul of a once powerful wyrm.
 D:かつて強大な力を誇っていたワイアームの怨霊だ。
 
@@ -18261,6 +18336,7 @@ S:1_IN_2 |
 S:HEAL | BLINK | BLIND | CONF | CAUSE_3 | DARKNESS | 
 S:ANIM_DEAD | SHRIEK | TELE_AWAY | BA_DARK | DRAIN_MANA |
 S:S_MONSTER | S_UNDEAD | S_DEMON | S_KIN |
+V:150
 D:$A dark elven figure that glows with an inner light.
 D:内部から光を発する暗いエルフの影だ。
 
@@ -18279,6 +18355,7 @@ F:OPEN_DOOR | BASH_DOOR |
 F:ANIMAL | NO_CONF | NO_SLEEP
 S:1_IN_8 |
 S:BR_MANA
+V:150
 D:$A powerful aura radiates from this canine creature. It feels 
 D:$like... magic?
 D:強力なオーラを発している犬型生物だ。それは魔法のような感じが
@@ -18331,6 +18408,7 @@ F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING |
 S:1_IN_6 |
 S:BLIND | CONF | SCARE |
 S:BR_POIS
+V:75
 D:$A huge dragon of incredible destructive power.  Noxious vapours 
 D:$fill the room near it, leaving you gasping for breath.  Flee 
 D:$now while you still can!
@@ -18440,6 +18518,7 @@ F:MALE | FORCE_SLEEP | FORCE_MAXHP | DROP_1D2 | SMART
 F:DROP_CORPSE | DROP_SKELETON | CAN_SWIM
 S:1_IN_5 |
 S:ROCKET
+V:133
 D:$You watch in horror as he aims his massive weapon at you.
 D:彼はその恐ろしい重火器の狙いをあなたに向けている。
 
@@ -18455,6 +18534,7 @@ F:FORCE_SLEEP | RAND_50 | EMPTY_MIND | BASH_DOOR | CAN_FLY |
 F:RES_SHAR | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN | POWERFUL | NONLIVING
 S:1_IN_4 | 
 S:BR_SHAR
+V:150
 D:$A howling blast of razor-sharp mountain fragments, kept intact by perilous 
 D:$magics.
 D:凄まじい音を立てて吹き付けるカミソリのように鋭い破片の塊だ。
@@ -18763,6 +18843,7 @@ F:NO_CONF | NO_SLEEP
 S:1_IN_3 | 
 S:HEAL | 
 S:S_SPIDER
+V:75
 D:$A lord of all that is natural, skilled in the mystic ways.  He is a master 
 D:$of martial arts and is at one with nature, able to summon help from the 
 D:$wild if need be.
@@ -18787,6 +18868,7 @@ F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:HEAL | MIND_BLAST | 
 S:S_SPIDER | S_HOUND
+V:75
 D:$He is one of the few true masters of the art, being extremely skillful in 
 D:$all forms of unarmed combat and controlling the world's natural creatures 
 D:$with disdainful ease.
@@ -19006,6 +19088,7 @@ S:HEAL | INVULNER | BLINK | TPORT | WORLD | TELE_TO | TELE_AWAY | TELE_LEVEL |
 S:PSY_SPEAR | DARKNESS | TRAPS | FORGET | ANIM_DEAD | S_KIN | S_CYBER | S_MONSTER |
 S:S_MONSTERS | S_ANT | S_SPIDER | S_HOUND | S_HYDRA | S_DEMON | S_UNDEAD |
 S:S_DRAGON | S_HI_UNDEAD | S_AMBERITES | S_UNIQUE | BA_LITE
+V:133
 
 N:930:超人ロックのクローン
 E:Clone of Locke the Superman
@@ -19071,6 +19154,7 @@ S:TPORT | BLIND | BLINK | HEAL |
 S:CONF | BO_MANA | BRAIN_SMASH | PSY_SPEAR |
 S:BA_NETH | BA_DARK | BA_CHAO |
 S:S_MONSTERS | S_DEMON | S_KIN | SPECIAL
+V:150
 D:「私はもともと二人だったのだ。それを…一人に合成した。
 D:『ドラム』の計画を監督するために。
 D:このやり方なら、寿命を8倍にのばすことができる。そして、パワーも8倍になる。」
@@ -19376,6 +19460,7 @@ B:TOUCH:EAT_ITEM
 F:UNIQUE | DROP_CORPSE | FORCE_MAXHP | CAN_SPEAK | HUMAN | MALE |
 F:EVIL | ONLY_ITEM | DROP_2D2 | DROP_GOOD |
 F:NO_SLEEP | NO_CONF | OPEN_DOOR | MOVE_BODY |
+V:75
 S:1_IN_2 |
 S:BLINK | TPORT | TRAPS | CONF | BLIND | SLOW | HOLD | FORGET
 
@@ -19604,6 +19689,7 @@ F:DROP_1D2 | DROP_90 | DROP_GOOD | ONLY_ITEM | CAN_SWIM |
 F:REGENERATE | EAT_GIVE_STR | EAT_GIVE_CON | EAT_LOSE_INT | EAT_LOSE_CHR |
 S:1_IN_6 |
 S:BR_SHAR | TELE_TO
+V:150
 D:銀河ボディビルコンテスト十連続グランドチャンピオン。
 D:必殺技はボ帝ビルカッター。
 
@@ -19667,6 +19753,7 @@ F:DROP_2D2 | ONLY_GOLD |
 F:OPEN_DOOR | BASH_DOOR | TAKE_ITEM | MOVE_BODY | RES_SOUN
 S:1_IN_5 |
 S:BR_SOUN |
+V:150
 D:お前のものは俺のもの。俺のものは俺のもの。
 
 N:968:氷竜『ブラムド』
@@ -19819,6 +19906,7 @@ F:BASH_DOOR | PASS_WALL | MOVE_BODY | TAKE_ITEM | EVIL
 F:ANIMAL | NO_STUN | NO_SLEEP | CAN_FLY
 S:1_IN_7 |
 S:S_DRAGON
+V:25
 D:$This bat has been the death of many adventurers, taking their only 
 D:$weapon and leaving them to face a dragon.
 D:冒険者の武器を奪い、さらにドラゴンをけしかける事で、
@@ -20040,6 +20128,7 @@ F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_3 |
 S:SCARE | BRAIN_SMASH | DRAIN_MANA |
 S:BR_FIRE | BR_LITE | BR_SOUN | HEAL | S_ANGEL
+V:133
 D:伝説の聖なる鳥だ。前は鴻、後は麟、顎は燕、嘴は鶏、頸は蛇、尾は魚、額は鸛、
 D:顋は鴛、背は亀甲、羽は五采を備え、龍の紋様を持つと言う。
 
@@ -20060,6 +20149,7 @@ F:RES_DISE | RES_NETH | RES_PLAS |
 F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_6 |
 S:BLIND | SHRIEK | DISPEL | INVULNER | S_ANGEL
+V:133
 D:龍の鱗に牛の尾、馬の蹄を持ち、角の生えた四本足の聖なる獣で、
 D:王者が仁のある政治を行った時に姿を現わすと言われている。
 
@@ -20233,6 +20323,7 @@ S:1_IN_2 |
 S:BLIND | CONF | SCARE | 
 S:BR_LITE | BR_DARK | BR_SOUN | BR_CONF | BR_SHAR | 
 S:S_HI_DRAGON
+V:150
 D:$Bahamut the Platinum Dragon has been described both as the King of All Good Dragons, 
 D:$and more accurately, as a glorious and resplendent deity in his own right. He is ever 
 D:$watchful for the cause of lawful good and sits unsleepingly in his palace on Mount 
@@ -20283,6 +20374,7 @@ F:FORCE_MAXHP | CAN_SPEAK |
 F:ONLY_ITEM | DROP_90 | DROP_GOOD |
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | RES_NETH
 F:UNDEAD | NO_SLEEP
+V:25
 D:$He has only three hair. He is careless, but kind, and always a bit hungry.
 D:毛が三本しかないんだよ。ずっこけなんだ優しい奴さ。
 D:いつもおなかを空かせているんだよ。
@@ -20467,6 +20559,7 @@ F:NO_CONF | NO_SLEEP | NO_STUN | NO_FEAR | HAS_LITE_2 | HUMAN |
 F:RES_TELE | RAND_50 | ESCORT | IM_FIRE |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | UNIQUE |
 F:OPEN_DOOR | EVIL | BASH_DOOR | SMART
+V:166
 S:1_IN_3
 S:BA_FIRE | HASTE | SPECIAL
 
@@ -20788,6 +20881,7 @@ F:RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | NO_STUN | REGENERATE |
 F:NO_CONF | NO_SLEEP | CAN_FLY |
 F:COLD_BLOOD | BASH_DOOR | POWERFUL | RAND_25 |
 F:GOOD | DROP_CORPSE | SELF_LITE_2
+V:150
 D:$He was the braver of Atlantis. His body was converted by a Shinto priest, 
 D:$in order to fight against "Papa". His body is now made by Orihalcon.
 D:もとはアトランティスの勇者。
