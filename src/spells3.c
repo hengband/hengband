@@ -5762,7 +5762,7 @@ bool summon_kin_player(int level, int y, int x, u32b mode)
  * @param px プレイヤーX座標
  * @return なし
  */
-void massacre(int py, int px)
+void massacre(void)
 {
 	int x, y;
 	cave_type       *c_ptr;

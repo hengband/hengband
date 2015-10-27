@@ -1280,7 +1280,7 @@ extern bool polymorph_monster(int y, int x);
 extern bool dimension_door(void);
 extern bool mirror_tunnel(void);
 extern bool summon_kin_player(int level, int y, int x, u32b mode);
-extern void massacre(int py, int px);
+extern void massacre(void);
 
 /* store.c */
 extern bool combine_and_reorder_home(int store_num);

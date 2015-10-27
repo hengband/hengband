@@ -1369,7 +1369,7 @@ static bool cast_berserk_spell(int spell)
 		earthquake(p_ptr->y, p_ptr->x, 8+randint0(5));
 		break;
 	case 4:
-		massacre(p_ptr->y, p_ptr->x);
+		massacre();
 		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
