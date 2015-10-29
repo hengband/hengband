@@ -1831,7 +1831,7 @@ static void roff_aux(int r_idx, int mode)
 		/* Acquire the effect */
 		switch (effect)
 		{
-			case RBE_SUPERHURT:
+			case RBE_SUPERHURT: q = _("強力に攻撃する", "slaughter"); break;
 			case RBE_HURT:    	q = _("攻撃する", "attack"); break;
 			case RBE_POISON:  	q = _("毒をくらわす", "poison"); break;
 			case RBE_UN_BONUS:	q = _("劣化させる", "disenchant"); break;
