@@ -291,26 +291,26 @@ typedef struct monster_race monster_race;
 
 struct monster_race
 {
-	u32b name;				/* Name (offset) */
+	u32b name;				/*!< 名前データのオフセット(日本語) /  Name offset(Japanese) */
 #ifdef JP
-	u32b E_name;                    /* 英語名 (offset) */
+	u32b E_name;            /*!< 名前データのオフセット(英語) /  Name offset(English) */
 #endif
-	u32b text;				/* Text (offset) */
+	u32b text;				/*!< 思い出テキストのオフセット / Lore text offset */
 
-	byte hdice;				/* Creatures hit dice count */
-	byte hside;				/* Creatures hit dice sides */
+	byte hdice;				/*!< HPのダイス数 / Creatures hit dice count */
+	byte hside;				/*!< HPのダイス面数 / Creatures hit dice sides */
 
-	s16b ac;				/* Armour Class */
+	s16b ac;				/*!< アーマークラス / Armour Class */
 
-	s16b sleep;				/* Inactive counter (base) */
-	byte aaf;				/* Area affect radius (1-100) */
-	byte speed;				/* Speed (normally 110) */
+	s16b sleep;				/*!< 睡眠値 / Inactive counter (base) */
+	byte aaf;				/*!< 感知範囲(1-100スクエア) / Area affect radius (1-100) */
+	byte speed;				/*!< 加速(110で+0) / Speed (normally 110) */
 
-	s32b mexp;				/* Exp value for kill */
+	s32b mexp;				/*!< 殺害時基本経験値 / Exp value for kill */
 
-	s16b extra;				/* Unused (for now) */
+	s16b extra;				/*!< 未使用 /  Unused (for now) */
 
-	byte freq_spell;		/* Spell frequency */
+	byte freq_spell;		/*!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency */
 
 	u32b flags1;			/* Flags 1 (general) */
 	u32b flags2;			/* Flags 2 (abilities) */
