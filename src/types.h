@@ -332,7 +332,7 @@ struct monster_race
 	u16b artifact_rarity[4];	/* 特定アーティファクトレア度 */
 	u16b artifact_percent[4]; /* 特定アーティファクトドロップ率 */
 
-	u32b arena_ratio; /* アリーナの評価修正値(%基準 / 0=100%)*/
+	u32b arena_ratio;		/* アリーナの評価修正値(%基準 / 0=100%) / Arena */
 
 	s16b next_r_idx;
 	u32b next_exp;
@@ -353,7 +353,7 @@ struct monster_race
 
 	byte cur_num;			/* Monster population on current level */
 
-	s16b floor_id;                  /* Location of unique monster */
+	s16b floor_id;          /* Location of unique monster */
 
 
 	s16b r_sights;			/* Count sightings of this monster */
@@ -382,7 +382,7 @@ struct monster_race
 	u32b r_flags4;			/* Observed racial flags */
 	u32b r_flags5;			/* Observed racial flags */
 	u32b r_flags6;			/* Observed racial flags */
-	/* u32b r_flags7; */			/* Observed racial flags */
+	/* u32b r_flags7; */	/* Observed racial flags */
 	u32b r_flagsr;			/* Observed racial resistance flags */
 };
 
@@ -684,32 +684,34 @@ struct option_type
 };
 
 
-/*
- * Structure for the "quests"
- */
 typedef struct quest_type quest_type;
+
+/*!
+ * @struct quest_type
+ * @brief クエスト情報の構造体 / Structure for the "quests".
+ */
 
 struct quest_type
 {
-	s16b status;            /* Is the quest taken, completed, finished? */
+	s16b status;            /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
 
-	s16b type;              /* The quest type */
+	s16b type;              /*!< クエストの種別 / The quest type */
 
-	char name[60];          /* Quest name */
-	s16b level;             /* Dungeon level */
-	s16b r_idx;             /* Monster race */
+	char name[60];          /*!< クエスト名 / Quest name */
+	s16b level;             /*!< 処理階層 / Dungeon level */
+	s16b r_idx;             /*!< クエスト対象のモンスターID / Monster race */
 
-	s16b cur_num;           /* Number killed */
-	s16b max_num;           /* Number required */
+	s16b cur_num;           /*!< 撃破したモンスターの数 / Number killed */
+	s16b max_num;           /*!< 求められるモンスターの撃破数 / Number required */
 
-	s16b k_idx;             /* object index */
-	s16b num_mon;           /* number of monsters on level */
+	s16b k_idx;             /*!< クエスト対象のアイテムID / object index */
+	s16b num_mon;           /*!< QUEST_TYPE_KILL_NUMBER時の目標撃破数 number of monsters on level */
 
-	byte flags;             /* quest flags */
-	byte dungeon;           /* quest dungeon */
+	byte flags;             /*!< クエストに関するフラグビット / quest flags */
+	byte dungeon;           /*!< クエスト対象のダンジョンID / quest dungeon */
 
-	byte complev;           /* player level (complete) */
-	u32b comptime;          /* quest clear time*/
+	byte complev;           /*!< クリア時プレイヤーレベル / player level (complete) */
+	u32b comptime;          /*!< クリア時ゲーム時間 /  quest clear time*/
 };
 
 
