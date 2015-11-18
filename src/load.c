@@ -1749,7 +1749,7 @@ static void rd_extra(void)
 
 	if (z_older_than(10, 0, 1))
 	{
-		for (i = 0; i < OLD_MAX_MANE; i++)
+		for (i = 0; i < MAX_MANE; i++)
 		{
 			p_ptr->mane_spell[i] = -1;
 			p_ptr->mane_dam[i] = 0;
