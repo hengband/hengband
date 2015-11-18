@@ -3243,12 +3243,16 @@ static void k_info_reset(void)
 
 
 /*!
- * @brief プレイヤー構造体の内容を初期値で消去する / Clear all the global "character" data
+ * @brief プレイヤー構造体の内容を初期値で消去する(名前を除く) / Clear all the global "character" data (without name)
  * @return なし
  */
-static void player_wipe(void)
+static void player_wipe_without_name(void)
 {
 	int i;
+	player_type tmp;
+
+	/* Temporary copy for migration - written back later */
+	COPY(&tmp, p_ptr, player_type);
 
 	/* Hack -- free the "last message" string */
 	if (p_ptr->last_message) string_free(p_ptr->last_message);
@@ -3436,6 +3440,9 @@ static void player_wipe(void)
 		dungeon_type = 0;
 		p_ptr->recall_dungeon = DUNGEON_GALGALS;
 	}
+
+	/* Data migration */
+	memcpy(p_ptr->name, tmp.name, sizeof(tmp.name));
 }
 
 
@@ -6541,7 +6548,7 @@ void player_birth(void)
 	wipe_m_list();
 
 	/* Wipe the player */
-	player_wipe();
+	player_wipe_without_name();
 
 	/* Create a new character */
 
@@ -6557,7 +6564,7 @@ void player_birth(void)
 			if (player_birth_aux()) break;
 
 			/* Wipe the player */
-			player_wipe();
+			player_wipe_without_name();
 		}
 	}
 
