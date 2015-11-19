@@ -5766,6 +5766,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	signals_init();
 
 	/* Initialize */
+	Term_activate(term_screen);
 	init_angband();
 
 	/* We are now initialized */
