@@ -287,7 +287,7 @@ static errr path_temp(char *buf, int max)
 	if (!s) return (-1);
 
 	/* Format to length */
-#ifndef WIN32
+#if !defined(WIN32) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
 	(void)strnfmt(buf, max, "%s", s);
 #else
 	(void)strnfmt(buf, max, ".%s", s);
