@@ -3725,7 +3725,7 @@ static byte player_init[MAX_CLASS][3][2] =
 	{
 		/* Monk */
 		{ TV_SORCERY_BOOK, 0 },
-		{ TV_SOFT_ARMOR, SV_SOFT_LEATHER_ARMOR },
+		{ TV_POTION, SV_POTION_SPEED },
 		{ TV_POTION, SV_POTION_HEROISM }
 	},
 
@@ -3809,7 +3809,7 @@ static byte player_init[MAX_CLASS][3][2] =
 	{
 		/* ForceTrainer */
 		{ TV_SORCERY_BOOK, 0 },
-		{ TV_SOFT_ARMOR, SV_SOFT_LEATHER_ARMOR },
+		{ TV_POTION, SV_POTION_SPEED },
 		{ TV_POTION, SV_POTION_RESTORE_MANA }
 	},
 
