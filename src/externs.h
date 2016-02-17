@@ -1547,7 +1547,7 @@ extern void race_score(int race_num);
 extern void show_highclass(void);
 
 /* mind.c */
-extern mind_power mind_powers[5];
+extern mind_power const mind_powers[5];
 extern void mindcraft_info(char *p, int use_mind, int power);
 extern void do_cmd_mind(void);
 extern void do_cmd_mind_browse(void);
