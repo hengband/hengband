@@ -22,7 +22,7 @@ struct snipe_power
 };
 
 /*! スナイパー技能の解説メッセージ */
-static const char *snipe_tips[MAX_SNIPE_POWERS] =
+static cptr const snipe_tips[MAX_SNIPE_POWERS] =
 {
 #ifdef JP
 	"精神を集中する。射撃の威力、精度が上がり、高度な射撃術が使用できるようになる。",
@@ -62,7 +62,7 @@ static const char *snipe_tips[MAX_SNIPE_POWERS] =
 };
 
 /*! スナイパー技能テーブル */
-snipe_power snipe_powers[MAX_SNIPE_POWERS] =
+static snipe_power const snipe_powers[MAX_SNIPE_POWERS] =
 {
 	/* Level gained,  cost,  name */
 #ifdef JP
