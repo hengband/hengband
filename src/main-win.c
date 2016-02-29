@@ -553,6 +553,9 @@ static bool can_use_music = FALSE;
 static MCI_OPEN_PARMS mop;
 static char mci_device_type[256];
 
+int current_music_type = 0;
+int current_music_id = 0;
+
 #endif /* USE_MUSIC */
 
 
@@ -2489,6 +2492,7 @@ static errr Term_xtra_win_music(int n, int v)
 #endif /* USE_MUSIC */
 
 	/* Sound disabled */
+
 	if(!use_music) return (1);
 
 	/* Illegal sound */
@@ -2516,8 +2520,8 @@ static errr Term_xtra_win_music(int n, int v)
 	/* No sample */
 	if (i == 0)
 	{
-		mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
-		mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+		//mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
+		//mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 		return (1);
 	}
 
@@ -2560,6 +2564,13 @@ static errr Term_xtra_win_music(int n, int v)
 		path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, town_music_file[v][Rand_external(i)]);
 		break;
 	}
+
+	if(current_music_type == n && current_music_id == v)
+	{
+		return (0);
+	}
+	current_music_type = n;
+	current_music_id = v;
 
 #ifdef WIN32
 

@@ -1816,4 +1816,3 @@ extern void revenge_store(int dam);
 extern bool teleport_barrier(int m_idx);
 extern bool magic_barrier(int m_idx);
 extern bool multiply_barrier(int m_idx);
-

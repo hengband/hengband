@@ -1715,7 +1715,7 @@ errr play_music(int type, int val)
 	if (!use_music) return 1;
 
 	/* Make a sound (if allowed) */
-	return Term_xtra(type , val);
+	return Term_xtra(type, val);
 }
 
 /*
@@ -1770,11 +1770,11 @@ void select_floor_music()
 
 	if(dungeon_type)
 	{
-		if(play_music(TERM_XTRA_MUSIC_DUNGEON, dungeon_type))
+		if(p_ptr->feeling == 2) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL2);
+		else if(p_ptr->feeling >= 3 && p_ptr->feeling <= 5) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL1);
+		else
 		{
-			if(p_ptr->feeling == 2) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL2);
-			else if(p_ptr->feeling >= 3 && p_ptr->feeling <= 5) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL1);
-			else
+			if(play_music(TERM_XTRA_MUSIC_DUNGEON, dungeon_type))
 			{
 				if(dun_level < 40) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW);
 				else if(dun_level < 80) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED);
