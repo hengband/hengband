@@ -673,6 +673,9 @@ const cptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 	"quest",
 	"arena",
 	"battle",
+	"quest_clear",
+	"final_quest_clear",
+	"ambush",
 };
 
 

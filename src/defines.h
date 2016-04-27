@@ -4453,7 +4453,10 @@ extern int PlayerUID;
 #define MUSIC_BASIC_QUEST     15
 #define MUSIC_BASIC_ARENA     16
 #define MUSIC_BASIC_BATTLE    17
-#define MUSIC_BASIC_MAX       18 /*!< BGM定義の最大数 */
+#define MUSIC_BASIC_QUEST_CLEAR 18
+#define MUSIC_BASIC_FINAL_QUEST_CLEAR 19
+#define MUSIC_BASIC_AMBUSH    20
+#define MUSIC_BASIC_MAX       21 /*!< BGM定義の最大数 */
 
 /*** Sound constants ***/
 

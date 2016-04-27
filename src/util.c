@@ -1727,6 +1727,12 @@ void select_floor_music()
 	/* No sound */
 	if (!use_music) return;
 
+	if(ambush_flag)
+	{
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_AMBUSH);
+		return;
+	}
+
 	if(p_ptr->wild_mode)
 	{
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WILD);

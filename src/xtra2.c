@@ -420,6 +420,7 @@ void complete_quest(int quest_num)
 
 	if (!(q_ptr->flags & QUEST_FLAG_SILENT))
 	{
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST_CLEAR);
 		msg_print(_("クエストを達成した！", "You just completed your quest!"));
 		msg_print(NULL);
 	}
@@ -1403,6 +1404,8 @@ void monster_death(int m_idx, bool drop_item)
 
 		/* Redraw the "title" */
 		p_ptr->redraw |= (PR_TITLE);
+
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
 
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("見事に変愚蛮怒の勝利者となった！", "become *WINNER* of Hengband finely!"));
 
