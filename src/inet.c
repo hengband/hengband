@@ -165,7 +165,7 @@ void set_proxy(char *default_url, int default_port)
 
 	/* ポート番号があるかどうかを調べ、あればproxy_portに設定。 */
 	--len;
-	while (len > 0 && isdigit(s[len]))
+	while (len > 0 && isdigit((unsigned char)s[len]))
 		--len;
 	if (len > 0 && s[len] == ':' && s[len + 1] != '\0')
 	{
