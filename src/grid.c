@@ -1104,7 +1104,7 @@ static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, 
 /*!
  * @brief 特定の壁(永久壁など)を避けながら部屋間の通路を作成する / This routine maps a path from (x1, y1) to (x2, y2) avoiding SOLID walls.
  * @return なし
- * @todo 詳細用調査
+ * @todo 詳細要調査
  * @details
  * Permanent rock is ignored in this path finding- sometimes there is no\n
  * path around anyway -so there will be a crash if we try to find one.\n
@@ -1136,8 +1136,6 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 
 		/* perturbation perpendicular to path */
 		changex = (randint0(abs(dy) + 2) * 2 - abs(dy) - 1) / 2;
-
-		/* perturbation perpendicular to path */
 		changey = (randint0(abs(dx) + 2) * 2 - abs(dx) - 1) / 2;
 
 		/* Work out "mid" ponit */

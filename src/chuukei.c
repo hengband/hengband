@@ -544,7 +544,7 @@ static errr send_text_to_chuukei_server(int x, int y, int len, byte col, cptr st
 	}
 	else
 	{
-#ifdef SJIS
+#if defined(SJIS) && defined(JP)
 		sjis2euc(buf2);
 #endif
 		sprintf(buf, "t%c%c%c%c%s", x+1, y+1, len, col, buf2);
@@ -952,7 +952,7 @@ static bool flush_ringbuf_client(void)
 		switch (id)
 		{
 		case 't': /* 通常 */
-#ifdef SJIS
+#if defined(SJIS) && defined(JP)
 			euc2sjis(mesg);
 #endif
 			update_term_size(x, y, len);

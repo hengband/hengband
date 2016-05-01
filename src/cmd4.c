@@ -502,13 +502,17 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		case NIKKI_MAXDEAPTH:
 		{
 			fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
-						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level, d_name+d_info[dungeon_type].name, num);
+						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
+						   _(d_name+d_info[dungeon_type].namem, num),
+						   _(num, d_name+d_info[dungeon_type].name));
 			break;
 		}
 		case NIKKI_TRUMP:
 		{
 			fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n",
-						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note, d_name + d_info[num].name, max_dlv[num]);
+						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note,
+						   _(d_name + d_info[num].name, max_dlv[num]),
+						   _(max_dlv[num], d_name + d_info[num].name));
 			break;
 		}
 		case NIKKI_STAIR:

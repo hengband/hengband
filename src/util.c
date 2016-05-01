@@ -503,7 +503,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 			}
 #endif
 			/* Handle printables */
-			else if (isprint(*s))
+			else if (isprint((unsigned char)*s))
 			{
 				/* Copy */
 				buf[i++] = *s;
