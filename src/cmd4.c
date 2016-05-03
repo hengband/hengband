@@ -503,7 +503,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		{
 			fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
 						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
-						   _(d_name+d_info[dungeon_type].namem, num),
+						   _(d_name+d_info[dungeon_type].name, num),
 						   _(num, d_name+d_info[dungeon_type].name));
 			break;
 		}
