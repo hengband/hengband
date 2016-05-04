@@ -22192,3 +22192,18 @@ F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
 D:$A mysterious purple jelly thing.  It looks ready to explode.
 D:紫でぷよぷよした謎の生物だ。
 
+#JZ#
+N:1102:ラット・オウガ
+E:Rat Ogre
+G:r:U
+I:115:25d11:10:65:30
+W:22:2:0:6000:0:0
+B:HIT:SUPERHURT:5d4
+B:HIT:SUPERHURT:5d4
+B:HIT:SUPERHURT:5d4
+B:BITE:POISON:9d3
+F:EVIL | DROP_1D2 | DROP_SKELETON | DROP_CORPSE | FORCE_SLEEP
+F:OPEN_DOOR | MALE | WILD_WASTE | WILD_SWAMP | NO_FEAR
+D:$It's a biped walking monster, seems subspecies of Skaven,
+D:$but it's larger and more terrible than them.
+D:それはスケイヴンの亜種と思われるが、より大きくおぞましい二足歩行の怪物だ。
