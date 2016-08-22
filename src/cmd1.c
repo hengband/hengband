@@ -158,24 +158,31 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 {
 	int k, ac;
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	
-	ac = r_ptr->ac;
-	if(m_ptr->r_idx == MON_GOEMON && !MON_CSLEEP(m_ptr)) ac *= 3;
 
 	/* Percentile dice */
-	k = randint0(100);
+	k = randint1(100);
 	
 	/* Snipers with high-concentration reduce instant miss percentage.*/
 	k += p_ptr->concent;
 	
 	/* Hack -- Instant miss or hit */
-	if (k < 10) return (k < 5);
+	if (k <= 5) return (FALSE);
+	if (k > 95) return (TRUE);
 
 	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
 		if (one_in_(20)) return (FALSE);
 
 	/* Never hit */
 	if (chance <= 0) return (FALSE);
+
+	ac = r_ptr->ac;
+	if (p_ptr->concent)
+	{
+		ac *= (8 - p_ptr->concent);
+		ac /= 8;
+	}
+
+	if(m_ptr->r_idx == MON_GOEMON && !MON_CSLEEP(m_ptr)) ac *= 3;
 
 	/* Invisible monsters are harder to hit */
 	if (!vis) chance = (chance + 1) / 2;

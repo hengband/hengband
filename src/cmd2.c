@@ -3508,14 +3508,6 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 				}
 			}
 
-			/* Some shots have hit bonus */
-			armour = r_ptr->ac;
-			if (p_ptr->concent)
-			{
-				armour *= (8 - p_ptr->concent);
-				armour /= 8;
-			}
-
 			/* Did we hit it (penalize range) */
 			if (test_hit_fire(chance - cur_dis, m_ptr, m_ptr->ml, o_name))
 			{
