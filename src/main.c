@@ -99,13 +99,6 @@ static void init_stuff(void)
 {
 	char path[1024];
 
-#if defined(VM)
-
-	/* Hack -- prepare "path" */
-	strcpy(path, "Angband:");
-
-#else /* VM */
-
 	cptr tail;
 
 	/* Get the environment variable */
@@ -119,8 +112,6 @@ static void init_stuff(void)
 
 	/* Hack -- Add a path separator (only if needed) */
 	if (!suffix(path, PATH_SEP)) strcat(path, PATH_SEP);
-
-#endif /* VM */
 
 	/* Initialize */
 	init_file_paths(path);

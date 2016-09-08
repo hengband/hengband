@@ -123,21 +123,12 @@
  * all "digits" must be "digits".  Control characters can be made
  * from any legal characters.  XXX XXX XXX
  */
-#ifdef VM
-#  define A2I(X)	alphatoindex(X)
-#  define I2A(X)	indextoalpha(X)
-#  define D2I(X)	((X) - '0')
-#  define I2D(X)	((X) + '0')
-#  define KTRL(X)	((X) & 0x1F)
-#  define ESCAPE	'\033'
-#else
-#  define A2I(X)	((X) - 'a')
-#  define I2A(X)	((X) + 'a')
-#  define D2I(X)	((X) - '0')
-#  define I2D(X)	((X) + '0')
-#  define KTRL(X)	((X) & 0x1F)
-#  define ESCAPE	'\033'
-#endif
+#define A2I(X)	((X) - 'a')
+#define I2A(X)	((X) + 'a')
+#define D2I(X)	((X) - '0')
+#define I2D(X)	((X) + '0')
+#define KTRL(X)	((X) & 0x1F)
+#define ESCAPE	'\033'
 
 /*
  * Refer to the member at offset of structure

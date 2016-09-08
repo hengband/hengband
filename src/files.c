@@ -5918,11 +5918,6 @@ void process_player_name(bool sf)
 		(void)sprintf(temp, "%s", player_base);
 #endif
 
-#ifdef VM
-		/* Hack -- support "flat directory" usage on VM/ESA */
-		(void)sprintf(temp, "%s.sv", player_base);
-#endif /* VM */
-
 		/* Build the filename */
 		path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
 	}
