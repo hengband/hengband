@@ -550,18 +550,6 @@ int main(int argc, char *argv[])
 				puts("  -mibm    To use IBM (BIOS text mode)");
 #endif /* USE_IBM */
 
-#ifdef USE_SLA
-				puts("  -msla    To use SLA (SLANG)");
-#endif /* USE_SLA */
-
-#ifdef USE_LSL
-				puts("  -mlsl    To use LSL (Linux-SVGALIB)");
-#endif /* USE_LSL */
-
-#ifdef USE_VME
-				puts("  -mvme    To use VME (VAX/ESA)");
-#endif /* USE_VME */
-
 				/* Actually abort the process */
 				quit(NULL);
 			}
@@ -660,76 +648,6 @@ int main(int argc, char *argv[])
 		if (0 == init_ibm())
 		{
 			ANGBAND_SYS = "ibm";
-			done = TRUE;
-		}
-	}
-#endif
-
-
-#ifdef USE_EMX
-	/* Attempt to use the "main-emx.c" support */
-	if (!done && (!mstr || (streq(mstr, "emx"))))
-	{
-		extern errr init_emx(void);
-		if (0 == init_emx())
-		{
-			ANGBAND_SYS = "emx";
-			done = TRUE;
-		}
-	}
-#endif
-
-
-#ifdef USE_SLA
-	/* Attempt to use the "main-sla.c" support */
-	if (!done && (!mstr || (streq(mstr, "sla"))))
-	{
-		extern errr init_sla(void);
-		if (0 == init_sla())
-		{
-			ANGBAND_SYS = "sla";
-			done = TRUE;
-		}
-	}
-#endif
-
-
-#ifdef USE_LSL
-	/* Attempt to use the "main-lsl.c" support */
-	if (!done && (!mstr || (streq(mstr, "lsl"))))
-	{
-		extern errr init_lsl(void);
-		if (0 == init_lsl())
-		{
-			ANGBAND_SYS = "lsl";
-			done = TRUE;
-		}
-	}
-#endif
-
-
-#ifdef USE_AMI
-	/* Attempt to use the "main-ami.c" support */
-	if (!done && (!mstr || (streq(mstr, "ami"))))
-	{
-		extern errr init_ami(void);
-		if (0 == init_ami())
-		{
-			ANGBAND_SYS = "ami";
-			done = TRUE;
-		}
-	}
-#endif
-
-
-#ifdef USE_VME
-	/* Attempt to use the "main-vme.c" support */
-	if (!done && (!mstr || (streq(mstr, "vme"))))
-	{
-		extern errr init_vme(void);
-		if (0 == init_vme())
-		{
-			ANGBAND_SYS = "vme";
 			done = TRUE;
 		}
 	}

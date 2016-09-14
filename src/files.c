@@ -5789,7 +5789,7 @@ void process_player_name(bool sf)
 	if (character_generated) strcpy(old_player_base, player_base);
 
 	/* Cannot be too long */
-#if defined(MACINTOSH) || defined(USE_EMX) || defined(ACORN) || defined(VM)
+#if defined(MACINTOSH) || defined(ACORN)
 	if (strlen(p_ptr->name) > 15)
 	{
 		/* Name too long */
