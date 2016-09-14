@@ -1908,7 +1908,7 @@ extern void do_cmd_debug(void);
  */
 void do_cmd_debug(void)
 {
-	int     x, y;
+	int     x, y, i;
 	char    cmd;
 
 
@@ -2083,26 +2083,22 @@ void do_cmd_debug(void)
 		teleport_player(10, 0L);
 		break;
 
-#if 0
 	/* Complete a Quest -KMW- */
 	case 'q':
-		for (i = 0; i < max_quests; i++)
+		if(p_ptr->inside_quest)
 		{
-			if (p_ptr->quest[i].status == QUEST_STATUS_TAKEN)
+			if (quest[p_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
 			{
-				p_ptr->quest[i].status++;
-				msg_print("Completed Quest");
-				msg_print(NULL);
+				complete_quest(p_ptr->inside_quest);
 				break;
 			}
 		}
-		if (i == max_quests)
+		else
 		{
 			msg_print("No current quest");
 			msg_print(NULL);
 		}
 		break;
-#endif
 
 	/* Make every dungeon square "known" to test streamers -KMW- */
 	case 'u':
