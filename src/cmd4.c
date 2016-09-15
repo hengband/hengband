@@ -5747,7 +5747,7 @@ static void do_cmd_knowledge_weapon_exp(void)
 
 				if ((k_ptr->tval == TV_SWORD - i) && (k_ptr->sval == num))
 				{
-					if ((k_ptr->tval == TV_BOW) && (k_ptr->sval == SV_CRIMSON)) continue;
+					if ((k_ptr->tval == TV_BOW) && (k_ptr->sval == SV_CRIMSON || k_ptr->sval == SV_HARP)) continue;
 
 					weapon_exp = p_ptr->weapon_exp[4 - i][num];
 					strip_name(tmp, j);

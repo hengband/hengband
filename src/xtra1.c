@@ -3092,6 +3092,7 @@ int bow_tval_ammo(object_type *o_ptr)
 			return TV_BOLT;
 		}
 		case SV_CRIMSON:
+		case SV_HARP:
 		{
 			return TV_NO_AMMO;
 		}

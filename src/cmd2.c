@@ -3792,6 +3792,13 @@ void do_cmd_fire(void)
 		return;
 	}
 
+	if (j_ptr->sval == SV_HARP)
+	{
+		msg_print(_("この武器で射撃はできない。", "It's not for firing."));
+		flush();
+		return;
+	}
+
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{

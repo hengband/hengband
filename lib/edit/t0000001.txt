@@ -420,11 +420,16 @@ F:@:FLOOR:3:0:0:0:215
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:33
 
-# Quest 27 rewarding (Priest, Bard and ForceTrainer
+# Quest 27 rewarding (Priest and ForceTrainer
 # get The Palantir of Westernesse)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest Bard ForceTrainer] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest ForceTrainer] ]
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:15
+
+# Quest 27 rewarding (Bard get Harp of Robinton, the masterharper)
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Bard ] ]
+F:a:BUILDING_0:3
+F:@:FLOOR:3:0:0:0:251
 
 # Quest 27 rewarding (Mirror-Master gets The Jewel Encrusted Crown of Numenor)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Mirror-Master] ]
