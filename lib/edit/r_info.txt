@@ -4454,7 +4454,7 @@ D:$An unfortunate individual, who was killed by the incurable
 D:$disease known as Nurgle's Rot, and was transformed into a 
 D:$rotting demon zombie. It has but one eye, and a single 
 D:$pale horn in its forehead.
-D:ナーグルの腐れ病という名で知られる不治の病によって死んだ不運な人間で、
+D:<ナーグル>の腐れ病という名で知られる不治の病によって死んだ不運な人間で、
 D:腐乱した悪魔のゾンビになってしまっている。目は一つだけで、一本の
 D:青白い角が額に生えている。
 
@@ -8687,7 +8687,7 @@ D:カオスの達人で、ログルスを操る能力により怖れられてい
 #J0#
 #J0#
 #J0#(コメント)
-#J0# これについては他のワイト(grave wight, forest wigtht, emperor wight) との統一
+#J0# これについては他のワイト(grave wight, forest wight, emperor wight) との統一
 #J0# から塚ワイトとしている。塚人とすると他を「墓人」「森人」などとしなければ
 #J0# 統一がとれなくなるから。
 #J0#
@@ -12818,7 +12818,7 @@ D:もともと知性は低かったが、次第に主人である「古のもの
 D:り、反抗して滅ぼした。
 D:「悪臭放つ虹色に輝く悪夢じみた可塑性のある柱が... 原形質の泡の無
 D:定形の塊が、自らかすかに輝き、わたくしたちに向かいあう、トンネル
-D:を満たす前部のいたることろに、緑がかった光を放つ疣のような何万も
+D:を満たす前部のいたるところに、緑がかった光を放つ疣のような何万も
 D:の一時的な眼を構成したり消したりしながら、あわてふためくペンギン
 D:たちを押しつぶし、同類とともに邪悪にもすべてをとりさったなめらか
 D:な床をずるずるすべってきたのだった。なおも不気味な嘲笑うような声
@@ -15447,7 +15447,7 @@ D:場所には大きな口が開いている。
 #JZ#
 #JZ#眠りの主ヒュプノス
 #JZ#元来はギリシア神話の眠りの神ですが、Ｈ・Ｐ・ラヴクラフトの
-#JZ#「ヒュプノス」で言及された事からクトゥルフ神話に組み込まれ
+#JZ#「ヒプノス」で言及された事からクトゥルフ神話に組み込まれ
 #JZ#ました。 by 久留さん
 #JZ#解説は NeSYS さん、引用は久留さんによる。
 N:787:眠りの主『ヒュプノス』
@@ -16095,7 +16095,7 @@ D:$immense proportions.  She is surrounded by a cloud of Unlight as she sucks
 D:$in all living light into her bloated body.  She is always ravenously 
 D:$hungry and would even eat herself to avoid starvation.  She is rumoured to 
 D:$have a foul and deadly breath.
-D:この広大で見るも恐ろしい空虚な存在は、巨大な蜘蛛のような姿をしいてる。
+D:この広大で見るも恐ろしい空虚な存在は、巨大な蜘蛛のような姿をしている。
 D:彼女は光なき闇で覆われており、全ての光をその膨れた腹に吸い込んでしまう。
 D:彼女は常に飢えきっており、飢餓を避けるためには自分の体でさえも食べようと
 D:する。彼女は不潔で忌まわしいブレスを吐くと言われている。
