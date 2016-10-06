@@ -4454,7 +4454,7 @@ D:$An unfortunate individual, who was killed by the incurable
 D:$disease known as Nurgle's Rot, and was transformed into a 
 D:$rotting demon zombie. It has but one eye, and a single 
 D:$pale horn in its forehead.
-D:ナーグルの腐れ病という名で知られる不治の病によって死んだ不運な人間で、
+D:<ナーグル>の腐れ病という名で知られる不治の病によって死んだ不運な人間で、
 D:腐乱した悪魔のゾンビになってしまっている。目は一つだけで、一本の
 D:青白い角が額に生えている。
 
@@ -8687,7 +8687,7 @@ D:カオスの達人で、ログルスを操る能力により怖れられてい
 #J0#
 #J0#
 #J0#(コメント)
-#J0# これについては他のワイト(grave wight, forest wigtht, emperor wight) との統一
+#J0# これについては他のワイト(grave wight, forest wight, emperor wight) との統一
 #J0# から塚ワイトとしている。塚人とすると他を「墓人」「森人」などとしなければ
 #J0# 統一がとれなくなるから。
 #J0#
