@@ -5801,7 +5801,7 @@ B:TOUCH:ELEC:2d7
 F:AQUATIC | ANIMAL | RAND_25 | IM_ELEC | RES_WATE | WILD_ALL |
 D:$This cute little serpentine creature can create a deadly voltage. 
 D:$Better watch out!
-D:この小さな曲がりくねった生き物は致命的な電圧を発する事が出来る。
+D:この小さな曲がりくねった生き物は致命的な電圧を発する事ができる。
 D:触らないほうがいいぞ！
 
 #J0#
@@ -7862,7 +7862,7 @@ S:1_IN_3 |
 S:HEAL | HASTE | BLIND | CONF | SCARE
 D:$A lesser angel protected by an aura of holiness.  Its muscular form looks 
 D:$extremely powerful next to your own frail body.
-D:聖なるオーラで守られた下級の天使だ。そのたくましい体と比べてみると、自分の
+D:聖なるオーラで守られた下級の天使だ。その逞しい体と比べてみると、自分の
 D:体はなんとも貧弱に感じられる。
 
 #JZ#
@@ -8585,7 +8585,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | TROLL | IM_COLD | IM_POIS | HURT_LITE | HURT_ROCK
 D:$Big, brawny, powerful and with a taste for hobbit.  He has friends called 
 D:$Bill and Tom.
-D:巨大で、筋骨たくましくて、強力で、ホビットを大好物にしている。
+D:巨大で、筋骨逞しくて、強力で、ホビットを大好物にしている。
 D:彼にはビルとトムという友達がいる。
 
 #J0#
@@ -8605,7 +8605,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | TROLL | IM_COLD | IM_POIS | HURT_LITE | HURT_ROCK
 D:$Big, brawny, powerful and with a taste for hobbit.  He has friends called 
 D:$Bert and Tom.
-D:巨大で、筋骨たくましくて、強力で、ホビットを大好物にしている。
+D:巨大で、筋骨逞しくて、強力で、ホビットを大好物にしている。
 D:彼にはバートとトムという友達がいる。
 
 #J0#
@@ -8625,7 +8625,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | TROLL | IM_COLD | IM_POIS | HURT_LITE | HURT_ROCK
 D:$Big, brawny, powerful and with a taste for hobbit.  He has friends called 
 D:$Bert and Bill.
-D:巨大で、筋骨たくましくて、強力で、ホビットを大好物にしている。
+D:巨大で、筋骨逞しくて、強力で、ホビットを大好物にしている。
 D:彼にはバートとビルという友達がいる。
 
 #J0#
@@ -13886,7 +13886,7 @@ F:IM_ELEC | IM_COLD | IM_FIRE |
 D:$Ulik is the strongest troll who has ever lived. He could challenge 
 D:$the immortals and pound them to dust with his great strength.
 D:ウリクはこの世を生きたトロルの中でも最強のトロルだ。
-D:彼は不死なる者どもに挑んで、その力で彼らを粉々にすることが出来る。
+D:彼は不死なる者どもに挑んで、その力で彼らを粉々にすることができる。
 
 #J0#
 #J0# (コメント)
@@ -15758,7 +15758,7 @@ D:$An elephantine horror with five trunks, each capable of breathing
 D:$destructive blasts of elements. It is said that it is better to 
 D:$face the fury of a thousand raging lions than the Norsa!
 D:この象の姿をとった恐怖には五本の鼻があり、それぞれが破壊的な
-D:エレメントのブレスを吐くことが出来る。『ノーサ』に比べれば
+D:エレメントのブレスを吐くことができる。『ノーサ』に比べれば
 D:何千匹もの猛り狂ったライオンを相手にする方がまだマシだと言われている！
 
 #JZ#
@@ -16328,8 +16328,8 @@ D:「…スヒュイは手をゆっくり離した。両手の間では黒い塊
 D:さっきまで岩であった混沌とした場所から左右に伸びて、
 D:長く黒い溝を作った。そこには無でありかつ激しいというパラドクスがあった。
 D:彼はじっと立ち、黒い塊をその場に固定した。少し経って彼は言った。
-D:「こいつは解放して暴走させることが出来る。あるいは命令を与えてから解放
-D:することも出来る。」 彼がそれ以上言わないので僕は尋ねた。
+D:「こいつは解放して暴走させることができる。あるいは命令を与えてから解放
+D:することもできる。」 彼がそれ以上言わないので僕は尋ねた。
 D:「するとどうなるんだい？影の世界を完全に破壊しつくすまで広がり続ける
 D:のかい？」 （ロジャー・ゼラズニイ、アンバー７「アンバーの血」）
 
@@ -17254,7 +17254,7 @@ D:$hunger and leave the Norse gods for the dessert.
 D:北欧神話でロキと女巨人アングルボザの間に生まれた
 D:途方もなく巨大な狼で、
 D:空腹を満たすために太陽を食べ、神々を
-D:デザートとして残しておくぐらいの事をすることが出来る。
+D:デザートとして残しておくぐらいの事をすることができる。
 
 #JZ#
 N:847:パワー・ワイアーム
