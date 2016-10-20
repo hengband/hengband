@@ -294,7 +294,7 @@ B:BITE:HURT:1d3
 F:RAND_25 | DROP_SKELETON | DROP_CORPSE | WILD_TOWN | WILD_ONLY
 F:ANIMAL
 D:$A thin flea-ridden mutt, growling as you get close.
-D:ノミの住みかのようなやせた犬で、人が近づくとうなる。
+D:ノミの住みかのようなやせた犬で、人が近づくと唸る。
 
 #J0#
 #J0#
@@ -706,7 +706,7 @@ B:BITE:HURT:1d3
 F:FRIENDS | 
 F:ANIMAL | WILD_WOOD | WILD_GRASS | DROP_SKELETON | DROP_CORPSE
 D:$It is a yapping snarling dog, dangerous when in a pack.
-D:それはやかましくうなる犬型の動物で、群れていると危険だ。
+D:それはやかましく唸る犬型の動物で、群れていると危険だ。
 
 #J0#
 N:36:兵隊アリ
@@ -2004,7 +2004,7 @@ S:1_IN_10 |
 S:CONF | DARKNESS | MISSILE
 D:$An elven figure with jet black skin and white hair, his eyes are large and 
 D:$twisted with evil.
-D:漆黒の肌と白い髪の毛を持ったエルフで、その大きな目は邪悪にゆがんでいる。
+D:漆黒の肌と白い髪の毛を持ったエルフで、その大きな目は邪悪に歪んでいる。
 
 #J0#
 N:123:ゾンビ・コボルド
@@ -2243,7 +2243,7 @@ D:$"At [Theoden's] feet upon the steps sat a wizened figure of a man, with a
 D:$pale wise face and heavy-lidded eyes...he laughed grimly, as he lifted his 
 D:$heavy lids for a moment and gazed on the strangers with dark eyes." 
 D:彼はサルマンのためにスパイをしている。彼はこの世の全てに不満を抱いている
-D:不運な奴で、何のモラルもないゆがんだ性質をしている。
+D:不運な奴で、何のモラルもない歪んだ性質をしている。
 D:「また足許には賢人めいた青白い顔に瞼の重たくかぶさる目をした、
 D:しなびた男が一人、階段に腰を下ろしていました…彼は薄気味悪い笑い声を
 D:立てながら、ちらと重い瞼を上げ、悪意のある目をじっと旅人たちに
@@ -3128,7 +3128,7 @@ F:FRIENDS |
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | DEMON | IM_FIRE | NO_FEAR | NO_CONF
 D:$An ugly screaming little demon servant of Tzeentch.
-D:<ティーンチ>のしもべの、叫ぶ醜い小型の悪魔だ。
+D:<ティーンチ>の下僕の、叫ぶ醜い小型の悪魔だ。
 
 #J0#
 N:190:毛むくじゃらモルド
@@ -3471,7 +3471,7 @@ F:FORCE_MAXHP | DROP_CORPSE | CAN_FLY | ANIMAL | RIDING |
 F:BASH_DOOR |
 F:IM_POIS | IM_COLD | IM_ELEC | RES_CHAO
 D:$A strange hybrid of eagle, lion and horse.  It looks weird.
-D:ワシとライオンと馬の混血した奇妙な生物だ。それは超自然的な雰囲気を
+D:鷲とライオンと馬の混血した奇妙な生物だ。それは超自然的な雰囲気を
 D:持っている。
 
 #J0#
@@ -4026,7 +4026,7 @@ F:EVIL | DEMON | IM_FIRE | NO_FEAR | NO_CONF
 S:1_IN_8
 S:CONF | SCARE
 D:$An ugly screaming little demon servant of Tzeentch.
-D:<ティーンチ>のしもべの、叫ぶ醜い小型の悪魔だ。
+D:<ティーンチ>の下僕の、叫ぶ醜い小型の悪魔だ。
 
 #JZ#
 N:243:クローカー
@@ -4645,7 +4645,7 @@ F:ANIMAL | IM_COLD | IM_ELEC | IM_ACID
 S:1_IN_10 |
 S:SHOOT
 D:$It is half lion, half eagle.  It flies menacingly towards you.
-D:その体は半分がライオンで、半分がワシだ。それは冒険者の方へ威嚇的に
+D:その体は半分がライオンで、半分が鷲だ。それは冒険者の方へ威嚇的に
 D:飛んでくる。
 
 #J0#
@@ -5604,7 +5604,7 @@ S:SPECIAL
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
 #D:この生き物はなにか超自然的な存在の使いだ。 
-#D:そしてそれは大きなワシのように見える。
+#D:そしてそれは大きな鷲のように見える。
 D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
 D:マイアールと同じ魂を持っていると言われる。
 D:この大鷲はその一族の一員である。
@@ -6223,7 +6223,7 @@ F:DROP_CORPSE | DROP_SKELETON
 S:1_IN_6 | 
 S:BO_ELEC
 D:$A green-garbed monk, trained in martial arts.
-D:緑色の法衣を身に纏った、拳法に熟練した修行僧だ。
+D:緑色の法衣を身にまとった、拳法に熟練した修行僧だ。
 
 #J0#
 N:371:ブラック・ウーズ
@@ -6482,7 +6482,7 @@ S:SPECIAL | S_KIN
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
 #D:この生き物はなにか超自然的な存在の使いだ。 
-#D:そしてそれは大きなワシのように見える。
+#D:そしてそれは大きな鷲のように見える。
 D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
 D:マイアールと同じ魂を持っていると言われる。
 D:メネルドールは一族の中でグワイヒアとその弟ランドローバルに継いで速く、
@@ -6721,7 +6721,7 @@ S:1_IN_6 |
 S:SHRIEK | S_MONSTER | S_MONSTERS | HOLD | CONF | MIND_BLAST | DRAIN_MANA
 D:$A figure carved from stone, with three vulture faces. Their eyes glow 
 D:$a malevolent light...
-D:三つのハゲワシの頭を持つ石像だ。その瞳は悪意に満ちた光に輝いている。
+D:三つの禿鷲の頭を持つ石像だ。その瞳は悪意に満ちた光に輝いている。
 
 #J0#
 N:398:プーケル人
@@ -6952,7 +6952,7 @@ S:SPECIAL | S_KIN
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
 #D:この生き物はなにか超自然的な存在の使いだ。 
-#D:そしてそれは大きなワシのように見える。
+#D:そしてそれは大きな鷲のように見える。
 D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
 D:マイアールと同じ魂を持っていると言われる。
 D:グワイヒアは大鷲の王であり、一族の中で最も強く、速い。
@@ -7021,7 +7021,7 @@ F:BASH_DOOR | OPEN_DOOR | HAS_LITE_2 | HUMAN |
 S:1_IN_8
 S:BLIND | CONF | TPORT
 D:$A faithful servitor and a skilled warrior.
-D:忠実なしもべであり熟練した戦士だ。
+D:忠実な下僕であり熟練した戦士だ。
 
 #J0#
 N:415:洞窟オーガ
@@ -7309,7 +7309,7 @@ S:1_IN_5 |
 S:BR_NEXU
 D:$A locus of conflicting points coalesce to form the vague shape of a huge 
 D:$hound.  Or is it just your imagination?
-D:ゆがんだ空間を繋ぎ合わせると、ぼんやりと犬のような姿が見える。
+D:歪んだ空間を繋ぎ合わせると、ぼんやりと犬のような姿が見える。
 D:それともただの気のせいだろうか？
 
 #J0#
@@ -8566,7 +8566,7 @@ F:DROP_SKELETON | HAS_LITE_2 |
 S:1_IN_7 | 
 S:HEAL
 D:$A monk in white robes.  He is skilled in martial arts.
-D:純白の法衣を身に纏った、拳法に熟練した修行僧だ。
+D:純白の法衣を身にまとった、拳法に熟練した修行僧だ。
 
 #J0#
 N:493:岩トロル『バート』
@@ -8742,7 +8742,7 @@ S:1_IN_6 |
 S:SLOW | CONF | SCARE | BR_DISE | BR_CHAO
 D:$A dragon twisted by the forces of chaos.  It seems first ugly, then fair, 
 D:$as its form shimmers and changes in front of your eyes.
-D:カオスの力でゆがんだドラゴンだ。それは一見すると醜いようだが、眼前で刻々と
+D:カオスの力で歪んだドラゴンだ。それは一見すると醜いようだが、眼前で刻々と
 D:輝きながら変化する姿は独特の美しさを持っている。
 
 #J0#
@@ -9536,7 +9536,7 @@ D:$Unfettered by the usual constraints of gravity, these unnatural creatures
 D:$are walking on the walls and even the ceiling!  The earth suddenly feels 
 D:$rather less solid as you see gravity warp all round the monsters.
 D:重力の束縛から解放されたこの異常な生物は、壁や天井でさえもまるで
-D:床のように歩くことができる。このモンスターの回りで重力がゆがんでいるのを
+D:床のように歩くことができる。このモンスターの回りで重力が歪んでいるのを
 D:見ると、大地も突然不安定なものに思えてくる。
 
 #J0#
@@ -9602,7 +9602,7 @@ D:$an almost physical force.  The dungeon floor buckles as if struck by a
 D:$powerful blow as it stalks towards you.
 #D:深茶色の体をしたこの犬は精神的な力で冒険者を攻撃をしてくるが、
 #D:その力はあまりに強いためにほとんど物理的な力とかわりがない。
-#D:それが忍び寄ってくると、ダンジョンの床がまるで何かに叩かれたようにゆがむ。
+#D:それが忍び寄ってくると、ダンジョンの床がまるで何かに叩かれたように歪む。
 D:深い褐色の何かの形が目の前に浮かんでいる。
 D:その犬のような形があなたに触れるとあたかも物体が当たったかのような衝撃を受ける。
 D:それが"歩く"時、ダンジョンの床がまるで強い打撃を受けたようにへこむのが見える。
@@ -9679,7 +9679,7 @@ B:CRUSH:SUPERHURT:4d6
 F:BASH_DOOR | DROP_CORPSE
 F:ANIMAL | RIDING
 D:$A massive elephantine form with eyes twisted by madness.
-D:巨大な象のような姿で、その目は狂気にゆがんでいる。
+D:巨大な象のような姿で、その目は狂気に歪んでいる。
 
 #J0#
 N:548:巨大火アリ
@@ -10296,7 +10296,7 @@ S:CAUSE_3 | DRAIN_MANA | BRAIN_SMASH
 V:75
 D:$It is a skeletal form dressed in robes. 
 D:$It looks evil and devious...
-D:襤褸を纏った骸骨のような姿をしている、邪悪で捻曲がった亡者だ。
+D:襤褸をまとった骸骨のような姿をしている、邪悪で捻曲がった亡者だ。
 
 #JZ#
 N:578:虹色の蝶人
@@ -12456,7 +12456,7 @@ F:FRIENDS | DROP_CORPSE
 F:BASH_DOOR | 
 F:ANIMAL | RIDING
 D:$A massive elephantine form with eyes twisted by madness.
-D:巨大な象のような姿で、その目は狂気にゆがんでいる。
+D:巨大な象のような姿で、その目は狂気に歪んでいる。
 
 #JZ#
 N:674:闇の審判『フィアー』
@@ -13813,7 +13813,7 @@ D:$The very air warps as pure elemental energy stalks towards you in the
 D:$shape of a giant hound.  Your hair stands on end and your palms itch as 
 D:$you sense trouble.
 D:巨大な犬の姿をした純粋なエネルギーの塊だ。このモンスターが
-D:近づいてくると辺りの大気がゆがみはじめる。冒険者の肉体は恐怖を察知して、
+D:近づいてくると辺りの大気が歪みはじめる。冒険者の肉体は恐怖を察知して、
 D:髪の毛は逆立ち、手は汗ばんでくる。
 
 #J0#
@@ -14273,7 +14273,7 @@ S:BO_FIRE | BO_PLAS | BA_FIRE |
 S:BR_FIRE | BR_LITE | BR_PLAS
 D:$A massive glowing eagle bathed in flames.  The searing heat chars your 
 D:$skin and melts your armour.
-D:炎の中に住む強力な輝くワシだ。焦がすような熱気は冒険者の鎧を溶かし、
+D:炎の中に住む強力な輝く鷲だ。焦がすような熱気は冒険者の鎧を溶かし、
 D:皮膚を炭のようにしてしまう。
 
 #J0#
@@ -15368,7 +15368,7 @@ D:$and then foul.  Its body is twisted by chaotic forces as it strives to
 D:$stay real.  Its very existence distorts the universe around it.
 D:刻々とその姿を変化させる屈強なドラゴンだ。見る度に、美しかったり
 D:汚らわしかったりする。なんとか現実の姿を現そうとしているが、その体は
-D:カオスの力でゆがんでいる。正にその存在自体が回りの世界をゆがめている。
+D:カオスの力で歪んでいる。正にその存在自体が回りの世界を歪めている。
 
 #J0#
 N:784:ロー・ワイアーム
@@ -15642,7 +15642,7 @@ D:$This huge affront to existence twists and tears at the fabric of space.
 D:$Darkness itself recoils from the touch of Tselakus as he leaves a trail
 D:$of death and destruction. Mighty claws rend reality as he
 D:$annihilates all in his path to your soul!
-D:この存在自体が侮辱的な人間は、辺りの空間の構造をゆがめて引き裂いている。
+D:この存在自体が侮辱的な人間は、辺りの空間の構造を歪めて引き裂いている。
 D:強力な魔法の熟練者であるツエラクスは、冒険者の柔らかい肉に飢えている。
 D:ツエラクスの持つ暗闇を発する松明が通った後には、死と破壊の痕跡しか
 D:残されない。ツエラクスは常に軽蔑的な冷笑を絶やさず、彼を倒そうとする
@@ -16384,7 +16384,7 @@ D:$as her own those who die an ignoble death.
 D:北欧神話における地獄ニヴルヘイムの支配者は無慈悲な女王だ。
 D:彼女はロキと女巨人アングルボザの間に生まれた娘で、拷問用の新たな魂を
 D:コレクションに加えるべくいつも探し求めている。
-D:そして来たるべき破滅の徴である不気味な緑色の衣を身に纏い、
+D:そして来たるべき破滅の徴である不気味な緑色の衣を身にまとい、
 D:みじめな死を遂げた者を迎えに来る。
 
 #J0#
@@ -17792,7 +17792,7 @@ D:その苦しみをこの世の全ての光や善を支配することで癒そ
 D:人間の暗黒に対する恐怖の根源であり、邪悪な力で忌まわしい生物を日夜生み出
 D:し続けている。オークやドラゴンやトロルは彼の邪悪な贈り物であり、それらが
 D:痛みや苦しみをこの世に及ぼしていることが彼を無上に喜ばせる。
-D:彼はその邪悪にゆがんだ忌まわしき相貌に、恐るべき鉄の冠を戴いている。
+D:彼はその邪悪に歪んだ忌まわしき相貌に、恐るべき鉄の冠を戴いている。
 D:冠に今も二つ残されたシルマリルはその聖なる光で彼を永遠に焼き続けている。
 D:冒険者を挽き肉にすべく彼が真一文字に
 D:歩み寄ってくるとき、その手に握られた冥界の大鉄杖『グロンド』が
@@ -18012,7 +18012,7 @@ F:DROP_CORPSE | DROP_SKELETON
 S:1_IN_9 | 
 S:BO_NETH
 D:$A monk in dusky robes trained in the most lethal martial arts.
-D:漆黒の法衣を身に纏い、暗殺拳に熟練した修行僧だ。
+D:漆黒の法衣を身にまとい、暗殺拳に熟練した修行僧だ。
 
 N:871:はぐれメタル
 E:Metal Babble
@@ -20469,7 +20469,7 @@ S:1_IN_2 |
 S:TPORT | HOLD | 
 S:S_DEMON
 D:$A figure twisted by evil standing in robes of deepest crimson.
-D:深紅のローブを身にまとってたたずむ、邪悪にゆがんだ人間だ。
+D:深紅のローブを身にまとってたたずむ、邪悪に歪んだ人間だ。
 
 N:1009:ウォウズの犬王『ドワール』
 E:Dwar, Dog Lord of Waw
@@ -21166,7 +21166,7 @@ F:HUMAN | DROP_CORPSE | DROP_SKELETON
 S:1_IN_9 | 
 S:HASTE
 D:$A yellow-garbed monk, trained in martial arts.
-D:黄色の法衣を身に纏った、拳法に熟練した修行僧だ。
+D:黄色の法衣を身にまとった、拳法に熟練した修行僧だ。
 
 N:1048:石ドラゴン
 E:Stone dragon
