@@ -3336,7 +3336,7 @@ F:UNDEAD | EMPTY_MIND | NO_CONF | NO_SLEEP | IM_POIS | IM_COLD | NO_FEAR |
 F:HURT_LITE | RES_NETH | COLD_BLOOD | EVIL | NEVER_MOVE | MULTIPLY
 D:$A sickening mound of decaying flesh, bones, hands and so on. It seems to 
 D:$be growing.
-D:腐った肉、骨、手などの吐き気をもよおす塊だ。それは大きくなっている
+D:腐った肉、骨、手などの吐き気を催す塊だ。それは大きくなっている
 D:ように見える。
 
 #JZ#
@@ -5349,7 +5349,7 @@ S:1_IN_9 |
 S:BR_CONF
 D:$This vast gleaming bronze fly has wings which beat mesmerically fast.
 D:青銅の光沢を持った巨大なトンボで、その単調な羽音は人に眠気を
-D:もよおさせる。
+D:催させる。
 
 #J0#
 N:321:ストーン・ジャイアント
@@ -5377,7 +5377,7 @@ F:ANIMAL | IM_ACID
 S:1_IN_9 | 
 S:BR_ACID
 D:$The size of a large bird, this fly drips caustic acid.
-D:鳥ほどの大きさがあるトンボで、腐食性の酸をしたたらせている。
+D:鳥ほどの大きさがあるトンボで、腐食性の酸を滴らせている。
 
 #J0#
 N:323:石ゴーレム
@@ -7097,7 +7097,7 @@ F:COLD_BLOOD | HURT_LITE
 S:1_IN_9
 S:SCARE | HOLD
 D:$Flesh is falling off in chunks from this decaying abomination.
-D:この腐敗した凶々しい者の体からは腐肉の塊がしたたり落ちている。
+D:この腐敗した凶々しい者の体からは腐肉の塊が滴り落ちている。
 D:完全な人間の形をしているわけではないが、限りなく人間に良く似ている場合も
 D:ある。
 D:前かがみの姿勢で２本足で歩き、何処となく犬に似ている。
@@ -7210,7 +7210,7 @@ F:FRIENDS | DROP_60 | WILD_WOOD | WILD_MOUNTAIN | WILD_SWAMP
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | EAT_POISONOUS | REGENERATE |
 F:EVIL | TROLL
 D:$A powerful troll form.  Venom drips from its needlelike claws.
-D:屈強なトロルで、その針の様な爪からは毒液がしたたり落ちている。
+D:屈強なトロルで、その針の様な爪からは毒液が滴り落ちている。
 
 #JZ#
 N:425:<<ティーンチ>>の火炎悪魔
@@ -7531,7 +7531,7 @@ F:ANIMAL | IM_POIS | WILD_SHORE | WILD_SWAMP |
 S:1_IN_5 | 
 S:SCARE | BA_POIS
 D:$A strange reptilian hybrid with five heads dripping venom.
-D:毒をしたたらす五つの首を持った奇妙な雑種の爬虫類だ。
+D:毒を滴らす五つの首を持った奇妙な雑種の爬虫類だ。
 
 #JZ#
 N:441:『ガチャピン』
@@ -8283,7 +8283,7 @@ B:WAIL:TERRIFY:5d6
 F:WEIRD_MIND | BASH_DOOR | WILD_ALL | DROP_CORPSE
 F:ANIMAL | CAN_FLY
 D:$It is a giant beetle that produces a chilling sound.
-D:それは寒気をもよおす様な羽音を立てる巨大な甲虫だ。
+D:それは寒気を催す様な羽音を立てる巨大な甲虫だ。
 
 #J0#
 N:479:オーガ・シャーマン
@@ -8382,7 +8382,7 @@ F:COLD_BLOOD | HURT_LITE | RES_NETH
 S:1_IN_7
 S:SCARE | HOLD | DARKNESS | S_UNDEAD | ANIM_DEAD
 D:$Flesh is falling off in chunks from this decaying abomination.
-D:この腐敗した凶々しい者の体からは腐肉の塊がしたたり落ちている。
+D:この腐敗した凶々しい者の体からは腐肉の塊が滴り落ちている。
 D:完全な人間の形をしているわけではないが、限りなく人間に良く似ている場合も
 D:ある。
 D:前かがみの姿勢で２本足で歩き、何処となく犬に似ている。
@@ -9234,7 +9234,7 @@ F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_8 | 
 S:BO_ACID
 D:$It is a towering form composed of rock with fists of awesome power.
-D:それは岩でできたそびえ立つような姿をしていて、すさまじい力を持った拳が
+D:それは岩でできたそびえ立つような姿をしていて、凄まじい力を持った拳が
 D:付いている。
 
 #J0#
@@ -9665,7 +9665,7 @@ S:BR_ACID
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$darkest black hue.  Acid drips from its body.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
-D:まだ柔らかいその鱗は深い黒色をしている。体からは酸がしたたり落ちている。
+D:まだ柔らかいその鱗は深い黒色をしている。体からは酸が滴り落ちている。
 
 #J0#
 N:547:ムーマク
@@ -9751,7 +9751,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL | TROLL | IM_COLD | IM_POIS
 D:$A massive and cruel troll of great power, drool slides caustically down 
 D:$his muscular frame.  Despite his bulk, he strikes with stunning speed.
-D:狂気の心を持った異常に屈強なトロルで、体からは腐食性の体液をしたたらせて
+D:狂気の心を持った異常に屈強なトロルで、体からは腐食性の体液を滴らせて
 D:いる。体の大きさにも関わらず、あっけにとられるようなスピードで攻撃をして
 D:くる。
 
@@ -10587,7 +10587,7 @@ S:BR_SHAR
 D:$A dragon of strange crystalline form.  Light shines through it, dazzling 
 D:$your eyes with spectrums of colour.
 D:奇妙な水晶のようなドラゴンだ。光が屈折して輝いてできる虹のような色が冒険者の
-D:目をくらませる。
+D:目を眩ませる。
 
 #J0#
 N:592:ブラック・ドラゴン
@@ -10795,7 +10795,7 @@ V:133
 D:$A strange pillar of shining light that hurts your eyes.  Its shape changes 
 D:$constantly as it cuts through the air towards you.  It is like a beacon, 
 D:$waking monsters from their slumber.
-D:輝く光が柱状になったモンスターで、そのまぶしさは目にダメージを与える。
+D:輝く光が柱状になったモンスターで、その眩しさは目にダメージを与える。
 D:風を切り裂いて動き回るにつれて、刻々と姿を変化させている。それはのろし火の
 D:ように辺りのモンスターを眠りから目覚めさせる。
 
@@ -11103,7 +11103,7 @@ S:1_IN_5 |
 S:SCARE | BA_POIS | 
 S:BR_POIS
 D:$A strange reptilian hybrid with seven heads dripping venom.
-D:毒をしたたらす七つの首を持った奇妙な雑種の爬虫類だ。
+D:毒を滴らす七つの首を持った奇妙な雑種の爬虫類だ。
 
 #JZ#
 #JZ#モイア。レブマの女王。
@@ -11351,7 +11351,7 @@ S:1_IN_9 |
 S:BLIND | CONF | SCARE | 
 S:BR_ACID
 D:$A huge draconic form.  Pools of acid melt the floor around it.
-D:巨大なドラゴンで、したたる酸が池のようになって回りの床を溶かしている。
+D:巨大なドラゴンで、滴る酸が池のようになって回りの床を溶かしている。
 
 #JZ#
 N:625:不可解な煙霧
@@ -16531,7 +16531,7 @@ D:$It pulsates with evil.  Its intent is to overwhelm you with monster after
 D:$monster, until it can greedily dine on your remains.
 D:この忌むべき存在は床をのたうち回りながら、奇妙な鳴き声と鼻息を発している。
 D:それは邪悪な生を受けている。それはとにかく手当たり次第にモンスターを召喚し
-D:て冒険者を打ちのめし、その肉体をむさぼり食うことしか考えていない。
+D:て冒険者を打ちのめし、その肉体を貪り食うことしか考えていない。
 
 #JZ#
 #JZ#生きている炎クトゥグァ
@@ -16760,7 +16760,7 @@ S:1_IN_5 |
 S:BR_FIRE
 D:$It is a giant dog that glows with heat.  Flames pour from its nostrils.
 D:アンバーの周りのアーデンの森を護るジュリアンが従えている獰猛な猟犬。
-D:熱を発して輝く巨大な犬で、火炎がその鼻孔からしたたっている。
+D:熱を発して輝く巨大な犬で、火炎がその鼻孔から滴っている。
 
 #J0#
 N:830:骸骨の帝王『カントラス』
@@ -17568,7 +17568,7 @@ D:$defeated in combat.  With his whip of flame and awesome fiery breath he
 D:$saved his master from Ungoliant's rage.
 D:ゴスモグはモルゴスの私的守衛隊バルログの隊長だ。彼は門の番人である
 D:エクセリオンを倒した功績があり、戦いに一度も負けたことがない。彼は炎のムチ
-D:とすさまじい火炎のブレスで彼の主をウンゴリアントの怒りから守ったのだ。
+D:と凄まじい火炎のブレスで彼の主をウンゴリアントの怒りから守ったのだ。
 
 #JZ#
 #JZ#偉大なるクトゥルフ（ク・リトル・リトル、クトゥルー）
