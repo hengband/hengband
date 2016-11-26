@@ -267,7 +267,7 @@ F:RAND_50 | WILD_ONLY | WILD_GRASS | WILD_WOOD |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE
 D:$It is not a carnivore, but will defend itself if you stray too 
 D:$close.
-D:肉食ではないが、近付き過ぎると身を守るため攻撃してくる。
+D:肉食ではないが、近づき過ぎると身を守るため攻撃してくる。
 
 #JZ#
 N:6:きこり
@@ -681,7 +681,7 @@ B:BITE:HURT:1d3
 F:ANIMAL | CAN_SWIM | WILD_MOUNTAIN
 F:DROP_CORPSE
 D:$It is a small lizard with a hardened hide.
-D:それは小さなトカゲで固い皮を持っている。
+D:それは小さなトカゲで硬い皮を持っている。
 
 #JZ#
 N:34:グリッドバグ
@@ -1406,7 +1406,7 @@ W:4:1:0:9:30:134
 B:BITE:HURT:1d10
 F:ANIMAL | CAN_SWIM | DROP_CORPSE
 D:$It is an armoured lizard with a powerful bite.
-D:固い皮を持ったトカゲで噛む力が強い。
+D:硬い皮を持ったトカゲで噛む力が強い。
 
 #J0#
 N:83:見習レンジャー
@@ -1956,7 +1956,7 @@ F:BASH_DOOR | EAT_POISONOUS |
 F:ANIMAL | IM_POIS
 D:$It is recognized by the hard-scaled end of its body that is often rattled 
 D:$to frighten its prey.
-D:それは尻尾に固い殻を持ったヘビで、その殻をガラガラとならして獲物を脅かす。
+D:それは尻尾に硬い殻を持ったヘビで、その殻をガラガラとならして獲物を脅かす。
 
 #JZ#
 N:120:巨大ナメクジ
@@ -1972,7 +1972,7 @@ S:1_IN_10
 S:BR_ACID
 D:$It is slowly making its way towards you, eating everything in 
 D:$its path...
-D:それはゆっくりとあなたに近付いてくる。途中にあるものを全て食べながら...
+D:それはゆっくりとあなたに近づいてくる。途中にあるものを全て食べながら...
 
 #J0#
 N:121:巨大ピンク・ガエル
@@ -2180,7 +2180,7 @@ B:BITE:HURT:1d8
 B:BITE:HURT:1d8
 F:ANIMAL | CAN_SWIM | WILD_ALL | DROP_CORPSE
 D:$It is a black lizard with overlapping scales and a powerful jaw.
-D:それは固い皮と強力なアゴを持った黒いトカゲだ。
+D:それは硬い皮と強力なアゴを持った黒いトカゲだ。
 
 #J0#
 N:135:コボルド・ロード『ムガッシュ』
@@ -4075,7 +4075,7 @@ F:IM_ACID | IM_POIS | CAN_SWIM |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$A fast moving highly acidic jelly thing, that is eating away the floor it 
 D:$rests on.
-D:動きの素早い、酸に満ちあふれたゼリーのような物体で、回りの床をも
+D:動きの素早い、酸に満ちあふれたゼリーのような物体で、周りの床をも
 D:腐食させている。
 
 #JZ#
@@ -4363,7 +4363,7 @@ D:$A creature like a giant purple Buddha with lots of teeth.
 D:$It cleans them with the bones of sorcerors.
 D:魔法使いを好んで食べるゴリラ形の謎の守護者だ。
 D:「大きくて丸々と太った姿が僕の道を塞いでいた。コウモリの耳を
-D:した紫色のブッダのようだった。近付くにつれその詳細がはっきり
+D:した紫色のブッダのようだった。近づくにつれその詳細がはっきり
 D:してきた---突き出た牙、目蓋がないように見える黄色い目、
 D:大きな手と足には赤くて長い爪があった。それはトンネルの真ん中に座って
 D:立ち上がろうとはしなかった。衣服は着ていなかったが、膨らんだ腹を
@@ -5139,7 +5139,7 @@ S:BR_ELEC
 D:$Saint Elmo's Fire forms a ghostly halo around this hound, and sparks sting 
 D:$your fingers as energy builds up in the air around you.
 D:セントエルモの炎の様な幽玄な後光がこの犬を包み込んでいる。
-D:辺りに満ちたエネルギーが冒険者の回りに立ちのぼり、火花が指を突き刺す。
+D:辺りに満ちたエネルギーが冒険者の周りに立ちのぼり、火花が指を突き刺す。
 
 #JZ#
 N:310:ミミック(薬)
@@ -5855,7 +5855,7 @@ F:DROP_90 |
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | GIANT | IM_ELEC | MALE | EAT_GIVE_STR
 D:$It is a twenty foot tall giant wreathed in clouds.
-D:それは背丈が 6 メートル以上もある巨人で、雲が回りに渦巻いている。
+D:それは背丈が 6 メートル以上もある巨人で、雲が周りに渦巻いている。
 
 #J0#
 N:350:ウルク『ウグルク』
@@ -6039,7 +6039,7 @@ S:1_IN_6 |
 S:BR_ELEC
 V:150
 D:$A shimmering tornado of air, sparks crackle along its length.
-D:光を放つ空気の竜巻で、その回りには火花が閃光を発している。
+D:光を放つ空気の竜巻で、その周りには火花が閃光を発している。
 
 #JZ#
 N:360:フグ
@@ -6345,7 +6345,7 @@ F:ANIMAL | IM_FIRE
 S:1_IN_4 | 
 S:BR_FIRE
 D:$It is a sharp-tailed bat, wreathed in fire.
-D:鋭い尻尾を持ったコウモリで、体の回りには火炎が渦巻いている。
+D:鋭い尻尾を持ったコウモリで、体の周りには火炎が渦巻いている。
 
 #J0#
 N:378:ホワイト・キラービートル
@@ -6671,7 +6671,7 @@ F:WEIRD_MIND | BASH_DOOR | DROP_SKELETON
 F:ANIMAL | IM_POIS
 D:$A hideous centipede covered in slime and with glowing tentacles around its 
 D:$head.
-D:ベトベトした粘膜に覆われた巨大なムカデで、頭の回りには光を発する
+D:ベトベトした粘膜に覆われた巨大なムカデで、頭の周りには光を発する
 D:触手が突いている。
 
 #JZ#
@@ -7432,7 +7432,7 @@ S:BO_ELEC
 D:$A man-shaped form of living lightning, sparks and shocks crackle all over 
 D:$this madly capering figure, as it leaps and whirls around and about you.
 D:魂を持った電気で、人間のような姿をしている。狂ったように跳ね回るこの
-D:モンスターの回りには火花と電撃が常に巻き起こっている。渦巻くように辺りを
+D:モンスターの周りには火花と電撃が常に巻き起こっている。渦巻くように辺りを
 D:跳躍しながら冒険者に近寄ってくる。
 
 #J0#
@@ -8129,7 +8129,7 @@ F:IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
 S:SCARE | CAUSE_3 | DARKNESS
 D:$It is a ghostly form with eyes that haunt you.
-D:それは幽霊のような存在で、その目はいつまでも冒険者を睨み付けている。
+D:それは幽霊のような存在で、その目はいつまでも冒険者を睨みつけている。
 
 #J0#
 N:471:シャドウ・ドレイク
@@ -8198,7 +8198,7 @@ F:WEIRD_MIND | BASH_DOOR | WILD_GRASS | DROP_CORPSE
 F:ANIMAL | CAN_FLY
 D:$It is a beetle with deadly sharp cutting mandibles and a rock-hard 
 D:$carapace.
-D:それは恐ろしく鋭い切れ味のアゴと、岩のように堅い甲羅を持った甲虫だ。
+D:それは恐ろしく鋭い切れ味のアゴと、岩のように硬い甲羅を持った甲虫だ。
 
 #JZ#
 N:475:ゴーゴン
@@ -8216,7 +8216,7 @@ S:1_IN_8 |
 S:BR_POIS
 D:$A bull whose skin is made of steel plates. Watch out for its 
 D:$deadly breath!
-D:鋼板のような堅い皮膚を持った牛のようなモンスターだ。
+D:鋼板のような硬い皮膚を持った牛のようなモンスターだ。
 D:危険なブレスに注意しろ!
 
 #JZ#
@@ -9029,7 +9029,7 @@ F:WEIRD_MIND | BASH_DOOR |
 F:ANIMAL | IM_POIS
 D:$A hideous centipede covered in slime and with glowing tentacles around its 
 D:$head.
-D:ベトベトした粘膜に覆われた巨大なムカデで、頭の回りには光を発する
+D:ベトベトした粘膜に覆われた巨大なムカデで、頭の周りには光を発する
 D:触手が突いている。
 
 #J0#
@@ -9536,7 +9536,7 @@ D:$Unfettered by the usual constraints of gravity, these unnatural creatures
 D:$are walking on the walls and even the ceiling!  The earth suddenly feels 
 D:$rather less solid as you see gravity warp all round the monsters.
 D:重力の束縛から解放されたこの異常な生物は、壁や天井でさえもまるで
-D:床のように歩くことができる。このモンスターの回りで重力が歪んでいるのを
+D:床のように歩くことができる。このモンスターの周りで重力が歪んでいるのを
 D:見ると、大地も突然不安定なものに思えてくる。
 
 #J0#
@@ -9821,7 +9821,7 @@ S:HOLD | SCARE | CAUSE_3 | DARKNESS
 D:$A tangible but ghostly form, made of grey fog.  The air around it feels 
 D:$deathly cold.
 D:それは実体があるように見えるが、実際は灰色の霧でできた幽霊のようなものだ。
-D:その回りには死のような冷たさの大気が充満している。
+D:その周りには死のような冷たさの大気が充満している。
 
 N:555:レヴナント
 E:Revenant
@@ -10120,7 +10120,7 @@ D:「隆起をもった樽状の物体で、水平にのびる腕が中央の輪
 D:のように放射状に分出して、ドアの把手のような、球根のようなものが、
 D:樽の上部と下部から垂直に伸びていた、これら把手状のものはそれぞれ、
 D:車輪の中心軸さながらに、長くて平たい、三角形のように先細りになっ
-D:た腕が５本、海星の腕を思わせる格好でまわりに配置されていた」
+D:た腕が５本、海星の腕を思わせる格好で周りに配置されていた」
 D:(Ｈ・Ｐ・ラヴクラフト、大瀧啓裕訳「魔女の家の夢」
 D:『ラヴクラフト全集３』、創元推理文庫、pp.195-196)
 D:彼らの肉体はどんな温度変化や真空にも耐えられ、
@@ -11351,7 +11351,7 @@ S:1_IN_9 |
 S:BLIND | CONF | SCARE | 
 S:BR_ACID
 D:$A huge draconic form.  Pools of acid melt the floor around it.
-D:巨大なドラゴンで、滴る酸が池のようになって回りの床を溶かしている。
+D:巨大なドラゴンで、滴る酸が池のようになって周りの床を溶かしている。
 
 #JZ#
 N:625:不可解な煙霧
@@ -11492,7 +11492,7 @@ F:ANIMAL | HURT_LITE | NO_FEAR | SELF_LITE_1
 D:$It is a strange mass of squirming worms.  Magical energy crackles 
 D:$around its disgusting form.
 D:それはのたくる奇妙なイモムシの大群だ。この忌まわしい
-D:生物の回りでは、魔法のエネルギーがパチパチと音を立てている。
+D:生物の周りでは、魔法のエネルギーがパチパチと音を立てている。
 
 #J0#
 N:633:腐乱クイルスルグ
@@ -11660,7 +11660,7 @@ F:ANIMAL | IM_ELEC | DROP_CORPSE | RIDING
 V:133
 D:$A vast legendary bird, its iron talons rake the most impenetrable of 
 D:$surfaces and its screech echoes through the many winding dungeon corridors.
-D:巨大な伝説の鳥であり、その鉄の爪はどんな堅いものでも引き裂き、その鳴き声は
+D:巨大な伝説の鳥であり、その鉄の爪はどんな硬いものでも引き裂き、その鳴き声は
 D:どんな入り組んだ通路でも通り抜けてダンジョン中に響き渡る。
 
 #J0#
@@ -11846,7 +11846,7 @@ S:BLIND | CONF | SCARE | CAUSE_3 | FORGET |
 S:S_DEMON
 D:$It is a demon of small stature, but its armoured frame moves with 
 D:$lightning speed and its powers make it a tornado of death and destruction.
-D:それは小さな彫像のデーモンだ。その動きは堅い体からは想像もつかない
+D:それは小さな彫像のデーモンだ。その動きは硬い体からは想像もつかない
 D:電光石火のスピードで、その力は死と破壊の竜巻を巻き起こす。
 
 #JZ#
@@ -12053,7 +12053,7 @@ S:BO_ACID | BA_FIRE | BA_COLD | ANIM_DEAD
 S:S_MONSTER | S_UNDEAD | S_DEMON | MISSILE
 D:$A dark elven figure, dressed in deepest black.  Power seems to crackle 
 D:$from his slender frame.
-D:漆黒の服を身にまとったダークエルフだ。そのしなやかな体の回りでは、魔力が
+D:漆黒の服を身にまとったダークエルフだ。そのしなやかな体の周りでは、魔力が
 D:パチパチと音を立てている。
 
 #J0#
@@ -12257,7 +12257,7 @@ D:$A disembodied eye, floating in the air.  Black nether storms rage around
 D:$its bloodshot pupil and light seems to bend as it sucks its power from the 
 D:$very air around it.  Your soul chills as it drains your vitality for its 
 D:$evil enchantments.
-D:宙に浮かぶ巨大な目玉だ。その血走った瞳の回りでは冥界の暗黒の嵐が
+D:宙に浮かぶ巨大な目玉だ。その血走った瞳の周りでは冥界の暗黒の嵐が
 D:巻き起こっている。
 D:また周辺の大気から力を吸い取っているので、どんどんと光が失われていくようだ。
 D:それは邪悪な魔力を得るために冒険者の生命力を吸い取る。
@@ -13252,7 +13252,7 @@ S:BR_FIRE | BR_NETH
 D:$A mixture of dragon and basilisk, the dracolisk stares at you with deep 
 D:$piercing eyes, its evil breath burning the ground where it stands.
 D:ドラゴンとバシリスクの混血であるドラコリスクは、深く突き刺すような
-D:視線で冒険者を睨み付ける。その邪悪なブレスは、自分の足下の大地ですら燃え上
+D:視線で冒険者を睨みつける。その邪悪なブレスは、自分の足下の大地ですら燃え上
 D:がらせる。
 
 #JZ#
@@ -13862,7 +13862,7 @@ S:BR_ELEC
 D:$A vast dragon of power.  Storms and lightning crash around its titanic 
 D:$form.  Deep blue scales reflect the flashes and highlight the creature's 
 D:$great muscles.  It regards you with contempt.
-D:力に満ちた巨大なドラゴンだ。その山のような体の回りには嵐が巻き起こり、稲妻
+D:力に満ちた巨大なドラゴンだ。その山のような体の周りには嵐が巻き起こり、稲妻
 D:が光っている。
 D:深い青色の鱗が光を反射して、この生物の隆々たる筋肉を浮き彫りにしている。
 D:それは冒険者を軽蔑すべき者とみなしている。
@@ -14546,7 +14546,7 @@ D:$A massive legendary hydra.  It has twelve powerful heads.  Its many eyes
 D:$stare at you as clouds of smoke and poisonous vapour rise from its 
 D:$seething form.
 D:巨大な伝説的ヒドラだ。それは力に満ちあふれた十二もの首を持っている。
-D:たくさんの目が冒険者を睨み付け、燃え立つような全身からは煙の雲と毒の蒸気
+D:たくさんの目が冒険者を睨みつけ、燃え立つような全身からは煙の雲と毒の蒸気
 D:を立ちのぼらせている。
 
 #J0#
@@ -14595,7 +14595,7 @@ D:$A vast dragon of immense power.  Fire leaps continuously from its huge
 D:$form.  The air around it scalds you.  Its slightest glance burns you, and 
 D:$you truly realize how insignificant you are.
 D:それは信じがたい程の力を持った巨大なドラゴンで、その体からは常に炎
-D:が吹き上がっている。その回りに立ちこめる熱気だけでも冒険者を火傷させるのに
+D:が吹き上がっている。その周りに立ちこめる熱気だけでも冒険者を火傷させるのに
 D:は充分であり、そのほんの一瞥だけでも冒険者を燃え上がらせるには十分だ。
 D:冒険者はこの生物の前では自分がなんと無力であるのかを痛感するだろう。
 
@@ -15368,7 +15368,7 @@ D:$and then foul.  Its body is twisted by chaotic forces as it strives to
 D:$stay real.  Its very existence distorts the universe around it.
 D:刻々とその姿を変化させる屈強なドラゴンだ。見る度に、美しかったり
 D:汚らわしかったりする。なんとか現実の姿を現そうとしているが、その体は
-D:カオスの力で歪んでいる。正にその存在自体が回りの世界を歪めている。
+D:カオスの力で歪んでいる。正にその存在自体が周りの世界を歪めている。
 
 #J0#
 N:784:ロー・ワイアーム
@@ -18031,7 +18031,7 @@ F:RES_ALL | POWERFUL |
 F:NO_CONF | NO_SLEEP | NO_STUN | EMPTY_MIND | RES_TELE |
 S:1_IN_1 |
 S:BLINK | BO_MANA | BA_CHAO | BA_FIRE | TPORT  | PSY_SPEAR
-D:固い金属に包まれたスライムだ。
+D:硬い金属に包まれたスライムだ。
 
 N:872:『八岐大蛇』
 E:The Yamata-no-Orochi
@@ -18451,7 +18451,7 @@ S:1_IN_6 |
 S:BO_ELEC | MISSILE | BLINK | S_MONSTER | BA_ELEC
 D:$Supported by a whirlwind, the djinni turns to face you.
 D:ディジニは風の属性を持つジンだ。
-D:まわりにつむじ風をまとったディジニがあなたを睨んでいる。
+D:周りにつむじ風をまとったディジニがあなたを睨んでいる。
 
 N:893:イフリート
 E:Efreeti
@@ -18646,7 +18646,7 @@ D:$It is a massive mushroom that seems to have a huge mouth. The air is thick
 D:$with miasma, and you notice to your horror that the fungus is sprouting
 D:$everywhere!
 D:巨大な口を持っているように見えるどっしりとしたキノコだ。
-D:このキノコはどこにでも生えてまわりの空気を濃い瘴気で汚染する。
+D:このキノコはどこにでも生えて周りの空気を濃い瘴気で汚染する。
 
 N:905:雲ゴーレム
 E:Cloud golem
@@ -18676,7 +18676,7 @@ F:IM_FIRE | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | KILL_BODY
 F:KILL_ITEM
 D:$It burns everything in its path with the heat its magma-like body
 D:$produces.
-D:それはマグマのような体から発する熱によって、まわりに近づくあらゆるもの
+D:それはマグマのような体から発する熱によって、周りに近づくあらゆるもの
 D:を焼きつくしながら動いている。
 
 N:907:オーガ戦士
