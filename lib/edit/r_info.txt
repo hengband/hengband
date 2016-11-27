@@ -2896,7 +2896,7 @@ D:$disk-shaped pads from which dozens of long toes hung like roots or worms.
 D:$its arms were longer than its entire body. it was a crushed slug, a thing 
 D:$that had been frozen and thawed before it was fully baked. It was - 
 D:$'It is the Borshin', said the Lord of Bats."
-D:青白く捻曲がったこの生物は、あなたの姿そのものを憎んでいる。
+D:青白く捻じ曲がったこの生物は、あなたの姿そのものを憎んでいる。
 D:「それはまるで、人間の顔になることをめざして作りはじめながらついに目標
 D:にとどかなかったかのような貌だった。踏みしだかれ、捻じ曲げられ、
 D:頭部のふくらみを形成する醜い肉塊を穴だらけにされていた。その胴体を
@@ -3892,7 +3892,7 @@ F:EVIL | IM_POIS
 S:1_IN_8 | 
 S:CONF | CAUSE_1 | DARKNESS | MISSILE | SHOOT 
 D:$A dark elven torso merged with the bloated form of a giant spider.
-D:それは上半身がエルフで、下半身には巨大蜘蛛の様な膨れた腹を持っている。
+D:それは上半身がエルフで、下半身には巨大蜘蛛のような膨れた腹を持っている。
 
 #JZ#
 N:235:モングバット
@@ -5138,7 +5138,7 @@ S:1_IN_10 |
 S:BR_ELEC
 D:$Saint Elmo's Fire forms a ghostly halo around this hound, and sparks sting 
 D:$your fingers as energy builds up in the air around you.
-D:セントエルモの炎の様な幽玄な後光がこの犬を包み込んでいる。
+D:セントエルモの炎のような幽玄な後光がこの犬を包み込んでいる。
 D:辺りに満ちたエネルギーが冒険者の周りに立ちのぼり、火花が指を突き刺す。
 
 #JZ#
@@ -7210,7 +7210,7 @@ F:FRIENDS | DROP_60 | WILD_WOOD | WILD_MOUNTAIN | WILD_SWAMP
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | EAT_POISONOUS | REGENERATE |
 F:EVIL | TROLL
 D:$A powerful troll form.  Venom drips from its needlelike claws.
-D:屈強なトロルで、その針の様な爪からは毒液が滴り落ちている。
+D:屈強なトロルで、その針のような爪からは毒液が滴り落ちている。
 
 #JZ#
 N:425:<<ティーンチ>>の火炎悪魔
@@ -7765,7 +7765,7 @@ D:『クトゥルー９』、青心社文庫、p.305)
 D:陸上ではぴょんぴょん跳ねるようにして歩き、けろけろという声で鳴く。
 D:しかし、身振りや手振りでコミュニケーションを取ることが多いようだ。
 D:時のない深い海の底で生活し、異様で尊大な生命を持ち、
-D:信じがたいほど冷酷である。
+D:信じ難たいほど冷酷である。
 D:人間と交配することが可能であり、混血児は生後まもなくは人間と変わらないが、
 D:二十歳を過ぎたあたりから魚のような特徴が表れ始め、
 D:最終的には種族の記憶に目覚めて完全なディープワンへと変貌を遂げてしまう。
@@ -8283,7 +8283,7 @@ B:WAIL:TERRIFY:5d6
 F:WEIRD_MIND | BASH_DOOR | WILD_ALL | DROP_CORPSE
 F:ANIMAL | CAN_FLY
 D:$It is a giant beetle that produces a chilling sound.
-D:それは寒気を催す様な羽音を立てる巨大な甲虫だ。
+D:それは寒気を催すような羽音を立てる巨大な甲虫だ。
 
 #J0#
 N:479:オーガ・シャーマン
@@ -9074,7 +9074,7 @@ V:133
 D:$A magical treatment has turned Jurt, an adept of Logrus, 
 D:$into a Living Trump.
 D:混沌の宮廷の女王ダラの息子で、ログルス使いである彼の心は
-D:復讐心で捻曲がっている。彼は復讐を果たすため魔法の儀式によって
+D:復讐心で捻じ曲がっている。彼は復讐を果たすため魔法の儀式によって
 D:人間トランプとなった。
 D:”「どこでも移動できたとしても無意味だ」ジャスラは言った。
 D:「お前がどこにいても間抜けならね。」”
@@ -9200,7 +9200,7 @@ D:$Slender, red-skinned demons twisting in nightmarish shapes.
 D:$They are armed with hellblades, which will suck the life from 
 D:$your body.
 D:流血の神<コーン>の配下の下級悪魔。
-D:悪夢のような姿に捻曲がった、細身で赤い肌をした悪魔だ。
+D:悪夢のような姿に捻じ曲がった、細身で赤い肌をした悪魔だ。
 D:ヘルブレードを装備していて、その刃はあなたの生命力を
 D:吸いとる。
 
@@ -9499,7 +9499,7 @@ F:FORCE_MAXHP | OPEN_DOOR | FRIENDS | DROP_60 | REGENERATE |
 F:SMART | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | TROLL | IM_POIS
 D:$It is a massive intelligent troll with needle sharp fangs.
-D:それは針の様な牙を持ったトロルで、力も強いし頭も良い。
+D:それは針のような牙を持ったトロルで、力も強いし頭も良い。
 
 N:539:スリング・ハーフリング
 E:Halfling slinger
@@ -10272,7 +10272,7 @@ D:$It is a fast, deadly dragonoid creature. It was bred and trained
 D:$in the Courts of Chaos for assassination.
 D:素早く、危険なドラゴン型の生物だ。混沌の宮廷で暗殺のために
 D:飼育され訓練されている。
-D:「--あずき色の体、ステンドグラスの様な翼。その姿は死の予感と共に
+D:「--あずき色の体、ステンドグラスのような翼。その姿は死の予感と共に
 D:獲物を狩るカマキリを思い出させた。刺のついた首輪と、短い毛皮からあらゆる
 D:方向に突き出した刺のような爪。それは希少で、危険で、高度な知性を持つ
 D:混沌の獣だった。」(ロジャー・ゼラズニイ, アンバー７「アンバーの血」)
@@ -10296,7 +10296,7 @@ S:CAUSE_3 | DRAIN_MANA | BRAIN_SMASH
 V:75
 D:$It is a skeletal form dressed in robes. 
 D:$It looks evil and devious...
-D:襤褸をまとった骸骨のような姿をしている、邪悪で捻曲がった亡者だ。
+D:襤褸をまとった骸骨のような姿をしている、邪悪で捻じ曲がった亡者だ。
 
 #JZ#
 N:578:虹色の蝶人
@@ -10944,7 +10944,7 @@ D:をしている。それは冒険者の方に手をさしのべている。
 #JZ#
 #JZ#夜鬼（夜妖、夜のゴーント）
 #JZ#Ｈ・Ｐ・ラヴクラフトの「幻夢境カダスを求めて」に登場。
-#JZ#夢の国でノーデンスに仕える生物で、ゴム状の身体に蝙蝠の翼とねじ
+#JZ#夢の国でノーデンスに仕える生物で、ゴム状の身体に蝙蝠の翼と捻じ
 #JZ#れた角を持ち、顔は有りません。シャンタク鳥と対立し、グールとは
 #JZ#友好的です。 by 久留さん
 N:608:夜鬼
@@ -11721,7 +11721,7 @@ S:SLOW | CONF | SCARE |
 S:BR_NETH
 D:$It is a dragon-like form wrapped in darkness.  You cannot make out its 
 D:$true form but you sense its evil.
-D:それは暗黒に包まれたドラゴンの様なモンスターだ。その真の姿を把握することは
+D:それは暗黒に包まれたドラゴンのようなモンスターだ。その真の姿を把握することは
 D:できないが、その邪悪な気は感じとることができる。
 
 #J0#
@@ -12224,7 +12224,7 @@ D:$of black rubbery wings of singularly monstrous dimensions."
 D:体長約１２メートル程の、コウモリのような翼を持つ、巨大な黒い蛇か芋虫に似
 D:た生き物。
 D:翼が１枚のものと、２枚のものの２種類が存在する。
-D:体の形は常に変化してねじれたりくねったりしている。
+D:体の形は常に変化して捻じれたりくねったりしている。
 D:彼らは我々の住む次元と隣接した次元との間に存在している。
 D:素早く動き回り、大きな喉声を発して会話する。
 D:非常に高い知性を持っており、人間の言葉を話す事も出来るようだ。
@@ -12502,7 +12502,7 @@ S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$A huge draconic form.  Many colours ripple down its massive frame.  Few 
 D:$live to see another.
 D:巨大なドラゴンで、その体の上では様々な色が波打つように変化
-D:している。その姿を見て命を長らえた者はほとんどいない。
+D:している。その姿を見て命を永らえた者はほとんどいない。
 
 #J0#
 N:676:天上界ドラゴン
@@ -13121,7 +13121,7 @@ S:BR_FIRE
 D:$Smaug is one of the Uruloki that still survive, a fire-drake of immense 
 D:$cunning and intelligence.  His speed through air is matched by few other 
 D:$dragons and his dragonfire is what legends are made of.
-D:スマウグはウルローキの生き残りの一匹であり、信じがたいずる賢さと知能を
+D:スマウグはウルローキの生き残りの一匹であり、信じ難たいずる賢さと知能を
 D:そなえたファイア・ドレイクだ。空を飛ぶスピードはドラゴンの中でも秀でており、
 D:その火炎のブレスは伝説的ですらある。
 
@@ -13612,7 +13612,7 @@ S:S_HOUND | S_UNDEAD
 D:$Garm is a gigantic hound, whose job is to guard that none escapes 
 D:$the tortures of Hel, the Norse place of punishment for the wicked 
 D:$and cowardly dead.
-D:ガルムは巨大な猟犬だ。心が捻曲がった者や臆病な死に方をした者の魂が
+D:ガルムは巨大な猟犬だ。心が捻じ曲がった者や臆病な死に方をした者の魂が
 D:罰を受けている地獄で何者も逃がさないように見張っている。
 
 #JZ#
@@ -13789,7 +13789,7 @@ V:150
 D:$You get a terrible sense of deja vu, or is it a premonition?  All at once 
 D:$you see a little puppy and a toothless old dog.  Perhaps you should give 
 D:$up and go to bed.
-D:デジャヴの様な感じを覚えるが、気のせいなのだろうか？一見すると小さな子犬
+D:デジャヴのような感じを覚えるが、気のせいなのだろうか？一見すると小さな子犬
 D:か歯の抜けた老犬のようだ。それと戦うのは諦めてとっとと寝るべきだ。
 
 #J0#
@@ -14135,7 +14135,7 @@ S:S_UNDEAD | S_KIN
 D:$A warrior-king of the East.  Khamul is a powerful opponent, his skill in 
 D:$combat awesome and his form twisted by evil cunning.
 D:東方の戦士の王であるカムルはやっかいな強敵であり、その戦闘能力には恐るべき
-D:ものがある。その姿は邪悪なずる賢さでねじ曲がっている。
+D:ものがある。その姿は邪悪なずる賢さで捻じ曲がっている。
 
 #JZ#
 #JZ#ティンダロスの猟犬
@@ -14223,8 +14223,8 @@ S:BR_COLD
 D:$An immense dragon capable of awesome destruction.  You have never felt 
 D:$such extreme cold, or witnessed such an icy stare.  Begone quickly or feel 
 D:$its wrath!
-D:恐るべき破壊能力を持った巨大なドラゴンだ。この様な冷気はかつて感じたこと
-D:がないし、この様な冷たい眼差しはかつて見たことがない。素早く逃げないと
+D:恐るべき破壊能力を持った巨大なドラゴンだ。このような冷気はかつて感じたこと
+D:がないし、このような冷たい眼差しはかつて見たことがない。素早く逃げないと
 D:恐るべき怒りを呼び覚ましてしまうだろう！
 
 #JZ#
@@ -14303,7 +14303,7 @@ D:$It is like nothing you have ever seen before, and a terrible chill runs
 D:$down your spine as you face it.
 D:この極度に邪悪な生物は巨大なイモムシのような姿をしている。
 D:その胃袋は暗黒の空間のようで、鋼鉄の皮膚からは酸がしたたり落ちている。
-D:この様な存在にはかつて出会ったことはない。それは背筋に響くような
+D:このような存在にはかつて出会ったことはない。それは背筋に響くような
 D:恐ろしげな叫び声をあげる。
 
 #JZ#
@@ -14594,7 +14594,7 @@ S:BR_FIRE
 D:$A vast dragon of immense power.  Fire leaps continuously from its huge 
 D:$form.  The air around it scalds you.  Its slightest glance burns you, and 
 D:$you truly realize how insignificant you are.
-D:それは信じがたい程の力を持った巨大なドラゴンで、その体からは常に炎
+D:それは信じ難たい程の力を持った巨大なドラゴンで、その体からは常に炎
 D:が吹き上がっている。その周りに立ちこめる熱気だけでも冒険者を火傷させるのに
 D:は充分であり、そのほんの一瞥だけでも冒険者を燃え上がらせるには十分だ。
 D:冒険者はこの生物の前では自分がなんと無力であるのかを痛感するだろう。
@@ -16060,7 +16060,7 @@ D:$stood laughing. About his neck, on a heavy cord, there hung a silver
 D:$hunting horn. He wore a fringe beard and a light mustache. In his right 
 D:$hand he held a goblet of wine."
 D:ジェラードは他のアンバーの王子に比べればそれほど
-D:心はねじ曲がってないが、その力は他のアンバーの王子達が束になっても
+D:心は捻じ曲がってないが、その力は他のアンバーの王子達が束になっても
 D:絶対にかなわない。
 D:「大きな強そうな男。まったくぼくと瓜二つだが、そいつの顎の方が重い。そし
 D:て、こいつはぼくよりも大きいが、のろい、とぼくは知っている、こいつの力
@@ -16635,7 +16635,7 @@ D:$The Chief of the Ringwraiths.  A fell being of devastating power.  His
 D:$spells are lethal and his combat blows crushingly hard.  He moves at 
 D:$speed, and commands legions of evil to do his bidding.  It is said that he 
 D:$is fated never to die by the hand of mortal man.
-D:指輪の幽鬼の隊長であり、破壊的な力を持った恐るべき存在だ。その呪文は信じが
+D:指輪の幽鬼の隊長であり、破壊的な力を持った恐るべき存在だ。その呪文は信じ難
 D:たい威力を持ち、戦闘に際しては全てのものを打ち砕くかのような攻撃力を誇る。
 D:彼は素早く行動し、邪悪の者どもに命令を発して思い通りに操る。彼は死すべき人
 D:間の男の手では決して葬り去ることができないといわれている。
@@ -19384,9 +19384,9 @@ S:S_ANGEL | S_DRAGON | BA_LITE | HEAL | DISPEL
 D:$Never a more heavenly being have you seen.  The very holiness of its 
 D:$presence makes you deeply respect it.  Few creatures can match the powers 
 D:$of a Solar; fewer still live to tell the tale after attacking one.
-D:この様な神々しい存在は見たことがない。その存在自体が神聖であり、深く敬意を
+D:このような神々しい存在は見たことがない。その存在自体が神聖であり、深く敬意を
 D:払いたくなる。ソーラーに匹敵するような力を持った生物はほとんどいない。
-D:またソーラーに攻撃をしかけた者で命を長らえた者もほとんどいない。
+D:またソーラーに攻撃をしかけた者で命を永らえた者もほとんどいない。
 
 N:944:深い水たまり
 E:Deep puddle
