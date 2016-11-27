@@ -3396,7 +3396,7 @@ S:BLINK
 V:133
 D:$It looks very cute, except for the razor sharp teeth. It moans 
 D:$ominously as it jumps at your throat!
-D:そのカミソリのように鋭い前歯以外は可愛く見える。それは不気味にうなって
+D:その剃刀のように鋭い前歯以外は可愛く見える。それは不気味にうなって
 D:あなたの喉に跳びかかる！
 
 #JZ#
@@ -5728,7 +5728,7 @@ D:外見をしていて、近寄りがたい雰囲気がある。
 #J0#(コメント)
 #J0# "Quylthulg" に関してはまったく調べがつかなかった。このモンスターを
 #J0# 知っているという人も私の知る限りでは一人もいなかった。一体「クイルスルグ」
-#J0# で読み方が良いのかどうか、未だに判断がつかない。
+#J0# で読み方が良いのかどうか、いまだに判断がつかない。
 #J0#
 N:342:クイルスルグ
 E:Quylthulg
@@ -8682,7 +8682,7 @@ S:HEAL |
 S:S_SPIDER | BA_CHAO | S_DEMON
 V:133
 D:$An adept of chaos, feared for his skill of invoking raw Logrus.
-D:カオスの達人で、ログルスを操る能力により怖れられている。
+D:カオスの達人で、ログルスを操る能力により恐れられている。
 
 #J0#
 #J0#
@@ -15023,7 +15023,7 @@ D:$He is one of the greatest warriors of chaos to walk the earth.
 D:$His bloody blade has slain thousands and tens of thousands, and still 
 D:$hungers for more. 
 D:彼はこの世界を歩んだ混沌の戦士の中でも最も偉大な者の一人だ。
-D:彼の血塗られた剣は何千、何万という者を葬ってきた。そして未だにさらなる
+D:彼の血塗られた剣は何千、何万という者を葬ってきた。そしていまだにさらなる
 D:獲物に飢えている。
 
 #J0#
@@ -18537,7 +18537,7 @@ S:BR_SHAR
 V:150
 D:$A howling blast of razor-sharp mountain fragments, kept intact by perilous 
 D:$magics.
-D:凄まじい音を立てて吹き付けるカミソリのように鋭い破片の塊だ。
+D:凄まじい音を立てて吹き付ける剃刀のように鋭い破片の塊だ。
 D:魔法によってその形を維持されている。
 
 N:898:花崗岩の壁
@@ -18598,7 +18598,7 @@ F:MALE | ONLY_ITEM | DROP_90 | DROP_CORPSE | DROP_SKELETON | GOOD | HUMAN |
 F:OPEN_DOOR | BASH_DOOR | NO_FEAR | HAS_LITE_1 |
 D:$A warrior clad in ornate but effective armour, holding katana so sharp it
 D:$can cut your throat and you won't notice till you nod.
-D:相手の心臓を射るようなするどい眼つき。剣をピクリとも動かさずに構え、
+D:相手の心臓を射るような鋭い眼つき。剣をピクリとも動かさずに構え、
 D:鋭いかけ声とともに相手に飛びかかる。その剣が静かにサヤに収められるときに、
 D:相手はすでに息絶えている。
 D:彼らは絶体絶命に陥ると自害してしまうという。
