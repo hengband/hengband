@@ -718,7 +718,7 @@ B:BITE:HURT:1d5
 F:WEIRD_MIND | BASH_DOOR | DROP_CORPSE |
 F:ANIMAL | WILD_GRASS | EAT_POISONOUS
 D:$A large ant with powerful mandibles.
-D:強いアゴを持った大きなアリだ。
+D:強い顎を持った大きなアリだ。
 
 #J0#
 N:37:フルーツ・コウモリ
@@ -1314,7 +1314,7 @@ B:BITE:HURT:1d7
 F:WEIRD_MIND | BASH_DOOR | WILD_GRASS
 F:ANIMAL | DROP_CORPSE
 D:$It is about two feet long and has sharp pincers.
-D:それは大きさが 60 センチ近くあり、さらに鋭いアゴも持っている。
+D:それは大きさが 60 センチ近くあり、さらに鋭い顎も持っている。
 
 #J0#
 N:76:イエロー・モルド
@@ -2180,7 +2180,7 @@ B:BITE:HURT:1d8
 B:BITE:HURT:1d8
 F:ANIMAL | CAN_SWIM | WILD_ALL | DROP_CORPSE
 D:$It is a black lizard with overlapping scales and a powerful jaw.
-D:それは硬い皮と強力なアゴを持った黒いトカゲだ。
+D:それは硬い皮と強力な顎を持った黒いトカゲだ。
 
 #J0#
 N:135:コボルド・ロード『ムガッシュ』
@@ -2748,7 +2748,7 @@ B:STING:LOSE_STR:1d4
 F:WEIRD_MIND | BASH_DOOR | WILD_ALL | DROP_CORPSE
 F:ANIMAL
 D:$It is large and has venomous mandibles.
-D:それは大きくて強力なアゴを持っている。
+D:それは大きくて強力な顎を持っている。
 
 #J0#
 N:169:東夷『ブロッダ』
@@ -3858,7 +3858,7 @@ B:STING:HURT:2d4
 F:WEIRD_MIND | BASH_DOOR | 
 F:ANIMAL | DROP_SKELETON
 D:$It is a vast armoured centipede with massive mandibles and a spiked tail.
-D:それは頑丈なアゴと尖った尻尾を持った、防御力の高い巨大なムカデだ。
+D:それは頑丈な顎と尖った尻尾を持った、防御力の高い巨大なムカデだ。
 
 #J0#
 N:233:斑点ゼリー
@@ -4712,7 +4712,7 @@ F:HURT_ROCK | NO_CONF | NO_SLEEP
 V:150
 D:$This bizarre creature has glaring eyes and large mandibles capable of 
 D:$slicing through rock.
-D:この奇怪な生物はギラギラ光る目と、岩をも切り裂く巨大なアゴを持っている。
+D:この奇怪な生物はギラギラ光る目と、岩をも切り裂く巨大な顎を持っている。
 
 #JZ#
 N:284:錆の怪物
@@ -5278,7 +5278,7 @@ S:1_IN_4 |
 S:SHRIEK
 D:$A pile of rotting vegetation that slides towards you with a disgusting 
 D:$stench, waking all it nears.
-D:悪臭を振りまいて付近のものを目覚めさせながらはいずり回る、腐った植物の塊だ。
+D:悪臭を振りまいて付近のものを目覚めさせながら這いずり回る、腐った植物の塊だ。
 
 #JZ#
 #JZ#某ロマ・サガシリーズをやってたら女性特効の技がこの類の敵に効いたんです。
@@ -6860,7 +6860,7 @@ F:RAND_25 | WILD_ALL |
 F:WEIRD_MIND | BASH_DOOR | DROP_CORPSE
 F:ANIMAL | CAN_FLY | EAT_LOSE_STR
 D:$A giant beetle with poisonous mandibles.
-D:有毒なアゴを持った巨大な甲虫だ。
+D:有毒な顎を持った巨大な甲虫だ。
 
 #JZ#
 N:406:吸血イクシツザチトル
@@ -7195,7 +7195,7 @@ F:COLD_BLOOD | BASH_DOOR |
 F:ANIMAL | 
 F:IM_POIS | NO_CONF | NO_SLEEP
 D:$It is a pile of coins, slithering forward on thousands of tiny legs.
-D:それはコインの塊で、何千もの小さな足で前にはいずり歩く。
+D:それはコインの塊で、何千もの小さな足で前に這いずり歩く。
 
 #J0#
 N:424:アルグロス
@@ -8198,7 +8198,7 @@ F:WEIRD_MIND | BASH_DOOR | WILD_GRASS | DROP_CORPSE
 F:ANIMAL | CAN_FLY
 D:$It is a beetle with deadly sharp cutting mandibles and a rock-hard 
 D:$carapace.
-D:それは恐ろしく鋭い切れ味のアゴと、岩のように硬い甲羅を持った甲虫だ。
+D:それは恐ろしく鋭い切れ味の顎と、岩のように硬い甲羅を持った甲虫だ。
 
 #JZ#
 N:475:ゴーゴン
@@ -9693,7 +9693,7 @@ F:FORCE_MAXHP | KILL_BODY | FRIENDS | DROP_CORPSE
 F:WEIRD_MIND | BASH_DOOR | 
 F:ANIMAL | IM_FIRE
 D:$A giant ant covered in shaggy fur.  Its powerful jaws glow with heat.
-D:全身が毛で覆われた巨大なアリだ。その強力なアゴは熱に輝いている。
+D:全身が毛で覆われた巨大なアリだ。その強力な顎は熱に輝いている。
 
 #J0#
 N:549:ホワイト・ドラゴン
@@ -10477,7 +10477,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP | NO_FEAR | CAN_SWIM
 D:$A lump of rotting black flesh that slurrrrrrrps across the dungeon floor.
-D:腐った黒い肉の塊で、ダンジョンの床をはいずり回っている。
+D:腐った黒い肉の塊で、ダンジョンの床を這いずり回っている。
 
 #JZ#
 N:586:殺人タマムシ
@@ -11385,7 +11385,7 @@ F:RAND_25 | RES_NEXU | AURA_ELEC | IM_FIRE | IM_ELEC |
 F:EMPTY_MIND | BASH_DOOR | POWERFUL | KILL_BODY |
 F:CAN_SWIM | NO_CONF | NO_SLEEP | 
 D:$Weird, jelly like creatures. No two look the same.
-D:気味の悪いゼリー状生物。同じようにみえるものは二つと無い。
+D:気味の悪いゼリー状生物。同じように見えるものは二つと無い。
 
 N:627:地獄の鉄槌
 E:Hammer of hell
@@ -14518,7 +14518,7 @@ S:BR_ACID | BR_POIS |
 S:S_DRAGON | S_UNDEAD
 D:$In the bowels of Hel, the dread Nidhogg, a dragon blacker than the 
 D:$night, feasts on the essences of the dead.
-D:真夜中よりも黒い龍、おそるべきニーズホッグは地獄の奥底で死者の魂を
+D:真夜中よりも黒い龍、恐るべきニーズホッグは地獄の奥底で死者の魂を
 D:貪り喰っている。
 
 #J0#
@@ -18873,7 +18873,7 @@ D:$He is one of the few true masters of the art, being extremely skillful in
 D:$all forms of unarmed combat and controlling the world's natural creatures 
 D:$with disdainful ease.
 D:彼は修験道を真に極めた数少ない者であり、全ての種類の肉弾戦をマスター
-D:している。そしてこの世界の自然界の生物にアゴで命令を与えることができる。
+D:している。そしてこの世界の自然界の生物に顎で命令を与えることができる。
 
 N:918:チョウチンアンコウ
 E:Devilfish

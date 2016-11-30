@@ -1752,7 +1752,7 @@ D:$"I will give you a name, and I shall call you Sting."  The perfect size
 D:$for Bilbo, and stamped forever by the courage he found in Mirkwood, this 
 D:$sturdy little blade grants the wearer combat prowess and survival 
 D:$abilities they did not know they had.
-D:「おまえに名まえをつけてやろう！よし，つらぬき丸とよぼう。」
+D:「おまえに名まえをつけてやろう！よし、つらぬき丸とよぼう。」
 D:ビルボにとって丁度良い大きさだったこの短剣には、
 D:彼が闇の森で勝ちとった勇気が永遠に刻み込まれている。
 D:この丈夫で小さな剣は使用者の
