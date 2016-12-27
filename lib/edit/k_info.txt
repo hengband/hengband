@@ -358,7 +358,7 @@ G:,:r
 I:80:39:1000
 W:0:0:10:2
 D:$A heady wine, almost as good as that served at the Green Dragon at Bywater.
-D:ベイウォーターの緑竜邸で出るのと同じくらい質の良い、
+D:水の辺村の緑竜館で出るのと同じくらい質の良い、
 D:アルコール度の高いワインだ。
 
 ##### Extra digger #####
@@ -404,7 +404,7 @@ P:0:3d4:0:0:0
 F:SHOW_MODS
 D:$Also known as the hand-and-a-half blade.  A larger-than-normal straight-
 D:$sided sword with two cutting edges.
-D:片手半剣とも呼ばれる。通常のロングソードよりも長い両刃の直刀だ。
+D:片手半剣とも呼ばれる。通常のロング・ソードよりも長い両刃の直刀だ。
 
 N:32:シミター
 E:& Scimitar~
@@ -572,8 +572,8 @@ W:5:0:75:48
 A:5/1
 P:0:1d6:0:0:0
 F:SHOW_MODS
-D:$A smaller version of the longsword, perfectly sized for Hobbits.
-D:ロングソードを少し短くしたような剣だ。ホビットにぴったりのサイズだ。
+D:$A smaller version of the Long Sword, perfectly sized for Hobbits.
+D:ロング・ソードを少し短くしたような剣だ。ホビットにぴったりのサイズだ。
 
 N:47:折れた剣
 E:& Broken Sword~
