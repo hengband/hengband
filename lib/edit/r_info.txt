@@ -236,7 +236,7 @@ G:B:U
 I:110:1d1:30:1:10
 W:0:3:0:0:0:0
 B:BITE:HURT:1d3
-F:RAND_25 | CAN_FLY | WILD_TOWN | WILD_ONLY
+F:RAND_25 | CAN_FLY | WILD_TOWN | WILD_ONLY | FRIENDLY
 F:ANIMAL | DROP_SKELETON
 D:$Utterly harmless, except when angry.
 D:怒らせなければ全く無害だ。
@@ -498,13 +498,13 @@ B:HIT:HURT:1d6
 B:HIT:HURT:1d6
 F:NEVER_MOVE | 
 F:STUPID | EMPTY_MIND | 
-F:IM_POIS | DROP_CORPSE
+F:IM_POIS
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$A small strange growth.
 D:小さい奇妙なカビだ。
 
 #J0#
-N:21:大白蛇
+N:21:大白ヘビ
 E:Large white snake
 G:J:w
 I:100:3d6:4:30:99
@@ -2125,7 +2125,7 @@ D:$A large red snake with a woman's torso.
 D:女性の上半身を持った大きなヘビだ。
 
 #JZ#
-N:131:レッド・ジェリー
+N:131:レッド・ゼリー
 E:Red jelly
 G:j:R
 I:110:26d8:2:1:99
@@ -3117,7 +3117,7 @@ D:$A bizarre bear-creature with the claws and the face of an owl.
 D:奇怪な熊型のモンスターで、フクロウの爪と顔を持っている。
 
 #JZ#
-N:189:ブルーホラー
+N:189:ブルー・ホラー
 E:Blue horror
 G:u:B
 I:110:14d9:20:35:20
@@ -3535,10 +3535,8 @@ B:TOUCH:EXP_10
 F:RAND_50 | RAND_25 | CAN_SWIM |
 F:STUPID | WEIRD_MIND | MULTIPLY | BASH_DOOR | 
 F:ANIMAL | HURT_LITE | RES_NETH | NO_FEAR
-D:$It is a disgusting mass of dark worms, eating each other, the floor, 
-D:$the air, you....
-D:それは忌まわしい暗黒のイモムシの大群であり、お互いに共食いしあい、床や空気
-D:さえも食べる。そして冒険者さえも...。
+D:$It is a disgusting mass of dark worms.
+D:それは忌まわしい暗黒のイモムシの大群だ。
 
 #JZ#
 N:214:深淵イモムシの大群
@@ -4116,8 +4114,7 @@ I:110:16d10:20:45:50
 W:14:1:0:60:0:0
 B:HIT:HURT:6d3
 B:HIT:HURT:6d3
-F:AQUATIC | WILD_ALL | RES_WATE |
-F:MALE
+F:AQUATIC | WILD_ALL | RES_WATE
 D:$A race of fair yet belligrent sea elves.
 D:洗練された、しかも好戦的な海のエルフの種族だ。
 
@@ -4751,7 +4748,7 @@ D:$An armoured orc with an air of authority.
 D:鎧を着たオークで、威厳のある雰囲気を漂わせている。
 
 #J0#
-N:286:ゼラチン・キューブ
+N:286:ゼラチナス・キューブ
 E:Gelatinous cube
 G:j:B
 I:110:36d10:12:18:1
@@ -5265,7 +5262,7 @@ D:ている。
 #J0#
 N:316:よろめき歩く塊
 E:Shambling mound
-G:,:g
+G:#:g
 I:110:20d6:20:16:40
 W:18:2:0:75:0:0
 B:HIT:HURT:1d8
@@ -6242,7 +6239,7 @@ D:$It is a strangely moving puddle.
 D:それは奇妙に動く泥のようなものだ。
 
 #J0#
-N:372:重装備戦士
+N:372:熟練戦士
 E:Hardened warrior
 G:p:u
 I:110:15d11:20:40:40
@@ -11846,7 +11843,7 @@ S:BLIND | CONF | SCARE | CAUSE_3 | FORGET |
 S:S_DEMON
 D:$It is a demon of small stature, but its armoured frame moves with 
 D:$lightning speed and its powers make it a tornado of death and destruction.
-D:それは小さな彫像のデーモンだ。その動きは硬い体からは想像もつかない
+D:それは小さな背丈のデーモンだ。その動きは硬い体からは想像もつかない
 D:電光石火のスピードで、その力は死と破壊の竜巻を巻き起こす。
 
 #JZ#
@@ -15562,7 +15559,7 @@ D:$left: an emerald, a ruby, and a sapphire, respectively."
 D:この狡猾なアンバーの王子は陰謀の名人だ。
 D:「真っ赤な顎ひげ、燃えるような頭髪の男。赤とオレンジの、主として絹の衣裳。
 D:右手に剣、左手にワインのグラス。…目の奥に、悪魔そのものが踊っている。
-D:華奢な顎だが、顎ひけがそれを隠している。その剣には、精巧な金色の線条細
+D:華奢な顎だが、顎ひげがそれを隠している。その剣には、精巧な金色の線条細
 D:工の象眼がある。右手には大きな二つの指輪、左手にも一つ。順に、エメラル
 D:ド、ルビー、サファイアのもの。」
 D:（ロジャー・ゼラズニイ、岡部宏之訳「アンバーの九王子」早川書房、p.48）
@@ -18418,7 +18415,7 @@ D:逃げられるうちに逃げろ!
 
 N:891:バラヒアを裏切りし『ゴルリム』
 E:Gorlim, Betrayer of Barahir
-G:p:s
+G:z:s
 I:120:16d100:20:120:40
 W:41:3:0:7000:0:0
 B:HIT:HURT:8d6
@@ -18427,15 +18424,15 @@ B:HIT:UN_BONUS:6d8
 B:HIT:UN_BONUS:6d8
 F:UNIQUE | DROP_CORPSE | MALE | 
 F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
-F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | 
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | UNDEAD 
 F:SMART | OPEN_DOOR | BASH_DOOR | HAS_LITE_2 |
 F:IM_ACID | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP |
 S:1_IN_2 | 
 S:CAUSE_3 | BO_WATE | BO_MANA
-D:$This once-mighty warrior was so dominated by Morgoth's power that he 
-D:$became little more than a mindless creature of evil.
-D:かつて屈強さを誇ったこの戦士はモルゴスの力に完全に支配され、今では
-D:ほとんど意思を持たない邪悪の生物に成り下がってしまった。
+D:$This body of once-mighty warrior was so dominated by Sauron's power that he 
+D:$became little more than a mindless undead of evil.
+D:かつて屈強さを誇ったこの戦士の肉体はサウロンの力に完全に支配され、
+D:今ではほとんど意思を持たない邪悪なアンデッドに成り下がってしまった。
 
 N:892:ディジニ
 E:Djinni
