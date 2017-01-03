@@ -985,123 +985,120 @@
  * Originally from UnAngband, and modified into TR-like style in Hengband
  */
 
+#define FF_LOS           0              /*!< 視界が通る地形である */
+#define FF_PROJECT       1              /*!< 飛び道具が通過できる地形である */
+#define FF_MOVE          2              /*!< 移動可能な地形である */
+#define FF_PLACE         3              /*!< モンスター配置をしても良い地形である(cave_empty_bold/cave_empty_gridで利用) */
+#define FF_DROP          4              /*!< アイテムを落としてよい地形である */
+#define FF_SECRET        5              /*!< 隠し扉やトラップが潜んでいる地形である */
+#define FF_NOTICE        6              /*!< 何か興味を引くものがある地形である(シフトキー＋方向で走行中の時に止まる基準) */
+#define FF_REMEMBER      7              /*!< 常に記憶対象となる地形である(記憶喪失時に忘れたりしなくなる) */
+#define FF_OPEN          8              /*!< 開けるコマンドの対象となる地形である */
+#define FF_CLOSE         9              /*!< 閉じるコマンドの対象となる地形である */
+#define FF_BASH          10             /*!< 体当たりコマンドの対象となる地形である */
+#define FF_SPIKE         11             /*!< くさびを打つコマンドの対象となる地形である */
+#define FF_DISARM        12             /*!< 解除コマンドの対象となる地形である */
+#define FF_STORE         13             /*!< 店舗の入口となる地形である */
+#define FF_TUNNEL        14             /*!< 魔王変化などで掘り進められる地形である */
+#define FF_MAY_HAVE_GOLD 15             /*!< 何か財宝を隠した可能性のある地形である？(f_infoに使用している地形なし) */
+#define FF_HAS_GOLD      16             /*!< 財宝を含んだ地形である */
+#define FF_HAS_ITEM      17             /*!< アイテムを含んだ地形である */
+#define FF_DOOR          18             /*!< ドアのある地形である */
+#define FF_TRAP          19             /*!< トラップのある地形である */
+#define FF_STAIRS        20             /*!< 階段のある地形である */
+#define FF_GLYPH         21             /*!< 守りのルーンが張られた地形である */
+#define FF_LESS          22             /*!< 階上に通じる地形である */
+#define FF_MORE          23             /*!< 階下に通じる地形である */
+#define FF_AVOID_RUN     24             /*!< 自動移動機能時に障害として迂回すべき地形である */
+#define FF_FLOOR         25             /*!< 床のある地形である */
+#define FF_WALL          26             /*!< 壁のある地形である */
+#define FF_PERMANENT     27             /*!< 絶対に破壊できない永久地形である */
+/* #define FF_XXX00         28  未定義 */
+/* #define FF_XXX01         29  未定義 */
+/* #define FF_XXX02         30  未定義 */
+#define FF_HIT_TRAP      31             /*!< トラップのある地形である(TRAPと常に重複している？) */
+/* #define FF_BRIDGE        32  未使用 */
+/* #define FF_RIVER         33  未使用 */
+/* #define FF_LAKE          34  未使用 */
+/* #define FF_BRIDGED       35  未使用 */
+/* #define FF_COVERED       36  未使用 */
+#define FF_GLOW          37             /*!< 常に光っている地形である */
+#define FF_ENSECRET      38             /*!< 不明(f_info.txt上で利用している地形がない) */
+#define FF_WATER         39             /*!< 水のある地形である */
+#define FF_LAVA          40             /*!< 溶岩のある地形である */
+#define FF_SHALLOW       41             /*!< 浅い地形である */
+#define FF_DEEP          42             /*!< 深い地形である */
+/* #define FF_FILLED        43 */       /*!< 未使用 */
+#define FF_HURT_ROCK     44             /*!< 岩石溶解の対象となる地形である */
+/* #define FF_HURT_FIRE     45 */       /*!< 未使用 */
+/* #define FF_HURT_COLD     46 */       /*!< 未使用 */
+/* #define FF_HURT_ACID     47 */       /*!< 未使用 */
+/* #define FF_ICE           48 */       /*!< 未使用 */
+/* #define FF_ACID          49 */       /*!< 未使用 */
+/* #define FF_OIL           50 */       /*!< 未使用 */
+/* #define FF_XXX04      51 */          /*!< 未使用 */
+/* #define FF_CAN_CLIMB     52 */       /*!< 未使用 */
+#define FF_CAN_FLY       53             /*!< 飛行可能な地形である */
+#define FF_CAN_SWIM      54             /*!< 泳ぐことが可能な地形である */
+#define FF_CAN_PASS      55             /*!< 通過可能な地形である */
+/* #define FF_CAN_OOZE      56 */       /*!< 未使用 */
+#define FF_CAN_DIG       57             /*!< 掘削コマンドの対象となる地形である */
+/* #define FF_HIDE_ITEM     58  未使用 */
+/* #define FF_HIDE_SNEAK    59  未使用 */
+/* #define FF_HIDE_SWIM     60  未使用 */
+/* #define FF_HIDE_DIG      61  未使用 */
+/* #define FF_KILL_HUGE     62  未使用 */
+/* #define FF_KILL_MOVE     63  未使用 */
+/* #define FF_PICK_TRAP     64  未使用 */
+/* #define FF_PICK_DOOR     65  未使用 */
+/* #define FF_ALLOC         66  未使用 */
+/* #define FF_CHEST         67  未使用 */
+/* #define FF_DROP_1D2      68  未使用 */
+/* #define FF_DROP_2D2      69  未使用 */
+/* #define FF_DROP_GOOD     70  未使用 */
+/* #define FF_DROP_GREAT    71  未使用 */
+/* #define FF_HURT_POIS     72  未使用 */
+/* #define FF_HURT_ELEC     73  未使用 */
+/* #define FF_HURT_WATER    74  未使用 */
+/* #define FF_HURT_BWATER   75  未使用 */
+/* #define FF_USE_FEAT      76  未使用 */
+/* #define FF_GET_FEAT      77  未使用 */
+/* #define FF_GROUND        78  未使用 */
+/* #define FF_OUTSIDE       79  未使用 */
+/* #define FF_EASY_HIDE     80  未使用 */
+/* #define FF_EASY_CLIMB    81  未使用 */
+/* #define FF_MUST_CLIMB    82  未使用 */
+#define FF_TREE          83             /*!< 木の生えた地形である */
+/* #define FF_NEED_TREE     84  未使用 */
+/* #define FF_BLOOD         85  未使用 */
+/* #define FF_DUST          86  未使用 */
+/* #define FF_SLIME         87  未使用 */
+#define FF_PLANT         88             /*!< 植物の生えた地形である */
+/* #define FF_XXX2          89  未定義 */
+/* #define FF_INSTANT       90  未使用 */
+/* #define FF_EXPLODE       91  未使用 */
+/* #define FF_TIMED         92  未使用 */
+/* #define FF_ERUPT         93  未使用 */
+/* #define FF_STRIKE        94  未使用 */
+/* #define FF_SPREAD        95  未使用 */
+#define FF_SPECIAL       96             /*!< クエストやダンジョンに関わる特別な地形である */
+#define FF_HURT_DISI     97             /*!< 分解属性の対象となる地形である */
+#define FF_QUEST_ENTER   98             /*!< クエストの入り口である */
+#define FF_QUEST_EXIT    99             /*!< クエストの出口である */
+#define FF_QUEST         100            /*!< クエストに関する地形である */
+#define FF_SHAFT         101            /*!< 坑道である。(2階層移動する階段である) */
+#define FF_MOUNTAIN      102            /*!< ダンジョンの山地形である */
+#define FF_BLDG          103            /*!< 施設の入り口である */
+#define FF_MINOR_GLYPH   104            /*!< 爆発のルーンのある地形である */
+#define FF_PATTERN       105            /*!< パターンのある地形である */
+#define FF_TOWN          106            /*!< 広域マップ用の街がある地形である */
+#define FF_ENTRANCE      107            /*!< 広域マップ用のダンジョンがある地形である */
+#define FF_MIRROR        108            /*!< 鏡使いの鏡が張られた地形である */
+#define FF_UNPERM        109            /*!< 破壊不能な地形である(K:フラグ向け？) */
+#define FF_TELEPORTABLE  110            /*!< テレポート先の対象となる地形である */
+#define FF_CONVERT       111            /*!< 地形生成処理中の疑似フラグ */
+#define FF_GLASS         112            /*!< ガラス製の地形である */
 
-#define FF_LOS           0
-#define FF_PROJECT       1
-#define FF_MOVE          2
-#define FF_PLACE         3
-#define FF_DROP          4
-#define FF_SECRET        5
-#define FF_NOTICE        6
-#define FF_REMEMBER      7
-#define FF_OPEN          8
-#define FF_CLOSE         9
-#define FF_BASH          10
-#define FF_SPIKE         11
-#define FF_DISARM        12
-#define FF_STORE         13
-#define FF_TUNNEL        14
-#define FF_MAY_HAVE_GOLD 15
-#define FF_HAS_GOLD      16
-#define FF_HAS_ITEM      17
-#define FF_DOOR          18
-#define FF_TRAP          19
-#define FF_STAIRS        20
-#define FF_GLYPH         21
-#define FF_LESS          22
-#define FF_MORE          23
-#define FF_AVOID_RUN     24
-#define FF_FLOOR         25
-#define FF_WALL          26
-#define FF_PERMANENT     27
-/* #define FF_XXX00         28 */
-/* #define FF_XXX01         29 */
-/* #define FF_XXX02         30 */
-#define FF_HIT_TRAP      31
-
-/* #define FF_BRIDGE        32 */
-/* #define FF_RIVER         33 */
-/* #define FF_LAKE          34 */
-/* #define FF_BRIDGED       35 */
-/* #define FF_COVERED       36 */
-#define FF_GLOW          37
-#define FF_ENSECRET      38
-#define FF_WATER         39
-#define FF_LAVA          40
-#define FF_SHALLOW       41
-#define FF_DEEP          42
-/* #define FF_FILLED        43 */
-#define FF_HURT_ROCK     44
-/* #define FF_HURT_FIRE     45 */
-/* #define FF_HURT_COLD     46 */
-/* #define FF_HURT_ACID     47 */
-/* #define FF_ICE           48 */
-/* #define FF_ACID          49 */
-/* #define FF_OIL           50 */
-/* #define FF_XXX04      51 */
-/* #define FF_CAN_CLIMB     52 */
-#define FF_CAN_FLY       53
-#define FF_CAN_SWIM      54
-#define FF_CAN_PASS      55
-/* #define FF_CAN_OOZE      56 */
-#define FF_CAN_DIG       57
-/* #define FF_HIDE_ITEM     58 */
-/* #define FF_HIDE_SNEAK    59 */
-/* #define FF_HIDE_SWIM     60 */
-/* #define FF_HIDE_DIG      61 */
-/* #define FF_KILL_HUGE     62 */
-/* #define FF_KILL_MOVE     63 */
-
-/* #define FF_PICK_TRAP     64 */
-/* #define FF_PICK_DOOR     65 */
-/* #define FF_ALLOC         66 */
-/* #define FF_CHEST         67 */
-/* #define FF_DROP_1D2      68 */
-/* #define FF_DROP_2D2      69 */
-/* #define FF_DROP_GOOD     70 */
-/* #define FF_DROP_GREAT    71 */
-/* #define FF_HURT_POIS     72 */
-/* #define FF_HURT_ELEC     73 */
-/* #define FF_HURT_WATER    74 */
-/* #define FF_HURT_BWATER   75 */
-/* #define FF_USE_FEAT      76 */
-/* #define FF_GET_FEAT      77 */
-/* #define FF_GROUND        78 */
-/* #define FF_OUTSIDE       79 */
-/* #define FF_EASY_HIDE     80 */
-/* #define FF_EASY_CLIMB    81 */
-/* #define FF_MUST_CLIMB    82 */
-#define FF_TREE          83
-/* #define FF_NEED_TREE     84 */
-/* #define FF_BLOOD         85 */
-/* #define FF_DUST          86 */
-/* #define FF_SLIME         87 */
-#define FF_PLANT         88
-/* #define FF_XXX2          89 */
-/* #define FF_INSTANT       90 */
-/* #define FF_EXPLODE       91 */
-/* #define FF_TIMED         92 */
-/* #define FF_ERUPT         93 */
-/* #define FF_STRIKE        94 */
-/* #define FF_SPREAD        95 */
-
-#define FF_SPECIAL       96
-#define FF_HURT_DISI     97
-#define FF_QUEST_ENTER   98
-#define FF_QUEST_EXIT    99
-#define FF_QUEST         100
-#define FF_SHAFT         101
-#define FF_MOUNTAIN      102
-#define FF_BLDG          103
-#define FF_MINOR_GLYPH   104
-#define FF_PATTERN       105
-#define FF_TOWN          106
-#define FF_ENTRANCE      107
-#define FF_MIRROR        108
-#define FF_UNPERM        109
-#define FF_TELEPORTABLE  110
-#define FF_CONVERT       111
-#define FF_GLASS         112
 
 #define FF_FLAG_MAX      113
 #define FF_FLAG_SIZE     (1 + ((FF_FLAG_MAX - 1) / 32))
