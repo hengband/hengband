@@ -674,7 +674,7 @@ void curse_equipment(int chance, int heavy_chance)
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Extra, biased saving throw for blessed items */
-	if (have_flag(oflgs, TR_BLESSED) && (randint1(888) > chance))
+	if (have_flag(oflgs, TR_BLESSED))
 	{
 #ifdef JP
 		msg_format("祝福された%sは呪いを跳ね返した！", o_name,
