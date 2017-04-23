@@ -677,9 +677,9 @@ void curse_equipment(int chance, int heavy_chance)
 	if (have_flag(oflgs, TR_BLESSED) && (randint1(888) > chance))
 	{
 #ifdef JP
-msg_format("%sは呪いを跳ね返した！", o_name,
+		msg_format("祝福された%sは呪いを跳ね返した！", o_name,
 #else
-		msg_format("Your %s resist%s cursing!", o_name,
+		msg_format("Your blessed %s resist%s cursing!", o_name,
 #endif
 
 			((o_ptr->number > 1) ? "" : "s"));
