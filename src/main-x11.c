@@ -126,7 +126,7 @@ char *XSetIMValues(XIM, ...); /* Hack for XFree86 4.0 */
 #include <X11/Xatom.h>
 #endif /* __MAKEDEPEND__ */
 
-
+#include <iconv.h>
 /*
  * Include some helpful X11 code.
  */
@@ -1665,8 +1665,18 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
 				 Infokfnt->info, Infofnt->wid * 2);
 #else
 #ifdef USE_FONTSET
+
+		iconv_t cd = iconv_open("UTF-8", "EUC-JP");
+		size_t inlen = len;
+		size_t outlen = len * 2;
+		char *kanji = malloc(outlen);
+		char *sp = str; char *kp = kanji;
+		size_t n = iconv(cd, &sp, &inlen, &kp, &outlen);
+		iconv_close(cd);
+
 		XmbDrawImageString(Metadpy->dpy, Infowin->win, Infofnt->info,
-				   Infoclr->gc, x, y, str, len);
+				Infoclr->gc, x, y, kanji, kp-kanji);
+		free(kanji);
 #else
 		XDrawImageString(Metadpy->dpy, Infowin->win, Infoclr->gc,
 				 x, y, str, len);
