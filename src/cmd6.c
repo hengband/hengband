@@ -3909,6 +3909,7 @@ static void do_cmd_activate_aux(int item)
 			if (!success)
 				msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
 		}
+		calc_android_exp();
 		return;
 	}
 
