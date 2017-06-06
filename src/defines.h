@@ -51,8 +51,8 @@
 #define FAKE_VERSION   0
 
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
-#define FAKE_VER_MINOR 1 /*!< ゲームのバージョン番号定義(マイナー番号) */
-#define FAKE_VER_PATCH 5 /*!< ゲームのバージョン番号定義(パッチ番号) */
+#define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
+#define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
 
 
 /*!
