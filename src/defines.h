@@ -51,7 +51,7 @@
 #define FAKE_VERSION   0
 
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
-#define FAKE_VER_MINOR 3 /*!< ゲームのバージョン番号定義(マイナー番号) */
+#define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
 #define FAKE_VER_EXTRA 0 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
@@ -69,7 +69,7 @@
  * </pre>
  */
 #define H_VER_MAJOR 2 /*!< セーブファイル上のバージョン定義(メジャー番号) */
-#define H_VER_MINOR 3 /*!< セーブファイル上のバージョン定義(マイナー番号) */
+#define H_VER_MINOR 2 /*!< セーブファイル上のバージョン定義(マイナー番号) */
 #define H_VER_PATCH 0 /*!< セーブファイル上のバージョン定義(パッチ番号) */
 #define H_VER_EXTRA 0 /*!< セーブファイル上のバージョン定義(エクストラ番号) */
 
