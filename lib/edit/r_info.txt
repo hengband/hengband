@@ -21974,7 +21974,6 @@ D:地球侵略を企てるジュラル星人の統率者だ。
 D:「諸君、今から命令をすりゅ！地球の子供達をかたっぱしからとらえて君! 」
 D:（『チャージマン研！』アニメ第１話・『危機!!子供宇宙ステーション』）
 
-#JZ#
 N:1090:『ボルガ博士』
 E:Dr.Volga
 G:t:w
@@ -21989,7 +21988,6 @@ D:「ボルガ博士、あなたは殺されたんです。
 D:その頭の中に爆弾を仕掛けられて、今のあなたは人間ロボットなんだ！」
 D:（『チャージマン研！』アニメ第３５話・『頭の中にダイナマイト』）
 
-#J0#
 N:1091:グウィンの黒騎士
 E:Black knight of Gwyn
 G:p:s
@@ -22006,7 +22004,6 @@ F:IM_FIRE | IM_POIS | HAS_LITE_1 |
 D:太陽の光の王グウィンの火継ぎの輝きに焼かれ、灰となった神代の騎士だ。
 D:以来、彼らは世界を彷徨い歩く存在となった。
 
-#J0#
 N:1092:オーラントの公使
 E:Fat offcial of Allant
 G:p:D
@@ -22023,7 +22020,6 @@ D:オーラント王の手先として彼の地を統率する異形の者だ。
 D:その醜く太った体を揺らしながら、不気味な笑いと共に火の玉を繰り出し、
 D:三日月の斧で襲いかかって来る。
 
-#JZ#
 N:1093:月光蝶
 E:Moonlight butterfly
 G:I:b
@@ -22038,7 +22034,6 @@ D:この青く輝く巨大な蝶は、鱗を持たぬ白竜シースの手によ
 D:$This palely bright and giant butterfly is
 D:$created by Seath the scaleless dragon.
 
-#JZ#
 N:1094:コーウィンの銃士
 E:Gunner of Corwin
 G:h:r
@@ -22083,7 +22078,6 @@ D:そしておれたちのほうはだれも出ちゃおらんとね。ラグド
 D:駆け抜けたが、二人とも矢で射たれた。」
 D:（J.R.R.トールキン、瀬田貞二・田中明子訳 新版指輪物語） 
 
-#JZ#
 N:1096:濃尾無双『岩本虎眼』
 E:Kogan Iwamoto, the peerless swordsman of Nobi
 G:p:o
@@ -22101,7 +22095,6 @@ A:248:1:80
 D:「あの君さまはいつが盛りよな」この老剣士は今、正気でも曖昧でもなく、
 D:敵であろうと味方であろうと、間合いに入った者全てを斬る魔神と化している。
 
-#J0#
 N:1097:ヤング・クイックシルバー・ドラゴン
 E:Young quicksilver dragon
 G:d:s
@@ -22121,7 +22114,6 @@ D:$Its glossy body wriggles and goes into a liquid state.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
 D:その光沢のある肉体は液状にうごめいていて、変幻自在に形を変えている。
 
-#J0#
 N:1098:クイックシルバー・ドラゴン
 E:Mature quicksilver dragon
 G:d:s
@@ -22140,7 +22132,6 @@ S:BLIND
 D:$A large dragon with scales of wriggling silver.
 D:大きなドラゴンで、銀色にうごめく鱗を持っている。
 
-#J0#
 N:1099:古代クイックシルバー・ドラゴン
 E:Ancient quicksilver dragon
 G:D:s
@@ -22159,7 +22150,6 @@ S:BLIND
 D:$It's a huge dragon having kaleidoscopic form with cold blazing.
 D:冷たい輝きと共に変幻自在の姿を見せる巨大なドラゴンだ。
 
-#J0#
 N:1100:甲鱗のワーム
 E:Scaled wurm
 G:w:G
@@ -22189,9 +22179,8 @@ F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
 D:$A mysterious purple jelly thing.  It looks ready to explode.
 D:紫でぷよぷよした謎の生物だ。
 
-#JZ#
 N:1102:ラット・オウガ
-E:Rat Ogre
+E:Rat ogre
 G:r:U
 I:115:25d11:10:65:30
 W:22:2:0:6000:0:0
@@ -22204,3 +22193,19 @@ F:OPEN_DOOR | MALE | WILD_WASTE | WILD_SWAMP | NO_FEAR
 D:$It's a biped walking monster, seems subspecies of Skaven,
 D:$but it's larger and more terrible than them.
 D:それはスケイヴンの亜種と思われるが、より大きくおぞましい二足歩行の怪物だ。
+
+N:1103:拡散の尖兵
+E:Vanguard of diffusion
+G:U:s
+I:110:32d100:20:90:80
+W:45:4:0:5000:0:0
+B:HIT:SUPERHURT:10d12
+B:HIT:SUPERHURT:10d12
+B:HIT:SUPERHURT:10d12
+F:FORCE_SLEEP | FORCE_MAXHP | 
+F:ONLY_ITEM | DROP_4D2 |
+F:OPEN_DOOR | BASH_DOOR | POWERFUL | NONLIVING |
+F:EVIL | DEMON | NO_CONF | NO_SLEEP
+D:ボーレタリアの色のない霧から最初に現れたデーモンの尖兵だ。
+D:刺々しい灰色の巨体が斧を握りしめている。
+
