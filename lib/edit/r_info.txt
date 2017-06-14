@@ -22209,3 +22209,13 @@ F:EVIL | DEMON | NO_CONF | NO_SLEEP
 D:ボーレタリアの色のない霧から最初に現れたデーモンの尖兵だ。
 D:刺々しい灰色の巨体が斧を握りしめている。
 
+N:1104:おじゃまぷよ
+E:Hindrance puyo
+G:j:B
+I:108:30d6:15:60:50
+W:30:10:0:50:0:0
+F:HURT_FIRE | HURT_COLD | HURT_LITE | HURT_ROCK | NEVER_BLOW
+F:ATTR_CLEAR | NEVER_MOVE | MULTIPLY |
+F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
+D:$A mysterious clear jelly thing.  It looks ready to explode.
+D:透明でぷよぷよした謎の生物だ。
