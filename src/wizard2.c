@@ -111,6 +111,36 @@ static bool wiz_dimension_door(void)
 
 
 /*!
+ * @brief プレイ日数を変更する / Set gametime.
+ * @return 実際に変更を行ったらTRUEを返す
+ */
+static bool set_gametime(void)
+{
+	int tmp_int = 0;
+	char ppp[80], tmp_val[40];
+
+	/* Prompt */
+	sprintf(ppp, "Dungeon Turn (0-%d): ", dungeon_turn_limit);
+
+	/* Default */
+	sprintf(tmp_val, "%d", dungeon_turn);
+
+	/* Query */
+	if (!get_string(ppp, tmp_val, 10)) return (FALSE);
+
+	/* Extract */
+	tmp_int = atoi(tmp_val);
+
+	/* Verify */
+	if (tmp_int >= dungeon_turn_limit) tmp_int = dungeon_turn_limit - 1;
+	else if (tmp_int < 0) tmp_int = 0;
+	dungeon_turn = turn = tmp_int;
+	return (TRUE);
+
+}
+
+
+/*!
  * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
  * @return なし
  */
@@ -1908,9 +1938,8 @@ extern void do_cmd_debug(void);
  */
 void do_cmd_debug(void)
 {
-	int     x, y, i;
+	int     x, y;
 	char    cmd;
-
 
 	/* Get a "debug command" */
 	get_com("Debug Command: ", &cmd, FALSE);
@@ -2128,6 +2157,12 @@ void do_cmd_debug(void)
 	case 't':
 		teleport_player(100, 0L);
 		break;
+
+	/* Game Time Setting */
+	case 'T':
+		set_gametime();
+		break;
+
 
 	/* Very Good Objects */
 	case 'v':
