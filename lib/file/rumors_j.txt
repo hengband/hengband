@@ -147,7 +147,8 @@ Some weapons that slay dragons can be very deadly against them...
 {BFG9000}と銘のある壊滅のロッドを見たことあるかい？
 #What a pity, you cannot read it!
 それを読むことが出来ないなんて気の毒な。
-You will encounter a dark, tall stranger...
+#You will encounter a dark, tall stranger...
+あなたは黒ずくめの背の高い流れ者に出会うだろう...
 #A Mithril mail will not rust.
 ミスリルの鎧は錆びない。
 #An Adamantite mail will not rust.
@@ -168,18 +169,22 @@ You will encounter a dark, tall stranger...
 ゼラチンキューブと戦う前に鎧を脱いでみよう。
 #They say that only one sword can score *CRITICAL* hits.
 ただ一つの剣のみが *CRITICAL* を出すことが出来るらしい。
-You have Error in objdes()
+#You have Error in objdes()
+関数 objdes() でエラーが発生しました。
 #This rumor is not true.
 この噂は真実ではない。
-Trump power may be useful in some circumstances: free teleport!
-If you can fall like a feather, you need not care about gravity.
+#Trump power may be useful in some circumstances: free teleport!
+トランプの力はいくつかの状況で便利になるだろう：フリーなテレポートだ！
+#If you can fall like a feather, you need not care about gravity.
+羽のように落下できるなら、重力について心配する必要はない。
 #They say that you should rejoice if you find a scroll labeled ""!
 「」と書かれた巻物を拾ったら喜ぶべきなんだそうだ。
 #You don't always have to kill everything you meet!
 いつも出会う敵全てを殺す必要はない！
 #If you can't beat it, leave it alone!
 倒せないなら、ほっときな！
-An umber hulk can be a confusing sight.
+#An umber hulk can be a confusing sight.
+アンバーハルクは混乱した視界の中に在るだろう。
 #There *is* a good use for Potions of Detonations, Ruination and Death...
 爆発の薬や死の薬や破滅の薬には、いい使い道がある。
 #It's a bad idea to throw away a Longsword (4d5).
@@ -269,7 +274,8 @@ If you start seeing red monsters, you have probably gained infravision.
 地獄への階段があるのなら、天国への階段もあるはずだ。
 #You feel your luck is turning...
 多少は運が向いてきたか...
-If you thought Death swords were bad, wait until you meet Killer katanas!
+#If you thought Death swords were bad, wait until you meet Killer katanas!
+デスソードが強敵だと感じるなら、キラーカタナに出会えるまで待て！
 #Overeating can be bad for your health if there are others nearby.
 近くに何かいる場合、食べ過ぎは健康に良くない。
 #Cave dwellers are accustomed to darkness and rarely enjoy bright light.
@@ -309,7 +315,8 @@ They say that there is no such thing as free advice.
 足元に気をつけて！探索モードに入るには(s)キーだ。
 #They say that you had better leave Greater hell-beasts alone.
 グレーター・ヘル=ビーストは放っておいたほうがいいそうだ。
-Kharis' tomb is somewhere in the dungeon and you won't want to desecrate it!
+#Kharis' tomb is somewhere in the dungeon and you won't want to desecrate it!
+カリスの墓は迷宮のどこかにあるが、冒涜しようとは思わないことだ！
 #Selling unidentified potions to shopkeepers might be safer than quaffing them.
 未鑑定の薬を店に売るのは、自分で飲むより安全だ。
 #Always look out for trapdoors on "special" feeling levels!
@@ -322,14 +329,18 @@ Kharis' tomb is somewhere in the dungeon and you won't want to desecrate it!
 ただ一つの剣、『ノートゥング』のみが龍のファフナーを倒すことが出来るらしい。
 #"So when I die, the first thing I will see in heaven is a score list?"
 「じゃあ、もし死んだ時、天国で真っ先に目にするのはスコアリストだってのかい？」
-You're going into the morgue at midnight?
-How dare you! I will not buy that!
+#You're going into the morgue at midnight?
+真夜中に墓地に行く気かい？
+#How dare you! I will not buy that!
+図々しいな！そんなものを買うか！？
 #A Potion of Detonations is also known as nitroglycerin...
 爆発の薬はニトログリセリンという名でも知られている。
 #There is a trap on this level!
 この階には罠がある！
-A weapon of Undead Slaying has all you need to kill a ghost.
-A weapon of Dragon Slaying may give you resistance to a dragon's breath attack.
+#A weapon of Undead Slaying has all you need to kill a ghost.
+アンデッドスレイヤーは幽霊を倒す為に必要な全てを備えている。
+#A weapon of Dragon Slaying may give you resistance to a dragon's breath attack.
+ドラゴンスレイヤーはドラゴンのブレスに対する耐性を授けてくれるだろう。
 #They say that only a Warrior will want to wear the Terror Mask.
 戦士のみが『恐怖の仮面』を装備したがるだろうと言われている。
 All that is shall come to an end - a dark day dawns for the gods.
@@ -340,10 +351,14 @@ All that is shall come to an end - a dark day dawns for the gods.
 #Stairway Creation may be slower than Teleport Level, but safer...
 階段生成はレベルテレポートより遅いけど、安全だ...
 I hid the Jewel in a vault at 4700'. To find it, you need to:
-Wands of Heal Monster are useful! Hint: ball spell, @....moo(o)ooo
-Guaranteed heal self - scenario: o'@, type c4c4c4c4
-If it can't see you, it can't hurt you!
-If it can't see you, you might still be able to hurt it...
+#Wands of Heal Monster are useful! Hint: ball spell, @....moo(o)ooo
+怪物を回復させる杖は使いでがある！ ヒント：ボール系呪文、@....moo(o)ooo
+#Guaranteed heal self - scenario: o'@, type c4c4c4c4
+確実な自己治癒の方法 - 手順：o'@, c4c4c4c4 と入力。
+#If it can't see you, it can't hurt you!
+奴にあなたが見えないなら、奴はあなたを傷つけられない！
+#If it can't see you, you might still be able to hurt it...
+奴にあなたが見えないなら、あなたは奴を一方的に攻撃できるかもしれない...
 The Jedi Holocron is the best artifact light source there is.
 #I love you, you love me, we are a happy family!
 アイラブユー、ユーラブミー、ボクたちハッピー家族！
@@ -354,14 +369,16 @@ No animal is interested in sex if it is mortally scared.
 #Wagner's operas are awfully dissonant! The characters must be deaf!
 ワーグナーのオペラは酷い不調和音だ！登場人物は耳が聞こえないに違いない！
 Groo may be as dumb as an amoeba, but he knows a good sword when he sees one.
-Groo is an idiot! Groo is a dolt! He is a fool! He has no mind!
+#Groo is an idiot! Groo is a dolt! He is a fool! He has no mind!
+グルーは馬鹿だ！グルーはバカだ！奴はばかだ！奴には思考というものがない！
 And now, Groo does what Groo does best!
 #Groo is your worst nightmare.
 グルーは最悪の悪夢だ。
 #Freddy Krueger is your worst nightmare.
 フレディ・クルーガーは最悪の悪夢だ。
 Come to Freddy! He needs some sparring urgently.
-There are often stairways in graveyards: bad people are carried to hell...
+#There are often stairways in graveyards: bad people are carried to hell...
+墓地にはよく階段がある: 悪人共を地獄に送る為の階段が．．．
 #An urgent message from Dworkin: Pattern not found.
 ドワーキンからの緊急メッセージ：Pattern not found.
 #Only a god of Thunder could ride a lightning bolt!
@@ -408,8 +425,10 @@ For any remedy there is a misery.
 お願いだから前の噂は忘れてくれ。
 #There are scrolls that can be read only by mages.
 魔法使いにしか読めない巻物があるらしい。
-Some undead opponents will come back if defeated, more powerful than before!
-One level further down somebody is getting killed, right now.
+#Some undead opponents will come back if defeated, more powerful than before!
+アンデッドの中には倒されてもいつしか再び蘇る者がいるという。その前にもっと強くなれ！
+#One level further down somebody is getting killed, right now.
+たった今、ここの一つ下の階で誰かが殺された。
 #Meet me at 1900' if you are a man.
 男なら38階まで来て俺と勝負だ。
 Bashing a creature may sometimes stun it.
@@ -424,11 +443,13 @@ A person attuned to the Jewel could use it to erase the Pattern.
 近くに炎の罠がある時は、絶対に爆発の薬を持ち歩いてはいけない！
 Laugh to scorn the power of man, for none of woman born shall harm thee!
 All hail thee that shalt be king hereafter!
-He who laughs at Groo's brains will find there is nothing to laugh about.
+#He who laughs at Groo's brains will find there is nothing to laugh about.
+グルーの頭脳を嘲笑う者は、笑う対象が存在しないことに気づくだろう。
 A wise man always speaks too soon...
 Let us not dwell on possible bad fortunes!
 Appearance is only the frosting, not the cake!
-A feeling of Death flows through your body.
+#A feeling of Death flows through your body.
+死の予感があなたの体を通り抜けた。
 #Violence is no solution.
 暴力では何も解決しない。
 #Boots of Speed (+50) are no myth!
@@ -439,7 +460,8 @@ Drain you of your sanity: Face the Thing That Should Not Be!
 #Wearing an Amulet of Doom will take you into the Dungeons of Doom.
 破滅のアミュレット(Amulet of Doom)を装備すると画面が３Ｄポリゴンになるらしい。
 Whence come you then, that you have never heard of the Rhinegold?
-The Nibelung, Night-Alberich, in revenge, stole the Rhinegold.
+#The Nibelung, Night-Alberich, in revenge, stole the Rhinegold.
+ニーベルングの『復讐のアルベリヒ』はラインの黄金を盗んだ。
 Since by curse it came to me, accursed be this Ring!
 Each shall itch to possess the Ring, but none in it shall find pleasure!
 Solemn treaties, with symbols of trust, carved by Wotan in his Spear.
@@ -471,7 +493,8 @@ Damn! Those alien bastards are gonna pay for shooting up my ride!
 #Oremor nhoj em llik tsum uoy emag siht niw ot.
 Oremor nhoj いならなばねさ倒を私はにつ勝でムーゲのこ。
 If I cancel tomorrow the undead will thank me today.
-Hellfire will burn your soul... (if you're not of evil alignment!)
+#Hellfire will burn your soul... (if you're not of evil alignment!)
+地獄の炎があなたの魂を焼くだろう...(あなたが邪悪な属性でないのなら！)
 #Never attempt to Call the Void in an enclosed space!
 閉じた空間で「虚無招来」を試してはならない！
 #Call the Void needs a lot of room to cast...
@@ -635,7 +658,8 @@ How the means unforeseen are revealed whereby Oberon might be overthrown?
 Saroyan: Voyald is a way of saying Void, Voyage and World at the same time.
 #Death, next to birth is our best gift, and next to truth it is our best friend.
 「死」は、我々にとって生の次に有難い物だ。そして真実の次に良き友だ。
-The greatest story-teller of all is time and change, or death.
+#The greatest story-teller of all is time and change, or death.
+全てにおいて最も偉大な語り部とは、時と変化、そして死だ。
 Sing Fury: "This is not the time to wonder, this is not the time to cry!"
 How hope beyond hopes is fulfilled is yours to stumble upon.
 Do not grudge his chance of peril him who advances beyond hopes.
@@ -665,11 +689,13 @@ Morgoth is the very brink where hope and despair are akin.
 Give little heed to the wreck and slaughter that will lay around the pits.
 Accidents? what accidents? Mighty were your fallen ancestors.
 Fortune has betrayed you but for the momentum. Confidence!
-On the long run - IF you're survivor - winds of fortune will not wreck you.
+#On the long run - IF you're survivor - winds of fortune will not wreck you.
+長い道のりにおいて - もしあなたが生き残るのであれば - 運命の風はあなたを難破させはしないでしょう。
 As a spell-striking egghead you'd need convincing offensive powers!
 #Once no Recall is left the way up will seem never ending to you.
 帰還の巻物が無くなったら、地上への旅は終りのないものに感じるだろう。
-The simple scheme ended in failure. That demon called lots of companions.
+#The simple scheme ended in failure. That demon called lots of companions.
+簡単なはずのクエストをミスっちまった。あのデーモン、大量の仲間を呼びやがった。
 Sing CCR: "Before you kill me take a look at yourself." Reflection-shields!
 Sing Pythons: "Always look on the bright sight of death." Only a breath away!
 Sing Beck: "I'm a loser, baby dragon, so why don't you kill me?" Suicide, ha!
@@ -700,28 +726,39 @@ Any Hru will rage, spreading earthquake and ruin. Only Shudde is worse.
 You cannot escape a Hru just by blinking. Your life will be shattered!
 #If Amulets of Resistance don't stack it's caused by different additionals.
 もし複数の耐性のアミュレットが重ならない場合、それは異なる追加耐性を持っているからだ。
-Seek melee combat with breathing foes so your treasures won't get blasted!
+#Seek melee combat with breathing foes so your treasures won't get blasted!
+あなたの宝物を破壊されないよう、ブレスを持つ敵に対しては接近戦を挑むようにせよ！
 Master Vampires won't prey on your life blood only, but love to torture DEX.
 Hellhound Garm is defeatable if you fence out his summoned packs in advance.
 Mighty reptile Zoth-Ommog hates treasures and will crush any, leaving none!
-Drolems are not drolleries but draconic golems with high defenses. They bite!
-You can't get hold on Bully Gates, he charges you and is gone immediately.
-Never go near Bull Gates without maximum dexterity or lose lots of money!
+#Drolems are not drolleries but draconic golems with high defenses. They bite!
+ドローレムというのはおどけた挙動(drolleries)ではなくドラゴン型のゴーレムの事だ。噛まれるぞ！
+#You can't get hold on Bully Gates, he charges you and is gone immediately.
+あなたはブルゲイツを捕まえてはおけない、彼は請求して即座にいなくなる。
+#Never go near Bull Gates without maximum dexterity or lose lots of money!
+器用度を最高にしない限りはブルゲイツに近寄るな、でないと大金を失うはめになる！
 He cackles and sneers at you and throws traps as his confetti: Bully Gates!
-If the singular naga Jasra finds open ground she will call her hydras on you!
+#If the singular naga Jasra finds open ground she will call her hydras on you!
+稀なナーガ・ジャスラがひらけた場所を見つけたら、彼女はヒドラを召喚してくるだろう！
 You must capitalize (s)ecrets to find its Keepers. You'll really love them!
-The true name of Shudde is 747. But this will not help you sufficiently. Run!
-I balanced all, brought all to mind. In balance with this life, this death.
-A visit in the Inner Temple is less expensive than bundles of Restore potions.
-Trolls, Paladins or Bloodletters are fine to make money - if you top them.
+#The true name of Shudde is 747. But this will not help you sufficiently. Run!
+シャダーの本当の名は747だ。しかしその事実はあまりあなたの助けにはならない。走れ！
+#I balanced all, brought all to mind. In balance with this life, this death.
+私は全ての調和をとり、全てを思い出した。この生に対する調和とは、この死であると。
+#A visit in the Inner Temple is less expensive than bundles of Restore potions.
+寺院を訪れるのは能力回復の薬を求めるより安上がりだ。
+#Trolls, Paladins or Bloodletters are fine to make money - if you top them.
+トロル、聖騎士、血戮悪魔が、金稼ぎには良い--あなたが彼らを乗り越えられるなら。
 #The goddess of cats drains dexterity dramatically. Don't forget to sustain it.
 猫の女王は器用さを劇的に下げる。維持するのを忘れてはならない。
 #Scrolls of artifact creation need a plain weapon/armour to enhance it.
 アーティファクト生成の巻物は素の武器や防具を必要とする。
 The definitely best way to fill a gear gap is creating your own artifact.
 Iron liches are *very* deadly if you're not hard to breath and summons alike.
-Maulotaurs tend to rely on fire and overwhelming shattering strength. Prepare!
-Think out ways to get hold on some unusual nasty unique thieves. Ooh, Santa!
+#Maulotaurs tend to rely on fire and overwhelming shattering strength. Prepare!
+マウロタウルスは炎と圧倒的な粉砕力の怪力とをあてにする傾向がある。心せよ！
+#Think out ways to get hold on some unusual nasty unique thieves. Ooh, Santa!
+何人かの珍しい厄介なユニークの泥棒から持ち物を守る方法を考え抜こう。おお、サンタ！
 They say that everyone has some skeletons in the cellar. Some are harmful!
 GHOST said: "I would not wish to add to your probable present paranoia."
 One of life's smaller puzzles is how to get control of the nearer futures.
