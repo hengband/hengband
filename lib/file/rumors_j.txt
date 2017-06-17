@@ -352,7 +352,7 @@ All that is shall come to an end - a dark day dawns for the gods.
 階段生成はレベルテレポートより遅いけど、安全だ...
 I hid the Jewel in a vault at 4700'. To find it, you need to:
 #Wands of Heal Monster are useful! Hint: ball spell, @....moo(o)ooo
-怪物を回復させる杖は使いでがある！ ヒント：ボール系呪文、@....moo(o)ooo
+回復モンスターの魔法棒は使いでがある！ ヒント：ボール系呪文、@....moo(o)ooo
 #Guaranteed heal self - scenario: o'@, type c4c4c4c4
 確実な自己治癒の方法 - 手順：o'@, c4c4c4c4 と入力。
 #If it can't see you, it can't hurt you!
@@ -742,7 +742,7 @@ He cackles and sneers at you and throws traps as his confetti: Bully Gates!
 稀なナーガ・ジャスラがひらけた場所を見つけたら、彼女はヒドラを召喚してくるだろう！
 You must capitalize (s)ecrets to find its Keepers. You'll really love them!
 #The true name of Shudde is 747. But this will not help you sufficiently. Run!
-シャダーの本当の名は747だ。しかしその事実はあまりあなたの助けにはならない。走れ！
+シュド=メルの本当の名は747だ。しかしその事実はあまりあなたの助けにはならない。走れ！
 #I balanced all, brought all to mind. In balance with this life, this death.
 私は全ての調和をとり、全てを思い出した。この生に対する調和とは、この死であると。
 #A visit in the Inner Temple is less expensive than bundles of Restore potions.
@@ -764,45 +764,60 @@ GHOST said: "I would not wish to add to your probable present paranoia."
 One of life's smaller puzzles is how to get control of the nearer futures.
 The King in Yellow is strong in help. But he is also quite jumpy by himself.
 Glaurung and all his kinsfolk - send them where the pepper grows! It's timing.
-The swamps south of the Elventown is worthy of some hunting excursions!
-You would be amazed of what a Greater Kraken is able to give to you.
+#The swamps south of the Elventown is worthy of some hunting excursions!
+エルフの街の南の湿地帯は狩りの遠足の足音で騒がしい！
+#You would be amazed of what a Greater Kraken is able to give to you.
+あなたはグレータークラーケンがあなたに対して出来る事をを知ったら驚くでしょう。
 #In deep waters any treasures will be lost! Lure them coastwards.
 深い海や河では宝物は全て失われてしまう！岸辺におびき寄せるんだ。
-Any means of digging are crucial for designing the battleground as You like!
-You may assault nasty Zephyr packs at doubled corners safe from their breath.
-Only permanent walls will prevent Ethearal or Deathdrakes to come after you.
+#Any means of digging are crucial for designing the battleground as You like!
+戦場をあなたの好みの状態にカスタマイズする為には、どんな掘削手段でも重要だ！
+#You may assault nasty Zephyr packs at doubled corners safe from their breath.
+あなたは危険なゼファーの集団を、彼らの息を浴びない二つの曲がり角から強襲できる。
+#Only permanent walls will prevent Ethearal or Deathdrakes to come after you.
+永久岩の壁だけが、エターナルやデスドレイクの追撃を遮れるだろう。
 Drujs are not good for you. So as folks (dare)say: Let sleeping wyverns lie.
 Sort of Pit-diver you are - those who seek after artifacts beyond the Rim.
-A jagged tentacle of the constantly shifting kind is moving toward your leg...
+#A jagged tentacle of the constantly shifting kind is moving toward your leg...
+絶えずうごめく何者かの触手が、徐々にあなたの足元に近づいている...
 Raal's? Ya might have to fool with it a long while just to figure it out.
-Pattern and Logrus, like reason and feeling, the wells of Powers mages draw on.
-Apollonian and Dionysiac, light and dark, Order and Chaos need one another.
+#Pattern and Logrus, like reason and feeling, the wells of Powers mages draw on.
+パターンとログルスとは、理由と感性のようなもので、魔術師が力を得る源となるものだ。
+#Apollonian and Dionysiac, light and dark, Order and Chaos need one another.
+アポロ的なるものとデュオニュソス的なるもの、光と影、秩序と混沌は、互いに相手を必要としている。
 The principles game of light and dark is finally to be judged esthetically.
-An uncursed amulet of anti-teleportation supports Your choice of battleground.
+#An uncursed amulet of anti-teleportation supports Your choice of battleground.
+呪われていないテレポートのアミュレットはあなたが戦場を選ぶのを助けてくれる。
 Try to get unknown to your old self. No compromising awhile.
 The inn has rot-gut with a kick that blows the wax out of your ears!
 Too bad who not supports innkeepers! YOU have a stillness which is dangerous.
-A moral cudgel is truly not an effective weapon against farmer Maggot.
+#A moral cudgel is truly not an effective weapon against farmer Maggot.
+モラルの棍棒は、本当に農夫マゴットに対しては有効な武器にはなりえない。
 Where are you going, unbeliever? The stairs down are but seemingly easy!
 You might end up in the grip of sinister forces who rule by torture n infamy?
-The gods love us, they even created birds to throw presents down.
+#The gods love us, they even created birds to throw presents down.
+神々は我々を愛して下さっている、彼らは贈り物を落とさせる為に鳥をも生み出して下さった。
 Anybody gets the beats s/he has ordered at Fortunas Court in the end.
 Pay no attention. Incomers are resented and regarded as fair game!
 At the Courts of Chaos poisonous feuds fester behind every corner.
-You seem inoffensive, a mere joker, a light-weight. But your eyes ..?
+#You seem inoffensive, a mere joker, a light-weight. But your eyes ..?
+あなたは当り障りの無い、単なるおどけた、軽い人物に見えます。でもあなたの目は...？
 #Your knife has certainly hacked some bad meats. It's stained.
 君のナイフは何か悪い肉を切ったようだ。錆びているよ。
 The shrewd ones are never fooled. The weak mimic the strong habits.
 I see you have accustomed to plenty of local shopping snobberies.
-You won? You truly must have a brain as sharp as a woodsman's hatchet!
+#You won? You truly must have a brain as sharp as a woodsman's hatchet!
+勝利した？　あなたは樵の斧の如く研ぎ澄まされた脳を持っているに違いない！
 Mimics: striking down men from behind certainly seems to be their trademark.
 He looks honest. This probably means he is a complete crook. Oh, I'm mocking.
-Flee while you can. Any decent adventurer has to honour the priorities.
+#Flee while you can. Any decent adventurer has to honour the priorities.
+逃げられる間は逃げよ。どんなきちんとした冒険家も優先権は尊重しなければならないのだから。
 The average mage soon becomes accustomed to hard work and poor leisure.
 Are you sure to surpass your predecessors, being more than a mere brawler?
 Life: to mortgage yesterdays gains in order to move on to the next intermezzo.
 The art of dragon mail maintenance is: Never get stuck without escape chance.
-Oh I see! Now I'm not good enough!
+#Oh I see! Now I'm not good enough!
+オー、ワカリマシタ！ワタシ、タダイマアマリ、キブンヨクナイデス！
 Prices? Any complaints and you'll be bumped out faster than you can breathe.
 Prices? If you insist on haggling you'll never advance seriously!
 Well, I tell ya, the dungeons landlords are mulling this over gloomily!
@@ -823,35 +838,49 @@ And yet it is worth! it to best that Greater hell magic mushroom were-quylthulg!
 Forget your childlike lore: mushrooms are not tasty but awholotta challenge!
 Hi matador, like to get gored to death by an infuriated gory minotaur?
 Never get caught by the notorious bloodhound Judge Porn-Starr, the beholder.
-Gorgons are fairy tales: mighty useful to get stone sculptures for the palace.
-Selling blessed weapons to a sympathizing temple is not too bad an idea.
-I'd prefer ball sorcery or breath ability to mass genocide for good reason.
+#Gorgons are fairy tales: mighty useful to get stone sculptures for the palace.
+ゴルゴンは伝説の存在だ：宮殿に飾る石像を得るのに大いに役立つものとして。
+#Selling blessed weapons to a sympathizing temple is not too bad an idea.
+祝福された武器を自分の属性の寺院に売るのはそれほど悪い考えではない。
+#I'd prefer ball sorcery or breath ability to mass genocide for good reason.
+私はもっともな理由の為の大量虐殺において、ボール系呪文やブレスの能力を好みます。
 Scrolls of genocide will extinct annoying monster races from your level area.
-*Destruction* will cause a 15x15 area to change completely, but you undamaged.
-There are mostly only rumors about the effects of rarer ZAngband items.
+#*Destruction* will cause a 15x15 area to change completely, but you undamaged.
+*破壊*は15x15の範囲をくまなく変化させるが、あなたに被害は及ばない。
+#There are mostly only rumors about the effects of rarer ZAngband items.
+ここにある噂のほとんどは、よりレアなZAngbandのアイテムに関する噂だ。
 What does NETHER mean? The (arch.) N. regions are the world of the dead/hell.
 What does NEXUS mean? It refers to connexion/bond. Location/stats get unstable.
-Such a Blade of Chaos (chaotic) is quite a rare and precious finding.
-Isn't it a scandal that chaos patrons mostly grant inferior weapon gifts?
-Precious Blades of Chaos (6d5) are won by defeating a Bloodletter's platoon.
+#Such a Blade of Chaos (chaotic) is quite a rare and precious finding.
+このようなカオスブレード(混沌)は実にレアで貴重な代物だ。
+#Isn't it a scandal that chaos patrons mostly grant inferior weapon gifts?
+カオスパトロンがほとんど粗悪な武器をくれるという事はスキャンダルな事じゃないかな？
+#Precious Blades of Chaos (6d5) are won by defeating a Bloodletter's platoon.
+貴重なカオスブレード(6d5)は血戮悪魔の集団を打ち倒せば獲得する事が出来る。
 Nether and Life draining are not just the same, as by breath or by touching?
 Examination of rings of nether resistance reveals two granted intrinsics.
 To stand your ground against adversaries who heal-self you'll need...
 It's the Grail Brotherhood who is behind it all!
 There is no such thing as 'fearless', not unless a man is mad. But hide it!
-When the monsters don't eat you, ooh, let's say you're home.
+#When the monsters don't eat you, ooh, let's say you're home.
+怪物があなたを食べないなら、おおっ、私には帰る家があるのだと言ってみよう。
 #Young ones are made stupid, it's their protection against life's unkindness.
 若い人間は愚かなものだが、それは人生の不親切さに対する防御なのだ。
-And what about your due contribution to All-Fool's Day celebration? None?
+#And what about your due contribution to All-Fool's Day celebration? None?
+そして、四月一日の祝賀に対してあなたはどんな充分な貢献をしましたか？無し？
 For the shared blood of your Ancestors you'll know about depth devilries.
 It takes a practiced eye to see through the glitter the rotten core of Thuringwethil.
-I saw dragon scale mail priced 11000 gp more for having +17 instead of +16.
+#I saw dragon scale mail priced 11000 gp more for having +17 instead of +16.
+私は+17のドラゴン・スケイルメイルが+16のものより11000ゴールド高いのを見た事がある。
 The strong rely on strength. The not-so-strong must mint means of shrewdness.
 If not your might might make tremble them and flee you need good spy ability.
-Pay heed to the Quylthulg race: invisible, powerful summoners, able to escape.
-(S)He has the devil of a time who encounters the neversleeping quylthulgs.
+#Pay heed to the Quylthulg race: invisible, powerful summoners, able to escape.
+クイルスルグ族に注意せよ：透明で、強力な召喚師で、逃げる事もできる。
+#(S)He has the devil of a time who encounters the neversleeping quylthulgs.
+不眠のクイスルグスに出会う者は、時の悪魔に憑かれているに違いない。
 Your pet aversion against all sorts of hounds won't lead you to anything!
-An inertia hound is gorgeous dinner: giving pleasure and sleepy satisfaction.
+#An inertia hound is gorgeous dinner: giving pleasure and sleepy satisfaction.
+遅鈍ハウンドは豪華なディナーだ：喜びと夢うつつな満足を与えてくれる。
 #Patience at ambush will help to defeat many hounds.
 忍耐強い待ち伏せはハウンドの群を倒すのに役立つだろう。
 #Without catching acid I have once eliminated 10 water hounds 1 by 1 in melee!
@@ -876,72 +905,100 @@ It's your own fault if you don't use all non-cheating means of awareness.
 鑑定のロッドは、いかなる代償を払ってでも手に入れろ。たくさんの巻物や杖を節約できる。
 #Rods seem somewhat secure from fire/acid/lightning attacks, but get stolen!
 ロッドは火/酸/電気の攻撃に対して無傷なようだが、盗まれることはある！
-Some black humored remarks (rumors) on common morals are not easily outwitted.
+#Some black humored remarks (rumors) on common morals are not easily outwitted.
+一般のモラルに裏打ちされた幾つかのブラックユーモアは、容易に裏をかかれる事がない。
 Ever read Ambrose Bierce, From the devil's dictionary? No, didn't steal there.
 Remember that? Irony is a sophisticated art of talk by saying some opposite.
 #There are Uniques that are (friendly), but alas! they won't [yet] talk to you.
 いくつかのユニークモンスターは(友好的)だが、なんとまあ、[今のところ]彼らは話しかけてこない。
 #Ents (friendly) are equally strong as Hrus and tend to clear the vault fields.
 エント(友好的)はフルゥと同じくらい強くて、よく地下室をきれいにしてくれる。
-You could hate an Ent (friendly) who picks up the dragon scale mails you left.
+#You could hate an Ent (friendly) who picks up the dragon scale mails you left.
+放置していたドラゴン・スケイルメイルを友好的なエントが拾った時、あなたは怒りを覚えるかもしれない。
 #Ahtu is somewhat the evil mirror of Treebeard. Beware to confront these foes!
 『アフトゥ』は木の鬚の悪の写し身のようなものだ。気をつけろ！
 They say that there's work to be done, and no rest this side of Heaven.
-There are no guarantees in life, but it's smarter to take fewer chances.
+#There are no guarantees in life, but it's smarter to take fewer chances.
+人生に保障などない、だが少しのチャンスをものにする事は出来る。
 Artsi is not susceptible to sorcery, ideal warrior! If ever get him in melee.
 It's a crying shame but 30000's the highest one_item_price you ever will get.
 #Is it really true that a good chain armour once rusted can't be restored?
 一度錆びた鎖かたびらは元に戻らないって本当？
 Never thought about that daylight might be not just an illumination?
-Stone Skin is valuable as diamonds: even the tougher foes will miss you.
-You WILL need some means to prevent to be teleported to and fro unwanted.
-Without a means to teleport away certain nuisances you'll have harder labor.
-Hypnos, Lord of Sleep, is an awful jumpy fellow; you have to hunt him down.
-If you ever, ever manage to best The Stormbringer you'll be amazed!
-The deeper you dive the more grateful you'll be about sustaining equipment.
-You'll love Reflection if you ever encounter those smashing halfling legions.
-Surprisingly not only crossbows use bolts that could bounce...
-At an early stage you are yet quite happy to find e.g. rods of trap detection.
-There is but one use for charisma boosting items: shopkeeper charming.
-It's a happy moment when sufficient DEX makes you "grab hold of your backpack".
-#Even a nasty Amberite blood curse could fail if you're lucky.
+#Stone Skin is valuable as diamonds: even the tougher foes will miss you.
+石肌化はダイヤのように価値がある：あなたより強い仇敵すらも攻撃をミスすることだろう。
+#You WILL need some means to prevent to be teleported to and fro unwanted.
+あなたは行きたくないところへ行かされたりテレポートバックされるのに抵抗する手段を必要とすることになるだろう。
+#Without a means to teleport away certain nuisances you'll have harder labor.
+テレポートアウェイ対策が無いときは、きつい労務になるであろう迷惑を被ること確実だ。
+#Hypnos, Lord of Sleep, is an awful jumpy fellow; you have to hunt him down.
+眠りの王『ヒュプノス』は、恐ろしい跳ね回り野郎だ。狩っておかねば。
+#If you ever, ever manage to best The Stormbringer you'll be amazed!
+『ストームブリンガー』には絶対絶対ベストを尽くせば、仰天させられるであろう！
+#The deeper you dive the more grateful you'll be about sustaining equipment.
+より深く潜ることはほとんど維持の装備になっているだろうことにより感謝することだ。
+#You'll love Reflection if you ever encounter those smashing halfling legions.
+あの粉砕するハーフリングの軍団に遭遇するとき必ずあなたは反射が大好きになることだろう。
+#Surprisingly not only crossbows use bolts that could bounce...
+跳弾するボルトを使うのがクロスボウだけでないことが驚き。
+#At an early stage you are yet quite happy to find e.g. rods of trap detection.
+序盤はまだ発見すること(たとえばトラップ感知のロッド)が十分に幸せだ。
+#There is but one use for charisma boosting items: shopkeeper charming.
+あるにはあるけど1つだけの、魅力増加アイテムの使い道：店主魅了。
+#It's a happy moment when sufficient DEX makes you "grab hold of your backpack".
+十分な器用さが「ザックを取り返した」ときはうれしい瞬間だ。#Even a nasty Amberite blood curse could fail if you're lucky.
 運がいいなら、やっかいなアンバー王族の血の呪いさえも無効にできるだろう。
-Don't go deeper down the cliffs unless you find secure footholds (equipment).
+#Don't go deeper down the cliffs unless you find secure footholds (equipment).
+安全な足場(装備)を見つけるまではさらに絶壁を下って行こうとしないこと。
 Value in ART is so to say your scores relation of light and shade.
 You'd like an illustration on "sowing dragon's teeth"? Try Sorcery tower Quest!
-Waste of time, the crying. Fight and live - fight and die, then enter renewed.
-The say that to want too much was stupidity, waste of precious time and effort.
+#Waste of time, the crying. Fight and live - fight and die, then enter renewed.
+嘆くのは時間の無駄だ。戦って生きよ--戦って死ね、そして再挑戦だ。
+#The say that to want too much was stupidity, waste of precious time and effort.
+あまりに多くのものを求めるのは、貴重な時間と努力を浪費する無知な行いだそうだ。
 Down at 650' is an ill-omened place where the swift ochre jellies roam.
 Below 2500' you'll need sustained maximum spell stats to secure your heal-self.
-The miracle of Herbal Healing is like Book-stories told by priests, amazing.
-A fallen Angel is likely to stay behind a stone obstacle in chequered pits.
+#The miracle of Herbal Healing is like Book-stories told by priests, amazing.
+薬草治療の奇跡は、まるで聖職者によって語られる本の中の話のようで、驚かされる。
+#A fallen Angel is likely to stay behind a stone obstacle in chequered pits.
+堕天使は格子状ピットでの石の障害物のそばで待ち構えて居そうだ。
 A screaming willingness to the flash and bang of damnation, freed of the suspence.
 They say that all these inevitable tombstones are but blessings in disguise. 
 Survival challenges use up superabundant energies, burn off the gland-juices.
 Kittens. Always going for the dramatic. Watching too many adventure holos.
-Young Heroes-to-be are always kept on diet, to increase their aggressiveness.
-Free at last from the blood curse: mirth welled up, boiled over as pure laughter.
-If you encounter groups of usual solitary cats look out for Bast, Cat's godess!
-Even protected Books are destroyed by breathers of chaos balls. Area effect!
-It is more secure to carry precious books yourself, IF you provide resistances.
-There are but sometimes shopkeepers that pay full price of 25000gp for a Book.
+#Young Heroes-to-be are always kept on diet, to increase their aggressiveness.
+若い未来の英雄というものは、自らの攻撃性を保つ為に常にダイエットしているものだ。
+#Free at last from the blood curse: mirth welled up, boiled over as pure laughter.
+最終的に血の呪いから逃れる方法：笑って笑って笑い飛ばそう。
+#If you encounter groups of usual solitary cats look out for Bast, Cat's godess!
+もし猫達が群れをなしているのを見かけたなら、猫の女王バストに注意せよ！
+#Even protected Books are destroyed by breathers of chaos balls. Area effect!
+燃えない本であってもカオスボールの爆風で破壊される。範囲攻撃で！
+#It is more secure to carry precious books yourself, IF you provide resistances.
+耐性を揃えられるのであれば、貴重な本は自分で持ち歩いた方がより安全だ。
+#There are but sometimes shopkeepers that pay full price of 25000gp for a Book.
+まれにだが、本一冊に満額25000ゴールドを払う店主がいる。
 #Being hit by Cold breathes while carrying potions might speed and heal foes!
 薬をたくさん持っている時に冷気のブレスを浴びたら周囲の敵を速くしたり治療したりしてしまうだろう！
 You'll rarely get a chance to fight Fiona down and off, she loves her jumpiness!
 #Why are Poison Resistance rings higher priced than even Disenchantment rings?
 なんで耐毒の指輪が耐劣化の指輪より高いんだ？
-Are there any cumulative effects by adding another means of resistance? Well?
-IF there are no free places around you, the worst summoning will not itch you.
+#Are there any cumulative effects by adding another means of resistance? Well?
+別々の理由で得られる耐性って累積する事はあるの？本当？
+#IF there are no free places around you, the worst summoning will not itch you.
+あなたの周囲に空きがなければ、最悪の召喚があなたをいらつかせる事もないだろう。
 #You can win against the ever-aware quylthulgs by blocking their lines of sight.
 目を醒ましたクイルスルグは、視線を遮ることによって倒すことができる。
-Any hounds are disastrous to containment by Door Building. Extinct them quickly!
+#Any hounds are disastrous to containment by Door Building. Extinct them quickly!
+ドアの建物に封じ込まれているハウンドはどんな種類であっても悲惨だ。早急に沈黙させろ！
 #Regularly the god of the merchants is the same as that of the thieves.
 通常、商売の神と泥棒の神とは同一だ。
 #We are all natural born victims.
 我々はみんな生まれついての獲物だ。
 #Without information life is quite short.
 情報がなければ人生は極めて短い。
-Information age has not just begun today! Hermes, Loki, Prometheus are tradition.
+#Information age has not just begun today! Hermes, Loki, Prometheus are tradition.
+情報化時代は今日に始まったわけではない！　ヘルメス、ロキ、プロメテウスが源流だ。
 #Scrolls of Dispel XX are able to damage the foe for about 60 hitpoints.
 XX 退散の巻物は敵に 60 HP のダメージを与えることが出来る。
 #Scrolls of Fire/Ice/Chaos produce a balleffect, centered on you. Damaging you?
@@ -950,24 +1007,36 @@ XX 退散の巻物は敵に 60 HP のダメージを与えることが出来る�
 氷の巻物は炎の巻物の倍のダメージを与えるが、カオスの巻物よりは少し少ない。
 #To find a Rod of Havoc means nothing else than: chaos at your fingertips.
 壊滅のロッドを見つけることは、混沌を手元に置いておくことに他ならない。
-If the sages speak of Curing this comprehends the recovery of 6! traumata.
-The traumata to suffer: Cut, Stun, Blind, Confused, Terrified, Hallucination.
+#If the sages speak of Curing this comprehends the recovery of 6! traumata.
+賢者達が「癒し」について言うことは6つ(！)ものトラウマの回復を含む。
+#The traumata to suffer: Cut, Stun, Blind, Confused, Terrified, Hallucination.
+その頭を悩ませるトラウマ：切り傷、朦朧、盲目、混乱、恐怖、幻覚。
 #Staffs of Power will dispel any monster.
 力の杖はあらゆるモンスターを退散させるだろう。
-Staffs of Holiness will dispel evil ones and also protect you.
+#Staffs of Holiness will dispel evil ones and also protect you.
+聖浄の杖は邪悪な者どもを退散させ、さらにあなたを守るだろう。
 #Staffs of the Magi will help eggheads to clear the head and recover energies.
 賢者の杖はインテリ君をはっきりさせてエネルギーを回復するのに役立つ。
-Those who seek knowledge of the sources must be experienced hunters of hints.
-You have difficulties to find survey or details in the source files? Combat!
-There are always people who'd like to restrict knowledge to their own circles.
-It can't be bad to give knowledge to the people, even if by means of rumors.
-Those who'd exclude people of knowledge make up a priesthood of selfishness.
+#Those who seek knowledge of the sources must be experienced hunters of hints.
+ソースコードの知識を追い求める者は経験あるヒントの狩人達である。間違いない。
+#You have difficulties to find survey or details in the source files? Combat!
+ソースファイルの概観や詳細を見出すのが難しい？　闘え！
+#There are always people who'd like to restrict knowledge to their own circles.
+知識を内輪に制限したがるやつらは常に居るものだ。
+#It can't be bad to give knowledge to the people, even if by means of rumors.
+知識を人々に与えるのは悪いことにはならないだろう、それが噂の内容だとしてもだ。
+#Those who'd exclude people of knowledge make up a priesthood of selfishness.
+知識人達を排除しようとする人々は身勝手さの司祭職に成っていく。
 #You don't like the rumors you get? Write your own! (And share the good ones.)
 噂が気に入らない？自分で書こう！（そして良いものを共有しよう）
-If potions of blindness are useful against foes they will be priced at shops.
-Rumors are sort of wishing wells.
-Not any waters seem drinkable for those not thirsty!
+#If potions of blindness are useful against foes they will be priced at shops.
+もし盲目の薬が敵にも有効なら、店でもっと高値がつく事だろう。
+#Rumors are sort of wishing wells.
+噂というのは元気を願うコトという種類のモノである。
+#Not any waters seem drinkable for those not thirsty!
+ノドの渇いていないやつらにとってはどんな水でも飲めるとは思えない！
 #There are unclean waters. Well, boil them up!
 不潔な水もある。沸かしてから飲め！
-Time heals all wounds?? But surely time wounds all heels!
+#Time heals all wounds?? But surely time wounds all heels!
+時は全ての怪我を治す？　だが確かに時は全ての名を汚す！
 OOOOOOOOOOOOOOOOOO
