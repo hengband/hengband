@@ -467,7 +467,7 @@ void check_quest_completion(monster_type *m_ptr)
 	bool reward = FALSE;
 
 	object_type forge;
-	object_type *q_ptr;
+	object_type *o_ptr;
 
 	/* Get the location */
 	y = m_ptr->fy;
@@ -656,16 +656,16 @@ void check_quest_completion(monster_type *m_ptr)
 		for (i = 0; i < (dun_level / 15)+1; i++)
 		{
 			/* Get local object */
-			q_ptr = &forge;
+			o_ptr = &forge;
 
 			/* Wipe the object */
-			object_wipe(q_ptr);
+			object_wipe(o_ptr);
 
 			/* Make a great object */
-			make_object(q_ptr, AM_GOOD | AM_GREAT);
+			make_object(o_ptr, AM_GOOD | AM_GREAT);
 
 			/* Drop it in the dungeon */
-			(void)drop_near(q_ptr, -1, y, x);
+			(void)drop_near(o_ptr, -1, y, x);
 		}
 	}
 }
@@ -1248,7 +1248,6 @@ void monster_death(int m_idx, bool drop_item)
 	/* Mega-Hack -- drop fixed items */
 	if (drop_chosen_item)
 	{
-		int i;
 		int a_idx = 0;
 		int chance = 0;
 
@@ -1284,7 +1283,7 @@ void monster_death(int m_idx, bool drop_item)
 
 			if (d_info[dungeon_type].final_artifact)
 			{
-				int a_idx = d_info[dungeon_type].final_artifact;
+				a_idx = d_info[dungeon_type].final_artifact;
 				artifact_type *a_ptr = &a_info[a_idx];
 
 				if (!a_ptr->cur_num)
@@ -1874,7 +1873,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 				msg_format("せっかくだから%sを殺した。", m_name);
 			else
-msg_format("%sを殺した。", m_name);
+				msg_format("%sを殺した。", m_name);
 #else
 				msg_format("You have killed %s.", m_name);
 #endif
@@ -1884,7 +1883,6 @@ msg_format("%sを殺した。", m_name);
 		/* Death by Physical attack -- non-living monster */
 		else if (!monster_living(r_ptr))
 		{
-			int i;
 			bool explode = FALSE;
 
 			for (i = 0; i < 4; i++)
