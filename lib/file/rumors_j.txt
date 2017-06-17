@@ -774,8 +774,8 @@ Glaurung and all his kinsfolk - send them where the pepper grows! It's timing.
 戦場をあなたの好みの状態にカスタマイズする為には、どんな掘削手段でも重要だ！
 #You may assault nasty Zephyr packs at doubled corners safe from their breath.
 あなたは危険なゼファーの集団を、彼らの息を浴びない二つの曲がり角から強襲できる。
-#Only permanent walls will prevent Ethearal or Deathdrakes to come after you.
-永久岩の壁だけが、エターナルやデスドレイクの追撃を遮れるだろう。
+#Only permanent walls will prevent Ethereal or Deathdrakes to come after you.
+永久岩の壁だけが、天上界ドレイクやデスドレイクの追撃を遮れるだろう。
 Drujs are not good for you. So as folks (dare)say: Let sleeping wyverns lie.
 Sort of Pit-diver you are - those who seek after artifacts beyond the Rim.
 #A jagged tentacle of the constantly shifting kind is moving toward your leg...
