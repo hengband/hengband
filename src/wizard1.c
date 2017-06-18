@@ -1058,7 +1058,7 @@ static void analyze_general(object_type *o_ptr, char *desc_ptr)
  * @param p_ptr pval修正構造体の参照ポインタ
  * @return なし
  */
-static void analyze_pval(object_type *o_ptr, pval_info_type *p_ptr)
+static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
 {
 	u32b flgs[TR_FLAG_SIZE];
 
@@ -1068,17 +1068,17 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *p_ptr)
 	if (!o_ptr->pval)
 	{
 		/* An "empty" pval description indicates that pval == 0 */
-		p_ptr->pval_desc[0] = '\0';
+		pi_ptr->pval_desc[0] = '\0';
 		return;
 	}
 
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
-	affects_list = p_ptr->pval_affects;
+	affects_list = pi_ptr->pval_affects;
 
 	/* Create the "+N" string */
-	sprintf(p_ptr->pval_desc, "%s%d", POSITIZE(o_ptr->pval), o_ptr->pval);
+	sprintf(pi_ptr->pval_desc, "%s%d", POSITIZE(o_ptr->pval), o_ptr->pval);
 
 	/* First, check to see if the pval affects all stats */
 	if (have_flag(flgs, TR_STR) && have_flag(flgs, TR_INT) &&
