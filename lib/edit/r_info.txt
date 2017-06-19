@@ -19592,7 +19592,7 @@ N:957:あばれ馬
 E:Unruly horse
 G:q:G
 I:110:12d10:20:30:0
-W:9:2:0:35:0:0
+W:9:2:0:35:300:1105
 B:BITE:HURT:1d8
 B:KICK:HURT:2d4
 B:KICK:HURT:2d4
@@ -22219,3 +22219,20 @@ F:ATTR_CLEAR | NEVER_MOVE | MULTIPLY |
 F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
 D:$A mysterious clear jelly thing.  It looks ready to explode.
 D:透明でぷよぷよした謎の生物だ。
+
+N:1105:汗血馬
+E:Ferghana horse
+G:q:R
+I:115:20d15:20:70:0
+W:20:2:0:240:1800:985
+B:BITE:HURT:1d8
+B:KICK:HURT:2d4
+B:KICK:HURT:2d4
+B:KICK:HURT:8d4
+F:WILD_ALL | BASH_DOOR | RAND_25 | CAN_SWIM
+F:NO_FEAR | POWERFUL | FRIENDS
+F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
+D:$This horse is produced in ancient Fergana.
+D:$It was able to run 1000 Li a day and shed bloogy sweat.
+D:大宛で産出する名馬だ。血の汗を流し、千里を走ることができた。
+
