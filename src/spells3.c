@@ -3646,9 +3646,6 @@ void display_spell_list(void)
 	    (p_ptr->pclass == CLASS_MIRROR_MASTER) ||
 	    (p_ptr->pclass == CLASS_FORCETRAINER))
 	{
-		int             i;
-		int             y = 1;
-		int             x = 1;
 		int             minfail = 0;
 		int             plev = p_ptr->lev;
 		int             chance = 0;
@@ -3657,6 +3654,9 @@ void display_spell_list(void)
 		char            psi_desc[80];
 		int             use_mind;
 		bool use_hp = FALSE;
+
+		y = 1;
+		x = 1;
 
 		/* Display a list of spells */
 		prt("", y, x);

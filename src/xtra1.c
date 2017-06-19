@@ -5005,8 +5005,7 @@ void calc_bonuses(void)
 		}
 	}
 
-	if (p_ptr->ryoute)
-		hold *= 2;
+	if (p_ptr->ryoute) hold *= 2;
 
 	for(i = 0 ; i < 2 ; i++)
 	{
@@ -5763,6 +5762,7 @@ void calc_bonuses(void)
 		if ((inventory[i].tval == TV_NATURE_BOOK) && (inventory[i].sval == 2)) have_sw = TRUE;
 		if ((inventory[i].tval == TV_CRAFT_BOOK) && (inventory[i].sval == 2)) have_kabe = TRUE;
 	}
+
 	for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		/* Acquire object */

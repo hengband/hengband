@@ -109,52 +109,52 @@ void self_knowledge(void)
 	info[i++] = buf[1];
 	for (v_nr = 0; v_nr < 8; v_nr++)
 	{
-		char v_name [20];
+		char vir_name [20];
 		char vir_desc[80];
 		int tester = p_ptr->virtues[v_nr];
 	
-		strcpy(v_name, virtue[(p_ptr->vir_types[v_nr])-1]);
+		strcpy(vir_name, virtue[(p_ptr->vir_types[v_nr])-1]);
  
-		sprintf(vir_desc, _("おっと。%sの情報なし。", "Oops. No info about %s."), v_name);
+		sprintf(vir_desc, _("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
 		if (tester < -100)
 			sprintf(vir_desc, _("[%s]の対極 (%d)", "You are the polar opposite of %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < -80)
 			sprintf(vir_desc, _("[%s]の大敵 (%d)", "You are an arch-enemy of %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < -60)
 			sprintf(vir_desc, _("[%s]の強敵 (%d)", "You are a bitter enemy of %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < -40)
 			sprintf(vir_desc, _("[%s]の敵 (%d)", "You are an enemy of %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < -20)
 			sprintf(vir_desc, _("[%s]の罪者 (%d)", "You have sinned against %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < 0)
 			sprintf(vir_desc, _("[%s]の迷道者 (%d)", "You have strayed from the path of %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester == 0)
 			sprintf(vir_desc, _("[%s]の中立者 (%d)", "You are neutral to %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < 20)
 			sprintf(vir_desc, _("[%s]の小徳者 (%d)", "You are somewhat virtuous in %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < 40)
 			sprintf(vir_desc, _("[%s]の中徳者 (%d)", "You are virtuous in %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < 60)
 			sprintf(vir_desc, _("[%s]の高徳者 (%d)", "You are very virtuous in %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < 80)
 			sprintf(vir_desc, _("[%s]の覇者 (%d)", "You are a champion of %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else if (tester < 100)
 			sprintf(vir_desc, _("[%s]の偉大な覇者 (%d)", "You are a great champion of %s (%d)."),
-				v_name, tester);
+				vir_name, tester);
 		else
 			sprintf(vir_desc, _("[%s]の具現者 (%d)", "You are the living embodiment of %s (%d)."),
-		v_name, tester);
+				vir_name, tester);
 	
 		strcpy(v_string[v_nr], vir_desc);
 	
@@ -3276,8 +3276,6 @@ sprintf(buf, "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:", m_name, align, m_
 			/* Learn everything about this monster */
 			if (lore_do_probe(m_ptr->r_idx))
 			{
-				char buf[80];
-
 				/* Get base name of monster */
 				strcpy(buf, (r_name + r_ptr->name));
 
@@ -3930,13 +3928,13 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 					/* Hack -- Escape from the rock */
 					if (sn)
 					{
-						int m_idx = cave[yy][xx].m_idx;
+						int m_idx_aux = cave[yy][xx].m_idx;
 
 						/* Update the old location */
 						cave[yy][xx].m_idx = 0;
 
 						/* Update the new location */
-						cave[sy][sx].m_idx = m_idx;
+						cave[sy][sx].m_idx = m_idx_aux;
 
 						/* Move the monster */
 						m_ptr->fy = sy;
