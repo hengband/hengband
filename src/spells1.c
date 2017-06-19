@@ -5005,10 +5005,10 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 			case 3: case 4: case 5: case 6:
 				if (!count)
 				{
-					int dam = damroll(10, 10);
+					int extra_dam = damroll(10, 10);
                     msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
 
-					project(0, 8, ty,tx, dam, GF_MANA, curse_flg, -1);
+					project(0, 8, ty, tx, extra_dam, GF_MANA, curse_flg, -1);
 					if (!one_in_(6)) break;
 				}
 			case 7: case 8:
@@ -5423,13 +5423,13 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		/* Arrow -- XXX no dodging */
 		case GF_ARROW:
 		{
-            if (fuzzy)
-            {
-                msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
-            }
+			if (fuzzy)
+			{
+				msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
+			}
 			else if ((inventory[INVEN_RARM].name1 == ART_ZANTETSU) || (inventory[INVEN_LARM].name1 == ART_ZANTETSU))
 			{
-                msg_print(_("矢を斬り捨てた！", "You cut down the arrow!"));
+				msg_print(_("矢を斬り捨てた！", "You cut down the arrow!"));
 				break;
 			}
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -5444,13 +5444,13 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
-				int k = (randint1((dam > 40) ? 35 : (dam * 3 / 4 + 5)));
-				(void)set_stun(p_ptr->stun + k);
+				int plus_stun = (randint1((dam > 40) ? 35 : (dam * 3 / 4 + 5)));
+				(void)set_stun(p_ptr->stun + plus_stun);
 			}
 
 			if (!(p_ptr->resist_fire ||
-			      IS_OPPOSE_FIRE() ||
-			      p_ptr->immune_fire))
+				IS_OPPOSE_FIRE() ||
+				p_ptr->immune_fire))
 			{
 				inven_damage(set_acid_destroy, 3);
 			}
@@ -5580,8 +5580,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 			}
 			else if (!CHECK_MULTISHADOW())
 			{
-				int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
-				(void)set_stun(p_ptr->stun + k);
+				int plus_stun = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
+				(void)set_stun(p_ptr->stun + plus_stun);
 			}
 
 			if (!p_ptr->resist_sound || one_in_(13))
@@ -5821,7 +5821,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 		case GF_GRAVITY:
 		{
 			if (fuzzy) msg_print(_("何か重いもので攻撃された！", "You are hit by something heavy!"));
-            msg_print(_("周辺の重力がゆがんだ。", "Gravity warps around you."));
+				msg_print(_("周辺の重力がゆがんだ。", "Gravity warps around you."));
 
 			if (!CHECK_MULTISHADOW())
 			{
@@ -5830,8 +5830,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 					(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 				if (!(p_ptr->resist_sound || p_ptr->levitation))
 				{
-					int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
-					(void)set_stun(p_ptr->stun + k);
+					int plus_stun = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
+					(void)set_stun(p_ptr->stun + plus_stun);
 				}
 			}
 			if (p_ptr->levitation)
@@ -7022,11 +7022,11 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				monster_target_y=(s16b)y;
 				monster_target_x=(s16b)x;
 
-				remove_mirror(y,x);
-				next_mirror( &oy,&ox,y,x );
+				remove_mirror(y, x);
+				next_mirror(&oy, &ox, y, x);
 
 				path_n = i+project_path(&(path_g[i+1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
-				for( j = last_i; j <=i ; j++ )
+				for(j = last_i; j <= i; j++)
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
@@ -7050,28 +7050,29 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				last_i = i;
 			}
 		}
-		for( i = last_i ; i < path_n ; i++ )
+		for(i = last_i ; i < path_n ; i++)
 		{
-			int x,y;
-			y = GRID_Y(path_g[i]);
-			x = GRID_X(path_g[i]);
-			if(project_m(0,0,y,x,dam,GF_SEEKER,flg,TRUE))
-			  notice=TRUE;
+			int py, px;
+			py = GRID_Y(path_g[i]);
+			px = GRID_X(path_g[i]);
+			if(project_m(0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
+				notice = TRUE;
 			if(!who && (project_m_n==1) && !jump ){
-			  if(cave[project_m_y][project_m_x].m_idx >0 ){
-			    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
+				if(cave[project_m_y][project_m_x].m_idx > 0)
+				{
+					monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 
-			    if (m_ptr->ml)
-			    {
-			      /* Hack -- auto-recall */
-			      if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+					if (m_ptr->ml)
+					{
+						/* Hack -- auto-recall */
+						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-			      /* Hack - auto-track */
-			      health_track(cave[project_m_y][project_m_x].m_idx);
-			    }
-			  }
+						/* Hack - auto-track */
+						health_track(cave[project_m_y][project_m_x].m_idx);
+					}
+				}
 			}
-			(void)project_f(0,0,y,x,dam,GF_SEEKER);
+			(void)project_f(0, 0, py, px, dam, GF_SEEKER);
 		}
 		return notice;
 	}
@@ -7185,25 +7186,25 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 		}
 		for( i = 0; i < path_n ; i++ )
 		{
-			int x,y;
-			y = GRID_Y(path_g[i]);
-			x = GRID_X(path_g[i]);
-			(void)project_m(0,0,y,x,dam,GF_SUPER_RAY,flg,TRUE);
-			if(!who && (project_m_n==1) && !jump ){
-			  if(cave[project_m_y][project_m_x].m_idx >0 ){
-			    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
+			int py, px;
+			py = GRID_Y(path_g[i]);
+			px = GRID_X(path_g[i]);
+			(void)project_m(0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
+			if(!who && (project_m_n == 1) && !jump){
+				if(cave[project_m_y][project_m_x].m_idx >0 ){
+					monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 
-			    if (m_ptr->ml)
-			    {
-			      /* Hack -- auto-recall */
-			      if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+					if (m_ptr->ml)
+					{
+						/* Hack -- auto-recall */
+						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-			      /* Hack - auto-track */
-			      health_track(cave[project_m_y][project_m_x].m_idx);
-			    }
-			  }
+						/* Hack - auto-track */
+						health_track(cave[project_m_y][project_m_x].m_idx);
+					}
+				}
 			}
-			(void)project_f(0,0,y,x,dam,GF_SUPER_RAY);
+			(void)project_f(0, 0, py, px, dam, GF_SUPER_RAY);
 		}
 		return notice;
 	}
