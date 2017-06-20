@@ -3574,9 +3574,9 @@ static void init_dungeon_quests(void)
 static void init_turn(void)
 {
 	if ((p_ptr->prace == RACE_VAMPIRE) ||
-	    (p_ptr->prace == RACE_SKELETON) ||
-	    (p_ptr->prace == RACE_ZOMBIE) ||
-	    (p_ptr->prace == RACE_SPECTRE))
+		(p_ptr->prace == RACE_SKELETON) ||
+		(p_ptr->prace == RACE_ZOMBIE) ||
+		(p_ptr->prace == RACE_SPECTRE))
 	{
 		/* Undead start just after midnight */
 		turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
@@ -6496,8 +6496,8 @@ static bool ask_quick_start(void)
 	}
 
 	load_prev_data(FALSE);
-	init_dungeon_quests();
 	init_turn();
+	init_dungeon_quests();
 
 	sp_ptr = &sex_info[p_ptr->psex];
 	rp_ptr = &race_info[p_ptr->prace];
