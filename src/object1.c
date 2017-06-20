@@ -5029,8 +5029,6 @@ void py_pickup_floor(bool pickup)
 	/* Scan the pile of objects */
 	for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		object_type *o_ptr;
-
 		/* Access the object */
 		o_ptr = &o_list[this_o_idx];
 
@@ -5048,13 +5046,12 @@ void py_pickup_floor(bool pickup)
 		{
 			/* Message */
 #ifdef JP
-		msg_format(" $%ld の価値がある%sを見つけた。",
-			   (long)o_ptr->pval, o_name);
+			msg_format(" $%ld の価値がある%sを見つけた。",
+				(long)o_ptr->pval, o_name);
 #else
 			msg_format("You have found %ld gold pieces worth of %s.",
-				(long) o_ptr->pval, o_name);
+				(long)o_ptr->pval, o_name);
 #endif
-
 
 			/* Collect the gold */
 			p_ptr->au += o_ptr->pval;
