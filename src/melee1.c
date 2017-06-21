@@ -1629,7 +1629,7 @@ bool make_attack_normal(int m_idx)
 			/* Handle cut */
 			if (do_cut)
 			{
-				int k = 0;
+				int cut_plus = 0;
 
 				/* Critical hit (zero if non-critical) */
 				tmp = monster_critical(d_dice, d_side, damage);
@@ -1637,24 +1637,24 @@ bool make_attack_normal(int m_idx)
 				/* Roll for damage */
 				switch (tmp)
 				{
-					case 0: k = 0; break;
-					case 1: k = randint1(5); break;
-					case 2: k = randint1(5) + 5; break;
-					case 3: k = randint1(20) + 20; break;
-					case 4: k = randint1(50) + 50; break;
-					case 5: k = randint1(100) + 100; break;
-					case 6: k = 300; break;
-					default: k = 500; break;
+					case 0: cut_plus = 0; break;
+					case 1: cut_plus = randint1(5); break;
+					case 2: cut_plus = randint1(5) + 5; break;
+					case 3: cut_plus = randint1(20) + 20; break;
+					case 4: cut_plus = randint1(50) + 50; break;
+					case 5: cut_plus = randint1(100) + 100; break;
+					case 6: cut_plus = 300; break;
+					default: cut_plus = 500; break;
 				}
 
 				/* Apply the cut */
-				if (k) (void)set_cut(p_ptr->cut + k);
+				if (k) (void)set_cut(p_ptr->cut + cut_plus);
 			}
 
 			/* Handle stun */
 			if (do_stun)
 			{
-				int k = 0;
+				int stun_plus = 0;
 
 				/* Critical hit (zero if non-critical) */
 				tmp = monster_critical(d_dice, d_side, damage);
@@ -1662,13 +1662,13 @@ bool make_attack_normal(int m_idx)
 				/* Roll for damage */
 				switch (tmp)
 				{
-					case 0: k = 0; break;
-					case 1: k = randint1(5); break;
-					case 2: k = randint1(5) + 10; break;
-					case 3: k = randint1(10) + 20; break;
-					case 4: k = randint1(15) + 30; break;
-					case 5: k = randint1(20) + 40; break;
-					case 6: k = 80; break;
+					case 0: stun_plus = 0; break;
+					case 1: stun_plus = randint1(5); break;
+					case 2: stun_plus = randint1(5) + 10; break;
+					case 3: stun_plus = randint1(10) + 20; break;
+					case 4: stun_plus = randint1(15) + 30; break;
+					case 5: stun_plus = randint1(20) + 40; break;
+					case 6: stun_plus = 80; break;
 					default: k = 150; break;
 				}
 
@@ -1893,19 +1893,19 @@ bool make_attack_normal(int m_idx)
 				if (hex_spelling(HEX_SHADOW_CLOAK) && alive && !p_ptr->is_dead)
 				{
 					int dam = 1;
-					object_type *o_ptr = &inventory[INVEN_RARM];
+					object_type *o_armed_ptr = &inventory[INVEN_RARM];
 
 					if (!(r_ptr->flagsr & RFR_RES_ALL || r_ptr->flagsr & RFR_RES_DARK))
 					{
-						if (o_ptr->k_idx)
+						if (o_armed_ptr->k_idx)
 						{
-							int basedam = ((o_ptr->dd + p_ptr->to_dd[0]) * (o_ptr->ds + p_ptr->to_ds[0] + 1));
-							dam = basedam / 2 + o_ptr->to_d + p_ptr->to_d[0];
+							int basedam = ((o_armed_ptr->dd + p_ptr->to_dd[0]) * (o_armed_ptr->ds + p_ptr->to_ds[0] + 1));
+							dam = basedam / 2 + o_armed_ptr->to_d + p_ptr->to_d[0];
 						}
 
 						/* Cursed armor makes damages doubled */
-						o_ptr = &inventory[INVEN_BODY];
-						if ((o_ptr->k_idx) && object_is_cursed(o_ptr)) dam *= 2;
+						o_armed_ptr = &inventory[INVEN_BODY];
+						if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr)) dam *= 2;
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1936,8 +1936,8 @@ bool make_attack_normal(int m_idx)
 							/* Some cursed armours gives an extra effect */
 							for (j = 0; j < 4; j++)
 							{
-								o_ptr = &inventory[typ[j][0]];
-								if ((o_ptr->k_idx) && object_is_cursed(o_ptr) && object_is_armour(o_ptr))
+								o_armed_ptr = &inventory[typ[j][0]];
+								if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr) && object_is_armour(o_armed_ptr))
 									project(0, 0, m_ptr->fy, m_ptr->fx, (p_ptr->lev * 2), typ[j][1], flg, -1);
 							}
 						}
@@ -2011,11 +2011,11 @@ bool make_attack_normal(int m_idx)
 
 		if (p_ptr->riding && damage)
 		{
-			char m_name[80];
-			monster_desc(m_name, &m_list[p_ptr->riding], 0);
+			char m_steed_name[80];
+			monster_desc(m_steed_name, &m_list[p_ptr->riding], 0);
 			if (rakuba((damage > 200) ? 200 : damage, FALSE))
 			{
-				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_name);
+				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
 			}
 		}
 
@@ -2047,11 +2047,11 @@ bool make_attack_normal(int m_idx)
 
 	if ((p_ptr->counter || (p_ptr->special_defense & KATA_MUSOU)) && alive && !p_ptr->is_dead && m_ptr->ml && (p_ptr->csp > 7))
 	{
-		char m_name[80];
+		char m_target_name[80];
 		monster_desc(m_name, m_ptr, 0);
 
 		p_ptr->csp -= 7;
-		msg_format(_("%^sに反撃した！", "Your counterattack to %s!"), m_name);
+		msg_format(_("%^sに反撃した！", "Your counterattack to %s!"), m_target_name);
 		py_attack(m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
 
