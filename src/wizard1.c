@@ -1921,19 +1921,19 @@ static void spoil_out(cptr str)
 	cptr r;
 
 	/* Line buffer */
-	static char roff_buf[256];
+	static unsigned char roff_buf[256];
 
 	/* Delay buffer */
-	static char roff_waiting_buf[256];
+	static unsigned char roff_waiting_buf[256];
 
 #ifdef JP
 	bool iskanji_flag = FALSE;
 #endif
 	/* Current pointer into line roff_buf */
-	static char *roff_p = roff_buf;
+	static unsigned char *roff_p = roff_buf;
 
 	/* Last space saved into roff_buf */
-	static char *roff_s = NULL;
+	static unsigned char *roff_s = NULL;
 
 	/* Mega-Hack -- Delayed output */
 	static bool waiting_output = FALSE;
@@ -1967,10 +1967,10 @@ static void spoil_out(cptr str)
 	for (; *str; str++)
 	{
 #ifdef JP
-		char cbak;
+		unsigned char cbak;
 		bool k_flag = iskanji((unsigned char)(*str));
 #endif
-		char ch = *str;
+		unsigned char ch = *str;
 		bool wrap = (ch == '\n');
 
 #ifdef JP
@@ -2002,9 +2002,9 @@ static void spoil_out(cptr str)
 #ifdef JP
 				bool k_flag_local;
 				bool iskanji_flag_local = FALSE;
-				cptr tail = str + (k_flag ? 2 : 1);
+				ucptr tail = str + (k_flag ? 2 : 1);
 #else
-				cptr tail = str + 1;
+				ucptr tail = str + 1;
 #endif
 
 				for (; *tail; tail++)

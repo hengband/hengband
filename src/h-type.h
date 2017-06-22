@@ -40,10 +40,11 @@
 #include <stdint.h>
 #endif
 
-/*** Special 4 letter names for some standard types ***/
+/*** Special 4-5 letter names for some standard types ***/
 
 typedef void *vptr;       /*!< void型ポインタ定義 / A standard pointer (to "void" because ANSI C says so) */
 typedef const char *cptr; /*!< 文字列定数用ポインタ定義 / A simple pointer (to unmodifiable strings) */
+typedef const unsigned char *ucptr; /*!< 非負文字列定数用ポインタ定義 / A simple pointer (to unmodifiable strings) */
 typedef double real;      /*!< doubleをreal型として定義 / Since float's are silly, hard code real numbers as doubles */
 
 
