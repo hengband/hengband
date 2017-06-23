@@ -1964,8 +1964,8 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 
 	if (!necro && m_ptr)
 	{
-		char            m_name[80];
-		monster_race    *r_ptr = &r_info[m_ptr->ap_r_idx];
+		char m_name[80];
+		monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
 
 		power = r_ptr->level / 2;
 
@@ -1987,8 +1987,6 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		if (!(r_ptr->flags2 & RF2_ELDRITCH_HORROR))
 			return; /* oops */
 
-
-
 		if (is_pet(m_ptr))
 			return; /* Pet eldritch horrors are safe most of the time */
 
@@ -2009,7 +2007,6 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 			msg_format("You behold the %s visage of %s!",
 				funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
 #endif
-
 
 			if (one_in_(3))
 			{
@@ -2046,7 +2043,6 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	else if(!necro)
 	{
 		monster_race *r_ptr;
-		int power;
 		char m_name[80];
 		cptr desc;
 

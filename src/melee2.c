@@ -362,8 +362,6 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 
 	if (p_ptr->riding && (p_ptr->riding == m_idx) && (dam > 0))
 	{
-		char m_name[80];
-
 		/* Extract monster name */
 		monster_desc(m_name, m_ptr, 0);
 

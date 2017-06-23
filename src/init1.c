@@ -2162,7 +2162,6 @@ errr parse_k_info(char *buf, header *head)
 	/* Process 'A' for "Allocation" (one line only) */
 	else if (buf[0] == 'A')
 	{
-		int i;
 
 		/* XXX XXX XXX Simply read each number following a colon */
 		for (i = 0, s = buf+1; s && (s[0] == ':') && s[1]; ++i)
@@ -4259,16 +4258,16 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				/* Place player in a quest level */
 				if (p_ptr->inside_quest)
 				{
-					int y, x;
+					int py, px;
 
 					/* Delete the monster (if any) */
 					delete_monster(p_ptr->y, p_ptr->x);
 
-					y = atoi(zz[0]);
-					x = atoi(zz[1]);
+					py = atoi(zz[0]);
+					px = atoi(zz[1]);
 
-					p_ptr->y = y;
-					p_ptr->x = x;
+					p_ptr->y = py;
+					p_ptr->x = px;
 				}
 				/* Place player in the town */
 				else if (!p_ptr->oldpx && !p_ptr->oldpy)
