@@ -1015,8 +1015,6 @@ void leave_floor(void)
 	/* Kill some old saved floors */
 	if (!(change_floor_mode & CFM_SAVE_FLOORS))
 	{
-		int i;
-
 		/* Kill all saved floors */
 		for (i = 0; i < MAX_SAVED_FLOORS; i++)
 			kill_saved_floor(&saved_floors[i]);

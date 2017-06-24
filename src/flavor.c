@@ -2174,11 +2174,11 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 			if (*str)
 			{
 				/* Find the '#' */
-				cptr str = my_strchr(quark_str(o_ptr->inscription), '#');
+				cptr str_aux = my_strchr(quark_str(o_ptr->inscription), '#');
 
 				/* Add the false name */
 				t = object_desc_str(t,"『");
-				t = object_desc_str(t, &str[1]);
+				t = object_desc_str(t, &str_aux[1]);
 				t = object_desc_str(t,"』");
 			}
 		}
