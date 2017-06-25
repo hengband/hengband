@@ -35,7 +35,6 @@
 #define DUN_TUN_JCT_MIN 60 /* Chance of doors at tunnel junctions (was 90) */
 #define DUN_TUN_JCT_MAX 90
 
-extern int dun_rooms;
 
 extern int dun_tun_rnd; /*!< ダンジョンの通路方向を掻き回す頻度(一回の試行ごとに%で判定している) */
 extern int dun_tun_chg; /*!< ダンジョンの通路をクランクさせる頻度(一回の試行ごとに%で判定している) */

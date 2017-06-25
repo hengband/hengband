@@ -4379,23 +4379,23 @@ static void build_bubble_vault(int x0, int y0, int xsize, int ysize)
 	/* Top and bottom boundaries */
 	for (i = 0; i < xsize; i++)
 	{
-		int x = x0 - xhsize + i;
+		int side_x = x0 - xhsize + i;
 
-		place_outer_noperm_bold(y0 - yhsize + 0, x);
-		cave[y0 - yhsize + 0][x].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_outer_noperm_bold(y0 - yhsize + ysize - 1, x);
-		cave[y0 - yhsize + ysize - 1][x].info |= (CAVE_ROOM | CAVE_ICKY);
+		place_outer_noperm_bold(y0 - yhsize + 0, side_x);
+		cave[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+		place_outer_noperm_bold(y0 - yhsize + ysize - 1, side_x);
+		cave[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Left and right boundaries */
 	for (i = 1; i < ysize - 1; i++)
 	{
-		int y = y0 - yhsize + i;
+		int side_y = y0 - yhsize + i;
 
-		place_outer_noperm_bold(y, x0 - xhsize + 0);
-		cave[y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_outer_noperm_bold(y, x0 - xhsize + xsize - 1);
-		cave[y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
+		place_outer_noperm_bold(side_y, x0 - xhsize + 0);
+		cave[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
+		place_outer_noperm_bold(side_y, x0 - xhsize + xsize - 1);
+		cave[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Fill in middle with bubbles */
