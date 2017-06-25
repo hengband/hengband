@@ -3384,7 +3384,6 @@ static errr rd_savefile_new_aux(void)
 	/* Read the object memory */
 	for (i = 0; i < tmp16u; i++)
 	{
-		byte tmp8u;
 		object_kind *k_ptr = &k_info[i];
 
 		rd_byte(&tmp8u);
