@@ -3835,7 +3835,7 @@ static void do_cmd_activate_aux(int item)
 		}
 		else
 		{
-			bool success = FALSE;
+			success = FALSE;
 			if (!get_rep_dir2(&dir)) return;
 			if (monster_can_enter(p_ptr->y + ddy[dir], p_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0))
 			{

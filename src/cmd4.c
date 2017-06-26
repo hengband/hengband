@@ -1858,14 +1858,10 @@ void do_cmd_options_aux(int page, cptr info)
 static void do_cmd_options_win(void)
 {
 	int i, j, d;
-
 	int y = 0;
 	int x = 0;
-
 	char ch;
-
 	bool go = TRUE;
-
 	u32b old_flag[8];
 
 
@@ -1919,9 +1915,8 @@ static void do_cmd_options_win(void)
 			/* Display the windows */
 			for (j = 0; j < 8; j++)
 			{
-				byte a = TERM_WHITE;
-
 				char c = '.';
+				a = TERM_WHITE;
 
 				/* Use color */
 				if ((i == y) && (j == x)) a = TERM_L_BLUE;

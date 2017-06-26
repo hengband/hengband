@@ -2176,8 +2176,6 @@ static void do_name_pet(void)
 				m_ptr->nickname = quark_add(out_val);
 				if (record_named_pet)
 				{
-					char m_name[80];
-
 					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 					do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_NAME, m_name);
 				}
@@ -2186,8 +2184,6 @@ static void do_name_pet(void)
 			{
 				if (record_named_pet && old_name)
 				{
-					char m_name[80];
-
 					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 					do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_UNNAME, m_name);
 				}
