@@ -3464,10 +3464,9 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 		/* Monster here, Try to hit it */
 		if (cave[y][x].m_idx)
 		{
-			int armour;
-			cave_type *c_ptr = &cave[y][x];
+			cave_type *c_mon_ptr = &cave[y][x];
 
-			monster_type *m_ptr = &m_list[c_ptr->m_idx];
+			monster_type *m_ptr = &m_list[c_mon_ptr->m_idx];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Check the visibility */
@@ -3541,7 +3540,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
 						/* Hack -- Track this monster */
-						health_track(c_ptr->m_idx);
+						health_track(c_mon_ptr->m_idx);
 					}
 				}
 
@@ -3602,7 +3601,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 				}
 
 				/* Hit the monster, check for death */
-				if (mon_take_hit(c_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_ptr(m_ptr))))
+				if (mon_take_hit(c_mon_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_ptr(m_ptr))))
 				{
 					/* Dead monster */
 				}
@@ -3623,7 +3622,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 					}
 
 					/* Message */
-					message_pain(c_ptr->m_idx, tdam);
+					message_pain(c_mon_ptr->m_idx, tdam);
 
 					/* Anger the monster */
 					if (tdam > 0) anger_monster(m_ptr);
@@ -3649,7 +3648,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 					if (snipe_type == SP_RUSH)
 					{
 						int n = randint1(5) + 3;
-						int m_idx = c_ptr->m_idx;
+						int m_idx = c_mon_ptr->m_idx;
 
 						for ( ; cur_dis <= tdis; )
 						{
@@ -3677,7 +3676,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 							m_ptr->fy = ny;
 
 							/* Update the monster (new location) */
-							update_mon(c_ptr->m_idx, TRUE);
+							update_mon(c_mon_ptr->m_idx, TRUE);
 
 							lite_spot(ny, nx);
 							lite_spot(oy, ox);
