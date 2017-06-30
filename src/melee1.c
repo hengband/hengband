@@ -1648,7 +1648,7 @@ bool make_attack_normal(int m_idx)
 				}
 
 				/* Apply the cut */
-				if (k) (void)set_cut(p_ptr->cut + cut_plus);
+				if (cut_plus) (void)set_cut(p_ptr->cut + cut_plus);
 			}
 
 			/* Handle stun */
@@ -1669,11 +1669,11 @@ bool make_attack_normal(int m_idx)
 					case 4: stun_plus = randint1(15) + 30; break;
 					case 5: stun_plus = randint1(20) + 40; break;
 					case 6: stun_plus = 80; break;
-					default: k = 150; break;
+					default: stun_plus = 150; break;
 				}
 
 				/* Apply the stun */
-				if (k) (void)set_stun(p_ptr->stun + k);
+				if (stun_plus) (void)set_stun(p_ptr->stun + stun_plus);
 			}
 
 			if (explode)
