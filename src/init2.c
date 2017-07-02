@@ -43,8 +43,7 @@
 #endif /* CHECK_MODIFICATION_TIME */
 #endif
 
-
-
+static void put_title(void);
 
 /*!
  * @brief 各データファイルを読み取るためのパスを取得する
@@ -2368,6 +2367,7 @@ void init_angband(void)
 	/* Close it */
 	(void)fd_close(fd);
 
+	put_title();
 
 	/*** Initialize some arrays ***/
 
@@ -2478,6 +2478,25 @@ void init_angband(void)
 
 	/* Done */
 	note(_("[初期化終了]", "[Initialization complete]"));
+}
+
+/*!
+ * @brief タイトル記述
+ * @return なし
+ */
+static void put_title(void)
+{
+	char title[120];
+	int col;
+#if H_VER_EXTRA > 0
+	sprintf(title, _("変愚蛮怒 %d.%d.%d.%d(%s)", "Hengband %d.%d.%d.%d(%s)"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, H_VER_EXTRA,
+#else
+	sprintf(title, _("変愚蛮怒 %d.%d.%d(%s)", "Hengband %d.%d.%d(%s)"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH,
+#endif
+	IS_STABLE_VERSION ? _("安定版", "Stable") : _("開発版", "Developing"));
+	col = (80 - strlen(title)) / 2;
+	col = col < 0 ? 0 : col;
+	prt(title, VER_INFO_ROW, col);
 }
 
 /*!

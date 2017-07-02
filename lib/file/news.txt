@@ -1,7 +1,8 @@
 
-                  ****************************************
-                  **     Hengband 2.2.0.10(Develop)     **
-                  ****************************************
+
+                  ******************************************
+
+                  ******************************************
 
           Based on Moria:   Copyright (c) 1985 Robert Alan Koeneke
               and Umoria:   Copyright (c) 1989 James E. Wilson
@@ -13,7 +14,6 @@
        New ZAngband code:   Robert Ruehlmann < rr9@thangorodrim.net >
     ZAngband 2.3.0 - ???:   The ZAngband DevTeam
        ZAngband Jap ver.:   Mitsuhiro Itakura <itakura @ users.sourceforge.net>
-
 
            Hengband: Mr.Hoge (echizen @ users.sourceforge.jp) & Many others
                        http://hengband.sourceforge.jp/

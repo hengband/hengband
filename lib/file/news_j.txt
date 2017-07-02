@@ -1,7 +1,8 @@
 
-                  ***************************************
-                  **     変愚蛮怒 2.2.0.10(開発版)     **
-                  ***************************************
+
+                  *****************************************
+
+                  *****************************************
 
           Based on Moria:    Copyright (c) 1985 Robert Alan Koeneke
               and Umoria:    Copyright (c) 1989 James E. Wilson
@@ -13,7 +14,6 @@
        New ZAngband code:    Robert Ruehlmann < rr9＠thangorodrim.net >
     ZAngband 2.3.0 - ???:    The ZAngband DevTeam
        ZAngband 日本語版:    板倉充洋 < itakura＠users.sourceforge.net >
-
 
           変愚蛮怒: Mr.hoge (echizen＠users.sourceforge.jp) ＆ 多くの方々
                      http://hengband.sourceforge.jp/

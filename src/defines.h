@@ -53,11 +53,18 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 11 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 12 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+
+
+ /*!
+  * @brief バージョンが開発版が安定版かを返す
+  */
+#define	IS_STABLE_VERSION (FAKE_VER_MINOR % 2 == 0 && FAKE_VER_EXTRA == 0)
 
 /*!
  * @brief セーブファイル上のバージョン定義(メジャー番号) / "Savefile Version Number" for Hengband 1.1.1 and later
  * @details
+ * 当面FAKE_VER_*を参照しておく。
  * <pre>
  * First three digits may be same as the Program Version.  But not
  * always same.  It means that newer version may preserves lower
@@ -68,10 +75,10 @@
  * Upper compatibility is always guaranteed.
  * </pre>
  */
-#define H_VER_MAJOR 2 /*!< セーブファイル上のバージョン定義(メジャー番号) */
-#define H_VER_MINOR 2 /*!< セーブファイル上のバージョン定義(マイナー番号) */
-#define H_VER_PATCH 0 /*!< セーブファイル上のバージョン定義(パッチ番号) */
-#define H_VER_EXTRA 11 /*!< セーブファイル上のバージョン定義(エクストラ番号) */
+#define H_VER_MAJOR (FAKE_VER_MAJOR-10) /*!< セーブファイル上のバージョン定義(メジャー番号) */
+#define H_VER_MINOR FAKE_VER_MINOR /*!< セーブファイル上のバージョン定義(マイナー番号) */
+#define H_VER_PATCH FAKE_VER_PATCH /*!< セーブファイル上のバージョン定義(パッチ番号) */
+#define H_VER_EXTRA FAKE_VER_EXTRA /*!< セーブファイル上のバージョン定義(エクストラ番号) */
 
 #define ANGBAND_2_8_1 /*!< Angband 2.8.1以降から有効な処理分岐を定義 */
 #define ZANGBAND /*!< Zangband 以降から有効な処理分岐を定義 */
@@ -80,55 +87,55 @@
  * @brief generate.cで用いられる基本的なブロック数単位(垂直方向)
  * Number of grids in each block (vertically) Probably hard-coded to 11, see "generate.c"
  */
-#define BLOCK_HGT	11
+#define BLOCK_HGT 11
 
 /*!
  * @brief generate.cで用いられる基本的なブロック数単位(水平方向)
  * Number of grids in each block (horizontally) Probably hard-coded to 11, see "generate.c"
  */
-#define BLOCK_WID	11
+#define BLOCK_WID 11
 
 /*!
  * @brief 表示上の基本的なパネル単位(垂直方向、BLOCK_HGTの倍数で設定すること)
  * Number of grids in each panel (vertically) Must be a multiple of BLOCK_HGT
  */
-#define PANEL_HGT	11
+#define PANEL_HGT 11
 
 /*!
  * @brief 表示上の基本的なパネル単位(水平方向、BLOCK_WIDの倍数で設定すること)
  * Number of grids in each panel (horizontally) Must be a multiple of BLOCK_WID
  */
-#define PANEL_WID	33
+#define PANEL_WID 33
 
 /*!
  * @brief 表示上の基本的なブロック単位(垂直方向、PANEL_HGTの倍数で設定すること)
  * Number of grids used to display the dungeon (vertically). Must be a multiple of 11, probably hard-coded to 22.
  */
-#define SCREEN_HGT      22
+#define SCREEN_HGT 22
 
 /*!
  * @brief 表示上の基本的なブロック単位(水平方向、PANEL_WIDの倍数で設定すること)
  * Number of grids used to display the dungeon (horizontally). Must be a multiple of 33, probably hard-coded to 66.
  */
-#define SCREEN_WID      66
+#define SCREEN_WID 66
 
 /*!
  * @brief 表示上のダンジョンの最大垂直サイズ(SCREEN_HGTの3倍が望ましい)
  * Maximum dungeon height in grids, must be a multiple of SCREEN_HGT, probably hard-coded to SCREEN_HGT * 3.
  */
-#define MAX_HGT         66
+#define MAX_HGT 66
 
 /*!
  * @brief 表示上のダンジョンの最大水平サイズ(SCREEN_WIDの3倍が望ましい)
  * Maximum dungeon width in grids, must be a multiple of SCREEN_WID, probably hard-coded to SCREEN_WID * 3.
  */
-#define MAX_WID         198
+#define MAX_WID 198
 
 /*
  * Quest constants
  */
-#define MIN_RANDOM_QUEST    40 /*<! ランダムクエストを割り当てるクエストIDの開始値 */
-#define MAX_RANDOM_QUEST    49 /*<! ランダムクエストを割り当てるクエストIDの終了値 */
+#define MIN_RANDOM_QUEST 40 /*<! ランダムクエストを割り当てるクエストIDの開始値 */
+#define MAX_RANDOM_QUEST 49 /*<! ランダムクエストを割り当てるクエストIDの終了値 */
 
 /*!
  * @brief 該当IDが固定クエストかどうかを判定する / Check is the quest index is "fixed"
@@ -137,8 +144,8 @@
  */
 #define is_fixed_quest_idx(Q_IDX) (((Q_IDX) < MIN_RANDOM_QUEST) || ((Q_IDX) > MAX_RANDOM_QUEST))
 
-#define QUEST_TOWER1         5 /*<! 塔クエスト(第1階層)に割り振るクエストID */
-#define QUEST_TOWER2         6 /*<! 塔クエスト(第2階層)に割り振るクエストID */
+#define QUEST_TOWER1 5 /*<! 塔クエスト(第1階層)に割り振るクエストID */
+#define QUEST_TOWER2 6 /*<! 塔クエスト(第2階層)に割り振るクエストID */
 #define QUEST_TOWER3         7 /*<! 塔クエスト(第3階層)に割り振るクエストID */
 #define QUEST_OBERON         8 /*<! オベロン打倒クエストに割り振るクエストID */
 #define QUEST_SERPENT        9 /*<! サーペント打倒クエストに割り振るクエストID */
@@ -868,6 +875,8 @@
 #define SEIKAKU_MUNCHKIN 11
 
 /*** Screen Locations ***/
+
+#define VER_INFO_ROW 3   //!< タイトル表記(行)
 
 /*
  * Some screen locations for various display routines
