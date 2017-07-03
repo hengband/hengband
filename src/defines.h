@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 12 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 13 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -146,19 +146,19 @@
 
 #define QUEST_TOWER1 5 /*<! 塔クエスト(第1階層)に割り振るクエストID */
 #define QUEST_TOWER2 6 /*<! 塔クエスト(第2階層)に割り振るクエストID */
-#define QUEST_TOWER3         7 /*<! 塔クエスト(第3階層)に割り振るクエストID */
-#define QUEST_OBERON         8 /*<! オベロン打倒クエストに割り振るクエストID */
-#define QUEST_SERPENT        9 /*<! サーペント打倒クエストに割り振るクエストID */
+#define QUEST_TOWER3 7 /*<! 塔クエスト(第3階層)に割り振るクエストID */
+#define QUEST_OBERON 8 /*<! オベロン打倒クエストに割り振るクエストID */
+#define QUEST_SERPENT 9 /*<! サーペント打倒クエストに割り振るクエストID */
 
 /*
  * Arena constants
  */
-#define MAX_ARENA_MONS		41	/*<! 闘技場のイベント件数 -KMW- */
+#define MAX_ARENA_MONS 41 /*<! 闘技場のイベント件数 -KMW- */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT)) /*<! 旧バージョンの闘技場敗北定義 */
 
 
-#define MAX_STORES      10 /*!< store.c用の店舗の種類最大数 / Total number of stores (see "store.c", etc) */
-#define MAX_BLDG		32 /*!< 施設の種類最大数 / Number of buildings */
+#define MAX_STORES 10 /*!< store.c用の店舗の種類最大数 / Total number of stores (see "store.c", etc) */
+#define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */
 
 /*
  * Store types
@@ -498,16 +498,16 @@
 /*
  * Misc constants
  */
-#define TOWN_DAWN         10000    /*!< 1日分のターン / Number of ticks from dawn to dawn XXX */
-#define TURNS_PER_TICK    10L      /*!< Number of energy-gain-turns per ticks */
-#define MAX_DAYS          20000    /*!< 内部処理中で保持される最大日数 / Maximum days */
-#define BREAK_GLYPH       550      /*!< 守りのルーンの強靭度 / Rune of protection resistance */
-#define BREAK_MINOR_GLYPH 299      /*!< 爆発のルーンの発動しやすさ / For explosive runes */
-#define BTH_PLUS_ADJ       3       /*!< 武器経験値及びプレイヤーの打撃/射撃能力に応じた修正値倍率 / Adjust BTH per plus-to-hit */
-#define MON_MULT_ADJ  	   8       /*!< モンスターの増殖しにくさの基本倍率 / High value slows multiplication */
-#define MON_SUMMON_ADJ	   2       /*!< 現在未使用 Adjust level of summoned creatures */
-#define MON_DRAIN_LIFE	   2       /*!< モンスターの打撃によるプレイヤーの経験値吸収基本倍率(%) / Percent of player exp drained per hit */
-#define USE_DEVICE    	   3       /*!< 魔道具の最低失敗基準値 x> Harder devices x< Easier devices     */
+#define TOWN_DAWN         10000   /*!< 1日分のターン / Number of ticks from dawn to dawn XXX */
+#define TURNS_PER_TICK    10L     /*!< Number of energy-gain-turns per ticks */
+#define MAX_DAYS          20000   /*!< 内部処理中で保持される最大日数 / Maximum days */
+#define BREAK_GLYPH       550     /*!< 守りのルーンの強靭度 / Rune of protection resistance */
+#define BREAK_MINOR_GLYPH 299     /*!< 爆発のルーンの発動しやすさ / For explosive runes */
+#define BTH_PLUS_ADJ      3       /*!< 武器経験値及びプレイヤーの打撃/射撃能力に応じた修正値倍率 / Adjust BTH per plus-to-hit */
+#define MON_MULT_ADJ      8       /*!< モンスターの増殖しにくさの基本倍率 / High value slows multiplication */
+#define MON_SUMMON_ADJ    2       /*!< 現在未使用 Adjust level of summoned creatures */
+#define MON_DRAIN_LIFE    2       /*!< モンスターの打撃によるプレイヤーの経験値吸収基本倍率(%) / Percent of player exp drained per hit */
+#define USE_DEVICE        3       /*!< 魔道具の最低失敗基準値 x> Harder devices x< Easier devices     */
 
 
 /* "Biases" for random artifact gen */

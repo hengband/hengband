@@ -22236,3 +22236,23 @@ D:$This horse is produced in ancient Fergana.
 D:$It was able to run 1000 Li a day and shed bloogy sweat.
 D:大宛で産出する名馬だ。血の汗を流し、千里を走ることができた。
 
+N:1106:光の堕天使『エミリオ・ミハイロフ』
+E:Emilio Michaelov, Fallen Angel of Light
+G:A:b
+I:127:50d100:40:160:10
+W:57:5:0:30000:0:0
+B:PUNCH:HURT:4d12
+B:PUNCH:HURT:4d12
+B:PUNCH:HURT:6d10
+B:KICK:HURT:6d10
+F:UNIQUE | MALE | CAN_SPEAK | GOOD | EVIL | REFLECTING |
+F:FORCE_MAXHP | CAN_FLY | HUMAN |
+F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
+F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_LITE | RES_TELE |
+F:NO_CONF | NO_SLEEP | SELF_LITE_2 |
+S:1_IN_4 | 
+S:BLIND | SCARE |
+S:BO_MANA | HOLD |
+S:PSY_SPEAR | BA_LITE | BR_LITE
+D:光を操るサイキッカーで、中性的な容姿と背中に輝く光の羽根を背負っている。
