@@ -2011,10 +2011,10 @@ static bool inn_comm(int cmd)
 				else
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
 				
-				turn = (turn / (TURNS_PER_TICK*TOWN_DAWN/2) + 1) * (TURNS_PER_TICK*TOWN_DAWN/2);
+				turn = (turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
 				if (dungeon_turn < dungeon_turn_limit)
 				{
-					dungeon_turn += MIN(turn - oldturn, TURNS_PER_TICK * 250);
+					dungeon_turn += MIN((turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
 					if (dungeon_turn > dungeon_turn_limit) dungeon_turn = dungeon_turn_limit;
 				}
 
@@ -2049,7 +2049,7 @@ static bool inn_comm(int cmd)
 						int i;
 						for (i = 0; i < 72; i++)
 						{
-							p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
+							p_ptr->magic_num1[i] = p_ptr->magic_num2[i] * EATER_CHARGE;
 						}
 						for (; i < 108; i++)
 						{
@@ -2093,7 +2093,6 @@ static void get_questinfo(int questnum, bool do_init)
 	int     i;
 	int     old_quest;
 	char    tmp_str[80];
-
 
 	/* Clear the text */
 	for (i = 0; i < 10; i++)

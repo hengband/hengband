@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 13 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 14 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -499,7 +499,8 @@
  * Misc constants
  */
 #define TOWN_DAWN         10000   /*!< 1日分のターン / Number of ticks from dawn to dawn XXX */
-#define TURNS_PER_TICK    10L     /*!< Number of energy-gain-turns per ticks */
+#define TURNS_PER_TICK    10L     /*!< 時間経過処理を行うターン数の刻み / Number of energy-gain-turns per ticks */
+#define INN_DUNGEON_TURN_ADJ 10   /*!< 宿屋で時間をつぶした場合に増えるdungeon_turnの倍率 */
 #define MAX_DAYS          20000   /*!< 内部処理中で保持される最大日数 / Maximum days */
 #define BREAK_GLYPH       550     /*!< 守りのルーンの強靭度 / Rune of protection resistance */
 #define BREAK_MINOR_GLYPH 299     /*!< 爆発のルーンの発動しやすさ / For explosive runes */

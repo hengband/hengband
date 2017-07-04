@@ -120,10 +120,10 @@ s16b object_level;		/* Current object creation level */
 s16b monster_level;		/* Current monster creation level */
 s16b base_level;        /* Base dungeon level */
 
-s32b turn;				/* Current game turn */
-s32b turn_limit;		/* Limit of game turn */
-s32b dungeon_turn;			/* Game turn in dungeon */
-s32b dungeon_turn_limit;	/* Limit of game turn in dungeon */
+s32b turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
+s32b turn_limit;		/*!< turnの最大値 / Limit of game turn */
+s32b dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game turn in dungeon */
+s32b dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game turn in dungeon */
 s32b old_turn;			/* Turn when level began */
 s32b old_battle;
 
