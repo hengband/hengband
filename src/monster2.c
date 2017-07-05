@@ -1306,12 +1306,12 @@ s16b get_mon_num(int level)
 	alloc_entry		*table = alloc_race_table;
 
 	int pls_kakuritu, pls_level;
-	int hoge = mysqrt(level * 10000L + 400L);
+	int delay = mysqrt(level * 10000L) + 400L;
 
 	if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
-	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((dungeon_turn / (TURNS_PER_TICK * 5000L) - hoge / 10)));
-	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + dungeon_turn / (TURNS_PER_TICK * 40000L) - hoge / 40 + MIN(5, level / 10)) ;
+	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((dungeon_turn / (TURNS_PER_TICK * 5000L) - delay / 10)));
+	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + dungeon_turn / (TURNS_PER_TICK * 40000L) - delay / 40 + MIN(5, level / 10)) ;
 
 	if (d_info[dungeon_type].flags1 & DF1_MAZE)
 	{
