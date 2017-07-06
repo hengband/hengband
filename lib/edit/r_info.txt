@@ -22157,7 +22157,7 @@ I:110:66d101:10:66:66
 W:88:2:0:30000:0:0
 B:BITE:HURT:7d77
 F:DROP_CORPSE | FORCE_MAXHP
-F:DROP_GOOD | DROP_3D2 | DROP_4D2
+F:DROP_GOOD | DROP_3D2 | DROP_4D2 | RIDING
 D:氷河期のあいだに繁栄を極めたこのワームは、キイェルドーの
 D:ありとあらゆる人々にとって恐怖の的だった。その巨体と狂暴な性格が
 D:呼び起こした悪夢は数知れない―甲鱗のワームはまさに、
