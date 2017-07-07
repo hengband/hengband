@@ -5163,7 +5163,7 @@ bool choose_ele_attack(void)
 /*
  * Choose a elemental immune. -LM-
  */
-bool choose_ele_immune(int turn)
+bool choose_ele_immune(int immune_turn)
 {
 	char choice;
 
@@ -5186,13 +5186,13 @@ bool choose_ele_immune(int turn)
 	choice = inkey();
 
 	if ((choice == 'a') || (choice == 'A')) 
-		set_ele_immune(DEFENSE_FIRE, turn);
+		set_ele_immune(DEFENSE_FIRE, immune_turn);
 	else if ((choice == 'b') || (choice == 'B'))
-		set_ele_immune(DEFENSE_COLD, turn);
+		set_ele_immune(DEFENSE_COLD, immune_turn);
 	else if ((choice == 'c') || (choice == 'C'))
-		set_ele_immune(DEFENSE_ACID, turn);
+		set_ele_immune(DEFENSE_ACID, immune_turn);
 	else if ((choice == 'd') || (choice == 'D'))
-		set_ele_immune(DEFENSE_ELEC, turn);
+		set_ele_immune(DEFENSE_ELEC, immune_turn);
 	else
 	{
 		msg_print(_("免疫を付けるのをやめた。", "You cancel the temporary immune."));
