@@ -6474,14 +6474,14 @@ static void print_tomb(void)
 		{
 			if (dun_level == 0)
 			{
-				cptr town = p_ptr->town_num ? "街" : "荒野";
+				cptr field_name = p_ptr->town_num ? "街" : "荒野";
 				if (streq(p_ptr->died_from, "途中終了"))
 				{
-					sprintf(tmp, "%sで死んだ", town);
+					sprintf(tmp, "%sで死んだ", field_name);
 				}
 				else
 				{
-					sprintf(tmp, "に%sで殺された", town);
+					sprintf(tmp, "に%sで殺された", field_name);
 				}
 			}
 			else

@@ -3193,24 +3193,24 @@ static int repair_broken_weapon_aux(int bcost)
 
 	if (o_ptr->sval == SV_BROKEN_DAGGER)
 	{
-		int i, n = 1;
+		int j, n = 1;
 
 		/* Suppress compiler warning */
 		k_idx = 0;
 
-		for (i = 1; i < max_k_idx; i++)
+		for (j = 1; j < max_k_idx; j++)
 		{
-			object_kind *k_ptr = &k_info[i];
+			object_kind *k_aux_ptr = &k_info[j];
 
-			if (k_ptr->tval != TV_SWORD) continue;
-			if ((k_ptr->sval == SV_BROKEN_DAGGER) ||
-				(k_ptr->sval == SV_BROKEN_SWORD) ||
-				(k_ptr->sval == SV_DOKUBARI)) continue;
-			if (k_ptr->weight > 99) continue;
+			if (k_aux_ptr->tval != TV_SWORD) continue;
+			if ((k_aux_ptr->sval == SV_BROKEN_DAGGER) ||
+				(k_aux_ptr->sval == SV_BROKEN_SWORD) ||
+				(k_aux_ptr->sval == SV_DOKUBARI)) continue;
+			if (k_aux_ptr->weight > 99) continue;
 
 			if (one_in_(n)) 
 			{
-				k_idx = i;
+				k_idx = j;
 				n++;
 			}
 		}
