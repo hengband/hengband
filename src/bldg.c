@@ -299,6 +299,11 @@ static void arena_comm(int cmd)
 				r_ptr = &r_info[arena_info[p_ptr->arena_number].r_idx];
 				name = (r_name + r_ptr->name);
 				msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
+
+				p_ptr->monster_race_idx = arena_info[p_ptr->arena_number].r_idx;
+				p_ptr->window |= (PW_MONSTER);
+				window_stuff();
+
 			}
 			break;
 		case BACT_ARENA_RULES:
