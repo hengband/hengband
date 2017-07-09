@@ -464,6 +464,11 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 			fprintf(fff, _(" %2d:%02d %20s %sを発見した。\n", " %2d:%02d %20s discovered %s.\n"), hour, min, note_level, note);
 			break;
 		}
+		case NIKKI_ART_SCROLL:
+		{
+			fprintf(fff, _(" %2d:%02d %20s 巻物によって%sを生成した。\n", " %2d:%02d %20s created %s by scroll.\n"), hour, min, note_level, note);
+			break;
+		}
 		case NIKKI_UNIQUE:
 		{
 			fprintf(fff, _(" %2d:%02d %20s %sを倒した。\n", " %2d:%02d %20s defeated %s.\n"), hour, min, note_level, note);

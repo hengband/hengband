@@ -2506,7 +2506,15 @@ bool artifact_scroll(void)
 		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
 	}
 	else
+	{
+		if (record_rand_art)
+		{
+			/* Description */
+			object_desc(o_name, o_ptr, OD_NAME_ONLY);
+			do_cmd_write_nikki(NIKKI_ART_SCROLL, 0, o_name);
+		}
 		chg_virtue(V_ENCHANT, 1);
+	}
 
 	calc_android_exp();
 
