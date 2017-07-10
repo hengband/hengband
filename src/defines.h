@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 21 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 22 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -3202,7 +3202,7 @@
  * Therefore it's very easy to add a lot of new flags; no one need to
  * worry about in which variable a new flag should be put, nor to
  * modify a huge number of files all over the source directory at once
- * to add new flag variables such as flags4, flags5, etc...
+ * to add new flag variables such as flags4, a_ability_flags1, etc...
  *
  * All management of flags is now treated using a set of macros
  * instead of bit operations.
@@ -3817,11 +3817,11 @@
  * Monster bit flags of racial resistances
  * Note: Resist confusion was merged to RFR_NO_CONF
  */
-#define RFR_IM_ACID         0x00000001  /* Resist acid */
-#define RFR_IM_ELEC         0x00000002  /* Resist elec */
-#define RFR_IM_FIRE         0x00000004  /* Resist fire */
-#define RFR_IM_COLD         0x00000008  /* Resist cold */
-#define RFR_IM_POIS         0x00000010  /* Resist poison */
+#define RFR_IM_ACID         0x00000001  /* Immunity acid */
+#define RFR_IM_ELEC         0x00000002  /* Immunity elec */
+#define RFR_IM_FIRE         0x00000004  /* Immunity fire */
+#define RFR_IM_COLD         0x00000008  /* Immunity cold */
+#define RFR_IM_POIS         0x00000010  /* Immunity poison */
 #define RFR_RES_LITE        0x00000020  /* Resist lite */
 #define RFR_RES_DARK        0x00000040  /* Resist dark */
 #define RFR_RES_NETH        0x00000080  /* Resist nether */

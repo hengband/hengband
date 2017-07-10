@@ -1841,7 +1841,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 			chg_virtue (V_JUSTICE, -1);
 		}
 
-		if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags4 & ~(RF4_NOMAGIC_MASK))  && !(r_ptr->flags5 & ~(RF5_NOMAGIC_MASK)) && !(r_ptr->flags6 & ~(RF6_NOMAGIC_MASK)))
+		if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags4 & ~(RF4_NOMAGIC_MASK))  && !(r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK)) && !(r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK)))
 		{
 			if (one_in_(4)) chg_virtue(V_NATURE, -1);
 		}

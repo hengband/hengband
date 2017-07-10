@@ -233,8 +233,8 @@ static void roff_aux(int r_idx, int mode)
 	u32b		flags2;
 	u32b		flags3;
 	u32b		flags4;
-	u32b		flags5;
-	u32b		flags6;
+	u32b		a_ability_flags1;
+	u32b		a_ability_flags2;
 	u32b		flags7;
 	u32b		flagsr;
 
@@ -256,8 +256,8 @@ static void roff_aux(int r_idx, int mode)
 	flags2 = (r_ptr->flags2 & r_ptr->r_flags2);
 	flags3 = (r_ptr->flags3 & r_ptr->r_flags3);
 	flags4 = (r_ptr->flags4 & r_ptr->r_flags4);
-	flags5 = (r_ptr->flags5 & r_ptr->r_flags5);
-	flags6 = (r_ptr->flags6 & r_ptr->r_flags6);
+	a_ability_flags1 = (r_ptr->a_ability_flags1 & r_ptr->r_flags5);
+	a_ability_flags2 = (r_ptr->a_ability_flags2 & r_ptr->r_flags6);
 	flags7 = (r_ptr->flags7 & r_ptr->flags7);
 	flagsr = (r_ptr->flagsr & r_ptr->r_flagsr);
 
@@ -291,8 +291,8 @@ static void roff_aux(int r_idx, int mode)
 		flags2 = r_ptr->flags2;
 		flags3 = r_ptr->flags3;
 		flags4 = r_ptr->flags4;
-		flags5 = r_ptr->flags5;
-		flags6 = r_ptr->flags6;
+		a_ability_flags1 = r_ptr->a_ability_flags1;
+		a_ability_flags2 = r_ptr->a_ability_flags2;
 		flagsr = r_ptr->flagsr;
 	}
 
@@ -808,7 +808,7 @@ static void roff_aux(int r_idx, int mode)
 			}
 		}		
 	}
-	if (flags6 & (RF6_SPECIAL)) { vp[vn] = _("特別な行動をする", "do something"); color[vn++] = TERM_VIOLET; }
+	if (a_ability_flags2 & (RF6_SPECIAL)) { vp[vn] = _("特別な行動をする", "do something"); color[vn++] = TERM_VIOLET; }
 
 	/* Describe inate attacks */
 	if (vn)
@@ -1014,43 +1014,43 @@ static void roff_aux(int r_idx, int mode)
 
 	/* Collect spells */
 	vn = 0;
-	if (flags5 & (RF5_BA_ACID))         
+	if (a_ability_flags1 & (RF5_BA_ACID))         
 	{
 		set_damage(r_idx, (MS_BALL_ACID), _("アシッド・ボール%s", "produce acid balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_GREEN;
 	}
-	if (flags5 & (RF5_BA_ELEC))         
+	if (a_ability_flags1 & (RF5_BA_ELEC))         
 	{
 		set_damage(r_idx, (MS_BALL_ELEC), _("サンダー・ボール%s", "produce lightning balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
-	if (flags5 & (RF5_BA_FIRE))         
+	if (a_ability_flags1 & (RF5_BA_FIRE))         
 	{
 		set_damage(r_idx, (MS_BALL_FIRE), _("ファイア・ボール%s", "produce fire balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
-	if (flags5 & (RF5_BA_COLD))         
+	if (a_ability_flags1 & (RF5_BA_COLD))         
 	{
 		set_damage(r_idx, (MS_BALL_COLD), _("アイス・ボール%s", "produce frost balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
-	if (flags5 & (RF5_BA_POIS))         
+	if (a_ability_flags1 & (RF5_BA_POIS))         
 	{
 		set_damage(r_idx, (MS_BALL_POIS), _("悪臭雲%s", "produce poison balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN;
 	}
-	if (flags5 & (RF5_BA_NETH))         
+	if (a_ability_flags1 & (RF5_BA_NETH))         
 	{
 		set_damage(r_idx, (MS_BALL_NETHER), _("地獄球%s", "produce nether balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
-	if (flags5 & (RF5_BA_WATE))         
+	if (a_ability_flags1 & (RF5_BA_WATE))         
 	{
 		set_damage(r_idx, (MS_BALL_WATER), _("ウォーター・ボール%s", "produce water balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
@@ -1062,19 +1062,19 @@ static void roff_aux(int r_idx, int mode)
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN;
 	}
-	if (flags5 & (RF5_BA_MANA))         
+	if (a_ability_flags1 & (RF5_BA_MANA))         
 	{
 		set_damage(r_idx, (MS_BALL_MANA), _("魔力の嵐%s", "invoke mana storms%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE;
 	}
-	if (flags5 & (RF5_BA_DARK))         
+	if (a_ability_flags1 & (RF5_BA_DARK))         
 	{
 		set_damage(r_idx, (MS_BALL_DARK), _("暗黒の嵐%s", "invoke darkness storms%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
-	if (flags5 & (RF5_BA_LITE))         
+	if (a_ability_flags1 & (RF5_BA_LITE))         
 	{
 		set_damage(r_idx, (MS_STARBURST), _("スターバースト%s", "invoke starburst%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
@@ -1086,136 +1086,136 @@ static void roff_aux(int r_idx, int mode)
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_VIOLET;
 	}
-	if (flags6 & (RF6_HAND_DOOM)){ vp[vn] = _("破滅の手(40%-60%)", "invoke the Hand of Doom(40%-60%)"); color[vn++] = TERM_VIOLET; }
-	if (flags6 & (RF6_PSY_SPEAR))
+	if (a_ability_flags2 & (RF6_HAND_DOOM)){ vp[vn] = _("破滅の手(40%-60%)", "invoke the Hand of Doom(40%-60%)"); color[vn++] = TERM_VIOLET; }
+	if (a_ability_flags2 & (RF6_PSY_SPEAR))
 	{
 		set_damage(r_idx, (MS_PSY_SPEAR), _("光の剣%s", "psycho-spear%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_YELLOW;
 	}
-	if (flags5 & (RF5_DRAIN_MANA))
+	if (a_ability_flags1 & (RF5_DRAIN_MANA))
 	{
 		set_damage(r_idx, (MS_DRAIN_MANA), _("魔力吸収%s", "drain mana%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
-	if (flags5 & (RF5_MIND_BLAST))         
+	if (a_ability_flags1 & (RF5_MIND_BLAST))         
 	{
 		set_damage(r_idx, (MS_MIND_BLAST), _("精神攻撃%s", "cause mind blasting%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_RED;
 	}
-	if (flags5 & (RF5_BRAIN_SMASH))         
+	if (a_ability_flags1 & (RF5_BRAIN_SMASH))         
 	{
 		set_damage(r_idx, (MS_BRAIN_SMASH), _("脳攻撃%s", "cause brain smashing%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
-	if (flags5 & (RF5_CAUSE_1))         
+	if (a_ability_flags1 & (RF5_CAUSE_1))         
 	{
 		set_damage(r_idx, (MS_CAUSE_1), 
 			_("軽傷＋呪い%s", "cause light wounds and cursing%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
-	if (flags5 & (RF5_CAUSE_2))         
+	if (a_ability_flags1 & (RF5_CAUSE_2))         
 	{
 		set_damage(r_idx, (MS_CAUSE_2), 
 			_("重傷＋呪い%s", "cause serious wounds and cursing%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
-	if (flags5 & (RF5_CAUSE_3))         
+	if (a_ability_flags1 & (RF5_CAUSE_3))         
 	{
 		set_damage(r_idx, (MS_CAUSE_3), 
 			_("致命傷＋呪い%s", "cause critical wounds and cursing%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
-	if (flags5 & (RF5_CAUSE_4))         
+	if (a_ability_flags1 & (RF5_CAUSE_4))         
 	{
 		set_damage(r_idx, (MS_CAUSE_4), 
 			_("秘孔を突く%s", "cause mortal wounds%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
-	if (flags5 & (RF5_BO_ACID))         
+	if (a_ability_flags1 & (RF5_BO_ACID))         
 	{
 		set_damage(r_idx, (MS_BOLT_ACID), _("アシッド・ボルト%s", "produce acid bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_GREEN;
 	}
-	if (flags5 & (RF5_BO_ELEC))         
+	if (a_ability_flags1 & (RF5_BO_ELEC))         
 	{
 		set_damage(r_idx, (MS_BOLT_ELEC), _("サンダー・ボルト%s", "produce lightning bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
-	if (flags5 & (RF5_BO_FIRE))         
+	if (a_ability_flags1 & (RF5_BO_FIRE))         
 	{
 		set_damage(r_idx, (MS_BOLT_FIRE), _("ファイア・ボルト%s", "produce fire bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
-	if (flags5 & (RF5_BO_COLD))         
+	if (a_ability_flags1 & (RF5_BO_COLD))         
 	{
 		set_damage(r_idx, (MS_BOLT_COLD), _("アイス・ボルト%s", "produce frost bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
-	if (flags5 & (RF5_BO_NETH))         
+	if (a_ability_flags1 & (RF5_BO_NETH))         
 	{
 		set_damage(r_idx, (MS_BOLT_NETHER), _("地獄の矢%s", "produce nether bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
-	if (flags5 & (RF5_BO_WATE))         
+	if (a_ability_flags1 & (RF5_BO_WATE))         
 	{
 		set_damage(r_idx, (MS_BOLT_WATER), _("ウォーター・ボルト%s", "produce water bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
-	if (flags5 & (RF5_BO_MANA))         
+	if (a_ability_flags1 & (RF5_BO_MANA))         
 	{
 		set_damage(r_idx, (MS_BOLT_MANA), _("魔力の矢%s", "produce mana bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE;
 	}
-	if (flags5 & (RF5_BO_PLAS))         
+	if (a_ability_flags1 & (RF5_BO_PLAS))         
 	{
 		set_damage(r_idx, (MS_BOLT_PLASMA), _("プラズマ・ボルト%s", "produce plasma bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_RED;
 	}
-	if (flags5 & (RF5_BO_ICEE))         
+	if (a_ability_flags1 & (RF5_BO_ICEE))         
 	{
 		set_damage(r_idx, (MS_BOLT_ICE), _("極寒の矢%s", "produce ice bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_WHITE;
 	}
-	if (flags5 & (RF5_MISSILE))         
+	if (a_ability_flags1 & (RF5_MISSILE))         
 	{
 		set_damage(r_idx, (MS_MAGIC_MISSILE), _("マジックミサイル%s", "produce magic missiles%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
-	if (flags5 & (RF5_SCARE))           { vp[vn] = _("恐怖", "terrify"); color[vn++] = TERM_SLATE; }
-	if (flags5 & (RF5_BLIND))           { vp[vn] = _("目くらまし", "blind"); color[vn++] = TERM_L_DARK; }
-	if (flags5 & (RF5_CONF))            { vp[vn] = _("混乱", "confuse"); color[vn++] = TERM_L_UMBER; }
-	if (flags5 & (RF5_SLOW))            { vp[vn] = _("減速", "slow"); color[vn++] = TERM_UMBER; }
-	if (flags5 & (RF5_HOLD))            { vp[vn] = _("麻痺", "paralyze"); color[vn++] = TERM_RED; }
-	if (flags6 & (RF6_HASTE))           { vp[vn] = _("加速", "haste-self"); color[vn++] = TERM_L_GREEN; }
-	if (flags6 & (RF6_HEAL))            { vp[vn] = _("治癒", "heal-self"); color[vn++] = TERM_WHITE; }
-	if (flags6 & (RF6_INVULNER))        { vp[vn] = _("無敵化", "make invulnerable"); color[vn++] = TERM_WHITE; }
+	if (a_ability_flags1 & (RF5_SCARE))           { vp[vn] = _("恐怖", "terrify"); color[vn++] = TERM_SLATE; }
+	if (a_ability_flags1 & (RF5_BLIND))           { vp[vn] = _("目くらまし", "blind"); color[vn++] = TERM_L_DARK; }
+	if (a_ability_flags1 & (RF5_CONF))            { vp[vn] = _("混乱", "confuse"); color[vn++] = TERM_L_UMBER; }
+	if (a_ability_flags1 & (RF5_SLOW))            { vp[vn] = _("減速", "slow"); color[vn++] = TERM_UMBER; }
+	if (a_ability_flags1 & (RF5_HOLD))            { vp[vn] = _("麻痺", "paralyze"); color[vn++] = TERM_RED; }
+	if (a_ability_flags2 & (RF6_HASTE))           { vp[vn] = _("加速", "haste-self"); color[vn++] = TERM_L_GREEN; }
+	if (a_ability_flags2 & (RF6_HEAL))            { vp[vn] = _("治癒", "heal-self"); color[vn++] = TERM_WHITE; }
+	if (a_ability_flags2 & (RF6_INVULNER))        { vp[vn] = _("無敵化", "make invulnerable"); color[vn++] = TERM_WHITE; }
 	if (flags4 & RF4_DISPEL)            { vp[vn] = _("魔力消去", "dispel-magic"); color[vn++] = TERM_L_WHITE; }
-	if (flags6 & (RF6_BLINK))           { vp[vn] = _("ショートテレポート", "blink-self"); color[vn++] = TERM_UMBER; }
-	if (flags6 & (RF6_TPORT))           { vp[vn] = _("テレポート", "teleport-self"); color[vn++] = TERM_ORANGE; }
-	if (flags6 & (RF6_WORLD))           { vp[vn] = _("時を止める", "stop the time"); color[vn++] = TERM_L_BLUE; }
-	if (flags6 & (RF6_TELE_TO))         { vp[vn] = _("テレポートバック", "teleport to"); color[vn++] = TERM_L_UMBER; }
-	if (flags6 & (RF6_TELE_AWAY))       { vp[vn] = _("テレポートアウェイ", "teleport away"); color[vn++] = TERM_UMBER; }
-	if (flags6 & (RF6_TELE_LEVEL))      { vp[vn] = _("テレポート・レベル", "teleport level"); color[vn++] = TERM_ORANGE; }
+	if (a_ability_flags2 & (RF6_BLINK))           { vp[vn] = _("ショートテレポート", "blink-self"); color[vn++] = TERM_UMBER; }
+	if (a_ability_flags2 & (RF6_TPORT))           { vp[vn] = _("テレポート", "teleport-self"); color[vn++] = TERM_ORANGE; }
+	if (a_ability_flags2 & (RF6_WORLD))           { vp[vn] = _("時を止める", "stop the time"); color[vn++] = TERM_L_BLUE; }
+	if (a_ability_flags2 & (RF6_TELE_TO))         { vp[vn] = _("テレポートバック", "teleport to"); color[vn++] = TERM_L_UMBER; }
+	if (a_ability_flags2 & (RF6_TELE_AWAY))       { vp[vn] = _("テレポートアウェイ", "teleport away"); color[vn++] = TERM_UMBER; }
+	if (a_ability_flags2 & (RF6_TELE_LEVEL))      { vp[vn] = _("テレポート・レベル", "teleport level"); color[vn++] = TERM_ORANGE; }
 
-	if (flags6 & (RF6_DARKNESS))
+	if (a_ability_flags2 & (RF6_DARKNESS))
 	{
 		if ((p_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (r_ptr->flags7 & RF7_DARK_MASK))
 		{
@@ -1227,25 +1227,25 @@ static void roff_aux(int r_idx, int mode)
 		}
 	}
 
-	if (flags6 & (RF6_TRAPS))           { vp[vn] = _("トラップ", "create traps"); color[vn++] = TERM_BLUE; }
-	if (flags6 & (RF6_FORGET))          { vp[vn] = _("記憶消去", "cause amnesia"); color[vn++] = TERM_BLUE; }
-	if (flags6 & (RF6_RAISE_DEAD))      { vp[vn] = _("死者復活", "raise dead"); color[vn++] = TERM_RED; }
-	if (flags6 & (RF6_S_MONSTER))       { vp[vn] = _("モンスター一体召喚", "summon a monster"); color[vn++] = TERM_SLATE; }
-	if (flags6 & (RF6_S_MONSTERS))      { vp[vn] = _("モンスター複数召喚", "summon monsters"); color[vn++] = TERM_L_WHITE; }
-	if (flags6 & (RF6_S_KIN))           { vp[vn] = _("救援召喚", "summon aid"); color[vn++] = TERM_ORANGE; }
-	if (flags6 & (RF6_S_ANT))           { vp[vn] = _("アリ召喚", "summon ants"); color[vn++] = TERM_RED; }
-	if (flags6 & (RF6_S_SPIDER))        { vp[vn] = _("クモ召喚", "summon spiders"); color[vn++] = TERM_L_DARK; }
-	if (flags6 & (RF6_S_HOUND))         { vp[vn] = _("ハウンド召喚", "summon hounds"); color[vn++] = TERM_L_UMBER; }
-	if (flags6 & (RF6_S_HYDRA))         { vp[vn] = _("ヒドラ召喚", "summon hydras"); color[vn++] = TERM_L_GREEN; }
-	if (flags6 & (RF6_S_ANGEL))         { vp[vn] = _("天使一体召喚", "summon an angel"); color[vn++] = TERM_YELLOW; }
-	if (flags6 & (RF6_S_DEMON))         { vp[vn] = _("デーモン一体召喚", "summon a demon"); color[vn++] = TERM_L_RED; }
-	if (flags6 & (RF6_S_UNDEAD))        { vp[vn] = _("アンデッド一体召喚", "summon an undead"); color[vn++] = TERM_L_DARK; }
-	if (flags6 & (RF6_S_DRAGON))        { vp[vn] = _("ドラゴン一体召喚", "summon a dragon"); color[vn++] = TERM_ORANGE; }
-	if (flags6 & (RF6_S_HI_UNDEAD))     { vp[vn] = _("強力なアンデッド召喚", "summon Greater Undead"); color[vn++] = TERM_L_DARK; }
-	if (flags6 & (RF6_S_HI_DRAGON))     { vp[vn] = _("古代ドラゴン召喚", "summon Ancient Dragons"); color[vn++] = TERM_ORANGE; }	
-	if (flags6 & (RF6_S_CYBER))         { vp[vn] = _("サイバーデーモン召喚", "summon Cyberdemons"); color[vn++] = TERM_UMBER; }
-	if (flags6 & (RF6_S_AMBERITES))     { vp[vn] = _("アンバーの王族召喚", "summon Lords of Amber"); color[vn++] = TERM_VIOLET; }
-	if (flags6 & (RF6_S_UNIQUE))        { vp[vn] = _("ユニーク・モンスター召喚", "summon Unique Monsters"); color[vn++] = TERM_VIOLET; }
+	if (a_ability_flags2 & (RF6_TRAPS))           { vp[vn] = _("トラップ", "create traps"); color[vn++] = TERM_BLUE; }
+	if (a_ability_flags2 & (RF6_FORGET))          { vp[vn] = _("記憶消去", "cause amnesia"); color[vn++] = TERM_BLUE; }
+	if (a_ability_flags2 & (RF6_RAISE_DEAD))      { vp[vn] = _("死者復活", "raise dead"); color[vn++] = TERM_RED; }
+	if (a_ability_flags2 & (RF6_S_MONSTER))       { vp[vn] = _("モンスター一体召喚", "summon a monster"); color[vn++] = TERM_SLATE; }
+	if (a_ability_flags2 & (RF6_S_MONSTERS))      { vp[vn] = _("モンスター複数召喚", "summon monsters"); color[vn++] = TERM_L_WHITE; }
+	if (a_ability_flags2 & (RF6_S_KIN))           { vp[vn] = _("救援召喚", "summon aid"); color[vn++] = TERM_ORANGE; }
+	if (a_ability_flags2 & (RF6_S_ANT))           { vp[vn] = _("アリ召喚", "summon ants"); color[vn++] = TERM_RED; }
+	if (a_ability_flags2 & (RF6_S_SPIDER))        { vp[vn] = _("クモ召喚", "summon spiders"); color[vn++] = TERM_L_DARK; }
+	if (a_ability_flags2 & (RF6_S_HOUND))         { vp[vn] = _("ハウンド召喚", "summon hounds"); color[vn++] = TERM_L_UMBER; }
+	if (a_ability_flags2 & (RF6_S_HYDRA))         { vp[vn] = _("ヒドラ召喚", "summon hydras"); color[vn++] = TERM_L_GREEN; }
+	if (a_ability_flags2 & (RF6_S_ANGEL))         { vp[vn] = _("天使一体召喚", "summon an angel"); color[vn++] = TERM_YELLOW; }
+	if (a_ability_flags2 & (RF6_S_DEMON))         { vp[vn] = _("デーモン一体召喚", "summon a demon"); color[vn++] = TERM_L_RED; }
+	if (a_ability_flags2 & (RF6_S_UNDEAD))        { vp[vn] = _("アンデッド一体召喚", "summon an undead"); color[vn++] = TERM_L_DARK; }
+	if (a_ability_flags2 & (RF6_S_DRAGON))        { vp[vn] = _("ドラゴン一体召喚", "summon a dragon"); color[vn++] = TERM_ORANGE; }
+	if (a_ability_flags2 & (RF6_S_HI_UNDEAD))     { vp[vn] = _("強力なアンデッド召喚", "summon Greater Undead"); color[vn++] = TERM_L_DARK; }
+	if (a_ability_flags2 & (RF6_S_HI_DRAGON))     { vp[vn] = _("古代ドラゴン召喚", "summon Ancient Dragons"); color[vn++] = TERM_ORANGE; }	
+	if (a_ability_flags2 & (RF6_S_CYBER))         { vp[vn] = _("サイバーデーモン召喚", "summon Cyberdemons"); color[vn++] = TERM_UMBER; }
+	if (a_ability_flags2 & (RF6_S_AMBERITES))     { vp[vn] = _("アンバーの王族召喚", "summon Lords of Amber"); color[vn++] = TERM_VIOLET; }
+	if (a_ability_flags2 & (RF6_S_UNIQUE))        { vp[vn] = _("ユニーク・モンスター召喚", "summon Unique Monsters"); color[vn++] = TERM_VIOLET; }
 
 
 	/* Describe spells */

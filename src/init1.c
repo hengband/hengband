@@ -424,10 +424,10 @@ static cptr r_info_flags4[] =
 };
 
 /*!
- * モンスター特性トークンの定義5 /
+ * モンスター特性トークン(発動型能力1) /
  * Monster race flags
  */
-static cptr r_info_flags5[] =
+static cptr r_a_ability_flags1[] =
 {
 	"BA_ACID",
 	"BA_ELEC",
@@ -464,10 +464,10 @@ static cptr r_info_flags5[] =
 };
 
 /*!
- * モンスター特性トークンの定義6 /
+ * モンスター特性トークン(発動型能力2) /
  * Monster race flags
  */
-static cptr r_info_flags6[] =
+static cptr r_a_ability_flags2[] =
 {
 	"HASTE",
 	"HAND_DOOM",
@@ -2751,10 +2751,10 @@ static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
 	if (grab_one_flag(&r_ptr->flags4, r_info_flags4, what) == 0)
 		return 0;
 
-	if (grab_one_flag(&r_ptr->flags5, r_info_flags5, what) == 0)
+	if (grab_one_flag(&r_ptr->a_ability_flags1, r_a_ability_flags1, what) == 0)
 		return 0;
 
-	if (grab_one_flag(&r_ptr->flags6, r_info_flags6, what) == 0)
+	if (grab_one_flag(&r_ptr->a_ability_flags2, r_a_ability_flags2, what) == 0)
 		return 0;
 
 	/* Oops */
@@ -3164,10 +3164,10 @@ static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
 	if (grab_one_flag(&d_ptr->mflags4, r_info_flags4, what) == 0)
 		return 0;
 
-	if (grab_one_flag(&d_ptr->mflags5, r_info_flags5, what) == 0)
+	if (grab_one_flag(&d_ptr->mflags5, r_a_ability_flags1, what) == 0)
 		return 0;
 
-	if (grab_one_flag(&d_ptr->mflags6, r_info_flags6, what) == 0)
+	if (grab_one_flag(&d_ptr->mflags6, r_a_ability_flags2, what) == 0)
 		return 0;
 
 	/* Oops */
@@ -4881,8 +4881,8 @@ void write_r_info_txt(void)
 		f_ptr[1] = r_ptr->flags2; n_ptr[1] = r_info_flags2;
 		f_ptr[2] = r_ptr->flags3; n_ptr[2] = r_info_flags3;
 		f_ptr[3] = r_ptr->flags4; n_ptr[3] = r_info_flags4;
-		f_ptr[4] = r_ptr->flags5; n_ptr[4] = r_info_flags5;
-		f_ptr[5] = r_ptr->flags6; n_ptr[5] = r_info_flags6;
+		f_ptr[4] = r_ptr->a_ability_flags1; n_ptr[4] = r_a_ability_flags1;
+		f_ptr[5] = r_ptr->a_ability_flags2; n_ptr[5] = r_a_ability_flags2;
 		f_ptr[6] = r_ptr->flags7; n_ptr[6] = r_info_flags7;
 		f_ptr[7] = r_ptr->flags8; n_ptr[7] = r_info_flags8;
 		f_ptr[8] = r_ptr->flags9; n_ptr[8] = r_info_flags9;

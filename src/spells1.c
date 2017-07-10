@@ -4073,7 +4073,7 @@ static bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 				break;
 			}
 
-			if ((r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (r_ptr->flags5 & ~(RF5_NOMAGIC_MASK)) || (r_ptr->flags6 & ~(RF6_NOMAGIC_MASK)))
+			if ((r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK)) || (r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK)))
 			{
 				if (who > 0)
 				{

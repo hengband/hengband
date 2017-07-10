@@ -487,7 +487,7 @@ void teleport_player(int dis, u32b mode)
 				 * The latter limitation is to avoid
 				 * totally unkillable suckers...
 				 */
-				if ((r_ptr->flags6 & RF6_TPORT) &&
+				if ((r_ptr->a_ability_flags2 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
 					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, p_ptr->y, p_ptr->x, r_ptr->level, 0L);
@@ -531,7 +531,7 @@ void teleport_player_away(int m_idx, int dis)
 				 * The latter limitation is to avoid
 				 * totally unkillable suckers...
 				 */
-				if ((r_ptr->flags6 & RF6_TPORT) &&
+				if ((r_ptr->a_ability_flags2 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
 					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, p_ptr->y, p_ptr->x, r_ptr->level, 0L);

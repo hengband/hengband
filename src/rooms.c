@@ -6078,7 +6078,7 @@ static bool vault_aux_lite(int r_idx)
 	if (!vault_monster_okay(r_idx)) return FALSE;
 
 	/* Require lite attack */
-	if (!(r_ptr->flags4 & RF4_BR_LITE) && !(r_ptr->flags5 & RF5_BA_LITE)) return FALSE;
+	if (!(r_ptr->flags4 & RF4_BR_LITE) && !(r_ptr->a_ability_flags1 & RF5_BA_LITE)) return FALSE;
 
 	/* No wall passing monsters */
 	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return FALSE;

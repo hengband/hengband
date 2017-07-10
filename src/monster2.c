@@ -834,7 +834,7 @@ static bool summon_specific_aux(int r_idx)
 			       !(r_ptr->flags3 & (RF3_UNDEAD)) &&
 			       !(r_ptr->flags3 & (RF3_DEMON)) &&
 			       !(r_ptr->flags2 & (RF2_MULTIPLY)) &&
-			       !(r_ptr->flags4 || r_ptr->flags5 || r_ptr->flags6));
+			       !(r_ptr->flags4 || r_ptr->a_ability_flags1 || r_ptr->a_ability_flags2));
 			break;
 		}
 
@@ -994,16 +994,16 @@ static bool restrict_monster_to_dungeon(int r_idx)
 		if (r_idx != MON_CHAMELEON &&
 		    r_ptr->freq_spell && 
 		    !(r_ptr->flags4 & RF4_NOMAGIC_MASK) &&
-		    !(r_ptr->flags5 & RF5_NOMAGIC_MASK) &&
-		    !(r_ptr->flags6 & RF6_NOMAGIC_MASK))
+		    !(r_ptr->a_ability_flags1 & RF5_NOMAGIC_MASK) &&
+		    !(r_ptr->a_ability_flags2 & RF6_NOMAGIC_MASK))
 			return FALSE;
 	}
 	if (d_ptr->flags1 & DF1_NO_MELEE)
 	{
 		if (r_idx == MON_CHAMELEON) return TRUE;
 		if (!(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK)) &&
-		    !(r_ptr->flags5 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_CAUSE_1 | RF5_CAUSE_2 | RF5_CAUSE_3 | RF5_CAUSE_4 | RF5_MIND_BLAST | RF5_BRAIN_SMASH)) &&
-		    !(r_ptr->flags6 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK)))
+		    !(r_ptr->a_ability_flags1 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_CAUSE_1 | RF5_CAUSE_2 | RF5_CAUSE_3 | RF5_CAUSE_4 | RF5_MIND_BLAST | RF5_BRAIN_SMASH)) &&
+		    !(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK)))
 			return FALSE;
 	}
 	if (d_ptr->flags1 & DF1_BEGINNER)
@@ -1040,12 +1040,12 @@ static bool restrict_monster_to_dungeon(int r_idx)
 		}
 		if (d_ptr->mflags5)
 		{
-			if ((d_ptr->mflags5 & r_ptr->flags5) != d_ptr->mflags5)
+			if ((d_ptr->mflags5 & r_ptr->a_ability_flags1) != d_ptr->mflags5)
 				return FALSE;
 		}
 		if (d_ptr->mflags6)
 		{
-			if ((d_ptr->mflags6 & r_ptr->flags6) != d_ptr->mflags6)
+			if ((d_ptr->mflags6 & r_ptr->a_ability_flags2) != d_ptr->mflags6)
 				return FALSE;
 		}
 		if (d_ptr->mflags7)
@@ -1096,12 +1096,12 @@ static bool restrict_monster_to_dungeon(int r_idx)
 		}
 		if (d_ptr->mflags5)
 		{
-			if ((d_ptr->mflags5 & r_ptr->flags5) != d_ptr->mflags5)
+			if ((d_ptr->mflags5 & r_ptr->a_ability_flags1) != d_ptr->mflags5)
 				return TRUE;
 		}
 		if (d_ptr->mflags6)
 		{
-			if ((d_ptr->mflags6 & r_ptr->flags6) != d_ptr->mflags6)
+			if ((d_ptr->mflags6 & r_ptr->a_ability_flags2) != d_ptr->mflags6)
 				return TRUE;
 		}
 		if (d_ptr->mflags7)
@@ -1134,8 +1134,8 @@ static bool restrict_monster_to_dungeon(int r_idx)
 		if (r_ptr->flags2 & d_ptr->mflags2) return TRUE;
 		if (r_ptr->flags3 & d_ptr->mflags3) return TRUE;
 		if (r_ptr->flags4 & d_ptr->mflags4) return TRUE;
-		if (r_ptr->flags5 & d_ptr->mflags5) return TRUE;
-		if (r_ptr->flags6 & d_ptr->mflags6) return TRUE;
+		if (r_ptr->a_ability_flags1 & d_ptr->mflags5) return TRUE;
+		if (r_ptr->a_ability_flags2 & d_ptr->mflags6) return TRUE;
 		if (r_ptr->flags7 & d_ptr->mflags7) return TRUE;
 		if (r_ptr->flags8 & d_ptr->mflags8) return TRUE;
 		if (r_ptr->flags9 & d_ptr->mflags9) return TRUE;
@@ -1150,8 +1150,8 @@ static bool restrict_monster_to_dungeon(int r_idx)
 		if (r_ptr->flags2 & d_ptr->mflags2) return FALSE;
 		if (r_ptr->flags3 & d_ptr->mflags3) return FALSE;
 		if (r_ptr->flags4 & d_ptr->mflags4) return FALSE;
-		if (r_ptr->flags5 & d_ptr->mflags5) return FALSE;
-		if (r_ptr->flags6 & d_ptr->mflags6) return FALSE;
+		if (r_ptr->a_ability_flags1 & d_ptr->mflags5) return FALSE;
+		if (r_ptr->a_ability_flags2 & d_ptr->mflags6) return FALSE;
 		if (r_ptr->flags7 & d_ptr->mflags7) return FALSE;
 		if (r_ptr->flags8 & d_ptr->mflags8) return FALSE;
 		if (r_ptr->flags9 & d_ptr->mflags9) return FALSE;
@@ -1865,9 +1865,9 @@ int lore_do_probe(int r_idx)
 		if (!(r_ptr->r_flags4 & (1L << i)) &&
 		    (r_ptr->flags4 & (1L << i))) n++;
 		if (!(r_ptr->r_flags5 & (1L << i)) &&
-		    (r_ptr->flags5 & (1L << i))) n++;
+		    (r_ptr->a_ability_flags1 & (1L << i))) n++;
 		if (!(r_ptr->r_flags6 & (1L << i)) &&
-		    (r_ptr->flags6 & (1L << i))) n++;
+		    (r_ptr->a_ability_flags2 & (1L << i))) n++;
 		if (!(r_ptr->r_flagsr & (1L << i)) &&
 		    (r_ptr->flagsr & (1L << i))) n++;
 
@@ -1883,8 +1883,8 @@ int lore_do_probe(int r_idx)
 	r_ptr->r_flags2 = r_ptr->flags2;
 	r_ptr->r_flags3 = r_ptr->flags3;
 	r_ptr->r_flags4 = r_ptr->flags4;
-	r_ptr->r_flags5 = r_ptr->flags5;
-	r_ptr->r_flags6 = r_ptr->flags6;
+	r_ptr->r_flags5 = r_ptr->a_ability_flags1;
+	r_ptr->r_flags6 = r_ptr->a_ability_flags2;
 	r_ptr->r_flagsr = r_ptr->flagsr;
 
 	/* r_flags7 is actually unused */

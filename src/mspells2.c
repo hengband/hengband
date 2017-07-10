@@ -296,8 +296,8 @@ bool monst_spell_monst(int m_idx)
 
 	/* Extract the racial spell flags */
 	f4 = r_ptr->flags4;
-	f5 = r_ptr->flags5;
-	f6 = r_ptr->flags6;
+	f5 = r_ptr->a_ability_flags1;
+	f6 = r_ptr->a_ability_flags2;
 
 	/* Target is given for pet? */
 	if (pet_t_m_idx && pet)

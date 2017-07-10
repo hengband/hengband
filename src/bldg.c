@@ -1395,7 +1395,7 @@ static bool vault_aux_battle(int r_idx)
 		if (r_ptr->blow[i].method == RBM_EXPLODE) return (FALSE);
 		if (r_ptr->blow[i].effect != RBE_DR_MANA) dam += r_ptr->blow[i].d_dice;
 	}
-	if (!dam && !(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_BREATH_MASK)) && !(r_ptr->flags5 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_BREATH_MASK)) && !(r_ptr->flags6 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_BREATH_MASK))) return (FALSE);
+	if (!dam && !(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_BREATH_MASK)) && !(r_ptr->a_ability_flags1 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_BREATH_MASK)) && !(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_BREATH_MASK))) return (FALSE);
 
 	/* Okay */
 	return (TRUE);
@@ -1475,11 +1475,11 @@ void battle_monsters(void)
 				power[i] = power[i] * (r_ptr->speed - 20) / 100;
 			if (num_taisei > 2)
 				power[i] = power[i] * (num_taisei*2+5) / 10;
-			else if (r_ptr->flags6 & RF6_INVULNER)
+			else if (r_ptr->a_ability_flags2 & RF6_INVULNER)
 				power[i] = power[i] * 4 / 3;
-			else if (r_ptr->flags6 & RF6_HEAL)
+			else if (r_ptr->a_ability_flags2 & RF6_HEAL)
 				power[i] = power[i] * 4 / 3;
-			else if (r_ptr->flags5 & RF5_DRAIN_MANA)
+			else if (r_ptr->a_ability_flags1 & RF5_DRAIN_MANA)
 				power[i] = power[i] * 11 / 10;
 			if (r_ptr->flags1 & RF1_RAND_25)
 				power[i] = power[i] * 9 / 10;

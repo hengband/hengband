@@ -1182,8 +1182,8 @@ static void rd_lore(int r_idx)
 	r_ptr->r_flags2 &= r_ptr->flags2;
 	r_ptr->r_flags3 &= r_ptr->flags3;
 	r_ptr->r_flags4 &= r_ptr->flags4;
-	r_ptr->r_flags5 &= r_ptr->flags5;
-	r_ptr->r_flags6 &= r_ptr->flags6;
+	r_ptr->r_flags5 &= r_ptr->a_ability_flags1;
+	r_ptr->r_flags6 &= r_ptr->a_ability_flags2;
 	r_ptr->r_flagsr &= r_ptr->flagsr;
 }
 

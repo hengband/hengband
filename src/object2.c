@@ -7162,8 +7162,8 @@ bool process_warning(int xx, int yy)
 			if (projectable(my, mx, yy, xx))
             {
 				u32b f4 = r_ptr->flags4;
-				u32b f5 = r_ptr->flags5;
-				u32b f6 = r_ptr->flags6;
+				u32b f5 = r_ptr->a_ability_flags1;
+				u32b f6 = r_ptr->a_ability_flags2;
 
 				if (!(d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
 				{

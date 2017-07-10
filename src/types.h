@@ -314,12 +314,15 @@ struct monster_race
 	u32b flags2;			/* Flags 2 (abilities) */
 	u32b flags3;			/* Flags 3 (race/resist) */
 	u32b flags4;			/* Flags 4 (inate/breath) */
-	u32b flags5;			/* Flags 5 (normal spells) */
-	u32b flags6;			/* Flags 6 (special spells) */
 	u32b flags7;			/* Flags 7 (movement related abilities) */
 	u32b flags8;			/* Flags 8 (wilderness info) */
 	u32b flags9;			/* Flags 9 (drops info) */
 	u32b flagsr;			/* Flags R (resistances info) */
+
+	u32b a_ability_flags1;	/* Activate Ability Flags 5 (normal spells) */
+	u32b a_ability_flags2;	/* Activate Ability Flags 6 (special spells) */
+	u32b a_ability_flags3;	/* Activate Ability Flags 7 (implementing) */
+	u32b a_ability_flags4;	/* Activate Ability Flags 8 (implementing) */
 
 	monster_blow blow[4];	/* Up to four blows per round */
 	u16b reinforce_id[6];

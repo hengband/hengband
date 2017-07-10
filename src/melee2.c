@@ -584,8 +584,8 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
 
 	/* Can monster cast attack spell? */
 	if (r_ptr->flags4 & (RF4_ATTACK_MASK) ||
-	    r_ptr->flags5 & (RF5_ATTACK_MASK) ||
-	    r_ptr->flags6 & (RF6_ATTACK_MASK))
+	    r_ptr->a_ability_flags1 & (RF5_ATTACK_MASK) ||
+	    r_ptr->a_ability_flags2 & (RF6_ATTACK_MASK))
 	{
 		/* Can move spell castable grid? */
 		if (get_moves_aux2(m_idx, yp, xp)) return (TRUE);
@@ -1138,7 +1138,7 @@ static bool get_moves(int m_idx, int *mm)
 				}
 			}
 			if (cave[p_ptr->y][p_ptr->x].info & CAVE_ROOM) room -= 2;
-			if (!r_ptr->flags4 && !r_ptr->flags5 && !r_ptr->flags6) room -= 2;
+			if (!r_ptr->flags4 && !r_ptr->a_ability_flags1 && !r_ptr->a_ability_flags2) room -= 2;
 
 			/* Not in a room and strong player */
 			if (room < (8 * (p_ptr->chp + p_ptr->csp)) /
@@ -2413,7 +2413,7 @@ static void process_monster(int m_idx)
 	}
 
 
-	if (r_ptr->flags6 & RF6_SPECIAL)
+	if (r_ptr->a_ability_flags2 & RF6_SPECIAL)
 	{
 		/* Hack -- Ohmu scatters molds! */
 		if (m_ptr->r_idx == MON_OHMU)
