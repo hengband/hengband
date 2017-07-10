@@ -503,6 +503,86 @@ static cptr r_a_ability_flags2[] =
 	"S_UNIQUE"
 };
 
+/*!
+ * モンスター特性トークン(発動型能力3) /
+ * Monster race flags
+ */
+static cptr r_a_ability_flags3[] =
+{
+	"XXXA3X00",
+	"XXXA3X01",
+	"XXXA3X02",
+	"XXXA3X03",
+	"XXXA3X04",
+	"XXXA3X05",
+	"XXXA3X06",
+	"XXXA3X07",
+	"XXXA3X08",
+	"XXXA3X09",
+	"XXXA3X10",
+	"XXXA3X11",
+	"XXXA3X12",
+	"XXXA3X13",
+	"XXXA3X14",
+	"XXXA3X15",
+	"XXXA3X16",
+	"XXXA3X17",
+	"XXXA3X18",
+	"XXXA3X19",
+	"XXXA3X20",
+	"XXXA3X21",
+	"XXXA3X22",
+	"XXXA3X23",
+	"XXXA3X24",
+	"XXXA3X25",
+	"XXXA3X26",
+	"XXXA3X27",
+	"XXXA3X28",
+	"XXXA3X29",
+	"XXXA3X30",
+	"XXXA3X31",
+};
+
+/*!
+ * モンスター特性トークン(発動型能力4) /
+ * Monster race flags
+ */
+static cptr r_a_ability_flags4[] =
+{
+	"XXXA4X00",
+	"XXXA4X01",
+	"XXXA4X02",
+	"XXXA4X03",
+	"XXXA4X04",
+	"XXXA4X05",
+	"XXXA4X06",
+	"XXXA4X07",
+	"XXXA4X08",
+	"XXXA4X09",
+	"XXXA4X10",
+	"XXXA4X11",
+	"XXXA4X12",
+	"XXXA4X13",
+	"XXXA4X14",
+	"XXXA4X15",
+	"XXXA4X16",
+	"XXXA4X17",
+	"XXXA4X18",
+	"XXXA4X19",
+	"XXXA4X20",
+	"XXXA4X21",
+	"XXXA4X22",
+	"XXXA4X23",
+	"XXXA4X24",
+	"XXXA4X25",
+	"XXXA4X26",
+	"XXXA4X27",
+	"XXXA4X28",
+	"XXXA4X29",
+	"XXXA4X30",
+	"XXXA4X31",
+};
+
 
 /*!
  * モンスター特性トークンの定義7 /
@@ -3164,10 +3244,10 @@ static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
 	if (grab_one_flag(&d_ptr->mflags4, r_info_flags4, what) == 0)
 		return 0;
 
-	if (grab_one_flag(&d_ptr->mflags5, r_a_ability_flags1, what) == 0)
+	if (grab_one_flag(&d_ptr->m_a_ability_flags1, r_a_ability_flags1, what) == 0)
 		return 0;
 
-	if (grab_one_flag(&d_ptr->mflags6, r_a_ability_flags2, what) == 0)
+	if (grab_one_flag(&d_ptr->m_a_ability_flags2, r_a_ability_flags2, what) == 0)
 		return 0;
 
 	/* Oops */

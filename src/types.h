@@ -1629,12 +1629,15 @@ struct dungeon_info_type {
 	u32b mflags2;
 	u32b mflags3;
 	u32b mflags4;
-	u32b mflags5;
-	u32b mflags6;
 	u32b mflags7;
 	u32b mflags8;
 	u32b mflags9;
 	u32b mflagsr;
+
+	u32b m_a_ability_flags1;
+	u32b m_a_ability_flags2;
+	u32b m_a_ability_flags3;
+	u32b m_a_ability_flags4;
 
 	char r_char[5];		/* Monster race allowed */
 	int final_object;	/* The object you'll find at the bottom */

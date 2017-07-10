@@ -1038,14 +1038,14 @@ static bool restrict_monster_to_dungeon(int r_idx)
 			if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
 				return FALSE;
 		}
-		if (d_ptr->mflags5)
+		if (d_ptr->m_a_ability_flags1)
 		{
-			if ((d_ptr->mflags5 & r_ptr->a_ability_flags1) != d_ptr->mflags5)
+			if ((d_ptr->m_a_ability_flags1 & r_ptr->a_ability_flags1) != d_ptr->m_a_ability_flags1)
 				return FALSE;
 		}
-		if (d_ptr->mflags6)
+		if (d_ptr->m_a_ability_flags2)
 		{
-			if ((d_ptr->mflags6 & r_ptr->a_ability_flags2) != d_ptr->mflags6)
+			if ((d_ptr->m_a_ability_flags2 & r_ptr->a_ability_flags2) != d_ptr->m_a_ability_flags2)
 				return FALSE;
 		}
 		if (d_ptr->mflags7)
@@ -1094,14 +1094,14 @@ static bool restrict_monster_to_dungeon(int r_idx)
 			if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
 				return TRUE;
 		}
-		if (d_ptr->mflags5)
+		if (d_ptr->m_a_ability_flags1)
 		{
-			if ((d_ptr->mflags5 & r_ptr->a_ability_flags1) != d_ptr->mflags5)
+			if ((d_ptr->m_a_ability_flags1 & r_ptr->a_ability_flags1) != d_ptr->m_a_ability_flags1)
 				return TRUE;
 		}
-		if (d_ptr->mflags6)
+		if (d_ptr->m_a_ability_flags2)
 		{
-			if ((d_ptr->mflags6 & r_ptr->a_ability_flags2) != d_ptr->mflags6)
+			if ((d_ptr->m_a_ability_flags2 & r_ptr->a_ability_flags2) != d_ptr->m_a_ability_flags2)
 				return TRUE;
 		}
 		if (d_ptr->mflags7)
@@ -1134,8 +1134,8 @@ static bool restrict_monster_to_dungeon(int r_idx)
 		if (r_ptr->flags2 & d_ptr->mflags2) return TRUE;
 		if (r_ptr->flags3 & d_ptr->mflags3) return TRUE;
 		if (r_ptr->flags4 & d_ptr->mflags4) return TRUE;
-		if (r_ptr->a_ability_flags1 & d_ptr->mflags5) return TRUE;
-		if (r_ptr->a_ability_flags2 & d_ptr->mflags6) return TRUE;
+		if (r_ptr->a_ability_flags1 & d_ptr->m_a_ability_flags1) return TRUE;
+		if (r_ptr->a_ability_flags2 & d_ptr->m_a_ability_flags2) return TRUE;
 		if (r_ptr->flags7 & d_ptr->mflags7) return TRUE;
 		if (r_ptr->flags8 & d_ptr->mflags8) return TRUE;
 		if (r_ptr->flags9 & d_ptr->mflags9) return TRUE;
@@ -1150,8 +1150,8 @@ static bool restrict_monster_to_dungeon(int r_idx)
 		if (r_ptr->flags2 & d_ptr->mflags2) return FALSE;
 		if (r_ptr->flags3 & d_ptr->mflags3) return FALSE;
 		if (r_ptr->flags4 & d_ptr->mflags4) return FALSE;
-		if (r_ptr->a_ability_flags1 & d_ptr->mflags5) return FALSE;
-		if (r_ptr->a_ability_flags2 & d_ptr->mflags6) return FALSE;
+		if (r_ptr->a_ability_flags1 & d_ptr->m_a_ability_flags1) return FALSE;
+		if (r_ptr->a_ability_flags2 & d_ptr->m_a_ability_flags2) return FALSE;
 		if (r_ptr->flags7 & d_ptr->mflags7) return FALSE;
 		if (r_ptr->flags8 & d_ptr->mflags8) return FALSE;
 		if (r_ptr->flags9 & d_ptr->mflags9) return FALSE;
