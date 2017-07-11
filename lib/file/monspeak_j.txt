@@ -46,8 +46,10 @@ exclaims, "Well, if that isn't queerer than ever?"
 「わしは家に帰るまでランターンに火を灯さないようにしよう。」
 #says, "I see you are in some kind of trouble."
 「何かやっかい事に巻き込まれたようじゃな。」
-yells, "Hallo there!"
-says, "It's been a queer day, and no mistake."
+#yells, "Hallo there!"
+「やあ、お若いの！」
+#says, "It's been a queer day, and no mistake."
+「今日はろくでもない日じゃ、間違いない！」
 
 N:19:Lion Heart
 「旧郵政省のわけのわからない論理はコイ○ミ内閣には通用しない！」
@@ -115,7 +117,6 @@ N:1083:Hato Poppo
 「友愛精神に基づいた『人間のための経済』が日本の新たな成長をつくる。」
 「正直、政権交代する前の方が楽だった。名前には『山』がつくが、谷ばかりだ。」
 「公約というのは選挙の時の党の考え方ということ。」
-「大変なことになった、予想してなかった。困ったなあ。」
 「恵まれた家庭に育ったものですから。」
 
 #N:19:Martti Ihrasaari
@@ -287,13 +288,19 @@ N:200:Hobbes the Tiger
 
 N:140:Lagduf, the Snaga
 N:186:Grishnakh, the Hill Orc
-says, 'Saruman is a fool, and a dirty treacherous fool.'
-says, 'I left a fool.'
-yells, 'Nazgul, Nazgul!'
-says, 'Fine leadership!　I hope the great Ugluk will lead us out again.'
-hisses, 'My dear tender little fools.'
-says, 'Well, my little ones!　Enjoying your nice rest?'
-snarls, 'Have you got it -- either of you?'
+#says, 'Saruman is a fool, and a dirty treacherous fool.'
+「サルマンは汚ねえ裏切り者のバカ野郎だ」
+#says, 'I left a fool.'
+「俺はもう馬鹿じゃねえ」
+#yells, 'Nazgul, Nazgul!'
+は「ナズグルだ！ナズグルだ！」と叫んだ。
+#says, 'Fine leadership!　I hope the great Ugluk will lead us out again.'
+「良き指導者！偉大なるウグルクよ、再び我らを導き給わんことを」
+#hisses, 'My dear tender little fools.'
+は「弱っちくて可愛いお馬鹿ちゃん」と、あなたを嘲っている。
+#says, 'Well, my little ones!　Enjoying your nice rest?'
+「おう、ちびっ子、休暇は楽しんでいるか？」
+#snarls, 'Have you got it -- either of you?'
 
 N:215:Golfimbul, the Hill Orc Chief
 N:260:Ufthak of Cirith Ungol
@@ -305,9 +312,11 @@ N:356:Lugdush, the Uruk
 N:373:Azog, King of the Uruk-Hai
 #fingers his blade and grins evilly.
 は武器に手をかけてにやりと笑った。
-snickers, 'Now, I strike a blow for *our* side!'
-says, 'Orcs don't get no respect... I'm gonna change that!'
-calls your mother nasty names.
+#snickers, 'Now, I strike a blow for *our* side!'
+#says, 'Orcs don't get no respect... I'm gonna change that!'
+「オークというだけで見下される・・・俺がそれを変えてやる！」
+#calls your mother nasty names.
+はあなたの母親を侮辱的な名で呼ばわった。
 #says, 'I'll bet your innards would taste real sweet...'
 「貴様のハラワタはきっとおいしいだろうな」
 #belches and spits.
@@ -318,8 +327,10 @@ calls your mother nasty names.
 「俺は新鮮な血のにおいが大好きなんだよ。」
 #says, 'Yeeha! Another idiot to slaughter!'
 「もう一匹大バカ野郎が殺されに来やがった！」
-hawks a loogie in your direction.
-farts thunderously.
+#hawks a loogie in your direction.
+はあなた目がけて痰を吐いた。
+#farts thunderously
+は猛烈な屁をこいた。.
 #wonders aloud how many experience points you're worth.
 は、あなたが何点の経験値になるか考えている。
 #says, 'I love being psychotic!'
@@ -330,8 +341,10 @@ farts thunderously.
 「貴様をゆっくり拷問してやる。」
 #calls you a scum-sucking pig-dog.
 はあなたのことを腐れカス野郎のケツの毛と呼んでいる。
-says, 'I shall have my way with your women!'
+#says, 'I shall have my way with your women!'
+「お前の女を俺の横に侍らせて使ってやろう！」
 says, 'You're not so tough, buttmunch!'
+「お前はそんなにタフじゃないぞ、間抜けめが！」
 #says, 'Heh-heh, heh-heh, killing people is cool.'
 「へへ、へへ。人を殺すのは楽しいなあ。」
 
@@ -348,25 +361,31 @@ N:382:Mime, the Nibelung
 「貴様には代償を払ってもらう…その命でな！」
 #grins.
 はニヤリと笑っている。
-says, 'Maybe I will just hack your head off.'
+#says, 'Maybe I will just hack your head off.'
+「貴様の頭の中をぐちゃぐちゃに回してやる！」
 
 N:383:Hagen, son of Alberich
 #says, 'Did you hear what the ravens said? Revenge, that is what they cry!'
-「カラス共の言うことを聞いたか？ やつらは”復讐”と鳴いているんだ！」
-shouts, 'Hoiho! Hoiho! To arms! To arms!'
+「カラス共の言うことを聞いたか？ やつらは”復讐せよ”と鳴いているんだ！」
+#shouts, 'Hoiho! Hoiho! To arms! To arms!'
+「ハイホ！ハイホ！決闘だ！決闘だ！」
 #grumbles, 'I hate the happy, and I am never glad.'
 「私は幸せな奴等が嫌いだ。嬉しかったことなどない。」
 #cries, 'Keep away from the Ring!'
 「あの指輪に近づくな！」
 #boasts, 'My spear will certainly cut down the wrongful one.'
 「私の槍がよこしまな者を必ずや切り捨ててくれよう」
-cries, 'There! There shall my spear strike!'
-grins, 'You will die soon, handsome hero!'
+#cries, 'There! There shall my spear strike!'
+ 「そこだ！私の槍で穿ち倒してくれよう！」
+#grins, 'You will die soon, handsome hero!'
+ は「貴様の死はすぐそこだぞ、ハンサムな英雄よ！」と言ってニヤリと笑った。
 #states, 'I am but avenging perjury.'
 「私は偽誓者を罰しているにすぎない。」
 #shouts, 'Give the Ring here!'
 「今ここで指輪を渡すのだ！」
-shouts, 'Hoiho! Hoiho-hoho!'
+#shouts, 'Hoiho! Hoiho-hoho!'
+ 「ホイホ！ホイホ！ホイホ！」
+
 
 N:419:Alberich the Nibelung King
 #says, 'I'll mess up all your stuff!'
@@ -381,16 +400,20 @@ N:419:Alberich the Nibelung King
 「聞こえるか？ニーベルングの大軍勢が地下深くからやってくる音を！」
 #laughs, 'Ha ha ha ha! Beware!'
 は笑っている。「ハッハッハ！気をつけろ！」
-says, 'Beware, fool! Beware!'
+#says, 'Beware, fool! Beware!'
+「気をつけろ、愚か者め！身の程をわきまえろ！」
 #says, 'Envy led you here, pitiful rogue!'
 「嫉妬にかられてここまで来たか、哀れな悪党め！」
-boasts, 'I dauntlessly defy everyone, everyone!'
+#boasts, 'I dauntlessly defy everyone, everyone!'
+は「誰だろうと臆せずものともせんわ、誰であろうとな！」と誇った。
 #yells, 'Tremble, on your knees before the master of the Ring.'
 「おののき震えよ！指輪の支配者の前にひざまづいてな！」
 #yells, 'Tremble with terror, abject throng!'
 「恐怖に震えよ！惨めな群衆よ！」
-says, 'I am watching you everywhere, expect me where you do not perceive me!'
-says, 'Feel my wrath, idle rascal!'
+#says, 'I am watching you everywhere, expect me where you do not perceive me!'
+「お前が気づきようもないままに、私は貴様を地の果てまで付け狙ってやる！」
+#says, 'Feel my wrath, idle rascal!'
+「わが怒りを思い知れ、役立たずのごろつきめ！」
 #says, 'I have discovered you, you stupid thief!'
 「ついに見つけたぞ！愚かな泥棒め！」
 #says, 'Are you still not afraid? You should be!'
@@ -464,6 +487,7 @@ N:505:Goemon
 「今宵の斬鉄剣はひと味違うぞ！」
 「またつまらぬものを斬ってしまった．．．」
 「．．．．．」
+「斬鉄剣と拙者の腕をもってして斬れん物は無い。勝負！」
 
 N:1062:Groo the Wanderer
 #says: 'A fray! A fray!'
@@ -472,8 +496,10 @@ N:1062:Groo the Wanderer
 N:506:Fasolt the Giant
 #grumbles: 'Stop, greedy one! Leave something for me!'
 「待て、強欲者め！俺の分を残しておけ！」
-shouts: 'Back, over-bold one!'
-whines: 'You swindler, do you seek to vilify me?'
+#shouts: 'Back, over-bold one!'
+「退け！無謀者めが！」
+#whines: 'You swindler, do you seek to vilify me?'
+は「おう、詐欺師めが。おれをどうけなすか粗探ししようってか？」と愚痴った。
 
 N:517:Jurt the Living Trump
 「全部貴様のせいだ！」
@@ -635,13 +661,16 @@ N:769:Raphael, the Messenger
 「悔い改めよ！悪行者よ！」
 #says, 'My righteousness shall cleanse you!'
 「私の正義がお前を浄化する！」
-says, 'Don't EVER steal from the collection plate!'
+#says, 'Don't EVER steal from the collection plate!'
+ 「汝、献金皿から決して盗む勿れ！」
 #says, 'God may love you, but *I* don't!'
 「主は汝を愛するが、＊私＊は嫌いだ！」
-says, 'I shall smite thee with extreme prejudice!'
+#says, 'I shall smite thee with extreme prejudice!'
+「主の御意志を伺うまでもない、我が汝に神罰を与えん！」
 #says, 'Hope you like eternal damnation!'
 「永遠の呪いを気に入ってくれるといいがな。」
-says, 'Verily, it is too late for thee.'
+#says, 'Verily, it is too late for thee.'
+「たった今悔い改めようとも、それは汝にとって遅すぎた」
 
 #N:767:Daoloth, the Render of the Veils
 #N:770:Artsi the Champion of Chaos
@@ -748,24 +777,29 @@ N:857:Great Cthulhu
 は背筋の凍るような音を立てて這いずっている。
 #howls, 'The OTHER GODS will feast on your brain!'
 #hisses, 'I'll feed you to the Hounds of Tindalos...'
-「おまえはティンダロスの猟犬の餌になるのだ。」
+#「おまえはティンダロスの猟犬の餌になるのだ。」
 #hisses, 'Randolph Carter got off easy; you won't!'
-「ランドルフ・カーターは簡単だったがお前はちがうようだ。」
-seethes and fumes sickeningly.
-hisses, 'I'll send you beyond Known Space to Azathoth!'
+#「ランドルフ・カーターは簡単だったがお前はちがうようだ。」
+#seethes and fumes sickeningly.
+は吐き気のするような渦巻く噴煙を放っている。
+#hisses, 'I'll send you beyond Known Space to Azathoth!'
 #waves nasty-looking tentacles about.
 の気持ち悪い触腕が蠕いている。
-picks its teeth with the bones of former players.
+#picks its teeth with the bones of former players.
+#:は以前の冒険者の骨の中から、歯を選び出している。
 #opens your mind to a vista of nameless cosmic horror!
 があなたの精神を名状しがたい宇宙的恐怖に陥れた。
 #opens your mind to a vista of endless 'Three's Company' reruns!
-snorts and slobbers with glee.
+#snorts and slobbers with glee.
+
 
 N:850:Carcharoth, the Jaws of Thirst
 N:846:Fenris Wolf
 N:840:Draugluin, Sire of All Werewolves
-barks and bellows frighteningly!
-says, 'Oh good, another chew toy!'
+#barks and bellows frighteningly!
+はぞっとするような鳴き声で吠え立てた！
+#says, 'Oh good, another chew toy!'
+「よし、またおもちゃが来やがったぞ！」
 #says, 'Yummy! I was getting tired of chicken...'
 「ゴクッ！チキンには飽きてたところだ！」
 #lets out an earsplitting howl.
@@ -801,14 +835,16 @@ N:844:Kaschei the Immortal
 N:856:Gothmog, the High Captain of Balrogs
 #N:858:Sauron, the Sorcerer
 #N:860:Oberon, King of Amber
-brags, 'My power is beyond compare!'
+#brags, 'My power is beyond compare!'
+「比類なき俺の力を恐れよ！」
 #snorts, 'A mere mortal dares challenge my might? HA!'
 「貴様ごとき定命の者が私に挑むとはな、ハッ！」
 #says, 'Not another one! I just finished chewing on the last!'
 「また来たか！さっきの奴を噛み終ったばかりだぞ！」
 #wonders aloud how many XP you're worth.
 は、あなたが何点の経験値になるか考えている。
-leafs through 'Evil Geniuses For Dummies'.
+#leafs through 'Evil Geniuses For Dummies'.
+は『Evil Geniuses For Dummies』のページをめくっている。
 #mutters, 'Another damn loser to kill...'
 「もう一匹ウジ虫が殺されに来たか...」
 #says, 'Hell shall claim your remains!'
@@ -1216,4 +1252,3 @@ N:*:Default lines
 「私は人を殺すのが好きだ、とても楽しいからな」
 #screams: 'I'm out to destroy and I will cut you down!'
 は叫んだ：「私は破壊するために現れた、貴様を斬り捨てる！」
-
