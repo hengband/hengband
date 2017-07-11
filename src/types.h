@@ -1109,7 +1109,7 @@ struct player_type
 
 	s16b spell_exp[64];       /* Proficiency of spells */
 	s16b weapon_exp[5][64];   /* Proficiency of weapons */
-	s16b skill_exp[10];       /* Proficiency of misc. skill */
+	s16b skill_exp[GINOU_MAX];       /* Proficiency of misc. skill */
 
 	s32b magic_num1[108];     /* Array for non-spellbook type magic */
 	byte magic_num2[108];     /* Flags for non-spellbook type magics */

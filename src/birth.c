@@ -2803,7 +2803,7 @@ static void get_extra(bool roll_hitdie)
 		p_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
 	}
 
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < GINOU_MAX; i++)
 		p_ptr->skill_exp[i] = s_info[p_ptr->pclass].s_start[i];
 
 	/* Hitdice */

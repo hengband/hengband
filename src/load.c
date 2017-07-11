@@ -1704,7 +1704,7 @@ static void rd_extra(void)
 		for (i = 0; i < 5; i++) for (j = 0; j < 60; j++) rd_s16b(&p_ptr->weapon_exp[i][j]);
 	else
 		for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) rd_s16b(&p_ptr->weapon_exp[i][j]);
-	for (i = 0; i < 10; i++) rd_s16b(&p_ptr->skill_exp[i]);
+	for (i = 0; i < GINOU_MAX; i++) rd_s16b(&p_ptr->skill_exp[i]);
 	if (z_older_than(10, 4, 1))
 	{
 		if (p_ptr->pclass != CLASS_BEASTMASTER) p_ptr->skill_exp[GINOU_RIDING] /= 2;

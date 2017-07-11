@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 24 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 25 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -589,25 +589,25 @@
 #define GREAT_OBJ       10
 
 /*!
- * @brief 深層モンスターが生成される基本確率(1/x)
+ * @brief 深層モンスターが生成される(NASTY生成)の基本確率(1/x)
  * @details
  * There is a 1/25 (4%) chance of inflating the requested monster_level
  * during the creation of a monsters (see "get_mon_num()" in "monster.c").
  * Lower values yield harder monsters more often.
  */
 #define NASTY_MON_BASE     25
-#define NASTY_MON_MAX      3	/*! 深層モンスターが1フロアに生成される最大数  */
-#define NASTY_MON_PLUS_MAX 25	/*! 深層モンスターの階層加算最大量 */
+#define NASTY_MON_MAX      3	/*!< 深層モンスターが1フロアに生成される最大数  */
+#define NASTY_MON_PLUS_MAX 25	/*!< 深層モンスターの階層加算最大量 */
 
-#define PENETRATE_INVULNERABILITY 13 /*! 無敵化が破られる確率(1/x) / 1/x chance of hurting even if invulnerable! */
+#define PENETRATE_INVULNERABILITY 13 /*!< 無敵化が破られる確率(1/x) / 1/x chance of hurting even if invulnerable! */
 
 
 
 /*
  * Refueling constants
  */
-#define FUEL_TORCH      5000    /*! 松明の基本寿命値 / Maximum amount of fuel in a torch */
-#define FUEL_LAMP       15000   /*! ランタンの基本寿命値 / Maximum amount of fuel in a lantern */
+#define FUEL_TORCH      5000    /*!< 松明の基本寿命値 / Maximum amount of fuel in a torch */
+#define FUEL_LAMP       15000   /*!< ランタンの基本寿命値 / Maximum amount of fuel in a lantern */
 
 /*
  * More maximum values
@@ -4722,9 +4722,10 @@ extern int PlayerUID;
 #define PARSE_ERROR_UNDEFINED_TERRAIN_TAG   10
 #define PARSE_ERROR_MAX                     11
 
-#define GINOU_SUDE       0
-#define GINOU_NITOURYU   1
-#define GINOU_RIDING      2
+#define GINOU_SUDE      0
+#define GINOU_NITOURYU  1
+#define GINOU_RIDING    2
+#define GINOU_MAX      10
 
 /* Proficiency level */
 #define EXP_LEVEL_UNSKILLED 0

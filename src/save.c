@@ -652,7 +652,7 @@ static void wr_extra(void)
 
 	for (i = 0; i < 64; i++) wr_s16b(p_ptr->spell_exp[i]);
 	for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) wr_s16b(p_ptr->weapon_exp[i][j]);
-	for (i = 0; i < 10; i++) wr_s16b(p_ptr->skill_exp[i]);
+	for (i = 0; i < GINOU_MAX; i++) wr_s16b(p_ptr->skill_exp[i]);
 	for (i = 0; i < 108; i++) wr_s32b(p_ptr->magic_num1[i]);
 	for (i = 0; i < 108; i++) wr_byte(p_ptr->magic_num2[i]);
 
