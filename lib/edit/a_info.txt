@@ -4096,3 +4096,15 @@ P:0:0d0:0:0:0
 F:DEX | CHR
 F:RES_FIRE | RES_SOUND | RES_NETHER | SHOW_MODS | INSTA_ART
 
+N:252:『サンブレード』
+E:'Sun Blade'
+I:23:25:2
+W:30:80:130:65000
+P:0:4d6:12:12:0
+F:STR | DEX | CON
+F:SPEED | REGEN | SHOW_MODS | RIDING
+F:SLAY_EVIL | SLAY_UNDEAD | SLAY_DEMON
+F:FREE_ACT | LITE
+D:蜃気楼の塔の奥で英雄を待ち続ける輝ける剣だ。
+D:その刃は数多くの赤衣の者達に握られ、悪しき者たちを屠り続けてきた。(ファイナルファンタジー1)
+
