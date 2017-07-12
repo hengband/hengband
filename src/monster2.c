@@ -3042,11 +3042,8 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 {
 	/* Access the location */
 	cave_type		*c_ptr = &cave[y][x];
-
 	monster_type	*m_ptr;
-
 	monster_race	*r_ptr = &r_info[r_idx];
-
 	cptr		name = (r_name + r_ptr->name);
 
 	int cmi;
@@ -3641,7 +3638,7 @@ static int place_monster_m_idx = 0;
  * @param r_idx チェックするモンスター種族のID
  * @return 護衛にできるならばtrue
  */
-static bool place_monster_okay(int r_idx)
+static bool place_monster_can_escort(int r_idx)
 {
 	monster_race *r_ptr = &r_info[place_monster_idx];
 	monster_type *m_ptr = &m_list[place_monster_m_idx];
@@ -3757,7 +3754,7 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 			if (!cave_empty_bold2(ny, nx)) continue;
 
 			/* Prepare allocation table */
-			get_mon_num_prep(place_monster_okay, get_monster_hook2(ny, nx));
+			get_mon_num_prep(place_monster_can_escort, get_monster_hook2(ny, nx));
 
 			/* Pick a random race */
 			z = get_mon_num(r_ptr->level);
