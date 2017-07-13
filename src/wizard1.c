@@ -2558,11 +2558,11 @@ void do_cmd_spoilers(void)
 		prt("Create a spoiler file.", 2, 0);
 
 		/* Prompt for a file */
-		prt("(1) Brief Object Info (obj-desc.spo)", 5, 5);
-		prt("(2) Brief Artifact Info (artifact.spo)", 6, 5);
-		prt("(3) Brief Monster Info (mon-desc.spo)", 7, 5);
-		prt("(4) Full Monster Info (mon-info.spo)", 8, 5);
-		prt("(5) Monster Evolution Info (mon-evol.spo)", 9, 5);
+		prt("(1) Brief Object Info (obj-desc.txt)", 5, 5);
+		prt("(2) Brief Artifact Info (artifact.txt)", 6, 5);
+		prt("(3) Brief Monster Info (mon-desc.txt)", 7, 5);
+		prt("(4) Full Monster Info (mon-info.txt)", 8, 5);
+		prt("(5) Monster Evolution Info (mon-evol.txt)", 9, 5);
 
 		/* Prompt */
 		prt(_("コマンド:", "Command: "), _(18, 12), 0);
@@ -2578,27 +2578,27 @@ void do_cmd_spoilers(void)
 
 		/* Option (1) */
 		case '1':
-			spoil_obj_desc("obj-desc.spo");
+			spoil_obj_desc("obj-desc.txt");
 			break;
 
 		/* Option (2) */
 		case '2':
-			spoil_artifact("artifact.spo");
+			spoil_artifact("artifact.txt");
 			break;
 
 		/* Option (3) */
 		case '3':
-			spoil_mon_desc("mon-desc.spo");
+			spoil_mon_desc("mon-desc.txt");
 			break;
 
 		/* Option (4) */
 		case '4':
-			spoil_mon_info("mon-info.spo");
+			spoil_mon_info("mon-info.txt");
 			break;
 
 		/* Option (5) */
 		case '5':
-			spoil_mon_evol("mon-evol.spo");
+			spoil_mon_evol("mon-evol.txt");
 			break;
 
 		/* Oops */
