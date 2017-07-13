@@ -229,15 +229,16 @@ static grouper group_item[] =
  * @param dam ダメージダイス記述を返すバッファ参照ポインタ
  * @param wgt 重量記述を返すバッファ参照ポインタ
  * @param lev 生成階記述を返すバッファ参照ポインタ
+ * @param chance 生成機会を返すバッファ参照ポインタ
  * @param val 価値を返すバッファ参照ポインタ
  * @param k ベースアイテムID
  * @return なし
  */
-static void kind_info(char *buf, char *dam, char *wgt, int *lev, s32b *val, int k)
+static void kind_info(char *buf, char *dam, char *wgt, char *chance, int *lev, s32b *val, int k)
 {
 	object_type forge;
 	object_type *q_ptr;
-
+	int i;
 
 	/* Get local object */
 	q_ptr = &forge;
@@ -263,7 +264,7 @@ static void kind_info(char *buf, char *dam, char *wgt, int *lev, s32b *val, int 
 
 
 	/* Hack */
-	if (!buf || !dam || !wgt) return;
+	if (!buf || !dam || !chance || !wgt) return;
 
 
 	/* Description (too brief) */
@@ -317,6 +318,18 @@ static void kind_info(char *buf, char *dam, char *wgt, int *lev, s32b *val, int 
 		}
 	}
 
+	/* Chance */
+	sprintf(chance, "");
+	for(i = 0; i < 4; i++)
+	{
+		char chance_aux[20] = "";
+		if(k_info[q_ptr->k_idx].chance[i] > 0)
+		{
+			sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), k_info[q_ptr->k_idx].locale[i], 100/k_info[q_ptr->k_idx].chance[i]);
+			strcat(chance, chance_aux);
+		}
+	}
+
 
 	/* Weight */
 	sprintf(wgt, "%3d.%d", q_ptr->weight / 10, q_ptr->weight % 10);
@@ -338,6 +351,7 @@ static void spoil_obj_desc(cptr fname)
 	char buf[1024];
 
 	char wgt[80];
+	char chance[80];
 	char dam[80];
 
 
@@ -359,15 +373,14 @@ static void spoil_obj_desc(cptr fname)
 
 
 	/* Header */
-	fprintf(fff, "Spoiler File -- Basic Items (Hengband %d.%d.%d)\n\n\n",
-		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+	fprintf(fff, "Spoiler File -- Basic Items (Hengband %d.%d.%d.%d)\n\n\n",
+		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
 
 	/* More Header */
-	fprintf(fff, "%-45s     %8s%7s%5s%9s\n",
-		"Description", "Dam/AC", "Wgt", "Lev", "Cost");
-	fprintf(fff, "%-45s     %8s%7s%5s%9s\n",
-		"----------------------------------------",
-		"------", "---", "---", "----");
+	fprintf(fff, "%-37s%8s%7s%5s %40s%9s\n",
+		"Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
+	fprintf(fff, "%-37s%8s%7s%5s %40s%9s\n",
+		"-------------------------------------", "------", "---", "---", "----------------", "----");
 
 	/* List the groups */
 	for (i = 0; TRUE; i++)
@@ -391,8 +404,8 @@ static void spoil_obj_desc(cptr fname)
 						s32b t1;
 						s32b t2;
 
-						kind_info(NULL, NULL, NULL, &e1, &t1, who[i1]);
-						kind_info(NULL, NULL, NULL, &e2, &t2, who[i2]);
+						kind_info(NULL, NULL, NULL, NULL, &e1, &t1, who[i1]);
+						kind_info(NULL, NULL, NULL, NULL, &e2, &t2, who[i2]);
 
 						if ((t1 > t2) || ((t1 == t2) && (e1 > e2)))
 						{
@@ -412,11 +425,11 @@ static void spoil_obj_desc(cptr fname)
 					s32b v;
 
 					/* Describe the kind */
-					kind_info(buf, dam, wgt, &e, &v, who[s]);
+					kind_info(buf, dam, wgt, chance, &e, &v, who[s]);
 
 					/* Dump it */
-					fprintf(fff, "     %-45s%8s%7s%5d%9ld\n",
-						buf, dam, wgt, e, (long)(v));
+					fprintf(fff, "  %-35s%8s%7s%5d %-40s%9ld\n",
+						buf, dam, wgt, e, chance, (long)(v));
 				}
 
 				/* Start a new set */
