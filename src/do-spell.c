@@ -3173,14 +3173,14 @@ static cptr do_chaos_spell(int spell, int mode)
 		{
 			if (cast)
 			{
-				u32b mode = 0L;
+				u32b flg = 0L;
 				bool pet = !one_in_(3);
 
-				if (pet) mode |= PM_FORCE_PET;
-				else mode |= PM_NO_PET;
-				if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
+				if (pet) flg |= PM_FORCE_PET;
+				else flg |= PM_NO_PET;
+				if (!(pet && (plev < 50))) flg |= PM_ALLOW_GROUP;
 
-				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_DEMON, mode))
+				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_DEMON, flg))
 				{
 					msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 					if (pet)
@@ -3865,17 +3865,17 @@ static cptr do_death_spell(int spell, int mode)
 			{
 				int type;
 				bool pet = one_in_(3);
-				u32b mode = 0L;
+				u32b flg = 0L;
 
 				type = (plev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
 
 				if (!pet || (pet && (plev > 24) && one_in_(3)))
-					mode |= PM_ALLOW_GROUP;
+					flg |= PM_ALLOW_GROUP;
 
-				if (pet) mode |= PM_FORCE_PET;
-				else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
+				if (pet) flg |= PM_FORCE_PET;
+				else flg |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, type, mode))
+				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, type, flg))
 				{
 					msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
 								"Cold winds begin to blow around you, carrying with them the stench of decay..."));
@@ -6044,13 +6044,13 @@ static cptr do_daemon_spell(int spell, int mode)
 			if (cast)
 			{
 				bool pet = !one_in_(3);
-				u32b mode = 0L;
+				u32b flg = 0L;
 
-				if (pet) mode |= PM_FORCE_PET;
-				else mode |= PM_NO_PET;
-				if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
+				if (pet) flg |= PM_FORCE_PET;
+				else flg |= PM_NO_PET;
+				if (!(pet && (plev < 50))) flg |= PM_ALLOW_GROUP;
 
-				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, plev*2/3+randint1(plev/2), SUMMON_DEMON, mode))
+				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, plev*2/3+randint1(plev/2), SUMMON_DEMON, flg))
 				{
 					msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 
@@ -6784,13 +6784,13 @@ static cptr do_crusade_spell(int spell, int mode)
 			if (cast)
 			{
 				bool pet = !one_in_(3);
-				u32b mode = 0L;
+				u32b flg = 0L;
 
-				if (pet) mode |= PM_FORCE_PET;
-				else mode |= PM_NO_PET;
-				if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
+				if (pet) flg |= PM_FORCE_PET;
+				else flg |= PM_NO_PET;
+				if (!(pet && (plev < 50))) flg |= PM_ALLOW_GROUP;
 
-				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, mode))
+				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg))
 				{
 					if (pet)
 					{
@@ -9005,7 +9005,7 @@ static cptr do_hex_spell(int spell, int mode)
 			}
 			else
 			{
-				int power = 0;
+				int curse_rank = 0;
 				msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
 				o_ptr->curse_flags |= (TRC_CURSED);
 
@@ -9022,11 +9022,11 @@ static cptr do_hex_spell(int spell, int mode)
 						add_flag(o_ptr->art_flags, TR_VORPAL);
 						add_flag(o_ptr->art_flags, TR_VAMPIRIC);
 						msg_print(_("血だ！血だ！血だ！", "Blood, Blood, Blood!"));
-						power = 2;
+						curse_rank = 2;
 					}
 				}
 
-				o_ptr->curse_flags |= get_curse(power, o_ptr);
+				o_ptr->curse_flags |= get_curse(curse_rank, o_ptr);
 			}
 
 			p_ptr->update |= (PU_BONUS);
@@ -9311,7 +9311,7 @@ static cptr do_hex_spell(int spell, int mode)
 			}
 			else
 			{
-				int power = 0;
+				int curse_rank = 0;
 				msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
 				o_ptr->curse_flags |= (TRC_CURSED);
 
@@ -9329,11 +9329,11 @@ static cptr do_hex_spell(int spell, int mode)
 						add_flag(o_ptr->art_flags, TR_RES_DARK);
 						add_flag(o_ptr->art_flags, TR_RES_NETHER);
 						msg_print(_("血だ！血だ！血だ！", "Blood, Blood, Blood!"));
-						power = 2;
+						curse_rank = 2;
 					}
 				}
 
-				o_ptr->curse_flags |= get_curse(power, o_ptr);
+				o_ptr->curse_flags |= get_curse(curse_rank, o_ptr);
 			}
 
 			p_ptr->update |= (PU_BONUS);
