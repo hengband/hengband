@@ -1425,49 +1425,49 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	char            m_name[80];
 
-	int             dss, ddd;
+	int             dice_num, dice_side;
 
 	cptr            atk_desc;
 
 	switch (attack)
 	{
 		case MUT2_SCOR_TAIL:
-			dss = 3;
-			ddd = 7;
+			dice_num = 3;
+			dice_side = 7;
 			n_weight = 5;
 			atk_desc = _("尻尾", "tail");
 
 			break;
 		case MUT2_HORNS:
-			dss = 2;
-			ddd = 6;
+			dice_num = 2;
+			dice_side = 6;
 			n_weight = 15;
 			atk_desc = _("角", "horns");
 
 			break;
 		case MUT2_BEAK:
-			dss = 2;
-			ddd = 4;
+			dice_num = 2;
+			dice_side = 4;
 			n_weight = 5;
 			atk_desc = _("クチバシ", "beak");
 
 			break;
 		case MUT2_TRUNK:
-			dss = 1;
-			ddd = 4;
+			dice_num = 1;
+			dice_side = 4;
 			n_weight = 35;
 			atk_desc = _("象の鼻", "trunk");
 
 			break;
 		case MUT2_TENTACLES:
-			dss = 2;
-			ddd = 5;
+			dice_num = 2;
+			dice_side = 5;
 			n_weight = 5;
 			atk_desc = _("触手", "tentacles");
 
 			break;
 		default:
-			dss = ddd = n_weight = 1;
+			dice_num = dice_side = n_weight = 1;
 			atk_desc = _("未定義の部位", "undefined body part");
 
 	}
@@ -1488,7 +1488,7 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 		sound(SOUND_HIT);
 		msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name, atk_desc);
 
-		k = damroll(ddd, dss);
+		k = damroll(dice_num, dice_side);
 		k = critical_norm(n_weight, bonus, k, (s16b)bonus, 0);
 
 		/* Apply the player damage bonuses */
