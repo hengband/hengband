@@ -43,12 +43,15 @@ N:1060:Noborta Kesyta
 #yells, 'Help! Psycho on the loose!'
 は叫んだ。「助けてくれ！野放しのキチガイだ！」
 
+N:1083:Hato Poppo
+「大変なことになった、予想してなかった。困ったなあ。」
+
 N:53:Grip, Farmer Maggot's dog
 N:54:Wolf, Farmer Maggot's dog
 N:55:Fang, Farmer Maggot's dog
 #whimpers.
 はクンクン鳴いた。
-pines.
+#pines.
 #limps away, howling.
 は片足を引きずってほえた。
 #howls.
@@ -134,32 +137,50 @@ N:382:Mime, the Nibelung
 はすすり泣いた。
 #sobs and whines.
 は哀れっぽく泣いた。
-screams, 'Ohe! Ohe! Au! Au!'
-pleads, 'Let me go!'
-wails, 'Au! Au! Au!'
-says, 'I was so good to you, and this is my reward?'
-moans, 'Such ingratitude!'
-says, 'Go now, on your way!'
+#screams, 'Ohe! Ohe! Au! Au!'
+「オヘ！オヘ！アウ！アウ！」
+#pleads, 'Let me go!'
+は「俺を放せ！」と抗った。
+#wails, 'Au! Au! Au!'
+「アウ！アウ！アウ！」
+#says, 'I was so good to you, and this is my reward?'
+「お前には良くしてやったのに、その報いがこの有様か？」
+#moans, 'Such ingratitude!'
+はうめいた。「恩知らずめ！」
+#says, 'Go now, on your way!'
+「帰れ！今すぐに！」
 
 N:383:Hagen, son of Alberich
 #shouts, 'Vassals, rouse yourselves! Take your weapons, good strong weapons!'
 「者共、立ち上がるのだ！武器を取れ！強い武器を！」
-shouts, 'There is danger! Danger!'
-cries, 'Woe! Woe!'
+#shouts, 'There is danger! Danger!'
+は叫んだ。「これはまずい！まずいぞ！」
+#cries, 'Woe! Woe!'
+は泣きわめいた。「災難だ！災難だ！」
 
 N:419:Alberich the Nibelung King
 #screams, 'Help! Murder! Murder!'
 「助けて！人殺し！人殺し！」
-screams, 'Aaah! Crushed! Shattered!'
-moans, 'Base trickery, foul deceit!'
-pleads, 'I have paid, now let me depart!'
-cries, 'O shameful humiliation!'
-shouts, 'Rascally rogue! Robber! Ruffian!'
-grumbles, 'You will regret this outrage, you wretch!'
-moans, 'Terrible vengeance I vow for this wrong!'
-says, 'Smile now, but you can never escape my curse!'
-wails, 'Alas! Alas! Woe is me!'
-moans, 'Do you mock me?'
+#screams, 'Aaah! Crushed! Shattered!'
+「ああっ！壊れた！バラバラだ！」
+#moans, 'Base trickery, foul deceit!'
+は「さもしいペテン、汚らわしい欺瞞だ！」とうめいた。
+#pleads, 'I have paid, now let me depart!'
+は「代価は払っただろう、私を放せ！」と抗った。
+#cries, 'O shameful humiliation!'
+はすすり泣いた。「恥ずべき屈辱だ！」
+#shouts, 'Rascally rogue! Robber! Ruffian!'
+は叫んだ。「卑劣な盗賊野郎！強盗め！やくざ者！」
+#grumbles, 'You will regret this outrage, you wretch!'
+ぶつぶつと愚痴った。「この非道なふるまいを後悔するぞ、嫌われ者が！」
+#moans, 'Terrible vengeance I vow for this wrong!'
+「この悪徳には必ず復讐してやる！」
+#says, 'Smile now, but you can never escape my curse!'
+「今は笑っているがいい、だが貴様は私の呪いからは逃れられん！」
+#wails, 'Alas! Alas! Woe is me!'
+「おお！おお！災厄が私に！」
+#moans, 'Do you mock me?'
+「なぜ私を嘲笑う？」とうめいた。
 
 #N:392:Sangahyando of Umbar
 #N:380:Angamaite of Umbar
@@ -175,7 +196,8 @@ N:393:It
 はテレポートした。
 
 N:409:Kharis the Powerslave
-howls, 'Nnnnooo!'
+#howls, 'Nnnnooo!'
+は叫んだ。「ノオオオオオオッ！」
 #says, 'I don't want to die, I'm a god, why can't I live on?'
 「死にたくない！なぜ神である私が死なねばならぬのか！」
 #curses you.
@@ -187,6 +209,7 @@ howls, 'Nnnnooo!'
 
 N:431:Grendel
 whines, 'Mommy, save me!'
+はすすり泣いた。「ママ、助けて！」
 
 N:441:Gachapin
 N:1061:Barney the Dinosaur
@@ -203,19 +226,22 @@ N:493:Bert the Stone Troll
 N:494:Bill the Stone Troll
 N:495:Tom the Stone Troll
 N:551:Rogrog the Black Troll
-says, 'Now, stop it!'
-yells, 'Ey, watch it, you cheeky sod!'
+#says, 'Now, stop it!'
+「止めてくれ！今すぐに！」
+#yells, 'Ey, watch it, you cheeky sod!'
+「おでは見たぞ、生意気なくそがきが！」
 #screams, 'Me mates'll settle yer hash!'
 「俺のダチがおめえを八裂きにするぜ！」
 
 N:1062:Groo the Wanderer
-says, 'Oops... me get in big trouble!'
+#says, 'Oops... me get in big trouble!'
 「おっと...おいらとてもヤバいね！」
 
 N:506:Fasolt the Giant
 #cries: 'Take my life, but not my gold!'
 「俺の命などくれてやる。でも俺の金は駄目だ！」
-complains: 'Why do you rush at me? I sought justice, my just payment!'
+#complains: 'Why do you rush at me? I sought justice, my just payment!'
+は愚痴った。「なんで襲い掛かってくるんだ？俺は正当な分け前を要求しただけだ！」
 #whines: 'Why do you threaten me?'
 は哀れに叫んだ。「なんで俺を怖がらせるんだ？」
 
@@ -245,18 +271,21 @@ N:616:Kavlax the Many-Headed
 は今までのことを全部もう死んだ首のせいにしている。
 
 N:628:Malekith the Accursed
-says, 'C'mon! I'm sure we can work this out...'
+#says, 'C'mon! I'm sure we can work this out...'
+来やがれこの野郎！何とかしてやろうじゃないか！
 #pleads for his miserable life.
 は自分のみじめな人生を言い訳にした。
 
 N:642:Jasra, Brand's Mistress
 hisses, 'We don't die, we multiply!'
+シューッと音を立てた。「我らは死なず、我らは繁栄するのだ！」
 
 #N:651:Strygalldwir
 
 N:660:Rinaldo, son of Brand
 N:670:Jack of Shadows
-screams, 'Not the face! Not the face!'
+#screams, 'Not the face! Not the face!'
+は泣き叫んだ。「顔は止めてくれ！顔は！」
 #says, 'Yikes! Where'd I put my mail-order Cyberdemon?'
 「ちぃっ！通販で買ったサイバーデーモンどこに置いといたっけな？」
 
@@ -266,14 +295,18 @@ N:686:Judge Death
 N:674:Judge Fear
 N:654:Judge Fire
 N:656:Judge Mortis
-says, 'You'll never get away with this...'
-says, 'Hey! I've got LAWYERS!'
+#says, 'You'll never get away with this...'
+「このまま勝てると思っているのか？そんなはずがなかろう……」
+#says, 'Hey! I've got LAWYERS!'
+「おい、弁護士達を読んだからな！」
 
 #N:687:Ariel, Queen of Air
 
 N:697:Smaug the Golden
-groans in disbelief.
-roars furiously.
+#groans in disbelief.
+信じられない思いでうめき声を上げた。
+#roars furiously.
+は激怒して吠え猛けた。
 #Bard の射た黒い矢でスマウグは死にます。
 #howls, 'Black Arrow? NOOOO!'
 「黒い矢？やめてくれ～～！」
@@ -281,8 +314,10 @@ roars furiously.
 「そんなバカな！」
 
 N:712:Fafner the Dragon
-wails: 'Who are you that have wounded me so? Speak me your name!'
-complains: 'Who kindled your childish courage to this deadly deed?'
+#wails: 'Who are you that have wounded me so? Speak me your name!'
+は泣き叫んだ。「俺を傷つけた奴は誰だ？名を名乗れ！」
+#complains: 'Who kindled your childish courage to this deadly deed?'
+は泣き言を言った。「小童の蛮勇を唆し、殺しの業を冒させたのは誰だ?」
 
 #N:713:Fangorn the Treebeard
 
@@ -334,9 +369,10 @@ N:769:Raphael, the Messenger
 「主よ、主よ、何故に私をお見捨てになられたのか？」
 
 N:766:Ancalagon the Black
-writhes as he spouts acidic blood from many wounds.
-says, 'My friends the Wyrms of Power will get you!'
-
+#writhes as he spouts acidic blood from many wounds.
+は、多数の傷口から酸の血をまき散らしながらもがいている
+#says, 'My friends the Wyrms of Power will get you!'
+「我が友人のパワー・ワイアームたちがお前を迎えに来るだろう！」
 
 #N:770:Artsi the Champion of Chaos
 
@@ -351,10 +387,12 @@ N:771:Saruman of Many Colours
 N:772:Gandalf the Grey
 #screams, 'How have things come to this... again?!'
 「なんたることだ！お前さんは指輪物語を読んだことがないのか！？」
-yells, 'Ouch!'
+#yells, 'Ouch!'
+「痛ッ！」
 
 N:777:Bast, Goddess of Cats
-spits, 'I'll be back, worse than ever!'
+#spits, 'I'll be back, worse than ever!'
+「また戻ってくるからな！このビチグソがぁ～～～っ！」
 #snarls weakly.
 は弱々しくうなった。
 
@@ -390,6 +428,7 @@ N:824:Benedict, the Ideal Warrior
 
 N:825:The Witch-King of Angmar
 wails, 'Nooooo!'
+「おのれええええ！」
 
 #N:828:Ithaqua the Windwalker
 
@@ -430,7 +469,7 @@ N:857:Great Cthulhu
 「私が悪いわけではない。生まれながらにしてこうだったのだ。」
 #gibbers weakly.
 は弱々しくわけのわからないことを言った。
-mumbles, 'kill -9 adventurer, kill -9 adventurer', and you say 'No such process'
+#mumbles, 'kill -9 adventurer, kill -9 adventurer', and you say 'No such process'
 #oozes greenish blood from many wounds.
 は大量の傷口から緑の血を流している。
 #burbles with terror.
@@ -481,6 +520,9 @@ N:921:Internet Exploder
 は重い。
 は妙なパケットを発している。
 
+N:936:Kenshirou of hokuto
+「み、水……」
+
 N:1004:Pip, the Braver from Another World
 「魔法のアヒルよ、援護を頼む。ぼくはちっとも恐くないぞ！」
 
@@ -491,6 +533,7 @@ N:1005:Antharom, Magic Master in the Castle of Darkness
 N:1018:Raou the Conqueror
 「このラオウに膝をつかせるとは、、、」
 「なんと、このラオウの頭上に死兆星が！」
+「おごるな！貴様の弱点はトキが知っておるわ！」
 
 N:1029:Baby satan
 は無傷の球の呪文を唱えた。しかしMPが足りない！
@@ -529,13 +572,16 @@ N:*:Default lines
 「俺の人生はまだまだ長いんだ。」
 #says: 'Ok, ok! I get: no more pals.'
 「OK, OK, 分かったよ。もう仲間呼ばない。」
-screams: 'Help, ho!'
-screams: 'What ho! Help!'
+#screams: 'Help, ho!'
+「んおお！助けて！」
+#screams: 'What ho! Help!'
+「んがあ！何なんだ！助けてくれ！」
 #says: 'You will pay for this!'
 「憶えてろよ！」
 #says: 'Violence is no solution!'
 「暴力は何の解決にもならないぞ！」
 says: 'I thought you liked me.'
+「お前は私の事が好きだと思ってたのに！」
 #says: 'Such senseless violence! I don't understand it!'
 「なんてばかげた暴力だ！俺には理解できん！」
 #screams: 'Ho! Murder! Murder!'
@@ -544,25 +590,29 @@ says: 'I thought you liked me.'
 「うしろを見ろ！」
 #screams: 'Run away!'
 「逃げろ！」
-screams: 'Run to the hills! Run for your lives!'
+#screams: 'Run to the hills! Run for your lives!'
 #says: 'Wait! Spare me and I'll make you rich! Money isn't a problem!'
 「待て！助けてくれれば金持ちにしてやる！いくらでもやるぞ！」
 #says: 'I'll be back...'
 「いつか戻ってくるぞ．．．」
 #says: 'Hey -- I've got lawyers!'
 「おい！弁護士を呼ぶぞ！」
-says: 'All my possession for a moment of time!'
+#says: 'All my possession for a moment of time!'
+「持ってる物は何でもやるから少し待ってくれ！」
 #says: 'Hey, it was only a joke, all right?'
 「はは、ちょっとした冗談だよ。分かるだろ？」
 #says: 'Stop!'
 「待て！」
 #says: 'Cut it out, will you?'
 「やめてくれ！たのむ。」
-says: 'I will not kneel. Strike!'
+#says: 'I will not kneel. Strike!'
+「殴られても決して屈さないぞ！」
 #screams: 'Cowards! Why did you not protect me?'
 「臆病者どもめ！なぜ私を守らなかったんだ！」
-screams: 'Idiots! I am surrounded by incompetent idiots!'
-says: 'I don't wanna die, I'm a god, why can't I live on?'
+#screams: 'Idiots! I am surrounded by incompetent idiots!'
+「クソッ！どいつもこいつも役立たずな馬鹿共ばかりだ！」
+#says: 'I don't wanna die, I'm a god, why can't I live on?'
+「死にたくねえ！私は神なのになんで死にかけてるんだ！？」
 #yells: 'Someone call the Gendarmes!'
 「だれか憲兵を呼べ！」
 #screams: 'Keep that lunatic away from me!'
@@ -583,25 +633,33 @@ says: 'I don't wanna die, I'm a god, why can't I live on?'
 「何が望みだ？金か？女か？何でも用意するぞ...」
 #says: 'Wait! Let's make a deal!'
 「待て！取り引きをしよう！」
-says: 'Just can't stop this surmounting terror!'
+#says: 'Just can't stop this surmounting terror!'
+「クソっ、恐怖でブルっちまうのを止められねえ！」
 #says: 'If there is a God, then why has he let me die?'
 「もし神がいるなら、なぜ私を助けてくれないんだ？」
-says: 'I know where I'm going -- out!'
+#says: 'I know where I'm going -- out!'
 #says: 'No hope, no life, just pain and fear.'
 「望みはない、命もない、ただ苦痛と恐怖だけだ。」
-says: 'I am a fugitive, hunted down like game.'
-says: 'You'll live to regret this blasphemous offence!'
-says: 'All my life's blood is slowly draining away...'
+#says: 'I am a fugitive, hunted down like game.'
+「私は逃亡者、獲物のように狩られる」
+#says: 'You'll live to regret this blasphemous offence!'
+「この不敬極まる暴挙を一生後悔することになるぞ！」
+#says: 'All my life's blood is slowly draining away...'
+「私のすべてが、血のようにゆっくり流れ出していく……」
 #asks: 'Should we be fighting at all?'
-「俺たちはそもそも闘う必要があるのか？」
+「私たちはそもそも闘う必要があるのか？」
 #asks: 'What are we fighting for?'
-「俺たちは何のために闘っているんだ？」
+「お前と私は何のために闘っているんだ？」
 #asks you: 'Can you say you are proud of what you've done?'
 「自分のしている事に誇りを持っていると言えるか？」
-says: 'Every minute I get weaker...'
-says: 'All my life I've run away...'
-says: 'All that I see, absolute horror!'
-says: 'I have fallen prey to failure.'
+#says: 'Every minute I get weaker...'
+「どんどん力が弱っていきやがる……」
+#says: 'All my life I've run away...'
+「私の一生は逃走ばかりだ……」
+#says: 'All that I see, absolute horror!'
+「目につくもの全てが絶対的な恐怖だ！」
+#says: 'I have fallen prey to failure.'
+「俺はこの失敗の償いを負うんだ」
 #says: 'Just leave me alone!'
 「ほっといてくれ！」
 #says: 'Please, save me!'
@@ -612,12 +670,18 @@ says: 'I have fallen prey to failure.'
 「このラウンドはお前の勝ちだ。次はこちらのターンだ！」
 #says: 'Another time, another battlefield, *my* victory.'
 「別の時間に別の場所でやれば、勝つのは私だ。」
-says: 'I've got to keep running.'
-says: 'It's all so futile!'
-says: 'Cowards live to fight another day.'
-says: 'Life it seems will fade away, drifting further every day.'
-says: 'Emptiness is filling me, to the point of agony.'
-says: 'Cannot stand this hell I feel!'
+#says: 'I've got to keep running.'
+「逃げないと、走り続けないと」
+#says: 'It's all so futile!'
+「役立たずめ！」
+#says: 'Cowards live to fight another day.'
+「臆病者こそ、、生き残って再戦できるんだ」
+#says: 'Life it seems will fade away, drifting further every day.'
+「命は毎日を漂い続けて、やがて消え去るものなんだろう」
+#says: 'Emptiness is filling me, to the point of agony.'
+「苦悶に至らしめるほどに、空虚が私を満たし行く」
+#says: 'Cannot stand this hell I feel!'
+「こんな地獄みたいな場所、耐えられない！」
 #cries: 'Someone help me, oh please God help me!'
 「だれか、助けてくれ！ おお神よ、お願いだから助けてくれ！」
 #cries: 'Please! I have a mate and six siblings!'
