@@ -22256,3 +22256,13 @@ S:BLIND | SCARE |
 S:BO_MANA | HOLD |
 S:PSY_SPEAR | BA_LITE | BR_LITE
 D:光を操るサイキッカーで、中性的な容姿と背中に輝く光の羽根を背負っている。
+
+N:1107:さまようもの
+E:Wandering one
+G:G:b
+I:110:1d1:150:1:10
+W:0:30:0:0:0:0
+B:TOUCH:HURT:1d1
+F:WILD_TOWN | WILD_ONLY | RAND_50 | RAND_25
+F:FRIENDS | FRIENDLY
+D:彼らは故郷が常にあるものとも、常に帰るべきものとも考えていない。
