@@ -4851,15 +4851,15 @@ void calc_android_exp(void)
 			if (level > 65) level = 35 + (level - 65) / 5;
 			else if (level > 35) level = 25 + (level - 35) / 3;
 			else if (level > 15) level = 15 + (level - 15) / 2;
-			exp = MIN(100000L, value) * level * level / 2;
+			exp = MIN(100000L, value) / 2 * level * level;
 			if (value > 100000L)
-				exp += (value - 100000L) * level * level / 8;
+				exp += (value - 100000L) / 8 * level * level;
 		}
 		else
 		{
 			exp = MIN(100000L, value) * level;
 			if (value > 100000L)
-				exp += (value - 100000L) * level / 4;
+				exp += (value - 100000L) / 4  * level;
 		}
 		if ((((i == INVEN_RARM) || (i == INVEN_LARM)) && (buki_motteruka(i))) || (i == INVEN_BOW)) total_exp += exp / 48;
 		else total_exp += exp / 16;
