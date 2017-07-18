@@ -616,10 +616,12 @@ B:$11:N:Tower of Sorcery:Tanistil:Elf
 B:11:N:仙術の塔:タニスティル:エルフ
 B:$11:A:0:Recharge item:0:0:r:25:0
 B:11:A:0:再充填:0:0:r:25:0
-B:$11:A:1:Identify possessions:100:800:i:26:0
-B:11:A:1:持ち物全てを鑑定:100:800:i:26:0
-B:$11:A:2:Request quest:0:0:q:6:2
-B:11:A:2:クエスト:0:0:q:6:2
+B:$11:A:1:Recharge all items:0:0:a:45:0
+B:11:A:1:全てのアイテムを再充填:0:0:a:45:0
+B:$11:A:2:Identify possessions:100:800:i:26:0
+B:11:A:2:持ち物全てを鑑定:100:800:i:26:0
+B:$11:A:3:Request quest:0:0:q:6:2
+B:11:A:3:クエスト:0:0:q:6:2
 B:$11:M:0:2:0:0:0:0:0:0:0:0
 B:11:M:0:2:0:0:0:0:0:0:0:0
 
