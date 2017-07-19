@@ -298,7 +298,7 @@ N:656:Judge Mortis
 #says, 'You'll never get away with this...'
 「このまま勝てると思っているのか？そんなはずがなかろう……」
 #says, 'Hey! I've got LAWYERS!'
-「おい、弁護士達を読んだからな！」
+「おい、弁護士達を呼んだからな！」
 
 #N:687:Ariel, Queen of Air
 
