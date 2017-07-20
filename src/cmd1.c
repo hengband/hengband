@@ -1065,7 +1065,7 @@ static void hit_trap_slow(void)
  * @param turn 状態異常の追加ターン量
  * @return なし
  */
-static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*set_status)(int turn), int turn)
+static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*set_status)(int), int turn)
 {
 	msg_print(trap_message);
 
@@ -2303,17 +2303,17 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			}
 			else if (o_ptr->name1 == ART_G_HAMMER)
 			{
-				monster_type *m_ptr = &m_list[c_ptr->m_idx];
+				monster_type *target_ptr = &m_list[c_ptr->m_idx];
 
-				if (m_ptr->hold_o_idx)
+				if (target_ptr->hold_o_idx)
 				{
-					object_type *q_ptr = &o_list[m_ptr->hold_o_idx];
+					object_type *q_ptr = &o_list[target_ptr->hold_o_idx];
 					char o_name[MAX_NLEN];
 
 					object_desc(o_name, q_ptr, OD_NAME_ONLY);
 					q_ptr->held_m_idx = 0;
 					q_ptr->marked = OM_TOUCHED;
-					m_ptr->hold_o_idx = q_ptr->next_o_idx;
+					target_ptr->hold_o_idx = q_ptr->next_o_idx;
 					q_ptr->next_o_idx = 0;
 					msg_format(_("%sを奪った。", "You snatched %s."), o_name);
 					inven_carry(q_ptr);
@@ -2329,7 +2329,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
 			if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3))
 			{
-				u32b flgs[TR_FLAG_SIZE];
+				u32b flgs_aux[TR_FLAG_SIZE];
 
 				/* Sound */
 				sound(SOUND_HIT);
@@ -2340,7 +2340,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
 
 				/* Extract the flags */
-				object_flags(o_ptr, flgs);
+				object_flags(o_ptr, flgs_aux);
 
 				k = damroll(o_ptr->dd + p_ptr->to_dd[hand], o_ptr->ds + p_ptr->to_ds[hand]);
 				{
@@ -2397,7 +2397,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 					if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()) && (mult < 25))
 						mult = 25;
 
-					if ((p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (p_ptr->msp / 30)))
+					if ((p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs_aux, TR_FORCE_WEAPON)) && (p_ptr->csp > (p_ptr->msp / 30)))
 					{
 						p_ptr->csp -= (1+(p_ptr->msp / 30));
 						p_ptr->redraw |= (PR_MANA);
@@ -3297,13 +3297,13 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 		}
 		else if (MON_MONFEAR(riding_m_ptr))
 		{
-			char m_name[80];
+			char steed_name[80];
 
 			/* Acquire the monster name */
-			monster_desc(m_name, riding_m_ptr, 0);
+			monster_desc(steed_name, riding_m_ptr, 0);
 
 			/* Dump a message */
-			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), m_name);
+			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
 			oktomove = FALSE;
 			disturb(0, 1);
 		}
@@ -3346,9 +3346,9 @@ void move_player(int dir, bool do_pickup, bool break_trap)
 
 		if (oktomove && MON_STUNNED(riding_m_ptr) && one_in_(2))
 		{
-			char m_name[80];
-			monster_desc(m_name, riding_m_ptr, 0);
-			msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"),m_name);
+			char steed_name[80];
+			monster_desc(steed_name, riding_m_ptr, 0);
+			msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
 			oktomove = FALSE;
 			disturb(0, 1);
 		}
