@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 40 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 41 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -2545,7 +2545,7 @@
 #define SV_ROD_MIN_DIRECTION    12 /*!< この値以降の小項目IDを持ったロッドは使用時にターゲットを要求する / Special "sval" limit -- first "aimed" rod */
 
 #define SV_CHEST_MIN_LARGE      4  /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
-#define SV_CHEST_KANDUME        50 /*!< 箱アイテムの小項目ID: おもちゃのカンヅメ
+#define SV_CHEST_KANDUME        50 /*!< 箱アイテムの小項目ID: おもちゃのカンヅメ */
 
 /*
  * Special "sval" limit -- first "good" magic/prayer book
