@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 41 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 42 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -326,7 +326,7 @@
 #define MUT3_REGEN                      0x01000000L /*!< 突然変異: 急回復 */
 #define MUT3_ESP                        0x02000000L /*!< 突然変異: テレパシー */
 #define MUT3_LIMBER                     0x04000000L /*!< 突然変異: しなやかな肉体 */
-#define MUT3_ARTHRITIS                  0x08000000L /*!< 突然変異: 間接の痛み */
+#define MUT3_ARTHRITIS                  0x08000000L /*!< 突然変異: 関節の痛み */
 #define MUT3_BAD_LUCK                   0x10000000L /*!< 突然変異: 黒いオーラ(不運) */
 #define MUT3_VULN_ELEM                  0x20000000L /*!< 突然変異: 元素攻撃弱点 */
 #define MUT3_MOTION                     0x40000000L /*!< 突然変異: 正確で力強い動作 */
@@ -632,19 +632,19 @@
 /*
  * Player constants
  */
-#define PY_MAX_EXP      99999999L       /* Maximum exp */
-#define PY_MAX_GOLD     999999999L      /* Maximum gold */
-#define PY_MAX_LEVEL    50              /* Maximum level */
+#define PY_MAX_EXP      99999999L       /*!< プレイヤー経験値の最大値 / Maximum exp */
+#define PY_MAX_GOLD     999999999L      /*!< プレイヤー所持金の最大値 / Maximum gold */
+#define PY_MAX_LEVEL    50              /*!< プレイヤーレベルの最大値 / Maximum level */
 
 /*
  * Player "food" crucial values
  */
-#define PY_FOOD_MAX     15000   /* Food value (Bloated) */
-#define PY_FOOD_FULL    10000   /* Food value (Normal) */
-#define PY_FOOD_ALERT   2000    /* Food value (Hungry) */
-#define PY_FOOD_WEAK    1000    /* Food value (Weak) */
-#define PY_FOOD_FAINT   500     /* Food value (Fainting) */
-#define PY_FOOD_STARVE  100     /* Food value (Starving) */
+#define PY_FOOD_MAX     15000   /*!< 食べ過ぎ～満腹の閾値 / Food value (Bloated) */
+#define PY_FOOD_FULL    10000   /*!< 満腹～平常の閾値 / Food value (Normal) */
+#define PY_FOOD_ALERT   2000    /*!< 平常～空腹の閾値 / Food value (Hungry) */
+#define PY_FOOD_WEAK    1000    /*!< 空腹～衰弱の閾値 / Food value (Weak) */
+#define PY_FOOD_FAINT   500     /*!< 衰弱～衰弱(赤表示/麻痺)の閾値 / Food value (Fainting) */
+#define PY_FOOD_STARVE  100     /*!< 衰弱(赤表示/麻痺)～飢餓ダメージの閾値 / Food value (Starving) */
 
 /*
  * Player regeneration constants
@@ -656,8 +656,8 @@
 #define PY_REGEN_MNBASE         524     /* Min amount mana regen*2^16 */
 
 /*
- * Possible realms that can be chosen;
- * currently used only by birth.c and tables.c
+ * 職業ごとの選択可能な魔法領域現在の所 bitrh.cとtables.cでのみ使用。
+ * Possible realms that can be chosen currently used only by birth.c and tables.c
  */
 #define CH_NONE         0x00
 #define CH_LIFE         0x01
@@ -732,23 +732,23 @@
  * Note that "INVEN_PACK" is probably hard-coded by its use in savefiles, and
  * by the fact that the screen can only show 23 items plus a one-line prompt.
  */
-#define INVEN_PACK              23
+#define INVEN_PACK      23 /*!< アイテムスロット…所持品(0～) */
 
 /*
  * Indexes used for various "equipment" slots (hard-coded by savefiles, etc).
  */
-#define INVEN_RARM      24
-#define INVEN_LARM      25
-#define INVEN_BOW       26
-#define INVEN_RIGHT     27
-#define INVEN_LEFT      28
-#define INVEN_NECK      29
-#define INVEN_LITE      30
-#define INVEN_BODY      31
-#define INVEN_OUTER     32
-#define INVEN_HEAD      33
-#define INVEN_HANDS     34
-#define INVEN_FEET      35
+#define INVEN_RARM      24 /*!< アイテムスロット…右手 */
+#define INVEN_LARM      25 /*!< アイテムスロット…左手 */
+#define INVEN_BOW       26 /*!< アイテムスロット…射撃 */
+#define INVEN_RIGHT     27 /*!< アイテムスロット…右手指 */
+#define INVEN_LEFT      28 /*!< アイテムスロット…左手指 */
+#define INVEN_NECK      29 /*!< アイテムスロット…首 */
+#define INVEN_LITE      30 /*!< アイテムスロット…光源 */
+#define INVEN_BODY      31 /*!< アイテムスロット…体 */
+#define INVEN_OUTER     32 /*!< アイテムスロット…体の上 */
+#define INVEN_HEAD      33 /*!< アイテムスロット…頭部 */
+#define INVEN_HANDS     34 /*!< アイテムスロット…腕部 */
+#define INVEN_FEET      35 /*!< アイテムスロット…脚部 */
 
 /*
  * used for get_random_ego()
