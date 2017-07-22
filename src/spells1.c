@@ -5465,7 +5465,9 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 			if (p_ptr->resist_neth)
 			{
 				if (!prace_is_(RACE_SPECTRE))
+				{
 					dam *= 6; dam /= (randint1(4) + 7);
+				}
 			}
 			else if (!CHECK_MULTISHADOW()) drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
 
