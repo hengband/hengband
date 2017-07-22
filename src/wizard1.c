@@ -1987,7 +1987,7 @@ static void spoil_out(cptr str)
 		bool wrap = (ch == '\n');
 
 #ifdef JP
-		if (!isprint(ch) && !k_flag && !iskanji_flag) ch = ' ';
+		if (!isprint((unsigned char)ch) && !k_flag && !iskanji_flag) ch = ' ';
 		iskanji_flag = k_flag && !iskanji_flag;
 #else
 		if (!isprint(ch)) ch = ' ';
@@ -2026,7 +2026,7 @@ static void spoil_out(cptr str)
 
 #ifdef JP
 					k_flag_local = iskanji((unsigned char)(*tail));
-					if (isprint(*tail) || k_flag_local || iskanji_flag_local) break;
+					if (isprint((unsigned char)*tail) || k_flag_local || iskanji_flag_local) break;
 					iskanji_flag_local = k_flag_local && !iskanji_flag_local;
 #else
 					if (isprint(*tail)) break;
