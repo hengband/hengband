@@ -319,7 +319,7 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, int *lev, s
 	}
 
 	/* Chance */
-	sprintf(chance, "");
+	strcpy(chance, "");
 	for(i = 0; i < 4; i++)
 	{
 		char chance_aux[20] = "";
@@ -1934,19 +1934,19 @@ static void spoil_out(cptr str)
 	cptr r;
 
 	/* Line buffer */
-	static unsigned char roff_buf[256];
+	static char roff_buf[256];
 
 	/* Delay buffer */
-	static unsigned char roff_waiting_buf[256];
+	static char roff_waiting_buf[256];
 
 #ifdef JP
 	bool iskanji_flag = FALSE;
 #endif
 	/* Current pointer into line roff_buf */
-	static unsigned char *roff_p = roff_buf;
+	static char *roff_p = roff_buf;
 
 	/* Last space saved into roff_buf */
-	static unsigned char *roff_s = NULL;
+	static char *roff_s = NULL;
 
 	/* Mega-Hack -- Delayed output */
 	static bool waiting_output = FALSE;
@@ -1980,14 +1980,14 @@ static void spoil_out(cptr str)
 	for (; *str; str++)
 	{
 #ifdef JP
-		unsigned char cbak;
+		char cbak;
 		bool k_flag = iskanji((unsigned char)(*str));
 #endif
-		unsigned char ch = *str;
+		char ch = *str;
 		bool wrap = (ch == '\n');
 
 #ifdef JP
-		if (!isprint(ch) && !k_flag && !iskanji_flag) ch = ' ';
+		if (!isprint((unsigned char)ch) && !k_flag && !iskanji_flag) ch = ' ';
 		iskanji_flag = k_flag && !iskanji_flag;
 #else
 		if (!isprint(ch)) ch = ' ';
@@ -2015,9 +2015,9 @@ static void spoil_out(cptr str)
 #ifdef JP
 				bool k_flag_local;
 				bool iskanji_flag_local = FALSE;
-				ucptr tail = str + (k_flag ? 2 : 1);
+				cptr tail = str + (k_flag ? 2 : 1);
 #else
-				ucptr tail = str + 1;
+				cptr tail = str + 1;
 #endif
 
 				for (; *tail; tail++)
@@ -2026,7 +2026,7 @@ static void spoil_out(cptr str)
 
 #ifdef JP
 					k_flag_local = iskanji((unsigned char)(*tail));
-					if (isprint(*tail) || k_flag_local || iskanji_flag_local) break;
+					if (isprint((unsigned char)*tail) || k_flag_local || iskanji_flag_local) break;
 					iskanji_flag_local = k_flag_local && !iskanji_flag_local;
 #else
 					if (isprint(*tail)) break;
