@@ -319,7 +319,7 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, int *lev, s
 	}
 
 	/* Chance */
-	sprintf(chance, "");
+	strcpy(chance, "");
 	for(i = 0; i < 4; i++)
 	{
 		char chance_aux[20] = "";
