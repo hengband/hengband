@@ -2568,8 +2568,7 @@ int summon_IE(int y, int x, int rlev, int m_idx)
 {
 	u32b mode = 0L;
 	int k, count = 0;	
-	int num = 2 + randint1(3);
-	rlev;
+	int num = 2 + randint1(1 + rlev / 20);
 	for (k = 0; k < num; k++)
 	{
 		count += summon_named_creature(m_idx, y, x, MON_IE, mode);
