@@ -3457,6 +3457,17 @@ static void process_world(void)
 	/* Update dungeon feeling, and announce it if changed */
 	update_dungeon_feeling();
 
+	/* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
+	if (ironman_downward && (dungeon_type != DUNGEON_ANGBAND && dungeon_type != 0))
+	{
+		dun_level = 0;
+		dungeon_type = 0;
+		prepare_change_floor_mode(CFM_FIRST_FLOOR | CFM_RAND_PLACE);
+		p_ptr->inside_arena = FALSE;
+		p_ptr->wild_mode = FALSE;
+		p_ptr->leaving = TRUE;
+	}
+
 	/*** Check monster arena ***/
 	if (p_ptr->inside_battle && !p_ptr->leaving)
 	{
