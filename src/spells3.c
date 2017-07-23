@@ -712,7 +712,7 @@ void teleport_level(int m_idx)
 		{
 			if (!dun_level)
 			{
-				dungeon_type = p_ptr->recall_dungeon;
+				dungeon_type = ironman_downward ? DUNGEON_ANGBAND : p_ptr->recall_dungeon;
 				p_ptr->oldpy = p_ptr->y;
 				p_ptr->oldpx = p_ptr->x;
 			}

@@ -3429,15 +3429,15 @@ static void player_wipe_without_name(void)
 	/* Reset virtues*/
 	for (i = 0; i < 8; i++) p_ptr->virtues[i]=0;
 
+	dungeon_type = 0;
+
 	/* Set the recall dungeon accordingly */
-	if (vanilla_town)
+	if (vanilla_town || ironman_downward)
 	{
-		dungeon_type = 0;
 		p_ptr->recall_dungeon = DUNGEON_ANGBAND;
 	}
 	else
 	{
-		dungeon_type = 0;
 		p_ptr->recall_dungeon = DUNGEON_GALGALS;
 	}
 
