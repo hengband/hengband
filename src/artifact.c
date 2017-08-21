@@ -1347,11 +1347,25 @@ static void random_slay(object_type *o_ptr)
 	{
 		case 1:
 		case 2:
-			add_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
+			if (one_in_(4))
+			{
+				add_flag(o_ptr->art_flags, TR_KILL_ANIMAL);
+			}
+			else
+			{
+				add_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
+			}
 			break;
 		case 3:
 		case 4:
-			add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
+			if (one_in_(4))
+			{
+				add_flag(o_ptr->art_flags, TR_KILL_EVIL);
+			}
+			else
+			{
+			add_flag(o_ptr->art_flags, TR_SLAY_EVIL); 
+			}
 			if (!artifact_bias && one_in_(2))
 				artifact_bias = BIAS_LAW;
 			else if (!artifact_bias && one_in_(9))
@@ -1359,27 +1373,62 @@ static void random_slay(object_type *o_ptr)
 			break;
 		case 5:
 		case 6:
-			add_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
+			if (one_in_(4))
+			{
+				add_flag(o_ptr->art_flags, TR_KILL_UNDEAD);
+			}
+			else
+			{
+				add_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
+			}
 			if (!artifact_bias && one_in_(9))
 				artifact_bias = BIAS_PRIESTLY;
 			break;
 		case 7:
 		case 8:
-			add_flag(o_ptr->art_flags, TR_SLAY_DEMON);
+			if (one_in_(4))
+			{
+				add_flag(o_ptr->art_flags, TR_KILL_DEMON);
+			}
+			else
+			{
+				add_flag(o_ptr->art_flags, TR_SLAY_DEMON);
+			}
 			if (!artifact_bias && one_in_(9))
 				artifact_bias = BIAS_PRIESTLY;
 			break;
 		case 9:
 		case 10:
-			add_flag(o_ptr->art_flags, TR_SLAY_ORC);
+			if (one_in_(4))
+			{
+				add_flag(o_ptr->art_flags, TR_KILL_ORC);
+			}
+			else
+			{
+				add_flag(o_ptr->art_flags, TR_SLAY_ORC);
+			}
 			break;
 		case 11:
 		case 12:
-			add_flag(o_ptr->art_flags, TR_SLAY_TROLL);
+			if (one_in_(4))
+			{
+				add_flag(o_ptr->art_flags, TR_KILL_TROLL);
+			}
+			else
+			{
+				add_flag(o_ptr->art_flags, TR_SLAY_TROLL);
+			}
 			break;
 		case 13:
 		case 14:
-			add_flag(o_ptr->art_flags, TR_SLAY_GIANT);
+			if (one_in_(4))
+			{
+				add_flag(o_ptr->art_flags, TR_KILL_GIANT);
+			}
+			else
+			{
+				add_flag(o_ptr->art_flags, TR_SLAY_GIANT);
+			}
 			break;
 		case 15:
 		case 16:
@@ -1448,7 +1497,14 @@ static void random_slay(object_type *o_ptr)
 			break;
 		case 33:
 		case 34:
-			add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
+			if (one_in_(4))
+			{
+				add_flag(o_ptr->art_flags, TR_KILL_HUMAN);
+			}
+			else
+			{
+				add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
+			}
 			break;
 		default:
 			add_flag(o_ptr->art_flags, TR_CHAOTIC);
@@ -1902,6 +1958,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 			o_ptr->pval = 4;
 	}
 
+
 	/* give it some plusses... */
 	if (object_is_armour(o_ptr))
 		o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
@@ -1989,6 +2046,20 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		else power_level = 3;
 	}
 
+	/*平均対邪ダメージが一定以上なら11/12でダメージ抑制処理を行う*/
+	if(suppression_evil_dam(o_ptr) && !one_in_(12) && object_is_weapon)
+	{
+		msg_format("抑制処理");
+		do
+		{
+			if (weakening_artifact(o_ptr) == 0)
+			{
+				break;
+			}
+
+		} while (suppression_evil_dam(o_ptr));
+	}
+
 	if (a_scroll)
 	{
 		char dummy_name[80] = "";
@@ -2045,7 +2116,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
-		msg_format("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」:", max_powers, total_flags, artifact_bias_name[artifact_bias]);
+		msg_format("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」対邪%d:", max_powers, total_flags, artifact_bias_name[artifact_bias], calc_arm_avgdamage(o_ptr));
 #else
 		msg_format("Random artifact generated '%s'. (Power:%d, Value:%ld) :", artifact_bias_name[artifact_bias], max_powers, total_flags);
 #endif
@@ -3788,7 +3859,6 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
  * @attention この処理はdrop_near()内で普通の固定アーティファクトが重ならない性質に依存する.
  * 仮に2個以上存在可能かつ装備品以外の固定アーティファクトが作成されれば
  * drop_near()関数の返り値は信用できなくなる.
-
  */
 bool create_named_art(int a_idx, int y, int x)
 {
@@ -3838,4 +3908,129 @@ bool create_named_art(int a_idx, int y, int x)
 
 	/* Drop the artifact from heaven */
 	return drop_near(q_ptr, -1, y, x) ? TRUE : FALSE;
+}
+/*対邪平均ダメージの計算処理*/
+int calc_arm_avgdamage(object_type *o_ptr)
+{
+	u32b flgs[TR_FLAG_SIZE];
+	object_flags(o_ptr, flgs);
+
+	int dam = 0;
+	dam = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
+
+	if(cheat_xtra) msg_format("素平均%d ", dam);
+	if (have_flag(flgs, TR_KILL_EVIL))
+	{
+
+		if (have_flag(flgs,TR_FORCE_WEAPON))
+		{
+			dam = dam * 1.5 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
+		}
+		else
+		{
+			dam = dam * 3.5;
+		}
+		if (cheat_xtra) msg_format("X邪計算後%d ", dam);
+	}
+	else if (!have_flag(flgs, TR_KILL_EVIL) &&  have_flag(flgs, TR_SLAY_EVIL))
+	{
+		
+		if (have_flag(flgs, TR_FORCE_WEAPON))
+		{
+			dam = dam * 1.5 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
+		}
+		else
+		{
+			dam = dam * 2;
+		}
+		if (cheat_xtra) msg_format("/邪計算後%d ", dam);
+	}
+
+
+	if (have_flag(flgs, TR_VORPAL))
+	{
+		dam = dam * 1.21;
+		if (cheat_xtra) msg_format("/切計算後%d ", dam);
+	}
+
+	dam = dam + o_ptr->to_d;
+	if (cheat_xtra) msg_format("最終対邪%d ", dam);
+	return(dam);
+}
+
+int suppression_evil_dam(object_type *o_ptr)
+{
+	int num = 0;
+	u32b flgs[TR_FLAG_SIZE];
+	object_flags(o_ptr, flgs);
+
+	if (o_ptr->art_flags, TR_VAMPIRIC)
+	{
+		if(have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(o_ptr) > 52))
+		{
+			num = 1;
+		}
+		else if(have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 43))
+		{
+			num = 1;
+		}
+		else if( have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 33))
+		{
+			num = 1;
+		}
+		else if (calc_arm_avgdamage(o_ptr) > 63)
+		{
+			num = 1;
+		}
+	}
+	else
+	{
+		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(o_ptr) > 65))
+		{
+			num = 1;
+		}
+		else if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 52))
+		{
+		num = 1;
+		}
+		else if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 40))
+		{
+		num = 1;
+		}
+		else if (calc_arm_avgdamage(o_ptr) > 75)
+		{
+		num = 1;
+		}
+	}
+	return(num);
+}
+
+int weakening_artifact(object_type *o_ptr)
+{
+	 int k_idx = lookup_kind(o_ptr->sval, o_ptr->tval);
+	 object_kind *k_ptr = &k_info[k_idx];
+
+	 if ((k_info[k_idx].dd > o_ptr->dd) || (k_info[k_idx].ds > o_ptr->ds)) 
+	 {
+		 if (o_ptr->dd > o_ptr->ds)
+		 {
+			 o_ptr->dd--;
+		 }
+		 else
+		 {
+			 o_ptr->ds--;
+		 }
+		 return 1;
+	 }
+	 
+	 if (o_ptr->to_d > 11)
+	 {
+		 o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
+		 if (o_ptr->to_d < 10)
+		 {
+			 o_ptr->to_d = 10;
+		 }
+		 return 1;
+	 }
+	 return 0;
 }
