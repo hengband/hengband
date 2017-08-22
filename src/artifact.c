@@ -2046,10 +2046,10 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		else power_level = 3;
 	}
 
-	/*平均対邪ダメージが一定以上なら11/12でダメージ抑制処理を行う*/
-	if(suppression_evil_dam(o_ptr) && !one_in_(12) && object_is_weapon)
+	/* 平均対邪ダメージが一定以上なら11/12(WEIRD_LUCK)でダメージ抑制処理を行う */
+	if(suppression_evil_dam(o_ptr) && !one_in_(WEIRD_LUCK) && object_is_weapon)
 	{
-		msg_format("抑制処理");
+		if(cheat_xtra) msg_format("抑制処理");
 		do
 		{
 			if (weakening_artifact(o_ptr) == 0)
@@ -2141,7 +2141,7 @@ int activation_index(object_type *o_ptr)
 	/* Give priority to weaponsmith's essential activations */
 	if (object_is_smith(o_ptr))
 	{
-		switch (o_ptr->xtra3-1)
+		switch (o_ptr->xtra3 - 1)
 		{
 		case ESSENCE_TMP_RES_ACID: return ACT_RESIST_ACID;
 		case ESSENCE_TMP_RES_ELEC: return ACT_RESIST_ELEC;
@@ -3919,37 +3919,25 @@ int calc_arm_avgdamage(object_type *o_ptr)
 	dam = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
 
 	if(cheat_xtra) msg_format("素平均%d ", dam);
-	if (have_flag(flgs, TR_KILL_EVIL))
+	if(have_flag(flgs, TR_KILL_EVIL))
 	{
-
-		if (have_flag(flgs,TR_FORCE_WEAPON))
-		{
-			dam = dam * 1.5 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
-		}
-		else
-		{
-			dam = dam * 3.5;
-		}
+		dam = dam * 7 / 2;
 		if (cheat_xtra) msg_format("X邪計算後%d ", dam);
 	}
-	else if (!have_flag(flgs, TR_KILL_EVIL) &&  have_flag(flgs, TR_SLAY_EVIL))
-	{
-		
-		if (have_flag(flgs, TR_FORCE_WEAPON))
-		{
-			dam = dam * 1.5 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
-		}
-		else
-		{
-			dam = dam * 2;
-		}
+	else if(!have_flag(flgs, TR_KILL_EVIL) && have_flag(flgs, TR_SLAY_EVIL))
+	{	
+		dam = dam * 2;
 		if (cheat_xtra) msg_format("/邪計算後%d ", dam);
 	}
 
-
-	if (have_flag(flgs, TR_VORPAL))
+	if (have_flag(flgs, TR_FORCE_WEAPON))
 	{
-		dam = dam * 1.21;
+		dam = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
+	}
+
+	if(have_flag(flgs, TR_VORPAL))
+	{
+		dam = dam * 11 / 9;
 		if (cheat_xtra) msg_format("/切計算後%d ", dam);
 	}
 
@@ -4010,7 +3998,7 @@ int weakening_artifact(object_type *o_ptr)
 	 int k_idx = lookup_kind(o_ptr->sval, o_ptr->tval);
 	 object_kind *k_ptr = &k_info[k_idx];
 
-	 if ((k_info[k_idx].dd > o_ptr->dd) || (k_info[k_idx].ds > o_ptr->ds)) 
+	 if ((k_ptr->dd < o_ptr->dd) || (k_ptr->ds < o_ptr->ds))
 	 {
 		 if (o_ptr->dd > o_ptr->ds)
 		 {
@@ -4023,7 +4011,7 @@ int weakening_artifact(object_type *o_ptr)
 		 return 1;
 	 }
 	 
-	 if (o_ptr->to_d > 11)
+	 if (o_ptr->to_d > 10)
 	 {
 		 o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
 		 if (o_ptr->to_d < 10)
