@@ -681,7 +681,7 @@ static int yaku_check(void)
 		c_put_str(TERM_YELLOW, _("フォーカード", "Four of a kind"),  4,  3);
 		return ODDS_4C;
 	case 7:
-		if (!NUM_OF(cards[0]) || !NUM_OF(cards[1]))
+		if (!NUM_OF(cards[0]) && !NUM_OF(cards[1]))
 		{
 			c_put_str(TERM_YELLOW, _("ファイブエース", "Five ace"),  4,  3);
 			return ODDS_5A;
@@ -1049,6 +1049,22 @@ static int do_poker(void)
 	cards[2] = 6;
 	cards[3] = 7 + 26;
 	cards[4] = 3;
+#endif
+#if 0
+	/* debug:Five Card1 */
+	cards[0] = 4;
+	cards[1] = 52;
+	cards[2] = 4 + 13;
+	cards[3] = 4 + 26;
+	cards[4] = 4 + 39;
+#endif
+#if 0
+	/* debug:Five Card2 */
+	cards[1] = 52;
+	cards[0] = 4;
+	cards[2] = 4 + 13;
+	cards[3] = 4 + 26;
+	cards[4] = 4 + 39;
 #endif
 #if 0
 	/* debug */
