@@ -497,13 +497,14 @@ static bool yaku_check_flush(void)
 }
 
 /*!
- * @brief ポーカーの手札がストレート役を得ているかを帰す。
- * @return 役の判定結果
+ * @brief ポーカーの手札がストレートを含んだ高位の役を得ているかを帰す。
+ * @return 役の判定結果 0…ストレート、フラッシュいずれもなし/1…ストレートのみ/2…ストレートフラッシュ/3…ロイヤルストレートフラッシュ
  */
 static int yaku_check_straight(void)
 {
 	int i, lowest = 99;
 	bool joker_is_used = FALSE;
+	bool straight = FALSE;
 
 	/* get lowest */
 	for (i = 0; i < 5; i++)
@@ -512,6 +513,7 @@ static int yaku_check_straight(void)
 			lowest = NUM_OF(cards[i]);
 	}
 	
+	/* Check Royal Straight Flush */
 	if (yaku_check_flush())
 	{
 	  if( lowest == 0 ){
@@ -524,33 +526,57 @@ static int yaku_check_straight(void)
 				  break;
 			}
 		}
-		if (i == 4) return 3; /* Wow! Royal Flush!!! */
+		if (i == 4) return 3; /* Wow! Royal Straight Flush!!! */
 	  }
-	  if( lowest == 9 ){
+	  if(lowest == 9){
 		for (i = 0; i < 3; i++)
 		{
 			if (!find_card_num(10 + i))
 				break;
 		}
-		if (i == 3 && have_joker()) return 3; /* Wow! Royal Flush!!! */
+		if (i == 3 && have_joker()) return 3; /* Wow! Royal Straight Flush!!! */
 	  }
 	}
 
 	joker_is_used = FALSE;
+
+
+	/* Straight Only Check */
+
+	if (lowest == 0) { /* (10 - J - Q - K)[JOKER] - A */
+		for (i = 0; i < 4; i++)
+		{
+			if (!find_card_num(9 + i)) {
+				if (have_joker() && !joker_is_used)
+					joker_is_used = TRUE;
+				else
+					break; /* None */
+			}
+		}
+		if(i == 4) straight = TRUE;
+	}
+	if (lowest == 9) { /* 10 - J - Q - K - [JOKER] */
+		for (i = 0; i < 3; i++)
+		{
+			if (!find_card_num(10 + i))
+				break;
+		}
+		if (i == 3 && have_joker()) straight = TRUE;
+	}
 	for (i = 0; i < 5; i++)
 	{
-		if (!find_card_num(lowest + i)){
-		  if( have_joker() && !joker_is_used )
-		    joker_is_used = TRUE;
-		  else
-		    return 0;
+		if(!find_card_num(lowest + i)){
+			if( have_joker() && !joker_is_used )
+				joker_is_used = TRUE;
+			else
+				break; /* None */
 		}
 	}
+	if(i == 5) straight = TRUE;
 	
-	if (yaku_check_flush())
-		return 2; /* Straight Flush */
-
-	return 1;
+	if (straight && yaku_check_flush()) return 2; /* Straight Flush */
+	else if(straight) return 1; /* Only Straight */
+	else return 0;
 }
 
 /*!
@@ -985,12 +1011,44 @@ static int do_poker(void)
 	cards[4] = 51;
 #endif
 #if 0
-	/* debug:Straight */
+	/* debug:Straight1 */
 	cards[0] = 1;
 	cards[1] = 0 + 13;
 	cards[2] = 3;
 	cards[3] = 2 + 26;
 	cards[4] = 4;
+#endif
+#if 0
+	/* debug:Straight2 */
+	cards[0] = 12;
+	cards[1] = 0;
+	cards[2] = 9;
+	cards[3] = 11 + 13 * 2;
+	cards[4] = 10;
+#endif
+#if 0
+	/* debug:Straight3 */
+	cards[0] = 52;
+	cards[1] = 0;
+	cards[2] = 9;
+	cards[3] = 11 + 13 * 2;
+	cards[4] = 10;
+#endif
+#if 0
+	/* debug:Straight4 */
+	cards[0] = 12;
+	cards[1] = 52;
+	cards[2] = 9;
+	cards[3] = 11 + 13 * 2;
+	cards[4] = 10;
+#endif
+#if 0
+	/* debug:Straight5 */
+	cards[0] = 4;
+	cards[1] = 5 + 13;
+	cards[2] = 6;
+	cards[3] = 7 + 26;
+	cards[4] = 3;
 #endif
 #if 0
 	/* debug */
