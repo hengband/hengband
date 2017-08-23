@@ -483,6 +483,7 @@ static void wr_options(void)
 	if (cheat_know) c |= 0x1000;
 	if (cheat_live) c |= 0x2000;
 	if (cheat_save) c |= 0x4000;
+	if (cheat_diary_output) c |= 0x8000;
 
 	wr_u16b(c);
 

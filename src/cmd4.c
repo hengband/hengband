@@ -1385,7 +1385,7 @@ void do_cmd_messages(int num_now)
 /*!
  * チートオプションの最大数 / Number of cheating options
  */
-#define CHEAT_MAX 7
+#define CHEAT_MAX 8
 
 /*!
  * チーとオプションの定義テーブル / Cheating options
@@ -1418,7 +1418,13 @@ static option_type cheat_info[CHEAT_MAX] =
 
 	{ &cheat_save,		FALSE,	255,	0x40, 0x00,
 		"cheat_save",		_("死んだ時セーブするか確認する", "Ask for saving death")
+	},
+
+	{ &cheat_diary_output,	FALSE,	255,	0x80, 0x00,
+		"cheat_diary_output",		_("詳細な情報を日記に出力する", "Output detailed infotmation to diary.")
 	}
+
+
 };
 
 /*!

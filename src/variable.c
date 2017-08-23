@@ -355,6 +355,7 @@ bool cheat_xtra;	/* Peek into something else */
 bool cheat_know;	/* Know complete monster info */
 bool cheat_live;	/* Allow player to avoid death */
 bool cheat_save;	/* Ask for saving death */
+bool cheat_diary_output; /* Detailed info to diary */
 
 
 /* Special options */
