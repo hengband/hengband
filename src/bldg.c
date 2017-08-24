@@ -241,7 +241,7 @@ static void arena_comm(int cmd)
 					msg_print(NULL);
 					if (get_check(_("挑戦するかね？", "Do you fight? ")))
 					{	
-                        msg_print(_("死ぬがよい。", "Die, maggots."));
+						msg_print(_("死ぬがよい。", "Die, maggots."));
 						msg_print(NULL);
 					
 						p_ptr->exit_bldg = FALSE;
@@ -540,7 +540,6 @@ static int yaku_check_straight(void)
 
 	joker_is_used = FALSE;
 
-
 	/* Straight Only Check */
 
 	if (lowest == 0) { /* (10 - J - Q - K)[JOKER] - A */
@@ -555,14 +554,9 @@ static int yaku_check_straight(void)
 		}
 		if(i == 4) straight = TRUE;
 	}
-	if (lowest == 9) { /* 10 - J - Q - K - [JOKER] */
-		for (i = 0; i < 3; i++)
-		{
-			if (!find_card_num(10 + i))
-				break;
-		}
-		if (i == 3 && have_joker()) straight = TRUE;
-	}
+
+	joker_is_used = FALSE;
+
 	for (i = 0; i < 5; i++)
 	{
 		if(!find_card_num(lowest + i)){
