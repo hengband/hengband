@@ -3592,6 +3592,8 @@ bool target_set(int mode)
 
 	char	info[80];
 
+	char	same_key;
+
 	cave_type		*c_ptr;
 
 	int wid, hgt;
@@ -3606,6 +3608,14 @@ bool target_set(int mode)
 	/* Cancel tracking */
 	/* health_track(0); */
 
+	if (rogue_like_commands)
+	{
+		same_key = 'x';
+	}
+	else
+	{
+		same_key = 'l';
+	}
 
 	/* Prepare the "temp" array */
 	target_set_prepare(mode);
@@ -3748,14 +3758,24 @@ bool target_set(int mode)
 
 				default:
 				{
-					/* Extract the action (if any) */
-					d = get_keymap_dir(query);
+					if(query == same_key)
+					{
+						if (++m == temp_n)
+						{
+							m = 0;
+							if (!expand_list) done = TRUE;
+						}
+					}
+					else
+					{
+						/* Extract the action (if any) */
+						d = get_keymap_dir(query);
 
-					if (!d) bell();
-					break;
+						if (!d) bell();
+						break;
+					}
 				}
 			}
-
 			/* Hack -- move around */
 			if (d)
 			{
