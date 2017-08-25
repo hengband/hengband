@@ -758,6 +758,12 @@ static byte special_key_list[] =
 };
 #endif
 
+
+/* Function prototype */
+
+static bool is_already_running();
+
+
 /* bg */
 static void delete_bg(void)
 {
@@ -5619,7 +5625,7 @@ static void init_stuff(void)
 	/* validate_dir(ANGBAND_DIR_XTRA_HELP); */
 }
 
-bool is_already_running()
+static bool is_already_running()
 {
 	bool result = FALSE;
 	HANDLE hMutex;
