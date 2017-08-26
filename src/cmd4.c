@@ -685,12 +685,19 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 				case RECORD_NAMED_PET_LOSE_PARENT:
 					fprintf(fff, _("%sの召喚者が既にいないため消え去った。\n", "%s disappeared because there does not exist summoner.\n"), note);
 					break;
+
+
 				default:
 					fprintf(fff, "\n");
 					break;
 			}
 			break;
 		}
+
+		case NIKKI_WIZ_ARTIFACT:
+			fprintf(fff, "WIZ/ARTIFACT_INFO: %s\n", note);
+			break;
+
 		default:
 			break;
 	}

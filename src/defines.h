@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 55 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 56 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -4782,6 +4782,9 @@ extern int PlayerUID;
 #define NIKKI_NAMED_PET   21
 #define NIKKI_PAT_TELE    22
 #define NIKKI_ART_SCROLL  23
+
+#define NIKKI_WIZ_ARTIFACT  24
+
 
 #define RECORD_NAMED_PET_NAME        0
 #define RECORD_NAMED_PET_UNNAME      1

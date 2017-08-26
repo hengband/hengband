@@ -2123,6 +2123,19 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		msg_format("%s", o_name);
 	}
 
+	if (cheat_diary_output)
+	{
+		char spec[180];
+		char note[200];
+
+		object_aware(o_ptr);
+		object_known(o_ptr);
+		o_ptr->ident |= (IDENT_MENTAL);
+		object_desc(spec, o_ptr, 0);
+		sprintf(note, "%s\tDAM:%d", spec, calc_arm_avgdamage(o_ptr));
+		do_cmd_write_nikki(NIKKI_WIZ_ARTIFACT, 0, note);
+	}
+
 	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
@@ -3943,6 +3956,7 @@ int calc_arm_avgdamage(object_type *o_ptr)
 
 	dam = dam + o_ptr->to_d;
 	if (cheat_xtra) msg_format("最終対邪%d ", dam);
+
 	return(dam);
 }
 
