@@ -1424,20 +1424,20 @@ static bool cast_learned_spell(int spell, bool success)
 	case MS_S_UNIQUE:
 	{
 		int k, count = 0;
-        msg_print(_("特別な強敵を召喚した！", "You summon a special opponent!"));
+		msg_print(_("特別な強敵を召喚した！", "You summon a special opponent!"));
 		for (k = 0;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_UNIQUE, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
-                if (!pet)
-                    msg_print(_("召喚されたユニーク・モンスターは怒っている！", "Summoned special opponents are angry!"));
+				if (!pet)
+					msg_print(_("召喚されたユニーク・モンスターは怒っている！", "Summoned special opponents are angry!"));
 			}
 		for (k = count;k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
-                if (!pet)
-                    msg_print(_("召喚された上級アンデッドは怒っている！", "Summoned greater undeads are angry!"));
+				if (!pet)
+					msg_print(_("召喚された上級アンデッドは怒っている！", "Summoned greater undeads are angry!"));
 			}
 		if (!count)
 		{

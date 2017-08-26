@@ -2087,19 +2087,19 @@ static void object_mention(object_type *o_ptr)
 
 	if (object_is_fixed_artifact(o_ptr))
 	{
-		msg_format(_("伝説のアイテム (%s)", "Artifact (%s)"), o_name);
+		msg_format(_("WIZ: ★(%s)を生成しました。", "WIZ: Artifact (%s)"), o_name);
 	}
 	else if (o_ptr->art_name)
 	{
-		msg_format(_("ランダム・アーティファクト (%s)", "Random artifact (%s)"), o_name);
+		msg_format(_("WIZ: ☆(%s)を生成しました。", "WIZ: Random Artifact (%s)"), o_name);
 	}
 	else if (object_is_ego(o_ptr))
 	{
-		msg_format(_("名のあるアイテム (%s)", "Ego-item (%s)"), o_name);
+		msg_format(_("WIZ: エゴ(%s)を生成しました。", "WIZ: Ego-item (%s)"), o_name);
 	}
 	else
 	{
-		msg_format(_("アイテム (%s)", "Object (%s)"), o_name);
+		msg_format(_("WIZ: アイテム(%s)を生成しました。", "WIZ: Object (%s)"), o_name);
 	}
 }
 

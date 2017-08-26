@@ -2394,7 +2394,7 @@ static bool build_type5(void)
 	if (cheat_room)
 	{
 		/* Room type */
-		msg_format(_("モンスター部屋(nest)(%s%s)", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
+		msg_format(_("WIZ: モンスター部屋(nest)(%s%s)を生成します。", "WiZ: Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
 	}
 
 	/* Place some monsters */
@@ -2429,7 +2429,7 @@ static bool build_type5(void)
 				if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx) break;
 				if (!nest_mon_info[i + 1].used) break;
 			}
-			msg_print(r_name + r_info[nest_mon_info[i].r_idx].name);
+			msg_format("WIZ: Nest構成モンスターNo.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
 		}
 	}
 
@@ -2630,7 +2630,7 @@ static bool build_type6(void)
 	if (cheat_room)
 	{
 		/* Room type */
-		msg_format(_("モンスター部屋(pit)(%s%s)", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
+		msg_format(_("WIZ: モンスター部屋(pit)(%s%s)を生成します。", "WIZ: Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 	}
 
 	/* Select the entries */
@@ -2642,7 +2642,7 @@ static bool build_type6(void)
 		if (cheat_hear)
 		{
 			/* Message */
-			msg_print(r_name + r_info[what[i]].name);
+			msg_format("WIZ: Nest構成モンスターNo.%d:%s", i, r_name + r_info[what[i]].name);
 		}
 	}
 

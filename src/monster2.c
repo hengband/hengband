@@ -3146,29 +3146,9 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 		else return FALSE;
 	}
 
-	/* Powerful monster */
-	if (r_ptr->level > dun_level)
+	if (cheat_hear)
 	{
-		/* Unique monsters */
-		if (r_ptr->flags1 & (RF1_UNIQUE))
-		{
-			/* Message for cheaters */
-			if (cheat_hear) msg_format(_("深層のユニーク・モンスター (%s)。", "Deep Unique (%s)."), name);
-		}
-
-		/* Normal monsters */
-		else
-		{
-			/* Message for cheaters */
-			if (cheat_hear) msg_format(_("深層のモンスター (%s)。", "Deep Monster (%s)."), name);
-		}
-	}
-
-	/* Note the monster */
-	else if (r_ptr->flags1 & (RF1_UNIQUE))
-	{
-		/* Unique monsters induce message */
-		if (cheat_hear) msg_format(_("ユニーク・モンスター (%s)。", "Unique (%s)."), name);
+		msg_format(_("WIZ: モンスター (%s)[Lv%d]を生成しました。", "WIZ:　Monster (%s)[Lv%d]."), name, r_ptr->level);
 	}
 
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10)) mode &= ~PM_KAGE;
