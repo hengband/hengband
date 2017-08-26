@@ -2091,7 +2091,7 @@ static void object_mention(object_type *o_ptr)
 	}
 	else if (o_ptr->art_name)
 	{
-		msg_print(_("ランダム・アーティファクト", "Random artifact"));
+		msg_format(_("ランダム・アーティファクト (%s)", "Random artifact (%s)"), o_name);
 	}
 	else if (object_is_ego(o_ptr))
 	{

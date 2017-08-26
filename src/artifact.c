@@ -2047,7 +2047,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	}
 
 	/* 平均対邪ダメージが一定以上なら11/12(WEIRD_LUCK)でダメージ抑制処理を行う */
-	if(suppression_evil_dam(o_ptr) && !one_in_(WEIRD_LUCK) && object_is_weapon)
+	if(suppression_evil_dam(o_ptr) && !one_in_(WEIRD_LUCK) && object_is_weapon(o_ptr))
 	{
 		if(cheat_xtra) msg_format("抑制処理");
 		do
@@ -3928,34 +3928,34 @@ int calc_arm_avgdamage(object_type *o_ptr)
 	u32b flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
 
-	int dam = 0;
-	dam = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
+	int dam, base, s_evil, forced, vorpal;
+	dam = base = s_evil = forced = vorpal = 0;
 
-	if(cheat_xtra) msg_format("素平均%d ", dam);
+	dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
+
 	if(have_flag(flgs, TR_KILL_EVIL))
 	{
-		dam = dam * 7 / 2;
-		if (cheat_xtra) msg_format("X邪計算後%d ", dam);
+		dam = s_evil = dam * 7 / 2;
 	}
 	else if(!have_flag(flgs, TR_KILL_EVIL) && have_flag(flgs, TR_SLAY_EVIL))
 	{	
-		dam = dam * 2;
-		if (cheat_xtra) msg_format("/邪計算後%d ", dam);
+		dam = s_evil = dam * 2;
 	}
 
 	if (have_flag(flgs, TR_FORCE_WEAPON))
 	{
-		dam = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
+		dam = forced = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
 	}
 
 	if(have_flag(flgs, TR_VORPAL))
 	{
-		dam = dam * 11 / 9;
-		if (cheat_xtra) msg_format("/切計算後%d ", dam);
+		dam = vorpal = dam * 11 / 9;
 	}
 
 	dam = dam + o_ptr->to_d;
-	if (cheat_xtra) msg_format("最終対邪%d ", dam);
+
+	if (cheat_xtra) msg_format("素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d",
+		base, s_evil, forced, vorpal, dam);
 
 	return(dam);
 }
@@ -4014,25 +4014,43 @@ int weakening_artifact(object_type *o_ptr)
 
 	 if ((k_ptr->dd < o_ptr->dd) || (k_ptr->ds < o_ptr->ds))
 	 {
-		 if (o_ptr->dd > o_ptr->ds)
-		 {
-			 o_ptr->dd--;
-		 }
-		 else
-		 {
-			 o_ptr->ds--;
-		 }
-		 return 1;
-	 }
-	 
-	 if (o_ptr->to_d > 10)
-	 {
-		 o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
-		 if (o_ptr->to_d < 10)
-		 {
-			 o_ptr->to_d = 10;
-		 }
-		 return 1;
+		int pre_dd = o_ptr->dd;
+		int pre_ds = o_ptr->ds;
+
+		if (o_ptr->dd > o_ptr->ds)
+		{
+			o_ptr->dd--;
+		}
+		else
+		{
+			o_ptr->ds--;
+		}
+
+		if (cheat_xtra)
+		{
+			msg_format("Dice Supress %dd%d -> %dd%d",
+				pre_dd, pre_ds, o_ptr->dd, o_ptr->ds);
+		}
+		return 1;
+	}
+	
+	if (o_ptr->to_d > 10)
+	{
+		int pre_damage = o_ptr->to_d;
+
+		o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
+		if (o_ptr->to_d < 10)
+		{
+			o_ptr->to_d = 10;
+		}
+
+		if (cheat_xtra)
+		{
+			msg_format("Plus-Damage Supress %d -> %d",
+				pre_damage, o_ptr->to_d);
+		}
+
+		return 1;
 	 }
 	 return 0;
 }
