@@ -1343,6 +1343,7 @@ extern void message_add(cptr msg);
 extern void msg_print(cptr msg);
 #ifndef SWIG
 extern void msg_format(cptr fmt, ...);
+extern void msg_format_wizard(int cheat_type, cptr fmt, ...);
 #endif /* SWIG */
 extern void screen_save(void);
 extern void screen_load(void);

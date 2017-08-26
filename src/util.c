@@ -2827,11 +2827,8 @@ static void msg_flush(int x)
 void msg_print(cptr msg)
 {
 	static int p = 0;
-
 	int n;
-
 	char *t;
-
 	char buf[1024];
 
 	if (world_monster) return;
@@ -2858,7 +2855,6 @@ void msg_print(cptr msg)
 		/* Reset */
 		p = 0;
 	}
-
 
 	/* No message */
 	if (!msg) return;
@@ -2948,7 +2944,6 @@ void msg_print(cptr msg)
 		t += split; n -= split;
 	}
 
-
 	/* Display the tail of the message */
 	Term_putstr(p, 0, n, TERM_WHITE, t);
 
@@ -2969,11 +2964,16 @@ void msg_print(cptr msg)
 	p += n + 1;
 #endif
 
-
 	/* Optional refresh */
 	if (fresh_message) Term_fresh();
 }
 
+void msg_print_wizard(int cheat_type, cptr msg)
+{
+	char buf[1024];
+	sprintf(buf, "WIZ%2d:%s", cheat_type, msg);
+	msg_print(buf);
+}
 
 /*
  * Hack -- prevent "accidents" in "screen_save()" or "screen_load()"
@@ -3037,6 +3037,27 @@ void msg_format(cptr fmt, ...)
 
 	/* Display */
 	msg_print(buf);
+}
+
+/*
+ * Display a formatted message, using "vstrnfmt()" and "msg_print()".
+ */
+void msg_format_wizard(int cheat_type, cptr fmt, ...)
+{
+	va_list vp;
+	char buf[1024];
+
+	/* Begin the Varargs Stuff */
+	va_start(vp, fmt);
+
+	/* Format the args, save the length */
+	(void)vstrnfmt(buf, 1024, fmt, vp);
+
+	/* End the Varargs Stuff */
+	va_end(vp);
+
+	/* Display */
+	msg_print_wizard(cheat_type, buf);
 }
 
 
