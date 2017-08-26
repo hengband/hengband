@@ -2970,8 +2970,9 @@ void msg_print(cptr msg)
 
 void msg_print_wizard(int cheat_type, cptr msg)
 {
+	cptr cheat_mes[] = {"ITEM", "MONS", "DUNG", "MISC"};
 	char buf[1024];
-	sprintf(buf, "WIZ%2d:%s", cheat_type, msg);
+	sprintf(buf, "WIZ-%s:%s", cheat_mes[cheat_type], msg);
 	msg_print(buf);
 }
 

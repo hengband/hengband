@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 59 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 60 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -5660,3 +5660,10 @@ extern int PlayerUID;
 #define DICE_MULT 6
 #define DICE_DIV 7
 #define BASE_DAM 8
+
+/* Cheat Info Type */
+#define CHEAT_OBJECT 0
+#define CHEAT_MONSTER 1
+#define CHEAT_DUNGEON 2
+#define CHEAT_MISC 3
+
