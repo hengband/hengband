@@ -1327,8 +1327,8 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	/* Assume no "modifier" string */
 	cptr            modstr = "";
 
-	int             power;
-	int				fire_rate;
+	int power;
+	int fire_rate;
 
 	bool            aware = FALSE;
 	bool            known = FALSE;

@@ -2449,8 +2449,8 @@ s16b message_num(void)
  */
 cptr message_str(int age)
 {
-	s16b x;
-	s16b o;
+	s32b x;
+	s32b o;
 	cptr s;
 
 	/* Forgotten messages have no text */
@@ -2479,7 +2479,7 @@ void message_add(cptr str)
 {
 	int i, k, x, m, n;
 
-	char u[1024];
+	char u[4096];
 	char splitted1[81];
 	cptr splitted2;
 
@@ -2520,14 +2520,11 @@ void message_add(cptr str)
 		splitted2 = NULL;
 	}
 
-	/*** Step 2 -- Attempt to optimize ***/
+	/*** Step 2 -- 最適化の試行 / Attempt to optimize ***/
 
 	/* Limit number of messages to check */
 	m = message_num();
-
 	k = m / 4;
-
-	/* Limit number of messages to check */
 	if (k > MESSAGE_MAX / 32) k = MESSAGE_MAX / 32;
 
 	/* Check previous message */
@@ -2554,7 +2551,7 @@ void message_add(cptr str)
 		/* Find multiple */
 #ifdef JP
 		for (t = buf; *t && (*t != '<' || (*(t+1) != 'x' )); t++) 
-			if( iskanji(*t))t++;
+			if(iskanji(*t))t++;
 #else
 		for (t = buf; *t && (*t != '<'); t++);
 #endif
@@ -2602,8 +2599,7 @@ void message_add(cptr str)
 	/* Check the last few messages (if any to count) */
 	for (i = message__next; k; k--)
 	{
-		u16b q;
-
+		int q;
 		cptr old;
 
 		/* Back up and wrap if needed */
