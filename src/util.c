@@ -2970,6 +2970,11 @@ void msg_print(cptr msg)
 
 void msg_print_wizard(int cheat_type, cptr msg)
 {
+	if (!cheat_room && cheat_type == CHEAT_DUNGEON) return;
+	if (!cheat_peek && cheat_type == CHEAT_OBJECT) return;
+	if (!cheat_hear && cheat_type == CHEAT_MONSTER) return;
+	if (!cheat_xtra && cheat_type == CHEAT_MISC) return;
+
 	cptr cheat_mes[] = {"ITEM", "MONS", "DUNG", "MISC"};
 	char buf[1024];
 	sprintf(buf, "WIZ-%s:%s", cheat_mes[cheat_type], msg);
@@ -3045,6 +3050,11 @@ void msg_format(cptr fmt, ...)
  */
 void msg_format_wizard(int cheat_type, cptr fmt, ...)
 {
+	if(!cheat_room && cheat_type == CHEAT_DUNGEON) return;
+	if(!cheat_peek && cheat_type == CHEAT_OBJECT) return;
+	if(!cheat_hear && cheat_type == CHEAT_MONSTER) return;
+	if(!cheat_xtra && cheat_type == CHEAT_MISC) return;
+
 	va_list vp;
 	char buf[1024];
 
