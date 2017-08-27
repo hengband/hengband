@@ -1341,6 +1341,7 @@ extern s16b message_num(void);
 extern cptr message_str(int age);
 extern void message_add(cptr msg);
 extern void msg_print(cptr msg);
+extern void msg_print_wizard(int cheat_type, cptr msg);
 #ifndef SWIG
 extern void msg_format(cptr fmt, ...);
 extern void msg_format_wizard(int cheat_type, cptr fmt, ...);

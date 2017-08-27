@@ -2390,12 +2390,7 @@ static bool build_type5(void)
 		case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
 	}
 
-	/* Describe */
-	if (cheat_room)
-	{
-		/* Room type */
-		msg_format(_("WIZ: モンスター部屋(nest)(%s%s)を生成します。", "WiZ: Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
-	}
+	msg_format_wizard(CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
 
 	/* Place some monsters */
 	for (y = yval - 2; y <= yval + 2; y++)
@@ -2414,7 +2409,7 @@ static bool build_type5(void)
 		}
 	}
 
-	if (cheat_room && cheat_hear)
+	if (cheat_room)
 	{
 		ang_sort_comp = ang_sort_comp_nest_mon_info;
 		ang_sort_swap = ang_sort_swap_nest_mon_info;
@@ -2429,7 +2424,7 @@ static bool build_type5(void)
 				if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx) break;
 				if (!nest_mon_info[i + 1].used) break;
 			}
-			msg_format("WIZ: Nest構成モンスターNo.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
+			msg_format_wizard(CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
 		}
 	}
 
@@ -2626,24 +2621,14 @@ static bool build_type6(void)
 		}
 	}
 
-	/* Message */
-	if (cheat_room)
-	{
-		/* Room type */
-		msg_format(_("WIZ: モンスター部屋(pit)(%s%s)を生成します。", "WIZ: Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
-	}
+	msg_format_wizard(CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 
 	/* Select the entries */
 	for (i = 0; i < 8; i++)
 	{
 		/* Every other entry */
 		what[i] = what[i * 2];
-
-		if (cheat_hear)
-		{
-			/* Message */
-			msg_format("WIZ: Nest構成モンスターNo.%d:%s", i, r_name + r_info[what[i]].name);
-		}
+		msg_format_wizard(CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, r_name + r_info[what[i]].name);
 	}
 
 	/* Top and bottom rows */
@@ -3037,10 +3022,7 @@ static bool build_type7(void)
 	/* No lesser vault found */
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
-		if (cheat_room)
-		{
-			msg_print(_("警告！小さな地下室を配置できません！", "Warning! Could not place lesser vault!"));
-		}
+		msg_print_wizard(CHEAT_DUNGEON, _("小型固定Vaultを配置できませんでした。", "Could not place lesser vault."));
 		return FALSE;
 	}
 
@@ -3086,7 +3068,7 @@ static bool build_type7(void)
 #endif
 
 	/* Message */
-	if (cheat_room) msg_format(_("小さな地下室(%s)", "Lesser vault (%s)"), v_name + v_ptr->name);
+	msg_format_wizard(CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
@@ -3121,10 +3103,7 @@ static bool build_type8(void)
 	/* No greater vault found */
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
-		if (cheat_room)
-		{
-			msg_print(_("警告！巨大な地下室を配置できません！", "Warning! Could not place greater vault!"));
-		}
+		msg_print_wizard(CHEAT_DUNGEON, _("大型固定Vaultを配置できませんでした。", "Could not place greater vault."));
 		return FALSE;
 	}
 
@@ -3175,8 +3154,7 @@ static bool build_type8(void)
 	v_ptr = &v_info[76 + randint1(3)];
 #endif
 
-	/* Message */
-	if (cheat_room) msg_format(_("巨大な地下室(%s)", "Greater vault (%s)"), v_name + v_ptr->name);
+	msg_format_wizard(CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
@@ -4345,8 +4323,7 @@ static void build_bubble_vault(int x0, int y0, int xsize, int ysize)
 	int xhsize = xsize / 2;
 	int yhsize = ysize / 2;
 
-
-	if (cheat_room) msg_print("Bubble Vault");
+	msg_print_wizard(CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Room Vault."));
 
 	/* Allocate center of bubbles */
 	center[0].x = (byte)randint1(xsize - 3) + 1;
@@ -4547,7 +4524,7 @@ static void build_room_vault(int x0, int y0, int xsize, int ysize)
 	xhsize = xsize / 2;
 	yhsize = ysize / 2;
 
-	if (cheat_room) msg_print("Room Vault");
+	msg_print_wizard(CHEAT_DUNGEON, _("部屋型ランダムVaultを生成しました。", "Room Vault."));
 
 	/* fill area so don't get problems with arena levels */
 	for (x1 = 0; x1 < xsize; x1++)
@@ -4598,7 +4575,7 @@ static void build_cave_vault(int x0, int y0, int xsiz, int ysiz)
 	xsize = xhsize * 2;
 	ysize = yhsize * 2;
 
-	if (cheat_room) msg_print("Cave Vault");
+	msg_print_wizard(CHEAT_DUNGEON, _("洞穴ランダムVaultを生成しました。", "Cave Vault."));
 
 	light = done = FALSE;
 	room = TRUE;
@@ -4746,8 +4723,7 @@ void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault)
 	bool light;
 	cave_type *c_ptr;
 
-
-	if (cheat_room && is_vault) msg_print("Maze Vault");
+	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
 	/* Choose lite or dark */
 	light = ((dun_level <= randint1(25)) && is_vault && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
@@ -4817,7 +4793,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 	int m, n, num_vertices;
 	int *visited;
 
-	if (cheat_room) msg_print("Mini Checker Board Vault");
+	msg_print_wizard(CHEAT_DUNGEON, _("小型チェッカーランダムVaultを生成しました。", "Mini Checker Board Vault."));
 
 	/* Pick a random room size */
 	dy = ysize / 2 - 1;
@@ -5156,7 +5132,7 @@ static void build_castle_vault(int x0, int y0, int xsize, int ysize)
 	y2 = y0 + dy;
 	x2 = x0 + dx;
 
-	if (cheat_room) msg_print("Castle Vault");
+	msg_print_wizard(CHEAT_DUNGEON, _("城型ランダムVaultを生成しました。", "Castle Vault"));
 
 	/* generate the room */
 	for (y = y1 - 1; y <= y2 + 1; y++)
@@ -5273,7 +5249,7 @@ static void build_target_vault(int x0, int y0, int xsize, int ysize)
 	h3 = randint1(32);
 	h4 = randint1(32) - 16;
 
-	if (cheat_room) msg_print("Target Vault");
+	msg_print_wizard(CHEAT_DUNGEON, _("対称形ランダムVaultを生成しました。", "Elemental Vault"));
 
 	/* work out outer radius */
 	if (xsize > ysize)
@@ -5394,8 +5370,7 @@ static void build_elemental_vault(int x0, int y0, int xsiz, int ysiz)
 	int xsize, ysize, xhsize, yhsize, x, y, i;
 	int type;
 
-
-	if (cheat_room) msg_print("Elemental Vault");
+	msg_print_wizard(CHEAT_DUNGEON, _("精霊界ランダムVaultを生成しました。", "Elemental Vault"));
 
 	/* round to make sizes even */
 	xhsize = xsiz / 2;
@@ -5949,12 +5924,8 @@ static bool build_type13(void)
 		}
 	}
 
-	/* Message */
-	if (cheat_room)
-	{
-		/* Room type */
-		msg_format(_("%s%sの罠ピット", "Trapped monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
-	}
+	msg_format_wizard(CHEAT_DUNGEON, _("WIZ: %s%sの罠ピットが生成されました。", "WIZ: Trapped monster pit (%s%s)"),
+		n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 
 	/* Select the entries */
 	for (i = 0; i < 8; i++)
@@ -6057,11 +6028,7 @@ static bool build_type14(void)
 	c_ptr->mimic = c_ptr->feat;
 	c_ptr->feat = trap;
 
-	/* Message */
-	if (cheat_room)
-	{
-		msg_format(_("%sの部屋", "Room of %s"), f_name + f_info[trap].name);
-	}
+	msg_format_wizard(CHEAT_DUNGEON, _("WIZ: %sの部屋が生成されました。", "WIZ: Room of %s was generated."), f_name + f_info[trap].name);
 
 	return TRUE;
 }
@@ -6347,11 +6314,7 @@ static bool build_type15(void)
 		break;
 	}
 
-	/* Message */
-	if (cheat_room)
-	{
-		msg_print(_("ガラスの部屋", "Glass room"));
-	}
+	msg_print_wizard(CHEAT_DUNGEON, _("ガラスの部屋が生成されました。", "Glass room was generated."));
 
 	return TRUE;
 }
@@ -6646,7 +6609,7 @@ static bool build_type16(void)
 	/* Build stores */
 	build_stores(y1, x1, stores, n);
 
-	if (cheat_room) msg_print(_("地下街", "Underground Arcade"));
+	msg_print_wizard(CHEAT_DUNGEON, _("地下街を生成しました", "Underground arcade was generated."));
 
 	/* Free buildings array */
 	C_KILL(ugbldg, n, ugbldg_type);
@@ -6901,12 +6864,14 @@ bool generate_rooms(void)
 		if (!remain) break;
 	}
 
-	if (rooms_built < 2) return FALSE; /*! @details 部屋生成数が2未満の場合生成失敗を返す */
-
-	if (cheat_room)
+	/*! @details 部屋生成数が2未満の場合生成失敗を返す */
+	if (rooms_built < 2)
 	{
-		msg_format(_("部屋数: %d", "Number of Rooms: %d"), rooms_built);
+		msg_format_wizard(CHEAT_DUNGEON, _("部屋数が2未満でした。生成を再試行します。", "Number of rooms was under 2. Retry."), rooms_built);
+		return FALSE;
 	}
+
+	msg_format_wizard(CHEAT_DUNGEON, _("このダンジョンの部屋数は %d です。", "Number of Rooms: %d"), rooms_built);
 
 	return TRUE;
 }

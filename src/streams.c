@@ -357,18 +357,9 @@ void build_streamer(int feat, int chance)
 
 		if (dummy >= SAFE_MAX_ATTEMPTS)
 		{
-			if (cheat_room)
-			{
-#ifdef JP
-msg_print("警告！ストリーマーを配置できません！");
-#else
-				msg_print("Warning! Could not place streamer!");
-#endif
-
-			}
+			msg_print_wizard(CHEAT_DUNGEON, _("地形のストリーマー処理に失敗しました。", "Failed to place streamer."));
 			return;
 		}
-
 
 		/* Advance the streamer */
 		y += ddy[cdd[dir]];
@@ -459,11 +450,7 @@ void destroy_level(void)
 	int y1, x1, n;
 
 	/* Note destroyed levels */
-#ifdef JP
-	if (cheat_room) msg_print("破壊された階");
-#else
-	if (cheat_room) msg_print("Destroyed Level");
-#endif
+	msg_print_wizard(CHEAT_DUNGEON, _("階に*破壊*の痕跡を生成しました。", "Destroyed Level."));
 
 	/* Drop a few epi-centers (usually about two) */
 	for (n = 0; n < randint1(5); n++)
