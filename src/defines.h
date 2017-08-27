@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 62 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 63 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -443,14 +443,14 @@
  * OPTION: Maximum number of messages to remember (see "io.c")
  * Default: assume maximal memorization of 2048 total messages
  */
-#define MESSAGE_MAX     2048
+#define MESSAGE_MAX     4096
 
 /*
  * OPTION: Maximum space for the message text buffer (see "io.c")
  * Default: assume that each of the 2048 messages is repeated an
  * average of three times, and has an average length of 48
  */
-#define MESSAGE_BUF     32768
+#define MESSAGE_BUF 32768
 
 
 /*

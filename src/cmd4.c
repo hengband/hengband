@@ -1237,14 +1237,9 @@ void do_cmd_messages(int num_now)
 		}
 
 		/* Display header XXX XXX XXX */
-#ifdef JP
 		/* translation */
-		prt(format("以前のメッセージ %d-%d 全部で(%d)",
+		prt(format(_("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)"),
 			   i, i + j - 1, n), 0, 0);
-#else
-		prt(format("Message Recall (%d-%d of %d)",
-			   i, i + j - 1, n), 0, 0);
-#endif
 
 		/* Display prompt (not very informative) */
 		prt(_("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]",

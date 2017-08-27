@@ -2419,8 +2419,9 @@ cptr quark_str(s16b i)
 
 
 
-/*
- * How many messages are "available"?
+/*!
+ * @brief 保存中の過去ゲームメッセージの数を返す。 / How many messages are "available"?
+ * @return 残っているメッセージの数
  */
 s16b message_num(void)
 {
@@ -2441,9 +2442,10 @@ s16b message_num(void)
 }
 
 
-
-/*
- * Recall the "text" of a saved message
+/*!
+ * @brief 過去のゲームメッセージを返す。 / Recall the "text" of a saved message
+ * @params age メッセージの世代
+ * @return メッセージの文字列ポインタ
  */
 cptr message_str(int age)
 {
@@ -2468,9 +2470,10 @@ cptr message_str(int age)
 }
 
 
-
-/*
- * Add a new message, with great efficiency
+/*!
+ * @brief ゲームメッセージをログに追加する。 / Add a new message, with great efficiency
+ * @params str 保存したいメッセージ
+ * @return なし
  */
 void message_add(cptr str)
 {
@@ -2491,29 +2494,30 @@ void message_add(cptr str)
 	/* Important Hack -- Ignore "long" messages */
 	if (n >= MESSAGE_BUF / 4) return;
 
-	/* extra step -- split the message if n>80.   (added by Mogami) */
+	/* extra step -- split the message if n>80.(added by Mogami) */
 	if (n > 80) {
 #ifdef JP
-	  cptr t = str;
+		cptr t = str;
 
-	  for (n = 0; n < 80; n++, t++)
-	    if(iskanji(*t)) {
-	      t++;
-	      n++;
-	    }
-	  if (n == 81) n = 79; /* 最後の文字が漢字半分 */
+		for (n = 0; n < 80; n++, t++)
+		{
+			if(iskanji(*t)) {
+				t++;
+				n++;
+			}
+		}
+		if (n == 81) n = 79; /* 最後の文字が漢字半分 */
 #else
-	  for (n = 80; n > 60; n--)
-		  if (str[n] == ' ') break;
-	  if (n == 60)
-		  n = 80;
+		for (n = 80; n > 60; n--)
+			if (str[n] == ' ') break;
+		if (n == 60) n = 80;
 #endif
-	  splitted2 = str + n;
-	  strncpy(splitted1, str ,n);
-	  splitted1[n] = '\0';
-	  str = splitted1;
+		splitted2 = str + n;
+		strncpy(splitted1, str ,n);
+		splitted1[n] = '\0';
+		str = splitted1;
 	} else {
-	  splitted2 = NULL;
+		splitted2 = NULL;
 	}
 
 	/*** Step 2 -- Attempt to optimize ***/
@@ -2549,8 +2553,8 @@ void message_add(cptr str)
 
 		/* Find multiple */
 #ifdef JP
- for (t = buf; *t && (*t != '<' || (*(t+1) != 'x' )); t++) 
-     if( iskanji(*t))t++;
+		for (t = buf; *t && (*t != '<' || (*(t+1) != 'x' )); t++) 
+			if( iskanji(*t))t++;
 #else
 		for (t = buf; *t && (*t != '<'); t++);
 #endif
@@ -2738,7 +2742,7 @@ void message_add(cptr str)
 	message__head += n + 1;
 
 	/* recursively add splitted message (added by Mogami) */
- end_of_message_add:
+end_of_message_add:
 	if (splitted2 != NULL)
 	  message_add(splitted2);
 }
