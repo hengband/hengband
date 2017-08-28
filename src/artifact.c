@@ -2049,14 +2049,10 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	/* 平均対邪ダメージが一定以上なら11/12(WEIRD_LUCK)でダメージ抑制処理を行う */
 	if(suppression_evil_dam(o_ptr) && !one_in_(WEIRD_LUCK) && object_is_weapon(o_ptr))
 	{
-		if(cheat_xtra) msg_format("抑制処理");
+		msg_format_wizard(CHEAT_OBJECT, "アーティファクトの抑制処理を行います。");
 		do
 		{
-			if (weakening_artifact(o_ptr) == 0)
-			{
-				break;
-			}
-
+			if (weakening_artifact(o_ptr) == 0) break;
 		} while (suppression_evil_dam(o_ptr));
 	}
 
@@ -2102,26 +2098,8 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	/* Save the inscription */
 	o_ptr->art_name = quark_add(new_name);
 
-	if (cheat_xtra)
-	{
-		char o_name[MAX_NLEN];
-
-		object_aware(o_ptr);
-		object_known(o_ptr);
-
-		/* Mark the item as fully known */
-		o_ptr->ident |= (IDENT_MENTAL);
-
-		/* Description */
-		object_desc(o_name, o_ptr, 0);
-
-#ifdef JP
-		msg_format("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」対邪%d:", max_powers, total_flags, artifact_bias_name[artifact_bias], calc_arm_avgdamage(o_ptr));
-#else
-		msg_format("Random artifact generated '%s'. (Power:%d, Value:%ld) :", artifact_bias_name[artifact_bias], max_powers, total_flags);
-#endif
-		msg_format("%s", o_name);
-	}
+	msg_format_wizard(CHEAT_OBJECT, _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」",
+		"Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers, total_flags, artifact_bias_name[artifact_bias]);
 
 	if (cheat_diary_output)
 	{

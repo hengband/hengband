@@ -2079,28 +2079,15 @@ static void object_mention(object_type *o_ptr)
 {
 	char o_name[MAX_NLEN];
 
-	/*!
-	 * @note アイテム名取得後アイテムの価値に応じたデバッグメッセージを出力する。
-	 * Get Describe and view, Artifact, Random Artifact, Ego-item, and Normal item.
-	 */
-	object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+	object_aware(o_ptr);
+	object_known(o_ptr);
 
-	if (object_is_fixed_artifact(o_ptr))
-	{
-		msg_format(_("WIZ: ★(%s)を生成しました。", "WIZ: Artifact (%s)"), o_name);
-	}
-	else if (o_ptr->art_name)
-	{
-		msg_format(_("WIZ: ☆(%s)を生成しました。", "WIZ: Random Artifact (%s)"), o_name);
-	}
-	else if (object_is_ego(o_ptr))
-	{
-		msg_format(_("WIZ: エゴ(%s)を生成しました。", "WIZ: Ego-item (%s)"), o_name);
-	}
-	else
-	{
-		msg_format(_("WIZ: アイテム(%s)を生成しました。", "WIZ: Object (%s)"), o_name);
-	}
+	/* Mark the item as fully known */
+	o_ptr->ident |= (IDENT_MENTAL);
+
+	/* Description */
+	object_desc(o_name, o_ptr, 0);
+	msg_format_wizard(CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
 /*!

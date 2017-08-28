@@ -5924,7 +5924,7 @@ static bool build_type13(void)
 		}
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("WIZ: %s%sの罠ピットが生成されました。", "WIZ: Trapped monster pit (%s%s)"),
+	msg_format_wizard(CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"),
 		n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 
 	/* Select the entries */
@@ -6028,7 +6028,7 @@ static bool build_type14(void)
 	c_ptr->mimic = c_ptr->feat;
 	c_ptr->feat = trap;
 
-	msg_format_wizard(CHEAT_DUNGEON, _("WIZ: %sの部屋が生成されました。", "WIZ: Room of %s was generated."), f_name + f_info[trap].name);
+	msg_format_wizard(CHEAT_DUNGEON, _("%sの部屋が生成されました。", "Room of %s was generated."), f_name + f_info[trap].name);
 
 	return TRUE;
 }

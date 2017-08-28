@@ -3146,10 +3146,7 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 		else return FALSE;
 	}
 
-	if (cheat_hear)
-	{
-		msg_format(_("WIZ: モンスター (%s)[Lv%d]を生成しました。", "WIZ:　Monster (%s)[Lv%d]."), name, r_ptr->level);
-	}
+	msg_format_wizard(CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
 
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10)) mode &= ~PM_KAGE;
 
