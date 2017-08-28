@@ -2716,10 +2716,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		{
 			if (one_in_(50) || (power > 2)) /* power > 2 is debug only */
 				create_artifact(o_ptr, FALSE);
-
-			/* Mention the item */
-			if (cheat_peek) object_mention(o_ptr);
-
 			break;
 		}
 
@@ -2831,8 +2827,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 
 			if (o_ptr->sval == SV_DRAGON_SHIELD)
 			{
-				/* Mention the item */
-				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
 				if (!one_in_(3)) break;
 			}
@@ -2881,8 +2875,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		{
 			if (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)
 			{
-				/* Mention the item */
-				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
 				if (!one_in_(3)) break;
 			}
@@ -2909,8 +2901,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		{
 			if (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)
 			{
-				/* Mention the item */
-				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
 				if (!one_in_(3)) break;
 			}
@@ -3017,8 +3007,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		{
 			if (o_ptr->sval == SV_DRAGON_HELM)
 			{
-				/* Mention the item */
-				if (cheat_peek) object_mention(o_ptr);
 				dragon_resist(o_ptr);
 				if (!one_in_(3)) break;
 			}
@@ -3138,6 +3126,8 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 			break;
 		}
 	}
+
+	if (cheat_peek) object_mention(o_ptr);
 }
 
 
@@ -3237,9 +3227,6 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 						break;
 					}
-
-					/* Mention the item */
-					if (cheat_peek) object_mention(o_ptr);
 
 					break;
 				}
@@ -3744,9 +3731,6 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 					/* gain one low ESP */
 					add_esp_weak(o_ptr, FALSE);
-
-					/* Mention the item */
-					if (cheat_peek) object_mention(o_ptr);
 
 					break;
 				}
@@ -4426,10 +4410,6 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1)) o_ptr->curse_flags |= get_curse(1, o_ptr);
 		if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2)) o_ptr->curse_flags |= get_curse(2, o_ptr);
 
-
-		/* Cheat -- peek at the item */
-		if (cheat_peek) object_mention(o_ptr);
-
 		/* Done */
 		return;
 	}
@@ -4666,9 +4646,6 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2) && (o_ptr->name2 != EGO_ATTACKS))
 				o_ptr->pval = 2;
 		}
-
-		/* Cheat -- describe the item */
-		if (cheat_peek) object_mention(o_ptr);
 		
 		/* Done */
 		return;
@@ -4690,6 +4667,8 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		if (k_ptr->gen_flags & (TRG_RANDOM_CURSE1)) o_ptr->curse_flags |= get_curse(1, o_ptr);
 		if (k_ptr->gen_flags & (TRG_RANDOM_CURSE2)) o_ptr->curse_flags |= get_curse(2, o_ptr);
 	}
+
+	
 }
 
 
@@ -4856,14 +4835,6 @@ bool make_object(object_type *j_ptr, u32b mode)
 
 	obj_level = k_info[j_ptr->k_idx].level;
 	if (object_is_fixed_artifact(j_ptr)) obj_level = a_info[j_ptr->name1].level;
-
-	/* Notice "okay" out-of-depth objects */
-	if (!object_is_cursed(j_ptr) && !object_is_broken(j_ptr) &&
-	    (obj_level > dun_level))
-	{
-		/* Cheat -- peek at items */
-		if (cheat_peek) object_mention(j_ptr);
-	}
 
 	/* Success */
 	return (TRUE);
