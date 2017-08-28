@@ -3127,7 +3127,6 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 		}
 	}
 
-	if (cheat_peek) object_mention(o_ptr);
 }
 
 
@@ -4835,6 +4834,8 @@ bool make_object(object_type *j_ptr, u32b mode)
 
 	obj_level = k_info[j_ptr->k_idx].level;
 	if (object_is_fixed_artifact(j_ptr)) obj_level = a_info[j_ptr->name1].level;
+
+	if (cheat_peek) object_mention(j_ptr);
 
 	/* Success */
 	return (TRUE);
