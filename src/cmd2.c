@@ -3572,11 +3572,9 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 					tdam = mon_damage_mod(m_ptr, tdam, FALSE);
 				}
 
-				/* Complex message */
-				if (p_ptr->wizard || cheat_xtra)
-				{
-					msg_format(_("%d/%d のダメージを与えた。", "You do %d (out of %d) damage."), tdam, m_ptr->hp);
-				}
+				msg_format_wizard(CHEAT_MONSTER,
+					_("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
+					tdam, m_ptr->hp - tdam, m_ptr->maxhp, m_ptr->max_maxhp);
 
 				/* Sniper */
 				if (snipe_type == SP_EXPLODE)
@@ -4213,11 +4211,8 @@ bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 				/* Modify the damage */
 				tdam = mon_damage_mod(m_ptr, tdam, FALSE);
 
-				/* Complex message */
-				if (p_ptr->wizard)
-				{
-					msg_format(_("%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), tdam, m_ptr->hp);
-				}
+				msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
+					tdam, m_ptr->hp - tdam, m_ptr->maxhp, m_ptr->max_maxhp);
 
 				/* Hit the monster, check for death */
 				if (mon_take_hit(c_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_ptr(m_ptr))))
