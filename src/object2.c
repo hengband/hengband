@@ -4113,13 +4113,6 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 			/* Some figurines are cursed */
 			if (one_in_(6)) o_ptr->curse_flags |= TRC_CURSED;
 
-			if (cheat_peek)
-			{
-				msg_format(_("%sの人形, 深さ +%d%s", "Figurine of %s, depth +%d%s"),
-							  r_name + r_ptr->name, check - 1,
-							  !object_is_cursed(o_ptr) ? "" : " {cursed}");
-			}
-
 			break;
 		}
 
@@ -4167,11 +4160,6 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 			o_ptr->pval = i;
 
-			if (cheat_peek)
-			{
-				msg_format(_("%sの死体, 深さ +%d", "Corpse of %s, depth +%d"),
-							  r_name + r_ptr->name, check - 1);
-			}
 
 			object_aware(o_ptr);
 			object_known(o_ptr);
