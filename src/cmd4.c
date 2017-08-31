@@ -694,8 +694,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 			break;
 		}
 
-		case NIKKI_WIZ_ARTIFACT:
-			fprintf(fff, "WIZ/ARTIFACT_INFO: %s\n", note);
+		case NIKKI_WIZARD_LOG:
+			fprintf(fff, "%s\n", note);
 			break;
 
 		default:
@@ -1423,7 +1423,7 @@ static option_type cheat_info[CHEAT_MAX] =
 	},
 
 	{ &cheat_diary_output,	FALSE,	255,	0x80, 0x00,
-		"cheat_diary_output",		_("詳細な情報を日記に出力する", "Output detailed infotmation to diary.")
+		"cheat_diary_output",	_("ウィザードログを日記に出力する", "Output wizard log to diary.")
 	}
 
 

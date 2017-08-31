@@ -2979,6 +2979,12 @@ void msg_print_wizard(int cheat_type, cptr msg)
 	char buf[1024];
 	sprintf(buf, "WIZ-%s:%s", cheat_mes[cheat_type], msg);
 	msg_print(buf);
+
+	if (cheat_diary_output)
+	{
+		do_cmd_write_nikki(NIKKI_WIZARD_LOG, 0, buf);
+	}
+
 }
 
 /*

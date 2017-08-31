@@ -2101,19 +2101,6 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	msg_format_wizard(CHEAT_OBJECT, _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」",
 		"Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers, total_flags, artifact_bias_name[artifact_bias]);
 
-	if (cheat_diary_output)
-	{
-		char spec[180];
-		char note[200];
-
-		object_aware(o_ptr);
-		object_known(o_ptr);
-		o_ptr->ident |= (IDENT_MENTAL);
-		object_desc(spec, o_ptr, 0);
-		sprintf(note, "%s\tDAM:%d", spec, calc_arm_avgdamage(o_ptr));
-		do_cmd_write_nikki(NIKKI_WIZ_ARTIFACT, 0, note);
-	}
-
 	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
