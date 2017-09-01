@@ -2759,24 +2759,23 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
 
 					switch (o_ptr->name2)
 					{
-					  case EGO_DWARVEN:
-						if (o_ptr->tval != TV_HARD_ARMOR)
-						{
-							okay_flag = FALSE;
-							break;
-						}
-					  case EGO_DRUID:
-						if (o_ptr->tval != TV_SOFT_ARMOR)
-						{
-							okay_flag = FALSE;
-							break;
-						}
-					  default:
+						case EGO_DWARVEN:
+							if (o_ptr->tval != TV_HARD_ARMOR)
+							{
+								okay_flag = FALSE;
+							}
+						break;
+						case EGO_DRUID:
+							if (o_ptr->tval != TV_SOFT_ARMOR)
+							{
+								okay_flag = FALSE;
+							}
+						break;
+						default:
 						break;
 					}
 
-					if (okay_flag)
-						break;
+					if (okay_flag) break;
 				}
 				switch (o_ptr->name2)
 				{
