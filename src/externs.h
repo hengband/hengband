@@ -1337,7 +1337,7 @@ extern char inkey(void);
 extern cptr quark_str(s16b num);
 extern void quark_init(void);
 extern s16b quark_add(cptr str);
-extern s16b message_num(void);
+extern s32b message_num(void);
 extern cptr message_str(int age);
 extern void message_add(cptr msg);
 extern void msg_print(cptr msg);

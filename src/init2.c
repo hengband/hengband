@@ -1805,7 +1805,7 @@ static errr init_other(void)
 	quark_init();
 
 	/* Message variables */
-	C_MAKE(message__ptr, MESSAGE_MAX, u16b);
+	C_MAKE(message__ptr, MESSAGE_MAX, u32b);
 	C_MAKE(message__buf, MESSAGE_BUF, char);
 
 	/* Hack -- No messages yet */

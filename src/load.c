@@ -2369,20 +2369,40 @@ static void rd_messages(void)
 	int i;
 	char buf[128];
 
-	s16b num;
 
-	/* Total */
-	rd_s16b(&num);
-
-	/* Read the messages */
-	for (i = 0; i < num; i++)
+	if (h_older_than(2, 2, 0, 75))
 	{
-		/* Read the message */
-		rd_string(buf, sizeof(buf));
+		s16b num;
+		/* Total */
+		rd_s16b(&num);
 
-		/* Save the message */
-		message_add(buf);
+		/* Read the messages */
+		for (i = 0; i < num; i++)
+		{
+			/* Read the message */
+			rd_string(buf, sizeof(buf));
+
+			/* Save the message */
+			message_add(buf);
+		}
 	}
+	else
+	{
+		u32b num;
+		/* Total */
+		rd_u32b(&num);
+
+		/* Read the messages */
+		for (i = 0; i < num; i++)
+		{
+			/* Read the message */
+			rd_string(buf, sizeof(buf));
+
+			/* Save the message */
+			message_add(buf);
+		}
+	}
+
 }
 
 

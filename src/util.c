@@ -2423,7 +2423,7 @@ cptr quark_str(s16b i)
  * @brief 保存中の過去ゲームメッセージの数を返す。 / How many messages are "available"?
  * @return 残っているメッセージの数
  */
-s16b message_num(void)
+s32b message_num(void)
 {
 	int last, next, n;
 

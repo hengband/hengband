@@ -1268,6 +1268,7 @@ static bool wr_savefile_new(void)
 
 	byte            tmp8u;
 	u16b            tmp16u;
+	u32b            tmp32u;
 
 
 	/* Compact the objects */
@@ -1357,12 +1358,12 @@ static bool wr_savefile_new(void)
 
 
 	/* Dump the number of "messages" */
-	tmp16u = message_num();
-	if (compress_savefile && (tmp16u > 40)) tmp16u = 40;
-	wr_u16b(tmp16u);
+	tmp32u = message_num();
+	if (compress_savefile && (tmp32u > 40)) tmp32u = 40;
+	wr_u32b(tmp32u);
 
 	/* Dump the messages (oldest first!) */
-	for (i = tmp16u - 1; i >= 0; i--)
+	for (i = tmp32u - 1; i >= 0; i--)
 	{
 		wr_string(message_str((s16b)i));
 	}
