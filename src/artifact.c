@@ -12,6 +12,9 @@
 
 #include "angband.h"
 
+static int suppression_evil_dam(object_type *o_ptr);
+static int weakening_artifact(object_type *o_ptr);
+
 
 /* Chance of using syllables to form the name instead of the "template" files */
 #define SINDARIN_NAME   10 /*!< ランダムアーティファクトにシンダリン銘をつける確率 */
@@ -3928,54 +3931,54 @@ int calc_arm_avgdamage(object_type *o_ptr)
 	return(dam);
 }
 
-int suppression_evil_dam(object_type *o_ptr)
+static int suppression_evil_dam(object_type *o_ptr)
 {
-	int num = 0;
+	int num = FALSE;
 	u32b flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
 
-	if (o_ptr->art_flags, TR_VAMPIRIC)
+	if (have_flag(flgs, TR_VAMPIRIC))
 	{
 		if(have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(o_ptr) > 52))
 		{
-			num = 1;
+			num = TRUE;
 		}
 		else if(have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 43))
 		{
-			num = 1;
+			num = TRUE;
 		}
 		else if( have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 33))
 		{
-			num = 1;
+			num = TRUE;
 		}
 		else if (calc_arm_avgdamage(o_ptr) > 63)
 		{
-			num = 1;
+			num = TRUE;
 		}
 	}
 	else
 	{
 		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(o_ptr) > 65))
 		{
-			num = 1;
+			num = TRUE;
 		}
 		else if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 52))
 		{
-		num = 1;
+			num = TRUE;
 		}
 		else if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 40))
 		{
-		num = 1;
+			num = TRUE;
 		}
 		else if (calc_arm_avgdamage(o_ptr) > 75)
 		{
-		num = 1;
+			num = TRUE;
 		}
 	}
 	return(num);
 }
 
-int weakening_artifact(object_type *o_ptr)
+static int weakening_artifact(object_type *o_ptr)
 {
 	 int k_idx = lookup_kind(o_ptr->sval, o_ptr->tval);
 	 object_kind *k_ptr = &k_info[k_idx];
