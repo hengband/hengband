@@ -2754,7 +2754,7 @@ static int hit_chance(int to_h, int ac)
 	if (chance > 95) chance = 95;
 	if (chance < 5) chance = 5;
 	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
-		chance = (chance*19+9)/20;
+		chance = (chance * 19 + 9) / 20;
 	return chance;
 }
 

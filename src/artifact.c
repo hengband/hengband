@@ -151,16 +151,16 @@ void one_low_esp(object_type *o_ptr)
 {
 	switch (randint1(10))
 	{
-	case 1:  add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);   break;
-	case 2:  add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);   break;
-	case 3:  add_flag(o_ptr->art_flags, TR_ESP_DEMON);   break;
-	case 4:  add_flag(o_ptr->art_flags, TR_ESP_ORC);   break;
-	case 5:  add_flag(o_ptr->art_flags, TR_ESP_TROLL);   break;
-	case 6:  add_flag(o_ptr->art_flags, TR_ESP_GIANT);   break;
-	case 7:  add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
-	case 8:  add_flag(o_ptr->art_flags, TR_ESP_HUMAN);   break;
-	case 9:  add_flag(o_ptr->art_flags, TR_ESP_GOOD);   break;
-	case 10: add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);   break;
+		case 1:  add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);   break;
+		case 2:  add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);   break;
+		case 3:  add_flag(o_ptr->art_flags, TR_ESP_DEMON);   break;
+		case 4:  add_flag(o_ptr->art_flags, TR_ESP_ORC);   break;
+		case 5:  add_flag(o_ptr->art_flags, TR_ESP_TROLL);   break;
+		case 6:  add_flag(o_ptr->art_flags, TR_ESP_GIANT);   break;
+		case 7:  add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
+		case 8:  add_flag(o_ptr->art_flags, TR_ESP_HUMAN);   break;
+		case 9:  add_flag(o_ptr->art_flags, TR_ESP_GOOD);   break;
+		case 10: add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);   break;
 	}
 }
 
@@ -1138,12 +1138,12 @@ static void random_misc(object_type * o_ptr)
 			int idx[3];
 			int n = randint1(3);
 
-			idx[0] = randint1(8);
+			idx[0] = randint1(10);
 
-			idx[1] = randint1(7);
+			idx[1] = randint1(9);
 			if (idx[1] >= idx[0]) idx[1]++;
 
-			idx[2] = randint1(6);
+			idx[2] = randint1(8);
 			if (idx[2] >= idx[0]) idx[2]++;
 			if (idx[2] >= idx[1]) idx[2]++;
 
@@ -1174,16 +1174,19 @@ static void random_misc(object_type * o_ptr)
 				add_flag(o_ptr->art_flags, TR_ESP_GIANT);
 				break;
 			case 7:
+				add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
+				break;
+			case 8:
 				add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
 				if (!artifact_bias && one_in_(6))
 					artifact_bias = BIAS_ROGUE;
 				break;
-			case 8:
+			case 9:
 				add_flag(o_ptr->art_flags, TR_ESP_GOOD);
 				if (!artifact_bias && one_in_(3))
 					artifact_bias = BIAS_LAW;
 				break;
-			case 9:
+			case 10:
 				add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
 				if (!artifact_bias && one_in_(3))
 					artifact_bias = BIAS_LAW;
