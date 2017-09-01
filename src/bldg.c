@@ -3347,7 +3347,7 @@ static int repair_broken_weapon_aux(int bcost)
 	if (dd_bonus > 0)
 	{
 		o_ptr->dd++;
-		for (i = 0; i < dd_bonus; i++)
+		for (i = 1; i < dd_bonus; i++)
 		{
 			if (one_in_(o_ptr->dd + i)) o_ptr->dd++;
 		}
@@ -3355,7 +3355,7 @@ static int repair_broken_weapon_aux(int bcost)
 	if (ds_bonus > 0)
 	{
 		o_ptr->ds++;
-		for (i = 0; i < ds_bonus; i++)
+		for (i = 1; i < ds_bonus; i++)
 		{
 			if (one_in_(o_ptr->ds + i)) o_ptr->ds++;
 		}
