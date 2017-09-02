@@ -3912,20 +3912,23 @@ int calc_arm_avgdamage(object_type *o_ptr)
 	{	
 		dam = s_evil = dam * 2;
 	}
+	else s_evil = dam;
 
 	if (have_flag(flgs, TR_FORCE_WEAPON))
 	{
 		dam = forced = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
 	}
+	else forced = dam;
 
 	if(have_flag(flgs, TR_VORPAL))
 	{
 		dam = vorpal = dam * 11 / 9;
 	}
+	else vorpal = dam;
 
 	dam = dam + o_ptr->to_d;
 
-	if (cheat_xtra) msg_format("素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d",
+	msg_format_wizard(CHEAT_OBJECT,"素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d",
 		base, s_evil, forced, vorpal, dam);
 
 	return(dam);
@@ -3997,11 +4000,9 @@ static int weakening_artifact(object_type *o_ptr)
 			o_ptr->ds--;
 		}
 
-		if (cheat_xtra)
-		{
-			msg_format("Dice Supress %dd%d -> %dd%d",
-				pre_dd, pre_ds, o_ptr->dd, o_ptr->ds);
-		}
+		msg_format_wizard(CHEAT_OBJECT, 
+			_("ダイスが抑制されました。%dd%d -> %dd%d", "Dice Supress %dd%d -> %dd%d"),
+			pre_dd, pre_ds, o_ptr->dd, o_ptr->ds);
 		return 1;
 	}
 	
@@ -4015,11 +4016,9 @@ static int weakening_artifact(object_type *o_ptr)
 			o_ptr->to_d = 10;
 		}
 
-		if (cheat_xtra)
-		{
-			msg_format("Plus-Damage Supress %d -> %d",
-				pre_damage, o_ptr->to_d);
-		}
+		msg_format_wizard(CHEAT_OBJECT,
+			_("ダメージ修正が抑制されました。 %d -> %d", "Plus-Damage Supress %d -> %d"),
+			pre_damage, o_ptr->to_d);
 
 		return 1;
 	 }
