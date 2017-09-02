@@ -2030,7 +2030,7 @@ bool load_player(void)
 
 	/* Message */
 #ifdef JP
-	msg_format("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込中に発生。",
+	msg_format("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。",
 		   what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);
 #else
 	msg_format("Error (%s) reading %d.%d.%d savefile.",

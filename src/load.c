@@ -2372,9 +2372,9 @@ static void rd_messages(void)
 
 	if (h_older_than(2, 2, 0, 75))
 	{
-		s16b num;
+		u16b num;
 		/* Total */
-		rd_s16b(&num);
+		rd_u16b(&num);
 
 		/* Read the messages */
 		for (i = 0; i < num; i++)
@@ -3298,12 +3298,6 @@ static errr rd_savefile_new_aux(void)
 #endif
 
 
-	/* Mention the savefile version */
-	note(format(
-		     _("バージョン %d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d savefile..."),
-		     (z_major > 9) ? z_major - 10 : z_major, z_minor, z_patch));
-
-
 	/* Strip the version bytes */
 	strip_bytes(4);
 
@@ -3321,6 +3315,12 @@ static errr rd_savefile_new_aux(void)
 	rd_byte(&h_ver_patch);
 	rd_byte(&h_ver_minor);
 	rd_byte(&h_ver_major);
+
+	/* Mention the savefile version */
+	note(format(
+		_("バージョン %d.%d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d.%d savefile..."),
+		(h_ver_major > 9) ? h_ver_major - 10 : h_ver_major, h_ver_minor, h_ver_patch, h_ver_extra));
+
 
 	/* Operating system info */
 	rd_u32b(&sf_system);
