@@ -1437,6 +1437,7 @@ static void rd_options(void)
 	cheat_live = (c & 0x2000) ? TRUE : FALSE;
 	cheat_save = (c & 0x4000) ? TRUE : FALSE;
 	cheat_diary_output = (c & 0x8000) ? TRUE : FALSE;
+	cheat_turn = (c & 0x0080) ? TRUE : FALSE;
 
 	rd_byte((byte *)&autosave_l);
 	rd_byte((byte *)&autosave_t);

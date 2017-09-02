@@ -1387,7 +1387,7 @@ void do_cmd_messages(int num_now)
 /*!
  * チートオプションの最大数 / Number of cheating options
  */
-#define CHEAT_MAX 8
+#define CHEAT_MAX 9
 
 /*!
  * チーとオプションの定義テーブル / Cheating options
@@ -1424,6 +1424,10 @@ static option_type cheat_info[CHEAT_MAX] =
 
 	{ &cheat_diary_output,	FALSE,	255,	0x80, 0x00,
 		"cheat_diary_output",	_("ウィザードログを日記に出力する", "Output wizard log to diary.")
+	},
+
+	{ &cheat_turn,	FALSE,	255,	0x81, 0x00,
+		"cheat_turn",	_("ゲームメッセージにターン表示を行う", "Put turn to game message.")
 	}
 
 

@@ -3363,6 +3363,8 @@ static void player_wipe_without_name(void)
 	cheat_know = FALSE;
 	cheat_live = FALSE;
 	cheat_save = FALSE;
+	cheat_diary_output = FALSE;
+	cheat_turn = FALSE;
 
 	/* Assume no winning game */
 	p_ptr->total_winner = FALSE;
