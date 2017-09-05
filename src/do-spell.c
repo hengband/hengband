@@ -526,6 +526,7 @@ static void wild_magic(int spell)
 		break;
 	case 16: case 17:
 		wall_breaker();
+		break;
 	case 18:
 		sleep_monsters_touch();
 		break;
