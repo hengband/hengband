@@ -1208,7 +1208,7 @@ static cptr do_life_spell(int spell, int mode)
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_ball_hide(GF_WOUNDS, dir, damroll(sides, dice), 0);
+				fire_ball_hide(GF_WOUNDS, dir, damroll(dice, sides), 0);
 			}
 		}
 		break;
@@ -3547,7 +3547,7 @@ static cptr do_death_spell(int spell, int mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_OLD_DRAIN, dir, damroll(dice, dice) + base, rad);
+				fire_ball(GF_OLD_DRAIN, dir, damroll(dice, sides) + base, rad);
 			}
 		}
 		break;
@@ -6086,7 +6086,7 @@ static cptr do_daemon_spell(int spell, int mode)
 
 			if (cast)
 			{
-				set_tim_esp(randint1(base) + sides, FALSE);
+				set_tim_esp(randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -6621,7 +6621,7 @@ static cptr do_crusade_spell(int spell, int mode)
 
 			if (cast)
 			{
-				set_protevil(randint1(sides) + sides, FALSE);
+				set_protevil(randint1(sides) + base, FALSE);
 			}
 		}
 		break;
