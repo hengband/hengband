@@ -2833,9 +2833,6 @@ void msg_print(cptr msg)
 
 	if (world_monster) return;
 
-	/* No message */
-	if (!msg) return;
-
 	/* Copy it */
 	if(!cheat_turn)
 	{
@@ -2871,6 +2868,9 @@ void msg_print(cptr msg)
 		/* Reset */
 		p = 0;
 	}
+
+	/* No message */
+	if (!msg) return;
 
 	/* Memorize the message */
 	if (character_generated) message_add(buf);
