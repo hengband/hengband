@@ -2833,16 +2833,6 @@ void msg_print(cptr msg)
 
 	if (world_monster) return;
 
-	/* Copy it */
-	if(!cheat_turn)
-	{
-		strcpy(buf, msg);
-	}
-	else
-	{
-		sprintf(buf,("T:%d - %s"), turn, msg);
-	}
-
 	/* Hack -- Reset */
 	if (!msg_flag) {
 		/* Clear the line */
@@ -2850,14 +2840,11 @@ void msg_print(cptr msg)
 		p = 0;
 	}
 
-	/* Message Length */
-	n = (buf ? strlen(buf) : 0);
-
-	/* Paranoia */
-	if (n > 1000) return;
+	/* Original Message Length */
+	n = (msg ? strlen(msg) : 0);
 
 	/* Hack -- flush when requested or needed */
-	if (p && (!buf || ((p + n) > 72)))
+	if (p && (!msg || ((p + n) > 72)))
 	{
 		/* Flush */
 		msg_flush(p);
@@ -2871,6 +2858,22 @@ void msg_print(cptr msg)
 
 	/* No message */
 	if (!msg) return;
+
+	/* Paranoia */
+	if (n > 1000) return;
+
+	/* Copy it */
+	if (!cheat_turn)
+	{
+		strcpy(buf, msg);
+	}
+	else
+	{
+		sprintf(buf, ("T:%d - %s"), turn, msg);
+	}
+
+	/* New Message Length */
+	n = (buf ? strlen(buf) : 0);
 
 	/* Memorize the message */
 	if (character_generated) message_add(buf);
