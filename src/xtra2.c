@@ -2914,6 +2914,7 @@ static void target_set_prepare(int mode)
 		temp_x[1] = tmp;
 	}
 }
+
 void target_set_prepare_look(){
 	target_set_prepare(TARGET_LOOK);
 }

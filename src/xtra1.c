@@ -1864,7 +1864,7 @@ static void fix_monster_list(void)
 
 		Term_clear();
 
-		target_set_prepare_look();//モンスター一覧を生成，ソート
+		target_set_prepare_look(); //モンスター一覧を生成，ソート
 		print_monster_list(0, 0, h);
 
 		/* Fresh */
