@@ -95,7 +95,7 @@ static void perturb_point_mid(int x1, int x2, int x3, int x4,
 	if (avg > depth_max) avg = depth_max;
 
 	/* Set the new value. */
-	cave[ymid][xmid].feat = avg;
+	cave[ymid][xmid].feat = (s16b)avg;
 }
 
 
@@ -131,7 +131,7 @@ static void perturb_point_end(int x1, int x2, int x3,
 	if (avg > depth_max) avg = depth_max;
 
 	/* Set the new value. */
-	cave[ymid][xmid].feat = avg;
+	cave[ymid][xmid].feat = (s16b)avg;
 }
 
 
@@ -253,10 +253,10 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 	 * ToDo: calculate the medium height of the adjacent
 	 * terrains for every corner.
 	 */
-	cave[1][1].feat = randint0(table_size);
-	cave[MAX_HGT-2][1].feat = randint0(table_size);
-	cave[1][MAX_WID-2].feat = randint0(table_size);
-	cave[MAX_HGT-2][MAX_WID-2].feat = randint0(table_size);
+	cave[1][1].feat = (s16b)randint0(table_size);
+	cave[MAX_HGT-2][1].feat = (s16b)randint0(table_size);
+	cave[1][MAX_WID-2].feat = (s16b)randint0(table_size);
+	cave[MAX_HGT-2][MAX_WID-2].feat = (s16b)randint0(table_size);
 
 	if (!corner)
 	{
@@ -320,7 +320,7 @@ static void generate_area(int y, int x, bool border, bool corner)
 	int x1, y1;
 
 	/* Number of the town (if any) */
-	p_ptr->town_num = wilderness[y][x].town;
+	p_ptr->town_num = (s16b)wilderness[y][x].town;
 
 	/* Set the base level */
 	base_level = wilderness[y][x].level;
@@ -625,8 +625,8 @@ void wilderness_gen(void)
 					if ((f_ptr->subtype == 4) || ((p_ptr->town_num == 1) && (f_ptr->subtype == 0)))
 					{
 						if (c_ptr->m_idx) delete_monster_idx(c_ptr->m_idx);
-						p_ptr->oldpy = y;
-						p_ptr->oldpx = x;
+						p_ptr->oldpy = (s16b)y;
+						p_ptr->oldpx = (s16b)x;
 					}
 				}
 			}
@@ -646,8 +646,8 @@ void wilderness_gen(void)
 				if (cave_have_flag_grid(c_ptr, FF_ENTRANCE))
 				{
 					if (c_ptr->m_idx) delete_monster_idx(c_ptr->m_idx);
-					p_ptr->oldpy = y;
-					p_ptr->oldpx = x;
+					p_ptr->oldpy = (s16b)y;
+					p_ptr->oldpx = (s16b)x;
 				}
 			}
 		}
@@ -693,7 +693,7 @@ static s16b conv_terrain2feat[MAX_WILDERNESS];
  * Build the wilderness area. -DG-
  * @return なし
  */
-void wilderness_gen_small()
+void wilderness_gen_small(void)
 {
 	int i, j;
 
@@ -713,8 +713,8 @@ void wilderness_gen_small()
 	{
 		if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN))
 		{
-			cave[j][i].feat = feat_town;
-			cave[j][i].special = wilderness[j][i].town;
+			cave[j][i].feat = (s16b)feat_town;
+			cave[j][i].special = (s16b)wilderness[j][i].town;
 		}
 		else if (wilderness[j][i].road) cave[j][i].feat = feat_floor;
 		else if (wilderness[j][i].entrance && (p_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER)))
@@ -809,7 +809,7 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 				w_letter[index].terrain = 0;
 			
 			if (num > 2)
-				w_letter[index].level = atoi(zz[2]);
+				w_letter[index].level = (s16b)atoi(zz[2]);
 			else
 				w_letter[index].level = 0;
 			
@@ -819,7 +819,7 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 				w_letter[index].town = 0;
 			
 			if (num > 4)
-				w_letter[index].road = atoi(zz[4]);
+				w_letter[index].road = (byte_hack)atoi(zz[4]);
 			else
 				w_letter[index].road = 0;
 			
@@ -903,7 +903,7 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 	for (i = 1; i < max_d_idx; i++)
 	{
 		if (!d_info[i].maxdepth) continue;
-		wilderness[d_info[i].dy][d_info[i].dx].entrance = i;
+		wilderness[d_info[i].dy][d_info[i].dx].entrance = (byte_hack)i;
 		if (!wilderness[d_info[i].dy][d_info[i].dx].town)
 			wilderness[d_info[i].dy][d_info[i].dx].level = d_info[i].mindepth;
 	}
@@ -1180,8 +1180,8 @@ bool change_wild_mode(void)
 	p_ptr->energy_use = 1000;
 
 	/* Remember the position */
-	p_ptr->oldpx = p_ptr->x;
-	p_ptr->oldpy = p_ptr->y;
+	p_ptr->oldpx = (s16b)p_ptr->x;
+	p_ptr->oldpy = (s16b)p_ptr->y;
 
 	/* Cancel hex spelling */
 	if (hex_spelling_any()) stop_hex_spell_all();
