@@ -535,12 +535,12 @@ void Term_queue_char(int x, int y, byte a, char c, byte ta, char tc)
 	*scr_tcc = tc;
 
 	/* Check for new min/max row info */
-	if (y < Term->y1) Term->y1 = y;
-	if (y > Term->y2) Term->y2 = y;
+	if (y < Term->y1) Term->y1 = (byte_hack)y;
+	if (y > Term->y2) Term->y2 = (byte_hack)y;
 
 	/* Check for new min/max col info for this row */
-	if (x < Term->x1[y]) Term->x1[y] = x;
-	if (x > Term->x2[y]) Term->x2[y] = x;
+	if (x < Term->x1[y]) Term->x1[y] = (byte_hack)x;
+	if (x > Term->x2[y]) Term->x2[y] = (byte_hack)x;
 
 #ifdef JP
 	if (((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2) ||
@@ -695,12 +695,12 @@ void Term_queue_line(int x, int y, int n, byte *a, char *c, byte *ta, char *tc)
 	if (x1 >= 0)
 	{
 		/* Check for new min/max row info */
-		if (y < Term->y1) Term->y1 = y;
-		if (y > Term->y2) Term->y2 = y;
+		if (y < Term->y1) Term->y1 = (byte_hack)y;
+		if (y > Term->y2) Term->y2 = (byte_hack)y;
 
 		/* Check for new min/max col info in this row */
-		if (x1 < Term->x1[y]) Term->x1[y] = x1;
-		if (x2 > Term->x2[y]) Term->x2[y] = x2;
+		if (x1 < Term->x1[y]) Term->x1[y] = (byte_hack)x1;
+		if (x2 > Term->x2[y]) Term->x2[y] = (byte_hack)x2;
 	}
 }
 
@@ -828,12 +828,12 @@ void Term_queue_chars(int x, int y, int n, byte a, cptr s)
 	if (x1 >= 0)
 	{
 		/* Check for new min/max row info */
-		if (y < Term->y1) Term->y1 = y;
-		if (y > Term->y2) Term->y2 = y;
+		if (y < Term->y1) Term->y1 = (byte_hack)y;
+		if (y > Term->y2) Term->y2 = (byte_hack)y;
 
 		/* Check for new min/max col info in this row */
-		if (x1 < Term->x1[y]) Term->x1[y] = x1;
-		if (x2 > Term->x2[y]) Term->x2[y] = x2;
+		if (x1 < Term->x1[y]) Term->x1[y] = (byte_hack)x1;
+		if (x2 > Term->x2[y]) Term->x2[y] = (byte_hack)x2;
 	}
 }
 
@@ -1692,7 +1692,7 @@ errr Term_fresh(void)
 				}
 
 				/* This row is all done */
-				Term->x1[y] = w;
+				Term->x1[y] = (byte_hack)w;
 				Term->x2[y] = 0;
 
 				/* Hack -- Flush that row (if allowed) */
@@ -1701,7 +1701,7 @@ errr Term_fresh(void)
 		}
 
 		/* No rows are invalid */
-		Term->y1 = h;
+		Term->y1 = (byte_hack)h;
 		Term->y2 = 0;
 	}
 
@@ -1796,7 +1796,7 @@ errr Term_set_cursor(int v)
 	if (Term->scr->cv == v) return (1);
 
 	/* Change */
-	Term->scr->cv = v;
+	Term->scr->cv = (bool_hack)v;
 
 	/* Success */
 	return (0);
@@ -1818,8 +1818,8 @@ errr Term_gotoxy(int x, int y)
 	if ((y < 0) || (y >= h)) return (-1);
 
 	/* Remember the cursor */
-	Term->scr->cx = x;
-	Term->scr->cy = y;
+	Term->scr->cx = (byte_hack)x;
+	Term->scr->cy = (byte_hack)y;
 
 	/* The cursor is not useless */
 	Term->scr->cu = 0;
@@ -1975,7 +1975,7 @@ errr Term_addstr(int n, byte a, cptr s)
 	Term_queue_chars(Term->scr->cx, Term->scr->cy, n, a, s);
 
 	/* Advance the cursor */
-	Term->scr->cx += n;
+	Term->scr->cx += (byte_hack)n;
 
 	/* Hack -- Notice "Useless" cursor */
 	if (res) Term->scr->cu = 1;
@@ -2124,8 +2124,8 @@ errr Term_erase(int x, int y, int n)
 			n++;
 #endif
 		/* Save the "literal" information */
-		scr_aa[x] = na;
-		scr_cc[x] = nc;
+		scr_aa[x] = (byte_hack)na;
+		scr_cc[x] = (char)nc;
 
 		scr_taa[x] = 0;
 		scr_tcc[x] = 0;
@@ -2141,12 +2141,12 @@ errr Term_erase(int x, int y, int n)
 	if (x1 >= 0)
 	{
 		/* Check for new min/max row info */
-		if (y < Term->y1) Term->y1 = y;
-		if (y > Term->y2) Term->y2 = y;
+		if (y < Term->y1) Term->y1 = (byte_hack)y;
+		if (y > Term->y2) Term->y2 = (byte_hack)y;
 
 		/* Check for new min/max col info in this row */
-		if (x1 < Term->x1[y]) Term->x1[y] = x1;
-		if (x2 > Term->x2[y]) Term->x2[y] = x2;
+		if (x1 < Term->x1[y]) Term->x1[y] = (byte_hack)x1;
+		if (x2 > Term->x2[y]) Term->x2[y] = (byte_hack)x2;
 	}
 
 	/* Success */
@@ -2246,8 +2246,8 @@ errr Term_redraw_section(int x1, int y1, int x2, int y2)
 	if (x1 < 0) x1 = 0;
 
 	/* Set y limits */
-	Term->y1 = y1;
-	Term->y2 = y2;
+	Term->y1 = (byte_hack)y1;
+	Term->y2 = (byte_hack)y2;
 
 	/* Set the x limits */
 	for (i = Term->y1; i <= Term->y2; i++)
@@ -2266,8 +2266,8 @@ errr Term_redraw_section(int x1, int y1, int x2, int y2)
 			if (Term->scr->a[i][x2j] & AF_KANJI1) x2j++;
 		}
    
-		Term->x1[i] = x1j;
-		Term->x2[i] = x2j;
+		Term->x1[i] = (byte_hack)x1j;
+		Term->x2[i] = (byte_hack)x2j;
    
 		c_ptr = Term->old->c[i];
    
@@ -2401,7 +2401,7 @@ errr Term_keypress(int k)
 	if (!k) return (-1);
 
 	/* Store the char, advance the queue */
-	Term->key_queue[Term->key_head++] = k;
+	Term->key_queue[Term->key_head++] = (char)k;
 
 	/* Circular queue, handle wrap */
 	if (Term->key_head == Term->key_size) Term->key_head = 0;
@@ -2431,7 +2431,7 @@ errr Term_key_push(int k)
 	if (Term->key_tail == 0) Term->key_tail = Term->key_size;
 
 	/* Back up, Store the char */
-	Term->key_queue[--Term->key_tail] = k;
+	Term->key_queue[--Term->key_tail] = (char)k;
 
 	/* Success (unless overflow) */
 	if (Term->key_head != Term->key_tail) return (0);
@@ -2782,8 +2782,8 @@ errr Term_resize(int w, int h)
 	}
 
 	/* Save new size */
-	Term->wid = w;
-	Term->hgt = h;
+	Term->wid = (byte_hack)w;
+	Term->hgt = (byte_hack)h;
 
 	/* Force "total erase" */
 	Term->total_erase = TRUE;
@@ -2940,15 +2940,15 @@ errr term_init(term *t, int w, int h, int k)
 	t->key_head = t->key_tail = 0;
 
 	/* Determine the input queue size */
-	t->key_size = k;
+	t->key_size = (u16b)k;
 
 	/* Allocate the input queue */
 	C_MAKE(t->key_queue, t->key_size, char);
 
 
 	/* Save the size */
-	t->wid = w;
-	t->hgt = h;
+	t->wid = (byte_hack)w;
+	t->hgt = (byte_hack)h;
 
 	/* Allocate change arrays */
 	C_MAKE(t->x1, h, byte);

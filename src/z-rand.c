@@ -362,7 +362,7 @@ s16b randnor(int mean, int stand)
 	s16b high = RANDNOR_NUM;
 
 	/* Paranoia */
-	if (stand < 1) return (mean);
+	if (stand < 1) return (s16b)(mean);
 
 	/* Roll for probability */
 	tmp = (s16b)randint0(32768);
@@ -381,7 +381,7 @@ s16b randnor(int mean, int stand)
 		/* Move left otherwise */
 		else
 		{
-			high = mid;
+			high = (s16b)mid;
 		}
 	}
 
@@ -404,7 +404,7 @@ s16b damroll(int num, int sides)
 {
 	int i, sum = 0;
 	for (i = 0; i < num; i++) sum += randint1(sides);
-	return (sum);
+	return (s16b)(sum);
 }
 
 
@@ -463,7 +463,7 @@ s32b Rand_external(s32b m)
 	if (!initialized)
 	{
 		/* Initialize with new seed */
-		u32b seed = time(NULL);
+		u32b seed = (u32b)time(NULL);
 		Rand_Xorshift_seed(seed, Rand_state_external);
 		initialized = TRUE;
 	}

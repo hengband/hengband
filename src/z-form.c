@@ -466,7 +466,7 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				arg = va_arg(vp, int);
 
 				/* Format the argument */
-				sprintf(tmp, aux, arg);
+				sprintf(tmp, "%c", arg);
 
 				/* Done */
 				break;
@@ -483,7 +483,7 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 					arg = va_arg(vp, long);
 
 					/* Format the argument */
-					sprintf(tmp, aux, arg);
+					sprintf(tmp, "%ld", arg);
 				}
 				else
 				{
@@ -493,7 +493,7 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 					arg = va_arg(vp, int);
 
 					/* Format the argument */
-					sprintf(tmp, aux, arg);
+					sprintf(tmp, "%d", arg);
 				}
 
 				/* Done */
@@ -511,7 +511,25 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 					arg = va_arg(vp, unsigned long);
 
 					/* Format the argument */
-					sprintf(tmp, aux, arg);
+					switch (aux[q-1])
+					{
+						case 'u':
+							sprintf(tmp, "%lu", arg);
+							break;
+						case 'o':
+							sprintf(tmp, "%lo", arg);
+							break;
+						case 'x':
+							sprintf(tmp, "%lx", arg);
+							break;
+						case 'X':
+							sprintf(tmp, "%lX", arg);
+							break;
+						default:
+							sprintf(tmp, "");
+							break;
+					}
+
 				}
 				else
 				{
@@ -521,7 +539,24 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 					arg = va_arg(vp, unsigned int);
 
 					/* Format the argument */
-					sprintf(tmp, aux, arg);
+					switch (aux[q - 1])
+					{
+					case 'u':
+						sprintf(tmp, "%u", arg);
+						break;
+					case 'o':
+						sprintf(tmp, "%o", arg);
+						break;
+					case 'x':
+						sprintf(tmp, "%x", arg);
+						break;
+					case 'X':
+						sprintf(tmp, "%X", arg);
+						break;
+					default:
+						sprintf(tmp, "");
+						break;
+					}
 				}
 
 				/* Done */
@@ -539,7 +574,27 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				arg = va_arg(vp, double);
 
 				/* Format the argument */
-				sprintf(tmp, aux, arg);
+				switch (aux[q - 1])
+				{
+				case 'f':
+					sprintf(tmp, "%f", arg);
+					break;
+				case 'e':
+					sprintf(tmp, "%e", arg);
+					break;
+				case 'E':
+					sprintf(tmp, "%E", arg);
+					break;
+				case 'g':
+					sprintf(tmp, "%g", arg);
+					break;
+				case 'G':
+					sprintf(tmp, "%G", arg);
+					break;
+				default:
+					sprintf(tmp, aux, arg);
+					break;
+				}
 
 				/* Done */
 				break;
@@ -554,7 +609,7 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				arg = va_arg(vp, vptr);
 
 				/* Format the argument */
-				sprintf(tmp, aux, arg);
+				sprintf(tmp, "%p", arg);
 
 				/* Done */
 				break;
@@ -577,7 +632,7 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				arg2[1023] = '\0';
 
 				/* Format the argument */
-				sprintf(tmp, aux, arg2);
+				sprintf(tmp, "%s", arg2);
 
 				/* Done */
 				break;
@@ -593,7 +648,7 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				arg = va_arg(vp, vptr);
 
 				/* Format the "user data" */
-				(void)vstrnfmt_aux(tmp, 1000, aux, arg);
+				(void)vstrnfmt_aux(tmp, 1000, aux[q-1] == 'V' ? "%V" : "%v", arg);
 
 				/* Done */
 				break;
@@ -626,7 +681,7 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				{
 					/* Capitalize if possible */
 					if (islower(tmp[q]))
-						tmp[q] = toupper(tmp[q]);
+						tmp[q] = (char)toupper(tmp[q]);
 
 					/* Done */
 					break;
