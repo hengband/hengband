@@ -120,10 +120,10 @@ static bool set_gametime(void)
 	char ppp[80], tmp_val[40];
 
 	/* Prompt */
-	sprintf(ppp, "Dungeon Turn (0-%d): ", dungeon_turn_limit);
+	sprintf(ppp, "Dungeon Turn (0-%ld): ", dungeon_turn_limit);
 
 	/* Default */
-	sprintf(tmp_val, "%d", dungeon_turn);
+	sprintf(tmp_val, "%ld", dungeon_turn);
 
 	/* Query */
 	if (!get_string(ppp, tmp_val, 10)) return (FALSE);
@@ -349,7 +349,7 @@ static void do_cmd_wiz_reset_class(void)
 	if (tmp_int < 0 || tmp_int >= MAX_CLASS) return;
 
 	/* Save it */
-	p_ptr->pclass = tmp_int;
+	p_ptr->pclass = (byte_hack)tmp_int;
 
 	/* Redraw inscription */
 	p_ptr->window |= (PW_PLAYER);
@@ -410,7 +410,7 @@ static void do_cmd_wiz_change_aux(void)
 		else if (tmp_int < 3) tmp_int = 3;
 
 		/* Save it */
-		p_ptr->stat_cur[i] = p_ptr->stat_max[i] = tmp_int;
+		p_ptr->stat_cur[i] = p_ptr->stat_max[i] = (s16b)tmp_int;
 	}
 
 
@@ -421,7 +421,7 @@ static void do_cmd_wiz_change_aux(void)
 	if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 9)) return;
 
 	/* Extract */
-	tmp_s16b = atoi(tmp_val);
+	tmp_s16b = (s16b)atoi(tmp_val);
 
 	/* Verify */
 	if (tmp_s16b < WEAPON_EXP_UNSKILLED) tmp_s16b = WEAPON_EXP_UNSKILLED;
@@ -860,25 +860,25 @@ static void wiz_tweak_item(object_type *o_ptr)
 	p = "Enter new 'pval' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->pval);
 	if (!get_string(p, tmp_val, 5)) return;
-	o_ptr->pval = atoi(tmp_val);
+	o_ptr->pval = (s16b)atoi(tmp_val);
 	wiz_display_item(o_ptr);
 
 	p = "Enter new 'to_a' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->to_a);
 	if (!get_string(p, tmp_val, 5)) return;
-	o_ptr->to_a = atoi(tmp_val);
+	o_ptr->to_a = (s16b)atoi(tmp_val);
 	wiz_display_item(o_ptr);
 
 	p = "Enter new 'to_h' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->to_h);
 	if (!get_string(p, tmp_val, 5)) return;
-	o_ptr->to_h = atoi(tmp_val);
+	o_ptr->to_h = (s16b)atoi(tmp_val);
 	wiz_display_item(o_ptr);
 
 	p = "Enter new 'to_d' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->to_d);
 	if (!get_string(p, tmp_val, 5)) return;
-	o_ptr->to_d = atoi(tmp_val);
+	o_ptr->to_d = (s16b)atoi(tmp_val);
 	wiz_display_item(o_ptr);
 }
 
@@ -1221,7 +1221,7 @@ static void wiz_quantity_item(object_type *o_ptr)
 		if (tmp_int > 99) tmp_int = 99;
 
 		/* Accept modifications */
-		o_ptr->number = tmp_int;
+		o_ptr->number = (byte_hack)tmp_int;
 	}
 
 	if (o_ptr->tval == TV_ROD)
@@ -1569,9 +1569,9 @@ static void do_cmd_wiz_jump(void)
 		if (!get_string(ppp, tmp_val, 10)) return;
 
 		/* Extract request */
-		command_arg = atoi(tmp_val);
+		command_arg = (s16b)atoi(tmp_val);
 
-		dungeon_type = tmp_dungeon_type;
+		dungeon_type = (byte_hack)tmp_dungeon_type;
 	}
 
 	/* Paranoia */
@@ -1809,7 +1809,7 @@ static void do_cmd_wiz_create_feature(void)
 	else if (tmp_mimic >= max_f_idx) tmp_mimic = max_f_idx - 1;
 
 	cave_set_feat(y, x, tmp_feat);
-	c_ptr->mimic = tmp_mimic;
+	c_ptr->mimic = (s16b)tmp_mimic;
 
 	f_ptr = &f_info[get_feat_mimic(c_ptr)];
 

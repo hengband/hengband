@@ -409,7 +409,7 @@ static void spoil_obj_desc(cptr fname)
 
 						if ((t1 > t2) || ((t1 == t2) && (e1 > e2)))
 						{
-							int tmp = who[i1];
+							u16b tmp = who[i1];
 							who[i1] = who[i2];
 							who[i2] = tmp;
 						}
@@ -455,7 +455,7 @@ static void spoil_obj_desc(cptr fname)
 			if (k_ptr->gen_flags & (TRG_INSTA_ART)) continue;
 
 			/* Save the index */
-			who[n++] = k;
+			who[n++] = (u16b)k;
 		}
 	}
 
@@ -1655,7 +1655,7 @@ static bool make_fake_artifact(object_type *o_ptr, int name1)
 	object_prep(o_ptr, i);
 
 	/* Save the name */
-	o_ptr->name1 = name1;
+	o_ptr->name1 = (byte_hack)name1;
 
 	/* Extract the fields */
 	o_ptr->pval = a_ptr->pval;
@@ -1817,7 +1817,7 @@ static void spoil_mon_desc(cptr fname)
 		monster_race *r_ptr = &r_info[i];
 
 		/* Use that monster */
-		if (r_ptr->name) who[n++] = i;
+		if (r_ptr->name) who[n++] = (s16b)i;
 	}
 
 	/* Select the sort method */
@@ -2154,7 +2154,7 @@ static void spoil_mon_info(cptr fname)
 		monster_race *r_ptr = &r_info[i];
 
 		/* Use that monster */
-		if (r_ptr->name) who[n++] = i;
+		if (r_ptr->name) who[n++] = (s16b)i;
 	}
 
 	/* Select the sort method */
