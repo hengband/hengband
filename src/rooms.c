@@ -486,8 +486,8 @@ static bool find_space(int *y, int *x, int height, int width)
 	/* Save the room location */
 	if (dun->cent_n < CENT_MAX)
 	{
-		dun->cent[dun->cent_n].y = *y;
-		dun->cent[dun->cent_n].x = *x;
+		dun->cent[dun->cent_n].y = (byte_hack)*y;
+		dun->cent[dun->cent_n].x = (byte_hack)*x;
 		dun->cent_n++;
 	}
 
@@ -2310,7 +2310,7 @@ static bool build_type5(void)
 		if (r_ptr->flags3 & RF3_EVIL) align.sub_align |= SUB_ALIGN_EVIL;
 		if (r_ptr->flags3 & RF3_GOOD) align.sub_align |= SUB_ALIGN_GOOD;
 
-		nest_mon_info[i].r_idx = r_idx;
+		nest_mon_info[i].r_idx = (s16b)r_idx;
 		nest_mon_info[i].used = FALSE;
 	}
 
@@ -3208,7 +3208,7 @@ static void store_height(int x, int y, int val)
 	    (val <= fill_data.c1)) val = fill_data.c1 + 1;
 
 	/* store the value in height-map format */
-	cave[y][x].feat = val;
+	cave[y][x].feat = (s16b)val;
 
 	return;
 }
@@ -3333,10 +3333,10 @@ static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug,
 	}
 
 	/* Boundaries are walls */
-	cave[fill_data.ymin][fill_data.xmin].feat = maxsize;
-	cave[fill_data.ymax][fill_data.xmin].feat = maxsize;
-	cave[fill_data.ymin][fill_data.xmax].feat = maxsize;
-	cave[fill_data.ymax][fill_data.xmax].feat = maxsize;
+	cave[fill_data.ymin][fill_data.xmin].feat = (s16b)maxsize;
+	cave[fill_data.ymax][fill_data.xmin].feat = (s16b)maxsize;
+	cave[fill_data.ymin][fill_data.xmax].feat = (s16b)maxsize;
+	cave[fill_data.ymax][fill_data.xmax].feat = (s16b)maxsize;
 
 	/* Set the middle square to be an open area. */
 	cave[y0][x0].feat = 0;
@@ -3488,14 +3488,14 @@ static bool hack_isnt_wall(int y, int x, int c1, int c2, int c3, int feat1, int 
 			/* 25% of the time use the other tile : it looks better this way */
 			if (randint1(100) < 75)
 			{
-				cave[y][x].feat = feat1;
+				cave[y][x].feat = (s16b)feat1;
 				cave[y][x].info &= ~(CAVE_MASK);
 				cave[y][x].info |= info1;
 				return TRUE;
 			}
 			else
 			{
-				cave[y][x].feat = feat2;
+				cave[y][x].feat = (s16b)feat2;
 				cave[y][x].info &= ~(CAVE_MASK);
 				cave[y][x].info |= info2;
 				return TRUE;
@@ -3506,14 +3506,14 @@ static bool hack_isnt_wall(int y, int x, int c1, int c2, int c3, int feat1, int 
 			/* 25% of the time use the other tile : it looks better this way */
 			if (randint1(100) < 75)
 			{
-				cave[y][x].feat = feat2;
+				cave[y][x].feat = (s16b)feat2;
 				cave[y][x].info &= ~(CAVE_MASK);
 				cave[y][x].info |= info2;
 				return TRUE;
 			}
 			else
 			{
-				cave[y][x].feat = feat1;
+				cave[y][x].feat = (s16b)feat1;
 				cave[y][x].info &= ~(CAVE_MASK);
 				cave[y][x].info |= info1;
 				return TRUE;
@@ -3521,7 +3521,7 @@ static bool hack_isnt_wall(int y, int x, int c1, int c2, int c3, int feat1, int 
 		}
 		else if (cave[y][x].feat <= c3)
 		{
-			cave[y][x].feat = feat3;
+			cave[y][x].feat = (s16b)feat3;
 			cave[y][x].info &= ~(CAVE_MASK);
 			cave[y][x].info |= info3;
 			return TRUE;
@@ -3596,8 +3596,8 @@ static void cave_fill(byte y, byte x)
 					fill_data.info1, fill_data.info2, fill_data.info3))
 				{
 					/* Enqueue that entry */
-					temp_y[flow_tail] = j;
-					temp_x[flow_tail] = i;
+					temp_y[flow_tail] = (byte_hack)j;
+					temp_x[flow_tail] = (byte_hack)i;
 
 					/* Advance the queue */
 					if (++flow_tail == TEMP_MAX) flow_tail = 0;
@@ -4348,8 +4348,8 @@ static void build_bubble_vault(int x0, int y0, int xsize, int ysize)
 			}
 		}
 
-		center[i].x = x;
-		center[i].y = y;
+		center[i].x = (byte_hack)x;
+		center[i].y = (byte_hack)y;
 	}
 
 
@@ -4383,8 +4383,8 @@ static void build_bubble_vault(int x0, int y0, int xsize, int ysize)
 			/* Get distances to two closest centers */
 
 			/* initialize */
-			min1 = distance(x, y, center[0].x, center[0].y);
-			min2 = distance(x, y, center[1].x, center[1].y);
+			min1 = (u16b)distance(x, y, center[0].x, center[0].y);
+			min2 = (u16b)distance(x, y, center[1].x, center[1].y);
 
 			if (min1 > min2)
 			{
@@ -4397,7 +4397,7 @@ static void build_bubble_vault(int x0, int y0, int xsize, int ysize)
 			/* Scan the rest */
 			for (i = 2; i < BUBBLENUM; i++)
 			{
-				temp = distance(x, y, center[i].x, center[i].y);
+				temp = (u16b)distance(x, y, center[i].x, center[i].y);
 
 				if (temp < min1)
 				{
