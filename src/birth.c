@@ -21,7 +21,7 @@
  * system may have problems because the user can't stop the
  * autoroller for this number of rolls.
  */
-#define AUTOROLLER_STEP 5431L
+#define AUTOROLLER_STEP 54321L
 
 #if 0
 /*!
@@ -2046,6 +2046,9 @@ static cptr realm_subinfo[VALID_REALM] =
 /*! オートローラの能力値的要求水準 / Autoroll limit */
 static s16b stat_limit[6];
 
+/*! オートローラの要求値実現確率 */
+static s32b autoroll_chance;
+
 /*! オートローラの年齢、身長、体重、社会的地位の要求水準 */
 static struct {
 	s16b agemin, agemax;
@@ -2054,11 +2057,20 @@ static struct {
 	s16b scmin, scmax;
 } chara_limit;
 
-/*! オートローラ中、各能力値が水準を超えた回数 / Autoroll matches */
-static s32b stat_match[6];
-
 /*! オートローラの試行回数 / Autoroll round */
 static s32b auto_round;
+static s32b auto_round2;
+
+/* emulate 5 + 1d3 + 1d4 + 1d5 by randint0(60) */
+const int rand3_4_5[60] = 
+{
+	 8,  9,  9,  9, 10, 10, 10, 10, 10, 10, /*00-09*/
+	11, 11, 11, 11, 11, 11, 11, 11, 11, 12, /*10-19*/
+	12, 12, 12, 12, 12, 12, 12, 12, 12, 12, /*20-29*/
+	13, 13, 13, 13, 13, 13, 13, 13, 13, 13, /*30-49*/
+	13, 14, 14, 14, 14, 14, 14, 14, 14, 14, /*40-49*/
+	15, 15, 15, 15, 15, 15, 16, 16, 16, 17  /*50-59*/
+};
 
 /*! 
  * @brief プレイヤー作成を中断して変愚蛮怒を終了する
@@ -2676,48 +2688,45 @@ static void get_stats(void)
 	while (TRUE)
 	{
 		int i;
+		int j = 0;
 		int sum = 0;
-
+		int val;
+		s32b tmp;
 		/* Roll some dice */
 		for (i = 0; i < 2; i++)
 		{
-			s32b tmp = randint0(60*60*60);
-			int val;
+			/* randint0(60*60*60) for 3 stats. */
+			tmp = randint0(216000);
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
-			val = 5 + 3;
-			val += tmp % 3; tmp /= 3;
-			val += tmp % 4; tmp /= 4;
-			val += tmp % 5; tmp /= 5;
+			val = rand3_4_5[tmp % 60];
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i] = p_ptr->stat_max[3*i] = val;
+			p_ptr->stat_cur[j] = p_ptr->stat_max[j] = val;
+			j++;
 
+			tmp /= 60;
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
-			val = 5 + 3;
-			val += tmp % 3; tmp /= 3;
-			val += tmp % 4; tmp /= 4;
-			val += tmp % 5; tmp /= 5;
+			val = rand3_4_5[tmp % 60];
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i+1] = p_ptr->stat_max[3*i+1] = val;
+			p_ptr->stat_cur[j] = p_ptr->stat_max[j] = val;
+			j++;
 
+			tmp /= 60;
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
-			val = 5 + 3;
-			val += tmp % 3; tmp /= 3;
-			val += tmp % 4; tmp /= 4;
-			val += tmp;
+			val = rand3_4_5[tmp];
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i+2] = p_ptr->stat_max[3*i+2] = val;
+			p_ptr->stat_cur[j] = p_ptr->stat_max[j] = val;
+			j++;
 		}
 
 		/* Verify totals */
-		if ((sum > 42+5*6) && (sum < 57+5*6)) break;
-		/* 57 was 54... I hate 'magic numbers' :< TY */
+		if ((sum > 72) && (sum < 87)) break;
 	}
 }
 
@@ -3165,15 +3174,14 @@ static void get_money(void)
  */
 static void birth_put_stats(void)
 {
-	int i, j, m, p;
+	int i, j, m;
 	int col;
-	byte attr;
 	char buf[80];
 
 
 	if (autoroller)
 	{
-		col = 42;
+		col = 22;
 		/* Put the stats (and percents) */
 		for (i = 0; i < 6; i++)
 		{
@@ -3186,35 +3194,6 @@ static void birth_put_stats(void)
 			/* Put the stat */
 			cnv_stat(m, buf);
 			c_put_str(TERM_L_GREEN, buf, 3+i, col+24);
-
-			/* Put the percent */
-			if (stat_match[i])
-			{
-				if (stat_match[i] > 1000000L)
-				{
-					/* Prevent overflow */
-					p = stat_match[i] / (auto_round / 1000L);
-				}
-				else
-				{
-					p = 1000L * stat_match[i] / auto_round;
-				}
-			
-				attr = (p < 100) ? TERM_YELLOW : TERM_L_GREEN;
-				sprintf(buf, "%3d.%d%%", p/10, p%10);
-				c_put_str(attr, buf, 3+i, col+13);
-			}
-
-			/* Never happened */
-			else
-			{
-#ifdef JP
-				c_put_str(TERM_RED, "(なし)", 3+i, col+13);
-#else
-				c_put_str(TERM_RED, "(NONE)", 3+i, col+13);
-#endif
-
-			}
 		}
 	}
 }
@@ -4807,6 +4786,83 @@ static bool get_player_seikaku(void)
 	return TRUE;
 }
 
+/*
+	calc. probability of satisfying the required status set
+	return : inverted prob. / 100
+*/
+static s32b get_autoroller_prob(int *minval){
+
+	/* 1 percent of the valid random space (60^6 && 72<sum<87) */
+	s32b tot_rand_1p = 320669745; 
+	int i, j, tmp;
+	int ii[6];
+	int tval[6];
+	int tot = 0;
+	/* success count */
+	s32b succ = 0;
+	/* random combinations out of 60 (1d3+1d4+1d5) patterns */
+	int pp[18] =
+	{
+		0, 0, 0, 0, 0, 0, 0, 0, 		/* 0-7 */
+		1, 3, 6, 9, 11, 11, 9, 6, 3, 1	/* 8-17 */
+	};
+
+	/* Copy */
+	for(i = 0; i < 6; i++)
+	{
+		tval[i] = MAX(8, minval[i]);
+		tot += tval[i];
+	}
+
+	/* No Chance */
+	if(tot > 86) return -999;
+
+	/* bubble sort for speed-up */
+	for(i = 0; i < 5; i++)
+	{
+		for(j = 5; j > i; j--)
+		{
+			if(tval[j-1] < tval[j])
+			{
+				tmp = tval[j-1];
+				tval[j-1] = tval[j];
+				tval[j] = tmp;
+			}
+		}
+	}
+
+	tot = 0;
+
+	/* calc. prob. */
+	for(ii[0] = tval[0]; ii[0] < 18; ii[0]++)
+	{
+		for(ii[1] = tval[1]; ii[1] < 18; ii[1]++)
+		{
+			for(ii[2] = tval[2]; ii[2] < 18; ii[2]++)
+			{
+				for(ii[3] = tval[3]; ii[3] < 18; ii[3]++)
+				{
+					for(ii[4] = tval[4]; ii[4] < 18; ii[4]++)
+					{
+						for(ii[5] = tval[5]; ii[5] < 18; ii[5]++)
+						{
+							tot = ii[0] + ii[1] + ii[2] + ii[3] + ii[4] + ii[5];
+							if(tot > 86) break;
+							if(tot <= 72) continue;
+							succ += ( pp[ii[0]] * pp[ii[1]] * pp[ii[2]] * pp[ii[3]] * pp[ii[4]] * pp[ii[5]] );
+							/* If given condition is easy enough, quit calc. to save CPU. */
+							if(succ > 320670) return -1; 
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return tot_rand_1p / succ;
+}
+
+
 #ifdef ALLOW_AUTOROLLER
 /*!
  * @brief オートローラで得たい能力値の基準を決める。
@@ -4838,11 +4894,15 @@ static bool get_stat_limits(void)
 	put_str("           Base   Rac  Cla  Per      Total  Maximum", 13, 10);
 #endif
 
+#ifdef JP
+	put_str("        確率: 非常に容易(1/10000以上)", 23, 10);
+#else
+	put_str("        Prob: Quite Easy(>1/10000)", 23, 10);
+#endif
 	/* Output the maximum stats */
 	for (i = 0; i < 6; i++)
 	{
 		/* Reset the "success" counter */
-		stat_match[i] = 0;
 		cval[i] = 3;
 
 		/* Race/Class bonus */
@@ -4911,7 +4971,22 @@ static bool get_stat_limits(void)
 		/* Move Cursol */
 		if (cs != os)
 		{
-			if(os == 6)
+			if(os == 7)
+			{
+				autoroll_chance = get_autoroller_prob(cval);
+
+#ifdef JP
+				if(autoroll_chance == -999) sprintf(buf, "        確率: 不可能(合計86超)       ");
+				else if(autoroll_chance < 1) sprintf(buf, "        確率: 非常に容易(1/10000以上)");
+				else sprintf(buf, "        確率: 約 1/%8d00          ", autoroll_chance);
+#else
+				if(autoroll_chance == -999) sprintf(buf, "        Prob: Impossible(>86 tot stats)");
+				else if(autoroll_chance < 1) sprintf(buf, "        Prob: Quite Easy(>1/10000)     ");
+				else sprintf(buf, "        Prob: ~ 1/%8d00            ", autoroll_chance);
+#endif
+				put_str(buf,23,10);
+			}
+			else if(os == 6)
 			{
 #ifdef JP
 				c_put_str(TERM_WHITE, "決定する", 21, 35);
@@ -5060,7 +5135,7 @@ static bool get_stat_limits(void)
 			bell();
 			break;
 		}
-		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6))break;
+		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6 && autoroll_chance != -999))break;
 	}
 	
 	for (i = 0; i < 6; i++)
@@ -6041,6 +6116,8 @@ static bool player_birth_aux(void)
 	{
 		/* Clear fields */
 		auto_round = 0L;
+		auto_round2 = 0L;
+		autoroll_chance = -1L;
 	}
 
 	/* Initialize */
@@ -6069,7 +6146,7 @@ static bool player_birth_aux(void)
 	{
 		int col;
 
-		col = 42;
+		col = 22;
 
 		if (autoroller || autochara)
 		{
@@ -6077,17 +6154,16 @@ static bool player_birth_aux(void)
 
 			/* Label count */
 #ifdef JP
-			put_str("回数 :", 10, col+13);
+			put_str("回数 :", 10, col+10);
 #else
-			put_str("Round:", 10, col+13);
+			put_str("Round:", 10, col+10);
 #endif
-
 
 			/* Indicate the state */
 #ifdef JP
-			put_str("(ESCで停止)", 12, col+13);
+			put_str("(ESCで停止)", 13, col+13);
 #else
-			put_str("(Hit ESC to stop)", 12, col+13);
+			put_str("(Hit ESC to stop)", 13, col+13);
 #endif
 		}
 
@@ -6109,19 +6185,10 @@ static bool player_birth_aux(void)
 		{
 			/* Label */
 #ifdef JP
-			put_str("最小値", 2, col+5);
+			put_str("最小値", 2, col+13);
 #else
-			put_str(" Limit", 2, col+5);
+			put_str(" Limit", 2, col+13);
 #endif
-
-
-			/* Label */
-#ifdef JP
-			put_str("成功率", 2, col+13);
-#else
-			put_str("  Freq", 2, col+13);
-#endif
-
 
 			/* Label */
 #ifdef JP
@@ -6130,14 +6197,36 @@ static bool player_birth_aux(void)
 			put_str("  Roll", 2, col+24);
 #endif
 
+			/* Show prob. just below the round counter */
+#ifdef JP
+			if(autoroll_chance >= 1)
+				sprintf(buf, "確率 :  1/%8d00", autoroll_chance);
+			else if (autoroll_chance == -999)
+				sprintf(buf, "確率 :     不可能");
+			else
+				sprintf(buf, "確率 :     1/10000以上");
+#else
+			if(autoroll_chance >= 1)
+				sprintf(buf, "Prob :  1/%8d00", autoroll_chance);
+			else if (autoroll_chance == -999)
+			  sprintf(buf, "Prob :     Impossible");
+			else
+			  sprintf(buf, "Prob :     >1/10000");
+#endif
+			put_str(buf, 11, col+10);
 
+#ifdef JP
+			put_str("注意 : 体格等のオートローラを併用時は、上記確率より困難です。", 22, 5);
+#else
+			put_str("Note : Prob may be lower when you use the 'autochara' option.", 22, 5);
+#endif
 			/* Put the minimal stats */
 			for (i = 0; i < 6; i++)
 			{
 				int j, m;
 
 				/* Label stats */
-				put_str(stat_names[i], 3+i, col);
+				put_str(stat_names[i], 3+i, col+8);
 
 				/* Race/Class bonus */
 				j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
@@ -6147,7 +6236,7 @@ static bool player_birth_aux(void)
 
 				/* Put the stat */
 				cnv_stat(m, buf);
-				c_put_str(TERM_L_BLUE, buf, 3+i, col+5);
+				c_put_str(TERM_L_BLUE, buf, 3+i, col+13);
 			}
 		}
 
@@ -6163,17 +6252,10 @@ static bool player_birth_aux(void)
 			auto_round++;
 
 			/* Hack -- Prevent overflow */
-			if (auto_round >= 1000000000L)
+			if (auto_round > 1000000000L)
 			{
 				auto_round = 1;
-
-				if (autoroller)
-				{
-					for (i = 0; i < 6; i++)
-					{
-						stat_match[i] = 0;
-					}
-				}
+				auto_round2 ++;
 			}
 
 			if (autoroller)
@@ -6181,16 +6263,11 @@ static bool player_birth_aux(void)
 				/* Check and count acceptable stats */
 				for (i = 0; i < 6; i++)
 				{
-					/* This stat is okay */
-					if (p_ptr->stat_max[i] >= stat_limit[i])
-					{
-						stat_match[i]++;
-					}
-
 					/* This stat is not okay */
-					else
+					if (p_ptr->stat_max[i] < stat_limit[i])
 					{
 						accept = FALSE;
+						break;
 					}
 				}
 			}
@@ -6224,7 +6301,10 @@ static bool player_birth_aux(void)
 				birth_put_stats();
 
 				/* Dump round */
-				put_str(format("%10ld", auto_round), 10, col+20);
+				if(auto_round2)
+					put_str(format("%ld%09ld", auto_round2, auto_round), 10, col+20);
+				else
+					put_str(format("%10ld", auto_round), 10, col+20);
 
 #ifdef AUTOROLLER_DELAY
 				/* Delay 1/10 second */
