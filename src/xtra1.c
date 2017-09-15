@@ -96,7 +96,7 @@ s16b modify_stat_value(int value, int amount)
 	}
 
 	/* Return new value */
-	return (value);
+	return (s16b)(value);
 }
 
 
@@ -1864,7 +1864,7 @@ static void fix_monster_list(void)
 
 		Term_clear();
 
-		target_set_prepare_look(); //モンスター一覧を生成，ソート
+		target_set_prepare_look();//モンスター一覧を生成，ソート
 		print_monster_list(0, 0, h);
 
 		/* Fresh */
@@ -2503,7 +2503,11 @@ static void calc_spells(void)
 			k++;
 		}
 		if (k > 32) k = 32;
-		if ((p_ptr->new_spells > k) && ((mp_ptr->spell_book == TV_LIFE_BOOK) || (mp_ptr->spell_book == TV_HISSATSU_BOOK))) p_ptr->new_spells = k;
+		if ((p_ptr->new_spells > k) &&
+			((mp_ptr->spell_book == TV_LIFE_BOOK) || (mp_ptr->spell_book == TV_HISSATSU_BOOK)))
+		{
+			p_ptr->new_spells = (s16b)k;
+		}
 	}
 
 	if (p_ptr->new_spells < 0) p_ptr->new_spells = 0;
@@ -2990,7 +2994,7 @@ static void calc_torch(void)
 		if (have_flag(flgs, TR_LITE_M1)) rad -= 1;
 		if (have_flag(flgs, TR_LITE_M2)) rad -= 2;
 		if (have_flag(flgs, TR_LITE_M3)) rad -= 3;
-		p_ptr->cur_lite += rad;
+		p_ptr->cur_lite += (s16b)rad;
 	}
 
 	/* max radius is 14 (was 5) without rewriting other code -- */
@@ -3180,7 +3184,7 @@ s16b calc_num_fire(object_type *o_ptr)
 			num += (p_ptr->lev * 4);
 		}
 	}
-	return num;
+	return (s16b)num;
 }
 
 /*!
@@ -3246,8 +3250,8 @@ void calc_bonuses(void)
 	bool old_mighty_throw = p_ptr->mighty_throw;
 
 	/* Save the old armor class */
-	bool old_dis_ac = p_ptr->dis_ac;
-	bool old_dis_to_a = p_ptr->dis_to_a;
+	s16b old_dis_ac = p_ptr->dis_ac;
+	s16b old_dis_to_a = p_ptr->dis_to_a;
 
 
 	/* Clear extra blows/shots */
@@ -4358,25 +4362,25 @@ void calc_bonuses(void)
 		/* To Bow and Natural attack */
 
 		/* Apply the bonuses to hit/damage */
-		p_ptr->to_h_b += bonus_to_h;
-		p_ptr->to_h_m += bonus_to_h;
-		p_ptr->to_d_m += bonus_to_d;
+		p_ptr->to_h_b += (s16b)bonus_to_h;
+		p_ptr->to_h_m += (s16b)bonus_to_h;
+		p_ptr->to_d_m += (s16b)bonus_to_d;
 
 		/* Apply the mental bonuses tp hit/damage, if known */
-		if (object_is_known(o_ptr)) p_ptr->dis_to_h_b += bonus_to_h;
+		if (object_is_known(o_ptr)) p_ptr->dis_to_h_b += (s16b)bonus_to_h;
 
 		/* To Melee */
 		if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !p_ptr->ryoute)
 		{
 			/* Apply the bonuses to hit/damage */
-			p_ptr->to_h[i-INVEN_RIGHT] += bonus_to_h;
-			p_ptr->to_d[i-INVEN_RIGHT] += bonus_to_d;
+			p_ptr->to_h[i-INVEN_RIGHT] += (s16b)bonus_to_h;
+			p_ptr->to_d[i-INVEN_RIGHT] += (s16b)bonus_to_d;
 
 			/* Apply the mental bonuses tp hit/damage, if known */
 			if (object_is_known(o_ptr))
 			{
-				p_ptr->dis_to_h[i-INVEN_RIGHT] += bonus_to_h;
-				p_ptr->dis_to_d[i-INVEN_RIGHT] += bonus_to_d;
+				p_ptr->dis_to_h[i-INVEN_RIGHT] += (s16b)bonus_to_h;
+				p_ptr->dis_to_d[i-INVEN_RIGHT] += (s16b)bonus_to_d;
 			}
 		}
 		else if (p_ptr->migite && p_ptr->hidarite)
@@ -4399,14 +4403,14 @@ void calc_bonuses(void)
 		else
 		{
 			/* Apply the bonuses to hit/damage */
-			p_ptr->to_h[default_hand] += bonus_to_h;
-			p_ptr->to_d[default_hand] += bonus_to_d;
+			p_ptr->to_h[default_hand] += (s16b)bonus_to_h;
+			p_ptr->to_d[default_hand] += (s16b)bonus_to_d;
 
 			/* Apply the mental bonuses to hit/damage, if known */
 			if (object_is_known(o_ptr))
 			{
-				p_ptr->dis_to_h[default_hand] += bonus_to_h;
-				p_ptr->dis_to_d[default_hand] += bonus_to_d;
+				p_ptr->dis_to_h[default_hand] += (s16b)bonus_to_h;
+				p_ptr->dis_to_d[default_hand] += (s16b)bonus_to_d;
 			}
 		}
 	}
@@ -4534,8 +4538,8 @@ void calc_bonuses(void)
 			ac += 5;
 			if (o_ptr->curse_flags & TRC_HEAVY_CURSE) ac += 7;
 			if (o_ptr->curse_flags & TRC_PERMA_CURSE) ac += 13;
-			p_ptr->to_a += ac;
-			p_ptr->dis_to_a += ac;
+			p_ptr->to_a += (s16b)ac;
+			p_ptr->dis_to_a += (s16b)ac;
 		}
 	}
 
@@ -4551,7 +4555,7 @@ void calc_bonuses(void)
 		if (p_ptr->stat_top[i] != top)
 		{
 			/* Save the new value */
-			p_ptr->stat_top[i] = top;
+			p_ptr->stat_top[i] = (s16b)top;
 
 			/* Redisplay the stats later */
 			p_ptr->redraw |= (PR_STATS);
@@ -4577,7 +4581,7 @@ void calc_bonuses(void)
 		if (p_ptr->stat_use[i] != use)
 		{
 			/* Save the new value */
-			p_ptr->stat_use[i] = use;
+			p_ptr->stat_use[i] = (s16b)use;
 
 			/* Redisplay the stats later */
 			p_ptr->redraw |= (PR_STATS);
@@ -4600,7 +4604,7 @@ void calc_bonuses(void)
 		if (p_ptr->stat_ind[i] != ind)
 		{
 			/* Save the new index */
-			p_ptr->stat_ind[i] = ind;
+			p_ptr->stat_ind[i] = (s16b)ind;
 
 			/* Change in CON affects Hitpoints */
 			if (i == A_CON)
@@ -4892,10 +4896,10 @@ void calc_bonuses(void)
 		}
 		if (inventory[INVEN_RARM].tval == TV_POLEARM) penalty1 += 10;
 		if (inventory[INVEN_LARM].tval == TV_POLEARM) penalty2 += 10;
-		p_ptr->to_h[0] -= penalty1;
-		p_ptr->to_h[1] -= penalty2;
-		p_ptr->dis_to_h[0] -= penalty1;
-		p_ptr->dis_to_h[1] -= penalty2;
+		p_ptr->to_h[0] -= (s16b)penalty1;
+		p_ptr->to_h[1] -= (s16b)penalty2;
+		p_ptr->dis_to_h[0] -= (s16b)penalty1;
+		p_ptr->dis_to_h[1] -= (s16b)penalty2;
 	}
 
 	/* Extract the current weight (in tenth pounds) */
@@ -4987,7 +4991,7 @@ void calc_bonuses(void)
 	/* Compute "extra shots" if needed */
 	if (o_ptr->k_idx)
 	{
-		p_ptr->tval_ammo = bow_tval_ammo(o_ptr);
+		p_ptr->tval_ammo = (byte_hack)bow_tval_ammo(o_ptr);
 
 		/* Apply special flags */
 		if (o_ptr->k_idx && !p_ptr->heavy_shoot)
@@ -5164,10 +5168,10 @@ void calc_bonuses(void)
 			p_ptr->num_blow[i] = blows_table[str_index][dex_index];
 
 			/* Maximal value */
-			if (p_ptr->num_blow[i] > num) p_ptr->num_blow[i] = num;
+			if (p_ptr->num_blow[i] > num) p_ptr->num_blow[i] = (s16b)num;
 
 			/* Add in the "bonus blows" */
-			p_ptr->num_blow[i] += extra_blows[i];
+			p_ptr->num_blow[i] += (s16b)extra_blows[i];
 
 
 			if (p_ptr->pclass == CLASS_WARRIOR) p_ptr->num_blow[i] += (p_ptr->lev / 40);
@@ -5283,8 +5287,8 @@ void calc_bonuses(void)
 					penalty += 30;
 					if (penalty < 30) penalty = 30;
 				}
-				p_ptr->to_h[i] -= penalty;
-				p_ptr->dis_to_h[i] -= penalty;
+				p_ptr->to_h[i] -= (s16b)penalty;
+				p_ptr->dis_to_h[i] -= (s16b)penalty;
 
 				/* Riding weapon */
 				p_ptr->riding_wield[i] = TRUE;
@@ -5323,8 +5327,8 @@ void calc_bonuses(void)
 			if (penalty < 30) penalty = 30;
 		}
 		if (p_ptr->tval_ammo == TV_BOLT) penalty *= 2;
-		p_ptr->to_h_b -= penalty;
-		p_ptr->dis_to_h_b -= penalty;
+		p_ptr->to_h_b -= (s16b)penalty;
+		p_ptr->dis_to_h_b -= (s16b)penalty;
 	}
 
 	/* Different calculation for monks with empty hands */
@@ -6322,7 +6326,7 @@ void update_playtime(void)
 	/* Check if the game has started */
 	if (start_time != 0)
 	{
-		u32b tmp = time(NULL);
+		u32b tmp = (u32b)time(NULL);
 		playtime += (tmp - start_time);
 		start_time = tmp;
 	}
