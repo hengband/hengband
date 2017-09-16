@@ -135,7 +135,7 @@ static void get_random_virtue(int which)
 	}
 
 	/* Chosen */
-	p_ptr->vir_types[which] = type;
+	p_ptr->vir_types[which] = (s16b)type;
 }
 
 /*!
@@ -471,7 +471,7 @@ void set_virtue(int virtue_id, int amount)
 	{
 		if (p_ptr->vir_types[i] == virtue_id)
 		{
-			p_ptr->virtues[i] = amount;
+			p_ptr->virtues[i] = (s16b)amount;
 			return;
 		}
 	}

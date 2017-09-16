@@ -2349,7 +2349,7 @@ static byte choose_realm(s32b choices, int *count)
 	/* Clean up */
 	clear_from(10);
 
-	return (picks[k]);
+	return (byte_hack)(picks[k]);
 }
 
 
@@ -2692,7 +2692,7 @@ static void get_stats(void)
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i] = p_ptr->stat_max[3*i] = val;
+			p_ptr->stat_cur[3*i] = p_ptr->stat_max[3*i] = (s16b)val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -2702,7 +2702,7 @@ static void get_stats(void)
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i+1] = p_ptr->stat_max[3*i+1] = val;
+			p_ptr->stat_cur[3*i+1] = p_ptr->stat_max[3*i+1] = (s16b)val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -2712,7 +2712,7 @@ static void get_stats(void)
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i+2] = p_ptr->stat_max[3*i+2] = val;
+			p_ptr->stat_cur[3*i+2] = p_ptr->stat_max[3*i+2] = (s16b)val;
 		}
 
 		/* Verify totals */
@@ -2754,11 +2754,11 @@ void get_max_stats(void)
 		j = 18 + 60 + dice[i]*10;
 
 		/* Save that value */
-		p_ptr->stat_max_max[i] = j;
+		p_ptr->stat_max_max[i] = (s16b)j;
 		if (p_ptr->stat_max[i] > j)
-			p_ptr->stat_max[i] = j;
+			p_ptr->stat_max[i] = (s16b)j;
 		if (p_ptr->stat_cur[i] > j)
-			p_ptr->stat_cur[i] = j;
+			p_ptr->stat_cur[i] = (s16b)j;
 	}
 	p_ptr->knowledge &= ~(KNOW_STAT);
 
@@ -3054,7 +3054,7 @@ static void get_history(void)
 	else if (social_class < 1) social_class = 1;
 
 	/* Save the social class */
-	p_ptr->sc = social_class;
+	p_ptr->sc = (s16b)social_class;
 
 
 	/* Skip leading spaces */
@@ -3516,7 +3516,7 @@ void determine_random_questor(quest_type *q_ptr)
 		if (r_ptr->level > (q_ptr->level + (q_ptr->level / 20))) break;
 	}
 
-	q_ptr->r_idx = r_idx;
+	q_ptr->r_idx = (s16b)r_idx;
 }
 
 /*!
@@ -4334,7 +4334,7 @@ static bool get_player_race(void)
 	}
 
 	/* Set race */
-	p_ptr->prace = k;
+	p_ptr->prace = (byte_hack)k;
 
 	rp_ptr = &race_info[p_ptr->prace];
 
@@ -4550,7 +4550,7 @@ static bool get_player_class(void)
 	}
 
 	/* Set class */
-	p_ptr->pclass = k;
+	p_ptr->pclass = (byte_hack)k;
 	cp_ptr = &class_info[p_ptr->pclass];
 	mp_ptr = &m_info[p_ptr->pclass];
 
@@ -4788,7 +4788,7 @@ static bool get_player_seikaku(void)
 	}
 
 	/* Set seikaku */
-	p_ptr->pseikaku = k;
+	p_ptr->pseikaku = (byte_hack)k;
 	ap_ptr = &seikaku_info[p_ptr->pseikaku];
 #ifdef JP
 	strcpy(tmp, ap_ptr->title);
@@ -5066,7 +5066,7 @@ static bool get_stat_limits(void)
 	for (i = 0; i < 6; i++)
 	{
 		/* Save the minimum stat */
-		stat_limit[i] = cval[i];
+		stat_limit[i] = (s16b)cval[i];
 	}
 
 	return TRUE;
@@ -5371,14 +5371,14 @@ static bool get_chara_limits(void)
 	}
 
 	/* Input the minimum stats */
-	chara_limit.agemin = cval[0];
-	chara_limit.agemax = cval[1];
-	chara_limit.htmin = cval[2];
-	chara_limit.htmax = cval[3];
-	chara_limit.wtmin = cval[4];
-	chara_limit.wtmax = cval[5];
-	chara_limit.scmin = cval[6];
-	chara_limit.scmax = cval[7];
+	chara_limit.agemin = (s16b)cval[0];
+	chara_limit.agemax = (s16b)cval[1];
+	chara_limit.htmin = (s16b)cval[2];
+	chara_limit.htmax = (s16b)cval[3];
+	chara_limit.wtmin = (s16b)cval[4];
+	chara_limit.wtmax = (s16b)cval[5];
+	chara_limit.scmin = (s16b)cval[6];
+	chara_limit.scmax = (s16b)cval[7];
 
 	return TRUE;
 }
@@ -5906,7 +5906,7 @@ static bool player_birth_aux(void)
 	}
 
 	/* Set sex */
-	p_ptr->psex = k;
+	p_ptr->psex = (byte_hack)k;
 	sp_ptr = &sex_info[p_ptr->psex];
 
 	/* Display */
