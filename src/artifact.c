@@ -330,7 +330,7 @@ void one_activation(object_type *o_ptr)
 	}
 
 	/* A type was chosen... */
-	o_ptr->xtra2 = type;
+	o_ptr->xtra2 = (byte_hack)type;
 	add_flag(o_ptr->art_flags, TR_ACTIVATE);
 	o_ptr->timeout = 0;
 }
@@ -1101,8 +1101,8 @@ static void random_misc(object_type * o_ptr)
 				bonus_h /= 2;
 				bonus_d /= 2;
 			}
-			o_ptr->to_h += bonus_h;
-			o_ptr->to_d += bonus_d;
+			o_ptr->to_h += (s16b)bonus_h;
+			o_ptr->to_d += (s16b)bonus_d;
 			break;
 		}
 		case 30:
@@ -1700,7 +1700,7 @@ static void give_activation_power(object_type *o_ptr)
 	}
 
 	/* A type was chosen... */
-	o_ptr->xtra2 = type;
+	o_ptr->xtra2 = (byte_hack)type;
 	add_flag(o_ptr->art_flags, TR_ACTIVATE);
 	o_ptr->timeout = 0;
 }
@@ -3667,7 +3667,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 	/* Set activation timeout */
 	if (act_ptr->timeout.constant >= 0) {
-		o_ptr->timeout = act_ptr->timeout.constant;
+		o_ptr->timeout = (s16b)act_ptr->timeout.constant;
 		if (act_ptr->timeout.dice > 0) {
 			o_ptr->timeout += randint1(act_ptr->timeout.dice);
 		}
@@ -3868,7 +3868,7 @@ bool create_named_art(int a_idx, int y, int x)
 	object_prep(q_ptr, i);
 
 	/* Save the name */
-	q_ptr->name1 = a_idx;
+	q_ptr->name1 = (byte_hack)a_idx;
 
 	/* Extract the fields */
 	q_ptr->pval = a_ptr->pval;
