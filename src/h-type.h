@@ -104,8 +104,10 @@ typedef unsigned long u32b;
 #endif
 
 
+typedef s16b idx;			/*!< ゲーム中のID型を定義 */
 typedef byte position;		/*!< ゲーム中の座標型を定義 */
 typedef s16b hit_point;		/*!< ゲーム中のHP/ダメージ型を定義 */
+typedef s16b hit_prob;		/*!< ゲーム中の命中修正値を定義 */
 typedef s16b base_status;	/*!< ゲーム中の基礎能力値型を定義 */
 
 

@@ -2285,11 +2285,11 @@ static byte get_random_ego(byte slot, bool good)
  */
 static void a_m_aux_1(object_type *o_ptr, int level, int power)
 {
-	int tohit1 = randint1(5) + m_bonus(5, level);
-	int todam1 = randint1(5) + m_bonus(5, level);
+	hit_prob tohit1 = randint1(5) + m_bonus(5, level);
+	hit_point todam1 = randint1(5) + m_bonus(5, level);
 
-	int tohit2 = m_bonus(10, level);
-	int todam2 = m_bonus(10, level);
+	hit_prob tohit2 = m_bonus(10, level);
+	hit_point todam2 = m_bonus(10, level);
 
 	if ((o_ptr->tval == TV_BOLT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_SHOT))
 	{
@@ -4841,9 +4841,9 @@ bool make_object(object_type *j_ptr, u32b mode)
  * This routine uses "object_level" for the "generation level".\n
  * This routine requires a clean floor grid destination.\n
  */
-void place_object(int y, int x, u32b mode)
+void place_object(position y, position x, u32b mode)
 {
-	s16b o_idx;
+	idx o_idx;
 
 	/* Acquire grid */
 	cave_type *c_ptr = &cave[y][x];
@@ -4966,7 +4966,7 @@ bool make_gold(object_type *j_ptr)
  * @details
  * The location must be a legal, clean, floor grid.
  */
-void place_gold(int y, int x)
+void place_gold(position y, position x)
 {
 	s16b o_idx;
 

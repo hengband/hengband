@@ -518,10 +518,10 @@ typedef struct object_type object_type;
 
 struct object_type
 {
-	s16b k_idx;			/* Kind index (zero if "dead") */
+	idx k_idx;			/* Kind index (zero if "dead") */
 
-	byte iy;			/* Y-position on map, or zero */
-	byte ix;			/* X-position on map, or zero */
+	position iy;			/* Y-position on map, or zero */
+	position ix;			/* X-position on map, or zero */
 
 	byte tval;			/* Item type (from kind) */
 	byte sval;			/* Item sub-type (from kind) */
@@ -543,8 +543,8 @@ struct object_type
 	s16b xtra4;			/* Extra info fuel or captured monster's current HP */
 	s16b xtra5;			/* Extra info captured monster's max HP */
 
-	s16b to_h;			/* Plusses to hit */
-	s16b to_d;			/* Plusses to damage */
+	hit_prob to_h;			/* Plusses to hit */
+	hit_point to_d;			/* Plusses to damage */
 	s16b to_a;			/* Plusses to AC */
 
 	s16b ac;			/* Normal AC */

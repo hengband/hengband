@@ -3652,7 +3652,7 @@ bool set_food(int v)
  */
 bool inc_stat(int stat)
 {
-	int value, gain;
+	base_status value, gain;
 
 	/* Then augment the current/max stat */
 	value = p_ptr->stat_cur[stat];
