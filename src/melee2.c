@@ -250,7 +250,7 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 	}
 
 	/* Hurt it */
-	m_ptr->hp -= dam;
+	m_ptr->hp -= (s16b)dam;
 
 	/* It is dead now... or is it? */
 	if (m_ptr->hp < 0)
@@ -393,7 +393,7 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
  * Note that this function is responsible for about one to five percent\n
  * of the processor use in normal conditions...\n
  */
-static int mon_will_run(int m_idx)
+static bool mon_will_run(int m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -438,8 +438,8 @@ static int mon_will_run(int m_idx)
 	if (m_lev + 4 <= p_lev) return (TRUE);
 
 	/* Examine player health */
-	p_chp = p_ptr->chp;
-	p_mhp = p_ptr->mhp;
+	p_chp = (u16b)p_ptr->chp;
+	p_mhp = (u16b)p_ptr->mhp;
 
 	/* Examine monster health */
 	m_chp = m_ptr->hp;
@@ -2109,7 +2109,8 @@ static void process_monster(int m_idx)
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race    *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 
-	int             i, d, oy, ox, ny, nx;
+	int             i, d;
+	position	oy, ox, ny, nx;
 
 	int             mm[8];
 
@@ -2617,7 +2618,7 @@ static void process_monster(int m_idx)
 				(void)get_moves(m_idx, mm);
 
 				/* Restore the leash */
-				p_ptr->pet_follow_distance = dis;
+				p_ptr->pet_follow_distance = (s16b)dis;
 			}
 		}
 	}
@@ -3090,7 +3091,7 @@ static void process_monster(int m_idx)
 				}
 
 				/* Hack -- Update the new location */
-				c_ptr->m_idx = m_idx;
+				c_ptr->m_idx = (s16b)m_idx;
 
 				/* Move the monster */
 				m_ptr->fy = ny;
@@ -3234,7 +3235,7 @@ static void process_monster(int m_idx)
 						o_ptr->iy = o_ptr->ix = 0;
 
 						/* Memorize monster */
-						o_ptr->held_m_idx = m_idx;
+						o_ptr->held_m_idx = (s16b)m_idx;
 
 						/* Build a stack */
 						o_ptr->next_o_idx = m_ptr->hold_o_idx;
@@ -3549,7 +3550,7 @@ void process_monsters(void)
 
 
 		/* Save global index */
-		hack_m_idx = i;
+		hack_m_idx = (s16b)i;
 
 		/* Process the monster */
 		process_monster(i);
@@ -3624,7 +3625,7 @@ int get_mproc_idx(int m_idx, int mproc_type)
  */
 static void mproc_add(int m_idx, int mproc_type)
 {
-	if (mproc_max[mproc_type] < max_m_idx) mproc_list[mproc_type][mproc_max[mproc_type]++] = m_idx;
+	if (mproc_max[mproc_type] < max_m_idx) mproc_list[mproc_type][mproc_max[mproc_type]++] = (s16b)m_idx;
 }
 
 
@@ -3706,7 +3707,7 @@ bool set_monster_csleep(int m_idx, int v)
 	}
 
 	/* Use the value */
-	m_ptr->mtimed[MTIMED_CSLEEP] = v;
+	m_ptr->mtimed[MTIMED_CSLEEP] = (s16b)v;
 
 	if (!notice) return FALSE;
 
@@ -3759,7 +3760,7 @@ bool set_monster_fast(int m_idx, int v)
 	}
 
 	/* Use the value */
-	m_ptr->mtimed[MTIMED_FAST] = v;
+	m_ptr->mtimed[MTIMED_FAST] = (s16b)v;
 
 	if (!notice) return FALSE;
 
@@ -3801,7 +3802,7 @@ bool set_monster_slow(int m_idx, int v)
 	}
 
 	/* Use the value */
-	m_ptr->mtimed[MTIMED_SLOW] = v;
+	m_ptr->mtimed[MTIMED_SLOW] = (s16b)v;
 
 	if (!notice) return FALSE;
 
@@ -3847,7 +3848,7 @@ bool set_monster_stunned(int m_idx, int v)
 	}
 
 	/* Use the value */
-	m_ptr->mtimed[MTIMED_STUNNED] = v;
+	m_ptr->mtimed[MTIMED_STUNNED] = (s16b)v;
 
 	return notice;
 }
@@ -3889,7 +3890,7 @@ bool set_monster_confused(int m_idx, int v)
 	}
 
 	/* Use the value */
-	m_ptr->mtimed[MTIMED_CONFUSED] = v;
+	m_ptr->mtimed[MTIMED_CONFUSED] = (s16b)v;
 
 	return notice;
 }
@@ -3931,7 +3932,7 @@ bool set_monster_monfear(int m_idx, int v)
 	}
 
 	/* Use the value */
-	m_ptr->mtimed[MTIMED_MONFEAR] = v;
+	m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)v;
 
 	if (!notice) return FALSE;
 
@@ -3984,7 +3985,7 @@ bool set_monster_invulner(int m_idx, int v, bool energy_need)
 	}
 
 	/* Use the value */
-	m_ptr->mtimed[MTIMED_INVULNER] = v;
+	m_ptr->mtimed[MTIMED_INVULNER] = (s16b)v;
 
 	if (!notice) return FALSE;
 

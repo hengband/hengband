@@ -78,6 +78,7 @@ typedef char bool; /*!< bool型をcharとして定義 / Note that a bool is smal
 typedef int sint; /*!< sint型をintとして定義 / A signed, standard integer (at least 2 bytes) */
 typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
 
+
 /* The largest possible signed integer (pre-defined) */
 /* typedef long long; */
 
@@ -102,6 +103,10 @@ typedef signed long s32b;
 typedef unsigned long u32b;
 #endif
 
+
+typedef byte position;		/*!< ゲーム中の座標型を定義 */
+typedef s16b hit_point;		/*!< ゲーム中のHP/ダメージ型を定義 */
+typedef s16b base_status;	/*!< ゲーム中の基礎能力値型を定義 */
 
 
 

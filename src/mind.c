@@ -972,7 +972,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 			ask = isupper(choice);
 
 			/* Lowercase */
-			if (ask) choice = tolower(choice);
+			if (ask) choice = (char)tolower(choice);
 
 			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);
@@ -1305,9 +1305,9 @@ static bool cast_force_spell(int spell)
 				{
 					msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
 					cave[oy][ox].m_idx = 0;
-					cave[ty][tx].m_idx = m_idx;
-					m_ptr->fy = ty;
-					m_ptr->fx = tx;
+					cave[ty][tx].m_idx = (s16b)m_idx;
+					m_ptr->fy = (byte_hack)ty;
+					m_ptr->fx = (byte_hack)tx;
 
 					update_mon(m_idx, TRUE);
 					lite_spot(oy, ox);
@@ -1778,11 +1778,11 @@ static bool cast_ninja_spell(int spell)
 		cave[target_row][target_col].m_idx = 0;
 
 		/* Update the new location */
-		cave[ty][tx].m_idx = m_idx;
+		cave[ty][tx].m_idx = (s16b)m_idx;
 
 		/* Move the monster */
-		m_ptr->fy = ty;
-		m_ptr->fx = tx;
+		m_ptr->fy = (byte_hack)ty;
+		m_ptr->fx = (byte_hack)tx;
 
 		/* Wake the monster up */
 		(void)set_monster_csleep(m_idx, 0);

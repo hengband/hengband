@@ -2682,7 +2682,7 @@ static void get_stats(void)
 		for (i = 0; i < 2; i++)
 		{
 			s32b tmp = randint0(60*60*60);
-			int val;
+			base_status val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -2692,7 +2692,7 @@ static void get_stats(void)
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i] = p_ptr->stat_max[3*i] = (s16b)val;
+			p_ptr->stat_cur[3*i] = p_ptr->stat_max[3*i] = val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -2702,7 +2702,7 @@ static void get_stats(void)
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i+1] = p_ptr->stat_max[3*i+1] = (s16b)val;
+			p_ptr->stat_cur[3*i+1] = p_ptr->stat_max[3*i+1] = val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -2712,7 +2712,7 @@ static void get_stats(void)
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i+2] = p_ptr->stat_max[3*i+2] = (s16b)val;
+			p_ptr->stat_cur[3*i+2] = p_ptr->stat_max[3*i+2] = val;
 		}
 
 		/* Verify totals */
@@ -2751,14 +2751,14 @@ void get_max_stats(void)
 	/* Acquire the stats */
 	for (i = 0; i < 6; i++)
 	{
-		j = 18 + 60 + dice[i]*10;
+		base_status max_max = 18 + 60 + dice[i]*10;
 
 		/* Save that value */
-		p_ptr->stat_max_max[i] = (s16b)j;
-		if (p_ptr->stat_max[i] > j)
-			p_ptr->stat_max[i] = (s16b)j;
-		if (p_ptr->stat_cur[i] > j)
-			p_ptr->stat_cur[i] = (s16b)j;
+		p_ptr->stat_max_max[i] = max_max;
+		if (p_ptr->stat_max[i] > max_max)
+			p_ptr->stat_max[i] = max_max;
+		if (p_ptr->stat_cur[i] > max_max)
+			p_ptr->stat_cur[i] = max_max;
 	}
 	p_ptr->knowledge &= ~(KNOW_STAT);
 

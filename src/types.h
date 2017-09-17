@@ -590,12 +590,12 @@ struct monster_type
 	s16b ap_r_idx;		/* Monster race appearance index */
 	byte sub_align;		/* Sub-alignment for a neutral monster */
 
-	byte fy;		/* Y location on map */
-	byte fx;		/* X location on map */
+	position fy;		/* Y location on map */
+	position fx;		/* X location on map */
 
-	s16b hp;		/* Current Hit points */
-	s16b maxhp;		/* Max Hit points */
-	s16b max_maxhp;		/* Max Max Hit points */
+	hit_point hp;		/* Current Hit points */
+	hit_point maxhp;		/* Max Hit points */
+	hit_point max_maxhp;		/* Max Max Hit points */
 	u32b dealt_damage;		/* Sum of damages dealt by player */
 
 	s16b mtimed[MAX_MTIMED];	/* Timed status counter */
@@ -1013,9 +1013,9 @@ struct player_type
 
 	s16b max_plv;		/* Max Player Level */
 
-	s16b stat_max[6];	/* Current "maximal" stat values */
-	s16b stat_max_max[6];	/* Maximal "maximal" stat values */
-	s16b stat_cur[6];	/* Current "natural" stat values */
+	base_status stat_max[6];	/* Current "maximal" stat values */
+	base_status stat_max_max[6];	/* Maximal "maximal" stat values */
+	base_status stat_cur[6];	/* Current "natural" stat values */
 
 	s16b learned_spells;
 	s16b add_spells;
