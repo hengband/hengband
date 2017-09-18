@@ -67,7 +67,7 @@ bool teleport_away(int m_idx, int dis, u32b mode)
 {
 	int oy, ox, d, i, min;
 	int tries = 0;
-	int ny = 0, nx = 0;
+	position ny = 0, nx = 0;
 
 	bool look = TRUE;
 

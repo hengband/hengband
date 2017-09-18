@@ -1632,8 +1632,8 @@ bool combine_and_reorder_home(int store_num)
 					}
 					else
 					{
-						int old_num = o_ptr->number;
-						int remain = j_ptr->number + o_ptr->number - max_num;
+						item_number old_num = o_ptr->number;
+						item_number remain = j_ptr->number + o_ptr->number - max_num;
 
 						/* Add together the item counts */
 						object_absorb(j_ptr, o_ptr);

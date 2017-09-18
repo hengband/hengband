@@ -2673,9 +2673,8 @@ static void add_esp_weak(object_type *o_ptr, bool extra)
  */
 static void a_m_aux_2(object_type *o_ptr, int level, int power)
 {
-	int toac1 = randint1(5) + m_bonus(5, level);
-
-	int toac2 = m_bonus(10, level);
+	armour_class toac1 = randint1(5) + m_bonus(5, level);
+	armour_class toac2 = m_bonus(10, level);
 
 	/* Good */
 	if (power > 0)

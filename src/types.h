@@ -545,9 +545,9 @@ struct object_type
 
 	hit_prob to_h;			/* Plusses to hit */
 	hit_point to_d;			/* Plusses to damage */
-	s16b to_a;			/* Plusses to AC */
+	armour_class to_a;			/* Plusses to AC */
 
-	s16b ac;			/* Normal AC */
+	armour_class ac;			/* Normal AC */
 
 	byte dd, ds;		/* Damage dice/sides */
 
@@ -1022,61 +1022,60 @@ struct player_type
 
 	u32b count;
 
-	s16b fast;		/* Timed -- Fast */
-	s16b slow;		/* Timed -- Slow */
-	s16b blind;		/* Timed -- Blindness */
-	s16b paralyzed;		/* Timed -- Paralysis */
-	s16b confused;		/* Timed -- Confusion */
-	s16b afraid;		/* Timed -- Fear */
-	s16b image;		/* Timed -- Hallucination */
-	s16b poisoned;		/* Timed -- Poisoned */
-	s16b cut;		/* Timed -- Cut */
-	s16b stun;		/* Timed -- Stun */
+	time_effect fast;		/* Timed -- Fast */
+	time_effect slow;		/* Timed -- Slow */
+	time_effect blind;		/* Timed -- Blindness */
+	time_effect paralyzed;		/* Timed -- Paralysis */
+	time_effect confused;		/* Timed -- Confusion */
+	time_effect afraid;		/* Timed -- Fear */
+	time_effect image;		/* Timed -- Hallucination */
+	time_effect poisoned;		/* Timed -- Poisoned */
+	time_effect cut;		/* Timed -- Cut */
+	time_effect stun;		/* Timed -- Stun */
 
-	s16b protevil;		/* Timed -- Protection */
-	s16b invuln;		/* Timed -- Invulnerable */
-	s16b ult_res;		/* Timed -- Ultimate Resistance */
-	s16b hero;		/* Timed -- Heroism */
-	s16b shero;		/* Timed -- Super Heroism */
-	s16b shield;		/* Timed -- Shield Spell */
-	s16b blessed;		/* Timed -- Blessed */
-	s16b tim_invis;		/* Timed -- See Invisible */
-	s16b tim_infra;		/* Timed -- Infra Vision */
-	s16b tsuyoshi;		/* Timed -- Tsuyoshi Special */
-	s16b ele_attack;	/* Timed -- Elemental Attack */
-	s16b ele_immune;	/* Timed -- Elemental Immune */
+	time_effect protevil;		/* Timed -- Protection */
+	time_effect invuln;		/* Timed -- Invulnerable */
+	time_effect ult_res;		/* Timed -- Ultimate Resistance */
+	time_effect hero;		/* Timed -- Heroism */
+	time_effect shero;		/* Timed -- Super Heroism */
+	time_effect shield;		/* Timed -- Shield Spell */
+	time_effect blessed;		/* Timed -- Blessed */
+	time_effect tim_invis;		/* Timed -- See Invisible */
+	time_effect tim_infra;		/* Timed -- Infra Vision */
+	time_effect tsuyoshi;		/* Timed -- Tsuyoshi Special */
+	time_effect ele_attack;	/* Timed -- Elemental Attack */
+	time_effect ele_immune;	/* Timed -- Elemental Immune */
 
-	s16b oppose_acid;	/* Timed -- oppose acid */
-	s16b oppose_elec;	/* Timed -- oppose lightning */
-	s16b oppose_fire;	/* Timed -- oppose heat */
-	s16b oppose_cold;	/* Timed -- oppose cold */
-	s16b oppose_pois;	/* Timed -- oppose poison */
+	time_effect oppose_acid;	/* Timed -- oppose acid */
+	time_effect oppose_elec;	/* Timed -- oppose lightning */
+	time_effect oppose_fire;	/* Timed -- oppose heat */
+	time_effect oppose_cold;	/* Timed -- oppose cold */
+	time_effect oppose_pois;	/* Timed -- oppose poison */
 
+	time_effect tim_esp;       /* Timed ESP */
+	time_effect wraith_form;   /* Timed wraithform */
 
-	s16b tim_esp;       /* Timed ESP */
-	s16b wraith_form;   /* Timed wraithform */
-
-	s16b resist_magic;  /* Timed Resist Magic (later) */
-	s16b tim_regen;
-	s16b kabenuke;
-	s16b tim_stealth;
-	s16b tim_levitation;
-	s16b tim_sh_touki;
-	s16b lightspeed;
-	s16b tsubureru;
-	s16b magicdef;
-	s16b tim_res_nether;	/* Timed -- Nether resistance */
-	s16b tim_res_time;	/* Timed -- Time resistance */
+	time_effect resist_magic;  /* Timed Resist Magic (later) */
+	time_effect tim_regen;
+	time_effect kabenuke;
+	time_effect tim_stealth;
+	time_effect tim_levitation;
+	time_effect tim_sh_touki;
+	time_effect lightspeed;
+	time_effect tsubureru;
+	time_effect magicdef;
+	time_effect tim_res_nether;	/* Timed -- Nether resistance */
+	time_effect tim_res_time;	/* Timed -- Time resistance */
 	byte mimic_form;
-	s16b tim_mimic;
-	s16b tim_sh_fire;
-	s16b tim_sh_holy;
-	s16b tim_eyeeye;
+	time_effect tim_mimic;
+	time_effect tim_sh_fire;
+	time_effect tim_sh_holy;
+	time_effect tim_eyeeye;
 
 	/* for mirror master */
-	s16b tim_reflect;       /* Timed -- Reflect */
-	s16b multishadow;       /* Timed -- Multi-shadow */
-	s16b dustrobe;          /* Timed -- Robe of dust */
+	time_effect tim_reflect;       /* Timed -- Reflect */
+	time_effect multishadow;       /* Timed -- Multi-shadow */
+	time_effect dustrobe;          /* Timed -- Robe of dust */
 
 	s16b chaos_patron;
 	u32b muta1;
