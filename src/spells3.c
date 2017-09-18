@@ -1155,7 +1155,8 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
  */
 void mutate_player(void)
 {
-	int max1, cur1, max2, cur2, ii, jj, i;
+	base_status max1, cur1, max2, cur2;
+	int ii, jj, i;
 
 	/* Pick a pair of stats */
 	ii = randint0(6);
@@ -2001,7 +2002,7 @@ static int remove_curse_aux(int all)
  * Remove most curses
  * @return 解呪に成功した装備数
  */
-bool remove_curse(void)
+int remove_curse(void)
 {
 	return (remove_curse_aux(FALSE));
 }
@@ -2011,7 +2012,7 @@ bool remove_curse(void)
  * Remove all curses
  * @return 解呪に成功した装備数
  */
-bool remove_all_curse(void)
+int remove_all_curse(void)
 {
 	return (remove_curse_aux(TRUE));
 }

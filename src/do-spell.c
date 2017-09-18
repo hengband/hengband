@@ -1547,13 +1547,13 @@ static cptr do_life_spell(int spell, int mode)
 		if (desc) return _("一定時間、あらゆる耐性を付け、ACと魔法防御能力を上昇させる。", "Gives ultimate resistance, bonus to AC and speed.");
     
 		{
-			int base = plev / 2;
+			time_effect base = (time_effect)plev / 2;
 
 			if (info) return info_duration(base, base);
 
 			if (cast)
 			{
-				int v = randint1(base) + base;
+				time_effect v = randint1(base) + base;
 				set_fast(v, FALSE);
 				set_oppose_acid(v, FALSE);
 				set_oppose_elec(v, FALSE);
@@ -6097,13 +6097,13 @@ static cptr do_daemon_spell(int spell, int mode)
 			"Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to which from equipment for more powerful resistances.");
     
 		{
-			int base = 20;
+			time_effect base = 20;
 
 			if (info) return info_duration(base, base);
 
 			if (cast)
 			{
-				int dur = randint1(base) + base;
+				time_effect dur = randint1(base) + base;
 					
 				set_oppose_fire(dur, FALSE);
 				set_oppose_cold(dur, FALSE);

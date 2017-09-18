@@ -991,7 +991,7 @@ struct player_type
 	s32b exp;			/* Cur experience */
 	u32b exp_frac;		/* Cur exp frac (times 2^16) */
 
-	s16b lev;			/* Level */
+	player_level lev;			/* Level */
 
 	s16b town_num;			/* Current town number */
 	s16b arena_number;		/* monster number in arena -KMW- */

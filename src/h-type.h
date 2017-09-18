@@ -116,6 +116,8 @@ typedef s16b time_effect;   /*!< ゲーム中の時限期間の型を定義 */
 typedef byte character_idx; /*!< ゲーム中のキャラクター特性各種IDの型を定義 */
 typedef byte discount_rate; /*!< ゲーム中の値引き率の型を定義 */
 
+typedef s16b player_level;  /*!< ゲーム中のプレイヤーレベルの型を定義 */
+
 /*** Pointers to all the basic types defined above ***/
 
 typedef real *real_ptr;

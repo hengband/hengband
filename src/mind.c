@@ -1039,7 +1039,7 @@ static bool cast_mindcrafter_spell(int spell)
 {
 	int             b = 0;
 	int             dir;
-	int             plev = p_ptr->lev;
+	player_level plev = p_ptr->lev;
 
 	/* spell code */
 	switch (spell)
@@ -1069,7 +1069,7 @@ static bool cast_mindcrafter_spell(int spell)
 		}
 
 		if ((plev > 24) && (plev < 40))
-			set_tim_esp(plev, FALSE);
+			set_tim_esp((time_effect)plev, FALSE);
 
 		if (!b) msg_print(_("安全な気がする。", "You feel safe."));
 
@@ -1113,12 +1113,12 @@ static bool cast_mindcrafter_spell(int spell)
 		break;
 	case 6:
 		/* Character Armour */
-		set_shield(plev, FALSE);
-		if (plev > 14) set_oppose_acid(plev, FALSE);
-		if (plev > 19) set_oppose_fire(plev, FALSE);
-		if (plev > 24) set_oppose_cold(plev, FALSE);
-		if (plev > 29) set_oppose_elec(plev, FALSE);
-		if (plev > 34) set_oppose_pois(plev, FALSE);
+		set_shield((time_effect)plev, FALSE);
+		if (plev > 14) set_oppose_acid((time_effect)plev, FALSE);
+		if (plev > 19) set_oppose_fire((time_effect)plev, FALSE);
+		if (plev > 24) set_oppose_cold((time_effect)plev, FALSE);
+		if (plev > 29) set_oppose_elec((time_effect)plev, FALSE);
+		if (plev > 34) set_oppose_pois((time_effect)plev, FALSE);
 		break;
 	case 7:
 		/* Psychometry */

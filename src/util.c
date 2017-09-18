@@ -1721,7 +1721,7 @@ errr play_music(int type, int val)
 /*
  * Hack -- Select floor music.
  */
-void select_floor_music()
+void select_floor_music(void)
 {
 	int i;
 	/* No sound */
