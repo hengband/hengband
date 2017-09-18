@@ -5792,7 +5792,7 @@ void inven_item_increase(int item, int num)
 	else if (num < 0) num = 0;
 
 	/* Un-apply */
-	num -= o_ptr->number;
+	num -= (item_number)o_ptr->number;
 
 	/* Change the number and weight */
 	if (num)
@@ -5988,10 +5988,10 @@ void floor_item_increase(int item, int num)
 	else if (num < 0) num = 0;
 
 	/* Un-apply */
-	num -= o_ptr->number;
+	num -= (int)o_ptr->number;
 
 	/* Change the number */
-	o_ptr->number += num;
+	o_ptr->number += (item_number)num;
 }
 
 

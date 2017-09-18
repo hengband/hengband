@@ -109,7 +109,8 @@ typedef byte position;		/*!< ゲーム中の座標型を定義 */
 typedef s16b hit_point;		/*!< ゲーム中のHP/ダメージ型を定義 */
 typedef s16b hit_prob;		/*!< ゲーム中の命中修正値を定義 */
 typedef s16b base_status;	/*!< ゲーム中の基礎能力値型を定義 */
-
+typedef byte item_number;	/*!< ゲーム中のアイテム数型を定義 */
+typedef s16b action_energy;	/*!< ゲーム中の行動エネルギー型を定義 */
 
 
 /*** Pointers to all the basic types defined above ***/

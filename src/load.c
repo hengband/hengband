@@ -2727,7 +2727,7 @@ static errr rd_dungeon_old(void)
 	/* Read the dungeon items */
 	for (i = 1; i < limit; i++)
 	{
-		int o_idx;
+		idx o_idx;
 
 		object_type *o_ptr;
 

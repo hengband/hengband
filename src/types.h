@@ -530,7 +530,7 @@ struct object_type
 
 	byte discount;		/* Discount (if any) */
 
-	byte number;		/* Number of items */
+	item_number number;	/* Number of items */
 
 	s16b weight;		/* Item weight */
 
@@ -601,16 +601,16 @@ struct monster_type
 	s16b mtimed[MAX_MTIMED];	/* Timed status counter */
 
 	byte mspeed;	        /* Monster "speed" */
-	s16b energy_need;	/* Monster "energy" */
+	action_energy energy_need;	/* Monster "energy" */
 
-	byte cdis;		/* Current dis from player */
+	position cdis;		/* Current dis from player */
 
 	byte mflag;		/* Extra monster flags */
 	byte mflag2;		/* Extra monster flags */
 
 	bool ml;		/* Monster is "visible" */
 
-	s16b hold_o_idx;	/* Object being held (if any) */
+	idx hold_o_idx;	/* Object being held (if any) */
 
 	s16b target_y;		/* Can attack !los player */
 	s16b target_x;		/* Can attack !los player */
