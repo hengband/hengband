@@ -113,6 +113,8 @@ typedef byte item_number;	/*!< ゲーム中のアイテム数型を定義 */
 typedef s16b action_energy;	/*!< ゲーム中の行動エネルギー型を定義 */
 typedef s16b armour_class;	/*!< ゲーム中の行動アーマークラス型を定義 */
 typedef s16b time_effect;   /*!< ゲーム中の時限期間の型を定義 */
+typedef byte character_idx; /*!< ゲーム中のキャラクター特性各種IDの型を定義 */
+typedef byte discount_rate; /*!< ゲーム中の値引き率の型を定義 */
 
 /*** Pointers to all the basic types defined above ***/
 

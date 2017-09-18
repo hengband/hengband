@@ -963,7 +963,7 @@ static s32b price_item(object_type *o_ptr, int greed, bool flip)
 static void mass_produce(object_type *o_ptr)
 {
 	int size = 1;
-	int discount = 0;
+	discount_rate discount = 0;
 
 	s32b cost = object_value(o_ptr);
 
@@ -1099,18 +1099,8 @@ static void mass_produce(object_type *o_ptr)
 		discount = 90;
 	}
 
-
 	if (o_ptr->art_name)
 	{
-		if (cheat_peek && discount)
-		{
-#ifdef JP
-msg_print("ランダムアーティファクトは値引きなし。");
-#else
-			msg_print("No discount on random artifacts.");
-#endif
-
-		}
 		discount = 0;
 	}
 
@@ -1940,6 +1930,7 @@ static int store_carry(object_type *o_ptr)
  * Increase, by a given amount, the number of a certain item
  * in a certain store.	This can result in zero items.
  * </pre>
+ * @todo numは本来item_number型にしたい。
  */
 static void store_item_increase(int item, int num)
 {
@@ -1956,7 +1947,7 @@ static void store_item_increase(int item, int num)
 	num = cnt - o_ptr->number;
 
 	/* Save the new number */
-	o_ptr->number += num;
+	o_ptr->number += (item_number)num;
 }
 
 
@@ -3439,8 +3430,10 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
  */
 static void store_purchase(void)
 {
-	int i, amt, choice;
+	int i, choice;
 	int item, item_new;
+
+	item_number amt;
 
 	s32b price, best;
 
@@ -3628,7 +3621,7 @@ msg_format("一つにつき $%ldです。", (long)(best));
 
 			/* Message */
 #ifdef JP
-msg_format("%s(%c)を購入する。", o_name, I2A(item));
+			msg_format("%s(%c)を購入する。", o_name, I2A(item));
 #else
 			msg_format("Buying %s (%c).", o_name, I2A(item));
 #endif
@@ -3709,7 +3702,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 
 				/* Message */
 #ifdef JP
-		msg_format("%s(%c)を手に入れた。", o_name, index_to_label(item_new));
+				msg_format("%s(%c)を手に入れた。", o_name, index_to_label(item_new));
 #else
 				msg_format("You have %s (%c).",
 						   o_name, index_to_label(item_new));
@@ -3835,7 +3828,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 
 		/* Message */
 #ifdef JP
-				msg_format("%s(%c)を取った。",
+		msg_format("%s(%c)を取った。",
 #else
 		msg_format("You have %s (%c).",
 #endif

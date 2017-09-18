@@ -528,7 +528,7 @@ struct object_type
 
 	s16b pval;			/* Item extra-parameter */
 
-	byte discount;		/* Discount (if any) */
+	discount_rate discount;		/* Discount (if any) */
 
 	item_number number;	/* Number of items */
 
@@ -964,13 +964,13 @@ struct player_type
 	s16b oldpy;		/* Previous player location -KMW- */
 	s16b oldpx;		/* Previous player location -KMW- */
 
-	byte psex;			/* Sex index */
-	byte prace;			/* Race index */
-	byte pclass;		/* Class index */
-	byte pseikaku;		/* Seikaku index */
-	byte realm1;        /* First magic realm */
-	byte realm2;        /* Second magic realm */
-	byte oops;			/* Unused */
+	character_idx psex;			/* Sex index */
+	character_idx prace;			/* Race index */
+	character_idx pclass;		/* Class index */
+	character_idx pseikaku;		/* Seikaku index */
+	character_idx realm1;        /* First magic realm */
+	character_idx realm2;        /* Second magic realm */
+	character_idx oops;			/* Unused */
 
 	byte hitdie;		/* Hit dice (sides) */
 	u16b expfact;       /* Experience factor
