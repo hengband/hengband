@@ -2073,7 +2073,7 @@ int calc_mutant_regenerate_mod(void)
  * @brief 突然変異レイシャル上で口を使うよりを行った際に歌や呪術を停止する /
  * @return なし
  */
-void mutation_stop_mouth()
+static void mutation_stop_mouth(void)
 {
 	if (music_singing_any()) stop_singing();
 	if (hex_spelling_any()) stop_hex_spell_all();
@@ -2334,7 +2334,7 @@ bool mutation_power_aux(u32b power)
 		case MUT1_RESIST:
 			{
 				int num = lvl / 10;
-				int dur = randint1(20) + 20;
+				time_effect dur = randint1(20) + 20;
 
 				if (randint0(5) < num)
 				{

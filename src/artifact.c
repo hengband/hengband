@@ -3421,7 +3421,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_ULTIMATE_RESIST:
 		{
-			int v = randint1(25)+25;
+			time_effect v = randint1(25)+25;
 			(void)set_afraid(0);
 			(void)set_hero(v, FALSE);
 			(void)hp_player(10);

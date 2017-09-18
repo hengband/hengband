@@ -165,7 +165,7 @@ static void monspell_message_base(int m_idx, int t_idx, cptr msg1, cptr msg2, cp
 */
 void monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, int TARGET_TYPE)
 {
-	monspell_message_base(m_idx, t_idx, msg1, msg1, msg2, msg3, p_ptr->blind, TARGET_TYPE);
+	monspell_message_base(m_idx, t_idx, msg1, msg1, msg2, msg3, p_ptr->blind > 0, TARGET_TYPE);
 }
 
 /*!
@@ -178,7 +178,7 @@ void monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, cptr msg3, int
 */
 void simple_monspell_message(int m_idx, int t_idx, cptr msg1, cptr msg2, int TARGET_TYPE)
 {
-	monspell_message_base(m_idx, t_idx, msg1, msg2, msg1, msg2, p_ptr->blind, TARGET_TYPE);
+	monspell_message_base(m_idx, t_idx, msg1, msg2, msg1, msg2, p_ptr->blind > 0, TARGET_TYPE);
 }
 
 /*!
@@ -1738,7 +1738,7 @@ void spell_RF6_HASTE(int m_idx, int t_idx, int TARGET_TYPE)
 		_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
 		_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
 		_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
-		p_ptr->blind, TARGET_TYPE);
+		p_ptr->blind > 0, TARGET_TYPE);
 
 	/* Allow quick speed increases to base+10 */
 	if (set_monster_fast(m_idx, MON_FAST(m_ptr) + 100))
@@ -1802,7 +1802,7 @@ void spell_RF6_HEAL(int m_idx, int t_idx, int TARGET_TYPE)
 		_("%^sは自分の傷に念を集中した。", "%^s concentrates on %s wounds."),
 		_("%^sが自分の傷に集中した。", "%^s concentrates on %s wounds."),
 		_("%^sは自分の傷に念を集中した。", "%^s concentrates on %s wounds."),
-		p_ptr->blind, TARGET_TYPE);
+		p_ptr->blind > 0, TARGET_TYPE);
 
 	/* Heal some */
 	m_ptr->hp += (rlev * 6);
@@ -1954,8 +1954,9 @@ int spell_RF6_WORLD(int m_idx)
 */
 int spell_RF6_SPECIAL_BANORLUPART(int m_idx)
 {
-	monster_type	*m_ptr = &m_list[m_idx];
-	int dummy_hp, dummy_maxhp, k;
+	monster_type *m_ptr = &m_list[m_idx];
+	hit_point dummy_hp, dummy_maxhp;
+	int k;
 	int dummy_y = m_ptr->fy;
 	int dummy_x = m_ptr->fx;
 	u32b mode = 0L;
