@@ -253,7 +253,7 @@ bool test_hit_norm(int chance, int ac, int vis)
  * @param dam 現在算出中のダメージ値
  * @return クリティカル修正が入ったダメージ値
  */
-s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
+hit_point critical_shot(int weight, int plus_ammo, int plus_bow, hit_point dam)
 {
 	int i, k;
 	object_type *j_ptr =  &inventory[INVEN_BOW];
@@ -311,7 +311,7 @@ s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
  * @param mode オプションフラグ
  * @return クリティカル修正が入ったダメージ値
  */
-s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
+hit_point critical_norm(int weight, int plus, hit_point dam, s16b meichuu, int mode)
 {
 	int i, k;
 	
@@ -1214,7 +1214,7 @@ static void hit_trap(bool break_trap)
 			hit_trap_set_abnormal_status(
 				_("黒いガスに包み込まれた！", "A black gas surrounds you!"),
 				p_ptr->resist_blind,
-				set_blind, p_ptr->blind + randint0(50) + 25);
+				set_blind, p_ptr->blind + (time_effect)randint0(50) + 25);
 			break;
 		}
 
@@ -1223,7 +1223,7 @@ static void hit_trap(bool break_trap)
 			hit_trap_set_abnormal_status(
 				_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
 				p_ptr->resist_conf,
-				set_confused, p_ptr->confused + randint0(20) + 10);
+				set_confused, p_ptr->confused + (time_effect)randint0(20) + 10);
 			break;
 		}
 
@@ -1232,7 +1232,7 @@ static void hit_trap(bool break_trap)
 			hit_trap_set_abnormal_status(
 				_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
 				p_ptr->resist_pois || IS_OPPOSE_POIS(),
-				set_poisoned, p_ptr->poisoned + randint0(20) + 10);
+				set_poisoned, p_ptr->poisoned + (time_effect)randint0(20) + 10);
 			break;
 		}
 
@@ -1419,7 +1419,8 @@ static void touch_zap_player(monster_type *m_ptr)
  */
 static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 {
-	int             k, bonus, chance;
+	hit_point k;
+	int bonus, chance;
 	int             n_weight = 0;
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];

@@ -117,7 +117,8 @@ typedef byte character_idx; /*!< ゲーム中のキャラクター特性各種ID
 typedef byte discount_rate; /*!< ゲーム中の値引き率の型を定義 */
 
 typedef s16b player_level;  /*!< ゲーム中のプレイヤーレベルの型を定義 */
-typedef int direction;		/*!< ゲーム中の方角の型定義*/
+typedef int direction;		/*!< ゲーム中の方角の型定義 */
+typedef s16b sub_exp;		/*!< ゲーム中の副経験値の型定義 */
 
 /*** Pointers to all the basic types defined above ***/
 

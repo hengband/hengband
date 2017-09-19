@@ -698,8 +698,8 @@ extern void glow_deep_lava_and_bldg(void);
 /* cmd1.c */
 extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
 extern bool test_hit_norm(int chance, int ac, int vis);
-extern s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam);
-extern s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode);
+extern hit_point critical_shot(int weight, int plus_ammo, int plus_bow, hit_point dam);
+extern hit_point critical_norm(int weight, int plus, hit_point dam, s16b meichuu, int mode);
 extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bool thrown);
 extern void search(void);
 extern void py_pickup_aux(int o_idx);

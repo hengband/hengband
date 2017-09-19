@@ -1106,9 +1106,9 @@ struct player_type
 	u32b spell_forgotten2;	  /* bit mask of spells learned but forgotten */
 	byte spell_order[64];	  /* order spells learned/remembered/forgotten */
 
-	s16b spell_exp[64];       /* Proficiency of spells */
-	s16b weapon_exp[5][64];   /* Proficiency of weapons */
-	s16b skill_exp[GINOU_MAX];       /* Proficiency of misc. skill */
+	sub_exp spell_exp[64];        /* Proficiency of spells */
+	sub_exp weapon_exp[5][64];    /* Proficiency of weapons */
+	sub_exp skill_exp[GINOU_MAX]; /* Proficiency of misc. skill */
 
 	s32b magic_num1[108];     /* Array for non-spellbook type magic */
 	byte magic_num2[108];     /* Flags for non-spellbook type magics */
