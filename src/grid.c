@@ -23,7 +23,7 @@
  */
 bool new_player_spot(void)
 {
-	int	y = 0, x = 0;
+	position y = 0, x = 0;
 	int max_attempts = 10000;
 
 	cave_type *c_ptr;
@@ -33,8 +33,8 @@ bool new_player_spot(void)
 	while (max_attempts--)
 	{
 		/* Pick a legal spot */
-		y = rand_range(1, cur_hgt - 2);
-		x = rand_range(1, cur_wid - 2);
+		y = (position)rand_range(1, cur_hgt - 2);
+		x = (position)rand_range(1, cur_wid - 2);
 
 		c_ptr = &cave[y][x];
 
@@ -628,8 +628,9 @@ void set_floor(int x, int y)
  *   inner -- inner room walls\n
  *   outer -- outer room walls\n
  *   solid -- solid room walls\n
+ * TODO: tmp_row/tmp_col をposition型に後から直す。
  */
-bool build_tunnel(int row1, int col1, int row2, int col2)
+bool build_tunnel(position row1, position col1, position row2, position col2)
 {
 	int y, x;
 	int tmp_row, tmp_col;
@@ -708,8 +709,8 @@ bool build_tunnel(int row1, int col1, int row2, int col2)
 			if (is_solid_bold(y, x)) continue;
 
 			/* Accept this location */
-			row1 = tmp_row;
-			col1 = tmp_col;
+			row1 = (position)tmp_row;
+			col1 = (position)tmp_col;
 
 			/* Save the wall location */
 			if (dun->wall_n < WALL_MAX)
@@ -739,16 +740,16 @@ bool build_tunnel(int row1, int col1, int row2, int col2)
 		else if (c_ptr->info & (CAVE_ROOM))
 		{
 			/* Accept the location */
-			row1 = tmp_row;
-			col1 = tmp_col;
+			row1 = (position)tmp_row;
+			col1 = (position)tmp_col;
 		}
 
 		/* Tunnel through all other walls */
 		else if (is_extra_grid(c_ptr) || is_inner_grid(c_ptr) || is_solid_grid(c_ptr))
 		{
 			/* Accept this location */
-			row1 = tmp_row;
-			col1 = tmp_col;
+			row1 = (position)tmp_row;
+			col1 = (position)tmp_col;
 
 			/* Save the tunnel location */
 			if (dun->tunn_n < TUNN_MAX)
@@ -767,8 +768,8 @@ bool build_tunnel(int row1, int col1, int row2, int col2)
 		else
 		{
 			/* Accept the location */
-			row1 = tmp_row;
-			col1 = tmp_col;
+			row1 = (position)tmp_row;
+			col1 = (position)tmp_col;
 
 			/* Collect legal door locations */
 			if (!door_flag)
@@ -825,7 +826,7 @@ bool build_tunnel(int row1, int col1, int row2, int col2)
  * routine.\n
  * @todo 特に詳細な処理の意味を調査すべし
  */
-static bool set_tunnel(int *x, int *y, bool affectwall)
+static bool set_tunnel(position *x, position *y, bool affectwall)
 {
 	int i, j, dx, dy;
 
@@ -1115,7 +1116,7 @@ static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, 
  * Note it is VERY important that the "stop if hit another passage" logic\n
  * stays as is.  Without this the dungeon turns into Swiss Cheese...\n
  */
-bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
+bool build_tunnel2(position x1, position y1, position x2, position y2, int type, int cutoff)
 {
 	int x3, y3, dx, dy;
 	int changex, changey;

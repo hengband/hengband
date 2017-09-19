@@ -120,6 +120,10 @@ typedef s16b player_level;  /*!< ゲーム中のプレイヤーレベルの型�
 typedef int direction;		/*!< ゲーム中の方角の型定義 */
 typedef s16b sub_exp;		/*!< ゲーム中の副経験値の型定義 */
 
+typedef byte object_type_value;    /*!< ゲーム中のアイテム主分類の型定義 */
+typedef byte object_subtype_value; /*!< ゲーム中のアイテム副分類の型定義 */
+typedef s16b parameter_value;      /*!< ゲーム中のアイテム能力値の型定義 */
+
 /*** Pointers to all the basic types defined above ***/
 
 typedef real *real_ptr;

@@ -1561,7 +1561,8 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
  */
 static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int mode)
 {
-	int		num = 0, k, bonus, chance, vir;
+	int		num = 0, bonus, chance, vir;
+	hit_point k;
 
 	cave_type       *c_ptr = &cave[y][x];
 
@@ -1652,7 +1653,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			int now_exp = p_ptr->weapon_exp[tval][sval];
 			if (now_exp < s_info[p_ptr->pclass].w_max[tval][sval])
 			{
-				int amount = 0;
+				sub_exp amount = 0;
 				if (now_exp < WEAPON_EXP_BEGINNER) amount = 80;
 				else if (now_exp < WEAPON_EXP_SKILLED) amount = 10;
 				else if ((now_exp < WEAPON_EXP_EXPERT) && (p_ptr->lev > 19)) amount = 1;
@@ -1983,7 +1984,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						mult++;
 					}
 
-					k *= mult;
+					k *= (hit_point)mult;
 
 					/* Ouch! */
 					if (((r_ptr->flagsr & RFR_RES_ALL) ? k/100 : k) > m_ptr->hp)
@@ -2147,8 +2148,8 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				{
 					if (is_human)
 					{
-						int to_h = o_ptr->to_h;
-						int to_d = o_ptr->to_d;
+						hit_prob to_h = o_ptr->to_h;
+						hit_point to_d = o_ptr->to_d;
 						int i, flag;
 
 						flag = 1;
@@ -2401,7 +2402,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						p_ptr->redraw |= (PR_MANA);
 						mult = mult * 3 / 2 + 20;
 					}
-					k *= mult;
+					k *= (hit_point)mult;
 					k /= 10;
 				}
 
@@ -2416,7 +2417,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						mult++;
 					}
 
-					k *= mult;
+					k *= (hit_point)mult;
 				}
 				k += (p_ptr->to_d[hand] + o_ptr->to_d);
 				if (k < 0) k = 0;
@@ -2829,11 +2830,11 @@ bool move_player_effect(position ny, position nx, u32b mpe_mode)
 
 	if (!(mpe_mode & MPE_STAYING))
 	{
-		int oy = p_ptr->y;
-		int ox = p_ptr->x;
+		position oy = p_ptr->y;
+		position ox = p_ptr->x;
 		cave_type *oc_ptr = &cave[oy][ox];
 		int om_idx = oc_ptr->m_idx;
-		int nm_idx = c_ptr->m_idx;
+		idx nm_idx = c_ptr->m_idx;
 
 		/* Move the player */
 		p_ptr->y = ny;
@@ -3106,11 +3107,11 @@ bool trap_can_be_ignored(int feat)
  * any monster which might be in the destination grid.  Previously,\n
  * moving into walls was "free" and did NOT hit invisible monsters.\n
  */
-void move_player(int dir, bool do_pickup, bool break_trap)
+void move_player(direction dir, bool do_pickup, bool break_trap)
 {
 	/* Find the result of moving */
-	int y = p_ptr->y + ddy[dir];
-	int x = p_ptr->x + ddx[dir];
+	position y = p_ptr->y + ddy[dir];
+	position x = p_ptr->x + ddx[dir];
 
 	/* Examine the destination */
 	cave_type *c_ptr = &cave[y][x];

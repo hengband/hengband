@@ -523,7 +523,8 @@ static void place_pet(void)
 
 	for (i = 0; i < max_num; i++)
 	{
-		int cy = 0, cx = 0, m_idx;
+		position cy = 0, cx = 0;
+		idx m_idx;
 
 		if (!(party_mon[i].r_idx)) continue;
 

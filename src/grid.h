@@ -282,5 +282,5 @@ extern void rand_dir(int *rdir, int *cdir);
 extern bool get_is_floor(int x, int y);
 extern void set_floor(int x, int y);
 
-extern bool build_tunnel(int row1, int col1, int row2, int col2);
-extern bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff);
+extern bool build_tunnel(position row1, position col1, position row2, position col2);
+extern bool build_tunnel2(position x1, position y1, position x2, position y2, int type, int cutoff);

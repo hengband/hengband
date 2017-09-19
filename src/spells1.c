@@ -3053,7 +3053,7 @@ static bool project_m(int who, int r, int y, int x, hit_point dam, int typ, int 
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には効果がなかった！", " is immune.");
+				note = _("には効果がなかった！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;

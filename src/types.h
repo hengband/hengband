@@ -456,11 +456,9 @@ struct cave_type
 {
 	u16b info;		/* Hack -- cave flags */
 
-	s16b feat;		/* Hack -- feature type */
-
-	s16b o_idx;		/* Object in this grid */
-
-	s16b m_idx;		/* Monster in this grid */
+	idx feat;		/* Hack -- feature type */
+	idx o_idx;		/* Object in this grid */
+	idx m_idx;		/* Monster in this grid */
 
 	s16b special;	/* Special cave info */
 
@@ -480,8 +478,8 @@ typedef struct coord coord;
 
 struct coord
 {
-	byte y;
-	byte x;
+	position y;
+	position x;
 };
 
 
@@ -523,10 +521,10 @@ struct object_type
 	position iy;			/* Y-position on map, or zero */
 	position ix;			/* X-position on map, or zero */
 
-	byte tval;			/* Item type (from kind) */
-	byte sval;			/* Item sub-type (from kind) */
+	object_type_value tval;			/* Item type (from kind) */
+	object_subtype_value sval;			/* Item sub-type (from kind) */
 
-	s16b pval;			/* Item extra-parameter */
+	parameter_value pval;			/* Item extra-parameter */
 
 	discount_rate discount;		/* Discount (if any) */
 
@@ -996,7 +994,7 @@ struct player_type
 	s16b town_num;			/* Current town number */
 	s16b arena_number;		/* monster number in arena -KMW- */
 	bool inside_arena;		/* Is character inside arena? */
-	s16b inside_quest;		/* Inside quest level */
+	idx inside_quest;		/* Inside quest level */
 	bool inside_battle;		/* Is character inside tougijou? */
 
 	s32b wilderness_x;	/* Coordinates in the wilderness */
@@ -1351,8 +1349,8 @@ struct player_type
 
 	s16b energy_use;	/* Energy use this turn */
 
-	int y;	/* Player location in dungeon */
-	int x;	/* Player location in dungeon */
+	position y;	/* Player location in dungeon */
+	position x;	/* Player location in dungeon */
 	char name[32]; /* Current player's character name */
 };
 

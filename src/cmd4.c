@@ -383,7 +383,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	    type == NIKKI_RAND_QUEST_F ||
 	    type == NIKKI_TO_QUEST)
 	{
-		int old_quest;
+		idx old_quest;
 
 		old_quest = p_ptr->inside_quest;
 		p_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
