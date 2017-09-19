@@ -1039,6 +1039,7 @@ static bool cast_mindcrafter_spell(int spell)
 {
 	int             b = 0;
 	int             dir;
+	time_effect t;
 	player_level plev = p_ptr->lev;
 
 	/* spell code */
@@ -1150,10 +1151,10 @@ static bool cast_mindcrafter_spell(int spell)
 			hp_player(plev);
 		}
 
-		b = 10 + randint1((plev * 3) / 2);
-		set_hero(b, FALSE);
+		t = 10 + randint1((plev * 3) / 2);
+		set_hero(t, FALSE);
 		/* Haste */
-		(void)set_fast(b, FALSE);
+		(void)set_fast(t, FALSE);
 		break;
 	case 10:
 		/* Telekinesis */
@@ -1402,6 +1403,7 @@ static bool cast_mirror_spell(int spell)
 	int             dir;
 	int             plev = p_ptr->lev;
 	int		tmp;
+	time_effect t;
 	int		x,y;
 
 	/* spell code */
@@ -1412,7 +1414,7 @@ static bool cast_mirror_spell(int spell)
 	  tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 0;
 	  if( plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
 	  if( plev + tmp > 18 )detect_monsters_invis(DETECT_RAD_DEFAULT);
-	  if( plev + tmp > 28 )set_tim_esp(plev,FALSE);
+	  if( plev + tmp > 28 )set_tim_esp((time_effect)plev, FALSE);
 	  if( plev + tmp > 38 )map_area(DETECT_RAD_MAP);
 	  if( tmp == 0 && plev < 5 ){
 	    msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
@@ -1484,10 +1486,10 @@ static bool cast_mirror_spell(int spell)
 	  break;
 	/* shield of water */
 	case 12:
-	  tmp = 20+randint1(20);
-	  set_shield(tmp, FALSE);
-	  if( plev > 31 )set_tim_reflect(tmp, FALSE);
-	  if( plev > 39 )set_resist_magic(tmp,FALSE);
+	  t = 20 + randint1(20);
+	  set_shield(t, FALSE);
+	  if( plev > 31 )set_tim_reflect(t, FALSE);
+	  if( plev > 39 )set_resist_magic(t, FALSE);
 	  break;
 	/* super ray */
 	case 13:
@@ -1549,8 +1551,8 @@ static bool cast_mirror_spell(int spell)
  */
 static bool cast_berserk_spell(int spell)
 {
-	int y, x;
-	int dir;
+	position y, x;
+	direction dir;
 
 	/* spell code */
 	switch (spell)
@@ -1705,7 +1707,7 @@ static bool cast_ninja_spell(int spell)
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
 		teleport_player(30, 0L);
-		set_oppose_fire(plev, FALSE);
+		set_oppose_fire((time_effect)plev, FALSE);
 		break;
 	case 10:
 		return rush_attack(NULL);
@@ -1830,7 +1832,7 @@ static bool cast_ninja_spell(int spell)
 		break;
 	case 16:
 		(void)set_kabenuke(randint1(plev/2) + plev/2, FALSE);
-		set_oppose_acid(plev, FALSE);
+		set_oppose_acid((time_effect)plev, FALSE);
 		break;
 	case 17:
 		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);
