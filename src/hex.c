@@ -29,8 +29,7 @@ bool stop_hex_spell_all(void)
 
 	for (i = 0; i < 32; i++)
 	{
-		u32b spell = 1L << i;
-		if (hex_spelling(spell)) do_spell(REALM_HEX, spell, SPELL_STOP);
+		if (hex_spelling(i)) do_spell(REALM_HEX, i, SPELL_STOP);
 	}
 
 	p_ptr->magic_num1[0] = 0;
