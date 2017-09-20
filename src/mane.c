@@ -166,7 +166,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 					/* Reduce failure rate by INT/WIS adjustment */
 					chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[spell.use_stat]] + adj_mag_stat[p_ptr->stat_ind[A_DEX]] - 2) / 2;
 
-					if (spell.manedam) chance = chance * p_ptr->mane_dam[i] / spell.manedam;
+					if (spell.manedam) chance = chance * (baigaesi ? p_ptr->mane_dam[i] * 2 : p_ptr->mane_dam[i]) / spell.manedam;
 
 					chance += p_ptr->to_m_chance;
 
