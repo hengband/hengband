@@ -8319,7 +8319,9 @@ bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
 	/* Unused */
 	(void)v;
 
-	return (qa->comptime <= qb->comptime);
+	return (qa->comptime != qb->comptime) ?
+		(qa->comptime < qb->comptime) :
+		(qa->level <= qb->level);
 }
 
 void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
