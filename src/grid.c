@@ -944,9 +944,9 @@ static bool set_tunnel(position *x, position *y, bool affectwall)
  * Note that this routine is only called on "even" squares - so it gives
  * a natural checkerboard pattern.
  */
-static void create_cata_tunnel(int x, int y)
+static void create_cata_tunnel(position x, position y)
 {
-	int x1, y1;
+	position x1, y1;
 
 	/* Build tunnel */
 	x1 = x - 1;
@@ -991,7 +991,8 @@ static void create_cata_tunnel(int x, int y)
  */
 static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, bool *fail)
 {
-	int i, x, y;
+	int i;
+	position x, y;
 	int length;
 
 	/* Check for early exit */
@@ -1118,7 +1119,7 @@ static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, 
  */
 bool build_tunnel2(position x1, position y1, position x2, position y2, int type, int cutoff)
 {
-	int x3, y3, dx, dy;
+	int x3, y3, dx, dy; // TODO: いずれpositon型に変える
 	int changex, changey;
 	int length;
 	int i;
@@ -1200,8 +1201,8 @@ bool build_tunnel2(position x1, position y1, position x2, position y2, int type,
 					/* Save the door location */
 					if (dun->door_n < DOOR_MAX)
 					{
-						dun->door[dun->door_n].y = y3;
-						dun->door[dun->door_n].x = x3;
+						dun->door[dun->door_n].y = (position)y3;
+						dun->door[dun->door_n].x = (position)x3;
 						dun->door_n++;
 					}
 					else return FALSE;
@@ -1218,9 +1219,9 @@ bool build_tunnel2(position x1, position y1, position x2, position y2, int type,
 		else
 		{
 			/* tunnel through walls */
-			if (build_tunnel2(x1, y1, x3, y3, type, cutoff))
+			if (build_tunnel2(x1, y1, (position)x3, (position)y3, type, cutoff))
 			{
-				retval = build_tunnel2(x3, y3, x2, y2, type, cutoff);
+				retval = build_tunnel2((position)x3, (position)y3, x2, y2, type, cutoff);
 				firstsuccede = TRUE;
 			}
 			else
