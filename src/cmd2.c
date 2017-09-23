@@ -891,7 +891,7 @@ static bool is_open(int feat)
  * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
-static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
+static int count_dt(position *y, position *x, bool (*test)(int feat), bool under)
 {
 	int d, count, xx, yy;
 
@@ -1119,7 +1119,7 @@ static bool do_cmd_open_aux(int y, int x)
  */
 void do_cmd_open(void)
 {
-	int y, x;
+	position y, x;
 	direction dir;
 	idx o_idx;
 
@@ -1295,7 +1295,8 @@ static bool do_cmd_close_aux(int y, int x)
  */
 void do_cmd_close(void)
 {
-	int y, x, dir;
+	position y, x;
+	direction dir;
 
 	bool more = FALSE;
 
@@ -1956,8 +1957,8 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
  */
 void do_cmd_disarm(void)
 {
-	int y, x, dir;
-
+	position y, x;
+	direction dir;
 	s16b o_idx;
 
 	bool more = FALSE;
