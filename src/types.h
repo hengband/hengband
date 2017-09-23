@@ -564,8 +564,7 @@ struct object_type
 
 	u32b curse_flags;        /* Flags for curse */
 
-	s16b next_o_idx;	/* Next object in stack (if any) */
-
+	idx next_o_idx;	/* Next object in stack (if any) */
 	idx held_m_idx;	/* Monster holding us (if any) */
 };
 

@@ -2833,7 +2833,7 @@ bool move_player_effect(position ny, position nx, u32b mpe_mode)
 		position oy = p_ptr->y;
 		position ox = p_ptr->x;
 		cave_type *oc_ptr = &cave[oy][ox];
-		int om_idx = oc_ptr->m_idx;
+		idx om_idx = oc_ptr->m_idx;
 		idx nm_idx = c_ptr->m_idx;
 
 		/* Move the player */
@@ -3633,12 +3633,12 @@ static byte chome[] =
 /*
  * The direction we are running
  */
-static byte find_current;
+static direction find_current;
 
 /*
  * The direction we came from
  */
-static byte find_prevdir;
+static direction find_prevdir;
 
 /*
  * We are looking for open area

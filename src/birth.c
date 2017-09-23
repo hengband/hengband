@@ -2708,7 +2708,7 @@ static void get_stats(void)
 			val = 5 + 3;
 			val += tmp % 3; tmp /= 3;
 			val += tmp % 4; tmp /= 4;
-			val += tmp;
+			val += (base_status)tmp;
 
 			/* Save that value */
 			sum += val;

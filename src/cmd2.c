@@ -995,7 +995,7 @@ static int count_chests(int *y, int *x, bool trapped)
  * @param x 方角を確認したX座標
  * @return 方向ID
  */
-static int coords_to_dir(int y, int x)
+static direction coords_to_dir(position y, position x)
 {
 	int d[3][3] = { {7, 4, 1}, {8, 5, 2}, {9, 6, 3} };
 	int dy, dx;
@@ -1119,9 +1119,9 @@ static bool do_cmd_open_aux(int y, int x)
  */
 void do_cmd_open(void)
 {
-	int y, x, dir;
-
-	s16b o_idx;
+	int y, x;
+	direction dir;
+	idx o_idx;
 
 	bool more = FALSE;
 

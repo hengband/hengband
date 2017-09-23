@@ -250,14 +250,11 @@ void delete_object(int y, int x)
  * @param i2 整理したい配列の終点
  * @return なし
  */
-static void compact_objects_aux(int i1, int i2)
+static void compact_objects_aux(idx i1, idx i2)
 {
-	int i;
-
+	idx i;
 	cave_type *c_ptr;
-
 	object_type *o_ptr;
-
 
 	/* Do nothing */
 	if (i1 == i2) return;
