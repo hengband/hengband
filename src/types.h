@@ -66,8 +66,8 @@ typedef struct feature_type feature_type;
 
 struct feature_type
 {
-	str_offset name;                /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
-	str_offset text;                /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
+	STR_OFFSET name;                /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
+	STR_OFFSET text;                /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
 	s16b tag;                 /*!< 地形特性タグ参照のためのネームバッファオフセット値 /  Tag (offset) */
 
 	s16b mimic;               /*!< 未確定時の外形地形ID / Feature to mimic */
@@ -102,9 +102,9 @@ typedef struct object_kind object_kind;
 
 struct object_kind
 {
-	str_offset name;			/*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
-	str_offset text;			/*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
-	str_offset flavor_name;	/*!< 未確定名参照のためのネームバッファオフセット値 / Flavor name (offset) */
+	STR_OFFSET name;			/*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
+	STR_OFFSET text;			/*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
+	STR_OFFSET flavor_name;	/*!< 未確定名参照のためのネームバッファオフセット値 / Flavor name (offset) */
 
 	byte tval;			/*!< ベースアイテム種別の大項目値 Object type */
 	byte sval;			/*!< ベースアイテム種別の小項目値 Object sub type */
@@ -164,8 +164,8 @@ typedef struct artifact_type artifact_type;
  */
 struct artifact_type
 {
-	str_offset name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
-	str_offset text;			/*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
+	STR_OFFSET name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
+	STR_OFFSET text;			/*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
 
 	byte tval;			/*!< ベースアイテム大項目ID / Artifact type */
 	byte sval;			/*!< ベースアイテム小項目ID / Artifact sub type */
@@ -208,8 +208,8 @@ typedef struct ego_item_type ego_item_type;
 
 struct ego_item_type
 {
-	str_offset name;			/* Name (offset) */
-	str_offset text;			/* Text (offset) */
+	STR_OFFSET name;			/* Name (offset) */
+	STR_OFFSET text;			/* Text (offset) */
 
 	byte slot;			/* Standard slot value */
 	byte rating;		/* Rating boost */
@@ -289,11 +289,11 @@ typedef struct monster_race monster_race;
 
 struct monster_race
 {
-	str_offset name;	/*!< 名前データのオフセット(日本語) /  Name offset(Japanese) */
+	STR_OFFSET name;	/*!< 名前データのオフセット(日本語) /  Name offset(Japanese) */
 #ifdef JP
-	str_offset E_name;		/*!< 名前データのオフセット(英語) /  Name offset(English) */
+	STR_OFFSET E_name;		/*!< 名前データのオフセット(英語) /  Name offset(English) */
 #endif
-	str_offset text;				/*!< 思い出テキストのオフセット / Lore text offset */
+	STR_OFFSET text;				/*!< 思い出テキストのオフセット / Lore text offset */
 
 	byte hdice;				/*!< HPのダイス数 / Creatures hit dice count */
 	byte hside;				/*!< HPのダイス面数 / Creatures hit dice sides */
@@ -397,8 +397,8 @@ typedef struct vault_type vault_type;
 
 struct vault_type
 {
-	str_offset name;	/* Name (offset) */
-	str_offset text;	/* Text (offset) */
+	STR_OFFSET name;	/* Name (offset) */
+	STR_OFFSET text;	/* Text (offset) */
 
 	byte typ;			/* Vault type */
 	byte rat;			/* Vault rating */
@@ -454,9 +454,9 @@ struct cave_type
 {
 	u16b info;		/* Hack -- cave flags */
 
-	idx feat;		/* Hack -- feature type */
-	idx o_idx;		/* Object in this grid */
-	idx m_idx;		/* Monster in this grid */
+	IDX feat;		/* Hack -- feature type */
+	IDX o_idx;		/* Object in this grid */
+	IDX m_idx;		/* Monster in this grid */
 
 	s16b special;	/* Special cave info */
 
@@ -476,8 +476,8 @@ typedef struct coord coord;
 
 struct coord
 {
-	position y;
-	position x;
+	POSITION y;
+	POSITION x;
 };
 
 
@@ -514,21 +514,21 @@ typedef struct object_type object_type;
 
 struct object_type
 {
-	idx k_idx;			/* Kind index (zero if "dead") */
+	IDX k_idx;			/* Kind index (zero if "dead") */
 
-	position iy;			/* Y-position on map, or zero */
-	position ix;			/* X-position on map, or zero */
+	POSITION iy;			/* Y-position on map, or zero */
+	POSITION ix;			/* X-position on map, or zero */
 
-	object_type_value tval;			/* Item type (from kind) */
-	object_subtype_value sval;			/* Item sub-type (from kind) */
+	OBJECT_TYPE_VALUE tval;			/* Item type (from kind) */
+	OBJECT_SUBTYPE_VALUE sval;			/* Item sub-type (from kind) */
 
-	parameter_value pval;			/* Item extra-parameter */
+	PARAMETER_VALUE pval;			/* Item extra-parameter */
 
-	discount_rate discount;		/* Discount (if any) */
+	DISCOUNT_RATE discount;		/* Discount (if any) */
 
-	item_number number;	/* Number of items */
+	ITEM_NUMBER number;	/* Number of items */
 
-	s16b weight;		/* Item weight */
+	WEIGHT weight;		/* Item weight */
 
 	byte name1;			/* Artifact type, if any */
 	byte name2;			/* Ego-Item type, if any */
@@ -539,11 +539,11 @@ struct object_type
 	s16b xtra4;			/* Extra info fuel or captured monster's current HP */
 	s16b xtra5;			/* Extra info captured monster's max HP */
 
-	hit_prob to_h;			/* Plusses to hit */
-	hit_point to_d;			/* Plusses to damage */
-	armour_class to_a;			/* Plusses to AC */
+	HIT_PROB to_h;			/* Plusses to hit */
+	HIT_POINT to_d;			/* Plusses to damage */
+	ARMOUR_CLASS to_a;			/* Plusses to AC */
 
-	armour_class ac;			/* Normal AC */
+	ARMOUR_CLASS ac;			/* Normal AC */
 
 	byte dd, ds;		/* Damage dice/sides */
 
@@ -562,8 +562,8 @@ struct object_type
 
 	u32b curse_flags;        /* Flags for curse */
 
-	idx next_o_idx;	/* Next object in stack (if any) */
-	idx held_m_idx;	/* Monster holding us (if any) */
+	IDX next_o_idx;	/* Next object in stack (if any) */
+	IDX held_m_idx;	/* Monster holding us (if any) */
 };
 
 
@@ -585,27 +585,27 @@ struct monster_type
 	s16b ap_r_idx;		/* Monster race appearance index */
 	byte sub_align;		/* Sub-alignment for a neutral monster */
 
-	position fy;		/* Y location on map */
-	position fx;		/* X location on map */
+	POSITION fy;		/* Y location on map */
+	POSITION fx;		/* X location on map */
 
-	hit_point hp;		/* Current Hit points */
-	hit_point maxhp;		/* Max Hit points */
-	hit_point max_maxhp;		/* Max Max Hit points */
+	HIT_POINT hp;		/* Current Hit points */
+	HIT_POINT maxhp;		/* Max Hit points */
+	HIT_POINT max_maxhp;		/* Max Max Hit points */
 	u32b dealt_damage;		/* Sum of damages dealt by player */
 
 	s16b mtimed[MAX_MTIMED];	/* Timed status counter */
 
 	byte mspeed;	        /* Monster "speed" */
-	action_energy energy_need;	/* Monster "energy" */
+	ACTION_ENERGY energy_need;	/* Monster "energy" */
 
-	position cdis;		/* Current dis from player */
+	POSITION cdis;		/* Current dis from player */
 
 	byte mflag;		/* Extra monster flags */
 	byte mflag2;		/* Extra monster flags */
 
 	bool ml;		/* Monster is "visible" */
 
-	idx hold_o_idx;	/* Object being held (if any) */
+	IDX hold_o_idx;	/* Object being held (if any) */
 
 	s16b target_y;		/* Can attack !los player */
 	s16b target_x;		/* Can attack !los player */
@@ -959,13 +959,13 @@ struct player_type
 	s16b oldpy;		/* Previous player location -KMW- */
 	s16b oldpx;		/* Previous player location -KMW- */
 
-	character_idx psex;			/* Sex index */
-	character_idx prace;			/* Race index */
-	character_idx pclass;		/* Class index */
-	character_idx pseikaku;		/* Seikaku index */
-	character_idx realm1;        /* First magic realm */
-	character_idx realm2;        /* Second magic realm */
-	character_idx oops;			/* Unused */
+	CHARACTER_IDX psex;			/* Sex index */
+	CHARACTER_IDX prace;			/* Race index */
+	CHARACTER_IDX pclass;		/* Class index */
+	CHARACTER_IDX pseikaku;		/* Seikaku index */
+	CHARACTER_IDX realm1;        /* First magic realm */
+	CHARACTER_IDX realm2;        /* Second magic realm */
+	CHARACTER_IDX oops;			/* Unused */
 
 	byte hitdie;		/* Hit dice (sides) */
 	u16b expfact;       /* Experience factor
@@ -986,12 +986,12 @@ struct player_type
 	s32b exp;			/* Cur experience */
 	u32b exp_frac;		/* Cur exp frac (times 2^16) */
 
-	player_level lev;			/* Level */
+	PLAYER_LEVEL lev;			/* Level */
 
 	s16b town_num;			/* Current town number */
 	s16b arena_number;		/* monster number in arena -KMW- */
 	bool inside_arena;		/* Is character inside arena? */
-	idx inside_quest;		/* Inside quest level */
+	IDX inside_quest;		/* Inside quest level */
 	bool inside_battle;		/* Is character inside tougijou? */
 
 	s32b wilderness_x;	/* Coordinates in the wilderness */
@@ -1008,69 +1008,69 @@ struct player_type
 
 	s16b max_plv;		/* Max Player Level */
 
-	base_status stat_max[6];	/* Current "maximal" stat values */
-	base_status stat_max_max[6];	/* Maximal "maximal" stat values */
-	base_status stat_cur[6];	/* Current "natural" stat values */
+	BASE_STATUS stat_max[6];	/* Current "maximal" stat values */
+	BASE_STATUS stat_max_max[6];	/* Maximal "maximal" stat values */
+	BASE_STATUS stat_cur[6];	/* Current "natural" stat values */
 
 	s16b learned_spells;
 	s16b add_spells;
 
 	u32b count;
 
-	time_effect fast;		/* Timed -- Fast */
-	time_effect slow;		/* Timed -- Slow */
-	time_effect blind;		/* Timed -- Blindness */
-	time_effect paralyzed;		/* Timed -- Paralysis */
-	time_effect confused;		/* Timed -- Confusion */
-	time_effect afraid;		/* Timed -- Fear */
-	time_effect image;		/* Timed -- Hallucination */
-	time_effect poisoned;		/* Timed -- Poisoned */
-	time_effect cut;		/* Timed -- Cut */
-	time_effect stun;		/* Timed -- Stun */
+	TIME_EFFECT fast;		/* Timed -- Fast */
+	TIME_EFFECT slow;		/* Timed -- Slow */
+	TIME_EFFECT blind;		/* Timed -- Blindness */
+	TIME_EFFECT paralyzed;		/* Timed -- Paralysis */
+	TIME_EFFECT confused;		/* Timed -- Confusion */
+	TIME_EFFECT afraid;		/* Timed -- Fear */
+	TIME_EFFECT image;		/* Timed -- Hallucination */
+	TIME_EFFECT poisoned;		/* Timed -- Poisoned */
+	TIME_EFFECT cut;		/* Timed -- Cut */
+	TIME_EFFECT stun;		/* Timed -- Stun */
 
-	time_effect protevil;		/* Timed -- Protection */
-	time_effect invuln;		/* Timed -- Invulnerable */
-	time_effect ult_res;		/* Timed -- Ultimate Resistance */
-	time_effect hero;		/* Timed -- Heroism */
-	time_effect shero;		/* Timed -- Super Heroism */
-	time_effect shield;		/* Timed -- Shield Spell */
-	time_effect blessed;		/* Timed -- Blessed */
-	time_effect tim_invis;		/* Timed -- See Invisible */
-	time_effect tim_infra;		/* Timed -- Infra Vision */
-	time_effect tsuyoshi;		/* Timed -- Tsuyoshi Special */
-	time_effect ele_attack;	/* Timed -- Elemental Attack */
-	time_effect ele_immune;	/* Timed -- Elemental Immune */
+	TIME_EFFECT protevil;		/* Timed -- Protection */
+	TIME_EFFECT invuln;		/* Timed -- Invulnerable */
+	TIME_EFFECT ult_res;		/* Timed -- Ultimate Resistance */
+	TIME_EFFECT hero;		/* Timed -- Heroism */
+	TIME_EFFECT shero;		/* Timed -- Super Heroism */
+	TIME_EFFECT shield;		/* Timed -- Shield Spell */
+	TIME_EFFECT blessed;		/* Timed -- Blessed */
+	TIME_EFFECT tim_invis;		/* Timed -- See Invisible */
+	TIME_EFFECT tim_infra;		/* Timed -- Infra Vision */
+	TIME_EFFECT tsuyoshi;		/* Timed -- Tsuyoshi Special */
+	TIME_EFFECT ele_attack;	/* Timed -- Elemental Attack */
+	TIME_EFFECT ele_immune;	/* Timed -- Elemental Immune */
 
-	time_effect oppose_acid;	/* Timed -- oppose acid */
-	time_effect oppose_elec;	/* Timed -- oppose lightning */
-	time_effect oppose_fire;	/* Timed -- oppose heat */
-	time_effect oppose_cold;	/* Timed -- oppose cold */
-	time_effect oppose_pois;	/* Timed -- oppose poison */
+	TIME_EFFECT oppose_acid;	/* Timed -- oppose acid */
+	TIME_EFFECT oppose_elec;	/* Timed -- oppose lightning */
+	TIME_EFFECT oppose_fire;	/* Timed -- oppose heat */
+	TIME_EFFECT oppose_cold;	/* Timed -- oppose cold */
+	TIME_EFFECT oppose_pois;	/* Timed -- oppose poison */
 
-	time_effect tim_esp;       /* Timed ESP */
-	time_effect wraith_form;   /* Timed wraithform */
+	TIME_EFFECT tim_esp;       /* Timed ESP */
+	TIME_EFFECT wraith_form;   /* Timed wraithform */
 
-	time_effect resist_magic;  /* Timed Resist Magic (later) */
-	time_effect tim_regen;
-	time_effect kabenuke;
-	time_effect tim_stealth;
-	time_effect tim_levitation;
-	time_effect tim_sh_touki;
-	time_effect lightspeed;
-	time_effect tsubureru;
-	time_effect magicdef;
-	time_effect tim_res_nether;	/* Timed -- Nether resistance */
-	time_effect tim_res_time;	/* Timed -- Time resistance */
+	TIME_EFFECT resist_magic;  /* Timed Resist Magic (later) */
+	TIME_EFFECT tim_regen;
+	TIME_EFFECT kabenuke;
+	TIME_EFFECT tim_stealth;
+	TIME_EFFECT tim_levitation;
+	TIME_EFFECT tim_sh_touki;
+	TIME_EFFECT lightspeed;
+	TIME_EFFECT tsubureru;
+	TIME_EFFECT magicdef;
+	TIME_EFFECT tim_res_nether;	/* Timed -- Nether resistance */
+	TIME_EFFECT tim_res_time;	/* Timed -- Time resistance */
 	byte mimic_form;
-	time_effect tim_mimic;
-	time_effect tim_sh_fire;
-	time_effect tim_sh_holy;
-	time_effect tim_eyeeye;
+	TIME_EFFECT tim_mimic;
+	TIME_EFFECT tim_sh_fire;
+	TIME_EFFECT tim_sh_holy;
+	TIME_EFFECT tim_eyeeye;
 
 	/* for mirror master */
-	time_effect tim_reflect;       /* Timed -- Reflect */
-	time_effect multishadow;       /* Timed -- Multi-shadow */
-	time_effect dustrobe;          /* Timed -- Robe of dust */
+	TIME_EFFECT tim_reflect;       /* Timed -- Reflect */
+	TIME_EFFECT multishadow;       /* Timed -- Multi-shadow */
+	TIME_EFFECT dustrobe;          /* Timed -- Robe of dust */
 
 	s16b chaos_patron;
 	u32b muta1;
@@ -1101,9 +1101,9 @@ struct player_type
 	u32b spell_forgotten2;	  /* bit mask of spells learned but forgotten */
 	byte spell_order[64];	  /* order spells learned/remembered/forgotten */
 
-	sub_exp spell_exp[64];        /* Proficiency of spells */
-	sub_exp weapon_exp[5][64];    /* Proficiency of weapons */
-	sub_exp skill_exp[GINOU_MAX]; /* Proficiency of misc. skill */
+	SUB_EXP spell_exp[64];        /* Proficiency of spells */
+	SUB_EXP weapon_exp[5][64];    /* Proficiency of weapons */
+	SUB_EXP skill_exp[GINOU_MAX]; /* Proficiency of misc. skill */
 
 	s32b magic_num1[108];     /* Array for non-spellbook type magic */
 	byte magic_num2[108];     /* Flags for non-spellbook type magics */
@@ -1346,8 +1346,8 @@ struct player_type
 
 	s16b energy_use;	/* Energy use this turn */
 
-	position y;	/* Player location in dungeon */
-	position x;	/* Player location in dungeon */
+	POSITION y;	/* Player location in dungeon */
+	POSITION x;	/* Player location in dungeon */
 	char name[32]; /* Current player's character name */
 };
 
@@ -1594,8 +1594,8 @@ feat_prob;
 /* A structure for the != dungeon types */
 typedef struct dungeon_info_type dungeon_info_type;
 struct dungeon_info_type {
-	str_offset name;		/* Name */
-	str_offset text;		/* Description */
+	STR_OFFSET name;		/* Name */
+	STR_OFFSET text;		/* Description */
 
 	byte dy;
 	byte dx;

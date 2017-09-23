@@ -1092,11 +1092,11 @@ static void random_misc(object_type * o_ptr)
 		case 28:
 		case 29:
 		{
-			hit_prob bonus_h;
-			hit_point bonus_d;
+			HIT_PROB bonus_h;
+			HIT_POINT bonus_d;
 			add_flag(o_ptr->art_flags, TR_SHOW_MODS);
-			bonus_h = 4 + (hit_prob)(randint1(11));
-			bonus_d = 4 + (hit_point)(randint1(11));
+			bonus_h = 4 + (HIT_PROB)(randint1(11));
+			bonus_d = 4 + (HIT_POINT)(randint1(11));
 			if ((o_ptr->tval != TV_SWORD) && (o_ptr->tval != TV_POLEARM) && (o_ptr->tval != TV_HAFTED) && (o_ptr->tval != TV_DIGGING) && (o_ptr->tval != TV_GLOVES) && (o_ptr->tval != TV_RING))
 			{
 				bonus_h /= 2;
@@ -3421,7 +3421,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_ULTIMATE_RESIST:
 		{
-			time_effect v = randint1(25)+25;
+			TIME_EFFECT v = randint1(25)+25;
 			(void)set_afraid(0);
 			(void)set_hero(v, FALSE);
 			(void)hp_player(10);

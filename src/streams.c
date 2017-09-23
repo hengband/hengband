@@ -33,7 +33,7 @@
  * @param width 基本幅
  * @return なし
  */
-static void recursive_river(int x1, int y1, int x2, int y2, idx feat1, idx feat2, int width)
+static void recursive_river(int x1, int y1, int x2, int y2, IDX feat1, IDX feat2, int width)
 {
 	int dx, dy, length, l, x, y;
 	int changex, changey;

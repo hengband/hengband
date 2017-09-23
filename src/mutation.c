@@ -2334,7 +2334,7 @@ bool mutation_power_aux(u32b power)
 		case MUT1_RESIST:
 			{
 				int num = lvl / 10;
-				time_effect dur = randint1(20) + 20;
+				TIME_EFFECT dur = randint1(20) + 20;
 
 				if (randint0(5) < num)
 				{

@@ -390,9 +390,9 @@ s16b panel_col_prt, panel_row_prt;
 /*
  * Targetting variables
  */
-idx target_who;
-position target_col;
-position target_row;
+IDX target_who;
+POSITION target_col;
+POSITION target_row;
 
 
 /*

@@ -383,7 +383,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	    type == NIKKI_RAND_QUEST_F ||
 	    type == NIKKI_TO_QUEST)
 	{
-		idx old_quest;
+		IDX old_quest;
 
 		old_quest = p_ptr->inside_quest;
 		p_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
@@ -2496,10 +2496,9 @@ static errr macro_dump(cptr fname)
  */
 static void do_cmd_macro_aux(char *buf)
 {
-	int i, n = 0;
-
+	char i;
+	int n = 0;
 	char tmp[1024];
-
 
 	/* Flush */
 	flush();

@@ -2682,7 +2682,7 @@ static void get_stats(void)
 		for (i = 0; i < 2; i++)
 		{
 			s32b tmp = randint0(60*60*60);
-			base_status val;
+			BASE_STATUS val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -2708,7 +2708,7 @@ static void get_stats(void)
 			val = 5 + 3;
 			val += tmp % 3; tmp /= 3;
 			val += tmp % 4; tmp /= 4;
-			val += (base_status)tmp;
+			val += (BASE_STATUS)tmp;
 
 			/* Save that value */
 			sum += val;
@@ -2751,7 +2751,7 @@ void get_max_stats(void)
 	/* Acquire the stats */
 	for (i = 0; i < 6; i++)
 	{
-		base_status max_max = 18 + 60 + dice[i]*10;
+		BASE_STATUS max_max = 18 + 60 + dice[i]*10;
 
 		/* Save that value */
 		p_ptr->stat_max_max[i] = max_max;

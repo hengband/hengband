@@ -2110,7 +2110,7 @@ static void process_monster(int m_idx)
 	monster_race    *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 
 	int             i, d;
-	position	oy, ox, ny, nx;
+	POSITION	oy, ox, ny, nx;
 
 	int             mm[8];
 

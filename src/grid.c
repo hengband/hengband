@@ -23,7 +23,7 @@
  */
 bool new_player_spot(void)
 {
-	position y = 0, x = 0;
+	POSITION y = 0, x = 0;
 	int max_attempts = 10000;
 
 	cave_type *c_ptr;
@@ -33,8 +33,8 @@ bool new_player_spot(void)
 	while (max_attempts--)
 	{
 		/* Pick a legal spot */
-		y = (position)rand_range(1, cur_hgt - 2);
-		x = (position)rand_range(1, cur_wid - 2);
+		y = (POSITION)rand_range(1, cur_hgt - 2);
+		x = (POSITION)rand_range(1, cur_wid - 2);
 
 		c_ptr = &cave[y][x];
 
@@ -630,7 +630,7 @@ void set_floor(int x, int y)
  *   solid -- solid room walls\n
  * TODO: tmp_row/tmp_col をposition型に後から直す。
  */
-bool build_tunnel(position row1, position col1, position row2, position col2)
+bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
 	int y, x;
 	int tmp_row, tmp_col;
@@ -709,8 +709,8 @@ bool build_tunnel(position row1, position col1, position row2, position col2)
 			if (is_solid_bold(y, x)) continue;
 
 			/* Accept this location */
-			row1 = (position)tmp_row;
-			col1 = (position)tmp_col;
+			row1 = (POSITION)tmp_row;
+			col1 = (POSITION)tmp_col;
 
 			/* Save the wall location */
 			if (dun->wall_n < WALL_MAX)
@@ -740,16 +740,16 @@ bool build_tunnel(position row1, position col1, position row2, position col2)
 		else if (c_ptr->info & (CAVE_ROOM))
 		{
 			/* Accept the location */
-			row1 = (position)tmp_row;
-			col1 = (position)tmp_col;
+			row1 = tmp_row;
+			col1 = tmp_col;
 		}
 
 		/* Tunnel through all other walls */
 		else if (is_extra_grid(c_ptr) || is_inner_grid(c_ptr) || is_solid_grid(c_ptr))
 		{
 			/* Accept this location */
-			row1 = (position)tmp_row;
-			col1 = (position)tmp_col;
+			row1 = tmp_row;
+			col1 = tmp_col;
 
 			/* Save the tunnel location */
 			if (dun->tunn_n < TUNN_MAX)
@@ -768,8 +768,8 @@ bool build_tunnel(position row1, position col1, position row2, position col2)
 		else
 		{
 			/* Accept the location */
-			row1 = (position)tmp_row;
-			col1 = (position)tmp_col;
+			row1 = tmp_row;
+			col1 = tmp_col;
 
 			/* Collect legal door locations */
 			if (!door_flag)
@@ -826,7 +826,7 @@ bool build_tunnel(position row1, position col1, position row2, position col2)
  * routine.\n
  * @todo 特に詳細な処理の意味を調査すべし
  */
-static bool set_tunnel(position *x, position *y, bool affectwall)
+static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 {
 	int i, j, dx, dy;
 
@@ -944,9 +944,9 @@ static bool set_tunnel(position *x, position *y, bool affectwall)
  * Note that this routine is only called on "even" squares - so it gives
  * a natural checkerboard pattern.
  */
-static void create_cata_tunnel(position x, position y)
+static void create_cata_tunnel(POSITION x, POSITION y)
 {
-	position x1, y1;
+	POSITION x1, y1;
 
 	/* Build tunnel */
 	x1 = x - 1;
@@ -992,7 +992,7 @@ static void create_cata_tunnel(position x, position y)
 static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, bool *fail)
 {
 	int i;
-	position x, y;
+	POSITION x, y;
 	int length;
 
 	/* Check for early exit */
@@ -1117,7 +1117,7 @@ static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, 
  * Note it is VERY important that the "stop if hit another passage" logic\n
  * stays as is.  Without this the dungeon turns into Swiss Cheese...\n
  */
-bool build_tunnel2(position x1, position y1, position x2, position y2, int type, int cutoff)
+bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
 {
 	int x3, y3, dx, dy; // TODO: いずれpositon型に変える
 	int changex, changey;
@@ -1201,8 +1201,8 @@ bool build_tunnel2(position x1, position y1, position x2, position y2, int type,
 					/* Save the door location */
 					if (dun->door_n < DOOR_MAX)
 					{
-						dun->door[dun->door_n].y = (position)y3;
-						dun->door[dun->door_n].x = (position)x3;
+						dun->door[dun->door_n].y = (POSITION)y3;
+						dun->door[dun->door_n].x = (POSITION)x3;
 						dun->door_n++;
 					}
 					else return FALSE;
@@ -1219,9 +1219,9 @@ bool build_tunnel2(position x1, position y1, position x2, position y2, int type,
 		else
 		{
 			/* tunnel through walls */
-			if (build_tunnel2(x1, y1, (position)x3, (position)y3, type, cutoff))
+			if (build_tunnel2(x1, y1, (POSITION)x3, (POSITION)y3, type, cutoff))
 			{
-				retval = build_tunnel2((position)x3, (position)y3, x2, y2, type, cutoff);
+				retval = build_tunnel2((POSITION)x3, (POSITION)y3, x2, y2, type, cutoff);
 				firstsuccede = TRUE;
 			}
 			else

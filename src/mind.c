@@ -1039,8 +1039,8 @@ static bool cast_mindcrafter_spell(int spell)
 {
 	int             b = 0;
 	int             dir;
-	time_effect t;
-	player_level plev = p_ptr->lev;
+	TIME_EFFECT t;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	/* spell code */
 	switch (spell)
@@ -1070,7 +1070,7 @@ static bool cast_mindcrafter_spell(int spell)
 		}
 
 		if ((plev > 24) && (plev < 40))
-			set_tim_esp((time_effect)plev, FALSE);
+			set_tim_esp((TIME_EFFECT)plev, FALSE);
 
 		if (!b) msg_print(_("安全な気がする。", "You feel safe."));
 
@@ -1114,12 +1114,12 @@ static bool cast_mindcrafter_spell(int spell)
 		break;
 	case 6:
 		/* Character Armour */
-		set_shield((time_effect)plev, FALSE);
-		if (plev > 14) set_oppose_acid((time_effect)plev, FALSE);
-		if (plev > 19) set_oppose_fire((time_effect)plev, FALSE);
-		if (plev > 24) set_oppose_cold((time_effect)plev, FALSE);
-		if (plev > 29) set_oppose_elec((time_effect)plev, FALSE);
-		if (plev > 34) set_oppose_pois((time_effect)plev, FALSE);
+		set_shield((TIME_EFFECT)plev, FALSE);
+		if (plev > 14) set_oppose_acid((TIME_EFFECT)plev, FALSE);
+		if (plev > 19) set_oppose_fire((TIME_EFFECT)plev, FALSE);
+		if (plev > 24) set_oppose_cold((TIME_EFFECT)plev, FALSE);
+		if (plev > 29) set_oppose_elec((TIME_EFFECT)plev, FALSE);
+		if (plev > 34) set_oppose_pois((TIME_EFFECT)plev, FALSE);
 		break;
 	case 7:
 		/* Psychometry */
@@ -1403,7 +1403,7 @@ static bool cast_mirror_spell(int spell)
 	int             dir;
 	int             plev = p_ptr->lev;
 	int		tmp;
-	time_effect t;
+	TIME_EFFECT t;
 	int		x,y;
 
 	/* spell code */
@@ -1414,7 +1414,7 @@ static bool cast_mirror_spell(int spell)
 	  tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 0;
 	  if( plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
 	  if( plev + tmp > 18 )detect_monsters_invis(DETECT_RAD_DEFAULT);
-	  if( plev + tmp > 28 )set_tim_esp((time_effect)plev, FALSE);
+	  if( plev + tmp > 28 )set_tim_esp((TIME_EFFECT)plev, FALSE);
 	  if( plev + tmp > 38 )map_area(DETECT_RAD_MAP);
 	  if( tmp == 0 && plev < 5 ){
 	    msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
@@ -1551,8 +1551,8 @@ static bool cast_mirror_spell(int spell)
  */
 static bool cast_berserk_spell(int spell)
 {
-	position y, x;
-	direction dir;
+	POSITION y, x;
+	DIRECTION dir;
 
 	/* spell code */
 	switch (spell)
@@ -1707,7 +1707,7 @@ static bool cast_ninja_spell(int spell)
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
 		teleport_player(30, 0L);
-		set_oppose_fire((time_effect)plev, FALSE);
+		set_oppose_fire((TIME_EFFECT)plev, FALSE);
 		break;
 	case 10:
 		return rush_attack(NULL);
@@ -1832,7 +1832,7 @@ static bool cast_ninja_spell(int spell)
 		break;
 	case 16:
 		(void)set_kabenuke(randint1(plev/2) + plev/2, FALSE);
-		set_oppose_acid((time_effect)plev, FALSE);
+		set_oppose_acid((TIME_EFFECT)plev, FALSE);
 		break;
 	case 17:
 		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);

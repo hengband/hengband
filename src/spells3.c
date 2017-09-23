@@ -63,11 +63,11 @@ static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
  * Attempt to move the monster at least "dis/2" grids away.
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(idx m_idx, int dis, u32b mode)
+bool teleport_away(IDX m_idx, int dis, u32b mode)
 {
 	int oy, ox, d, i, min;
 	int tries = 0;
-	position ny = 0, nx = 0;
+	POSITION ny = 0, nx = 0;
 
 	bool look = TRUE;
 
@@ -348,7 +348,7 @@ bool teleport_player_aux(int dis, u32b mode)
 {
 	int candidates_at[MAX_TELEPORT_DISTANCE + 1];
 	int total_candidates, cur_candidates;
-	position y = 0, x = 0;
+	POSITION y = 0, x = 0;
 	int min, pick, i;
 
 	int left = MAX(1, p_ptr->x - dis);
@@ -556,9 +556,9 @@ void teleport_player_away(int m_idx, int dis)
  * This function allows teleporting into vaults (!)
  * </pre>
  */
-void teleport_player_to(position ny, position nx, u32b mode)
+void teleport_player_to(POSITION ny, POSITION nx, u32b mode)
 {
-	position y, x;
+	POSITION y, x;
 	int dis = 0, ctr = 0;
 
 	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
@@ -573,8 +573,8 @@ void teleport_player_to(position ny, position nx, u32b mode)
 		/* Pick a nearby legal location */
 		while (1)
 		{
-			y = (position)rand_spread(ny, dis);
-			x = (position)rand_spread(nx, dis);
+			y = (POSITION)rand_spread(ny, dis);
+			x = (POSITION)rand_spread(nx, dis);
 			if (in_bounds(y, x)) break;
 		}
 
@@ -1157,7 +1157,7 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
  */
 void mutate_player(void)
 {
-	base_status max1, cur1, max2, cur2;
+	BASE_STATUS max1, cur1, max2, cur2;
 	int ii, jj, i;
 
 	/* Pick a pair of stats */
@@ -2028,7 +2028,7 @@ int remove_all_curse(void)
 bool alchemy(void)
 {
 	int item, amt = 1;
-	item_number old_number;
+	ITEM_NUMBER old_number;
 	long price;
 	bool force = FALSE;
 	object_type *o_ptr;

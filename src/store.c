@@ -963,7 +963,7 @@ static s32b price_item(object_type *o_ptr, int greed, bool flip)
 static void mass_produce(object_type *o_ptr)
 {
 	int size = 1;
-	discount_rate discount = 0;
+	DISCOUNT_RATE discount = 0;
 
 	s32b cost = object_value(o_ptr);
 
@@ -1622,8 +1622,8 @@ bool combine_and_reorder_home(int store_num)
 					}
 					else
 					{
-						item_number old_num = o_ptr->number;
-						item_number remain = j_ptr->number + o_ptr->number - max_num;
+						ITEM_NUMBER old_num = o_ptr->number;
+						ITEM_NUMBER remain = j_ptr->number + o_ptr->number - max_num;
 
 						/* Add together the item counts */
 						object_absorb(j_ptr, o_ptr);
@@ -1930,7 +1930,7 @@ static int store_carry(object_type *o_ptr)
  * Increase, by a given amount, the number of a certain item
  * in a certain store.	This can result in zero items.
  * </pre>
- * @todo numは本来item_number型にしたい。
+ * @todo numは本来ITEM_NUMBER型にしたい。
  */
 static void store_item_increase(int item, int num)
 {
@@ -1947,7 +1947,7 @@ static void store_item_increase(int item, int num)
 	num = cnt - o_ptr->number;
 
 	/* Save the new number */
-	o_ptr->number += (item_number)num;
+	o_ptr->number += (ITEM_NUMBER)num;
 }
 
 
@@ -3433,7 +3433,7 @@ static void store_purchase(void)
 	int i, choice;
 	int item, item_new;
 
-	item_number amt;
+	ITEM_NUMBER amt;
 
 	s32b price, best;
 

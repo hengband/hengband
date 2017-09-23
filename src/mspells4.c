@@ -1955,7 +1955,7 @@ int spell_RF6_WORLD(int m_idx)
 int spell_RF6_SPECIAL_BANORLUPART(int m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
-	hit_point dummy_hp, dummy_maxhp;
+	HIT_POINT dummy_hp, dummy_maxhp;
 	int k;
 	int dummy_y = m_ptr->fy;
 	int dummy_x = m_ptr->fx;

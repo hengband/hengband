@@ -145,7 +145,7 @@ static cptr desc_moan[] =
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
  */
-bool make_attack_normal(idx m_idx)
+bool make_attack_normal(IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -713,7 +713,7 @@ bool make_attack_normal(idx m_idx)
 							obvious = TRUE;
 
 							/* Heal the monster */
-							m_ptr->hp += (hit_point)heal;
+							m_ptr->hp += (HIT_POINT)heal;
 
 							/* Redraw (later) if needed */
 							if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
@@ -1692,7 +1692,7 @@ bool make_attack_normal(idx m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 					{
-						hit_point dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1724,7 +1724,7 @@ bool make_attack_normal(idx m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
 					{
-						hit_point dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1756,7 +1756,7 @@ bool make_attack_normal(idx m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
 					{
-						hit_point dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1789,7 +1789,7 @@ bool make_attack_normal(idx m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK))
 					{
-						hit_point dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1827,7 +1827,7 @@ bool make_attack_normal(idx m_idx)
 					{
 						if (!(r_ptr->flagsr & RFR_RES_ALL))
 						{
-							hit_point dam = damroll(2, 6);
+							HIT_POINT dam = damroll(2, 6);
 
 							/* Modify the damage */
 							dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1861,7 +1861,7 @@ bool make_attack_normal(idx m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_RES_ALL))
 					{
-						hit_point dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1891,7 +1891,7 @@ bool make_attack_normal(idx m_idx)
 
 				if (hex_spelling(HEX_SHADOW_CLOAK) && alive && !p_ptr->is_dead)
 				{
-					hit_point dam = 1;
+					HIT_POINT dam = 1;
 					object_type *o_armed_ptr = &inventory[INVEN_RARM];
 
 					if (!(r_ptr->flagsr & RFR_RES_ALL || r_ptr->flagsr & RFR_RES_DARK))

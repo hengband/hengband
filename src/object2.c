@@ -250,9 +250,9 @@ void delete_object(int y, int x)
  * @param i2 整理したい配列の終点
  * @return なし
  */
-static void compact_objects_aux(idx i1, idx i2)
+static void compact_objects_aux(IDX i1, IDX i2)
 {
-	idx i;
+	IDX i;
 	cave_type *c_ptr;
 	object_type *o_ptr;
 
@@ -2282,11 +2282,11 @@ static byte get_random_ego(byte slot, bool good)
  */
 static void a_m_aux_1(object_type *o_ptr, int level, int power)
 {
-	hit_prob tohit1 = randint1(5) + m_bonus(5, level);
-	hit_point todam1 = randint1(5) + m_bonus(5, level);
+	HIT_PROB tohit1 = randint1(5) + m_bonus(5, level);
+	HIT_POINT todam1 = randint1(5) + m_bonus(5, level);
 
-	hit_prob tohit2 = m_bonus(10, level);
-	hit_point todam2 = m_bonus(10, level);
+	HIT_PROB tohit2 = m_bonus(10, level);
+	HIT_POINT todam2 = m_bonus(10, level);
 
 	if ((o_ptr->tval == TV_BOLT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_SHOT))
 	{
@@ -2670,8 +2670,8 @@ static void add_esp_weak(object_type *o_ptr, bool extra)
  */
 static void a_m_aux_2(object_type *o_ptr, int level, int power)
 {
-	armour_class toac1 = randint1(5) + m_bonus(5, level);
-	armour_class toac2 = m_bonus(10, level);
+	ARMOUR_CLASS toac1 = randint1(5) + m_bonus(5, level);
+	ARMOUR_CLASS toac2 = m_bonus(10, level);
 
 	/* Good */
 	if (power > 0)
@@ -4837,9 +4837,9 @@ bool make_object(object_type *j_ptr, u32b mode)
  * This routine uses "object_level" for the "generation level".\n
  * This routine requires a clean floor grid destination.\n
  */
-void place_object(position y, position x, u32b mode)
+void place_object(POSITION y, POSITION x, u32b mode)
 {
-	idx o_idx;
+	IDX o_idx;
 
 	/* Acquire grid */
 	cave_type *c_ptr = &cave[y][x];
@@ -4962,7 +4962,7 @@ bool make_gold(object_type *j_ptr)
  * @details
  * The location must be a legal, clean, floor grid.
  */
-void place_gold(position y, position x)
+void place_gold(POSITION y, POSITION x)
 {
 	s16b o_idx;
 
@@ -5788,7 +5788,7 @@ void inven_item_increase(int item, int num)
 	else if (num < 0) num = 0;
 
 	/* Un-apply */
-	num -= (item_number)o_ptr->number;
+	num -= (ITEM_NUMBER)o_ptr->number;
 
 	/* Change the number and weight */
 	if (num)
@@ -5987,7 +5987,7 @@ void floor_item_increase(int item, int num)
 	num -= (int)o_ptr->number;
 
 	/* Change the number */
-	o_ptr->number += (item_number)num;
+	o_ptr->number += (ITEM_NUMBER)num;
 }
 
 

@@ -2929,7 +2929,7 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	if (ironman_nightmare)
 	{
 		u32b hp = m_ptr->max_maxhp * 2L;
-		m_ptr->max_maxhp = (hit_point)MIN(30000, hp);
+		m_ptr->max_maxhp = (HIT_POINT)MIN(30000, hp);
 	}
 
 	m_ptr->maxhp = (long)(m_ptr->maxhp * m_ptr->max_maxhp) / oldmaxhp;
@@ -3275,7 +3275,7 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	{
 		u32b hp = m_ptr->max_maxhp * 2L;
 
-		m_ptr->max_maxhp = (hit_point)MIN(30000, hp);
+		m_ptr->max_maxhp = (HIT_POINT)MIN(30000, hp);
 	}
 
 	m_ptr->maxhp = m_ptr->max_maxhp;

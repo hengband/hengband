@@ -104,27 +104,28 @@ typedef unsigned long u32b;
 #endif
 
 
-typedef s16b idx;			/*!< ゲーム中のID型を定義 */
-typedef byte position;		/*!< ゲーム中の座標型を定義 */
-typedef s16b hit_point;		/*!< ゲーム中のHP/ダメージ型を定義 */
-typedef s16b hit_prob;		/*!< ゲーム中の命中修正値を定義 */
-typedef s16b base_status;	/*!< ゲーム中の基礎能力値型を定義 */
-typedef byte item_number;	/*!< ゲーム中のアイテム数型を定義 */
-typedef s16b action_energy;	/*!< ゲーム中の行動エネルギー型を定義 */
-typedef s16b armour_class;	/*!< ゲーム中の行動アーマークラス型を定義 */
-typedef s16b time_effect;   /*!< ゲーム中の時限期間の型を定義 */
-typedef byte character_idx; /*!< ゲーム中のキャラクター特性各種IDの型を定義 */
-typedef byte discount_rate; /*!< ゲーム中の値引き率の型を定義 */
+typedef s16b IDX;			/*!< ゲーム中のID型を定義 */
+typedef byte POSITION;		/*!< ゲーム中の座標型を定義 */
+typedef s16b HIT_POINT;		/*!< ゲーム中のHP/ダメージ型を定義 */
+typedef s16b HIT_PROB;		/*!< ゲーム中の命中修正値を定義 */
+typedef s16b BASE_STATUS;	/*!< ゲーム中の基礎能力値型を定義 */
+typedef byte ITEM_NUMBER;	/*!< ゲーム中のアイテム数型を定義 */
+typedef s16b ACTION_ENERGY;	/*!< ゲーム中の行動エネルギー型を定義 */
+typedef s16b ARMOUR_CLASS;	/*!< ゲーム中の行動アーマークラス型を定義 */
+typedef s16b TIME_EFFECT;   /*!< ゲーム中の時限期間の型を定義 */
+typedef byte CHARACTER_IDX; /*!< ゲーム中のキャラクター特性各種IDの型を定義 */
+typedef byte DISCOUNT_RATE; /*!< ゲーム中の値引き率の型を定義 */
 
-typedef s16b player_level;  /*!< ゲーム中のプレイヤーレベルの型を定義 */
-typedef int direction;		/*!< ゲーム中の方角の型定義 */
-typedef s16b sub_exp;		/*!< ゲーム中の副経験値の型定義 */
+typedef s16b PLAYER_LEVEL;  /*!< ゲーム中のプレイヤーレベルの型を定義 */
+typedef int DIRECTION;		/*!< ゲーム中の方角の型定義 */
+typedef s16b SUB_EXP;		/*!< ゲーム中の副経験値の型定義 */
 
-typedef byte object_type_value;    /*!< ゲーム中のアイテム主分類の型定義 */
-typedef byte object_subtype_value; /*!< ゲーム中のアイテム副分類の型定義 */
-typedef s16b parameter_value;      /*!< ゲーム中のアイテム能力値の型定義 */
+typedef byte OBJECT_TYPE_VALUE;    /*!< ゲーム中のアイテム主分類の型定義 */
+typedef byte OBJECT_SUBTYPE_VALUE; /*!< ゲーム中のアイテム副分類の型定義 */
+typedef s16b PARAMETER_VALUE;      /*!< ゲーム中のアイテム能力値の型定義 */
+typedef s16b WEIGHT;               /*!< ゲーム中の重量の型定義 */
 
-typedef u32b str_offset;      /*!< テキストオフセットの型定義 */
+typedef u32b STR_OFFSET;      /*!< テキストオフセットの型定義 */
 
 /*** Pointers to all the basic types defined above ***/
 

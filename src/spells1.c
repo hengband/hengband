@@ -1585,7 +1585,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
  * "flg" was added.
  * </pre>
  */
-static bool project_m(int who, int r, int y, int x, hit_point dam, int typ, int flg, bool see_s_msg)
+static bool project_m(int who, int r, int y, int x, HIT_POINT dam, int typ, int flg, bool see_s_msg)
 {
 	int tmp;
 

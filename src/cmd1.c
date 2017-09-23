@@ -253,7 +253,7 @@ bool test_hit_norm(int chance, int ac, int vis)
  * @param dam 現在算出中のダメージ値
  * @return クリティカル修正が入ったダメージ値
  */
-hit_point critical_shot(int weight, int plus_ammo, int plus_bow, hit_point dam)
+HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
 	int i, k;
 	object_type *j_ptr =  &inventory[INVEN_BOW];
@@ -311,7 +311,7 @@ hit_point critical_shot(int weight, int plus_ammo, int plus_bow, hit_point dam)
  * @param mode オプションフラグ
  * @return クリティカル修正が入ったダメージ値
  */
-hit_point critical_norm(int weight, int plus, hit_point dam, s16b meichuu, int mode)
+HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, int mode)
 {
 	int i, k;
 	
@@ -1214,7 +1214,7 @@ static void hit_trap(bool break_trap)
 			hit_trap_set_abnormal_status(
 				_("黒いガスに包み込まれた！", "A black gas surrounds you!"),
 				p_ptr->resist_blind,
-				set_blind, p_ptr->blind + (time_effect)randint0(50) + 25);
+				set_blind, p_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
 			break;
 		}
 
@@ -1223,7 +1223,7 @@ static void hit_trap(bool break_trap)
 			hit_trap_set_abnormal_status(
 				_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
 				p_ptr->resist_conf,
-				set_confused, p_ptr->confused + (time_effect)randint0(20) + 10);
+				set_confused, p_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
 			break;
 		}
 
@@ -1232,7 +1232,7 @@ static void hit_trap(bool break_trap)
 			hit_trap_set_abnormal_status(
 				_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
 				p_ptr->resist_pois || IS_OPPOSE_POIS(),
-				set_poisoned, p_ptr->poisoned + (time_effect)randint0(20) + 10);
+				set_poisoned, p_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
 			break;
 		}
 
@@ -1419,7 +1419,7 @@ static void touch_zap_player(monster_type *m_ptr)
  */
 static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 {
-	hit_point k;
+	HIT_POINT k;
 	int bonus, chance;
 	int             n_weight = 0;
 	monster_type    *m_ptr = &m_list[m_idx];
@@ -1562,7 +1562,7 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int mode)
 {
 	int		num = 0, bonus, chance, vir;
-	hit_point k;
+	HIT_POINT k;
 
 	cave_type       *c_ptr = &cave[y][x];
 
@@ -1653,7 +1653,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 			int now_exp = p_ptr->weapon_exp[tval][sval];
 			if (now_exp < s_info[p_ptr->pclass].w_max[tval][sval])
 			{
-				sub_exp amount = 0;
+				SUB_EXP amount = 0;
 				if (now_exp < WEAPON_EXP_BEGINNER) amount = 80;
 				else if (now_exp < WEAPON_EXP_SKILLED) amount = 10;
 				else if ((now_exp < WEAPON_EXP_EXPERT) && (p_ptr->lev > 19)) amount = 1;
@@ -1984,7 +1984,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						mult++;
 					}
 
-					k *= (hit_point)mult;
+					k *= (HIT_POINT)mult;
 
 					/* Ouch! */
 					if (((r_ptr->flagsr & RFR_RES_ALL) ? k/100 : k) > m_ptr->hp)
@@ -2148,8 +2148,8 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				{
 					if (is_human)
 					{
-						hit_prob to_h = o_ptr->to_h;
-						hit_point to_d = o_ptr->to_d;
+						HIT_PROB to_h = o_ptr->to_h;
+						HIT_POINT to_d = o_ptr->to_d;
 						int i, flag;
 
 						flag = 1;
@@ -2402,7 +2402,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						p_ptr->redraw |= (PR_MANA);
 						mult = mult * 3 / 2 + 20;
 					}
-					k *= (hit_point)mult;
+					k *= (HIT_POINT)mult;
 					k /= 10;
 				}
 
@@ -2417,7 +2417,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						mult++;
 					}
 
-					k *= (hit_point)mult;
+					k *= (HIT_POINT)mult;
 				}
 				k += (p_ptr->to_d[hand] + o_ptr->to_d);
 				if (k < 0) k = 0;
@@ -2823,18 +2823,18 @@ bool player_can_enter(s16b feature, u16b mode)
  * @param mpe_mode 移動オプションフラグ
  * @return プレイヤーが死亡やフロア離脱を行わず、実際に移動が可能ならばTRUEを返す。
  */
-bool move_player_effect(position ny, position nx, u32b mpe_mode)
+bool move_player_effect(POSITION ny, POSITION nx, u32b mpe_mode)
 {
 	cave_type *c_ptr = &cave[ny][nx];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	if (!(mpe_mode & MPE_STAYING))
 	{
-		position oy = p_ptr->y;
-		position ox = p_ptr->x;
+		POSITION oy = p_ptr->y;
+		POSITION ox = p_ptr->x;
 		cave_type *oc_ptr = &cave[oy][ox];
-		idx om_idx = oc_ptr->m_idx;
-		idx nm_idx = c_ptr->m_idx;
+		IDX om_idx = oc_ptr->m_idx;
+		IDX nm_idx = c_ptr->m_idx;
 
 		/* Move the player */
 		p_ptr->y = ny;
@@ -3107,11 +3107,11 @@ bool trap_can_be_ignored(int feat)
  * any monster which might be in the destination grid.  Previously,\n
  * moving into walls was "free" and did NOT hit invisible monsters.\n
  */
-void move_player(direction dir, bool do_pickup, bool break_trap)
+void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 {
 	/* Find the result of moving */
-	position y = p_ptr->y + ddy[dir];
-	position x = p_ptr->x + ddx[dir];
+	POSITION y = p_ptr->y + ddy[dir];
+	POSITION x = p_ptr->x + ddx[dir];
 
 	/* Examine the destination */
 	cave_type *c_ptr = &cave[y][x];
@@ -3633,12 +3633,12 @@ static byte chome[] =
 /*
  * The direction we are running
  */
-static direction find_current;
+static DIRECTION find_current;
 
 /*
  * The direction we came from
  */
-static direction find_prevdir;
+static DIRECTION find_prevdir;
 
 /*
  * We are looking for open area

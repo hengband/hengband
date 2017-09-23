@@ -1436,7 +1436,7 @@ void monster_death(int m_idx, bool drop_item)
  * "type" is not yet used and should be 0.
  * </pre>
  */
-hit_point mon_damage_mod(monster_type *m_ptr, hit_point dam, bool is_psy_spear)
+HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear)
 {
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
