@@ -396,9 +396,9 @@ extern bool closing_flag;
 extern s16b panel_row_min, panel_row_max;
 extern s16b panel_col_min, panel_col_max;
 extern s16b panel_col_prt, panel_row_prt;
-extern s16b target_who;
-extern s16b target_col;
-extern s16b target_row;
+extern idx target_who;
+extern position target_col;
+extern position target_row;
 extern int player_uid;
 extern int player_euid;
 extern int player_egid;
@@ -1219,7 +1219,7 @@ extern bool cave_player_teleportable_bold(int y, int x, u32b mode);
 extern bool teleport_player_aux(int dis, u32b mode);
 extern void teleport_player(int dis, u32b mode);
 extern void teleport_player_away(int m_idx, int dis);
-extern void teleport_player_to(int ny, int nx, u32b mode);
+extern void teleport_player_to(position ny, position nx, u32b mode);
 extern void teleport_away_followable(int m_idx);
 extern void teleport_level(int m_idx);
 extern int choose_dungeon(cptr note, int y, int x);
@@ -1583,7 +1583,7 @@ extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool b
 
 /* mspells2.c */
 extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);
-extern bool monst_spell_monst(int m_idx);
+extern bool monst_spell_monst(idx m_idx);
 
 /* mspells3.c */
 extern bool do_cmd_cast_learned(void);

@@ -253,7 +253,7 @@ static bool dispel_check_monster(int m_idx, int t_idx)
  * @details
  * The player is only disturbed if able to be affected by the spell.
  */
-bool monst_spell_monst(int m_idx)
+bool monst_spell_monst(idx m_idx)
 {
 	int y = 0, x = 0;
 	int i, k, t_idx = 0;

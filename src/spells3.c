@@ -556,9 +556,10 @@ void teleport_player_away(int m_idx, int dis)
  * This function allows teleporting into vaults (!)
  * </pre>
  */
-void teleport_player_to(int ny, int nx, u32b mode)
+void teleport_player_to(position ny, position nx, u32b mode)
 {
-	int y, x, dis = 0, ctr = 0;
+	position y, x;
+	int dis = 0, ctr = 0;
 
 	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
@@ -572,8 +573,8 @@ void teleport_player_to(int ny, int nx, u32b mode)
 		/* Pick a nearby legal location */
 		while (1)
 		{
-			y = rand_spread(ny, dis);
-			x = rand_spread(nx, dis);
+			y = (position)rand_spread(ny, dis);
+			x = (position)rand_spread(nx, dis);
 			if (in_bounds(y, x)) break;
 		}
 

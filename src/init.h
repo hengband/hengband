@@ -86,13 +86,10 @@ struct header
 
 	u16b head_size;		/* Size of the "header" in bytes */
 
-	u32b info_size;		/* Size of the "info" array in bytes */
-
-	u32b name_size;		/* Size of the "name" array in bytes */
-
-	u32b text_size;		/* Size of the "text" array in bytes */
-
-	u32b tag_size;		/* Size of the "tag" array in bytes */
+	str_offset info_size;		/* Size of the "info" array in bytes */
+	str_offset name_size;		/* Size of the "name" array in bytes */
+	str_offset text_size;		/* Size of the "text" array in bytes */
+	str_offset tag_size;		/* Size of the "tag" array in bytes */
 
 	void *info_ptr;
 	char *name_ptr;
