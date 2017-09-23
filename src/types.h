@@ -66,8 +66,8 @@ typedef struct feature_type feature_type;
 
 struct feature_type
 {
-	u32b name;                /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
-	u32b text;                /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
+	str_offset name;                /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
+	str_offset text;                /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
 	s16b tag;                 /*!< 地形特性タグ参照のためのネームバッファオフセット値 /  Tag (offset) */
 
 	s16b mimic;               /*!< 未確定時の外形地形ID / Feature to mimic */
@@ -102,9 +102,9 @@ typedef struct object_kind object_kind;
 
 struct object_kind
 {
-	u32b name;			/*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
-	u32b text;			/*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
-	u32b flavor_name;	/*!< 未確定名参照のためのネームバッファオフセット値 / Flavor name (offset) */
+	str_offset name;			/*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
+	str_offset text;			/*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
+	str_offset flavor_name;	/*!< 未確定名参照のためのネームバッファオフセット値 / Flavor name (offset) */
 
 	byte tval;			/*!< ベースアイテム種別の大項目値 Object type */
 	byte sval;			/*!< ベースアイテム種別の小項目値 Object sub type */
@@ -164,8 +164,8 @@ typedef struct artifact_type artifact_type;
  */
 struct artifact_type
 {
-	u32b name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
-	u32b text;			/*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
+	str_offset name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
+	str_offset text;			/*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
 
 	byte tval;			/*!< ベースアイテム大項目ID / Artifact type */
 	byte sval;			/*!< ベースアイテム小項目ID / Artifact sub type */
@@ -208,8 +208,8 @@ typedef struct ego_item_type ego_item_type;
 
 struct ego_item_type
 {
-	u32b name;			/* Name (offset) */
-	u32b text;			/* Text (offset) */
+	str_offset name;			/* Name (offset) */
+	str_offset text;			/* Text (offset) */
 
 	byte slot;			/* Standard slot value */
 	byte rating;		/* Rating boost */
@@ -289,11 +289,11 @@ typedef struct monster_race monster_race;
 
 struct monster_race
 {
-	u32b name;				/*!< 名前データのオフセット(日本語) /  Name offset(Japanese) */
+	str_offset name;	/*!< 名前データのオフセット(日本語) /  Name offset(Japanese) */
 #ifdef JP
-	u32b E_name;            /*!< 名前データのオフセット(英語) /  Name offset(English) */
+	str_offset E_name;		/*!< 名前データのオフセット(英語) /  Name offset(English) */
 #endif
-	u32b text;				/*!< 思い出テキストのオフセット / Lore text offset */
+	str_offset text;				/*!< 思い出テキストのオフセット / Lore text offset */
 
 	byte hdice;				/*!< HPのダイス数 / Creatures hit dice count */
 	byte hside;				/*!< HPのダイス面数 / Creatures hit dice sides */
@@ -397,13 +397,11 @@ typedef struct vault_type vault_type;
 
 struct vault_type
 {
-	u32b name;			/* Name (offset) */
-	u32b text;			/* Text (offset) */
+	str_offset name;	/* Name (offset) */
+	str_offset text;	/* Text (offset) */
 
 	byte typ;			/* Vault type */
-
 	byte rat;			/* Vault rating */
-
 	byte hgt;			/* Vault height */
 	byte wid;			/* Vault width */
 };
@@ -1596,8 +1594,8 @@ feat_prob;
 /* A structure for the != dungeon types */
 typedef struct dungeon_info_type dungeon_info_type;
 struct dungeon_info_type {
-	u32b name;		/* Name */
-	u32b text;		/* Description */
+	str_offset name;		/* Name */
+	str_offset text;		/* Description */
 
 	byte dy;
 	byte dx;

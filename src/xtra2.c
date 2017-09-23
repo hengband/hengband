@@ -2915,7 +2915,7 @@ static void target_set_prepare(int mode)
 	}
 }
 
-void target_set_prepare_look(){
+void target_set_prepare_look(void){
 	target_set_prepare(TARGET_LOOK);
 }
 

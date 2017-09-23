@@ -7032,7 +7032,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					if(project_m(0,0,y,x,dam,GF_SEEKER,flg,TRUE))notice=TRUE;
+					if(project_m(0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice=TRUE;
 					if(!who && (project_m_n==1) && !jump ){
 					  if(cave[project_m_y][project_m_x].m_idx >0 ){
 					    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];

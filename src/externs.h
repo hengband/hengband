@@ -1213,7 +1213,7 @@ extern bool rush_attack(bool *mdeath);
 extern void remove_all_mirrors(bool explode);
 
 /* spells3.c */
-extern bool teleport_away(int m_idx, int dis, u32b mode);
+extern bool teleport_away(idx m_idx, int dis, u32b mode);
 extern void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode);
 extern bool cave_player_teleportable_bold(int y, int x, u32b mode);
 extern bool teleport_player_aux(int dis, u32b mode);

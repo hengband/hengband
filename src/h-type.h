@@ -124,6 +124,8 @@ typedef byte object_type_value;    /*!< ゲーム中のアイテム主分類の�
 typedef byte object_subtype_value; /*!< ゲーム中のアイテム副分類の型定義 */
 typedef s16b parameter_value;      /*!< ゲーム中のアイテム能力値の型定義 */
 
+typedef s32b str_offset;      /*!< テキストオフセットの型定義 */
+
 /*** Pointers to all the basic types defined above ***/
 
 typedef real *real_ptr;

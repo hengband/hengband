@@ -63,7 +63,7 @@ static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
  * Attempt to move the monster at least "dis/2" grids away.
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(int m_idx, int dis, u32b mode)
+bool teleport_away(idx m_idx, int dis, u32b mode)
 {
 	int oy, ox, d, i, min;
 	int tries = 0;
@@ -348,7 +348,8 @@ bool teleport_player_aux(int dis, u32b mode)
 {
 	int candidates_at[MAX_TELEPORT_DISTANCE + 1];
 	int total_candidates, cur_candidates;
-	int y = 0, x = 0, min, pick, i;
+	position y = 0, x = 0;
+	int min, pick, i;
 
 	int left = MAX(1, p_ptr->x - dis);
 	int right = MIN(cur_wid - 2, p_ptr->x + dis);
@@ -2026,7 +2027,7 @@ int remove_all_curse(void)
 bool alchemy(void)
 {
 	int item, amt = 1;
-	int old_number;
+	item_number old_number;
 	long price;
 	bool force = FALSE;
 	object_type *o_ptr;
