@@ -105,7 +105,7 @@ typedef unsigned long u32b;
 
 
 typedef s16b IDX;			/*!< ゲーム中のID型を定義 */
-typedef byte POSITION;		/*!< ゲーム中の座標型を定義 */
+typedef s32b POSITION;		/*!< ゲーム中の座標型を定義 */
 typedef s16b HIT_POINT;		/*!< ゲーム中のHP/ダメージ型を定義 */
 typedef s16b HIT_PROB;		/*!< ゲーム中の命中修正値を定義 */
 typedef s16b BASE_STATUS;	/*!< ゲーム中の基礎能力値型を定義 */
@@ -124,6 +124,10 @@ typedef byte OBJECT_TYPE_VALUE;    /*!< ゲーム中のアイテム主分類の�
 typedef byte OBJECT_SUBTYPE_VALUE; /*!< ゲーム中のアイテム副分類の型定義 */
 typedef s16b PARAMETER_VALUE;      /*!< ゲーム中のアイテム能力値の型定義 */
 typedef s16b WEIGHT;               /*!< ゲーム中の重量の型定義 */
+
+typedef int DICE_NUMBER; /*!< ゲーム中のダイス数の型定義 */
+typedef int DICE_SID;   /*!< ゲーム中のダイス面の型定義 */
+
 
 typedef u32b STR_OFFSET;      /*!< テキストオフセットの型定義 */
 

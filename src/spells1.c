@@ -6773,7 +6773,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
  * and "update_view()" and "update_monsters()" need to be called.
  * </pre>
  */
-bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int monspell)
+bool project(int who, int rad, int y, int x, HIT_POINT dam, int typ, int flg, int monspell)
 {
 	int i, t, dist;
 

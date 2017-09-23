@@ -3630,7 +3630,8 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 {
 	int             i, t, y, x, yy, xx, dy, dx;
 	int             damage = 0;
-	int             sn = 0, sy = 0, sx = 0;
+	int             sn = 0;
+	POSITION        sy = 0, sx = 0;
 	bool            hurt = FALSE;
 	cave_type       *c_ptr;
 	bool            map[32][32];

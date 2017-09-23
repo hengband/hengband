@@ -782,7 +782,7 @@ static void cast_meteor(int dam, int rad)
 
 	for (i = 0; i < b; i++)
 	{
-		int y = 0, x = 0;
+		POSITION y = 0, x = 0;
 		int count;
 
 		for (count = 0; count <= 20; count++)
@@ -8059,7 +8059,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
     
 		if (cast)
 		{
-			int y, x;
+			POSITION y, x;
 
 			if (p_ptr->riding)
 			{
@@ -8174,9 +8174,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			if (cave[y][x].m_idx)
 			{
 				int i;
-				int ty = y, tx = x;
-				int oy = y, ox = x;
-				int m_idx = cave[y][x].m_idx;
+				POSITION ty = y, tx = x;
+				POSITION oy = y, ox = x;
+				IDX m_idx = cave[y][x].m_idx;
 				monster_type *m_ptr = &m_list[m_idx];
 				char m_name[80];
 	

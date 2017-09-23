@@ -338,14 +338,17 @@ static void strip_bytes(int n)
 static void rd_item_old(object_type *o_ptr)
 {
 	char buf[128];
+	byte_hack tmp8u;
 
 
 	/* Kind */
 	rd_s16b(&o_ptr->k_idx);
 
 	/* Location */
-	rd_byte(&o_ptr->iy);
-	rd_byte(&o_ptr->ix);
+	rd_byte(&tmp8u);
+	o_ptr->iy = (POSITION)tmp8u;
+	rd_byte(&tmp8u);
+	o_ptr->ix = (POSITION)tmp8u;
 
 	/* Type/Subtype */
 	rd_byte(&o_ptr->tval);
@@ -593,6 +596,7 @@ static void rd_item(object_type *o_ptr)
 	object_kind *k_ptr;
 	u32b flags;
 	char buf[128];
+	byte_hack tmp8u;
 
 	if (h_older_than(1, 5, 0, 0))
 	{
@@ -608,8 +612,10 @@ static void rd_item(object_type *o_ptr)
 	rd_s16b(&o_ptr->k_idx);
 
 	/* Location */
-	rd_byte(&o_ptr->iy);
-	rd_byte(&o_ptr->ix);
+	rd_byte(&tmp8u);
+	o_ptr->iy = (POSITION)tmp8u;
+	rd_byte(&tmp8u);
+	o_ptr->ix = (POSITION)tmp8u;
 
 	/* Type/Subtype */
 	k_ptr = &k_info[o_ptr->k_idx];
@@ -795,8 +801,11 @@ static void rd_monster_old(monster_type *m_ptr)
 		rd_byte(&m_ptr->sub_align);
 
 	/* Read the other information */
-	rd_byte(&m_ptr->fy);
-	rd_byte(&m_ptr->fx);
+	rd_byte(&tmp8u);
+	m_ptr->fy = (POSITION)tmp8u;
+	rd_byte(&tmp8u);
+	m_ptr->fx = (POSITION)tmp8u;
+
 	rd_s16b(&m_ptr->hp);
 	rd_s16b(&m_ptr->maxhp);
 	if (z_older_than(11, 0, 5))
@@ -935,8 +944,11 @@ static void rd_monster(monster_type *m_ptr)
 	rd_s16b(&m_ptr->r_idx);
 
 	/* Read the other information */
-	rd_byte(&m_ptr->fy);
-	rd_byte(&m_ptr->fx);
+	rd_byte(&tmp8u);
+	m_ptr->fy = (POSITION)tmp8u;
+	rd_byte(&tmp8u);
+	m_ptr->fx = (POSITION)tmp8u;
+
 	rd_s16b(&m_ptr->hp);
 	rd_s16b(&m_ptr->maxhp);
 	rd_s16b(&m_ptr->max_maxhp);
