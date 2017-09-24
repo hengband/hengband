@@ -382,9 +382,9 @@ bool closing_flag;		/* Dungeon is closing */
  * Dungeon size info
  */
 
-s16b panel_row_min, panel_row_max;
-s16b panel_col_min, panel_col_max;
-s16b panel_col_prt, panel_row_prt;
+POSITION panel_row_min, panel_row_max;
+POSITION panel_col_min, panel_col_max;
+POSITION panel_col_prt, panel_row_prt;
 
 
 /*
@@ -419,36 +419,36 @@ char savefile_base[40];
  * Array of grids lit by player lite (see "cave.c")
  */
 s16b lite_n;
-s16b lite_y[LITE_MAX];
-s16b lite_x[LITE_MAX];
+POSITION lite_y[LITE_MAX];
+POSITION lite_x[LITE_MAX];
 
 /*
  * Array of grids lit by player lite (see "cave.c")
  */
 s16b mon_lite_n;
-s16b mon_lite_y[MON_LITE_MAX];
-s16b mon_lite_x[MON_LITE_MAX];
+POSITION mon_lite_y[MON_LITE_MAX];
+POSITION mon_lite_x[MON_LITE_MAX];
 
 /*
  * Array of grids viewable to the player (see "cave.c")
  */
 s16b view_n;
-byte view_y[VIEW_MAX];
-byte view_x[VIEW_MAX];
+POSITION view_y[VIEW_MAX];
+POSITION view_x[VIEW_MAX];
 
 /*
  * Array of grids for use by various functions (see "cave.c")
  */
 s16b temp_n;
-byte temp_y[TEMP_MAX];
-byte temp_x[TEMP_MAX];
+POSITION temp_y[TEMP_MAX];
+POSITION temp_x[TEMP_MAX];
 
 /*
  * Array of grids for delayed visual updating (see "cave.c")
  */
 s16b redraw_n = 0;
-byte redraw_y[REDRAW_MAX];
-byte redraw_x[REDRAW_MAX];
+POSITION redraw_y[REDRAW_MAX];
+POSITION redraw_x[REDRAW_MAX];
 
 
 /*
