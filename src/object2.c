@@ -7722,8 +7722,9 @@ static void drain_essence(void)
 	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2, old_timeout;
 	u32b old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
 	object_type *o_ptr;
-	cptr            q, s;
-	byte iy, ix, marked, number;
+	cptr q, s;
+	POSITION iy, ix;
+	byte_hack marked, number;
 	s16b next_o_idx, weight;
 
 	for (i = 0; i < sizeof(drain_value) / sizeof(int); i++)

@@ -956,8 +956,8 @@ typedef struct player_type player_type;
 
 struct player_type
 {
-	s16b oldpy;		/* Previous player location -KMW- */
-	s16b oldpx;		/* Previous player location -KMW- */
+	POSITION oldpy;		/* Previous player location -KMW- */
+	POSITION oldpx;		/* Previous player location -KMW- */
 
 	CHARACTER_IDX psex;			/* Sex index */
 	CHARACTER_IDX prace;			/* Race index */

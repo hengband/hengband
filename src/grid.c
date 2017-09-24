@@ -1119,7 +1119,7 @@ static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, 
  */
 bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
 {
-	int x3, y3, dx, dy; // TODO: いずれpositon型に変える
+	POSITION x3, y3, dx, dy;
 	int changex, changey;
 	int length;
 	int i;

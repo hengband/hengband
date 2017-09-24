@@ -208,7 +208,7 @@ static byte spell_color(int type)
  * If the distance is not "one", we (may) return "*".
  * </pre>
  */
-u16b bolt_pict(int y, int x, int ny, int nx, int typ)
+u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, int typ)
 {
 	int base;
 
@@ -298,7 +298,7 @@ u16b bolt_pict(int y, int x, int ny, int nx, int typ)
  * by "update_view_los()", and very different from the one used by "los()".
  * </pre>
  */
-sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg)
+sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int flg)
 {
 	int y, x;
 
@@ -5173,7 +5173,7 @@ static bool project_m(int who, int r, int y, int x, HIT_POINT dam, int typ, int 
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
  */
-static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int flg, int monspell)
+static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, int dam, int typ, int flg, int monspell)
 {
 	int k = 0;
 	int rlev = 0;
@@ -5216,15 +5216,15 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
 	if ((p_ptr->reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && (flg & PROJECT_REFLECTABLE) && !one_in_(10))
 	{
-		byte t_y, t_x;
+		POSITION t_y, t_x;
 		int max_attempts = 10;
 
-        if (blind) 
-            msg_print(_("何かが跳ね返った！", "Something bounces!"));
+		if (blind) 
+			msg_print(_("何かが跳ね返った！", "Something bounces!"));
 		else if (p_ptr->special_defense & KATA_FUUJIN) 
-            msg_print(_("風の如く武器を振るって弾き返した！", "The attack bounces!"));
+			msg_print(_("風の如く武器を振るって弾き返した！", "The attack bounces!"));
 		else 
-            msg_print(_("攻撃が跳ね返った！", "The attack bounces!"));
+			msg_print(_("攻撃が跳ね返った！", "The attack bounces!"));
 
 
 		/* Choose 'new' target */
@@ -6318,28 +6318,28 @@ int dist_to_line(int y, int x, int y1, int x1, int y2, int x2)
  * Modified version of los() for calculation of disintegration balls.
  * Disintegration effects are stopped by permanent walls.
  */
-bool in_disintegration_range(int y1, int x1, int y2, int x2)
+bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	/* Delta */
-	int dx, dy;
+	POSITION dx, dy;
 
 	/* Absolute */
-	int ax, ay;
+	POSITION ax, ay;
 
 	/* Signs */
-	int sx, sy;
+	POSITION sx, sy;
 
 	/* Fractions */
-	int qx, qy;
+	POSITION qx, qy;
 
 	/* Scanners */
-	int tx, ty;
+	POSITION tx, ty;
 
 	/* Scale factors */
-	int f1, f2;
+	POSITION f1, f2;
 
 	/* Slope, or 1/Slope, of LOS */
-	int m;
+	POSITION m;
 
 
 	/* Extract the offset */

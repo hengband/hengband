@@ -1852,8 +1852,11 @@ static void rd_extra(void)
 	rd_byte(&p_ptr->exit_bldg);
 	rd_byte(&tmp8u);
 
-	rd_s16b(&p_ptr->oldpx);
-	rd_s16b(&p_ptr->oldpy);
+	rd_s16b(&tmp16s);
+	p_ptr->oldpx = (POSITION)tmp16s;
+	rd_s16b(&tmp16s);
+	p_ptr->oldpy = (POSITION)tmp16s;
+
 	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
 
 	/* Was p_ptr->rewards[MAX_BACT] */

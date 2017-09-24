@@ -165,8 +165,8 @@ static void wr_item(object_type *o_ptr)
 	wr_s16b(o_ptr->k_idx);
 
 	/* Location */
-	wr_byte(o_ptr->iy);
-	wr_byte(o_ptr->ix);
+	wr_byte((byte_hack)o_ptr->iy);
+	wr_byte((byte_hack)o_ptr->ix);
 
 	if (flags & SAVE_ITEM_PVAL) wr_s16b(o_ptr->pval);
 
@@ -248,8 +248,8 @@ static void wr_monster(monster_type *m_ptr)
 
 	/*** Write only un-obvious elements ***/
 	wr_s16b(m_ptr->r_idx);
-	wr_byte(m_ptr->fy);
-	wr_byte(m_ptr->fx);
+	wr_byte((byte_hack)m_ptr->fy);
+	wr_byte((byte_hack)m_ptr->fx);
 	wr_s16b(m_ptr->hp);
 	wr_s16b(m_ptr->maxhp);
 	wr_s16b(m_ptr->max_maxhp);
@@ -692,8 +692,8 @@ static void wr_extra(void)
 	wr_byte(p_ptr->exit_bldg);
 	wr_byte(0); /* Unused */
 
-	wr_s16b(p_ptr->oldpx);
-	wr_s16b(p_ptr->oldpy);
+	wr_s16b((s16b)p_ptr->oldpx);
+	wr_s16b((s16b)p_ptr->oldpy);
 
 	/* Was number of p_ptr->rewards[] */
 	wr_s16b(0);

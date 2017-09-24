@@ -1090,11 +1090,11 @@ extern void remove_loc(void);
 extern bool save_floor(saved_floor_type *sf_ptr, u32b mode);
 
 /* spells1.c */
-extern bool in_disintegration_range(int y1, int x1, int y2, int x2);
+extern bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, int typ);
 extern int take_hit(int damage_type, int damage, cptr kb_str, int monspell);
-extern u16b bolt_pict(int y, int x, int ny, int nx, int typ);
-extern sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, int flg);
+extern u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, int typ);
+extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int flg);
 extern int dist_to_line(int y, int x, int y1, int x1, int y2, int x2);
 extern bool project(int who, int rad, int y, int x, HIT_POINT dam, int typ, int flg, int monspell);
 extern int project_length;
@@ -1251,7 +1251,7 @@ extern bool identify_fully(bool only_equip);
 extern bool recharge(int num);
 extern bool bless_weapon(void);
 extern bool pulish_shield(void);
-extern bool potion_smash_effect(int who, int y, int x, int k_idx);
+extern bool potion_smash_effect(int who, POSITION y, POSITION x, int k_idx);
 extern void display_spell_list(void);
 extern s16b experience_of_spell(int spell, int realm);
 extern int mod_need_mana(int need_mana, int spell, int realm);

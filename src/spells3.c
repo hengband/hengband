@@ -2726,8 +2726,8 @@ bool mundane_spell(bool only_equip)
 	/* Oops */
 	msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 	{
-		byte iy = o_ptr->iy;                 /* Y-position on map, or zero */
-		byte ix = o_ptr->ix;                 /* X-position on map, or zero */
+		POSITION iy = o_ptr->iy;                 /* Y-position on map, or zero */
+		POSITION ix = o_ptr->ix;                 /* X-position on map, or zero */
 		s16b next_o_idx = o_ptr->next_o_idx; /* Next object in stack (if any) */
 		byte marked = o_ptr->marked;         /* Object is marked */
 		s16b weight = o_ptr->number * o_ptr->weight;
@@ -3477,7 +3477,7 @@ msg_format("%sは輝いた！", o_name);
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */
-bool potion_smash_effect(int who, int y, int x, int k_idx)
+bool potion_smash_effect(int who, POSITION y, POSITION x, int k_idx)
 {
 	int     radius = 2;
 	int     dt = 0;
