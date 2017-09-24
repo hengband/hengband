@@ -8163,7 +8163,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 }
 
 
-static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
+static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 {
 	char tmp_str[120];
 	char playtime_str[16];

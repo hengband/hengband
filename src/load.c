@@ -2844,7 +2844,7 @@ static errr rd_dungeon_old(void)
 	/* Read the monsters */
 	for (i = 1; i < limit; i++)
 	{
-		int m_idx;
+		IDX m_idx;
 		monster_type *m_ptr;
 
 		/* Get a new record */

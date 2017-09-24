@@ -3542,7 +3542,7 @@ static bool hack_isnt_wall(int y, int x, int c1, int c2, int c3, int feat1, int 
  * Quick and nasty fill routine used to find the connected region
  * of floor in the middle of the cave
  */
-static void cave_fill(byte y, byte x)
+static void cave_fill(POSITION y, POSITION x)
 {
 	int i, j, d;
 	int ty, tx;

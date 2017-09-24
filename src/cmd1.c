@@ -1065,7 +1065,7 @@ static void hit_trap_slow(void)
  * @param turn 状態異常の追加ターン量
  * @return なし
  */
-static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*set_status)(int), int turn_aux)
+static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*set_status)(IDX), IDX turn_aux)
 {
 	msg_print(trap_message);
 

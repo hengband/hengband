@@ -2815,10 +2815,11 @@ static POSITION mon_fy, mon_fx;
 /*
  * Add a square to the changes array
  */
-static void mon_lite_hack(int y, int x)
+static void mon_lite_hack(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
-	int       midpoint, dpf, d;
+	int dpf, d;
+	POSITION midpoint;
 
 	/* We trust this grid is in bounds */
 	/* if (!in_bounds2(y, x)) return; */
@@ -3222,8 +3223,8 @@ void update_mon_lite(void)
 		}
 
 		/* Add to end of temp array */
-		temp_x[temp_n] = (byte)fx;
-		temp_y[temp_n] = (byte)fy;
+		temp_x[temp_n] = fx;
+		temp_y[temp_n] = fy;
 		temp_n++;
 	}
 
@@ -3580,14 +3581,15 @@ static bool update_view_aux(int y, int x, int y1, int x1, int y2, int x2)
  */
 void update_view(void)
 {
-	int n, m, d, k, y, x, z;
+	int n, m, d, k, z;
+	POSITION y, x;
 
 	int se, sw, ne, nw, es, en, ws, wn;
 
 	int full, over;
 
-	int y_max = cur_hgt - 1;
-	int x_max = cur_wid - 1;
+	POSITION y_max = cur_hgt - 1;
+	POSITION x_max = cur_wid - 1;
 
 	cave_type *c_ptr;
 
@@ -4120,7 +4122,7 @@ static POSITION flow_y = 0;
  */
 void update_flow(void)
 {
-	int x, y, d;
+	POSITION x, y, d;
 	int flow_head = 1;
 	int flow_tail = 0;
 

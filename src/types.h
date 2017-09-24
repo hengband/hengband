@@ -530,8 +530,8 @@ struct object_type
 
 	WEIGHT weight;		/* Item weight */
 
-	byte name1;			/* Artifact type, if any */
-	byte name2;			/* Ego-Item type, if any */
+	IDX name1;			/* Artifact type, if any */
+	IDX name2;			/* Ego-Item type, if any */
 
 	byte xtra1;			/* Extra info type (now unused) */
 	byte xtra2;			/* Extra info activation index */

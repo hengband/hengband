@@ -2161,10 +2161,10 @@ static bool inn_comm(int cmd)
  * @param do_init クエストの開始処理(TRUE)、結果処理か(FALSE)
  * @return なし
  */
-static void get_questinfo(int questnum, bool do_init)
+static void get_questinfo(IDX questnum, bool do_init)
 {
 	int     i;
-	int     old_quest;
+	IDX     old_quest;
 	char    tmp_str[80];
 
 	/* Clear the text */
@@ -2800,14 +2800,14 @@ static void list_weapon(object_type *o_ptr, int row, int col)
 
 	/* Damage for one blow (if it hits) */
 	sprintf(tmp_str, _("攻撃一回につき %d-%d", "One Strike: %d-%d damage"),
-	    eff_dd + o_ptr->to_d + p_ptr->to_d[0],
-	    eff_ds * eff_dd + o_ptr->to_d + p_ptr->to_d[0]);
+	    (int)(eff_dd + o_ptr->to_d + p_ptr->to_d[0]),
+		(int)(eff_ds * eff_dd + o_ptr->to_d + p_ptr->to_d[0]));
 	put_str(tmp_str, row+6, col+1);
 
 	/* Damage for the complete attack (if all blows hit) */
 	sprintf(tmp_str, _("１ターンにつき %d-%d", "One Attack: %d-%d damage"),
-	    p_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + p_ptr->to_d[0]),
-	    p_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + p_ptr->to_d[0]));
+		(int)(p_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + p_ptr->to_d[0])),
+			(int)(p_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + p_ptr->to_d[0])));
 	put_str(tmp_str, row+7, col+1);
 }
 
@@ -3186,7 +3186,8 @@ static int repair_broken_weapon_aux(int bcost)
 	int item, mater;
 	object_type *o_ptr, *mo_ptr; /* broken weapon and material weapon */
 	object_kind *k_ptr;
-	int i, k_idx, dd_bonus, ds_bonus;
+	int i, dd_bonus, ds_bonus;
+	IDX k_idx;
 	char basenm[MAX_NLEN];
 	cptr q, s; /* For get_item prompt */
 	int row = 7;

@@ -1030,8 +1030,8 @@ static void prt_depth(void)
 	}
 	else
 	{
-		if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), dun_level * 50);
-		else (void)sprintf(depths, _("%d 階", "Lev %d"), dun_level);
+		if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), (int)dun_level * 50);
+		else (void)sprintf(depths, _("%d 階", "Lev %d"), (int)dun_level);
 
 		/* Get color of level based on feeling  -JSV- */
 		switch (p_ptr->feeling)
@@ -1762,7 +1762,7 @@ static void print_monster_line(int x, int y, monster_type* m_ptr, int n_same){
 	Term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
 	//LV
 	if (r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG2_KAGE)){
-		sprintf(buf, " %2d", r_ptr->level);
+		sprintf(buf, " %2d", (int)r_ptr->level);
 	}else{
 		strcpy(buf, " ??");
 	}

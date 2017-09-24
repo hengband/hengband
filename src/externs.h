@@ -1091,7 +1091,7 @@ extern bool save_floor(saved_floor_type *sf_ptr, u32b mode);
 
 /* spells1.c */
 extern bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, int typ);
+extern void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, int typ);
 extern int take_hit(int damage_type, HIT_POINT damage, cptr kb_str, int monspell);
 extern u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, int typ);
 extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int flg);

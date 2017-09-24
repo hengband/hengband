@@ -2101,7 +2101,7 @@ static void object_mention(object_type *o_ptr)
 static bool make_artifact_special(object_type *o_ptr)
 {
 	int i;
-	int k_idx = 0;
+	IDX k_idx = 0;
 
 	/*! @note 地上ではキャンセルする / No artifacts in the town */
 	if (!dun_level) return (FALSE);

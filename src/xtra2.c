@@ -624,7 +624,7 @@ void check_quest_completion(monster_type *m_ptr)
 	/* Create a magical staircase */
 	if (create_stairs)
 	{
-		int ny, nx;
+		POSITION ny, nx;
 
 		/* Stagger around */
 		while (cave_perma_bold(y, x) || cave[y][x].o_idx || (cave[y][x].info & CAVE_OBJECT) )
@@ -2904,7 +2904,7 @@ static void target_set_prepare(int mode)
 
 	if (p_ptr->riding && target_pet && (temp_n > 1) && (mode & (TARGET_KILL)))
 	{
-		byte tmp;
+		POSITION tmp;
 
 		tmp = temp_y[0];
 		temp_y[0] = temp_y[1];
@@ -3286,7 +3286,8 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 			/* Continue scrolling list if requested */
 			while (1)
 			{
-				int i, o_idx;
+				int i;
+				IDX o_idx;
 
 				/* Save screen */
 				screen_save();
@@ -3582,8 +3583,8 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 bool target_set(int mode)
 {
 	int		i, d, m, t, bd;
-	int		y = p_ptr->y;
-	int		x = p_ptr->x;
+	POSITION y = p_ptr->y;
+	POSITION x = p_ptr->x;
 
 	bool	done = FALSE;
 
@@ -5762,7 +5763,7 @@ void display_rumor(bool ex)
 		{
 			if (strcmp(zz[0], "ARTIFACT") == 0)
 			{
-				int a_idx, k_idx;
+				IDX a_idx, k_idx;
 				object_type forge;
 				object_type *q_ptr = &forge;
 				artifact_type *a_ptr;

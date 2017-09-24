@@ -3937,7 +3937,7 @@ void display_player(int mode)
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, p_ptr->died_from);
+					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)dun_level, p_ptr->died_from);
 #else
 					sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, dun_level, map_name());
 #endif
@@ -3969,7 +3969,7 @@ void display_player(int mode)
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level);
+					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), (int)dun_level);
 #else
 					sprintf(statmsg, "...Now, you are exploring level %d of %s.", dun_level, map_name());
 #endif
@@ -4710,7 +4710,7 @@ static void dump_aux_monsters(FILE *fff)
 		for (k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--)
 		{
 			monster_race *r_ptr = &r_info[who[k]];
-			fprintf(fff, _("  %-40s (レベル%3d)\n", "  %-40s (level %3d)\n"), (r_name + r_ptr->name), r_ptr->level); 
+			fprintf(fff, _("  %-40s (レベル%3d)\n", "  %-40s (level %3d)\n"), (r_name + r_ptr->name), (int)r_ptr->level);
 		}
 
 	}
@@ -6488,11 +6488,11 @@ static void print_tomb(void)
 			{
 				if (streq(p_ptr->died_from, "途中終了"))
 				{
-					sprintf(tmp, "地下 %d 階で死んだ", dun_level);
+					sprintf(tmp, "地下 %d 階で死んだ", (int)dun_level);
 				}
 				else
 				{
-					sprintf(tmp, "に地下 %d 階で殺された", dun_level);
+					sprintf(tmp, "に地下 %d 階で殺された", (int)dun_level);
 				}
 			}
 			center_string(buf, tmp);

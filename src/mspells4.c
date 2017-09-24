@@ -3175,12 +3175,12 @@ void spell_RF6_S_DRAGON(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 * @param m_idx 呪文を唱えるモンスターID
 * @return 召喚したモンスターの数を返す。
 */
-int summon_NAZGUL(int y, int x, int m_idx)
+int summon_NAZGUL(POSITION y, POSITION x, IDX m_idx)
 {
 	u32b mode = 0L;
 	int count = 0, k;
-	int cy = y;
-	int cx = x;
+	POSITION cy = y;
+	POSITION cx = x;
 	char m_name[80];
 	monster_name(m_idx, m_name);
 
