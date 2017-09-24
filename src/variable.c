@@ -112,13 +112,13 @@ bool msg_flag;			/* Used in msg_print() for "buffering" */
 s16b running;			/* Current counter for running, if any */
 s16b resting;			/* Current counter for resting, if any */
 
-s16b cur_hgt;			/* Current dungeon height */
-s16b cur_wid;			/* Current dungeon width */
-s16b dun_level;			/* Current dungeon level */
+POSITION cur_hgt;		/* Current dungeon height */
+POSITION cur_wid;		/* Current dungeon width */
+DEPTH dun_level;		/* Current dungeon level */
 s16b num_repro;			/* Current reproducer count */
-s16b object_level;		/* Current object creation level */
-s16b monster_level;		/* Current monster creation level */
-s16b base_level;        /* Base dungeon level */
+DEPTH object_level;		/* Current object creation level */
+DEPTH monster_level;	/* Current monster creation level */
+DEPTH base_level;		/* Base dungeon level */
 
 s32b turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
 s32b turn_limit;		/*!< turnの最大値 / Limit of game turn */

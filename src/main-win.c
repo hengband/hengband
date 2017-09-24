@@ -761,7 +761,7 @@ static byte special_key_list[] =
 
 /* Function prototype */
 
-static bool is_already_running();
+static bool is_already_running(void);
 
 
 /* bg */

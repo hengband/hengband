@@ -2103,7 +2103,7 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
  *\n
  * A "direction" of "5" means "pick a random direction".\n
  */
-static void process_monster(int m_idx)
+static void process_monster(IDX m_idx)
 {
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];

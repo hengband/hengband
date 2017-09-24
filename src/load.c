@@ -2491,14 +2491,16 @@ static errr rd_dungeon_old(void)
 	/*** Basic info ***/
 
 	/* Header info */
-	rd_s16b(&dun_level);
+	rd_s16b(&tmp16s);
+	dun_level = (DEPTH)tmp16s;
 	if (z_older_than(10, 3, 8)) dungeon_type = DUNGEON_ANGBAND;
 	else rd_byte(&dungeon_type);
 
 	/* Set the base level for old versions */
 	base_level = dun_level;
 
-	rd_s16b(&base_level);
+	rd_s16b(&tmp16s);
+	base_level = (DEPTH)tmp16s;
 
 	rd_s16b(&num_repro);
 	rd_s16b(&tmp16s);
@@ -2506,8 +2508,10 @@ static errr rd_dungeon_old(void)
 	rd_s16b(&tmp16s);
 	p_ptr->x = (int)tmp16s;
 	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
-	rd_s16b(&cur_hgt);
-	rd_s16b(&cur_wid);
+	rd_s16b(&tmp16s);
+	cur_hgt = (POSITION)tmp16s;
+	rd_s16b(&tmp16s);
+	cur_wid = (POSITION)tmp16s;
 	rd_s16b(&tmp16s); /* max_panel_rows */
 	rd_s16b(&tmp16s); /* max_panel_cols */
 
@@ -2918,7 +2922,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	{
 		/*** Not a saved floor ***/
 
-		rd_s16b(&dun_level);
+		rd_s16b(&tmp16s);
+		dun_level = (DEPTH)tmp16s;
 		base_level = dun_level;
 	}
 	else
@@ -2948,7 +2953,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		if (tmp16s != sf_ptr->lower_floor_id) return 171;
 	}
 
-	rd_s16b(&base_level);
+	rd_s16b(&tmp16s);
+	base_level = (DEPTH)tmp16s;
 	rd_s16b(&num_repro);
 
 	rd_u16b(&tmp16u);
@@ -2957,8 +2963,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_u16b(&tmp16u);
 	p_ptr->x = (int)tmp16u;
 
-	rd_s16b(&cur_hgt);
-	rd_s16b(&cur_wid);
+	rd_s16b(&tmp16s);
+	cur_hgt = (POSITION)tmp16s;
+	rd_s16b(&tmp16s);
+	cur_wid = (POSITION)tmp16s;
 
 	rd_byte(&p_ptr->feeling);
 

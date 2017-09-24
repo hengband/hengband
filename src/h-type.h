@@ -132,7 +132,7 @@ typedef s32b PRICE;      /*!< ゲーム中の金額価値の型定義 */
 
 typedef u32b STR_OFFSET;      /*!< テキストオフセットの型定義 */
 
-typedef byte DEPTH;     /*!< ゲーム中の階層レベルの型定義 */
+typedef s32b DEPTH;     /*!< ゲーム中の階層レベルの型定義 */
 typedef byte RARITY;    /*!< ゲーム中の希少度の型定義 */
 
 

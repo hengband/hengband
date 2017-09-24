@@ -933,7 +933,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	{
 		/*** Not a saved floor ***/
 
-		wr_s16b(dun_level);
+		wr_s16b((s16b)dun_level);
 	}
 	else
 	{
@@ -948,12 +948,12 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 		wr_s16b(sf_ptr->lower_floor_id);
 	}
 
-	wr_u16b(base_level);
+	wr_u16b((u16b)base_level);
 	wr_u16b(num_repro);
 	wr_u16b((u16b)p_ptr->y);
 	wr_u16b((u16b)p_ptr->x);
-	wr_u16b(cur_hgt);
-	wr_u16b(cur_wid);
+	wr_u16b((u16b)cur_hgt);
+	wr_u16b((u16b)cur_wid);
 	wr_byte(p_ptr->feeling);
 
 
