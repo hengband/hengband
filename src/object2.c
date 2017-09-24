@@ -4074,7 +4074,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 		case TV_FIGURINE:
 		{
-			int i = 1;
+			PARAMETER_VALUE i = 1;
 			int check;
 
 			monster_race *r_ptr;

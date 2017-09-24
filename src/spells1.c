@@ -596,11 +596,11 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
  * Mega-Hack -- track "affected" monsters (see "project()" comments)
  */
 static int project_m_n; /*!< 魔法効果範囲内にいるモンスターの数 */
-static int project_m_x; /*!< 処理中のモンスターX座標 */
-static int project_m_y; /*!< 処理中のモンスターY座標 */
+static POSITION project_m_x; /*!< 処理中のモンスターX座標 */
+static POSITION project_m_y; /*!< 処理中のモンスターY座標 */
 /* Mega-Hack -- monsters target */
-static s16b monster_target_x; /*!< モンスターの攻撃目標X座標 */
-static s16b monster_target_y; /*!< モンスターの攻撃目標Y座標 */
+static POSITION monster_target_x; /*!< モンスターの攻撃目標X座標 */
+static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
 
 
 /*!
@@ -6773,7 +6773,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
  * and "update_view()" and "update_monsters()" need to be called.
  * </pre>
  */
-bool project(int who, int rad, int y, int x, HIT_POINT dam, int typ, int flg, int monspell)
+bool project(int who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, int monspell)
 {
 	int i, t, dist;
 

@@ -1096,7 +1096,7 @@ extern int take_hit(int damage_type, HIT_POINT damage, cptr kb_str, int monspell
 extern u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, int typ);
 extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int flg);
 extern int dist_to_line(int y, int x, int y1, int x1, int y2, int x2);
-extern bool project(int who, int rad, int y, int x, HIT_POINT dam, int typ, int flg, int monspell);
+extern bool project(int who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, int monspell);
 extern int project_length;
 extern bool binding_field(int dam);
 extern void seal_of_mirror(int dam);

@@ -5625,7 +5625,7 @@ static void init_stuff(void)
 	/* validate_dir(ANGBAND_DIR_XTRA_HELP); */
 }
 
-static bool is_already_running()
+static bool is_already_running(void)
 {
 	bool result = FALSE;
 	HANDLE hMutex;

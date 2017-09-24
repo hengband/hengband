@@ -3573,7 +3573,7 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 		/* Check each direction, up to total */
 		for (i = 0; (i < 8) && (hack_n < total); i++)
 		{
-			int mx, my;
+			POSITION mx, my;
 
 			scatter(&my, &mx, hy, hx, 4, 0);
 
@@ -3722,7 +3722,8 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 		/* Try to place several "escorts" */
 		for (i = 0; i < 32; i++)
 		{
-			int nx, ny, z, d = 3;
+			POSITION nx, ny, d = 3;
+			int z; 
 
 			/* Pick a location */
 			scatter(&ny, &nx, y, x, d, 0);

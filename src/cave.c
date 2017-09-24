@@ -2810,7 +2810,7 @@ void update_lite(void)
 
 
 static bool mon_invis;
-static s16b mon_fy, mon_fx;
+static POSITION mon_fy, mon_fx;
 
 /*
  * Add a square to the changes array
@@ -4100,8 +4100,8 @@ void forget_flow(void)
  * it everytime the player moves out of LOS of the last
  * "way-point".
  */
-static u16b flow_x = 0;
-static u16b flow_y = 0;
+static POSITION flow_x = 0;
+static POSITION flow_y = 0;
 
 
 
@@ -4934,7 +4934,7 @@ bool projectable(int y1, int x1, int y2, int x2)
  */
 void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, int m)
 {
-	int nx, ny;
+	POSITION nx, ny;
 
 	/* Unused */
 	m = m;

@@ -686,7 +686,8 @@ static void pattern_teleport(void)
  */
 static void wreck_the_pattern(void)
 {
-	int to_ruin = 0, r_y, r_x;
+	int to_ruin = 0;
+	POSITION r_y, r_x;
 	int pattern_type = f_info[cave[p_ptr->y][p_ptr->x].feat].subtype;
 
 	if (pattern_type == PATTERN_TILE_WRECKED)

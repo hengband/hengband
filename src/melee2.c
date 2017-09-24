@@ -402,8 +402,8 @@ static bool mon_will_run(int m_idx)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	u16b p_lev, m_lev;
-	u16b p_chp, p_mhp;
-	u16b m_chp, m_mhp;
+	HIT_POINT p_chp, p_mhp;
+	HIT_POINT m_chp, m_mhp;
 	u32b p_val, m_val;
 
 #endif
@@ -438,8 +438,8 @@ static bool mon_will_run(int m_idx)
 	if (m_lev + 4 <= p_lev) return (TRUE);
 
 	/* Examine player health */
-	p_chp = (u16b)p_ptr->chp;
-	p_mhp = (u16b)p_ptr->mhp;
+	p_chp = p_ptr->chp;
+	p_mhp = p_ptr->mhp;
 
 	/* Examine monster health */
 	m_chp = m_ptr->hp;
@@ -1444,7 +1444,7 @@ static int check_hit2(int power, int level, int ac, int stun)
  * @param t_idx 目標側モンスターの参照ID
  * @return 実際に打撃処理が行われた場合TRUEを返す
  */
-static bool monst_attack_monst(int m_idx, int t_idx)
+static bool monst_attack_monst(IDX m_idx, IDX t_idx)
 {
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_type    *t_ptr = &m_list[t_idx];

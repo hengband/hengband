@@ -479,7 +479,8 @@ void vault_traps(int y, int x, int yd, int xd, int num)
  */
 void vault_monsters(int y1, int x1, int num)
 {
-	int k, i, y, x;
+	int k, i;
+	POSITION y, x;
 	cave_type *c_ptr;
 
 	/* Try to summon "num" monsters "near" the given location */

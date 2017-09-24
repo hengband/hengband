@@ -127,10 +127,14 @@ typedef s16b PARAMETER_VALUE;      /*!< ゲーム中のアイテム能力値の�
 typedef s16b WEIGHT;               /*!< ゲーム中の重量の型定義 */
 
 typedef int DICE_NUMBER; /*!< ゲーム中のダイス数の型定義 */
-typedef int DICE_SID;   /*!< ゲーム中のダイス面の型定義 */
-
+typedef int DICE_SID;    /*!< ゲーム中のダイス面の型定義 */
+typedef s32b PRICE;      /*!< ゲーム中の金額価値の型定義 */
 
 typedef u32b STR_OFFSET;      /*!< テキストオフセットの型定義 */
+
+typedef byte DEPTH;     /*!< ゲーム中の階層レベルの型定義 */
+typedef byte RARITY;    /*!< ゲーム中の希少度の型定義 */
+
 
 /*** Pointers to all the basic types defined above ***/
 

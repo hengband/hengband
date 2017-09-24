@@ -338,8 +338,8 @@ struct monster_race
 	s16b next_r_idx;
 	u32b next_exp;
 
-	byte level;				/* Level of creature */
-	byte rarity;			/* Rarity of creature */
+	DEPTH level;				/* Level of creature */
+	RARITY rarity;			/* Rarity of creature */
 
 
 	byte d_attr;			/* Default monster attribute */
@@ -978,8 +978,7 @@ struct player_type
 	s16b wt;			/* Weight */
 	s16b sc;			/* Social Class */
 
-
-	s32b au;			/* Current Gold */
+	PRICE au;			/* Current Gold */
 
 	s32b max_max_exp;	/* Max max experience (only to calculate score) */
 	s32b max_exp;		/* Max experience */
@@ -1209,8 +1208,8 @@ struct player_type
 	bool counter;
 
 	s32b align;				/* Good/evil/neutral */
-	s16b run_py;
-	s16b run_px;
+	POSITION run_py;
+	POSITION run_px;
 
 
 	/*** Extracted fields ***/
