@@ -1404,136 +1404,136 @@ static bool cast_mirror_spell(int spell)
 	int             plev = p_ptr->lev;
 	int		tmp;
 	TIME_EFFECT t;
-	int		x,y;
+	int		x, y;
 
 	/* spell code */
 	switch (spell)
 	{
-	/* mirror of seeing */
+		/* mirror of seeing */
 	case 0:
-	  tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 0;
-	  if( plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
-	  if( plev + tmp > 18 )detect_monsters_invis(DETECT_RAD_DEFAULT);
-	  if( plev + tmp > 28 )set_tim_esp((TIME_EFFECT)plev, FALSE);
-	  if( plev + tmp > 38 )map_area(DETECT_RAD_MAP);
-	  if( tmp == 0 && plev < 5 ){
-	    msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
-	  }
-	  break;
-	/* drip of light */
-	case 1:
-	  if( number_of_mirrors() < 4 + plev/10 ){
-	    place_mirror();
-	  }
-	  else {
-			msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
-	  }
-	  break;
-	case 2:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  if ( plev > 9 && is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ) {
-	    fire_beam(GF_LITE, dir,damroll(3+((plev-1)/5),4));
-	  }
-	  else {
-	    fire_bolt(GF_LITE, dir,damroll(3+((plev-1)/5),4));
-	  }
-	  break;
-	/* warped mirror */
-	case 3:
-	  teleport_player(10, 0L);
-	  break;
-	/* mirror of light */
-	case 4:
-	  (void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
-	  break;
-	/* mirror of wandering */
-	case 5:
-	  teleport_player(plev * 5, 0L);
-	  break;
-	/* robe of dust */
-	case 6:
-	  set_dustrobe(20+randint1(20),FALSE);
-	  break;
-	/* banishing mirror */
-	case 7:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  (void)fire_beam(GF_AWAY_ALL, dir , plev);
-	  break;
-	/* mirror clashing */
-	case 8:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  fire_ball(GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8),
-		    (plev > 20 ? (plev - 20) / 8 + 1 : 0));
-	  break;
-	/* mirror sleeping */
-	case 9:
-	  for(x=0;x<cur_wid;x++){
-	    for(y=0;y<cur_hgt;y++){
-	      if (is_mirror_grid(&cave[y][x])) {
-		project(0,2,y,x,plev,GF_OLD_SLEEP,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_HANGEKI),-1);
-	      }
-	    }
-	  }
-	  break;
-	/* seeker ray */
-	case 10:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  fire_beam(GF_SEEKER,dir, damroll(11+(plev-5)/4,8));
-	  break;
-	/* seal of mirror */
-	case 11:
-	  seal_of_mirror(plev*4+100);
-	  break;
-	/* shield of water */
-	case 12:
-	  t = 20 + randint1(20);
-	  set_shield(t, FALSE);
-	  if( plev > 31 )set_tim_reflect(t, FALSE);
-	  if( plev > 39 )set_resist_magic(t, FALSE);
-	  break;
-	/* super ray */
-	case 13:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  fire_beam(GF_SUPER_RAY,dir, 150+randint1(2*plev));
-	  break;
-	/* illusion light */
-	case 14:
-	  tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 3;
-	  slow_monsters(plev);
-	  stun_monsters(plev*tmp);
-	  confuse_monsters(plev*tmp);
-	  turn_monsters(plev*tmp);
-	  stun_monsters(plev*tmp);
-	  stasis_monsters(plev*tmp);
-	  break;
-	/* mirror shift */
-	case 15:
-	  if( !is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ){
-		msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
+		tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 0;
+		if (plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
+		if (plev + tmp > 18)detect_monsters_invis(DETECT_RAD_DEFAULT);
+		if (plev + tmp > 28)set_tim_esp((TIME_EFFECT)plev, FALSE);
+		if (plev + tmp > 38)map_area(DETECT_RAD_MAP);
+		if (tmp == 0 && plev < 5) {
+			msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
+		}
 		break;
-	  }
-	  alter_reality();
-	  break;
-	/* mirror tunnel */
+		/* drip of light */
+	case 1:
+		if (number_of_mirrors() < 4 + plev / 10) {
+			place_mirror();
+		}
+		else {
+			msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
+		}
+		break;
+	case 2:
+		if (!get_aim_dir(&dir)) return FALSE;
+		if (plev > 9 && is_mirror_grid(&cave[p_ptr->y][p_ptr->x])) {
+			fire_beam(GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+		}
+		else {
+			fire_bolt(GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+		}
+		break;
+		/* warped mirror */
+	case 3:
+		teleport_player(10, 0L);
+		break;
+		/* mirror of light */
+	case 4:
+		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
+		break;
+		/* mirror of wandering */
+	case 5:
+		teleport_player(plev * 5, 0L);
+		break;
+		/* robe of dust */
+	case 6:
+		set_dustrobe(20 + randint1(20), FALSE);
+		break;
+		/* banishing mirror */
+	case 7:
+		if (!get_aim_dir(&dir)) return FALSE;
+		(void)fire_beam(GF_AWAY_ALL, dir, plev);
+		break;
+		/* mirror clashing */
+	case 8:
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_ball(GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8),
+			(plev > 20 ? (plev - 20) / 8 + 1 : 0));
+		break;
+		/* mirror sleeping */
+	case 9:
+		for (x = 0; x < cur_wid; x++) {
+			for (y = 0; y < cur_hgt; y++) {
+				if (is_mirror_grid(&cave[y][x])) {
+					project(0, 2, y, x, plev, GF_OLD_SLEEP, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+				}
+			}
+		}
+		break;
+		/* seeker ray */
+	case 10:
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_beam(GF_SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
+		break;
+		/* seal of mirror */
+	case 11:
+		seal_of_mirror(plev * 4 + 100);
+		break;
+		/* shield of water */
+	case 12:
+		t = 20 + randint1(20);
+		set_shield(t, FALSE);
+		if (plev > 31)set_tim_reflect(t, FALSE);
+		if (plev > 39)set_resist_magic(t, FALSE);
+		break;
+		/* super ray */
+	case 13:
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_beam(GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
+		break;
+		/* illusion light */
+	case 14:
+		tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 3;
+		slow_monsters(plev);
+		stun_monsters(plev*tmp);
+		confuse_monsters(plev*tmp);
+		turn_monsters(plev*tmp);
+		stun_monsters(plev*tmp);
+		stasis_monsters(plev*tmp);
+		break;
+		/* mirror shift */
+	case 15:
+		if (!is_mirror_grid(&cave[p_ptr->y][p_ptr->x])) {
+			msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
+			break;
+		}
+		alter_reality();
+		break;
+		/* mirror tunnel */
 	case 16:
-	  msg_print(_("鏡の世界を通り抜け…  ", "Go through the world of mirror..."));
-	  return mirror_tunnel();
+		msg_print(_("鏡の世界を通り抜け…  ", "Go through the world of mirror..."));
+		return mirror_tunnel();
 
-	/* mirror of recall */
+		/* mirror of recall */
 	case 17:
 		return word_of_recall();
-	/* multi-shadow */
+		/* multi-shadow */
 	case 18:
-	  set_multishadow(6+randint1(6),FALSE);
-	  break;
-	/* binding field */
+		set_multishadow(6 + randint1(6), FALSE);
+		break;
+		/* binding field */
 	case 19:
-	  if( !binding_field(plev*11+5) )msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
-	  break;
-	/* mirror of Ruffnor */
+		if (!binding_field(plev * 11 + 5))msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
+		break;
+		/* mirror of Ruffnor */
 	case 20:
-	  (void)set_invuln(randint1(4)+4,FALSE);
-	  break;
+		(void)set_invuln(randint1(4) + 4, FALSE);
+		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
 

@@ -581,8 +581,8 @@ typedef struct monster_type monster_type;
 
 struct monster_type
 {
-	s16b r_idx;		/* Monster race index */
-	s16b ap_r_idx;		/* Monster race appearance index */
+	IDX r_idx;		/* Monster race index */
+	IDX ap_r_idx;		/* Monster race appearance index */
 	byte sub_align;		/* Sub-alignment for a neutral monster */
 
 	POSITION fy;		/* Y location on map */
@@ -593,7 +593,7 @@ struct monster_type
 	HIT_POINT max_maxhp;		/* Max Max Hit points */
 	u32b dealt_damage;		/* Sum of damages dealt by player */
 
-	s16b mtimed[MAX_MTIMED];	/* Timed status counter */
+	TIME_EFFECT mtimed[MAX_MTIMED];	/* Timed status counter */
 
 	byte mspeed;	        /* Monster "speed" */
 	ACTION_ENERGY energy_need;	/* Monster "energy" */
@@ -607,8 +607,8 @@ struct monster_type
 
 	IDX hold_o_idx;	/* Object being held (if any) */
 
-	s16b target_y;		/* Can attack !los player */
-	s16b target_x;		/* Can attack !los player */
+	POSITION target_y;		/* Can attack !los player */
+	POSITION target_x;		/* Can attack !los player */
 
 	u16b nickname;		/* Monster's Nickname */
 

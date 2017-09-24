@@ -1505,8 +1505,8 @@ static bool monst_attack_monst(int m_idx, int t_idx)
 	{
 		bool obvious = FALSE;
 
-		int power = 0;
-		int damage = 0;
+		HIT_POINT power = 0;
+		HIT_POINT damage = 0;
 
 		cptr act = NULL;
 

@@ -2988,7 +2988,7 @@ void update_mon_lite(void)
 	int i, rad;
 	cave_type *c_ptr;
 
-	s16b fx, fy;
+	POSITION fx, fy;
 	void (*add_mon_lite)(int, int);
 	int f_flag;
 
@@ -4547,7 +4547,7 @@ void wiz_dark(void)
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
-void cave_set_feat(int y, int x, int feat)
+void cave_set_feat(POSITION y, POSITION x, IDX feat)
 {
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[feat];
