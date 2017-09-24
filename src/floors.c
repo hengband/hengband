@@ -540,7 +540,8 @@ static void place_pet(void)
 		}
 		else
 		{
-			int j, d;
+			int j;
+			POSITION d;
 
 			for (d = 1; d < 6; d++)
 			{

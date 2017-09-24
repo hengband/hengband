@@ -3524,8 +3524,8 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 
 	int hack_n = 0;
 
-	byte hack_y[GROUP_MAX];
-	byte hack_x[GROUP_MAX];
+	POSITION hack_y[GROUP_MAX];
+	POSITION hack_x[GROUP_MAX];
 
 
 	/* Pick a group size */
@@ -3567,8 +3567,8 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 	for (n = 0; (n < hack_n) && (hack_n < total); n++)
 	{
 		/* Grab the location */
-		int hx = hack_x[n];
-		int hy = hack_y[n];
+		POSITION hx = hack_x[n];
+		POSITION hy = hack_y[n];
 
 		/* Check each direction, up to total */
 		for (i = 0; (i < 8) && (hack_n < total); i++)

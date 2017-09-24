@@ -946,9 +946,10 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(int feat), bool under
  * @details
  * If requested, count only trapped chests.
  */
-static int count_chests(int *y, int *x, bool trapped)
+static int count_chests(POSITION *y, POSITION *x, bool trapped)
 {
-	int d, count, o_idx;
+	int d, count;
+	IDX o_idx;
 
 	object_type *o_ptr;
 

@@ -4932,7 +4932,7 @@ bool projectable(int y1, int x1, int y2, int x2)
  *
  * Currently the "m" parameter is unused.
  */
-void scatter(int *yp, int *xp, int y, int x, int d, int m)
+void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, int m)
 {
 	int nx, ny;
 

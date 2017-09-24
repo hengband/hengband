@@ -967,7 +967,7 @@ struct player_type
 	CHARACTER_IDX realm2;        /* Second magic realm */
 	CHARACTER_IDX oops;			/* Unused */
 
-	byte hitdie;		/* Hit dice (sides) */
+	DICE_SID hitdie;		/* Hit dice (sides) */
 	u16b expfact;       /* Experience factor
 			     * Note: was byte, causing overflow for Amberite
 			     * characters (such as Amberite Paladins)

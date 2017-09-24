@@ -4395,7 +4395,7 @@ void do_poly_self(void)
  * setting the player to "dead".
  */
 
-int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
+int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 {
 	int old_chp = p_ptr->chp;
 

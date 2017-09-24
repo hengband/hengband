@@ -4163,7 +4163,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 		case TV_STATUE:
 		{
-			int i = 1;
+			PARAMETER_VALUE i = 1;
 
 			monster_race *r_ptr;
 
@@ -8444,7 +8444,8 @@ static void add_essence(int mode)
 		{
 			char tmp_val[160];
 			int val;
-			int get_to_h, get_to_d;
+			HIT_PROB get_to_h;
+			HIT_POINT get_to_d;
 
 			strcpy(tmp_val, "1");
 			if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), p_ptr->lev/7+3), tmp_val, 2)) return;

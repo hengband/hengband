@@ -459,7 +459,7 @@ static int count_all_hostile_monsters(void)
  */
 void check_quest_completion(monster_type *m_ptr)
 {
-	int y, x;
+	POSITION y, x;
 
 	int quest_num;
 
@@ -989,7 +989,7 @@ void monster_death(int m_idx, bool drop_item)
 		{
 			if (!one_in_(7))
 			{
-				int wy = y, wx = x;
+				POSITION wy = y, wx = x;
 				int attempts = 100;
 				bool pet = is_pet(m_ptr);
 

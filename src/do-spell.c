@@ -8884,8 +8884,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	bool add = TRUE;
 
-	int plev = p_ptr->lev;
-	int power;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	HIT_POINT power;
 
 	switch (spell)
 	{

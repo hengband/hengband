@@ -5173,7 +5173,7 @@ static bool project_m(int who, int r, int y, int x, HIT_POINT dam, int typ, int 
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
  */
-static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, int dam, int typ, int flg, int monspell)
+static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, int monspell)
 {
 	int k = 0;
 	int rlev = 0;

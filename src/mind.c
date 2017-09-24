@@ -1401,7 +1401,7 @@ static int number_of_mirrors( void )
 static bool cast_mirror_spell(int spell)
 {
 	int             dir;
-	int             plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	int		tmp;
 	TIME_EFFECT t;
 	int		x, y;
@@ -1470,7 +1470,7 @@ static bool cast_mirror_spell(int spell)
 		for (x = 0; x < cur_wid; x++) {
 			for (y = 0; y < cur_hgt; y++) {
 				if (is_mirror_grid(&cave[y][x])) {
-					project(0, 2, y, x, plev, GF_OLD_SLEEP, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+					project(0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 				}
 			}
 		}

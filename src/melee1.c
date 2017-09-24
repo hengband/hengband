@@ -169,7 +169,7 @@ bool make_attack_normal(IDX m_idx)
 	bool touched = FALSE, fear = FALSE, alive = TRUE;
 	bool explode = FALSE;
 	bool do_silly_attack = (one_in_(2) && p_ptr->image);
-	int get_damage = 0;
+	HIT_POINT get_damage = 0;
 	int abbreviate = 0;
 
 	/* Not allowed to attack */
@@ -209,8 +209,8 @@ bool make_attack_normal(IDX m_idx)
 	{
 		bool obvious = FALSE;
 
-		int power = 0;
-		int damage = 0;
+		HIT_POINT power = 0;
+		HIT_POINT damage = 0;
 
 		cptr act = NULL;
 
