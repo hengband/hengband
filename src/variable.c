@@ -1049,58 +1049,58 @@ building_type building[MAX_BLDG];
 /*
  * Maximum number of quests
  */
-u16b max_quests;
+IDX max_quests;
 
 /*
  * Maximum number of monsters in r_info.txt
  */
-u16b max_r_idx;
+IDX max_r_idx;
 
 /*
  * Maximum number of items in k_info.txt
  */
-u16b max_k_idx;
+IDX max_k_idx;
 
 /*
  * Maximum number of vaults in v_info.txt
  */
-u16b max_v_idx;
+IDX max_v_idx;
 
 /*
  * Maximum number of terrain features in f_info.txt
  */
-u16b max_f_idx;
+IDX max_f_idx;
 
 /*
  * Maximum number of artifacts in a_info.txt
  */
-u16b max_a_idx;
+IDX max_a_idx;
 
 /*
  * Maximum number of ego-items in e_info.txt
  */
-u16b max_e_idx;
+IDX max_e_idx;
 
 /*
  * Maximum number of dungeon in e_info.txt
  */
-u16b max_d_idx;
+IDX max_d_idx;
 
 /*
  * Maximum number of objects in the level
  */
-u16b max_o_idx;
+IDX max_o_idx;
 
 /*
  * Maximum number of monsters in the level
  */
-u16b max_m_idx;
+IDX max_m_idx;
 
 /*
  * Maximum size of the wilderness
  */
-s32b max_wild_x;
-s32b max_wild_y;
+POSITION max_wild_x;
+POSITION max_wild_y;
 
 /*
  * Quest info

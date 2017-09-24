@@ -4799,7 +4799,7 @@ void quest_discovery(int q_idx)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-int quest_number(int level)
+IDX quest_number(DEPTH level)
 {
 	int i;
 
@@ -4827,7 +4827,7 @@ int quest_number(int level)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-int random_quest_number(int level)
+IDX random_quest_number(DEPTH level)
 {
 	int i;
 

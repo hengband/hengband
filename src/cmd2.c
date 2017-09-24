@@ -3648,12 +3648,12 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 					if (snipe_type == SP_RUSH)
 					{
 						int n = randint1(5) + 3;
-						int m_idx = c_mon_ptr->m_idx;
+						IDX m_idx = c_mon_ptr->m_idx;
 
 						for ( ; cur_dis <= tdis; )
 						{
-							int ox = nx;
-							int oy = ny;
+							POSITION ox = nx;
+							POSITION oy = ny;
 
 							if (!n) break;
 

@@ -1932,7 +1932,7 @@ void object_copy(object_type *o_ptr, object_type *j_ptr)
  * @param k_idx 新たに作成したいベースアイテム情報のID
  * @return なし
  */
-void object_prep(object_type *o_ptr, int k_idx)
+void object_prep(object_type *o_ptr, IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 

@@ -6814,10 +6814,10 @@ bool project(int who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int t
 	int grids = 0;
 
 	/* Coordinates of the affected grids */
-	byte gx[1024], gy[1024];
+	POSITION gx[1024], gy[1024];
 
 	/* Encoded "radius" info (see above) */
-	byte gm[32];
+	POSITION gm[32];
 
 	/* Actual radius encoded in gm[] */
 	int gm_rad = rad;

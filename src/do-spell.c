@@ -6951,7 +6951,7 @@ static cptr do_crusade_spell(int spell, int mode)
 				for (i = 0; i < 12; i++)
 				{
 					int attempt = 10;
-					int my = 0, mx = 0;
+					POSITION my = 0, mx = 0;
 
 					while (attempt--)
 					{

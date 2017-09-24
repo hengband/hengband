@@ -691,7 +691,7 @@ static void get_out_monster(void)
 	int dis = 1;
 	int oy = p_ptr->y;
 	int ox = p_ptr->x;
-	int m_idx = cave[oy][ox].m_idx;
+	IDX m_idx = cave[oy][ox].m_idx;
 
 	/* Nothing to do if no monster */
 	if (!m_idx) return;
