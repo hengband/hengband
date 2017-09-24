@@ -994,16 +994,16 @@ struct player_type
 	IDX inside_quest;		/* Inside quest level */
 	bool inside_battle;		/* Is character inside tougijou? */
 
-	s32b wilderness_x;	/* Coordinates in the wilderness */
-	s32b wilderness_y;
+	POSITION wilderness_x;	/* Coordinates in the wilderness */
+	POSITION wilderness_y;
 	bool wild_mode;
 
-	s32b mhp;			/* Max hit pts */
-	s32b chp;			/* Cur hit pts */
+	HIT_POINT mhp;			/* Max hit pts */
+	HIT_POINT chp;			/* Cur hit pts */
 	u32b chp_frac;		/* Cur hit frac (times 2^16) */
 
-	s32b msp;			/* Max mana pts */
-	s32b csp;			/* Cur mana pts */
+	MANA_POINT msp;			/* Max mana pts */
+	MANA_POINT csp;			/* Cur mana pts */
 	u32b csp_frac;		/* Cur mana frac (times 2^16) */
 
 	s16b max_plv;		/* Max Player Level */

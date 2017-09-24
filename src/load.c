@@ -339,6 +339,7 @@ static void rd_item_old(object_type *o_ptr)
 {
 	char buf[128];
 	byte_hack tmp8u;
+	s16b tmp16s;
 
 
 	/* Kind */
@@ -373,7 +374,9 @@ static void rd_item_old(object_type *o_ptr)
 	rd_s16b(&o_ptr->timeout);
 
 	rd_s16b(&o_ptr->to_h);
-	rd_s16b(&o_ptr->to_d);
+	
+	rd_s16b(&tmp16s);
+	o_ptr->to_d = tmp16s;
 	rd_s16b(&o_ptr->to_a);
 
 	rd_s16b(&o_ptr->ac);
@@ -597,6 +600,7 @@ static void rd_item(object_type *o_ptr)
 	u32b flags;
 	char buf[128];
 	byte_hack tmp8u;
+	s16b tmp16s;
 
 	if (h_older_than(1, 5, 0, 0))
 	{
@@ -642,7 +646,11 @@ static void rd_item(object_type *o_ptr)
 
 	if (flags & SAVE_ITEM_TO_H) rd_s16b(&o_ptr->to_h);
 	else o_ptr->to_h = 0;
-	if (flags & SAVE_ITEM_TO_D) rd_s16b(&o_ptr->to_d);
+	if (flags & SAVE_ITEM_TO_D)
+	{
+		rd_s16b(&tmp16s);
+		o_ptr->to_d = tmp16s;
+	}
 	else o_ptr->to_d = 0;
 	if (flags & SAVE_ITEM_TO_A) rd_s16b(&o_ptr->to_a);
 	else o_ptr->to_a = 0;
@@ -779,6 +787,7 @@ static void rd_item(object_type *o_ptr)
 static void rd_monster_old(monster_type *m_ptr)
 {
 	byte tmp8u;
+	s16b tmp16s;
 	char buf[128];
 
 	/* Read the monster race */
@@ -806,15 +815,19 @@ static void rd_monster_old(monster_type *m_ptr)
 	rd_byte(&tmp8u);
 	m_ptr->fx = (POSITION)tmp8u;
 
-	rd_s16b(&m_ptr->hp);
-	rd_s16b(&m_ptr->maxhp);
+	rd_s16b(&tmp16s);
+	m_ptr->hp = tmp16s;
+	rd_s16b(&tmp16s);
+	m_ptr->maxhp = tmp16s;
+
 	if (z_older_than(11, 0, 5))
 	{
 		m_ptr->max_maxhp = m_ptr->maxhp;
 	}
 	else
 	{
-		rd_s16b(&m_ptr->max_maxhp);
+		rd_s16b(&tmp16s);
+		m_ptr->max_maxhp = (HIT_POINT)tmp16s;
 	}
 	if(h_older_than(2, 1, 2, 1))
 	{
@@ -862,14 +875,15 @@ static void rd_monster_old(monster_type *m_ptr)
 	}
 	else if (z_older_than(10,0,11))
 	{
-		s16b tmp16s;
 		rd_s16b(&tmp16s);
 		reset_target(m_ptr);
 	}
 	else
 	{
-		rd_s16b(&m_ptr->target_y);
-		rd_s16b(&m_ptr->target_x);
+		rd_s16b(&tmp16s);
+		m_ptr->target_y = (POSITION)tmp16s;
+		rd_s16b(&tmp16s);
+		m_ptr->target_x = (POSITION)tmp16s;
 	}
 
 	rd_byte(&tmp8u);
@@ -928,6 +942,7 @@ static void rd_monster(monster_type *m_ptr)
 	u32b flags;
 	char buf[128];
 	byte tmp8u;
+	s16b tmp16s;
 
 	if (h_older_than(1, 5, 0, 0))
 	{
@@ -949,9 +964,13 @@ static void rd_monster(monster_type *m_ptr)
 	rd_byte(&tmp8u);
 	m_ptr->fx = (POSITION)tmp8u;
 
-	rd_s16b(&m_ptr->hp);
-	rd_s16b(&m_ptr->maxhp);
-	rd_s16b(&m_ptr->max_maxhp);
+	rd_s16b(&tmp16s);
+	m_ptr->hp = (HIT_POINT)tmp16s;
+	rd_s16b(&tmp16s);
+	m_ptr->maxhp = (HIT_POINT)tmp16s;
+	rd_s16b(&tmp16s);
+	m_ptr->max_maxhp = (HIT_POINT)tmp16s;
+
 	if(h_older_than(2, 1, 2, 1))
 	{
 		m_ptr->dealt_damage = 0;
@@ -1006,9 +1025,17 @@ static void rd_monster(monster_type *m_ptr)
 	}
 	else m_ptr->mtimed[MTIMED_MONFEAR] = 0;
 
-	if (flags & SAVE_MON_TARGET_Y) rd_s16b(&m_ptr->target_y);
+	if (flags & SAVE_MON_TARGET_Y)
+	{
+		rd_s16b(&tmp16s);
+		m_ptr->target_y = (POSITION)tmp16s;
+	}
 	else m_ptr->target_y = 0;
-	if (flags & SAVE_MON_TARGET_X) rd_s16b(&m_ptr->target_x);
+	if (flags & SAVE_MON_TARGET_X)
+	{
+		rd_s16b(&tmp16s);
+		m_ptr->target_x = (POSITION)tmp16s;
+	}
 	else m_ptr->target_x = 0;
 
 	if (flags & SAVE_MON_INVULNER)
@@ -1675,7 +1702,8 @@ static void rd_extra(void)
 	}
 
 	/* Special Race/Class info */
-	rd_byte(&p_ptr->hitdie);
+	rd_byte(&tmp8u);
+	p_ptr->hitdie = tmp8u;
 	rd_u16b(&p_ptr->expfact);
 
 	/* Age/Height/Weight */

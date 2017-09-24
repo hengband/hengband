@@ -180,7 +180,7 @@ static void wr_item(object_type *o_ptr)
 	if (flags & SAVE_ITEM_TIMEOUT) wr_s16b(o_ptr->timeout);
 
 	if (flags & SAVE_ITEM_TO_H) wr_s16b(o_ptr->to_h);
-	if (flags & SAVE_ITEM_TO_D) wr_s16b(o_ptr->to_d);
+	if (flags & SAVE_ITEM_TO_D) wr_s16b((s16b)o_ptr->to_d);
 	if (flags & SAVE_ITEM_TO_A) wr_s16b(o_ptr->to_a);
 	if (flags & SAVE_ITEM_AC) wr_s16b(o_ptr->ac);
 	if (flags & SAVE_ITEM_DD) wr_byte(o_ptr->dd);
@@ -250,9 +250,9 @@ static void wr_monster(monster_type *m_ptr)
 	wr_s16b(m_ptr->r_idx);
 	wr_byte((byte_hack)m_ptr->fy);
 	wr_byte((byte_hack)m_ptr->fx);
-	wr_s16b(m_ptr->hp);
-	wr_s16b(m_ptr->maxhp);
-	wr_s16b(m_ptr->max_maxhp);
+	wr_s16b((s16b)m_ptr->hp);
+	wr_s16b((s16b)m_ptr->maxhp);
+	wr_s16b((s16b)m_ptr->max_maxhp);
 	wr_u32b(m_ptr->dealt_damage);
 	
 
@@ -290,8 +290,8 @@ static void wr_monster(monster_type *m_ptr)
 		tmp8u = (byte)m_ptr->mtimed[MTIMED_MONFEAR];
 		wr_byte(tmp8u);
 	}
-	if (flags & SAVE_MON_TARGET_Y) wr_s16b(m_ptr->target_y);
-	if (flags & SAVE_MON_TARGET_X) wr_s16b(m_ptr->target_x);
+	if (flags & SAVE_MON_TARGET_Y) wr_s16b((s16b)m_ptr->target_y);
+	if (flags & SAVE_MON_TARGET_X) wr_s16b((s16b)m_ptr->target_x);
 	if (flags & SAVE_MON_INVULNER)
 	{
 		tmp8u = (byte)m_ptr->mtimed[MTIMED_INVULNER];
@@ -630,7 +630,7 @@ static void wr_extra(void)
 	wr_byte(p_ptr->realm2);
 	wr_byte(0);	/* oops */
 
-	wr_byte(p_ptr->hitdie);
+	wr_byte((byte)p_ptr->hitdie);
 	wr_u16b(p_ptr->expfact);
 
 	wr_s16b(p_ptr->age);
