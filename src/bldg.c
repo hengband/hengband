@@ -1501,9 +1501,10 @@ void battle_monsters(void)
 	{
 		total = 0;
 		tekitou = FALSE;
-		for(i=0;i<4;i++)
+		for(i = 0; i < 4; i++)
 		{
-			int r_idx, j;
+			IDX r_idx;
+			int j;
 			while (1)
 			{
 				get_mon_num_prep(vault_aux_battle, NULL);

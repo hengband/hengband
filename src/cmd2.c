@@ -891,7 +891,7 @@ static bool is_open(IDX feat)
  * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
-static int count_dt(POSITION *y, POSITION *x, bool (*test)(int feat), bool under)
+static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under)
 {
 	int d, count, xx, yy;
 
@@ -3710,9 +3710,9 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 	if (stick_to)
 	{
-		int m_idx = cave[y][x].m_idx;
+		IDX m_idx = cave[y][x].m_idx;
 		monster_type *m_ptr = &m_list[m_idx];
-		int o_idx = o_pop();
+		IDX o_idx = o_pop();
 
 		if (!o_idx)
 		{

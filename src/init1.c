@@ -2998,8 +2998,8 @@ errr parse_r_info(char *buf, header *head)
 				&lev, &rar, &pad, &exp, &nextexp, &nextmon)) return (1);
 
 		/* Save the values */
-		r_ptr->level = lev;
-		r_ptr->rarity = rar;
+		r_ptr->level = (DEPTH)lev;
+		r_ptr->rarity = (RARITY)rar;
 		r_ptr->extra = pad;
 		r_ptr->mexp = exp;
 		r_ptr->next_exp = nextexp;
@@ -4255,8 +4255,8 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 		{
 			if (init_flags & INIT_ASSIGN)
 			{
-				int idx, count = 0;
-				int reward_idx = 0;
+				int count = 0;
+				IDX idx, reward_idx = 0;
 
 				for (idx = 2; idx < num; idx++)
 				{
@@ -4375,67 +4375,67 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Maximum towns */
 			if (zz[0][0] == 'T')
 			{
-				max_towns = atoi(zz[1]);
+				max_towns = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum quests */
 			else if (zz[0][0] == 'Q')
 			{
-				max_quests = atoi(zz[1]);
+				max_quests = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum r_idx */
 			else if (zz[0][0] == 'R')
 			{
-				max_r_idx = atoi(zz[1]);
+				max_r_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum k_idx */
 			else if (zz[0][0] == 'K')
 			{
-				max_k_idx = atoi(zz[1]);
+				max_k_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum v_idx */
 			else if (zz[0][0] == 'V')
 			{
-				max_v_idx = atoi(zz[1]);
+				max_v_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum f_idx */
 			else if (zz[0][0] == 'F')
 			{
-				max_f_idx = atoi(zz[1]);
+				max_f_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum a_idx */
 			else if (zz[0][0] == 'A')
 			{
-				max_a_idx = atoi(zz[1]);
+				max_a_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum e_idx */
 			else if (zz[0][0] == 'E')
 			{
-				max_e_idx = atoi(zz[1]);
+				max_e_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum d_idx */
 			else if (zz[0][0] == 'D')
 			{
-				max_d_idx = atoi(zz[1]); 
+				max_d_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum o_idx */
 			else if (zz[0][0] == 'O')
 			{
-				max_o_idx = atoi(zz[1]);
+				max_o_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum m_idx */
 			else if (zz[0][0] == 'M')
 			{
-				max_m_idx = atoi(zz[1]);
+				max_m_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Wilderness size */

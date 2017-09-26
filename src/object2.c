@@ -531,9 +531,9 @@ void wipe_o_list(void)
  * This routine should almost never fail, but in case it does,
  * we must be sure to handle "failure" of this routine.
  */
-s16b o_pop(void)
+IDX o_pop(void)
 {
-	int i;
+	IDX i;
 
 
 	/* Initial allocation */

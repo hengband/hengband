@@ -507,7 +507,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		case NIKKI_MAXDEAPTH:
 		{
 			fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
-						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, (int)note_level,
+						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
 						   _(d_name+d_info[dungeon_type].name, num),
 						   _(num, d_name+d_info[dungeon_type].name));
 			break;
@@ -515,8 +515,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		case NIKKI_TRUMP:
 		{
 			fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n",
-						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, (int)note_level, note,
-						   _(d_name + d_info[num].name, max_dlv[num]),
+						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note,
+						   _(d_name + d_info[num].name, (int)max_dlv[num]),
 						   _(max_dlv[num], d_name + d_info[num].name));
 			break;
 		}
@@ -540,7 +540,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		{
 			if (!num)
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"), 
-						hour, min, note_level, _(d_name+d_info[dungeon_type].name, max_dlv[dungeon_type]), 
+						hour, min, note_level, _(d_name+d_info[dungeon_type].name, (int)max_dlv[dungeon_type]), 
 											   _(max_dlv[dungeon_type], d_name+d_info[dungeon_type].name));
 			else
 				fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
@@ -3259,6 +3259,7 @@ void do_cmd_visuals(void)
 		case '2':
 		{
 			static cptr mark = "Object attr/chars";
+			IDX k_idx;
 
 			/* Prompt */
 			prt(_("コマンド: アイテムの[色/文字]をファイルに書き出します", "Command: Dump object attr/chars"), 15, 0);
@@ -3282,10 +3283,10 @@ void do_cmd_visuals(void)
 			auto_dump_printf(_("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
 
 			/* Dump objects */
-			for (i = 0; i < max_k_idx; i++)
+			for (k_idx = 0; k_idx < max_k_idx; k_idx++)
 			{
 				char o_name[80];
-				object_kind *k_ptr = &k_info[i];
+				object_kind *k_ptr = &k_info[k_idx];
 
 				/* Skip non-entries */
 				if (!k_ptr->name) continue;
@@ -3293,14 +3294,14 @@ void do_cmd_visuals(void)
 				if (!k_ptr->flavor)
 				{
 					/* Tidy name */
-					strip_name(o_name, i);
+					strip_name(o_name, k_idx);
 				}
 				else
 				{
 					object_type forge;
 
 					/* Prepare dummy object */
-					object_prep(&forge, i);
+					object_prep(&forge, k_idx);
 
 					/* Get un-shuffled flavor name */
 					object_desc(o_name, &forge, OD_FORCE_FLAVOR);
@@ -3310,7 +3311,7 @@ void do_cmd_visuals(void)
 				auto_dump_printf("# %s\n", o_name);
 
 				/* Dump the object attr/char info */
-				auto_dump_printf("K:%d:0x%02X/0x%02X\n\n", i,
+				auto_dump_printf("K:%d:0x%02X/0x%02X\n\n", (int)k_idx,
 					(byte)(k_ptr->x_attr), (byte)(k_ptr->x_char));
 			}
 
@@ -7915,7 +7916,7 @@ static void do_cmd_knowledge_dungeon(void)
 			}
 			else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
 			
-			fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+			fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_name + d_info[i].name, (int)max_dlv[i]);
 		}
 	}
 	
@@ -7992,7 +7993,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 	char rand_tmp_str[120] = "\0";
 	char name[80];
 	monster_race *r_ptr;
-	int i;
+	IDX i;
 	int rand_level = 100;
 	int total = 0;
 
@@ -8005,7 +8006,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 			(quest[i].status == QUEST_STATUS_COMPLETED))
 		{
 			/* Set the quest number temporary */
-			int old_quest = p_ptr->inside_quest;
+			IDX old_quest = p_ptr->inside_quest;
 			int j;
 
 			/* Clear the text */

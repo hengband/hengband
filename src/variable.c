@@ -1146,7 +1146,7 @@ int cap_hp;
 int cap_maxhp;
 u16b cap_nickname;
 
-s16b battle_mon[4];
+IDX battle_mon[4];
 int sel_monster;
 int battle_odds;
 int kakekin;

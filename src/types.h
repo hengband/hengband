@@ -700,7 +700,7 @@ struct quest_type
 	s16b cur_num;           /*!< 撃破したモンスターの数 / Number killed */
 	s16b max_num;           /*!< 求められるモンスターの撃破数 / Number required */
 
-	s16b k_idx;             /*!< クエスト対象のアイテムID / object index */
+	IDX k_idx;             /*!< クエスト対象のアイテムID / object index */
 	s16b num_mon;           /*!< QUEST_TYPE_KILL_NUMBER時の目標撃破数 number of monsters on level */
 
 	byte flags;             /*!< クエストに関するフラグビット / quest flags */
