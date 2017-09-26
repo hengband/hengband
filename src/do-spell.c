@@ -8675,7 +8675,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
     
 		if (cast)
 		{
-			int y, x;
+			POSITION y, x;
 
 			if (!tgt_pt(&x, &y)) return NULL;
 
@@ -9558,7 +9558,8 @@ static cptr do_hex_spell(int spell, int mode)
 		if (desc) return _("モンスターの隣のマスに瞬間移動する。", "Teleports you close to a monster.");
 		if (cast)
 		{
-			int i, y, x, dir;
+			int i, dir;
+			POSITION y, x;
 			bool flag;
 
 			for (i = 0; i < 3; i++)

@@ -214,14 +214,14 @@ struct ego_item_type
 	byte slot;			/* Standard slot value */
 	byte rating;		/* Rating boost */
 
-	byte level;			/* Minimum level */
-	byte rarity;		/* Object rarity */
+	DEPTH level;			/* Minimum level */
+	RARITY rarity;		/* Object rarity */
 
 	byte max_to_h;		/* Maximum to-hit bonus */
 	byte max_to_d;		/* Maximum to-dam bonus */
 	byte max_to_a;		/* Maximum to-ac bonus */
 
-	byte max_pval;		/* Maximum pval */
+	PARAMETER_VALUE max_pval;		/* Maximum pval */
 
 	s32b cost;			/* Ego-item "cost" */
 
@@ -229,7 +229,7 @@ struct ego_item_type
 
 	u32b gen_flags;		/* flags for generate */
 
-	byte act_idx;		/* Activative ability index */
+	IDX act_idx;		/* Activative ability index */
 };
 
 

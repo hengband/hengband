@@ -5146,7 +5146,7 @@ msg_format("%sはあなたを無視した。",
  * XAngband: determine if a given location is "interesting"
  * based on target_set_accept function.
  */
-static bool tgt_pt_accept(int y, int x)
+static bool tgt_pt_accept(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
 
@@ -5185,7 +5185,7 @@ static bool tgt_pt_accept(int y, int x)
  */
 static void tgt_pt_prepare(void)
 {
-	int y, x;
+	POSITION y, x;
 
 	/* Reset "temp" array */
 	temp_n = 0;

@@ -631,7 +631,7 @@ static void pattern_teleport(void)
 		sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), min_level, max_level);
 
 		/* Default */
-		sprintf(tmp_val, "%d", dun_level);
+		sprintf(tmp_val, "%d", (DEPTH)dun_level);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 10)) return;

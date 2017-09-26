@@ -873,7 +873,7 @@ static void wiz_tweak_item(object_type *o_ptr)
 	wiz_display_item(o_ptr);
 
 	p = "Enter new 'to_d' setting: ";
-	sprintf(tmp_val, "%d", o_ptr->to_d);
+	sprintf(tmp_val, "%d", (int)o_ptr->to_d);
 	if (!get_string(p, tmp_val, 5)) return;
 	o_ptr->to_d = (s16b)atoi(tmp_val);
 	wiz_display_item(o_ptr);
@@ -1560,7 +1560,7 @@ static void do_cmd_wiz_jump(void)
 		sprintf(ppp, "Jump to level (0, %d-%d): ", d_info[tmp_dungeon_type].mindepth, d_info[tmp_dungeon_type].maxdepth);
 
 		/* Default */
-		sprintf(tmp_val, "%d", dun_level);
+		sprintf(tmp_val, "%d", (int)dun_level);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 10)) return;
@@ -1777,7 +1777,7 @@ static void do_cmd_wiz_create_feature(void)
 	feature_type *f_ptr;
 	char         tmp_val[160];
 	int          tmp_feat, tmp_mimic;
-	int          y, x;
+	POSITION y, x;
 
 	if (!tgt_pt(&x, &y)) return;
 

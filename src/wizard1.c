@@ -2500,7 +2500,7 @@ static void spoil_mon_evol(cptr fname)
 			fprintf(fff, "[%d]: ", r_ptr->next_r_idx);
 			r_ptr = &r_info[r_ptr->next_r_idx];
 			fprintf(fff, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"),
-				r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
+				r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
 		}
 
 		/* End of evolution tree */

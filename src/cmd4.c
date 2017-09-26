@@ -431,9 +431,9 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		else
 		{
 #ifdef JP
-			sprintf(note_level_buf, "%d階(%s):", dun_level, d_name+d_info[dungeon_type].name);
+			sprintf(note_level_buf, "%d階(%s):", (int)dun_level, d_name+d_info[dungeon_type].name);
 #else
-			sprintf(note_level_buf, "%s L%d:", d_name+d_info[dungeon_type].name, dun_level);
+			sprintf(note_level_buf, "%s L%d:", d_name+d_info[dungeon_type].name, (int)dun_level);
 #endif
 			note_level = note_level_buf;
 		}
@@ -507,7 +507,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		case NIKKI_MAXDEAPTH:
 		{
 			fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
-						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
+						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, (int)note_level,
 						   _(d_name+d_info[dungeon_type].name, num),
 						   _(num, d_name+d_info[dungeon_type].name));
 			break;
@@ -515,7 +515,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		case NIKKI_TRUMP:
 		{
 			fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n",
-						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note,
+						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, (int)note_level, note,
 						   _(d_name + d_info[num].name, max_dlv[num]),
 						   _(max_dlv[num], d_name + d_info[num].name));
 			break;
@@ -5717,7 +5717,7 @@ static void do_cmd_knowledge_uniques(void)
 		monster_race *r_ptr = &r_info[who[k]];
 
 		/* Print a message */
-		fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_name + r_ptr->name, (DEPTH)r_ptr->level);
+		fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_name + r_ptr->name, (int)r_ptr->level);
 	}
 
 	/* Free the "who" array */

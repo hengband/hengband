@@ -6159,7 +6159,7 @@ void do_cmd_save_and_exit(void)
 long total_points(void)
 {
 	int i, mult = 100;
-	s16b max_dl = 0;
+	DEPTH max_dl = 0;
 	u32b point, point_h, point_l;
 	int arena_win = MIN(p_ptr->arena_number, MAX_ARENA_MONS);
 

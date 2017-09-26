@@ -4618,7 +4618,8 @@ static void travel_flow(int ty, int tx)
  */
 void do_cmd_travel(void)
 {
-	int x, y, i;
+	POSITION x, y;
+	int i;
 	int dx, dy, sx, sy;
 	feature_type *f_ptr;
 
