@@ -650,7 +650,7 @@ static void rd_item(object_type *o_ptr)
 	if (flags & SAVE_ITEM_NAME2)
 	{
 		rd_byte(&tmp8u);
-		o_ptr->name1 = tmp8u;
+		o_ptr->name2 = tmp8u;
 	}
 	else o_ptr->name2 = 0;
 	if (flags & SAVE_ITEM_TIMEOUT) rd_s16b(&o_ptr->timeout);
