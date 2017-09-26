@@ -3233,11 +3233,9 @@ bool probing(void)
 #endif
 
 			/* Describe the monster */
-#ifdef JP
-sprintf(buf,"%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", m_name, align, m_ptr->hp, m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
-#else
-sprintf(buf, "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:", m_name, align, m_ptr->hp, m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
-#endif
+			sprintf(buf,_("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"),
+				m_name, align, (int)m_ptr->hp, (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
+
 			if (r_ptr->next_r_idx)
 			{
 				strcat(buf, format("%d/%d ", m_ptr->exp, r_ptr->next_exp));
@@ -3929,7 +3927,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 					/* Hack -- Escape from the rock */
 					if (sn)
 					{
-						int m_idx_aux = cave[yy][xx].m_idx;
+						IDX m_idx_aux = cave[yy][xx].m_idx;
 
 						/* Update the old location */
 						cave[yy][xx].m_idx = 0;
@@ -5637,7 +5635,7 @@ int summon_cyber(int who, int y, int x)
 void wall_breaker(void)
 {
 	int i;
-	int y = 0, x = 0;
+	POSITION y = 0, x = 0;
 	int attempts = 1000;
 
 	if (randint1(80 + p_ptr->lev) < 70)

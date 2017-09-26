@@ -1715,9 +1715,9 @@ static void today_target(void)
 	c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);
 	sprintf(buf,_("ターゲット： %s", "target: %s"),r_name + r_ptr->name);
 	c_put_str(TERM_YELLOW, buf, 6, 10);
-	sprintf(buf,_("死体 ---- $%d", "corpse   ---- $%d"),r_ptr->level * 50 + 100);
+	sprintf(buf,_("死体 ---- $%d", "corpse   ---- $%d"), (int)r_ptr->level * 50 + 100);
 	prt(buf, 8, 10);
-	sprintf(buf,_("骨   ---- $%d", "skeleton ---- $%d"),r_ptr->level * 30 + 60);
+	sprintf(buf,_("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60);
 	prt(buf, 9, 10);
 	p_ptr->today_mon = today_mon;
 }
@@ -3579,7 +3579,7 @@ static void building_recharge(void)
 	object_kind *k_ptr;
 	cptr        q, s;
 	int         price;
-	int         charges;
+	PARAMETER_VALUE charges;
 	int         max_charges;
 	char        tmp_str[MAX_NLEN];
 

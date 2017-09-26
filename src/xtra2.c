@@ -5218,10 +5218,11 @@ static void tgt_pt_prepare(void)
 /*
  * old -- from PsiAngband.
  */
-bool tgt_pt(int *x_ptr, int *y_ptr)
+bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 {
 	char ch = 0;
-	int d, x, y, n = 0;
+	int d, n = 0;
+	POSITION x, y;
 	bool success = FALSE;
 
 	int wid, hgt;

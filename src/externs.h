@@ -614,7 +614,7 @@ extern s16b feat_swamp;
 extern s16b feat_undetected;
 
 extern byte dungeon_type;
-extern s16b *max_dlv;
+extern DEPTH *max_dlv;
 extern s16b feat_wall_outer;
 extern s16b feat_wall_inner;
 extern s16b feat_wall_solid;
@@ -679,8 +679,8 @@ extern void map_area(int range);
 extern void wiz_lite(bool ninja);
 extern void wiz_dark(void);
 extern void cave_set_feat(POSITION y, POSITION x, IDX feat);
-extern int conv_dungeon_feat(int newfeat);
-extern int feat_state(int feat, int action);
+extern IDX conv_dungeon_feat(IDX newfeat);
+extern IDX feat_state(IDX feat, int action);
 extern void cave_alter_feat(int y, int x, int action);
 extern void remove_mirror(int y, int x);
 extern bool is_mirror_grid(cave_type *c_ptr);
@@ -689,9 +689,9 @@ extern bool is_explosive_rune_grid(cave_type *c_ptr);
 extern void mmove2(int *y, int *x, int y1, int x1, int y2, int x2);
 extern bool projectable(int y1, int x1, int y2, int x2);
 extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, int mode);
-extern void health_track(int m_idx);
-extern void monster_race_track(int r_idx);
-extern void object_kind_track(int k_idx);
+extern void health_track(IDX m_idx);
+extern void monster_race_track(IDX r_idx);
+extern void object_kind_track(IDX k_idx);
 extern void disturb(int stop_search, int flush_output);
 extern void glow_deep_lava_and_bldg(void);
 
@@ -991,9 +991,9 @@ extern bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mod
 extern bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode);
 extern bool multiply_monster(int m_idx, bool clone, u32b mode);
 extern void update_smart_learn(int m_idx, int what);
-extern void choose_new_monster(int m_idx, bool born, int r_idx);
+extern void choose_new_monster(IDX m_idx, bool born, IDX r_idx);
 extern byte get_mspeed(monster_race *r_ptr);
-extern bool player_place(int y, int x);
+extern bool player_place(POSITION y, POSITION x);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
 
 /* object1.c */
@@ -1508,7 +1508,7 @@ extern bool get_hack_dir(int *dp);
 extern bool get_rep_dir(int *dp, bool under);
 extern bool get_rep_dir2(int *dp);
 extern void gain_level_reward(int chosen_reward);
-extern bool tgt_pt(int *x, int *y);
+extern bool tgt_pt(POSITION *x, POSITION *y);
 extern void do_poly_wounds(void);
 extern void change_race(int new_race, cptr effect_msg);
 extern HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear);

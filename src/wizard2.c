@@ -100,12 +100,9 @@ void do_cmd_rerate(bool display)
  */
 static bool wiz_dimension_door(void)
 {
-	int	x = 0, y = 0;
-
+	POSITION x = 0, y = 0;
 	if (!tgt_pt(&x, &y)) return FALSE;
-
 	teleport_player_to(y, x, TELEPORT_NONMAGICAL);
-
 	return (TRUE);
 }
 

@@ -2833,7 +2833,7 @@ static bool monster_hook_chameleon(int r_idx)
  * @param r_idx 旧モンスター種族のID
  * @return なし
  */
-void choose_new_monster(int m_idx, bool born, int r_idx)
+void choose_new_monster(IDX m_idx, bool born, IDX r_idx)
 {
 	int oldmaxhp;
 	monster_type *m_ptr = &m_list[m_idx];
@@ -4608,7 +4608,7 @@ void update_smart_learn(int m_idx, int what)
  * @param y 配置先Y座標
  * @return 配置に成功したらTRUE
  */
-bool player_place(int y, int x)
+bool player_place(POSITION y, POSITION x)
 {
 	/* Paranoia XXX XXX */
 	if (cave[y][x].m_idx != 0) return FALSE;

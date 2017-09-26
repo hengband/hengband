@@ -1853,10 +1853,10 @@ static void spoil_mon_desc(cptr fname)
 
 
 		/* Level */
-		sprintf(lev, "%d", r_ptr->level);
+		sprintf(lev, "%d", (int)r_ptr->level);
 
 		/* Rarity */
-		sprintf(rar, "%d", r_ptr->rarity);
+		sprintf(rar, "%d", (int)r_ptr->rarity);
 
 		/* Speed */
 		if (r_ptr->speed >= 110)
@@ -2491,25 +2491,16 @@ static void spoil_mon_evol(cptr fname)
 
 		/* Trace the evolution tree */
 		r_ptr = &r_info[r_idx];
-#ifdef JP
-		fprintf(fff, "[%d]: %s (レベル%d, '%c')\n", r_idx,
-			r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
-#else
-		fprintf(fff, "[%d]: %s (Level %d, '%c')\n", r_idx,
-			r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
-#endif
+		fprintf(fff, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"),
+			r_idx, r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
+
 		for (n = 1; r_ptr->next_exp; n++)
 		{
 			fprintf(fff, "%*s-(%ld)-> ", n * 2, "", (long int)r_ptr->next_exp);
 			fprintf(fff, "[%d]: ", r_ptr->next_r_idx);
 			r_ptr = &r_info[r_ptr->next_r_idx];
-#ifdef JP
-			fprintf(fff, "%s (レベル%d, '%c')\n",
+			fprintf(fff, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"),
 				r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
-#else
-			fprintf(fff, "%s (Level %d, '%c')\n",
-				r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
-#endif
 		}
 
 		/* End of evolution tree */

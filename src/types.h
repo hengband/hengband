@@ -1162,11 +1162,11 @@ struct player_type
 	bool teleport_town;
 	bool enter_dungeon;     /* Just enter the dungeon */
 
-	s16b health_who;	/* Health bar trackee */
+	IDX health_who;	/* Health bar trackee */
 
-	s16b monster_race_idx;	/* Monster race trackee */
+	IDX monster_race_idx;	/* Monster race trackee */
 
-	s16b object_kind_idx;	/* Object kind trackee */
+	IDX object_kind_idx;	/* Object kind trackee */
 
 	s16b new_spells;	/* Number of spells available */
 	s16b old_spells;

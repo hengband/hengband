@@ -612,7 +612,7 @@ void do_cmd_browse(void)
  * @param next_realm 変更先の魔法領域ID
  * @return なし
  */
-static void change_realm2(int next_realm)
+static void change_realm2(CHARACTER_IDX next_realm)
 {
 	int i, j = 0;
 	char tmp[80];

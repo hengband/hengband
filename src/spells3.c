@@ -998,7 +998,7 @@ bool reset_recall(void)
 	sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), d_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
 
 	/* Default */
-	sprintf(tmp_val, "%d", MAX(dun_level, 1));
+	sprintf(tmp_val, "%d", (int)MAX(dun_level, 1));
 
 	/* Ask for a level */
 	if (get_string(ppp, tmp_val, 10))
@@ -1677,7 +1677,8 @@ void call_the_(void)
  */
 void fetch(int dir, int wgt, bool require_los)
 {
-	int             ty, tx, i;
+	int             ty, tx;
+	DEPTH i;
 	cave_type       *c_ptr;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];

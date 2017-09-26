@@ -345,7 +345,8 @@ static void compact_objects_aux(IDX i1, IDX i2)
  */
 void compact_objects(int size)
 {
-	int i, y, x, num, cnt;
+	IDX i;
+	int y, x, num, cnt;
 	int cur_lev, cur_dis, chance;
 	object_type *o_ptr;
 
@@ -2100,7 +2101,7 @@ static void object_mention(object_type *o_ptr)
  */
 static bool make_artifact_special(object_type *o_ptr)
 {
-	int i;
+	IDX i;
 	IDX k_idx = 0;
 
 	/*! @note 地上ではキャンセルする / No artifacts in the town */
@@ -2169,7 +2170,7 @@ static bool make_artifact_special(object_type *o_ptr)
  */
 static bool make_artifact(object_type *o_ptr)
 {
-	int i;
+	IDX i;
 
 
 	/* No artifacts in the town */
@@ -4113,7 +4114,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 		case TV_CORPSE:
 		{
-			int i = 1;
+			PARAMETER_VALUE i = 1;
 			int check;
 
 			u32b match = 0;

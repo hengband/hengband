@@ -4501,11 +4501,8 @@ static void dump_aux_recall(FILE *fff)
 		}
 		else if (max_dlv[y] == d_info[y].maxdepth) seiha = TRUE;
 
-#ifdef JP
-		fprintf(fff, "   %c%-12s: %3d 階\n", seiha ? '!' : ' ', d_name+d_info[y].name, max_dlv[y]);
-#else
-		fprintf(fff, "   %c%-16s: level %3d\n", seiha ? '!' : ' ', d_name+d_info[y].name, max_dlv[y]);
-#endif
+		fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"),
+			seiha ? '!' : ' ', d_name+d_info[y].name, (int)max_dlv[y]);
 	}
 }
 

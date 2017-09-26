@@ -752,7 +752,7 @@ static int racial_aux(power_desc_type *pd_ptr)
  * @brief レイシャル・パワー発動時に口を使う継続的な詠唱処理を中断する
  * @return なし
  */
-void ratial_stop_mouth()
+void ratial_stop_mouth(void)
 {
 	if (music_singing_any()) stop_singing();
 	if (hex_spelling_any()) stop_hex_spell_all();

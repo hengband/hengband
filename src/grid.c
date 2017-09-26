@@ -629,12 +629,11 @@ void set_floor(int x, int y)
  *   inner -- inner room walls\n
  *   outer -- outer room walls\n
  *   solid -- solid room walls\n
- * TODO: tmp_row/tmp_col をposition型に後から直す。
  */
 bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
 	int y, x;
-	int tmp_row, tmp_col;
+	POSITION tmp_row, tmp_col;
 	int row_dir, col_dir;
 	int start_row, start_col;
 	int main_loop_count = 0;

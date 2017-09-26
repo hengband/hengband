@@ -1254,7 +1254,7 @@ s16b feat_undetected;
  * Which dungeon ?
  */
 byte dungeon_type;
-s16b *max_dlv;
+DEPTH *max_dlv;
 
 s16b feat_wall_outer;
 s16b feat_wall_inner;

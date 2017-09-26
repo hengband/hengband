@@ -1745,7 +1745,7 @@ void prt_path(int y, int x)
 	int i;
 	int path_n;
 	u16b path_g[512];
-	int default_color = TERM_SLATE;
+	byte_hack default_color = TERM_SLATE;
 
 	if (!display_path) return;
 	if (-1 == project_length)
@@ -2018,7 +2018,7 @@ void display_map(int *cy, int *cx)
 			map_info(j, i, &ta, &tc, &ta, &tc);
 
 			/* Extract the priority */
-			tp = feat_priority;
+			tp = (byte_hack)feat_priority;
 
 			if(match_autopick!=-1
 			   && (match_autopick_yx[y][x] == -1
@@ -2902,7 +2902,7 @@ static void mon_lite_hack(POSITION y, POSITION x)
 /*
  * Add a square to the changes array
  */
-static void mon_dark_hack(int y, int x)
+static void mon_dark_hack(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
 	int       midpoint, dpf, d;
@@ -2990,7 +2990,7 @@ void update_mon_lite(void)
 	cave_type *c_ptr;
 
 	POSITION fx, fy;
-	void (*add_mon_lite)(int, int);
+	void (*add_mon_lite)(POSITION, POSITION);
 	int f_flag;
 
 	s16b end_temp;
@@ -4170,8 +4170,8 @@ void update_flow(void)
 		for (d = 0; d < 8; d++)
 		{
 			int old_head = flow_head;
-			int m = cave[ty][tx].cost + 1;
-			int n = cave[ty][tx].dist + 1;
+			byte_hack m = cave[ty][tx].cost + 1;
+			byte_hack n = cave[ty][tx].dist + 1;
 			cave_type *c_ptr;
 
 			/* Child location */
@@ -4663,7 +4663,7 @@ void cave_set_feat(POSITION y, POSITION x, IDX feat)
 }
 
 
-int conv_dungeon_feat(int newfeat)
+IDX conv_dungeon_feat(IDX newfeat)
 {
 	feature_type *f_ptr = &f_info[newfeat];
 
@@ -4697,7 +4697,7 @@ int conv_dungeon_feat(int newfeat)
  * Take a feature, determine what that feature becomes
  * through applying the given action.
  */
-int feat_state(int feat, int action)
+IDX feat_state(IDX feat, int action)
 {
 	feature_type *f_ptr = &f_info[feat];
 	int i;
@@ -4720,10 +4720,10 @@ int feat_state(int feat, int action)
 void cave_alter_feat(int y, int x, int action)
 {
 	/* Set old feature */
-	int oldfeat = cave[y][x].feat;
+	IDX oldfeat = cave[y][x].feat;
 
 	/* Get the new feat */
-	int newfeat = feat_state(oldfeat, action);
+	IDX newfeat = feat_state(oldfeat, action);
 
 	/* No change */
 	if (newfeat == oldfeat) return;
@@ -4969,7 +4969,7 @@ void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, int
 /*
  * Track a new monster
  */
-void health_track(int m_idx)
+void health_track(IDX m_idx)
 {
 	/* Mount monster is already tracked */
 	if (m_idx && m_idx == p_ptr->riding) return;
@@ -4986,7 +4986,7 @@ void health_track(int m_idx)
 /*
  * Hack -- track the given monster race
  */
-void monster_race_track(int r_idx)
+void monster_race_track(IDX r_idx)
 {
 	/* Save this monster ID */
 	p_ptr->monster_race_idx = r_idx;
@@ -5000,7 +5000,7 @@ void monster_race_track(int r_idx)
 /*
  * Hack -- track the given object kind
  */
-void object_kind_track(int k_idx)
+void object_kind_track(IDX k_idx)
 {
 	/* Save this monster ID */
 	p_ptr->object_kind_idx = k_idx;
