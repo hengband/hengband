@@ -151,7 +151,7 @@ extern u32b seed_town;
 extern s16b command_cmd;
 extern s16b command_arg;
 extern s16b command_rep;
-extern s16b command_dir;
+extern DIRECTION command_dir;
 extern s16b command_see;
 extern s16b command_gap;
 extern s16b command_wrk;

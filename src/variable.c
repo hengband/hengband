@@ -98,7 +98,7 @@ s16b command_cmd;		/* Current "Angband Command" */
 
 s16b command_arg;		/* Gives argument of current command */
 s16b command_rep;		/* Gives repetition of current command */
-s16b command_dir;		/* Gives direction of current command */
+DIRECTION command_dir;		/* Gives direction of current command */
 
 s16b command_see;		/* See "object1.c" */
 s16b command_wrk;		/* See "object1.c" */

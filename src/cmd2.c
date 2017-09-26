@@ -874,7 +874,7 @@ static bool do_cmd_open_chest(int y, int x, s16b o_idx)
  * @param feat 地形ID
  * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
  */
-static bool is_open(int feat)
+static bool is_open(IDX feat)
 {
 	return have_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(feat, FF_CLOSE));
 }
@@ -1985,8 +1985,7 @@ void do_cmd_disarm(void)
 		/* See if only one target */
 		if (num_traps || num_chests)
 		{
-			bool too_many = (num_traps && num_chests) || (num_traps > 1) ||
-			    (num_chests > 1);
+			bool too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
 			if (!too_many) command_dir = coords_to_dir(y, x);
 		}
 	}

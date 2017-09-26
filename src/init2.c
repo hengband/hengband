@@ -1781,7 +1781,7 @@ static errr init_other(void)
 	}
 
 	/* Allocate and Wipe the max dungeon level */
-	C_MAKE(max_dlv, max_d_idx, s16b);
+	C_MAKE(max_dlv, max_d_idx, DEPTH);
 
 	/* Allocate and wipe each line of the cave */
 	for (i = 0; i < MAX_HGT; i++)

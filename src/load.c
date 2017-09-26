@@ -369,8 +369,12 @@ static void rd_item_old(object_type *o_ptr)
 	rd_byte(&o_ptr->number);
 	rd_s16b(&o_ptr->weight);
 
-	rd_byte(&o_ptr->name1);
-	rd_byte(&o_ptr->name2);
+	rd_byte(&tmp8u);
+	o_ptr->name1 = tmp8u;
+
+	rd_byte(&tmp8u);
+	o_ptr->name2 = tmp8u;
+
 	rd_s16b(&o_ptr->timeout);
 
 	rd_s16b(&o_ptr->to_h);
@@ -637,9 +641,17 @@ static void rd_item(object_type *o_ptr)
 
 	rd_s16b(&o_ptr->weight);
 
-	if (flags & SAVE_ITEM_NAME1) rd_byte(&o_ptr->name1);
+	if (flags & SAVE_ITEM_NAME1)
+	{
+		rd_byte(&tmp8u);
+		o_ptr->name1 = tmp8u;
+	}
 	else o_ptr->name1 = 0;
-	if (flags & SAVE_ITEM_NAME2) rd_byte(&o_ptr->name2);
+	if (flags & SAVE_ITEM_NAME2)
+	{
+		rd_byte(&tmp8u);
+		o_ptr->name1 = tmp8u;
+	}
 	else o_ptr->name2 = 0;
 	if (flags & SAVE_ITEM_TIMEOUT) rd_s16b(&o_ptr->timeout);
 	else o_ptr->timeout = 0;
@@ -1934,7 +1946,8 @@ static void rd_extra(void)
 	rd_s16b(&p_ptr->max_plv);
 	if (z_older_than(10, 3, 8))
 	{
-		rd_s16b(&max_dlv[DUNGEON_ANGBAND]);
+		rd_s16b(&tmp16s);
+		max_dlv[DUNGEON_ANGBAND] = tmp16s;
 	}
 	else
 	{
@@ -1944,7 +1957,8 @@ static void rd_extra(void)
 
 		for(i = 0; i < max; i++)
 		{
-			rd_s16b(&max_dlv[i]);
+			rd_s16b(&tmp16s);
+			max_dlv[i] = tmp16s;
 			if (max_dlv[i] > d_info[i].maxdepth) max_dlv[i] = d_info[i].maxdepth;
 		}
 	}

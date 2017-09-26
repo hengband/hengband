@@ -2207,7 +2207,7 @@ static void get_questinfo(IDX questnum, bool do_init)
  */
 static void castle_quest(void)
 {
-	int             q_index = 0;
+	IDX q_index = 0;
 	monster_race    *r_ptr;
 	quest_type      *q_ptr;
 	cptr            name;
@@ -3267,7 +3267,8 @@ static int repair_broken_weapon_aux(int bcost)
 
 	if (o_ptr->sval == SV_BROKEN_DAGGER)
 	{
-		int j, n = 1;
+		IDX j;
+		int n = 1;
 
 		/* Suppress compiler warning */
 		k_idx = 0;
@@ -4018,7 +4019,8 @@ bool tele_town(void)
  */
 static bool research_mon(void)
 {
-	int i, n, r_idx;
+	int i, n;
+	IDX r_idx;
 	char sym, query;
 	char buf[128];
 
@@ -4802,7 +4804,7 @@ void quest_discovery(int q_idx)
  */
 IDX quest_number(DEPTH level)
 {
-	int i;
+	IDX i;
 
 	/* Check quests */
 	if (p_ptr->inside_quest)
@@ -4830,16 +4832,16 @@ IDX quest_number(DEPTH level)
  */
 IDX random_quest_number(DEPTH level)
 {
-	int i;
+	IDX i;
 
 	if (dungeon_type != DUNGEON_ANGBAND) return 0;
 
 	for (i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
 	{
 		if ((quest[i].type == QUEST_TYPE_RANDOM) &&
-		    (quest[i].status == QUEST_STATUS_TAKEN) &&
-		    (quest[i].level == level) &&
-		    (quest[i].dungeon == DUNGEON_ANGBAND))
+			(quest[i].status == QUEST_STATUS_TAKEN) &&
+			(quest[i].level == level) &&
+			(quest[i].dungeon == DUNGEON_ANGBAND))
 		{
 			return i;
 		}

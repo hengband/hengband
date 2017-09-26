@@ -3612,7 +3612,7 @@ typedef struct dungeon_grid dungeon_grid;
 
 struct dungeon_grid
 {
-	int		feature;		/* Terrain feature */
+	IDX		feature;		/* Terrain feature */
 	int		monster;		/* Monster */
 	int		object;			/* Object */
 	int		ego;			/* Ego-Item */
