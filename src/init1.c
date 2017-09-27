@@ -4035,10 +4035,10 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 			int idx = s[0];
 
-			int object_index = letter[idx].object;
-			int monster_index = letter[idx].monster;
+			IDX object_index = letter[idx].object;
+			IDX monster_index = letter[idx].monster;
 			int random = letter[idx].random;
-			int artifact_index = letter[idx].artifact;
+			IDX artifact_index = letter[idx].artifact;
 
 			/* Lay down a floor */
 			c_ptr->feat = conv_dungeon_feat(letter[idx].feature);

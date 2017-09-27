@@ -3107,7 +3107,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	/* Read the dungeon items */
 	for (i = 1; i < limit; i++)
 	{
-		int o_idx;
+		IDX o_idx;
 		object_type *o_ptr;
 
 
@@ -3208,6 +3208,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 static errr rd_dungeon(void)
 {
 	errr err = 0;
+	s16b tmp16s;
 	byte num;
 	int i;
 
@@ -3260,7 +3261,10 @@ static errr rd_dungeon(void)
 
 			rd_s16b(&sf_ptr->floor_id);
 			rd_byte(&sf_ptr->savefile_id);
-			rd_s16b(&sf_ptr->dun_level);
+
+			rd_s16b(&tmp16s);
+			sf_ptr->dun_level = (DEPTH)tmp16s;
+
 			rd_s32b(&sf_ptr->last_visit);
 			rd_u32b(&sf_ptr->visit_mark);
 			rd_s16b(&sf_ptr->upper_floor_id);

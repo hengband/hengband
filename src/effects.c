@@ -4577,7 +4577,7 @@ int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 				         !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 					strcpy(buf,_("クエスト", "in a quest"));
 				else
-					sprintf(buf,_("%d階", "level %d"), (DEPTH)dun_level);
+					sprintf(buf,_("%d階", "level %d"), (int)dun_level);
 
 				sprintf(tmp, _("%sで%sに殺された。", "killed by %s %s."), buf, p_ptr->died_from);
 				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, tmp);

@@ -7049,7 +7049,7 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 /*
  * Describe fake object
  */
-static void desc_obj_fake(int k_idx)
+static void desc_obj_fake(IDX k_idx)
 {
 	object_type *o_ptr;
 	object_type object_type_body;
@@ -8061,7 +8061,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 							artifact_type *a_ptr = &a_info[quest[i].k_idx];
 							object_type forge;
 							object_type *q_ptr = &forge;
-							int k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+							IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
 							object_prep(q_ptr, k_idx);
 							q_ptr->name1 = quest[i].k_idx;
 							q_ptr->ident = IDENT_STORE;

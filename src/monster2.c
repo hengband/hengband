@@ -3793,7 +3793,7 @@ bool place_monster(int y, int x, u32b mode)
  * @param x 生成地点x座標
  * @return 生成に成功したらtrue
  */
-bool alloc_horde(int y, int x)
+bool alloc_horde(POSITION y, POSITION x)
 {
 	monster_race *r_ptr = NULL;
 	int r_idx = 0;

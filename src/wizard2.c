@@ -182,7 +182,7 @@ static void do_cmd_wiz_hack_ben(void)
  */
 static void do_cmd_summon_horde(void)
 {
-	int wy = p_ptr->y, wx = p_ptr->x;
+	POSITION wy = p_ptr->y, wx = p_ptr->x;
 	int attempts = 1000;
 
 	while (--attempts)
@@ -1415,8 +1415,7 @@ static void wiz_create_item(void)
 	object_type	forge;
 	object_type *q_ptr;
 
-	int k_idx;
-
+	IDX k_idx;
 
 	/* Save the screen */
 	screen_save();
@@ -1426,7 +1425,6 @@ static void wiz_create_item(void)
 
 	/* Restore the screen */
 	screen_load();
-
 
 	/* Return if failed */
 	if (!k_idx) return;

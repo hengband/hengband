@@ -5309,9 +5309,9 @@ bool polymorph_monster(int y, int x)
  * @param y テレポート先のY座標
  * @return 目標に指定通りテレポートできたならばTRUEを返す
  */
-static bool dimension_door_aux(int x, int y)
+static bool dimension_door_aux(DEPTH x, DEPTH y)
 {
-	int	plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
@@ -5342,7 +5342,7 @@ static bool dimension_door_aux(int x, int y)
  */
 bool dimension_door(void)
 {
-	int x = 0, y = 0;
+	DEPTH x = 0, y = 0;
 
 	/* Rerutn FALSE if cancelled */
 	if (!tgt_pt(&x, &y)) return FALSE;

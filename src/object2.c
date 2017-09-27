@@ -1855,7 +1855,7 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
  * @param sval 検索したいベースアイテムのsval
  * @return なし
  */
-s16b lookup_kind(int tval, int sval)
+IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
 {
 	int k;
 	int num = 0;
@@ -5455,8 +5455,8 @@ void acquirement(int y1, int x1, int num, bool great, bool special, bool known)
 
 typedef struct
 {
-	int tval;
-	int sval;
+	OBJECT_TYPE_VALUE tval;
+	OBJECT_SUBTYPE_VALUE sval;
 	int prob;
 	byte flag;
 } amuse_type;
