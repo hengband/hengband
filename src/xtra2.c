@@ -3424,7 +3424,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 		if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 		{
 			/* Set the quest number temporary */
-			int old_quest = p_ptr->inside_quest;
+			IDX old_quest = p_ptr->inside_quest;
 			int j;
 
 			/* Clear the text */
@@ -4461,7 +4461,8 @@ void gain_level_reward(int chosen_reward)
 	object_type forge;
 	char        wrath_reason[32] = "";
 	int         nasty_chance = 6;
-	int         dummy = 0, dummy2 = 0;
+	OBJECT_TYPE_VALUE dummy = 0;
+	OBJECT_SUBTYPE_VALUE dummy2 = 0;
 	int         type, effect;
 	cptr        reward = NULL;
 	char o_name[MAX_NLEN];

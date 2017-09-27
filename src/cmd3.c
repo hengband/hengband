@@ -1795,7 +1795,8 @@ void ang_sort_swap_hook(vptr u, vptr v, int a, int b)
  */
 void do_cmd_query_symbol(void)
 {
-	int		i, n, r_idx;
+	int		i, n;
+	IDX r_idx;
 	char	sym, query;
 	char	buf[128];
 

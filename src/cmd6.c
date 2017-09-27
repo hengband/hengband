@@ -4137,7 +4137,7 @@ static int select_magic_eater(bool only_browse)
 	int ext=0;
 	char choice;
 	bool flag, request_list;
-	int tval = 0;
+	OBJECT_TYPE_VALUE tval = 0;
 	int             ask = TRUE, i = 0;
 	char            out_val[160];
 
@@ -4580,7 +4580,9 @@ static int select_magic_eater(bool only_browse)
  */
 bool do_cmd_magic_eater(bool only_browse, bool powerful)
 {
-	int item, chance, level, k_idx, tval, sval;
+	int item, chance, level, k_idx;
+	OBJECT_TYPE_VALUE tval;
+	OBJECT_SUBTYPE_VALUE sval;
 	bool use_charge = TRUE;
 
 	/* Not when confused */

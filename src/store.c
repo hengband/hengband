@@ -1113,7 +1113,7 @@ static void mass_produce(object_type *o_ptr)
 	/* Ensure that mass-produced rods and wands get the correct pvals. */
 	if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
 	{
-		o_ptr->pval *= o_ptr->number;
+		o_ptr->pval *= (PARAMETER_VALUE)o_ptr->number;
 	}
 }
 
