@@ -510,9 +510,9 @@ errr top_twenty(void)
 
 	/* Save the level and such */
 	sprintf(the_score.cur_lev, "%3d", p_ptr->lev);
-	sprintf(the_score.cur_dun, "%3d", dun_level);
+	sprintf(the_score.cur_dun, "%3d", (int)dun_level);
 	sprintf(the_score.max_lev, "%3d", p_ptr->max_plv);
-	sprintf(the_score.max_dun, "%3d", max_dlv[dungeon_type]);
+	sprintf(the_score.max_dun, "%3d", (int)max_dlv[dungeon_type]);
 
 	/* Save the cause of death (31 chars) */
 	if (strlen(p_ptr->died_from) >= sizeof(the_score.how))

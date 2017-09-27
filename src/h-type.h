@@ -110,7 +110,7 @@ typedef s32b HIT_POINT;		/*!< ゲーム中のHP/ダメージ型を定義 */
 typedef s32b MANA_POINT;	/*!< ゲーム中のMP型を定義 */
 typedef s16b HIT_PROB;		/*!< ゲーム中の命中修正値を定義 */
 typedef s16b BASE_STATUS;	/*!< ゲーム中の基礎能力値型を定義 */
-typedef byte ITEM_NUMBER;	/*!< ゲーム中のアイテム数型を定義 */
+typedef s32b ITEM_NUMBER;	/*!< ゲーム中のアイテム数型を定義 */
 typedef s16b ACTION_ENERGY;	/*!< ゲーム中の行動エネルギー型を定義 */
 typedef s16b ARMOUR_CLASS;	/*!< ゲーム中の行動アーマークラス型を定義 */
 typedef s16b TIME_EFFECT;   /*!< ゲーム中の時限期間の型を定義 */

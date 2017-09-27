@@ -171,12 +171,12 @@ static void wr_item(object_type *o_ptr)
 	if (flags & SAVE_ITEM_PVAL) wr_s16b(o_ptr->pval);
 
 	if (flags & SAVE_ITEM_DISCOUNT) wr_byte(o_ptr->discount);
-	if (flags & SAVE_ITEM_NUMBER) wr_byte(o_ptr->number);
+	if (flags & SAVE_ITEM_NUMBER) wr_byte((byte_hack)o_ptr->number);
 
 	wr_s16b(o_ptr->weight);
 
-	if (flags & SAVE_ITEM_NAME1) wr_byte(o_ptr->name1);
-	if (flags & SAVE_ITEM_NAME2) wr_byte(o_ptr->name2);
+	if (flags & SAVE_ITEM_NAME1) wr_byte((byte_hack)o_ptr->name1);
+	if (flags & SAVE_ITEM_NAME2) wr_byte((byte_hack)o_ptr->name2);
 	if (flags & SAVE_ITEM_TIMEOUT) wr_s16b(o_ptr->timeout);
 
 	if (flags & SAVE_ITEM_TO_H) wr_s16b(o_ptr->to_h);
@@ -711,7 +711,7 @@ static void wr_extra(void)
 	tmp8u = (byte)max_d_idx;
 	wr_byte(tmp8u);
 	for (i = 0; i < tmp8u; i++)
-		wr_s16b(max_dlv[i]);
+		wr_s16b((s16b)max_dlv[i]);
 
 	/* More info */
 	wr_s16b(0);     /* oops */
@@ -941,7 +941,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 		wr_s16b(sf_ptr->floor_id);
 		wr_byte(sf_ptr->savefile_id);
-		wr_s16b(sf_ptr->dun_level);
+		wr_s16b((s16b)sf_ptr->dun_level);
 		wr_s32b(sf_ptr->last_visit);
 		wr_u32b(sf_ptr->visit_mark);
 		wr_s16b(sf_ptr->upper_floor_id);
@@ -1074,7 +1074,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 			}
 
 			/* Extract an ID */
-			tmp16u = i;
+			tmp16u = (u16b)i;
 
 			/* If the run is broken, or too full, flush it */
 			if ((tmp16u != prev_u16b) || (count == MAX_UCHAR))
@@ -1212,7 +1212,7 @@ static bool wr_dungeon(void)
 
 		wr_s16b(sf_ptr->floor_id);
 		wr_byte(sf_ptr->savefile_id);
-		wr_s16b(sf_ptr->dun_level);
+		wr_s16b((s16b)sf_ptr->dun_level);
 		wr_s32b(sf_ptr->last_visit);
 		wr_u32b(sf_ptr->visit_mark);
 		wr_s16b(sf_ptr->upper_floor_id);

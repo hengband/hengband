@@ -366,7 +366,8 @@ static void rd_item_old(object_type *o_ptr)
 	rd_s16b(&o_ptr->pval);
 
 	rd_byte(&o_ptr->discount);
-	rd_byte(&o_ptr->number);
+	rd_byte(&tmp8u);
+	o_ptr->number = (ITEM_NUMBER)tmp8u;
 	rd_s16b(&o_ptr->weight);
 
 	rd_byte(&tmp8u);
@@ -636,7 +637,10 @@ static void rd_item(object_type *o_ptr)
 
 	if (flags & SAVE_ITEM_DISCOUNT) rd_byte(&o_ptr->discount);
 	else o_ptr->discount = 0;
-	if (flags & SAVE_ITEM_NUMBER) rd_byte(&o_ptr->number);
+	if (flags & SAVE_ITEM_NUMBER) {
+		rd_byte(&tmp8u);
+		o_ptr->number = tmp8u;
+	}	
 	else o_ptr->number = 1;
 
 	rd_s16b(&o_ptr->weight);
