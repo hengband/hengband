@@ -3741,7 +3741,7 @@ static void do_cmd_activate_aux(int item)
 		else
 #endif
 		{
-			int pet_ctr, i;
+			IDX pet_ctr, i;
 			IDX *who;
 			int max_pet = 0;
 			u16b dummy_why;
@@ -3790,7 +3790,7 @@ static void do_cmd_activate_aux(int item)
 
 			if(fire_ball(GF_CAPTURE, dir, 0, 0))
 			{
-				o_ptr->pval = cap_mon;
+				o_ptr->pval = (PARAMETER_VALUE)cap_mon;
 				o_ptr->xtra3 = cap_mspeed;
 				o_ptr->xtra4 = cap_hp;
 				o_ptr->xtra5 = cap_maxhp;
@@ -4280,9 +4280,10 @@ static int select_magic_eater(bool only_browse)
 		{
 			byte y, x = 0;
 			int ctr, chance;
-			int k_idx;
+			IDX k_idx;
 			char dummy[80];
-			int x1, y1, level;
+			POSITION x1, y1;
+			int level;
 			byte col;
 
 			strcpy(dummy, "");

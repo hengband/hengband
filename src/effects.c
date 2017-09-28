@@ -297,7 +297,7 @@ void dispel_player(void)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_mimic(TIME_EFFECT v, int p, bool do_dec)
+bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -316,7 +316,7 @@ bool set_mimic(TIME_EFFECT v, int p, bool do_dec)
 		else if ((!p_ptr->tim_mimic) || (p_ptr->mimic_form != p))
 		{
 			msg_print(_("自分の体が変わってゆくのを感じた。", "You feel that your body changes."));
-			p_ptr->mimic_form=p;
+			p_ptr->mimic_form = p;
 			notice = TRUE;
 		}
 	}
@@ -4261,7 +4261,7 @@ void do_poly_self(void)
 	if ((power > randint0(20)) && one_in_(3) && (p_ptr->prace != RACE_ANDROID))
 	{
 		char effect_msg[80] = "";
-		int new_race;
+		CHARACTER_IDX new_race;
 
 		/* Some form of racial polymorph... */
 		power -= 10;

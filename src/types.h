@@ -330,12 +330,12 @@ struct monster_race
 	u16b reinforce_ds[6];
 
 	u16b artifact_id[4];	/* 特定アーティファクトドロップID */
-	u16b artifact_rarity[4];	/* 特定アーティファクトレア度 */
-	u16b artifact_percent[4]; /* 特定アーティファクトドロップ率 */
+	RARITY artifact_rarity[4];	/* 特定アーティファクトレア度 */
+	PERCENTAGE artifact_percent[4]; /* 特定アーティファクトドロップ率 */
 
-	u32b arena_ratio;		/* アリーナの評価修正値(%基準 / 0=100%) / Arena */
+	PERCENTAGE arena_ratio;		/* アリーナの評価修正値(%基準 / 0=100%) / Arena */
 
-	s16b next_r_idx;
+	IDX next_r_idx;
 	u32b next_exp;
 
 	DEPTH level;				/* Level of creature */
@@ -547,7 +547,7 @@ struct object_type
 
 	byte dd, ds;		/* Damage dice/sides */
 
-	s16b timeout;		/* Timeout Counter */
+	TIME_EFFECT timeout;	/* Timeout Counter */
 
 	byte ident;			/* Special flags  */
 
@@ -1060,7 +1060,7 @@ struct player_type
 	TIME_EFFECT magicdef;
 	TIME_EFFECT tim_res_nether;	/* Timed -- Nether resistance */
 	TIME_EFFECT tim_res_time;	/* Timed -- Time resistance */
-	byte mimic_form;
+	IDX mimic_form;
 	TIME_EFFECT tim_mimic;
 	TIME_EFFECT tim_sh_fire;
 	TIME_EFFECT tim_sh_holy;

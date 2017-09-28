@@ -137,6 +137,8 @@ typedef byte RARITY;    /*!< ゲーム中の希少度の型定義 */
 
 typedef s32b GAME_TURN;     /*!< ゲーム中のターンの型定義 */
 
+typedef s16b PERCENTAGE;     /*!< ゲーム中のパーセント表記の型定義 */
+
 /*** Pointers to all the basic types defined above ***/
 
 typedef real *real_ptr;

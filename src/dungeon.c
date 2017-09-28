@@ -2972,7 +2972,7 @@ static void process_world_aux_recharge(void)
 		if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout))
 		{
 			/* Determine how many rods are charging. */
-			int temp = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
+			TIME_EFFECT temp = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
 			if (temp > o_ptr->number) temp = o_ptr->number;
 
 			/* Decrease timeout by that number. */
@@ -3017,7 +3017,7 @@ static void process_world_aux_recharge(void)
 		if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout))
 		{
 			/* Charge it */
-			o_ptr->timeout -= o_ptr->number;
+			o_ptr->timeout -= (TIME_EFFECT)o_ptr->number;
 
 			/* Boundary control. */
 			if (o_ptr->timeout < 0) o_ptr->timeout = 0;

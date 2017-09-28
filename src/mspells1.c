@@ -959,7 +959,7 @@ static bool spell_dispel(byte spell)
  * @param m_idx モンスターの構造体配列ID
  * @return 魔力消去をかけるべきならTRUEを返す。
  */
-bool dispel_check(int m_idx)
+bool dispel_check(IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1439,7 +1439,7 @@ static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
  * Note the special "MFLAG_NICE" flag, which prevents a monster from using\n
  * any spell attacks until the player has had a single chance to move.\n
  */
-bool make_attack_spell(int m_idx)
+bool make_attack_spell(IDX m_idx)
 {
 	int             k, thrown_spell = 0, rlev, failrate;
 	byte            spell[96], num = 0;

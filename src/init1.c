@@ -2722,16 +2722,16 @@ errr parse_e_info(char *buf, header *head)
 	/* Hack -- Process 'C' for "creation" */
 	else if (buf[0] == 'C')
 	{
-		int th, td, ta, pv;
+		int th, td, ta, pval;
 
 		/* Scan for the values */
 		if (4 != sscanf(buf+2, "%d:%d:%d:%d",
-				&th, &td, &ta, &pv)) return (1);
+				&th, &td, &ta, &pval)) return (1);
 
 		e_ptr->max_to_h = th;
 		e_ptr->max_to_d = td;
 		e_ptr->max_to_a = ta;
-		e_ptr->max_pval = pv;
+		e_ptr->max_pval = (PARAMETER_VALUE)pval;
 	}
 
 	/* Hack -- Process 'U' for activation index */
@@ -3155,7 +3155,7 @@ errr parse_r_info(char *buf, header *head)
 
 		if (3 != sscanf(buf+2, "%d:%d:%d", &id, &rarity, &per)) return (1);
 		r_ptr->artifact_id[i] = id;
-		r_ptr->artifact_rarity[i] = rarity;
+		r_ptr->artifact_rarity[i] = (RARITY)rarity;
 		r_ptr->artifact_percent[i] = per;
 	}
 

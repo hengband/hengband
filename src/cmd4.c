@@ -5447,7 +5447,8 @@ static void ang_sort_art_swap(vptr u, vptr v, int a, int b)
  */
 static void do_cmd_knowledge_artifacts(void)
 {
-	int i, k, z, x, y, n = 0;
+	int i, k, x, y, n = 0;
+	IDX z;
 	u16b why = 3;
 	s16b *who;
 
@@ -6325,7 +6326,7 @@ static void display_group_list(int col, int row, int wid, int per_page,
  * Move the cursor in a browser window 
  */
 static void browser_cursor(char ch, int *column, int *grp_cur, int grp_cnt, 
-						   int *list_cur, int list_cnt)
+						   IDX *list_cur, IDX list_cnt)
 {
 	int d;
 	int col = *column;
@@ -7087,11 +7088,11 @@ static void desc_obj_fake(IDX k_idx)
 /*
  * Display known objects
  */
-static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int direct_k_idx)
+static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx)
 {
 	int i, len, max;
 	int grp_cur, grp_top, old_grp_cur;
-	int object_old, object_cur, object_top;
+	IDX object_old, object_cur, object_top;
 	int grp_cnt, grp_idx[100];
 	int object_cnt;
 	int *object_idx;
@@ -7450,7 +7451,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int d
 {
 	int i, len, max;
 	int grp_cur, grp_top, old_grp_cur;
-	int feat_cur, feat_top;
+	IDX feat_cur, feat_top;
 	int grp_cnt, grp_idx[100];
 	int feat_cnt;
 	int *feat_idx;
