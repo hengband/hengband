@@ -3907,7 +3907,9 @@ static void add_outfit(object_type *o_ptr)
  */
 void player_outfit(void)
 {
-	int i, tv, sv;
+	int i;
+	OBJECT_TYPE_VALUE tv;
+	OBJECT_SUBTYPE_VALUE sv;
 
 	object_type	forge;
 	object_type	*q_ptr;
@@ -4045,10 +4047,11 @@ void player_outfit(void)
 	}
 	else if (p_ptr->pclass == CLASS_SORCERER)
 	{
-		for (i = TV_LIFE_BOOK; i <= TV_LIFE_BOOK+MAX_MAGIC-1; i++)
+		OBJECT_TYPE_VALUE book_tval;
+		for (book_tval = TV_LIFE_BOOK; book_tval <= TV_LIFE_BOOK+MAX_MAGIC-1; book_tval++)
 		{
 			/* Hack -- Give the player some arrows */
-			object_prep(q_ptr, lookup_kind(i, 0));
+			object_prep(q_ptr, lookup_kind(book_tval, 0));
 			q_ptr->number = 1;
 
 			add_outfit(q_ptr);

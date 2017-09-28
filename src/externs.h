@@ -1214,7 +1214,7 @@ extern void remove_all_mirrors(bool explode);
 
 /* spells3.c */
 extern bool teleport_away(IDX m_idx, int dis, u32b mode);
-extern void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode);
+extern void teleport_monster_to(IDX m_idx, POSITION ty, POSITION tx, int power, u32b mode);
 extern bool cave_player_teleportable_bold(int y, int x, u32b mode);
 extern bool teleport_player_aux(int dis, u32b mode);
 extern void teleport_player(int dis, u32b mode);
@@ -1510,7 +1510,7 @@ extern bool get_rep_dir2(int *dp);
 extern void gain_level_reward(int chosen_reward);
 extern bool tgt_pt(POSITION *x, POSITION *y);
 extern void do_poly_wounds(void);
-extern void change_race(int new_race, cptr effect_msg);
+extern void change_race(CHARACTER_IDX new_race, cptr effect_msg);
 extern HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear);
 extern s16b gain_energy(void);
 extern s16b bow_energy(int sval);
@@ -1592,8 +1592,8 @@ extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
 
 /* mspells4.c */
 extern bool spell_learnable(int m_idx);
-extern int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx);
-extern int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx);
+extern int monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, IDX m_idx);
+extern int monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, IDX m_idx, IDX t_idx);
 extern int monspell_damage(int SPELL_NUM, int m_idx, int TYPE);
 extern int monspell_race_damage(int SPELL_NUM, int r_idx, int TYPE);
 extern int monspell_bluemage_damage(int SPELL_NUM, int plev, int TYPE);

@@ -1635,9 +1635,9 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
  * @param name1 生成するアーティファクトID
  * @return 生成が成功した場合TRUEを返す
  */
-static bool make_fake_artifact(object_type *o_ptr, int name1)
+static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 {
-	int i;
+	IDX i;
 
 	artifact_type *a_ptr = &a_info[name1];
 

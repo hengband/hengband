@@ -3742,12 +3742,12 @@ static void do_cmd_activate_aux(int item)
 #endif
 		{
 			int pet_ctr, i;
-			u16b *who;
+			IDX *who;
 			int max_pet = 0;
 			u16b dummy_why;
 
 			/* Allocate the "who" array */
-			C_MAKE(who, max_m_idx, u16b);
+			C_MAKE(who, max_m_idx, IDX);
 
 			/* Process the monsters (backwards) */
 			for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
@@ -3770,7 +3770,7 @@ static void do_cmd_activate_aux(int item)
 			}
 
 			/* Free the "who" array */
-			C_KILL(who, max_m_idx, u16b);
+			C_KILL(who, max_m_idx, IDX);
 		}
 		o_ptr->timeout = 100+randint1(100);
 		return;

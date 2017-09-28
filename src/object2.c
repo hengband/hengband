@@ -1857,9 +1857,9 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
  */
 IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
 {
-	int k;
+	IDX k;
 	int num = 0;
-	int bk = 0;
+	IDX bk = 0;
 
 	/* Look for it */
 	for (k = 1; k < max_k_idx; k++)
@@ -4768,7 +4768,7 @@ bool make_object(object_type *j_ptr, u32b mode)
 	/* Generate a special object, or a normal object */
 	if (!one_in_(prob) || !make_artifact_special(j_ptr))
 	{
-		int k_idx;
+		IDX k_idx;
 
 		/* Good objects */
 		if ((mode & AM_GOOD) && !get_obj_num_hook)
@@ -7725,7 +7725,8 @@ static void drain_essence(void)
 	object_type *o_ptr;
 	cptr q, s;
 	POSITION iy, ix;
-	byte_hack marked, number;
+	byte_hack marked;
+	ITEM_NUMBER number;
 	s16b next_o_idx, weight;
 
 	for (i = 0; i < sizeof(drain_value) / sizeof(int); i++)

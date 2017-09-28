@@ -1455,8 +1455,8 @@ bool make_attack_spell(int m_idx)
 	int             dam = 0;
 
 	/* Target location */
-	int x = p_ptr->x;
-	int y = p_ptr->y;
+	POSITION x = p_ptr->x;
+	POSITION y = p_ptr->y;
 
 	/* Target location for lite breath */
 	int x_br_lite = 0;

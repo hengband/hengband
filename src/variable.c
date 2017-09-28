@@ -120,12 +120,12 @@ DEPTH object_level;		/* Current object creation level */
 DEPTH monster_level;	/* Current monster creation level */
 DEPTH base_level;		/* Base dungeon level */
 
-s32b turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
-s32b turn_limit;		/*!< turnの最大値 / Limit of game turn */
-s32b dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game turn in dungeon */
-s32b dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game turn in dungeon */
-s32b old_turn;			/* Turn when level began */
-s32b old_battle;
+GAME_TURN turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
+GAME_TURN turn_limit;		/*!< turnの最大値 / Limit of game turn */
+GAME_TURN dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game turn in dungeon */
+GAME_TURN dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game turn in dungeon */
+GAME_TURN old_turn;			/* Turn when level began */
+GAME_TURN old_battle;
 
 bool use_sound;			/* The "sound" mode is enabled */
 bool use_music;			/* The "music" mode is enabled */

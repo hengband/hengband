@@ -31,7 +31,7 @@ void do_cmd_rerate_aux(void)
 	while (1)
 	{
 		/* Pre-calculate level 1 hitdice */
-		p_ptr->player_hp[0] = p_ptr->hitdie;
+		p_ptr->player_hp[0] = (HIT_POINT)p_ptr->hitdie;
 
 		for (i = 1; i < 4; i++)
 		{
@@ -1617,7 +1617,7 @@ static void do_cmd_wiz_jump(void)
  */
 static void do_cmd_wiz_learn(void)
 {
-	int i;
+	IDX i;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -1774,7 +1774,7 @@ static void do_cmd_wiz_create_feature(void)
 	cave_type    *c_ptr;
 	feature_type *f_ptr;
 	char         tmp_val[160];
-	int          tmp_feat, tmp_mimic;
+	IDX          tmp_feat, tmp_mimic;
 	POSITION y, x;
 
 	if (!tgt_pt(&x, &y)) return;

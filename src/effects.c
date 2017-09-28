@@ -3728,7 +3728,8 @@ bool inc_stat(int stat)
  */
 bool dec_stat(int stat, int amount, int permanent)
 {
-	int cur, max, loss, same, res = FALSE;
+	BASE_STATUS cur, max;
+	int loss, same, res = FALSE;
 
 
 	/* Acquire current value */
@@ -4188,7 +4189,7 @@ void do_poly_wounds(void)
 /*
  * Change player race
  */
-void change_race(int new_race, cptr effect_msg)
+void change_race(CHARACTER_IDX new_race, cptr effect_msg)
 {
 	cptr title = race_info[new_race].title;
 	int  old_race = p_ptr->prace;

@@ -157,9 +157,9 @@ static void recursive_river(int x1, int y1, int x2, int y2, IDX feat1, IDX feat2
  */
 void add_river(IDX feat1, IDX feat2)
 {
-	int y2, x2;
-	int y1 = 0, x1 = 0;
-	int wid;
+	POSITION y2, x2;
+	POSITION y1 = 0, x1 = 0;
+	POSITION wid;
 
 
 	/* Hack -- Choose starting point */

@@ -1655,7 +1655,8 @@ void do_cmd_pet_dismiss(void)
 {
 	monster_type	*m_ptr;
 	bool		all_pets = FALSE;
-	int pet_ctr, i;
+	IDX pet_ctr;
+	int i;
 	int Dismissed = 0;
 
 	u16b *who;

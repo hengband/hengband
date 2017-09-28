@@ -816,7 +816,7 @@ static bool cave_gen(void)
 		/* Hack -- Add some rivers */
 		if (one_in_(3) && (randint1(dun_level) > 5))
 		{
-			int feat1 = 0, feat2 = 0;
+			IDX feat1 = 0, feat2 = 0;
 
 			/* Choose water or lava */
 			if ((randint1(MAX_DEPTH * 2) - 1 > dun_level) && (d_info[dungeon_type].flags1 & DF1_WATER_RIVER))

@@ -1877,7 +1877,7 @@ void spell_RF6_INVULNER(int m_idx, int t_idx, int TARGET_TYPE)
 * @param m_idx 呪文を唱えるモンスターID
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_BLINK(int m_idx, int TARGET_TYPE)
+void spell_RF6_BLINK(IDX m_idx, int TARGET_TYPE)
 {
 	char m_name[80];
 	monster_name(m_idx, m_name);
@@ -2054,9 +2054,9 @@ int spell_RF6_SPECIAL_ROLENTO(int y, int x, int m_idx, int t_idx, int TARGET_TYP
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-int spell_RF6_SPECIAL_B(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+int spell_RF6_SPECIAL_B(POSITION y, POSITION x, IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 	monster_type	*m_ptr = &m_list[m_idx];
 	monster_type	*t_ptr = &m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
@@ -2151,7 +2151,7 @@ int spell_RF6_SPECIAL_B(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-int spell_RF6_SPECIAL(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+int spell_RF6_SPECIAL(POSITION y, POSITION x, IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
@@ -2191,7 +2191,7 @@ int spell_RF6_SPECIAL(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-void spell_RF6_TELE_TO(int m_idx, int t_idx, int TARGET_TYPE)
+void spell_RF6_TELE_TO(IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	monster_type	*t_ptr = &m_list[t_idx];
@@ -3235,7 +3235,7 @@ int summon_NAZGUL(POSITION y, POSITION x, IDX m_idx)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_HI_UNDEAD(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
+void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -3417,7 +3417,7 @@ void spell_RF6_S_UNIQUE(int y, int x, int m_idx, int t_idx, int TARGET_TYPE)
 * @param m_idx 呪文を唱えるモンスターID
 * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
 */
-int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx)
+int monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, IDX m_idx)
 {
 	switch (SPELL_NUM)
 	{
@@ -3530,7 +3530,7 @@ int monspell_to_player(int SPELL_NUM, int y, int x, int m_idx)
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
 */
-int monspell_to_monster(int SPELL_NUM, int y, int x, int m_idx, int t_idx)
+int monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, IDX m_idx, IDX t_idx)
 {
 	switch (SPELL_NUM)
 	{

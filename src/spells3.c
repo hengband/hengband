@@ -178,7 +178,7 @@ bool teleport_away(IDX m_idx, int dis, u32b mode)
  * @param mode オプション
  * @return なし
  */
-void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode)
+void teleport_monster_to(IDX m_idx, POSITION ty, POSITION tx, int power, u32b mode)
 {
 	int ny, nx, oy, ox, d, i, min;
 	int attempts = 500;

@@ -8523,9 +8523,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 			for (i = 0; i < 3; i++)
 			{
-				int y, x;
-				int ny, nx;
-				int m_idx;
+				POSITION y, x;
+				POSITION ny, nx;
+				IDX m_idx;
 				cave_type *c_ptr;
 				monster_type *m_ptr;
 	

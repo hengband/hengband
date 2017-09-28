@@ -135,6 +135,7 @@ typedef u32b STR_OFFSET;      /*!< テキストオフセットの型定義 */
 typedef s32b DEPTH;     /*!< ゲーム中の階層レベルの型定義 */
 typedef byte RARITY;    /*!< ゲーム中の希少度の型定義 */
 
+typedef s32b GAME_TURN;     /*!< ゲーム中のターンの型定義 */
 
 /*** Pointers to all the basic types defined above ***/
 

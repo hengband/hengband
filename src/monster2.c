@@ -330,7 +330,7 @@ void delete_monster(int y, int x)
  * @param i2 配列移動先添字
  * @return なし
  */
-static void compact_monsters_aux(int i1, int i2)
+static void compact_monsters_aux(IDX i1, IDX i2)
 {
 	int y, x, i;
 
@@ -3700,7 +3700,7 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 		n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);
 		for(j = 0; j < n; j++)
 		{
-			int nx, ny, d = 7;
+			POSITION nx, ny, d = 7;
 			scatter(&ny, &nx, y, x, d, 0);
 			(void)place_monster_one(place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
 		}
@@ -3796,11 +3796,11 @@ bool place_monster(int y, int x, u32b mode)
 bool alloc_horde(POSITION y, POSITION x)
 {
 	monster_race *r_ptr = NULL;
-	int r_idx = 0;
-	int m_idx;
+	IDX r_idx = 0;
+	IDX m_idx;
 	int attempts = 1000;
-	int cy = y;
-	int cx = x;
+	POSITION cy = y;
+	POSITION cx = x;
 
 	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
