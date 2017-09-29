@@ -6325,13 +6325,13 @@ static void display_group_list(int col, int row, int wid, int per_page,
 /* 
  * Move the cursor in a browser window 
  */
-static void browser_cursor(char ch, int *column, int *grp_cur, int grp_cnt, 
+static void browser_cursor(char ch, int *column, IDX *grp_cur, IDX grp_cnt, 
 						   IDX *list_cur, IDX list_cnt)
 {
 	int d;
 	int col = *column;
-	int grp = *grp_cur;
-	int list = *list_cur;
+	IDX grp = *grp_cur;
+	IDX list = *list_cur;
 
 	/* Extract direction */
 	if (ch == ' ')

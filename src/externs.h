@@ -1070,7 +1070,7 @@ extern s16b inven_takeoff(int item, int amt);
 extern void inven_drop(int item, int amt);
 extern void combine_pack(void);
 extern void reorder_pack(void);
-extern void display_koff(int k_idx);
+extern void display_koff(IDX k_idx);
 extern object_type *choose_warning_item(void);
 extern bool process_warning(int xx, int yy);
 extern void do_cmd_kaji(bool only_browse);
@@ -1558,17 +1558,6 @@ extern void do_cmd_mind_browse(void);
 
 /* mane.c */
 extern bool do_cmd_mane(bool baigaesi);
-
-/* mspells1.c */
-extern bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend);
-extern bool summon_possible(int y1, int x1);
-extern bool raise_possible(monster_type *m_ptr);
-extern bool dispel_check(int m_idx);
-extern bool spell_is_inate(u16b spell);
-extern bool make_attack_spell(int m_idx);
-extern void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type);
-extern void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type);
-extern void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type);
 
 /* mspells1.c */
 extern bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend);

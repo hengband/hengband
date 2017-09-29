@@ -5502,7 +5502,8 @@ void amusement(int y1, int x1, int num, bool known)
 	/* Acquirement */
 	while (num)
 	{
-		int i, k_idx, a_idx = 0;
+		int i;
+		IDX k_idx, a_idx = 0;
 		int r = randint0(t);
 		bool insta_art, fixed_art;
 
@@ -6620,7 +6621,7 @@ void reorder_pack(void)
  * @details
  * Include list of usable spells for readible books
  */
-void display_koff(int k_idx)
+void display_koff(IDX k_idx)
 {
 	int y;
 

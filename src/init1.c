@@ -3003,7 +3003,7 @@ errr parse_r_info(char *buf, header *head)
 		r_ptr->extra = pad;
 		r_ptr->mexp = exp;
 		r_ptr->next_exp = nextexp;
-		r_ptr->next_r_idx = nextmon;
+		r_ptr->next_r_idx = (IDX)nextmon;
 	}
 
 	/* Process 'R' for "Reinforcement" (up to six lines) */
