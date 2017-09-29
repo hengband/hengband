@@ -140,7 +140,8 @@ typedef s32b GAME_TURN;     /*!< ゲーム中のターンの型定義 */
 
 typedef s16b PERCENTAGE;     /*!< ゲーム中のパーセント表記の型定義 */
 
-typedef u32b BIT_FLAGS;     /*!< ゲーム中の階層レベルの型定義 */
+typedef u32b BIT_FLAGS;     /*!< 32ビットのフラグ配列の型定義 */
+typedef byte BIT_FLAGS8;    /*!< 8ビットのフラグ配列の型定義 */
 
 /*** Pointers to all the basic types defined above ***/
 

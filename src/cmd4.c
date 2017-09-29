@@ -3142,9 +3142,9 @@ static void print_visuals_menu(cptr choice_msg)
 	prt(format("コマンド: %s", choice_msg ? choice_msg : _("", "")), 15, 0);
 }
 
-static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int direct_r_idx);
-static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int direct_k_idx);
-static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int direct_f_idx, int *lighting_level);
+static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX direct_r_idx);
+static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx);
+static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, int *lighting_level);
 
 /*
  * Interact with "visuals"
@@ -4314,7 +4314,7 @@ static bool ang_sort_comp_monster_level(vptr u, vptr v, int a, int b)
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
+static int collect_monsters(int grp_cur, s16b mon_idx[], BIT_FLAGS8 mode)
 {
 	int i, mon_cnt = 0;
 	int dummy_why;
@@ -4560,9 +4560,10 @@ static byte object_group_tval[] =
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static int collect_objects(int grp_cur, int object_idx[], byte mode)
+static int collect_objects(int grp_cur, IDX object_idx[], BIT_FLAGS8 mode)
 {
-	int i, j, k, object_cnt = 0;
+	IDX i;
+	int j, k, object_cnt = 0;
 
 	/* Get a list of x_char in this group */
 	byte group_tval = object_group_tval[grp_cur];
@@ -4642,7 +4643,7 @@ static cptr feature_group_text[] =
  *
  * mode & 0x01 : check for non-empty group
  */
-static int collect_features(int grp_cur, int *feat_idx, byte mode)
+static int collect_features(int grp_cur, IDX *feat_idx, BIT_FLAGS8 mode)
 {
 	int i, feat_cnt = 0;
 
@@ -6300,7 +6301,7 @@ static void do_cmd_knowledge_kill_count(void)
  * @return なし
  */
 static void display_group_list(int col, int row, int wid, int per_page,
-	int grp_idx[], cptr group_text[], int grp_cur, int grp_top)
+	IDX grp_idx[], cptr group_text[], int grp_cur, int grp_top)
 {
 	int i;
 
@@ -6711,7 +6712,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 /*
  * Display known monsters.
  */
-static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int direct_r_idx)
+static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX direct_r_idx)
 {
 	IDX i;
 	int len, max;
@@ -6731,7 +6732,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int d
 	int browser_rows;
 	POSITION wid, hgt;
 
-	byte mode;
+	BIT_FLAGS8 mode;
 
 	/* Get size */
 	Term_get_size(&wid, &hgt);
@@ -7091,7 +7092,8 @@ static void desc_obj_fake(IDX k_idx)
  */
 static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx)
 {
-	int i, len, max;
+	IDX i;
+	int len, max;
 	IDX grp_cur, grp_top, old_grp_cur;
 	IDX object_old, object_cur, object_top;
 	int grp_cnt;
@@ -7117,7 +7119,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 	browser_rows = hgt - 8;
 
 	/* Allocate the "object_idx" array */
-	C_MAKE(object_idx, max_k_idx, int);
+	C_MAKE(object_idx, max_k_idx, IDX);
 
 	max = 0;
 	grp_cnt = 0;
@@ -7371,7 +7373,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 	}
 
 	/* Free the "object_idx" array */
-	C_KILL(object_idx, max_k_idx, int);
+	C_KILL(object_idx, max_k_idx, IDX);
 }
 
 
@@ -7451,13 +7453,14 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
  */
 static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int direct_f_idx, int *lighting_level)
 {
-	int i, len, max;
+	IDX i;
+	int len, max;
 	IDX grp_cur, grp_top, old_grp_cur;
 	IDX feat_cur, feat_top;
 	int grp_cnt;
 	IDX grp_idx[100];
 	int feat_cnt;
-	int *feat_idx;
+	IDX *feat_idx;
 
 	int column = 0;
 	bool flag;
@@ -8342,7 +8345,8 @@ static void do_cmd_knowledge_quests(void)
 {
 	FILE *fff;
 	char file_name[1024];
-	int *quest_num, dummy, i;
+	IDX *quest_num;
+	int dummy, i;
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);

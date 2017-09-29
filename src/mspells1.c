@@ -1334,8 +1334,8 @@ bool spell_is_inate(u16b spell)
  * @param path_check 射線を判定するための関数ポインタ
  * @return 有効な座標があった場合TRUEを返す
  */
-static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
-	int f_flag, bool (*path_check)(int, int, int, int))
+static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
+	int f_flag, bool (*path_check)(POSITION, POSITION, POSITION, POSITION))
 {
 	int i;
 	int tonari;

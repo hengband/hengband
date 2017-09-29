@@ -520,7 +520,7 @@ void teleport_player_away(int m_idx, int dis)
 	{
 		for (yy = -1; yy < 2; yy++)
 		{
-			int tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
+			IDX tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
 
 			/* A monster except your mount or caster may follow */
 			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx) && (m_idx != tmp_m_idx))

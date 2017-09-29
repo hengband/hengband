@@ -6820,7 +6820,7 @@ bool project(int who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int t
 	POSITION gm[32];
 
 	/* Actual radius encoded in gm[] */
-	int gm_rad = rad;
+	POSITION gm_rad = rad;
 
 	bool jump = FALSE;
 

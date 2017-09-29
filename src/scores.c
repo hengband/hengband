@@ -663,7 +663,8 @@ void show_highclass(void)
 {
 
 	register int i = 0, j, m = 0;
-	int pr, clev/*, al*/;
+	int pr;
+	PLAYER_LEVEL clev/*, al*/;
 	high_score the_score;
 	char buf[1024], out_val[256];
 
@@ -695,7 +696,7 @@ void show_highclass(void)
 		if (highscore_seek(j)) break;
 		if (highscore_read(&the_score)) break;
 		pr = atoi(the_score.p_r);
-		clev = atoi(the_score.cur_lev);
+		clev = (PLAYER_LEVEL)atoi(the_score.cur_lev);
 
 #ifdef JP
 		sprintf(out_val, "   %3d) %sの%s (レベル %2d)",
