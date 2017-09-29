@@ -1393,8 +1393,8 @@ errr parse_s_info(char *buf, header *head)
 			|| max < WEAPON_EXP_UNSKILLED || max > WEAPON_EXP_MASTER) return (8);
 
 		/* Save the values */
-		s_ptr->s_start[num] = start;
-		s_ptr->s_max[num] = max;
+		s_ptr->s_start[num] = (SUB_EXP)start;
+		s_ptr->s_max[num] = (SUB_EXP)max;
 	}
 
 
@@ -3156,7 +3156,7 @@ errr parse_r_info(char *buf, header *head)
 		if (3 != sscanf(buf+2, "%d:%d:%d", &id, &rarity, &per)) return (1);
 		r_ptr->artifact_id[i] = id;
 		r_ptr->artifact_rarity[i] = (RARITY)rarity;
-		r_ptr->artifact_percent[i] = per;
+		r_ptr->artifact_percent[i] = (PERCENTAGE)per;
 	}
 
 	/* Process 'V' for "Arena power value ratio" */
@@ -3681,7 +3681,7 @@ static errr parse_line_feature(char *buf)
 				if (zz[6][0] == '*')
 				{
 					letter[index].random |= RANDOM_ARTIFACT;
-					if (zz[6][1]) letter[index].artifact = atoi(zz[6] + 1);
+					if (zz[6][1]) letter[index].artifact = (IDX)atoi(zz[6] + 1);
 				}
 				else if (zz[6][0] == '!')
 				{
@@ -3692,7 +3692,7 @@ static errr parse_line_feature(char *buf)
 				}
 				else
 				{
-					letter[index].artifact = atoi(zz[6]);
+					letter[index].artifact = (IDX)atoi(zz[6]);
 				}
 				/* Fall through */
 			/* Ego-item */
@@ -3700,11 +3700,11 @@ static errr parse_line_feature(char *buf)
 				if (zz[5][0] == '*')
 				{
 					letter[index].random |= RANDOM_EGO;
-					if (zz[5][1]) letter[index].ego = atoi(zz[5] + 1);
+					if (zz[5][1]) letter[index].ego = (IDX)atoi(zz[5] + 1);
 				}
 				else
 				{
-					letter[index].ego = atoi(zz[5]);
+					letter[index].ego = (IDX)atoi(zz[5]);
 				}
 				/* Fall through */
 			/* Object */
@@ -3712,7 +3712,7 @@ static errr parse_line_feature(char *buf)
 				if (zz[4][0] == '*')
 				{
 					letter[index].random |= RANDOM_OBJECT;
-					if (zz[4][1]) letter[index].object = atoi(zz[4] + 1);
+					if (zz[4][1]) letter[index].object = (IDX)atoi(zz[4] + 1);
 				}
 				else if (zz[4][0] == '!')
 				{
@@ -3731,7 +3731,7 @@ static errr parse_line_feature(char *buf)
 				}
 				else
 				{
-					letter[index].object = atoi(zz[4]);
+					letter[index].object = (IDX)atoi(zz[4]);
 				}
 				/* Fall through */
 			/* Monster */
@@ -3739,7 +3739,7 @@ static errr parse_line_feature(char *buf)
 				if (zz[3][0] == '*')
 				{
 					letter[index].random |= RANDOM_MONSTER;
-					if (zz[3][1]) letter[index].monster = atoi(zz[3] + 1);
+					if (zz[3][1]) letter[index].monster = (IDX)atoi(zz[3] + 1);
 				}
 				else if (zz[3][0] == 'c')
 				{
@@ -3748,7 +3748,7 @@ static errr parse_line_feature(char *buf)
 				}
 				else
 				{
-					letter[index].monster = atoi(zz[3]);
+					letter[index].monster = (IDX)atoi(zz[3]);
 				}
 				/* Fall through */
 			/* Cave info */

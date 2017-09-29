@@ -6325,8 +6325,8 @@ static void display_group_list(int col, int row, int wid, int per_page,
 /* 
  * Move the cursor in a browser window 
  */
-static void browser_cursor(char ch, int *column, IDX *grp_cur, IDX grp_cnt, 
-						   IDX *list_cur, IDX list_cnt)
+static void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, 
+						   IDX *list_cur, int list_cnt)
 {
 	int d;
 	int col = *column;
@@ -7452,9 +7452,10 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int direct_f_idx, int *lighting_level)
 {
 	int i, len, max;
-	int grp_cur, grp_top, old_grp_cur;
+	IDX grp_cur, grp_top, old_grp_cur;
 	IDX feat_cur, feat_top;
-	int grp_cnt, grp_idx[100];
+	int grp_cnt;
+	IDX grp_idx[100];
 	int feat_cnt;
 	int *feat_idx;
 
@@ -8229,7 +8230,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 /*
  * Print all finished quests
  */
-void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
+void do_cmd_knowledge_quests_completed(FILE *fff, IDX quest_num[])
 {
 	int i;
 	int total = 0;
@@ -8237,7 +8238,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 	fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
 	for (i = 1; i < max_quests; i++)
 	{
-		int q_idx = quest_num[i];
+		IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
 		if (q_ptr->status == QUEST_STATUS_FINISHED &&
@@ -8253,7 +8254,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 /*
  * Print all failed quests
  */
-void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
+void do_cmd_knowledge_quests_failed(FILE *fff, IDX quest_num[])
 {
 	int i;
 	int total = 0;

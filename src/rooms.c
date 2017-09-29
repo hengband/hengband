@@ -6462,7 +6462,8 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
  */
 static void build_stores(int ltcy, int ltcx, int stores[], int n)
 {
-	int i, j, y, x;
+	int i, y, x;
+	IDX j;
 	ugbldg_type *cur_ugbldg;
 
 	for (i = 0; i < n; i++)

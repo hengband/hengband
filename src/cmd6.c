@@ -4583,7 +4583,9 @@ static int select_magic_eater(bool only_browse)
  */
 bool do_cmd_magic_eater(bool only_browse, bool powerful)
 {
-	int item, chance, level, k_idx;
+	OBJECT_SUBTYPE_VALUE item;
+	int chance, level;
+	IDX k_idx;
 	OBJECT_TYPE_VALUE tval;
 	OBJECT_SUBTYPE_VALUE sval;
 	bool use_charge = TRUE;
@@ -4603,7 +4605,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	}
 	if (item >= EATER_EXT*2) {tval = TV_ROD;sval = item - EATER_EXT*2;}
 	else if (item >= EATER_EXT) {tval = TV_WAND;sval = item - EATER_EXT;}
-	else {tval = TV_STAFF;sval = item;}
+	else {tval = TV_STAFF; sval = item;}
 	k_idx = lookup_kind(tval, sval);
 
 	level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
