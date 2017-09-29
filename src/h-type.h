@@ -119,6 +119,7 @@ typedef byte DISCOUNT_RATE; /*!< ゲーム中の値引き率の型を定義 */
 
 typedef s16b PLAYER_LEVEL;  /*!< ゲーム中のプレイヤーレベルの型を定義 */
 typedef int DIRECTION;		/*!< ゲーム中の方角の型定義 */
+typedef s32b EXP;			/*!< ゲーム中の主経験値の型定義 */
 typedef s16b SUB_EXP;		/*!< ゲーム中の副経験値の型定義 */
 
 typedef byte OBJECT_TYPE_VALUE;    /*!< ゲーム中のアイテム主分類の型定義 */

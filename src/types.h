@@ -694,9 +694,9 @@ struct quest_type
 	s16b type;              /*!< クエストの種別 / The quest type */
 
 	char name[60];          /*!< クエスト名 / Quest name */
-	s16b level;             /*!< 処理階層 / Dungeon level */
-	s16b r_idx;             /*!< クエスト対象のモンスターID / Monster race */
-
+	DEPTH level;             /*!< 処理階層 / Dungeon level */
+	IDX r_idx;             /*!< クエスト対象のモンスターID / Monster race */
+	   
 	s16b cur_num;           /*!< 撃破したモンスターの数 / Number killed */
 	s16b max_num;           /*!< 求められるモンスターの撃破数 / Number required */
 
@@ -980,10 +980,10 @@ struct player_type
 
 	PRICE au;			/* Current Gold */
 
-	s32b max_max_exp;	/* Max max experience (only to calculate score) */
-	s32b max_exp;		/* Max experience */
-	s32b exp;			/* Cur experience */
-	u32b exp_frac;		/* Cur exp frac (times 2^16) */
+	EXP max_max_exp;	/* Max max experience (only to calculate score) */
+	EXP max_exp;		/* Max experience */
+	EXP exp;			/* Cur experience */
+	EXP exp_frac;		/* Cur exp frac (times 2^16) */
 
 	PLAYER_LEVEL lev;			/* Level */
 

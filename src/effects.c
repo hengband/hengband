@@ -4328,7 +4328,7 @@ void do_poly_self(void)
 
 		do
 		{
-			new_race = randint0(MAX_RACES);
+			new_race = (CHARACTER_IDX)randint0(MAX_RACES);
 		}
 		while ((new_race == p_ptr->prace) || (new_race == RACE_ANDROID));
 

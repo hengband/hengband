@@ -2714,7 +2714,7 @@ errr parse_e_info(char *buf, header *head)
 
 		/* Save the values */
 		e_ptr->level = level;
-		e_ptr->rarity = rarity;
+		e_ptr->rarity = (RARITY)rarity;
 		/* e_ptr->weight = wgt; */
 		e_ptr->cost = cost;
 	}
@@ -3617,7 +3617,7 @@ struct dungeon_grid
 	int		object;			/* Object */
 	int		ego;			/* Ego-Item */
 	int		artifact;		/* Artifact */
-	int		trap;			/* Trap */
+	IDX		trap;			/* Trap */
 	int		cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
 	int		special;		/* Reserved for special terrain info */
 	int		random;			/* Number of the random effect */
@@ -4172,7 +4172,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			{
 				if (a_info[artifact_index].cur_num)
 				{
-					int k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
+					IDX k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
 					object_type forge;
 					object_type *q_ptr = &forge;
 
@@ -4234,8 +4234,8 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				q_ptr->cur_num = atoi(zz[4]);
 				q_ptr->max_num = atoi(zz[5]);
 				q_ptr->level   = atoi(zz[6]);
-				q_ptr->r_idx   = atoi(zz[7]);
-				q_ptr->k_idx   = atoi(zz[8]);
+				q_ptr->r_idx   = (IDX)atoi(zz[7]);
+				q_ptr->k_idx   = (IDX)atoi(zz[8]);
 				q_ptr->dungeon = atoi(zz[9]);
 
 				if (num > 10)
@@ -4260,7 +4260,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 				for (idx = 2; idx < num; idx++)
 				{
-					int a_idx = atoi(zz[idx]);
+					IDX a_idx = (IDX)atoi(zz[idx]);
 					if (a_idx < 1) continue;
 					if (a_info[a_idx].cur_num > 0) continue;
 					count++;

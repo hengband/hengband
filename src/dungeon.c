@@ -631,7 +631,7 @@ static void pattern_teleport(void)
 		sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), min_level, max_level);
 
 		/* Default */
-		sprintf(tmp_val, "%d", (DEPTH)dun_level);
+		sprintf(tmp_val, "%d", (int)dun_level);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 10)) return;
@@ -2973,7 +2973,7 @@ static void process_world_aux_recharge(void)
 		{
 			/* Determine how many rods are charging. */
 			TIME_EFFECT temp = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
-			if (temp > o_ptr->number) temp = o_ptr->number;
+			if (temp > o_ptr->number) temp = (TIME_EFFECT)o_ptr->number;
 
 			/* Decrease timeout by that number. */
 			o_ptr->timeout -= temp;

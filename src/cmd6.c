@@ -4279,7 +4279,8 @@ static int select_magic_eater(bool only_browse)
 		if (request_list || use_menu)
 		{
 			byte y, x = 0;
-			int ctr, chance;
+			OBJECT_SUBTYPE_VALUE ctr;
+			int chance;
 			IDX k_idx;
 			char dummy[80];
 			POSITION x1, y1;

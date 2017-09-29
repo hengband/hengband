@@ -644,10 +644,10 @@ extern void player_outfit(void);
 extern void dump_yourself(FILE *fff);
 
 /* cave.c */
-extern int distance(int y1, int x1, int y2, int x2);
-extern bool is_trap(int feat);
+extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+extern bool is_trap(IDX feat);
 extern bool is_known_trap(cave_type *c_ptr);
-extern bool is_closed_door(int feat);
+extern bool is_closed_door(IDX feat);
 extern bool is_hidden_door(cave_type *c_ptr);
 extern bool los(int y1, int x1, int y2, int x2);
 extern void update_local_illumination(int y, int x);

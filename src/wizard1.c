@@ -234,7 +234,7 @@ static grouper group_item[] =
  * @param k ベースアイテムID
  * @return なし
  */
-static void kind_info(char *buf, char *dam, char *wgt, char *chance, int *lev, s32b *val, int k)
+static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, s32b *val, IDX k)
 {
 	object_type forge;
 	object_type *q_ptr;
@@ -1680,7 +1680,8 @@ static bool make_fake_artifact(object_type *o_ptr, IDX name1)
  */
 static void spoil_artifact(cptr fname)
 {
-	int i, j;
+	int i;
+	IDX j;
 
 	object_type forge;
 	object_type *q_ptr;

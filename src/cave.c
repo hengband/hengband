@@ -31,18 +31,18 @@ static int feat_priority; /*!< マップ縮小表示時に表示すべき地形�
  * @param x2 2点目のx座標
  * @return 2点間の距離
  */
-int distance (int y1, int x1, int y2, int x2)
+POSITION distance (POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	int dy = (y1 > y2) ? (y1 - y2) : (y2 - y1);
-	int dx = (x1 > x2) ? (x1 - x2) : (x2 - x1);
+	POSITION dy = (y1 > y2) ? (y1 - y2) : (y2 - y1);
+	POSITION dx = (x1 > x2) ? (x1 - x2) : (x2 - x1);
 
 	/* Squared distance */
-	int target = (dy * dy) + (dx * dx);
+	POSITION target = (dy * dy) + (dx * dx);
 
 	/* Approximate distance: hypot(dy,dx) = max(dy,dx) + min(dy,dx) / 2 */
-	int d = (dy > dx) ? (dy + (dx>>1)) : (dx + (dy>>1));
+	POSITION d = (dy > dx) ? (dy + (dx>>1)) : (dx + (dy>>1));
 
-	int err;
+	POSITION err;
 
 	/* Simple case */
 	if (!dy || !dx) return d;
@@ -67,7 +67,7 @@ int distance (int y1, int x1, int y2, int x2)
  * @param feat 地形情報のID
  * @return 罠持ちの地形ならばTRUEを返す。
  */
-bool is_trap(int feat)
+bool is_trap(IDX feat)
 {
 	return have_flag(f_info[feat].flags, FF_TRAP);
 }
@@ -90,7 +90,7 @@ bool is_known_trap(cave_type *c_ptr)
  * @param feat 地形情報のID
  * @return 閉じたドアのある地形ならばTRUEを返す。
  */
-bool is_closed_door(int feat)
+bool is_closed_door(IDX feat)
 {
 	feature_type *f_ptr = &f_info[feat];
 

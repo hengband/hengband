@@ -6714,11 +6714,11 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int direct_r_idx)
 {
 	int i, len, max;
-	int grp_cur, grp_top, old_grp_cur;
-	int mon_cur, mon_top;
-	int grp_cnt, grp_idx[100];
-	int mon_cnt;
-	s16b *mon_idx;
+	IDX grp_cur, grp_top, old_grp_cur;
+	IDX mon_cur, mon_top;
+	IDX grp_cnt, grp_idx[100];
+	IDX mon_cnt;
+	IDX *mon_idx;
 
 	int column = 0;
 	bool flag;
@@ -6728,7 +6728,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int d
 	byte attr_top = 0, char_left = 0;
 
 	int browser_rows;
-	int wid, hgt;
+	POSITION wid, hgt;
 
 	byte mode;
 
@@ -7091,7 +7091,7 @@ static void desc_obj_fake(IDX k_idx)
 static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx)
 {
 	int i, len, max;
-	int grp_cur, grp_top, old_grp_cur;
+	IDX grp_cur, grp_top, old_grp_cur;
 	IDX object_old, object_cur, object_top;
 	int grp_cnt, grp_idx[100];
 	int object_cnt;
@@ -8092,13 +8092,8 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 				}
 
 				/* Print the quest info */
-#ifdef JP
-				sprintf(tmp_str, "  %s (危険度:%d階相当)%s\n",
-					quest[i].name, quest[i].level, note);
-#else
-				sprintf(tmp_str, "  %s (Danger level: %d)%s\n",
-					quest[i].name, quest[i].level, note);
-#endif
+				sprintf(tmp_str, _("  %s (危険度:%d階相当)%s\n", "  %s (Danger level: %d)%s\n"),
+					quest[i].name, (int)quest[i].level, note);
 
 				fputs(tmp_str, fff);
 
