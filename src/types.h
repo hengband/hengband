@@ -68,14 +68,14 @@ struct feature_type
 {
 	STR_OFFSET name;                /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
 	STR_OFFSET text;                /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
-	s16b tag;                 /*!< 地形特性タグ参照のためのネームバッファオフセット値 /  Tag (offset) */
+	STR_OFFSET tag;                 /*!< 地形特性タグ参照のためのネームバッファオフセット値 /  Tag (offset) */
 
-	s16b mimic;               /*!< 未確定時の外形地形ID / Feature to mimic */
+	IDX mimic;               /*!< 未確定時の外形地形ID / Feature to mimic */
 
-	u32b flags[FF_FLAG_SIZE]; /*!< 地形の基本特性ビット配列 / Flags */
+	BIT_FLAGS flags[FF_FLAG_SIZE]; /*!< 地形の基本特性ビット配列 / Flags */
 
 	u16b priority;            /*!< 縮小表示で省略する際の表示優先度 / Map priority */
-	s16b destroyed;           /*!< *破壊*に巻き込まれた時の地形移行先(未実装？) / Default destroyed state */
+	IDX destroyed;           /*!< *破壊*に巻き込まれた時の地形移行先(未実装？) / Default destroyed state */
 
 	feature_state state[MAX_FEAT_STATES]; /*!< feature_state テーブル */
 
@@ -415,10 +415,10 @@ typedef struct skill_table skill_table;
 
 struct skill_table
 {
-	s16b w_start[5][64];	  /* start weapon exp */
-	s16b w_max[5][64];        /* max weapon exp */
-	s16b s_start[10];	  /* start skill */
-	s16b s_max[10];           /* max skill */
+	SUB_EXP w_start[5][64];	  /* start weapon exp */
+	SUB_EXP w_max[5][64];        /* max weapon exp */
+	SUB_EXP s_start[10];	  /* start skill */
+	SUB_EXP s_max[10];           /* max skill */
 };
 
 
@@ -545,7 +545,8 @@ struct object_type
 
 	ARMOUR_CLASS ac;			/* Normal AC */
 
-	byte dd, ds;		/* Damage dice/sides */
+	DICE_NUMBER dd;
+	DICE_SID ds;		/* Damage dice/sides */
 
 	TIME_EFFECT timeout;	/* Timeout Counter */
 
@@ -558,9 +559,8 @@ struct object_type
 
 	byte feeling;          /* Game generated inscription number (eg, pseudo-id) */
 
-	u32b art_flags[TR_FLAG_SIZE];        /* Extra Flags for ego and artifacts */
-
-	u32b curse_flags;        /* Flags for curse */
+	BIT_FLAGS art_flags[TR_FLAG_SIZE];        /* Extra Flags for ego and artifacts */
+	BIT_FLAGS curse_flags;        /* Flags for curse */
 
 	IDX next_o_idx;	/* Next object in stack (if any) */
 	IDX held_m_idx;	/* Monster holding us (if any) */
@@ -600,8 +600,8 @@ struct monster_type
 
 	POSITION cdis;		/* Current dis from player */
 
-	byte mflag;		/* Extra monster flags */
-	byte mflag2;		/* Extra monster flags */
+	BIT_FLAGS mflag;		/* Extra monster flags */
+	BIT_FLAGS mflag2;	/* Extra monster flags */
 
 	bool ml;		/* Monster is "visible" */
 

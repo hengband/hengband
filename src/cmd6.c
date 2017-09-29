@@ -4134,11 +4134,12 @@ void do_cmd_use(void)
  */
 static int select_magic_eater(bool only_browse)
 {
-	int ext=0;
+	OBJECT_SUBTYPE_VALUE ext = 0;
 	char choice;
 	bool flag, request_list;
 	OBJECT_TYPE_VALUE tval = 0;
-	int             ask = TRUE, i = 0;
+	int             ask = TRUE;
+	OBJECT_SUBTYPE_VALUE i = 0;
 	char            out_val[160];
 
 	int menu_line = (use_menu ? 1 : 0);

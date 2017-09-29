@@ -4326,8 +4326,11 @@ static void dump_aux_class_special(FILE *fff)
 	else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 	{
 		char s[EATER_EXT][MAX_NLEN];
-		int tval, ext, k_idx;
-		int i, magic_num;
+		OBJECT_TYPE_VALUE tval;
+		int ext;
+		IDX k_idx;
+		OBJECT_SUBTYPE_VALUE i;
+		int magic_num;
 
 		fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
 
@@ -4624,10 +4627,10 @@ static void dump_aux_monsters(FILE *fff)
 {
 	/* Monsters slain */
 
-	int k;
+	IDX k;
 	long uniq_total = 0;
 	long norm_total = 0;
-	s16b *who;
+	IDX *who;
 
 	/* Sort by monster level */
 	u16b why = 2;

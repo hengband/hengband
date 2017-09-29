@@ -2190,7 +2190,7 @@ static void get_questinfo(IDX questnum, bool do_init)
 	p_ptr->inside_quest = old_quest;
 
 	/* Print the quest info */
-	sprintf(tmp_str, _("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), quest[questnum].level);
+	sprintf(tmp_str, _("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)quest[questnum].level);
 
 	prt(tmp_str, 5, 0);
 

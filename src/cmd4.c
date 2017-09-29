@@ -517,7 +517,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 			fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n",
 						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note,
 						   _(d_name + d_info[num].name, (int)max_dlv[num]),
-						   _(max_dlv[num], d_name + d_info[num].name));
+						   _((int)max_dlv[num], d_name + d_info[num].name));
 			break;
 		}
 		case NIKKI_STAIR:
@@ -541,7 +541,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 			if (!num)
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"), 
 						hour, min, note_level, _(d_name+d_info[dungeon_type].name, (int)max_dlv[dungeon_type]), 
-											   _(max_dlv[dungeon_type], d_name+d_info[dungeon_type].name));
+											   _((int)max_dlv[dungeon_type], d_name+d_info[dungeon_type].name));
 			else
 				fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
 			break;
@@ -6713,7 +6713,8 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
  */
 static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int direct_r_idx)
 {
-	int i, len, max;
+	IDX i;
+	int len, max;
 	IDX grp_cur, grp_top, old_grp_cur;
 	IDX mon_cur, mon_top;
 	IDX grp_cnt, grp_idx[100];
@@ -6971,7 +6972,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int d
 /*
  * Display the objects in a group.
  */
-static void display_object_list(int col, int row, int per_page, int object_idx[],
+static void display_object_list(int col, int row, int per_page, IDX object_idx[],
 	int object_cur, int object_top, bool visual_only)
 {
 	int i;
@@ -7093,9 +7094,10 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 	int i, len, max;
 	IDX grp_cur, grp_top, old_grp_cur;
 	IDX object_old, object_cur, object_top;
-	int grp_cnt, grp_idx[100];
+	int grp_cnt;
+	IDX grp_idx[100];
 	int object_cnt;
-	int *object_idx;
+	IDX *object_idx;
 
 	int column = 0;
 	bool flag;
@@ -8128,13 +8130,13 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 					{
 #ifdef JP
 						sprintf(rand_tmp_str,"  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n",
-							quest[i].name, quest[i].level,
+							quest[i].name, (int)quest[i].level,
 							quest[i].max_num, name, quest[i].max_num - quest[i].cur_num);
 #else
 						plural_aux(name);
 
 						sprintf(rand_tmp_str,"  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n",
-							quest[i].name, quest[i].level,
+							quest[i].name, (idx)quest[i].level,
 							quest[i].max_num, name, quest[i].cur_num);
 #endif
 					}
@@ -8197,7 +8199,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 				_("  %-35s (%3d階)            -   不戦勝 - %s\n",
 				  "  %-35s (Dungeon level: %3d) - Unearned - %s\n") ,
 				r_name+r_info[q_ptr->r_idx].name,
-				q_ptr->level, playtime_str);
+				(int)q_ptr->level, playtime_str);
 		}
 		else
 		{
@@ -8205,7 +8207,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 				_("  %-35s (%3d階)            - レベル%2d - %s\n",
 				  "  %-35s (Dungeon level: %3d) - level %2d - %s\n") ,
 				r_name+r_info[q_ptr->r_idx].name,
-				q_ptr->level,
+				(int)q_ptr->level,
 				q_ptr->complev,
 				playtime_str);
 		}
@@ -8216,7 +8218,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 		sprintf(tmp_str,
 			_("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n",
 			  "  %-35s (Danger  level: %3d) - level %2d - %s\n") ,
-			q_ptr->name, q_ptr->level, q_ptr->complev, playtime_str);
+			q_ptr->name, (int)q_ptr->level, q_ptr->complev, playtime_str);
 	}
 
 	fputs(tmp_str, fff);

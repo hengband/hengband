@@ -3164,7 +3164,7 @@ errr parse_r_info(char *buf, header *head)
 	{
 		int val;
 		if (3 != sscanf(buf+2, "%d", &val)) return (1);
-		r_ptr->arena_ratio = val;
+		r_ptr->arena_ratio = (PERCENTAGE)val;
 	}
 
 	/* Oops */
@@ -3613,10 +3613,10 @@ typedef struct dungeon_grid dungeon_grid;
 struct dungeon_grid
 {
 	IDX		feature;		/* Terrain feature */
-	int		monster;		/* Monster */
-	int		object;			/* Object */
-	int		ego;			/* Ego-Item */
-	int		artifact;		/* Artifact */
+	IDX		monster;		/* Monster */
+	IDX		object;			/* Object */
+	IDX		ego;			/* Ego-Item */
+	IDX		artifact;		/* Artifact */
 	IDX		trap;			/* Trap */
 	int		cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
 	int		special;		/* Reserved for special terrain info */
