@@ -2048,7 +2048,7 @@ void do_cmd_read_scroll(void)
  * @param known 判明済ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, bool known)
+static int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
 {
 	int k;
 	int ident = FALSE;
@@ -2575,7 +2575,7 @@ void do_cmd_use_staff(void)
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-static int wand_effect(int sval, int dir, bool powerful, bool magic)
+static int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
 {
 	int ident = FALSE;
 	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
@@ -3050,7 +3050,7 @@ void do_cmd_aim_wand(void)
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-static int rod_effect(int sval, int dir, bool *use_charge, bool powerful, bool magic)
+static int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerful, bool magic)
 {
 	int ident = FALSE;
 	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;

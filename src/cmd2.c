@@ -3487,7 +3487,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 				int now_exp = p_ptr->weapon_exp[0][j_ptr->sval];
 				if (now_exp < s_info[p_ptr->pclass].w_max[0][j_ptr->sval])
 				{
-					int amount = 0;
+					SUB_EXP amount = 0;
 					if (now_exp < WEAPON_EXP_BEGINNER) amount = 80;
 					else if (now_exp < WEAPON_EXP_SKILLED) amount = 25;
 					else if ((now_exp < WEAPON_EXP_EXPERT) && (p_ptr->lev > 19)) amount = 10;

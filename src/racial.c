@@ -264,7 +264,7 @@ static bool do_cmd_archer(void)
 bool gain_magic(void)
 {
 	int item;
-	int pval;
+	PARAMETER_VALUE pval;
 	int ext = 0;
 	cptr q, s;
 	object_type *o_ptr;

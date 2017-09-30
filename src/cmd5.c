@@ -18,7 +18,7 @@
  * @param tval 魔法書のtval
  * @return 領域魔法の技能名称を保管した文字列ポインタ
  */
-cptr spell_category_name(int tval)
+cptr spell_category_name(OBJECT_TYPE_VALUE tval)
 {
 	switch (tval)
 	{
@@ -64,7 +64,7 @@ bool select_the_force = FALSE;
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm)
+static int get_spell(int *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int use_realm)
 {
 	int         i;
 	int         spell = -1;

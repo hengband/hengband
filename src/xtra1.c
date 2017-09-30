@@ -3116,7 +3116,7 @@ s16b calc_num_fire(object_type *o_ptr)
 	int extra_shots = 0;
 	int i;
 	int num = 0;
-	int tval_ammo = bow_tval_ammo(o_ptr);
+	OBJECT_TYPE_VALUE tval_ammo = bow_tval_ammo(o_ptr);
 	object_type *q_ptr;
 	u32b flgs[TR_FLAG_SIZE];
 	
@@ -5428,8 +5428,8 @@ void calc_bonuses(void)
 	{
 		if (buki_motteruka(INVEN_RARM+i))
 		{
-			int tval = inventory[INVEN_RARM+i].tval - TV_WEAPON_BEGIN;
-			int sval = inventory[INVEN_RARM+i].sval;
+			OBJECT_TYPE_VALUE tval = inventory[INVEN_RARM+i].tval - TV_WEAPON_BEGIN;
+			OBJECT_SUBTYPE_VALUE sval = inventory[INVEN_RARM+i].sval;
 
 			p_ptr->to_h[i] += (p_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
 			p_ptr->dis_to_h[i] += (p_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;

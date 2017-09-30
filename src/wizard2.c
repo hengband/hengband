@@ -749,7 +749,7 @@ static int wiz_create_itemtype(void)
 {
 	int i, num, max_num;
 	int col, row;
-	int tval;
+	OBJECT_TYPE_VALUE tval;
 
 	cptr tval_desc;
 	char ch;

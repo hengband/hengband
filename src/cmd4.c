@@ -3384,7 +3384,7 @@ void do_cmd_visuals(void)
 		case '4':
 		{
 			static cptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
-			static int r = 0;
+			static IDX r = 0;
 
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
@@ -4645,7 +4645,8 @@ static cptr feature_group_text[] =
  */
 static int collect_features(int grp_cur, IDX *feat_idx, BIT_FLAGS8 mode)
 {
-	int i, feat_cnt = 0;
+	IDX i;
+	int feat_cnt = 0;
 
 	/* Unused;  There is a single group. */
 	(void)grp_cur;

@@ -386,8 +386,10 @@ static void rd_item_old(object_type *o_ptr)
 
 	rd_s16b(&o_ptr->ac);
 
-	rd_byte(&o_ptr->dd);
-	rd_byte(&o_ptr->ds);
+	rd_byte(&tmp8u);
+	o_ptr->dd = tmp8u;
+	rd_byte(&tmp8u);
+	o_ptr->ds = tmp8u;
 
 	rd_byte(&o_ptr->ident);
 
@@ -674,9 +676,17 @@ static void rd_item(object_type *o_ptr)
 	if (flags & SAVE_ITEM_AC) rd_s16b(&o_ptr->ac);
 	else o_ptr->ac = 0;
 
-	if (flags & SAVE_ITEM_DD) rd_byte(&o_ptr->dd);
+	if (flags & SAVE_ITEM_DD)
+	{
+		 rd_byte(&tmp8u);
+		 o_ptr->dd = tmp8u;
+	}
 	else o_ptr->dd = 0;
-	if (flags & SAVE_ITEM_DS) rd_byte(&o_ptr->ds);
+	if (flags & SAVE_ITEM_DS)
+	{
+		rd_byte(&tmp8u);
+		o_ptr->ds = tmp8u;
+	}
 	else o_ptr->ds = 0;
 
 	if (flags & SAVE_ITEM_IDENT) rd_byte(&o_ptr->ident);
@@ -3364,6 +3374,7 @@ static errr rd_savefile_new_aux(void)
 
 	byte tmp8u;
 	u16b tmp16u;
+	s16b tmp16s;
 	u32b tmp32u;
 
 #ifdef VERIFY_CHECKSUMS
@@ -3531,7 +3542,8 @@ static errr rd_savefile_new_aux(void)
 				quest_type* const q_ptr = &quest[i];
 				
 				rd_s16b(&q_ptr->status);
-				rd_s16b(&q_ptr->level);
+				rd_s16b(&tmp16s);
+				q_ptr->level = tmp16s;
 
 				if (z_older_than(11, 0, 6))
 				{

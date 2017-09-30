@@ -600,8 +600,8 @@ struct monster_type
 
 	POSITION cdis;		/* Current dis from player */
 
-	BIT_FLAGS mflag;		/* Extra monster flags */
-	BIT_FLAGS mflag2;	/* Extra monster flags */
+	BIT_FLAGS8 mflag;	/* Extra monster flags */
+	BIT_FLAGS8 mflag2;	/* Extra monster flags */
 
 	bool ml;		/* Monster is "visible" */
 

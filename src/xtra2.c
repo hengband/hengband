@@ -5535,7 +5535,7 @@ s16b gain_energy(void)
 /*
  * Return bow energy 
  */
-s16b bow_energy(int sval)
+s16b bow_energy(OBJECT_SUBTYPE_VALUE sval)
 {
 	int energy = 100;
 
@@ -5592,7 +5592,7 @@ s16b bow_energy(int sval)
 /*
  * Return bow tmul
  */
-int bow_tmul(int sval)
+int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
 {
 	int tmul = 0;
 

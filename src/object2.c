@@ -7721,7 +7721,8 @@ static void drain_essence(void)
 	int i, item;
 	int dec = 4;
 	bool observe = FALSE;
-	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2, old_timeout;
+	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
+	TIME_EFFECT old_timeout;
 	u32b old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
 	object_type *o_ptr;
 	cptr q, s;
@@ -7828,7 +7829,7 @@ static void drain_essence(void)
 	for (i = 0; essence_info[i].add_name; i++)
 	{
 		essence_type *es_ptr = &essence_info[i];
-		int pval = 0;
+		PARAMETER_VALUE pval = 0;
 
 		if (es_ptr->add < TR_FLAG_MAX && is_pval_flag(es_ptr->add) && old_pval)
 			pval = (have_flag(new_flgs, es_ptr->add)) ? old_pval - o_ptr->pval : old_pval;
@@ -8422,14 +8423,14 @@ static void add_essence(int mode)
 			{
 				char tmp[80];
 				char tmp_val[160];
-				int pval;
-				int limit = MIN(5, p_ptr->magic_num1[es_ptr->essence]/es_ptr->value);
+				PARAMETER_VALUE pval;
+				PARAMETER_VALUE limit = MIN(5, p_ptr->magic_num1[es_ptr->essence]/es_ptr->value);
 
 				sprintf(tmp, _("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit);
 				strcpy(tmp_val, "1");
 
 				if (!get_string(tmp, tmp_val, 1)) return;
-				pval = atoi(tmp_val);
+				pval = (PARAMETER_VALUE)atoi(tmp_val);
 				if (pval > limit) pval = limit;
 				else if (pval < 1) pval = 1;
 				o_ptr->pval += pval;

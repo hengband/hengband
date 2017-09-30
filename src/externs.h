@@ -792,7 +792,7 @@ extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
 
 /* cmd5.c */
-extern cptr spell_category_name(int tval);
+extern cptr spell_category_name(OBJECT_TYPE_VALUE tval);
 extern void do_cmd_browse(void);
 extern void do_cmd_study(void);
 extern void do_cmd_cast(void);
@@ -1513,8 +1513,8 @@ extern void do_poly_wounds(void);
 extern void change_race(CHARACTER_IDX new_race, cptr effect_msg);
 extern HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear);
 extern s16b gain_energy(void);
-extern s16b bow_energy(int sval);
-extern int bow_tmul(int sval);
+extern s16b bow_energy(OBJECT_SUBTYPE_VALUE sval);
+extern int bow_tmul(OBJECT_SUBTYPE_VALUE sval);
 extern cptr your_alignment(void);
 extern int weapon_exp_level(int weapon_exp);
 extern int riding_exp_level(int riding_exp);
