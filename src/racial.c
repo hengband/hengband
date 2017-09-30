@@ -603,7 +603,7 @@ typedef struct power_desc_type power_desc_type;
 struct power_desc_type
 {
 	char name[40];
-	int  level;
+	PLAYER_LEVEL level;
 	int  cost;
 	int  stat;
 	int  fail;
@@ -618,7 +618,7 @@ struct power_desc_type
  */
 static int racial_chance(power_desc_type *pd_ptr)
 {
-	s16b min_level  = pd_ptr->level;
+	PLAYER_LEVEL min_level  = pd_ptr->level;
 	int  difficulty = pd_ptr->fail;
 
 	int i;

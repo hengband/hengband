@@ -5154,11 +5154,12 @@ bool brand_bolts(void)
  * @details
  * Note that this function is one of the more "dangerous" ones...
  */
-static s16b poly_r_idx(int r_idx)
+static IDX poly_r_idx(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	int i, r, lev1, lev2;
+	int i, r;
+	DEPTH lev1, lev2;
 
 	/* Hack -- Uniques/Questors never polymorph */
 	if ((r_ptr->flags1 & RF1_UNIQUE) ||

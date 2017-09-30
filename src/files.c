@@ -4425,13 +4425,13 @@ static void dump_aux_class_special(FILE *fff)
 static void dump_aux_quest(FILE *fff)
 {
 	int i;
-	int *quest_num;
+	IDX *quest_num;
 	int dummy;
 
 	fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
 
 	/* Allocate Memory */
-	C_MAKE(quest_num, max_quests, int);
+	C_MAKE(quest_num, max_quests, IDX);
 
 	/* Sort by compete level */
 	for (i = 1; i < max_quests; i++) quest_num[i] = i;
@@ -4447,7 +4447,7 @@ static void dump_aux_quest(FILE *fff)
 	fputc('\n', fff);
 
 	/* Free Memory */
-	C_KILL(quest_num, max_quests, int);
+	C_KILL(quest_num, max_quests, IDX);
 }
 
 

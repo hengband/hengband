@@ -1293,7 +1293,7 @@ extern void store_init(int town_num, int store_num);
 extern void move_to_black_market(object_type * o_ptr);
 
 /* bldg.c */
-extern bool get_nightmare(int r_idx);
+extern bool get_nightmare(IDX r_idx);
 extern void battle_monsters(void);
 extern void do_cmd_bldg(void);
 extern void do_cmd_quest(void);
@@ -1301,7 +1301,7 @@ extern void quest_discovery(int q_idx);
 extern IDX quest_number(DEPTH level);
 extern IDX random_quest_number(DEPTH level);
 extern bool tele_town(void);
-extern s16b calc_crit_ratio_shot(int plus_ammo,int plus_bow);
+extern HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow);
 extern s16b calc_expect_crit_shot(int weight, int plus_ammo,int plus_bow, int dam);
 extern s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari);
 

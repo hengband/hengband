@@ -2027,7 +2027,7 @@ static bool kankin(void)
  * @param r_idx 判定対象となるモンスターのＩＤ
  * @return 悪夢の元凶となり得るか否か。
  */
-bool get_nightmare(int r_idx)
+bool get_nightmare(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2323,9 +2323,9 @@ static void town_history(void)
  * @return ダメージ期待値
  * @note 基本ダメージ量と重量はこの部位では計算に加わらない。
  */
-s16b calc_crit_ratio_shot(int plus_ammo, int plus_bow)
+HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow)
 {
-	int i;
+	HIT_POINT i;
 	object_type *j_ptr =  &inventory[INVEN_BOW];
 	
 	/* Extract "shot" power */

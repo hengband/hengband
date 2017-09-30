@@ -1675,10 +1675,10 @@ errr parse_f_info(char *buf, header *head)
 		}
 
 		/* Default "mimic" */
-		f_ptr->mimic = i;
+		f_ptr->mimic = (IDX)i;
 
 		/* Default "destroyed state" -- if not specified */
-		f_ptr->destroyed = i;
+		f_ptr->destroyed = (IDX)i;
 
 		/* Default "states" */
 		for (i = 0; i < MAX_FEAT_STATES; i++) f_ptr->state[i].action = FF_FLAG_MAX;

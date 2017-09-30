@@ -201,8 +201,8 @@ void get_table_sindarin(char *out_string)
  */
 static void shuffle_flavors(byte tval)
 {
-	s16b *k_idx_list;
-	int k_idx_list_num = 0;
+	IDX *k_idx_list;
+	IDX k_idx_list_num = 0;
 	int i;
 
 	/* Allocate an array for a list of k_idx */

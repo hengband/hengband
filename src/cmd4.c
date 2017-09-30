@@ -7792,7 +7792,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int d
 	}
 
 	/* Free the "feat_idx" array */
-	C_KILL(feat_idx, max_f_idx, int);
+	C_KILL(feat_idx, max_f_idx, IDX);
 }
 
 
@@ -8176,7 +8176,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 	if (is_fixed_quest_idx(q_idx))
 	{
 		/* Set the quest number temporary */
-		int old_quest = p_ptr->inside_quest;
+		IDX old_quest = p_ptr->inside_quest;
 
 		p_ptr->inside_quest = q_idx;
 
@@ -8299,13 +8299,8 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 			total++;
 
 			/* Print the quest info */
-#ifdef JP
-			sprintf(tmp_str, "  %s (%d階, %s)\n",
-				quest[i].name, quest[i].level, r_name+r_info[quest[i].r_idx].name);
-#else
-			sprintf(tmp_str, "  %s (%d, %s)\n",
-				quest[i].name, quest[i].level, r_name+r_info[quest[i].r_idx].name);
-#endif
+			sprintf(tmp_str, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"),
+				quest[i].name, (int)quest[i].level, r_name+r_info[quest[i].r_idx].name);
 			fputs(tmp_str, fff);
 		}
 	}
@@ -8359,7 +8354,7 @@ static void do_cmd_knowledge_quests(void)
 	}
 
 	/* Allocate Memory */
-	C_MAKE(quest_num, max_quests, int);
+	C_MAKE(quest_num, max_quests, IDX);
 
 	/* Sort by compete level */
 	for (i = 1; i < max_quests; i++) quest_num[i] = i;
@@ -8389,7 +8384,7 @@ static void do_cmd_knowledge_quests(void)
 	fd_kill(file_name);
 
 	/* Free Memory */
-	C_KILL(quest_num, max_quests, int);
+	C_KILL(quest_num, max_quests, IDX);
 }
 
 
