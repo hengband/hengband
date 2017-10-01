@@ -222,7 +222,7 @@ void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
  * @param t_idx 目標のモンスターID
  * @return 魔力消去を使うべきならばTRUEを変えす。
  */
-static bool dispel_check_monster(int m_idx, int t_idx)
+static bool dispel_check_monster(IDX m_idx, IDX t_idx)
 {
 	monster_type *t_ptr = &m_list[t_idx];
 

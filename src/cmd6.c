@@ -2585,7 +2585,7 @@ static int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool m
 	if (sval == SV_WAND_WONDER)
 	{
 		int vir = virtue_number(V_CHANCE);
-		sval = randint0(SV_WAND_WONDER);
+		sval = (OBJECT_SUBTYPE_VALUE)randint0(SV_WAND_WONDER);
 
 		if (vir)
 		{

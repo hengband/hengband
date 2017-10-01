@@ -3477,7 +3477,7 @@ void do_cmd_visuals(void)
 		case '5':
 		{
 			static cptr choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
-			static int k = 0;
+			static IDX k = 0;
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
@@ -5619,7 +5619,7 @@ static void do_cmd_knowledge_uniques(void)
 {
 	int i, k, n = 0;
 	u16b why = 2;
-	s16b *who;
+	IDX *who;
 
 	FILE *fff;
 
@@ -7452,7 +7452,7 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 /*
  * Interact with feature visuals.
  */
-static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int direct_f_idx, int *lighting_level)
+static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, int *lighting_level)
 {
 	IDX i;
 	int len, max;
@@ -7486,7 +7486,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int d
 	browser_rows = hgt - 8;
 
 	/* Allocate the "feat_idx" array */
-	C_MAKE(feat_idx, max_f_idx, int);
+	C_MAKE(feat_idx, max_f_idx, IDX);
 
 	max = 0;
 	grp_cnt = 0;
@@ -8342,7 +8342,8 @@ static void do_cmd_knowledge_quests(void)
 	FILE *fff;
 	char file_name[1024];
 	IDX *quest_num;
-	int dummy, i;
+	int dummy;
+	IDX i;
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);

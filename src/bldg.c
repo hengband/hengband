@@ -3294,7 +3294,7 @@ static int repair_broken_weapon_aux(int bcost)
 	else /* TV_BROKEN_SWORD */
 	{
 		/* Repair to a sword or sometimes material's type weapon */
-		IDX tval = (one_in_(5) ? mo_ptr->tval : TV_SWORD);
+		OBJECT_TYPE_VALUE tval = (one_in_(5) ? mo_ptr->tval : TV_SWORD);
 
 		while(1)
 		{

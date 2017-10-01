@@ -1051,7 +1051,9 @@ static void wild_magic(int spell)
  */
 void do_cmd_cast(void)
 {
-	int	item, sval, spell, realm;
+	int	item;
+	OBJECT_SUBTYPE_VALUE sval;
+	int spell, realm;
 	int	chance;
 	int	increment = 0;
 	int	use_realm;

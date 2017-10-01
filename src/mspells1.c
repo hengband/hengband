@@ -1441,9 +1441,11 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
  */
 bool make_attack_spell(IDX m_idx)
 {
-	int             k, thrown_spell = 0, rlev, failrate;
+	int k, thrown_spell = 0;
+	DEPTH rlev;
+	PERCENTAGE failrate;
 	byte            spell[96], num = 0;
-	u32b            f4, f5, f6;
+	BIT_FLAGS f4, f5, f6;
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	char            m_name[80];

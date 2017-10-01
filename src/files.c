@@ -4424,7 +4424,7 @@ static void dump_aux_class_special(FILE *fff)
  */
 static void dump_aux_quest(FILE *fff)
 {
-	int i;
+	IDX i;
 	IDX *quest_num;
 	int dummy;
 
