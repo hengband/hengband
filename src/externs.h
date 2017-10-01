@@ -1222,7 +1222,7 @@ extern void teleport_player_away(int m_idx, int dis);
 extern void teleport_player_to(POSITION ny, POSITION nx, u32b mode);
 extern void teleport_away_followable(int m_idx);
 extern void teleport_level(int m_idx);
-extern int choose_dungeon(cptr note, int y, int x);
+extern IDX choose_dungeon(cptr note, int y, int x);
 extern bool recall_player(int turns);
 extern bool word_of_recall(void);
 extern bool reset_recall(void);
@@ -1302,8 +1302,8 @@ extern IDX quest_number(DEPTH level);
 extern IDX random_quest_number(DEPTH level);
 extern bool tele_town(void);
 extern HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow);
-extern s16b calc_expect_crit_shot(int weight, int plus_ammo,int plus_bow, int dam);
-extern s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari);
+extern HIT_POINT calc_expect_crit_shot(int weight, int plus_ammo,int plus_bow, int dam);
+extern HIT_POINT calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari);
 
 /* util.c */
 extern errr path_parse(char *buf, int max, cptr file);

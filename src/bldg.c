@@ -2356,7 +2356,7 @@ HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow)
  * @param dam 基本ダメージ量
  * @return ダメージ期待値
  */
-s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
+HIT_POINT calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
 {
 	u32b num;
 	int i, k, crit;
@@ -2398,7 +2398,7 @@ s16b calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
  * @param dokubari 毒針処理か否か
  * @return ダメージ期待値
  */
-s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari)
+HIT_POINT calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari)
 {
 	u32b k, num;
 	int i;
@@ -2442,7 +2442,7 @@ s16b calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari
  * @param force 理力特別計算フラグ
  * @return ダメージ期待値
  */
-static s16b calc_slaydam(int dam, int mult, int div, bool force)
+static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
 {
 	int tmp;
 	if(force)
@@ -4020,7 +4020,8 @@ bool tele_town(void)
  */
 static bool research_mon(void)
 {
-	int i, n;
+	IDX i;
+	int n;
 	IDX r_idx;
 	char sym, query;
 	char buf[128];
@@ -4031,7 +4032,7 @@ static bool research_mon(void)
 
 	u16b why = 0;
 
-	u16b	*who;
+	IDX *who;
 
 	/* XTRA HACK WHATSEARCH */
 	bool    all = FALSE;
@@ -4041,7 +4042,7 @@ static bool research_mon(void)
 
 	/* XTRA HACK REMEMBER_IDX */
 	static int old_sym = '\0';
-	static int old_i = 0;
+	static IDX old_i = 0;
 
 
 	/* Save the screen */
@@ -4108,7 +4109,7 @@ static bool research_mon(void)
 
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, u16b);
+	C_MAKE(who, max_r_idx, IDX);
 
 	/* Collect matching monsters */
 	for (n = 0, i = 1; i < max_r_idx; i++)
@@ -4140,7 +4141,7 @@ static bool research_mon(void)
 					continue;
 				}
 #endif
-				if (isupper(temp[xx])) temp[xx] = tolower(temp[xx]);
+				if (isupper(temp[xx])) temp[xx] = (char)tolower(temp[xx]);
 			}
   
 #ifdef JP
@@ -4149,7 +4150,7 @@ static bool research_mon(void)
 			strcpy(temp2, r_name + r_ptr->name);
 #endif
 			for (xx = 0; temp2[xx] && xx < 80; xx++)
-				if (isupper(temp2[xx])) temp2[xx] = tolower(temp2[xx]);
+				if (isupper(temp2[xx])) temp2[xx] = (char)tolower(temp2[xx]);
 
 #ifdef JP
 			if (my_strstr(temp2, temp) || my_strstr(r_name + r_ptr->name, temp))
@@ -4165,7 +4166,7 @@ static bool research_mon(void)
 	if (!n)
 	{
 		/* Free the "who" array */
-		C_KILL(who, max_r_idx, u16b);
+		C_KILL(who, max_r_idx, IDX);
 
 		/* Restore */
 		screen_load();
@@ -4273,7 +4274,7 @@ static bool research_mon(void)
 	/* prt(buf, 5, 5);*/
 
 	/* Free the "who" array */
-	C_KILL(who, max_r_idx, u16b);
+	C_KILL(who, max_r_idx, IDX);
 
 	/* Restore */
 	screen_load();
@@ -4431,8 +4432,8 @@ static void bldg_process_command(building_type *bldg, int i)
 		break;
 	case BACT_TELEPORT_LEVEL:
 	{
-		int select_dungeon;
-		int max_depth;
+		IDX select_dungeon;
+		DEPTH max_depth;
 
 		clear_bldg(4, 20);
 		select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);

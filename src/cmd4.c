@@ -3088,7 +3088,7 @@ static cptr lighting_level_str[F_LIT_MAX] =
  * @param max ビジュアルIDの最大数
  * @return 指定が実際に行われた場合TRUE、キャンセルされた場合FALSE
  */
-static bool cmd_visuals_aux(int i, int *num, int max)
+static bool cmd_visuals_aux(int i, int *num, IDX max)
 {
 	if (iscntrl(i))
 	{
@@ -7381,8 +7381,8 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 /*
  * Display the features in a group.
  */
-static void display_feature_list(int col, int row, int per_page, int *feat_idx,
-	int feat_cur, int feat_top, bool visual_only, int lighting_level)
+static void display_feature_list(int col, int row, int per_page, IDX *feat_idx,
+	IDX feat_cur, IDX feat_top, bool visual_only, int lighting_level)
 {
 	int lit_col[F_LIT_MAX], i, j;
 	int f_idx_col = use_bigtile ? 62 : 64;

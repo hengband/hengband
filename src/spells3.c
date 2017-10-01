@@ -839,7 +839,7 @@ void teleport_level(int m_idx)
  * @param x コンソールX座標
  * @return なし
  */
-int choose_dungeon(cptr note, int y, int x)
+IDX choose_dungeon(cptr note, int y, int x)
 {
 	int select_dungeon;
 	int i, num = 0;
