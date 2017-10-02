@@ -2235,8 +2235,8 @@ errr parse_k_info(char *buf, header *head)
 		/* Save the values */
 		k_ptr->level = level;
 		k_ptr->extra = extra;
-		k_ptr->weight = wgt;
-		k_ptr->cost = cost;
+		k_ptr->weight = (WEIGHT)wgt;
+		k_ptr->cost = (PRICE)cost;
 	}
 
 	/* Process 'A' for "Allocation" (one line only) */
@@ -2981,7 +2981,7 @@ errr parse_r_info(char *buf, header *head)
 		r_ptr->hdice = MAX(hp1, 1);
 		r_ptr->hside = MAX(hp2, 1);
 		r_ptr->aaf = aaf;
-		r_ptr->ac = ac;
+		r_ptr->ac = (ARMOUR_CLASS)ac;
 		r_ptr->sleep = slp;
 	}
 

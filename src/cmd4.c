@@ -3485,12 +3485,12 @@ void do_cmd_visuals(void)
 			{
 				object_kind *k_ptr = &k_info[k];
 				char c;
-				int t;
+				IDX t;
 
-				byte da = k_ptr->d_attr;
-				byte dc = k_ptr->d_char;
-				byte ca = k_ptr->x_attr;
-				byte cc = k_ptr->x_char;
+				SYMBOL_COLOR da = k_ptr->d_attr;
+				SYMBOL_CODE dc = k_ptr->d_char;
+				SYMBOL_COLOR ca = k_ptr->x_attr;
+				SYMBOL_CODE cc = k_ptr->x_char;
 
 				/* Label the object */
 				Term_putstr(5, 17, -1, TERM_WHITE,
@@ -3579,7 +3579,7 @@ void do_cmd_visuals(void)
 			{
 				feature_type *f_ptr = &f_info[f];
 				char c;
-				int t;
+				IDX t;
 
 				byte da = f_ptr->d_attr[lighting_level];
 				byte dc = f_ptr->d_char[lighting_level];

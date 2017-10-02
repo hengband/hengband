@@ -986,7 +986,7 @@ static bool cast_summon_greater_demon(void)
  * @param song 魔法効果のID
  * @return なし
  */
-static void start_singing(int spell, int song)
+static void start_singing(MAGIC_NUM2 spell, MAGIC_NUM1 song)
 {
 	/* Remember the song index */
 	p_ptr->magic_num1[0] = song;
@@ -6983,7 +6983,7 @@ static cptr do_crusade_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
  */
-static cptr do_music_spell(int spell, int mode)
+static cptr do_music_spell(MAGIC_NUM2 spell, int mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -9054,7 +9054,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (cast)
 		{
 			int a = 3 - (p_ptr->pspeed - 100) / 10;
-			int r = 3 + randint1(3) + MAX(0, MIN(3, a));
+			MAGIC_NUM2 r = 3 + randint1(3) + MAX(0, MIN(3, a));
 
 			if (p_ptr->magic_num2[2] > 0)
 			{

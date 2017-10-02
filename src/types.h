@@ -82,11 +82,11 @@ struct feature_type
 	byte subtype;  /*!< 副特性値 */
 	byte power;    /*!< 地形強度 */
 
-	byte d_attr[F_LIT_MAX];   /*!< デフォルトの地形シンボルカラー / Default feature attribute */
-	byte d_char[F_LIT_MAX];   /*!< デフォルトの地形シンボルアルファベット / Default feature character */
+	SYMBOL_COLOR d_attr[F_LIT_MAX];   /*!< デフォルトの地形シンボルカラー / Default feature attribute */
+	SYMBOL_CODE d_char[F_LIT_MAX];   /*!< デフォルトの地形シンボルアルファベット / Default feature character */
 
-	byte x_attr[F_LIT_MAX];   /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
-	byte x_char[F_LIT_MAX];   /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
+	SYMBOL_COLOR x_attr[F_LIT_MAX];   /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
+	SYMBOL_CODE x_char[F_LIT_MAX];   /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
 };
 
 
@@ -124,14 +124,14 @@ struct object_kind
 
 	PRICE cost;			/*!< ベースアイテムの基本価値 / Object "base cost" */
 
-	u32b flags[TR_FLAG_SIZE];	/*!< ベースアイテムの基本特性ビット配列 / Flags */
+	BIT_FLAGS flags[TR_FLAG_SIZE];	/*!< ベースアイテムの基本特性ビット配列 / Flags */
 
-	u32b gen_flags;		/*!< ベースアイテムの生成特性ビット配列 / flags for generate */
+	BIT_FLAGS gen_flags;		/*!< ベースアイテムの生成特性ビット配列 / flags for generate */
 
-	byte locale[4];		/*!< ベースアイテムの生成階テーブル / Allocation level(s) */
+	DEPTH locale[4];		/*!< ベースアイテムの生成階テーブル / Allocation level(s) */
 	byte chance[4];		/*!< ベースアイテムの生成確率テーブル / Allocation chance(s) */
 
-	byte level;			/*!< ベースアイテムの基本生成階 / Level */
+	DEPTH level;			/*!< ベースアイテムの基本生成階 / Level */
 	byte extra;			/*!< その他色々のビットフラグ配列 / Something */
 
 	SYMBOL_COLOR d_attr;		/*!< デフォルトのアイテムシンボルカラー / Default object attribute */
@@ -148,7 +148,7 @@ struct object_kind
 
 	bool tried;			/*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 
-	byte act_idx;		/*!< 発動能力のID /  Activative ability index */
+	IDX act_idx;		/*!< 発動能力のID /  Activative ability index */
 };
 
 
@@ -294,12 +294,12 @@ struct monster_race
 #ifdef JP
 	STR_OFFSET E_name;		/*!< 名前データのオフセット(英語) /  Name offset(English) */
 #endif
-	STR_OFFSET text;				/*!< 思い出テキストのオフセット / Lore text offset */
+	STR_OFFSET text;		/*!< 思い出テキストのオフセット / Lore text offset */
 
-	byte hdice;				/*!< HPのダイス数 / Creatures hit dice count */
-	byte hside;				/*!< HPのダイス面数 / Creatures hit dice sides */
+	DICE_NUMBER hdice;		/*!< HPのダイス数 / Creatures hit dice count */
+	DICE_SID hside;			/*!< HPのダイス面数 / Creatures hit dice sides */
 
-	s16b ac;				/*!< アーマークラス / Armour Class */
+	ARMOUR_CLASS ac;		/*!< アーマークラス / Armour Class */
 
 	s16b sleep;				/*!< 睡眠値 / Inactive counter (base) */
 	byte aaf;				/*!< 感知範囲(1-100スクエア) / Area affect radius (1-100) */
@@ -403,8 +403,8 @@ struct vault_type
 
 	byte typ;			/* Vault type */
 	byte rat;			/* Vault rating */
-	byte hgt;			/* Vault height */
-	byte wid;			/* Vault width */
+	POSITION hgt;		/* Vault height */
+	POSITION wid;		/* Vault width */
 };
 
 
@@ -1089,16 +1089,16 @@ struct player_type
 
 	s16b food;		  /* Current nutrition */
 
-	u32b special_attack;	  /* Special attack capacity -LM- */
-	u32b special_defense;	  /* Special block capacity -LM- */
+	BIT_FLAGS special_attack;	  /* Special attack capacity -LM- */
+	BIT_FLAGS special_defense;	  /* Special block capacity -LM- */
 	byte action;		  /* Currently action */
 
-	u32b spell_learned1;	  /* bit mask of spells learned */
-	u32b spell_learned2;	  /* bit mask of spells learned */
-	u32b spell_worked1;	  /* bit mask of spells tried and worked */
-	u32b spell_worked2;	  /* bit mask of spells tried and worked */
-	u32b spell_forgotten1;	  /* bit mask of spells learned but forgotten */
-	u32b spell_forgotten2;	  /* bit mask of spells learned but forgotten */
+	BIT_FLAGS spell_learned1;	  /* bit mask of spells learned */
+	BIT_FLAGS spell_learned2;	  /* bit mask of spells learned */
+	BIT_FLAGS spell_worked1;	  /* bit mask of spells tried and worked */
+	BIT_FLAGS spell_worked2;	  /* bit mask of spells tried and worked */
+	BIT_FLAGS spell_forgotten1;	  /* bit mask of spells learned but forgotten */
+	BIT_FLAGS spell_forgotten2;	  /* bit mask of spells learned but forgotten */
 	byte spell_order[64];	  /* order spells learned/remembered/forgotten */
 
 	SUB_EXP spell_exp[64];        /* Proficiency of spells */
@@ -1131,11 +1131,11 @@ struct player_type
 
 	s16b riding;              /* Riding on a monster of this index */
 	byte knowledge;           /* Knowledge about yourself */
-	s32b visit;               /* Visited towns */
+	BIT_FLAGS visit;               /* Visited towns */
 
 	byte start_race;          /* Race at birth */
-	s32b old_race1;           /* Record of race changes */
-	s32b old_race2;           /* Record of race changes */
+	BIT_FLAGS old_race1;           /* Record of race changes */
+	BIT_FLAGS old_race2;           /* Record of race changes */
 	s16b old_realm;           /* Record of realm changes */
 
 	s16b pet_follow_distance; /* Length of the imaginary "leash" for pets */

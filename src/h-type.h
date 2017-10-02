@@ -144,6 +144,7 @@ typedef u32b BIT_FLAGS;     /*!< 32ビットのフラグ配列の型定義 */
 typedef byte BIT_FLAGS8;    /*!< 8ビットのフラグ配列の型定義 */
 
 typedef s16b COMMAND_CODE;   /*!< コマンド内容の型定義 */
+typedef s16b COMMAND_ARG;	 /*!< コマンド引数の型定義 */
 
 typedef int TERM_POSITION;   /*!< コンソール表示座標の型定義 */
 typedef byte SYMBOL_COLOR;    /*!< キャラの色の型定義 */

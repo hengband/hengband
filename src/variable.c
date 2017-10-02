@@ -96,7 +96,7 @@ u32b seed_town;			/* Hack -- consistent town layout */
 
 s16b command_cmd;		/* Current "Angband Command" */
 
-s16b command_arg;		/* Gives argument of current command */
+COMMAND_ARG command_arg;		/* Gives argument of current command */
 s16b command_rep;		/* Gives repetition of current command */
 DIRECTION command_dir;		/* Gives direction of current command */
 

@@ -6188,7 +6188,7 @@ void play_game(bool new_game)
 
 		p_ptr->is_dead = TRUE;
 
-		start_time = time(NULL);
+		start_time = (u32b)time(NULL);
 
 		/* No suspending now */
 		signals_ignore_tstp();
