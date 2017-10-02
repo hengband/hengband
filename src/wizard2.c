@@ -745,7 +745,7 @@ void strip_name(char *buf, int k_idx)
  * This function returns the k_idx of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-static int wiz_create_itemtype(void)
+static IDX wiz_create_itemtype(void)
 {
 	int i, num, max_num;
 	int col, row;
@@ -1788,7 +1788,7 @@ static void do_cmd_wiz_create_feature(void)
 	if (!get_string(_("地形: ", "Feature: "), tmp_val, 3)) return;
 
 	/* Extract */
-	tmp_feat = atoi(tmp_val);
+	tmp_feat = (IDX)atoi(tmp_val);
 	if (tmp_feat < 0) tmp_feat = 0;
 	else if (tmp_feat >= max_f_idx) tmp_feat = max_f_idx - 1;
 
@@ -1799,7 +1799,7 @@ static void do_cmd_wiz_create_feature(void)
 	if (!get_string(_("地形 (mimic): ", "Feature (mimic): "), tmp_val, 3)) return;
 
 	/* Extract */
-	tmp_mimic = atoi(tmp_val);
+	tmp_mimic = (IDX)atoi(tmp_val);
 	if (tmp_mimic < 0) tmp_mimic = 0;
 	else if (tmp_mimic >= max_f_idx) tmp_mimic = max_f_idx - 1;
 

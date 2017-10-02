@@ -737,7 +737,7 @@ cptr extract_note_dies(monster_race *r_ptr)
  * it drops all of its objects, which may disappear in crowded rooms.
  * </pre>
  */
-void monster_death(int m_idx, bool drop_item)
+void monster_death(IDX m_idx, bool drop_item)
 {
 	int i, j, y, x;
 
@@ -1278,7 +1278,7 @@ void monster_death(int m_idx, bool drop_item)
 
 		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
 		{
-			int k_idx = d_info[dungeon_type].final_object ? d_info[dungeon_type].final_object
+			IDX k_idx = d_info[dungeon_type].final_object ? d_info[dungeon_type].final_object
 				: lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
 
 			if (d_info[dungeon_type].final_artifact)
@@ -5713,10 +5713,10 @@ int spell_exp_level(int spell_exp)
  * Display a rumor and apply its effects
  */
 
-int rumor_num(char *zz, int max_idx)
+IDX rumor_num(char *zz, IDX max_idx)
 {
 	if (strcmp(zz, "*") == 0) return randint1(max_idx - 1);
-	return atoi(zz);
+	return (IDX)atoi(zz);
 }
 
 cptr rumor_bind_name(char *base, cptr fullname)

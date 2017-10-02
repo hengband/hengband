@@ -1105,8 +1105,8 @@ struct player_type
 	SUB_EXP weapon_exp[5][64];    /* Proficiency of weapons */
 	SUB_EXP skill_exp[GINOU_MAX]; /* Proficiency of misc. skill */
 
-	s32b magic_num1[108];     /* Array for non-spellbook type magic */
-	byte magic_num2[108];     /* Flags for non-spellbook type magics */
+	MAGIC_NUM1 magic_num1[108];     /*!< Array for non-spellbook type magic */
+	MAGIC_NUM2 magic_num2[108];     /*!< Flags for non-spellbook type magics */
 
 	s16b mane_spell[MAX_MANE];
 	s16b mane_dam[MAX_MANE];

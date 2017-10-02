@@ -3393,7 +3393,7 @@ void do_cmd_visuals(void)
 			{
 				monster_race *r_ptr = &r_info[r];
 				char c;
-				int t;
+				IDX t;
 
 				byte da = r_ptr->d_attr;
 				byte dc = r_ptr->d_char;
@@ -3570,7 +3570,7 @@ void do_cmd_visuals(void)
 		case '6':
 		{
 			static cptr choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
-			static int f = 0;
+			static IDX f = 0;
 			static int lighting_level = F_LIT_STANDARD;
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 

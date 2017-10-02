@@ -1488,7 +1488,7 @@ extern void complete_quest(int quest_num);
 extern void check_quest_completion(monster_type *m_ptr);
 extern void check_find_art_quest_completion(object_type *o_ptr);
 extern cptr extract_note_dies(monster_race *r_ptr);
-extern void monster_death(int m_idx, bool drop_item);
+extern void monster_death(IDX m_idx, bool drop_item);
 extern bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note);
 extern void get_screen_size(int *wid_p, int *hgt_p);
 extern void panel_bounds_center(void);
