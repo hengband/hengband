@@ -1155,8 +1155,8 @@ u32b mon_odds[4];
 int pet_t_m_idx;
 int riding_t_m_idx;
 
-s16b kubi_r_idx[MAX_KUBI];
-s16b today_mon;
+IDX kubi_r_idx[MAX_KUBI];
+IDX today_mon;
 
 bool write_level;
 

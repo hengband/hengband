@@ -2217,9 +2217,9 @@ errr parse_k_info(char *buf, header *head)
 				&tval, &sval, &pval)) return (1);
 
 		/* Save the values */
-		k_ptr->tval = tval;
-		k_ptr->sval = sval;
-		k_ptr->pval = pval;
+		k_ptr->tval = (OBJECT_TYPE_VALUE)tval;
+		k_ptr->sval = (OBJECT_SUBTYPE_VALUE)sval;
+		k_ptr->pval = (PARAMETER_VALUE)pval;
 	}
 
 	/* Process 'W' for "More Info" (one line only) */

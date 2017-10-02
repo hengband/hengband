@@ -2720,7 +2720,7 @@ static void ang_sort_swap_distance(vptr u, vptr v, int a, int b)
 /*
  * Hack -- help "select" a location (see below)
  */
-static s16b target_pick(int y1, int x1, int dy, int dx)
+static s16b target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION dx)
 {
 	int i, v;
 

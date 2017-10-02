@@ -3088,7 +3088,7 @@ static cptr lighting_level_str[F_LIT_MAX] =
  * @param max ビジュアルIDの最大数
  * @return 指定が実際に行われた場合TRUE、キャンセルされた場合FALSE
  */
-static bool cmd_visuals_aux(int i, int *num, IDX max)
+static bool cmd_visuals_aux(int i, IDX *num, IDX max)
 {
 	if (iscntrl(i))
 	{
@@ -3151,7 +3151,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
  */
 void do_cmd_visuals(void)
 {
-	int i;
+	char i;
 	char tmp[160];
 	char buf[1024];
 	bool need_redraw = FALSE;
@@ -3436,7 +3436,7 @@ void do_cmd_visuals(void)
 				{
 				case 'n':
 					{
-						int prev_r = r;
+						IDX prev_r = r;
 						do
 						{
 							if (!cmd_visuals_aux(i, &r, max_r_idx))
@@ -3529,7 +3529,7 @@ void do_cmd_visuals(void)
 				{
 				case 'n':
 					{
-						int prev_k = k;
+						IDX prev_k = k;
 						do
 						{
 							if (!cmd_visuals_aux(i, &k, max_k_idx))
@@ -4316,7 +4316,8 @@ static bool ang_sort_comp_monster_level(vptr u, vptr v, int a, int b)
  */
 static int collect_monsters(int grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 {
-	int i, mon_cnt = 0;
+	IDX i;
+	int mon_cnt = 0;
 	int dummy_why;
 
 	/* Get a list of x_char in this group */

@@ -3038,7 +3038,7 @@ byte get_mspeed(monster_race *r_ptr)
  * This is the only function which may place a monster in the dungeon,
  * except for the savefile loading code.
  */
-static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
+static bool place_monster_one(IDX who, POSITION y, POSITION x, IDX r_idx, BIT_FLAGS mode)
 {
 	/* Access the location */
 	cave_type		*c_ptr = &cave[y][x];
