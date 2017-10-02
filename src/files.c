@@ -355,7 +355,10 @@ static named_num gf_desc[] =
  */
 errr process_pref_file_command(char *buf)
 {
-	int i, j, n1, n2;
+	int i, j;
+	SYMBOL_COLOR n1;
+	SYMBOL_CODE n2;
+
 
 	char *zz[16];
 

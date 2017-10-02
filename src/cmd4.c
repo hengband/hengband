@@ -5449,10 +5449,11 @@ static void ang_sort_art_swap(vptr u, vptr v, int a, int b)
  */
 static void do_cmd_knowledge_artifacts(void)
 {
-	int i, k, x, y, n = 0;
+	IDX i;
+	int k, x, y, n = 0;
 	IDX z;
 	u16b why = 3;
-	s16b *who;
+	IDX *who;
 
 	FILE *fff;
 
@@ -5617,7 +5618,8 @@ static void do_cmd_knowledge_artifacts(void)
  */
 static void do_cmd_knowledge_uniques(void)
 {
-	int i, k, n = 0;
+	IDX i;
+	int k, n = 0;
 	u16b why = 2;
 	IDX *who;
 
@@ -6130,9 +6132,10 @@ static void do_cmd_knowledge_pets(void)
  */
 static void do_cmd_knowledge_kill_count(void)
 {
-	int i, k, n = 0;
+	IDX i;
+	int k, n = 0;
 	u16b why = 2;
-	s16b *who;
+	IDX *who;
 
 	FILE *fff;
 
@@ -6731,7 +6734,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 	byte attr_top = 0, char_left = 0;
 
 	int browser_rows;
-	POSITION wid, hgt;
+	TERM_POSITION wid, hgt;
 
 	BIT_FLAGS8 mode;
 
@@ -8147,13 +8150,8 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 					}
 					else
 					{
-#ifdef JP
-						sprintf(rand_tmp_str,"  %s (%d 階) - %sを倒す。\n",
-							quest[i].name, quest[i].level, name);
-#else
-						sprintf(rand_tmp_str,"  %s (Dungeon level: %d)\n  Kill %s.\n",
-							quest[i].name, quest[i].level, name);
-#endif
+						sprintf(rand_tmp_str,_("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n"),
+							quest[i].name, (int)quest[i].level, name);
 					}
 				}
 			}
@@ -8260,13 +8258,13 @@ void do_cmd_knowledge_quests_completed(FILE *fff, IDX quest_num[])
  */
 void do_cmd_knowledge_quests_failed(FILE *fff, IDX quest_num[])
 {
-	int i;
+	IDX i;
 	int total = 0;
 
 	fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
 	for (i = 1; i < max_quests; i++)
 	{
-		int q_idx = quest_num[i];
+		IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
 		if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) &&

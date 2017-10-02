@@ -133,11 +133,11 @@ struct object_kind
 	byte level;			/*!< ベースアイテムの基本生成階 / Level */
 	byte extra;			/*!< その他色々のビットフラグ配列 / Something */
 
-	byte d_attr;		/*!< デフォルトのアイテムシンボルカラー / Default object attribute */
-	byte d_char;		/*!< デフォルトのアイテムシンボルアルファベット / Default object character */
+	SYMBOL_COLOR d_attr;		/*!< デフォルトのアイテムシンボルカラー / Default object attribute */
+	SYMBOL_CODE d_char;		/*!< デフォルトのアイテムシンボルアルファベット / Default object character */
 
-	byte x_attr;		/*!< 設定変更後のアイテムシンボルカラー /  Desired object attribute */
-	byte x_char;		/*!< 設定変更後のアイテムシンボルアルファベット /  Desired object character */
+	SYMBOL_COLOR x_attr;		/*!< 設定変更後のアイテムシンボルカラー /  Desired object attribute */
+	SYMBOL_CODE x_char;		/*!< 設定変更後のアイテムシンボルアルファベット /  Desired object character */
 
 	s16b flavor;		/*!< 調査中(TODO) / Special object flavor (or zero) */
 

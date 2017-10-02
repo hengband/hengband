@@ -4441,8 +4441,8 @@ void do_cmd_throw(void)
 
 static int flow_head = 0;
 static int flow_tail = 0;
-static s16b temp2_x[MAX_SHORT];
-static s16b temp2_y[MAX_SHORT];
+static POSITION temp2_x[MAX_SHORT];
+static POSITION temp2_y[MAX_SHORT];
 
 /*!
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information 
@@ -4514,7 +4514,7 @@ static int travel_flow_cost(int y, int x)
  * @param wall プレイヤーが壁の中にいるならばTRUE
  * @return なし
  */
-static void travel_flow_aux(int y, int x, int n, bool wall)
+static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 {
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];

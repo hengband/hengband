@@ -148,7 +148,7 @@ extern bool character_xtra;
 extern bool creating_savefile;
 extern u32b seed_flavor;
 extern u32b seed_town;
-extern s16b command_cmd;
+extern COMMAND_CODE command_cmd;
 extern s16b command_arg;
 extern s16b command_rep;
 extern DIRECTION command_dir;

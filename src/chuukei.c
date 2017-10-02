@@ -932,7 +932,8 @@ static bool flush_ringbuf_client(void)
 	while (get_nextbuf(buf))
 	{
 		char id;
-		int x, y, len, col;
+		int x, y, len;
+		SYMBOL_COLOR col;
 		int i;
 		unsigned char tmp1, tmp2, tmp3, tmp4;
 		char *mesg;

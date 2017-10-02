@@ -143,6 +143,12 @@ typedef s16b PERCENTAGE;     /*!< ゲーム中のパーセント表記の型定�
 typedef u32b BIT_FLAGS;     /*!< 32ビットのフラグ配列の型定義 */
 typedef byte BIT_FLAGS8;    /*!< 8ビットのフラグ配列の型定義 */
 
+typedef s16b COMMAND_CODE;   /*!< コマンド内容の型定義 */
+
+typedef int TERM_POSITION;   /*!< コンソール表示座標の型定義 */
+typedef byte SYMBOL_COLOR;    /*!< キャラの色の型定義 */
+typedef byte SYMBOL_CODE;     /*!< キャラの文字の型定義 */
+
 /*** Pointers to all the basic types defined above ***/
 
 typedef real *real_ptr;
