@@ -2276,12 +2276,12 @@ errr parse_k_info(char *buf, header *head)
 		if (6 != sscanf(buf+2, "%d:%dd%d:%d:%d:%d",
 				&ac, &hd1, &hd2, &th, &td, &ta)) return (1);
 
-		k_ptr->ac = ac;
-		k_ptr->dd = hd1;
-		k_ptr->ds = hd2;
-		k_ptr->to_h = th;
-		k_ptr->to_d = td;
-		k_ptr->to_a =  ta;
+		k_ptr->ac = (ARMOUR_CLASS)ac;
+		k_ptr->dd = (DICE_NUMBER)hd1;
+		k_ptr->ds = (DICE_SID)hd2;
+		k_ptr->to_h = (HIT_PROB)th;
+		k_ptr->to_d = (HIT_POINT)td;
+		k_ptr->to_a = (ARMOUR_CLASS)ta;
 	}
 
 	/* Hack -- Process 'U' for activation index */

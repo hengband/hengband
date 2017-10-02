@@ -125,7 +125,7 @@ typedef s16b SUB_EXP;		/*!< ゲーム中の副経験値の型定義 */
 typedef byte OBJECT_TYPE_VALUE;    /*!< ゲーム中のアイテム主分類の型定義 */
 typedef byte OBJECT_SUBTYPE_VALUE; /*!< ゲーム中のアイテム副分類の型定義 */
 typedef s16b PARAMETER_VALUE;      /*!< ゲーム中のアイテム能力値の型定義 */
-typedef s16b WEIGHT;               /*!< ゲーム中の重量の型定義 */
+typedef s16b WEIGHT;               /*!< ゲーム中の重量の型定義(ポンド) */
 
 typedef int DICE_NUMBER; /*!< ゲーム中のダイス数の型定義 */
 typedef int DICE_SID;    /*!< ゲーム中のダイス面の型定義 */

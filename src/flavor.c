@@ -203,7 +203,7 @@ static void shuffle_flavors(byte tval)
 {
 	IDX *k_idx_list;
 	IDX k_idx_list_num = 0;
-	int i;
+	IDX i;
 
 	/* Allocate an array for a list of k_idx */
 	C_MAKE(k_idx_list, max_k_idx, s16b);

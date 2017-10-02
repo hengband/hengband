@@ -109,19 +109,20 @@ struct object_kind
 	byte tval;			/*!< ベースアイテム種別の大項目値 Object type */
 	byte sval;			/*!< ベースアイテム種別の小項目値 Object sub type */
 
-	s16b pval;			/*!< ベースアイテムのpval（能力修正共通値） Object extra info */
+	PARAMETER_VALUE pval;	/*!< ベースアイテムのpval（能力修正共通値） Object extra info */
 
-	s16b to_h;			/*!< ベースアイテムの命中修正値 / Bonus to hit */
-	s16b to_d;			/*!< ベースアイテムのダメージ修正値 / Bonus to damage */
-	s16b to_a;			/*!< ベースアイテムのAC修正値 / Bonus to armor */
+	HIT_PROB to_h;			/*!< ベースアイテムの命中修正値 / Bonus to hit */
+	HIT_POINT to_d;			/*!< ベースアイテムのダメージ修正値 / Bonus to damage */
+	ARMOUR_CLASS to_a;			/*!< ベースアイテムのAC修正値 / Bonus to armor */
 
-	s16b ac;			/*!< ベースアイテムのAC基本値 /  Base armor */
+	ARMOUR_CLASS ac;			/*!< ベースアイテムのAC基本値 /  Base armor */
 
-	byte dd, ds;		/*!< ダメージダイスの数と大きさ / Damage dice/sides */
+	DICE_NUMBER dd;
+	DICE_SID ds;		/*!< ダメージダイスの数と大きさ / Damage dice/sides */
 
-	s16b weight;		/*!< ベースアイテムの重量 / Weight */
+	WEIGHT weight;		/*!< ベースアイテムの重量 / Weight */
 
-	s32b cost;			/*!< ベースアイテムの基本価値 / Object "base cost" */
+	PRICE cost;			/*!< ベースアイテムの基本価値 / Object "base cost" */
 
 	u32b flags[TR_FLAG_SIZE];	/*!< ベースアイテムの基本特性ビット配列 / Flags */
 
@@ -338,16 +339,16 @@ struct monster_race
 	IDX next_r_idx;
 	u32b next_exp;
 
-	DEPTH level;				/* Level of creature */
+	DEPTH level;			/* Level of creature */
 	RARITY rarity;			/* Rarity of creature */
 
 
-	byte d_attr;			/* Default monster attribute */
-	byte d_char;			/* Default monster character */
+	SYMBOL_COLOR d_attr;		/* Default monster attribute */
+	SYMBOL_CODE d_char;			/* Default monster character */
 
 
-	byte x_attr;			/* Desired monster attribute */
-	byte x_char;			/* Desired monster character */
+	SYMBOL_COLOR x_attr;		/* Desired monster attribute */
+	SYMBOL_CODE x_char;			/* Desired monster character */
 
 
 	byte max_num;			/* Maximum population allowed per level */

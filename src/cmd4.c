@@ -4314,7 +4314,7 @@ static bool ang_sort_comp_monster_level(vptr u, vptr v, int a, int b)
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static int collect_monsters(int grp_cur, s16b mon_idx[], BIT_FLAGS8 mode)
+static int collect_monsters(int grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 {
 	int i, mon_cnt = 0;
 	int dummy_why;
@@ -5450,7 +5450,8 @@ static void ang_sort_art_swap(vptr u, vptr v, int a, int b)
 static void do_cmd_knowledge_artifacts(void)
 {
 	IDX i;
-	int k, x, y, n = 0;
+	IDX k;
+	int x, y, n = 0;
 	IDX z;
 	u16b why = 3;
 	IDX *who;

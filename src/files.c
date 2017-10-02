@@ -479,8 +479,8 @@ errr process_pref_file_command(char *buf)
 			if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 			{
 				j = (huge)strtol(zz[0], NULL, 0);
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				for (i = 1; i < max_k_idx; i++)
 				{
 					object_kind *k_ptr = &k_info[i];
