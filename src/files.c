@@ -381,8 +381,8 @@ errr process_pref_file_command(char *buf)
 			{
 				monster_race *r_ptr;
 				i = (huge)strtol(zz[0], NULL, 0);
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				if (i >= max_r_idx) return 1;
 				r_ptr = &r_info[i];
 				if (n1 || (!(n2 & 0x80) && n2)) r_ptr->x_attr = n1; /* Allow TERM_DARK text */
@@ -397,8 +397,8 @@ errr process_pref_file_command(char *buf)
 			{
 				object_kind *k_ptr;
 				i = (huge)strtol(zz[0], NULL, 0);
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				if (i >= max_k_idx) return 1;
 				k_ptr = &k_info[i];
 				if (n1 || (!(n2 & 0x80) && n2)) k_ptr->x_attr = n1; /* Allow TERM_DARK text */
@@ -423,8 +423,8 @@ errr process_pref_file_command(char *buf)
 				if (i >= max_f_idx) return 1;
 				f_ptr = &f_info[i];
 
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
 				if (n2) f_ptr->x_char[F_LIT_STANDARD] = n2;
 
@@ -451,8 +451,8 @@ errr process_pref_file_command(char *buf)
 				case F_LIT_MAX * 2 + 1:
 					for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
 					{
-						n1 = strtol(zz[j * 2 + 1], NULL, 0);
-						n2 = strtol(zz[j * 2 + 2], NULL, 0);
+						n1 = (SYMBOL_COLOR)strtol(zz[j * 2 + 1], NULL, 0);
+						n2 = (SYMBOL_CODE)strtol(zz[j * 2 + 2], NULL, 0);
 						if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[j] = n1; /* Allow TERM_DARK text */
 						if (n2) f_ptr->x_char[j] = n2;
 					}
@@ -466,8 +466,8 @@ errr process_pref_file_command(char *buf)
 			if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 			{
 				j = (byte)strtol(zz[0], NULL, 0);
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				misc_to_attr[j] = n1;
 				misc_to_char[j] = n2;
 				return 0;
@@ -499,7 +499,7 @@ errr process_pref_file_command(char *buf)
 			if (tokenize(buf+2, 2, zz, TOKENIZE_CHECKQUOTE) == 2)
 			{
 				j = (byte)strtol(zz[0], NULL, 0) % 128;
-				n1 = strtol(zz[1], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
 				if (n1) tval_to_attr[j] = n1;
 				return 0;
 			}

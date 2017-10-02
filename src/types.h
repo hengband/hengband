@@ -984,7 +984,7 @@ struct player_type
 	EXP max_max_exp;	/* Max max experience (only to calculate score) */
 	EXP max_exp;		/* Max experience */
 	EXP exp;			/* Cur experience */
-	EXP exp_frac;		/* Cur exp frac (times 2^16) */
+	u32b exp_frac;		/* Cur exp frac (times 2^16) */
 
 	PLAYER_LEVEL lev;			/* Level */
 

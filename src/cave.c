@@ -154,10 +154,10 @@ bool is_hidden_door(cave_type *c_ptr)
  *\n
  * Use the "update_view()" function to determine player line-of-sight.\n
  */
-bool los(int y1, int x1, int y2, int x2)
+bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	/* Delta */
-	int dx, dy;
+	POSITION dx, dy;
 
 	/* Absolute */
 	int ax, ay;
@@ -4898,9 +4898,9 @@ void mmove2(int *y, int *x, int y1, int x1, int y2, int x2)
  *
  * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
  */
-bool projectable(int y1, int x1, int y2, int x2)
+bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	int y, x;
+	POSITION y, x;
 
 	int grid_n = 0;
 	u16b grid_g[512];
