@@ -64,7 +64,7 @@ bool select_the_force = FALSE;
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(int *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int use_realm)
+static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int use_realm)
 {
 	int         i;
 	int         spell = -1;
@@ -470,8 +470,8 @@ void do_cmd_browse(void)
 	int		spell = -1;
 	int		num = 0;
 
-	byte		spells[64];
-	char            temp[62*4];
+	int		spells[64];
+	char    temp[62*4];
 
 	object_type	*o_ptr;
 
@@ -654,12 +654,13 @@ static void change_realm2(CHARACTER_IDX next_realm)
  */
 void do_cmd_study(void)
 {
-	int	i, item, sval;
+	int	i, item;
+	OBJECT_SUBTYPE_VALUE sval;
 	int	increment = 0;
 	bool    learned = FALSE;
 
 	/* Spells of realm2 will have an increment of +32 */
-	int	spell = -1;
+	SPELL_IDX spell = -1;
 
 	cptr p = spell_category_name(mp_ptr->spell_book);
 

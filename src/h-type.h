@@ -150,8 +150,10 @@ typedef int TERM_POSITION;   /*!< コンソール表示座標の型定義 */
 typedef byte SYMBOL_COLOR;    /*!< キャラの色の型定義 */
 typedef byte SYMBOL_CODE;     /*!< キャラの文字の型定義 */
 
-typedef s32b MAGIC_NUM1; /*!< プレイヤーの汎用魔法情報配列1の型定義*/
-typedef byte MAGIC_NUM2; /*!< プレイヤーの汎用魔法情報配列2の型定義*/
+typedef s32b MAGIC_NUM1;   /*!< プレイヤーの汎用魔法情報配列1の型定義*/
+typedef byte MAGIC_NUM2;   /*!< プレイヤーの汎用魔法情報配列2の型定義*/
+
+typedef s32b SPELL_IDX;    /*!< 各魔法領域/職業能力ごとの呪文ID型定義 */
 
 /*** Pointers to all the basic types defined above ***/
 

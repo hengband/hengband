@@ -1099,7 +1099,7 @@ struct player_type
 	BIT_FLAGS spell_worked2;	  /* bit mask of spells tried and worked */
 	BIT_FLAGS spell_forgotten1;	  /* bit mask of spells learned but forgotten */
 	BIT_FLAGS spell_forgotten2;	  /* bit mask of spells learned but forgotten */
-	byte spell_order[64];	  /* order spells learned/remembered/forgotten */
+	SPELL_IDX spell_order[64];  /* order spells learned/remembered/forgotten */
 
 	SUB_EXP spell_exp[64];        /* Proficiency of spells */
 	SUB_EXP weapon_exp[5][64];    /* Proficiency of weapons */

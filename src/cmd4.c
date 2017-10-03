@@ -3144,7 +3144,7 @@ static void print_visuals_menu(cptr choice_msg)
 
 static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX direct_r_idx);
 static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx);
-static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, int *lighting_level);
+static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level);
 
 /*
  * Interact with "visuals"
@@ -3691,7 +3691,7 @@ void do_cmd_visuals(void)
 		/* Modify feature attr/chars (visual mode) */
 		case '9':
 		{
-			int lighting_level = F_LIT_STANDARD;
+			IDX lighting_level = F_LIT_STANDARD;
 			do_cmd_knowledge_features(&need_redraw, TRUE, -1, &lighting_level);
 			break;
 		}
@@ -4314,10 +4314,10 @@ static bool ang_sort_comp_monster_level(vptr u, vptr v, int a, int b)
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static int collect_monsters(IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
+static IDX collect_monsters(IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 {
 	IDX i;
-	int mon_cnt = 0;
+	IDX mon_cnt = 0;
 	int dummy_why;
 
 	/* Get a list of x_char in this group */
@@ -7457,7 +7457,7 @@ static void display_feature_list(int col, int row, int per_page, IDX *feat_idx,
 /*
  * Interact with feature visuals.
  */
-static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, int *lighting_level)
+static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
 	IDX i;
 	int len, max;
@@ -8678,7 +8678,7 @@ void do_cmd_knowledge(void)
 			break;
 		case '0': /* Feature list */
 			{
-				int lighting_level = F_LIT_STANDARD;
+				IDX lighting_level = F_LIT_STANDARD;
 				do_cmd_knowledge_features(&need_redraw, FALSE, -1, &lighting_level);
 			}
 			break;
