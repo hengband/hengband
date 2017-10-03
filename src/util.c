@@ -4865,7 +4865,7 @@ static int repeat__idx = 0;
 static int repeat__key[REPEAT_MAX];
 
 
-void repeat_push(int what)
+void repeat_push(SPELL_IDX what)
 {
 	/* Too many keys */
 	if (repeat__cnt == REPEAT_MAX) return;
@@ -4878,7 +4878,7 @@ void repeat_push(int what)
 }
 
 
-bool repeat_pull(int *what)
+bool repeat_pull(SPELL_IDX *what)
 {
 	/* All out of keys */
 	if (repeat__idx == repeat__cnt) return (FALSE);

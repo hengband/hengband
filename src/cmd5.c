@@ -406,7 +406,7 @@ static bool player_has_no_spellbooks(void)
  */
 static void confirm_use_force(bool browse_only)
 {
-	int  item;
+	SPELL_IDX item;
 	char which;
 
 #ifdef ALLOW_REPEAT
@@ -467,7 +467,7 @@ static void confirm_use_force(bool browse_only)
 void do_cmd_browse(void)
 {
 	int		item, sval, use_realm = 0, j, line;
-	int		spell = -1;
+	SPELL_IDX spell = -1;
 	int		num = 0;
 
 	int		spells[64];
@@ -1054,7 +1054,8 @@ void do_cmd_cast(void)
 {
 	int	item;
 	OBJECT_SUBTYPE_VALUE sval;
-	int spell, realm;
+	SPELL_IDX spell;
+	IDX realm;
 	int	chance;
 	int	increment = 0;
 	int	use_realm;
@@ -2205,7 +2206,7 @@ static void do_name_pet(void)
  */
 void do_cmd_pet(void)
 {
-	int			i = 0;
+	SPELL_IDX i = 0;
 	int			num;
 	int			powers[36];
 	cptr			power_desc[36];

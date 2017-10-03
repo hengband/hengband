@@ -303,7 +303,7 @@ struct monster_race
 
 	s16b sleep;				/*!< 睡眠値 / Inactive counter (base) */
 	byte aaf;				/*!< 感知範囲(1-100スクエア) / Area affect radius (1-100) */
-	byte speed;				/*!< 加速(110で+0) / Speed (normally 110) */
+	SPEED speed;				/*!< 加速(110で+0) / Speed (normally 110) */
 
 	s32b mexp;				/*!< 殺害時基本経験値 / Exp value for kill */
 
@@ -326,11 +326,11 @@ struct monster_race
 	u32b a_ability_flags4;	/* Activate Ability Flags 8 (implementing) */
 
 	monster_blow blow[4];	/* Up to four blows per round */
-	u16b reinforce_id[6];
-	u16b reinforce_dd[6];
-	u16b reinforce_ds[6];
+	IDX reinforce_id[6];
+	DICE_NUMBER reinforce_dd[6];
+	DICE_SID reinforce_ds[6];
 
-	u16b artifact_id[4];	/* 特定アーティファクトドロップID */
+	IDX artifact_id[4];	/* 特定アーティファクトドロップID */
 	RARITY artifact_rarity[4];	/* 特定アーティファクトレア度 */
 	PERCENTAGE artifact_percent[4]; /* 特定アーティファクトドロップ率 */
 
@@ -596,7 +596,7 @@ struct monster_type
 
 	TIME_EFFECT mtimed[MAX_MTIMED];	/* Timed status counter */
 
-	byte mspeed;	        /* Monster "speed" */
+	SPEED mspeed;	        /* Monster "speed" */
 	ACTION_ENERGY energy_need;	/* Monster "energy" */
 
 	POSITION cdis;		/* Current dis from player */
@@ -1084,8 +1084,8 @@ struct player_type
 	s16b alter_reality;	  /* Alter reality counter */
 	IDX recall_dungeon;      /* Dungeon set to be recalled */
 
-	s16b energy_need;	  /* Energy needed for next move */
-	s16b enchant_energy_need;	  /* Energy needed for next upkeep effect	 */
+	ENERGY energy_need;	  /* Energy needed for next move */
+	ENERGY enchant_energy_need;	  /* Energy needed for next upkeep effect	 */
 
 	s16b food;		  /* Current nutrition */
 
