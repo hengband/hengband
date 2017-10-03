@@ -589,7 +589,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 		case 4:  sprintf(p, " %s%d+d20", s_dur, 20 + boost / 5); break;
 		case 5:  break;
 		case 6:  sprintf(p, " %s%d+d%d", s_dur, 15 + boost / 7, plev / 2); break;
-		case 7:  sprintf(p, " %s%dd8", s_dam, 8 + ((plev - 5) / 5) + boost / 12); break;
+		case 7:  sprintf(p, " %s%dd8", s_dam, 8 + ((plev - 5) / 4) + boost / 12); break;
 		case 8:  sprintf(p, " %s10d6+%d", s_dam, plev * 3 / 2 + boost * 3 / 5); break;
 		case 9:  break;
 		case 10: sprintf(p, _(" 最大%d体", " max %d"), 1+boost/100); break;
