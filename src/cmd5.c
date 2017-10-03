@@ -71,7 +71,7 @@ static int get_spell(int *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learn
 	int         num = 0;
 	int         ask = TRUE;
 	int         need_mana;
-	byte        spells[64];
+	int         spells[64];
 	bool        flag, redraw, okay;
 	char        choice;
 	const magic_type  *s_ptr;
@@ -242,7 +242,7 @@ static int get_spell(int *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learn
 			ask = (isupper(choice));
 
 			/* Lowercase */
-			if (ask) choice = tolower(choice);
+			if (ask) choice = (char)tolower(choice);
 
 			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);

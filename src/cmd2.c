@@ -2675,7 +2675,7 @@ void do_cmd_rest(void)
 		/* Rest some */
 		else
 		{
-			command_arg = atoi(out_val);
+			command_arg = (COMMAND_ARG)atoi(out_val);
 			if (command_arg <= 0) return;
 		}
 	}

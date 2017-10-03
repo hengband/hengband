@@ -1795,7 +1795,8 @@ void ang_sort_swap_hook(vptr u, vptr v, int a, int b)
  */
 void do_cmd_query_symbol(void)
 {
-	int		i, n;
+	IDX i;
+	int n;
 	IDX r_idx;
 	char	sym, query;
 	char	buf[128];
@@ -1809,7 +1810,7 @@ void do_cmd_query_symbol(void)
 	bool	recall = FALSE;
 
 	u16b	why = 0;
-	u16b	*who;
+	IDX	*who;
 
 	/* Get a character, or abort */
 	if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ", 
@@ -1866,7 +1867,7 @@ void do_cmd_query_symbol(void)
 	prt(buf, 0, 0);
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, u16b);
+	C_MAKE(who, max_r_idx, IDX);
 
 	/* Collect matching monsters */
 	for (n = 0, i = 1; i < max_r_idx; i++)
@@ -1896,7 +1897,7 @@ void do_cmd_query_symbol(void)
 #ifdef JP
 		    if (iskanji( temp[xx])) { xx++; continue; }
 #endif
-		    if (isupper(temp[xx])) temp[xx]=tolower(temp[xx]);
+		    if (isupper(temp[xx])) temp[xx] = (char)tolower(temp[xx]);
 		  }
   
 #ifdef JP
@@ -1905,14 +1906,14 @@ void do_cmd_query_symbol(void)
 		  strcpy(temp2, r_name+r_ptr->name);
 #endif
 		  for (xx=0; temp2[xx] && xx<80; xx++)
-		    if (isupper(temp2[xx])) temp2[xx]=tolower(temp2[xx]);
+		    if (isupper(temp2[xx])) temp2[xx] = (char)tolower(temp2[xx]);
   
 #ifdef JP
 		  if (my_strstr(temp2, temp) || my_strstr(r_name + r_ptr->name, temp) )
 #else
 		  if (my_strstr(temp2, temp))
 #endif
-			  who[n++]=i;
+			  who[n++] = i;
 		}
 
 		/* Collect "appropriate" monsters */
@@ -1923,7 +1924,7 @@ void do_cmd_query_symbol(void)
 	if (!n)
 	{
 		/* Free the "who" array */
-		C_KILL(who, max_r_idx, u16b);
+		C_KILL(who, max_r_idx, IDX);
 
 		return;
 	}
@@ -1959,7 +1960,7 @@ void do_cmd_query_symbol(void)
 	if (query != 'y')
 	{
 		/* Free the "who" array */
-		C_KILL(who, max_r_idx, u16b);
+		C_KILL(who, max_r_idx, IDX);
 
 		return;
 	}
@@ -2052,7 +2053,7 @@ void do_cmd_query_symbol(void)
 	}
 
 	/* Free the "who" array */
-	C_KILL(who, max_r_idx, u16b);
+	C_KILL(who, max_r_idx, IDX);
 
 	/* Re-display the identity */
 	prt(buf, 0, 0);

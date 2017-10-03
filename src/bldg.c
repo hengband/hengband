@@ -3344,7 +3344,7 @@ static int repair_broken_weapon_aux(int bcost)
 	/* Copy base object's ability */
 	for (i = 0; i < TR_FLAG_SIZE; i++) o_ptr->art_flags[i] |= k_ptr->flags[i];
 	if (k_ptr->pval) o_ptr->pval = MAX(o_ptr->pval, randint1(k_ptr->pval));
-	if (have_flag(k_ptr->flags, TR_ACTIVATE)) o_ptr->xtra2 = k_ptr->act_idx;
+	if (have_flag(k_ptr->flags, TR_ACTIVATE)) o_ptr->xtra2 = (byte_hack)k_ptr->act_idx;
 
 	/* Dice up */
 	if (dd_bonus > 0)

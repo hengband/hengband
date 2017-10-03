@@ -793,7 +793,7 @@ typedef struct player_magic player_magic;
 
 struct player_magic
 {
-	int spell_book;		/* Tval of spell books (if any) */
+	OBJECT_TYPE_VALUE spell_book; /* Tval of spell books (if any) */
 	int spell_xtra;		/* Something for later */
 
 	int spell_stat;		/* Stat for spells (if any)  */

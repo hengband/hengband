@@ -2632,7 +2632,7 @@ static errr keymap_dump(cptr fname)
 		if (!act) continue;
 
 		/* Encode the key */
-		buf[0] = i;
+		buf[0] = (char)i;
 		buf[1] = '\0';
 		ascii_to_text(key, buf);
 
@@ -3093,14 +3093,14 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
 	if (iscntrl(i))
 	{
 		char str[10] = "";
-		int tmp;
+		IDX tmp;
 
 		sprintf(str, "%d", *num);
 
 		if (!get_string(format("Input new number(0-%d): ", max-1), str, 4))
 			return FALSE;
 
-		tmp = strtol(str, NULL, 0);
+		tmp = (IDX)strtol(str, NULL, 0);
 		if (tmp >= 0 && tmp < max)
 			*num = tmp;
 	}
@@ -3571,7 +3571,7 @@ void do_cmd_visuals(void)
 		{
 			static cptr choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
 			static IDX f = 0;
-			static int lighting_level = F_LIT_STANDARD;
+			static IDX lighting_level = F_LIT_STANDARD;
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
@@ -3634,7 +3634,7 @@ void do_cmd_visuals(void)
 				{
 				case 'n':
 					{
-						int prev_f = f;
+						IDX prev_f = f;
 						do
 						{
 							if (!cmd_visuals_aux(i, &f, max_f_idx))
@@ -4314,7 +4314,7 @@ static bool ang_sort_comp_monster_level(vptr u, vptr v, int a, int b)
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static int collect_monsters(int grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
+static int collect_monsters(IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 {
 	IDX i;
 	int mon_cnt = 0;
@@ -4815,7 +4815,7 @@ void do_cmd_load_screen(void)
 			for (i = 0; i < 16; i++)
 			{
 				/* Use attr matches */
-				if (hack[i] == buf[x]) a = i;
+				if (hack[i] == buf[x]) a = (byte_hack)i;
 			}
 
 			/* Put the attr/char */
