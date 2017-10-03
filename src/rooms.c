@@ -1446,7 +1446,7 @@ static u32b vault_aux_dragon_mask4;
  * @param r_idx 確認したいモンスター種族ID
  * @return Vault生成の最低必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_simple(int r_idx)
+static bool vault_aux_simple(IDX r_idx)
 {
 	/* Okay */
 	return (vault_monster_okay(r_idx));
@@ -1459,7 +1459,7 @@ static bool vault_aux_simple(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_jelly(int r_idx)
+static bool vault_aux_jelly(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1484,7 +1484,7 @@ static bool vault_aux_jelly(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_animal(int r_idx)
+static bool vault_aux_animal(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1505,7 +1505,7 @@ static bool vault_aux_animal(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_undead(int r_idx)
+static bool vault_aux_undead(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1525,7 +1525,7 @@ static bool vault_aux_undead(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_chapel_g(int r_idx)
+static bool vault_aux_chapel_g(IDX r_idx)
 {
 	static int chapel_list[] = {
 		MON_NOV_PRIEST, MON_NOV_PALADIN, MON_NOV_PRIEST_G, MON_NOV_PALADIN_G, 
@@ -1559,7 +1559,7 @@ static bool vault_aux_chapel_g(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_kennel(int r_idx)
+static bool vault_aux_kennel(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1579,7 +1579,7 @@ static bool vault_aux_kennel(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_mimic(int r_idx)
+static bool vault_aux_mimic(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1599,7 +1599,7 @@ static bool vault_aux_mimic(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_clone(int r_idx)
+static bool vault_aux_clone(IDX r_idx)
 {
 	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
@@ -1614,7 +1614,7 @@ static bool vault_aux_clone(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_symbol_e(int r_idx)
+static bool vault_aux_symbol_e(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1639,7 +1639,7 @@ static bool vault_aux_symbol_e(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_symbol_g(int r_idx)
+static bool vault_aux_symbol_g(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1664,7 +1664,7 @@ static bool vault_aux_symbol_g(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_orc(int r_idx)
+static bool vault_aux_orc(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1688,7 +1688,7 @@ static bool vault_aux_orc(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_troll(int r_idx)
+static bool vault_aux_troll(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1712,7 +1712,7 @@ static bool vault_aux_troll(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_giant(int r_idx)
+static bool vault_aux_giant(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1738,7 +1738,7 @@ static bool vault_aux_giant(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_dragon(int r_idx)
+static bool vault_aux_dragon(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1765,7 +1765,7 @@ static bool vault_aux_dragon(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_demon(int r_idx)
+static bool vault_aux_demon(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1788,7 +1788,7 @@ static bool vault_aux_demon(int r_idx)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_cthulhu(int r_idx)
+static bool vault_aux_cthulhu(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -1828,7 +1828,7 @@ static void vault_prep_clone(void)
  */
 static void vault_prep_symbol(void)
 {
-	int r_idx;
+	IDX r_idx;
 
 	/* Apply the monster restriction */
 	get_mon_num_prep(vault_aux_simple, NULL);
@@ -1923,7 +1923,7 @@ static void vault_prep_dragon(void)
  * @param r_idx 確認したいモンスター種族ID
  * @return 生成必要条件を満たしているならTRUEを返す。
  */
-static bool vault_aux_dark_elf(int r_idx)
+static bool vault_aux_dark_elf(IDX r_idx)
 {
 	int i;
 	static int dark_elf_list[] =
@@ -1951,7 +1951,7 @@ typedef struct vault_aux_type vault_aux_type;
 struct vault_aux_type
 {
 	cptr name;
-	bool (*hook_func)(int r_idx);
+	bool (*hook_func)(IDX r_idx);
 	void (*prep_func)(void);
 	int level;
 	int chance;
@@ -2287,7 +2287,7 @@ static bool build_type5(void)
 	/* Pick some monster types */
 	for (i = 0; i < NUM_NEST_MON_TYPE; i++)
 	{
-		int r_idx = 0, attempts = 100;
+		IDX r_idx = 0, attempts = 100;
 		monster_race *r_ptr = NULL;
 
 		while (attempts--)
@@ -2397,7 +2397,7 @@ static bool build_type5(void)
 	{
 		for (x = xval - 9; x <= xval + 9; x++)
 		{
-			int r_idx;
+			IDX r_idx;
 
 			i = randint0(NUM_NEST_MON_TYPE);
 			r_idx = nest_mon_info[i].r_idx;
@@ -2499,7 +2499,7 @@ static bool build_type6(void)
 	/* Pick some monster types */
 	for (i = 0; i < 16; i++)
 	{
-		int r_idx = 0, attempts = 100;
+		IDX r_idx = 0, attempts = 100;
 		monster_race *r_ptr = NULL;
 
 		while (attempts--)
@@ -5651,7 +5651,7 @@ static bool build_type12(void)
 /*
  * Helper function for "trapped monster pit"
  */
-static bool vault_aux_trapped_pit(int r_idx)
+static bool vault_aux_trapped_pit(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -5773,7 +5773,7 @@ static bool build_type13(void)
 	/* Pick some monster types */
 	for (i = 0; i < 16; i++)
 	{
-		int r_idx = 0, attempts = 100;
+		IDX r_idx = 0, attempts = 100;
 		monster_race *r_ptr = NULL;
 
 		while (attempts--)
@@ -6037,7 +6037,7 @@ static bool build_type14(void)
 /*
  * Helper function for "glass room"
  */
-static bool vault_aux_lite(int r_idx)
+static bool vault_aux_lite(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -6059,7 +6059,7 @@ static bool vault_aux_lite(int r_idx)
 /*
  * Helper function for "glass room"
  */
-static bool vault_aux_shards(int r_idx)
+static bool vault_aux_shards(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -6153,7 +6153,7 @@ static bool build_type15(void)
 			/* Place fixed lite berathers */
 			for (dir1 = 4; dir1 < 8; dir1++)
 			{
-				int r_idx = get_mon_num(dun_level);
+				IDX r_idx = get_mon_num(dun_level);
 
 				y = yval + 2 * ddy_ddd[dir1];
 				x = xval + 2 * ddx_ddd[dir1];
@@ -6196,7 +6196,7 @@ static bool build_type15(void)
 
 	case 2: /* 1 lite breather + random object */
 		{
-			int r_idx, dir1;
+			IDX r_idx, dir1;
 
 			/* Pillars */
 			c_ptr = &cave[y1 + 1][x1 + 1];
@@ -6283,7 +6283,7 @@ static bool build_type15(void)
 			/* Place shard berathers */
 			for (dir1 = 4; dir1 < 8; dir1++)
 			{
-				int r_idx = get_mon_num(dun_level);
+				IDX r_idx = get_mon_num(dun_level);
 
 				y = yval + ddy_ddd[dir1];
 				x = xval + ddx_ddd[dir1];

@@ -3921,7 +3921,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
  * @param r_idx チェックしたいモンスター種族のID
  * @return 人形にできるならTRUEを返す
  */
-static bool item_monster_okay(int r_idx)
+static bool item_monster_okay(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -4250,7 +4250,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
  * "good" and "great" arguments are false.  As a total hack, if "great" is\n
  * true, then the item gets 3 extra "attempts" to become an artifact.\n
  */
-void apply_magic(object_type *o_ptr, int lev, u32b mode)
+void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
 	int i, rolls, f1, f2, power;
 
@@ -4752,7 +4752,7 @@ static bool kind_is_good(int k_idx)
  * This routine uses "object_level" for the "generation level".\n
  * We assume that the given object has been "wiped".\n
  */
-bool make_object(object_type *j_ptr, u32b mode)
+bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 {
 	int prob, base;
 	byte obj_level;
@@ -4838,7 +4838,7 @@ bool make_object(object_type *j_ptr, u32b mode)
  * This routine uses "object_level" for the "generation level".\n
  * This routine requires a clean floor grid destination.\n
  */
-void place_object(POSITION y, POSITION x, u32b mode)
+void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	IDX o_idx;
 
@@ -6980,7 +6980,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int *max)
 * @param max 算出した最大ダメージを返すポインタ
 * @return なし
 */
-void spell_damcalc_by_spellnum(int spell_num, int typ, int m_idx, int *max)
+void spell_damcalc_by_spellnum(int spell_num, int typ, IDX m_idx, int *max)
 {
     monster_type *m_ptr = &m_list[m_idx];
     int dam = monspell_damage((spell_num), m_idx, DAM_MAX);

@@ -27,7 +27,7 @@
  * @param mode オプション
  * @return テレポート先として妥当ならばtrue
  */
-static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
+static bool cave_monster_teleportable_bold(IDX m_idx, int y, int x, u32b mode)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	cave_type    *c_ptr = &cave[y][x];
@@ -505,7 +505,7 @@ void teleport_player(int dis, u32b mode)
  * @param dis テレポート距離
  * @return なし
  */
-void teleport_player_away(int m_idx, int dis)
+void teleport_player_away(IDX m_idx, int dis)
 {
 	int yy, xx;
 
@@ -600,7 +600,7 @@ void teleport_player_to(POSITION ny, POSITION nx, u32b mode)
 }
 
 
-void teleport_away_followable(int m_idx)
+void teleport_away_followable(IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	int          oldfy = m_ptr->fy;
@@ -659,7 +659,7 @@ void teleport_away_followable(int m_idx)
  * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
  * @return なし
  */
-void teleport_level(int m_idx)
+void teleport_level(IDX m_idx)
 {
 	bool         go_up;
 	char         m_name[160];

@@ -67,7 +67,7 @@ static bool int_outof(monster_race *r_ptr, int prob)
  * @param f6p モンスター魔法のフラグリスト3
  * @return なし
  */
-static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
+static void remove_bad_spells(IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -509,7 +509,7 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
+void bolt(IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
   {
     int flg;
     bool learnable = spell_learnable(m_idx);
@@ -540,7 +540,7 @@ void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
+void beam(IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
 {
     int flg;
     bool learnable = spell_learnable(m_idx);
@@ -574,7 +574,7 @@ void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type)
+void breath(int y, int x, IDX m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type)
 {
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1076,7 +1076,7 @@ bool dispel_check(IDX m_idx)
  *\n
  * This function may well be an efficiency bottleneck.\n
  */
-static int choose_attack_spell(int m_idx, byte spells[], byte num)
+static int choose_attack_spell(IDX m_idx, byte spells[], byte num)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];

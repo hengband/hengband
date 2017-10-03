@@ -3453,7 +3453,7 @@ static void player_wipe_without_name(void)
  * @param r_idx モンスターＩＤ
  * @return 討伐対象にできるならTRUEを返す。
  */
-static bool mon_hook_quest(int r_idx)
+static bool mon_hook_quest(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3867,7 +3867,7 @@ static byte player_init[MAX_CLASS][3][2] =
  * @param r_idx モンスターＩＤ
  * @return 死体を食べられるならTRUEを返す。
  */
-static bool monster_hook_human(int r_idx)
+static bool monster_hook_human(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 

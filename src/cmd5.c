@@ -1596,7 +1596,7 @@ void check_pets_num_and_align(monster_type *m_ptr, bool inc)
 int calculate_upkeep(void)
 {
 	s32b old_friend_align = friend_align;
-	int m_idx;
+	IDX m_idx;
 	bool have_a_unique = FALSE;
 	s32b total_friend_levels = 0;
 

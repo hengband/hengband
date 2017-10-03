@@ -256,7 +256,8 @@ static bool dispel_check_monster(IDX m_idx, IDX t_idx)
 bool monst_spell_monst(IDX m_idx)
 {
 	int y = 0, x = 0;
-	int i, k, t_idx = 0;
+	int i, k;
+	IDX t_idx = 0;
 	int thrown_spell;
 	int dam = 0;
 	int start;

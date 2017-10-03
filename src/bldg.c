@@ -1438,7 +1438,7 @@ static bool gamble_comm(int cmd)
  * 自爆以外のなんらかのHP攻撃手段を持っていること。
  * @return 参加できるか否か
  */
-static bool vault_aux_battle(int r_idx)
+static bool vault_aux_battle(IDX r_idx)
 {
 	int i;
 	int dam = 0;

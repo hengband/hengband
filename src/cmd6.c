@@ -4132,7 +4132,7 @@ void do_cmd_use(void)
  * @param only_browse 閲覧するだけならばTRUE
  * @return 選択した魔力のID、キャンセルならば-1を返す
  */
-static int select_magic_eater(bool only_browse)
+static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 {
 	OBJECT_SUBTYPE_VALUE ext = 0;
 	char choice;
@@ -4145,7 +4145,7 @@ static int select_magic_eater(bool only_browse)
 	int menu_line = (use_menu ? 1 : 0);
 
 #ifdef ALLOW_REPEAT
-	int sn;
+	SPELL_IDX sn;
 	if (repeat_pull(&sn))
 	{
 		/* Verify the spell */

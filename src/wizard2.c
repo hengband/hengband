@@ -1669,7 +1669,7 @@ static void do_cmd_wiz_summon(int num)
  * @details
  * XXX XXX XXX This function is rather dangerous
  */
-static void do_cmd_wiz_named(int r_idx)
+static void do_cmd_wiz_named(IDX r_idx)
 {
 	(void)summon_named_creature(0, p_ptr->y, p_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 }
@@ -1683,7 +1683,7 @@ static void do_cmd_wiz_named(int r_idx)
  * @details
  * XXX XXX XXX This function is rather dangerous
  */
-static void do_cmd_wiz_named_friendly(int r_idx)
+static void do_cmd_wiz_named_friendly(IDX r_idx)
 {
 	(void)summon_named_creature(0, p_ptr->y, p_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET));
 }

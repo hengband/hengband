@@ -675,70 +675,70 @@ void mindcraft_info(char *p, int use_mind, int power)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-  static int get_mind_power(int *sn, bool only_browse)
-    {
-      int             i;
-      int             num = 0;
-      int             y = 1;
-      int             x = 10;
-      int             minfail = 0;
-      int             plev = p_ptr->lev;
-      int             chance = 0;
-      int             ask = TRUE;
-      char            choice;
-      char            out_val[160];
-      char            comment[80];
-      cptr            p;
+static int get_mind_power(SPELL_IDX *sn, bool only_browse)
+{
+	int             i;
+	int             num = 0;
+	int             y = 1;
+	int             x = 10;
+	int             minfail = 0;
+	int             plev = p_ptr->lev;
+	int             chance = 0;
+	int             ask = TRUE;
+	char            choice;
+	char            out_val[160];
+	char            comment[80];
+	cptr            p;
 
-      mind_type       spell;
-      const mind_power      *mind_ptr;
-      bool            flag, redraw;
-      int             use_mind;
-      int menu_line = (use_menu ? 1 : 0);
+	mind_type       spell;
+	const mind_power      *mind_ptr;
+	bool            flag, redraw;
+	int             use_mind;
+	int menu_line = (use_menu ? 1 : 0);
 
-      switch(p_ptr->pclass)
+	switch (p_ptr->pclass)
 	{
 	case CLASS_MINDCRAFTER:
-	  {
-	    use_mind = MIND_MINDCRAFTER;
-	    p = _("超能力", "mindcraft");
-	    break;
-	  }
-	case CLASS_FORCETRAINER:
-	  {
-	    use_mind = MIND_KI;
-	    p = _("練気術", "Force");
-	    break;
-	  }
-	case CLASS_BERSERKER:
-	  {
-	    use_mind = MIND_BERSERKER;
-	    p = _("技", "brutal power");
-	    break;
-	  }
-	case CLASS_MIRROR_MASTER:
-	  {
-	    use_mind = MIND_MIRROR_MASTER;
-	    p = _("鏡魔法", "magic");
-	    break;
-	  }
-	case CLASS_NINJA:
-	  {
-	    use_mind = MIND_NINJUTSU;
-	    p = _("忍術", "ninjutsu");
-	    break;
-	  }
-	default:
-	  {
-	    use_mind = 0;
-	    p = _("超能力", "mindcraft");
-	    break;
-	  }
+	{
+		use_mind = MIND_MINDCRAFTER;
+		p = _("超能力", "mindcraft");
+		break;
 	}
-      mind_ptr = &mind_powers[use_mind];
+	case CLASS_FORCETRAINER:
+	{
+		use_mind = MIND_KI;
+		p = _("練気術", "Force");
+		break;
+	}
+	case CLASS_BERSERKER:
+	{
+		use_mind = MIND_BERSERKER;
+		p = _("技", "brutal power");
+		break;
+	}
+	case CLASS_MIRROR_MASTER:
+	{
+		use_mind = MIND_MIRROR_MASTER;
+		p = _("鏡魔法", "magic");
+		break;
+	}
+	case CLASS_NINJA:
+	{
+		use_mind = MIND_NINJUTSU;
+		p = _("忍術", "ninjutsu");
+		break;
+	}
+	default:
+	{
+		use_mind = 0;
+		p = _("超能力", "mindcraft");
+		break;
+	}
+	}
+	mind_ptr = &mind_powers[use_mind];
 
 	/* Assume cancelled */
-      *sn = (-1);
+	*sn = (-1);
 
 #ifdef ALLOW_REPEAT /* TNB */
 
@@ -1278,7 +1278,7 @@ static bool cast_force_spell(int spell)
 			int i;
 			int ty = y, tx = x;
 			int oy = y, ox = x;
-			int m_idx = cave[y][x].m_idx;
+			IDX m_idx = cave[y][x].m_idx;
 			monster_type *m_ptr = &m_list[m_idx];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 			char m_name[80];
@@ -1327,7 +1327,7 @@ static bool cast_force_spell(int spell)
 		break;
 	case 9:
 	{
-		int m_idx;
+		IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;
@@ -1744,12 +1744,12 @@ static bool cast_ninja_spell(int spell)
 	case 12:
 	{
 		monster_type *m_ptr;
-		int m_idx;
+		IDX m_idx;
 		char m_name[80];
 		int i;
 		int path_n;
 		u16b path_g[512];
-		int ty,tx;
+		POSITION ty, tx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;

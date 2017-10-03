@@ -670,7 +670,7 @@ static bool summon_unique_okay = FALSE;
  * @return 召喚条件が一致するならtrue
  * @details
  */
-static bool summon_specific_aux(int r_idx)
+static bool summon_specific_aux(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	int okay = FALSE;
@@ -979,7 +979,7 @@ static int chameleon_change_m_idx = 0;
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(int r_idx)
+static bool restrict_monster_to_dungeon(IDX r_idx)
 {
 	dungeon_info_type *d_ptr = &d_info[dungeon_type];
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1805,7 +1805,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
  * @details
  * Return the number of new flags learnt.  -Mogami-
  */
-int lore_do_probe(int r_idx)
+int lore_do_probe(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	int i, n = 0;
@@ -1923,7 +1923,7 @@ int lore_do_probe(int r_idx)
  * gold and items are dropped, and remembers that information to be
  * described later by the monster recall code.
  */
-void lore_treasure(int m_idx, int num_item, int num_gold)
+void lore_treasure(IDX m_idx, int num_item, int num_gold)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -2342,7 +2342,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
  * "disturb_near" (monster which is "easily" viewable moves in some
  * way).  Note that "moves" includes "appears" and "disappears".
  */
-void update_mon(int m_idx, bool full)
+void update_mon(IDX m_idx, bool full)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -2758,7 +2758,7 @@ void update_monsters(bool full)
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(int r_idx)
+static bool monster_hook_chameleon_lord(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	monster_type *m_ptr = &m_list[chameleon_change_m_idx];
@@ -2794,7 +2794,7 @@ static bool monster_hook_chameleon_lord(int r_idx)
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon(int r_idx)
+static bool monster_hook_chameleon(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	monster_type *m_ptr = &m_list[chameleon_change_m_idx];
@@ -2946,7 +2946,7 @@ void choose_new_monster(IDX m_idx, bool born, IDX r_idx)
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_tanuki(int r_idx)
+static bool monster_hook_tanuki(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2967,7 +2967,7 @@ static bool monster_hook_tanuki(int r_idx)
  * @param r_idx モンスター種族ID
  * @return モンスター種族の表層ID
  */
-static int initial_r_appearance(int r_idx)
+static int initial_r_appearance(IDX r_idx)
 {
 	int attempts = 1000;
 
@@ -3435,7 +3435,7 @@ static bool place_monster_one(IDX who, POSITION y, POSITION x, IDX r_idx, BIT_FL
  * @return 成功したらtrue
  *  
  */
-static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
+static bool mon_scatter(IDX r_idx, int *yp, int *xp, int y, int x, int max_dist)
 {
 	int place_x[MON_SCAT_MAXD];
 	int place_y[MON_SCAT_MAXD];
@@ -3515,7 +3515,7 @@ static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
  * @param mode 生成オプション
  * @return 成功したらtrue
  */
-static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
+static bool place_monster_group(IDX who, POSITION y, POSITION x, IDX r_idx, u32b mode)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3615,7 +3615,7 @@ static int place_monster_m_idx = 0;
  * @param r_idx チェックするモンスター種族のID
  * @return 護衛にできるならばtrue
  */
-static bool place_monster_can_escort(int r_idx)
+static bool place_monster_can_escort(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[place_monster_idx];
 	monster_type *m_ptr = &m_list[place_monster_m_idx];
@@ -3677,7 +3677,7 @@ static bool place_monster_can_escort(int r_idx)
  * Note the use of the new "monster allocation table" code to restrict
  * the "get_mon_num()" function to "legal" escort types.
  */
-bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
+bool place_monster_aux(int who, int y, int x, IDX r_idx, u32b mode)
 {
 	int             i, j, n;
 	monster_race    *r_ptr = &r_info[r_idx];
@@ -3766,7 +3766,7 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
  */
 bool place_monster(int y, int x, u32b mode)
 {
-	int r_idx;
+	IDX r_idx;
 
 	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
@@ -3973,7 +3973,7 @@ bool alloc_monster(int dis, u32b mode)
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚対象にできるならばTRUE
  */
-static bool summon_specific_okay(int r_idx)
+static bool summon_specific_okay(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -4100,7 +4100,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
  * @param mode 生成オプション 
  * @return 召喚できたらtrueを返す
  */
-bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
+bool summon_named_creature (int who, int oy, int ox, IDX r_idx, u32b mode)
 {
 	int x, y;
 
@@ -4128,7 +4128,7 @@ bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
  * @details
  * Note that "reproduction" REQUIRES empty space.
  */
-bool multiply_monster(int m_idx, bool clone, u32b mode)
+bool multiply_monster(IDX m_idx, bool clone, u32b mode)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 
@@ -4163,7 +4163,7 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
  * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */
-void message_pain(int m_idx, int dam)
+void message_pain(IDX m_idx, int dam)
 {
 	long oldhp, newhp, tmp;
 	int percentage;
@@ -4491,7 +4491,7 @@ void message_pain(int m_idx, int dam)
  * @param what 学習対象ID
  * @return なし
  */
-void update_smart_learn(int m_idx, int what)
+void update_smart_learn(IDX m_idx, int what)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 

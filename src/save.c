@@ -310,7 +310,7 @@ static void wr_monster(monster_type *m_ptr)
  * @param r_idx モンスター種族ID
  * @return なし
  */
-static void wr_lore(int r_idx)
+static void wr_lore(IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 

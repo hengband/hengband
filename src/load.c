@@ -1143,7 +1143,7 @@ static void rd_monster(monster_type *m_ptr)
  * @param r_idx 読み込み先モンスターID
  * @return なし
  */
-static void rd_lore(int r_idx)
+static void rd_lore(IDX r_idx)
 {
 	byte tmp8u;
 
@@ -3180,7 +3180,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	for (i = 1; i < limit; i++)
 	{
 		cave_type *c_ptr;
-		int m_idx;
+		IDX m_idx;
 		monster_type *m_ptr;
 
 		/* Get a new record */

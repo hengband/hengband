@@ -230,7 +230,7 @@ msg_format("レベル %d にようこそ。", p_ptr->lev);
  * Used to allocate proper treasure when "Creeping coins" die
  * XXX XXX XXX Note the use of actual "monster names"
  */
-static int get_coin_type(int r_idx)
+static int get_coin_type(IDX r_idx)
 {
 	/* Analyze monsters */
 	switch (r_idx)
@@ -439,7 +439,7 @@ static int count_all_hostile_monsters(void)
 	{
 		for (y = 0; y < cur_hgt; ++ y)
 		{
-			int m_idx = cave[y][x].m_idx;
+			IDX m_idx = cave[y][x].m_idx;
 
 			if (m_idx > 0 && is_hostile(&m_list[m_idx]))
 			{
@@ -1577,7 +1577,7 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
  * to induce changes in the monster recall code.
  * </pre>
  */
-bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
+bool mon_take_hit(IDX m_idx, int dam, bool *fear, cptr note)
 {
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
@@ -2530,7 +2530,7 @@ void ang_sort(vptr u, vptr v, int n)
  * Future versions may restrict the ability to target "trappers"
  * and "mimics", but the semantics is a little bit weird.
  */
-bool target_able(int m_idx)
+bool target_able(IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -5786,7 +5786,7 @@ void display_rumor(bool ex)
 			}
 			else if  (strcmp(zz[0], "MONSTER") == 0)
 			{
-				int r_idx;
+				IDX r_idx;
 				monster_race *r_ptr;
 
 				while(1)
@@ -5826,7 +5826,7 @@ void display_rumor(bool ex)
 			}
 			else if  (strcmp(zz[0], "TOWN") == 0)
 			{
-				int t_idx;
+				IDX t_idx;
 				s32b visit;
 
 				while(1)

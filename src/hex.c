@@ -299,7 +299,7 @@ void revenge_store(int dam)
  * @param m_idx 判定の対象となるモンスターID
  * @return 反テレポートの効果が適用されるならTRUEを返す
  */
-bool teleport_barrier(int m_idx)
+bool teleport_barrier(IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -315,7 +315,7 @@ bool teleport_barrier(int m_idx)
  * @param m_idx 判定の対象となるモンスターID
  * @return 反魔法の効果が適用されるならTRUEを返す
  */
-bool magic_barrier(int m_idx)
+bool magic_barrier(IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -331,7 +331,7 @@ bool magic_barrier(int m_idx)
  * @param m_idx 判定の対象となるモンスターID
  * @return 反増殖の効果が適用されるならTRUEを返す
  */
-bool multiply_barrier(int m_idx)
+bool multiply_barrier(IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
