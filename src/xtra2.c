@@ -230,7 +230,7 @@ msg_format("レベル %d にようこそ。", p_ptr->lev);
  * Used to allocate proper treasure when "Creeping coins" die
  * XXX XXX XXX Note the use of actual "monster names"
  */
-static int get_coin_type(IDX r_idx)
+static int get_coin_type(MONRACE_IDX r_idx)
 {
 	/* Analyze monsters */
 	switch (r_idx)
@@ -5786,7 +5786,7 @@ void display_rumor(bool ex)
 			}
 			else if  (strcmp(zz[0], "MONSTER") == 0)
 			{
-				IDX r_idx;
+				MONRACE_IDX r_idx;
 				monster_race *r_ptr;
 
 				while(1)

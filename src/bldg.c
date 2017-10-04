@@ -1438,7 +1438,7 @@ static bool gamble_comm(int cmd)
  * 自爆以外のなんらかのHP攻撃手段を持っていること。
  * @return 参加できるか否か
  */
-static bool vault_aux_battle(IDX r_idx)
+static bool vault_aux_battle(MONRACE_IDX r_idx)
 {
 	int i;
 	int dam = 0;
@@ -1503,7 +1503,7 @@ void battle_monsters(void)
 		tekitou = FALSE;
 		for(i = 0; i < 4; i++)
 		{
-			IDX r_idx;
+			MONRACE_IDX r_idx;
 			int j;
 			while (1)
 			{
@@ -2027,7 +2027,7 @@ static bool kankin(void)
  * @param r_idx 判定対象となるモンスターのＩＤ
  * @return 悪夢の元凶となり得るか否か。
  */
-bool get_nightmare(IDX r_idx)
+bool get_nightmare(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -4022,7 +4022,7 @@ static bool research_mon(void)
 {
 	IDX i;
 	int n;
-	IDX r_idx;
+	MONRACE_IDX r_idx;
 	char sym, query;
 	char buf[128];
 

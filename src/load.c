@@ -1145,7 +1145,7 @@ static void rd_monster(monster_type *m_ptr)
  * @param r_idx 読み込み先モンスターID
  * @return なし
  */
-static void rd_lore(IDX r_idx)
+static void rd_lore(MONRACE_IDX r_idx)
 {
 	byte tmp8u;
 

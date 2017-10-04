@@ -106,6 +106,7 @@ typedef unsigned long u32b;
 
 typedef s16b IDX;			/*!< ゲーム中のID型を定義 */
 typedef s16b FEAT_IDX;		/*!< ゲーム中の地形ID型を定義 */
+typedef s16b MONRACE_IDX;		/*!< ゲーム中のモンスター種族ID型を定義 */
 
 typedef s32b POSITION;		/*!< ゲーム中の座標型を定義 */
 typedef s32b HIT_POINT;		/*!< ゲーム中のHP/ダメージ型を定義 */

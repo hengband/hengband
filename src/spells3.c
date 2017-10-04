@@ -5154,7 +5154,7 @@ bool brand_bolts(void)
  * @details
  * Note that this function is one of the more "dangerous" ones...
  */
-static IDX poly_r_idx(IDX r_idx)
+static IDX poly_r_idx(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 

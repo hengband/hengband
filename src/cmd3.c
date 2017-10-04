@@ -1797,7 +1797,7 @@ void do_cmd_query_symbol(void)
 {
 	IDX i;
 	int n;
-	IDX r_idx;
+	MONRACE_IDX r_idx;
 	char	sym, query;
 	char	buf[128];
 

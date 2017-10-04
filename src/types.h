@@ -582,7 +582,7 @@ typedef struct monster_type monster_type;
 
 struct monster_type
 {
-	IDX r_idx;		/* Monster race index */
+	MONRACE_IDX r_idx;		/* Monster race index */
 	IDX ap_r_idx;		/* Monster race appearance index */
 	byte sub_align;		/* Sub-alignment for a neutral monster */
 
@@ -696,7 +696,7 @@ struct quest_type
 
 	char name[60];          /*!< クエスト名 / Quest name */
 	DEPTH level;             /*!< 処理階層 / Dungeon level */
-	IDX r_idx;             /*!< クエスト対象のモンスターID / Monster race */
+	MONRACE_IDX r_idx;             /*!< クエスト対象のモンスターID / Monster race */
 	   
 	s16b cur_num;           /*!< 撃破したモンスターの数 / Number killed */
 	s16b max_num;           /*!< 求められるモンスターの撃破数 / Number required */
@@ -1073,9 +1073,9 @@ struct player_type
 	TIME_EFFECT dustrobe;          /* Timed -- Robe of dust */
 
 	s16b chaos_patron;
-	u32b muta1;
-	u32b muta2;
-	u32b muta3;
+	BIT_FLAGS muta1;
+	BIT_FLAGS muta2;
+	BIT_FLAGS muta3;
 
 	s16b virtues[8];
 	s16b vir_types[8];
@@ -1531,7 +1531,7 @@ struct tag_type
 	int     index;
 };
 
-typedef bool (*monster_hook_type)(IDX r_idx);
+typedef bool (*monster_hook_type)(MONRACE_IDX r_idx);
 
 
 /*

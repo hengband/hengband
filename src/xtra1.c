@@ -1736,7 +1736,7 @@ static void fix_inven(void)
 static void print_monster_line(int x, int y, monster_type* m_ptr, int n_same){
 	char buf[256];
 	int i;
-	IDX r_idx = m_ptr->ap_r_idx;
+	MONRACE_IDX r_idx = m_ptr->ap_r_idx;
 	monster_race* r_ptr = &r_info[r_idx];
  
 	Term_gotoxy(x, y);
@@ -1795,7 +1795,7 @@ void print_monster_list(int x, int y, int max_lines){
 		if(!m_ptr->r_idx)continue;//dead?
 		{
 			/*
-			IDX r_idx = m_ptr->ap_r_idx;
+			MONRACE_IDX r_idx = m_ptr->ap_r_idx;
 			monster_race* r_ptr = &r_info[r_idx];
 			cptr name = (r_name + r_ptr->name);
 			cptr ename = (r_name + r_ptr->name);

@@ -6669,7 +6669,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		byte attr;
 
 		/* Get the race index */
-		IDX r_idx = mon_idx[mon_top + i] ;
+		MONRACE_IDX r_idx = mon_idx[mon_top + i] ;
 
 		/* Access the race */
 		monster_race *r_ptr = &r_info[r_idx];

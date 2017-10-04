@@ -4986,7 +4986,7 @@ void health_track(IDX m_idx)
 /*
  * Hack -- track the given monster race
  */
-void monster_race_track(IDX r_idx)
+void monster_race_track(MONRACE_IDX r_idx)
 {
 	/* Save this monster ID */
 	p_ptr->monster_race_idx = r_idx;

@@ -690,7 +690,7 @@ extern void mmove2(int *y, int *x, int y1, int x1, int y2, int x2);
 extern bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, int mode);
 extern void health_track(IDX m_idx);
-extern void monster_race_track(IDX r_idx);
+extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(IDX k_idx);
 extern void disturb(int stop_search, int flush_output);
 extern void glow_deep_lava_and_bldg(void);
@@ -940,12 +940,12 @@ extern bool process_the_world(int num, int who, bool vs_player);
 extern void monster_gain_exp(IDX m_idx, IDX s_idx);
 
 /* monster1.c */
-extern void roff_top(IDX r_idx);
-extern void screen_roff(IDX r_idx, int mode);
-extern void display_roff(IDX r_idx);
-extern void output_monster_spoiler(IDX r_idx, void (*roff_func)(byte attr, cptr str));
+extern void roff_top(MONRACE_IDX r_idx);
+extern void screen_roff(MONRACE_IDX r_idx, int mode);
+extern void display_roff(MONRACE_IDX r_idx);
+extern void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(byte attr, cptr str));
 extern void create_name(int type, char *name);
-extern bool mon_hook_dungeon(IDX r_idx);
+extern bool mon_hook_dungeon(MONRACE_IDX r_idx);
 
 extern monster_hook_type get_monster_hook(void);
 extern monster_hook_type get_monster_hook2(int y, int x);
@@ -958,7 +958,7 @@ extern bool monster_can_enter(int y, int x, monster_race *r_ptr, u16b mode);
 extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern bool monster_living(monster_race *r_ptr);
-extern bool no_questor_or_bounty_uniques(IDX r_idx);
+extern bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx);
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
 
 
@@ -977,21 +977,21 @@ extern s16b m_pop(void);
 extern errr get_mon_num_prep(monster_hook_type monster_hook, monster_hook_type monster_hook2);
 extern s16b get_mon_num(int level);
 extern void monster_desc(char *desc, monster_type *m_ptr, int mode);
-extern int lore_do_probe(IDX r_idx);
+extern int lore_do_probe(MONRACE_IDX r_idx);
 extern void lore_treasure(IDX m_idx, int num_item, int num_gold);
 extern void sanity_blast(monster_type *m_ptr, bool necro);
 extern void update_mon(IDX m_idx, bool full);
 extern void update_monsters(bool full);
-extern bool place_monster_aux(IDX who, POSITION y, POSITION x, IDX r_idx, BIT_FLAGS mode);
+extern bool place_monster_aux(IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool alloc_horde(POSITION y, POSITION x);
 extern bool alloc_guardian(bool def_val);
 extern bool alloc_monster(int dis, u32b mode);
 extern bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode);
-extern bool summon_named_creature (int who, int oy, int ox, IDX r_idx, u32b mode);
+extern bool summon_named_creature (int who, int oy, int ox, MONRACE_IDX r_idx, u32b mode);
 extern bool multiply_monster(IDX m_idx, bool clone, u32b mode);
 extern void update_smart_learn(IDX m_idx, int what);
-extern void choose_new_monster(IDX m_idx, bool born, IDX r_idx);
+extern void choose_new_monster(IDX m_idx, bool born, MONRACE_IDX r_idx);
 extern byte get_mspeed(monster_race *r_ptr);
 extern bool player_place(POSITION y, POSITION x);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
@@ -1293,7 +1293,7 @@ extern void store_init(int town_num, int store_num);
 extern void move_to_black_market(object_type * o_ptr);
 
 /* bldg.c */
-extern bool get_nightmare(IDX r_idx);
+extern bool get_nightmare(MONRACE_IDX r_idx);
 extern void battle_monsters(void);
 extern void do_cmd_bldg(void);
 extern void do_cmd_quest(void);
@@ -1584,7 +1584,7 @@ extern bool spell_learnable(IDX m_idx);
 extern int monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, IDX m_idx);
 extern int monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, IDX m_idx, IDX t_idx);
 extern int monspell_damage(int SPELL_NUM, IDX m_idx, int TYPE);
-extern int monspell_race_damage(int SPELL_NUM, IDX r_idx, int TYPE);
+extern int monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE);
 extern int monspell_bluemage_damage(int SPELL_NUM, int plev, int TYPE);
 
 /* hissatsu.c */

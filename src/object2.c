@@ -3921,7 +3921,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
  * @param r_idx チェックしたいモンスター種族のID
  * @return 人形にできるならTRUEを返す
  */
-static bool item_monster_okay(IDX r_idx)
+static bool item_monster_okay(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 

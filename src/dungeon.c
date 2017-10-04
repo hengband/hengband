@@ -4939,7 +4939,7 @@ static void process_command(void)
  * @param r_idx 判定したいモンスター種族のID
  * @return 釣れる対象ならばTRUEを返す
  */
-static bool monster_tsuri(IDX r_idx)
+static bool monster_tsuri(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -5114,7 +5114,7 @@ static void process_player(void)
 		Term_xtra(TERM_XTRA_DELAY, 10);
 		if (one_in_(1000))
 		{
-			IDX r_idx;
+			MONRACE_IDX r_idx;
 			bool success = FALSE;
 			get_mon_num_prep(monster_tsuri,NULL);
 			r_idx = get_mon_num(dun_level ? dun_level : wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level);
