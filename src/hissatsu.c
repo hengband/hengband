@@ -32,7 +32,7 @@
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_hissatsu_power(int *sn)
+static int get_hissatsu_power(IDX *sn)
 {
 	int             i, j = 0;
 	int             num = 0;

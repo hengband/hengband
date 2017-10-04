@@ -3677,7 +3677,7 @@ static bool place_monster_can_escort(IDX r_idx)
  * Note the use of the new "monster allocation table" code to restrict
  * the "get_mon_num()" function to "legal" escort types.
  */
-bool place_monster_aux(int who, int y, int x, IDX r_idx, u32b mode)
+bool place_monster_aux(IDX who, POSITION y, POSITION x, IDX r_idx, BIT_FLAGS mode)
 {
 	int             i, j, n;
 	monster_race    *r_ptr = &r_info[r_idx];
@@ -3764,7 +3764,7 @@ bool place_monster_aux(int who, int y, int x, IDX r_idx, u32b mode)
  * @param mode 生成オプション
  * @return 生成に成功したらtrue
  */
-bool place_monster(int y, int x, u32b mode)
+bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	IDX r_idx;
 

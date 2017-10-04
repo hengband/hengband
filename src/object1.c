@@ -1589,7 +1589,7 @@ cptr describe_use(int i)
  * @return 使用可能な魔法書ならばTRUEを返す。
  */
 
-bool check_book_realm(const byte book_tval, const byte book_sval)
+bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
 {
 	if (book_tval < TV_LIFE_BOOK) return FALSE;
 	if (p_ptr->pclass == CLASS_SORCERER)

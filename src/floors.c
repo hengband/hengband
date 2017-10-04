@@ -1208,7 +1208,7 @@ void change_floor(void)
 		/* Maintain monsters and artifacts */
 		if (loaded)
 		{
-			int i;
+			IDX i;
 			s32b tmp_last_visit = sf_ptr->last_visit;
 			s32b absence_ticks;
 			int alloc_chance = d_info[dungeon_type].max_m_alloc_chance;

@@ -199,7 +199,7 @@ static void learned_info(char *p, int power)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_learned_power(int *sn)
+static int get_learned_power(IDX *sn)
 {
 	int             i = 0;
 	int             num = 0;
