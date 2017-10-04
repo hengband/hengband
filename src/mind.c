@@ -1278,7 +1278,7 @@ static bool cast_force_spell(int spell)
 			int i;
 			int ty = y, tx = x;
 			int oy = y, ox = x;
-			IDX m_idx = cave[y][x].m_idx;
+			MONSTER_IDX m_idx = cave[y][x].m_idx;
 			monster_type *m_ptr = &m_list[m_idx];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 			char m_name[80];
@@ -1327,7 +1327,7 @@ static bool cast_force_spell(int spell)
 		break;
 	case 9:
 	{
-		IDX m_idx;
+		MONSTER_IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;
@@ -1744,7 +1744,7 @@ static bool cast_ninja_spell(int spell)
 	case 12:
 	{
 		monster_type *m_ptr;
-		IDX m_idx;
+		MONSTER_IDX m_idx;
 		char m_name[80];
 		int i;
 		int path_n;

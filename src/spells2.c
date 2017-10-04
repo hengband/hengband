@@ -2929,7 +2929,7 @@ void aggravate_monsters(int who)
  * @param spell_name 抹殺効果を起こした魔法の名前
  * @return 効力があった場合TRUEを返す
  */
-bool genocide_aux(IDX m_idx, int power, bool player_cast, int dam_side, cptr spell_name)
+bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, cptr spell_name)
 {
 	int          msec = delay_factor * delay_factor * delay_factor;
 	monster_type *m_ptr = &m_list[m_idx];
@@ -3624,7 +3624,7 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
  * This has allowed massive simplification of the "monster" code.
  * </pre>
  */
-bool earthquake_aux(int cy, int cx, int r, IDX m_idx)
+bool earthquake_aux(int cy, int cx, int r, MONSTER_IDX m_idx)
 {
 	int             i, t, y, x, yy, xx, dy, dx;
 	int             damage = 0;

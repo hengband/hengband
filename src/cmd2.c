@@ -3647,7 +3647,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 					if (snipe_type == SP_RUSH)
 					{
 						int n = randint1(5) + 3;
-						IDX m_idx = c_mon_ptr->m_idx;
+						MONSTER_IDX m_idx = c_mon_ptr->m_idx;
 
 						for ( ; cur_dis <= tdis; )
 						{
@@ -3710,7 +3710,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 	if (stick_to)
 	{
-		IDX m_idx = cave[y][x].m_idx;
+		MONSTER_IDX m_idx = cave[y][x].m_idx;
 		monster_type *m_ptr = &m_list[m_idx];
 		IDX o_idx = o_pop();
 

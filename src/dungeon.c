@@ -3206,7 +3206,7 @@ static void process_world_aux_movement(void)
  * @param m_idx 隣接数を調べたいモンスターのID
  * @return 隣接しているモンスターの数
  */
-static int get_monster_crowd_number(IDX m_idx)
+static int get_monster_crowd_number(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	int my = m_ptr->fy;

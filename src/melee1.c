@@ -145,7 +145,7 @@ static cptr desc_moan[] =
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
  */
-bool make_attack_normal(IDX m_idx)
+bool make_attack_normal(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];

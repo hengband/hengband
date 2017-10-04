@@ -8176,7 +8176,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 				int i;
 				POSITION ty = y, tx = x;
 				POSITION oy = y, ox = x;
-				IDX m_idx = cave[y][x].m_idx;
+				MONSTER_IDX m_idx = cave[y][x].m_idx;
 				monster_type *m_ptr = &m_list[m_idx];
 				char m_name[80];
 	
@@ -8525,7 +8525,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			{
 				POSITION y, x;
 				POSITION ny, nx;
-				IDX m_idx;
+				MONSTER_IDX m_idx;
 				cave_type *c_ptr;
 				monster_type *m_ptr;
 	

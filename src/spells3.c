@@ -27,7 +27,7 @@
  * @param mode オプション
  * @return テレポート先として妥当ならばtrue
  */
-static bool cave_monster_teleportable_bold(IDX m_idx, int y, int x, u32b mode)
+static bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, int y, int x, u32b mode)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	cave_type    *c_ptr = &cave[y][x];
@@ -63,7 +63,7 @@ static bool cave_monster_teleportable_bold(IDX m_idx, int y, int x, u32b mode)
  * Attempt to move the monster at least "dis/2" grids away.
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(IDX m_idx, int dis, u32b mode)
+bool teleport_away(MONSTER_IDX m_idx, int dis, u32b mode)
 {
 	int oy, ox, d, i, min;
 	int tries = 0;
@@ -178,7 +178,7 @@ bool teleport_away(IDX m_idx, int dis, u32b mode)
  * @param mode オプション
  * @return なし
  */
-void teleport_monster_to(IDX m_idx, POSITION ty, POSITION tx, int power, u32b mode)
+void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, u32b mode)
 {
 	int ny, nx, oy, ox, d, i, min;
 	int attempts = 500;
@@ -505,7 +505,7 @@ void teleport_player(int dis, u32b mode)
  * @param dis テレポート距離
  * @return なし
  */
-void teleport_player_away(IDX m_idx, int dis)
+void teleport_player_away(MONSTER_IDX m_idx, int dis)
 {
 	int yy, xx;
 
@@ -600,7 +600,7 @@ void teleport_player_to(POSITION ny, POSITION nx, u32b mode)
 }
 
 
-void teleport_away_followable(IDX m_idx)
+void teleport_away_followable(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	int          oldfy = m_ptr->fy;
@@ -659,7 +659,7 @@ void teleport_away_followable(IDX m_idx)
  * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
  * @return なし
  */
-void teleport_level(IDX m_idx)
+void teleport_level(MONSTER_IDX m_idx)
 {
 	bool         go_up;
 	char         m_name[160];

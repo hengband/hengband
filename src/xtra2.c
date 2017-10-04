@@ -439,7 +439,7 @@ static int count_all_hostile_monsters(void)
 	{
 		for (y = 0; y < cur_hgt; ++ y)
 		{
-			IDX m_idx = cave[y][x].m_idx;
+			MONSTER_IDX m_idx = cave[y][x].m_idx;
 
 			if (m_idx > 0 && is_hostile(&m_list[m_idx]))
 			{
@@ -737,7 +737,7 @@ cptr extract_note_dies(monster_race *r_ptr)
  * it drops all of its objects, which may disappear in crowded rooms.
  * </pre>
  */
-void monster_death(IDX m_idx, bool drop_item)
+void monster_death(MONSTER_IDX m_idx, bool drop_item)
 {
 	int i, j, y, x;
 
@@ -1577,7 +1577,7 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
  * to induce changes in the monster recall code.
  * </pre>
  */
-bool mon_take_hit(IDX m_idx, int dam, bool *fear, cptr note)
+bool mon_take_hit(MONSTER_IDX m_idx, int dam, bool *fear, cptr note)
 {
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
@@ -2530,7 +2530,7 @@ void ang_sort(vptr u, vptr v, int n)
  * Future versions may restrict the ability to target "trappers"
  * and "mimics", but the semantics is a little bit weird.
  */
-bool target_able(IDX m_idx)
+bool target_able(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 

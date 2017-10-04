@@ -219,7 +219,7 @@ monster_race *real_r_ptr(monster_type *m_ptr)
  * モンスターを削除するとそのモンスターが拾っていたアイテムも同時に削除される。 /
  * When a monster is deleted, all of its objects are deleted.
  */
-void delete_monster_idx(int i)
+void delete_monster_idx(MONSTER_IDX i)
 {
 	int x, y;
 
@@ -309,7 +309,7 @@ void delete_monster_idx(int i)
  * @param y 削除位置y座標
  * @return なし
  */
-void delete_monster(int y, int x)
+void delete_monster(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
 
@@ -1923,7 +1923,7 @@ int lore_do_probe(MONRACE_IDX r_idx)
  * gold and items are dropped, and remembers that information to be
  * described later by the monster recall code.
  */
-void lore_treasure(IDX m_idx, int num_item, int num_gold)
+void lore_treasure(MONSTER_IDX m_idx, int num_item, int num_gold)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -2342,7 +2342,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
  * "disturb_near" (monster which is "easily" viewable moves in some
  * way).  Note that "moves" includes "appears" and "disappears".
  */
-void update_mon(IDX m_idx, bool full)
+void update_mon(MONSTER_IDX m_idx, bool full)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -2833,7 +2833,7 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
  * @param r_idx 旧モンスター種族のID
  * @return なし
  */
-void choose_new_monster(IDX m_idx, bool born, MONRACE_IDX r_idx)
+void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {
 	int oldmaxhp;
 	monster_type *m_ptr = &m_list[m_idx];
@@ -3797,7 +3797,7 @@ bool alloc_horde(POSITION y, POSITION x)
 {
 	monster_race *r_ptr = NULL;
 	MONRACE_IDX r_idx = 0;
-	IDX m_idx;
+	MONSTER_IDX m_idx;
 	int attempts = 1000;
 	POSITION cy = y;
 	POSITION cx = x;
@@ -4128,7 +4128,7 @@ bool summon_named_creature (int who, int oy, int ox, MONRACE_IDX r_idx, u32b mod
  * @details
  * Note that "reproduction" REQUIRES empty space.
  */
-bool multiply_monster(IDX m_idx, bool clone, u32b mode)
+bool multiply_monster(MONSTER_IDX m_idx, bool clone, u32b mode)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 
@@ -4163,7 +4163,7 @@ bool multiply_monster(IDX m_idx, bool clone, u32b mode)
  * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */
-void message_pain(IDX m_idx, int dam)
+void message_pain(MONSTER_IDX m_idx, int dam)
 {
 	long oldhp, newhp, tmp;
 	int percentage;
@@ -4491,7 +4491,7 @@ void message_pain(IDX m_idx, int dam)
  * @param what 学習対象ID
  * @return なし
  */
-void update_smart_learn(IDX m_idx, int what)
+void update_smart_learn(MONSTER_IDX m_idx, int what)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 

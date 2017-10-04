@@ -524,7 +524,7 @@ static void place_pet(void)
 	for (i = 0; i < max_num; i++)
 	{
 		POSITION cy = 0, cx = 0;
-		IDX m_idx;
+		MONSTER_IDX m_idx;
 
 		if (!(party_mon[i].r_idx)) continue;
 
@@ -691,7 +691,7 @@ static void get_out_monster(void)
 	int dis = 1;
 	int oy = p_ptr->y;
 	int ox = p_ptr->x;
-	IDX m_idx = cave[oy][ox].m_idx;
+	MONSTER_IDX m_idx = cave[oy][ox].m_idx;
 
 	/* Nothing to do if no monster */
 	if (!m_idx) return;

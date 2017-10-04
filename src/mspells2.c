@@ -222,7 +222,7 @@ void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
  * @param t_idx 目標のモンスターID
  * @return 魔力消去を使うべきならばTRUEを変えす。
  */
-static bool dispel_check_monster(IDX m_idx, IDX t_idx)
+static bool dispel_check_monster(MONSTER_IDX m_idx, IDX t_idx)
 {
 	monster_type *t_ptr = &m_list[t_idx];
 
@@ -253,7 +253,7 @@ static bool dispel_check_monster(IDX m_idx, IDX t_idx)
  * @details
  * The player is only disturbed if able to be affected by the spell.
  */
-bool monst_spell_monst(IDX m_idx)
+bool monst_spell_monst(MONSTER_IDX m_idx)
 {
 	int y = 0, x = 0;
 	int i, k;

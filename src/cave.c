@@ -4969,7 +4969,7 @@ void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, int
 /*
  * Track a new monster
  */
-void health_track(IDX m_idx)
+void health_track(MONSTER_IDX m_idx)
 {
 	/* Mount monster is already tracked */
 	if (m_idx && m_idx == p_ptr->riding) return;

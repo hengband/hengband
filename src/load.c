@@ -2883,7 +2883,7 @@ static errr rd_dungeon_old(void)
 	/* Read the monsters */
 	for (i = 1; i < limit; i++)
 	{
-		IDX m_idx;
+		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
 
 		/* Get a new record */
@@ -3191,7 +3191,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	for (i = 1; i < limit; i++)
 	{
 		cave_type *c_ptr;
-		IDX m_idx;
+		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
 
 		/* Get a new record */

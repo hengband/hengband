@@ -6980,7 +6980,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int *max)
 * @param max 算出した最大ダメージを返すポインタ
 * @return なし
 */
-void spell_damcalc_by_spellnum(int spell_num, int typ, IDX m_idx, int *max)
+void spell_damcalc_by_spellnum(int spell_num, int typ, MONSTER_IDX m_idx, int *max)
 {
     monster_type *m_ptr = &m_list[m_idx];
     int dam = monspell_damage((spell_num), m_idx, DAM_MAX);

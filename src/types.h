@@ -457,7 +457,7 @@ struct cave_type
 
 	IDX feat;		/* Hack -- feature type */
 	IDX o_idx;		/* Object in this grid */
-	IDX m_idx;		/* Monster in this grid */
+	MONSTER_IDX m_idx;		/* Monster in this grid */
 
 	s16b special;	/* Special cave info */
 

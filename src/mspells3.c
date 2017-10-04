@@ -637,7 +637,7 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
 	case MS_DISPEL:
 	{
-		IDX m_idx;
+		MONSTER_IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;
