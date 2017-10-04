@@ -7386,8 +7386,8 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 /*
  * Display the features in a group.
  */
-static void display_feature_list(int col, int row, int per_page, IDX *feat_idx,
-	IDX feat_cur, IDX feat_top, bool visual_only, int lighting_level)
+static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_idx,
+	FEAT_IDX feat_cur, FEAT_IDX feat_top, bool visual_only, int lighting_level)
 {
 	int lit_col[F_LIT_MAX], i, j;
 	int f_idx_col = use_bigtile ? 62 : 64;
@@ -7403,7 +7403,7 @@ static void display_feature_list(int col, int row, int per_page, IDX *feat_idx,
 		byte attr;
 
 		/* Get the index */
-		int f_idx = feat_idx[feat_top + i];
+		FEAT_IDX f_idx = feat_idx[feat_top + i];
 
 		/* Access the index */
 		feature_type *f_ptr = &f_info[f_idx];

@@ -1178,77 +1178,77 @@ cptr screen_dump = NULL;
 /*** Terrain feature variables ***/
 
 /* Nothing */
-s16b feat_none;
+FEAT_IDX feat_none;
 
 /* Floor */
-s16b feat_floor;
+FEAT_IDX feat_floor;
 
 /* Objects */
-s16b feat_glyph;
-s16b feat_explosive_rune;
-s16b feat_mirror;
+FEAT_IDX feat_glyph;
+FEAT_IDX feat_explosive_rune;
+FEAT_IDX feat_mirror;
 
 /* Doors */
 door_type feat_door[MAX_DOOR_TYPES];
 
 /* Stairs */
-s16b feat_up_stair;
-s16b feat_down_stair;
-s16b feat_entrance;
+FEAT_IDX feat_up_stair;
+FEAT_IDX feat_down_stair;
+FEAT_IDX feat_entrance;
 
 /* Special traps */
-s16b feat_trap_open;
-s16b feat_trap_armageddon;
-s16b feat_trap_piranha;
+FEAT_IDX feat_trap_open;
+FEAT_IDX feat_trap_armageddon;
+FEAT_IDX feat_trap_piranha;
 
 /* Rubble */
-s16b feat_rubble;
+FEAT_IDX feat_rubble;
 
 /* Seams */
-s16b feat_magma_vein;
-s16b feat_quartz_vein;
+FEAT_IDX feat_magma_vein;
+FEAT_IDX feat_quartz_vein;
 
 /* Walls */
-s16b feat_granite;
-s16b feat_permanent;
+FEAT_IDX feat_granite;
+FEAT_IDX feat_permanent;
 
 /* Glass floor */
-s16b feat_glass_floor;
+FEAT_IDX feat_glass_floor;
 
 /* Glass walls */
-s16b feat_glass_wall;
-s16b feat_permanent_glass_wall;
+FEAT_IDX feat_glass_wall;
+FEAT_IDX feat_permanent_glass_wall;
 
 /* Pattern */
-s16b feat_pattern_start;
-s16b feat_pattern_1;
-s16b feat_pattern_2;
-s16b feat_pattern_3;
-s16b feat_pattern_4;
-s16b feat_pattern_end;
-s16b feat_pattern_old;
-s16b feat_pattern_exit;
-s16b feat_pattern_corrupted;
+FEAT_IDX feat_pattern_start;
+FEAT_IDX feat_pattern_1;
+FEAT_IDX feat_pattern_2;
+FEAT_IDX feat_pattern_3;
+FEAT_IDX feat_pattern_4;
+FEAT_IDX feat_pattern_end;
+FEAT_IDX feat_pattern_old;
+FEAT_IDX feat_pattern_exit;
+FEAT_IDX feat_pattern_corrupted;
 
 /* Various */
-s16b feat_black_market;
-s16b feat_town;
+FEAT_IDX feat_black_market;
+FEAT_IDX feat_town;
 
 /* Terrains */
-s16b feat_deep_water;
-s16b feat_shallow_water;
-s16b feat_deep_lava;
-s16b feat_shallow_lava;
-s16b feat_dirt;
-s16b feat_grass;
-s16b feat_flower;
-s16b feat_brake;
-s16b feat_tree;
-s16b feat_mountain;
-s16b feat_swamp;
+FEAT_IDX feat_deep_water;
+FEAT_IDX feat_shallow_water;
+FEAT_IDX feat_deep_lava;
+FEAT_IDX feat_shallow_lava;
+FEAT_IDX feat_dirt;
+FEAT_IDX feat_grass;
+FEAT_IDX feat_flower;
+FEAT_IDX feat_brake;
+FEAT_IDX feat_tree;
+FEAT_IDX feat_mountain;
+FEAT_IDX feat_swamp;
 
 /* Unknown grid (not detected) */
-s16b feat_undetected;
+FEAT_IDX feat_undetected;
 
 /*
  * Which dungeon ?
@@ -1256,10 +1256,10 @@ s16b feat_undetected;
 IDX dungeon_type;
 DEPTH *max_dlv;
 
-s16b feat_wall_outer;
-s16b feat_wall_inner;
-s16b feat_wall_solid;
-s16b floor_type[100], fill_type[100];
+FEAT_IDX feat_wall_outer;
+FEAT_IDX feat_wall_inner;
+FEAT_IDX feat_wall_solid;
+FEAT_IDX floor_type[100], fill_type[100];
 
 bool now_damaged;
 s16b now_message;

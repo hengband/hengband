@@ -2543,9 +2543,9 @@ static errr rd_dungeon_old(void)
 
 	rd_s16b(&num_repro);
 	rd_s16b(&tmp16s);
-	p_ptr->y = (int)tmp16s;
+	p_ptr->y = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
-	p_ptr->x = (int)tmp16s;
+	p_ptr->x = (POSITION)tmp16s;
 	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
 	rd_s16b(&tmp16s);
 	cur_hgt = (POSITION)tmp16s;
