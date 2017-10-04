@@ -32,7 +32,7 @@
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_hissatsu_power(IDX *sn)
+static int get_hissatsu_power(SPELL_IDX *sn)
 {
 	int             i, j = 0;
 	int             num = 0;
@@ -324,7 +324,7 @@ static int get_hissatsu_power(IDX *sn)
  */
 void do_cmd_hissatsu(void)
 {
-	int             n = 0;
+	SPELL_IDX       n = 0;
 	magic_type      spell;
 
 

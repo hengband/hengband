@@ -2737,7 +2737,7 @@ void update_mon(IDX m_idx, bool full)
  */
 void update_monsters(bool full)
 {
-	int i;
+	IDX i;
 
 	/* Update each (live) monster */
 	for (i = 1; i < m_max; i++)
@@ -2967,7 +2967,7 @@ static bool monster_hook_tanuki(IDX r_idx)
  * @param r_idx モンスター種族ID
  * @return モンスター種族の表層ID
  */
-static int initial_r_appearance(IDX r_idx)
+static IDX initial_r_appearance(IDX r_idx)
 {
 	int attempts = 1000;
 
@@ -3601,14 +3601,14 @@ static bool place_monster_group(IDX who, POSITION y, POSITION x, IDX r_idx, u32b
  * @brief 護衛対象となるモンスター種族IDを渡すグローバル変数 / Hack -- help pick an escort type
  * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_idxを除去し、関数引数化する
  */
-static int place_monster_idx = 0;
+static IDX place_monster_idx = 0;
 
 /*!
  * @var place_monster_m_idx
  * @brief 護衛対象となるモンスターIDを渡すグローバル変数 / Hack -- help pick an escort type
  * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_m_idxを除去し、関数引数化する
  */
-static int place_monster_m_idx = 0;
+static IDX place_monster_m_idx = 0;
 
 /*!
  * @brief モンスター種族が召喚主の護衛となれるかどうかをチェックする / Hack -- help pick an escort type

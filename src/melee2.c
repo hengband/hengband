@@ -61,7 +61,7 @@ static bool get_enemy_dir(IDX m_idx, int *mm)
 		/* Scan thru all monsters */
 		for (i = start; ((i < start + m_max) && (i > start - m_max)); i+=plus)
 		{
-			int dummy = (i % m_max);
+			IDX dummy = (i % m_max);
 
 			if (!dummy) continue;
 
@@ -194,7 +194,7 @@ static bool get_enemy_dir(IDX m_idx, int *mm)
  * @param who 打撃を行ったモンスターの参照ID
  * @return なし
  */
-void mon_take_hit_mon(IDX m_idx, int dam, bool *fear, cptr note, int who)
+void mon_take_hit_mon(IDX m_idx, HIT_POINT dam, bool *fear, cptr note, IDX who)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 
@@ -3390,8 +3390,8 @@ static void process_monster(IDX m_idx)
  */
 void process_monsters(void)
 {
-	int             i;
-	int             fx, fy;
+	IDX i;
+	POSITION fx, fy;
 
 	bool            test;
 
@@ -3550,7 +3550,7 @@ void process_monsters(void)
 
 
 		/* Save global index */
-		hack_m_idx = (s16b)i;
+		hack_m_idx = i;
 
 		/* Process the monster */
 		process_monster(i);
@@ -4349,7 +4349,7 @@ bool process_the_world(int num, int who, bool vs_player)
  * @param s_idx 撃破されたモンスター種族の参照ID
  * @return なし
  */
-void monster_gain_exp(IDX m_idx, int s_idx)
+void monster_gain_exp(IDX m_idx, IDX s_idx)
 {
 	monster_type *m_ptr;
 	monster_race *r_ptr;

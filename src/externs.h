@@ -195,8 +195,8 @@ extern s16b o_max;
 extern s16b o_cnt;
 extern s16b m_max;
 extern s16b m_cnt;
-extern s16b hack_m_idx;
-extern s16b hack_m_idx_ii;
+extern IDX hack_m_idx;
+extern IDX hack_m_idx_ii;
 extern int total_friends;
 extern s32b friend_align;
 extern int leaving_quest;
@@ -613,7 +613,7 @@ extern s16b feat_mountain;
 extern s16b feat_swamp;
 extern s16b feat_undetected;
 
-extern byte dungeon_type;
+extern IDX dungeon_type;
 extern DEPTH *max_dlv;
 extern s16b feat_wall_outer;
 extern s16b feat_wall_inner;
@@ -935,9 +935,9 @@ extern void process_monsters_mtimed(int mtimed_idx);
 extern void dispel_monster_status(IDX m_idx);
 extern u32b get_curse(int power, object_type *o_ptr);
 extern void curse_equipment(int chance, int heavy_chance);
-extern void mon_take_hit_mon(IDX m_idx, int dam, bool *fear, cptr note, int who);
+extern void mon_take_hit_mon(IDX m_idx, HIT_POINT dam, bool *fear, cptr note, IDX who);
 extern bool process_the_world(int num, int who, bool vs_player);
-extern void monster_gain_exp(IDX m_idx, int s_idx);
+extern void monster_gain_exp(IDX m_idx, IDX s_idx);
 
 /* monster1.c */
 extern void roff_top(IDX r_idx);

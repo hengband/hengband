@@ -352,8 +352,10 @@ static void rd_item_old(object_type *o_ptr)
 	o_ptr->ix = (POSITION)tmp8u;
 
 	/* Type/Subtype */
-	rd_byte(&o_ptr->tval);
-	rd_byte(&o_ptr->sval);
+	rd_byte(&tmp8u);
+	o_ptr->tval = tmp8u;
+	rd_byte(&tmp8u);
+	o_ptr->sval = tmp8u;
 
 	if (z_older_than(10, 4, 4))
 	{
@@ -1688,6 +1690,7 @@ static void rd_extra(void)
 
 	byte tmp8u;
 	s16b tmp16s;
+	s32b tmp32s;
 	u16b tmp16u;
 
 	rd_string(p_ptr->name, sizeof(p_ptr->name));
@@ -1810,8 +1813,10 @@ static void rd_extra(void)
 	else
 	{
 		rd_byte(&p_ptr->start_race);
-		rd_s32b(&p_ptr->old_race1);
-		rd_s32b(&p_ptr->old_race2);
+		rd_s32b(&tmp32s);
+		p_ptr->old_race1 = (BIT_FLAGS)tmp32s;
+		rd_s32b(&tmp32s);
+		p_ptr->old_race2 = (BIT_FLAGS)tmp32s;
 		rd_s16b(&p_ptr->old_realm);
 	}
 
@@ -2100,7 +2105,8 @@ static void rd_extra(void)
 		else
 		{
 			rd_s16b(&p_ptr->tim_res_time);
-			rd_byte(&p_ptr->mimic_form);
+			rd_byte(&tmp8u);
+			p_ptr->mimic_form = (IDX)tmp8u;
 			rd_s16b(&p_ptr->tim_mimic);
 			rd_s16b(&p_ptr->tim_sh_fire);
 		}
@@ -2323,7 +2329,8 @@ static void rd_extra(void)
 	}
 	else
 	{
-		rd_s32b(&p_ptr->visit);
+		rd_s32b(&tmp32s);
+		p_ptr->visit = (BIT_FLAGS)tmp32s;
 	}
 	if (!z_older_than(11, 0, 5))
 	{
@@ -2522,7 +2529,11 @@ static errr rd_dungeon_old(void)
 	rd_s16b(&tmp16s);
 	dun_level = (DEPTH)tmp16s;
 	if (z_older_than(10, 3, 8)) dungeon_type = DUNGEON_ANGBAND;
-	else rd_byte(&dungeon_type);
+	else
+	{ 
+		rd_byte(&tmp8u);
+		dungeon_type = (IDX)tmp8u;
+	}
 
 	/* Set the base level for old versions */
 	base_level = dun_level;

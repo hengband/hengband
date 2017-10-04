@@ -1877,7 +1877,8 @@ static bool cast_ninja_spell(int spell)
  */
 void do_cmd_mind(void)
 {
-	int             n = 0,  b = 0;
+	SPELL_IDX n = 0;
+	int b = 0;
 	int             chance;
 	int             minfail = 0;
 	int             plev = p_ptr->lev;

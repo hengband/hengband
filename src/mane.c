@@ -215,7 +215,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 		ask = isupper(choice);
 
 		/* Lowercase */
-		if (ask) choice = tolower(choice);
+		if (ask) choice = (char)tolower(choice);
 
 		/* Extract request */
 		i = (islower(choice) ? A2I(choice) : -1);
@@ -734,7 +734,7 @@ static bool use_mane(int spell)
 		break;
 	case MS_TELE_LEVEL:
 	{
-		int target_m_idx;
+		IDX target_m_idx;
 		monster_type *m_ptr;
 		monster_race *r_ptr;
 		char m_name[80];
