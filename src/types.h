@@ -1129,7 +1129,7 @@ struct player_type
 
 	bool wizard;		  /* Player is in wizard mode */
 
-	s16b riding;              /* Riding on a monster of this index */
+	MONSTER_IDX riding;              /* Riding on a monster of this index */
 	byte knowledge;           /* Knowledge about yourself */
 	BIT_FLAGS visit;               /* Visited towns */
 

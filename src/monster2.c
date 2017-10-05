@@ -1297,7 +1297,7 @@ static int mysqrt(int n)
  * Note that if no monsters are "appropriate", then this function will
  * fail, and return zero, but this should *almost* never happen.
  */
-s16b get_mon_num(int level)
+MONRACE_IDX get_mon_num(DEPTH level)
 {
 	int			i, j, p;
 	int			r_idx;
@@ -2971,8 +2971,8 @@ static IDX initial_r_appearance(MONRACE_IDX r_idx)
 {
 	int attempts = 1000;
 
-	int ap_r_idx;
-	int min = MIN(base_level-5, 50);
+	IDX ap_r_idx;
+	DEPTH min = MIN(base_level-5, 50);
 
 	if (!(r_info[r_idx].flags7 & RF7_TANUKI))
 		return r_idx;

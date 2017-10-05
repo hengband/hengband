@@ -1659,11 +1659,11 @@ void do_cmd_pet_dismiss(void)
 {
 	monster_type	*m_ptr;
 	bool		all_pets = FALSE;
-	IDX pet_ctr;
+	MONSTER_IDX pet_ctr;
 	int i;
 	int Dismissed = 0;
 
-	u16b *who;
+	MONSTER_IDX *who;
 	u16b dummy_why;
 	int max_pet = 0;
 	int cu, cv;
@@ -1783,7 +1783,7 @@ void do_cmd_pet_dismiss(void)
 	Term->scr->cv = cv;
 	Term_fresh();
 
-	C_KILL(who, max_m_idx, u16b);
+	C_KILL(who, max_m_idx, MONSTER_IDX);
 
 #ifdef JP
 	msg_format("%d 体のペットを放しました。", Dismissed);
@@ -1805,7 +1805,7 @@ static bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
 {
 	bool p_can_enter;
 	bool old_character_xtra = character_xtra;
-	int  old_riding = p_ptr->riding;
+	MONSTER_IDX old_riding = p_ptr->riding;
 	bool old_riding_ryoute = p_ptr->riding_ryoute;
 	bool old_old_riding_ryoute = p_ptr->old_riding_ryoute;
 	bool old_pf_ryoute = (p_ptr->pet_extra_flags & PF_RYOUTE) ? TRUE : FALSE;

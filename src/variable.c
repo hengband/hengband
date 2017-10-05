@@ -992,7 +992,7 @@ bool item_tester_no_ryoute = FALSE;
  * Here is a "pseudo-hook" used during calls to "get_item()" and
  * "show_inven()" and "show_equip()", and the choice window routines.
  */
-byte item_tester_tval;
+OBJECT_TYPE_VALUE item_tester_tval;
 
 
 /*
@@ -1054,7 +1054,7 @@ IDX max_quests;
 /*
  * Maximum number of monsters in r_info.txt
  */
-IDX max_r_idx;
+MONRACE_IDX max_r_idx;
 
 /*
  * Maximum number of items in k_info.txt
@@ -1094,7 +1094,7 @@ IDX max_o_idx;
 /*
  * Maximum number of monsters in the level
  */
-IDX max_m_idx;
+MONSTER_IDX max_m_idx;
 
 /*
  * Maximum size of the wilderness

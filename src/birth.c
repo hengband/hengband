@@ -3480,7 +3480,7 @@ static bool mon_hook_quest(MONRACE_IDX r_idx)
  */
 void determine_random_questor(quest_type *q_ptr)
 {
-	int          r_idx;
+	MONRACE_IDX r_idx;
 	monster_race *r_ptr;
 
 	/* Prepare allocation table */

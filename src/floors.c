@@ -358,7 +358,8 @@ static monster_type party_mon[MAX_PARTY_MON]; /*!< フロア移動に保存す�
  */
 static void preserve_pet(void)
 {
-	int num, i;
+	int num;
+	MONSTER_IDX i;
 
 	for (num = 0; num < MAX_PARTY_MON; num++)
 	{
@@ -865,7 +866,7 @@ void leave_floor(void)
 	feature_type *f_ptr;
 	saved_floor_type *sf_ptr;
 	int quest_r_idx = 0;
-	int i;
+	DUNGEON_IDX i;
 
 	/* Preserve pets and prepare to take these to next floor */
 	preserve_pet();
