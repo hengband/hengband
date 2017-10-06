@@ -6111,7 +6111,7 @@ void determine_today_mon(bool conv_old)
  */
 void play_game(bool new_game)
 {
-	int i;
+	MONSTER_IDX i;
 	bool load_game = TRUE;
 	bool init_random_seed = FALSE;
 
@@ -6590,13 +6590,14 @@ void play_game(bool new_game)
 
 					if (p_ptr->pclass == CLASS_MAGIC_EATER)
 					{
-						for (i = 0; i < EATER_EXT*2; i++)
+						int magic_idx;
+						for (magic_idx = 0; magic_idx < EATER_EXT*2; magic_idx++)
 						{
-							p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
+							p_ptr->magic_num1[magic_idx] = p_ptr->magic_num2[magic_idx]*EATER_CHARGE;
 						}
-						for (; i < EATER_EXT*3; i++)
+						for (; magic_idx < EATER_EXT*3; magic_idx++)
 						{
-							p_ptr->magic_num1[i] = 0;
+							p_ptr->magic_num1[magic_idx] = 0;
 						}
 					}
 					/* Restore spell points */

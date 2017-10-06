@@ -1255,7 +1255,8 @@ static void build_battle(void)
  */
 static void battle_gen(void)
 {
-	int y, x, i;
+	int y, x;
+	MONSTER_IDX i;
 	int qy = 0;
 	int qx = 0;
 
@@ -1284,7 +1285,7 @@ static void battle_gen(void)
 
 	build_battle();
 
-	for(i=0;i<4;i++)
+	for(i = 0; i < 4; i++)
 	{
 		place_monster_aux(0, p_ptr->y + 8 + (i/2)*4, p_ptr->x - 2 + (i%2)*4, battle_mon[i],
 				  (PM_NO_KAGE | PM_NO_PET));

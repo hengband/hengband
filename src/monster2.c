@@ -428,8 +428,9 @@ static void compact_monsters_aux(IDX i1, IDX i2)
  */
 void compact_monsters(int size)
 {
-	int		i, num, cnt;
-	int		cur_lev, cur_dis, chance;
+	MONSTER_IDX i;
+	int num, cnt;
+	int cur_lev, cur_dis, chance;
 
 	/* Message (only if compacting) */
 	if (size) msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));

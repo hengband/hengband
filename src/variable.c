@@ -160,11 +160,11 @@ s16b equip_cnt;			/* Number of items in equipment */
 s16b o_max = 1;			/* Number of allocated objects */
 s16b o_cnt = 0;			/* Number of live objects */
 
-s16b m_max = 1;			/* Number of allocated monsters */
-s16b m_cnt = 0;			/* Number of live monsters */
+MONSTER_IDX m_max = 1;			/* Number of allocated monsters */
+MONSTER_IDX m_cnt = 0;			/* Number of live monsters */
 
-IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
-IDX hack_m_idx_ii = 0;
+MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
+MONSTER_IDX hack_m_idx_ii = 0;
 bool multi_rew = FALSE;
 char summon_kin_type;   /* Hack, by Julian Lighton: summon 'relatives' */
 

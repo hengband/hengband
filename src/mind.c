@@ -2189,7 +2189,7 @@ void do_cmd_mind(void)
  */
 void do_cmd_mind_browse(void)
 {
-	int n = 0;
+	SPELL_IDX n = 0;
 	int j, line;
 	char temp[62*5];
 	int use_mind = 0;

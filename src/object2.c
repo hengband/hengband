@@ -4195,7 +4195,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 		case TV_CHEST:
 		{
-			byte obj_level = k_info[o_ptr->k_idx].level;
+			DEPTH obj_level = k_info[o_ptr->k_idx].level;
 
 			/* Hack -- skip ruined chests */
 			if (obj_level <= 0) break;

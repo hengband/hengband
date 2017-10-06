@@ -1305,7 +1305,7 @@ static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
  * @param spell 判定対象のID
  * @return 非魔術的な特殊技能ならばTRUEを返す。
  */
-bool spell_is_inate(u16b spell)
+bool spell_is_inate(SPELL_IDX spell)
 {
 	if (spell < 32 * 4) /* Set RF4 */
 	{
@@ -1441,7 +1441,8 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
  */
 bool make_attack_spell(MONSTER_IDX m_idx)
 {
-	int k, thrown_spell = 0;
+	int k;
+	SPELL_IDX thrown_spell = 0;
 	DEPTH rlev;
 	PERCENTAGE failrate;
 	byte            spell[96], num = 0;

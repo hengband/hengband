@@ -255,9 +255,9 @@ static bool dispel_check_monster(MONSTER_IDX m_idx, IDX t_idx)
  */
 bool monst_spell_monst(MONSTER_IDX m_idx)
 {
-	int y = 0, x = 0;
+	POSITION y = 0, x = 0;
 	int i, k;
-	IDX t_idx = 0;
+	MONSTER_IDX t_idx = 0;
 	int thrown_spell;
 	int dam = 0;
 	int start;
@@ -354,7 +354,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		/* Scan thru all monsters */
 		for (i = start; ((i < start + m_max) && (i > start - m_max)); i += plus)
 		{
-			int dummy = (i % m_max);
+			MONSTER_IDX dummy = (i % m_max);
 			if (!dummy) continue;
 
 			t_idx = dummy;
