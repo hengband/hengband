@@ -112,6 +112,7 @@ typedef s16b DUNGEON_IDX;	/*!< ゲーム中のダンジョンID型を定義 */
 typedef s16b REALM_IDX;		/*!< ゲーム中の魔法領域ID型を定義 */
 typedef s16b ARTIFACT_IDX;	/*!< ゲーム中のアーティファクトID型を定義 */
 typedef s16b VIRTUES_IDX;	/*!< ゲーム中の徳ID型を定義 */
+typedef s16b QUEST_IDX;		/*!< ゲーム中のクエストID型を定義 */
 
 typedef s32b POSITION;		/*!< ゲーム中の座標型を定義 */
 typedef s32b HIT_POINT;		/*!< ゲーム中のHP/ダメージ型を定義 */

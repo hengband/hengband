@@ -1653,8 +1653,10 @@ static void load_quick_start(void)
 	rd_byte(&previous_char.prace);
 	rd_byte(&previous_char.pclass);
 	rd_byte(&previous_char.pseikaku);
-	rd_byte(&previous_char.realm1);
-	rd_byte(&previous_char.realm2);
+	rd_byte(&tmp8u);
+	previous_char.realm1 = (REALM_IDX)tmp8u;
+	rd_byte(&tmp8u);
+	previous_char.realm2 = (REALM_IDX)tmp8u;
 
 	rd_s16b(&previous_char.age);
 	rd_s16b(&previous_char.ht);
@@ -1718,8 +1720,10 @@ static void rd_extra(void)
 	rd_byte(&p_ptr->pclass);
 	rd_byte(&p_ptr->pseikaku);
 	rd_byte(&p_ptr->psex);
-	rd_byte(&p_ptr->realm1);
-	rd_byte(&p_ptr->realm2);
+	rd_byte(&tmp8u);
+	p_ptr->realm1 = (REALM_IDX)tmp8u;
+	rd_byte(&tmp8u);
+	p_ptr->realm2 = (REALM_IDX)tmp8u;
 	rd_byte(&tmp8u); /* oops */
 
 	if (z_older_than(10, 4, 4))
@@ -2323,7 +2327,6 @@ static void rd_extra(void)
 	}
 	else if (z_older_than(10, 3, 10))
 	{
-		s32b tmp32s;
 		rd_s32b(&tmp32s);
 		p_ptr->visit = 1L;
 	}
@@ -3234,6 +3237,7 @@ static errr rd_dungeon(void)
 {
 	errr err = 0;
 	s16b tmp16s;
+	byte_hack tmp8u;
 	byte num;
 	int i;
 
@@ -3262,8 +3266,8 @@ static errr rd_dungeon(void)
 	rd_s16b(&max_floor_id);
 
 	/* Current dungeon type */
-	rd_byte(&dungeon_type);
-
+	rd_byte(&tmp8u);
+	dungeon_type = (DUNGEON_IDX)tmp8u;
 
 	/* Number of the saved_floors array elements */
 	rd_byte(&num);
@@ -3483,7 +3487,7 @@ static errr rd_savefile_new_aux(void)
 	for (i = 0; i < tmp16u; i++)
 	{
 		/* Read the lore */
-		rd_lore(i);
+		rd_lore((MONRACE_IDX)i);
 	}
 
 	if (arg_fiddle) note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
@@ -3805,7 +3809,8 @@ static errr rd_savefile_new_aux(void)
 
 	for (i = 0; i < 64; i++)
 	{
-		rd_byte(&p_ptr->spell_order[i]);
+		rd_byte(&tmp8u);
+		p_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
 	}
 
 
