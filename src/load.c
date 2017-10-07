@@ -3305,7 +3305,6 @@ static errr rd_dungeon(void)
 		for (i = 0; i < num; i++)
 		{
 			saved_floor_type *sf_ptr = &saved_floors[i];
-			byte tmp8u;
 
 			/* Unused element */
 			if (!sf_ptr->floor_id) continue;
@@ -3611,7 +3610,7 @@ static errr rd_savefile_new_aux(void)
 						else
 						{
 							init_flags = INIT_ASSIGN;
-							p_ptr->inside_quest = i;
+							p_ptr->inside_quest = (QUEST_IDX)i;
 
 							process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 							p_ptr->inside_quest = old_inside_quest;

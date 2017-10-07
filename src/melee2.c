@@ -3649,7 +3649,8 @@ static void mproc_remove(MONSTER_IDX m_idx, int mproc_type)
 void mproc_init(void)
 {
 	monster_type *m_ptr;
-	int          i, cmi;
+	MONSTER_IDX i;
+	int cmi;
 
 	/* Reset "mproc_max[]" */
 	for (cmi = 0; cmi < MAX_MTIMED; cmi++) mproc_max[cmi] = 0;

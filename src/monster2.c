@@ -593,9 +593,9 @@ void wipe_m_list(void)
  * @details
  * This routine should almost never fail, but it *can* happen.
  */
-s16b m_pop(void)
+MONSTER_IDX m_pop(void)
 {
-	int i;
+	MONSTER_IDX i;
 
 
 	/* Normal allocation */
@@ -3039,7 +3039,7 @@ byte get_mspeed(monster_race *r_ptr)
  * This is the only function which may place a monster in the dungeon,
  * except for the savefile loading code.
  */
-static bool place_monster_one(IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
+static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	/* Access the location */
 	cave_type		*c_ptr = &cave[y][x];
@@ -3724,7 +3724,7 @@ bool place_monster_aux(IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_F
 		for (i = 0; i < 32; i++)
 		{
 			POSITION nx, ny, d = 3;
-			int z; 
+			MONRACE_IDX z; 
 
 			/* Pick a location */
 			scatter(&ny, &nx, y, x, d, 0);

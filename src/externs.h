@@ -973,7 +973,7 @@ extern void delete_monster_idx(MONSTER_IDX i);
 extern void delete_monster(POSITION y, POSITION x);
 extern void compact_monsters(int size);
 extern void wipe_m_list(void);
-extern s16b m_pop(void);
+extern MONSTER_IDX m_pop(void);
 extern errr get_mon_num_prep(monster_hook_type monster_hook, monster_hook_type monster_hook2);
 extern MONRACE_IDX get_mon_num(DEPTH level);
 extern void monster_desc(char *desc, monster_type *m_ptr, int mode);
