@@ -9618,7 +9618,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (info) return info_damage(0, 0, power);
 		if (cast)
 		{
-			int r;
+			MAGIC_NUM2 r;
 			int a = 3 - (p_ptr->pspeed - 100) / 10;
 			r = 1 + randint1(2) + MAX(0, MIN(3, a));
 
@@ -9696,7 +9696,7 @@ static cptr do_hex_spell(int spell, int mode)
  * @param mode 求める処理
  * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はNULLポインタを返す。
  */
-cptr do_spell(int realm, int spell, int mode)
+cptr do_spell(REALM_IDX realm, MAGIC_NUM2 spell, int mode)
 {
 	switch (realm)
 	{

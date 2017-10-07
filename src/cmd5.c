@@ -64,7 +64,7 @@ bool select_the_force = FALSE;
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int use_realm)
+static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
 {
 	int         i;
 	int         spell = -1;
@@ -466,7 +466,9 @@ static void confirm_use_force(bool browse_only)
  */
 void do_cmd_browse(void)
 {
-	int		item, sval, use_realm = 0, j, line;
+	int		item, sval;
+	REALM_IDX use_realm = 0;
+	int j, line;
 	SPELL_IDX spell = -1;
 	int		num = 0;
 
@@ -1055,7 +1057,7 @@ void do_cmd_cast(void)
 	int	item;
 	OBJECT_SUBTYPE_VALUE sval;
 	SPELL_IDX spell;
-	IDX realm;
+	REALM_IDX realm;
 	int	chance;
 	int	increment = 0;
 	int	use_realm;
@@ -1674,7 +1676,7 @@ void do_cmd_pet_dismiss(void)
 	Term->scr->cv = 1;
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_m_idx, u16b);
+	C_MAKE(who, max_m_idx, MONSTER_IDX);
 
 	/* Process the monsters (backwards) */
 	for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
@@ -2520,7 +2522,7 @@ void do_cmd_pet(void)
 			ask = (isupper(choice));
 
 			/* Lowercase */
-			if (ask) choice = tolower(choice);
+			if (ask) choice = (char)tolower(choice);
 
 			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);

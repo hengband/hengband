@@ -819,7 +819,7 @@ extern bool do_cmd_magic_eater(bool only_browse, bool powerful);
 
 /* do-spell.c */
 extern void stop_singing(void);
-extern cptr do_spell(int realm, int spell, int mode);
+extern cptr do_spell(REALM_IDX realm, MAGIC_NUM2 spell, int mode);
 
 /* dungeon.c */
 extern void leave_quest_check(void);

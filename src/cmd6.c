@@ -4481,7 +4481,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 				ask = (isupper(choice));
 
 				/* Lowercase */
-				if (ask) choice = tolower(choice);
+				if (ask) choice = (char)tolower(choice);
 
 				/* Extract request */
 				i = (islower(choice) ? A2I(choice) : -1);
