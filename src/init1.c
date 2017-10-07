@@ -3018,9 +3018,9 @@ errr parse_r_info(char *buf, header *head)
 
 		/* Scan for the values */
 		if (3 != sscanf(buf+2, "%d:%dd%d", &id, &dd, &ds)) return (1);
-		r_ptr->reinforce_id[i] = id;
-		r_ptr->reinforce_dd[i] = dd;
-		r_ptr->reinforce_ds[i] = ds;
+		r_ptr->reinforce_id[i] = (MONRACE_IDX)id;
+		r_ptr->reinforce_dd[i] = (DICE_NUMBER)dd;
+		r_ptr->reinforce_ds[i] = (DICE_SID)ds;
 	}
 
 	/* Process 'B' for "Blows" (up to four lines) */
@@ -3154,7 +3154,7 @@ errr parse_r_info(char *buf, header *head)
 		if (i == 4) return (1);
 
 		if (3 != sscanf(buf+2, "%d:%d:%d", &id, &rarity, &per)) return (1);
-		r_ptr->artifact_id[i] = id;
+		r_ptr->artifact_id[i] = (ARTIFACT_IDX)id;
 		r_ptr->artifact_rarity[i] = (RARITY)rarity;
 		r_ptr->artifact_percent[i] = (PERCENTAGE)per;
 	}

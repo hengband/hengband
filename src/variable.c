@@ -1253,7 +1253,7 @@ FEAT_IDX feat_undetected;
 /*
  * Which dungeon ?
  */
-IDX dungeon_type;
+DUNGEON_IDX dungeon_type;
 DEPTH *max_dlv;
 
 FEAT_IDX feat_wall_outer;

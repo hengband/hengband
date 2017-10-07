@@ -613,7 +613,7 @@ extern FEAT_IDX feat_mountain;
 extern FEAT_IDX feat_swamp;
 extern FEAT_IDX feat_undetected;
 
-extern IDX dungeon_type;
+extern DUNGEON_IDX dungeon_type;
 extern DEPTH *max_dlv;
 extern FEAT_IDX feat_wall_outer;
 extern FEAT_IDX feat_wall_inner;
@@ -819,7 +819,7 @@ extern bool do_cmd_magic_eater(bool only_browse, bool powerful);
 
 /* do-spell.c */
 extern void stop_singing(void);
-extern cptr do_spell(REALM_IDX realm, MAGIC_NUM2 spell, int mode);
+extern cptr do_spell(REALM_IDX realm, SPELL_IDX spell, int mode);
 
 /* dungeon.c */
 extern void leave_quest_check(void);
@@ -1716,7 +1716,7 @@ extern bool object_is_nameless(object_type *o_ptr);
 extern bool object_allow_two_hands_wielding(object_type *o_ptr);
 
 /* wild.c */
-extern void set_floor_and_wall(byte type);
+extern void set_floor_and_wall(DUNGEON_IDX type);
 extern void wilderness_gen(void);
 extern void wilderness_gen_small(void);
 extern errr init_wilderness(void);

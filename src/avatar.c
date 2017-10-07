@@ -143,7 +143,7 @@ static void get_random_virtue(int which)
  * @param realm 魔法領域のID
  * @return 対応する徳のID
  */
-static s16b get_realm_virtues(byte realm)
+static VIRTUES_IDX get_realm_virtues(REALM_IDX realm)
 {
 	switch (realm)
 	{

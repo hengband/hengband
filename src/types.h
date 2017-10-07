@@ -326,11 +326,11 @@ struct monster_race
 	u32b a_ability_flags4;	/* Activate Ability Flags 8 (implementing) */
 
 	monster_blow blow[4];	/* Up to four blows per round */
-	IDX reinforce_id[6];
+	MONRACE_IDX reinforce_id[6];
 	DICE_NUMBER reinforce_dd[6];
 	DICE_SID reinforce_ds[6];
 
-	IDX artifact_id[4];	/* 特定アーティファクトドロップID */
+	ARTIFACT_IDX artifact_id[4];	/* 特定アーティファクトドロップID */
 	RARITY artifact_rarity[4];	/* 特定アーティファクトレア度 */
 	PERCENTAGE artifact_percent[4]; /* 特定アーティファクトドロップ率 */
 
@@ -1363,8 +1363,8 @@ struct birther
 	byte prace;        /* Race index */
 	byte pclass;       /* Class index */
 	byte pseikaku;     /* Seikaku index */
-	byte realm1;       /* First magic realm */
-	byte realm2;       /* Second magic realm */
+	REALM_IDX realm1;       /* First magic realm */
+	REALM_IDX realm2;       /* Second magic realm */
 
 	s16b age;
 	s16b ht;

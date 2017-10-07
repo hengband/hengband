@@ -4050,7 +4050,8 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
  */
 bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 {
-	int x, y, r_idx;
+	POSITION x, y;
+	MONRACE_IDX r_idx;
 
 	if (p_ptr->inside_arena) return (FALSE);
 

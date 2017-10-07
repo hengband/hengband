@@ -5806,7 +5806,8 @@ static void do_cmd_knowledge_weapon_exp(void)
  */
 static void do_cmd_knowledge_spell_exp(void)
 {
-	int i = 0, spell_exp, exp_level;
+	SPELL_IDX i = 0;
+	int spell_exp, exp_level;
 
 	FILE *fff;
 	const magic_type *s_ptr;

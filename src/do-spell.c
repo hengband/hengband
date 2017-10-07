@@ -9696,7 +9696,7 @@ static cptr do_hex_spell(int spell, int mode)
  * @param mode 求める処理
  * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はNULLポインタを返す。
  */
-cptr do_spell(REALM_IDX realm, MAGIC_NUM2 spell, int mode)
+cptr do_spell(REALM_IDX realm, SPELL_IDX spell, int mode)
 {
 	switch (realm)
 	{
