@@ -964,8 +964,8 @@ struct player_type
 	CHARACTER_IDX prace;			/* Race index */
 	CHARACTER_IDX pclass;		/* Class index */
 	CHARACTER_IDX pseikaku;		/* Seikaku index */
-	CHARACTER_IDX realm1;        /* First magic realm */
-	CHARACTER_IDX realm2;        /* Second magic realm */
+	REALM_IDX realm1;        /* First magic realm */
+	REALM_IDX realm2;        /* Second magic realm */
 	CHARACTER_IDX oops;			/* Unused */
 
 	DICE_SID hitdie;		/* Hit dice (sides) */

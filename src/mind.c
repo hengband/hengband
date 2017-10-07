@@ -576,7 +576,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 		break;
 	case MIND_KI:
 	{
-		int boost = p_ptr->magic_num1[0];
+		int boost = P_PTR_KI;
 
 		if (heavy_armor()) boost /= 2;
 
@@ -892,7 +892,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 							if (i == 5)
 							{
 								int j;
-								for (j = 0; j < p_ptr->magic_num1[0] / 50; j++)
+								for (j = 0; j < P_PTR_KI / 50; j++)
 									mana_cost += (j+1) * 3 / 2;
 							}
 						}
@@ -1220,9 +1220,9 @@ static bool cast_mindcrafter_spell(int spell)
  */
 static bool cast_force_spell(int spell)
 {
-	int             dir;
-	int             plev = p_ptr->lev;
-	int             boost = p_ptr->magic_num1[0];
+	DIRECTION dir;
+	int plev = p_ptr->lev;
+	int boost = P_PTR_KI;
 
 	if (heavy_armor()) boost /= 2;
 
@@ -1250,12 +1250,12 @@ static bool cast_force_spell(int spell)
 		break;
 	case 5:
 		msg_print(_("気を練った。", "You improved the Force."));
-		p_ptr->magic_num1[0] += (70 + plev);
+		P_PTR_KI += (70 + plev);
 		p_ptr->update |= (PU_BONUS);
-		if (randint1(p_ptr->magic_num1[0]) > (plev * 4 + 120))
+		if (randint1(P_PTR_KI) > (plev * 4 + 120))
 		{
 			msg_print(_("気が暴走した！", "The Force exploded!"));
-			fire_ball(GF_MANA, 0, p_ptr->magic_num1[0] / 2, 10);
+			fire_ball(GF_MANA, 0, P_PTR_KI / 2, 10);
 			take_hit(DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"), -1);
 		}
 		else return TRUE;
@@ -1369,7 +1369,7 @@ static bool cast_force_spell(int spell)
 	default:
 		msg_print(_("なに？", "Zap?"));
 	}
-	p_ptr->magic_num1[0] = 0;
+	P_PTR_KI = 0;
 	p_ptr->update |= (PU_BONUS);
 
 	return TRUE;
@@ -1936,7 +1936,7 @@ void do_cmd_mind(void)
 		if (n == 5)
 		{
 			int j;
-			for (j = 0; j < p_ptr->magic_num1[0] / 50; j++)
+			for (j = 0; j < P_PTR_KI / 50; j++)
 				mana_cost += (j+1) * 3 / 2;
 		}
 	}
@@ -2009,10 +2009,10 @@ void do_cmd_mind(void)
 
 		if ((use_mind != MIND_BERSERKER) && (use_mind != MIND_NINJUTSU))
 		{
-			if ((use_mind == MIND_KI) && (n != 5) && p_ptr->magic_num1[0])
+			if ((use_mind == MIND_KI) && (n != 5) && P_PTR_KI)
 			{
 				msg_print(_("気が散ってしまった．．．", "Your improved Force has gone away..."));
-				p_ptr->magic_num1[0] = 0;
+				P_PTR_KI = 0;
 			}
 
 			if (randint1(100) < (chance / 2))

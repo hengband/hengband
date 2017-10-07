@@ -5344,10 +5344,10 @@ void calc_bonuses(void)
 			if (blow_base > 31) p_ptr->num_blow[0]++;
 			if (blow_base > 44) p_ptr->num_blow[0]++;
 			if (blow_base > 58) p_ptr->num_blow[0]++;
-			if (p_ptr->magic_num1[0])
+			if (P_PTR_KI)
 			{
-				p_ptr->to_d[0] += (p_ptr->magic_num1[0]/5);
-				p_ptr->dis_to_d[0] += (p_ptr->magic_num1[0]/5);
+				p_ptr->to_d[0] += P_PTR_KI / 5;
+				p_ptr->dis_to_d[0] += P_PTR_KI / 5;
 			}
 		}
 		else

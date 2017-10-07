@@ -5240,13 +5240,13 @@ static void process_player(void)
 	{
 		(void)set_lightspeed(p_ptr->lightspeed - 1, TRUE);
 	}
-	if ((p_ptr->pclass == CLASS_FORCETRAINER) && (p_ptr->magic_num1[0]))
+	if ((p_ptr->pclass == CLASS_FORCETRAINER) && P_PTR_KI)
 	{
-		if (p_ptr->magic_num1[0] < 40)
+		if (P_PTR_KI < 40)
 		{
-			p_ptr->magic_num1[0] = 0;
+			P_PTR_KI = 0;
 		}
-		else p_ptr->magic_num1[0] -= 40;
+		else P_PTR_KI -= 40;
 		p_ptr->update |= (PU_BONUS);
 	}
 	if (p_ptr->action == ACTION_LEARN)

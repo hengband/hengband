@@ -3474,7 +3474,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			(void)set_shero(p_ptr->shero + t, FALSE);
 			if (p_ptr->pclass == CLASS_FORCETRAINER)
 			{
-				p_ptr->magic_num1[0] = plev * 5 + 190;
+				P_PTR_KI = plev * 5 + 190;
 				msg_print(_("気が爆発寸前になった。", "Your force are immediatly before explosion."));
 			}
 

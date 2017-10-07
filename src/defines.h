@@ -5475,6 +5475,8 @@ extern int PlayerUID;
 #define IS_TIM_ESP() (p_ptr->tim_esp || music_singing(MUSIC_MIND) || (p_ptr->concent >= CONCENT_TELE_THRESHOLD))
 #define IS_TIM_STEALTH() (p_ptr->tim_stealth || music_singing(MUSIC_STEALTH))
 
+#define P_PTR_KI (p_ptr->magic_num1[0])
+
 /* Multishadow effects is determined by turn */
 #define CHECK_MULTISHADOW() (p_ptr->multishadow && (turn & 1))
 

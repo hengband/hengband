@@ -1884,9 +1884,9 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				}
 
 				if (p_ptr->special_defense & KAMAE_SUZAKU) weight = 4;
-				if ((p_ptr->pclass == CLASS_FORCETRAINER) && (p_ptr->magic_num1[0]))
+				if ((p_ptr->pclass == CLASS_FORCETRAINER) && P_PTR_KI)
 				{
-					weight += (p_ptr->magic_num1[0]/30);
+					weight += (P_PTR_KI / 30);
 					if (weight > 20) weight = 20;
 				}
 
