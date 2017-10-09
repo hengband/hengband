@@ -1462,8 +1462,8 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	POSITION y = p_ptr->y;
 
 	/* Target location for lite breath */
-	int x_br_lite = 0;
-	int y_br_lite = 0;
+	POSITION x_br_lite = 0;
+	POSITION y_br_lite = 0;
 
 	/* Extract the "see-able-ness" */
     bool seen = (!p_ptr->blind && m_ptr->ml);

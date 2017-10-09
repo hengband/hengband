@@ -1152,8 +1152,8 @@ int battle_odds;
 int kakekin;
 u32b mon_odds[4];
 
-int pet_t_m_idx;
-int riding_t_m_idx;
+MONSTER_IDX pet_t_m_idx;
+MONSTER_IDX riding_t_m_idx;
 
 IDX kubi_r_idx[MAX_KUBI];
 IDX today_mon;

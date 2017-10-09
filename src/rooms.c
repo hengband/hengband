@@ -2475,7 +2475,7 @@ static bool build_type6(void)
 	int y, x, y1, x1, y2, x2, xval, yval;
 	int i, j;
 
-	int what[16];
+	MONRACE_IDX what[16];
 
 	monster_type align;
 

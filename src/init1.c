@@ -2977,9 +2977,9 @@ errr parse_r_info(char *buf, header *head)
 				&spd, &hp1, &hp2, &aaf, &ac, &slp)) return (1);
 
 		/* Save the values */
-		r_ptr->speed = spd;
-		r_ptr->hdice = MAX(hp1, 1);
-		r_ptr->hside = MAX(hp2, 1);
+		r_ptr->speed = (SPEED)spd;
+		r_ptr->hdice = (DICE_NUMBER)MAX(hp1, 1);
+		r_ptr->hside = (DICE_SID)MAX(hp2, 1);
 		r_ptr->aaf = aaf;
 		r_ptr->ac = (ARMOUR_CLASS)ac;
 		r_ptr->sleep = slp;

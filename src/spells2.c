@@ -2582,7 +2582,8 @@ bool detect_monsters_string(int range, cptr Match)
  */
 bool detect_monsters_xxx(int range, u32b match_flag)
 {
-	int  i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool flag = FALSE;
 	cptr desc_monsters = _("変なモンスター", "weird monsters");
 
