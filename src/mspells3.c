@@ -1130,7 +1130,7 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
 	case MS_TELE_LEVEL:
 	{
-		int target_m_idx;
+		MONSTER_IDX target_m_idx;
 		monster_type *m_ptr;
 		monster_race *r_ptr;
 		char m_name[80];

@@ -182,7 +182,7 @@ extern bool inkey_xtra;
 extern bool inkey_scan;
 extern bool inkey_flag;
 extern bool get_com_no_macros;
-extern s16b coin_type;
+extern OBJECT_SUBTYPE_VALUE coin_type;
 extern bool opening_chest;
 extern bool shimmer_monsters;
 extern bool shimmer_objects;
@@ -1005,8 +1005,8 @@ extern void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
 extern cptr item_activation(object_type *o_ptr);
 extern bool screen_object(object_type *o_ptr, u32b mode);
 extern char index_to_label(int i);
-extern s16b label_to_inven(int c);
-extern s16b label_to_equip(int c);
+extern INVENTORY_IDX label_to_inven(int c);
+extern INVENTORY_IDX label_to_equip(int c);
 extern s16b wield_slot(object_type *o_ptr);
 extern cptr mention_use(int i);
 extern cptr describe_use(int i);
@@ -1653,8 +1653,8 @@ extern void fsetfileinfo(cptr path, u32b fcreator, u32b ftype);
 #ifdef ALLOW_REPEAT /* TNB */
 
 /* util.c */
-extern void repeat_push(SPELL_IDX what);
-extern bool repeat_pull(SPELL_IDX *what);
+extern void repeat_push(IDX what);
+extern bool repeat_pull(IDX *what);
 extern void repeat_check(void);
 
 #endif /* ALLOW_REPEAT -- TNB */

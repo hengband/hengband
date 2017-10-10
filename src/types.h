@@ -534,11 +534,11 @@ struct object_type
 	IDX name1;			/* Artifact type, if any */
 	IDX name2;			/* Ego-Item type, if any */
 
-	byte xtra1;			/* Extra info type (now unused) */
-	byte xtra2;			/* Extra info activation index */
-	byte xtra3;			/* Extra info for weaponsmith */
-	s16b xtra4;			/* Extra info fuel or captured monster's current HP */
-	s16b xtra5;			/* Extra info captured monster's max HP */
+	XTRA8 xtra1;			/* Extra info type (now unused) */
+	XTRA8 xtra2;			/* Extra info activation index */
+	XTRA8 xtra3;			/* Extra info for weaponsmith */
+	XTRA16 xtra4;			/* Extra info fuel or captured monster's current HP */
+	XTRA16 xtra5;			/* Extra info captured monster's max HP */
 
 	HIT_PROB to_h;			/* Plusses to hit */
 	HIT_POINT to_d;			/* Plusses to damage */
@@ -635,12 +635,12 @@ typedef struct alloc_entry alloc_entry;
 
 struct alloc_entry
 {
-	s16b index;		/* The actual index */
+	IDX index;		/* The actual index */
 
-	byte level;		/* Base dungeon level */
-	byte prob1;		/* Probability, pass 1 */
-	byte prob2;		/* Probability, pass 2 */
-	byte prob3;		/* Probability, pass 3 */
+	DEPTH level;		/* Base dungeon level */
+	PROB prob1;		/* Probability, pass 1 */
+	PROB prob2;		/* Probability, pass 2 */
+	PROB prob3;		/* Probability, pass 3 */
 
 	u16b total;		/* Unused for now */
 };

@@ -2202,7 +2202,7 @@ static void calc_spells(void)
 	int         num_boukyaku = 0;
 
 	const magic_type	*s_ptr;
-	int which;
+	REALM_IDX which;
 	int bonus = 0;
 
 

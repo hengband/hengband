@@ -4105,15 +4105,15 @@ bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 /*!
  * @brief 呪文情報の表示処理 /
  * Print a list of spells (for browsing or casting or viewing)
- * @param target_spell 呪文ID
- * @param spells アクセス開始するスペルの参照ポイント
- * @param num 表示する
+ * @param target_spell 呪文ID		    
+ * @param spells 表示するスペルID配列の参照ポインタ
+ * @param num 表示するスペルの数(spellsの要素数)
  * @param y 表示メッセージ左上Y座標
  * @param x 表示メッセージ左上X座標
  * @param use_realm 魔法領域ID
  * @return なし
  */
-void print_spells(int target_spell, int *spells, int num, TERM_POSITION y, TERM_POSITION x, int use_realm)
+void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_POSITION y, TERM_POSITION x, int use_realm)
 {
 	int             i, spell, exp_level, increment = 64;
 	const magic_type *s_ptr;

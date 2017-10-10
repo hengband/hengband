@@ -6628,7 +6628,7 @@ void display_koff(IDX k_idx)
 	object_type forge;
 	object_type *q_ptr;
 	int         sval;
-	int         use_realm;
+	REALM_IDX   use_realm;
 
 	char o_name[MAX_NLEN];
 
@@ -6675,7 +6675,7 @@ void display_koff(IDX k_idx)
 	{
 		int     spell = -1;
 		int     num = 0;
-		byte    spells[64];
+		SPELL_IDX    spells[64];
 
 		/* Extract spells */
 		for (spell = 0; spell < 32; spell++)
@@ -8645,7 +8645,7 @@ static void erase_essence(void)
  */
 void do_cmd_kaji(bool only_browse)
 {
-	int mode = 0;
+	IDX mode = 0;
 	char choice;
 
 	int menu_line = (use_menu ? 1 : 0);

@@ -1317,7 +1317,7 @@ char index_to_label(int i)
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  * @details Note that the label does NOT distinguish inven/equip.
  */
-s16b label_to_inven(int c)
+INVENTORY_IDX label_to_inven(int c)
 {
 	int i;
 
@@ -1355,7 +1355,7 @@ static bool is_ring_slot(int i)
  * Convert a label into the index of a item in the "equip"
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */
-s16b label_to_equip(int c)
+INVENTORY_IDX label_to_equip(int c)
 {
 	int i;
 

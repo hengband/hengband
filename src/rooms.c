@@ -2616,7 +2616,7 @@ static bool build_type6(void)
 			/* Bubble */
 			if (p1 > p2)
 			{
-				int tmp = what[i1];
+				MONRACE_IDX tmp = what[i1];
 				what[i1] = what[i2];
 				what[i2] = tmp;
 			}
@@ -5744,10 +5744,10 @@ static bool build_type13(void)
 		{0, 0, -1}
 	};
 
-	int y, x, y1, x1, y2, x2, xval, yval;
+	POSITION y, x, y1, x1, y2, x2, xval, yval;
 	int i, j;
 
-	int what[16];
+	MONRACE_IDX what[16];
 
 	monster_type align;
 
