@@ -5206,13 +5206,13 @@ static IDX poly_r_idx(MONRACE_IDX r_idx)
  * @param x 指定のX座標
  * @return 実際に変身したらTRUEを返す
  */
-bool polymorph_monster(int y, int x)
+bool polymorph_monster(POSITION y, POSITION x)
 {
 	cave_type *c_ptr = &cave[y][x];
 	monster_type *m_ptr = &m_list[c_ptr->m_idx];
 	bool polymorphed = FALSE;
-	int new_r_idx;
-	int old_r_idx = m_ptr->r_idx;
+	MONRACE_IDX new_r_idx;
+	MONRACE_IDX old_r_idx = m_ptr->r_idx;
 	bool targeted = (target_who == c_ptr->m_idx) ? TRUE : FALSE;
 	bool health_tracked = (p_ptr->health_who == c_ptr->m_idx) ? TRUE : FALSE;
 	monster_type back_m;

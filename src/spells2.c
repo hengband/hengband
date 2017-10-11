@@ -1821,7 +1821,7 @@ void report_magics(void)
  * @param known 地形から危険フラグを外すならTRUE
  * @return 効力があった場合TRUEを返す
  */
-static bool detect_feat_flag(int range, int flag, bool known)
+static bool detect_feat_flag(POSITION range, int flag, bool known)
 {
 	int       x, y;
 	bool      detect = FALSE;
@@ -1884,7 +1884,7 @@ static bool detect_feat_flag(int range, int flag, bool known)
  * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
  * @return 効力があった場合TRUEを返す
  */
-bool detect_traps(int range, bool known)
+bool detect_traps(POSITION range, bool known)
 {
 	bool detect = detect_feat_flag(range, FF_TRAP, known);
 
@@ -1908,7 +1908,7 @@ bool detect_traps(int range, bool known)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_doors(int range)
+bool detect_doors(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_DOOR, TRUE);
 
@@ -1930,7 +1930,7 @@ bool detect_doors(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_stairs(int range)
+bool detect_stairs(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_STAIRS, TRUE);
 
@@ -1952,7 +1952,7 @@ bool detect_stairs(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_treasure(int range)
+bool detect_treasure(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_HAS_GOLD, TRUE);
 
@@ -1974,10 +1974,10 @@ bool detect_treasure(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_objects_gold(int range)
+bool detect_objects_gold(POSITION range)
 {
 	int i, y, x;
-	int range2 = range;
+	POSITION range2 = range;
 
 	bool detect = FALSE;
 
@@ -2038,10 +2038,10 @@ bool detect_objects_gold(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_objects_normal(int range)
+bool detect_objects_normal(POSITION range)
 {
 	int i, y, x;
-	int range2 = range;
+	POSITION range2 = range;
 
 	bool detect = FALSE;
 
@@ -2110,7 +2110,7 @@ bool detect_objects_normal(int range)
  * It can probably be argued that this function is now too powerful.
  * </pre>
  */
-bool detect_objects_magic(int range)
+bool detect_objects_magic(POSITION range)
 {
 	int i, y, x, tv;
 
@@ -2192,7 +2192,7 @@ bool detect_objects_magic(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_normal(int range)
+bool detect_monsters_normal(POSITION range)
 {
 	int i, y, x;
 
@@ -2252,7 +2252,7 @@ bool detect_monsters_normal(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_invis(int range)
+bool detect_monsters_invis(POSITION range)
 {
 	int i, y, x;
 	bool flag = FALSE;
@@ -2317,7 +2317,7 @@ bool detect_monsters_invis(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_evil(int range)
+bool detect_monsters_evil(POSITION range)
 {
 	int i, y, x;
 	bool flag = FALSE;
@@ -2386,7 +2386,7 @@ bool detect_monsters_evil(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_nonliving(int range)
+bool detect_monsters_nonliving(POSITION range)
 {
 	int     i, y, x;
 	bool    flag = FALSE;
@@ -2449,9 +2449,10 @@ bool detect_monsters_nonliving(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_mind(int range)
+bool detect_monsters_mind(POSITION range)
 {
-	int     i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool    flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
@@ -2514,9 +2515,10 @@ bool detect_monsters_mind(int range)
  * @param Match 対応シンボルの混じったモンスター文字列(複数指定化)
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_string(int range, cptr Match)
+bool detect_monsters_string(POSITION range, cptr Match)
 {
-	int i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
@@ -2580,7 +2582,7 @@ bool detect_monsters_string(int range, cptr Match)
  * @param match_flag 感知フラグ
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_xxx(int range, u32b match_flag)
+bool detect_monsters_xxx(POSITION range, u32b match_flag)
 {
 	MONSTER_IDX i;
 	POSITION y, x;
@@ -2663,7 +2665,7 @@ bool detect_monsters_xxx(int range, u32b match_flag)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_all(int range)
+bool detect_all(POSITION range)
 {
 	bool detect = FALSE;
 
@@ -2867,9 +2869,9 @@ bool crusade(void)
  * @param who 怒らせる原因を起こしたモンスター(0ならばプレイヤー)
  * @return なし
  */
-void aggravate_monsters(int who)
+void aggravate_monsters(MONSTER_IDX who)
 {
-	int     i;
+	MONSTER_IDX i;
 	bool    sleep = FALSE;
 	bool    speed = FALSE;
 
@@ -3031,7 +3033,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
  */
 bool symbol_genocide(int power, bool player_cast)
 {
-	int  i;
+	MONSTER_IDX i;
 	char typ;
 	bool result = FALSE;
 
@@ -3078,7 +3080,7 @@ bool symbol_genocide(int power, bool player_cast)
  */
 bool mass_genocide(int power, bool player_cast)
 {
-	int  i;
+	MONSTER_IDX i;
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
@@ -3120,7 +3122,7 @@ bool mass_genocide(int power, bool player_cast)
  */
 bool mass_genocide_undead(int power, bool player_cast)
 {
-	int  i;
+	POSITION i;
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */

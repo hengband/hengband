@@ -62,7 +62,7 @@ static cptr info_duration(int base, int sides)
  * @param range 効果範囲
  * @return フォーマットに従い整形された文字列
  */
-static cptr info_range(int range)
+static cptr info_range(POSITION range)
 {
 	return format(_("範囲:%d", "range %d"), range);
 }
@@ -1608,7 +1608,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
     
 		{
-			int range = 10;
+			POSITION range = 10;
 
 			if (info) return info_range(range);
 
@@ -1678,7 +1678,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
-			int range = plev * 5;
+			POSITION range = plev * 5;
 
 			if (info) return info_range(range);
 
@@ -1963,7 +1963,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleport to given location.");
     
 		{
-			int range = plev / 2 + 10;
+			POSITION range = plev / 2 + 10;
 
 			if (info) return info_range(range);
 
@@ -2161,7 +2161,7 @@ static cptr do_nature_spell(int spell, int mode)
 		{
 			int dice = 3 + (plev - 1) / 5;
 			int sides = 4;
-			int range = plev / 6 + 2;
+			POSITION range = plev / 6 + 2;
 
 			if (info) return format("%s%dd%d %s%d", s_dam, dice, sides, s_rng, range);
 
@@ -2892,7 +2892,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
-			int range = plev * 5;
+			POSITION range = plev * 5;
 
 			if (info) return info_range(range);
 
@@ -4033,7 +4033,7 @@ static cptr do_trump_spell(int spell, int mode)
 		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
     
 		{
-			int range = 10;
+			POSITION range = 10;
 
 			if (info) return info_range(range);
 
@@ -4094,7 +4094,7 @@ static cptr do_trump_spell(int spell, int mode)
 		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
-			int range = plev * 4;
+			POSITION range = plev * 4;
 
 			if (info) return info_range(range);
 
@@ -4279,7 +4279,7 @@ static cptr do_trump_spell(int spell, int mode)
 		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleport to given location.");
     
 		{
-			int range = plev / 2 + 10;
+			POSITION range = plev / 2 + 10;
 
 			if (info) return info_range(range);
 
@@ -4742,7 +4742,7 @@ static cptr do_arcane_spell(int spell, int mode)
 		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
     
 		{
-			int range = 10;
+			POSITION range = 10;
 
 			if (info) return info_range(range);
 
@@ -4984,7 +4984,7 @@ static cptr do_arcane_spell(int spell, int mode)
 		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
-			int range = plev * 5;
+			POSITION range = plev * 5;
 
 			if (info) return info_range(range);
 
@@ -6468,7 +6468,7 @@ static cptr do_crusade_spell(int spell, int mode)
 		if (desc) return _("中距離のテレポートをする。", "Teleport medium distance.");
     
 		{
-			int range = 25 + plev / 2;
+			POSITION range = 25 + plev / 2;
 
 			if (info) return info_range(range);
 

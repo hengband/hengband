@@ -4298,7 +4298,7 @@ void update_smell(void)
 /*
  * Hack -- map the current panel (plus some) ala "magic mapping"
  */
-void map_area(int range)
+void map_area(POSITION range)
 {
 	int             i, x, y;
 	cave_type       *c_ptr;

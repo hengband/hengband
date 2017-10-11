@@ -2472,7 +2472,7 @@ static bool build_type5(void)
  */
 static bool build_type6(void)
 {
-	int y, x, y1, x1, y2, x2, xval, yval;
+	POSITION y, x, y1, x1, y2, x2, xval, yval;
 	int i, j;
 
 	MONRACE_IDX what[16];
@@ -2695,7 +2695,7 @@ static bool build_type6(void)
  * @param transno 処理ID
  * @return なし
  */
-static void coord_trans(int *x, int *y, int xoffset, int yoffset, int transno)
+static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yoffset, int transno)
 {
 	int i;
 	int temp;
@@ -2740,15 +2740,12 @@ static void coord_trans(int *x, int *y, int xoffset, int yoffset, int transno)
  * @param transno 変換ID
  * @return なし
  */
-static void build_vault(int yval, int xval, int ymax, int xmax, cptr data,
-		int xoffset, int yoffset, int transno)
+static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, cptr data,
+		POSITION xoffset, POSITION yoffset, int transno)
 {
-	int dx, dy, x, y, i, j;
-
+	POSITION dx, dy, x, y, i, j;
 	cptr t;
-
 	cave_type *c_ptr;
-
 
 	/* Place dungeon features and objects */
 	for (t = data, dy = 0; dy < ymax; dy++)
@@ -5921,7 +5918,7 @@ static bool build_type13(void)
 			/* Bubble */
 			if (p1 > p2)
 			{
-				int tmp = what[i1];
+				MONRACE_IDX tmp = what[i1];
 				what[i1] = what[i2];
 				what[i2] = tmp;
 			}

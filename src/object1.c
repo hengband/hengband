@@ -3761,11 +3761,13 @@ int show_floor(int target_item, int y, int x, int *min_width)
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
+bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
 {
 	char n1 = ' ', n2 = ' ', which = ' ';
 
-	int j, k, i1, i2, e1, e2;
+	int j, i1, i2;
+	COMMAND_CODE e1, e2;
+	COMMAND_CODE k;
 
 	bool done, item;
 

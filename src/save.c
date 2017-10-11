@@ -183,8 +183,8 @@ static void wr_item(object_type *o_ptr)
 	if (flags & SAVE_ITEM_TO_D) wr_s16b((s16b)o_ptr->to_d);
 	if (flags & SAVE_ITEM_TO_A) wr_s16b(o_ptr->to_a);
 	if (flags & SAVE_ITEM_AC) wr_s16b(o_ptr->ac);
-	if (flags & SAVE_ITEM_DD) wr_byte(o_ptr->dd);
-	if (flags & SAVE_ITEM_DS) wr_byte(o_ptr->ds);
+	if (flags & SAVE_ITEM_DD) wr_byte((byte_hack)o_ptr->dd);
+	if (flags & SAVE_ITEM_DS) wr_byte((byte_hack)o_ptr->ds);
 
 	if (flags & SAVE_ITEM_IDENT) wr_byte(o_ptr->ident);
 
@@ -569,8 +569,8 @@ static void save_quick_start(void)
 	wr_byte(previous_char.prace);
 	wr_byte(previous_char.pclass);
 	wr_byte(previous_char.pseikaku);
-	wr_byte(previous_char.realm1);
-	wr_byte(previous_char.realm2);
+	wr_byte((byte_hack)previous_char.realm1);
+	wr_byte((byte_hack)previous_char.realm2);
 
 	wr_s16b(previous_char.age);
 	wr_s16b(previous_char.ht);
@@ -581,7 +581,7 @@ static void save_quick_start(void)
 	for (i = 0; i < 6; i++) wr_s16b(previous_char.stat_max[i]);
 	for (i = 0; i < 6; i++) wr_s16b(previous_char.stat_max_max[i]);
 
-	for (i = 0; i < PY_MAX_LEVEL; i++) wr_s16b(previous_char.player_hp[i]);
+	for (i = 0; i < PY_MAX_LEVEL; i++) wr_s16b((s16b)previous_char.player_hp[i]);
 
 	wr_s16b(previous_char.chaos_patron);
 
@@ -626,8 +626,8 @@ static void wr_extra(void)
 	wr_byte(p_ptr->pclass);
 	wr_byte(p_ptr->pseikaku);
 	wr_byte(p_ptr->psex);
-	wr_byte(p_ptr->realm1);
-	wr_byte(p_ptr->realm2);
+	wr_byte((byte_hack)p_ptr->realm1);
+	wr_byte((byte_hack)p_ptr->realm2);
 	wr_byte(0);	/* oops */
 
 	wr_byte((byte)p_ptr->hitdie);
@@ -666,8 +666,8 @@ static void wr_extra(void)
 
 	for (i = 0; i < MAX_MANE; i++)
 	{
-		wr_s16b(p_ptr->mane_spell[i]);
-		wr_s16b(p_ptr->mane_dam[i]);
+		wr_s16b((s16b)p_ptr->mane_spell[i]);
+		wr_s16b((s16b)p_ptr->mane_dam[i]);
 	}
 	wr_s16b(p_ptr->mane_num);
 
@@ -1183,7 +1183,7 @@ static bool wr_dungeon(void)
 	wr_s16b(max_floor_id);
 
 	/* Current dungeon type */
-	wr_byte(dungeon_type);
+	wr_byte((byte_hack)dungeon_type);
 
 
 	/*** No saved floor (On the surface etc.) ***/
@@ -1403,7 +1403,7 @@ static bool wr_savefile_new(void)
 
 		/* And the dungeon level too */
 		/* (prevents problems with multi-level quests) */
-		wr_s16b(q_ptr->level);
+		wr_s16b((s16b)q_ptr->level);
 
 		wr_byte(q_ptr->complev);
 		wr_u32b(q_ptr->comptime);
@@ -1460,7 +1460,7 @@ static bool wr_savefile_new(void)
 	wr_u16b(tmp16u);
 	for (i = 0; i < tmp16u; i++)
 	{
-		wr_s16b(p_ptr->player_hp[i]);
+		wr_s16b((s16b)p_ptr->player_hp[i]);
 	}
 
 
@@ -1478,7 +1478,7 @@ static bool wr_savefile_new(void)
 	/* Dump the ordered spells */
 	for (i = 0; i < 64; i++)
 	{
-		wr_byte(p_ptr->spell_order[i]);
+		wr_byte((byte_hack)p_ptr->spell_order[i]);
 	}
 
 
@@ -1650,9 +1650,9 @@ static bool save_player_aux(char *name)
  */
 bool save_player(void)
 {
-	int             result = FALSE;
+	bool result = FALSE;
 
-	char    safe[1024];
+	char safe[1024];
 
 
 #ifdef SET_UID
