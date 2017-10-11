@@ -4755,7 +4755,7 @@ static bool kind_is_good(int k_idx)
 bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 {
 	int prob, base;
-	byte obj_level;
+	DEPTH obj_level;
 
 
 	/* Chance of "special object" */
@@ -6154,7 +6154,7 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
  */
 s16b inven_carry(object_type *o_ptr)
 {
-	int i, j, k;
+	INVENTORY_IDX i, j, k;
 	int n = -1;
 
 	object_type *j_ptr;

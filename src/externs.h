@@ -1259,7 +1259,7 @@ extern int mod_spell_chance_1(int chance);
 extern int mod_spell_chance_2(int chance);
 extern s16b spell_chance(int spell,int realm);
 extern bool spell_okay(int spell, bool learned, bool study_pray, int realm);
-extern void print_spells(int target_spell, int *spells, int num, TERM_POSITION y, TERM_POSITION x, int realm);
+extern void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_POSITION y, TERM_POSITION x, REALM_IDX realm);
 extern bool hates_acid(object_type *o_ptr);
 extern bool hates_elec(object_type *o_ptr);
 extern bool hates_fire(object_type *o_ptr);
@@ -1653,8 +1653,8 @@ extern void fsetfileinfo(cptr path, u32b fcreator, u32b ftype);
 #ifdef ALLOW_REPEAT /* TNB */
 
 /* util.c */
-extern void repeat_push(IDX what);
-extern bool repeat_pull(IDX *what);
+extern void repeat_push(COMMAND_CODE what);
+extern bool repeat_pull(COMMAND_CODE *what);
 extern void repeat_check(void);
 
 #endif /* ALLOW_REPEAT -- TNB */

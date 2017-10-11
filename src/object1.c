@@ -1319,10 +1319,10 @@ char index_to_label(int i)
  */
 INVENTORY_IDX label_to_inven(int c)
 {
-	int i;
+	INVENTORY_IDX i;
 
 	/* Convert */
-	i = (islower(c) ? A2I(c) : -1);
+	i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
 	/* Verify the index */
 	if ((i < 0) || (i > INVEN_PACK)) return (-1);
@@ -1357,10 +1357,10 @@ static bool is_ring_slot(int i)
  */
 INVENTORY_IDX label_to_equip(int c)
 {
-	int i;
+	INVENTORY_IDX i;
 
 	/* Convert */
-	i = (islower(c) ? A2I(c) : -1) + INVEN_RARM;
+	i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_RARM;
 
 	/* Verify the index */
 	if ((i < INVEN_RARM) || (i >= INVEN_TOTAL)) return (-1);

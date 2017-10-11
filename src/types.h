@@ -1109,7 +1109,7 @@ struct player_type
 	MAGIC_NUM2 magic_num2[108];     /*!< Flags for non-spellbook type magics */
 
 	s16b mane_spell[MAX_MANE];
-	s16b mane_dam[MAX_MANE];
+	HIT_POINT mane_dam[MAX_MANE];
 	s16b mane_num;
 
 	s16b concent;      /* Sniper's concentration level */

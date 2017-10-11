@@ -233,7 +233,7 @@ static void prt_binary(u32b flags, int row, int col)
  * @param col 表示行
  * @return なし
  */
-static void prt_alloc(byte tval, byte sval, int row, int col)
+static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_POSITION row, TERM_POSITION col)
 {
 	int i, j;
 	int home = 0;

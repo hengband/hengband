@@ -4100,7 +4100,7 @@ bool earthquake(int cy, int cx, int r)
  */
 void discharge_minion(void)
 {
-	int i;
+	MONSTER_IDX i;
 	bool okay = TRUE;
 
 	for (i = 1; i < m_max; i++)

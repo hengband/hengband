@@ -4865,7 +4865,7 @@ static int repeat__idx = 0;
 static int repeat__key[REPEAT_MAX];
 
 
-void repeat_push(IDX what)
+void repeat_push(COMMAND_CODE what)
 {
 	/* Too many keys */
 	if (repeat__cnt == REPEAT_MAX) return;
@@ -4878,7 +4878,7 @@ void repeat_push(IDX what)
 }
 
 
-bool repeat_pull(IDX *what)
+bool repeat_pull(COMMAND_CODE *what)
 {
 	/* All out of keys */
 	if (repeat__idx == repeat__cnt) return (FALSE);
@@ -4892,7 +4892,7 @@ bool repeat_pull(IDX *what)
 
 void repeat_check(void)
 {
-	int		what;
+	COMMAND_CODE what;
 
 	/* Ignore some commands */
 	if (command_cmd == ESCAPE) return;

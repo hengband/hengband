@@ -400,7 +400,7 @@ static bool find_space_aux(int blocks_high, int blocks_wide, int block_y, int bl
  * Return TRUE and values for the center of the room if all went well.\n
  * Otherwise, return FALSE.\n
  */
-static bool find_space(int *y, int *x, int height, int width)
+static bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width)
 {
 	int candidates, pick;
 	int by, bx, by1, bx1, by2, bx2;
@@ -521,8 +521,8 @@ static bool find_space(int *y, int *x, int height, int width)
  */
 static bool build_type1(void)
 {
-	int y, x, y2, x2, yval, xval;
-	int y1, x1, xsize, ysize;
+	POSITION y, x, y2, x2, yval, xval;
+	POSITION y1, x1, xsize, ysize;
 
 	bool light;
 
@@ -716,9 +716,9 @@ static bool build_type1(void)
  */
 static bool build_type2(void)
 {
-	int			y, x, xval, yval;
-	int			y1a, x1a, y2a, x2a;
-	int			y1b, x1b, y2b, x2b;
+	POSITION	y, x, xval, yval;
+	POSITION	y1a, x1a, y2a, x2a;
+	POSITION	y1b, x1b, y2b, x2b;
 	bool		light;
 	cave_type   *c_ptr;
 
@@ -840,10 +840,10 @@ static bool build_type2(void)
  */
 static bool build_type3(void)
 {
-	int			y, x, dy, dx, wy, wx;
-	int			y1a, x1a, y2a, x2a;
-	int			y1b, x1b, y2b, x2b;
-	int			yval, xval;
+	POSITION y, x, dy, dx, wy, wx;
+	POSITION y1a, x1a, y2a, x2a;
+	POSITION y1b, x1b, y2b, x2b;
+	POSITION yval, xval;
 	bool		light;
 	cave_type   *c_ptr;
 
@@ -3006,9 +3006,9 @@ static bool build_type7(void)
 {
 	vault_type *v_ptr = NULL;
 	int dummy;
-	int x, y;
-	int xval, yval;
-	int xoffset, yoffset;
+	POSITION x, y;
+	POSITION xval, yval;
+	POSITION xoffset, yoffset;
 	int transno;
 
 	/* Pick a lesser vault */
@@ -3816,7 +3816,8 @@ static bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, b
  */
 static bool build_type9(void)
 {
-	int grd, roug, cutoff, xsize, ysize, y0, x0;
+	int grd, roug, cutoff;
+	POSITION xsize, ysize, y0, x0;
 
 	bool done, light, room;
 
@@ -5962,8 +5963,8 @@ static bool build_type13(void)
  */
 static bool build_type14(void)
 {
-	int y, x, y2, x2, yval, xval;
-	int y1, x1, xsize, ysize;
+	POSITION y, x, y2, x2, yval, xval;
+	POSITION y1, x1, xsize, ysize;
 
 	bool light;
 

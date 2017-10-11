@@ -600,8 +600,8 @@ static void sense_inventory2(void)
  */
 static void pattern_teleport(void)
 {
-	int min_level = 0;
-	int max_level = 99;
+	DEPTH min_level = 0;
+	DEPTH max_level = 99;
 
 	/* Ask for level */
 	if (get_check(_("他の階にテレポートしますか？", "Teleport level? ")))
@@ -637,7 +637,7 @@ static void pattern_teleport(void)
 		if (!get_string(ppp, tmp_val, 10)) return;
 
 		/* Extract request */
-		command_arg = atoi(tmp_val);
+		command_arg = (COMMAND_ARG)atoi(tmp_val);
 	}
 	else if (get_check(_("通常テレポート？", "Normal teleport? ")))
 	{
@@ -650,10 +650,10 @@ static void pattern_teleport(void)
 	}
 
 	/* Paranoia */
-	if (command_arg < min_level) command_arg = min_level;
+	if (command_arg < min_level) command_arg = (COMMAND_ARG)min_level;
 
 	/* Paranoia */
-	if (command_arg > max_level) command_arg = max_level;
+	if (command_arg > max_level) command_arg = (COMMAND_ARG)max_level;
 
 	/* Accept request */
 	msg_format(_("%d 階にテレポートしました。", "You teleport to dungeon level %d."), command_arg);
