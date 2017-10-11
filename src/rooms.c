@@ -5456,7 +5456,7 @@ static void build_elemental_vault(int x0, int y0, int xsiz, int ysiz)
  */
 static bool build_type10(void)
 {
-	int y0, x0, xsize, ysize, vtype;
+	POSITION y0, x0, xsize, ysize, vtype;
 
 	/* Get size */
 	/* big enough to look good, small enough to be fairly common. */
@@ -5564,7 +5564,7 @@ static bool build_type11(void)
  */
 static bool build_type12(void)
 {
-	int rad, x, y, x0, y0;
+	POSITION rad, x, y, x0, y0;
 	int light = FALSE;
 	bool emptyflag = TRUE;
 
@@ -6561,7 +6561,7 @@ static bool build_type16(void)
 		STORE_ALCHEMIST, STORE_MAGIC, STORE_BLACK, STORE_BOOK,
 	};
 	int n = sizeof stores / sizeof (int);
-	int i, y, x, y1, x1, yval, xval;
+	POSITION i, y, x, y1, x1, yval, xval;
 	int town_hgt = rand_range(MIN_TOWN_HGT, MAX_TOWN_HGT);
 	int town_wid = rand_range(MIN_TOWN_WID, MAX_TOWN_WID);
 	bool prevent_bm = FALSE;

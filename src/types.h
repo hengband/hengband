@@ -168,29 +168,30 @@ struct artifact_type
 	STR_OFFSET name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
 	STR_OFFSET text;			/*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
 
-	byte tval;			/*!< ベースアイテム大項目ID / Artifact type */
-	byte sval;			/*!< ベースアイテム小項目ID / Artifact sub type */
+	OBJECT_TYPE_VALUE tval;		/*!< ベースアイテム大項目ID / Artifact type */
+	OBJECT_SUBTYPE_VALUE sval;	/*!< ベースアイテム小項目ID / Artifact sub type */
 
-	s16b pval;			/*!< pval修正値 / Artifact extra info */
+	PARAMETER_VALUE pval;	/*!< pval修正値 / Artifact extra info */
 
-	s16b to_h;			/*!< 命中ボーナス値 /  Bonus to hit */
-	s16b to_d;			/*!< ダメージボーナス値 / Bonus to damage */
-	s16b to_a;			/*!< ACボーナス値 / Bonus to armor */
+	HIT_PROB to_h;			/*!< 命中ボーナス値 /  Bonus to hit */
+	HIT_POINT to_d;		/*!< ダメージボーナス値 / Bonus to damage */
+	ARMOUR_CLASS to_a;			/*!< ACボーナス値 / Bonus to armor */
 
-	s16b ac;			/*!< 上書きベースAC値 / Base armor */
+	ARMOUR_CLASS ac;			/*!< 上書きベースAC値 / Base armor */
 
-	byte dd, ds;		/*!< ダイス値 / Damage when hits */
+	DICE_NUMBER dd;
+	DICE_SID ds;	/*!< ダイス値 / Damage when hits */
 
-	s16b weight;		/*!< 重量 / Weight */
+	WEIGHT weight;		/*!< 重量 / Weight */
 
-	s32b cost;			/*!< 基本価格 / Artifact "cost" */
+	PRICE cost;			/*!< 基本価格 / Artifact "cost" */
 
-	u32b flags[TR_FLAG_SIZE];       /*! アイテムフラグ / Artifact Flags */
+	BIT_FLAGS flags[TR_FLAG_SIZE];       /*! アイテムフラグ / Artifact Flags */
 
-	u32b gen_flags;		/*! アイテム生成フラグ / flags for generate */
+	BIT_FLAGS gen_flags;		/*! アイテム生成フラグ / flags for generate */
 
-	byte level;			/*! 基本生成階 / Artifact level */
-	byte rarity;		/*! レアリティ / Artifact rarity */
+	DEPTH level;		/*! 基本生成階 / Artifact level */
+	RARITY rarity;		/*! レアリティ / Artifact rarity */
 
 	byte cur_num;		/*! 現在の生成数 / Number created (0 or 1) */
 	byte max_num;		/*! (未使用)最大生成数 / Unused (should be "1") */
@@ -305,25 +306,25 @@ struct monster_race
 	byte aaf;				/*!< 感知範囲(1-100スクエア) / Area affect radius (1-100) */
 	SPEED speed;				/*!< 加速(110で+0) / Speed (normally 110) */
 
-	s32b mexp;				/*!< 殺害時基本経験値 / Exp value for kill */
+	EXP mexp;				/*!< 殺害時基本経験値 / Exp value for kill */
 
 	s16b extra;				/*!< 未使用 /  Unused (for now) */
 
 	byte freq_spell;		/*!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency */
 
-	u32b flags1;			/* Flags 1 (general) */
-	u32b flags2;			/* Flags 2 (abilities) */
-	u32b flags3;			/* Flags 3 (race/resist) */
-	u32b flags4;			/* Flags 4 (inate/breath) */
-	u32b flags7;			/* Flags 7 (movement related abilities) */
-	u32b flags8;			/* Flags 8 (wilderness info) */
-	u32b flags9;			/* Flags 9 (drops info) */
-	u32b flagsr;			/* Flags R (resistances info) */
+	BIT_FLAGS flags1;			/* Flags 1 (general) */
+	BIT_FLAGS flags2;			/* Flags 2 (abilities) */
+	BIT_FLAGS flags3;			/* Flags 3 (race/resist) */
+	BIT_FLAGS flags4;			/* Flags 4 (inate/breath) */
+	BIT_FLAGS flags7;			/* Flags 7 (movement related abilities) */
+	BIT_FLAGS flags8;			/* Flags 8 (wilderness info) */
+	BIT_FLAGS flags9;			/* Flags 9 (drops info) */
+	BIT_FLAGS flagsr;			/* Flags R (resistances info) */
 
-	u32b a_ability_flags1;	/* Activate Ability Flags 5 (normal spells) */
-	u32b a_ability_flags2;	/* Activate Ability Flags 6 (special spells) */
-	u32b a_ability_flags3;	/* Activate Ability Flags 7 (implementing) */
-	u32b a_ability_flags4;	/* Activate Ability Flags 8 (implementing) */
+	BIT_FLAGS a_ability_flags1;	/* Activate Ability Flags 5 (normal spells) */
+	BIT_FLAGS a_ability_flags2;	/* Activate Ability Flags 6 (special spells) */
+	BIT_FLAGS a_ability_flags3;	/* Activate Ability Flags 7 (implementing) */
+	BIT_FLAGS a_ability_flags4;	/* Activate Ability Flags 8 (implementing) */
 
 	monster_blow blow[4];	/* Up to four blows per round */
 	MONRACE_IDX reinforce_id[6];
@@ -336,8 +337,8 @@ struct monster_race
 
 	PERCENTAGE arena_ratio;		/* アリーナの評価修正値(%基準 / 0=100%) / Arena */
 
-	IDX next_r_idx;
-	u32b next_exp;
+	MONRACE_IDX next_r_idx;
+	EXP next_exp;
 
 	DEPTH level;			/* Level of creature */
 	RARITY rarity;			/* Rarity of creature */
@@ -1704,13 +1705,13 @@ typedef struct
  */
 typedef struct
 {
-	s16b open;
-	s16b broken;
-	s16b closed;
-	s16b locked[MAX_LJ_DOORS];
-	s16b num_locked;
-	s16b jammed[MAX_LJ_DOORS];
-	s16b num_jammed;
+	FEAT_IDX open;
+	FEAT_IDX broken;
+	FEAT_IDX closed;
+	FEAT_IDX locked[MAX_LJ_DOORS];
+	FEAT_IDX num_locked;
+	FEAT_IDX jammed[MAX_LJ_DOORS];
+	FEAT_IDX num_jammed;
 } door_type;
 
 

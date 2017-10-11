@@ -1856,7 +1856,7 @@ void display_equip(void)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag(int *cp, char tag, int mode)
+static bool get_tag(COMMAND_CODE *cp, char tag, int mode)
 {
 	int i, start, end;
 	cptr s;
