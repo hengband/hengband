@@ -1081,14 +1081,14 @@ struct player_type
 	s16b virtues[8];
 	s16b vir_types[8];
 
-	s16b word_recall;	  /* Word of recall counter */
-	s16b alter_reality;	  /* Alter reality counter */
-	IDX recall_dungeon;      /* Dungeon set to be recalled */
+	TIME_EFFECT word_recall;	  /* Word of recall counter */
+	TIME_EFFECT alter_reality;	  /* Alter reality counter */
+	DUNGEON_IDX recall_dungeon;      /* Dungeon set to be recalled */
 
 	ENERGY energy_need;	  /* Energy needed for next move */
 	ENERGY enchant_energy_need;	  /* Energy needed for next upkeep effect	 */
 
-	s16b food;		  /* Current nutrition */
+	FEED food;		  /* Current nutrition */
 
 	BIT_FLAGS special_attack;	  /* Special attack capacity -LM- */
 	BIT_FLAGS special_defense;	  /* Special block capacity -LM- */

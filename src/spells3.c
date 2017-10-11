@@ -5363,7 +5363,7 @@ bool dimension_door(void)
  */
 bool mirror_tunnel(void)
 {
-	int x = 0, y = 0;
+	POSITION x = 0, y = 0;
 
 	/* Rerutn FALSE if cancelled */
 	if (!tgt_pt(&x, &y)) return FALSE;
