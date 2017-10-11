@@ -67,11 +67,11 @@ bool select_the_force = FALSE;
 static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
 {
 	int         i;
-	int         spell = -1;
+	SPELL_IDX   spell = -1;
 	int         num = 0;
 	int         ask = TRUE;
-	int         need_mana;
-	int         spells[64];
+	MANA_POINT  need_mana;
+	SPELL_IDX   spells[64];
 	bool        flag, redraw, okay;
 	char        choice;
 	const magic_type  *s_ptr;

@@ -6155,7 +6155,7 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
 s16b inven_carry(object_type *o_ptr)
 {
 	INVENTORY_IDX i, j, k;
-	int n = -1;
+	INVENTORY_IDX n = -1;
 
 	object_type *j_ptr;
 
@@ -7959,7 +7959,7 @@ static void drain_essence(void)
  */
 static int choose_essence(void)
 {
-	int mode = 0;
+	COMMAND_CODE mode = 0;
 	char choice;
 	int menu_line = (use_menu ? 1 : 0);
 

@@ -3439,7 +3439,8 @@ bool activate_random_artifact(object_type *o_ptr)
 		/* Unique activation */
 		case ACT_CAST_OFF:
 		{
-			int inv, o_idx, t;
+			int inv, t;
+			OBJECT_IDX o_idx;
 			char o_name[MAX_NLEN];
 			object_type forge;
 

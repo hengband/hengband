@@ -401,8 +401,8 @@ static void spoil_obj_desc(cptr fname)
 						int e1;
 						int e2;
 
-						s32b t1;
-						s32b t2;
+						DEPTH t1;
+						DEPTH t2;
 
 						kind_info(NULL, NULL, NULL, NULL, &e1, &t1, who[i1]);
 						kind_info(NULL, NULL, NULL, NULL, &e2, &t2, who[i2]);
@@ -422,7 +422,7 @@ static void spoil_obj_desc(cptr fname)
 				for (s = 0; s < n; s++)
 				{
 					int e;
-					s32b v;
+					DEPTH v;
 
 					/* Describe the kind */
 					kind_info(buf, dam, wgt, chance, &e, &v, who[s]);

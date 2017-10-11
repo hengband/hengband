@@ -1956,10 +1956,10 @@ int spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	HIT_POINT dummy_hp, dummy_maxhp;
-	int k;
-	int dummy_y = m_ptr->fy;
-	int dummy_x = m_ptr->fx;
-	u32b mode = 0L;
+	MONSTER_IDX k;
+	POSITION dummy_y = m_ptr->fy;
+	POSITION dummy_x = m_ptr->fx;
+	BIT_FLAGS mode = 0L;
 
 	switch(m_ptr->r_idx)
 	{

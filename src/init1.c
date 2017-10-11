@@ -1522,10 +1522,10 @@ errr parse_m_info(char *buf, header *head)
 		if (4 != sscanf(buf+2, "%d:%d:%d:%d",
 				&level, &mana, &fail, &exp)) return (1);
 
-		m_ptr->info[realm][magic_idx].slevel = level;
-		m_ptr->info[realm][magic_idx].smana = mana;
-		m_ptr->info[realm][magic_idx].sfail = fail;
-		m_ptr->info[realm][magic_idx].sexp = exp;
+		m_ptr->info[realm][magic_idx].slevel = (PLAYER_LEVEL)level;
+		m_ptr->info[realm][magic_idx].smana = (MANA_POINT)mana;
+		m_ptr->info[realm][magic_idx].sfail = (PERCENTAGE)fail;
+		m_ptr->info[realm][magic_idx].sexp = (EXP)exp;
 		magic_idx ++;
 	}
 

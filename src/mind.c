@@ -675,7 +675,7 @@ void mindcraft_info(char *p, int use_mind, int power)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_mind_power(SPELL_IDX *sn, bool only_browse)
+static int get_mind_power(COMMAND_CODE *sn, bool only_browse)
 {
 	int             i;
 	int             num = 0;

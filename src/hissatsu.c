@@ -34,7 +34,8 @@
  */
 static int get_hissatsu_power(SPELL_IDX *sn)
 {
-	int             i, j = 0;
+	SPELL_IDX i;
+	int j = 0;
 	int             num = 0;
 	int             y = 1;
 	int             x = 15;
@@ -42,7 +43,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	int             ask = TRUE;
 	char            choice;
 	char            out_val[160];
-	char sentaku[32];
+	SPELL_IDX sentaku[32];
 	cptr            p = _("必殺剣", "special attack");
 
 	magic_type spell;

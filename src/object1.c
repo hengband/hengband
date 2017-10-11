@@ -2718,13 +2718,15 @@ bool can_get_item(void)
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
  */
-bool get_item(int *cp, cptr pmt, cptr str, int mode)
+bool get_item(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
 {
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	char which = ' ';
 
-	int j, k, i1, i2, e1, e2;
+	int j;
+	COMMAND_CODE k;
+	int i1, i2, e1, e2;
 
 	bool done, item;
 

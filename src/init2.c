@@ -1979,10 +1979,10 @@ static errr init_object_alloc(void)
 
 				/* Load the entry */
 				table[z].index = i;
-				table[z].level = x;
-				table[z].prob1 = p;
-				table[z].prob2 = p;
-				table[z].prob3 = p;
+				table[z].level = (DEPTH)x;
+				table[z].prob1 = (PROB)p;
+				table[z].prob2 = (PROB)p;
+				table[z].prob3 = (PROB)p;
 
 				/* Another entry complete for this locale */
 				aux[x]++;
@@ -2048,10 +2048,10 @@ static errr init_alloc(void)
 
 			/* Load the entry */
 			alloc_race_table[i].index = elements[i].index;
-			alloc_race_table[i].level = x;
-			alloc_race_table[i].prob1 = p;
-			alloc_race_table[i].prob2 = p;
-			alloc_race_table[i].prob3 = p;
+			alloc_race_table[i].level = (DEPTH)x;
+			alloc_race_table[i].prob1 = (PROB)p;
+			alloc_race_table[i].prob2 = (PROB)p;
+			alloc_race_table[i].prob3 = (PROB)p;
 		}
 	}
 

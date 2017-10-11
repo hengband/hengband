@@ -776,10 +776,10 @@ typedef struct magic_type magic_type;
 
 struct magic_type
 {
-	byte slevel;		/* Required level (to learn) */
-	byte smana;			/* Required mana (to cast) */
-	byte sfail;			/* Minimum chance of failure */
-	byte sexp;			/* Encoded experience bonus */
+	PLAYER_LEVEL slevel;	/* Required level (to learn) */
+	MANA_POINT smana;		/* Required mana (to cast) */
+	PERCENTAGE sfail;		/* Minimum chance of failure */
+	EXP sexp;				/* Encoded experience bonus */
 };
 
 
@@ -1108,13 +1108,13 @@ struct player_type
 	MAGIC_NUM1 magic_num1[108];     /*!< Array for non-spellbook type magic */
 	MAGIC_NUM2 magic_num2[108];     /*!< Flags for non-spellbook type magics */
 
-	s16b mane_spell[MAX_MANE];
+	SPELL_IDX mane_spell[MAX_MANE];
 	HIT_POINT mane_dam[MAX_MANE];
 	s16b mane_num;
 
 	s16b concent;      /* Sniper's concentration level */
 
-	s16b player_hp[PY_MAX_LEVEL];
+	HIT_POINT player_hp[PY_MAX_LEVEL];
 	char died_from[80];   	  /* What killed the player */
 	cptr last_message;        /* Last message on death or retirement */
 	char history[4][60];  	  /* Textual "history" for the Player */
@@ -1373,9 +1373,9 @@ struct birther
 
 	s32b au;
 
-	s16b stat_max[6];	/* Current "maximal" stat values */
-	s16b stat_max_max[6];	/* Maximal "maximal" stat values */
-	s16b player_hp[PY_MAX_LEVEL];
+	BASE_STATUS stat_max[6];	/* Current "maximal" stat values */
+	BASE_STATUS stat_max_max[6];	/* Maximal "maximal" stat values */
+	HIT_POINT player_hp[PY_MAX_LEVEL];
 
 	s16b chaos_patron;
 

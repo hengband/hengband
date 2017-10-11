@@ -476,7 +476,7 @@ void teleport_player(int dis, u32b mode)
 	{
 		for (yy = -1; yy < 2; yy++)
 		{
-			int tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
+			MONSTER_IDX tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
 
 			/* A monster except your mount may follow */
 			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx))

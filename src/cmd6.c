@@ -4145,7 +4145,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 	int menu_line = (use_menu ? 1 : 0);
 
 #ifdef ALLOW_REPEAT
-	SPELL_IDX sn;
+	COMMAND_CODE sn;
 	if (repeat_pull(&sn))
 	{
 		/* Verify the spell */

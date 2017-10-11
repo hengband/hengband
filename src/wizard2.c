@@ -1697,7 +1697,7 @@ static void do_cmd_wiz_named_friendly(MONRACE_IDX r_idx)
  */
 static void do_cmd_wiz_zap(void)
 {
-	int i;
+	MONSTER_IDX i;
 
 
 	/* Genocide everyone nearby */
@@ -1735,7 +1735,7 @@ static void do_cmd_wiz_zap(void)
  */
 static void do_cmd_wiz_zap_all(void)
 {
-	int i;
+	MONSTER_IDX i;
 
 	/* Genocide everyone */
 	for (i = 1; i < m_max; i++)

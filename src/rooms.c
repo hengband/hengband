@@ -1098,8 +1098,8 @@ static bool build_type3(void)
  */
 static bool build_type4(void)
 {
-	int         y, x, y1, x1;
-	int         y2, x2, tmp, yval, xval;
+	POSITION y, x, y1, x1;
+	POSITION y2, x2, tmp, yval, xval;
 	bool        light;
 	cave_type   *c_ptr;
 
@@ -2260,7 +2260,7 @@ static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
  */
 static bool build_type5(void)
 {
-	int y, x, y1, x1, y2, x2, xval, yval;
+	POSITION y, x, y1, x1, y2, x2, xval, yval;
 	int i;
 	nest_mon_info_type nest_mon_info[NUM_NEST_MON_TYPE];
 
@@ -5517,7 +5517,7 @@ static bool build_type10(void)
  */
 static bool build_type11(void)
 {
-	int rad, x, y, x0, y0;
+	POSITION rad, x, y, x0, y0;
 	int light = FALSE;
 
 	/* Occasional light */
@@ -6090,8 +6090,8 @@ static bool kind_is_potion(int k_idx)
  */
 static bool build_type15(void)
 {
-	int y, x, y2, x2, yval, xval;
-	int y1, x1, xsize, ysize;
+	POSITION y, x, y2, x2, yval, xval;
+	POSITION y1, x1, xsize, ysize;
 	bool light;
 
 	cave_type *c_ptr;
