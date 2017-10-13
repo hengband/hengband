@@ -816,6 +816,7 @@ static void rd_monster_old(monster_type *m_ptr)
 {
 	byte tmp8u;
 	s16b tmp16s;
+	u32b tmp32u;
 	char buf[128];
 
 	/* Read the monster race */
@@ -925,7 +926,8 @@ static void rd_monster_old(monster_type *m_ptr)
 	if (z_older_than(10, 4, 5))
 		m_ptr->exp = 0;
 	else
-		rd_u32b(&m_ptr->exp);
+		rd_u32b(&tmp32u);
+		m_ptr->exp = tmp32u;
 
 	if (z_older_than(10, 2, 2))
 	{
@@ -971,6 +973,7 @@ static void rd_monster(monster_type *m_ptr)
 	char buf[128];
 	byte tmp8u;
 	s16b tmp16s;
+	u32b tmp32u;
 
 	if (h_older_than(1, 5, 0, 0))
 	{
@@ -1076,7 +1079,11 @@ static void rd_monster(monster_type *m_ptr)
 	if (flags & SAVE_MON_SMART) rd_u32b(&m_ptr->smart);
 	else m_ptr->smart = 0;
 
-	if (flags & SAVE_MON_EXP) rd_u32b(&m_ptr->exp);
+	if (flags & SAVE_MON_EXP)
+	{
+		rd_u32b(&tmp32u);
+		m_ptr->exp = (EXP)tmp32u;
+	}
 	else m_ptr->exp = 0;
 
 	m_ptr->mflag = 0; /* Not saved */
@@ -1641,6 +1648,7 @@ static void rd_ghost(void)
 static void load_quick_start(void)
 {
 	byte tmp8u;
+	s16b tmp16s;
 	int i;
 
 	if (z_older_than(11, 0, 13))
@@ -1667,7 +1675,11 @@ static void load_quick_start(void)
 	for (i = 0; i < 6; i++) rd_s16b(&previous_char.stat_max[i]);
 	for (i = 0; i < 6; i++) rd_s16b(&previous_char.stat_max_max[i]);
 
-	for (i = 0; i < PY_MAX_LEVEL; i++) rd_s16b(&previous_char.player_hp[i]);
+	for (i = 0; i < PY_MAX_LEVEL; i++)
+	{
+		rd_s16b(&tmp16s);
+		previous_char.player_hp[i] = (HIT_POINT)tmp16s;
+	}
 
 	rd_s16b(&previous_char.chaos_patron);
 
@@ -1852,8 +1864,10 @@ static void rd_extra(void)
 	{
 		for (i = 0; i < MAX_MANE; i++)
 		{
-			rd_s16b(&p_ptr->mane_spell[i]);
-			rd_s16b(&p_ptr->mane_dam[i]);
+			rd_s16b(&tmp16s);
+			p_ptr->mane_spell[i] = (SPELL_IDX)tmp16s;
+			rd_s16b(&tmp16s);
+			p_ptr->mane_dam[i] = (SPELL_IDX)tmp16s;
 		}
 		rd_s16b(&p_ptr->mane_num);
 	}

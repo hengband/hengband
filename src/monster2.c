@@ -3678,7 +3678,7 @@ static bool place_monster_can_escort(MONRACE_IDX r_idx)
  * Note the use of the new "monster allocation table" code to restrict
  * the "get_mon_num()" function to "legal" escort types.
  */
-bool place_monster_aux(IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
+bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	int             i, j, n;
 	monster_race    *r_ptr = &r_info[r_idx];
@@ -4048,7 +4048,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
  *
  * Note that this function may not succeed, though this is very rare.
  */
-bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
+bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode)
 {
 	POSITION x, y;
 	MONRACE_IDX r_idx;
@@ -4102,7 +4102,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
  * @param mode 生成オプション 
  * @return 召喚できたらtrueを返す
  */
-bool summon_named_creature (int who, int oy, int ox, MONRACE_IDX r_idx, u32b mode)
+bool summon_named_creature (MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	int x, y;
 

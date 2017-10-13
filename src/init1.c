@@ -2505,12 +2505,12 @@ errr parse_a_info(char *buf, header *head)
 		if (6 != sscanf(buf+2, "%d:%dd%d:%d:%d:%d",
 				&ac, &hd1, &hd2, &th, &td, &ta)) return (1);
 
-		a_ptr->ac = ac;
-		a_ptr->dd = hd1;
-		a_ptr->ds = hd2;
-		a_ptr->to_h = th;
-		a_ptr->to_d = td;
-		a_ptr->to_a =  ta;
+		a_ptr->ac = (ARMOUR_CLASS)ac;
+		a_ptr->dd = (DICE_NUMBER)hd1;
+		a_ptr->ds = (DICE_SID)hd2;
+		a_ptr->to_h = (HIT_PROB)th;
+		a_ptr->to_d = (HIT_POINT)td;
+		a_ptr->to_a = (ARMOUR_CLASS)ta;
 	}
 
 	/* Hack -- Process 'U' for activation index */

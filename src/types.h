@@ -607,18 +607,18 @@ struct monster_type
 
 	bool ml;		/* Monster is "visible" */
 
-	IDX hold_o_idx;	/* Object being held (if any) */
+	OBJECT_IDX hold_o_idx;	/* Object being held (if any) */
 
 	POSITION target_y;		/* Can attack !los player */
 	POSITION target_x;		/* Can attack !los player */
 
-	u16b nickname;		/* Monster's Nickname */
+	STR_OFFSET nickname;		/* Monster's Nickname */
 
-	u32b exp;
+	EXP exp;
 
-	u32b smart;			/* Field for "smart_learn" */
+	BIT_FLAGS smart;			/* Field for "smart_learn" */
 
-	s16b parent_m_idx;
+	MONSTER_IDX parent_m_idx;
 };
 
 

@@ -1981,7 +1981,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, int mode)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
+static bool get_tag_floor(COMMAND_CODE *cp, char tag, int floor_list[], int floor_num)
 {
 	int i;
 	cptr s;

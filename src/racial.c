@@ -1714,9 +1714,10 @@ static bool cmd_racial_power_aux(s32b command)
 void do_cmd_racial_power(void)
 {
 	power_desc_type power_desc[36];
-	int             num, i = 0;
-	int             ask = TRUE;
-	int             lvl = p_ptr->lev;
+	int num;
+	COMMAND_CODE i = 0;
+	int ask = TRUE;
+	PLAYER_LEVEL lvl = p_ptr->lev;
 	bool            flag, redraw, cast = FALSE;
 	bool            warrior = ((p_ptr->pclass == CLASS_WARRIOR || p_ptr->pclass == CLASS_BERSERKER) ? TRUE : FALSE);
 	char            choice;
