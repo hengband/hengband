@@ -1789,7 +1789,7 @@ void alter_reality(void)
 
 	if (!p_ptr->alter_reality)
 	{
-		int turns = randint0(21) + 15;
+		TIME_EFFECT turns = randint0(21) + 15;
 
 		p_ptr->alter_reality = turns;
 		msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
@@ -2908,7 +2908,8 @@ bool item_tester_hook_recharge(object_type *o_ptr)
 bool recharge(int power)
 {
 	int item, lev;
-	int recharge_strength, recharge_amount;
+	int recharge_strength;
+	TIME_EFFECT recharge_amount;
 
 	object_type *o_ptr;
 	object_kind *k_ptr;

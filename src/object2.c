@@ -8075,7 +8075,7 @@ static int choose_essence(void)
 static void add_essence(int mode)
 {
 	int item, max_num = 0;
-	int i;
+	COMMAND_CODE i;
 	bool flag,redraw;
 	char choice;
 	cptr            q, s;

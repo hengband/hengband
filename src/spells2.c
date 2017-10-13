@@ -2319,7 +2319,8 @@ bool detect_monsters_invis(POSITION range)
  */
 bool detect_monsters_evil(POSITION range)
 {
-	int i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
@@ -2388,8 +2389,9 @@ bool detect_monsters_evil(POSITION range)
  */
 bool detect_monsters_nonliving(POSITION range)
 {
-	int     i, y, x;
-	bool    flag = FALSE;
+	MONSTER_IDX i;
+	POSITION y, x;
+	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 

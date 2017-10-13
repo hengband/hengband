@@ -2726,7 +2726,8 @@ bool get_item(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
 
 	int j;
 	COMMAND_CODE k;
-	int i1, i2, e1, e2;
+	COMMAND_CODE i1, i2;
+	COMMAND_CODE e1, e2;
 
 	bool done, item;
 
@@ -4031,7 +4032,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
 	/* Repeat until done */
 	while (!done)
 	{
-		int get_item_label = 0;
+		COMMAND_CODE get_item_label = 0;
 
 		/* Show choices */
 		int ni = 0;

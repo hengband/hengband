@@ -3436,7 +3436,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
  * @return 成功したらtrue
  *  
  */
-static bool mon_scatter(MONRACE_IDX r_idx, int *yp, int *xp, int y, int x, int max_dist)
+static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
 {
 	int place_x[MON_SCAT_MAXD];
 	int place_y[MON_SCAT_MAXD];

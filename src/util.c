@@ -3805,7 +3805,7 @@ bool get_com(cptr prompt, char *command, bool z_escape)
 s16b get_quantity(cptr prompt, int max)
 {
 	bool res;
-	int amt;
+	COMMAND_CODE amt;
 	char tmp[80];
 	char buf[80];
 

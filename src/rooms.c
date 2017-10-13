@@ -3084,8 +3084,8 @@ static bool build_type8(void)
 {
 	vault_type *v_ptr;
 	int dummy;
-	int xval, yval;
-	int x, y;
+	POSITION xval, yval;
+	POSITION x, y;
 	int transno;
 	int xoffset, yoffset;
 
@@ -3147,7 +3147,7 @@ static bool build_type8(void)
 	 * prevent generation of vaults with no-entrance.
 	 */
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, abs(y) + 2, abs(x) + 2)) return FALSE;
+	if (!find_space(&yval, &xval, (POSITION)(abs(y) + 2), (POSITION)(abs(x) + 2))) return FALSE;
 
 #ifdef FORCE_V_IDX
 	v_ptr = &v_info[76 + randint1(3)];

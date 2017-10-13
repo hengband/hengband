@@ -2610,7 +2610,7 @@ static void display_store(void)
  * @param j 選択範囲の最大値
  * @return 実際に選択したらTRUE、キャンセルしたらFALSE
  */
-static int get_stock(int *com_val, cptr pmt, int i, int j)
+static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 {
 	char	command;
 	char	out_val[160];

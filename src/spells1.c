@@ -1585,7 +1585,7 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
  * "flg" was added.
  * </pre>
  */
-static bool project_m(int who, int r, int y, int x, HIT_POINT dam, int typ, int flg, bool see_s_msg)
+static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, bool see_s_msg)
 {
 	int tmp;
 
@@ -1643,7 +1643,7 @@ static bool project_m(int who, int r, int y, int x, HIT_POINT dam, int typ, int 
 	char m_name[80];
 	char m_poss[10];
 
-	int photo = 0;
+	PARAMETER_VALUE photo = 0;
 
 	/* Assume no note */
 	cptr note = NULL;
@@ -6544,10 +6544,10 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 /*
  * breath shape
  */
-void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, byte *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, int typ)
+void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, int typ)
 {
-	int by = y1;
-	int bx = x1;
+	POSITION by = y1;
+	POSITION bx = x1;
 	int brad = 0;
 	int brev = rad * rad / dist;
 	int bdis = 0;
@@ -6777,13 +6777,13 @@ bool project(int who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int t
 {
 	int i, t, dist;
 
-	int y1, x1;
-	int y2, x2;
-	int by, bx;
+	POSITION y1, x1;
+	POSITION y2, x2;
+	POSITION by, bx;
 
 	int dist_hack = 0;
 
-	int y_saver, x_saver; /* For reflecting monsters */
+	POSITION y_saver, x_saver; /* For reflecting monsters */
 
 	int msec = delay_factor * delay_factor * delay_factor;
 
