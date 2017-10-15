@@ -7586,7 +7586,7 @@ bool project(int who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int t
 				    ((cave[y][x].m_idx != p_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
 				    (!who || dist_hack > 1) && !one_in_(10))
 				{
-					byte t_y, t_x;
+					POSITION t_y, t_x;
 					int max_attempts = 10;
 
 					/* Choose 'new' target */

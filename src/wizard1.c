@@ -234,7 +234,7 @@ static grouper group_item[] =
  * @param k ベースアイテムID
  * @return なし
  */
-static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, s32b *val, IDX k)
+static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, OBJECT_IDX k)
 {
 	object_type forge;
 	object_type *q_ptr;
@@ -346,7 +346,7 @@ static void spoil_obj_desc(cptr fname)
 {
 	int i, k, s, t, n = 0, group_start = 0;
 
-	u16b who[200];
+	OBJECT_IDX who[200];
 
 	char buf[1024];
 
@@ -398,11 +398,11 @@ static void spoil_obj_desc(cptr fname)
 						int i1 = t;
 						int i2 = t + 1;
 
-						int e1;
-						int e2;
+						DEPTH e1;
+						DEPTH e2;
 
-						DEPTH t1;
-						DEPTH t2;
+						PRICE t1;
+						PRICE t2;
 
 						kind_info(NULL, NULL, NULL, NULL, &e1, &t1, who[i1]);
 						kind_info(NULL, NULL, NULL, NULL, &e2, &t2, who[i2]);
@@ -421,8 +421,8 @@ static void spoil_obj_desc(cptr fname)
 				/* Spoil each item */
 				for (s = 0; s < n; s++)
 				{
-					int e;
-					DEPTH v;
+					DEPTH e;
+					PRICE v;
 
 					/* Describe the kind */
 					kind_info(buf, dam, wgt, chance, &e, &v, who[s]);

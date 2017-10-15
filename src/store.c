@@ -2081,7 +2081,9 @@ static void store_delete(void)
  */
 static void store_create(void)
 {
-	int i, tries, level;
+	OBJECT_IDX i;
+	int tries;
+	DEPTH level;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -2654,7 +2656,7 @@ static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 	/* Ask until done */
 	while (TRUE)
 	{
-		int k;
+		COMMAND_CODE k;
 
 		/* Escape */
 		if (!get_com(out_val, &command, FALSE)) break;
@@ -3431,7 +3433,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 static void store_purchase(void)
 {
 	int i, choice;
-	int item, item_new;
+	COMMAND_CODE item, item_new;
 
 	ITEM_NUMBER amt;
 
@@ -4289,7 +4291,7 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 static void store_examine(void)
 {
 	int         i;
-	int         item;
+	COMMAND_CODE item;
 	object_type *o_ptr;
 	char        o_name[MAX_NLEN];
 	char        out_val[160];
@@ -4391,7 +4393,7 @@ msg_print("特に変わったところはないようだ。");
 static void museum_remove_object(void)
 {
 	int         i;
-	int         item;
+	COMMAND_CODE item;
 	object_type *o_ptr;
 	char        o_name[MAX_NLEN];
 	char        out_val[160];

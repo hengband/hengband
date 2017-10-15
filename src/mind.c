@@ -677,7 +677,7 @@ void mindcraft_info(char *p, int use_mind, int power)
  */
 static int get_mind_power(COMMAND_CODE *sn, bool only_browse)
 {
-	int             i;
+	COMMAND_CODE i;
 	int             num = 0;
 	int             y = 1;
 	int             x = 10;

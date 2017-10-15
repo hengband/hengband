@@ -220,7 +220,7 @@ void display_snipe_list(void)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_snipe_power(int *sn, bool only_browse)
+static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 {
 	int             i;
 	int             num = 0;

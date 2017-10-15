@@ -88,8 +88,8 @@ static bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool
 
 	int grids = 0;
 	POSITION gx[1024], gy[1024];
-	byte gm[32];
-	int gm_rad = rad;
+	POSITION gm[32];
+	POSITION gm_rad = rad;
 
 	bool hit2 = FALSE;
 	bool hityou = FALSE;

@@ -833,15 +833,15 @@ void teleport_level(MONSTER_IDX m_idx)
 
 
 /*!
- * @brief これまでに入ったダンジョンの一覧を表示する
+ * @brief これまでに入ったダンジョンの一覧を表示し、選択させる。
  * @param note ダンジョンに施す処理記述
  * @param y コンソールY座標
  * @param x コンソールX座標
- * @return なし
+ * @return 選択されたダンジョンID
  */
-IDX choose_dungeon(cptr note, int y, int x)
+DUNGEON_IDX choose_dungeon(cptr note, POSITION y, POSITION x)
 {
-	int select_dungeon;
+	DUNGEON_IDX select_dungeon;
 	int i, num = 0;
 	s16b *dun;
 
@@ -919,7 +919,7 @@ IDX choose_dungeon(cptr note, int y, int x)
  * @param turns 発動までのターン数
  * @return 常にTRUEを返す
  */
-bool recall_player(int turns)
+bool recall_player(TIME_EFFECT turns)
 {
 	/*
 	 * TODO: Recall the player to the last
@@ -5159,7 +5159,8 @@ static IDX poly_r_idx(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	int i, r;
+	int i;
+	MONRACE_IDX r;
 	DEPTH lev1, lev2;
 
 	/* Hack -- Uniques/Questors never polymorph */

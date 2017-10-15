@@ -1933,7 +1933,7 @@ void object_copy(object_type *o_ptr, object_type *j_ptr)
  * @param k_idx 新たに作成したいベースアイテム情報のID
  * @return なし
  */
-void object_prep(object_type *o_ptr, IDX k_idx)
+void object_prep(object_type *o_ptr, OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -7961,7 +7961,7 @@ static int choose_essence(void)
 {
 	COMMAND_CODE mode = 0;
 	char choice;
-	int menu_line = (use_menu ? 1 : 0);
+	COMMAND_CODE menu_line = (use_menu ? 1 : 0);
 
 #ifdef JP
 	cptr menu_name[] = {

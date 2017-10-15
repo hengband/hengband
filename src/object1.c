@@ -1858,7 +1858,8 @@ void display_equip(void)
  */
 static bool get_tag(COMMAND_CODE *cp, char tag, int mode)
 {
-	int i, start, end;
+	COMMAND_CODE i;
+	int start, end;
 	cptr s;
 
 	/* Extract index from mode */
@@ -1983,7 +1984,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, int mode)
  */
 static bool get_tag_floor(COMMAND_CODE *cp, char tag, int floor_list[], int floor_num)
 {
-	int i;
+	COMMAND_CODE i;
 	cptr s;
 
 	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
@@ -2117,7 +2118,7 @@ static void prepare_label_string_floor(char *label, int floor_list[], int floor_
 	/* Move each label */
 	for (i = 0; i < 52; i++)
 	{
-		int index;
+		COMMAND_CODE index;
 		char c = alphabet_chars[i];
 
 		/* Find a tag with this label */
@@ -3766,7 +3767,8 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
 {
 	char n1 = ' ', n2 = ' ', which = ' ';
 
-	int j, i1, i2;
+	int j;
+	COMMAND_CODE i1, i2;
 	COMMAND_CODE e1, e2;
 	COMMAND_CODE k;
 

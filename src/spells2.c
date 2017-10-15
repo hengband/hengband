@@ -2194,7 +2194,8 @@ bool detect_objects_magic(POSITION range)
  */
 bool detect_monsters_normal(POSITION range)
 {
-	int i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 
 	bool flag = FALSE;
 
@@ -2254,7 +2255,8 @@ bool detect_monsters_normal(POSITION range)
  */
 bool detect_monsters_invis(POSITION range)
 {
-	int i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
@@ -5520,11 +5522,11 @@ bool activate_ty_curse(bool stop_ty, int *count)
  * @param can_pet プレイヤーのペットとなる可能性があるならばTRUEにする
  * @return 作用が実際にあった場合TRUEを返す
  */
-int activate_hi_summon(int y, int x, bool can_pet)
+int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
 {
 	int i;
 	int count = 0;
-	int summon_lev;
+	DEPTH summon_lev;
 	u32b mode = PM_ALLOW_GROUP;
 	bool pet = FALSE;
 
@@ -5609,7 +5611,7 @@ int activate_hi_summon(int y, int x, bool can_pet)
  * @param x 召喚位置X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-int summon_cyber(int who, int y, int x)
+int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
 {
 	int i;
 	int max_cyber = (easy_band ? 1 : (dun_level / 50) + randint1(2));
