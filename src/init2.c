@@ -1615,7 +1615,7 @@ s16b f_tag_to_index_in_init(cptr str)
  */
 static errr init_feat_variables(void)
 {
-	int i;
+	FEAT_IDX i;
 
 	/* Nothing */
 	feat_none = f_tag_to_index_in_init("NONE");

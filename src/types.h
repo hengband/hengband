@@ -219,17 +219,16 @@ struct ego_item_type
 	DEPTH level;			/* Minimum level */
 	RARITY rarity;		/* Object rarity */
 
-	byte max_to_h;		/* Maximum to-hit bonus */
-	byte max_to_d;		/* Maximum to-dam bonus */
-	byte max_to_a;		/* Maximum to-ac bonus */
+	HIT_PROB max_to_h;		/* Maximum to-hit bonus */
+	HIT_POINT max_to_d;		/* Maximum to-dam bonus */
+	ARMOUR_CLASS max_to_a;		/* Maximum to-ac bonus */
 
 	PARAMETER_VALUE max_pval;		/* Maximum pval */
 
-	s32b cost;			/* Ego-item "cost" */
+	PRICE cost;			/* Ego-item "cost" */
 
-	u32b flags[TR_FLAG_SIZE];	/* Ego-Item Flags */
-
-	u32b gen_flags;		/* flags for generate */
+	BIT_FLAGS flags[TR_FLAG_SIZE];	/* Ego-Item Flags */
+	BIT_FLAGS gen_flags;		/* flags for generate */
 
 	IDX act_idx;		/* Activative ability index */
 };
@@ -1586,8 +1585,8 @@ struct high_score
 
 typedef struct
 {
-	s16b feat;    /* Feature tile */
-	byte percent; /* Chance of type */
+	FEAT_IDX feat;    /* Feature tile */
+	PERCENTAGE percent; /* Chance of type */
 }
 feat_prob;
 
@@ -1598,8 +1597,8 @@ struct dungeon_info_type {
 	STR_OFFSET name;		/* Name */
 	STR_OFFSET text;		/* Description */
 
-	byte dy;
-	byte dx;
+	POSITION dy;
+	POSITION dx;
 
 	feat_prob floor[DUNGEON_FEAT_PROB_NUM]; /* Floor probability */
 	feat_prob fill[DUNGEON_FEAT_PROB_NUM];  /* Cave wall probability */

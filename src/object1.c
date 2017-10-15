@@ -2988,7 +2988,7 @@ bool get_item(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
 	/* Repeat until done */
 	while (!done)
 	{
-		int get_item_label = 0;
+		COMMAND_CODE get_item_label = 0;
 
 		/* Show choices */
 		int ni = 0;

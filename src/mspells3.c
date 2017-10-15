@@ -1463,7 +1463,7 @@ static bool cast_learned_spell(int spell, bool success)
  */
 bool do_cmd_cast_learned(void)
 {
-	int             n = 0;
+	SPELL_IDX n = 0;
 	int             chance;
 	int             minfail = 0;
 	int             plev = p_ptr->lev;

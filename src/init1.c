@@ -2474,9 +2474,9 @@ errr parse_a_info(char *buf, header *head)
 				&tval, &sval, &pval)) return (1);
 
 		/* Save the values */
-		a_ptr->tval = tval;
-		a_ptr->sval = sval;
-		a_ptr->pval = pval;
+		a_ptr->tval = (OBJECT_TYPE_VALUE)tval;
+		a_ptr->sval = (OBJECT_SUBTYPE_VALUE)sval;
+		a_ptr->pval = (PARAMETER_VALUE)pval;
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
@@ -2490,10 +2490,10 @@ errr parse_a_info(char *buf, header *head)
 				&level, &rarity, &wgt, &cost)) return (1);
 
 		/* Save the values */
-		a_ptr->level = level;
-		a_ptr->rarity = rarity;
-		a_ptr->weight = wgt;
-		a_ptr->cost = cost;
+		a_ptr->level = (DEPTH)level;
+		a_ptr->rarity = (RARITY)rarity;
+		a_ptr->weight = (WEIGHT)wgt;
+		a_ptr->cost = (PRICE)cost;
 	}
 
 	/* Hack -- Process 'P' for "power" and such */
@@ -3394,7 +3394,7 @@ errr parse_d_info(char *buf, header *head)
 			d_ptr->floor[i].feat = f_tag_to_index(zz[i * 2]);
 			if (d_ptr->floor[i].feat < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
-			d_ptr->floor[i].percent = atoi(zz[i * 2 + 1]);
+			d_ptr->floor[i].percent = (PERCENTAGE)atoi(zz[i * 2 + 1]);
 		}
 		d_ptr->tunnel_percent = atoi(zz[DUNGEON_FEAT_PROB_NUM * 2]);
 	}
@@ -3413,7 +3413,7 @@ errr parse_d_info(char *buf, header *head)
 			d_ptr->fill[i].feat = f_tag_to_index(zz[i * 2]);
 			if (d_ptr->fill[i].feat < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
-			d_ptr->fill[i].percent = atoi(zz[i * 2 + 1]);
+			d_ptr->fill[i].percent = (PERCENTAGE)atoi(zz[i * 2 + 1]);
 		}
 
 		d_ptr->outer_wall = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2]);
