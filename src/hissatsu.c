@@ -254,7 +254,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 				ask = (isupper(choice));
 
 				/* Lowercase */
-				if (ask) choice = tolower(choice);
+				if (ask) choice = (char)tolower(choice);
 
 				/* Extract request */
 				i = (islower(choice) ? A2I(choice) : -1);

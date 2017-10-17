@@ -4868,7 +4868,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
 
 				/* Extract "query" setting */
 				ver = isupper(which);
-				which = tolower(which);
+				which = (char)tolower(which);
 
 				/* Convert letter to inventory index */
 				if (command_wrk == (USE_INVEN))

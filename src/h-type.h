@@ -172,6 +172,7 @@ typedef byte MAGIC_NUM2;   /*!< プレイヤーの汎用魔法情報配列2の�
 
 typedef s32b SPELL_IDX;    /*!< 各魔法領域/職業能力ごとの呪文ID型定義 */
 typedef s16b PROB;         /*!< 確率の重みの型定義 */
+typedef byte FEAT_POWER;   /*!< 地形強度の型定義 */
 
 /*** Pointers to all the basic types defined above ***/
 

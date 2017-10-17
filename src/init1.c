@@ -1309,8 +1309,8 @@ errr parse_v_info(char *buf, header *head)
 		/* Save the values */
 		v_ptr->typ = typ;
 		v_ptr->rat = rat;
-		v_ptr->hgt = hgt;
-		v_ptr->wid = wid;
+		v_ptr->hgt = (POSITION)hgt;
+		v_ptr->wid = (POSITION)wid;
 	}
 
 	/* Oops */
@@ -2728,9 +2728,9 @@ errr parse_e_info(char *buf, header *head)
 		if (4 != sscanf(buf+2, "%d:%d:%d:%d",
 				&th, &td, &ta, &pval)) return (1);
 
-		e_ptr->max_to_h = th;
-		e_ptr->max_to_d = td;
-		e_ptr->max_to_a = ta;
+		e_ptr->max_to_h = (HIT_PROB)th;
+		e_ptr->max_to_d = (HIT_POINT)td;
+		e_ptr->max_to_a = (ARMOUR_CLASS)ta;
 		e_ptr->max_pval = (PARAMETER_VALUE)pval;
 	}
 

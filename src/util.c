@@ -3878,7 +3878,7 @@ s16b get_quantity(cptr prompt, COMMAND_CODE max)
 	if (!res) return 0;
 
 	/* Extract a number */
-	amt = atoi(buf);
+	amt = (COMMAND_CODE)atoi(buf);
 
 	/* A letter means "all" */
 	if (isalpha(buf[0])) amt = max;
@@ -4862,7 +4862,7 @@ static int repeat__cnt = 0;
 static int repeat__idx = 0;
 
 /* Saved "stuff" */
-static int repeat__key[REPEAT_MAX];
+static COMMAND_CODE repeat__key[REPEAT_MAX];
 
 
 void repeat_push(COMMAND_CODE what)

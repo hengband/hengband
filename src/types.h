@@ -80,7 +80,7 @@ struct feature_type
 	feature_state state[MAX_FEAT_STATES]; /*!< feature_state テーブル */
 
 	byte subtype;  /*!< 副特性値 */
-	byte power;    /*!< 地形強度 */
+	FEAT_POWER power;    /*!< 地形強度 */
 
 	SYMBOL_COLOR d_attr[F_LIT_MAX];   /*!< デフォルトの地形シンボルカラー / Default feature attribute */
 	SYMBOL_CODE d_char[F_LIT_MAX];   /*!< デフォルトの地形シンボルアルファベット / Default feature character */
@@ -251,8 +251,8 @@ struct monster_blow
 {
 	byte method;
 	byte effect;
-	byte d_dice;
-	byte d_side;
+	DICE_NUMBER d_dice;
+	DICE_SID d_side;
 };
 
 
@@ -1492,7 +1492,7 @@ struct wilderness_type
 	int         town;
 	int         road;
 	u32b        seed;
-	s16b        level;
+	DEPTH        level;
 	byte        entrance;
 };
 
@@ -1602,13 +1602,13 @@ struct dungeon_info_type {
 
 	feat_prob floor[DUNGEON_FEAT_PROB_NUM]; /* Floor probability */
 	feat_prob fill[DUNGEON_FEAT_PROB_NUM];  /* Cave wall probability */
-	s16b outer_wall;                        /* Outer wall tile */
-	s16b inner_wall;                        /* Inner wall tile */
-	s16b stream1;                           /* stream tile */
-	s16b stream2;                           /* stream tile */
+	FEAT_IDX outer_wall;                        /* Outer wall tile */
+	FEAT_IDX inner_wall;                        /* Inner wall tile */
+	FEAT_IDX stream1;                           /* stream tile */
+	FEAT_IDX stream2;                           /* stream tile */
 
-	s16b mindepth;         /* Minimal depth */
-	s16b maxdepth;         /* Maximal depth */
+	DEPTH mindepth;         /* Minimal depth */
+	DEPTH maxdepth;         /* Maximal depth */
 	byte min_plev;         /* Minimal plev needed to enter -- it's an anti-cheating mesure */
 	s16b pit;
 	s16b nest;
