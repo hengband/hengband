@@ -221,7 +221,7 @@ bool select_ring_slot = FALSE;
  */
 void do_cmd_wield(void)
 {
-	int item, slot;
+	OBJECT_IDX item, slot;
 
 	object_type forge;
 	object_type *q_ptr;

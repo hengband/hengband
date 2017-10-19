@@ -2629,7 +2629,7 @@ static bool get_item_allow(int item)
  * @param i 選択アイテムID
  * @return 正規のIDならばTRUEを返す。
  */
-static bool get_item_okay(int i)
+static bool get_item_okay(OBJECT_IDX i)
 {
 	/* Illegal items */
 	if ((i < 0) || (i >= INVEN_TOTAL)) return (FALSE);
@@ -2719,16 +2719,16 @@ bool can_get_item(void)
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
  */
-bool get_item(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
+bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, int mode)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	char which = ' ';
 
 	int j;
-	COMMAND_CODE k;
-	COMMAND_CODE i1, i2;
-	COMMAND_CODE e1, e2;
+	OBJECT_IDX k;
+	OBJECT_IDX i1, i2;
+	OBJECT_IDX e1, e2;
 
 	bool done, item;
 
