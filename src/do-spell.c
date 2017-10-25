@@ -926,8 +926,8 @@ static bool item_tester_offer(object_type *o_ptr)
  */
 static bool cast_summon_greater_demon(void)
 {
-	int plev = p_ptr->lev;
-	int item;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	OBJECT_IDX item;
 	cptr q, s;
 	int summon_lev;
 	object_type *o_ptr;
@@ -8962,7 +8962,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (desc) return _("装備している武器を呪う。", "Curses your weapon.");
 		if (cast)
 		{
-			int item;
+			OBJECT_IDX item;
 			cptr q, s;
 			char o_name[MAX_NLEN];
 			object_type *o_ptr;
@@ -9268,7 +9268,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (desc) return _("装備している防具に呪いをかける。", "Curse a piece of armour that you wielding.");
 		if (cast)
 		{
-			int item;
+			OBJECT_IDX item;
 			cptr q, s;
 			char o_name[MAX_NLEN];
 			object_type *o_ptr;
@@ -9478,7 +9478,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (desc) return _("呪われた武器の呪いを吸収して魔力を回復する。", "Drains curse on your weapon and heals SP a little.");
 		if (cast)
 		{
-			int item;
+			OBJECT_IDX item;
 			cptr s, q;
 			u32b f[TR_FLAG_SIZE];
 			object_type *o_ptr;

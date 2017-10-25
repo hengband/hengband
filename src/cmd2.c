@@ -3766,7 +3766,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
  */
 void do_cmd_fire(void)
 {
-	int item;
+	OBJECT_IDX item;
 	object_type *j_ptr;
 	cptr q, s;
 
@@ -3865,7 +3865,8 @@ static bool item_tester_hook_boomerang(object_type *o_ptr)
  */
 bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
 {
-	int dir, item;
+	DIRECTION dir;
+	OBJECT_IDX item;
 	int i, j, y, x, ty, tx, prev_y, prev_x;
 	int ny[19], nx[19];
 	int chance, tdam, tdis;

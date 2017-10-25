@@ -598,7 +598,7 @@ static bool item_tester_hook_eatable(object_type *o_ptr)
  */
 void do_cmd_eat_food(void)
 {
-	int         item;
+	OBJECT_IDX item;
 	cptr        q, s;
 
 
@@ -1345,7 +1345,7 @@ static bool item_tester_hook_quaff(object_type *o_ptr)
  */
 void do_cmd_quaff_potion(void)
 {
-	int  item;
+	OBJECT_IDX item;
 	cptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
@@ -1988,7 +1988,7 @@ static bool item_tester_hook_readable(object_type *o_ptr)
 void do_cmd_read_scroll(void)
 {
 	object_type *o_ptr;
-	int  item;
+	OBJECT_IDX item;
 	cptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
@@ -2547,7 +2547,7 @@ static void do_cmd_use_staff_aux(int item)
  */
 void do_cmd_use_staff(void)
 {
-	int  item;
+	OBJECT_IDX item;
 	cptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
@@ -3020,7 +3020,7 @@ static void do_cmd_aim_wand_aux(int item)
  */
 void do_cmd_aim_wand(void)
 {
-	int     item;
+	OBJECT_IDX item;
 	cptr    q, s;
 
 	/* Restrict choices to wands */
@@ -3450,7 +3450,7 @@ static void do_cmd_zap_rod_aux(int item)
  */
 void do_cmd_zap_rod(void)
 {
-	int item;
+	OBJECT_IDX item;
 	cptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
@@ -3923,7 +3923,7 @@ static void do_cmd_activate_aux(int item)
  */
 void do_cmd_activate(void)
 {
-	int     item;
+	OBJECT_IDX item;
 	cptr    q, s;
 
 
@@ -4011,7 +4011,7 @@ static bool item_tester_hook_use(object_type *o_ptr)
  */
 void do_cmd_use(void)
 {
-	int         item;
+	OBJECT_IDX item;
 	object_type *o_ptr;
 	cptr        q, s;
 

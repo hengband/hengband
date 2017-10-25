@@ -2871,7 +2871,7 @@ static bool item_tester_hook_ammo(object_type *o_ptr)
 static int compare_weapons(int bcost)
 {
 	int i, n;
-	int item, item2;
+	OBJECT_IDX item, item2;
 	object_type *o_ptr[2];
 	object_type orig_weapon;
 	object_type *i_ptr;
@@ -3184,7 +3184,7 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 static int repair_broken_weapon_aux(int bcost)
 {
 	s32b cost;
-	int item, mater;
+	OBJECT_IDX item, mater;
 	object_type *o_ptr, *mo_ptr; /* broken weapon and material weapon */
 	object_kind *k_ptr;
 	int i, dd_bonus, ds_bonus;
@@ -3458,7 +3458,8 @@ static int repair_broken_weapon(int bcost)
  */
 static bool enchant_item(int cost, int to_hit, int to_dam, int to_ac)
 {
-	int         i, item;
+	int         i;
+	OBJECT_IDX  item;
 	bool        okay = FALSE;
 	object_type *o_ptr;
 	cptr        q, s;
@@ -3576,7 +3577,8 @@ static bool enchant_item(int cost, int to_hit, int to_dam, int to_ac)
  */
 static void building_recharge(void)
 {
-	int         item, lev;
+	OBJECT_IDX  item;
+	int         lev;
 	object_type *o_ptr;
 	object_kind *k_ptr;
 	cptr        q, s;

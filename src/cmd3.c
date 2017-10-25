@@ -636,7 +636,7 @@ void kamaenaoshi(int item)
  */
 void do_cmd_takeoff(void)
 {
-	int item;
+	OBJECT_IDX item;
 
 	object_type *o_ptr;
 
@@ -732,7 +732,8 @@ void do_cmd_takeoff(void)
  */
 void do_cmd_drop(void)
 {
-	int item, amt = 1;
+	OBJECT_IDX item;
+	int amt = 1;
 
 	object_type *o_ptr;
 
@@ -839,7 +840,7 @@ static bool high_level_book(object_type *o_ptr)
  */
 void do_cmd_destroy(void)
 {
-	int			item, amt = 1;
+	OBJECT_IDX item, amt = 1;
 	int			old_number;
 
 	bool		force = FALSE;
@@ -1061,10 +1062,8 @@ void do_cmd_destroy(void)
  */
 void do_cmd_observe(void)
 {
-	int			item;
-
+	OBJECT_IDX item;
 	object_type		*o_ptr;
-
 	char		o_name[MAX_NLEN];
 
 	cptr q, s;
@@ -1120,10 +1119,8 @@ void do_cmd_observe(void)
  */
 void do_cmd_uninscribe(void)
 {
-	int   item;
-
+	OBJECT_IDX item;
 	object_type *o_ptr;
-
 	cptr q, s;
 
 	item_tester_no_ryoute = TRUE;
@@ -1182,14 +1179,10 @@ void do_cmd_uninscribe(void)
  */
 void do_cmd_inscribe(void)
 {
-	int			item;
-
+	OBJECT_IDX item;
 	object_type		*o_ptr;
-
 	char		o_name[MAX_NLEN];
-
 	char		out_val[80];
-
 	cptr q, s;
 
 	item_tester_no_ryoute = TRUE;
@@ -1279,7 +1272,7 @@ static bool item_tester_refill_lantern(object_type *o_ptr)
  */
 static void do_cmd_refill_lamp(void)
 {
-	int item;
+	OBJECT_IDX item;
 
 	object_type *o_ptr;
 	object_type *j_ptr;
@@ -1388,7 +1381,7 @@ static bool item_tester_refill_torch(object_type *o_ptr)
  */
 static void do_cmd_refill_torch(void)
 {
-	int item;
+	OBJECT_IDX item;
 
 	object_type *o_ptr;
 	object_type *j_ptr;

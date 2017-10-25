@@ -3258,7 +3258,7 @@ static bool insert_return_code(text_body_type *tb)
  */
 static object_type *choose_object(cptr q, cptr s)
 {
-	int item;
+	OBJECT_IDX item;
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP))) return NULL;
 
