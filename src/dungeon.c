@@ -628,7 +628,7 @@ static void pattern_teleport(void)
 		}
 
 		/* Prompt */
-		sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), min_level, max_level);
+		sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);
 
 		/* Default */
 		sprintf(tmp_val, "%d", (int)dun_level);
@@ -1227,7 +1227,7 @@ void leave_tower_check(void)
  */
 bool psychometry(void)
 {
-	int             item;
+	OBJECT_IDX      item;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	byte            feel;

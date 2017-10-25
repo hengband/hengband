@@ -139,7 +139,7 @@ static bool do_cmd_archer(void)
 	/**********Create arrows*********/
 	else if (ext == 2)
 	{
-		int item;
+		OBJECT_IDX item;
 		cptr q, s;
 		s16b slot;
 
@@ -198,7 +198,7 @@ static bool do_cmd_archer(void)
 	/**********Create bolts*********/
 	else if (ext == 3)
 	{
-		int item;
+		OBJECT_IDX item;
 		cptr q, s;
 		s16b slot;
 
@@ -263,7 +263,7 @@ static bool do_cmd_archer(void)
  */
 bool gain_magic(void)
 {
-	int item;
+	OBJECT_IDX item;
 	PARAMETER_VALUE pval;
 	int ext = 0;
 	cptr q, s;

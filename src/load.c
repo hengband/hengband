@@ -3753,7 +3753,8 @@ static errr rd_savefile_new_aux(void)
 	/* Read the player_hp array */
 	for (i = 0; i < tmp16u; i++)
 	{
-		rd_s16b(&p_ptr->player_hp[i]);
+		rd_s16b(&tmp16s);
+		p_ptr->player_hp[i] = (HIT_POINT)tmp16s;
 	}
 
 	/* Important -- Initialize the sex */

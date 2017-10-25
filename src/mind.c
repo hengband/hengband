@@ -1716,7 +1716,7 @@ static bool cast_ninja_spell(int spell)
 		int i;
 		for (i = 0; i < 8; i++)
 		{
-			int slot;
+			OBJECT_IDX slot;
 
 			for (slot = 0; slot < INVEN_PACK; slot++)
 			{

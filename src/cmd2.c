@@ -3863,7 +3863,7 @@ static bool item_tester_hook_boomerang(object_type *o_ptr)
  * the item to be destroyed?  Should it do any damage at all?
  * </pre>
  */
-bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
+bool do_cmd_throw_aux(int mult, bool boomerang, OBJECT_IDX shuriken)
 {
 	DIRECTION dir;
 	OBJECT_IDX item;

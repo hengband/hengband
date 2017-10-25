@@ -1859,7 +1859,7 @@ void display_equip(void)
 static bool get_tag(COMMAND_CODE *cp, char tag, int mode)
 {
 	COMMAND_CODE i;
-	int start, end;
+	COMMAND_CODE start, end;
 	cptr s;
 
 	/* Extract index from mode */

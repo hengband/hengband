@@ -234,7 +234,7 @@ void do_cmd_wield(void)
 
 	cptr q, s;
 
-	int need_switch_wielding = 0;
+	OBJECT_IDX need_switch_wielding = 0;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{

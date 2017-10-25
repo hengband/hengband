@@ -7718,7 +7718,8 @@ static void display_essence(void)
 static void drain_essence(void)
 {
 	int drain_value[sizeof(p_ptr->magic_num1) / sizeof(s32b)];
-	int i, item;
+	int i;
+	OBJECT_IDX item;
 	int dec = 4;
 	bool observe = FALSE;
 	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
@@ -8074,7 +8075,8 @@ static int choose_essence(void)
  */
 static void add_essence(int mode)
 {
-	int item, max_num = 0;
+	OBJECT_IDX item;
+	int max_num = 0;
 	COMMAND_CODE i;
 	bool flag,redraw;
 	char choice;
@@ -8587,11 +8589,11 @@ static void add_essence(int mode)
  */
 static void erase_essence(void)
 {
-	int item;
+	OBJECT_IDX item;
 	cptr q, s;
 	object_type *o_ptr;
 	char o_name[MAX_NLEN];
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	item_tester_hook = object_is_smith;
 

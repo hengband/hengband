@@ -656,7 +656,8 @@ static void change_realm2(CHARACTER_IDX next_realm)
  */
 void do_cmd_study(void)
 {
-	int	i, item;
+	int	i;
+	OBJECT_IDX item;
 	OBJECT_SUBTYPE_VALUE sval;
 	int	increment = 0;
 	bool    learned = FALSE;
@@ -1054,7 +1055,7 @@ static void wild_magic(int spell)
  */
 void do_cmd_cast(void)
 {
-	int	item;
+	OBJECT_IDX item;
 	OBJECT_SUBTYPE_VALUE sval;
 	SPELL_IDX spell;
 	REALM_IDX realm;

@@ -620,7 +620,7 @@ extern FEAT_IDX feat_wall_inner;
 extern FEAT_IDX feat_wall_solid;
 extern FEAT_IDX floor_type[100], fill_type[100];
 extern bool now_damaged;
-extern s16b now_message;
+extern COMMAND_CODE now_message;
 extern bool use_menu;
 
 /* autopick.c */
@@ -735,7 +735,7 @@ extern void do_cmd_rest(void);
 extern void do_cmd_fire(void);
 extern void do_cmd_fire_aux(int item, object_type *j_ptr);
 extern void do_cmd_throw(void);
-extern bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken);
+extern bool do_cmd_throw_aux(int mult, bool boomerang, OBJECT_IDX shuriken);
 #ifdef TRAVEL
 extern void do_cmd_travel(void);
 #endif
@@ -1335,7 +1335,7 @@ extern void ascii_to_text(char *buf, cptr str);
 extern errr macro_add(cptr pat, cptr act);
 extern sint macro_find_exact(cptr pat);
 extern char inkey(void);
-extern cptr quark_str(s16b num);
+extern cptr quark_str(STR_OFFSET num);
 extern void quark_init(void);
 extern s16b quark_add(cptr str);
 extern s32b message_num(void);

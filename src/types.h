@@ -1609,29 +1609,29 @@ struct dungeon_info_type {
 
 	DEPTH mindepth;         /* Minimal depth */
 	DEPTH maxdepth;         /* Maximal depth */
-	byte min_plev;         /* Minimal plev needed to enter -- it's an anti-cheating mesure */
-	s16b pit;
-	s16b nest;
+	PLAYER_LEVEL min_plev;         /* Minimal plev needed to enter -- it's an anti-cheating mesure */
+	BIT_FLAGS16 pit;
+	BIT_FLAGS16 nest;
 	byte mode;		/* Mode of combinaison of the monster flags */
 
 	int min_m_alloc_level;	/* Minimal number of monsters per level */
 	int max_m_alloc_chance;	/* There is a 1/max_m_alloc_chance chance per round of creating a new monster */
 
-	u32b flags1;		/* Flags 1 */
+	BIT_FLAGS flags1;		/* Flags 1 */
 
-	u32b mflags1;		/* The monster flags that are allowed */
-	u32b mflags2;
-	u32b mflags3;
-	u32b mflags4;
-	u32b mflags7;
-	u32b mflags8;
-	u32b mflags9;
-	u32b mflagsr;
+	BIT_FLAGS mflags1;		/* The monster flags that are allowed */
+	BIT_FLAGS mflags2;
+	BIT_FLAGS mflags3;
+	BIT_FLAGS mflags4;
+	BIT_FLAGS mflags7;
+	BIT_FLAGS mflags8;
+	BIT_FLAGS mflags9;
+	BIT_FLAGS mflagsr;
 
-	u32b m_a_ability_flags1;
-	u32b m_a_ability_flags2;
-	u32b m_a_ability_flags3;
-	u32b m_a_ability_flags4;
+	BIT_FLAGS m_a_ability_flags1;
+	BIT_FLAGS m_a_ability_flags2;
+	BIT_FLAGS m_a_ability_flags3;
+	BIT_FLAGS m_a_ability_flags4;
 
 	char r_char[5];		/* Monster race allowed */
 	int final_object;	/* The object you'll find at the bottom */

@@ -1834,7 +1834,7 @@ errr parse_f_info(char *buf, header *head)
 			if (1 == sscanf(s, "POWER_%d", &i))
 			{
 				/* Extract a "power" */
-				f_ptr->power =  i;
+				f_ptr->power = (FEAT_POWER)i;
 
 				/* Start at next entry */
 				s = t;
@@ -2233,7 +2233,7 @@ errr parse_k_info(char *buf, header *head)
 				&level, &extra, &wgt, &cost)) return (1);
 
 		/* Save the values */
-		k_ptr->level = level;
+		k_ptr->level = (DEPTH)level;
 		k_ptr->extra = extra;
 		k_ptr->weight = (WEIGHT)wgt;
 		k_ptr->cost = (PRICE)cost;
@@ -3355,16 +3355,16 @@ errr parse_d_info(char *buf, header *head)
 				 &min_lev, &max_lev, &min_plev, &mode, &min_alloc, &max_chance, &obj_good, &obj_great, (unsigned int *)&pit, (unsigned int *)&nest)) return (1);
 
 		/* Save the values */
-		d_ptr->mindepth = min_lev;
-		d_ptr->maxdepth = max_lev;
-		d_ptr->min_plev = min_plev;
+		d_ptr->mindepth = (DEPTH)min_lev;
+		d_ptr->maxdepth = (DEPTH)max_lev;
+		d_ptr->min_plev = (PLAYER_LEVEL)min_plev;
 		d_ptr->mode = mode;
 		d_ptr->min_m_alloc_level = min_alloc;
 		d_ptr->max_m_alloc_chance = max_chance;
 		d_ptr->obj_good = obj_good;
 		d_ptr->obj_great = obj_great;
-		d_ptr->pit = pit;
-		d_ptr->nest = nest;
+		d_ptr->pit = (BIT_FLAGS16)pit;
+		d_ptr->nest = (BIT_FLAGS16)nest;
 	}
 
 	/* Process 'P' for "Place Info" */
