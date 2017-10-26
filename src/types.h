@@ -695,14 +695,14 @@ struct quest_type
 	s16b type;              /*!< クエストの種別 / The quest type */
 
 	char name[60];          /*!< クエスト名 / Quest name */
-	DEPTH level;             /*!< 処理階層 / Dungeon level */
-	MONRACE_IDX r_idx;             /*!< クエスト対象のモンスターID / Monster race */
-	   
-	s16b cur_num;           /*!< 撃破したモンスターの数 / Number killed */
-	s16b max_num;           /*!< 求められるモンスターの撃破数 / Number required */
+	DEPTH level;            /*!< 処理階層 / Dungeon level */
+	MONRACE_IDX r_idx;      /*!< クエスト対象のモンスターID / Monster race */
 
-	IDX k_idx;             /*!< クエスト対象のアイテムID / object index */
-	s16b num_mon;           /*!< QUEST_TYPE_KILL_NUMBER時の目標撃破数 number of monsters on level */
+	MONSTER_NUMBER cur_num; /*!< 撃破したモンスターの数 / Number killed */
+	MONSTER_NUMBER max_num; /*!< 求められるモンスターの撃破数 / Number required */
+
+	IDX k_idx;              /*!< クエスト対象のアイテムID / object index */
+	MONSTER_NUMBER num_mon; /*!< QUEST_TYPE_KILL_NUMBER時の目標撃破数 number of monsters on level */
 
 	byte flags;             /*!< クエストに関するフラグビット / quest flags */
 	byte dungeon;           /*!< クエスト対象のダンジョンID / quest dungeon */

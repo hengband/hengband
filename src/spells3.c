@@ -947,7 +947,7 @@ bool recall_player(TIME_EFFECT turns)
 	{
 		if (!dun_level)
 		{
-			int select_dungeon;
+			DUNGEON_IDX select_dungeon;
 			select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
 			if (!select_dungeon) return FALSE;
 			p_ptr->recall_dungeon = select_dungeon;

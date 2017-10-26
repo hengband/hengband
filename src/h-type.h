@@ -113,15 +113,21 @@ typedef s16b REALM_IDX;		/*!< ゲーム中の魔法領域ID型を定義 */
 typedef s16b ARTIFACT_IDX;	/*!< ゲーム中のアーティファクトID型を定義 */
 typedef s16b VIRTUES_IDX;	/*!< ゲーム中の徳ID型を定義 */
 typedef s16b QUEST_IDX;		/*!< ゲーム中のクエストID型を定義 */
+
 typedef s16b INVENTORY_IDX;	/*!< ゲーム中の所持品ID型を定義 */
 typedef s16b OBJECT_IDX;	/*!< ゲーム中のアイテムID型を定義 */
+
+typedef s16b KIND_OBJECT_IDX;	/*!< ゲーム中のベースアイテムID型を定義 */
 
 typedef s32b POSITION;		/*!< ゲーム中の座標型を定義 */
 typedef s32b HIT_POINT;		/*!< ゲーム中のHP/ダメージ型を定義 */
 typedef s32b MANA_POINT;	/*!< ゲーム中のMP型を定義 */
 typedef s16b HIT_PROB;		/*!< ゲーム中の命中修正値を定義 */
 typedef s16b BASE_STATUS;	/*!< ゲーム中の基礎能力値型を定義 */
-typedef s32b ITEM_NUMBER;	/*!< ゲーム中のアイテム数型を定義 */
+
+typedef s32b MONSTER_NUMBER;	/*!< ゲーム中のモンスター数型を定義 */
+typedef s32b ITEM_NUMBER;		/*!< ゲーム中のアイテム数型を定義 */
+
 typedef s16b ACTION_ENERGY;	/*!< ゲーム中の行動エネルギー型を定義 */
 typedef s16b ARMOUR_CLASS;	/*!< ゲーム中の行動アーマークラス型を定義 */
 typedef s16b TIME_EFFECT;   /*!< ゲーム中の時限期間の型を定義 */

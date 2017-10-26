@@ -2232,8 +2232,9 @@ static bool activate_dragon_breath(object_type *o_ptr)
  */
 bool activate_random_artifact(object_type *o_ptr)
 {
-	int plev = p_ptr->lev;
-	int k, dir, dummy = 0;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	int k, dummy = 0;
+	DIRECTION dir;
 	cptr name = k_name + k_info[o_ptr->k_idx].name;
 	const activation_type* const act_ptr = find_activation_info(o_ptr);
 

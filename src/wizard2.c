@@ -1272,7 +1272,7 @@ static void do_cmd_wiz_blue_mage(void)
  */
 static void do_cmd_wiz_play(void)
 {
-	int item;
+	OBJECT_IDX item;
 
 	object_type	forge;
 	object_type *q_ptr;
@@ -1555,7 +1555,8 @@ static void do_cmd_wiz_jump(void)
 		if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > max_d_idx)) tmp_dungeon_type = DUNGEON_ANGBAND;
 
 		/* Prompt */
-		sprintf(ppp, "Jump to level (0, %d-%d): ", d_info[tmp_dungeon_type].mindepth, d_info[tmp_dungeon_type].maxdepth);
+		sprintf(ppp, "Jump to level (0, %d-%d): ",
+			(int)d_info[tmp_dungeon_type].mindepth, (int)d_info[tmp_dungeon_type].maxdepth);
 
 		/* Default */
 		sprintf(tmp_val, "%d", (int)dun_level);

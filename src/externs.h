@@ -1503,7 +1503,7 @@ extern bool target_able(MONSTER_IDX m_idx);
 extern bool target_okay(void);
 extern bool target_set(int mode);
 extern void target_set_prepare_look(void);
-extern bool get_aim_dir(int *dp);
+extern bool get_aim_dir(DIRECTION *dp);
 extern bool get_hack_dir(int *dp);
 extern bool get_rep_dir(int *dp, bool under);
 extern bool get_rep_dir2(int *dp);

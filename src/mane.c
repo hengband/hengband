@@ -276,10 +276,10 @@ static int get_mane_power(int *sn, bool baigaesi)
  */
 static bool use_mane(int spell)
 {
-	int             dir;
-	int             plev = p_ptr->lev;
-	u32b mode = (PM_ALLOW_GROUP | PM_FORCE_PET);
-	u32b u_mode = 0L;
+	DIRECTION dir;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	BIT_FLAGS mode = (PM_ALLOW_GROUP | PM_FORCE_PET);
+	BIT_FLAGS u_mode = 0L;
 
 	if (randint1(50+plev) < plev/10) u_mode = PM_ALLOW_UNIQUE;
 

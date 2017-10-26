@@ -567,7 +567,7 @@ static bool cast_sniper_spell(int spell)
  */
 void do_cmd_snipe(void)
 {
-	int             n = 0;
+	COMMAND_CODE n = 0;
 	bool            cast;
 
 

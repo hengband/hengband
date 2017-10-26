@@ -4091,12 +4091,10 @@ bool target_set(int mode)
  *
  * Note that confusion over-rides any (explicit?) user choice.
  */
-bool get_aim_dir(int *dp)
+bool get_aim_dir(DIRECTION *dp)
 {
-	int		dir;
-
+	DIRECTION dir;
 	char	command;
-
 	cptr	p;
 
 	/* Initialize */

@@ -1198,11 +1198,11 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
  * We return "TRUE" if the effect of the projection is "obvious".
  * </pre>
  */
-static bool project_o(int who, int r, int y, int x, int dam, int typ)
+static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, int typ)
 {
 	cave_type *c_ptr = &cave[y][x];
 
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	bool obvious = FALSE;
 	bool known = player_has_los_bold(y, x);
