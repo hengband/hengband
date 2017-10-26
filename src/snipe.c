@@ -619,7 +619,7 @@ void do_cmd_snipe(void)
  */
 void do_cmd_snipe_browse(void)
 {
-	int n = 0;
+	COMMAND_CODE n = 0;
 	int j, line;
 	char temp[62 * 4];
 

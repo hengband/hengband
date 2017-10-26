@@ -5339,7 +5339,7 @@ bool sleep_monsters_touch(void)
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool animate_dead(int who, int y, int x)
+bool animate_dead(MONSTER_IDX who, POSITION y, POSITION x)
 {
 	int flg = PROJECT_ITEM | PROJECT_HIDE;
 	return (project(who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));

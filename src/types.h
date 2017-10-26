@@ -455,13 +455,13 @@ struct cave_type
 {
 	u16b info;		/* Hack -- cave flags */
 
-	IDX feat;		/* Hack -- feature type */
-	IDX o_idx;		/* Object in this grid */
+	FEAT_IDX feat;		/* Hack -- feature type */
+	OBJECT_IDX o_idx;		/* Object in this grid */
 	MONSTER_IDX m_idx;		/* Monster in this grid */
 
 	s16b special;	/* Special cave info */
 
-	s16b mimic;		/* Feature to mimic */
+	FEAT_IDX mimic;		/* Feature to mimic */
 
 	byte cost;		/* Hack -- cost of flowing */
 	byte dist;		/* Hack -- distance from player */
@@ -515,7 +515,7 @@ typedef struct object_type object_type;
 
 struct object_type
 {
-	IDX k_idx;			/* Kind index (zero if "dead") */
+	KIND_OBJECT_IDX k_idx;			/* Kind index (zero if "dead") */
 
 	POSITION iy;			/* Y-position on map, or zero */
 	POSITION ix;			/* X-position on map, or zero */

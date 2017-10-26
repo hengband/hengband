@@ -2081,7 +2081,7 @@ static void prepare_label_string(char *label, int mode)
 	/* Move each label */
 	for (i = 0; i < 52; i++)
 	{
-		int index;
+		COMMAND_CODE index;
 		char c = alphabet_chars[i];
 
 		/* Find a tag with this label */

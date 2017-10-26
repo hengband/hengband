@@ -3482,7 +3482,7 @@ msg_format("%sは輝いた！", o_name);
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */
-bool potion_smash_effect(int who, POSITION y, POSITION x, int k_idx)
+bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
 {
 	int     radius = 2;
 	int     dt = 0;

@@ -6544,7 +6544,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 /*
  * breath shape
  */
-void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, int *pgm_rad, int rad, int y1, int x1, int y2, int x2, int typ)
+void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, int *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int typ)
 {
 	POSITION by = y1;
 	POSITION bx = x1;
@@ -6773,7 +6773,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
  * and "update_view()" and "update_monsters()" need to be called.
  * </pre>
  */
-bool project(int who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, int monspell)
+bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, int monspell)
 {
 	int i, t, dist;
 
