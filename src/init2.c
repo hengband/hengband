@@ -1495,7 +1495,7 @@ static errr init_towns(void)
 			/* Scan the choices */
 			for (k = 0; k < STORE_CHOICES; k++)
 			{
-				int k_idx;
+				KIND_OBJECT_IDX k_idx;
 
 				/* Extract the tval/sval codes */
 				int tv = store_table[j][k][0];

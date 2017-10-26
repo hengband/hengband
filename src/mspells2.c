@@ -259,7 +259,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	int i, k;
 	MONSTER_IDX t_idx = 0;
 	int thrown_spell;
-	int dam = 0;
+	HIT_POINT dam = 0;
 	int start;
 	int plus = 1;
 

@@ -6076,7 +6076,7 @@ static bool vault_aux_shards(MONRACE_IDX r_idx)
 /*
  * Hack -- determine if a template is potion
  */
-static bool kind_is_potion(int k_idx)
+static bool kind_is_potion(KIND_OBJECT_IDX k_idx)
 {
 	return k_info[k_idx].tval == TV_POTION;
 }

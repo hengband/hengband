@@ -96,7 +96,7 @@ static cptr info_delay(int base, int sides)
  * @param dam 固定値
  * @return フォーマットに従い整形された文字列
  */
-static cptr info_multi_damage(int dam)
+static cptr info_multi_damage(HIT_POINT dam)
 {
 	return format(_("損傷:各%d", "dam %d each"), dam);
 }
@@ -775,7 +775,7 @@ static void cast_shuffle(void)
  * @param rad 効力の半径
  * @return なし
  */
-static void cast_meteor(int dam, int rad)
+static void cast_meteor(HIT_POINT dam, int rad)
 {
 	int i;
 	int b = 10 + randint1(10);
@@ -820,7 +820,7 @@ static void cast_meteor(int dam, int rad)
  * @param rad 効力の半径
  * @return ターゲットを指定し、実行したならばTRUEを返す。
  */
-static bool cast_wrath_of_the_god(int dam, int rad)
+static bool cast_wrath_of_the_god(HIT_POINT dam, int rad)
 {
 	int x, y, tx, ty;
 	int nx, ny;
@@ -2605,7 +2605,7 @@ static cptr do_nature_spell(int spell, int mode)
 		if (desc) return _("巨大な冷気の球を放つ。", "Fires a huge ball of cold.");
     
 		{
-			int dam = 70 + plev * 3 / 2;
+			HIT_POINT dam = 70 + plev * 3 / 2;
 			int rad = plev / 12 + 1;
 
 			if (info) return info_damage(0, 0, dam);
@@ -2624,7 +2624,7 @@ static cptr do_nature_spell(int spell, int mode)
 		if (desc) return _("巨大な電撃の球を放つ。", "Fires a huge electric ball.");
     
 		{
-			int dam = 90 + plev * 3 / 2;
+			HIT_POINT dam = 90 + plev * 3 / 2;
 			int rad = plev / 12 + 1;
 
 			if (info) return info_damage(0, 0, dam);
@@ -2643,7 +2643,7 @@ static cptr do_nature_spell(int spell, int mode)
 		if (desc) return _("巨大な水の球を放つ。", "Fires a huge ball of water.");
     
 		{
-			int dam = 100 + plev * 3 / 2;
+			HIT_POINT dam = 100 + plev * 3 / 2;
 			int rad = plev / 12 + 1;
 
 			if (info) return info_damage(0, 0, dam);
@@ -2662,7 +2662,7 @@ static cptr do_nature_spell(int spell, int mode)
 			"Generates ball of light centered on you. Maps and lights whole dungeon level. Knows all objects location.");
     
 		{
-			int dam = 150;
+			HIT_POINT dam = 150;
 			int rad = 8;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -2944,7 +2944,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("自分を中心とした轟音の球を発生させる。", "Generates a ball of sound centered on you.");
     
 		{
-			int dam = 60 + plev;
+			HIT_POINT dam = 60 + plev;
 			int rad = plev / 10 + 2;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -2981,7 +2981,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("炎の球を放つ。", "Fires a ball of fire.");
     
 		{
-			int dam = plev + 55;
+			HIT_POINT dam = plev + 55;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3033,7 +3033,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("巨大なカオスの球を放つ。", "Fires a huge ball of chaos.");
     
 		{
-			int dam = plev * 2 + 99;
+			HIT_POINT dam = plev * 2 + 99;
 			int rad = plev / 5;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3104,7 +3104,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("巨大な分解の球を放つ。", "Fires a huge ball of disintegration.");
     
 		{
-			int dam = plev + 70;
+			HIT_POINT dam = plev + 70;
 			int rad = 3 + plev / 40;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3140,7 +3140,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("ロケットを発射する。", "Fires a magic rocket.");
     
 		{
-			int dam = 120 + plev * 2;
+			HIT_POINT dam = 120 + plev * 2;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3222,7 +3222,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("自分の周辺に隕石を落とす。", "Makes meteor balls fall down to nearby random locations.");
     
 		{
-			int dam = plev * 2;
+			HIT_POINT dam = plev * 2;
 			int rad = 2;
 
 			if (info) return info_multi_damage(dam);
@@ -3239,7 +3239,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("自分を中心とした超巨大な炎の球を発生させる。", "Generate a huge ball of fire centered on you.");
     
 		{
-			int dam = 300 + 3 * plev;
+			HIT_POINT dam = 300 + 3 * plev;
 			int rad = 8;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -3283,7 +3283,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("非常に強力で巨大な純粋な魔力の球を放つ。", "Fires an extremely powerful huge ball of pure mana.");
     
 		{
-			int dam = 300 + plev * 4;
+			HIT_POINT dam = 300 + plev * 4;
 			int rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3302,7 +3302,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("非常に強力なカオスの球を放つ。", "Fires an extremely powerful ball of chaos.");
     
 		{
-			int dam = p_ptr->chp;
+			HIT_POINT dam = p_ptr->chp;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3437,7 +3437,7 @@ static cptr do_death_spell(int spell, int mode)
 		if (desc) return _("毒の球を放つ。", "Fires a ball of poison.");
     
 		{
-			int dam = 10 + plev / 2;
+			HIT_POINT dam = 10 + plev / 2;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3576,7 +3576,7 @@ static cptr do_death_spell(int spell, int mode)
 		if (desc) return _("自分を中心とした毒の球を発生させる。", "Generate a ball of poison centered on you.");
     
 		{
-			int dam = (30 + plev) * 2;
+			HIT_POINT dam = (30 + plev) * 2;
 			int rad = plev / 10 + 2;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -3632,7 +3632,7 @@ static cptr do_death_spell(int spell, int mode)
 
 			if (cast)
 			{
-				int dam = base + damroll(dice, sides);
+				HIT_POINT dam = base + damroll(dice, sides);
 
 				if (!get_aim_dir(&dir)) return NULL;
 
@@ -3786,7 +3786,7 @@ static cptr do_death_spell(int spell, int mode)
 			"Fires 3 bolts. Each of the bolts absorbs some HP from a monster and gives them to you.");
     
 		{
-			int dam = 100;
+			HIT_POINT dam = 100;
 
 			if (info) return format("%s3*%d", s_dam, dam);
 
@@ -3829,7 +3829,7 @@ static cptr do_death_spell(int spell, int mode)
 		if (desc) return _("巨大な暗黒の球を放つ。", "Fires a huge ball of darkness.");
     
 		{
-			int dam = 100 + plev * 2;
+			HIT_POINT dam = 100 + plev * 2;
 			int rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3971,7 +3971,7 @@ static cptr do_death_spell(int spell, int mode)
 			"Fires a powerful ball of evil power. Hurts good monsters greatly.");
     
 		{
-			int dam = 666;
+			HIT_POINT dam = 666;
 			int rad = 3;
 
 			if (info) return info_damage(0, 0, dam);
@@ -4571,7 +4571,7 @@ static cptr do_trump_spell(int spell, int mode)
 		if (desc) return _("自分の周辺に隕石を落とす。", "Makes meteor balls fall down to nearby random locations.");
     
 		{
-			int dam = plev * 2;
+			HIT_POINT dam = plev * 2;
 			int rad = 2;
 
 			if (info) return info_multi_damage(dam);
@@ -5126,7 +5126,7 @@ static cptr do_arcane_spell(int spell, int mode)
 		if (desc) return _("炎、電撃、冷気、酸のどれかの球を放つ。", "Fires a ball of some elements.");
     
 		{
-			int dam = 75 + plev;
+			HIT_POINT dam = 75 + plev;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -5992,7 +5992,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("炎の球を放つ。", "Fires a ball of fire.");
     
 		{
-			int dam = plev + 55;
+			HIT_POINT dam = plev + 55;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6023,7 +6023,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("大きな地獄の球を放つ。", "Fires a huge ball of nether.");
     
 		{
-			int dam = plev * 3 / 2 + 100;
+			HIT_POINT dam = plev * 3 / 2 + 100;
 			int rad = plev / 20 + 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6120,7 +6120,7 @@ static cptr do_daemon_spell(int spell, int mode)
 			"Generates a ball of fire centered on you which transforms floors to magma.");
     
 		{
-			int dam = (55 + plev) * 2;
+			HIT_POINT dam = (55 + plev) * 2;
 			int rad = 3;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -6138,7 +6138,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("プラズマの球を放つ。", "Fires a ball of plasma.");
     
 		{
-			int dam = plev * 3 / 2 + 80;
+			HIT_POINT dam = plev * 3 / 2 + 80;
 			int rad = 2 + plev / 40;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6193,7 +6193,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("因果混乱の球を放つ。", "Fires a ball of nexus.");
     
 		{
-			int dam = 100 + plev * 2;
+			HIT_POINT dam = 100 + plev * 2;
 			int rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6263,7 +6263,7 @@ static cptr do_daemon_spell(int spell, int mode)
 			"Generate balls of chaos, confusion and charm centered on you.");
     
 		{
-			int dam = 50 + plev;
+			HIT_POINT dam = 50 + plev;
 			int power = 20 + plev;
 			int rad = 3 + plev / 20;
 
@@ -6308,7 +6308,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("超巨大な地獄の球を放つ。", "Generate a huge ball of nether.");
     
 		{
-			int dam = plev * 15;
+			HIT_POINT dam = plev * 15;
 			int rad = plev / 5;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6328,7 +6328,7 @@ static cptr do_daemon_spell(int spell, int mode)
 			"Puts blood curse which damages and causes various effects on a monster. You also take damage.");
     
 		{
-			int dam = 600;
+			HIT_POINT dam = 600;
 			int rad = 0;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6631,7 +6631,7 @@ static cptr do_crusade_spell(int spell, int mode)
 		if (desc) return _("強力な電撃のボルトを放つ。", "Fires a powerful bolt of lightning.");
     
 		{
-			int dam = plev * 5;
+			HIT_POINT dam = plev * 5;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -6763,7 +6763,7 @@ static cptr do_crusade_spell(int spell, int mode)
 		if (desc) return _("巨大な閃光の球を放つ。", "Fires a huge ball of powerful light.");
     
 		{
-			int dam = 100 + plev * 2;
+			HIT_POINT dam = 100 + plev * 2;
 			int rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6896,7 +6896,7 @@ static cptr do_crusade_spell(int spell, int mode)
 		if (desc) return _("ターゲットの周囲に分解の球を多数落とす。", "Drops many balls of disintegration near the target.");
     
 		{
-			int dam = plev * 3 + 25;
+			HIT_POINT dam = plev * 3 + 25;
 			int rad = 2;
 
 			if (info) return info_multi_damage(dam);

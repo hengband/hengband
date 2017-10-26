@@ -254,7 +254,7 @@ static int get_coin_type(MONRACE_IDX r_idx)
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトがクロークならばTRUEを返す
  */
-static bool kind_is_cloak(int k_idx)
+static bool kind_is_cloak(KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -275,7 +275,7 @@ static bool kind_is_cloak(int k_idx)
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが竿状武器ならばTRUEを返す
  */
-static bool kind_is_polearm(int k_idx)
+static bool kind_is_polearm(KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -296,7 +296,7 @@ static bool kind_is_polearm(int k_idx)
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが剣ならばTRUEを返す
  */
-static bool kind_is_sword(int k_idx)
+static bool kind_is_sword(KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -317,7 +317,7 @@ static bool kind_is_sword(int k_idx)
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが魔法書ならばTRUEを返す
  */
-static bool kind_is_book(int k_idx)
+static bool kind_is_book(KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -338,7 +338,7 @@ static bool kind_is_book(int k_idx)
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトがベースアイテム時点でGOODなアイテムならばTRUEを返す
  */
-static bool kind_is_good_book(int k_idx)
+static bool kind_is_good_book(KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -359,7 +359,7 @@ static bool kind_is_good_book(int k_idx)
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが鎧ならばTRUEを返す
  */
-static bool kind_is_armor(int k_idx)
+static bool kind_is_armor(KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -380,7 +380,7 @@ static bool kind_is_armor(int k_idx)
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが打撃武器ならばTRUEを返す
  */
-static bool kind_is_hafted(int k_idx)
+static bool kind_is_hafted(KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -1478,7 +1478,7 @@ HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear)
  * experience point of a monster later.
  * </pre>
  */
-static void get_exp_from_mon(int dam, monster_type *m_ptr)
+static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1577,7 +1577,7 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr)
  * to induce changes in the monster recall code.
  * </pre>
  */
-bool mon_take_hit(MONSTER_IDX m_idx, int dam, bool *fear, cptr note)
+bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 {
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];

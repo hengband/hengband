@@ -2704,7 +2704,7 @@ bool detect_all(POSITION range)
  * this is done in two passes. -- JDL
  * </pre>
  */
-bool project_hack(int typ, int dam)
+bool project_hack(int typ, HIT_POINT dam)
 {
 	int     i, x, y;
 	int     flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
@@ -2806,7 +2806,7 @@ bool turn_undead(void)
  * @brief 視界内のアンデッド・モンスターにダメージを与える処理 / Dispel undead monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_undead(int dam)
+bool dispel_undead(HIT_POINT dam)
 {
 	bool tester = (project_hack(GF_DISP_UNDEAD, dam));
 	if (tester)
@@ -2818,7 +2818,7 @@ bool dispel_undead(int dam)
  * @brief 視界内の邪悪なモンスターにダメージを与える処理 / Dispel evil monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_evil(int dam)
+bool dispel_evil(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_EVIL, dam));
 }
@@ -2827,7 +2827,7 @@ bool dispel_evil(int dam)
  * @brief 視界内の善良なモンスターにダメージを与える処理 / Dispel good monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_good(int dam)
+bool dispel_good(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_GOOD, dam));
 }
@@ -2836,7 +2836,7 @@ bool dispel_good(int dam)
  * @brief 視界内のあらゆるモンスターにダメージを与える処理 / Dispel all monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_monsters(int dam)
+bool dispel_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_ALL, dam));
 }
@@ -2845,7 +2845,7 @@ bool dispel_monsters(int dam)
  * @brief 視界内の生命のあるモンスターにダメージを与える処理 / Dispel 'living' monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_living(int dam)
+bool dispel_living(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_LIVING, dam));
 }
@@ -2854,7 +2854,7 @@ bool dispel_living(int dam)
  * @brief 視界内の悪魔系モンスターにダメージを与える処理 / Dispel 'living' monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_demons(int dam)
+bool dispel_demons(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_DEMON, dam));
 }
@@ -3126,7 +3126,7 @@ bool mass_genocide(int power, bool player_cast)
  */
 bool mass_genocide_undead(int power, bool player_cast)
 {
-	POSITION i;
+	MONSTER_IDX i;
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
@@ -4122,7 +4122,7 @@ void discharge_minion(void)
 	}
 	for (i = 1; i < m_max; i++)
 	{
-		int dam;
+		HIT_POINT dam;
 		monster_type *m_ptr = &m_list[i];
 		monster_race *r_ptr;
 
@@ -4592,7 +4592,7 @@ void unlite_room(int y1, int x1)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_area(int dam, int rad)
+bool lite_area(HIT_POINT dam, int rad)
 {
 	int flg = PROJECT_GRID | PROJECT_KILL;
 
@@ -4625,7 +4625,7 @@ bool lite_area(int dam, int rad)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool unlite_area(int dam, int rad)
+bool unlite_area(HIT_POINT dam, int rad)
 {
 	int flg = PROJECT_GRID | PROJECT_KILL;
 
@@ -4661,7 +4661,7 @@ bool unlite_area(int dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(int typ, int dir, int dam, int rad)
+bool fire_ball(int typ, int dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
@@ -4700,7 +4700,7 @@ bool fire_ball(int typ, int dir, int dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(int typ, int dir, int dam, int rad)
+bool fire_rocket(int typ, int dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
@@ -4736,7 +4736,7 @@ bool fire_rocket(int typ, int dir, int dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(int typ, int dir, int dam, int rad)
+bool fire_ball_hide(int typ, int dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
@@ -4777,7 +4777,7 @@ bool fire_ball_hide(int typ, int dir, int dam, int rad)
  * Option to hurt the player.
  * </pre>
  */
-bool fire_meteor(int who, int typ, int y, int x, int dam, int rad)
+bool fire_meteor(int who, int typ, int y, int x, HIT_POINT dam, int rad)
 {
 	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
@@ -4928,7 +4928,7 @@ bool teleport_swap(int dir)
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(int typ, int dir, int dam, int flg)
+bool project_hook(int typ, int dir, HIT_POINT dam, int flg)
 {
 	int tx, ty;
 
@@ -4963,7 +4963,7 @@ bool project_hook(int typ, int dir, int dam, int flg)
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(int typ, int dir, int dam)
+bool fire_bolt(int typ, int dir, HIT_POINT dam)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
@@ -4983,7 +4983,7 @@ bool fire_bolt(int typ, int dir, int dam)
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(int typ, int dir, int dam)
+bool fire_beam(int typ, int dir, HIT_POINT dam)
 {
 	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(typ, dir, dam, flg));
@@ -5003,7 +5003,7 @@ bool fire_beam(int typ, int dir, int dam)
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(int prob, int typ, int dir, int dam)
+bool fire_bolt_or_beam(int prob, int typ, int dir, HIT_POINT dam)
 {
 	if (randint0(100) < prob)
 	{
@@ -5021,7 +5021,7 @@ bool fire_bolt_or_beam(int prob, int typ, int dir, int dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_line(int dir, int dam)
+bool lite_line(int dir, HIT_POINT dam)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
 	return (project_hook(GF_LITE_WEAK, dir, dam, flg));
@@ -5033,7 +5033,7 @@ bool lite_line(int dir, int dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool drain_life(int dir, int dam)
+bool drain_life(int dir, HIT_POINT dam)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_DRAIN, dir, dam, flg));
@@ -5045,7 +5045,7 @@ bool drain_life(int dir, int dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool wall_to_mud(int dir, int dam)
+bool wall_to_mud(int dir, HIT_POINT dam)
 {
 	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project_hook(GF_KILL_WALL, dir, dam, flg));
@@ -5090,7 +5090,7 @@ bool disarm_trap(int dir)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool heal_monster(int dir, int dam)
+bool heal_monster(int dir, HIT_POINT dam)
 {
 	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_HEAL, dir, dam, flg));
@@ -5428,7 +5428,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 		case 30: case 31:
 			if (!(*count))
 			{
-				int dam = damroll(10, 10);
+				HIT_POINT dam = damroll(10, 10);
 				msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
 				project(0, 8, p_ptr->y, p_ptr->x, dam, GF_MANA, flg, -1);
 				take_hit(DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"), -1);
@@ -5688,7 +5688,7 @@ void wall_breaker(void)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool confuse_monsters(int dam)
+bool confuse_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_OLD_CONF, dam));
 }
@@ -5699,7 +5699,7 @@ bool confuse_monsters(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_monsters(int dam)
+bool charm_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_CHARM, dam));
 }
@@ -5710,7 +5710,7 @@ bool charm_monsters(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_animals(int dam)
+bool charm_animals(HIT_POINT dam)
 {
 	return (project_hack(GF_CONTROL_ANIMAL, dam));
 }
@@ -5721,7 +5721,7 @@ bool charm_animals(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stun_monsters(int dam)
+bool stun_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_STUN, dam));
 }
@@ -5732,7 +5732,7 @@ bool stun_monsters(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stasis_monsters(int dam)
+bool stasis_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_STASIS, dam));
 }
@@ -5743,7 +5743,7 @@ bool stasis_monsters(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool mindblast_monsters(int dam)
+bool mindblast_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_PSI, dam));
 }
@@ -5765,7 +5765,7 @@ bool banish_monsters(int dist)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool turn_evil(int dam)
+bool turn_evil(HIT_POINT dam)
 {
 	return (project_hack(GF_TURN_EVIL, dam));
 }
@@ -5776,7 +5776,7 @@ bool turn_evil(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool turn_monsters(int dam)
+bool turn_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_TURN_ALL, dam));
 }

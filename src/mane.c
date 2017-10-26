@@ -21,7 +21,7 @@ static int damage;
  * @param dam ものまねの威力
  * @return なし
  */
-static void mane_info(char *p, int power, int dam)
+static void mane_info(char *p, int power, HIT_POINT dam)
 {
 	int plev = p_ptr->lev;
 #ifdef JP

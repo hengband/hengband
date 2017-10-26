@@ -2973,7 +2973,7 @@ bool activate_random_artifact(object_type *o_ptr)
 				}
 				for (; i < EATER_EXT*3; i++)
 				{
-					int k_idx = lookup_kind(TV_ROD, i-EATER_EXT*2);
+					KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, i-EATER_EXT*2);
 					p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
 					if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 				}
@@ -3902,7 +3902,7 @@ int calc_arm_avgdamage(object_type *o_ptr)
 	u32b flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
 
-	int dam, base, s_evil, forced, vorpal;
+	HIT_POINT dam, base, s_evil, forced, vorpal;
 	dam = base = s_evil = forced = vorpal = 0;
 
 	dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
@@ -3986,7 +3986,7 @@ static int suppression_evil_dam(object_type *o_ptr)
 
 static int weakening_artifact(object_type *o_ptr)
 {
-	 int k_idx = lookup_kind(o_ptr->sval, o_ptr->tval);
+	 KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->sval, o_ptr->tval);
 	 object_kind *k_ptr = &k_info[k_idx];
 
 	 if ((k_ptr->dd < o_ptr->dd) || (k_ptr->ds < o_ptr->ds))

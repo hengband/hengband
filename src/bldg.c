@@ -1441,7 +1441,7 @@ static bool gamble_comm(int cmd)
 static bool vault_aux_battle(MONRACE_IDX r_idx)
 {
 	int i;
-	int dam = 0;
+	HIT_POINT dam = 0;
 
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2356,7 +2356,7 @@ HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow)
  * @param dam 基本ダメージ量
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int dam)
+HIT_POINT calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  HIT_POINT dam)
 {
 	u32b num;
 	int i, k, crit;
@@ -2398,7 +2398,7 @@ HIT_POINT calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  int da
  * @param dokubari 毒針処理か否か
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(int weight, int plus, int dam, s16b meichuu, bool dokubari)
+HIT_POINT calc_expect_crit(int weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari)
 {
 	u32b k, num;
 	int i;

@@ -286,7 +286,7 @@ void revenge_spell(void)
  * @param dam 蓄積されるダメージ量
  * @return なし
  */
-void revenge_store(int dam)
+void revenge_store(HIT_POINT dam)
 {
 	if (p_ptr->realm1 != REALM_HEX) return;
 	if (p_ptr->magic_num2[2] <= 0) return;

@@ -1026,7 +1026,7 @@ static void do_cmd_quaff_potion_aux(int item)
 				}
 				for (; i < EATER_EXT*3; i++)
 				{
-					int k_idx = lookup_kind(TV_ROD, i-EATER_EXT*2);
+					KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, i-EATER_EXT*2);
 					p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
 					if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 				}
@@ -2609,7 +2609,7 @@ static int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool m
 	{
 		case SV_WAND_HEAL_MONSTER:
 		{
-			int dam = damroll((powerful ? 20 : 10), 10);
+			HIT_POINT dam = damroll((powerful ? 20 : 10), 10);
 			if (heal_monster(dir, dam)) ident = TRUE;
 			break;
 		}
@@ -2649,14 +2649,14 @@ static int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool m
 
 		case SV_WAND_STONE_TO_MUD:
 		{
-			int dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
+			HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
 			if (wall_to_mud(dir, dam)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_LITE:
 		{
-			int dam = damroll((powerful ? 12 : 6), 8);
+			HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
 			msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
 			(void)lite_line(dir, dam);
 			ident = TRUE;
@@ -2791,7 +2791,7 @@ static int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool m
 
 		case SV_WAND_DRAGON_BREATH:
 		{
-			int dam;
+			HIT_POINT dam;
 			int typ;
 
 			switch (randint1(5))
@@ -3182,7 +3182,7 @@ static int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool
 
 		case SV_ROD_LITE:
 		{
-			int dam = damroll((powerful ? 12 : 6), 8);
+			HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
 			msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
 			(void)lite_line(dir, dam);
 			ident = TRUE;
@@ -3278,7 +3278,7 @@ static int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool
 
 		case SV_ROD_STONE_TO_MUD:
 		{
-			int dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
+			HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
 			if (wall_to_mud(dir, dam)) ident = TRUE;
 			break;
 		}

@@ -1848,7 +1848,7 @@ static bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
  * @param force TRUEならば強制的に落馬する
  * @return 実際に落馬したらTRUEを返す
  */
-bool rakuba(int dam, bool force)
+bool rakuba(HIT_POINT dam, bool force)
 {
 	int i, y, x, oy, ox;
 	int sn = 0, sy = 0, sx = 0;

@@ -950,7 +950,7 @@ static int check_hit(int power)
  */
 static void hit_trap_pit(int trap_feat_type)
 {
-	int dam;
+	HIT_POINT dam;
 	cptr trap_name = "";
 	cptr spike_name = "";
 
@@ -1368,7 +1368,7 @@ static void hit_trap(bool break_trap)
  * @return なし
  */
 static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
-				 int (*dam_func)(int dam, cptr kb_str, int monspell, bool aura), cptr message)
+				 int (*dam_func)(HIT_POINT dam, cptr kb_str, int monspell, bool aura), cptr message)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 

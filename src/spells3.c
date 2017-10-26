@@ -4685,7 +4685,7 @@ static int minus_ac(void)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int acid_dam(int dam, cptr kb_str, int monspell, bool aura)
+int acid_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -4735,7 +4735,7 @@ int acid_dam(int dam, cptr kb_str, int monspell, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int elec_dam(int dam, cptr kb_str, int monspell, bool aura)
+int elec_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -4784,7 +4784,7 @@ int elec_dam(int dam, cptr kb_str, int monspell, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int fire_dam(int dam, cptr kb_str, int monspell, bool aura)
+int fire_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -4833,7 +4833,7 @@ int fire_dam(int dam, cptr kb_str, int monspell, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int cold_dam(int dam, cptr kb_str, int monspell, bool aura)
+int cold_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;

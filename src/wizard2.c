@@ -710,7 +710,7 @@ static tval_desc tvals[] =
  * @param k_idx ベースアイテムID
  * @return なし
  */
-void strip_name(char *buf, int k_idx)
+void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
 {
 	char *t;
 

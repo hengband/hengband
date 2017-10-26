@@ -250,7 +250,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 */
 int spell_RF4_ROCKET(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かを射った。", "%^s shoots something."),
@@ -276,7 +276,7 @@ int spell_RF4_ROCKET(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE
 */
 int spell_RF4_SHOOT(int y, int x, MONSTER_IDX m_idx, IDX t_idx,int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが奇妙な音を発した。", "%^s makes a strange noise."),
@@ -303,7 +303,7 @@ int spell_RF4_SHOOT(int y, int x, MONSTER_IDX m_idx, IDX t_idx,int TARGET_TYPE)
 */
 int spell_RF4_BREATH(int GF_TYPE, int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam, ms_type, drs_type;
+	HIT_POINT dam, ms_type, drs_type;
 	cptr type_s;
 	bool smart_learn_aux = TRUE;
 	monster_type	*m_ptr = &m_list[m_idx];
@@ -504,7 +504,7 @@ int spell_RF4_BREATH(int GF_TYPE, int y, int x, MONSTER_IDX m_idx, IDX t_idx, in
 */
 int spell_RF4_BA_NUKE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -531,7 +531,7 @@ int spell_RF4_BA_NUKE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF4_BA_CHAO(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが恐ろしげにつぶやいた。", "%^s mumbles frighteningly."),
@@ -558,7 +558,7 @@ int spell_RF4_BA_CHAO(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_ACID(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam, rad;
+	HIT_POINT dam, rad;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -587,7 +587,7 @@ int spell_RF5_BA_ACID(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_ELEC(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam, rad;
+	HIT_POINT dam, rad;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -616,7 +616,7 @@ int spell_RF5_BA_ELEC(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_FIRE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam, rad;
+	HIT_POINT dam, rad;
 	monster_type	*m_ptr = &m_list[m_idx];
 
 	if (m_ptr->r_idx == MON_ROLENTO)
@@ -656,7 +656,7 @@ int spell_RF5_BA_FIRE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_COLD(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam, rad;
+	HIT_POINT dam, rad;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -685,7 +685,7 @@ int spell_RF5_BA_COLD(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_POIS(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -712,7 +712,7 @@ int spell_RF5_BA_POIS(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_NETH(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -739,7 +739,7 @@ int spell_RF5_BA_NETH(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_WATE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 	bool known = monster_near_player(m_idx, t_idx);
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
@@ -779,7 +779,7 @@ int spell_RF5_BA_WATE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_MANA(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
@@ -803,7 +803,7 @@ int spell_RF5_BA_MANA(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_DARK(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
@@ -830,7 +830,7 @@ int spell_RF5_BA_DARK(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_DRAIN_MANA(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 	char m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
@@ -867,7 +867,7 @@ int spell_RF5_MIND_BLAST(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
-	int dam;
+	HIT_POINT dam;
 	char m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
@@ -904,7 +904,7 @@ int spell_RF5_BRAIN_SMASH(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
-	int dam;
+	HIT_POINT dam;
 	char m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
@@ -943,7 +943,7 @@ int spell_RF5_BRAIN_SMASH(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-void spell_RF5_CAUSE(int GF_TYPE, int dam, int y, int x, MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2, cptr msg3, int MS_TYPE, int TARGET_TYPE)
+void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, int y, int x, MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2, cptr msg3, int MS_TYPE, int TARGET_TYPE)
 {
 	char m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
@@ -983,7 +983,7 @@ void spell_RF5_CAUSE(int GF_TYPE, int dam, int y, int x, MONSTER_IDX m_idx, IDX 
 int spell_RF5_CAUSE_1(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
 	cptr msg1, msg2, msg3;
-	int dam;
+	HIT_POINT dam;
 	dam = monspell_damage((MS_CAUSE_1), m_idx, DAM_ROLL);
 
 	msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
@@ -1006,7 +1006,7 @@ int spell_RF5_CAUSE_1(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 int spell_RF5_CAUSE_2(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
 	cptr msg1, msg2, msg3;
-	int dam;
+	HIT_POINT dam;
 	dam = monspell_damage((MS_CAUSE_2), m_idx, DAM_ROLL);
 
 	msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
@@ -1029,7 +1029,7 @@ int spell_RF5_CAUSE_2(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 int spell_RF5_CAUSE_3(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
 	cptr msg1, msg2, msg3;
-	int dam;
+	HIT_POINT dam;
 	dam = monspell_damage((MS_CAUSE_3), m_idx, DAM_ROLL);
 
 	msg1 = _("%^sが何かを大声で叫んだ。", "%^s mumbles loudly.");
@@ -1052,7 +1052,7 @@ int spell_RF5_CAUSE_3(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 int spell_RF5_CAUSE_4(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
 	cptr msg1, msg2, msg3;
-	int dam;
+	HIT_POINT dam;
 	dam = monspell_damage((MS_CAUSE_4), m_idx, DAM_ROLL);
 
 	msg1 = _("%^sが「お前は既に死んでいる」と叫んだ。", "%^s screams the word 'DIE!'");
@@ -1074,7 +1074,7 @@ int spell_RF5_CAUSE_4(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BO_ACID(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1103,7 +1103,7 @@ int spell_RF5_BO_ACID(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BO_ELEC(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1132,7 +1132,7 @@ int spell_RF5_BO_ELEC(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BO_FIRE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1161,7 +1161,7 @@ int spell_RF5_BO_FIRE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BO_COLD(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1190,7 +1190,7 @@ int spell_RF5_BO_COLD(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BA_LITE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
@@ -1217,7 +1217,7 @@ int spell_RF5_BA_LITE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BO_NETH(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1246,7 +1246,7 @@ int spell_RF5_BO_NETH(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BO_WATE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1274,7 +1274,7 @@ int spell_RF5_BO_WATE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BO_MANA(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1302,7 +1302,7 @@ int spell_RF5_BO_MANA(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BO_PLAS(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1330,7 +1330,7 @@ int spell_RF5_BO_PLAS(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_BO_ICEE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1359,7 +1359,7 @@ int spell_RF5_BO_ICEE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYP
 */
 int spell_RF5_MISSILE(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1760,7 +1760,7 @@ void spell_RF6_HASTE(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 */
 int spell_RF6_HAND_DOOM(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam = 0;
+	HIT_POINT dam = 0;
 
 	simple_monspell_message(m_idx, t_idx,
 		_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"),
@@ -2373,7 +2373,7 @@ void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 */
 int spell_RF6_PSY_SPEAR(int y, int x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	int dam;
+	HIT_POINT dam;
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -3644,7 +3644,7 @@ int monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-int monspell_damage_roll(int dam, int dice_num, int dice_side, int mult, int div, int TYPE)
+int monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side, int mult, int div, int TYPE)
 {
 	switch (TYPE)
 	{
@@ -3675,7 +3675,7 @@ int monspell_damage_roll(int dam, int dice_num, int dice_side, int mult, int div
 */
 int monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
 {
-	int dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
+	HIT_POINT dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
 
 	switch (SPELL_NUM)
 	{

@@ -368,7 +368,7 @@ static void wr_lore(MONRACE_IDX r_idx)
  * @param k_idx ベースアイテムのID
  * @return なし
  */
-static void wr_xtra(int k_idx)
+static void wr_xtra(KIND_OBJECT_IDX k_idx)
 {
 	byte tmp8u = 0;
 

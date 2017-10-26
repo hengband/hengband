@@ -1554,7 +1554,7 @@ static void process_world_aux_hp_and_sp(void)
 	/* Take damage from cuts */
 	if (p_ptr->cut && !IS_INVULN())
 	{
-		int dam;
+		HIT_POINT dam;
 
 		/* Mortal wound or Deep Gash */
 		if (p_ptr->cut > 1000)
@@ -3874,7 +3874,7 @@ static void process_world(void)
 			if (p_ptr->food < PY_FOOD_STARVE)
 			{
 				/* Calculate damage */
-				int dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
+				HIT_POINT dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
 
 				/* Take damage */
 				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);

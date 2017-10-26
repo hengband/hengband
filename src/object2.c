@@ -4661,7 +4661,7 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
  * @param k_idx 判定したいベースアイテムのID
  * @return ベースアイテムが上質ならばTRUEを返す。
  */
-static bool kind_is_good(int k_idx)
+static bool kind_is_good(KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -6735,7 +6735,7 @@ object_type *choose_warning_item(void)
  * @param max 算出した最大ダメージを返すポインタ
  * @return なし
  */
-static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int *max)
+static void spell_damcalc(monster_type *m_ptr, int typ, HIT_POINT dam, int *max)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	int          rlev = r_ptr->level;
@@ -6983,7 +6983,7 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int *max)
 void spell_damcalc_by_spellnum(int spell_num, int typ, MONSTER_IDX m_idx, int *max)
 {
     monster_type *m_ptr = &m_list[m_idx];
-    int dam = monspell_damage((spell_num), m_idx, DAM_MAX);
+    HIT_POINT dam = monspell_damage((spell_num), m_idx, DAM_MAX);
     spell_damcalc(m_ptr, typ, dam, max);
 }
 

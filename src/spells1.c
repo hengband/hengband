@@ -628,7 +628,7 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  * XXX XXX XXX Perhaps we should affect doors?
  * </pre>
  */
-static bool project_f(int who, int r, int y, int x, int dam, int typ)
+static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 {
 	cave_type       *c_ptr = &cave[y][x];
 	feature_type    *f_ptr = &f_info[c_ptr->feat];
@@ -1207,11 +1207,11 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	bool obvious = FALSE;
 	bool known = player_has_los_bold(y, x);
 
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	char o_name[MAX_NLEN];
 
-	int k_idx = 0;
+	KIND_OBJECT_IDX k_idx = 0;
 	bool is_potion = FALSE;
 
 
@@ -7846,7 +7846,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-bool binding_field( int dam )
+bool binding_field( HIT_POINT dam )
 {
 	int mirror_x[10],mirror_y[10]; /* 鏡はもっと少ない */
 	int mirror_num=0;              /* 鏡の数 */
@@ -7995,7 +7995,7 @@ bool binding_field( int dam )
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-void seal_of_mirror( int dam )
+void seal_of_mirror( HIT_POINT dam )
 {
 	int x,y;
 

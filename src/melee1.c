@@ -24,7 +24,7 @@
  * and which also do at least 20 damage, or, sometimes, N damage.
  * This is used only to determine "cuts" and "stuns".
  */
-static int monster_critical(int dice, int sides, int dam)
+static int monster_critical(int dice, int sides, HIT_POINT dam)
 {
 	int max = 0;
 	int total = dice * sides;

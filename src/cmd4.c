@@ -6993,7 +6993,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 		object_kind *flavor_k_ptr;
 
 		/* Get the object index */
-		int k_idx = object_idx[object_top + i];
+		KIND_OBJECT_IDX k_idx = object_idx[object_top + i];
 
 		/* Access the object */
 		object_kind *k_ptr = &k_info[k_idx];

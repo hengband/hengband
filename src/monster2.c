@@ -4165,7 +4165,7 @@ bool multiply_monster(MONSTER_IDX m_idx, bool clone, u32b mode)
  * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */
-void message_pain(MONSTER_IDX m_idx, int dam)
+void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 {
 	long oldhp, newhp, tmp;
 	int percentage;
