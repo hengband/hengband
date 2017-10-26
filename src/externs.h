@@ -1014,8 +1014,8 @@ extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUB
 extern bool item_tester_okay(object_type *o_ptr);
 extern void display_inven(void);
 extern void display_equip(void);
-extern int show_inven(int target_item);
-extern int show_equip(int target_item);
+extern COMMAND_CODE show_inven(int target_item);
+extern COMMAND_CODE show_equip(int target_item);
 extern void toggle_inven_equip(void);
 extern bool can_get_item(void);
 extern bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, int mode);

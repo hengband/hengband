@@ -466,7 +466,8 @@ static void confirm_use_force(bool browse_only)
  */
 void do_cmd_browse(void)
 {
-	int		item, sval;
+	OBJECT_IDX item;
+	OBJECT_SUBTYPE_VALUE sval;
 	REALM_IDX use_realm = 0;
 	int j, line;
 	SPELL_IDX spell = -1;

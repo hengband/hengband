@@ -4104,7 +4104,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
  */
 bool summon_named_creature (MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-	int x, y;
+	POSITION x, y;
 
 	/* Paranoia */
 	/* if (!r_idx) return; */
@@ -4134,7 +4134,7 @@ bool multiply_monster(MONSTER_IDX m_idx, bool clone, u32b mode)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 
-	int y, x;
+	POSITION y, x;
 
 	if (!mon_scatter(m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
 		return FALSE;

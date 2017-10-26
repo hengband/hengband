@@ -222,7 +222,7 @@ void display_snipe_list(void)
  */
 static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 {
-	int             i;
+	COMMAND_CODE i;
 	int             num = 0;
 	int             y = 1;
 	int             x = 20;

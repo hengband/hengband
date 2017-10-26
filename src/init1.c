@@ -1089,7 +1089,7 @@ static bool add_name(u32b *offset, header *head, cptr buf)
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-static bool add_tag(s16b *offset, header *head, cptr buf)
+static bool add_tag(STR_OFFSET *offset, header *head, cptr buf)
 {
 	u32b i;
 
@@ -1718,7 +1718,7 @@ errr parse_f_info(char *buf, header *head)
 	/* Process 'M' for "Mimic" (one line only) */
 	else if (buf[0] == 'M')
 	{
-		s16b offset;
+		STR_OFFSET offset;
 
 		if (!add_tag(&offset, head, buf + 2)) return PARSE_ERROR_OUT_OF_MEMORY;
 
@@ -1866,7 +1866,7 @@ errr parse_f_info(char *buf, header *head)
 	/* Process 'K' for "States" (up to four lines + default (which cannot be last)) */
 	else if (buf[0] == 'K')
 	{
-		s16b offset;
+		STR_OFFSET offset;
 
 		/* Find the next empty state slot (if any) */
 		for (i = 0; i < MAX_FEAT_STATES; i++) if (f_ptr->state[i].action == FF_FLAG_MAX) break;
@@ -3001,8 +3001,8 @@ errr parse_r_info(char *buf, header *head)
 		r_ptr->level = (DEPTH)lev;
 		r_ptr->rarity = (RARITY)rar;
 		r_ptr->extra = pad;
-		r_ptr->mexp = exp;
-		r_ptr->next_exp = nextexp;
+		r_ptr->mexp = (EXP)exp;
+		r_ptr->next_exp = (EXP)nextexp;
 		r_ptr->next_r_idx = (IDX)nextmon;
 	}
 

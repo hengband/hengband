@@ -193,11 +193,11 @@ static int beam_chance(void)
  * @param mode モンスター生成条件フラグ
  * @return モンスターが（敵対も含めて）召還されたならばTRUEを返す。
  */
-static bool trump_summoning(int num, bool pet, int y, int x, int lev, int type, u32b mode)
+static bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode)
 {
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
-	int who;
+	MONSTER_IDX who;
 	int i;
 	bool success = FALSE;
 

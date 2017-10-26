@@ -2142,7 +2142,7 @@ static void prepare_label_string_floor(char *label, int floor_list[], int floor_
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-int show_inven(int target_item)
+COMMAND_CODE show_inven(int target_item)
 {
 	int             i, j, k, l, z = 0;
 	int             col, cur_col, len;
@@ -2308,7 +2308,7 @@ int show_inven(int target_item)
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-int show_equip(int target_item)
+COMMAND_CODE show_equip(int target_item)
 {
 	int             i, j, k, l;
 	int             col, cur_col, len;

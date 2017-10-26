@@ -4045,7 +4045,7 @@ extern void do_cmd_borg(void);
  */
 static void process_command(void)
 {
-	int old_now_message = now_message;
+	COMMAND_CODE old_now_message = now_message;
 
 #ifdef ALLOW_REPEAT /* TNB */
 

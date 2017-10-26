@@ -3887,7 +3887,8 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 static void store_sell(void)
 {
 	int choice;
-	int item, item_pos;
+	OBJECT_IDX item;
+	int item_pos;
 	int amt;
 
 	s32b price, value, dummy;

@@ -396,7 +396,8 @@ void do_cmd_hissatsu(void)
  */
 void do_cmd_gain_hissatsu(void)
 {
-	int item, i, j;
+	OBJECT_IDX item;
+	int i, j;
 
 	object_type *o_ptr;
 	cptr q, s;

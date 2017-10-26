@@ -875,7 +875,7 @@ DUNGEON_IDX choose_dungeon(cptr note, POSITION y, POSITION x)
 		else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
 
 		sprintf(buf,_("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"), 
-					'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+					'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, (int)max_dlv[i]);
 		prt(buf, y + num, x);
 		dun[num++] = i;
 	}
@@ -995,7 +995,8 @@ bool reset_recall(void)
 
 	if (!select_dungeon) return FALSE;
 	/* Prompt */
-	sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), d_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
+	sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "),
+		(int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
 
 	/* Default */
 	sprintf(tmp_val, "%d", (int)MAX(dun_level, 1));
@@ -1295,7 +1296,7 @@ void phlogiston(void)
  */
 void brand_weapon(int brand_type)
 {
-	int         item;
+	OBJECT_IDX item;
 	object_type *o_ptr;
 	cptr        q, s;
 
@@ -2028,9 +2029,10 @@ int remove_all_curse(void)
  */
 bool alchemy(void)
 {
-	int item, amt = 1;
+	OBJECT_IDX item;
+	int amt = 1;
 	ITEM_NUMBER old_number;
-	long price;
+	PRICE price;
 	bool force = FALSE;
 	object_type *o_ptr;
 	char o_name[MAX_NLEN];
@@ -2297,7 +2299,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
  */
 bool enchant_spell(int num_hit, int num_dam, int num_ac)
 {
-	int         item;
+	OBJECT_IDX item;
 	bool        okay = FALSE;
 	object_type *o_ptr;
 	char        o_name[MAX_NLEN];
@@ -2394,7 +2396,7 @@ static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
  */
 bool artifact_scroll(void)
 {
-	int             item;
+	OBJECT_IDX item;
 	bool            okay = FALSE;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
@@ -2613,7 +2615,7 @@ static bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
  */
 bool ident_spell(bool only_equip)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
@@ -2699,7 +2701,7 @@ bool ident_spell(bool only_equip)
  */
 bool mundane_spell(bool only_equip)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
 	cptr            q, s;
 
@@ -2783,7 +2785,7 @@ static bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
  */
 bool identify_fully(bool only_equip)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
@@ -2907,7 +2909,8 @@ bool item_tester_hook_recharge(object_type *o_ptr)
  */
 bool recharge(int power)
 {
-	int item, lev;
+	OBJECT_IDX item;
+	int lev;
 	int recharge_strength;
 	TIME_EFFECT recharge_amount;
 
@@ -3201,9 +3204,9 @@ bool recharge(int power)
  */
 bool bless_weapon(void)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
 
@@ -3385,7 +3388,7 @@ msg_format("%s は劣化した！",
  */
 bool pulish_shield(void)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
 	u32b flgs[TR_FLAG_SIZE];
 	char            o_name[MAX_NLEN];
@@ -4874,7 +4877,7 @@ int cold_dam(int dam, cptr kb_str, int monspell, bool aura)
  */
 bool rustproof(void)
 {
-	int         item;
+	OBJECT_IDX item;
 	object_type *o_ptr;
 	char        o_name[MAX_NLEN];
 	cptr        q, s;
@@ -5386,7 +5389,8 @@ bool eat_magic(int power)
 {
 	object_type * o_ptr;
 	object_kind *k_ptr;
-	int lev, item;
+	int lev;
+	OBJECT_IDX item;
 	int recharge_strength = 0;
 
 	bool fail = FALSE;
