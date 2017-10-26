@@ -181,6 +181,8 @@ typedef s32b SPELL_IDX;    /*!< 各魔法領域/職業能力ごとの呪文ID型
 typedef s16b PROB;         /*!< 確率の重みの型定義 */
 typedef byte FEAT_POWER;   /*!< 地形強度の型定義 */
 
+typedef int QUANTITY; /*!< インターフェース上の指定個数 */
+
 /*** Pointers to all the basic types defined above ***/
 
 typedef real *real_ptr;

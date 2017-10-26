@@ -4451,7 +4451,7 @@ static void bldg_process_command(building_type *bldg, int i)
 			else if(quest[QUEST_SERPENT].status != QUEST_STATUS_FINISHED) max_depth = 99;
 		}
 		amt = get_quantity(format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), 
-							d_name + d_info[select_dungeon].name), max_depth);
+							d_name + d_info[select_dungeon].name), (QUANTITY)max_depth);
 
 		if (amt > 0)
 		{

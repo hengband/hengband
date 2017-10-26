@@ -3802,7 +3802,7 @@ bool get_com(cptr prompt, char *command, bool z_escape)
  *
  * Hack -- allow "command_arg" to specify a quantity
  */
-s16b get_quantity(cptr prompt, COMMAND_CODE max)
+QUANTITY get_quantity(cptr prompt, QUANTITY max)
 {
 	bool res;
 	COMMAND_CODE amt;

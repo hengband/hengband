@@ -39,7 +39,7 @@ static void mane_info(char *p, int power, HIT_POINT dam)
 	strcpy(p, "");
 
 	if ((power > 2 && power < 41) || (power > 41 && power < 59) || (power == 75))
-		sprintf(p, " %s%d", s_dam, dam);
+		sprintf(p, " %s%d", s_dam, (int)dam);
 	else
 	{
 		switch (power)

@@ -5747,7 +5747,8 @@ static void do_cmd_knowledge_uniques(void)
  */
 static void do_cmd_knowledge_weapon_exp(void)
 {
-	int i, j, num, weapon_exp;
+	int i, num, weapon_exp;
+	KIND_OBJECT_IDX j;
 
 	FILE *fff;
 

@@ -1142,21 +1142,21 @@ bool world_player;
 
 int cap_mon;
 int cap_mspeed;
-int cap_hp;
-int cap_maxhp;
-u16b cap_nickname;
+HIT_POINT cap_hp;
+HIT_POINT cap_maxhp;
+STR_OFFSET cap_nickname;
 
-IDX battle_mon[4];
+MONRACE_IDX battle_mon[4];
 int sel_monster;
 int battle_odds;
-int kakekin;
+PRICE kakekin;
 u32b mon_odds[4];
 
 MONSTER_IDX pet_t_m_idx;
 MONSTER_IDX riding_t_m_idx;
 
-IDX kubi_r_idx[MAX_KUBI];
-IDX today_mon;
+MONSTER_IDX kubi_r_idx[MAX_KUBI];
+MONSTER_IDX today_mon;
 
 bool write_level;
 

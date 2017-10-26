@@ -1411,8 +1411,8 @@ static bool wr_savefile_new(void)
 		/* Save quest status if quest is running */
 		if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_COMPLETED || !is_fixed_quest_idx(i))
 		{
-			wr_s16b(q_ptr->cur_num);
-			wr_s16b(q_ptr->max_num);
+			wr_s16b((s16b)q_ptr->cur_num);
+			wr_s16b((s16b)q_ptr->max_num);
 			wr_s16b(q_ptr->type);
 			wr_s16b(q_ptr->r_idx);
 			wr_s16b(q_ptr->k_idx);
