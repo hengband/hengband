@@ -153,7 +153,7 @@ extern COMMAND_ARG command_arg;
 extern s16b command_rep;
 extern DIRECTION command_dir;
 extern s16b command_see;
-extern s16b command_gap;
+extern TERM_POSITION command_gap;
 extern s16b command_wrk;
 extern s16b command_new;
 extern bool msg_flag;
@@ -1683,8 +1683,8 @@ extern bool do_cmd_disarm_aux(int y, int x, int dir);
 #ifdef ALLOW_EASY_FLOOR /* TNB */
 
 /* object1.c */
-extern int scan_floor(int *items, int y, int x, int mode);
-extern COMMAND_CODE show_floor(int target_item, int y, int x, int *min_width);
+extern int scan_floor(int *items, POSITION y, POSITION x, int mode);
+extern COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *min_width);
 extern bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode);
 extern void py_pickup_floor(bool pickup);
 

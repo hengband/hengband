@@ -3595,8 +3595,10 @@ static errr rd_savefile_new_aux(void)
 				    (!z_older_than(10, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED)) ||
 				    (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load))))
 				{
-					rd_s16b(&q_ptr->cur_num);
-					rd_s16b(&q_ptr->max_num);
+					rd_s16b(&tmp16s);
+					q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
+					rd_s16b(&tmp16s);
+					q_ptr->max_num = (MONSTER_NUMBER)tmp16s;
 					rd_s16b(&q_ptr->type);
 
 					/* Load quest monster index */

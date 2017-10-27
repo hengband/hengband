@@ -494,9 +494,9 @@ static int mult_brand(int mult, const u32b* flgs, const monster_type* m_ptr)
  */
 s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bool thrown)
 {
-	int mult = 10;
+	MULTIPLY mult = 10;
 
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);

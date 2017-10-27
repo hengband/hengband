@@ -2150,7 +2150,7 @@ COMMAND_CODE show_inven(int target_item)
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	char            tmp_val[80];
-	int             out_index[23];
+	COMMAND_CODE out_index[23];
 	byte            out_color[23];
 	char            out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
@@ -2317,7 +2317,7 @@ COMMAND_CODE show_equip(int target_item)
 	object_type     *o_ptr;
 	char            tmp_val[80];
 	char            o_name[MAX_NLEN];
-	int             out_index[23];
+	COMMAND_CODE out_index[23];
 	byte            out_color[23];
 	char            out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
@@ -3459,7 +3459,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, int mode)
 
 				/* Extract "query" setting */
 				ver = isupper(which);
-				which = tolower(which);
+				which = (char)tolower(which);
 
 				/* Convert letter to inventory index */
 				if (!command_wrk)
@@ -3578,7 +3578,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, int mode)
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-int scan_floor(int *items, int y, int x, int mode)
+int scan_floor(int *items, POSITION y, POSITION x, int mode)
 {
 	int this_o_idx, next_o_idx;
 
@@ -3629,9 +3629,10 @@ int scan_floor(int *items, int y, int x, int mode)
  * @return 選択したアイテムの添え字
  * @details
  */
-COMMAND_CODE show_floor(int target_item, int y, int x, int *min_width)
+COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *min_width)
 {
-	int i, j, k, l;
+	COMMAND_CODE i;
+	int j, k, l;
 	int col, len;
 
 	object_type *o_ptr;
@@ -3640,7 +3641,7 @@ COMMAND_CODE show_floor(int target_item, int y, int x, int *min_width)
 
 	char tmp_val[80];
 
-	int out_index[23];
+	COMMAND_CODE out_index[23];
 	byte out_color[23];
 	char out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
@@ -3793,7 +3794,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
 	char out_val[160];
 
 	int floor_num, floor_list[23], floor_top = 0;
-	int min_width = 0;
+	TERM_POSITION min_width = 0;
 
 	extern bool select_the_force;
 

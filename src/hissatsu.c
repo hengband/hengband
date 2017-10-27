@@ -650,7 +650,7 @@ MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, int 
 	/* Bloody Maelstrom */
 	if ((mode == HISSATSU_SEKIRYUKA) && p_ptr->cut && monster_living(r_ptr))
 	{
-		int tmp = MIN(100, MAX(10, p_ptr->cut / 10));
+		MULTIPLY tmp = MIN(100, MAX(10, p_ptr->cut / 10));
 		if (mult < tmp) mult = tmp;
 	}
 
