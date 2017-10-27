@@ -1091,11 +1091,11 @@ extern bool save_floor(saved_floor_type *sf_ptr, u32b mode);
 
 /* spells1.c */
 extern bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, int *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int typ);
+extern void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int typ);
 extern int take_hit(int damage_type, HIT_POINT damage, cptr kb_str, int monspell);
 extern u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, int typ);
 extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int flg);
-extern int dist_to_line(int y, int x, int y1, int x1, int y2, int x2);
+extern POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, int monspell);
 extern int project_length;
 extern bool binding_field(HIT_POINT dam);
@@ -1684,7 +1684,7 @@ extern bool do_cmd_disarm_aux(int y, int x, int dir);
 
 /* object1.c */
 extern int scan_floor(int *items, int y, int x, int mode);
-extern int show_floor(int target_item, int y, int x, int *min_width);
+extern COMMAND_CODE show_floor(int target_item, int y, int x, int *min_width);
 extern bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode);
 extern void py_pickup_floor(bool pickup);
 

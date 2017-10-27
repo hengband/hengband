@@ -2144,7 +2144,8 @@ static void prepare_label_string_floor(char *label, int floor_list[], int floor_
  */
 COMMAND_CODE show_inven(int target_item)
 {
-	int             i, j, k, l, z = 0;
+	COMMAND_CODE i;
+	int j, k, l, z = 0;
 	int             col, cur_col, len;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
@@ -2152,8 +2153,8 @@ COMMAND_CODE show_inven(int target_item)
 	int             out_index[23];
 	byte            out_color[23];
 	char            out_desc[23][MAX_NLEN];
-	int             target_item_label = 0;
-	int             wid, hgt;
+	COMMAND_CODE target_item_label = 0;
+	TERM_POSITION wid, hgt;
 	char            inven_label[52 + 1];
 
 	/* Starting column */
@@ -2310,7 +2311,8 @@ COMMAND_CODE show_inven(int target_item)
  */
 COMMAND_CODE show_equip(int target_item)
 {
-	int             i, j, k, l;
+	COMMAND_CODE i;
+	int j, k, l;
 	int             col, cur_col, len;
 	object_type     *o_ptr;
 	char            tmp_val[80];
@@ -2318,8 +2320,8 @@ COMMAND_CODE show_equip(int target_item)
 	int             out_index[23];
 	byte            out_color[23];
 	char            out_desc[23][MAX_NLEN];
-	int             target_item_label = 0;
-	int             wid, hgt;
+	COMMAND_CODE target_item_label = 0;
+	TERM_POSITION wid, hgt;
 	char            equip_label[52 + 1];
 
 	/* Starting column */
@@ -3624,10 +3626,10 @@ int scan_floor(int *items, int y, int x, int mode)
  * @param y 走査するフロアのY座標
  * @param x 走査するフロアのX座標
  * @param min_width 表示の長さ
- * @return 選択したアイテムのID
+ * @return 選択したアイテムの添え字
  * @details
  */
-int show_floor(int target_item, int y, int x, int *min_width)
+COMMAND_CODE show_floor(int target_item, int y, int x, int *min_width)
 {
 	int i, j, k, l;
 	int col, len;
@@ -3641,7 +3643,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 	int out_index[23];
 	byte out_color[23];
 	char out_desc[23][MAX_NLEN];
-	int target_item_label = 0;
+	COMMAND_CODE target_item_label = 0;
 
 	int floor_list[23], floor_num;
 	int wid, hgt;
@@ -4988,11 +4990,11 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
  */
 static bool py_pickup_floor_aux(void)
 {
-	s16b this_o_idx;
+	OBJECT_IDX this_o_idx;
 
 	cptr q, s;
 
-	int item;
+	OBJECT_IDX item;
 
 	/* Restrict the choices */
 	item_tester_hook = inven_carry_okay;

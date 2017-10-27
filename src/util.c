@@ -1197,8 +1197,8 @@ void text_to_ascii(char *buf, cptr str)
 			/* Hex-mode XXX */
 			if (*str == 'x')
 			{
-				*s = 16 * dehex(*++str);
-				*s++ += dehex(*++str);
+				*s = 16 * (char)dehex(*++str);
+				*s++ += (char)dehex(*++str);
 			}
 
 			/* Hack -- simple way to specify "backslash" */
@@ -1252,29 +1252,29 @@ void text_to_ascii(char *buf, cptr str)
 			/* Octal-mode */
 			else if (*str == '0')
 			{
-				*s = 8 * deoct(*++str);
-				*s++ += deoct(*++str);
+				*s = 8 * (char)deoct(*++str);
+				*s++ += (char)deoct(*++str);
 			}
 
 			/* Octal-mode */
 			else if (*str == '1')
 			{
-				*s = 64 + 8 * deoct(*++str);
-				*s++ += deoct(*++str);
+				*s = 64 + 8 * (char)deoct(*++str);
+				*s++ += (char)deoct(*++str);
 			}
 
 			/* Octal-mode */
 			else if (*str == '2')
 			{
-				*s = 64 * 2 + 8 * deoct(*++str);
-				*s++ += deoct(*++str);
+				*s = 64 * 2 + 8 * (char)deoct(*++str);
+				*s++ += (char)deoct(*++str);
 			}
 
 			/* Octal-mode */
 			else if (*str == '3')
 			{
-				*s = 64 * 3 + 8 * deoct(*++str);
-				*s++ += deoct(*++str);
+				*s = 64 * 3 + 8 * (char)deoct(*++str);
+				*s++ += (char)deoct(*++str);
 			}
 
 			/* Skip the final char */

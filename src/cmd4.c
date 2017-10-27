@@ -8059,11 +8059,11 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 						{
 #ifdef JP
 							sprintf(note," - %d 体の%sを倒す。(あと %d 体)",
-								quest[i].max_num, name, quest[i].max_num - quest[i].cur_num);
+								(int)quest[i].max_num, name, (int)(quest[i].max_num - quest[i].cur_num));
 #else
 							plural_aux(name);
 							sprintf(note," - kill %d %s, have killed %d.",
-								quest[i].max_num, name, quest[i].cur_num);
+								(int)quest[i].max_num, name, (int)quest[i].cur_num);
 #endif
 						}
 						else
@@ -8091,10 +8091,10 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 					case QUEST_TYPE_KILL_NUMBER:
 #ifdef JP
 						sprintf(note," - %d 体のモンスターを倒す。(あと %d 体)",
-							quest[i].max_num, quest[i].max_num - quest[i].cur_num);
+							(int)quest[i].max_num, (int)(quest[i].max_num - quest[i].cur_num));
 #else
 						sprintf(note," - Kill %d monsters, have killed %d.",
-							quest[i].max_num, quest[i].cur_num);
+							(int)quest[i].max_num, (int)quest[i].cur_num);
 #endif
 						break;
 

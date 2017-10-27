@@ -6017,7 +6017,8 @@ void extract_option_vars(void)
  */
 void determine_bounty_uniques(void)
 {
-	int          i, j, tmp;
+	int i, j;
+	MONRACE_IDX tmp;
 	monster_race *r_ptr;
 
 	get_mon_num_prep(NULL, NULL);

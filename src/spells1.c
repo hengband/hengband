@@ -6288,27 +6288,27 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 /*
  * Find the distance from (x, y) to a line.
  */
-int dist_to_line(int y, int x, int y1, int x1, int y2, int x2)
+POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	/* Vector from (x, y) to (x1, y1) */
-	int py = y1 - y;
-	int px = x1 - x;
+	POSITION py = y1 - y;
+	POSITION px = x1 - x;
 
 	/* Normal vector */
-	int ny = x2 - x1;
-	int nx = y1 - y2;
+	POSITION ny = x2 - x1;
+	POSITION nx = y1 - y2;
 
-   /* Length of N */
-	int pd = distance(y1, x1, y, x);
-	int nd = distance(y1, x1, y2, x2);
+	/* Length of N */
+	POSITION pd = distance(y1, x1, y, x);
+	POSITION nd = distance(y1, x1, y2, x2);
 
 	if (pd > nd) return distance(y, x, y2, x2);
 
 	/* Component of P on N */
 	nd = ((nd) ? ((py * ny + px * nx) / nd) : 0);
 
-   /* Absolute value */
-   return((nd >= 0) ? nd : 0 - nd);
+	/* Absolute value */
+	return((nd >= 0) ? nd : 0 - nd);
 }
 
 
@@ -6544,7 +6544,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 /*
  * breath shape
  */
-void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, int *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int typ)
+void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int typ)
 {
 	POSITION by = y1;
 	POSITION bx = x1;
