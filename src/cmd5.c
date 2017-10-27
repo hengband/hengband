@@ -2210,7 +2210,7 @@ static void do_name_pet(void)
  */
 void do_cmd_pet(void)
 {
-	SPELL_IDX i = 0;
+	COMMAND_CODE i = 0;
 	int			num;
 	int			powers[36];
 	cptr			power_desc[36];

@@ -1041,7 +1041,7 @@ extern bool object_similar(object_type *o_ptr, object_type *j_ptr);
 extern void object_absorb(object_type *o_ptr, object_type *j_ptr);
 extern IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval);
 extern void object_wipe(object_type *o_ptr);
-extern void object_prep(object_type *o_ptr, OBJECT_IDX k_idx);
+extern void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx);
 extern void object_copy(object_type *o_ptr, object_type *j_ptr);
 extern void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 extern bool make_object(object_type *j_ptr, BIT_FLAGS mode);
@@ -1592,10 +1592,10 @@ extern void hissatsu_info(char *p, int power);
 extern void do_cmd_hissatsu(void);
 extern void do_cmd_hissatsu_browse(void);
 extern void do_cmd_gain_hissatsu(void);
-extern s16b mult_hissatsu(int mult, u32b *flgs, monster_type *m_ptr, int mode);
+extern MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, int mode);
 
 /* mutation.c */
-extern int count_bits(u32b x);
+extern int count_bits(BIT_FLAGS x);
 extern bool gain_random_mutation(int choose_mut);
 extern bool lose_mutation(int choose_mut);
 extern void dump_mutations(FILE *OutFile);

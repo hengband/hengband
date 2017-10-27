@@ -3451,7 +3451,7 @@ errr parse_d_info(char *buf, header *head)
 			if (1 == sscanf(s, "FINAL_ARTIFACT_%d", &artif))
 			{
 				/* Extract a "Final Artifact" */
-				d_ptr->final_artifact = artif;
+				d_ptr->final_artifact = (ARTIFACT_IDX)artif;
 
 				/* Start at next entry */
 				s = t;
@@ -3464,7 +3464,7 @@ errr parse_d_info(char *buf, header *head)
 			if (1 == sscanf(s, "FINAL_OBJECT_%d", &artif))
 			{
 				/* Extract a "Final Artifact" */
-				d_ptr->final_object = artif;
+				d_ptr->final_object = (KIND_OBJECT_IDX)artif;
 
 				/* Start at next entry */
 				s = t;
@@ -3477,7 +3477,7 @@ errr parse_d_info(char *buf, header *head)
 			if (1 == sscanf(s, "FINAL_GUARDIAN_%d", &monst))
 			{
 				/* Extract a "Artifact Guardian" */
-				d_ptr->final_guardian = monst;
+				d_ptr->final_guardian = (MONRACE_IDX)monst;
 
 				/* Start at next entry */
 				s = t;

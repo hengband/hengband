@@ -8143,13 +8143,13 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 #ifdef JP
 						sprintf(rand_tmp_str,"  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n",
 							quest[i].name, (int)quest[i].level,
-							quest[i].max_num, name, quest[i].max_num - quest[i].cur_num);
+							(MONSTER_NUMBER)quest[i].max_num, name, (MONSTER_NUMBER)(quest[i].max_num - quest[i].cur_num));
 #else
 						plural_aux(name);
 
 						sprintf(rand_tmp_str,"  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n",
 							quest[i].name, (idx)quest[i].level,
-							quest[i].max_num, name, quest[i].cur_num);
+							(MONSTER_NUMBER)quest[i].max_num, name, (MONSTER_NUMBER)quest[i].cur_num);
 #endif
 					}
 					else

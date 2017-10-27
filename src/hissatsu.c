@@ -496,7 +496,7 @@ void do_cmd_gain_hissatsu(void)
  * @param mode 剣術のスレイ型ID
  * @return スレイの倍率(/10倍)
  */
-s16b mult_hissatsu(int mult, u32b *flgs, monster_type *m_ptr, int mode)
+MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, int mode)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 

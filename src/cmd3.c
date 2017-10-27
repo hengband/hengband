@@ -840,18 +840,18 @@ static bool high_level_book(object_type *o_ptr)
  */
 void do_cmd_destroy(void)
 {
-	OBJECT_IDX item, amt = 1;
-	int			old_number;
+	OBJECT_IDX item;
+	QUANTITY amt = 1;
+	QUANTITY old_number;
 
-	bool		force = FALSE;
+	bool force = FALSE;
 
-	object_type		*o_ptr;
-	object_type             forge;
-	object_type             *q_ptr = &forge;
+	object_type *o_ptr;
+	object_type forge;
+	object_type *q_ptr = &forge;
 
-	char		o_name[MAX_NLEN];
-
-	char		out_val[MAX_NLEN+40];
+	char o_name[MAX_NLEN];
+	char out_val[MAX_NLEN+40];
 
 	cptr q, s;
 

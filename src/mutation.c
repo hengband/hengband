@@ -2010,7 +2010,7 @@ void do_cmd_knowledge_mutations(void)
  * @param x ビット数を調べたい変数
  * @return ビット数
  */
-int count_bits(u32b x)
+int count_bits(BIT_FLAGS x)
 {
 	int n = 0;
 

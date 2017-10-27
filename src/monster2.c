@@ -3861,7 +3861,7 @@ bool alloc_horde(POSITION y, POSITION x)
  */
 bool alloc_guardian(bool def_val)
 {
-	int guardian = d_info[dungeon_type].final_guardian;
+	MONRACE_IDX guardian = d_info[dungeon_type].final_guardian;
 
 	if (guardian && (d_info[dungeon_type].maxdepth == dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
 	{
