@@ -364,7 +364,7 @@ HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, int m
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-static int mult_slaying(int mult, const u32b* flgs, const monster_type* m_ptr)
+static MULTIPLY mult_slaying(MULTIPLY mult, const u32b* flgs, const monster_type* m_ptr)
 {
 	static const struct slay_table_t {
 		int slay_flag;

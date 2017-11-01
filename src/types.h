@@ -1061,7 +1061,7 @@ struct player_type
 	TIME_EFFECT magicdef;
 	TIME_EFFECT tim_res_nether;	/* Timed -- Nether resistance */
 	TIME_EFFECT tim_res_time;	/* Timed -- Time resistance */
-	IDX mimic_form;
+	MIMIC_RACE_IDX mimic_form;
 	TIME_EFFECT tim_mimic;
 	TIME_EFFECT tim_sh_fire;
 	TIME_EFFECT tim_sh_holy;
@@ -1072,7 +1072,7 @@ struct player_type
 	TIME_EFFECT multishadow;       /* Timed -- Multi-shadow */
 	TIME_EFFECT dustrobe;          /* Timed -- Robe of dust */
 
-	s16b chaos_patron;
+	PATRON_IDX chaos_patron;
 	BIT_FLAGS muta1;
 	BIT_FLAGS muta2;
 	BIT_FLAGS muta3;
