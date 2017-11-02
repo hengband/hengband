@@ -142,6 +142,7 @@ typedef byte CHARACTER_IDX;		/*!< ゲーム中のキャラクター特性各種I
 typedef byte DISCOUNT_RATE;		/*!< ゲーム中の値引き率の型を定義 */
 typedef byte SPEED;				/*!< ゲーム中の加速値の型定義 */
 typedef s16b ENERGY;			/*!< ゲーム中の行動エネルギーの型定義 */
+typedef s16b SLEEP_DEGREE;		/*!< モンスターの睡眠度の型定義 */
 
 typedef s16b PLAYER_LEVEL;		/*!< ゲーム中のプレイヤーレベルの型を定義 */
 typedef int DIRECTION;			/*!< ゲーム中の方角の型定義 */

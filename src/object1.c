@@ -3632,7 +3632,7 @@ int scan_floor(int *items, POSITION y, POSITION x, int mode)
 COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *min_width)
 {
 	COMMAND_CODE i;
-	int j, k, l;
+	int j, k, l, m;
 	int col, len;
 
 	object_type *o_ptr;
@@ -3708,10 +3708,10 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *
 	for (j = 0; j < k; j++)
 	{
 		/* Get the index */
-		i = floor_list[out_index[j]];
+		m = floor_list[out_index[j]];
 
 		/* Get the item */
-		o_ptr = &o_list[i];
+		o_ptr = &o_list[m];
 
 		/* Clear the line */
 		prt("", j + 1, col ? col - 2 : col);
@@ -3721,7 +3721,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *
 			if (j == (target_item-1))
 			{
 				strcpy(tmp_val, _("》", "> "));
-				target_item_label = i;
+				target_item_label = m;
 			}
 			else strcpy(tmp_val, "   ");
 		}

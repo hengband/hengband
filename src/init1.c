@@ -2980,9 +2980,9 @@ errr parse_r_info(char *buf, header *head)
 		r_ptr->speed = (SPEED)spd;
 		r_ptr->hdice = (DICE_NUMBER)MAX(hp1, 1);
 		r_ptr->hside = (DICE_SID)MAX(hp2, 1);
-		r_ptr->aaf = aaf;
+		r_ptr->aaf = (POSITION)aaf;
 		r_ptr->ac = (ARMOUR_CLASS)ac;
-		r_ptr->sleep = slp;
+		r_ptr->sleep = (SLEEP_DEGREE)slp;
 	}
 
 	/* Process 'W' for "More Info" (one line only) */

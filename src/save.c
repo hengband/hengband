@@ -769,7 +769,7 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->magicdef);
 	wr_s16b(p_ptr->tim_res_nether);
 	wr_s16b(p_ptr->tim_res_time);
-	wr_byte(p_ptr->mimic_form);
+	wr_byte((byte)p_ptr->mimic_form);
 	wr_s16b(p_ptr->tim_mimic);
 	wr_s16b(p_ptr->tim_sh_fire);
 	wr_s16b(p_ptr->tim_sh_holy);
@@ -1272,6 +1272,8 @@ static bool wr_savefile_new(void)
 	u16b            tmp16u;
 	u32b            tmp32u;
 
+	MONRACE_IDX r_idx;
+	KIND_OBJECT_IDX k_idx;
 
 	/* Compact the objects */
 	compact_objects(0);
@@ -1279,7 +1281,7 @@ static bool wr_savefile_new(void)
 	compact_monsters(0);
 
 	/* Guess at the current time */
-	now = time((time_t *)0);
+	now = (u32b)time((time_t *)0);
 
 
 	/* Note the operating system */
@@ -1370,17 +1372,15 @@ static bool wr_savefile_new(void)
 		wr_string(message_str((s16b)i));
 	}
 
-
 	/* Dump the monster lore */
 	tmp16u = max_r_idx;
 	wr_u16b(tmp16u);
-	for (i = 0; i < tmp16u; i++) wr_lore(i);
-
+	for (r_idx = 0; r_idx < tmp16u; r_idx++) wr_lore(r_idx);
 
 	/* Dump the object memory */
 	tmp16u = max_k_idx;
 	wr_u16b(tmp16u);
-	for (i = 0; i < tmp16u; i++) wr_xtra(i);
+	for (k_idx = 0; k_idx < tmp16u; k_idx++) wr_xtra(k_idx);
 
 	/* Dump the towns */
 	tmp16u = max_towns;

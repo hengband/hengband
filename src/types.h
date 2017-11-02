@@ -301,8 +301,8 @@ struct monster_race
 
 	ARMOUR_CLASS ac;		/*!< アーマークラス / Armour Class */
 
-	s16b sleep;				/*!< 睡眠値 / Inactive counter (base) */
-	byte aaf;				/*!< 感知範囲(1-100スクエア) / Area affect radius (1-100) */
+	SLEEP_DEGREE sleep;				/*!< 睡眠値 / Inactive counter (base) */
+	POSITION aaf;				/*!< 感知範囲(1-100スクエア) / Area affect radius (1-100) */
 	SPEED speed;				/*!< 加速(110で+0) / Speed (normally 110) */
 
 	EXP mexp;				/*!< 殺害時基本経験値 / Exp value for kill */
