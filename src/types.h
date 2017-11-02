@@ -401,8 +401,8 @@ struct vault_type
 	STR_OFFSET name;	/* Name (offset) */
 	STR_OFFSET text;	/* Text (offset) */
 
-	byte typ;			/* Vault type */
-	byte rat;			/* Vault rating */
+	ROOM_IDX typ;		/* Vault type */
+	PROB rat;			/* Vault rating (unused) */
 	POSITION hgt;		/* Vault height */
 	POSITION wid;		/* Vault width */
 };

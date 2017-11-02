@@ -119,6 +119,7 @@ typedef s16b REALM_IDX;			/*!< ゲーム中の魔法領域ID型を定義 */
 typedef s16b ARTIFACT_IDX;		/*!< ゲーム中のアーティファクトID型を定義 */
 typedef s16b VIRTUES_IDX;		/*!< ゲーム中の徳ID型を定義 */
 typedef s16b QUEST_IDX;			/*!< ゲーム中のクエストID型を定義 */
+typedef byte ROOM_IDX;			/*!< 部屋のID型を定義 */
 
 typedef s16b INVENTORY_IDX;		/*!< ゲーム中の所持品ID型を定義 */
 typedef s16b OBJECT_IDX;		/*!< ゲーム中のアイテムID型を定義 */
@@ -166,7 +167,7 @@ typedef byte RARITY;    /*!< ゲーム中の希少度の型定義 */
 
 typedef s32b GAME_TURN;     /*!< ゲーム中のターンの型定義 */
 
-typedef s16b PERCENTAGE;    /*!< ゲーム中のパーセント表記の型定義 */
+typedef s16b PERCENTAGE;    /*!< ゲーム中のパーセント表記の型定義(/100倍) */
 typedef s16b MULTIPLY;      /*!< ゲーム中の倍率の型定義(/10倍) */
 
 typedef u32b BIT_FLAGS;     /*!< 32ビットのフラグ配列の型定義 */

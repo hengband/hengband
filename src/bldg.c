@@ -3755,7 +3755,7 @@ if (get_check(format("そのロッドを＄%d で再充填しますか？",
 			max_charges = o_ptr->number * k_ptr->pval - o_ptr->pval;
 
 		/* Get the quantity for staves and wands */
-		charges = get_quantity(format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold? "), price), 
+		charges = (PARAMETER_VALUE)get_quantity(format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold? "), price), 
 					MIN(p_ptr->au / price, max_charges));
 
 		/* Do nothing */

@@ -1670,7 +1670,7 @@ void do_cmd_pet_dismiss(void)
 	MONSTER_IDX *who;
 	u16b dummy_why;
 	int max_pet = 0;
-	int cu, cv;
+	bool_hack cu, cv;
 
 	cu = Term->scr->cu;
 	cv = Term->scr->cv;

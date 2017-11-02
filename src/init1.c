@@ -1307,8 +1307,8 @@ errr parse_v_info(char *buf, header *head)
 			&typ, &rat, &hgt, &wid)) return (1);
 
 		/* Save the values */
-		v_ptr->typ = typ;
-		v_ptr->rat = rat;
+		v_ptr->typ = (ROOM_IDX)typ;
+		v_ptr->rat = (PROB)rat;
 		v_ptr->hgt = (POSITION)hgt;
 		v_ptr->wid = (POSITION)wid;
 	}

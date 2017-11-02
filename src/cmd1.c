@@ -364,12 +364,12 @@ HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, int m
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-static MULTIPLY mult_slaying(MULTIPLY mult, const u32b* flgs, const monster_type* m_ptr)
+static MULTIPLY mult_slaying(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_type* m_ptr)
 {
 	static const struct slay_table_t {
 		int slay_flag;
-		u32b affect_race_flag;
-		int slay_mult;
+		BIT_FLAGS affect_race_flag;
+		MULTIPLY slay_mult;
 		size_t flag_offset;
 		size_t r_flag_offset;
 	} slay_table[] = {
@@ -425,12 +425,12 @@ static MULTIPLY mult_slaying(MULTIPLY mult, const u32b* flgs, const monster_type
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-static int mult_brand(int mult, const u32b* flgs, const monster_type* m_ptr)
+static MULTIPLY mult_brand(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_type* m_ptr)
 {
 	static const struct brand_table_t {
 		int brand_flag;
-		u32b resist_mask;
-		u32b hurt_flag;
+		BIT_FLAGS resist_mask;
+		BIT_FLAGS hurt_flag;
 	} brand_table[] = {
 		{TR_BRAND_ACID, RFR_EFF_IM_ACID_MASK, 0U           },
 		{TR_BRAND_ELEC, RFR_EFF_IM_ELEC_MASK, 0U           },
