@@ -2598,10 +2598,10 @@ bool target_okay(void)
  */
 static bool ang_sort_comp_distance(vptr u, vptr v, int a, int b)
 {
-	byte *x = (byte*)(u);
-	byte *y = (byte*)(v);
+	POSITION *x = (POSITION*)(u);
+	POSITION *y = (POSITION*)(v);
 
-	int da, db, kx, ky;
+	POSITION da, db, kx, ky;
 
 	/* Absolute distance components */
 	kx = x[a]; kx -= p_ptr->x; kx = ABS(kx);
@@ -2630,8 +2630,8 @@ static bool ang_sort_comp_distance(vptr u, vptr v, int a, int b)
  */
 static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 {
-	byte *x = (byte*)(u);
-	byte *y = (byte*)(v);
+	POSITION *x = (POSITION*)(u);
+	POSITION *y = (POSITION*)(v);
 	cave_type *ca_ptr = &cave[y[a]][x[a]];
 	cave_type *cb_ptr = &cave[y[b]][x[b]];
 	monster_type *ma_ptr = &m_list[ca_ptr->m_idx];
@@ -2699,10 +2699,10 @@ static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
  */
 static void ang_sort_swap_distance(vptr u, vptr v, int a, int b)
 {
-	byte *x = (byte*)(u);
-	byte *y = (byte*)(v);
+	POSITION *x = (POSITION*)(u);
+	POSITION *y = (POSITION*)(v);
 
-	byte temp;
+	POSITION temp;
 
 	/* Swap "x" */
 	temp = x[a];
@@ -3587,13 +3587,9 @@ bool target_set(int mode)
 	POSITION x = p_ptr->x;
 
 	bool	done = FALSE;
-
 	bool	flag = TRUE;
-
 	char	query;
-
 	char	info[80];
-
 	char	same_key;
 
 	cave_type		*c_ptr;
