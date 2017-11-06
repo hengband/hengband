@@ -8310,9 +8310,9 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 }
 
 
-bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
+bool ang_sort_comp_quest_num(vptr u, vptr v, QUEST_IDX a, QUEST_IDX b)
 {
-	int *q_num = (int *)u;
+	QUEST_IDX *q_num = (QUEST_IDX *)u;
 	quest_type *qa = &quest[q_num[a]];
 	quest_type *qb = &quest[q_num[b]];
 
@@ -8322,10 +8322,10 @@ bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
 	return (qa->comptime <= qb->comptime);
 }
 
-void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
+void ang_sort_swap_quest_num(vptr u, vptr v, QUEST_IDX a, QUEST_IDX b)
 {
-	int *q_num = (int *)u;
-	int tmp;
+	QUEST_IDX *q_num = (QUEST_IDX *)u;
+	QUEST_IDX tmp;
 
 	/* Unused */
 	(void)v;

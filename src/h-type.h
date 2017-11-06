@@ -167,6 +167,7 @@ typedef s32b DEPTH;     /*!< ゲーム中の階層レベルの型定義 */
 typedef byte RARITY;    /*!< ゲーム中の希少度の型定義 */
 
 typedef s32b GAME_TURN;     /*!< ゲーム中のターンの型定義 */
+typedef s32b REAL_TIME;     /*!< 実時刻の型定義 */
 
 typedef s16b PERCENTAGE;    /*!< ゲーム中のパーセント表記の型定義(/100倍) */
 typedef s16b MULTIPLY;      /*!< ゲーム中の倍率の型定義(/10倍) */

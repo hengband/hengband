@@ -701,14 +701,14 @@ struct quest_type
 	MONSTER_NUMBER cur_num; /*!< 撃破したモンスターの数 / Number killed */
 	MONSTER_NUMBER max_num; /*!< 求められるモンスターの撃破数 / Number required */
 
-	IDX k_idx;              /*!< クエスト対象のアイテムID / object index */
+	KIND_OBJECT_IDX k_idx;              /*!< クエスト対象のアイテムID / object index */
 	MONSTER_NUMBER num_mon; /*!< QUEST_TYPE_KILL_NUMBER時の目標撃破数 number of monsters on level */
 
-	byte flags;             /*!< クエストに関するフラグビット / quest flags */
-	byte dungeon;           /*!< クエスト対象のダンジョンID / quest dungeon */
+	BIT_FLAGS flags;             /*!< クエストに関するフラグビット / quest flags */
+	DUNGEON_IDX dungeon;           /*!< クエスト対象のダンジョンID / quest dungeon */
 
-	byte complev;           /*!< クリア時プレイヤーレベル / player level (complete) */
-	u32b comptime;          /*!< クリア時ゲーム時間 /  quest clear time*/
+	PLAYER_LEVEL complev;           /*!< クリア時プレイヤーレベル / player level (complete) */
+	REAL_TIME comptime;          /*!< クリア時ゲーム時間 /  quest clear time*/
 };
 
 
@@ -721,7 +721,7 @@ struct owner_type
 {
 	cptr owner_name;	/* Name */
 
-	s32b max_cost;		/* Purse limit */
+	PRICE max_cost;		/* Purse limit */
 
 	byte max_inflate;	/* Inflation (max) */
 	byte min_inflate;	/* Inflation (min) */
