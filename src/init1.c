@@ -2234,7 +2234,7 @@ errr parse_k_info(char *buf, header *head)
 
 		/* Save the values */
 		k_ptr->level = (DEPTH)level;
-		k_ptr->extra = extra;
+		k_ptr->extra = (BIT_FLAGS8)extra;
 		k_ptr->weight = (WEIGHT)wgt;
 		k_ptr->cost = (PRICE)cost;
 	}
@@ -2262,7 +2262,7 @@ errr parse_k_info(char *buf, header *head)
 			if (t && (!s || t < s))
 			{
 				int chance = atoi(t+1);
-				if (chance > 0) k_ptr->chance[i] = chance;
+				if (chance > 0) k_ptr->chance[i] = (PROB)chance;
 			}
 		}
 	}
@@ -2698,8 +2698,8 @@ errr parse_e_info(char *buf, header *head)
 				&slot, &rating)) return (1);
 
 		/* Save the values */
-		e_ptr->slot = slot;
-		e_ptr->rating = rating;
+		e_ptr->slot = (INVENTORY_IDX)slot;
+		e_ptr->rating = (PRICE)rating;
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
@@ -3000,7 +3000,7 @@ errr parse_r_info(char *buf, header *head)
 		/* Save the values */
 		r_ptr->level = (DEPTH)lev;
 		r_ptr->rarity = (RARITY)rar;
-		r_ptr->extra = pad;
+		r_ptr->extra = (BIT_FLAGS16)pad;
 		r_ptr->mexp = (EXP)exp;
 		r_ptr->next_exp = (EXP)nextexp;
 		r_ptr->next_r_idx = (IDX)nextmon;

@@ -129,10 +129,10 @@ struct object_kind
 	BIT_FLAGS gen_flags;		/*!< ベースアイテムの生成特性ビット配列 / flags for generate */
 
 	DEPTH locale[4];		/*!< ベースアイテムの生成階テーブル / Allocation level(s) */
-	byte chance[4];		/*!< ベースアイテムの生成確率テーブル / Allocation chance(s) */
+	PROB chance[4];		/*!< ベースアイテムの生成確率テーブル / Allocation chance(s) */
 
 	DEPTH level;			/*!< ベースアイテムの基本生成階 / Level */
-	byte extra;			/*!< その他色々のビットフラグ配列 / Something */
+	BIT_FLAGS8 extra;			/*!< その他色々のビットフラグ配列 / Something */
 
 	SYMBOL_COLOR d_attr;		/*!< デフォルトのアイテムシンボルカラー / Default object attribute */
 	SYMBOL_CODE d_char;		/*!< デフォルトのアイテムシンボルアルファベット / Default object character */
@@ -213,8 +213,8 @@ struct ego_item_type
 	STR_OFFSET name;			/* Name (offset) */
 	STR_OFFSET text;			/* Text (offset) */
 
-	byte slot;			/* Standard slot value */
-	byte rating;		/* Rating boost */
+	INVENTORY_IDX slot;		/*!< 装備部位 / Standard slot value */
+	PRICE rating;		/*!< ベースアイテムからの価値加速 / Rating boost */
 
 	DEPTH level;			/* Minimum level */
 	RARITY rarity;		/* Object rarity */
@@ -249,8 +249,8 @@ typedef struct monster_blow monster_blow;
 
 struct monster_blow
 {
-	byte method;
-	byte effect;
+	BLOW_METHOD method;
+	BLOW_EFFECT effect;
 	DICE_NUMBER d_dice;
 	DICE_SID d_side;
 };
@@ -307,9 +307,9 @@ struct monster_race
 
 	EXP mexp;				/*!< 殺害時基本経験値 / Exp value for kill */
 
-	s16b extra;				/*!< 未使用 /  Unused (for now) */
+	BIT_FLAGS16 extra;				/*!< 未使用 /  Unused (for now) */
 
-	byte freq_spell;		/*!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency */
+	RARITY freq_spell;		/*!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency */
 
 	BIT_FLAGS flags1;			/* Flags 1 (general) */
 	BIT_FLAGS flags2;			/* Flags 2 (abilities) */

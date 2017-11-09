@@ -195,6 +195,10 @@ typedef byte FEAT_POWER;   /*!< 地形強度の型定義 */
 
 typedef int QUANTITY; /*!< インターフェース上の指定個数 */
 
+typedef byte BLOW_METHOD; /*!< モンスターの打撃手段ID */
+typedef byte BLOW_EFFECT; /*!< モンスターの打撃効果ID */
+
+
 /*** Pointers to all the basic types defined above ***/
 
 typedef real *real_ptr;
