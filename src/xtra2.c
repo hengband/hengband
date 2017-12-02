@@ -4373,9 +4373,9 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 }
 
 
-bool get_rep_dir2(int *dp)
+bool get_rep_dir2(DIRECTION *dp)
 {
-	int dir;
+	DIRECTION dir;
 
 	/* Initialize */
 	(*dp) = 0;
@@ -5399,12 +5399,11 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 }
 
 
-bool get_hack_dir(int *dp)
+bool get_hack_dir(DIRECTION *dp)
 {
-	int		dir;
+	DIRECTION dir;
 	cptr    p;
 	char    command;
-
 
 	/* Initialize */
 	(*dp) = 0;
