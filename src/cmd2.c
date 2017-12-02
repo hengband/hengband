@@ -578,7 +578,7 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
  * Note that the chest itself is never destroyed.
  * </pre>
  */
-static void chest_trap(int y, int x, s16b o_idx)
+static void chest_trap(POSITION y, POSITION x, KIND_OBJECT_IDX o_idx)
 {
 	int  i, trap;
 

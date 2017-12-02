@@ -4777,7 +4777,7 @@ bool fire_ball_hide(int typ, int dir, HIT_POINT dam, int rad)
  * Option to hurt the player.
  * </pre>
  */
-bool fire_meteor(int who, int typ, int y, int x, HIT_POINT dam, int rad)
+bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
 {
 	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 

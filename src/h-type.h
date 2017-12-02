@@ -198,6 +198,8 @@ typedef int QUANTITY; /*!< インターフェース上の指定個数 */
 typedef byte BLOW_METHOD; /*!< モンスターの打撃手段ID */
 typedef byte BLOW_EFFECT; /*!< モンスターの打撃効果ID */
 
+typedef int EFFECT_ID; /*!< 効果属性ID */
+
 
 /*** Pointers to all the basic types defined above ***/
 

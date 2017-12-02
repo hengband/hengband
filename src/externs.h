@@ -1148,7 +1148,7 @@ extern bool unlite_area(HIT_POINT dam, int rad);
 extern bool fire_ball(int typ, int dir, HIT_POINT dam, int rad);
 extern bool fire_rocket(int typ, int dir, HIT_POINT dam, int rad);
 extern bool fire_ball_hide(int typ, int dir, HIT_POINT dam, int rad);
-extern bool fire_meteor(int who, int typ, int x, int y, HIT_POINT dam, int rad);
+extern bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION x, POSITION y, HIT_POINT dam, POSITION rad);
 extern bool fire_bolt(int typ, int dir, HIT_POINT dam);
 extern bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev);
 extern void call_chaos(void);

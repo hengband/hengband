@@ -1405,7 +1405,7 @@ static bool wr_savefile_new(void)
 		/* (prevents problems with multi-level quests) */
 		wr_s16b((s16b)q_ptr->level);
 
-		wr_byte(q_ptr->complev);
+		wr_byte((byte_hack)q_ptr->complev);
 		wr_u32b(q_ptr->comptime);
 
 		/* Save quest status if quest is running */
@@ -1416,8 +1416,8 @@ static bool wr_savefile_new(void)
 			wr_s16b(q_ptr->type);
 			wr_s16b(q_ptr->r_idx);
 			wr_s16b(q_ptr->k_idx);
-			wr_byte(q_ptr->flags);
-			wr_byte(q_ptr->dungeon);
+			wr_byte((byte_hack)q_ptr->flags);
+			wr_byte((byte_hack)q_ptr->dungeon);
 		}
 	}
 
