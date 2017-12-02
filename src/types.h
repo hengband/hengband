@@ -690,9 +690,8 @@ typedef struct quest_type quest_type;
 
 struct quest_type
 {
-	s16b status;            /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
-
-	s16b type;              /*!< クエストの種別 / The quest type */
+	QUEST_STATUS status;          /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
+	QUEST_TYPE type;              /*!< クエストの種別 / The quest type */
 
 	char name[60];          /*!< クエスト名 / Quest name */
 	DEPTH level;            /*!< 処理階層 / Dungeon level */

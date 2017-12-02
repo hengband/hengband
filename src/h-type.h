@@ -200,6 +200,9 @@ typedef byte BLOW_EFFECT; /*!< モンスターの打撃効果ID */
 
 typedef int EFFECT_ID; /*!< 効果属性ID */
 
+typedef s16b QUEST_TYPE;  /*!< クエストの種別ID */
+typedef s16b QUEST_STATUS;  /*!< クエストの状態ID */
+
 
 /*** Pointers to all the basic types defined above ***/
 

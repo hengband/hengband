@@ -1347,7 +1347,7 @@ void brand_weapon(int brand_type)
 				act = _("は鋭さを増した！", "becomes very sharp!");
 
 				o_ptr->name2 = EGO_SHARPNESS;
-				o_ptr->pval = m_bonus(5, dun_level) + 1;
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, dun_level) + 1;
 
 				if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
 					o_ptr->pval = 2;
@@ -1356,7 +1356,7 @@ void brand_weapon(int brand_type)
 			{
 				act = _("は破壊力を増した！", "seems very powerful.");
 				o_ptr->name2 = EGO_EARTHQUAKES;
-				o_ptr->pval = m_bonus(3, dun_level);
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, dun_level);
 			}
 			break;
 		case 16:

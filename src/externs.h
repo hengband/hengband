@@ -997,7 +997,7 @@ extern bool player_place(POSITION y, POSITION x);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
 
 /* object1.c */
-extern s16b m_bonus(int max, int level);
+extern int m_bonus(int max, DEPTH level);
 
 extern void reset_visuals(void);
 extern void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);

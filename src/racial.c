@@ -115,7 +115,7 @@ static bool do_cmd_archer(void)
 			q_ptr = &forge;
 
 			/* Hack -- Give the player some small firestones */
-			object_prep(q_ptr, lookup_kind(TV_SHOT, m_bonus(1, p_ptr->lev) + 1));
+			object_prep(q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, p_ptr->lev) + 1));
 			q_ptr->number = (byte)rand_range(15,30);
 			object_aware(q_ptr);
 			object_known(q_ptr);
@@ -166,7 +166,7 @@ static bool do_cmd_archer(void)
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
-		object_prep(q_ptr, lookup_kind(TV_ARROW, m_bonus(1, p_ptr->lev)+ 1));
+		object_prep(q_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, p_ptr->lev)+ 1));
 		q_ptr->number = (byte)rand_range(5, 10);
 		object_aware(q_ptr);
 		object_known(q_ptr);
@@ -225,7 +225,7 @@ static bool do_cmd_archer(void)
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
-		object_prep(q_ptr, lookup_kind(TV_BOLT, m_bonus(1, p_ptr->lev)+1));
+		object_prep(q_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, p_ptr->lev)+1));
 		q_ptr->number = (byte)rand_range(4, 8);
 		object_aware(q_ptr);
 		object_known(q_ptr);

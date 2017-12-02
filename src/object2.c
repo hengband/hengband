@@ -2025,7 +2025,7 @@ void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx)
  * 120    0.03  0.11  0.31  0.46  1.31  2.48  4.60  7.78 11.67 25.53 45.72\n
  * 128    0.02  0.01  0.13  0.33  0.83  1.41  3.24  6.17  9.57 14.22 64.07\n
  */
-s16b m_bonus(int max, int level)
+int m_bonus(int max, DEPTH level)
 {
 	int bonus, stand, extra, value;
 
@@ -2281,13 +2281,13 @@ static byte get_random_ego(byte slot, bool good)
  * Hack -- note special base damage dice boosting\n
  * Hack -- note special processing for weapon/digger\n
  */
-static void a_m_aux_1(object_type *o_ptr, int level, int power)
+static void a_m_aux_1(object_type *o_ptr, DEPTH level, int power)
 {
-	HIT_PROB tohit1 = randint1(5) + m_bonus(5, level);
-	HIT_POINT todam1 = randint1(5) + m_bonus(5, level);
+	HIT_PROB tohit1 = randint1(5) + (HIT_PROB)m_bonus(5, level);
+	HIT_POINT todam1 = randint1(5) + (HIT_POINT)m_bonus(5, level);
 
-	HIT_PROB tohit2 = m_bonus(10, level);
-	HIT_POINT todam2 = m_bonus(10, level);
+	HIT_PROB tohit2 = (HIT_PROB)m_bonus(10, level);
+	HIT_POINT todam2 = (HIT_POINT)m_bonus(10, level);
 
 	if ((o_ptr->tval == TV_BOLT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_SHOT))
 	{
@@ -2452,13 +2452,13 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						add_flag(o_ptr->art_flags, TR_RES_FEAR);
 					break;
 				case EGO_SHARPNESS:
-					o_ptr->pval = m_bonus(5, level) + 1;
+					o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, level) + 1;
 					break;
 				case EGO_EARTHQUAKES:
 					if (one_in_(3) && (level > 60))
 						add_flag(o_ptr->art_flags, TR_BLOWS);
 					else
-						o_ptr->pval = m_bonus(3, level);
+						o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, level);
 					break;
 				case EGO_VAMPIRIC:
 					if (one_in_(5))
@@ -2671,8 +2671,8 @@ static void add_esp_weak(object_type *o_ptr, bool extra)
  */
 static void a_m_aux_2(object_type *o_ptr, int level, int power)
 {
-	ARMOUR_CLASS toac1 = randint1(5) + m_bonus(5, level);
-	ARMOUR_CLASS toac2 = m_bonus(10, level);
+	ARMOUR_CLASS toac1 = (ARMOUR_CLASS)randint1(5) + m_bonus(5, level);
+	ARMOUR_CLASS toac2 = (ARMOUR_CLASS)m_bonus(10, level);
 
 	/* Good */
 	if (power > 0)
@@ -3150,7 +3150,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_ATTACKS:
 				{
 					/* Stat bonus */
-					o_ptr->pval = m_bonus(2, level);
+					o_ptr->pval = (PARAMETER_VALUE)m_bonus(2, level);
 					if (one_in_(15)) o_ptr->pval++;
 					if (o_ptr->pval < 1) o_ptr->pval = 1;
 
@@ -3181,7 +3181,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_DEX:
 				{
 					/* Stat bonus */
-					o_ptr->pval = 1 + m_bonus(5, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3203,7 +3203,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_SPEED:
 				{
 					/* Base speed (1 to 10) */
-					o_ptr->pval = randint1(5) + m_bonus(5, level);
+					o_ptr->pval = randint1(5) + (PARAMETER_VALUE)m_bonus(5, level);
 
 					/* Super-charge the ring */
 					while (randint0(100) < 50) o_ptr->pval++;
@@ -3235,7 +3235,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					while (one_in_(4));
 
 					/* Bonus to armor class */
-					o_ptr->to_a = 10 + randint1(5) + m_bonus(10, level);
+					o_ptr->to_a = 10 + randint1(5) + (ARMOUR_CLASS)m_bonus(10, level);
 				}
 				break;
 
@@ -3249,7 +3249,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_SEARCHING:
 				{
 					/* Bonus to searching */
-					o_ptr->pval = 1 + m_bonus(5, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3274,7 +3274,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_ELEC:
 				{
 					/* Bonus to armor class */
-					o_ptr->to_a = 5 + randint1(5) + m_bonus(10, level);
+					o_ptr->to_a = 5 + randint1(5) + (ARMOUR_CLASS)m_bonus(10, level);
 					break;
 				}
 
@@ -3289,7 +3289,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->curse_flags |= TRC_CURSED;
 
 					/* Penalize */
-					o_ptr->pval = 0 - (1 + m_bonus(5, level));
+					o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, level));
 					if (power > 0) power = 0 - power;
 
 					break;
@@ -3305,8 +3305,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->curse_flags |= TRC_CURSED;
 
 					/* Penalize */
-					o_ptr->to_a = 0 - (5 + m_bonus(10, level));
-					o_ptr->pval = 0 - (1 + m_bonus(5, level));
+					o_ptr->to_a = 0 - (5 + (ARMOUR_CLASS)m_bonus(10, level));
+					o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, level));
 					if (power > 0) power = 0 - power;
 
 					break;
@@ -3316,7 +3316,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_DAMAGE:
 				{
 					/* Bonus to damage */
-					o_ptr->to_d = 1 + randint1(5) + m_bonus(16, level);
+					o_ptr->to_d = 1 + randint1(5) + (HIT_POINT)m_bonus(16, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3338,7 +3338,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_ACCURACY:
 				{
 					/* Bonus to hit */
-					o_ptr->to_h = 1 + randint1(5) + m_bonus(16, level);
+					o_ptr->to_h = 1 + randint1(5) + (HIT_PROB)m_bonus(16, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3360,7 +3360,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_PROTECTION:
 				{
 					/* Bonus to armor class */
-					o_ptr->to_a = 5 + randint1(8) + m_bonus(10, level);
+					o_ptr->to_a = 5 + randint1(8) + (ARMOUR_CLASS)m_bonus(10, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3382,8 +3382,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_SLAYING:
 				{
 					/* Bonus to damage and to hit */
-					o_ptr->to_d = randint1(5) + m_bonus(12, level);
-					o_ptr->to_h = randint1(5) + m_bonus(12, level);
+					o_ptr->to_d = randint1(5) + (HIT_POINT)m_bonus(12, level);
+					o_ptr->to_h = randint1(5) + (HIT_PROB)m_bonus(12, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3404,7 +3404,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 				case SV_RING_MUSCLE:
 				{
-					o_ptr->pval = 1 + m_bonus(3, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(3, level);
 					if (one_in_(4)) o_ptr->pval++;
 
 					/* Cursed */
@@ -3641,7 +3641,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_AMULET_WISDOM:
 				case SV_AMULET_CHARISMA:
 				{
-					o_ptr->pval = 1 + m_bonus(5, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3700,7 +3700,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				/* Amulet of searching */
 				case SV_AMULET_SEARCHING:
 				{
-					o_ptr->pval = randint1(2) + m_bonus(4, level);
+					o_ptr->pval = randint1(2) + (PARAMETER_VALUE)m_bonus(4, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3721,8 +3721,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				/* Amulet of the Magi -- never cursed */
 				case SV_AMULET_THE_MAGI:
 				{
-					o_ptr->pval = randint1(5) + m_bonus(5, level);
-					o_ptr->to_a = randint1(5) + m_bonus(5, level);
+					o_ptr->pval = randint1(5) + (PARAMETER_VALUE)m_bonus(5, level);
+					o_ptr->to_a = randint1(5) + (ARMOUR_CLASS)m_bonus(5, level);
 
 					/* gain one low ESP */
 					add_esp_weak(o_ptr, FALSE);
@@ -3740,8 +3740,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->curse_flags |= (TRC_CURSED);
 
 					/* Penalize */
-					o_ptr->pval = 0 - (randint1(5) + m_bonus(5, level));
-					o_ptr->to_a = 0 - (randint1(5) + m_bonus(5, level));
+					o_ptr->pval = 0 - (randint1(5) + (PARAMETER_VALUE)m_bonus(5, level));
+					o_ptr->to_a = 0 - (randint1(5) + (ARMOUR_CLASS)m_bonus(5, level));
 					if (power > 0) power = 0 - power;
 
 					break;
@@ -3749,7 +3749,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 				case SV_AMULET_MAGIC_MASTERY:
 				{
-					o_ptr->pval = 1 + m_bonus(4, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(4, level);
 
 					/* Cursed */
 					if (power < 0)
