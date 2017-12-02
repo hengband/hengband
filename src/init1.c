@@ -3071,10 +3071,10 @@ errr parse_r_info(char *buf, header *head)
 		if (*t == 'd') *t++ = '\0';
 
 		/* Save the method */
-		r_ptr->blow[i].method = n1;
+		r_ptr->blow[i].method = (BLOW_METHOD)n1;
 
 		/* Save the effect */
-		r_ptr->blow[i].effect = n2;
+		r_ptr->blow[i].effect = (BLOW_EFFECT)n2;
 
 		/* Extract the damage dice and sides */
 		r_ptr->blow[i].d_dice = atoi(s);
@@ -4230,13 +4230,13 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				if (num < 9) return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
 
 				q_ptr->type    = atoi(zz[2]);
-				q_ptr->num_mon = atoi(zz[3]);
-				q_ptr->cur_num = atoi(zz[4]);
-				q_ptr->max_num = atoi(zz[5]);
-				q_ptr->level   = atoi(zz[6]);
+				q_ptr->num_mon = (MONSTER_NUMBER)atoi(zz[3]);
+				q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
+				q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
+				q_ptr->level   = (DEPTH)atoi(zz[6]);
 				q_ptr->r_idx   = (IDX)atoi(zz[7]);
 				q_ptr->k_idx   = (IDX)atoi(zz[8]);
-				q_ptr->dungeon = atoi(zz[9]);
+				q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
 
 				if (num > 10)
 					q_ptr->flags  = atoi(zz[10]);

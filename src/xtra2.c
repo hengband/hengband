@@ -4235,9 +4235,9 @@ bool get_aim_dir(DIRECTION *dp)
  * This function tracks and uses the "global direction", and uses
  * that as the "desired direction", to which "confusion" is applied.
  */
-bool get_rep_dir(int *dp, bool under)
+bool get_rep_dir(DIRECTION *dp, bool under)
 {
-	int dir;
+	DIRECTION dir;
 	cptr prompt;
 
 	/* Initialize */

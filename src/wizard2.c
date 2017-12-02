@@ -745,16 +745,17 @@ void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
  * This function returns the k_idx of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-static IDX wiz_create_itemtype(void)
+static KIND_OBJECT_IDX wiz_create_itemtype(void)
 {
-	int i, num, max_num;
-	int col, row;
+	KIND_OBJECT_IDX i;
+	int num, max_num;
+	TERM_POSITION col, row;
 	OBJECT_TYPE_VALUE tval;
 
 	cptr tval_desc;
 	char ch;
 
-	int choice[80];
+	KIND_OBJECT_IDX choice[80];
 
 	char buf[160];
 

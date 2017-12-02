@@ -3631,8 +3631,8 @@ int scan_floor(int *items, POSITION y, POSITION x, int mode)
  */
 COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *min_width)
 {
-	COMMAND_CODE i;
-	int j, k, l, m;
+	COMMAND_CODE i, m;
+	int j, k, l;
 	int col, len;
 
 	object_type *o_ptr;

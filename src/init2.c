@@ -1978,7 +1978,7 @@ static errr init_object_alloc(void)
 				z = y + aux[x];
 
 				/* Load the entry */
-				table[z].index = i;
+				table[z].index = (KIND_OBJECT_IDX)i;
 				table[z].level = (DEPTH)x;
 				table[z].prob1 = (PROB)p;
 				table[z].prob2 = (PROB)p;
@@ -2047,7 +2047,7 @@ static errr init_alloc(void)
 			p = (100 / r_ptr->rarity);
 
 			/* Load the entry */
-			alloc_race_table[i].index = elements[i].index;
+			alloc_race_table[i].index = (KIND_OBJECT_IDX)elements[i].index;
 			alloc_race_table[i].level = (DEPTH)x;
 			alloc_race_table[i].prob1 = (PROB)p;
 			alloc_race_table[i].prob2 = (PROB)p;

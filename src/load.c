@@ -3579,7 +3579,8 @@ static errr rd_savefile_new_aux(void)
 				}
 				else
 				{
-					rd_byte(&q_ptr->complev);
+					rd_byte(&tmp8u);
+					q_ptr->complev = tmp8u;
 				}
 				if(h_older_than(2, 1, 2, 2))
 				{
@@ -3615,7 +3616,8 @@ static errr rd_savefile_new_aux(void)
 					if (q_ptr->k_idx)
 						a_info[q_ptr->k_idx].gen_flags |= TRG_QUESTITEM;
 
-					rd_byte(&q_ptr->flags);
+					rd_byte(&tmp8u);
+					q_ptr->flags = tmp8u;
 
 					if (z_older_than(10, 3, 11))
 					{
@@ -3634,7 +3636,8 @@ static errr rd_savefile_new_aux(void)
 					}
 					else
 					{
-						rd_byte(&q_ptr->dungeon);
+						rd_byte(&tmp8u);
+						q_ptr->dungeon = tmp8u;
 					}
 					/* Mark uniques */
 					if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_UNTAKEN)

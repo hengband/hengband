@@ -2512,7 +2512,7 @@ void do_cmd_walk(bool pickup)
 	}
 
 	/* Get a "repeated" direction */
-	if (get_rep_dir(&dir,FALSE))
+	if (get_rep_dir(&dir, FALSE))
 	{
 		/* Take a turn */
 		p_ptr->energy_use = 100;

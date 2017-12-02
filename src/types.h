@@ -635,7 +635,7 @@ typedef struct alloc_entry alloc_entry;
 
 struct alloc_entry
 {
-	IDX index;		/* The actual index */
+	KIND_OBJECT_IDX index;		/* The actual index */
 
 	DEPTH level;		/* Base dungeon level */
 	PROB prob1;		/* Probability, pass 1 */
