@@ -1,8 +1,7 @@
 ﻿/*!
  * @file h-type.h
- * @brief ゲーム中に用いる変数型定義 /
- * Basic "types".
- * @date 2014/08/17
+ * @brief ゲーム中に用いる変数型定義 / Basic "types".
+ * @date 2017/12/03
  * @author
  * 不明(変愚蛮怒スタッフ？)
  * @details
@@ -127,8 +126,24 @@ typedef s16b OBJECT_IDX;		/*!< ゲーム中のアイテムID型を定義 */
 typedef s16b KIND_OBJECT_IDX;	/*!< ゲーム中のベースアイテムID型を定義 */
 
 typedef s32b POSITION;			/*!< ゲーム中の座標型を定義 */
-typedef s32b HIT_POINT;			/*!< ゲーム中のHP/ダメージ型を定義 */
+
+/*!
+ * @var typedef s32b HIT_POINT
+ * @brief HPとその増減量の型定義
+ * @details 
+ * HIT_POINTはプレイヤー及びモンスターのHPの各値とその増減量の型である。
+ */
+typedef s32b HIT_POINT;			
+
+/*!
+ * @var typedef s32b MANA_POINT
+ * @brief MPとその増減量の型定義
+ * @details
+ * MANA_POINTはプレイヤーのMPの各地とその増減量の型である。
+ */
 typedef s32b MANA_POINT;		/*!< ゲーム中のMP型を定義 */
+
+
 typedef s16b HIT_PROB;			/*!< ゲーム中の命中修正値を定義 */
 typedef s16b BASE_STATUS;		/*!< ゲーム中の基礎能力値型を定義 */
 
@@ -141,7 +156,16 @@ typedef s16b TIME_EFFECT;		/*!< ゲーム中の時限期間の型を定義 */
 typedef byte CHARACTER_IDX;		/*!< ゲーム中のキャラクター特性各種IDの型を定義 */
 typedef byte DISCOUNT_RATE;		/*!< ゲーム中の値引き率の型を定義 */
 typedef byte SPEED;				/*!< ゲーム中の加速値の型定義 */
+
+/*!
+ * @var typedef s16b ENEGRY
+ * @brief 行動エネルギーの型定義
+ * @details
+ * ENERGYはプレイヤーとモンスターの行動順を定める行動エネルギーを示す型定義である。
+ */
 typedef s16b ENERGY;			/*!< ゲーム中の行動エネルギーの型定義 */
+
+
 typedef s16b SLEEP_DEGREE;		/*!< モンスターの睡眠度の型定義 */
 
 typedef s16b PLAYER_LEVEL;		/*!< ゲーム中のプレイヤーレベルの型を定義 */
