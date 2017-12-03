@@ -1522,7 +1522,6 @@ extern int spell_exp_level(int spell_exp);
 extern void display_rumor(bool ex);
 
 /* artifact.c */
-extern void one_sustain(object_type *o_ptr);
 extern void one_high_resistance(object_type *o_ptr);
 extern void one_lordly_high_resistance(object_type *o_ptr);
 extern void one_ele_resistance(object_type *o_ptr);
