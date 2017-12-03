@@ -334,9 +334,9 @@
 
 
 
-# define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
-# define MA_KNEE 1 /*!< 金的効果ID */
-# define MA_SLOW 2 /*!< 膝蹴り効果ID */
+#define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
+#define MA_KNEE 1 /*!< 金的効果ID */
+#define MA_SLOW 2 /*!< 膝蹴り効果ID */
 
 #define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
 

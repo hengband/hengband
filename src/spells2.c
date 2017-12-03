@@ -3169,9 +3169,9 @@ bool mass_genocide_undead(int power, bool player_cast)
  */
 bool probing(void)
 {
-	int     i, speed;
-	int cu, cv;
-	bool    probe = FALSE;
+	int i, speed;
+	bool_hack cu, cv;
+	bool probe = FALSE;
 	char buf[256];
 	cptr align;
 

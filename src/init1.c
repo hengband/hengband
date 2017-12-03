@@ -4229,7 +4229,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 				if (num < 9) return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
 
-				q_ptr->type    = atoi(zz[2]);
+				q_ptr->type    = (QUEST_TYPE)atoi(zz[2]);
 				q_ptr->num_mon = (MONSTER_NUMBER)atoi(zz[3]);
 				q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
 				q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
