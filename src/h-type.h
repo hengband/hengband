@@ -143,6 +143,7 @@ typedef s32b HIT_POINT;
  */
 typedef s32b MANA_POINT;		/*!< ゲーム中のMP型を定義 */
 
+typedef int ARTIFACT_BIAS_IDX;  /*!< ランダムアーティファクトのバイアス型 */
 
 typedef s16b HIT_PROB;			/*!< ゲーム中の命中修正値を定義 */
 typedef s16b BASE_STATUS;		/*!< ゲーム中の基礎能力値型を定義 */

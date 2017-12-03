@@ -565,6 +565,8 @@ struct object_type
 
 	IDX next_o_idx;	/* Next object in stack (if any) */
 	IDX held_m_idx;	/* Monster holding us (if any) */
+
+	ARTIFACT_BIAS_IDX artifact_bias; /*!< ランダムアーティファクト生成時のバイアスID */
 };
 
 
