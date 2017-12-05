@@ -3889,7 +3889,7 @@ bool target_set(int mode)
 			strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
 
 			/* Describe and Prompt (enable "TARGET_LOOK") */
-			while (!(query = target_set_aux(y, x, mode | TARGET_LOOK, info)));
+			while ((query = target_set_aux(y, x, mode | TARGET_LOOK, info)) == 0);
 
 			/* Cancel tracking */
 			/* health_track(0); */
