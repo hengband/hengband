@@ -1049,7 +1049,7 @@ building_type building[MAX_BLDG];
 /*
  * Maximum number of quests
  */
-IDX max_quests;
+QUEST_IDX max_quests;
 
 /*
  * Maximum number of monsters in r_info.txt
@@ -1059,7 +1059,7 @@ MONRACE_IDX max_r_idx;
 /*
  * Maximum number of items in k_info.txt
  */
-IDX max_k_idx;
+KIND_OBJECT_IDX max_k_idx;
 
 /*
  * Maximum number of vaults in v_info.txt
@@ -1084,12 +1084,12 @@ IDX max_e_idx;
 /*
  * Maximum number of dungeon in e_info.txt
  */
-IDX max_d_idx;
+DUNGEON_IDX max_d_idx;
 
 /*
  * Maximum number of objects in the level
  */
-IDX max_o_idx;
+OBJECT_IDX max_o_idx;
 
 /*
  * Maximum number of monsters in the level
