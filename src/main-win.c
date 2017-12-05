@@ -4292,7 +4292,7 @@ static void process_menus(WORD wCmd)
 
 		case IDM_OPTIONS_BIGTILE:
 		{
-			term_data *td = &data[0];
+			td = &data[0];
 
 			/* Paranoia */
 			if (!inkey_flag)
@@ -4738,7 +4738,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 		{
 			HGLOBAL hGlobal;
 			LPSTR lpStr;
-			int i, j, sz;
+			int j, sz;
 			int dx = abs(oldx - mousex) + 1;
 			int dy = abs(oldy - mousey) + 1;
 			int ox = (oldx > mousex) ? mousex : oldx;
