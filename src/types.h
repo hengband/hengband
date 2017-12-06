@@ -1461,9 +1461,9 @@ struct building_type
 	s16b actions[8];                /* action codes */
 	s16b action_restr[8];           /* action restrictions */
 
-	s16b member_class[MAX_CLASS];   /* which classes are part of guild */
-	s16b member_race[MAX_RACES];    /* which classes are part of guild */
-	s16b member_realm[MAX_MAGIC+1]; /* which realms are part of guild */
+	CLASS_IDX member_class[MAX_CLASS];   /* which classes are part of guild */
+	RACE_IDX member_race[MAX_RACES];    /* which classes are part of guild */
+	REALM_IDX member_realm[MAX_MAGIC+1]; /* which realms are part of guild */
 };
 
 

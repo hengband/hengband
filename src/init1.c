@@ -3875,7 +3875,7 @@ static errr parse_line_building(char *buf)
 			{
 				for (i = 0; i < MAX_CLASS; i++)
 				{
-					building[index].member_class[i] = atoi(zz[i]);
+					building[index].member_class[i] = (CLASS_IDX)atoi(zz[i]);
 				}
 
 				break;
@@ -3891,7 +3891,7 @@ static errr parse_line_building(char *buf)
 			{
 				for (i = 0; i < MAX_RACES; i++)
 				{
-					building[index].member_race[i] = atoi(zz[i]);
+					building[index].member_race[i] = (RACE_IDX)atoi(zz[i]);
 				}
 
 				break;
@@ -3907,7 +3907,7 @@ static errr parse_line_building(char *buf)
 			{
 				for (i = 0; i < MAX_MAGIC; i++)
 				{
-					building[index].member_realm[i+1] = atoi(zz[i]);
+					building[index].member_realm[i+1] = (REALM_IDX)atoi(zz[i]);
 				}
 
 				break;

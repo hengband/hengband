@@ -8669,7 +8669,7 @@ static void erase_essence(void)
  */
 void do_cmd_kaji(bool only_browse)
 {
-	IDX mode = 0;
+	int mode = 0;
 	char choice;
 
 	int menu_line = (use_menu ? 1 : 0);
