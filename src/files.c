@@ -4409,9 +4409,9 @@ static void dump_aux_class_special(FILE *fff)
 		for (i = 0; i < row; i++)
 		{
 			fprintf(fff, "\n");
-			fprintf(fff, "%-11s %5d     ", essence_name[id[i]], p_ptr->magic_num1[id[i]]);
-			if(i + row < n) fprintf(fff, "%-11s %5d     ", essence_name[id[i + row]], p_ptr->magic_num1[id[i + row]]);
-			if(i + row * 2 < n) fprintf(fff, "%-11s %5d", essence_name[id[i + row * 2]], p_ptr->magic_num1[id[i + row * 2]]);
+			fprintf(fff, "%-11s %5d     ", essence_name[id[i]], (int)p_ptr->magic_num1[id[i]]);
+			if(i + row < n) fprintf(fff, "%-11s %5d     ", essence_name[id[i + row]], (int)p_ptr->magic_num1[id[i + row]]);
+			if(i + row * 2 < n) fprintf(fff, "%-11s %5d", essence_name[id[i + row * 2]], (int)p_ptr->magic_num1[id[i + row * 2]]);
 		}
 
 		fputs("\n", fff);

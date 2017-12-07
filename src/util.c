@@ -2869,7 +2869,7 @@ void msg_print(cptr msg)
 	}
 	else
 	{
-		sprintf(buf, ("T:%d - %s"), turn, msg);
+		sprintf(buf, ("T:%d - %s"), (int)turn, msg);
 	}
 
 	/* New Message Length */

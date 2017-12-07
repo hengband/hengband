@@ -325,7 +325,8 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev,
 		char chance_aux[20] = "";
 		if(k_info[q_ptr->k_idx].chance[i] > 0)
 		{
-			sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), k_info[q_ptr->k_idx].locale[i], 100/k_info[q_ptr->k_idx].chance[i]);
+			sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""),
+				(int)k_info[q_ptr->k_idx].locale[i], 100/k_info[q_ptr->k_idx].chance[i]);
 			strcat(chance, chance_aux);
 		}
 	}
@@ -429,7 +430,7 @@ static void spoil_obj_desc(cptr fname)
 
 					/* Dump it */
 					fprintf(fff, "  %-35s%8s%7s%5d %-40s%9ld\n",
-						buf, dam, wgt, e, chance, (long)(v));
+						buf, dam, wgt, (int)e, chance, (long)(v));
 				}
 
 				/* Start a new set */
@@ -1384,12 +1385,12 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 	artifact_type *a_ptr = &a_info[o_ptr->name1];
 
 #ifdef JP
-	sprintf(misc_desc, "レベル %u, 希少度 %u, %d.%d kg, ＄%ld",
-		a_ptr->level, a_ptr->rarity,
+	sprintf(misc_desc, "レベル %d, 希少度 %u, %d.%d kg, ＄%ld",
+		(int)a_ptr->level, a_ptr->rarity,
 		lbtokg1(a_ptr->weight), lbtokg2(a_ptr->weight), (long int)a_ptr->cost);
 #else
-	sprintf(misc_desc, "Level %u, Rarity %u, %d.%d lbs, %ld Gold",
-		a_ptr->level, a_ptr->rarity,
+	sprintf(misc_desc, "Level %d, Rarity %u, %d.%d lbs, %ld Gold",
+		(int)a_ptr->level, a_ptr->rarity,
 		a_ptr->weight / 10, a_ptr->weight % 10, a_ptr->cost);
 #endif
 }
