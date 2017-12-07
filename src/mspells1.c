@@ -542,7 +542,7 @@ void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, in
  */
 void beam(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
 {
-    int flg;
+    int flg = 0;
     bool learnable = spell_learnable(m_idx);
 
     switch (target_type)

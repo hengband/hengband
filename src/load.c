@@ -926,6 +926,7 @@ static void rd_monster_old(monster_type *m_ptr)
 	if (z_older_than(10, 4, 5))
 		m_ptr->exp = 0;
 	else
+		tmp32u = 0;
 		rd_u32b(&tmp32u);
 		m_ptr->exp = tmp32u;
 
