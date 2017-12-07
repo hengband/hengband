@@ -6307,9 +6307,9 @@ s16b inven_carry(object_type *o_ptr)
  * to fall to the ground.\n
  * Return the inventory slot into which the item is placed.\n
  */
-s16b inven_takeoff(int item, int amt)
+INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 {
-	int slot;
+	INVENTORY_IDX slot;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -7980,7 +7980,7 @@ static void drain_essence(void)
  * @brief 付加するエッセンスの大別を選択する
  * @return 選んだエッセンスの大別ID
  */
-static int choose_essence(void)
+static COMMAND_CODE choose_essence(void)
 {
 	COMMAND_CODE mode = 0;
 	char choice;
@@ -8007,7 +8007,7 @@ static int choose_essence(void)
 		"Others"
 	};
 #endif
-	const int mode_max = 7;
+	const COMMAND_CODE mode_max = 7;
 
 #ifdef ALLOW_REPEAT
 	if (repeat_pull(&mode) && 1 <= mode && mode <= mode_max)
@@ -8669,10 +8669,10 @@ static void erase_essence(void)
  */
 void do_cmd_kaji(bool only_browse)
 {
-	int mode = 0;
+	COMMAND_CODE mode = 0;
 	char choice;
 
-	int menu_line = (use_menu ? 1 : 0);
+	COMMAND_CODE menu_line = (use_menu ? 1 : 0);
 
 	if (!only_browse)
 	{

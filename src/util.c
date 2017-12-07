@@ -4478,7 +4478,7 @@ void request_command(int shopping)
 		/* Command Count */
 		if (cmd == '0')
 		{
-			int old_arg = command_arg;
+			COMMAND_ARG old_arg = command_arg;
 
 			/* Reset */
 			command_arg = 0;

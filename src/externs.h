@@ -1066,7 +1066,7 @@ extern void floor_item_optimize(int item);
 extern bool inven_carry_okay(object_type *o_ptr);
 extern bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
 extern s16b inven_carry(object_type *o_ptr);
-extern s16b inven_takeoff(int item, int amt);
+extern INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt);
 extern void inven_drop(int item, int amt);
 extern void combine_pack(void);
 extern void reorder_pack(void);
