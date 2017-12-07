@@ -1316,7 +1316,7 @@ bool object_is_quest_target(object_type *o_ptr)
  *   OD_NO_FLAVOR        : Allow to hidden flavor\n
  *   OD_FORCE_FLAVOR     : Get un-shuffled flavor name\n
  */
-void object_desc(char *buf, object_type *o_ptr, u32b mode)
+void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 {
 	/* Extract object kind name */
 	cptr            kindname = k_name + k_info[o_ptr->k_idx].name;

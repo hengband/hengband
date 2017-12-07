@@ -1036,7 +1036,7 @@ static void wiz_statistics(object_type *o_ptr)
 	char ch;
 	cptr quality;
 
-	u32b mode;
+	BIT_FLAGS mode;
 
 	object_type forge;
 	object_type	*q_ptr;

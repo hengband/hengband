@@ -2319,7 +2319,7 @@ static void process_world_aux_mutation(void)
 	    !p_ptr->anti_magic && (randint1(6666) == 666))
 	{
 		bool pet = one_in_(6);
-		u32b mode = PM_ALLOW_GROUP;
+		BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
@@ -2430,7 +2430,7 @@ static void process_world_aux_mutation(void)
 	    !p_ptr->anti_magic && one_in_(7000))
 	{
 		bool pet = one_in_(3);
-		u32b mode = PM_ALLOW_GROUP;
+		BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
@@ -2510,7 +2510,7 @@ static void process_world_aux_mutation(void)
 	    !p_ptr->anti_magic && one_in_(3000))
 	{
 		bool pet = one_in_(5);
-		u32b mode = PM_ALLOW_GROUP;
+		BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);

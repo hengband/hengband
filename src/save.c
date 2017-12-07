@@ -2141,7 +2141,7 @@ static bool save_floor_aux(saved_floor_type *sf_ptr)
  * @param mode 保存オプション
  * @return なし
  */
-bool save_floor(saved_floor_type *sf_ptr, u32b mode)
+bool save_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {
 	FILE *old_fff = NULL;
 	byte old_xor_byte = 0;

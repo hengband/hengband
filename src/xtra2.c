@@ -924,7 +924,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			{
 				int wy = y, wx = x;
 				bool pet = is_pet(m_ptr);
-				u32b mode = 0L;
+				BIT_FLAGS mode = 0L;
 
 				if (pet) mode |= PM_FORCE_PET;
 
@@ -1001,7 +1001,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				if (attempts > 0)
 				{
-					u32b mode = 0L;
+					BIT_FLAGS mode = 0L;
 					if (pet) mode |= PM_FORCE_PET;
 
 					if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode))
@@ -1940,7 +1940,7 @@ msg_format("%sを葬り去った。", m_name);
 		{
 			int dummy_y = m_ptr->fy;
 			int dummy_x = m_ptr->fx;
-			u32b mode = 0L;
+			BIT_FLAGS mode = 0L;
 
 			if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 
@@ -2338,7 +2338,7 @@ void verify_panel(void)
 /*
  * Monster health description
  */
-cptr look_mon_desc(monster_type *m_ptr, u32b mode)
+cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 {
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 	bool         living;

@@ -5440,7 +5440,7 @@ void acquirement(int y1, int x1, int num, bool great, bool special, bool known)
 {
 	object_type *i_ptr;
 	object_type object_type_body;
-	u32b mode = AM_GOOD | (great || special ? AM_GREAT : 0L) | (special ? AM_SPECIAL : 0L) ;
+	BIT_FLAGS mode = AM_GOOD | (great || special ? AM_GREAT : 0L) | (special ? AM_SPECIAL : 0L) ;
 
 	/* Acquirement */
 	while (num--)

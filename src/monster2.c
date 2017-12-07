@@ -3516,7 +3516,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
  * @param mode 生成オプション
  * @return 成功したらtrue
  */
-static bool place_monster_group(IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, u32b mode)
+static bool place_monster_group(IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3904,7 +3904,7 @@ bool alloc_guardian(bool def_val)
  * Use "slp" to choose the initial "sleep" status
  * Use "monster_level" for the monster level
  */
-bool alloc_monster(int dis, u32b mode)
+bool alloc_monster(int dis, BIT_FLAGS mode)
 {
 	int			y = 0, x = 0;
 	int         attempts_left = 10000;
@@ -4130,7 +4130,7 @@ bool summon_named_creature (MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_I
  * @details
  * Note that "reproduction" REQUIRES empty space.
  */
-bool multiply_monster(MONSTER_IDX m_idx, bool clone, u32b mode)
+bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 

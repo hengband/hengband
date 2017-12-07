@@ -471,7 +471,7 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 	int number;
 
 	bool small;
-	u32b mode = AM_GOOD;
+	BIT_FLAGS mode = AM_GOOD;
 
 	object_type forge;
 	object_type *q_ptr;

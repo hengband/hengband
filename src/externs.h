@@ -881,14 +881,14 @@ extern void get_table_sindarin_aux(char *out_string);
 extern void get_table_sindarin(char *out_string);
 extern void flavor_init(void);
 extern char *object_desc_kosuu(char *t, object_type *o_ptr);
-extern void object_desc(char *buf, object_type *o_ptr, u32b mode);
+extern void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode);
 
 /* floors.c */
 extern void init_saved_floors(bool force);
 extern void clear_saved_floor_files(void);
 extern saved_floor_type *get_sf_ptr(s16b floor_id);
 extern s16b get_new_floor_id(void);
-extern void prepare_change_floor_mode(u32b mode);
+extern void prepare_change_floor_mode(BIT_FLAGS mode);
 extern void precalc_cur_num_of_pet(void);
 extern void leave_floor(void);
 extern void change_floor(void);
@@ -916,7 +916,7 @@ extern cptr get_check_sum(void);
 
 /* load.c */
 extern errr rd_savefile_new(void);
-extern bool load_floor(saved_floor_type *sf_ptr, u32b mode);
+extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
 /* melee1.c */
 /* melee2.c */
@@ -986,10 +986,10 @@ extern bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 extern bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool alloc_horde(POSITION y, POSITION x);
 extern bool alloc_guardian(bool def_val);
-extern bool alloc_monster(int dis, u32b mode);
+extern bool alloc_monster(int dis, BIT_FLAGS mode);
 extern bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode);
 extern bool summon_named_creature (MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);
-extern bool multiply_monster(MONSTER_IDX m_idx, bool clone, u32b mode);
+extern bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
 extern void update_smart_learn(MONSTER_IDX m_idx, int what);
 extern void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 extern byte get_mspeed(monster_race *r_ptr);
@@ -1003,7 +1003,7 @@ extern void reset_visuals(void);
 extern void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
 extern void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
 extern cptr item_activation(object_type *o_ptr);
-extern bool screen_object(object_type *o_ptr, u32b mode);
+extern bool screen_object(object_type *o_ptr, BIT_FLAGS mode);
 extern char index_to_label(int i);
 extern INVENTORY_IDX label_to_inven(int c);
 extern INVENTORY_IDX label_to_equip(int c);
@@ -1087,7 +1087,7 @@ extern void do_cmd_racial_power(void);
 extern bool save_player(void);
 extern bool load_player(void);
 extern void remove_loc(void);
-extern bool save_floor(saved_floor_type *sf_ptr, u32b mode);
+extern bool save_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
 /* spells1.c */
 extern bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
@@ -1213,13 +1213,13 @@ extern bool rush_attack(bool *mdeath);
 extern void remove_all_mirrors(bool explode);
 
 /* spells3.c */
-extern bool teleport_away(MONSTER_IDX m_idx, int dis, u32b mode);
-extern void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, u32b mode);
-extern bool cave_player_teleportable_bold(int y, int x, u32b mode);
-extern bool teleport_player_aux(int dis, u32b mode);
-extern void teleport_player(int dis, u32b mode);
+extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);
+extern void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode);
+extern bool cave_player_teleportable_bold(int y, int x, BIT_FLAGS mode);
+extern bool teleport_player_aux(int dis, BIT_FLAGS mode);
+extern void teleport_player(int dis, BIT_FLAGS mode);
 extern void teleport_player_away(MONSTER_IDX m_idx, int dis);
-extern void teleport_player_to(POSITION ny, POSITION nx, u32b mode);
+extern void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode);
 extern void teleport_away_followable(MONSTER_IDX m_idx);
 extern void teleport_level(MONSTER_IDX m_idx);
 extern DUNGEON_IDX choose_dungeon(cptr note, POSITION y, POSITION x);
@@ -1281,7 +1281,7 @@ extern bool brand_bolts(void);
 extern bool polymorph_monster(POSITION y, POSITION x);
 extern bool dimension_door(void);
 extern bool mirror_tunnel(void);
-extern bool summon_kin_player(int level, int y, int x, u32b mode);
+extern bool summon_kin_player(int level, int y, int x, BIT_FLAGS mode);
 extern void massacre(void);
 
 /* store.c */
@@ -1496,7 +1496,7 @@ extern void resize_map(void);
 extern void redraw_window(void);
 extern bool change_panel(int dy, int dx);
 extern void verify_panel(void);
-extern cptr look_mon_desc(monster_type *m_ptr, u32b mode);
+extern cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
 extern void ang_sort_aux(vptr u, vptr v, int p, int q);
 extern void ang_sort(vptr u, vptr v, int n);
 extern bool target_able(MONSTER_IDX m_idx);

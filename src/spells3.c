@@ -27,7 +27,7 @@
  * @param mode オプション
  * @return テレポート先として妥当ならばtrue
  */
-static bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, int y, int x, u32b mode)
+static bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, int y, int x, BIT_FLAGS mode)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	cave_type    *c_ptr = &cave[y][x];
@@ -63,7 +63,7 @@ static bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, int y, int x, u32b
  * Attempt to move the monster at least "dis/2" grids away.
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(MONSTER_IDX m_idx, int dis, u32b mode)
+bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode)
 {
 	int oy, ox, d, i, min;
 	int tries = 0;
@@ -178,7 +178,7 @@ bool teleport_away(MONSTER_IDX m_idx, int dis, u32b mode)
  * @param mode オプション
  * @return なし
  */
-void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, u32b mode)
+void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode)
 {
 	int ny, nx, oy, ox, d, i, min;
 	int attempts = 500;
@@ -278,7 +278,7 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
  * @param mode オプション
  * @return テレポート先として妥当ならばtrue
  */
-bool cave_player_teleportable_bold(int y, int x, u32b mode)
+bool cave_player_teleportable_bold(int y, int x, BIT_FLAGS mode)
 {
 	cave_type    *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -344,7 +344,7 @@ bool cave_player_teleportable_bold(int y, int x, u32b mode)
  * </pre>
  */
 
-bool teleport_player_aux(int dis, u32b mode)
+bool teleport_player_aux(int dis, BIT_FLAGS mode)
 {
 	int candidates_at[MAX_TELEPORT_DISTANCE + 1];
 	int total_candidates, cur_candidates;
@@ -461,7 +461,7 @@ bool teleport_player_aux(int dis, u32b mode)
  * @param mode オプション
  * @return なし
  */
-void teleport_player(int dis, u32b mode)
+void teleport_player(int dis, BIT_FLAGS mode)
 {
 	int yy, xx;
 
@@ -556,7 +556,7 @@ void teleport_player_away(MONSTER_IDX m_idx, int dis)
  * This function allows teleporting into vaults (!)
  * </pre>
  */
-void teleport_player_to(POSITION ny, POSITION nx, u32b mode)
+void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 {
 	POSITION y, x;
 	int dis = 0, ctr = 0;
@@ -5235,7 +5235,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 	/* Handle polymorph */
 	if (new_r_idx != old_r_idx)
 	{
-		u32b mode = 0L;
+		BIT_FLAGS mode = 0L;
 		bool preserve_hold_objects = back_m.hold_o_idx ? TRUE : FALSE;
 		s16b this_o_idx, next_o_idx = 0;
 
@@ -5667,7 +5667,7 @@ bool eat_magic(int power)
  * @param mode 召喚オプション
  * @return ターンを消費した場合TRUEを返す
  */
-bool summon_kin_player(int level, int y, int x, u32b mode)
+bool summon_kin_player(int level, int y, int x, BIT_FLAGS mode)
 {
 	bool pet = (bool)(mode & PM_FORCE_PET);
 	if (!pet) mode |= PM_NO_PET;

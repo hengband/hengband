@@ -2734,7 +2734,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_SUMMON_ELEMENTAL:
 		{
 			bool pet = one_in_(3);
-			u32b mode = 0L;
+			BIT_FLAGS mode = 0L;
 
 			if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
 			if (pet) mode |= PM_FORCE_PET;
@@ -2755,7 +2755,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_SUMMON_DEMON:
 		{
 			bool pet = one_in_(3);
-			u32b mode = 0L;
+			BIT_FLAGS mode = 0L;
 
 			if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
 			if (pet) mode |= PM_FORCE_PET;
@@ -2777,7 +2777,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			bool pet = one_in_(3);
 			int type;
-			u32b mode = 0L;
+			BIT_FLAGS mode = 0L;
 
 			type = (plev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
 
@@ -2802,7 +2802,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SUMMON_HOUND:
 		{
-			u32b mode = PM_ALLOW_GROUP;
+			BIT_FLAGS mode = PM_ALLOW_GROUP;
 			bool pet = !one_in_(5);
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= PM_NO_PET;
@@ -2830,7 +2830,7 @@ bool activate_random_artifact(object_type *o_ptr)
 
 		case ACT_SUMMON_OCTOPUS:
 		{
-			u32b mode = PM_ALLOW_GROUP;
+			BIT_FLAGS mode = PM_ALLOW_GROUP;
 			bool pet = !one_in_(5);
 			if (pet) mode |= PM_FORCE_PET;
 

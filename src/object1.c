@@ -510,7 +510,7 @@ cptr item_activation(object_type *o_ptr)
  * @param mode 表示オプション
  * @return 特筆すべき情報が一つでもあった場合TRUE、一つもなく表示がキャンセルされた場合FALSEを返す。
  */
-bool screen_object(object_type *o_ptr, u32b mode)
+bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 {
 	int                     i = 0, j, k;
 

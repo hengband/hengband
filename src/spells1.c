@@ -1430,7 +1430,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (o_ptr->tval == TV_CORPSE)
 				{
 					int i;
-					u32b mode = 0L;
+					BIT_FLAGS mode = 0L;
 
 					if (!who || is_pet(&m_list[who]))
 						mode |= PM_FORCE_PET;
@@ -5033,7 +5033,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			case 19: case 20: case 21: case 22:
 			{
 				bool pet = !one_in_(3);
-				u32b mode = PM_ALLOW_GROUP;
+				BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 				if (pet) mode |= PM_FORCE_PET;
 				else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);

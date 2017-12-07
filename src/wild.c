@@ -662,7 +662,7 @@ void wilderness_gen(void)
 	/* Make some residents */
 	for (i = 0; i < lim; i++)
 	{
-		u32b mode = 0;
+		BIT_FLAGS mode = 0;
 
 		if (!(generate_encounter || (one_in_(2) && (!p_ptr->town_num))))
 			mode |= PM_ALLOW_SLEEP;

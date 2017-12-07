@@ -2026,7 +2026,7 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(POSITION y, POSITION x, MONSTER_IDX m_idx, I
 {
 	int count = 0, k;
 	int num = 1 + randint1(3);
-	u32b mode = 0L;
+	BIT_FLAGS mode = 0L;
 	
 	monspell_message(m_idx, t_idx,
 		_("%^sが何か大量に投げた。", "%^s spreads something."),
@@ -2567,7 +2567,7 @@ MONSTER_NUMBER summon_EAGLE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
  */
 MONSTER_NUMBER summon_IE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
-	u32b mode = 0L;
+	BIT_FLAGS mode = 0L;
 	int k, count = 0;	
 	int num = 2 + randint1(1 + rlev / 20);
 	for (k = 0; k < num; k++)
@@ -2624,7 +2624,7 @@ MONSTER_NUMBER summon_Guardian(POSITION y, POSITION x, int rlev, MONSTER_IDX m_i
 */
 MONSTER_NUMBER summon_LOCK_CLONE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
-	u32b mode = 0L;
+	BIT_FLAGS mode = 0L;
 	int k, count = 0;
 	int num = randint1(3);
 	rlev;
@@ -3177,7 +3177,7 @@ void spell_RF6_S_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, in
 */
 MONSTER_NUMBER summon_NAZGUL(POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-	u32b mode = 0L;
+	BIT_FLAGS mode = 0L;
 	int count = 0, k;
 	POSITION cy = y;
 	POSITION cx = x;

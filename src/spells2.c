@@ -5527,7 +5527,7 @@ int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
 	int i;
 	int count = 0;
 	DEPTH summon_lev;
-	u32b mode = PM_ALLOW_GROUP;
+	BIT_FLAGS mode = PM_ALLOW_GROUP;
 	bool pet = FALSE;
 
 	if (can_pet)
@@ -5616,7 +5616,7 @@ int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
 	int i;
 	int max_cyber = (easy_band ? 1 : (dun_level / 50) + randint1(2));
 	int count = 0;
-	u32b mode = PM_ALLOW_GROUP;
+	BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 	/* Summoned by a monster */
 	if (who > 0)

@@ -486,7 +486,7 @@ bool place_quest_monsters(void)
 	for (i = 0; i < max_quests; i++)
 	{
 		monster_race *r_ptr;
-		u32b mode;
+		BIT_FLAGS mode;
 		int j;
 
 		if (quest[i].status != QUEST_STATUS_TAKEN ||

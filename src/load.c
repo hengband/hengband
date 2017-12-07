@@ -4085,7 +4085,7 @@ static bool load_floor_aux(saved_floor_type *sf_ptr)
  * @param mode オプション
  * @return 成功したらtrue
  */
-bool load_floor(saved_floor_type *sf_ptr, u32b mode)
+bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {
 	FILE *old_fff = NULL;
 	byte old_xor_byte = 0;

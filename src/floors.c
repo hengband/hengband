@@ -304,7 +304,7 @@ s16b get_new_floor_id(void)
  * @param mode 追加したい所持フラグ
  * @return なし
  */
-void prepare_change_floor_mode(u32b mode)
+void prepare_change_floor_mode(BIT_FLAGS mode)
 {
 	change_floor_mode |= mode;
 }
