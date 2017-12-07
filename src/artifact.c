@@ -3598,7 +3598,7 @@ bool activate_random_artifact(object_type *o_ptr)
 		{
 			int num = 1;
 			int i;
-			int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+			BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 			int tx, ty;
 
 			/* Only for Crimson */

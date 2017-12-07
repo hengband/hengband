@@ -1094,9 +1094,9 @@ extern bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSIT
 extern void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int typ);
 extern int take_hit(int damage_type, HIT_POINT damage, cptr kb_str, int monspell);
 extern u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, int typ);
-extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int flg);
+extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
 extern POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, int monspell);
+extern bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, BIT_FLAGS flg, int monspell);
 extern int project_length;
 extern bool binding_field(HIT_POINT dam);
 extern void seal_of_mirror(HIT_POINT dam);
@@ -1204,7 +1204,7 @@ extern s32b flag_cost(object_type *o_ptr, int plusses);
 extern void report_magics(void);
 extern bool teleport_swap(int dir);
 extern bool item_tester_hook_recharge(object_type *o_ptr);
-extern bool project_hook(int typ, int dir, HIT_POINT dam, int flg);
+extern bool project_hook(int typ, int dir, HIT_POINT dam, BIT_FLAGS flg);
 extern bool project_hack(int typ, HIT_POINT dam);
 extern bool eat_magic(int power);
 extern void discharge_minion(void);
@@ -1570,7 +1570,7 @@ extern void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monsp
 extern void breath(int y, int x, MONSTER_IDX m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type);
 
 /* mspells2.c */
-extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);
+extern void get_project_point(int sy, int sx, int *ty, int *tx, BIT_FLAGS flg);
 extern bool monst_spell_monst(MONSTER_IDX m_idx);
 
 /* mspells3.c */

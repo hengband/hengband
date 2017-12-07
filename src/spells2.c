@@ -4594,7 +4594,7 @@ void unlite_room(int y1, int x1)
  */
 bool lite_area(HIT_POINT dam, int rad)
 {
-	int flg = PROJECT_GRID | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS)
 	{
@@ -4627,7 +4627,7 @@ bool lite_area(HIT_POINT dam, int rad)
  */
 bool unlite_area(HIT_POINT dam, int rad)
 {
-	int flg = PROJECT_GRID | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
 	/* Hack -- Message */
 	if (!p_ptr->blind)
@@ -4665,7 +4665,7 @@ bool fire_ball(int typ, int dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	if (typ == GF_CONTROL_LIVING) flg|= PROJECT_HIDE;
 	/* Use the given direction */
@@ -4704,7 +4704,7 @@ bool fire_rocket(int typ, int dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Use the given direction */
 	tx = p_ptr->x + 99 * ddx[dir];
@@ -4740,7 +4740,7 @@ bool fire_ball_hide(int typ, int dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
 
 	/* Use the given direction */
 	tx = p_ptr->x + 99 * ddx[dir];
@@ -4779,7 +4779,7 @@ bool fire_ball_hide(int typ, int dir, HIT_POINT dam, int rad)
  */
 bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
 {
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Analyze the "target" and the caster. */
 	return (project(who, rad, y, x, dam, typ, flg, -1));
@@ -4802,7 +4802,7 @@ bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
 	int ty, tx, y, x;
 	int i;
 
-	int flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
+	BIT_FLAGS flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
 
 	/* Assume okay */
 	bool result = TRUE;
@@ -4928,7 +4928,7 @@ bool teleport_swap(int dir)
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(int typ, int dir, HIT_POINT dam, int flg)
+bool project_hook(int typ, int dir, HIT_POINT dam, BIT_FLAGS flg)
 {
 	int tx, ty;
 
@@ -4965,7 +4965,7 @@ bool project_hook(int typ, int dir, HIT_POINT dam, int flg)
  */
 bool fire_bolt(int typ, int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
 	return (project_hook(typ, dir, dam, flg));
 }
@@ -4985,7 +4985,7 @@ bool fire_bolt(int typ, int dir, HIT_POINT dam)
  */
 bool fire_beam(int typ, int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(typ, dir, dam, flg));
 }
 
@@ -5023,7 +5023,7 @@ bool fire_bolt_or_beam(int prob, int typ, int dir, HIT_POINT dam)
  */
 bool lite_line(int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
 	return (project_hook(GF_LITE_WEAK, dir, dam, flg));
 }
 
@@ -5035,7 +5035,7 @@ bool lite_line(int dir, HIT_POINT dam)
  */
 bool drain_life(int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_DRAIN, dir, dam, flg));
 }
 
@@ -5047,7 +5047,7 @@ bool drain_life(int dir, HIT_POINT dam)
  */
 bool wall_to_mud(int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project_hook(GF_KILL_WALL, dir, dam, flg));
 }
 
@@ -5058,7 +5058,7 @@ bool wall_to_mud(int dir, HIT_POINT dam)
  */
 bool wizard_lock(int dir)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project_hook(GF_JAM_DOOR, dir, 20 + randint1(30), flg));
 }
 
@@ -5069,7 +5069,7 @@ bool wizard_lock(int dir)
  */
 bool destroy_door(int dir)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(GF_KILL_DOOR, dir, 0, flg));
 }
 
@@ -5080,7 +5080,7 @@ bool destroy_door(int dir)
  */
 bool disarm_trap(int dir)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(GF_KILL_TRAP, dir, 0, flg));
 }
 
@@ -5092,7 +5092,7 @@ bool disarm_trap(int dir)
  */
 bool heal_monster(int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_HEAL, dir, dam, flg));
 }
 
@@ -5104,7 +5104,7 @@ bool heal_monster(int dir, HIT_POINT dam)
  */
 bool speed_monster(int dir, int power)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SPEED, dir, power, flg));
 }
 
@@ -5116,7 +5116,7 @@ bool speed_monster(int dir, int power)
  */
 bool slow_monster(int dir, int power)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SLOW, dir, power, flg));
 }
 
@@ -5128,7 +5128,7 @@ bool slow_monster(int dir, int power)
  */
 bool sleep_monster(int dir, int power)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SLEEP, dir, power, flg));
 }
 
@@ -5162,7 +5162,7 @@ bool stasis_evil(int dir)
  */
 bool confuse_monster(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_CONF, dir, plev, flg));
 }
 
@@ -5174,7 +5174,7 @@ bool confuse_monster(int dir, int plev)
  */
 bool stun_monster(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_STUN, dir, plev, flg));
 }
 
@@ -5186,7 +5186,7 @@ bool stun_monster(int dir, int plev)
  */
 bool poly_monster(int dir, int power)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	bool tester = (project_hook(GF_OLD_POLY, dir, power, flg));
 	if (tester)
 		chg_virtue(V_CHANCE, 1);
@@ -5200,7 +5200,7 @@ bool poly_monster(int dir, int power)
  */
 bool clone_monster(int dir)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_CLONE, dir, 0, flg));
 }
 
@@ -5212,7 +5212,7 @@ bool clone_monster(int dir)
  */
 bool fear_monster(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_TURN_ALL, dir, plev, flg));
 }
 
@@ -5224,7 +5224,7 @@ bool fear_monster(int dir, int plev)
  */
 bool death_ray(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_DEATH_RAY, dir, plev * 200, flg));
 }
 
@@ -5236,7 +5236,7 @@ bool death_ray(int dir, int plev)
  */
 bool teleport_monster(int dir, int distance)
 {
-	int flg = PROJECT_BEAM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL;
 	return (project_hook(GF_AWAY_ALL, dir, distance, flg));
 }
 
@@ -5246,7 +5246,7 @@ bool teleport_monster(int dir, int distance)
  */
 bool door_creation(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_DOOR, flg, -1));
 }
 
@@ -5258,7 +5258,7 @@ bool door_creation(void)
  */
 bool trap_creation(int y, int x)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
 }
 
@@ -5268,7 +5268,7 @@ bool trap_creation(int y, int x)
  */
 bool tree_creation(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_TREE, flg, -1));
 }
 
@@ -5278,7 +5278,7 @@ bool tree_creation(void)
  */
 bool glyph_creation(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_GLYPH, flg, -1));
 }
 
@@ -5288,7 +5288,7 @@ bool glyph_creation(void)
  */
 bool wall_stone(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 
 	bool dummy = (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_STONE_WALL, flg, -1));
 
@@ -5307,7 +5307,7 @@ bool wall_stone(void)
  */
 bool destroy_doors_touch(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_DOOR, flg, -1));
 }
 
@@ -5317,7 +5317,7 @@ bool destroy_doors_touch(void)
  */
 bool disarm_traps_touch(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_TRAP, flg, -1));
 }
 
@@ -5327,7 +5327,7 @@ bool disarm_traps_touch(void)
  */
 bool sleep_monsters_touch(void)
 {
-	int flg = PROJECT_KILL | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_KILL | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, p_ptr->lev, GF_OLD_SLEEP, flg, -1));
 }
 
@@ -5341,7 +5341,7 @@ bool sleep_monsters_touch(void)
  */
 bool animate_dead(MONSTER_IDX who, POSITION y, POSITION x)
 {
-	int flg = PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_ITEM | PROJECT_HIDE;
 	return (project(who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
 }
 
@@ -5412,7 +5412,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 {
 	int     i = 0;
 
-	int flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
+	BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 
 	do
 	{
@@ -5799,7 +5799,7 @@ bool deathray_monsters(void)
  */
 bool charm_monster(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CHARM, dir, plev, flg));
 }
 
@@ -5811,7 +5811,7 @@ bool charm_monster(int dir, int plev)
  */
 bool control_one_undead(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_UNDEAD, dir, plev, flg));
 }
 
@@ -5823,7 +5823,7 @@ bool control_one_undead(int dir, int plev)
  */
 bool control_one_demon(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_DEMON, dir, plev, flg));
 }
 
@@ -5835,7 +5835,7 @@ bool control_one_demon(int dir, int plev)
  */
 bool charm_animal(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_ANIMAL, dir, plev, flg));
 }
 
@@ -5847,7 +5847,7 @@ bool charm_animal(int dir, int plev)
  */
 bool charm_living(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_LIVING, dir, plev, flg));
 }
 

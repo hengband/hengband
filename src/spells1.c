@@ -298,7 +298,7 @@ u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, int typ)
  * by "update_view_los()", and very different from the one used by "los()".
  * </pre>
  */
-sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int flg)
+sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
 {
 	int y, x;
 
@@ -1585,7 +1585,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * "flg" was added.
  * </pre>
  */
-static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, bool see_s_msg)
+static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, int typ, BIT_FLAGS flg, bool see_s_msg)
 {
 	int tmp;
 
@@ -5173,7 +5173,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
  */
-static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, int monspell)
+static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, int typ, BIT_FLAGS flg, int monspell)
 {
 	int k = 0;
 	int rlev = 0;
@@ -6773,7 +6773,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
  * and "update_view()" and "update_monsters()" need to be called.
  * </pre>
  */
-bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, int flg, int monspell)
+bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, BIT_FLAGS flg, int monspell)
 {
 	int i, t, dist;
 

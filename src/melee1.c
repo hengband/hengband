@@ -1924,7 +1924,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						else /* monster does not dead */
 						{
 							int j;
-							int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+							BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 							int typ[4][2] = {
 								{ INVEN_HEAD, GF_OLD_CONF },
 								{ INVEN_LARM,  GF_OLD_SLEEP },

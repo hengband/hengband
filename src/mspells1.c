@@ -511,7 +511,7 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  */
 void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
   {
-    int flg;
+    BIT_FLAGS flg;
     bool learnable = spell_learnable(m_idx);
 
     switch (target_type)
@@ -542,7 +542,7 @@ void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, in
  */
 void beam(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
 {
-    int flg = 0;
+    BIT_FLAGS flg = 0;
     bool learnable = spell_learnable(m_idx);
 
     switch (target_type)
@@ -579,7 +579,7 @@ void breath(int y, int x, MONSTER_IDX m_idx, int typ, int dam_hp, int rad, bool 
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool learnable = spell_learnable(m_idx);
-	int flg = 0x00;
+	BIT_FLAGS flg = 0x00;
 
     switch (target_type)
     {

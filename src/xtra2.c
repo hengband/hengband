@@ -792,7 +792,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	{
 		if (r_ptr->blow[i].method == RBM_EXPLODE)
 		{
-			int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+			BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 			int typ = mbe_info[r_ptr->blow[i].effect].explode_type;
 			DICE_NUMBER d_dice = r_ptr->blow[i].d_dice;
 			DICE_SID d_side = r_ptr->blow[i].d_side;
@@ -1017,7 +1017,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	case MON_UNMAKER:
 		/* One more ultra-hack: An Unmaker goes out with a big bang! */
 		{
-			int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+			BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 			(void)project(m_idx, 6, y, x, 100, GF_CHAOS, flg, -1);
 		}
 		break;
@@ -1132,7 +1132,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 	case MON_ROLENTO:
 		{
-			int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+			BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 			(void)project(m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
 		}
 		break;

@@ -94,7 +94,7 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
 	bool hit2 = FALSE;
 	bool hityou = FALSE;
 
-	int flg;
+	BIT_FLAGS flg;
 
 	switch (typ)
 	{
@@ -191,7 +191,7 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
  * @param flg 判定のフラグ配列
  * @return なし
  */
-void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
+void get_project_point(int sy, int sx, int *ty, int *tx, BIT_FLAGS flg)
 {
 	u16b path_g[128];
 	int  path_n, i;

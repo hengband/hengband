@@ -2932,7 +2932,7 @@ static void free_text_lines(cptr *lines_list)
 /*
  * Delete or insert string
  */
-static void toggle_keyword(text_body_type *tb, int flg)
+static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 {
 	int by1, by2, y;
 	bool add = TRUE;
@@ -3104,7 +3104,7 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
 /*
  * Delete or insert string
  */
-static void add_keyword(text_body_type *tb, int flg)
+static void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 {
 	int by1, by2, y;
 
