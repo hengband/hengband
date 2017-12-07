@@ -1580,11 +1580,11 @@ extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
 
 /* mspells4.c */
 extern bool spell_learnable(MONSTER_IDX m_idx);
-extern int monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx);
-extern int monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx);
-extern int monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE);
-extern int monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE);
-extern int monspell_bluemage_damage(int SPELL_NUM, int plev, int TYPE);
+extern HIT_POINT monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx);
+extern HIT_POINT monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx);
+extern HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE);
+extern HIT_POINT monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE);
+extern HIT_POINT monspell_bluemage_damage(int SPELL_NUM, int plev, int TYPE);
 
 /* hissatsu.c */
 extern void hissatsu_info(char *p, int power);
