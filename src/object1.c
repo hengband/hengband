@@ -3646,8 +3646,9 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *
 	char out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
 
-	int floor_list[23], floor_num;
-	int wid, hgt;
+	int floor_list[23];
+	int floor_num;
+	TERM_POSITION wid, hgt;
 	char floor_label[52 + 1];
 
 	bool dont_need_to_show_weights = TRUE;

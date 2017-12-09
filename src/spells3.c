@@ -1679,7 +1679,7 @@ void call_the_(void)
 void fetch(int dir, int wgt, bool require_los)
 {
 	int             ty, tx;
-	DEPTH i;
+	OBJECT_IDX i;
 	cave_type       *c_ptr;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
@@ -1764,6 +1764,7 @@ void fetch(int dir, int wgt, bool require_los)
 	i = c_ptr->o_idx;
 	c_ptr->o_idx = o_ptr->next_o_idx;
 	cave[p_ptr->y][p_ptr->x].o_idx = i; /* 'move' it */
+
 	o_ptr->next_o_idx = 0;
 	o_ptr->iy = (byte)p_ptr->y;
 	o_ptr->ix = (byte)p_ptr->x;

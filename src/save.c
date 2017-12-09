@@ -315,11 +315,11 @@ static void wr_lore(MONRACE_IDX r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Count sights/deaths/kills */
-	wr_s16b(r_ptr->r_sights);
-	wr_s16b(r_ptr->r_deaths);
-	wr_s16b(r_ptr->r_pkills);
-	wr_s16b(r_ptr->r_akills);
-	wr_s16b(r_ptr->r_tkills);
+	wr_s16b((s16b)r_ptr->r_sights);
+	wr_s16b((s16b)r_ptr->r_deaths);
+	wr_s16b((s16b)r_ptr->r_pkills);
+	wr_s16b((s16b)r_ptr->r_akills);
+	wr_s16b((s16b)r_ptr->r_tkills);
 
 	/* Count wakes and ignores */
 	wr_byte(r_ptr->r_wake);
@@ -330,8 +330,8 @@ static void wr_lore(MONRACE_IDX r_idx)
 	wr_byte(r_ptr->r_xtra2);
 
 	/* Count drops */
-	wr_byte(r_ptr->r_drop_gold);
-	wr_byte(r_ptr->r_drop_item);
+	wr_byte((byte_hack)r_ptr->r_drop_gold);
+	wr_byte((byte_hack)r_ptr->r_drop_item);
 
 	/* Count spells */
 	wr_byte(0); /* unused now */
@@ -354,7 +354,7 @@ static void wr_lore(MONRACE_IDX r_idx)
 
 
 	/* Monster limit per level */
-	wr_byte(r_ptr->max_num);
+	wr_byte((byte_hack)r_ptr->max_num);
 
 	/* Location in saved floor */
 	wr_s16b(r_ptr->floor_id);

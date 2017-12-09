@@ -1159,22 +1159,28 @@ static void rd_monster(monster_type *m_ptr)
 static void rd_lore(MONRACE_IDX r_idx)
 {
 	byte tmp8u;
+	s16b tmp16s;
 
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Count sights/deaths/kills */
-	rd_s16b(&r_ptr->r_sights);
-	rd_s16b(&r_ptr->r_deaths);
-	rd_s16b(&r_ptr->r_pkills);
+	rd_s16b(&tmp16s);
+	r_ptr->r_sights = (MONSTER_NUMBER)tmp16s;
+	rd_s16b(&tmp16s);
+	r_ptr->r_deaths = (MONSTER_NUMBER)tmp16s;
+	rd_s16b(&tmp16s);
+	r_ptr->r_pkills = (MONSTER_NUMBER)tmp16s;
 	if (h_older_than(1, 7, 0, 5))
 	{
 		r_ptr->r_akills = r_ptr->r_pkills;
 	}
 	else
 	{
-		rd_s16b(&r_ptr->r_akills);
+		rd_s16b(&tmp16s);
+		r_ptr->r_akills = (MONSTER_NUMBER)tmp16s; 
 	}
-	rd_s16b(&r_ptr->r_tkills);
+	rd_s16b(&tmp16s);
+	r_ptr->r_tkills = (MONSTER_NUMBER)tmp16s;
 
 	/* Count wakes and ignores */
 	rd_byte(&r_ptr->r_wake);

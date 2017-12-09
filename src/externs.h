@@ -978,7 +978,7 @@ extern errr get_mon_num_prep(monster_hook_type monster_hook, monster_hook_type m
 extern MONRACE_IDX get_mon_num(DEPTH level);
 extern void monster_desc(char *desc, monster_type *m_ptr, int mode);
 extern int lore_do_probe(MONRACE_IDX r_idx);
-extern void lore_treasure(MONSTER_IDX m_idx, int num_item, int num_gold);
+extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
 extern void sanity_blast(monster_type *m_ptr, bool necro);
 extern void update_mon(MONSTER_IDX m_idx, bool full);
 extern void update_monsters(bool full);

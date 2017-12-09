@@ -5732,7 +5732,7 @@ cptr rumor_bind_name(char *base, cptr fullname)
 
 void display_rumor(bool ex)
 {
-	bool err;
+	errr err;
 	int section = 0;
 	char Rumor[1024];
 

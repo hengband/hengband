@@ -1924,7 +1924,7 @@ int lore_do_probe(MONRACE_IDX r_idx)
  * gold and items are dropped, and remembers that information to be
  * described later by the monster recall code.
  */
-void lore_treasure(MONSTER_IDX m_idx, int num_item, int num_gold)
+void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 

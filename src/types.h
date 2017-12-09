@@ -351,19 +351,18 @@ struct monster_race
 	SYMBOL_CODE x_char;			/* Desired monster character */
 
 
-	byte max_num;			/* Maximum population allowed per level */
+	MONSTER_NUMBER max_num;	/* Maximum population allowed per level */
+	MONSTER_NUMBER cur_num;	/* Monster population on current level */
 
-	byte cur_num;			/* Monster population on current level */
-
-	s16b floor_id;          /* Location of unique monster */
+	FLOOR_IDX floor_id;		/* Location of unique monster */
 
 
-	s16b r_sights;			/* Count sightings of this monster */
-	s16b r_deaths;			/* Count deaths from this monster */
+	MONSTER_NUMBER r_sights;	/* Count sightings of this monster */
+	MONSTER_NUMBER r_deaths;	/* Count deaths from this monster */
 
-	s16b r_pkills;			/* Count visible monsters killed in this life */
-	s16b r_akills;			/* Count all monsters killed in this life */
-	s16b r_tkills;			/* Count monsters killed in all lives */
+	MONSTER_NUMBER r_pkills;	/* Count visible monsters killed in this life */
+	MONSTER_NUMBER r_akills;	/* Count all monsters killed in this life */
+	MONSTER_NUMBER r_tkills;	/* Count monsters killed in all lives */
 
 	byte r_wake;			/* Number of times woken up (?) */
 	byte r_ignore;			/* Number of times ignored (?) */
@@ -371,8 +370,8 @@ struct monster_race
 	byte r_xtra1;			/* Something (unused) */
 	byte r_xtra2;			/* Something (unused) */
 
-	byte r_drop_gold;		/* Max number of gold dropped at once */
-	byte r_drop_item;		/* Max number of item dropped at once */
+	ITEM_NUMBER r_drop_gold;	/*!< これまでに撃破時に落とした財宝の数 / Max number of gold dropped at once */
+	ITEM_NUMBER r_drop_item;	/*!< これまでに撃破時に落としたアイテムの数 / Max number of item dropped at once */
 
 	byte r_cast_spell;		/* Max number of other spells seen */
 
