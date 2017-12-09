@@ -1265,7 +1265,7 @@ struct player_type
 	bool sustain_con;	/* Keep constitution */
 	bool sustain_chr;	/* Keep charisma */
 
-	u32b cursed;            /* Player is cursed */
+	BIT_FLAGS cursed;	/* Player is cursed */
 
 	bool can_swim;		/* No damage falling */
 	bool levitation;		/* No damage falling */
@@ -1302,21 +1302,20 @@ struct player_type
 	bool mighty_throw;
 	bool see_nocto;		/* Noctovision */
 
-	s16b to_dd[2]; /* Extra dice/sides */
-	s16b to_ds[2];
+	DICE_NUMBER to_dd[2]; /* Extra dice/sides */
+	DICE_SID to_ds[2];
 
-	s16b dis_to_h[2];	/* Known bonus to hit (wield) */
-	s16b dis_to_h_b;	/* Known bonus to hit (bow) */
-	s16b dis_to_d[2];	/* Known bonus to dam (wield) */
-	s16b dis_to_a;		/* Known bonus to ac */
+	HIT_PROB dis_to_h[2];	/*!< 判明している現在の表記上の近接武器命中修正値 /  Known bonus to hit (wield) */
+	HIT_PROB dis_to_h_b;	/*!< 判明している現在の表記上の射撃武器命中修正値 / Known bonus to hit (bow) */
+	HIT_POINT dis_to_d[2];	/*!< 判明している現在の表記上の近接武器ダメージ修正値 / Known bonus to dam (wield) */
+	ARMOUR_CLASS dis_to_a;	/*!< 判明している現在の表記上の装備AC修正値 / Known bonus to ac */
+	ARMOUR_CLASS dis_ac;	/*!< 判明している現在の表記上の装備AC基礎値 / Known base ac */
 
-	s16b dis_ac;		/* Known base ac */
-
-	s16b to_h[2];			/* Bonus to hit (wield) */
-	s16b to_h_b;			/* Bonus to hit (bow) */
-	s16b to_h_m;			/* Bonus to hit (misc) */
-	s16b to_d[2];			/* Bonus to dam (wield) */
-	s16b to_d_m;			/* Bonus to dam (misc) */
+	s16b to_h[2];		/* Bonus to hit (wield) */
+	s16b to_h_b;		/* Bonus to hit (bow) */
+	s16b to_h_m;		/* Bonus to hit (misc) */
+	s16b to_d[2];		/* Bonus to dam (wield) */
+	s16b to_d_m;		/* Bonus to dam (misc) */
 	s16b to_a;			/* Bonus to ac */
 
 	s16b to_m_chance;		/* Minusses to cast chance */
@@ -1326,20 +1325,19 @@ struct player_type
 	bool hidarite;
 	bool no_flowed;
 
-	s16b ac;			/* Base ac */
+	ARMOUR_CLASS ac;	/*!< 装備無しの基本AC / Base ac */
 
-	s16b see_infra;		/* Infravision range */
-
-	s16b skill_dis;		/* Skill: Disarming */
-	s16b skill_dev;		/* Skill: Magic Devices */
-	s16b skill_sav;		/* Skill: Saving throw */
-	s16b skill_stl;		/* Skill: Stealth factor */
-	s16b skill_srh;		/* Skill: Searching ability */
-	s16b skill_fos;		/* Skill: Searching frequency */
-	s16b skill_thn;		/* Skill: To hit (normal) */
-	s16b skill_thb;		/* Skill: To hit (shooting) */
-	s16b skill_tht;		/* Skill: To hit (throwing) */
-	s16b skill_dig;		/* Skill: Digging */
+	ACTION_SKILL_POWER see_infra;	/*!< 赤外線視能力の強さ /Infravision range */
+	ACTION_SKILL_POWER skill_dis;	/*!< 行動技能値:解除能力 / Skill: Disarming */
+	ACTION_SKILL_POWER skill_dev;	/*!< 行動技能値:魔道具使用 / Skill: Magic Devices */
+	ACTION_SKILL_POWER skill_sav;	/*!< 行動技能値:魔法防御 / Skill: Saving throw */
+	ACTION_SKILL_POWER skill_stl;	/*!< 行動技能値:隠密 / Skill: Stealth factor */
+	ACTION_SKILL_POWER skill_srh;	/*!< 行動技能値:知覚 / Skill: Searching ability */
+	ACTION_SKILL_POWER skill_fos;	/*!< 行動技能値:探索 / Skill: Searching frequency */
+	ACTION_SKILL_POWER skill_thn;	/*!< 行動技能値:打撃命中能力 / Skill: To hit (normal) */
+	ACTION_SKILL_POWER skill_thb;	/*!< 行動技能値:射撃命中能力 / Skill: To hit (shooting) */
+	ACTION_SKILL_POWER skill_tht;	/*!< 行動技能値:投射命中能力 / Skill: To hit (throwing) */
+	ACTION_SKILL_POWER skill_dig;	/*!< 行動技能値:掘削 / Skill: Digging */
 
 	s16b num_blow[2];	/* Number of blows */
 	s16b num_fire;		/* Number of shots */
@@ -1350,11 +1348,11 @@ struct player_type
 
 	byte pspeed;		/* Current speed */
 
-	s16b energy_use;	/* Energy use this turn */
+	ENERGY energy_use;	/* Energy use this turn */
 
 	POSITION y;	/* Player location in dungeon */
 	POSITION x;	/* Player location in dungeon */
-	char name[32]; /* Current player's character name */
+	char name[32]; /*!< 現在のプレイヤー名 / Current player's character name */
 };
 
 

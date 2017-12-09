@@ -176,7 +176,6 @@ typedef s32b EXP;				/*!< ゲーム中の主経験値の型定義 */
 typedef s16b SUB_EXP;			/*!< ゲーム中の副経験値の型定義 */
 typedef s16b TERM_COLOR;		/*!< テキスト表示色の型定義 */
 
-
 typedef s32b OBJECT_TYPE_VALUE;    /*!< ゲーム中のアイテム主分類の型定義 */
 typedef s32b OBJECT_SUBTYPE_VALUE; /*!< ゲーム中のアイテム副分類の型定義 */
 typedef s16b PARAMETER_VALUE;      /*!< ゲーム中のアイテム能力値の型定義 */
@@ -226,8 +225,10 @@ typedef byte BLOW_EFFECT; /*!< モンスターの打撃効果ID */
 
 typedef int EFFECT_ID; /*!< 効果属性ID */
 
-typedef s16b QUEST_TYPE;  /*!< クエストの種別ID */
-typedef s16b QUEST_STATUS;  /*!< クエストの状態ID */
+typedef s16b QUEST_TYPE;   /*!< クエストの種別ID */
+typedef s16b QUEST_STATUS; /*!< クエストの状態ID */
+
+typedef s16b ACTION_SKILL_POWER;  /*!< 行動技能値 */
 
 
 /*** Pointers to all the basic types defined above ***/
