@@ -459,7 +459,12 @@ struct cave_type
 	OBJECT_IDX o_idx;		/* Object in this grid */
 	MONSTER_IDX m_idx;		/* Monster in this grid */
 
-	s16b special;	/* Special cave info */
+	/*! 地形の特別な情報を保存する / Special cave info
+	 * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
+	 * 各ダンジョン入口の移行先ダンジョンID、
+	 * 
+	 */
+	s16b special;
 
 	FEAT_IDX mimic;		/* Feature to mimic */
 
@@ -537,8 +542,8 @@ struct object_type
 	XTRA8 xtra1;			/* Extra info type (now unused) */
 	XTRA8 xtra2;			/* Extra info activation index */
 	XTRA8 xtra3;			/* Extra info for weaponsmith */
-	XTRA16 xtra4;			/* Extra info fuel or captured monster's current HP */
-	XTRA16 xtra5;			/* Extra info captured monster's max HP */
+	XTRA16 xtra4;			/*!< 光源の残り寿命、あるいは捕らえたモンスターの現HP / Extra info fuel or captured monster's current HP */
+	XTRA16 xtra5;			/*!< 捕らえたモンスターの最大HP / Extra info captured monster's max HP */
 
 	HIT_PROB to_h;			/* Plusses to hit */
 	HIT_POINT to_d;			/* Plusses to damage */

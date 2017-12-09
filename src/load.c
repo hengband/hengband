@@ -2947,15 +2947,22 @@ static errr rd_dungeon_old(void)
 
 /*!
  * @brief 保存されたフロアを読み込む / Read the saved floor
- * @return なし
+ * @return info読み込みエラーコード
  * @details
+ * この関数は、セーブデータの互換性を保つために多くのデータ改変処理を備えている。
+ * 現在確認している処理は以下の通り、
+ * <ul>
+ * <li>1.7.0.2で8bitだったcave_typeのfeat,mimicのID値を16bitに拡張する処理。</li>
+ * <li>1.7.0.8までに廃止、IDなどを差し替えたクエスト番号を置換する処理。</li>
+ * </ul>
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
 static errr rd_saved_floor(saved_floor_type *sf_ptr)
 {
-	int ymax, xmax;
-	int i, y, x;
+	POSITION ymax, xmax;
+	POSITION y, x;
+	int i;
 	byte count;
 	byte tmp8u;
 	s16b tmp16s;
@@ -3015,10 +3022,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_s16b(&num_repro);
 
 	rd_u16b(&tmp16u);
-	p_ptr->y = (int)tmp16u;
+	p_ptr->y = (POSITION)tmp16u;
 
 	rd_u16b(&tmp16u);
-	p_ptr->x = (int)tmp16u;
+	p_ptr->x = (POSITION)tmp16u;
 
 	rd_s16b(&tmp16s);
 	cur_hgt = (POSITION)tmp16s;
@@ -3126,7 +3133,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 				}
 			}
 			else if ((c_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
-			         (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
+				(p_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
 			{
 				c_ptr->feat = feat_up_stair;
 				c_ptr->special = 0;
