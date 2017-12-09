@@ -1214,14 +1214,14 @@ struct player_type
 	bool sutemi;
 	bool counter;
 
-	s32b align;				/* Good/evil/neutral */
+	ALIGNMENT align;				/* Good/evil/neutral */
 	POSITION run_py;
 	POSITION run_px;
 
 
 	/*** Extracted fields ***/
 
-	u32b total_weight;	/* Total weight being carried */
+	WEIGHT total_weight;	/*!< 所持品と装備品の計算総重量 / Total weight being carried */
 
 	s16b stat_add[6];	/* Modifiers to stat values */
 	s16b stat_ind[6];	/* Indexes into stat tables */
@@ -1343,7 +1343,6 @@ struct player_type
 	s16b num_fire;		/* Number of shots */
 
 	byte tval_xtra;		/* Correct xtra tval */
-
 	byte tval_ammo;		/* Correct ammo tval */
 
 	byte pspeed;		/* Current speed */
@@ -1375,13 +1374,13 @@ struct birther
 	s16b wt;
 	s16b sc;
 
-	s32b au;
+	PRICE au; /*!< 初期の所持金 */
 
 	BASE_STATUS stat_max[6];	/* Current "maximal" stat values */
 	BASE_STATUS stat_max_max[6];	/* Maximal "maximal" stat values */
 	HIT_POINT player_hp[PY_MAX_LEVEL];
 
-	s16b chaos_patron;
+	PATRON_IDX chaos_patron;
 
 	s16b vir_types[8];
 

@@ -1904,7 +1904,7 @@ errr parse_f_info(char *buf, header *head)
 	}
 
 	/* Oops */
-	else	return (6);
+	else return (6);
 
 	/* Success */
 	return (0);

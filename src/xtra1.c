@@ -6302,7 +6302,7 @@ s16b empty_hands(bool riding_control)
  */
 bool heavy_armor(void)
 {
-	u16b monk_arm_wgt = 0;
+	WEIGHT monk_arm_wgt = 0;
 
 	if ((p_ptr->pclass != CLASS_MONK) && (p_ptr->pclass != CLASS_FORCETRAINER) && (p_ptr->pclass != CLASS_NINJA)) return FALSE;
 

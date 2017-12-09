@@ -6396,11 +6396,10 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
  * @details
  * The object will be dropped "near" the current location
  */
-void inven_drop(int item, int amt)
+void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 {
 	object_type forge;
 	object_type *q_ptr;
-
 	object_type *o_ptr;
 
 	char o_name[MAX_NLEN];
@@ -7746,13 +7745,14 @@ static void drain_essence(void)
 	bool observe = FALSE;
 	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
 	TIME_EFFECT old_timeout;
-	u32b old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
+	BIT_FLAGS old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
 	object_type *o_ptr;
 	cptr q, s;
 	POSITION iy, ix;
 	byte_hack marked;
 	ITEM_NUMBER number;
-	s16b next_o_idx, weight;
+	OBJECT_IDX next_o_idx;
+	WEIGHT weight;
 
 	for (i = 0; i < sizeof(drain_value) / sizeof(int); i++)
 		drain_value[i] = 0;

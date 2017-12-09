@@ -333,7 +333,7 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev,
 
 
 	/* Weight */
-	sprintf(wgt, "%3d.%d", q_ptr->weight / 10, q_ptr->weight % 10);
+	sprintf(wgt, "%3d.%d", (int)(q_ptr->weight / 10), (int)(q_ptr->weight % 10));
 }
 
 

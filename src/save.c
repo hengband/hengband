@@ -173,7 +173,7 @@ static void wr_item(object_type *o_ptr)
 	if (flags & SAVE_ITEM_DISCOUNT) wr_byte(o_ptr->discount);
 	if (flags & SAVE_ITEM_NUMBER) wr_byte((byte_hack)o_ptr->number);
 
-	wr_s16b(o_ptr->weight);
+	wr_s16b((s16b)o_ptr->weight);
 
 	if (flags & SAVE_ITEM_NAME1) wr_byte((byte_hack)o_ptr->name1);
 	if (flags & SAVE_ITEM_NAME2) wr_byte((byte_hack)o_ptr->name2);
