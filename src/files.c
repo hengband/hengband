@@ -122,7 +122,7 @@ void safe_setuid_grab(void)
  * Hack -- We will always extract at least one token
  * </pre>
  */
-s16b tokenize(char *buf, s16b num, char **tokens, int mode)
+s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode)
 {
 	int i = 0;
 
@@ -523,7 +523,7 @@ errr process_pref_file_command(char *buf)
 		/* Process "C:<str>" -- create keymap */
 		case 'C':
 		{
-			int mode;
+			BIT_FLAGS mode;
 			char tmp[1024];
 
 			if (tokenize(buf+2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
@@ -3783,7 +3783,7 @@ c_put_str(TERM_YELLOW, "現在", row, stat_col+35);
  * Mode 4 = mutations
  * </pre>
  */
-void display_player(int mode)
+void display_player(BIT_FLAGS mode)
 {
 	int i;
 
@@ -5194,7 +5194,7 @@ static void show_file_aux_line(cptr str, int cy, cptr shower)
  * Return FALSE on 'q' to exit from a deep, otherwise TRUE.
  * </pre>
  */
-bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
+bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode)
 {
 	int i, n, skey;
 

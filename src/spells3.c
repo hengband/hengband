@@ -842,8 +842,9 @@ void teleport_level(MONSTER_IDX m_idx)
 DUNGEON_IDX choose_dungeon(cptr note, POSITION y, POSITION x)
 {
 	DUNGEON_IDX select_dungeon;
-	int i, num = 0;
-	s16b *dun;
+	DUNGEON_IDX i;
+	int num = 0;
+	DUNGEON_IDX *dun;
 
 	/* Hack -- No need to choose dungeon in some case */
 	if (lite_town || vanilla_town || ironman_downward)
@@ -1041,7 +1042,7 @@ msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select
  * @return 劣化処理に関するメッセージが発せられた場合はTRUEを返す /
  * Return "TRUE" if the player notices anything
  */
-bool apply_disenchant(int mode)
+bool apply_disenchant(BIT_FLAGS mode)
 {
 	int             t = 0;
 	object_type     *o_ptr;
@@ -1676,13 +1677,13 @@ void call_the_(void)
  * @param require_los 射線の通りを要求するならばTRUE
  * @return なし
  */
-void fetch(int dir, int wgt, bool require_los)
+void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 {
-	int             ty, tx;
+	POSITION ty, tx;
 	OBJECT_IDX i;
-	cave_type       *c_ptr;
-	object_type     *o_ptr;
-	char            o_name[MAX_NLEN];
+	cave_type *c_ptr;
+	object_type *o_ptr;
+	char o_name[MAX_NLEN];
 
 	/* Check to see if an object is already there */
 	if (cave[p_ptr->y][p_ptr->x].o_idx)
@@ -2298,7 +2299,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
  * Note that "num_ac" requires armour, else weapon
  * Returns TRUE if attempted, FALSE if cancelled
  */
-bool enchant_spell(int num_hit, int num_dam, int num_ac)
+bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
 	OBJECT_IDX item;
 	bool        okay = FALSE;

@@ -1191,8 +1191,10 @@ static void rd_lore(MONRACE_IDX r_idx)
 	rd_byte(&r_ptr->r_xtra2);
 
 	/* Count drops */
-	rd_byte(&r_ptr->r_drop_gold);
-	rd_byte(&r_ptr->r_drop_item);
+	rd_byte(&tmp8u);
+	r_ptr->r_drop_gold = (ITEM_NUMBER)tmp8u;
+	rd_byte(&tmp8u);
+	r_ptr->r_drop_item = (ITEM_NUMBER)tmp8u;
 
 	/* Count spells */
 	rd_byte(&tmp8u);
@@ -1253,7 +1255,8 @@ static void rd_lore(MONRACE_IDX r_idx)
 	}
 
 	/* Read the "Racial" monster limit per level */
-	rd_byte(&r_ptr->max_num);
+	rd_byte(&tmp8u);
+	r_ptr->max_num = (MONSTER_NUMBER)tmp8u;
 
 	/* Location in saved floor */
 	rd_s16b(&r_ptr->floor_id);
@@ -2205,7 +2208,8 @@ static void rd_extra(void)
 	p_ptr->autopick_autoregister = tmp8u ? TRUE : FALSE;
 
 	rd_byte(&tmp8u); /* oops */
-	rd_byte(&p_ptr->action);
+	rd_byte(&tmp8u);
+	p_ptr->action = (ACTION_IDX)tmp8u;
 	if (!z_older_than(10, 4, 3))
 	{
 		rd_byte(&tmp8u);

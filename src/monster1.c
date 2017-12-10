@@ -205,7 +205,7 @@ void set_damage(MONRACE_IDX r_idx, int SPELL_NUM, char* msg, char* tmp)
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
  */
-static void roff_aux(MONRACE_IDX r_idx, int mode)
+static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	monster_race    *r_ptr = &r_info[r_idx];
 
@@ -229,16 +229,16 @@ static void roff_aux(MONRACE_IDX r_idx, int mode)
 	bool            magic = FALSE;
 	bool            reinforce = FALSE;
 
-	u32b		flags1;
-	u32b		flags2;
-	u32b		flags3;
-	u32b		flags4;
-	u32b		a_ability_flags1;
-	u32b		a_ability_flags2;
-	u32b		flags7;
-	u32b		flagsr;
+	BIT_FLAGS flags1;
+	BIT_FLAGS flags2;
+	BIT_FLAGS flags3;
+	BIT_FLAGS flags4;
+	BIT_FLAGS a_ability_flags1;
+	BIT_FLAGS a_ability_flags2;
+	BIT_FLAGS flags7;
+	BIT_FLAGS flagsr;
 
-	byte drop_gold, drop_item;
+	ITEM_NUMBER drop_gold, drop_item;
 
 	int		vn = 0;
 	byte		color[96];
@@ -2067,7 +2067,7 @@ void roff_top(MONRACE_IDX r_idx)
  * @param mode 表示オプション
  * @return なし
  */
-void screen_roff(MONRACE_IDX r_idx, int mode)
+void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	/* Flush messages */
 	msg_print(NULL);

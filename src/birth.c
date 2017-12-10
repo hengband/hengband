@@ -5728,7 +5728,7 @@ static bool player_birth_aux(void)
 {
 	int i, k, n, cs, os;
 
-	int mode = 0;
+	BIT_FLAGS mode = 0;
 
 	bool flag = FALSE;
 	bool prev = FALSE;

@@ -112,6 +112,7 @@ typedef s16b RACE_IDX;			/*!< ゲーム中のプレイヤー種族ID型を定義
 typedef s16b CLASS_IDX;			/*!< ゲーム中のプレイヤー職業ID型を定義 */
 typedef s16b MIMIC_RACE_IDX;	/*!< ゲーム中のプレイヤー変身種族ID型を定義 */
 typedef s16b PATRON_IDX;		/*!< ゲーム中のプレイヤーパトロンID型を定義 */
+typedef s32b ACTION_IDX;		/*!< プレイヤーが現在取っている常時行動のID定義 */
 
 typedef s16b MONRACE_IDX;		/*!< ゲーム中のモンスター種族ID型を定義 */
 typedef s16b MONSTER_IDX;		/*!< ゲーム中のモンスター個体ID型を定義 */

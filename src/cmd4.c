@@ -2593,7 +2593,7 @@ static errr keymap_dump(cptr fname)
 	char key[1024];
 	char buf[1024];
 
-	int mode;
+	BIT_FLAGS mode;
 
 	/* Roguelike */
 	if (rogue_like_commands)
@@ -2671,7 +2671,7 @@ void do_cmd_macros(void)
 
 	char buf[1024];
 
-	int mode;
+	BIT_FLAGS mode;
 
 
 	/* Roguelike */
@@ -6179,7 +6179,7 @@ static void do_cmd_knowledge_kill_count(void)
 			}
 			else
 			{
-				s16b This = r_ptr->r_pkills;
+				MONSTER_NUMBER This = r_ptr->r_pkills;
 
 				if (This > 0)
 				{
@@ -6235,16 +6235,16 @@ static void do_cmd_knowledge_kill_count(void)
 		}
 		else
 		{
-			s16b This = r_ptr->r_pkills;
+			MONSTER_NUMBER This = r_ptr->r_pkills;
 
 			if (This > 0)
 			{
 #ifdef JP
 				/* p,tは人と数える by ita */
 				if (my_strchr("pt", r_ptr->d_char))
-					fprintf(fff, "     %3d 人の %s\n", This, r_name + r_ptr->name);
+					fprintf(fff, "     %3d 人の %s\n", (int)This, r_name + r_ptr->name);
 				else
-					fprintf(fff, "     %3d 体の %s\n", This, r_name + r_ptr->name);
+					fprintf(fff, "     %3d 体の %s\n", (int)This, r_name + r_ptr->name);
 #else
 				if (This < 2)
 				{
@@ -8310,7 +8310,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 }
 
 
-bool ang_sort_comp_quest_num(vptr u, vptr v, QUEST_IDX a, QUEST_IDX b)
+bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
 {
 	QUEST_IDX *q_num = (QUEST_IDX *)u;
 	quest_type *qa = &quest[q_num[a]];
@@ -8322,7 +8322,7 @@ bool ang_sort_comp_quest_num(vptr u, vptr v, QUEST_IDX a, QUEST_IDX b)
 	return (qa->comptime <= qb->comptime);
 }
 
-void ang_sort_swap_quest_num(vptr u, vptr v, QUEST_IDX a, QUEST_IDX b)
+void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
 {
 	QUEST_IDX *q_num = (QUEST_IDX *)u;
 	QUEST_IDX tmp;

@@ -696,7 +696,7 @@ errr fd_copy(cptr file, cptr what)
  * of "O_RDONLY", "O_WRONLY", and "O_RDWR" in "A-win-h", and then
  * we must simulate the effect of the proper "open()" call below.
  */
-int fd_make(cptr file, int mode)
+int fd_make(cptr file, BIT_FLAGS mode)
 {
 	char buf[1024];
 
@@ -3658,7 +3658,7 @@ bool get_check(cptr prompt)
  * mode & CHECK_NO_HISTORY  : no message_add
  * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool get_check_strict(cptr prompt, int mode)
+bool get_check_strict(cptr prompt, BIT_FLAGS mode)
 {
 	int i;
 	char buf[80];
@@ -4405,7 +4405,7 @@ void request_command(int shopping)
 	int i;
 
 	char cmd;
-	int mode;
+	BIT_FLAGS mode;
 
 	cptr act;
 
@@ -4813,7 +4813,7 @@ int get_keymap_dir(char ch)
 	}
 	else
 	{
-		int mode;
+		BIT_FLAGS mode;
 		cptr act, s;
 
 		/* Roguelike */
@@ -5453,7 +5453,7 @@ void str_tolower(char *str)
 			continue;
 		}
 #endif
-		*str = tolower(*str);
+		*str = (char)tolower(*str);
 	}
 }
 

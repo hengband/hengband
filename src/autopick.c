@@ -4929,7 +4929,7 @@ static bool insert_keymap_line(text_body_type *tb)
 {
 	char tmp[1024];
 	char buf[2];
-	int mode;
+	BIT_FLAGS mode;
 	cptr act;
 
 	/* Roguelike */

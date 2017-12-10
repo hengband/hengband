@@ -441,7 +441,7 @@ static errr init_info(cptr filename, header *head,
 {
 	int fd;
 
-	int mode = 0644;
+	BIT_FLAGS mode = 0644;
 
 	errr err = 1;
 
@@ -2266,7 +2266,7 @@ void init_angband(void)
 {
 	int fd = -1;
 
-	int mode = 0664;
+	BIT_FLAGS mode = 0664;
 
 	FILE *fp;
 

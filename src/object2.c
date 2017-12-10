@@ -8095,7 +8095,7 @@ static COMMAND_CODE choose_essence(void)
  * @param mode エッセンスの大別ID
  * @return なし
  */
-static void add_essence(int mode)
+static void add_essence(BIT_FLAGS mode)
 {
 	OBJECT_IDX item;
 	int max_num = 0;

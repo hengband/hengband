@@ -1096,7 +1096,7 @@ struct player_type
 
 	BIT_FLAGS special_attack;	  /* Special attack capacity -LM- */
 	BIT_FLAGS special_defense;	  /* Special block capacity -LM- */
-	byte action;		  /* Currently action */
+	ACTION_IDX action;		  /* Currently action */
 
 	BIT_FLAGS spell_learned1;	  /* bit mask of spells learned */
 	BIT_FLAGS spell_learned2;	  /* bit mask of spells learned */

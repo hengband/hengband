@@ -2836,7 +2836,7 @@ static bool target_set_accept(int y, int x)
  *
  * Return the number of target_able monsters in the set.
  */
-static void target_set_prepare(int mode)
+static void target_set_prepare(BIT_FLAGS mode)
 {
 	int y, x;
 	int min_hgt, max_hgt, min_wid, max_wid;
@@ -2998,7 +2998,7 @@ bool show_gold_on_floor = FALSE;
  *
  * This function must handle blindness/hallucination.
  */
-static int target_set_aux(int y, int x, int mode, cptr info)
+static int target_set_aux(int y, int x, BIT_FLAGS mode, cptr info)
 {
 	cave_type *c_ptr = &cave[y][x];
 	s16b this_o_idx, next_o_idx = 0;
@@ -3580,7 +3580,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
  * This command will cancel any old target, even if used from
  * inside the "look" command.
  */
-bool target_set(int mode)
+bool target_set(BIT_FLAGS mode)
 {
 	int		i, d, m, t, bd;
 	POSITION y = p_ptr->y;

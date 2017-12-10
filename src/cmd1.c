@@ -311,7 +311,7 @@ HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam)
  * @param mode オプションフラグ
  * @return クリティカル修正が入ったダメージ値
  */
-HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, int mode)
+HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode)
 {
 	int i, k;
 	
@@ -492,7 +492,7 @@ static MULTIPLY mult_brand(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_t
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bool thrown)
+s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown)
 {
 	MULTIPLY mult = 10;
 
@@ -1559,7 +1559,7 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
  * @details
  * If no "weapon" is available, then "punch" the monster one time.
  */
-static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int mode)
+static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, BIT_FLAGS mode)
 {
 	int		num = 0, bonus, chance, vir;
 	HIT_POINT k;
@@ -2467,7 +2467,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
  * @details
  * If no "weapon" is available, then "punch" the monster one time.
  */
-bool py_attack(int y, int x, int mode)
+bool py_attack(int y, int x, BIT_FLAGS mode)
 {
 	bool            fear = FALSE;
 	bool            mdeath = FALSE;

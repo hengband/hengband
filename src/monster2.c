@@ -1513,7 +1513,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
  *  MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE
  *    --> Reflexive, genderized if visable ("himself") or "itself"
  */
-void monster_desc(char *desc, monster_type *m_ptr, int mode)
+void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 {
 	cptr            res;
 	monster_race    *r_ptr;

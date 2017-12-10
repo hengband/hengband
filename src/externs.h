@@ -688,7 +688,7 @@ extern bool is_glyph_grid(cave_type *c_ptr);
 extern bool is_explosive_rune_grid(cave_type *c_ptr);
 extern void mmove2(int *y, int *x, int y1, int x1, int y2, int x2);
 extern bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, int mode);
+extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
 extern void health_track(MONSTER_IDX m_idx);
 extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(IDX k_idx);
@@ -699,12 +699,12 @@ extern void glow_deep_lava_and_bldg(void);
 extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
 extern bool test_hit_norm(int chance, int ac, int vis);
 extern HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam);
-extern HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, int mode);
-extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bool thrown);
+extern HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
+extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown);
 extern void search(void);
 extern void py_pickup_aux(int o_idx);
 extern void carry(bool pickup);
-extern bool py_attack(int y, int x, int mode);
+extern bool py_attack(int y, int x, BIT_FLAGS mode);
 extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
 extern bool move_player_effect(POSITION ny, POSITION nx, u32b mpe_mode);
@@ -784,8 +784,8 @@ extern void do_cmd_save_screen_html_aux(char *filename, int message);
 extern void do_cmd_save_screen(void);
 extern void do_cmd_knowledge_quests_completed(FILE *fff, IDX quest_num[]);
 extern void do_cmd_knowledge_quests_failed(FILE *fff, IDX quest_num[]);
-extern bool ang_sort_comp_quest_num(vptr u, vptr v, QUEST_IDX a, QUEST_IDX b);
-extern void ang_sort_swap_quest_num(vptr u, vptr v, QUEST_IDX a, QUEST_IDX b);
+extern bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b);
+extern void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b);
 extern void do_cmd_knowledge(void);
 extern void plural_aux(char * Name);
 extern void do_cmd_checkquest(void);
@@ -819,7 +819,7 @@ extern bool do_cmd_magic_eater(bool only_browse, bool powerful);
 
 /* do-spell.c */
 extern void stop_singing(void);
-extern cptr do_spell(REALM_IDX realm, SPELL_IDX spell, int mode);
+extern cptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
 
 /* dungeon.c */
 extern void leave_quest_check(void);
@@ -838,8 +838,8 @@ extern void prevent_turn_overflow(void);
 /* files.c */
 extern void safe_setuid_drop(void);
 extern void safe_setuid_grab(void);
-extern s16b tokenize(char *buf, s16b num, char **tokens, int mode);
-extern void display_player(int mode);
+extern s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode);
+extern void display_player(BIT_FLAGS mode);
 extern errr make_character_dump(FILE *fff);
 extern errr file_character(cptr name);
 extern errr process_pref_file_command(char *buf);
@@ -852,7 +852,7 @@ extern errr check_time_init(void);
 extern errr check_load_init(void);
 extern errr check_time(void);
 extern errr check_load(void);
-extern bool show_file(bool show_version, cptr name, cptr what, int line, int mode);
+extern bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode);
 extern void do_cmd_help(void);
 extern void process_player_name(bool sf);
 extern void get_name(void);
@@ -941,7 +941,7 @@ extern void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx);
 
 /* monster1.c */
 extern void roff_top(MONRACE_IDX r_idx);
-extern void screen_roff(MONRACE_IDX r_idx, int mode);
+extern void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern void display_roff(MONRACE_IDX r_idx);
 extern void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(byte attr, cptr str));
 extern void create_name(int type, char *name);
@@ -976,7 +976,7 @@ extern void wipe_m_list(void);
 extern MONSTER_IDX m_pop(void);
 extern errr get_mon_num_prep(monster_hook_type monster_hook, monster_hook_type monster_hook2);
 extern MONRACE_IDX get_mon_num(DEPTH level);
-extern void monster_desc(char *desc, monster_type *m_ptr, int mode);
+extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 extern int lore_do_probe(MONRACE_IDX r_idx);
 extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
 extern void sanity_blast(monster_type *m_ptr, bool necro);
@@ -1018,7 +1018,7 @@ extern COMMAND_CODE show_inven(int target_item);
 extern COMMAND_CODE show_equip(int target_item);
 extern void toggle_inven_equip(void);
 extern bool can_get_item(void);
-extern bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, int mode);
+extern bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode);
 
 /* object2.c */
 extern void excise_object_idx(int o_idx);
@@ -1226,13 +1226,13 @@ extern DUNGEON_IDX choose_dungeon(cptr note, POSITION y, POSITION x);
 extern bool recall_player(TIME_EFFECT turns);
 extern bool word_of_recall(void);
 extern bool reset_recall(void);
-extern bool apply_disenchant(int mode);
+extern bool apply_disenchant(BIT_FLAGS mode);
 extern void mutate_player(void);
 extern void apply_nexus(monster_type *m_ptr);
 extern void phlogiston(void);
 extern void brand_weapon(int brand_type);
 extern void call_the_(void);
-extern void fetch(int dir, int wgt, bool require_los);
+extern void fetch(DIRECTION dir, WEIGHT wgt, bool require_los);
 extern void alter_reality(void);
 extern bool warding_glyph(void);
 extern bool place_mirror(void);
@@ -1242,7 +1242,7 @@ extern int remove_curse(void);
 extern int remove_all_curse(void);
 extern bool alchemy(void);
 extern bool enchant(object_type *o_ptr, int n, int eflag);
-extern bool enchant_spell(int num_hit, int num_dam, int num_ac);
+extern bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac);
 extern bool artifact_scroll(void);
 extern bool ident_spell(bool only_equip);
 extern bool mundane_spell(bool only_equip);
@@ -1316,7 +1316,7 @@ extern errr my_fclose(FILE *fff);
 extern errr fd_kill(cptr file);
 extern errr fd_move(cptr file, cptr what);
 extern errr fd_copy(cptr file, cptr what);
-extern int fd_make(cptr file, int mode);
+extern int fd_make(cptr file, BIT_FLAGS mode);
 extern int fd_open(cptr file, int flags);
 extern errr fd_lock(int fd, int what);
 extern errr fd_seek(int fd, huge n);
@@ -1360,7 +1360,7 @@ extern bool askfor_aux(char *buf, int len, bool numpad_cursor);
 extern bool askfor(char *buf, int len);
 extern bool get_string(cptr prompt, char *buf, int len);
 extern bool get_check(cptr prompt);
-extern bool get_check_strict(cptr prompt, int mode);
+extern bool get_check_strict(cptr prompt, BIT_FLAGS mode);
 extern bool get_com(cptr prompt, char *command, bool z_escape);
 extern QUANTITY get_quantity(cptr prompt, QUANTITY max);
 extern void pause_line(int row);
@@ -1412,7 +1412,7 @@ extern void update_playtime(void);
 
 
 /* effects.c */
-extern void set_action(int typ);
+extern void set_action(ACTION_IDX typ);
 extern void reset_tim_flags(void);
 extern void dispel_player(void);
 extern bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec);
@@ -1501,7 +1501,7 @@ extern void ang_sort_aux(vptr u, vptr v, int p, int q);
 extern void ang_sort(vptr u, vptr v, int n);
 extern bool target_able(MONSTER_IDX m_idx);
 extern bool target_okay(void);
-extern bool target_set(int mode);
+extern bool target_set(BIT_FLAGS mode);
 extern void target_set_prepare_look(void);
 extern bool get_aim_dir(DIRECTION *dp);
 extern bool get_hack_dir(DIRECTION *dp);
@@ -1576,7 +1576,7 @@ extern bool monst_spell_monst(MONSTER_IDX m_idx);
 /* mspells3.c */
 extern bool do_cmd_cast_learned(void);
 extern void learn_spell(int monspell);
-extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
+extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, BIT_FLAGS mode);
 
 /* mspells4.c */
 extern bool spell_learnable(MONSTER_IDX m_idx);
@@ -1591,7 +1591,7 @@ extern void hissatsu_info(char *p, int power);
 extern void do_cmd_hissatsu(void);
 extern void do_cmd_hissatsu_browse(void);
 extern void do_cmd_gain_hissatsu(void);
-extern MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, int mode);
+extern MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_FLAGS mode);
 
 /* mutation.c */
 extern int count_bits(BIT_FLAGS x);
@@ -1682,9 +1682,9 @@ extern bool do_cmd_disarm_aux(int y, int x, int dir);
 #ifdef ALLOW_EASY_FLOOR /* TNB */
 
 /* object1.c */
-extern int scan_floor(int *items, POSITION y, POSITION x, int mode);
+extern ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode);
 extern COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *min_width);
-extern bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode);
+extern bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode);
 extern void py_pickup_floor(bool pickup);
 
 /* variable.c */

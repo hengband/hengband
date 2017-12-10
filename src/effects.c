@@ -21,7 +21,7 @@
  * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_KAMAE / #ACTION_KATA / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL から選択。
  * @return なし
  */
-void set_action(int typ)
+void set_action(ACTION_IDX typ)
 {
 	int prev_typ = p_ptr->action;
 

@@ -4910,7 +4910,7 @@ void write_r_info_txt(void)
 
 	cptr desc;
 
-	int mode = -1;
+	BIT_FLAGS mode = -1;
 
 	if (!fff) return;
 

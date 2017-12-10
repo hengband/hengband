@@ -30,7 +30,7 @@ void init_saved_floors(bool force)
 	char floor_savefile[1024];
 	int i;
 	int fd = -1;
-	int mode = 0644;
+	BIT_FLAGS mode = 0644;
 
 #ifdef SET_UID
 # ifdef SECURE

@@ -1048,7 +1048,7 @@ void stop_singing(void)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_life_spell(int spell, int mode)
+static cptr do_life_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -1575,7 +1575,7 @@ static cptr do_life_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_sorcery_spell(int spell, int mode)
+static cptr do_sorcery_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -2123,7 +2123,7 @@ static cptr do_sorcery_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_nature_spell(int spell, int mode)
+static cptr do_nature_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -2728,7 +2728,7 @@ static cptr do_nature_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_chaos_spell(int spell, int mode)
+static cptr do_chaos_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -3341,7 +3341,7 @@ static cptr do_chaos_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_death_spell(int spell, int mode)
+static cptr do_death_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -4014,7 +4014,7 @@ static cptr do_death_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_trump_spell(int spell, int mode)
+static cptr do_trump_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -4660,7 +4660,7 @@ static cptr do_trump_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_arcane_spell(int spell, int mode)
+static cptr do_arcane_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -5221,7 +5221,7 @@ static cptr do_arcane_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_craft_spell(int spell, int mode)
+static cptr do_craft_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -5754,7 +5754,7 @@ static cptr do_craft_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_daemon_spell(int spell, int mode)
+static cptr do_daemon_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -6370,7 +6370,7 @@ static cptr do_daemon_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_crusade_spell(int spell, int mode)
+static cptr do_crusade_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -6983,7 +6983,7 @@ static cptr do_crusade_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
  */
-static cptr do_music_spell(MAGIC_NUM2 spell, int mode)
+static cptr do_music_spell(MAGIC_NUM2 spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -7900,7 +7900,7 @@ static cptr do_music_spell(MAGIC_NUM2 spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_hissatsu_spell(int spell, int mode)
+static cptr do_hissatsu_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -8873,7 +8873,7 @@ static bool item_tester_hook_cursed(object_type *o_ptr)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
  */
-static cptr do_hex_spell(int spell, int mode)
+static cptr do_hex_spell(int spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -9696,7 +9696,7 @@ static cptr do_hex_spell(int spell, int mode)
  * @param mode 求める処理
  * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はNULLポインタを返す。
  */
-cptr do_spell(REALM_IDX realm, SPELL_IDX spell, int mode)
+cptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	switch (realm)
 	{

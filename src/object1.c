@@ -1856,7 +1856,7 @@ void display_equip(void)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag(COMMAND_CODE *cp, char tag, int mode)
+static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 {
 	COMMAND_CODE i;
 	COMMAND_CODE start, end;
@@ -1982,7 +1982,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, int mode)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag_floor(COMMAND_CODE *cp, char tag, int floor_list[], int floor_num)
+static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], FLOOR_IDX floor_num)
 {
 	COMMAND_CODE i;
 	cptr s;
@@ -2069,7 +2069,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, int floor_list[], int floo
  * @param mode 所持品リストか装備品リストかの切り替え
  * @return なし
  */
-static void prepare_label_string(char *label, int mode)
+static void prepare_label_string(char *label, BIT_FLAGS mode)
 {
 	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
@@ -2107,7 +2107,7 @@ static void prepare_label_string(char *label, int mode)
  */
 /*
  */
-static void prepare_label_string_floor(char *label, int floor_list[], int floor_num)
+static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], FLOOR_IDX floor_num)
 {
 	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  i;
@@ -2721,7 +2721,7 @@ bool can_get_item(void)
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
  */
-bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, int mode)
+bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -3578,11 +3578,11 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, int mode)
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-int scan_floor(int *items, POSITION y, POSITION x, int mode)
+ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	int this_o_idx, next_o_idx;
+	OBJECT_IDX this_o_idx, next_o_idx;
 
-	int num = 0;
+	ITEM_NUMBER num = 0;
 
 	/* Sanity */
 	if (!in_bounds(y, x)) return 0;
@@ -3638,7 +3638,6 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *
 	object_type *o_ptr;
 
 	char o_name[MAX_NLEN];
-
 	char tmp_val[80];
 
 	COMMAND_CODE out_index[23];
@@ -3646,8 +3645,8 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *
 	char out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
 
-	int floor_list[23];
-	int floor_num;
+	OBJECT_IDX floor_list[23];
+	ITEM_NUMBER floor_num;
 	TERM_POSITION wid, hgt;
 	char floor_label[52 + 1];
 
@@ -3767,7 +3766,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
+bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 {
 	char n1 = ' ', n2 = ' ', which = ' ';
 
@@ -3794,7 +3793,9 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, int mode)
 	char tmp_val[160];
 	char out_val[160];
 
-	int floor_num, floor_list[23], floor_top = 0;
+	ITEM_NUMBER floor_num;
+	OBJECT_IDX floor_list[23];
+	int floor_top = 0;
 	TERM_POSITION min_width = 0;
 
 	extern bool select_the_force;

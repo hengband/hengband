@@ -2220,7 +2220,7 @@ void do_cmd_pet(void)
 	int			pet_ctr;
 	monster_type	*m_ptr;
 
-	int mode = 0;
+	BIT_FLAGS mode = 0;
 
 	char buf[160];
 	char target_buf[160];
