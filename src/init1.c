@@ -4238,8 +4238,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				q_ptr->k_idx   = (IDX)atoi(zz[8]);
 				q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
 
-				if (num > 10)
-					q_ptr->flags  = atoi(zz[10]);
+				if (num > 10) q_ptr->flags  = atoi(zz[10]);
 
 				r_ptr = &r_info[q_ptr->r_idx];
 				if (r_ptr->flags1 & RF1_UNIQUE)

@@ -2478,6 +2478,7 @@ static void rd_messages(void)
 {
 	int i;
 	char buf[128];
+	int message_max;
 
 
 	if (h_older_than(2, 2, 0, 75))
@@ -2485,9 +2486,10 @@ static void rd_messages(void)
 		u16b num;
 		/* Total */
 		rd_u16b(&num);
+		message_max = (int)num;
 
 		/* Read the messages */
-		for (i = 0; i < num; i++)
+		for (i = 0; i < message_max; i++)
 		{
 			/* Read the message */
 			rd_string(buf, sizeof(buf));
@@ -2501,9 +2503,10 @@ static void rd_messages(void)
 		u32b num;
 		/* Total */
 		rd_u32b(&num);
+		message_max = (int)num;
 
 		/* Read the messages */
-		for (i = 0; i < num; i++)
+		for (i = 0; i < message_max; i++)
 		{
 			/* Read the message */
 			rd_string(buf, sizeof(buf));
