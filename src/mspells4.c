@@ -2622,12 +2622,12 @@ MONSTER_NUMBER summon_Guardian(POSITION y, POSITION x, int rlev, MONSTER_IDX m_i
 * @param m_idx 呪文を唱えるモンスターID
 * @return 召喚したモンスターの数を返す。
 */
-MONSTER_NUMBER summon_LOCK_CLONE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+MONSTER_NUMBER summon_LOCK_CLONE(POSITION y, POSITION x, DEPTH rlev, MONSTER_IDX m_idx)
 {
 	BIT_FLAGS mode = 0L;
 	int k, count = 0;
 	int num = randint1(3);
-	rlev;
+	rlev = rlev;
 	for (k = 0; k < num; k++)
 	{
 		count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, mode);

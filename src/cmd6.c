@@ -4281,7 +4281,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 		{
 			byte y, x = 0;
 			OBJECT_SUBTYPE_VALUE ctr;
-			int chance;
+			PERCENTAGE chance;
 			IDX k_idx;
 			char dummy[80];
 			POSITION x1, y1;
@@ -4584,7 +4584,8 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 bool do_cmd_magic_eater(bool only_browse, bool powerful)
 {
 	OBJECT_SUBTYPE_VALUE item;
-	int chance, level;
+	PERCENTAGE chance;
+	DEPTH level;
 	IDX k_idx;
 	OBJECT_TYPE_VALUE tval;
 	OBJECT_SUBTYPE_VALUE sval;

@@ -1255,9 +1255,9 @@ extern bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OB
 extern void display_spell_list(void);
 extern s16b experience_of_spell(int spell, int realm);
 extern int mod_need_mana(int need_mana, int spell, int realm);
-extern int mod_spell_chance_1(int chance);
-extern int mod_spell_chance_2(int chance);
-extern s16b spell_chance(int spell,int realm);
+extern PERCENTAGE mod_spell_chance_1(PERCENTAGE chance);
+extern PERCENTAGE mod_spell_chance_2(PERCENTAGE chance);
+extern PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX realm);
 extern bool spell_okay(int spell, bool learned, bool study_pray, int realm);
 extern void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_POSITION y, TERM_POSITION x, REALM_IDX realm);
 extern bool hates_acid(object_type *o_ptr);

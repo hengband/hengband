@@ -675,9 +675,9 @@ void mindcraft_info(char *p, int use_mind, int power)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_mind_power(COMMAND_CODE *sn, bool only_browse)
+static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 {
-	COMMAND_CODE i;
+	SPELL_IDX i;
 	int             num = 0;
 	int             y = 1;
 	int             x = 10;
@@ -934,7 +934,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 						else strcpy(psi_desc, "     ");
 					}
 					else
-						sprintf(psi_desc, "  %c) ",I2A(i));
+						sprintf(psi_desc, "  %c) ", I2A(i));
 					/* Dump the spell --(-- */
 					strcat(psi_desc,
 					       format("%-30s%2d %4d%s %3d%%%s",

@@ -1062,15 +1062,12 @@ void do_cmd_cast(void)
 	REALM_IDX realm;
 	int	chance;
 	int	increment = 0;
-	int	use_realm;
-	int	need_mana;
+	REALM_IDX use_realm;
+	MANA_POINT need_mana;
 
 	cptr prayer;
-
 	object_type	*o_ptr;
-
 	const magic_type *s_ptr;
-
 	cptr q, s;
 
 	bool over_exerted = FALSE;

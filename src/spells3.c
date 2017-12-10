@@ -3910,7 +3910,7 @@ int mod_need_mana(int need_mana, int spell, int realm)
  * @return 失敗率(%)
  * @todo 統合を検討
  */
-int mod_spell_chance_1(int chance)
+PERCENTAGE mod_spell_chance_1(PERCENTAGE chance)
 {
 	chance += p_ptr->to_m_chance;
 
@@ -3935,7 +3935,7 @@ int mod_spell_chance_1(int chance)
  * Note: variable "chance" cannot be negative.
  * @todo 統合を検討
  */
-int mod_spell_chance_2(int chance)
+PERCENTAGE mod_spell_chance_2(PERCENTAGE chance)
 {
 	if (p_ptr->dec_mana) chance--;
 
@@ -3952,12 +3952,12 @@ int mod_spell_chance_2(int chance)
  * @param use_realm 魔法領域ID
  * @return 失敗率(%)
  */
-s16b spell_chance(int spell, int use_realm)
+PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 {
-	int             chance, minfail;
+	PERCENTAGE chance, minfail;
 	const magic_type *s_ptr;
-	int             need_mana;
-	int penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
+	MANA_POINT need_mana;
+	PERCENTAGE penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
 
 
 	/* Paranoia -- must be literate */

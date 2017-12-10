@@ -523,7 +523,7 @@ errr process_pref_file_command(char *buf)
 		/* Process "C:<str>" -- create keymap */
 		case 'C':
 		{
-			BIT_FLAGS mode;
+			int mode;
 			char tmp[1024];
 
 			if (tokenize(buf+2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;

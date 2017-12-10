@@ -205,9 +205,9 @@ static int get_learned_power(SPELL_IDX *sn)
 	int             num = 0;
 	int             y = 1;
 	int             x = 18;
-	int             minfail = 0;
-	int             plev = p_ptr->lev;
-	int             chance = 0;
+	PERCENTAGE minfail = 0;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	PERCENTAGE chance = 0;
 	int             ask = TRUE, mode = 0;
 	int             spellnum[MAX_MONSPELLS];
 	char            ch;
@@ -1464,12 +1464,12 @@ static bool cast_learned_spell(int spell, bool success)
 bool do_cmd_cast_learned(void)
 {
 	SPELL_IDX n = 0;
-	int             chance;
-	int             minfail = 0;
-	int             plev = p_ptr->lev;
-	monster_power   spell;
-	bool            cast;
-	int             need_mana;
+	PERCENTAGE chance;
+	PERCENTAGE minfail = 0;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	monster_power spell;
+	bool cast;
+	MANA_POINT need_mana;
 
 
 	/* not if confused */

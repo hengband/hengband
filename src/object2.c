@@ -1989,7 +1989,7 @@ void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx)
 	o_ptr->ds = k_ptr->ds;
 
 	/* Default activation */
-	if (k_ptr->act_idx > 0) o_ptr->xtra2 = k_ptr->act_idx;
+	if (k_ptr->act_idx > 0) o_ptr->xtra2 = (XTRA8)k_ptr->act_idx;
 
 	/* Hack -- worthless items are always "broken" */
 	if (k_info[o_ptr->k_idx].cost <= 0) o_ptr->ident |= (IDENT_BROKEN);
@@ -4537,7 +4537,7 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 		}
 
 		/* Hack -- apply activatin index if needed */
-		if (e_ptr->act_idx) o_ptr->xtra2 = e_ptr->act_idx;
+		if (e_ptr->act_idx) o_ptr->xtra2 = (XTRA8)e_ptr->act_idx;
 
 		/* Hack -- apply extra penalties if needed */
 		if ((object_is_cursed(o_ptr) || object_is_broken(o_ptr)) && !(e_ptr->gen_flags & (TRG_POWERFUL)))

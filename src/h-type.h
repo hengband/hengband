@@ -119,6 +119,8 @@ typedef s16b MONSTER_IDX;		/*!< ゲーム中のモンスター個体ID型を定�
 typedef s16b DUNGEON_IDX;		/*!< ゲーム中のダンジョンID型を定義 */
 typedef s16b REALM_IDX;			/*!< ゲーム中の魔法領域ID型を定義 */
 typedef s16b ARTIFACT_IDX;		/*!< ゲーム中のアーティファクトID型を定義 */
+typedef s16b EGO_IDX;			/*!< アイテムエゴのID型を定義 */
+typedef s16b ACTIVATION_IDX;	/*!< アイテムの発動効果ID型を定義 */
 typedef s16b VIRTUES_IDX;		/*!< ゲーム中の徳ID型を定義 */
 typedef s16b QUEST_IDX;			/*!< ゲーム中のクエストID型を定義 */
 typedef byte ROOM_IDX;			/*!< 部屋のID型を定義 */

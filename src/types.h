@@ -148,7 +148,7 @@ struct object_kind
 
 	bool tried;			/*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 
-	IDX act_idx;		/*!< 発動能力のID /  Activative ability index */
+	ACTIVATION_IDX act_idx;		/*!< 発動能力のID /  Activative ability index */
 };
 
 
@@ -1433,9 +1433,9 @@ struct mind_power
 typedef struct monster_power monster_power;
 struct monster_power
 {
-	int     level;
-	int     smana;
-	int     fail;
+	PLAYER_LEVEL level;
+	MANA_POINT smana;
+	PERCENTAGE fail;
 	int     manedam;
 	int     manefail;
 	int     use_stat;
