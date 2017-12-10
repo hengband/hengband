@@ -797,7 +797,7 @@ static void wr_extra(void)
 	wr_byte(p_ptr->knowledge);
 	wr_byte(p_ptr->autopick_autoregister);
 	wr_byte(0);     /* oops */
-	wr_byte(p_ptr->action);
+	wr_byte((byte_hack)p_ptr->action);
 	wr_byte(0);
 	wr_byte(preserve_mode);
 	wr_byte(p_ptr->wait_report_score);

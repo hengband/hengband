@@ -4620,7 +4620,7 @@ void request_command(int shopping)
 	if (always_repeat && (command_arg <= 0))
 	{
 		/* Hack -- auto repeat certain commands */
-		if (my_strchr("TBDoc+", (COMMAND_CODE)command_cmd))
+		if (my_strchr("TBDoc+", (char)command_cmd))
 		{
 			/* Repeat 99 times */
 			command_arg = 99;

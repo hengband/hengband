@@ -1982,7 +1982,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], FLOOR_IDX floor_num)
+static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
 	COMMAND_CODE i;
 	cptr s;
@@ -2107,7 +2107,7 @@ static void prepare_label_string(char *label, BIT_FLAGS mode)
  */
 /*
  */
-static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], FLOOR_IDX floor_num)
+static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
 	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  i;
@@ -2653,7 +2653,9 @@ static bool get_item_okay(OBJECT_IDX i)
  */
 bool can_get_item(void)
 {
-	int j, floor_list[23], floor_num = 0;
+	int j;
+	OBJECT_IDX floor_list[23];
+	ITEM_NUMBER floor_num = 0;
 
 	for (j = 0; j < INVEN_TOTAL; j++)
 		if (item_tester_okay(&inventory[j]))

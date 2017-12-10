@@ -3791,9 +3791,9 @@ static void do_cmd_activate_aux(int item)
 			if(fire_ball(GF_CAPTURE, dir, 0, 0))
 			{
 				o_ptr->pval = (PARAMETER_VALUE)cap_mon;
-				o_ptr->xtra3 = cap_mspeed;
-				o_ptr->xtra4 = cap_hp;
-				o_ptr->xtra5 = cap_maxhp;
+				o_ptr->xtra3 = (XTRA8)cap_mspeed;
+				o_ptr->xtra4 = (XTRA16)cap_hp;
+				o_ptr->xtra5 = (XTRA16)cap_maxhp;
 				if (cap_nickname)
 				{
 					cptr t;

@@ -1456,8 +1456,8 @@ struct building_type
 	char owner_race[20];            /* proprietor race */
 
 	char act_names[8][30];          /* action names */
-	s32b member_costs[8];           /* Costs for class members of building */
-	s32b other_costs[8];		    /* Costs for nonguild members */
+	PRICE member_costs[8];           /* Costs for class members of building */
+	PRICE other_costs[8];		    /* Costs for nonguild members */
 	char letters[8];                /* action letters */
 	s16b actions[8];                /* action codes */
 	s16b action_restr[8];           /* action restrictions */
@@ -1614,7 +1614,7 @@ struct dungeon_info_type {
 	PLAYER_LEVEL min_plev;         /* Minimal plev needed to enter -- it's an anti-cheating mesure */
 	BIT_FLAGS16 pit;
 	BIT_FLAGS16 nest;
-	byte mode;		/* Mode of combinaison of the monster flags */
+	BIT_FLAGS8 mode; /* Mode of combinaison of the monster flags */
 
 	int min_m_alloc_level;	/* Minimal number of monsters per level */
 	int max_m_alloc_chance;	/* There is a 1/max_m_alloc_chance chance per round of creating a new monster */

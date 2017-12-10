@@ -3358,7 +3358,7 @@ errr parse_d_info(char *buf, header *head)
 		d_ptr->mindepth = (DEPTH)min_lev;
 		d_ptr->maxdepth = (DEPTH)max_lev;
 		d_ptr->min_plev = (PLAYER_LEVEL)min_plev;
-		d_ptr->mode = mode;
+		d_ptr->mode = (BIT_FLAGS8)mode;
 		d_ptr->min_m_alloc_level = min_alloc;
 		d_ptr->max_m_alloc_chance = max_chance;
 		d_ptr->obj_good = obj_good;
@@ -3848,10 +3848,10 @@ static errr parse_line_building(char *buf)
 				strcpy(building[index].act_names[action_index], zz[1]);
 
 				/* Cost of the action for members */
-				building[index].member_costs[action_index] = atoi(zz[2]);
+				building[index].member_costs[action_index] = (PRICE)atoi(zz[2]);
 
 				/* Cost of the action for non-members */
-				building[index].other_costs[action_index] = atoi(zz[3]);
+				building[index].other_costs[action_index] = (PRICE)atoi(zz[3]);
 
 				/* Letter assigned to the action */
 				building[index].letters[action_index] = zz[4][0];

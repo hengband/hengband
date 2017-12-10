@@ -471,10 +471,10 @@ void do_cmd_browse(void)
 	REALM_IDX use_realm = 0;
 	int j, line;
 	SPELL_IDX spell = -1;
-	int		num = 0;
+	int num = 0;
 
-	int		spells[64];
-	char    temp[62*4];
+	SPELL_IDX spells[64];
+	char temp[62*4];
 
 	object_type	*o_ptr;
 

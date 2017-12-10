@@ -27,7 +27,7 @@ void check_experience(void)
 	bool level_mutation = FALSE;
 	bool level_inc_stat = FALSE;
 	bool android = (p_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
-	int  old_lev = p_ptr->lev;
+	PLAYER_LEVEL old_lev = p_ptr->lev;
 
 	/* Hack -- lower limit */
 	if (p_ptr->exp < 0) p_ptr->exp = 0;
@@ -3010,7 +3010,8 @@ static int target_set_aux(int y, int x, BIT_FLAGS mode, cptr info)
 	char out_val[MAX_NLEN+80];
 
 #ifdef ALLOW_EASY_FLOOR
-	int floor_list[23], floor_num = 0;
+	OBJECT_IDX floor_list[23];
+	ITEM_NUMBER floor_num = 0;
 
 	/* Scan all objects in the grid */
 	if (easy_floor)
@@ -3264,10 +3265,10 @@ static int target_set_aux(int y, int x, BIT_FLAGS mode, cptr info)
 				/* Display rough information about items */
 #ifdef JP
 				sprintf(out_val, "%s %d個のアイテム%s%s ['x'で一覧, %s]",
-					s1, floor_num, s2, s3, info);
+					s1, (int)floor_num, s2, s3, info);
 #else
 				sprintf(out_val, "%s%s%sa pile of %d items [x,%s]",
-					s1, s2, s3, floor_num, info);
+					s1, s2, s3, (int)floor_num, info);
 #endif
 
 				prt(out_val, 0, 0);
@@ -3300,10 +3301,10 @@ static int target_set_aux(int y, int x, BIT_FLAGS mode, cptr info)
 				/* Prompt */
 #ifdef JP
 				sprintf(out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]",
-					s1, floor_num, s2, s3, info);
+					s1, (int)floor_num, s2, s3, info);
 #else
 				sprintf(out_val, "%s%s%sa pile of %d items [Enter,%s]",
-					s1, s2, s3, floor_num, info);
+					s1, s2, s3, (int)floor_num, info);
 #endif
 				prt(out_val, 0, 0);
 

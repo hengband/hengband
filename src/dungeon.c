@@ -1065,7 +1065,7 @@ static void regen_captured_monsters(void)
 			if (r_ptr->flags2 & RF2_REGENERATE) frac *= 2;
 
 			/* Hack -- Regenerate */
-			o_ptr->xtra4 += frac;
+			o_ptr->xtra4 += (XTRA16)frac;
 
 			/* Do not over-regenerate */
 			if (o_ptr->xtra4 > o_ptr->xtra5) o_ptr->xtra4 = o_ptr->xtra5;

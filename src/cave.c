@@ -4934,12 +4934,12 @@ bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
  *
  * Currently the "m" parameter is unused.
  */
-void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, int m)
+void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
 	POSITION nx, ny;
 
 	/* Unused */
-	m = m;
+	mode = mode;
 
 	/* Pick a location */
 	while (TRUE)

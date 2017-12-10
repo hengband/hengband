@@ -1243,7 +1243,7 @@ void apply_nexus(monster_type *m_ptr)
  */
 void phlogiston(void)
 {
-	int max_flog = 0;
+	GAME_TURN max_flog = 0;
 	object_type * o_ptr = &inventory[INVEN_LITE];
 
 	/* It's a lamp */
@@ -1272,7 +1272,7 @@ void phlogiston(void)
 	}
 
 	/* Refuel */
-	o_ptr->xtra4 += (max_flog / 2);
+	o_ptr->xtra4 += (XTRA16)(max_flog / 2);
 
 	/* Message */
 	msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light item."));
@@ -1280,7 +1280,7 @@ void phlogiston(void)
 	/* Comment */
 	if (o_ptr->xtra4 >= max_flog)
 	{
-		o_ptr->xtra4 = max_flog;
+		o_ptr->xtra4 = (XTRA16)max_flog;
 		msg_print(_("照明用アイテムは満タンになった。", "Your light item is full."));
 	}
 
