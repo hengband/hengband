@@ -4405,7 +4405,7 @@ void request_command(int shopping)
 	int i;
 
 	char cmd;
-	BIT_FLAGS mode;
+	int mode;
 
 	cptr act;
 

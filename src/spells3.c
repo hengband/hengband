@@ -3026,7 +3026,7 @@ bool recharge(int power)
 			 */
 			if ((o_ptr->tval == TV_STAFF) && (o_ptr->number > 1))
 			{
-				recharge_amount /= o_ptr->number;
+				recharge_amount /= (TIME_EFFECT)o_ptr->number;
 				if (recharge_amount < 1) recharge_amount = 1;
 			}
 

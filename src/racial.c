@@ -318,7 +318,7 @@ bool gain_magic(void)
 
 	if (o_ptr->tval == TV_ROD)
 	{
-		p_ptr->magic_num2[o_ptr->sval + ext] += o_ptr->number;
+		p_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)o_ptr->number;
 		if (p_ptr->magic_num2[o_ptr->sval + ext] > 99) p_ptr->magic_num2[o_ptr->sval + ext] = 99;
 	}
 	else
@@ -334,7 +334,7 @@ bool gain_magic(void)
 				gain_num = (gain_num/3 + randint0(gain_num/3)) / 256;
 				if (gain_num < 1) gain_num = 1;
 			}
-			p_ptr->magic_num2[o_ptr->sval + ext] += gain_num;
+			p_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)gain_num;
 			if (p_ptr->magic_num2[o_ptr->sval + ext] > 99) p_ptr->magic_num2[o_ptr->sval + ext] = 99;
 			p_ptr->magic_num1[o_ptr->sval + ext] += pval * 0x10000;
 			if (p_ptr->magic_num1[o_ptr->sval + ext] > 99 * 0x10000) p_ptr->magic_num1[o_ptr->sval + ext] = 99 * 0x10000;

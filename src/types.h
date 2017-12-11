@@ -1115,7 +1115,7 @@ struct player_type
 	SUB_EXP skill_exp[GINOU_MAX]; /* Proficiency of misc. skill */
 
 	MAGIC_NUM1 magic_num1[108];     /*!< Array for non-spellbook type magic */
-	MAGIC_NUM2 magic_num2[108];     /*!< Flags for non-spellbook type magics */
+	MAGIC_NUM2 magic_num2[108];     /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
 
 	SPELL_IDX mane_spell[MAX_MANE];
 	HIT_POINT mane_dam[MAX_MANE];

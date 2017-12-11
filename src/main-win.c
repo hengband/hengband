@@ -374,8 +374,8 @@ struct _term_data
 
 	uint keys;
 
-	uint rows;	/* int -> uint */
-	uint cols;
+	TERM_POSITION rows;	/* int -> uint */
+	TERM_POSITION cols;
 
 	uint pos_x;
 	uint pos_y;
@@ -400,11 +400,11 @@ struct _term_data
 
 	HFONT font_id;
 
-	uint font_wid;
-	uint font_hgt;
+	int font_wid;
+	int font_hgt;
 
-	uint tile_wid;
-	uint tile_hgt;
+	int tile_wid;
+	int tile_hgt;
 
 	uint map_tile_wid;
 	uint map_tile_hgt;
@@ -605,8 +605,8 @@ static bool Term_no_press = FALSE;
  */
 static bool mouse_down = FALSE;
 static bool paint_rect = FALSE;
-static int mousex = 0, mousey = 0;
-static int oldx, oldy;
+static TERM_POSITION mousex = 0, mousey = 0;
+static TERM_POSITION oldx, oldy;
 
 
 /*
@@ -2314,7 +2314,7 @@ static errr Term_xtra_win_react(void)
 		term_data *td = &data[i];
 
 		/* Update resized windows */
-		if ((td->cols != (uint)td->t.wid) || (td->rows != (uint)td->t.hgt))
+		if ((td->cols != td->t.wid) || (td->rows != td->t.hgt))
 		{
 			/* Activate */
 			Term_activate(&td->t);
@@ -4739,10 +4739,10 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			HGLOBAL hGlobal;
 			LPSTR lpStr;
 			int j, sz;
-			int dx = abs(oldx - mousex) + 1;
-			int dy = abs(oldy - mousey) + 1;
-			int ox = (oldx > mousex) ? mousex : oldx;
-			int oy = (oldy > mousey) ? mousey : oldy;
+			TERM_POSITION dx = abs(oldx - mousex) + 1;
+			TERM_POSITION dy = abs(oldy - mousey) + 1;
+			TERM_POSITION ox = (oldx > mousex) ? mousex : oldx;
+			TERM_POSITION oy = (oldy > mousey) ? mousey : oldy;
 
 			mouse_down = FALSE;
 			paint_rect = FALSE;
@@ -4947,8 +4947,8 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 
 				case SIZE_RESTORED:
 				{
-					uint cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
-					uint rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
+					TERM_POSITION cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
+					TERM_POSITION rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
 
 					/* New size */
 					if ((td->cols != cols) || (td->rows != rows))
@@ -5125,8 +5125,8 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 		case WM_SIZE:
 		{
-			uint cols;
-			uint rows;
+			TERM_POSITION cols;
+			TERM_POSITION rows;
 			
 			/* this message was sent before WM_NCCREATE */
 			if (!td) return 1;
