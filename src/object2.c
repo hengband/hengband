@@ -7262,7 +7262,7 @@ static bool item_tester_hook_melee_ammo(object_type *o_ptr)
 typedef struct {
 	int add;       /* TR flag number or special essence id */
 	cptr add_name; /* Name of this ability */
-	int type;      /* Menu number */
+	ESSENCE_IDX type;      /* Menu number */
 	int essence;   /* Index for carrying essences */
 	int value;     /* Needed value to add this ability */
 } essence_type;
@@ -8095,7 +8095,7 @@ static COMMAND_CODE choose_essence(void)
  * @param mode エッセンスの大別ID
  * @return なし
  */
-static void add_essence(BIT_FLAGS mode)
+static void add_essence(ESSENCE_IDX mode)
 {
 	OBJECT_IDX item;
 	int max_num = 0;

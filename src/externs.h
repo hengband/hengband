@@ -1394,7 +1394,7 @@ extern bool is_daytime(void);
 extern void extract_day_hour_min(int *day, int *hour, int *min);
 extern void prt_time(void);
 extern cptr map_name(void);
-extern u32b weight_limit(void);
+extern WEIGHT weight_limit(void);
 extern bool buki_motteruka(int i);
 extern bool is_heavy_shoot(object_type *o_ptr);
 extern int bow_tval_ammo(object_type *o_ptr);

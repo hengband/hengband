@@ -1644,7 +1644,7 @@ struct dungeon_info_type {
 	ARTIFACT_IDX final_artifact;	/* The artifact you'll find at the bottom */
 	MONRACE_IDX final_guardian;	/* The artifact's guardian. If an artifact is specified, then it's NEEDED */
 
-	byte special_div;	/* % of monsters affected by the flags/races allowed, to add some variety */
+	PROB special_div;	/* % of monsters affected by the flags/races allowed, to add some variety */
 	int tunnel_percent;
 	int obj_great;
 	int obj_good;

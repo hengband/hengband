@@ -3034,12 +3034,12 @@ static void calc_torch(void)
  * Computes current weight limit.
  * @return 制限重量(ポンド)
  */
-u32b weight_limit(void)
+WEIGHT weight_limit(void)
 {
-	u32b i;
+	WEIGHT i;
 
 	/* Weight limit based only on strength */
-	i = (u32b)adj_str_wgt[p_ptr->stat_ind[A_STR]] * 50; /* Constant was 100 */
+	i = (WEIGHT)adj_str_wgt[p_ptr->stat_ind[A_STR]] * 50; /* Constant was 100 */
 	if (p_ptr->pclass == CLASS_BERSERKER) i = i * 3 / 2;
 
 	/* Return the result */

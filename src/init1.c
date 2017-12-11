@@ -1860,7 +1860,7 @@ errr parse_f_info(char *buf, header *head)
 		if (1 != sscanf(buf+2, "%d", &priority)) return (PARSE_ERROR_GENERIC);
 
 		/* Save the value */
-		f_ptr->priority = priority;
+		f_ptr->priority = (FEAT_PRIORITY)priority;
 	}
 
 	/* Process 'K' for "States" (up to four lines + default (which cannot be last)) */
@@ -3497,7 +3497,7 @@ errr parse_d_info(char *buf, header *head)
 			if (1 == sscanf(s, "MONSTER_DIV_%d", &monst))
 			{
 				/* Extract a "Special %" */
-				d_ptr->special_div = monst;
+				d_ptr->special_div = (PROB)monst;
 
 				/* Start at next entry */
 				s = t;
