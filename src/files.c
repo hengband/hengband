@@ -2030,7 +2030,7 @@ static void display_player_various(void)
 	/* If the player is wielding one? */
 	if (o_ptr->k_idx)
 	{
-		s16b energy_fire = bow_energy(o_ptr->sval);
+		ENERGY energy_fire = bow_energy(o_ptr->sval);
 
 		/* Calculate shots per round */
 		shots = p_ptr->num_fire * 100;

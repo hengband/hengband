@@ -2477,7 +2477,8 @@ cptr message_str(int age)
  */
 void message_add(cptr str)
 {
-	int i, k, x, m, n;
+	u32b i;
+	int k, x, m, n;
 
 	char u[4096];
 	char splitted1[81];

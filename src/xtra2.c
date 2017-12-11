@@ -5526,12 +5526,14 @@ s16b gain_energy(void)
 }
 
 
-/*
- * Return bow energy 
+/*!
+ * @brief 射撃武器の攻撃に必要な基本消費エネルギーを返す/Return bow energy
+ * @param sval 射撃武器のアイテム副分類ID 
+ * @return 消費する基本エネルギー
  */
-s16b bow_energy(OBJECT_SUBTYPE_VALUE sval)
+ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval)
 {
-	int energy = 100;
+	ENERGY energy = 10000;
 
 	/* Analyze the launcher */
 	switch (sval)
