@@ -418,35 +418,35 @@ char savefile_base[40];
 /*
  * Array of grids lit by player lite (see "cave.c")
  */
-s16b lite_n;
+POSITION_IDX lite_n;
 POSITION lite_y[LITE_MAX];
 POSITION lite_x[LITE_MAX];
 
 /*
  * Array of grids lit by player lite (see "cave.c")
  */
-s16b mon_lite_n;
+POSITION_IDX mon_lite_n;
 POSITION mon_lite_y[MON_LITE_MAX];
 POSITION mon_lite_x[MON_LITE_MAX];
 
 /*
  * Array of grids viewable to the player (see "cave.c")
  */
-s16b view_n;
+POSITION_IDX view_n;
 POSITION view_y[VIEW_MAX];
 POSITION view_x[VIEW_MAX];
 
 /*
  * Array of grids for use by various functions (see "cave.c")
  */
-s16b temp_n;
+POSITION_IDX temp_n;
 POSITION temp_y[TEMP_MAX];
 POSITION temp_x[TEMP_MAX];
 
 /*
  * Array of grids for delayed visual updating (see "cave.c")
  */
-s16b redraw_n = 0;
+POSITION_IDX redraw_n = 0;
 POSITION redraw_y[REDRAW_MAX];
 POSITION redraw_x[REDRAW_MAX];
 

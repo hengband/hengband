@@ -131,6 +131,7 @@ typedef s16b OBJECT_IDX;		/*!< ゲーム中のアイテムID型を定義 */
 typedef s16b KIND_OBJECT_IDX;	/*!< ゲーム中のベースアイテムID型を定義 */
 
 typedef s32b POSITION;			/*!< ゲーム中の座標型を定義 */
+typedef s16b POSITION_IDX;		/*!< ゲーム中の座標リストID型 */
 
 typedef s32b ALIGNMENT;		/*!< 善悪属性の型定義 */
 

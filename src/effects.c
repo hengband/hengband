@@ -3729,7 +3729,8 @@ bool inc_stat(int stat)
 bool dec_stat(int stat, int amount, int permanent)
 {
 	BASE_STATUS cur, max;
-	int loss, same, res = FALSE;
+	int loss, same;
+	bool res = FALSE;
 
 
 	/* Acquire current value */
