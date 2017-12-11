@@ -53,7 +53,8 @@ typedef struct feature_state feature_state;
 struct feature_state
 {
 	byte action; /*!< 変化条件をFF_*のIDで指定 / Action (FF_*) */
-	s16b result; /*!< 変化先ID / Result (f_info ID) */
+	STR_OFFSET result_tag; /*!< 変化先ID / Result (f_info ID) */
+	FEAT_IDX result; /*!< 変化先ID / Result (f_info ID) */
 };
 
 
@@ -70,12 +71,15 @@ struct feature_type
 	STR_OFFSET text;                /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
 	STR_OFFSET tag;                 /*!< 地形特性タグ参照のためのネームバッファオフセット値 /  Tag (offset) */
 
-	IDX mimic;               /*!< 未確定時の外形地形ID / Feature to mimic */
+	STR_OFFSET mimic_tag;
+	STR_OFFSET destroyed_tag;
+
+	FEAT_IDX mimic;               /*!< 未確定時の外形地形ID / Feature to mimic */
+	FEAT_IDX destroyed;           /*!< *破壊*に巻き込まれた時の地形移行先(未実装？) / Default destroyed state */
 
 	BIT_FLAGS flags[FF_FLAG_SIZE]; /*!< 地形の基本特性ビット配列 / Flags */
 
 	u16b priority;            /*!< 縮小表示で省略する際の表示優先度 / Map priority */
-	IDX destroyed;           /*!< *破壊*に巻き込まれた時の地形移行先(未実装？) / Default destroyed state */
 
 	feature_state state[MAX_FEAT_STATES]; /*!< feature_state テーブル */
 

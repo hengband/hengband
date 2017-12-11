@@ -1675,10 +1675,10 @@ errr parse_f_info(char *buf, header *head)
 		}
 
 		/* Default "mimic" */
-		f_ptr->mimic = (IDX)i;
+		f_ptr->mimic = (FEAT_IDX)i;
 
 		/* Default "destroyed state" -- if not specified */
-		f_ptr->destroyed = (IDX)i;
+		f_ptr->destroyed = (FEAT_IDX)i;
 
 		/* Default "states" */
 		for (i = 0; i < MAX_FEAT_STATES; i++) f_ptr->state[i].action = FF_FLAG_MAX;
@@ -1723,7 +1723,7 @@ errr parse_f_info(char *buf, header *head)
 		if (!add_tag(&offset, head, buf + 2)) return PARSE_ERROR_OUT_OF_MEMORY;
 
 		/* Record a fake tag index */
-		f_ptr->mimic = -offset;
+		f_ptr->mimic_tag = offset;
 	}
 
 
@@ -1886,7 +1886,7 @@ errr parse_f_info(char *buf, header *head)
 			if (!add_tag(&offset, head, t)) return PARSE_ERROR_OUT_OF_MEMORY;
 
 			/* Record a fake tag index */
-			f_ptr->destroyed = -offset;
+			f_ptr->destroyed_tag = offset;
 		}
 		else
 		{
@@ -1899,7 +1899,7 @@ errr parse_f_info(char *buf, header *head)
 			if (!add_tag(&offset, head, t)) return PARSE_ERROR_OUT_OF_MEMORY;
 
 			/* Record a fake tag index */
-			f_ptr->state[i].result = -offset;
+			f_ptr->state[i].result_tag = offset;
 		}
 	}
 
@@ -1939,29 +1939,32 @@ s16b f_tag_to_index(cptr str)
 /*!
  * @brief 地形タグからIDを得る /
  * Search for real index corresponding to this fake tag
- * @param feat タグ文字列
- * @return なし
+ * @param feat タグ文字列のオフセット
+ * @return 地形ID。該当がないなら-1
  */
-static void search_real_feat(s16b *feat)
+static FEAT_IDX search_real_feat(STR_OFFSET feat)
 {
-	int i;
+	FEAT_IDX i;
 
 	/* Don't convert non-fake tag */
-	if (*feat >= 0) return;
+	if (feat <= 0)
+	{
+		return -1;
+	}
 
 	/* Search for real index corresponding to this fake tag */
 	for (i = 0; i < f_head.info_num; i++)
 	{
-		if ((-(*feat)) == f_info[i].tag)
+		if (feat == f_info[i].tag)
 		{
 			/* Record real index */
-			*feat = (s16b)i;
-			return;
+			return i;
 		}
 	}
 
 	/* Undefined tag */
-	msg_format(_("未定義のタグ '%s'。", "%s is undefined."), f_tag + (-(*feat)));
+	msg_format(_("未定義のタグ '%s'。", "%s is undefined."), f_tag + feat);
+	return -1;
 }
 
 
@@ -1979,13 +1982,17 @@ void retouch_f_info(header *head)
 	for (i = 0; i < head->info_num; i++)
 	{
 		feature_type *f_ptr = &f_info[i];
-		int j;
+		FEAT_IDX j, k;
 
-		search_real_feat(&f_ptr->mimic);
-
-		search_real_feat(&f_ptr->destroyed);
-
-		for (j = 0; j < MAX_FEAT_STATES; j++) search_real_feat(&f_ptr->state[j].result);
+		k = search_real_feat(f_ptr->mimic_tag);
+		f_ptr->mimic = k < 0 ? f_ptr->mimic : k;
+		k = search_real_feat(f_ptr->destroyed_tag);
+		f_ptr->destroyed = k < 0 ? f_ptr->destroyed : k;
+		for (j = 0; j < MAX_FEAT_STATES; j++)
+		{
+			k = search_real_feat(f_ptr->state[j].result_tag);
+			f_ptr->state[j].result = k < 0 ? f_ptr->state[j].result : k;
+		}
 	}
 }
 
