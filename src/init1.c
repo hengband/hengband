@@ -1603,7 +1603,7 @@ static errr grab_one_feat_flag(feature_type *f_ptr, cptr what)
  */
 static errr grab_one_feat_action(feature_type *f_ptr, cptr what, int count)
 {
-	int i;
+	FF_FLAGS_IDX i;
 
 	/* Check flags */
 	for (i = 0; i < FF_FLAG_MAX; i++)

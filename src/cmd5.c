@@ -2217,7 +2217,7 @@ void do_cmd_pet(void)
 	int			pet_ctr;
 	monster_type	*m_ptr;
 
-	BIT_FLAGS mode = 0;
+	PET_COMMAND_IDX mode = 0;
 
 	char buf[160];
 	char target_buf[160];
@@ -2474,7 +2474,7 @@ void do_cmd_pet(void)
 			if (!redraw || use_menu)
 			{
 				byte y = 1, x = 0;
-				int ctr = 0;
+				PET_COMMAND_IDX ctr = 0;
 
 				/* Show list */
 				redraw = TRUE;

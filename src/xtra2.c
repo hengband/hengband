@@ -2722,8 +2722,7 @@ static void ang_sort_swap_distance(vptr u, vptr v, int a, int b)
  */
 static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION dx)
 {
-	POSITION_IDX i;
-	int v;
+	POSITION_IDX i, v;
 	POSITION x2, y2, x3, y3, x4, y4;
 	POSITION_IDX b_i = -1, b_v = 9999;
 
@@ -2997,7 +2996,7 @@ bool show_gold_on_floor = FALSE;
  *
  * This function must handle blindness/hallucination.
  */
-static int target_set_aux(int y, int x, BIT_FLAGS mode, cptr info)
+static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 {
 	cave_type *c_ptr = &cave[y][x];
 	s16b this_o_idx, next_o_idx = 0;
@@ -3005,7 +3004,7 @@ static int target_set_aux(int y, int x, BIT_FLAGS mode, cptr info)
 	bool boring = TRUE;
 	s16b feat;
 	feature_type *f_ptr;
-	int query = '\001';
+	char query = '\001';
 	char out_val[MAX_NLEN+80];
 
 #ifdef ALLOW_EASY_FLOOR

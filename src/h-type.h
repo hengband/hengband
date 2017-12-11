@@ -235,8 +235,10 @@ typedef int EFFECT_ID; /*!< 効果属性ID */
 typedef s16b QUEST_TYPE;   /*!< クエストの種別ID */
 typedef s16b QUEST_STATUS; /*!< クエストの状態ID */
 
-typedef s16b ACTION_SKILL_POWER;  /*!< 行動技能値 */
+typedef s16b ACTION_SKILL_POWER; /*!< 行動技能値 */
 
+typedef int PET_COMMAND_IDX; /*!< ペットへの指示ID */
+typedef byte FF_FLAGS_IDX;   /*!< 地形特性ID */
 
 /*** Pointers to all the basic types defined above ***/
 

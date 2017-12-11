@@ -52,7 +52,7 @@ typedef struct feature_state feature_state;
 
 struct feature_state
 {
-	byte action; /*!< 変化条件をFF_*のIDで指定 / Action (FF_*) */
+	FF_FLAGS_IDX action; /*!< 変化条件をFF_*のIDで指定 / Action (FF_*) */
 	STR_OFFSET result_tag; /*!< 変化先ID / Result (f_info ID) */
 	FEAT_IDX result; /*!< 変化先ID / Result (f_info ID) */
 };
