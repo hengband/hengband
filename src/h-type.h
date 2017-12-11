@@ -134,6 +134,7 @@ typedef s32b POSITION;			/*!< ゲーム中の座標型を定義 */
 typedef s16b POSITION_IDX;		/*!< ゲーム中の座標リストID型 */
 
 typedef s32b ALIGNMENT;		/*!< 善悪属性の型定義 */
+typedef byte FEAT_SUBTYPE;	/*!< 地形情報の副値 (トラップ種別/パターン種別/店舗種別)*/
 
 /*!
  * @var typedef s32b HIT_POINT
@@ -239,6 +240,8 @@ typedef s16b ACTION_SKILL_POWER; /*!< 行動技能値 */
 
 typedef int PET_COMMAND_IDX; /*!< ペットへの指示ID */
 typedef byte FF_FLAGS_IDX;   /*!< 地形特性ID */
+
+typedef s16b FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
 
 /*** Pointers to all the basic types defined above ***/
 

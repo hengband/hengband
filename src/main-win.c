@@ -1691,7 +1691,7 @@ static bool init_graphics(void)
 	/* if (can_use_graphics != arg_graphics) */
 	{
 		char buf[1024];
-		int wid, hgt, twid, thgt, ox, oy;
+		BYTE wid, hgt, twid, thgt, ox, oy;
 		cptr name;
 
 		if (arg_graphics == GRAPHICS_ADAM_BOLT)

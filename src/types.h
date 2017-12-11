@@ -79,11 +79,11 @@ struct feature_type
 
 	BIT_FLAGS flags[FF_FLAG_SIZE]; /*!< 地形の基本特性ビット配列 / Flags */
 
-	u16b priority;            /*!< 縮小表示で省略する際の表示優先度 / Map priority */
+	FEAT_PRIORITY priority;            /*!< 縮小表示で省略する際の表示優先度 / Map priority */
 
 	feature_state state[MAX_FEAT_STATES]; /*!< feature_state テーブル */
 
-	byte subtype;  /*!< 副特性値 */
+	FEAT_SUBTYPE subtype;  /*!< 副特性値 */
 	FEAT_POWER power;    /*!< 地形強度 */
 
 	SYMBOL_COLOR d_attr[F_LIT_MAX];   /*!< デフォルトの地形シンボルカラー / Default feature attribute */

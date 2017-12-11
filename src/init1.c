@@ -1821,7 +1821,7 @@ errr parse_f_info(char *buf, header *head)
 			if (1 == sscanf(s, "SUBTYPE_%d", &i))
 			{
 				/* Extract a "subtype" */
-				f_ptr->subtype =  i;
+				f_ptr->subtype = (FEAT_SUBTYPE)i;
 
 				/* Start at next entry */
 				s = t;
