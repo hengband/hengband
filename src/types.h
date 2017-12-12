@@ -1671,7 +1671,7 @@ typedef struct {
 typedef struct 
 {
 	s16b floor_id;        /* No recycle until 65536 IDs are all used */
-	byte savefile_id;     /* ID for savefile (from 0 to MAX_SAVED_FLOOR) */
+	s16b savefile_id;     /* ID for savefile (from 0 to MAX_SAVED_FLOOR) */
 	DEPTH dun_level;
 	s32b last_visit;      /* Time count of last visit. 0 for new floor. */
 	u32b visit_mark;      /* Older has always smaller mark. */

@@ -404,7 +404,7 @@ static errr init_info_raw(int fd, header *head)
  * @param len データの長さ
  * @return エラーコード
  */
-static void init_header(header *head, int num, int len)
+static void init_header(header *head, IDX num, int len)
 {
 	/* Save the "version" */
 	head->v_major = FAKE_VER_MAJOR;
@@ -413,7 +413,7 @@ static void init_header(header *head, int num, int len)
 	head->v_extra = 0;
 
 	/* Save the "record" information */
-	head->info_num = num;
+	head->info_num = (IDX)num;
 	head->info_len = len;
 
 	/* Save the size of "*_head" and "*_info" */

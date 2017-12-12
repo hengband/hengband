@@ -2353,7 +2353,7 @@ void quark_init(void)
  */
 s16b quark_add(cptr str)
 {
-	int i;
+	s16b i;
 
 	/* Look for an existing quark */
 	for (i = 1; i < quark__num; i++)

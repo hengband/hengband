@@ -124,7 +124,7 @@ void safe_setuid_grab(void)
  */
 s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode)
 {
-	int i = 0;
+	s16b i = 0;
 
 	char *s = buf;
 

@@ -3619,14 +3619,14 @@ typedef struct dungeon_grid dungeon_grid;
 
 struct dungeon_grid
 {
-	IDX		feature;		/* Terrain feature */
-	IDX		monster;		/* Monster */
-	IDX		object;			/* Object */
-	IDX		ego;			/* Ego-Item */
-	IDX		artifact;		/* Artifact */
+	FEAT_IDX feature;		/* Terrain feature */
+	MONSTER_IDX	monster;		/* Monster */
+	OBJECT_IDX object;			/* Object */
+	EGO_IDX	ego;			/* Ego-Item */
+	ARTIFACT_IDX artifact;		/* Artifact */
 	IDX		trap;			/* Trap */
 	int		cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
-	int		special;		/* Reserved for special terrain info */
+	s16b special; /* Reserved for special terrain info */
 	int		random;			/* Number of the random effect */
 };
 

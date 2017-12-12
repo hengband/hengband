@@ -238,7 +238,7 @@ static void kill_saved_floor(saved_floor_type *sf_ptr)
 s16b get_new_floor_id(void)
 {
 	saved_floor_type *sf_ptr = NULL;
-	int i;
+	s16b i;
 
 	/* Look for empty space */
 	for (i = 0; i < MAX_SAVED_FLOORS; i++)

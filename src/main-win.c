@@ -1381,10 +1381,8 @@ static void load_prefs(void)
  */
 static s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
 {
-	int k = 0;
-
+	s16b k = 0;
 	char *s = buf;
-
 
 	/* Process */
 	while (k < num)
@@ -3199,11 +3197,13 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 static void windows_map(void)
 {
 	term_data *td = &data[0];
-	byte a, c;
+	byte a;
+	char c;
 	int x, min_x, max_x;
 	int y, min_y, max_y;
 
-	byte ta, tc;
+	byte ta;
+	char tc;
 
 	/* Only in graphics mode */
 	if (!use_graphics) return;
