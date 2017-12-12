@@ -1463,8 +1463,8 @@ struct building_type
 	PRICE member_costs[8];           /* Costs for class members of building */
 	PRICE other_costs[8];		    /* Costs for nonguild members */
 	char letters[8];                /* action letters */
-	s16b actions[8];                /* action codes */
-	s16b action_restr[8];           /* action restrictions */
+	BACT_IDX actions[8];                /* action codes */
+	BACT_RESTRICT_IDX action_restr[8];           /* action restrictions */
 
 	CLASS_IDX member_class[MAX_CLASS];   /* which classes are part of guild */
 	RACE_IDX member_race[MAX_RACES];    /* which classes are part of guild */

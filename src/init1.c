@@ -3864,10 +3864,10 @@ static errr parse_line_building(char *buf)
 				building[index].letters[action_index] = zz[4][0];
 
 				/* Action code */
-				building[index].actions[action_index] = atoi(zz[5]);
+				building[index].actions[action_index] = (BACT_IDX)atoi(zz[5]);
 
 				/* Action restriction */
-				building[index].action_restr[action_index] = atoi(zz[6]);
+				building[index].action_restr[action_index] = (BACT_RESTRICT_IDX)atoi(zz[6]);
 
 				break;
 			}

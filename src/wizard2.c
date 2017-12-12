@@ -1539,9 +1539,8 @@ static void do_cmd_wiz_jump(void)
 	if (command_arg <= 0)
 	{
 		char	ppp[80];
-
 		char	tmp_val[160];
-		int		tmp_dungeon_type;
+		DUNGEON_IDX tmp_dungeon_type;
 
 		/* Prompt */
 		sprintf(ppp, "Jump which dungeon : ");
@@ -1552,7 +1551,7 @@ static void do_cmd_wiz_jump(void)
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 2)) return;
 
-		tmp_dungeon_type = atoi(tmp_val);
+		tmp_dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
 		if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > max_d_idx)) tmp_dungeon_type = DUNGEON_ANGBAND;
 
 		/* Prompt */
@@ -1566,9 +1565,9 @@ static void do_cmd_wiz_jump(void)
 		if (!get_string(ppp, tmp_val, 10)) return;
 
 		/* Extract request */
-		command_arg = (s16b)atoi(tmp_val);
+		command_arg = (COMMAND_ARG)atoi(tmp_val);
 
-		dungeon_type = (byte_hack)tmp_dungeon_type;
+		dungeon_type = tmp_dungeon_type;
 	}
 
 	/* Paranoia */

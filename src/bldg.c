@@ -4293,8 +4293,8 @@ static bool research_mon(void)
  */
 static void bldg_process_command(building_type *bldg, int i)
 {
-	int bact = bldg->actions[i];
-	int bcost;
+	BACT_IDX bact = bldg->actions[i];
+	PRICE bcost;
 	bool paid = FALSE;
 	int amt;
 
