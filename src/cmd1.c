@@ -567,10 +567,9 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_FLAGS mo
  * @param x 対象となるマスのX座標
  * @return なし
  */
-static void discover_hidden_things(int y, int x)
+static void discover_hidden_things(POSITION y, POSITION x)
 {
-	s16b this_o_idx, next_o_idx = 0;
-
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	cave_type *c_ptr;
 
 	/* Access the grid */
@@ -640,7 +639,8 @@ static void discover_hidden_things(int y, int x)
  */
 void search(void)
 {
-	int i, chance;
+	DIRECTION i;
+	PERCENTAGE chance;
 
 	/* Start with base search ability */
 	chance = p_ptr->skill_srh;

@@ -251,7 +251,7 @@ s16b get_new_floor_id(void)
 	/* None found */
 	if (i == MAX_SAVED_FLOORS)
 	{
-		int oldest = 0;
+		s16b oldest = 0;
 		u32b oldest_visit = 0xffffffffL;
 
 		/* Search for oldest */

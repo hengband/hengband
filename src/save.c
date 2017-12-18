@@ -940,7 +940,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 		/*** The saved floor ***/
 
 		wr_s16b(sf_ptr->floor_id);
-		wr_byte(sf_ptr->savefile_id);
+		wr_byte((byte_hack)sf_ptr->savefile_id);
 		wr_s16b((s16b)sf_ptr->dun_level);
 		wr_s32b(sf_ptr->last_visit);
 		wr_u32b(sf_ptr->visit_mark);
@@ -1211,7 +1211,7 @@ static bool wr_dungeon(void)
 		saved_floor_type *sf_ptr = &saved_floors[i];
 
 		wr_s16b(sf_ptr->floor_id);
-		wr_byte(sf_ptr->savefile_id);
+		wr_byte((byte_hack)sf_ptr->savefile_id);
 		wr_s16b((s16b)sf_ptr->dun_level);
 		wr_s32b(sf_ptr->last_visit);
 		wr_u32b(sf_ptr->visit_mark);

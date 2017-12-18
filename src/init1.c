@@ -3624,8 +3624,8 @@ struct dungeon_grid
 	OBJECT_IDX object;			/* Object */
 	EGO_IDX	ego;			/* Ego-Item */
 	ARTIFACT_IDX artifact;		/* Artifact */
-	IDX		trap;			/* Trap */
-	int		cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
+	IDX trap;			/* Trap */
+	BIT_FLAGS cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
 	s16b special; /* Reserved for special terrain info */
 	int		random;			/* Number of the random effect */
 };

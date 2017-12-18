@@ -281,7 +281,7 @@ static void shuffle_flavors(byte tval)
  */
 void flavor_init(void)
 {
-	int i;
+	KIND_OBJECT_IDX i;
 	u32b state_backup[4];
 
 	/* Hack -- Backup the RNG state */

@@ -144,7 +144,7 @@ struct object_kind
 	SYMBOL_COLOR x_attr;		/*!< 設定変更後のアイテムシンボルカラー /  Desired object attribute */
 	SYMBOL_CODE x_char;		/*!< 設定変更後のアイテムシンボルアルファベット /  Desired object character */
 
-	s16b flavor;		/*!< 調査中(TODO) / Special object flavor (or zero) */
+	IDX flavor;		/*!< 調査中(TODO) / Special object flavor (or zero) */
 
 	bool easy_know;		/*!< ベースアイテムが初期からベース名を判断可能かどうか / This object is always known (if aware) */
 
@@ -456,7 +456,7 @@ typedef struct cave_type cave_type;
 
 struct cave_type
 {
-	u16b info;		/* Hack -- cave flags */
+	BIT_FLAGS info;		/* Hack -- cave flags */
 
 	FEAT_IDX feat;		/* Hack -- feature type */
 	OBJECT_IDX o_idx;		/* Object in this grid */
@@ -1335,7 +1335,16 @@ struct player_type
 	ACTION_SKILL_POWER skill_dev;	/*!< 行動技能値:魔道具使用 / Skill: Magic Devices */
 	ACTION_SKILL_POWER skill_sav;	/*!< 行動技能値:魔法防御 / Skill: Saving throw */
 	ACTION_SKILL_POWER skill_stl;	/*!< 行動技能値:隠密 / Skill: Stealth factor */
-	ACTION_SKILL_POWER skill_srh;	/*!< 行動技能値:知覚 / Skill: Searching ability */
+
+	/*! 
+	 * 行動技能値:知覚 / Skill: Searching ability
+	 * この値はトラップの判定処理などで混乱、盲目、幻覚、無光源などの
+	 * 状態異常がない限り、難易度修正などがないままそのままパーセンテージ値として使われる。
+	 * 100以上ならば必ず全てのトラップを見つけることが出来る。
+	 */
+	ACTION_SKILL_POWER skill_srh;
+
+
 	ACTION_SKILL_POWER skill_fos;	/*!< 行動技能値:探索 / Skill: Searching frequency */
 	ACTION_SKILL_POWER skill_thn;	/*!< 行動技能値:打撃命中能力 / Skill: To hit (normal) */
 	ACTION_SKILL_POWER skill_thb;	/*!< 行動技能値:射撃命中能力 / Skill: To hit (shooting) */
@@ -1685,7 +1694,7 @@ typedef struct
  */
 typedef struct
 {
-	u16b info;
+	BIT_FLAGS info;
 	s16b feat;
 	s16b mimic;
 	s16b special;
