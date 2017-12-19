@@ -2637,7 +2637,7 @@ void do_cmd_rest(void)
 
 	set_action(ACTION_NONE);
 
-	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_ID(p_ptr) || p_ptr->magic_num1[1]))
+	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(p_ptr) || INTERUPTING_SONG_EFFECT(p_ptr)))
 	{
 		stop_singing();
 	}

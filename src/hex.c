@@ -33,8 +33,8 @@ bool stop_hex_spell_all(void)
 		if (hex_spelling(spell)) do_spell(REALM_HEX, spell, SPELL_STOP);
 	}
 
-	p_ptr->magic_num1[0] = 0;
-	p_ptr->magic_num2[0] = 0;
+	CASTING_HEX_FLAGS(p_ptr) = 0;
+	CASTING_HEX_NUM(p_ptr) = 0;
 
 	/* Print message */
 	if (p_ptr->action == ACTION_SPELL) set_action(ACTION_NONE);
@@ -71,7 +71,7 @@ bool stop_hex_spell(void)
 	}
 
 	/* Stop all spells */
-	else if ((p_ptr->magic_num2[0] == 1) || (p_ptr->lev < 35))
+	else if ((CASTING_HEX_NUM(p_ptr) == 1) || (p_ptr->lev < 35))
 	{
 		return stop_hex_spell_all();
 	}
@@ -79,10 +79,10 @@ bool stop_hex_spell(void)
 	{
 #ifdef JP
 		strnfmt(out_val, 78, "どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)",
-			I2A(0), I2A(p_ptr->magic_num2[0] - 1));
+			I2A(0), I2A(CASTING_HEX_NUM(p_ptr) - 1));
 #else
 		strnfmt(out_val, 78, "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)",
-			I2A(0), I2A(p_ptr->magic_num2[0] - 1));
+			I2A(0), I2A(CASTING_HEX_NUM(p_ptr) - 1));
 #endif
 
 		screen_save();
@@ -110,7 +110,7 @@ bool stop_hex_spell(void)
 				screen_load();
 				return stop_hex_spell_all();
 			}
-			if ((choice < I2A(0)) || (choice > I2A(p_ptr->magic_num2[0] - 1))) continue;
+			if ((choice < I2A(0)) || (choice > I2A(CASTING_HEX_NUM(p_ptr) - 1))) continue;
 			flag = TRUE;
 		}
 	}
@@ -122,8 +122,8 @@ bool stop_hex_spell(void)
 		int n = sp[A2I(choice)];
 
 		do_spell(REALM_HEX, n, SPELL_STOP);
-		p_ptr->magic_num1[0] &= ~(1L << n);
-		p_ptr->magic_num2[0]--;
+		CASTING_HEX_FLAGS(p_ptr) &= ~(1L << n);
+		CASTING_HEX_NUM(p_ptr)--;
 	}
 
 	/* Redraw status */
@@ -148,7 +148,7 @@ void check_hex(void)
 
 	/* Spells spelled by player */
 	if (p_ptr->realm1 != REALM_HEX) return;
-	if (!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return;
+	if (!CASTING_HEX_FLAGS(p_ptr) && !p_ptr->magic_num1[1]) return;
 
 	if (p_ptr->magic_num1[1])
 	{
@@ -179,7 +179,7 @@ void check_hex(void)
 	/* Culcurates final mana cost */
 	need_mana_frac = 0;
 	s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
-	need_mana += (p_ptr->magic_num2[0] - 1);
+	need_mana += (CASTING_HEX_NUM(p_ptr) - 1);
 
 
 	/* Not enough mana */
@@ -260,7 +260,7 @@ bool hex_spell_fully(void)
 	/* Paranoia */
 	k_max = MIN(k_max, MAX_KEEP);
 
-	if (p_ptr->magic_num2[0] < k_max) return FALSE;
+	if (CASTING_HEX_NUM(p_ptr) < k_max) return FALSE;
 
 	return TRUE;
 }

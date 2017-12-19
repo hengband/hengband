@@ -4503,7 +4503,7 @@ void calc_bonuses(void)
 	/* Hex bonuses */
 	if (p_ptr->realm1 == REALM_HEX)
 	{
-		if (hex_spelling_any()) p_ptr->skill_stl -= (1 + p_ptr->magic_num2[0]);
+		if (hex_spelling_any()) p_ptr->skill_stl -= (1 + CASTING_HEX_NUM(p_ptr));
 		if (hex_spelling(HEX_DETECT_EVIL)) p_ptr->esp_evil = TRUE;
 		if (hex_spelling(HEX_XTRA_MIGHT)) p_ptr->stat_add[A_STR] += 4;
 		if (hex_spelling(HEX_BUILDING))

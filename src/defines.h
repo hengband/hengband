@@ -5241,8 +5241,9 @@ extern int PlayerUID;
 
 #define MUSIC_DETECT            101
 
-#define SINGING_SONG_ID(P_PTR) ((P_PTR)->magic_num1[0])
-#define INTERUPTING_SONG_ID(P_PTR) ((P_PTR)->magic_num1[0])
+#define SINGING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[0])
+#define INTERUPTING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[1])
+#define SINGING_SONG_ID(P_PTR) ((P_PTR)->magic_num2[0])
 #define music_singing(X) ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == (X)))
 #define music_singing_any() ((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
 
@@ -5585,6 +5586,10 @@ extern int PlayerUID;
 	((p_ptr->realm1 == REALM_HEX) && (p_ptr->magic_num1[0]))
 #define hex_spelling(X) \
 	((p_ptr->realm1 == REALM_HEX) && (p_ptr->magic_num1[0] & (1L << (X))))
+#define CASTING_HEX_FLAGS(P_PTR) ((P_PTR)->magic_num1[0])
+#define CASTING_HEX_NUM(P_PTR) ((P_PTR)->magic_num2[0])
+
+
 /* 1st book */
 #define HEX_BLESS             0
 #define HEX_CURE_LIGHT        1

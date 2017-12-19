@@ -1394,7 +1394,7 @@ static void check_music(void)
 
 	/* Music singed by player */
 	if (p_ptr->pclass != CLASS_BARD) return;
-	if (!SINGING_SONG_ID(p_ptr) && !INTERUPTING_SONG_ID(p_ptr)) return;
+	if (!SINGING_SONG_EFFECT(p_ptr) && !INTERUPTING_SONG_EFFECT(p_ptr)) return;
 
 	if (p_ptr->anti_magic)
 	{
@@ -1402,7 +1402,7 @@ static void check_music(void)
 		return;
 	}
 
-	spell = p_ptr->magic_num2[0];
+	spell = SINGING_SONG_ID(p_ptr);
 	s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 
 	need_mana = mod_need_mana(s_ptr->smana, spell, REALM_MUSIC);
@@ -1421,10 +1421,10 @@ static void check_music(void)
 		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), need_mana, need_mana_frac);
 
 		p_ptr->redraw |= PR_MANA;
-		if (INTERUPTING_SONG_ID(p_ptr))
+		if (INTERUPTING_SONG_EFFECT(p_ptr))
 		{
-			SINGING_SONG_ID(p_ptr) = p_ptr->magic_num1[1];
-			INTERUPTING_SONG_ID(p_ptr) = 0;
+			SINGING_SONG_EFFECT(p_ptr) = INTERUPTING_SONG_EFFECT(p_ptr);
+			INTERUPTING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 			msg_print(_("歌を再開した。", "You restart singing."));
 			p_ptr->action = ACTION_SING;
 
@@ -5748,8 +5748,8 @@ static void dungeon(bool load_game)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_ID(p_ptr) > MUSIC_DETECT))
-		SINGING_SONG_ID(p_ptr) = MUSIC_DETECT;
+	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(p_ptr) > MUSIC_DETECT))
+		SINGING_SONG_EFFECT(p_ptr) = MUSIC_DETECT;
 
 	/* Hack -- notice death or departure */
 	if (!p_ptr->playing || p_ptr->is_dead) return;

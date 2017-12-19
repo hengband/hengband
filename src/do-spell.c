@@ -989,10 +989,10 @@ static bool cast_summon_greater_demon(void)
 static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
 {
 	/* Remember the song index */
-	SINGING_SONG_ID(p_ptr) = song;
+	SINGING_SONG_EFFECT(p_ptr) = song;
 
 	/* Remember the index of the spell which activated the song */
-	p_ptr->magic_num2[0] = spell;
+	SINGING_SONG_ID(p_ptr) = spell;
 
 
 	/* Now the player is singing */
@@ -1015,24 +1015,24 @@ void stop_singing(void)
 	if (p_ptr->pclass != CLASS_BARD) return;
 
  	/* Are there interupted song? */
-	if (INTERUPTING_SONG_ID(p_ptr))
+	if (INTERUPTING_SONG_EFFECT(p_ptr))
 	{
 		/* Forget interupted song */
-		INTERUPTING_SONG_ID(p_ptr) = MUSIC_NONE;
+		INTERUPTING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 		return;
 	}
 
 	/* The player is singing? */
-	if (!SINGING_SONG_ID(p_ptr)) return;
+	if (!SINGING_SONG_EFFECT(p_ptr)) return;
 
 	/* Hack -- if called from set_action(), avoid recursive loop */
 	if (p_ptr->action == ACTION_SING) set_action(ACTION_NONE);
 
 	/* Message text of each song or etc. */
-	do_spell(REALM_MUSIC, p_ptr->magic_num2[0], SPELL_STOP);
+	do_spell(REALM_MUSIC, SINGING_SONG_ID(p_ptr), SPELL_STOP);
 
-	SINGING_SONG_ID(p_ptr) = MUSIC_NONE;
-	p_ptr->magic_num2[0] = 0;
+	SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
+	SINGING_SONG_ID(p_ptr) = 0;
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
@@ -9129,9 +9129,9 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling of casting a spell.");
 		if (cast)
 		{
-			p_ptr->magic_num1[0] |= (1L << HEX_INHAIL);
+			CASTING_HEX_FLAGS(p_ptr) |= (1L << HEX_INHAIL);
 			do_cmd_quaff_potion();
-			p_ptr->magic_num1[0] &= ~(1L << HEX_INHAIL);
+			CASTING_HEX_FLAGS(p_ptr) &= ~(1L << HEX_INHAIL);
 			add = FALSE;
 		}
 		break;
@@ -9371,9 +9371,9 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if ((!o_ptr->k_idx) || (!object_is_cursed(o_ptr)))
 			{
 				do_spell(REALM_HEX, spell, SPELL_STOP);
-				p_ptr->magic_num1[0] &= ~(1L << spell);
-				p_ptr->magic_num2[0]--;
-				if (!p_ptr->magic_num2[0]) set_action(ACTION_NONE);
+				CASTING_HEX_FLAGS(p_ptr) &= ~(1L << spell);
+				CASTING_HEX_NUM(p_ptr)--;
+				if (!SINGING_SONG_ID(p_ptr)) set_action(ACTION_NONE);
 			}
 		}
 		if (stop)
@@ -9460,9 +9460,9 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (!flag)
 			{
 				msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
-				p_ptr->magic_num1[0] &= ~(1L << HEX_RESTORE);
-				if (cont) p_ptr->magic_num2[0]--;
-				if (p_ptr->magic_num2) p_ptr->action = ACTION_NONE;
+				CASTING_HEX_FLAGS(p_ptr) &= ~(1L << HEX_RESTORE);
+				if (cont) CASTING_HEX_NUM(p_ptr)--;
+				if (CASTING_HEX_NUM(p_ptr)) p_ptr->action = ACTION_NONE;
 
 				/* Redraw status */
 				p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
@@ -9672,8 +9672,8 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	if ((cast) && (add))
 	{
 		/* add spell */
-		p_ptr->magic_num1[0] |= 1L << (spell);
-		p_ptr->magic_num2[0]++;
+		CASTING_HEX_FLAGS(p_ptr) |= 1L << (spell);
+		CASTING_HEX_NUM(p_ptr)++;
 
 		if (p_ptr->action != ACTION_SPELL) set_action(ACTION_SPELL);
 	}
