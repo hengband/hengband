@@ -7215,8 +7215,7 @@ static cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			msg_print(_("静かな音楽が感覚を研ぎ澄まさせた．．．", "Your quiet music sharpens your sense of hearing..."));
 			/* Hack -- Initialize the turn count */
-			p_ptr->magic_num1[2] = 0;
-
+			SINGING_COUNT(p_ptr) = 0;
 			start_singing(spell, MUSIC_DETECT);
 		}
 
@@ -7227,14 +7226,14 @@ static cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				int count = p_ptr->magic_num1[2];
+				int count = SINGING_COUNT(p_ptr);
 
 				if (count >= 19) wiz_lite(FALSE);
 				if (count >= 11)
 				{
 					map_area(rad);
 					if (plev > 39 && count < 19)
-						p_ptr->magic_num1[2] = count + 1;
+						SINGING_COUNT(p_ptr) = count + 1;
 				}
 				if (count >= 6)
 				{
@@ -7244,7 +7243,7 @@ static cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					detect_objects_normal(rad);
 
 					if (plev > 24 && count < 11)
-						p_ptr->magic_num1[2] = count + 1;
+						SINGING_COUNT(p_ptr) = count + 1;
 				}
 				if (count >= 3)
 				{
@@ -7252,14 +7251,14 @@ static cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					detect_monsters_normal(rad);
 
 					if (plev > 19 && count < 6)
-						p_ptr->magic_num1[2] = count + 1;
+						SINGING_COUNT(p_ptr) = count + 1;
 				}
 				detect_traps(rad, TRUE);
 				detect_doors(rad);
 				detect_stairs(rad);
 
 				if (plev > 14 && count < 3)
-					p_ptr->magic_num1[2] = count + 1;
+					SINGING_COUNT(p_ptr) = count + 1;
 			}
 		}
 

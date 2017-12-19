@@ -5243,6 +5243,7 @@ extern int PlayerUID;
 
 #define SINGING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[0])
 #define INTERUPTING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[1])
+#define SINGING_COUNT(P_PTR) ((P_PTR)->magic_num1[2])
 #define SINGING_SONG_ID(P_PTR) ((P_PTR)->magic_num2[0])
 #define music_singing(X) ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == (X)))
 #define music_singing_any() ((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])

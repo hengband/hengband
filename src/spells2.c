@@ -1890,7 +1890,7 @@ bool detect_traps(POSITION range, bool known)
 
 	if (known) p_ptr->dtrap = TRUE;
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 0) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -1912,7 +1912,7 @@ bool detect_doors(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_DOOR, TRUE);
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 0) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -1934,7 +1934,7 @@ bool detect_stairs(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_STAIRS, TRUE);
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 0) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -1956,7 +1956,7 @@ bool detect_treasure(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_HAS_GOLD, TRUE);
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 6) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -2015,7 +2015,7 @@ bool detect_objects_gold(POSITION range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 6) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -2079,7 +2079,7 @@ bool detect_objects_normal(POSITION range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 6) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -2234,7 +2234,7 @@ bool detect_monsters_normal(POSITION range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 3) flag = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 
 	/* Describe */
 	if (flag)
@@ -2301,7 +2301,7 @@ bool detect_monsters_invis(POSITION range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 3) flag = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 
 	/* Describe */
 	if (flag)
@@ -2567,7 +2567,7 @@ bool detect_monsters_string(POSITION range, cptr Match)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 3) flag = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 
 	/* Describe */
 	if (flag)
