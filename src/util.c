@@ -2351,9 +2351,9 @@ void quark_init(void)
 /*
  * Add a new "quark" to the set of quarks.
  */
-s16b quark_add(cptr str)
+u16b quark_add(cptr str)
 {
-	s16b i;
+	u16b i;
 
 	/* Look for an existing quark */
 	for (i = 1; i < quark__num; i++)
@@ -2477,7 +2477,8 @@ cptr message_str(int age)
  */
 void message_add(cptr str)
 {
-	int i, k, x, m, n;
+	u32b i;
+	int k, x, m, n;
 
 	char u[4096];
 	char splitted1[81];

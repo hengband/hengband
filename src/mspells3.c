@@ -611,7 +611,7 @@ static bool cast_learned_spell(int spell, bool success)
 	HIT_POINT damage = 0;
 	bool pet = success;
 	bool no_trump = FALSE;
-	u32b p_mode, u_mode = 0L, g_mode;
+	BIT_FLAGS p_mode, u_mode = 0L, g_mode;
 
 	if (pet)
 	{
