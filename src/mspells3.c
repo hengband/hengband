@@ -605,12 +605,12 @@ static int get_learned_power(SPELL_IDX *sn)
  */
 static bool cast_learned_spell(int spell, bool success)
 {
-	int             dir;
-	int             plev = pseudo_plev();
-	int     summon_lev = p_ptr->lev * 2 / 3 + randint1(p_ptr->lev/2);
-	int             damage = 0;
-	bool   pet = success;
-	bool   no_trump = FALSE;
+	DIRECTION dir;
+	PLAYER_LEVEL plev = pseudo_plev();
+	PLAYER_LEVEL summon_lev = p_ptr->lev * 2 / 3 + randint1(p_ptr->lev/2);
+	HIT_POINT damage = 0;
+	bool pet = success;
+	bool no_trump = FALSE;
 	u32b p_mode, u_mode = 0L, g_mode;
 
 	if (pet)

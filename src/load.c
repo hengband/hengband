@@ -3066,7 +3066,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		cave_template_type *ct_ptr = &templates[i];
 
 		/* Read it */
-		rd_u16b(&ct_ptr->info);
+		rd_u16b(&tmp16u);
+		ct_ptr->info = (BIT_FLAGS)tmp16u;
 		if (h_older_than(1, 7, 0, 2))
 		{
 			rd_byte(&tmp8u);
@@ -3327,7 +3328,8 @@ static errr rd_dungeon(void)
 			saved_floor_type *sf_ptr = &saved_floors[i];
 
 			rd_s16b(&sf_ptr->floor_id);
-			rd_byte(&sf_ptr->savefile_id);
+			rd_byte(&tmp8u);
+			sf_ptr->savefile_id = (s16b)tmp8u;
 
 			rd_s16b(&tmp16s);
 			sf_ptr->dun_level = (DEPTH)tmp16s;

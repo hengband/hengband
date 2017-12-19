@@ -1043,7 +1043,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 		cave_template_type *ct_ptr = &templates[i];
 
 		/* Dump it */
-		wr_u16b(ct_ptr->info);
+		wr_u16b((u16b)ct_ptr->info);
 		wr_s16b(ct_ptr->feat);
 		wr_s16b(ct_ptr->mimic);
 		wr_s16b(ct_ptr->special);
