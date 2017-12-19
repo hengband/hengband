@@ -1574,7 +1574,7 @@ static void do_cmd_wiz_jump(void)
 	if (command_arg < d_info[dungeon_type].mindepth) command_arg = 0;
 
 	/* Paranoia */
-	if (command_arg > d_info[dungeon_type].maxdepth) command_arg = d_info[dungeon_type].maxdepth;
+	if (command_arg > d_info[dungeon_type].maxdepth) command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
 
 	/* Accept request */
 	msg_format("You jump to dungeon level %d.", command_arg);

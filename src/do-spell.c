@@ -989,10 +989,10 @@ static bool cast_summon_greater_demon(void)
 static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
 {
 	/* Remember the song index */
-	SINGING_SONG_EFFECT(p_ptr) = song;
+	SINGING_SONG_EFFECT(p_ptr) = (MAGIC_NUM2)song;
 
 	/* Remember the index of the spell which activated the song */
-	SINGING_SONG_ID(p_ptr) = spell;
+	SINGING_SONG_ID(p_ptr) = (SPELL_IDX)spell;
 
 
 	/* Now the player is singing */

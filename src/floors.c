@@ -101,7 +101,7 @@ void init_saved_floors(bool force)
 	latest_visit_mark = 1;
 
 	/* A sign to mark temporal files */
-	saved_floor_file_sign = time(NULL);
+	saved_floor_file_sign = (u32b)time(NULL);
 
 	/* No next floor yet */
 	new_floor_id = 0;

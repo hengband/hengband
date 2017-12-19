@@ -2477,8 +2477,8 @@ cptr message_str(int age)
  */
 void message_add(cptr str)
 {
-	u32b i;
-	int k, x, m, n;
+	u32b i, n;
+	int k, x, m;
 
 	char u[4096];
 	char splitted1[81];
@@ -3806,7 +3806,7 @@ bool get_com(cptr prompt, char *command, bool z_escape)
 QUANTITY get_quantity(cptr prompt, QUANTITY max)
 {
 	bool res;
-	COMMAND_CODE amt;
+	QUANTITY amt;
 	char tmp[80];
 	char buf[80];
 

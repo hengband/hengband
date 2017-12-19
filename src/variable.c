@@ -98,7 +98,7 @@ s16b command_cmd;		/* Current "Angband Command" */
 
 COMMAND_ARG command_arg;	/*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */
 
-s16b command_rep;			/*!< 各種コマンドの汎用的なリピート数として扱う / Gives repetition of current command */
+COMMAND_NUM command_rep;	/*!< 各種コマンドの汎用的なリピート数として扱う / Gives repetition of current command */
 
 DIRECTION command_dir;		/*!< 各種コマンドの汎用的な方向値処理として扱う/ Gives direction of current command */
 

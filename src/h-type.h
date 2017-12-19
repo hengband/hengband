@@ -216,6 +216,7 @@ typedef byte XTRA8;      /*!< 汎用変数8ビットの型定義 */
 
 typedef s16b COMMAND_CODE;   /*!< コマンド内容の型定義 */
 typedef s16b COMMAND_ARG;	 /*!< コマンド引数の型定義 */
+typedef s16b COMMAND_NUM;	 /*!< コマンド数の型定義 */
 
 typedef int TERM_POSITION;   /*!< コンソール表示座標の型定義 */
 typedef byte SYMBOL_COLOR;    /*!< キャラの色の型定義 */
