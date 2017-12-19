@@ -112,7 +112,7 @@ s16b command_new;		/* Command chaining from inven/equip view */
 bool msg_flag;			/* Used in msg_print() for "buffering" */
 
 s16b running;			/* Current counter for running, if any */
-s16b resting;			/* Current counter for resting, if any */
+GAME_TURN resting;			/* Current counter for resting, if any */
 
 POSITION cur_hgt;		/* Current dungeon height */
 POSITION cur_wid;		/* Current dungeon width */

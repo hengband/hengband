@@ -1181,13 +1181,13 @@ static void prt_state(void)
 				}
 
 				/* Rest until healed */
-				else if (resting == -1)
+				else if (resting == COMMAND_ARG_REST_FULL_HEALING)
 				{
 					text[0] = text[1] = text[2] = text[3] = '*';
 				}
 
 				/* Rest until done */
-				else if (resting == -2)
+				else if (resting == COMMAND_ARG_REST_UNTIL_DONE)
 				{
 					text[0] = text[1] = text[2] = text[3] = '&';
 				}

@@ -1027,7 +1027,7 @@ static bool cmd_racial_power_aux(s32b command)
 		case CLASS_BARD:
 		{
 			/* Singing is already stopped */
-			if (!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return FALSE;
+			if (!SINGING_SONG_ID(p_ptr) && !INTERUPTING_SONG_ID(p_ptr)) return FALSE;
 
 			stop_singing();
 			p_ptr->energy_use = 10;

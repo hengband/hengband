@@ -268,8 +268,8 @@ void dispel_player(void)
 	if (music_singing_any() || hex_spelling_any())
 	{
 		cptr str = (music_singing_any()) ? _("歌", "singing") : _("呪文", "spelling");
-		p_ptr->magic_num1[1] = p_ptr->magic_num1[0];
-		p_ptr->magic_num1[0] = 0;
+		INTERUPTING_SONG_ID(p_ptr) = SINGING_SONG_ID(p_ptr);
+		SINGING_SONG_ID(p_ptr) = MUSIC_NONE;
 		msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
 		p_ptr->action = ACTION_NONE;
 

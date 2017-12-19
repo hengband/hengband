@@ -989,7 +989,7 @@ static bool cast_summon_greater_demon(void)
 static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
 {
 	/* Remember the song index */
-	p_ptr->magic_num1[0] = song;
+	SINGING_SONG_ID(p_ptr) = song;
 
 	/* Remember the index of the spell which activated the song */
 	p_ptr->magic_num2[0] = spell;
@@ -1015,15 +1015,15 @@ void stop_singing(void)
 	if (p_ptr->pclass != CLASS_BARD) return;
 
  	/* Are there interupted song? */
-	if (p_ptr->magic_num1[1])
+	if (INTERUPTING_SONG_ID(p_ptr))
 	{
 		/* Forget interupted song */
-		p_ptr->magic_num1[1] = 0;
+		INTERUPTING_SONG_ID(p_ptr) = MUSIC_NONE;
 		return;
 	}
 
 	/* The player is singing? */
-	if (!p_ptr->magic_num1[0]) return;
+	if (!SINGING_SONG_ID(p_ptr)) return;
 
 	/* Hack -- if called from set_action(), avoid recursive loop */
 	if (p_ptr->action == ACTION_SING) set_action(ACTION_NONE);
@@ -1031,7 +1031,7 @@ void stop_singing(void)
 	/* Message text of each song or etc. */
 	do_spell(REALM_MUSIC, p_ptr->magic_num2[0], SPELL_STOP);
 
-	p_ptr->magic_num1[0] = MUSIC_NONE;
+	SINGING_SONG_ID(p_ptr) = MUSIC_NONE;
 	p_ptr->magic_num2[0] = 0;
 
 	/* Recalculate bonuses */

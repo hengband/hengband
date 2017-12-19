@@ -1394,7 +1394,7 @@ static void check_music(void)
 
 	/* Music singed by player */
 	if (p_ptr->pclass != CLASS_BARD) return;
-	if (!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return;
+	if (!SINGING_SONG_ID(p_ptr) && !INTERUPTING_SONG_ID(p_ptr)) return;
 
 	if (p_ptr->anti_magic)
 	{
@@ -1421,10 +1421,10 @@ static void check_music(void)
 		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), need_mana, need_mana_frac);
 
 		p_ptr->redraw |= PR_MANA;
-		if (p_ptr->magic_num1[1])
+		if (INTERUPTING_SONG_ID(p_ptr))
 		{
-			p_ptr->magic_num1[0] = p_ptr->magic_num1[1];
-			p_ptr->magic_num1[1] = 0;
+			SINGING_SONG_ID(p_ptr) = p_ptr->magic_num1[1];
+			INTERUPTING_SONG_ID(p_ptr) = 0;
 			msg_print(_("歌を再開した。", "You restart singing."));
 			p_ptr->action = ACTION_SING;
 
@@ -5080,7 +5080,7 @@ static void process_player(void)
 	if (resting < 0)
 	{
 		/* Basic resting */
-		if (resting == -1)
+		if (resting == COMMAND_ARG_REST_FULL_HEALING)
 		{
 			/* Stop resting */
 			if ((p_ptr->chp == p_ptr->mhp) &&
@@ -5091,7 +5091,7 @@ static void process_player(void)
 		}
 
 		/* Complete resting */
-		else if (resting == -2)
+		else if (resting == COMMAND_ARG_REST_UNTIL_DONE)
 		{
 			/* Stop resting */
 			if ((p_ptr->chp == p_ptr->mhp) &&
@@ -5748,8 +5748,8 @@ static void dungeon(bool load_game)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT))
-		p_ptr->magic_num1[0] = MUSIC_DETECT;
+	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_ID(p_ptr) > MUSIC_DETECT))
+		SINGING_SONG_ID(p_ptr) = MUSIC_DETECT;
 
 	/* Hack -- notice death or departure */
 	if (!p_ptr->playing || p_ptr->is_dead) return;

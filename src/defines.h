@@ -5241,6 +5241,8 @@ extern int PlayerUID;
 
 #define MUSIC_DETECT            101
 
+#define SINGING_SONG_ID(P_PTR) ((P_PTR)->magic_num1[0])
+#define INTERUPTING_SONG_ID(P_PTR) ((P_PTR)->magic_num1[0])
 #define music_singing(X) ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == (X)))
 #define music_singing_any() ((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
 
@@ -5669,3 +5671,5 @@ extern int PlayerUID;
 #define CHEAT_DUNGEON 2
 #define CHEAT_MISC 3
 
+#define COMMAND_ARG_REST_UNTIL_DONE -2   /*!<休憩コマンド引数 … 必要な分だけ回復 */
+#define COMMAND_ARG_REST_FULL_HEALING -1 /*!<休憩コマンド引数 … HPとMPが全回復するまで */

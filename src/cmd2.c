@@ -2637,7 +2637,7 @@ void do_cmd_rest(void)
 
 	set_action(ACTION_NONE);
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] || p_ptr->magic_num1[1]))
+	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_ID(p_ptr) || p_ptr->magic_num1[1]))
 	{
 		stop_singing();
 	}
@@ -2663,13 +2663,13 @@ void do_cmd_rest(void)
 		/* Rest until done */
 		if (out_val[0] == '&')
 		{
-			command_arg = (-2);
+			command_arg = COMMAND_ARG_REST_UNTIL_DONE;
 		}
 
 		/* Rest a lot */
 		else if (out_val[0] == '*')
 		{
-			command_arg = (-1);
+			command_arg = COMMAND_ARG_REST_FULL_HEALING;
 		}
 
 		/* Rest some */
