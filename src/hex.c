@@ -272,12 +272,12 @@ bool hex_spell_fully(void)
 void revenge_spell(void)
 {
 	if (p_ptr->realm1 != REALM_HEX) return;
-	if (p_ptr->magic_num2[2] <= 0) return;
+	if (HEX_REVENGE_TURN(p_ptr) <= 0) return;
 
-	switch(p_ptr->magic_num2[1])
+	switch(HEX_REVENGE_TYPE(p_ptr))
 	{
-	case 1: do_spell(REALM_HEX, HEX_PATIENCE, SPELL_CONT); break;
-	case 2: do_spell(REALM_HEX, HEX_REVENGE, SPELL_CONT); break;
+		case 1: do_spell(REALM_HEX, HEX_PATIENCE, SPELL_CONT); break;
+		case 2: do_spell(REALM_HEX, HEX_REVENGE, SPELL_CONT); break;
 	}
 }
 
@@ -289,9 +289,9 @@ void revenge_spell(void)
 void revenge_store(HIT_POINT dam)
 {
 	if (p_ptr->realm1 != REALM_HEX) return;
-	if (p_ptr->magic_num2[2] <= 0) return;
+	if (HEX_REVENGE_TURN(p_ptr) <= 0) return;
 
-	p_ptr->magic_num1[2] += dam;
+	HEX_REVENGE_POWER(p_ptr) += dam;
 }
 
 /*!

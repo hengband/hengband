@@ -9048,22 +9048,22 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("我慢", "Patience");
 		if (desc) return _("数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。", 
 			"Bursts hell fire strongly after patients any damage while few turns.");
-		power = MIN(200, (p_ptr->magic_num1[2] * 2));
+		power = MIN(200, (HEX_REVENGE_POWER(p_ptr) * 2));
 		if (info) return info_damage(0, 0, power);
 		if (cast)
 		{
 			int a = 3 - (p_ptr->pspeed - 100) / 10;
 			MAGIC_NUM2 r = 3 + randint1(3) + MAX(0, MIN(3, a));
 
-			if (p_ptr->magic_num2[2] > 0)
+			if (HEX_REVENGE_TURN(p_ptr) > 0)
 			{
 				msg_print(_("すでに我慢をしている。", "You are already patienting."));
 				return NULL;
 			}
 
-			p_ptr->magic_num2[1] = 1;
-			p_ptr->magic_num2[2] = r;
-			p_ptr->magic_num1[2] = 0;
+			HEX_REVENGE_TYPE(p_ptr) = 1;
+			HEX_REVENGE_TURN(p_ptr) = r;
+			HEX_REVENGE_POWER(p_ptr) = 0;
 			msg_print(_("じっと耐えることにした。", "You decide to patient all damages."));
 			add = FALSE;
 		}
@@ -9071,9 +9071,9 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int rad = 2 + (power / 50);
 
-			p_ptr->magic_num2[2]--;
+			HEX_REVENGE_TURN(p_ptr)--;
 
-			if ((p_ptr->magic_num2[2] <= 0) || (power >= 200))
+			if ((HEX_REVENGE_TURN(p_ptr) <= 0) || (power >= 200))
 			{
 				msg_print(_("我慢が解かれた！", "Time for end of patioence!"));
 				if (power)
@@ -9087,9 +9087,9 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				}
 
 				/* Reset */
-				p_ptr->magic_num2[1] = 0;
-				p_ptr->magic_num2[2] = 0;
-				p_ptr->magic_num1[2] = 0;
+				HEX_REVENGE_TYPE(p_ptr) = 0;
+				HEX_REVENGE_TURN(p_ptr) = 0;
+				HEX_REVENGE_POWER(p_ptr) = 0;
 			}
 		}
 		break;
@@ -9613,7 +9613,7 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("復讐の宣告", "Revenge sentence");
 		if (desc) return _("数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。", 
 			"Fires  a ball of hell fire to try revenging after few turns.");
-		power = p_ptr->magic_num1[2];
+		power = HEX_REVENGE_POWER(p_ptr);
 		if (info) return info_damage(0, 0, power);
 		if (cast)
 		{
@@ -9621,22 +9621,22 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int a = 3 - (p_ptr->pspeed - 100) / 10;
 			r = 1 + randint1(2) + MAX(0, MIN(3, a));
 
-			if (p_ptr->magic_num2[2] > 0)
+			if (HEX_REVENGE_TURN(p_ptr) > 0)
 			{
 				msg_print(_("すでに復讐は宣告済みだ。", "You already pronounced your revenge."));
 				return NULL;
 			}
 
-			p_ptr->magic_num2[1] = 2;
-			p_ptr->magic_num2[2] = r;
+			HEX_REVENGE_TYPE(p_ptr) = 2;
+			HEX_REVENGE_TURN(p_ptr) = r;
 			msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You pronounce your revenge. %d turns left."), r);
 			add = FALSE;
 		}
 		if (cont)
 		{
-			p_ptr->magic_num2[2]--;
+			HEX_REVENGE_TURN(p_ptr)--;
 
-			if (p_ptr->magic_num2[2] <= 0)
+			if (HEX_REVENGE_TURN(p_ptr) <= 0)
 			{
 				int dir;
 
@@ -9661,7 +9661,7 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				{
 					msg_print(_("復讐する気が失せた。", "You are not a mood to revenge."));
 				}
-				p_ptr->magic_num1[2] = 0;
+				HEX_REVENGE_POWER(p_ptr) = 0;
 			}
 		}
 		break;

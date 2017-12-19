@@ -674,10 +674,10 @@ static void prt_status(void)
 			hex_spelling(HEX_CURE_SERIOUS) ||
 			hex_spelling(HEX_CURE_CRITICAL)) ADD_FLG(BAR_CURE);
 
-		if (p_ptr->magic_num2[2])
+		if (HEX_REVENGE_TURN(p_ptr))
 		{
-			if (p_ptr->magic_num2[1] == 1) ADD_FLG(BAR_PATIENCE);
-			if (p_ptr->magic_num2[1] == 2) ADD_FLG(BAR_REVENGE);
+			if (HEX_REVENGE_TYPE(p_ptr) == 1) ADD_FLG(BAR_PATIENCE);
+			if (HEX_REVENGE_TYPE(p_ptr) == 2) ADD_FLG(BAR_REVENGE);
 		}
 	}
 
