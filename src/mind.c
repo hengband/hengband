@@ -689,7 +689,7 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	char            out_val[160];
 	char            comment[80];
 	cptr            p;
-
+	COMMAND_CODE code;
 	mind_type       spell;
 	const mind_power      *mind_ptr;
 	bool            flag, redraw;
@@ -743,10 +743,13 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the spell, if available */
-	if (repeat_pull(sn))
+
+	if (repeat_pull(&code))
 	{
+		*sn = (SPELL_IDX)code;
 		/* Hack -- If requested INVEN_FORCE(1111), pull again */
-		if (*sn == INVEN_FORCE) repeat_pull(sn);
+		if (*sn == INVEN_FORCE) repeat_pull(&code);
+		*sn = (SPELL_IDX)code;
 
 		/* Verify the spell */
 		if (mind_ptr->info[*sn].min_lev <= plev)
@@ -1021,7 +1024,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	repeat_push(*sn);
+	repeat_push((COMMAND_CODE)i);
 
 #endif /* ALLOW_REPEAT -- TNB */
 

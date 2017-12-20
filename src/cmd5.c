@@ -77,6 +77,7 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 	const magic_type  *s_ptr;
 	char        out_val[160];
 	cptr        p;
+	COMMAND_CODE code;
 #ifdef JP
 	char jverb_buf[128];
 #endif
@@ -85,8 +86,9 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the spell, if available */
-	if (repeat_pull(sn))
+	if (repeat_pull(&code))
 	{
+		*sn = (SPELL_IDX)code;
 		/* Verify the spell */
 		if (spell_okay(*sn, learned, FALSE, use_realm))
 		{
@@ -338,7 +340,7 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	repeat_push(*sn);
+	repeat_push((COMMAND_CODE)spell);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -406,14 +408,16 @@ static bool player_has_no_spellbooks(void)
  */
 static void confirm_use_force(bool browse_only)
 {
-	SPELL_IDX item;
+	INVENTORY_IDX item;
 	char which;
+	COMMAND_CODE code;
 
 #ifdef ALLOW_REPEAT
 
 	/* Get the item index */
-	if (repeat_pull(&item) && (item == INVEN_FORCE))
+	if (repeat_pull(&code) && (code == INVEN_FORCE))
 	{
+		item = (INVENTORY_IDX)code;
 		browse_only ? do_cmd_mind_browse() : do_cmd_mind();
 		return;
 	}

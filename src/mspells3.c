@@ -216,7 +216,7 @@ static int get_learned_power(SPELL_IDX *sn)
 	char            comment[80];
 	s32b            f4 = 0, f5 = 0, f6 = 0;
 	cptr            p = _("魔法", "magic");
-
+	COMMAND_CODE code;
 	monster_power   spell;
 	bool            flag, redraw;
 	int menu_line = (use_menu ? 1 : 0);
@@ -233,11 +233,13 @@ static int get_learned_power(SPELL_IDX *sn)
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the spell, if available */
-	if (repeat_pull(sn))
+	
+	if (repeat_pull(&code))
 	{
 		/* Success */
 		return (TRUE);
 	}
+	*sn = (SPELL_IDX)code;
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -587,7 +589,7 @@ static int get_learned_power(SPELL_IDX *sn)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	repeat_push(*sn);
+	repeat_push((COMMAND_CODE)spellnum[i]);
 
 #endif /* ALLOW_REPEAT -- TNB */
 

@@ -4408,7 +4408,7 @@ void request_command(int shopping)
 {
 	int i;
 
-	char cmd;
+	s16b cmd;
 	int mode;
 
 	cptr act;

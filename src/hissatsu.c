@@ -45,7 +45,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	char            out_val[160];
 	SPELL_IDX sentaku[32];
 	cptr            p = _("必殺剣", "special attack");
-
+	COMMAND_CODE code;
 	magic_type spell;
 	bool            flag, redraw;
 	int menu_line = (use_menu ? 1 : 0);
@@ -56,8 +56,9 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the spell, if available */
-	if (repeat_pull(sn))
+	if (repeat_pull(&code))
 	{
+		*sn = (SPELL_IDX)code;
 		/* Verify the spell */
 		if (technic_info[TECHNIC_HISSATSU][*sn].slevel <= plev)
 		{
@@ -310,7 +311,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	repeat_push(*sn);
+	repeat_push((COMMAND_CODE)j);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
