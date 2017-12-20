@@ -4091,6 +4091,7 @@ bool get_aim_dir(DIRECTION *dp)
 	DIRECTION dir;
 	char	command;
 	cptr	p;
+	COMMAND_CODE code;
 
 	/* Initialize */
 	(*dp) = 0;
@@ -4103,17 +4104,18 @@ bool get_aim_dir(DIRECTION *dp)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	if (repeat_pull(dp))
+	if (repeat_pull(&code))
 	{
 		/* Confusion? */
 
 		/* Verify */
-		if (!(*dp == 5 && !target_okay()))
+		if (!(code == 5 && !target_okay()))
 		{
 /*			return (TRUE); */
-			dir = *dp;
+			dir = (DIRECTION)code;
 		}
 	}
+	*dp = (DIRECTION)code;
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -4208,7 +4210,7 @@ bool get_aim_dir(DIRECTION *dp)
 #ifdef ALLOW_REPEAT /* TNB */
 
 /*	repeat_push(dir); */
-	repeat_push(command_dir);
+	repeat_push((COMMAND_CODE)command_dir);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -4238,6 +4240,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 {
 	DIRECTION dir;
 	cptr prompt;
+	COMMAND_CODE code;
 
 	/* Initialize */
 	(*dp) = 0;
@@ -4247,11 +4250,12 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	if (repeat_pull(dp))
+	if (repeat_pull(&code))
 	{
-		dir = *dp;
+		dir = (DIRECTION)code;
 /*		return (TRUE); */
 	}
+	*dp = (DIRECTION)code;
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -4363,7 +4367,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 #ifdef ALLOW_REPEAT /* TNB */
 
 /*	repeat_push(dir); */
-	repeat_push(command_dir);
+	repeat_push((COMMAND_CODE)command_dir);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -4375,6 +4379,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 bool get_rep_dir2(DIRECTION *dp)
 {
 	DIRECTION dir;
+	COMMAND_CODE code;
 
 	/* Initialize */
 	(*dp) = 0;
@@ -4384,11 +4389,12 @@ bool get_rep_dir2(DIRECTION *dp)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	if (repeat_pull(dp))
+	if (repeat_pull(&code))
 	{
-		dir = *dp;
+		dir = (DIRECTION)code;
 /*		return (TRUE); */
 	}
+	*dp = (DIRECTION)code;
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -4440,7 +4446,7 @@ bool get_rep_dir2(DIRECTION *dp)
 #ifdef ALLOW_REPEAT /* TNB */
 
 /*	repeat_push(dir); */
-	repeat_push(command_dir);
+	repeat_push((COMMAND_CODE)command_dir);
 
 #endif /* ALLOW_REPEAT -- TNB */
 

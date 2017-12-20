@@ -3805,10 +3805,11 @@ bool get_com(cptr prompt, char *command, bool z_escape)
  */
 QUANTITY get_quantity(cptr prompt, QUANTITY max)
 {
-	bool res;
+	bool res, result;
 	QUANTITY amt;
 	char tmp[80];
 	char buf[80];
+	COMMAND_CODE code;
 
 
 	/* Use "command_arg" */
@@ -3830,7 +3831,9 @@ QUANTITY get_quantity(cptr prompt, QUANTITY max)
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the item index */
-	if ((max != 1) && repeat_pull(&amt))
+	result = repeat_pull(&code);
+	amt = (QUANTITY)code;
+	if ((max != 1) && result)
 	{
 		/* Enforce the maximum */
 		if (amt > max) amt = max;
@@ -3892,7 +3895,7 @@ QUANTITY get_quantity(cptr prompt, QUANTITY max)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	if (amt) repeat_push(amt);
+	if (amt) repeat_push((COMMAND_CODE)amt);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
