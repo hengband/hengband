@@ -2962,36 +2962,36 @@
 /*
  * Spell types used by project(), and related functions.
  */
-#define GF_ELEC         1
-#define GF_POIS         2
-#define GF_ACID         3
-#define GF_COLD         4
-#define GF_FIRE         5
-#define GF_PSY_SPEAR    9
-#define GF_MISSILE      10
-#define GF_ARROW        11
-#define GF_PLASMA       12
+#define GF_ELEC         1			/*!< 魔法効果: 電撃*/
+#define GF_POIS         2			/*!< 魔法効果: 毒*/
+#define GF_ACID         3			/*!< 魔法効果: 酸*/
+#define GF_COLD         4			/*!< 魔法効果: 冷気*/
+#define GF_FIRE         5			/*!< 魔法効果: 火炎*/
+#define GF_PSY_SPEAR    9			/*!< 魔法効果: 光の剣*/
+#define GF_MISSILE      10			/*!< 魔法効果: マジックミサイル*/
+#define GF_ARROW        11			/*!< 魔法効果: 矢*/
+#define GF_PLASMA       12			/*!< 魔法効果: プラズマ*/
 /* Replaced with GF_HOLY_FIRE and GF_HELL_FIRE */
 /* #define GF_HOLY_ORB     13 */
-#define GF_WATER        14
-#define GF_LITE         15
-#define GF_DARK         16
-#define GF_LITE_WEAK    17
-#define GF_DARK_WEAK    18
-#define GF_SHARDS       20
-#define GF_SOUND        21
-#define GF_CONFUSION    22
-#define GF_FORCE        23
-#define GF_INERTIAL      24
-#define GF_MANA         26
-#define GF_METEOR       27
-#define GF_ICE          28
-#define GF_CHAOS        30
-#define GF_NETHER       31
-#define GF_DISENCHANT   32
-#define GF_NEXUS        33
-#define GF_TIME         34
-#define GF_GRAVITY      35
+#define GF_WATER        14			/*!< 魔法効果: 水流*/
+#define GF_LITE         15			/*!< 魔法効果: 閃光*/
+#define GF_DARK         16			/*!< 魔法効果: 暗黒*/
+#define GF_LITE_WEAK    17			/*!< 魔法効果: 弱光*/
+#define GF_DARK_WEAK    18			/*!< 魔法効果: 弱暗*/
+#define GF_SHARDS       20			/*!< 魔法効果: 破片*/
+#define GF_SOUND        21			/*!< 魔法効果: 轟音*/
+#define GF_CONFUSION    22			/*!< 魔法効果: 混乱*/
+#define GF_FORCE        23			/*!< 魔法効果: フォース*/
+#define GF_INERTIAL     24			/*!< 魔法効果: 遅鈍*/
+#define GF_MANA         26			/*!< 魔法効果: 純粋魔力*/
+#define GF_METEOR       27			/*!< 魔法効果: 隕石*/
+#define GF_ICE          28			/*!< 魔法効果: 極寒*/
+#define GF_CHAOS        30			/*!< 魔法効果: カオス*/
+#define GF_NETHER       31			/*!< 魔法効果: 地獄*/
+#define GF_DISENCHANT   32			/*!< 魔法効果: 劣化*/
+#define GF_NEXUS        33			/*!< 魔法効果: 因果混乱*/
+#define GF_TIME         34			/*!< 魔法効果: 時間逆転*/
+#define GF_GRAVITY      35			/*!< 魔法効果: 重力*/
 #define GF_KILL_WALL    40
 #define GF_KILL_DOOR    41
 #define GF_KILL_TRAP    42
@@ -3000,11 +3000,11 @@
 #define GF_MAKE_TRAP    47
 #define GF_MAKE_TREE    48
 #define GF_OLD_CLONE    51
-#define GF_OLD_POLY             52
-#define GF_OLD_HEAL             53
+#define GF_OLD_POLY     52
+#define GF_OLD_HEAL     53
 #define GF_OLD_SPEED    54
-#define GF_OLD_SLOW             55
-#define GF_OLD_CONF             56
+#define GF_OLD_SLOW     55
+#define GF_OLD_CONF     56
 #define GF_OLD_SLEEP    57
 #define GF_OLD_DRAIN    58
 #define GF_AWAY_UNDEAD  61
@@ -3015,7 +3015,7 @@
 #define GF_TURN_ALL     66
 #define GF_DISP_UNDEAD  67
 #define GF_DISP_EVIL    68
-#define GF_DISP_ALL 69
+#define GF_DISP_ALL     69
 #define GF_DISP_DEMON   70      /* New types for Zangband begin here... */
 #define GF_DISP_LIVING  71
 #define GF_ROCKET       72
@@ -3029,10 +3029,10 @@
 #define GF_HELL_FIRE    80
 #define GF_DISINTEGRATE 81
 #define GF_CHARM        82
-#define GF_CONTROL_UNDEAD   83
-#define GF_CONTROL_ANIMAL   84
-#define GF_PSI         85
-#define GF_PSI_DRAIN   86
+#define GF_CONTROL_UNDEAD  83
+#define GF_CONTROL_ANIMAL  84
+#define GF_PSI          85
+#define GF_PSI_DRAIN    86
 #define GF_TELEKINESIS  87
 #define GF_JAM_DOOR     88
 #define GF_DOMINATION   89
@@ -3064,7 +3064,7 @@
 #define GF_STASIS_EVIL 115
 #define GF_WOUNDS      116
 
-#define MAX_GF				117
+#define MAX_GF         117
 
 /*
  * Some things which induce learning
