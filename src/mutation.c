@@ -1478,6 +1478,19 @@ bool lose_mutation(int choose_mut)
 	}
 }
 
+void lose_all_mutations(void)
+{
+	if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
+	{
+		chg_virtue(V_CHANCE, -5);
+		msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
+		p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
+		p_ptr->update |= PU_BONUS;
+		handle_stuff();
+		mutant_regenerate_mod = calc_mutant_regenerate_mod();
+	}
+}
+
 /*!
  * @brief ファイルポインタを通じて突然変異の一覧を出力する
  * @param OutFile 出力先ファイルポインタ

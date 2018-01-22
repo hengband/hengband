@@ -740,13 +740,7 @@ static void cast_shuffle(void)
 	{
 		msg_print(_("《審判》だ。", "It's the Judgement."));
 		do_cmd_rerate(FALSE);
-		if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
-		{
-			msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
-			p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
-			p_ptr->update |= PU_BONUS;
-			handle_stuff();
-		}
+		lose_all_mutations();
 	}
 	else if (die < 120)
 	{

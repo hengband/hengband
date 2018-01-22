@@ -1184,15 +1184,7 @@ static void do_cmd_quaff_potion_aux(int item)
 			do_cmd_rerate(FALSE);
 			get_max_stats();
 			p_ptr->update |= PU_BONUS;
-			if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
-			{
-				chg_virtue(V_CHANCE, -5);
-				msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
-				p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
-				p_ptr->update |= PU_BONUS;
-				handle_stuff();
-				mutant_regenerate_mod = calc_mutant_regenerate_mod();
-			}
+			lose_all_mutations();
 			ident = TRUE;
 			break;
 
@@ -1217,11 +1209,7 @@ static void do_cmd_quaff_potion_aux(int item)
 		case SV_POTION_POLYMORPH:
 			if ((p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3) && one_in_(23))
 			{
-				chg_virtue(V_CHANCE, -5);
-				msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
-				p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
-				p_ptr->update |= PU_BONUS;
-				handle_stuff();
+				lose_all_mutations();
 			}
 			else
 			{
