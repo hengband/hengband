@@ -3219,6 +3219,7 @@ bool probing(void)
 			speed = m_ptr->mspeed - 110;
 			if (MON_FAST(m_ptr)) speed += 10;
 			if (MON_SLOW(m_ptr)) speed -= 10;
+			if (ironman_nightmare) speed += 5;
 
 			/* Get the monster's alignment */
 #ifdef JP
