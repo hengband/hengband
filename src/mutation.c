@@ -2106,7 +2106,7 @@ bool mutation_power_aux(u32b power)
 			mutation_stop_mouth();
 			msg_print(_("あなたは火炎のブレスを吐いた...", "You breathe fire..."));
 
-			fire_ball(GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
+			fire_ball(GF_FIRE, dir, lvl * 2, -1 - (lvl / 20));
 			break;
 
 		case MUT1_HYPN_GAZE:
