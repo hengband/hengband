@@ -211,6 +211,31 @@ int soc_write(int sd, char *buf, size_t sz)
 	return sz;
 }
 
+int soc_read(int sd, char *buf, size_t sz)
+{
+#ifndef MACINTOSH
+	int nleft, nread = 0;
+
+	nleft = sz;
+
+	while (nleft > 0) {
+		int n;
+		n = recv(sd, buf + nread, nleft, 0);
+		if (n <= 0)
+			return (nread);
+		nleft -= n;
+		nread += n;
+	}
+#else /* !MACINTOSH */
+
+	OTResult bytesSent;
+
+	OTSnd(ep, (void *)buf, sz, 0);
+
+#endif
+	return nread;
+}
+
 #if 0 /* おそらく使わない */
 int soc_write_str(int sd, char *buf)
 {

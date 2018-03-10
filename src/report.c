@@ -37,11 +37,11 @@
 #define HTTP_PROXY ""                   /*!< デフォルトのプロキシURL / Default proxy url */
 #define HTTP_PROXY_PORT 0               /*!< デフォルトのプロキシポート / Default proxy port */
 #define HTTP_TIMEOUT    20              /*!< デフォルトのタイムアウト時間(秒) / Timeout length (second) */
-#define SCORE_SERVER "moon.kmc.gr.jp"   /*!< デフォルトのスコアサーバURL / Default score server url */
+#define SCORE_SERVER "hengband.osdn.jp" /*!< デフォルトのスコアサーバURL / Default score server url */
 #define SCORE_PORT 80                   /*!< デフォルトのスコアサーバポート / Default score server port */
 
 #ifdef JP
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore/score.cgi" /*!< スコア開示URL */
+#define SCORE_PATH "http://hengband.osdn.jp/score/register_score.php" /*!< スコア開示URL */
 #else
 #define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
@@ -228,22 +228,37 @@ static BUF * buf_subbuf(BUF *buf, int pos1, size_t sz)
  * @param buf 伝送内容バッファ
  * @return なし
  */
-static void http_post(int sd, cptr url, BUF *buf)
+static bool http_post(int sd, cptr url, BUF *buf)
 {
 	BUF *output;
+	char response_buf[1024] = "";
+	const char *HTTP_RESPONSE_CODE_OK = "HTTP/1.1 200 OK";
 
 	output = buf_new();
-	buf_sprintf(output, "POST %s HTTP/1.0\n", url);
-	buf_sprintf(output, "User-Agent: Hengband %d.%d.%d\n",
+	buf_sprintf(output, "POST %s HTTP/1.0\r\n", url);
+	buf_sprintf(output, "User-Agent: Hengband %d.%d.%d\r\n",
 		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
-	buf_sprintf(output, "Content-Length: %d\n", buf->size);
-	buf_sprintf(output, "Content-Encoding: binary\n");
-	buf_sprintf(output, "Content-Type: application/octet-stream\n");
-	buf_sprintf(output, "\n");
+	buf_sprintf(output, "Content-Length: %d\r\n", buf->size);
+	buf_sprintf(output, "Content-Encoding: binary\r\n");
+#ifdef JP
+#ifdef SJIS
+	buf_sprintf(output, "Content-Type: text/plain; charset=SHIFT_JIS\r\n");
+#endif
+#ifdef EUC
+	buf_sprintf(output, "Content-Type: text/plain; charset=EUC-JP\r\n");
+#endif
+#else
+	buf_sprintf(output, "Content-Type: text/plain; charset=ASCII\r\n");
+#endif
+	buf_sprintf(output, "\r\n");
 	buf_append(output, buf->data, buf->size);
 
 	soc_write(sd, output->data, output->size);
+
+	soc_read(sd, response_buf, sizeof(response_buf));
+
+	return strncmp(response_buf, HTTP_RESPONSE_CODE_OK, strlen(HTTP_RESPONSE_CODE_OK)) == 0;
 }
 
 /*!
@@ -524,34 +539,62 @@ errr report_score(void)
 		sd = connect_server(HTTP_TIMEOUT, SCORE_SERVER, SCORE_PORT);
 
 
-		if (!(sd < 0)) break;
+		if (sd < 0) {
 #ifdef JP
-		sprintf(buff, "スコア・サーバへの接続に失敗しました。(%s)", soc_err());
+			sprintf(buff, "スコア・サーバへの接続に失敗しました。(%s)", soc_err());
 #else
-		sprintf(buff, "Failed to connect to the score server.(%s)", soc_err());
+			sprintf(buff, "Failed to connect to the score server.(%s)", soc_err());
 #endif
-		prt(buff, 0, 0);
-		(void)inkey();
-		
-#ifdef JP
-		if (!get_check_strict("もう一度接続を試みますか? ", CHECK_NO_HISTORY))
-#else
-		if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
-#endif
-		{
-			err = 1;
-			goto report_end;
-		}
-	}
-#ifdef JP
-	prt("スコア送信中...", 0, 0);
-#else
-	prt("Sending the score...", 0, 0);
-#endif
-	Term_fresh();
-	http_post(sd, SCORE_PATH, score);
+			prt(buff, 0, 0);
+			(void)inkey();
 
-	disconnect_server(sd);
+#ifdef JP
+			if (!get_check_strict("もう一度接続を試みますか? ", CHECK_NO_HISTORY))
+#else
+			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
+#endif
+			{
+				err = 1;
+				goto report_end;
+			}
+
+			continue;
+		}
+
+#ifdef JP
+		prt("スコア送信中...", 0, 0);
+#else
+		prt("Sending the score...", 0, 0);
+#endif
+		Term_fresh();
+
+		if (!http_post(sd, SCORE_PATH, score)) {
+			disconnect_server(sd);
+#ifdef JP
+			sprintf(buff, "スコア・サーバへの送信に失敗しました。");
+#else
+			sprintf(buff, "Failed to send to the score server.");
+#endif
+			prt(buff, 0, 0);
+			(void)inkey();
+
+#ifdef JP
+			if (!get_check_strict("もう一度接続を試みますか? ", CHECK_NO_HISTORY))
+#else
+			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
+#endif
+			{
+				err = 1;
+				goto report_end;
+			}
+
+			continue;
+		}
+
+		disconnect_server(sd);
+		break;
+	}
+
  report_end:
 #ifdef WINDOWS
 	WSACleanup();
