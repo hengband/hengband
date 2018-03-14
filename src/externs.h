@@ -166,6 +166,7 @@ extern s16b num_repro;
 extern DEPTH object_level;
 extern DEPTH monster_level;
 extern DEPTH base_level;
+extern bool invoking_midnight_curse;
 extern s32b turn;
 extern s32b turn_limit;
 extern s32b dungeon_turn;

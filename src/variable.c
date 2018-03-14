@@ -121,6 +121,7 @@ s16b num_repro;			/* Current reproducer count */
 DEPTH object_level;		/* Current object creation level */
 DEPTH monster_level;	/* Current monster creation level */
 DEPTH base_level;		/* Base dungeon level */
+bool invoking_midnight_curse; /*!< 悪夢モード時の真夜中太古の呪い発生処理フラグ */
 
 GAME_TURN turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
 GAME_TURN turn_limit;		/*!< turnの最大値 / Limit of game turn */

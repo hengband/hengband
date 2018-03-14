@@ -657,7 +657,7 @@ void wilderness_gen(void)
 	player_place(p_ptr->oldpy, p_ptr->oldpx);
 	/* p_ptr->leaving_dungeon = FALSE;*/
 
-	lim = (generate_encounter==TRUE)?40:MIN_M_ALLOC_TN;
+	lim = (generate_encounter == TRUE) ? 40 : MIN_M_ALLOC_TN;
 
 	/* Make some residents */
 	for (i = 0; i < lim; i++)
@@ -1175,8 +1175,8 @@ bool change_wild_mode(void)
 	p_ptr->energy_use = 1000;
 
 	/* Remember the position */
-	p_ptr->oldpx = (s16b)p_ptr->x;
-	p_ptr->oldpy = (s16b)p_ptr->y;
+	p_ptr->oldpx = p_ptr->x;
+	p_ptr->oldpy = p_ptr->y;
 
 	/* Cancel hex spelling */
 	if (hex_spelling_any()) stop_hex_spell_all();

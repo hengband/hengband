@@ -3521,7 +3521,7 @@ static void process_world(void)
 			p_ptr->energy_need = 0;
 			battle_monsters();
 		}
-		else if (turn - old_turn == 150*TURNS_PER_TICK)
+		else if (turn - old_turn == 150 * TURNS_PER_TICK)
 		{
 			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle have ended in a draw."));
 			p_ptr->au += kakekin;
@@ -3774,11 +3774,12 @@ static void process_world(void)
 
 	/*
 	 * Nightmare mode activates the TY_CURSE at midnight
-	 *
 	 * Require exact minute -- Don't activate multiple times in a minute
 	 */
+
 	if (ironman_nightmare && (min != prev_min))
 	{
+
 		/* Every 15 minutes after 11:00 pm */
 		if ((hour == 23) && !(min % 15))
 		{
@@ -3808,11 +3809,25 @@ static void process_world(void)
 		/* TY_CURSE activates at midnight! */
 		if (!hour && !min)
 		{
-			int count = 0;
 
 			disturb(1, 1);
 			msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
-			activate_ty_curse(FALSE, &count);
+
+			if (p_ptr->wild_mode)
+			{
+				/* Go into large wilderness view */
+				p_ptr->oldpy = randint1(MAX_HGT - 2);
+				p_ptr->oldpx = randint1(MAX_WID - 2);
+				change_wild_mode();
+
+				/* Give first move to monsters */
+				p_ptr->energy_use = 100;
+
+				/* HACk -- set the encouter flag for the wilderness generation */
+				generate_encounter = TRUE;
+			}
+
+			invoking_midnight_curse = TRUE;
 		}
 	}
 
@@ -5047,6 +5062,13 @@ static void process_player(void)
 		hack_mutation = FALSE;
 	}
 
+	if (invoking_midnight_curse)
+	{
+		int count = 0;
+		activate_ty_curse(FALSE, &count);
+		invoking_midnight_curse = FALSE;
+	}
+
 	if (p_ptr->inside_battle)
 	{
 		for(i = 1; i < m_max; i++)
@@ -5870,9 +5892,6 @@ static void dungeon(bool load_game)
 		/* Hack -- Notice death or departure */
 		if (!p_ptr->playing || p_ptr->is_dead) break;
 
-		/* Handle "leaving" */
-		if (p_ptr->leaving) break;
-
 		/* Count game turns */
 		turn++;
 
@@ -5883,6 +5902,9 @@ static void dungeon(bool load_game)
 		}
 
 		prevent_turn_overflow();
+
+		/* Handle "leaving" */
+		if (p_ptr->leaving) break;
 
 		if (wild_regen) wild_regen--;
 	}
