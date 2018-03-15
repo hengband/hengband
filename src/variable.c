@@ -116,11 +116,11 @@ GAME_TURN resting;			/* Current counter for resting, if any */
 
 POSITION cur_hgt;		/* Current dungeon height */
 POSITION cur_wid;		/* Current dungeon width */
-DEPTH dun_level;		/* Current dungeon level */
+DEPTH dun_level;		/*!< 現在の実ダンジョン階層、base_levelの参照元となる / Current dungeon level */
 s16b num_repro;			/* Current reproducer count */
-DEPTH object_level;		/* Current object creation level */
-DEPTH monster_level;	/* Current monster creation level */
-DEPTH base_level;		/* Base dungeon level */
+DEPTH base_level;		/*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
+DEPTH object_level;		/*!< アイテムの生成レベル、base_levelを起点に一時変更する時に参照 / Current object creation level */
+DEPTH monster_level;	/*!< モンスターの生成レベル、base_levelを起点に一時変更する時に参照 / Current monster creation level */
 bool invoking_midnight_curse; /*!< 悪夢モード時の真夜中太古の呪い発生処理フラグ */
 
 GAME_TURN turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
@@ -154,7 +154,7 @@ bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 
 s16b inven_nxt;			/* Hack -- unused */
-bool hack_mind;
+bool hack_mind;			/*!< ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による以上抑止 */
 bool hack_mutation;
 
 s16b inven_cnt;			/* Number of items in inventory */

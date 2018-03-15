@@ -5626,9 +5626,15 @@ static void process_player(void)
 /*!
  * @brief 現在プレイヤーがいるダンジョンの全体処理 / Interact with the current dungeon level.
  * @return なし
- * @note
+ * @details
+ * <p>
+ * この関数から現在の階層を出る、プレイヤーがキャラが死ぬ、
+ * ゲームを終了するかのいずれかまでループする。
+ * </p>
+ * <p>
  * This function will not exit until the level is completed,\n
  * the user dies, or the game is terminated.\n
+ * </p>
  */
 static void dungeon(bool load_game)
 {
