@@ -6127,7 +6127,7 @@ void do_cmd_save_game(int is_autosave)
 	(void)strcpy(p_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
 
 	/* HACK -- don't get sanity blast on updating view */
-	hack_mind = FALSE;
+	is_loading_now = FALSE;
 
 	/* Update stuff */
 	update_stuff();
@@ -6136,7 +6136,7 @@ void do_cmd_save_game(int is_autosave)
 	mproc_init();
 
 	/* HACK -- reset the hackish flag */
-	hack_mind = TRUE;
+	is_loading_now = TRUE;
 }
 
 

@@ -5644,7 +5644,7 @@ static void dungeon(bool load_game)
 	base_level = dun_level;
 
 	/* Reset various flags */
-	hack_mind = FALSE;
+	is_loading_now = FALSE;
 
 	/* Not leaving */
 	p_ptr->leaving = FALSE;
@@ -5812,7 +5812,7 @@ static void dungeon(bool load_game)
 	/* Reset the object generation level */
 	object_level = base_level;
 
-	hack_mind = TRUE;
+	is_loading_now = TRUE;
 
 	if (p_ptr->energy_need > 0 && !p_ptr->inside_battle &&
 	    (dun_level || p_ptr->leaving_dungeon || p_ptr->inside_arena))

@@ -153,8 +153,7 @@ bool shimmer_objects;	/* Hack -- optimize multi-hued objects */
 bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 
-s16b inven_nxt;			/* Hack -- unused */
-bool hack_mind;			/*!< ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による以上抑止 */
+bool is_loading_now;	/*!< ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 bool hack_mutation;
 
 s16b inven_cnt;			/* Number of items in inventory */

@@ -189,7 +189,6 @@ extern bool shimmer_monsters;
 extern bool shimmer_objects;
 extern bool repair_monsters;
 extern bool repair_objects;
-extern s16b inven_nxt;
 extern s16b inven_cnt;
 extern s16b equip_cnt;
 extern s16b o_max;
@@ -204,7 +203,7 @@ extern int leaving_quest;
 extern bool reinit_wilderness;
 extern bool multi_rew;
 extern char summon_kin_type;
-extern bool hack_mind;
+extern bool is_loading_now;
 extern bool hack_mutation;
 
 

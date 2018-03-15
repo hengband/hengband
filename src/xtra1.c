@@ -5697,7 +5697,7 @@ void calc_bonuses(void)
 			if (p_ptr->icky_wield[i])
 			{
 				msg_print(_("今の装備はどうも自分にふさわしくない気がする。", "You do not feel comfortable with your weapon."));
-				if (hack_mind)
+				if (is_loading_now)
 				{
 					chg_virtue(V_FAITH, -1);
 				}
@@ -5744,7 +5744,7 @@ void calc_bonuses(void)
 		if (heavy_armor())
 		{
 			msg_print(_("装備が重くてバランスを取れない。", "The weight of your armor disrupts your balance."));
-			if (hack_mind)
+			if (is_loading_now)
 			{
 				chg_virtue(V_HARMONY, -1);
 			}

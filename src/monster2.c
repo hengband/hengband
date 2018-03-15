@@ -1978,7 +1978,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		}
 		else power *= 2;
 
-		if (!hack_mind)
+		if (!is_loading_now)
 			return; /* No effect yet, just loaded... */
 
 		if (!m_ptr->ml)
