@@ -3959,10 +3959,10 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
 		}
 	}
 
+	if (!summon_unique_okay && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))) return FALSE;
+
 	/* Hack -- no specific type specified */
 	if (!summon_specific_type) return (TRUE);
-
-	if (!summon_unique_okay && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))) return FALSE;
 
 	if ((summon_specific_who < 0) &&
 	    ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
