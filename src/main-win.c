@@ -377,15 +377,26 @@ unsigned _cdecl _dos_getfileattr(const char *, unsigned *);
  */
 typedef struct _term_data term_data;
 
-/*
- * Extra "term" data
- *
+/*!
+ * @struct _term_data
+ * @brief ターム情報構造体 / Extra "term" data
+ * @details
+ * <p>
+ * pos_x / pos_y は各タームの左上点座標を指す。
+ * </p>
+ * <p>
+ * tile_wid / tile_hgt は[ウィンドウ]メニューのタイルの幅/高さを～を
+ * 1ドットずつ調整するステータスを指す。
+ * また、フォントを変更すると都度自動調整される。
+ * </p>
+ * <p>
  * Note the use of "font_want" for the names of the font file requested by
  * the user, and the use of "font_file" for the currently active font file.
  *
  * The "font_file" is uppercased, and takes the form "8X13.FON", while
  * "font_want" can be in almost any form as long as it could be construed
  * as attempting to represent the name of a font.
+ * </p>
  */
 struct _term_data
 {
@@ -403,8 +414,8 @@ struct _term_data
 	TERM_POSITION rows;	/* int -> uint */
 	TERM_POSITION cols;
 
-	uint pos_x;
-	uint pos_y;
+	uint pos_x; //!< タームの左上X座標
+	uint pos_y; //!< タームの左上Y座標
 	uint size_wid;
 	uint size_hgt;
 	uint size_ow1;
@@ -426,11 +437,11 @@ struct _term_data
 
 	HFONT font_id;
 
-	int font_wid;
-	int font_hgt;
+	int font_wid;  //!< フォント横幅
+	int font_hgt;  //!< フォント縦幅
 
-	int tile_wid;
-	int tile_hgt;
+	int tile_wid;  //!< タイル横幅
+	int tile_hgt;  //!< タイル縦幅
 
 	uint map_tile_wid;
 	uint map_tile_hgt;
@@ -517,8 +528,8 @@ static HPALETTE hPal;
 
 /* bg */
 static HBITMAP hBG = NULL;
-static int use_bg = 0;
-static char bg_bitmap_file[1024] = "bg.bmp";
+static int use_bg = 0; //!< 背景使用フラグ、1なら私用。
+static char bg_bitmap_file[1024] = "bg.bmp"; //!< 現在の背景ビットマップファイル名。
 
 #ifdef USE_SAVER
 
@@ -532,10 +543,11 @@ static HWND hwndSaver;
 
 #ifdef USE_GRAPHICS
 
-/*
+/*!
+ * 現在使用中のタイルID(0ならば未使用)
  * Flag set once "graphics" has been initialized
  */
-static bool can_use_graphics = FALSE;
+static byte_hack current_graphics_mode = 0;
 
 /*
  * The global bitmap
@@ -1706,123 +1718,125 @@ static int new_palette(void)
 
 
 #ifdef USE_GRAPHICS
-/*
- * Initialize graphics
+/*!
+ * @brief グラフィクスを初期化する / Initialize graphics
+ * @details
+ * <ul>
+ * <li>メニュー[オプション]＞[グラフィクス]が「なし」以外の時に描画処理を初期化する。</li>
+ * <li>呼び出されるタイミングはロード時、及び同メニューで「なし」以外に変更される毎になる。</li>
+ * </ul>
  */
 static bool init_graphics(void)
 {
 	/* Initialize once */
-	/* if (can_use_graphics != arg_graphics) */
+	char buf[1024];
+	BYTE wid, hgt, twid, thgt, ox, oy;
+	cptr name;
+
+	if (arg_graphics == GRAPHICS_ADAM_BOLT)
 	{
-		char buf[1024];
-		BYTE wid, hgt, twid, thgt, ox, oy;
-		cptr name;
+		wid = 16;
+		hgt = 16;
+		twid = 16;
+		thgt = 16;
+		ox = 0;
+		oy = 0;
+		name = "16X16.BMP";
 
-		if (arg_graphics == GRAPHICS_ADAM_BOLT)
-		{
-			wid = 16;
-			hgt = 16;
-			twid = 16;
-			thgt = 16;
-			ox = 0;
-			oy = 0;
-			name = "16X16.BMP";
+		ANGBAND_GRAF = "new";
+	}
+	else if (arg_graphics == GRAPHICS_HENGBAND)
+	{
+		/*! @todo redraw
+		wid = 64;
+		hgt = 64;
+		twid = 32;
+		thgt = 32;
+		ox = -16;
+		oy = -24;
+		name = "64X64.BMP";
+		*/
 
-			ANGBAND_GRAF = "new";
-		}
-		else if (arg_graphics == GRAPHICS_HENGBAND)
-		{
-			/*! @todo redraw 
-			wid = 64;
-			hgt = 64;
-			twid = 32;
-			thgt = 32;
-			ox = -16;
-			oy = -24;
-			name = "64X64.BMP";
-			*/
+		wid = 32;
+		hgt = 32;
+		twid = 32;
+		thgt = 32;
+		ox = 0;
+		oy = 0;
+		name = "32X32.BMP";
 
-			wid = 32;
-			hgt = 32;
-			twid = 32;
-			thgt = 32;
-			ox = 0;
-			oy = 0;
-			name = "32X32.BMP";
-
-			ANGBAND_GRAF = "ne2";
-		}
-		else
-		{
-			wid = 8;
-			hgt = 8;
-			twid = 8;
-			thgt = 8;
-			ox = 0;
-			oy = 0;
-			name = "8X8.BMP";
-			ANGBAND_GRAF = "old";
-		}
-
-		/* Access the bitmap file */
-		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name);
-
-		/* Load the bitmap or quit */
-		if (!ReadDIB(data[0].w, buf, &infGraph))
-		{
-			plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
-			return (FALSE);
-		}
-
-		/* Save the new sizes */
-		infGraph.CellWidth = wid;
-		infGraph.CellHeight = hgt;
-		infGraph.TileWidth = twid;
-		infGraph.TileHeight = thgt;
-		infGraph.OffsetX = ox;
-		infGraph.OffsetY = oy;
-
-		if (arg_graphics == GRAPHICS_ADAM_BOLT)
-		{
-			/* Access the mask file */
-			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask.bmp");
-
-			/* Load the bitmap or quit */
-			if (!ReadDIB(data[0].w, buf, &infMask))
-			{
-				plog_fmt("Cannot read bitmap file '%s'", buf);
-				return (FALSE);
-			}
-		}
-		if (arg_graphics == GRAPHICS_HENGBAND)
-		{
-			/* Access the mask file */
-			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
-
-			/* Load the bitmap or quit */
-			if (!ReadDIB(data[0].w, buf, &infMask))
-			{
-				plog_fmt("Cannot read bitmap file '%s'", buf);
-				return (FALSE);
-			}
-		}
-
-		/* Activate a palette */
-		if (!new_palette())
-		{
-			/* Free bitmap XXX XXX XXX */
-
-			/* Oops */
-			plog(_("パレットを実現できません！", "Cannot activate palette!"));
-			return (FALSE);
-		}
-
-		/* Graphics available */
-		can_use_graphics = arg_graphics;
+		ANGBAND_GRAF = "ne2";
+	}
+	else
+	{
+		wid = 8;
+		hgt = 8;
+		twid = 8;
+		thgt = 8;
+		ox = 0;
+		oy = 0;
+		name = "8X8.BMP";
+		ANGBAND_GRAF = "old";
 	}
 
+	/* Access the bitmap file */
+	path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name);
+
+	/* Load the bitmap or quit */
+	if (!ReadDIB(data[0].w, buf, &infGraph))
+	{
+		plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
+		return (FALSE);
+	}
+
+	/* Save the new sizes */
+	infGraph.CellWidth = wid;
+	infGraph.CellHeight = hgt;
+	infGraph.TileWidth = twid;
+	infGraph.TileHeight = thgt;
+	infGraph.OffsetX = ox;
+	infGraph.OffsetY = oy;
+
+	if (arg_graphics == GRAPHICS_ADAM_BOLT)
+	{
+		/* Access the mask file */
+		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask.bmp");
+
+		/* Load the bitmap or quit */
+		if (!ReadDIB(data[0].w, buf, &infMask))
+		{
+			plog_fmt("Cannot read bitmap file '%s'", buf);
+			return (FALSE);
+		}
+	}
+	if (arg_graphics == GRAPHICS_HENGBAND)
+	{
+		/* Access the mask file */
+		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
+
+		/* Load the bitmap or quit */
+		if (!ReadDIB(data[0].w, buf, &infMask))
+		{
+			plog_fmt("Cannot read bitmap file '%s'", buf);
+			return (FALSE);
+		}
+	}
+
+	/* Activate a palette */
+	if (!new_palette())
+	{
+		/* Free bitmap XXX XXX XXX */
+
+		/* Oops */
+		plog(_("パレットを実現できません！", "Cannot activate palette!"));
+		return (FALSE);
+	}
+
+	/* Graphics available */
+	current_graphics_mode = arg_graphics;
+
 	/* Result */
-	return (can_use_graphics);
+	return (current_graphics_mode);
 }
 #endif /* USE_GRAPHICS */
 
