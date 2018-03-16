@@ -3267,7 +3267,7 @@ static void player_wipe_without_name(void)
 	}
 
 	/* Wipe the quests */
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		quest_type* const q_ptr = &quest[i];
 		

@@ -1538,7 +1538,7 @@ static void load_music_prefs(void)
 		}
 	}
 
-	for (i = 0; i < 1000; i++) /*!< @todo クエスト最大数指定 */
+	for (i = 0; i < max_q_idx; i++)
 	{
 		sprintf(key, "quest%03d", i);
 		GetPrivateProfileString("Quest", key, "", tmp, 1024, ini_path);

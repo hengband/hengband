@@ -4814,7 +4814,7 @@ IDX quest_number(DEPTH level)
 	if (p_ptr->inside_quest)
 		return (p_ptr->inside_quest);
 
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		if (quest[i].status != QUEST_STATUS_TAKEN) continue;
 

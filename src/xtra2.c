@@ -481,7 +481,7 @@ void check_quest_completion(monster_type *m_ptr)
 	{
 		int i;
 
-		for (i = max_quests - 1; i > 0; i--)
+		for (i = max_q_idx - 1; i > 0; i--)
 		{
 			quest_type* const q_ptr = &quest[i];
 			
@@ -680,7 +680,7 @@ void check_find_art_quest_completion(object_type *o_ptr)
 {
 	int i;
 	/* Check if completed a quest */
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		if ((quest[i].type == QUEST_TYPE_FIND_ARTIFACT) &&
 		    (quest[i].status == QUEST_STATUS_TAKEN) &&

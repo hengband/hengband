@@ -483,7 +483,7 @@ bool place_quest_monsters(void)
 	int i;
 
 	/* Handle the quest monster placements */
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		monster_race *r_ptr;
 		BIT_FLAGS mode;

@@ -4434,13 +4434,13 @@ static void dump_aux_quest(FILE *fff)
 	fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
 
 	/* Allocate Memory */
-	C_MAKE(quest_num, max_quests, IDX);
+	C_MAKE(quest_num, max_q_idx, IDX);
 
 	/* Sort by compete level */
-	for (i = 1; i < max_quests; i++) quest_num[i] = i;
+	for (i = 1; i < max_q_idx; i++) quest_num[i] = i;
 	ang_sort_comp = ang_sort_comp_quest_num;
 	ang_sort_swap = ang_sort_swap_quest_num;
-	ang_sort(quest_num, &dummy, max_quests);
+	ang_sort(quest_num, &dummy, max_q_idx);
 
 	/* Dump Quest Information */
 	fputc('\n', fff);
@@ -4450,7 +4450,7 @@ static void dump_aux_quest(FILE *fff)
 	fputc('\n', fff);
 
 	/* Free Memory */
-	C_KILL(quest_num, max_quests, IDX);
+	C_KILL(quest_num, max_q_idx, IDX);
 }
 
 

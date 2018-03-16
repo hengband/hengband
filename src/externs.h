@@ -521,7 +521,7 @@ extern bool monk_armour_aux;
 extern bool monk_notify_aux;
 extern wilderness_type **wilderness;
 extern building_type building[MAX_BLDG];
-extern QUEST_IDX max_quests;
+extern QUEST_IDX max_q_idx;
 extern MONRACE_IDX max_r_idx;
 extern IDX max_k_idx;
 extern IDX max_v_idx;

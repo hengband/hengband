@@ -890,7 +890,7 @@ void leave_floor(void)
 
 
 	/* Search the quest monster index */
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		if ((quest[i].status == QUEST_STATUS_TAKEN) &&
 		    ((quest[i].type == QUEST_TYPE_KILL_LEVEL) ||

@@ -1760,7 +1760,7 @@ void select_floor_music(void)
 		return;
 	}
 
-	for(i = 0; i < max_quests; i++)
+	for(i = 0; i < max_q_idx; i++)
 	{ // TODO マクロで類似条件を統合すること
 		if(quest[i].status == QUEST_STATUS_TAKEN &&
 			(quest[i].type == QUEST_TYPE_KILL_LEVEL || quest[i].type == QUEST_TYPE_RANDOM) &&

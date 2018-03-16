@@ -3583,7 +3583,7 @@ static errr rd_savefile_new_aux(void)
 		}
 
 		/* Incompatible save files */
-		if (max_quests_load > max_quests)
+		if (max_quests_load > max_q_idx)
 		{
 			note(format(_("クエストが多すぎる(%u)！", "Too many (%u) quests!"), max_quests_load));
 			return (23);
@@ -3591,7 +3591,7 @@ static errr rd_savefile_new_aux(void)
 
 		for (i = 0; i < max_quests_load; i++)
 		{
-			if (i < max_quests)
+			if (i < max_q_idx)
 			{
 				quest_type* const q_ptr = &quest[i];
 				

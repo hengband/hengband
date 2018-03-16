@@ -1579,10 +1579,10 @@ static errr init_quests(void)
 	/*** Prepare the quests ***/
 
 	/* Allocate the quests */
-	C_MAKE(quest, max_quests, quest_type);
+	C_MAKE(quest, max_q_idx, quest_type);
 
 	/* Set all quest to "untaken" */
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		quest[i].status = QUEST_STATUS_UNTAKEN;
 	}

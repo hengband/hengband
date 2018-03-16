@@ -1387,14 +1387,14 @@ static bool wr_savefile_new(void)
 	wr_u16b(tmp16u);
 
 	/* Dump the quests */
-	tmp16u = max_quests;
+	tmp16u = max_q_idx;
 	wr_u16b(tmp16u);
 
 	/* Dump the quests */
 	tmp8u = MAX_RANDOM_QUEST-MIN_RANDOM_QUEST;
 	wr_byte(tmp8u);
 
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		quest_type* const q_ptr = &quest[i];
 

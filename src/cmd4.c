@@ -8014,7 +8014,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 
 	fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
-	for (i = 1; i < max_quests; i++)
+	for (i = 1; i < max_q_idx; i++)
 	{
 		if ((quest[i].status == QUEST_STATUS_TAKEN) ||
 			((quest[i].status == QUEST_STATUS_STAGE_COMPLETED) && (quest[i].type == QUEST_TYPE_TOWER)) ||
@@ -8242,7 +8242,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, IDX quest_num[])
 	int total = 0;
 
 	fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
-	for (i = 1; i < max_quests; i++)
+	for (i = 1; i < max_q_idx; i++)
 	{
 		IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
@@ -8266,7 +8266,7 @@ void do_cmd_knowledge_quests_failed(FILE *fff, IDX quest_num[])
 	int total = 0;
 
 	fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
-	for (i = 1; i < max_quests; i++)
+	for (i = 1; i < max_q_idx; i++)
 	{
 		IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
@@ -8291,7 +8291,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 	int total = 0;
 
 	fprintf(fff, _("《残りのランダムクエスト》\n", "< Remaining Random Quest >\n"));
-	for (i = 1; i < max_quests; i++)
+	for (i = 1; i < max_q_idx; i++)
 	{
 		/* No info from "silent" quests */
 		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
@@ -8357,13 +8357,13 @@ static void do_cmd_knowledge_quests(void)
 	}
 
 	/* Allocate Memory */
-	C_MAKE(quest_num, max_quests, IDX);
+	C_MAKE(quest_num, max_q_idx, IDX);
 
 	/* Sort by compete level */
-	for (i = 1; i < max_quests; i++) quest_num[i] = i;
+	for (i = 1; i < max_q_idx; i++) quest_num[i] = i;
 	ang_sort_comp = ang_sort_comp_quest_num;
 	ang_sort_swap = ang_sort_swap_quest_num;
-	ang_sort(quest_num, &dummy, max_quests);
+	ang_sort(quest_num, &dummy, max_q_idx);
 
 	/* Dump Quest Information */
 	do_cmd_knowledge_quests_current(fff);
@@ -8387,7 +8387,7 @@ static void do_cmd_knowledge_quests(void)
 	fd_kill(file_name);
 
 	/* Free Memory */
-	C_KILL(quest_num, max_quests, IDX);
+	C_KILL(quest_num, max_q_idx, IDX);
 }
 
 

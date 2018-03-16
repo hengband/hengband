@@ -4387,7 +4387,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Maximum quests */
 			else if (zz[0][0] == 'Q')
 			{
-				max_quests = (IDX)atoi(zz[1]);
+				max_q_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum r_idx */

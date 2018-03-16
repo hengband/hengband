@@ -1051,7 +1051,7 @@ building_type building[MAX_BLDG];
 /*
  * Maximum number of quests
  */
-QUEST_IDX max_quests;
+QUEST_IDX max_q_idx;
 
 /*
  * Maximum number of monsters in r_info.txt

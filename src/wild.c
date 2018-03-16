@@ -678,7 +678,7 @@ void wilderness_gen(void)
 	set_floor_and_wall(0);
 
 	/* Set rewarded quests to finished */
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		if (quest[i].status == QUEST_STATUS_REWARDED)
 			quest[i].status = QUEST_STATUS_FINISHED;
