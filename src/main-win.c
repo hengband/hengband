@@ -1,76 +1,102 @@
-﻿/* File: main-win.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, Skirmantas Kligys, and others
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.
- */
-
-
-/*
- * This file helps Angband work with Windows computers.
- *
- * To use this file, use an appropriate "Makefile" or "Project File",
- * make sure that "WINDOWS" and/or "WIN32" are defined somewhere, and
- * make sure to obtain various extra files as described below.
- *
- * The official compilation uses the CodeWarrior Pro compiler, which
- * includes a special project file and precompilable header file.
- *
- *
- * See also "main-dos.c" and "main-ibm.c".
- *
- *
- * The "lib/user/pref-win.prf" file contains keymaps, macro definitions,
- * and/or color redefinitions.
- *
- * The "lib/user/font-win.prf" contains attr/char mappings for use with the
- * normal "lib/xtra/font/*.fon" font files.
- *
- * The "lib/user/graf-win.prf" contains attr/char mappings for use with the
- * special "lib/xtra/graf/*.bmp" bitmap files, which are activated by a menu
- * item.
- *
- *
- * Compiling this file, and using the resulting executable, requires
- * several extra files not distributed with the standard Angband code.
- * If "USE_GRAPHICS" is defined, then "readdib.h" and "readdib.c" must
- * be placed into "src/", and the "8X8.BMP" bitmap file must be placed
- * into "lib/xtra/graf".  In any case, some "*.fon" files (including
- * "8X13.FON" if nothing else) must be placed into "lib/xtra/font/".
- * If "USE_SOUND" is defined, then some special library (for example,
- * "winmm.lib") may need to be linked in, and desired "*.WAV" sound
- * files must be placed into "lib/xtra/sound/".  All of these extra
- * files can be found in the "ext-win" archive.
- *
- *
- * The "Term_xtra_win_clear()" function should probably do a low-level
- * clear of the current window, and redraw the borders and other things,
- * if only for efficiency.  XXX XXX XXX
- *
- * A simpler method is needed for selecting the "tile size" for windows.
- * XXX XXX XXX
- *
- * The various "warning" messages assume the existance of the "screen.w"
- * window, I think, and only a few calls actually check for its existance,
- * this may be okay since "NULL" means "on top of all windows". (?)  The
- * user must never be allowed to "hide" the main window, or the "menubar"
- * will disappear.  XXX XXX XXX
- *
- * Special "Windows Help Files" can be placed into "lib/xtra/help/" for
- * use with the "winhelp.exe" program.  These files *may* be available
- * at the ftp site somewhere, but I have not seen them.  XXX XXX XXX
- *
- *
- * Initial framework (and most code) by Ben Harrison (benh@phial.com).
- *
- * Original code by Skirmantas Kligys (kligys@scf.usc.edu).
- *
- * Additional code by Ross E Becker (beckerr@cis.ohio-state.edu),
- * and Chris R. Martin (crm7479@tam2000.tamu.edu).
- */
+﻿/*!
+* @file main-win.c
+* @brief Windows版固有実装(メインエントリポイント含む)
+* @date 2018/03/16
+* @author Hengband Team
+* @detail
+*
+* <h3>概要</h3>
+* Windows98かその前後の頃を起点としたAPI実装。
+* 各種のゲームエンジンは無論、
+* DirectXといった昨今描画に標準的となったライブラリも用いていない。
+* タイルの描画処理などについては、現在動作の詳細を検証中。
+*
+* <h3>フォーク元の概要</h3>
+* <p>
+* Copyright (c) 1997 Ben Harrison, Skirmantas Kligys, and others
+*
+* This software may be copied and distributed for educational, research,
+* and not for profit purposes provided that this copyright and statement
+* are included in all such copies.
+* </p>
+* <p>
+* This file helps Angband work with Windows computers.
+*
+* To use this file, use an appropriate "Makefile" or "Project File",
+* make sure that "WINDOWS" and/or "WIN32" are defined somewhere, and
+* make sure to obtain various extra files as described below.
+*
+* The official compilation uses the CodeWarrior Pro compiler, which
+* includes a special project file and precompilable header file.
+* </p>
+*
+* <p>
+* <del>See also "main-dos.c" and "main-ibm.c".</del>
+* </p>
+*
+* <p>
+* The "lib/user/pref-win.prf" file contains keymaps, macro definitions,
+* and/or color redefinitions.
+* </p>
+*
+* <p>
+* The "lib/user/font-win.prf" contains attr/char mappings for use with the
+* normal "lib/xtra/font/*.fon" font files.
+* </p>
+*
+* <p>
+* The "lib/user/graf-win.prf" contains attr/char mappings for use with the
+* special "lib/xtra/graf/*.bmp" bitmap files, which are activated by a menu
+* item.
+* </p>
+*
+* <p>
+* Compiling this file, and using the resulting executable, requires
+* several extra files not distributed with the standard Angband code.
+* If "USE_GRAPHICS" is defined, then "readdib.h" and "readdib.c" must
+* be placed into "src/", and the "8X8.BMP" bitmap file must be placed
+* into "lib/xtra/graf".  In any case, some "*.fon" files (including
+* "8X13.FON" if nothing else) must be placed into "lib/xtra/font/".
+* If "USE_SOUND" is defined, then some special library (for example,
+* "winmm.lib") may need to be linked in, and desired "*.WAV" sound
+* files must be placed into "lib/xtra/sound/".  All of these extra
+* files can be found in the "ext-win" archive.
+* </p>
+*
+* <p>
+* The "Term_xtra_win_clear()" function should probably do a low-level
+* clear of the current window, and redraw the borders and other things,
+* if only for efficiency.  XXX XXX XXX
+* </p>
+*
+* <p>
+* A simpler method is needed for selecting the "tile size" for windows.
+* XXX XXX XXX
+* </p>
+*
+* <p>
+* The various "warning" messages assume the existance of the "screen.w"
+* window, I think, and only a few calls actually check for its existance,
+* this may be okay since "NULL" means "on top of all windows". (?)  The
+* user must never be allowed to "hide" the main window, or the "menubar"
+* will disappear.  XXX XXX XXX
+* </p>
+*
+* <p>
+* Special "Windows Help Files" can be placed into "lib/xtra/help/" for
+* use with the "winhelp.exe" program.  These files *may* be available
+* at the ftp site somewhere, but I have not seen them.  XXX XXX XXX
+* </p>
+*
+* <p>
+* Initial framework (and most code) by Ben Harrison (benh@phial.com).
+*
+* Original code by Skirmantas Kligys (kligys@scf.usc.edu).
+*
+* Additional code by Ross E Becker (beckerr@cis.ohio-state.edu),
+* and Chris R. Martin (crm7479@tam2000.tamu.edu).
+* </p>
+*/
 
 #include "angband.h"
 
