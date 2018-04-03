@@ -381,6 +381,8 @@ cptr make_screen_dump(void)
 			case '&': cc = "&amp;"; break;
 			case '<': cc = "&lt;"; break;
 			case '>': cc = "&gt;"; break;
+			case '"': cc = "&quot;"; break;
+			case '\'': cc = "&#39;"; break;
 #ifdef WINDOWS
 			case 0x1f: c = '.'; break;
 			case 0x7f: c = (a == 0x09) ? '%' : '#'; break;
