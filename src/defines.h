@@ -5493,7 +5493,7 @@ extern int PlayerUID;
 #define MAX_MACRO_TRIG 200 /*!< 登録を許すマクロ（トリガー）の最大数 */
 
 /* Max size of screen dump buffer */
-#define SCREEN_BUF_SIZE 65536
+#define SCREEN_BUF_MAX_SIZE (4 * 65536)
 
 
 /*

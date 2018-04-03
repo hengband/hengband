@@ -3777,7 +3777,7 @@ static errr rd_savefile_new_aux(void)
 
 	if (!z_older_than(11, 0, 9))
 	{
-		char buf[SCREEN_BUF_SIZE];
+		char buf[SCREEN_BUF_MAX_SIZE];
 		rd_string(buf, sizeof(buf));
 		if (buf[0]) screen_dump = string_make(buf);
 	}

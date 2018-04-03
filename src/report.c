@@ -408,7 +408,7 @@ cptr make_screen_dump(void)
 		buf_sprintf(screen_buf, html_foot[i]);
 
 	/* Screen dump size is too big ? */
-	if (screen_buf->size + 1> SCREEN_BUF_SIZE)
+	if (screen_buf->size + 1> SCREEN_BUF_MAX_SIZE)
 	{
 		ret = NULL;
 	}
