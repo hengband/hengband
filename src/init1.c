@@ -1089,7 +1089,7 @@ static bool add_name(u32b *offset, header *head, cptr buf)
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-static bool add_tag(s16b *offset, header *head, cptr buf)
+static bool add_tag(STR_OFFSET *offset, header *head, cptr buf)
 {
 	u32b i;
 
@@ -1307,10 +1307,10 @@ errr parse_v_info(char *buf, header *head)
 			&typ, &rat, &hgt, &wid)) return (1);
 
 		/* Save the values */
-		v_ptr->typ = typ;
-		v_ptr->rat = rat;
-		v_ptr->hgt = hgt;
-		v_ptr->wid = wid;
+		v_ptr->typ = (ROOM_IDX)typ;
+		v_ptr->rat = (PROB)rat;
+		v_ptr->hgt = (POSITION)hgt;
+		v_ptr->wid = (POSITION)wid;
 	}
 
 	/* Oops */
@@ -1393,8 +1393,8 @@ errr parse_s_info(char *buf, header *head)
 			|| max < WEAPON_EXP_UNSKILLED || max > WEAPON_EXP_MASTER) return (8);
 
 		/* Save the values */
-		s_ptr->s_start[num] = start;
-		s_ptr->s_max[num] = max;
+		s_ptr->s_start[num] = (SUB_EXP)start;
+		s_ptr->s_max[num] = (SUB_EXP)max;
 	}
 
 
@@ -1522,10 +1522,10 @@ errr parse_m_info(char *buf, header *head)
 		if (4 != sscanf(buf+2, "%d:%d:%d:%d",
 				&level, &mana, &fail, &exp)) return (1);
 
-		m_ptr->info[realm][magic_idx].slevel = level;
-		m_ptr->info[realm][magic_idx].smana = mana;
-		m_ptr->info[realm][magic_idx].sfail = fail;
-		m_ptr->info[realm][magic_idx].sexp = exp;
+		m_ptr->info[realm][magic_idx].slevel = (PLAYER_LEVEL)level;
+		m_ptr->info[realm][magic_idx].smana = (MANA_POINT)mana;
+		m_ptr->info[realm][magic_idx].sfail = (PERCENTAGE)fail;
+		m_ptr->info[realm][magic_idx].sexp = (EXP)exp;
 		magic_idx ++;
 	}
 
@@ -1603,7 +1603,7 @@ static errr grab_one_feat_flag(feature_type *f_ptr, cptr what)
  */
 static errr grab_one_feat_action(feature_type *f_ptr, cptr what, int count)
 {
-	int i;
+	FF_FLAGS_IDX i;
 
 	/* Check flags */
 	for (i = 0; i < FF_FLAG_MAX; i++)
@@ -1675,10 +1675,10 @@ errr parse_f_info(char *buf, header *head)
 		}
 
 		/* Default "mimic" */
-		f_ptr->mimic = i;
+		f_ptr->mimic = (FEAT_IDX)i;
 
 		/* Default "destroyed state" -- if not specified */
-		f_ptr->destroyed = i;
+		f_ptr->destroyed = (FEAT_IDX)i;
 
 		/* Default "states" */
 		for (i = 0; i < MAX_FEAT_STATES; i++) f_ptr->state[i].action = FF_FLAG_MAX;
@@ -1718,12 +1718,12 @@ errr parse_f_info(char *buf, header *head)
 	/* Process 'M' for "Mimic" (one line only) */
 	else if (buf[0] == 'M')
 	{
-		s16b offset;
+		STR_OFFSET offset;
 
 		if (!add_tag(&offset, head, buf + 2)) return PARSE_ERROR_OUT_OF_MEMORY;
 
 		/* Record a fake tag index */
-		f_ptr->mimic = -offset;
+		f_ptr->mimic_tag = offset;
 	}
 
 
@@ -1821,7 +1821,7 @@ errr parse_f_info(char *buf, header *head)
 			if (1 == sscanf(s, "SUBTYPE_%d", &i))
 			{
 				/* Extract a "subtype" */
-				f_ptr->subtype =  i;
+				f_ptr->subtype = (FEAT_SUBTYPE)i;
 
 				/* Start at next entry */
 				s = t;
@@ -1834,7 +1834,7 @@ errr parse_f_info(char *buf, header *head)
 			if (1 == sscanf(s, "POWER_%d", &i))
 			{
 				/* Extract a "power" */
-				f_ptr->power =  i;
+				f_ptr->power = (FEAT_POWER)i;
 
 				/* Start at next entry */
 				s = t;
@@ -1860,13 +1860,13 @@ errr parse_f_info(char *buf, header *head)
 		if (1 != sscanf(buf+2, "%d", &priority)) return (PARSE_ERROR_GENERIC);
 
 		/* Save the value */
-		f_ptr->priority = priority;
+		f_ptr->priority = (FEAT_PRIORITY)priority;
 	}
 
 	/* Process 'K' for "States" (up to four lines + default (which cannot be last)) */
 	else if (buf[0] == 'K')
 	{
-		s16b offset;
+		STR_OFFSET offset;
 
 		/* Find the next empty state slot (if any) */
 		for (i = 0; i < MAX_FEAT_STATES; i++) if (f_ptr->state[i].action == FF_FLAG_MAX) break;
@@ -1886,7 +1886,7 @@ errr parse_f_info(char *buf, header *head)
 			if (!add_tag(&offset, head, t)) return PARSE_ERROR_OUT_OF_MEMORY;
 
 			/* Record a fake tag index */
-			f_ptr->destroyed = -offset;
+			f_ptr->destroyed_tag = offset;
 		}
 		else
 		{
@@ -1899,12 +1899,12 @@ errr parse_f_info(char *buf, header *head)
 			if (!add_tag(&offset, head, t)) return PARSE_ERROR_OUT_OF_MEMORY;
 
 			/* Record a fake tag index */
-			f_ptr->state[i].result = -offset;
+			f_ptr->state[i].result_tag = offset;
 		}
 	}
 
 	/* Oops */
-	else	return (6);
+	else return (6);
 
 	/* Success */
 	return (0);
@@ -1939,29 +1939,32 @@ s16b f_tag_to_index(cptr str)
 /*!
  * @brief 地形タグからIDを得る /
  * Search for real index corresponding to this fake tag
- * @param feat タグ文字列
- * @return なし
+ * @param feat タグ文字列のオフセット
+ * @return 地形ID。該当がないなら-1
  */
-static void search_real_feat(s16b *feat)
+static FEAT_IDX search_real_feat(STR_OFFSET feat)
 {
-	int i;
+	FEAT_IDX i;
 
 	/* Don't convert non-fake tag */
-	if (*feat >= 0) return;
+	if (feat <= 0)
+	{
+		return -1;
+	}
 
 	/* Search for real index corresponding to this fake tag */
 	for (i = 0; i < f_head.info_num; i++)
 	{
-		if ((-(*feat)) == f_info[i].tag)
+		if (feat == f_info[i].tag)
 		{
 			/* Record real index */
-			*feat = (s16b)i;
-			return;
+			return i;
 		}
 	}
 
 	/* Undefined tag */
-	msg_format(_("未定義のタグ '%s'。", "%s is undefined."), f_tag + (-(*feat)));
+	msg_format(_("未定義のタグ '%s'。", "%s is undefined."), f_tag + feat);
+	return -1;
 }
 
 
@@ -1979,13 +1982,17 @@ void retouch_f_info(header *head)
 	for (i = 0; i < head->info_num; i++)
 	{
 		feature_type *f_ptr = &f_info[i];
-		int j;
+		FEAT_IDX j, k;
 
-		search_real_feat(&f_ptr->mimic);
-
-		search_real_feat(&f_ptr->destroyed);
-
-		for (j = 0; j < MAX_FEAT_STATES; j++) search_real_feat(&f_ptr->state[j].result);
+		k = search_real_feat(f_ptr->mimic_tag);
+		f_ptr->mimic = k < 0 ? f_ptr->mimic : k;
+		k = search_real_feat(f_ptr->destroyed_tag);
+		f_ptr->destroyed = k < 0 ? f_ptr->destroyed : k;
+		for (j = 0; j < MAX_FEAT_STATES; j++)
+		{
+			k = search_real_feat(f_ptr->state[j].result_tag);
+			f_ptr->state[j].result = k < 0 ? f_ptr->state[j].result : k;
+		}
 	}
 }
 
@@ -2217,9 +2224,9 @@ errr parse_k_info(char *buf, header *head)
 				&tval, &sval, &pval)) return (1);
 
 		/* Save the values */
-		k_ptr->tval = tval;
-		k_ptr->sval = sval;
-		k_ptr->pval = pval;
+		k_ptr->tval = (OBJECT_TYPE_VALUE)tval;
+		k_ptr->sval = (OBJECT_SUBTYPE_VALUE)sval;
+		k_ptr->pval = (PARAMETER_VALUE)pval;
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
@@ -2233,10 +2240,10 @@ errr parse_k_info(char *buf, header *head)
 				&level, &extra, &wgt, &cost)) return (1);
 
 		/* Save the values */
-		k_ptr->level = level;
-		k_ptr->extra = extra;
-		k_ptr->weight = wgt;
-		k_ptr->cost = cost;
+		k_ptr->level = (DEPTH)level;
+		k_ptr->extra = (BIT_FLAGS8)extra;
+		k_ptr->weight = (WEIGHT)wgt;
+		k_ptr->cost = (PRICE)cost;
 	}
 
 	/* Process 'A' for "Allocation" (one line only) */
@@ -2262,7 +2269,7 @@ errr parse_k_info(char *buf, header *head)
 			if (t && (!s || t < s))
 			{
 				int chance = atoi(t+1);
-				if (chance > 0) k_ptr->chance[i] = chance;
+				if (chance > 0) k_ptr->chance[i] = (PROB)chance;
 			}
 		}
 	}
@@ -2276,12 +2283,12 @@ errr parse_k_info(char *buf, header *head)
 		if (6 != sscanf(buf+2, "%d:%dd%d:%d:%d:%d",
 				&ac, &hd1, &hd2, &th, &td, &ta)) return (1);
 
-		k_ptr->ac = ac;
-		k_ptr->dd = hd1;
-		k_ptr->ds = hd2;
-		k_ptr->to_h = th;
-		k_ptr->to_d = td;
-		k_ptr->to_a =  ta;
+		k_ptr->ac = (ARMOUR_CLASS)ac;
+		k_ptr->dd = (DICE_NUMBER)hd1;
+		k_ptr->ds = (DICE_SID)hd2;
+		k_ptr->to_h = (HIT_PROB)th;
+		k_ptr->to_d = (HIT_POINT)td;
+		k_ptr->to_a = (ARMOUR_CLASS)ta;
 	}
 
 	/* Hack -- Process 'U' for activation index */
@@ -2474,9 +2481,9 @@ errr parse_a_info(char *buf, header *head)
 				&tval, &sval, &pval)) return (1);
 
 		/* Save the values */
-		a_ptr->tval = tval;
-		a_ptr->sval = sval;
-		a_ptr->pval = pval;
+		a_ptr->tval = (OBJECT_TYPE_VALUE)tval;
+		a_ptr->sval = (OBJECT_SUBTYPE_VALUE)sval;
+		a_ptr->pval = (PARAMETER_VALUE)pval;
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
@@ -2490,10 +2497,10 @@ errr parse_a_info(char *buf, header *head)
 				&level, &rarity, &wgt, &cost)) return (1);
 
 		/* Save the values */
-		a_ptr->level = level;
-		a_ptr->rarity = rarity;
-		a_ptr->weight = wgt;
-		a_ptr->cost = cost;
+		a_ptr->level = (DEPTH)level;
+		a_ptr->rarity = (RARITY)rarity;
+		a_ptr->weight = (WEIGHT)wgt;
+		a_ptr->cost = (PRICE)cost;
 	}
 
 	/* Hack -- Process 'P' for "power" and such */
@@ -2505,12 +2512,12 @@ errr parse_a_info(char *buf, header *head)
 		if (6 != sscanf(buf+2, "%d:%dd%d:%d:%d:%d",
 				&ac, &hd1, &hd2, &th, &td, &ta)) return (1);
 
-		a_ptr->ac = ac;
-		a_ptr->dd = hd1;
-		a_ptr->ds = hd2;
-		a_ptr->to_h = th;
-		a_ptr->to_d = td;
-		a_ptr->to_a =  ta;
+		a_ptr->ac = (ARMOUR_CLASS)ac;
+		a_ptr->dd = (DICE_NUMBER)hd1;
+		a_ptr->ds = (DICE_SID)hd2;
+		a_ptr->to_h = (HIT_PROB)th;
+		a_ptr->to_d = (HIT_POINT)td;
+		a_ptr->to_a = (ARMOUR_CLASS)ta;
 	}
 
 	/* Hack -- Process 'U' for activation index */
@@ -2698,8 +2705,8 @@ errr parse_e_info(char *buf, header *head)
 				&slot, &rating)) return (1);
 
 		/* Save the values */
-		e_ptr->slot = slot;
-		e_ptr->rating = rating;
+		e_ptr->slot = (INVENTORY_IDX)slot;
+		e_ptr->rating = (PRICE)rating;
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
@@ -2714,7 +2721,7 @@ errr parse_e_info(char *buf, header *head)
 
 		/* Save the values */
 		e_ptr->level = level;
-		e_ptr->rarity = rarity;
+		e_ptr->rarity = (RARITY)rarity;
 		/* e_ptr->weight = wgt; */
 		e_ptr->cost = cost;
 	}
@@ -2722,16 +2729,16 @@ errr parse_e_info(char *buf, header *head)
 	/* Hack -- Process 'C' for "creation" */
 	else if (buf[0] == 'C')
 	{
-		int th, td, ta, pv;
+		int th, td, ta, pval;
 
 		/* Scan for the values */
 		if (4 != sscanf(buf+2, "%d:%d:%d:%d",
-				&th, &td, &ta, &pv)) return (1);
+				&th, &td, &ta, &pval)) return (1);
 
-		e_ptr->max_to_h = th;
-		e_ptr->max_to_d = td;
-		e_ptr->max_to_a = ta;
-		e_ptr->max_pval = pv;
+		e_ptr->max_to_h = (HIT_PROB)th;
+		e_ptr->max_to_d = (HIT_POINT)td;
+		e_ptr->max_to_a = (ARMOUR_CLASS)ta;
+		e_ptr->max_pval = (PARAMETER_VALUE)pval;
 	}
 
 	/* Hack -- Process 'U' for activation index */
@@ -2977,12 +2984,12 @@ errr parse_r_info(char *buf, header *head)
 				&spd, &hp1, &hp2, &aaf, &ac, &slp)) return (1);
 
 		/* Save the values */
-		r_ptr->speed = spd;
-		r_ptr->hdice = MAX(hp1, 1);
-		r_ptr->hside = MAX(hp2, 1);
-		r_ptr->aaf = aaf;
-		r_ptr->ac = ac;
-		r_ptr->sleep = slp;
+		r_ptr->speed = (SPEED)spd;
+		r_ptr->hdice = (DICE_NUMBER)MAX(hp1, 1);
+		r_ptr->hside = (DICE_SID)MAX(hp2, 1);
+		r_ptr->aaf = (POSITION)aaf;
+		r_ptr->ac = (ARMOUR_CLASS)ac;
+		r_ptr->sleep = (SLEEP_DEGREE)slp;
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
@@ -2998,12 +3005,12 @@ errr parse_r_info(char *buf, header *head)
 				&lev, &rar, &pad, &exp, &nextexp, &nextmon)) return (1);
 
 		/* Save the values */
-		r_ptr->level = lev;
-		r_ptr->rarity = rar;
-		r_ptr->extra = pad;
-		r_ptr->mexp = exp;
-		r_ptr->next_exp = nextexp;
-		r_ptr->next_r_idx = nextmon;
+		r_ptr->level = (DEPTH)lev;
+		r_ptr->rarity = (RARITY)rar;
+		r_ptr->extra = (BIT_FLAGS16)pad;
+		r_ptr->mexp = (EXP)exp;
+		r_ptr->next_exp = (EXP)nextexp;
+		r_ptr->next_r_idx = (IDX)nextmon;
 	}
 
 	/* Process 'R' for "Reinforcement" (up to six lines) */
@@ -3018,9 +3025,9 @@ errr parse_r_info(char *buf, header *head)
 
 		/* Scan for the values */
 		if (3 != sscanf(buf+2, "%d:%dd%d", &id, &dd, &ds)) return (1);
-		r_ptr->reinforce_id[i] = id;
-		r_ptr->reinforce_dd[i] = dd;
-		r_ptr->reinforce_ds[i] = ds;
+		r_ptr->reinforce_id[i] = (MONRACE_IDX)id;
+		r_ptr->reinforce_dd[i] = (DICE_NUMBER)dd;
+		r_ptr->reinforce_ds[i] = (DICE_SID)ds;
 	}
 
 	/* Process 'B' for "Blows" (up to four lines) */
@@ -3071,10 +3078,10 @@ errr parse_r_info(char *buf, header *head)
 		if (*t == 'd') *t++ = '\0';
 
 		/* Save the method */
-		r_ptr->blow[i].method = n1;
+		r_ptr->blow[i].method = (BLOW_METHOD)n1;
 
 		/* Save the effect */
-		r_ptr->blow[i].effect = n2;
+		r_ptr->blow[i].effect = (BLOW_EFFECT)n2;
 
 		/* Extract the damage dice and sides */
 		r_ptr->blow[i].d_dice = atoi(s);
@@ -3154,9 +3161,9 @@ errr parse_r_info(char *buf, header *head)
 		if (i == 4) return (1);
 
 		if (3 != sscanf(buf+2, "%d:%d:%d", &id, &rarity, &per)) return (1);
-		r_ptr->artifact_id[i] = id;
-		r_ptr->artifact_rarity[i] = rarity;
-		r_ptr->artifact_percent[i] = per;
+		r_ptr->artifact_id[i] = (ARTIFACT_IDX)id;
+		r_ptr->artifact_rarity[i] = (RARITY)rarity;
+		r_ptr->artifact_percent[i] = (PERCENTAGE)per;
 	}
 
 	/* Process 'V' for "Arena power value ratio" */
@@ -3164,7 +3171,7 @@ errr parse_r_info(char *buf, header *head)
 	{
 		int val;
 		if (3 != sscanf(buf+2, "%d", &val)) return (1);
-		r_ptr->arena_ratio = val;
+		r_ptr->arena_ratio = (PERCENTAGE)val;
 	}
 
 	/* Oops */
@@ -3355,16 +3362,16 @@ errr parse_d_info(char *buf, header *head)
 				 &min_lev, &max_lev, &min_plev, &mode, &min_alloc, &max_chance, &obj_good, &obj_great, (unsigned int *)&pit, (unsigned int *)&nest)) return (1);
 
 		/* Save the values */
-		d_ptr->mindepth = min_lev;
-		d_ptr->maxdepth = max_lev;
-		d_ptr->min_plev = min_plev;
-		d_ptr->mode = mode;
+		d_ptr->mindepth = (DEPTH)min_lev;
+		d_ptr->maxdepth = (DEPTH)max_lev;
+		d_ptr->min_plev = (PLAYER_LEVEL)min_plev;
+		d_ptr->mode = (BIT_FLAGS8)mode;
 		d_ptr->min_m_alloc_level = min_alloc;
 		d_ptr->max_m_alloc_chance = max_chance;
 		d_ptr->obj_good = obj_good;
 		d_ptr->obj_great = obj_great;
-		d_ptr->pit = pit;
-		d_ptr->nest = nest;
+		d_ptr->pit = (BIT_FLAGS16)pit;
+		d_ptr->nest = (BIT_FLAGS16)nest;
 	}
 
 	/* Process 'P' for "Place Info" */
@@ -3394,7 +3401,7 @@ errr parse_d_info(char *buf, header *head)
 			d_ptr->floor[i].feat = f_tag_to_index(zz[i * 2]);
 			if (d_ptr->floor[i].feat < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
-			d_ptr->floor[i].percent = atoi(zz[i * 2 + 1]);
+			d_ptr->floor[i].percent = (PERCENTAGE)atoi(zz[i * 2 + 1]);
 		}
 		d_ptr->tunnel_percent = atoi(zz[DUNGEON_FEAT_PROB_NUM * 2]);
 	}
@@ -3413,7 +3420,7 @@ errr parse_d_info(char *buf, header *head)
 			d_ptr->fill[i].feat = f_tag_to_index(zz[i * 2]);
 			if (d_ptr->fill[i].feat < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
-			d_ptr->fill[i].percent = atoi(zz[i * 2 + 1]);
+			d_ptr->fill[i].percent = (PERCENTAGE)atoi(zz[i * 2 + 1]);
 		}
 
 		d_ptr->outer_wall = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2]);
@@ -3451,7 +3458,7 @@ errr parse_d_info(char *buf, header *head)
 			if (1 == sscanf(s, "FINAL_ARTIFACT_%d", &artif))
 			{
 				/* Extract a "Final Artifact" */
-				d_ptr->final_artifact = artif;
+				d_ptr->final_artifact = (ARTIFACT_IDX)artif;
 
 				/* Start at next entry */
 				s = t;
@@ -3464,7 +3471,7 @@ errr parse_d_info(char *buf, header *head)
 			if (1 == sscanf(s, "FINAL_OBJECT_%d", &artif))
 			{
 				/* Extract a "Final Artifact" */
-				d_ptr->final_object = artif;
+				d_ptr->final_object = (KIND_OBJECT_IDX)artif;
 
 				/* Start at next entry */
 				s = t;
@@ -3477,7 +3484,7 @@ errr parse_d_info(char *buf, header *head)
 			if (1 == sscanf(s, "FINAL_GUARDIAN_%d", &monst))
 			{
 				/* Extract a "Artifact Guardian" */
-				d_ptr->final_guardian = monst;
+				d_ptr->final_guardian = (MONRACE_IDX)monst;
 
 				/* Start at next entry */
 				s = t;
@@ -3490,7 +3497,7 @@ errr parse_d_info(char *buf, header *head)
 			if (1 == sscanf(s, "MONSTER_DIV_%d", &monst))
 			{
 				/* Extract a "Special %" */
-				d_ptr->special_div = monst;
+				d_ptr->special_div = (PROB)monst;
 
 				/* Start at next entry */
 				s = t;
@@ -3612,14 +3619,14 @@ typedef struct dungeon_grid dungeon_grid;
 
 struct dungeon_grid
 {
-	int		feature;		/* Terrain feature */
-	int		monster;		/* Monster */
-	int		object;			/* Object */
-	int		ego;			/* Ego-Item */
-	int		artifact;		/* Artifact */
-	int		trap;			/* Trap */
-	int		cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
-	int		special;		/* Reserved for special terrain info */
+	FEAT_IDX feature;		/* Terrain feature */
+	MONSTER_IDX	monster;		/* Monster */
+	OBJECT_IDX object;			/* Object */
+	EGO_IDX	ego;			/* Ego-Item */
+	ARTIFACT_IDX artifact;		/* Artifact */
+	IDX trap;			/* Trap */
+	BIT_FLAGS cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
+	s16b special; /* Reserved for special terrain info */
 	int		random;			/* Number of the random effect */
 };
 
@@ -3681,7 +3688,7 @@ static errr parse_line_feature(char *buf)
 				if (zz[6][0] == '*')
 				{
 					letter[index].random |= RANDOM_ARTIFACT;
-					if (zz[6][1]) letter[index].artifact = atoi(zz[6] + 1);
+					if (zz[6][1]) letter[index].artifact = (IDX)atoi(zz[6] + 1);
 				}
 				else if (zz[6][0] == '!')
 				{
@@ -3692,7 +3699,7 @@ static errr parse_line_feature(char *buf)
 				}
 				else
 				{
-					letter[index].artifact = atoi(zz[6]);
+					letter[index].artifact = (IDX)atoi(zz[6]);
 				}
 				/* Fall through */
 			/* Ego-item */
@@ -3700,11 +3707,11 @@ static errr parse_line_feature(char *buf)
 				if (zz[5][0] == '*')
 				{
 					letter[index].random |= RANDOM_EGO;
-					if (zz[5][1]) letter[index].ego = atoi(zz[5] + 1);
+					if (zz[5][1]) letter[index].ego = (IDX)atoi(zz[5] + 1);
 				}
 				else
 				{
-					letter[index].ego = atoi(zz[5]);
+					letter[index].ego = (IDX)atoi(zz[5]);
 				}
 				/* Fall through */
 			/* Object */
@@ -3712,7 +3719,7 @@ static errr parse_line_feature(char *buf)
 				if (zz[4][0] == '*')
 				{
 					letter[index].random |= RANDOM_OBJECT;
-					if (zz[4][1]) letter[index].object = atoi(zz[4] + 1);
+					if (zz[4][1]) letter[index].object = (IDX)atoi(zz[4] + 1);
 				}
 				else if (zz[4][0] == '!')
 				{
@@ -3731,7 +3738,7 @@ static errr parse_line_feature(char *buf)
 				}
 				else
 				{
-					letter[index].object = atoi(zz[4]);
+					letter[index].object = (IDX)atoi(zz[4]);
 				}
 				/* Fall through */
 			/* Monster */
@@ -3739,7 +3746,7 @@ static errr parse_line_feature(char *buf)
 				if (zz[3][0] == '*')
 				{
 					letter[index].random |= RANDOM_MONSTER;
-					if (zz[3][1]) letter[index].monster = atoi(zz[3] + 1);
+					if (zz[3][1]) letter[index].monster = (IDX)atoi(zz[3] + 1);
 				}
 				else if (zz[3][0] == 'c')
 				{
@@ -3748,7 +3755,7 @@ static errr parse_line_feature(char *buf)
 				}
 				else
 				{
-					letter[index].monster = atoi(zz[3]);
+					letter[index].monster = (IDX)atoi(zz[3]);
 				}
 				/* Fall through */
 			/* Cave info */
@@ -3848,19 +3855,19 @@ static errr parse_line_building(char *buf)
 				strcpy(building[index].act_names[action_index], zz[1]);
 
 				/* Cost of the action for members */
-				building[index].member_costs[action_index] = atoi(zz[2]);
+				building[index].member_costs[action_index] = (PRICE)atoi(zz[2]);
 
 				/* Cost of the action for non-members */
-				building[index].other_costs[action_index] = atoi(zz[3]);
+				building[index].other_costs[action_index] = (PRICE)atoi(zz[3]);
 
 				/* Letter assigned to the action */
 				building[index].letters[action_index] = zz[4][0];
 
 				/* Action code */
-				building[index].actions[action_index] = atoi(zz[5]);
+				building[index].actions[action_index] = (BACT_IDX)atoi(zz[5]);
 
 				/* Action restriction */
-				building[index].action_restr[action_index] = atoi(zz[6]);
+				building[index].action_restr[action_index] = (BACT_RESTRICT_IDX)atoi(zz[6]);
 
 				break;
 			}
@@ -3875,7 +3882,7 @@ static errr parse_line_building(char *buf)
 			{
 				for (i = 0; i < MAX_CLASS; i++)
 				{
-					building[index].member_class[i] = atoi(zz[i]);
+					building[index].member_class[i] = (CLASS_IDX)atoi(zz[i]);
 				}
 
 				break;
@@ -3891,7 +3898,7 @@ static errr parse_line_building(char *buf)
 			{
 				for (i = 0; i < MAX_RACES; i++)
 				{
-					building[index].member_race[i] = atoi(zz[i]);
+					building[index].member_race[i] = (RACE_IDX)atoi(zz[i]);
 				}
 
 				break;
@@ -3907,7 +3914,7 @@ static errr parse_line_building(char *buf)
 			{
 				for (i = 0; i < MAX_MAGIC; i++)
 				{
-					building[index].member_realm[i+1] = atoi(zz[i]);
+					building[index].member_realm[i+1] = (REALM_IDX)atoi(zz[i]);
 				}
 
 				break;
@@ -4035,10 +4042,10 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 			int idx = s[0];
 
-			int object_index = letter[idx].object;
-			int monster_index = letter[idx].monster;
+			IDX object_index = letter[idx].object;
+			IDX monster_index = letter[idx].monster;
 			int random = letter[idx].random;
-			int artifact_index = letter[idx].artifact;
+			IDX artifact_index = letter[idx].artifact;
 
 			/* Lay down a floor */
 			c_ptr->feat = conv_dungeon_feat(letter[idx].feature);
@@ -4172,7 +4179,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			{
 				if (a_info[artifact_index].cur_num)
 				{
-					int k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
+					IDX k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
 					object_type forge;
 					object_type *q_ptr = &forge;
 
@@ -4229,17 +4236,16 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 				if (num < 9) return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
 
-				q_ptr->type    = atoi(zz[2]);
-				q_ptr->num_mon = atoi(zz[3]);
-				q_ptr->cur_num = atoi(zz[4]);
-				q_ptr->max_num = atoi(zz[5]);
-				q_ptr->level   = atoi(zz[6]);
-				q_ptr->r_idx   = atoi(zz[7]);
-				q_ptr->k_idx   = atoi(zz[8]);
-				q_ptr->dungeon = atoi(zz[9]);
+				q_ptr->type    = (QUEST_TYPE)atoi(zz[2]);
+				q_ptr->num_mon = (MONSTER_NUMBER)atoi(zz[3]);
+				q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
+				q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
+				q_ptr->level   = (DEPTH)atoi(zz[6]);
+				q_ptr->r_idx   = (IDX)atoi(zz[7]);
+				q_ptr->k_idx   = (IDX)atoi(zz[8]);
+				q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
 
-				if (num > 10)
-					q_ptr->flags  = atoi(zz[10]);
+				if (num > 10) q_ptr->flags  = atoi(zz[10]);
 
 				r_ptr = &r_info[q_ptr->r_idx];
 				if (r_ptr->flags1 & RF1_UNIQUE)
@@ -4255,12 +4261,12 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 		{
 			if (init_flags & INIT_ASSIGN)
 			{
-				int idx, count = 0;
-				int reward_idx = 0;
+				int count = 0;
+				IDX idx, reward_idx = 0;
 
 				for (idx = 2; idx < num; idx++)
 				{
-					int a_idx = atoi(zz[idx]);
+					IDX a_idx = (IDX)atoi(zz[idx]);
 					if (a_idx < 1) continue;
 					if (a_info[a_idx].cur_num > 0) continue;
 					count++;
@@ -4375,67 +4381,67 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Maximum towns */
 			if (zz[0][0] == 'T')
 			{
-				max_towns = atoi(zz[1]);
+				max_towns = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum quests */
 			else if (zz[0][0] == 'Q')
 			{
-				max_quests = atoi(zz[1]);
+				max_q_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum r_idx */
 			else if (zz[0][0] == 'R')
 			{
-				max_r_idx = atoi(zz[1]);
+				max_r_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum k_idx */
 			else if (zz[0][0] == 'K')
 			{
-				max_k_idx = atoi(zz[1]);
+				max_k_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum v_idx */
 			else if (zz[0][0] == 'V')
 			{
-				max_v_idx = atoi(zz[1]);
+				max_v_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum f_idx */
 			else if (zz[0][0] == 'F')
 			{
-				max_f_idx = atoi(zz[1]);
+				max_f_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum a_idx */
 			else if (zz[0][0] == 'A')
 			{
-				max_a_idx = atoi(zz[1]);
+				max_a_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum e_idx */
 			else if (zz[0][0] == 'E')
 			{
-				max_e_idx = atoi(zz[1]);
+				max_e_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum d_idx */
 			else if (zz[0][0] == 'D')
 			{
-				max_d_idx = atoi(zz[1]); 
+				max_d_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum o_idx */
 			else if (zz[0][0] == 'O')
 			{
-				max_o_idx = atoi(zz[1]);
+				max_o_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum m_idx */
 			else if (zz[0][0] == 'M')
 			{
-				max_m_idx = atoi(zz[1]);
+				max_m_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Wilderness size */
@@ -4910,7 +4916,7 @@ void write_r_info_txt(void)
 
 	cptr desc;
 
-	int mode = -1;
+	BIT_FLAGS mode = -1;
 
 	if (!fff) return;
 

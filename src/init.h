@@ -78,21 +78,14 @@ struct header
 	byte v_patch;		/* Version -- patch */
 	byte v_extra;		/* Version -- extra */
 
-
 	u16b info_num;		/* Number of "info" records */
-
-	u16b info_len;		/* Size of each "info" record */
-
-
+	int info_len;		/* Size of each "info" record */
 	u16b head_size;		/* Size of the "header" in bytes */
 
-	u32b info_size;		/* Size of the "info" array in bytes */
-
-	u32b name_size;		/* Size of the "name" array in bytes */
-
-	u32b text_size;		/* Size of the "text" array in bytes */
-
-	u32b tag_size;		/* Size of the "tag" array in bytes */
+	STR_OFFSET info_size;		/* Size of the "info" array in bytes */
+	STR_OFFSET name_size;		/* Size of the "name" array in bytes */
+	STR_OFFSET text_size;		/* Size of the "text" array in bytes */
+	STR_OFFSET tag_size;		/* Size of the "tag" array in bytes */
 
 	void *info_ptr;
 	char *name_ptr;

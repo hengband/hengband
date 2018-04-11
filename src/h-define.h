@@ -124,7 +124,7 @@
  * from any legal characters.  XXX XXX XXX
  */
 #define A2I(X)	((X) - 'a')
-#define I2A(X)	((X) + 'a')
+#define I2A(X)	((char)(X) + 'a')
 #define D2I(X)	((X) - '0')
 #define I2D(X)	((X) + '0')
 #define KTRL(X)	((X) & 0x1F)

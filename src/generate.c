@@ -166,7 +166,7 @@ static bool alloc_stairs_aux(int y, int x, int walls)
  * @param walls 最低減隣接させたい外壁の数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-static bool alloc_stairs(int feat, int num, int walls)
+static bool alloc_stairs(IDX feat, int num, int walls)
 {
 	int i;
 	int shaft_num = 0;
@@ -483,10 +483,10 @@ bool place_quest_monsters(void)
 	int i;
 
 	/* Handle the quest monster placements */
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		monster_race *r_ptr;
-		u32b mode;
+		BIT_FLAGS mode;
 		int j;
 
 		if (quest[i].status != QUEST_STATUS_TAKEN ||
@@ -816,7 +816,7 @@ static bool cave_gen(void)
 		/* Hack -- Add some rivers */
 		if (one_in_(3) && (randint1(dun_level) > 5))
 		{
-			int feat1 = 0, feat2 = 0;
+			IDX feat1 = 0, feat2 = 0;
 
 			/* Choose water or lava */
 			if ((randint1(MAX_DEPTH * 2) - 1 > dun_level) && (d_info[dungeon_type].flags1 & DF1_WATER_RIVER))
@@ -1255,7 +1255,8 @@ static void build_battle(void)
  */
 static void battle_gen(void)
 {
-	int y, x, i;
+	int y, x;
+	MONSTER_IDX i;
 	int qy = 0;
 	int qx = 0;
 
@@ -1284,7 +1285,7 @@ static void battle_gen(void)
 
 	build_battle();
 
-	for(i=0;i<4;i++)
+	for(i = 0; i < 4; i++)
 	{
 		place_monster_aux(0, p_ptr->y + 8 + (i/2)*4, p_ptr->x - 2 + (i%2)*4, battle_mon[i],
 				  (PM_NO_KAGE | PM_NO_PET));

@@ -201,9 +201,9 @@ void get_table_sindarin(char *out_string)
  */
 static void shuffle_flavors(byte tval)
 {
-	s16b *k_idx_list;
-	int k_idx_list_num = 0;
-	int i;
+	IDX *k_idx_list;
+	IDX k_idx_list_num = 0;
+	IDX i;
 
 	/* Allocate an array for a list of k_idx */
 	C_MAKE(k_idx_list, max_k_idx, s16b);
@@ -281,7 +281,7 @@ static void shuffle_flavors(byte tval)
  */
 void flavor_init(void)
 {
-	int i;
+	KIND_OBJECT_IDX i;
 	u32b state_backup[4];
 
 	/* Hack -- Backup the RNG state */
@@ -1316,7 +1316,7 @@ bool object_is_quest_target(object_type *o_ptr)
  *   OD_NO_FLAVOR        : Allow to hidden flavor\n
  *   OD_FORCE_FLAVOR     : Get un-shuffled flavor name\n
  */
-void object_desc(char *buf, object_type *o_ptr, u32b mode)
+void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 {
 	/* Extract object kind name */
 	cptr            kindname = k_name + k_info[o_ptr->k_idx].name;
@@ -2448,7 +2448,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
 	{
 		int avgdam = o_ptr->dd * (o_ptr->ds + 1) * 10 / 2;
 		int tmul = bow_tmul(bow_ptr->sval);
-		s16b energy_fire = bow_energy(bow_ptr->sval);
+		ENERGY energy_fire = bow_energy(bow_ptr->sval);
 
 		/* See if the bow is "known" - then set damage bonus */
 		if (object_is_known(bow_ptr)) avgdam += (bow_ptr->to_d * 10);

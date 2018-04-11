@@ -234,7 +234,7 @@ static grouper group_item[] =
  * @param k ベースアイテムID
  * @return なし
  */
-static void kind_info(char *buf, char *dam, char *wgt, char *chance, int *lev, s32b *val, int k)
+static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, OBJECT_IDX k)
 {
 	object_type forge;
 	object_type *q_ptr;
@@ -325,14 +325,15 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, int *lev, s
 		char chance_aux[20] = "";
 		if(k_info[q_ptr->k_idx].chance[i] > 0)
 		{
-			sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), k_info[q_ptr->k_idx].locale[i], 100/k_info[q_ptr->k_idx].chance[i]);
+			sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""),
+				(int)k_info[q_ptr->k_idx].locale[i], 100/k_info[q_ptr->k_idx].chance[i]);
 			strcat(chance, chance_aux);
 		}
 	}
 
 
 	/* Weight */
-	sprintf(wgt, "%3d.%d", q_ptr->weight / 10, q_ptr->weight % 10);
+	sprintf(wgt, "%3d.%d", (int)(q_ptr->weight / 10), (int)(q_ptr->weight % 10));
 }
 
 
@@ -346,7 +347,7 @@ static void spoil_obj_desc(cptr fname)
 {
 	int i, k, s, t, n = 0, group_start = 0;
 
-	u16b who[200];
+	OBJECT_IDX who[200];
 
 	char buf[1024];
 
@@ -398,11 +399,11 @@ static void spoil_obj_desc(cptr fname)
 						int i1 = t;
 						int i2 = t + 1;
 
-						int e1;
-						int e2;
+						DEPTH e1;
+						DEPTH e2;
 
-						s32b t1;
-						s32b t2;
+						PRICE t1;
+						PRICE t2;
 
 						kind_info(NULL, NULL, NULL, NULL, &e1, &t1, who[i1]);
 						kind_info(NULL, NULL, NULL, NULL, &e2, &t2, who[i2]);
@@ -421,15 +422,15 @@ static void spoil_obj_desc(cptr fname)
 				/* Spoil each item */
 				for (s = 0; s < n; s++)
 				{
-					int e;
-					s32b v;
+					DEPTH e;
+					PRICE v;
 
 					/* Describe the kind */
 					kind_info(buf, dam, wgt, chance, &e, &v, who[s]);
 
 					/* Dump it */
 					fprintf(fff, "  %-35s%8s%7s%5d %-40s%9ld\n",
-						buf, dam, wgt, e, chance, (long)(v));
+						buf, dam, wgt, (int)e, chance, (long)(v));
 				}
 
 				/* Start a new set */
@@ -1384,12 +1385,12 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 	artifact_type *a_ptr = &a_info[o_ptr->name1];
 
 #ifdef JP
-	sprintf(misc_desc, "レベル %u, 希少度 %u, %d.%d kg, ＄%ld",
-		a_ptr->level, a_ptr->rarity,
+	sprintf(misc_desc, "レベル %d, 希少度 %u, %d.%d kg, ＄%ld",
+		(int)a_ptr->level, a_ptr->rarity,
 		lbtokg1(a_ptr->weight), lbtokg2(a_ptr->weight), (long int)a_ptr->cost);
 #else
-	sprintf(misc_desc, "Level %u, Rarity %u, %d.%d lbs, %ld Gold",
-		a_ptr->level, a_ptr->rarity,
+	sprintf(misc_desc, "Level %d, Rarity %u, %d.%d lbs, %ld Gold",
+		(int)a_ptr->level, a_ptr->rarity,
 		a_ptr->weight / 10, a_ptr->weight % 10, a_ptr->cost);
 #endif
 }
@@ -1635,9 +1636,9 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
  * @param name1 生成するアーティファクトID
  * @return 生成が成功した場合TRUEを返す
  */
-static bool make_fake_artifact(object_type *o_ptr, int name1)
+static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 {
-	int i;
+	IDX i;
 
 	artifact_type *a_ptr = &a_info[name1];
 
@@ -1680,7 +1681,8 @@ static bool make_fake_artifact(object_type *o_ptr, int name1)
  */
 static void spoil_artifact(cptr fname)
 {
-	int i, j;
+	int i;
+	IDX j;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -1853,10 +1855,10 @@ static void spoil_mon_desc(cptr fname)
 
 
 		/* Level */
-		sprintf(lev, "%d", r_ptr->level);
+		sprintf(lev, "%d", (int)r_ptr->level);
 
 		/* Rarity */
-		sprintf(rar, "%d", r_ptr->rarity);
+		sprintf(rar, "%d", (int)r_ptr->rarity);
 
 		/* Speed */
 		if (r_ptr->speed >= 110)
@@ -2216,7 +2218,7 @@ static void spoil_mon_info(cptr fname)
 		spoil_out(buf);
 
 		/* Level */
-		sprintf(buf, "Lev:%d  ", r_ptr->level);
+		sprintf(buf, "Lev:%d  ", (int)r_ptr->level);
 		spoil_out(buf);
 
 		/* Rarity */
@@ -2491,25 +2493,16 @@ static void spoil_mon_evol(cptr fname)
 
 		/* Trace the evolution tree */
 		r_ptr = &r_info[r_idx];
-#ifdef JP
-		fprintf(fff, "[%d]: %s (レベル%d, '%c')\n", r_idx,
-			r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
-#else
-		fprintf(fff, "[%d]: %s (Level %d, '%c')\n", r_idx,
-			r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
-#endif
+		fprintf(fff, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"),
+			r_idx, r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
+
 		for (n = 1; r_ptr->next_exp; n++)
 		{
 			fprintf(fff, "%*s-(%ld)-> ", n * 2, "", (long int)r_ptr->next_exp);
 			fprintf(fff, "[%d]: ", r_ptr->next_r_idx);
 			r_ptr = &r_info[r_ptr->next_r_idx];
-#ifdef JP
-			fprintf(fff, "%s (レベル%d, '%c')\n",
-				r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
-#else
-			fprintf(fff, "%s (Level %d, '%c')\n",
-				r_name + r_ptr->name, r_ptr->level, r_ptr->d_char);
-#endif
+			fprintf(fff, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"),
+				r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
 		}
 
 		/* End of evolution tree */

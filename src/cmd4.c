@@ -383,7 +383,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	    type == NIKKI_RAND_QUEST_F ||
 	    type == NIKKI_TO_QUEST)
 	{
-		int old_quest;
+		IDX old_quest;
 
 		old_quest = p_ptr->inside_quest;
 		p_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
@@ -431,9 +431,9 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		else
 		{
 #ifdef JP
-			sprintf(note_level_buf, "%d階(%s):", dun_level, d_name+d_info[dungeon_type].name);
+			sprintf(note_level_buf, "%d階(%s):", (int)dun_level, d_name+d_info[dungeon_type].name);
 #else
-			sprintf(note_level_buf, "%s L%d:", d_name+d_info[dungeon_type].name, dun_level);
+			sprintf(note_level_buf, "%s L%d:", d_name+d_info[dungeon_type].name, (int)dun_level);
 #endif
 			note_level = note_level_buf;
 		}
@@ -516,8 +516,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		{
 			fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n",
 						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note,
-						   _(d_name + d_info[num].name, max_dlv[num]),
-						   _(max_dlv[num], d_name + d_info[num].name));
+						   _(d_name + d_info[num].name, (int)max_dlv[num]),
+						   _((int)max_dlv[num], d_name + d_info[num].name));
 			break;
 		}
 		case NIKKI_STAIR:
@@ -540,8 +540,8 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		{
 			if (!num)
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"), 
-						hour, min, note_level, _(d_name+d_info[dungeon_type].name, max_dlv[dungeon_type]), 
-											   _(max_dlv[dungeon_type], d_name+d_info[dungeon_type].name));
+						hour, min, note_level, _(d_name+d_info[dungeon_type].name, (int)max_dlv[dungeon_type]), 
+											   _((int)max_dlv[dungeon_type], d_name+d_info[dungeon_type].name));
 			else
 				fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
 			break;
@@ -2496,10 +2496,9 @@ static errr macro_dump(cptr fname)
  */
 static void do_cmd_macro_aux(char *buf)
 {
-	int i, n = 0;
-
+	char i;
+	int n = 0;
 	char tmp[1024];
-
 
 	/* Flush */
 	flush();
@@ -2594,7 +2593,7 @@ static errr keymap_dump(cptr fname)
 	char key[1024];
 	char buf[1024];
 
-	int mode;
+	BIT_FLAGS mode;
 
 	/* Roguelike */
 	if (rogue_like_commands)
@@ -2633,7 +2632,7 @@ static errr keymap_dump(cptr fname)
 		if (!act) continue;
 
 		/* Encode the key */
-		buf[0] = i;
+		buf[0] = (char)i;
 		buf[1] = '\0';
 		ascii_to_text(key, buf);
 
@@ -2672,7 +2671,7 @@ void do_cmd_macros(void)
 
 	char buf[1024];
 
-	int mode;
+	BIT_FLAGS mode;
 
 
 	/* Roguelike */
@@ -3089,19 +3088,19 @@ static cptr lighting_level_str[F_LIT_MAX] =
  * @param max ビジュアルIDの最大数
  * @return 指定が実際に行われた場合TRUE、キャンセルされた場合FALSE
  */
-static bool cmd_visuals_aux(int i, int *num, int max)
+static bool cmd_visuals_aux(int i, IDX *num, IDX max)
 {
 	if (iscntrl(i))
 	{
 		char str[10] = "";
-		int tmp;
+		IDX tmp;
 
 		sprintf(str, "%d", *num);
 
 		if (!get_string(format("Input new number(0-%d): ", max-1), str, 4))
 			return FALSE;
 
-		tmp = strtol(str, NULL, 0);
+		tmp = (IDX)strtol(str, NULL, 0);
 		if (tmp >= 0 && tmp < max)
 			*num = tmp;
 	}
@@ -3143,16 +3142,16 @@ static void print_visuals_menu(cptr choice_msg)
 	prt(format("コマンド: %s", choice_msg ? choice_msg : _("", "")), 15, 0);
 }
 
-static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int direct_r_idx);
-static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int direct_k_idx);
-static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int direct_f_idx, int *lighting_level);
+static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX direct_r_idx);
+static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx);
+static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level);
 
 /*
  * Interact with "visuals"
  */
 void do_cmd_visuals(void)
 {
-	int i;
+	char i;
 	char tmp[160];
 	char buf[1024];
 	bool need_redraw = FALSE;
@@ -3260,6 +3259,7 @@ void do_cmd_visuals(void)
 		case '2':
 		{
 			static cptr mark = "Object attr/chars";
+			IDX k_idx;
 
 			/* Prompt */
 			prt(_("コマンド: アイテムの[色/文字]をファイルに書き出します", "Command: Dump object attr/chars"), 15, 0);
@@ -3283,10 +3283,10 @@ void do_cmd_visuals(void)
 			auto_dump_printf(_("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
 
 			/* Dump objects */
-			for (i = 0; i < max_k_idx; i++)
+			for (k_idx = 0; k_idx < max_k_idx; k_idx++)
 			{
 				char o_name[80];
-				object_kind *k_ptr = &k_info[i];
+				object_kind *k_ptr = &k_info[k_idx];
 
 				/* Skip non-entries */
 				if (!k_ptr->name) continue;
@@ -3294,14 +3294,14 @@ void do_cmd_visuals(void)
 				if (!k_ptr->flavor)
 				{
 					/* Tidy name */
-					strip_name(o_name, i);
+					strip_name(o_name, k_idx);
 				}
 				else
 				{
 					object_type forge;
 
 					/* Prepare dummy object */
-					object_prep(&forge, i);
+					object_prep(&forge, k_idx);
 
 					/* Get un-shuffled flavor name */
 					object_desc(o_name, &forge, OD_FORCE_FLAVOR);
@@ -3311,7 +3311,7 @@ void do_cmd_visuals(void)
 				auto_dump_printf("# %s\n", o_name);
 
 				/* Dump the object attr/char info */
-				auto_dump_printf("K:%d:0x%02X/0x%02X\n\n", i,
+				auto_dump_printf("K:%d:0x%02X/0x%02X\n\n", (int)k_idx,
 					(byte)(k_ptr->x_attr), (byte)(k_ptr->x_char));
 			}
 
@@ -3384,7 +3384,7 @@ void do_cmd_visuals(void)
 		case '4':
 		{
 			static cptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
-			static int r = 0;
+			static IDX r = 0;
 
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
@@ -3393,7 +3393,7 @@ void do_cmd_visuals(void)
 			{
 				monster_race *r_ptr = &r_info[r];
 				char c;
-				int t;
+				IDX t;
 
 				byte da = r_ptr->d_attr;
 				byte dc = r_ptr->d_char;
@@ -3436,7 +3436,7 @@ void do_cmd_visuals(void)
 				{
 				case 'n':
 					{
-						int prev_r = r;
+						IDX prev_r = r;
 						do
 						{
 							if (!cmd_visuals_aux(i, &r, max_r_idx))
@@ -3477,7 +3477,7 @@ void do_cmd_visuals(void)
 		case '5':
 		{
 			static cptr choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
-			static int k = 0;
+			static IDX k = 0;
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
@@ -3485,12 +3485,12 @@ void do_cmd_visuals(void)
 			{
 				object_kind *k_ptr = &k_info[k];
 				char c;
-				int t;
+				IDX t;
 
-				byte da = k_ptr->d_attr;
-				byte dc = k_ptr->d_char;
-				byte ca = k_ptr->x_attr;
-				byte cc = k_ptr->x_char;
+				SYMBOL_COLOR da = k_ptr->d_attr;
+				SYMBOL_CODE dc = k_ptr->d_char;
+				SYMBOL_COLOR ca = k_ptr->x_attr;
+				SYMBOL_CODE cc = k_ptr->x_char;
 
 				/* Label the object */
 				Term_putstr(5, 17, -1, TERM_WHITE,
@@ -3529,7 +3529,7 @@ void do_cmd_visuals(void)
 				{
 				case 'n':
 					{
-						int prev_k = k;
+						IDX prev_k = k;
 						do
 						{
 							if (!cmd_visuals_aux(i, &k, max_k_idx))
@@ -3570,8 +3570,8 @@ void do_cmd_visuals(void)
 		case '6':
 		{
 			static cptr choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
-			static int f = 0;
-			static int lighting_level = F_LIT_STANDARD;
+			static IDX f = 0;
+			static IDX lighting_level = F_LIT_STANDARD;
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
@@ -3579,7 +3579,7 @@ void do_cmd_visuals(void)
 			{
 				feature_type *f_ptr = &f_info[f];
 				char c;
-				int t;
+				IDX t;
 
 				byte da = f_ptr->d_attr[lighting_level];
 				byte dc = f_ptr->d_char[lighting_level];
@@ -3634,7 +3634,7 @@ void do_cmd_visuals(void)
 				{
 				case 'n':
 					{
-						int prev_f = f;
+						IDX prev_f = f;
 						do
 						{
 							if (!cmd_visuals_aux(i, &f, max_f_idx))
@@ -3691,7 +3691,7 @@ void do_cmd_visuals(void)
 		/* Modify feature attr/chars (visual mode) */
 		case '9':
 		{
-			int lighting_level = F_LIT_STANDARD;
+			IDX lighting_level = F_LIT_STANDARD;
 			do_cmd_knowledge_features(&need_redraw, TRUE, -1, &lighting_level);
 			break;
 		}
@@ -4314,9 +4314,10 @@ static bool ang_sort_comp_monster_level(vptr u, vptr v, int a, int b)
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
+static IDX collect_monsters(IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 {
-	int i, mon_cnt = 0;
+	IDX i;
+	IDX mon_cnt = 0;
 	int dummy_why;
 
 	/* Get a list of x_char in this group */
@@ -4560,9 +4561,10 @@ static byte object_group_tval[] =
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static int collect_objects(int grp_cur, int object_idx[], byte mode)
+static int collect_objects(int grp_cur, IDX object_idx[], BIT_FLAGS8 mode)
 {
-	int i, j, k, object_cnt = 0;
+	IDX i;
+	int j, k, object_cnt = 0;
 
 	/* Get a list of x_char in this group */
 	byte group_tval = object_group_tval[grp_cur];
@@ -4642,9 +4644,10 @@ static cptr feature_group_text[] =
  *
  * mode & 0x01 : check for non-empty group
  */
-static int collect_features(int grp_cur, int *feat_idx, byte mode)
+static int collect_features(int grp_cur, IDX *feat_idx, BIT_FLAGS8 mode)
 {
-	int i, feat_cnt = 0;
+	IDX i;
+	int feat_cnt = 0;
 
 	/* Unused;  There is a single group. */
 	(void)grp_cur;
@@ -4812,7 +4815,7 @@ void do_cmd_load_screen(void)
 			for (i = 0; i < 16; i++)
 			{
 				/* Use attr matches */
-				if (hack[i] == buf[x]) a = i;
+				if (hack[i] == buf[x]) a = (byte_hack)i;
 			}
 
 			/* Put the attr/char */
@@ -5447,9 +5450,12 @@ static void ang_sort_art_swap(vptr u, vptr v, int a, int b)
  */
 static void do_cmd_knowledge_artifacts(void)
 {
-	int i, k, z, x, y, n = 0;
+	IDX i;
+	IDX k;
+	int x, y, n = 0;
+	IDX z;
 	u16b why = 3;
-	s16b *who;
+	IDX *who;
 
 	FILE *fff;
 
@@ -5614,9 +5620,10 @@ static void do_cmd_knowledge_artifacts(void)
  */
 static void do_cmd_knowledge_uniques(void)
 {
-	int i, k, n = 0;
+	IDX i;
+	int k, n = 0;
 	u16b why = 2;
-	s16b *who;
+	IDX *who;
 
 	FILE *fff;
 
@@ -5718,7 +5725,7 @@ static void do_cmd_knowledge_uniques(void)
 		monster_race *r_ptr = &r_info[who[k]];
 
 		/* Print a message */
-		fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_name + r_ptr->name, r_ptr->level);
+		fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_name + r_ptr->name, (int)r_ptr->level);
 	}
 
 	/* Free the "who" array */
@@ -5740,7 +5747,8 @@ static void do_cmd_knowledge_uniques(void)
  */
 static void do_cmd_knowledge_weapon_exp(void)
 {
-	int i, j, num, weapon_exp;
+	int i, num, weapon_exp;
+	KIND_OBJECT_IDX j;
 
 	FILE *fff;
 
@@ -5799,7 +5807,8 @@ static void do_cmd_knowledge_weapon_exp(void)
  */
 static void do_cmd_knowledge_spell_exp(void)
 {
-	int i = 0, spell_exp, exp_level;
+	SPELL_IDX i = 0;
+	int spell_exp, exp_level;
 
 	FILE *fff;
 	const magic_type *s_ptr;
@@ -6127,9 +6136,10 @@ static void do_cmd_knowledge_pets(void)
  */
 static void do_cmd_knowledge_kill_count(void)
 {
-	int i, k, n = 0;
+	IDX i;
+	int k, n = 0;
 	u16b why = 2;
-	s16b *who;
+	IDX *who;
 
 	FILE *fff;
 
@@ -6169,7 +6179,7 @@ static void do_cmd_knowledge_kill_count(void)
 			}
 			else
 			{
-				s16b This = r_ptr->r_pkills;
+				MONSTER_NUMBER This = r_ptr->r_pkills;
 
 				if (This > 0)
 				{
@@ -6225,16 +6235,16 @@ static void do_cmd_knowledge_kill_count(void)
 		}
 		else
 		{
-			s16b This = r_ptr->r_pkills;
+			MONSTER_NUMBER This = r_ptr->r_pkills;
 
 			if (This > 0)
 			{
 #ifdef JP
 				/* p,tは人と数える by ita */
 				if (my_strchr("pt", r_ptr->d_char))
-					fprintf(fff, "     %3d 人の %s\n", This, r_name + r_ptr->name);
+					fprintf(fff, "     %3d 人の %s\n", (int)This, r_name + r_ptr->name);
 				else
-					fprintf(fff, "     %3d 体の %s\n", This, r_name + r_ptr->name);
+					fprintf(fff, "     %3d 体の %s\n", (int)This, r_name + r_ptr->name);
 #else
 				if (This < 2)
 				{
@@ -6299,7 +6309,7 @@ static void do_cmd_knowledge_kill_count(void)
  * @return なし
  */
 static void display_group_list(int col, int row, int wid, int per_page,
-	int grp_idx[], cptr group_text[], int grp_cur, int grp_top)
+	IDX grp_idx[], cptr group_text[], int grp_cur, int grp_top)
 {
 	int i;
 
@@ -6324,13 +6334,13 @@ static void display_group_list(int col, int row, int wid, int per_page,
 /* 
  * Move the cursor in a browser window 
  */
-static void browser_cursor(char ch, int *column, int *grp_cur, int grp_cnt, 
-						   int *list_cur, int list_cnt)
+static void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, 
+						   IDX *list_cur, int list_cnt)
 {
 	int d;
 	int col = *column;
-	int grp = *grp_cur;
-	int list = *list_cur;
+	IDX grp = *grp_cur;
+	IDX list = *list_cur;
 
 	/* Extract direction */
 	if (ch == ' ')
@@ -6661,7 +6671,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		byte attr;
 
 		/* Get the race index */
-		int r_idx = mon_idx[mon_top + i] ;
+		MONRACE_IDX r_idx = mon_idx[mon_top + i] ;
 
 		/* Access the race */
 		monster_race *r_ptr = &r_info[r_idx];
@@ -6710,14 +6720,15 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 /*
  * Display known monsters.
  */
-static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int direct_r_idx)
+static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX direct_r_idx)
 {
-	int i, len, max;
-	int grp_cur, grp_top, old_grp_cur;
-	int mon_cur, mon_top;
-	int grp_cnt, grp_idx[100];
-	int mon_cnt;
-	s16b *mon_idx;
+	IDX i;
+	int len, max;
+	IDX grp_cur, grp_top, old_grp_cur;
+	IDX mon_cur, mon_top;
+	IDX grp_cnt, grp_idx[100];
+	IDX mon_cnt;
+	IDX *mon_idx;
 
 	int column = 0;
 	bool flag;
@@ -6727,9 +6738,9 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int d
 	byte attr_top = 0, char_left = 0;
 
 	int browser_rows;
-	int wid, hgt;
+	TERM_POSITION wid, hgt;
 
-	byte mode;
+	BIT_FLAGS8 mode;
 
 	/* Get size */
 	Term_get_size(&wid, &hgt);
@@ -6970,7 +6981,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, int d
 /*
  * Display the objects in a group.
  */
-static void display_object_list(int col, int row, int per_page, int object_idx[],
+static void display_object_list(int col, int row, int per_page, IDX object_idx[],
 	int object_cur, int object_top, bool visual_only)
 {
 	int i;
@@ -6983,7 +6994,7 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 		object_kind *flavor_k_ptr;
 
 		/* Get the object index */
-		int k_idx = object_idx[object_top + i];
+		KIND_OBJECT_IDX k_idx = object_idx[object_top + i];
 
 		/* Access the object */
 		object_kind *k_ptr = &k_info[k_idx];
@@ -7049,7 +7060,7 @@ static void display_object_list(int col, int row, int per_page, int object_idx[]
 /*
  * Describe fake object
  */
-static void desc_obj_fake(int k_idx)
+static void desc_obj_fake(IDX k_idx)
 {
 	object_type *o_ptr;
 	object_type object_type_body;
@@ -7087,14 +7098,16 @@ static void desc_obj_fake(int k_idx)
 /*
  * Display known objects
  */
-static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int direct_k_idx)
+static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx)
 {
-	int i, len, max;
-	int grp_cur, grp_top, old_grp_cur;
-	int object_old, object_cur, object_top;
-	int grp_cnt, grp_idx[100];
+	IDX i;
+	int len, max;
+	IDX grp_cur, grp_top, old_grp_cur;
+	IDX object_old, object_cur, object_top;
+	int grp_cnt;
+	IDX grp_idx[100];
 	int object_cnt;
-	int *object_idx;
+	IDX *object_idx;
 
 	int column = 0;
 	bool flag;
@@ -7114,7 +7127,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 	browser_rows = hgt - 8;
 
 	/* Allocate the "object_idx" array */
-	C_MAKE(object_idx, max_k_idx, int);
+	C_MAKE(object_idx, max_k_idx, IDX);
 
 	max = 0;
 	grp_cnt = 0;
@@ -7368,15 +7381,15 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, int di
 	}
 
 	/* Free the "object_idx" array */
-	C_KILL(object_idx, max_k_idx, int);
+	C_KILL(object_idx, max_k_idx, IDX);
 }
 
 
 /*
  * Display the features in a group.
  */
-static void display_feature_list(int col, int row, int per_page, int *feat_idx,
-	int feat_cur, int feat_top, bool visual_only, int lighting_level)
+static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_idx,
+	FEAT_IDX feat_cur, FEAT_IDX feat_top, bool visual_only, int lighting_level)
 {
 	int lit_col[F_LIT_MAX], i, j;
 	int f_idx_col = use_bigtile ? 62 : 64;
@@ -7392,7 +7405,7 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 		byte attr;
 
 		/* Get the index */
-		int f_idx = feat_idx[feat_top + i];
+		FEAT_IDX f_idx = feat_idx[feat_top + i];
 
 		/* Access the index */
 		feature_type *f_ptr = &f_info[f_idx];
@@ -7446,14 +7459,16 @@ static void display_feature_list(int col, int row, int per_page, int *feat_idx,
 /*
  * Interact with feature visuals.
  */
-static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int direct_f_idx, int *lighting_level)
+static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
-	int i, len, max;
-	int grp_cur, grp_top, old_grp_cur;
-	int feat_cur, feat_top;
-	int grp_cnt, grp_idx[100];
+	IDX i;
+	int len, max;
+	IDX grp_cur, grp_top, old_grp_cur;
+	IDX feat_cur, feat_top;
+	int grp_cnt;
+	IDX grp_idx[100];
 	int feat_cnt;
-	int *feat_idx;
+	IDX *feat_idx;
 
 	int column = 0;
 	bool flag;
@@ -7478,7 +7493,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int d
 	browser_rows = hgt - 8;
 
 	/* Allocate the "feat_idx" array */
-	C_MAKE(feat_idx, max_f_idx, int);
+	C_MAKE(feat_idx, max_f_idx, IDX);
 
 	max = 0;
 	grp_cnt = 0;
@@ -7784,7 +7799,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, int d
 	}
 
 	/* Free the "feat_idx" array */
-	C_KILL(feat_idx, max_f_idx, int);
+	C_KILL(feat_idx, max_f_idx, IDX);
 }
 
 
@@ -7916,7 +7931,7 @@ static void do_cmd_knowledge_dungeon(void)
 			}
 			else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
 			
-			fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+			fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_name + d_info[i].name, (int)max_dlv[i]);
 		}
 	}
 	
@@ -7993,20 +8008,20 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 	char rand_tmp_str[120] = "\0";
 	char name[80];
 	monster_race *r_ptr;
-	int i;
+	IDX i;
 	int rand_level = 100;
 	int total = 0;
 
 	fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
-	for (i = 1; i < max_quests; i++)
+	for (i = 1; i < max_q_idx; i++)
 	{
 		if ((quest[i].status == QUEST_STATUS_TAKEN) ||
 			((quest[i].status == QUEST_STATUS_STAGE_COMPLETED) && (quest[i].type == QUEST_TYPE_TOWER)) ||
 			(quest[i].status == QUEST_STATUS_COMPLETED))
 		{
 			/* Set the quest number temporary */
-			int old_quest = p_ptr->inside_quest;
+			IDX old_quest = p_ptr->inside_quest;
 			int j;
 
 			/* Clear the text */
@@ -8044,11 +8059,11 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 						{
 #ifdef JP
 							sprintf(note," - %d 体の%sを倒す。(あと %d 体)",
-								quest[i].max_num, name, quest[i].max_num - quest[i].cur_num);
+								(int)quest[i].max_num, name, (int)(quest[i].max_num - quest[i].cur_num));
 #else
 							plural_aux(name);
 							sprintf(note," - kill %d %s, have killed %d.",
-								quest[i].max_num, name, quest[i].cur_num);
+								(int)quest[i].max_num, name, (int)quest[i].cur_num);
 #endif
 						}
 						else
@@ -8061,7 +8076,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 							artifact_type *a_ptr = &a_info[quest[i].k_idx];
 							object_type forge;
 							object_type *q_ptr = &forge;
-							int k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+							IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
 							object_prep(q_ptr, k_idx);
 							q_ptr->name1 = quest[i].k_idx;
 							q_ptr->ident = IDENT_STORE;
@@ -8076,10 +8091,10 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 					case QUEST_TYPE_KILL_NUMBER:
 #ifdef JP
 						sprintf(note," - %d 体のモンスターを倒す。(あと %d 体)",
-							quest[i].max_num, quest[i].max_num - quest[i].cur_num);
+							(int)quest[i].max_num, (int)(quest[i].max_num - quest[i].cur_num));
 #else
 						sprintf(note," - Kill %d monsters, have killed %d.",
-							quest[i].max_num, quest[i].cur_num);
+							(int)quest[i].max_num, (int)quest[i].cur_num);
 #endif
 						break;
 
@@ -8091,13 +8106,8 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 				}
 
 				/* Print the quest info */
-#ifdef JP
-				sprintf(tmp_str, "  %s (危険度:%d階相当)%s\n",
-					quest[i].name, quest[i].level, note);
-#else
-				sprintf(tmp_str, "  %s (Danger level: %d)%s\n",
-					quest[i].name, quest[i].level, note);
-#endif
+				sprintf(tmp_str, _("  %s (危険度:%d階相当)%s\n", "  %s (Danger level: %d)%s\n"),
+					quest[i].name, (int)quest[i].level, note);
 
 				fputs(tmp_str, fff);
 
@@ -8132,25 +8142,20 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 					{
 #ifdef JP
 						sprintf(rand_tmp_str,"  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n",
-							quest[i].name, quest[i].level,
-							quest[i].max_num, name, quest[i].max_num - quest[i].cur_num);
+							quest[i].name, (int)quest[i].level,
+							(int)quest[i].max_num, name, (int)(quest[i].max_num - quest[i].cur_num));
 #else
 						plural_aux(name);
 
 						sprintf(rand_tmp_str,"  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n",
-							quest[i].name, quest[i].level,
-							quest[i].max_num, name, quest[i].cur_num);
+							quest[i].name, (int)quest[i].level,
+							(int)quest[i].max_num, name, (int)quest[i].cur_num);
 #endif
 					}
 					else
 					{
-#ifdef JP
-						sprintf(rand_tmp_str,"  %s (%d 階) - %sを倒す。\n",
-							quest[i].name, quest[i].level, name);
-#else
-						sprintf(rand_tmp_str,"  %s (Dungeon level: %d)\n  Kill %s.\n",
-							quest[i].name, quest[i].level, name);
-#endif
+						sprintf(rand_tmp_str,_("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n"),
+							quest[i].name, (int)quest[i].level, name);
 					}
 				}
 			}
@@ -8164,7 +8169,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 }
 
 
-static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
+static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 {
 	char tmp_str[120];
 	char playtime_str[16];
@@ -8173,7 +8178,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
 	if (is_fixed_quest_idx(q_idx))
 	{
 		/* Set the quest number temporary */
-		int old_quest = p_ptr->inside_quest;
+		IDX old_quest = p_ptr->inside_quest;
 
 		p_ptr->inside_quest = q_idx;
 
@@ -8201,7 +8206,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
 				_("  %-35s (%3d階)            -   不戦勝 - %s\n",
 				  "  %-35s (Dungeon level: %3d) - Unearned - %s\n") ,
 				r_name+r_info[q_ptr->r_idx].name,
-				q_ptr->level, playtime_str);
+				(int)q_ptr->level, playtime_str);
 		}
 		else
 		{
@@ -8209,7 +8214,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
 				_("  %-35s (%3d階)            - レベル%2d - %s\n",
 				  "  %-35s (Dungeon level: %3d) - level %2d - %s\n") ,
 				r_name+r_info[q_ptr->r_idx].name,
-				q_ptr->level,
+				(int)q_ptr->level,
 				q_ptr->complev,
 				playtime_str);
 		}
@@ -8220,7 +8225,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
 		sprintf(tmp_str,
 			_("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n",
 			  "  %-35s (Danger  level: %3d) - level %2d - %s\n") ,
-			q_ptr->name, q_ptr->level, q_ptr->complev, playtime_str);
+			q_ptr->name, (int)q_ptr->level, q_ptr->complev, playtime_str);
 	}
 
 	fputs(tmp_str, fff);
@@ -8231,15 +8236,15 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, int q_idx)
 /*
  * Print all finished quests
  */
-void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
+void do_cmd_knowledge_quests_completed(FILE *fff, IDX quest_num[])
 {
 	int i;
 	int total = 0;
 
 	fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
-	for (i = 1; i < max_quests; i++)
+	for (i = 1; i < max_q_idx; i++)
 	{
-		int q_idx = quest_num[i];
+		IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
 		if (q_ptr->status == QUEST_STATUS_FINISHED &&
@@ -8255,15 +8260,15 @@ void do_cmd_knowledge_quests_completed(FILE *fff, int quest_num[])
 /*
  * Print all failed quests
  */
-void do_cmd_knowledge_quests_failed(FILE *fff, int quest_num[])
+void do_cmd_knowledge_quests_failed(FILE *fff, IDX quest_num[])
 {
-	int i;
+	IDX i;
 	int total = 0;
 
 	fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
-	for (i = 1; i < max_quests; i++)
+	for (i = 1; i < max_q_idx; i++)
 	{
-		int q_idx = quest_num[i];
+		IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
 		if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) &&
@@ -8286,7 +8291,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 	int total = 0;
 
 	fprintf(fff, _("《残りのランダムクエスト》\n", "< Remaining Random Quest >\n"));
-	for (i = 1; i < max_quests; i++)
+	for (i = 1; i < max_q_idx; i++)
 	{
 		/* No info from "silent" quests */
 		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
@@ -8296,13 +8301,8 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 			total++;
 
 			/* Print the quest info */
-#ifdef JP
-			sprintf(tmp_str, "  %s (%d階, %s)\n",
-				quest[i].name, quest[i].level, r_name+r_info[quest[i].r_idx].name);
-#else
-			sprintf(tmp_str, "  %s (%d, %s)\n",
-				quest[i].name, quest[i].level, r_name+r_info[quest[i].r_idx].name);
-#endif
+			sprintf(tmp_str, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"),
+				quest[i].name, (int)quest[i].level, r_name+r_info[quest[i].r_idx].name);
 			fputs(tmp_str, fff);
 		}
 	}
@@ -8312,7 +8312,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 
 bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
 {
-	int *q_num = (int *)u;
+	QUEST_IDX *q_num = (QUEST_IDX *)u;
 	quest_type *qa = &quest[q_num[a]];
 	quest_type *qb = &quest[q_num[b]];
 
@@ -8326,8 +8326,8 @@ bool ang_sort_comp_quest_num(vptr u, vptr v, int a, int b)
 
 void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
 {
-	int *q_num = (int *)u;
-	int tmp;
+	QUEST_IDX *q_num = (QUEST_IDX *)u;
+	QUEST_IDX tmp;
 
 	/* Unused */
 	(void)v;
@@ -8345,7 +8345,9 @@ static void do_cmd_knowledge_quests(void)
 {
 	FILE *fff;
 	char file_name[1024];
-	int *quest_num, dummy, i;
+	IDX *quest_num;
+	int dummy;
+	IDX i;
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
@@ -8357,13 +8359,13 @@ static void do_cmd_knowledge_quests(void)
 	}
 
 	/* Allocate Memory */
-	C_MAKE(quest_num, max_quests, int);
+	C_MAKE(quest_num, max_q_idx, IDX);
 
 	/* Sort by compete level */
-	for (i = 1; i < max_quests; i++) quest_num[i] = i;
+	for (i = 1; i < max_q_idx; i++) quest_num[i] = i;
 	ang_sort_comp = ang_sort_comp_quest_num;
 	ang_sort_swap = ang_sort_swap_quest_num;
-	ang_sort(quest_num, &dummy, max_quests);
+	ang_sort(quest_num, &dummy, max_q_idx);
 
 	/* Dump Quest Information */
 	do_cmd_knowledge_quests_current(fff);
@@ -8387,7 +8389,7 @@ static void do_cmd_knowledge_quests(void)
 	fd_kill(file_name);
 
 	/* Free Memory */
-	C_KILL(quest_num, max_quests, int);
+	C_KILL(quest_num, max_q_idx, IDX);
 }
 
 
@@ -8680,7 +8682,7 @@ void do_cmd_knowledge(void)
 			break;
 		case '0': /* Feature list */
 			{
-				int lighting_level = F_LIT_STANDARD;
+				IDX lighting_level = F_LIT_STANDARD;
 				do_cmd_knowledge_features(&need_redraw, FALSE, -1, &lighting_level);
 			}
 			break;

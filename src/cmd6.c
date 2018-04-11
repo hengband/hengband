@@ -598,7 +598,7 @@ static bool item_tester_hook_eatable(object_type *o_ptr)
  */
 void do_cmd_eat_food(void)
 {
-	int         item;
+	OBJECT_IDX item;
 	cptr        q, s;
 
 
@@ -1026,7 +1026,7 @@ static void do_cmd_quaff_potion_aux(int item)
 				}
 				for (; i < EATER_EXT*3; i++)
 				{
-					int k_idx = lookup_kind(TV_ROD, i-EATER_EXT*2);
+					KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, i-EATER_EXT*2);
 					p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
 					if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 				}
@@ -1184,15 +1184,7 @@ static void do_cmd_quaff_potion_aux(int item)
 			do_cmd_rerate(FALSE);
 			get_max_stats();
 			p_ptr->update |= PU_BONUS;
-			if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
-			{
-				chg_virtue(V_CHANCE, -5);
-				msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
-				p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
-				p_ptr->update |= PU_BONUS;
-				handle_stuff();
-				mutant_regenerate_mod = calc_mutant_regenerate_mod();
-			}
+			lose_all_mutations();
 			ident = TRUE;
 			break;
 
@@ -1217,11 +1209,7 @@ static void do_cmd_quaff_potion_aux(int item)
 		case SV_POTION_POLYMORPH:
 			if ((p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3) && one_in_(23))
 			{
-				chg_virtue(V_CHANCE, -5);
-				msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
-				p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
-				p_ptr->update |= PU_BONUS;
-				handle_stuff();
+				lose_all_mutations();
 			}
 			else
 			{
@@ -1345,7 +1333,7 @@ static bool item_tester_hook_quaff(object_type *o_ptr)
  */
 void do_cmd_quaff_potion(void)
 {
-	int  item;
+	OBJECT_IDX item;
 	cptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
@@ -1988,7 +1976,7 @@ static bool item_tester_hook_readable(object_type *o_ptr)
 void do_cmd_read_scroll(void)
 {
 	object_type *o_ptr;
-	int  item;
+	OBJECT_IDX item;
 	cptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
@@ -2048,7 +2036,7 @@ void do_cmd_read_scroll(void)
  * @param known 判明済ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, bool known)
+static int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
 {
 	int k;
 	int ident = FALSE;
@@ -2132,8 +2120,8 @@ static int staff_effect(int sval, bool *use_charge, bool powerful, bool magic, b
 
 		case SV_STAFF_STARLITE:
 		{
-			int num = damroll(5, 3);
-			int y = 0, x = 0;
+			HIT_POINT num = damroll(5, 3);
+			POSITION y = 0, x = 0;
 			int attempts;
 
 			if (!p_ptr->blind && !magic)
@@ -2547,7 +2535,7 @@ static void do_cmd_use_staff_aux(int item)
  */
 void do_cmd_use_staff(void)
 {
-	int  item;
+	OBJECT_IDX item;
 	cptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
@@ -2575,7 +2563,7 @@ void do_cmd_use_staff(void)
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-static int wand_effect(int sval, int dir, bool powerful, bool magic)
+static int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
 {
 	int ident = FALSE;
 	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
@@ -2585,7 +2573,7 @@ static int wand_effect(int sval, int dir, bool powerful, bool magic)
 	if (sval == SV_WAND_WONDER)
 	{
 		int vir = virtue_number(V_CHANCE);
-		sval = randint0(SV_WAND_WONDER);
+		sval = (OBJECT_SUBTYPE_VALUE)randint0(SV_WAND_WONDER);
 
 		if (vir)
 		{
@@ -2609,7 +2597,7 @@ static int wand_effect(int sval, int dir, bool powerful, bool magic)
 	{
 		case SV_WAND_HEAL_MONSTER:
 		{
-			int dam = damroll((powerful ? 20 : 10), 10);
+			HIT_POINT dam = damroll((powerful ? 20 : 10), 10);
 			if (heal_monster(dir, dam)) ident = TRUE;
 			break;
 		}
@@ -2649,14 +2637,14 @@ static int wand_effect(int sval, int dir, bool powerful, bool magic)
 
 		case SV_WAND_STONE_TO_MUD:
 		{
-			int dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
+			HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
 			if (wall_to_mud(dir, dam)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_LITE:
 		{
-			int dam = damroll((powerful ? 12 : 6), 8);
+			HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
 			msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
 			(void)lite_line(dir, dam);
 			ident = TRUE;
@@ -2791,7 +2779,7 @@ static int wand_effect(int sval, int dir, bool powerful, bool magic)
 
 		case SV_WAND_DRAGON_BREATH:
 		{
-			int dam;
+			HIT_POINT dam;
 			int typ;
 
 			switch (randint1(5))
@@ -3020,7 +3008,7 @@ static void do_cmd_aim_wand_aux(int item)
  */
 void do_cmd_aim_wand(void)
 {
-	int     item;
+	OBJECT_IDX item;
 	cptr    q, s;
 
 	/* Restrict choices to wands */
@@ -3050,7 +3038,7 @@ void do_cmd_aim_wand(void)
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-static int rod_effect(int sval, int dir, bool *use_charge, bool powerful, bool magic)
+static int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerful, bool magic)
 {
 	int ident = FALSE;
 	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
@@ -3182,7 +3170,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool powerful, bool m
 
 		case SV_ROD_LITE:
 		{
-			int dam = damroll((powerful ? 12 : 6), 8);
+			HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
 			msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
 			(void)lite_line(dir, dam);
 			ident = TRUE;
@@ -3278,7 +3266,7 @@ static int rod_effect(int sval, int dir, bool *use_charge, bool powerful, bool m
 
 		case SV_ROD_STONE_TO_MUD:
 		{
-			int dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
+			HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
 			if (wall_to_mud(dir, dam)) ident = TRUE;
 			break;
 		}
@@ -3450,7 +3438,7 @@ static void do_cmd_zap_rod_aux(int item)
  */
 void do_cmd_zap_rod(void)
 {
-	int item;
+	OBJECT_IDX item;
 	cptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
@@ -3741,13 +3729,13 @@ static void do_cmd_activate_aux(int item)
 		else
 #endif
 		{
-			int pet_ctr, i;
-			u16b *who;
+			IDX pet_ctr, i;
+			IDX *who;
 			int max_pet = 0;
 			u16b dummy_why;
 
 			/* Allocate the "who" array */
-			C_MAKE(who, max_m_idx, u16b);
+			C_MAKE(who, max_m_idx, IDX);
 
 			/* Process the monsters (backwards) */
 			for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
@@ -3770,7 +3758,7 @@ static void do_cmd_activate_aux(int item)
 			}
 
 			/* Free the "who" array */
-			C_KILL(who, max_m_idx, u16b);
+			C_KILL(who, max_m_idx, IDX);
 		}
 		o_ptr->timeout = 100+randint1(100);
 		return;
@@ -3790,10 +3778,10 @@ static void do_cmd_activate_aux(int item)
 
 			if(fire_ball(GF_CAPTURE, dir, 0, 0))
 			{
-				o_ptr->pval = cap_mon;
-				o_ptr->xtra3 = cap_mspeed;
-				o_ptr->xtra4 = cap_hp;
-				o_ptr->xtra5 = cap_maxhp;
+				o_ptr->pval = (PARAMETER_VALUE)cap_mon;
+				o_ptr->xtra3 = (XTRA8)cap_mspeed;
+				o_ptr->xtra4 = (XTRA16)cap_hp;
+				o_ptr->xtra5 = (XTRA16)cap_maxhp;
 				if (cap_nickname)
 				{
 					cptr t;
@@ -3923,7 +3911,7 @@ static void do_cmd_activate_aux(int item)
  */
 void do_cmd_activate(void)
 {
-	int     item;
+	OBJECT_IDX item;
 	cptr    q, s;
 
 
@@ -4011,7 +3999,7 @@ static bool item_tester_hook_use(object_type *o_ptr)
  */
 void do_cmd_use(void)
 {
-	int         item;
+	OBJECT_IDX item;
 	object_type *o_ptr;
 	cptr        q, s;
 
@@ -4132,19 +4120,20 @@ void do_cmd_use(void)
  * @param only_browse 閲覧するだけならばTRUE
  * @return 選択した魔力のID、キャンセルならば-1を返す
  */
-static int select_magic_eater(bool only_browse)
+static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 {
-	int ext=0;
+	OBJECT_SUBTYPE_VALUE ext = 0;
 	char choice;
 	bool flag, request_list;
-	int tval = 0;
-	int             ask = TRUE, i = 0;
+	OBJECT_TYPE_VALUE tval = 0;
+	int             ask = TRUE;
+	OBJECT_SUBTYPE_VALUE i = 0;
 	char            out_val[160];
 
 	int menu_line = (use_menu ? 1 : 0);
 
 #ifdef ALLOW_REPEAT
-	int sn;
+	COMMAND_CODE sn;
 	if (repeat_pull(&sn))
 	{
 		/* Verify the spell */
@@ -4279,10 +4268,12 @@ static int select_magic_eater(bool only_browse)
 		if (request_list || use_menu)
 		{
 			byte y, x = 0;
-			int ctr, chance;
-			int k_idx;
+			OBJECT_SUBTYPE_VALUE ctr;
+			PERCENTAGE chance;
+			IDX k_idx;
 			char dummy[80];
-			int x1, y1, level;
+			POSITION x1, y1;
+			int level;
 			byte col;
 
 			strcpy(dummy, "");
@@ -4478,7 +4469,7 @@ static int select_magic_eater(bool only_browse)
 				ask = (isupper(choice));
 
 				/* Lowercase */
-				if (ask) choice = tolower(choice);
+				if (ask) choice = (char)tolower(choice);
 
 				/* Extract request */
 				i = (islower(choice) ? A2I(choice) : -1);
@@ -4580,7 +4571,12 @@ static int select_magic_eater(bool only_browse)
  */
 bool do_cmd_magic_eater(bool only_browse, bool powerful)
 {
-	int item, chance, level, k_idx, tval, sval;
+	OBJECT_SUBTYPE_VALUE item;
+	PERCENTAGE chance;
+	DEPTH level;
+	IDX k_idx;
+	OBJECT_TYPE_VALUE tval;
+	OBJECT_SUBTYPE_VALUE sval;
 	bool use_charge = TRUE;
 
 	/* Not when confused */
@@ -4598,7 +4594,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	}
 	if (item >= EATER_EXT*2) {tval = TV_ROD;sval = item - EATER_EXT*2;}
 	else if (item >= EATER_EXT) {tval = TV_WAND;sval = item - EATER_EXT;}
-	else {tval = TV_STAFF;sval = item;}
+	else {tval = TV_STAFF; sval = item;}
 	k_idx = lookup_kind(tval, sval);
 
 	level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);

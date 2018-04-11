@@ -14,7 +14,7 @@
 
 /* Externs */
 
-extern void add_river(int feat1, int feat2);
-extern void build_streamer(int feat, int chance);
-extern void place_trees(int x,int y);
+extern void add_river(IDX feat1, IDX feat2);
+extern void build_streamer(IDX feat, int chance);
+extern void place_trees(POSITION x, POSITION y);
 extern void destroy_level(void);

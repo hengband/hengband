@@ -273,7 +273,7 @@ static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_defaul
 			break;
 		}
 
-		if (isupper(c)) c = tolower(c);
+		if (isupper(c)) c = (char)tolower(c);
 
 		buf[i] = c;
 	}
@@ -2932,7 +2932,7 @@ static void free_text_lines(cptr *lines_list)
 /*
  * Delete or insert string
  */
-static void toggle_keyword(text_body_type *tb, int flg)
+static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 {
 	int by1, by2, y;
 	bool add = TRUE;
@@ -3104,7 +3104,7 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
 /*
  * Delete or insert string
  */
-static void add_keyword(text_body_type *tb, int flg)
+static void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 {
 	int by1, by2, y;
 
@@ -3258,7 +3258,7 @@ static bool insert_return_code(text_body_type *tb)
  */
 static object_type *choose_object(cptr q, cptr s)
 {
-	int item;
+	OBJECT_IDX item;
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP))) return NULL;
 
@@ -4868,7 +4868,7 @@ static bool insert_macro_line(text_body_type *tb)
 	while (i)
 	{
 		/* Save the key */
-		buf[n++] = i;
+		buf[n++] = (char)i;
 
 		/* Do not process macros */
 		inkey_base = TRUE;
@@ -4929,7 +4929,7 @@ static bool insert_keymap_line(text_body_type *tb)
 {
 	char tmp[1024];
 	char buf[2];
-	int mode;
+	BIT_FLAGS mode;
 	cptr act;
 
 	/* Roguelike */
@@ -5897,8 +5897,8 @@ static void insert_single_letter(text_body_type *tb, int key)
 		next = inkey();
 		if (j+2 < MAX_LINELEN)
 		{
-			buf[j++] = key;
-			buf[j++] = next;
+			buf[j++] = (char)key;
+			buf[j++] = (char)next;
 			tb->cx += 2;
 		}
 		else
@@ -5908,7 +5908,7 @@ static void insert_single_letter(text_body_type *tb, int key)
 #endif
 	{
 		if (j+1 < MAX_LINELEN)
-			buf[j++] = key;
+			buf[j++] = (char)key;
 		tb->cx++;
 	}
 
@@ -6164,7 +6164,7 @@ void do_cmd_edit_autopick(void)
 		/* Other commands */
 		else
 		{
-			com_id = get_com_id(key);
+			com_id = get_com_id((char)key);
 		}
 
 		if (com_id) quit = do_editor_command(tb, com_id);
@@ -6191,7 +6191,7 @@ void do_cmd_edit_autopick(void)
 	process_autopick_file(buf);
 
 	/* HACK -- reset start_time so that playtime is not increase while edit */
-	start_time = time(NULL);
+	start_time = (u32b)time(NULL);
 
 	/* Save cursor location */
 	cx_save = tb->cx;

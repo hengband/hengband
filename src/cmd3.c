@@ -221,7 +221,7 @@ bool select_ring_slot = FALSE;
  */
 void do_cmd_wield(void)
 {
-	int item, slot;
+	OBJECT_IDX item, slot;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -234,7 +234,7 @@ void do_cmd_wield(void)
 
 	cptr q, s;
 
-	int need_switch_wielding = 0;
+	OBJECT_IDX need_switch_wielding = 0;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -636,7 +636,7 @@ void kamaenaoshi(int item)
  */
 void do_cmd_takeoff(void)
 {
-	int item;
+	OBJECT_IDX item;
 
 	object_type *o_ptr;
 
@@ -732,7 +732,8 @@ void do_cmd_takeoff(void)
  */
 void do_cmd_drop(void)
 {
-	int item, amt = 1;
+	OBJECT_IDX item;
+	int amt = 1;
 
 	object_type *o_ptr;
 
@@ -839,18 +840,18 @@ static bool high_level_book(object_type *o_ptr)
  */
 void do_cmd_destroy(void)
 {
-	int			item, amt = 1;
-	int			old_number;
+	OBJECT_IDX item;
+	QUANTITY amt = 1;
+	QUANTITY old_number;
 
-	bool		force = FALSE;
+	bool force = FALSE;
 
-	object_type		*o_ptr;
-	object_type             forge;
-	object_type             *q_ptr = &forge;
+	object_type *o_ptr;
+	object_type forge;
+	object_type *q_ptr = &forge;
 
-	char		o_name[MAX_NLEN];
-
-	char		out_val[MAX_NLEN+40];
+	char o_name[MAX_NLEN];
+	char out_val[MAX_NLEN+40];
 
 	cptr q, s;
 
@@ -1061,10 +1062,8 @@ void do_cmd_destroy(void)
  */
 void do_cmd_observe(void)
 {
-	int			item;
-
+	OBJECT_IDX item;
 	object_type		*o_ptr;
-
 	char		o_name[MAX_NLEN];
 
 	cptr q, s;
@@ -1120,10 +1119,8 @@ void do_cmd_observe(void)
  */
 void do_cmd_uninscribe(void)
 {
-	int   item;
-
+	OBJECT_IDX item;
 	object_type *o_ptr;
-
 	cptr q, s;
 
 	item_tester_no_ryoute = TRUE;
@@ -1182,14 +1179,10 @@ void do_cmd_uninscribe(void)
  */
 void do_cmd_inscribe(void)
 {
-	int			item;
-
+	OBJECT_IDX item;
 	object_type		*o_ptr;
-
 	char		o_name[MAX_NLEN];
-
 	char		out_val[80];
-
 	cptr q, s;
 
 	item_tester_no_ryoute = TRUE;
@@ -1279,7 +1272,7 @@ static bool item_tester_refill_lantern(object_type *o_ptr)
  */
 static void do_cmd_refill_lamp(void)
 {
-	int item;
+	OBJECT_IDX item;
 
 	object_type *o_ptr;
 	object_type *j_ptr;
@@ -1388,7 +1381,7 @@ static bool item_tester_refill_torch(object_type *o_ptr)
  */
 static void do_cmd_refill_torch(void)
 {
-	int item;
+	OBJECT_IDX item;
 
 	object_type *o_ptr;
 	object_type *j_ptr;
@@ -1795,7 +1788,9 @@ void ang_sort_swap_hook(vptr u, vptr v, int a, int b)
  */
 void do_cmd_query_symbol(void)
 {
-	int		i, n, r_idx;
+	IDX i;
+	int n;
+	MONRACE_IDX r_idx;
 	char	sym, query;
 	char	buf[128];
 
@@ -1808,7 +1803,7 @@ void do_cmd_query_symbol(void)
 	bool	recall = FALSE;
 
 	u16b	why = 0;
-	u16b	*who;
+	IDX	*who;
 
 	/* Get a character, or abort */
 	if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ", 
@@ -1865,7 +1860,7 @@ void do_cmd_query_symbol(void)
 	prt(buf, 0, 0);
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, u16b);
+	C_MAKE(who, max_r_idx, IDX);
 
 	/* Collect matching monsters */
 	for (n = 0, i = 1; i < max_r_idx; i++)
@@ -1895,7 +1890,7 @@ void do_cmd_query_symbol(void)
 #ifdef JP
 		    if (iskanji( temp[xx])) { xx++; continue; }
 #endif
-		    if (isupper(temp[xx])) temp[xx]=tolower(temp[xx]);
+		    if (isupper(temp[xx])) temp[xx] = (char)tolower(temp[xx]);
 		  }
   
 #ifdef JP
@@ -1904,14 +1899,14 @@ void do_cmd_query_symbol(void)
 		  strcpy(temp2, r_name+r_ptr->name);
 #endif
 		  for (xx=0; temp2[xx] && xx<80; xx++)
-		    if (isupper(temp2[xx])) temp2[xx]=tolower(temp2[xx]);
+		    if (isupper(temp2[xx])) temp2[xx] = (char)tolower(temp2[xx]);
   
 #ifdef JP
 		  if (my_strstr(temp2, temp) || my_strstr(r_name + r_ptr->name, temp) )
 #else
 		  if (my_strstr(temp2, temp))
 #endif
-			  who[n++]=i;
+			  who[n++] = i;
 		}
 
 		/* Collect "appropriate" monsters */
@@ -1922,7 +1917,7 @@ void do_cmd_query_symbol(void)
 	if (!n)
 	{
 		/* Free the "who" array */
-		C_KILL(who, max_r_idx, u16b);
+		C_KILL(who, max_r_idx, IDX);
 
 		return;
 	}
@@ -1958,7 +1953,7 @@ void do_cmd_query_symbol(void)
 	if (query != 'y')
 	{
 		/* Free the "who" array */
-		C_KILL(who, max_r_idx, u16b);
+		C_KILL(who, max_r_idx, IDX);
 
 		return;
 	}
@@ -2051,7 +2046,7 @@ void do_cmd_query_symbol(void)
 	}
 
 	/* Free the "who" array */
-	C_KILL(who, max_r_idx, u16b);
+	C_KILL(who, max_r_idx, IDX);
 
 	/* Re-display the identity */
 	prt(buf, 0, 0);

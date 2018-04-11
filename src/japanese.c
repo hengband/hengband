@@ -70,7 +70,7 @@ void sindarin_to_kana(char *kana, const char *sindarin)
 
 	sprintf(kana, "%s$", sindarin);
 	for (idx = 0; kana[idx]; idx++)
-		if (isupper(kana[idx])) kana[idx] = tolower(kana[idx]);
+		if (isupper(kana[idx])) kana[idx] = (char)tolower(kana[idx]);
 
 	for (idx = 0; s2j_table[idx].key1 != NULL; idx++)
 	{

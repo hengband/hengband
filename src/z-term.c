@@ -2320,7 +2320,7 @@ errr Term_get_cursor(int *v)
 /*
  * Extract the current window size
  */
-errr Term_get_size(int *w, int *h)
+errr Term_get_size(TERM_POSITION *w, TERM_POSITION *h)
 {
 	/* Access the cursor */
 	(*w) = Term->wid;

@@ -23,7 +23,7 @@
  */
 bool new_player_spot(void)
 {
-	int	y = 0, x = 0;
+	POSITION y = 0, x = 0;
 	int max_attempts = 10000;
 
 	cave_type *c_ptr;
@@ -33,8 +33,8 @@ bool new_player_spot(void)
 	while (max_attempts--)
 	{
 		/* Pick a legal spot */
-		y = rand_range(1, cur_hgt - 2);
-		x = rand_range(1, cur_wid - 2);
+		y = (POSITION)rand_range(1, cur_hgt - 2);
+		x = (POSITION)rand_range(1, cur_wid - 2);
 
 		c_ptr = &cave[y][x];
 
@@ -479,7 +479,8 @@ void vault_traps(int y, int x, int yd, int xd, int num)
  */
 void vault_monsters(int y1, int x1, int num)
 {
-	int k, i, y, x;
+	int k, i;
+	POSITION y, x;
 	cave_type *c_ptr;
 
 	/* Try to summon "num" monsters "near" the given location */
@@ -629,10 +630,10 @@ void set_floor(int x, int y)
  *   outer -- outer room walls\n
  *   solid -- solid room walls\n
  */
-bool build_tunnel(int row1, int col1, int row2, int col2)
+bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
 	int y, x;
-	int tmp_row, tmp_col;
+	POSITION tmp_row, tmp_col;
 	int row_dir, col_dir;
 	int start_row, start_col;
 	int main_loop_count = 0;
@@ -708,8 +709,8 @@ bool build_tunnel(int row1, int col1, int row2, int col2)
 			if (is_solid_bold(y, x)) continue;
 
 			/* Accept this location */
-			row1 = tmp_row;
-			col1 = tmp_col;
+			row1 = (POSITION)tmp_row;
+			col1 = (POSITION)tmp_col;
 
 			/* Save the wall location */
 			if (dun->wall_n < WALL_MAX)
@@ -825,7 +826,7 @@ bool build_tunnel(int row1, int col1, int row2, int col2)
  * routine.\n
  * @todo 特に詳細な処理の意味を調査すべし
  */
-static bool set_tunnel(int *x, int *y, bool affectwall)
+static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 {
 	int i, j, dx, dy;
 
@@ -943,9 +944,9 @@ static bool set_tunnel(int *x, int *y, bool affectwall)
  * Note that this routine is only called on "even" squares - so it gives
  * a natural checkerboard pattern.
  */
-static void create_cata_tunnel(int x, int y)
+static void create_cata_tunnel(POSITION x, POSITION y)
 {
-	int x1, y1;
+	POSITION x1, y1;
 
 	/* Build tunnel */
 	x1 = x - 1;
@@ -990,7 +991,8 @@ static void create_cata_tunnel(int x, int y)
  */
 static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, bool *fail)
 {
-	int i, x, y;
+	int i;
+	POSITION x, y;
 	int length;
 
 	/* Check for early exit */
@@ -1115,9 +1117,9 @@ static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, 
  * Note it is VERY important that the "stop if hit another passage" logic\n
  * stays as is.  Without this the dungeon turns into Swiss Cheese...\n
  */
-bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
+bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
 {
-	int x3, y3, dx, dy;
+	POSITION x3, y3, dx, dy;
 	int changex, changey;
 	int length;
 	int i;
@@ -1199,8 +1201,8 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 					/* Save the door location */
 					if (dun->door_n < DOOR_MAX)
 					{
-						dun->door[dun->door_n].y = y3;
-						dun->door[dun->door_n].x = x3;
+						dun->door[dun->door_n].y = (POSITION)y3;
+						dun->door[dun->door_n].x = (POSITION)x3;
 						dun->door_n++;
 					}
 					else return FALSE;
@@ -1217,9 +1219,9 @@ bool build_tunnel2(int x1, int y1, int x2, int y2, int type, int cutoff)
 		else
 		{
 			/* tunnel through walls */
-			if (build_tunnel2(x1, y1, x3, y3, type, cutoff))
+			if (build_tunnel2(x1, y1, (POSITION)x3, (POSITION)y3, type, cutoff))
 			{
-				retval = build_tunnel2(x3, y3, x2, y2, type, cutoff);
+				retval = build_tunnel2((POSITION)x3, (POSITION)y3, x2, y2, type, cutoff);
 				firstsuccede = TRUE;
 			}
 			else

@@ -47,7 +47,7 @@ static cptr wd_his[3] =
  * @details
  * The higher the level, the fewer kills needed.
  */
-static bool know_armour(int r_idx)
+static bool know_armour(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -85,7 +85,7 @@ static bool know_armour(int r_idx)
  * the more damage an attack does, the more attacks you need
  * </pre>
  */
-static bool know_damage(int r_idx, int i)
+static bool know_damage(MONRACE_IDX r_idx, int i)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -177,7 +177,7 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
 * @param tmp 返すメッセージを格納する配列
 * @return なし
 */
-void set_damage(int r_idx, int SPELL_NUM, char* msg, char* tmp)
+void set_damage(MONRACE_IDX r_idx, int SPELL_NUM, char* msg, char* tmp)
 {
     int base_damage = monspell_race_damage(SPELL_NUM, r_idx, BASE_DAM);
     int dice_num = monspell_race_damage(SPELL_NUM, r_idx, DICE_NUM);
@@ -205,7 +205,7 @@ void set_damage(int r_idx, int SPELL_NUM, char* msg, char* tmp)
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
  */
-static void roff_aux(int r_idx, int mode)
+static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	monster_race    *r_ptr = &r_info[r_idx];
 
@@ -229,16 +229,16 @@ static void roff_aux(int r_idx, int mode)
 	bool            magic = FALSE;
 	bool            reinforce = FALSE;
 
-	u32b		flags1;
-	u32b		flags2;
-	u32b		flags3;
-	u32b		flags4;
-	u32b		a_ability_flags1;
-	u32b		a_ability_flags2;
-	u32b		flags7;
-	u32b		flagsr;
+	BIT_FLAGS flags1;
+	BIT_FLAGS flags2;
+	BIT_FLAGS flags3;
+	BIT_FLAGS flags4;
+	BIT_FLAGS a_ability_flags1;
+	BIT_FLAGS a_ability_flags2;
+	BIT_FLAGS flags7;
+	BIT_FLAGS flagsr;
 
-	byte drop_gold, drop_item;
+	ITEM_NUMBER drop_gold, drop_item;
 
 	int		vn = 0;
 	byte		color[96];
@@ -2001,7 +2001,7 @@ static void roff_aux(int r_idx, int mode)
  * @param r_idx モンスターの種族ID
  * @return なし
  */
-void roff_top(int r_idx)
+void roff_top(MONRACE_IDX r_idx)
 {
 	monster_race	*r_ptr = &r_info[r_idx];
 
@@ -2067,7 +2067,7 @@ void roff_top(int r_idx)
  * @param mode 表示オプション
  * @return なし
  */
-void screen_roff(int r_idx, int mode)
+void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	/* Flush messages */
 	msg_print(NULL);
@@ -2093,7 +2093,7 @@ void screen_roff(int r_idx, int mode)
  * @param r_idx モンスターの種族ID
  * @return なし
  */
-void display_roff(int r_idx)
+void display_roff(MONRACE_IDX r_idx)
 {
 	int y;
 
@@ -2124,7 +2124,7 @@ void display_roff(int r_idx)
  * @param roff_func 出力処理を行う関数ポインタ
  * @return なし
  */
-void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str))
+void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(byte attr, cptr str))
 {
 	hook_c_roff = roff_func;
 
@@ -2138,7 +2138,7 @@ void output_monster_spoiler(int r_idx, void (*roff_func)(byte attr, cptr str))
  * @param r_idx 判定するモンスターの種族ID
  * @return ダンジョンに出現するならばTRUEを返す
  */
-bool mon_hook_dungeon(int r_idx)
+bool mon_hook_dungeon(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2159,7 +2159,7 @@ bool mon_hook_dungeon(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 海洋に出現するならばTRUEを返す
  */
-static bool mon_hook_ocean(int r_idx)
+static bool mon_hook_ocean(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2175,7 +2175,7 @@ static bool mon_hook_ocean(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 海岸に出現するならばTRUEを返す
  */
-static bool mon_hook_shore(int r_idx)
+static bool mon_hook_shore(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2191,7 +2191,7 @@ static bool mon_hook_shore(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 荒地に出現するならばTRUEを返す
  */
-static bool mon_hook_waste(int r_idx)
+static bool mon_hook_waste(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2207,7 +2207,7 @@ static bool mon_hook_waste(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 荒地に出現するならばTRUEを返す
  */
-static bool mon_hook_town(int r_idx)
+static bool mon_hook_town(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2223,7 +2223,7 @@ static bool mon_hook_town(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 森林に出現するならばTRUEを返す
  */
-static bool mon_hook_wood(int r_idx)
+static bool mon_hook_wood(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2239,7 +2239,7 @@ static bool mon_hook_wood(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 火山に出現するならばTRUEを返す
  */
-static bool mon_hook_volcano(int r_idx)
+static bool mon_hook_volcano(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2254,7 +2254,7 @@ static bool mon_hook_volcano(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 山地に出現するならばTRUEを返す
  */
-static bool mon_hook_mountain(int r_idx)
+static bool mon_hook_mountain(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2270,7 +2270,7 @@ static bool mon_hook_mountain(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 森林に出現するならばTRUEを返す
  */
-static bool mon_hook_grass(int r_idx)
+static bool mon_hook_grass(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2285,7 +2285,7 @@ static bool mon_hook_grass(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 深い水地形に出現するならばTRUEを返す
  */
-static bool mon_hook_deep_water(int r_idx)
+static bool mon_hook_deep_water(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2303,7 +2303,7 @@ static bool mon_hook_deep_water(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 浅い水地形に出現するならばTRUEを返す
  */
-static bool mon_hook_shallow_water(int r_idx)
+static bool mon_hook_shallow_water(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2321,7 +2321,7 @@ static bool mon_hook_shallow_water(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 溶岩地形に出現するならばTRUEを返す
  */
-static bool mon_hook_lava(int r_idx)
+static bool mon_hook_lava(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2341,7 +2341,7 @@ static bool mon_hook_lava(int r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 通常の床地形に出現するならばTRUEを返す
  */
-static bool mon_hook_floor(int r_idx)
+static bool mon_hook_floor(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2708,7 +2708,7 @@ bool monster_living(monster_race *r_ptr)
  * @details
  * 実質バーノール＝ルパート用。
  */
-bool no_questor_or_bounty_uniques(int r_idx)
+bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx)
 {
 	switch (r_idx)
 	{

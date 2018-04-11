@@ -696,7 +696,7 @@ errr fd_copy(cptr file, cptr what)
  * of "O_RDONLY", "O_WRONLY", and "O_RDWR" in "A-win-h", and then
  * we must simulate the effect of the proper "open()" call below.
  */
-int fd_make(cptr file, int mode)
+int fd_make(cptr file, BIT_FLAGS mode)
 {
 	char buf[1024];
 
@@ -1197,8 +1197,8 @@ void text_to_ascii(char *buf, cptr str)
 			/* Hex-mode XXX */
 			if (*str == 'x')
 			{
-				*s = 16 * dehex(*++str);
-				*s++ += dehex(*++str);
+				*s = 16 * (char)dehex(*++str);
+				*s++ += (char)dehex(*++str);
 			}
 
 			/* Hack -- simple way to specify "backslash" */
@@ -1252,29 +1252,29 @@ void text_to_ascii(char *buf, cptr str)
 			/* Octal-mode */
 			else if (*str == '0')
 			{
-				*s = 8 * deoct(*++str);
-				*s++ += deoct(*++str);
+				*s = 8 * (char)deoct(*++str);
+				*s++ += (char)deoct(*++str);
 			}
 
 			/* Octal-mode */
 			else if (*str == '1')
 			{
-				*s = 64 + 8 * deoct(*++str);
-				*s++ += deoct(*++str);
+				*s = 64 + 8 * (char)deoct(*++str);
+				*s++ += (char)deoct(*++str);
 			}
 
 			/* Octal-mode */
 			else if (*str == '2')
 			{
-				*s = 64 * 2 + 8 * deoct(*++str);
-				*s++ += deoct(*++str);
+				*s = 64 * 2 + 8 * (char)deoct(*++str);
+				*s++ += (char)deoct(*++str);
 			}
 
 			/* Octal-mode */
 			else if (*str == '3')
 			{
-				*s = 64 * 3 + 8 * deoct(*++str);
-				*s++ += deoct(*++str);
+				*s = 64 * 3 + 8 * (char)deoct(*++str);
+				*s++ += (char)deoct(*++str);
 			}
 
 			/* Skip the final char */
@@ -1322,7 +1322,7 @@ static bool trigger_ascii_to_text(char **bufptr, cptr *strptr)
 		switch(ch)
 		{
 		case '&':
-			while ((tmp = my_strchr(macro_modifier_chr, *str)))
+			while ((tmp = my_strchr(macro_modifier_chr, *str)) != 0)
 			{
 				j = (int)(tmp - macro_modifier_chr);
 				tmp = macro_modifier_name[j];
@@ -1721,7 +1721,7 @@ errr play_music(int type, int val)
 /*
  * Hack -- Select floor music.
  */
-void select_floor_music()
+void select_floor_music(void)
 {
 	int i;
 	/* No sound */
@@ -1760,7 +1760,7 @@ void select_floor_music()
 		return;
 	}
 
-	for(i = 0; i < max_quests; i++)
+	for(i = 0; i < max_q_idx; i++)
 	{ // TODO マクロで類似条件を統合すること
 		if(quest[i].status == QUEST_STATUS_TAKEN &&
 			(quest[i].type == QUEST_TYPE_KILL_LEVEL || quest[i].type == QUEST_TYPE_RANDOM) &&
@@ -2351,9 +2351,9 @@ void quark_init(void)
 /*
  * Add a new "quark" to the set of quarks.
  */
-s16b quark_add(cptr str)
+u16b quark_add(cptr str)
 {
-	int i;
+	u16b i;
 
 	/* Look for an existing quark */
 	for (i = 1; i < quark__num; i++)
@@ -2379,7 +2379,7 @@ s16b quark_add(cptr str)
 /*
  * This function looks up a quark
  */
-cptr quark_str(s16b i)
+cptr quark_str(STR_OFFSET i)
 {
 	cptr q;
 
@@ -2477,7 +2477,8 @@ cptr message_str(int age)
  */
 void message_add(cptr str)
 {
-	int i, k, x, m, n;
+	u32b i, n;
+	int k, x, m;
 
 	char u[4096];
 	char splitted1[81];
@@ -2869,7 +2870,7 @@ void msg_print(cptr msg)
 	}
 	else
 	{
-		sprintf(buf, ("T:%d - %s"), turn, msg);
+		sprintf(buf, ("T:%d - %s"), (int)turn, msg);
 	}
 
 	/* New Message Length */
@@ -3658,7 +3659,7 @@ bool get_check(cptr prompt)
  * mode & CHECK_NO_HISTORY  : no message_add
  * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool get_check_strict(cptr prompt, int mode)
+bool get_check_strict(cptr prompt, BIT_FLAGS mode)
 {
 	int i;
 	char buf[80];
@@ -3802,12 +3803,13 @@ bool get_com(cptr prompt, char *command, bool z_escape)
  *
  * Hack -- allow "command_arg" to specify a quantity
  */
-s16b get_quantity(cptr prompt, int max)
+QUANTITY get_quantity(cptr prompt, QUANTITY max)
 {
-	bool res;
-	int amt;
+	bool res, result;
+	QUANTITY amt;
 	char tmp[80];
 	char buf[80];
+	COMMAND_CODE code;
 
 
 	/* Use "command_arg" */
@@ -3829,7 +3831,9 @@ s16b get_quantity(cptr prompt, int max)
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the item index */
-	if ((max != 1) && repeat_pull(&amt))
+	result = repeat_pull(&code);
+	amt = (QUANTITY)code;
+	if ((max != 1) && result)
 	{
 		/* Enforce the maximum */
 		if (amt > max) amt = max;
@@ -3878,7 +3882,7 @@ s16b get_quantity(cptr prompt, int max)
 	if (!res) return 0;
 
 	/* Extract a number */
-	amt = atoi(buf);
+	amt = (COMMAND_CODE)atoi(buf);
 
 	/* A letter means "all" */
 	if (isalpha(buf[0])) amt = max;
@@ -3891,7 +3895,7 @@ s16b get_quantity(cptr prompt, int max)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	if (amt) repeat_push(amt);
+	if (amt) repeat_push((COMMAND_CODE)amt);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -4404,7 +4408,7 @@ void request_command(int shopping)
 {
 	int i;
 
-	char cmd;
+	s16b cmd;
 	int mode;
 
 	cptr act;
@@ -4478,7 +4482,7 @@ void request_command(int shopping)
 		/* Command Count */
 		if (cmd == '0')
 		{
-			int old_arg = command_arg;
+			COMMAND_ARG old_arg = command_arg;
 
 			/* Reset */
 			command_arg = 0;
@@ -4620,7 +4624,7 @@ void request_command(int shopping)
 	if (always_repeat && (command_arg <= 0))
 	{
 		/* Hack -- auto repeat certain commands */
-		if (my_strchr("TBDoc+", command_cmd))
+		if (my_strchr("TBDoc+", (char)command_cmd))
 		{
 			/* Repeat 99 times */
 			command_arg = 99;
@@ -4813,7 +4817,7 @@ int get_keymap_dir(char ch)
 	}
 	else
 	{
-		int mode;
+		BIT_FLAGS mode;
 		cptr act, s;
 
 		/* Roguelike */
@@ -4862,10 +4866,10 @@ static int repeat__cnt = 0;
 static int repeat__idx = 0;
 
 /* Saved "stuff" */
-static int repeat__key[REPEAT_MAX];
+static COMMAND_CODE repeat__key[REPEAT_MAX];
 
 
-void repeat_push(int what)
+void repeat_push(COMMAND_CODE what)
 {
 	/* Too many keys */
 	if (repeat__cnt == REPEAT_MAX) return;
@@ -4878,7 +4882,7 @@ void repeat_push(int what)
 }
 
 
-bool repeat_pull(int *what)
+bool repeat_pull(COMMAND_CODE *what)
 {
 	/* All out of keys */
 	if (repeat__idx == repeat__cnt) return (FALSE);
@@ -4892,7 +4896,7 @@ bool repeat_pull(int *what)
 
 void repeat_check(void)
 {
-	int		what;
+	COMMAND_CODE what;
 
 	/* Ignore some commands */
 	if (command_cmd == ESCAPE) return;
@@ -5453,7 +5457,7 @@ void str_tolower(char *str)
 			continue;
 		}
 #endif
-		*str = tolower(*str);
+		*str = (char)tolower(*str);
 	}
 }
 

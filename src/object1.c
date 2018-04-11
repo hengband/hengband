@@ -510,7 +510,7 @@ cptr item_activation(object_type *o_ptr)
  * @param mode 表示オプション
  * @return 特筆すべき情報が一つでもあった場合TRUE、一つもなく表示がキャンセルされた場合FALSEを返す。
  */
-bool screen_object(object_type *o_ptr, u32b mode)
+bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 {
 	int                     i = 0, j, k;
 
@@ -1317,12 +1317,12 @@ char index_to_label(int i)
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  * @details Note that the label does NOT distinguish inven/equip.
  */
-s16b label_to_inven(int c)
+INVENTORY_IDX label_to_inven(int c)
 {
-	int i;
+	INVENTORY_IDX i;
 
 	/* Convert */
-	i = (islower(c) ? A2I(c) : -1);
+	i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
 	/* Verify the index */
 	if ((i < 0) || (i > INVEN_PACK)) return (-1);
@@ -1355,12 +1355,12 @@ static bool is_ring_slot(int i)
  * Convert a label into the index of a item in the "equip"
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */
-s16b label_to_equip(int c)
+INVENTORY_IDX label_to_equip(int c)
 {
-	int i;
+	INVENTORY_IDX i;
 
 	/* Convert */
-	i = (islower(c) ? A2I(c) : -1) + INVEN_RARM;
+	i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_RARM;
 
 	/* Verify the index */
 	if ((i < INVEN_RARM) || (i >= INVEN_TOTAL)) return (-1);
@@ -1589,7 +1589,7 @@ cptr describe_use(int i)
  * @return 使用可能な魔法書ならばTRUEを返す。
  */
 
-bool check_book_realm(const byte book_tval, const byte book_sval)
+bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
 {
 	if (book_tval < TV_LIFE_BOOK) return FALSE;
 	if (p_ptr->pclass == CLASS_SORCERER)
@@ -1856,9 +1856,10 @@ void display_equip(void)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag(int *cp, char tag, int mode)
+static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 {
-	int i, start, end;
+	COMMAND_CODE i;
+	COMMAND_CODE start, end;
 	cptr s;
 
 	/* Extract index from mode */
@@ -1981,9 +1982,9 @@ static bool get_tag(int *cp, char tag, int mode)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
+static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
-	int i;
+	COMMAND_CODE i;
 	cptr s;
 
 	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
@@ -2068,7 +2069,7 @@ static bool get_tag_floor(int *cp, char tag, int floor_list[], int floor_num)
  * @param mode 所持品リストか装備品リストかの切り替え
  * @return なし
  */
-static void prepare_label_string(char *label, int mode)
+static void prepare_label_string(char *label, BIT_FLAGS mode)
 {
 	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
@@ -2080,7 +2081,7 @@ static void prepare_label_string(char *label, int mode)
 	/* Move each label */
 	for (i = 0; i < 52; i++)
 	{
-		int index;
+		COMMAND_CODE index;
 		char c = alphabet_chars[i];
 
 		/* Find a tag with this label */
@@ -2106,7 +2107,7 @@ static void prepare_label_string(char *label, int mode)
  */
 /*
  */
-static void prepare_label_string_floor(char *label, int floor_list[], int floor_num)
+static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
 	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  i;
@@ -2117,7 +2118,7 @@ static void prepare_label_string_floor(char *label, int floor_list[], int floor_
 	/* Move each label */
 	for (i = 0; i < 52; i++)
 	{
-		int index;
+		COMMAND_CODE index;
 		char c = alphabet_chars[i];
 
 		/* Find a tag with this label */
@@ -2141,18 +2142,19 @@ static void prepare_label_string_floor(char *label, int floor_list[], int floor_
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-int show_inven(int target_item)
+COMMAND_CODE show_inven(int target_item)
 {
-	int             i, j, k, l, z = 0;
+	COMMAND_CODE i;
+	int j, k, l, z = 0;
 	int             col, cur_col, len;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	char            tmp_val[80];
-	int             out_index[23];
+	COMMAND_CODE out_index[23];
 	byte            out_color[23];
 	char            out_desc[23][MAX_NLEN];
-	int             target_item_label = 0;
-	int             wid, hgt;
+	COMMAND_CODE target_item_label = 0;
+	TERM_POSITION wid, hgt;
 	char            inven_label[52 + 1];
 
 	/* Starting column */
@@ -2307,18 +2309,19 @@ int show_inven(int target_item)
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-int show_equip(int target_item)
+COMMAND_CODE show_equip(int target_item)
 {
-	int             i, j, k, l;
+	COMMAND_CODE i;
+	int j, k, l;
 	int             col, cur_col, len;
 	object_type     *o_ptr;
 	char            tmp_val[80];
 	char            o_name[MAX_NLEN];
-	int             out_index[23];
+	COMMAND_CODE out_index[23];
 	byte            out_color[23];
 	char            out_desc[23][MAX_NLEN];
-	int             target_item_label = 0;
-	int             wid, hgt;
+	COMMAND_CODE target_item_label = 0;
+	TERM_POSITION wid, hgt;
 	char            equip_label[52 + 1];
 
 	/* Starting column */
@@ -2628,7 +2631,7 @@ static bool get_item_allow(int item)
  * @param i 選択アイテムID
  * @return 正規のIDならばTRUEを返す。
  */
-static bool get_item_okay(int i)
+static bool get_item_okay(OBJECT_IDX i)
 {
 	/* Illegal items */
 	if ((i < 0) || (i >= INVEN_TOTAL)) return (FALSE);
@@ -2650,7 +2653,9 @@ static bool get_item_okay(int i)
  */
 bool can_get_item(void)
 {
-	int j, floor_list[23], floor_num = 0;
+	int j;
+	OBJECT_IDX floor_list[23];
+	ITEM_NUMBER floor_num = 0;
 
 	for (j = 0; j < INVEN_TOTAL; j++)
 		if (item_tester_okay(&inventory[j]))
@@ -2718,13 +2723,16 @@ bool can_get_item(void)
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
  */
-bool get_item(int *cp, cptr pmt, cptr str, int mode)
+bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 {
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	char which = ' ';
 
-	int j, k, i1, i2, e1, e2;
+	int j;
+	OBJECT_IDX k;
+	OBJECT_IDX i1, i2;
+	OBJECT_IDX e1, e2;
 
 	bool done, item;
 
@@ -2984,7 +2992,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 	/* Repeat until done */
 	while (!done)
 	{
-		int get_item_label = 0;
+		COMMAND_CODE get_item_label = 0;
 
 		/* Show choices */
 		int ni = 0;
@@ -3453,7 +3461,7 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
 
 				/* Extract "query" setting */
 				ver = isupper(which);
-				which = tolower(which);
+				which = (char)tolower(which);
 
 				/* Convert letter to inventory index */
 				if (!command_wrk)
@@ -3572,11 +3580,11 @@ bool get_item(int *cp, cptr pmt, cptr str, int mode)
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-int scan_floor(int *items, int y, int x, int mode)
+ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	int this_o_idx, next_o_idx;
+	OBJECT_IDX this_o_idx, next_o_idx;
 
-	int num = 0;
+	ITEM_NUMBER num = 0;
 
 	/* Sanity */
 	if (!in_bounds(y, x)) return 0;
@@ -3620,27 +3628,28 @@ int scan_floor(int *items, int y, int x, int mode)
  * @param y 走査するフロアのY座標
  * @param x 走査するフロアのX座標
  * @param min_width 表示の長さ
- * @return 選択したアイテムのID
+ * @return 選択したアイテムの添え字
  * @details
  */
-int show_floor(int target_item, int y, int x, int *min_width)
+COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *min_width)
 {
-	int i, j, k, l;
+	COMMAND_CODE i, m;
+	int j, k, l;
 	int col, len;
 
 	object_type *o_ptr;
 
 	char o_name[MAX_NLEN];
-
 	char tmp_val[80];
 
-	int out_index[23];
+	COMMAND_CODE out_index[23];
 	byte out_color[23];
 	char out_desc[23][MAX_NLEN];
-	int target_item_label = 0;
+	COMMAND_CODE target_item_label = 0;
 
-	int floor_list[23], floor_num;
-	int wid, hgt;
+	OBJECT_IDX floor_list[23];
+	ITEM_NUMBER floor_num;
+	TERM_POSITION wid, hgt;
 	char floor_label[52 + 1];
 
 	bool dont_need_to_show_weights = TRUE;
@@ -3701,10 +3710,10 @@ int show_floor(int target_item, int y, int x, int *min_width)
 	for (j = 0; j < k; j++)
 	{
 		/* Get the index */
-		i = floor_list[out_index[j]];
+		m = floor_list[out_index[j]];
 
 		/* Get the item */
-		o_ptr = &o_list[i];
+		o_ptr = &o_list[m];
 
 		/* Clear the line */
 		prt("", j + 1, col ? col - 2 : col);
@@ -3714,7 +3723,7 @@ int show_floor(int target_item, int y, int x, int *min_width)
 			if (j == (target_item-1))
 			{
 				strcpy(tmp_val, _("》", "> "));
-				target_item_label = i;
+				target_item_label = m;
 			}
 			else strcpy(tmp_val, "   ");
 		}
@@ -3759,11 +3768,14 @@ int show_floor(int target_item, int y, int x, int *min_width)
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
+bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 {
 	char n1 = ' ', n2 = ' ', which = ' ';
 
-	int j, k, i1, i2, e1, e2;
+	int j;
+	COMMAND_CODE i1, i2;
+	COMMAND_CODE e1, e2;
+	COMMAND_CODE k;
 
 	bool done, item;
 
@@ -3783,8 +3795,10 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	char tmp_val[160];
 	char out_val[160];
 
-	int floor_num, floor_list[23], floor_top = 0;
-	int min_width = 0;
+	ITEM_NUMBER floor_num;
+	OBJECT_IDX floor_list[23];
+	int floor_top = 0;
+	TERM_POSITION min_width = 0;
 
 	extern bool select_the_force;
 
@@ -4027,7 +4041,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 	/* Repeat until done */
 	while (!done)
 	{
-		int get_item_label = 0;
+		COMMAND_CODE get_item_label = 0;
 
 		/* Show choices */
 		int ni = 0;
@@ -4526,7 +4540,8 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 			case '\r':
 			case '+':
 			{
-				int i, o_idx;
+				int i;
+				IDX o_idx;
 				cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 				if (command_wrk != (USE_FLOOR)) break;
@@ -4860,7 +4875,7 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
 
 				/* Extract "query" setting */
 				ver = isupper(which);
-				which = tolower(which);
+				which = (char)tolower(which);
 
 				/* Convert letter to inventory index */
 				if (command_wrk == (USE_INVEN))
@@ -4980,11 +4995,11 @@ bool get_item_floor(int *cp, cptr pmt, cptr str, int mode)
  */
 static bool py_pickup_floor_aux(void)
 {
-	s16b this_o_idx;
+	OBJECT_IDX this_o_idx;
 
 	cptr q, s;
 
-	int item;
+	OBJECT_IDX item;
 
 	/* Restrict the choices */
 	item_tester_hook = inven_carry_okay;

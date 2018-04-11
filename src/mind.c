@@ -576,7 +576,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 		break;
 	case MIND_KI:
 	{
-		int boost = p_ptr->magic_num1[0];
+		int boost = P_PTR_KI;
 
 		if (heavy_armor()) boost /= 2;
 
@@ -675,78 +675,81 @@ void mindcraft_info(char *p, int use_mind, int power)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-  static int get_mind_power(int *sn, bool only_browse)
-    {
-      int             i;
-      int             num = 0;
-      int             y = 1;
-      int             x = 10;
-      int             minfail = 0;
-      int             plev = p_ptr->lev;
-      int             chance = 0;
-      int             ask = TRUE;
-      char            choice;
-      char            out_val[160];
-      char            comment[80];
-      cptr            p;
+static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
+{
+	SPELL_IDX i;
+	int             num = 0;
+	int             y = 1;
+	int             x = 10;
+	int             minfail = 0;
+	int             plev = p_ptr->lev;
+	int             chance = 0;
+	int             ask = TRUE;
+	char            choice;
+	char            out_val[160];
+	char            comment[80];
+	cptr            p;
+	COMMAND_CODE code;
+	mind_type       spell;
+	const mind_power      *mind_ptr;
+	bool            flag, redraw;
+	int             use_mind;
+	int menu_line = (use_menu ? 1 : 0);
 
-      mind_type       spell;
-      const mind_power      *mind_ptr;
-      bool            flag, redraw;
-      int             use_mind;
-      int menu_line = (use_menu ? 1 : 0);
-
-      switch(p_ptr->pclass)
+	switch (p_ptr->pclass)
 	{
 	case CLASS_MINDCRAFTER:
-	  {
-	    use_mind = MIND_MINDCRAFTER;
-	    p = _("超能力", "mindcraft");
-	    break;
-	  }
-	case CLASS_FORCETRAINER:
-	  {
-	    use_mind = MIND_KI;
-	    p = _("練気術", "Force");
-	    break;
-	  }
-	case CLASS_BERSERKER:
-	  {
-	    use_mind = MIND_BERSERKER;
-	    p = _("技", "brutal power");
-	    break;
-	  }
-	case CLASS_MIRROR_MASTER:
-	  {
-	    use_mind = MIND_MIRROR_MASTER;
-	    p = _("鏡魔法", "magic");
-	    break;
-	  }
-	case CLASS_NINJA:
-	  {
-	    use_mind = MIND_NINJUTSU;
-	    p = _("忍術", "ninjutsu");
-	    break;
-	  }
-	default:
-	  {
-	    use_mind = 0;
-	    p = _("超能力", "mindcraft");
-	    break;
-	  }
+	{
+		use_mind = MIND_MINDCRAFTER;
+		p = _("超能力", "mindcraft");
+		break;
 	}
-      mind_ptr = &mind_powers[use_mind];
+	case CLASS_FORCETRAINER:
+	{
+		use_mind = MIND_KI;
+		p = _("練気術", "Force");
+		break;
+	}
+	case CLASS_BERSERKER:
+	{
+		use_mind = MIND_BERSERKER;
+		p = _("技", "brutal power");
+		break;
+	}
+	case CLASS_MIRROR_MASTER:
+	{
+		use_mind = MIND_MIRROR_MASTER;
+		p = _("鏡魔法", "magic");
+		break;
+	}
+	case CLASS_NINJA:
+	{
+		use_mind = MIND_NINJUTSU;
+		p = _("忍術", "ninjutsu");
+		break;
+	}
+	default:
+	{
+		use_mind = 0;
+		p = _("超能力", "mindcraft");
+		break;
+	}
+	}
+	mind_ptr = &mind_powers[use_mind];
 
 	/* Assume cancelled */
-      *sn = (-1);
+	*sn = (-1);
 
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the spell, if available */
-	if (repeat_pull(sn))
+
+	if (repeat_pull(&code))
 	{
+		*sn = (SPELL_IDX)code;
 		/* Hack -- If requested INVEN_FORCE(1111), pull again */
-		if (*sn == INVEN_FORCE) repeat_pull(sn);
+		if (*sn == INVEN_FORCE) repeat_pull(&code);
+		*sn = (SPELL_IDX)code;
 
 		/* Verify the spell */
 		if (mind_ptr->info[*sn].min_lev <= plev)
@@ -892,7 +895,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 							if (i == 5)
 							{
 								int j;
-								for (j = 0; j < p_ptr->magic_num1[0] / 50; j++)
+								for (j = 0; j < P_PTR_KI / 50; j++)
 									mana_cost += (j+1) * 3 / 2;
 							}
 						}
@@ -934,7 +937,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 						else strcpy(psi_desc, "     ");
 					}
 					else
-						sprintf(psi_desc, "  %c) ",I2A(i));
+						sprintf(psi_desc, "  %c) ", I2A(i));
 					/* Dump the spell --(-- */
 					strcat(psi_desc,
 					       format("%-30s%2d %4d%s %3d%%%s",
@@ -972,7 +975,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 			ask = isupper(choice);
 
 			/* Lowercase */
-			if (ask) choice = tolower(choice);
+			if (ask) choice = (char)tolower(choice);
 
 			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);
@@ -1021,7 +1024,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	repeat_push(*sn);
+	repeat_push((COMMAND_CODE)i);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -1039,7 +1042,8 @@ static bool cast_mindcrafter_spell(int spell)
 {
 	int             b = 0;
 	int             dir;
-	int             plev = p_ptr->lev;
+	TIME_EFFECT t;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	/* spell code */
 	switch (spell)
@@ -1069,7 +1073,7 @@ static bool cast_mindcrafter_spell(int spell)
 		}
 
 		if ((plev > 24) && (plev < 40))
-			set_tim_esp(plev, FALSE);
+			set_tim_esp((TIME_EFFECT)plev, FALSE);
 
 		if (!b) msg_print(_("安全な気がする。", "You feel safe."));
 
@@ -1113,12 +1117,12 @@ static bool cast_mindcrafter_spell(int spell)
 		break;
 	case 6:
 		/* Character Armour */
-		set_shield(plev, FALSE);
-		if (plev > 14) set_oppose_acid(plev, FALSE);
-		if (plev > 19) set_oppose_fire(plev, FALSE);
-		if (plev > 24) set_oppose_cold(plev, FALSE);
-		if (plev > 29) set_oppose_elec(plev, FALSE);
-		if (plev > 34) set_oppose_pois(plev, FALSE);
+		set_shield((TIME_EFFECT)plev, FALSE);
+		if (plev > 14) set_oppose_acid((TIME_EFFECT)plev, FALSE);
+		if (plev > 19) set_oppose_fire((TIME_EFFECT)plev, FALSE);
+		if (plev > 24) set_oppose_cold((TIME_EFFECT)plev, FALSE);
+		if (plev > 29) set_oppose_elec((TIME_EFFECT)plev, FALSE);
+		if (plev > 34) set_oppose_pois((TIME_EFFECT)plev, FALSE);
 		break;
 	case 7:
 		/* Psychometry */
@@ -1150,10 +1154,10 @@ static bool cast_mindcrafter_spell(int spell)
 			hp_player(plev);
 		}
 
-		b = 10 + randint1((plev * 3) / 2);
-		set_hero(b, FALSE);
+		t = 10 + randint1((plev * 3) / 2);
+		set_hero(t, FALSE);
 		/* Haste */
-		(void)set_fast(b, FALSE);
+		(void)set_fast(t, FALSE);
 		break;
 	case 10:
 		/* Telekinesis */
@@ -1219,9 +1223,9 @@ static bool cast_mindcrafter_spell(int spell)
  */
 static bool cast_force_spell(int spell)
 {
-	int             dir;
-	int             plev = p_ptr->lev;
-	int             boost = p_ptr->magic_num1[0];
+	DIRECTION dir;
+	int plev = p_ptr->lev;
+	int boost = P_PTR_KI;
 
 	if (heavy_armor()) boost /= 2;
 
@@ -1249,12 +1253,12 @@ static bool cast_force_spell(int spell)
 		break;
 	case 5:
 		msg_print(_("気を練った。", "You improved the Force."));
-		p_ptr->magic_num1[0] += (70 + plev);
+		P_PTR_KI += (70 + plev);
 		p_ptr->update |= (PU_BONUS);
-		if (randint1(p_ptr->magic_num1[0]) > (plev * 4 + 120))
+		if (randint1(P_PTR_KI) > (plev * 4 + 120))
 		{
 			msg_print(_("気が暴走した！", "The Force exploded!"));
-			fire_ball(GF_MANA, 0, p_ptr->magic_num1[0] / 2, 10);
+			fire_ball(GF_MANA, 0, P_PTR_KI / 2, 10);
 			take_hit(DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"), -1);
 		}
 		else return TRUE;
@@ -1277,7 +1281,7 @@ static bool cast_force_spell(int spell)
 			int i;
 			int ty = y, tx = x;
 			int oy = y, ox = x;
-			int m_idx = cave[y][x].m_idx;
+			MONSTER_IDX m_idx = cave[y][x].m_idx;
 			monster_type *m_ptr = &m_list[m_idx];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 			char m_name[80];
@@ -1305,9 +1309,9 @@ static bool cast_force_spell(int spell)
 				{
 					msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
 					cave[oy][ox].m_idx = 0;
-					cave[ty][tx].m_idx = m_idx;
-					m_ptr->fy = ty;
-					m_ptr->fx = tx;
+					cave[ty][tx].m_idx = (s16b)m_idx;
+					m_ptr->fy = (byte_hack)ty;
+					m_ptr->fx = (byte_hack)tx;
 
 					update_mon(m_idx, TRUE);
 					lite_spot(oy, ox);
@@ -1326,7 +1330,7 @@ static bool cast_force_spell(int spell)
 		break;
 	case 9:
 	{
-		int m_idx;
+		MONSTER_IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;
@@ -1368,7 +1372,7 @@ static bool cast_force_spell(int spell)
 	default:
 		msg_print(_("なに？", "Zap?"));
 	}
-	p_ptr->magic_num1[0] = 0;
+	P_PTR_KI = 0;
 	p_ptr->update |= (PU_BONUS);
 
 	return TRUE;
@@ -1400,138 +1404,139 @@ static int number_of_mirrors( void )
 static bool cast_mirror_spell(int spell)
 {
 	int             dir;
-	int             plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	int		tmp;
-	int		x,y;
+	TIME_EFFECT t;
+	int		x, y;
 
 	/* spell code */
 	switch (spell)
 	{
-	/* mirror of seeing */
+		/* mirror of seeing */
 	case 0:
-	  tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 0;
-	  if( plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
-	  if( plev + tmp > 18 )detect_monsters_invis(DETECT_RAD_DEFAULT);
-	  if( plev + tmp > 28 )set_tim_esp(plev,FALSE);
-	  if( plev + tmp > 38 )map_area(DETECT_RAD_MAP);
-	  if( tmp == 0 && plev < 5 ){
-	    msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
-	  }
-	  break;
-	/* drip of light */
-	case 1:
-	  if( number_of_mirrors() < 4 + plev/10 ){
-	    place_mirror();
-	  }
-	  else {
-			msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
-	  }
-	  break;
-	case 2:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  if ( plev > 9 && is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ) {
-	    fire_beam(GF_LITE, dir,damroll(3+((plev-1)/5),4));
-	  }
-	  else {
-	    fire_bolt(GF_LITE, dir,damroll(3+((plev-1)/5),4));
-	  }
-	  break;
-	/* warped mirror */
-	case 3:
-	  teleport_player(10, 0L);
-	  break;
-	/* mirror of light */
-	case 4:
-	  (void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
-	  break;
-	/* mirror of wandering */
-	case 5:
-	  teleport_player(plev * 5, 0L);
-	  break;
-	/* robe of dust */
-	case 6:
-	  set_dustrobe(20+randint1(20),FALSE);
-	  break;
-	/* banishing mirror */
-	case 7:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  (void)fire_beam(GF_AWAY_ALL, dir , plev);
-	  break;
-	/* mirror clashing */
-	case 8:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  fire_ball(GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8),
-		    (plev > 20 ? (plev - 20) / 8 + 1 : 0));
-	  break;
-	/* mirror sleeping */
-	case 9:
-	  for(x=0;x<cur_wid;x++){
-	    for(y=0;y<cur_hgt;y++){
-	      if (is_mirror_grid(&cave[y][x])) {
-		project(0,2,y,x,plev,GF_OLD_SLEEP,(PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP|PROJECT_NO_HANGEKI),-1);
-	      }
-	    }
-	  }
-	  break;
-	/* seeker ray */
-	case 10:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  fire_beam(GF_SEEKER,dir, damroll(11+(plev-5)/4,8));
-	  break;
-	/* seal of mirror */
-	case 11:
-	  seal_of_mirror(plev*4+100);
-	  break;
-	/* shield of water */
-	case 12:
-	  tmp = 20+randint1(20);
-	  set_shield(tmp, FALSE);
-	  if( plev > 31 )set_tim_reflect(tmp, FALSE);
-	  if( plev > 39 )set_resist_magic(tmp,FALSE);
-	  break;
-	/* super ray */
-	case 13:
-	  if (!get_aim_dir(&dir)) return FALSE;
-	  fire_beam(GF_SUPER_RAY,dir, 150+randint1(2*plev));
-	  break;
-	/* illusion light */
-	case 14:
-	  tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 3;
-	  slow_monsters(plev);
-	  stun_monsters(plev*tmp);
-	  confuse_monsters(plev*tmp);
-	  turn_monsters(plev*tmp);
-	  stun_monsters(plev*tmp);
-	  stasis_monsters(plev*tmp);
-	  break;
-	/* mirror shift */
-	case 15:
-	  if( !is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ){
-		msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
+		tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 0;
+		if (plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
+		if (plev + tmp > 18)detect_monsters_invis(DETECT_RAD_DEFAULT);
+		if (plev + tmp > 28)set_tim_esp((TIME_EFFECT)plev, FALSE);
+		if (plev + tmp > 38)map_area(DETECT_RAD_MAP);
+		if (tmp == 0 && plev < 5) {
+			msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
+		}
 		break;
-	  }
-	  alter_reality();
-	  break;
-	/* mirror tunnel */
+		/* drip of light */
+	case 1:
+		if (number_of_mirrors() < 4 + plev / 10) {
+			place_mirror();
+		}
+		else {
+			msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
+		}
+		break;
+	case 2:
+		if (!get_aim_dir(&dir)) return FALSE;
+		if (plev > 9 && is_mirror_grid(&cave[p_ptr->y][p_ptr->x])) {
+			fire_beam(GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+		}
+		else {
+			fire_bolt(GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+		}
+		break;
+		/* warped mirror */
+	case 3:
+		teleport_player(10, 0L);
+		break;
+		/* mirror of light */
+	case 4:
+		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
+		break;
+		/* mirror of wandering */
+	case 5:
+		teleport_player(plev * 5, 0L);
+		break;
+		/* robe of dust */
+	case 6:
+		set_dustrobe(20 + randint1(20), FALSE);
+		break;
+		/* banishing mirror */
+	case 7:
+		if (!get_aim_dir(&dir)) return FALSE;
+		(void)fire_beam(GF_AWAY_ALL, dir, plev);
+		break;
+		/* mirror clashing */
+	case 8:
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_ball(GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8),
+			(plev > 20 ? (plev - 20) / 8 + 1 : 0));
+		break;
+		/* mirror sleeping */
+	case 9:
+		for (x = 0; x < cur_wid; x++) {
+			for (y = 0; y < cur_hgt; y++) {
+				if (is_mirror_grid(&cave[y][x])) {
+					project(0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+				}
+			}
+		}
+		break;
+		/* seeker ray */
+	case 10:
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_beam(GF_SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
+		break;
+		/* seal of mirror */
+	case 11:
+		seal_of_mirror(plev * 4 + 100);
+		break;
+		/* shield of water */
+	case 12:
+		t = 20 + randint1(20);
+		set_shield(t, FALSE);
+		if (plev > 31)set_tim_reflect(t, FALSE);
+		if (plev > 39)set_resist_magic(t, FALSE);
+		break;
+		/* super ray */
+	case 13:
+		if (!get_aim_dir(&dir)) return FALSE;
+		fire_beam(GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
+		break;
+		/* illusion light */
+	case 14:
+		tmp = is_mirror_grid(&cave[p_ptr->y][p_ptr->x]) ? 4 : 3;
+		slow_monsters(plev);
+		stun_monsters(plev*tmp);
+		confuse_monsters(plev*tmp);
+		turn_monsters(plev*tmp);
+		stun_monsters(plev*tmp);
+		stasis_monsters(plev*tmp);
+		break;
+		/* mirror shift */
+	case 15:
+		if (!is_mirror_grid(&cave[p_ptr->y][p_ptr->x])) {
+			msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
+			break;
+		}
+		alter_reality();
+		break;
+		/* mirror tunnel */
 	case 16:
-	  msg_print(_("鏡の世界を通り抜け…  ", "Go through the world of mirror..."));
-	  return mirror_tunnel();
+		msg_print(_("鏡の世界を通り抜け…  ", "Go through the world of mirror..."));
+		return mirror_tunnel();
 
-	/* mirror of recall */
+		/* mirror of recall */
 	case 17:
 		return word_of_recall();
-	/* multi-shadow */
+		/* multi-shadow */
 	case 18:
-	  set_multishadow(6+randint1(6),FALSE);
-	  break;
-	/* binding field */
+		set_multishadow(6 + randint1(6), FALSE);
+		break;
+		/* binding field */
 	case 19:
-	  if( !binding_field(plev*11+5) )msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
-	  break;
-	/* mirror of Ruffnor */
+		if (!binding_field(plev * 11 + 5))msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
+		break;
+		/* mirror of Ruffnor */
 	case 20:
-	  (void)set_invuln(randint1(4)+4,FALSE);
-	  break;
+		(void)set_invuln(randint1(4) + 4, FALSE);
+		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
 
@@ -1549,8 +1554,8 @@ static bool cast_mirror_spell(int spell)
  */
 static bool cast_berserk_spell(int spell)
 {
-	int y, x;
-	int dir;
+	POSITION y, x;
+	DIRECTION dir;
 
 	/* spell code */
 	switch (spell)
@@ -1624,7 +1629,7 @@ static bool cast_berserk_spell(int spell)
  */
 static bool cast_ninja_spell(int spell)
 {
-	int x, y;
+	POSITION x, y;
 	int dir;
 	int plev = p_ptr->lev;
 
@@ -1705,7 +1710,7 @@ static bool cast_ninja_spell(int spell)
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
 		teleport_player(30, 0L);
-		set_oppose_fire(plev, FALSE);
+		set_oppose_fire((TIME_EFFECT)plev, FALSE);
 		break;
 	case 10:
 		return rush_attack(NULL);
@@ -1714,7 +1719,7 @@ static bool cast_ninja_spell(int spell)
 		int i;
 		for (i = 0; i < 8; i++)
 		{
-			int slot;
+			OBJECT_IDX slot;
 
 			for (slot = 0; slot < INVEN_PACK; slot++)
 			{
@@ -1742,12 +1747,12 @@ static bool cast_ninja_spell(int spell)
 	case 12:
 	{
 		monster_type *m_ptr;
-		int m_idx;
+		MONSTER_IDX m_idx;
 		char m_name[80];
 		int i;
 		int path_n;
 		u16b path_g[512];
-		int ty,tx;
+		POSITION ty, tx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;
@@ -1778,11 +1783,11 @@ static bool cast_ninja_spell(int spell)
 		cave[target_row][target_col].m_idx = 0;
 
 		/* Update the new location */
-		cave[ty][tx].m_idx = m_idx;
+		cave[ty][tx].m_idx = (s16b)m_idx;
 
 		/* Move the monster */
-		m_ptr->fy = ty;
-		m_ptr->fx = tx;
+		m_ptr->fy = (byte_hack)ty;
+		m_ptr->fx = (byte_hack)tx;
 
 		/* Wake the monster up */
 		(void)set_monster_csleep(m_idx, 0);
@@ -1830,7 +1835,7 @@ static bool cast_ninja_spell(int spell)
 		break;
 	case 16:
 		(void)set_kabenuke(randint1(plev/2) + plev/2, FALSE);
-		set_oppose_acid(plev, FALSE);
+		set_oppose_acid((TIME_EFFECT)plev, FALSE);
 		break;
 	case 17:
 		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);
@@ -1875,7 +1880,8 @@ static bool cast_ninja_spell(int spell)
  */
 void do_cmd_mind(void)
 {
-	int             n = 0,  b = 0;
+	SPELL_IDX n = 0;
+	int b = 0;
 	int             chance;
 	int             minfail = 0;
 	int             plev = p_ptr->lev;
@@ -1933,7 +1939,7 @@ void do_cmd_mind(void)
 		if (n == 5)
 		{
 			int j;
-			for (j = 0; j < p_ptr->magic_num1[0] / 50; j++)
+			for (j = 0; j < P_PTR_KI / 50; j++)
 				mana_cost += (j+1) * 3 / 2;
 		}
 	}
@@ -2006,10 +2012,10 @@ void do_cmd_mind(void)
 
 		if ((use_mind != MIND_BERSERKER) && (use_mind != MIND_NINJUTSU))
 		{
-			if ((use_mind == MIND_KI) && (n != 5) && p_ptr->magic_num1[0])
+			if ((use_mind == MIND_KI) && (n != 5) && P_PTR_KI)
 			{
 				msg_print(_("気が散ってしまった．．．", "Your improved Force has gone away..."));
-				p_ptr->magic_num1[0] = 0;
+				P_PTR_KI = 0;
 			}
 
 			if (randint1(100) < (chance / 2))
@@ -2186,7 +2192,7 @@ void do_cmd_mind(void)
  */
 void do_cmd_mind_browse(void)
 {
-	int n = 0;
+	SPELL_IDX n = 0;
 	int j, line;
 	char temp[62*5];
 	int use_mind = 0;

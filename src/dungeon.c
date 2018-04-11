@@ -600,8 +600,8 @@ static void sense_inventory2(void)
  */
 static void pattern_teleport(void)
 {
-	int min_level = 0;
-	int max_level = 99;
+	DEPTH min_level = 0;
+	DEPTH max_level = 99;
 
 	/* Ask for level */
 	if (get_check(_("他の階にテレポートしますか？", "Teleport level? ")))
@@ -628,16 +628,16 @@ static void pattern_teleport(void)
 		}
 
 		/* Prompt */
-		sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), min_level, max_level);
+		sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);
 
 		/* Default */
-		sprintf(tmp_val, "%d", dun_level);
+		sprintf(tmp_val, "%d", (int)dun_level);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 10)) return;
 
 		/* Extract request */
-		command_arg = atoi(tmp_val);
+		command_arg = (COMMAND_ARG)atoi(tmp_val);
 	}
 	else if (get_check(_("通常テレポート？", "Normal teleport? ")))
 	{
@@ -650,10 +650,10 @@ static void pattern_teleport(void)
 	}
 
 	/* Paranoia */
-	if (command_arg < min_level) command_arg = min_level;
+	if (command_arg < min_level) command_arg = (COMMAND_ARG)min_level;
 
 	/* Paranoia */
-	if (command_arg > max_level) command_arg = max_level;
+	if (command_arg > max_level) command_arg = (COMMAND_ARG)max_level;
 
 	/* Accept request */
 	msg_format(_("%d 階にテレポートしました。", "You teleport to dungeon level %d."), command_arg);
@@ -686,7 +686,8 @@ static void pattern_teleport(void)
  */
 static void wreck_the_pattern(void)
 {
-	int to_ruin = 0, r_y, r_x;
+	int to_ruin = 0;
+	POSITION r_y, r_x;
 	int pattern_type = f_info[cave[p_ptr->y][p_ptr->x].feat].subtype;
 
 	if (pattern_type == PATTERN_TILE_WRECKED)
@@ -1064,7 +1065,7 @@ static void regen_captured_monsters(void)
 			if (r_ptr->flags2 & RF2_REGENERATE) frac *= 2;
 
 			/* Hack -- Regenerate */
-			o_ptr->xtra4 += frac;
+			o_ptr->xtra4 += (XTRA16)frac;
 
 			/* Do not over-regenerate */
 			if (o_ptr->xtra4 > o_ptr->xtra5) o_ptr->xtra4 = o_ptr->xtra5;
@@ -1226,7 +1227,7 @@ void leave_tower_check(void)
  */
 bool psychometry(void)
 {
-	int             item;
+	OBJECT_IDX      item;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	byte            feel;
@@ -1393,7 +1394,7 @@ static void check_music(void)
 
 	/* Music singed by player */
 	if (p_ptr->pclass != CLASS_BARD) return;
-	if (!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return;
+	if (!SINGING_SONG_EFFECT(p_ptr) && !INTERUPTING_SONG_EFFECT(p_ptr)) return;
 
 	if (p_ptr->anti_magic)
 	{
@@ -1401,7 +1402,7 @@ static void check_music(void)
 		return;
 	}
 
-	spell = p_ptr->magic_num2[0];
+	spell = SINGING_SONG_ID(p_ptr);
 	s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 
 	need_mana = mod_need_mana(s_ptr->smana, spell, REALM_MUSIC);
@@ -1420,10 +1421,10 @@ static void check_music(void)
 		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), need_mana, need_mana_frac);
 
 		p_ptr->redraw |= PR_MANA;
-		if (p_ptr->magic_num1[1])
+		if (INTERUPTING_SONG_EFFECT(p_ptr))
 		{
-			p_ptr->magic_num1[0] = p_ptr->magic_num1[1];
-			p_ptr->magic_num1[1] = 0;
+			SINGING_SONG_EFFECT(p_ptr) = INTERUPTING_SONG_EFFECT(p_ptr);
+			INTERUPTING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 			msg_print(_("歌を再開した。", "You restart singing."));
 			p_ptr->action = ACTION_SING;
 
@@ -1553,7 +1554,7 @@ static void process_world_aux_hp_and_sp(void)
 	/* Take damage from cuts */
 	if (p_ptr->cut && !IS_INVULN())
 	{
-		int dam;
+		HIT_POINT dam;
 
 		/* Mortal wound or Deep Gash */
 		if (p_ptr->cut > 1000)
@@ -2318,7 +2319,7 @@ static void process_world_aux_mutation(void)
 	    !p_ptr->anti_magic && (randint1(6666) == 666))
 	{
 		bool pet = one_in_(6);
-		u32b mode = PM_ALLOW_GROUP;
+		BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
@@ -2429,7 +2430,7 @@ static void process_world_aux_mutation(void)
 	    !p_ptr->anti_magic && one_in_(7000))
 	{
 		bool pet = one_in_(3);
-		u32b mode = PM_ALLOW_GROUP;
+		BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
@@ -2509,7 +2510,7 @@ static void process_world_aux_mutation(void)
 	    !p_ptr->anti_magic && one_in_(3000))
 	{
 		bool pet = one_in_(5);
-		u32b mode = PM_ALLOW_GROUP;
+		BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
@@ -2634,7 +2635,7 @@ static void process_world_aux_mutation(void)
 	}
 	if ((p_ptr->muta2 & MUT2_DISARM) && one_in_(10000))
 	{
-		int slot = 0;
+		INVENTORY_IDX slot = 0;
 		object_type *o_ptr = NULL;
 
 		disturb(0, 1);
@@ -2971,8 +2972,8 @@ static void process_world_aux_recharge(void)
 		if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout))
 		{
 			/* Determine how many rods are charging. */
-			int temp = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
-			if (temp > o_ptr->number) temp = o_ptr->number;
+			TIME_EFFECT temp = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
+			if (temp > o_ptr->number) temp = (TIME_EFFECT)o_ptr->number;
 
 			/* Decrease timeout by that number. */
 			o_ptr->timeout -= temp;
@@ -3016,7 +3017,7 @@ static void process_world_aux_recharge(void)
 		if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout))
 		{
 			/* Charge it */
-			o_ptr->timeout -= o_ptr->number;
+			o_ptr->timeout -= (TIME_EFFECT)o_ptr->number;
 
 			/* Boundary control. */
 			if (o_ptr->timeout < 0) o_ptr->timeout = 0;
@@ -3205,7 +3206,7 @@ static void process_world_aux_movement(void)
  * @param m_idx 隣接数を調べたいモンスターのID
  * @return 隣接しているモンスターの数
  */
-static int get_monster_crowd_number(int m_idx)
+static int get_monster_crowd_number(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	int my = m_ptr->fy;
@@ -3243,7 +3244,7 @@ static byte get_dungeon_feeling(void)
 {
 	const int base = 10;
 	int rating = 0;
-	int i;
+	IDX i;
 
 	/* Hack -- no feeling in the town */
 	if (!dun_level) return 0;
@@ -3520,7 +3521,7 @@ static void process_world(void)
 			p_ptr->energy_need = 0;
 			battle_monsters();
 		}
-		else if (turn - old_turn == 150*TURNS_PER_TICK)
+		else if (turn - old_turn == 150 * TURNS_PER_TICK)
 		{
 			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle have ended in a draw."));
 			p_ptr->au += kakekin;
@@ -3773,11 +3774,12 @@ static void process_world(void)
 
 	/*
 	 * Nightmare mode activates the TY_CURSE at midnight
-	 *
 	 * Require exact minute -- Don't activate multiple times in a minute
 	 */
+
 	if (ironman_nightmare && (min != prev_min))
 	{
+
 		/* Every 15 minutes after 11:00 pm */
 		if ((hour == 23) && !(min % 15))
 		{
@@ -3807,11 +3809,25 @@ static void process_world(void)
 		/* TY_CURSE activates at midnight! */
 		if (!hour && !min)
 		{
-			int count = 0;
 
 			disturb(1, 1);
 			msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
-			activate_ty_curse(FALSE, &count);
+
+			if (p_ptr->wild_mode)
+			{
+				/* Go into large wilderness view */
+				p_ptr->oldpy = randint1(MAX_HGT - 2);
+				p_ptr->oldpx = randint1(MAX_WID - 2);
+				change_wild_mode();
+
+				/* Give first move to monsters */
+				p_ptr->energy_use = 100;
+
+				/* HACk -- set the encouter flag for the wilderness generation */
+				generate_encounter = TRUE;
+			}
+
+			invoking_midnight_curse = TRUE;
 		}
 	}
 
@@ -3873,7 +3889,7 @@ static void process_world(void)
 			if (p_ptr->food < PY_FOOD_STARVE)
 			{
 				/* Calculate damage */
-				int dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
+				HIT_POINT dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
 
 				/* Take damage */
 				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
@@ -4044,7 +4060,7 @@ extern void do_cmd_borg(void);
  */
 static void process_command(void)
 {
-	int old_now_message = now_message;
+	COMMAND_CODE old_now_message = now_message;
 
 #ifdef ALLOW_REPEAT /* TNB */
 
@@ -4938,7 +4954,7 @@ static void process_command(void)
  * @param r_idx 判定したいモンスター種族のID
  * @return 釣れる対象ならばTRUEを返す
  */
-static bool monster_tsuri(int r_idx)
+static bool monster_tsuri(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -5034,7 +5050,7 @@ static void process_upkeep_with_speed(void)
  */
 static void process_player(void)
 {
-	int i;
+	IDX i;
 
 	/*** Apply energy ***/
 
@@ -5044,6 +5060,13 @@ static void process_player(void)
 
 		(void)gain_random_mutation(0);
 		hack_mutation = FALSE;
+	}
+
+	if (invoking_midnight_curse)
+	{
+		int count = 0;
+		activate_ty_curse(FALSE, &count);
+		invoking_midnight_curse = FALSE;
 	}
 
 	if (p_ptr->inside_battle)
@@ -5079,7 +5102,7 @@ static void process_player(void)
 	if (resting < 0)
 	{
 		/* Basic resting */
-		if (resting == -1)
+		if (resting == COMMAND_ARG_REST_FULL_HEALING)
 		{
 			/* Stop resting */
 			if ((p_ptr->chp == p_ptr->mhp) &&
@@ -5090,7 +5113,7 @@ static void process_player(void)
 		}
 
 		/* Complete resting */
-		else if (resting == -2)
+		else if (resting == COMMAND_ARG_REST_UNTIL_DONE)
 		{
 			/* Stop resting */
 			if ((p_ptr->chp == p_ptr->mhp) &&
@@ -5113,7 +5136,7 @@ static void process_player(void)
 		Term_xtra(TERM_XTRA_DELAY, 10);
 		if (one_in_(1000))
 		{
-			int r_idx;
+			MONRACE_IDX r_idx;
 			bool success = FALSE;
 			get_mon_num_prep(monster_tsuri,NULL);
 			r_idx = get_mon_num(dun_level ? dun_level : wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level);
@@ -5239,13 +5262,13 @@ static void process_player(void)
 	{
 		(void)set_lightspeed(p_ptr->lightspeed - 1, TRUE);
 	}
-	if ((p_ptr->pclass == CLASS_FORCETRAINER) && (p_ptr->magic_num1[0]))
+	if ((p_ptr->pclass == CLASS_FORCETRAINER) && P_PTR_KI)
 	{
-		if (p_ptr->magic_num1[0] < 40)
+		if (P_PTR_KI < 40)
 		{
-			p_ptr->magic_num1[0] = 0;
+			P_PTR_KI = 0;
 		}
-		else p_ptr->magic_num1[0] -= 40;
+		else P_PTR_KI -= 40;
 		p_ptr->update |= (PU_BONUS);
 	}
 	if (p_ptr->action == ACTION_LEARN)
@@ -5603,9 +5626,15 @@ static void process_player(void)
 /*!
  * @brief 現在プレイヤーがいるダンジョンの全体処理 / Interact with the current dungeon level.
  * @return なし
- * @note
+ * @details
+ * <p>
+ * この関数から現在の階層を出る、プレイヤーがキャラが死ぬ、
+ * ゲームを終了するかのいずれかまでループする。
+ * </p>
+ * <p>
  * This function will not exit until the level is completed,\n
  * the user dies, or the game is terminated.\n
+ * </p>
  */
 static void dungeon(bool load_game)
 {
@@ -5615,7 +5644,7 @@ static void dungeon(bool load_game)
 	base_level = dun_level;
 
 	/* Reset various flags */
-	hack_mind = FALSE;
+	is_loading_now = FALSE;
 
 	/* Not leaving */
 	p_ptr->leaving = FALSE;
@@ -5747,8 +5776,8 @@ static void dungeon(bool load_game)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] > MUSIC_DETECT))
-		p_ptr->magic_num1[0] = MUSIC_DETECT;
+	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(p_ptr) > MUSIC_DETECT))
+		SINGING_SONG_EFFECT(p_ptr) = MUSIC_DETECT;
 
 	/* Hack -- notice death or departure */
 	if (!p_ptr->playing || p_ptr->is_dead) return;
@@ -5783,7 +5812,7 @@ static void dungeon(bool load_game)
 	/* Reset the object generation level */
 	object_level = base_level;
 
-	hack_mind = TRUE;
+	is_loading_now = TRUE;
 
 	if (p_ptr->energy_need > 0 && !p_ptr->inside_battle &&
 	    (dun_level || p_ptr->leaving_dungeon || p_ptr->inside_arena))
@@ -5869,9 +5898,6 @@ static void dungeon(bool load_game)
 		/* Hack -- Notice death or departure */
 		if (!p_ptr->playing || p_ptr->is_dead) break;
 
-		/* Handle "leaving" */
-		if (p_ptr->leaving) break;
-
 		/* Count game turns */
 		turn++;
 
@@ -5882,6 +5908,9 @@ static void dungeon(bool load_game)
 		}
 
 		prevent_turn_overflow();
+
+		/* Handle "leaving" */
+		if (p_ptr->leaving) break;
 
 		if (wild_regen) wild_regen--;
 	}
@@ -6016,7 +6045,8 @@ void extract_option_vars(void)
  */
 void determine_bounty_uniques(void)
 {
-	int          i, j, tmp;
+	int i, j;
+	MONRACE_IDX tmp;
 	monster_race *r_ptr;
 
 	get_mon_num_prep(NULL, NULL);
@@ -6110,7 +6140,7 @@ void determine_today_mon(bool conv_old)
  */
 void play_game(bool new_game)
 {
-	int i;
+	MONSTER_IDX i;
 	bool load_game = TRUE;
 	bool init_random_seed = FALSE;
 
@@ -6187,7 +6217,7 @@ void play_game(bool new_game)
 
 		p_ptr->is_dead = TRUE;
 
-		start_time = time(NULL);
+		start_time = (u32b)time(NULL);
 
 		/* No suspending now */
 		signals_ignore_tstp();
@@ -6479,7 +6509,7 @@ void play_game(bool new_game)
 	if (new_game && ((p_ptr->pclass == CLASS_CAVALRY) || (p_ptr->pclass == CLASS_BEASTMASTER)))
 	{
 		monster_type *m_ptr;
-		int pet_r_idx = ((p_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
+		IDX pet_r_idx = ((p_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
 		monster_race *r_ptr = &r_info[pet_r_idx];
 		place_monster_aux(0, p_ptr->y, p_ptr->x - 1, pet_r_idx,
 				  (PM_FORCE_PET | PM_NO_KAGE));
@@ -6589,13 +6619,14 @@ void play_game(bool new_game)
 
 					if (p_ptr->pclass == CLASS_MAGIC_EATER)
 					{
-						for (i = 0; i < EATER_EXT*2; i++)
+						int magic_idx;
+						for (magic_idx = 0; magic_idx < EATER_EXT*2; magic_idx++)
 						{
-							p_ptr->magic_num1[i] = p_ptr->magic_num2[i]*EATER_CHARGE;
+							p_ptr->magic_num1[magic_idx] = p_ptr->magic_num2[magic_idx]*EATER_CHARGE;
 						}
-						for (; i < EATER_EXT*3; i++)
+						for (; magic_idx < EATER_EXT*3; magic_idx++)
 						{
-							p_ptr->magic_num1[i] = 0;
+							p_ptr->magic_num1[magic_idx] = 0;
 						}
 					}
 					/* Restore spell points */

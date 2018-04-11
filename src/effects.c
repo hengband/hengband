@@ -21,7 +21,7 @@
  * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_KAMAE / #ACTION_KATA / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL から選択。
  * @return なし
  */
-void set_action(int typ)
+void set_action(ACTION_IDX typ)
 {
 	int prev_typ = p_ptr->action;
 
@@ -206,8 +206,8 @@ void reset_tim_flags(void)
 
 	if (p_ptr->pclass == CLASS_BARD)
 	{
-		p_ptr->magic_num1[0] = 0;
-		p_ptr->magic_num2[0] = 0;
+		SINGING_SONG_EFFECT(p_ptr) = 0;
+		SINGING_SONG_ID(p_ptr) = 0;
 	}
 }
 
@@ -268,8 +268,8 @@ void dispel_player(void)
 	if (music_singing_any() || hex_spelling_any())
 	{
 		cptr str = (music_singing_any()) ? _("歌", "singing") : _("呪文", "spelling");
-		p_ptr->magic_num1[1] = p_ptr->magic_num1[0];
-		p_ptr->magic_num1[0] = 0;
+		INTERUPTING_SONG_EFFECT(p_ptr) = SINGING_SONG_EFFECT(p_ptr);
+		SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 		msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
 		p_ptr->action = ACTION_NONE;
 
@@ -297,7 +297,7 @@ void dispel_player(void)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_mimic(int v, int p, bool do_dec)
+bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -316,7 +316,7 @@ bool set_mimic(int v, int p, bool do_dec)
 		else if ((!p_ptr->tim_mimic) || (p_ptr->mimic_form != p))
 		{
 			msg_print(_("自分の体が変わってゆくのを感じた。", "You feel that your body changes."));
-			p_ptr->mimic_form=p;
+			p_ptr->mimic_form = p;
 			notice = TRUE;
 		}
 	}
@@ -366,7 +366,7 @@ bool set_mimic(int v, int p, bool do_dec)
  * Note that blindness is currently the only thing which can affect\n
  * "player_can_see_bold()".\n
  */
-bool set_blind(int v)
+bool set_blind(TIME_EFFECT v)
 {
 	bool notice = FALSE;
 
@@ -446,7 +446,7 @@ bool set_blind(int v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_confused(int v)
+bool set_confused(TIME_EFFECT v)
 {
 	bool notice = FALSE;
 
@@ -537,7 +537,7 @@ bool set_confused(int v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_poisoned(int v)
+bool set_poisoned(TIME_EFFECT v)
 {
 	bool notice = FALSE;
 
@@ -591,7 +591,7 @@ bool set_poisoned(int v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_afraid(int v)
+bool set_afraid(TIME_EFFECT v)
 {
 	bool notice = FALSE;
 
@@ -658,7 +658,7 @@ bool set_afraid(int v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_paralyzed(int v)
+bool set_paralyzed(TIME_EFFECT v)
 {
 	bool notice = FALSE;
 
@@ -722,7 +722,7 @@ bool set_paralyzed(int v)
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details Note that we must redraw the map when hallucination changes.
  */
-bool set_image(int v)
+bool set_image(TIME_EFFECT v)
 {
 	bool notice = FALSE;
 
@@ -795,7 +795,7 @@ bool set_image(int v)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_fast(int v, bool do_dec)
+bool set_fast(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -855,7 +855,7 @@ bool set_fast(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_lightspeed(int v, bool do_dec)
+bool set_lightspeed(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -917,7 +917,7 @@ bool set_lightspeed(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_slow(int v, bool do_dec)
+bool set_slow(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -976,7 +976,7 @@ bool set_slow(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_shield(int v, bool do_dec)
+bool set_shield(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1038,7 +1038,7 @@ bool set_shield(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tsubureru(int v, bool do_dec)
+bool set_tsubureru(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1100,7 +1100,7 @@ bool set_tsubureru(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_magicdef(int v, bool do_dec)
+bool set_magicdef(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1161,7 +1161,7 @@ bool set_magicdef(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_blessed(int v, bool do_dec)
+bool set_blessed(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1223,7 +1223,7 @@ bool set_blessed(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_hero(int v, bool do_dec)
+bool set_hero(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1287,7 +1287,7 @@ bool set_hero(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_shero(int v, bool do_dec)
+bool set_shero(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1352,7 +1352,7 @@ bool set_shero(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_protevil(int v, bool do_dec)
+bool set_protevil(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1410,7 +1410,7 @@ bool set_protevil(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_wraith_form(int v, bool do_dec)
+bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1494,7 +1494,7 @@ bool set_wraith_form(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_invuln(int v, bool do_dec)
+bool set_invuln(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1580,7 +1580,7 @@ bool set_invuln(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_esp(int v, bool do_dec)
+bool set_tim_esp(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1644,7 +1644,7 @@ bool set_tim_esp(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_invis(int v, bool do_dec)
+bool set_tim_invis(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1708,7 +1708,7 @@ bool set_tim_invis(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_infra(int v, bool do_dec)
+bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1772,7 +1772,7 @@ bool set_tim_infra(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_regen(int v, bool do_dec)
+bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1833,7 +1833,7 @@ bool set_tim_regen(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_stealth(int v, bool do_dec)
+bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -1954,7 +1954,7 @@ bool set_superstealth(bool set)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_levitation(int v, bool do_dec)
+bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2015,7 +2015,7 @@ bool set_tim_levitation(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_touki(int v, bool do_dec)
+bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2073,7 +2073,7 @@ bool set_tim_sh_touki(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_fire(int v, bool do_dec)
+bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2134,7 +2134,7 @@ bool set_tim_sh_fire(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_holy(int v, bool do_dec)
+bool set_tim_sh_holy(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2195,7 +2195,7 @@ bool set_tim_sh_holy(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_eyeeye(int v, bool do_dec)
+bool set_tim_eyeeye(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2257,7 +2257,7 @@ bool set_tim_eyeeye(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_resist_magic(int v, bool do_dec)
+bool set_resist_magic(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2318,7 +2318,7 @@ bool set_resist_magic(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_reflect(int v, bool do_dec)
+bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2377,7 +2377,7 @@ bool set_tim_reflect(int v, bool do_dec)
 /*
  * Set "p_ptr->multishadow", notice observable changes
  */
-bool set_multishadow(int v, bool do_dec)
+bool set_multishadow(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2438,7 +2438,7 @@ bool set_multishadow(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_dustrobe(int v, bool do_dec)
+bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2499,7 +2499,7 @@ bool set_dustrobe(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_kabenuke(int v, bool do_dec)
+bool set_kabenuke(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2560,7 +2560,7 @@ bool set_kabenuke(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tsuyoshi(int v, bool do_dec)
+bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2630,7 +2630,7 @@ bool set_tsuyoshi(int v, bool do_dec)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_ele_attack(u32b attack_type, int v)
+bool set_ele_attack(u32b attack_type, TIME_EFFECT v)
 {
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -2710,7 +2710,7 @@ bool set_ele_attack(u32b attack_type, int v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_ele_immune(u32b immune_type, int v)
+bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
 {
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -2790,7 +2790,7 @@ bool set_ele_immune(u32b immune_type, int v)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_acid(int v, bool do_dec)
+bool set_oppose_acid(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2848,7 +2848,7 @@ bool set_oppose_acid(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_elec(int v, bool do_dec)
+bool set_oppose_elec(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2906,7 +2906,7 @@ bool set_oppose_elec(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_fire(int v, bool do_dec)
+bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -2965,7 +2965,7 @@ bool set_oppose_fire(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_cold(int v, bool do_dec)
+bool set_oppose_cold(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -3023,7 +3023,7 @@ bool set_oppose_cold(int v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_pois(int v, bool do_dec)
+bool set_oppose_pois(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -3083,7 +3083,7 @@ bool set_oppose_pois(int v, bool do_dec)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool set_stun(int v)
+bool set_stun(TIME_EFFECT v)
 {
 	int old_aux, new_aux;
 	bool notice = FALSE;
@@ -3247,7 +3247,7 @@ bool set_stun(int v)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool set_cut(int v)
+bool set_cut(TIME_EFFECT v)
 {
 	int old_aux, new_aux;
 	bool notice = FALSE;
@@ -3467,7 +3467,7 @@ bool set_cut(int v)
  * game turns, or 500/(100/5) = 25 player turns (if nothing else is
  * affecting the player speed).\n
  */
-bool set_food(int v)
+bool set_food(TIME_EFFECT v)
 {
 	int old_aux, new_aux;
 
@@ -3652,7 +3652,7 @@ bool set_food(int v)
  */
 bool inc_stat(int stat)
 {
-	int value, gain;
+	BASE_STATUS value, gain;
 
 	/* Then augment the current/max stat */
 	value = p_ptr->stat_cur[stat];
@@ -3728,7 +3728,9 @@ bool inc_stat(int stat)
  */
 bool dec_stat(int stat, int amount, int permanent)
 {
-	int cur, max, loss, same, res = FALSE;
+	BASE_STATUS cur, max;
+	int loss, same;
+	bool res = FALSE;
 
 
 	/* Acquire current value */
@@ -4188,7 +4190,7 @@ void do_poly_wounds(void)
 /*
  * Change player race
  */
-void change_race(int new_race, cptr effect_msg)
+void change_race(CHARACTER_IDX new_race, cptr effect_msg)
 {
 	cptr title = race_info[new_race].title;
 	int  old_race = p_ptr->prace;
@@ -4260,7 +4262,7 @@ void do_poly_self(void)
 	if ((power > randint0(20)) && one_in_(3) && (p_ptr->prace != RACE_ANDROID))
 	{
 		char effect_msg[80] = "";
-		int new_race;
+		CHARACTER_IDX new_race;
 
 		/* Some form of racial polymorph... */
 		power -= 10;
@@ -4327,7 +4329,7 @@ void do_poly_self(void)
 
 		do
 		{
-			new_race = randint0(MAX_RACES);
+			new_race = (CHARACTER_IDX)randint0(MAX_RACES);
 		}
 		while ((new_race == p_ptr->prace) || (new_race == RACE_ANDROID));
 
@@ -4395,7 +4397,7 @@ void do_poly_self(void)
  * setting the player to "dead".
  */
 
-int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
+int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 {
 	int old_chp = p_ptr->chp;
 
@@ -4577,7 +4579,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 				         !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 					strcpy(buf,_("クエスト", "in a quest"));
 				else
-					sprintf(buf,_("%d階", "level %d"), dun_level);
+					sprintf(buf,_("%d階", "level %d"), (int)dun_level);
 
 				sprintf(tmp, _("%sで%sに殺された。", "killed by %s %s."), buf, p_ptr->died_from);
 				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, tmp);
@@ -4922,7 +4924,7 @@ bool drain_exp(s32b drain, s32b slip, int hold_exp_prob)
 }
 
 
-bool set_ultimate_res(int v, bool do_dec)
+bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -4977,7 +4979,7 @@ bool set_ultimate_res(int v, bool do_dec)
 	return (TRUE);
 }
 
-bool set_tim_res_nether(int v, bool do_dec)
+bool set_tim_res_nether(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -5032,7 +5034,7 @@ bool set_tim_res_nether(int v, bool do_dec)
 	return (TRUE);
 }
 
-bool set_tim_res_time(int v, bool do_dec)
+bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 
@@ -5163,7 +5165,7 @@ bool choose_ele_attack(void)
 /*
  * Choose a elemental immune. -LM-
  */
-bool choose_ele_immune(int immune_turn)
+bool choose_ele_immune(TIME_EFFECT immune_turn)
 {
 	char choice;
 

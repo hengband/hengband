@@ -1,76 +1,102 @@
-﻿/* File: main-win.c */
-
-/*
- * Copyright (c) 1997 Ben Harrison, Skirmantas Kligys, and others
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.
- */
-
-
-/*
- * This file helps Angband work with Windows computers.
- *
- * To use this file, use an appropriate "Makefile" or "Project File",
- * make sure that "WINDOWS" and/or "WIN32" are defined somewhere, and
- * make sure to obtain various extra files as described below.
- *
- * The official compilation uses the CodeWarrior Pro compiler, which
- * includes a special project file and precompilable header file.
- *
- *
- * See also "main-dos.c" and "main-ibm.c".
- *
- *
- * The "lib/user/pref-win.prf" file contains keymaps, macro definitions,
- * and/or color redefinitions.
- *
- * The "lib/user/font-win.prf" contains attr/char mappings for use with the
- * normal "lib/xtra/font/*.fon" font files.
- *
- * The "lib/user/graf-win.prf" contains attr/char mappings for use with the
- * special "lib/xtra/graf/*.bmp" bitmap files, which are activated by a menu
- * item.
- *
- *
- * Compiling this file, and using the resulting executable, requires
- * several extra files not distributed with the standard Angband code.
- * If "USE_GRAPHICS" is defined, then "readdib.h" and "readdib.c" must
- * be placed into "src/", and the "8X8.BMP" bitmap file must be placed
- * into "lib/xtra/graf".  In any case, some "*.fon" files (including
- * "8X13.FON" if nothing else) must be placed into "lib/xtra/font/".
- * If "USE_SOUND" is defined, then some special library (for example,
- * "winmm.lib") may need to be linked in, and desired "*.WAV" sound
- * files must be placed into "lib/xtra/sound/".  All of these extra
- * files can be found in the "ext-win" archive.
- *
- *
- * The "Term_xtra_win_clear()" function should probably do a low-level
- * clear of the current window, and redraw the borders and other things,
- * if only for efficiency.  XXX XXX XXX
- *
- * A simpler method is needed for selecting the "tile size" for windows.
- * XXX XXX XXX
- *
- * The various "warning" messages assume the existance of the "screen.w"
- * window, I think, and only a few calls actually check for its existance,
- * this may be okay since "NULL" means "on top of all windows". (?)  The
- * user must never be allowed to "hide" the main window, or the "menubar"
- * will disappear.  XXX XXX XXX
- *
- * Special "Windows Help Files" can be placed into "lib/xtra/help/" for
- * use with the "winhelp.exe" program.  These files *may* be available
- * at the ftp site somewhere, but I have not seen them.  XXX XXX XXX
- *
- *
- * Initial framework (and most code) by Ben Harrison (benh@phial.com).
- *
- * Original code by Skirmantas Kligys (kligys@scf.usc.edu).
- *
- * Additional code by Ross E Becker (beckerr@cis.ohio-state.edu),
- * and Chris R. Martin (crm7479@tam2000.tamu.edu).
- */
+﻿/*!
+* @file main-win.c
+* @brief Windows版固有実装(メインエントリポイント含む)
+* @date 2018/03/16
+* @author Hengband Team
+* @detail
+*
+* <h3>概要</h3>
+* Windows98かその前後の頃を起点としたAPI実装。
+* 各種のゲームエンジンは無論、
+* DirectXといった昨今描画に標準的となったライブラリも用いていない。
+* タイルの描画処理などについては、現在動作の詳細を検証中。
+*
+* <h3>フォーク元の概要</h3>
+* <p>
+* Copyright (c) 1997 Ben Harrison, Skirmantas Kligys, and others
+*
+* This software may be copied and distributed for educational, research,
+* and not for profit purposes provided that this copyright and statement
+* are included in all such copies.
+* </p>
+* <p>
+* This file helps Angband work with Windows computers.
+*
+* To use this file, use an appropriate "Makefile" or "Project File",
+* make sure that "WINDOWS" and/or "WIN32" are defined somewhere, and
+* make sure to obtain various extra files as described below.
+*
+* The official compilation uses the CodeWarrior Pro compiler, which
+* includes a special project file and precompilable header file.
+* </p>
+*
+* <p>
+* <del>See also "main-dos.c" and "main-ibm.c".</del>
+* </p>
+*
+* <p>
+* The "lib/user/pref-win.prf" file contains keymaps, macro definitions,
+* and/or color redefinitions.
+* </p>
+*
+* <p>
+* The "lib/user/font-win.prf" contains attr/char mappings for use with the
+* normal "lib/xtra/font/*.fon" font files.
+* </p>
+*
+* <p>
+* The "lib/user/graf-win.prf" contains attr/char mappings for use with the
+* special "lib/xtra/graf/*.bmp" bitmap files, which are activated by a menu
+* item.
+* </p>
+*
+* <p>
+* Compiling this file, and using the resulting executable, requires
+* several extra files not distributed with the standard Angband code.
+* If "USE_GRAPHICS" is defined, then "readdib.h" and "readdib.c" must
+* be placed into "src/", and the "8X8.BMP" bitmap file must be placed
+* into "lib/xtra/graf".  In any case, some "*.fon" files (including
+* "8X13.FON" if nothing else) must be placed into "lib/xtra/font/".
+* If "USE_SOUND" is defined, then some special library (for example,
+* "winmm.lib") may need to be linked in, and desired "*.WAV" sound
+* files must be placed into "lib/xtra/sound/".  All of these extra
+* files can be found in the "ext-win" archive.
+* </p>
+*
+* <p>
+* The "Term_xtra_win_clear()" function should probably do a low-level
+* clear of the current window, and redraw the borders and other things,
+* if only for efficiency.  XXX XXX XXX
+* </p>
+*
+* <p>
+* A simpler method is needed for selecting the "tile size" for windows.
+* XXX XXX XXX
+* </p>
+*
+* <p>
+* The various "warning" messages assume the existance of the "screen.w"
+* window, I think, and only a few calls actually check for its existance,
+* this may be okay since "NULL" means "on top of all windows". (?)  The
+* user must never be allowed to "hide" the main window, or the "menubar"
+* will disappear.  XXX XXX XXX
+* </p>
+*
+* <p>
+* Special "Windows Help Files" can be placed into "lib/xtra/help/" for
+* use with the "winhelp.exe" program.  These files *may* be available
+* at the ftp site somewhere, but I have not seen them.  XXX XXX XXX
+* </p>
+*
+* <p>
+* Initial framework (and most code) by Ben Harrison (benh@phial.com).
+*
+* Original code by Skirmantas Kligys (kligys@scf.usc.edu).
+*
+* Additional code by Ross E Becker (beckerr@cis.ohio-state.edu),
+* and Chris R. Martin (crm7479@tam2000.tamu.edu).
+* </p>
+*/
 
 #include "angband.h"
 
@@ -351,15 +377,26 @@ unsigned _cdecl _dos_getfileattr(const char *, unsigned *);
  */
 typedef struct _term_data term_data;
 
-/*
- * Extra "term" data
- *
+/*!
+ * @struct _term_data
+ * @brief ターム情報構造体 / Extra "term" data
+ * @details
+ * <p>
+ * pos_x / pos_y は各タームの左上点座標を指す。
+ * </p>
+ * <p>
+ * tile_wid / tile_hgt は[ウィンドウ]メニューのタイルの幅/高さを～を
+ * 1ドットずつ調整するステータスを指す。
+ * また、フォントを変更すると都度自動調整される。
+ * </p>
+ * <p>
  * Note the use of "font_want" for the names of the font file requested by
  * the user, and the use of "font_file" for the currently active font file.
  *
  * The "font_file" is uppercased, and takes the form "8X13.FON", while
  * "font_want" can be in almost any form as long as it could be construed
  * as attempting to represent the name of a font.
+ * </p>
  */
 struct _term_data
 {
@@ -374,11 +411,11 @@ struct _term_data
 
 	uint keys;
 
-	uint rows;	/* int -> uint */
-	uint cols;
+	TERM_POSITION rows;	/* int -> uint */
+	TERM_POSITION cols;
 
-	uint pos_x;
-	uint pos_y;
+	uint pos_x; //!< タームの左上X座標
+	uint pos_y; //!< タームの左上Y座標
 	uint size_wid;
 	uint size_hgt;
 	uint size_ow1;
@@ -400,11 +437,11 @@ struct _term_data
 
 	HFONT font_id;
 
-	uint font_wid;
-	uint font_hgt;
+	int font_wid;  //!< フォント横幅
+	int font_hgt;  //!< フォント縦幅
 
-	uint tile_wid;
-	uint tile_hgt;
+	int tile_wid;  //!< タイル横幅
+	int tile_hgt;  //!< タイル縦幅
 
 	uint map_tile_wid;
 	uint map_tile_hgt;
@@ -491,8 +528,8 @@ static HPALETTE hPal;
 
 /* bg */
 static HBITMAP hBG = NULL;
-static int use_bg = 0;
-static char bg_bitmap_file[1024] = "bg.bmp";
+static int use_bg = 0; //!< 背景使用フラグ、1なら私用。
+static char bg_bitmap_file[1024] = "bg.bmp"; //!< 現在の背景ビットマップファイル名。
 
 #ifdef USE_SAVER
 
@@ -506,10 +543,11 @@ static HWND hwndSaver;
 
 #ifdef USE_GRAPHICS
 
-/*
+/*!
+ * 現在使用中のタイルID(0ならば未使用)
  * Flag set once "graphics" has been initialized
  */
-static bool can_use_graphics = FALSE;
+static byte_hack current_graphics_mode = 0;
 
 /*
  * The global bitmap
@@ -605,8 +643,8 @@ static bool Term_no_press = FALSE;
  */
 static bool mouse_down = FALSE;
 static bool paint_rect = FALSE;
-static int mousex = 0, mousey = 0;
-static int oldx, oldy;
+static TERM_POSITION mousex = 0, mousey = 0;
+static TERM_POSITION oldx, oldy;
 
 
 /*
@@ -761,7 +799,7 @@ static byte special_key_list[] =
 
 /* Function prototype */
 
-static bool is_already_running();
+static bool is_already_running(void);
 
 
 /* bg */
@@ -1314,7 +1352,7 @@ static void load_prefs_aux(int i)
 	/* Window size */
 	if (i == 0)
 	{
-		win_maximized = GetPrivateProfileInt(sec_name, "Maximized", win_maximized, ini_file);
+		win_maximized = (GetPrivateProfileInt(sec_name, "Maximized", win_maximized, ini_file) != 0);
 	}
 
 	/* Window position */
@@ -1326,7 +1364,7 @@ static void load_prefs_aux(int i)
 	/* Window Z position */
 	if (i > 0)
 	{
-		td->posfix = GetPrivateProfileInt(sec_name, "PositionFix", td->posfix, ini_file);
+		td->posfix = (GetPrivateProfileInt(sec_name, "PositionFix", td->posfix, ini_file) != 0);
 	}
 }
 
@@ -1339,10 +1377,10 @@ static void load_prefs(void)
 	int i;
 
 	/* Extract the "arg_graphics" flag */
-	arg_graphics = GetPrivateProfileInt("Angband", "Graphics", GRAPHICS_NONE, ini_file);
+	arg_graphics = (byte_hack)GetPrivateProfileInt("Angband", "Graphics", GRAPHICS_NONE, ini_file);
 
 	/* Extract the "arg_bigtile" flag */
-	arg_bigtile = GetPrivateProfileInt("Angband", "Bigtile", FALSE, ini_file);
+	arg_bigtile = (GetPrivateProfileInt("Angband", "Bigtile", FALSE, ini_file) != 0);
 	use_bigtile = arg_bigtile;
 
 	/* Extract the "arg_sound" flag */
@@ -1381,10 +1419,8 @@ static void load_prefs(void)
  */
 static s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
 {
-	int k = 0;
-
+	s16b k = 0;
 	char *s = buf;
-
 
 	/* Process */
 	while (k < num)
@@ -1502,7 +1538,7 @@ static void load_music_prefs(void)
 		}
 	}
 
-	for (i = 0; i < 1000; i++) /*!< @todo クエスト最大数指定 */
+	for (i = 0; i < max_q_idx; i++)
 	{
 		sprintf(key, "quest%03d", i);
 		GetPrivateProfileString("Quest", key, "", tmp, 1024, ini_path);
@@ -1682,123 +1718,125 @@ static int new_palette(void)
 
 
 #ifdef USE_GRAPHICS
-/*
- * Initialize graphics
+/*!
+ * @brief グラフィクスを初期化する / Initialize graphics
+ * @details
+ * <ul>
+ * <li>メニュー[オプション]＞[グラフィクス]が「なし」以外の時に描画処理を初期化する。</li>
+ * <li>呼び出されるタイミングはロード時、及び同メニューで「なし」以外に変更される毎になる。</li>
+ * </ul>
  */
 static bool init_graphics(void)
 {
 	/* Initialize once */
-	/* if (can_use_graphics != arg_graphics) */
+	char buf[1024];
+	BYTE wid, hgt, twid, thgt, ox, oy;
+	cptr name;
+
+	if (arg_graphics == GRAPHICS_ADAM_BOLT)
 	{
-		char buf[1024];
-		int wid, hgt, twid, thgt, ox, oy;
-		cptr name;
+		wid = 16;
+		hgt = 16;
+		twid = 16;
+		thgt = 16;
+		ox = 0;
+		oy = 0;
+		name = "16X16.BMP";
 
-		if (arg_graphics == GRAPHICS_ADAM_BOLT)
-		{
-			wid = 16;
-			hgt = 16;
-			twid = 16;
-			thgt = 16;
-			ox = 0;
-			oy = 0;
-			name = "16X16.BMP";
+		ANGBAND_GRAF = "new";
+	}
+	else if (arg_graphics == GRAPHICS_HENGBAND)
+	{
+		/*! @todo redraw
+		wid = 64;
+		hgt = 64;
+		twid = 32;
+		thgt = 32;
+		ox = -16;
+		oy = -24;
+		name = "64X64.BMP";
+		*/
 
-			ANGBAND_GRAF = "new";
-		}
-		else if (arg_graphics == GRAPHICS_HENGBAND)
-		{
-			/*! @todo redraw 
-			wid = 64;
-			hgt = 64;
-			twid = 32;
-			thgt = 32;
-			ox = -16;
-			oy = -24;
-			name = "64X64.BMP";
-			*/
+		wid = 32;
+		hgt = 32;
+		twid = 32;
+		thgt = 32;
+		ox = 0;
+		oy = 0;
+		name = "32X32.BMP";
 
-			wid = 32;
-			hgt = 32;
-			twid = 32;
-			thgt = 32;
-			ox = 0;
-			oy = 0;
-			name = "32X32.BMP";
-
-			ANGBAND_GRAF = "ne2";
-		}
-		else
-		{
-			wid = 8;
-			hgt = 8;
-			twid = 8;
-			thgt = 8;
-			ox = 0;
-			oy = 0;
-			name = "8X8.BMP";
-			ANGBAND_GRAF = "old";
-		}
-
-		/* Access the bitmap file */
-		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name);
-
-		/* Load the bitmap or quit */
-		if (!ReadDIB(data[0].w, buf, &infGraph))
-		{
-			plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
-			return (FALSE);
-		}
-
-		/* Save the new sizes */
-		infGraph.CellWidth = wid;
-		infGraph.CellHeight = hgt;
-		infGraph.TileWidth = twid;
-		infGraph.TileHeight = thgt;
-		infGraph.OffsetX = ox;
-		infGraph.OffsetY = oy;
-
-		if (arg_graphics == GRAPHICS_ADAM_BOLT)
-		{
-			/* Access the mask file */
-			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask.bmp");
-
-			/* Load the bitmap or quit */
-			if (!ReadDIB(data[0].w, buf, &infMask))
-			{
-				plog_fmt("Cannot read bitmap file '%s'", buf);
-				return (FALSE);
-			}
-		}
-		if (arg_graphics == GRAPHICS_HENGBAND)
-		{
-			/* Access the mask file */
-			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
-
-			/* Load the bitmap or quit */
-			if (!ReadDIB(data[0].w, buf, &infMask))
-			{
-				plog_fmt("Cannot read bitmap file '%s'", buf);
-				return (FALSE);
-			}
-		}
-
-		/* Activate a palette */
-		if (!new_palette())
-		{
-			/* Free bitmap XXX XXX XXX */
-
-			/* Oops */
-			plog(_("パレットを実現できません！", "Cannot activate palette!"));
-			return (FALSE);
-		}
-
-		/* Graphics available */
-		can_use_graphics = arg_graphics;
+		ANGBAND_GRAF = "ne2";
+	}
+	else
+	{
+		wid = 8;
+		hgt = 8;
+		twid = 8;
+		thgt = 8;
+		ox = 0;
+		oy = 0;
+		name = "8X8.BMP";
+		ANGBAND_GRAF = "old";
 	}
 
+	/* Access the bitmap file */
+	path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name);
+
+	/* Load the bitmap or quit */
+	if (!ReadDIB(data[0].w, buf, &infGraph))
+	{
+		plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
+		return (FALSE);
+	}
+
+	/* Save the new sizes */
+	infGraph.CellWidth = wid;
+	infGraph.CellHeight = hgt;
+	infGraph.TileWidth = twid;
+	infGraph.TileHeight = thgt;
+	infGraph.OffsetX = ox;
+	infGraph.OffsetY = oy;
+
+	if (arg_graphics == GRAPHICS_ADAM_BOLT)
+	{
+		/* Access the mask file */
+		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask.bmp");
+
+		/* Load the bitmap or quit */
+		if (!ReadDIB(data[0].w, buf, &infMask))
+		{
+			plog_fmt("Cannot read bitmap file '%s'", buf);
+			return (FALSE);
+		}
+	}
+	if (arg_graphics == GRAPHICS_HENGBAND)
+	{
+		/* Access the mask file */
+		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
+
+		/* Load the bitmap or quit */
+		if (!ReadDIB(data[0].w, buf, &infMask))
+		{
+			plog_fmt("Cannot read bitmap file '%s'", buf);
+			return (FALSE);
+		}
+	}
+
+	/* Activate a palette */
+	if (!new_palette())
+	{
+		/* Free bitmap XXX XXX XXX */
+
+		/* Oops */
+		plog(_("パレットを実現できません！", "Cannot activate palette!"));
+		return (FALSE);
+	}
+
+	/* Graphics available */
+	current_graphics_mode = arg_graphics;
+
 	/* Result */
-	return (can_use_graphics);
+	return (current_graphics_mode);
 }
 #endif /* USE_GRAPHICS */
 
@@ -2314,7 +2352,7 @@ static errr Term_xtra_win_react(void)
 		term_data *td = &data[i];
 
 		/* Update resized windows */
-		if ((td->cols != (uint)td->t.wid) || (td->rows != (uint)td->t.hgt))
+		if ((td->cols != td->t.wid) || (td->rows != td->t.hgt))
 		{
 			/* Activate */
 			Term_activate(&td->t);
@@ -3199,11 +3237,13 @@ static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, c
 static void windows_map(void)
 {
 	term_data *td = &data[0];
-	byte a, c;
+	byte a;
+	char c;
 	int x, min_x, max_x;
 	int y, min_y, max_y;
 
-	byte ta, tc;
+	byte ta;
+	char tc;
 
 	/* Only in graphics mode */
 	if (!use_graphics) return;
@@ -4292,7 +4332,7 @@ static void process_menus(WORD wCmd)
 
 		case IDM_OPTIONS_BIGTILE:
 		{
-			term_data *td = &data[0];
+			td = &data[0];
 
 			/* Paranoia */
 			if (!inkey_flag)
@@ -4738,11 +4778,11 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 		{
 			HGLOBAL hGlobal;
 			LPSTR lpStr;
-			int i, j, sz;
-			int dx = abs(oldx - mousex) + 1;
-			int dy = abs(oldy - mousey) + 1;
-			int ox = (oldx > mousex) ? mousex : oldx;
-			int oy = (oldy > mousey) ? mousey : oldy;
+			int j, sz;
+			TERM_POSITION dx = abs(oldx - mousex) + 1;
+			TERM_POSITION dy = abs(oldy - mousey) + 1;
+			TERM_POSITION ox = (oldx > mousex) ? mousex : oldx;
+			TERM_POSITION oy = (oldy > mousey) ? mousey : oldy;
 
 			mouse_down = FALSE;
 			paint_rect = FALSE;
@@ -4947,8 +4987,8 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 
 				case SIZE_RESTORED:
 				{
-					uint cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
-					uint rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
+					TERM_POSITION cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
+					TERM_POSITION rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
 
 					/* New size */
 					if ((td->cols != cols) || (td->rows != rows))
@@ -5125,8 +5165,8 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 		case WM_SIZE:
 		{
-			uint cols;
-			uint rows;
+			TERM_POSITION cols;
+			TERM_POSITION rows;
 			
 			/* this message was sent before WM_NCCREATE */
 			if (!td) return 1;
@@ -5625,7 +5665,7 @@ static void init_stuff(void)
 	/* validate_dir(ANGBAND_DIR_XTRA_HELP); */
 }
 
-static bool is_already_running()
+static bool is_already_running(void)
 {
 	bool result = FALSE;
 	HANDLE hMutex;

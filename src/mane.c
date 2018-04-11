@@ -21,7 +21,7 @@ static int damage;
  * @param dam ものまねの威力
  * @return なし
  */
-static void mane_info(char *p, int power, int dam)
+static void mane_info(char *p, int power, HIT_POINT dam)
 {
 	int plev = p_ptr->lev;
 #ifdef JP
@@ -39,7 +39,7 @@ static void mane_info(char *p, int power, int dam)
 	strcpy(p, "");
 
 	if ((power > 2 && power < 41) || (power > 41 && power < 59) || (power == 75))
-		sprintf(p, " %s%d", s_dam, dam);
+		sprintf(p, " %s%d", s_dam, (int)dam);
 	else
 	{
 		switch (power)
@@ -215,7 +215,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 		ask = isupper(choice);
 
 		/* Lowercase */
-		if (ask) choice = tolower(choice);
+		if (ask) choice = (char)tolower(choice);
 
 		/* Extract request */
 		i = (islower(choice) ? A2I(choice) : -1);
@@ -276,10 +276,10 @@ static int get_mane_power(int *sn, bool baigaesi)
  */
 static bool use_mane(int spell)
 {
-	int             dir;
-	int             plev = p_ptr->lev;
-	u32b mode = (PM_ALLOW_GROUP | PM_FORCE_PET);
-	u32b u_mode = 0L;
+	DIRECTION dir;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	BIT_FLAGS mode = (PM_ALLOW_GROUP | PM_FORCE_PET);
+	BIT_FLAGS u_mode = 0L;
 
 	if (randint1(50+plev) < plev/10) u_mode = PM_ALLOW_UNIQUE;
 
@@ -295,7 +295,7 @@ static bool use_mane(int spell)
 		break;
 	case MS_DISPEL:
 	{
-		int m_idx;
+		MONSTER_IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;
@@ -734,7 +734,7 @@ static bool use_mane(int spell)
 		break;
 	case MS_TELE_LEVEL:
 	{
-		int target_m_idx;
+		IDX target_m_idx;
 		monster_type *m_ptr;
 		monster_race *r_ptr;
 		char m_name[80];

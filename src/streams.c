@@ -33,7 +33,7 @@
  * @param width 基本幅
  * @return なし
  */
-static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2, int width)
+static void recursive_river(int x1, int y1, int x2, int y2, IDX feat1, IDX feat2, int width)
 {
 	int dx, dy, length, l, x, y;
 	int changex, changey;
@@ -155,11 +155,11 @@ static void recursive_river(int x1, int y1, int x2, int y2, int feat1, int feat2
  * @param feat2 境界部地形ID
  * @return なし
  */
-void add_river(int feat1, int feat2)
+void add_river(IDX feat1, IDX feat2)
 {
-	int y2, x2;
-	int y1 = 0, x1 = 0;
-	int wid;
+	POSITION y2, x2;
+	POSITION y1 = 0, x1 = 0;
+	POSITION wid;
 
 
 	/* Hack -- Choose starting point */
@@ -226,7 +226,7 @@ void add_river(int feat1, int feat2)
  * hidden gold types are currently unused.
  * </pre>
  */
-void build_streamer(int feat, int chance)
+void build_streamer(IDX feat, int chance)
 {
 	int		i, tx, ty;
 	int		y, x, dir;
@@ -389,7 +389,7 @@ void build_streamer(int feat, int chance)
  * This happens in real world lava tubes.
  * </pre>
  */
-void place_trees(int x, int y)
+void place_trees(POSITION x, POSITION y)
 {
 	int i, j;
 	cave_type *c_ptr;

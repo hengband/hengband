@@ -115,7 +115,7 @@ static bool do_cmd_archer(void)
 			q_ptr = &forge;
 
 			/* Hack -- Give the player some small firestones */
-			object_prep(q_ptr, lookup_kind(TV_SHOT, m_bonus(1, p_ptr->lev) + 1));
+			object_prep(q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, p_ptr->lev) + 1));
 			q_ptr->number = (byte)rand_range(15,30);
 			object_aware(q_ptr);
 			object_known(q_ptr);
@@ -139,7 +139,7 @@ static bool do_cmd_archer(void)
 	/**********Create arrows*********/
 	else if (ext == 2)
 	{
-		int item;
+		OBJECT_IDX item;
 		cptr q, s;
 		s16b slot;
 
@@ -166,7 +166,7 @@ static bool do_cmd_archer(void)
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
-		object_prep(q_ptr, lookup_kind(TV_ARROW, m_bonus(1, p_ptr->lev)+ 1));
+		object_prep(q_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, p_ptr->lev)+ 1));
 		q_ptr->number = (byte)rand_range(5, 10);
 		object_aware(q_ptr);
 		object_known(q_ptr);
@@ -198,7 +198,7 @@ static bool do_cmd_archer(void)
 	/**********Create bolts*********/
 	else if (ext == 3)
 	{
-		int item;
+		OBJECT_IDX item;
 		cptr q, s;
 		s16b slot;
 
@@ -225,7 +225,7 @@ static bool do_cmd_archer(void)
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
-		object_prep(q_ptr, lookup_kind(TV_BOLT, m_bonus(1, p_ptr->lev)+1));
+		object_prep(q_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, p_ptr->lev)+1));
 		q_ptr->number = (byte)rand_range(4, 8);
 		object_aware(q_ptr);
 		object_known(q_ptr);
@@ -263,8 +263,8 @@ static bool do_cmd_archer(void)
  */
 bool gain_magic(void)
 {
-	int item;
-	int pval;
+	OBJECT_IDX item;
+	PARAMETER_VALUE pval;
 	int ext = 0;
 	cptr q, s;
 	object_type *o_ptr;
@@ -318,7 +318,7 @@ bool gain_magic(void)
 
 	if (o_ptr->tval == TV_ROD)
 	{
-		p_ptr->magic_num2[o_ptr->sval + ext] += o_ptr->number;
+		p_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)o_ptr->number;
 		if (p_ptr->magic_num2[o_ptr->sval + ext] > 99) p_ptr->magic_num2[o_ptr->sval + ext] = 99;
 	}
 	else
@@ -334,7 +334,7 @@ bool gain_magic(void)
 				gain_num = (gain_num/3 + randint0(gain_num/3)) / 256;
 				if (gain_num < 1) gain_num = 1;
 			}
-			p_ptr->magic_num2[o_ptr->sval + ext] += gain_num;
+			p_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)gain_num;
 			if (p_ptr->magic_num2[o_ptr->sval + ext] > 99) p_ptr->magic_num2[o_ptr->sval + ext] = 99;
 			p_ptr->magic_num1[o_ptr->sval + ext] += pval * 0x10000;
 			if (p_ptr->magic_num1[o_ptr->sval + ext] > 99 * 0x10000) p_ptr->magic_num1[o_ptr->sval + ext] = 99 * 0x10000;
@@ -603,7 +603,7 @@ typedef struct power_desc_type power_desc_type;
 struct power_desc_type
 {
 	char name[40];
-	int  level;
+	PLAYER_LEVEL level;
 	int  cost;
 	int  stat;
 	int  fail;
@@ -618,7 +618,7 @@ struct power_desc_type
  */
 static int racial_chance(power_desc_type *pd_ptr)
 {
-	s16b min_level  = pd_ptr->level;
+	PLAYER_LEVEL min_level  = pd_ptr->level;
 	int  difficulty = pd_ptr->fail;
 
 	int i;
@@ -752,7 +752,7 @@ static int racial_aux(power_desc_type *pd_ptr)
  * @brief レイシャル・パワー発動時に口を使う継続的な詠唱処理を中断する
  * @return なし
  */
-void ratial_stop_mouth()
+void ratial_stop_mouth(void)
 {
 	if (music_singing_any()) stop_singing();
 	if (hex_spelling_any()) stop_hex_spell_all();
@@ -1027,7 +1027,7 @@ static bool cmd_racial_power_aux(s32b command)
 		case CLASS_BARD:
 		{
 			/* Singing is already stopped */
-			if (!p_ptr->magic_num1[0] && !p_ptr->magic_num1[1]) return FALSE;
+			if (!SINGING_SONG_EFFECT(p_ptr) && !INTERUPTING_SONG_EFFECT(p_ptr)) return FALSE;
 
 			stop_singing();
 			p_ptr->energy_use = 10;
@@ -1714,9 +1714,10 @@ static bool cmd_racial_power_aux(s32b command)
 void do_cmd_racial_power(void)
 {
 	power_desc_type power_desc[36];
-	int             num, i = 0;
-	int             ask = TRUE;
-	int             lvl = p_ptr->lev;
+	int num;
+	COMMAND_CODE i = 0;
+	int ask = TRUE;
+	PLAYER_LEVEL lvl = p_ptr->lev;
 	bool            flag, redraw, cast = FALSE;
 	bool            warrior = ((p_ptr->pclass == CLASS_WARRIOR || p_ptr->pclass == CLASS_BERSERKER) ? TRUE : FALSE);
 	char            choice;
@@ -2849,7 +2850,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 				ask = (isupper(choice));
 
 				/* Lowercase */
-				if (ask) choice = tolower(choice);
+				if (ask) choice = (char)tolower(choice);
 
 				/* Extract request */
 				i = (islower(choice) ? A2I(choice) : -1);

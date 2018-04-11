@@ -67,7 +67,7 @@ static bool int_outof(monster_race *r_ptr, int prob)
  * @param f6p モンスター魔法のフラグリスト3
  * @return なし
  */
-static void remove_bad_spells(int m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
+static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -509,9 +509,9 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
+void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
   {
-    int flg;
+    BIT_FLAGS flg;
     bool learnable = spell_learnable(m_idx);
 
     switch (target_type)
@@ -540,9 +540,9 @@ void bolt(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
+void beam(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
 {
-    int flg;
+    BIT_FLAGS flg = 0;
     bool learnable = spell_learnable(m_idx);
 
     switch (target_type)
@@ -574,12 +574,12 @@ void beam(int m_idx, int y, int x, int typ, int dam_hp, int monspell, int target
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void breath(int y, int x, int m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type)
+void breath(int y, int x, MONSTER_IDX m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type)
 {
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool learnable = spell_learnable(m_idx);
-	int flg = 0x00;
+	BIT_FLAGS flg = 0x00;
 
     switch (target_type)
     {
@@ -959,7 +959,7 @@ static bool spell_dispel(byte spell)
  * @param m_idx モンスターの構造体配列ID
  * @return 魔力消去をかけるべきならTRUEを返す。
  */
-bool dispel_check(int m_idx)
+bool dispel_check(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1076,7 +1076,7 @@ bool dispel_check(int m_idx)
  *\n
  * This function may well be an efficiency bottleneck.\n
  */
-static int choose_attack_spell(int m_idx, byte spells[], byte num)
+static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1305,7 +1305,7 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num)
  * @param spell 判定対象のID
  * @return 非魔術的な特殊技能ならばTRUEを返す。
  */
-bool spell_is_inate(u16b spell)
+bool spell_is_inate(SPELL_IDX spell)
 {
 	if (spell < 32 * 4) /* Set RF4 */
 	{
@@ -1334,8 +1334,8 @@ bool spell_is_inate(u16b spell)
  * @param path_check 射線を判定するための関数ポインタ
  * @return 有効な座標があった場合TRUEを返す
  */
-static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
-	int f_flag, bool (*path_check)(int, int, int, int))
+static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
+	int f_flag, bool (*path_check)(POSITION, POSITION, POSITION, POSITION))
 {
 	int i;
 	int tonari;
@@ -1439,11 +1439,14 @@ static bool adjacent_grid_check(monster_type *m_ptr, int *yp, int *xp,
  * Note the special "MFLAG_NICE" flag, which prevents a monster from using\n
  * any spell attacks until the player has had a single chance to move.\n
  */
-bool make_attack_spell(int m_idx)
+bool make_attack_spell(MONSTER_IDX m_idx)
 {
-	int             k, thrown_spell = 0, rlev, failrate;
+	int k;
+	SPELL_IDX thrown_spell = 0;
+	DEPTH rlev;
+	PERCENTAGE failrate;
 	byte            spell[96], num = 0;
-	u32b            f4, f5, f6;
+	BIT_FLAGS f4, f5, f6;
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	char            m_name[80];
@@ -1455,12 +1458,12 @@ bool make_attack_spell(int m_idx)
 	int             dam = 0;
 
 	/* Target location */
-	int x = p_ptr->x;
-	int y = p_ptr->y;
+	POSITION x = p_ptr->x;
+	POSITION y = p_ptr->y;
 
 	/* Target location for lite breath */
-	int x_br_lite = 0;
-	int y_br_lite = 0;
+	POSITION x_br_lite = 0;
+	POSITION y_br_lite = 0;
 
 	/* Extract the "see-able-ness" */
     bool seen = (!p_ptr->blind && m_ptr->ml);

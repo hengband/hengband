@@ -18,7 +18,7 @@
  * @param tval 魔法書のtval
  * @return 領域魔法の技能名称を保管した文字列ポインタ
  */
-cptr spell_category_name(int tval)
+cptr spell_category_name(OBJECT_TYPE_VALUE tval)
 {
 	switch (tval)
 	{
@@ -64,19 +64,20 @@ bool select_the_force = FALSE;
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm)
+static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
 {
 	int         i;
-	int         spell = -1;
+	SPELL_IDX   spell = -1;
 	int         num = 0;
 	int         ask = TRUE;
-	int         need_mana;
-	byte        spells[64];
+	MANA_POINT  need_mana;
+	SPELL_IDX   spells[64];
 	bool        flag, redraw, okay;
 	char        choice;
 	const magic_type  *s_ptr;
 	char        out_val[160];
 	cptr        p;
+	COMMAND_CODE code;
 #ifdef JP
 	char jverb_buf[128];
 #endif
@@ -85,8 +86,9 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the spell, if available */
-	if (repeat_pull(sn))
+	if (repeat_pull(&code))
 	{
+		*sn = (SPELL_IDX)code;
 		/* Verify the spell */
 		if (spell_okay(*sn, learned, FALSE, use_realm))
 		{
@@ -242,7 +244,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 			ask = (isupper(choice));
 
 			/* Lowercase */
-			if (ask) choice = tolower(choice);
+			if (ask) choice = (char)tolower(choice);
 
 			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);
@@ -338,7 +340,7 @@ static int get_spell(int *sn, cptr prompt, int sval, bool learned, int use_realm
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	repeat_push(*sn);
+	repeat_push((COMMAND_CODE)spell);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -406,14 +408,16 @@ static bool player_has_no_spellbooks(void)
  */
 static void confirm_use_force(bool browse_only)
 {
-	int  item;
+	INVENTORY_IDX item;
 	char which;
+	COMMAND_CODE code;
 
 #ifdef ALLOW_REPEAT
 
 	/* Get the item index */
-	if (repeat_pull(&item) && (item == INVEN_FORCE))
+	if (repeat_pull(&code) && (code == INVEN_FORCE))
 	{
+		item = (INVENTORY_IDX)code;
 		browse_only ? do_cmd_mind_browse() : do_cmd_mind();
 		return;
 	}
@@ -466,12 +470,15 @@ static void confirm_use_force(bool browse_only)
  */
 void do_cmd_browse(void)
 {
-	int		item, sval, use_realm = 0, j, line;
-	int		spell = -1;
-	int		num = 0;
+	OBJECT_IDX item;
+	OBJECT_SUBTYPE_VALUE sval;
+	REALM_IDX use_realm = 0;
+	int j, line;
+	SPELL_IDX spell = -1;
+	int num = 0;
 
-	byte		spells[64];
-	char            temp[62*4];
+	SPELL_IDX spells[64];
+	char temp[62*4];
 
 	object_type	*o_ptr;
 
@@ -612,7 +619,7 @@ void do_cmd_browse(void)
  * @param next_realm 変更先の魔法領域ID
  * @return なし
  */
-static void change_realm2(int next_realm)
+static void change_realm2(CHARACTER_IDX next_realm)
 {
 	int i, j = 0;
 	char tmp[80];
@@ -654,12 +661,14 @@ static void change_realm2(int next_realm)
  */
 void do_cmd_study(void)
 {
-	int	i, item, sval;
+	int	i;
+	OBJECT_IDX item;
+	OBJECT_SUBTYPE_VALUE sval;
 	int	increment = 0;
 	bool    learned = FALSE;
 
 	/* Spells of realm2 will have an increment of +32 */
-	int	spell = -1;
+	SPELL_IDX spell = -1;
 
 	cptr p = spell_category_name(mp_ptr->spell_book);
 
@@ -1051,18 +1060,18 @@ static void wild_magic(int spell)
  */
 void do_cmd_cast(void)
 {
-	int	item, sval, spell, realm;
+	OBJECT_IDX item;
+	OBJECT_SUBTYPE_VALUE sval;
+	SPELL_IDX spell;
+	REALM_IDX realm;
 	int	chance;
 	int	increment = 0;
-	int	use_realm;
-	int	need_mana;
+	REALM_IDX use_realm;
+	MANA_POINT need_mana;
 
 	cptr prayer;
-
 	object_type	*o_ptr;
-
 	const magic_type *s_ptr;
-
 	cptr q, s;
 
 	bool over_exerted = FALSE;
@@ -1592,7 +1601,7 @@ void check_pets_num_and_align(monster_type *m_ptr, bool inc)
 int calculate_upkeep(void)
 {
 	s32b old_friend_align = friend_align;
-	int m_idx;
+	MONSTER_IDX m_idx;
 	bool have_a_unique = FALSE;
 	s32b total_friend_levels = 0;
 
@@ -1655,13 +1664,14 @@ void do_cmd_pet_dismiss(void)
 {
 	monster_type	*m_ptr;
 	bool		all_pets = FALSE;
-	int pet_ctr, i;
+	MONSTER_IDX pet_ctr;
+	int i;
 	int Dismissed = 0;
 
-	u16b *who;
+	MONSTER_IDX *who;
 	u16b dummy_why;
 	int max_pet = 0;
-	int cu, cv;
+	bool_hack cu, cv;
 
 	cu = Term->scr->cu;
 	cv = Term->scr->cv;
@@ -1669,7 +1679,7 @@ void do_cmd_pet_dismiss(void)
 	Term->scr->cv = 1;
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_m_idx, u16b);
+	C_MAKE(who, max_m_idx, MONSTER_IDX);
 
 	/* Process the monsters (backwards) */
 	for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
@@ -1778,7 +1788,7 @@ void do_cmd_pet_dismiss(void)
 	Term->scr->cv = cv;
 	Term_fresh();
 
-	C_KILL(who, max_m_idx, u16b);
+	C_KILL(who, max_m_idx, MONSTER_IDX);
 
 #ifdef JP
 	msg_format("%d 体のペットを放しました。", Dismissed);
@@ -1800,7 +1810,7 @@ static bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
 {
 	bool p_can_enter;
 	bool old_character_xtra = character_xtra;
-	int  old_riding = p_ptr->riding;
+	MONSTER_IDX old_riding = p_ptr->riding;
 	bool old_riding_ryoute = p_ptr->riding_ryoute;
 	bool old_old_riding_ryoute = p_ptr->old_riding_ryoute;
 	bool old_pf_ryoute = (p_ptr->pet_extra_flags & PF_RYOUTE) ? TRUE : FALSE;
@@ -1839,7 +1849,7 @@ static bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
  * @param force TRUEならば強制的に落馬する
  * @return 実際に落馬したらTRUEを返す
  */
-bool rakuba(int dam, bool force)
+bool rakuba(HIT_POINT dam, bool force)
 {
 	int i, y, x, oy, ox;
 	int sn = 0, sy = 0, sx = 0;
@@ -2201,7 +2211,7 @@ static void do_name_pet(void)
  */
 void do_cmd_pet(void)
 {
-	int			i = 0;
+	COMMAND_CODE i = 0;
 	int			num;
 	int			powers[36];
 	cptr			power_desc[36];
@@ -2211,7 +2221,7 @@ void do_cmd_pet(void)
 	int			pet_ctr;
 	monster_type	*m_ptr;
 
-	int mode = 0;
+	PET_COMMAND_IDX mode = 0;
 
 	char buf[160];
 	char target_buf[160];
@@ -2468,7 +2478,7 @@ void do_cmd_pet(void)
 			if (!redraw || use_menu)
 			{
 				byte y = 1, x = 0;
-				int ctr = 0;
+				PET_COMMAND_IDX ctr = 0;
 
 				/* Show list */
 				redraw = TRUE;
@@ -2515,7 +2525,7 @@ void do_cmd_pet(void)
 			ask = (isupper(choice));
 
 			/* Lowercase */
-			if (ask) choice = tolower(choice);
+			if (ask) choice = (char)tolower(choice);
 
 			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);

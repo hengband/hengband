@@ -471,7 +471,7 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
 	int number;
 
 	bool small;
-	u32b mode = AM_GOOD;
+	BIT_FLAGS mode = AM_GOOD;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -578,7 +578,7 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
  * Note that the chest itself is never destroyed.
  * </pre>
  */
-static void chest_trap(int y, int x, s16b o_idx)
+static void chest_trap(POSITION y, POSITION x, KIND_OBJECT_IDX o_idx)
 {
 	int  i, trap;
 
@@ -874,7 +874,7 @@ static bool do_cmd_open_chest(int y, int x, s16b o_idx)
  * @param feat 地形ID
  * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
  */
-static bool is_open(int feat)
+static bool is_open(IDX feat)
 {
 	return have_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(feat, FF_CLOSE));
 }
@@ -891,7 +891,7 @@ static bool is_open(int feat)
  * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
-static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
+static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under)
 {
 	int d, count, xx, yy;
 
@@ -946,9 +946,10 @@ static int count_dt(int *y, int *x, bool (*test)(int feat), bool under)
  * @details
  * If requested, count only trapped chests.
  */
-static int count_chests(int *y, int *x, bool trapped)
+static int count_chests(POSITION *y, POSITION *x, bool trapped)
 {
-	int d, count, o_idx;
+	int d, count;
+	IDX o_idx;
 
 	object_type *o_ptr;
 
@@ -995,7 +996,7 @@ static int count_chests(int *y, int *x, bool trapped)
  * @param x 方角を確認したX座標
  * @return 方向ID
  */
-static int coords_to_dir(int y, int x)
+static DIRECTION coords_to_dir(POSITION y, POSITION x)
 {
 	int d[3][3] = { {7, 4, 1}, {8, 5, 2}, {9, 6, 3} };
 	int dy, dx;
@@ -1119,9 +1120,9 @@ static bool do_cmd_open_aux(int y, int x)
  */
 void do_cmd_open(void)
 {
-	int y, x, dir;
-
-	s16b o_idx;
+	POSITION y, x;
+	DIRECTION dir;
+	IDX o_idx;
 
 	bool more = FALSE;
 
@@ -1295,7 +1296,8 @@ static bool do_cmd_close_aux(int y, int x)
  */
 void do_cmd_close(void)
 {
-	int y, x, dir;
+	POSITION y, x;
+	DIRECTION dir;
 
 	bool more = FALSE;
 
@@ -1956,8 +1958,8 @@ static bool do_cmd_disarm_aux(int y, int x, int dir)
  */
 void do_cmd_disarm(void)
 {
-	int y, x, dir;
-
+	POSITION y, x;
+	DIRECTION dir;
 	s16b o_idx;
 
 	bool more = FALSE;
@@ -1983,8 +1985,7 @@ void do_cmd_disarm(void)
 		/* See if only one target */
 		if (num_traps || num_chests)
 		{
-			bool too_many = (num_traps && num_chests) || (num_traps > 1) ||
-			    (num_chests > 1);
+			bool too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
 			if (!too_many) command_dir = coords_to_dir(y, x);
 		}
 	}
@@ -2511,7 +2512,7 @@ void do_cmd_walk(bool pickup)
 	}
 
 	/* Get a "repeated" direction */
-	if (get_rep_dir(&dir,FALSE))
+	if (get_rep_dir(&dir, FALSE))
 	{
 		/* Take a turn */
 		p_ptr->energy_use = 100;
@@ -2636,7 +2637,7 @@ void do_cmd_rest(void)
 
 	set_action(ACTION_NONE);
 
-	if ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] || p_ptr->magic_num1[1]))
+	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(p_ptr) || INTERUPTING_SONG_EFFECT(p_ptr)))
 	{
 		stop_singing();
 	}
@@ -2662,19 +2663,19 @@ void do_cmd_rest(void)
 		/* Rest until done */
 		if (out_val[0] == '&')
 		{
-			command_arg = (-2);
+			command_arg = COMMAND_ARG_REST_UNTIL_DONE;
 		}
 
 		/* Rest a lot */
 		else if (out_val[0] == '*')
 		{
-			command_arg = (-1);
+			command_arg = COMMAND_ARG_REST_FULL_HEALING;
 		}
 
 		/* Rest some */
 		else
 		{
-			command_arg = atoi(out_val);
+			command_arg = (COMMAND_ARG)atoi(out_val);
 			if (command_arg <= 0) return;
 		}
 	}
@@ -3486,7 +3487,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 				int now_exp = p_ptr->weapon_exp[0][j_ptr->sval];
 				if (now_exp < s_info[p_ptr->pclass].w_max[0][j_ptr->sval])
 				{
-					int amount = 0;
+					SUB_EXP amount = 0;
 					if (now_exp < WEAPON_EXP_BEGINNER) amount = 80;
 					else if (now_exp < WEAPON_EXP_SKILLED) amount = 25;
 					else if ((now_exp < WEAPON_EXP_EXPERT) && (p_ptr->lev > 19)) amount = 10;
@@ -3646,12 +3647,12 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 					if (snipe_type == SP_RUSH)
 					{
 						int n = randint1(5) + 3;
-						int m_idx = c_mon_ptr->m_idx;
+						MONSTER_IDX m_idx = c_mon_ptr->m_idx;
 
 						for ( ; cur_dis <= tdis; )
 						{
-							int ox = nx;
-							int oy = ny;
+							POSITION ox = nx;
+							POSITION oy = ny;
 
 							if (!n) break;
 
@@ -3709,9 +3710,9 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
 
 	if (stick_to)
 	{
-		int m_idx = cave[y][x].m_idx;
+		MONSTER_IDX m_idx = cave[y][x].m_idx;
 		monster_type *m_ptr = &m_list[m_idx];
-		int o_idx = o_pop();
+		IDX o_idx = o_pop();
 
 		if (!o_idx)
 		{
@@ -3765,7 +3766,7 @@ void do_cmd_fire_aux(int item, object_type *j_ptr)
  */
 void do_cmd_fire(void)
 {
-	int item;
+	OBJECT_IDX item;
 	object_type *j_ptr;
 	cptr q, s;
 
@@ -3862,9 +3863,10 @@ static bool item_tester_hook_boomerang(object_type *o_ptr)
  * the item to be destroyed?  Should it do any damage at all?
  * </pre>
  */
-bool do_cmd_throw_aux(int mult, bool boomerang, int shuriken)
+bool do_cmd_throw_aux(int mult, bool boomerang, OBJECT_IDX shuriken)
 {
-	int dir, item;
+	DIRECTION dir;
+	OBJECT_IDX item;
 	int i, j, y, x, ty, tx, prev_y, prev_x;
 	int ny[19], nx[19];
 	int chance, tdam, tdis;
@@ -4440,8 +4442,8 @@ void do_cmd_throw(void)
 
 static int flow_head = 0;
 static int flow_tail = 0;
-static s16b temp2_x[MAX_SHORT];
-static s16b temp2_y[MAX_SHORT];
+static POSITION temp2_x[MAX_SHORT];
+static POSITION temp2_y[MAX_SHORT];
 
 /*!
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information 
@@ -4513,7 +4515,7 @@ static int travel_flow_cost(int y, int x)
  * @param wall プレイヤーが壁の中にいるならばTRUE
  * @return なし
  */
-static void travel_flow_aux(int y, int x, int n, bool wall)
+static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 {
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -4616,7 +4618,8 @@ static void travel_flow(int ty, int tx)
  */
 void do_cmd_travel(void)
 {
-	int x, y, i;
+	POSITION x, y;
+	int i;
 	int dx, dy, sx, sy;
 	feature_type *f_ptr;
 

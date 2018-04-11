@@ -24,7 +24,7 @@
  * and which also do at least 20 damage, or, sometimes, N damage.
  * This is used only to determine "cuts" and "stuns".
  */
-static int monster_critical(int dice, int sides, int dam)
+static int monster_critical(int dice, int sides, HIT_POINT dam)
 {
 	int max = 0;
 	int total = dice * sides;
@@ -145,10 +145,9 @@ static cptr desc_moan[] =
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
  */
-bool make_attack_normal(int m_idx)
+bool make_attack_normal(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
-
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	int ap_cnt;
@@ -170,7 +169,7 @@ bool make_attack_normal(int m_idx)
 	bool touched = FALSE, fear = FALSE, alive = TRUE;
 	bool explode = FALSE;
 	bool do_silly_attack = (one_in_(2) && p_ptr->image);
-	int get_damage = 0;
+	HIT_POINT get_damage = 0;
 	int abbreviate = 0;
 
 	/* Not allowed to attack */
@@ -210,8 +209,8 @@ bool make_attack_normal(int m_idx)
 	{
 		bool obvious = FALSE;
 
-		int power = 0;
-		int damage = 0;
+		HIT_POINT power = 0;
+		HIT_POINT damage = 0;
 
 		cptr act = NULL;
 
@@ -714,7 +713,7 @@ bool make_attack_normal(int m_idx)
 							obvious = TRUE;
 
 							/* Heal the monster */
-							m_ptr->hp += heal;
+							m_ptr->hp += (HIT_POINT)heal;
 
 							/* Redraw (later) if needed */
 							if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
@@ -1693,7 +1692,7 @@ bool make_attack_normal(int m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 					{
-						int dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1725,7 +1724,7 @@ bool make_attack_normal(int m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
 					{
-						int dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1757,7 +1756,7 @@ bool make_attack_normal(int m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
 					{
-						int dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1790,7 +1789,7 @@ bool make_attack_normal(int m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK))
 					{
-						int dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1828,7 +1827,7 @@ bool make_attack_normal(int m_idx)
 					{
 						if (!(r_ptr->flagsr & RFR_RES_ALL))
 						{
-							int dam = damroll(2, 6);
+							HIT_POINT dam = damroll(2, 6);
 
 							/* Modify the damage */
 							dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1862,7 +1861,7 @@ bool make_attack_normal(int m_idx)
 				{
 					if (!(r_ptr->flagsr & RFR_RES_ALL))
 					{
-						int dam = damroll(2, 6);
+						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
@@ -1892,7 +1891,7 @@ bool make_attack_normal(int m_idx)
 
 				if (hex_spelling(HEX_SHADOW_CLOAK) && alive && !p_ptr->is_dead)
 				{
-					int dam = 1;
+					HIT_POINT dam = 1;
 					object_type *o_armed_ptr = &inventory[INVEN_RARM];
 
 					if (!(r_ptr->flagsr & RFR_RES_ALL || r_ptr->flagsr & RFR_RES_DARK))
@@ -1925,7 +1924,7 @@ bool make_attack_normal(int m_idx)
 						else /* monster does not dead */
 						{
 							int j;
-							int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+							BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 							int typ[4][2] = {
 								{ INVEN_HEAD, GF_OLD_CONF },
 								{ INVEN_LARM,  GF_OLD_SLEEP },

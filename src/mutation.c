@@ -1478,6 +1478,19 @@ bool lose_mutation(int choose_mut)
 	}
 }
 
+void lose_all_mutations(void)
+{
+	if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
+	{
+		chg_virtue(V_CHANCE, -5);
+		msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
+		p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
+		p_ptr->update |= PU_BONUS;
+		handle_stuff();
+		mutant_regenerate_mod = calc_mutant_regenerate_mod();
+	}
+}
+
 /*!
  * @brief ファイルポインタを通じて突然変異の一覧を出力する
  * @param OutFile 出力先ファイルポインタ
@@ -2010,7 +2023,7 @@ void do_cmd_knowledge_mutations(void)
  * @param x ビット数を調べたい変数
  * @return ビット数
  */
-int count_bits(u32b x)
+int count_bits(BIT_FLAGS x)
 {
 	int n = 0;
 
@@ -2073,7 +2086,7 @@ int calc_mutant_regenerate_mod(void)
  * @brief 突然変異レイシャル上で口を使うよりを行った際に歌や呪術を停止する /
  * @return なし
  */
-void mutation_stop_mouth()
+static void mutation_stop_mouth(void)
 {
 	if (music_singing_any()) stop_singing();
 	if (hex_spelling_any()) stop_hex_spell_all();
@@ -2106,7 +2119,7 @@ bool mutation_power_aux(u32b power)
 			mutation_stop_mouth();
 			msg_print(_("あなたは火炎のブレスを吐いた...", "You breathe fire..."));
 
-			fire_ball(GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
+			fire_ball(GF_FIRE, dir, lvl * 2, -1 - (lvl / 20));
 			break;
 
 		case MUT1_HYPN_GAZE:
@@ -2334,7 +2347,7 @@ bool mutation_power_aux(u32b power)
 		case MUT1_RESIST:
 			{
 				int num = lvl / 10;
-				int dur = randint1(20) + 20;
+				TIME_EFFECT dur = randint1(20) + 20;
 
 				if (randint0(5) < num)
 				{

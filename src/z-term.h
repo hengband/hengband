@@ -37,7 +37,7 @@ struct term_win
 	bool cu, cv;
 	byte cx, cy;
 
-	byte **a;
+	SYMBOL_COLOR **a;
 	char **c;
 
 	byte *va;
@@ -187,8 +187,8 @@ struct term
 	u16b key_xtra;
 	u16b key_size;
 
-	byte wid;
-	byte hgt;
+	TERM_POSITION wid;
+	TERM_POSITION hgt;
 
 	byte y1;
 	byte y2;

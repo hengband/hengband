@@ -13,6 +13,9 @@
 
 #include "angband.h"
 
+static void one_sustain(object_type *o_ptr);
+
+
 static cptr const kaji_tips[5] =
 {
 #ifdef JP
@@ -29,6 +32,25 @@ static cptr const kaji_tips[5] =
 	"Enchant an equipment or make an equiment element-proofed. The improved items and artifacts can be enchanted too.",
 #endif
 };
+
+/*!
+ * @brief 対象のオブジェクトにランダムな能力維持を一つ付加する。/ Choose one random sustain
+ * @details 重複の抑止はない。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
+static void one_sustain(object_type *o_ptr)
+{
+	switch (randint0(6))
+	{
+	case 0: add_flag(o_ptr->art_flags, TR_SUST_STR); break;
+	case 1: add_flag(o_ptr->art_flags, TR_SUST_INT); break;
+	case 2: add_flag(o_ptr->art_flags, TR_SUST_WIS); break;
+	case 3: add_flag(o_ptr->art_flags, TR_SUST_DEX); break;
+	case 4: add_flag(o_ptr->art_flags, TR_SUST_CON); break;
+	case 5: add_flag(o_ptr->art_flags, TR_SUST_CHR); break;
+	}
+}
 
 /*!
  * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks
@@ -250,14 +272,11 @@ void delete_object(int y, int x)
  * @param i2 整理したい配列の終点
  * @return なし
  */
-static void compact_objects_aux(int i1, int i2)
+static void compact_objects_aux(IDX i1, IDX i2)
 {
-	int i;
-
+	IDX i;
 	cave_type *c_ptr;
-
 	object_type *o_ptr;
-
 
 	/* Do nothing */
 	if (i1 == i2) return;
@@ -348,7 +367,8 @@ static void compact_objects_aux(int i1, int i2)
  */
 void compact_objects(int size)
 {
-	int i, y, x, num, cnt;
+	IDX i;
+	int y, x, num, cnt;
 	int cur_lev, cur_dis, chance;
 	object_type *o_ptr;
 
@@ -533,9 +553,9 @@ void wipe_o_list(void)
  * This routine should almost never fail, but in case it does,
  * we must be sure to handle "failure" of this routine.
  */
-s16b o_pop(void)
+IDX o_pop(void)
 {
-	int i;
+	IDX i;
 
 
 	/* Initial allocation */
@@ -1857,11 +1877,11 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
  * @param sval 検索したいベースアイテムのsval
  * @return なし
  */
-s16b lookup_kind(int tval, int sval)
+IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
 {
-	int k;
+	IDX k;
 	int num = 0;
-	int bk = 0;
+	IDX bk = 0;
 
 	/* Look for it */
 	for (k = 1; k < max_k_idx; k++)
@@ -1935,7 +1955,7 @@ void object_copy(object_type *o_ptr, object_type *j_ptr)
  * @param k_idx 新たに作成したいベースアイテム情報のID
  * @return なし
  */
-void object_prep(object_type *o_ptr, int k_idx)
+void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -1969,7 +1989,7 @@ void object_prep(object_type *o_ptr, int k_idx)
 	o_ptr->ds = k_ptr->ds;
 
 	/* Default activation */
-	if (k_ptr->act_idx > 0) o_ptr->xtra2 = k_ptr->act_idx;
+	if (k_ptr->act_idx > 0) o_ptr->xtra2 = (XTRA8)k_ptr->act_idx;
 
 	/* Hack -- worthless items are always "broken" */
 	if (k_info[o_ptr->k_idx].cost <= 0) o_ptr->ident |= (IDENT_BROKEN);
@@ -2027,7 +2047,7 @@ void object_prep(object_type *o_ptr, int k_idx)
  * 120    0.03  0.11  0.31  0.46  1.31  2.48  4.60  7.78 11.67 25.53 45.72\n
  * 128    0.02  0.01  0.13  0.33  0.83  1.41  3.24  6.17  9.57 14.22 64.07\n
  */
-s16b m_bonus(int max, int level)
+int m_bonus(int max, DEPTH level)
 {
 	int bonus, stand, extra, value;
 
@@ -2103,8 +2123,8 @@ static void object_mention(object_type *o_ptr)
  */
 static bool make_artifact_special(object_type *o_ptr)
 {
-	int i;
-	int k_idx = 0;
+	IDX i;
+	IDX k_idx = 0;
 
 	/*! @note 地上ではキャンセルする / No artifacts in the town */
 	if (!dun_level) return (FALSE);
@@ -2172,7 +2192,7 @@ static bool make_artifact_special(object_type *o_ptr)
  */
 static bool make_artifact(object_type *o_ptr)
 {
-	int i;
+	IDX i;
 
 
 	/* No artifacts in the town */
@@ -2283,13 +2303,13 @@ static byte get_random_ego(byte slot, bool good)
  * Hack -- note special base damage dice boosting\n
  * Hack -- note special processing for weapon/digger\n
  */
-static void a_m_aux_1(object_type *o_ptr, int level, int power)
+static void a_m_aux_1(object_type *o_ptr, DEPTH level, int power)
 {
-	int tohit1 = randint1(5) + m_bonus(5, level);
-	int todam1 = randint1(5) + m_bonus(5, level);
+	HIT_PROB tohit1 = randint1(5) + (HIT_PROB)m_bonus(5, level);
+	HIT_POINT todam1 = randint1(5) + (HIT_POINT)m_bonus(5, level);
 
-	int tohit2 = m_bonus(10, level);
-	int todam2 = m_bonus(10, level);
+	HIT_PROB tohit2 = (HIT_PROB)m_bonus(10, level);
+	HIT_POINT todam2 = (HIT_POINT)m_bonus(10, level);
 
 	if ((o_ptr->tval == TV_BOLT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_SHOT))
 	{
@@ -2454,13 +2474,13 @@ static void a_m_aux_1(object_type *o_ptr, int level, int power)
 						add_flag(o_ptr->art_flags, TR_RES_FEAR);
 					break;
 				case EGO_SHARPNESS:
-					o_ptr->pval = m_bonus(5, level) + 1;
+					o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, level) + 1;
 					break;
 				case EGO_EARTHQUAKES:
 					if (one_in_(3) && (level > 60))
 						add_flag(o_ptr->art_flags, TR_BLOWS);
 					else
-						o_ptr->pval = m_bonus(3, level);
+						o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, level);
 					break;
 				case EGO_VAMPIRIC:
 					if (one_in_(5))
@@ -2673,9 +2693,8 @@ static void add_esp_weak(object_type *o_ptr, bool extra)
  */
 static void a_m_aux_2(object_type *o_ptr, int level, int power)
 {
-	int toac1 = randint1(5) + m_bonus(5, level);
-
-	int toac2 = m_bonus(10, level);
+	ARMOUR_CLASS toac1 = (ARMOUR_CLASS)randint1(5) + m_bonus(5, level);
+	ARMOUR_CLASS toac2 = (ARMOUR_CLASS)m_bonus(10, level);
 
 	/* Good */
 	if (power > 0)
@@ -3153,7 +3172,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_ATTACKS:
 				{
 					/* Stat bonus */
-					o_ptr->pval = m_bonus(2, level);
+					o_ptr->pval = (PARAMETER_VALUE)m_bonus(2, level);
 					if (one_in_(15)) o_ptr->pval++;
 					if (o_ptr->pval < 1) o_ptr->pval = 1;
 
@@ -3184,7 +3203,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_DEX:
 				{
 					/* Stat bonus */
-					o_ptr->pval = 1 + m_bonus(5, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3206,7 +3225,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_SPEED:
 				{
 					/* Base speed (1 to 10) */
-					o_ptr->pval = randint1(5) + m_bonus(5, level);
+					o_ptr->pval = randint1(5) + (PARAMETER_VALUE)m_bonus(5, level);
 
 					/* Super-charge the ring */
 					while (randint0(100) < 50) o_ptr->pval++;
@@ -3238,7 +3257,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					while (one_in_(4));
 
 					/* Bonus to armor class */
-					o_ptr->to_a = 10 + randint1(5) + m_bonus(10, level);
+					o_ptr->to_a = 10 + randint1(5) + (ARMOUR_CLASS)m_bonus(10, level);
 				}
 				break;
 
@@ -3252,7 +3271,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_SEARCHING:
 				{
 					/* Bonus to searching */
-					o_ptr->pval = 1 + m_bonus(5, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3277,7 +3296,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_ELEC:
 				{
 					/* Bonus to armor class */
-					o_ptr->to_a = 5 + randint1(5) + m_bonus(10, level);
+					o_ptr->to_a = 5 + randint1(5) + (ARMOUR_CLASS)m_bonus(10, level);
 					break;
 				}
 
@@ -3292,7 +3311,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->curse_flags |= TRC_CURSED;
 
 					/* Penalize */
-					o_ptr->pval = 0 - (1 + m_bonus(5, level));
+					o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, level));
 					if (power > 0) power = 0 - power;
 
 					break;
@@ -3308,8 +3327,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->curse_flags |= TRC_CURSED;
 
 					/* Penalize */
-					o_ptr->to_a = 0 - (5 + m_bonus(10, level));
-					o_ptr->pval = 0 - (1 + m_bonus(5, level));
+					o_ptr->to_a = 0 - (5 + (ARMOUR_CLASS)m_bonus(10, level));
+					o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, level));
 					if (power > 0) power = 0 - power;
 
 					break;
@@ -3319,7 +3338,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_DAMAGE:
 				{
 					/* Bonus to damage */
-					o_ptr->to_d = 1 + randint1(5) + m_bonus(16, level);
+					o_ptr->to_d = 1 + randint1(5) + (HIT_POINT)m_bonus(16, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3341,7 +3360,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_ACCURACY:
 				{
 					/* Bonus to hit */
-					o_ptr->to_h = 1 + randint1(5) + m_bonus(16, level);
+					o_ptr->to_h = 1 + randint1(5) + (HIT_PROB)m_bonus(16, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3363,7 +3382,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_PROTECTION:
 				{
 					/* Bonus to armor class */
-					o_ptr->to_a = 5 + randint1(8) + m_bonus(10, level);
+					o_ptr->to_a = 5 + randint1(8) + (ARMOUR_CLASS)m_bonus(10, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3385,8 +3404,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_RING_SLAYING:
 				{
 					/* Bonus to damage and to hit */
-					o_ptr->to_d = randint1(5) + m_bonus(12, level);
-					o_ptr->to_h = randint1(5) + m_bonus(12, level);
+					o_ptr->to_d = randint1(5) + (HIT_POINT)m_bonus(12, level);
+					o_ptr->to_h = randint1(5) + (HIT_PROB)m_bonus(12, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3407,7 +3426,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 				case SV_RING_MUSCLE:
 				{
-					o_ptr->pval = 1 + m_bonus(3, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(3, level);
 					if (one_in_(4)) o_ptr->pval++;
 
 					/* Cursed */
@@ -3644,7 +3663,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				case SV_AMULET_WISDOM:
 				case SV_AMULET_CHARISMA:
 				{
-					o_ptr->pval = 1 + m_bonus(5, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3703,7 +3722,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				/* Amulet of searching */
 				case SV_AMULET_SEARCHING:
 				{
-					o_ptr->pval = randint1(2) + m_bonus(4, level);
+					o_ptr->pval = randint1(2) + (PARAMETER_VALUE)m_bonus(4, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3724,8 +3743,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 				/* Amulet of the Magi -- never cursed */
 				case SV_AMULET_THE_MAGI:
 				{
-					o_ptr->pval = randint1(5) + m_bonus(5, level);
-					o_ptr->to_a = randint1(5) + m_bonus(5, level);
+					o_ptr->pval = randint1(5) + (PARAMETER_VALUE)m_bonus(5, level);
+					o_ptr->to_a = randint1(5) + (ARMOUR_CLASS)m_bonus(5, level);
 
 					/* gain one low ESP */
 					add_esp_weak(o_ptr, FALSE);
@@ -3743,8 +3762,8 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 					o_ptr->curse_flags |= (TRC_CURSED);
 
 					/* Penalize */
-					o_ptr->pval = 0 - (randint1(5) + m_bonus(5, level));
-					o_ptr->to_a = 0 - (randint1(5) + m_bonus(5, level));
+					o_ptr->pval = 0 - (randint1(5) + (PARAMETER_VALUE)m_bonus(5, level));
+					o_ptr->to_a = 0 - (randint1(5) + (ARMOUR_CLASS)m_bonus(5, level));
 					if (power > 0) power = 0 - power;
 
 					break;
@@ -3752,7 +3771,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
 
 				case SV_AMULET_MAGIC_MASTERY:
 				{
-					o_ptr->pval = 1 + m_bonus(4, level);
+					o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(4, level);
 
 					/* Cursed */
 					if (power < 0)
@@ -3924,7 +3943,7 @@ static void a_m_aux_3(object_type *o_ptr, int level, int power)
  * @param r_idx チェックしたいモンスター種族のID
  * @return 人形にできるならTRUEを返す
  */
-static bool item_monster_okay(int r_idx)
+static bool item_monster_okay(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -4078,7 +4097,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 		case TV_FIGURINE:
 		{
-			int i = 1;
+			PARAMETER_VALUE i = 1;
 			int check;
 
 			monster_race *r_ptr;
@@ -4117,7 +4136,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 		case TV_CORPSE:
 		{
-			int i = 1;
+			PARAMETER_VALUE i = 1;
 			int check;
 
 			u32b match = 0;
@@ -4167,7 +4186,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 		case TV_STATUE:
 		{
-			int i = 1;
+			PARAMETER_VALUE i = 1;
 
 			monster_race *r_ptr;
 
@@ -4198,7 +4217,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
 
 		case TV_CHEST:
 		{
-			byte obj_level = k_info[o_ptr->k_idx].level;
+			DEPTH obj_level = k_info[o_ptr->k_idx].level;
 
 			/* Hack -- skip ruined chests */
 			if (obj_level <= 0) break;
@@ -4253,7 +4272,7 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power)
  * "good" and "great" arguments are false.  As a total hack, if "great" is\n
  * true, then the item gets 3 extra "attempts" to become an artifact.\n
  */
-void apply_magic(object_type *o_ptr, int lev, u32b mode)
+void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
 	int i, rolls, f1, f2, power;
 
@@ -4518,7 +4537,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
 		}
 
 		/* Hack -- apply activatin index if needed */
-		if (e_ptr->act_idx) o_ptr->xtra2 = e_ptr->act_idx;
+		if (e_ptr->act_idx) o_ptr->xtra2 = (XTRA8)e_ptr->act_idx;
 
 		/* Hack -- apply extra penalties if needed */
 		if ((object_is_cursed(o_ptr) || object_is_broken(o_ptr)) && !(e_ptr->gen_flags & (TRG_POWERFUL)))
@@ -4664,7 +4683,7 @@ void apply_magic(object_type *o_ptr, int lev, u32b mode)
  * @param k_idx 判定したいベースアイテムのID
  * @return ベースアイテムが上質ならばTRUEを返す。
  */
-static bool kind_is_good(int k_idx)
+static bool kind_is_good(KIND_OBJECT_IDX k_idx)
 {
 	object_kind *k_ptr = &k_info[k_idx];
 
@@ -4755,10 +4774,10 @@ static bool kind_is_good(int k_idx)
  * This routine uses "object_level" for the "generation level".\n
  * We assume that the given object has been "wiped".\n
  */
-bool make_object(object_type *j_ptr, u32b mode)
+bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 {
 	int prob, base;
-	byte obj_level;
+	DEPTH obj_level;
 
 
 	/* Chance of "special object" */
@@ -4771,7 +4790,7 @@ bool make_object(object_type *j_ptr, u32b mode)
 	/* Generate a special object, or a normal object */
 	if (!one_in_(prob) || !make_artifact_special(j_ptr))
 	{
-		int k_idx;
+		IDX k_idx;
 
 		/* Good objects */
 		if ((mode & AM_GOOD) && !get_obj_num_hook)
@@ -4841,9 +4860,9 @@ bool make_object(object_type *j_ptr, u32b mode)
  * This routine uses "object_level" for the "generation level".\n
  * This routine requires a clean floor grid destination.\n
  */
-void place_object(int y, int x, u32b mode)
+void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	s16b o_idx;
+	IDX o_idx;
 
 	/* Acquire grid */
 	cave_type *c_ptr = &cave[y][x];
@@ -4966,7 +4985,7 @@ bool make_gold(object_type *j_ptr)
  * @details
  * The location must be a legal, clean, floor grid.
  */
-void place_gold(int y, int x)
+void place_gold(POSITION y, POSITION x)
 {
 	s16b o_idx;
 
@@ -5421,7 +5440,7 @@ void acquirement(int y1, int x1, int num, bool great, bool special, bool known)
 {
 	object_type *i_ptr;
 	object_type object_type_body;
-	u32b mode = AM_GOOD | (great || special ? AM_GREAT : 0L) | (special ? AM_SPECIAL : 0L) ;
+	BIT_FLAGS mode = AM_GOOD | (great || special ? AM_GREAT : 0L) | (special ? AM_SPECIAL : 0L) ;
 
 	/* Acquirement */
 	while (num--)
@@ -5458,8 +5477,8 @@ void acquirement(int y1, int x1, int num, bool great, bool special, bool known)
 
 typedef struct
 {
-	int tval;
-	int sval;
+	OBJECT_TYPE_VALUE tval;
+	OBJECT_SUBTYPE_VALUE sval;
 	int prob;
 	byte flag;
 } amuse_type;
@@ -5505,7 +5524,8 @@ void amusement(int y1, int x1, int num, bool known)
 	/* Acquirement */
 	while (num)
 	{
-		int i, k_idx, a_idx = 0;
+		int i;
+		IDX k_idx, a_idx = 0;
 		int r = randint0(t);
 		bool insta_art, fixed_art;
 
@@ -5792,7 +5812,7 @@ void inven_item_increase(int item, int num)
 	else if (num < 0) num = 0;
 
 	/* Un-apply */
-	num -= o_ptr->number;
+	num -= (ITEM_NUMBER)o_ptr->number;
 
 	/* Change the number and weight */
 	if (num)
@@ -5988,10 +6008,10 @@ void floor_item_increase(int item, int num)
 	else if (num < 0) num = 0;
 
 	/* Un-apply */
-	num -= o_ptr->number;
+	num -= (int)o_ptr->number;
 
 	/* Change the number */
-	o_ptr->number += num;
+	o_ptr->number += (ITEM_NUMBER)num;
 }
 
 
@@ -6156,8 +6176,8 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
  */
 s16b inven_carry(object_type *o_ptr)
 {
-	int i, j, k;
-	int n = -1;
+	INVENTORY_IDX i, j, k;
+	INVENTORY_IDX n = -1;
 
 	object_type *j_ptr;
 
@@ -6287,9 +6307,9 @@ s16b inven_carry(object_type *o_ptr)
  * to fall to the ground.\n
  * Return the inventory slot into which the item is placed.\n
  */
-s16b inven_takeoff(int item, int amt)
+INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 {
-	int slot;
+	INVENTORY_IDX slot;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -6376,11 +6396,10 @@ s16b inven_takeoff(int item, int amt)
  * @details
  * The object will be dropped "near" the current location
  */
-void inven_drop(int item, int amt)
+void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 {
 	object_type forge;
 	object_type *q_ptr;
-
 	object_type *o_ptr;
 
 	char o_name[MAX_NLEN];
@@ -6623,14 +6642,14 @@ void reorder_pack(void)
  * @details
  * Include list of usable spells for readible books
  */
-void display_koff(int k_idx)
+void display_koff(IDX k_idx)
 {
 	int y;
 
 	object_type forge;
 	object_type *q_ptr;
 	int         sval;
-	int         use_realm;
+	REALM_IDX   use_realm;
 
 	char o_name[MAX_NLEN];
 
@@ -6677,7 +6696,7 @@ void display_koff(int k_idx)
 	{
 		int     spell = -1;
 		int     num = 0;
-		byte    spells[64];
+		SPELL_IDX    spells[64];
 
 		/* Extract spells */
 		for (spell = 0; spell < 32; spell++)
@@ -6737,7 +6756,7 @@ object_type *choose_warning_item(void)
  * @param max 算出した最大ダメージを返すポインタ
  * @return なし
  */
-static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int *max)
+static void spell_damcalc(monster_type *m_ptr, int typ, HIT_POINT dam, int *max)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	int          rlev = r_ptr->level;
@@ -6982,10 +7001,10 @@ static void spell_damcalc(monster_type *m_ptr, int typ, int dam, int *max)
 * @param max 算出した最大ダメージを返すポインタ
 * @return なし
 */
-void spell_damcalc_by_spellnum(int spell_num, int typ, int m_idx, int *max)
+void spell_damcalc_by_spellnum(int spell_num, int typ, MONSTER_IDX m_idx, int *max)
 {
     monster_type *m_ptr = &m_list[m_idx];
-    int dam = monspell_damage((spell_num), m_idx, DAM_MAX);
+    HIT_POINT dam = monspell_damage((spell_num), m_idx, DAM_MAX);
     spell_damcalc(m_ptr, typ, dam, max);
 }
 
@@ -7243,7 +7262,7 @@ static bool item_tester_hook_melee_ammo(object_type *o_ptr)
 typedef struct {
 	int add;       /* TR flag number or special essence id */
 	cptr add_name; /* Name of this ability */
-	int type;      /* Menu number */
+	ESSENCE_IDX type;      /* Menu number */
 	int essence;   /* Index for carrying essences */
 	int value;     /* Needed value to add this ability */
 } essence_type;
@@ -7720,15 +7739,20 @@ static void display_essence(void)
 static void drain_essence(void)
 {
 	int drain_value[sizeof(p_ptr->magic_num1) / sizeof(s32b)];
-	int i, item;
+	int i;
+	OBJECT_IDX item;
 	int dec = 4;
 	bool observe = FALSE;
-	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2, old_timeout;
-	u32b old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
+	int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
+	TIME_EFFECT old_timeout;
+	BIT_FLAGS old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
 	object_type *o_ptr;
-	cptr            q, s;
-	byte iy, ix, marked, number;
-	s16b next_o_idx, weight;
+	cptr q, s;
+	POSITION iy, ix;
+	byte_hack marked;
+	ITEM_NUMBER number;
+	OBJECT_IDX next_o_idx;
+	WEIGHT weight;
 
 	for (i = 0; i < sizeof(drain_value) / sizeof(int); i++)
 		drain_value[i] = 0;
@@ -7828,7 +7852,7 @@ static void drain_essence(void)
 	for (i = 0; essence_info[i].add_name; i++)
 	{
 		essence_type *es_ptr = &essence_info[i];
-		int pval = 0;
+		PARAMETER_VALUE pval = 0;
 
 		if (es_ptr->add < TR_FLAG_MAX && is_pval_flag(es_ptr->add) && old_pval)
 			pval = (have_flag(new_flgs, es_ptr->add)) ? old_pval - o_ptr->pval : old_pval;
@@ -7956,11 +7980,11 @@ static void drain_essence(void)
  * @brief 付加するエッセンスの大別を選択する
  * @return 選んだエッセンスの大別ID
  */
-static int choose_essence(void)
+static COMMAND_CODE choose_essence(void)
 {
-	int mode = 0;
+	COMMAND_CODE mode = 0;
 	char choice;
-	int menu_line = (use_menu ? 1 : 0);
+	COMMAND_CODE menu_line = (use_menu ? 1 : 0);
 
 #ifdef JP
 	cptr menu_name[] = {
@@ -7983,7 +8007,7 @@ static int choose_essence(void)
 		"Others"
 	};
 #endif
-	const int mode_max = 7;
+	const COMMAND_CODE mode_max = 7;
 
 #ifdef ALLOW_REPEAT
 	if (repeat_pull(&mode) && 1 <= mode && mode <= mode_max)
@@ -8052,7 +8076,7 @@ static int choose_essence(void)
 				return 0;
 			}
 
-			if (isupper(choice)) choice = tolower(choice);
+			if (isupper(choice)) choice = (char)tolower(choice);
 
 			if ('a' <= choice && choice <= 'a' + (char)mode_max - 1)
 				mode = (int)choice - 'a' + 1;
@@ -8071,10 +8095,11 @@ static int choose_essence(void)
  * @param mode エッセンスの大別ID
  * @return なし
  */
-static void add_essence(int mode)
+static void add_essence(ESSENCE_IDX mode)
 {
-	int item, max_num = 0;
-	int i;
+	OBJECT_IDX item;
+	int max_num = 0;
+	COMMAND_CODE i;
 	bool flag,redraw;
 	char choice;
 	cptr            q, s;
@@ -8302,7 +8327,7 @@ static void add_essence(int mode)
 			ask = (isupper(choice));
 
 			/* Lowercase */
-			if (ask) choice = tolower(choice);
+			if (ask) choice = (char)tolower(choice);
 
 			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);
@@ -8422,14 +8447,14 @@ static void add_essence(int mode)
 			{
 				char tmp[80];
 				char tmp_val[160];
-				int pval;
-				int limit = MIN(5, p_ptr->magic_num1[es_ptr->essence]/es_ptr->value);
+				PARAMETER_VALUE pval;
+				PARAMETER_VALUE limit = MIN(5, p_ptr->magic_num1[es_ptr->essence]/es_ptr->value);
 
 				sprintf(tmp, _("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit);
 				strcpy(tmp_val, "1");
 
 				if (!get_string(tmp, tmp_val, 1)) return;
-				pval = atoi(tmp_val);
+				pval = (PARAMETER_VALUE)atoi(tmp_val);
 				if (pval > limit) pval = limit;
 				else if (pval < 1) pval = 1;
 				o_ptr->pval += pval;
@@ -8447,7 +8472,8 @@ static void add_essence(int mode)
 		{
 			char tmp_val[160];
 			int val;
-			int get_to_h, get_to_d;
+			HIT_PROB get_to_h;
+			HIT_POINT get_to_d;
 
 			strcpy(tmp_val, "1");
 			if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), p_ptr->lev/7+3), tmp_val, 2)) return;
@@ -8585,11 +8611,11 @@ static void add_essence(int mode)
  */
 static void erase_essence(void)
 {
-	int item;
+	OBJECT_IDX item;
 	cptr q, s;
 	object_type *o_ptr;
 	char o_name[MAX_NLEN];
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	item_tester_hook = object_is_smith;
 
@@ -8643,10 +8669,10 @@ static void erase_essence(void)
  */
 void do_cmd_kaji(bool only_browse)
 {
-	int mode = 0;
+	COMMAND_CODE mode = 0;
 	char choice;
 
-	int menu_line = (use_menu ? 1 : 0);
+	COMMAND_CODE menu_line = (use_menu ? 1 : 0);
 
 	if (!only_browse)
 	{

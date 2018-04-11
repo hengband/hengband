@@ -510,9 +510,9 @@ errr top_twenty(void)
 
 	/* Save the level and such */
 	sprintf(the_score.cur_lev, "%3d", p_ptr->lev);
-	sprintf(the_score.cur_dun, "%3d", dun_level);
+	sprintf(the_score.cur_dun, "%3d", (int)dun_level);
 	sprintf(the_score.max_lev, "%3d", p_ptr->max_plv);
-	sprintf(the_score.max_dun, "%3d", max_dlv[dungeon_type]);
+	sprintf(the_score.max_dun, "%3d", (int)max_dlv[dungeon_type]);
 
 	/* Save the cause of death (31 chars) */
 	if (strlen(p_ptr->died_from) >= sizeof(the_score.how))
@@ -622,10 +622,10 @@ errr predict_score(void)
 	sprintf(the_score.p_a, "%2d", p_ptr->pseikaku);
 
 	/* Save the level and such */
-	sprintf(the_score.cur_lev, "%3d", p_ptr->lev);
-	sprintf(the_score.cur_dun, "%3d", dun_level);
-	sprintf(the_score.max_lev, "%3d", p_ptr->max_plv);
-	sprintf(the_score.max_dun, "%3d", max_dlv[dungeon_type]);
+	sprintf(the_score.cur_lev, "%3d", (int)p_ptr->lev);
+	sprintf(the_score.cur_dun, "%3d", (int)dun_level);
+	sprintf(the_score.max_lev, "%3d", (int)p_ptr->max_plv);
+	sprintf(the_score.max_dun, "%3d", (int)max_dlv[dungeon_type]);
 
 	/* Hack -- no cause of death */
 	/* まだ死んでいないときの識別文字 */
@@ -663,7 +663,8 @@ void show_highclass(void)
 {
 
 	register int i = 0, j, m = 0;
-	int pr, clev/*, al*/;
+	int pr;
+	PLAYER_LEVEL clev/*, al*/;
 	high_score the_score;
 	char buf[1024], out_val[256];
 
@@ -695,7 +696,7 @@ void show_highclass(void)
 		if (highscore_seek(j)) break;
 		if (highscore_read(&the_score)) break;
 		pr = atoi(the_score.p_r);
-		clev = atoi(the_score.cur_lev);
+		clev = (PLAYER_LEVEL)atoi(the_score.cur_lev);
 
 #ifdef JP
 		sprintf(out_val, "   %3d) %sの%s (レベル %2d)",

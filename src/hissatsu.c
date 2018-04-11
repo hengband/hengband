@@ -32,9 +32,10 @@
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_hissatsu_power(int *sn)
+static int get_hissatsu_power(SPELL_IDX *sn)
 {
-	int             i, j = 0;
+	SPELL_IDX i;
+	int j = 0;
 	int             num = 0;
 	int             y = 1;
 	int             x = 15;
@@ -42,9 +43,9 @@ static int get_hissatsu_power(int *sn)
 	int             ask = TRUE;
 	char            choice;
 	char            out_val[160];
-	char sentaku[32];
+	SPELL_IDX sentaku[32];
 	cptr            p = _("必殺剣", "special attack");
-
+	COMMAND_CODE code;
 	magic_type spell;
 	bool            flag, redraw;
 	int menu_line = (use_menu ? 1 : 0);
@@ -55,8 +56,9 @@ static int get_hissatsu_power(int *sn)
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the spell, if available */
-	if (repeat_pull(sn))
+	if (repeat_pull(&code))
 	{
+		*sn = (SPELL_IDX)code;
 		/* Verify the spell */
 		if (technic_info[TECHNIC_HISSATSU][*sn].slevel <= plev)
 		{
@@ -253,7 +255,7 @@ static int get_hissatsu_power(int *sn)
 				ask = (isupper(choice));
 
 				/* Lowercase */
-				if (ask) choice = tolower(choice);
+				if (ask) choice = (char)tolower(choice);
 
 				/* Extract request */
 				i = (islower(choice) ? A2I(choice) : -1);
@@ -309,7 +311,7 @@ static int get_hissatsu_power(int *sn)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	repeat_push(*sn);
+	repeat_push((COMMAND_CODE)j);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -324,7 +326,7 @@ static int get_hissatsu_power(int *sn)
  */
 void do_cmd_hissatsu(void)
 {
-	int             n = 0;
+	SPELL_IDX       n = 0;
 	magic_type      spell;
 
 
@@ -395,7 +397,8 @@ void do_cmd_hissatsu(void)
  */
 void do_cmd_gain_hissatsu(void)
 {
-	int item, i, j;
+	OBJECT_IDX item;
+	int i, j;
 
 	object_type *o_ptr;
 	cptr q, s;
@@ -494,7 +497,7 @@ void do_cmd_gain_hissatsu(void)
  * @param mode 剣術のスレイ型ID
  * @return スレイの倍率(/10倍)
  */
-s16b mult_hissatsu(int mult, u32b *flgs, monster_type *m_ptr, int mode)
+MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_FLAGS mode)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -648,7 +651,7 @@ s16b mult_hissatsu(int mult, u32b *flgs, monster_type *m_ptr, int mode)
 	/* Bloody Maelstrom */
 	if ((mode == HISSATSU_SEKIRYUKA) && p_ptr->cut && monster_living(r_ptr))
 	{
-		int tmp = MIN(100, MAX(10, p_ptr->cut / 10));
+		MULTIPLY tmp = MIN(100, MAX(10, p_ptr->cut / 10));
 		if (mult < tmp) mult = tmp;
 	}
 

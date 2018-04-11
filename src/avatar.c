@@ -135,7 +135,7 @@ static void get_random_virtue(int which)
 	}
 
 	/* Chosen */
-	p_ptr->vir_types[which] = type;
+	p_ptr->vir_types[which] = (s16b)type;
 }
 
 /*!
@@ -143,7 +143,7 @@ static void get_random_virtue(int which)
  * @param realm 魔法領域のID
  * @return 対応する徳のID
  */
-static s16b get_realm_virtues(byte realm)
+static VIRTUES_IDX get_realm_virtues(REALM_IDX realm)
 {
 	switch (realm)
 	{
@@ -471,7 +471,7 @@ void set_virtue(int virtue_id, int amount)
 	{
 		if (p_ptr->vir_types[i] == virtue_id)
 		{
-			p_ptr->virtues[i] = amount;
+			p_ptr->virtues[i] = (s16b)amount;
 			return;
 		}
 	}

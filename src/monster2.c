@@ -219,7 +219,7 @@ monster_race *real_r_ptr(monster_type *m_ptr)
  * モンスターを削除するとそのモンスターが拾っていたアイテムも同時に削除される。 /
  * When a monster is deleted, all of its objects are deleted.
  */
-void delete_monster_idx(int i)
+void delete_monster_idx(MONSTER_IDX i)
 {
 	int x, y;
 
@@ -309,7 +309,7 @@ void delete_monster_idx(int i)
  * @param y 削除位置y座標
  * @return なし
  */
-void delete_monster(int y, int x)
+void delete_monster(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
 
@@ -330,7 +330,7 @@ void delete_monster(int y, int x)
  * @param i2 配列移動先添字
  * @return なし
  */
-static void compact_monsters_aux(int i1, int i2)
+static void compact_monsters_aux(IDX i1, IDX i2)
 {
 	int y, x, i;
 
@@ -428,8 +428,9 @@ static void compact_monsters_aux(int i1, int i2)
  */
 void compact_monsters(int size)
 {
-	int		i, num, cnt;
-	int		cur_lev, cur_dis, chance;
+	MONSTER_IDX i;
+	int num, cnt;
+	int cur_lev, cur_dis, chance;
 
 	/* Message (only if compacting) */
 	if (size) msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));
@@ -592,9 +593,9 @@ void wipe_m_list(void)
  * @details
  * This routine should almost never fail, but it *can* happen.
  */
-s16b m_pop(void)
+MONSTER_IDX m_pop(void)
 {
-	int i;
+	MONSTER_IDX i;
 
 
 	/* Normal allocation */
@@ -670,7 +671,7 @@ static bool summon_unique_okay = FALSE;
  * @return 召喚条件が一致するならtrue
  * @details
  */
-static bool summon_specific_aux(int r_idx)
+static bool summon_specific_aux(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	int okay = FALSE;
@@ -979,7 +980,7 @@ static int chameleon_change_m_idx = 0;
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(int r_idx)
+static bool restrict_monster_to_dungeon(MONRACE_IDX r_idx)
 {
 	dungeon_info_type *d_ptr = &d_info[dungeon_type];
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1297,7 +1298,7 @@ static int mysqrt(int n)
  * Note that if no monsters are "appropriate", then this function will
  * fail, and return zero, but this should *almost* never happen.
  */
-s16b get_mon_num(int level)
+MONRACE_IDX get_mon_num(DEPTH level)
 {
 	int			i, j, p;
 	int			r_idx;
@@ -1512,7 +1513,7 @@ s16b get_mon_num(int level)
  *  MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE
  *    --> Reflexive, genderized if visable ("himself") or "itself"
  */
-void monster_desc(char *desc, monster_type *m_ptr, int mode)
+void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 {
 	cptr            res;
 	monster_race    *r_ptr;
@@ -1805,7 +1806,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
  * @details
  * Return the number of new flags learnt.  -Mogami-
  */
-int lore_do_probe(int r_idx)
+int lore_do_probe(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	int i, n = 0;
@@ -1923,7 +1924,7 @@ int lore_do_probe(int r_idx)
  * gold and items are dropped, and remembers that information to be
  * described later by the monster recall code.
  */
-void lore_treasure(int m_idx, int num_item, int num_gold)
+void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -1957,7 +1958,6 @@ void lore_treasure(int m_idx, int num_item, int num_gold)
  */
 void sanity_blast(monster_type *m_ptr, bool necro)
 {
-	bool happened = FALSE;
 	int power = 100;
 
 	if (p_ptr->inside_battle || !character_dungeon) return;
@@ -1978,7 +1978,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		}
 		else power *= 2;
 
-		if (!hack_mind)
+		if (!is_loading_now)
 			return; /* No effect yet, just loaded... */
 
 		if (!m_ptr->ml)
@@ -2134,28 +2134,83 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		msg_print(_("ネクロノミコンを読んで正気を失った！", "Your sanity is shaken by reading the Necronomicon!"));
 	}
 
-	if (!saving_throw(p_ptr->skill_sav - power)) /* Mind blast */
+	if (saving_throw(p_ptr->skill_sav - power))
 	{
-		if (!p_ptr->resist_conf)
-		{
-			(void)set_confused(p_ptr->confused + randint0(4) + 4);
-		}
-		if (!p_ptr->resist_chaos && one_in_(3))
-		{
-			(void)set_image(p_ptr->image + randint0(250) + 150);
-		}
 		return;
 	}
 
-	if (!saving_throw(p_ptr->skill_sav - power)) /* Lose int & wis */
-	{
-		do_dec_stat(A_INT);
-		do_dec_stat(A_WIS);
-		return;
-	}
+	do {
+		(void)do_dec_stat(A_INT);
+	} while (randint0(100) > p_ptr->skill_sav && one_in_(2));
 
-	if (!saving_throw(p_ptr->skill_sav - power)) /* Brain smash */
+	do {
+		(void)do_dec_stat(A_WIS);
+	} while (randint0(100) > p_ptr->skill_sav && one_in_(2));
+
+	switch (randint1(21))
 	{
+	case 1:
+		if (!(p_ptr->muta3 & MUT3_MORONIC) && one_in_(5))
+		{
+			if ((p_ptr->stat_use[A_INT] < 4) && (p_ptr->stat_use[A_WIS] < 4))
+			{
+				msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You turn into an utter moron!"));
+			}
+			else
+			{
+				msg_print(_("あなたは完璧な馬鹿になった！", "You turn into an utter moron!"));
+			}
+
+			if (p_ptr->muta3 & MUT3_HYPER_INT)
+			{
+				msg_print(_("あなたの脳は生体コンピュータではなくなった。", "Your brain is no longer a living computer."));
+				p_ptr->muta3 &= ~(MUT3_HYPER_INT);
+			}
+			p_ptr->muta3 |= MUT3_MORONIC;
+		}
+		break;
+	case 2:
+	case 3:
+	case 4:
+		if (!(p_ptr->muta2 & MUT2_COWARDICE) && !p_ptr->resist_fear)
+		{
+			msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
+
+			/* Duh, the following should never happen, but anyway... */
+			if (p_ptr->muta3 & MUT3_FEARLESS)
+			{
+				msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));
+				p_ptr->muta3 &= ~(MUT3_FEARLESS);
+			}
+
+			p_ptr->muta2 |= MUT2_COWARDICE;
+		}
+		break;
+	case 5:
+	case 6:
+	case 7:
+		if (!(p_ptr->muta2 & MUT2_HALLU) && !p_ptr->resist_chaos)
+		{
+			msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
+			p_ptr->muta2 |= MUT2_HALLU;
+		}
+		break;
+	case 8:
+	case 9:
+	case 10:
+		if (!(p_ptr->muta2 & MUT2_BERS_RAGE))
+		{
+			msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
+			p_ptr->muta2 |= MUT2_BERS_RAGE;
+		}
+		break;
+	case 11:
+	case 12:
+	case 13:
+	case 14:
+	case 15:
+	case 16:
+		/* Brain smash */
 		if (!p_ptr->resist_conf)
 		{
 			(void)set_confused(p_ptr->confused + randint0(4) + 4);
@@ -2164,116 +2219,20 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		{
 			(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
 		}
-		while (randint0(100) > p_ptr->skill_sav)
-			(void)do_dec_stat(A_INT);
-		while (randint0(100) > p_ptr->skill_sav)
-			(void)do_dec_stat(A_WIS);
 		if (!p_ptr->resist_chaos)
 		{
 			(void)set_image(p_ptr->image + randint0(250) + 150);
 		}
-		return;
-	}
-
-	if (!saving_throw(p_ptr->skill_sav - power)) /* Amnesia */
-	{
-
+		break;
+	case 17:
+	case 18:
+	case 19:
+	case 20:
+	case 21:
+		/* Amnesia */
 		if (lose_all_info())
 			msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
-
-		return;
-	}
-
-	if (saving_throw(p_ptr->skill_sav - power))
-	{
-		return;
-	}
-
-	/* Else gain permanent insanity */
-	if ((p_ptr->muta3 & MUT3_MORONIC) && /*(p_ptr->muta2 & MUT2_BERS_RAGE) &&*/
-		((p_ptr->muta2 & MUT2_COWARDICE) || (p_ptr->resist_fear)) &&
-		((p_ptr->muta2 & MUT2_HALLU) || (p_ptr->resist_chaos)))
-	{
-		/* The poor bastard already has all possible insanities! */
-		return;
-	}
-
-	while (!happened)
-	{
-		switch (randint1(21))
-		{
-			case 1:
-				if (!(p_ptr->muta3 & MUT3_MORONIC) && one_in_(5))
-				{
-					if ((p_ptr->stat_use[A_INT] < 4) && (p_ptr->stat_use[A_WIS] < 4))
-					{
-						msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You turn into an utter moron!"));
-					}
-					else
-					{
-						msg_print(_("あなたは完璧な馬鹿になった！", "You turn into an utter moron!"));
-					}
-
-					if (p_ptr->muta3 & MUT3_HYPER_INT)
-					{
-						msg_print(_("あなたの脳は生体コンピュータではなくなった。", "Your brain is no longer a living computer."));
-						p_ptr->muta3 &= ~(MUT3_HYPER_INT);
-					}
-					p_ptr->muta3 |= MUT3_MORONIC;
-					happened = TRUE;
-				}
-				break;
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-			case 9:
-			case 10:
-			case 11:
-				if (!(p_ptr->muta2 & MUT2_COWARDICE) && !p_ptr->resist_fear)
-				{
-					msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
-
-					/* Duh, the following should never happen, but anyway... */
-					if (p_ptr->muta3 & MUT3_FEARLESS)
-					{
-						msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));
-						p_ptr->muta3 &= ~(MUT3_FEARLESS);
-					}
-
-					p_ptr->muta2 |= MUT2_COWARDICE;
-					happened = TRUE;
-				}
-				break;
-			case 12:
-			case 13:
-			case 14:
-			case 15:
-			case 16:
-			case 17:
-			case 18:
-			case 19:
-			case 20:
-			case 21:
-				if (!(p_ptr->muta2 & MUT2_HALLU) && !p_ptr->resist_chaos)
-				{
-					msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
-					p_ptr->muta2 |= MUT2_HALLU;
-					happened = TRUE;
-				}
-				break;
-			default:
-				if (!(p_ptr->muta2 & MUT2_BERS_RAGE))
-				{
-					msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
-					p_ptr->muta2 |= MUT2_BERS_RAGE;
-					happened = TRUE;
-				}
-				break;
-		}
+		break;
 	}
 
 	p_ptr->update |= PU_BONUS;
@@ -2342,7 +2301,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
  * "disturb_near" (monster which is "easily" viewable moves in some
  * way).  Note that "moves" includes "appears" and "disappears".
  */
-void update_mon(int m_idx, bool full)
+void update_mon(MONSTER_IDX m_idx, bool full)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -2737,7 +2696,7 @@ void update_mon(int m_idx, bool full)
  */
 void update_monsters(bool full)
 {
-	int i;
+	IDX i;
 
 	/* Update each (live) monster */
 	for (i = 1; i < m_max; i++)
@@ -2758,7 +2717,7 @@ void update_monsters(bool full)
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(int r_idx)
+static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	monster_type *m_ptr = &m_list[chameleon_change_m_idx];
@@ -2794,7 +2753,7 @@ static bool monster_hook_chameleon_lord(int r_idx)
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon(int r_idx)
+static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	monster_type *m_ptr = &m_list[chameleon_change_m_idx];
@@ -2833,7 +2792,7 @@ static bool monster_hook_chameleon(int r_idx)
  * @param r_idx 旧モンスター種族のID
  * @return なし
  */
-void choose_new_monster(int m_idx, bool born, int r_idx)
+void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {
 	int oldmaxhp;
 	monster_type *m_ptr = &m_list[m_idx];
@@ -2929,7 +2888,7 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
 	if (ironman_nightmare)
 	{
 		u32b hp = m_ptr->max_maxhp * 2L;
-		m_ptr->max_maxhp = (s16b)MIN(30000, hp);
+		m_ptr->max_maxhp = (HIT_POINT)MIN(30000, hp);
 	}
 
 	m_ptr->maxhp = (long)(m_ptr->maxhp * m_ptr->max_maxhp) / oldmaxhp;
@@ -2946,7 +2905,7 @@ void choose_new_monster(int m_idx, bool born, int r_idx)
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_tanuki(int r_idx)
+static bool monster_hook_tanuki(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2967,12 +2926,12 @@ static bool monster_hook_tanuki(int r_idx)
  * @param r_idx モンスター種族ID
  * @return モンスター種族の表層ID
  */
-static int initial_r_appearance(int r_idx)
+static IDX initial_r_appearance(MONRACE_IDX r_idx)
 {
 	int attempts = 1000;
 
-	int ap_r_idx;
-	int min = MIN(base_level-5, 50);
+	IDX ap_r_idx;
+	DEPTH min = MIN(base_level-5, 50);
 
 	if (!(r_info[r_idx].flags7 & RF7_TANUKI))
 		return r_idx;
@@ -3038,7 +2997,7 @@ byte get_mspeed(monster_race *r_ptr)
  * This is the only function which may place a monster in the dungeon,
  * except for the savefile loading code.
  */
-static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
+static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	/* Access the location */
 	cave_type		*c_ptr = &cave[y][x];
@@ -3275,7 +3234,7 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
 	{
 		u32b hp = m_ptr->max_maxhp * 2L;
 
-		m_ptr->max_maxhp = (s16b)MIN(30000, hp);
+		m_ptr->max_maxhp = (HIT_POINT)MIN(30000, hp);
 	}
 
 	m_ptr->maxhp = m_ptr->max_maxhp;
@@ -3435,7 +3394,7 @@ static bool place_monster_one(int who, int y, int x, int r_idx, u32b mode)
  * @return 成功したらtrue
  *  
  */
-static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
+static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
 {
 	int place_x[MON_SCAT_MAXD];
 	int place_y[MON_SCAT_MAXD];
@@ -3515,7 +3474,7 @@ static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
  * @param mode 生成オプション
  * @return 成功したらtrue
  */
-static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
+static bool place_monster_group(IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3524,8 +3483,8 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 
 	int hack_n = 0;
 
-	byte hack_y[GROUP_MAX];
-	byte hack_x[GROUP_MAX];
+	POSITION hack_y[GROUP_MAX];
+	POSITION hack_x[GROUP_MAX];
 
 
 	/* Pick a group size */
@@ -3567,13 +3526,13 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
 	for (n = 0; (n < hack_n) && (hack_n < total); n++)
 	{
 		/* Grab the location */
-		int hx = hack_x[n];
-		int hy = hack_y[n];
+		POSITION hx = hack_x[n];
+		POSITION hy = hack_y[n];
 
 		/* Check each direction, up to total */
 		for (i = 0; (i < 8) && (hack_n < total); i++)
 		{
-			int mx, my;
+			POSITION mx, my;
 
 			scatter(&my, &mx, hy, hx, 4, 0);
 
@@ -3601,21 +3560,21 @@ static bool place_monster_group(int who, int y, int x, int r_idx, u32b mode)
  * @brief 護衛対象となるモンスター種族IDを渡すグローバル変数 / Hack -- help pick an escort type
  * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_idxを除去し、関数引数化する
  */
-static int place_monster_idx = 0;
+static IDX place_monster_idx = 0;
 
 /*!
  * @var place_monster_m_idx
  * @brief 護衛対象となるモンスターIDを渡すグローバル変数 / Hack -- help pick an escort type
  * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_m_idxを除去し、関数引数化する
  */
-static int place_monster_m_idx = 0;
+static IDX place_monster_m_idx = 0;
 
 /*!
  * @brief モンスター種族が召喚主の護衛となれるかどうかをチェックする / Hack -- help pick an escort type
  * @param r_idx チェックするモンスター種族のID
  * @return 護衛にできるならばtrue
  */
-static bool place_monster_can_escort(int r_idx)
+static bool place_monster_can_escort(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[place_monster_idx];
 	monster_type *m_ptr = &m_list[place_monster_m_idx];
@@ -3677,7 +3636,7 @@ static bool place_monster_can_escort(int r_idx)
  * Note the use of the new "monster allocation table" code to restrict
  * the "get_mon_num()" function to "legal" escort types.
  */
-bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
+bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	int             i, j, n;
 	monster_race    *r_ptr = &r_info[r_idx];
@@ -3700,7 +3659,7 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 		n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);
 		for(j = 0; j < n; j++)
 		{
-			int nx, ny, d = 7;
+			POSITION nx, ny, d = 7;
 			scatter(&ny, &nx, y, x, d, 0);
 			(void)place_monster_one(place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
 		}
@@ -3722,7 +3681,8 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 		/* Try to place several "escorts" */
 		for (i = 0; i < 32; i++)
 		{
-			int nx, ny, z, d = 3;
+			POSITION nx, ny, d = 3;
+			MONRACE_IDX z; 
 
 			/* Pick a location */
 			scatter(&ny, &nx, y, x, d, 0);
@@ -3763,9 +3723,9 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
  * @param mode 生成オプション
  * @return 生成に成功したらtrue
  */
-bool place_monster(int y, int x, u32b mode)
+bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	int r_idx;
+	MONRACE_IDX r_idx;
 
 	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
@@ -3792,14 +3752,14 @@ bool place_monster(int y, int x, u32b mode)
  * @param x 生成地点x座標
  * @return 生成に成功したらtrue
  */
-bool alloc_horde(int y, int x)
+bool alloc_horde(POSITION y, POSITION x)
 {
 	monster_race *r_ptr = NULL;
-	int r_idx = 0;
-	int m_idx;
+	MONRACE_IDX r_idx = 0;
+	MONSTER_IDX m_idx;
 	int attempts = 1000;
-	int cy = y;
-	int cx = x;
+	POSITION cy = y;
+	POSITION cx = x;
 
 	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
@@ -3859,7 +3819,7 @@ bool alloc_horde(int y, int x)
  */
 bool alloc_guardian(bool def_val)
 {
-	int guardian = d_info[dungeon_type].final_guardian;
+	MONRACE_IDX guardian = d_info[dungeon_type].final_guardian;
 
 	if (guardian && (d_info[dungeon_type].maxdepth == dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
 	{
@@ -3902,7 +3862,7 @@ bool alloc_guardian(bool def_val)
  * Use "slp" to choose the initial "sleep" status
  * Use "monster_level" for the monster level
  */
-bool alloc_monster(int dis, u32b mode)
+bool alloc_monster(int dis, BIT_FLAGS mode)
 {
 	int			y = 0, x = 0;
 	int         attempts_left = 10000;
@@ -3972,7 +3932,7 @@ bool alloc_monster(int dis, u32b mode)
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚対象にできるならばTRUE
  */
-static bool summon_specific_okay(int r_idx)
+static bool summon_specific_okay(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3999,10 +3959,10 @@ static bool summon_specific_okay(int r_idx)
 		}
 	}
 
+	if (!summon_unique_okay && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))) return FALSE;
+
 	/* Hack -- no specific type specified */
 	if (!summon_specific_type) return (TRUE);
-
-	if (!summon_unique_okay && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))) return FALSE;
 
 	if ((summon_specific_who < 0) &&
 	    ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
@@ -4046,9 +4006,10 @@ static bool summon_specific_okay(int r_idx)
  *
  * Note that this function may not succeed, though this is very rare.
  */
-bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
+bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode)
 {
-	int x, y, r_idx;
+	POSITION x, y;
+	MONRACE_IDX r_idx;
 
 	if (p_ptr->inside_arena) return (FALSE);
 
@@ -4099,9 +4060,9 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
  * @param mode 生成オプション 
  * @return 召喚できたらtrueを返す
  */
-bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
+bool summon_named_creature (MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-	int x, y;
+	POSITION x, y;
 
 	/* Paranoia */
 	/* if (!r_idx) return; */
@@ -4127,11 +4088,11 @@ bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
  * @details
  * Note that "reproduction" REQUIRES empty space.
  */
-bool multiply_monster(int m_idx, bool clone, u32b mode)
+bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 
-	int y, x;
+	POSITION y, x;
 
 	if (!mon_scatter(m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
 		return FALSE;
@@ -4162,7 +4123,7 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
  * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */
-void message_pain(int m_idx, int dam)
+void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 {
 	long oldhp, newhp, tmp;
 	int percentage;
@@ -4490,7 +4451,7 @@ void message_pain(int m_idx, int dam)
  * @param what 学習対象ID
  * @return なし
  */
-void update_smart_learn(int m_idx, int what)
+void update_smart_learn(MONSTER_IDX m_idx, int what)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -4607,7 +4568,7 @@ void update_smart_learn(int m_idx, int what)
  * @param y 配置先Y座標
  * @return 配置に成功したらTRUE
  */
-bool player_place(int y, int x)
+bool player_place(POSITION y, POSITION x)
 {
 	/* Paranoia XXX XXX */
 	if (cave[y][x].m_idx != 0) return FALSE;

@@ -199,15 +199,15 @@ static void learned_info(char *p, int power)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_learned_power(int *sn)
+static int get_learned_power(SPELL_IDX *sn)
 {
 	int             i = 0;
 	int             num = 0;
 	int             y = 1;
 	int             x = 18;
-	int             minfail = 0;
-	int             plev = p_ptr->lev;
-	int             chance = 0;
+	PERCENTAGE minfail = 0;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	PERCENTAGE chance = 0;
 	int             ask = TRUE, mode = 0;
 	int             spellnum[MAX_MONSPELLS];
 	char            ch;
@@ -216,7 +216,7 @@ static int get_learned_power(int *sn)
 	char            comment[80];
 	s32b            f4 = 0, f5 = 0, f6 = 0;
 	cptr            p = _("魔法", "magic");
-
+	COMMAND_CODE code;
 	monster_power   spell;
 	bool            flag, redraw;
 	int menu_line = (use_menu ? 1 : 0);
@@ -233,11 +233,13 @@ static int get_learned_power(int *sn)
 #ifdef ALLOW_REPEAT /* TNB */
 
 	/* Get the spell, if available */
-	if (repeat_pull(sn))
+	
+	if (repeat_pull(&code))
 	{
 		/* Success */
 		return (TRUE);
 	}
+	*sn = (SPELL_IDX)code;
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -538,7 +540,7 @@ static int get_learned_power(int *sn)
 			ask = isupper(choice);
 
 			/* Lowercase */
-			if (ask) choice = tolower(choice);
+			if (ask) choice = (char)tolower(choice);
 
 			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);
@@ -587,7 +589,7 @@ static int get_learned_power(int *sn)
 
 #ifdef ALLOW_REPEAT /* TNB */
 
-	repeat_push(*sn);
+	repeat_push((COMMAND_CODE)spellnum[i]);
 
 #endif /* ALLOW_REPEAT -- TNB */
 
@@ -605,13 +607,13 @@ static int get_learned_power(int *sn)
  */
 static bool cast_learned_spell(int spell, bool success)
 {
-	int             dir;
-	int             plev = pseudo_plev();
-	int     summon_lev = p_ptr->lev * 2 / 3 + randint1(p_ptr->lev/2);
-	int             damage = 0;
-	bool   pet = success;
-	bool   no_trump = FALSE;
-	u32b p_mode, u_mode = 0L, g_mode;
+	DIRECTION dir;
+	PLAYER_LEVEL plev = pseudo_plev();
+	PLAYER_LEVEL summon_lev = p_ptr->lev * 2 / 3 + randint1(p_ptr->lev/2);
+	HIT_POINT damage = 0;
+	bool pet = success;
+	bool no_trump = FALSE;
+	BIT_FLAGS p_mode, u_mode = 0L, g_mode;
 
 	if (pet)
 	{
@@ -637,7 +639,7 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
 	case MS_DISPEL:
 	{
-		int m_idx;
+		MONSTER_IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = cave[target_row][target_col].m_idx;
@@ -1130,7 +1132,7 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
 	case MS_TELE_LEVEL:
 	{
-		int target_m_idx;
+		MONSTER_IDX target_m_idx;
 		monster_type *m_ptr;
 		monster_race *r_ptr;
 		char m_name[80];
@@ -1463,13 +1465,13 @@ static bool cast_learned_spell(int spell, bool success)
  */
 bool do_cmd_cast_learned(void)
 {
-	int             n = 0;
-	int             chance;
-	int             minfail = 0;
-	int             plev = p_ptr->lev;
-	monster_power   spell;
-	bool            cast;
-	int             need_mana;
+	SPELL_IDX n = 0;
+	PERCENTAGE chance;
+	PERCENTAGE minfail = 0;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	monster_power spell;
+	bool cast;
+	MANA_POINT need_mana;
 
 
 	/* not if confused */
@@ -1636,7 +1638,7 @@ void learn_spell(int monspell)
  */
 /*
  */
-void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode)
+void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, BIT_FLAGS mode)
 {
 	switch (mode)
 	{

@@ -31,18 +31,18 @@ static int feat_priority; /*!< マップ縮小表示時に表示すべき地形�
  * @param x2 2点目のx座標
  * @return 2点間の距離
  */
-int distance (int y1, int x1, int y2, int x2)
+POSITION distance (POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	int dy = (y1 > y2) ? (y1 - y2) : (y2 - y1);
-	int dx = (x1 > x2) ? (x1 - x2) : (x2 - x1);
+	POSITION dy = (y1 > y2) ? (y1 - y2) : (y2 - y1);
+	POSITION dx = (x1 > x2) ? (x1 - x2) : (x2 - x1);
 
 	/* Squared distance */
-	int target = (dy * dy) + (dx * dx);
+	POSITION target = (dy * dy) + (dx * dx);
 
 	/* Approximate distance: hypot(dy,dx) = max(dy,dx) + min(dy,dx) / 2 */
-	int d = (dy > dx) ? (dy + (dx>>1)) : (dx + (dy>>1));
+	POSITION d = (dy > dx) ? (dy + (dx>>1)) : (dx + (dy>>1));
 
-	int err;
+	POSITION err;
 
 	/* Simple case */
 	if (!dy || !dx) return d;
@@ -67,7 +67,7 @@ int distance (int y1, int x1, int y2, int x2)
  * @param feat 地形情報のID
  * @return 罠持ちの地形ならばTRUEを返す。
  */
-bool is_trap(int feat)
+bool is_trap(IDX feat)
 {
 	return have_flag(f_info[feat].flags, FF_TRAP);
 }
@@ -90,7 +90,7 @@ bool is_known_trap(cave_type *c_ptr)
  * @param feat 地形情報のID
  * @return 閉じたドアのある地形ならばTRUEを返す。
  */
-bool is_closed_door(int feat)
+bool is_closed_door(IDX feat)
 {
 	feature_type *f_ptr = &f_info[feat];
 
@@ -154,10 +154,10 @@ bool is_hidden_door(cave_type *c_ptr)
  *\n
  * Use the "update_view()" function to determine player line-of-sight.\n
  */
-bool los(int y1, int x1, int y2, int x2)
+bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	/* Delta */
-	int dx, dy;
+	POSITION dx, dy;
 
 	/* Absolute */
 	int ax, ay;
@@ -1745,7 +1745,7 @@ void prt_path(int y, int x)
 	int i;
 	int path_n;
 	u16b path_g[512];
-	int default_color = TERM_SLATE;
+	byte_hack default_color = TERM_SLATE;
 
 	if (!display_path) return;
 	if (-1 == project_length)
@@ -2018,7 +2018,7 @@ void display_map(int *cy, int *cx)
 			map_info(j, i, &ta, &tc, &ta, &tc);
 
 			/* Extract the priority */
-			tp = feat_priority;
+			tp = (byte_hack)feat_priority;
 
 			if(match_autopick!=-1
 			   && (match_autopick_yx[y][x] == -1
@@ -2810,15 +2810,16 @@ void update_lite(void)
 
 
 static bool mon_invis;
-static s16b mon_fy, mon_fx;
+static POSITION mon_fy, mon_fx;
 
 /*
  * Add a square to the changes array
  */
-static void mon_lite_hack(int y, int x)
+static void mon_lite_hack(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
-	int       midpoint, dpf, d;
+	int dpf, d;
+	POSITION midpoint;
 
 	/* We trust this grid is in bounds */
 	/* if (!in_bounds2(y, x)) return; */
@@ -2901,7 +2902,7 @@ static void mon_lite_hack(int y, int x)
 /*
  * Add a square to the changes array
  */
-static void mon_dark_hack(int y, int x)
+static void mon_dark_hack(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
 	int       midpoint, dpf, d;
@@ -2988,8 +2989,8 @@ void update_mon_lite(void)
 	int i, rad;
 	cave_type *c_ptr;
 
-	s16b fx, fy;
-	void (*add_mon_lite)(int, int);
+	POSITION fx, fy;
+	void (*add_mon_lite)(POSITION, POSITION);
 	int f_flag;
 
 	s16b end_temp;
@@ -3222,8 +3223,8 @@ void update_mon_lite(void)
 		}
 
 		/* Add to end of temp array */
-		temp_x[temp_n] = (byte)fx;
-		temp_y[temp_n] = (byte)fy;
+		temp_x[temp_n] = fx;
+		temp_y[temp_n] = fy;
 		temp_n++;
 	}
 
@@ -3580,14 +3581,15 @@ static bool update_view_aux(int y, int x, int y1, int x1, int y2, int x2)
  */
 void update_view(void)
 {
-	int n, m, d, k, y, x, z;
+	int n, m, d, k, z;
+	POSITION y, x;
 
 	int se, sw, ne, nw, es, en, ws, wn;
 
 	int full, over;
 
-	int y_max = cur_hgt - 1;
-	int x_max = cur_wid - 1;
+	POSITION y_max = cur_hgt - 1;
+	POSITION x_max = cur_wid - 1;
 
 	cave_type *c_ptr;
 
@@ -4100,8 +4102,8 @@ void forget_flow(void)
  * it everytime the player moves out of LOS of the last
  * "way-point".
  */
-static u16b flow_x = 0;
-static u16b flow_y = 0;
+static POSITION flow_x = 0;
+static POSITION flow_y = 0;
 
 
 
@@ -4120,7 +4122,7 @@ static u16b flow_y = 0;
  */
 void update_flow(void)
 {
-	int x, y, d;
+	POSITION x, y, d;
 	int flow_head = 1;
 	int flow_tail = 0;
 
@@ -4168,8 +4170,8 @@ void update_flow(void)
 		for (d = 0; d < 8; d++)
 		{
 			int old_head = flow_head;
-			int m = cave[ty][tx].cost + 1;
-			int n = cave[ty][tx].dist + 1;
+			byte_hack m = cave[ty][tx].cost + 1;
+			byte_hack n = cave[ty][tx].dist + 1;
 			cave_type *c_ptr;
 
 			/* Child location */
@@ -4296,7 +4298,7 @@ void update_smell(void)
 /*
  * Hack -- map the current panel (plus some) ala "magic mapping"
  */
-void map_area(int range)
+void map_area(POSITION range)
 {
 	int             i, x, y;
 	cave_type       *c_ptr;
@@ -4547,7 +4549,7 @@ void wiz_dark(void)
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
-void cave_set_feat(int y, int x, int feat)
+void cave_set_feat(POSITION y, POSITION x, IDX feat)
 {
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[feat];
@@ -4661,7 +4663,7 @@ void cave_set_feat(int y, int x, int feat)
 }
 
 
-int conv_dungeon_feat(int newfeat)
+IDX conv_dungeon_feat(IDX newfeat)
 {
 	feature_type *f_ptr = &f_info[newfeat];
 
@@ -4695,7 +4697,7 @@ int conv_dungeon_feat(int newfeat)
  * Take a feature, determine what that feature becomes
  * through applying the given action.
  */
-int feat_state(int feat, int action)
+IDX feat_state(IDX feat, int action)
 {
 	feature_type *f_ptr = &f_info[feat];
 	int i;
@@ -4718,10 +4720,10 @@ int feat_state(int feat, int action)
 void cave_alter_feat(int y, int x, int action)
 {
 	/* Set old feature */
-	int oldfeat = cave[y][x].feat;
+	IDX oldfeat = cave[y][x].feat;
 
 	/* Get the new feat */
-	int newfeat = feat_state(oldfeat, action);
+	IDX newfeat = feat_state(oldfeat, action);
 
 	/* No change */
 	if (newfeat == oldfeat) return;
@@ -4896,9 +4898,9 @@ void mmove2(int *y, int *x, int y1, int x1, int y2, int x2)
  *
  * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
  */
-bool projectable(int y1, int x1, int y2, int x2)
+bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	int y, x;
+	POSITION y, x;
 
 	int grid_n = 0;
 	u16b grid_g[512];
@@ -4932,12 +4934,12 @@ bool projectable(int y1, int x1, int y2, int x2)
  *
  * Currently the "m" parameter is unused.
  */
-void scatter(int *yp, int *xp, int y, int x, int d, int m)
+void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
-	int nx, ny;
+	POSITION nx, ny;
 
 	/* Unused */
-	m = m;
+	mode = mode;
 
 	/* Pick a location */
 	while (TRUE)
@@ -4967,7 +4969,7 @@ void scatter(int *yp, int *xp, int y, int x, int d, int m)
 /*
  * Track a new monster
  */
-void health_track(int m_idx)
+void health_track(MONSTER_IDX m_idx)
 {
 	/* Mount monster is already tracked */
 	if (m_idx && m_idx == p_ptr->riding) return;
@@ -4984,7 +4986,7 @@ void health_track(int m_idx)
 /*
  * Hack -- track the given monster race
  */
-void monster_race_track(int r_idx)
+void monster_race_track(MONRACE_IDX r_idx)
 {
 	/* Save this monster ID */
 	p_ptr->monster_race_idx = r_idx;
@@ -4998,7 +5000,7 @@ void monster_race_track(int r_idx)
 /*
  * Hack -- track the given object kind
  */
-void object_kind_track(int k_idx)
+void object_kind_track(IDX k_idx)
 {
 	/* Save this monster ID */
 	p_ptr->object_kind_idx = k_idx;

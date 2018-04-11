@@ -334,9 +334,9 @@
 
 
 
-# define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
-# define MA_KNEE 1 /*!< 金的効果ID */
-# define MA_SLOW 2 /*!< 膝蹴り効果ID */
+#define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
+#define MA_KNEE 1 /*!< 金的効果ID */
+#define MA_SLOW 2 /*!< 膝蹴り効果ID */
 
 #define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
 
@@ -2962,36 +2962,36 @@
 /*
  * Spell types used by project(), and related functions.
  */
-#define GF_ELEC         1
-#define GF_POIS         2
-#define GF_ACID         3
-#define GF_COLD         4
-#define GF_FIRE         5
-#define GF_PSY_SPEAR    9
-#define GF_MISSILE      10
-#define GF_ARROW        11
-#define GF_PLASMA       12
+#define GF_ELEC         1			/*!< 魔法効果: 電撃*/
+#define GF_POIS         2			/*!< 魔法効果: 毒*/
+#define GF_ACID         3			/*!< 魔法効果: 酸*/
+#define GF_COLD         4			/*!< 魔法効果: 冷気*/
+#define GF_FIRE         5			/*!< 魔法効果: 火炎*/
+#define GF_PSY_SPEAR    9			/*!< 魔法効果: 光の剣*/
+#define GF_MISSILE      10			/*!< 魔法効果: マジックミサイル*/
+#define GF_ARROW        11			/*!< 魔法効果: 矢*/
+#define GF_PLASMA       12			/*!< 魔法効果: プラズマ*/
 /* Replaced with GF_HOLY_FIRE and GF_HELL_FIRE */
 /* #define GF_HOLY_ORB     13 */
-#define GF_WATER        14
-#define GF_LITE         15
-#define GF_DARK         16
-#define GF_LITE_WEAK    17
-#define GF_DARK_WEAK    18
-#define GF_SHARDS       20
-#define GF_SOUND        21
-#define GF_CONFUSION    22
-#define GF_FORCE        23
-#define GF_INERTIAL      24
-#define GF_MANA         26
-#define GF_METEOR       27
-#define GF_ICE          28
-#define GF_CHAOS        30
-#define GF_NETHER       31
-#define GF_DISENCHANT   32
-#define GF_NEXUS        33
-#define GF_TIME         34
-#define GF_GRAVITY      35
+#define GF_WATER        14			/*!< 魔法効果: 水流*/
+#define GF_LITE         15			/*!< 魔法効果: 閃光*/
+#define GF_DARK         16			/*!< 魔法効果: 暗黒*/
+#define GF_LITE_WEAK    17			/*!< 魔法効果: 弱光*/
+#define GF_DARK_WEAK    18			/*!< 魔法効果: 弱暗*/
+#define GF_SHARDS       20			/*!< 魔法効果: 破片*/
+#define GF_SOUND        21			/*!< 魔法効果: 轟音*/
+#define GF_CONFUSION    22			/*!< 魔法効果: 混乱*/
+#define GF_FORCE        23			/*!< 魔法効果: フォース*/
+#define GF_INERTIAL     24			/*!< 魔法効果: 遅鈍*/
+#define GF_MANA         26			/*!< 魔法効果: 純粋魔力*/
+#define GF_METEOR       27			/*!< 魔法効果: 隕石*/
+#define GF_ICE          28			/*!< 魔法効果: 極寒*/
+#define GF_CHAOS        30			/*!< 魔法効果: カオス*/
+#define GF_NETHER       31			/*!< 魔法効果: 地獄*/
+#define GF_DISENCHANT   32			/*!< 魔法効果: 劣化*/
+#define GF_NEXUS        33			/*!< 魔法効果: 因果混乱*/
+#define GF_TIME         34			/*!< 魔法効果: 時間逆転*/
+#define GF_GRAVITY      35			/*!< 魔法効果: 重力*/
 #define GF_KILL_WALL    40
 #define GF_KILL_DOOR    41
 #define GF_KILL_TRAP    42
@@ -3000,11 +3000,11 @@
 #define GF_MAKE_TRAP    47
 #define GF_MAKE_TREE    48
 #define GF_OLD_CLONE    51
-#define GF_OLD_POLY             52
-#define GF_OLD_HEAL             53
+#define GF_OLD_POLY     52
+#define GF_OLD_HEAL     53
 #define GF_OLD_SPEED    54
-#define GF_OLD_SLOW             55
-#define GF_OLD_CONF             56
+#define GF_OLD_SLOW     55
+#define GF_OLD_CONF     56
 #define GF_OLD_SLEEP    57
 #define GF_OLD_DRAIN    58
 #define GF_AWAY_UNDEAD  61
@@ -3015,7 +3015,7 @@
 #define GF_TURN_ALL     66
 #define GF_DISP_UNDEAD  67
 #define GF_DISP_EVIL    68
-#define GF_DISP_ALL 69
+#define GF_DISP_ALL     69
 #define GF_DISP_DEMON   70      /* New types for Zangband begin here... */
 #define GF_DISP_LIVING  71
 #define GF_ROCKET       72
@@ -3029,10 +3029,10 @@
 #define GF_HELL_FIRE    80
 #define GF_DISINTEGRATE 81
 #define GF_CHARM        82
-#define GF_CONTROL_UNDEAD   83
-#define GF_CONTROL_ANIMAL   84
-#define GF_PSI         85
-#define GF_PSI_DRAIN   86
+#define GF_CONTROL_UNDEAD  83
+#define GF_CONTROL_ANIMAL  84
+#define GF_PSI          85
+#define GF_PSI_DRAIN    86
 #define GF_TELEKINESIS  87
 #define GF_JAM_DOOR     88
 #define GF_DOMINATION   89
@@ -3064,7 +3064,7 @@
 #define GF_STASIS_EVIL 115
 #define GF_WOUNDS      116
 
-#define MAX_GF				117
+#define MAX_GF         117
 
 /*
  * Some things which induce learning
@@ -5241,6 +5241,10 @@ extern int PlayerUID;
 
 #define MUSIC_DETECT            101
 
+#define SINGING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[0])
+#define INTERUPTING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[1])
+#define SINGING_COUNT(P_PTR) ((P_PTR)->magic_num1[2])
+#define SINGING_SONG_ID(P_PTR) ((P_PTR)->magic_num2[0])
 #define music_singing(X) ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == (X)))
 #define music_singing_any() ((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
 
@@ -5475,6 +5479,8 @@ extern int PlayerUID;
 #define IS_TIM_ESP() (p_ptr->tim_esp || music_singing(MUSIC_MIND) || (p_ptr->concent >= CONCENT_TELE_THRESHOLD))
 #define IS_TIM_STEALTH() (p_ptr->tim_stealth || music_singing(MUSIC_STEALTH))
 
+#define P_PTR_KI (p_ptr->magic_num1[0])
+
 /* Multishadow effects is determined by turn */
 #define CHECK_MULTISHADOW() (p_ptr->multishadow && (turn & 1))
 
@@ -5581,6 +5587,12 @@ extern int PlayerUID;
 	((p_ptr->realm1 == REALM_HEX) && (p_ptr->magic_num1[0]))
 #define hex_spelling(X) \
 	((p_ptr->realm1 == REALM_HEX) && (p_ptr->magic_num1[0] & (1L << (X))))
+#define CASTING_HEX_FLAGS(P_PTR) ((P_PTR)->magic_num1[0])
+#define CASTING_HEX_NUM(P_PTR) ((P_PTR)->magic_num2[0])
+#define HEX_REVENGE_POWER(P_PTR) ((P_PTR)->magic_num1[2])
+#define HEX_REVENGE_TURN(P_PTR) ((P_PTR)->magic_num2[2])
+#define HEX_REVENGE_TYPE(P_PTR) ((P_PTR)->magic_num2[1])
+
 /* 1st book */
 #define HEX_BLESS             0
 #define HEX_CURE_LIGHT        1
@@ -5667,3 +5679,5 @@ extern int PlayerUID;
 #define CHEAT_DUNGEON 2
 #define CHEAT_MISC 3
 
+#define COMMAND_ARG_REST_UNTIL_DONE -2   /*!<休憩コマンド引数 … 必要な分だけ回復 */
+#define COMMAND_ARG_REST_FULL_HEALING -1 /*!<休憩コマンド引数 … HPとMPが全回復するまで */

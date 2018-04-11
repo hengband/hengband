@@ -31,7 +31,7 @@ void do_cmd_rerate_aux(void)
 	while (1)
 	{
 		/* Pre-calculate level 1 hitdice */
-		p_ptr->player_hp[0] = p_ptr->hitdie;
+		p_ptr->player_hp[0] = (HIT_POINT)p_ptr->hitdie;
 
 		for (i = 1; i < 4; i++)
 		{
@@ -100,12 +100,9 @@ void do_cmd_rerate(bool display)
  */
 static bool wiz_dimension_door(void)
 {
-	int	x = 0, y = 0;
-
+	POSITION x = 0, y = 0;
 	if (!tgt_pt(&x, &y)) return FALSE;
-
 	teleport_player_to(y, x, TELEPORT_NONMAGICAL);
-
 	return (TRUE);
 }
 
@@ -185,7 +182,7 @@ static void do_cmd_wiz_hack_ben(void)
  */
 static void do_cmd_summon_horde(void)
 {
-	int wy = p_ptr->y, wx = p_ptr->x;
+	POSITION wy = p_ptr->y, wx = p_ptr->x;
 	int attempts = 1000;
 
 	while (--attempts)
@@ -236,7 +233,7 @@ static void prt_binary(u32b flags, int row, int col)
  * @param col 表示行
  * @return なし
  */
-static void prt_alloc(byte tval, byte sval, int row, int col)
+static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_POSITION row, TERM_POSITION col)
 {
 	int i, j;
 	int home = 0;
@@ -713,7 +710,7 @@ static tval_desc tvals[] =
  * @param k_idx ベースアイテムID
  * @return なし
  */
-void strip_name(char *buf, int k_idx)
+void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
 {
 	char *t;
 
@@ -748,16 +745,17 @@ void strip_name(char *buf, int k_idx)
  * This function returns the k_idx of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-static int wiz_create_itemtype(void)
+static KIND_OBJECT_IDX wiz_create_itemtype(void)
 {
-	int i, num, max_num;
-	int col, row;
-	int tval;
+	KIND_OBJECT_IDX i;
+	int num, max_num;
+	TERM_POSITION col, row;
+	OBJECT_TYPE_VALUE tval;
 
 	cptr tval_desc;
 	char ch;
 
-	int choice[80];
+	KIND_OBJECT_IDX choice[80];
 
 	char buf[160];
 
@@ -876,7 +874,7 @@ static void wiz_tweak_item(object_type *o_ptr)
 	wiz_display_item(o_ptr);
 
 	p = "Enter new 'to_d' setting: ";
-	sprintf(tmp_val, "%d", o_ptr->to_d);
+	sprintf(tmp_val, "%d", (int)o_ptr->to_d);
 	if (!get_string(p, tmp_val, 5)) return;
 	o_ptr->to_d = (s16b)atoi(tmp_val);
 	wiz_display_item(o_ptr);
@@ -1038,7 +1036,7 @@ static void wiz_statistics(object_type *o_ptr)
 	char ch;
 	cptr quality;
 
-	u32b mode;
+	BIT_FLAGS mode;
 
 	object_type forge;
 	object_type	*q_ptr;
@@ -1208,7 +1206,7 @@ static void wiz_quantity_item(object_type *o_ptr)
 	tmp_qnt = o_ptr->number;
 
 	/* Default */
-	sprintf(tmp_val, "%d", o_ptr->number);
+	sprintf(tmp_val, "%d", (int)o_ptr->number);
 
 	/* Query */
 	if (get_string("Quantity: ", tmp_val, 2))
@@ -1275,7 +1273,7 @@ static void do_cmd_wiz_blue_mage(void)
  */
 static void do_cmd_wiz_play(void)
 {
-	int item;
+	OBJECT_IDX item;
 
 	object_type	forge;
 	object_type *q_ptr;
@@ -1418,8 +1416,7 @@ static void wiz_create_item(void)
 	object_type	forge;
 	object_type *q_ptr;
 
-	int k_idx;
-
+	IDX k_idx;
 
 	/* Save the screen */
 	screen_save();
@@ -1429,7 +1426,6 @@ static void wiz_create_item(void)
 
 	/* Restore the screen */
 	screen_load();
-
 
 	/* Return if failed */
 	if (!k_idx) return;
@@ -1543,9 +1539,8 @@ static void do_cmd_wiz_jump(void)
 	if (command_arg <= 0)
 	{
 		char	ppp[80];
-
 		char	tmp_val[160];
-		int		tmp_dungeon_type;
+		DUNGEON_IDX tmp_dungeon_type;
 
 		/* Prompt */
 		sprintf(ppp, "Jump which dungeon : ");
@@ -1556,29 +1551,30 @@ static void do_cmd_wiz_jump(void)
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 2)) return;
 
-		tmp_dungeon_type = atoi(tmp_val);
+		tmp_dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
 		if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > max_d_idx)) tmp_dungeon_type = DUNGEON_ANGBAND;
 
 		/* Prompt */
-		sprintf(ppp, "Jump to level (0, %d-%d): ", d_info[tmp_dungeon_type].mindepth, d_info[tmp_dungeon_type].maxdepth);
+		sprintf(ppp, "Jump to level (0, %d-%d): ",
+			(int)d_info[tmp_dungeon_type].mindepth, (int)d_info[tmp_dungeon_type].maxdepth);
 
 		/* Default */
-		sprintf(tmp_val, "%d", dun_level);
+		sprintf(tmp_val, "%d", (int)dun_level);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 10)) return;
 
 		/* Extract request */
-		command_arg = (s16b)atoi(tmp_val);
+		command_arg = (COMMAND_ARG)atoi(tmp_val);
 
-		dungeon_type = (byte_hack)tmp_dungeon_type;
+		dungeon_type = tmp_dungeon_type;
 	}
 
 	/* Paranoia */
 	if (command_arg < d_info[dungeon_type].mindepth) command_arg = 0;
 
 	/* Paranoia */
-	if (command_arg > d_info[dungeon_type].maxdepth) command_arg = d_info[dungeon_type].maxdepth;
+	if (command_arg > d_info[dungeon_type].maxdepth) command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
 
 	/* Accept request */
 	msg_format("You jump to dungeon level %d.", command_arg);
@@ -1622,7 +1618,7 @@ static void do_cmd_wiz_jump(void)
  */
 static void do_cmd_wiz_learn(void)
 {
-	int i;
+	IDX i;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -1674,7 +1670,7 @@ static void do_cmd_wiz_summon(int num)
  * @details
  * XXX XXX XXX This function is rather dangerous
  */
-static void do_cmd_wiz_named(int r_idx)
+static void do_cmd_wiz_named(MONRACE_IDX r_idx)
 {
 	(void)summon_named_creature(0, p_ptr->y, p_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 }
@@ -1688,7 +1684,7 @@ static void do_cmd_wiz_named(int r_idx)
  * @details
  * XXX XXX XXX This function is rather dangerous
  */
-static void do_cmd_wiz_named_friendly(int r_idx)
+static void do_cmd_wiz_named_friendly(MONRACE_IDX r_idx)
 {
 	(void)summon_named_creature(0, p_ptr->y, p_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET));
 }
@@ -1702,7 +1698,7 @@ static void do_cmd_wiz_named_friendly(int r_idx)
  */
 static void do_cmd_wiz_zap(void)
 {
-	int i;
+	MONSTER_IDX i;
 
 
 	/* Genocide everyone nearby */
@@ -1740,7 +1736,7 @@ static void do_cmd_wiz_zap(void)
  */
 static void do_cmd_wiz_zap_all(void)
 {
-	int i;
+	MONSTER_IDX i;
 
 	/* Genocide everyone */
 	for (i = 1; i < m_max; i++)
@@ -1779,8 +1775,8 @@ static void do_cmd_wiz_create_feature(void)
 	cave_type    *c_ptr;
 	feature_type *f_ptr;
 	char         tmp_val[160];
-	int          tmp_feat, tmp_mimic;
-	int          y, x;
+	IDX          tmp_feat, tmp_mimic;
+	POSITION y, x;
 
 	if (!tgt_pt(&x, &y)) return;
 
@@ -1793,7 +1789,7 @@ static void do_cmd_wiz_create_feature(void)
 	if (!get_string(_("地形: ", "Feature: "), tmp_val, 3)) return;
 
 	/* Extract */
-	tmp_feat = atoi(tmp_val);
+	tmp_feat = (IDX)atoi(tmp_val);
 	if (tmp_feat < 0) tmp_feat = 0;
 	else if (tmp_feat >= max_f_idx) tmp_feat = max_f_idx - 1;
 
@@ -1804,7 +1800,7 @@ static void do_cmd_wiz_create_feature(void)
 	if (!get_string(_("地形 (mimic): ", "Feature (mimic): "), tmp_val, 3)) return;
 
 	/* Extract */
-	tmp_mimic = atoi(tmp_val);
+	tmp_mimic = (IDX)atoi(tmp_val);
 	if (tmp_mimic < 0) tmp_mimic = 0;
 	else if (tmp_mimic >= max_f_idx) tmp_mimic = max_f_idx - 1;
 

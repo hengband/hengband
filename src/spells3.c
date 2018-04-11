@@ -27,7 +27,7 @@
  * @param mode オプション
  * @return テレポート先として妥当ならばtrue
  */
-static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
+static bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, int y, int x, BIT_FLAGS mode)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	cave_type    *c_ptr = &cave[y][x];
@@ -63,11 +63,11 @@ static bool cave_monster_teleportable_bold(int m_idx, int y, int x, u32b mode)
  * Attempt to move the monster at least "dis/2" grids away.
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(int m_idx, int dis, u32b mode)
+bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode)
 {
 	int oy, ox, d, i, min;
 	int tries = 0;
-	int ny = 0, nx = 0;
+	POSITION ny = 0, nx = 0;
 
 	bool look = TRUE;
 
@@ -178,7 +178,7 @@ bool teleport_away(int m_idx, int dis, u32b mode)
  * @param mode オプション
  * @return なし
  */
-void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode)
+void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode)
 {
 	int ny, nx, oy, ox, d, i, min;
 	int attempts = 500;
@@ -278,7 +278,7 @@ void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode)
  * @param mode オプション
  * @return テレポート先として妥当ならばtrue
  */
-bool cave_player_teleportable_bold(int y, int x, u32b mode)
+bool cave_player_teleportable_bold(int y, int x, BIT_FLAGS mode)
 {
 	cave_type    *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -344,11 +344,12 @@ bool cave_player_teleportable_bold(int y, int x, u32b mode)
  * </pre>
  */
 
-bool teleport_player_aux(int dis, u32b mode)
+bool teleport_player_aux(int dis, BIT_FLAGS mode)
 {
 	int candidates_at[MAX_TELEPORT_DISTANCE + 1];
 	int total_candidates, cur_candidates;
-	int y = 0, x = 0, min, pick, i;
+	POSITION y = 0, x = 0;
+	int min, pick, i;
 
 	int left = MAX(1, p_ptr->x - dis);
 	int right = MIN(cur_wid - 2, p_ptr->x + dis);
@@ -460,7 +461,7 @@ bool teleport_player_aux(int dis, u32b mode)
  * @param mode オプション
  * @return なし
  */
-void teleport_player(int dis, u32b mode)
+void teleport_player(int dis, BIT_FLAGS mode)
 {
 	int yy, xx;
 
@@ -475,7 +476,7 @@ void teleport_player(int dis, u32b mode)
 	{
 		for (yy = -1; yy < 2; yy++)
 		{
-			int tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
+			MONSTER_IDX tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
 
 			/* A monster except your mount may follow */
 			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx))
@@ -504,7 +505,7 @@ void teleport_player(int dis, u32b mode)
  * @param dis テレポート距離
  * @return なし
  */
-void teleport_player_away(int m_idx, int dis)
+void teleport_player_away(MONSTER_IDX m_idx, int dis)
 {
 	int yy, xx;
 
@@ -519,7 +520,7 @@ void teleport_player_away(int m_idx, int dis)
 	{
 		for (yy = -1; yy < 2; yy++)
 		{
-			int tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
+			IDX tmp_m_idx = cave[oy+yy][ox+xx].m_idx;
 
 			/* A monster except your mount or caster may follow */
 			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx) && (m_idx != tmp_m_idx))
@@ -555,9 +556,10 @@ void teleport_player_away(int m_idx, int dis)
  * This function allows teleporting into vaults (!)
  * </pre>
  */
-void teleport_player_to(int ny, int nx, u32b mode)
+void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 {
-	int y, x, dis = 0, ctr = 0;
+	POSITION y, x;
+	int dis = 0, ctr = 0;
 
 	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
@@ -571,8 +573,8 @@ void teleport_player_to(int ny, int nx, u32b mode)
 		/* Pick a nearby legal location */
 		while (1)
 		{
-			y = rand_spread(ny, dis);
-			x = rand_spread(nx, dis);
+			y = (POSITION)rand_spread(ny, dis);
+			x = (POSITION)rand_spread(nx, dis);
 			if (in_bounds(y, x)) break;
 		}
 
@@ -598,7 +600,7 @@ void teleport_player_to(int ny, int nx, u32b mode)
 }
 
 
-void teleport_away_followable(int m_idx)
+void teleport_away_followable(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	int          oldfy = m_ptr->fy;
@@ -657,7 +659,7 @@ void teleport_away_followable(int m_idx)
  * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
  * @return なし
  */
-void teleport_level(int m_idx)
+void teleport_level(MONSTER_IDX m_idx)
 {
 	bool         go_up;
 	char         m_name[160];
@@ -831,17 +833,18 @@ void teleport_level(int m_idx)
 
 
 /*!
- * @brief これまでに入ったダンジョンの一覧を表示する
+ * @brief これまでに入ったダンジョンの一覧を表示し、選択させる。
  * @param note ダンジョンに施す処理記述
  * @param y コンソールY座標
  * @param x コンソールX座標
- * @return なし
+ * @return 選択されたダンジョンID
  */
-int choose_dungeon(cptr note, int y, int x)
+DUNGEON_IDX choose_dungeon(cptr note, POSITION y, POSITION x)
 {
-	int select_dungeon;
-	int i, num = 0;
-	s16b *dun;
+	DUNGEON_IDX select_dungeon;
+	DUNGEON_IDX i;
+	int num = 0;
+	DUNGEON_IDX *dun;
 
 	/* Hack -- No need to choose dungeon in some case */
 	if (lite_town || vanilla_town || ironman_downward)
@@ -873,7 +876,7 @@ int choose_dungeon(cptr note, int y, int x)
 		else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
 
 		sprintf(buf,_("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"), 
-					'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, max_dlv[i]);
+					'a'+num, seiha ? '!' : ' ', d_name + d_info[i].name, (int)max_dlv[i]);
 		prt(buf, y + num, x);
 		dun[num++] = i;
 	}
@@ -917,7 +920,7 @@ int choose_dungeon(cptr note, int y, int x)
  * @param turns 発動までのターン数
  * @return 常にTRUEを返す
  */
-bool recall_player(int turns)
+bool recall_player(TIME_EFFECT turns)
 {
 	/*
 	 * TODO: Recall the player to the last
@@ -945,7 +948,7 @@ bool recall_player(int turns)
 	{
 		if (!dun_level)
 		{
-			int select_dungeon;
+			DUNGEON_IDX select_dungeon;
 			select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
 			if (!select_dungeon) return FALSE;
 			p_ptr->recall_dungeon = select_dungeon;
@@ -993,10 +996,11 @@ bool reset_recall(void)
 
 	if (!select_dungeon) return FALSE;
 	/* Prompt */
-	sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), d_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
+	sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "),
+		(int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
 
 	/* Default */
-	sprintf(tmp_val, "%d", MAX(dun_level, 1));
+	sprintf(tmp_val, "%d", (int)MAX(dun_level, 1));
 
 	/* Ask for a level */
 	if (get_string(ppp, tmp_val, 10))
@@ -1038,7 +1042,7 @@ msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select
  * @return 劣化処理に関するメッセージが発せられた場合はTRUEを返す /
  * Return "TRUE" if the player notices anything
  */
-bool apply_disenchant(int mode)
+bool apply_disenchant(BIT_FLAGS mode)
 {
 	int             t = 0;
 	object_type     *o_ptr;
@@ -1155,7 +1159,8 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
  */
 void mutate_player(void)
 {
-	int max1, cur1, max2, cur2, ii, jj, i;
+	BASE_STATUS max1, cur1, max2, cur2;
+	int ii, jj, i;
 
 	/* Pick a pair of stats */
 	ii = randint0(6);
@@ -1238,7 +1243,7 @@ void apply_nexus(monster_type *m_ptr)
  */
 void phlogiston(void)
 {
-	int max_flog = 0;
+	GAME_TURN max_flog = 0;
 	object_type * o_ptr = &inventory[INVEN_LITE];
 
 	/* It's a lamp */
@@ -1267,7 +1272,7 @@ void phlogiston(void)
 	}
 
 	/* Refuel */
-	o_ptr->xtra4 += (max_flog / 2);
+	o_ptr->xtra4 += (XTRA16)(max_flog / 2);
 
 	/* Message */
 	msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light item."));
@@ -1275,7 +1280,7 @@ void phlogiston(void)
 	/* Comment */
 	if (o_ptr->xtra4 >= max_flog)
 	{
-		o_ptr->xtra4 = max_flog;
+		o_ptr->xtra4 = (XTRA16)max_flog;
 		msg_print(_("照明用アイテムは満タンになった。", "Your light item is full."));
 	}
 
@@ -1292,7 +1297,7 @@ void phlogiston(void)
  */
 void brand_weapon(int brand_type)
 {
-	int         item;
+	OBJECT_IDX item;
 	object_type *o_ptr;
 	cptr        q, s;
 
@@ -1343,7 +1348,7 @@ void brand_weapon(int brand_type)
 				act = _("は鋭さを増した！", "becomes very sharp!");
 
 				o_ptr->name2 = EGO_SHARPNESS;
-				o_ptr->pval = m_bonus(5, dun_level) + 1;
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, dun_level) + 1;
 
 				if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
 					o_ptr->pval = 2;
@@ -1352,7 +1357,7 @@ void brand_weapon(int brand_type)
 			{
 				act = _("は破壊力を増した！", "seems very powerful.");
 				o_ptr->name2 = EGO_EARTHQUAKES;
-				o_ptr->pval = m_bonus(3, dun_level);
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, dun_level);
 			}
 			break;
 		case 16:
@@ -1672,12 +1677,13 @@ void call_the_(void)
  * @param require_los 射線の通りを要求するならばTRUE
  * @return なし
  */
-void fetch(int dir, int wgt, bool require_los)
+void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 {
-	int             ty, tx, i;
-	cave_type       *c_ptr;
-	object_type     *o_ptr;
-	char            o_name[MAX_NLEN];
+	POSITION ty, tx;
+	OBJECT_IDX i;
+	cave_type *c_ptr;
+	object_type *o_ptr;
+	char o_name[MAX_NLEN];
 
 	/* Check to see if an object is already there */
 	if (cave[p_ptr->y][p_ptr->x].o_idx)
@@ -1759,6 +1765,7 @@ void fetch(int dir, int wgt, bool require_los)
 	i = c_ptr->o_idx;
 	c_ptr->o_idx = o_ptr->next_o_idx;
 	cave[p_ptr->y][p_ptr->x].o_idx = i; /* 'move' it */
+
 	o_ptr->next_o_idx = 0;
 	o_ptr->iy = (byte)p_ptr->y;
 	o_ptr->ix = (byte)p_ptr->x;
@@ -1785,7 +1792,7 @@ void alter_reality(void)
 
 	if (!p_ptr->alter_reality)
 	{
-		int turns = randint0(21) + 15;
+		TIME_EFFECT turns = randint0(21) + 15;
 
 		p_ptr->alter_reality = turns;
 		msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
@@ -2001,7 +2008,7 @@ static int remove_curse_aux(int all)
  * Remove most curses
  * @return 解呪に成功した装備数
  */
-bool remove_curse(void)
+int remove_curse(void)
 {
 	return (remove_curse_aux(FALSE));
 }
@@ -2011,7 +2018,7 @@ bool remove_curse(void)
  * Remove all curses
  * @return 解呪に成功した装備数
  */
-bool remove_all_curse(void)
+int remove_all_curse(void)
 {
 	return (remove_curse_aux(TRUE));
 }
@@ -2024,9 +2031,10 @@ bool remove_all_curse(void)
  */
 bool alchemy(void)
 {
-	int item, amt = 1;
-	int old_number;
-	long price;
+	OBJECT_IDX item;
+	int amt = 1;
+	ITEM_NUMBER old_number;
+	PRICE price;
 	bool force = FALSE;
 	object_type *o_ptr;
 	char o_name[MAX_NLEN];
@@ -2291,9 +2299,9 @@ bool enchant(object_type *o_ptr, int n, int eflag)
  * Note that "num_ac" requires armour, else weapon
  * Returns TRUE if attempted, FALSE if cancelled
  */
-bool enchant_spell(int num_hit, int num_dam, int num_ac)
+bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
-	int         item;
+	OBJECT_IDX item;
 	bool        okay = FALSE;
 	object_type *o_ptr;
 	char        o_name[MAX_NLEN];
@@ -2390,7 +2398,7 @@ static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
  */
 bool artifact_scroll(void)
 {
-	int             item;
+	OBJECT_IDX item;
 	bool            okay = FALSE;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
@@ -2609,7 +2617,7 @@ static bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
  */
 bool ident_spell(bool only_equip)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
@@ -2695,7 +2703,7 @@ bool ident_spell(bool only_equip)
  */
 bool mundane_spell(bool only_equip)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
 	cptr            q, s;
 
@@ -2723,8 +2731,8 @@ bool mundane_spell(bool only_equip)
 	/* Oops */
 	msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 	{
-		byte iy = o_ptr->iy;                 /* Y-position on map, or zero */
-		byte ix = o_ptr->ix;                 /* X-position on map, or zero */
+		POSITION iy = o_ptr->iy;                 /* Y-position on map, or zero */
+		POSITION ix = o_ptr->ix;                 /* X-position on map, or zero */
 		s16b next_o_idx = o_ptr->next_o_idx; /* Next object in stack (if any) */
 		byte marked = o_ptr->marked;         /* Object is marked */
 		s16b weight = o_ptr->number * o_ptr->weight;
@@ -2779,7 +2787,7 @@ static bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
  */
 bool identify_fully(bool only_equip)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
@@ -2903,8 +2911,10 @@ bool item_tester_hook_recharge(object_type *o_ptr)
  */
 bool recharge(int power)
 {
-	int item, lev;
-	int recharge_strength, recharge_amount;
+	OBJECT_IDX item;
+	int lev;
+	int recharge_strength;
+	TIME_EFFECT recharge_amount;
 
 	object_type *o_ptr;
 	object_kind *k_ptr;
@@ -3016,7 +3026,7 @@ bool recharge(int power)
 			 */
 			if ((o_ptr->tval == TV_STAFF) && (o_ptr->number > 1))
 			{
-				recharge_amount /= o_ptr->number;
+				recharge_amount /= (TIME_EFFECT)o_ptr->number;
 				if (recharge_amount < 1) recharge_amount = 1;
 			}
 
@@ -3196,9 +3206,9 @@ bool recharge(int power)
  */
 bool bless_weapon(void)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
 
@@ -3380,7 +3390,7 @@ msg_format("%s は劣化した！",
  */
 bool pulish_shield(void)
 {
-	int             item;
+	OBJECT_IDX item;
 	object_type     *o_ptr;
 	u32b flgs[TR_FLAG_SIZE];
 	char            o_name[MAX_NLEN];
@@ -3474,7 +3484,7 @@ msg_format("%sは輝いた！", o_name);
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */
-bool potion_smash_effect(int who, int y, int x, int k_idx)
+bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
 {
 	int     radius = 2;
 	int     dt = 0;
@@ -3900,7 +3910,7 @@ int mod_need_mana(int need_mana, int spell, int realm)
  * @return 失敗率(%)
  * @todo 統合を検討
  */
-int mod_spell_chance_1(int chance)
+PERCENTAGE mod_spell_chance_1(PERCENTAGE chance)
 {
 	chance += p_ptr->to_m_chance;
 
@@ -3925,7 +3935,7 @@ int mod_spell_chance_1(int chance)
  * Note: variable "chance" cannot be negative.
  * @todo 統合を検討
  */
-int mod_spell_chance_2(int chance)
+PERCENTAGE mod_spell_chance_2(PERCENTAGE chance)
 {
 	if (p_ptr->dec_mana) chance--;
 
@@ -3942,12 +3952,12 @@ int mod_spell_chance_2(int chance)
  * @param use_realm 魔法領域ID
  * @return 失敗率(%)
  */
-s16b spell_chance(int spell, int use_realm)
+PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 {
-	int             chance, minfail;
+	PERCENTAGE chance, minfail;
 	const magic_type *s_ptr;
-	int             need_mana;
-	int penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
+	MANA_POINT need_mana;
+	PERCENTAGE penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
 
 
 	/* Paranoia -- must be literate */
@@ -4101,15 +4111,15 @@ bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 /*!
  * @brief 呪文情報の表示処理 /
  * Print a list of spells (for browsing or casting or viewing)
- * @param target_spell 呪文ID
- * @param spells アクセス開始するスペルの参照ポイント
- * @param num 表示する
+ * @param target_spell 呪文ID		    
+ * @param spells 表示するスペルID配列の参照ポインタ
+ * @param num 表示するスペルの数(spellsの要素数)
  * @param y 表示メッセージ左上Y座標
  * @param x 表示メッセージ左上X座標
  * @param use_realm 魔法領域ID
  * @return なし
  */
-void print_spells(int target_spell, byte *spells, int num, int y, int x, int use_realm)
+void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_POSITION y, TERM_POSITION x, REALM_IDX use_realm)
 {
 	int             i, spell, exp_level, increment = 64;
 	const magic_type *s_ptr;
@@ -4677,7 +4687,7 @@ static int minus_ac(void)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int acid_dam(int dam, cptr kb_str, int monspell, bool aura)
+int acid_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -4727,7 +4737,7 @@ int acid_dam(int dam, cptr kb_str, int monspell, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int elec_dam(int dam, cptr kb_str, int monspell, bool aura)
+int elec_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -4776,7 +4786,7 @@ int elec_dam(int dam, cptr kb_str, int monspell, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int fire_dam(int dam, cptr kb_str, int monspell, bool aura)
+int fire_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -4825,7 +4835,7 @@ int fire_dam(int dam, cptr kb_str, int monspell, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int cold_dam(int dam, cptr kb_str, int monspell, bool aura)
+int cold_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
 	int get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
@@ -4869,7 +4879,7 @@ int cold_dam(int dam, cptr kb_str, int monspell, bool aura)
  */
 bool rustproof(void)
 {
-	int         item;
+	OBJECT_IDX item;
 	object_type *o_ptr;
 	char        o_name[MAX_NLEN];
 	cptr        q, s;
@@ -5150,11 +5160,13 @@ bool brand_bolts(void)
  * @details
  * Note that this function is one of the more "dangerous" ones...
  */
-static s16b poly_r_idx(int r_idx)
+static IDX poly_r_idx(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	int i, r, lev1, lev2;
+	int i;
+	MONRACE_IDX r;
+	DEPTH lev1, lev2;
 
 	/* Hack -- Uniques/Questors never polymorph */
 	if ((r_ptr->flags1 & RF1_UNIQUE) ||
@@ -5201,13 +5213,13 @@ static s16b poly_r_idx(int r_idx)
  * @param x 指定のX座標
  * @return 実際に変身したらTRUEを返す
  */
-bool polymorph_monster(int y, int x)
+bool polymorph_monster(POSITION y, POSITION x)
 {
 	cave_type *c_ptr = &cave[y][x];
 	monster_type *m_ptr = &m_list[c_ptr->m_idx];
 	bool polymorphed = FALSE;
-	int new_r_idx;
-	int old_r_idx = m_ptr->r_idx;
+	MONRACE_IDX new_r_idx;
+	MONRACE_IDX old_r_idx = m_ptr->r_idx;
 	bool targeted = (target_who == c_ptr->m_idx) ? TRUE : FALSE;
 	bool health_tracked = (p_ptr->health_who == c_ptr->m_idx) ? TRUE : FALSE;
 	monster_type back_m;
@@ -5225,7 +5237,7 @@ bool polymorph_monster(int y, int x)
 	/* Handle polymorph */
 	if (new_r_idx != old_r_idx)
 	{
-		u32b mode = 0L;
+		BIT_FLAGS mode = 0L;
 		bool preserve_hold_objects = back_m.hold_o_idx ? TRUE : FALSE;
 		s16b this_o_idx, next_o_idx = 0;
 
@@ -5305,9 +5317,9 @@ bool polymorph_monster(int y, int x)
  * @param y テレポート先のY座標
  * @return 目標に指定通りテレポートできたならばTRUEを返す
  */
-static bool dimension_door_aux(int x, int y)
+static bool dimension_door_aux(DEPTH x, DEPTH y)
 {
-	int	plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
@@ -5338,7 +5350,7 @@ static bool dimension_door_aux(int x, int y)
  */
 bool dimension_door(void)
 {
-	int x = 0, y = 0;
+	DEPTH x = 0, y = 0;
 
 	/* Rerutn FALSE if cancelled */
 	if (!tgt_pt(&x, &y)) return FALSE;
@@ -5358,7 +5370,7 @@ bool dimension_door(void)
  */
 bool mirror_tunnel(void)
 {
-	int x = 0, y = 0;
+	POSITION x = 0, y = 0;
 
 	/* Rerutn FALSE if cancelled */
 	if (!tgt_pt(&x, &y)) return FALSE;
@@ -5379,7 +5391,8 @@ bool eat_magic(int power)
 {
 	object_type * o_ptr;
 	object_kind *k_ptr;
-	int lev, item;
+	int lev;
+	OBJECT_IDX item;
 	int recharge_strength = 0;
 
 	bool fail = FALSE;
@@ -5656,7 +5669,7 @@ bool eat_magic(int power)
  * @param mode 召喚オプション
  * @return ターンを消費した場合TRUEを返す
  */
-bool summon_kin_player(int level, int y, int x, u32b mode)
+bool summon_kin_player(int level, int y, int x, BIT_FLAGS mode)
 {
 	bool pet = (bool)(mode & PM_FORCE_PET);
 	if (!pet) mode |= PM_NO_PET;

@@ -62,7 +62,7 @@ static cptr info_duration(int base, int sides)
  * @param range 効果範囲
  * @return フォーマットに従い整形された文字列
  */
-static cptr info_range(int range)
+static cptr info_range(POSITION range)
 {
 	return format(_("範囲:%d", "range %d"), range);
 }
@@ -96,7 +96,7 @@ static cptr info_delay(int base, int sides)
  * @param dam 固定値
  * @return フォーマットに従い整形された文字列
  */
-static cptr info_multi_damage(int dam)
+static cptr info_multi_damage(HIT_POINT dam)
 {
 	return format(_("損傷:各%d", "dam %d each"), dam);
 }
@@ -193,11 +193,11 @@ static int beam_chance(void)
  * @param mode モンスター生成条件フラグ
  * @return モンスターが（敵対も含めて）召還されたならばTRUEを返す。
  */
-static bool trump_summoning(int num, bool pet, int y, int x, int lev, int type, u32b mode)
+static bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode)
 {
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
-	int who;
+	MONSTER_IDX who;
 	int i;
 	bool success = FALSE;
 
@@ -487,7 +487,7 @@ static void cast_invoke_spirits(int dir)
  * @param spell 基準となる引数ID
  * @return なし
  */
-static void wild_magic(int spell)
+static void wild_magic(SPELL_IDX spell)
 {
 	int counter = 0;
 	int type = SUMMON_MOLD + randint0(6);
@@ -740,13 +740,7 @@ static void cast_shuffle(void)
 	{
 		msg_print(_("《審判》だ。", "It's the Judgement."));
 		do_cmd_rerate(FALSE);
-		if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
-		{
-			msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
-			p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
-			p_ptr->update |= PU_BONUS;
-			handle_stuff();
-		}
+		lose_all_mutations();
 	}
 	else if (die < 120)
 	{
@@ -775,14 +769,14 @@ static void cast_shuffle(void)
  * @param rad 効力の半径
  * @return なし
  */
-static void cast_meteor(int dam, int rad)
+static void cast_meteor(HIT_POINT dam, int rad)
 {
 	int i;
 	int b = 10 + randint1(10);
 
 	for (i = 0; i < b; i++)
 	{
-		int y = 0, x = 0;
+		POSITION y = 0, x = 0;
 		int count;
 
 		for (count = 0; count <= 20; count++)
@@ -820,7 +814,7 @@ static void cast_meteor(int dam, int rad)
  * @param rad 効力の半径
  * @return ターゲットを指定し、実行したならばTRUEを返す。
  */
-static bool cast_wrath_of_the_god(int dam, int rad)
+static bool cast_wrath_of_the_god(HIT_POINT dam, int rad)
 {
 	int x, y, tx, ty;
 	int nx, ny;
@@ -926,8 +920,8 @@ static bool item_tester_offer(object_type *o_ptr)
  */
 static bool cast_summon_greater_demon(void)
 {
-	int plev = p_ptr->lev;
-	int item;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	OBJECT_IDX item;
 	cptr q, s;
 	int summon_lev;
 	object_type *o_ptr;
@@ -986,13 +980,13 @@ static bool cast_summon_greater_demon(void)
  * @param song 魔法効果のID
  * @return なし
  */
-static void start_singing(int spell, int song)
+static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
 {
 	/* Remember the song index */
-	p_ptr->magic_num1[0] = song;
+	SINGING_SONG_EFFECT(p_ptr) = (MAGIC_NUM1)song;
 
 	/* Remember the index of the spell which activated the song */
-	p_ptr->magic_num2[0] = spell;
+	SINGING_SONG_ID(p_ptr) = (MAGIC_NUM2)spell;
 
 
 	/* Now the player is singing */
@@ -1015,24 +1009,24 @@ void stop_singing(void)
 	if (p_ptr->pclass != CLASS_BARD) return;
 
  	/* Are there interupted song? */
-	if (p_ptr->magic_num1[1])
+	if (INTERUPTING_SONG_EFFECT(p_ptr))
 	{
 		/* Forget interupted song */
-		p_ptr->magic_num1[1] = 0;
+		INTERUPTING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 		return;
 	}
 
 	/* The player is singing? */
-	if (!p_ptr->magic_num1[0]) return;
+	if (!SINGING_SONG_EFFECT(p_ptr)) return;
 
 	/* Hack -- if called from set_action(), avoid recursive loop */
 	if (p_ptr->action == ACTION_SING) set_action(ACTION_NONE);
 
 	/* Message text of each song or etc. */
-	do_spell(REALM_MUSIC, p_ptr->magic_num2[0], SPELL_STOP);
+	do_spell(REALM_MUSIC, SINGING_SONG_ID(p_ptr), SPELL_STOP);
 
-	p_ptr->magic_num1[0] = MUSIC_NONE;
-	p_ptr->magic_num2[0] = 0;
+	SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
+	SINGING_SONG_ID(p_ptr) = 0;
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
@@ -1048,7 +1042,7 @@ void stop_singing(void)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_life_spell(int spell, int mode)
+static cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -1547,13 +1541,13 @@ static cptr do_life_spell(int spell, int mode)
 		if (desc) return _("一定時間、あらゆる耐性を付け、ACと魔法防御能力を上昇させる。", "Gives ultimate resistance, bonus to AC and speed.");
     
 		{
-			int base = plev / 2;
+			TIME_EFFECT base = (TIME_EFFECT)plev / 2;
 
 			if (info) return info_duration(base, base);
 
 			if (cast)
 			{
-				int v = randint1(base) + base;
+				TIME_EFFECT v = randint1(base) + base;
 				set_fast(v, FALSE);
 				set_oppose_acid(v, FALSE);
 				set_oppose_elec(v, FALSE);
@@ -1575,7 +1569,7 @@ static cptr do_life_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_sorcery_spell(int spell, int mode)
+static cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -1608,7 +1602,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
     
 		{
-			int range = 10;
+			POSITION range = 10;
 
 			if (info) return info_range(range);
 
@@ -1678,7 +1672,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
-			int range = plev * 5;
+			POSITION range = plev * 5;
 
 			if (info) return info_range(range);
 
@@ -1963,7 +1957,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleport to given location.");
     
 		{
-			int range = plev / 2 + 10;
+			POSITION range = plev / 2 + 10;
 
 			if (info) return info_range(range);
 
@@ -2123,7 +2117,7 @@ static cptr do_sorcery_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_nature_spell(int spell, int mode)
+static cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -2161,7 +2155,7 @@ static cptr do_nature_spell(int spell, int mode)
 		{
 			int dice = 3 + (plev - 1) / 5;
 			int sides = 4;
-			int range = plev / 6 + 2;
+			POSITION range = plev / 6 + 2;
 
 			if (info) return format("%s%dd%d %s%d", s_dam, dice, sides, s_rng, range);
 
@@ -2605,7 +2599,7 @@ static cptr do_nature_spell(int spell, int mode)
 		if (desc) return _("巨大な冷気の球を放つ。", "Fires a huge ball of cold.");
     
 		{
-			int dam = 70 + plev * 3 / 2;
+			HIT_POINT dam = 70 + plev * 3 / 2;
 			int rad = plev / 12 + 1;
 
 			if (info) return info_damage(0, 0, dam);
@@ -2624,7 +2618,7 @@ static cptr do_nature_spell(int spell, int mode)
 		if (desc) return _("巨大な電撃の球を放つ。", "Fires a huge electric ball.");
     
 		{
-			int dam = 90 + plev * 3 / 2;
+			HIT_POINT dam = 90 + plev * 3 / 2;
 			int rad = plev / 12 + 1;
 
 			if (info) return info_damage(0, 0, dam);
@@ -2643,7 +2637,7 @@ static cptr do_nature_spell(int spell, int mode)
 		if (desc) return _("巨大な水の球を放つ。", "Fires a huge ball of water.");
     
 		{
-			int dam = 100 + plev * 3 / 2;
+			HIT_POINT dam = 100 + plev * 3 / 2;
 			int rad = plev / 12 + 1;
 
 			if (info) return info_damage(0, 0, dam);
@@ -2662,7 +2656,7 @@ static cptr do_nature_spell(int spell, int mode)
 			"Generates ball of light centered on you. Maps and lights whole dungeon level. Knows all objects location.");
     
 		{
-			int dam = 150;
+			HIT_POINT dam = 150;
 			int rad = 8;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -2728,7 +2722,7 @@ static cptr do_nature_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_chaos_spell(int spell, int mode)
+static cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -2892,7 +2886,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
-			int range = plev * 5;
+			POSITION range = plev * 5;
 
 			if (info) return info_range(range);
 
@@ -2944,7 +2938,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("自分を中心とした轟音の球を発生させる。", "Generates a ball of sound centered on you.");
     
 		{
-			int dam = 60 + plev;
+			HIT_POINT dam = 60 + plev;
 			int rad = plev / 10 + 2;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -2981,7 +2975,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("炎の球を放つ。", "Fires a ball of fire.");
     
 		{
-			int dam = plev + 55;
+			HIT_POINT dam = plev + 55;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3033,7 +3027,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("巨大なカオスの球を放つ。", "Fires a huge ball of chaos.");
     
 		{
-			int dam = plev * 2 + 99;
+			HIT_POINT dam = plev * 2 + 99;
 			int rad = plev / 5;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3104,7 +3098,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("巨大な分解の球を放つ。", "Fires a huge ball of disintegration.");
     
 		{
-			int dam = plev + 70;
+			HIT_POINT dam = plev + 70;
 			int rad = 3 + plev / 40;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3140,7 +3134,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("ロケットを発射する。", "Fires a magic rocket.");
     
 		{
-			int dam = 120 + plev * 2;
+			HIT_POINT dam = 120 + plev * 2;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3222,7 +3216,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("自分の周辺に隕石を落とす。", "Makes meteor balls fall down to nearby random locations.");
     
 		{
-			int dam = plev * 2;
+			HIT_POINT dam = plev * 2;
 			int rad = 2;
 
 			if (info) return info_multi_damage(dam);
@@ -3239,7 +3233,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("自分を中心とした超巨大な炎の球を発生させる。", "Generate a huge ball of fire centered on you.");
     
 		{
-			int dam = 300 + 3 * plev;
+			HIT_POINT dam = 300 + 3 * plev;
 			int rad = 8;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -3283,7 +3277,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("非常に強力で巨大な純粋な魔力の球を放つ。", "Fires an extremely powerful huge ball of pure mana.");
     
 		{
-			int dam = 300 + plev * 4;
+			HIT_POINT dam = 300 + plev * 4;
 			int rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3302,7 +3296,7 @@ static cptr do_chaos_spell(int spell, int mode)
 		if (desc) return _("非常に強力なカオスの球を放つ。", "Fires an extremely powerful ball of chaos.");
     
 		{
-			int dam = p_ptr->chp;
+			HIT_POINT dam = p_ptr->chp;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3341,7 +3335,7 @@ static cptr do_chaos_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_death_spell(int spell, int mode)
+static cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -3437,7 +3431,7 @@ static cptr do_death_spell(int spell, int mode)
 		if (desc) return _("毒の球を放つ。", "Fires a ball of poison.");
     
 		{
-			int dam = 10 + plev / 2;
+			HIT_POINT dam = 10 + plev / 2;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3576,7 +3570,7 @@ static cptr do_death_spell(int spell, int mode)
 		if (desc) return _("自分を中心とした毒の球を発生させる。", "Generate a ball of poison centered on you.");
     
 		{
-			int dam = (30 + plev) * 2;
+			HIT_POINT dam = (30 + plev) * 2;
 			int rad = plev / 10 + 2;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -3632,7 +3626,7 @@ static cptr do_death_spell(int spell, int mode)
 
 			if (cast)
 			{
-				int dam = base + damroll(dice, sides);
+				HIT_POINT dam = base + damroll(dice, sides);
 
 				if (!get_aim_dir(&dir)) return NULL;
 
@@ -3786,7 +3780,7 @@ static cptr do_death_spell(int spell, int mode)
 			"Fires 3 bolts. Each of the bolts absorbs some HP from a monster and gives them to you.");
     
 		{
-			int dam = 100;
+			HIT_POINT dam = 100;
 
 			if (info) return format("%s3*%d", s_dam, dam);
 
@@ -3829,7 +3823,7 @@ static cptr do_death_spell(int spell, int mode)
 		if (desc) return _("巨大な暗黒の球を放つ。", "Fires a huge ball of darkness.");
     
 		{
-			int dam = 100 + plev * 2;
+			HIT_POINT dam = 100 + plev * 2;
 			int rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
@@ -3971,7 +3965,7 @@ static cptr do_death_spell(int spell, int mode)
 			"Fires a powerful ball of evil power. Hurts good monsters greatly.");
     
 		{
-			int dam = 666;
+			HIT_POINT dam = 666;
 			int rad = 3;
 
 			if (info) return info_damage(0, 0, dam);
@@ -4014,7 +4008,7 @@ static cptr do_death_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_trump_spell(int spell, int mode)
+static cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -4033,7 +4027,7 @@ static cptr do_trump_spell(int spell, int mode)
 		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
     
 		{
-			int range = 10;
+			POSITION range = 10;
 
 			if (info) return info_range(range);
 
@@ -4094,7 +4088,7 @@ static cptr do_trump_spell(int spell, int mode)
 		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
-			int range = plev * 4;
+			POSITION range = plev * 4;
 
 			if (info) return info_range(range);
 
@@ -4279,7 +4273,7 @@ static cptr do_trump_spell(int spell, int mode)
 		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleport to given location.");
     
 		{
-			int range = plev / 2 + 10;
+			POSITION range = plev / 2 + 10;
 
 			if (info) return info_range(range);
 
@@ -4571,7 +4565,7 @@ static cptr do_trump_spell(int spell, int mode)
 		if (desc) return _("自分の周辺に隕石を落とす。", "Makes meteor balls fall down to nearby random locations.");
     
 		{
-			int dam = plev * 2;
+			HIT_POINT dam = plev * 2;
 			int rad = 2;
 
 			if (info) return info_multi_damage(dam);
@@ -4660,7 +4654,7 @@ static cptr do_trump_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_arcane_spell(int spell, int mode)
+static cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -4742,7 +4736,7 @@ static cptr do_arcane_spell(int spell, int mode)
 		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
     
 		{
-			int range = 10;
+			POSITION range = 10;
 
 			if (info) return info_range(range);
 
@@ -4984,7 +4978,7 @@ static cptr do_arcane_spell(int spell, int mode)
 		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
     
 		{
-			int range = plev * 5;
+			POSITION range = plev * 5;
 
 			if (info) return info_range(range);
 
@@ -5126,7 +5120,7 @@ static cptr do_arcane_spell(int spell, int mode)
 		if (desc) return _("炎、電撃、冷気、酸のどれかの球を放つ。", "Fires a ball of some elements.");
     
 		{
-			int dam = 75 + plev;
+			HIT_POINT dam = 75 + plev;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -5221,7 +5215,7 @@ static cptr do_arcane_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_craft_spell(int spell, int mode)
+static cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -5754,7 +5748,7 @@ static cptr do_craft_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_daemon_spell(int spell, int mode)
+static cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -5992,7 +5986,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("炎の球を放つ。", "Fires a ball of fire.");
     
 		{
-			int dam = plev + 55;
+			HIT_POINT dam = plev + 55;
 			int rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6023,7 +6017,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("大きな地獄の球を放つ。", "Fires a huge ball of nether.");
     
 		{
-			int dam = plev * 3 / 2 + 100;
+			HIT_POINT dam = plev * 3 / 2 + 100;
 			int rad = plev / 20 + 2;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6097,13 +6091,13 @@ static cptr do_daemon_spell(int spell, int mode)
 			"Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to which from equipment for more powerful resistances.");
     
 		{
-			int base = 20;
+			TIME_EFFECT base = 20;
 
 			if (info) return info_duration(base, base);
 
 			if (cast)
 			{
-				int dur = randint1(base) + base;
+				TIME_EFFECT dur = randint1(base) + base;
 					
 				set_oppose_fire(dur, FALSE);
 				set_oppose_cold(dur, FALSE);
@@ -6120,7 +6114,7 @@ static cptr do_daemon_spell(int spell, int mode)
 			"Generates a ball of fire centered on you which transforms floors to magma.");
     
 		{
-			int dam = (55 + plev) * 2;
+			HIT_POINT dam = (55 + plev) * 2;
 			int rad = 3;
 
 			if (info) return info_damage(0, 0, dam/2);
@@ -6138,7 +6132,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("プラズマの球を放つ。", "Fires a ball of plasma.");
     
 		{
-			int dam = plev * 3 / 2 + 80;
+			HIT_POINT dam = plev * 3 / 2 + 80;
 			int rad = 2 + plev / 40;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6193,7 +6187,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("因果混乱の球を放つ。", "Fires a ball of nexus.");
     
 		{
-			int dam = 100 + plev * 2;
+			HIT_POINT dam = 100 + plev * 2;
 			int rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6263,7 +6257,7 @@ static cptr do_daemon_spell(int spell, int mode)
 			"Generate balls of chaos, confusion and charm centered on you.");
     
 		{
-			int dam = 50 + plev;
+			HIT_POINT dam = 50 + plev;
 			int power = 20 + plev;
 			int rad = 3 + plev / 20;
 
@@ -6308,7 +6302,7 @@ static cptr do_daemon_spell(int spell, int mode)
 		if (desc) return _("超巨大な地獄の球を放つ。", "Generate a huge ball of nether.");
     
 		{
-			int dam = plev * 15;
+			HIT_POINT dam = plev * 15;
 			int rad = plev / 5;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6328,7 +6322,7 @@ static cptr do_daemon_spell(int spell, int mode)
 			"Puts blood curse which damages and causes various effects on a monster. You also take damage.");
     
 		{
-			int dam = 600;
+			HIT_POINT dam = 600;
 			int rad = 0;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6370,7 +6364,7 @@ static cptr do_daemon_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_crusade_spell(int spell, int mode)
+static cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -6468,7 +6462,7 @@ static cptr do_crusade_spell(int spell, int mode)
 		if (desc) return _("中距離のテレポートをする。", "Teleport medium distance.");
     
 		{
-			int range = 25 + plev / 2;
+			POSITION range = 25 + plev / 2;
 
 			if (info) return info_range(range);
 
@@ -6631,7 +6625,7 @@ static cptr do_crusade_spell(int spell, int mode)
 		if (desc) return _("強力な電撃のボルトを放つ。", "Fires a powerful bolt of lightning.");
     
 		{
-			int dam = plev * 5;
+			HIT_POINT dam = plev * 5;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -6763,7 +6757,7 @@ static cptr do_crusade_spell(int spell, int mode)
 		if (desc) return _("巨大な閃光の球を放つ。", "Fires a huge ball of powerful light.");
     
 		{
-			int dam = 100 + plev * 2;
+			HIT_POINT dam = 100 + plev * 2;
 			int rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
@@ -6896,7 +6890,7 @@ static cptr do_crusade_spell(int spell, int mode)
 		if (desc) return _("ターゲットの周囲に分解の球を多数落とす。", "Drops many balls of disintegration near the target.");
     
 		{
-			int dam = plev * 3 + 25;
+			HIT_POINT dam = plev * 3 + 25;
 			int rad = 2;
 
 			if (info) return info_multi_damage(dam);
@@ -6951,7 +6945,7 @@ static cptr do_crusade_spell(int spell, int mode)
 				for (i = 0; i < 12; i++)
 				{
 					int attempt = 10;
-					int my = 0, mx = 0;
+					POSITION my = 0, mx = 0;
 
 					while (attempt--)
 					{
@@ -6983,7 +6977,7 @@ static cptr do_crusade_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
  */
-static cptr do_music_spell(int spell, int mode)
+static cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -7215,8 +7209,7 @@ static cptr do_music_spell(int spell, int mode)
 		{
 			msg_print(_("静かな音楽が感覚を研ぎ澄まさせた．．．", "Your quiet music sharpens your sense of hearing..."));
 			/* Hack -- Initialize the turn count */
-			p_ptr->magic_num1[2] = 0;
-
+			SINGING_COUNT(p_ptr) = 0;
 			start_singing(spell, MUSIC_DETECT);
 		}
 
@@ -7227,14 +7220,14 @@ static cptr do_music_spell(int spell, int mode)
 
 			if (cont)
 			{
-				int count = p_ptr->magic_num1[2];
+				int count = SINGING_COUNT(p_ptr);
 
 				if (count >= 19) wiz_lite(FALSE);
 				if (count >= 11)
 				{
 					map_area(rad);
 					if (plev > 39 && count < 19)
-						p_ptr->magic_num1[2] = count + 1;
+						SINGING_COUNT(p_ptr) = count + 1;
 				}
 				if (count >= 6)
 				{
@@ -7244,7 +7237,7 @@ static cptr do_music_spell(int spell, int mode)
 					detect_objects_normal(rad);
 
 					if (plev > 24 && count < 11)
-						p_ptr->magic_num1[2] = count + 1;
+						SINGING_COUNT(p_ptr) = count + 1;
 				}
 				if (count >= 3)
 				{
@@ -7252,14 +7245,14 @@ static cptr do_music_spell(int spell, int mode)
 					detect_monsters_normal(rad);
 
 					if (plev > 19 && count < 6)
-						p_ptr->magic_num1[2] = count + 1;
+						SINGING_COUNT(p_ptr) = count + 1;
 				}
 				detect_traps(rad, TRUE);
 				detect_doors(rad);
 				detect_stairs(rad);
 
 				if (plev > 14 && count < 3)
-					p_ptr->magic_num1[2] = count + 1;
+					SINGING_COUNT(p_ptr) = count + 1;
 			}
 		}
 
@@ -7900,7 +7893,7 @@ static cptr do_music_spell(int spell, int mode)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_CAST)
  * @return SPELL_NAME / SPELL_DESC 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
  */
-static cptr do_hissatsu_spell(int spell, int mode)
+static cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -8059,7 +8052,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
     
 		if (cast)
 		{
-			int y, x;
+			POSITION y, x;
 
 			if (p_ptr->riding)
 			{
@@ -8174,9 +8167,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 			if (cave[y][x].m_idx)
 			{
 				int i;
-				int ty = y, tx = x;
-				int oy = y, ox = x;
-				int m_idx = cave[y][x].m_idx;
+				POSITION ty = y, tx = x;
+				POSITION oy = y, ox = x;
+				MONSTER_IDX m_idx = cave[y][x].m_idx;
 				monster_type *m_ptr = &m_list[m_idx];
 				char m_name[80];
 	
@@ -8523,9 +8516,9 @@ static cptr do_hissatsu_spell(int spell, int mode)
 
 			for (i = 0; i < 3; i++)
 			{
-				int y, x;
-				int ny, nx;
-				int m_idx;
+				POSITION y, x;
+				POSITION ny, nx;
+				MONSTER_IDX m_idx;
 				cave_type *c_ptr;
 				monster_type *m_ptr;
 	
@@ -8675,7 +8668,7 @@ static cptr do_hissatsu_spell(int spell, int mode)
     
 		if (cast)
 		{
-			int y, x;
+			POSITION y, x;
 
 			if (!tgt_pt(&x, &y)) return NULL;
 
@@ -8873,7 +8866,7 @@ static bool item_tester_hook_cursed(object_type *o_ptr)
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
  * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
  */
-static cptr do_hex_spell(int spell, int mode)
+static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -8884,8 +8877,8 @@ static cptr do_hex_spell(int spell, int mode)
 
 	bool add = TRUE;
 
-	int plev = p_ptr->lev;
-	int power;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	HIT_POINT power;
 
 	switch (spell)
 	{
@@ -8962,7 +8955,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (desc) return _("装備している武器を呪う。", "Curses your weapon.");
 		if (cast)
 		{
-			int item;
+			OBJECT_IDX item;
 			cptr q, s;
 			char o_name[MAX_NLEN];
 			object_type *o_ptr;
@@ -9049,22 +9042,22 @@ static cptr do_hex_spell(int spell, int mode)
 		if (name) return _("我慢", "Patience");
 		if (desc) return _("数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。", 
 			"Bursts hell fire strongly after patients any damage while few turns.");
-		power = MIN(200, (p_ptr->magic_num1[2] * 2));
+		power = MIN(200, (HEX_REVENGE_POWER(p_ptr) * 2));
 		if (info) return info_damage(0, 0, power);
 		if (cast)
 		{
 			int a = 3 - (p_ptr->pspeed - 100) / 10;
-			int r = 3 + randint1(3) + MAX(0, MIN(3, a));
+			MAGIC_NUM2 r = 3 + randint1(3) + MAX(0, MIN(3, a));
 
-			if (p_ptr->magic_num2[2] > 0)
+			if (HEX_REVENGE_TURN(p_ptr) > 0)
 			{
 				msg_print(_("すでに我慢をしている。", "You are already patienting."));
 				return NULL;
 			}
 
-			p_ptr->magic_num2[1] = 1;
-			p_ptr->magic_num2[2] = r;
-			p_ptr->magic_num1[2] = 0;
+			HEX_REVENGE_TYPE(p_ptr) = 1;
+			HEX_REVENGE_TURN(p_ptr) = r;
+			HEX_REVENGE_POWER(p_ptr) = 0;
 			msg_print(_("じっと耐えることにした。", "You decide to patient all damages."));
 			add = FALSE;
 		}
@@ -9072,9 +9065,9 @@ static cptr do_hex_spell(int spell, int mode)
 		{
 			int rad = 2 + (power / 50);
 
-			p_ptr->magic_num2[2]--;
+			HEX_REVENGE_TURN(p_ptr)--;
 
-			if ((p_ptr->magic_num2[2] <= 0) || (power >= 200))
+			if ((HEX_REVENGE_TURN(p_ptr) <= 0) || (power >= 200))
 			{
 				msg_print(_("我慢が解かれた！", "Time for end of patioence!"));
 				if (power)
@@ -9088,9 +9081,9 @@ static cptr do_hex_spell(int spell, int mode)
 				}
 
 				/* Reset */
-				p_ptr->magic_num2[1] = 0;
-				p_ptr->magic_num2[2] = 0;
-				p_ptr->magic_num1[2] = 0;
+				HEX_REVENGE_TYPE(p_ptr) = 0;
+				HEX_REVENGE_TURN(p_ptr) = 0;
+				HEX_REVENGE_POWER(p_ptr) = 0;
 			}
 		}
 		break;
@@ -9129,9 +9122,9 @@ static cptr do_hex_spell(int spell, int mode)
 		if (desc) return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling of casting a spell.");
 		if (cast)
 		{
-			p_ptr->magic_num1[0] |= (1L << HEX_INHAIL);
+			CASTING_HEX_FLAGS(p_ptr) |= (1L << HEX_INHAIL);
 			do_cmd_quaff_potion();
-			p_ptr->magic_num1[0] &= ~(1L << HEX_INHAIL);
+			CASTING_HEX_FLAGS(p_ptr) &= ~(1L << HEX_INHAIL);
 			add = FALSE;
 		}
 		break;
@@ -9268,7 +9261,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (desc) return _("装備している防具に呪いをかける。", "Curse a piece of armour that you wielding.");
 		if (cast)
 		{
-			int item;
+			OBJECT_IDX item;
 			cptr q, s;
 			char o_name[MAX_NLEN];
 			object_type *o_ptr;
@@ -9371,9 +9364,9 @@ static cptr do_hex_spell(int spell, int mode)
 			if ((!o_ptr->k_idx) || (!object_is_cursed(o_ptr)))
 			{
 				do_spell(REALM_HEX, spell, SPELL_STOP);
-				p_ptr->magic_num1[0] &= ~(1L << spell);
-				p_ptr->magic_num2[0]--;
-				if (!p_ptr->magic_num2[0]) set_action(ACTION_NONE);
+				CASTING_HEX_FLAGS(p_ptr) &= ~(1L << spell);
+				CASTING_HEX_NUM(p_ptr)--;
+				if (!SINGING_SONG_ID(p_ptr)) set_action(ACTION_NONE);
 			}
 		}
 		if (stop)
@@ -9460,9 +9453,9 @@ static cptr do_hex_spell(int spell, int mode)
 			if (!flag)
 			{
 				msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
-				p_ptr->magic_num1[0] &= ~(1L << HEX_RESTORE);
-				if (cont) p_ptr->magic_num2[0]--;
-				if (p_ptr->magic_num2) p_ptr->action = ACTION_NONE;
+				CASTING_HEX_FLAGS(p_ptr) &= ~(1L << HEX_RESTORE);
+				if (cont) CASTING_HEX_NUM(p_ptr)--;
+				if (CASTING_HEX_NUM(p_ptr)) p_ptr->action = ACTION_NONE;
 
 				/* Redraw status */
 				p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
@@ -9478,7 +9471,7 @@ static cptr do_hex_spell(int spell, int mode)
 		if (desc) return _("呪われた武器の呪いを吸収して魔力を回復する。", "Drains curse on your weapon and heals SP a little.");
 		if (cast)
 		{
-			int item;
+			OBJECT_IDX item;
 			cptr s, q;
 			u32b f[TR_FLAG_SIZE];
 			object_type *o_ptr;
@@ -9558,7 +9551,8 @@ static cptr do_hex_spell(int spell, int mode)
 		if (desc) return _("モンスターの隣のマスに瞬間移動する。", "Teleports you close to a monster.");
 		if (cast)
 		{
-			int i, y, x, dir;
+			int i, dir;
+			POSITION y, x;
 			bool flag;
 
 			for (i = 0; i < 3; i++)
@@ -9613,30 +9607,30 @@ static cptr do_hex_spell(int spell, int mode)
 		if (name) return _("復讐の宣告", "Revenge sentence");
 		if (desc) return _("数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。", 
 			"Fires  a ball of hell fire to try revenging after few turns.");
-		power = p_ptr->magic_num1[2];
+		power = HEX_REVENGE_POWER(p_ptr);
 		if (info) return info_damage(0, 0, power);
 		if (cast)
 		{
-			int r;
+			MAGIC_NUM2 r;
 			int a = 3 - (p_ptr->pspeed - 100) / 10;
 			r = 1 + randint1(2) + MAX(0, MIN(3, a));
 
-			if (p_ptr->magic_num2[2] > 0)
+			if (HEX_REVENGE_TURN(p_ptr) > 0)
 			{
 				msg_print(_("すでに復讐は宣告済みだ。", "You already pronounced your revenge."));
 				return NULL;
 			}
 
-			p_ptr->magic_num2[1] = 2;
-			p_ptr->magic_num2[2] = r;
+			HEX_REVENGE_TYPE(p_ptr) = 2;
+			HEX_REVENGE_TURN(p_ptr) = r;
 			msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You pronounce your revenge. %d turns left."), r);
 			add = FALSE;
 		}
 		if (cont)
 		{
-			p_ptr->magic_num2[2]--;
+			HEX_REVENGE_TURN(p_ptr)--;
 
-			if (p_ptr->magic_num2[2] <= 0)
+			if (HEX_REVENGE_TURN(p_ptr) <= 0)
 			{
 				int dir;
 
@@ -9661,7 +9655,7 @@ static cptr do_hex_spell(int spell, int mode)
 				{
 					msg_print(_("復讐する気が失せた。", "You are not a mood to revenge."));
 				}
-				p_ptr->magic_num1[2] = 0;
+				HEX_REVENGE_POWER(p_ptr) = 0;
 			}
 		}
 		break;
@@ -9671,8 +9665,8 @@ static cptr do_hex_spell(int spell, int mode)
 	if ((cast) && (add))
 	{
 		/* add spell */
-		p_ptr->magic_num1[0] |= 1L << (spell);
-		p_ptr->magic_num2[0]++;
+		CASTING_HEX_FLAGS(p_ptr) |= 1L << (spell);
+		CASTING_HEX_NUM(p_ptr)++;
 
 		if (p_ptr->action != ACTION_SPELL) set_action(ACTION_SPELL);
 	}
@@ -9695,7 +9689,7 @@ static cptr do_hex_spell(int spell, int mode)
  * @param mode 求める処理
  * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はNULLポインタを返す。
  */
-cptr do_spell(int realm, int spell, int mode)
+cptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	switch (realm)
 	{

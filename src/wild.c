@@ -41,9 +41,9 @@ static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_F
  * @param type ダンジョンID
  * @return なし
  */
-void set_floor_and_wall(byte type)
+void set_floor_and_wall(DUNGEON_IDX type)
 {
-	static byte cur_type = 255;
+	DUNGEON_IDX cur_type = 255;
 	dungeon_info_type *d_ptr;
 
 	/* Already filled */
@@ -657,12 +657,12 @@ void wilderness_gen(void)
 	player_place(p_ptr->oldpy, p_ptr->oldpx);
 	/* p_ptr->leaving_dungeon = FALSE;*/
 
-	lim = (generate_encounter==TRUE)?40:MIN_M_ALLOC_TN;
+	lim = (generate_encounter == TRUE) ? 40 : MIN_M_ALLOC_TN;
 
 	/* Make some residents */
 	for (i = 0; i < lim; i++)
 	{
-		u32b mode = 0;
+		BIT_FLAGS mode = 0;
 
 		if (!(generate_encounter || (one_in_(2) && (!p_ptr->town_num))))
 			mode |= PM_ALLOW_SLEEP;
@@ -678,7 +678,7 @@ void wilderness_gen(void)
 	set_floor_and_wall(0);
 
 	/* Set rewarded quests to finished */
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		if (quest[i].status == QUEST_STATUS_REWARDED)
 			quest[i].status = QUEST_STATUS_FINISHED;
@@ -849,17 +849,12 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 		
 		for (*x = xmin, i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++)
 		{
-			int idx = s[0];
-			
-			wilderness[*y][*x].terrain = w_letter[idx].terrain;
-			
-			wilderness[*y][*x].level = w_letter[idx].level;
-			
-			wilderness[*y][*x].town = w_letter[idx].town;
-			
-			wilderness[*y][*x].road = w_letter[idx].road;
-			
-			strcpy(town[w_letter[idx].town].name, w_letter[idx].name);
+			int id = s[0];
+			wilderness[*y][*x].terrain = w_letter[id].terrain;
+			wilderness[*y][*x].level = w_letter[id].level;
+			wilderness[*y][*x].town = w_letter[id].town;
+			wilderness[*y][*x].road = w_letter[id].road;
+			strcpy(town[w_letter[id].town].name, w_letter[id].name);
 		}
 		
 		(*y)++;
@@ -1180,8 +1175,8 @@ bool change_wild_mode(void)
 	p_ptr->energy_use = 1000;
 
 	/* Remember the position */
-	p_ptr->oldpx = (s16b)p_ptr->x;
-	p_ptr->oldpy = (s16b)p_ptr->y;
+	p_ptr->oldpx = p_ptr->x;
+	p_ptr->oldpy = p_ptr->y;
 
 	/* Cancel hex spelling */
 	if (hex_spelling_any()) stop_hex_spell_all();

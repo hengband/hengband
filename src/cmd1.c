@@ -253,7 +253,7 @@ bool test_hit_norm(int chance, int ac, int vis)
  * @param dam 現在算出中のダメージ値
  * @return クリティカル修正が入ったダメージ値
  */
-s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
+HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
 	int i, k;
 	object_type *j_ptr =  &inventory[INVEN_BOW];
@@ -311,7 +311,7 @@ s16b critical_shot(int weight, int plus_ammo, int plus_bow, int dam)
  * @param mode オプションフラグ
  * @return クリティカル修正が入ったダメージ値
  */
-s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
+HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode)
 {
 	int i, k;
 	
@@ -364,12 +364,12 @@ s16b critical_norm(int weight, int plus, int dam, s16b meichuu, int mode)
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-static int mult_slaying(int mult, const u32b* flgs, const monster_type* m_ptr)
+static MULTIPLY mult_slaying(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_type* m_ptr)
 {
 	static const struct slay_table_t {
 		int slay_flag;
-		u32b affect_race_flag;
-		int slay_mult;
+		BIT_FLAGS affect_race_flag;
+		MULTIPLY slay_mult;
 		size_t flag_offset;
 		size_t r_flag_offset;
 	} slay_table[] = {
@@ -425,12 +425,12 @@ static int mult_slaying(int mult, const u32b* flgs, const monster_type* m_ptr)
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-static int mult_brand(int mult, const u32b* flgs, const monster_type* m_ptr)
+static MULTIPLY mult_brand(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_type* m_ptr)
 {
 	static const struct brand_table_t {
 		int brand_flag;
-		u32b resist_mask;
-		u32b hurt_flag;
+		BIT_FLAGS resist_mask;
+		BIT_FLAGS hurt_flag;
 	} brand_table[] = {
 		{TR_BRAND_ACID, RFR_EFF_IM_ACID_MASK, 0U           },
 		{TR_BRAND_ELEC, RFR_EFF_IM_ELEC_MASK, 0U           },
@@ -492,11 +492,11 @@ static int mult_brand(int mult, const u32b* flgs, const monster_type* m_ptr)
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bool thrown)
+s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown)
 {
-	int mult = 10;
+	MULTIPLY mult = 10;
 
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
@@ -567,10 +567,9 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, int mode, bo
  * @param x 対象となるマスのX座標
  * @return なし
  */
-static void discover_hidden_things(int y, int x)
+static void discover_hidden_things(POSITION y, POSITION x)
 {
-	s16b this_o_idx, next_o_idx = 0;
-
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	cave_type *c_ptr;
 
 	/* Access the grid */
@@ -640,7 +639,8 @@ static void discover_hidden_things(int y, int x)
  */
 void search(void)
 {
-	int i, chance;
+	DIRECTION i;
+	PERCENTAGE chance;
 
 	/* Start with base search ability */
 	chance = p_ptr->skill_srh;
@@ -950,7 +950,7 @@ static int check_hit(int power)
  */
 static void hit_trap_pit(int trap_feat_type)
 {
-	int dam;
+	HIT_POINT dam;
 	cptr trap_name = "";
 	cptr spike_name = "";
 
@@ -1065,7 +1065,7 @@ static void hit_trap_slow(void)
  * @param turn 状態異常の追加ターン量
  * @return なし
  */
-static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*set_status)(int), int turn_aux)
+static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool (*set_status)(IDX), IDX turn_aux)
 {
 	msg_print(trap_message);
 
@@ -1214,7 +1214,7 @@ static void hit_trap(bool break_trap)
 			hit_trap_set_abnormal_status(
 				_("黒いガスに包み込まれた！", "A black gas surrounds you!"),
 				p_ptr->resist_blind,
-				set_blind, p_ptr->blind + randint0(50) + 25);
+				set_blind, p_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
 			break;
 		}
 
@@ -1223,7 +1223,7 @@ static void hit_trap(bool break_trap)
 			hit_trap_set_abnormal_status(
 				_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
 				p_ptr->resist_conf,
-				set_confused, p_ptr->confused + randint0(20) + 10);
+				set_confused, p_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
 			break;
 		}
 
@@ -1232,7 +1232,7 @@ static void hit_trap(bool break_trap)
 			hit_trap_set_abnormal_status(
 				_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
 				p_ptr->resist_pois || IS_OPPOSE_POIS(),
-				set_poisoned, p_ptr->poisoned + randint0(20) + 10);
+				set_poisoned, p_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
 			break;
 		}
 
@@ -1368,7 +1368,7 @@ static void hit_trap(bool break_trap)
  * @return なし
  */
 static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
-				 int (*dam_func)(int dam, cptr kb_str, int monspell, bool aura), cptr message)
+				 int (*dam_func)(HIT_POINT dam, cptr kb_str, int monspell, bool aura), cptr message)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1419,7 +1419,8 @@ static void touch_zap_player(monster_type *m_ptr)
  */
 static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 {
-	int             k, bonus, chance;
+	HIT_POINT k;
+	int bonus, chance;
 	int             n_weight = 0;
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
@@ -1558,9 +1559,10 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
  * @details
  * If no "weapon" is available, then "punch" the monster one time.
  */
-static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int mode)
+static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, BIT_FLAGS mode)
 {
-	int		num = 0, k, bonus, chance, vir;
+	int		num = 0, bonus, chance, vir;
+	HIT_POINT k;
 
 	cave_type       *c_ptr = &cave[y][x];
 
@@ -1646,12 +1648,12 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
-			int tval = inventory[INVEN_RARM+hand].tval - TV_WEAPON_BEGIN;
-			int sval = inventory[INVEN_RARM+hand].sval;
+			OBJECT_TYPE_VALUE tval = inventory[INVEN_RARM+hand].tval - TV_WEAPON_BEGIN;
+			OBJECT_SUBTYPE_VALUE sval = inventory[INVEN_RARM+hand].sval;
 			int now_exp = p_ptr->weapon_exp[tval][sval];
 			if (now_exp < s_info[p_ptr->pclass].w_max[tval][sval])
 			{
-				int amount = 0;
+				SUB_EXP amount = 0;
 				if (now_exp < WEAPON_EXP_BEGINNER) amount = 80;
 				else if (now_exp < WEAPON_EXP_SKILLED) amount = 10;
 				else if ((now_exp < WEAPON_EXP_EXPERT) && (p_ptr->lev > 19)) amount = 1;
@@ -1882,9 +1884,9 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				}
 
 				if (p_ptr->special_defense & KAMAE_SUZAKU) weight = 4;
-				if ((p_ptr->pclass == CLASS_FORCETRAINER) && (p_ptr->magic_num1[0]))
+				if ((p_ptr->pclass == CLASS_FORCETRAINER) && P_PTR_KI)
 				{
-					weight += (p_ptr->magic_num1[0]/30);
+					weight += (P_PTR_KI / 30);
 					if (weight > 20) weight = 20;
 				}
 
@@ -1982,7 +1984,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						mult++;
 					}
 
-					k *= mult;
+					k *= (HIT_POINT)mult;
 
 					/* Ouch! */
 					if (((r_ptr->flagsr & RFR_RES_ALL) ? k/100 : k) > m_ptr->hp)
@@ -2146,8 +2148,8 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 				{
 					if (is_human)
 					{
-						int to_h = o_ptr->to_h;
-						int to_d = o_ptr->to_d;
+						HIT_PROB to_h = o_ptr->to_h;
+						HIT_POINT to_d = o_ptr->to_d;
 						int i, flag;
 
 						flag = 1;
@@ -2400,7 +2402,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						p_ptr->redraw |= (PR_MANA);
 						mult = mult * 3 / 2 + 20;
 					}
-					k *= mult;
+					k *= (HIT_POINT)mult;
 					k /= 10;
 				}
 
@@ -2415,7 +2417,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 						mult++;
 					}
 
-					k *= mult;
+					k *= (HIT_POINT)mult;
 				}
 				k += (p_ptr->to_d[hand] + o_ptr->to_d);
 				if (k < 0) k = 0;
@@ -2465,7 +2467,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
  * @details
  * If no "weapon" is available, then "punch" the monster one time.
  */
-bool py_attack(int y, int x, int mode)
+bool py_attack(int y, int x, BIT_FLAGS mode)
 {
 	bool            fear = FALSE;
 	bool            mdeath = FALSE;
@@ -2821,18 +2823,18 @@ bool player_can_enter(s16b feature, u16b mode)
  * @param mpe_mode 移動オプションフラグ
  * @return プレイヤーが死亡やフロア離脱を行わず、実際に移動が可能ならばTRUEを返す。
  */
-bool move_player_effect(int ny, int nx, u32b mpe_mode)
+bool move_player_effect(POSITION ny, POSITION nx, u32b mpe_mode)
 {
 	cave_type *c_ptr = &cave[ny][nx];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	if (!(mpe_mode & MPE_STAYING))
 	{
-		int oy = p_ptr->y;
-		int ox = p_ptr->x;
+		POSITION oy = p_ptr->y;
+		POSITION ox = p_ptr->x;
 		cave_type *oc_ptr = &cave[oy][ox];
-		int om_idx = oc_ptr->m_idx;
-		int nm_idx = c_ptr->m_idx;
+		IDX om_idx = oc_ptr->m_idx;
+		IDX nm_idx = c_ptr->m_idx;
 
 		/* Move the player */
 		p_ptr->y = ny;
@@ -3105,11 +3107,11 @@ bool trap_can_be_ignored(int feat)
  * any monster which might be in the destination grid.  Previously,\n
  * moving into walls was "free" and did NOT hit invisible monsters.\n
  */
-void move_player(int dir, bool do_pickup, bool break_trap)
+void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 {
 	/* Find the result of moving */
-	int y = p_ptr->y + ddy[dir];
-	int x = p_ptr->x + ddx[dir];
+	POSITION y = p_ptr->y + ddy[dir];
+	POSITION x = p_ptr->x + ddx[dir];
 
 	/* Examine the destination */
 	cave_type *c_ptr = &cave[y][x];
@@ -3631,12 +3633,12 @@ static byte chome[] =
 /*
  * The direction we are running
  */
-static byte find_current;
+static DIRECTION find_current;
 
 /*
  * The direction we came from
  */
-static byte find_prevdir;
+static DIRECTION find_prevdir;
 
 /*
  * We are looking for open area

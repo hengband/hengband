@@ -1821,7 +1821,7 @@ void report_magics(void)
  * @param known 地形から危険フラグを外すならTRUE
  * @return 効力があった場合TRUEを返す
  */
-static bool detect_feat_flag(int range, int flag, bool known)
+static bool detect_feat_flag(POSITION range, int flag, bool known)
 {
 	int       x, y;
 	bool      detect = FALSE;
@@ -1884,13 +1884,13 @@ static bool detect_feat_flag(int range, int flag, bool known)
  * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
  * @return 効力があった場合TRUEを返す
  */
-bool detect_traps(int range, bool known)
+bool detect_traps(POSITION range, bool known)
 {
 	bool detect = detect_feat_flag(range, FF_TRAP, known);
 
 	if (known) p_ptr->dtrap = TRUE;
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 0) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -1908,11 +1908,11 @@ bool detect_traps(int range, bool known)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_doors(int range)
+bool detect_doors(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_DOOR, TRUE);
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 0) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -1930,11 +1930,11 @@ bool detect_doors(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_stairs(int range)
+bool detect_stairs(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_STAIRS, TRUE);
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 0) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -1952,11 +1952,11 @@ bool detect_stairs(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_treasure(int range)
+bool detect_treasure(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_HAS_GOLD, TRUE);
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 6) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -1974,10 +1974,10 @@ bool detect_treasure(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_objects_gold(int range)
+bool detect_objects_gold(POSITION range)
 {
 	int i, y, x;
-	int range2 = range;
+	POSITION range2 = range;
 
 	bool detect = FALSE;
 
@@ -2015,7 +2015,7 @@ bool detect_objects_gold(int range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 6) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -2038,10 +2038,10 @@ bool detect_objects_gold(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_objects_normal(int range)
+bool detect_objects_normal(POSITION range)
 {
 	int i, y, x;
-	int range2 = range;
+	POSITION range2 = range;
 
 	bool detect = FALSE;
 
@@ -2079,7 +2079,7 @@ bool detect_objects_normal(int range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 6) detect = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 
 	/* Describe */
 	if (detect)
@@ -2110,7 +2110,7 @@ bool detect_objects_normal(int range)
  * It can probably be argued that this function is now too powerful.
  * </pre>
  */
-bool detect_objects_magic(int range)
+bool detect_objects_magic(POSITION range)
 {
 	int i, y, x, tv;
 
@@ -2192,9 +2192,10 @@ bool detect_objects_magic(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_normal(int range)
+bool detect_monsters_normal(POSITION range)
 {
-	int i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 
 	bool flag = FALSE;
 
@@ -2233,7 +2234,7 @@ bool detect_monsters_normal(int range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 3) flag = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 
 	/* Describe */
 	if (flag)
@@ -2252,9 +2253,10 @@ bool detect_monsters_normal(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_invis(int range)
+bool detect_monsters_invis(POSITION range)
 {
-	int i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
@@ -2299,7 +2301,7 @@ bool detect_monsters_invis(int range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 3) flag = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 
 	/* Describe */
 	if (flag)
@@ -2317,9 +2319,10 @@ bool detect_monsters_invis(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_evil(int range)
+bool detect_monsters_evil(POSITION range)
 {
-	int i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
@@ -2386,10 +2389,11 @@ bool detect_monsters_evil(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_nonliving(int range)
+bool detect_monsters_nonliving(POSITION range)
 {
-	int     i, y, x;
-	bool    flag = FALSE;
+	MONSTER_IDX i;
+	POSITION y, x;
+	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
@@ -2449,9 +2453,10 @@ bool detect_monsters_nonliving(int range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_mind(int range)
+bool detect_monsters_mind(POSITION range)
 {
-	int     i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool    flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
@@ -2514,9 +2519,10 @@ bool detect_monsters_mind(int range)
  * @param Match 対応シンボルの混じったモンスター文字列(複数指定化)
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_string(int range, cptr Match)
+bool detect_monsters_string(POSITION range, cptr Match)
 {
-	int i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
@@ -2561,7 +2567,7 @@ bool detect_monsters_string(int range, cptr Match)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && p_ptr->magic_num1[2] > 3) flag = FALSE;
+	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 
 	/* Describe */
 	if (flag)
@@ -2580,9 +2586,10 @@ bool detect_monsters_string(int range, cptr Match)
  * @param match_flag 感知フラグ
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_xxx(int range, u32b match_flag)
+bool detect_monsters_xxx(POSITION range, u32b match_flag)
 {
-	int  i, y, x;
+	MONSTER_IDX i;
+	POSITION y, x;
 	bool flag = FALSE;
 	cptr desc_monsters = _("変なモンスター", "weird monsters");
 
@@ -2662,7 +2669,7 @@ bool detect_monsters_xxx(int range, u32b match_flag)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_all(int range)
+bool detect_all(POSITION range)
 {
 	bool detect = FALSE;
 
@@ -2697,7 +2704,7 @@ bool detect_all(int range)
  * this is done in two passes. -- JDL
  * </pre>
  */
-bool project_hack(int typ, int dam)
+bool project_hack(int typ, HIT_POINT dam)
 {
 	int     i, x, y;
 	int     flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
@@ -2799,7 +2806,7 @@ bool turn_undead(void)
  * @brief 視界内のアンデッド・モンスターにダメージを与える処理 / Dispel undead monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_undead(int dam)
+bool dispel_undead(HIT_POINT dam)
 {
 	bool tester = (project_hack(GF_DISP_UNDEAD, dam));
 	if (tester)
@@ -2811,7 +2818,7 @@ bool dispel_undead(int dam)
  * @brief 視界内の邪悪なモンスターにダメージを与える処理 / Dispel evil monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_evil(int dam)
+bool dispel_evil(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_EVIL, dam));
 }
@@ -2820,7 +2827,7 @@ bool dispel_evil(int dam)
  * @brief 視界内の善良なモンスターにダメージを与える処理 / Dispel good monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_good(int dam)
+bool dispel_good(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_GOOD, dam));
 }
@@ -2829,7 +2836,7 @@ bool dispel_good(int dam)
  * @brief 視界内のあらゆるモンスターにダメージを与える処理 / Dispel all monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_monsters(int dam)
+bool dispel_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_ALL, dam));
 }
@@ -2838,7 +2845,7 @@ bool dispel_monsters(int dam)
  * @brief 視界内の生命のあるモンスターにダメージを与える処理 / Dispel 'living' monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_living(int dam)
+bool dispel_living(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_LIVING, dam));
 }
@@ -2847,7 +2854,7 @@ bool dispel_living(int dam)
  * @brief 視界内の悪魔系モンスターにダメージを与える処理 / Dispel 'living' monsters
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_demons(int dam)
+bool dispel_demons(HIT_POINT dam)
 {
 	return (project_hack(GF_DISP_DEMON, dam));
 }
@@ -2866,9 +2873,9 @@ bool crusade(void)
  * @param who 怒らせる原因を起こしたモンスター(0ならばプレイヤー)
  * @return なし
  */
-void aggravate_monsters(int who)
+void aggravate_monsters(MONSTER_IDX who)
 {
-	int     i;
+	MONSTER_IDX i;
 	bool    sleep = FALSE;
 	bool    speed = FALSE;
 
@@ -2929,7 +2936,7 @@ void aggravate_monsters(int who)
  * @param spell_name 抹殺効果を起こした魔法の名前
  * @return 効力があった場合TRUEを返す
  */
-bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spell_name)
+bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, cptr spell_name)
 {
 	int          msec = delay_factor * delay_factor * delay_factor;
 	monster_type *m_ptr = &m_list[m_idx];
@@ -3030,7 +3037,7 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
  */
 bool symbol_genocide(int power, bool player_cast)
 {
-	int  i;
+	MONSTER_IDX i;
 	char typ;
 	bool result = FALSE;
 
@@ -3077,7 +3084,7 @@ bool symbol_genocide(int power, bool player_cast)
  */
 bool mass_genocide(int power, bool player_cast)
 {
-	int  i;
+	MONSTER_IDX i;
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
@@ -3119,7 +3126,7 @@ bool mass_genocide(int power, bool player_cast)
  */
 bool mass_genocide_undead(int power, bool player_cast)
 {
-	int  i;
+	MONSTER_IDX i;
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
@@ -3162,9 +3169,9 @@ bool mass_genocide_undead(int power, bool player_cast)
  */
 bool probing(void)
 {
-	int     i, speed;
-	int cu, cv;
-	bool    probe = FALSE;
+	int i, speed;
+	bool_hack cu, cv;
+	bool probe = FALSE;
 	char buf[256];
 	cptr align;
 
@@ -3212,6 +3219,7 @@ bool probing(void)
 			speed = m_ptr->mspeed - 110;
 			if (MON_FAST(m_ptr)) speed += 10;
 			if (MON_SLOW(m_ptr)) speed -= 10;
+			if (ironman_nightmare) speed += 5;
 
 			/* Get the monster's alignment */
 #ifdef JP
@@ -3233,11 +3241,9 @@ bool probing(void)
 #endif
 
 			/* Describe the monster */
-#ifdef JP
-sprintf(buf,"%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", m_name, align, m_ptr->hp, m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
-#else
-sprintf(buf, "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:", m_name, align, m_ptr->hp, m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
-#endif
+			sprintf(buf,_("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"),
+				m_name, align, (int)m_ptr->hp, (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
+
 			if (r_ptr->next_r_idx)
 			{
 				strcat(buf, format("%d/%d ", m_ptr->exp, r_ptr->next_exp));
@@ -3626,11 +3632,12 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
  * This has allowed massive simplification of the "monster" code.
  * </pre>
  */
-bool earthquake_aux(int cy, int cx, int r, int m_idx)
+bool earthquake_aux(int cy, int cx, int r, MONSTER_IDX m_idx)
 {
 	int             i, t, y, x, yy, xx, dy, dx;
 	int             damage = 0;
-	int             sn = 0, sy = 0, sx = 0;
+	int             sn = 0;
+	POSITION        sy = 0, sx = 0;
 	bool            hurt = FALSE;
 	cave_type       *c_ptr;
 	bool            map[32][32];
@@ -3928,7 +3935,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
 					/* Hack -- Escape from the rock */
 					if (sn)
 					{
-						int m_idx_aux = cave[yy][xx].m_idx;
+						IDX m_idx_aux = cave[yy][xx].m_idx;
 
 						/* Update the old location */
 						cave[yy][xx].m_idx = 0;
@@ -4100,7 +4107,7 @@ bool earthquake(int cy, int cx, int r)
  */
 void discharge_minion(void)
 {
-	int i;
+	MONSTER_IDX i;
 	bool okay = TRUE;
 
 	for (i = 1; i < m_max; i++)
@@ -4116,7 +4123,7 @@ void discharge_minion(void)
 	}
 	for (i = 1; i < m_max; i++)
 	{
-		int dam;
+		HIT_POINT dam;
 		monster_type *m_ptr = &m_list[i];
 		monster_race *r_ptr;
 
@@ -4586,9 +4593,9 @@ void unlite_room(int y1, int x1)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_area(int dam, int rad)
+bool lite_area(HIT_POINT dam, int rad)
 {
-	int flg = PROJECT_GRID | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS)
 	{
@@ -4619,9 +4626,9 @@ bool lite_area(int dam, int rad)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool unlite_area(int dam, int rad)
+bool unlite_area(HIT_POINT dam, int rad)
 {
-	int flg = PROJECT_GRID | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
 	/* Hack -- Message */
 	if (!p_ptr->blind)
@@ -4655,11 +4662,11 @@ bool unlite_area(int dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(int typ, int dir, int dam, int rad)
+bool fire_ball(int typ, int dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	if (typ == GF_CONTROL_LIVING) flg|= PROJECT_HIDE;
 	/* Use the given direction */
@@ -4694,11 +4701,11 @@ bool fire_ball(int typ, int dir, int dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(int typ, int dir, int dam, int rad)
+bool fire_rocket(int typ, int dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Use the given direction */
 	tx = p_ptr->x + 99 * ddx[dir];
@@ -4730,11 +4737,11 @@ bool fire_rocket(int typ, int dir, int dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(int typ, int dir, int dam, int rad)
+bool fire_ball_hide(int typ, int dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
 
 	/* Use the given direction */
 	tx = p_ptr->x + 99 * ddx[dir];
@@ -4771,9 +4778,9 @@ bool fire_ball_hide(int typ, int dir, int dam, int rad)
  * Option to hurt the player.
  * </pre>
  */
-bool fire_meteor(int who, int typ, int y, int x, int dam, int rad)
+bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
 {
-	int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Analyze the "target" and the caster. */
 	return (project(who, rad, y, x, dam, typ, flg, -1));
@@ -4796,7 +4803,7 @@ bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
 	int ty, tx, y, x;
 	int i;
 
-	int flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
+	BIT_FLAGS flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
 
 	/* Assume okay */
 	bool result = TRUE;
@@ -4922,7 +4929,7 @@ bool teleport_swap(int dir)
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(int typ, int dir, int dam, int flg)
+bool project_hook(int typ, int dir, HIT_POINT dam, BIT_FLAGS flg)
 {
 	int tx, ty;
 
@@ -4957,9 +4964,9 @@ bool project_hook(int typ, int dir, int dam, int flg)
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(int typ, int dir, int dam)
+bool fire_bolt(int typ, int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
 	return (project_hook(typ, dir, dam, flg));
 }
@@ -4977,9 +4984,9 @@ bool fire_bolt(int typ, int dir, int dam)
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(int typ, int dir, int dam)
+bool fire_beam(int typ, int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(typ, dir, dam, flg));
 }
 
@@ -4997,7 +5004,7 @@ bool fire_beam(int typ, int dir, int dam)
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(int prob, int typ, int dir, int dam)
+bool fire_bolt_or_beam(int prob, int typ, int dir, HIT_POINT dam)
 {
 	if (randint0(100) < prob)
 	{
@@ -5015,9 +5022,9 @@ bool fire_bolt_or_beam(int prob, int typ, int dir, int dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_line(int dir, int dam)
+bool lite_line(int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
 	return (project_hook(GF_LITE_WEAK, dir, dam, flg));
 }
 
@@ -5027,9 +5034,9 @@ bool lite_line(int dir, int dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool drain_life(int dir, int dam)
+bool drain_life(int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_DRAIN, dir, dam, flg));
 }
 
@@ -5039,9 +5046,9 @@ bool drain_life(int dir, int dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool wall_to_mud(int dir, int dam)
+bool wall_to_mud(int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project_hook(GF_KILL_WALL, dir, dam, flg));
 }
 
@@ -5052,7 +5059,7 @@ bool wall_to_mud(int dir, int dam)
  */
 bool wizard_lock(int dir)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project_hook(GF_JAM_DOOR, dir, 20 + randint1(30), flg));
 }
 
@@ -5063,7 +5070,7 @@ bool wizard_lock(int dir)
  */
 bool destroy_door(int dir)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(GF_KILL_DOOR, dir, 0, flg));
 }
 
@@ -5074,7 +5081,7 @@ bool destroy_door(int dir)
  */
 bool disarm_trap(int dir)
 {
-	int flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(GF_KILL_TRAP, dir, 0, flg));
 }
 
@@ -5084,9 +5091,9 @@ bool disarm_trap(int dir)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool heal_monster(int dir, int dam)
+bool heal_monster(int dir, HIT_POINT dam)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_HEAL, dir, dam, flg));
 }
 
@@ -5098,7 +5105,7 @@ bool heal_monster(int dir, int dam)
  */
 bool speed_monster(int dir, int power)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SPEED, dir, power, flg));
 }
 
@@ -5110,7 +5117,7 @@ bool speed_monster(int dir, int power)
  */
 bool slow_monster(int dir, int power)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SLOW, dir, power, flg));
 }
 
@@ -5122,7 +5129,7 @@ bool slow_monster(int dir, int power)
  */
 bool sleep_monster(int dir, int power)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SLEEP, dir, power, flg));
 }
 
@@ -5156,7 +5163,7 @@ bool stasis_evil(int dir)
  */
 bool confuse_monster(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_CONF, dir, plev, flg));
 }
 
@@ -5168,7 +5175,7 @@ bool confuse_monster(int dir, int plev)
  */
 bool stun_monster(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_STUN, dir, plev, flg));
 }
 
@@ -5180,7 +5187,7 @@ bool stun_monster(int dir, int plev)
  */
 bool poly_monster(int dir, int power)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	bool tester = (project_hook(GF_OLD_POLY, dir, power, flg));
 	if (tester)
 		chg_virtue(V_CHANCE, 1);
@@ -5194,7 +5201,7 @@ bool poly_monster(int dir, int power)
  */
 bool clone_monster(int dir)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_CLONE, dir, 0, flg));
 }
 
@@ -5206,7 +5213,7 @@ bool clone_monster(int dir)
  */
 bool fear_monster(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_TURN_ALL, dir, plev, flg));
 }
 
@@ -5218,7 +5225,7 @@ bool fear_monster(int dir, int plev)
  */
 bool death_ray(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_DEATH_RAY, dir, plev * 200, flg));
 }
 
@@ -5230,7 +5237,7 @@ bool death_ray(int dir, int plev)
  */
 bool teleport_monster(int dir, int distance)
 {
-	int flg = PROJECT_BEAM | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL;
 	return (project_hook(GF_AWAY_ALL, dir, distance, flg));
 }
 
@@ -5240,7 +5247,7 @@ bool teleport_monster(int dir, int distance)
  */
 bool door_creation(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_DOOR, flg, -1));
 }
 
@@ -5252,7 +5259,7 @@ bool door_creation(void)
  */
 bool trap_creation(int y, int x)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
 }
 
@@ -5262,7 +5269,7 @@ bool trap_creation(int y, int x)
  */
 bool tree_creation(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_TREE, flg, -1));
 }
 
@@ -5272,7 +5279,7 @@ bool tree_creation(void)
  */
 bool glyph_creation(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_GLYPH, flg, -1));
 }
 
@@ -5282,7 +5289,7 @@ bool glyph_creation(void)
  */
 bool wall_stone(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 
 	bool dummy = (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_STONE_WALL, flg, -1));
 
@@ -5301,7 +5308,7 @@ bool wall_stone(void)
  */
 bool destroy_doors_touch(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_DOOR, flg, -1));
 }
 
@@ -5311,7 +5318,7 @@ bool destroy_doors_touch(void)
  */
 bool disarm_traps_touch(void)
 {
-	int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_TRAP, flg, -1));
 }
 
@@ -5321,7 +5328,7 @@ bool disarm_traps_touch(void)
  */
 bool sleep_monsters_touch(void)
 {
-	int flg = PROJECT_KILL | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_KILL | PROJECT_HIDE;
 	return (project(0, 1, p_ptr->y, p_ptr->x, p_ptr->lev, GF_OLD_SLEEP, flg, -1));
 }
 
@@ -5333,9 +5340,9 @@ bool sleep_monsters_touch(void)
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool animate_dead(int who, int y, int x)
+bool animate_dead(MONSTER_IDX who, POSITION y, POSITION x)
 {
-	int flg = PROJECT_ITEM | PROJECT_HIDE;
+	BIT_FLAGS flg = PROJECT_ITEM | PROJECT_HIDE;
 	return (project(who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
 }
 
@@ -5406,7 +5413,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 {
 	int     i = 0;
 
-	int flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
+	BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 
 	do
 	{
@@ -5422,7 +5429,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 		case 30: case 31:
 			if (!(*count))
 			{
-				int dam = damroll(10, 10);
+				HIT_POINT dam = damroll(10, 10);
 				msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
 				project(0, 8, p_ptr->y, p_ptr->x, dam, GF_MANA, flg, -1);
 				take_hit(DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"), -1);
@@ -5516,12 +5523,12 @@ bool activate_ty_curse(bool stop_ty, int *count)
  * @param can_pet プレイヤーのペットとなる可能性があるならばTRUEにする
  * @return 作用が実際にあった場合TRUEを返す
  */
-int activate_hi_summon(int y, int x, bool can_pet)
+int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
 {
 	int i;
 	int count = 0;
-	int summon_lev;
-	u32b mode = PM_ALLOW_GROUP;
+	DEPTH summon_lev;
+	BIT_FLAGS mode = PM_ALLOW_GROUP;
 	bool pet = FALSE;
 
 	if (can_pet)
@@ -5605,12 +5612,12 @@ int activate_hi_summon(int y, int x, bool can_pet)
  * @param x 召喚位置X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-int summon_cyber(int who, int y, int x)
+int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
 {
 	int i;
 	int max_cyber = (easy_band ? 1 : (dun_level / 50) + randint1(2));
 	int count = 0;
-	u32b mode = PM_ALLOW_GROUP;
+	BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 	/* Summoned by a monster */
 	if (who > 0)
@@ -5636,7 +5643,7 @@ int summon_cyber(int who, int y, int x)
 void wall_breaker(void)
 {
 	int i;
-	int y = 0, x = 0;
+	POSITION y = 0, x = 0;
 	int attempts = 1000;
 
 	if (randint1(80 + p_ptr->lev) < 70)
@@ -5682,7 +5689,7 @@ void wall_breaker(void)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool confuse_monsters(int dam)
+bool confuse_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_OLD_CONF, dam));
 }
@@ -5693,7 +5700,7 @@ bool confuse_monsters(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_monsters(int dam)
+bool charm_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_CHARM, dam));
 }
@@ -5704,7 +5711,7 @@ bool charm_monsters(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_animals(int dam)
+bool charm_animals(HIT_POINT dam)
 {
 	return (project_hack(GF_CONTROL_ANIMAL, dam));
 }
@@ -5715,7 +5722,7 @@ bool charm_animals(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stun_monsters(int dam)
+bool stun_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_STUN, dam));
 }
@@ -5726,7 +5733,7 @@ bool stun_monsters(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stasis_monsters(int dam)
+bool stasis_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_STASIS, dam));
 }
@@ -5737,7 +5744,7 @@ bool stasis_monsters(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool mindblast_monsters(int dam)
+bool mindblast_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_PSI, dam));
 }
@@ -5759,7 +5766,7 @@ bool banish_monsters(int dist)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool turn_evil(int dam)
+bool turn_evil(HIT_POINT dam)
 {
 	return (project_hack(GF_TURN_EVIL, dam));
 }
@@ -5770,7 +5777,7 @@ bool turn_evil(int dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool turn_monsters(int dam)
+bool turn_monsters(HIT_POINT dam)
 {
 	return (project_hack(GF_TURN_ALL, dam));
 }
@@ -5793,7 +5800,7 @@ bool deathray_monsters(void)
  */
 bool charm_monster(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CHARM, dir, plev, flg));
 }
 
@@ -5805,7 +5812,7 @@ bool charm_monster(int dir, int plev)
  */
 bool control_one_undead(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_UNDEAD, dir, plev, flg));
 }
 
@@ -5817,7 +5824,7 @@ bool control_one_undead(int dir, int plev)
  */
 bool control_one_demon(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_DEMON, dir, plev, flg));
 }
 
@@ -5829,7 +5836,7 @@ bool control_one_demon(int dir, int plev)
  */
 bool charm_animal(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_ANIMAL, dir, plev, flg));
 }
 
@@ -5841,7 +5848,7 @@ bool charm_animal(int dir, int plev)
  */
 bool charm_living(int dir, int plev)
 {
-	int flg = PROJECT_STOP | PROJECT_KILL;
+	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_LIVING, dir, plev, flg));
 }
 

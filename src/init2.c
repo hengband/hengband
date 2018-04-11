@@ -404,7 +404,7 @@ static errr init_info_raw(int fd, header *head)
  * @param len データの長さ
  * @return エラーコード
  */
-static void init_header(header *head, int num, int len)
+static void init_header(header *head, IDX num, int len)
 {
 	/* Save the "version" */
 	head->v_major = FAKE_VER_MAJOR;
@@ -413,7 +413,7 @@ static void init_header(header *head, int num, int len)
 	head->v_extra = 0;
 
 	/* Save the "record" information */
-	head->info_num = num;
+	head->info_num = (IDX)num;
 	head->info_len = len;
 
 	/* Save the size of "*_head" and "*_info" */
@@ -441,7 +441,7 @@ static errr init_info(cptr filename, header *head,
 {
 	int fd;
 
-	int mode = 0644;
+	BIT_FLAGS mode = 0644;
 
 	errr err = 1;
 
@@ -1495,7 +1495,7 @@ static errr init_towns(void)
 			/* Scan the choices */
 			for (k = 0; k < STORE_CHOICES; k++)
 			{
-				int k_idx;
+				KIND_OBJECT_IDX k_idx;
 
 				/* Extract the tval/sval codes */
 				int tv = store_table[j][k][0];
@@ -1579,10 +1579,10 @@ static errr init_quests(void)
 	/*** Prepare the quests ***/
 
 	/* Allocate the quests */
-	C_MAKE(quest, max_quests, quest_type);
+	C_MAKE(quest, max_q_idx, quest_type);
 
 	/* Set all quest to "untaken" */
-	for (i = 0; i < max_quests; i++)
+	for (i = 0; i < max_q_idx; i++)
 	{
 		quest[i].status = QUEST_STATUS_UNTAKEN;
 	}
@@ -1615,7 +1615,7 @@ s16b f_tag_to_index_in_init(cptr str)
  */
 static errr init_feat_variables(void)
 {
-	int i;
+	FEAT_IDX i;
 
 	/* Nothing */
 	feat_none = f_tag_to_index_in_init("NONE");
@@ -1781,7 +1781,7 @@ static errr init_other(void)
 	}
 
 	/* Allocate and Wipe the max dungeon level */
-	C_MAKE(max_dlv, max_d_idx, s16b);
+	C_MAKE(max_dlv, max_d_idx, DEPTH);
 
 	/* Allocate and wipe each line of the cave */
 	for (i = 0; i < MAX_HGT; i++)
@@ -1978,11 +1978,11 @@ static errr init_object_alloc(void)
 				z = y + aux[x];
 
 				/* Load the entry */
-				table[z].index = i;
-				table[z].level = x;
-				table[z].prob1 = p;
-				table[z].prob2 = p;
-				table[z].prob3 = p;
+				table[z].index = (KIND_OBJECT_IDX)i;
+				table[z].level = (DEPTH)x;
+				table[z].prob1 = (PROB)p;
+				table[z].prob2 = (PROB)p;
+				table[z].prob3 = (PROB)p;
 
 				/* Another entry complete for this locale */
 				aux[x]++;
@@ -2047,11 +2047,11 @@ static errr init_alloc(void)
 			p = (100 / r_ptr->rarity);
 
 			/* Load the entry */
-			alloc_race_table[i].index = elements[i].index;
-			alloc_race_table[i].level = x;
-			alloc_race_table[i].prob1 = p;
-			alloc_race_table[i].prob2 = p;
-			alloc_race_table[i].prob3 = p;
+			alloc_race_table[i].index = (KIND_OBJECT_IDX)elements[i].index;
+			alloc_race_table[i].level = (DEPTH)x;
+			alloc_race_table[i].prob1 = (PROB)p;
+			alloc_race_table[i].prob2 = (PROB)p;
+			alloc_race_table[i].prob3 = (PROB)p;
 		}
 	}
 
@@ -2266,7 +2266,7 @@ void init_angband(void)
 {
 	int fd = -1;
 
-	int mode = 0664;
+	BIT_FLAGS mode = 0664;
 
 	FILE *fp;
 

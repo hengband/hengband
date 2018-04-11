@@ -122,9 +122,9 @@ void safe_setuid_grab(void)
  * Hack -- We will always extract at least one token
  * </pre>
  */
-s16b tokenize(char *buf, s16b num, char **tokens, int mode)
+s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode)
 {
-	int i = 0;
+	s16b i = 0;
 
 	char *s = buf;
 
@@ -355,7 +355,10 @@ static named_num gf_desc[] =
  */
 errr process_pref_file_command(char *buf)
 {
-	int i, j, n1, n2;
+	int i, j;
+	SYMBOL_COLOR n1;
+	SYMBOL_CODE n2;
+
 
 	char *zz[16];
 
@@ -378,8 +381,8 @@ errr process_pref_file_command(char *buf)
 			{
 				monster_race *r_ptr;
 				i = (huge)strtol(zz[0], NULL, 0);
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				if (i >= max_r_idx) return 1;
 				r_ptr = &r_info[i];
 				if (n1 || (!(n2 & 0x80) && n2)) r_ptr->x_attr = n1; /* Allow TERM_DARK text */
@@ -394,8 +397,8 @@ errr process_pref_file_command(char *buf)
 			{
 				object_kind *k_ptr;
 				i = (huge)strtol(zz[0], NULL, 0);
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				if (i >= max_k_idx) return 1;
 				k_ptr = &k_info[i];
 				if (n1 || (!(n2 & 0x80) && n2)) k_ptr->x_attr = n1; /* Allow TERM_DARK text */
@@ -420,8 +423,8 @@ errr process_pref_file_command(char *buf)
 				if (i >= max_f_idx) return 1;
 				f_ptr = &f_info[i];
 
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
 				if (n2) f_ptr->x_char[F_LIT_STANDARD] = n2;
 
@@ -448,8 +451,8 @@ errr process_pref_file_command(char *buf)
 				case F_LIT_MAX * 2 + 1:
 					for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
 					{
-						n1 = strtol(zz[j * 2 + 1], NULL, 0);
-						n2 = strtol(zz[j * 2 + 2], NULL, 0);
+						n1 = (SYMBOL_COLOR)strtol(zz[j * 2 + 1], NULL, 0);
+						n2 = (SYMBOL_CODE)strtol(zz[j * 2 + 2], NULL, 0);
 						if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[j] = n1; /* Allow TERM_DARK text */
 						if (n2) f_ptr->x_char[j] = n2;
 					}
@@ -463,8 +466,8 @@ errr process_pref_file_command(char *buf)
 			if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 			{
 				j = (byte)strtol(zz[0], NULL, 0);
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				misc_to_attr[j] = n1;
 				misc_to_char[j] = n2;
 				return 0;
@@ -476,8 +479,8 @@ errr process_pref_file_command(char *buf)
 			if (tokenize(buf+2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)
 			{
 				j = (huge)strtol(zz[0], NULL, 0);
-				n1 = strtol(zz[1], NULL, 0);
-				n2 = strtol(zz[2], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
+				n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 				for (i = 1; i < max_k_idx; i++)
 				{
 					object_kind *k_ptr = &k_info[i];
@@ -496,7 +499,7 @@ errr process_pref_file_command(char *buf)
 			if (tokenize(buf+2, 2, zz, TOKENIZE_CHECKQUOTE) == 2)
 			{
 				j = (byte)strtol(zz[0], NULL, 0) % 128;
-				n1 = strtol(zz[1], NULL, 0);
+				n1 = (SYMBOL_COLOR)strtol(zz[1], NULL, 0);
 				if (n1) tval_to_attr[j] = n1;
 				return 0;
 			}
@@ -2027,7 +2030,7 @@ static void display_player_various(void)
 	/* If the player is wielding one? */
 	if (o_ptr->k_idx)
 	{
-		s16b energy_fire = bow_energy(o_ptr->sval);
+		ENERGY energy_fire = bow_energy(o_ptr->sval);
 
 		/* Calculate shots per round */
 		shots = p_ptr->num_fire * 100;
@@ -3780,7 +3783,7 @@ c_put_str(TERM_YELLOW, "現在", row, stat_col+35);
  * Mode 4 = mutations
  * </pre>
  */
-void display_player(int mode)
+void display_player(BIT_FLAGS mode)
 {
 	int i;
 
@@ -3937,7 +3940,7 @@ void display_player(int mode)
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), dun_level, p_ptr->died_from);
+					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)dun_level, p_ptr->died_from);
 #else
 					sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, dun_level, map_name());
 #endif
@@ -3969,7 +3972,7 @@ void display_player(int mode)
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), dun_level);
+					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), (int)dun_level);
 #else
 					sprintf(statmsg, "...Now, you are exploring level %d of %s.", dun_level, map_name());
 #endif
@@ -4326,8 +4329,11 @@ static void dump_aux_class_special(FILE *fff)
 	else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 	{
 		char s[EATER_EXT][MAX_NLEN];
-		int tval, ext, k_idx;
-		int i, magic_num;
+		OBJECT_TYPE_VALUE tval;
+		int ext;
+		IDX k_idx;
+		OBJECT_SUBTYPE_VALUE i;
+		int magic_num;
 
 		fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
 
@@ -4403,9 +4409,9 @@ static void dump_aux_class_special(FILE *fff)
 		for (i = 0; i < row; i++)
 		{
 			fprintf(fff, "\n");
-			fprintf(fff, "%-11s %5d     ", essence_name[id[i]], p_ptr->magic_num1[id[i]]);
-			if(i + row < n) fprintf(fff, "%-11s %5d     ", essence_name[id[i + row]], p_ptr->magic_num1[id[i + row]]);
-			if(i + row * 2 < n) fprintf(fff, "%-11s %5d", essence_name[id[i + row * 2]], p_ptr->magic_num1[id[i + row * 2]]);
+			fprintf(fff, "%-11s %5d     ", essence_name[id[i]], (int)p_ptr->magic_num1[id[i]]);
+			if(i + row < n) fprintf(fff, "%-11s %5d     ", essence_name[id[i + row]], (int)p_ptr->magic_num1[id[i + row]]);
+			if(i + row * 2 < n) fprintf(fff, "%-11s %5d", essence_name[id[i + row * 2]], (int)p_ptr->magic_num1[id[i + row * 2]]);
 		}
 
 		fputs("\n", fff);
@@ -4421,20 +4427,20 @@ static void dump_aux_class_special(FILE *fff)
  */
 static void dump_aux_quest(FILE *fff)
 {
-	int i;
-	int *quest_num;
+	IDX i;
+	IDX *quest_num;
 	int dummy;
 
 	fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
 
 	/* Allocate Memory */
-	C_MAKE(quest_num, max_quests, int);
+	C_MAKE(quest_num, max_q_idx, IDX);
 
 	/* Sort by compete level */
-	for (i = 1; i < max_quests; i++) quest_num[i] = i;
+	for (i = 1; i < max_q_idx; i++) quest_num[i] = i;
 	ang_sort_comp = ang_sort_comp_quest_num;
 	ang_sort_swap = ang_sort_swap_quest_num;
-	ang_sort(quest_num, &dummy, max_quests);
+	ang_sort(quest_num, &dummy, max_q_idx);
 
 	/* Dump Quest Information */
 	fputc('\n', fff);
@@ -4444,7 +4450,7 @@ static void dump_aux_quest(FILE *fff)
 	fputc('\n', fff);
 
 	/* Free Memory */
-	C_KILL(quest_num, max_quests, int);
+	C_KILL(quest_num, max_q_idx, IDX);
 }
 
 
@@ -4501,11 +4507,8 @@ static void dump_aux_recall(FILE *fff)
 		}
 		else if (max_dlv[y] == d_info[y].maxdepth) seiha = TRUE;
 
-#ifdef JP
-		fprintf(fff, "   %c%-12s: %3d 階\n", seiha ? '!' : ' ', d_name+d_info[y].name, max_dlv[y]);
-#else
-		fprintf(fff, "   %c%-16s: level %3d\n", seiha ? '!' : ' ', d_name+d_info[y].name, max_dlv[y]);
-#endif
+		fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"),
+			seiha ? '!' : ' ', d_name+d_info[y].name, (int)max_dlv[y]);
 	}
 }
 
@@ -4627,10 +4630,10 @@ static void dump_aux_monsters(FILE *fff)
 {
 	/* Monsters slain */
 
-	int k;
+	IDX k;
 	long uniq_total = 0;
 	long norm_total = 0;
-	s16b *who;
+	IDX *who;
 
 	/* Sort by monster level */
 	u16b why = 2;
@@ -4710,7 +4713,7 @@ static void dump_aux_monsters(FILE *fff)
 		for (k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--)
 		{
 			monster_race *r_ptr = &r_info[who[k]];
-			fprintf(fff, _("  %-40s (レベル%3d)\n", "  %-40s (level %3d)\n"), (r_name + r_ptr->name), r_ptr->level); 
+			fprintf(fff, _("  %-40s (レベル%3d)\n", "  %-40s (level %3d)\n"), (r_name + r_ptr->name), (int)r_ptr->level);
 		}
 
 	}
@@ -5191,7 +5194,7 @@ static void show_file_aux_line(cptr str, int cy, cptr shower)
  * Return FALSE on 'q' to exit from a deep, otherwise TRUE.
  * </pre>
  */
-bool show_file(bool show_version, cptr name, cptr what, int line, int mode)
+bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode)
 {
 	int i, n, skey;
 
@@ -6124,7 +6127,7 @@ void do_cmd_save_game(int is_autosave)
 	(void)strcpy(p_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
 
 	/* HACK -- don't get sanity blast on updating view */
-	hack_mind = FALSE;
+	is_loading_now = FALSE;
 
 	/* Update stuff */
 	update_stuff();
@@ -6133,7 +6136,7 @@ void do_cmd_save_game(int is_autosave)
 	mproc_init();
 
 	/* HACK -- reset the hackish flag */
-	hack_mind = TRUE;
+	is_loading_now = TRUE;
 }
 
 
@@ -6162,7 +6165,7 @@ void do_cmd_save_and_exit(void)
 long total_points(void)
 {
 	int i, mult = 100;
-	s16b max_dl = 0;
+	DEPTH max_dl = 0;
 	u32b point, point_h, point_l;
 	int arena_win = MIN(p_ptr->arena_number, MAX_ARENA_MONS);
 
@@ -6488,11 +6491,11 @@ static void print_tomb(void)
 			{
 				if (streq(p_ptr->died_from, "途中終了"))
 				{
-					sprintf(tmp, "地下 %d 階で死んだ", dun_level);
+					sprintf(tmp, "地下 %d 階で死んだ", (int)dun_level);
 				}
 				else
 				{
-					sprintf(tmp, "に地下 %d 階で殺された", dun_level);
+					sprintf(tmp, "に地下 %d 階で殺された", (int)dun_level);
 				}
 			}
 			center_string(buf, tmp);

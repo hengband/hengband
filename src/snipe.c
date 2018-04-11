@@ -220,9 +220,9 @@ void display_snipe_list(void)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_snipe_power(int *sn, bool only_browse)
+static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 {
-	int             i;
+	COMMAND_CODE i;
 	int             num = 0;
 	int             y = 1;
 	int             x = 20;
@@ -356,7 +356,7 @@ static int get_snipe_power(int *sn, bool only_browse)
 		ask = isupper(choice);
 
 		/* Lowercase */
-		if (ask) choice = tolower(choice);
+		if (ask) choice = (char)tolower(choice);
 
 		/* Extract request */
 		i = (islower(choice) ? A2I(choice) : -1);
@@ -567,7 +567,7 @@ static bool cast_sniper_spell(int spell)
  */
 void do_cmd_snipe(void)
 {
-	int             n = 0;
+	COMMAND_CODE n = 0;
 	bool            cast;
 
 
@@ -619,7 +619,7 @@ void do_cmd_snipe(void)
  */
 void do_cmd_snipe_browse(void)
 {
-	int n = 0;
+	COMMAND_CODE n = 0;
 	int j, line;
 	char temp[62 * 4];
 
