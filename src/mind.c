@@ -1839,7 +1839,7 @@ static bool cast_ninja_spell(int spell)
 		break;
 	case 17:
 		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);
-		fire_ball(GF_OLD_DRAIN, 0, 75+plev*2/3, plev/5+2);
+		fire_ball(GF_HYPODYNAMIA, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(GF_CONFUSION, 0, 75+plev*2/3, plev/5+2);
 		teleport_player(30, 0L);
 		break;

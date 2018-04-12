@@ -239,7 +239,7 @@ static named_num gf_desc[] =
 	{"GF_OLD_SLOW",			GF_OLD_SLOW			},
 	{"GF_OLD_CONF",			GF_OLD_CONF			},
 	{"GF_OLD_SLEEP",			GF_OLD_SLEEP		},
-	{"GF_OLD_DRAIN",			GF_OLD_DRAIN		},
+	{"GF_HYPODYNAMIA",			GF_HYPODYNAMIA		},
 	{"GF_AWAY_UNDEAD",		GF_AWAY_UNDEAD		},
 	{"GF_AWAY_EVIL",			GF_AWAY_EVIL		},
 	{"GF_AWAY_ALL",			GF_AWAY_ALL			},

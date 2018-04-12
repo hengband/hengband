@@ -2730,13 +2730,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 
 		/* Drain Life */
-		case GF_OLD_DRAIN:
+		case GF_HYPODYNAMIA:
 		{
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2749,7 +2749,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
 					if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
 				}
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 				dam = 0;
 			}
@@ -4783,7 +4783,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (do_time)
 			{
-                note = _("は弱くなったようだ。", " seems weakened.");
+				note = _("は弱くなったようだ。", " seems weakened.");
 				m_ptr->maxhp -= do_time;
 				if ((m_ptr->hp - dam) > m_ptr->maxhp) dam = m_ptr->hp - m_ptr->maxhp;
 			}

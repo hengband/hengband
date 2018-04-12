@@ -3541,7 +3541,7 @@ static cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_OLD_DRAIN, dir, damroll(dice, sides) + base, rad);
+				fire_ball(GF_HYPODYNAMIA, dir, damroll(dice, sides) + base, rad);
 			}
 		}
 		break;
@@ -9137,7 +9137,7 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
 		{
-			project_hack(GF_OLD_DRAIN, randint1(power));
+			project_hack(GF_HYPODYNAMIA, randint1(power));
 		}
 		break;
 

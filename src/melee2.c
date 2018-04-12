@@ -1839,7 +1839,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, IDX t_idx)
 				break;
 
 			case RBE_DR_LIFE:
-				pt = GF_OLD_DRAIN;
+				pt = GF_HYPODYNAMIA;
 				effect_type = BLOW_EFFECT_TYPE_HEAL;
 				break;
 

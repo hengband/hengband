@@ -5037,7 +5037,7 @@ bool lite_line(int dir, HIT_POINT dam)
 bool drain_life(int dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_DRAIN, dir, dam, flg));
+	return (project_hook(GF_HYPODYNAMIA, dir, dam, flg));
 }
 
 /*!

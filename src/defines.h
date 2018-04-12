@@ -3006,7 +3006,7 @@
 #define GF_OLD_SLOW     55
 #define GF_OLD_CONF     56
 #define GF_OLD_SLEEP    57
-#define GF_OLD_DRAIN    58
+#define GF_HYPODYNAMIA  58			/*!< 魔法効果: 衰弱*/
 #define GF_AWAY_UNDEAD  61
 #define GF_AWAY_EVIL    62
 #define GF_AWAY_ALL     63
