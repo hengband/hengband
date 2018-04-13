@@ -9130,9 +9130,9 @@ static cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("吸血霧", "Vampiric mist");
-		if (desc) return _("視界内のモンスターに微弱量の生命力吸収のダメージを与える。与えたダメージの分、体力が回復する。", 
-			"Deals few dameges of drain life to all monsters in your sight.");
+		if (name) return _("衰弱の霧", "Hypodynamic mist");
+		if (desc) return _("視界内のモンスターに微弱量の衰弱属性のダメージを与える。", 
+			"Deals few damages of hypodynamia to all monsters in your sight.");
 		power = (plev / 2) + 5;
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
