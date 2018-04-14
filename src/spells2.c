@@ -5029,12 +5029,12 @@ bool lite_line(int dir, HIT_POINT dam)
 }
 
 /*!
- * @brief 吸血ボルト処理
+ * @brief 衰弱ボルト処理
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool drain_life(int dir, HIT_POINT dam)
+bool hypodynamic_bolt(int dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_HYPODYNAMIA, dir, dam, flg));

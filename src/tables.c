@@ -6278,7 +6278,7 @@ const activation_type activation_info[] =
 	{ "DRAIN_1", ACT_DRAIN_1, 30, 500, {12, 0},
 	  _("窒息攻撃(100)", "a strangling attack (100)") },
 	{ "DRAIN_2", ACT_DRAIN_2, 40, 750, {15, 0},
-	  _("生命力吸収(120)", "drain life (120)") },
+	  _("衰弱のボルト(120)", "hypodynamic bolt (120)") },
 	{ "VAMPIRE_1", ACT_VAMPIRE_1, 40, 1000, {20, 0},
 	  _("吸血ドレイン(3*50)", "vampiric drain (3*50)") },
 	{ "BO_MISS_2", ACT_BO_MISS_2, 40, 1000, {20, 0},

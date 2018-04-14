@@ -1155,7 +1155,7 @@ extern void call_chaos(void);
 extern bool fire_beam(int typ, int dir, HIT_POINT dam);
 extern bool fire_bolt_or_beam(int prob, int typ, int dir, HIT_POINT dam);
 extern bool lite_line(int dir, HIT_POINT dam);
-extern bool drain_life(int dir, HIT_POINT dam);
+extern bool hypodynamic_bolt(int dir, HIT_POINT dam);
 extern bool death_ray(int dir, int plev);
 extern bool wall_to_mud(int dir, HIT_POINT dam);
 extern bool destroy_door(int dir);

@@ -1263,7 +1263,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 				msg_print(_("あなたはニヤリとして牙をむいた...", "You grin and bare your fangs..."));
 				dummy = plev + randint1(plev) * MAX(1, plev / 10);   /* Dmg */
-				if (drain_life(dir, dummy))
+				if (hypodynamic_bolt(dir, dummy))
 				{
 					if (p_ptr->food < PY_FOOD_FULL)
 						/* No heal if we are "full" */
@@ -1617,7 +1617,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 				msg_print(_("あなたはニヤリとして牙をむいた...", "You grin and bare your fangs..."));
 				dummy = plev + randint1(plev) * MAX(1, plev / 10);   /* Dmg */
-				if (drain_life(dir, dummy))
+				if (hypodynamic_bolt(dir, dummy))
 				{
 					if (p_ptr->food < PY_FOOD_FULL)
 						/* No heal if we are "full" */

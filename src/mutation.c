@@ -2180,7 +2180,7 @@ bool mutation_power_aux(u32b power)
 
 				dummy = lvl * 2;
 
-				if (drain_life(dir, dummy))
+				if (hypodynamic_bolt(dir, dummy))
 				{
 					if (p_ptr->food < PY_FOOD_FULL)
 						/* No heal if we are "full" */
