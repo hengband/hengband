@@ -2675,7 +2675,7 @@ static int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool m
 			break;
 		}
 
-		case SV_WAND_DRAIN_LIFE:
+		case SV_WAND_HYPODYNAMIA:
 		{
 			if (hypodynamic_bolt(dir, 80 + lev)) ident = TRUE;
 			break;
@@ -3189,7 +3189,7 @@ static int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool
 			break;
 		}
 
-		case SV_ROD_DRAIN_LIFE:
+		case SV_ROD_HYPODYNAMIA:
 		{
 			if (hypodynamic_bolt(dir, 70 + 3 * lev / 2)) ident = TRUE;
 			break;

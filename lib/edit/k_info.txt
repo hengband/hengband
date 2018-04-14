@@ -3000,15 +3000,15 @@ P:0:1d1:0:0:0
 D:$It puts a monster to sleep when you use it.
 D:それは使うと1体のモンスターを眠らせる。
 
-N:280:生命力吸収:鋼鉄の
+N:280:衰弱:鋼鉄の
 E:Drain Life:Steel
 G:-:W
 I:65:12:7
 W:50:0:10:1200
 A:50/1
 P:0:1d1:0:0:0
-D:$It fires a bolt of drain life (damage: 80+level) when you use it.
-D:それは使うとダメージ80+レベルの生命力を削る矢を放つ。
+D:$It fires a bolt of hypodynamia (damage: 80+level) when you use it.
+D:それは使うとダメージ80+レベルの衰弱の矢を放つ。
 
 N:281:トラップ/ドア破壊:ブリキの
 E:Trap/Door Destruction:Tin
@@ -3855,15 +3855,15 @@ P:0:1d1:0:0:0
 D:$It puts a monster to sleep when you zap it.
 D:それは振ると1体のモンスターを眠らせる。
 
-N:363:生命力吸収:チタンの
+N:363:衰弱:チタンの
 E:Drain Life:Titanium
 G:-:w
 I:66:18:23
 W:75:0:15:3600
 A:38/16:75/4
 P:0:1d1:0:0:0
-D:$It fires a bolt of drain life (damage: 70+3*level/2) when you zap it.
-D:それは振るとダメージ70+3*レベル/2の生命力を削る矢を放つ。
+D:$It fires a bolt of hypodynamia (damage: 70+3*level/2) when you zap it.
+D:それは振るとダメージ70+3*レベル/2の衰弱の矢を放つ。
 
 N:364:テレポート・アウェイ:タングステンの
 E:Teleport Other:Tungsten

@@ -2324,7 +2324,7 @@
 #define SV_WAND_SLOW_MONSTER             9
 #define SV_WAND_CONFUSE_MONSTER         10
 #define SV_WAND_FEAR_MONSTER            11
-#define SV_WAND_DRAIN_LIFE              12
+#define SV_WAND_HYPODYNAMIA              12
 #define SV_WAND_POLYMORPH               13
 #define SV_WAND_STINKING_CLOUD          14
 #define SV_WAND_MAGIC_MISSILE           15
@@ -2364,7 +2364,7 @@
 #define SV_ROD_LITE                     15
 #define SV_ROD_SLEEP_MONSTER            16
 #define SV_ROD_SLOW_MONSTER             17
-#define SV_ROD_DRAIN_LIFE               18
+#define SV_ROD_HYPODYNAMIA               18
 #define SV_ROD_POLYMORPH                19
 #define SV_ROD_ACID_BOLT                20
 #define SV_ROD_ELEC_BOLT                21
