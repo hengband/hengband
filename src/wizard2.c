@@ -117,10 +117,10 @@ static bool set_gametime(void)
 	char ppp[80], tmp_val[40];
 
 	/* Prompt */
-	sprintf(ppp, "Dungeon Turn (0-%ld): ", dungeon_turn_limit);
+	sprintf(ppp, "Dungeon Turn (0-%ld): ", (long)dungeon_turn_limit);
 
 	/* Default */
-	sprintf(tmp_val, "%ld", dungeon_turn);
+	sprintf(tmp_val, "%ld", (long)dungeon_turn);
 
 	/* Query */
 	if (!get_string(ppp, tmp_val, 10)) return (FALSE);

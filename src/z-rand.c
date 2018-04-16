@@ -192,10 +192,11 @@ void Rand_state_init(void)
 #ifdef RNG_DEVICE
 
 	FILE *fp = fopen(RNG_DEVICE, "r");
+	int n;
 	
 	do {
-		fread(Rand_state, sizeof(Rand_state[0]), 4, fp);
-	} while ((Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
+		n = fread(Rand_state, sizeof(Rand_state[0]), 4, fp);
+	} while (n != 4 || (Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
 	
 	fclose(fp);
 

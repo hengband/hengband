@@ -766,7 +766,7 @@ cptr process_pref_file_expr(char **sp, char *fp)
 	char b2 = ']';
 
 	char f = ' ';
-	static char tmp[10];
+	static char tmp[16];
 
 	/* Initial */
 	s = (*sp);

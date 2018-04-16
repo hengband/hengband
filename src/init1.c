@@ -503,6 +503,7 @@ static cptr r_a_ability_flags2[] =
 	"S_UNIQUE"
 };
 
+#if 0
 /*!
  * モンスター特性トークン(発動型能力3) /
  * Monster race flags
@@ -542,7 +543,9 @@ static cptr r_a_ability_flags3[] =
 	"XXXA3X30",
 	"XXXA3X31",
 };
+#endif
 
+#if 0
 /*!
  * モンスター特性トークン(発動型能力4) /
  * Monster race flags
@@ -582,6 +585,7 @@ static cptr r_a_ability_flags4[] =
 	"XXXA4X30",
 	"XXXA4X31",
 };
+#endif
 
 
 /*!

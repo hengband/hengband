@@ -2874,7 +2874,7 @@ void msg_print(cptr msg)
 	}
 
 	/* New Message Length */
-	n = (buf ? strlen(buf) : 0);
+	n = strlen(buf);
 
 	/* Memorize the message */
 	if (character_generated) message_add(buf);

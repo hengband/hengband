@@ -4402,7 +4402,7 @@ int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 	int old_chp = p_ptr->chp;
 
 	char death_message[1024];
-	char tmp[80];
+	char tmp[1024];
 
 	int warning = (p_ptr->mhp * hitpoint_warn / 10);
 

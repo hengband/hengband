@@ -408,7 +408,6 @@ static bool player_has_no_spellbooks(void)
  */
 static void confirm_use_force(bool browse_only)
 {
-	INVENTORY_IDX item;
 	char which;
 	COMMAND_CODE code;
 
@@ -417,7 +416,6 @@ static void confirm_use_force(bool browse_only)
 	/* Get the item index */
 	if (repeat_pull(&code) && (code == INVEN_FORCE))
 	{
-		item = (INVENTORY_IDX)code;
 		browse_only ? do_cmd_mind_browse() : do_cmd_mind();
 		return;
 	}

@@ -602,7 +602,7 @@ typedef struct power_desc_type power_desc_type;
  */
 struct power_desc_type
 {
-	char name[40];
+	char name[80];
 	PLAYER_LEVEL level;
 	int  cost;
 	int  stat;

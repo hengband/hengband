@@ -3151,7 +3151,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
  */
 void do_cmd_visuals(void)
 {
-	char i;
+	int i;
 	char tmp[160];
 	char buf[1024];
 	bool need_redraw = FALSE;

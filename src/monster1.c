@@ -2048,7 +2048,7 @@ void roff_top(MONRACE_IDX r_idx)
 	/* Wizards get extra info */
 	if (p_ptr->wizard)
 	{
-		char buf[6];
+		char buf[16];
 
 		sprintf(buf, "%d", r_idx);
 
