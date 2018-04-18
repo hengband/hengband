@@ -1670,8 +1670,11 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
 		size_t inlen = len;
 		size_t outlen = len * 2;
 		char *kanji = malloc(outlen);
-		char *sp = str; char *kp = kanji;
-		size_t n = iconv(cd, &sp, &inlen, &kp, &outlen);
+		char *sp; char *kp = kanji;
+		char sbuf[1024];
+		my_strcpy(sbuf, str, sizeof(sbuf));
+		sp = sbuf;
+		iconv(cd, &sp, &inlen, &kp, &outlen);
 		iconv_close(cd);
 
 		XmbDrawImageString(Metadpy->dpy, Infowin->win, Infofnt->info,

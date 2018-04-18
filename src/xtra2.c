@@ -1588,7 +1588,6 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 	bool        innocent = TRUE, thief = FALSE;
 	int         i;
 	int         expdam;
-	int			dealt_damage;
 
 	(void)COPY(&exp_mon, m_ptr, monster_type);
 	
@@ -1615,9 +1614,6 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 	/* Genocided by chaos patron */
 	if (!m_idx) return TRUE;
 	
-	/* Remember dealt_damage before this attack*/
-	dealt_damage = m_ptr->dealt_damage;
-
 	/* Hurt it */
 	m_ptr->hp -= dam;
 	

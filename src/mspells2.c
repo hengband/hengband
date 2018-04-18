@@ -276,14 +276,11 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	monster_type *t_ptr = NULL;
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	monster_race *tr_ptr = NULL;
 
 	u32b f4, f5, f6;
 
 	bool see_m = is_seen(m_ptr);
 	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
-	bool see_t;
-	bool see_either;
 	bool pet = is_pet(m_ptr);
 
 	bool in_no_magic_dungeon = (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && dun_level
@@ -382,7 +379,6 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	/* OK -- we've got a target */
 	y = t_ptr->fy;
 	x = t_ptr->fx;
-	tr_ptr = &r_info[t_ptr->r_idx];
 
 	/* Forget old counter attack target */
 	reset_target(m_ptr);
@@ -683,9 +679,6 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 	/* Choose a spell to cast */
 	thrown_spell = spell[randint0(num)];
-
-	see_t = is_seen(t_ptr);
-	see_either = (see_m || see_t);
 
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 1);
 

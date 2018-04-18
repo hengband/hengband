@@ -4777,7 +4777,6 @@ static bool kind_is_good(KIND_OBJECT_IDX k_idx)
 bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 {
 	int prob, base;
-	DEPTH obj_level;
 
 
 	/* Chance of "special object" */
@@ -4837,9 +4836,6 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 				j_ptr->number = (byte)damroll(6, 7);
 		}
 	}
-
-	obj_level = k_info[j_ptr->k_idx].level;
-	if (object_is_fixed_artifact(j_ptr)) obj_level = a_info[j_ptr->name1].level;
 
 	if (cheat_peek) object_mention(j_ptr);
 
@@ -8142,7 +8138,7 @@ static void add_essence(ESSENCE_IDX mode)
 	choice = (always_show_list || use_menu) ? ESCAPE:1;
 	while (!flag)
 	{
-		bool able[22];
+		bool able[22] = {0};
 		if( choice==ESCAPE ) choice = ' '; 
 		else if( !get_com(out_val, &choice, FALSE) )break; 
 

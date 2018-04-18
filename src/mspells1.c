@@ -511,7 +511,7 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  */
 void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
   {
-    BIT_FLAGS flg;
+    BIT_FLAGS flg = 0;
     bool learnable = spell_learnable(m_idx);
 
     switch (target_type)

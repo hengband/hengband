@@ -303,7 +303,7 @@ HIT_POINT spell_RF4_SHOOT(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx,i
 */
 HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	HIT_POINT dam, ms_type, drs_type;
+	HIT_POINT dam, ms_type, drs_type = 0;
 	cptr type_s;
 	bool smart_learn_aux = TRUE;
 	monster_type	*m_ptr = &m_list[m_idx];
@@ -450,6 +450,11 @@ HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_id
 		smart_learn_aux = FALSE;
 		break;
 	default:
+		/* Do not reach here */
+		dam = 0;
+		type_s = _("不明", "Unknown");
+		ms_type = MS_BR_ACID;
+		smart_learn_aux = FALSE;
 		break;
 	}
 
@@ -2056,7 +2061,7 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(POSITION y, POSITION x, MONSTER_IDX m_idx, I
 */
 HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	HIT_POINT dam;
+	HIT_POINT dam = -1;
 	monster_type	*m_ptr = &m_list[m_idx];
 	monster_type	*t_ptr = &m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
