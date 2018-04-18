@@ -3392,7 +3392,7 @@ void do_cmd_visuals(void)
 			while (1)
 			{
 				monster_race *r_ptr = &r_info[r];
-				char c;
+				int c;
 				IDX t;
 
 				byte da = r_ptr->d_attr;
@@ -3484,7 +3484,7 @@ void do_cmd_visuals(void)
 			while (1)
 			{
 				object_kind *k_ptr = &k_info[k];
-				char c;
+				int c;
 				IDX t;
 
 				SYMBOL_COLOR da = k_ptr->d_attr;
@@ -3578,7 +3578,7 @@ void do_cmd_visuals(void)
 			while (1)
 			{
 				feature_type *f_ptr = &f_info[f];
-				char c;
+				int c;
 				IDX t;
 
 				byte da = f_ptr->d_attr[lighting_level];
