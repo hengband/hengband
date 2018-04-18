@@ -3613,9 +3613,9 @@ static cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("吸血ドレイン", "Vampiric Drain");
-		if (desc) return _("モンスター1体から生命力を吸いとる。吸いとった生命力によって満腹度が上がる。", 
-			"Absorbs some HP from a monster and gives them to you. You will also gain nutritional sustenance from this.");
+		if (name) return _("吸血の矢", "Vampiric Bolt");
+		if (desc) return _("ボルトによりモンスター1体から生命力を吸いとる。吸いとった生命力によって満腹度が上がる。", 
+			"Absorbs some HP from a monster and gives them to you by bolt. You will also gain nutritional sustenance from this.");
     
 		{
 			int dice = 1;
@@ -3775,10 +3775,9 @@ static cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("真・吸血", "Vampirism True");
-		if (desc) return _("モンスター1体から生命力を吸いとる。吸いとった生命力によって体力が回復する。", 
+		if (name) return _("吸血の連矢", "Vampiric Bolts");
+		if (desc) return _("3連射のボルトによりモンスター1体から生命力を吸いとる。吸いとった生命力によって体力が回復する。", 
 			"Fires 3 bolts. Each of the bolts absorbs some HP from a monster and gives them to you.");
-    
 		{
 			HIT_POINT dam = 100;
 

@@ -2093,7 +2093,7 @@ void do_cmd_racial_power(void)
 			power_desc[num++].number = -1;
 			break;
 		case MIMIC_VAMPIRE:
-			strcpy(power_desc[num].name, _("生命力吸収", "Drain Life"));
+			strcpy(power_desc[num].name, _("吸血", "Vampiric Drain"));
 			power_desc[num].level = 2;
 			power_desc[num].cost = 1 + (lvl / 3);
 			power_desc[num].stat = A_CON;
@@ -2291,7 +2291,7 @@ void do_cmd_racial_power(void)
 			power_desc[num++].number = -1;
 			break;
 		case RACE_VAMPIRE:
-			strcpy(power_desc[num].name, _("生命力吸収", "Drain Life"));
+			strcpy(power_desc[num].name, _("吸血", "Vampiric Drain"));
 			power_desc[num].level = 2;
 			power_desc[num].cost = 1 + (lvl / 3);
 			power_desc[num].stat = A_CON;
@@ -2442,7 +2442,7 @@ void do_cmd_racial_power(void)
 
 		if (p_ptr->muta1 & MUT1_VAMPIRISM)
 		{
-			strcpy(power_desc[num].name, _("吸血ドレイン", "Vampiric Drain"));
+			strcpy(power_desc[num].name, _("吸血", "Vampiric Drain"));
 			power_desc[num].level = 2;
 			power_desc[num].cost = (1 + (lvl / 3));
 			power_desc[num].stat = A_CON;

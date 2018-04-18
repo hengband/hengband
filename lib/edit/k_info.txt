@@ -3001,7 +3001,7 @@ D:$It puts a monster to sleep when you use it.
 D:それは使うと1体のモンスターを眠らせる。
 
 N:280:衰弱:鋼鉄の
-E:Drain Life:Steel
+E:Hypodynamia:Steel
 G:-:W
 I:65:12:7
 W:50:0:10:1200
@@ -3856,7 +3856,7 @@ D:$It puts a monster to sleep when you zap it.
 D:それは振ると1体のモンスターを眠らせる。
 
 N:363:衰弱:チタンの
-E:Drain Life:Titanium
+E:Hypodynamia:Titanium
 G:-:w
 I:66:18:23
 W:75:0:15:3600

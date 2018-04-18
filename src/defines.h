@@ -53,7 +53,7 @@
 #define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 1 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 1 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 2 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 
  /*!
@@ -237,7 +237,7 @@
 #define MUT1_VTELEPORT                  0x00000010L /*!< 突然変異: テレポート / Voluntary teleport */
 #define MUT1_MIND_BLST                  0x00000020L /*!< 突然変異: 精神攻撃 */
 #define MUT1_RADIATION                  0x00000040L /*!< 突然変異: 放射能 */
-#define MUT1_VAMPIRISM                  0x00000080L /*!< 突然変異: 吸血ドレイン */
+#define MUT1_VAMPIRISM                  0x00000080L /*!< 突然変異: 吸血 */
 #define MUT1_SMELL_MET                  0x00000100L /*!< 突然変異: 金属嗅覚 */
 #define MUT1_SMELL_MON                  0x00000200L /*!< 突然変異: 敵臭嗅覚 */
 #define MUT1_BLINK                      0x00000400L /*!< 突然変異: ショート・テレポート */
@@ -1734,17 +1734,17 @@
 #define ACT_BO_FIRE_1           7
 #define ACT_BA_COLD_1           8
 #define ACT_BA_FIRE_1           9
-#define ACT_DRAIN_1             10
+#define ACT_HYPODYNAMIA_1       10
 #define ACT_BA_COLD_2           11
 #define ACT_BA_ELEC_2           12
-#define ACT_DRAIN_2             13
-#define ACT_VAMPIRE_1           14
+#define ACT_HYPODYNAMIA_2       13
+#define ACT_DRAIN_1             14
 #define ACT_BO_MISS_2           15
 #define ACT_BA_FIRE_3           16
 #define ACT_BA_COLD_3           17
 #define ACT_BA_ELEC_3           18
 #define ACT_WHIRLWIND           19
-#define ACT_VAMPIRE_2           20
+#define ACT_DRAIN_2             20
 #define ACT_CALL_CHAOS          21
 #define ACT_ROCKET              22
 #define ACT_DISP_EVIL           23

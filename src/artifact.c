@@ -228,7 +228,7 @@ void one_activation(object_type *o_ptr)
 				break;
 			case ACT_BA_COLD_1:
 			case ACT_BA_FIRE_1:
-			case ACT_DRAIN_1:
+			case ACT_HYPODYNAMIA_1:
 			case ACT_TELE_AWAY:
 			case ACT_ESP:
 			case ACT_RESIST_ALL:
@@ -243,8 +243,8 @@ void one_activation(object_type *o_ptr)
 			case ACT_ID_PLAIN:
 				chance = 75;
 				break;
-			case ACT_DRAIN_2:
-			case ACT_VAMPIRE_1:
+			case ACT_HYPODYNAMIA_2:
+			case ACT_DRAIN_1:
 			case ACT_BO_MISS_2:
 			case ACT_BA_FIRE_2:
 			case ACT_REST_EXP:
@@ -254,7 +254,7 @@ void one_activation(object_type *o_ptr)
 			case ACT_BA_COLD_3:
 			case ACT_BA_ELEC_3:
 			case ACT_WHIRLWIND:
-			case ACT_VAMPIRE_2:
+			case ACT_DRAIN_2:
 			case ACT_CHARM_ANIMAL:
 				chance = 50;
 				break;
@@ -1600,11 +1600,11 @@ static void give_activation_power(object_type *o_ptr)
 			else if (one_in_(13))
 				type = ACT_SUMMON_UNDEAD;
 			else if (one_in_(9))
-				type = ACT_VAMPIRE_2;
+				type = ACT_DRAIN_2;
 			else if (one_in_(6))
 				type = ACT_CHARM_UNDEAD;
 			else
-				type = ACT_VAMPIRE_1;
+				type = ACT_DRAIN_1;
 			break;
 
 		case BIAS_LAW:
@@ -2367,7 +2367,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 		
-		case ACT_DRAIN_1:
+		case ACT_HYPODYNAMIA_1:
 		{
 			msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
 			if (!get_aim_dir(&dir)) return FALSE;
@@ -2375,7 +2375,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
-		case ACT_DRAIN_2:
+		case ACT_HYPODYNAMIA_2:
 		{
 			msg_print(_("黒く輝いている...", "It glows black..."));
 			if (!get_aim_dir(&dir)) return FALSE;
@@ -2383,7 +2383,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
-		case ACT_VAMPIRE_1:
+		case ACT_DRAIN_1:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
 			for (dummy = 0; dummy < 3; dummy++)
@@ -2426,7 +2426,7 @@ bool activate_random_artifact(object_type *o_ptr)
 			break;
 		}
 
-		case ACT_VAMPIRE_2:
+		case ACT_DRAIN_2:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
 			for (dummy = 0; dummy < 3; dummy++)

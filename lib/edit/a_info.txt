@@ -251,7 +251,7 @@ I:45:32:1
 W:50:40:2:75000
 F:STR | INT | WIS | DEX | CON | CHR | STEALTH | HIDE_TYPE |
 F:RES_POIS | ACTIVATE | SEE_INVIS | SEARCH | WARNING | INSTA_ART
-U:DRAIN_1
+U:HYPODYNAMIA_1
 D:$This bracelet has its own will, which was created by Marlin
 D:$ the prince of chaos. It is  invisible but it sometimes
 D:$ ripples to warn owner's dangers. It can morph to strangle
