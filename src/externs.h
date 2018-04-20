@@ -1146,6 +1146,7 @@ extern void unlite_room(int y1, int x1);
 extern bool lite_area(HIT_POINT dam, int rad);
 extern bool unlite_area(HIT_POINT dam, int rad);
 extern bool fire_ball(int typ, int dir, HIT_POINT dam, int rad);
+extern bool fire_breath(int typ, int dir, HIT_POINT dam, int rad);
 extern bool fire_rocket(int typ, int dir, HIT_POINT dam, int rad);
 extern bool fire_ball_hide(int typ, int dir, HIT_POINT dam, int rad);
 extern bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION x, POSITION y, HIT_POINT dam, POSITION rad);

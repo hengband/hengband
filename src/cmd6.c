@@ -2765,14 +2765,14 @@ static int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool m
 
 		case SV_WAND_DRAGON_FIRE:
 		{
-			fire_ball(GF_FIRE, dir, (powerful ? 300 : 200), -3);
+			fire_breath(GF_FIRE, dir, (powerful ? 300 : 200), 3);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_DRAGON_COLD:
 		{
-			fire_ball(GF_COLD, dir, (powerful ? 270 : 180), -3);
+			fire_breath(GF_COLD, dir, (powerful ? 270 : 180), 3);
 			ident = TRUE;
 			break;
 		}

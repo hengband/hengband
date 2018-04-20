@@ -4685,6 +4685,24 @@ bool fire_ball(int typ, int dir, HIT_POINT dam, int rad)
 	return (project(0, rad, ty, tx, dam, typ, flg, -1));
 }
 
+/*!
+* @brief ブレス系スペルの発動 / Cast a breath spell
+* @param typ 効果属性
+* @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
+* @param dam 威力
+* @param rad 半径
+* @return 作用が実際にあった場合TRUEを返す
+* @details
+* <pre>
+* Stop if we hit a monster, act as a "ball"
+* Allow "target" mode to pass over monsters
+* Affect grids, objects, and monsters
+* </pre>
+*/
+bool fire_breath(int typ, int dir, HIT_POINT dam, int rad)
+{
+	fire_ball(typ, dir, dam, -rad);
+}
 
 
 /*!

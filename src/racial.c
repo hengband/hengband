@@ -1233,7 +1233,7 @@ static bool cmd_racial_power_aux(s32b command)
 			msg_format("You breathe %s.",((type == GF_NETHER) ? "nether" : "fire"));
 #endif
 
-			fire_ball(type, dir, plev * 3, -(plev / 15) - 1);
+			fire_breath(type, dir, plev * 3, (plev / 15) + 1);
 			break;
 		}
 		case MIMIC_VAMPIRE:
@@ -1662,7 +1662,7 @@ static bool cmd_racial_power_aux(s32b command)
 				msg_format("You breathe %s.",((type == GF_NETHER) ? "nether" : "fire"));
 #endif
 
-				fire_ball(type, dir, plev * 3, -(plev / 15) - 1);
+				fire_breath(type, dir, plev * 3, (plev / 15) + 1);
 			}
 			break;
 
