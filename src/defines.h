@@ -4537,11 +4537,12 @@ extern int PlayerUID;
 #define SOUND_UNUSED    63 /*!< (no sound for gaze attacks) */
 #define SOUND_EXPLODE   64 /*!< Something (or somebody) explodes */
 #define SOUND_GLASS     65 /*!< A glass feature was crashed */
+#define SOUND_REFLECT   66 /*!< A bolt was reflected */
 
 /*
  * Mega-Hack -- maximum known sounds
  */
-#define SOUND_MAX 66 /*!< 効果音定義の最大数 */
+#define SOUND_MAX 67 /*!< 効果音定義の最大数 */
 
 #define MAX_VIRTUE 18 /*!< 徳定義の最大数 */
 

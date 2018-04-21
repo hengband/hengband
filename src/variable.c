@@ -652,6 +652,7 @@ const cptr angband_sound_name[SOUND_MAX] =
 	"unused",
 	"explode",
 	"glass",
+	"reflect",
 };
 
 /*
