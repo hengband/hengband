@@ -2047,7 +2047,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 	if ((p_ptr->counter || (p_ptr->special_defense & KATA_MUSOU)) && alive && !p_ptr->is_dead && m_ptr->ml && (p_ptr->csp > 7))
 	{
 		char m_target_name[80];
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(m_target_name, m_ptr, 0);
 
 		p_ptr->csp -= 7;
 		msg_format(_("%^sに反撃した！", "Your counterattack to %s!"), m_target_name);
