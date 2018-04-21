@@ -926,12 +926,12 @@ static void rd_monster_old(monster_type *m_ptr)
 	else
 		m_ptr->smart = 0;
 
-	if (z_older_than(10, 4, 5))
+	if (z_older_than(10, 4, 5)) {
 		m_ptr->exp = 0;
-	else
-		tmp32u = 0;
+	} else {
 		rd_u32b(&tmp32u);
 		m_ptr->exp = tmp32u;
+	}
 
 	if (z_older_than(10, 2, 2))
 	{
