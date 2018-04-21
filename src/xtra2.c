@@ -103,12 +103,7 @@ void check_experience(void)
 		sound(SOUND_LEVEL);
 
 		/* Message */
-#ifdef JP
-msg_format("レベル %d にようこそ。", p_ptr->lev);
-#else
-		msg_format("Welcome to level %d.", p_ptr->lev);
-
-#endif
+		msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), p_ptr->lev);
 
 		/* Update some stuff */
 		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);

@@ -648,29 +648,23 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		{
 			long i, j;
 
-#ifdef JP
-			i = p_ptr->lev;
-			hooked_roff(format(" %lu レベルのキャラクタにとって", (long)i));
-
-			i = (long)r_ptr->mexp * r_ptr->level / (p_ptr->max_plv+2);
-			j = ((((long)r_ptr->mexp * r_ptr->level % (p_ptr->max_plv+2)) *
-			       (long)1000 / (p_ptr->max_plv+2) + 5) / 10);
-
-			hooked_roff(format(" 約%ld.%02ld ポイントの経験となる。",
-				(long)i, (long)j ));
-#else
 			/* calculate the integer exp part */
-			i = (long)r_ptr->mexp * r_ptr->level / (p_ptr->max_plv+2);
+			i = (long)r_ptr->mexp * r_ptr->level / (p_ptr->max_plv + 2) * 3 / 2;
 
 			/* calculate the fractional exp part scaled by 100, */
 			/* must use long arithmetic to avoid overflow  */
-			j = ((((long)r_ptr->mexp * r_ptr->level % (p_ptr->max_plv+2)) *
-			       (long)1000 / (p_ptr->max_plv+2) + 5) / 10);
+			j = ((((long)r_ptr->mexp * r_ptr->level % (p_ptr->max_plv + 2) * 3 / 2) *
+				(long)1000 / (p_ptr->max_plv + 2) + 5) / 10);
+
+#ifdef JP
+			hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。",
+				p_ptr->lev, (long)i, (long)j ));
+#else
 
 			/* Mention the experience */
-			hooked_roff(format(" is worth about %ld.%02ld point%s",
-				    (long)i, (long)j,
-				    (((i == 1) && (j == 0)) ? "" : "s")));
+			hooked_roff(format(" is worth about %ld.%02ld point%s for level %d player",
+				(long)i, (long)j,
+				(((i == 1) && (j == 0)) ? "" : "s")), p_ptr->lev);
 
 			/* Take account of annoying English */
 			p = "th";
