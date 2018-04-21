@@ -4117,6 +4117,8 @@ void run_step(int dir)
 		/* Hack -- do not start silly run */
 		if (see_wall(dir, p_ptr->y, p_ptr->x))
 		{
+			sound(SOUND_HITWALL);
+
 			/* Message */
 			msg_print(_("その方向には走れません。", "You cannot run in that direction."));
 
