@@ -1,0 +1,3 @@
+*.wav -diff -text
+*.bmp -diff -text
+*.png -diff -text
