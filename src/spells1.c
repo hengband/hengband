@@ -5218,6 +5218,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 	{
 		POSITION t_y, t_x;
 		int max_attempts = 10;
+		sound(SOUND_REFLECT);
 
 		if (blind) 
 			msg_print(_("何かが跳ね返った！", "Something bounces!"));
@@ -7604,6 +7605,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 						t_x = x_saver;
 					}
 
+					sound(SOUND_REFLECT);
 					if (is_seen(m_ptr))
 					{
 						if ((m_ptr->r_idx == MON_KENSHIROU) || (m_ptr->r_idx == MON_RAOU))
