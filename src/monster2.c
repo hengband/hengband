@@ -4047,6 +4047,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 
 	summon_specific_type = 0;
 	/* Success */
+	sound(SOUND_SUMMON);
 	return (TRUE);
 }
 

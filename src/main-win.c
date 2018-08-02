@@ -647,13 +647,11 @@ static TERM_POSITION mousex = 0, mousey = 0;
 static TERM_POSITION oldx, oldy;
 
 
-/*
- * The "simple" color values
- *
+/*!
+ * @brief The "simple" color values
+ * @details
  * See "main-ibm.c" for original table information
- *
  * The entries below are taken from the "color bits" defined above.
- *
  * Note that many of the choices below suck, but so do crappy monitors.
  */
 static BYTE win_pal[256] =
