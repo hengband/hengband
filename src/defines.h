@@ -2968,8 +2968,8 @@
 #define GF_COLD         4			/*!< 魔法効果: 冷気*/
 #define GF_FIRE         5			/*!< 魔法効果: 火炎*/
 #define GF_PSY_SPEAR    9			/*!< 魔法効果: 光の剣*/
-#define GF_MISSILE      10			/*!< 魔法効果: マジックミサイル*/
-#define GF_ARROW        11			/*!< 魔法効果: 矢*/
+#define GF_MISSILE      10			/*!< 魔法効果: 弱魔力*/
+#define GF_ARROW        11			/*!< 魔法効果: 射撃*/
 #define GF_PLASMA       12			/*!< 魔法効果: プラズマ*/
 /* Replaced with GF_HOLY_FIRE and GF_HELL_FIRE */
 /* #define GF_HOLY_ORB     13 */
@@ -3009,7 +3009,7 @@
 #define GF_HYPODYNAMIA  58			/*!< 魔法効果: 衰弱*/
 #define GF_AWAY_UNDEAD  61			/*!< 魔法効果: アンデッド・アウェイ*/
 #define GF_AWAY_EVIL    62			/*!< 魔法効果: 邪悪飛ばし*/
-#define GF_AWAY_ALL     63			/*!< 魔法効果: モンスター・アウェイ*/
+#define GF_AWAY_ALL     63			/*!< 魔法効果: テレポート・アウェイ*/
 #define GF_TURN_UNDEAD  64			/*!< 魔法効果: アンデッド恐慌*/
 #define GF_TURN_EVIL    65			/*!< 魔法効果: 邪悪恐慌*/
 #define GF_TURN_ALL     66			/*!< 魔法効果: モンスター恐慌*/
@@ -3021,7 +3021,7 @@
 #define GF_DISP_LIVING  71			/*!< 魔法効果: 生命退散*/
 #define GF_ROCKET       72			/*!< 魔法効果: ロケット*/
 #define GF_NUKE         73			/*!< 魔法効果: 放射性廃棄物*/
-#define GF_MAKE_GLYPH   74			/*!< 魔法効果: 魔法のルーン生成*/
+#define GF_MAKE_GLYPH   74			/*!< 魔法効果: 守りのルーン生成*/
 #define GF_STASIS       75			/*!< 魔法効果: モンスター拘束*/
 #define GF_STONE_WALL   76			/*!< 魔法効果: 壁生成*/
 #define GF_DEATH_RAY    77			/*!< 魔法効果: 死の光線*/
@@ -3054,7 +3054,7 @@
 #define GF_ENGETSU     104			/*!< 魔法効果: 円月*/
 #define GF_GENOCIDE    105			/*!< 魔法効果: 抹殺*/
 #define GF_PHOTO       106			/*!< 魔法効果: 撮影*/
-#define GF_CONTROL_DEMON   107		/*!< 魔法効果: デーモン支配*/
+#define GF_CONTROL_DEMON   107		/*!< 魔法効果: 悪魔支配*/
 #define GF_LAVA_FLOW   108			/*!< 魔法効果: 溶岩噴出*/
 #define GF_BLOOD_CURSE 109			/*!< 魔法効果: 血の呪い*/
 #define GF_SEEKER      110			/*!< 魔法効果: シーカーレイ*/
