@@ -3003,8 +3003,8 @@
 #define GF_OLD_POLY     52			/*!< 魔法効果: チェンジ・モンスター*/
 #define GF_OLD_HEAL     53			/*!< 魔法効果: 回復モンスター*/
 #define GF_OLD_SPEED    54			/*!< 魔法効果: スピード・モンスター*/
-#define GF_OLD_SLOW     55			/*!< 魔法効果: 減速モンスター*/
-#define GF_OLD_CONF     56			/*!< 魔法効果: 混乱モンスター*/
+#define GF_OLD_SLOW     55			/*!< 魔法効果: スロウ・モンスター*/
+#define GF_OLD_CONF     56			/*!< 魔法効果: パニック・モンスター*/
 #define GF_OLD_SLEEP    57			/*!< 魔法効果: スリープ・モンスター*/
 #define GF_HYPODYNAMIA  58			/*!< 魔法効果: 衰弱*/
 #define GF_AWAY_UNDEAD  61			/*!< 魔法効果: アンデッド・アウェイ*/
