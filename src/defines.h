@@ -2992,77 +2992,78 @@
 #define GF_NEXUS        33			/*!< 魔法効果: 因果混乱*/
 #define GF_TIME         34			/*!< 魔法効果: 時間逆転*/
 #define GF_GRAVITY      35			/*!< 魔法効果: 重力*/
-#define GF_KILL_WALL    40
-#define GF_KILL_DOOR    41
-#define GF_KILL_TRAP    42
-#define GF_MAKE_WALL    45
-#define GF_MAKE_DOOR    46
-#define GF_MAKE_TRAP    47
-#define GF_MAKE_TREE    48
-#define GF_OLD_CLONE    51
-#define GF_OLD_POLY     52
-#define GF_OLD_HEAL     53
-#define GF_OLD_SPEED    54
-#define GF_OLD_SLOW     55
-#define GF_OLD_CONF     56
-#define GF_OLD_SLEEP    57
+#define GF_KILL_WALL    40			/*!< 魔法効果: 岩石溶解*/
+#define GF_KILL_DOOR    41			/*!< 魔法効果: ドア破壊*/
+#define GF_KILL_TRAP    42			/*!< 魔法効果: トラップ破壊*/
+#define GF_MAKE_WALL    45			/*!< 魔法効果: 壁生成*/
+#define GF_MAKE_DOOR    46			/*!< 魔法効果: ドア生成*/
+#define GF_MAKE_TRAP    47			/*!< 魔法効果: トラップ生成*/
+#define GF_MAKE_TREE    48			/*!< 魔法効果: 森林生成*/
+#define GF_OLD_CLONE    51			/*!< 魔法効果: クローン・モンスター*/
+#define GF_OLD_POLY     52			/*!< 魔法効果: チェンジ・モンスター*/
+#define GF_OLD_HEAL     53			/*!< 魔法効果: 回復モンスター*/
+#define GF_OLD_SPEED    54			/*!< 魔法効果: スピード・モンスター*/
+#define GF_OLD_SLOW     55			/*!< 魔法効果: 減速モンスター*/
+#define GF_OLD_CONF     56			/*!< 魔法効果: 混乱モンスター*/
+#define GF_OLD_SLEEP    57			/*!< 魔法効果: スリープ・モンスター*/
 #define GF_HYPODYNAMIA  58			/*!< 魔法効果: 衰弱*/
-#define GF_AWAY_UNDEAD  61
-#define GF_AWAY_EVIL    62
-#define GF_AWAY_ALL     63
-#define GF_TURN_UNDEAD  64
-#define GF_TURN_EVIL    65
-#define GF_TURN_ALL     66
-#define GF_DISP_UNDEAD  67
-#define GF_DISP_EVIL    68
-#define GF_DISP_ALL     69
-#define GF_DISP_DEMON   70      /* New types for Zangband begin here... */
-#define GF_DISP_LIVING  71
-#define GF_ROCKET       72
-#define GF_NUKE         73
-#define GF_MAKE_GLYPH   74
-#define GF_STASIS       75
-#define GF_STONE_WALL   76
-#define GF_DEATH_RAY    77
-#define GF_STUN         78
-#define GF_HOLY_FIRE    79
-#define GF_HELL_FIRE    80
-#define GF_DISINTEGRATE 81
-#define GF_CHARM        82
-#define GF_CONTROL_UNDEAD  83
-#define GF_CONTROL_ANIMAL  84
-#define GF_PSI          85
-#define GF_PSI_DRAIN    86
-#define GF_TELEKINESIS  87
-#define GF_JAM_DOOR     88
-#define GF_DOMINATION   89
-#define GF_DISP_GOOD    90
-#define GF_DRAIN_MANA   91
-#define GF_MIND_BLAST   92
-#define GF_BRAIN_SMASH  93
-#define GF_CAUSE_1      94
-#define GF_CAUSE_2      95
-#define GF_CAUSE_3      96
-#define GF_CAUSE_4      97
-#define GF_HAND_DOOM    98
-#define GF_CAPTURE      99
-#define GF_ANIM_DEAD   100
-#define GF_CONTROL_LIVING   101
-#define GF_IDENTIFY    102
-#define GF_ATTACK      103
-#define GF_ENGETSU     104
-#define GF_GENOCIDE    105
-#define GF_PHOTO       106
-#define GF_CONTROL_DEMON   107
-#define GF_LAVA_FLOW   108
-#define GF_BLOOD_CURSE 109
-#define GF_SEEKER 110
-#define GF_SUPER_RAY 111
-#define GF_STAR_HEAL 112
-#define GF_WATER_FLOW   113
-#define GF_CRUSADE     114
-#define GF_STASIS_EVIL 115
-#define GF_WOUNDS      116
+#define GF_AWAY_UNDEAD  61			/*!< 魔法効果: アンデッド・アウェイ*/
+#define GF_AWAY_EVIL    62			/*!< 魔法効果: 邪悪飛ばし*/
+#define GF_AWAY_ALL     63			/*!< 魔法効果: モンスター・アウェイ*/
+#define GF_TURN_UNDEAD  64			/*!< 魔法効果: アンデッド恐慌*/
+#define GF_TURN_EVIL    65			/*!< 魔法効果: 邪悪恐慌*/
+#define GF_TURN_ALL     66			/*!< 魔法効果: モンスター恐慌*/
+#define GF_DISP_UNDEAD  67			/*!< 魔法効果: アンデッド退散*/
+#define GF_DISP_EVIL    68			/*!< 魔法効果: 邪悪退散*/
+#define GF_DISP_ALL     69			/*!< 魔法効果: モンスター退散*/
+/* New types for Zangband begin here... */
+#define GF_DISP_DEMON   70			/*!< 魔法効果: 悪魔退散*/
+#define GF_DISP_LIVING  71			/*!< 魔法効果: 生命退散*/
+#define GF_ROCKET       72			/*!< 魔法効果: ロケット*/
+#define GF_NUKE         73			/*!< 魔法効果: 放射性廃棄物*/
+#define GF_MAKE_GLYPH   74			/*!< 魔法効果: 魔法のルーン生成*/
+#define GF_STASIS       75			/*!< 魔法効果: モンスター拘束*/
+#define GF_STONE_WALL   76			/*!< 魔法効果: 壁生成*/
+#define GF_DEATH_RAY    77			/*!< 魔法効果: 死の光線*/
+#define GF_STUN         78			/*!< 魔法効果: 朦朧*/
+#define GF_HOLY_FIRE    79			/*!< 魔法効果: 聖光*/
+#define GF_HELL_FIRE    80			/*!< 魔法効果: 地獄の劫火*/
+#define GF_DISINTEGRATE 81			/*!< 魔法効果: 分解*/
+#define GF_CHARM        82			/*!< 魔法効果: 魅了*/
+#define GF_CONTROL_UNDEAD  83		/*!< 魔法効果: アンデッド支配*/
+#define GF_CONTROL_ANIMAL  84		/*!< 魔法効果: 動物支配*/
+#define GF_PSI          85			/*!< 魔法効果: サイキック攻撃*/
+#define GF_PSI_DRAIN    86			/*!< 魔法効果: 精神吸収*/
+#define GF_TELEKINESIS  87			/*!< 魔法効果: テレキシネス*/
+#define GF_JAM_DOOR     88			/*!< 魔法効果: 施錠*/
+#define GF_DOMINATION   89			/*!< 魔法効果: 精神支配*/
+#define GF_DISP_GOOD    90			/*!< 魔法効果: 善良退散*/
+#define GF_DRAIN_MANA   91			/*!< 魔法効果: 魔力吸収*/
+#define GF_MIND_BLAST   92			/*!< 魔法効果: 精神攻撃*/
+#define GF_BRAIN_SMASH  93			/*!< 魔法効果: 脳攻撃*/
+#define GF_CAUSE_1      94			/*!< 魔法効果: 軽傷の呪い*/
+#define GF_CAUSE_2      95			/*!< 魔法効果: 重傷の呪い*/
+#define GF_CAUSE_3      96			/*!< 魔法効果: 致命傷の呪い*/
+#define GF_CAUSE_4      97			/*!< 魔法効果: 秘孔を突く*/
+#define GF_HAND_DOOM    98			/*!< 魔法効果: 破滅の手*/
+#define GF_CAPTURE      99			/*!< 魔法効果: 捕縛*/
+#define GF_ANIM_DEAD   100			/*!< 魔法効果: 死者復活*/
+#define GF_CONTROL_LIVING   101		/*!< 魔法効果: 生命支配*/
+#define GF_IDENTIFY    102			/*!< 魔法効果: 鑑定*/
+#define GF_ATTACK      103			/*!< 魔法効果: 白兵*/
+#define GF_ENGETSU     104			/*!< 魔法効果: 円月*/
+#define GF_GENOCIDE    105			/*!< 魔法効果: 抹殺*/
+#define GF_PHOTO       106			/*!< 魔法効果: 撮影*/
+#define GF_CONTROL_DEMON   107		/*!< 魔法効果: デーモン支配*/
+#define GF_LAVA_FLOW   108			/*!< 魔法効果: 溶岩噴出*/
+#define GF_BLOOD_CURSE 109			/*!< 魔法効果: 血の呪い*/
+#define GF_SEEKER      110			/*!< 魔法効果: シーカーレイ*/
+#define GF_SUPER_RAY   111			/*!< 魔法効果: スーパーレイ*/
+#define GF_STAR_HEAL   112			/*!< 魔法効果: 星の癒し*/
+#define GF_WATER_FLOW  113			/*!< 魔法効果: 流水*/
+#define GF_CRUSADE     114			/*!< 魔法効果: 聖戦*/
+#define GF_STASIS_EVIL 115			/*!< 魔法効果: 邪悪拘束*/
+#define GF_WOUNDS      116			/*!< 魔法効果: 創傷*/
 
 #define MAX_GF         117
 
