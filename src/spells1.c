@@ -32,16 +32,26 @@ static bool_hack common_saving_throw_charm(player_type *player_ptr, HIT_POINT po
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if(r_ptr->flagsr & RFR_RES_ALL || p_ptr->inside_arena) return TRUE;
+	if(p_ptr->inside_arena) return TRUE;
+
+	/* Memorize a flag */
+	if (r_ptr->flagsr & RFR_RES_ALL)
+	{
+		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
+		return TRUE;
+	}
+
+	if (r_ptr->flags3 & RF3_NO_CONF)
+	{
+		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+		return TRUE;
+	}
+
+	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2 & MFLAG2_NOPET) return TRUE;
 
 	pow += (adj_chr_chm[player_ptr->stat_ind[A_CHR]] - 1);
-
 	if((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;
-
-	return (r_ptr->flags1 & RF1_QUESTOR) ||
-			(r_ptr->flags3 & RF3_NO_CONF) ||
-			(m_ptr->mflag2 & MFLAG2_NOPET) ||
-			(r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
+	return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }
 
 /*!
@@ -2694,7 +2704,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 			else
 			{
-				if ((dam > 29) && (randint1(100) < dam))
+				if (!common_saving_throw_charm(p_ptr, dam, m_ptr))
 				{
 					note = _("があなたに隷属した。", " is in your thrall!");
 					set_pet(m_ptr);
@@ -3153,17 +3163,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (common_saving_throw_charm(p_ptr, dam, m_ptr))
 			{
 
-				/* Memorize a flag */
-				if (r_ptr->flagsr & RFR_RES_ALL)
-				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
-				}
-
-				if (r_ptr->flags3 & RF3_NO_CONF)
-				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-				}
-
 				/* Resist */
 				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
@@ -3195,7 +3194,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CONTROL_UNDEAD:
 		{
 			int vir;
-			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
 			if (seen) obvious = TRUE;
 
 			vir = virtue_number(V_UNLIFE);
@@ -3210,22 +3208,9 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				dam -= p_ptr->virtues[vir-1]/20;
 			}
 
-			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-			{
-				note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
-				break;
-			}
-
-			if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
-				dam = dam * 2 / 3;
-
 			/* Attempt a saving throw */
-			if ((r_ptr->flags1 & RF1_QUESTOR) ||
-			  (!(r_ptr->flags3 & RF3_UNDEAD)) ||
-				(m_ptr->mflag2 & MFLAG2_NOPET) ||
-				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
+				!(r_ptr->flags3 & RF3_UNDEAD))
 			{
 				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
@@ -3252,7 +3237,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CONTROL_DEMON:
 		{
 			int vir;
-			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
 			if (seen) obvious = TRUE;
 
 			vir = virtue_number(V_UNLIFE);
@@ -3267,26 +3251,12 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				dam -= p_ptr->virtues[vir-1]/20;
 			}
 
-			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-			{
-				note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
-				break;
-			}
-
-			if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
-				dam = dam * 2 / 3;
-
 			/* Attempt a saving throw */
-			if ((r_ptr->flags1 & RF1_QUESTOR) ||
-			  (!(r_ptr->flags3 & RF3_DEMON)) ||
-				(m_ptr->mflag2 & MFLAG2_NOPET) ||
-				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
+				!(r_ptr->flags3 & RF3_DEMON))
 			{
 				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
-
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
@@ -3310,8 +3280,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CONTROL_ANIMAL:
 		{
 			int vir;
-			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
-
 			if (seen) obvious = TRUE;
 
 			vir = virtue_number(V_NATURE);
@@ -3326,34 +3294,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				dam -= p_ptr->virtues[vir-1]/20;
 			}
 
-			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-			{
-				note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
-				break;
-			}
-
-			if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
-				dam = dam * 2 / 3;
-
 			/* Attempt a saving throw */
-			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
-			  (!(r_ptr->flags3 & (RF3_ANIMAL))) ||
-				(m_ptr->mflag2 & MFLAG2_NOPET) ||
-				(r_ptr->flags3 & (RF3_NO_CONF)) ||
-				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
+				!(r_ptr->flags3 & RF3_ANIMAL))
 			{
-				/* Memorize a flag */
-				if (r_ptr->flags3 & (RF3_NO_CONF))
-				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-				}
-
 				/* Resist */
 				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
-
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
@@ -3366,7 +3313,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				note = _("はなついた。", " is tamed!");
 				set_pet(m_ptr);
-
 				if (r_ptr->flags3 & RF3_ANIMAL)
 					chg_virtue(V_NATURE, 1);
 			}
@@ -3381,7 +3327,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			int vir;
 
-			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
 			vir = virtue_number(V_UNLIFE);
 			if (seen) obvious = TRUE;
 
@@ -3397,30 +3342,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				dam -= p_ptr->virtues[vir-1]/20;
 			}
 
-			if (r_ptr->flags3 & (RF3_NO_CONF)) dam -= 30;
-			if (dam < 1) dam = 1;
 			msg_format(_("%sを見つめた。", "You stare into %s."), m_name);
-			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-			{
-				note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
-				break;
-			}
-
-			if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
-				dam = dam * 2 / 3;
 
 			/* Attempt a saving throw */
-			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
-				(m_ptr->mflag2 & MFLAG2_NOPET) ||
-				 !monster_living(r_ptr) ||
-				 ((r_ptr->level+10) > randint1(dam)))
+			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
+				!monster_living(r_ptr))
 			{
 				/* Resist */
 				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
-
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
@@ -3433,7 +3363,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				note = _("を支配した。", " is tamed!");
 				set_pet(m_ptr);
-
 				if (r_ptr->flags3 & RF3_ANIMAL)
 					chg_virtue(V_NATURE, 1);
 			}
