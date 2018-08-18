@@ -33,7 +33,7 @@ int project_length = 0; /*!< 投射の射程距離 */
 static void next_mirror( int* next_y , int* next_x , int cury, int curx)
 {
 	int mirror_x[10],mirror_y[10]; /* 鏡はもっと少ない */
-	int mirror_num=0;              /* 鏡の数 */
+	int mirror_num=0;			  /* 鏡の数 */
 	int x,y;
 	int num;
 
@@ -105,44 +105,44 @@ static byte spell_color(int type)
 		/* Analyze */
 		switch (type)
 		{
-			case GF_PSY_SPEAR:      return (0x06);
-			case GF_MISSILE:        return (0x0F);
-			case GF_ACID:           return (0x04);
-			case GF_ELEC:           return (0x02);
-			case GF_FIRE:           return (0x00);
-			case GF_COLD:           return (0x01);
-			case GF_POIS:           return (0x03);
-			case GF_HOLY_FIRE:      return (0x00);
-			case GF_HELL_FIRE:      return (0x00);
-			case GF_MANA:           return (0x0E);
+			case GF_PSY_SPEAR:		return (0x06);
+			case GF_MISSILE:		return (0x0F);
+			case GF_ACID:			return (0x04);
+			case GF_ELEC:			return (0x02);
+			case GF_FIRE:			return (0x00);
+			case GF_COLD:			return (0x01);
+			case GF_POIS:			return (0x03);
+			case GF_HOLY_FIRE:		return (0x00);
+			case GF_HELL_FIRE:		return (0x00);
+			case GF_MANA:			return (0x0E);
 			  /* by henkma */
-			case GF_SEEKER:         return (0x0E);
-			case GF_SUPER_RAY:      return (0x0E);
+			case GF_SEEKER:			return (0x0E);
+			case GF_SUPER_RAY:		return (0x0E);
 
-			case GF_ARROW:          return (0x0F);
-			case GF_WATER:          return (0x04);
-			case GF_NETHER:         return (0x07);
-			case GF_CHAOS:          return (mh_attr(15));
-			case GF_DISENCHANT:     return (0x05);
-			case GF_NEXUS:          return (0x0C);
-			case GF_CONFUSION:      return (mh_attr(4));
-			case GF_SOUND:          return (0x09);
-			case GF_SHARDS:         return (0x08);
-			case GF_FORCE:          return (0x09);
-			case GF_INERTIAL:        return (0x09);
-			case GF_GRAVITY:        return (0x09);
-			case GF_TIME:           return (0x09);
-			case GF_LITE_WEAK:      return (0x06);
-			case GF_LITE:           return (0x06);
-			case GF_DARK_WEAK:      return (0x07);
-			case GF_DARK:           return (0x07);
-			case GF_PLASMA:         return (0x0B);
-			case GF_METEOR:         return (0x00);
-			case GF_ICE:            return (0x01);
-			case GF_ROCKET:         return (0x0F);
-			case GF_DEATH_RAY:      return (0x07);
-			case GF_NUKE:           return (mh_attr(2));
-			case GF_DISINTEGRATE:   return (0x05);
+			case GF_ARROW:			return (0x0F);
+			case GF_WATER:			return (0x04);
+			case GF_NETHER:			return (0x07);
+			case GF_CHAOS:			return (mh_attr(15));
+			case GF_DISENCHANT:		return (0x05);
+			case GF_NEXUS:			return (0x0C);
+			case GF_CONFUSION:		return (mh_attr(4));
+			case GF_SOUND:			return (0x09);
+			case GF_SHARDS:			return (0x08);
+			case GF_FORCE:			return (0x09);
+			case GF_INERTIAL:		return (0x09);
+			case GF_GRAVITY:		return (0x09);
+			case GF_TIME:			return (0x09);
+			case GF_LITE_WEAK:		return (0x06);
+			case GF_LITE:			return (0x06);
+			case GF_DARK_WEAK:		return (0x07);
+			case GF_DARK:			return (0x07);
+			case GF_PLASMA:			return (0x0B);
+			case GF_METEOR:			return (0x00);
+			case GF_ICE:			return (0x01);
+			case GF_ROCKET:			return (0x0F);
+			case GF_DEATH_RAY:		return (0x07);
+			case GF_NUKE:			return (mh_attr(2));
+			case GF_DISINTEGRATE:	return (0x05);
 			case GF_PSI:
 			case GF_PSI_DRAIN:
 			case GF_TELEKINESIS:
@@ -150,16 +150,16 @@ static byte spell_color(int type)
 			case GF_DRAIN_MANA:
 			case GF_MIND_BLAST:
 			case GF_BRAIN_SMASH:
-						return (0x09);
+				return (0x09);
 			case GF_CAUSE_1:
 			case GF_CAUSE_2:
 			case GF_CAUSE_3:
-			case GF_CAUSE_4:        return (0x0E);
-			case GF_HAND_DOOM:      return (0x07);
-			case GF_CAPTURE  :      return (0x0E);
-			case GF_IDENTIFY:       return (0x01);
-			case GF_ATTACK:        return (0x0F);
-			case GF_PHOTO   :      return (0x06);
+			case GF_CAUSE_4:		return (0x0E);
+			case GF_HAND_DOOM:		return (0x07);
+			case GF_CAPTURE  :		return (0x0E);
+			case GF_IDENTIFY:		return (0x01);
+			case GF_ATTACK:			return (0x0F);
+			case GF_PHOTO   :		return (0x06);
 		}
 	}
 	/* Normal tiles or ASCII */
@@ -412,7 +412,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-				    (player_bold(y, x) || cave[y][x].m_idx != 0))
+					(player_bold(y, x) || cave[y][x].m_idx != 0))
 					break;
 			}
 
@@ -501,7 +501,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-				    (player_bold(y, x) || cave[y][x].m_idx != 0))
+					(player_bold(y, x) || cave[y][x].m_idx != 0))
 					break;
 			}
 
@@ -572,7 +572,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-				    (player_bold(y, x) || cave[y][x].m_idx != 0))
+					(player_bold(y, x) || cave[y][x].m_idx != 0))
 					break;
 			}
 
@@ -630,8 +630,8 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  */
 static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 {
-	cave_type       *c_ptr = &cave[y][x];
-	feature_type    *f_ptr = &f_info[c_ptr->feat];
+	cave_type	   *c_ptr = &cave[y][x];
+	feature_type	*f_ptr = &f_info[c_ptr->feat];
 
 	bool obvious = FALSE;
 	bool known = player_has_los_bold(y, x);
@@ -652,18 +652,18 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 		case GF_POIS:
 		case GF_NUKE:
 		case GF_DEATH_RAY:
-            message = _("枯れた", "was blasted."); break;
+			message = _("枯れた", "was blasted."); break;
 		case GF_TIME:
-            message = _("縮んだ", "shrank."); break;
+			message = _("縮んだ", "shrank."); break;
 		case GF_ACID:
-            message = _("溶けた", "melted."); break;
+			message = _("溶けた", "melted."); break;
 		case GF_COLD:
 		case GF_ICE:
-            message = _("凍り、砕け散った", "was frozen and smashed."); break;
+			message = _("凍り、砕け散った", "was frozen and smashed."); break;
 		case GF_FIRE:
 		case GF_ELEC:
 		case GF_PLASMA:
-            message = _("燃えた", "burns up!"); break;
+			message = _("燃えた", "burns up!"); break;
 		case GF_METEOR:
 		case GF_CHAOS:
 		case GF_MANA:
@@ -675,13 +675,13 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 		case GF_DISENCHANT:
 		case GF_FORCE:
 		case GF_GRAVITY:
-            message = _("粉砕された", "was crushed."); break;
+			message = _("粉砕された", "was crushed."); break;
 		default:
 			message = NULL;break;
 		}
 		if (message)
 		{
-            msg_format(_("木は%s。", "A tree %s"), message);
+			msg_format(_("木は%s。", "A tree %s"), message);
 			cave_set_feat(y, x, one_in_(3) ? feat_brake : feat_grass);
 
 			/* Observe */
@@ -749,7 +749,7 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 				/* Check line of sight */
 				if (known)
 				{
-                    msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
+					msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 					obvious = TRUE;
 				}
 
@@ -768,7 +768,7 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 				/* Check line of sound */
 				if (known && (old_feat != c_ptr->feat))
 				{
-                    msg_print(_("カチッと音がした！", "Click!"));
+					msg_print(_("カチッと音がした！", "Click!"));
 					obvious = TRUE;
 				}
 			}
@@ -797,7 +797,7 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 				if (known)
 				{
 					/* Message */
-                    msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
+					msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 					obvious = TRUE;
 				}
 
@@ -840,7 +840,7 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 				if (known && have_flag(mimic_f_ptr->flags, FF_OPEN))
 				{
 					/* Message */
-                    msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), f_name + mimic_f_ptr->name);
+					msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), f_name + mimic_f_ptr->name);
 					obvious = TRUE;
 				}
 			}
@@ -855,7 +855,7 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 				/* Message */
 				if (known && (c_ptr->info & (CAVE_MARK)))
 				{
-                    msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
+					msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
 					obvious = TRUE;
 				}
 
@@ -1093,7 +1093,7 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 		{
 			if (is_mirror_grid(c_ptr))
 			{
-                msg_print(_("鏡が割れた！", "The mirror was crashed!"));
+				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
 				remove_mirror(y, x);
 				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
@@ -1104,7 +1104,7 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 				/* Message */
 				if (known && (c_ptr->info & CAVE_MARK))
 				{
-                    msg_format(_("%sが割れた！", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
+					msg_format(_("%sが割れた！", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
 					sound(SOUND_GLASS);
 				}
 
@@ -1120,8 +1120,8 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 		case GF_SOUND:
 		{
 			if (is_mirror_grid(c_ptr) && p_ptr->lev < 40)
-            {
-                msg_print(_("鏡が割れた！", "The mirror was crashed!"));
+			{
+				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
 				remove_mirror(y, x);
 				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
@@ -1132,7 +1132,7 @@ static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
 				/* Message */
 				if (known && (c_ptr->info & CAVE_MARK))
 				{
-                    msg_format(_("%sが割れた！", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
+					msg_format(_("%sが割れた！", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
 					sound(SOUND_GLASS);
 				}
 
@@ -1257,7 +1257,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (hates_acid(o_ptr))
 				{
 					do_kill = TRUE;
-                    note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
+					note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
 					if (have_flag(flgs, TR_IGNORE_ACID)) ignore = TRUE;
 				}
 				break;
@@ -1269,7 +1269,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (hates_elec(o_ptr))
 				{
 					do_kill = TRUE;
-                    note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
+					note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
 					if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
 				}
 				break;
@@ -1280,8 +1280,8 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				if (hates_fire(o_ptr))
 				{
-                    do_kill = TRUE;
-                    note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
+					do_kill = TRUE;
+					note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
 					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 				}
 				break;
@@ -1292,7 +1292,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				if (hates_cold(o_ptr))
 				{
-                    note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
+					note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
 					do_kill = TRUE;
 					if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
 				}
@@ -1305,14 +1305,14 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (hates_fire(o_ptr))
 				{
 					do_kill = TRUE;
-                    note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
+					note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
 					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 				}
 				if (hates_elec(o_ptr))
 				{
 					ignore = FALSE;
 					do_kill = TRUE;
-                    note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
+					note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
 					if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
 				}
 				break;
@@ -1323,15 +1323,15 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				if (hates_fire(o_ptr))
 				{
-                    do_kill = TRUE;
-                    note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
+					do_kill = TRUE;
+					note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
 					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 				}
 				if (hates_cold(o_ptr))
 				{
 					ignore = FALSE;
 					do_kill = TRUE;
-                    note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
+					note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
 					if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
 				}
 				break;
@@ -1344,8 +1344,8 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			case GF_SOUND:
 			{
 				if (hates_cold(o_ptr))
-                {
-                    note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
+				{
+					note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
 					do_kill = TRUE;
 				}
 				break;
@@ -1357,21 +1357,21 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			case GF_SUPER_RAY:
 			{
 				do_kill = TRUE;
-                note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
+				note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
 				break;
 			}
 
 			case GF_DISINTEGRATE:
 			{
 				do_kill = TRUE;
-                note_kill = _("蒸発してしまった！", (plural ? " evaporate!" : " evaporates!"));
+				note_kill = _("蒸発してしまった！", (plural ? " evaporate!" : " evaporates!"));
 				break;
 			}
 
 			case GF_CHAOS:
 			{
 				do_kill = TRUE;
-                note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
+				note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
 				if (have_flag(flgs, TR_RES_CHAOS)) ignore = TRUE;
 				else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS)) ignore = TRUE;
 				break;
@@ -1383,8 +1383,8 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				if (object_is_cursed(o_ptr))
 				{
-                    do_kill = TRUE;
-                    note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
+					do_kill = TRUE;
+					note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
 				}
 				break;
 			}
@@ -1417,7 +1417,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						/* Notice */
 						if (known && (o_ptr->marked & OM_FOUND))
 						{
-                            msg_print(_("カチッと音がした！", "Click!"));
+							msg_print(_("カチッと音がした！", "Click!"));
 							obvious = TRUE;
 						}
 					}
@@ -1438,21 +1438,21 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					for (i = 0; i < o_ptr->number ; i++)
 					{
 						if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) ||
-						    ((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60)))
+							((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60)))
 						{
 							if (!note_kill)
 							{
-                                note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
+								note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
 							}
 							continue;
 						}
 						else if (summon_named_creature(who, y, x, o_ptr->pval, mode))
 						{
-                            note_kill = _("生き返った。", " revived.");
+							note_kill = _("生き返った。", " revived.");
 						}
 						else if (!note_kill)
 						{
-                            note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
+							note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
 						}
 					}
 					do_kill = TRUE;
@@ -1479,8 +1479,8 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Observe the resist */
 				if (known && (o_ptr->marked & OM_FOUND))
 				{
-                    msg_format(_("%sは影響を受けない！", 
-                       (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
+					msg_format(_("%sは影響を受けない！", 
+					   (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
 				}
 			}
 
@@ -1490,7 +1490,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Describe if needed */
 				if (known && (o_ptr->marked & OM_FOUND) && note_kill)
 				{
-                    msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
+					msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
 				}
 
 				k_idx = o_ptr->k_idx;
@@ -1564,15 +1564,15 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * <pre>
  * Damage reductions use the following formulas:
  *   Note that "dam = dam * 6 / (randint1(6) + 6);"
- *     gives avg damage of .655, ranging from .858 to .500
+ *	 gives avg damage of .655, ranging from .858 to .500
  *   Note that "dam = dam * 5 / (randint1(6) + 6);"
- *     gives avg damage of .544, ranging from .714 to .417
+ *	 gives avg damage of .544, ranging from .714 to .417
  *   Note that "dam = dam * 4 / (randint1(6) + 6);"
- *     gives avg damage of .444, ranging from .556 to .333
+ *	 gives avg damage of .444, ranging from .556 to .333
  *   Note that "dam = dam * 3 / (randint1(6) + 6);"
- *     gives avg damage of .327, ranging from .427 to .250
+ *	 gives avg damage of .327, ranging from .427 to .250
  *   Note that "dam = dam * 2 / (randint1(6) + 6);"
- *     gives something simple.
+ *	 gives something simple.
  * </pre>
  * <pre>
  * In this function, "result" messages are postponed until the end, where
@@ -1690,7 +1690,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -1705,14 +1705,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_ACID)
 			{
-                note = _("にはかなり耐性がある！", " resists a lot.");
+				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ACID);
 			}
@@ -1726,15 +1726,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_ELEC)
 			{
-                note = _("にはかなり耐性がある！", " resists a lot.");
-                dam /= 9;
+				note = _("にはかなり耐性がある！", " resists a lot.");
+				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ELEC);
 			}
 			break;
@@ -1747,20 +1747,20 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_FIRE)
 			{
-                note = _("にはかなり耐性がある！", " resists a lot.");
+				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_FIRE);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_FIRE))
 			{
-                note = _("はひどい痛手をうけた。", " is hit hard.");
+				note = _("はひどい痛手をうけた。", " is hit hard.");
 				dam *= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_FIRE);
 			}
@@ -1774,20 +1774,20 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_COLD)
 			{
-                note = _("にはかなり耐性がある！", " resists a lot.");
+				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_COLD))
-            {
-                note = _("はひどい痛手をうけた。", " is hit hard.");
+			{
+				note = _("はひどい痛手をうけた。", " is hit hard.");
 				dam *= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
@@ -1801,14 +1801,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_POIS)
 			{
-                note = _("にはかなり耐性がある！", " resists a lot.");
+				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
@@ -1822,14 +1822,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_IM_POIS)
 			{
-                note = _("には耐性がある。", " resists.");
+				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
@@ -1843,15 +1843,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flags3 & RF3_GOOD)
-            {
-                note = _("はひどい痛手をうけた。", " is hit hard.");
+			{
+				note = _("はひどい痛手をうけた。", " is hit hard.");
 				dam *= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 			}
@@ -1864,27 +1864,27 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flags3 & RF3_GOOD)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_GOOD;
 			}
 			else if (r_ptr->flags3 & RF3_EVIL)
 			{
-                dam *= 2;
-                note = _("はひどい痛手をうけた。", " is hit hard.");
+				dam *= 2;
+				note = _("はひどい痛手をうけた。", " is hit hard.");
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
 			}
 			else
-            {
-                note = _("には耐性がある。", " resists.");
+			{
+				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 			}
 			break;
@@ -1896,8 +1896,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -1912,14 +1912,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_PLAS)
-            {
-                note = _("には耐性がある。", " resists.");
+			{
+				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_PLAS);
 			}
@@ -1933,7 +1933,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -1941,21 +1941,21 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (r_ptr->flagsr & RFR_RES_NETH)
 			{
 				if (r_ptr->flags3 & RF3_UNDEAD)
-                {
-                    note = _("には完全な耐性がある！", " is immune.");
+				{
+					note = _("には完全な耐性がある！", " is immune.");
 					dam = 0;
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 				}
 				else
 				{
-                    note = _("には耐性がある。", " resists.");
+					note = _("には耐性がある。", " resists.");
 					dam *= 3; dam /= randint1(6) + 6;
 				}
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NETH);
 			}
 			else if (r_ptr->flags3 & RF3_EVIL)
-            {
-                note = _("はいくらか耐性を示した。", " resists somewhat.");
+			{
+				note = _("はいくらか耐性を示した。", " resists somewhat.");
 				dam /= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 			}
@@ -1969,7 +1969,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -1977,13 +1977,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (r_ptr->flagsr & RFR_RES_WATE)
 			{
 				if ((m_ptr->r_idx == MON_WATER_ELEM) || (m_ptr->r_idx == MON_UNMAKER))
-                {
-                    note = _("には完全な耐性がある！", " is immune.");
+				{
+					note = _("には完全な耐性がある！", " is immune.");
 					dam = 0;
 				}
 				else
-                {
-                    note = _("には耐性がある。", " resists.");
+				{
+					note = _("には耐性がある。", " resists.");
 					dam *= 3; dam /= randint1(6) + 6;
 				}
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WATE);
@@ -1997,21 +1997,21 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_CHAO)
-            {
-                note = _("には耐性がある。", " resists.");
+			{
+				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_CHAO);
 			}
 			else if ((r_ptr->flags3 & RF3_DEMON) && one_in_(3))
-            {
-                note = _("はいくらか耐性を示した。", " resists somewhat.");
+			{
+				note = _("はいくらか耐性を示した。", " resists somewhat.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
 			}
@@ -2029,16 +2029,16 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_SHAR)
 			{
-                note = _("には耐性がある。", " resists.");
-                dam *= 3; dam /= randint1(6) + 6;
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
 			break;
@@ -2051,14 +2051,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_SHAR)
-            {
-                note = _("はいくらか耐性を示した。", " resists somewhat.");
+			{
+				note = _("はいくらか耐性を示した。", " resists somewhat.");
 				dam /= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
@@ -2073,15 +2073,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_SOUN)
 			{
-                note = _("には耐性がある。", " resists.");
-                dam *= 2; dam /= randint1(6) + 6;
+				note = _("には耐性がある。", " resists.");
+				dam *= 2; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SOUN);
 			}
 			else do_stun = (10 + randint1(15) + r) / (r + 1);
@@ -2095,15 +2095,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flags3 & RF3_NO_CONF)
 			{
-                note = _("には耐性がある。", " resists.");
-                dam *= 3; dam /= randint1(6) + 6;
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 			}
 			else do_conf = (10 + randint1(15) + r) / (r + 1);
@@ -2117,15 +2117,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_DISE)
 			{
-                note = _("には耐性がある。", " resists.");
-                dam *= 3; dam /= randint1(6) + 6;
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DISE);
 			}
 			break;
@@ -2137,15 +2137,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_NEXU)
-            {
-                note = _("には耐性がある。", " resists.");
+			{
+				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NEXU);
 			}
@@ -2158,15 +2158,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_WALL)
-            {
-                note = _("には耐性がある。", " resists.");
+			{
+				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WALL);
 			}
@@ -2180,15 +2180,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_INER)
-            {
-                note = _("には耐性がある。", " resists.");
+			{
+				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_INER);
 			}
@@ -2196,7 +2196,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				/* Powerful monsters can resist */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					obvious = FALSE;
 				}
@@ -2205,7 +2205,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				{
 					if (set_monster_slow(c_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
-                        note = _("の動きが遅くなった。", " starts moving slower.");
+						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
 				}
 			}
@@ -2219,14 +2219,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_TIME)
 			{
-                note = _("には耐性がある。", " resists.");
+				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_TIME);
 			}
@@ -2242,8 +2242,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2253,13 +2253,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (r_ptr->flags1 & (RF1_UNIQUE))
 				{
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                    note = _("には効果がなかった。", " is unaffected!");
+					note = _("には効果がなかった。", " is unaffected!");
 					resist_tele = TRUE;
 				}
 				else if (r_ptr->level > randint1(100))
 				{
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                    note = _("には耐性がある！", " resists!");
+					note = _("には耐性がある！", " resists!");
 					resist_tele = TRUE;
 				}
 			}
@@ -2269,8 +2269,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (p_ptr->riding && (c_ptr->m_idx == p_ptr->riding)) do_dist = 0;
 
 			if (r_ptr->flagsr & RFR_RES_GRAV)
-            {
-                note = _("には耐性がある！", " resists!");
+			{
+				note = _("には耐性がある！", " resists!");
 				dam *= 3; dam /= randint1(6) + 6;
 				do_dist = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_GRAV);
@@ -2280,7 +2280,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* 1. slowness */
 				/* Powerful monsters can resist */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					obvious = FALSE;
 				}
@@ -2289,7 +2289,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				{
 					if (set_monster_slow(c_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
-                        note = _("の動きが遅くなった。", " starts moving slower.");
+						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
 				}
 
@@ -2298,12 +2298,12 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					/* Resist */
 					do_stun = 0;
 					/* No obvious effect */
-                    note = _("には効果がなかった。", " is unaffected!");
+					note = _("には効果がなかった。", " is unaffected!");
 					obvious = FALSE;
 				}
 			}
@@ -2319,7 +2319,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2335,7 +2335,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2343,8 +2343,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (r_ptr->flags3 & RF3_HURT_ROCK)
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
-                note = _("の皮膚がただれた！", " loses some skin!");
-                note_dies = _("は蒸発した！", " evaporates!");
+				note = _("の皮膚がただれた！", " loses some skin!");
+				note_dies = _("は蒸発した！", " evaporates!");
 				dam *= 2;
 			}
 			break;
@@ -2358,14 +2358,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (!(los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)))
 			{
 				if (seen_msg) 
-                    msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), m_name);
+					msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), m_name);
 				skipped = TRUE;
 				break;
 			}
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2373,15 +2373,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
 				dam = 0;
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 
 			}
 			else if ((r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
-			         (r_ptr->flags3 & RF3_ANIMAL) ||
-			         (r_ptr->level > randint1(3 * dam)))
-            {
-                note = _("には耐性がある！", " resists!");
+					 (r_ptr->flags3 & RF3_ANIMAL) ||
+					 (r_ptr->level > randint1(3 * dam)))
+			{
+				note = _("には耐性がある！", " resists!");
 				dam /= 3;
 
 				/*
@@ -2389,18 +2389,18 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				 * attacks back on them
 				 */
 				if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
-				    (r_ptr->level > p_ptr->lev / 2) &&
-				    one_in_(2))
+					(r_ptr->level > p_ptr->lev / 2) &&
+					one_in_(2))
 				{
 					note = NULL;
 					msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！", 
-                        (seen ? "%^s's corrupted mind backlashes your attack!" : 
-                                "%^ss corrupted mind backlashes your attack!")), m_name);
+						(seen ? "%^s's corrupted mind backlashes your attack!" : 
+								"%^ss corrupted mind backlashes your attack!")), m_name);
 
 					/* Saving throw */
 					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 					{
-                        msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+						msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 					}
 					else
 					{
@@ -2420,7 +2420,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 								case 3:
 								{
 									if (r_ptr->flags3 & RF3_NO_FEAR)
-                                        note = _("には効果がなかった。", " is unaffected.");
+										note = _("には効果がなかった。", " is unaffected.");
 									else
 										set_afraid(p_ptr->afraid + 3 + randint1(dam));
 									break;
@@ -2450,13 +2450,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						do_fear = 3 + randint1(dam);
 						break;
 					default:
-                        note = _("は眠り込んでしまった！", " falls asleep!");
+						note = _("は眠り込んでしまった！", " falls asleep!");
 						do_sleep = 3 + randint1(dam);
 						break;
 				}
 			}
 
-            note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
+			note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 			break;
 		}
 
@@ -2465,22 +2465,22 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
-                dam = 0;
-                note = _("には完全な耐性がある！", " is immune.");
+				dam = 0;
+				note = _("には完全な耐性がある！", " is immune.");
 			}
 			else if ((r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
-			         (r_ptr->flags3 & RF3_ANIMAL) ||
-			         (r_ptr->level > randint1(3 * dam)))
-            {
-                note = _("には耐性がある！", " resists!");
+					 (r_ptr->flags3 & RF3_ANIMAL) ||
+					 (r_ptr->level > randint1(3 * dam)))
+			{
+				note = _("には耐性がある！", " resists!");
 				dam /= 3;
 
 				/*
@@ -2488,17 +2488,17 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				 * attacks back on them
 				 */
 				if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
-				     (r_ptr->level > p_ptr->lev / 2) &&
-				     (one_in_(2)))
+					 (r_ptr->level > p_ptr->lev / 2) &&
+					 (one_in_(2)))
 				{
 					note = NULL;
 					msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！", 
-                        (seen ? "%^s's corrupted mind backlashes your attack!" : 
-                                "%^ss corrupted mind backlashes your attack!")), m_name);
+						(seen ? "%^s's corrupted mind backlashes your attack!" : 
+								"%^ss corrupted mind backlashes your attack!")), m_name);
 					/* Saving throw */
 					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
 					{
-                        msg_print(_("あなたは効力を跳ね返した！", "You resist the effects!"));
+						msg_print(_("あなたは効力を跳ね返した！", "You resist the effects!"));
 					}
 					else
 					{
@@ -2506,7 +2506,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						monster_desc(killer, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 						if (!CHECK_MULTISHADOW())
 						{
-                            msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
+							msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
 							p_ptr->csp -= damroll(5, dam) / 2;
 							if (p_ptr->csp < 0) p_ptr->csp = 0;
 							p_ptr->redraw |= PR_MANA;
@@ -2520,10 +2520,10 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			else if (dam > 0)
 			{
 				int b = damroll(5, dam) / 4;
-                cptr str = (p_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
-                cptr msg = _("あなたは%sの苦痛を%sに変換した！", 
-                     (seen ? "You convert %s's pain into %s!" : 
-                             "You convert %ss pain into %s!"));
+				cptr str = (p_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
+				cptr msg = _("あなたは%sの苦痛を%sに変換した！", 
+					 (seen ? "You convert %s's pain into %s!" : 
+							 "You convert %ss pain into %s!"));
 				msg_format(msg, m_name, str);
 
 				b = MIN(p_ptr->msp, p_ptr->csp + b);
@@ -2531,7 +2531,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				p_ptr->redraw |= PR_MANA;
 				p_ptr->window |= (PW_SPELL);
 			}
-            note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
+			note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 			break;
 		}
 
@@ -2540,8 +2540,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2557,7 +2557,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
-			    (r_ptr->level > 5 + randint1(dam)))
+				(r_ptr->level > 5 + randint1(dam)))
 			{
 				/* Resist */
 				do_stun = 0;
@@ -2574,7 +2574,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2588,8 +2588,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2605,15 +2605,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
 			{
-                note = _("には効果がなかった！", " is immune.");
+				note = _("には効果がなかった！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) ||
-			    (r_ptr->flags3 & RF3_NO_CONF) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(r_ptr->flags3 & RF3_NO_CONF) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_CONF)
@@ -2629,18 +2629,18 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				 * attacks back on them
 				 */
 				if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
-				    (r_ptr->level > p_ptr->lev / 2) &&
-				    (one_in_(2)))
+					(r_ptr->level > p_ptr->lev / 2) &&
+					(one_in_(2)))
 				{
-                    note = NULL;
-                    msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
-                        (seen ? "%^s's corrupted mind backlashes your attack!" :
-                        "%^ss corrupted mind backlashes your attack!")), m_name);
+					note = NULL;
+					msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
+						(seen ? "%^s's corrupted mind backlashes your attack!" :
+						"%^ss corrupted mind backlashes your attack!")), m_name);
 
 					/* Saving throw */
 					if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
 					{
-                        msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+						msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 					}
 					else
 					{
@@ -2656,7 +2656,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 							default:
 							{
 								if (r_ptr->flags3 & RF3_NO_FEAR)
-                                    note = _("には効果がなかった。", " is unaffected.");
+									note = _("には効果がなかった。", " is unaffected.");
 								else
 									set_afraid(p_ptr->afraid + dam);
 							}
@@ -2666,7 +2666,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				else
 				{
 					/* No obvious effect */
-                    note = _("には効果がなかった。", " is unaffected.");
+					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
 			}
@@ -2674,7 +2674,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				if ((dam > 29) && (randint1(100) < dam))
 				{
-                    note = _("があなたに隷属した。", " is in your thrall!");
+					note = _("があなたに隷属した。", " is in your thrall!");
 					set_pet(m_ptr);
 				}
 				else
@@ -2706,22 +2706,22 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			do_stun = (randint1(15) + 1) / (r + 1);
 			if (r_ptr->flagsr & RFR_IM_COLD)
-            {
-                note = _("にはかなり耐性がある！", " resists a lot.");
+			{
+				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_COLD))
 			{
-                note = _("はひどい痛手をうけた。", " is hit hard.");
+				note = _("はひどい痛手をうけた。", " is hit hard.");
 				dam *= 2;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
@@ -2764,8 +2764,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2778,7 +2778,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
 					if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
 				}
-                note = _("には完全な耐性がある！", " is immune.");
+				note = _("には完全な耐性がある！", " is immune.");
 				obvious = FALSE;
 				dam = 0;
 			}
@@ -2786,8 +2786,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				 (randint1(888) != 666)) ||
 				 (((r_ptr->level + randint1(20)) > randint1((caster_lev / 2) + randint1(10))) &&
 				 randint1(100) != 66))
-            {
-                note = _("には耐性がある！", " resists!");
+			{
+				note = _("には耐性がある！", " resists!");
 				obvious = FALSE;
 				dam = 0;
 			}
@@ -2801,8 +2801,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -2812,10 +2812,10 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Powerful monsters can resist */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
-			    (r_ptr->flags1 & RF1_QUESTOR) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+				(r_ptr->flags1 & RF1_QUESTOR) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				do_poly = FALSE;
 				obvious = FALSE;
 			}
@@ -2833,8 +2833,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if ((p_ptr->inside_arena) || is_pet(m_ptr) || (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 			}
 			else
 			{
@@ -2844,7 +2844,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Attempt to clone. */
 				if (multiply_monster(c_ptr->m_idx, TRUE, 0L))
 				{
-                    note = _("が分裂した！", " spawns!");
+					note = _("が分裂した！", " spawns!");
 				}
 			}
 
@@ -2865,7 +2865,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (m_ptr->maxhp < m_ptr->max_maxhp)
 			{
-                if (seen_msg) msg_format(_("%^sの強さが戻った。", "%^s recovers %s vitality."), m_name, m_poss);
+				if (seen_msg) msg_format(_("%^sの強さが戻った。", "%^s recovers %s vitality."), m_name, m_poss);
 				m_ptr->maxhp = m_ptr->max_maxhp;
 			}
 
@@ -2887,17 +2887,17 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			(void)set_monster_csleep(c_ptr->m_idx, 0);
 			if (MON_STUNNED(m_ptr))
 			{
-                if (seen_msg) msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name);
+				if (seen_msg) msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name);
 				(void)set_monster_stunned(c_ptr->m_idx, 0);
 			}
 			if (MON_CONFUSED(m_ptr))
 			{
-                if (seen_msg) msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name);
+				if (seen_msg) msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name);
 				(void)set_monster_confused(c_ptr->m_idx, 0);
 			}
 			if (MON_MONFEAR(m_ptr))
 			{
-                if (seen_msg) msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
+				if (seen_msg) msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
 				(void)set_monster_monfear(c_ptr->m_idx, 0);
 			}
 
@@ -2939,7 +2939,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 			/* Message */
-            note = _("は体力を回復したようだ。", " looks healthier.");
+			note = _("は体力を回復したようだ。", " looks healthier.");
 
 			/* No "real" damage */
 			dam = 0;
@@ -2955,7 +2955,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Speed up */
 			if (set_monster_fast(c_ptr->m_idx, MON_FAST(m_ptr) + 100))
 			{
-                note = _("の動きが速くなった。", " starts moving faster.");
+				note = _("の動きが速くなった。", " starts moving faster.");
 			}
 
 			if (!who)
@@ -2978,17 +2978,17 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			/* Powerful monsters can resist */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
 
@@ -2997,7 +2997,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				if (set_monster_slow(c_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 				{
-                    note = _("の動きが遅くなった。", " starts moving slower.");
+					note = _("の動きが遅くなった。", " starts moving slower.");
 				}
 			}
 
@@ -3013,16 +3013,16 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
-			    (r_ptr->flags3 & RF3_NO_SLEEP) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(r_ptr->flags3 & RF3_NO_SLEEP) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_SLEEP)
@@ -3030,13 +3030,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
 				}
 				/* No obvious effect */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
 			else
 			{
 				/* Go to sleep (much) later */
-                note = _("は眠り込んでしまった！", " falls asleep!");
+				note = _("は眠り込んでしまった！", " falls asleep!");
 				do_sleep = 500;
 			}
 
@@ -3060,16 +3060,16 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
-			    !(r_ptr->flags3 & RF3_EVIL) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+				!(r_ptr->flags3 & RF3_EVIL) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
 			else
 			{
 				/* Go to sleep (much) later */
-                note = _("は動けなくなった！", " is suspended!");
+				note = _("は動けなくなった！", " is suspended!");
 				do_sleep = 500;
 			}
 
@@ -3084,23 +3084,23 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
 			else
 			{
 				/* Go to sleep (much) later */
-                note = _("は動けなくなった！", " is suspended!");
+				note = _("は動けなくなった！", " is suspended!");
 				do_sleep = 500;
 			}
 
@@ -3113,7 +3113,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CHARM:
 		{
 			int vir;
-			dam += (adj_con_fix[p_ptr->stat_ind[A_CHR]] - 1);
+			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
 			vir = virtue_number(V_HARMONY);
 			if (vir)
 			{
@@ -3129,8 +3129,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3141,9 +3141,9 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_QUESTOR) ||
-			    (r_ptr->flags3 & RF3_NO_CONF) ||
-			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 5))
+				(r_ptr->flags3 & RF3_NO_CONF) ||
+				(m_ptr->mflag2 & MFLAG2_NOPET) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 5))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_CONF)
@@ -3153,19 +3153,19 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				/* Resist */
 				/* No obvious effect */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("は突然友好的になったようだ！", " suddenly seems friendly!");
+				note = _("は突然友好的になったようだ！", " suddenly seems friendly!");
 				set_pet(m_ptr);
 
 				chg_virtue(V_INDIVIDUALISM, -1);
@@ -3197,8 +3197,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3210,22 +3210,22 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_QUESTOR) ||
 			  (!(r_ptr->flags3 & RF3_UNDEAD)) ||
-			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
+				(m_ptr->mflag2 & MFLAG2_NOPET) ||
 				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("は既にあなたの奴隷だ！", " is in your thrall!");
+				note = _("は既にあなたの奴隷だ！", " is in your thrall!");
 				set_pet(m_ptr);
 			}
 
@@ -3253,8 +3253,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3266,23 +3266,23 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_QUESTOR) ||
 			  (!(r_ptr->flags3 & RF3_DEMON)) ||
-			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
+				(m_ptr->mflag2 & MFLAG2_NOPET) ||
 				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("は既にあなたの奴隷だ！", " is in your thrall!");
+				note = _("は既にあなたの奴隷だ！", " is in your thrall!");
 				set_pet(m_ptr);
 			}
 
@@ -3311,8 +3311,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3324,7 +3324,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 			  (!(r_ptr->flags3 & (RF3_ANIMAL))) ||
-			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
+				(m_ptr->mflag2 & MFLAG2_NOPET) ||
 				 (r_ptr->flags3 & (RF3_NO_CONF)) ||
 				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
@@ -3336,19 +3336,19 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				/* Resist */
 				/* No obvious effect */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("はなついた。", " is tamed!");
+				note = _("はなついた。", " is tamed!");
 				set_pet(m_ptr);
 
 				if (r_ptr->flags3 & RF3_ANIMAL)
@@ -3383,10 +3383,10 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (r_ptr->flags3 & (RF3_NO_CONF)) dam -= 30;
 			if (dam < 1) dam = 1;
-            msg_format(_("%sを見つめた。", "You stare into %s."), m_name);
+			msg_format(_("%sを見つめた。", "You stare into %s."), m_name);
 			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3397,25 +3397,25 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
-			    (m_ptr->mflag2 & MFLAG2_NOPET) ||
+				(m_ptr->mflag2 & MFLAG2_NOPET) ||
 				 !monster_living(r_ptr) ||
 				 ((r_ptr->level+10) > randint1(dam)))
 			{
 				/* Resist */
 				/* No obvious effect */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else if (p_ptr->cursed & TRC_AGGRAVATE)
 			{
-                note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
 			else
 			{
-                note = _("を支配した。", " is tamed!");
+				note = _("を支配した。", " is tamed!");
 				set_pet(m_ptr);
 
 				if (r_ptr->flags3 & RF3_ANIMAL)
@@ -3433,8 +3433,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3444,8 +3444,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-			    (r_ptr->flags3 & (RF3_NO_CONF)) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(r_ptr->flags3 & (RF3_NO_CONF)) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -3457,7 +3457,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				do_conf = 0;
 
 				/* No obvious effect */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
 
@@ -3471,8 +3471,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -3481,13 +3481,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Resist */
 				do_stun = 0;
 
 				/* No obvious effect */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
 
@@ -3522,8 +3522,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 
 				/* Special effect */
-                note = _("は光に身をすくめた！", " cringes from the light!");
-                note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
+				note = _("は光に身をすくめた！", " cringes from the light!");
+				note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
 			}
 
 			/* Normally no damage */
@@ -3544,23 +3544,23 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_LITE)
-            {
-                note = _("には耐性がある！", " resists!");
+			{
+				note = _("には耐性がある！", " resists!");
 				dam *= 2; dam /= (randint1(6)+6);
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_LITE);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_LITE))
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
-                note = _("は光に身をすくめた！", " cringes from the light!");
-                note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
+				note = _("は光に身をすくめた！", " cringes from the light!");
+				note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
 				dam *= 2;
 			}
 			break;
@@ -3573,15 +3573,15 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flagsr & RFR_RES_DARK)
-            {
-                note = _("には耐性がある！", " resists!");
+			{
+				note = _("には耐性がある！", " resists!");
 				dam *= 2; dam /= (randint1(6)+6);
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DARK);
 			}
@@ -3607,8 +3607,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
 
 				/* Cute little message */
-                note = _("の皮膚がただれた！", " loses some skin!");
-                note_dies = _("はドロドロに溶けた！", " dissolves!");
+				note = _("の皮膚がただれた！", " loses some skin!");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
 
 			/* Usually, ignore the effects */
@@ -3634,14 +3634,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				{
 					if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 					{
-                        if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                        note = _("には効果がなかった。", " is unaffected.");
+						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+						note = _("には効果がなかった。", " is unaffected.");
 						resists_tele = TRUE;
 					}
 					else if (r_ptr->level > randint1(100))
 					{
-                        if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                        note = _("には耐性がある！", " resists!");
+						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+						note = _("には耐性がある！", " resists!");
 						resists_tele = TRUE;
 					}
 				}
@@ -3679,14 +3679,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				{
 					if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 					{
-                        if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                        note = _("には効果がなかった。", " is unaffected.");
+						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+						note = _("には効果がなかった。", " is unaffected.");
 						resists_tele = TRUE;
 					}
 					else if (r_ptr->level > randint1(100))
 					{
-                        if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                        note = _("には耐性がある！", " resists!");
+						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+						note = _("には耐性がある！", " resists!");
 						resists_tele = TRUE;
 					}
 				}
@@ -3720,14 +3720,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 				{
-                    if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                    note = _("には効果がなかった。", " is unaffected.");
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					note = _("には効果がなかった。", " is unaffected.");
 					resists_tele = TRUE;
 				}
 				else if (r_ptr->level > randint1(100))
 				{
-                    if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-                    note = _("には耐性がある！", " resists!");
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					note = _("には耐性がある！", " resists!");
 					resists_tele = TRUE;
 				}
 			}
@@ -3771,7 +3771,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
 				{
 					/* No obvious effect */
-                    note = _("には効果がなかった。", " is unaffected.");
+					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 					do_fear = 0;
 				}
@@ -3814,7 +3814,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
 				{
 					/* No obvious effect */
-                    note = _("には効果がなかった。", " is unaffected.");
+					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 					do_fear = 0;
 				}
@@ -3849,11 +3849,11 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-			    (r_ptr->flags3 & (RF3_NO_FEAR)) ||
-			    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(r_ptr->flags3 & (RF3_NO_FEAR)) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* No obvious effect */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 				do_fear = 0;
 			}
@@ -3883,8 +3883,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 
 				/* Message */
-                note = _("は身震いした。", " shudders.");
-                note_dies = _("はドロドロに溶けた！", " dissolves!");
+				note = _("は身震いした。", " shudders.");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -3920,8 +3920,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 
 				/* Message */
-                note = _("は身震いした。", " shudders.");
-                note_dies = _("はドロドロに溶けた！", " dissolves!");
+				note = _("は身震いした。", " shudders.");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -3956,8 +3956,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 
 				/* Message */
-                note = _("は身震いした。", " shudders.");
-                note_dies = _("はドロドロに溶けた！", " dissolves!");
+				note = _("は身震いした。", " shudders.");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -3989,8 +3989,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (seen) obvious = TRUE;
 
 				/* Message */
-                note = _("は身震いした。", " shudders.");
-                note_dies = _("はドロドロに溶けた！", " dissolves!");
+				note = _("は身震いした。", " shudders.");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -4025,8 +4025,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
 
 				/* Message */
-                note = _("は身震いした。", " shudders.");
-                note_dies = _("はドロドロに溶けた！", " dissolves!");
+				note = _("は身震いした。", " shudders.");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
 
 			/* Others ignore */
@@ -4055,8 +4055,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			/* Message */
-            note = _("は身震いした。", " shudders.");
-            note_dies = _("はドロドロに溶けた！", " dissolves!");
+			note = _("は身震いした。", " shudders.");
+			note_dies = _("はドロドロに溶けた！", " dissolves!");
 			break;
 		}
 
@@ -4066,8 +4066,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4093,20 +4093,20 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						{
 							/* Get the monster name */
 							monster_desc(killer, caster_ptr, 0);
-                            msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), killer);
+							msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), killer);
 						}
 					}
 				}
 				else
 				{
 					/* Message */
-                    msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), m_name);
+					msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), m_name);
 					(void)hp_player(dam);
 				}
 			}
 			else
 			{
-                if (see_s_msg) msg_format(_("%sには効果がなかった。", "%s is unaffected."), m_name);
+				if (see_s_msg) msg_format(_("%sには効果がなかった。", "%s is unaffected."), m_name);
 			}
 			dam = 0;
 			break;
@@ -4117,11 +4117,11 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
+			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4136,26 +4136,26 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (r_ptr->flags3 & (RF3_NO_CONF))
 				{
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-                }
-                note = _("には効果がなかった。", " is unaffected.");
+				}
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
-                if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-                note = _("には完全な耐性がある！", " is immune.");
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
 			{
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
-                note = _("には耐性がある。", " resists.");
+				note = _("には耐性がある。", " resists.");
 				dam /= 3;
 			}
 			else
 			{
-                note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
-                note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
+				note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
+				note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 
 				if (who > 0) do_conf = randint0(4) + 4;
 				else do_conf = randint0(8) + 8;
@@ -4168,11 +4168,11 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
+			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4187,26 +4187,26 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (r_ptr->flags3 & (RF3_NO_CONF))
 				{
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-                }
-                note = _("には効果がなかった。", " is unaffected.");
+				}
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
-                if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-                note = _("には完全な耐性がある！", " is immune.");
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
 			{
-                if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
-                note = _("には耐性がある！", " resists!");
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+				note = _("には耐性がある！", " resists!");
 				dam /= 3;
 			}
 			else
 			{
-                note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
-                note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
+				note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
+				note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 
 				if (who > 0)
 				{
@@ -4228,11 +4228,11 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%sを指差して呪いをかけた。", "You point at %s and curse."), m_name);
+			if (!who) msg_format(_("%sを指差して呪いをかけた。", "You point at %s and curse."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4240,8 +4240,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4252,11 +4252,11 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%sを指差して恐ろしげに呪いをかけた。", "You point at %s and curse horribly."), m_name);
+			if (!who) msg_format(_("%sを指差して恐ろしげに呪いをかけた。", "You point at %s and curse horribly."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4264,8 +4264,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4276,11 +4276,11 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			if (seen) obvious = TRUE;
 			/* Message */
-            if (!who) msg_format(_("%sを指差し、恐ろしげに呪文を唱えた！", "You point at %s, incanting terribly!"), m_name);
+			if (!who) msg_format(_("%sを指差し、恐ろしげに呪文を唱えた！", "You point at %s, incanting terribly!"), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4288,8 +4288,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4301,12 +4301,12 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 			/* Message */
 			if (!who) 
-                msg_format(_("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。", 
-                             "You point at %s, screaming the word, 'DIE!'."), m_name);
+				msg_format(_("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。", 
+							 "You point at %s, screaming the word, 'DIE!'."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4314,8 +4314,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (caster_ptr->r_idx != MON_KENSHIROU)))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4327,16 +4327,16 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 
 			if (r_ptr->flags1 & RF1_UNIQUE)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			else
@@ -4350,7 +4350,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				}
 				else
 				{
-                    note = _("は耐性を持っている！", "resists!");
+					note = _("は耐性を持っている！", "resists!");
 					dam = 0;
 				}
 			}
@@ -4362,9 +4362,9 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			int nokori_hp;
 			if ((p_ptr->inside_quest && (quest[p_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(m_ptr)) ||
-			    (r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL)) || (r_ptr->flags7 & (RF7_UNIQUE2)) || (r_ptr->flags1 & RF1_QUESTOR) || m_ptr->parent_m_idx)
-            {
-                msg_format(_("%sには効果がなかった。", "%s is unaffected."), m_name);
+				(r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL)) || (r_ptr->flags7 & (RF7_UNIQUE2)) || (r_ptr->flags1 & RF1_QUESTOR) || m_ptr->parent_m_idx)
+			{
+				msg_format(_("%sには効果がなかった。", "%s is unaffected."), m_name);
 				skipped = TRUE;
 				break;
 			}
@@ -4377,13 +4377,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (m_ptr->hp >= nokori_hp)
 			{
-                msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), m_name);
+				msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), m_name);
 				skipped = TRUE;
 			}
 			else if (m_ptr->hp < randint0(nokori_hp))
 			{
 				if (m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(c_ptr->m_idx, FALSE, MON_CHAMELEON);
-                msg_format(_("%sを捕えた！", "You capture %^s!"), m_name);
+				msg_format(_("%sを捕えた！", "You capture %^s!"), m_name);
 				cap_mon = m_ptr->r_idx;
 				cap_mspeed = m_ptr->mspeed;
 				cap_hp = m_ptr->hp;
@@ -4393,7 +4393,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				{
 					if (rakuba(-1, FALSE))
 					{
-                        msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
+						msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
 					}
 				}
 
@@ -4403,7 +4403,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 			else
 			{
-                msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), m_name);
+				msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), m_name);
 				skipped = TRUE;
 			}
 			break;
@@ -4425,23 +4425,23 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 			if (r_ptr->flags2 & RF2_EMPTY_MIND)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 				break;
 			}
 			if (MON_CSLEEP(m_ptr))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				skipped = TRUE;
 				break;
@@ -4456,9 +4456,9 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				/* Powerful monsters can resist */
 				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-                {
-                    note = _("には効果がなかった。", " is unaffected.");
+					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				{
+					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
 
@@ -4467,7 +4467,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				{
 					if (set_monster_slow(c_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
-                        note = _("の動きが遅くなった。", " starts moving slower.");
+						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
 				}
 			}
@@ -4478,13 +4478,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					/* Resist */
 					do_stun = 0;
 
 					/* No obvious effect */
-                    note = _("には効果がなかった。", " is unaffected.");
+					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
 			}
@@ -4493,8 +4493,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-				    (r_ptr->flags3 & RF3_NO_SLEEP) ||
-				    (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(r_ptr->flags3 & RF3_NO_SLEEP) ||
+					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					/* Memorize a flag */
 					if (r_ptr->flags3 & RF3_NO_SLEEP)
@@ -4503,20 +4503,20 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					}
 
 					/* No obvious effect */
-                    note = _("には効果がなかった。", " is unaffected.");
+					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
 				else
 				{
 					/* Go to sleep (much) later */
-                    note = _("は眠り込んでしまった！", " falls asleep!");
+					note = _("は眠り込んでしまった！", " falls asleep!");
 					do_sleep = 500;
 				}
 			}
 
 			if (!done)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 			}
 
 			/* No "real" damage */
@@ -4530,16 +4530,16 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
 
-            if (genocide_aux(c_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
+			if (genocide_aux(c_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
 			{
-                if (seen_msg) msg_format(_("%sは消滅した！", "%^s disappered!"), m_name);
+				if (seen_msg) msg_format(_("%sは消滅した！", "%^s disappered!"), m_name);
 				chg_virtue(V_VITALITY, -1);
 				return TRUE;
 			}
@@ -4561,8 +4561,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 
 				/* Special effect */
-                note = _("は光に身をすくめた！", " cringes from the light!");
-                note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
+				note = _("は光に身をすくめた！", " cringes from the light!");
+				note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
 			}
 
 			/* Normally no damage */
@@ -4584,8 +4584,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4606,16 +4606,16 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* No need to tame your pet */
 				if (is_pet(m_ptr))
 				{
-                    note = _("の動きが速くなった。", " starts moving faster.");
+					note = _("の動きが速くなった。", " starts moving faster.");
 					(void)set_monster_fast(c_ptr->m_idx, MON_FAST(m_ptr) + 100);
 					success = TRUE;
 				}
 
 				/* Attempt a saving throw */
 				else if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
-				    (r_ptr->flags1 & (RF1_UNIQUE)) ||
-				    (m_ptr->mflag2 & MFLAG2_NOPET) ||
-				    (p_ptr->cursed & TRC_AGGRAVATE) ||
+					(r_ptr->flags1 & (RF1_UNIQUE)) ||
+					(m_ptr->mflag2 & MFLAG2_NOPET) ||
+					(p_ptr->cursed & TRC_AGGRAVATE) ||
 					 ((r_ptr->level+10) > randint1(dam)))
 				{
 					/* Resist */
@@ -4623,7 +4623,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				}
 				else
 				{
-                    note = _("を支配した。", " is tamed!");
+					note = _("を支配した。", " is tamed!");
 					set_pet(m_ptr);
 					(void)set_monster_fast(c_ptr->m_idx, MON_FAST(m_ptr) + 100);
 
@@ -4652,8 +4652,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
-            {
-                note = _("には完全な耐性がある！", " is immune.");
+			{
+				note = _("には完全な耐性がある！", " is immune.");
 				skipped = TRUE;
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
@@ -4661,8 +4661,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if (randint0(100 + dam) < (r_ptr->level + 50))
-            {
-                note = _("には効果がなかった。", " is unaffected.");
+			{
+				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			break;
@@ -4708,7 +4708,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	/* Modify the damage */
 	tmp = dam;
 	dam = mon_damage_mod(m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
-    if ((tmp > 0) && (dam == 0)) note = _("はダメージを受けていない。", " is unharmed.");
+	if ((tmp > 0) && (dam == 0)) note = _("はダメージを受けていない。", " is unharmed.");
 
 	/* Check for death */
 	if (dam > m_ptr->hp)
@@ -4720,8 +4720,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	{
 		/* Sound and Impact resisters never stun */
 		if (do_stun &&
-		    !(r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) &&
-		    !(r_ptr->flags3 & RF3_NO_STUN))
+			!(r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) &&
+			!(r_ptr->flags3 & RF3_NO_STUN))
 		{
 			/* Obvious */
 			if (seen) obvious = TRUE;
@@ -4729,12 +4729,12 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Get stunned */
 			if (MON_STUNNED(m_ptr))
 			{
-                note = _("はひどくもうろうとした。", " is more dazed.");
-                tmp = MON_STUNNED(m_ptr) + (do_stun / 2);
+				note = _("はひどくもうろうとした。", " is more dazed.");
+				tmp = MON_STUNNED(m_ptr) + (do_stun / 2);
 			}
 			else
 			{
-                note = _("はもうろうとした。", " is dazed.");
+				note = _("はもうろうとした。", " is dazed.");
 				tmp = do_stun;
 			}
 
@@ -4756,14 +4756,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Already partially confused */
 			if (MON_CONFUSED(m_ptr))
 			{
-                note = _("はさらに混乱したようだ。", " looks more confused.");
+				note = _("はさらに混乱したようだ。", " looks more confused.");
 				tmp = MON_CONFUSED(m_ptr) + (do_conf / 2);
 			}
 
 			/* Was not confused */
 			else
 			{
-                note = _("は混乱したようだ。", " looks confused.");
+				note = _("は混乱したようだ。", " looks confused.");
 				tmp = do_conf;
 			}
 
@@ -4799,7 +4799,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (seen) obvious = TRUE;
 
 				/* Monster polymorphs */
-                note = _("が変身した！", " changes!");
+				note = _("が変身した！", " changes!");
 
 				/* Turn off the damage */
 				dam = 0;
@@ -4807,7 +4807,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			else
 			{
 				/* No polymorph */
-                note = _("には効果がなかった。", " is unaffected.");
+				note = _("には効果がなかった。", " is unaffected.");
 			}
 
 			/* Hack -- Get new monster */
@@ -4824,7 +4824,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (seen) obvious = TRUE;
 
 			/* Message */
-            note = _("が消え去った！", " disappears!");
+			note = _("が消え去った！", " disappears!");
 
 			if (!who) chg_virtue(V_VALOUR, -1);
 
@@ -4901,7 +4901,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (sad)
 			{
-                msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
+				msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
 			}
 		}
 
@@ -4928,7 +4928,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 	else if (heal_leper)
 	{
-        if (seen_msg) msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
+		if (seen_msg) msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
 
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
@@ -4960,7 +4960,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Give detailed messages if visible or destroyed */
 			if (note && seen_msg)
-                msg_format(_("%s%s", "%^s%s"), m_name, note);
+				msg_format(_("%s%s", "%^s%s"), m_name, note);
 
 			/* Hack -- Pain message */
 			else if (known && (dam || !do_fear))
@@ -4979,7 +4979,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				sound(SOUND_FLEE);
 
 				/* Message */
-                msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
+				msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 			}
 
 			/* Hack -- handle sleep */
@@ -4998,7 +4998,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			case 1: case 2:
 				if (!count)
 				{
-                    msg_print(_("地面が揺れた...", "The ground trembles..."));
+					msg_print(_("地面が揺れた...", "The ground trembles..."));
 					earthquake(ty, tx, 4 + randint0(4));
 					if (!one_in_(6)) break;
 				}
@@ -5006,7 +5006,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (!count)
 				{
 					int extra_dam = damroll(10, 10);
-                    msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
+					msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
 
 					project(0, 8, ty, tx, extra_dam, GF_MANA, curse_flg, -1);
 					if (!one_in_(6)) break;
@@ -5014,14 +5014,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			case 7: case 8:
 				if (!count)
 				{
-                    msg_print(_("空間が歪んだ！", "Space warps about you!"));
+					msg_print(_("空間が歪んだ！", "Space warps about you!"));
 
 					if (m_ptr->r_idx) teleport_away(c_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
 					if (one_in_(13)) count += activate_hi_summon(ty, tx, TRUE);
 					if (!one_in_(6)) break;
 				}
 			case 9: case 10: case 11:
-                msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
+				msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
 				project(0, 7, ty, tx, 50, GF_DISINTEGRATE, curse_flg, -1);
 				if (!one_in_(6)) break;
 			case 12: case 13: case 14: case 15: case 16:
@@ -5043,7 +5043,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 			case 23: case 24: case 25:
 				if (p_ptr->hold_exp && (randint0(100) < 75)) break;
-                msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
+				msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
 
 				if (p_ptr->hold_exp) lose_exp(p_ptr->exp / 160);
 				else lose_exp(p_ptr->exp / 16);
@@ -5287,15 +5287,15 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		switch (who)
 		{
 		case PROJECT_WHO_UNCTRL_POWER:
-            strcpy(killer, _("制御できない力の氾流", "uncontrollable power storm"));
+			strcpy(killer, _("制御できない力の氾流", "uncontrollable power storm"));
 			break;
 
 		case PROJECT_WHO_GLASS_SHARDS:
-            strcpy(killer, _("ガラスの破片", "shards of glass"));
+			strcpy(killer, _("ガラスの破片", "shards of glass"));
 			break;
 
 		default:
-            strcpy(killer, _("罠", "a trap"));
+			strcpy(killer, _("罠", "a trap"));
 			break;
 		}
 
@@ -5309,7 +5309,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		/* Standard damage -- hurts inventory too */
 		case GF_ACID:
 		{
-            if (fuzzy) msg_print(_("酸で攻撃された！", "You are hit by acid!"));			
+			if (fuzzy) msg_print(_("酸で攻撃された！", "You are hit by acid!"));			
 			get_damage = acid_dam(dam, killer, monspell, FALSE);
 			break;
 		}
@@ -5317,8 +5317,8 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		/* Standard damage -- hurts inventory too */
 		case GF_FIRE:
 		{
-            if (fuzzy) msg_print(_("火炎で攻撃された！", "You are hit by fire!"));
-            get_damage = fire_dam(dam, killer, monspell, FALSE);
+			if (fuzzy) msg_print(_("火炎で攻撃された！", "You are hit by fire!"));
+			get_damage = fire_dam(dam, killer, monspell, FALSE);
 			break;
 		}
 
@@ -5342,13 +5342,13 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		case GF_POIS:
 		{
 			bool double_resist = IS_OPPOSE_POIS();
-            if (fuzzy) msg_print(_("毒で攻撃された！", "You are hit by poison!"));
+			if (fuzzy) msg_print(_("毒で攻撃された！", "You are hit by poison!"));
 
 			if (p_ptr->resist_pois) dam = (dam + 2) / 3;
 			if (double_resist) dam = (dam + 2) / 3;
 
 			if ((!(double_resist || p_ptr->resist_pois)) &&
-			     one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
+				 one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
 			{
 				do_dec_stat(A_CON);
 			}
@@ -5366,7 +5366,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		case GF_NUKE:
 		{
 			bool double_resist = IS_OPPOSE_POIS();
-            if (fuzzy) msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
+			if (fuzzy) msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
 
 			if (p_ptr->resist_pois) dam = (2 * dam + 2) / 5;
 			if (double_resist) dam = (2 * dam + 2) / 5;
@@ -5377,7 +5377,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 
 				if (one_in_(5)) /* 6 */
 				{
-                    msg_print(_("奇形的な変身を遂げた！", "You undergo a freakish metamorphosis!"));
+					msg_print(_("奇形的な変身を遂げた！", "You undergo a freakish metamorphosis!"));
 					if (one_in_(4)) /* 4 */
 						do_poly_self();
 					else
@@ -5395,7 +5395,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		/* Standard damage */
 		case GF_MISSILE:
 		{
-            if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+			if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
@@ -5403,7 +5403,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		/* Holy Orb -- Player only takes partial damage */
 		case GF_HOLY_FIRE:
 		{
-            if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+			if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 			if (p_ptr->align > 10)
 				dam /= 2;
 			else if (p_ptr->align < -10)
@@ -5414,7 +5414,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 
 		case GF_HELL_FIRE:
 		{
-            if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+			if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 			if (p_ptr->align > 10)
 				dam *= 2;
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -5474,7 +5474,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 
 			if (prace_is_(RACE_SPECTRE) && !CHECK_MULTISHADOW())
 			{
-                msg_print(_("気分がよくなった。", "You feel invigorated!"));
+				msg_print(_("気分がよくなった。", "You feel invigorated!"));
 				hp_player(dam / 4);
 				learn_spell(monspell);
 			}
@@ -5490,7 +5490,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		case GF_WATER:
 		{
 			if (fuzzy) msg_print(_("何か湿ったもので攻撃された！", "You are hit by something wet!"));
-            if (!CHECK_MULTISHADOW())
+			if (!CHECK_MULTISHADOW())
 			{
 				if (!p_ptr->resist_sound)
 				{
@@ -5514,7 +5514,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		/* Chaos -- many effects */
 		case GF_CHAOS:
 		{
-            if (fuzzy) msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
+			if (fuzzy) msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
 			if (p_ptr->resist_chaos)
 			{
 				dam *= 6; dam /= (randint1(4) + 7);
@@ -5531,7 +5531,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 					(void)set_image(p_ptr->image + randint1(10));
 					if (one_in_(3))
 					{
-                        msg_print(_("あなたの身体はカオスの力で捻じ曲げられた！", "Your body is twisted by chaos!"));
+						msg_print(_("あなたの身体はカオスの力で捻じ曲げられた！", "Your body is twisted by chaos!"));
 						(void)gain_random_mutation(0);
 					}
 				}
@@ -5708,7 +5708,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 
 			if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 			{
-                if (!CHECK_MULTISHADOW()) msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
+				if (!CHECK_MULTISHADOW()) msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
 				dam *= 2;
 			}
 			else if (prace_is_(RACE_S_FAIRY))
@@ -5723,7 +5723,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 			{
 				p_ptr->wraith_form = 0;
 				msg_print(_("閃光のため非物質的な影の存在でいられなくなった。",
-                    "The light forces you out of your incorporeal shadow form."));
+					"The light forces you out of your incorporeal shadow form."));
 
 				p_ptr->redraw |= PR_MAP;
 				/* Update monsters */
@@ -5765,7 +5765,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 			{
 				dam *= 4;
 				dam /= (randint1(4) + 7);
-                msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
+				msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
 			}
 			else if (!CHECK_MULTISHADOW())
 			{
@@ -5774,7 +5774,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 					case 1: case 2: case 3: case 4: case 5:
 					{
 						if (p_ptr->prace == RACE_ANDROID) break;
-                        msg_print(_("人生が逆戻りした気がする。", "You feel life has clocked back."));
+						msg_print(_("人生が逆戻りした気がする。", "You feel life has clocked back."));
 						lose_exp(100 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
 						break;
 					}
@@ -5783,16 +5783,16 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 					{
 						switch (randint1(6))
 						{
-                            case 1: k = A_STR; act = _("強く", "strong"); break;
-                            case 2: k = A_INT; act = _("聡明で", "bright"); break;
-                            case 3: k = A_WIS; act = _("賢明で", "wise"); break;
-                            case 4: k = A_DEX; act = _("器用で", "agile"); break;
-                            case 5: k = A_CON; act = _("健康で", "hale"); break;
-                            case 6: k = A_CHR; act = _("美しく", "beautiful"); break;
+							case 1: k = A_STR; act = _("強く", "strong"); break;
+							case 2: k = A_INT; act = _("聡明で", "bright"); break;
+							case 3: k = A_WIS; act = _("賢明で", "wise"); break;
+							case 4: k = A_DEX; act = _("器用で", "agile"); break;
+							case 5: k = A_CON; act = _("健康で", "hale"); break;
+							case 6: k = A_CHR; act = _("美しく", "beautiful"); break;
 						}
 
 						msg_format(_("あなたは以前ほど%sなくなってしまった...。", 
-                                     "You're not as %s as you used to be..."), act);
+									 "You're not as %s as you used to be..."), act);
 
 						p_ptr->stat_cur[k] = (p_ptr->stat_cur[k] * 3) / 4;
 						if (p_ptr->stat_cur[k] < 3) p_ptr->stat_cur[k] = 3;
@@ -5803,7 +5803,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 					case 10:
 					{
 						msg_print(_("あなたは以前ほど力強くなくなってしまった...。", 
-                                    "You're not as powerful as you used to be..."));
+									"You're not as powerful as you used to be..."));
 
 						for (k = 0; k < 6; k++)
 						{
@@ -5887,11 +5887,11 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		case GF_OLD_SLEEP:
 		{
 			if (p_ptr->free_act)  break;
-            if (fuzzy) msg_print(_("眠ってしまった！", "You fall asleep!"));
+			if (fuzzy) msg_print(_("眠ってしまった！", "You fall asleep!"));
 
 			if (ironman_nightmare)
 			{
-                msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
+				msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 				/* Have some nightmares */
 				sanity_blast(NULL, FALSE);
 			}
@@ -6002,15 +6002,15 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		{
 			if (CHECK_MULTISHADOW())
 			{
-                msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, you are unharmed!"));
+				msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, you are unharmed!"));
 			}
 			else if (p_ptr->csp)
 			{
 				/* Basic message */
 				if (who > 0) 
-                    msg_format(_("%^sに精神エネルギーを吸い取られてしまった！", "%^s draws psychic energy from you!"), m_name);
+					msg_format(_("%^sに精神エネルギーを吸い取られてしまった！", "%^s draws psychic energy from you!"), m_name);
 				else 
-                    msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drawn!"));
+					msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drawn!"));
 
 				/* Full drain */
 				if (dam >= p_ptr->csp)
@@ -6051,7 +6051,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 						/* Special message */
 						if (m_ptr->ml)
 						{
-                            msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), m_name);
+							msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), m_name);
 						}
 					}
 				}
@@ -6066,14 +6066,14 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		{
 			if ((randint0(100 + rlev / 2) < MAX(5, p_ptr->skill_sav)) && !CHECK_MULTISHADOW())
 			{
-                msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+				msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
 			{
 				if (!CHECK_MULTISHADOW())
 				{
-                    msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psyonic energy."));
+					msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psyonic energy."));
 
 					if (!p_ptr->resist_conf)
 					{
@@ -6103,15 +6103,15 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		case GF_BRAIN_SMASH:
 		{
 			if ((randint0(100 + rlev / 2) < MAX(5, p_ptr->skill_sav)) && !CHECK_MULTISHADOW())
-            {
-                msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+			{
+				msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
 			{
 				if (!CHECK_MULTISHADOW())
-                {
-                    msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psyonic energy."));
+				{
+					msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psyonic energy."));
 
 					p_ptr->csp -= 100;
 					if (p_ptr->csp < 0)
@@ -6157,8 +6157,8 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		case GF_CAUSE_1:
 		{
 			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
-            {
-                msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+			{
+				msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
@@ -6173,8 +6173,8 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		case GF_CAUSE_2:
 		{
 			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
-            {
-                msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+			{
+				msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
@@ -6189,8 +6189,8 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		case GF_CAUSE_3:
 		{
 			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
-            {
-                msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+			{
+				msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
@@ -6206,7 +6206,7 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		{
 			if ((randint0(100 + rlev / 2) < p_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW())
 			{
-                msg_print(_("しかし秘孔を跳ね返した！", "You resist the effects!"));
+				msg_print(_("しかし秘孔を跳ね返した！", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
@@ -6221,15 +6221,15 @@ static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT
 		case GF_HAND_DOOM:
 		{
 			if ((randint0(100 + rlev/2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW())
-            {
-                msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+			{
+				msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 				learn_spell(monspell);
 			}
 			else
 			{
 				if (!CHECK_MULTISHADOW())
 				{
-                    msg_print(_("あなたは命が薄まっていくように感じた！", "You feel your life fade away!"));
+					msg_print(_("あなたは命が薄まっていくように感じた！", "You feel your life fade away!"));
 					curse_equipment(40, 20);
 				}
 
@@ -7036,16 +7036,16 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					if(project_m(0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice=TRUE;
 					if(!who && (project_m_n==1) && !jump ){
 					  if(cave[project_m_y][project_m_x].m_idx >0 ){
-					    monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
+						monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 
-					    if (m_ptr->ml)
-					    {
-					      /* Hack -- auto-recall */
-					      if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+						if (m_ptr->ml)
+						{
+						  /* Hack -- auto-recall */
+						  if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-					      /* Hack - auto-track */
-					      health_track(cave[project_m_y][project_m_x].m_idx);
-					    }
+						  /* Hack - auto-track */
+						  health_track(cave[project_m_y][project_m_x].m_idx);
+						}
 					  }
 					}
 					(void)project_f(0,0,y,x,dam,GF_SEEKER);
@@ -7338,11 +7338,11 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 		/*
 		 * Create a conical breath attack
 		 *
-		 *         ***
-		 *     ********
+		 *       ***
+		 *   ********
 		 * D********@**
-		 *     ********
-		 *         ***
+		 *   ********
+		 *       ***
 		 */
 
 		if (breath)
@@ -7584,8 +7584,8 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				monster_race *ref_ptr = &r_info[m_ptr->r_idx];
 
 				if ((flg & PROJECT_REFLECTABLE) && cave[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
-				    ((cave[y][x].m_idx != p_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
-				    (!who || dist_hack > 1) && !one_in_(10))
+					((cave[y][x].m_idx != p_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
+					(!who || dist_hack > 1) && !one_in_(10))
 				{
 					POSITION t_y, t_x;
 					int max_attempts = 10;
@@ -7609,11 +7609,11 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					if (is_seen(m_ptr))
 					{
 						if ((m_ptr->r_idx == MON_KENSHIROU) || (m_ptr->r_idx == MON_RAOU))
-                            msg_print(_("「北斗神拳奥義・二指真空把！」", "The attack bounces!"));
+							msg_print(_("「北斗神拳奥義・二指真空把！」", "The attack bounces!"));
 						else if (m_ptr->r_idx == MON_DIO) 
-                            msg_print(_("ディオ・ブランドーは指一本で攻撃を弾き返した！", "The attack bounces!"));
+							msg_print(_("ディオ・ブランドーは指一本で攻撃を弾き返した！", "The attack bounces!"));
 						else 
-                            msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
+							msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
 					}
 					if (is_original_ap_and_seen(m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 
@@ -7827,14 +7827,14 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 		{
 			if (rakuba(rakubadam_m, FALSE))
 			{
-                msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name);
+				msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name);
 			}
 		}
 		if (p_ptr->riding && rakubadam_p > 0)
 		{
 			if(rakuba(rakubadam_p, FALSE))
 			{
-                msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_name);
+				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_name);
 			}
 		}
 	}
@@ -7851,7 +7851,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 bool binding_field( HIT_POINT dam )
 {
 	int mirror_x[10],mirror_y[10]; /* 鏡はもっと少ない */
-	int mirror_num=0;              /* 鏡の数 */
+	int mirror_num=0;			  /* 鏡の数 */
 	int x,y;
 	int centersign;
 	int x1,x2,y1,y2;
@@ -7871,11 +7871,11 @@ bool binding_field( HIT_POINT dam )
 		for( y=0 ; y < cur_hgt ; y++ )
 		{
 			if( is_mirror_grid(&cave[y][x]) &&
-			    distance(p_ptr->y,p_ptr->x,y,x) <= MAX_RANGE &&
-			    distance(p_ptr->y,p_ptr->x,y,x) != 0 &&
-			    player_has_los_bold(y,x) &&
-			    projectable(p_ptr->y, p_ptr->x, y, x)
-			    ){
+				distance(p_ptr->y,p_ptr->x,y,x) <= MAX_RANGE &&
+				distance(p_ptr->y,p_ptr->x,y,x) != 0 &&
+				player_has_los_bold(y,x) &&
+				projectable(p_ptr->y, p_ptr->x, y, x)
+				){
 				mirror_y[mirror_num]=y;
 				mirror_x[mirror_num]=x;
 				mirror_num++;
@@ -7904,7 +7904,7 @@ bool binding_field( HIT_POINT dam )
 	centersign = (point_x[0]*3-x)*(point_y[1]*3-y)
 		- (point_y[0]*3-y)*(point_x[1]*3-x);
 	if( centersign == 0 )return FALSE;
-			    
+				
 	x1 = point_x[0] < point_x[1] ? point_x[0] : point_x[1];
 	x1 = x1 < point_x[2] ? x1 : point_x[2];
 	y1 = point_y[0] < point_y[1] ? point_y[0] : point_y[1];
@@ -7919,9 +7919,9 @@ bool binding_field( HIT_POINT dam )
 		for( x=x1 ; x <=x2 ; x++ ){
 			if( centersign*( (point_x[0]-x)*(point_y[1]-y)
 					 -(point_y[0]-y)*(point_x[1]-x)) >=0 &&
-			    centersign*( (point_x[1]-x)*(point_y[2]-y)
+				centersign*( (point_x[1]-x)*(point_y[2]-y)
 					 -(point_y[1]-y)*(point_x[2]-x)) >=0 &&
-			    centersign*( (point_x[2]-x)*(point_y[0]-y)
+				centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
 				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
@@ -7942,9 +7942,9 @@ bool binding_field( HIT_POINT dam )
 		for( x=x1 ; x <=x2 ; x++ ){
 			if( centersign*( (point_x[0]-x)*(point_y[1]-y)
 					 -(point_y[0]-y)*(point_x[1]-x)) >=0 &&
-			    centersign*( (point_x[1]-x)*(point_y[2]-y)
+				centersign*( (point_x[1]-x)*(point_y[2]-y)
 					 -(point_y[1]-y)*(point_x[2]-x)) >=0 &&
-			    centersign*( (point_x[2]-x)*(point_y[0]-y)
+				centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
 				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
@@ -7957,9 +7957,9 @@ bool binding_field( HIT_POINT dam )
 		for( x=x1 ; x <=x2 ; x++ ){
 			if( centersign*( (point_x[0]-x)*(point_y[1]-y)
 					 -(point_y[0]-y)*(point_x[1]-x)) >=0 &&
-			    centersign*( (point_x[1]-x)*(point_y[2]-y)
+				centersign*( (point_x[1]-x)*(point_y[2]-y)
 					 -(point_y[1]-y)*(point_x[2]-x)) >=0 &&
-			    centersign*( (point_x[2]-x)*(point_y[0]-y)
+				centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
 				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
@@ -7972,9 +7972,9 @@ bool binding_field( HIT_POINT dam )
 		for( x=x1 ; x <=x2 ; x++ ){
 			if( centersign*( (point_x[0]-x)*(point_y[1]-y)
 					 -(point_y[0]-y)*(point_x[1]-x)) >=0 &&
-			    centersign*( (point_x[1]-x)*(point_y[2]-y)
+				centersign*( (point_x[1]-x)*(point_y[2]-y)
 					 -(point_y[1]-y)*(point_x[2]-x)) >=0 &&
-			    centersign*( (point_x[2]-x)*(point_y[0]-y)
+				centersign*( (point_x[2]-x)*(point_y[0]-y)
 					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
 			{
 				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
@@ -7985,7 +7985,7 @@ bool binding_field( HIT_POINT dam )
 		}
 	}
 	if( one_in_(7) ){
-        msg_print(_("鏡が結界に耐えきれず、壊れてしまった。", "The field broke a mirror"));
+		msg_print(_("鏡が結界に耐えきれず、壊れてしまった。", "The field broke a mirror"));
 		remove_mirror(point_y[0],point_x[0]);
 	}
 
@@ -8020,4 +8020,4 @@ void seal_of_mirror( HIT_POINT dam )
 	}
 	return;
 }
-     
+	 
