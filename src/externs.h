@@ -1199,7 +1199,6 @@ extern bool charm_monster(int dir, int plev);
 extern bool control_one_undead(int dir, int plev);
 extern bool control_one_demon(int dir, int plev);
 extern bool charm_animal(int dir, int plev);
-extern bool charm_living(int dir, int plev);
 extern bool mindblast_monsters(HIT_POINT dam);
 extern s32b flag_cost(object_type *o_ptr, int plusses);
 extern void report_magics(void);

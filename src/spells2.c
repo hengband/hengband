@@ -5858,17 +5858,6 @@ bool charm_animal(int dir, int plev)
 	return (project_hook(GF_CONTROL_ANIMAL, dir, plev, flg));
 }
 
-/*!
- * @brief 生物支配(1体)
- * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
- * @param plev パワー
- * @return 作用が実際にあった場合TRUEを返す
- */
-bool charm_living(int dir, int plev)
-{
-	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-	return (project_hook(GF_CONTROL_LIVING, dir, plev, flg));
-}
 
 /*!
  * @brief 変わり身処理
