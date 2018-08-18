@@ -23,6 +23,28 @@ int project_length = 0; /*!< 投射の射程距離 */
 
 
 /*!
+ * @brief モンスター魅了用セービングスロー共通部
+ * @param pow 魅了パワー
+ * @param m_ptr 対象モンスター
+ * @return 魅了に抵抗したらTRUE
+ */
+static bool_hack common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, monster_type *m_ptr)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	if(r_ptr->flagsr & RFR_RES_ALL || p_ptr->inside_arena) return TRUE;
+
+	pow += (adj_chr_chm[player_ptr->stat_ind[A_CHR]] - 1);
+
+	if((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;
+
+	return (r_ptr->flags1 & RF1_QUESTOR) ||
+			(r_ptr->flags3 & RF3_NO_CONF) ||
+			(m_ptr->mflag2 & MFLAG2_NOPET) ||
+			(r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
+}
+
+/*!
  * @brief 配置した鏡リストの次を取得する /
  * Get another mirror. for SEEKER 
  * @param next_y 次の鏡のy座標を返す参照ポインタ
@@ -30,33 +52,33 @@ int project_length = 0; /*!< 投射の射程距離 */
  * @param cury 現在の鏡のy座標
  * @param curx 現在の鏡のx座標
  */
-static void next_mirror( int* next_y , int* next_x , int cury, int curx)
+static void next_mirror(int* next_y, int* next_x, int cury, int curx)
 {
-	int mirror_x[10],mirror_y[10]; /* 鏡はもっと少ない */
-	int mirror_num=0;			  /* 鏡の数 */
-	int x,y;
+	int mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
+	int mirror_num = 0;			  /* 鏡の数 */
+	int x, y;
 	int num;
 
-	for( x=0 ; x < cur_wid ; x++ )
+	for (x = 0; x < cur_wid; x++)
 	{
-		for( y=0 ; y < cur_hgt ; y++ )
+		for (y = 0; y < cur_hgt; y++)
 		{
-			if( is_mirror_grid(&cave[y][x])){
-				mirror_y[mirror_num]=y;
-				mirror_x[mirror_num]=x;
+			if (is_mirror_grid(&cave[y][x])) {
+				mirror_y[mirror_num] = y;
+				mirror_x[mirror_num] = x;
 				mirror_num++;
 			}
 		}
 	}
-	if( mirror_num )
+	if (mirror_num)
 	{
-		num=randint0(mirror_num);
-		*next_y=mirror_y[num];
-		*next_x=mirror_x[num];
+		num = randint0(mirror_num);
+		*next_y = mirror_y[num];
+		*next_x = mirror_x[num];
 		return;
 	}
-	*next_y=cury+randint0(5)-2;
-	*next_x=curx+randint0(5)-2;
+	*next_y = cury + randint0(5) - 2;
+	*next_x = curx + randint0(5) - 2;
 	return;
 }
 		
@@ -3113,7 +3135,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CHARM:
 		{
 			int vir;
-			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
 			vir = virtue_number(V_HARMONY);
 			if (vir)
 			{
@@ -3128,24 +3149,16 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (seen) obvious = TRUE;
 
-			if ((r_ptr->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-			{
-				note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
-				break;
-			}
-
-			if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
-				dam = dam * 2 / 3;
-
 			/* Attempt a saving throw */
-			if ((r_ptr->flags1 & RF1_QUESTOR) ||
-				(r_ptr->flags3 & RF3_NO_CONF) ||
-				(m_ptr->mflag2 & MFLAG2_NOPET) ||
-				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 5))
+			if (common_saving_throw_charm(p_ptr, dam, m_ptr))
 			{
+
 				/* Memorize a flag */
+				if (r_ptr->flagsr & RFR_RES_ALL)
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
+				}
+
 				if (r_ptr->flags3 & RF3_NO_CONF)
 				{
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
@@ -3182,6 +3195,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CONTROL_UNDEAD:
 		{
 			int vir;
+			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
 			if (seen) obvious = TRUE;
 
 			vir = virtue_number(V_UNLIFE);
@@ -3238,6 +3252,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CONTROL_DEMON:
 		{
 			int vir;
+			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
 			if (seen) obvious = TRUE;
 
 			vir = virtue_number(V_UNLIFE);
@@ -3295,6 +3310,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CONTROL_ANIMAL:
 		{
 			int vir;
+			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
 
 			if (seen) obvious = TRUE;
 
@@ -3325,8 +3341,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 			  (!(r_ptr->flags3 & (RF3_ANIMAL))) ||
 				(m_ptr->mflag2 & MFLAG2_NOPET) ||
-				 (r_ptr->flags3 & (RF3_NO_CONF)) ||
-				 (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(r_ptr->flags3 & (RF3_NO_CONF)) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
@@ -3365,10 +3381,10 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			int vir;
 
+			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]] - 1);
 			vir = virtue_number(V_UNLIFE);
 			if (seen) obvious = TRUE;
 
-			dam += (adj_chr_chm[p_ptr->stat_ind[A_CHR]]);
 			vir = virtue_number(V_UNLIFE);
 			if (vir)
 			{
