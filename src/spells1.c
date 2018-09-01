@@ -23,7 +23,7 @@ int project_length = 0; /*!< 投射の射程距離 */
 
 
 /*!
- * @brief モンスター魅了用セービングスロー共通部
+ * @brief モンスター魅了用セービングスロー共通部(汎用系)
  * @param pow 魅了パワー
  * @param m_ptr 対象モンスター
  * @return 魅了に抵抗したらTRUE
@@ -53,6 +53,33 @@ static bool_hack common_saving_throw_charm(player_type *player_ptr, HIT_POINT po
 	if((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;
 	return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }
+
+/*!
+ * @brief モンスター服従用セービングスロー共通部(部族依存系)
+ * @param pow 服従パワー
+ * @param m_ptr 対象モンスター
+ * @return 服従に抵抗したらTRUE
+ */
+static bool_hack common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, monster_type *m_ptr)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	if (p_ptr->inside_arena) return TRUE;
+
+	/* Memorize a flag */
+	if (r_ptr->flagsr & RFR_RES_ALL)
+	{
+		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
+		return TRUE;
+	}
+
+	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2 & MFLAG2_NOPET) return TRUE;
+
+	pow += adj_chr_chm[player_ptr->stat_ind[A_CHR]] - 1;
+	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;
+	return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
+}
+
 
 /*!
  * @brief 配置した鏡リストの次を取得する /
@@ -3209,7 +3236,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			/* Attempt a saving throw */
-			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
+			if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
 				!(r_ptr->flags3 & RF3_UNDEAD))
 			{
 				/* No obvious effect */
@@ -3252,7 +3279,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			/* Attempt a saving throw */
-			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
+			if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
 				!(r_ptr->flags3 & RF3_DEMON))
 			{
 				/* No obvious effect */
@@ -3295,7 +3322,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			/* Attempt a saving throw */
-			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
+			if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
 				!(r_ptr->flags3 & RF3_ANIMAL))
 			{
 				/* Resist */
@@ -3323,7 +3350,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		}
 
 		/* Tame animal */
-		case GF_CONTROL_LIVING:
+		case GF_CHARM_LIVING:
 		{
 			int vir;
 

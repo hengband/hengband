@@ -1001,11 +1001,11 @@ static bool cmd_racial_power_aux(s32b command)
 			if (command == -3)
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
-				(void)fire_ball_hide(GF_CONTROL_LIVING, dir, p_ptr->lev, 0);
+				(void)fire_ball_hide(GF_CHARM_LIVING, dir, p_ptr->lev, 0);
 			}
 			else if (command == -4)
 			{
-				project_hack(GF_CONTROL_LIVING, p_ptr->lev);
+				project_hack(GF_CHARM_LIVING, p_ptr->lev);
 			}
 			break;
 		}

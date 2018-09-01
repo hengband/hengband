@@ -4668,7 +4668,7 @@ bool fire_ball(int typ, int dir, HIT_POINT dam, int rad)
 
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
-	if (typ == GF_CONTROL_LIVING) flg|= PROJECT_HIDE;
+	if (typ == GF_CHARM_LIVING) flg|= PROJECT_HIDE;
 	/* Use the given direction */
 	tx = p_ptr->x + 99 * ddx[dir];
 	ty = p_ptr->y + 99 * ddy[dir];

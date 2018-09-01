@@ -1177,9 +1177,8 @@ void do_cmd_cast(void)
 
 	/* Ask for a spell */
 #ifdef JP
-	if (!get_spell(&spell,  
-				((mp_ptr->spell_book == TV_LIFE_BOOK) ? "詠唱する" : (mp_ptr->spell_book == TV_MUSIC_BOOK) ? "歌う" : "唱える"), 
-		       sval, TRUE, realm))
+	if (!get_spell(&spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "詠唱する" : (mp_ptr->spell_book == TV_MUSIC_BOOK) ? "歌う" : "唱える"), 
+			sval, TRUE, realm))
 	{
 		if (spell == -2) msg_format("その本には知っている%sがない。", prayer);
 		return;

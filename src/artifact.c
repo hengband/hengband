@@ -2688,14 +2688,14 @@ bool activate_random_artifact(object_type *o_ptr)
 		case ACT_CHARM_ANIMAL:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			(void)charm_animal(dir, plev * 2);
+			(void)charm_animal(dir, plev);
 			break;
 		}
 
 		case ACT_CHARM_UNDEAD:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			(void)control_one_undead(dir, plev * 2);
+			(void)control_one_undead(dir, plev);
 			break;
 		}
 

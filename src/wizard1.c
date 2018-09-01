@@ -1834,16 +1834,19 @@ static void spoil_mon_desc(cptr fname)
 	{
 		monster_race *r_ptr = &r_info[who[i]];
 
+		if (!(r_ptr->flags3 & (RF3_DEMON)))
+		{
+			continue;
+		}
+
 		cptr name = (r_name + r_ptr->name);
 		if (r_ptr->flags7 & (RF7_KAGE)) continue;
 
 		/* Get the "name" */
-		/*
-		else if (r_ptr->flags1 & (RF1_QUESTOR))
+		else if (r_ptr->flags3 & (RF3_NO_CONF))
 		{
-			sprintf(nam, "[Q] %s", name);
+			sprintf(nam, "[*] %s", name);
 		}
-		*/
 		else if (r_ptr->flags1 & (RF1_UNIQUE))
 		{
 			sprintf(nam, "[U] %s", name);
