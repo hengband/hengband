@@ -1843,10 +1843,12 @@ static void spoil_mon_desc(cptr fname)
 		if (r_ptr->flags7 & (RF7_KAGE)) continue;
 
 		/* Get the "name" */
+		/*
 		else if (r_ptr->flags3 & (RF3_NO_CONF))
 		{
 			sprintf(nam, "[*] %s", name);
 		}
+		*/
 		else if (r_ptr->flags1 & (RF1_UNIQUE))
 		{
 			sprintf(nam, "[U] %s", name);
