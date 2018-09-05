@@ -2629,17 +2629,12 @@
 #define ENCH_FORCE      0x08 /*!< 装備強化処理: 無条件に成功させる / Force enchantment */
 
 /*
- * Bit flags for the "target_set" function XXX XXX XXX
- *
- *      KILL: Target monsters
- *      LOOK: Describe grid fully
- *      XTRA: Currently unused flag
- *      GRID: Select from all grids
+ * target_set用関数の利用用途フラグ / Bit flags for the "target_set" function
  */
-#define TARGET_KILL             0x01
-#define TARGET_LOOK             0x02
-#define TARGET_XTRA             0x04
-#define TARGET_GRID             0x08
+#define TARGET_KILL     0x01 /*!< モンスターへの狙いをつける(視界内モンスターのみクエリ対象) / Target monsters */
+#define TARGET_LOOK     0x02 /*!< "L"ookコマンド向けの既存情報確認向け(全ての有為な情報をクエリ対象) / Describe grid fully */
+#define TARGET_XTRA     0x04 /*!< 現在未使用 / Currently unused flag */
+#define TARGET_GRID     0x08 /*!< 全てのマス対象にする(現在未使用) / Select from all grids */
 
 
 /*
