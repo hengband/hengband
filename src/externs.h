@@ -1103,7 +1103,6 @@ extern void seal_of_mirror(HIT_POINT dam);
 
 /* spells2.c */
 extern void message_pain(MONSTER_IDX m_idx, HIT_POINT dam);
-extern void self_knowledge(void);
 extern bool detect_traps(POSITION range, bool known);
 extern bool detect_doors(POSITION range);
 extern bool detect_stairs(POSITION range);
@@ -1201,7 +1200,6 @@ extern bool control_one_demon(int dir, int plev);
 extern bool charm_animal(int dir, int plev);
 extern bool mindblast_monsters(HIT_POINT dam);
 extern s32b flag_cost(object_type *o_ptr, int plusses);
-extern void report_magics(void);
 extern bool teleport_swap(int dir);
 extern bool item_tester_hook_recharge(object_type *o_ptr);
 extern bool project_hook(int typ, int dir, HIT_POINT dam, BIT_FLAGS flg);

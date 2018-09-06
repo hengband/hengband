@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "selfinfo.h"
 
 
 /*!

@@ -12,6 +12,7 @@
  */
 
 #include "angband.h"
+#include "selfinfo.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える
