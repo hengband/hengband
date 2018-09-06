@@ -2671,13 +2671,13 @@
 #define SM_OPP_COLD             0x00080000 /*!< モンスターの学習フラグ: プレイヤーに二重冷気耐性あり */
 #define SM_OPP_POIS             0x00100000 /*!< モンスターの学習フラグ: プレイヤーに二重毒耐性あり */
 #define SM_OPP_XXX1             0x00200000 /*!< 未使用 / (unused) */
-#define SM_CLONED               0x00400000 /*!< モンスターの特殊耐性: クローン免疫 / XXX Cloned */
-#define SM_PET                  0x00800000 /*!< モンスターの特殊耐性: ペット免疫 / XXX Pet */
+#define SM_CLONED               0x00400000 /*!< クローンである / Cloned */
+#define SM_PET                  0x00800000 /*!< ペットである / Pet */
 #define SM_IMM_ACID             0x01000000 /*!< モンスターの学習フラグ: プレイヤーに酸免疫あり */
 #define SM_IMM_ELEC             0x02000000 /*!< モンスターの学習フラグ: プレイヤーに電撃免疫あり */
 #define SM_IMM_FIRE             0x04000000 /*!< モンスターの学習フラグ: プレイヤーに火炎免疫あり */
 #define SM_IMM_COLD             0x08000000 /*!< モンスターの学習フラグ: プレイヤーに冷気免疫あり */
-#define SM_FRIENDLY             0x10000000 /*!< モンスターの特殊耐性: 友好化免疫 /  XXX Friendly */
+#define SM_FRIENDLY             0x10000000 /*!< 友好的である / Friendly */
 #define SM_IMM_REFLECT          0x20000000 /*!< モンスターの学習フラグ: プレイヤーに反射あり */
 #define SM_IMM_FREE             0x40000000 /*!< モンスターの学習フラグ: プレイヤーに麻痺耐性あり */
 #define SM_IMM_MANA             0x80000000 /*!< モンスターの学習フラグ: プレイヤーにMPがない */
