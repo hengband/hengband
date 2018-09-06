@@ -2561,18 +2561,18 @@
 
 
 /*
- * Special cave grid flags
+ * 特殊なマス状態フラグ / Special cave grid flags
  */
-#define CAVE_MARK       0x0001    /* memorized feature */
-#define CAVE_GLOW       0x0002    /* self-illuminating */
-#define CAVE_ICKY       0x0004    /* part of a vault */
-#define CAVE_ROOM       0x0008    /* part of a room */
-#define CAVE_LITE       0x0010    /* lite flag  */
-#define CAVE_VIEW       0x0020    /* view flag */
-#define CAVE_TEMP       0x0040    /* temp flag */
-#define CAVE_XTRA       0x0080    /* misc flag */
-#define CAVE_MNLT       0x0100    /* Illuminated by monster */
-#define CAVE_MNDK       0x8000    /* Darken by monster */
+#define CAVE_MARK       0x0001    /*!< 現在プレイヤーの記憶に収まっている / memorized feature */
+#define CAVE_GLOW       0x0002    /*!< マス自体が光源を持っている / self-illuminating */
+#define CAVE_ICKY       0x0004    /*!< 生成されたVaultの一部である / part of a vault */
+#define CAVE_ROOM       0x0008    /*!< 生成された部屋の一部である / part of a room */
+#define CAVE_LITE       0x0010    /*!< 現在光に照らされている / lite flag  */
+#define CAVE_VIEW       0x0020    /*!< 現在プレイヤーの視界に収まっている / view flag */
+#define CAVE_TEMP       0x0040    /*!< 光源に関する処理のアルゴリズム用記録フラグ / temp flag */
+#define CAVE_XTRA       0x0080    /*!< 視界に関する処理のアルゴリズム用記録フラグ(update_view()等参照) / misc flag */
+#define CAVE_MNLT       0x0100    /*!< モンスターの光源によって照らされている / Illuminated by monster */
+#define CAVE_MNDK       0x8000    /*!< モンスターの暗源によって暗闇になっている / Darken by monster */
 
 /* Used only while cave generation */
 #define CAVE_FLOOR      0x0200	/*!< フロア属性のあるマス */
