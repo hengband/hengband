@@ -804,7 +804,6 @@ extern void do_cmd_pet_dismiss(void);
 extern void do_cmd_pet(void);
 
 /* cmd6.c */
-extern void do_cmd_eat_food(void);
 extern void do_cmd_quaff_potion(void);
 extern void do_cmd_read_scroll(void);
 extern void do_cmd_aim_wand(void);
