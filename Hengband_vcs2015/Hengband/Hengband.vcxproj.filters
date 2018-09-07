@@ -208,6 +208,12 @@
     <ClCompile Include="..\..\src\snipe.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\selfinfo.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-eat.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -277,6 +283,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\z-virt.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\selfinfo.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-eat.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

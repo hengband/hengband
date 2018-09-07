@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\src\bldg.c" />
     <ClCompile Include="..\..\src\cave.c" />
     <ClCompile Include="..\..\src\chuukei.c" />
+    <ClCompile Include="..\..\src\cmd-eat.c" />
     <ClCompile Include="..\..\src\cmd1.c" />
     <ClCompile Include="..\..\src\cmd2.c" />
     <ClCompile Include="..\..\src\cmd3.c" />
@@ -181,6 +182,7 @@
     <ClCompile Include="..\..\src\rooms.c" />
     <ClCompile Include="..\..\src\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
+    <ClCompile Include="..\..\src\selfinfo.c" />
     <ClCompile Include="..\..\src\snipe.c" />
     <ClCompile Include="..\..\src\spells1.c" />
     <ClCompile Include="..\..\src\spells2.c" />
@@ -203,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
+    <ClInclude Include="..\..\src\cmd-eat.h" />
     <ClInclude Include="..\..\src\defines.h" />
     <ClInclude Include="..\..\src\externs.h" />
     <ClInclude Include="..\..\src\generate.h" />
@@ -217,6 +220,7 @@
     <ClInclude Include="..\..\src\mindtips.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\rooms.h" />
+    <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\streams.h" />
     <ClInclude Include="..\..\src\types.h" />
     <ClInclude Include="..\..\src\z-config.h" />
