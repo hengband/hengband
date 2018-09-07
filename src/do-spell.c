@@ -8,6 +8,7 @@
 
 #include "angband.h"
 #include "selfinfo.h"
+#include "cmd-quaff.h"
 
 
 /*!

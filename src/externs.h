@@ -808,7 +808,6 @@ extern void do_cmd_read_scroll(void);
 extern void do_cmd_aim_wand(void);
 extern void do_cmd_use_staff(void);
 extern void do_cmd_zap_rod(void);
-extern void do_cmd_activate(void);
 extern void do_cmd_rerate_aux(void);
 extern void do_cmd_rerate(bool display);
 extern void ring_of_power(int dir);

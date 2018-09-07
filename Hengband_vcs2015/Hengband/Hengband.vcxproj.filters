@@ -211,10 +211,13 @@
     <ClCompile Include="..\..\src\selfinfo.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-eat.c">
+    <ClCompile Include="..\..\src\cmd-activate.c">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd-quaff.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-eat.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -295,6 +298,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-quaff.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-activate.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

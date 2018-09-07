@@ -1,18 +1,18 @@
-/*!
+ï»¿/*!
  * @file cmd-eat.c
- * @brief ƒvƒŒƒCƒ„[‚ÌH‚×‚éƒRƒ}ƒ“ƒhÀ‘•
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é£Ÿã¹ã‚‹ã‚³ãƒãƒ³ãƒ‰å®Ÿè£…
  * @date 2018/09/07
  * @details
- * cmd6.c‚æ‚è•ª—£B
+ * cmd6.cã‚ˆã‚Šåˆ†é›¢ã€‚
  */
 
 
 #include "angband.h"
 
 /*!
- * @brief H—¿‚ğH‚×‚éƒRƒ}ƒ“ƒh‚ÌƒTƒuƒ‹[ƒ`ƒ“
- * @param item H‚×‚éƒIƒuƒWƒFƒNƒg‚ÌŠ•iID
- * @return ‚È‚µ
+ * @brief é£Ÿæ–™ã‚’é£Ÿã¹ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³
+ * @param item é£Ÿã¹ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æŒå“ID
+ * @return ãªã—
  */
 void do_cmd_eat_food_aux(int item)
 {
@@ -125,7 +125,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_WEAKNESS:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(6, 6), _("“Å“ü‚èH—¿", "poisonous food"), -1);
+			take_hit(DAMAGE_NOESCAPE, damroll(6, 6), _("æ¯’å…¥ã‚Šé£Ÿæ–™", "poisonous food"), -1);
 			(void)do_dec_stat(A_STR);
 			ident = TRUE;
 			break;
@@ -133,7 +133,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_SICKNESS:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(6, 6), _("“Å“ü‚èH—¿", "poisonous food"), -1);
+			take_hit(DAMAGE_NOESCAPE, damroll(6, 6), _("æ¯’å…¥ã‚Šé£Ÿæ–™", "poisonous food"), -1);
 			(void)do_dec_stat(A_CON);
 			ident = TRUE;
 			break;
@@ -141,7 +141,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_STUPIDITY:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(8, 8), _("“Å“ü‚èH—¿", "poisonous food"), -1);
+			take_hit(DAMAGE_NOESCAPE, damroll(8, 8), _("æ¯’å…¥ã‚Šé£Ÿæ–™", "poisonous food"), -1);
 			(void)do_dec_stat(A_INT);
 			ident = TRUE;
 			break;
@@ -149,7 +149,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_NAIVETY:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(8, 8), _("“Å“ü‚èH—¿", "poisonous food"), -1);
+			take_hit(DAMAGE_NOESCAPE, damroll(8, 8), _("æ¯’å…¥ã‚Šé£Ÿæ–™", "poisonous food"), -1);
 			(void)do_dec_stat(A_WIS);
 			ident = TRUE;
 			break;
@@ -157,7 +157,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_UNHEALTH:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(10, 10), _("“Å“ü‚èH—¿", "poisonous food"), -1);
+			take_hit(DAMAGE_NOESCAPE, damroll(10, 10), _("æ¯’å…¥ã‚Šé£Ÿæ–™", "poisonous food"), -1);
 			(void)do_dec_stat(A_CON);
 			ident = TRUE;
 			break;
@@ -165,7 +165,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_DISEASE:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(10, 10), _("“Å“ü‚èH—¿", "poisonous food"), -1);
+			take_hit(DAMAGE_NOESCAPE, damroll(10, 10), _("æ¯’å…¥ã‚Šé£Ÿæ–™", "poisonous food"), -1);
 			(void)do_dec_stat(A_STR);
 			ident = TRUE;
 			break;
@@ -226,31 +226,31 @@ void do_cmd_eat_food_aux(int item)
 
 
 #ifdef JP
-		/* ‚»‚ê‚¼‚ê‚ÌH‚×•¨‚ÌŠ´‘z‚ğƒIƒŠƒWƒiƒ‹‚æ‚è×‚©‚­•\Œ» */
+		/* ãã‚Œãã‚Œã®é£Ÿã¹ç‰©ã®æ„Ÿæƒ³ã‚’ã‚ªãƒªã‚¸ãƒŠãƒ«ã‚ˆã‚Šç´°ã‹ãè¡¨ç¾ */
 		case SV_FOOD_BISCUIT:
 		{
-			msg_print("ŠÃ‚­‚ÄƒTƒNƒTƒN‚µ‚Ä‚Æ‚Ä‚à‚¨‚¢‚µ‚¢B");
+			msg_print("ç”˜ãã¦ã‚µã‚¯ã‚µã‚¯ã—ã¦ã¨ã¦ã‚‚ãŠã„ã—ã„ã€‚");
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_JERKY:
 		{
-			msg_print("•‚²‚½‚¦‚ª‚ ‚Á‚Ä‚¨‚¢‚µ‚¢B");
+			msg_print("æ­¯ã”ãŸãˆãŒã‚ã£ã¦ãŠã„ã—ã„ã€‚");
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_SLIME_MOLD:
 		{
-			msg_print("‚±‚ê‚Í‚È‚ñ‚Æ‚àŒ`—e‚µ‚ª‚½‚¢–¡‚¾B");
+			msg_print("ã“ã‚Œã¯ãªã‚“ã¨ã‚‚å½¢å®¹ã—ãŒãŸã„å‘³ã ã€‚");
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_RATION:
 		{
-			msg_print("‚±‚ê‚Í‚¨‚¢‚µ‚¢B");
+			msg_print("ã“ã‚Œã¯ãŠã„ã—ã„ã€‚");
 			ident = TRUE;
 			break;
 		}
@@ -269,7 +269,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_WAYBREAD:
 		{
-			msg_print(_("‚±‚ê‚Í‚Ğ‚¶‚å‚¤‚É”ü–¡‚¾B", "That tastes good."));
+			msg_print(_("ã“ã‚Œã¯ã²ã˜ã‚‡ã†ã«ç¾å‘³ã ã€‚", "That tastes good."));
 			(void)set_poisoned(0);
 			(void)hp_player(damroll(4, 8));
 			ident = TRUE;
@@ -279,7 +279,7 @@ void do_cmd_eat_food_aux(int item)
 #ifdef JP
 		case SV_FOOD_PINT_OF_ALE:
 		{
-			msg_print("‚Ì‚Ç‚²‚µ‘u‚â‚©‚¾B");
+			msg_print("ã®ã©ã”ã—çˆ½ã‚„ã‹ã ã€‚");
 			ident = TRUE;
 			break;
 		}
@@ -332,11 +332,11 @@ void do_cmd_eat_food_aux(int item)
 	{
 		/* Reduced nutritional benefit */
 		(void)set_food(p_ptr->food + (o_ptr->pval / 10));
-		msg_print(_("‚ ‚È‚½‚Ì‚æ‚¤‚ÈÒ‚É‚Æ‚Á‚ÄH—Æ‚È‚Ç‹Í‚©‚È‰h—{‚É‚µ‚©‚È‚ç‚È‚¢B",
+		msg_print(_("ã‚ãªãŸã®ã‚ˆã†ãªè€…ã«ã¨ã£ã¦é£Ÿç³§ãªã©åƒ…ã‹ãªæ „é¤Šã«ã—ã‹ãªã‚‰ãªã„ã€‚",
 			"Mere victuals hold scant sustenance for a being such as yourself."));
 
 		if (p_ptr->food < PY_FOOD_ALERT)   /* Hungry */
-			msg_print(_("‚ ‚È‚½‚Ì‹Q‚¦‚ÍV‘N‚ÈŒŒ‚É‚æ‚Á‚Ä‚Ì‚İ–‚½‚³‚ê‚éI",
+			msg_print(_("ã‚ãªãŸã®é£¢ãˆã¯æ–°é®®ãªè¡€ã«ã‚ˆã£ã¦ã®ã¿æº€ãŸã•ã‚Œã‚‹ï¼",
 				"Your hunger can only be satisfied with fresh blood!"));
 	}
 	else if ((prace_is_(RACE_SKELETON) ||
@@ -350,15 +350,15 @@ void do_cmd_eat_food_aux(int item)
 		if (o_ptr->tval == TV_STAFF &&
 			(item < 0) && (o_ptr->number > 1))
 		{
-			msg_print(_("‚Ü‚¸‚Íñ‚ğE‚í‚È‚¯‚ê‚ÎB", "You must first pick up the staffs."));
+			msg_print(_("ã¾ãšã¯æ–ã‚’æ‹¾ã‚ãªã‘ã‚Œã°ã€‚", "You must first pick up the staffs."));
 			return;
 		}
-		staff = (o_ptr->tval == TV_STAFF) ? _("ñ", "staff") : _("–‚–@–_", "wand");
+		staff = (o_ptr->tval == TV_STAFF) ? _("æ–", "staff") : _("é­”æ³•æ£’", "wand");
 
 		/* "Eat" charges */
 		if (o_ptr->pval == 0)
 		{
-			msg_format(_("‚±‚Ì%s‚É‚Í‚à‚¤–‚—Í‚ªc‚Á‚Ä‚¢‚È‚¢B", "The %s has no charges left."), staff);
+			msg_format(_("ã“ã®%sã«ã¯ã‚‚ã†é­”åŠ›ãŒæ®‹ã£ã¦ã„ãªã„ã€‚", "The %s has no charges left."), staff);
 			o_ptr->ident |= (IDENT_EMPTY);
 
 			/* Combine / Reorder the pack (later) */
@@ -367,7 +367,7 @@ void do_cmd_eat_food_aux(int item)
 
 			return;
 		}
-		msg_format(_("‚ ‚È‚½‚Í%s‚Ì–‚—Í‚ğƒGƒlƒ‹ƒM[Œ¹‚Æ‚µ‚Ä‹zû‚µ‚½B", "You absorb mana of the %s as your energy."), staff);
+		msg_format(_("ã‚ãªãŸã¯%sã®é­”åŠ›ã‚’ã‚¨ãƒãƒ«ã‚®ãƒ¼æºã¨ã—ã¦å¸åã—ãŸã€‚", "You absorb mana of the %s as your energy."), staff);
 
 		/* Use a single charge */
 		o_ptr->pval--;
@@ -400,7 +400,7 @@ void do_cmd_eat_food_aux(int item)
 			item = inven_carry(q_ptr);
 
 			/* Message */
-			msg_format(_("ñ‚ğ‚Ü‚Æ‚ß‚È‚¨‚µ‚½B", "You unstack your staff."));
+			msg_format(_("æ–ã‚’ã¾ã¨ã‚ãªãŠã—ãŸã€‚", "You unstack your staff."));
 		}
 
 		/* Describe charges in the pack */
@@ -429,7 +429,7 @@ void do_cmd_eat_food_aux(int item)
 		/* Drain vitality of humanoids */
 		char o_name[MAX_NLEN];
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-		msg_format(_("%s‚Í”R‚¦ã‚èŠD‚É‚È‚Á‚½B¸—Í‚ğ‹zû‚µ‚½‹C‚ª‚·‚éB", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
+		msg_format(_("%sã¯ç‡ƒãˆä¸Šã‚Šç°ã«ãªã£ãŸã€‚ç²¾åŠ›ã‚’å¸åã—ãŸæ°—ãŒã™ã‚‹ã€‚", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
 		(void)set_food(PY_FOOD_MAX - 1);
 	}
 	else if (prace_is_(RACE_SKELETON))
@@ -438,7 +438,7 @@ void do_cmd_eat_food_aux(int item)
 		if (o_ptr->tval == TV_SKELETON ||
 			(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
 		{
-			msg_print(_("‚ ‚È‚½‚Íœ‚Å©•ª‚Ì‘Ì‚ğ•â‚Á‚½B", "Your body absorbs the bone."));
+			msg_print(_("ã‚ãªãŸã¯éª¨ã§è‡ªåˆ†ã®ä½“ã‚’è£œã£ãŸã€‚", "Your body absorbs the bone."));
 			set_food(p_ptr->food + 5000);
 		}
 		else
@@ -450,7 +450,7 @@ void do_cmd_eat_food_aux(int item)
 				object_type forge;
 				object_type *q_ptr = &forge;
 
-				msg_print(_("H‚×•¨‚ªƒAƒS‚ğ‘f’Ê‚è‚µ‚Ä—‚¿‚½I", "The food falls through your jaws!"));
+				msg_print(_("é£Ÿã¹ç‰©ãŒã‚¢ã‚´ã‚’ç´ é€šã‚Šã—ã¦è½ã¡ãŸï¼", "The food falls through your jaws!"));
 
 				/* Create the item */
 				object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
@@ -460,7 +460,7 @@ void do_cmd_eat_food_aux(int item)
 			}
 			else
 			{
-				msg_print(_("H‚×•¨‚ªƒAƒS‚ğ‘f’Ê‚è‚µ‚Ä—‚¿AÁ‚¦‚½I", "The food falls through your jaws and vanishes!"));
+				msg_print(_("é£Ÿã¹ç‰©ãŒã‚¢ã‚´ã‚’ç´ é€šã‚Šã—ã¦è½ã¡ã€æ¶ˆãˆãŸï¼", "The food falls through your jaws and vanishes!"));
 			}
 	}
 	else if (prace_is_(RACE_GOLEM) ||
@@ -471,7 +471,7 @@ void do_cmd_eat_food_aux(int item)
 		prace_is_(RACE_SPECTRE) ||
 		(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
 	{
-		msg_print(_("¶Ò‚ÌH•¨‚Í‚ ‚È‚½‚É‚Æ‚Á‚Ä‚Ù‚Æ‚ñ‚Ç‰h—{‚É‚È‚ç‚È‚¢B", "The food of mortals is poor sustenance for you."));
+		msg_print(_("ç”Ÿè€…ã®é£Ÿç‰©ã¯ã‚ãªãŸã«ã¨ã£ã¦ã»ã¨ã‚“ã©æ „é¤Šã«ãªã‚‰ãªã„ã€‚", "The food of mortals is poor sustenance for you."));
 		set_food(p_ptr->food + ((o_ptr->pval) / 20));
 	}
 	else if (o_ptr->tval == TV_FOOD && o_ptr->sval == SV_FOOD_WAYBREAD)
@@ -504,10 +504,10 @@ void do_cmd_eat_food_aux(int item)
 
 
 /*!
- * @brief ƒIƒuƒWƒFƒNƒg‚ğƒvƒŒƒCƒ„[‚ªH‚×‚é‚±‚Æ‚ª‚Å‚«‚é‚©‚ğ”»’è‚·‚é /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒé£Ÿã¹ã‚‹ã“ã¨ãŒã§ãã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ /
  * Hook to determine if an object is eatable
- * @param o_ptr ”»’è‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @return H‚×‚é‚±‚Æ‚ª‰Â”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+ * @param o_ptr åˆ¤å®šã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return é£Ÿã¹ã‚‹ã“ã¨ãŒå¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool item_tester_hook_eatable(object_type *o_ptr)
 {
@@ -546,9 +546,9 @@ static bool item_tester_hook_eatable(object_type *o_ptr)
 
 
 /*!
- * @brief H—¿‚ğH‚×‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief é£Ÿæ–™ã‚’é£Ÿã¹ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Eat some food (from the pack or floor)
- * @return ‚È‚µ
+ * @return ãªã—
  */
 void do_cmd_eat_food(void)
 {
@@ -565,8 +565,8 @@ void do_cmd_eat_food(void)
 	item_tester_hook = item_tester_hook_eatable;
 
 	/* Get an item */
-	q = _("‚Ç‚ê‚ğH‚×‚Ü‚·‚©? ", "Eat which item? ");
-	s = _("H‚×•¨‚ª‚È‚¢B", "You have nothing to eat.");
+	q = _("ã©ã‚Œã‚’é£Ÿã¹ã¾ã™ã‹? ", "Eat which item? ");
+	s = _("é£Ÿã¹ç‰©ãŒãªã„ã€‚", "You have nothing to eat.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 

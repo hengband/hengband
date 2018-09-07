@@ -1,9 +1,9 @@
-/*!
+ï»¿/*!
  * @file cmd-quaff.c
- * @brief ƒvƒŒƒCƒ„[‚Ìˆù‚ŞƒRƒ}ƒ“ƒhÀ‘•
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é£²ã‚€ã‚³ãƒãƒ³ãƒ‰å®Ÿè£…
  * @date 2018/09/07
  * @details
- * cmd6.c‚æ‚è•ª—£B
+ * cmd6.cã‚ˆã‚Šåˆ†é›¢ã€‚
  */
 
 
@@ -11,10 +11,10 @@
 #include "selfinfo.h"
 
 /*!
- * @brief –ò‚ğˆù‚ŞƒRƒ}ƒ“ƒh‚ÌƒTƒuƒ‹[ƒ`ƒ“ /
+ * @brief è–¬ã‚’é£²ã‚€ã‚³ãƒãƒ³ãƒ‰ã®ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ /
  * Quaff a potion (from the pack or the floor)
- * @param item ˆù‚Ş–òƒIƒuƒWƒFƒNƒg‚ÌŠ•iID
- * @return ‚È‚µ
+ * @param item é£²ã‚€è–¬ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æŒå“ID
+ * @return ãªã—
  */
 void do_cmd_quaff_potion_aux(int item)
 {
@@ -30,7 +30,7 @@ void do_cmd_quaff_potion_aux(int item)
 	if (world_player)
 	{
 		if (flush_failure) flush();
-		msg_print(_("•r‚©‚ç…‚ª—¬‚êo‚Ä‚±‚È‚¢I", "The potion doesn't flow out from a bottle."));
+		msg_print(_("ç“¶ã‹ã‚‰æ°´ãŒæµã‚Œå‡ºã¦ã“ãªã„ï¼", "The potion doesn't flow out from a bottle."));
 
 		sound(SOUND_FAIL);
 		return;
@@ -94,22 +94,22 @@ void do_cmd_quaff_potion_aux(int item)
 	{
 		switch (q_ptr->sval)
 		{
-			/* ˆù‚İ‚²‚½‚¦‚ğƒIƒŠƒWƒiƒ‹‚æ‚è×‚©‚­•\Œ» */
+			/* é£²ã¿ã”ãŸãˆã‚’ã‚ªãƒªã‚¸ãƒŠãƒ«ã‚ˆã‚Šç´°ã‹ãè¡¨ç¾ */
 		case SV_POTION_WATER:
-			msg_print(_("Œû‚Ì’†‚ª‚³‚Á‚Ï‚è‚µ‚½B", ""));
-			msg_print(_("‚Ì‚Ç‚ÌŠ‰‚«‚ª­‚µ‚¨‚³‚Ü‚Á‚½B", "You feel less thirsty."));
+			msg_print(_("å£ã®ä¸­ãŒã•ã£ã±ã‚Šã—ãŸã€‚", ""));
+			msg_print(_("ã®ã©ã®æ¸‡ããŒå°‘ã—ãŠã•ã¾ã£ãŸã€‚", "You feel less thirsty."));
 			ident = TRUE;
 			break;
 
 		case SV_POTION_APPLE_JUICE:
-			msg_print(_("ŠÃ‚­‚ÄƒTƒbƒpƒŠ‚Æ‚µ‚Ä‚¢‚ÄA‚Æ‚Ä‚à‚¨‚¢‚µ‚¢B", ""));
-			msg_print(_("‚Ì‚Ç‚ÌŠ‰‚«‚ª­‚µ‚¨‚³‚Ü‚Á‚½B", "You feel less thirsty."));
+			msg_print(_("ç”˜ãã¦ã‚µãƒƒãƒ‘ãƒªã¨ã—ã¦ã„ã¦ã€ã¨ã¦ã‚‚ãŠã„ã—ã„ã€‚", ""));
+			msg_print(_("ã®ã©ã®æ¸‡ããŒå°‘ã—ãŠã•ã¾ã£ãŸã€‚", "You feel less thirsty."));
 			ident = TRUE;
 			break;
 
 		case SV_POTION_SLIME_MOLD:
-			msg_print(_("‚È‚ñ‚Æ‚à•s‹C–¡‚È–¡‚¾B", ""));
-			msg_print(_("‚Ì‚Ç‚ÌŠ‰‚«‚ª­‚µ‚¨‚³‚Ü‚Á‚½B", "You feel less thirsty."));
+			msg_print(_("ãªã‚“ã¨ã‚‚ä¸æ°—å‘³ãªå‘³ã ã€‚", ""));
+			msg_print(_("ã®ã©ã®æ¸‡ããŒå°‘ã—ãŠã•ã¾ã£ãŸã€‚", "You feel less thirsty."));
 			ident = TRUE;
 			break;
 
@@ -118,7 +118,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_SALT_WATER:
-			msg_print(_("‚¤‚¥Iv‚í‚¸“f‚¢‚Ä‚µ‚Ü‚Á‚½B", "The potion makes you vomit!"));
+			msg_print(_("ã†ã‡ï¼æ€ã‚ãšåã„ã¦ã—ã¾ã£ãŸã€‚", "The potion makes you vomit!"));
 
 			if (!(prace_is_(RACE_GOLEM) ||
 			      prace_is_(RACE_ZOMBIE) ||
@@ -183,8 +183,8 @@ void do_cmd_quaff_potion_aux(int item)
 					else wiz_dark();
 					(void)teleport_player_aux(100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 					wiz_dark();
-					msg_print(_("’m‚ç‚È‚¢êŠ‚Å–Ú‚ªÁ‚ß‚½B“ª’É‚ª‚·‚éB", "You wake up somewhere with a sore head..."));
-					msg_print(_("‰½‚àv‚¢o‚¹‚È‚¢B‚Ç‚¤‚â‚Á‚Ä‚±‚±‚Ö—ˆ‚½‚Ì‚©‚à•ª‚©‚ç‚È‚¢I", "You can't remember a thing, or how you got here!"));
+					msg_print(_("çŸ¥ã‚‰ãªã„å ´æ‰€ã§ç›®ãŒé†’ã‚ãŸã€‚é ­ç—›ãŒã™ã‚‹ã€‚", "You wake up somewhere with a sore head..."));
+					msg_print(_("ä½•ã‚‚æ€ã„å‡ºã›ãªã„ã€‚ã©ã†ã‚„ã£ã¦ã“ã“ã¸æ¥ãŸã®ã‹ã‚‚åˆ†ã‹ã‚‰ãªã„ï¼", "You can't remember a thing, or how you got here!"));
 				}
 			}
 			break;
@@ -192,11 +192,11 @@ void do_cmd_quaff_potion_aux(int item)
 		case SV_POTION_SLEEP:
 			if (!p_ptr->free_act)
 			{
-				msg_print(_("‚ ‚È‚½‚Í–°‚Á‚Ä‚µ‚Ü‚Á‚½B", "You fall asleep."));
+				msg_print(_("ã‚ãªãŸã¯çœ ã£ã¦ã—ã¾ã£ãŸã€‚", "You fall asleep."));
 
 				if (ironman_nightmare)
 				{
-					msg_print(_("‹°‚ë‚µ‚¢ŒõŒi‚ª“ª‚É•‚‚©‚ñ‚Å‚«‚½B", "A horrible vision enters your mind."));
+					msg_print(_("æã‚ã—ã„å…‰æ™¯ãŒé ­ã«æµ®ã‹ã‚“ã§ããŸã€‚", "A horrible vision enters your mind."));
 
 					/* Have some nightmares */
 					sanity_blast(NULL, FALSE);
@@ -211,7 +211,7 @@ void do_cmd_quaff_potion_aux(int item)
 		case SV_POTION_LOSE_MEMORIES:
 			if (!p_ptr->hold_exp && (p_ptr->exp > 0))
 			{
-				msg_print(_("‰ß‹‚Ì‹L‰¯‚ª”–‚ê‚Ä‚¢‚­‹C‚ª‚·‚éB", "You feel your memories fade."));
+				msg_print(_("éå»ã®è¨˜æ†¶ãŒè–„ã‚Œã¦ã„ãæ°—ãŒã™ã‚‹ã€‚", "You feel your memories fade."));
 				chg_virtue(V_KNOWLEDGE, -5);
 
 				lose_exp(p_ptr->exp / 4);
@@ -220,8 +220,8 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_RUINATION:
-			msg_print(_("g‚àS‚àã‚Á‚Ä‚«‚ÄA¸‹C‚ª”²‚¯‚Ä‚¢‚­‚æ‚¤‚¾B", "Your nerves and muscles feel weak and lifeless!"));
-			take_hit(DAMAGE_LOSELIFE, damroll(10, 10), _("”j–Å‚Ì–ò", "a potion of Ruination"), -1);
+			msg_print(_("èº«ã‚‚å¿ƒã‚‚å¼±ã£ã¦ãã¦ã€ç²¾æ°—ãŒæŠœã‘ã¦ã„ãã‚ˆã†ã ã€‚", "Your nerves and muscles feel weak and lifeless!"));
+			take_hit(DAMAGE_LOSELIFE, damroll(10, 10), _("ç ´æ»…ã®è–¬", "a potion of Ruination"), -1);
 
 			(void)dec_stat(A_DEX, 25, TRUE);
 			(void)dec_stat(A_WIS, 25, TRUE);
@@ -257,8 +257,8 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_DETONATIONS:
-			msg_print(_("‘Ì‚Ì’†‚ÅŒƒ‚µ‚¢”š”­‚ª‹N‚«‚½I", "Massive explosions rupture your body!"));
-			take_hit(DAMAGE_NOESCAPE, damroll(50, 20), _("”š”­‚Ì–ò", "a potion of Detonation"), -1);
+			msg_print(_("ä½“ã®ä¸­ã§æ¿€ã—ã„çˆ†ç™ºãŒèµ·ããŸï¼", "Massive explosions rupture your body!"));
+			take_hit(DAMAGE_NOESCAPE, damroll(50, 20), _("çˆ†ç™ºã®è–¬", "a potion of Detonation"), -1);
 
 			(void)set_stun(p_ptr->stun + 75);
 			(void)set_cut(p_ptr->cut + 5000);
@@ -268,8 +268,8 @@ void do_cmd_quaff_potion_aux(int item)
 		case SV_POTION_DEATH:
 			chg_virtue(V_VITALITY, -1);
 			chg_virtue(V_UNLIFE, 5);
-			msg_print(_("€‚Ì—\Š´‚ª‘Ì’†‚ğ‹ì‚¯‚ß‚®‚Á‚½B", "A feeling of Death flows through your body."));
-			take_hit(DAMAGE_LOSELIFE, 5000, _("€‚Ì–ò", "a potion of Death"), -1);
+			msg_print(_("æ­»ã®äºˆæ„ŸãŒä½“ä¸­ã‚’é§†ã‘ã‚ãã£ãŸã€‚", "A feeling of Death flows through your body."));
+			take_hit(DAMAGE_LOSELIFE, 5000, _("æ­»ã®è–¬", "a potion of Death"), -1);
 			ident = TRUE;
 			break;
 
@@ -384,7 +384,7 @@ void do_cmd_quaff_potion_aux(int item)
 		case SV_POTION_LIFE:
 			chg_virtue(V_VITALITY, 1);
 			chg_virtue(V_UNLIFE, -5);
-			msg_print(_("‘Ì’†‚É¶–½—Í‚ª–‚¿‚ ‚Ó‚ê‚Ä‚«‚½I", "You feel life flow through your body!"));
+			msg_print(_("ä½“ä¸­ã«ç”Ÿå‘½åŠ›ãŒæº€ã¡ã‚ãµã‚Œã¦ããŸï¼", "You feel life flow through your body!"));
 			restore_level();
 			(void)set_poisoned(0);
 			(void)set_blind(0);
@@ -419,7 +419,7 @@ void do_cmd_quaff_potion_aux(int item)
 					p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE*3 : p_ptr->magic_num2[i]*EATER_ROD_CHARGE/3)*k_info[k_idx].pval;
 					if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 				}
-				msg_print(_("“ª‚ªƒnƒbƒLƒŠ‚Æ‚µ‚½B", "You feel your head clear."));
+				msg_print(_("é ­ãŒãƒãƒƒã‚­ãƒªã¨ã—ãŸã€‚", "You feel your head clear."));
 				p_ptr->window |= (PW_PLAYER);
 				ident = TRUE;
 			}
@@ -427,7 +427,7 @@ void do_cmd_quaff_potion_aux(int item)
 			{
 				p_ptr->csp = p_ptr->msp;
 				p_ptr->csp_frac = 0;
-				msg_print(_("“ª‚ªƒnƒbƒLƒŠ‚Æ‚µ‚½B", "You feel your head clear."));
+				msg_print(_("é ­ãŒãƒãƒƒã‚­ãƒªã¨ã—ãŸã€‚", "You feel your head clear."));
 
 				p_ptr->redraw |= (PR_MANA);
 				p_ptr->window |= (PW_PLAYER);
@@ -499,7 +499,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_ENLIGHTENMENT:
-			msg_print(_("©•ª‚Ì’u‚©‚ê‚Ä‚¢‚éó‹µ‚ª”]— ‚É•‚‚©‚ñ‚Å‚«‚½...", "An image of your surroundings forms in your mind..."));
+			msg_print(_("è‡ªåˆ†ã®ç½®ã‹ã‚Œã¦ã„ã‚‹çŠ¶æ³ãŒè„³è£ã«æµ®ã‹ã‚“ã§ããŸ...", "An image of your surroundings forms in your mind..."));
 			chg_virtue(V_KNOWLEDGE, 1);
 			chg_virtue(V_ENLIGHTEN, 1);
 			wiz_lite(FALSE);
@@ -507,7 +507,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_STAR_ENLIGHTENMENT:
-			msg_print(_("X‚È‚éŒ[–Ö‚ğŠ´‚¶‚½...", "You begin to feel more enlightened..."));
+			msg_print(_("æ›´ãªã‚‹å•“è’™ã‚’æ„Ÿã˜ãŸ...", "You begin to feel more enlightened..."));
 			chg_virtue(V_KNOWLEDGE, 1);
 			chg_virtue(V_ENLIGHTEN, 2);
 			msg_print(NULL);
@@ -526,7 +526,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_SELF_KNOWLEDGE:
-			msg_print(_("©•ª©g‚Ì‚±‚Æ‚ª­‚µ‚Í•ª‚©‚Á‚½‹C‚ª‚·‚é...", "You begin to know yourself a little better..."));
+			msg_print(_("è‡ªåˆ†è‡ªèº«ã®ã“ã¨ãŒå°‘ã—ã¯åˆ†ã‹ã£ãŸæ°—ãŒã™ã‚‹...", "You begin to know yourself a little better..."));
 			msg_print(NULL);
 			self_knowledge();
 			ident = TRUE;
@@ -539,7 +539,7 @@ void do_cmd_quaff_potion_aux(int item)
 			{
 				s32b ee = (p_ptr->exp / 2) + 10;
 				if (ee > 100000L) ee = 100000L;
-				msg_print(_("X‚ÉŒoŒ±‚ğÏ‚ñ‚¾‚æ‚¤‚È‹C‚ª‚·‚éB", "You feel more experienced."));
+				msg_print(_("æ›´ã«çµŒé¨“ã‚’ç©ã‚“ã ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚", "You feel more experienced."));
 				gain_exp(ee);
 				ident = TRUE;
 			}
@@ -584,7 +584,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_TSUYOSHI:
-			msg_print(_("uƒIƒNƒŒŒZ‚³‚ñIv", "Brother OKURE!"));
+			msg_print(_("ã€Œã‚ªã‚¯ãƒ¬å…„ã•ã‚“ï¼ã€", "Brother OKURE!"));
 			msg_print(NULL);
 			p_ptr->tsuyoshi = 1;
 			(void)set_tsuyoshi(0, TRUE);
@@ -617,7 +617,7 @@ void do_cmd_quaff_potion_aux(int item)
 
 	if (prace_is_(RACE_SKELETON))
 	{
-		msg_print(_("‰t‘Ì‚Ìˆê•”‚Í‚ ‚È‚½‚ÌƒAƒS‚ğ‘f’Ê‚è‚µ‚Ä—‚¿‚½I", "Some of the fluid falls through your jaws!"));
+		msg_print(_("æ¶²ä½“ã®ä¸€éƒ¨ã¯ã‚ãªãŸã®ã‚¢ã‚´ã‚’ç´ é€šã‚Šã—ã¦è½ã¡ãŸï¼", "Some of the fluid falls through your jaws!"));
 		(void)potion_smash_effect(0, p_ptr->y, p_ptr->x, q_ptr->k_idx);
 	}
 
@@ -665,7 +665,7 @@ void do_cmd_quaff_potion_aux(int item)
 			case RACE_ANDROID:
 				if (q_ptr->tval == TV_FLASK)
 				{
-					msg_print(_("ƒIƒCƒ‹‚ğ•â‹‹‚µ‚½B", "You replenish yourself with the oil."));
+					msg_print(_("ã‚ªã‚¤ãƒ«ã‚’è£œçµ¦ã—ãŸã€‚", "You replenish yourself with the oil."));
 					set_food(p_ptr->food + 5000);
 				}
 				else
@@ -674,7 +674,7 @@ void do_cmd_quaff_potion_aux(int item)
 				}
 				break;
 			case RACE_ENT:
-				msg_print(_("…•ª‚ğæ‚è‚ñ‚¾B", "You are moistened."));
+				msg_print(_("æ°´åˆ†ã‚’å–ã‚Šè¾¼ã‚“ã ã€‚", "You are moistened."));
 				set_food(MIN(p_ptr->food + q_ptr->pval + MAX(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
 				break;
 			default:
@@ -697,10 +697,10 @@ void do_cmd_quaff_potion_aux(int item)
 
 
 /*!
- * @brief ƒIƒuƒWƒFƒNƒg‚ğƒvƒŒƒCƒ„[‚ªˆù‚Ş‚±‚Æ‚ª‚Å‚«‚é‚©‚ğ”»’è‚·‚é /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒé£²ã‚€ã“ã¨ãŒã§ãã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ /
  * Hook to determine if an object can be quaffed
- * @param o_ptr ”»’è‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @return ˆù‚Ş‚±‚Æ‚ª‰Â”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+ * @param o_ptr åˆ¤å®šã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return é£²ã‚€ã“ã¨ãŒå¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 static bool item_tester_hook_quaff(object_type *o_ptr)
 {
@@ -716,9 +716,9 @@ static bool item_tester_hook_quaff(object_type *o_ptr)
 
 
 /*!
- * @brief –ò‚ğˆù‚ŞƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief è–¬ã‚’é£²ã‚€ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Quaff some potion (from the pack or floor)
- * @return ‚È‚µ
+ * @return ãªã—
  */
 void do_cmd_quaff_potion(void)
 {
@@ -734,8 +734,8 @@ void do_cmd_quaff_potion(void)
 	item_tester_hook = item_tester_hook_quaff;
 
 	/* Get an item */
-	q = _("‚Ç‚Ì–ò‚ğˆù‚İ‚Ü‚·‚©? ", "Quaff which potion? ");
-	s = _("ˆù‚ß‚é–ò‚ª‚È‚¢B", "You have no potions to quaff.");
+	q = _("ã©ã®è–¬ã‚’é£²ã¿ã¾ã™ã‹? ", "Quaff which potion? ");
+	s = _("é£²ã‚ã‚‹è–¬ãŒãªã„ã€‚", "You have no potions to quaff.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
