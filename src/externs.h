@@ -805,7 +805,6 @@ extern void do_cmd_pet(void);
 
 /* cmd6.c */
 extern void do_cmd_aim_wand(void);
-extern void do_cmd_use_staff(void);
 extern void do_cmd_zap_rod(void);
 extern void do_cmd_rerate_aux(void);
 extern void do_cmd_rerate(bool display);

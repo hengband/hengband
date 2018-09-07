@@ -142,6 +142,7 @@
     <ClCompile Include="..\..\src\cmd-eat.c" />
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
+    <ClCompile Include="..\..\src\cmd-usestaff.c" />
     <ClCompile Include="..\..\src\cmd1.c" />
     <ClCompile Include="..\..\src\cmd2.c" />
     <ClCompile Include="..\..\src\cmd3.c" />
@@ -212,6 +213,7 @@
     <ClInclude Include="..\..\src\cmd-eat.h" />
     <ClInclude Include="..\..\src\cmd-quaff.h" />
     <ClInclude Include="..\..\src\cmd-read.h" />
+    <ClInclude Include="..\..\src\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\defines.h" />
     <ClInclude Include="..\..\src\externs.h" />
     <ClInclude Include="..\..\src\generate.h" />

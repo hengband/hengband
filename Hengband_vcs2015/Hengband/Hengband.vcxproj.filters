@@ -223,6 +223,9 @@
     <ClCompile Include="..\..\src\cmd-read.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-usestaff.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -307,6 +310,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-read.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-usestaff.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
