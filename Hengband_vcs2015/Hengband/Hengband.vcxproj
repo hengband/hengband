@@ -139,6 +139,7 @@
     <ClCompile Include="..\..\src\cave.c" />
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\cmd-eat.c" />
+    <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd1.c" />
     <ClCompile Include="..\..\src\cmd2.c" />
     <ClCompile Include="..\..\src\cmd3.c" />
@@ -206,6 +207,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
     <ClInclude Include="..\..\src\cmd-eat.h" />
+    <ClInclude Include="..\..\src\cmd-quaff.h" />
     <ClInclude Include="..\..\src\defines.h" />
     <ClInclude Include="..\..\src\externs.h" />
     <ClInclude Include="..\..\src\generate.h" />
