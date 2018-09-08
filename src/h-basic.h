@@ -27,5 +27,8 @@
 /* Basic constants and macros */
 #include "h-define.h"
 
+/* ゲーム調整値はこちらに */
+#include "gamevalue.h"
+
 #endif
 

@@ -318,9 +318,6 @@ bool cave_player_teleportable_bold(int y, int x, BIT_FLAGS mode)
 }
 
 
-/*! テレポート最大距離 */
-#define MAX_TELEPORT_DISTANCE 200
-
 /*!
  * @brief プレイヤーのテレポート先選定と移動処理 /
  * Teleport the player to a location up to "dis" grids away.
