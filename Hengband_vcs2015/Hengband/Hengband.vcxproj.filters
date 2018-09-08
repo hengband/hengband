@@ -232,6 +232,9 @@
     <ClCompile Include="..\..\src\cmd-magiceat.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\gameoption.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -329,6 +332,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\gamevalue.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gameoption.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

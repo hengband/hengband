@@ -162,6 +162,7 @@
     <ClCompile Include="..\..\src\files.c" />
     <ClCompile Include="..\..\src\flavor.c" />
     <ClCompile Include="..\..\src\floors.c" />
+    <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\generate.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\hex.c" />
@@ -223,6 +224,7 @@
     <ClInclude Include="..\..\src\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\defines.h" />
     <ClInclude Include="..\..\src\externs.h" />
+    <ClInclude Include="..\..\src\gameoption.h" />
     <ClInclude Include="..\..\src\gamevalue.h" />
     <ClInclude Include="..\..\src\generate.h" />
     <ClInclude Include="..\..\src\grid.h" />
