@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "cmd-zapwand.h"
 
 #define MIN_STOCK 12
 

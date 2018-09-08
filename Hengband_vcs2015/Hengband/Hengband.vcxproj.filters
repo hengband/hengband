@@ -226,6 +226,12 @@
     <ClCompile Include="..\..\src\cmd-usestaff.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-zapwand.h">
+      <Filter>Header</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-zapwand.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">

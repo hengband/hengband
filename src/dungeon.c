@@ -16,6 +16,7 @@
 #include "cmd-quaff.h"
 #include "cmd-read.h"
 #include "cmd-usestaff.h"
+#include "cmd-zapwand.h"
 
 #define TY_CURSE_CHANCE 200 /*!<太古の怨念の1ターン毎の発動確率(1/n)*/
 #define CHAINSWORD_NOISE 100 /*!<チェンソーの1ターン毎の発動確率(1/n)*/
