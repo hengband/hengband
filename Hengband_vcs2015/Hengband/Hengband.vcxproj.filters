@@ -226,10 +226,10 @@
     <ClCompile Include="..\..\src\cmd-usestaff.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-zapwand.h">
-      <Filter>Header</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-zapwand.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-zaprod.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -319,6 +319,10 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-usestaff.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-zapwand.h" />
+    <ClInclude Include="..\..\src\cmd-zaprod.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

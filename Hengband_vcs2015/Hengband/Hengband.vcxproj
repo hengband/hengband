@@ -143,7 +143,9 @@
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
     <ClCompile Include="..\..\src\cmd-usestaff.c" />
+    <ClCompile Include="..\..\src\cmd-zaprod.c" />
     <ClCompile Include="..\..\src\cmd-zapwand.c" />
+    <ClInclude Include="..\..\src\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd-zapwand.h">
       <FileType>CppCode</FileType>
     </ClInclude>
