@@ -758,6 +758,7 @@ extern void do_cmd_query_symbol(void);
 extern void kamaenaoshi(int item);
 extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
 extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);
+extern void do_cmd_use(void);
 
 /* cmd4.c */
 #ifndef JP
@@ -802,13 +803,6 @@ extern void check_pets_num_and_align(monster_type *m_ptr, bool inc);
 extern int calculate_upkeep(void);
 extern void do_cmd_pet_dismiss(void);
 extern void do_cmd_pet(void);
-
-/* cmd6.c */
-extern void do_cmd_rerate_aux(void);
-extern void do_cmd_rerate(bool display);
-extern void ring_of_power(int dir);
-extern void do_cmd_use(void);
-extern bool do_cmd_magic_eater(bool only_browse, bool powerful);
 
 /* do-spell.c */
 extern void stop_singing(void);
@@ -1202,6 +1196,7 @@ extern void discharge_minion(void);
 extern bool kawarimi(bool success);
 extern bool rush_attack(bool *mdeath);
 extern void remove_all_mirrors(bool explode);
+extern void ring_of_power(int dir);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);
@@ -1721,6 +1716,8 @@ extern void spoil_random_artifact(cptr fname);
 
 /* wizard2.c */
 extern void strip_name(char *buf, KIND_OBJECT_IDX k_idx);
+extern void do_cmd_rerate_aux(void);
+extern void do_cmd_rerate(bool display);
 
 /* avatar.c */
 extern bool compare_virtue(int type, int num, int tekitou);

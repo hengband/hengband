@@ -4253,3 +4253,72 @@ void remove_all_mirrors(bool explode)
 		}
 	}
 }
+
+/*!
+ * @brief 『一つの指輪』の効果処理 /
+ * Hack -- activate the ring of power
+ * @param dir 発動の方向ID
+ * @return なし
+ */
+void ring_of_power(int dir)
+{
+	/* Pick a random effect */
+	switch (randint1(10))
+	{
+	case 1:
+	case 2:
+	{
+		/* Message */
+		msg_print(_("あなたは悪性のオーラに包み込まれた。", "You are surrounded by a malignant aura."));
+		sound(SOUND_EVIL);
+
+		/* Decrease all stats (permanently) */
+		(void)dec_stat(A_STR, 50, TRUE);
+		(void)dec_stat(A_INT, 50, TRUE);
+		(void)dec_stat(A_WIS, 50, TRUE);
+		(void)dec_stat(A_DEX, 50, TRUE);
+		(void)dec_stat(A_CON, 50, TRUE);
+		(void)dec_stat(A_CHR, 50, TRUE);
+
+		/* Lose some experience (permanently) */
+		p_ptr->exp -= (p_ptr->exp / 4);
+		p_ptr->max_exp -= (p_ptr->exp / 4);
+		check_experience();
+
+		break;
+	}
+
+	case 3:
+	{
+		/* Message */
+		msg_print(_("あなたは強力なオーラに包み込まれた。", "You are surrounded by a powerful aura."));
+
+		/* Dispel monsters */
+		dispel_monsters(1000);
+
+		break;
+	}
+
+	case 4:
+	case 5:
+	case 6:
+	{
+		/* Mana Ball */
+		fire_ball(GF_MANA, dir, 600, 3);
+
+		break;
+	}
+
+	case 7:
+	case 8:
+	case 9:
+	case 10:
+	{
+		/* Mana Bolt */
+		fire_bolt(GF_MANA, dir, 500);
+
+		break;
+	}
+	}
+}
+

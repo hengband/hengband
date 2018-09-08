@@ -34,9 +34,6 @@
     <ClCompile Include="..\..\src\cmd3.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd6.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd5.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -232,6 +229,9 @@
     <ClCompile Include="..\..\src\cmd-zaprod.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-magiceat.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -323,6 +323,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-zapwand.h" />
     <ClInclude Include="..\..\src\cmd-zaprod.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-magiceat.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

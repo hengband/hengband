@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\src\cmd-usestaff.c" />
     <ClCompile Include="..\..\src\cmd-zaprod.c" />
     <ClCompile Include="..\..\src\cmd-zapwand.c" />
+    <ClInclude Include="..\..\src\cmd-magiceat.h" />
     <ClInclude Include="..\..\src\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd-zapwand.h">
       <FileType>CppCode</FileType>
@@ -154,7 +155,7 @@
     <ClCompile Include="..\..\src\cmd3.c" />
     <ClCompile Include="..\..\src\cmd4.c" />
     <ClCompile Include="..\..\src\cmd5.c" />
-    <ClCompile Include="..\..\src\cmd6.c" />
+    <ClCompile Include="..\..\src\cmd-magiceat.c" />
     <ClCompile Include="..\..\src\do-spell.c" />
     <ClCompile Include="..\..\src\dungeon.c" />
     <ClCompile Include="..\..\src\effects.c" />

@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "cmd-zapwand.h"
+#include "cmd-magiceat.h"
 
 #define MIN_STOCK 12
 

@@ -12,6 +12,14 @@
 
 
 #include "angband.h"
+#include "selfinfo.h"
+#include "cmd-activate.h"
+#include "cmd-eat.h"
+#include "cmd-quaff.h"
+#include "cmd-read.h"
+#include "cmd-usestaff.h"
+#include "cmd-zaprod.h"
+#include "cmd-zapwand.h"
 
 
 
@@ -2052,4 +2060,184 @@ void do_cmd_query_symbol(void)
 	prt(buf, 0, 0);
 }
 
+
+/*!
+* @brief オブジェクトをプレイヤーが簡易使用コマンドで利用できるかを判定する /
+* Hook to determine if an object is useable
+* @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+* @return 利用可能ならばTRUEを返す
+*/
+static bool item_tester_hook_use(object_type *o_ptr)
+{
+	u32b flgs[TR_FLAG_SIZE];
+
+	/* Ammo */
+	if (o_ptr->tval == p_ptr->tval_ammo)
+		return (TRUE);
+
+	/* Useable object */
+	switch (o_ptr->tval)
+	{
+	case TV_SPIKE:
+	case TV_STAFF:
+	case TV_WAND:
+	case TV_ROD:
+	case TV_SCROLL:
+	case TV_POTION:
+	case TV_FOOD:
+	{
+		return (TRUE);
+	}
+
+	default:
+	{
+		int i;
+
+		/* Not known */
+		if (!object_is_known(o_ptr)) return (FALSE);
+
+		/* HACK - only items from the equipment can be activated */
+		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
+		{
+			if (&inventory[i] == o_ptr)
+			{
+				/* Extract the flags */
+				object_flags(o_ptr, flgs);
+
+				/* Check activation flag */
+				if (have_flag(flgs, TR_ACTIVATE)) return (TRUE);
+			}
+		}
+	}
+	}
+
+	/* Assume not */
+	return (FALSE);
+}
+
+
+/*!
+ * @brief アイテムを汎用的に「使う」コマンドのメインルーチン /
+ * Use an item
+ * @return なし
+ * @details
+ * XXX - Add actions for other item types
+ */
+void do_cmd_use(void)
+{
+	OBJECT_IDX item;
+	object_type *o_ptr;
+	cptr        q, s;
+
+	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	{
+		set_action(ACTION_NONE);
+	}
+
+	item_tester_no_ryoute = TRUE;
+	/* Prepare the hook */
+	item_tester_hook = item_tester_hook_use;
+
+	/* Get an item */
+	q = _("どれを使いますか？", "Use which item? ");
+	s = _("使えるものがありません。", "You have nothing to use.");
+
+	if (!get_item(&item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR))) return;
+
+	/* Get the item (in the pack) */
+	if (item >= 0)
+	{
+		o_ptr = &inventory[item];
+	}
+	/* Get the item (on the floor) */
+	else
+	{
+		o_ptr = &o_list[0 - item];
+	}
+
+	switch (o_ptr->tval)
+	{
+		/* Spike a door */
+		case TV_SPIKE:
+		{
+			do_cmd_spike();
+			break;
+		}
+
+		/* Eat some food */
+		case TV_FOOD:
+		{
+			do_cmd_eat_food_aux(item);
+			break;
+		}
+
+		/* Aim a wand */
+		case TV_WAND:
+		{
+			do_cmd_aim_wand_aux(item);
+			break;
+		}
+
+		/* Use a staff */
+		case TV_STAFF:
+		{
+			do_cmd_use_staff_aux(item);
+			break;
+		}
+
+		/* Zap a rod */
+		case TV_ROD:
+		{
+			do_cmd_zap_rod_aux(item);
+			break;
+		}
+
+		/* Quaff a potion */
+		case TV_POTION:
+		{
+			do_cmd_quaff_potion_aux(item);
+			break;
+		}
+
+		/* Read a scroll */
+		case TV_SCROLL:
+		{
+			/* Check some conditions */
+			if (p_ptr->blind)
+			{
+				msg_print(_("目が見えない。", "You can't see anything."));
+				return;
+			}
+			if (no_lite())
+			{
+				msg_print(_("明かりがないので、暗くて読めない。", "You have no light to read by."));
+				return;
+			}
+			if (p_ptr->confused)
+			{
+				msg_print(_("混乱していて読めない！", "You are too confused!"));
+				return;
+			}
+
+		  do_cmd_read_scroll_aux(item, TRUE);
+		  break;
+		}
+
+		/* Fire ammo */
+		case TV_SHOT:
+		case TV_ARROW:
+		case TV_BOLT:
+		{
+			do_cmd_fire_aux(item, &inventory[INVEN_BOW]);
+			break;
+		}
+
+		/* Activate an artifact */
+		default:
+		{
+			do_cmd_activate_aux(item);
+			break;
+		}
+	}
+}
 
