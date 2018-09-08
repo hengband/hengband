@@ -13,8 +13,6 @@
 
 #include "angband.h"
 
-/* ToDo: Make this global */
-#define HURT_CHANCE 16 /*!< 属性攻撃を受けた際に能力値低下を起こす確率(1/X) / 1/x chance of reducing stats (for elemental attacks) */
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
 static int rakubadam_p; /*!< 落馬した際のダメージ量 */

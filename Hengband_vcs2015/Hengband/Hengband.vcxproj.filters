@@ -328,6 +328,9 @@
     <ClInclude Include="..\..\src\cmd-magiceat.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\gamevalue.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

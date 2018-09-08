@@ -141,7 +141,6 @@
 
 
 #include "angband.h"
-#define MAX_VAMPIRIC_DRAIN 50 /*!< 吸血処理の最大回復HP */
 
 
 /*!

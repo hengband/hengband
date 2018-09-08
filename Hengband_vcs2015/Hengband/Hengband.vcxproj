@@ -223,6 +223,7 @@
     <ClInclude Include="..\..\src\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\defines.h" />
     <ClInclude Include="..\..\src\externs.h" />
+    <ClInclude Include="..\..\src\gamevalue.h" />
     <ClInclude Include="..\..\src\generate.h" />
     <ClInclude Include="..\..\src\grid.h" />
     <ClInclude Include="..\..\src\h-basic.h" />

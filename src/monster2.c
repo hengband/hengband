@@ -3463,8 +3463,6 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 	return TRUE;
 }
 
-#define GROUP_MAX 32 /*!< place_monster_group() 関数によるモンスターのGROUP生成時の配置最大数 / Maximum size of a group of monsters */
-
 /*!
  * @brief モンスターを目標地点に集団生成する / Attempt to place a "group" of monsters around the given location
  * @param who 召喚主のモンスター情報ID

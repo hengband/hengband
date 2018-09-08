@@ -15,9 +15,6 @@
 
 #include "angband.h"
 
-#define SPEAK_CHANCE 8
-#define GRINDNOISE 20
-#define CYBERNOISE 20
 
 /*!
  * @brief モンスターが敵に接近するための方向を決める /

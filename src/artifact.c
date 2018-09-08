@@ -17,21 +17,6 @@ static int suppression_evil_dam(object_type *o_ptr);
 static int weakening_artifact(object_type *o_ptr);
 
 
-/* Chance of using syllables to form the name instead of the "template" files */
-#define SINDARIN_NAME   10 /*!< ランダムアーティファクトにシンダリン銘をつける確率 */
-#define TABLE_NAME      20 /*!< ランダムアーティファクトに漢字銘をつける確率(正確には TABLE_NAME - SINDARIN_NAME %)となる */
-#define A_CURSED        13 /*!< 1/nの確率で生成の巻物以外のランダムアーティファクトが呪いつきになる。 */
-#define WEIRD_LUCK      12 /*!< 1/nの確率でrandom_resistance()の処理中バイアス外の耐性がつき、create_artifactで4を超えるpvalが許可される。*/
-#define BIAS_LUCK       20 /*!< 1/nの確率でrandom_resistance()で付加する元素耐性が免疫になる */
-#define IM_LUCK         7 /*!< 1/nの確率でrandom_resistance()で複数免疫の除去処理が免除される */
-
-/*! @note
- * Bias luck needs to be higher than weird luck,
- * since it is usually tested several times...
- */
-
-#define ACTIVATION_CHANCE 3 /*!< 1/nの確率でランダムアーティファクトに発動が付加される。ただし防具はさらに1/2 */
-
 
 /*!
  * @brief 対象のオブジェクトにランダムな上位耐性を一つ付加する。/ Choose one random high resistance

@@ -16,9 +16,6 @@
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
 #define MAX_TRIES 100
 
-/*! 能力値現象の基本確率(1 / HURT_CHANCE) / 1/x chance of reducing stats (for elemental attacks) */
-#define HURT_CHANCE 16
-
 /*!
  * @brief 指定されたマスがモンスターのテレポート可能先かどうかを判定する。
  * @param m_idx モンスターID
