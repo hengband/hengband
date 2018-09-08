@@ -80,14 +80,10 @@ void do_cmd_go_up(void)
 	
 		
 		/* Success */
-#ifdef JP
 		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-			msg_print("なんだこの階段は！");
+			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
-			msg_print("上の階に登った。");
-#else
-		msg_print("You enter the up staircase.");
-#endif
+			msg_print(_("上の階に登った。", "You enter the up staircase."));
 
 		leave_quest_check();
 
@@ -187,7 +183,7 @@ void do_cmd_go_up(void)
 
 	/* Success */
 	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-		msg_print(_("なんだこの階段は！", ""));
+		msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 	else if (up_num == dun_level)
 		msg_print(_("地上に戻った。", "You go back to the surface."));
 	else
@@ -237,14 +233,10 @@ void do_cmd_go_down(void)
 		/* Confirm Leaving */
 		if(!confirm_leave_level(TRUE)) return;
 		
-#ifdef JP
 		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-			msg_print("なんだこの階段は！");
+			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
-			msg_print("下の階に降りた。");
-#else
-			msg_print("You enter the down staircase.");
-#endif
+			msg_print(_("下の階に降りた。", "You enter the down staircase."));
 
 		leave_quest_check();
 		leave_tower_check();
@@ -347,7 +339,7 @@ void do_cmd_go_down(void)
 			else
 			{
 				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-					msg_print(_("なんだこの階段は！", ""));
+					msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 				else
 					msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));
 			}

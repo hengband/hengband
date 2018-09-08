@@ -1302,11 +1302,7 @@ void change_floor(void)
 			if (sf_ptr->last_visit)
 			{
 				/* Temporal file is broken? */
-#ifdef JP
-				msg_print("階段は行き止まりだった。");
-#else
-				msg_print("The staircases come to a dead end...");
-#endif
+				msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
 
 				/* Create simple dead end */
 				build_dead_end();
