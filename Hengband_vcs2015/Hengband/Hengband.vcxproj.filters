@@ -235,6 +235,9 @@
     <ClCompile Include="..\..\src\cmd-spell.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\chest.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -335,6 +338,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\gameoption.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\chest.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

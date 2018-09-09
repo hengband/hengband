@@ -137,6 +137,7 @@
     <ClCompile Include="..\..\src\birth.c" />
     <ClCompile Include="..\..\src\bldg.c" />
     <ClCompile Include="..\..\src\cave.c" />
+    <ClCompile Include="..\..\src\chest.c" />
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\cmd-activate.c" />
     <ClCompile Include="..\..\src\cmd-eat.c" />
@@ -145,6 +146,7 @@
     <ClCompile Include="..\..\src\cmd-usestaff.c" />
     <ClCompile Include="..\..\src\cmd-zaprod.c" />
     <ClCompile Include="..\..\src\cmd-zapwand.c" />
+    <ClInclude Include="..\..\src\chest.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />
     <ClInclude Include="..\..\src\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd-zapwand.h">
