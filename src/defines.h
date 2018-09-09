@@ -3546,7 +3546,7 @@
 #define RF3_HURT_ROCK       0x00002000  /*!< モンスター特性: 岩石溶解(GF_KILL_WALL)でダメージを受ける / Hurt by rock remover */
 #define RF3_HURT_FIRE       0x00004000  /*!< モンスター特性: 火炎が弱点 / Hurt badly by fire */
 #define RF3_HURT_COLD       0x00008000  /*!< モンスター特性: 冷気が弱点 / Hurt badly by cold */
-#define RF3_XXX16           0x00010000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_ANGEL           0x00010000  /*!< モンスター特性: 天使 / ANGEL */
 #define RF3_XXX17           0x00020000  /*!< モンスター特性: 未使用 / XXX */
 #define RF3_XXX18           0x00040000  /*!< モンスター特性: 未使用 / XXX */
 #define RF3_XXX19           0x00080000  /*!< モンスター特性: 未使用 / XXX */

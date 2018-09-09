@@ -365,7 +365,7 @@ static cptr r_info_flags3[] =
 	"HURT_ROCK",
 	"HURT_FIRE",
 	"HURT_COLD",
-	"XXX",
+	"ANGEL",
 	"XXX",
 	"XXX",
 	"XXX",

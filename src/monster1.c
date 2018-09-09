@@ -625,7 +625,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		if (flags3 & RF3_UNDEAD)          hook_c_roff(TERM_VIOLET, _("アンデッドの", " undead"));
 		if (flags3 & RF3_AMBERITE)        hook_c_roff(TERM_VIOLET, _("アンバーの王族の", " Amberite"));
 
-		if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC)) || (flags2 & (RF2_QUANTUM | RF2_HUMAN)))
+		if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_ANGEL)) || (flags2 & (RF2_QUANTUM | RF2_HUMAN)))
 		{
 		/* Describe the "race" */
 			if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, _("ドラゴン", " dragon"));
@@ -635,6 +635,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, _("オーク", " orc"));
 			if (flags2 & RF2_HUMAN)    hook_c_roff(TERM_L_WHITE, _("人間", " human"));
 			if (flags2 & RF2_QUANTUM)  hook_c_roff(TERM_VIOLET, _("量子生物", " quantum creature"));
+			if (flags3 & RF3_ANGEL)    hook_c_roff(TERM_YELLOW, _("天使", " angel"));
 		}
 		else
 		{
