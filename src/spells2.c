@@ -4322,3 +4322,107 @@ void ring_of_power(int dir)
 	}
 }
 
+/*!
+* @brief 運命の輪、並びにカオス的な効果の発動
+* @param spell ランダムな効果を選択するための基準ID
+* @return なし
+*/
+void wild_magic(int spell)
+{
+	int counter = 0;
+	int type = SUMMON_MOLD + randint0(6);
+
+	if (type < SUMMON_MOLD) type = SUMMON_MOLD;
+	else if (type > SUMMON_MIMIC) type = SUMMON_MIMIC;
+
+	switch (randint1(spell) + randint1(8) + 1)
+	{
+	case 1:
+	case 2:
+	case 3:
+		teleport_player(10, TELEPORT_PASSIVE);
+		break;
+	case 4:
+	case 5:
+	case 6:
+		teleport_player(100, TELEPORT_PASSIVE);
+		break;
+	case 7:
+	case 8:
+		teleport_player(200, TELEPORT_PASSIVE);
+		break;
+	case 9:
+	case 10:
+	case 11:
+		unlite_area(10, 3);
+		break;
+	case 12:
+	case 13:
+	case 14:
+		lite_area(damroll(2, 3), 2);
+		break;
+	case 15:
+		destroy_doors_touch();
+		break;
+	case 16: case 17:
+		wall_breaker();
+	case 18:
+		sleep_monsters_touch();
+		break;
+	case 19:
+	case 20:
+		trap_creation(p_ptr->y, p_ptr->x);
+		break;
+	case 21:
+	case 22:
+		door_creation();
+		break;
+	case 23:
+	case 24:
+	case 25:
+		aggravate_monsters(0);
+		break;
+	case 26:
+		earthquake(p_ptr->y, p_ptr->x, 5);
+		break;
+	case 27:
+	case 28:
+		(void)gain_random_mutation(0);
+		break;
+	case 29:
+	case 30:
+		apply_disenchant(1);
+		break;
+	case 31:
+		lose_all_info();
+		break;
+	case 32:
+		fire_ball(GF_CHAOS, 0, spell + 5, 1 + (spell / 10));
+		break;
+	case 33:
+		wall_stone();
+		break;
+	case 34:
+	case 35:
+		while (counter++ < 8)
+		{
+			(void)summon_specific(0, p_ptr->y, p_ptr->x, (dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
+		}
+		break;
+	case 36:
+	case 37:
+		activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
+		break;
+	case 38:
+		(void)summon_cyber(-1, p_ptr->y, p_ptr->x);
+		break;
+	default:
+	{
+		int count = 0;
+		(void)activate_ty_curse(FALSE, &count);
+		break;
+	}
+	}
+
+	return;
+}

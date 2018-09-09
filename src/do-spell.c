@@ -366,7 +366,6 @@ static void cast_invoke_spirits(int dir)
 		msg_print(_("あなたはおどろおどろしい力のうねりを感じた！", "You feel a surge of eldritch force!"));
 	}
 
-
 	if (die < 8)
 	{
 		msg_print(_("なんてこった！あなたの周りの地面から朽ちた人影が立ち上がってきた！", 

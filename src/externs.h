@@ -1197,6 +1197,7 @@ extern bool kawarimi(bool success);
 extern bool rush_attack(bool *mdeath);
 extern void remove_all_mirrors(bool explode);
 extern void ring_of_power(int dir);
+extern void wild_magic(int spell);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);
