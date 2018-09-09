@@ -4426,3 +4426,551 @@ void wild_magic(int spell)
 
 	return;
 }
+
+/*!
+* @brief カオス魔法「流星群」の処理としてプレイヤーを中心に隕石落下処理を10+1d10回繰り返す。
+* / Drop 10+1d10 meteor ball at random places near the player
+* @param dam ダメージ
+* @param rad 効力の半径
+* @return なし
+*/
+void cast_meteor(HIT_POINT dam, int rad)
+{
+	int i;
+	int b = 10 + randint1(10);
+
+	for (i = 0; i < b; i++)
+	{
+		POSITION y = 0, x = 0;
+		int count;
+
+		for (count = 0; count <= 20; count++)
+		{
+			int dy, dx, d;
+
+			x = p_ptr->x - 8 + randint0(17);
+			y = p_ptr->y - 8 + randint0(17);
+
+			dx = (p_ptr->x > x) ? (p_ptr->x - x) : (x - p_ptr->x);
+			dy = (p_ptr->y > y) ? (p_ptr->y - y) : (y - p_ptr->y);
+
+			/* Approximate distance */
+			d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
+
+			if (d >= 9) continue;
+
+			if (!in_bounds(y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)
+				|| !cave_have_flag_bold(y, x, FF_PROJECT)) continue;
+
+			/* Valid position */
+			break;
+		}
+
+		if (count > 20) continue;
+
+		project(0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+	}
+}
+
+
+/*!
+* @brief 破邪魔法「神の怒り」の処理としてターゲットを指定した後分解のボールを最大20回発生させる。
+* @param dam ダメージ
+* @param rad 効力の半径
+* @return ターゲットを指定し、実行したならばTRUEを返す。
+*/
+bool cast_wrath_of_the_god(HIT_POINT dam, int rad)
+{
+	int x, y, tx, ty;
+	int nx, ny;
+	int dir, i;
+	int b = 10 + randint1(10);
+
+	if (!get_aim_dir(&dir)) return FALSE;
+
+	/* Use the given direction */
+	tx = p_ptr->x + 99 * ddx[dir];
+	ty = p_ptr->y + 99 * ddy[dir];
+
+	/* Hack -- Use an actual "target" */
+	if ((dir == 5) && target_okay())
+	{
+		tx = target_col;
+		ty = target_row;
+	}
+
+	x = p_ptr->x;
+	y = p_ptr->y;
+
+	while (1)
+	{
+		/* Hack -- Stop at the target */
+		if ((y == ty) && (x == tx)) break;
+
+		ny = y;
+		nx = x;
+		mmove2(&ny, &nx, p_ptr->y, p_ptr->x, ty, tx);
+
+		/* Stop at maximum range */
+		if (MAX_RANGE <= distance(p_ptr->y, p_ptr->x, ny, nx)) break;
+
+		/* Stopped by walls/doors */
+		if (!cave_have_flag_bold(ny, nx, FF_PROJECT)) break;
+
+		/* Stopped by monsters */
+		if ((dir != 5) && cave[ny][nx].m_idx != 0) break;
+
+		/* Save the new location */
+		x = nx;
+		y = ny;
+	}
+	tx = x;
+	ty = y;
+
+	for (i = 0; i < b; i++)
+	{
+		int count = 20, d = 0;
+
+		while (count--)
+		{
+			int dx, dy;
+
+			x = tx - 5 + randint0(11);
+			y = ty - 5 + randint0(11);
+
+			dx = (tx > x) ? (tx - x) : (x - tx);
+			dy = (ty > y) ? (ty - y) : (y - ty);
+
+			/* Approximate distance */
+			d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
+			/* Within the radius */
+			if (d < 5) break;
+		}
+
+		if (count < 0) continue;
+
+		/* Cannot penetrate perm walls */
+		if (!in_bounds(y, x) ||
+			cave_stop_disintegration(y, x) ||
+			!in_disintegration_range(ty, tx, y, x))
+			continue;
+
+		project(0, rad, y, x, dam, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+	}
+
+	return TRUE;
+}
+
+/*!
+* @brief 「ワンダー」のランダムな効果を決定して処理する。
+* @param dir 方向ID
+* @return なし
+* @details
+* This spell should become more useful (more controlled) as the\n
+* player gains experience levels.  Thus, add 1/5 of the player's\n
+* level to the die roll.  This eliminates the worst effects later on,\n
+* while keeping the results quite random.  It also allows some potent\n
+* effects only at high level.
+*/
+void cast_wonder(int dir)
+{
+	int plev = p_ptr->lev;
+	int die = randint1(100) + plev / 5;
+	int vir = virtue_number(V_CHANCE);
+
+	if (vir)
+	{
+		if (p_ptr->virtues[vir - 1] > 0)
+		{
+			while (randint1(400) < p_ptr->virtues[vir - 1]) die++;
+		}
+		else
+		{
+			while (randint1(400) < (0 - p_ptr->virtues[vir - 1])) die--;
+		}
+	}
+
+	if (die < 26)
+		chg_virtue(V_CHANCE, 1);
+
+	if (die > 100)
+	{
+		msg_print(_("あなたは力がみなぎるのを感じた！", "You feel a surge of power!"));
+	}
+
+	if (die < 8) clone_monster(dir);
+	else if (die < 14) speed_monster(dir, plev);
+	else if (die < 26) heal_monster(dir, damroll(4, 6));
+	else if (die < 31) poly_monster(dir, plev);
+	else if (die < 36)
+		fire_bolt_or_beam(beam_chance() - 10, GF_MISSILE, dir,
+			damroll(3 + ((plev - 1) / 5), 4));
+	else if (die < 41) confuse_monster(dir, plev);
+	else if (die < 46) fire_ball(GF_POIS, dir, 20 + (plev / 2), 3);
+	else if (die < 51) (void)lite_line(dir, damroll(6, 8));
+	else if (die < 56)
+		fire_bolt_or_beam(beam_chance() - 10, GF_ELEC, dir,
+			damroll(3 + ((plev - 5) / 4), 8));
+	else if (die < 61)
+		fire_bolt_or_beam(beam_chance() - 10, GF_COLD, dir,
+			damroll(5 + ((plev - 5) / 4), 8));
+	else if (die < 66)
+		fire_bolt_or_beam(beam_chance(), GF_ACID, dir,
+			damroll(6 + ((plev - 5) / 4), 8));
+	else if (die < 71)
+		fire_bolt_or_beam(beam_chance(), GF_FIRE, dir,
+			damroll(8 + ((plev - 5) / 4), 8));
+	else if (die < 76) hypodynamic_bolt(dir, 75);
+	else if (die < 81) fire_ball(GF_ELEC, dir, 30 + plev / 2, 2);
+	else if (die < 86) fire_ball(GF_ACID, dir, 40 + plev, 2);
+	else if (die < 91) fire_ball(GF_ICE, dir, 70 + plev, 3);
+	else if (die < 96) fire_ball(GF_FIRE, dir, 80 + plev, 3);
+	else if (die < 101) hypodynamic_bolt(dir, 100 + plev);
+	else if (die < 104)
+	{
+		earthquake(p_ptr->y, p_ptr->x, 12);
+	}
+	else if (die < 106)
+	{
+		(void)destroy_area(p_ptr->y, p_ptr->x, 13 + randint0(5), FALSE);
+	}
+	else if (die < 108)
+	{
+		symbol_genocide(plev + 50, TRUE);
+	}
+	else if (die < 110) dispel_monsters(120);
+	else /* RARE */
+	{
+		dispel_monsters(150);
+		slow_monsters(plev);
+		sleep_monsters(plev);
+		hp_player(300);
+	}
+}
+
+
+/*!
+* @brief 「悪霊召喚」のランダムな効果を決定して処理する。
+* @param dir 方向ID
+* @return なし
+*/
+void cast_invoke_spirits(int dir)
+{
+	int plev = p_ptr->lev;
+	int die = randint1(100) + plev / 5;
+	int vir = virtue_number(V_CHANCE);
+
+	if (vir)
+	{
+		if (p_ptr->virtues[vir - 1] > 0)
+		{
+			while (randint1(400) < p_ptr->virtues[vir - 1]) die++;
+		}
+		else
+		{
+			while (randint1(400) < (0 - p_ptr->virtues[vir - 1])) die--;
+		}
+	}
+
+	msg_print(_("あなたは死者たちの力を招集した...", "You call on the power of the dead..."));
+	if (die < 26)
+		chg_virtue(V_CHANCE, 1);
+
+	if (die > 100)
+	{
+		msg_print(_("あなたはおどろおどろしい力のうねりを感じた！", "You feel a surge of eldritch force!"));
+	}
+
+	if (die < 8)
+	{
+		msg_print(_("なんてこった！あなたの周りの地面から朽ちた人影が立ち上がってきた！",
+			"Oh no! Mouldering forms rise from the earth around you!"));
+
+		(void)summon_specific(0, p_ptr->y, p_ptr->x, dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+		chg_virtue(V_UNLIFE, 1);
+	}
+	else if (die < 14)
+	{
+		msg_print(_("名状し難い邪悪な存在があなたの心を通り過ぎて行った...", "An unnamable evil brushes against your mind..."));
+
+		set_afraid(p_ptr->afraid + randint1(4) + 4);
+	}
+	else if (die < 26)
+	{
+		msg_print(_("あなたの頭に大量の幽霊たちの騒々しい声が押し寄せてきた...",
+			"Your head is invaded by a horde of gibbering spectral voices..."));
+
+		set_confused(p_ptr->confused + randint1(4) + 4);
+	}
+	else if (die < 31)
+	{
+		poly_monster(dir, plev);
+	}
+	else if (die < 36)
+	{
+		fire_bolt_or_beam(beam_chance() - 10, GF_MISSILE, dir,
+			damroll(3 + ((plev - 1) / 5), 4));
+	}
+	else if (die < 41)
+	{
+		confuse_monster(dir, plev);
+	}
+	else if (die < 46)
+	{
+		fire_ball(GF_POIS, dir, 20 + (plev / 2), 3);
+	}
+	else if (die < 51)
+	{
+		(void)lite_line(dir, damroll(6, 8));
+	}
+	else if (die < 56)
+	{
+		fire_bolt_or_beam(beam_chance() - 10, GF_ELEC, dir,
+			damroll(3 + ((plev - 5) / 4), 8));
+	}
+	else if (die < 61)
+	{
+		fire_bolt_or_beam(beam_chance() - 10, GF_COLD, dir,
+			damroll(5 + ((plev - 5) / 4), 8));
+	}
+	else if (die < 66)
+	{
+		fire_bolt_or_beam(beam_chance(), GF_ACID, dir,
+			damroll(6 + ((plev - 5) / 4), 8));
+	}
+	else if (die < 71)
+	{
+		fire_bolt_or_beam(beam_chance(), GF_FIRE, dir,
+			damroll(8 + ((plev - 5) / 4), 8));
+	}
+	else if (die < 76)
+	{
+		hypodynamic_bolt(dir, 75);
+	}
+	else if (die < 81)
+	{
+		fire_ball(GF_ELEC, dir, 30 + plev / 2, 2);
+	}
+	else if (die < 86)
+	{
+		fire_ball(GF_ACID, dir, 40 + plev, 2);
+	}
+	else if (die < 91)
+	{
+		fire_ball(GF_ICE, dir, 70 + plev, 3);
+	}
+	else if (die < 96)
+	{
+		fire_ball(GF_FIRE, dir, 80 + plev, 3);
+	}
+	else if (die < 101)
+	{
+		hypodynamic_bolt(dir, 100 + plev);
+	}
+	else if (die < 104)
+	{
+		earthquake(p_ptr->y, p_ptr->x, 12);
+	}
+	else if (die < 106)
+	{
+		(void)destroy_area(p_ptr->y, p_ptr->x, 13 + randint0(5), FALSE);
+	}
+	else if (die < 108)
+	{
+		symbol_genocide(plev + 50, TRUE);
+	}
+	else if (die < 110)
+	{
+		dispel_monsters(120);
+	}
+	else
+	{ /* RARE */
+		dispel_monsters(150);
+		slow_monsters(plev);
+		sleep_monsters(plev);
+		hp_player(300);
+	}
+
+	if (die < 31)
+	{
+		msg_print(_("陰欝な声がクスクス笑う。「もうすぐおまえは我々の仲間になるだろう。弱き者よ。」",
+			"Sepulchral voices chuckle. 'Soon you will join us, mortal.'"));
+	}
+}
+
+/*!
+* @brief トランプ領域の「シャッフル」の効果をランダムに決めて処理する。
+* @return なし
+*/
+void cast_shuffle(void)
+{
+	int plev = p_ptr->lev;
+	int dir;
+	int die;
+	int vir = virtue_number(V_CHANCE);
+	int i;
+
+	/* Card sharks and high mages get a level bonus */
+	if ((p_ptr->pclass == CLASS_ROGUE) ||
+		(p_ptr->pclass == CLASS_HIGH_MAGE) ||
+		(p_ptr->pclass == CLASS_SORCERER))
+		die = (randint1(110)) + plev / 5;
+	else
+		die = randint1(120);
+
+
+	if (vir)
+	{
+		if (p_ptr->virtues[vir - 1] > 0)
+		{
+			while (randint1(400) < p_ptr->virtues[vir - 1]) die++;
+		}
+		else
+		{
+			while (randint1(400) < (0 - p_ptr->virtues[vir - 1])) die--;
+		}
+	}
+
+	msg_print(_("あなたはカードを切って一枚引いた...", "You shuffle the deck and draw a card..."));
+
+	if (die < 30)
+		chg_virtue(V_CHANCE, 1);
+
+	if (die < 7)
+	{
+		msg_print(_("なんてこった！《死》だ！", "Oh no! It's Death!"));
+
+		for (i = 0; i < randint1(3); i++)
+			activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
+	}
+	else if (die < 14)
+	{
+		msg_print(_("なんてこった！《悪魔》だ！", "Oh no! It's the Devil!"));
+		summon_specific(0, p_ptr->y, p_ptr->x, dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+	}
+	else if (die < 18)
+	{
+		int count = 0;
+		msg_print(_("なんてこった！《吊られた男》だ！", "Oh no! It's the Hanged Man."));
+		activate_ty_curse(FALSE, &count);
+	}
+	else if (die < 22)
+	{
+		msg_print(_("《不調和の剣》だ。", "It's the swords of discord."));
+		aggravate_monsters(0);
+	}
+	else if (die < 26)
+	{
+		msg_print(_("《愚者》だ。", "It's the Fool."));
+		do_dec_stat(A_INT);
+		do_dec_stat(A_WIS);
+	}
+	else if (die < 30)
+	{
+		msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
+		trump_summoning(1, FALSE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+	}
+	else if (die < 33)
+	{
+		msg_print(_("《月》だ。", "It's the Moon."));
+		unlite_area(10, 3);
+	}
+	else if (die < 38)
+	{
+		msg_print(_("《運命の輪》だ。", "It's the Wheel of Fortune."));
+		wild_magic(randint0(32));
+	}
+	else if (die < 40)
+	{
+		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
+		teleport_player(10, TELEPORT_PASSIVE);
+	}
+	else if (die < 42)
+	{
+		msg_print(_("《正義》だ。", "It's Justice."));
+		set_blessed(p_ptr->lev, FALSE);
+	}
+	else if (die < 47)
+	{
+		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
+		teleport_player(100, TELEPORT_PASSIVE);
+	}
+	else if (die < 52)
+	{
+		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
+		teleport_player(200, TELEPORT_PASSIVE);
+	}
+	else if (die < 60)
+	{
+		msg_print(_("《塔》だ。", "It's the Tower."));
+		wall_breaker();
+	}
+	else if (die < 72)
+	{
+		msg_print(_("《節制》だ。", "It's Temperance."));
+		sleep_monsters_touch();
+	}
+	else if (die < 80)
+	{
+		msg_print(_("《塔》だ。", "It's the Tower."));
+
+		earthquake(p_ptr->y, p_ptr->x, 5);
+	}
+	else if (die < 82)
+	{
+		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), SUMMON_MOLD, 0L);
+	}
+	else if (die < 84)
+	{
+		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), SUMMON_BAT, 0L);
+	}
+	else if (die < 86)
+	{
+		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), SUMMON_VORTEX, 0L);
+	}
+	else if (die < 88)
+	{
+		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
+	}
+	else if (die < 96)
+	{
+		msg_print(_("《恋人》だ。", "It's the Lovers."));
+
+		if (get_aim_dir(&dir))
+			charm_monster(dir, MIN(p_ptr->lev, 20));
+	}
+	else if (die < 101)
+	{
+		msg_print(_("《隠者》だ。", "It's the Hermit."));
+		wall_stone();
+	}
+	else if (die < 111)
+	{
+		msg_print(_("《審判》だ。", "It's the Judgement."));
+		do_cmd_rerate(FALSE);
+		lose_all_mutations();
+	}
+	else if (die < 120)
+	{
+		msg_print(_("《太陽》だ。", "It's the Sun."));
+		chg_virtue(V_KNOWLEDGE, 1);
+		chg_virtue(V_ENLIGHTEN, 1);
+		wiz_lite(FALSE);
+	}
+	else
+	{
+		msg_print(_("《世界》だ。", "It's the World."));
+		if (p_ptr->exp < PY_MAX_EXP)
+		{
+			s32b ee = (p_ptr->exp / 25) + 1;
+			if (ee > 5000) ee = 5000;
+			msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
+			gain_exp(ee);
+		}
+	}
+}
+

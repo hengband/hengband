@@ -806,6 +806,8 @@ extern void do_cmd_pet(void);
 /* cmd-spell.c */
 extern void stop_singing(void);
 extern cptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
+extern bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
+extern int beam_chance(void);
 
 /* dungeon.c */
 extern void leave_quest_check(void);
@@ -1197,6 +1199,11 @@ extern bool rush_attack(bool *mdeath);
 extern void remove_all_mirrors(bool explode);
 extern void ring_of_power(int dir);
 extern void wild_magic(int spell);
+extern void cast_meteor(HIT_POINT dam, int rad);
+extern bool cast_wrath_of_the_god(HIT_POINT dam, int rad);
+extern void cast_wonder(int dir);
+extern void cast_invoke_spirits(int dir);
+extern void cast_shuffle(void);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);
