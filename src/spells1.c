@@ -78,6 +78,23 @@ static bool_hack common_saving_throw_control(player_type *player_ptr, HIT_POINT 
 	return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }
 
+/*!
+* @brief 一部ボルト魔法のビーム化確率を算出する / Prepare standard probability to become beam for fire_bolt_or_beam()
+* @return ビーム化確率(%)
+* @details
+* ハードコーティングによる実装が行われている。
+* メイジは(レベル)%、ハイメイジ、スペルマスターは(レベル)%、それ以外の職業は(レベル/2)%
+*/
+int beam_chance(void)
+{
+	if (p_ptr->pclass == CLASS_MAGE)
+		return p_ptr->lev;
+	if (p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER)
+		return p_ptr->lev + 10;
+
+	return p_ptr->lev / 2;
+}
+
 
 /*!
  * @brief 配置した鏡リストの次を取得する /

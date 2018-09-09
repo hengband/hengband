@@ -198,6 +198,7 @@
     <ClCompile Include="..\..\src\scores.c" />
     <ClCompile Include="..\..\src\selfinfo.c" />
     <ClCompile Include="..\..\src\snipe.c" />
+    <ClCompile Include="..\..\src\spells-summon.c" />
     <ClCompile Include="..\..\src\spells1.c" />
     <ClCompile Include="..\..\src\spells2.c" />
     <ClCompile Include="..\..\src\spells3.c" />
@@ -241,6 +242,7 @@
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\rooms.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />
+    <ClInclude Include="..\..\src\spells-summon.h" />
     <ClInclude Include="..\..\src\streams.h" />
     <ClInclude Include="..\..\src\types.h" />
     <ClInclude Include="..\..\src\z-config.h" />

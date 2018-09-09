@@ -807,7 +807,6 @@ extern void do_cmd_pet(void);
 extern void stop_singing(void);
 extern cptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
 extern bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
-extern int beam_chance(void);
 
 /* dungeon.c */
 extern void leave_quest_check(void);
@@ -1078,6 +1077,7 @@ extern void remove_loc(void);
 extern bool save_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
 /* spells1.c */
+extern int beam_chance(void);
 extern bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int typ);
 extern int take_hit(int damage_type, HIT_POINT damage, cptr kb_str, int monspell);
