@@ -4573,10 +4573,7 @@ static void process_command(void)
 		/* Throw an item */
 		case 'v':
 		{
-			if (!p_ptr->wild_mode)
-			{
-				do_cmd_throw();
-			}
+			if (!p_ptr->wild_mode) do_cmd_throw(1, FALSE, -1);
 			break;
 		}
 

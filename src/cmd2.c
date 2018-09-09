@@ -32,13 +32,8 @@ bool confirm_leave_level(bool down_stair)
 						((q_ptr->status != QUEST_STATUS_STAGE_COMPLETED) ||
 						 (down_stair && (quest[QUEST_TOWER1].status != QUEST_STATUS_COMPLETED))))))
 	{
-#ifdef JP
-		msg_print("この階を一度去ると二度と戻って来られません。");
-		if (get_check("本当にこの階を去りますか？")) return TRUE;
-#else
-		msg_print("You can't come back here once you leave this floor.");
-		if (get_check("Really leave this floor? ")) return TRUE;
-#endif
+		msg_print(_("この階を一度去ると二度と戻って来られません。", "You can't come back here once you leave this floor."));
+		if (get_check(_("本当にこの階を去りますか？", "Really leave this floor? "))) return TRUE;
 	}
 	else
 	{
@@ -3498,7 +3493,7 @@ static bool item_tester_hook_boomerang(object_type *o_ptr)
 
 
 /*!
- * @brief 投射処理のサブルーチン /
+ * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
  * @param mult 威力の倍率
  * @param boomerang ブーメラン処理ならばTRUE
@@ -3513,7 +3508,7 @@ static bool item_tester_hook_boomerang(object_type *o_ptr)
  * the item to be destroyed?  Should it do any damage at all?
  * </pre>
  */
-bool do_cmd_throw_aux(int mult, bool boomerang, OBJECT_IDX shuriken)
+bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 {
 	DIRECTION dir;
 	OBJECT_IDX item;
@@ -4070,17 +4065,6 @@ bool do_cmd_throw_aux(int mult, bool boomerang, OBJECT_IDX shuriken)
 	}
 
 	return TRUE;
-}
-
-
-/*!
- * @brief 投射処理のメインルーチン /
- * Throw an object from the pack or floor.
- * @return なし
- */
-void do_cmd_throw(void)
-{
-	do_cmd_throw_aux(1, FALSE, -1);
 }
 
 
