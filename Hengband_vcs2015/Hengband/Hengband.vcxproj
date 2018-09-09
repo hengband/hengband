@@ -156,7 +156,7 @@
     <ClCompile Include="..\..\src\cmd4.c" />
     <ClCompile Include="..\..\src\cmd5.c" />
     <ClCompile Include="..\..\src\cmd-magiceat.c" />
-    <ClCompile Include="..\..\src\do-spell.c" />
+    <ClCompile Include="..\..\src\cmd-spell.c" />
     <ClCompile Include="..\..\src\dungeon.c" />
     <ClCompile Include="..\..\src\effects.c" />
     <ClCompile Include="..\..\src\files.c" />

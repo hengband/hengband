@@ -37,9 +37,6 @@
     <ClCompile Include="..\..\src\cmd5.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\do-spell.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\effects.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -233,6 +230,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\gameoption.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-spell.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

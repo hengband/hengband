@@ -804,7 +804,7 @@ extern int calculate_upkeep(void);
 extern void do_cmd_pet_dismiss(void);
 extern void do_cmd_pet(void);
 
-/* do-spell.c */
+/* cmd-spell.c */
 extern void stop_singing(void);
 extern cptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
 
