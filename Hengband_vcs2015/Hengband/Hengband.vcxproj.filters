@@ -244,6 +244,9 @@
     <ClCompile Include="..\..\src\trap.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\rooms_normal.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -353,6 +356,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\trap.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms_normal.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

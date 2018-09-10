@@ -66,4 +66,8 @@ extern void build_cavern(void);
 
 extern bool generate_rooms(void);
 extern void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault);
+extern void place_secret_door(int y, int x, int type);
+extern void place_locked_door(int y, int x);
+extern bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width);
+
 

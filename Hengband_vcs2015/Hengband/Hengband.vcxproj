@@ -194,6 +194,7 @@
     <ClCompile Include="..\..\src\readdib.c" />
     <ClCompile Include="..\..\src\report.c" />
     <ClCompile Include="..\..\src\rooms.c" />
+    <ClCompile Include="..\..\src\rooms_normal.c" />
     <ClCompile Include="..\..\src\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
     <ClCompile Include="..\..\src\selfinfo.c" />
@@ -242,6 +243,7 @@
     <ClInclude Include="..\..\src\mindtips.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\rooms.h" />
+    <ClInclude Include="..\..\src\rooms_normal.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\spells-summon.h" />
     <ClInclude Include="..\..\src\streams.h" />
