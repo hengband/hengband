@@ -205,6 +205,7 @@
     <ClCompile Include="..\..\src\store.c" />
     <ClCompile Include="..\..\src\streams.c" />
     <ClCompile Include="..\..\src\tables.c" />
+    <ClCompile Include="..\..\src\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
     <ClCompile Include="..\..\src\variable.c" />
     <ClCompile Include="..\..\src\wild.c" />
@@ -244,6 +245,7 @@
     <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\spells-summon.h" />
     <ClInclude Include="..\..\src\streams.h" />
+    <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\types.h" />
     <ClInclude Include="..\..\src\z-config.h" />
     <ClInclude Include="..\..\src\z-form.h" />

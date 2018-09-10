@@ -241,6 +241,9 @@
     <ClCompile Include="..\..\src\spells-summon.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\trap.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -347,6 +350,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spells-summon.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\trap.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
