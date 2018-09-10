@@ -2902,7 +2902,7 @@ bool fire_ball(int typ, int dir, HIT_POINT dam, int rad)
 */
 bool fire_breath(int typ, int dir, HIT_POINT dam, int rad)
 {
-	fire_ball(typ, dir, dam, -rad);
+	return fire_ball(typ, dir, dam, -rad);
 }
 
 
