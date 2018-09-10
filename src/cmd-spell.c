@@ -2069,8 +2069,7 @@ static cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_DISINTEGRATE, dir,
-					damroll(dice, sides), 0);
+				fire_ball(GF_DISINTEGRATE, dir, damroll(dice, sides), 0);
 			}
 		}
 		break;

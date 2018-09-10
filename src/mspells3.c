@@ -697,7 +697,7 @@ static bool cast_learned_spell(int spell, bool success)
 
         msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
         damage = monspell_bluemage_damage((MS_BR_COLD), plev, DAM_ROLL);
-		fire_ball(GF_COLD, dir, damage, (plev > 40 ? -3 : -2));
+		fire_breath(GF_COLD, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_POIS:
         if (!get_aim_dir(&dir)) return FALSE;

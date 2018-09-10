@@ -254,7 +254,7 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
 
 		if (powerful) dam = (dam * 3) / 2;
 
-		fire_ball(typ, dir, dam, -3);
+		fire_breath(typ, dir, dam, 3);
 
 		ident = TRUE;
 		break;

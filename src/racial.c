@@ -1557,8 +1557,7 @@ static bool cmd_racial_power_aux(s32b command)
 				ratial_stop_mouth();
 				msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), Type_desc);
 
-				fire_ball(Type, dir, plev * 2,
-				    -(plev / 15) - 1);
+				fire_breath(Type, dir, plev * 2, (plev / 15) + 1);
 			}
 			break;
 
