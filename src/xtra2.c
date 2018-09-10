@@ -4480,27 +4480,13 @@ void gain_level_reward(int chosen_reward)
 	type--;
 
 
-#ifdef JP
-sprintf(wrath_reason, "%sの怒り",
-		chaos_patrons[p_ptr->chaos_patron]);
-#else
-	sprintf(wrath_reason, "the Wrath of %s",
-		chaos_patrons[p_ptr->chaos_patron]);
-#endif
-
+	sprintf(wrath_reason, _("%sの怒り", "the Wrath of %s"), chaos_patrons[p_ptr->chaos_patron]);
 
 	effect = chaos_rewards[p_ptr->chaos_patron][type];
 
 	if (one_in_(6) && !chosen_reward)
 	{
-#ifdef JP
-msg_format("%^sは褒美としてあなたを突然変異させた。",
-			chaos_patrons[p_ptr->chaos_patron]);
-#else
-		msg_format("%^s rewards you with a mutation!",
-			chaos_patrons[p_ptr->chaos_patron]);
-#endif
-
+		msg_format(_("%^sは褒美としてあなたを突然変異させた。", "%^s rewards you with a mutation!"), chaos_patrons[p_ptr->chaos_patron]);
 		(void)gain_random_mutation(0);
 		reward = _("変異した。", "mutation");
 	}
@@ -4508,29 +4494,19 @@ msg_format("%^sは褒美としてあなたを突然変異させた。",
 	{
 	switch (chosen_reward ? chosen_reward : effect)
 	{
-		case REW_POLY_SLF:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_POLY_SLF:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝、新たなる姿を必要とせり！」", "'Thou needst a new form, mortal!'"));
 
 			do_poly_self();
 			reward = _("変異した。", "polymorphing");
 			break;
-		case REW_GAIN_EXP:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_GAIN_EXP:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝は良く行いたり！続けよ！」", "'Well done, mortal! Lead on!'"));
 
 			if (p_ptr->prace == RACE_ANDROID)
@@ -4547,15 +4523,10 @@ msg_format("%sの声が響き渡った:",
 				reward = _("経験値を得た", "experience");
 			}
 			break;
-		case REW_LOSE_EXP:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_LOSE_EXP:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「下僕よ、汝それに値せず。」", "'Thou didst not deserve that, slave.'"));
 
 			if (p_ptr->prace == RACE_ANDROID)
@@ -4568,9 +4539,10 @@ msg_format("%sの声が響き渡った:",
 				reward = _("経験値を失った。", "losing experience");
 			}
 			break;
+
 		case REW_GOOD_OBJ:
 #ifdef JP
-msg_format("%sの声がささやいた:",
+			msg_format("%sの声がささやいた:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #else
 			msg_format("The voice of %s whispers:",
@@ -4582,29 +4554,19 @@ msg_format("%sの声がささやいた:",
 			acquirement(p_ptr->y, p_ptr->x, 1, FALSE, FALSE, FALSE);
 			reward = _("上質なアイテムを手に入れた。", "a good item");
 			break;
-		case REW_GREA_OBJ:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_GREA_OBJ:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
 			acquirement(p_ptr->y, p_ptr->x, 1, TRUE, FALSE, FALSE);
 			reward = _("高級品のアイテムを手に入れた。", "an excellent item");
 			break;
-		case REW_CHAOS_WP:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_CHAOS_WP:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝の行いは貴き剣に値せり。」", "'Thy deed hath earned thee a worthy blade.'"));
 
 			/* Get local object */
@@ -4707,41 +4669,30 @@ msg_format("%sの声が響き渡った:",
 			(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
 			reward = _("(混沌)の武器を手に入れた。", "chaos weapon");
 			break;
-		case REW_GOOD_OBS:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_GOOD_OBS:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝の行いは貴き報いに値せり。」", "'Thy deed hath earned thee a worthy reward.'"));
 
 			acquirement(p_ptr->y, p_ptr->x, randint1(2) + 1, FALSE, FALSE, FALSE);
 			reward = _("上質なアイテムを手に入れた。", "good items");
 			break;
-		case REW_GREA_OBS:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_GREA_OBS:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「下僕よ、汝の献身への我が惜しみ無き報いを見るがよい。」", "'Behold, mortal, how generously I reward thy loyalty.'"));
 
 			acquirement(p_ptr->y, p_ptr->x, randint1(2) + 1, TRUE, FALSE, FALSE);
 			reward = _("高級品のアイテムを手に入れた。", "excellent items");
 			break;
+
 		case REW_TY_CURSE:
 #ifdef JP
-msg_format("%sの声が轟き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
+			msg_format("%sの声が轟き渡った:", chaos_patrons[p_ptr->chaos_patron]);
 #else
-			msg_format("The voice of %s thunders:",
-				chaos_patrons[p_ptr->chaos_patron]);
+			msg_format("The voice of %s thunders:", chaos_patrons[p_ptr->chaos_patron]);
 #endif
 
 			msg_print(_("「下僕よ、汝傲慢なり。」", "'Thou art growing arrogant, mortal.'"));
@@ -4749,15 +4700,10 @@ msg_format("%sの声が轟き渡った:",
 			(void)activate_ty_curse(FALSE, &count);
 			reward = _("禍々しい呪いをかけられた。", "cursing");
 			break;
-		case REW_SUMMON_M:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_SUMMON_M:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「我が下僕たちよ、かの傲慢なる者を倒すべし！」", "'My pets, destroy the arrogant mortal!'"));
 
 			for (dummy = 0; dummy < randint1(5) + 1; dummy++)
@@ -4766,23 +4712,21 @@ msg_format("%sの声が響き渡った:",
 			}
 			reward = _("モンスターを召喚された。", "summoning hostile monsters");
 			break;
-		case REW_H_SUMMON:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+
+		case REW_H_SUMMON:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝、より強き敵を必要とせり！」", "'Thou needst worthier opponents!'"));
 
 			activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			reward = _("モンスターを召喚された。", "summoning many hostile monsters");
 			break;
+
+
 		case REW_DO_HAVOC:
 #ifdef JP
-msg_format("%sの声が響き渡った:",
+			msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #else
 			msg_format("The voice of %s booms out:",
@@ -4794,9 +4738,11 @@ msg_format("%sの声が響き渡った:",
 			call_chaos();
 			reward = _("カオスの力が渦巻いた。", "calling chaos");
 			break;
+
+
 		case REW_GAIN_ABL:
 #ifdef JP
-msg_format("%sの声が鳴り響いた:",
+			msg_format("%sの声が鳴り響いた:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #else
 			msg_format("The voice of %s rings out:",
@@ -4811,9 +4757,11 @@ msg_format("%sの声が鳴り響いた:",
 				do_inc_stat(randint0(6));
 			reward = _("能力値が上がった。", "increasing a stat");
 			break;
+
+
 		case REW_LOSE_ABL:
 #ifdef JP
-msg_format("%sの声が響き渡った:",
+			msg_format("%sの声が響き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #else
 			msg_format("The voice of %s booms out:",
@@ -4828,9 +4776,12 @@ msg_format("%sの声が響き渡った:",
 				(void)do_dec_stat(randint0(6));
 			reward = _("能力値が下がった。", "decreasing a stat");
 			break;
+
+
 		case REW_RUIN_ABL:
+
 #ifdef JP
-msg_format("%sの声が轟き渡った:",
+			msg_format("%sの声が轟き渡った:",
 				chaos_patrons[p_ptr->chaos_patron]);
 #else
 			msg_format("The voice of %s thunders:",
@@ -4846,21 +4797,18 @@ msg_format("%sの声が轟き渡った:",
 			}
 			reward = _("全能力値が下がった。", "decreasing all stats");
 			break;
-		case REW_POLY_WND:
-			msg_format(_("%sの力が触れるのを感じた。", "You feel the power of %s touch you."),
 
+		case REW_POLY_WND:
+
+			msg_format(_("%sの力が触れるのを感じた。", "You feel the power of %s touch you."),
 				chaos_patrons[p_ptr->chaos_patron]);
 			do_poly_wounds();
 			reward = _("傷が変化した。", "polymorphing wounds");
 			break;
+
 		case REW_AUGM_ABL:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 
 			msg_print(_("「我がささやかなる賜物を受けとるがよい！」", "'Receive this modest gift from me!'"));
 
@@ -4870,32 +4818,20 @@ msg_format("%sの声が響き渡った:",
 			}
 			reward = _("全能力値が上がった。", "increasing all stats");
 			break;
-		case REW_HURT_LOT:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_HURT_LOT:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「苦しむがよい、無能な愚か者よ！」", "'Suffer, pathetic fool!'"));
 
 			fire_ball(GF_DISINTEGRATE, 0, p_ptr->lev * 4, 4);
 			take_hit(DAMAGE_NOESCAPE, p_ptr->lev * 4, wrath_reason, -1);
 			reward = _("分解の球が発生した。", "generating disintegration ball");
 			break;
-	   case REW_HEAL_FUL:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
-			msg_print(_("「甦るがよい、我が下僕よ！」", "'Rise, my servant!'"));
+		case REW_HEAL_FUL:
 
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			restore_level();
 			(void)set_poisoned(0);
 			(void)set_blind(0);
@@ -4910,16 +4846,11 @@ msg_format("%sの声が響き渡った:",
 			}
 			reward = _("体力が回復した。", "healing");
 			break;
-		case REW_CURSE_WP:
-			if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM)) break;
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_CURSE_WP:
+
+			if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM)) break;
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝、武器に頼ることなかれ。」", "'Thou reliest too much on thy weapon.'"));
 
 			dummy = INVEN_RARM;
@@ -4932,16 +4863,11 @@ msg_format("%sの声が響き渡った:",
 			(void)curse_weapon(FALSE, dummy);
 			reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 			break;
-		case REW_CURSE_AR:
-			if (!inventory[INVEN_BODY].k_idx) break;
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_CURSE_AR:
+
+			if (!inventory[INVEN_BODY].k_idx) break;
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝、防具に頼ることなかれ。」", "'Thou reliest too much on thine equipment.'"));
 
 			object_desc(o_name, &inventory[INVEN_BODY], OD_NAME_ONLY);
@@ -4949,14 +4875,8 @@ msg_format("%sの声が響き渡った:",
 			reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 			break;
 		case REW_PISS_OFF:
-#ifdef JP
-msg_format("%sの声がささやいた:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s whispers:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+			msg_format(_("%sの声がささやいた:", "The voice of %s whispers:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「我を怒りしめた罪を償うべし。」", "'Now thou shalt pay for annoying me.'"));
 
 			switch (randint1(4))
@@ -5000,10 +4920,10 @@ msg_format("%sの声がささやいた:",
 					break;
 			}
 			break;
-		case REW_WRATH:
-			msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"),
 
-				chaos_patrons[p_ptr->chaos_patron]);
+		case REW_WRATH:
+
+			msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「死ぬがよい、下僕よ！」", "'Die, mortal!'"));
 
 			take_hit(DAMAGE_LOSELIFE, p_ptr->lev * 4, wrath_reason, -1);
@@ -5028,70 +4948,46 @@ msg_format("%sの声がささやいた:",
 			}
 			if (one_in_(2)) (void)curse_armor();
 			break;
-		case REW_DESTRUCT:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_DESTRUCT:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「死と破壊こそ我が喜びなり！」", "'Death and destruction! This pleaseth me!'"));
 
 			(void)destroy_area(p_ptr->y, p_ptr->x, 25, FALSE);
 			reward = _("ダンジョンが*破壊*された。", "*destruct*ing dungeon");
 			break;
+
 		case REW_GENOCIDE:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「我、汝の敵を抹殺せん！」", "'Let me relieve thee of thine oppressors!'"));
-
 			(void)symbol_genocide(0, FALSE);
 			reward = _("モンスターが抹殺された。", "genociding monsters");
 			break;
-		case REW_MASS_GEN:
-#ifdef JP
-msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_MASS_GEN:
+
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「我、汝の敵を抹殺せん！」", "'Let me relieve thee of thine oppressors!'"));
 
 			(void)mass_genocide(0, FALSE);
 			reward = _("モンスターが抹殺された。", "genociding nearby monsters");
 			break;
-		case REW_DISPEL_C:
-#ifdef JP
-msg_format("%sの力が敵を攻撃するのを感じた！",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("You can feel the power of %s assault your enemies!",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_DISPEL_C:
+
+			msg_format(_("%sの力が敵を攻撃するのを感じた！", "You can feel the power of %s assault your enemies!"), chaos_patrons[p_ptr->chaos_patron]);
 			(void)dispel_monsters(p_ptr->lev * 4);
 			break;
-		case REW_IGNORE:
-#ifdef JP
-msg_format("%sはあなたを無視した。",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("%s ignores you.",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
 
+		case REW_IGNORE:
+
+			msg_format(_("%sはあなたを無視した。", "%s ignores you."), chaos_patrons[p_ptr->chaos_patron]);
 			break;
+
 		case REW_SER_DEMO:
+
 			msg_format(_("%sは褒美として悪魔の使いをよこした！", "%s rewards you with a demonic servant!"),chaos_patrons[p_ptr->chaos_patron]);
 
 			if (!summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_DEMON, PM_FORCE_PET))
@@ -5100,6 +4996,7 @@ msg_format("%sはあなたを無視した。",
 				reward = _("悪魔がペットになった。", "a demonic servant");
 
 			break;
+
 		case REW_SER_MONS:
 			msg_format(_("%sは褒美として使いをよこした！", "%s rewards you with a servant!"),chaos_patrons[p_ptr->chaos_patron]);
 
@@ -5109,6 +5006,7 @@ msg_format("%sはあなたを無視した。",
 				reward = _("モンスターがペットになった。", "a servant");
 
 			break;
+
 		case REW_SER_UNDE:
 			msg_format(_("%sは褒美としてアンデッドの使いをよこした。", "%s rewards you with an undead servant!"),chaos_patrons[p_ptr->chaos_patron]);
 
@@ -5118,6 +5016,7 @@ msg_format("%sはあなたを無視した。",
 				reward = _("アンデッドがペットになった。", "an undead servant");
 
 			break;
+
 		default:
 			msg_format(_("%sの声がどもった:", "The voice of %s stammers:"),
 
