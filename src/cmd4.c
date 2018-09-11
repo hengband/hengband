@@ -40,7 +40,7 @@
  */
 
 #include "angband.h"
-
+#include "cmd-pet.h"
 
 
 /*

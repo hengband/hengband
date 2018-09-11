@@ -12,6 +12,7 @@
 
 
 #include "angband.h"
+#include "cmd-pet.h"
 
 #define REWARD_CHANCE 10
 

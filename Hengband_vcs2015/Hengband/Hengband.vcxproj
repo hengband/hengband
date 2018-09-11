@@ -141,6 +141,7 @@
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\cmd-activate.c" />
     <ClCompile Include="..\..\src\cmd-eat.c" />
+    <ClCompile Include="..\..\src\cmd-pet.c" />
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
     <ClCompile Include="..\..\src\cmd-usestaff.c" />
@@ -148,6 +149,7 @@
     <ClCompile Include="..\..\src\cmd-zapwand.c" />
     <ClInclude Include="..\..\src\chest.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />
+    <ClInclude Include="..\..\src\cmd-pet.h" />
     <ClInclude Include="..\..\src\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd-zapwand.h">
       <FileType>CppCode</FileType>

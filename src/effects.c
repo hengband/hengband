@@ -12,7 +12,6 @@
  * 2013 Deskull rearranged comment for Doxygen.\n
  */
 
-
 #include "angband.h"
 
 /*!
@@ -5205,3 +5204,4 @@ bool choose_ele_immune(TIME_EFFECT immune_turn)
 	screen_load();
 	return TRUE;
 }
+

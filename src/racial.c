@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "cmd-magiceat.h"
 #include "cmd-zapwand.h"
+#include "cmd-pet.h"
 
 /*!
  * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/
