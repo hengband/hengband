@@ -739,26 +739,6 @@ extern bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken);
 extern void do_cmd_travel(void);
 #endif
 
-/* cmd3.c */
-extern void do_cmd_inven(void);
-extern void do_cmd_equip(void);
-extern void do_cmd_wield(void);
-extern void do_cmd_takeoff(void);
-extern void do_cmd_drop(void);
-extern void do_cmd_destroy(void);
-extern void do_cmd_observe(void);
-extern void do_cmd_uninscribe(void);
-extern void do_cmd_inscribe(void);
-extern void do_cmd_refill(void);
-extern void do_cmd_target(void);
-extern void do_cmd_look(void);
-extern void do_cmd_locate(void);
-extern void do_cmd_query_symbol(void);
-extern void kamaenaoshi(int item);
-extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
-extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);
-extern void do_cmd_use(void);
-
 /* cmd4.c */
 #ifndef JP
 extern cptr get_ordinal_number_suffix(int num);
@@ -1797,3 +1777,8 @@ extern void revenge_store(HIT_POINT dam);
 extern bool teleport_barrier(MONSTER_IDX m_idx);
 extern bool magic_barrier(MONSTER_IDX m_idx);
 extern bool multiply_barrier(MONSTER_IDX m_idx);
+
+extern void kamaenaoshi(int item);
+
+extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
+extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);

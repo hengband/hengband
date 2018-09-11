@@ -31,9 +31,6 @@
     <ClCompile Include="..\..\src\cmd4.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd3.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd5.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -250,6 +247,9 @@
     <ClCompile Include="..\..\src\cmd-pet.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -365,6 +365,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-pet.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

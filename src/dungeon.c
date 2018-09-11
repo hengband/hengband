@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "cmd-activate.h"
 #include "cmd-eat.h"
+#include "cmd-item.h"
 #include "cmd-magiceat.h"
 #include "cmd-quaff.h"
 #include "cmd-read.h"

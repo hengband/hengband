@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\src\cmd-zaprod.c" />
     <ClCompile Include="..\..\src\cmd-zapwand.c" />
     <ClInclude Include="..\..\src\chest.h" />
+    <ClInclude Include="..\..\src\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />
     <ClInclude Include="..\..\src\cmd-pet.h" />
     <ClInclude Include="..\..\src\cmd-zaprod.h" />
@@ -156,7 +157,7 @@
     </ClInclude>
     <ClCompile Include="..\..\src\cmd1.c" />
     <ClCompile Include="..\..\src\cmd2.c" />
-    <ClCompile Include="..\..\src\cmd3.c" />
+    <ClCompile Include="..\..\src\cmd-item.c" />
     <ClCompile Include="..\..\src\cmd4.c" />
     <ClCompile Include="..\..\src\cmd5.c" />
     <ClCompile Include="..\..\src\cmd-magiceat.c" />
