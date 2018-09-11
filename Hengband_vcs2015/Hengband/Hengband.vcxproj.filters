@@ -250,6 +250,9 @@
     <ClCompile Include="..\..\src\rooms-normal.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\rooms-pitnest.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -368,6 +371,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rooms-normal.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-pitnest.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
