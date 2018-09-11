@@ -185,7 +185,7 @@ void place_secret_door(int y, int x, int type)
  * Note - this should be used only on allocated regions
  * within another room.
  */
-static void build_small_room(int x0, int y0)
+void build_small_room(int x0, int y0)
 {
 	int x, y;
 
@@ -2520,7 +2520,7 @@ static void build_castle_vault(int x0, int y0, int xsize, int ysize)
  * Note: no range checking is done so must be inside dungeon
  * This routine also stomps on doors
  */
-static void add_outer_wall(int x, int y, int light, int x1, int y1, int x2, int y2)
+void add_outer_wall(int x, int y, int light, int x1, int y1, int x2, int y2)
 {
 	cave_type *c_ptr;
 	feature_type *f_ptr;
@@ -2572,8 +2572,7 @@ static void add_outer_wall(int x, int y, int light, int x1, int y1, int x2, int 
  * Hacked distance formula - gives the 'wrong' answer.
  * Used to build crypts
  */
-static int dist2(int x1, int y1, int x2, int y2,
-		 int h1, int h2, int h3, int h4)
+int dist2(int x1, int y1, int x2, int y2, int h1, int h2, int h3, int h4)
 {
 	int dx, dy;
 	dx = abs(x2 - x1);
@@ -2859,151 +2858,6 @@ static bool build_type10(void)
 
 		/* Paranoia */
 		default: return FALSE;
-	}
-
-	return TRUE;
-}
-
-
-/*!
- * @brief タイプ11の部屋…円形部屋の生成 / Type 11 -- Build an vertical oval room.
- * @return なし
- * @details
- * For every grid in the possible square, check the distance.\n
- * If it's less than the radius, make it a room square.\n
- *\n
- * When done fill from the inside to find the walls,\n
- */
-static bool build_type11(void)
-{
-	POSITION rad, x, y, x0, y0;
-	int light = FALSE;
-
-	/* Occasional light */
-	if ((randint1(dun_level) <= 15) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS)) light = TRUE;
-
-	rad = randint0(9);
-
-	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&y0, &x0, rad * 2 + 1, rad * 2 + 1)) return FALSE;
-
-	/* Make circular floor */
-	for (x = x0 - rad; x <= x0 + rad; x++)
-	{
-		for (y = y0 - rad; y <= y0 + rad; y++)
-		{
-			if (distance(y0, x0, y, x) <= rad - 1)
-			{
-				/* inside- so is floor */
-				place_floor_bold(y, x);
-			}
-			else if (distance(y0, x0, y, x) <= rad + 1)
-			{
-				/* make granite outside so arena works */
-				place_extra_bold(y, x);
-			}
-		}
-	}
-
-	/* Find visible outer walls and set to be FEAT_OUTER */
-	add_outer_wall(x0, y0, light, x0 - rad, y0 - rad, x0 + rad, y0 + rad);
-
-	return TRUE;
-}
-
-
-/*!
- * @brief タイプ12の部屋…ドーム型部屋の生成 / Type 12 -- Build crypt room.
- * @return なし
- * @details
- * For every grid in the possible square, check the (fake) distance.\n
- * If it's less than the radius, make it a room square.\n
- *\n
- * When done fill from the inside to find the walls,\n
- */
-static bool build_type12(void)
-{
-	POSITION rad, x, y, x0, y0;
-	int light = FALSE;
-	bool emptyflag = TRUE;
-
-	/* Make a random metric */
-	int h1, h2, h3, h4;
-	h1 = randint1(32) - 16;
-	h2 = randint1(16);
-	h3 = randint1(32);
-	h4 = randint1(32) - 16;
-
-	/* Occasional light */
-	if ((randint1(dun_level) <= 5) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS)) light = TRUE;
-
-	rad = randint1(9);
-
-	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&y0, &x0, rad * 2 + 3, rad * 2 + 3)) return FALSE;
-
-	/* Make floor */
-	for (x = x0 - rad; x <= x0 + rad; x++)
-	{
-		for (y = y0 - rad; y <= y0 + rad; y++)
-		{
-			/* clear room flag */
-			cave[y][x].info &= ~(CAVE_ROOM);
-
-			if (dist2(y0, x0, y, x, h1, h2, h3, h4) <= rad - 1)
-			{
-				/* inside - so is floor */
-				place_floor_bold(y, x);
-			}
-			else if (distance(y0, x0, y, x) < 3)
-			{
-				place_floor_bold(y, x);
-			}
-			else
-			{
-				/* make granite outside so arena works */
-				place_extra_bold(y, x);
-			}
-
-			/* proper boundary for arena */
-			if (((y + rad) == y0) || ((y - rad) == y0) ||
-			    ((x + rad) == x0) || ((x - rad) == x0))
-			{
-				place_extra_bold(y, x);
-			}
-		}
-	}
-
-	/* Find visible outer walls and set to be FEAT_OUTER */
-	add_outer_wall(x0, y0, light, x0 - rad - 1, y0 - rad - 1,
-		       x0 + rad + 1, y0 + rad + 1);
-
-	/* Check to see if there is room for an inner vault */
-	for (x = x0 - 2; x <= x0 + 2; x++)
-	{
-		for (y = y0 - 2; y <= y0 + 2; y++)
-		{
-			if (!is_floor_bold(y, x))
-			{
-				/* Wall in the way */
-				emptyflag = FALSE;
-			}
-		}
-	}
-
-	if (emptyflag && one_in_(2))
-	{
-		/* Build the vault */
-		build_small_room(x0, y0);
-
-		/* Place a treasure in the vault */
-		place_object(y0, x0, 0L);
-
-		/* Let's guard the treasure well */
-		vault_monsters(y0, x0, randint0(2) + 3);
-
-		/* Traps naturally */
-		vault_traps(y0, x0, 4, 4, randint0(3) + 2);
 	}
 
 	return TRUE;

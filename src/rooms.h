@@ -69,5 +69,7 @@ extern void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault
 extern void place_secret_door(int y, int x, int type);
 extern void place_locked_door(int y, int x);
 extern bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width);
-
+extern void build_small_room(int x0, int y0);
+extern void add_outer_wall(int x, int y, int light, int x1, int y1, int x2, int y2);
+extern int dist2(int x1, int y1, int x2, int y2, int h1, int h2, int h3, int h4);
 
