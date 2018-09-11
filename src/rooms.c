@@ -41,7 +41,7 @@
 #include "grid.h"
 #include "rooms.h"
 
-#include "rooms_normal.h"
+#include "rooms-normal.h"
 
 
 /*!

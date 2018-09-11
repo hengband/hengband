@@ -241,13 +241,13 @@
     <ClCompile Include="..\..\src\trap.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\rooms_normal.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-pet.c">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd-item.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms-normal.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -361,13 +361,13 @@
     <ClInclude Include="..\..\src\trap.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\rooms_normal.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\cmd-pet.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-normal.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
