@@ -1,5 +1,6 @@
 #include "angband.h"
 #include "grid.h"
+#include "generate.h"
 #include "rooms.h"
 #include "rooms-pitnest.h"
 

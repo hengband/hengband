@@ -250,7 +250,10 @@
     <ClCompile Include="..\..\src\rooms-normal.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\rooms-pitnest.cpp">
+    <ClCompile Include="..\..\src\rooms-pitnest.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms-vault.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -374,6 +377,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rooms-pitnest.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-vault.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
