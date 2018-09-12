@@ -151,6 +151,7 @@
     <ClInclude Include="..\..\src\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />
     <ClInclude Include="..\..\src\cmd-pet.h" />
+    <ClInclude Include="..\..\src\cmd-spell.h" />
     <ClInclude Include="..\..\src\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd-zapwand.h">
       <FileType>CppCode</FileType>
@@ -194,6 +195,7 @@
     <ClCompile Include="..\..\src\object2.c" />
     <ClCompile Include="..\..\src\racial.c" />
     <ClCompile Include="..\..\src\readdib.c" />
+    <ClCompile Include="..\..\src\realm-arcane.c" />
     <ClCompile Include="..\..\src\realm-hex.c" />
     <ClCompile Include="..\..\src\report.c" />
     <ClCompile Include="..\..\src\rooms-normal.c" />
@@ -247,6 +249,7 @@
     <ClInclude Include="..\..\src\kajitips.h" />
     <ClInclude Include="..\..\src\mindtips.h" />
     <ClInclude Include="..\..\src\readdib.h" />
+    <ClInclude Include="..\..\src\realm-arcane.h" />
     <ClInclude Include="..\..\src\rooms-normal.h" />
     <ClInclude Include="..\..\src\rooms-pitnest.h" />
     <ClInclude Include="..\..\src\rooms-vault.h" />
