@@ -52,9 +52,6 @@
     <ClCompile Include="..\..\src\generate.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\hex.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\grid.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -254,6 +251,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\rooms-vault.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm-hex.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -170,7 +170,6 @@
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\generate.c" />
     <ClCompile Include="..\..\src\grid.c" />
-    <ClCompile Include="..\..\src\hex.c" />
     <ClCompile Include="..\..\src\hissatsu.c" />
     <ClCompile Include="..\..\src\inet.c" />
     <ClCompile Include="..\..\src\init1.c" />
@@ -195,6 +194,7 @@
     <ClCompile Include="..\..\src\object2.c" />
     <ClCompile Include="..\..\src\racial.c" />
     <ClCompile Include="..\..\src\readdib.c" />
+    <ClCompile Include="..\..\src\realm-hex.c" />
     <ClCompile Include="..\..\src\report.c" />
     <ClCompile Include="..\..\src\rooms-normal.c" />
     <ClCompile Include="..\..\src\rooms-pitnest.c" />
