@@ -22266,3 +22266,22 @@ B:TOUCH:HURT:1d1
 F:WILD_TOWN | WILD_ONLY | RAND_50 | RAND_25
 F:FRIENDS | FRIENDLY
 D:彼らは故郷が常にあるものとも、常に帰るべきものとも考えていない。
+
+N:1108:セラの天使
+E:Serra Angel
+G:A:w
+I:120:50d14:85:68:3
+W:35:2:0:1800:0:0
+B:SLASH:HURT:6d6
+B:SLASH:HURT:6d6
+B:SLASH:HURT:6d6
+B:SLASH:HURT:6d6
+F:FORCE_MAXHP | SMART | NO_FEAR | GOOD | CAN_FLY |
+F:ONLY_ITEM | DROP_2D2 | FEMALE | RES_LITE
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
+F:NO_SLEEP | SELF_LITE_1 | ANGEL
+D:$Born with wings of light and a sword of faith,
+D:$this heavenly incarnation embodies both fury and purity.
+D:光の翼と信仰の剣と共に生まれたこの天使は、怒りと純粋さを体現する。
+D:（Magic: the Gathering リミテッド～第４版）
