@@ -262,6 +262,9 @@
     <ClCompile Include="..\..\src\realm-chaos.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\realm-life.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -395,6 +398,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm-chaos.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm-life.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

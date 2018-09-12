@@ -198,6 +198,7 @@
     <ClCompile Include="..\..\src\realm-arcane.c" />
     <ClCompile Include="..\..\src\realm-chaos.c" />
     <ClCompile Include="..\..\src\realm-hex.c" />
+    <ClCompile Include="..\..\src\realm-life.c" />
     <ClCompile Include="..\..\src\report.c" />
     <ClCompile Include="..\..\src\rooms-normal.c" />
     <ClCompile Include="..\..\src\rooms-pitnest.c" />
@@ -252,6 +253,7 @@
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\realm-arcane.h" />
     <ClInclude Include="..\..\src\realm-chaos.h" />
+    <ClInclude Include="..\..\src\realm-life.h" />
     <ClInclude Include="..\..\src\rooms-normal.h" />
     <ClInclude Include="..\..\src\rooms-pitnest.h" />
     <ClInclude Include="..\..\src\rooms-vault.h" />
