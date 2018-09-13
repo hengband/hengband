@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
+    <ClCompile Include="..\..\src\realm-daemon.cpp" />
     <ClCompile Include="..\..\src\realm-death.c" />
     <ClCompile Include="..\..\src\realm-nature.c" />
     <ClCompile Include="..\..\src\realm-sorcery.c" />
@@ -259,6 +260,7 @@
     <ClInclude Include="..\..\src\realm-arcane.h" />
     <ClInclude Include="..\..\src\realm-chaos.h" />
     <ClInclude Include="..\..\src\realm-craft.h" />
+    <ClInclude Include="..\..\src\realm-daemon.h" />
     <ClInclude Include="..\..\src\realm-death.h" />
     <ClInclude Include="..\..\src\realm-life.h" />
     <ClInclude Include="..\..\src\realm-nature.h" />
