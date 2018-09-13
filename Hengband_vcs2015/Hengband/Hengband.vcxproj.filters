@@ -271,6 +271,9 @@
     <ClCompile Include="..\..\src\realm-nature.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\realm-death.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -413,6 +416,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm-nature.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm-death.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
