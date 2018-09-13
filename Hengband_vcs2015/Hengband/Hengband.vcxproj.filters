@@ -283,6 +283,9 @@
     <ClCompile Include="..\..\src\realm-daemon.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\realm-crusade.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -437,6 +440,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm-daemon.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm-crusade.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
