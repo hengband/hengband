@@ -280,7 +280,7 @@
     <ClCompile Include="..\..\src\realm-craft.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm-daemon.cpp">
+    <ClCompile Include="..\..\src\realm-daemon.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -22268,7 +22268,7 @@ F:FRIENDS | FRIENDLY
 D:彼らは故郷が常にあるものとも、常に帰るべきものとも考えていない。
 
 N:1108:セラの天使
-E:Serra Angel
+E:Serra angel
 G:A:w
 I:120:50d14:85:68:3
 W:35:2:0:1800:0:0
@@ -22285,3 +22285,20 @@ D:$Born with wings of light and a sword of faith,
 D:$this heavenly incarnation embodies both fury and purity.
 D:光の翼と信仰の剣と共に生まれたこの天使は、怒りと純粋さを体現する。
 D:（Magic: the Gathering リミテッド～第４版）
+
+N:1109:センギアの吸血鬼
+E:Sengir vampire
+G:V:o
+I:120:50d14:20:80:10
+W:35:2:0:1800:0:0
+B:CLAW:HURT:6d6
+B:CLAW:HURT:6d6
+B:BITE:EXP_VAMP:5d6
+B:BITE:EXP_VAMP:5d6
+F:FORCE_SLEEP | FORCE_MAXHP | KILL_BODY
+F:DROP_2D2 | CAN_FLY | RES_NETH | RES_DARK |
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | REGENERATE 
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_SLEEP
+D:$Empires rise and fall, but evil is eternal.
+D:帝国には栄枯盛衰があるが、邪悪さは不滅だ。
+D:（Magic: the Gathering）
