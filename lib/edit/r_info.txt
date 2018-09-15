@@ -22321,7 +22321,7 @@ F:EVIL
 S:1_IN_3 | 
 S:TPORT | BO_FIRE | BO_ELEC |
 S:S_DEMON
-D:$The half-devil @laneswalker, Tibalt always has a preference
+D:$The half-devil Planeswalker, Tibalt always has a preference
 D:$for spread of pain and disorder to everyone including himself. 
 D:半人半魔のプレインズウォーカー、ティボルトは苦痛と騒乱が、
 D:自分を含めた全ての人々に及ぶことを常に望んでいる。
