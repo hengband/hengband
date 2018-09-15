@@ -289,6 +289,9 @@
     <ClCompile Include="..\..\src\realm-song.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\realm-hissatsu.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -449,6 +452,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm-song.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm-hissatsu.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

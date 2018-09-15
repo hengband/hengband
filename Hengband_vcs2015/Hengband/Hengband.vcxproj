@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\src\realm-crusade.c" />
     <ClCompile Include="..\..\src\realm-daemon.c" />
     <ClCompile Include="..\..\src\realm-death.c" />
+    <ClCompile Include="..\..\src\realm-hissatsu.c" />
     <ClCompile Include="..\..\src\realm-nature.c" />
     <ClCompile Include="..\..\src\realm-song.c" />
     <ClCompile Include="..\..\src\realm-sorcery.c" />
@@ -265,6 +266,7 @@
     <ClInclude Include="..\..\src\realm-crusade.h" />
     <ClInclude Include="..\..\src\realm-daemon.h" />
     <ClInclude Include="..\..\src\realm-death.h" />
+    <ClInclude Include="..\..\src\realm-hissatsu.h" />
     <ClInclude Include="..\..\src\realm-life.h" />
     <ClInclude Include="..\..\src\realm-nature.h" />
     <ClInclude Include="..\..\src\realm-song.h" />
