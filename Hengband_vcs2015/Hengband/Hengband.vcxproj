@@ -209,6 +209,7 @@
     <ClCompile Include="..\..\src\realm-life.c" />
     <ClCompile Include="..\..\src\realm-trump.c" />
     <ClCompile Include="..\..\src\report.c" />
+    <ClCompile Include="..\..\src\rooms-city.c" />
     <ClCompile Include="..\..\src\rooms-normal.c" />
     <ClCompile Include="..\..\src\rooms-pitnest.c" />
     <ClCompile Include="..\..\src\rooms-vault.c" />
@@ -273,6 +274,7 @@
     <ClInclude Include="..\..\src\realm-song.h" />
     <ClInclude Include="..\..\src\realm-sorcery.h" />
     <ClInclude Include="..\..\src\realm-trump.h" />
+    <ClInclude Include="..\..\src\rooms-city.h" />
     <ClInclude Include="..\..\src\rooms-normal.h" />
     <ClInclude Include="..\..\src\rooms-pitnest.h" />
     <ClInclude Include="..\..\src\rooms-vault.h" />
