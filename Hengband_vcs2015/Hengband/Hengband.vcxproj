@@ -149,6 +149,7 @@
     <ClCompile Include="..\..\src\realm-daemon.c" />
     <ClCompile Include="..\..\src\realm-death.c" />
     <ClCompile Include="..\..\src\realm-nature.c" />
+    <ClCompile Include="..\..\src\realm-song.c" />
     <ClCompile Include="..\..\src\realm-sorcery.c" />
     <ClCompile Include="..\..\src\cmd-usestaff.c" />
     <ClCompile Include="..\..\src\cmd-zaprod.c" />
@@ -266,6 +267,7 @@
     <ClInclude Include="..\..\src\realm-death.h" />
     <ClInclude Include="..\..\src\realm-life.h" />
     <ClInclude Include="..\..\src\realm-nature.h" />
+    <ClInclude Include="..\..\src\realm-song.h" />
     <ClInclude Include="..\..\src\realm-sorcery.h" />
     <ClInclude Include="..\..\src\realm-trump.h" />
     <ClInclude Include="..\..\src\rooms-normal.h" />
