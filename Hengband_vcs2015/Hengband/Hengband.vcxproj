@@ -266,6 +266,7 @@
     <ClInclude Include="..\..\src\realm-crusade.h" />
     <ClInclude Include="..\..\src\realm-daemon.h" />
     <ClInclude Include="..\..\src\realm-death.h" />
+    <ClInclude Include="..\..\src\realm-hex.h" />
     <ClInclude Include="..\..\src\realm-hissatsu.h" />
     <ClInclude Include="..\..\src\realm-life.h" />
     <ClInclude Include="..\..\src\realm-nature.h" />

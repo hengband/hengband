@@ -457,6 +457,9 @@
     <ClInclude Include="..\..\src\realm-hissatsu.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\realm-hex.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />
