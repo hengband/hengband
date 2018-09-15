@@ -22302,3 +22302,26 @@ F:EVIL | UNDEAD | IM_COLD | IM_POIS | HURT_LITE | NO_SLEEP | NO_FEAR
 D:$Empires rise and fall, but evil is eternal.
 D:帝国には栄枯盛衰があるが、邪悪さは不滅だ。
 D:（Magic: the Gathering）
+
+N:1110:悪鬼の血脈『ティボルト』
+E:Tibalt, the Fiend-Blooded
+G:u:R
+I:115:40d10:40:70:15
+W:22:4:0:1000:0:0
+B:PUNCH:HURT:3d3
+B:CLAW:HURT:2d4
+B:SLASH:HURT:2d6
+B:BITE:HURT:1d6
+F:MALE | DROP_CORPSE | HAS_LITE_1 |
+F:FORCE_SLEEP | FORCE_MAXHP | HUMAN | DEMON | 
+F:IM_FIRE | IM_ELEC
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD |
+F:OPEN_DOOR | BASH_DOOR | STUPID 
+F:EVIL
+S:1_IN_3 | 
+S:TPORT | BO_FIRE | BO_ELEC |
+S:S_DEMON
+D:$The half-devil @laneswalker, Tibalt always has a preference
+D:$for spread of pain and disorder to everyone including himself. 
+D:半人半魔のプレインズウォーカー、ティボルトは苦痛と騒乱が、
+D:自分を含めた全ての人々に及ぶことを常に望んでいる。
