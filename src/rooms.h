@@ -91,4 +91,9 @@ extern void generate_room_floor(int y1, int x1, int y2, int x2, int light);
 extern void generate_fill_perm_bold(int y1, int x1, int y2, int x2);
 extern void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug, int cutoff);
 extern bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, bool light, bool room);
-
+extern void fill_treasure(int x1, int x2, int y1, int y2, int difficulty);
+extern bool generate_lake(int y0, int x0, int xsize, int ysize, int c1, int c2, int c3, int type);
+extern void build_recursive_room(int x1, int y1, int x2, int y2, int power);
+extern void build_room(int x1, int x2, int y1, int y2);
+extern void add_door(int x, int y);
+extern void r_visit(int y1, int x1, int y2, int x2, int node, int dir, int *visited);
