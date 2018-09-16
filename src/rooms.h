@@ -81,8 +81,6 @@ extern void build_cavern(void);
 
 extern bool generate_rooms(void);
 extern void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault);
-extern void place_secret_door(int y, int x, int type);
-extern void place_locked_door(int y, int x);
 extern bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width);
 extern void build_small_room(int x0, int y0);
 extern void add_outer_wall(int x, int y, int light, int x1, int y1, int x2, int y2);
@@ -95,5 +93,4 @@ extern void fill_treasure(int x1, int x2, int y1, int y2, int difficulty);
 extern bool generate_lake(int y0, int x0, int xsize, int ysize, int c1, int c2, int c3, int type);
 extern void build_recursive_room(int x1, int y1, int x2, int y2, int power);
 extern void build_room(int x1, int x2, int y1, int y2);
-extern void add_door(int x, int y);
 extern void r_visit(int y1, int x1, int y2, int x2, int node, int dir, int *visited);

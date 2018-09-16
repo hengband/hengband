@@ -268,6 +268,232 @@ void place_closed_door(int y, int x, int type)
 }
 
 /*!
+* @brief 鍵のかかったドアを配置する
+* @param y 配置したいフロアのY座標
+* @param x 配置したいフロアのX座標
+* @return なし
+*/
+void place_locked_door(int y, int x)
+{
+	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
+	{
+		place_floor_bold(y, x);
+	}
+	else
+	{
+		set_cave_feat(y, x, feat_locked_door_random((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+		cave[y][x].info &= ~(CAVE_FLOOR);
+		delete_monster(y, x);
+	}
+}
+
+
+/*!
+* @brief 隠しドアを配置する
+* @param y 配置したいフロアのY座標
+* @param x 配置したいフロアのX座標
+* @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
+* @return なし
+*/
+void place_secret_door(int y, int x, int type)
+{
+	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
+	{
+		place_floor_bold(y, x);
+	}
+	else
+	{
+		cave_type *c_ptr = &cave[y][x];
+
+		if (type == DOOR_DEFAULT)
+		{
+			type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
+				one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+				((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+		}
+
+		/* Create secret door */
+		place_closed_door(y, x, type);
+
+		if (type != DOOR_CURTAIN)
+		{
+			/* Hide by inner wall because this is used in rooms only */
+			c_ptr->mimic = feat_wall_inner;
+
+			/* Floor type terrain cannot hide a door */
+			if (feat_supports_los(c_ptr->mimic) && !feat_supports_los(c_ptr->feat))
+			{
+				if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
+				{
+					c_ptr->feat = one_in_(2) ? c_ptr->mimic : floor_type[randint0(100)];
+				}
+				c_ptr->mimic = 0;
+			}
+		}
+
+		c_ptr->info &= ~(CAVE_FLOOR);
+		delete_monster(y, x);
+	}
+}
+
+/*
+ * Routine used by the random vault creators to add a door to a location
+ * Note that range checking has to be done in the calling routine.
+ *
+ * The doors must be INSIDE the allocated region.
+ */
+void add_door(int x, int y)
+{
+	/* Need to have a wall in the center square */
+	if (!is_outer_bold(y, x)) return;
+
+	/* look at:
+	*  x#x
+	*  .#.
+	*  x#x
+	*
+	*  where x=don't care
+	*  .=floor, #=wall
+	*/
+
+	if (is_floor_bold(y - 1, x) && is_floor_bold(y + 1, x) &&
+		(is_outer_bold(y, x - 1) && is_outer_bold(y, x + 1)))
+	{
+		/* secret door */
+		place_secret_door(y, x, DOOR_DEFAULT);
+
+		/* set boundarys so don't get wide doors */
+		place_solid_bold(y, x - 1);
+		place_solid_bold(y, x + 1);
+	}
+
+
+	/* look at:
+	*  x#x
+	*  .#.
+	*  x#x
+	*
+	*  where x = don't care
+	*  .=floor, #=wall
+	*/
+	if (is_outer_bold(y - 1, x) && is_outer_bold(y + 1, x) &&
+		is_floor_bold(y, x - 1) && is_floor_bold(y, x + 1))
+	{
+		/* secret door */
+		place_secret_door(y, x, DOOR_DEFAULT);
+
+		/* set boundarys so don't get wide doors */
+		place_solid_bold(y - 1, x);
+		place_solid_bold(y + 1, x);
+	}
+}
+
+/*!
+* @brief 隣接4マスに存在する通路の数を返す / Count the number of "corridor" grids adjacent to the given grid.
+* @param y1 基準となるマスのY座標
+* @param x1 基準となるマスのX座標
+* @return 通路の数
+* @note Assumes "in_bounds(y1, x1)"
+* @details
+* XXX XXX This routine currently only counts actual "empty floor"\n
+* grids which are not in rooms.  We might want to also count stairs,\n
+* open doors, closed doors, etc.
+*/
+static int next_to_corr(int y1, int x1)
+{
+	int i, y, x, k = 0;
+
+	cave_type *c_ptr;
+
+	/* Scan adjacent grids */
+	for (i = 0; i < 4; i++)
+	{
+		/* Extract the location */
+		y = y1 + ddy_ddd[i];
+		x = x1 + ddx_ddd[i];
+
+		/* Access the grid */
+		c_ptr = &cave[y][x];
+
+		/* Skip non floors */
+		if (cave_have_flag_grid(c_ptr, FF_WALL)) continue;
+
+		/* Skip non "empty floor" grids */
+		if (!is_floor_grid(c_ptr))
+			continue;
+
+		/* Skip grids inside rooms */
+		if (c_ptr->info & (CAVE_ROOM)) continue;
+
+		/* Count these grids */
+		k++;
+	}
+
+	/* Return the number of corridors */
+	return (k);
+}
+
+/*!
+* @brief ドアを設置可能な地形かを返す / Determine if the given location is "between" two walls, and "next to" two corridor spaces.
+* @param y 判定を行いたいマスのY座標
+* @param x 判定を行いたいマスのX座標
+* @return ドアを設置可能ならばTRUEを返す
+* @note Assumes "in_bounds(y1, x1)"
+* @details
+* XXX XXX XXX\n
+* Assumes "in_bounds(y, x)"\n
+*/
+static bool possible_doorway(int y, int x)
+{
+	/* Count the adjacent corridors */
+	if (next_to_corr(y, x) >= 2)
+	{
+		/* Check Vertical */
+		if (cave_have_flag_bold(y - 1, x, FF_WALL) &&
+			cave_have_flag_bold(y + 1, x, FF_WALL))
+		{
+			return (TRUE);
+		}
+
+		/* Check Horizontal */
+		if (cave_have_flag_bold(y, x - 1, FF_WALL) &&
+			cave_have_flag_bold(y, x + 1, FF_WALL))
+		{
+			return (TRUE);
+		}
+	}
+
+	/* No doorway */
+	return (FALSE);
+}
+
+/*!
+* @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
+* @param y 設置を行いたいマスのY座標
+* @param x 設置を行いたいマスのX座標
+* @return なし
+*/
+void try_door(int y, int x)
+{
+	/* Paranoia */
+	if (!in_bounds(y, x)) return;
+
+	/* Ignore walls */
+	if (cave_have_flag_bold(y, x, FF_WALL)) return;
+
+	/* Ignore room grids */
+	if (cave[y][x].info & (CAVE_ROOM)) return;
+
+	/* Occasional door (if allowed) */
+	if ((randint0(100) < dun_tun_jct) && possible_doorway(y, x) && !(d_info[dungeon_type].flags1 & DF1_NO_DOORS))
+	{
+		/* Place a door */
+		place_random_door(y, x, FALSE);
+	}
+}
+
+
+/*!
  * @brief 長方形の空洞を生成する / Make an empty square floor, for the middle of rooms
  * @param x1 長方形の左端X座標(-1)
  * @param x2 長方形の右端X座標(+1)

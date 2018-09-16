@@ -111,74 +111,6 @@ static byte room_build_order[ROOM_T_MAX] = {
 };
 
 /*!
- * @brief 鍵のかかったドアを配置する
- * @param y 配置したいフロアのY座標
- * @param x 配置したいフロアのX座標
- * @return なし
- */
-void place_locked_door(int y, int x)
-{
-	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
-	{
-		place_floor_bold(y, x);
-	}
-	else
-	{
-		set_cave_feat(y, x, feat_locked_door_random((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
-		cave[y][x].info &= ~(CAVE_FLOOR);
-		delete_monster(y, x);
-	}
-}
-
-/*!
- * @brief 隠しドアを配置する
- * @param y 配置したいフロアのY座標
- * @param x 配置したいフロアのX座標
- * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
- * @return なし
- */
-void place_secret_door(int y, int x, int type)
-{
-	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
-	{
-		place_floor_bold(y, x);
-	}
-	else
-	{
-		cave_type *c_ptr = &cave[y][x];
-
-		if (type == DOOR_DEFAULT)
-		{
-			type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-			        one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-			        ((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
-		}
-
-		/* Create secret door */
-		place_closed_door(y, x, type);
-
-		if (type != DOOR_CURTAIN)
-		{
-			/* Hide by inner wall because this is used in rooms only */
-			c_ptr->mimic = feat_wall_inner;
-
-			/* Floor type terrain cannot hide a door */
-			if (feat_supports_los(c_ptr->mimic) && !feat_supports_los(c_ptr->feat))
-			{
-				if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
-				{
-					c_ptr->feat = one_in_(2) ? c_ptr->mimic : floor_type[randint0(100)];
-				}
-				c_ptr->mimic = 0;
-			}
-		}
-
-		c_ptr->info &= ~(CAVE_FLOOR);
-		delete_monster(y, x);
-	}
-}
-
-/*!
  * @brief 1マスだけの部屋を作成し、上下左右いずれか一つに隠しドアを配置する。
  * @param y0 配置したい中心のY座標
  * @param x0 配置したい中心のX座標
@@ -1408,58 +1340,6 @@ void build_lake(int type)
 }
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
-
-/*
- * Routine used by the random vault creators to add a door to a location
- * Note that range checking has to be done in the calling routine.
- *
- * The doors must be INSIDE the allocated region.
- */
-void add_door(int x, int y)
-{
-	/* Need to have a wall in the center square */
-	if (!is_outer_bold(y, x)) return;
-
-	/* look at:
-	 *  x#x
-	 *  .#.
-	 *  x#x
-	 *
-	 *  where x=don't care
-	 *  .=floor, #=wall
-	 */
-
-	if (is_floor_bold(y-1,x) && is_floor_bold(y+1,x) &&
-	    (is_outer_bold(y, x - 1) && is_outer_bold(y, x + 1)))
-	{
-		/* secret door */
-		place_secret_door(y, x, DOOR_DEFAULT);
-
-		/* set boundarys so don't get wide doors */
-		place_solid_bold(y, x - 1);
-		place_solid_bold(y, x + 1);
-	}
-
-
-	/* look at:
-	 *  x#x
-	 *  .#.
-	 *  x#x
-	 *
-	 *  where x = don't care
-	 *  .=floor, #=wall
-	 */
-	if (is_outer_bold(y - 1, x) && is_outer_bold(y + 1, x) &&
-	    is_floor_bold(y,x-1) && is_floor_bold(y,x+1))
-	{
-		/* secret door */
-		place_secret_door(y, x, DOOR_DEFAULT);
-
-		/* set boundarys so don't get wide doors */
-		place_solid_bold(y - 1, x);
-		place_solid_bold(y + 1, x);
-	}
-}
 
 
 /*
