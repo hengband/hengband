@@ -474,12 +474,7 @@ static void preserve_pet(void)
 
 				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
-
-#ifdef JP
-				msg_format("%sは消え去った！", m_name);
-#else
-				msg_format("%^s disappears!", m_name);
-#endif
+				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}
 
 			/* Delete the monster */
@@ -611,11 +606,7 @@ static void place_pet(void)
 			char m_name[80];
 
 			monster_desc(m_name, m_ptr, 0);
-#ifdef JP
-			msg_format("%sとはぐれてしまった。", m_name);
-#else
-			msg_format("You have lost sight of %s.", m_name);
-#endif
+			msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);
 			if (record_named_pet && m_ptr->nickname)
 			{
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
@@ -1369,19 +1360,11 @@ void change_floor(void)
 		{
 			if (!p_ptr->blind)
 			{
-#ifdef JP
-				msg_print("突然階段が塞がれてしまった。");
-#else
-				msg_print("Suddenly the stairs is blocked!");
-#endif
+				msg_print(_("突然階段が塞がれてしまった。", "Suddenly the stairs is blocked!"));
 			}
 			else
 			{
-#ifdef JP
-				msg_print("ゴトゴトと何か音がした。");
-#else
-				msg_print("You hear some noises.");
-#endif
+				msg_print(_("ゴトゴトと何か音がした。", "You hear some noises."));
 			}
 		}
 
@@ -1455,23 +1438,14 @@ void stair_creation(void)
 	    p_ptr->inside_arena || p_ptr->inside_battle)
 	{
 		/* arena or quest */
-#ifdef JP
-		msg_print("効果がありません！");
-#else
-		msg_print("There is no effect!");
-#endif
+		msg_print(_("効果がありません！", "There is no effect!"));
 		return;
 	}
 
 	/* Artifacts resists */
 	if (!cave_valid_bold(p_ptr->y, p_ptr->x))
 	{
-#ifdef JP
-		msg_print("床上のアイテムが呪文を跳ね返した。");
-#else
-		msg_print("The object resists the spell.");
-#endif
-
+		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return;
 	}
 
