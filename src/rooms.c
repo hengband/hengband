@@ -42,6 +42,7 @@
 #include "rooms.h"
 
 #include "rooms-city.h"
+#include "rooms-fractal.h"
 #include "rooms-normal.h"
 #include "rooms-pitnest.h"
 #include "rooms-special.h"
@@ -628,7 +629,7 @@ static void store_height(int x, int y, int val)
  *    small values are good for smooth walls.
  *  size=length of the side of the square cave system.
  */
-static void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug, int cutoff)
+void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug, int cutoff)
 {
 	int xhsize, yhsize, xsize, ysize, maxsize;
 
@@ -985,7 +986,7 @@ static void cave_fill(POSITION y, POSITION x)
 }
 
 
-static bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, bool light, bool room)
+bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, bool light, bool room)
 {
 	int x, y, i, xhsize, yhsize;
 
@@ -1168,69 +1169,6 @@ static bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, b
 	return TRUE;
 }
 
-
-/*!
- * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal cave system
- * @return なし
- */
-static bool build_type9(void)
-{
-	int grd, roug, cutoff;
-	POSITION xsize, ysize, y0, x0;
-
-	bool done, light, room;
-
-	/* get size: note 'Evenness'*/
-	xsize = randint1(22) * 2 + 6;
-	ysize = randint1(15) * 2 + 6;
-
-	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&y0, &x0, ysize + 1, xsize + 1))
-	{
-		/* Limit to the minimum room size, and retry */
-		xsize = 8;
-		ysize = 8;
-
-		/* Find and reserve some space in the dungeon.  Get center of room. */
-		if (!find_space(&y0, &x0, ysize + 1, xsize + 1))
-		{
-			/*
-			 * Still no space?!
-			 * Try normal room
-			 */
-			return build_type1();
-		}
-	}
-
-	light = done = FALSE;
-	room = TRUE;
-
-	if ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS)) light = TRUE;
-
-	while (!done)
-	{
-		/* Note: size must be even or there are rounding problems
-		* This causes the tunnels not to connect properly to the room */
-
-		/* testing values for these parameters feel free to adjust */
-		grd = 1 << (randint0(4));
-
-		/* want average of about 16 */
-		roug = randint1(8) * randint1(4);
-
-		/* about size/2 */
-		cutoff = randint1(xsize / 4) + randint1(ysize / 4) +
-			 randint1(xsize / 4) + randint1(ysize / 4);
-
-		/* make it */
-		generate_hmap(y0, x0, xsize, ysize, grd, roug, cutoff);
-
-		/* Convert to normal format + clean up */
-		done = generate_fracave(y0, x0, xsize, ysize, cutoff, light, room);
-	}
-
-	return TRUE;
-}
 
 #ifdef ALLOW_CAVERNS_AND_LAKES
 /*
