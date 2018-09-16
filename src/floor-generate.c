@@ -1074,11 +1074,7 @@ static void arena_gen(void)
 	{
 		p_ptr->exit_bldg = TRUE;
 		p_ptr->arena_number++;
-#ifdef JP
-		msg_print("相手は欠場した。あなたの不戦勝だ。");
-#else
-		msg_print("The enemy is unable appear. You won by default.");
-#endif
+		msg_print(_("相手は欠場した。あなたの不戦勝だ。", "The enemy is unable appear. You won by default."));
 	}
 
 }

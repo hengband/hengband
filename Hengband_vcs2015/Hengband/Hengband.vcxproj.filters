@@ -43,13 +43,7 @@
     <ClCompile Include="..\..\src\files.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floors.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\flavor.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\generate.c">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\grid.c">
@@ -302,6 +296,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\rooms-fractal.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor-generate.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor-save.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
