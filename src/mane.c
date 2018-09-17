@@ -287,12 +287,15 @@ static bool use_mane(int spell)
 	/* spell code */
 	switch (spell)
 	{
+
 	case MS_SHRIEK:
 		msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
 		aggravate_monsters(0);
 		break;
+
 	case MS_XXX1:
 		break;
+
 	case MS_DISPEL:
 	{
 		MONSTER_IDX m_idx;
@@ -305,96 +308,100 @@ static bool use_mane(int spell)
 		dispel_monster_status(m_idx);
 		break;
 	}
+
 	case MS_ROCKET:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("ロケットを発射した。", "You fire a rocket."));
-		
 			fire_rocket(GF_ROCKET, dir, damage, 2);
 		break;
+
 	case MS_SHOOT:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("矢を放った。", "You fire an arrow."));
-		
 			fire_bolt(GF_ARROW, dir, damage);
 		break;
+
 	case MS_XXX2:
 		break;
+
 	case MS_XXX3:
 		break;
+
 	case MS_XXX4:
 		break;
+
 	case MS_BR_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
-		
 		fire_breath(GF_ACID, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
-		
 		fire_breath(GF_ELEC, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
-		
 		fire_breath(GF_FIRE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
-		
 		fire_breath(GF_COLD, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_POIS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
-		
 		fire_breath(GF_POIS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
-		
 		fire_breath(GF_NETHER, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_LITE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
-		
 		fire_breath(GF_LITE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
-		
 		fire_breath(GF_DARK, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
-		
 		fire_breath(GF_CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_SOUND:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
-		
 		fire_breath(GF_SOUND, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
-		
 		fire_breath(GF_CHAOS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_DISEN:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
-		
 		fire_breath(GF_DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_NEXUS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));

@@ -6826,8 +6826,8 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	rakubadam_m = 0;
 
 	/* Default target of monsterspell is player */
-	monster_target_y=p_ptr->y;
-	monster_target_x=p_ptr->x;
+	monster_target_y = p_ptr->y;
+	monster_target_x = p_ptr->x;
 
 	/* Hack -- Jump to target */
 	if (flg & (PROJECT_JUMP))

@@ -4938,9 +4938,6 @@ void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT
 {
 	POSITION nx, ny;
 
-	/* Unused */
-	mode = mode;
-
 	/* Pick a location */
 	while (TRUE)
 	{
@@ -4954,8 +4951,15 @@ void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT
 		/* Ignore "excessively distant" locations */
 		if ((d > 1) && (distance(y, x, ny, nx) > d)) continue;
 
-		/* Require "line of projection" */
-		if (projectable(y, x, ny, nx)) break;
+		if (mode & PROJECT_LOS)
+		{
+			if(los(y, x, ny, nx)) break;
+		}
+		else
+		{
+			if(projectable(y, x, ny, nx)) break;
+		}
+
 	}
 
 	/* Save the location */

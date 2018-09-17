@@ -110,10 +110,8 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 			while (attempts--)
 			{
-				scatter(&y, &x, p_ptr->y, p_ptr->x, 4, 0);
-
+				scatter(&y, &x, p_ptr->y, p_ptr->x, 4, PROJECT_LOS);
 				if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
-
 				if (!player_bold(y, x)) break;
 			}
 
