@@ -1383,56 +1383,6 @@ void do_cmd_messages(int num_now)
 }
 
 
-
-/*!
- * チートオプションの最大数 / Number of cheating options
- */
-#define CHEAT_MAX 9
-
-/*!
- * チーとオプションの定義テーブル / Cheating options
- */
-static option_type cheat_info[CHEAT_MAX] =
-{
-	{ &cheat_peek,		FALSE,	255,	0x01, 0x00,
-		"cheat_peek",		_("アイテムの生成をのぞき見る", "Peek into object creation")
-	},
-
-	{ &cheat_hear,		FALSE,	255,	0x02, 0x00,
-		"cheat_hear",		_("モンスターの生成をのぞき見る", "Peek into monster creation")
-	},
-
-	{ &cheat_room,		FALSE,	255,	0x04, 0x00,
-		"cheat_room",		_("ダンジョンの生成をのぞき見る", "Peek into dungeon creation")
-	},
-
-	{ &cheat_xtra,		FALSE,	255,	0x08, 0x00,
-		"cheat_xtra",		_("その他の事をのぞき見る", "Peek into something else")
-	},
-
-	{ &cheat_know,		FALSE,	255,	0x10, 0x00,
-		"cheat_know",		_("完全なモンスターの思い出を知る", "Know complete monster info")
-	},
-
-	{ &cheat_live,		FALSE,	255,	0x20, 0x00,
-		"cheat_live",		_("死を回避することを可能にする", "Allow player to avoid death")
-	},
-
-	{ &cheat_save,		FALSE,	255,	0x40, 0x00,
-		"cheat_save",		_("死んだ時セーブするか確認する", "Ask for saving death")
-	},
-
-	{ &cheat_diary_output,	FALSE,	255,	0x80, 0x00,
-		"cheat_diary_output",	_("ウィザードログを日記に出力する", "Output wizard log to diary.")
-	},
-
-	{ &cheat_turn,	FALSE,	255,	0x81, 0x00,
-		"cheat_turn",	_("ゲームメッセージにターン表示を行う", "Put turn to game message.")
-	}
-
-
-};
-
 /*!
  * @brief チートオプションを変更するコマンドのメインルーチン
  * Interact with some options for cheating
@@ -1442,11 +1392,8 @@ static option_type cheat_info[CHEAT_MAX] =
 static void do_cmd_options_cheat(cptr info)
 {
 	char	ch;
-
 	int		i, k = 0, n = CHEAT_MAX;
-
 	char	buf[80];
-
 
 	/* Clear screen */
 	Term_clear();

@@ -93,7 +93,6 @@ extern const cptr color_names[16];
 extern const cptr stat_names[6];
 extern const cptr stat_names_reduced[6];
 extern const cptr window_flag_desc[32];
-extern const option_type option_info[];
 extern const cptr chaos_patrons[MAX_PATRON];
 extern const int chaos_stats[MAX_PATRON];
 extern const int chaos_rewards[MAX_PATRON][20];
@@ -115,6 +114,9 @@ extern const byte feature_action_flags[FF_FLAG_MAX];
 extern const dragonbreath_type dragonbreath_info[];
 extern const activation_type activation_info[];
 extern const cptr artifact_bias_name[MAX_BIAS];
+
+extern const option_type option_info[];
+extern const option_type cheat_info[CHEAT_MAX];
 
 /* variable.c */
 extern const cptr copyright[5];
