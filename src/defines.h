@@ -5618,6 +5618,6 @@ extern int PlayerUID;
 #define COMMAND_ARG_REST_FULL_HEALING -1 /*!<休憩コマンド引数 … HPとMPが全回復するまで */
 
 /*!
-* チートオプションの最大数 / Number of cheating options
-*/
-#define CHEAT_MAX 9
+ * チートオプションの最大数 / Number of cheating options
+ */
+#define CHEAT_MAX 10

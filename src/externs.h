@@ -385,6 +385,7 @@ extern bool cheat_live;
 extern bool cheat_save;
 extern bool cheat_diary_output;
 extern bool cheat_turn;
+extern bool cheat_sight;
 
 extern char record_o_name[MAX_NLEN];
 extern s32b record_turn;

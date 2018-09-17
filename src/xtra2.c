@@ -3640,6 +3640,15 @@ bool target_set(BIT_FLAGS mode)
 			{
 				strcpy(info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"));
 			}
+
+			if (cheat_sight)
+			{
+				char cheatinfo[30];
+				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d",
+					los(p_ptr->y, p_ptr->x, y, x),
+					projectable(p_ptr->y, p_ptr->x, y, x));
+				strcat(info, cheatinfo);
+			}
 			
 			/* Describe and Prompt */
 			while (TRUE){
@@ -3878,6 +3887,15 @@ bool target_set(BIT_FLAGS mode)
 
 			/* Default prompt */
 			strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
+
+			if (cheat_sight)
+			{
+				char cheatinfo[30];
+				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d",
+					los(p_ptr->y, p_ptr->x, y, x),
+					projectable(p_ptr->y, p_ptr->x, y, x));
+				strcat(info, cheatinfo);
+			}
 
 			/* Describe and Prompt (enable "TARGET_LOOK") */
 			while ((query = target_set_aux(y, x, mode | TARGET_LOOK, info)) == 0);
