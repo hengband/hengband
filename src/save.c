@@ -476,6 +476,7 @@ static void wr_options(void)
 
 	if (p_ptr->wizard) c |= 0x0002;
 
+	if (cheat_sight) c |= 0x0040;
 	if (cheat_turn) c |= 0x0080;
 
 	if (cheat_peek) c |= 0x0100;
