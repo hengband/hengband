@@ -116,7 +116,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 			}
 
 			project(0, 0, y, x, damroll(6 + lev / 8, 10), GF_LITE_WEAK,
-				(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
+				(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
 		}
 		ident = TRUE;
 		break;
