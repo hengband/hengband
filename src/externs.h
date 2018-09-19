@@ -117,6 +117,7 @@ extern const cptr artifact_bias_name[MAX_BIAS];
 
 extern const option_type option_info[];
 extern const option_type cheat_info[CHEAT_MAX];
+extern const option_type autosave_info[2];
 
 /* variable.c */
 extern const cptr copyright[5];

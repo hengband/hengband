@@ -434,3 +434,15 @@ const option_type cheat_info[CHEAT_MAX] =
 	}
 };
 
+
+/*!
+* 自動セーブオプションテーブル
+*/
+const option_type autosave_info[2] =
+{
+	{ &autosave_l,      FALSE, 255, 0x01, 0x00,
+	"autosave_l",    _("新しい階に入る度に自動セーブする", "Autosave when entering new levels") },
+
+	{ &autosave_t,      FALSE, 255, 0x02, 0x00,
+	"autosave_t",   _("一定ターン毎に自動セーブする", "Timed autosave") },
+};

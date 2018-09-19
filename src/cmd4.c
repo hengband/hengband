@@ -1512,18 +1512,6 @@ static void do_cmd_options_cheat(cptr info)
 
 
 /*!
- * 自動セーブオプションテーブル
- */
-static option_type autosave_info[2] =
-{
-	{ &autosave_l,      FALSE, 255, 0x01, 0x00,
-	    "autosave_l",    _("新しい階に入る度に自動セーブする", "Autosave when entering new levels") },
-
-	{ &autosave_t,      FALSE, 255, 0x02, 0x00,
-	    "autosave_t",   _("一定ターン毎に自動セーブする", "Timed autosave") },
-};
-
-/*!
  * @brief セーブ頻度ターンの次の値を返す
  * @param current 現在のセーブ頻度ターン値
  * @return 次のセーブ頻度ターン値
