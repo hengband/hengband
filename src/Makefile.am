@@ -5,25 +5,32 @@ AUTOMAKE_OPTIONS = foreign
 bin_PROGRAMS = hengband
 
 hengband_SOURCES = \
-	z-util.c z-virt.c z-form.c z-rand.c z-term.c \
-	variable.c tables.c util.c cave.c \
-	kajitips.h object1.c object2.c monster1.c monster2.c \
-	xtra1.c xtra2.c spells1.c spells2.c \
-	melee1.c melee2.c save.c files.c floors.c\
-	cmd1.c cmd2.c cmd3.c cmd4.c cmd5.c cmd6.c do-spell.c\
-	store.c birth.c load.c \
-	wizard1.c wizard2.c grid.c streams.c rooms.c \
-	generate.c dungeon.c init1.c init2.c \
-	effects.c racial.c inet.c report.c snipe.c hex.c \
-	artifact.c autopick.c mutation.c flavor.c spells3.c \
-	mspells1.c mspells2.c mspells3.c mspells4.c \
-	scores.c mind.c mane.c hissatsu.c \
-	bldg.c obj_kind.c wild.c avatar.c japanese.c \
-	main-cap.c main-gcu.c main-x11.c main-xaw.c main.c chuukei.c \
-	angband.h defines.h externs.h generate.h grid.h \
-	h-basic.h h-config.h h-define.h h-system.h h-type.h \
-	mindtips.h readdib.h rooms.h streams.h init.h \
-	types.h z-config.h z-form.h z-rand.h z-term.h z-util.h z-virt.h
+	artifact.c angband.h autopick.c avatar.c birth.c bldg.c cave.c chest.c chest.h chuukei.c \
+	cmd1.c cmd2.c cmd4.c cmd5.c cmd-activate.c cmd-activate.h cmd-eat.c cmd-eat.h \
+	cmd-item.c cmd-item.h cmd-magiceat.c cmd-magiceat.h cmd-pet.c cmd-pet.h \
+	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
+	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
+	cmd-zapwand.h defines.h dungeon.c effects.c externs.h files.c flavor.c \
+	floor-generate.c floor-save.c gameoption.c gameoption.h gamevalue.h \
+	generate.h grid.c grid.h h-basic.h h-config.h h-define.h hissatsu.c \
+	h-system.h h-type.h inet.c init1.c init2.c init.h japanese.c load.c \
+	main.c main-x11.c main-gcu.c mane.c melee1.c melee2.c mind.c monster1.c \
+	monster2.c mspells1.c mspells2.c mspells3.c mspells4.c mutation.c object1.c \
+	object2.c obj_kind.c racial.c realm-arcane.c \
+	realm-arcane.h realm-chaos.c realm-chaos.h realm-craft.c realm-craft.h \
+	realm-crusade.c realm-crusade.h realm-daemon.c realm-daemon.h realm-death.c \
+	realm-death.h realm-hex.c realm-hex.h realm-hissatsu.c realm-hissatsu.h \
+	realm-life.c realm-life.h realm-nature.c realm-nature.h realm-song.c \
+	realm-song.h realm-sorcery.c realm-sorcery.h realm-trump.c realm-trump.h \
+	report.c rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
+	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
+	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
+	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h snipe.c spells1.c \
+	spells2.c spells3.c spells-summon.c spells-summon.h \
+	store.c streams.c streams.h tables.c trap.c trap.h types.h util.c \
+	variable.c wild.c wizard1.c wizard2.c xtra1.c xtra2.c z-config.h \
+	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
+	z-virt.c z-virt.h 
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-mac.c main-win.c \
