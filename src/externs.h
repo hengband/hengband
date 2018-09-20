@@ -857,11 +857,6 @@ extern void leave_floor(void);
 extern void change_floor(void);
 extern void stair_creation(void);
 
-/* generate.c */
-extern bool place_quest_monsters(void);
-extern void wipe_generate_cave_flags(void);
-extern void clear_cave(void);
-extern void generate_cave(void);
 
 /* init1.c */
 extern byte color_char_to_attr(char c);

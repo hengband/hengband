@@ -98,3 +98,8 @@ struct dun_data
 };
 
 extern dun_data *dun;
+
+extern bool place_quest_monsters(void);
+extern void wipe_generate_cave_flags(void);
+extern void clear_cave(void);
+extern void generate_cave(void);

@@ -41,6 +41,7 @@
  */
 
 #include "angband.h"
+#include "generate.h"
 
 
 /*

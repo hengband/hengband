@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "generate.h"
 #include "grid.h"
 
 
