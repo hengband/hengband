@@ -750,14 +750,8 @@ void carry(bool pickup)
 			delete_object_idx(this_o_idx);
 
 			/* Message */
-#ifdef JP
-		msg_format(" $%ld の価値がある%sを見つけた。",
+			msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."),
 			   (long)value, o_name);
-#else
-			msg_format("You collect %ld gold pieces worth of %s.",
-				   (long)value, o_name);
-#endif
-
 
 			sound(SOUND_SELL);
 
@@ -1192,17 +1186,10 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, BIT
 			sound(SOUND_HIT);
 
 			/* Message */
-#ifdef JP
-			if (backstab) msg_format("あなたは冷酷にも眠っている無力な%sを突き刺した！", m_name);
-			else if (fuiuchi) msg_format("不意を突いて%sに強烈な一撃を喰らわせた！", m_name);
-			else if (stab_fleeing) msg_format("逃げる%sを背中から突き刺した！", m_name);
-			else if (!monk_attack) msg_format("%sを攻撃した。", m_name);
-#else
-			if (backstab) msg_format("You cruelly stab the helpless, sleeping %s!", m_name);
-			else if (fuiuchi) msg_format("You make surprise attack, and hit %s with a powerful blow!", m_name);
-			else if (stab_fleeing) msg_format("You backstab the fleeing %s!",  m_name);
-			else if (!monk_attack) msg_format("You hit %s.", m_name);
-#endif
+			if (backstab) msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), m_name);
+			else if (fuiuchi) msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), m_name);
+			else if (stab_fleeing) msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), m_name);
+			else if (!monk_attack) msg_format(_("%sを攻撃した。", "You hit %s."), m_name);
 
 			/* Hack -- bare hands do one damage */
 			k = 1;
