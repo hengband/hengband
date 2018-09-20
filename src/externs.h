@@ -700,10 +700,8 @@ extern void disturb(int stop_search, int flush_output);
 extern void glow_deep_lava_and_bldg(void);
 
 /* cmd1.c */
-extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
 extern bool test_hit_norm(int chance, int ac, int vis);
 extern HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam);
-extern HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
 extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown);
 extern void search(void);
 extern void py_pickup_aux(int o_idx);
@@ -885,6 +883,8 @@ extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
 /* melee1.c */
 /* melee2.c */
+extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
+extern HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
 extern bool make_attack_normal(MONSTER_IDX m_idx);
 extern void process_monsters(void);
 extern int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type);

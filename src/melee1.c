@@ -15,6 +15,97 @@
 #include "cmd-pet.h"
 
 
+
+ /*!
+ * @brief プレイヤーからモンスターへの打撃命中判定 /
+ * Determine if the player "hits" a monster (normal combat).
+ * @param chance 基本命中値
+ * @param ac モンスターのAC
+ * @param vis 目標を視界に捕らえているならばTRUEを指定
+ * @return 命中と判定された場合TRUEを返す
+ * @note Always miss 5%, always hit 5%, otherwise random.
+ */
+bool test_hit_norm(int chance, int ac, int vis)
+{
+	int k;
+
+	/* Percentile dice */
+	k = randint0(100);
+
+	/* Hack -- Instant miss or hit */
+	if (k < 10) return (k < 5);
+
+	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+		if (one_in_(20)) return (FALSE);
+
+	/* Wimpy attack never hits */
+	if (chance <= 0) return (FALSE);
+
+	/* Penalize invisible targets */
+	if (!vis) chance = (chance + 1) / 2;
+
+	/* Power must defeat armor */
+	if (randint0(chance) < (ac * 3 / 4)) return (FALSE);
+
+	/* Assume hit */
+	return (TRUE);
+}
+
+
+/*!
+* @brief プレイヤーからモンスターへの打撃クリティカル判定 /
+* Critical hits (by player) Factor in weapon weight, total plusses, player melee bonus
+* @param weight 矢弾の重量
+* @param plus 武器の命中修正
+* @param dam 現在算出中のダメージ値
+* @param meichuu 打撃の基本命中力
+* @param mode オプションフラグ
+* @return クリティカル修正が入ったダメージ値
+*/
+HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode)
+{
+	int i, k;
+
+	/* Extract "blow" power */
+	i = (weight + (meichuu * 3 + plus * 5) + p_ptr->skill_thn);
+
+	/* Chance */
+	if ((randint1((p_ptr->pclass == CLASS_NINJA) ? 4444 : 5000) <= i) || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN))
+	{
+		k = weight + randint1(650);
+		if ((mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN)) k += randint1(650);
+
+		if (k < 400)
+		{
+			msg_print(_("手ごたえがあった！", "It was a good hit!"));
+
+			dam = 2 * dam + 5;
+		}
+		else if (k < 700)
+		{
+			msg_print(_("かなりの手ごたえがあった！", "It was a great hit!"));
+			dam = 2 * dam + 10;
+		}
+		else if (k < 900)
+		{
+			msg_print(_("会心の一撃だ！", "It was a superb hit!"));
+			dam = 3 * dam + 15;
+		}
+		else if (k < 1300)
+		{
+			msg_print(_("最高の会心の一撃だ！", "It was a *GREAT* hit!"));
+			dam = 3 * dam + 20;
+		}
+		else
+		{
+			msg_print(_("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!"));
+			dam = ((7 * dam) / 2) + 25;
+		}
+	}
+
+	return (dam);
+}
+
 /*!
  * @brief モンスター打撃のクリティカルランクを返す /
  * Critical blow. All hits that do 95% of total possible damage,
