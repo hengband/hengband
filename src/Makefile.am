@@ -25,8 +25,8 @@ hengband_SOURCES = \
 	report.c rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
 	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
-	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h snipe.c spells1.c \
-	spells2.c spells3.c spells-summon.c spells-summon.h \
+	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h shoot.c snipe.c \
+	spells1.c spells2.c spells3.c spells-summon.c spells-summon.h \
 	store.c streams.c streams.h tables.c trap.c trap.h types.h util.c \
 	variable.c wild.c wizard1.c wizard2.c xtra1.c xtra2.c z-config.h \
 	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \

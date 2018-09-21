@@ -304,6 +304,9 @@
     <ClCompile Include="..\..\src\floor-save.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\shoot.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
