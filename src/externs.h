@@ -706,7 +706,6 @@ extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_F
 extern void search(void);
 extern void py_pickup_aux(int o_idx);
 extern void carry(bool pickup);
-extern bool py_attack(int y, int x, BIT_FLAGS mode);
 extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
 extern bool move_player_effect(POSITION ny, POSITION nx, u32b mpe_mode);
@@ -880,6 +879,7 @@ extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 /* melee2.c */
 extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
 extern HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
+extern bool py_attack(int y, int x, BIT_FLAGS mode);
 extern bool make_attack_normal(MONSTER_IDX m_idx);
 extern void process_monsters(void);
 extern int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type);
