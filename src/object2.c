@@ -8106,6 +8106,7 @@ static void add_essence(ESSENCE_IDX mode)
 	char o_name[MAX_NLEN];
 	int use_essence;
 	essence_type *es_ptr;
+	bool able[22] = { 0 };
 
 	int menu_line = (use_menu ? 1 : 0);
 
@@ -8138,7 +8139,6 @@ static void add_essence(ESSENCE_IDX mode)
 	choice = (always_show_list || use_menu) ? ESCAPE:1;
 	while (!flag)
 	{
-		bool able[22] = {0};
 		if( choice==ESCAPE ) choice = ' '; 
 		else if( !get_com(out_val, &choice, FALSE) )break; 
 
