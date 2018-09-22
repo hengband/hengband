@@ -24,17 +24,10 @@ static int damage;
 static void mane_info(char *p, int power, HIT_POINT dam)
 {
 	int plev = p_ptr->lev;
-#ifdef JP
-	cptr s_dam = "損傷:";
-	cptr s_dur = "期間:";
-	cptr s_range = "範囲:";
-	cptr s_heal = "回復:";
-#else
-	cptr s_dam = "dam ";
-	cptr s_dur = "dur ";
-	cptr s_range = "range ";
-	cptr s_heal = "heal ";
-#endif
+	cptr s_dam = _("損傷:", "dam ");
+	cptr s_dur = _("期間:", "dur ");
+	cptr s_range = _("範囲:", "range ");
+	cptr s_heal = _("回復:", "heal ");
 
 	strcpy(p, "");
 
@@ -405,63 +398,68 @@ static bool use_mane(int spell)
 	case MS_BR_NEXUS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
-		
-		fire_breath(GF_NEXUS, dir, damage, (plev > 35 ? 3 : 2));
+			fire_breath(GF_NEXUS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_TIME:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
-		
 		fire_breath(GF_TIME, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_INERTIA:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
-		
-		fire_breath(GF_INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
+			fire_breath(GF_INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_GRAVITY:
 		if (!get_aim_dir(&dir)) return FALSE;
-		else msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
-		
+		else msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));		
 		fire_breath(GF_GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_SHARDS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
-		
 		fire_breath(GF_SHARDS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_PLASMA:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
 		
 		fire_breath(GF_PLASMA, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_FORCE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
 		
 		fire_breath(GF_FORCE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BR_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
 		
 		fire_breath(GF_MANA, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BALL_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
 		
 			fire_ball(GF_NUKE, dir, damage, 2);
 		break;
+
 	case MS_BR_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
 		
 		fire_breath(GF_NUKE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
+
 	case MS_BALL_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("純ログルスを放った。", "You invoke a raw Logrus."));
@@ -764,15 +762,18 @@ static bool use_mane(int spell)
 		else teleport_level(target_m_idx);
 		break;
 	}
+
 	case MS_PSY_SPEAR:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
 		(void)fire_beam(GF_PSY_SPEAR, dir, damage);
 		break;
+
 	case MS_DARKNESS:
 		msg_print(_("暗闇の中で手を振った。", "You gesture in shadow."));
 		(void)unlite_area(10, 3);
 		break;
+
 	case MS_MAKE_TRAP:
 		if (!target_set(TARGET_KILL)) return FALSE;
 		msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackles evilly."));

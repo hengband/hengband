@@ -426,7 +426,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		else if (!dun_level)
 			note_level = _("地上:", "Surface:");
 		else if (q_idx && (is_fixed_quest_idx(q_idx)
-		         && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
+			&& !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 			note_level = _("クエスト:", "Quest:");
 		else
 		{

@@ -3606,6 +3606,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			/* Nope */
 			return FALSE;
 		}
+
 	}
 
 	/* Get local object */
@@ -3645,8 +3646,8 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	if (shuriken >= 0)
 	{
-		ty = randint0(101)-50+p_ptr->y;
-		tx = randint0(101)-50+p_ptr->x;
+		ty = randint0(101) - 50 + p_ptr->y;
+		tx = randint0(101) - 50 + p_ptr->x;
 	}
 	else
 	{

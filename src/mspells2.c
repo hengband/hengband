@@ -703,8 +703,8 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 	can_remember = is_original_ap_and_seen(m_ptr);
 
-    dam = monspell_to_monster(thrown_spell, y, x, m_idx, t_idx);
-    if (dam < 0)return FALSE;
+	dam = monspell_to_monster(thrown_spell, y, x, m_idx, t_idx);
+	if (dam < 0) return FALSE;
 
 	if (m_ptr->ml && maneable && !world_monster && !p_ptr->blind && (p_ptr->pclass == CLASS_IMITATOR))
 	{
