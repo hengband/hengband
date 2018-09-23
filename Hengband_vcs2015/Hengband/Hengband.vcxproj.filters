@@ -307,6 +307,9 @@
     <ClCompile Include="..\..\src\shoot.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\history.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -485,6 +488,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rooms-fractal.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\history.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
