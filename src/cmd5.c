@@ -756,7 +756,6 @@ void do_cmd_study(void)
 	else
 	{
 		int k = 0;
-
 		int gift = -1;
 
 		/* Extract spells */
@@ -790,7 +789,6 @@ void do_cmd_study(void)
 		/* Abort */
 		return;
 	}
-
 
 	if (increment) spell += increment;
 

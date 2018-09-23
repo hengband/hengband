@@ -194,12 +194,9 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
  */
 void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, IDX who)
 {
-	monster_type	*m_ptr = &m_list[m_idx];
-
-	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
-
+	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	char m_name[160];
-
 	bool seen = is_seen(m_ptr);
 
 	/* Can the player be aware of this attack? */
@@ -237,7 +234,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 			dam /= 100;
 			if((dam == 0) && one_in_(3)) dam = 1;
 		}
-		if (dam==0)
+		if(dam == 0)
 		{
 			if (seen)
 			{
@@ -2239,7 +2236,9 @@ static void process_monster(MONSTER_IDX m_idx)
 	}
 
 	if (m_ptr->r_idx == MON_SHURYUUDAN)
+	{
 		mon_take_hit_mon(m_idx, 1, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+	}
 
 	if ((is_pet(m_ptr) || is_friendly(m_ptr)) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && !p_ptr->inside_battle)
 	{

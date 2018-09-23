@@ -4857,21 +4857,13 @@ static bool get_stat_limits(void)
 		/* Above 18 */
 		if (m > 18)
 		{
-#ifdef JP
 			sprintf(cur, "18/%02d", (m - 18));
-#else
-			sprintf(cur, "18/%02d", (m - 18));
-#endif
 		}
 		
 		/* From 3 to 18 */
 		else
 		{
-#ifdef JP
 			sprintf(cur, "%2d", m);
-#else
-			sprintf(cur, "%2d", m);
-#endif
 		}
 
 		/* Obtain the current stat */
@@ -4880,21 +4872,13 @@ static bool get_stat_limits(void)
 		/* Above 18 */
 		if (m > 18)
 		{
-#ifdef JP
 			sprintf(inp, "18/%02d", (m - 18));
-#else
-			sprintf(inp, "18/%02d", (m - 18));
-#endif
 		}
 		
 		/* From 3 to 18 */
 		else
 		{
-#ifdef JP
 			sprintf(inp, "%2d", m);
-#else
-			sprintf(inp, "%2d", m);
-#endif
 		}
 
 		/* Prepare a prompt */
@@ -4916,22 +4900,15 @@ static bool get_stat_limits(void)
 		{
 			if(os == 6)
 			{
-#ifdef JP
-				c_put_str(TERM_WHITE, "決定する", 21, 35);
-#else
-				c_put_str(TERM_WHITE, "Accept", 21, 35);
-#endif
+				c_put_str(TERM_WHITE, _("決定する", "Accept"), 21, 35);
 			}
 			else if(os < 6)
+			{
 				c_put_str(TERM_WHITE, cur, 14 + os, 10);
-			
+			}
 			if(cs == 6)
 			{
-#ifdef JP
-				c_put_str(TERM_YELLOW, "決定する", 21, 35);
-#else
-				c_put_str(TERM_YELLOW, "Accept", 21, 35);
-#endif
+				c_put_str(TERM_YELLOW, _("決定する", "Accept"), 21, 35);
 			}
 			else
 			{
@@ -4944,21 +4921,13 @@ static bool get_stat_limits(void)
 				/* Above 18 */
 				if (m > 18)
 				{
-#ifdef JP
 					sprintf(inp, "18/%02d", (m - 18));
-#else
-					sprintf(inp, "18/%02d", (m - 18));
-#endif
 				}
 				
 				/* From 3 to 18 */
 				else
 				{
-#ifdef JP
 					sprintf(inp, "%2d", m);
-#else
-					sprintf(inp, "%2d", m);
-#endif
 				}
 				
 				/* Prepare a prompt */
@@ -5091,17 +5060,10 @@ static bool get_chara_limits(void)
 	char c;
 	char buf[80], cur[80];
 	cptr itemname[] = {
-#ifdef JP
-		"年齢",
-		"身長(インチ)",
-		"体重(ポンド)",
-		"社会的地位"
-#else
-		"age",
-		"height",
-		"weight",
-		"social class"
-#endif
+		_("年齢", "age"),
+		_("身長(インチ)", "height"),
+		_("体重(ポンド)", "weight"),
+		_("社会的地位", "social class")
 	};
 
 	/* Clean up */
@@ -5203,11 +5165,8 @@ static bool get_chara_limits(void)
 		/* Move Cursol */
 		if (cs != os)
 		{
-#ifdef JP
-			const char accept[] = "決定する";
-#else
-			const char accept[] = "Accept";
-#endif
+			const char accept[] = _("決定する", "Accept");
+
 			if(os == MAXITEMS)
 			{
 				c_put_str(TERM_WHITE, accept, 19, 35);
