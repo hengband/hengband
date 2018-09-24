@@ -21,6 +21,7 @@
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
 
+#include "object-hook.h"
 
 
 /*!
@@ -172,53 +173,6 @@ void do_cmd_equip(void)
 }
 
 
-/*!
- * @brief オブジェクトを防具として装備できるかの判定 / The "wearable" tester
- * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
- * @return オブジェクトが防具として装備できるならTRUEを返す。
- */
-static bool item_tester_hook_wear(object_type *o_ptr)
-{
-	if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI))
-		if (p_ptr->psex == SEX_MALE) return FALSE;
-
-	/* Check for a usable slot */
-	if (wield_slot(o_ptr) >= INVEN_RARM) return (TRUE);
-
-	/* Assume not wearable */
-	return (FALSE);
-}
-
-
-/*!
- * @brief オブジェクトがどちらの手にも装備できる武器かどうかの判定
- * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
- * @return 左右両方の手で装備できるならばTRUEを返す。
- */
-static bool item_tester_hook_mochikae(object_type *o_ptr)
-{
-	/* Check for a usable slot */
-	if (((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) ||
-	    (o_ptr->tval == TV_SHIELD) || (o_ptr->tval == TV_CAPTURE) ||
-	    (o_ptr->tval == TV_CARD)) return (TRUE);
-
-	/* Assume not wearable */
-	return (FALSE);
-}
-
-/*!
- * @brief オブジェクトが右手か左手に装備できる武器かどうかの判定
- * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
- * @return 右手か左手の武器として装備できるならばTRUEを返す。
- */
-static bool item_tester_hook_melee_weapon(object_type *o_ptr)
-{
-	/* Check for a usable slot */
-	if ((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD))return (TRUE);
-
-	/* Assume not wearable */
-	return (FALSE);
-}
 
 
 bool select_ring_slot = FALSE;
@@ -2059,62 +2013,6 @@ void do_cmd_query_symbol(void)
 	/* Re-display the identity */
 	prt(buf, 0, 0);
 }
-
-
-/*!
-* @brief オブジェクトをプレイヤーが簡易使用コマンドで利用できるかを判定する /
-* Hook to determine if an object is useable
-* @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
-* @return 利用可能ならばTRUEを返す
-*/
-static bool item_tester_hook_use(object_type *o_ptr)
-{
-	u32b flgs[TR_FLAG_SIZE];
-
-	/* Ammo */
-	if (o_ptr->tval == p_ptr->tval_ammo)
-		return (TRUE);
-
-	/* Useable object */
-	switch (o_ptr->tval)
-	{
-	case TV_SPIKE:
-	case TV_STAFF:
-	case TV_WAND:
-	case TV_ROD:
-	case TV_SCROLL:
-	case TV_POTION:
-	case TV_FOOD:
-	{
-		return (TRUE);
-	}
-
-	default:
-	{
-		int i;
-
-		/* Not known */
-		if (!object_is_known(o_ptr)) return (FALSE);
-
-		/* HACK - only items from the equipment can be activated */
-		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
-		{
-			if (&inventory[i] == o_ptr)
-			{
-				/* Extract the flags */
-				object_flags(o_ptr, flgs);
-
-				/* Check activation flag */
-				if (have_flag(flgs, TR_ACTIVATE)) return (TRUE);
-			}
-		}
-	}
-	}
-
-	/* Assume not */
-	return (FALSE);
-}
-
 
 /*!
  * @brief アイテムを汎用的に「使う」コマンドのメインルーチン /

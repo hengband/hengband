@@ -12,6 +12,7 @@
  */
 
 #include "angband.h"
+#include "object-hook.h"
 
 static void one_sustain(object_type *o_ptr);
 
@@ -7223,34 +7224,6 @@ bool process_warning(int xx, int yy)
 
 	return TRUE;
 }
-
-/*!
- * @brief エッセンスの付加可能な武器や矢弾かを返す
- * @param o_ptr チェックしたいオブジェクトの構造体参照ポインタ
- * @return エッセンスの付加可能な武器か矢弾ならばTRUEを返す。
- */
-static bool item_tester_hook_melee_ammo(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_HAFTED:
-		case TV_POLEARM:
-		case TV_DIGGING:
-		case TV_BOLT:
-		case TV_ARROW:
-		case TV_SHOT:
-		{
-			return (TRUE);
-		}
-		case TV_SWORD:
-		{
-			if (o_ptr->sval != SV_DOKUBARI) return (TRUE);
-		}
-	}
-
-	return (FALSE);
-}
-
 
 /*!
  * エッセンス情報の構造体 / A structure for smithing

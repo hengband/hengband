@@ -1161,7 +1161,6 @@ extern bool charm_animal(int dir, int plev);
 extern bool mindblast_monsters(HIT_POINT dam);
 extern s32b flag_cost(object_type *o_ptr, int plusses);
 extern bool teleport_swap(int dir);
-extern bool item_tester_hook_recharge(object_type *o_ptr);
 extern bool project_hook(int typ, int dir, HIT_POINT dam, BIT_FLAGS flg);
 extern bool project_hack(int typ, HIT_POINT dam);
 extern bool eat_magic(int power);

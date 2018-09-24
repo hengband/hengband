@@ -8,6 +8,7 @@
 
 
 #include "angband.h"
+#include "object-hook.h"
 
 /*!
  * @brief 食料を食べるコマンドのサブルーチン
@@ -500,48 +501,6 @@ void do_cmd_eat_food_aux(int item)
 		floor_item_describe(0 - item);
 		floor_item_optimize(0 - item);
 	}
-}
-
-
-/*!
- * @brief オブジェクトをプレイヤーが食べることができるかを判定する /
- * Hook to determine if an object is eatable
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return 食べることが可能ならばTRUEを返す
- */
-static bool item_tester_hook_eatable(object_type *o_ptr)
-{
-	if (o_ptr->tval == TV_FOOD) return TRUE;
-
-#if 0
-	if (prace_is_(RACE_SKELETON))
-	{
-		if (o_ptr->tval == TV_SKELETON ||
-			(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
-			return TRUE;
-	}
-	else
-#endif
-
-		if (prace_is_(RACE_SKELETON) ||
-			prace_is_(RACE_GOLEM) ||
-			prace_is_(RACE_ZOMBIE) ||
-			prace_is_(RACE_SPECTRE))
-		{
-			if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
-				return TRUE;
-		}
-		else if (prace_is_(RACE_DEMON) ||
-			(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON))
-		{
-			if (o_ptr->tval == TV_CORPSE &&
-				o_ptr->sval == SV_CORPSE &&
-				my_strchr("pht", r_info[o_ptr->pval].d_char))
-				return TRUE;
-		}
-
-	/* Assume not */
-	return (FALSE);
 }
 
 

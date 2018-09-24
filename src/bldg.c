@@ -13,7 +13,7 @@
 */
 
 #include "angband.h"
-
+#include "object-hook.h"
 
 /*!
  * ループ中で / hack as in leave_store in store.c
@@ -2812,53 +2812,6 @@ static void list_weapon(object_type *o_ptr, int row, int col)
 	put_str(tmp_str, row+7, col+1);
 }
 
-
-/*!
- * @brief 武器匠の「武器」鑑定対象になるかを判定する。/ Hook to specify "weapon"
- * @param o_ptr オブジェクトの構造体の参照ポインタ。
- * @return 対象になるならTRUEを返す。
- */
-static bool item_tester_hook_melee_weapon(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_HAFTED:
-		case TV_POLEARM:
-		case TV_DIGGING:
-		{
-			return (TRUE);
-		}
-		case TV_SWORD:
-		{
-			if (o_ptr->sval != SV_DOKUBARI) return (TRUE);
-		}
-	}
-
-	return (FALSE);
-}
-
-
-/*!
- * @brief 武器匠の「矢弾」鑑定対象になるかを判定する。/ Hook to specify "weapon"
- * @param o_ptr オブジェクトの構造体の参照ポインタ。
- * @return 対象になるならTRUEを返す。
- */
-static bool item_tester_hook_ammo(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-		case TV_SHOT:
-		case TV_ARROW:
-		case TV_BOLT:
-		{
-			return (TRUE);
-		}
-	}
-
-	return (FALSE);
-}
-
-
 /*!
  * @brief 武器匠鑑定１回分（オブジェクト２種）の処理。/ Compare weapons
  * @details 
@@ -2895,7 +2848,7 @@ static int compare_weapons(int bcost)
 
 	/* Only compare melee weapons */
 	item_tester_no_ryoute = TRUE;
-	item_tester_hook = item_tester_hook_melee_weapon;
+	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
 	/* Get the first weapon */
 	q = _("第一の武器は？", "What is your first weapon? ");
@@ -2919,7 +2872,7 @@ static int compare_weapons(int bcost)
 
 		/* Only compare melee weapons */
 		item_tester_no_ryoute = TRUE;
-		item_tester_hook = item_tester_hook_melee_weapon;
+		item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
 		/* Hack -- prevent "icky" message */
 		character_xtra = TRUE;
@@ -3101,24 +3054,6 @@ static bool eval_ac(int iAC)
 }
 
 
-/*!
- * @brief 修復対象となる壊れた武器かを判定する。 / Hook to specify "broken weapon"
- * @param o_ptr オブジェクトの構造体の参照ポインタ。
- * @return 修復対象になるならTRUEを返す。
- */
-static bool item_tester_hook_broken_weapon(object_type *o_ptr)
-{
- 	if (o_ptr->tval != TV_SWORD) return FALSE;
-
-	switch (o_ptr->sval)
-	{
-	case SV_BROKEN_DAGGER:
-	case SV_BROKEN_SWORD:
-		return TRUE;
-	}
-
-	return FALSE;
-}
 
 /*!
  * @brief 修復材料のオブジェクトから修復対象に特性を移植する。
@@ -3235,7 +3170,7 @@ static int repair_broken_weapon_aux(int bcost)
 	s = _("材料となる武器がありません。", "You have no material to repair.");
 
 	/* Only forge broken weapons */
-	item_tester_hook = item_tester_hook_melee_weapon;
+	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
 	if (!get_item(&mater, q, s, (USE_INVEN | USE_EQUIP))) return (0);
 	if (mater == item)

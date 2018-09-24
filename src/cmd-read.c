@@ -6,8 +6,8 @@
  * cmd6.cより分離。
  */
 
-
 #include "angband.h"
+#include "object-hook.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン
@@ -606,20 +606,6 @@ void do_cmd_read_scroll_aux(int item, bool known)
 		floor_item_describe(0 - item);
 		floor_item_optimize(0 - item);
 	}
-}
-
-/*!
- * @brief オブジェクトをプレイヤーが読むことができるかを判定する /
- * Hook to determine if an object is readable
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return 読むことが可能ならばTRUEを返す
- */
-static bool item_tester_hook_readable(object_type *o_ptr)
-{
-	if ((o_ptr->tval==TV_SCROLL) || (o_ptr->tval==TV_PARCHMENT) || (o_ptr->name1 == ART_GHB) || (o_ptr->name1 == ART_POWER)) return (TRUE);
-
-	/* Assume not */
-	return (FALSE);
 }
 
 /*!

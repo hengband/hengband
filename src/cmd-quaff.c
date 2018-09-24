@@ -6,9 +6,9 @@
  * cmd6.cより分離。
  */
 
-
 #include "angband.h"
 #include "selfinfo.h"
+#include "object-hook.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /
@@ -695,24 +695,6 @@ void do_cmd_quaff_potion_aux(int item)
 	}
 }
 
-
-/*!
- * @brief オブジェクトをプレイヤーが飲むことができるかを判定する /
- * Hook to determine if an object can be quaffed
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return 飲むことが可能ならばTRUEを返す
- */
-static bool item_tester_hook_quaff(object_type *o_ptr)
-{
-	if (o_ptr->tval == TV_POTION) return TRUE;
-
-	if (prace_is_(RACE_ANDROID))
-	{
-		if (o_ptr->tval == TV_FLASK && o_ptr->sval == SV_FLASK_OIL)
-			return TRUE;
-	}
-	return FALSE;
-}
 
 
 /*!

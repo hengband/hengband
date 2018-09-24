@@ -12,7 +12,7 @@
 
 #include "angband.h"
 #include "chest.h"
-
+#include "object-hook.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理
@@ -3476,19 +3476,6 @@ void do_cmd_fire(void)
 		(void)set_slow(p_ptr->slow + randint0(7) + 7, FALSE);
 		(void)set_stun(p_ptr->stun + randint1(25));
 	}
-}
-
-/*!
- * @brief オブジェクトが投射可能な武器かどうかを返す。
- * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
- * @return 投射可能な武器ならばTRUE
- */
-static bool item_tester_hook_boomerang(object_type *o_ptr)
-{
-	if ((o_ptr->tval==TV_DIGGING) || (o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM) || (o_ptr->tval == TV_HAFTED)) return (TRUE);
-
-	/* Assume not */
-	return (FALSE);
 }
 
 

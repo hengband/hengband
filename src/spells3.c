@@ -12,6 +12,7 @@
  */
 
 #include "angband.h"
+#include "object-hook.h"
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
 #define MAX_TRIES 100
@@ -2369,24 +2370,6 @@ msg_format("%s は明るく輝いた！",
 
 
 /*!
- * @brief アイテムが並の価値のアイテムかどうか判定する /
- * Check if an object is nameless weapon or armour
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 並ならばTRUEを返す
- */
-static bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
-{
-	/* Require weapon or armour */
-	if (!object_is_weapon_armour_ammo(o_ptr)) return FALSE;
-	
-	/* Require nameless object if the object is well known */
-	if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
-		return FALSE;
-
-	return TRUE;
-}
-
-/*!
  * @brief アーティファクト生成の巻物処理 /
  * @return 生成が実際に試みられたらTRUEを返す
  */
@@ -2579,28 +2562,6 @@ bool identify_item(object_type *o_ptr)
 }
 
 /*!
- * @brief アイテムが鑑定済みかを判定する /
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 実際に鑑定済みならばTRUEを返す
- */
-static bool item_tester_hook_identify(object_type *o_ptr)
-{
-	return (bool)!object_is_known(o_ptr);
-}
-
-/*!
- * @brief アイテムが鑑定済みの武器防具かを判定する /
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 実際に鑑定済みならばTRUEを返す
- */
-static bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
-{
-	if (object_is_known(o_ptr))
-		return FALSE;
-	return object_is_weapon_armour_ammo(o_ptr);
-}
-
-/*!
  * @brief アイテム鑑定のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
@@ -2749,28 +2710,6 @@ bool mundane_spell(bool only_equip)
 }
 
 /*!
- * @brief アイテムが*鑑定*済みかを判定する /
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 実際に鑑定済みならばTRUEを返す
- */
-static bool item_tester_hook_identify_fully(object_type *o_ptr)
-{
-	return (bool)(!object_is_known(o_ptr) || !(o_ptr->ident & IDENT_MENTAL));
-}
-
-/*!
- * @brief アイテムが*鑑定*済みの武器防具かを判定する /
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 実際に鑑定済みならばTRUEを返す
- */
-static bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
-{
-	if (!item_tester_hook_identify_fully(o_ptr))
-		return FALSE;
-	return object_is_weapon_armour_ammo(o_ptr);
-}
-
-/*!
  * @brief アイテム*鑑定*のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
@@ -2860,27 +2799,6 @@ bool identify_fully(bool only_equip)
 	return (TRUE);
 }
 
-
-/*!
- * @brief 魔力充填が可能なアイテムかどうか判定する /
- * Hook for "get_item()".  Determine if something is rechargable.
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 魔力充填が可能ならばTRUEを返す
- */
-bool item_tester_hook_recharge(object_type *o_ptr)
-{
-	/* Recharge staffs */
-	if (o_ptr->tval == TV_STAFF) return (TRUE);
-
-	/* Recharge wands */
-	if (o_ptr->tval == TV_WAND) return (TRUE);
-
-	/* Hack -- Recharge rods */
-	if (o_ptr->tval == TV_ROD) return (TRUE);
-
-	/* Nope */
-	return (FALSE);
-}
 
 
 /*!

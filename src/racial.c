@@ -15,20 +15,7 @@
 #include "cmd-zapwand.h"
 #include "cmd-pet.h"
 
-/*!
- * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/
- * Hook to determine if an object is contertible in an arrow/bolt
- * @param o_ptr オブジェクトの構造体の参照ポインタ。
- * @return 材料にできるならTRUEを返す
- */
-static bool item_tester_hook_convertible(object_type *o_ptr)
-{
-	if((o_ptr->tval==TV_JUNK) || (o_ptr->tval==TV_SKELETON)) return TRUE;
-
-	if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON)) return TRUE;
-	/* Assume not */
-	return (FALSE);
-}
+#include "object-hook.h"
 
 /*!
  * @brief レイシャル「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.

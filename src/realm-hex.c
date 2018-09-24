@@ -18,39 +18,9 @@
 #include "angband.h"
 #include "cmd-spell.h"
 #include "cmd-quaff.h"
+#include "object-hook.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
-
- /*!
- * @brief 呪術領域の武器呪縛の対象にできる武器かどうかを返す。 / An "item_tester_hook" for offer
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @return 呪縛可能な武器ならばTRUEを返す
- */
-static bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
-{
-	switch (o_ptr->tval)
-	{
-	case TV_SWORD:
-	case TV_HAFTED:
-	case TV_POLEARM:
-	case TV_DIGGING:
-	{
-		return (TRUE);
-	}
-	}
-
-	return (FALSE);
-}
-
-/*!
-* @brief 呪術領域の各処理に使える呪われた装備かどうかを返す。 / An "item_tester_hook" for offer
-* @param o_ptr オブジェクト構造体の参照ポインタ
-* @return 使える装備ならばTRUEを返す
-*/
-static bool item_tester_hook_cursed(object_type *o_ptr)
-{
-	return (bool)(object_is_cursed(o_ptr));
-}
 
 /*!
  * @brief プレイヤーが詠唱中の全呪術を停止する

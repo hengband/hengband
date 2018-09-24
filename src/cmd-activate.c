@@ -8,6 +8,7 @@
 
 #include "angband.h"
 #include "cmd-activate.h"
+#include "object-hook.h"
 
 /*!
 * @brief ペット入りモンスターボールをソートするための比較関数
@@ -47,28 +48,6 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
 	return w1 <= w2;
 }
 
-/*!
-* @brief オブジェクトをプレイヤーが魔道具として発動できるかを判定する /
-* Hook to determine if an object is activatable
-* @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
-* @return 魔道具として発動可能ならばTRUEを返す
-*/
-static bool item_tester_hook_activate(object_type *o_ptr)
-{
-	u32b flgs[TR_FLAG_SIZE];
-
-	/* Not known */
-	if (!object_is_known(o_ptr)) return (FALSE);
-
-	/* Extract the flags */
-	object_flags(o_ptr, flgs);
-
-	/* Check activation flag */
-	if (have_flag(flgs, TR_ACTIVATE)) return (TRUE);
-
-	/* Assume not */
-	return (FALSE);
-}
 
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /

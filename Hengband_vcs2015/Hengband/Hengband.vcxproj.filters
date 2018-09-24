@@ -313,6 +313,9 @@
     <ClCompile Include="..\..\src\monster-hook.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-hook.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -497,6 +500,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-hook.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
