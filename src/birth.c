@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "history.h"
+#include "monster-hook.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 
@@ -1634,12 +1635,7 @@ static void birth_put_stats(void)
 			/* Never happened */
 			else
 			{
-#ifdef JP
-				c_put_str(TERM_RED, "(なし)", 3+i, col+13);
-#else
-				c_put_str(TERM_RED, "(NONE)", 3+i, col+13);
-#endif
-
+				c_put_str(TERM_RED, _("(なし)", "(NONE)"), 3+i, col+13);
 			}
 		}
 	}
@@ -1871,31 +1867,6 @@ static void player_wipe_without_name(void)
 
 	/* Data migration */
 	memcpy(p_ptr->name, tmp.name, sizeof(tmp.name));
-}
-
-
-/*!
- * @brief モンスターがクエストの討伐対象に成り得るかを返す / Hook function for quest monsters
- * @param r_idx モンスターＩＤ
- * @return 討伐対象にできるならTRUEを返す。
- */
-static bool mon_hook_quest(MONRACE_IDX r_idx)
-{
-	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Random quests are in the dungeon */
-	if (r_ptr->flags8 & RF8_WILD_ONLY) return FALSE;
-
-	/* No random quests for aquatic monsters */
-	if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
-
-	/* No random quests for multiplying monsters */
-	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
-
-	/* No quests to kill friendly monsters */
-	if (r_ptr->flags7 & RF7_FRIENDLY) return FALSE;
-
-	return TRUE;
 }
 
 

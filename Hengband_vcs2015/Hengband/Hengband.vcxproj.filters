@@ -310,6 +310,9 @@
     <ClCompile Include="..\..\src\history.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-hook.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -491,6 +494,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\history.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-hook.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

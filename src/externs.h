@@ -905,7 +905,6 @@ extern void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern void display_roff(MONRACE_IDX r_idx);
 extern void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(byte attr, cptr str));
 extern void create_name(int type, char *name);
-extern bool mon_hook_dungeon(MONRACE_IDX r_idx);
 
 extern monster_hook_type get_monster_hook(void);
 extern monster_hook_type get_monster_hook2(int y, int x);

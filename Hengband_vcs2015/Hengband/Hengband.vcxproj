@@ -147,6 +147,7 @@
     <ClCompile Include="..\..\src\floor-generate.c" />
     <ClCompile Include="..\..\src\floor-save.c" />
     <ClCompile Include="..\..\src\history.c" />
+    <ClCompile Include="..\..\src\monster-hook.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
     <ClCompile Include="..\..\src\realm-crusade.c" />
     <ClCompile Include="..\..\src\realm-daemon.c" />
@@ -266,6 +267,7 @@
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\kajitips.h" />
     <ClInclude Include="..\..\src\mindtips.h" />
+    <ClInclude Include="..\..\src\monster-hook.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\realm-arcane.h" />
     <ClInclude Include="..\..\src\realm-chaos.h" />

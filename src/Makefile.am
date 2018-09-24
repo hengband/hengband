@@ -15,7 +15,8 @@ hengband_SOURCES = \
 	generate.h grid.c grid.h h-basic.h h-config.h h-define.h hissatsu.c \
 	history.h history.c \
 	h-system.h h-type.h inet.c init1.c init2.c init.h japanese.c load.c \
-	main.c main-x11.c main-gcu.c mane.c melee1.c melee2.c mind.c monster1.c \
+	main.c main-x11.c main-gcu.c mane.c melee1.c melee2.c mind.c \
+	monster-hook.c monster-hook.h monster1.c \
 	monster2.c mspells1.c mspells2.c mspells3.c mspells4.c mutation.c object1.c \
 	object2.c obj_kind.c racial.c realm-arcane.c \
 	realm-arcane.h realm-chaos.c realm-chaos.h realm-craft.c realm-craft.h \

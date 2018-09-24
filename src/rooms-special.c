@@ -2,6 +2,7 @@
 #include "grid.h"
 #include "generate.h"
 #include "rooms.h"
+#include "monster-hook.h"
 
 /*
 * Helper function for "glass room"
