@@ -6620,9 +6620,7 @@ void play_game(bool new_game)
 					msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
 					msg_print(NULL);
 
-					/* Restore hit points */
-					p_ptr->chp = p_ptr->mhp;
-					p_ptr->chp_frac = 0;
+					(void)life_stream(FALSE, FALSE);
 
 					if (p_ptr->pclass == CLASS_MAGIC_EATER)
 					{
@@ -6636,6 +6634,7 @@ void play_game(bool new_game)
 							p_ptr->magic_num1[magic_idx] = 0;
 						}
 					}
+
 					/* Restore spell points */
 					p_ptr->csp = p_ptr->msp;
 					p_ptr->csp_frac = 0;
@@ -6665,16 +6664,6 @@ void play_game(bool new_game)
 
 					/* Do not die */
 					p_ptr->is_dead = FALSE;
-
-					/* Hack -- Healing */
-					(void)set_blind(0);
-					(void)set_confused(0);
-					(void)set_poisoned(0);
-					(void)set_afraid(0);
-					(void)set_paralyzed(0);
-					(void)set_image(0);
-					(void)set_stun(0);
-					(void)set_cut(0);
 
 					/* Hack -- Prevent starvation */
 					(void)set_food(PY_FOOD_MAX - 1);

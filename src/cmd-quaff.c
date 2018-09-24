@@ -382,26 +382,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_LIFE:
-			chg_virtue(V_VITALITY, 1);
-			chg_virtue(V_UNLIFE, -5);
-			msg_print(_("体中に生命力が満ちあふれてきた！", "You feel life flow through your body!"));
-			restore_level();
-			(void)set_poisoned(0);
-			(void)set_blind(0);
-			(void)set_confused(0);
-			(void)set_image(0);
-			(void)set_stun(0);
-			(void)set_cut(0);
-			(void)do_res_stat(A_STR);
-			(void)do_res_stat(A_CON);
-			(void)do_res_stat(A_DEX);
-			(void)do_res_stat(A_WIS);
-			(void)do_res_stat(A_INT);
-			(void)do_res_stat(A_CHR);
-			(void)set_shero(0,TRUE);
-			update_stuff();
-			hp_player(5000);
-			ident = TRUE;
+			ident = life_stream(TRUE, TRUE);
 			break;
 
 		case SV_POTION_RESTORE_MANA:
