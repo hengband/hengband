@@ -149,28 +149,16 @@ void chest_trap(POSITION y, POSITION x, KIND_OBJECT_IDX o_idx)
 	/* Lose strength */
 	if (trap & (CHEST_LOSE_STR))
 	{
-#ifdef JP
-		msg_print("édä|ÇØÇÁÇÍÇƒÇ¢ÇΩè¨Ç≥Ç»êjÇ…éhÇ≥ÇÍÇƒÇµÇ‹Ç¡ÇΩÅI");
-		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), "ì≈êj", -1);
-#else
-		msg_print("A small needle has pricked you!");
-		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), "a poison needle", -1);
-#endif
-
+		msg_print(_("édä|ÇØÇÁÇÍÇƒÇ¢ÇΩè¨Ç≥Ç»êjÇ…éhÇ≥ÇÍÇƒÇµÇ‹Ç¡ÇΩÅI", "A small needle has pricked you!"));
+		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("ì≈êj", "a poison needle"), -1);
 		(void)do_dec_stat(A_STR);
 	}
 
 	/* Lose constitution */
 	if (trap & (CHEST_LOSE_CON))
 	{
-#ifdef JP
-		msg_print("édä|ÇØÇÁÇÍÇƒÇ¢ÇΩè¨Ç≥Ç»êjÇ…éhÇ≥ÇÍÇƒÇµÇ‹Ç¡ÇΩÅI");
-		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), "ì≈êj", -1);
-#else
-		msg_print("A small needle has pricked you!");
-		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), "a poison needle", -1);
-#endif
-
+		msg_print(_("édä|ÇØÇÁÇÍÇƒÇ¢ÇΩè¨Ç≥Ç»êjÇ…éhÇ≥ÇÍÇƒÇµÇ‹Ç¡ÇΩÅI", "A small needle has pricked you!"));
+		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("ì≈êj", "a poison needle"), -1);
 		(void)do_dec_stat(A_CON);
 	}
 
