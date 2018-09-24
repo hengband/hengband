@@ -189,15 +189,15 @@ static cptr f_info_flags[] =
 	"LAVA",
 	"SHALLOW",
 	"DEEP",
-	"FILLED",
+	"POISON_PUDDLE",
 	"HURT_ROCK",
 	"HURT_FIRE",
 	"HURT_COLD",
 	"HURT_ACID",
-	"ICE",
-	"ACID",
+	"COLD_PUDDLE",
+	"ACID_PUDDLE",
 	"OIL",
-	"XXX04",
+	"ELEC_PUDDLE",
 	"CAN_CLIMB",
 	"CAN_FLY",
 	"CAN_SWIM",
@@ -4808,15 +4808,10 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 {
 	FILE *fp;
-
 	char buf[1024];
-
 	int num = -1;
-
 	errr err = 0;
-
 	bool bypass = FALSE;
-
 	int x = xmin, y = ymin;
 
 

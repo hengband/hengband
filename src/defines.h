@@ -988,15 +988,15 @@
 #define FF_LAVA          40             /*!< 溶岩のある地形である */
 #define FF_SHALLOW       41             /*!< 浅い地形である */
 #define FF_DEEP          42             /*!< 深い地形である */
-/* #define FF_FILLED        43 */       /*!< 未使用 */
+#define FF_POISON_PUDDLE 43             /*!< 毒溜まりがある */
 #define FF_HURT_ROCK     44             /*!< 岩石溶解の対象となる地形である */
 /* #define FF_HURT_FIRE     45 */       /*!< 未使用 */
 /* #define FF_HURT_COLD     46 */       /*!< 未使用 */
 /* #define FF_HURT_ACID     47 */       /*!< 未使用 */
-/* #define FF_ICE           48 */       /*!< 未使用 */
-/* #define FF_ACID          49 */       /*!< 未使用 */
-/* #define FF_OIL           50 */       /*!< 未使用 */
-/* #define FF_XXX04      51 */          /*!< 未使用 */
+#define FF_COLD_PUDDLE   48             /*!< 冷気溜まりがある */
+#define FF_ACID_PUDDLE   49             /*!< 酸溜まりがある */
+/* #define FF_OIL           50          /*!< 未使用 */
+#define FF_ELEC_PUDDLE   51             /*!< 接地部が帯電している */
 /* #define FF_CAN_CLIMB     52 */       /*!< 未使用 */
 #define FF_CAN_FLY       53             /*!< 飛行可能な地形である */
 #define FF_CAN_SWIM      54             /*!< 泳ぐことが可能な地形である */
