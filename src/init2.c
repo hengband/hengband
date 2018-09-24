@@ -35,6 +35,7 @@
 #include "angband.h"
 
 #include "init.h"
+#include "trap.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME

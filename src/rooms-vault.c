@@ -2,6 +2,7 @@
 #include "grid.h"
 #include "rooms.h"
 #include "generate.h"
+#include "trap.h"
 
 /*
 * This function creates a random vault that looks like a collection of bubbles.

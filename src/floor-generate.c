@@ -101,6 +101,7 @@
 #include "grid.h"
 #include "rooms.h"
 #include "streams.h"
+#include "trap.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;

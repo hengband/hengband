@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
+#include "trap.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */

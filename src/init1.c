@@ -47,6 +47,7 @@
  */
 
 #include "angband.h"
+#include "trap.h"
 
 
 

@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "grid.h"
+#include "trap.h"
 
 
 /*!

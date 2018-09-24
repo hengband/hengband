@@ -49,6 +49,8 @@
 #include "rooms-trap.h"
 #include "rooms-vault.h"
 
+#include "trap.h"
+
 
 /*!
  * 各部屋タイプの生成比定義
