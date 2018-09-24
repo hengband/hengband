@@ -6235,6 +6235,9 @@ void play_game(bool new_game)
 		/* Open the high score file, for reading/writing */
 		highscore_fd = fd_open(buf, O_RDWR);
 
+		/* 町名消失バグ対策(#38205) Init the wilderness */
+		process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
+
 		/* Handle score, show Top scores */
 		success = send_world_score(TRUE);
 
