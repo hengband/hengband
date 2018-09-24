@@ -2174,7 +2174,7 @@ monster_hook_type get_monster_hook(void)
  * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
  */
-monster_hook_type get_monster_hook2(int y, int x)
+monster_hook_type get_monster_hook2(POSITION y, POSITION x)
 {
 	feature_type *f_ptr = &f_info[cave[y][x].feat];
 
@@ -2348,7 +2348,7 @@ bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode)
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(int y, int x, monster_race *r_ptr, u16b mode)
+bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, u16b mode)
 {
 	cave_type *c_ptr = &cave[y][x];
 

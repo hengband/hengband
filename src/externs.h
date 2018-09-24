@@ -907,13 +907,13 @@ extern void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(byte att
 extern void create_name(int type, char *name);
 
 extern monster_hook_type get_monster_hook(void);
-extern monster_hook_type get_monster_hook2(int y, int x);
+extern monster_hook_type get_monster_hook2(POSITION y, POSITION x);
 extern void set_friendly(monster_type *m_ptr);
 extern void set_pet(monster_type *m_ptr);
 extern void set_hostile(monster_type *m_ptr);
 extern void anger_monster(monster_type *m_ptr);
 extern bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode);
-extern bool monster_can_enter(int y, int x, monster_race *r_ptr, u16b mode);
+extern bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, u16b mode);
 extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern bool monster_living(monster_race *r_ptr);
@@ -945,7 +945,7 @@ extern bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 extern bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool alloc_horde(POSITION y, POSITION x);
 extern bool alloc_guardian(bool def_val);
-extern bool alloc_monster(int dis, BIT_FLAGS mode);
+extern bool alloc_monster(POSITION dis, BIT_FLAGS mode);
 extern bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode);
 extern bool summon_named_creature (MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);

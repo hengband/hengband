@@ -3862,10 +3862,10 @@ bool alloc_guardian(bool def_val)
  * Use "slp" to choose the initial "sleep" status
  * Use "monster_level" for the monster level
  */
-bool alloc_monster(int dis, BIT_FLAGS mode)
+bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 {
-	int			y = 0, x = 0;
-	int         attempts_left = 10000;
+	int y = 0, x = 0;
+	int attempts_left = 10000;
 
 	/* Put the Guardian */
 	if (alloc_guardian(FALSE)) return TRUE;
