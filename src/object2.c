@@ -5433,7 +5433,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  * @return なし
  */
-void acquirement(int y1, int x1, int num, bool great, bool special, bool known)
+void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
 {
 	object_type *i_ptr;
 	object_type object_type_body;
@@ -5507,7 +5507,7 @@ amuse_type amuse_info[] =
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  * @return なし
  */
-void amusement(int y1, int x1, int num, bool known)
+void amusement(POSITION y1, POSITION x1, int num, bool known)
 {
 	object_type *i_ptr;
 	object_type object_type_body;
@@ -5667,7 +5667,7 @@ s16b choose_random_trap(void)
  * @param x 秘匿したいマスのX座標
  * @return なし
  */
-void disclose_grid(int y, int x)
+void disclose_grid(POSITION y, POSITION x)
 {
 	cave_type *c_ptr = &cave[y][x];
 
@@ -5699,7 +5699,7 @@ void disclose_grid(int y, int x)
  * when they are "discovered" (by detecting them or setting them off),\n
  * the trap is "instantiated" as a visible, "typed", trap.\n
  */
-void place_trap(int y, int x)
+void place_trap(POSITION y, POSITION x)
 {
 	cave_type *c_ptr = &cave[y][x];
 
