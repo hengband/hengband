@@ -1,7 +1,7 @@
 ﻿/*!
  * @file xtra1.c
- * @brief 雑多なその他の処理1 / misc code
- * @date 2014/08/17
+ * @brief プレイヤーのステータス処理 / status
+ * @date 2018/09/25
  * @author
  * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
  * This software may be copied and distributed for educational, research, and\n
@@ -2197,9 +2197,9 @@ static void fix_object(void)
  */
 static void calc_spells(void)
 {
-	int			i, j, k, levels;
-	int			num_allowed;
-	int         num_boukyaku = 0;
+	int i, j, k, levels;
+	int num_allowed;
+	int num_boukyaku = 0;
 
 	const magic_type	*s_ptr;
 	REALM_IDX which;
@@ -2331,11 +2331,9 @@ static void calc_spells(void)
 
 			/* Message */
 #ifdef JP
-			msg_format("%sの%sを忘れてしまった。",
-				   do_spell(which, j%32, SPELL_NAME), p );
+			msg_format("%sの%sを忘れてしまった。", do_spell(which, j%32, SPELL_NAME), p );
 #else
-			msg_format("You have forgotten the %s of %s.", p,
-			do_spell(which, j%32, SPELL_NAME));
+			msg_format("You have forgotten the %s of %s.", p, do_spell(which, j%32, SPELL_NAME));
 #endif
 
 
@@ -2467,11 +2465,9 @@ static void calc_spells(void)
 
 			/* Message */
 #ifdef JP
-			msg_format("%sの%sを思い出した。",
-				   do_spell(which, j%32, SPELL_NAME), p );
+			msg_format("%sの%sを思い出した。", do_spell(which, j%32, SPELL_NAME), p );
 #else
-			msg_format("You have remembered the %s of %s.",
-				   p, do_spell(which, j%32, SPELL_NAME));
+			msg_format("You have remembered the %s of %s.", p, do_spell(which, j%32, SPELL_NAME));
 #endif
 
 
@@ -2554,7 +2550,7 @@ static void calc_spells(void)
  */
 static void calc_mana(void)
 {
-	int		msp, levels, cur_wgt, max_wgt;
+	int msp, levels, cur_wgt, max_wgt;
 
 	object_type	*o_ptr;
 
@@ -2807,8 +2803,7 @@ static void calc_mana(void)
 		/* レベルアップの時は上昇量を表示する */
 		if ((level_up == 1) && (msp > p_ptr->msp))
 		{
-			msg_format("最大マジック・ポイントが %d 増加した！",
-				   (msp - p_ptr->msp));
+			msg_format("最大マジック・ポイントが %d 増加した！", (msp - p_ptr->msp));
 		}
 #endif
 		/* Save new mana */
@@ -2933,8 +2928,7 @@ static void calc_hitpoints(void)
 		/* レベルアップの時は上昇量を表示する */
 		if ((level_up == 1) && (mhp > p_ptr->mhp))
 		{
-			msg_format("最大ヒット・ポイントが %d 増加した！",
-				   (mhp - p_ptr->mhp) );
+			msg_format("最大ヒット・ポイントが %d 増加した！", (mhp - p_ptr->mhp) );
 		}
 #endif
 		/* Save the new max-hitpoints */

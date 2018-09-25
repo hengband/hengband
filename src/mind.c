@@ -855,11 +855,9 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 				prt("", y, x);
 				put_str(_("名前", "Name"), y, x + 5);
 
-#ifdef JP
-put_str(format("Lv   %s   失率 効果", ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y, x + 35);
-#else
-put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y, x + 35);
-#endif
+				put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"),
+					((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y, x + 35);
+
 				has_weapon[0] = buki_motteruka(INVEN_RARM);
 				has_weapon[1] = buki_motteruka(INVEN_LARM);
 
@@ -942,11 +940,7 @@ put_str(format("Lv   %s   Fail Info", ((use_mind == MIND_BERSERKER) || (use_mind
 					strcat(psi_desc,
 					       format("%-30s%2d %4d%s %3d%%%s",
 						      spell.name, spell.min_lev, mana_cost,
-#ifdef JP
-						      (((use_mind == MIND_MINDCRAFTER) && (i == 13)) ? "～" : "  "), 
-#else
-						      (((use_mind == MIND_MINDCRAFTER) && (i == 13)) ? "~ " : "  "), 
-#endif
+						      (((use_mind == MIND_MINDCRAFTER) && (i == 13)) ? _("～", "~ ") : "  "),
 						      chance, comment));
 					prt(psi_desc, y + i + 1, x);
 				}
