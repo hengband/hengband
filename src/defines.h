@@ -1762,8 +1762,8 @@
 #define ACT_XTRA_SPEED          96
 #define ACT_WRAITH              97
 #define ACT_INVULN              98
-#define ACT_HELO                99
-#define ACT_HELO_SPEED          100
+#define ACT_HERO                99
+#define ACT_HERO_SPEED          100
 #define ACT_RESIST_ACID         101
 #define ACT_RESIST_FIRE         102
 #define ACT_RESIST_COLD         103

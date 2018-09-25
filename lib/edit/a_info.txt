@@ -2602,7 +2602,7 @@ W:30:30:180:120000
 P:0:2d6:10:12:2
 F:CON | BLOWS | HIDE_TYPE | BRAND_ACID | SHOW_MODS
 F:SLAY_TROLL | SLAY_DEMON | ACTIVATE
-U:HELO_SPEED
+U:HERO_SPEED
 D:$"Hurin [...] wielded the axe two-handed, and it is sung that the axe
 D:$ smoked in the black blood of the troll-guard of Gothmog, until it withered,
 D:$ and each time that he slew Hurin cried 'Aure entuluva! Day shall come
@@ -3046,7 +3046,7 @@ I:21:7:3
 W:40:5:100:808
 P:0:1d7:-5:10:3
 F:STR | CHR | RES_FIRE | ACTIVATE | 
-U:HELO
+U:HERO
 D:消火作業にあたって、士気を鼓舞すべく振りたてられた杖だ。
 D:杖の先に隊のマーク入りの円盤があり、その下側から
 D:長い帯状の飾りが幾本ものびている。
@@ -3520,7 +3520,7 @@ P:0:3d3:11:22:0
 F:STR | DEX | CHR | TUNNEL | BLESSED |
 F:SLAY_EVIL | SLAY_DRAGON | SLAY_ORC | SLAY_GIANT | SLAY_DEMON |
 F:RES_COLD | SEE_INVIS | RES_FEAR | REGEN
-U:HELO
+U:HERO
 D:バトルハンマー氏族のドワーフの長にして、伝説の都ミスリル・ホールの王、
 D:ブルーノー・バトルハンマーの生涯最高傑作だ。
 D:「なるほどね」ドリッズドは、ハンマーをブルーノーに返した。

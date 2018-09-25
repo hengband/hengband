@@ -1266,13 +1266,13 @@ bool activate_artifact(object_type *o_ptr)
 		break;
 	}
 
-	case ACT_HELO:
+	case ACT_HERO:
 	{
 		(void)heroism(25);
 		break;
 	}
 
-	case ACT_HELO_SPEED:
+	case ACT_HERO_SPEED:
 	{
 		(void)set_fast(randint1(50) + 50, FALSE);
 		(void)heroism(50);

@@ -1049,7 +1049,7 @@ X:27:10
 W:5:0:0:300
 C:0:0:0:0
 F:ACTIVATE
-U:HELO
+U:HERO
 
 N:151:殺戮の
 E:and Slaying
