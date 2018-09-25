@@ -405,7 +405,6 @@
     <ClInclude Include="..\..\src\cmd-usestaff.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd-zapwand.h" />
     <ClInclude Include="..\..\src\cmd-zaprod.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -503,6 +502,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-zapwand.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
