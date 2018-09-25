@@ -1172,6 +1172,7 @@ extern void cast_wonder(int dir);
 extern void cast_invoke_spirits(int dir);
 extern void cast_shuffle(void);
 extern bool_hack life_stream(bool_hack message, bool_hack virtue);
+extern bool_hack heroism(int base);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);

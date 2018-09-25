@@ -5006,3 +5006,11 @@ bool_hack life_stream(bool_hack message, bool_hack virtue)
 	return TRUE;
 }
 
+bool_hack heroism(int base)
+{
+	bool_hack ident = FALSE;
+	if(set_afraid(0)) ident = TRUE;
+	if(set_hero(p_ptr->hero + randint1(base) + base, FALSE)) ident = TRUE;
+	if(hp_player(10)) ident = TRUE;
+	return ident;
+}

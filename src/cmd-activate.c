@@ -1268,18 +1268,14 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_HELO:
 	{
-		(void)set_afraid(0);
-		set_hero(randint1(25) + 25, FALSE);
-		hp_player(10);
+		(void)heroism(25);
 		break;
 	}
 
 	case ACT_HELO_SPEED:
 	{
 		(void)set_fast(randint1(50) + 50, FALSE);
-		hp_player(10);
-		set_afraid(0);
-		set_hero(randint1(50) + 50, FALSE);
+		(void)heroism(50);
 		break;
 	}
 

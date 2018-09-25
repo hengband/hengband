@@ -325,9 +325,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_HEROISM:
-			if (set_afraid(0)) ident = TRUE;
-			if (set_hero(p_ptr->hero + randint1(25) + 25, FALSE)) ident = TRUE;
-			if (hp_player(10)) ident = TRUE;
+			ident = heroism(25);
 			break;
 
 		case SV_POTION_BESERK_STRENGTH:

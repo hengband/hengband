@@ -456,9 +456,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_hero(randint1(base) + base, FALSE);
-				hp_player(10);
-				set_afraid(0);
+				(void)heroism(base);
 			}
 		}
 		break;
