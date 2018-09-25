@@ -25,14 +25,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 2;
 			int sides = 10;
-
 			if (info) return info_heal(dice, sides, 0);
-
-			if (cast)
-			{
-				hp_player(damroll(dice, sides));
-				set_cut(p_ptr->cut - 10);
-			}
+			if (cast) (void)cure_light_wound(dice, sides);			
 		}
 		break;
 

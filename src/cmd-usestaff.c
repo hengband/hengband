@@ -175,13 +175,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 	case SV_STAFF_CURE_LIGHT:
 	{
-		if (hp_player(damroll((powerful ? 4 : 2), 8))) ident = TRUE;
-		if (powerful) {
-			if (set_blind(0)) ident = TRUE;
-			if (set_poisoned(0)) ident = TRUE;
-			if (set_cut(p_ptr->cut - 10)) ident = TRUE;
-		}
-		if (set_shero(0, TRUE)) ident = TRUE;
+		ident = cure_light_wound((powerful ? 4 : 2), 8);
 		break;
 	}
 
