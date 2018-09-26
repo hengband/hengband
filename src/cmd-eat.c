@@ -198,7 +198,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_CURE_SERIOUS:
 		{
-			if (hp_player(damroll(4, 8))) ident = TRUE;
+			ident = cure_serious_wound(4, 8);
 			break;
 		}
 

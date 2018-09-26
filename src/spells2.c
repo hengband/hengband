@@ -5024,3 +5024,14 @@ bool_hack cure_light_wound(int dice, int sides)
 	if (set_shero(0, TRUE)) ident = TRUE;
 	return ident;
 }
+
+bool_hack cure_serious_wound(int dice, int sides)
+{
+	bool_hack ident = FALSE;
+	if (hp_player(damroll(dice, sides))) ident = TRUE;
+	if (set_blind(0)) ident = TRUE;
+	if (set_confused(0)) ident = TRUE;
+	if (set_cut((p_ptr->cut / 2) - 50)) ident = TRUE;
+	if (set_shero(0, TRUE)) ident = TRUE;
+	return ident;
+}

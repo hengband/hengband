@@ -339,11 +339,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_CURE_SERIOUS:
-			if (hp_player(damroll(4, 8))) ident = TRUE;
-			if (set_blind(0)) ident = TRUE;
-			if (set_confused(0)) ident = TRUE;
-			if (set_cut((p_ptr->cut / 2) - 50)) ident = TRUE;
-			if (set_shero(0, TRUE)) ident = TRUE;
+			ident = cure_light_wound(4, 8);
 			break;
 
 		case SV_POTION_CURE_CRITICAL:

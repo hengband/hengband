@@ -1106,8 +1106,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_CURE_MW:
 	{
 		msg_print(_("深紫色の光を発している...", "It radiates deep purple..."));
-		hp_player(damroll(4, 8));
-		(void)set_cut((p_ptr->cut / 2) - 50);
+		(void)cure_serious_wound(4, 8);
 		break;
 	}
 

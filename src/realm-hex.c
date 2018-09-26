@@ -590,11 +590,7 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			msg_print(_("気分が良くなってくる。", "You feel better and better."));
 		}
-		if (cast || cont)
-		{
-			hp_player(damroll(2, 10));
-			set_cut((p_ptr->cut / 2) - 10);
-		}
+		if (cast || cont) (void)cure_serious_wound(2, 10);
 		break;
 
 	case 10:

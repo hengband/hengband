@@ -312,12 +312,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
-
-			if (cast)
-			{
-				hp_player(damroll(dice, sides));
-				set_cut((p_ptr->cut / 2) - 50);
-			}
+			if (cast) (void)cure_serious_wound(4, 8);
 		}
 		break;
 
