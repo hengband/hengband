@@ -310,19 +310,10 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 15:
 		if (name) return _("薬草治療", "Herbal Healing");
 		if (desc) return _("体力を大幅に回復させ、負傷、朦朧状態、毒から全快する。", "Heals HP greatly. And heals cut, stun and poison completely.");
-
 		{
 			int heal = 500;
-
 			if (info) return info_heal(0, 0, heal);
-
-			if (cast)
-			{
-				hp_player(heal);
-				set_stun(0);
-				set_cut(0);
-				set_poisoned(0);
-			}
+			if (cast) (void)cure_critical_wounds(heal);
 		}
 		break;
 

@@ -343,15 +343,15 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_CURE_CRITICAL:
-			ident = cure_serious_wounds(6, 8);
+			ident = cure_critical_wounds(damroll(6, 8));
 			break;
 
 		case SV_POTION_HEALING:
-			ident = greater_healing(300);
+			ident = cure_critical_wounds(300);
 			break;
 
 		case SV_POTION_STAR_HEALING:
-			ident = greater_healing(1200);
+			ident = cure_critical_wounds(1200);
 			break;
 
 		case SV_POTION_LIFE:

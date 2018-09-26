@@ -5036,20 +5036,7 @@ bool_hack cure_serious_wounds(int dice, int sides)
 	return ident;
 }
 
-bool_hack cure_critical_wounds(int dice, int sides)
-{
-	bool_hack ident = FALSE;
-	if (hp_player(damroll(dice, sides))) ident = TRUE;
-	if (set_blind(0)) ident = TRUE;
-	if (set_confused(0)) ident = TRUE;
-	if (set_poisoned(0)) ident = TRUE;
-	if (set_stun(0)) ident = TRUE;
-	if (set_cut(0)) ident = TRUE;
-	if (set_shero(0, TRUE)) ident = TRUE;
-	return ident;
-}
-
-bool_hack greater_healing(int pow)
+bool_hack cure_critical_wounds(HIT_POINT pow)
 {
 	bool_hack ident = FALSE;
 	if (hp_player(pow)) ident = TRUE;

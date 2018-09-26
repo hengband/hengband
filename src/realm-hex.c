@@ -698,7 +698,7 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			msg_print(_("気分が良くなってくる。", "You feel better and better."));
 		}
-		if (cast || cont) (void)cure_serious_wounds(4, 10);
+		if (cast || cont) (void)cure_critical_wounds(damroll(4, 10));
 		break;
 
 	case 18:
