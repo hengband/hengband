@@ -169,13 +169,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
-
-			if (cast)
-			{
-				hp_player(damroll(dice, sides));
-				set_stun(0);
-				set_cut(0);
-			}
+			if (cast) (void)cure_serious_wounds(dice, sides);
 		}
 		break;
 
