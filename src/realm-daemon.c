@@ -484,15 +484,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 25;
-
 			if (info) return info_duration(base, base);
-
-			if (cast)
-			{
-				set_hero(randint1(base) + base, FALSE);
-				hp_player(10);
-				set_afraid(0);
-			}
+			if (cast)heroism(base);
 		}
 		break;
 

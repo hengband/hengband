@@ -1085,14 +1085,8 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_CHOIR_SINGS:
 	{
 		msg_print(_("天国の歌が聞こえる...", "A heavenly choir sings..."));
-		(void)set_poisoned(0);
-		(void)set_cut(0);
-		(void)set_stun(0);
-		(void)set_confused(0);
-		(void)set_blind(0);
-		(void)set_afraid(0);
+		(void)greater_healing(777);
 		(void)set_hero(randint1(25) + 25, FALSE);
-		(void)hp_player(777);
 		break;
 	}
 
@@ -1142,8 +1136,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_print(_("深青色に輝いている...", "It glows deep blue..."));
 		msg_print(_("体内に暖かい鼓動が感じられる...", "You feel a warm tingling inside..."));
-		(void)hp_player(700);
-		(void)set_cut(0);
+		(void)greater_healing(700);
 		break;
 	}
 
@@ -1151,8 +1144,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_print(_("白く明るく輝いている...", "It glows a bright white..."));
 		msg_print(_("ひじょうに気分がよい...", "You feel much better..."));
-		(void)hp_player(1000);
-		(void)set_cut(0);
+		(void)greater_healing(1000);
 		break;
 	}
 

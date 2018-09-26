@@ -347,23 +347,11 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_HEALING:
-			if (hp_player(300)) ident = TRUE;
-			if (set_blind(0)) ident = TRUE;
-			if (set_confused(0)) ident = TRUE;
-			if (set_poisoned(0)) ident = TRUE;
-			if (set_stun(0)) ident = TRUE;
-			if (set_cut(0)) ident = TRUE;
-			if (set_shero(0,TRUE)) ident = TRUE;
+			ident = greater_healing(300);
 			break;
 
 		case SV_POTION_STAR_HEALING:
-			if (hp_player(1200)) ident = TRUE;
-			if (set_blind(0)) ident = TRUE;
-			if (set_confused(0)) ident = TRUE;
-			if (set_poisoned(0)) ident = TRUE;
-			if (set_stun(0)) ident = TRUE;
-			if (set_cut(0)) ident = TRUE;
-			if (set_shero(0,TRUE)) ident = TRUE;
+			ident = greater_healing(1200);
 			break;
 
 		case SV_POTION_LIFE:

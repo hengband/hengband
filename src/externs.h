@@ -1175,6 +1175,8 @@ extern bool_hack life_stream(bool_hack message, bool_hack virtue);
 extern bool_hack heroism(int base);
 extern bool_hack cure_light_wounds(int dice, int sides);
 extern bool_hack cure_serious_wounds(int dice, int sides);
+extern bool_hack cure_critical_wounds(int dice, int sides);
+extern bool_hack greater_healing(int pow);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);
