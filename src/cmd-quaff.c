@@ -335,11 +335,11 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_CURE_LIGHT:
-			ident = cure_light_wound(2, 8);
+			ident = cure_light_wounds(2, 8);
 			break;
 
 		case SV_POTION_CURE_SERIOUS:
-			ident = cure_light_wound(4, 8);
+			ident = cure_serious_wounds(4, 8);
 			break;
 
 		case SV_POTION_CURE_CRITICAL:

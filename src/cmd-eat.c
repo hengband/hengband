@@ -198,7 +198,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_CURE_SERIOUS:
 		{
-			ident = cure_serious_wound(4, 8);
+			ident = cure_serious_wounds(4, 8);
 			break;
 		}
 

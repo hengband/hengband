@@ -175,7 +175,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 	case SV_STAFF_CURE_LIGHT:
 	{
-		ident = cure_light_wound((powerful ? 4 : 2), 8);
+		ident = cure_light_wounds((powerful ? 4 : 2), 8);
 		break;
 	}
 

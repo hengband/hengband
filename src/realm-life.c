@@ -26,7 +26,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int dice = 2;
 			int sides = 10;
 			if (info) return info_heal(dice, sides, 0);
-			if (cast) (void)cure_light_wound(dice, sides);			
+			if (cast) (void)cure_light_wounds(dice, sides);			
 		}
 		break;
 
@@ -104,7 +104,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
-			if (cast) (void)cure_serious_wound(dice, sides);
+			if (cast) (void)cure_serious_wounds(dice, sides);
 		}
 		break;
 

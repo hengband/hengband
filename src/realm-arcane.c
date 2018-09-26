@@ -141,7 +141,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
-			if (cast) (void)cure_light_wound(dice, sides);
+			if (cast) (void)cure_light_wounds(dice, sides);
 		}
 		break;
 
@@ -312,7 +312,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
-			if (cast) (void)cure_serious_wound(4, 8);
+			if (cast) (void)cure_serious_wounds(4, 8);
 		}
 		break;
 

@@ -5015,7 +5015,7 @@ bool_hack heroism(int base)
 	return ident;
 }
 
-bool_hack cure_light_wound(int dice, int sides)
+bool_hack cure_light_wounds(int dice, int sides)
 {
 	bool_hack ident = FALSE;
 	if (hp_player(damroll(dice, sides))) ident = TRUE;
@@ -5025,7 +5025,7 @@ bool_hack cure_light_wound(int dice, int sides)
 	return ident;
 }
 
-bool_hack cure_serious_wound(int dice, int sides)
+bool_hack cure_serious_wounds(int dice, int sides)
 {
 	bool_hack ident = FALSE;
 	if (hp_player(damroll(dice, sides))) ident = TRUE;
