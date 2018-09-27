@@ -3939,12 +3939,12 @@ bool hp_player(int num)
  */
 static cptr desc_stat_pos[] =
 {
-_("強く", "strong"),
-_("知的に", "smart"),
-_("賢く", "wise"),
-_("器用に", "dextrous"),
-_("健康に", "healthy"),
-_("美しく", "cute")
+	_("強く", "strong"),
+	_("知的に", "smart"),
+	_("賢く", "wise"),
+	_("器用に", "dextrous"),
+	_("健康に", "healthy"),
+	_("美しく", "cute")
 };
 
 
@@ -3953,22 +3953,12 @@ _("美しく", "cute")
  */
 static cptr desc_stat_neg[] =
 {
-#ifdef JP
-"弱く",
-"無知に",
-"愚かに",
-"不器用に",
-"不健康に",
-"醜く"
-#else
-	"weak",
-	"stupid",
-	"naive",
-	"clumsy",
-	"sickly",
-	"ugly"
-#endif
-
+	_("弱く", "weak"),
+	_("無知に", "stupid"),
+	_("愚かに", "naive"),
+	_("不器用に", "clumsy"),
+	_("不健康に", "sickly"),
+	_("醜く", "ugly")
 };
 
 
