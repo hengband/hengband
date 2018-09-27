@@ -203,17 +203,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 	case SV_STAFF_THE_MAGI:
 	{
 		if (do_res_stat(A_INT)) ident = TRUE;
-		if (p_ptr->csp < p_ptr->msp)
-		{
-			p_ptr->csp = p_ptr->msp;
-			p_ptr->csp_frac = 0;
-			ident = TRUE;
-			msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-
-			p_ptr->redraw |= (PR_MANA);
-			p_ptr->window |= (PW_PLAYER);
-			p_ptr->window |= (PW_SPELL);
-		}
+		ident |= restore_mana(FALSE);
 		if (set_shero(0, TRUE)) ident = TRUE;
 		break;
 	}

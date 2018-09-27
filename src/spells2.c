@@ -5048,3 +5048,39 @@ bool_hack cure_critical_wounds(HIT_POINT pow)
 	if (set_shero(0, TRUE)) ident = TRUE;
 	return ident;
 }
+
+bool_hack restore_mana(bool_hack magic_eater)
+{
+	bool_hack ident = FALSE;
+
+	if (p_ptr->pclass == CLASS_MAGIC_EATER && magic_eater)
+	{
+		int i;
+		for (i = 0; i < EATER_EXT * 2; i++)
+		{
+			p_ptr->magic_num1[i] += (p_ptr->magic_num2[i] < 10) ? EATER_CHARGE * 3 : p_ptr->magic_num2[i] * EATER_CHARGE / 3;
+			if (p_ptr->magic_num1[i] > p_ptr->magic_num2[i] * EATER_CHARGE) p_ptr->magic_num1[i] = p_ptr->magic_num2[i] * EATER_CHARGE;
+		}
+		for (; i < EATER_EXT * 3; i++)
+		{
+			KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, i - EATER_EXT * 2);
+			p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE * 3 : p_ptr->magic_num2[i] * EATER_ROD_CHARGE / 3)*k_info[k_idx].pval;
+			if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
+		}
+		msg_print(_("頭がハッキリとした。", "You feel your head clear."));
+		p_ptr->window |= (PW_PLAYER);
+		ident = TRUE;
+	}
+	else if (p_ptr->csp < p_ptr->msp)
+	{
+		p_ptr->csp = p_ptr->msp;
+		p_ptr->csp_frac = 0;
+		msg_print(_("頭がハッキリとした。", "You feel your head clear."));
+		p_ptr->redraw |= (PR_MANA);
+		p_ptr->window |= (PW_PLAYER);
+		p_ptr->window |= (PW_SPELL);
+		ident = TRUE;
+	}
+
+	return ident;
+}

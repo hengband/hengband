@@ -369,7 +369,6 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int power = 90;
 
 			if (info) return info_power(power);
-
 			if (cast)
 			{
 				if (!recharge(power)) return NULL;
@@ -489,7 +488,6 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-
 				fire_beam(GF_GRAVITY, dir, damroll(dice, sides));
 			}
 		}
@@ -569,7 +567,6 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-
 				fire_ball(GF_MANA, dir, dam, rad);
 			}
 		}
@@ -596,7 +593,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 31:
 		if (name) return _("虚無召来", "Call the Void");
-		if (desc) return _("自分に周囲に向かって、ロケット、純粋な魔力の球、放射性廃棄物の球を放つ。ただし、壁に隣接して使用すると広範囲を破壊する。",
+		if (desc) return _("自分の周囲に向かって、ロケット、純粋な魔力の球、放射性廃棄物の球を放つ。ただし、壁に隣接して使用すると広範囲を破壊する。",
 			"Fires rockets, mana balls and nuclear waste balls in all directions each unless you are not adjacent to any walls. Otherwise *destroys* huge area.");
 
 		{

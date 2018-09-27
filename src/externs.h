@@ -1176,6 +1176,7 @@ extern bool_hack heroism(int base);
 extern bool_hack cure_light_wounds(int dice, int sides);
 extern bool_hack cure_serious_wounds(int dice, int sides);
 extern bool_hack cure_critical_wounds(HIT_POINT pow);
+extern bool_hack restore_mana(bool_hack magic_eater);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);
