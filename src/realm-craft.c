@@ -252,10 +252,7 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				set_poisoned(0);
-				set_stun(0);
-				set_cut(0);
-				set_image(0);
+				(void)true_healing(0);
 			}
 		}
 		break;

@@ -480,13 +480,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_CURING:
-			if (hp_player(50)) ident = TRUE;
-			if (set_blind(0)) ident = TRUE;
-			if (set_poisoned(0)) ident = TRUE;
-			if (set_confused(0)) ident = TRUE;
-			if (set_stun(0)) ident = TRUE;
-			if (set_cut(0)) ident = TRUE;
-			if (set_image(0)) ident = TRUE;
+			if (true_healing(50)) ident = TRUE;
 			break;
 
 		case SV_POTION_INVULNERABILITY:

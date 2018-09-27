@@ -3876,7 +3876,10 @@ bool hp_player(int num)
 {
 	int vir;
 	vir = virtue_number(V_VITALITY);
-	if (vir)
+
+	if(num <= 0) return (FALSE);
+
+	if(vir)
 	{
 		num = num * (p_ptr->virtues[vir - 1] + 1250) / 1250;
 	}

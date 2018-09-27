@@ -5044,6 +5044,19 @@ bool_hack cure_critical_wounds(HIT_POINT pow)
 	return ident;
 }
 
+bool_hack true_healing(HIT_POINT pow)
+{
+	bool_hack ident = FALSE;
+	if (hp_player(pow)) ident = TRUE;
+	if (set_blind(0)) ident = TRUE;
+	if (set_confused(0)) ident = TRUE;
+	if (set_poisoned(0)) ident = TRUE;
+	if (set_stun(0)) ident = TRUE;
+	if (set_cut(0)) ident = TRUE;
+	if (set_image(0)) ident = TRUE;
+	return ident;
+}
+
 bool_hack restore_mana(bool_hack magic_eater)
 {
 	bool_hack ident = FALSE;

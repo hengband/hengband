@@ -1146,13 +1146,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_CURING:
 	{
 		msg_format(_("%sの優しさに癒される...", "the %s cures you affectionately ..."), name);
-		(void)set_poisoned(0);
-		(void)set_confused(0);
-		(void)set_blind(0);
-		(void)set_stun(0);
-		(void)set_cut(0);
-		(void)set_image(0);
-
+		true_healing(0);
 		break;
 	}
 

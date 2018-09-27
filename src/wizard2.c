@@ -1478,53 +1478,7 @@ static void wiz_create_item(void)
  */
 static void do_cmd_wiz_cure_all(void)
 {
-	/* Restore stats */
-	(void)res_stat(A_STR);
-	(void)res_stat(A_INT);
-	(void)res_stat(A_WIS);
-	(void)res_stat(A_CON);
-	(void)res_stat(A_DEX);
-	(void)res_stat(A_CHR);
-
-	/* Restore the level */
-	(void)restore_level();
-
-	/* Heal the player */
-	if (p_ptr->chp < p_ptr->mhp)
-	{
-		p_ptr->chp = p_ptr->mhp;
-		p_ptr->chp_frac = 0;
-
-		/* Redraw */
-		p_ptr->redraw |= (PR_HP);
-
-		/* Window stuff */
-		p_ptr->window |= (PW_PLAYER);
-	}
-
-	/* Restore mana */
-	if (p_ptr->csp < p_ptr->msp)
-	{
-		p_ptr->csp = p_ptr->msp;
-		p_ptr->csp_frac = 0;
-
-		p_ptr->redraw |= (PR_MANA);
-		p_ptr->window |= (PW_PLAYER);
-		p_ptr->window |= (PW_SPELL);
-	}
-
-	/* Cure stuff */
-	(void)set_blind(0);
-	(void)set_confused(0);
-	(void)set_poisoned(0);
-	(void)set_afraid(0);
-	(void)set_paralyzed(0);
-	(void)set_image(0);
-	(void)set_stun(0);
-	(void)set_cut(0);
-	(void)set_slow(0, TRUE);
-
-	/* No longer hungry */
+	(void)life_stream(FALSE, FALSE);
 	(void)set_food(PY_FOOD_MAX - 1);
 }
 

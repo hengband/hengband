@@ -4851,18 +4851,9 @@ void gain_level_reward(int chosen_reward)
 		case REW_HEAL_FUL:
 
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
-			restore_level();
-			(void)set_poisoned(0);
-			(void)set_blind(0);
-			(void)set_confused(0);
-			(void)set_image(0);
-			(void)set_stun(0);
-			(void)set_cut(0);
-			hp_player(5000);
-			for (dummy = 0; dummy < 6; dummy++)
-			{
-				(void)do_res_stat(dummy);
-			}
+			(void)restore_level();
+			(void)restore_all_status();
+			(void)true_healing(5000);
 			reward = _("体力が回復した。", "healing");
 			break;
 

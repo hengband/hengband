@@ -181,22 +181,14 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 	case SV_STAFF_CURING:
 	{
-		if (set_blind(0)) ident = TRUE;
-		if (set_poisoned(0)) ident = TRUE;
-		if (set_confused(0)) ident = TRUE;
-		if (set_stun(0)) ident = TRUE;
-		if (set_cut(0)) ident = TRUE;
-		if (set_image(0)) ident = TRUE;
+		ident = true_healing(0);
 		if (set_shero(0, TRUE)) ident = TRUE;
 		break;
 	}
 
 	case SV_STAFF_HEALING:
 	{
-		if (hp_player(powerful ? 500 : 300)) ident = TRUE;
-		if (set_stun(0)) ident = TRUE;
-		if (set_cut(0)) ident = TRUE;
-		if (set_shero(0, TRUE)) ident = TRUE;
+		if (cure_critical_wounds(powerful ? 500 : 300)) ident = TRUE;
 		break;
 	}
 

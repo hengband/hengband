@@ -1332,12 +1332,7 @@ static bool cmd_racial_power_aux(s32b command)
 			{
 				msg_print(_("あなたは「パターン」を心に描いてその上を歩いた...", "You picture the Pattern in your mind and walk it..."));
 
-				(void)set_poisoned(0);
-				(void)set_image(0);
-				(void)set_stun(0);
-				(void)set_cut(0);
-				(void)set_blind(0);
-				(void)set_afraid(0);
+				(void)true_healing(0);
 				(void)restore_all_status();
 				(void)restore_level();
 			}

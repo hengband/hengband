@@ -83,12 +83,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerf
 
 	case SV_ROD_CURING:
 	{
-		if (set_blind(0)) ident = TRUE;
-		if (set_poisoned(0)) ident = TRUE;
-		if (set_confused(0)) ident = TRUE;
-		if (set_stun(0)) ident = TRUE;
-		if (set_cut(0)) ident = TRUE;
-		if (set_image(0)) ident = TRUE;
+		if (true_healing(0)) ident = TRUE;
 		if (set_shero(0, TRUE)) ident = TRUE;
 		break;
 	}
