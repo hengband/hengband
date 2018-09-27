@@ -436,12 +436,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				do_res_stat(A_STR);
-				do_res_stat(A_INT);
-				do_res_stat(A_WIS);
-				do_res_stat(A_DEX);
-				do_res_stat(A_CON);
-				do_res_stat(A_CHR);
+				(void)restore_all_status();
 				restore_level();
 			}
 		}

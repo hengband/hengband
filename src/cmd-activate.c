@@ -1122,12 +1122,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_REST_ALL:
 	{
 		msg_print(_("濃緑色に輝いている...", "It glows a deep green..."));
-		(void)do_res_stat(A_STR);
-		(void)do_res_stat(A_INT);
-		(void)do_res_stat(A_WIS);
-		(void)do_res_stat(A_DEX);
-		(void)do_res_stat(A_CON);
-		(void)do_res_stat(A_CHR);
+		(void)restore_all_status();
 		(void)restore_level();
 		break;
 	}

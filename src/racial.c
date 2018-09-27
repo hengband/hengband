@@ -1338,12 +1338,7 @@ static bool cmd_racial_power_aux(s32b command)
 				(void)set_cut(0);
 				(void)set_blind(0);
 				(void)set_afraid(0);
-				(void)do_res_stat(A_STR);
-				(void)do_res_stat(A_INT);
-				(void)do_res_stat(A_WIS);
-				(void)do_res_stat(A_DEX);
-				(void)do_res_stat(A_CON);
-				(void)do_res_stat(A_CHR);
+				(void)restore_all_status();
 				(void)restore_level();
 			}
 			break;

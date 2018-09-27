@@ -897,12 +897,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				msg_print(_("ˆÃ•‚Ì’†‚ÉŒõ‚Æ”ü‚ğ‚Ó‚è‚Ü‚¢‚½B‘Ì‚ªŒ³‚ÌŠˆ—Í‚ğæ‚è–ß‚µ‚½B",
 					"You strewed light and beauty in the dark as you sing. You feel refreshed."));
-				(void)do_res_stat(A_STR);
-				(void)do_res_stat(A_INT);
-				(void)do_res_stat(A_WIS);
-				(void)do_res_stat(A_DEX);
-				(void)do_res_stat(A_CON);
-				(void)do_res_stat(A_CHR);
+				(void)restore_all_status();
 				(void)restore_level();
 			}
 		}

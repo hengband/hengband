@@ -4993,12 +4993,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue)
 	(void)set_image(0);
 	(void)set_stun(0);
 	(void)set_cut(0);
-	(void)do_res_stat(A_STR);
-	(void)do_res_stat(A_CON);
-	(void)do_res_stat(A_DEX);
-	(void)do_res_stat(A_WIS);
-	(void)do_res_stat(A_INT);
-	(void)do_res_stat(A_CHR);
+	(void)restore_all_status();
 	(void)set_shero(0, TRUE);
 	update_stuff();
 	hp_player(5000);
@@ -5084,3 +5079,16 @@ bool_hack restore_mana(bool_hack magic_eater)
 
 	return ident;
 }
+
+bool restore_all_status(void)
+{
+	bool ident = FALSE; 
+	if (do_res_stat(A_STR)) ident = TRUE;
+	if (do_res_stat(A_INT)) ident = TRUE;
+	if (do_res_stat(A_WIS)) ident = TRUE;
+	if (do_res_stat(A_DEX)) ident = TRUE;
+	if (do_res_stat(A_CON)) ident = TRUE;
+	if (do_res_stat(A_CHR)) ident = TRUE;
+	return ident;
+}
+

@@ -4340,21 +4340,10 @@ static void bldg_process_command(building_type *bldg, int i)
 		do_cmd_study();
 		break;
 	case BACT_HEALING: /* needs work */
-		hp_player(200);
-		set_poisoned(0);
-		set_blind(0);
-		set_confused(0);
-		set_cut(0);
-		set_stun(0);
-		paid = TRUE;
+		paid = cure_critical_wounds(200);
 		break;
 	case BACT_RESTORE: /* needs work */
-		if (do_res_stat(A_STR)) paid = TRUE;
-		if (do_res_stat(A_INT)) paid = TRUE;
-		if (do_res_stat(A_WIS)) paid = TRUE;
-		if (do_res_stat(A_DEX)) paid = TRUE;
-		if (do_res_stat(A_CON)) paid = TRUE;
-		if (do_res_stat(A_CHR)) paid = TRUE;
+		paid = restore_all_status();
 		break;
 	case BACT_ENCHANT_ARROWS:
 		item_tester_hook = item_tester_hook_ammo;

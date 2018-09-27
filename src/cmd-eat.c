@@ -216,12 +216,7 @@ void do_cmd_eat_food_aux(int item)
 
 		case SV_FOOD_RESTORING:
 		{
-			if (do_res_stat(A_STR)) ident = TRUE;
-			if (do_res_stat(A_INT)) ident = TRUE;
-			if (do_res_stat(A_WIS)) ident = TRUE;
-			if (do_res_stat(A_DEX)) ident = TRUE;
-			if (do_res_stat(A_CON)) ident = TRUE;
-			if (do_res_stat(A_CHR)) ident = TRUE;
+			ident = restore_all_status();
 			break;
 		}
 

@@ -4099,7 +4099,6 @@ bool restore_level(void)
 	return (FALSE);
 }
 
-
 /*
  * Forget everything
  */

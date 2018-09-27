@@ -746,20 +746,10 @@ static bool pattern_effect(void)
 	switch (pattern_type)
 	{
 	case PATTERN_TILE_END:
-		(void)set_poisoned(0);
 		(void)set_image(0);
-		(void)set_stun(0);
-		(void)set_cut(0);
-		(void)set_blind(0);
-		(void)set_afraid(0);
-		(void)do_res_stat(A_STR);
-		(void)do_res_stat(A_INT);
-		(void)do_res_stat(A_WIS);
-		(void)do_res_stat(A_DEX);
-		(void)do_res_stat(A_CON);
-		(void)do_res_stat(A_CHR);
+		(void)restore_all_status();
 		(void)restore_level();
-		(void)hp_player(1000);
+		(void)cure_critical_wounds(1000);
 
 		cave_set_feat(p_ptr->y, p_ptr->x, feat_pattern_old);
 		msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));

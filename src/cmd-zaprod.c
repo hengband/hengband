@@ -95,22 +95,14 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerf
 
 	case SV_ROD_HEALING:
 	{
-		if (hp_player(powerful ? 750 : 500)) ident = TRUE;
-		if (set_stun(0)) ident = TRUE;
-		if (set_cut(0)) ident = TRUE;
-		if (set_shero(0, TRUE)) ident = TRUE;
+		if(cure_critical_wounds(powerful ? 750 : 500)) ident = TRUE;
 		break;
 	}
 
 	case SV_ROD_RESTORATION:
 	{
-		if (restore_level()) ident = TRUE;
-		if (do_res_stat(A_STR)) ident = TRUE;
-		if (do_res_stat(A_INT)) ident = TRUE;
-		if (do_res_stat(A_WIS)) ident = TRUE;
-		if (do_res_stat(A_DEX)) ident = TRUE;
-		if (do_res_stat(A_CON)) ident = TRUE;
-		if (do_res_stat(A_CHR)) ident = TRUE;
+		if(restore_level()) ident = TRUE;
+		if(restore_all_status()) ident = TRUE;
 		break;
 	}
 
