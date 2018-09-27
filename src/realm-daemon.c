@@ -154,9 +154,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int rad = (plev < 30) ? 2 : 3;
 			int base;
 
-			if (p_ptr->pclass == CLASS_MAGE ||
-				p_ptr->pclass == CLASS_HIGH_MAGE ||
-				p_ptr->pclass == CLASS_SORCERER)
+			if (IS_WIZARD_CLASS())
 				base = plev + plev / 2;
 			else
 				base = plev + plev / 4;

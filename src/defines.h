@@ -5416,6 +5416,9 @@ extern int PlayerUID;
 
 #define P_PTR_KI (p_ptr->magic_num1[0])
 
+#define IS_WIZARD_CLASS() \
+	(p_ptr->pclass == CLASS_MAGE || p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER || p_ptr->pclass == CLASS_MAGIC_EATER || p_ptr->pclass == CLASS_BLUE_MAGE)
+
 /* Multishadow effects is determined by turn */
 #define CHECK_MULTISHADOW() (p_ptr->multishadow && (turn & 1))
 
