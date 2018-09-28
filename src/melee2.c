@@ -462,9 +462,10 @@ static bool mon_will_run(MONSTER_IDX m_idx)
  * @param xp 適したマスのX座標を返す参照ポインタ
  * @return 有効なマスがあった場合TRUEを返す
  */
-static bool get_moves_aux2(MONSTER_IDX m_idx, int *yp, int *xp)
+static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-	int i, y, x, y1, x1, best = 999;
+	int i, best = 999;
+	POSITION y, x, y1, x1;
 
 	cave_type *c_ptr;
 	bool can_open_door = FALSE;
@@ -567,9 +568,10 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, int *yp, int *xp)
  * being close enough to chase directly.  I have no idea what will\n
  * happen if you combine "smell" with low "aaf" values.\n
  */
-static bool get_moves_aux(MONSTER_IDX m_idx, int *yp, int *xp, bool no_flow)
+static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no_flow)
 {
-	int i, y, x, y1, x1, best;
+	int i, best;
+	POSITION y, x, y1, x1;
 
 	cave_type *c_ptr;
 	bool use_scent = FALSE;
@@ -686,9 +688,9 @@ static bool get_moves_aux(MONSTER_IDX m_idx, int *yp, int *xp, bool no_flow)
  * but instead of heading directly for it, the monster should "swerve"\n
  * around the player so that he has a smaller chance of getting hit.\n
  */
-static bool get_fear_moves_aux(MONSTER_IDX m_idx, int *yp, int *xp)
+static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-	int y, x, y1, x1, fy, fx, gy = 0, gx = 0;
+	POSITION y, x, y1, x1, fy, fx, gy = 0, gx = 0;
 	int score = -1;
 	int i;
 
@@ -901,15 +903,15 @@ static sint *dist_offsets_x[10] =
  *\n
  * Return TRUE if a safe location is available.\n
  */
-static bool find_safety(MONSTER_IDX m_idx, int *yp, int *xp)
+static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
-	int fy = m_ptr->fy;
-	int fx = m_ptr->fx;
+	POSITION fy = m_ptr->fy;
+	POSITION fx = m_ptr->fx;
 
-	int y, x, dy, dx, d, dis, i;
-	int gy = 0, gx = 0, gdis = 0;
+	POSITION y, x, dy, dx, d, dis, i;
+	POSITION gy = 0, gx = 0, gdis = 0;
 
 	sint *y_offsets;
 	sint *x_offsets;
@@ -995,16 +997,16 @@ static bool find_safety(MONSTER_IDX m_idx, int *yp, int *xp)
  *\n
  * Return TRUE if a good location is available.\n
  */
-static bool find_hiding(MONSTER_IDX m_idx, int *yp, int *xp)
+static bool find_hiding(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	int fy = m_ptr->fy;
-	int fx = m_ptr->fx;
+	POSITION fy = m_ptr->fy;
+	POSITION fx = m_ptr->fx;
 
-	int y, x, dy, dx, d, dis, i;
-	int gy = 0, gx = 0, gdis = 999;
+	POSITION y, x, dy, dx, d, dis, i;
+	POSITION gy = 0, gx = 0, gdis = 999;
 
 	sint *y_offsets, *x_offsets;
 
@@ -1073,10 +1075,10 @@ static bool get_moves(MONSTER_IDX m_idx, int *mm)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	int          y = 0, ay, x = 0, ax;
+	POSITION     y = 0, ay, x = 0, ax;
 	int          move_val = 0;
-	int          y2 = p_ptr->y;
-	int          x2 = p_ptr->x;
+	POSITION     y2 = p_ptr->y;
+	POSITION     x2 = p_ptr->x;
 	bool         done = FALSE;
 	bool         will_run = mon_will_run(m_idx);
 	cave_type    *c_ptr;

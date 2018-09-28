@@ -4200,7 +4200,7 @@ void change_race(CHARACTER_IDX new_race, cptr effect_msg)
 	}
 	else
 	{
-		p_ptr->old_race2 |= 1L << (p_ptr->prace-32);
+		p_ptr->old_race2 |= 1L << (p_ptr->prace - 32);
 	}
 	p_ptr->prace = new_race;
 	rp_ptr = &race_info[p_ptr->prace];
