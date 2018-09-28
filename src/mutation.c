@@ -2083,16 +2083,6 @@ int calc_mutant_regenerate_mod(void)
 	return (regen);
 }
 
-/*!
- * @brief 突然変異レイシャル上で口を使うよりを行った際に歌や呪術を停止する /
- * @return なし
- */
-static void mutation_stop_mouth(void)
-{
-	if (music_singing_any()) stop_singing();
-	if (hex_spelling_any()) stop_hex_spell_all();
-}
-
 
 /*!
  * @brief 突然変異のレイシャル効果実装
@@ -2109,7 +2099,7 @@ bool mutation_power_aux(u32b power)
 	{
 		case MUT1_SPIT_ACID:
 			if (!get_aim_dir(&dir)) return FALSE;
-			mutation_stop_mouth();
+			stop_mouth();
 			msg_print(_("酸を吐きかけた...", "You spit acid..."));
 
 			fire_ball(GF_ACID, dir, lvl, 1 + (lvl / 30));
@@ -2117,7 +2107,7 @@ bool mutation_power_aux(u32b power)
 
 		case MUT1_BR_FIRE:
 			if (!get_aim_dir(&dir)) return FALSE;
-			mutation_stop_mouth();
+			stop_mouth();
 			msg_print(_("あなたは火炎のブレスを吐いた...", "You breathe fire..."));
 
 			fire_breath(GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
@@ -2167,7 +2157,7 @@ bool mutation_power_aux(u32b power)
 				x = p_ptr->x + ddx[dir];
 				c_ptr = &cave[y][x];
 
-				mutation_stop_mouth();
+				stop_mouth();
 
 				if (!(c_ptr->m_idx))
 				{
@@ -2204,12 +2194,12 @@ bool mutation_power_aux(u32b power)
 			break;
 
 		case MUT1_SMELL_MET:
-			mutation_stop_mouth();
+			stop_mouth();
 			(void)detect_treasure(DETECT_RAD_DEFAULT);
 			break;
 
 		case MUT1_SMELL_MON:
-			mutation_stop_mouth();
+			stop_mouth();
 			(void)detect_monsters_normal(DETECT_RAD_DEFAULT);
 			break;
 
@@ -2230,7 +2220,7 @@ bool mutation_power_aux(u32b power)
 				f_ptr = &f_info[c_ptr->feat];
 				mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
-				mutation_stop_mouth();
+				stop_mouth();
 
 				if (!have_flag(mimic_f_ptr->flags, FF_HURT_ROCK))
 				{
@@ -2294,7 +2284,7 @@ bool mutation_power_aux(u32b power)
 			break;
 
 		case MUT1_SHRIEK:
-			mutation_stop_mouth();
+			stop_mouth();
 			(void)fire_ball(GF_SOUND, 0, 2 * lvl, 8);
 			(void)aggravate_monsters(0);
 			break;
@@ -2389,15 +2379,8 @@ bool mutation_power_aux(u32b power)
 			break;
 
 		case MUT1_STERILITY:
-			/* Fake a population explosion. */
-#ifdef JP
-			msg_print("突然頭が痛くなった！");
-			take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, "禁欲を強いた疲労", -1);
-#else
-			msg_print("You suddenly have a headache!");
-			take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, "the strain of forcing abstinence", -1);
-#endif
-
+			msg_print(_("突然頭が痛くなった！", "You suddenly have a headache!"));
+			take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, _("禁欲を強いた疲労", "the strain of forcing abstinence"), -1);
 			num_repro += MAX_REPRO;
 			break;
 
@@ -2418,7 +2401,6 @@ bool mutation_power_aux(u32b power)
 				else
 				{
 					msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
-
 					msg_print(NULL);
 				}
 			}
@@ -2484,7 +2466,6 @@ bool mutation_power_aux(u32b power)
 				else
 				{
 					msg_print(_("祈りは効果がなかった！", "Your invocation is ineffectual!"));
-
 					if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
 				}
 			}

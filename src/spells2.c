@@ -5114,3 +5114,12 @@ bool restore_all_status(void)
 	return ident;
 }
 
+/*!
+ * @brief 口を使う継続的な処理を中断する
+ * @return なし
+ */
+void stop_mouth(void)
+{
+	if (music_singing_any()) stop_singing();
+	if (hex_spelling_any()) stop_hex_spell_all();
+}

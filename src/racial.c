@@ -738,15 +738,6 @@ static int racial_aux(power_desc_type *pd_ptr)
 	return -1;
 }
 
-/*!
- * @brief レイシャル・パワー発動時に口を使う継続的な詠唱処理を中断する
- * @return なし
- */
-void ratial_stop_mouth(void)
-{
-	if (music_singing_any()) stop_singing();
-	if (hex_spelling_any()) stop_hex_spell_all();
-}
 
 /*!
  * @brief レイシャル・パワー発動処理
@@ -1216,7 +1207,7 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
 			if (!get_aim_dir(&dir)) return FALSE;
-			ratial_stop_mouth();
+			stop_mouth();
 #ifdef JP
 			msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"));
 #else
@@ -1243,7 +1234,7 @@ static bool cmd_racial_power_aux(s32b command)
 				x = p_ptr->x + ddx[dir];
 				c_ptr = &cave[y][x];
 
-				ratial_stop_mouth();
+				stop_mouth();
 
 				if (!c_ptr->m_idx)
 				{
@@ -1364,14 +1355,14 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_YEEK:
 			if (!get_aim_dir(&dir)) return FALSE;
-			ratial_stop_mouth();
+			stop_mouth();
 			msg_print(_("身の毛もよだつ叫び声を上げた！", "You make a horrible scream!"));
 			(void)fear_monster(dir, plev);
 			break;
 
 		case RACE_KLACKON:
 			if (!get_aim_dir(&dir)) return FALSE;
-			ratial_stop_mouth();
+			stop_mouth();
 			msg_print(_("酸を吐いた。", "You spit acid."));
 			if (plev < 25) fire_bolt(GF_ACID, dir, plev);
 			else fire_ball(GF_ACID, dir, plev, 2);
@@ -1528,7 +1519,7 @@ static bool cmd_racial_power_aux(s32b command)
 					}
 				}
 
-				ratial_stop_mouth();
+				stop_mouth();
 				msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), Type_desc);
 
 				fire_breath(Type, dir, plev * 2, (plev / 15) + 1);
@@ -1582,7 +1573,7 @@ static bool cmd_racial_power_aux(s32b command)
 				x = p_ptr->x + ddx[dir];
 				c_ptr = &cave[y][x];
 
-				ratial_stop_mouth();
+				stop_mouth();
 
 				if (!c_ptr->m_idx)
 				{
@@ -1615,7 +1606,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_SPECTRE:
 			if (!get_aim_dir(&dir)) return FALSE;
-			ratial_stop_mouth();
+			stop_mouth();
 			msg_print(_("あなたはおどろおどろしい叫び声をあげた！", "You emit an eldritch howl!"));
 			(void)fear_monster(dir, plev);
 			break;
@@ -1630,7 +1621,7 @@ static bool cmd_racial_power_aux(s32b command)
 			{
 				int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
 				if (!get_aim_dir(&dir)) return FALSE;
-				ratial_stop_mouth();
+				stop_mouth();
 #ifdef JP
 				msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"));
 #else
