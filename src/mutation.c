@@ -2147,50 +2147,7 @@ bool mutation_power_aux(u32b power)
 			break;
 
 		case MUT1_VAMPIRISM:
-			{
-				int x, y, dummy;
-				cave_type *c_ptr;
-
-				/* Only works on adjacent monsters */
-				if (!get_rep_dir2(&dir)) return FALSE;
-				y = p_ptr->y + ddy[dir];
-				x = p_ptr->x + ddx[dir];
-				c_ptr = &cave[y][x];
-
-				stop_mouth();
-
-				if (!(c_ptr->m_idx))
-				{
-					msg_print(_("何もない場所に噛みついた！", "You bite into thin air!"));
-
-					break;
-				}
-
-				msg_print(_("あなたはニヤリとして牙をむいた...", "You grin and bare your fangs..."));
-
-
-				dummy = lvl * 2;
-
-				if (hypodynamic_bolt(dir, dummy))
-				{
-					if (p_ptr->food < PY_FOOD_FULL)
-						/* No heal if we are "full" */
-						(void)hp_player(dummy);
-					else
-						msg_print(_("あなたは空腹ではありません。", "You were not hungry."));
-
-					/* Gain nutritional sustenance: 150/hp drained */
-					/* A Food ration gives 5000 food points (by contrast) */
-					/* Don't ever get more than "Full" this way */
-					/* But if we ARE Gorged,  it won't cure us */
-					dummy = p_ptr->food + MIN(5000, 100 * dummy);
-					if (p_ptr->food < PY_FOOD_MAX)   /* Not gorged already */
-						(void)set_food(dummy >= PY_FOOD_MAX ? PY_FOOD_MAX-1 : dummy);
-				}
-				else
-					msg_print(_("げぇ！ひどい味だ。", "Yechh. That tastes foul."));
-
-			}
+			vampirism();
 			break;
 
 		case MUT1_SMELL_MET:
