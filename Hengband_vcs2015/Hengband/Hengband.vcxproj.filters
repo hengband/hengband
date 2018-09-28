@@ -316,6 +316,9 @@
     <ClCompile Include="..\..\src\object-hook.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-status.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -505,6 +508,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-zapwand.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-status.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

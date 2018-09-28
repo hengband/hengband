@@ -882,6 +882,7 @@ extern HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu
 extern bool py_attack(int y, int x, BIT_FLAGS mode);
 extern bool make_attack_normal(MONSTER_IDX m_idx);
 extern void process_monsters(void);
+extern void process_monster(MONSTER_IDX m_idx);
 extern int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type);
 extern void mproc_init(void);
 extern bool set_monster_csleep(MONSTER_IDX m_idx, int v);
