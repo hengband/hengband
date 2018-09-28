@@ -1167,12 +1167,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_BERSERK:
 	{
-		(void)set_afraid(0);
-		(void)set_shero(randint1(25) + 25, FALSE);
-		/* (void)set_afraid(0);
-		(void)set_hero(randint1(50) + 50, FALSE);
-		(void)set_blessed(randint1(50) + 50, FALSE);
-		o_ptr->timeout = 100 + randint1(100); */
+		(void)berserk(randint1(25) + 25);
 		break;
 	}
 

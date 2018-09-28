@@ -329,9 +329,7 @@ void do_cmd_quaff_potion_aux(int item)
 			break;
 
 		case SV_POTION_BESERK_STRENGTH:
-			if (set_afraid(0)) ident = TRUE;
-			if (set_shero(p_ptr->shero + randint1(25) + 25, FALSE)) ident = TRUE;
-			if (hp_player(30)) ident = TRUE;
+			ident = berserk(randint1(25) + 25);
 			break;
 
 		case SV_POTION_CURE_LIGHT:

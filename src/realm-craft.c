@@ -208,9 +208,7 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_shero(randint1(base) + base, FALSE);
-				hp_player(30);
-				set_afraid(0);
+				(void)berserk(base + randint1(base));
 			}
 		}
 		break;

@@ -2307,6 +2307,7 @@ bool create_named_art(int a_idx, int y, int x)
 	/* Drop the artifact from heaven */
 	return drop_near(q_ptr, -1, y, x) ? TRUE : FALSE;
 }
+
 /*対邪平均ダメージの計算処理*/
 int calc_arm_avgdamage(object_type *o_ptr)
 {

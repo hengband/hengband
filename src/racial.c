@@ -1317,9 +1317,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_HALF_TROLL:
 			msg_print(_("うがぁぁ！", "RAAAGH!"));
-			(void)set_afraid(0);
-			(void)set_shero(10 + randint1(plev), FALSE);
-			(void)hp_player(30);
+			(void)berserk(10 + randint1(plev));
 			break;
 
 		case RACE_AMBERITE:
@@ -1340,9 +1338,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_BARBARIAN:
 			msg_print(_("うぉぉおお！", "Raaagh!"));
-			(void)set_afraid(0);
-			(void)set_shero(10 + randint1(plev), FALSE);
-			(void)hp_player(30);
+			(void)berserk(10 + randint1(plev));
 			break;
 
 		case RACE_HALF_OGRE:

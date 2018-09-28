@@ -1173,6 +1173,7 @@ extern void cast_invoke_spirits(int dir);
 extern void cast_shuffle(void);
 extern bool_hack life_stream(bool_hack message, bool_hack virtue);
 extern bool_hack heroism(int base);
+extern bool_hack berserk(int base);
 extern bool_hack cure_light_wounds(int dice, int sides);
 extern bool_hack cure_serious_wounds(int dice, int sides);
 extern bool_hack cure_critical_wounds(HIT_POINT pow);

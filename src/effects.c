@@ -1282,8 +1282,8 @@ bool set_hero(TIME_EFFECT v, bool do_dec)
 
 /*!
  * @brief 狂戦士化の継続時間をセットする / Set "p_ptr->shero", notice observable changes
- * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param v 継続時間/ 0ならば無条件にリセット
+ * @param do_dec FALSEの場合現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_shero(TIME_EFFECT v, bool do_dec)
