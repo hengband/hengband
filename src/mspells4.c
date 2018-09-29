@@ -39,7 +39,7 @@ bool monster_near_player(MONSTER_IDX m_idx, IDX t_idx)
 */
 bool see_monster(MONSTER_IDX m_idx)
 {
-	monster_type	*m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &m_list[m_idx];
 	return is_seen(m_ptr);
 }
 
@@ -50,7 +50,7 @@ bool see_monster(MONSTER_IDX m_idx)
 */
 bool spell_learnable(MONSTER_IDX m_idx)
 {
-	monster_type	*m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &m_list[m_idx];
 	/* Extract the "see-able-ness" */
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 
@@ -907,7 +907,7 @@ HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_
 */
 HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	char m_name[80], t_name[80];
@@ -2531,7 +2531,7 @@ void spell_RF6_FORGET(MONSTER_IDX m_idx)
 */
 void spell_RF6_RAISE_DEAD(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &m_list[m_idx];
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),

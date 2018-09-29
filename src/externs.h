@@ -530,7 +530,7 @@ extern MONRACE_IDX max_r_idx;
 extern IDX max_k_idx;
 extern IDX max_v_idx;
 extern IDX max_f_idx;
-extern IDX max_a_idx;
+extern ARTIFACT_IDX max_a_idx;
 extern IDX max_e_idx;
 extern DUNGEON_IDX max_d_idx;
 extern OBJECT_IDX max_o_idx;
@@ -1506,7 +1506,7 @@ extern bool create_artifact(object_type *o_ptr, bool a_scroll);
 extern int activation_index(object_type *o_ptr);
 extern const activation_type* find_activation_info(object_type *o_ptr);
 extern void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr);
-extern bool create_named_art(int a_idx, int y, int x);
+extern bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x);
 
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);

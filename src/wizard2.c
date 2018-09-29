@@ -145,13 +145,13 @@ static bool set_gametime(void)
 static void wiz_create_named_art(void)
 {
 	char tmp_val[10] = "";
-	int a_idx;
+	ARTIFACT_IDX a_idx;
 
 	/* Query */
 	if (!get_string("Artifact ID:", tmp_val, 3)) return;
 
 	/* Extract */
-	a_idx = atoi(tmp_val);
+	a_idx = (ARTIFACT_IDX)atoi(tmp_val);
 	if(a_idx < 0) a_idx = 0;
 	if(a_idx >= max_a_idx) a_idx = 0; 
 
@@ -1417,7 +1417,7 @@ static void wiz_create_item(void)
 	object_type	forge;
 	object_type *q_ptr;
 
-	IDX k_idx;
+	OBJECT_IDX k_idx;
 
 	/* Save the screen */
 	screen_save();
@@ -1433,7 +1433,7 @@ static void wiz_create_item(void)
 
 	if (k_info[k_idx].gen_flags & TRG_INSTA_ART)
 	{
-		int i;
+		ARTIFACT_IDX i;
 
 		/* Artifactify */
 		for (i = 1; i < max_a_idx; i++)

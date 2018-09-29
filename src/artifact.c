@@ -2258,7 +2258,7 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
  * 仮に2個以上存在可能かつ装備品以外の固定アーティファクトが作成されれば
  * drop_near()関数の返り値は信用できなくなる.
  */
-bool create_named_art(int a_idx, int y, int x)
+bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 {
 	object_type forge;
 	object_type *q_ptr;

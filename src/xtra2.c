@@ -1024,7 +1024,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		/* Reward for "lazy" player */
 		if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
 		{
-			int a_idx = 0;
+			ARTIFACT_IDX a_idx = 0;
 			artifact_type *a_ptr = NULL;
 
 			if (!drop_chosen_item) break;
@@ -1244,7 +1244,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	/* Mega-Hack -- drop fixed items */
 	if (drop_chosen_item)
 	{
-		int a_idx = 0;
+		ARTIFACT_IDX a_idx = 0;
 		int chance = 0;
 
 		for(i = 0; i < 4; i++)

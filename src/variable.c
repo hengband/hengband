@@ -882,7 +882,7 @@ IDX max_f_idx;
 /*
  * Maximum number of artifacts in a_info.txt
  */
-IDX max_a_idx;
+ARTIFACT_IDX max_a_idx;
 
 /*
  * Maximum number of ego-items in e_info.txt
