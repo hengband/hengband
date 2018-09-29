@@ -2784,17 +2784,10 @@ static cptr *read_text_lines(cptr filename)
 static void prepare_default_pickpref(void)
 {
 	const cptr messages[] = {
-#ifdef JP
-		"あなたは「自動拾いエディタ」を初めて起動しました。",
-		"自動拾いのユーザー設定ファイルがまだ書かれていないので、",
-		"基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。",
+		_("あなたは「自動拾いエディタ」を初めて起動しました。", "You have activated the Auto-Picker Editor for the first time."),
+		_("自動拾いのユーザー設定ファイルがまだ書かれていないので、", "Since user pref file for autopick is not yet created,"),
+		_("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf ."),
 		NULL
-#else
-		"You have activated the Auto-Picker Editor for the first time.",
-		"Since user pref file for autopick is not yet created,",
-		"the default setting is loaded from lib/pref/pickpref.prf .",
-		NULL
-#endif
 	};
 
 	char buf[1024];
@@ -3803,11 +3796,11 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 /*
  * Editor command id's
  */
-#define EC_QUIT                1 
-#define EC_SAVEQUIT            2     
-#define EC_REVERT	       3 
-#define EC_HELP                4 
-#define EC_RETURN	       5        
+#define EC_QUIT            1
+#define EC_SAVEQUIT        2
+#define EC_REVERT	       3
+#define EC_HELP            4
+#define EC_RETURN	       5
 #define EC_LEFT		       6 
 #define EC_DOWN		       7 
 #define EC_UP		       8 
