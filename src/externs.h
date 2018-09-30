@@ -876,7 +876,7 @@ extern errr rd_savefile_new(void);
 extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
 /* melee1.c */
-/* melee2.c */
+/* monster-process.c */
 extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
 extern HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
 extern bool py_attack(int y, int x, BIT_FLAGS mode);
