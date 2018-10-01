@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\src\floor-save.c" />
     <ClCompile Include="..\..\src\history.c" />
     <ClCompile Include="..\..\src\monster-hook.c" />
+    <ClCompile Include="..\..\src\monster-process.c" />
     <ClCompile Include="..\..\src\monster-status.c" />
     <ClCompile Include="..\..\src\object-hook.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
@@ -193,7 +194,6 @@
     <ClCompile Include="..\..\src\main.c" />
     <ClCompile Include="..\..\src\mane.c" />
     <ClCompile Include="..\..\src\melee1.c" />
-    <ClCompile Include="..\..\src\melee2.c" />
     <ClCompile Include="..\..\src\mind.c" />
     <ClCompile Include="..\..\src\monster1.c" />
     <ClCompile Include="..\..\src\monster2.c" />

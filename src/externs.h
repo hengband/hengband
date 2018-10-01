@@ -285,7 +285,7 @@ extern bool ignore_unview;	/* Ignore whenever any monster does */
 extern bool show_ammo_detail;	/* Show Description of ammo damage */
 extern bool show_ammo_no_crit;	/* Show No-crit damage of ammo */
 extern bool show_ammo_crit_ratio;	/* Show critical ratio of ammo */
-
+extern bool show_actual_value;	/* Show actual value of skill */
 
 /*** Game-Play Options ***/
 

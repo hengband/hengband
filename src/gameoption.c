@@ -172,6 +172,9 @@ const option_type option_info[] =
 	{ &show_ammo_crit_ratio,        FALSE, OPT_PAGE_TEXT, 2, 16,
 	"show_ammo_crit_ratio",         _("矢弾の会心発生率を表示する", "Show critical ratio of ammo") },
 
+	{ &show_actual_value,           FALSE, OPT_PAGE_TEXT, 2, 17,
+	"show_actual_vaule",            _("各技能値に実値を表示する", "Show actual value of skill") },
+
 
 /*** Game-Play ***/
 

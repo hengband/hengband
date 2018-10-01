@@ -79,9 +79,6 @@
     <ClCompile Include="..\..\src\melee1.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\melee2.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -317,6 +314,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster-status.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-process.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

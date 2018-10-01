@@ -133,6 +133,7 @@ bool powerup_home;	/* Increase capacity of your home (*) */
 bool show_ammo_detail;	/* Show Description of ammo damage */
 bool show_ammo_no_crit;	/* Show No-crit damage of ammo */
 bool show_ammo_crit_ratio;	/* Show critical ratio of ammo */
+bool show_actual_value;	/* Show actual value of skill */
 
 
 
