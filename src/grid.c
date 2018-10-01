@@ -86,7 +86,7 @@ bool new_player_spot(void)
  * @param x 配置を試みたいマスのX座標
  * @return なし
  */
-void place_random_stairs(int y, int x)
+void place_random_stairs(POSITION y, POSITION x)
 {
 	bool up_stairs = TRUE;
 	bool down_stairs = TRUE;
@@ -136,7 +136,7 @@ void place_random_stairs(int y, int x)
  * @param room 部屋に接している場合向けのドア生成か否か
  * @return なし
  */
-void place_random_door(int y, int x, bool room)
+void place_random_door(POSITION y, POSITION x, bool room)
 {
 	int tmp, type;
 	s16b feat = feat_none;
@@ -220,7 +220,7 @@ void place_random_door(int y, int x, bool room)
  * @param type ドアの地形ID
  * @return なし
  */
-void place_closed_door(int y, int x, int type)
+void place_closed_door(POSITION y, POSITION x, int type)
 {
 	int tmp;
 	s16b feat = feat_none;
@@ -274,7 +274,7 @@ void place_closed_door(int y, int x, int type)
 * @param x 配置したいフロアのX座標
 * @return なし
 */
-void place_locked_door(int y, int x)
+void place_locked_door(POSITION y, POSITION x)
 {
 	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
 	{
@@ -296,7 +296,7 @@ void place_locked_door(int y, int x)
 * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
 * @return なし
 */
-void place_secret_door(int y, int x, int type)
+void place_secret_door(POSITION y, POSITION x, int type)
 {
 	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
 	{
@@ -343,7 +343,7 @@ void place_secret_door(int y, int x, int type)
  *
  * The doors must be INSIDE the allocated region.
  */
-void add_door(int x, int y)
+void add_door(POSITION x, POSITION y)
 {
 	/* Need to have a wall in the center square */
 	if (!is_outer_bold(y, x)) return;

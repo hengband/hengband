@@ -265,12 +265,12 @@
 
 extern bool new_player_spot(void);
 
-extern void place_random_stairs(int y, int x);
-extern void place_random_door(int y, int x, bool room);
-extern void place_closed_door(int y, int x, int type);
-extern void add_door(int x, int y);
-extern void place_secret_door(int y, int x, int type);
-extern void place_locked_door(int y, int x);
+extern void place_random_stairs(POSITION y, POSITION x);
+extern void place_random_door(POSITION y, POSITION x, bool room);
+extern void place_closed_door(POSITION y, POSITION x, int type);
+extern void add_door(POSITION x, POSITION y);
+extern void place_secret_door(POSITION y, POSITION x, int type);
+extern void place_locked_door(POSITION y, POSITION x);
 extern void try_door(int y, int x);
 extern void place_floor(int x1, int x2, int y1, int y2, bool light);
 extern void place_room(int x1, int x2, int y1, int y2, bool light);
