@@ -1479,6 +1479,7 @@ static void wiz_create_item(void)
 static void do_cmd_wiz_cure_all(void)
 {
 	(void)life_stream(FALSE, FALSE);
+	(void)restore_mana(TRUE);
 	(void)set_food(PY_FOOD_MAX - 1);
 }
 
@@ -1608,7 +1609,6 @@ static void do_cmd_wiz_learn(void)
 static void do_cmd_wiz_summon(int num)
 {
 	int i;
-
 	for (i = 0; i < num; i++)
 	{
 		(void)summon_specific(0, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
