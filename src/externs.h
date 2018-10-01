@@ -879,7 +879,7 @@ extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 /* monster-process.c */
 extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
 extern HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
-extern bool py_attack(int y, int x, BIT_FLAGS mode);
+extern bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool make_attack_normal(MONSTER_IDX m_idx);
 extern void process_monsters(void);
 extern void process_monster(MONSTER_IDX m_idx);

@@ -1337,7 +1337,7 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, BIT
 * @details
 * If no "weapon" is available, then "punch" the monster one time.
 */
-bool py_attack(int y, int x, BIT_FLAGS mode)
+bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	bool            fear = FALSE;
 	bool            mdeath = FALSE;

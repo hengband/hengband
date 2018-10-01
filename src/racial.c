@@ -80,7 +80,8 @@ static bool do_cmd_archer(void)
 	/**********Create shots*********/
 	if (ext == 1)
 	{
-		POSITION x, y, dir;
+		POSITION x, y;
+		DIRECTION dir;
 		cave_type *c_ptr;
 
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
