@@ -5176,3 +5176,26 @@ bool_hack vampirism(void)
 	return TRUE;
 }
 
+bool panic_hit(void)
+{
+	DIRECTION dir;
+	POSITION x, y;
+
+	if (!get_rep_dir2(&dir, FALSE)) return FALSE;
+	y = p_ptr->y + ddy[dir];
+	x = p_ptr->x + ddx[dir];
+	if (cave[y][x].m_idx)
+	{
+		py_attack(y, x, 0);
+		if (randint0(p_ptr->skill_dis) < 7)
+			msg_print(_("うまく逃げられなかった。", "You failed to run away."));
+		else
+			teleport_player(30, 0L);
+	}
+	else
+	{
+		msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
+		msg_print(NULL);
+	}
+
+}

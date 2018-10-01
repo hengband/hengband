@@ -80,7 +80,7 @@ static bool do_cmd_archer(void)
 	/**********Create shots*********/
 	if (ext == 1)
 	{
-		int x,y, dir;
+		POSITION x, y, dir;
 		cave_type *c_ptr;
 
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
@@ -805,23 +805,7 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_ROGUE:
 		{
-			int x, y;
-
-			if (!get_rep_dir(&dir, FALSE)) return FALSE;
-			y = p_ptr->y + ddy[dir];
-			x = p_ptr->x + ddx[dir];
-			if (cave[y][x].m_idx)
-			{
-				py_attack(y, x, 0);
-				if (randint0(p_ptr->skill_dis) < 7)
-					msg_print(_("うまく逃げられなかった。", "You are failed to run away."));
-				else teleport_player(30, 0L);
-			}
-			else
-			{
-				msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
-				msg_print(NULL);
-			}
+			if(!panic_hit()) return FALSE;
 			break;
 		}
 		case CLASS_RANGER:
@@ -906,7 +890,7 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			else if (command == -4)
 			{
-				int x, y;
+				POSITION x, y;
 
 				if (!get_rep_dir(&dir, FALSE)) return FALSE;
 				y = p_ptr->y + ddy[dir];

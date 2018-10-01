@@ -1672,22 +1672,7 @@ static bool cast_ninja_spell(int spell)
 	}
 	case 5:
 	{
-		if (!get_rep_dir(&dir, FALSE)) return FALSE;
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
-		if (cave[y][x].m_idx)
-		{
-			py_attack(y, x, 0);
-			if (randint0(p_ptr->skill_dis) < 7)
-				msg_print(_("うまく逃げられなかった。", "You failed to run away."));
-			else
-				teleport_player(30, 0L);
-		}
-		else
-		{
-			msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
-			msg_print(NULL);
-		}
+		if(!panic_hit()) return FALSE;
 		break;
 	}
 	case 6:

@@ -1183,6 +1183,7 @@ extern bool_hack restore_mana(bool_hack magic_eater);
 extern bool restore_all_status(void);
 extern void stop_mouth(void);
 extern bool_hack vampirism(void);
+extern bool panic_hit(void);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);
