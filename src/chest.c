@@ -95,14 +95,14 @@ void chest_death(bool scatter, int y, int x, s16b o_idx)
 				if (!cave_empty_bold(y, x)) continue;
 
 				/* Place the object there. */
-				drop_near(q_ptr, -1, y, x);
+				(void)drop_near(q_ptr, -1, y, x);
 
 				/* Done. */
 				break;
 			}
 		}
 		/* Normally, drop object near the chest. */
-		else drop_near(q_ptr, -1, y, x);
+		else (void)drop_near(q_ptr, -1, y, x);
 	}
 
 	/* Reset the object level */

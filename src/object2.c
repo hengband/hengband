@@ -4940,9 +4940,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 bool make_gold(object_type *j_ptr)
 {
 	int i;
-
 	s32b base;
-
 
 	/* Hack -- Pick a Treasure variety */
 	i = ((randint1(object_level + 2) + 2) / 2) - 1;
@@ -4963,7 +4961,7 @@ bool make_gold(object_type *j_ptr)
 	object_prep(j_ptr, OBJ_GOLD_LIST + i);
 
 	/* Hack -- Base coin cost */
-	base = k_info[OBJ_GOLD_LIST+i].cost;
+	base = k_info[OBJ_GOLD_LIST + i].cost;
 
 	/* Determine how much the treasure is "worth" */
 	j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
@@ -4984,11 +4982,10 @@ bool make_gold(object_type *j_ptr)
  */
 void place_gold(POSITION y, POSITION x)
 {
-	s16b o_idx;
+	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
 	cave_type *c_ptr = &cave[y][x];
-
 
 	object_type forge;
 	object_type *q_ptr;
@@ -5012,7 +5009,6 @@ void place_gold(POSITION y, POSITION x)
 
 	/* Make some gold */
 	if (!make_gold(q_ptr)) return;
-
 
 	/* Make an object */
 	o_idx = o_pop();
@@ -5054,7 +5050,7 @@ void place_gold(POSITION y, POSITION x)
  * @param chance ドロップの成功率(%)
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
- * @return 生成に成功したらTRUEを返す。
+ * @return 生成に成功したらオブジェクトのIDを返す。
  * @details
  * The initial location is assumed to be "in_bounds()".\n
  *\n
@@ -5069,18 +5065,17 @@ void place_gold(POSITION y, POSITION x)
  * the object can combine, stack, or be placed.  Artifacts will try very\n
  * hard to be placed, including "teleporting" to a useful grid if needed.\n
  */
-s16b drop_near(object_type *j_ptr, int chance, int y, int x)
+OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
 {
 	int i, k, d, s;
 
 	int bs, bn;
-	int by, bx;
-	int dy, dx;
-	int ty, tx = 0;
+	POSITION by, bx;
+	POSITION dy, dx;
+	POSITION ty, tx = 0;
 
-	s16b o_idx = 0;
-
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	cave_type *c_ptr;
 
@@ -5105,11 +5100,8 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
 #ifdef JP
 		msg_format("%sは消えた。", o_name);
 #else
-		msg_format("The %s disappear%s.",
-			   o_name, (plural ? "" : "s"));
+		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-
-
 		/* Debug */
 		if (p_ptr->wizard) msg_print(_("(破損)", "(breakage)"));
 

@@ -583,17 +583,9 @@ void vault_objects(int y, int x, int num)
 			}
 
 
-			if (dummy >= SAFE_MAX_ATTEMPTS)
+			if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room)
 			{
-				if (cheat_room)
-				{
-#ifdef JP
-msg_print("警告！地下室のアイテムを配置できません！");
-#else
-					msg_print("Warning! Could not place vault object!");
-#endif
-
-				}
+				msg_print(_("警告！地下室のアイテムを配置できません！", "Warning! Could not place vault object!"));
 			}
 
 

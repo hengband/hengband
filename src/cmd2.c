@@ -2375,9 +2375,9 @@ void do_cmd_rest(void)
  * @details
  * Note that artifacts never break, see the "drop_near()" function.
  */
-static int breakage_chance(object_type *o_ptr)
+static PERCENTAGE breakage_chance(object_type *o_ptr)
 {
-	int archer_bonus = (p_ptr->pclass == CLASS_ARCHER ? (p_ptr->lev-1)/7 + 4: 0);
+	PERCENTAGE archer_bonus = (p_ptr->pclass == CLASS_ARCHER ? (PERCENTAGE)(p_ptr->lev-1)/7 + 4: 0);
 
 	/* Examine the snipe type */
 	if (snipe_type)
@@ -2837,10 +2837,11 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 void do_cmd_fire_aux(int item, object_type *j_ptr)
 {
 	int dir;
-	int i, j, y, x, ny, nx, ty, tx, prev_y, prev_x;
+	int i, y, x, ny, nx, ty, tx, prev_y, prev_x;
 	int tdam_base, tdis, thits, tmul;
 	int bonus, chance;
 	int cur_dis, visible;
+	PERCENTAGE j;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -3499,11 +3500,12 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 {
 	DIRECTION dir;
 	OBJECT_IDX item;
-	int i, j, y, x, ty, tx, prev_y, prev_x;
+	int i, y, x, ty, tx, prev_y, prev_x;
 	int ny[19], nx[19];
 	int chance, tdam, tdis;
 	int mul, div, dd, ds;
 	int cur_dis, visible;
+	PERCENTAGE j;
 
 	object_type forge;
 	object_type *q_ptr;

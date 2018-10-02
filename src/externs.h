@@ -1008,7 +1008,7 @@ extern bool make_object(object_type *j_ptr, BIT_FLAGS mode);
 extern void place_object(POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool make_gold(object_type *j_ptr);
 extern void place_gold(POSITION y, POSITION x);
-extern s16b drop_near(object_type *o_ptr, int chance, int y, int x);
+extern OBJECT_IDX drop_near(object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
 extern void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bool known);
 extern void amusement(POSITION y1, POSITION x1, int num, bool known);
 extern void inven_item_charges(int item);
