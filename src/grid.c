@@ -558,7 +558,7 @@ void place_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_objects(int y, int x, int num)
+void vault_objects(POSITION y, POSITION x, int num)
 {
 	int dummy = 0;
 	int i = 0, j = y, k = x;
@@ -621,7 +621,7 @@ void vault_objects(int y, int x, int num)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_trap_aux(int y, int x, int yd, int xd)
+void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
 	int count = 0, y1 = y, x1 = x;
 	int dummy = 0;
@@ -641,17 +641,9 @@ void vault_trap_aux(int y, int x, int yd, int xd)
 			break;
 		}
 
-		if (dummy >= SAFE_MAX_ATTEMPTS)
+		if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room)
 		{
-			if (cheat_room)
-			{
-#ifdef JP
-msg_print("警告！地下室のトラップを配置できません！");
-#else
-				msg_print("Warning! Could not place vault trap!");
-#endif
-
-			}
+			msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
 		}
 
 		/* Require "naked" floor grids */
@@ -677,7 +669,7 @@ msg_print("警告！地下室のトラップを配置できません！");
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_traps(int y, int x, int yd, int xd, int num)
+void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 {
 	int i;
 
@@ -696,7 +688,7 @@ void vault_traps(int y, int x, int yd, int xd, int num)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_monsters(int y1, int x1, int num)
+void vault_monsters(POSITION y1, POSITION x1, int num)
 {
 	int k, i;
 	POSITION y, x;
