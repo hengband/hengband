@@ -474,7 +474,7 @@ static bool possible_doorway(int y, int x)
 * @param x 設置を行いたいマスのX座標
 * @return なし
 */
-void try_door(int y, int x)
+void try_door(POSITION y, POSITION x)
 {
 	/* Paranoia */
 	if (!in_bounds(y, x)) return;
@@ -503,7 +503,7 @@ void try_door(int y, int x)
  * @param light 照明の有無
  * @return なし
  */
-void place_floor(int x1, int x2, int y1, int y2, bool light)
+void place_floor(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
 {
 	int x, y;
 
@@ -529,7 +529,7 @@ void place_floor(int x1, int x2, int y1, int y2, bool light)
  * @param light 照明の有無
  * @return なし
  */
-void place_room(int x1, int x2, int y1, int y2, bool light)
+void place_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
 {
 	int y, x;
 
