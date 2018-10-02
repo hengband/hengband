@@ -1514,6 +1514,9 @@ errr check_load_init(void)
 #define ENTRY_SKILL_SEARCH 25
 #define ENTRY_SKILL_DISARM 26
 #define ENTRY_SKILL_DEVICE 27
+#define ENTRY_SKILL_DIG 45
+
+
 #define ENTRY_BLOWS 28
 #define ENTRY_SHOTS 29
 #define ENTRY_AVG_DMG 30
@@ -1589,6 +1592,7 @@ static struct
 	{29,  7, 21, "属性"},
 	{29, 14, 21, "強化度"},
 	{29, 16, 21, "次レベル"},
+	{53, 19, -1, "掘削      :" },
 };
 #else
 = {
@@ -1637,6 +1641,7 @@ static struct
 	{29,  7, 21, "Align"},
 	{29, 14, 21, "Construction"},
 	{29, 16, 21, "Const to Adv"},
+	{53, 19, -1, "Digging    :" },
 };
 #endif
 
@@ -2026,6 +2031,7 @@ static void display_player_various(void)
 	int         tmp, damage[2], to_h[2], blows1, blows2, i, basedam;
 	int			xthn, xthb, xfos, xsrh;
 	int			xdis, xdev, xsav, xstl;
+	int			xdig;
 	cptr		desc;
 	int         muta_att = 0;
 	u32b flgs[TR_FLAG_SIZE];
@@ -2150,6 +2156,7 @@ static void display_player_various(void)
 	xstl = p_ptr->skill_stl;
 	xsrh = p_ptr->skill_srh;
 	xfos = p_ptr->skill_fos;
+	xdig = p_ptr->skill_dig;
 
 
 	desc = likert(xthn, 12);
@@ -2176,6 +2183,12 @@ static void display_player_various(void)
 
 	desc = likert(xdev, 6);
 	display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
+
+	desc = likert(xdev, 6);
+	display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
+
+	desc = likert(xdig, 4);
+	display_player_one_line(ENTRY_SKILL_DIG, desc, likert_color);
 
 	if (!muta_att)
 		display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
