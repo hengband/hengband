@@ -89,6 +89,7 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP     */
 	{{  0,  0,  0,  0,  1,  1,  1,  2,  2,  2,  2}, 40}, /*GLASS    */
 	{{  1,  1,  1,  1,  1,  1,  1,  2,  2,  3,  3},  1}, /*ARCADE   */
+	{{ 20, 40, 60, 80,100,100,100,100,100,100,100},  1}, /*FIX   */
 };
 
 
@@ -109,6 +110,7 @@ static byte room_build_order[ROOM_T_MAX] = {
 	ROOM_T_OVERLAP,
 	ROOM_T_CROSS,
 	ROOM_T_FRACAVE,
+	ROOM_T_FIXED,
 	ROOM_T_NORMAL,
 };
 
@@ -2072,6 +2074,7 @@ static bool room_build(int typ)
 	case ROOM_T_TRAP:          return build_type14();
 	case ROOM_T_GLASS:         return build_type15();
 	case ROOM_T_ARCADE:        return build_type16();
+	case ROOM_T_FIXED:        return build_type17();
 	}
 
 	/* Paranoia */

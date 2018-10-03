@@ -39,8 +39,9 @@
 #define ROOM_T_TRAP          13	 /*!<部屋型ID:トラップ部屋 / Piranha/Armageddon trap room */
 #define ROOM_T_GLASS         14	 /*!<部屋型ID:ガラス部屋 / Glass room */
 #define ROOM_T_ARCADE        15  /*!<部屋型ID:商店 / Arcade */
+#define ROOM_T_FIXED         16  /*!<部屋型ID:固定部屋 / Fixed room */
 
-#define ROOM_T_MAX 16 /*!<部屋型ID最大数 */
+#define ROOM_T_MAX 17 /*!<部屋型ID最大数 */
 
 
 /*
