@@ -1200,7 +1200,7 @@ static void create_cata_tunnel(POSITION x, POSITION y)
  * This, when used with longer line segments gives the "catacomb-like" tunnels seen near\n
  * the surface.\n
  */
-static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, bool *fail)
+static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int count, bool *fail)
 {
 	int i;
 	POSITION x, y;
@@ -1331,7 +1331,7 @@ static void short_seg_hack(int x1, int y1, int x2, int y2, int type, int count, 
 bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
 {
 	POSITION x3, y3, dx, dy;
-	int changex, changey;
+	POSITION changex, changey;
 	int length;
 	int i;
 	bool retval, firstsuccede;
@@ -1342,7 +1342,7 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 	if (length > cutoff)
 	{
 		/*
-		* Divide path in half and call routine twice.
+		 * Divide path in half and call routine twice.
 		 */
 		dx = (x2 - x1) / 2;
 		dy = (y2 - y1) / 2;
