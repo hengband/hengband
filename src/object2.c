@@ -842,7 +842,6 @@ void object_aware(object_type *o_ptr)
 	}
 }
 
-
 /*!
  * @brief オブジェクトを試行済にする /
  * Something has been "sampled"
@@ -855,6 +854,79 @@ void object_tried(object_type *o_ptr)
 	k_info[o_ptr->k_idx].tried = TRUE;
 }
 
+/*!
+* @brief 重度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
+* @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
+* @return 擬似鑑定結果のIDを返す。
+*/
+byte value_check_aux1(object_type *o_ptr)
+{
+	/* Artifacts */
+	if (object_is_artifact(o_ptr))
+	{
+		/* Cursed/Broken */
+		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) return FEEL_TERRIBLE;
+
+		/* Normal */
+		return FEEL_SPECIAL;
+	}
+
+	/* Ego-Items */
+	if (object_is_ego(o_ptr))
+	{
+		/* Cursed/Broken */
+		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) return FEEL_WORTHLESS;
+
+		/* Normal */
+		return FEEL_EXCELLENT;
+	}
+
+	/* Cursed items */
+	if (object_is_cursed(o_ptr)) return FEEL_CURSED;
+
+	/* Broken items */
+	if (object_is_broken(o_ptr)) return FEEL_BROKEN;
+
+	if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET)) return FEEL_AVERAGE;
+
+	/* Good "armor" bonus */
+	if (o_ptr->to_a > 0) return FEEL_GOOD;
+
+	/* Good "weapon" bonus */
+	if (o_ptr->to_h + o_ptr->to_d > 0) return FEEL_GOOD;
+
+	/* Default to "average" */
+	return FEEL_AVERAGE;
+}
+
+/*!
+* @brief 軽度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 2 (Light).
+* @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
+* @return 擬似鑑定結果のIDを返す。
+*/
+byte value_check_aux2(object_type *o_ptr)
+{
+	/* Cursed items (all of them) */
+	if (object_is_cursed(o_ptr)) return FEEL_CURSED;
+
+	/* Broken items (all of them) */
+	if (object_is_broken(o_ptr)) return FEEL_BROKEN;
+
+	/* Artifacts -- except cursed/broken ones */
+	if (object_is_artifact(o_ptr)) return FEEL_UNCURSED;
+
+	/* Ego-Items -- except cursed/broken ones */
+	if (object_is_ego(o_ptr)) return FEEL_UNCURSED;
+
+	/* Good armor bonus */
+	if (o_ptr->to_a > 0) return FEEL_UNCURSED;
+
+	/* Good weapon bonuses */
+	if (o_ptr->to_h + o_ptr->to_d > 0) return FEEL_UNCURSED;
+
+	/* No feeling */
+	return FEEL_NONE;
+}
 
 /*!
  * @brief 未鑑定なベースアイテムの基本価格を返す /

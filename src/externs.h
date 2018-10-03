@@ -792,9 +792,6 @@ extern void determine_today_mon(bool conv_old);
 extern void play_game(bool new_game);
 extern s32b turn_real(s32b hoge);
 extern void prevent_turn_overflow(void);
-extern byte value_check_aux1(object_type *o_ptr);
-extern byte value_check_aux2(object_type *o_ptr);
-
 
 
 /* files.c */
@@ -991,6 +988,8 @@ extern s16b get_obj_num(int level);
 extern void object_known(object_type *o_ptr);
 extern void object_aware(object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
+extern byte value_check_aux1(object_type *o_ptr);
+extern byte value_check_aux2(object_type *o_ptr);
 extern s32b object_value(object_type *o_ptr);
 extern s32b object_value_real(object_type *o_ptr);
 extern bool can_player_destroy_object(object_type *o_ptr);

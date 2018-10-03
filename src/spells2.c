@@ -5207,7 +5207,6 @@ bool panic_hit(void)
 /*!
 * @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the inventory (or on the floor)
 * @return なし
-* @todo mind.cにこの関数を移動させるべき。
 * @note
 * currently this function allows pseudo-id of any object,
 * including silly ones like potions & scrolls, which always
