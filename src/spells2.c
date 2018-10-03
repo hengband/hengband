@@ -1538,9 +1538,10 @@ bool probing(void)
  * "earthquake" by using the "full" to select "destruction".
  * </pre>
  */
-bool destroy_area(int y1, int x1, int r, bool in_generate)
+bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 {
-	int       y, x, k, t;
+	POSITION y, x;
+	int k, t;
 	cave_type *c_ptr;
 	bool      flag = FALSE;
 
@@ -1834,9 +1835,10 @@ bool destroy_area(int y1, int x1, int r, bool in_generate)
  * This has allowed massive simplification of the "monster" code.
  * </pre>
  */
-bool earthquake_aux(int cy, int cx, int r, MONSTER_IDX m_idx)
+bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 {
-	int             i, t, y, x, yy, xx, dy, dx;
+	int i, t;
+	POSITION y, x, yy, xx, dy, dx;
 	int             damage = 0;
 	int             sn = 0;
 	POSITION        sy = 0, sx = 0;
@@ -2298,7 +2300,7 @@ bool earthquake_aux(int cy, int cx, int r, MONSTER_IDX m_idx)
  * @param cx 中心X座標
  * @param r 効果半径
  */
-bool earthquake(int cy, int cx, int r)
+bool earthquake(POSITION cy, POSITION cx, POSITION r)
 {
 	return earthquake_aux(cy, cx, r, 0);
 }
