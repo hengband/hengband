@@ -563,9 +563,9 @@ static void store_height(int x, int y, int val)
  *    small values are good for smooth walls.
  *  size=length of the side of the square cave system.
  */
-void generate_hmap(int y0, int x0, int xsiz, int ysiz, int grd, int roug, int cutoff)
+void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
 {
-	int xhsize, yhsize, xsize, ysize, maxsize;
+	POSITION xhsize, yhsize, xsize, ysize, maxsize;
 
 	/*
 	 * fixed point variables- these are stored as 256 x normal value
@@ -920,9 +920,10 @@ static void cave_fill(POSITION y, POSITION x)
 }
 
 
-bool generate_fracave(int y0, int x0, int xsize, int ysize, int cutoff, bool light, bool room)
+bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int cutoff, bool light, bool room)
 {
-	int x, y, i, xhsize, yhsize;
+	POSITION x, y, xhsize, yhsize;
+	int i;
 
 	/* offsets to middle from corner */
 	xhsize = xsize / 2;
