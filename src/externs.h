@@ -790,9 +790,11 @@ extern void extract_option_vars(void);
 extern void determine_bounty_uniques(void);
 extern void determine_today_mon(bool conv_old);
 extern void play_game(bool new_game);
-extern bool psychometry(void);
 extern s32b turn_real(s32b hoge);
 extern void prevent_turn_overflow(void);
+extern byte value_check_aux1(object_type *o_ptr);
+extern byte value_check_aux2(object_type *o_ptr);
+
 
 
 /* files.c */
@@ -1182,6 +1184,7 @@ extern bool restore_all_status(void);
 extern void stop_mouth(void);
 extern bool_hack vampirism(void);
 extern bool panic_hit(void);
+extern bool psychometry(void);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);

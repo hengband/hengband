@@ -5203,3 +5203,125 @@ bool panic_hit(void)
 	}
 
 }
+
+/*!
+* @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the inventory (or on the floor)
+* @return なし
+* @todo mind.cにこの関数を移動させるべき。
+* @note
+* currently this function allows pseudo-id of any object,
+* including silly ones like potions & scrolls, which always
+* get '{average}'. This should be changed, either to stop such
+* items from being pseudo-id'd, or to allow psychometry to
+* detect whether the unidentified potion/scroll/etc is
+* good (Cure Light Wounds, Restore Strength, etc) or
+* bad (Poison, Weakness etc) or 'useless' (Slime Mold Juice, etc).
+*/
+bool psychometry(void)
+{
+	OBJECT_IDX      item;
+	object_type     *o_ptr;
+	char            o_name[MAX_NLEN];
+	byte            feel;
+	cptr            q, s;
+	bool okay = FALSE;
+
+	item_tester_no_ryoute = TRUE;
+	/* Get an item */
+	q = _("どのアイテムを調べますか？", "Meditate on which item? ");
+	s = _("調べるアイテムがありません。", "You have nothing appropriate.");
+
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+
+	/* Get the item (in the pack) */
+	if (item >= 0)
+	{
+		o_ptr = &inventory[item];
+	}
+
+	/* Get the item (on the floor) */
+	else
+	{
+		o_ptr = &o_list[0 - item];
+	}
+
+	/* It is fully known, no information needed */
+	if (object_is_known(o_ptr))
+	{
+		msg_print(_("何も新しいことは判らなかった。", "You cannot find out anything more about that."));
+		return TRUE;
+	}
+
+	/* Check for a feeling */
+	feel = value_check_aux1(o_ptr);
+
+	/* Get an object description */
+	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+
+	/* Skip non-feelings */
+	if (!feel)
+	{
+		msg_format(_("%sからは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the %s."), o_name);
+		return TRUE;
+	}
+
+#ifdef JP
+	msg_format("%sは%sという感じがする...",
+		o_name, game_inscriptions[feel]);
+#else
+	msg_format("You feel that the %s %s %s...",
+		o_name, ((o_ptr->number == 1) ? "is" : "are"),
+		game_inscriptions[feel]);
+#endif
+
+
+	/* We have "felt" it */
+	o_ptr->ident |= (IDENT_SENSE);
+
+	/* "Inscribe" it */
+	o_ptr->feeling = feel;
+
+	/* Player touches it */
+	o_ptr->marked |= OM_TOUCHED;
+
+	/* Combine / Reorder the pack (later) */
+	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+
+	/* Window stuff */
+	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+
+	/* Valid "tval" codes */
+	switch (o_ptr->tval)
+	{
+	case TV_SHOT:
+	case TV_ARROW:
+	case TV_BOLT:
+	case TV_BOW:
+	case TV_DIGGING:
+	case TV_HAFTED:
+	case TV_POLEARM:
+	case TV_SWORD:
+	case TV_BOOTS:
+	case TV_GLOVES:
+	case TV_HELM:
+	case TV_CROWN:
+	case TV_SHIELD:
+	case TV_CLOAK:
+	case TV_SOFT_ARMOR:
+	case TV_HARD_ARMOR:
+	case TV_DRAG_ARMOR:
+	case TV_CARD:
+	case TV_RING:
+	case TV_AMULET:
+	case TV_LITE:
+	case TV_FIGURINE:
+		okay = TRUE;
+		break;
+	}
+
+	/* Auto-inscription/destroy */
+	autopick_alter_item(item, (bool)(okay && destroy_feeling));
+
+	/* Something happened */
+	return (TRUE);
+}
