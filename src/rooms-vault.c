@@ -1231,7 +1231,7 @@ bool build_type17(void)
 #endif
 
 	/* Message */
-	msg_format_wizard(CHEAT_DUNGEON, _("¬Œ^Vault(%s)‚ð¶¬‚µ‚Ü‚µ‚½B", "Lesser vault (%s)."), v_name + v_ptr->name);
+	msg_format_wizard(CHEAT_DUNGEON, _("“ÁŽêŒÅ’è•”‰®(%s)‚ð¶¬‚µ‚Ü‚µ‚½B", "Special Fix room (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,

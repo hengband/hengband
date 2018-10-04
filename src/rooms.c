@@ -2074,7 +2074,7 @@ static bool room_build(int typ)
 	case ROOM_T_TRAP:          return build_type14();
 	case ROOM_T_GLASS:         return build_type15();
 	case ROOM_T_ARCADE:        return build_type16();
-	case ROOM_T_FIXED:        return build_type17();
+	case ROOM_T_FIXED:         return build_type17();
 	}
 
 	/* Paranoia */
