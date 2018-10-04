@@ -5581,7 +5581,7 @@ bool eat_magic(int power)
  * @param mode 召喚オプション
  * @return ターンを消費した場合TRUEを返す
  */
-bool summon_kin_player(int level, int y, int x, BIT_FLAGS mode)
+bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	bool pet = (bool)(mode & PM_FORCE_PET);
 	if (!pet) mode |= PM_NO_PET;
@@ -5697,7 +5697,7 @@ bool summon_kin_player(int level, int y, int x, BIT_FLAGS mode)
  */
 void massacre(void)
 {
-	int x, y;
+	POSITION x, y;
 	cave_type       *c_ptr;
 	monster_type    *m_ptr;
 	int dir;

@@ -297,7 +297,7 @@ static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool(*s
 void hit_trap(bool break_trap)
 {
 	int i, num, dam;
-	int x = p_ptr->x, y = p_ptr->y;
+	POSITION x = p_ptr->x, y = p_ptr->y;
 
 	/* Get the cave grid */
 	cave_type *c_ptr = &cave[y][x];
