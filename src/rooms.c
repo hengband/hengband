@@ -125,9 +125,9 @@ static byte room_build_order[ROOM_T_MAX] = {
  * Note - this should be used only on allocated regions
  * within another room.
  */
-void build_small_room(int x0, int y0)
+void build_small_room(POSITION x0, POSITION y0)
 {
-	int x, y;
+	POSITION x, y;
 
 	for (y = y0 - 1; y <= y0 + 1; y++)
 	{
@@ -167,9 +167,10 @@ void build_small_room(int x0, int y0)
  * @param y2 範囲の下端
  * @return なし
  */
-static void check_room_boundary(int x1, int y1, int x2, int y2)
+static void check_room_boundary(POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
-	int count, x, y;
+	int count;
+	POSITION x, y;
 	bool old_is_floor, new_is_floor;
 
 
@@ -1660,10 +1661,10 @@ void r_visit(int y1, int x1, int y2, int x2, int node, int dir, int *visited)
 }
 
 
-void build_maze_vault(int x0, int y0, int xsize, int ysize, bool is_vault)
+void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault)
 {
-	int y, x, dy, dx;
-	int y1, x1, y2, x2;
+	POSITION y, x, dy, dx;
+	POSITION y1, x1, y2, x2;
 	int m, n, num_vertices, *visited;
 	bool light;
 	cave_type *c_ptr;
