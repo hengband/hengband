@@ -47,6 +47,10 @@
 #    9 - monster up to 9 levels OOD and treasure up to 7 levels OOD
 #    8 - monster up to 40 levels OOD and treasure up to 20 levels OOD
 #    , - monster up to 3 levels OOD and/or treasure up to 7 levels OOD
+#    ~ - shallow water
+#    = - deep water
+#    v - shallow lava
+#    w - deep lava
 
 # Version stamp (required)
 

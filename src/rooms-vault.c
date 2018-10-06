@@ -452,6 +452,23 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				place_object(y, x, AM_GOOD | AM_GREAT);
 				object_level = base_level;
 				break;
+
+			case '~':
+				set_cave_feat(y, x, feat_shallow_water);
+				break;
+
+			case '=':
+				set_cave_feat(y, x, feat_deep_water);
+				break;
+
+			case 'v':
+				set_cave_feat(y, x, feat_shallow_lava);
+				break;
+
+			case 'w':
+				set_cave_feat(y, x, feat_deep_lava);
+				break;
+
 			}
 		}
 	}
