@@ -569,12 +569,12 @@ void beam(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, in
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param rad 半径
- * @param breath TRUEならばブ・E構萢・．ALSEならばボー・E萢
+ * @param breath 
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void breath(int y, int x, MONSTER_IDX m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type)
+void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, int typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type)
 {
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

@@ -1538,7 +1538,7 @@ extern bool spell_is_inate(SPELL_IDX spell);
 extern bool make_attack_spell(MONSTER_IDX m_idx);
 extern void beam(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type);
 extern void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type);
-extern void breath(int y, int x, MONSTER_IDX m_idx, int typ, int dam_hp, int rad, bool breath, int monspell, int target_type);
+extern void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, int typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type);
 
 /* mspells2.c */
 extern void get_project_point(int sy, int sx, int *ty, int *tx, BIT_FLAGS flg);
@@ -1558,9 +1558,7 @@ extern HIT_POINT monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE
 extern HIT_POINT monspell_bluemage_damage(int SPELL_NUM, int plev, int TYPE);
 
 /* hissatsu.c */
-extern void hissatsu_info(char *p, int power);
 extern void do_cmd_hissatsu(void);
-extern void do_cmd_hissatsu_browse(void);
 extern void do_cmd_gain_hissatsu(void);
 extern MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_FLAGS mode);
 

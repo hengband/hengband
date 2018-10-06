@@ -372,8 +372,7 @@ void do_cmd_activate_aux(int item)
 void do_cmd_activate(void)
 {
 	OBJECT_IDX item;
-	cptr    q, s;
-
+	cptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
@@ -778,9 +777,7 @@ bool activate_artifact(object_type *o_ptr)
 			while (attempts--)
 			{
 				scatter(&y, &x, p_ptr->y, p_ptr->x, 4, 0);
-
 				if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
-
 				if (!player_bold(y, x)) break;
 			}
 
@@ -819,6 +816,7 @@ bool activate_artifact(object_type *o_ptr)
 		}
 		break;
 	}
+
 	case ACT_BR_COLD:
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -829,6 +827,7 @@ bool activate_artifact(object_type *o_ptr)
 		}
 		break;
 	}
+
 	case ACT_BR_DRAGON:
 	{
 		if (!activate_dragon_breath(o_ptr)) return FALSE;
@@ -836,7 +835,6 @@ bool activate_artifact(object_type *o_ptr)
 	}
 
 	/* Activate for other offensive action */
-
 	case ACT_CONFUSE:
 	{
 		msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
