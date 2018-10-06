@@ -599,9 +599,7 @@ void kamaenaoshi(int item)
 void do_cmd_takeoff(void)
 {
 	OBJECT_IDX item;
-
 	object_type *o_ptr;
-
 	cptr q, s;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
@@ -610,14 +608,10 @@ void do_cmd_takeoff(void)
 	}
 
 	item_tester_no_ryoute = TRUE;
+
 	/* Get an item */
-#ifdef JP
-	q = "どれを装備からはずしますか? ";
-	s = "はずせる装備がない。";
-#else
-	q = "Take off which item? ";
-	s = "You are not wearing anything to take off.";
-#endif
+	q = _("どれを装備からはずしますか? ", "Take off which item? ");
+	s = _("はずせる装備がない。", "You are not wearing anything to take off.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP))) return;
 
@@ -679,11 +673,8 @@ void do_cmd_takeoff(void)
 
 	/* Take off the item */
 	(void)inven_takeoff(item, 255);
-
 	kamaenaoshi(item);
-
 	calc_android_exp();
-
 	p_ptr->redraw |= (PR_EQUIPPY);
 }
 
@@ -708,13 +699,8 @@ void do_cmd_drop(void)
 
 	item_tester_no_ryoute = TRUE;
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムを落としますか? ";
-	s = "落とせるアイテムを持っていない。";
-#else
-	q = "Drop which item? ";
-	s = "You have nothing to drop.";
-#endif
+	q = _("どのアイテムを落としますか? ", "Drop which item? ");
+	s = _("落とせるアイテムを持っていない。", "You have nothing to drop.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return;
 
@@ -825,15 +811,9 @@ void do_cmd_destroy(void)
 	/* Hack -- force destruction */
 	if (command_arg > 0) force = TRUE;
 
-
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムを壊しますか? ";
-	s = "壊せるアイテムを持っていない。";
-#else
-	q = "Destroy which item? ";
-	s = "You have nothing to destroy.";
-#endif
+	q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
+	s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
@@ -1031,14 +1011,10 @@ void do_cmd_observe(void)
 	cptr q, s;
 
 	item_tester_no_ryoute = TRUE;
+
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムを調べますか? ";
-	s = "調べられるアイテムがない。";
-#else
-	q = "Examine which item? ";
-	s = "You have nothing to examine.";
-#endif
+	q = _("どのアイテムを調べますか? ", "Examine which item? ");
+	s = _("調べられるアイテムがない。", "You have nothing to examine.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
 
@@ -1087,13 +1063,8 @@ void do_cmd_uninscribe(void)
 
 	item_tester_no_ryoute = TRUE;
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムの銘を消しますか? ";
-	s = "銘を消せるアイテムがない。";
-#else
-	q = "Un-inscribe which item? ";
-	s = "You have nothing to un-inscribe.";
-#endif
+	q = _("どのアイテムの銘を消しますか? ", "Un-inscribe which item? ");
+	s = _("銘を消せるアイテムがない。", "You have nothing to un-inscribe.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
 
@@ -1149,13 +1120,8 @@ void do_cmd_inscribe(void)
 
 	item_tester_no_ryoute = TRUE;
 	/* Get an item */
-#ifdef JP
-	q = "どのアイテムに銘を刻みますか? ";
-	s = "銘を刻めるアイテムがない。";
-#else
-	q = "Inscribe which item? ";
-	s = "You have nothing to inscribe.";
-#endif
+	q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
+	s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
 

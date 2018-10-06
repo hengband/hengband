@@ -3770,7 +3770,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		if (cave[y][x].m_idx)
 		{
 			cave_type *c_ptr = &cave[y][x];
-
 			monster_type *m_ptr = &m_list[c_ptr->m_idx];
 
 			/* Check the visibility */
