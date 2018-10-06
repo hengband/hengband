@@ -4484,9 +4484,10 @@ void cast_meteor(HIT_POINT dam, int rad)
 */
 bool cast_wrath_of_the_god(HIT_POINT dam, int rad)
 {
-	int x, y, tx, ty;
-	int nx, ny;
-	int dir, i;
+	POSITION x, y, tx, ty;
+	POSITION nx, ny;
+	DIRECTION dir;
+	int i;
 	int b = 10 + randint1(10);
 
 	if (!get_aim_dir(&dir)) return FALSE;

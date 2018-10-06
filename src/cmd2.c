@@ -2836,8 +2836,9 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
  */
 void do_cmd_fire_aux(int item, object_type *j_ptr)
 {
-	int dir;
-	int i, y, x, ny, nx, ty, tx, prev_y, prev_x;
+	DIRECTION dir;
+	int i;
+	POSITION y, x, ny, nx, ty, tx, prev_y, prev_x;
 	int tdam_base, tdis, thits, tmul;
 	int bonus, chance;
 	int cur_dis, visible;
@@ -3500,8 +3501,9 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 {
 	DIRECTION dir;
 	OBJECT_IDX item;
-	int i, y, x, ty, tx, prev_y, prev_x;
-	int ny[19], nx[19];
+	int i;
+	POSITION y, x, ty, tx, prev_y, prev_x;
+	POSITION ny[19], nx[19];
 	int chance, tdam, tdis;
 	int mul, div, dd, ds;
 	int cur_dis, visible;

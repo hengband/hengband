@@ -4840,9 +4840,9 @@ bool is_explosive_rune_grid(cave_type *c_ptr)
  * Calculate "incremental motion". Used by project() and shoot().
  * Assumes that (*y,*x) lies on the path from (y1,x1) to (y2,x2).
  */
-void mmove2(int *y, int *x, int y1, int x1, int y2, int x2)
+void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	int dy, dx, dist, shift;
+	POSITION dy, dx, dist, shift;
 
 	/* Extract the distance travelled */
 	dy = (*y < y1) ? y1 - *y : *y - y1;

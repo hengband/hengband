@@ -690,7 +690,7 @@ extern void remove_mirror(int y, int x);
 extern bool is_mirror_grid(cave_type *c_ptr);
 extern bool is_glyph_grid(cave_type *c_ptr);
 extern bool is_explosive_rune_grid(cave_type *c_ptr);
-extern void mmove2(int *y, int *x, int y1, int x1, int y2, int x2);
+extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
 extern void health_track(MONSTER_IDX m_idx);
