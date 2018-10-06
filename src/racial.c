@@ -595,10 +595,10 @@ struct power_desc_type
 {
 	char name[80];
 	PLAYER_LEVEL level;
-	int  cost;
-	int  stat;
-	int  fail;
-	int  number;
+	int cost;
+	int stat;
+	int fail;
+	int number;
 };
 
 

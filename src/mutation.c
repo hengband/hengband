@@ -2086,14 +2086,13 @@ int calc_mutant_regenerate_mod(void)
 
 /*!
  * @brief 突然変異のレイシャル効果実装
- * @return 発動させる突然変異レイシャルのID
+ * @param power 発動させる突然変異レイシャルのID
  * @return レイシャルを実行した場合TRUE、キャンセルした場合FALSEを返す
  */
-bool mutation_power_aux(u32b power)
+bool mutation_power_aux(int power)
 {
-	int     dir = 0;
-	int     lvl = p_ptr->lev;
-
+	DIRECTION dir = 0;
+	PLAYER_LEVEL lvl = p_ptr->lev;
 
 	switch (power)
 	{
@@ -2101,7 +2100,6 @@ bool mutation_power_aux(u32b power)
 			if (!get_aim_dir(&dir)) return FALSE;
 			stop_mouth();
 			msg_print(_("酸を吐きかけた...", "You spit acid..."));
-
 			fire_ball(GF_ACID, dir, lvl, 1 + (lvl / 30));
 			break;
 
@@ -2109,40 +2107,34 @@ bool mutation_power_aux(u32b power)
 			if (!get_aim_dir(&dir)) return FALSE;
 			stop_mouth();
 			msg_print(_("あなたは火炎のブレスを吐いた...", "You breathe fire..."));
-
 			fire_breath(GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
 			break;
 
 		case MUT1_HYPN_GAZE:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("あなたの目は幻惑的になった...", "Your eyes look mesmerizing..."));
-
 			(void)charm_monster(dir, lvl);
 			break;
 
 		case MUT1_TELEKINES:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("集中している...", "You concentrate..."));
-
 			fetch(dir, lvl * 10, TRUE);
 			break;
 
 		case MUT1_VTELEPORT:
 			msg_print(_("集中している...", "You concentrate..."));
-
 			teleport_player(10 + 4 * lvl, 0L);
 			break;
 
 		case MUT1_MIND_BLST:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("集中している...", "You concentrate..."));
-
 			fire_bolt(GF_PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
 			break;
 
 		case MUT1_RADIATION:
 			msg_print(_("体から放射能が発生した！", "Radiation flows from your body!"));
-
 			fire_ball(GF_NUKE, 0, (lvl * 2), 3 + (lvl / 20));
 			break;
 
@@ -2166,7 +2158,7 @@ bool mutation_power_aux(u32b power)
 
 		case MUT1_EAT_ROCK:
 			{
-				int x, y;
+				POSITION x, y;
 				cave_type *c_ptr;
 				feature_type *f_ptr, *mimic_f_ptr;
 
@@ -2362,7 +2354,7 @@ bool mutation_power_aux(u32b power)
 
 		case MUT1_BANISH:
 			{
-				int x, y;
+				POSITION x, y;
 				cave_type *c_ptr;
 				monster_type *m_ptr;
 				monster_race *r_ptr;
@@ -2412,7 +2404,7 @@ bool mutation_power_aux(u32b power)
 
 		case MUT1_COLD_TOUCH:
 			{
-				int x, y;
+				POSITION x, y;
 				cave_type *c_ptr;
 
 				if (!get_rep_dir2(&dir)) return FALSE;

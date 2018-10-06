@@ -20,7 +20,7 @@
 * on the level on which the chest is generated.
 * </pre>
 */
-void chest_death(bool scatter, int y, int x, s16b o_idx)
+void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int number;
 
@@ -132,9 +132,9 @@ void chest_death(bool scatter, int y, int x, s16b o_idx)
 * Note that the chest itself is never destroyed.
 * </pre>
 */
-void chest_trap(POSITION y, POSITION x, KIND_OBJECT_IDX o_idx)
+void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
-	int  i, trap;
+	int i, trap;
 
 	object_type *o_ptr = &o_list[o_idx];
 
