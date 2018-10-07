@@ -1465,12 +1465,10 @@ void print_rel(char c, byte a, int y, int x)
  * optimized primarily for the most common cases, that is, for the
  * non-marked floor grids.
  */
-void note_spot(int y, int x)
+void note_spot(POSITION y, POSITION x)
 {
 	cave_type *c_ptr = &cave[y][x];
-
-	s16b this_o_idx, next_o_idx = 0;
-
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Blind players see nothing */
 	if (p_ptr->blind) return;
@@ -1618,7 +1616,7 @@ void display_dungeon(void)
  *
  * This function should only be called on "legal" grids
  */
-void lite_spot(int y, int x)
+void lite_spot(POSITION y, POSITION x)
 {
 	/* Redraw if on screen */
 	if (panel_contains(y, x) && in_bounds2(y, x))
@@ -1739,7 +1737,7 @@ void prt_map(void)
 /*
  * print project path
  */
-void prt_path(int y, int x)
+void prt_path(POSITION y, POSITION x)
 {
 	int i;
 	int path_n;

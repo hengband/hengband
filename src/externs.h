@@ -662,11 +662,11 @@ extern void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LI
 extern void map_info(POSITION y, POSITION x, byte *ap, char *cp, byte *tap, char *tcp);
 extern void move_cursor_relative(int row, int col);
 extern void print_rel(char c, byte a, int y, int x);
-extern void note_spot(int y, int x);
+extern void note_spot(POSITION y, POSITION x);
 extern void display_dungeon(void);
-extern void lite_spot(int y, int x);
+extern void lite_spot(POSITION y, POSITION x);
 extern void prt_map(void);
-extern void prt_path(int y, int x);
+extern void prt_path(POSITION y, POSITION x);
 extern void display_map(int *cy, int *cx);
 extern void do_cmd_view_map(void);
 extern void forget_lite(void);
