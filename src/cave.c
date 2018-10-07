@@ -565,7 +565,7 @@ void update_local_illumination(POSITION y, POSITION x)
  * "glowing" grid.  This prevents the player from being able to "see" the\n
  * walls of illuminated rooms from a corridor outside the room.\n
  */
-bool player_can_see_bold(int y, int x)
+bool player_can_see_bold(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
 
@@ -614,12 +614,10 @@ bool no_lite(void)
  * @details 
  * 条件は永久地形でなく、なおかつ該当のマスにアーティファクトが存在しないか、である。英語の旧コメントに反して＊破壊＊の抑止判定には現在使われていない。
  */
-bool cave_valid_bold(int y, int x)
+bool cave_valid_bold(POSITION y, POSITION x)
 {
 	cave_type *c_ptr = &cave[y][x];
-
-	s16b this_o_idx, next_o_idx = 0;
-
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Forbid perma-grids */
 	if (cave_perma_grid(c_ptr)) return (FALSE);
@@ -944,7 +942,7 @@ void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
  * "x_ptr->xxx", is quicker than "x_info[x].xxx", if this is incorrect\n
  * then a whole lot of code should be changed...  XXX XXX\n
  */
-void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
+void map_info(POSITION y, POSITION x, byte *ap, char *cp, byte *tap, char *tcp)
 {
 	/* Get the cave */
 	cave_type *c_ptr = &cave[y][x];
