@@ -713,12 +713,7 @@ void curse_equipment(int chance, int heavy_chance)
 
 	if (changed)
 	{
-#ifdef JP
-msg_format("悪意に満ちた黒いオーラが%sをとりまいた...", o_name);
-#else
-		msg_format("There is a malignant black aura surrounding %s...", o_name);
-#endif
-
+		msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding %s..."), o_name);
 		o_ptr->feeling = FEEL_NONE;
 	}
 	p_ptr->update |= (PU_BONUS);
@@ -1447,11 +1442,11 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	PERCENTAGE failrate;
 	byte            spell[96], num = 0;
 	BIT_FLAGS f4, f5, f6;
-	monster_type    *m_ptr = &m_list[m_idx];
-	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-	char            m_name[80];
+	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	char m_name[80];
 #ifndef JP
-	char            m_poss[80];
+	char m_poss[80];
 #endif
 	bool            no_inate = FALSE;
 	bool            do_spell = DO_SPELL_NONE;

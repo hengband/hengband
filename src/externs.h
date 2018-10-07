@@ -654,7 +654,7 @@ extern bool is_known_trap(cave_type *c_ptr);
 extern bool is_closed_door(IDX feat);
 extern bool is_hidden_door(cave_type *c_ptr);
 extern bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern void update_local_illumination(int y, int x);
+extern void update_local_illumination(POSITION y, POSITION x);
 extern bool player_can_see_bold(int y, int x);
 extern bool cave_valid_bold(int y, int x);
 extern bool no_lite(void);

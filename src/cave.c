@@ -437,9 +437,10 @@ static bool check_local_illumination(int y, int x)
  * @param x x座標
  * @return なし
  */
-void update_local_illumination(int y, int x)
+void update_local_illumination(POSITION y, POSITION x)
 {
-	int i, yy, xx;
+	int i;
+	POSITION yy, xx;
 
 	if (!in_bounds(y, x)) return;
 
