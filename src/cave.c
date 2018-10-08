@@ -4770,7 +4770,7 @@ void cave_alter_feat(int y, int x, int action)
 
 
 /* Remove a mirror */
-void remove_mirror(int y, int x)
+void remove_mirror(POSITION y, POSITION x)
 {
 	cave_type *c_ptr = &cave[y][x];
 

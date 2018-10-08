@@ -686,7 +686,7 @@ extern void cave_set_feat(POSITION y, POSITION x, IDX feat);
 extern IDX conv_dungeon_feat(IDX newfeat);
 extern IDX feat_state(IDX feat, int action);
 extern void cave_alter_feat(int y, int x, int action);
-extern void remove_mirror(int y, int x);
+extern void remove_mirror(POSITION y, POSITION x);
 extern bool is_mirror_grid(cave_type *c_ptr);
 extern bool is_glyph_grid(cave_type *c_ptr);
 extern bool is_explosive_rune_grid(cave_type *c_ptr);
