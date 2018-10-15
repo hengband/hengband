@@ -221,15 +221,6 @@
 
 #define IDM_HELP_CONTENTS       901
 
-
-
-/*
- * This may need to be removed for some compilers XXX XXX XXX
- */
-#if 0
-#define STRICT
-#endif
-
 /*
  * Exclude parts of WINDOWS.H that are not needed
  */
