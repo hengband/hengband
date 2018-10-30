@@ -392,16 +392,12 @@ typedef struct _term_data term_data;
 struct _term_data
 {
 	term t;
-
 	cptr s;
-
 	HWND w;
-
 	DWORD dwStyle;
 	DWORD dwExStyle;
 
 	uint keys;
-
 	TERM_POSITION rows;	/* int -> uint */
 	TERM_POSITION cols;
 
@@ -415,22 +411,14 @@ struct _term_data
 	uint size_oh2;
 
 	bool size_hack;
-
 	bool xtra_hack;
-
 	bool visible;
-
 	bool bizarre;
-
 	cptr font_want;
-
 	cptr font_file;
-
 	HFONT font_id;
-
 	int font_wid;  //!< フォント横幅
 	int font_hgt;  //!< フォント縦幅
-
 	int tile_wid;  //!< タイル横幅
 	int tile_hgt;  //!< タイル縦幅
 
@@ -451,26 +439,11 @@ struct _term_data
 #endif
 };
 
+#define MAX_TERM_DATA 8	//!< Maximum number of windows XXX XXX XXX
 
-/*
- * Maximum number of windows XXX XXX XXX
- */
-#define MAX_TERM_DATA 8
-
-/*
- * An array of term_data's
- */
-static term_data data[MAX_TERM_DATA];
-
-/*
- * Hack -- global "window creation" pointer
- */
-static term_data *my_td;
-
-/*
- * Remember normal size of main window when maxmized
- */
-POINT normsize;
+static term_data data[MAX_TERM_DATA]; //!< An array of term_data's
+static term_data *my_td; //!< Hack -- global "window creation" pointer
+POINT normsize; //!< Remember normal size of main window when maxmized
 
 /*
  * was main window maximized on previous playing
