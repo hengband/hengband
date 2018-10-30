@@ -1,12 +1,12 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 
 
 /*!
-* @brief ƒgƒ‰ƒ“ƒv—Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief ãƒˆãƒ©ãƒ³ãƒ—é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -15,7 +15,7 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
-	static const char s_random[] = _("ƒ‰ƒ“ƒ_ƒ€", "random");
+	static const char s_random[] = _("ãƒ©ãƒ³ãƒ€ãƒ ", "random");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -23,8 +23,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("ƒVƒ‡[ƒgEƒeƒŒƒ|[ƒg", "Phase Door");
-		if (desc) return _("‹ß‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB", "Teleport short distance.");
+		if (name) return _("ã‚·ãƒ§ãƒ¼ãƒˆãƒ»ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "Phase Door");
+		if (desc) return _("è¿‘è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚", "Teleport short distance.");
 
 		{
 			POSITION range = 10;
@@ -39,18 +39,18 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("’wå‚ÌƒJ[ƒh", "Trump Spiders");
-		if (desc) return _("’wå‚ğ¢Š«‚·‚éB", "Summons spiders.");
+		if (name) return _("èœ˜è››ã®ã‚«ãƒ¼ãƒ‰", "Trump Spiders");
+		if (desc) return _("èœ˜è››ã‚’å¬å–šã™ã‚‹ã€‚", "Summons spiders.");
 
 		{
 			if (cast || fail)
 			{
-				msg_print(_("‚ ‚È‚½‚Í’wå‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of an spider..."));
+				msg_print(_("ã‚ãªãŸã¯èœ˜è››ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of an spider..."));
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, SUMMON_SPIDER, PM_ALLOW_GROUP))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½’wå‚Í“{‚Á‚Ä‚¢‚éI", "The summoned spiders get angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸèœ˜è››ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned spiders get angry!"));
 					}
 				}
 			}
@@ -58,8 +58,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("ƒVƒƒƒbƒtƒ‹", "Shuffle");
-		if (desc) return _("ƒJ[ƒh‚Ìè‚¢‚ğ‚·‚éB", "Causes random effects.");
+		if (name) return _("ã‚·ãƒ£ãƒƒãƒ•ãƒ«", "Shuffle");
+		if (desc) return _("ã‚«ãƒ¼ãƒ‰ã®å ã„ã‚’ã™ã‚‹ã€‚", "Causes random effects.");
 
 		{
 			if (info) return s_random;
@@ -72,8 +72,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("ƒtƒƒAEƒŠƒZƒbƒg", "Reset Recall");
-		if (desc) return _("Å[ŠK‚ğ•ÏX‚·‚éB", "Resets the 'deepest' level for recall spell.");
+		if (name) return _("ãƒ•ãƒ­ã‚¢ãƒ»ãƒªã‚»ãƒƒãƒˆ", "Reset Recall");
+		if (desc) return _("æœ€æ·±éšã‚’å¤‰æ›´ã™ã‚‹ã€‚", "Resets the 'deepest' level for recall spell.");
 
 		{
 			if (cast)
@@ -84,8 +84,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("ƒeƒŒƒ|[ƒg", "Teleport");
-		if (desc) return _("‰“‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB", "Teleport long distance.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "Teleport");
+		if (desc) return _("é è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚", "Teleport long distance.");
 
 		{
 			POSITION range = plev * 4;
@@ -100,8 +100,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("Š´’m‚ÌƒJ[ƒh", "Trump Spying");
-		if (desc) return _("ˆê’èŠÔAƒeƒŒƒpƒV[”\—Í‚ğ“¾‚éB", "Gives telepathy for a while.");
+		if (name) return _("æ„ŸçŸ¥ã®ã‚«ãƒ¼ãƒ‰", "Trump Spying");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚", "Gives telepathy for a while.");
 
 		{
 			int base = 25;
@@ -117,8 +117,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("ƒeƒŒƒ|[ƒgEƒ‚ƒ“ƒXƒ^[", "Teleport Away");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éƒr[ƒ€‚ğ•ú‚ÂB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Teleports all monsters on the line away unless resisted.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", "Teleport Away");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Teleports all monsters on the line away unless resisted.");
 
 		{
 			int power = plev;
@@ -135,19 +135,19 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("“®•¨‚ÌƒJ[ƒh", "Trump Animals");
-		if (desc) return _("1‘Ì‚Ì“®•¨‚ğ¢Š«‚·‚éB", "Summons an animal.");
+		if (name) return _("å‹•ç‰©ã®ã‚«ãƒ¼ãƒ‰", "Trump Animals");
+		if (desc) return _("1ä½“ã®å‹•ç‰©ã‚’å¬å–šã™ã‚‹ã€‚", "Summons an animal.");
 
 		{
 			if (cast || fail)
 			{
 				int type = (!fail ? SUMMON_ANIMAL_RANGER : SUMMON_ANIMAL);
-				msg_print(_("‚ ‚È‚½‚Í“®•¨‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of an animal..."));
+				msg_print(_("ã‚ãªãŸã¯å‹•ç‰©ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of an animal..."));
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, type, 0L))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½“®•¨‚Í“{‚Á‚Ä‚¢‚éI", "The summoned animal gets angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸå‹•ç‰©ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned animal gets angry!"));
 					}
 				}
 			}
@@ -155,8 +155,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("ˆÚ“®‚ÌƒJ[ƒh", "Trump Reach");
-		if (desc) return _("ƒAƒCƒeƒ€‚ğ©•ª‚Ì‘«Œ³‚ÖˆÚ“®‚³‚¹‚éB", "Pulls a distant item close to you.");
+		if (name) return _("ç§»å‹•ã®ã‚«ãƒ¼ãƒ‰", "Trump Reach");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’è‡ªåˆ†ã®è¶³å…ƒã¸ç§»å‹•ã•ã›ã‚‹ã€‚", "Pulls a distant item close to you.");
 
 		{
 			int weight = plev * 15;
@@ -173,8 +173,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("ƒJƒ~ƒJƒ[‚ÌƒJ[ƒh", "Trump Kamikaze");
-		if (desc) return _("•¡”‚Ì”š”­‚·‚éƒ‚ƒ“ƒXƒ^[‚ğ¢Š«‚·‚éB", "Summons monsters which explode by itself.");
+		if (name) return _("ã‚«ãƒŸã‚«ã‚¼ã®ã‚«ãƒ¼ãƒ‰", "Trump Kamikaze");
+		if (desc) return _("è¤‡æ•°ã®çˆ†ç™ºã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å¬å–šã™ã‚‹ã€‚", "Summons monsters which explode by itself.");
 
 		{
 			if (cast || fail)
@@ -200,12 +200,12 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				else
 					type = SUMMON_KAMIKAZE;
 
-				msg_print(_("‚ ‚È‚½‚ÍƒJƒ~ƒJƒ[‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on several trumps at once..."));
+				msg_print(_("ã‚ãªãŸã¯ã‚«ãƒŸã‚«ã‚¼ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on several trumps at once..."));
 				if (trump_summoning(2 + randint0(plev / 7), !fail, y, x, 0, type, 0L))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½ƒ‚ƒ“ƒXƒ^[‚Í“{‚Á‚Ä‚¢‚éI", "The summoned creatures get angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned creatures get angry!"));
 					}
 				}
 			}
@@ -213,8 +213,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("Œ¶—ì¢Š«", "Phantasmal Servant");
-		if (desc) return _("1‘Ì‚Ì—H—ì‚ğ¢Š«‚·‚éB", "Summons a ghost.");
+		if (name) return _("å¹»éœŠå¬å–š", "Phantasmal Servant");
+		if (desc) return _("1ä½“ã®å¹½éœŠã‚’å¬å–šã™ã‚‹ã€‚", "Summons a ghost.");
 
 		{
 			/* Phantasmal Servant is not summoned as enemy when failed */
@@ -224,15 +224,15 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, (summon_lev * 3 / 2), SUMMON_PHANTOM, 0L))
 				{
-					msg_print(_("Œä—p‚Å‚²‚´‚¢‚Ü‚·‚©AŒäål—lH", "'Your wish, master?'"));
+					msg_print(_("å¾¡ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€å¾¡ä¸»äººæ§˜ï¼Ÿ", "'Your wish, master?'"));
 				}
 			}
 		}
 		break;
 
 	case 11:
-		if (name) return _("ƒXƒs[ƒhEƒ‚ƒ“ƒXƒ^[", "Haste Monster");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğ‰Á‘¬‚³‚¹‚éB", "Hastes a monster.");
+		if (name) return _("ã‚¹ãƒ”ãƒ¼ãƒ‰ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", "Haste Monster");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’åŠ é€Ÿã•ã›ã‚‹ã€‚", "Hastes a monster.");
 
 		{
 			if (cast)
@@ -256,21 +256,21 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("ƒeƒŒƒ|[ƒgEƒŒƒxƒ‹", "Teleport Level");
-		if (desc) return _("u‚Éã‚©‰º‚ÌŠK‚ÉƒeƒŒƒ|[ƒg‚·‚éB", "Teleport to up or down stairs in a moment.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¬ãƒ™ãƒ«", "Teleport Level");
+		if (desc) return _("ç¬æ™‚ã«ä¸Šã‹ä¸‹ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚", "Teleport to up or down stairs in a moment.");
 
 		{
 			if (cast)
 			{
-				if (!get_check(_("–{“–‚É‘¼‚ÌŠK‚ÉƒeƒŒƒ|[ƒg‚µ‚Ü‚·‚©H", "Are you sure? (Teleport Level)"))) return NULL;
+				if (!get_check(_("æœ¬å½“ã«ä»–ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ", "Are you sure? (Teleport Level)"))) return NULL;
 				teleport_level(0);
 			}
 		}
 		break;
 
 	case 13:
-		if (name) return _("ŸŒ³‚Ì”à", "Dimension Door");
-		if (desc) return _("’Z‹——£“à‚Ìw’è‚µ‚½êŠ‚ÉƒeƒŒƒ|[ƒg‚·‚éB", "Teleport to given location.");
+		if (name) return _("æ¬¡å…ƒã®æ‰‰", "Dimension Door");
+		if (desc) return _("çŸ­è·é›¢å†…ã®æŒ‡å®šã—ãŸå ´æ‰€ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚", "Teleport to given location.");
 
 		{
 			POSITION range = plev / 2 + 10;
@@ -279,15 +279,15 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				msg_print(_("ŸŒ³‚Ì”à‚ªŠJ‚¢‚½B–Ú“I’n‚ğ‘I‚ñ‚Å‰º‚³‚¢B", "You open a dimensional gate. Choose a destination."));
+				msg_print(_("æ¬¡å…ƒã®æ‰‰ãŒé–‹ã„ãŸã€‚ç›®çš„åœ°ã‚’é¸ã‚“ã§ä¸‹ã•ã„ã€‚", "You open a dimensional gate. Choose a destination."));
 				if (!dimension_door()) return NULL;
 			}
 		}
 		break;
 
 	case 14:
-		if (name) return _("‹AŠÒ‚Ìô•¶", "Word of Recall");
-		if (desc) return _("’nã‚É‚¢‚é‚Æ‚«‚Íƒ_ƒ“ƒWƒ‡ƒ“‚ÌÅ[ŠK‚ÖAƒ_ƒ“ƒWƒ‡ƒ“‚É‚¢‚é‚Æ‚«‚Í’nã‚Ö‚ÆˆÚ“®‚·‚éB",
+		if (name) return _("å¸°é‚„ã®å‘ªæ–‡", "Word of Recall");
+		if (desc) return _("åœ°ä¸Šã«ã„ã‚‹ã¨ãã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®æœ€æ·±éšã¸ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«ã„ã‚‹ã¨ãã¯åœ°ä¸Šã¸ã¨ç§»å‹•ã™ã‚‹ã€‚",
 			"Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
 
 		{
@@ -304,8 +304,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("‰ö•¨’Ç•ú", "Banish");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Teleports all monsters in sight away unless resisted.");
+		if (name) return _("æ€ªç‰©è¿½æ”¾", "Banish");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Teleports all monsters in sight away unless resisted.");
 
 		{
 			int power = plev * 4;
@@ -320,8 +320,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("ˆÊ’uŒğŠ·‚ÌƒJ[ƒh", "Swap Position");
-		if (desc) return _("1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ÆˆÊ’u‚ğŒğŠ·‚·‚éB", "Swap positions of you and a monster.");
+		if (name) return _("ä½ç½®äº¤æ›ã®ã‚«ãƒ¼ãƒ‰", "Swap Position");
+		if (desc) return _("1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¨ä½ç½®ã‚’äº¤æ›ã™ã‚‹ã€‚", "Swap positions of you and a monster.");
 
 		{
 			if (cast)
@@ -344,18 +344,18 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("ƒAƒ“ƒfƒbƒh‚ÌƒJ[ƒh", "Trump Undead");
-		if (desc) return _("1‘Ì‚ÌƒAƒ“ƒfƒbƒh‚ğ¢Š«‚·‚éB", "Summons an undead monster.");
+		if (name) return _("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®ã‚«ãƒ¼ãƒ‰", "Trump Undead");
+		if (desc) return _("1ä½“ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’å¬å–šã™ã‚‹ã€‚", "Summons an undead monster.");
 
 		{
 			if (cast || fail)
 			{
-				msg_print(_("‚ ‚È‚½‚ÍƒAƒ“ƒfƒbƒh‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of an undead creature..."));
+				msg_print(_("ã‚ãªãŸã¯ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of an undead creature..."));
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, SUMMON_UNDEAD, 0L))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½ƒAƒ“ƒfƒbƒh‚Í“{‚Á‚Ä‚¢‚éI", "The summoned undead creature gets angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned undead creature gets angry!"));
 					}
 				}
 			}
@@ -363,18 +363,18 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("à¦’—Ş‚ÌƒJ[ƒh", "Trump Reptiles");
-		if (desc) return _("1‘Ì‚Ìƒqƒhƒ‰‚ğ¢Š«‚·‚éB", "Summons a hydra.");
+		if (name) return _("çˆ¬è™«é¡ã®ã‚«ãƒ¼ãƒ‰", "Trump Reptiles");
+		if (desc) return _("1ä½“ã®ãƒ’ãƒ‰ãƒ©ã‚’å¬å–šã™ã‚‹ã€‚", "Summons a hydra.");
 
 		{
 			if (cast || fail)
 			{
-				msg_print(_("‚ ‚È‚½‚Íà¦’—Ş‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of a reptile..."));
+				msg_print(_("ã‚ãªãŸã¯çˆ¬è™«é¡ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of a reptile..."));
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, SUMMON_HYDRA, 0L))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½à¦’—Ş‚Í“{‚Á‚Ä‚¢‚éI", "The summoned reptile gets angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸçˆ¬è™«é¡ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned reptile gets angry!"));
 					}
 				}
 			}
@@ -382,14 +382,14 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("ƒ‚ƒ“ƒXƒ^[‚ÌƒJ[ƒh", "Trump Monsters");
-		if (desc) return _("•¡”‚Ìƒ‚ƒ“ƒXƒ^[‚ğ¢Š«‚·‚éB", "Summons some monsters.");
+		if (name) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ã‚«ãƒ¼ãƒ‰", "Trump Monsters");
+		if (desc) return _("è¤‡æ•°ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å¬å–šã™ã‚‹ã€‚", "Summons some monsters.");
 
 		{
 			if (cast || fail)
 			{
 				int type;
-				msg_print(_("‚ ‚È‚½‚Íƒ‚ƒ“ƒXƒ^[‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on several trumps at once..."));
+				msg_print(_("ã‚ãªãŸã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on several trumps at once..."));
 				if (p_ptr->pclass == CLASS_BEASTMASTER)
 					type = SUMMON_LIVING;
 				else
@@ -399,7 +399,7 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½ƒ‚ƒ“ƒXƒ^[‚Í“{‚Á‚Ä‚¢‚éI", "The summoned creatures get angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned creatures get angry!"));
 					}
 				}
 
@@ -408,18 +408,18 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("ƒnƒEƒ“ƒh‚ÌƒJ[ƒh", "Trump Hounds");
-		if (desc) return _("1ƒOƒ‹[ƒv‚ÌƒnƒEƒ“ƒh‚ğ¢Š«‚·‚éB", "Summons a group of hounds.");
+		if (name) return _("ãƒã‚¦ãƒ³ãƒ‰ã®ã‚«ãƒ¼ãƒ‰", "Trump Hounds");
+		if (desc) return _("1ã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒã‚¦ãƒ³ãƒ‰ã‚’å¬å–šã™ã‚‹ã€‚", "Summons a group of hounds.");
 
 		{
 			if (cast || fail)
 			{
-				msg_print(_("‚ ‚È‚½‚ÍƒnƒEƒ“ƒh‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of a hound..."));
+				msg_print(_("ã‚ãªãŸã¯ãƒã‚¦ãƒ³ãƒ‰ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of a hound..."));
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, SUMMON_HOUND, PM_ALLOW_GROUP))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½ƒnƒEƒ“ƒh‚Í“{‚Á‚Ä‚¢‚éI", "The summoned hounds get angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸãƒã‚¦ãƒ³ãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned hounds get angry!"));
 					}
 				}
 			}
@@ -427,8 +427,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("ƒgƒ‰ƒ“ƒv‚Ìn", "Trump Branding");
-		if (desc) return _("•Ší‚Éƒgƒ‰ƒ“ƒv‚Ì‘®«‚ğ‚Â‚¯‚éB", "Makes current weapon a Trump weapon.");
+		if (name) return _("ãƒˆãƒ©ãƒ³ãƒ—ã®åˆƒ", "Trump Branding");
+		if (desc) return _("æ­¦å™¨ã«ãƒˆãƒ©ãƒ³ãƒ—ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚", "Makes current weapon a Trump weapon.");
 
 		{
 			if (cast)
@@ -439,8 +439,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("lŠÔƒgƒ‰ƒ“ƒv", "Living Trump");
-		if (desc) return _("ƒ‰ƒ“ƒ_ƒ€‚ÉƒeƒŒƒ|[ƒg‚·‚é“Ë‘R•ÏˆÙ‚©A©•ª‚ÌˆÓv‚ÅƒeƒŒƒ|[ƒg‚·‚é“Ë‘R•ÏˆÙ‚ªg‚É‚Â‚­B",
+		if (name) return _("äººé–“ãƒˆãƒ©ãƒ³ãƒ—", "Living Trump");
+		if (desc) return _("ãƒ©ãƒ³ãƒ€ãƒ ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹çªç„¶å¤‰ç•°ã‹ã€è‡ªåˆ†ã®æ„æ€ã§ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹çªç„¶å¤‰ç•°ãŒèº«ã«ã¤ãã€‚",
 			"Gives mutation which makes you teleport randomly or makes you able to teleport at will.");
 
 		{
@@ -458,25 +458,25 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				/* Gain the mutation */
 				if (gain_random_mutation(mutation))
 				{
-					msg_print(_("‚ ‚È‚½‚Í¶‚«‚Ä‚¢‚éƒJ[ƒh‚É•Ï‚í‚Á‚½B", "You have turned into a Living Trump."));
+					msg_print(_("ã‚ãªãŸã¯ç”Ÿãã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰ã«å¤‰ã‚ã£ãŸã€‚", "You have turned into a Living Trump."));
 				}
 			}
 		}
 		break;
 
 	case 23:
-		if (name) return _("ƒTƒCƒo[ƒf[ƒ‚ƒ“‚ÌƒJ[ƒh", "Trump Cyberdemon");
-		if (desc) return _("1‘Ì‚ÌƒTƒCƒo[ƒf[ƒ‚ƒ“‚ğ¢Š«‚·‚éB", "Summons a cyber demon.");
+		if (name) return _("ã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã®ã‚«ãƒ¼ãƒ‰", "Trump Cyberdemon");
+		if (desc) return _("1ä½“ã®ã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¬å–šã™ã‚‹ã€‚", "Summons a cyber demon.");
 
 		{
 			if (cast || fail)
 			{
-				msg_print(_("‚ ‚È‚½‚ÍƒTƒCƒo[ƒf[ƒ‚ƒ“‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of a Cyberdemon..."));
+				msg_print(_("ã‚ãªãŸã¯ã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of a Cyberdemon..."));
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, SUMMON_CYBER, 0L))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½ƒTƒCƒo[ƒf[ƒ‚ƒ“‚Í“{‚Á‚Ä‚¢‚éI", "The summoned Cyberdemon gets angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸã‚µã‚¤ãƒãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned Cyberdemon gets angry!"));
 					}
 				}
 			}
@@ -484,8 +484,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("—\Œ©‚ÌƒJ[ƒh", "Trump Divination");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[Aã©A”àAŠK’iAà•óA‚»‚µ‚ÄƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB",
+		if (name) return _("äºˆè¦‹ã®ã‚«ãƒ¼ãƒ‰", "Trump Divination");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€ç½ ã€æ‰‰ã€éšæ®µã€è²¡å®ã€ãã—ã¦ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚",
 			"Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
 
 		{
@@ -501,8 +501,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("’m¯‚ÌƒJ[ƒh", "Trump Lore");
-		if (desc) return _("ƒAƒCƒeƒ€‚Ì‚Â”\—Í‚ğŠ®‘S‚É’m‚éB", "*Identifies* an item.");
+		if (name) return _("çŸ¥è­˜ã®ã‚«ãƒ¼ãƒ‰", "Trump Lore");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚", "*Identifies* an item.");
 
 		{
 			if (cast)
@@ -513,8 +513,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 26:
-		if (name) return _("‰ñ•œƒ‚ƒ“ƒXƒ^[", "Heal Monster");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚Ì‘Ì—Í‚ğ‰ñ•œ‚³‚¹‚éB", "Heal a monster.");
+		if (name) return _("å›å¾©ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", "Heal Monster");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã®ä½“åŠ›ã‚’å›å¾©ã•ã›ã‚‹ã€‚", "Heal a monster.");
 
 		{
 			int heal = plev * 10 + 200;
@@ -542,18 +542,18 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 27:
-		if (name) return _("ƒhƒ‰ƒSƒ“‚ÌƒJ[ƒh", "Trump Dragon");
-		if (desc) return _("1‘Ì‚Ìƒhƒ‰ƒSƒ“‚ğ¢Š«‚·‚éB", "Summons a dragon.");
+		if (name) return _("ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚«ãƒ¼ãƒ‰", "Trump Dragon");
+		if (desc) return _("1ä½“ã®ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¬å–šã™ã‚‹ã€‚", "Summons a dragon.");
 
 		{
 			if (cast || fail)
 			{
-				msg_print(_("‚ ‚È‚½‚Íƒhƒ‰ƒSƒ“‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of a dragon..."));
+				msg_print(_("ã‚ãªãŸã¯ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of a dragon..."));
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, SUMMON_DRAGON, 0L))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½ƒhƒ‰ƒSƒ“‚Í“{‚Á‚Ä‚¢‚éI", "The summoned dragon gets angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸãƒ‰ãƒ©ã‚´ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned dragon gets angry!"));
 					}
 				}
 			}
@@ -561,8 +561,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("è¦Î‚ÌƒJ[ƒh", "Trump Meteor");
-		if (desc) return _("©•ª‚Ìü•Ó‚Éè¦Î‚ğ—‚Æ‚·B", "Makes meteor balls fall down to nearby random locations.");
+		if (name) return _("éš•çŸ³ã®ã‚«ãƒ¼ãƒ‰", "Trump Meteor");
+		if (desc) return _("è‡ªåˆ†ã®å‘¨è¾ºã«éš•çŸ³ã‚’è½ã¨ã™ã€‚", "Makes meteor balls fall down to nearby random locations.");
 
 		{
 			HIT_POINT dam = plev * 2;
@@ -578,18 +578,18 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("ƒf[ƒ‚ƒ“‚ÌƒJ[ƒh", "Trump Demon");
-		if (desc) return _("1‘Ì‚Ìˆ«–‚‚ğ¢Š«‚·‚éB", "Summons a demon.");
+		if (name) return _("ãƒ‡ãƒ¼ãƒ¢ãƒ³ã®ã‚«ãƒ¼ãƒ‰", "Trump Demon");
+		if (desc) return _("1ä½“ã®æ‚ªé­”ã‚’å¬å–šã™ã‚‹ã€‚", "Summons a demon.");
 
 		{
 			if (cast || fail)
 			{
-				msg_print(_("‚ ‚È‚½‚Íƒf[ƒ‚ƒ“‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of a demon..."));
+				msg_print(_("ã‚ãªãŸã¯ãƒ‡ãƒ¼ãƒ¢ãƒ³ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of a demon..."));
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, SUMMON_DEMON, 0L))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½ƒf[ƒ‚ƒ“‚Í“{‚Á‚Ä‚¢‚éI", "The summoned demon gets angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸãƒ‡ãƒ¼ãƒ¢ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned demon gets angry!"));
 					}
 				}
 			}
@@ -597,19 +597,19 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("’n–‚ÌƒJ[ƒh", "Trump Greater Undead");
-		if (desc) return _("1‘Ì‚Ìã‹‰ƒAƒ“ƒfƒbƒh‚ğ¢Š«‚·‚éB", "Summons a greater undead.");
+		if (name) return _("åœ°ç„ã®ã‚«ãƒ¼ãƒ‰", "Trump Greater Undead");
+		if (desc) return _("1ä½“ã®ä¸Šç´šã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’å¬å–šã™ã‚‹ã€‚", "Summons a greater undead.");
 
 		{
 			if (cast || fail)
 			{
-				msg_print(_("‚ ‚È‚½‚Í‹­—Í‚ÈƒAƒ“ƒfƒbƒh‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of a greater undead being..."));
+				msg_print(_("ã‚ãªãŸã¯å¼·åŠ›ãªã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of a greater undead being..."));
 				/* May allow unique depend on level and dice roll */
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, SUMMON_HI_UNDEAD, PM_ALLOW_UNIQUE))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½ã‹‰ƒAƒ“ƒfƒbƒh‚Í“{‚Á‚Ä‚¢‚éI", "The summoned greater undead creature gets angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸä¸Šç´šã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned greater undead creature gets angry!"));
 					}
 				}
 			}
@@ -617,8 +617,8 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 31:
-		if (name) return _("ŒÃ‘ãƒhƒ‰ƒSƒ“‚ÌƒJ[ƒh", "Trump Ancient Dragon");
-		if (desc) return _("1‘Ì‚ÌŒÃ‘ãƒhƒ‰ƒSƒ“‚ğ¢Š«‚·‚éB", "Summons an ancient dragon.");
+		if (name) return _("å¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚«ãƒ¼ãƒ‰", "Trump Ancient Dragon");
+		if (desc) return _("1ä½“ã®å¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¬å–šã™ã‚‹ã€‚", "Summons an ancient dragon.");
 
 		{
 			if (cast)
@@ -630,13 +630,13 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				else
 					type = SUMMON_HI_DRAGON;
 
-				msg_print(_("‚ ‚È‚½‚ÍŒÃ‘ãƒhƒ‰ƒSƒ“‚ÌƒJ[ƒh‚ÉW’†‚·‚é...", "You concentrate on the trump of an ancient dragon..."));
+				msg_print(_("ã‚ãªãŸã¯å¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã®ã‚«ãƒ¼ãƒ‰ã«é›†ä¸­ã™ã‚‹...", "You concentrate on the trump of an ancient dragon..."));
 				/* May allow unique depend on level and dice roll */
 				if (trump_summoning(1, !fail, p_ptr->y, p_ptr->x, 0, type, PM_ALLOW_UNIQUE))
 				{
 					if (fail)
 					{
-						msg_print(_("¢Š«‚³‚ê‚½ŒÃ‘ãƒhƒ‰ƒSƒ“‚Í“{‚Á‚Ä‚¢‚éI", "The summoned ancient dragon gets angry!"));
+						msg_print(_("å¬å–šã•ã‚ŒãŸå¤ä»£ãƒ‰ãƒ©ã‚´ãƒ³ã¯æ€’ã£ã¦ã„ã‚‹ï¼", "The summoned ancient dragon gets angry!"));
 					}
 				}
 			}

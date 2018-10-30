@@ -1,14 +1,14 @@
-
+ï»¿
 #include "angband.h"
 
 /*!
-* @brief ” ‚©‚çƒAƒCƒeƒ€‚ğˆø‚«o‚· /
+* @brief ç®±ã‹ã‚‰ã‚¢ã‚¤ãƒ†ãƒ ã‚’å¼•ãå‡ºã™ /
 * Allocates objects upon opening a chest    -BEN-
-* @param scatter TRUE‚È‚ç‚Îƒgƒ‰ƒbƒv‚É‚æ‚éƒAƒCƒeƒ€‚ÌŠgUˆ—
-* @param y ” ‚Ì‘¶İ‚·‚éƒ}ƒX‚ÌYÀ•W
-* @param x ” ‚Ì‘¶İ‚·‚éƒ}ƒX‚ÌXÀ•W
-* @param o_idx ” ‚ÌƒIƒuƒWƒFƒNƒgID
-* @return ‚È‚µ
+* @param scatter TRUEãªã‚‰ã°ãƒˆãƒ©ãƒƒãƒ—ã«ã‚ˆã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã®æ‹¡æ•£å‡¦ç†
+* @param y ç®±ã®å­˜åœ¨ã™ã‚‹ãƒã‚¹ã®Yåº§æ¨™
+* @param x ç®±ã®å­˜åœ¨ã™ã‚‹ãƒã‚¹ã®Xåº§æ¨™
+* @param o_idx ç®±ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID
+* @return ãªã—
 * @details
 * <pre>
 * Disperse treasures from the given chest, centered at (x,y).
@@ -120,12 +120,12 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 
 
 /*!
-* @brief ” ‚Ìƒgƒ‰ƒbƒvˆ— /
+* @brief ç®±ã®ãƒˆãƒ©ãƒƒãƒ—å‡¦ç† /
 * Chests have traps too.
-* @param y ” ‚Ì‘¶İ‚·‚éƒ}ƒX‚ÌYÀ•W
-* @param x ” ‚Ì‘¶İ‚·‚éƒ}ƒX‚ÌXÀ•W
-* @param o_idx ” ‚ÌƒIƒuƒWƒFƒNƒgID
-* @return ‚È‚µ
+* @param y ç®±ã®å­˜åœ¨ã™ã‚‹ãƒã‚¹ã®Yåº§æ¨™
+* @param x ç®±ã®å­˜åœ¨ã™ã‚‹ãƒã‚¹ã®Xåº§æ¨™
+* @param o_idx ç®±ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID
+* @return ãªã—
 * @details
 * <pre>
 * Exploding chest destroys contents (and traps).
@@ -149,23 +149,23 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	/* Lose strength */
 	if (trap & (CHEST_LOSE_STR))
 	{
-		msg_print(_("dŠ|‚¯‚ç‚ê‚Ä‚¢‚½¬‚³‚Èj‚Éh‚³‚ê‚Ä‚µ‚Ü‚Á‚½I", "A small needle has pricked you!"));
-		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("“Åj", "a poison needle"), -1);
+		msg_print(_("ä»•æ›ã‘ã‚‰ã‚Œã¦ã„ãŸå°ã•ãªé‡ã«åˆºã•ã‚Œã¦ã—ã¾ã£ãŸï¼", "A small needle has pricked you!"));
+		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("æ¯’é‡", "a poison needle"), -1);
 		(void)do_dec_stat(A_STR);
 	}
 
 	/* Lose constitution */
 	if (trap & (CHEST_LOSE_CON))
 	{
-		msg_print(_("dŠ|‚¯‚ç‚ê‚Ä‚¢‚½¬‚³‚Èj‚Éh‚³‚ê‚Ä‚µ‚Ü‚Á‚½I", "A small needle has pricked you!"));
-		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("“Åj", "a poison needle"), -1);
+		msg_print(_("ä»•æ›ã‘ã‚‰ã‚Œã¦ã„ãŸå°ã•ãªé‡ã«åˆºã•ã‚Œã¦ã—ã¾ã£ãŸï¼", "A small needle has pricked you!"));
+		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("æ¯’é‡", "a poison needle"), -1);
 		(void)do_dec_stat(A_CON);
 	}
 
 	/* Poison */
 	if (trap & (CHEST_POISON))
 	{
-		msg_print(_("“Ë”@‚«o‚µ‚½—ÎF‚ÌƒKƒX‚É•ï‚İ‚Ü‚ê‚½I", "A puff of green gas surrounds you!"));
+		msg_print(_("çªå¦‚å¹ãå‡ºã—ãŸç·‘è‰²ã®ã‚¬ã‚¹ã«åŒ…ã¿è¾¼ã¾ã‚ŒãŸï¼", "A puff of green gas surrounds you!"));
 		if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
 		{
 			(void)set_poisoned(p_ptr->poisoned + 10 + randint1(20));
@@ -175,7 +175,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	/* Paralyze */
 	if (trap & (CHEST_PARALYZE))
 	{
-		msg_print(_("“Ë”@‚«o‚µ‚½‰©F‚¢ƒKƒX‚É•ï‚İ‚Ü‚ê‚½I", "A puff of yellow gas surrounds you!"));
+		msg_print(_("çªå¦‚å¹ãå‡ºã—ãŸé»„è‰²ã„ã‚¬ã‚¹ã«åŒ…ã¿è¾¼ã¾ã‚ŒãŸï¼", "A puff of yellow gas surrounds you!"));
 		if (!p_ptr->free_act)
 		{
 			(void)set_paralyzed(p_ptr->paralyzed + 10 + randint1(20));
@@ -186,7 +186,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	if (trap & (CHEST_SUMMON))
 	{
 		int num = 2 + randint1(3);
-		msg_print(_("“Ë”@‚«o‚µ‚½‰Œ‚É•ï‚İ‚Ü‚ê‚½I", "You are enveloped in a cloud of smoke!"));
+		msg_print(_("çªå¦‚å¹ãå‡ºã—ãŸç…™ã«åŒ…ã¿è¾¼ã¾ã‚ŒãŸï¼", "You are enveloped in a cloud of smoke!"));
 		for (i = 0; i < num; i++)
 		{
 			if (randint1(100)<dun_level)
@@ -199,7 +199,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	/* Elemental summon. */
 	if (trap & (CHEST_E_SUMMON))
 	{
-		msg_print(_("•ó‚ğç‚é‚½‚ß‚ÉƒGƒŒƒƒ“ƒ^ƒ‹‚ªŒ»‚ê‚½I", "Elemental beings appear to protect their treasures!"));
+		msg_print(_("å®ã‚’å®ˆã‚‹ãŸã‚ã«ã‚¨ãƒ¬ãƒ¡ãƒ³ã‚¿ãƒ«ãŒç¾ã‚ŒãŸï¼", "Elemental beings appear to protect their treasures!"));
 		for (i = 0; i < randint1(3) + 5; i++)
 		{
 			(void)summon_specific(0, y, x, mon_level, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
@@ -209,7 +209,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	/* Force clouds, then summon birds. */
 	if (trap & (CHEST_BIRD_STORM))
 	{
-		msg_print(_("’¹‚ÌŒQ‚ê‚ª‚ ‚È‚½‚ğæ‚èŠª‚¢‚½I", "A storm of birds swirls around you!"));
+		msg_print(_("é³¥ã®ç¾¤ã‚ŒãŒã‚ãªãŸã‚’å–ã‚Šå·»ã„ãŸï¼", "A storm of birds swirls around you!"));
 
 		for (i = 0; i < randint1(3) + 3; i++)
 			(void)fire_meteor(-1, GF_FORCE, y, x, o_ptr->pval / 5, 7);
@@ -226,7 +226,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		/* Summon demons. */
 		if (one_in_(4))
 		{
-			msg_print(_("‰Š‚Æ—°‰©‚Ì‰_‚Ì’†‚Éˆ«–‚‚ªp‚ğŒ»‚µ‚½I", "Demons materialize in clouds of fire and brimstone!"));
+			msg_print(_("ç‚ã¨ç¡«é»„ã®é›²ã®ä¸­ã«æ‚ªé­”ãŒå§¿ã‚’ç¾ã—ãŸï¼", "Demons materialize in clouds of fire and brimstone!"));
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
 				(void)fire_meteor(-1, GF_FIRE, y, x, 10, 5);
@@ -237,7 +237,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		/* Summon dragons. */
 		else if (one_in_(3))
 		{
-			msg_print(_("ˆÃˆÅ‚Éƒhƒ‰ƒSƒ“‚Ì‰e‚ª‚Ú‚ñ‚â‚è‚ÆŒ»‚ê‚½I", "Draconic forms loom out of the darkness!"));
+			msg_print(_("æš—é—‡ã«ãƒ‰ãƒ©ã‚´ãƒ³ã®å½±ãŒã¼ã‚“ã‚„ã‚Šã¨ç¾ã‚ŒãŸï¼", "Draconic forms loom out of the darkness!"));
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
 				(void)summon_specific(0, y, x, mon_level, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
@@ -247,7 +247,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		/* Summon hybrids. */
 		else if (one_in_(2))
 		{
-			msg_print(_("Šï–­‚Èp‚Ì‰ö•¨‚ªP‚Á‚Ä—ˆ‚½I", "Creatures strange and twisted assault you!"));
+			msg_print(_("å¥‡å¦™ãªå§¿ã®æ€ªç‰©ãŒè¥²ã£ã¦æ¥ãŸï¼", "Creatures strange and twisted assault you!"));
 			for (i = 0; i < randint1(5) + 3; i++)
 			{
 				(void)summon_specific(0, y, x, mon_level, SUMMON_HYBRID, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
@@ -257,7 +257,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		/* Summon vortices (scattered) */
 		else
 		{
-			msg_print(_("‰QŠª‚ª‡‘Ì‚µA”j—ô‚µ‚½I", "Vortices coalesce and wreak destruction!"));
+			msg_print(_("æ¸¦å·»ãŒåˆä½“ã—ã€ç ´è£‚ã—ãŸï¼", "Vortices coalesce and wreak destruction!"));
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
 				(void)summon_specific(0, y, x, mon_level, SUMMON_VORTEX, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
@@ -272,14 +272,14 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		int nasty_tricks_count = 4 + randint0(3);
 
 		/* Message. */
-		msg_print(_("‹°‚ë‚µ‚¢º‚ª‹¿‚¢‚½:  uˆÃˆÅ‚ª“ğ‚ğ‚Â‚Â‚Ü‚ñIv", "Hideous voices bid:  'Let the darkness have thee!'"));
+		msg_print(_("æã‚ã—ã„å£°ãŒéŸ¿ã„ãŸ:  ã€Œæš—é—‡ãŒæ±ã‚’ã¤ã¤ã¾ã‚“ï¼ã€", "Hideous voices bid:  'Let the darkness have thee!'"));
 		/* This is gonna hurt... */
 		for (; nasty_tricks_count > 0; nasty_tricks_count--)
 		{
 			/* ...but a high saving throw does help a little. */
 			if (randint1(100 + o_ptr->pval * 2) > p_ptr->skill_sav)
 			{
-				if (one_in_(6)) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), _("”j–Å‚Ìƒgƒ‰ƒbƒv‚Ì•ó” ", "a chest dispel-player trap"), -1);
+				if (one_in_(6)) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), _("ç ´æ»…ã®ãƒˆãƒ©ãƒƒãƒ—ã®å®ç®±", "a chest dispel-player trap"), -1);
 				else if (one_in_(5)) (void)set_cut(p_ptr->cut + 200);
 				else if (one_in_(4))
 				{
@@ -308,23 +308,23 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	/* Aggravate monsters. */
 	if (trap & (CHEST_ALARM))
 	{
-		msg_print(_("‚¯‚½‚½‚Ü‚µ‚¢‰¹‚ª–Â‚è‹¿‚¢‚½I", "An alarm sounds!"));
+		msg_print(_("ã‘ãŸãŸã¾ã—ã„éŸ³ãŒé³´ã‚ŠéŸ¿ã„ãŸï¼", "An alarm sounds!"));
 		aggravate_monsters(0);
 	}
 
 	/* Explode */
 	if ((trap & (CHEST_EXPLODE)) && o_ptr->k_idx)
 	{
-		msg_print(_("“Ë‘RA” ‚ª”š”­‚µ‚½I", "There is a sudden explosion!"));
-		msg_print(_("” ‚Ì’†‚Ì•¨‚Í‚·‚×‚Ä•²X‚ÉÓ‚¯U‚Á‚½I", "Everything inside the chest is destroyed!"));
+		msg_print(_("çªç„¶ã€ç®±ãŒçˆ†ç™ºã—ãŸï¼", "There is a sudden explosion!"));
+		msg_print(_("ç®±ã®ä¸­ã®ç‰©ã¯ã™ã¹ã¦ç²‰ã€…ã«ç •ã‘æ•£ã£ãŸï¼", "Everything inside the chest is destroyed!"));
 		o_ptr->pval = 0;
 		sound(SOUND_EXPLODE);
-		take_hit(DAMAGE_ATTACK, damroll(5, 8), _("”š”­‚·‚é” ", "an exploding chest"), -1);
+		take_hit(DAMAGE_ATTACK, damroll(5, 8), _("çˆ†ç™ºã™ã‚‹ç®±", "an exploding chest"), -1);
 	}
 	/* Scatter contents. */
 	if ((trap & (CHEST_SCATTER)) && o_ptr->k_idx)
 	{
-		msg_print(_("•ó” ‚Ì’†g‚Íƒ_ƒ“ƒWƒ‡ƒ“‚¶‚ã‚¤‚ÉU—‚µ‚½I", "The contents of the chest scatter all over the dungeon!"));
+		msg_print(_("å®ç®±ã®ä¸­èº«ã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã˜ã‚…ã†ã«æ•£ä¹±ã—ãŸï¼", "The contents of the chest scatter all over the dungeon!"));
 		chest_death(TRUE, y, x, o_idx);
 		o_ptr->pval = 0;
 	}

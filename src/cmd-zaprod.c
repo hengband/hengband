@@ -1,13 +1,13 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 
 /*!
- * @brief ƒƒbƒh‚ÌŒø‰Ê‚ğ”­“®‚·‚é
- * @param sval ƒIƒuƒWƒFƒNƒg‚Ìsval
- * @param dir ”­“®–Ú•W‚Ì•ûŒüID
- * @param use_charge ƒ`ƒƒ[ƒW‚ğÁ”ï‚µ‚½‚©‚Ç‚¤‚©‚ğ•Ô‚·QÆƒ|ƒCƒ“ƒ^
- * @param powerful ‹­—Í”­“®ã‚Ìˆ—‚È‚ç‚ÎTRUE
- * @param magic –‚“¹‹ïpã‚Ìˆ—‚È‚ç‚ÎTRUE
- * @return ”­“®‚É‚æ‚èŒø‰Ê“à—e‚ªŠm’è‚µ‚½‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+ * @brief ãƒ­ãƒƒãƒ‰ã®åŠ¹æœã‚’ç™ºå‹•ã™ã‚‹
+ * @param sval ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®sval
+ * @param dir ç™ºå‹•ç›®æ¨™ã®æ–¹å‘ID
+ * @param use_charge ãƒãƒ£ãƒ¼ã‚¸ã‚’æ¶ˆè²»ã—ãŸã‹ã©ã†ã‹ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param powerful å¼·åŠ›ç™ºå‹•ä¸Šã®å‡¦ç†ãªã‚‰ã°TRUE
+ * @param magic é­”é“å…·è¡“ä¸Šã®å‡¦ç†ãªã‚‰ã°TRUE
+ * @return ç™ºå‹•ã«ã‚ˆã‚ŠåŠ¹æœå†…å®¹ãŒç¢ºå®šã—ãŸãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerful, bool magic)
 {
@@ -130,7 +130,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerf
 	case SV_ROD_LITE:
 	{
 		HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
-		msg_print(_("Â‚­‹P‚­Œõü‚ª•ú‚½‚ê‚½B", "A line of blue shimmering light appears."));
+		msg_print(_("é’ãè¼ãå…‰ç·šãŒæ”¾ãŸã‚ŒãŸã€‚", "A line of blue shimmering light appears."));
 		(void)lite_line(dir, dam);
 		ident = TRUE;
 		break;
@@ -241,10 +241,10 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerf
 }
 
 /*!
-* @brief ƒƒbƒh‚ğg‚¤ƒRƒ}ƒ“ƒh‚ÌƒTƒuƒ‹[ƒ`ƒ“ /
+* @brief ãƒ­ãƒƒãƒ‰ã‚’ä½¿ã†ã‚³ãƒãƒ³ãƒ‰ã®ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ /
 * Activate (zap) a Rod
-* @param item g‚¤ƒIƒuƒWƒFƒNƒg‚ÌŠ•iID
-* @return ‚È‚µ
+* @param item ä½¿ã†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æŒå“ID
+* @return ãªã—
 * @details
 * <pre>
 * Unstack fully charged rods as needed.
@@ -281,7 +281,7 @@ void do_cmd_zap_rod_aux(int item)
 	/* Mega-Hack -- refuse to zap a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
 	{
-		msg_print(_("‚Ü‚¸‚Íƒƒbƒh‚ğE‚í‚È‚¯‚ê‚ÎB", "You must first pick up the rods."));
+		msg_print(_("ã¾ãšã¯ãƒ­ãƒƒãƒ‰ã‚’æ‹¾ã‚ãªã‘ã‚Œã°ã€‚", "You must first pick up the rods."));
 		return;
 	}
 
@@ -316,7 +316,7 @@ void do_cmd_zap_rod_aux(int item)
 	if (world_player)
 	{
 		if (flush_failure) flush();
-		msg_print(_("~‚Ü‚Á‚½‚Ì’†‚Å‚Í‚¤‚Ü‚­“­‚©‚È‚¢‚æ‚¤‚¾B", "Nothing happen. Maybe this rod is freezing too."));
+		msg_print(_("æ­¢ã¾ã£ãŸæ™‚ã®ä¸­ã§ã¯ã†ã¾ãåƒã‹ãªã„ã‚ˆã†ã ã€‚", "Nothing happen. Maybe this rod is freezing too."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -337,7 +337,7 @@ void do_cmd_zap_rod_aux(int item)
 	if (!success)
 	{
 		if (flush_failure) flush();
-		msg_print(_("‚¤‚Ü‚­ƒƒbƒh‚ğg‚¦‚È‚©‚Á‚½B", "You failed to use the rod properly."));
+		msg_print(_("ã†ã¾ããƒ­ãƒƒãƒ‰ã‚’ä½¿ãˆãªã‹ã£ãŸã€‚", "You failed to use the rod properly."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -348,14 +348,14 @@ void do_cmd_zap_rod_aux(int item)
 	if ((o_ptr->number == 1) && (o_ptr->timeout))
 	{
 		if (flush_failure) flush();
-		msg_print(_("‚±‚Ìƒƒbƒh‚Í‚Ü‚¾–‚—Í‚ğ[“U‚µ‚Ä‚¢‚éÅ’†‚¾B", "The rod is still charging."));
+		msg_print(_("ã“ã®ãƒ­ãƒƒãƒ‰ã¯ã¾ã é­”åŠ›ã‚’å……å¡«ã—ã¦ã„ã‚‹æœ€ä¸­ã ã€‚", "The rod is still charging."));
 		return;
 	}
 	/* A stack of rods lacks enough energy. */
 	else if ((o_ptr->number > 1) && (o_ptr->timeout > k_ptr->pval * (o_ptr->number - 1)))
 	{
 		if (flush_failure) flush();
-		msg_print(_("‚»‚Ìƒƒbƒh‚Í‚Ü‚¾[“U’†‚Å‚·B", "The rods are all still charging."));
+		msg_print(_("ãã®ãƒ­ãƒƒãƒ‰ã¯ã¾ã å……å¡«ä¸­ã§ã™ã€‚", "The rods are all still charging."));
 		return;
 	}
 
@@ -392,8 +392,8 @@ void do_cmd_zap_rod_aux(int item)
 }
 
 /*!
-* @brief ƒƒbƒh‚ğg‚¤ƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
-* @return ‚È‚µ
+* @brief ãƒ­ãƒƒãƒ‰ã‚’ä½¿ã†ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
+* @return ãªã—
 */
 void do_cmd_zap_rod(void)
 {
@@ -409,8 +409,8 @@ void do_cmd_zap_rod(void)
 	item_tester_tval = TV_ROD;
 
 	/* Get an item */
-	q = _("‚Ç‚Ìƒƒbƒh‚ğU‚è‚Ü‚·‚©? ", "Zap which rod? ");
-	s = _("g‚¦‚éƒƒbƒh‚ª‚È‚¢B", "You have no rod to zap.");
+	q = _("ã©ã®ãƒ­ãƒƒãƒ‰ã‚’æŒ¯ã‚Šã¾ã™ã‹? ", "Zap which rod? ");
+	s = _("ä½¿ãˆã‚‹ãƒ­ãƒƒãƒ‰ãŒãªã„ã€‚", "You have no rod to zap.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 

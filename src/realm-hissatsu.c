@@ -1,11 +1,11 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 
 /*!
-* @brief Œ•p‚ÌŠeˆ—‚ğs‚¤
-* @param spell Œ•pID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief å‰£è¡“ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell å‰£è¡“ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -19,8 +19,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("”ò”Ñj", "Tobi-Izuna");
-		if (desc) return _("2ƒ}ƒX—£‚ê‚½‚Æ‚±‚ë‚É‚¢‚éƒ‚ƒ“ƒXƒ^[‚ğUŒ‚‚·‚éB", "Attacks a two squares distant monster.");
+		if (name) return _("é£›é£¯ç¶±", "Tobi-Izuna");
+		if (desc) return _("2ãƒã‚¹é›¢ã‚ŒãŸã¨ã“ã‚ã«ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ”»æ’ƒã™ã‚‹ã€‚", "Attacks a two squares distant monster.");
 
 		if (cast)
 		{
@@ -32,8 +32,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("ŒÜŒ‰Ja‚è", "3-Way Attack");
-		if (desc) return _("3•ûŒü‚É‘Î‚µ‚ÄUŒ‚‚·‚éB", "Attacks in 3 directions in one time.");
+		if (name) return _("äº”æœˆé›¨æ–¬ã‚Š", "3-Way Attack");
+		if (desc) return _("3æ–¹å‘ã«å¯¾ã—ã¦æ”»æ’ƒã™ã‚‹ã€‚", "Attacks in 3 directions in one time.");
 
 		if (cast)
 		{
@@ -55,27 +55,27 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cave[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
-				msg_print(_("UŒ‚‚Í‹ó‚ğØ‚Á‚½B", "You attack the empty air."));
+				msg_print(_("æ”»æ’ƒã¯ç©ºã‚’åˆ‡ã£ãŸã€‚", "You attack the empty air."));
 
 			y = p_ptr->y + ddy_cdd[(cdir + 7) % 8];
 			x = p_ptr->x + ddx_cdd[(cdir + 7) % 8];
 			if (cave[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
-				msg_print(_("UŒ‚‚Í‹ó‚ğØ‚Á‚½B", "You attack the empty air."));
+				msg_print(_("æ”»æ’ƒã¯ç©ºã‚’åˆ‡ã£ãŸã€‚", "You attack the empty air."));
 
 			y = p_ptr->y + ddy_cdd[(cdir + 1) % 8];
 			x = p_ptr->x + ddx_cdd[(cdir + 1) % 8];
 			if (cave[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
-				msg_print(_("UŒ‚‚Í‹ó‚ğØ‚Á‚½B", "You attack the empty air."));
+				msg_print(_("æ”»æ’ƒã¯ç©ºã‚’åˆ‡ã£ãŸã€‚", "You attack the empty air."));
 		}
 		break;
 
 	case 2:
-		if (name) return _("ƒu[ƒƒ‰ƒ“", "Boomerang");
-		if (desc) return _("•Ší‚ğèŒ³‚É–ß‚Á‚Ä‚­‚é‚æ‚¤‚É“Š‚°‚éB–ß‚Á‚Ä‚±‚È‚¢‚±‚Æ‚à‚ ‚éB",
+		if (name) return _("ãƒ–ãƒ¼ãƒ¡ãƒ©ãƒ³", "Boomerang");
+		if (desc) return _("æ­¦å™¨ã‚’æ‰‹å…ƒã«æˆ»ã£ã¦ãã‚‹ã‚ˆã†ã«æŠ•ã’ã‚‹ã€‚æˆ»ã£ã¦ã“ãªã„ã“ã¨ã‚‚ã‚ã‚‹ã€‚",
 			"Throws current weapon. And it'll return to your hand unless failed.");
 
 		if (cast)
@@ -85,8 +85,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("‰‹—ì", "Burning Strike");
-		if (desc) return _("‰Î‰Š‘Ï«‚Ì‚È‚¢ƒ‚ƒ“ƒXƒ^[‚É‘åƒ_ƒ[ƒW‚ğ—^‚¦‚éB", "Attacks a monster with more damage unless it has resistance to fire.");
+		if (name) return _("ç„”éœŠ", "Burning Strike");
+		if (desc) return _("ç«ç‚è€æ€§ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚", "Attacks a monster with more damage unless it has resistance to fire.");
 
 		if (cast)
 		{
@@ -102,15 +102,15 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_FIRE);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 4:
-		if (name) return _("E‹CŠ´’m", "Detect Ferocity");
-		if (desc) return _("‹ß‚­‚Ìvl‚·‚é‚±‚Æ‚ª‚Å‚«‚éƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB", "Detects all monsters except mindless in your vicinity.");
+		if (name) return _("æ®ºæ°—æ„ŸçŸ¥", "Detect Ferocity");
+		if (desc) return _("è¿‘ãã®æ€è€ƒã™ã‚‹ã“ã¨ãŒã§ãã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all monsters except mindless in your vicinity.");
 
 		if (cast)
 		{
@@ -119,8 +119,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("‚İ‚Ë‘Å‚¿", "Strike to Stun");
-		if (desc) return _("‘Šè‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚È‚¢‚ªANO‚Æ‚³‚¹‚éB", "Attempts to stun a monster in the adjacent.");
+		if (name) return _("ã¿ã­æ‰“ã¡", "Strike to Stun");
+		if (desc) return _("ç›¸æ‰‹ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆãªã„ãŒã€æœ¦æœ§ã¨ã•ã›ã‚‹ã€‚", "Attempts to stun a monster in the adjacent.");
 
 		if (cast)
 		{
@@ -136,32 +136,32 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_MINEUCHI);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 6:
-		if (name) return _("ƒJƒEƒ“ƒ^[", "Counter");
-		if (desc) return _("‘Šè‚ÉUŒ‚‚³‚ê‚½‚Æ‚«‚É”½Œ‚‚·‚éB”½Œ‚‚·‚é‚½‚Ñ‚ÉMP‚ğÁ”ïB",
+		if (name) return _("ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼", "Counter");
+		if (desc) return _("ç›¸æ‰‹ã«æ”»æ’ƒã•ã‚ŒãŸã¨ãã«åæ’ƒã™ã‚‹ã€‚åæ’ƒã™ã‚‹ãŸã³ã«MPã‚’æ¶ˆè²»ã€‚",
 			"Prepares to counterattack. When attack by a monster, strikes back using SP each time.");
 
 		if (cast)
 		{
 			if (p_ptr->riding)
 			{
-				msg_print(_("æ”n’†‚É‚Í–³—‚¾B", "You cannot do it when riding."));
+				msg_print(_("ä¹—é¦¬ä¸­ã«ã¯ç„¡ç†ã ã€‚", "You cannot do it when riding."));
 				return NULL;
 			}
-			msg_print(_("‘Šè‚ÌUŒ‚‚É‘Î‚µ‚Äg\‚¦‚½B", "You prepare to counter blow."));
+			msg_print(_("ç›¸æ‰‹ã®æ”»æ’ƒã«å¯¾ã—ã¦èº«æ§‹ãˆãŸã€‚", "You prepare to counter blow."));
 			p_ptr->counter = TRUE;
 		}
 		break;
 
 	case 7:
-		if (name) return _("•¥‚¢”²‚¯", "Harainuke");
-		if (desc) return _("UŒ‚‚µ‚½ŒãA”½‘Î‘¤‚É”²‚¯‚éB",
+		if (name) return _("æ‰•ã„æŠœã‘", "Harainuke");
+		if (desc) return _("æ”»æ’ƒã—ãŸå¾Œã€åå¯¾å´ã«æŠœã‘ã‚‹ã€‚",
 			"Attacks monster with your weapons normally, then move through counter side of the monster.");
 
 		if (cast)
@@ -170,7 +170,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (p_ptr->riding)
 			{
-				msg_print(_("æ”n’†‚É‚Í–³—‚¾B", "You cannot do it when riding."));
+				msg_print(_("ä¹—é¦¬ä¸­ã«ã¯ç„¡ç†ã ã€‚", "You cannot do it when riding."));
 				return NULL;
 			}
 
@@ -182,7 +182,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (!cave[y][x].m_idx)
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 
@@ -205,8 +205,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("ƒT[ƒyƒ“ƒcƒ^ƒ“", "Serpent's Tongue");
-		if (desc) return _("“Å‘Ï«‚Ì‚È‚¢ƒ‚ƒ“ƒXƒ^[‚É‘åƒ_ƒ[ƒW‚ğ—^‚¦‚éB", "Attacks a monster with more damage unless it has resistance to poison.");
+		if (name) return _("ã‚µãƒ¼ãƒšãƒ³ãƒ„ã‚¿ãƒ³", "Serpent's Tongue");
+		if (desc) return _("æ¯’è€æ€§ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚", "Attacks a monster with more damage unless it has resistance to poison.");
 
 		if (cast)
 		{
@@ -222,15 +222,15 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_POISON);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 9:
-		if (name) return _("a–‚Œ•“ó‚Ì‘¾“", "Zammaken");
-		if (desc) return _("¶–½‚Ì‚È‚¢×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚É‘åƒ_ƒ[ƒW‚ğ—^‚¦‚é‚ªA‘¼‚Ìƒ‚ƒ“ƒXƒ^[‚É‚Í‘S‚­Œø‰Ê‚ª‚È‚¢B",
+		if (name) return _("æ–¬é­”å‰£å¼ã®å¤ªåˆ€", "Zammaken");
+		if (desc) return _("ç”Ÿå‘½ã®ãªã„é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ãŒã€ä»–ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯å…¨ãåŠ¹æœãŒãªã„ã€‚",
 			"Attacks an evil unliving monster with great damage. No effect to other  monsters.");
 
 		if (cast)
@@ -247,15 +247,15 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_ZANMA);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 10:
-		if (name) return _("—ô•—Œ•", "Wind Blast");
-		if (desc) return _("UŒ‚‚µ‚½‘Šè‚ğŒã•û‚Ö‚«”ò‚Î‚·B", "Attacks an adjacent monster, and blow it away.");
+		if (name) return _("è£‚é¢¨å‰£", "Wind Blast");
+		if (desc) return _("æ”»æ’ƒã—ãŸç›¸æ‰‹ã‚’å¾Œæ–¹ã¸å¹ãé£›ã°ã™ã€‚", "Attacks an adjacent monster, and blow it away.");
 
 		if (cast)
 		{
@@ -271,7 +271,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, 0);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 			if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
@@ -302,7 +302,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				}
 				if ((ty != oy) || (tx != ox))
 				{
-					msg_format(_("%s‚ğ‚«”ò‚Î‚µ‚½I", "You blow %s away!"), m_name);
+					msg_format(_("%sã‚’å¹ãé£›ã°ã—ãŸï¼", "You blow %s away!"), m_name);
 					cave[oy][ox].m_idx = 0;
 					cave[ty][tx].m_idx = m_idx;
 					m_ptr->fy = ty;
@@ -320,8 +320,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("“ ‚Ì–Ú—˜‚«", "Judge");
-		if (desc) return _("•ŠíE–h‹ï‚ğ1‚Â¯•Ê‚·‚éBƒŒƒxƒ‹45ˆÈã‚Å•ŠíE–h‹ï‚Ì”\—Í‚ğŠ®‘S‚É’m‚é‚±‚Æ‚ª‚Å‚«‚éB",
+		if (name) return _("åˆ€åŒ ã®ç›®åˆ©ã", "Judge");
+		if (desc) return _("æ­¦å™¨ãƒ»é˜²å…·ã‚’1ã¤è­˜åˆ¥ã™ã‚‹ã€‚ãƒ¬ãƒ™ãƒ«45ä»¥ä¸Šã§æ­¦å™¨ãƒ»é˜²å…·ã®èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚",
 			"Identifies a weapon or armor. Or *identifies* these at level 45.");
 
 		if (cast)
@@ -338,8 +338,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("”jŠâa", "Rock Smash");
-		if (desc) return _("Šâ‚ğ‰ó‚µAŠâÎŒn‚Ìƒ‚ƒ“ƒXƒ^[‚É‘åƒ_ƒ[ƒW‚ğ—^‚¦‚éB", "Breaks rock. Or greatly damage a monster made by rocks.");
+		if (name) return _("ç ´å²©æ–¬", "Rock Smash");
+		if (desc) return _("å²©ã‚’å£Šã—ã€å²©çŸ³ç³»ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚", "Breaks rock. Or greatly damage a monster made by rocks.");
 
 		if (cast)
 		{
@@ -365,8 +365,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("—‚êáŒ‰Ô", "Midare-Setsugekka");
-		if (desc) return _("UŒ‚‰ñ”‚ª‘‚¦A—â‹C‘Ï«‚Ì‚È‚¢ƒ‚ƒ“ƒXƒ^[‚É‘åƒ_ƒ[ƒW‚ğ—^‚¦‚éB",
+		if (name) return _("ä¹±ã‚Œé›ªæœˆèŠ±", "Midare-Setsugekka");
+		if (desc) return _("æ”»æ’ƒå›æ•°ãŒå¢—ãˆã€å†·æ°—è€æ€§ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚",
 			"Attacks a monster with increased number of attacks and more damage unless it has resistance to cold.");
 
 		if (cast)
@@ -383,15 +383,15 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_COLD);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 14:
-		if (name) return _("‹}Š“Ë‚«", "Spot Aiming");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[‚ğˆêŒ‚‚Å“|‚·UŒ‚‚ğŒJ‚èo‚·B¸”s‚·‚é‚Æ1“_‚µ‚©ƒ_ƒ[ƒW‚ğ—^‚¦‚ç‚ê‚È‚¢B",
+		if (name) return _("æ€¥æ‰€çªã", "Spot Aiming");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ä¸€æ’ƒã§å€’ã™æ”»æ’ƒã‚’ç¹°ã‚Šå‡ºã™ã€‚å¤±æ•—ã™ã‚‹ã¨1ç‚¹ã—ã‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‰ã‚Œãªã„ã€‚",
 			"Attempts to kill a monster instantly. If failed cause only 1HP of damage.");
 
 		if (cast)
@@ -408,15 +408,15 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_KYUSHO);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 15:
-		if (name) return _("–‚_a‚è", "Majingiri");
-		if (desc) return _("‰ïS‚ÌˆêŒ‚‚ÅUŒ‚‚·‚éBUŒ‚‚ª‚©‚í‚³‚ê‚â‚·‚¢B",
+		if (name) return _("é­”ç¥æ–¬ã‚Š", "Majingiri");
+		if (desc) return _("ä¼šå¿ƒã®ä¸€æ’ƒã§æ”»æ’ƒã™ã‚‹ã€‚æ”»æ’ƒãŒã‹ã‚ã•ã‚Œã‚„ã™ã„ã€‚",
 			"Attempts to attack with critical hit. But this attack is easy to evade for a monster.");
 
 		if (cast)
@@ -433,15 +433,15 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_MAJIN);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 16:
-		if (name) return _("Ì‚Äg", "Desperate Attack");
-		if (desc) return _("‹­—Í‚ÈUŒ‚‚ğŒJ‚èo‚·BŸ‚Ìƒ^[ƒ“‚Ü‚Å‚ÌŠÔAH‚ç‚¤ƒ_ƒ[ƒW‚ª‘‚¦‚éB",
+		if (name) return _("æ¨ã¦èº«", "Desperate Attack");
+		if (desc) return _("å¼·åŠ›ãªæ”»æ’ƒã‚’ç¹°ã‚Šå‡ºã™ã€‚æ¬¡ã®ã‚¿ãƒ¼ãƒ³ã¾ã§ã®é–“ã€é£Ÿã‚‰ã†ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒå¢—ãˆã‚‹ã€‚",
 			"Attacks with all of your power. But all damages you take will be doubled for one turn.");
 
 		if (cast)
@@ -458,7 +458,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_SUTEMI);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 			p_ptr->sutemi = TRUE;
@@ -466,8 +466,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("—‹Œ‚˜h’Üa", "Lightning Eagle");
-		if (desc) return _("“dŒ‚‘Ï«‚Ì‚È‚¢ƒ‚ƒ“ƒXƒ^[‚É”ñí‚É‘å‚«‚¢ƒ_ƒ[ƒW‚ğ—^‚¦‚éB",
+		if (name) return _("é›·æ’ƒé·²çˆªæ–¬", "Lightning Eagle");
+		if (desc) return _("é›»æ’ƒè€æ€§ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«éå¸¸ã«å¤§ãã„ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚",
 			"Attacks a monster with more damage unless it has resistance to electricity.");
 
 		if (cast)
@@ -484,15 +484,15 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_ELEC);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 18:
-		if (name) return _("“üg", "Rush Attack");
-		if (desc) return _("‘f‘‚­‘Šè‚É‹ßŠñ‚èUŒ‚‚·‚éB", "Steps close to a monster and attacks at a time.");
+		if (name) return _("å…¥èº«", "Rush Attack");
+		if (desc) return _("ç´ æ—©ãç›¸æ‰‹ã«è¿‘å¯„ã‚Šæ”»æ’ƒã™ã‚‹ã€‚", "Steps close to a monster and attacks at a time.");
 
 		if (cast)
 		{
@@ -501,8 +501,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("Ô—¬‰Q", "Bloody Maelstrom");
-		if (desc) return _("©•ª©g‚à‚ğì‚è‚Â‚ÂA‚»‚Ì‚ª[‚¢‚Ù‚Ç‘å‚«‚¢ˆĞ—Í‚Å‘S•ûŒü‚Ì“G‚ğUŒ‚‚Å‚«‚éB¶‚«‚Ä‚¢‚È‚¢ƒ‚ƒ“ƒXƒ^[‚É‚ÍŒø‰Ê‚ª‚È‚¢B",
+		if (name) return _("èµ¤æµæ¸¦", "Bloody Maelstrom");
+		if (desc) return _("è‡ªåˆ†è‡ªèº«ã‚‚å‚·ã‚’ä½œã‚Šã¤ã¤ã€ãã®å‚·ãŒæ·±ã„ã»ã©å¤§ãã„å¨åŠ›ã§å…¨æ–¹å‘ã®æ•µã‚’æ”»æ’ƒã§ãã‚‹ã€‚ç”Ÿãã¦ã„ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯åŠ¹æœãŒãªã„ã€‚",
 			"Attacks all adjacent monsters with power corresponding to your cut status. Then increases your cut status. No effect to unliving monsters.");
 
 		if (cast)
@@ -534,7 +534,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 						char m_name[80];
 
 						monster_desc(m_name, m_ptr, 0);
-						msg_format(_("%s‚É‚ÍŒø‰Ê‚ª‚È‚¢I", "%s is unharmed!"), m_name);
+						msg_format(_("%sã«ã¯åŠ¹æœãŒãªã„ï¼", "%s is unharmed!"), m_name);
 					}
 					else py_attack(y, x, HISSATSU_SEKIRYUKA);
 				}
@@ -543,8 +543,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("ŒƒkŒ‚", "Earthquake Blow");
-		if (desc) return _("’nk‚ğ‹N‚±‚·B", "Shakes dungeon structure, and results in random swapping of floors and walls.");
+		if (name) return _("æ¿€éœ‡æ’ƒ", "Earthquake Blow");
+		if (desc) return _("åœ°éœ‡ã‚’èµ·ã“ã™ã€‚", "Shakes dungeon structure, and results in random swapping of floors and walls.");
 
 		if (cast)
 		{
@@ -564,8 +564,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("’n‘–‚è", "Crack");
-		if (desc) return _("ÕŒ‚”g‚Ìƒr[ƒ€‚ğ•ú‚ÂB", "Fires a beam of shock wave.");
+		if (name) return _("åœ°èµ°ã‚Š", "Crack");
+		if (desc) return _("è¡æ’ƒæ³¢ã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a beam of shock wave.");
 
 		if (cast)
 		{
@@ -573,7 +573,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			u32b flgs[TR_FLAG_SIZE];
 			object_type *o_ptr;
 			if (!get_aim_dir(&dir)) return NULL;
-			msg_print(_("•Ší‚ğ‘å‚«‚­U‚è‰º‚ë‚µ‚½B", "You swing your weapon downward."));
+			msg_print(_("æ­¦å™¨ã‚’å¤§ããæŒ¯ã‚Šä¸‹ã‚ã—ãŸã€‚", "You swing your weapon downward."));
 			for (i = 0; i < 2; i++)
 			{
 				int damage;
@@ -605,21 +605,21 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("‹C”—‚Ì—Y‹©‚Ñ", "War Cry");
-		if (desc) return _("‹ŠE“à‚Ì‘Sƒ‚ƒ“ƒXƒ^[‚É‘Î‚µ‚ÄŒ‰¹‚ÌUŒ‚‚ğs‚¤B‚³‚ç‚ÉA‹ß‚­‚É‚¢‚éƒ‚ƒ“ƒXƒ^[‚ğ“{‚ç‚¹‚éB",
+		if (name) return _("æ°—è¿«ã®é›„å«ã³", "War Cry");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦è½ŸéŸ³ã®æ”»æ’ƒã‚’è¡Œã†ã€‚ã•ã‚‰ã«ã€è¿‘ãã«ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ€’ã‚‰ã›ã‚‹ã€‚",
 			"Damages all monsters in sight with sound. Aggravate nearby monsters.");
 
 		if (cast)
 		{
-			msg_print(_("—Y‹©‚Ñ‚ğ‚ ‚°‚½I", "You roar out!"));
+			msg_print(_("é›„å«ã³ã‚’ã‚ã’ãŸï¼", "You roar out!"));
 			project_hack(GF_SOUND, randint1(plev * 3));
 			aggravate_monsters(0);
 		}
 		break;
 
 	case 23:
-		if (name) return _("–³‘oO’i", "Musou-Sandan");
-		if (desc) return _("‹­—Í‚È3’iUŒ‚‚ğŒJ‚èo‚·B", "Attacks with powerful 3 strikes.");
+		if (name) return _("ç„¡åŒä¸‰æ®µ", "Musou-Sandan");
+		if (desc) return _("å¼·åŠ›ãª3æ®µæ”»æ’ƒã‚’ç¹°ã‚Šå‡ºã™ã€‚", "Attacks with powerful 3 strikes.");
 
 		if (cast)
 		{
@@ -644,7 +644,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					py_attack(y, x, HISSATSU_3DAN);
 				else
 				{
-					msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+					msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 					return NULL;
 				}
 
@@ -700,8 +700,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("‹zŒŒ‹S‚Ì‰å", "Vampire's Fang");
-		if (desc) return _("UŒ‚‚µ‚½‘Šè‚Ì‘Ì—Í‚ğ‹z‚¢‚Æ‚èA©•ª‚Ì‘Ì—Í‚ğ‰ñ•œ‚³‚¹‚éB¶–½‚ğ‚½‚È‚¢ƒ‚ƒ“ƒXƒ^[‚É‚Í’Ê‚¶‚È‚¢B",
+		if (name) return _("å¸è¡€é¬¼ã®ç‰™", "Vampire's Fang");
+		if (desc) return _("æ”»æ’ƒã—ãŸç›¸æ‰‹ã®ä½“åŠ›ã‚’å¸ã„ã¨ã‚Šã€è‡ªåˆ†ã®ä½“åŠ›ã‚’å›å¾©ã•ã›ã‚‹ã€‚ç”Ÿå‘½ã‚’æŒãŸãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯é€šã˜ãªã„ã€‚",
 			"Attacks with vampiric strikes which absorbs HP from a monster and gives them to you. No effect to unliving monsters.");
 
 		if (cast)
@@ -718,19 +718,19 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_DRAIN);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
 		}
 		break;
 
 	case 25:
-		if (name) return _("Œ¶˜f", "Moon Dazzling");
-		if (desc) return _("‹ŠE“à‚Ì‹N‚«‚Ä‚¢‚é‘Sƒ‚ƒ“ƒXƒ^[‚ÉNOA¬—A–°‚è‚ğ—^‚¦‚æ‚¤‚Æ‚·‚éB", "Attempts to stun, confuse and sleep all waking monsters.");
+		if (name) return _("å¹»æƒ‘", "Moon Dazzling");
+		if (desc) return _("è¦–ç•Œå†…ã®èµ·ãã¦ã„ã‚‹å…¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«æœ¦æœ§ã€æ··ä¹±ã€çœ ã‚Šã‚’ä¸ãˆã‚ˆã†ã¨ã™ã‚‹ã€‚", "Attempts to stun, confuse and sleep all waking monsters.");
 
 		if (cast)
 		{
-			msg_print(_("•Ší‚ğ•s‹K‘¥‚É—h‚ç‚µ‚½DDD", "You irregularly wave your weapon..."));
+			msg_print(_("æ­¦å™¨ã‚’ä¸è¦å‰‡ã«æºã‚‰ã—ãŸï¼ï¼ï¼", "You irregularly wave your weapon..."));
 			project_hack(GF_ENGETSU, plev * 4);
 			project_hack(GF_ENGETSU, plev * 4);
 			project_hack(GF_ENGETSU, plev * 4);
@@ -738,8 +738,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 26:
-		if (name) return _("•Sla‚è", "Hundred Slaughter");
-		if (desc) return _("˜A‘±‚µ‚Ä“üg‚Åƒ‚ƒ“ƒXƒ^[‚ğUŒ‚‚·‚éBUŒ‚‚·‚é‚½‚Ñ‚ÉMP‚ğÁ”ïBMP‚ª‚È‚­‚È‚é‚©Aƒ‚ƒ“ƒXƒ^[‚ğ“|‚¹‚È‚©‚Á‚½‚ç•Sla‚è‚ÍI—¹‚·‚éB",
+		if (name) return _("ç™¾äººæ–¬ã‚Š", "Hundred Slaughter");
+		if (desc) return _("é€£ç¶šã—ã¦å…¥èº«ã§ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ”»æ’ƒã™ã‚‹ã€‚æ”»æ’ƒã™ã‚‹ãŸã³ã«MPã‚’æ¶ˆè²»ã€‚MPãŒãªããªã‚‹ã‹ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å€’ã›ãªã‹ã£ãŸã‚‰ç™¾äººæ–¬ã‚Šã¯çµ‚äº†ã™ã‚‹ã€‚",
 			"Performs a series of rush attacks. The series continues while killing each monster in a time and SP remains.");
 
 		if (cast)
@@ -775,8 +775,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 27:
-		if (name) return _("“VãÄ—´‘M", "Dragonic Flash");
-		if (desc) return _("‹ŠE“à‚ÌêŠ‚ğw’è‚µ‚ÄA‚»‚ÌêŠ‚Æ©•ª‚ÌŠÔ‚É‚¢‚é‘Sƒ‚ƒ“ƒXƒ^[‚ğUŒ‚‚µA‚»‚ÌêŠ‚ÉˆÚ“®‚·‚éB",
+		if (name) return _("å¤©ç¿”é¾é–ƒ", "Dragonic Flash");
+		if (desc) return _("è¦–ç•Œå†…ã®å ´æ‰€ã‚’æŒ‡å®šã—ã¦ã€ãã®å ´æ‰€ã¨è‡ªåˆ†ã®é–“ã«ã„ã‚‹å…¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ”»æ’ƒã—ã€ãã®å ´æ‰€ã«ç§»å‹•ã™ã‚‹ã€‚",
 			"Runs toward given location while attacking all monsters on the path.");
 
 		if (cast)
@@ -789,12 +789,12 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				(distance(y, x, p_ptr->y, p_ptr->x) > MAX_SIGHT / 2) ||
 				!projectable(p_ptr->y, p_ptr->x, y, x))
 			{
-				msg_print(_("¸”sI", "You cannot move to that place!"));
+				msg_print(_("å¤±æ•—ï¼", "You cannot move to that place!"));
 				break;
 			}
 			if (p_ptr->anti_tele)
 			{
-				msg_print(_("•sv‹c‚È—Í‚ªƒeƒŒƒ|[ƒg‚ğ–h‚¢‚¾I", "A mysterious force prevents you from teleporting!"));
+				msg_print(_("ä¸æ€è­°ãªåŠ›ãŒãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’é˜²ã„ã ï¼", "A mysterious force prevents you from teleporting!"));
 				break;
 			}
 			project(0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL, -1);
@@ -803,8 +803,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("“ñd‚ÌŒ•Œ‚", "Twin Slash");
-		if (desc) return _("1ƒ^[ƒ“‚Å2“xUŒ‚‚ğs‚¤B", "double attacks at a time.");
+		if (name) return _("äºŒé‡ã®å‰£æ’ƒ", "Twin Slash");
+		if (desc) return _("1ã‚¿ãƒ¼ãƒ³ã§2åº¦æ”»æ’ƒã‚’è¡Œã†ã€‚", "double attacks at a time.");
 
 		if (cast)
 		{
@@ -826,15 +826,15 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			}
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "You don't see any monster in this direction"));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "You don't see any monster in this direction"));
 				return NULL;
 			}
 		}
 		break;
 
 	case 29:
-		if (name) return _("ŒÕ•šâ“¨", "Kofuku-Zettousei");
-		if (desc) return _("‹­—Í‚ÈUŒ‚‚ğs‚¢A‹ß‚­‚ÌêŠ‚É‚àŒø‰Ê‚ª‹y‚ÔB", "Performs a powerful attack which even effect nearby monsters.");
+		if (name) return _("è™ä¼çµ¶åˆ€å‹¢", "Kofuku-Zettousei");
+		if (desc) return _("å¼·åŠ›ãªæ”»æ’ƒã‚’è¡Œã„ã€è¿‘ãã®å ´æ‰€ã«ã‚‚åŠ¹æœãŒåŠã¶ã€‚", "Performs a powerful attack which even effect nearby monsters.");
 
 		if (cast)
 		{
@@ -851,10 +851,10 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
 			{
-				msg_print(_("‚È‚º‚©UŒ‚‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚¢B", "Something prevent you from attacking."));
+				msg_print(_("ãªãœã‹æ”»æ’ƒã™ã‚‹ã“ã¨ãŒã§ããªã„ã€‚", "Something prevent you from attacking."));
 				return "";
 			}
-			msg_print(_("•Ší‚ğ‘å‚«‚­U‚è‰º‚ë‚µ‚½B", "You swing your weapon downward."));
+			msg_print(_("æ­¦å™¨ã‚’å¤§ããæŒ¯ã‚Šä¸‹ã‚ã—ãŸã€‚", "You swing your weapon downward."));
 			for (i = 0; i < 2; i++)
 			{
 				int damage;
@@ -885,8 +885,8 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("Œc‰_‹S”EŒ•", "Keiun-Kininken");
-		if (desc) return _("©•ª‚àƒ_ƒ[ƒW‚ğ‚­‚ç‚¤‚ªA‘Šè‚É”ñí‚É‘å‚«‚Èƒ_ƒ[ƒW‚ğ—^‚¦‚éBƒAƒ“ƒfƒbƒh‚É‚Í“Á‚ÉŒø‰Ê‚ª‚ ‚éB",
+		if (name) return _("æ…¶é›²é¬¼å¿å‰£", "Keiun-Kininken");
+		if (desc) return _("è‡ªåˆ†ã‚‚ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ãã‚‰ã†ãŒã€ç›¸æ‰‹ã«éå¸¸ã«å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã«ã¯ç‰¹ã«åŠ¹æœãŒã‚ã‚‹ã€‚",
 			"Attacks a monster with extremely powerful damage. But you also takes some damages. Hurts a undead monster greatly.");
 
 		if (cast)
@@ -903,23 +903,23 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				py_attack(y, x, HISSATSU_UNDEAD);
 			else
 			{
-				msg_print(_("‚»‚Ì•ûŒü‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "There is no monster."));
+				msg_print(_("ãã®æ–¹å‘ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "There is no monster."));
 				return NULL;
 			}
-			take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), _("Œc‰_‹S”EŒ•‚ğg‚Á‚½ÕŒ‚", "exhaustion on using Keiun-Kininken"), -1);
+			take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), _("æ…¶é›²é¬¼å¿å‰£ã‚’ä½¿ã£ãŸè¡æ’ƒ", "exhaustion on using Keiun-Kininken"), -1);
 		}
 		break;
 
 	case 31:
-		if (name) return _("Ø• ", "Harakiri");
-		if (desc) return _("u•m“¹‚Æ‚ÍA€‚Ê‚±‚Æ‚ÆŒ©‚Â‚¯‚½‚èBv", "'Busido is found in death'");
+		if (name) return _("åˆ‡è…¹", "Harakiri");
+		if (desc) return _("ã€Œæ­¦å£«é“ã¨ã¯ã€æ­»ã¬ã“ã¨ã¨è¦‹ã¤ã‘ãŸã‚Šã€‚ã€", "'Busido is found in death'");
 
 		if (cast)
 		{
 			int i;
-			if (!get_check(_("–{“–‚É©E‚µ‚Ü‚·‚©H", "Do you really want to commit suicide? "))) return NULL;
+			if (!get_check(_("æœ¬å½“ã«è‡ªæ®ºã—ã¾ã™ã‹ï¼Ÿ", "Do you really want to commit suicide? "))) return NULL;
 			/* Special Verification for suicide */
-			prt(_("Šm”F‚Ì‚½‚ß '@' ‚ğ‰Ÿ‚µ‚Ä‰º‚³‚¢B", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
+			prt(_("ç¢ºèªã®ãŸã‚ '@' ã‚’æŠ¼ã—ã¦ä¸‹ã•ã„ã€‚", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
 
 			flush();
 			i = inkey();
@@ -932,7 +932,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			}
 			else
 			{
-				msg_print(_("•m“¹‚Æ‚ÍA€‚Ê‚±‚Æ‚ÆŒ©‚Â‚¯‚½‚èB", "Meaning of Bushi-do is found in the death."));
+				msg_print(_("æ­¦å£«é“ã¨ã¯ã€æ­»ã¬ã“ã¨ã¨è¦‹ã¤ã‘ãŸã‚Šã€‚", "Meaning of Bushi-do is found in the death."));
 				take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
 			}
 		}

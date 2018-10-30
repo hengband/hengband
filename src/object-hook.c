@@ -1,12 +1,12 @@
-
+ï»¿
 #include "angband.h"
 #include "object-hook.h"
 
 /*!
-* @brief ‘ÎÛ‚ÌƒAƒCƒeƒ€‚ª–î‚âƒNƒƒXƒ{ƒE‚Ì–î‚ÌŞ—¿‚É‚È‚é‚©‚ğ•Ô‚·B/
+* @brief å¯¾è±¡ã®ã‚¢ã‚¤ãƒ†ãƒ ãŒçŸ¢ã‚„ã‚¯ãƒ­ã‚¹ãƒœã‚¦ã®çŸ¢ã®ææ–™ã«ãªã‚‹ã‹ã‚’è¿”ã™ã€‚/
 * Hook to determine if an object is contertible in an arrow/bolt
-* @param o_ptr ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘Ì‚ÌQÆƒ|ƒCƒ“ƒ^B
-* @return Ş—¿‚É‚Å‚«‚é‚È‚çTRUE‚ğ•Ô‚·
+* @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿ã€‚
+* @return ææ–™ã«ã§ãã‚‹ãªã‚‰TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_convertible(object_type *o_ptr)
 {
@@ -18,9 +18,9 @@ bool item_tester_hook_convertible(object_type *o_ptr)
 }
 
 /*!
-* @brief •Ší ‚Ìu•ŠívŠÓ’è‘ÎÛ‚É‚È‚é‚©‚ğ”»’è‚·‚éB/ Hook to specify "weapon"
-* @param o_ptr ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘Ì‚ÌQÆƒ|ƒCƒ“ƒ^B
-* @return ‘ÎÛ‚É‚È‚é‚È‚çTRUE‚ğ•Ô‚·B
+* @brief æ­¦å™¨åŒ ã®ã€Œæ­¦å™¨ã€é‘‘å®šå¯¾è±¡ã«ãªã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚/ Hook to specify "weapon"
+* @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿ã€‚
+* @return å¯¾è±¡ã«ãªã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 bool item_tester_hook_orthodox_melee_weapons(object_type *o_ptr)
 {
@@ -42,9 +42,9 @@ bool item_tester_hook_orthodox_melee_weapons(object_type *o_ptr)
 }
 
 /*!
-* @brief ƒIƒuƒWƒFƒNƒg‚ª‰Eè‚©¶è‚É‘•”õ‚Å‚«‚é•Ší‚©‚Ç‚¤‚©‚Ì”»’è
-* @param o_ptr ”»’è‚·‚éƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return ‰Eè‚©¶è‚Ì•Ší‚Æ‚µ‚Ä‘•”õ‚Å‚«‚é‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+* @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå³æ‰‹ã‹å·¦æ‰‹ã«è£…å‚™ã§ãã‚‹æ­¦å™¨ã‹ã©ã†ã‹ã®åˆ¤å®š
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return å³æ‰‹ã‹å·¦æ‰‹ã®æ­¦å™¨ã¨ã—ã¦è£…å‚™ã§ãã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
 */
 bool item_tester_hook_melee_weapon(object_type *o_ptr)
 {
@@ -57,9 +57,9 @@ bool item_tester_hook_melee_weapon(object_type *o_ptr)
 
 
 /*!
-* @brief •Ší ‚Ìu–î’evŠÓ’è‘ÎÛ‚É‚È‚é‚©‚ğ”»’è‚·‚éB/ Hook to specify "weapon"
-* @param o_ptr ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘Ì‚ÌQÆƒ|ƒCƒ“ƒ^B
-* @return ‘ÎÛ‚É‚È‚é‚È‚çTRUE‚ğ•Ô‚·B
+* @brief æ­¦å™¨åŒ ã®ã€ŒçŸ¢å¼¾ã€é‘‘å®šå¯¾è±¡ã«ãªã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚/ Hook to specify "weapon"
+* @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿ã€‚
+* @return å¯¾è±¡ã«ãªã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 bool item_tester_hook_ammo(object_type *o_ptr)
 {
@@ -77,9 +77,9 @@ bool item_tester_hook_ammo(object_type *o_ptr)
 }
 
 /*!
-* @brief C•œ‘ÎÛ‚Æ‚È‚é‰ó‚ê‚½•Ší‚©‚ğ”»’è‚·‚éB / Hook to specify "broken weapon"
-* @param o_ptr ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘Ì‚ÌQÆƒ|ƒCƒ“ƒ^B
-* @return C•œ‘ÎÛ‚É‚È‚é‚È‚çTRUE‚ğ•Ô‚·B
+* @brief ä¿®å¾©å¯¾è±¡ã¨ãªã‚‹å£Šã‚ŒãŸæ­¦å™¨ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚ / Hook to specify "broken weapon"
+* @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿ã€‚
+* @return ä¿®å¾©å¯¾è±¡ã«ãªã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 bool item_tester_hook_broken_weapon(object_type *o_ptr)
 {
@@ -96,9 +96,9 @@ bool item_tester_hook_broken_weapon(object_type *o_ptr)
 }
 
 /*!
-* @brief ƒIƒuƒWƒFƒNƒg‚ª“ŠË‰Â”\‚È•Ší‚©‚Ç‚¤‚©‚ğ•Ô‚·B
-* @param o_ptr ”»’è‚·‚éƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return “ŠË‰Â”\‚È•Ší‚È‚ç‚ÎTRUE
+* @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæŠ•å°„å¯èƒ½ãªæ­¦å™¨ã‹ã©ã†ã‹ã‚’è¿”ã™ã€‚
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return æŠ•å°„å¯èƒ½ãªæ­¦å™¨ãªã‚‰ã°TRUE
 */
 bool item_tester_hook_boomerang(object_type *o_ptr)
 {
@@ -109,10 +109,10 @@ bool item_tester_hook_boomerang(object_type *o_ptr)
 }
 
 /*!
-* @brief ƒIƒuƒWƒFƒNƒg‚ğƒvƒŒƒCƒ„[‚ªH‚×‚é‚±‚Æ‚ª‚Å‚«‚é‚©‚ğ”»’è‚·‚é /
+* @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒé£Ÿã¹ã‚‹ã“ã¨ãŒã§ãã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ /
 * Hook to determine if an object is eatable
-* @param o_ptr ”»’è‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return H‚×‚é‚±‚Æ‚ª‰Â”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @param o_ptr åˆ¤å®šã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return é£Ÿã¹ã‚‹ã“ã¨ãŒå¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_eatable(object_type *o_ptr)
 {
@@ -150,9 +150,9 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 }
 
 /*!
-* @brief ƒIƒuƒWƒFƒNƒg‚ª‚Ç‚¿‚ç‚Ìè‚É‚à‘•”õ‚Å‚«‚é•Ší‚©‚Ç‚¤‚©‚Ì”»’è
-* @param o_ptr ”»’è‚·‚éƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return ¶‰E—¼•û‚Ìè‚Å‘•”õ‚Å‚«‚é‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+* @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã©ã¡ã‚‰ã®æ‰‹ã«ã‚‚è£…å‚™ã§ãã‚‹æ­¦å™¨ã‹ã©ã†ã‹ã®åˆ¤å®š
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return å·¦å³ä¸¡æ–¹ã®æ‰‹ã§è£…å‚™ã§ãã‚‹ãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
 */
 bool item_tester_hook_mochikae(object_type *o_ptr)
 {
@@ -166,10 +166,10 @@ bool item_tester_hook_mochikae(object_type *o_ptr)
 }
 
 /*!
-* @brief ƒIƒuƒWƒFƒNƒg‚ğƒvƒŒƒCƒ„[‚ª–‚“¹‹ï‚Æ‚µ‚Ä”­“®‚Å‚«‚é‚©‚ğ”»’è‚·‚é /
+* @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒé­”é“å…·ã¨ã—ã¦ç™ºå‹•ã§ãã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ /
 * Hook to determine if an object is activatable
-* @param o_ptr ”»’è‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return –‚“¹‹ï‚Æ‚µ‚Ä”­“®‰Â”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @param o_ptr åˆ¤å®šã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return é­”é“å…·ã¨ã—ã¦ç™ºå‹•å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_activate(object_type *o_ptr)
 {
@@ -189,9 +189,9 @@ bool item_tester_hook_activate(object_type *o_ptr)
 }
 
 /*!
-* @brief ƒIƒuƒWƒFƒNƒg‚ğ–h‹ï‚Æ‚µ‚Ä‘•”õ‚Å‚«‚é‚©‚Ì”»’è / The "wearable" tester
-* @param o_ptr ”»’è‚·‚éƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return ƒIƒuƒWƒFƒNƒg‚ª–h‹ï‚Æ‚µ‚Ä‘•”õ‚Å‚«‚é‚È‚çTRUE‚ğ•Ô‚·B
+* @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é˜²å…·ã¨ã—ã¦è£…å‚™ã§ãã‚‹ã‹ã®åˆ¤å®š / The "wearable" tester
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé˜²å…·ã¨ã—ã¦è£…å‚™ã§ãã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 bool item_tester_hook_wear(object_type *o_ptr)
 {
@@ -207,10 +207,10 @@ bool item_tester_hook_wear(object_type *o_ptr)
 
 
 /*!
-* @brief ƒIƒuƒWƒFƒNƒg‚ğƒvƒŒƒCƒ„[‚ªŠÈˆÕg—pƒRƒ}ƒ“ƒh‚Å—˜—p‚Å‚«‚é‚©‚ğ”»’è‚·‚é /
+* @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒç°¡æ˜“ä½¿ç”¨ã‚³ãƒãƒ³ãƒ‰ã§åˆ©ç”¨ã§ãã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ /
 * Hook to determine if an object is useable
-* @param o_ptr ”»’è‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return —˜—p‰Â”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @param o_ptr åˆ¤å®šã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return åˆ©ç”¨å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_use(object_type *o_ptr)
 {
@@ -262,10 +262,10 @@ bool item_tester_hook_use(object_type *o_ptr)
 
 
 /*!
-* @brief ƒIƒuƒWƒFƒNƒg‚ğƒvƒŒƒCƒ„[‚ªˆù‚Ş‚±‚Æ‚ª‚Å‚«‚é‚©‚ğ”»’è‚·‚é /
+* @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒé£²ã‚€ã“ã¨ãŒã§ãã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ /
 * Hook to determine if an object can be quaffed
-* @param o_ptr ”»’è‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return ˆù‚Ş‚±‚Æ‚ª‰Â”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @param o_ptr åˆ¤å®šã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return é£²ã‚€ã“ã¨ãŒå¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_quaff(object_type *o_ptr)
 {
@@ -281,10 +281,10 @@ bool item_tester_hook_quaff(object_type *o_ptr)
 
 
 /*!
-* @brief ƒIƒuƒWƒFƒNƒg‚ğƒvƒŒƒCƒ„[‚ª“Ç‚Ş‚±‚Æ‚ª‚Å‚«‚é‚©‚ğ”»’è‚·‚é /
+* @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒèª­ã‚€ã“ã¨ãŒã§ãã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ /
 * Hook to determine if an object is readable
-* @param o_ptr ”»’è‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return “Ç‚Ş‚±‚Æ‚ª‰Â”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @param o_ptr åˆ¤å®šã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return èª­ã‚€ã“ã¨ãŒå¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_readable(object_type *o_ptr)
 {
@@ -296,9 +296,9 @@ bool item_tester_hook_readable(object_type *o_ptr)
 
 
 /*!
-* @brief ƒGƒbƒZƒ“ƒX‚Ì•t‰Á‰Â”\‚È•Ší‚â–î’e‚©‚ğ•Ô‚·
-* @param o_ptr ƒ`ƒFƒbƒN‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @return ƒGƒbƒZƒ“ƒX‚Ì•t‰Á‰Â”\‚È•Ší‚©–î’e‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+* @brief ã‚¨ãƒƒã‚»ãƒ³ã‚¹ã®ä»˜åŠ å¯èƒ½ãªæ­¦å™¨ã‚„çŸ¢å¼¾ã‹ã‚’è¿”ã™
+* @param o_ptr ãƒã‚§ãƒƒã‚¯ã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return ã‚¨ãƒƒã‚»ãƒ³ã‚¹ã®ä»˜åŠ å¯èƒ½ãªæ­¦å™¨ã‹çŸ¢å¼¾ãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
 */
 bool item_tester_hook_melee_ammo(object_type *o_ptr)
 {
@@ -323,9 +323,9 @@ bool item_tester_hook_melee_ammo(object_type *o_ptr)
 }
 
 /*!
-* @brief ôp—Ìˆæ‚Ì•Šíô”›‚Ì‘ÎÛ‚É‚Å‚«‚é•Ší‚©‚Ç‚¤‚©‚ğ•Ô‚·B / An "item_tester_hook" for offer
-* @param o_ptr ƒIƒuƒWƒFƒNƒg\‘¢‘Ì‚ÌQÆƒ|ƒCƒ“ƒ^
-* @return ô”›‰Â”\‚È•Ší‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @brief å‘ªè¡“é ˜åŸŸã®æ­¦å™¨å‘ªç¸›ã®å¯¾è±¡ã«ã§ãã‚‹æ­¦å™¨ã‹ã©ã†ã‹ã‚’è¿”ã™ã€‚ / An "item_tester_hook" for offer
+* @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return å‘ªç¸›å¯èƒ½ãªæ­¦å™¨ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
 {
@@ -344,9 +344,9 @@ bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
 }
 
 /*!
-* @brief ôp—Ìˆæ‚ÌŠeˆ—‚Ég‚¦‚éô‚í‚ê‚½‘•”õ‚©‚Ç‚¤‚©‚ğ•Ô‚·B / An "item_tester_hook" for offer
-* @param o_ptr ƒIƒuƒWƒFƒNƒg\‘¢‘Ì‚ÌQÆƒ|ƒCƒ“ƒ^
-* @return g‚¦‚é‘•”õ‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @brief å‘ªè¡“é ˜åŸŸã®å„å‡¦ç†ã«ä½¿ãˆã‚‹å‘ªã‚ã‚ŒãŸè£…å‚™ã‹ã©ã†ã‹ã‚’è¿”ã™ã€‚ / An "item_tester_hook" for offer
+* @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return ä½¿ãˆã‚‹è£…å‚™ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_cursed(object_type *o_ptr)
 {
@@ -355,10 +355,10 @@ bool item_tester_hook_cursed(object_type *o_ptr)
 
 
 /*!
-* @brief ƒAƒCƒeƒ€‚ª•À‚Ì‰¿’l‚ÌƒAƒCƒeƒ€‚©‚Ç‚¤‚©”»’è‚·‚é /
+* @brief ã‚¢ã‚¤ãƒ†ãƒ ãŒä¸¦ã®ä¾¡å€¤ã®ã‚¢ã‚¤ãƒ†ãƒ ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹ /
 * Check if an object is nameless weapon or armour
-* @param o_ptr ”»’è‚·‚éƒAƒCƒeƒ€‚Ìî•ñQÆƒ|ƒCƒ“ƒ^
-* @return •À‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã®æƒ…å ±å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return ä¸¦ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
 {
@@ -374,9 +374,9 @@ bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
 
 
 /*!
-* @brief ƒAƒCƒeƒ€‚ªŠÓ’èÏ‚İ‚©‚ğ”»’è‚·‚é /
-* @param o_ptr ”»’è‚·‚éƒAƒCƒeƒ€‚Ìî•ñQÆƒ|ƒCƒ“ƒ^
-* @return ÀÛ‚ÉŠÓ’èÏ‚İ‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @brief ã‚¢ã‚¤ãƒ†ãƒ ãŒé‘‘å®šæ¸ˆã¿ã‹ã‚’åˆ¤å®šã™ã‚‹ /
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã®æƒ…å ±å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return å®Ÿéš›ã«é‘‘å®šæ¸ˆã¿ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_identify(object_type *o_ptr)
 {
@@ -384,9 +384,9 @@ bool item_tester_hook_identify(object_type *o_ptr)
 }
 
 /*!
-* @brief ƒAƒCƒeƒ€‚ªŠÓ’èÏ‚İ‚Ì•Ší–h‹ï‚©‚ğ”»’è‚·‚é /
-* @param o_ptr ”»’è‚·‚éƒAƒCƒeƒ€‚Ìî•ñQÆƒ|ƒCƒ“ƒ^
-* @return ÀÛ‚ÉŠÓ’èÏ‚İ‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @brief ã‚¢ã‚¤ãƒ†ãƒ ãŒé‘‘å®šæ¸ˆã¿ã®æ­¦å™¨é˜²å…·ã‹ã‚’åˆ¤å®šã™ã‚‹ /
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã®æƒ…å ±å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return å®Ÿéš›ã«é‘‘å®šæ¸ˆã¿ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
 {
@@ -396,9 +396,9 @@ bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
 }
 
 /*!
-* @brief ƒAƒCƒeƒ€‚ª*ŠÓ’è*Ï‚İ‚©‚ğ”»’è‚·‚é /
-* @param o_ptr ”»’è‚·‚éƒAƒCƒeƒ€‚Ìî•ñQÆƒ|ƒCƒ“ƒ^
-* @return ÀÛ‚ÉŠÓ’èÏ‚İ‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @brief ã‚¢ã‚¤ãƒ†ãƒ ãŒ*é‘‘å®š*æ¸ˆã¿ã‹ã‚’åˆ¤å®šã™ã‚‹ /
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã®æƒ…å ±å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return å®Ÿéš›ã«é‘‘å®šæ¸ˆã¿ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_identify_fully(object_type *o_ptr)
 {
@@ -406,9 +406,9 @@ bool item_tester_hook_identify_fully(object_type *o_ptr)
 }
 
 /*!
-* @brief ƒAƒCƒeƒ€‚ª*ŠÓ’è*Ï‚İ‚Ì•Ší–h‹ï‚©‚ğ”»’è‚·‚é /
-* @param o_ptr ”»’è‚·‚éƒAƒCƒeƒ€‚Ìî•ñQÆƒ|ƒCƒ“ƒ^
-* @return ÀÛ‚ÉŠÓ’èÏ‚İ‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @brief ã‚¢ã‚¤ãƒ†ãƒ ãŒ*é‘‘å®š*æ¸ˆã¿ã®æ­¦å™¨é˜²å…·ã‹ã‚’åˆ¤å®šã™ã‚‹ /
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã®æƒ…å ±å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return å®Ÿéš›ã«é‘‘å®šæ¸ˆã¿ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
 {
@@ -419,10 +419,10 @@ bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
 
 
 /*!
-* @brief –‚—Í[“U‚ª‰Â”\‚ÈƒAƒCƒeƒ€‚©‚Ç‚¤‚©”»’è‚·‚é /
+* @brief é­”åŠ›å……å¡«ãŒå¯èƒ½ãªã‚¢ã‚¤ãƒ†ãƒ ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹ /
 * Hook for "get_item()".  Determine if something is rechargable.
-* @param o_ptr ”»’è‚·‚éƒAƒCƒeƒ€‚Ìî•ñQÆƒ|ƒCƒ“ƒ^
-* @return –‚—Í[“U‚ª‰Â”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @param o_ptr åˆ¤å®šã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã®æƒ…å ±å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return é­”åŠ›å……å¡«ãŒå¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool item_tester_hook_recharge(object_type *o_ptr)
 {

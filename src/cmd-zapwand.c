@@ -1,13 +1,13 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 
 
 /*!
-* @brief –‚–@–_‚ÌŒø‰Ê‚ğ”­“®‚·‚é
-* @param sval ƒIƒuƒWƒFƒNƒg‚Ìsval
-* @param dir ”­“®‚Ì•ûŒüID
-* @param powerful ‹­—Í”­“®ã‚Ìˆ—‚È‚ç‚ÎTRUE
-* @param magic –‚“¹‹ïpã‚Ìˆ—‚È‚ç‚ÎTRUE
-* @return ”­“®‚É‚æ‚èŒø‰Ê“à—e‚ªŠm’è‚µ‚½‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @brief é­”æ³•æ£’ã®åŠ¹æœã‚’ç™ºå‹•ã™ã‚‹
+* @param sval ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®sval
+* @param dir ç™ºå‹•ã®æ–¹å‘ID
+* @param powerful å¼·åŠ›ç™ºå‹•ä¸Šã®å‡¦ç†ãªã‚‰ã°TRUE
+* @param magic é­”é“å…·è¡“ä¸Šã®å‡¦ç†ãªã‚‰ã°TRUE
+* @return ç™ºå‹•ã«ã‚ˆã‚ŠåŠ¹æœå†…å®¹ãŒç¢ºå®šã—ãŸãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
 {
@@ -91,7 +91,7 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
 	case SV_WAND_LITE:
 	{
 		HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
-		msg_print(_("Â‚­‹P‚­Œõü‚ª•ú‚½‚ê‚½B", "A line of blue shimmering light appears."));
+		msg_print(_("é’ãè¼ãå…‰ç·šãŒæ”¾ãŸã‚ŒãŸã€‚", "A line of blue shimmering light appears."));
 		(void)lite_line(dir, dam);
 		ident = TRUE;
 		break;
@@ -205,7 +205,7 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
 
 	case SV_WAND_WONDER:
 	{
-		msg_print(_("‚¨‚Á‚ÆA“ä‚Ì–‚–@–_‚ğn“®‚³‚¹‚½B", "Oops.  Wand of wonder activated."));
+		msg_print(_("ãŠã£ã¨ã€è¬ã®é­”æ³•æ£’ã‚’å§‹å‹•ã•ã›ãŸã€‚", "Oops.  Wand of wonder activated."));
 		break;
 	}
 
@@ -269,7 +269,7 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
 
 	case SV_WAND_ROCKETS:
 	{
-		msg_print(_("ƒƒPƒbƒg‚ğ”­Ë‚µ‚½I", "You launch a rocket!"));
+		msg_print(_("ãƒ­ã‚±ãƒƒãƒˆã‚’ç™ºå°„ã—ãŸï¼", "You launch a rocket!"));
 		fire_rocket(GF_ROCKET, dir, 250 + lev * 3, rad);
 		ident = TRUE;
 		break;
@@ -293,10 +293,10 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
 }
 
 /*!
-* @brief –‚–@–_‚ğg‚¤ƒRƒ}ƒ“ƒh‚ÌƒTƒuƒ‹[ƒ`ƒ“ /
+* @brief é­”æ³•æ£’ã‚’ä½¿ã†ã‚³ãƒãƒ³ãƒ‰ã®ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ /
 * Aim a wand (from the pack or floor).
-* @param item g‚¤ƒIƒuƒWƒFƒNƒg‚ÌŠ•iID
-* @return ‚È‚µ
+* @param item ä½¿ã†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æŒå“ID
+* @return ãªã—
 * @details
 * <pre>
 * Use a single charge from a single item.
@@ -334,7 +334,7 @@ void do_cmd_aim_wand_aux(int item)
 	/* Mega-Hack -- refuse to aim a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
 	{
-		msg_print(_("‚Ü‚¸‚Í–‚–@–_‚ğE‚í‚È‚¯‚ê‚ÎB", "You must first pick up the wands."));
+		msg_print(_("ã¾ãšã¯é­”æ³•æ£’ã‚’æ‹¾ã‚ãªã‘ã‚Œã°ã€‚", "You must first pick up the wands."));
 		return;
 	}
 
@@ -375,7 +375,7 @@ void do_cmd_aim_wand_aux(int item)
 	if (world_player)
 	{
 		if (flush_failure) flush();
-		msg_print(_("~‚Ü‚Á‚½‚Ì’†‚Å‚Í‚¤‚Ü‚­“­‚©‚È‚¢‚æ‚¤‚¾B", "Nothing happen. Maybe this wand is freezing too."));
+		msg_print(_("æ­¢ã¾ã£ãŸæ™‚ã®ä¸­ã§ã¯ã†ã¾ãåƒã‹ãªã„ã‚ˆã†ã ã€‚", "Nothing happen. Maybe this wand is freezing too."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -384,7 +384,7 @@ void do_cmd_aim_wand_aux(int item)
 	if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (p_ptr->pclass == CLASS_BERSERKER))
 	{
 		if (flush_failure) flush();
-		msg_print(_("–‚–@–_‚ğ‚¤‚Ü‚­g‚¦‚È‚©‚Á‚½B", "You failed to use the wand properly."));
+		msg_print(_("é­”æ³•æ£’ã‚’ã†ã¾ãä½¿ãˆãªã‹ã£ãŸã€‚", "You failed to use the wand properly."));
 		sound(SOUND_FAIL);
 		return;
 	}
@@ -393,7 +393,7 @@ void do_cmd_aim_wand_aux(int item)
 	if (o_ptr->pval <= 0)
 	{
 		if (flush_failure) flush();
-		msg_print(_("‚±‚Ì–‚–@–_‚É‚Í‚à‚¤–‚—Í‚ªc‚Á‚Ä‚¢‚È‚¢B", "The wand has no charges left."));
+		msg_print(_("ã“ã®é­”æ³•æ£’ã«ã¯ã‚‚ã†é­”åŠ›ãŒæ®‹ã£ã¦ã„ãªã„ã€‚", "The wand has no charges left."));
 		o_ptr->ident |= (IDENT_EMPTY);
 
 		/* Combine / Reorder the pack (later) */
@@ -449,8 +449,8 @@ void do_cmd_aim_wand_aux(int item)
 }
 
 /*!
-* @brief –‚–@–_‚ğg‚¤ƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
-* @return ‚È‚µ
+* @brief é­”æ³•æ£’ã‚’ä½¿ã†ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
+* @return ãªã—
 */
 void do_cmd_aim_wand(void)
 {
@@ -466,8 +466,8 @@ void do_cmd_aim_wand(void)
 	}
 
 	/* Get an item */
-	q = _("‚Ç‚Ì–‚–@–_‚Å‘_‚¢‚Ü‚·‚©? ", "Aim which wand? ");
-	s = _("g‚¦‚é–‚–@–_‚ª‚È‚¢B", "You have no wand to aim.");
+	q = _("ã©ã®é­”æ³•æ£’ã§ç‹™ã„ã¾ã™ã‹? ", "Aim which wand? ");
+	s = _("ä½¿ãˆã‚‹é­”æ³•æ£’ãŒãªã„ã€‚", "You have no wand to aim.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 

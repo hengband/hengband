@@ -1,10 +1,10 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 
 /*!
-* @brief ƒvƒŒƒCƒ„[‚Ì‹Ræ/‰º”nˆ—”»’è
-* @param c_ptr ƒvƒŒƒCƒ„[‚ÌˆÚ“®æƒ}ƒX‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @param now_riding TRUE‚È‚ç‰º”nˆ—AFALSE‚È‚ç‚Î‹Ræˆ—
-* @return ‰Â”\‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é¨ä¹—/ä¸‹é¦¬å‡¦ç†åˆ¤å®š
+* @param c_ptr ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å…ˆãƒã‚¹ã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @param now_riding TRUEãªã‚‰ä¸‹é¦¬å‡¦ç†ã€FALSEãªã‚‰ã°é¨ä¹—å‡¦ç†
+* @return å¯èƒ½ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
 {
@@ -45,12 +45,12 @@ bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
 
 
 /*!
-* @brief ƒyƒbƒg‚É‚È‚Á‚Ä‚¢‚éƒ‚ƒ“ƒXƒ^[‚ğƒ\[ƒg‚·‚é‚½‚ß‚Ì”äŠrˆ—
-* @param u ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘Ì”z—ñ
-* @param v –¢g—p
-* @param a ”äŠr‘ÎÛ‚Ìƒ‚ƒ“ƒXƒ^[ID1
-* @param b ”äŠr‘ÎÛ‚Ìƒ‚ƒ“ƒXƒ^[ID2
-* @return 2”Ô–Ú‚ª‘å‚È‚ç‚ÎTRUE‚ğ•Ô‚·
+* @brief ãƒšãƒƒãƒˆã«ãªã£ã¦ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ã‚½ãƒ¼ãƒˆã™ã‚‹ãŸã‚ã®æ¯”è¼ƒå‡¦ç†
+* @param u ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ§‹é€ ä½“é…åˆ—
+* @param v æœªä½¿ç”¨
+* @param a æ¯”è¼ƒå¯¾è±¡ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ID1
+* @param b æ¯”è¼ƒå¯¾è±¡ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ID2
+* @return 2ç•ªç›®ãŒå¤§ãªã‚‰ã°TRUEã‚’è¿”ã™
 */
 static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 {
@@ -90,8 +90,8 @@ static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 
 
 /*!
-* @brief ƒyƒbƒg‚ÌˆÛƒRƒXƒgŒvZ
-* @return ˆÛƒRƒXƒg(%)
+* @brief ãƒšãƒƒãƒˆã®ç¶­æŒã‚³ã‚¹ãƒˆè¨ˆç®—
+* @return ç¶­æŒã‚³ã‚¹ãƒˆ(%)
 */
 int calculate_upkeep(void)
 {
@@ -152,8 +152,8 @@ int calculate_upkeep(void)
 }
 
 /*!
-* @brief ƒyƒbƒg‚ğŠJ•ú‚·‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“
-* @return ‚È‚µ
+* @brief ãƒšãƒƒãƒˆã‚’é–‹æ”¾ã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
+* @return ãªã—
 */
 void do_cmd_pet_dismiss(void)
 {
@@ -212,7 +212,7 @@ void do_cmd_pet_dismiss(void)
 			/* Hack -- handle stuff */
 			handle_stuff();
 
-			msg_format(_("%s‚ğ•ú‚µ‚Ü‚·‚©H [Yes/No/Unnamed (%d‘Ì)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, max_pet - i);
+			msg_format(_("%sã‚’æ”¾ã—ã¾ã™ã‹ï¼Ÿ [Yes/No/Unnamed (%dä½“)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, max_pet - i);
 
 			if (m_ptr->ml)
 				move_cursor_relative(m_ptr->fy, m_ptr->fx);
@@ -227,7 +227,7 @@ void do_cmd_pet_dismiss(void)
 
 					if (kakunin)
 					{
-						msg_format(_("–{“–‚É‚æ‚ë‚µ‚¢‚Å‚·‚©H (%s) ", "Are you sure? (%s) "), friend_name);
+						msg_format(_("æœ¬å½“ã«ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ (%s) ", "Are you sure? (%s) "), friend_name);
 						ch = inkey();
 						if (ch != 'Y' && ch != 'y')
 							delete_this = FALSE;
@@ -260,7 +260,7 @@ void do_cmd_pet_dismiss(void)
 
 			if (pet_ctr == p_ptr->riding)
 			{
-				msg_format(_("%s‚©‚ç~‚è‚½B", "You have got off %s. "), friend_name);
+				msg_format(_("%sã‹ã‚‰é™ã‚ŠãŸã€‚", "You have got off %s. "), friend_name);
 
 				p_ptr->riding = 0;
 
@@ -270,7 +270,7 @@ void do_cmd_pet_dismiss(void)
 			}
 
 			/* HACK : Add the line to message buffer */
-			msg_format(_("%s ‚ğ•ú‚µ‚½B", "Dismissed %s."), friend_name);
+			msg_format(_("%s ã‚’æ”¾ã—ãŸã€‚", "Dismissed %s."), friend_name);
 			p_ptr->window |= (PW_MESSAGE);
 			window_stuff();
 
@@ -286,21 +286,21 @@ void do_cmd_pet_dismiss(void)
 	C_KILL(who, max_m_idx, MONSTER_IDX);
 
 #ifdef JP
-	msg_format("%d ‘Ì‚Ìƒyƒbƒg‚ğ•ú‚µ‚Ü‚µ‚½B", Dismissed);
+	msg_format("%d ä½“ã®ãƒšãƒƒãƒˆã‚’æ”¾ã—ã¾ã—ãŸã€‚", Dismissed);
 #else
 	msg_format("You have dismissed %d pet%s.", Dismissed,
 		(Dismissed == 1 ? "" : "s"));
 #endif
 	if (Dismissed == 0 && all_pets)
-		msg_print(_("'U'nnamed ‚ÍAæ”nˆÈŠO‚Ì–¼‘O‚Ì‚È‚¢ƒyƒbƒg‚¾‚¯‚ğ‘S‚Ä‰ğ•ú‚µ‚Ü‚·B", "'U'nnamed means all your pets except named pets and your mount."));
+		msg_print(_("'U'nnamed ã¯ã€ä¹—é¦¬ä»¥å¤–ã®åå‰ã®ãªã„ãƒšãƒƒãƒˆã ã‘ã‚’å…¨ã¦è§£æ”¾ã—ã¾ã™ã€‚", "'U'nnamed means all your pets except named pets and your mount."));
 }
 
 
 
 /*!
-* @brief ƒyƒbƒg‚©‚ç‹Ræ/‰º”n‚·‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
-* @param force ‹­§“I‚É‹Ræ/‰º”n‚·‚é‚È‚ç‚ÎTRUE
-* @return ‹Ræ/‰º”n‚Å‚«‚½‚çTRUE
+* @brief ãƒšãƒƒãƒˆã‹ã‚‰é¨ä¹—/ä¸‹é¦¬ã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
+* @param force å¼·åˆ¶çš„ã«é¨ä¹—/ä¸‹é¦¬ã™ã‚‹ãªã‚‰ã°TRUE
+* @return é¨ä¹—/ä¸‹é¦¬ã§ããŸã‚‰TRUE
 */
 bool do_riding(bool force)
 {
@@ -320,7 +320,7 @@ bool do_riding(bool force)
 		/* Skip non-empty grids */
 		if (!player_can_ride_aux(c_ptr, FALSE))
 		{
-			msg_print(_("‚»‚¿‚ç‚É‚Í~‚è‚ç‚ê‚Ü‚¹‚ñB", "You cannot go to that direction."));
+			msg_print(_("ãã¡ã‚‰ã«ã¯é™ã‚Šã‚‰ã‚Œã¾ã›ã‚“ã€‚", "You cannot go to that direction."));
 			return FALSE;
 		}
 
@@ -332,7 +332,7 @@ bool do_riding(bool force)
 			p_ptr->energy_use = 100;
 
 			/* Message */
-			msg_print(_("ƒ‚ƒ“ƒXƒ^[‚ª—§‚¿‚Ó‚³‚ª‚Á‚Ä‚¢‚éI", "There is a monster in the way!"));
+			msg_print(_("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒç«‹ã¡ãµã•ãŒã£ã¦ã„ã‚‹ï¼", "There is a monster in the way!"));
 
 			py_attack(y, x, 0);
 			return FALSE;
@@ -346,7 +346,7 @@ bool do_riding(bool force)
 	{
 		if (p_ptr->confused)
 		{
-			msg_print(_("¬—‚µ‚Ä‚¢‚Äæ‚ê‚È‚¢I", "You are too confused!"));
+			msg_print(_("æ··ä¹±ã—ã¦ã„ã¦ä¹—ã‚Œãªã„ï¼", "You are too confused!"));
 			return FALSE;
 		}
 
@@ -354,17 +354,17 @@ bool do_riding(bool force)
 
 		if (!c_ptr->m_idx || !m_ptr->ml)
 		{
-			msg_print(_("‚»‚ÌêŠ‚É‚Íƒ‚ƒ“ƒXƒ^[‚Í‚¢‚Ü‚¹‚ñB", "Here is no monster."));
+			msg_print(_("ãã®å ´æ‰€ã«ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã„ã¾ã›ã‚“ã€‚", "Here is no monster."));
 			return FALSE;
 		}
 		if (!is_pet(m_ptr) && !force)
 		{
-			msg_print(_("‚»‚Ìƒ‚ƒ“ƒXƒ^[‚Íƒyƒbƒg‚Å‚Í‚ ‚è‚Ü‚¹‚ñB", "That monster is not a pet."));
+			msg_print(_("ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ãƒšãƒƒãƒˆã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚", "That monster is not a pet."));
 			return FALSE;
 		}
 		if (!(r_info[m_ptr->r_idx].flags7 & RF7_RIDING))
 		{
-			msg_print(_("‚»‚Ìƒ‚ƒ“ƒXƒ^[‚É‚Íæ‚ê‚È‚³‚»‚¤‚¾B", "This monster doesn't seem suitable for riding."));
+			msg_print(_("ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯ä¹—ã‚Œãªã•ãã†ã ã€‚", "This monster doesn't seem suitable for riding."));
 			return FALSE;
 		}
 
@@ -375,10 +375,10 @@ bool do_riding(bool force)
 			/* Feature code (applying "mimic" field) */
 			feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];
 #ifdef JP
-			msg_format("‚»‚Ìƒ‚ƒ“ƒXƒ^[‚Í%s‚Ì%s‚É‚¢‚éB", f_name + f_ptr->name,
+			msg_format("ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯%sã®%sã«ã„ã‚‹ã€‚", f_name + f_ptr->name,
 				((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
 					(!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE))) ?
-				"’†" : "ã");
+				"ä¸­" : "ä¸Š");
 #else
 			msg_format("This monster is %s the %s.",
 				((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
@@ -390,7 +390,7 @@ bool do_riding(bool force)
 		}
 		if (r_info[m_ptr->r_idx].level > randint1((p_ptr->skill_exp[GINOU_RIDING] / 50 + p_ptr->lev / 2 + 20)))
 		{
-			msg_print(_("‚¤‚Ü‚­æ‚ê‚È‚©‚Á‚½B", "You failed to ride."));
+			msg_print(_("ã†ã¾ãä¹—ã‚Œãªã‹ã£ãŸã€‚", "You failed to ride."));
 			p_ptr->energy_use = 100;
 			return FALSE;
 		}
@@ -400,7 +400,7 @@ bool do_riding(bool force)
 			char m_name[80];
 			monster_desc(m_name, m_ptr, 0);
 			(void)set_monster_csleep(c_ptr->m_idx, 0);
-			msg_format(_("%s‚ğ‹N‚±‚µ‚½B", "You have waked %s up."), m_name);
+			msg_format(_("%sã‚’èµ·ã“ã—ãŸã€‚", "You have waked %s up."), m_name);
 		}
 
 		if (p_ptr->action == ACTION_KAMAE) set_action(ACTION_NONE);
@@ -431,8 +431,8 @@ bool do_riding(bool force)
 }
 
 /*!
-* @brief ƒyƒbƒg‚É–¼‘O‚ğ‚Â‚¯‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“
-* @return ‚È‚µ
+* @brief ãƒšãƒƒãƒˆã«åå‰ã‚’ã¤ã‘ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
+* @return ãªã—
 */
 static void do_name_pet(void)
 {
@@ -457,18 +457,18 @@ static void do_name_pet(void)
 		if (!is_pet(m_ptr))
 		{
 			/* Message */
-			msg_print(_("‚»‚Ìƒ‚ƒ“ƒXƒ^[‚Íƒyƒbƒg‚Å‚Í‚È‚¢B", "This monster is not a pet."));
+			msg_print(_("ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ãƒšãƒƒãƒˆã§ã¯ãªã„ã€‚", "This monster is not a pet."));
 			return;
 		}
 		if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE)
 		{
-			msg_print(_("‚»‚Ìƒ‚ƒ“ƒXƒ^[‚Ì–¼‘O‚Í•Ï‚¦‚ç‚ê‚È‚¢I", "You cannot change name of this monster!"));
+			msg_print(_("ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®åå‰ã¯å¤‰ãˆã‚‰ã‚Œãªã„ï¼", "You cannot change name of this monster!"));
 			return;
 		}
 		monster_desc(m_name, m_ptr, 0);
 
 		/* Message */
-		msg_format(_("%s‚É–¼‘O‚ğ‚Â‚¯‚éB", "Name %s."), m_name);
+		msg_format(_("%sã«åå‰ã‚’ã¤ã‘ã‚‹ã€‚", "Name %s."), m_name);
 		msg_print(NULL);
 
 		/* Start with nothing */
@@ -483,7 +483,7 @@ static void do_name_pet(void)
 		}
 
 		/* Get a new inscription (possibly empty) */
-		if (get_string(_("–¼‘O: ", "Name: "), out_val, 15))
+		if (get_string(_("åå‰: ", "Name: "), out_val, 15))
 		{
 			if (out_val[0])
 			{
@@ -510,9 +510,9 @@ static void do_name_pet(void)
 
 
 /*!
-* @brief ƒyƒbƒg‚ÉŠÖ‚·‚éƒRƒ}ƒ“ƒhƒŠƒXƒg‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+* @brief ãƒšãƒƒãƒˆã«é–¢ã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
 * Issue a pet command
-* @return ‚È‚µ
+* @return ãªã—
 */
 void do_cmd_pet(void)
 {
@@ -535,109 +535,109 @@ void do_cmd_pet(void)
 
 	num = 0;
 
-	power_desc[num] = _("ƒyƒbƒg‚ğ•ú‚·", "dismiss pets");
+	power_desc[num] = _("ãƒšãƒƒãƒˆã‚’æ”¾ã™", "dismiss pets");
 	powers[num++] = PET_DISMISS;
 
 #ifdef JP
-	sprintf(target_buf, "ƒyƒbƒg‚Ìƒ^[ƒQƒbƒg‚ğw’è (Œ»İF%s)",
-		(pet_t_m_idx ? (p_ptr->image ? "‰½‚©Šï–­‚È•¨" : (r_name + r_info[m_list[pet_t_m_idx].ap_r_idx].name)) : "w’è‚È‚µ"));
+	sprintf(target_buf, "ãƒšãƒƒãƒˆã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’æŒ‡å®š (ç¾åœ¨ï¼š%s)",
+		(pet_t_m_idx ? (p_ptr->image ? "ä½•ã‹å¥‡å¦™ãªç‰©" : (r_name + r_info[m_list[pet_t_m_idx].ap_r_idx].name)) : "æŒ‡å®šãªã—"));
 #else
 	sprintf(target_buf, "specify a target of pet (now:%s)",
 		(pet_t_m_idx ? (p_ptr->image ? "something strange" : (r_name + r_info[m_list[pet_t_m_idx].ap_r_idx].name)) : "nothing"));
 #endif
 	power_desc[num] = target_buf;
 	powers[num++] = PET_TARGET;
-	power_desc[num] = _("‹ß‚­‚É‚¢‚ë", "stay close");
+	power_desc[num] = _("è¿‘ãã«ã„ã‚", "stay close");
 
 	if (p_ptr->pet_follow_distance == PET_CLOSE_DIST) mode = num;
 	powers[num++] = PET_STAY_CLOSE;
-	power_desc[num] = _("‚Â‚¢‚Ä—ˆ‚¢", "follow me");
+	power_desc[num] = _("ã¤ã„ã¦æ¥ã„", "follow me");
 
 	if (p_ptr->pet_follow_distance == PET_FOLLOW_DIST) mode = num;
 	powers[num++] = PET_FOLLOW_ME;
-	power_desc[num] = _("“G‚ğŒ©‚Â‚¯‚Ä“|‚¹", "seek and destroy");
+	power_desc[num] = _("æ•µã‚’è¦‹ã¤ã‘ã¦å€’ã›", "seek and destroy");
 
 	if (p_ptr->pet_follow_distance == PET_DESTROY_DIST) mode = num;
 	powers[num++] = PET_SEEK_AND_DESTROY;
-	power_desc[num] = _("­‚µ—£‚ê‚Ä‚¢‚ë", "give me space");
+	power_desc[num] = _("å°‘ã—é›¢ã‚Œã¦ã„ã‚", "give me space");
 
 	if (p_ptr->pet_follow_distance == PET_SPACE_DIST) mode = num;
 	powers[num++] = PET_ALLOW_SPACE;
-	power_desc[num] = _("—£‚ê‚Ä‚¢‚ë", "stay away");
+	power_desc[num] = _("é›¢ã‚Œã¦ã„ã‚", "stay away");
 
 	if (p_ptr->pet_follow_distance == PET_AWAY_DIST) mode = num;
 	powers[num++] = PET_STAY_AWAY;
 
 	if (p_ptr->pet_extra_flags & PF_OPEN_DOORS)
 	{
-		power_desc[num] = _("ƒhƒA‚ğŠJ‚¯‚é (Œ»İ:ON)", "pets open doors (now On)");
+		power_desc[num] = _("ãƒ‰ã‚¢ã‚’é–‹ã‘ã‚‹ (ç¾åœ¨:ON)", "pets open doors (now On)");
 	}
 	else
 	{
-		power_desc[num] = _("ƒhƒA‚ğŠJ‚¯‚é (Œ»İ:OFF)", "pets open doors (now Off)");
+		power_desc[num] = _("ãƒ‰ã‚¢ã‚’é–‹ã‘ã‚‹ (ç¾åœ¨:OFF)", "pets open doors (now Off)");
 	}
 	powers[num++] = PET_OPEN_DOORS;
 
 	if (p_ptr->pet_extra_flags & PF_PICKUP_ITEMS)
 	{
-		power_desc[num] = _("ƒAƒCƒeƒ€‚ğE‚¤ (Œ»İ:ON)", "pets pick up items (now On)");
+		power_desc[num] = _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã† (ç¾åœ¨:ON)", "pets pick up items (now On)");
 	}
 	else
 	{
-		power_desc[num] = _("ƒAƒCƒeƒ€‚ğE‚¤ (Œ»İ:OFF)", "pets pick up items (now Off)");
+		power_desc[num] = _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã† (ç¾åœ¨:OFF)", "pets pick up items (now Off)");
 	}
 	powers[num++] = PET_TAKE_ITEMS;
 
 	if (p_ptr->pet_extra_flags & PF_TELEPORT)
 	{
-		power_desc[num] = _("ƒeƒŒƒ|[ƒgŒn–‚–@‚ğg‚¤ (Œ»İ:ON)", "allow teleport (now On)");
+		power_desc[num] = _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆç³»é­”æ³•ã‚’ä½¿ã† (ç¾åœ¨:ON)", "allow teleport (now On)");
 	}
 	else
 	{
-		power_desc[num] = _("ƒeƒŒƒ|[ƒgŒn–‚–@‚ğg‚¤ (Œ»İ:OFF)", "allow teleport (now Off)");
+		power_desc[num] = _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆç³»é­”æ³•ã‚’ä½¿ã† (ç¾åœ¨:OFF)", "allow teleport (now Off)");
 	}
 	powers[num++] = PET_TELEPORT;
 
 	if (p_ptr->pet_extra_flags & PF_ATTACK_SPELL)
 	{
-		power_desc[num] = _("UŒ‚–‚–@‚ğg‚¤ (Œ»İ:ON)", "allow cast attack spell (now On)");
+		power_desc[num] = _("æ”»æ’ƒé­”æ³•ã‚’ä½¿ã† (ç¾åœ¨:ON)", "allow cast attack spell (now On)");
 	}
 	else
 	{
-		power_desc[num] = _("UŒ‚–‚–@‚ğg‚¤ (Œ»İ:OFF)", "allow cast attack spell (now Off)");
+		power_desc[num] = _("æ”»æ’ƒé­”æ³•ã‚’ä½¿ã† (ç¾åœ¨:OFF)", "allow cast attack spell (now Off)");
 	}
 	powers[num++] = PET_ATTACK_SPELL;
 
 	if (p_ptr->pet_extra_flags & PF_SUMMON_SPELL)
 	{
-		power_desc[num] = _("¢Š«–‚–@‚ğg‚¤ (Œ»İ:ON)", "allow cast summon spell (now On)");
+		power_desc[num] = _("å¬å–šé­”æ³•ã‚’ä½¿ã† (ç¾åœ¨:ON)", "allow cast summon spell (now On)");
 	}
 	else
 	{
-		power_desc[num] = _("¢Š«–‚–@‚ğg‚¤ (Œ»İ:OFF)", "allow cast summon spell (now Off)");
+		power_desc[num] = _("å¬å–šé­”æ³•ã‚’ä½¿ã† (ç¾åœ¨:OFF)", "allow cast summon spell (now Off)");
 	}
 	powers[num++] = PET_SUMMON_SPELL;
 
 	if (p_ptr->pet_extra_flags & PF_BALL_SPELL)
 	{
-		power_desc[num] = _("ƒvƒŒƒCƒ„[‚ğŠª‚«‚Ş”ÍˆÍ–‚–@‚ğg‚¤ (Œ»İ:ON)", "allow involve player in area spell (now On)");
+		power_desc[num] = _("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å·»ãè¾¼ã‚€ç¯„å›²é­”æ³•ã‚’ä½¿ã† (ç¾åœ¨:ON)", "allow involve player in area spell (now On)");
 	}
 	else
 	{
-		power_desc[num] = _("ƒvƒŒƒCƒ„[‚ğŠª‚«‚Ş”ÍˆÍ–‚–@‚ğg‚¤ (Œ»İ:OFF)", "allow involve player in area spell (now Off)");
+		power_desc[num] = _("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å·»ãè¾¼ã‚€ç¯„å›²é­”æ³•ã‚’ä½¿ã† (ç¾åœ¨:OFF)", "allow involve player in area spell (now Off)");
 	}
 	powers[num++] = PET_BALL_SPELL;
 
 	if (p_ptr->riding)
 	{
-		power_desc[num] = _("ƒyƒbƒg‚©‚ç~‚è‚é", "get off a pet");
+		power_desc[num] = _("ãƒšãƒƒãƒˆã‹ã‚‰é™ã‚Šã‚‹", "get off a pet");
 	}
 	else
 	{
-		power_desc[num] = _("ƒyƒbƒg‚Éæ‚é", "ride a pet");
+		power_desc[num] = _("ãƒšãƒƒãƒˆã«ä¹—ã‚‹", "ride a pet");
 	}
 	powers[num++] = PET_RIDING;
-	power_desc[num] = _("ƒyƒbƒg‚É–¼‘O‚ğ‚Â‚¯‚é", "name pets");
+	power_desc[num] = _("ãƒšãƒƒãƒˆã«åå‰ã‚’ã¤ã‘ã‚‹", "name pets");
 	powers[num++] = PET_NAME;
 
 	if (p_ptr->riding)
@@ -649,11 +649,11 @@ void do_cmd_pet(void)
 		{
 			if (p_ptr->pet_extra_flags & PF_RYOUTE)
 			{
-				power_desc[num] = _("•Ší‚ğ•Ğè‚Å‚Â", "use one hand to control a riding pet");
+				power_desc[num] = _("æ­¦å™¨ã‚’ç‰‡æ‰‹ã§æŒã¤", "use one hand to control a riding pet");
 			}
 			else
 			{
-				power_desc[num] = _("•Ší‚ğ—¼è‚Å‚Â", "use both hands for a weapon");
+				power_desc[num] = _("æ­¦å™¨ã‚’ä¸¡æ‰‹ã§æŒã¤", "use both hands for a weapon");
 			}
 
 			powers[num++] = PET_RYOUTE;
@@ -669,11 +669,11 @@ void do_cmd_pet(void)
 				{
 					if (p_ptr->pet_extra_flags & PF_RYOUTE)
 					{
-						power_desc[num] = _("•Ğè‚ÅŠi“¬‚·‚é", "use one hand to control a riding pet");
+						power_desc[num] = _("ç‰‡æ‰‹ã§æ ¼é—˜ã™ã‚‹", "use one hand to control a riding pet");
 					}
 					else
 					{
-						power_desc[num] = _("—¼è‚ÅŠi“¬‚·‚é", "use both hands for melee");
+						power_desc[num] = _("ä¸¡æ‰‹ã§æ ¼é—˜ã™ã‚‹", "use both hands for melee");
 					}
 
 					powers[num++] = PET_RYOUTE;
@@ -682,11 +682,11 @@ void do_cmd_pet(void)
 				{
 					if (p_ptr->pet_extra_flags & PF_RYOUTE)
 					{
-						power_desc[num] = _("Ši“¬‚ğs‚í‚È‚¢", "use one hand to control a riding pet");
+						power_desc[num] = _("æ ¼é—˜ã‚’è¡Œã‚ãªã„", "use one hand to control a riding pet");
 					}
 					else
 					{
-						power_desc[num] = _("Ši“¬‚ğs‚¤", "use one hand for melee");
+						power_desc[num] = _("æ ¼é—˜ã‚’è¡Œã†", "use one hand for melee");
 					}
 
 					powers[num++] = PET_RYOUTE;
@@ -713,13 +713,13 @@ void do_cmd_pet(void)
 			screen_save();
 
 			/* Build a prompt */
-			strnfmt(out_val, 78, _("(ƒRƒ}ƒ“ƒhAESC=I—¹) ƒRƒ}ƒ“ƒh‚ğ‘I‚ñ‚Å‚­‚¾‚³‚¢:", "(Command, ESC=exit) Choose command from menu."));
+			strnfmt(out_val, 78, _("(ã‚³ãƒãƒ³ãƒ‰ã€ESC=çµ‚äº†) ã‚³ãƒãƒ³ãƒ‰ã‚’é¸ã‚“ã§ãã ã•ã„:", "(Command, ESC=exit) Choose command from menu."));
 		}
 		else
 		{
 			/* Build a prompt */
 			strnfmt(out_val, 78,
-				_("(ƒRƒ}ƒ“ƒh %c-%cA'*'=ˆê——AESC=I—¹) ƒRƒ}ƒ“ƒh‚ğ‘I‚ñ‚Å‚­‚¾‚³‚¢:", "(Command %c-%c, *=List, ESC=exit) Select a command: "),
+				_("(ã‚³ãƒãƒ³ãƒ‰ %c-%cã€'*'=ä¸€è¦§ã€ESC=çµ‚äº†) ã‚³ãƒãƒ³ãƒ‰ã‚’é¸ã‚“ã§ãã ã•ã„:", "(Command %c-%c, *=List, ESC=exit) Select a command: "),
 				I2A(0), I2A(num - 1));
 		}
 
@@ -798,7 +798,7 @@ void do_cmd_pet(void)
 					{
 						/* Letter/number for power selection */
 						if (use_menu)
-							sprintf(buf, "%c%s ", (ctr == mode) ? '*' : ' ', (ctr == (menu_line - 1)) ? _("t", "> ") : "  ");
+							sprintf(buf, "%c%s ", (ctr == mode) ? '*' : ' ', (ctr == (menu_line - 1)) ? _("ã€‹", "> ") : "  ");
 						else
 							sprintf(buf, "%c%c) ", (ctr == mode) ? '*' : ' ', I2A(ctr));
 
@@ -847,7 +847,7 @@ void do_cmd_pet(void)
 			if (ask)
 			{
 				/* Prompt */
-				strnfmt(buf, 78, _("%s‚ğg‚¢‚Ü‚·‚©H ", "Use %s? "), power_desc[i]);
+				strnfmt(buf, 78, _("%sã‚’ä½¿ã„ã¾ã™ã‹ï¼Ÿ ", "Use %s? "), power_desc[i]);
 
 				/* Belay that order */
 				if (!get_check(buf)) continue;
@@ -885,7 +885,7 @@ void do_cmd_pet(void)
 
 		if (!pet_ctr)
 		{
-			msg_print(_("ƒyƒbƒg‚ª‚¢‚È‚¢I", "You have no pets!"));
+			msg_print(_("ãƒšãƒƒãƒˆãŒã„ãªã„ï¼", "You have no pets!"));
 			break;
 		}
 		do_cmd_pet_dismiss();
@@ -1024,10 +1024,10 @@ void do_cmd_pet(void)
 
 
 /*!
-* @brief ƒyƒbƒg‚Ì‘Pˆ«‘®«‚É‰‚¶‚½ˆÛƒRƒXƒg‚Ì“r’†ŒvZˆ—
-* @param m_ptr ŒvZŠî€‚Æ‚È‚éƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @param inc m_ptr‚Åw’è‚µ‚½ƒ‚ƒ“ƒXƒ^[‚ğˆÛƒRƒXƒgŒvZ‚É‰Á‚¦‚é‚È‚çTRUEAŠO‚·‚È‚çFALSE‚ğw’è
-* @return ‚È‚µ
+* @brief ãƒšãƒƒãƒˆã®å–„æ‚ªå±æ€§ã«å¿œã˜ãŸç¶­æŒã‚³ã‚¹ãƒˆã®é€”ä¸­è¨ˆç®—å‡¦ç†
+* @param m_ptr è¨ˆç®—åŸºæº–ã¨ãªã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @param inc m_ptrã§æŒ‡å®šã—ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ç¶­æŒã‚³ã‚¹ãƒˆè¨ˆç®—ã«åŠ ãˆã‚‹ãªã‚‰TRUEã€å¤–ã™ãªã‚‰FALSEã‚’æŒ‡å®š
+* @return ãªã—
 */
 void check_pets_num_and_align(monster_type *m_ptr, bool inc)
 {
@@ -1053,10 +1053,10 @@ void check_pets_num_and_align(monster_type *m_ptr, bool inc)
 
 
 /*!
-* @brief ƒvƒŒƒCƒ„[‚Ì—”n”»’èˆ—
-* @param dam —”n”»’è‚ğ”­‚µ‚½Û‚Éó‚¯‚½ƒ_ƒ[ƒW—Ê
-* @param force TRUE‚È‚ç‚Î‹­§“I‚É—”n‚·‚é
-* @return ÀÛ‚É—”n‚µ‚½‚çTRUE‚ğ•Ô‚·
+* @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è½é¦¬åˆ¤å®šå‡¦ç†
+* @param dam è½é¦¬åˆ¤å®šã‚’ç™ºã—ãŸéš›ã«å—ã‘ãŸãƒ€ãƒ¡ãƒ¼ã‚¸é‡
+* @param force TRUEãªã‚‰ã°å¼·åˆ¶çš„ã«è½é¦¬ã™ã‚‹
+* @return å®Ÿéš›ã«è½é¦¬ã—ãŸã‚‰TRUEã‚’è¿”ã™
 */
 bool rakuba(HIT_POINT dam, bool force)
 {
@@ -1078,7 +1078,7 @@ bool rakuba(HIT_POINT dam, bool force)
 			int max = s_info[p_ptr->pclass].s_max[GINOU_RIDING];
 			int ridinglevel = r_ptr->level;
 
-			/* —”n‚Ì‚µ‚â‚·‚³ */
+			/* è½é¦¬ã®ã—ã‚„ã™ã• */
 			int rakubalevel = r_ptr->level;
 			if (p_ptr->riding_ryoute) rakubalevel += 20;
 
@@ -1095,7 +1095,7 @@ bool rakuba(HIT_POINT dam, bool force)
 				p_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
 			}
 
-			/* ƒŒƒxƒ‹‚Ì’á‚¢æ”n‚©‚ç‚Í—”n‚µ‚É‚­‚¢ */
+			/* ãƒ¬ãƒ™ãƒ«ã®ä½ã„ä¹—é¦¬ã‹ã‚‰ã¯è½é¦¬ã—ã«ãã„ */
 			if (randint0(dam / 2 + rakubalevel * 2) < cur / 30 + 10)
 			{
 				if ((((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY)) && !p_ptr->riding_ryoute) || !one_in_(p_ptr->lev*(p_ptr->riding_ryoute ? 2 : 3) + 30))
@@ -1139,8 +1139,8 @@ bool rakuba(HIT_POINT dam, bool force)
 		{
 			monster_desc(m_name, m_ptr, 0);
 #ifdef JP
-			msg_format("%s‚©‚çU‚è—‚Æ‚³‚ê‚»‚¤‚É‚È‚Á‚ÄA•Ç‚É‚Ô‚Â‚©‚Á‚½B", m_name);
-			take_hit(DAMAGE_NOESCAPE, r_ptr->level + 3, "•Ç‚Ö‚ÌÕ“Ë", -1);
+			msg_format("%sã‹ã‚‰æŒ¯ã‚Šè½ã¨ã•ã‚Œãã†ã«ãªã£ã¦ã€å£ã«ã¶ã¤ã‹ã£ãŸã€‚", m_name);
+			take_hit(DAMAGE_NOESCAPE, r_ptr->level + 3, "å£ã¸ã®è¡çª", -1);
 #else
 			msg_format("You have nearly fallen from %s, but bumped into wall.", m_name);
 			take_hit(DAMAGE_NOESCAPE, r_ptr->level + 3, "bumping into wall", -1);
@@ -1186,11 +1186,11 @@ bool rakuba(HIT_POINT dam, bool force)
 	if (p_ptr->levitation && !force)
 	{
 		monster_desc(m_name, m_ptr, 0);
-		msg_format(_("%s‚©‚ç—‚¿‚½‚ªA‹ó’†‚Å‚¤‚Ü‚­‘Ì¨‚ğ—§‚Ä’¼‚µ‚Ä’…’n‚µ‚½B", "You are thrown from %s, but make a good landing."), m_name);
+		msg_format(_("%sã‹ã‚‰è½ã¡ãŸãŒã€ç©ºä¸­ã§ã†ã¾ãä½“å‹¢ã‚’ç«‹ã¦ç›´ã—ã¦ç€åœ°ã—ãŸã€‚", "You are thrown from %s, but make a good landing."), m_name);
 	}
 	else
 	{
-		take_hit(DAMAGE_NOESCAPE, r_ptr->level + 3, _("—”n", "Falling from riding"), -1);
+		take_hit(DAMAGE_NOESCAPE, r_ptr->level + 3, _("è½é¦¬", "Falling from riding"), -1);
 		fall_dam = TRUE;
 	}
 

@@ -1,8 +1,8 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "gameoption.h"
 
 /*!
- * @brief ƒIƒvƒVƒ‡ƒ“ƒe[ƒuƒ‹ /
+ * @brief ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ†ãƒ¼ãƒ–ãƒ« /
  * Available Options
  */
 const option_type option_info[] =
@@ -10,380 +10,380 @@ const option_type option_info[] =
 	/*** Input Options ***/
 
 	{ &rogue_like_commands,         FALSE, OPT_PAGE_INPUT, 0, 0,
-	"rogue_like_commands",          _("ƒ[ƒO•—ƒL[”z’u‚ğg—p‚·‚é", "Rogue-like commands") },
+	"rogue_like_commands",          _("ãƒ­ãƒ¼ã‚°é¢¨ã‚­ãƒ¼é…ç½®ã‚’ä½¿ç”¨ã™ã‚‹", "Rogue-like commands") },
 
 	{ &always_pickup,               FALSE, OPT_PAGE_INPUT, 0, 5,
-	"always_pickup",                _("í‚ÉƒAƒCƒeƒ€‚ğE‚¤" , "Pick things up by default") },
+	"always_pickup",                _("å¸¸ã«ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã†" , "Pick things up by default") },
 
 	{ &carry_query_flag,            FALSE, OPT_PAGE_INPUT, 0, 3,
-	"carry_query_flag",             _("ƒAƒCƒeƒ€‚ğE‚¤‘O‚ÉŠm”F‚·‚é", "Prompt before picking things up") },
+	"carry_query_flag",             _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã†å‰ã«ç¢ºèªã™ã‚‹", "Prompt before picking things up") },
 
 	{ &quick_messages,              TRUE,  OPT_PAGE_INPUT, 0, 1,
-	"quick_messages",               _("ƒNƒCƒbƒNEƒƒbƒZ[ƒW‚ğg—p‚·‚é", "Activate quick messages") },
+	"quick_messages",               _("ã‚¯ã‚¤ãƒƒã‚¯ãƒ»ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä½¿ç”¨ã™ã‚‹", "Activate quick messages") },
 
 	{ &auto_more,                   FALSE, OPT_PAGE_INPUT, 2, 6,
-	"auto_more",                    _("ƒL[‘Ò‚¿‚µ‚È‚¢‚Å˜A‘±‚ÅƒƒbƒZ[ƒW‚ğ•\¦‚·‚é", "Automatically clear '-more-' prompts") },
+	"auto_more",                    _("ã‚­ãƒ¼å¾…ã¡ã—ãªã„ã§é€£ç¶šã§ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã™ã‚‹", "Automatically clear '-more-' prompts") },
 
 	{ &command_menu,                TRUE,  OPT_PAGE_INPUT, 2, 7,
-	"command_menu",                 _("ƒƒjƒ…[‚É‚æ‚èƒRƒ}ƒ“ƒh‘I‘ğ‚ğ—LŒø‚É‚·‚é", "Enable command selection menu") },
+	"command_menu",                 _("ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã«ã‚ˆã‚Šã‚³ãƒãƒ³ãƒ‰é¸æŠã‚’æœ‰åŠ¹ã«ã™ã‚‹", "Enable command selection menu") },
 
 	{ &other_query_flag,            FALSE, OPT_PAGE_INPUT, 0, 2,
-	"other_query_flag",             _("°ã‚ÌƒAƒCƒeƒ€‚ğg—p‚·‚é‚Æ‚«‚ÉŠm”F‚·‚é", "Prompt for floor item selection") },
+	"other_query_flag",             _("åºŠä¸Šã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ç”¨ã™ã‚‹ã¨ãã«ç¢ºèªã™ã‚‹", "Prompt for floor item selection") },
 
 	{ &use_old_target,              FALSE, OPT_PAGE_INPUT, 0, 4,
-	"use_old_target",               _("í‚ÉˆÈ‘O‚Ìƒ^[ƒQƒbƒg‚ğw’è‚·‚é", "Use old target by default") },
+	"use_old_target",               _("å¸¸ã«ä»¥å‰ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’æŒ‡å®šã™ã‚‹", "Use old target by default") },
 
 	{ &always_repeat,               TRUE,  OPT_PAGE_INPUT, 0, 6,
-	"always_repeat",                _("ƒRƒ}ƒ“ƒh©“®ŒJ‚è•Ô‚µ", "Repeat obvious commands") },
+	"always_repeat",                _("ã‚³ãƒãƒ³ãƒ‰è‡ªå‹•ç¹°ã‚Šè¿”ã—", "Repeat obvious commands") },
 
 	{ &confirm_destroy,             FALSE, OPT_PAGE_INPUT, 5, 3,
-	"confirm_destroy",              _("u–³‰¿’lv‚ÈƒAƒCƒeƒ€‚ğ”j‰ó‚·‚éŠm”F‚·‚é", "Prompt for destruction of known worthless items") },
+	"confirm_destroy",              _("ã€Œç„¡ä¾¡å€¤ã€ãªã‚¢ã‚¤ãƒ†ãƒ ã‚’ç ´å£Šã™ã‚‹æ™‚ç¢ºèªã™ã‚‹", "Prompt for destruction of known worthless items") },
 
 	{ &confirm_wear,                TRUE,  OPT_PAGE_INPUT, 5, 4,
-	"confirm_wear",                 _("ô‚í‚ê‚½•¨‚ğ‘•”õ‚·‚éŠm”F‚·‚é", "Confirm to wear/wield known cursed items") },
+	"confirm_wear",                 _("å‘ªã‚ã‚ŒãŸç‰©ã‚’è£…å‚™ã™ã‚‹æ™‚ç¢ºèªã™ã‚‹", "Confirm to wear/wield known cursed items") },
 
 	{ &confirm_quest,               TRUE,  OPT_PAGE_INPUT, 1, 9,
-	"confirm_quest",                _("ƒNƒGƒXƒg‚ğ’ú‚ß‚ÄŠK’i‚Å“¦‚°‚é‘O‚ÉŠm”F‚·‚é", "Prompt before exiting a quest level") },
+	"confirm_quest",                _("ã‚¯ã‚¨ã‚¹ãƒˆã‚’è«¦ã‚ã¦éšæ®µã§é€ƒã’ã‚‹å‰ã«ç¢ºèªã™ã‚‹", "Prompt before exiting a quest level") },
 
 	{ &target_pet,                  FALSE, OPT_PAGE_INPUT, 2, 5,
-	"target_pet",                   _("ƒyƒbƒg‚ğƒ^[ƒQƒbƒg‚É‚·‚é", "Allow targetting pets") },
+	"target_pet",                   _("ãƒšãƒƒãƒˆã‚’ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã«ã™ã‚‹", "Allow targetting pets") },
 
 	#ifdef ALLOW_EASY_OPEN
 	{ &easy_open,                   TRUE,  OPT_PAGE_INPUT, 5, 7,
-	"easy_open",                    _("©“®“I‚ÉƒhƒA‚ğŠJ‚¯‚é", "Automatically open doors") },
+	"easy_open",                    _("è‡ªå‹•çš„ã«ãƒ‰ã‚¢ã‚’é–‹ã‘ã‚‹", "Automatically open doors") },
 	#endif /* ALLOW_EASY_OPEN */
 
 	#ifdef ALLOW_EASY_DISARM
 	{ &easy_disarm,                 TRUE,  OPT_PAGE_INPUT, 5, 8,
-	"easy_disarm",                  _("©“®“I‚Éã©‚ğ‰ğœ‚·‚é", "Automatically disarm traps") },
+	"easy_disarm",                  _("è‡ªå‹•çš„ã«ç½ ã‚’è§£é™¤ã™ã‚‹", "Automatically disarm traps") },
 	#endif /* ALLOW_EASY_DISARM */
 
 	#ifdef ALLOW_EASY_FLOOR /* TNB */
 	{ &easy_floor,                  FALSE, OPT_PAGE_INPUT, 5, 9,
-	"easy_floor",                   _("°ã‚Åd‚È‚Á‚½ƒAƒCƒeƒ€‚ğƒŠƒXƒg‚·‚é", "Display floor stacks in a list") },
+	"easy_floor",                   _("åºŠä¸Šã§é‡ãªã£ãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’ãƒªã‚¹ãƒˆã™ã‚‹", "Display floor stacks in a list") },
 	#endif /* ALLOW_EASY_FLOOR -- TNB */
 
 	{ &use_command,                 FALSE, OPT_PAGE_INPUT, 5, 10,
-	"use_command",                  _("ug‚¤(a)vƒRƒ}ƒ“ƒh‚ÅƒAƒCƒeƒ€‚ğ‰½‚Å‚àg‚¦‚é", "Allow unified use command") },
+	"use_command",                  _("ã€Œä½¿ã†(a)ã€ã‚³ãƒãƒ³ãƒ‰ã§ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½•ã§ã‚‚ä½¿ãˆã‚‹", "Allow unified use command") },
 
 	{ &over_exert,                  FALSE, OPT_PAGE_INPUT, 0, 29,
-	"over_exert",                   _("MP‚ª‘«‚è‚È‚­‚Ä‚à–‚–@‚É’§í‚·‚é", "Allow casting spells when short of mana") },
+	"over_exert",                   _("MPãŒè¶³ã‚Šãªãã¦ã‚‚é­”æ³•ã«æŒ‘æˆ¦ã™ã‚‹", "Allow casting spells when short of mana") },
 
 	{ &numpad_as_cursorkey,         TRUE, OPT_PAGE_INPUT, 2, 31,
-	"numpad_as_cursorkey",          _("ƒGƒfƒBƒ^“à‚Åƒeƒ“ƒL[‚ğƒJ[ƒ\ƒ‹ƒL[‚Æ‚µ‚Äg‚¤", "Use numpad keys as cursor keys in editor mode") },
+	"numpad_as_cursorkey",          _("ã‚¨ãƒ‡ã‚£ã‚¿å†…ã§ãƒ†ãƒ³ã‚­ãƒ¼ã‚’ã‚«ãƒ¼ã‚½ãƒ«ã‚­ãƒ¼ã¨ã—ã¦ä½¿ã†", "Use numpad keys as cursor keys in editor mode") },
 
 /*** Map Screen Options ***/
 
 	{ &center_player,               FALSE, OPT_PAGE_MAPSCREEN, 5, 11,
-	"center_player",                _("í‚ÉƒvƒŒƒCƒ„[‚ğ’†S‚É’u‚­(*’x‚¢*)", "Center map while walking (*slow*)") },
+	"center_player",                _("å¸¸ã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸­å¿ƒã«ç½®ã(*é…ã„*)", "Center map while walking (*slow*)") },
 
 	{ &center_running,              TRUE,  OPT_PAGE_MAPSCREEN, 5, 12,
-	"center_running",               _("‘–‚Á‚Ä‚¢‚é‚Å‚à’†S‚É’u‚­", "Centering even while running") },
+	"center_running",               _("èµ°ã£ã¦ã„ã‚‹æ™‚ã§ã‚‚ä¸­å¿ƒã«ç½®ã", "Centering even while running") },
 
 	{ &view_yellow_lite,            TRUE,  OPT_PAGE_MAPSCREEN, 1, 28,
-	"view_yellow_lite",             _("–¾‚©‚è‚Ì”ÍˆÍ‚ğ“Á•Ê‚ÈF‚Å•\¦‚·‚é", "Use special colors for torch-lit grids") },
+	"view_yellow_lite",             _("æ˜ã‹ã‚Šã®ç¯„å›²ã‚’ç‰¹åˆ¥ãªè‰²ã§è¡¨ç¤ºã™ã‚‹", "Use special colors for torch-lit grids") },
 
 	{ &view_bright_lite,            TRUE,  OPT_PAGE_MAPSCREEN, 1, 29,
-	"view_bright_lite",             _("‹ŠE‚Ì”ÍˆÍ‚ğ“Á•Ê‚ÈF‚Å•\¦‚·‚é", "Use special colors for 'viewable' grids") },
+	"view_bright_lite",             _("è¦–ç•Œã®ç¯„å›²ã‚’ç‰¹åˆ¥ãªè‰²ã§è¡¨ç¤ºã™ã‚‹", "Use special colors for 'viewable' grids") },
 
 	{ &view_granite_lite,           TRUE,  OPT_PAGE_MAPSCREEN, 1, 30,
-	"view_granite_lite",            _("•Ç‚ğ“Á•Ê‚ÈF‚Å•\¦‚·‚é(d‚¢)", "Use special colors for wall grids (slow)") },
+	"view_granite_lite",            _("å£ã‚’ç‰¹åˆ¥ãªè‰²ã§è¡¨ç¤ºã™ã‚‹(é‡ã„)", "Use special colors for wall grids (slow)") },
 
 	{ &view_special_lite,           TRUE,  OPT_PAGE_MAPSCREEN, 1, 31,
-	"view_special_lite",            _("°‚ğ“Á•Ê‚ÈF‚Å•\¦‚·‚é(d‚¢)", "Use special colors for floor grids (slow)") },
+	"view_special_lite",            _("åºŠã‚’ç‰¹åˆ¥ãªè‰²ã§è¡¨ç¤ºã™ã‚‹(é‡ã„)", "Use special colors for floor grids (slow)") },
 
 	{ &view_perma_grids,            TRUE,  OPT_PAGE_MAPSCREEN, 1, 6,
-	"view_perma_grids",             _("–¾‚é‚¢êŠ‚Í‚»‚Ì‚Ü‚Ü‚É‚·‚é", "Map remembers all perma-lit grids") },
+	"view_perma_grids",             _("æ˜ã‚‹ã„å ´æ‰€ã¯ãã®ã¾ã¾ã«ã™ã‚‹", "Map remembers all perma-lit grids") },
 
 	{ &view_torch_grids,            FALSE, OPT_PAGE_MAPSCREEN, 1, 7,
-	"view_torch_grids",             _("–¾‚©‚è‚ÅÆ‚ç‚µ‚½êŠ‚Í‚»‚Ì‚Ü‚Ü‚É‚·‚é", "Map remembers all torch-lit grids") },
+	"view_torch_grids",             _("æ˜ã‹ã‚Šã§ç…§ã‚‰ã—ãŸå ´æ‰€ã¯ãã®ã¾ã¾ã«ã™ã‚‹", "Map remembers all torch-lit grids") },
 
 	{ &view_unsafe_grids,           FALSE, OPT_PAGE_MAPSCREEN, 1, 8,
-	"view_unsafe_grids",            _("ƒgƒ‰ƒbƒvŠ´’mÏ‚İ‚Å‚È‚¢êŠ‚ğ•\¦‚·‚é", "Map marked by detect traps") },
+	"view_unsafe_grids",            _("ãƒˆãƒ©ãƒƒãƒ—æ„ŸçŸ¥æ¸ˆã¿ã§ãªã„å ´æ‰€ã‚’è¡¨ç¤ºã™ã‚‹", "Map marked by detect traps") },
 
 	{ &view_reduce_view,            FALSE, OPT_PAGE_MAPSCREEN, 1, 17,
-	"view_reduce_view",             _("ŠX‚Å‚Í‹–ì‚ğ‹·‚­‚·‚é", "Reduce view-radius in town") },
+	"view_reduce_view",             _("è¡—ã§ã¯è¦–é‡ã‚’ç‹­ãã™ã‚‹", "Reduce view-radius in town") },
 
 	{ &fresh_before,                TRUE,  OPT_PAGE_MAPSCREEN, 1, 23,
-	"fresh_before",                 _("˜A‘±ƒRƒ}ƒ“ƒh’†‚É‰æ–Ê‚ğÄ•`‰æ‚µ‘±‚¯‚é", "Flush output while continuous command") },
+	"fresh_before",                 _("é€£ç¶šã‚³ãƒãƒ³ãƒ‰ä¸­ã«ç”»é¢ã‚’å†æç”»ã—ç¶šã‘ã‚‹", "Flush output while continuous command") },
 
 	{ &fresh_after,                 FALSE, OPT_PAGE_MAPSCREEN, 1, 24,
-	"fresh_after",                  _("ƒRƒ}ƒ“ƒhŒã‚É‰æ–Ê‚ğí‚ÉÄ•`‰æ‚µ‘±‚¯‚é", "Flush output after monster's move") },
+	"fresh_after",                  _("ã‚³ãƒãƒ³ãƒ‰å¾Œã«ç”»é¢ã‚’å¸¸ã«å†æç”»ã—ç¶šã‘ã‚‹", "Flush output after monster's move") },
 
 	{ &fresh_message,               FALSE, OPT_PAGE_MAPSCREEN, 1, 25,
-	"fresh_message",                _("ƒƒbƒZ[ƒW‚ÌŒã‚É‰æ–Ê‚ğÄ•`‰æ‚·‚é", "Flush output after every message") },
+	"fresh_message",                _("ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å¾Œã«ç”»é¢ã‚’å†æç”»ã™ã‚‹", "Flush output after every message") },
 
 	{ &hilite_player,               FALSE, OPT_PAGE_MAPSCREEN, 1, 27,
-	"hilite_player",                _("ƒvƒŒƒCƒ„[‚ÉƒJ[ƒ\ƒ‹‚ğ‡‚í‚¹‚é", "Hilite the player with the cursor") },
+	"hilite_player",                _("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚«ãƒ¼ã‚½ãƒ«ã‚’åˆã‚ã›ã‚‹", "Hilite the player with the cursor") },
 
 	{ &display_path,                FALSE, OPT_PAGE_MAPSCREEN, 2, 8,
-	"display_path",                 _("–‚–@‚â–î‚Ì‹OÕ‚ğ•\¦‚·‚é", "Display actual path before shooting") },
+	"display_path",                 _("é­”æ³•ã‚„çŸ¢ã®è»Œè·¡ã‚’è¡¨ç¤ºã™ã‚‹", "Display actual path before shooting") },
 
 /*** Text Display Options ***/
 
 	{ &plain_descriptions,          TRUE,  OPT_PAGE_TEXT, 5, 1,
-	"plain_descriptions",           _("ƒAƒCƒeƒ€‚Ì‹Lq‚ğŠÈ—ª‚É‚·‚é", "Plain object descriptions") },
+	"plain_descriptions",           _("ã‚¢ã‚¤ãƒ†ãƒ ã®è¨˜è¿°ã‚’ç°¡ç•¥ã«ã™ã‚‹", "Plain object descriptions") },
 
 	{ &plain_pickup,                FALSE, OPT_PAGE_TEXT, 6, 6,
-	"plain_pickup",                 _("uE‚Á‚½vƒƒbƒZ[ƒW‚ğŠÈ—ª‰»‚·‚é", "Plain pickup messages(japanese only)") },
+	"plain_pickup",                 _("ã€Œæ‹¾ã£ãŸã€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ç°¡ç•¥åŒ–ã™ã‚‹", "Plain pickup messages(japanese only)") },
 
 	{ &always_show_list,            TRUE,  OPT_PAGE_TEXT, 4, 0,
-	"always_show_list",             _("‘I‘ğ‚É‚Íí‚Éˆê——‚ğ•\¦‚·‚é", "Always show list when choosing items") },
+	"always_show_list",             _("é¸æŠæ™‚ã«ã¯å¸¸ã«ä¸€è¦§ã‚’è¡¨ç¤ºã™ã‚‹", "Always show list when choosing items") },
 
 	{ &depth_in_feet,               FALSE, OPT_PAGE_TEXT, 0, 7,
-	"depth_in_feet",                _("ƒ_ƒ“ƒWƒ‡ƒ“‚Ì[‚³‚ğƒtƒB[ƒg‚Å•\¦‚·‚é", "Show dungeon level in feet") },
+	"depth_in_feet",                _("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®æ·±ã•ã‚’ãƒ•ã‚£ãƒ¼ãƒˆã§è¡¨ç¤ºã™ã‚‹", "Show dungeon level in feet") },
 
 	{ &show_labels,                 TRUE,  OPT_PAGE_TEXT, 0, 10,
-	"show_labels",                  _("‘•”õˆê——‚Å‘•”õêŠ‚ğ•\¦‚·‚é", "Show labels in object listings") },
+	"show_labels",                  _("è£…å‚™ä¸€è¦§ã§è£…å‚™å ´æ‰€ã‚’è¡¨ç¤ºã™ã‚‹", "Show labels in object listings") },
 
 	{ &show_weights,                TRUE,  OPT_PAGE_TEXT, 0, 11,
-	"show_weights",                 _("ƒAƒCƒeƒ€ˆê——‚Åd—Ê‚ğ•\¦‚·‚é", "Show weights in object listings") },
+	"show_weights",                 _("ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§ã§é‡é‡ã‚’è¡¨ç¤ºã™ã‚‹", "Show weights in object listings") },
 
 	{ &show_item_graph,             TRUE,  OPT_PAGE_TEXT, 2, 0,
-	"show_item_graph",              _("ƒAƒCƒeƒ€‚ÌƒVƒ“ƒ{ƒ‹‚ğ•\¦‚·‚é", "Show items graphics") },
+	"show_item_graph",              _("ã‚¢ã‚¤ãƒ†ãƒ ã®ã‚·ãƒ³ãƒœãƒ«ã‚’è¡¨ç¤ºã™ã‚‹", "Show items graphics") },
 
 	{ &equippy_chars,               TRUE,  OPT_PAGE_TEXT, 1, 12,
-	"equippy_chars",                _("ƒXƒe[ƒ^ƒX‚É•¶š‚Å‘•”õ‚ğ•\¦‚·‚é", "Display 'equippy' chars") },
+	"equippy_chars",                _("ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã«æ–‡å­—ã§è£…å‚™ã‚’è¡¨ç¤ºã™ã‚‹", "Display 'equippy' chars") },
 
 	{ &display_mutations,           FALSE, OPT_PAGE_TEXT, 5, 0,
-	"display_mutations",            _("'C'ƒRƒ}ƒ“ƒh‚Å“Ë‘R•ÏˆÙ‚ğ•\¦‚·‚é", "Display mutations in 'C'haracter Display") },
+	"display_mutations",            _("'C'ã‚³ãƒãƒ³ãƒ‰ã§çªç„¶å¤‰ç•°ã‚’è¡¨ç¤ºã™ã‚‹", "Display mutations in 'C'haracter Display") },
 
 	{ &compress_savefile,           FALSE, OPT_PAGE_TEXT, 1, 26,
-	"compress_savefile",            _("ƒZ[ƒuEƒtƒ@ƒCƒ‹’†‚ÌƒƒbƒZ[ƒW‚ğˆ³k‚·‚é", "Compress messages in savefiles") },
+	"compress_savefile",            _("ã‚»ãƒ¼ãƒ–ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ä¸­ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’åœ§ç¸®ã™ã‚‹", "Compress messages in savefiles") },
 
 	{ &abbrev_extra,                FALSE, OPT_PAGE_TEXT, 2, 10,
-	"abbrev_extra",                 _("ƒAƒCƒeƒ€‚É’Ç‰Á‘Ï«/”\—Í‚Ì—ªÌ‚ğ‚Ş", "Describe obj's extra resistances by abbreviation") },
+	"abbrev_extra",                 _("ã‚¢ã‚¤ãƒ†ãƒ ã«è¿½åŠ è€æ€§/èƒ½åŠ›ã®ç•¥ç§°ã‚’åˆ»ã‚€", "Describe obj's extra resistances by abbreviation") },
 
 	{ &abbrev_all,                  FALSE, OPT_PAGE_TEXT, 2, 11,
-	"abbrev_all",                   _("ƒAƒCƒeƒ€‚É‘S‚Ä‚Ì‘Ï«/”\—Í‚Ì—ªÌ‚ğ‚Ş", "Describe obj's all resistances by abbreviation") },
+	"abbrev_all",                   _("ã‚¢ã‚¤ãƒ†ãƒ ã«å…¨ã¦ã®è€æ€§/èƒ½åŠ›ã®ç•¥ç§°ã‚’åˆ»ã‚€", "Describe obj's all resistances by abbreviation") },
 
 	{ &exp_need,                    FALSE, OPT_PAGE_TEXT, 2, 12,
-	"exp_need",                     _("Ÿ‚ÌƒŒƒxƒ‹‚É•K—v‚ÈŒoŒ±’l‚ğ•\¦‚·‚é", "Show the experience needed for next level") },
+	"exp_need",                     _("æ¬¡ã®ãƒ¬ãƒ™ãƒ«ã«å¿…è¦ãªçµŒé¨“å€¤ã‚’è¡¨ç¤ºã™ã‚‹", "Show the experience needed for next level") },
 
 	{ &ignore_unview,               FALSE, OPT_PAGE_TEXT, 2, 13,
-	"ignore_unview",                _("‹ŠEŠO‚Ìƒ‚ƒ“ƒXƒ^[‚Ìs“®‚ğ•\¦‚µ‚È‚¢", "Ignore whenever any monster does") },
+	"ignore_unview",                _("è¦–ç•Œå¤–ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®è¡Œå‹•ã‚’è¡¨ç¤ºã—ãªã„", "Ignore whenever any monster does") },
 
 	{ &show_ammo_detail,            TRUE, OPT_PAGE_TEXT, 2, 14,
-	"show_ammo_detail",             _("–î’e‚Ìƒ_ƒ[ƒW‚Ìà–¾‚ğ•\¦‚·‚é", "Show description of ammo damage") },
+	"show_ammo_detail",             _("çŸ¢å¼¾ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã®èª¬æ˜ã‚’è¡¨ç¤ºã™ã‚‹", "Show description of ammo damage") },
 
 	{ &show_ammo_no_crit,           FALSE, OPT_PAGE_TEXT, 2, 15,
-	"show_ammo_no_crit",            _("‰ïS‚ğl—¶‚µ‚È‚¢ê‡‚Ì–î’e‚Ìƒ_ƒ[ƒW‚ğ•\¦‚·‚é", "Show ammo damage with no critical") },
+	"show_ammo_no_crit",            _("ä¼šå¿ƒã‚’è€ƒæ…®ã—ãªã„å ´åˆã®çŸ¢å¼¾ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã™ã‚‹", "Show ammo damage with no critical") },
 
 	{ &show_ammo_crit_ratio,        FALSE, OPT_PAGE_TEXT, 2, 16,
-	"show_ammo_crit_ratio",         _("–î’e‚Ì‰ïS”­¶—¦‚ğ•\¦‚·‚é", "Show critical ratio of ammo") },
+	"show_ammo_crit_ratio",         _("çŸ¢å¼¾ã®ä¼šå¿ƒç™ºç”Ÿç‡ã‚’è¡¨ç¤ºã™ã‚‹", "Show critical ratio of ammo") },
 
 	{ &show_actual_value,           FALSE, OPT_PAGE_TEXT, 2, 17,
-	"show_actual_vaule",            _("Še‹Z”\’l‚ÉÀ’l‚ğ•\¦‚·‚é", "Show actual value of skill") },
+	"show_actual_vaule",            _("å„æŠ€èƒ½å€¤ã«å®Ÿå€¤ã‚’è¡¨ç¤ºã™ã‚‹", "Show actual value of skill") },
 
 
 /*** Game-Play ***/
 
 	{ &stack_force_notes,           TRUE,  OPT_PAGE_GAMEPLAY, 0, 8,
-	"stack_force_notes",            _("ˆÙ‚È‚é–Á‚ÌƒAƒCƒeƒ€‚ğ‚Ü‚Æ‚ß‚é", "Merge inscriptions when stacking") },
+	"stack_force_notes",            _("ç•°ãªã‚‹éŠ˜ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ã¾ã¨ã‚ã‚‹", "Merge inscriptions when stacking") },
 
 	{ &stack_force_costs,           FALSE, OPT_PAGE_GAMEPLAY, 0, 9,
-	"stack_force_costs",            _("ˆÙ‚È‚éŠ„ˆø•\¦‚ÌƒAƒCƒeƒ€‚ğ‚Ü‚Æ‚ß‚é", "Merge discounts when stacking") },
+	"stack_force_costs",            _("ç•°ãªã‚‹å‰²å¼•è¡¨ç¤ºã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ã¾ã¨ã‚ã‚‹", "Merge discounts when stacking") },
 
 	{ &expand_list,                 TRUE,  OPT_PAGE_GAMEPLAY, 1, 5,
-	"expand_list",                  _("uˆê——vƒRƒ}ƒ“ƒh‚ğŠg’£‚·‚é", "Expand the power of the list commands") },
+	"expand_list",                  _("ã€Œä¸€è¦§ã€ã‚³ãƒãƒ³ãƒ‰ã‚’æ‹¡å¼µã™ã‚‹", "Expand the power of the list commands") },
 
 	{ &small_levels,                TRUE,  OPT_PAGE_GAMEPLAY, 0, 30,
-	"small_levels",                 _("”ñí‚É¬‚³‚¢ƒtƒƒA‚Ì¶¬‚ğ‰Â”\‚É‚·‚é", "Allow unusually small dungeon levels") },
+	"small_levels",                 _("éå¸¸ã«å°ã•ã„ãƒ•ãƒ­ã‚¢ã®ç”Ÿæˆã‚’å¯èƒ½ã«ã™ã‚‹", "Allow unusually small dungeon levels") },
 
 	{ &always_small_levels,         FALSE, OPT_PAGE_GAMEPLAY, 2, 3,
-	"always_small_levels",          _("í‚É”ñí‚É¬‚³‚¢ƒtƒƒA‚ğ¶¬‚·‚é", "Always create unusually small dungeon levels") },
+	"always_small_levels",          _("å¸¸ã«éå¸¸ã«å°ã•ã„ãƒ•ãƒ­ã‚¢ã‚’ç”Ÿæˆã™ã‚‹", "Always create unusually small dungeon levels") },
 
 	{ &empty_levels,                TRUE,  OPT_PAGE_GAMEPLAY, 0, 31,
-	"empty_levels",                 _("‹ó‚Á‚Û‚ÌuƒAƒŠ[ƒivƒŒƒxƒ‹‚Ì¶¬‚ğ‰Â”\‚É‚·‚é", "Allow empty 'arena' levels") },
+	"empty_levels",                 _("ç©ºã£ã½ã®ã€Œã‚¢ãƒªãƒ¼ãƒŠã€ãƒ¬ãƒ™ãƒ«ã®ç”Ÿæˆã‚’å¯èƒ½ã«ã™ã‚‹", "Allow empty 'arena' levels") },
 
 	{ &bound_walls_perm,            FALSE, OPT_PAGE_GAMEPLAY, 2, 1,
-	"bound_walls_perm",             _("ƒ_ƒ“ƒWƒ‡ƒ“‚ÌŠO•Ç‚ğ‰i‹vŠâ‚É‚·‚é", "Boundary walls become 'permanent wall'") },
+	"bound_walls_perm",             _("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®å¤–å£ã‚’æ°¸ä¹…å²©ã«ã™ã‚‹", "Boundary walls become 'permanent wall'") },
 
 	{ &last_words,                  TRUE,  OPT_PAGE_GAMEPLAY, 0, 28,
-	"last_words",                   _("ƒLƒƒƒ‰ƒNƒ^[‚ª€‚ñ‚¾ˆâŒ¾‚ğ‚Ì‚±‚·", "Leave last words when your character dies") },
+	"last_words",                   _("ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãŒæ­»ã‚“ã æ™‚éºè¨€ã‚’ã®ã“ã™", "Leave last words when your character dies") },
 
 #ifdef WORLD_SCORE
 	{ &send_score,                  TRUE,  OPT_PAGE_GAMEPLAY, 4, 6,
-	"send_score",                   _("ƒXƒRƒAƒT[ƒo‚ÉƒXƒRƒA‚ğ‘—‚é", "Send score dump to the world score server") },
+	"send_score",                   _("ã‚¹ã‚³ã‚¢ã‚µãƒ¼ãƒã«ã‚¹ã‚³ã‚¢ã‚’é€ã‚‹", "Send score dump to the world score server") },
 #endif
 
 	{ &allow_debug_opts,            FALSE, OPT_PAGE_GAMEPLAY, 6, 11,
-	"allow_debug_opts",             _("ƒfƒoƒbƒO/¼‹\ƒIƒvƒVƒ‡ƒ“‚ğ‹–‰Â‚·‚é", "Allow use of debug/cheat options") },
+	"allow_debug_opts",             _("ãƒ‡ãƒãƒƒã‚°/è©æ¬ºã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’è¨±å¯ã™ã‚‹", "Allow use of debug/cheat options") },
 
 /*** Disturbance ***/
 
 	{ &find_ignore_stairs,          FALSE, OPT_PAGE_DISTURBANCE, 0, 16,
-	"find_ignore_stairs",           _("ŠK’i‚Í’Ê‰ß‚·‚é", "Run past stairs") },
+	"find_ignore_stairs",           _("éšæ®µã¯é€šéã™ã‚‹", "Run past stairs") },
 
 	{ &find_ignore_doors,           TRUE,  OPT_PAGE_DISTURBANCE, 0, 17,
-	"find_ignore_doors",            _("ƒhƒA‚Í’Ê‰ß‚·‚é", "Run through open doors") },
+	"find_ignore_doors",            _("ãƒ‰ã‚¢ã¯é€šéã™ã‚‹", "Run through open doors") },
 
 	{ &find_cut,                    FALSE, OPT_PAGE_DISTURBANCE, 0, 18,
-	"find_cut",                     _("‹È‚èŠp‚ğÎ‚ß‚ÉÅ’Z‹——£‚Å’Ê‰ß‚·‚é", "Run past known corners") },
+	"find_cut",                     _("æ›²ã‚Šè§’ã‚’æ–œã‚ã«æœ€çŸ­è·é›¢ã§é€šéã™ã‚‹", "Run past known corners") },
 
 	{ &check_abort,                 TRUE,  OPT_PAGE_DISTURBANCE, 1, 18,
-	"check_abort",                  _("˜A‘±ƒRƒ}ƒ“ƒh‚ÍƒL[“ü—Í‚Å’†’f‚·‚é", "Check for user abort while continuous command") },
+	"check_abort",                  _("é€£ç¶šã‚³ãƒãƒ³ãƒ‰ã¯ã‚­ãƒ¼å…¥åŠ›ã§ä¸­æ–­ã™ã‚‹", "Check for user abort while continuous command") },
 
 	{ &flush_failure,               TRUE,  OPT_PAGE_DISTURBANCE, 1, 20,
-	"flush_failure",                _("—lX‚Èƒ~ƒX”­¶‚É“ü—Í‚ğƒNƒŠƒA‚·‚é", "Flush input on various failures") },
+	"flush_failure",                _("æ§˜ã€…ãªãƒŸã‚¹ç™ºç”Ÿæ™‚ã«å…¥åŠ›ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹", "Flush input on various failures") },
 
 	{ &flush_disturb,               FALSE, OPT_PAGE_DISTURBANCE, 1, 21,
-	"flush_disturb",                _("áŠQ”­¶‚É“ü—Í‚ğƒNƒŠƒA‚·‚é", "Flush input whenever disturbed") },
+	"flush_disturb",                _("éšœå®³ç™ºç”Ÿæ™‚ã«å…¥åŠ›ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹", "Flush input whenever disturbed") },
 
 	{ &disturb_move,                FALSE, OPT_PAGE_DISTURBANCE, 0, 20,
-	"disturb_move",                 _("‚Ç‚±‚Ìƒ‚ƒ“ƒXƒ^[‚ª“®‚¢‚Ä‚às“®‚ğ’†~‚·‚é", "Disturb whenever any monster moves") },
+	"disturb_move",                 _("ã©ã“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå‹•ã„ã¦ã‚‚è¡Œå‹•ã‚’ä¸­æ­¢ã™ã‚‹", "Disturb whenever any monster moves") },
 
 	{ &disturb_high,                FALSE, OPT_PAGE_DISTURBANCE, 1, 3,
-	"disturb_high",                 _("ƒŒƒxƒ‹‚Ì‚‚¢ƒ‚ƒ“ƒXƒ^[‚ª“®‚¢‚½‚çs“®‚ğ’†~‚·‚é", "Disturb whenever high-level monster moves") },
+	"disturb_high",                 _("ãƒ¬ãƒ™ãƒ«ã®é«˜ã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå‹•ã„ãŸã‚‰è¡Œå‹•ã‚’ä¸­æ­¢ã™ã‚‹", "Disturb whenever high-level monster moves") },
 
 	{ &disturb_near,                TRUE,  OPT_PAGE_DISTURBANCE, 0, 21,
-	"disturb_near",                 _("‹ŠE“à‚Ìƒ‚ƒ“ƒXƒ^[‚ª“®‚¢‚½‚çs“®‚ğ’†~‚·‚é", "Disturb whenever viewable monster moves") },
+	"disturb_near",                 _("è¦–ç•Œå†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå‹•ã„ãŸã‚‰è¡Œå‹•ã‚’ä¸­æ­¢ã™ã‚‹", "Disturb whenever viewable monster moves") },
 
 	{ &disturb_pets,                FALSE, OPT_PAGE_DISTURBANCE, 5, 6,
-	"disturb_pets",                 _("‹ŠE“à‚Ìƒyƒbƒg‚ª“®‚¢‚½‚çs“®‚ğ’†~‚·‚é", "Disturb when visible pets move") },
+	"disturb_pets",                 _("è¦–ç•Œå†…ã®ãƒšãƒƒãƒˆãŒå‹•ã„ãŸã‚‰è¡Œå‹•ã‚’ä¸­æ­¢ã™ã‚‹", "Disturb when visible pets move") },
 
 	{ &disturb_panel,               TRUE,  OPT_PAGE_DISTURBANCE, 0, 22,
-	"disturb_panel",                _("‰æ–ÊƒXƒNƒ[ƒ‹‚És“®‚ğ’†~‚·‚é", "Disturb whenever map panel changes") },
+	"disturb_panel",                _("ç”»é¢ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«æ™‚ã«è¡Œå‹•ã‚’ä¸­æ­¢ã™ã‚‹", "Disturb whenever map panel changes") },
 
 	{ &disturb_state,               TRUE,  OPT_PAGE_DISTURBANCE, 0, 23,
-	"disturb_state",                _("©•ª‚ÌƒXƒe[ƒ^ƒX•Ï‰»‚És“®‚ğ’†~‚·‚é", "Disturb whenever player state changes") },
+	"disturb_state",                _("è‡ªåˆ†ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹å¤‰åŒ–æ™‚ã«è¡Œå‹•ã‚’ä¸­æ­¢ã™ã‚‹", "Disturb whenever player state changes") },
 
 	{ &disturb_minor,               TRUE,  OPT_PAGE_DISTURBANCE, 0, 24,
-	"disturb_minor",                _("±×‚È‚±‚Æ‚ª‹N‚«‚Ä‚às“®‚ğ’†~‚·‚é", "Disturb whenever boring things happen") },
+	"disturb_minor",                _("äº›ç´°ãªã“ã¨ãŒèµ·ãã¦ã‚‚è¡Œå‹•ã‚’ä¸­æ­¢ã™ã‚‹", "Disturb whenever boring things happen") },
 
 	{ &ring_bell,                   FALSE, OPT_PAGE_DISTURBANCE, 0, 14,
-	"ring_bell",                    _("ƒGƒ‰[‚Éƒr[ƒv‰¹‚ğ–Â‚ç‚·", "Audible bell (on errors, etc)") },
+	"ring_bell",                    _("ã‚¨ãƒ©ãƒ¼æ™‚ã«ãƒ“ãƒ¼ãƒ—éŸ³ã‚’é³´ã‚‰ã™", "Audible bell (on errors, etc)") },
 
 	{ &disturb_trap_detect,         TRUE,  OPT_PAGE_DISTURBANCE, 0, 27,
-	"disturb_trap_detect",          _("ƒgƒ‰ƒbƒvŠ´’m”ÍˆÍŠO‚Éo‚é’¼‘O‚És“®‚ğ’†~‚·‚é", "Disturb when leaving trap detected area") },
+	"disturb_trap_detect",          _("ãƒˆãƒ©ãƒƒãƒ—æ„ŸçŸ¥ç¯„å›²å¤–ã«å‡ºã‚‹ç›´å‰ã«è¡Œå‹•ã‚’ä¸­æ­¢ã™ã‚‹", "Disturb when leaving trap detected area") },
 
 	{ &alert_trap_detect,           FALSE, OPT_PAGE_DISTURBANCE, 0, 25,
-	"alert_trap_detect",            _("ƒgƒ‰ƒbƒvŠ´’m”ÍˆÍŠO‚Éo‚é’¼‘O‚ÉŒx‚·‚é", "Alert when leaving trap detected area") },
+	"alert_trap_detect",            _("ãƒˆãƒ©ãƒƒãƒ—æ„ŸçŸ¥ç¯„å›²å¤–ã«å‡ºã‚‹ç›´å‰ã«è­¦å‘Šã™ã‚‹", "Alert when leaving trap detected area") },
 
 /*** Birth Options ***/
 	{ &manual_haggle,               FALSE, OPT_PAGE_BIRTH, 1, 0,
-	"manual_haggle",                _("“X‚Å’lØ‚èŒğÂ‚ğ‚·‚é", "Manually haggle in stores") },
+	"manual_haggle",                _("åº—ã§å€¤åˆ‡ã‚Šäº¤æ¸‰ã‚’ã™ã‚‹", "Manually haggle in stores") },
 
 	{ &easy_band,                   FALSE, OPT_PAGE_BIRTH, 6, 31,
-	"easy_band",                    _("‰SÒ—pŠÈ’Pƒ‚[ƒh(*)", "Easy Mode (*)") },
+	"easy_band",                    _("åˆå¿ƒè€…ç”¨ç°¡å˜ãƒ¢ãƒ¼ãƒ‰(*)", "Easy Mode (*)") },
 
 	{ &smart_learn,                 TRUE,  OPT_PAGE_BIRTH, 1, 14,
-	"smart_learn",                  _("ƒ‚ƒ“ƒXƒ^[‚Í¸”s‚ğŠwK‚·‚é(*)", "Monsters learn from their mistakes (*)") },
+	"smart_learn",                  _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯å¤±æ•—ã‚’å­¦ç¿’ã™ã‚‹(*)", "Monsters learn from their mistakes (*)") },
 
 	{ &smart_cheat,                 FALSE, OPT_PAGE_BIRTH, 1, 15,
-	"smart_cheat",                  _("ƒ‚ƒ“ƒXƒ^[‚ÍƒvƒŒƒCƒ„[‚Ìã‚İ‚ğ“Ë‚­(*)", "Monsters exploit players weaknesses (*)") },
+	"smart_cheat",                  _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å¼±ã¿ã‚’çªã(*)", "Monsters exploit players weaknesses (*)") },
 
 	{ &vanilla_town,                FALSE, OPT_PAGE_BIRTH, 6, 0,
-	"vanilla_town",                 _("Œ³‘c‚ÌŠX/ƒNƒGƒXƒg‚Ær–ì‚È‚µ", "Use 'vanilla' town without quests and wilderness") },
+	"vanilla_town",                 _("å…ƒç¥–ã®è¡—/ã‚¯ã‚¨ã‚¹ãƒˆã¨è’é‡ãªã—", "Use 'vanilla' town without quests and wilderness") },
 
 	{ &lite_town,                   FALSE, OPT_PAGE_BIRTH, 6, 1,
-	"lite_town",                    _("¬‹K–Í‚ÈŠX/r–ì‚È‚µ", "Use 'lite' town without a wilderness") },
+	"lite_town",                    _("å°è¦æ¨¡ãªè¡—/è’é‡ãªã—", "Use 'lite' town without a wilderness") },
 
 	{ &ironman_shops,               FALSE, OPT_PAGE_BIRTH, 6, 2,
-	"ironman_shops",                _("(“Sl—p)“X‚ğg—p‚µ‚È‚¢(*)", "Stores are permanently closed (*)") },
+	"ironman_shops",                _("(é‰„äººç”¨)åº—ã‚’ä½¿ç”¨ã—ãªã„(*)", "Stores are permanently closed (*)") },
 
 	{ &ironman_small_levels,        FALSE, OPT_PAGE_BIRTH, 6, 3,
-	"ironman_small_levels",         _("(“Sl—p)í‚É”ñí‚É¬‚³‚¢ƒtƒƒA‚ğ¶¬(*)", "Always create unusually small dungeon levels (*)") },
+	"ironman_small_levels",         _("(é‰„äººç”¨)å¸¸ã«éå¸¸ã«å°ã•ã„ãƒ•ãƒ­ã‚¢ã‚’ç”Ÿæˆ(*)", "Always create unusually small dungeon levels (*)") },
 
 	{ &ironman_downward,            FALSE, OPT_PAGE_BIRTH, 6, 4,
-	"ironman_downward",             _("(“Sl—p)‹AŠÒ‚Æã‚èŠK’i‚È‚µ(*)", "Disable recall and use of up stairs (*)") },
+	"ironman_downward",             _("(é‰„äººç”¨)å¸°é‚„ã¨ä¸Šã‚Šéšæ®µãªã—(*)", "Disable recall and use of up stairs (*)") },
 
 	{ &ironman_empty_levels,        FALSE, OPT_PAGE_BIRTH, 6, 8,
-	"ironman_empty_levels",         _("(“Sl—p)í‚É‹ó‚Á‚Û‚ÌƒAƒŠ[ƒiƒŒƒxƒ‹‚ğ¶¬(*)", "Always create empty 'arena' levels (*)") },
+	"ironman_empty_levels",         _("(é‰„äººç”¨)å¸¸ã«ç©ºã£ã½ã®ã‚¢ãƒªãƒ¼ãƒŠãƒ¬ãƒ™ãƒ«ã‚’ç”Ÿæˆ(*)", "Always create empty 'arena' levels (*)") },
 
 	{ &ironman_rooms,               FALSE, OPT_PAGE_BIRTH, 6, 12,
-	"ironman_rooms",                _("(“Sl—p)í‚É•’Ê‚Å‚È‚¢•”‰®‚ğ¶¬‚·‚é(*)", "Always generate very unusual rooms (*)") },
+	"ironman_rooms",                _("(é‰„äººç”¨)å¸¸ã«æ™®é€šã§ãªã„éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹(*)", "Always generate very unusual rooms (*)") },
 
 	{ &ironman_nightmare,           FALSE, OPT_PAGE_BIRTH, 6, 18,
-	"ironman_nightmare",            _("(“Sl—p)ˆ«–²ƒ‚[ƒh(‚±‚ê‚Í‘S‚­•sğ—‚Å‚·I)(*)", "Nightmare mode(it isn't even remotely fair!)(*)") },
+	"ironman_nightmare",            _("(é‰„äººç”¨)æ‚ªå¤¢ãƒ¢ãƒ¼ãƒ‰(ã“ã‚Œã¯å…¨ãä¸æ¡ç†ã§ã™ï¼)(*)", "Nightmare mode(it isn't even remotely fair!)(*)") },
 
 	{ &left_hander,                 FALSE, OPT_PAGE_BIRTH, 6, 13,
-	"left_hander",                  _("¶—˜‚«‚Å‚ ‚é", "Left-Hander") },
+	"left_hander",                  _("å·¦åˆ©ãã§ã‚ã‚‹", "Left-Hander") },
 
 	{ &preserve_mode,               TRUE,  OPT_PAGE_BIRTH, 6, 14,
-	"preserve_mode",                _("“`à‚ÌƒAƒCƒeƒ€‚ğæ‚è“¦‚µ‚Ä‚àÄ¶¬‚³‚ê‚é(*)", "Preserve artifacts (*)") },
+	"preserve_mode",                _("ä¼èª¬ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’å–ã‚Šé€ƒã—ã¦ã‚‚å†ç”Ÿæˆã•ã‚Œã‚‹(*)", "Preserve artifacts (*)") },
 
 	{ &autoroller,                  TRUE,  OPT_PAGE_BIRTH, 6, 15,
-	"autoroller",                   _("”\—Í’l‚ÉƒI[ƒgƒ[ƒ‰[g—p(*)", "Allow use of autoroller for stats (*)") },
+	"autoroller",                   _("èƒ½åŠ›å€¤ã«ã‚ªãƒ¼ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ä½¿ç”¨(*)", "Allow use of autoroller for stats (*)") },
 
 	{ &autochara,                   FALSE, OPT_PAGE_BIRTH, 6, 16,
-	"autochara",                   _("‘ÌŠi/’nˆÊ‚ÉƒI[ƒgƒ[ƒ‰[g—p", "Autoroll for weight, height and social status") },
+	"autochara",                   _("ä½“æ ¼/åœ°ä½ã«ã‚ªãƒ¼ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ä½¿ç”¨", "Autoroll for weight, height and social status") },
 
 	{ &powerup_home,                TRUE,  OPT_PAGE_BIRTH, 4, 3,
-	"powerup_home",                 _("‰ä‚ª‰Æ‚ğŠg’£‚·‚é(*)", "Increase capacity of your home (*)") },
+	"powerup_home",                 _("æˆ‘ãŒå®¶ã‚’æ‹¡å¼µã™ã‚‹(*)", "Increase capacity of your home (*)") },
 
 /*** Easy Object Auto-Destroyer ***/
 
 	{ &destroy_items,               FALSE, OPT_PAGE_AUTODESTROY, 7, 0,
-	"destroy_items",                _("ƒAƒCƒeƒ€‚ÌŠÈˆÕ©“®”j‰ó‚ğg—p‚·‚é", "Use easy auto-destroyer") },
+	"destroy_items",                _("ã‚¢ã‚¤ãƒ†ãƒ ã®ç°¡æ˜“è‡ªå‹•ç ´å£Šã‚’ä½¿ç”¨ã™ã‚‹", "Use easy auto-destroyer") },
 
 	{ &destroy_feeling,             FALSE, OPT_PAGE_AUTODESTROY, 7, 8,
-	"destroy_feeling",              _("ŠÈˆÕŠÓ’è‚µ‚½‚Æ‚«©“®”j‰ó‚ğ“K—p‚·‚é", "Apply auto-destroy as sense feeling") },
+	"destroy_feeling",              _("ç°¡æ˜“é‘‘å®šã—ãŸã¨ãè‡ªå‹•ç ´å£Šã‚’é©ç”¨ã™ã‚‹", "Apply auto-destroy as sense feeling") },
 
 	{ &destroy_identify,            FALSE, OPT_PAGE_AUTODESTROY, 7, 9,
-	"destroy_identify",             _("ŠÓ’è‚µ‚½‚Æ‚«©“®”j‰ó‚ğ“K—p‚·‚é", "Apply auto-destroy as identify an item") },
+	"destroy_identify",             _("é‘‘å®šã—ãŸã¨ãè‡ªå‹•ç ´å£Šã‚’é©ç”¨ã™ã‚‹", "Apply auto-destroy as identify an item") },
 
 	{ &leave_worth,                 TRUE,  OPT_PAGE_AUTODESTROY, 7, 2,
-	"leave_worth",                  _("‰¿’l‚ª‚ ‚éƒAƒCƒeƒ€‚Í‰ó‚³‚È‚¢", "Auto-destroyer leaves known worthy items") },
+	"leave_worth",                  _("ä¾¡å€¤ãŒã‚ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã¯å£Šã•ãªã„", "Auto-destroyer leaves known worthy items") },
 
 	{ &leave_equip,                 FALSE, OPT_PAGE_AUTODESTROY, 7, 3,
-	"leave_equip",                  _("•Ší/–h‹ï‚Í‰ó‚³‚È‚¢", "Auto-destroyer leaves weapons and armour") },
+	"leave_equip",                  _("æ­¦å™¨/é˜²å…·ã¯å£Šã•ãªã„", "Auto-destroyer leaves weapons and armour") },
 
 	{ &leave_chest,                 TRUE,  OPT_PAGE_AUTODESTROY, 7, 7,
-	"leave_chest",                  _("ŠJ••‚³‚ê‚Ä‚¢‚È‚¢” ‚Í‰ó‚³‚È‚¢", "Auto-destroyer leaves closed chests") },
+	"leave_chest",                  _("é–‹å°ã•ã‚Œã¦ã„ãªã„ç®±ã¯å£Šã•ãªã„", "Auto-destroyer leaves closed chests") },
 
 	{ &leave_wanted,                TRUE,  OPT_PAGE_AUTODESTROY, 7, 4,
-	"leave_wanted",                 _("Ü‹àñ‚Ì€‘Ì/œ‚Í‰ó‚³‚È‚¢", "Auto-destroyer leaves wanted corpses") },
+	"leave_wanted",                 _("è³é‡‘é¦–ã®æ­»ä½“/éª¨ã¯å£Šã•ãªã„", "Auto-destroyer leaves wanted corpses") },
 
 	{ &leave_corpse,                FALSE, OPT_PAGE_AUTODESTROY, 7, 5,
-	"leave_corpse",                 _("€‘Ì/œ‚Í‰ó‚³‚È‚¢", "Auto-destroyer leaves corpses and skeletons") },
+	"leave_corpse",                 _("æ­»ä½“/éª¨ã¯å£Šã•ãªã„", "Auto-destroyer leaves corpses and skeletons") },
 
 	{ &leave_junk,                  FALSE, OPT_PAGE_AUTODESTROY, 7, 6,
-	"leave_junk",                   _("‚ª‚ç‚­‚½‚Í‰ó‚³‚È‚¢", "Auto-destroyer leaves junk") },
+	"leave_junk",                   _("ãŒã‚‰ããŸã¯å£Šã•ãªã„", "Auto-destroyer leaves junk") },
 
 	{ &leave_special,               TRUE,  OPT_PAGE_AUTODESTROY, 7, 1,
-	"leave_special",                _("í‘°/E‹Æ‚Å“Á•Ê‚É•K—v‚ÈƒAƒCƒeƒ€‚Í‰ó‚³‚È‚¢", "Auto-destroyer leaves items your race/class needs") },
+	"leave_special",                _("ç¨®æ—/è·æ¥­ã§ç‰¹åˆ¥ã«å¿…è¦ãªã‚¢ã‚¤ãƒ†ãƒ ã¯å£Šã•ãªã„", "Auto-destroyer leaves items your race/class needs") },
 
 /*** Play-record Options ***/
 
 	{ &record_fix_art,              TRUE,  OPT_PAGE_PLAYRECORD, 4, 11,
-	"record_fix_art",               _("ŒÅ’èƒA[ƒeƒBƒtƒ@ƒNƒg‚Ì“üè‚ğ‹L˜^‚·‚é", "Record fixed artifacts") },
+	"record_fix_art",               _("å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã®å…¥æ‰‹ã‚’è¨˜éŒ²ã™ã‚‹", "Record fixed artifacts") },
 
 	{ &record_rand_art,             TRUE,  OPT_PAGE_PLAYRECORD, 4, 12,
-	"record_rand_art",              _("ƒ‰ƒ“ƒ_ƒ€ƒA[ƒeƒBƒtƒ@ƒNƒg‚Ì“üè‚ğ‹L˜^‚·‚é", "Record random artifacts") },
+	"record_rand_art",              _("ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã®å…¥æ‰‹ã‚’è¨˜éŒ²ã™ã‚‹", "Record random artifacts") },
 
 	{ &record_destroy_uniq,         TRUE,  OPT_PAGE_PLAYRECORD, 4, 13,
-	"record_destroy_uniq",          _("ƒ†ƒj[ƒNƒ‚ƒ“ƒXƒ^[‚ğ“|‚µ‚½‚Æ‚«‚ğ‹L˜^‚·‚é", "Record when destroy unique monster") },
+	"record_destroy_uniq",          _("ãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å€’ã—ãŸã¨ãã‚’è¨˜éŒ²ã™ã‚‹", "Record when destroy unique monster") },
 
 	{ &record_fix_quest,            TRUE,  OPT_PAGE_PLAYRECORD, 4, 14,
-	"record_fix_quest",             _("ŒÅ’èƒNƒGƒXƒg‚Ì’B¬‚ğ‹L˜^‚·‚é", "Record fixed quests") },
+	"record_fix_quest",             _("å›ºå®šã‚¯ã‚¨ã‚¹ãƒˆã®é”æˆã‚’è¨˜éŒ²ã™ã‚‹", "Record fixed quests") },
 
 	{ &record_rand_quest,           TRUE,  OPT_PAGE_PLAYRECORD, 4, 15,
-	"record_rand_quest",            _("ƒ‰ƒ“ƒ_ƒ€ƒNƒGƒXƒg‚Ì’B¬‚ğ‹L˜^‚·‚é", "Record random quests") },
+	"record_rand_quest",            _("ãƒ©ãƒ³ãƒ€ãƒ ã‚¯ã‚¨ã‚¹ãƒˆã®é”æˆã‚’è¨˜éŒ²ã™ã‚‹", "Record random quests") },
 
 	{ &record_maxdepth,             TRUE,  OPT_PAGE_PLAYRECORD, 4, 16,
-	"record_maxdepth",              _("Å[ŠK‚ğXV‚µ‚½‚Æ‚«‚É‹L˜^‚·‚é", "Record movements to deepest level") },
+	"record_maxdepth",              _("æœ€æ·±éšã‚’æ›´æ–°ã—ãŸã¨ãã«è¨˜éŒ²ã™ã‚‹", "Record movements to deepest level") },
 
 	{ &record_stair,                TRUE,  OPT_PAGE_PLAYRECORD, 4, 17,
-	"record_stair",                 _("ŠK‚ÌˆÚ“®‚ğ‹L˜^‚·‚é", "Record recall and stair movements") },
+	"record_stair",                 _("éšã®ç§»å‹•ã‚’è¨˜éŒ²ã™ã‚‹", "Record recall and stair movements") },
 
 	{ &record_buy,                  TRUE,  OPT_PAGE_PLAYRECORD, 4, 18,
-	"record_buy",                   _("ƒAƒCƒeƒ€‚Ìw“ü‚ğ‹L˜^‚·‚é", "Record purchased items") },
+	"record_buy",                   _("ã‚¢ã‚¤ãƒ†ãƒ ã®è³¼å…¥ã‚’è¨˜éŒ²ã™ã‚‹", "Record purchased items") },
 
 	{ &record_sell,                 FALSE, OPT_PAGE_PLAYRECORD, 4, 19,
-	"record_sell",                  _("ƒAƒCƒeƒ€‚Ì”„‹p‚ğ‹L˜^‚·‚é", "Record sold items") },
+	"record_sell",                  _("ã‚¢ã‚¤ãƒ†ãƒ ã®å£²å´ã‚’è¨˜éŒ²ã™ã‚‹", "Record sold items") },
 
 	{ &record_danger,               TRUE,  OPT_PAGE_PLAYRECORD, 4, 20,
-	"record_danger",                _("ƒsƒ“ƒ`‚É‚È‚Á‚½‚Æ‚«‚ğ‹L˜^‚·‚é", "Record hitpoint warning") },
+	"record_danger",                _("ãƒ”ãƒ³ãƒã«ãªã£ãŸã¨ãã‚’è¨˜éŒ²ã™ã‚‹", "Record hitpoint warning") },
 
 	{ &record_arena,                TRUE,  OPT_PAGE_PLAYRECORD, 4, 21,
-	"record_arena",                 _("ƒAƒŠ[ƒi‚Å‚ÌŸ—˜‚ğ‹L˜^‚·‚é", "Record arena victories") },
+	"record_arena",                 _("ã‚¢ãƒªãƒ¼ãƒŠã§ã®å‹åˆ©ã‚’è¨˜éŒ²ã™ã‚‹", "Record arena victories") },
 
 	{ &record_ident,                TRUE,  OPT_PAGE_PLAYRECORD, 4, 22,
-	"record_ident",                 _("–¢”»–¾‚ÌƒAƒCƒeƒ€‚Ì¯•Ê‚ğ‹L˜^‚·‚é", "Record first identified items") },
+	"record_ident",                 _("æœªåˆ¤æ˜ã®ã‚¢ã‚¤ãƒ†ãƒ ã®è­˜åˆ¥ã‚’è¨˜éŒ²ã™ã‚‹", "Record first identified items") },
 
 	{ &record_named_pet,            FALSE, OPT_PAGE_PLAYRECORD, 4, 23,
-	"record_named_pet",             _("–¼‘O‚Â‚«ƒyƒbƒg‚Ìî•ñ‚ğ‹L˜^‚·‚é", "Record informations of named pets") },
+	"record_named_pet",             _("åå‰ã¤ããƒšãƒƒãƒˆã®æƒ…å ±ã‚’è¨˜éŒ²ã™ã‚‹", "Record informations of named pets") },
 
 /*** End of Table ***/
 
@@ -392,60 +392,60 @@ const option_type option_info[] =
 };
 
 /*!
- * ƒ`[ƒgƒIƒvƒVƒ‡ƒ“‚Ì’è‹`ƒe[ƒuƒ‹ / Cheating options
+ * ãƒãƒ¼ãƒˆã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®å®šç¾©ãƒ†ãƒ¼ãƒ–ãƒ« / Cheating options
  */
 const option_type cheat_info[CHEAT_MAX] =
 {
 	{ &cheat_peek,		FALSE,	255,	0x01, 0x00,
-	"cheat_peek",		_("ƒAƒCƒeƒ€‚Ì¶¬‚ğ‚Ì‚¼‚«Œ©‚é", "Peek into object creation")
+	"cheat_peek",		_("ã‚¢ã‚¤ãƒ†ãƒ ã®ç”Ÿæˆã‚’ã®ããè¦‹ã‚‹", "Peek into object creation")
 	},
 
 	{ &cheat_hear,		FALSE,	255,	0x02, 0x00,
-	"cheat_hear",		_("ƒ‚ƒ“ƒXƒ^[‚Ì¶¬‚ğ‚Ì‚¼‚«Œ©‚é", "Peek into monster creation")
+	"cheat_hear",		_("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç”Ÿæˆã‚’ã®ããè¦‹ã‚‹", "Peek into monster creation")
 	},
 
 	{ &cheat_room,		FALSE,	255,	0x04, 0x00,
-	"cheat_room",		_("ƒ_ƒ“ƒWƒ‡ƒ“‚Ì¶¬‚ğ‚Ì‚¼‚«Œ©‚é", "Peek into dungeon creation")
+	"cheat_room",		_("ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®ç”Ÿæˆã‚’ã®ããè¦‹ã‚‹", "Peek into dungeon creation")
 	},
 
 	{ &cheat_xtra,		FALSE,	255,	0x08, 0x00,
-	"cheat_xtra",		_("‚»‚Ì‘¼‚Ì–‚ğ‚Ì‚¼‚«Œ©‚é", "Peek into something else")
+	"cheat_xtra",		_("ãã®ä»–ã®äº‹ã‚’ã®ããè¦‹ã‚‹", "Peek into something else")
 	},
 
 	{ &cheat_know,		FALSE,	255,	0x10, 0x00,
-	"cheat_know",		_("Š®‘S‚Èƒ‚ƒ“ƒXƒ^[‚Ìv‚¢o‚ğ’m‚é", "Know complete monster info")
+	"cheat_know",		_("å®Œå…¨ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ€ã„å‡ºã‚’çŸ¥ã‚‹", "Know complete monster info")
 	},
 
 	{ &cheat_live,		FALSE,	255,	0x20, 0x00,
-	"cheat_live",		_("€‚ğ‰ñ”ğ‚·‚é‚±‚Æ‚ğ‰Â”\‚É‚·‚é", "Allow player to avoid death")
+	"cheat_live",		_("æ­»ã‚’å›é¿ã™ã‚‹ã“ã¨ã‚’å¯èƒ½ã«ã™ã‚‹", "Allow player to avoid death")
 	},
 
 	{ &cheat_save,		FALSE,	255,	0x40, 0x00,
-	"cheat_save",		_("€‚ñ‚¾ƒZ[ƒu‚·‚é‚©Šm”F‚·‚é", "Ask for saving death")
+	"cheat_save",		_("æ­»ã‚“ã æ™‚ã‚»ãƒ¼ãƒ–ã™ã‚‹ã‹ç¢ºèªã™ã‚‹", "Ask for saving death")
 	},
 
 	{ &cheat_diary_output,	FALSE,	255,	0x80, 0x00,
-	"cheat_diary_output",	_("ƒEƒBƒU[ƒhƒƒO‚ğ“ú‹L‚Éo—Í‚·‚é", "Output wizard log to diary.")
+	"cheat_diary_output",	_("ã‚¦ã‚£ã‚¶ãƒ¼ãƒ‰ãƒ­ã‚°ã‚’æ—¥è¨˜ã«å‡ºåŠ›ã™ã‚‹", "Output wizard log to diary.")
 	},
 
 	{ &cheat_turn,	FALSE,	255,	0x81, 0x00,
-	"cheat_turn",	_("ƒQ[ƒ€ƒƒbƒZ[ƒW‚Éƒ^[ƒ“•\¦‚ğs‚¤", "Put turn to game message.")
+	"cheat_turn",	_("ã‚²ãƒ¼ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«ã‚¿ãƒ¼ãƒ³è¡¨ç¤ºã‚’è¡Œã†", "Put turn to game message.")
 	},
 
 	{ &cheat_sight,	FALSE,	255,	0x82, 0x00,
-	"cheat_sight",	_("uŒ©‚évƒRƒ}ƒ“ƒh‚ğŠg’£‚·‚éB", "Expand \"L\"ook command.")
+	"cheat_sight",	_("ã€Œè¦‹ã‚‹ã€ã‚³ãƒãƒ³ãƒ‰ã‚’æ‹¡å¼µã™ã‚‹ã€‚", "Expand \"L\"ook command.")
 	}
 };
 
 
 /*!
-* ©“®ƒZ[ƒuƒIƒvƒVƒ‡ƒ“ƒe[ƒuƒ‹
+* è‡ªå‹•ã‚»ãƒ¼ãƒ–ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ†ãƒ¼ãƒ–ãƒ«
 */
 const option_type autosave_info[2] =
 {
 	{ &autosave_l,      FALSE, 255, 0x01, 0x00,
-	"autosave_l",    _("V‚µ‚¢ŠK‚É“ü‚é“x‚É©“®ƒZ[ƒu‚·‚é", "Autosave when entering new levels") },
+	"autosave_l",    _("æ–°ã—ã„éšã«å…¥ã‚‹åº¦ã«è‡ªå‹•ã‚»ãƒ¼ãƒ–ã™ã‚‹", "Autosave when entering new levels") },
 
 	{ &autosave_t,      FALSE, 255, 0x02, 0x00,
-	"autosave_t",   _("ˆê’èƒ^[ƒ“–ˆ‚É©“®ƒZ[ƒu‚·‚é", "Timed autosave") },
+	"autosave_t",   _("ä¸€å®šã‚¿ãƒ¼ãƒ³æ¯ã«è‡ªå‹•ã‚»ãƒ¼ãƒ–ã™ã‚‹", "Timed autosave") },
 };

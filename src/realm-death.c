@@ -1,13 +1,13 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 
 
 
 /*!
-* @brief ˆÃ•—Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief æš—é»’é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -16,8 +16,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-	static const char s_dam[] = _("‘¹:", "dam ");
-	static const char s_random[] = _("ƒ‰ƒ“ƒ_ƒ€", "random");
+	static const char s_dam[] = _("æå‚·:", "dam ");
+	static const char s_random[] = _("ãƒ©ãƒ³ãƒ€ãƒ ", "random");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -25,8 +25,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("–³¶–½Š´’m", "Detect Unlife");
-		if (desc) return _("‹ß‚­‚Ì¶–½‚Ì‚È‚¢ƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB", "Detects all nonliving monsters in your vicinity.");
+		if (name) return _("ç„¡ç”Ÿå‘½æ„ŸçŸ¥", "Detect Unlife");
+		if (desc) return _("è¿‘ãã®ç”Ÿå‘½ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all nonliving monsters in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -41,8 +41,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("ôE’e", "Malediction");
-		if (desc) return _("‚²‚­¬‚³‚È×ˆ«‚È—Í‚ğ‚Âƒ{[ƒ‹‚ğ•ú‚ÂB‘P—Ç‚Èƒ‚ƒ“ƒXƒ^[‚É‚Í‘å‚«‚Èƒ_ƒ[ƒW‚ğ—^‚¦‚éB",
+		if (name) return _("å‘ªæ®ºå¼¾", "Malediction");
+		if (desc) return _("ã”ãå°ã•ãªé‚ªæ‚ªãªåŠ›ã‚’æŒã¤ãƒœãƒ¼ãƒ«ã‚’æ”¾ã¤ã€‚å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚",
 			"Fires a tiny ball of evil power which hurts good monsters greatly.");
 
 		{
@@ -85,8 +85,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("×ˆ«Š´’m", "Detect Evil");
-		if (desc) return _("‹ß‚­‚Ì×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB", "Detects all evil monsters in your vicinity.");
+		if (name) return _("é‚ªæ‚ªæ„ŸçŸ¥", "Detect Evil");
+		if (desc) return _("è¿‘ãã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all evil monsters in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -101,8 +101,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("ˆ«L‰_", "Stinking Cloud");
-		if (desc) return _("“Å‚Ì‹…‚ğ•ú‚ÂB", "Fires a ball of poison.");
+		if (name) return _("æ‚ªè‡­é›²", "Stinking Cloud");
+		if (desc) return _("æ¯’ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a ball of poison.");
 
 		{
 			HIT_POINT dam = 10 + plev / 2;
@@ -120,8 +120,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("•‚¢–°‚è", "Black Sleep");
-		if (desc) return _("1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–°‚ç‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to sleep a monster.");
+		if (name) return _("é»’ã„çœ ã‚Š", "Black Sleep");
+		if (desc) return _("1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’çœ ã‚‰ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to sleep a monster.");
 
 		{
 			int power = plev;
@@ -138,8 +138,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("‘Ï“Å", "Resist Poison");
-		if (desc) return _("ˆê’èŠÔA“Å‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€æ¯’", "Resist Poison");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€æ¯’ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to poison. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
@@ -155,8 +155,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("‹°Q", "Horrify");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğ‹°•|‚³‚¹ANO‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to scare and stun a monster.");
+		if (name) return _("ææ…Œ", "Horrify");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’ææ€–ã•ã›ã€æœ¦æœ§ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to scare and stun a monster.");
 
 		{
 			int power = plev;
@@ -174,8 +174,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("ƒAƒ“ƒfƒbƒh]‘®", "Enslave Undead");
-		if (desc) return _("ƒAƒ“ƒfƒbƒh1‘Ì‚ğ–£—¹‚·‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to charm an undead monster.");
+		if (name) return _("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰å¾“å±", "Enslave Undead");
+		if (desc) return _("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰1ä½“ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to charm an undead monster.");
 
 		{
 			int power = plev;
@@ -192,8 +192,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("ƒGƒ“ƒgƒƒs[‚Ì‹…", "Orb of Entropy");
-		if (desc) return _("¶–½‚Ì‚ ‚éÒ‚ÌHP‚ÆÅ‘åHP‘o•û‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚éŒø‰Ê‚Ì‚ ‚é‹…‚ğ•ú‚ÂB", "Fires a ball which damages to both HP and MaxHP of living monsters.");
+		if (name) return _("ã‚¨ãƒ³ãƒˆãƒ­ãƒ”ãƒ¼ã®çƒ", "Orb of Entropy");
+		if (desc) return _("ç”Ÿå‘½ã®ã‚ã‚‹è€…ã®HPã¨æœ€å¤§HPåŒæ–¹ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹åŠ¹æœã®ã‚ã‚‹çƒã‚’æ”¾ã¤ã€‚", "Fires a ball which damages to both HP and MaxHP of living monsters.");
 
 		{
 			int dice = 3;
@@ -219,8 +219,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("’n–‚Ì–î", "Nether Bolt");
-		if (desc) return _("’n–‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or beam of nether.");
+		if (name) return _("åœ°ç„ã®çŸ¢", "Nether Bolt");
+		if (desc) return _("åœ°ç„ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or beam of nether.");
 
 		{
 			int dice = 8 + (plev - 5) / 4;
@@ -238,8 +238,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("EC‰_", "Cloud kill");
-		if (desc) return _("©•ª‚ğ’†S‚Æ‚µ‚½“Å‚Ì‹…‚ğ”­¶‚³‚¹‚éB", "Generate a ball of poison centered on you.");
+		if (name) return _("æ®ºæˆ®é›²", "Cloud kill");
+		if (desc) return _("è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸæ¯’ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚", "Generate a ball of poison centered on you.");
 
 		{
 			HIT_POINT dam = (30 + plev) * 2;
@@ -255,8 +255,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("ƒ‚ƒ“ƒXƒ^[Á–Å", "Genocide One");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğÁ‚µ‹‚éBŒoŒ±’l‚âƒAƒCƒeƒ€‚Íè‚É“ü‚ç‚È‚¢B’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to vanish a monster.");
+		if (name) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ¶ˆæ»…", "Genocide One");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’æ¶ˆã—å»ã‚‹ã€‚çµŒé¨“å€¤ã‚„ã‚¢ã‚¤ãƒ†ãƒ ã¯æ‰‹ã«å…¥ã‚‰ãªã„ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to vanish a monster.");
 
 		{
 			int power = plev + 50;
@@ -273,8 +273,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("“Å‚Ìn", "Poison Branding");
-		if (desc) return _("•Ší‚É“Å‚Ì‘®«‚ğ‚Â‚¯‚éB", "Makes current weapon poison branded.");
+		if (name) return _("æ¯’ã®åˆƒ", "Poison Branding");
+		if (desc) return _("æ­¦å™¨ã«æ¯’ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚", "Makes current weapon poison branded.");
 
 		{
 			if (cast)
@@ -285,8 +285,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("‹zŒŒ‚Ì–î", "Vampiric Bolt");
-		if (desc) return _("ƒ{ƒ‹ƒg‚É‚æ‚èƒ‚ƒ“ƒXƒ^[1‘Ì‚©‚ç¶–½—Í‚ğ‹z‚¢‚Æ‚éB‹z‚¢‚Æ‚Á‚½¶–½—Í‚É‚æ‚Á‚Ä–• “x‚ªã‚ª‚éB",
+		if (name) return _("å¸è¡€ã®çŸ¢", "Vampiric Bolt");
+		if (desc) return _("ãƒœãƒ«ãƒˆã«ã‚ˆã‚Šãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‹ã‚‰ç”Ÿå‘½åŠ›ã‚’å¸ã„ã¨ã‚‹ã€‚å¸ã„ã¨ã£ãŸç”Ÿå‘½åŠ›ã«ã‚ˆã£ã¦æº€è…¹åº¦ãŒä¸ŠãŒã‚‹ã€‚",
 			"Absorbs some HP from a monster and gives them to you by bolt. You will also gain nutritional sustenance from this.");
 
 		{
@@ -331,8 +331,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("”½°‚Ìp", "Animate dead");
-		if (desc) return _("üˆÍ‚Ì€‘Ì‚âœ‚ğ¶‚«•Ô‚·B", "Resurrects nearby corpse and skeletons. And makes these your pets.");
+		if (name) return _("åé­‚ã®è¡“", "Animate dead");
+		if (desc) return _("å‘¨å›²ã®æ­»ä½“ã‚„éª¨ã‚’ç”Ÿãè¿”ã™ã€‚", "Resurrects nearby corpse and skeletons. And makes these your pets.");
 
 		{
 			if (cast)
@@ -343,8 +343,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("–•E", "Genocide");
-		if (desc) return _("w’è‚µ‚½•¶š‚Ìƒ‚ƒ“ƒXƒ^[‚ğŒ»İ‚ÌŠK‚©‚çÁ‚µ‹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB",
+		if (name) return _("æŠ¹æ®º", "Genocide");
+		if (desc) return _("æŒ‡å®šã—ãŸæ–‡å­—ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ç¾åœ¨ã®éšã‹ã‚‰æ¶ˆã—å»ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚",
 			"Eliminates an entire class of monster, exhausting you.  Powerful or unique monsters may resist.");
 
 		{
@@ -360,8 +360,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("‹¶ím‰»", "Berserk");
-		if (desc) return _("‹¶ím‰»‚µA‹°•|‚ğœ‹‚·‚éB", "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.");
+		if (name) return _("ç‹‚æˆ¦å£«åŒ–", "Berserk");
+		if (desc) return _("ç‹‚æˆ¦å£«åŒ–ã—ã€ææ€–ã‚’é™¤å»ã™ã‚‹ã€‚", "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.");
 
 		{
 			int base = 25;
@@ -376,8 +376,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("ˆ«—ì¢Š«", "Invoke Spirits");
-		if (desc) return _("ƒ‰ƒ“ƒ_ƒ€‚Å—lX‚ÈŒø‰Ê‚ª‹N‚±‚éB", "Causes random effects.");
+		if (name) return _("æ‚ªéœŠå¬å–š", "Invoke Spirits");
+		if (desc) return _("ãƒ©ãƒ³ãƒ€ãƒ ã§æ§˜ã€…ãªåŠ¹æœãŒèµ·ã“ã‚‹ã€‚", "Causes random effects.");
 
 		{
 			if (info) return s_random;
@@ -392,8 +392,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("ˆÃ•‚Ì–î", "Dark Bolt");
-		if (desc) return _("ˆÃ•‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or beam of darkness.");
+		if (name) return _("æš—é»’ã®çŸ¢", "Dark Bolt");
+		if (desc) return _("æš—é»’ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or beam of darkness.");
 
 		{
 			int dice = 4 + (plev - 5) / 4;
@@ -411,8 +411,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("‹¶—ím", "Battle Frenzy");
-		if (desc) return _("‹¶ím‰»‚µA‹°•|‚ğœ‹‚µA‰Á‘¬‚·‚éB",
+		if (name) return _("ç‹‚ä¹±æˆ¦å£«", "Battle Frenzy");
+		if (desc) return _("ç‹‚æˆ¦å£«åŒ–ã—ã€ææ€–ã‚’é™¤å»ã—ã€åŠ é€Ÿã™ã‚‹ã€‚",
 			"Gives another bonus to hit and HP, immunity to fear for a while. Hastes you. But decreases AC.");
 
 		{
@@ -431,8 +431,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("‹zŒŒ‚Ìn", "Vampiric Branding");
-		if (desc) return _("•Ší‚É‹zŒŒ‚Ì‘®«‚ğ‚Â‚¯‚éB", "Makes current weapon Vampiric.");
+		if (name) return _("å¸è¡€ã®åˆƒ", "Vampiric Branding");
+		if (desc) return _("æ­¦å™¨ã«å¸è¡€ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚", "Makes current weapon Vampiric.");
 
 		{
 			if (cast)
@@ -443,8 +443,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("‹zŒŒ‚Ì˜A–î", "Vampiric Bolts");
-		if (desc) return _("3˜AË‚Ìƒ{ƒ‹ƒg‚É‚æ‚èƒ‚ƒ“ƒXƒ^[1‘Ì‚©‚ç¶–½—Í‚ğ‹z‚¢‚Æ‚éB‹z‚¢‚Æ‚Á‚½¶–½—Í‚É‚æ‚Á‚Ä‘Ì—Í‚ª‰ñ•œ‚·‚éB",
+		if (name) return _("å¸è¡€ã®é€£çŸ¢", "Vampiric Bolts");
+		if (desc) return _("3é€£å°„ã®ãƒœãƒ«ãƒˆã«ã‚ˆã‚Šãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‹ã‚‰ç”Ÿå‘½åŠ›ã‚’å¸ã„ã¨ã‚‹ã€‚å¸ã„ã¨ã£ãŸç”Ÿå‘½åŠ›ã«ã‚ˆã£ã¦ä½“åŠ›ãŒå›å¾©ã™ã‚‹ã€‚",
 			"Fires 3 bolts. Each of the bolts absorbs some HP from a monster and gives them to you.");
 		{
 			HIT_POINT dam = 100;
@@ -470,8 +470,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("€‚ÌŒ¾°", "Nether Wave");
-		if (desc) return _("‹ŠE“à‚Ì¶–½‚Ì‚ ‚éƒ‚ƒ“ƒXƒ^[‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚éB", "Damages all living monsters in sight.");
+		if (name) return _("æ­»ã®è¨€é­‚", "Nether Wave");
+		if (desc) return _("è¦–ç•Œå†…ã®ç”Ÿå‘½ã®ã‚ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚", "Damages all living monsters in sight.");
 
 		{
 			int sides = plev * 3;
@@ -486,8 +486,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 23:
-		if (name) return _("ˆÃ•‚Ì—’", "Darkness Storm");
-		if (desc) return _("‹‘å‚ÈˆÃ•‚Ì‹…‚ğ•ú‚ÂB", "Fires a huge ball of darkness.");
+		if (name) return _("æš—é»’ã®åµ", "Darkness Storm");
+		if (desc) return _("å·¨å¤§ãªæš—é»’ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a huge ball of darkness.");
 
 		{
 			HIT_POINT dam = 100 + plev * 2;
@@ -505,8 +505,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("€‚ÌŒõü", "Death Ray");
-		if (desc) return _("€‚ÌŒõü‚ğ•ú‚ÂB", "Fires a beam of death.");
+		if (name) return _("æ­»ã®å…‰ç·š", "Death Ray");
+		if (desc) return _("æ­»ã®å…‰ç·šã‚’æ”¾ã¤ã€‚", "Fires a beam of death.");
 
 		{
 			if (cast)
@@ -519,8 +519,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("€Ò¢Š«", "Raise the Dead");
-		if (desc) return _("1‘Ì‚ÌƒAƒ“ƒfƒbƒh‚ğ¢Š«‚·‚éB", "Summons an undead monster.");
+		if (name) return _("æ­»è€…å¬å–š", "Raise the Dead");
+		if (desc) return _("1ä½“ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’å¬å–šã™ã‚‹ã€‚", "Summons an undead monster.");
 
 		{
 			if (cast)
@@ -539,18 +539,18 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, type, flg))
 				{
-					msg_print(_("—â‚½‚¢•—‚ª‚ ‚È‚½‚Ìü‚è‚É‚«n‚ß‚½B‚»‚ê‚Í•…”sL‚ğ‰^‚ñ‚Å‚¢‚é...",
+					msg_print(_("å†·ãŸã„é¢¨ãŒã‚ãªãŸã®å‘¨ã‚Šã«å¹ãå§‹ã‚ãŸã€‚ãã‚Œã¯è…æ•—è‡­ã‚’é‹ã‚“ã§ã„ã‚‹...",
 						"Cold winds begin to blow around you, carrying with them the stench of decay..."));
 
 
 					if (pet)
 					{
-						msg_print(_("ŒÃ‚¦‚Ì€‚¹‚éÒ‹¤‚ª‚ ‚È‚½‚Éd‚¦‚é‚½‚ß“y‚©‚çáS‚Á‚½I",
+						msg_print(_("å¤ãˆã®æ­»ã›ã‚‹è€…å…±ãŒã‚ãªãŸã«ä»•ãˆã‚‹ãŸã‚åœŸã‹ã‚‰ç”¦ã£ãŸï¼",
 							"Ancient, long-dead forms arise from the ground to serve you!"));
 					}
 					else
 					{
-						msg_print(_("€Ò‚ªáS‚Á‚½B–°‚è‚ğ–W‚°‚é‚ ‚È‚½‚ğ”±‚·‚é‚½‚ß‚ÉI",
+						msg_print(_("æ­»è€…ãŒç”¦ã£ãŸã€‚çœ ã‚Šã‚’å¦¨ã’ã‚‹ã‚ãªãŸã‚’ç½°ã™ã‚‹ãŸã‚ã«ï¼",
 							"'The dead arise... to punish you for disturbing them!'"));
 					}
 
@@ -561,8 +561,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 26:
-		if (name) return _("€Ò‚Ì”é“`", "Esoteria");
-		if (desc) return _("ƒAƒCƒeƒ€‚ğ1‚Â¯•Ê‚·‚éBƒŒƒxƒ‹‚ª‚‚¢‚ÆƒAƒCƒeƒ€‚Ì”\—Í‚ğŠ®‘S‚É’m‚é‚±‚Æ‚ª‚Å‚«‚éB",
+		if (name) return _("æ­»è€…ã®ç§˜ä¼", "Esoteria");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’1ã¤è­˜åˆ¥ã™ã‚‹ã€‚ãƒ¬ãƒ™ãƒ«ãŒé«˜ã„ã¨ã‚¢ã‚¤ãƒ†ãƒ ã®èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚",
 			"Identifies an item. Or *identifies* an item at higher level.");
 
 		{
@@ -581,8 +581,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 27:
-		if (name) return _("‹zŒŒ‹S•Ï‰»", "Polymorph Vampire");
-		if (desc) return _("ˆê’èŠÔA‹zŒŒ‹S‚É•Ï‰»‚·‚éB•Ï‰»‚µ‚Ä‚¢‚éŠÔ‚Í–{—ˆ‚Ìí‘°‚Ì”\—Í‚ğ¸‚¢A‘ã‚í‚è‚É‹zŒŒ‹S‚Æ‚µ‚Ä‚Ì”\—Í‚ğ“¾‚éB",
+		if (name) return _("å¸è¡€é¬¼å¤‰åŒ–", "Polymorph Vampire");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€å¸è¡€é¬¼ã«å¤‰åŒ–ã™ã‚‹ã€‚å¤‰åŒ–ã—ã¦ã„ã‚‹é–“ã¯æœ¬æ¥ã®ç¨®æ—ã®èƒ½åŠ›ã‚’å¤±ã„ã€ä»£ã‚ã‚Šã«å¸è¡€é¬¼ã¨ã—ã¦ã®èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚",
 			"Mimic a vampire for a while. Loses abilities of original race and gets abilities as a vampire.");
 
 		{
@@ -598,8 +598,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("ŒoŒ±’l•œŠˆ", "Restore Life");
-		if (desc) return _("¸‚Á‚½ŒoŒ±’l‚ğ‰ñ•œ‚·‚éB", "Restore lost experience.");
+		if (name) return _("çµŒé¨“å€¤å¾©æ´»", "Restore Life");
+		if (desc) return _("å¤±ã£ãŸçµŒé¨“å€¤ã‚’å›å¾©ã™ã‚‹ã€‚", "Restore lost experience.");
 
 		{
 			if (cast)
@@ -610,8 +610,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("ü•Ó–•E", "Mass Genocide");
-		if (desc) return _("©•ª‚ÌüˆÍ‚É‚¢‚éƒ‚ƒ“ƒXƒ^[‚ğŒ»İ‚ÌŠK‚©‚çÁ‚µ‹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB",
+		if (name) return _("å‘¨è¾ºæŠ¹æ®º", "Mass Genocide");
+		if (desc) return _("è‡ªåˆ†ã®å‘¨å›²ã«ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ç¾åœ¨ã®éšã‹ã‚‰æ¶ˆã—å»ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚",
 			"Eliminates all nearby monsters, exhausting you.  Powerful or unique monsters may be able to resist.");
 
 		{
@@ -627,8 +627,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("’n–‚Ì…‰Î", "Hellfire");
-		if (desc) return _("×ˆ«‚È—Í‚ğ‚Â•óì‚ğ•ú‚ÂB‘P—Ç‚Èƒ‚ƒ“ƒXƒ^[‚É‚Í‘å‚«‚Èƒ_ƒ[ƒW‚ğ—^‚¦‚éB",
+		if (name) return _("åœ°ç„ã®åŠ«ç«", "Hellfire");
+		if (desc) return _("é‚ªæ‚ªãªåŠ›ã‚’æŒã¤å®ç ã‚’æ”¾ã¤ã€‚å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚",
 			"Fires a powerful ball of evil power. Hurts good monsters greatly.");
 
 		{
@@ -642,14 +642,14 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 				fire_ball(GF_HELL_FIRE, dir, dam, rad);
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), _("’n–‚Ì…‰Î‚Ìô•¶‚ğ¥‚¦‚½”æ˜J", "the strain of casting Hellfire"), -1);
+				take_hit(DAMAGE_USELIFE, 20 + randint1(30), _("åœ°ç„ã®åŠ«ç«ã®å‘ªæ–‡ã‚’å”±ãˆãŸç–²åŠ´", "the strain of casting Hellfire"), -1);
 			}
 		}
 		break;
 
 	case 31:
-		if (name) return _("—H‘Ì‰»", "Wraithform");
-		if (desc) return _("ˆê’èŠÔA•Ç‚ğ’Ê‚è”²‚¯‚é‚±‚Æ‚ª‚Å‚«ó‚¯‚éƒ_ƒ[ƒW‚ªŒyŒ¸‚³‚ê‚é—H‘Ì‚Ìó‘Ô‚É•Ïg‚·‚éB",
+		if (name) return _("å¹½ä½“åŒ–", "Wraithform");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€å£ã‚’é€šã‚ŠæŠœã‘ã‚‹ã“ã¨ãŒã§ãå—ã‘ã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒè»½æ¸›ã•ã‚Œã‚‹å¹½ä½“ã®çŠ¶æ…‹ã«å¤‰èº«ã™ã‚‹ã€‚",
 			"Becomes wraith form which gives ability to pass walls and makes all damages half.");
 
 		{

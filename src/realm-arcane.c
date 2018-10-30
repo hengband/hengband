@@ -1,11 +1,11 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 
 /*!
-* @brief ”ép—Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief ç§˜è¡“é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -20,8 +20,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("“dŒ‚", "Zap");
-		if (desc) return _("“dŒ‚‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or beam of lightning.");
+		if (name) return _("é›»æ’ƒ", "Zap");
+		if (desc) return _("é›»æ’ƒã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or beam of lightning.");
 
 		{
 			int dice = 3 + (plev - 1) / 5;
@@ -39,8 +39,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("–‚–@‚Ì{ù", "Wizard Lock");
-		if (desc) return _("”à‚ÉŒ®‚ğ‚©‚¯‚éB", "Locks a door.");
+		if (name) return _("é­”æ³•ã®æ–½éŒ ", "Wizard Lock");
+		if (desc) return _("æ‰‰ã«éµã‚’ã‹ã‘ã‚‹ã€‚", "Locks a door.");
 
 		{
 			if (cast)
@@ -53,8 +53,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("“§–¾‘ÌŠ´’m", "Detect Invisibility");
-		if (desc) return _("‹ß‚­‚Ì“§–¾‚Èƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB", "Detects all invisible monsters in your vicinity.");
+		if (name) return _("é€æ˜ä½“æ„ŸçŸ¥", "Detect Invisibility");
+		if (desc) return _("è¿‘ãã®é€æ˜ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all invisible monsters in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -69,8 +69,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("ƒ‚ƒ“ƒXƒ^[Š´’m", "Detect Monsters");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚ÌŒ©‚¦‚éƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB", "Detects all monsters in your vicinity unless invisible.");
+		if (name) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ„ŸçŸ¥", "Detect Monsters");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®è¦‹ãˆã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all monsters in your vicinity unless invisible.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -85,8 +85,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("ƒVƒ‡[ƒgEƒeƒŒƒ|[ƒg", "Blink");
-		if (desc) return _("‹ß‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB", "Teleport short distance.");
+		if (name) return _("ã‚·ãƒ§ãƒ¼ãƒˆãƒ»ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "Blink");
+		if (desc) return _("è¿‘è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚", "Teleport short distance.");
 
 		{
 			POSITION range = 10;
@@ -101,8 +101,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("ƒ‰ƒCƒgEƒGƒŠƒA", "Light Area");
-		if (desc) return _("ŒõŒ¹‚ªÆ‚ç‚µ‚Ä‚¢‚é”ÍˆÍ‚©•”‰®‘S‘Ì‚ğ‰i‹v‚É–¾‚é‚­‚·‚éB", "Lights up nearby area and the inside of a room permanently.");
+		if (name) return _("ãƒ©ã‚¤ãƒˆãƒ»ã‚¨ãƒªã‚¢", "Light Area");
+		if (desc) return _("å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚", "Lights up nearby area and the inside of a room permanently.");
 
 		{
 			int dice = 2;
@@ -119,8 +119,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("ã©‚Æ”à ”j‰ó", "Trap & Door Destruction");
-		if (desc) return _("ˆê’¼üã‚Ì‘S‚Ä‚Ìã©‚Æ”à‚ğ”j‰ó‚·‚éB", "Fires a beam which destroy traps and doors.");
+		if (name) return _("ç½ ã¨æ‰‰ ç ´å£Š", "Trap & Door Destruction");
+		if (desc) return _("ä¸€ç›´ç·šä¸Šã®å…¨ã¦ã®ç½ ã¨æ‰‰ã‚’ç ´å£Šã™ã‚‹ã€‚", "Fires a beam which destroy traps and doors.");
 
 		{
 			if (cast)
@@ -133,8 +133,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("Œy‚Ì¡–ü", "Cure Light Wounds");
-		if (desc) return _("‰ö‰ä‚Æ‘Ì—Í‚ğ­‚µ‰ñ•œ‚³‚¹‚éB", "Heals cut and HP a little.");
+		if (name) return _("è»½å‚·ã®æ²»ç™’", "Cure Light Wounds");
+		if (desc) return _("æ€ªæˆ‘ã¨ä½“åŠ›ã‚’å°‘ã—å›å¾©ã•ã›ã‚‹ã€‚", "Heals cut and HP a little.");
 
 		{
 			int dice = 2;
@@ -146,8 +146,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("ã©‚Æ”à Š´’m", "Detect Doors & Traps");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚Ìã©‚Æ”à‚ÆŠK’i‚ğŠ´’m‚·‚éB", "Detects traps, doors, and stairs in your vicinity.");
+		if (name) return _("ç½ ã¨æ‰‰ æ„ŸçŸ¥", "Detect Doors & Traps");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ç½ ã¨æ‰‰ã¨éšæ®µã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects traps, doors, and stairs in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -164,8 +164,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("”R‘f", "Phlogiston");
-		if (desc) return _("ŒõŒ¹‚É”R—¿‚ğ•â‹‹‚·‚éB", "Adds more turns of light to a lantern or torch.");
+		if (name) return _("ç‡ƒç´ ", "Phlogiston");
+		if (desc) return _("å…‰æºã«ç‡ƒæ–™ã‚’è£œçµ¦ã™ã‚‹ã€‚", "Adds more turns of light to a lantern or torch.");
 
 		{
 			if (cast)
@@ -176,8 +176,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("à•óŠ´’m", "Detect Treasure");
-		if (desc) return _("‹ß‚­‚Ìà•ó‚ğŠ´’m‚·‚éB", "Detects all treasures in your vicinity.");
+		if (name) return _("è²¡å®æ„ŸçŸ¥", "Detect Treasure");
+		if (desc) return _("è¿‘ãã®è²¡å®ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all treasures in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -193,8 +193,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("–‚–@ Š´’m", "Detect Enchantment");
-		if (desc) return _("‹ß‚­‚Ì–‚–@‚ª‚©‚©‚Á‚½ƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB", "Detects all magical items in your vicinity.");
+		if (name) return _("é­”æ³• æ„ŸçŸ¥", "Detect Enchantment");
+		if (desc) return _("è¿‘ãã®é­”æ³•ãŒã‹ã‹ã£ãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all magical items in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -209,8 +209,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("ƒAƒCƒeƒ€Š´’m", "Detect Objects");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚ÌƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB", "Detects all items in your vicinity.");
+		if (name) return _("ã‚¢ã‚¤ãƒ†ãƒ æ„ŸçŸ¥", "Detect Objects");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all items in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -225,8 +225,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("‰ğ“Å", "Cure Poison");
-		if (desc) return _("“Å‚ğ‘Ì“à‚©‚çŠ®‘S‚Éæ‚èœ‚­B", "Cures poison status.");
+		if (name) return _("è§£æ¯’", "Cure Poison");
+		if (desc) return _("æ¯’ã‚’ä½“å†…ã‹ã‚‰å®Œå…¨ã«å–ã‚Šé™¤ãã€‚", "Cures poison status.");
 
 		{
 			if (cast)
@@ -237,8 +237,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("‘Ï—â", "Resist Cold");
-		if (desc) return _("ˆê’èŠÔA—â‹C‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB", "Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.");
+		if (name) return _("è€å†·", "Resist Cold");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€å†·æ°—ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚", "Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
 			int base = 20;
@@ -253,8 +253,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("‘Ï‰Î", "Resist Fire");
-		if (desc) return _("ˆê’èŠÔA‰Š‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€ç«", "Resist Fire");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ç‚ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
@@ -270,8 +270,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("‘Ï“d", "Resist Lightning");
-		if (desc) return _("ˆê’èŠÔA“dŒ‚‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€é›»", "Resist Lightning");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é›»æ’ƒã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to electricity. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
@@ -287,8 +287,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("‘Ï_", "Resist Acid");
-		if (desc) return _("ˆê’èŠÔA_‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€é…¸", "Resist Acid");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é…¸ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to acid. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
@@ -304,8 +304,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("d‚Ì¡–ü", "Cure Medium Wounds");
-		if (desc) return _("‰ö‰ä‚Æ‘Ì—Í‚ğ’†’ö“x‰ñ•œ‚³‚¹‚éB", "Heals cut and HP more.");
+		if (name) return _("é‡å‚·ã®æ²»ç™’", "Cure Medium Wounds");
+		if (desc) return _("æ€ªæˆ‘ã¨ä½“åŠ›ã‚’ä¸­ç¨‹åº¦å›å¾©ã•ã›ã‚‹ã€‚", "Heals cut and HP more.");
 
 		{
 			int dice = 4;
@@ -317,8 +317,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("ƒeƒŒƒ|[ƒg", "Teleport");
-		if (desc) return _("‰“‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB", "Teleport long distance.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "Teleport");
+		if (desc) return _("é è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚", "Teleport long distance.");
 
 		{
 			POSITION range = plev * 5;
@@ -333,8 +333,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("ŠÓ’è", "Identify");
-		if (desc) return _("ƒAƒCƒeƒ€‚ğ¯•Ê‚·‚éB", "Identifies an item.");
+		if (name) return _("é‘‘å®š", "Identify");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’è­˜åˆ¥ã™ã‚‹ã€‚", "Identifies an item.");
 
 		{
 			if (cast)
@@ -345,8 +345,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("ŠâÎ—n‰ğ", "Stone to Mud");
-		if (desc) return _("•Ç‚ğ—n‚©‚µ‚Ä°‚É‚·‚éB", "Turns one rock square to mud.");
+		if (name) return _("å²©çŸ³æº¶è§£", "Stone to Mud");
+		if (desc) return _("å£ã‚’æº¶ã‹ã—ã¦åºŠã«ã™ã‚‹ã€‚", "Turns one rock square to mud.");
 
 		{
 			int dice = 1;
@@ -365,8 +365,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("‘MŒõ", "Ray of Light");
-		if (desc) return _("Œõü‚ğ•ú‚ÂBŒõ‚è‚ğŒ™‚¤ƒ‚ƒ“ƒXƒ^[‚ÉŒø‰Ê‚ª‚ ‚éB", "Fires a beam of light which damages to light-sensitive monsters.");
+		if (name) return _("é–ƒå…‰", "Ray of Light");
+		if (desc) return _("å…‰ç·šã‚’æ”¾ã¤ã€‚å…‰ã‚Šã‚’å«Œã†ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«åŠ¹æœãŒã‚ã‚‹ã€‚", "Fires a beam of light which damages to light-sensitive monsters.");
 
 		{
 			int dice = 6;
@@ -378,15 +378,15 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				msg_print(_("Œõü‚ª•ú‚½‚ê‚½B", "A line of light appears."));
+				msg_print(_("å…‰ç·šãŒæ”¾ãŸã‚ŒãŸã€‚", "A line of light appears."));
 				lite_line(dir, damroll(6, 8));
 			}
 		}
 		break;
 
 	case 23:
-		if (name) return _("‹ó• [‘«", "Satisfy Hunger");
-		if (desc) return _("–• ‚É‚·‚éB", "Satisfies hunger.");
+		if (name) return _("ç©ºè…¹å……è¶³", "Satisfy Hunger");
+		if (desc) return _("æº€è…¹ã«ã™ã‚‹ã€‚", "Satisfies hunger.");
 
 		{
 			if (cast)
@@ -397,8 +397,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("“§–¾‹”F", "See Invisible");
-		if (desc) return _("ˆê’èŠÔA“§–¾‚È‚à‚Ì‚ªŒ©‚¦‚é‚æ‚¤‚É‚È‚éB", "Gives see invisible for a while.");
+		if (name) return _("é€æ˜è¦–èª", "See Invisible");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é€æ˜ãªã‚‚ã®ãŒè¦‹ãˆã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚", "Gives see invisible for a while.");
 
 		{
 			int base = 24;
@@ -413,36 +413,36 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("ƒGƒŒƒƒ“ƒ^ƒ‹¢Š«", "Conjure Elemental");
-		if (desc) return _("1‘Ì‚ÌƒGƒŒƒƒ“ƒ^ƒ‹‚ğ¢Š«‚·‚éB", "Summons an elemental.");
+		if (name) return _("ã‚¨ãƒ¬ãƒ¡ãƒ³ã‚¿ãƒ«å¬å–š", "Conjure Elemental");
+		if (desc) return _("1ä½“ã®ã‚¨ãƒ¬ãƒ¡ãƒ³ã‚¿ãƒ«ã‚’å¬å–šã™ã‚‹ã€‚", "Summons an elemental.");
 
 		{
 			if (cast)
 			{
 				if (!summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 				{
-					msg_print(_("ƒGƒŒƒƒ“ƒ^ƒ‹‚ÍŒ»‚ê‚È‚©‚Á‚½B", "No Elementals arrive."));
+					msg_print(_("ã‚¨ãƒ¬ãƒ¡ãƒ³ã‚¿ãƒ«ã¯ç¾ã‚Œãªã‹ã£ãŸã€‚", "No Elementals arrive."));
 				}
 			}
 		}
 		break;
 
 	case 26:
-		if (name) return _("ƒeƒŒƒ|[ƒgEƒŒƒxƒ‹", "Teleport Level");
-		if (desc) return _("u‚Éã‚©‰º‚ÌŠK‚ÉƒeƒŒƒ|[ƒg‚·‚éB", "Teleport to up or down stairs in a moment.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¬ãƒ™ãƒ«", "Teleport Level");
+		if (desc) return _("ç¬æ™‚ã«ä¸Šã‹ä¸‹ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚", "Teleport to up or down stairs in a moment.");
 
 		{
 			if (cast)
 			{
-				if (!get_check(_("–{“–‚É‘¼‚ÌŠK‚ÉƒeƒŒƒ|[ƒg‚µ‚Ü‚·‚©H", "Are you sure? (Teleport Level)"))) return NULL;
+				if (!get_check(_("æœ¬å½“ã«ä»–ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ", "Are you sure? (Teleport Level)"))) return NULL;
 				teleport_level(0);
 			}
 		}
 		break;
 
 	case 27:
-		if (name) return _("ƒeƒŒƒ|[ƒgEƒ‚ƒ“ƒXƒ^[", "Teleport Away");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éƒr[ƒ€‚ğ•ú‚ÂB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Teleports all monsters on the line away unless resisted.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", "Teleport Away");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Teleports all monsters on the line away unless resisted.");
 
 		{
 			int power = plev;
@@ -459,8 +459,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("Œ³‘f‚Ì‹…", "Elemental Ball");
-		if (desc) return _("‰ŠA“dŒ‚A—â‹CA_‚Ì‚Ç‚ê‚©‚Ì‹…‚ğ•ú‚ÂB", "Fires a ball of some elements.");
+		if (name) return _("å…ƒç´ ã®çƒ", "Elemental Ball");
+		if (desc) return _("ç‚ã€é›»æ’ƒã€å†·æ°—ã€é…¸ã®ã©ã‚Œã‹ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a ball of some elements.");
 
 		{
 			HIT_POINT dam = 75 + plev;
@@ -488,8 +488,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("‘SŠ´’m", "Detection");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[Aã©A”àAŠK’iAà•óA‚»‚µ‚ÄƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB",
+		if (name) return _("å…¨æ„ŸçŸ¥", "Detection");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€ç½ ã€æ‰‰ã€éšæ®µã€è²¡å®ã€ãã—ã¦ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚",
 			"Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
 
 		{
@@ -505,8 +505,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("‹AŠÒ‚Ìô•¶", "Word of Recall");
-		if (desc) return _("’nã‚É‚¢‚é‚Æ‚«‚Íƒ_ƒ“ƒWƒ‡ƒ“‚ÌÅ[ŠK‚ÖAƒ_ƒ“ƒWƒ‡ƒ“‚É‚¢‚é‚Æ‚«‚Í’nã‚Ö‚ÆˆÚ“®‚·‚éB",
+		if (name) return _("å¸°é‚„ã®å‘ªæ–‡", "Word of Recall");
+		if (desc) return _("åœ°ä¸Šã«ã„ã‚‹ã¨ãã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®æœ€æ·±éšã¸ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«ã„ã‚‹ã¨ãã¯åœ°ä¸Šã¸ã¨ç§»å‹•ã™ã‚‹ã€‚",
 			"Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
 
 		{
@@ -523,8 +523,8 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 31:
-		if (name) return _("ç—¢Šá", "Clairvoyance");
-		if (desc) return _("‚»‚ÌŠK‘S‘Ì‚ğ‰i‹v‚ÉÆ‚ç‚µAƒ_ƒ“ƒWƒ‡ƒ““à‚·‚×‚Ä‚ÌƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB‚³‚ç‚ÉAˆê’èŠÔƒeƒŒƒpƒV[”\—Í‚ğ“¾‚éB",
+		if (name) return _("åƒé‡Œçœ¼", "Clairvoyance");
+		if (desc) return _("ãã®éšå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚ã•ã‚‰ã«ã€ä¸€å®šæ™‚é–“ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚",
 			"Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.");
 
 		{

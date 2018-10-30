@@ -1,14 +1,14 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 #include "selfinfo.h"
 
 
 
 /*!
-* @brief  —Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief åŒ é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -22,8 +22,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("ÔŠOü‹—Í", "Infravision");
-		if (desc) return _("ˆê’èŠÔAÔŠOü‹—Í‚ª‘‹­‚³‚ê‚éB", "Gives infravision for a while.");
+		if (name) return _("èµ¤å¤–ç·šè¦–åŠ›", "Infravision");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€èµ¤å¤–ç·šè¦–åŠ›ãŒå¢—å¼·ã•ã‚Œã‚‹ã€‚", "Gives infravision for a while.");
 
 		{
 			int base = 100;
@@ -38,8 +38,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("‰ñ•œ—Í‹­‰»", "Regeneration");
-		if (desc) return _("ˆê’èŠÔA‰ñ•œ—Í‚ª‘‹­‚³‚ê‚éB", "Gives regeneration ability for a while.");
+		if (name) return _("å›å¾©åŠ›å¼·åŒ–", "Regeneration");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€å›å¾©åŠ›ãŒå¢—å¼·ã•ã‚Œã‚‹ã€‚", "Gives regeneration ability for a while.");
 
 		{
 			int base = 80;
@@ -54,8 +54,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("‹ó• [‘«", "Satisfy Hunger");
-		if (desc) return _("–• ‚É‚È‚éB", "Satisfies hunger.");
+		if (name) return _("ç©ºè…¹å……è¶³", "Satisfy Hunger");
+		if (desc) return _("æº€è…¹ã«ãªã‚‹ã€‚", "Satisfies hunger.");
 
 		{
 			if (cast)
@@ -66,8 +66,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("‘Ï—â‹C", "Resist Cold");
-		if (desc) return _("ˆê’èŠÔA—â‹C‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€å†·æ°—", "Resist Cold");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€å†·æ°—ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
@@ -83,8 +83,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("‘Ï‰Î‰Š", "Resist Fire");
-		if (desc) return _("ˆê’èŠÔA‰Š‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€ç«ç‚", "Resist Fire");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ç‚ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
@@ -100,8 +100,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("m‹C‚—g", "Heroism");
-		if (desc) return _("ˆê’èŠÔAƒq[ƒ[‹C•ª‚É‚È‚éB", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
+		if (name) return _("å£«æ°—é«˜æš", "Heroism");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚‹ã€‚", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
 
 		{
 			int base = 25;
@@ -116,8 +116,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("‘Ï“dŒ‚", "Resist Lightning");
-		if (desc) return _("ˆê’èŠÔA“dŒ‚‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€é›»æ’ƒ", "Resist Lightning");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é›»æ’ƒã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to electricity. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
@@ -133,8 +133,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("‘Ï_", "Resist Acid");
-		if (desc) return _("ˆê’èŠÔA_‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€é…¸", "Resist Acid");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é…¸ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to acid. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
@@ -150,8 +150,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("“§–¾‹”F", "See Invisibility");
-		if (desc) return _("ˆê’èŠÔA“§–¾‚È‚à‚Ì‚ªŒ©‚¦‚é‚æ‚¤‚É‚È‚éB", "Gives see invisible for a while.");
+		if (name) return _("é€æ˜è¦–èª", "See Invisibility");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é€æ˜ãªã‚‚ã®ãŒè¦‹ãˆã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚", "Gives see invisible for a while.");
 
 		{
 			int base = 24;
@@ -166,23 +166,23 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("‰ğô", "Remove Curse");
-		if (desc) return _("ƒAƒCƒeƒ€‚É‚©‚©‚Á‚½ã‚¢ô‚¢‚ğ‰ğœ‚·‚éB", "Removes normal curses from equipped items.");
+		if (name) return _("è§£å‘ª", "Remove Curse");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼±ã„å‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚", "Removes normal curses from equipped items.");
 
 		{
 			if (cast)
 			{
 				if (remove_curse())
 				{
-					msg_print(_("’N‚©‚ÉŒ©ç‚ç‚ê‚Ä‚¢‚é‚æ‚¤‚È‹C‚ª‚·‚éB", "You feel as if someone is watching over you."));
+					msg_print(_("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 10:
-		if (name) return _("‘Ï“Å", "Resist Poison");
-		if (desc) return _("ˆê’èŠÔA“Å‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€æ¯’", "Resist Poison");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€æ¯’ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to poison. This resistance can be added to which from equipment for more powerful resistance.");
 
 		{
@@ -198,8 +198,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("‹¶ím‰»", "Berserk");
-		if (desc) return _("‹¶ím‰»‚µA‹°•|‚ğœ‹‚·‚éB", "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.");
+		if (name) return _("ç‹‚æˆ¦å£«åŒ–", "Berserk");
+		if (desc) return _("ç‹‚æˆ¦å£«åŒ–ã—ã€ææ€–ã‚’é™¤å»ã™ã‚‹ã€‚", "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.");
 
 		{
 			int base = 25;
@@ -214,8 +214,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("©ŒÈ•ªÍ", "Self Knowledge");
-		if (desc) return _("Œ»İ‚Ì©•ª‚Ìó‘Ô‚ğŠ®‘S‚É’m‚éB",
+		if (name) return _("è‡ªå·±åˆ†æ", "Self Knowledge");
+		if (desc) return _("ç¾åœ¨ã®è‡ªåˆ†ã®çŠ¶æ…‹ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚",
 			"Gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.");
 
 		{
@@ -227,8 +227,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("‘Î×ˆ«Œ‹ŠE", "Protection from Evil");
-		if (desc) return _("×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚ÌUŒ‚‚ğ–h‚®ƒoƒŠƒA‚ğ’£‚éB", "Gives aura which protect you from evil monster's physical attack.");
+		if (name) return _("å¯¾é‚ªæ‚ªçµç•Œ", "Protection from Evil");
+		if (desc) return _("é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ”»æ’ƒã‚’é˜²ããƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚", "Gives aura which protect you from evil monster's physical attack.");
 
 		{
 			int base = 3 * plev;
@@ -244,8 +244,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("–ü‚µ", "Cure");
-		if (desc) return _("“ÅANOó‘ÔA•‰‚ğ‘S‰õ‚³‚¹AŒ¶Šo‚ğ’¼‚·B", "Heals poison, stun, cut and hallucination completely.");
+		if (name) return _("ç™’ã—", "Cure");
+		if (desc) return _("æ¯’ã€æœ¦æœ§çŠ¶æ…‹ã€è² å‚·ã‚’å…¨å¿«ã•ã›ã€å¹»è¦šã‚’ç›´ã™ã€‚", "Heals poison, stun, cut and hallucination completely.");
 
 		{
 			if (cast)
@@ -256,8 +256,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("–‚–@Œ•", "Mana Branding");
-		if (desc) return _("ˆê’èŠÔA•Ší‚É—â‹CA‰ŠA“dŒ‚A_A“Å‚Ì‚¢‚¸‚ê‚©‚Ì‘®«‚ğ‚Â‚¯‚éB•Ší‚ğ‚½‚È‚¢‚Æg‚¦‚È‚¢B",
+		if (name) return _("é­”æ³•å‰£", "Mana Branding");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€æ­¦å™¨ã«å†·æ°—ã€ç‚ã€é›»æ’ƒã€é…¸ã€æ¯’ã®ã„ãšã‚Œã‹ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚æ­¦å™¨ã‚’æŒãŸãªã„ã¨ä½¿ãˆãªã„ã€‚",
 			"Makes current weapon some elemental branded. You must wield weapons.");
 
 		{
@@ -273,8 +273,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("ƒeƒŒƒpƒV[", "Telepathy");
-		if (desc) return _("ˆê’èŠÔAƒeƒŒƒpƒV[”\—Í‚ğ“¾‚éB", "Gives telepathy for a while.");
+		if (name) return _("ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼", "Telepathy");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚", "Gives telepathy for a while.");
 
 		{
 			int base = 25;
@@ -290,8 +290,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("”§Î‰»", "Stone Skin");
-		if (desc) return _("ˆê’èŠÔAAC‚ğã¸‚³‚¹‚éB", "Gives bonus to AC for a while.");
+		if (name) return _("è‚ŒçŸ³åŒ–", "Stone Skin");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ACã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚", "Gives bonus to AC for a while.");
 
 		{
 			int base = 30;
@@ -307,8 +307,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("‘S‘Ï«", "Resistance");
-		if (desc) return _("ˆê’èŠÔA_A“dŒ‚A‰ŠA—â‹CA“Å‚É‘Î‚·‚é‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("å…¨è€æ€§", "Resistance");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é…¸ã€é›»æ’ƒã€ç‚ã€å†·æ°—ã€æ¯’ã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.");
 
 		{
@@ -328,8 +328,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("ƒXƒs[ƒh", "Haste Self");
-		if (desc) return _("ˆê’èŠÔA‰Á‘¬‚·‚éB", "Hastes you for a while.");
+		if (name) return _("ã‚¹ãƒ”ãƒ¼ãƒ‰", "Haste Self");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€åŠ é€Ÿã™ã‚‹ã€‚", "Hastes you for a while.");
 
 		{
 			int base = plev;
@@ -345,8 +345,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("•Ç”²‚¯", "Walk through Wall");
-		if (desc) return _("ˆê’èŠÔA”¼•¨¿‰»‚µ•Ç‚ğ’Ê‚è”²‚¯‚ç‚ê‚é‚æ‚¤‚É‚È‚éB", "Gives ability to pass walls for a while.");
+		if (name) return _("å£æŠœã‘", "Walk through Wall");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€åŠç‰©è³ªåŒ–ã—å£ã‚’é€šã‚ŠæŠœã‘ã‚‰ã‚Œã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚", "Gives ability to pass walls for a while.");
 
 		{
 			int base = plev / 2;
@@ -361,8 +361,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("‚–‚«", "Polish Shield");
-		if (desc) return _("‚‚É”½Ë‚Ì‘®«‚ğ‚Â‚¯‚éB", "Makes a shield a shield of reflection.");
+		if (name) return _("ç›¾ç£¨ã", "Polish Shield");
+		if (desc) return _("ç›¾ã«åå°„ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚", "Makes a shield a shield of reflection.");
 
 		{
 			if (cast)
@@ -373,27 +373,27 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("ƒS[ƒŒƒ€»‘¢", "Create Golem");
-		if (desc) return _("1‘Ì‚ÌƒS[ƒŒƒ€‚ğ»‘¢‚·‚éB", "Creates a golem.");
+		if (name) return _("ã‚´ãƒ¼ãƒ¬ãƒ è£½é€ ", "Create Golem");
+		if (desc) return _("1ä½“ã®ã‚´ãƒ¼ãƒ¬ãƒ ã‚’è£½é€ ã™ã‚‹ã€‚", "Creates a golem.");
 
 		{
 			if (cast)
 			{
 				if (summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_GOLEM, PM_FORCE_PET))
 				{
-					msg_print(_("ƒS[ƒŒƒ€‚ğì‚Á‚½B", "You make a golem."));
+					msg_print(_("ã‚´ãƒ¼ãƒ¬ãƒ ã‚’ä½œã£ãŸã€‚", "You make a golem."));
 				}
 				else
 				{
-					msg_print(_("‚¤‚Ü‚­ƒS[ƒŒƒ€‚ğì‚ê‚È‚©‚Á‚½B", "No Golems arrive."));
+					msg_print(_("ã†ã¾ãã‚´ãƒ¼ãƒ¬ãƒ ã‚’ä½œã‚Œãªã‹ã£ãŸã€‚", "No Golems arrive."));
 				}
 			}
 		}
 		break;
 
 	case 23:
-		if (name) return _("–‚–@‚ÌŠZ", "Magical armor");
-		if (desc) return _("ˆê’èŠÔA–‚–@–hŒä—Í‚ÆAC‚ªã‚ª‚èA¬—‚Æ–Ó–Ú‚Ì‘Ï«A”½Ë”\—ÍA–ƒáƒ’m‚ç‚¸A•‚—V‚ğ“¾‚éB",
+		if (name) return _("é­”æ³•ã®é§", "Magical armor");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é­”æ³•é˜²å¾¡åŠ›ã¨ACãŒä¸ŠãŒã‚Šã€æ··ä¹±ã¨ç›²ç›®ã®è€æ€§ã€åå°„èƒ½åŠ›ã€éº»ç—ºçŸ¥ã‚‰ãšã€æµ®éŠã‚’å¾—ã‚‹ã€‚",
 			"Gives resistance to magic, bonus to AC, resistance to confusion, blindness, reflection, free action and levitation for a while.");
 
 		{
@@ -409,8 +409,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("‘•”õ–³—Í‰»", "Remove Enchantment");
-		if (desc) return _("•ŠíE–h‹ï‚É‚©‚¯‚ç‚ê‚½‚ ‚ç‚ä‚é–‚—Í‚ğŠ®‘S‚É‰ğœ‚·‚éB", "Removes all magics completely from any weapon or armor.");
+		if (name) return _("è£…å‚™ç„¡åŠ›åŒ–", "Remove Enchantment");
+		if (desc) return _("æ­¦å™¨ãƒ»é˜²å…·ã«ã‹ã‘ã‚‰ã‚ŒãŸã‚ã‚‰ã‚†ã‚‹é­”åŠ›ã‚’å®Œå…¨ã«è§£é™¤ã™ã‚‹ã€‚", "Removes all magics completely from any weapon or armor.");
 
 		{
 			if (cast)
@@ -421,23 +421,23 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("ô‚¢•²Ó", "Remove All Curse");
-		if (desc) return _("ƒAƒCƒeƒ€‚É‚©‚©‚Á‚½‹­—Í‚Èô‚¢‚ğ‰ğœ‚·‚éB", "Removes normal and heavy curse from equipped items.");
+		if (name) return _("å‘ªã„ç²‰ç •", "Remove All Curse");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼·åŠ›ãªå‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚", "Removes normal and heavy curse from equipped items.");
 
 		{
 			if (cast)
 			{
 				if (remove_all_curse())
 				{
-					msg_print(_("’N‚©‚ÉŒ©ç‚ç‚ê‚Ä‚¢‚é‚æ‚¤‚È‹C‚ª‚·‚éB", "You feel as if someone is watching over you."));
+					msg_print(_("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 26:
-		if (name) return _("Š®‘S‚È‚é’m¯", "Knowledge True");
-		if (desc) return _("ƒAƒCƒeƒ€‚Ì‚Â”\—Í‚ğŠ®‘S‚É’m‚éB", "*Identifies* an item.");
+		if (name) return _("å®Œå…¨ãªã‚‹çŸ¥è­˜", "Knowledge True");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚", "*Identifies* an item.");
 
 		{
 			if (cast)
@@ -448,8 +448,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 27:
-		if (name) return _("•Ší‹­‰»", "Enchant Weapon");
-		if (desc) return _("•Ší‚Ì–½’†—¦C³‚Æƒ_ƒ[ƒWC³‚ğ‹­‰»‚·‚éB", "Attempts to increase +to-hit, +to-dam of a weapon.");
+		if (name) return _("æ­¦å™¨å¼·åŒ–", "Enchant Weapon");
+		if (desc) return _("æ­¦å™¨ã®å‘½ä¸­ç‡ä¿®æ­£ã¨ãƒ€ãƒ¡ãƒ¼ã‚¸ä¿®æ­£ã‚’å¼·åŒ–ã™ã‚‹ã€‚", "Attempts to increase +to-hit, +to-dam of a weapon.");
 
 		{
 			if (cast)
@@ -460,8 +460,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("–h‹ï‹­‰»", "Enchant Armor");
-		if (desc) return _("ŠZ‚Ì–hŒäC³‚ğ‹­‰»‚·‚éB", "Attempts to increase +AC of an armor.");
+		if (name) return _("é˜²å…·å¼·åŒ–", "Enchant Armor");
+		if (desc) return _("é§ã®é˜²å¾¡ä¿®æ­£ã‚’å¼·åŒ–ã™ã‚‹ã€‚", "Attempts to increase +AC of an armor.");
 
 		{
 			if (cast)
@@ -472,8 +472,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("•Ší‘®«•t—^", "Brand Weapon");
-		if (desc) return _("•Ší‚Éƒ‰ƒ“ƒ_ƒ€‚É‘®«‚ğ‚Â‚¯‚éB", "Makes current weapon a random ego weapon.");
+		if (name) return _("æ­¦å™¨å±æ€§ä»˜ä¸", "Brand Weapon");
+		if (desc) return _("æ­¦å™¨ã«ãƒ©ãƒ³ãƒ€ãƒ ã«å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚", "Makes current weapon a random ego weapon.");
 
 		{
 			if (cast)
@@ -484,8 +484,8 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("lŠÔƒgƒ‰ƒ“ƒv", "Living Trump");
-		if (desc) return _("ƒ‰ƒ“ƒ_ƒ€‚ÉƒeƒŒƒ|[ƒg‚·‚é“Ë‘R•ÏˆÙ‚©A©•ª‚ÌˆÓv‚ÅƒeƒŒƒ|[ƒg‚·‚é“Ë‘R•ÏˆÙ‚ªg‚É‚Â‚­B",
+		if (name) return _("äººé–“ãƒˆãƒ©ãƒ³ãƒ—", "Living Trump");
+		if (desc) return _("ãƒ©ãƒ³ãƒ€ãƒ ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹çªç„¶å¤‰ç•°ã‹ã€è‡ªåˆ†ã®æ„æ€ã§ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹çªç„¶å¤‰ç•°ãŒèº«ã«ã¤ãã€‚",
 			"Gives mutation which makes you teleport randomly or makes you able to teleport at will.");
 
 		{
@@ -503,15 +503,15 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				/* Gain the mutation */
 				if (gain_random_mutation(mutation))
 				{
-					msg_print(_("‚ ‚È‚½‚Í¶‚«‚Ä‚¢‚éƒJ[ƒh‚É•Ï‚í‚Á‚½B", "You have turned into a Living Trump."));
+					msg_print(_("ã‚ãªãŸã¯ç”Ÿãã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰ã«å¤‰ã‚ã£ãŸã€‚", "You have turned into a Living Trump."));
 				}
 			}
 		}
 		break;
 
 	case 31:
-		if (name) return _("‘®«‚Ö‚Ì–Æ‰u", "Immunity");
-		if (desc) return _("ˆê’èŠÔA—â‹CA‰ŠA“dŒ‚A_‚Ì‚¢‚¸‚ê‚©‚É‘Î‚·‚é–Æ‰u‚ğ“¾‚éB",
+		if (name) return _("å±æ€§ã¸ã®å…ç–«", "Immunity");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€å†·æ°—ã€ç‚ã€é›»æ’ƒã€é…¸ã®ã„ãšã‚Œã‹ã«å¯¾ã™ã‚‹å…ç–«ã‚’å¾—ã‚‹ã€‚",
 			"Gives an immunity to fire, cold, electricity or acid for a while.");
 
 		{

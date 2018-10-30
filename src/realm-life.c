@@ -1,11 +1,11 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 
 /*!
-* @brief ¶–½—Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief ç”Ÿå‘½é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -20,8 +20,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("Œy‚Ì¡–ü", "Cure Light Wounds");
-		if (desc) return _("‰ö‰ä‚Æ‘Ì—Í‚ğ­‚µ‰ñ•œ‚³‚¹‚éB", "Heals cut and HP a little.");
+		if (name) return _("è»½å‚·ã®æ²»ç™’", "Cure Light Wounds");
+		if (desc) return _("æ€ªæˆ‘ã¨ä½“åŠ›ã‚’å°‘ã—å›å¾©ã•ã›ã‚‹ã€‚", "Heals cut and HP a little.");
 		{
 			int dice = 2;
 			int sides = 10;
@@ -31,8 +31,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("j•Ÿ", "Bless");
-		if (desc) return _("ˆê’èŠÔA–½’†—¦‚ÆAC‚Éƒ{[ƒiƒX‚ğ“¾‚éB", "Gives bonus to hit and AC for a few turns.");
+		if (name) return _("ç¥ç¦", "Bless");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€å‘½ä¸­ç‡ã¨ACã«ãƒœãƒ¼ãƒŠã‚¹ã‚’å¾—ã‚‹ã€‚", "Gives bonus to hit and AC for a few turns.");
 		{
 			int base = 12;
 
@@ -46,8 +46,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("Œy", "Cause Light Wounds");
-		if (desc) return _("1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚É¬ƒ_ƒ[ƒW‚ğ—^‚¦‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Wounds a monster a little unless resisted.");
+		if (name) return _("è»½å‚·", "Cause Light Wounds");
+		if (desc) return _("1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å°ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Wounds a monster a little unless resisted.");
 		{
 			int dice = 3 + (plev - 1) / 5;
 			int sides = 4;
@@ -63,8 +63,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("Œõ‚Ì¢Š«", "Call Light");
-		if (desc) return _("ŒõŒ¹‚ªÆ‚ç‚µ‚Ä‚¢‚é”ÍˆÍ‚©•”‰®‘S‘Ì‚ğ‰i‹v‚É–¾‚é‚­‚·‚éB", "Lights up nearby area and the inside of a room permanently.");
+		if (name) return _("å…‰ã®å¬å–š", "Call Light");
+		if (desc) return _("å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚", "Lights up nearby area and the inside of a room permanently.");
 		{
 			int dice = 2;
 			int sides = plev / 2;
@@ -80,8 +80,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("ã© & ‰B‚µ”àŠ´’m", "Detect Doors & Traps");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚Ìã©‚Æ”à‚ÆŠK’i‚ğŠ´’m‚·‚éB", "Detects traps, doors, and stairs in your vicinity.");
+		if (name) return _("ç½  & éš ã—æ‰‰æ„ŸçŸ¥", "Detect Doors & Traps");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ç½ ã¨æ‰‰ã¨éšæ®µã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects traps, doors, and stairs in your vicinity.");
 		{
 			int rad = DETECT_RAD_DEFAULT;
 
@@ -97,8 +97,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("d‚Ì¡–ü", "Cure Medium Wounds");
-		if (desc) return _("‰ö‰ä‚Æ‘Ì—Í‚ğ’†’ö“x‰ñ•œ‚³‚¹‚éB", "Heals cut and HP more.");
+		if (name) return _("é‡å‚·ã®æ²»ç™’", "Cure Medium Wounds");
+		if (desc) return _("æ€ªæˆ‘ã¨ä½“åŠ›ã‚’ä¸­ç¨‹åº¦å›å¾©ã•ã›ã‚‹ã€‚", "Heals cut and HP more.");
 		{
 			int dice = 4;
 			int sides = 10;
@@ -109,8 +109,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("‰ğ“Å", "Cure Poison");
-		if (desc) return _("‘Ì“à‚Ì“Å‚ğæ‚èœ‚­B", "Cure poison status.");
+		if (name) return _("è§£æ¯’", "Cure Poison");
+		if (desc) return _("ä½“å†…ã®æ¯’ã‚’å–ã‚Šé™¤ãã€‚", "Cure poison status.");
 		{
 			if (cast)
 			{
@@ -120,8 +120,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("‹ó• [‘«", "Satisfy Hunger");
-		if (desc) return _("–• ‚É‚·‚éB", "Satisfies hunger.");
+		if (name) return _("ç©ºè…¹å……è¶³", "Satisfy Hunger");
+		if (desc) return _("æº€è…¹ã«ã™ã‚‹ã€‚", "Satisfies hunger.");
 		{
 			if (cast)
 			{
@@ -131,22 +131,22 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("‰ğô", "Remove Curse");
-		if (desc) return _("ƒAƒCƒeƒ€‚É‚©‚©‚Á‚½ã‚¢ô‚¢‚ğ‰ğœ‚·‚éB", "Removes normal curses from equipped items.");
+		if (name) return _("è§£å‘ª", "Remove Curse");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼±ã„å‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚", "Removes normal curses from equipped items.");
 		{
 			if (cast)
 			{
 				if (remove_curse())
 				{
-					msg_print(_("’N‚©‚ÉŒ©ç‚ç‚ê‚Ä‚¢‚é‚æ‚¤‚È‹C‚ª‚·‚éB", "You feel as if someone is watching over you."));
+					msg_print(_("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 9:
-		if (name) return _("d", "Cause Medium Wounds");
-		if (desc) return _("1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚É’†ƒ_ƒ[ƒW‚ğ—^‚¦‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Wounds a monster unless resisted.");
+		if (name) return _("é‡å‚·", "Cause Medium Wounds");
+		if (desc) return _("1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ä¸­ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Wounds a monster unless resisted.");
 		{
 			int sides = 8 + (plev - 5) / 4;
 			int dice = 8;
@@ -162,8 +162,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("’v–½‚Ì¡–ü", "Cure Critical Wounds");
-		if (desc) return _("‘Ì—Í‚ğ‘å•‚É‰ñ•œ‚³‚¹A•‰‚ÆNOó‘Ô‚à‘S‰õ‚·‚éB", "Heals cut, stun and HP greatly.");
+		if (name) return _("è‡´å‘½å‚·ã®æ²»ç™’", "Cure Critical Wounds");
+		if (desc) return _("ä½“åŠ›ã‚’å¤§å¹…ã«å›å¾©ã•ã›ã€è² å‚·ã¨æœ¦æœ§çŠ¶æ…‹ã‚‚å…¨å¿«ã™ã‚‹ã€‚", "Heals cut, stun and HP greatly.");
 		{
 			int dice = 8;
 			int sides = 10;
@@ -174,8 +174,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("‘Ï”M‘ÏŠ¦", "Resist Heat and Cold");
-		if (desc) return _("ˆê’èŠÔA‰Î‰Š‚Æ—â‹C‚É‘Î‚·‚é‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€ç†±è€å¯’", "Resist Heat and Cold");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ç«ç‚ã¨å†·æ°—ã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to fire and cold. These resistances can be added to which from equipment for more powerful resistances.");
 
 		{
@@ -192,8 +192,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("ü•ÓŠ´’m", "Sense Surroundings");
-		if (desc) return _("ü•Ó‚Ì’nŒ`‚ğŠ´’m‚·‚éB", "Maps nearby area.");
+		if (name) return _("å‘¨è¾ºæ„ŸçŸ¥", "Sense Surroundings");
+		if (desc) return _("å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Maps nearby area.");
 
 		{
 			int rad = DETECT_RAD_MAP;
@@ -208,8 +208,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("ƒpƒjƒbƒNEƒAƒ“ƒfƒbƒh", "Turn Undead");
-		if (desc) return _("‹ŠE“à‚ÌƒAƒ“ƒfƒbƒh‚ğ‹°•|‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to scare undead monsters in sight.");
+		if (name) return _("ãƒ‘ãƒ‹ãƒƒã‚¯ãƒ»ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰", "Turn Undead");
+		if (desc) return _("è¦–ç•Œå†…ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’ææ€–ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to scare undead monsters in sight.");
 
 		{
 			if (cast)
@@ -220,8 +220,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("‘Ì—Í‰ñ•œ", "Healing");
-		if (desc) return _("‹É‚ß‚Ä‹­—Í‚È‰ñ•œô•¶‚ÅA•‰‚ÆNOó‘Ô‚à‘S‰õ‚·‚éB", "Much powerful healing magic, and heals cut and stun completely.");
+		if (name) return _("ä½“åŠ›å›å¾©", "Healing");
+		if (desc) return _("æ¥µã‚ã¦å¼·åŠ›ãªå›å¾©å‘ªæ–‡ã§ã€è² å‚·ã¨æœ¦æœ§çŠ¶æ…‹ã‚‚å…¨å¿«ã™ã‚‹ã€‚", "Much powerful healing magic, and heals cut and stun completely.");
 
 		{
 			int heal = 300;
@@ -231,8 +231,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("Œ‹ŠE‚Ì–äÍ", "Glyph of Warding");
-		if (desc) return _("©•ª‚Ì‚¢‚é°‚Ìã‚ÉAƒ‚ƒ“ƒXƒ^[‚ª’Ê‚è”²‚¯‚½‚è¢Š«‚³‚ê‚½‚è‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚­‚È‚éƒ‹[ƒ“‚ğ•`‚­B",
+		if (name) return _("çµç•Œã®ç´‹ç« ", "Glyph of Warding");
+		if (desc) return _("è‡ªåˆ†ã®ã„ã‚‹åºŠã®ä¸Šã«ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€šã‚ŠæŠœã‘ãŸã‚Šå¬å–šã•ã‚ŒãŸã‚Šã™ã‚‹ã“ã¨ãŒã§ããªããªã‚‹ãƒ«ãƒ¼ãƒ³ã‚’æãã€‚",
 			"Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.");
 
 		{
@@ -244,23 +244,23 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("*‰ğô*", "Dispel Curse");
-		if (desc) return _("ƒAƒCƒeƒ€‚É‚©‚©‚Á‚½‹­—Í‚Èô‚¢‚ğ‰ğœ‚·‚éB", "Removes normal and heavy curse from equipped items.");
+		if (name) return _("*è§£å‘ª*", "Dispel Curse");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼·åŠ›ãªå‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚", "Removes normal and heavy curse from equipped items.");
 
 		{
 			if (cast)
 			{
 				if (remove_all_curse())
 				{
-					msg_print(_("’N‚©‚ÉŒ©ç‚ç‚ê‚Ä‚¢‚é‚æ‚¤‚È‹C‚ª‚·‚éB", "You feel as if someone is watching over you."));
+					msg_print(_("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 17:
-		if (name) return _("ŠÓ¯", "Perception");
-		if (desc) return _("ƒAƒCƒeƒ€‚ğ¯•Ê‚·‚éB", "Identifies an item.");
+		if (name) return _("é‘‘è­˜", "Perception");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’è­˜åˆ¥ã™ã‚‹ã€‚", "Identifies an item.");
 
 		{
 			if (cast)
@@ -271,8 +271,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("ƒAƒ“ƒfƒbƒh‘ŞU", "Dispel Undead");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚ÌƒAƒ“ƒfƒbƒh‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚éB", "Damages all undead monsters in sight.");
+		if (name) return _("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰é€€æ•£", "Dispel Undead");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚", "Damages all undead monsters in sight.");
 
 		{
 			int dice = 1;
@@ -288,8 +288,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("“â‚Ì", "Day of the Dove");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–£—¹‚·‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to charm all monsters in sight.");
+		if (name) return _("å‡ªã®åˆ»", "Day of the Dove");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to charm all monsters in sight.");
 
 		{
 			int power = plev * 2;
@@ -304,8 +304,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("’v–½", "Cause Critical Wounds");
-		if (desc) return _("1‘Ì‚Ìƒ‚ƒ“ƒXƒ^[‚É‘åƒ_ƒ[ƒW‚ğ—^‚¦‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Wounds a monster critically unless resisted.");
+		if (name) return _("è‡´å‘½å‚·", "Cause Critical Wounds");
+		if (desc) return _("1ä½“ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Wounds a monster critically unless resisted.");
 
 		{
 			int dice = 5 + (plev - 5) / 3;
@@ -322,8 +322,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("‹AŠÒ‚ÌÙ", "Word of Recall");
-		if (desc) return _("’nã‚É‚¢‚é‚Æ‚«‚Íƒ_ƒ“ƒWƒ‡ƒ“‚ÌÅ[ŠK‚ÖAƒ_ƒ“ƒWƒ‡ƒ“‚É‚¢‚é‚Æ‚«‚Í’nã‚Ö‚ÆˆÚ“®‚·‚éB", "Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
+		if (name) return _("å¸°é‚„ã®è©”", "Word of Recall");
+		if (desc) return _("åœ°ä¸Šã«ã„ã‚‹ã¨ãã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®æœ€æ·±éšã¸ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«ã„ã‚‹ã¨ãã¯åœ°ä¸Šã¸ã¨ç§»å‹•ã™ã‚‹ã€‚", "Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
 
 		{
 			int base = 15;
@@ -339,8 +339,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("^À‚ÌÕ’d", "Alter Reality");
-		if (desc) return _("Œ»İ‚ÌŠK‚ğÄ\¬‚·‚éB", "Recreates current dungeon level.");
+		if (name) return _("çœŸå®Ÿã®ç¥­å£‡", "Alter Reality");
+		if (desc) return _("ç¾åœ¨ã®éšã‚’å†æ§‹æˆã™ã‚‹ã€‚", "Recreates current dungeon level.");
 
 		{
 			int base = 15;
@@ -356,8 +356,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 23:
-		if (name) return _("^EŒ‹ŠE", "Warding True");
-		if (desc) return _("©•ª‚Ì‚¢‚é°‚ÆüˆÍ8ƒ}ƒX‚Ì°‚Ìã‚ÉAƒ‚ƒ“ƒXƒ^[‚ª’Ê‚è”²‚¯‚½‚è¢Š«‚³‚ê‚½‚è‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚­‚È‚éƒ‹[ƒ“‚ğ•`‚­B", "Creates glyphs in all adjacent squares and under you.");
+		if (name) return _("çœŸãƒ»çµç•Œ", "Warding True");
+		if (desc) return _("è‡ªåˆ†ã®ã„ã‚‹åºŠã¨å‘¨å›²8ãƒã‚¹ã®åºŠã®ä¸Šã«ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€šã‚ŠæŠœã‘ãŸã‚Šå¬å–šã•ã‚ŒãŸã‚Šã™ã‚‹ã“ã¨ãŒã§ããªããªã‚‹ãƒ«ãƒ¼ãƒ³ã‚’æãã€‚", "Creates glyphs in all adjacent squares and under you.");
 
 		{
 			int rad = 1;
@@ -373,8 +373,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("•s–Ñ‰»", "Sterilization");
-		if (desc) return _("‚±‚ÌŠK‚Ì‘B‚·‚éƒ‚ƒ“ƒXƒ^[‚ª‘B‚Å‚«‚È‚­‚È‚éB", "Prevents any breeders on current level from breeding.");
+		if (name) return _("ä¸æ¯›åŒ–", "Sterilization");
+		if (desc) return _("ã“ã®éšã®å¢—æ®–ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå¢—æ®–ã§ããªããªã‚‹ã€‚", "Prevents any breeders on current level from breeding.");
 
 		{
 			if (cast)
@@ -385,8 +385,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("‘SŠ´’m", "Detection");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[Aã©A”àAŠK’iAà•óA‚»‚µ‚ÄƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB", "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
+		if (name) return _("å…¨æ„ŸçŸ¥", "Detection");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€ç½ ã€æ‰‰ã€éšæ®µã€è²¡å®ã€ãã—ã¦ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -401,8 +401,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 26:
-		if (name) return _("ƒAƒ“ƒfƒbƒhÁ–Å", "Annihilate Undead");
-		if (desc) return _("©•ª‚ÌüˆÍ‚É‚¢‚éƒAƒ“ƒfƒbƒh‚ğŒ»İ‚ÌŠK‚©‚çÁ‚µ‹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB",
+		if (name) return _("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰æ¶ˆæ»…", "Annihilate Undead");
+		if (desc) return _("è‡ªåˆ†ã®å‘¨å›²ã«ã„ã‚‹ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã‚’ç¾åœ¨ã®éšã‹ã‚‰æ¶ˆã—å»ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚",
 			"Eliminates all nearby undead monsters, exhausting you.  Powerful or unique monsters may be able to resist.");
 
 		{
@@ -418,8 +418,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 27:
-		if (name) return _("ç—¢Šá", "Clairvoyance");
-		if (desc) return _("‚»‚ÌŠK‘S‘Ì‚ğ‰i‹v‚ÉÆ‚ç‚µAƒ_ƒ“ƒWƒ‡ƒ““à‚·‚×‚Ä‚ÌƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB", "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.");
+		if (name) return _("åƒé‡Œçœ¼", "Clairvoyance");
+		if (desc) return _("ãã®éšå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.");
 
 		{
 			if (cast)
@@ -430,8 +430,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("‘S•œŠˆ", "Restoration");
-		if (desc) return _("‚·‚×‚Ä‚ÌƒXƒe[ƒ^ƒX‚ÆŒoŒ±’l‚ğ‰ñ•œ‚·‚éB", "Restores all stats and experience.");
+		if (name) return _("å…¨å¾©æ´»", "Restoration");
+		if (desc) return _("ã™ã¹ã¦ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¨çµŒé¨“å€¤ã‚’å›å¾©ã™ã‚‹ã€‚", "Restores all stats and experience.");
 
 		{
 			if (cast)
@@ -443,8 +443,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("*‘Ì—Í‰ñ•œ*", "Healing True");
-		if (desc) return _("Å‹­‚Ì¡–ü‚Ì–‚–@‚ÅA•‰‚ÆNOó‘Ô‚à‘S‰õ‚·‚éB", "The greatest healing magic. Heals all HP, cut and stun.");
+		if (name) return _("*ä½“åŠ›å›å¾©*", "Healing True");
+		if (desc) return _("æœ€å¼·ã®æ²»ç™’ã®é­”æ³•ã§ã€è² å‚·ã¨æœ¦æœ§çŠ¶æ…‹ã‚‚å…¨å¿«ã™ã‚‹ã€‚", "The greatest healing magic. Heals all HP, cut and stun.");
 
 		{
 			int heal = 2000;
@@ -454,8 +454,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("¹‚È‚éƒrƒWƒ‡ƒ“", "Holy Vision");
-		if (desc) return _("ƒAƒCƒeƒ€‚Ì‚Â”\—Í‚ğŠ®‘S‚É’m‚éB", "*Identifies* an item.");
+		if (name) return _("è–ãªã‚‹ãƒ“ã‚¸ãƒ§ãƒ³", "Holy Vision");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚", "*Identifies* an item.");
 
 		{
 			if (cast)
@@ -466,8 +466,8 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 31:
-		if (name) return _("‹†‹É‚Ì‘Ï«", "Ultimate Resistance");
-		if (desc) return _("ˆê’èŠÔA‚ ‚ç‚ä‚é‘Ï«‚ğ•t‚¯AAC‚Æ–‚–@–hŒä”\—Í‚ğã¸‚³‚¹‚éB", "Gives ultimate resistance, bonus to AC and speed.");
+		if (name) return _("ç©¶æ¥µã®è€æ€§", "Ultimate Resistance");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ã‚ã‚‰ã‚†ã‚‹è€æ€§ã‚’ä»˜ã‘ã€ACã¨é­”æ³•é˜²å¾¡èƒ½åŠ›ã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚", "Gives ultimate resistance, bonus to AC and speed.");
 
 		{
 			TIME_EFFECT base = (TIME_EFFECT)plev / 2;

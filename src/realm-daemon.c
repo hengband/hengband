@@ -1,13 +1,13 @@
-
+ï»¿
 #include "angband.h"
 #include "cmd-spell.h"
 #include "spells-summon.h"
 
 /*!
-* @brief ˆ«–‚—Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief æ‚ªé­”é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -15,7 +15,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
-	static const char s_dam[] = _("‘¹:", "dam ");
+	static const char s_dam[] = _("æå‚·:", "dam ");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -23,8 +23,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("ƒ}ƒWƒbƒNEƒ~ƒTƒCƒ‹", "Magic Missile");
-		if (desc) return _("ã‚¢–‚–@‚Ì–î‚ğ•ú‚ÂB", "Fires a weak bolt of magic.");
+		if (name) return _("ãƒã‚¸ãƒƒã‚¯ãƒ»ãƒŸã‚µã‚¤ãƒ«", "Magic Missile");
+		if (desc) return _("å¼±ã„é­”æ³•ã®çŸ¢ã‚’æ”¾ã¤ã€‚", "Fires a weak bolt of magic.");
 
 		{
 			int dice = 3 + (plev - 1) / 5;
@@ -42,8 +42,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("–³¶–½Š´’m", "Detect Unlife");
-		if (desc) return _("‹ß‚­‚Ì¶–½‚Ì‚È‚¢ƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB", "Detects all nonliving monsters in your vicinity.");
+		if (name) return _("ç„¡ç”Ÿå‘½æ„ŸçŸ¥", "Detect Unlife");
+		if (desc) return _("è¿‘ãã®ç”Ÿå‘½ã®ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all nonliving monsters in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -58,8 +58,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("×‚È‚éj•Ÿ", "Evil Bless");
-		if (desc) return _("ˆê’èŠÔA–½’†—¦‚ÆAC‚Éƒ{[ƒiƒX‚ğ“¾‚éB", "Gives bonus to hit and AC for a few turns.");
+		if (name) return _("é‚ªãªã‚‹ç¥ç¦", "Evil Bless");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€å‘½ä¸­ç‡ã¨ACã«ãƒœãƒ¼ãƒŠã‚¹ã‚’å¾—ã‚‹ã€‚", "Gives bonus to hit and AC for a few turns.");
 
 		{
 			int base = 12;
@@ -74,8 +74,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("‘Ï‰Î‰Š", "Resist Fire");
-		if (desc) return _("ˆê’èŠÔA‰Š‚Ö‚Ì‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("è€ç«ç‚", "Resist Fire");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ç‚ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.");
 
 		{
@@ -91,8 +91,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("‹°Q", "Horrify");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğ‹°•|‚³‚¹ANO‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to scare and stun a monster.");
+		if (name) return _("ææ…Œ", "Horrify");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’ææ€–ã•ã›ã€æœ¦æœ§ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to scare and stun a monster.");
 
 		{
 			int power = plev;
@@ -110,8 +110,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("’n–‚Ì–î", "Nether Bolt");
-		if (desc) return _("’n–‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or beam of nether.");
+		if (name) return _("åœ°ç„ã®çŸ¢", "Nether Bolt");
+		if (desc) return _("åœ°ç„ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or beam of nether.");
 
 		{
 			int dice = 6 + (plev - 5) / 4;
@@ -129,23 +129,23 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("ŒÃ‘ã‚Ì€—ì¢Š«", "Summon Manes");
-		if (desc) return _("ŒÃ‘ã‚Ì€—ì‚ğ¢Š«‚·‚éB", "Summons a manes.");
+		if (name) return _("å¤ä»£ã®æ­»éœŠå¬å–š", "Summon Manes");
+		if (desc) return _("å¤ä»£ã®æ­»éœŠã‚’å¬å–šã™ã‚‹ã€‚", "Summons a manes.");
 
 		{
 			if (cast)
 			{
 				if (!summon_specific(-1, p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 				{
-					msg_print(_("ŒÃ‘ã‚Ì€—ì‚ÍŒ»‚ê‚È‚©‚Á‚½B", "No Manes arrive."));
+					msg_print(_("å¤ä»£ã®æ­»éœŠã¯ç¾ã‚Œãªã‹ã£ãŸã€‚", "No Manes arrive."));
 				}
 			}
 		}
 		break;
 
 	case 7:
-		if (name) return _("’n–‚Ì‰‹", "Hellish Flame");
-		if (desc) return _("×ˆ«‚È—Í‚ğ‚Âƒ{[ƒ‹‚ğ•ú‚ÂB‘P—Ç‚Èƒ‚ƒ“ƒXƒ^[‚É‚Í‘å‚«‚Èƒ_ƒ[ƒW‚ğ—^‚¦‚éB",
+		if (name) return _("åœ°ç„ã®ç„”", "Hellish Flame");
+		if (desc) return _("é‚ªæ‚ªãªåŠ›ã‚’æŒã¤ãƒœãƒ¼ãƒ«ã‚’æ”¾ã¤ã€‚å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚",
 			"Fires a ball of evil power. Hurts good monsters greatly.");
 
 		{
@@ -172,8 +172,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("ƒf[ƒ‚ƒ“x”z", "Dominate Demon");
-		if (desc) return _("ˆ«–‚1‘Ì‚ğ–£—¹‚·‚éB’ïR‚³‚ê‚é‚Æ–³Œø", "Attempts to charm a demon.");
+		if (name) return _("ãƒ‡ãƒ¼ãƒ¢ãƒ³æ”¯é…", "Dominate Demon");
+		if (desc) return _("æ‚ªé­”1ä½“ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹", "Attempts to charm a demon.");
 
 		{
 			int power = plev;
@@ -190,8 +190,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("ƒrƒWƒ‡ƒ“", "Vision");
-		if (desc) return _("ü•Ó‚Ì’nŒ`‚ğŠ´’m‚·‚éB", "Maps nearby area.");
+		if (name) return _("ãƒ“ã‚¸ãƒ§ãƒ³", "Vision");
+		if (desc) return _("å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Maps nearby area.");
 
 		{
 			int rad = DETECT_RAD_MAP;
@@ -206,8 +206,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("‘Ï’n–", "Resist Nether");
-		if (desc) return _("ˆê’èŠÔA’n–‚Ö‚Ì‘Ï«‚ğ“¾‚éB", "Gives resistance to nether for a while.");
+		if (name) return _("è€åœ°ç„", "Resist Nether");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€åœ°ç„ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚", "Gives resistance to nether for a while.");
 
 		{
 			int base = 20;
@@ -222,8 +222,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("ƒvƒ‰ƒYƒ}Eƒ{ƒ‹ƒg", "Plasma bolt");
-		if (desc) return _("ƒvƒ‰ƒYƒ}‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or beam of plasma.");
+		if (name) return _("ãƒ—ãƒ©ã‚ºãƒãƒ»ãƒœãƒ«ãƒˆ", "Plasma bolt");
+		if (desc) return _("ãƒ—ãƒ©ã‚ºãƒã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or beam of plasma.");
 
 		{
 			int dice = 11 + (plev - 5) / 4;
@@ -241,8 +241,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("ƒtƒ@ƒCƒAEƒ{[ƒ‹", "Fire Ball");
-		if (desc) return _("‰Š‚Ì‹…‚ğ•ú‚ÂB", "Fires a ball of fire.");
+		if (name) return _("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ¼ãƒ«", "Fire Ball");
+		if (desc) return _("ç‚ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a ball of fire.");
 
 		{
 			HIT_POINT dam = plev + 55;
@@ -260,8 +260,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("‰Š‚Ìn", "Fire Branding");
-		if (desc) return _("•Ší‚É‰Š‚Ì‘®«‚ğ‚Â‚¯‚éB", "Makes current weapon fire branded.");
+		if (name) return _("ç‚ã®åˆƒ", "Fire Branding");
+		if (desc) return _("æ­¦å™¨ã«ç‚ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚", "Makes current weapon fire branded.");
 
 		{
 			if (cast)
@@ -272,8 +272,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("’n–‹…", "Nether Ball");
-		if (desc) return _("‘å‚«‚È’n–‚Ì‹…‚ğ•ú‚ÂB", "Fires a huge ball of nether.");
+		if (name) return _("åœ°ç„çƒ", "Nether Ball");
+		if (desc) return _("å¤§ããªåœ°ç„ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a huge ball of nether.");
 
 		{
 			HIT_POINT dam = plev * 3 / 2 + 100;
@@ -291,8 +291,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("ƒf[ƒ‚ƒ“¢Š«", "Summon Demon");
-		if (desc) return _("ˆ«–‚1‘Ì‚ğ¢Š«‚·‚éB", "Summons a demon.");
+		if (name) return _("ãƒ‡ãƒ¼ãƒ¢ãƒ³å¬å–š", "Summon Demon");
+		if (desc) return _("æ‚ªé­”1ä½“ã‚’å¬å–šã™ã‚‹ã€‚", "Summons a demon.");
 
 		{
 			if (cast)
@@ -306,21 +306,21 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, plev * 2 / 3 + randint1(plev / 2), SUMMON_DEMON, flg))
 				{
-					msg_print(_("—°‰©‚Ìˆ«L‚ª[–‚µ‚½B", "The area fills with a stench of sulphur and brimstone."));
+					msg_print(_("ç¡«é»„ã®æ‚ªè‡­ãŒå……æº€ã—ãŸã€‚", "The area fills with a stench of sulphur and brimstone."));
 
 					if (pet)
 					{
-						msg_print(_("u‚²—p‚Å‚²‚´‚¢‚Ü‚·‚©A‚²ål—lv", "'What is thy bidding... Master?'"));
+						msg_print(_("ã€Œã”ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€ã”ä¸»äººæ§˜ã€", "'What is thy bidding... Master?'"));
 					}
 					else
 					{
-						msg_print(_("u”Ú‚µ‚«Ò‚æA‰ä‚Í“ğ‚Ì‰º–l‚É‚ ‚ç‚¸I ‚¨‘O‚Ì°‚ğ’¸‚­‚¼Iv",
+						msg_print(_("ã€Œå‘ã—ãè€…ã‚ˆã€æˆ‘ã¯æ±ã®ä¸‹åƒ•ã«ã‚ã‚‰ãšï¼ ãŠå‰ã®é­‚ã‚’é ‚ããï¼ã€",
 							"'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
 					}
 				}
 				else
 				{
-					msg_print(_("ˆ«–‚‚ÍŒ»‚ê‚È‚©‚Á‚½B", "No demons arrive."));
+					msg_print(_("æ‚ªé­”ã¯ç¾ã‚Œãªã‹ã£ãŸã€‚", "No demons arrive."));
 				}
 				break;
 			}
@@ -328,8 +328,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("ˆ«–‚‚Ì–Ú", "Devilish Eye");
-		if (desc) return _("ˆê’èŠÔAƒeƒŒƒpƒV[”\—Í‚ğ“¾‚éB", "Gives telepathy for a while.");
+		if (name) return _("æ‚ªé­”ã®ç›®", "Devilish Eye");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚", "Gives telepathy for a while.");
 
 		{
 			int base = 30;
@@ -345,8 +345,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("ˆ«–‚‚ÌƒNƒ[ƒN", "Devil Cloak");
-		if (desc) return _("‹°•|‚ğæ‚èœ‚«Aˆê’èŠÔA‰Š‚Æ—â‹C‚Ì‘Ï«A‰Š‚ÌƒI[ƒ‰‚ğ“¾‚éB‘Ï«‚Í‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("æ‚ªé­”ã®ã‚¯ãƒ­ãƒ¼ã‚¯", "Devil Cloak");
+		if (desc) return _("ææ€–ã‚’å–ã‚Šé™¤ãã€ä¸€å®šæ™‚é–“ã€ç‚ã¨å†·æ°—ã®è€æ€§ã€ç‚ã®ã‚ªãƒ¼ãƒ©ã‚’å¾—ã‚‹ã€‚è€æ€§ã¯è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to which from equipment for more powerful resistances.");
 
 		{
@@ -368,8 +368,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("—nŠâ—¬", "The Flow of Lava");
-		if (desc) return _("©•ª‚ğ’†S‚Æ‚µ‚½‰Š‚Ì‹…‚ğì‚èo‚µA°‚ğ—nŠâ‚É•Ï‚¦‚éB",
+		if (name) return _("æº¶å²©æµ", "The Flow of Lava");
+		if (desc) return _("è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸç‚ã®çƒã‚’ä½œã‚Šå‡ºã—ã€åºŠã‚’æº¶å²©ã«å¤‰ãˆã‚‹ã€‚",
 			"Generates a ball of fire centered on you which transforms floors to magma.");
 
 		{
@@ -387,8 +387,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("ƒvƒ‰ƒYƒ}‹…", "Plasma Ball");
-		if (desc) return _("ƒvƒ‰ƒYƒ}‚Ì‹…‚ğ•ú‚ÂB", "Fires a ball of plasma.");
+		if (name) return _("ãƒ—ãƒ©ã‚ºãƒçƒ", "Plasma Ball");
+		if (desc) return _("ãƒ—ãƒ©ã‚ºãƒã®çƒã‚’æ”¾ã¤ã€‚", "Fires a ball of plasma.");
 
 		{
 			HIT_POINT dam = plev * 3 / 2 + 80;
@@ -406,8 +406,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("ˆ«–‚•Ï‰»", "Polymorph Demon");
-		if (desc) return _("ˆê’èŠÔAˆ«–‚‚É•Ï‰»‚·‚éB•Ï‰»‚µ‚Ä‚¢‚éŠÔ‚Í–{—ˆ‚Ìí‘°‚Ì”\—Í‚ğ¸‚¢A‘ã‚í‚è‚Éˆ«–‚‚Æ‚µ‚Ä‚Ì”\—Í‚ğ“¾‚éB",
+		if (name) return _("æ‚ªé­”å¤‰åŒ–", "Polymorph Demon");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€æ‚ªé­”ã«å¤‰åŒ–ã™ã‚‹ã€‚å¤‰åŒ–ã—ã¦ã„ã‚‹é–“ã¯æœ¬æ¥ã®ç¨®æ—ã®èƒ½åŠ›ã‚’å¤±ã„ã€ä»£ã‚ã‚Šã«æ‚ªé­”ã¨ã—ã¦ã®èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚",
 			"Mimic a demon for a while. Loses abilities of original race and gets abilities as a demon.");
 
 		{
@@ -423,8 +423,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("’n–‚Ì”g“®", "Nather Wave");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚éB‘P—Ç‚Èƒ‚ƒ“ƒXƒ^[‚É“Á‚É‘å‚«‚Èƒ_ƒ[ƒW‚ğ—^‚¦‚éB",
+		if (name) return _("åœ°ç„ã®æ³¢å‹•", "Nather Wave");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ç‰¹ã«å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚",
 			"Damages all monsters in sight. Hurts good monsters greatly.");
 
 		{
@@ -442,8 +442,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("ƒTƒLƒ…ƒoƒX‚ÌÚ•«", "Kiss of Succubus");
-		if (desc) return _("ˆö‰Ê¬—‚Ì‹…‚ğ•ú‚ÂB", "Fires a ball of nexus.");
+		if (name) return _("ã‚µã‚­ãƒ¥ãƒã‚¹ã®æ¥å»", "Kiss of Succubus");
+		if (desc) return _("å› æœæ··ä¹±ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a ball of nexus.");
 
 		{
 			HIT_POINT dam = 100 + plev * 2;
@@ -460,8 +460,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 23:
-		if (name) return _("”j–Å‚Ìè", "Doom Hand");
-		if (desc) return _("”j–Å‚Ìè‚ğ•ú‚ÂBH‚ç‚Á‚½ƒ‚ƒ“ƒXƒ^[‚Í‚»‚Ì‚Æ‚«‚ÌHP‚Ì”¼•ª‘OŒã‚Ìƒ_ƒ[ƒW‚ğó‚¯‚éB", "Attempts to make a monster's HP almost half.");
+		if (name) return _("ç ´æ»…ã®æ‰‹", "Doom Hand");
+		if (desc) return _("ç ´æ»…ã®æ‰‹ã‚’æ”¾ã¤ã€‚é£Ÿã‚‰ã£ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ãã®ã¨ãã®HPã®åŠåˆ†å‰å¾Œã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã€‚", "Attempts to make a monster's HP almost half.");
 
 		{
 			if (cast)
@@ -469,7 +469,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if (!get_aim_dir(&dir))
 					return NULL;
 				else
-					msg_print(_("<”j–Å‚Ìè>‚ğ•ú‚Á‚½I", "You invoke the Hand of Doom!"));
+					msg_print(_("<ç ´æ»…ã®æ‰‹>ã‚’æ”¾ã£ãŸï¼", "You invoke the Hand of Doom!"));
 
 				fire_ball_hide(GF_HAND_DOOM, dir, plev * 2, 0);
 			}
@@ -477,8 +477,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("m‹C‚—g", "Raise the Morale");
-		if (desc) return _("ˆê’èŠÔAƒq[ƒ[‹C•ª‚É‚È‚éB", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
+		if (name) return _("å£«æ°—é«˜æš", "Raise the Morale");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚‹ã€‚", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
 
 		{
 			int base = 25;
@@ -488,8 +488,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("•s–Å‚Ì“÷‘Ì", "Immortal Body");
-		if (desc) return _("ˆê’èŠÔAŠÔ‹t“]‚Ö‚Ì‘Ï«‚ğ“¾‚éB", "Gives resistance to time for a while.");
+		if (name) return _("ä¸æ»…ã®è‚‰ä½“", "Immortal Body");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€æ™‚é–“é€†è»¢ã¸ã®è€æ€§ã‚’å¾—ã‚‹ã€‚", "Gives resistance to time for a while.");
 
 		{
 			int base = 20;
@@ -504,8 +504,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 26:
-		if (name) return _("‹¶‹C‚Ì‰~ŠÂ", "Insanity Circle");
-		if (desc) return _("©•ª‚ğ’†S‚Æ‚µ‚½ƒJƒIƒX‚Ì‹…A¬—‚Ì‹…‚ğ”­¶‚³‚¹A‹ß‚­‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–£—¹‚·‚éB",
+		if (name) return _("ç‹‚æ°—ã®å††ç’°", "Insanity Circle");
+		if (desc) return _("è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸã‚«ã‚ªã‚¹ã®çƒã€æ··ä¹±ã®çƒã‚’ç™ºç”Ÿã•ã›ã€è¿‘ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é­…äº†ã™ã‚‹ã€‚",
 			"Generate balls of chaos, confusion and charm centered on you.");
 
 		{
@@ -525,8 +525,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 27:
-		if (name) return _("ƒyƒbƒg”š”j", "Explode Pets");
-		if (desc) return _("‘S‚Ä‚Ìƒyƒbƒg‚ğ‹­§“I‚É”š”j‚³‚¹‚éB", "Makes all pets explode.");
+		if (name) return _("ãƒšãƒƒãƒˆçˆ†ç ´", "Explode Pets");
+		if (desc) return _("å…¨ã¦ã®ãƒšãƒƒãƒˆã‚’å¼·åˆ¶çš„ã«çˆ†ç ´ã•ã›ã‚‹ã€‚", "Makes all pets explode.");
 
 		{
 			if (cast)
@@ -537,8 +537,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("ƒOƒŒ[ƒ^[ƒf[ƒ‚ƒ“¢Š«", "Summon Greater Demon");
-		if (desc) return _("ã‹‰ƒf[ƒ‚ƒ“‚ğ¢Š«‚·‚éB¢Š«‚·‚é‚É‚ÍlŠÔ('p','h','t'‚Å•\‚³‚ê‚éƒ‚ƒ“ƒXƒ^[)‚Ì€‘Ì‚ğ•ù‚°‚È‚¯‚ê‚Î‚È‚ç‚È‚¢B",
+		if (name) return _("ã‚°ãƒ¬ãƒ¼ã‚¿ãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³å¬å–š", "Summon Greater Demon");
+		if (desc) return _("ä¸Šç´šãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¬å–šã™ã‚‹ã€‚å¬å–šã™ã‚‹ã«ã¯äººé–“('p','h','t'ã§è¡¨ã•ã‚Œã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼)ã®æ­»ä½“ã‚’æ§ã’ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚",
 			"Summons greater demon. It need to sacrifice a corpse of human ('p','h' or 't').");
 
 		{
@@ -550,8 +550,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("’n–—’", "Nether Storm");
-		if (desc) return _("’´‹‘å‚È’n–‚Ì‹…‚ğ•ú‚ÂB", "Generate a huge ball of nether.");
+		if (name) return _("åœ°ç„åµ", "Nether Storm");
+		if (desc) return _("è¶…å·¨å¤§ãªåœ°ç„ã®çƒã‚’æ”¾ã¤ã€‚", "Generate a huge ball of nether.");
 
 		{
 			HIT_POINT dam = plev * 15;
@@ -569,8 +569,8 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("ŒŒ‚Ìô‚¢", "Bloody Curse");
-		if (desc) return _("©•ª‚ªƒ_ƒ[ƒW‚ğó‚¯‚é‚±‚Æ‚É‚æ‚Á‚Ä‘ÎÛ‚Éô‚¢‚ğ‚©‚¯Aƒ_ƒ[ƒW‚ğ—^‚¦—lX‚ÈŒø‰Ê‚ğˆø‚«‹N‚±‚·B",
+		if (name) return _("è¡€ã®å‘ªã„", "Bloody Curse");
+		if (desc) return _("è‡ªåˆ†ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã“ã¨ã«ã‚ˆã£ã¦å¯¾è±¡ã«å‘ªã„ã‚’ã‹ã‘ã€ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆæ§˜ã€…ãªåŠ¹æœã‚’å¼•ãèµ·ã“ã™ã€‚",
 			"Puts blood curse which damages and causes various effects on a monster. You also take damage.");
 
 		{
@@ -584,14 +584,14 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 				fire_ball_hide(GF_BLOOD_CURSE, dir, dam, rad);
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), _("ŒŒ‚Ìô‚¢", "Blood curse"), -1);
+				take_hit(DAMAGE_USELIFE, 20 + randint1(30), _("è¡€ã®å‘ªã„", "Blood curse"), -1);
 			}
 		}
 		break;
 
 	case 31:
-		if (name) return _("–‚‰¤•Ï‰»", "Polymorph Demonlord");
-		if (desc) return _("ˆ«–‚‚Ì‰¤‚É•Ï‰»‚·‚éB•Ï‰»‚µ‚Ä‚¢‚éŠÔ‚Í–{—ˆ‚Ìí‘°‚Ì”\—Í‚ğ¸‚¢A‘ã‚í‚è‚Éˆ«–‚‚Ì‰¤‚Æ‚µ‚Ä‚Ì”\—Í‚ğ“¾A•Ç‚ğ”j‰ó‚µ‚È‚ª‚ç•à‚­B",
+		if (name) return _("é­”ç‹å¤‰åŒ–", "Polymorph Demonlord");
+		if (desc) return _("æ‚ªé­”ã®ç‹ã«å¤‰åŒ–ã™ã‚‹ã€‚å¤‰åŒ–ã—ã¦ã„ã‚‹é–“ã¯æœ¬æ¥ã®ç¨®æ—ã®èƒ½åŠ›ã‚’å¤±ã„ã€ä»£ã‚ã‚Šã«æ‚ªé­”ã®ç‹ã¨ã—ã¦ã®èƒ½åŠ›ã‚’å¾—ã€å£ã‚’ç ´å£Šã—ãªãŒã‚‰æ­©ãã€‚",
 			"Mimic a demon lord for a while. Loses abilities of original race and gets great abilities as a demon lord. Even hard walls can't stop your walking.");
 
 		{

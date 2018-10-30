@@ -1,13 +1,13 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 
 
 
 /*!
-* @brief ”j×—Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief ç ´é‚ªé ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -22,8 +22,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("’¦”±", "Punishment");
-		if (desc) return _("“dŒ‚‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or beam of lightning.");
+		if (name) return _("æ‡²ç½°", "Punishment");
+		if (desc) return _("é›»æ’ƒã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or beam of lightning.");
 
 		{
 			int dice = 3 + (plev - 1) / 5;
@@ -41,8 +41,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("×ˆ«‘¶İŠ´’m", "Detect Evil");
-		if (desc) return _("‹ß‚­‚Ì×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB", "Detects all evil monsters in your vicinity.");
+		if (name) return _("é‚ªæ‚ªå­˜åœ¨æ„ŸçŸ¥", "Detect Evil");
+		if (desc) return _("è¿‘ãã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all evil monsters in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -57,8 +57,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("‹°•|œ‹", "Remove Fear");
-		if (desc) return _("‹°•|‚ğæ‚èœ‚­B", "Removes fear.");
+		if (name) return _("ææ€–é™¤å»", "Remove Fear");
+		if (desc) return _("ææ€–ã‚’å–ã‚Šé™¤ãã€‚", "Removes fear.");
 
 		{
 			if (cast)
@@ -69,8 +69,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("ˆĞˆ³", "Scare Monster");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğ‹°•|‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to scare a monster.");
+		if (name) return _("å¨åœ§", "Scare Monster");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’ææ€–ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to scare a monster.");
 
 		{
 			int power = plev;
@@ -87,8 +87,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("¹ˆæ", "Sanctuary");
-		if (desc) return _("—×Ú‚µ‚½‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–°‚ç‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to sleep monsters in the adjacent squares.");
+		if (name) return _("è–åŸŸ", "Sanctuary");
+		if (desc) return _("éš£æ¥ã—ãŸå…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’çœ ã‚‰ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to sleep monsters in the adjacent squares.");
 
 		{
 			int power = plev;
@@ -103,8 +103,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("“üŒû", "Portal");
-		if (desc) return _("’†‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB", "Teleport medium distance.");
+		if (name) return _("å…¥å£", "Portal");
+		if (desc) return _("ä¸­è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚", "Teleport medium distance.");
 
 		{
 			POSITION range = 25 + plev / 2;
@@ -119,8 +119,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("ƒXƒ^[ƒ_ƒXƒg", "Star Dust");
-		if (desc) return _("ƒ^[ƒQƒbƒg•t‹ß‚É‘MŒõ‚Ìƒ{ƒ‹ƒg‚ğ˜AË‚·‚éB", "Fires many bolts of light near the target.");
+		if (name) return _("ã‚¹ã‚¿ãƒ¼ãƒ€ã‚¹ãƒˆ", "Star Dust");
+		if (desc) return _("ã‚¿ãƒ¼ã‚²ãƒƒãƒˆä»˜è¿‘ã«é–ƒå…‰ã®ãƒœãƒ«ãƒˆã‚’é€£å°„ã™ã‚‹ã€‚", "Fires many bolts of light near the target.");
 
 		{
 			int dice = 3 + (plev - 1) / 9;
@@ -137,8 +137,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("g‘Ìò‰»", "Purify");
-		if (desc) return _("A“ÅANO‚©‚ç‘S‰õ‚·‚éB", "Heals all cut, stun and poison status.");
+		if (name) return _("èº«ä½“æµ„åŒ–", "Purify");
+		if (desc) return _("å‚·ã€æ¯’ã€æœ¦æœ§ã‹ã‚‰å…¨å¿«ã™ã‚‹ã€‚", "Heals all cut, stun and poison status.");
 
 		{
 			if (cast)
@@ -151,8 +151,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("×ˆ«”ò‚Î‚µ", "Scatter Evil");
-		if (desc) return _("×ˆ«‚Èƒ‚ƒ“ƒXƒ^[1‘Ì‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to teleport an evil monster away.");
+		if (name) return _("é‚ªæ‚ªé£›ã°ã—", "Scatter Evil");
+		if (desc) return _("é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to teleport an evil monster away.");
 
 		{
 			int power = MAX_SIGHT * 5;
@@ -168,8 +168,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("¹‚È‚éŒõ‹…", "Holy Orb");
-		if (desc) return _("¹‚È‚é—Í‚ğ‚à‚Â•óì‚ğ•ú‚ÂB×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚É‘Î‚µ‚Ä‘å‚«‚Èƒ_ƒ[ƒW‚ğ—^‚¦‚é‚ªA‘P—Ç‚Èƒ‚ƒ“ƒXƒ^[‚É‚ÍŒø‰Ê‚ª‚È‚¢B",
+		if (name) return _("è–ãªã‚‹å…‰çƒ", "Holy Orb");
+		if (desc) return _("è–ãªã‚‹åŠ›ã‚’ã‚‚ã¤å®ç ã‚’æ”¾ã¤ã€‚é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ãŒã€å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ã¯åŠ¹æœãŒãªã„ã€‚",
 			"Fires a ball with holy power. Hurts evil monsters greatly, but don't effect good monsters.");
 
 		{
@@ -198,8 +198,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("ˆ«–‚•¥‚¢", "Exorcism");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚ÌƒAƒ“ƒfƒbƒh‹y‚Ñˆ«–‚‚Éƒ_ƒ[ƒW‚ğ—^‚¦A×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚ğ‹°•|‚³‚¹‚éB",
+		if (name) return _("æ‚ªé­”æ‰•ã„", "Exorcism");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰åŠã³æ‚ªé­”ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã€é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ææ€–ã•ã›ã‚‹ã€‚",
 			"Damages all undead and demons in sight, and scares all evil monsters in sight.");
 
 		{
@@ -218,23 +218,23 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("‰ğô", "Remove Curse");
-		if (desc) return _("ƒAƒCƒeƒ€‚É‚©‚©‚Á‚½ã‚¢ô‚¢‚ğ‰ğœ‚·‚éB", "Removes normal curses from equipped items.");
+		if (name) return _("è§£å‘ª", "Remove Curse");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼±ã„å‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚", "Removes normal curses from equipped items.");
 
 		{
 			if (cast)
 			{
 				if (remove_curse())
 				{
-					msg_print(_("’N‚©‚ÉŒ©ç‚ç‚ê‚Ä‚¢‚é‚æ‚¤‚È‹C‚ª‚·‚éB", "You feel as if someone is watching over you."));
+					msg_print(_("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 12:
-		if (name) return _("“§–¾‹”F", "Sense Unseen");
-		if (desc) return _("ˆê’èŠÔA“§–¾‚È‚à‚Ì‚ªŒ©‚¦‚é‚æ‚¤‚É‚È‚éB", "Gives see invisible for a while.");
+		if (name) return _("é€æ˜è¦–èª", "Sense Unseen");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é€æ˜ãªã‚‚ã®ãŒè¦‹ãˆã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚", "Gives see invisible for a while.");
 
 		{
 			int base = 24;
@@ -249,8 +249,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("‘Î×ˆ«Œ‹ŠE", "Protection from Evil");
-		if (desc) return _("×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚ÌUŒ‚‚ğ–h‚®ƒoƒŠƒA‚ğ’£‚éB", "Gives aura which protect you from evil monster's physical attack.");
+		if (name) return _("å¯¾é‚ªæ‚ªçµç•Œ", "Protection from Evil");
+		if (desc) return _("é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ”»æ’ƒã‚’é˜²ããƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚", "Gives aura which protect you from evil monster's physical attack.");
 
 		{
 			int base = 25;
@@ -266,8 +266,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("Ù‚«‚Ì—‹", "Judgment Thunder");
-		if (desc) return _("‹­—Í‚È“dŒ‚‚Ìƒ{ƒ‹ƒg‚ğ•ú‚ÂB", "Fires a powerful bolt of lightning.");
+		if (name) return _("è£ãã®é›·", "Judgment Thunder");
+		if (desc) return _("å¼·åŠ›ãªé›»æ’ƒã®ãƒœãƒ«ãƒˆã‚’æ”¾ã¤ã€‚", "Fires a powerful bolt of lightning.");
 
 		{
 			HIT_POINT dam = plev * 5;
@@ -283,15 +283,15 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("¹‚È‚éŒäŒ¾—t", "Holy Word");
-		if (desc) return _("‹ŠE“à‚Ì×ˆ«‚È‘¶İ‚É‘å‚«‚Èƒ_ƒ[ƒW‚ğ—^‚¦A‘Ì—Í‚ğ‰ñ•œ‚µA“ÅA‹°•|ANOó‘ÔA•‰‚©‚ç‘S‰õ‚·‚éB",
+		if (name) return _("è–ãªã‚‹å¾¡è¨€è‘‰", "Holy Word");
+		if (desc) return _("è¦–ç•Œå†…ã®é‚ªæ‚ªãªå­˜åœ¨ã«å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã€ä½“åŠ›ã‚’å›å¾©ã—ã€æ¯’ã€ææ€–ã€æœ¦æœ§çŠ¶æ…‹ã€è² å‚·ã‹ã‚‰å…¨å¿«ã™ã‚‹ã€‚",
 			"Damages all evil monsters in sight, heals HP somewhat, and completely heals poison, fear, stun and cut status.");
 
 		{
 			int dam_sides = plev * 6;
 			int heal = 100;
 
-			if (info) return format(_("‘¹:1d%d/‰ñ%d", "dam:d%d/h%d"), dam_sides, heal);
+			if (info) return format(_("æ:1d%d/å›%d", "dam:d%d/h%d"), dam_sides, heal);
 			if (cast)
 			{
 				dispel_evil(randint1(dam_sides));
@@ -305,8 +305,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("ŠJ‚©‚ê‚½“¹", "Unbarring Ways");
-		if (desc) return _("ˆê’¼üã‚Ì‘S‚Ä‚Ìã©‚Æ”à‚ğ”j‰ó‚·‚éB", "Fires a beam which destroy traps and doors.");
+		if (name) return _("é–‹ã‹ã‚ŒãŸé“", "Unbarring Ways");
+		if (desc) return _("ä¸€ç›´ç·šä¸Šã®å…¨ã¦ã®ç½ ã¨æ‰‰ã‚’ç ´å£Šã™ã‚‹ã€‚", "Fires a beam which destroy traps and doors.");
 
 		{
 			if (cast)
@@ -319,8 +319,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("••–‚", "Arrest");
-		if (desc) return _("×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚Ì“®‚«‚ğ~‚ß‚éB", "Attempts to paralyze an evil monster.");
+		if (name) return _("å°é­”", "Arrest");
+		if (desc) return _("é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‹•ãã‚’æ­¢ã‚ã‚‹ã€‚", "Attempts to paralyze an evil monster.");
 
 		{
 			int power = plev * 2;
@@ -336,8 +336,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("¹‚È‚éƒI[ƒ‰", "Holy Aura");
-		if (desc) return _("ˆê’èŠÔA×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚ğ‚Â‚¯‚é¹‚È‚éƒI[ƒ‰‚ğ“¾‚éB",
+		if (name) return _("è–ãªã‚‹ã‚ªãƒ¼ãƒ©", "Holy Aura");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å‚·ã¤ã‘ã‚‹è–ãªã‚‹ã‚ªãƒ¼ãƒ©ã‚’å¾—ã‚‹ã€‚",
 			"Gives aura of holy power which injures evil monsters which attacked you for a while.");
 
 		{
@@ -353,8 +353,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("ƒAƒ“ƒfƒbƒh&ˆ«–‚‘ŞU", "Dispel Undead & Demons");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚ÌƒAƒ“ƒfƒbƒh‹y‚Ñˆ«–‚‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚éB", "Damages all undead and demons in sight.");
+		if (name) return _("ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰&æ‚ªé­”é€€æ•£", "Dispel Undead & Demons");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰åŠã³æ‚ªé­”ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚", "Damages all undead and demons in sight.");
 
 		{
 			int sides = plev * 4;
@@ -370,8 +370,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("×ˆ«‘ŞU", "Dispel Evil");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ì×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚éB", "Damages all evil monsters in sight.");
+		if (name) return _("é‚ªæ‚ªé€€æ•£", "Dispel Evil");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚", "Damages all evil monsters in sight.");
 
 		{
 			int sides = plev * 4;
@@ -386,8 +386,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("¹‚È‚én", "Holy Blade");
-		if (desc) return _("’Êí‚Ì•Ší‚É–Å×‚Ì‘®«‚ğ‚Â‚¯‚éB", "Makes current weapon especially deadly against evil monsters.");
+		if (name) return _("è–ãªã‚‹åˆƒ", "Holy Blade");
+		if (desc) return _("é€šå¸¸ã®æ­¦å™¨ã«æ»…é‚ªã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚", "Makes current weapon especially deadly against evil monsters.");
 
 		{
 			if (cast)
@@ -398,8 +398,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("ƒXƒ^[ƒo[ƒXƒg", "Star Burst");
-		if (desc) return _("‹‘å‚È‘MŒõ‚Ì‹…‚ğ•ú‚ÂB", "Fires a huge ball of powerful light.");
+		if (name) return _("ã‚¹ã‚¿ãƒ¼ãƒãƒ¼ã‚¹ãƒˆ", "Star Burst");
+		if (desc) return _("å·¨å¤§ãªé–ƒå…‰ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a huge ball of powerful light.");
 
 		{
 			HIT_POINT dam = 100 + plev * 2;
@@ -417,8 +417,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 23:
-		if (name) return _("“Vg¢Š«", "Summon Angel");
-		if (desc) return _("“Vg‚ğ1‘Ì¢Š«‚·‚éB", "Summons an angel.");
+		if (name) return _("å¤©ä½¿å¬å–š", "Summon Angel");
+		if (desc) return _("å¤©ä½¿ã‚’1ä½“å¬å–šã™ã‚‹ã€‚", "Summons an angel.");
 
 		{
 			if (cast)
@@ -434,11 +434,11 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				{
 					if (pet)
 					{
-						msg_print(_("u‚²—p‚Å‚²‚´‚¢‚Ü‚·‚©A‚²ål—lv", "'What is thy bidding... Master?'"));
+						msg_print(_("ã€Œã”ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€ã”ä¸»äººæ§˜ã€", "'What is thy bidding... Master?'"));
 					}
 					else
 					{
-						msg_print(_("u‰ä‚Í“ğ‚Ì‰º–l‚É‚ ‚ç‚¸I ˆ«sÒ‚æA‰÷‚¢‰ü‚ß‚æIv", "Mortal! Repent of thy impiousness."));
+						msg_print(_("ã€Œæˆ‘ã¯æ±ã®ä¸‹åƒ•ã«ã‚ã‚‰ãšï¼ æ‚ªè¡Œè€…ã‚ˆã€æ‚”ã„æ”¹ã‚ã‚ˆï¼ã€", "Mortal! Repent of thy impiousness."));
 					}
 				}
 			}
@@ -446,8 +446,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("m‹C‚—g", "Heroism");
-		if (desc) return _("ˆê’èŠÔAƒq[ƒ[‹C•ª‚É‚È‚éB", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
+		if (name) return _("å£«æ°—é«˜æš", "Heroism");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚‹ã€‚", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
 
 		{
 			int base = 25;
@@ -462,23 +462,23 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("ô‚¢‘ŞU", "Dispel Curse");
-		if (desc) return _("ƒAƒCƒeƒ€‚É‚©‚©‚Á‚½‹­—Í‚Èô‚¢‚ğ‰ğœ‚·‚éB", "Removes normal and heavy curse from equipped items.");
+		if (name) return _("å‘ªã„é€€æ•£", "Dispel Curse");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã«ã‹ã‹ã£ãŸå¼·åŠ›ãªå‘ªã„ã‚’è§£é™¤ã™ã‚‹ã€‚", "Removes normal and heavy curse from equipped items.");
 
 		{
 			if (cast)
 			{
 				if (remove_all_curse())
 				{
-					msg_print(_("’N‚©‚ÉŒ©ç‚ç‚ê‚Ä‚¢‚é‚æ‚¤‚È‹C‚ª‚·‚éB", "You feel as if someone is watching over you."));
+					msg_print(_("èª°ã‹ã«è¦‹å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚", "You feel as if someone is watching over you."));
 				}
 			}
 		}
 		break;
 
 	case 26:
-		if (name) return _("×ˆ«’Ç•ú", "Banish Evil");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ì×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB",
+		if (name) return _("é‚ªæ‚ªè¿½æ”¾", "Banish Evil");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚",
 			"Teleports all evil monsters in sight away unless resisted.");
 
 		{
@@ -490,15 +490,15 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (banish_evil(power))
 				{
-					msg_print(_("_¹‚È—Í‚ª×ˆ«‚ğ‘Å‚¿•¥‚Á‚½I", "The holy power banishes evil!"));
+					msg_print(_("ç¥è–ãªåŠ›ãŒé‚ªæ‚ªã‚’æ‰“ã¡æ‰•ã£ãŸï¼", "The holy power banishes evil!"));
 				}
 			}
 		}
 		break;
 
 	case 27:
-		if (name) return _("ƒnƒ‹ƒ}ƒQƒhƒ“", "Armageddon");
-		if (desc) return _("ü•Ó‚ÌƒAƒCƒeƒ€Aƒ‚ƒ“ƒXƒ^[A’nŒ`‚ğ”j‰ó‚·‚éB", "Destroy everything in nearby area.");
+		if (name) return _("ãƒãƒ«ãƒã‚²ãƒ‰ãƒ³", "Armageddon");
+		if (desc) return _("å‘¨è¾ºã®ã‚¢ã‚¤ãƒ†ãƒ ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€åœ°å½¢ã‚’ç ´å£Šã™ã‚‹ã€‚", "Destroy everything in nearby area.");
 
 		{
 			int base = 12;
@@ -512,8 +512,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("–Ú‚É‚Í–Ú‚ğ", "An Eye for an Eye");
-		if (desc) return _("ˆê’èŠÔA©•ª‚ªƒ_ƒ[ƒW‚ğó‚¯‚½‚Æ‚«‚ÉUŒ‚‚ğs‚Á‚½ƒ‚ƒ“ƒXƒ^[‚É‘Î‚µ‚Ä“¯“™‚Ìƒ_ƒ[ƒW‚ğ—^‚¦‚éB",
+		if (name) return _("ç›®ã«ã¯ç›®ã‚’", "An Eye for an Eye");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€è‡ªåˆ†ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã¨ãã«æ”»æ’ƒã‚’è¡Œã£ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦åŒç­‰ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚",
 			"Gives special aura for a while. When you are attacked by a monster, the monster are injured with same amount of damage as you take.");
 
 		{
@@ -529,8 +529,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("_‚Ì“{‚è", "Wrath of the God");
-		if (desc) return _("ƒ^[ƒQƒbƒg‚ÌüˆÍ‚É•ª‰ğ‚Ì‹…‚ğ‘½”—‚Æ‚·B", "Drops many balls of disintegration near the target.");
+		if (name) return _("ç¥ã®æ€’ã‚Š", "Wrath of the God");
+		if (desc) return _("ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®å‘¨å›²ã«åˆ†è§£ã®çƒã‚’å¤šæ•°è½ã¨ã™ã€‚", "Drops many balls of disintegration near the target.");
 
 		{
 			HIT_POINT dam = plev * 3 + 25;
@@ -546,8 +546,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("_ˆĞ", "Divine Intervention");
-		if (desc) return _("—×Ú‚·‚éƒ‚ƒ“ƒXƒ^[‚É¹‚È‚éƒ_ƒ[ƒW‚ğ—^‚¦A‹ŠE“à‚Ìƒ‚ƒ“ƒXƒ^[‚Éƒ_ƒ[ƒWAŒ¸‘¬ANOA¬—A‹°•|A–°‚è‚ğ—^‚¦‚éB‚³‚ç‚É‘Ì—Í‚ğ‰ñ•œ‚·‚éB",
+		if (name) return _("ç¥å¨", "Divine Intervention");
+		if (desc) return _("éš£æ¥ã™ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«è–ãªã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã€è¦–ç•Œå†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã€æ¸›é€Ÿã€æœ¦æœ§ã€æ··ä¹±ã€ææ€–ã€çœ ã‚Šã‚’ä¸ãˆã‚‹ã€‚ã•ã‚‰ã«ä½“åŠ›ã‚’å›å¾©ã™ã‚‹ã€‚",
 			"Damages all adjacent monsters with holy power. Damages and attempt to slow, stun, confuse, scare and freeze all monsters in sight. And heals HP.");
 
 		{
@@ -556,7 +556,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int heal = 100;
 			int power = plev * 4;
 
-			if (info) return format(_("‰ñ%d/‘¹%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam / 2);
+			if (info) return format(_("å›%d/æ%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam / 2);
 			if (cast)
 			{
 				project(0, 1, p_ptr->y, p_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
@@ -572,8 +572,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 31:
-		if (name) return _("¹í", "Crusade");
-		if (desc) return _("‹ŠE“à‚Ì‘P—Ç‚Èƒ‚ƒ“ƒXƒ^[‚ğƒyƒbƒg‚É‚µ‚æ‚¤‚Æ‚µA‚È‚ç‚È‚©‚Á‚½ê‡‹y‚Ñ‘P—Ç‚Å‚È‚¢ƒ‚ƒ“ƒXƒ^[‚ğ‹°•|‚³‚¹‚éB‚³‚ç‚É‘½”‚Ì‰Á‘¬‚³‚ê‚½‹Rm‚ğ¢Š«‚µAƒq[ƒ[Aj•ŸA‰Á‘¬A‘Î×ˆ«Œ‹ŠE‚ğ“¾‚éB",
+		if (name) return _("è–æˆ¦", "Crusade");
+		if (desc) return _("è¦–ç•Œå†…ã®å–„è‰¯ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒšãƒƒãƒˆã«ã—ã‚ˆã†ã¨ã—ã€ãªã‚‰ãªã‹ã£ãŸå ´åˆåŠã³å–„è‰¯ã§ãªã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ææ€–ã•ã›ã‚‹ã€‚ã•ã‚‰ã«å¤šæ•°ã®åŠ é€Ÿã•ã‚ŒãŸé¨å£«ã‚’å¬å–šã—ã€ãƒ’ãƒ¼ãƒ­ãƒ¼ã€ç¥ç¦ã€åŠ é€Ÿã€å¯¾é‚ªæ‚ªçµç•Œã‚’å¾—ã‚‹ã€‚",
 			"Attempts to charm all good monsters in sight, and scare all non-charmed monsters, and summons great number of knights, and gives heroism, bless, speed and protection from evil.");
 
 		{

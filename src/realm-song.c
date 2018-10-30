@@ -1,11 +1,11 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 
 /*!
-* @brief ‰Ì‚ÌŠJŽn‚ðˆ—‚·‚é / Start singing if the player is a Bard
-* @param spell —Ìˆæ–‚–@‚Æ‚µ‚Ä‚ÌID
-* @param song –‚–@Œø‰Ê‚ÌID
-* @return ‚È‚µ
+* @brief æ­Œã®é–‹å§‹ã‚’å‡¦ç†ã™ã‚‹ / Start singing if the player is a Bard
+* @param spell é ˜åŸŸé­”æ³•ã¨ã—ã¦ã®ID
+* @param song é­”æ³•åŠ¹æžœã®ID
+* @return ãªã—
 */
 static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
 {
@@ -28,8 +28,8 @@ static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
 }
 
 /*!
-* @brief ‰Ì‚Ì’âŽ~‚ðˆ—‚·‚é / Stop singing if the player is a Bard
-* @return ‚È‚µ
+* @brief æ­Œã®åœæ­¢ã‚’å‡¦ç†ã™ã‚‹ / Stop singing if the player is a Bard
+* @return ãªã—
 */
 void stop_singing(void)
 {
@@ -63,10 +63,10 @@ void stop_singing(void)
 }
 
 /*!
-* @brief ‰Ì‚ÌŠeˆ—‚ðs‚¤
-* @param spell ‰ÌID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO Žž‚É‚Í•¶Žš—ñƒ|ƒCƒ“ƒ^‚ð•Ô‚·BSPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP Žž‚ÍNULL•¶Žš—ñ‚ð•Ô‚·B
+* @brief æ­Œã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell æ­ŒID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP æ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -77,7 +77,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
 	bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
 	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
-	static const char s_dam[] = _("‘¹:", "dam ");
+	static const char s_dam[] = _("æå‚·:", "dam ");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -85,15 +85,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("’x“Ý‚Ì‰Ì", "Song of Holding");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ðŒ¸‘¬‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to slow all monsters in sight.");
+		if (name) return _("é…éˆã®æ­Œ", "Song of Holding");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ¸›é€Ÿã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to slow all monsters in sight.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("‚ä‚Á‚­‚è‚Æ‚µ‚½ƒƒƒfƒB‚ðŒû‚¸‚³‚ÝŽn‚ß‚½DDD", "You start humming a slow, steady melody..."));
+			msg_print(_("ã‚†ã£ãã‚Šã¨ã—ãŸãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å£ãšã•ã¿å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "You start humming a slow, steady melody..."));
 			start_singing(spell, MUSIC_SLOW);
 		}
 
@@ -110,15 +110,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("j•Ÿ‚Ì‰Ì", "Song of Blessing");
-		if (desc) return _("–½’†—¦‚ÆAC‚Ìƒ{[ƒiƒX‚ð“¾‚éB", "Gives bonus to hit and AC for a few turns.");
+		if (name) return _("ç¥ç¦ã®æ­Œ", "Song of Blessing");
+		if (desc) return _("å‘½ä¸­çŽ‡ã¨ACã®ãƒœãƒ¼ãƒŠã‚¹ã‚’å¾—ã‚‹ã€‚", "Gives bonus to hit and AC for a few turns.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("Œµ‚©‚ÈƒƒƒfƒB‚ð‘t‚ÅŽn‚ß‚½DDD", "The holy power of the Music of the Ainur enters you..."));
+			msg_print(_("åŽ³ã‹ãªãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "The holy power of the Music of the Ainur enters you..."));
 			start_singing(spell, MUSIC_BLESS);
 		}
 
@@ -126,15 +126,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (!p_ptr->blessed)
 			{
-				msg_print(_("‚Œ‰‚È‹C•ª‚ªÁ‚¦Ž¸‚¹‚½B", "The prayer has expired."));
+				msg_print(_("é«˜æ½”ãªæ°—åˆ†ãŒæ¶ˆãˆå¤±ã›ãŸã€‚", "The prayer has expired."));
 			}
 		}
 
 		break;
 
 	case 2:
-		if (name) return _("•ö‰ó‚Ì‰¹F", "Wrecking Note");
-		if (desc) return _("Œ‰¹‚Ìƒ{ƒ‹ƒg‚ð•ú‚ÂB", "Fires a bolt of sound.");
+		if (name) return _("å´©å£Šã®éŸ³è‰²", "Wrecking Note");
+		if (desc) return _("è½ŸéŸ³ã®ãƒœãƒ«ãƒˆã‚’æ”¾ã¤ã€‚", "Fires a bolt of sound.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
@@ -155,15 +155,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("žNžO‚Ìù—¥", "Stun Pattern");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ðžNžO‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to stun all monsters in sight.");
+		if (name) return _("æœ¦æœ§ã®æ—‹å¾‹", "Stun Pattern");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æœ¦æœ§ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to stun all monsters in sight.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("á¿˜f‚³‚¹‚éƒƒƒfƒB‚ð‘t‚ÅŽn‚ß‚½DDD", "You weave a pattern of sounds to bewilder and daze..."));
+			msg_print(_("çœ©æƒ‘ã•ã›ã‚‹ãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "You weave a pattern of sounds to bewilder and daze..."));
 			start_singing(spell, MUSIC_STUN);
 		}
 
@@ -182,15 +182,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("¶–½‚Ì—¬‚ê", "Flow of Life");
-		if (desc) return _("‘Ì—Í‚ð­‚µ‰ñ•œ‚³‚¹‚éB", "Heals HP a little.");
+		if (name) return _("ç”Ÿå‘½ã®æµã‚Œ", "Flow of Life");
+		if (desc) return _("ä½“åŠ›ã‚’å°‘ã—å›žå¾©ã•ã›ã‚‹ã€‚", "Heals HP a little.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("‰Ì‚ð’Ê‚µ‚Ä‘Ì‚ÉŠˆ‹C‚ª–ß‚Á‚Ä‚«‚½DDD", "Life flows through you as you sing a song of healing..."));
+			msg_print(_("æ­Œã‚’é€šã—ã¦ä½“ã«æ´»æ°—ãŒæˆ»ã£ã¦ããŸï¼Žï¼Žï¼Ž", "Life flows through you as you sing a song of healing..."));
 			start_singing(spell, MUSIC_L_LIFE);
 		}
 
@@ -209,8 +209,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("‘¾—z‚Ì‰Ì", "Song of the Sun");
-		if (desc) return _("ŒõŒ¹‚ªÆ‚ç‚µ‚Ä‚¢‚é”ÍˆÍ‚©•”‰®‘S‘Ì‚ð‰i‹v‚É–¾‚é‚­‚·‚éB", "Lights up nearby area and the inside of a room permanently.");
+		if (name) return _("å¤ªé™½ã®æ­Œ", "Song of the Sun");
+		if (desc) return _("å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜Žã‚‹ãã™ã‚‹ã€‚", "Lights up nearby area and the inside of a room permanently.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
@@ -224,22 +224,22 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				msg_print(_("Œõ‚è‹P‚­‰Ì‚ª•Ó‚è‚ðÆ‚ç‚µ‚½B", "Your uplifting song brings brightness to dark places..."));
+				msg_print(_("å…‰ã‚Šè¼ãæ­ŒãŒè¾ºã‚Šã‚’ç…§ã‚‰ã—ãŸã€‚", "Your uplifting song brings brightness to dark places..."));
 				lite_area(damroll(dice, sides), rad);
 			}
 		}
 		break;
 
 	case 6:
-		if (name) return _("‹°•|‚Ì‰Ì", "Song of Fear");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ð‹°•|‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to scare all monsters in sight.");
+		if (name) return _("ææ€–ã®æ­Œ", "Song of Fear");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ææ€–ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to scare all monsters in sight.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("‚¨‚Ç‚ë‚¨‚Ç‚ë‚µ‚¢ƒƒƒfƒB‚ð‘t‚ÅŽn‚ß‚½DDD", "You start weaving a fearful pattern..."));
+			msg_print(_("ãŠã©ã‚ãŠã©ã‚ã—ã„ãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "You start weaving a fearful pattern..."));
 			start_singing(spell, MUSIC_FEAR);
 		}
 
@@ -257,15 +257,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("í‚¢‚Ì‰Ì", "Heroic Ballad");
-		if (desc) return _("ƒq[ƒ[‹C•ª‚É‚È‚éB", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
+		if (name) return _("æˆ¦ã„ã®æ­Œ", "Heroic Ballad");
+		if (desc) return _("ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚‹ã€‚", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("Œƒ‚µ‚¢í‚¢‚Ì‰Ì‚ð‰Ì‚Á‚½DDD", "You start singing a song of intense fighting..."));
+			msg_print(_("æ¿€ã—ã„æˆ¦ã„ã®æ­Œã‚’æ­Œã£ãŸï¼Žï¼Žï¼Ž", "You start singing a song of intense fighting..."));
 
 			(void)hp_player(10);
 			(void)set_afraid(0);
@@ -280,7 +280,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (!p_ptr->hero)
 			{
-				msg_print(_("ƒq[ƒ[‚Ì‹C•ª‚ªÁ‚¦Ž¸‚¹‚½B", "The heroism wears off."));
+				msg_print(_("ãƒ’ãƒ¼ãƒ­ãƒ¼ã®æ°—åˆ†ãŒæ¶ˆãˆå¤±ã›ãŸã€‚", "The heroism wears off."));
 				/* Recalculate hitpoints */
 				p_ptr->update |= (PU_HP);
 			}
@@ -289,8 +289,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("—ì“I’mŠo", "Clairaudience");
-		if (desc) return _("‹ß‚­‚Ìã©/”à/ŠK’i‚ðŠ´’m‚·‚éBƒŒƒxƒ‹15‚Å‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[A20‚Åà•ó‚ÆƒAƒCƒeƒ€‚ðŠ´’m‚Å‚«‚é‚æ‚¤‚É‚È‚éBƒŒƒxƒ‹25‚ÅŽü•Ó‚Ì’nŒ`‚ðŠ´’m‚µA40‚Å‚»‚ÌŠK‘S‘Ì‚ð‰i‹v‚ÉÆ‚ç‚µAƒ_ƒ“ƒWƒ‡ƒ““à‚Ì‚·‚×‚Ä‚ÌƒAƒCƒeƒ€‚ðŠ´’m‚·‚éB‚±‚ÌŒø‰Ê‚Í‰Ì‚¢‘±‚¯‚é‚±‚Æ‚Å‡‚É‹N‚±‚éB",
+		if (name) return _("éœŠçš„çŸ¥è¦š", "Clairaudience");
+		if (desc) return _("è¿‘ãã®ç½ /æ‰‰/éšŽæ®µã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚ãƒ¬ãƒ™ãƒ«15ã§å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€20ã§è²¡å®ã¨ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã§ãã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚ãƒ¬ãƒ™ãƒ«25ã§å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã—ã€40ã§ãã®éšŽå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã®ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚ã“ã®åŠ¹æžœã¯æ­Œã„ç¶šã‘ã‚‹ã“ã¨ã§é †ã«èµ·ã“ã‚‹ã€‚",
 			"Detects traps, doors and stairs in your vicinity. And detects all monsters at level 15, treasures and items at level 20. Maps nearby area at level 25. Lights and know the whole level at level 40. These effects occurs by turns while this song continues.");
 
 		/* Stop singing before start another */
@@ -298,7 +298,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		if (cast)
 		{
-			msg_print(_("Ã‚©‚È‰¹Šy‚ªŠ´Šo‚ðŒ¤‚¬Ÿ‚Ü‚³‚¹‚½DDD", "Your quiet music sharpens your sense of hearing..."));
+			msg_print(_("é™ã‹ãªéŸ³æ¥½ãŒæ„Ÿè¦šã‚’ç ”ãŽæ¾„ã¾ã•ã›ãŸï¼Žï¼Žï¼Ž", "Your quiet music sharpens your sense of hearing..."));
 			/* Hack -- Initialize the turn count */
 			SINGING_COUNT(p_ptr) = 0;
 			start_singing(spell, MUSIC_DETECT);
@@ -350,15 +350,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("°‚Ì‰Ì", "Soul Shriek");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚É‘Î‚µ‚Ä¸_UŒ‚‚ðs‚¤B", "Damages all monsters in sight with PSI damages.");
+		if (name) return _("é­‚ã®æ­Œ", "Soul Shriek");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦ç²¾ç¥žæ”»æ’ƒã‚’è¡Œã†ã€‚", "Damages all monsters in sight with PSI damages.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("¸_‚ð”P‚¶‹È‚°‚é‰Ì‚ð‰Ì‚Á‚½DDD", "You start singing a song of soul in pain..."));
+			msg_print(_("ç²¾ç¥žã‚’æ»ã˜æ›²ã’ã‚‹æ­Œã‚’æ­Œã£ãŸï¼Žï¼Žï¼Ž", "You start singing a song of soul in pain..."));
 			start_singing(spell, MUSIC_PSI);
 		}
 
@@ -377,15 +377,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("’mŽ¯‚Ì‰Ì", "Song of Lore");
-		if (desc) return _("Ž©•ª‚Ì‚¢‚éƒ}ƒX‚Æ—×‚è‚Ìƒ}ƒX‚É—Ž‚¿‚Ä‚¢‚éƒAƒCƒeƒ€‚ðŠÓ’è‚·‚éB", "Identifies all items which are in the adjacent squares.");
+		if (name) return _("çŸ¥è­˜ã®æ­Œ", "Song of Lore");
+		if (desc) return _("è‡ªåˆ†ã®ã„ã‚‹ãƒžã‚¹ã¨éš£ã‚Šã®ãƒžã‚¹ã«è½ã¡ã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’é‘‘å®šã™ã‚‹ã€‚", "Identifies all items which are in the adjacent squares.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("‚±‚Ì¢ŠE‚Ì’mŽ¯‚ª—¬‚êž‚ñ‚Å‚«‚½DDD", "You recall the rich lore of the world..."));
+			msg_print(_("ã“ã®ä¸–ç•Œã®çŸ¥è­˜ãŒæµã‚Œè¾¼ã‚“ã§ããŸï¼Žï¼Žï¼Ž", "You recall the rich lore of the world..."));
 			start_singing(spell, MUSIC_ID);
 		}
 
@@ -395,8 +395,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (info) return info_radius(rad);
 
 			/*
-			* ‰Ì‚ÌŠJŽnŽž‚É‚àŒø‰Ê”­“®F
-			* MP•s‘«‚ÅŠÓ’è‚ª”­“®‚³‚ê‚é‘O‚É‰Ì‚ª’†’f‚µ‚Ä‚µ‚Ü‚¤‚Ì‚ð–hŽ~B
+			* æ­Œã®é–‹å§‹æ™‚ã«ã‚‚åŠ¹æžœç™ºå‹•ï¼š
+			* MPä¸è¶³ã§é‘‘å®šãŒç™ºå‹•ã•ã‚Œã‚‹å‰ã«æ­ŒãŒä¸­æ–­ã—ã¦ã—ã¾ã†ã®ã‚’é˜²æ­¢ã€‚
 			*/
 			if (cont || cast)
 			{
@@ -407,15 +407,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("‰B“Ù‚Ì‰Ì", "Hiding Tune");
-		if (desc) return _("‰B–§s“®”\—Í‚ðã¸‚³‚¹‚éB", "Gives improved stealth.");
+		if (name) return _("éš éã®æ­Œ", "Hiding Tune");
+		if (desc) return _("éš å¯†è¡Œå‹•èƒ½åŠ›ã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚", "Gives improved stealth.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("‚ ‚È‚½‚ÌŽp‚ªŒiF‚É‚Æ‚¯‚±‚ñ‚Å‚¢‚Á‚½DDD", "Your song carries you beyond the sight of mortal eyes..."));
+			msg_print(_("ã‚ãªãŸã®å§¿ãŒæ™¯è‰²ã«ã¨ã‘ã“ã‚“ã§ã„ã£ãŸï¼Žï¼Žï¼Ž", "Your song carries you beyond the sight of mortal eyes..."));
 			start_singing(spell, MUSIC_STEALTH);
 		}
 
@@ -423,22 +423,22 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (!p_ptr->tim_stealth)
 			{
-				msg_print(_("Žp‚ª‚Í‚Á‚«‚è‚ÆŒ©‚¦‚é‚æ‚¤‚É‚È‚Á‚½B", "You are no longer hided."));
+				msg_print(_("å§¿ãŒã¯ã£ãã‚Šã¨è¦‹ãˆã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚", "You are no longer hided."));
 			}
 		}
 
 		break;
 
 	case 12:
-		if (name) return _("Œ¶‰e‚Ìù—¥", "Illusion Pattern");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ð¬—‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to confuse all monsters in sight.");
+		if (name) return _("å¹»å½±ã®æ—‹å¾‹", "Illusion Pattern");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ··ä¹±ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to confuse all monsters in sight.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("•Ó‚èˆê–Ê‚ÉŒ¶‰e‚ªŒ»‚ê‚½DDD", "You weave a pattern of sounds to beguile and confuse..."));
+			msg_print(_("è¾ºã‚Šä¸€é¢ã«å¹»å½±ãŒç¾ã‚ŒãŸï¼Žï¼Žï¼Ž", "You weave a pattern of sounds to beguile and confuse..."));
 			start_singing(spell, MUSIC_CONF);
 		}
 
@@ -456,15 +456,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("”j–Å‚Ì‹©‚Ñ", "Doomcall");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚É‘Î‚µ‚ÄŒ‰¹UŒ‚‚ðs‚¤B", "Damages all monsters in sight with booming sound.");
+		if (name) return _("ç ´æ»…ã®å«ã³", "Doomcall");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«å¯¾ã—ã¦è½ŸéŸ³æ”»æ’ƒã‚’è¡Œã†ã€‚", "Damages all monsters in sight with booming sound.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("Œ‰¹‚ª‹¿‚¢‚½DDD", "The fury of the Downfall of Numenor lashes out..."));
+			msg_print(_("è½ŸéŸ³ãŒéŸ¿ã„ãŸï¼Žï¼Žï¼Ž", "The fury of the Downfall of Numenor lashes out..."));
 			start_singing(spell, MUSIC_SOUND);
 		}
 
@@ -483,8 +483,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("ƒtƒBƒŠƒGƒ‹‚Ì‰Ì", "Firiel's Song");
-		if (desc) return _("ŽüˆÍ‚ÌŽ€‘Ì‚âœ‚ð¶‚«•Ô‚·B", "Resurrects nearby corpse and skeletons. And makes these your pets.");
+		if (name) return _("ãƒ•ã‚£ãƒªã‚¨ãƒ«ã®æ­Œ", "Firiel's Song");
+		if (desc) return _("å‘¨å›²ã®æ­»ä½“ã‚„éª¨ã‚’ç”Ÿãè¿”ã™ã€‚", "Resurrects nearby corpse and skeletons. And makes these your pets.");
 
 		{
 			/* Stop singing before start another */
@@ -492,22 +492,22 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				msg_print(_("¶–½‚Æ•œŠˆ‚Ìƒe[ƒ}‚ð‘t‚ÅŽn‚ß‚½DDD", "The themes of life and revival are woven into your song..."));
+				msg_print(_("ç”Ÿå‘½ã¨å¾©æ´»ã®ãƒ†ãƒ¼ãƒžã‚’å¥ã§å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "The themes of life and revival are woven into your song..."));
 				animate_dead(0, p_ptr->y, p_ptr->x);
 			}
 		}
 		break;
 
 	case 15:
-		if (name) return _("—·‚Ì’‡ŠÔ", "Fellowship Chant");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ð–£—¹‚·‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to charm all monsters in sight.");
+		if (name) return _("æ—…ã®ä»²é–“", "Fellowship Chant");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to charm all monsters in sight.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("ˆÀ‚ç‚©‚ÈƒƒƒfƒB‚ð‘t‚ÅŽn‚ß‚½DDD", "You weave a slow, soothing melody of imploration..."));
+			msg_print(_("å®‰ã‚‰ã‹ãªãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "You weave a slow, soothing melody of imploration..."));
 			start_singing(spell, MUSIC_CHARM);
 		}
 
@@ -526,22 +526,22 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("•ª‰ð‰¹”g", "Sound of disintegration");
-		if (desc) return _("•Ç‚ðŒ@‚èi‚ÞBŽ©•ª‚Ì‘«Œ³‚ÌƒAƒCƒeƒ€‚Íö”­‚·‚éB", "Makes you be able to burrow into walls. Objects under your feet evaporate.");
+		if (name) return _("åˆ†è§£éŸ³æ³¢", "Sound of disintegration");
+		if (desc) return _("å£ã‚’æŽ˜ã‚Šé€²ã‚€ã€‚è‡ªåˆ†ã®è¶³å…ƒã®ã‚¢ã‚¤ãƒ†ãƒ ã¯è’¸ç™ºã™ã‚‹ã€‚", "Makes you be able to burrow into walls. Objects under your feet evaporate.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("•²Ó‚·‚éƒƒƒfƒB‚ð‘t‚ÅŽn‚ß‚½DDD", "You weave a violent pattern of sounds to break wall."));
+			msg_print(_("ç²‰ç •ã™ã‚‹ãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "You weave a violent pattern of sounds to break wall."));
 			start_singing(spell, MUSIC_WALL);
 		}
 
 		{
 			/*
-			* ‰Ì‚ÌŠJŽnŽž‚É‚àŒø‰Ê”­“®F
-			* MP•s‘«‚ÅŒø‰Ê‚ª”­“®‚³‚ê‚é‘O‚É‰Ì‚ª’†’f‚µ‚Ä‚µ‚Ü‚¤‚Ì‚ð–hŽ~B
+			* æ­Œã®é–‹å§‹æ™‚ã«ã‚‚åŠ¹æžœç™ºå‹•ï¼š
+			* MPä¸è¶³ã§åŠ¹æžœãŒç™ºå‹•ã•ã‚Œã‚‹å‰ã«æ­ŒãŒä¸­æ–­ã—ã¦ã—ã¾ã†ã®ã‚’é˜²æ­¢ã€‚
 			*/
 			if (cont || cast)
 			{
@@ -552,8 +552,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("Œ³‘f‘Ï«", "Finrod's Resistance");
-		if (desc) return _("Ž_A“dŒ‚A‰ŠA—â‹CA“Å‚É‘Î‚·‚é‘Ï«‚ð“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—ÝÏ‚·‚éB",
+		if (name) return _("å…ƒç´ è€æ€§", "Finrod's Resistance");
+		if (desc) return _("é…¸ã€é›»æ’ƒã€ç‚Žã€å†·æ°—ã€æ¯’ã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to which from equipment for more powerful resistances.");
 
 		/* Stop singing before start another */
@@ -561,7 +561,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		if (cast)
 		{
-			msg_print(_("Œ³‘f‚Ì—Í‚É‘Î‚·‚é”E‘Ï‚Ì‰Ì‚ð‰Ì‚Á‚½B", "You sing a song of perseverance against powers..."));
+			msg_print(_("å…ƒç´ ã®åŠ›ã«å¯¾ã™ã‚‹å¿è€ã®æ­Œã‚’æ­Œã£ãŸã€‚", "You sing a song of perseverance against powers..."));
 			start_singing(spell, MUSIC_RESIST);
 		}
 
@@ -569,42 +569,42 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (!p_ptr->oppose_acid)
 			{
-				msg_print(_("Ž_‚Ö‚Ì‘Ï«‚ª”–‚ê‚½‹C‚ª‚·‚éB", "You feel less resistant to acid."));
+				msg_print(_("é…¸ã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚", "You feel less resistant to acid."));
 			}
 
 			if (!p_ptr->oppose_elec)
 			{
-				msg_print(_("“dŒ‚‚Ö‚Ì‘Ï«‚ª”–‚ê‚½‹C‚ª‚·‚éB", "You feel less resistant to elec."));
+				msg_print(_("é›»æ’ƒã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚", "You feel less resistant to elec."));
 			}
 
 			if (!p_ptr->oppose_fire)
 			{
-				msg_print(_("‰Î‚Ö‚Ì‘Ï«‚ª”–‚ê‚½‹C‚ª‚·‚éB", "You feel less resistant to fire."));
+				msg_print(_("ç«ã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚", "You feel less resistant to fire."));
 			}
 
 			if (!p_ptr->oppose_cold)
 			{
-				msg_print(_("—â‹C‚Ö‚Ì‘Ï«‚ª”–‚ê‚½‹C‚ª‚·‚éB", "You feel less resistant to cold."));
+				msg_print(_("å†·æ°—ã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚", "You feel less resistant to cold."));
 			}
 
 			if (!p_ptr->oppose_pois)
 			{
-				msg_print(_("“Å‚Ö‚Ì‘Ï«‚ª”–‚ê‚½‹C‚ª‚·‚éB", "You feel less resistant to pois."));
+				msg_print(_("æ¯’ã¸ã®è€æ€§ãŒè–„ã‚ŒãŸæ°—ãŒã™ã‚‹ã€‚", "You feel less resistant to pois."));
 			}
 		}
 
 		break;
 
 	case 18:
-		if (name) return _("ƒzƒrƒbƒg‚ÌƒƒƒfƒB", "Hobbit Melodies");
-		if (desc) return _("‰Á‘¬‚·‚éB", "Hastes you.");
+		if (name) return _("ãƒ›ãƒ“ãƒƒãƒˆã®ãƒ¡ãƒ­ãƒ‡ã‚£", "Hobbit Melodies");
+		if (desc) return _("åŠ é€Ÿã™ã‚‹ã€‚", "Hastes you.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("Œy‰õ‚È‰Ì‚ðŒû‚¸‚³‚ÝŽn‚ß‚½DDD", "You start singing joyful pop song..."));
+			msg_print(_("è»½å¿«ãªæ­Œã‚’å£ãšã•ã¿å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "You start singing joyful pop song..."));
 			start_singing(spell, MUSIC_SPEED);
 		}
 
@@ -612,15 +612,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (!p_ptr->fast)
 			{
-				msg_print(_("“®‚«‚Ì‘f‘‚³‚ª‚È‚­‚È‚Á‚½‚æ‚¤‚¾B", "You feel yourself slow down."));
+				msg_print(_("å‹•ãã®ç´ æ—©ã•ãŒãªããªã£ãŸã‚ˆã†ã ã€‚", "You feel yourself slow down."));
 			}
 		}
 
 		break;
 
 	case 19:
-		if (name) return _("˜c‚ñ‚¾¢ŠE", "World Contortion");
-		if (desc) return _("‹ß‚­‚Ìƒ‚ƒ“ƒXƒ^[‚ðƒeƒŒƒ|[ƒg‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Teleports all nearby monsters away unless resisted.");
+		if (name) return _("æ­ªã‚“ã ä¸–ç•Œ", "World Contortion");
+		if (desc) return _("è¿‘ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Teleports all nearby monsters away unless resisted.");
 
 		{
 			int rad = plev / 15 + 1;
@@ -633,15 +633,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				msg_print(_("‰Ì‚ª‹óŠÔ‚ð˜c‚ß‚½DDD", "Reality whirls wildly as you sing a dizzying melody..."));
+				msg_print(_("æ­ŒãŒç©ºé–“ã‚’æ­ªã‚ãŸï¼Žï¼Žï¼Ž", "Reality whirls wildly as you sing a dizzying melody..."));
 				project(0, rad, p_ptr->y, p_ptr->x, power, GF_AWAY_ALL, PROJECT_KILL, -1);
 			}
 		}
 		break;
 
 	case 20:
-		if (name) return _("‘ÞŽU‚Ì‰Ì", "Dispelling chant");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚Éƒ_ƒ[ƒW‚ð—^‚¦‚éBŽ×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚É“Á‚É‘å‚«‚Èƒ_ƒ[ƒW‚ð—^‚¦‚éB",
+		if (name) return _("é€€æ•£ã®æ­Œ", "Dispelling chant");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸Žãˆã‚‹ã€‚é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ç‰¹ã«å¤§ããªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸Žãˆã‚‹ã€‚",
 			"Damages all monsters in sight. Hurts evil monsters greatly.");
 
 		/* Stop singing before start another */
@@ -649,7 +649,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		if (cast)
 		{
-			msg_print(_("‘Ï‚¦‚ç‚ê‚È‚¢•s‹¦˜a‰¹‚ª“G‚ðÓ‚ß—§‚Ä‚½DDD", "You cry out in an ear-wracking voice..."));
+			msg_print(_("è€ãˆã‚‰ã‚Œãªã„ä¸å”å’ŒéŸ³ãŒæ•µã‚’è²¬ã‚ç«‹ã¦ãŸï¼Žï¼Žï¼Ž", "You cry out in an ear-wracking voice..."));
 			start_singing(spell, MUSIC_DISPEL);
 		}
 
@@ -668,15 +668,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("ƒTƒ‹ƒ}ƒ“‚ÌŠÃŒ¾", "The Voice of Saruman");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ðŒ¸‘¬‚³‚¹A–°‚ç‚¹‚æ‚¤‚Æ‚·‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to slow and sleep all monsters in sight.");
+		if (name) return _("ã‚µãƒ«ãƒžãƒ³ã®ç”˜è¨€", "The Voice of Saruman");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ¸›é€Ÿã•ã›ã€çœ ã‚‰ã›ã‚ˆã†ã¨ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to slow and sleep all monsters in sight.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("—D‚µ‚­A–£—Í“I‚È‰Ì‚ðŒû‚¸‚³‚ÝŽn‚ß‚½DDD", "You start humming a gentle and attractive song..."));
+			msg_print(_("å„ªã—ãã€é­…åŠ›çš„ãªæ­Œã‚’å£ãšã•ã¿å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "You start humming a gentle and attractive song..."));
 			start_singing(spell, MUSIC_SARUMAN);
 		}
 
@@ -695,8 +695,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("—’‚Ì‰¹F", "Song of the Tempest");
-		if (desc) return _("Œ‰¹‚Ìƒr[ƒ€‚ð•ú‚ÂB", "Fires a beam of sound.");
+		if (name) return _("åµã®éŸ³è‰²", "Song of the Tempest");
+		if (desc) return _("è½ŸéŸ³ã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a beam of sound.");
 
 		{
 			int dice = 15 + (plev - 1) / 2;
@@ -717,8 +717,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 23:
-		if (name) return _("‚à‚¤ˆê‚Â‚Ì¢ŠE", "Ambarkanta");
-		if (desc) return _("Œ»Ý‚ÌŠK‚ðÄ\¬‚·‚éB", "Recreates current dungeon level.");
+		if (name) return _("ã‚‚ã†ä¸€ã¤ã®ä¸–ç•Œ", "Ambarkanta");
+		if (desc) return _("ç¾åœ¨ã®éšŽã‚’å†æ§‹æˆã™ã‚‹ã€‚", "Recreates current dungeon level.");
 
 		{
 			int base = 15;
@@ -731,15 +731,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				msg_print(_("ŽüˆÍ‚ª•Ï‰»‚µŽn‚ß‚½DDD", "You sing of the primeval shaping of Middle-earth..."));
+				msg_print(_("å‘¨å›²ãŒå¤‰åŒ–ã—å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "You sing of the primeval shaping of Middle-earth..."));
 				alter_reality();
 			}
 		}
 		break;
 
 	case 24:
-		if (name) return _("”j‰ó‚Ìù—¥", "Wrecking Pattern");
-		if (desc) return _("ŽüˆÍ‚Ìƒ_ƒ“ƒWƒ‡ƒ“‚ð—h‚ç‚µA•Ç‚Æ°‚ðƒ‰ƒ“ƒ_ƒ€‚É“ü‚ê•Ï‚¦‚éB",
+		if (name) return _("ç ´å£Šã®æ—‹å¾‹", "Wrecking Pattern");
+		if (desc) return _("å‘¨å›²ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’æºã‚‰ã—ã€å£ã¨åºŠã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«å…¥ã‚Œå¤‰ãˆã‚‹ã€‚",
 			"Shakes dungeon structure, and results in random swapping of floors and walls.");
 
 		/* Stop singing before start another */
@@ -747,7 +747,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		if (cast)
 		{
-			msg_print(_("”j‰ó“I‚È‰Ì‚ª‹¿‚«‚í‚½‚Á‚½DDD", "You weave a pattern of sounds to contort and shatter..."));
+			msg_print(_("ç ´å£Šçš„ãªæ­ŒãŒéŸ¿ãã‚ãŸã£ãŸï¼Žï¼Žï¼Ž", "You weave a pattern of sounds to contort and shatter..."));
 			start_singing(spell, MUSIC_QUAKE);
 		}
 
@@ -766,15 +766,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 
 	case 25:
-		if (name) return _("’â‘Ø‚Ì‰Ì", "Stationary Shriek");
-		if (desc) return _("Ž‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ð–ƒáƒ‚³‚¹‚æ‚¤‚Æ‚·‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to freeze all monsters in sight.");
+		if (name) return _("åœæ»žã®æ­Œ", "Stationary Shriek");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’éº»ç—ºã•ã›ã‚ˆã†ã¨ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to freeze all monsters in sight.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("‚ä‚Á‚­‚è‚Æ‚µ‚½ƒƒƒfƒB‚ð‘t‚ÅŽn‚ß‚½DDD", "You weave a very slow pattern which is almost likely to stop..."));
+			msg_print(_("ã‚†ã£ãã‚Šã¨ã—ãŸãƒ¡ãƒ­ãƒ‡ã‚£ã‚’å¥ã§å§‹ã‚ãŸï¼Žï¼Žï¼Ž", "You weave a very slow pattern which is almost likely to stop..."));
 			start_singing(spell, MUSIC_STASIS);
 		}
 
@@ -792,8 +792,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 26:
-		if (name) return _("Žç‚è‚Ì‰Ì", "Endurance");
-		if (desc) return _("Ž©•ª‚Ì‚¢‚é°‚Ìã‚ÉAƒ‚ƒ“ƒXƒ^[‚ª’Ê‚è”²‚¯‚½‚è¢Š«‚³‚ê‚½‚è‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚­‚È‚éƒ‹[ƒ“‚ð•`‚­B",
+		if (name) return _("å®ˆã‚Šã®æ­Œ", "Endurance");
+		if (desc) return _("è‡ªåˆ†ã®ã„ã‚‹åºŠã®ä¸Šã«ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€šã‚ŠæŠœã‘ãŸã‚Šå¬å–šã•ã‚ŒãŸã‚Šã™ã‚‹ã“ã¨ãŒã§ããªããªã‚‹ãƒ«ãƒ¼ãƒ³ã‚’æãã€‚",
 			"Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.");
 
 		{
@@ -802,15 +802,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				msg_print(_("‰Ì‚ª_¹‚Èê‚ðì‚èo‚µ‚½DDD", "The holy power of the Music is creating sacred field..."));
+				msg_print(_("æ­ŒãŒç¥žè–ãªå ´ã‚’ä½œã‚Šå‡ºã—ãŸï¼Žï¼Žï¼Ž", "The holy power of the Music is creating sacred field..."));
 				warding_glyph();
 			}
 		}
 		break;
 
 	case 27:
-		if (name) return _("‰p—Y‚ÌŽ", "The Hero's Poem");
-		if (desc) return _("‰Á‘¬‚µAƒq[ƒ[‹C•ª‚É‚È‚èAŽ‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚Éƒ_ƒ[ƒW‚ð—^‚¦‚éB",
+		if (name) return _("è‹±é›„ã®è©©", "The Hero's Poem");
+		if (desc) return _("åŠ é€Ÿã—ã€ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã«ãªã‚Šã€è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸Žãˆã‚‹ã€‚",
 			"Hastes you. Gives heroism. Damages all monsters in sight.");
 
 		/* Stop singing before start another */
@@ -818,7 +818,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		if (cast)
 		{
-			msg_print(_("‰p—Y‚Ì‰Ì‚ðŒû‚¸‚³‚ñ‚¾DDD", "You chant a powerful, heroic call to arms..."));
+			msg_print(_("è‹±é›„ã®æ­Œã‚’å£ãšã•ã‚“ã ï¼Žï¼Žï¼Ž", "You chant a powerful, heroic call to arms..."));
 			(void)hp_player(10);
 			(void)set_afraid(0);
 
@@ -832,14 +832,14 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (!p_ptr->hero)
 			{
-				msg_print(_("ƒq[ƒ[‚Ì‹C•ª‚ªÁ‚¦Ž¸‚¹‚½B", "The heroism wears off."));
+				msg_print(_("ãƒ’ãƒ¼ãƒ­ãƒ¼ã®æ°—åˆ†ãŒæ¶ˆãˆå¤±ã›ãŸã€‚", "The heroism wears off."));
 				/* Recalculate hitpoints */
 				p_ptr->update |= (PU_HP);
 			}
 
 			if (!p_ptr->fast)
 			{
-				msg_print(_("“®‚«‚Ì‘f‘‚³‚ª‚È‚­‚È‚Á‚½‚æ‚¤‚¾B", "You feel yourself slow down."));
+				msg_print(_("å‹•ãã®ç´ æ—©ã•ãŒãªããªã£ãŸã‚ˆã†ã ã€‚", "You feel yourself slow down."));
 			}
 		}
 
@@ -857,15 +857,15 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("ƒ„ƒ”ƒ@ƒ“ƒi‚Ì•‚¯", "Relief of Yavanna");
-		if (desc) return _("‹­—Í‚È‰ñ•œ‚Ì‰Ì‚ÅA•‰‚ÆžNžOó‘Ô‚à‘S‰õ‚·‚éB", "Powerful healing song. Also heals cut and stun completely.");
+		if (name) return _("ãƒ¤ãƒ´ã‚¡ãƒ³ãƒŠã®åŠ©ã‘", "Relief of Yavanna");
+		if (desc) return _("å¼·åŠ›ãªå›žå¾©ã®æ­Œã§ã€è² å‚·ã¨æœ¦æœ§çŠ¶æ…‹ã‚‚å…¨å¿«ã™ã‚‹ã€‚", "Powerful healing song. Also heals cut and stun completely.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing();
 
 		if (cast)
 		{
-			msg_print(_("‰Ì‚ð’Ê‚µ‚Ä‘Ì‚ÉŠˆ‹C‚ª–ß‚Á‚Ä‚«‚½DDD", "Life flows through you as you sing the song..."));
+			msg_print(_("æ­Œã‚’é€šã—ã¦ä½“ã«æ´»æ°—ãŒæˆ»ã£ã¦ããŸï¼Žï¼Žï¼Ž", "Life flows through you as you sing the song..."));
 			start_singing(spell, MUSIC_H_LIFE);
 		}
 
@@ -886,8 +886,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("Ä¶‚Ì‰Ì", "Goddess' rebirth");
-		if (desc) return _("‚·‚×‚Ä‚ÌƒXƒe[ƒ^ƒX‚ÆŒoŒ±’l‚ð‰ñ•œ‚·‚éB", "Restores all stats and experience.");
+		if (name) return _("å†ç”Ÿã®æ­Œ", "Goddess' rebirth");
+		if (desc) return _("ã™ã¹ã¦ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¨çµŒé¨“å€¤ã‚’å›žå¾©ã™ã‚‹ã€‚", "Restores all stats and experience.");
 
 		{
 			/* Stop singing before start another */
@@ -895,7 +895,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				msg_print(_("ˆÃ•‚Ì’†‚ÉŒõ‚Æ”ü‚ð‚Ó‚è‚Ü‚¢‚½B‘Ì‚ªŒ³‚ÌŠˆ—Í‚ðŽæ‚è–ß‚µ‚½B",
+				msg_print(_("æš—é»’ã®ä¸­ã«å…‰ã¨ç¾Žã‚’ãµã‚Šã¾ã„ãŸã€‚ä½“ãŒå…ƒã®æ´»åŠ›ã‚’å–ã‚Šæˆ»ã—ãŸã€‚",
 					"You strewed light and beauty in the dark as you sing. You feel refreshed."));
 				(void)restore_all_status();
 				(void)restore_level();
@@ -904,8 +904,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("ƒTƒEƒƒ“‚Ì–‚p", "Wizardry of Sauron");
-		if (desc) return _("”ñí‚É‹­—Í‚Å‚²‚­¬‚³‚¢Œ‰¹‚Ì‹…‚ð•ú‚ÂB", "Fires an extremely powerful tiny ball of sound.");
+		if (name) return _("ã‚µã‚¦ãƒ­ãƒ³ã®é­”è¡“", "Wizardry of Sauron");
+		if (desc) return _("éžå¸¸ã«å¼·åŠ›ã§ã”ãå°ã•ã„è½ŸéŸ³ã®çƒã‚’æ”¾ã¤ã€‚", "Fires an extremely powerful tiny ball of sound.");
 
 		{
 			int dice = 50 + plev;
@@ -927,8 +927,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 31:
-		if (name) return _("ƒtƒBƒ“ƒSƒ‹ƒtƒBƒ“‚Ì’§í", "Fingolfin's Challenge");
-		if (desc) return _("ƒ_ƒ[ƒW‚ðŽó‚¯‚È‚­‚È‚éƒoƒŠƒA‚ð’£‚éB",
+		if (name) return _("ãƒ•ã‚£ãƒ³ã‚´ãƒ«ãƒ•ã‚£ãƒ³ã®æŒ‘æˆ¦", "Fingolfin's Challenge");
+		if (desc) return _("ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãªããªã‚‹ãƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚",
 			"Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks.");
 
 		/* Stop singing before start another */
@@ -936,7 +936,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		if (cast)
 		{
-			msg_print(_("ƒtƒBƒ“ƒSƒ‹ƒtƒBƒ“‚Ì–»‰¤‚Ö‚Ì’§í‚ð‰Ì‚Á‚½DDD",
+			msg_print(_("ãƒ•ã‚£ãƒ³ã‚´ãƒ«ãƒ•ã‚£ãƒ³ã®å†¥çŽ‹ã¸ã®æŒ‘æˆ¦ã‚’æ­Œã£ãŸï¼Žï¼Žï¼Ž",
 				"You recall the valor of Fingolfin's challenge to the Dark Lord..."));
 
 			/* Redraw map */
@@ -955,7 +955,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (!p_ptr->invuln)
 			{
-				msg_print(_("–³“G‚Å‚Í‚È‚­‚È‚Á‚½B", "The invulnerability wears off."));
+				msg_print(_("ç„¡æ•µã§ã¯ãªããªã£ãŸã€‚", "The invulnerability wears off."));
 				/* Redraw map */
 				p_ptr->redraw |= (PR_MAP);
 

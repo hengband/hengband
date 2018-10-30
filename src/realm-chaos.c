@@ -1,11 +1,11 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 
 /*!
-* @brief ƒJƒIƒX—Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief ã‚«ã‚ªã‚¹é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -14,8 +14,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-	static const char s_dam[] = _("‘¹:", "dam ");
-	static const char s_random[] = _("ƒ‰ƒ“ƒ_ƒ€", "random");
+	static const char s_dam[] = _("æå‚·:", "dam ");
+	static const char s_random[] = _("ãƒ©ãƒ³ãƒ€ãƒ ", "random");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -23,8 +23,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("ƒ}ƒWƒbƒNEƒ~ƒTƒCƒ‹", "Magic Missile");
-		if (desc) return _("ã‚¢–‚–@‚Ì–î‚ğ•ú‚ÂB", "Fires a weak bolt of magic.");
+		if (name) return _("ãƒã‚¸ãƒƒã‚¯ãƒ»ãƒŸã‚µã‚¤ãƒ«", "Magic Missile");
+		if (desc) return _("å¼±ã„é­”æ³•ã®çŸ¢ã‚’æ”¾ã¤ã€‚", "Fires a weak bolt of magic.");
 
 		{
 			int dice = 3 + ((plev - 1) / 5);
@@ -42,8 +42,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("ƒgƒ‰ƒbƒv/ƒhƒA”j‰ó", "Trap / Door Destruction");
-		if (desc) return _("—×Ú‚·‚éã©‚Æ”à‚ğ”j‰ó‚·‚éB", "Destroys all traps in adjacent squares.");
+		if (name) return _("ãƒˆãƒ©ãƒƒãƒ—/ãƒ‰ã‚¢ç ´å£Š", "Trap / Door Destruction");
+		if (desc) return _("éš£æ¥ã™ã‚‹ç½ ã¨æ‰‰ã‚’ç ´å£Šã™ã‚‹ã€‚", "Destroys all traps in adjacent squares.");
 
 		{
 			int rad = 1;
@@ -58,8 +58,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("‘MŒõ", "Flash of Light");
-		if (desc) return _("ŒõŒ¹‚ªÆ‚ç‚µ‚Ä‚¢‚é”ÍˆÍ‚©•”‰®‘S‘Ì‚ğ‰i‹v‚É–¾‚é‚­‚·‚éB", "Lights up nearby area and the inside of a room permanently.");
+		if (name) return _("é–ƒå…‰", "Flash of Light");
+		if (desc) return _("å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚", "Lights up nearby area and the inside of a room permanently.");
 
 		{
 			int dice = 2;
@@ -76,15 +76,15 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("¬—‚Ìè", "Touch of Confusion");
-		if (desc) return _("‘Šè‚ğ¬—‚³‚¹‚éUŒ‚‚ğ‚Å‚«‚é‚æ‚¤‚É‚·‚éB", "Attempts to confuse the next monster that you hit.");
+		if (name) return _("æ··ä¹±ã®æ‰‹", "Touch of Confusion");
+		if (desc) return _("ç›¸æ‰‹ã‚’æ··ä¹±ã•ã›ã‚‹æ”»æ’ƒã‚’ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ã€‚", "Attempts to confuse the next monster that you hit.");
 
 		{
 			if (cast)
 			{
 				if (!(p_ptr->special_attack & ATTACK_CONFUSE))
 				{
-					msg_print(_("‚ ‚È‚½‚Ìè‚ÍŒõ‚èn‚ß‚½B", "Your hands start glowing."));
+					msg_print(_("ã‚ãªãŸã®æ‰‹ã¯å…‰ã‚Šå§‹ã‚ãŸã€‚", "Your hands start glowing."));
 					p_ptr->special_attack |= ATTACK_CONFUSE;
 					p_ptr->redraw |= (PR_STATUS);
 				}
@@ -93,8 +93,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("–‚—Íày—ô", "Mana Burst");
-		if (desc) return _("–‚–@‚Ì‹…‚ğ•ú‚ÂB", "Fires a ball of magic.");
+		if (name) return _("é­”åŠ›ç‚¸è£‚", "Mana Burst");
+		if (desc) return _("é­”æ³•ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a ball of magic.");
 
 		{
 			int dice = 3;
@@ -126,8 +126,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("ƒtƒ@ƒCƒAEƒ{ƒ‹ƒg", "Fire Bolt");
-		if (desc) return _("‰Š‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or beam of fire.");
+		if (name) return _("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ«ãƒˆ", "Fire Bolt");
+		if (desc) return _("ç‚ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or beam of fire.");
 
 		{
 			int dice = 8 + (plev - 5) / 4;
@@ -145,8 +145,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("—Í‚ÌŒ", "Fist of Force");
-		if (desc) return _("‚²‚­¬‚³‚È•ª‰ğ‚Ì‹…‚ğ•ú‚ÂB", "Fires a tiny ball of disintegration.");
+		if (name) return _("åŠ›ã®æ‹³", "Fist of Force");
+		if (desc) return _("ã”ãå°ã•ãªåˆ†è§£ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a tiny ball of disintegration.");
 
 		{
 			int dice = 8 + ((plev - 5) / 4);
@@ -164,8 +164,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("ƒeƒŒƒ|[ƒg", "Teleport Self");
-		if (desc) return _("‰“‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB", "Teleport long distance.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "Teleport Self");
+		if (desc) return _("é è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚", "Teleport long distance.");
 
 		{
 			POSITION range = plev * 5;
@@ -180,8 +180,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("ƒƒ“ƒ_[", "Wonder");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[‚Éƒ‰ƒ“ƒ_ƒ€‚ÈŒø‰Ê‚ğ—^‚¦‚éB", "Fires something with random effects.");
+		if (name) return _("ãƒ¯ãƒ³ãƒ€ãƒ¼", "Wonder");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ©ãƒ³ãƒ€ãƒ ãªåŠ¹æœã‚’ä¸ãˆã‚‹ã€‚", "Fires something with random effects.");
 
 		{
 			if (info) return s_random;
@@ -197,8 +197,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("ƒJƒIƒXEƒ{ƒ‹ƒg", "Chaos Bolt");
-		if (desc) return _("ƒJƒIƒX‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or ball of chaos.");
+		if (name) return _("ã‚«ã‚ªã‚¹ãƒ»ãƒœãƒ«ãƒˆ", "Chaos Bolt");
+		if (desc) return _("ã‚«ã‚ªã‚¹ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or ball of chaos.");
 
 		{
 			int dice = 10 + (plev - 5) / 4;
@@ -216,8 +216,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("ƒ\ƒjƒbƒNEƒu[ƒ€", "Sonic Boom");
-		if (desc) return _("©•ª‚ğ’†S‚Æ‚µ‚½Œ‰¹‚Ì‹…‚ğ”­¶‚³‚¹‚éB", "Generates a ball of sound centered on you.");
+		if (name) return _("ã‚½ãƒ‹ãƒƒã‚¯ãƒ»ãƒ–ãƒ¼ãƒ ", "Sonic Boom");
+		if (desc) return _("è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸè½ŸéŸ³ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚", "Generates a ball of sound centered on you.");
 
 		{
 			HIT_POINT dam = 60 + plev;
@@ -227,15 +227,15 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				msg_print(_("ƒh[ƒ“I•”‰®‚ª—h‚ê‚½I", "BOOM! Shake the room!"));
+				msg_print(_("ãƒ‰ãƒ¼ãƒ³ï¼éƒ¨å±‹ãŒæºã‚ŒãŸï¼", "BOOM! Shake the room!"));
 				project(0, rad, p_ptr->y, p_ptr->x, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
 			}
 		}
 		break;
 
 	case 11:
-		if (name) return _("”j–Å‚Ì–î", "Doom Bolt");
-		if (desc) return _("ƒˆ‚È–‚—Í‚Ìƒr[ƒ€‚ğ•ú‚ÂB", "Fires a beam of pure mana.");
+		if (name) return _("ç ´æ»…ã®çŸ¢", "Doom Bolt");
+		if (desc) return _("ç´”ç²‹ãªé­”åŠ›ã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a beam of pure mana.");
 
 		{
 			int dice = 11 + (plev - 5) / 4;
@@ -253,8 +253,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("ƒtƒ@ƒCƒAEƒ{[ƒ‹", "Fire Ball");
-		if (desc) return _("‰Š‚Ì‹…‚ğ•ú‚ÂB", "Fires a ball of fire.");
+		if (name) return _("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ¼ãƒ«", "Fire Ball");
+		if (desc) return _("ç‚ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a ball of fire.");
 
 		{
 			HIT_POINT dam = plev + 55;
@@ -272,8 +272,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("ƒeƒŒƒ|[ƒgEƒAƒEƒFƒC", "Teleport Other");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éƒr[ƒ€‚ğ•ú‚ÂB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Teleports all monsters on the line away unless resisted.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ã‚¢ã‚¦ã‚§ã‚¤", "Teleport Other");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Teleports all monsters on the line away unless resisted.");
 
 		{
 			int power = plev;
@@ -290,8 +290,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("”j‰ó‚ÌŒ¾—t", "Word of Destruction");
-		if (desc) return _("ü•Ó‚ÌƒAƒCƒeƒ€Aƒ‚ƒ“ƒXƒ^[A’nŒ`‚ğ”j‰ó‚·‚éB", "Destroy everything in nearby area.");
+		if (name) return _("ç ´å£Šã®è¨€è‘‰", "Word of Destruction");
+		if (desc) return _("å‘¨è¾ºã®ã‚¢ã‚¤ãƒ†ãƒ ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€åœ°å½¢ã‚’ç ´å£Šã™ã‚‹ã€‚", "Destroy everything in nearby area.");
 
 		{
 			int base = 12;
@@ -305,8 +305,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("ƒƒOƒ‹ƒX”­“®", "Invoke Logrus");
-		if (desc) return _("‹‘å‚ÈƒJƒIƒX‚Ì‹…‚ğ•ú‚ÂB", "Fires a huge ball of chaos.");
+		if (name) return _("ãƒ­ã‚°ãƒ«ã‚¹ç™ºå‹•", "Invoke Logrus");
+		if (desc) return _("å·¨å¤§ãªã‚«ã‚ªã‚¹ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a huge ball of chaos.");
 
 		{
 			HIT_POINT dam = plev * 2 + 99;
@@ -324,8 +324,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("‘¼Ò•Ï—e", "Polymorph Other");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğ•Ïg‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to polymorph a monster.");
+		if (name) return _("ä»–è€…å¤‰å®¹", "Polymorph Other");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’å¤‰èº«ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to polymorph a monster.");
 
 		{
 			int power = plev;
@@ -342,8 +342,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("˜A½ˆîÈ", "Chain Lightning");
-		if (desc) return _("‘S•ûŒü‚É‘Î‚µ‚Ä“dŒ‚‚Ìƒr[ƒ€‚ğ•ú‚ÂB", "Fires lightning beams in all directions.");
+		if (name) return _("é€£é–ç¨²å¦»", "Chain Lightning");
+		if (desc) return _("å…¨æ–¹å‘ã«å¯¾ã—ã¦é›»æ’ƒã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires lightning beams in all directions.");
 
 		{
 			int dice = 5 + plev / 10;
@@ -360,8 +360,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("–‚—Í••“ü", "Arcane Binding");
-		if (desc) return _("ñ/–‚–@–_‚Ì[“U‰ñ”‚ğ‘‚â‚·‚©A[“U’†‚Ìƒƒbƒh‚Ì[“UŠÔ‚ğŒ¸‚ç‚·B", "Recharges staffs, wands or rods.");
+		if (name) return _("é­”åŠ›å°å…¥", "Arcane Binding");
+		if (desc) return _("æ–/é­”æ³•æ£’ã®å……å¡«å›æ•°ã‚’å¢—ã‚„ã™ã‹ã€å……å¡«ä¸­ã®ãƒ­ãƒƒãƒ‰ã®å……å¡«æ™‚é–“ã‚’æ¸›ã‚‰ã™ã€‚", "Recharges staffs, wands or rods.");
 
 		{
 			int power = 90;
@@ -375,8 +375,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("Œ´q•ª‰ğ", "Disintegrate");
-		if (desc) return _("‹‘å‚È•ª‰ğ‚Ì‹…‚ğ•ú‚ÂB", "Fires a huge ball of disintegration.");
+		if (name) return _("åŸå­åˆ†è§£", "Disintegrate");
+		if (desc) return _("å·¨å¤§ãªåˆ†è§£ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a huge ball of disintegration.");
 
 		{
 			HIT_POINT dam = plev + 70;
@@ -394,8 +394,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("Œ»À•Ï—e", "Alter Reality");
-		if (desc) return _("Œ»İ‚ÌŠK‚ğÄ\¬‚·‚éB", "Recreates current dungeon level.");
+		if (name) return _("ç¾å®Ÿå¤‰å®¹", "Alter Reality");
+		if (desc) return _("ç¾åœ¨ã®éšã‚’å†æ§‹æˆã™ã‚‹ã€‚", "Recreates current dungeon level.");
 
 		{
 			int base = 15;
@@ -411,8 +411,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("ƒ}ƒWƒbƒNEƒƒPƒbƒg", "Magic Rocket");
-		if (desc) return _("ƒƒPƒbƒg‚ğ”­Ë‚·‚éB", "Fires a magic rocket.");
+		if (name) return _("ãƒã‚¸ãƒƒã‚¯ãƒ»ãƒ­ã‚±ãƒƒãƒˆ", "Magic Rocket");
+		if (desc) return _("ãƒ­ã‚±ãƒƒãƒˆã‚’ç™ºå°„ã™ã‚‹ã€‚", "Fires a magic rocket.");
 
 		{
 			HIT_POINT dam = 120 + plev * 2;
@@ -424,15 +424,15 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				msg_print(_("ƒƒPƒbƒg”­ËI", "You launch a rocket!"));
+				msg_print(_("ãƒ­ã‚±ãƒƒãƒˆç™ºå°„ï¼", "You launch a rocket!"));
 				fire_rocket(GF_ROCKET, dir, dam, rad);
 			}
 		}
 		break;
 
 	case 22:
-		if (name) return _("¬“×‚Ìn", "Chaos Branding");
-		if (desc) return _("•Ší‚ÉƒJƒIƒX‚Ì‘®«‚ğ‚Â‚¯‚éB", "Makes current weapon a Chaotic weapon.");
+		if (name) return _("æ··æ²Œã®åˆƒ", "Chaos Branding");
+		if (desc) return _("æ­¦å™¨ã«ã‚«ã‚ªã‚¹ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚", "Makes current weapon a Chaotic weapon.");
 
 		{
 			if (cast)
@@ -443,8 +443,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 23:
-		if (name) return _("ˆ«–‚¢Š«", "Summon Demon");
-		if (desc) return _("ˆ«–‚‚ğ1‘Ì¢Š«‚·‚éB", "Summons a demon.");
+		if (name) return _("æ‚ªé­”å¬å–š", "Summon Demon");
+		if (desc) return _("æ‚ªé­”ã‚’1ä½“å¬å–šã™ã‚‹ã€‚", "Summons a demon.");
 
 		{
 			if (cast)
@@ -458,14 +458,14 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_DEMON, flg))
 				{
-					msg_print(_("—°‰©‚Ìˆ«L‚ª[–‚µ‚½B", "The area fills with a stench of sulphur and brimstone."));
+					msg_print(_("ç¡«é»„ã®æ‚ªè‡­ãŒå……æº€ã—ãŸã€‚", "The area fills with a stench of sulphur and brimstone."));
 					if (pet)
 					{
-						msg_print(_("u‚²—p‚Å‚²‚´‚¢‚Ü‚·‚©A‚²ål—lv", "'What is thy bidding... Master?'"));
+						msg_print(_("ã€Œã”ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€ã”ä¸»äººæ§˜ã€", "'What is thy bidding... Master?'"));
 					}
 					else
 					{
-						msg_print(_("u”Ú‚µ‚«Ò‚æA‰ä‚Í“ğ‚Ì‰º–l‚É‚ ‚ç‚¸I ‚¨‘O‚Ì°‚ğ’¸‚­‚¼Iv",
+						msg_print(_("ã€Œå‘ã—ãè€…ã‚ˆã€æˆ‘ã¯æ±ã®ä¸‹åƒ•ã«ã‚ã‚‰ãšï¼ ãŠå‰ã®é­‚ã‚’é ‚ããï¼ã€",
 							"'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
 					}
 				}
@@ -474,8 +474,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("d—ÍŒõü", "Beam of Gravity");
-		if (desc) return _("d—Í‚Ìƒr[ƒ€‚ğ•ú‚ÂB", "Fires a beam of gravity.");
+		if (name) return _("é‡åŠ›å…‰ç·š", "Beam of Gravity");
+		if (desc) return _("é‡åŠ›ã®ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a beam of gravity.");
 
 		{
 			int dice = 9 + (plev - 5) / 4;
@@ -492,8 +492,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("—¬¯ŒQ", "Meteor Swarm");
-		if (desc) return _("©•ª‚Ìü•Ó‚Éè¦Î‚ğ—‚Æ‚·B", "Makes meteor balls fall down to nearby random locations.");
+		if (name) return _("æµæ˜Ÿç¾¤", "Meteor Swarm");
+		if (desc) return _("è‡ªåˆ†ã®å‘¨è¾ºã«éš•çŸ³ã‚’è½ã¨ã™ã€‚", "Makes meteor balls fall down to nearby random locations.");
 
 		{
 			HIT_POINT dam = plev * 2;
@@ -509,8 +509,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 26:
-		if (name) return _("‰‹‚ÌˆêŒ‚", "Flame Strike");
-		if (desc) return _("©•ª‚ğ’†S‚Æ‚µ‚½’´‹‘å‚È‰Š‚Ì‹…‚ğ”­¶‚³‚¹‚éB", "Generate a huge ball of fire centered on you.");
+		if (name) return _("ç„”ã®ä¸€æ’ƒ", "Flame Strike");
+		if (desc) return _("è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸè¶…å·¨å¤§ãªç‚ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚", "Generate a huge ball of fire centered on you.");
 
 		{
 			HIT_POINT dam = 300 + 3 * plev;
@@ -526,8 +526,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 27:
-		if (name) return _("¬“×¢—ˆ", "Call Chaos");
-		if (desc) return _("ƒ‰ƒ“ƒ_ƒ€‚È‘®«‚Ì‹…‚âƒr[ƒ€‚ğ”­¶‚³‚¹‚éB", "Generate random kind of balls or beams.");
+		if (name) return _("æ··æ²Œå¬æ¥", "Call Chaos");
+		if (desc) return _("ãƒ©ãƒ³ãƒ€ãƒ ãªå±æ€§ã®çƒã‚„ãƒ“ãƒ¼ãƒ ã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚", "Generate random kind of balls or beams.");
 
 		{
 			if (info) return format("%s150 / 250", s_dam);
@@ -540,21 +540,21 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("©ŒÈ•Ï—e", "Polymorph Self");
-		if (desc) return _("©•ª‚ğ•Ïg‚³‚¹‚æ‚¤‚Æ‚·‚éB", "Polymorphs yourself.");
+		if (name) return _("è‡ªå·±å¤‰å®¹", "Polymorph Self");
+		if (desc) return _("è‡ªåˆ†ã‚’å¤‰èº«ã•ã›ã‚ˆã†ã¨ã™ã‚‹ã€‚", "Polymorphs yourself.");
 
 		{
 			if (cast)
 			{
-				if (!get_check(_("•Ïg‚µ‚Ü‚·B‚æ‚ë‚µ‚¢‚Å‚·‚©H", "You will polymorph yourself. Are you sure? "))) return NULL;
+				if (!get_check(_("å¤‰èº«ã—ã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ", "You will polymorph yourself. Are you sure? "))) return NULL;
 				do_poly_self();
 			}
 		}
 		break;
 
 	case 29:
-		if (name) return _("–‚—Í‚Ì—’", "Mana Storm");
-		if (desc) return _("”ñí‚É‹­—Í‚Å‹‘å‚Èƒˆ‚È–‚—Í‚Ì‹…‚ğ•ú‚ÂB", "Fires an extremely powerful huge ball of pure mana.");
+		if (name) return _("é­”åŠ›ã®åµ", "Mana Storm");
+		if (desc) return _("éå¸¸ã«å¼·åŠ›ã§å·¨å¤§ãªç´”ç²‹ãªé­”åŠ›ã®çƒã‚’æ”¾ã¤ã€‚", "Fires an extremely powerful huge ball of pure mana.");
 
 		{
 			HIT_POINT dam = 300 + plev * 4;
@@ -571,8 +571,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("ƒƒOƒ‹ƒX‚ÌƒuƒŒƒX", "Breathe Logrus");
-		if (desc) return _("”ñí‚É‹­—Í‚ÈƒJƒIƒX‚Ì‹…‚ğ•ú‚ÂB", "Fires an extremely powerful ball of chaos.");
+		if (name) return _("ãƒ­ã‚°ãƒ«ã‚¹ã®ãƒ–ãƒ¬ã‚¹", "Breathe Logrus");
+		if (desc) return _("éå¸¸ã«å¼·åŠ›ãªã‚«ã‚ªã‚¹ã®çƒã‚’æ”¾ã¤ã€‚", "Fires an extremely powerful ball of chaos.");
 
 		{
 			HIT_POINT dam = p_ptr->chp;
@@ -590,8 +590,8 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 31:
-		if (name) return _("‹•–³¢—ˆ", "Call the Void");
-		if (desc) return _("©•ª‚ÌüˆÍ‚ÉŒü‚©‚Á‚ÄAƒƒPƒbƒgAƒˆ‚È–‚—Í‚Ì‹…A•úË«”pŠü•¨‚Ì‹…‚ğ•ú‚ÂB‚½‚¾‚µA•Ç‚É—×Ú‚µ‚Äg—p‚·‚é‚ÆL”ÍˆÍ‚ğ”j‰ó‚·‚éB",
+		if (name) return _("è™šç„¡å¬æ¥", "Call the Void");
+		if (desc) return _("è‡ªåˆ†ã®å‘¨å›²ã«å‘ã‹ã£ã¦ã€ãƒ­ã‚±ãƒƒãƒˆã€ç´”ç²‹ãªé­”åŠ›ã®çƒã€æ”¾å°„æ€§å»ƒæ£„ç‰©ã®çƒã‚’æ”¾ã¤ã€‚ãŸã ã—ã€å£ã«éš£æ¥ã—ã¦ä½¿ç”¨ã™ã‚‹ã¨åºƒç¯„å›²ã‚’ç ´å£Šã™ã‚‹ã€‚",
 			"Fires rockets, mana balls and nuclear waste balls in all directions each unless you are not adjacent to any walls. Otherwise *destroys* huge area.");
 
 		{

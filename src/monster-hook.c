@@ -1,11 +1,11 @@
-#include "angband.h"
+﻿#include "angband.h"
 #include "monster-hook.h"
 
 
 /*!
-* @brief �����X�^�[���N�G�X�g�̓����Ώۂɐ��蓾�邩��Ԃ� / Hook function for quest monsters
-* @param r_idx �����X�^�[�h�c
-* @return �����Ώۂɂł���Ȃ�TRUE��Ԃ��B
+* @brief モンスターがクエストの討伐対象に成り得るかを返す / Hook function for quest monsters
+* @param r_idx モンスターＩＤ
+* @return 討伐対象にできるならTRUEを返す。
 */
 bool mon_hook_quest(MONRACE_IDX r_idx)
 {
@@ -28,9 +28,9 @@ bool mon_hook_quest(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[���_���W�����ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �_���W�����ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターがダンジョンに出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return ダンジョンに出現するならばTRUEを返す
 */
 bool mon_hook_dungeon(MONRACE_IDX r_idx)
 {
@@ -49,9 +49,9 @@ bool mon_hook_dungeon(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[���C�m�ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �C�m�ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが海洋に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 海洋に出現するならばTRUEを返す
 */
 bool mon_hook_ocean(MONRACE_IDX r_idx)
 {
@@ -65,9 +65,9 @@ bool mon_hook_ocean(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[���C�݂ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �C�݂ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが海岸に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 海岸に出現するならばTRUEを返す
 */
 bool mon_hook_shore(MONRACE_IDX r_idx)
 {
@@ -81,9 +81,9 @@ bool mon_hook_shore(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[���r�n�ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �r�n�ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが荒地に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 荒地に出現するならばTRUEを返す
 */
 bool mon_hook_waste(MONRACE_IDX r_idx)
 {
@@ -97,9 +97,9 @@ bool mon_hook_waste(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[�����ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �r�n�ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが町に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 荒地に出現するならばTRUEを返す
 */
 bool mon_hook_town(MONRACE_IDX r_idx)
 {
@@ -113,9 +113,9 @@ bool mon_hook_town(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[���X�тɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �X�тɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが森林に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 森林に出現するならばTRUEを返す
 */
 bool mon_hook_wood(MONRACE_IDX r_idx)
 {
@@ -129,9 +129,9 @@ bool mon_hook_wood(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[���ΎR�ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �ΎR�ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが火山に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 火山に出現するならばTRUEを返す
 */
 bool mon_hook_volcano(MONRACE_IDX r_idx)
 {
@@ -144,9 +144,9 @@ bool mon_hook_volcano(MONRACE_IDX r_idx)
 }
 
 /*!
-* @brief �����X�^�[���R�n�ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �R�n�ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが山地に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 山地に出現するならばTRUEを返す
 */
 bool mon_hook_mountain(MONRACE_IDX r_idx)
 {
@@ -160,9 +160,9 @@ bool mon_hook_mountain(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[�������ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �X�тɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが草原に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 森林に出現するならばTRUEを返す
 */
 bool mon_hook_grass(MONRACE_IDX r_idx)
 {
@@ -175,9 +175,9 @@ bool mon_hook_grass(MONRACE_IDX r_idx)
 }
 
 /*!
-* @brief �����X�^�[���[�����n�`�ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �[�����n�`�ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが深い水地形に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 深い水地形に出現するならばTRUEを返す
 */
 bool mon_hook_deep_water(MONRACE_IDX r_idx)
 {
@@ -193,9 +193,9 @@ bool mon_hook_deep_water(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[���󂢐��n�`�ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �󂢐��n�`�ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが浅い水地形に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 浅い水地形に出現するならばTRUEを返す
 */
 bool mon_hook_shallow_water(MONRACE_IDX r_idx)
 {
@@ -211,9 +211,9 @@ bool mon_hook_shallow_water(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[���n��n�`�ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �n��n�`�ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが溶岩地形に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 溶岩地形に出現するならばTRUEを返す
 */
 bool mon_hook_lava(MONRACE_IDX r_idx)
 {
@@ -231,9 +231,9 @@ bool mon_hook_lava(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief �����X�^�[���ʏ�̏��n�`�ɏo�����邩�ǂ�����Ԃ�
-* @param r_idx ���肷�郂���X�^�[�̎푰ID
-* @return �ʏ�̏��n�`�ɏo������Ȃ��TRUE��Ԃ�
+* @brief モンスターが通常の床地形に出現するかどうかを返す
+* @param r_idx 判定するモンスターの種族ID
+* @return 通常の床地形に出現するならばTRUEを返す
 */
 bool mon_hook_floor(MONRACE_IDX r_idx)
 {

@@ -1,12 +1,12 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 #include "selfinfo.h"
 
 /*!
-* @brief åp—Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief ä»™è¡“é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -21,8 +21,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("ƒ‚ƒ“ƒXƒ^[Š´’m", "Detect Monsters");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚ÌŒ©‚¦‚éƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB", "Detects all monsters in your vicinity unless invisible.");
+		if (name) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ„ŸçŸ¥", "Detect Monsters");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®è¦‹ãˆã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all monsters in your vicinity unless invisible.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -37,8 +37,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("ƒVƒ‡[ƒgEƒeƒŒƒ|[ƒg", "Phase Door");
-		if (desc) return _("‹ß‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB", "Teleport short distance.");
+		if (name) return _("ã‚·ãƒ§ãƒ¼ãƒˆãƒ»ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "Phase Door");
+		if (desc) return _("è¿‘è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚", "Teleport short distance.");
 
 		{
 			POSITION range = 10;
@@ -53,8 +53,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("ã©‚Æ”àŠ´’m", "Detect Doors and Traps");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚Ì”à‚Æã©‚ğŠ´’m‚·‚éB", "Detects traps, doors, and stairs in your vicinity.");
+		if (name) return _("ç½ ã¨æ‰‰æ„ŸçŸ¥", "Detect Doors and Traps");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®æ‰‰ã¨ç½ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects traps, doors, and stairs in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -71,8 +71,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("ƒ‰ƒCƒgEƒGƒŠƒA", "Light Area");
-		if (desc) return _("ŒõŒ¹‚ªÆ‚ç‚µ‚Ä‚¢‚é”ÍˆÍ‚©•”‰®‘S‘Ì‚ğ‰i‹v‚É–¾‚é‚­‚·‚éB", "Lights up nearby area and the inside of a room permanently.");
+		if (name) return _("ãƒ©ã‚¤ãƒˆãƒ»ã‚¨ãƒªã‚¢", "Light Area");
+		if (desc) return _("å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚", "Lights up nearby area and the inside of a room permanently.");
 
 		{
 			int dice = 2;
@@ -89,8 +89,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("ƒpƒjƒbƒNEƒ‚ƒ“ƒXƒ^[", "Confuse Monster");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğ¬—‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to confuse a monster.");
+		if (name) return _("ãƒ‘ãƒ‹ãƒƒã‚¯ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", "Confuse Monster");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’æ··ä¹±ã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to confuse a monster.");
 
 		{
 			int power = (plev * 3) / 2;
@@ -107,8 +107,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 5:
-		if (name) return _("ƒeƒŒƒ|[ƒg", "Teleport");
-		if (desc) return _("‰“‹——£‚ÌƒeƒŒƒ|[ƒg‚ğ‚·‚éB", "Teleport long distance.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆ", "Teleport");
+		if (desc) return _("é è·é›¢ã®ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã‚’ã™ã‚‹ã€‚", "Teleport long distance.");
 
 		{
 			POSITION range = plev * 5;
@@ -123,8 +123,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("ƒXƒŠ[ƒvEƒ‚ƒ“ƒXƒ^[", "Sleep Monster");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğ–°‚ç‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to sleep a monster.");
+		if (name) return _("ã‚¹ãƒªãƒ¼ãƒ—ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", "Sleep Monster");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’çœ ã‚‰ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to sleep a monster.");
 
 		{
 			int power = plev;
@@ -141,8 +141,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("–‚—Í[“U", "Recharging");
-		if (desc) return _("ñ/–‚–@–_‚Ì[“U‰ñ”‚ğ‘‚â‚·‚©A[“U’†‚Ìƒƒbƒh‚Ì[“UŠÔ‚ğŒ¸‚ç‚·B", "Recharges staffs, wands or rods.");
+		if (name) return _("é­”åŠ›å……å¡«", "Recharging");
+		if (desc) return _("æ–/é­”æ³•æ£’ã®å……å¡«å›æ•°ã‚’å¢—ã‚„ã™ã‹ã€å……å¡«ä¸­ã®ãƒ­ãƒƒãƒ‰ã®å……å¡«æ™‚é–“ã‚’æ¸›ã‚‰ã™ã€‚", "Recharges staffs, wands or rods.");
 
 		{
 			int power = plev * 4;
@@ -157,8 +157,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("–‚–@‚Ì’n}", "Magic Mapping");
-		if (desc) return _("ü•Ó‚Ì’nŒ`‚ğŠ´’m‚·‚éB", "Maps nearby area.");
+		if (name) return _("é­”æ³•ã®åœ°å›³", "Magic Mapping");
+		if (desc) return _("å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Maps nearby area.");
 
 		{
 			int rad = DETECT_RAD_MAP;
@@ -173,8 +173,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("ŠÓ’è", "Identify");
-		if (desc) return _("ƒAƒCƒeƒ€‚ğ¯•Ê‚·‚éB", "Identifies an item.");
+		if (name) return _("é‘‘å®š", "Identify");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’è­˜åˆ¥ã™ã‚‹ã€‚", "Identifies an item.");
 
 		{
 			if (cast)
@@ -185,8 +185,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("ƒXƒƒEEƒ‚ƒ“ƒXƒ^[", "Slow Monster");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğŒ¸‘¬‚³‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to slow a monster.");
+		if (name) return _("ã‚¹ãƒ­ã‚¦ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", "Slow Monster");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’æ¸›é€Ÿã•ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to slow a monster.");
 
 		{
 			int power = plev;
@@ -203,8 +203,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("ü•ÓƒXƒŠ[ƒv", "Mass Sleep");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–°‚ç‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to sleep all monsters in sight.");
+		if (name) return _("å‘¨è¾ºã‚¹ãƒªãƒ¼ãƒ—", "Mass Sleep");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’çœ ã‚‰ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to sleep all monsters in sight.");
 
 		{
 			int power = plev;
@@ -219,8 +219,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("ƒeƒŒƒ|[ƒgEƒ‚ƒ“ƒXƒ^[", "Teleport Away");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éƒr[ƒ€‚ğ•ú‚ÂB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Teleports all monsters on the line away unless resisted.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", "Teleport Away");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Teleports all monsters on the line away unless resisted.");
 
 		{
 			int power = plev;
@@ -237,8 +237,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 13:
-		if (name) return _("ƒXƒs[ƒh", "Haste Self");
-		if (desc) return _("ˆê’èŠÔA‰Á‘¬‚·‚éB", "Hastes you for a while.");
+		if (name) return _("ã‚¹ãƒ”ãƒ¼ãƒ‰", "Haste Self");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€åŠ é€Ÿã™ã‚‹ã€‚", "Hastes you for a while.");
 
 		{
 			int base = plev;
@@ -254,8 +254,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("^EŠ´’m", "Detection True");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[Aã©A”àAŠK’iAà•óA‚»‚µ‚ÄƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB",
+		if (name) return _("çœŸãƒ»æ„ŸçŸ¥", "Detection True");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€ç½ ã€æ‰‰ã€éšæ®µã€è²¡å®ã€ãã—ã¦ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚",
 			"Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
 
 		{
@@ -271,8 +271,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("^EŠÓ’è", "Identify True");
-		if (desc) return _("ƒAƒCƒeƒ€‚Ì‚Â”\—Í‚ğŠ®‘S‚É’m‚éB", "*Identifies* an item.");
+		if (name) return _("çœŸãƒ»é‘‘å®š", "Identify True");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚", "*Identifies* an item.");
 
 		{
 			if (cast)
@@ -283,8 +283,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("•¨‘Ì‚Æà•óŠ´’m", "Detect items and Treasure");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚ÌƒAƒCƒeƒ€‚Æà•ó‚ğŠ´’m‚·‚éB", "Detects all treasures and items in your vicinity.");
+		if (name) return _("ç‰©ä½“ã¨è²¡å®æ„ŸçŸ¥", "Detect items and Treasure");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã¨è²¡å®ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all treasures and items in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -301,8 +301,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("ƒ`ƒƒ[ƒ€Eƒ‚ƒ“ƒXƒ^[", "Charm Monster");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[1‘Ì‚ğ–£—¹‚·‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to charm a monster.");
+		if (name) return _("ãƒãƒ£ãƒ¼ãƒ ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼", "Charm Monster");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼1ä½“ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to charm a monster.");
 
 		{
 			int power = plev;
@@ -319,8 +319,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("¸_Š´’m", "Sense Minds");
-		if (desc) return _("ˆê’èŠÔAƒeƒŒƒpƒV[”\—Í‚ğ“¾‚éB", "Gives telepathy for a while.");
+		if (name) return _("ç²¾ç¥æ„ŸçŸ¥", "Sense Minds");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚", "Gives telepathy for a while.");
 
 		{
 			int base = 25;
@@ -336,8 +336,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("ŠXˆÚ“®", "Teleport to town");
-		if (desc) return _("ŠX‚ÖˆÚ“®‚·‚éB’nã‚É‚¢‚é‚Æ‚«‚µ‚©g‚¦‚È‚¢B", "Teleport to a town which you choose in a moment. Can only be used outdoors.");
+		if (name) return _("è¡—ç§»å‹•", "Teleport to town");
+		if (desc) return _("è¡—ã¸ç§»å‹•ã™ã‚‹ã€‚åœ°ä¸Šã«ã„ã‚‹ã¨ãã—ã‹ä½¿ãˆãªã„ã€‚", "Teleport to a town which you choose in a moment. Can only be used outdoors.");
 
 		{
 			if (cast)
@@ -348,8 +348,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("©ŒÈ•ªÍ", "Self Knowledge");
-		if (desc) return _("Œ»İ‚Ì©•ª‚Ìó‘Ô‚ğŠ®‘S‚É’m‚éB",
+		if (name) return _("è‡ªå·±åˆ†æ", "Self Knowledge");
+		if (desc) return _("ç¾åœ¨ã®è‡ªåˆ†ã®çŠ¶æ…‹ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚",
 			"Gives you useful info regarding your current resistances, the powers of your weapon and maximum limits of your stats.");
 
 		{
@@ -361,21 +361,21 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("ƒeƒŒƒ|[ƒgEƒŒƒxƒ‹", "Teleport Level");
-		if (desc) return _("u‚Éã‚©‰º‚ÌŠK‚ÉƒeƒŒƒ|[ƒg‚·‚éB", "Teleport to up or down stairs in a moment.");
+		if (name) return _("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒ¬ãƒ™ãƒ«", "Teleport Level");
+		if (desc) return _("ç¬æ™‚ã«ä¸Šã‹ä¸‹ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚", "Teleport to up or down stairs in a moment.");
 
 		{
 			if (cast)
 			{
-				if (!get_check(_("–{“–‚É‘¼‚ÌŠK‚ÉƒeƒŒƒ|[ƒg‚µ‚Ü‚·‚©H", "Are you sure? (Teleport Level)"))) return NULL;
+				if (!get_check(_("æœ¬å½“ã«ä»–ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ", "Are you sure? (Teleport Level)"))) return NULL;
 				teleport_level(0);
 			}
 		}
 		break;
 
 	case 22:
-		if (name) return _("‹AŠÒ‚Ìô•¶", "Word of Recall");
-		if (desc) return _("’nã‚É‚¢‚é‚Æ‚«‚Íƒ_ƒ“ƒWƒ‡ƒ“‚ÌÅ[ŠK‚ÖAƒ_ƒ“ƒWƒ‡ƒ“‚É‚¢‚é‚Æ‚«‚Í’nã‚Ö‚ÆˆÚ“®‚·‚éB",
+		if (name) return _("å¸°é‚„ã®å‘ªæ–‡", "Word of Recall");
+		if (desc) return _("åœ°ä¸Šã«ã„ã‚‹ã¨ãã¯ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®æœ€æ·±éšã¸ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã«ã„ã‚‹ã¨ãã¯åœ°ä¸Šã¸ã¨ç§»å‹•ã™ã‚‹ã€‚",
 			"Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
 
 		{
@@ -392,8 +392,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 23:
-		if (name) return _("ŸŒ³‚Ì”à", "Dimension Door");
-		if (desc) return _("’Z‹——£“à‚Ìw’è‚µ‚½êŠ‚ÉƒeƒŒƒ|[ƒg‚·‚éB", "Teleport to given location.");
+		if (name) return _("æ¬¡å…ƒã®æ‰‰", "Dimension Door");
+		if (desc) return _("çŸ­è·é›¢å†…ã®æŒ‡å®šã—ãŸå ´æ‰€ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚", "Teleport to given location.");
 
 		{
 			POSITION range = plev / 2 + 10;
@@ -402,15 +402,15 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				msg_print(_("ŸŒ³‚Ì”à‚ªŠJ‚¢‚½B–Ú“I’n‚ğ‘I‚ñ‚Å‰º‚³‚¢B", "You open a dimensional gate. Choose a destination."));
+				msg_print(_("æ¬¡å…ƒã®æ‰‰ãŒé–‹ã„ãŸã€‚ç›®çš„åœ°ã‚’é¸ã‚“ã§ä¸‹ã•ã„ã€‚", "You open a dimensional gate. Choose a destination."));
 				if (!dimension_door()) return NULL;
 			}
 		}
 		break;
 
 	case 24:
-		if (name) return _("’²¸", "Probing");
-		if (desc) return _("ƒ‚ƒ“ƒXƒ^[‚Ì‘®«Ac‚è‘Ì—ÍAÅ‘å‘Ì—ÍAƒXƒs[ƒhA³‘Ì‚ğ’m‚éB",
+		if (name) return _("èª¿æŸ»", "Probing");
+		if (desc) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å±æ€§ã€æ®‹ã‚Šä½“åŠ›ã€æœ€å¤§ä½“åŠ›ã€ã‚¹ãƒ”ãƒ¼ãƒ‰ã€æ­£ä½“ã‚’çŸ¥ã‚‹ã€‚",
 			"Proves all monsters' alignment, HP, speed and their true character.");
 
 		{
@@ -422,8 +422,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("”š”­‚Ìƒ‹[ƒ“", "Explosive Rune");
-		if (desc) return _("©•ª‚Ì‚¢‚é°‚Ìã‚ÉAƒ‚ƒ“ƒXƒ^[‚ª’Ê‚é‚Æ”š”­‚µ‚Äƒ_ƒ[ƒW‚ğ—^‚¦‚éƒ‹[ƒ“‚ğ•`‚­B",
+		if (name) return _("çˆ†ç™ºã®ãƒ«ãƒ¼ãƒ³", "Explosive Rune");
+		if (desc) return _("è‡ªåˆ†ã®ã„ã‚‹åºŠã®ä¸Šã«ã€ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé€šã‚‹ã¨çˆ†ç™ºã—ã¦ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ãƒ«ãƒ¼ãƒ³ã‚’æãã€‚",
 			"Sets a glyph under you. The glyph will explode when a monster moves on it.");
 
 		{
@@ -441,8 +441,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 26:
-		if (name) return _("”O“®—Í", "Telekinesis");
-		if (desc) return _("ƒAƒCƒeƒ€‚ğ©•ª‚Ì‘«Œ³‚ÖˆÚ“®‚³‚¹‚éB", "Pulls a distant item close to you.");
+		if (name) return _("å¿µå‹•åŠ›", "Telekinesis");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’è‡ªåˆ†ã®è¶³å…ƒã¸ç§»å‹•ã•ã›ã‚‹ã€‚", "Pulls a distant item close to you.");
 
 		{
 			int weight = plev * 15;
@@ -459,8 +459,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 27:
-		if (name) return _("ç—¢Šá", "Clairvoyance");
-		if (desc) return _("‚»‚ÌŠK‘S‘Ì‚ğ‰i‹v‚ÉÆ‚ç‚µAƒ_ƒ“ƒWƒ‡ƒ““à‚·‚×‚Ä‚ÌƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB‚³‚ç‚ÉAˆê’èŠÔƒeƒŒƒpƒV[”\—Í‚ğ“¾‚éB",
+		if (name) return _("åƒé‡Œçœ¼", "Clairvoyance");
+		if (desc) return _("ãã®éšå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚ã•ã‚‰ã«ã€ä¸€å®šæ™‚é–“ãƒ†ãƒ¬ãƒ‘ã‚·ãƒ¼èƒ½åŠ›ã‚’å¾—ã‚‹ã€‚",
 			"Maps and lights whole dungeon level. Knows all objects location. And gives telepathy for a while.");
 
 		{
@@ -485,8 +485,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("–£—¹‚Ì‹ü", "Charm monsters");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ğ–£—¹‚·‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to charm all monsters in sight.");
+		if (name) return _("é­…äº†ã®è¦–ç·š", "Charm monsters");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to charm all monsters in sight.");
 
 		{
 			int power = plev * 2;
@@ -501,8 +501,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("˜B‹àp", "Alchemy");
-		if (desc) return _("ƒAƒCƒeƒ€1‚Â‚ğ‚¨‹à‚É•Ï‚¦‚éB", "Turns an item into 1/3 of its value in gold.");
+		if (name) return _("éŒ¬é‡‘è¡“", "Alchemy");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ 1ã¤ã‚’ãŠé‡‘ã«å¤‰ãˆã‚‹ã€‚", "Turns an item into 1/3 of its value in gold.");
 
 		{
 			if (cast)
@@ -513,8 +513,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 30:
-		if (name) return _("‰ö•¨’Ç•ú", "Banishment");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ğƒeƒŒƒ|[ƒg‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Teleports all monsters in sight away unless resisted.");
+		if (name) return _("æ€ªç‰©è¿½æ”¾", "Banishment");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Teleports all monsters in sight away unless resisted.");
 
 		{
 			int power = plev * 4;
@@ -529,8 +529,8 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 31:
-		if (name) return _("–³‚Ì‹…", "Globe of Invulnerability");
-		if (desc) return _("ˆê’èŠÔAƒ_ƒ[ƒW‚ğó‚¯‚È‚­‚È‚éƒoƒŠƒA‚ğ’£‚éBØ‚ê‚½uŠÔ‚É­‚µƒ^[ƒ“‚ğÁ”ï‚·‚é‚Ì‚Å’ˆÓB",
+		if (name) return _("ç„¡å‚·ã®çƒ", "Globe of Invulnerability");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãªããªã‚‹ãƒãƒªã‚¢ã‚’å¼µã‚‹ã€‚åˆ‡ã‚ŒãŸç¬é–“ã«å°‘ã—ã‚¿ãƒ¼ãƒ³ã‚’æ¶ˆè²»ã™ã‚‹ã®ã§æ³¨æ„ã€‚",
 			"Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.");
 
 		{
