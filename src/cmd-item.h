@@ -1,4 +1,4 @@
-/* cmd3-item.h */
+﻿/* cmd3-item.h */
 
 extern void do_cmd_inven(void);
 extern void do_cmd_equip(void);

@@ -1,4 +1,4 @@
-
+﻿
 extern void init_normal_traps(void);
 extern s16b choose_random_trap(void);
 extern void disclose_grid(POSITION y, POSITION x);

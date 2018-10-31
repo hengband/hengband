@@ -1,6 +1,6 @@
-
+ï»¿
 /*!
-* @brief ƒx[ƒXƒAƒCƒeƒ€¶¬ŠK‘w‚ª‰ÁZ‚³‚ê‚éŠm—¦
+* @brief ãƒ™ãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ ç”Ÿæˆéšå±¤ãŒåŠ ç®—ã•ã‚Œã‚‹ç¢ºç‡
 * @details
 * There is a 1/10 (10%) chance of inflating the requested object_level
 * during the creation of an object (see "get_obj_num()" in "object.c").
@@ -9,38 +9,38 @@
 #define GREAT_OBJ       10
 
 /*!
-* @brief [‘wƒ‚ƒ“ƒXƒ^[‚ª¶¬‚³‚ê‚é(NASTY¶¬)‚ÌŠî–{Šm—¦(1/x)
+* @brief æ·±å±¤ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒç”Ÿæˆã•ã‚Œã‚‹(NASTYç”Ÿæˆ)ã®åŸºæœ¬ç¢ºç‡(1/x)
 * @details
 * There is a 1/25 (4%) chance of inflating the requested monster_level
 * during the creation of a monsters (see "get_mon_num()" in "monster.c").
 * Lower values yield harder monsters more often.
 */
 #define NASTY_MON_BASE     25
-#define NASTY_MON_MAX      3	/*!< [‘wƒ‚ƒ“ƒXƒ^[‚ª1ƒtƒƒA‚É¶¬‚³‚ê‚éÅ‘å”  */
-#define NASTY_MON_PLUS_MAX 25	/*!< [‘wƒ‚ƒ“ƒXƒ^[‚ÌŠK‘w‰ÁZÅ‘å—Ê */
+#define NASTY_MON_MAX      3	/*!< æ·±å±¤ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒ1ãƒ•ãƒ­ã‚¢ã«ç”Ÿæˆã•ã‚Œã‚‹æœ€å¤§æ•°  */
+#define NASTY_MON_PLUS_MAX 25	/*!< æ·±å±¤ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®éšå±¤åŠ ç®—æœ€å¤§é‡ */
 
-#define PENETRATE_INVULNERABILITY 13 /*!< –³“G‰»‚ª”j‚ç‚ê‚éŠm—¦(1/x) / 1/x chance of hurting even if invulnerable! */
+#define PENETRATE_INVULNERABILITY 13 /*!< ç„¡æ•µåŒ–ãŒç ´ã‚‰ã‚Œã‚‹ç¢ºç‡(1/x) / 1/x chance of hurting even if invulnerable! */
 
-#define MAX_TELEPORT_DISTANCE 200 /*!< ƒeƒŒƒ|[ƒgÅ‘å‹——£ */
+#define MAX_TELEPORT_DISTANCE 200 /*!< ãƒ†ãƒ¬ãƒãƒ¼ãƒˆæœ€å¤§è·é›¢ */
 
 /*
 * Refueling constants
 */
-#define FUEL_TORCH      5000    /*!< ¼–¾‚ÌŠî–{õ–½’l / Maximum amount of fuel in a torch */
-#define FUEL_LAMP       15000   /*!< ƒ‰ƒ“ƒ^ƒ“‚ÌŠî–{õ–½’l / Maximum amount of fuel in a lantern */
+#define FUEL_TORCH      5000    /*!< æ¾æ˜ã®åŸºæœ¬å¯¿å‘½å€¤ / Maximum amount of fuel in a torch */
+#define FUEL_LAMP       15000   /*!< ãƒ©ãƒ³ã‚¿ãƒ³ã®åŸºæœ¬å¯¿å‘½å€¤ / Maximum amount of fuel in a lantern */
 
 /*
 * More maximum values
 */
-#define MAX_SIGHT       20      /*!< ƒvƒŒƒCƒ„[‚ÌÅ‘å‹ŠE”ÍˆÍ(ƒ}ƒX) / Maximum view distance */
-#define MAX_RANGE       (p_ptr->inside_battle ? 36 : 18)      /*!< ƒvƒŒƒCƒ„[‚ÌUŒ‚Ë’ö(ƒ}ƒX) / Maximum range (spells, etc) */
-#define AAF_LIMIT       100     /*!< ƒ‚ƒ“ƒXƒ^[‚ÌŒÀŠEŠ´’m”ÍˆÍ(ƒ}ƒX) Limit of sensing radius */
+#define MAX_SIGHT       20      /*!< ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æœ€å¤§è¦–ç•Œç¯„å›²(ãƒã‚¹) / Maximum view distance */
+#define MAX_RANGE       (p_ptr->inside_battle ? 36 : 18)      /*!< ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒå°„ç¨‹(ãƒã‚¹) / Maximum range (spells, etc) */
+#define AAF_LIMIT       100     /*!< ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®é™ç•Œæ„ŸçŸ¥ç¯„å›²(ãƒã‚¹) Limit of sensing radius */
 
-#define MIN_M_ALLOC_TD          4 /*!< ŠX(’‹ŠÔ)‚ÌÅ’áZl”z’u” / The town starts out with 4 residents during the day */
-#define MIN_M_ALLOC_TN          8 /*!< ŠX(–éŠÔ)‚ÌÅ’áZl”z’u” / The town starts out with 8 residents during the night */
+#define MIN_M_ALLOC_TD          4 /*!< è¡—(æ˜¼é–“)ã®æœ€ä½ä½äººé…ç½®æ•° / The town starts out with 4 residents during the day */
+#define MIN_M_ALLOC_TN          8 /*!< è¡—(å¤œé–“)ã®æœ€ä½ä½äººé…ç½®æ•° / The town starts out with 8 residents during the night */
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‘B‚ÌÅ‘å”
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å¢—æ®–ã®æœ€å¤§æ•°
 * @details
 * A monster can only "multiply" (reproduce) if there are fewer than 100
 * monsters on the level capable of such spontaneous reproduction.  This
@@ -49,18 +49,18 @@
 */
 #define MAX_REPRO       100
 
-#define MAX_VAMPIRIC_DRAIN 50 /*!< ‹zŒŒˆ—‚ÌÅ‘å‰ñ•œHP */
+#define MAX_VAMPIRIC_DRAIN 50 /*!< å¸è¡€å‡¦ç†ã®æœ€å¤§å›å¾©HP */
 
 /*
 * Dungeon generation values
 */
-#define DUN_UNUSUAL 250 /*!< ’Êí‚Å‚Í‚È‚¢•”‰®‚ª¶¬‚³‚ê‚éŠî–{Šm—¦(ƒŒƒxƒ‹/’è”) / Level/chance of unusual room (was 200) */
-#define DUN_DEST    18  /*!< ”j‰ó’nŒ`‚ªƒtƒƒA‚É”­¶‚·‚éŠî–{Šm—¦(1/’è”) / 1/chance of having a destroyed level */
-#define SMALL_LEVEL 3   /*!< ¬‚³‚¢ƒtƒƒA‚Ì¶¬‚³‚ê‚éŠî–{Šm—¦(1/’è”) / 1/chance of smaller size (3) */
-#define EMPTY_LEVEL 24  /*!< ƒAƒŠ[ƒiƒŒƒxƒ‹(ŠO•Ç‚Ì‚È‚¢ƒtƒƒA)‚Ì¶¬‚³‚ê‚éŠî–{Šm—¦(1/’è”) / 1/chance of being 'empty' (15) */
-#define LAKE_LEVEL  24  /*!< ì‚âŒÎ‚Ì‚ ‚éƒtƒƒA‚Ì¶¬‚³‚ê‚éŠm—¦(1/’è”) / 1/chance of being a lake on the level */
-#define DARK_EMPTY  5   /*!< ƒtƒƒA‘S‘Ì‚ªˆÃ‚¢‰Â”\«‚ÌŠî–{Šm—¦(1/’è”) / 1/chance of arena level NOT being lit (2) */
-#define DUN_CAVERN  20	/*!< “´ŒAó‚Ìƒ_ƒ“ƒWƒ‡ƒ“‚ª¶¬‚³‚ê‚éŠî–{Šm—¦(1/’è”) / 1/chance of having a cavern level */
+#define DUN_UNUSUAL 250 /*!< é€šå¸¸ã§ã¯ãªã„éƒ¨å±‹ãŒç”Ÿæˆã•ã‚Œã‚‹åŸºæœ¬ç¢ºç‡(ãƒ¬ãƒ™ãƒ«/å®šæ•°) / Level/chance of unusual room (was 200) */
+#define DUN_DEST    18  /*!< ç ´å£Šåœ°å½¢ãŒãƒ•ãƒ­ã‚¢ã«ç™ºç”Ÿã™ã‚‹åŸºæœ¬ç¢ºç‡(1/å®šæ•°) / 1/chance of having a destroyed level */
+#define SMALL_LEVEL 3   /*!< å°ã•ã„ãƒ•ãƒ­ã‚¢ã®ç”Ÿæˆã•ã‚Œã‚‹åŸºæœ¬ç¢ºç‡(1/å®šæ•°) / 1/chance of smaller size (3) */
+#define EMPTY_LEVEL 24  /*!< ã‚¢ãƒªãƒ¼ãƒŠãƒ¬ãƒ™ãƒ«(å¤–å£ã®ãªã„ãƒ•ãƒ­ã‚¢)ã®ç”Ÿæˆã•ã‚Œã‚‹åŸºæœ¬ç¢ºç‡(1/å®šæ•°) / 1/chance of being 'empty' (15) */
+#define LAKE_LEVEL  24  /*!< å·ã‚„æ¹–ã®ã‚ã‚‹ãƒ•ãƒ­ã‚¢ã®ç”Ÿæˆã•ã‚Œã‚‹ç¢ºç‡(1/å®šæ•°) / 1/chance of being a lake on the level */
+#define DARK_EMPTY  5   /*!< ãƒ•ãƒ­ã‚¢å…¨ä½“ãŒæš—ã„å¯èƒ½æ€§ã®åŸºæœ¬ç¢ºç‡(1/å®šæ•°) / 1/chance of arena level NOT being lit (2) */
+#define DUN_CAVERN  20	/*!< æ´çªŸçŠ¶ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ãŒç”Ÿæˆã•ã‚Œã‚‹åŸºæœ¬ç¢ºç‡(1/å®šæ•°) / 1/chance of having a cavern level */
 
 /*
  * Dungeon tunnel generation values
@@ -105,28 +105,28 @@
 #define DUN_AMT_INVIS	3	/* Amount of invisible walls for rooms/corridors */
 
  /* Chance of using syllables to form the name instead of the "template" files */
-#define SINDARIN_NAME   10 /*!< ƒ‰ƒ“ƒ_ƒ€ƒA[ƒeƒBƒtƒ@ƒNƒg‚ÉƒVƒ“ƒ_ƒŠƒ“–Á‚ğ‚Â‚¯‚éŠm—¦ */
-#define TABLE_NAME      20 /*!< ƒ‰ƒ“ƒ_ƒ€ƒA[ƒeƒBƒtƒ@ƒNƒg‚ÉŠ¿š–Á‚ğ‚Â‚¯‚éŠm—¦(³Šm‚É‚Í TABLE_NAME - SINDARIN_NAME %)‚Æ‚È‚é */
-#define A_CURSED        13 /*!< 1/n‚ÌŠm—¦‚Å¶¬‚ÌŠª•¨ˆÈŠO‚Ìƒ‰ƒ“ƒ_ƒ€ƒA[ƒeƒBƒtƒ@ƒNƒg‚ªô‚¢‚Â‚«‚É‚È‚éB */
-#define WEIRD_LUCK      12 /*!< 1/n‚ÌŠm—¦‚Årandom_resistance()‚Ìˆ—’†ƒoƒCƒAƒXŠO‚Ì‘Ï«‚ª‚Â‚«Acreate_artifact‚Å4‚ğ’´‚¦‚épval‚ª‹–‰Â‚³‚ê‚éB*/
-#define BIAS_LUCK       20 /*!< 1/n‚ÌŠm—¦‚Årandom_resistance()‚Å•t‰Á‚·‚éŒ³‘f‘Ï«‚ª–Æ‰u‚É‚È‚é */
-#define IM_LUCK         7 /*!< 1/n‚ÌŠm—¦‚Årandom_resistance()‚Å•¡”–Æ‰u‚Ìœ‹ˆ—‚ª–Æœ‚³‚ê‚é */
+#define SINDARIN_NAME   10 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã«ã‚·ãƒ³ãƒ€ãƒªãƒ³éŠ˜ã‚’ã¤ã‘ã‚‹ç¢ºç‡ */
+#define TABLE_NAME      20 /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã«æ¼¢å­—éŠ˜ã‚’ã¤ã‘ã‚‹ç¢ºç‡(æ­£ç¢ºã«ã¯ TABLE_NAME - SINDARIN_NAME %)ã¨ãªã‚‹ */
+#define A_CURSED        13 /*!< 1/nã®ç¢ºç‡ã§ç”Ÿæˆã®å·»ç‰©ä»¥å¤–ã®ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãŒå‘ªã„ã¤ãã«ãªã‚‹ã€‚ */
+#define WEIRD_LUCK      12 /*!< 1/nã®ç¢ºç‡ã§random_resistance()ã®å‡¦ç†ä¸­ãƒã‚¤ã‚¢ã‚¹å¤–ã®è€æ€§ãŒã¤ãã€create_artifactã§4ã‚’è¶…ãˆã‚‹pvalãŒè¨±å¯ã•ã‚Œã‚‹ã€‚*/
+#define BIAS_LUCK       20 /*!< 1/nã®ç¢ºç‡ã§random_resistance()ã§ä»˜åŠ ã™ã‚‹å…ƒç´ è€æ€§ãŒå…ç–«ã«ãªã‚‹ */
+#define IM_LUCK         7 /*!< 1/nã®ç¢ºç‡ã§random_resistance()ã§è¤‡æ•°å…ç–«ã®é™¤å»å‡¦ç†ãŒå…é™¤ã•ã‚Œã‚‹ */
 
  /*! @note
  * Bias luck needs to be higher than weird luck,
  * since it is usually tested several times...
  */
 
-#define ACTIVATION_CHANCE 3 /*!< 1/n‚ÌŠm—¦‚Åƒ‰ƒ“ƒ_ƒ€ƒA[ƒeƒBƒtƒ@ƒNƒg‚É”­“®‚ª•t‰Á‚³‚ê‚éB‚½‚¾‚µ–h‹ï‚Í‚³‚ç‚É1/2 */
+#define ACTIVATION_CHANCE 3 /*!< 1/nã®ç¢ºç‡ã§ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã«ç™ºå‹•ãŒä»˜åŠ ã•ã‚Œã‚‹ã€‚ãŸã ã—é˜²å…·ã¯ã•ã‚‰ã«1/2 */
 
-#define TY_CURSE_CHANCE 200 /*!<‘¾ŒÃ‚Ì‰…”O‚Ì1ƒ^[ƒ“–ˆ‚Ì”­“®Šm—¦(1/n)*/
-#define CHAINSWORD_NOISE 100 /*!<ƒ`ƒFƒ“ƒ\[‚Ì1ƒ^[ƒ“–ˆ‚Ì”­“®Šm—¦(1/n)*/
+#define TY_CURSE_CHANCE 200 /*!<å¤ªå¤ã®æ€¨å¿µã®1ã‚¿ãƒ¼ãƒ³æ¯ã®ç™ºå‹•ç¢ºç‡(1/n)*/
+#define CHAINSWORD_NOISE 100 /*!<ãƒã‚§ãƒ³ã‚½ãƒ¼ã®1ã‚¿ãƒ¼ãƒ³æ¯ã®ç™ºå‹•ç¢ºç‡(1/n)*/
 
 #define SPEAK_CHANCE 8
 #define GRINDNOISE 20
 #define CYBERNOISE 20
 
-#define GROUP_MAX 32 /*!< place_monster_group() ŠÖ”‚É‚æ‚éƒ‚ƒ“ƒXƒ^[‚ÌGROUP¶¬‚Ì”z’uÅ‘å” / Maximum size of a group of monsters */
+#define GROUP_MAX 32 /*!< place_monster_group() é–¢æ•°ã«ã‚ˆã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®GROUPç”Ÿæˆæ™‚ã®é…ç½®æœ€å¤§æ•° / Maximum size of a group of monsters */
 
  /* ToDo: Make this global */
-#define HURT_CHANCE 16 /*!< ‘®«UŒ‚‚ğó‚¯‚½Û‚É”\—Í’l’á‰º‚ğ‹N‚±‚·Šm—¦(1/X) / 1/x chance of reducing stats (for elemental attacks) */
+#define HURT_CHANCE 16 /*!< å±æ€§æ”»æ’ƒã‚’å—ã‘ãŸéš›ã«èƒ½åŠ›å€¤ä½ä¸‹ã‚’èµ·ã“ã™ç¢ºç‡(1/X) / 1/x chance of reducing stats (for elemental attacks) */

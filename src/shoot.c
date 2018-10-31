@@ -1,13 +1,13 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 
 /*!
-* @brief ƒvƒŒƒCƒ„[‚©‚çƒ‚ƒ“ƒXƒ^[‚Ö‚ÌËŒ‚–½’†”»’è /
+* @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¸ã®å°„æ’ƒå‘½ä¸­åˆ¤å®š /
 * Determine if the player "hits" a monster (normal combat).
-* @param chance Šî–{–½’†’l
-* @param m_ptr ƒ‚ƒ“ƒXƒ^[‚Ì\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
-* @param vis –Ú•W‚ğ‹ŠE‚É•ß‚ç‚¦‚Ä‚¢‚é‚È‚ç‚ÎTRUE‚ğw’è
-* @param o_name ƒƒbƒZ[ƒW•\¦‚Ìƒ‚ƒ“ƒXƒ^[–¼
-* @return –½’†‚Æ”»’è‚³‚ê‚½ê‡TRUE‚ğ•Ô‚·
+* @param chance åŸºæœ¬å‘½ä¸­å€¤
+* @param m_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @param vis ç›®æ¨™ã‚’è¦–ç•Œã«æ•ã‚‰ãˆã¦ã„ã‚‹ãªã‚‰ã°TRUEã‚’æŒ‡å®š
+* @param o_name ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤ºæ™‚ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å
+* @return å‘½ä¸­ã¨åˆ¤å®šã•ã‚ŒãŸå ´åˆTRUEã‚’è¿”ã™
 * @note Always miss 5%, always hit 5%, otherwise random.
 */
 bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
@@ -52,7 +52,7 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 
 			/* Extract monster name */
 			monster_desc(m_name, m_ptr, 0);
-			msg_format(_("%s‚Í%s‚ğa‚èÌ‚Ä‚½I", "%s cuts down %s!"), m_name, o_name);
+			msg_format(_("%sã¯%sã‚’æ–¬ã‚Šæ¨ã¦ãŸï¼", "%s cuts down %s!"), m_name, o_name);
 		}
 		return (FALSE);
 	}
@@ -65,13 +65,13 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 
 
 /*!
-* @brief ƒvƒŒƒCƒ„[‚©‚çƒ‚ƒ“ƒXƒ^[‚Ö‚ÌËŒ‚ƒNƒŠƒeƒBƒJƒ‹”»’è /
+* @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¸ã®å°„æ’ƒã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«åˆ¤å®š /
 * Critical hits (from objects thrown by player) Factor in item weight, total plusses, and player level.
-* @param weight –î’e‚Ìd—Ê
-* @param plus_ammo –î’e‚Ì–½’†C³
-* @param plus_bow ‹|‚Ì–½’†C³
-* @param dam Œ»İZo’†‚Ìƒ_ƒ[ƒW’l
-* @return ƒNƒŠƒeƒBƒJƒ‹C³‚ª“ü‚Á‚½ƒ_ƒ[ƒW’l
+* @param weight çŸ¢å¼¾ã®é‡é‡
+* @param plus_ammo çŸ¢å¼¾ã®å‘½ä¸­ä¿®æ­£
+* @param plus_bow å¼“ã®å‘½ä¸­ä¿®æ­£
+* @param dam ç¾åœ¨ç®—å‡ºä¸­ã®ãƒ€ãƒ¡ãƒ¼ã‚¸å€¤
+* @return ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ä¿®æ­£ãŒå…¥ã£ãŸãƒ€ãƒ¡ãƒ¼ã‚¸å€¤
 */
 HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
@@ -101,17 +101,17 @@ HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 
 		if (k < 900)
 		{
-			msg_print(_("è‚²‚½‚¦‚ª‚ ‚Á‚½I", "It was a good hit!"));
+			msg_print(_("æ‰‹ã”ãŸãˆãŒã‚ã£ãŸï¼", "It was a good hit!"));
 			dam += (dam / 2);
 		}
 		else if (k < 1350)
 		{
-			msg_print(_("‚©‚È‚è‚Ìè‚²‚½‚¦‚ª‚ ‚Á‚½I", "It was a great hit!"));
+			msg_print(_("ã‹ãªã‚Šã®æ‰‹ã”ãŸãˆãŒã‚ã£ãŸï¼", "It was a great hit!"));
 			dam *= 2;
 		}
 		else
 		{
-			msg_print(_("‰ïS‚ÌˆêŒ‚‚¾I", "It was a superb hit!"));
+			msg_print(_("ä¼šå¿ƒã®ä¸€æ’ƒã ï¼", "It was a superb hit!"));
 			dam *= 3;
 		}
 	}

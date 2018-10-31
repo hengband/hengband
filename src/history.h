@@ -1,20 +1,20 @@
-
+ï»¿
 /*!
-* ¶‚¢—§‚¿ƒƒbƒZ[ƒWƒe[ƒuƒ‹ / Forward declare
+* ç”Ÿã„ç«‹ã¡ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ†ãƒ¼ãƒ–ãƒ« / Forward declare
 */
 typedef struct hist_type hist_type;
 
 /*!
-* ¶‚¢—§‚¿ƒƒbƒZ[ƒWƒe[ƒuƒ‹‚Ì\‘¢‘Ì’è‹` / Player background information
+* ç”Ÿã„ç«‹ã¡ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ†ãƒ¼ãƒ–ãƒ«ã®æ§‹é€ ä½“å®šç¾© / Player background information
 */
 struct hist_type
 {
-	cptr info;			    /*!> ƒƒbƒZ[ƒW–{•¶ / Textual History */
+	cptr info;			    /*!> ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æœ¬æ–‡ / Textual History */
 
-	byte roll;			    /*!> Šm—¦‚Ìd‚İ / Frequency of this entry */
-	byte chart;			    /*!> ¶‚¢—§‚¿ƒƒbƒZ[ƒW‚Ì—¬‚ê‚ğ¦‚·ƒ`ƒƒ[ƒgID / Chart index */
-	byte next;			    /*!> Ÿ‚Ìƒ`ƒƒ[ƒgID */
-	byte bonus;			    /*!> ƒƒbƒZ[ƒW‚É”º‚¤Ğ‰ï“I’nˆÊ‚Ì•Ï‰»—Ê(50‚ªŠî€’l) / Social Class Bonus + 50 */
+	byte roll;			    /*!> ç¢ºç‡ã®é‡ã¿ / Frequency of this entry */
+	byte chart;			    /*!> ç”Ÿã„ç«‹ã¡ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®æµã‚Œã‚’ç¤ºã™ãƒãƒ£ãƒ¼ãƒˆID / Chart index */
+	byte next;			    /*!> æ¬¡ã®ãƒãƒ£ãƒ¼ãƒˆID */
+	byte bonus;			    /*!> ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«ä¼´ã†ç¤¾ä¼šçš„åœ°ä½ã®å¤‰åŒ–é‡(50ãŒåŸºæº–å€¤) / Social Class Bonus + 50 */
 };
 
 struct hist_type;

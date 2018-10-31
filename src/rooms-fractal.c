@@ -1,12 +1,12 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "grid.h"
 #include "generate.h"
 #include "rooms.h"
 #include "rooms-normal.h"
 
 /*!
-* @brief ƒ^ƒCƒv9‚Ì•”‰®cƒtƒ‰ƒNƒ^ƒ‹ƒJ[ƒu‚É‚æ‚é“´ŒA¶¬ / Type 9 -- Driver routine to create fractal cave system
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—9ã®éƒ¨å±‹â€¦ãƒ•ãƒ©ã‚¯ã‚¿ãƒ«ã‚«ãƒ¼ãƒ–ã«ã‚ˆã‚‹æ´çªŸç”Ÿæˆ / Type 9 -- Driver routine to create fractal cave system
+* @return ãªã—
 */
 bool build_type9(void)
 {

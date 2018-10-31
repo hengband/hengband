@@ -1,4 +1,4 @@
-
+﻿
 extern bool mon_hook_quest(MONRACE_IDX r_idx);
 extern bool mon_hook_dungeon(MONRACE_IDX r_idx);
 extern bool mon_hook_ocean(MONRACE_IDX r_idx);

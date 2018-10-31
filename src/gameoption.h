@@ -1,4 +1,4 @@
-
+﻿
 /*
  * Software options (set via the '=' command).  See "tables.c"
  */

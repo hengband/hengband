@@ -1,4 +1,4 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "grid.h"
 #include "rooms.h"
 #include "generate.h"
@@ -30,7 +30,7 @@ static void build_bubble_vault(int x0, int y0, int xsize, int ysize)
 	int xhsize = xsize / 2;
 	int yhsize = ysize / 2;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("–AŒ^ƒ‰ƒ“ƒ_ƒ€Vault‚ğ¶¬‚µ‚Ü‚µ‚½B", "Room Vault."));
+	msg_print_wizard(CHEAT_DUNGEON, _("æ³¡å‹ãƒ©ãƒ³ãƒ€ãƒ Vaultã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Room Vault."));
 
 	/* Allocate center of bubbles */
 	center[0].x = (byte)randint1(xsize - 3) + 1;
@@ -155,7 +155,7 @@ static void build_room_vault(int x0, int y0, int xsize, int ysize)
 	xhsize = xsize / 2;
 	yhsize = ysize / 2;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("•”‰®Œ^ƒ‰ƒ“ƒ_ƒ€Vault‚ğ¶¬‚µ‚Ü‚µ‚½B", "Room Vault."));
+	msg_print_wizard(CHEAT_DUNGEON, _("éƒ¨å±‹å‹ãƒ©ãƒ³ãƒ€ãƒ Vaultã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Room Vault."));
 
 	/* fill area so don't get problems with arena levels */
 	for (x1 = 0; x1 < xsize; x1++)
@@ -206,7 +206,7 @@ static void build_cave_vault(int x0, int y0, int xsiz, int ysiz)
 	xsize = xhsize * 2;
 	ysize = yhsize * 2;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("“´ŒŠƒ‰ƒ“ƒ_ƒ€Vault‚ğ¶¬‚µ‚Ü‚µ‚½B", "Cave Vault."));
+	msg_print_wizard(CHEAT_DUNGEON, _("æ´ç©´ãƒ©ãƒ³ãƒ€ãƒ Vaultã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Cave Vault."));
 
 	light = done = FALSE;
 	room = TRUE;
@@ -246,13 +246,13 @@ static void build_cave_vault(int x0, int y0, int xsiz, int ysiz)
 
 
 /*!
-* @brief Vault’nŒ`‚ğ‰ñ“]Aã‰º¶‰E”½“]‚·‚é‚½‚ß‚ÌÀ•W•ÏŠ·‚ğ•Ô‚· / coordinate translation code
-* @param x •ÏŠ·‚µ‚½‚¢“_‚ÌXÀ•WQÆƒ|ƒCƒ“ƒ^
-* @param y •ÏŠ·‚µ‚½‚¢“_‚ÌYÀ•WQÆƒ|ƒCƒ“ƒ^
-* @param xoffset Vault¶¬‚ÌŠî€XÀ•W
-* @param yoffset Vault¶¬‚ÌŠî€YÀ•W
-* @param transno ˆ—ID
-* @return ‚È‚µ
+* @brief Vaultåœ°å½¢ã‚’å›è»¢ã€ä¸Šä¸‹å·¦å³åè»¢ã™ã‚‹ãŸã‚ã®åº§æ¨™å¤‰æ›ã‚’è¿”ã™ / coordinate translation code
+* @param x å¤‰æ›ã—ãŸã„ç‚¹ã®Xåº§æ¨™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @param y å¤‰æ›ã—ãŸã„ç‚¹ã®Yåº§æ¨™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @param xoffset Vaultç”Ÿæˆæ™‚ã®åŸºæº–Xåº§æ¨™
+* @param yoffset Vaultç”Ÿæˆæ™‚ã®åŸºæº–Yåº§æ¨™
+* @param transno å‡¦ç†ID
+* @return ãªã—
 */
 static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yoffset, int transno)
 {
@@ -289,16 +289,16 @@ static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yof
 
 
 /*!
-* @brief Vault‚ğƒtƒƒA‚É”z’u‚·‚é / Hack -- fill in "vault" rooms
-* @param yval ¶¬Šî€YÀ•W
-* @param xval ¶¬Šî€XÀ•W
-* @param ymax Vault‚ÌYƒTƒCƒY
-* @param xmax Vault‚ÌXƒTƒCƒY
-* @param data Vault‚Ìƒf[ƒ^•¶š—ñ
-* @param xoffset •ÏŠ·Šî€XÀ•W
-* @param yoffset •ÏŠ·Šî€YÀ•W
-* @param transno •ÏŠ·ID
-* @return ‚È‚µ
+* @brief Vaultã‚’ãƒ•ãƒ­ã‚¢ã«é…ç½®ã™ã‚‹ / Hack -- fill in "vault" rooms
+* @param yval ç”ŸæˆåŸºæº–Yåº§æ¨™
+* @param xval ç”ŸæˆåŸºæº–Xåº§æ¨™
+* @param ymax Vaultã®Yã‚µã‚¤ã‚º
+* @param xmax Vaultã®Xã‚µã‚¤ã‚º
+* @param data Vaultã®ãƒ‡ãƒ¼ã‚¿æ–‡å­—åˆ—
+* @param xoffset å¤‰æ›åŸºæº–Xåº§æ¨™
+* @param yoffset å¤‰æ›åŸºæº–Yåº§æ¨™
+* @param transno å¤‰æ›ID
+* @return ãªã—
 */
 static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, cptr data,
 	POSITION xoffset, POSITION yoffset, int transno)
@@ -574,8 +574,8 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 
 /*!
-* @brief ƒ^ƒCƒv7‚Ì•”‰®cv_info.txt‚æ‚è¬Œ^vault‚ğ¶¬‚·‚é / Type 7 -- simple vaults (see "v_info.txt")
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—7ã®éƒ¨å±‹â€¦v_info.txtã‚ˆã‚Šå°å‹vaultã‚’ç”Ÿæˆã™ã‚‹ / Type 7 -- simple vaults (see "v_info.txt")
+* @return ãªã—
 */
 bool build_type7(void)
 {
@@ -599,7 +599,7 @@ bool build_type7(void)
 	/* No lesser vault found */
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
-		msg_print_wizard(CHEAT_DUNGEON, _("¬Œ^ŒÅ’èVault‚ğ”z’u‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B", "Could not place lesser vault."));
+		msg_print_wizard(CHEAT_DUNGEON, _("å°å‹å›ºå®šVaultã‚’é…ç½®ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", "Could not place lesser vault."));
 		return FALSE;
 	}
 
@@ -645,7 +645,7 @@ bool build_type7(void)
 #endif
 
 	/* Message */
-	msg_format_wizard(CHEAT_DUNGEON, _("¬Œ^Vault(%s)‚ğ¶¬‚µ‚Ü‚µ‚½B", "Lesser vault (%s)."), v_name + v_ptr->name);
+	msg_format_wizard(CHEAT_DUNGEON, _("å°å‹Vault(%s)ã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Lesser vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
@@ -655,8 +655,8 @@ bool build_type7(void)
 }
 
 /*!
-* @brief ƒ^ƒCƒv8‚Ì•”‰®cv_info.txt‚æ‚è‘åŒ^vault‚ğ¶¬‚·‚é / Type 8 -- greater vaults (see "v_info.txt")
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—8ã®éƒ¨å±‹â€¦v_info.txtã‚ˆã‚Šå¤§å‹vaultã‚’ç”Ÿæˆã™ã‚‹ / Type 8 -- greater vaults (see "v_info.txt")
+* @return ãªã—
 */
 bool build_type8(void)
 {
@@ -680,7 +680,7 @@ bool build_type8(void)
 	/* No greater vault found */
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
-		msg_print_wizard(CHEAT_DUNGEON, _("‘åŒ^ŒÅ’èVault‚ğ”z’u‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B", "Could not place greater vault."));
+		msg_print_wizard(CHEAT_DUNGEON, _("å¤§å‹å›ºå®šVaultã‚’é…ç½®ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", "Could not place greater vault."));
 		return FALSE;
 	}
 
@@ -731,7 +731,7 @@ bool build_type8(void)
 	v_ptr = &v_info[76 + randint1(3)];
 #endif
 
-	msg_format_wizard(CHEAT_DUNGEON, _("‘åŒ^ŒÅ’èVault(%s)‚ğ¶¬‚µ‚Ü‚µ‚½B", "Greater vault (%s)."), v_name + v_ptr->name);
+	msg_format_wizard(CHEAT_DUNGEON, _("å¤§å‹å›ºå®šVault(%s)ã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Greater vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
@@ -757,7 +757,7 @@ static void build_target_vault(int x0, int y0, int xsize, int ysize)
 	h3 = randint1(32);
 	h4 = randint1(32) - 16;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("‘ÎÌŒ`ƒ‰ƒ“ƒ_ƒ€Vault‚ğ¶¬‚µ‚Ü‚µ‚½B", "Elemental Vault"));
+	msg_print_wizard(CHEAT_DUNGEON, _("å¯¾ç§°å½¢ãƒ©ãƒ³ãƒ€ãƒ Vaultã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Elemental Vault"));
 
 	/* work out outer radius */
 	if (xsize > ysize)
@@ -878,7 +878,7 @@ static void build_elemental_vault(int x0, int y0, int xsiz, int ysiz)
 	int xsize, ysize, xhsize, yhsize, x, y, i;
 	int type;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("¸—ìŠEƒ‰ƒ“ƒ_ƒ€Vault‚ğ¶¬‚µ‚Ü‚µ‚½B", "Elemental Vault"));
+	msg_print_wizard(CHEAT_DUNGEON, _("ç²¾éœŠç•Œãƒ©ãƒ³ãƒ€ãƒ Vaultã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Elemental Vault"));
 
 	/* round to make sizes even */
 	xhsize = xsiz / 2;
@@ -969,7 +969,7 @@ static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
 	int m, n, num_vertices;
 	int *visited;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("¬Œ^ƒ`ƒFƒbƒJ[ƒ‰ƒ“ƒ_ƒ€Vault‚ğ¶¬‚µ‚Ü‚µ‚½B", "Mini Checker Board Vault."));
+	msg_print_wizard(CHEAT_DUNGEON, _("å°å‹ãƒã‚§ãƒƒã‚«ãƒ¼ãƒ©ãƒ³ãƒ€ãƒ Vaultã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Mini Checker Board Vault."));
 
 	/* Pick a random room size */
 	dy = ysize / 2 - 1;
@@ -1100,7 +1100,7 @@ static void build_castle_vault(int x0, int y0, int xsize, int ysize)
 	y2 = y0 + dy;
 	x2 = x0 + dx;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("éŒ^ƒ‰ƒ“ƒ_ƒ€Vault‚ğ¶¬‚µ‚Ü‚µ‚½B", "Castle Vault"));
+	msg_print_wizard(CHEAT_DUNGEON, _("åŸå‹ãƒ©ãƒ³ãƒ€ãƒ Vaultã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Castle Vault"));
 
 	/* generate the room */
 	for (y = y1 - 1; y <= y2 + 1; y++)
@@ -1123,8 +1123,8 @@ static void build_castle_vault(int x0, int y0, int xsize, int ysize)
 
 
 /*!
-* @brief ƒ^ƒCƒv10‚Ì•”‰®cƒ‰ƒ“ƒ_ƒ€¶¬vault / Type 10 -- Random vaults
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—10ã®éƒ¨å±‹â€¦ãƒ©ãƒ³ãƒ€ãƒ ç”Ÿæˆvault / Type 10 -- Random vaults
+* @return ãªã—
 */
 bool build_type10(void)
 {
@@ -1177,8 +1177,8 @@ bool build_type10(void)
 
 
 /*!
-* @brief ƒ^ƒCƒv16‚Ì•”‰®cv_info.txt‚æ‚èŒÅ’è“Áê•”‰®‚ğ¶¬‚·‚é / Type 16 -- fixed special room (see "v_info.txt")
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—16ã®éƒ¨å±‹â€¦v_info.txtã‚ˆã‚Šå›ºå®šç‰¹æ®Šéƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹ / Type 16 -- fixed special room (see "v_info.txt")
+* @return ãªã—
 */
 bool build_type17(void)
 {
@@ -1202,7 +1202,7 @@ bool build_type17(void)
 	/* No lesser vault found */
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
-		msg_print_wizard(CHEAT_DUNGEON, _("ŒÅ’è“Áê•”‰®‚ğ”z’u‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B", "Could not place fixed special room."));
+		msg_print_wizard(CHEAT_DUNGEON, _("å›ºå®šç‰¹æ®Šéƒ¨å±‹ã‚’é…ç½®ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", "Could not place fixed special room."));
 		return FALSE;
 	}
 
@@ -1248,7 +1248,7 @@ bool build_type17(void)
 #endif
 
 	/* Message */
-	msg_format_wizard(CHEAT_DUNGEON, _("“ÁêŒÅ’è•”‰®(%s)‚ğ¶¬‚µ‚Ü‚µ‚½B", "Special Fix room (%s)."), v_name + v_ptr->name);
+	msg_format_wizard(CHEAT_DUNGEON, _("ç‰¹æ®Šå›ºå®šéƒ¨å±‹(%s)ã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚", "Special Fix room (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,

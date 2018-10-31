@@ -1,12 +1,12 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "cmd-spell.h"
 
 
 /*!
-* @brief ©‘R—Ìˆæ–‚–@‚ÌŠeˆ—‚ğs‚¤
-* @param spell –‚–@ID
-* @param mode ˆ—“à—e (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
-* @return SPELL_NAME / SPELL_DESC / SPELL_INFO ‚É‚Í•¶š—ñƒ|ƒCƒ“ƒ^‚ğ•Ô‚·BSPELL_CAST‚ÍNULL•¶š—ñ‚ğ•Ô‚·B
+* @brief è‡ªç„¶é ˜åŸŸé­”æ³•ã®å„å‡¦ç†ã‚’è¡Œã†
+* @param spell é­”æ³•ID
+* @param mode å‡¦ç†å†…å®¹ (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
+* @return SPELL_NAME / SPELL_DESC / SPELL_INFO æ™‚ã«ã¯æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚SPELL_CASTæ™‚ã¯NULLæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 */
 cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 {
@@ -15,8 +15,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-	static const char s_dam[] = _("‘¹:", "dam ");
-	static const char s_rng[] = _("Ë’ö", "rng ");
+	static const char s_dam[] = _("æå‚·:", "dam ");
+	static const char s_rng[] = _("å°„ç¨‹", "rng ");
 
 	int dir;
 	int plev = p_ptr->lev;
@@ -24,8 +24,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	switch (spell)
 	{
 	case 0:
-		if (name) return _("ƒ‚ƒ“ƒXƒ^[Š´’m", "Detect Creatures");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚ÌŒ©‚¦‚éƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB", "Detects all monsters in your vicinity unless invisible.");
+		if (name) return _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ„ŸçŸ¥", "Detect Creatures");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®è¦‹ãˆã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects all monsters in your vicinity unless invisible.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -40,8 +40,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 1:
-		if (name) return _("ˆîÈ", "Lightning");
-		if (desc) return _("“dŒ‚‚Ì’Z‚¢ƒr[ƒ€‚ğ•ú‚ÂB", "Fires a short beam of lightning.");
+		if (name) return _("ç¨²å¦»", "Lightning");
+		if (desc) return _("é›»æ’ƒã®çŸ­ã„ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a short beam of lightning.");
 
 		{
 			int dice = 3 + (plev - 1) / 5;
@@ -62,8 +62,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 2:
-		if (name) return _("ã©‚Æ”àŠ´’m", "Detect Doors and Traps");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚Ìã©‚Æ”à‚ğŠ´’m‚·‚éB", "Detects traps, doors, and stairs in your vicinity.");
+		if (name) return _("ç½ ã¨æ‰‰æ„ŸçŸ¥", "Detect Doors and Traps");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ç½ ã¨æ‰‰ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚", "Detects traps, doors, and stairs in your vicinity.");
 
 		{
 			int rad = DETECT_RAD_DEFAULT;
@@ -80,14 +80,14 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 3:
-		if (name) return _("H—Æ¶¬", "Produce Food");
-		if (desc) return _("H—¿‚ğˆê‚Âì‚èo‚·B", "Produces a Ration of Food.");
+		if (name) return _("é£Ÿç³§ç”Ÿæˆ", "Produce Food");
+		if (desc) return _("é£Ÿæ–™ã‚’ä¸€ã¤ä½œã‚Šå‡ºã™ã€‚", "Produces a Ration of Food.");
 
 		{
 			if (cast)
 			{
 				object_type forge, *q_ptr = &forge;
-				msg_print(_("H—¿‚ğ¶¬‚µ‚½B", "A food ration is produced."));
+				msg_print(_("é£Ÿæ–™ã‚’ç”Ÿæˆã—ãŸã€‚", "A food ration is produced."));
 
 				/* Create the food ration */
 				object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
@@ -99,8 +99,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 4:
-		if (name) return _("“ú‚ÌŒõ", "Daylight");
-		if (desc) return _("ŒõŒ¹‚ªÆ‚ç‚µ‚Ä‚¢‚é”ÍˆÍ‚©•”‰®‘S‘Ì‚ğ‰i‹v‚É–¾‚é‚­‚·‚éB", "Lights up nearby area and the inside of a room permanently.");
+		if (name) return _("æ—¥ã®å…‰", "Daylight");
+		if (desc) return _("å…‰æºãŒç…§ã‚‰ã—ã¦ã„ã‚‹ç¯„å›²ã‹éƒ¨å±‹å…¨ä½“ã‚’æ°¸ä¹…ã«æ˜ã‚‹ãã™ã‚‹ã€‚", "Lights up nearby area and the inside of a room permanently.");
 
 		{
 			int dice = 2;
@@ -115,16 +115,16 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				if ((prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
 				{
-					msg_print(_("“ú‚ÌŒõ‚ª‚ ‚È‚½‚Ì“÷‘Ì‚ğÅ‚ª‚µ‚½I", "The daylight scorches your flesh!"));
-					take_hit(DAMAGE_NOESCAPE, damroll(2, 2), _("“ú‚ÌŒõ", "daylight"), -1);
+					msg_print(_("æ—¥ã®å…‰ãŒã‚ãªãŸã®è‚‰ä½“ã‚’ç„¦ãŒã—ãŸï¼", "The daylight scorches your flesh!"));
+					take_hit(DAMAGE_NOESCAPE, damroll(2, 2), _("æ—¥ã®å…‰", "daylight"), -1);
 				}
 			}
 		}
 		break;
 
 	case 5:
-		if (name) return _("“®•¨K‚µ", "Animal Taming");
-		if (desc) return _("“®•¨1‘Ì‚ğ–£—¹‚·‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to charm an animal.");
+		if (name) return _("å‹•ç‰©ç¿’ã—", "Animal Taming");
+		if (desc) return _("å‹•ç‰©1ä½“ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to charm an animal.");
 
 		{
 			int power = plev;
@@ -141,8 +141,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 6:
-		if (name) return _("ŠÂ‹«‚Ö‚Ì‘Ï«", "Resist Environment");
-		if (desc) return _("ˆê’èŠÔA—â‹CA‰ŠA“dŒ‚‚É‘Î‚·‚é‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("ç’°å¢ƒã¸ã®è€æ€§", "Resist Environment");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€å†·æ°—ã€ç‚ã€é›»æ’ƒã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.");
 
 		{
@@ -160,8 +160,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 7:
-		if (name) return _("‚Æ“Å¡—Ã", "Cure Wounds & Poison");
-		if (desc) return _("‰ö‰ä‚ğ‘S‰õ‚³‚¹A“Å‚ğ‘Ì‚©‚çŠ®‘S‚Éæ‚èœ‚«A‘Ì—Í‚ğ­‚µ‰ñ•œ‚³‚¹‚éB", "Heals all cut and poison status. Heals HP a little.");
+		if (name) return _("å‚·ã¨æ¯’æ²»ç™‚", "Cure Wounds & Poison");
+		if (desc) return _("æ€ªæˆ‘ã‚’å…¨å¿«ã•ã›ã€æ¯’ã‚’ä½“ã‹ã‚‰å®Œå…¨ã«å–ã‚Šé™¤ãã€ä½“åŠ›ã‚’å°‘ã—å›å¾©ã•ã›ã‚‹ã€‚", "Heals all cut and poison status. Heals HP a little.");
 
 		{
 			int dice = 2;
@@ -179,8 +179,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 8:
-		if (name) return _("ŠâÎ—n‰ğ", "Stone to Mud");
-		if (desc) return _("•Ç‚ğ—n‚©‚µ‚Ä°‚É‚·‚éB", "Turns one rock square to mud.");
+		if (name) return _("å²©çŸ³æº¶è§£", "Stone to Mud");
+		if (desc) return _("å£ã‚’æº¶ã‹ã—ã¦åºŠã«ã™ã‚‹ã€‚", "Turns one rock square to mud.");
 
 		{
 			int dice = 1;
@@ -199,8 +199,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 9:
-		if (name) return _("ƒAƒCƒXEƒ{ƒ‹ƒg", "Frost Bolt");
-		if (desc) return _("—â‹C‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or beam of cold.");
+		if (name) return _("ã‚¢ã‚¤ã‚¹ãƒ»ãƒœãƒ«ãƒˆ", "Frost Bolt");
+		if (desc) return _("å†·æ°—ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or beam of cold.");
 
 		{
 			int dice = 3 + (plev - 5) / 4;
@@ -217,8 +217,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("©‘R‚ÌŠoÁ", "Nature Awareness");
-		if (desc) return _("ü•Ó‚Ì’nŒ`‚ğŠ´’m‚µA‹ß‚­‚Ìã©A”àAŠK’iA‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ğŠ´’m‚·‚éB",
+		if (name) return _("è‡ªç„¶ã®è¦šé†’", "Nature Awareness");
+		if (desc) return _("å‘¨è¾ºã®åœ°å½¢ã‚’æ„ŸçŸ¥ã—ã€è¿‘ãã®ç½ ã€æ‰‰ã€éšæ®µã€å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚",
 			"Maps nearby area. Detects all monsters, traps, doors and stairs.");
 
 		{
@@ -239,8 +239,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 11:
-		if (name) return _("ƒtƒ@ƒCƒAEƒ{ƒ‹ƒg", "Fire Bolt");
-		if (desc) return _("‰Î‰Š‚Ìƒ{ƒ‹ƒg‚à‚µ‚­‚Íƒr[ƒ€‚ğ•ú‚ÂB", "Fires a bolt or beam of fire.");
+		if (name) return _("ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ«ãƒˆ", "Fire Bolt");
+		if (desc) return _("ç«ç‚ã®ãƒœãƒ«ãƒˆã‚‚ã—ãã¯ãƒ“ãƒ¼ãƒ ã‚’æ”¾ã¤ã€‚", "Fires a bolt or beam of fire.");
 
 		{
 			int dice = 5 + (plev - 5) / 4;
@@ -257,8 +257,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 12:
-		if (name) return _("‘¾—zŒõü", "Ray of Sunlight");
-		if (desc) return _("Œõü‚ğ•ú‚ÂBŒõ‚è‚ğŒ™‚¤ƒ‚ƒ“ƒXƒ^[‚ÉŒø‰Ê‚ª‚ ‚éB", "Fires a beam of light which damages to light-sensitive monsters.");
+		if (name) return _("å¤ªé™½å…‰ç·š", "Ray of Sunlight");
+		if (desc) return _("å…‰ç·šã‚’æ”¾ã¤ã€‚å…‰ã‚Šã‚’å«Œã†ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«åŠ¹æœãŒã‚ã‚‹ã€‚", "Fires a beam of light which damages to light-sensitive monsters.");
 
 		{
 			int dice = 6;
@@ -269,15 +269,15 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				msg_print(_("‘¾—zŒõü‚ªŒ»‚ê‚½B", "A line of sunlight appears."));
+				msg_print(_("å¤ªé™½å…‰ç·šãŒç¾ã‚ŒãŸã€‚", "A line of sunlight appears."));
 				lite_line(dir, damroll(6, 8));
 			}
 		}
 		break;
 
 	case 13:
-		if (name) return _("‘«‚©‚¹", "Entangle");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ğŒ¸‘¬‚³‚¹‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to slow all monsters in sight.");
+		if (name) return _("è¶³ã‹ã›", "Entangle");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ¸›é€Ÿã•ã›ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to slow all monsters in sight.");
 
 		{
 			int power = plev;
@@ -292,15 +292,15 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 14:
-		if (name) return _("“®•¨¢Š«", "Summon Animal");
-		if (desc) return _("“®•¨‚ğ1‘Ì¢Š«‚·‚éB", "Summons an animal.");
+		if (name) return _("å‹•ç‰©å¬å–š", "Summon Animal");
+		if (desc) return _("å‹•ç‰©ã‚’1ä½“å¬å–šã™ã‚‹ã€‚", "Summons an animal.");
 
 		{
 			if (cast)
 			{
 				if (!(summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET))))
 				{
-					msg_print(_("“®•¨‚ÍŒ»‚ê‚È‚©‚Á‚½B", "No animals arrive."));
+					msg_print(_("å‹•ç‰©ã¯ç¾ã‚Œãªã‹ã£ãŸã€‚", "No animals arrive."));
 				}
 				break;
 			}
@@ -308,8 +308,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 15:
-		if (name) return _("–ò‘¡—Ã", "Herbal Healing");
-		if (desc) return _("‘Ì—Í‚ğ‘å•‚É‰ñ•œ‚³‚¹A•‰ANOó‘ÔA“Å‚©‚ç‘S‰õ‚·‚éB", "Heals HP greatly. And heals cut, stun and poison completely.");
+		if (name) return _("è–¬è‰æ²»ç™‚", "Herbal Healing");
+		if (desc) return _("ä½“åŠ›ã‚’å¤§å¹…ã«å›å¾©ã•ã›ã€è² å‚·ã€æœ¦æœ§çŠ¶æ…‹ã€æ¯’ã‹ã‚‰å…¨å¿«ã™ã‚‹ã€‚", "Heals HP greatly. And heals cut, stun and poison completely.");
 		{
 			int heal = 500;
 			if (info) return info_heal(0, 0, heal);
@@ -318,8 +318,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 16:
-		if (name) return _("ŠK’i¶¬", "Stair Building");
-		if (desc) return _("©•ª‚Ì‚¢‚éˆÊ’u‚ÉŠK’i‚ğì‚éB", "Creates a stair which goes down or up.");
+		if (name) return _("éšæ®µç”Ÿæˆ", "Stair Building");
+		if (desc) return _("è‡ªåˆ†ã®ã„ã‚‹ä½ç½®ã«éšæ®µã‚’ä½œã‚‹ã€‚", "Creates a stair which goes down or up.");
 
 		{
 			if (cast)
@@ -330,8 +330,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 17:
-		if (name) return _("”§Î‰»", "Stone Skin");
-		if (desc) return _("ˆê’èŠÔAAC‚ğã¸‚³‚¹‚éB", "Gives bonus to AC for a while.");
+		if (name) return _("è‚ŒçŸ³åŒ–", "Stone Skin");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€ACã‚’ä¸Šæ˜‡ã•ã›ã‚‹ã€‚", "Gives bonus to AC for a while.");
 
 		{
 			int base = 20;
@@ -347,8 +347,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 18:
-		if (name) return _("^E‘Ï«", "Resistance True");
-		if (desc) return _("ˆê’èŠÔA_A“dŒ‚A‰ŠA—â‹CA“Å‚É‘Î‚·‚é‘Ï«‚ğ“¾‚éB‘•”õ‚É‚æ‚é‘Ï«‚É—İÏ‚·‚éB",
+		if (name) return _("çœŸãƒ»è€æ€§", "Resistance True");
+		if (desc) return _("ä¸€å®šæ™‚é–“ã€é…¸ã€é›»æ’ƒã€ç‚ã€å†·æ°—ã€æ¯’ã«å¯¾ã™ã‚‹è€æ€§ã‚’å¾—ã‚‹ã€‚è£…å‚™ã«ã‚ˆã‚‹è€æ€§ã«ç´¯ç©ã™ã‚‹ã€‚",
 			"Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.");
 
 		{
@@ -368,8 +368,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 19:
-		if (name) return _("X—Ñ‘n‘¢", "Forest Creation");
-		if (desc) return _("üˆÍ‚É–Ø‚ğì‚èo‚·B", "Creates trees in all adjacent squares.");
+		if (name) return _("æ£®æ—å‰µé€ ", "Forest Creation");
+		if (desc) return _("å‘¨å›²ã«æœ¨ã‚’ä½œã‚Šå‡ºã™ã€‚", "Creates trees in all adjacent squares.");
 
 		{
 			if (cast)
@@ -380,8 +380,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 20:
-		if (name) return _("“®•¨—F˜a", "Animal Friendship");
-		if (desc) return _("‹ŠE“à‚Ì‘S‚Ä‚Ì“®•¨‚ğ–£—¹‚·‚éB’ïR‚³‚ê‚é‚Æ–³ŒøB", "Attempts to charm all animals in sight.");
+		if (name) return _("å‹•ç‰©å‹å’Œ", "Animal Friendship");
+		if (desc) return _("è¦–ç•Œå†…ã®å…¨ã¦ã®å‹•ç‰©ã‚’é­…äº†ã™ã‚‹ã€‚æŠµæŠ—ã•ã‚Œã‚‹ã¨ç„¡åŠ¹ã€‚", "Attempts to charm all animals in sight.");
 
 		{
 			int power = plev * 2;
@@ -396,8 +396,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 21:
-		if (name) return _("‹àÎ", "Stone Tell");
-		if (desc) return _("ƒAƒCƒeƒ€‚Ì‚Â”\—Í‚ğŠ®‘S‚É’m‚éB", "*Identifies* an item.");
+		if (name) return _("è©¦é‡‘çŸ³", "Stone Tell");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã®æŒã¤èƒ½åŠ›ã‚’å®Œå…¨ã«çŸ¥ã‚‹ã€‚", "*Identifies* an item.");
 
 		{
 			if (cast)
@@ -408,8 +408,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("Î‚Ì•Ç", "Wall of Stone");
-		if (desc) return _("©•ª‚ÌüˆÍ‚É‰Ô›¼Šâ‚Ì•Ç‚ğì‚éB", "Creates granite walls in all adjacent squares.");
+		if (name) return _("çŸ³ã®å£", "Wall of Stone");
+		if (desc) return _("è‡ªåˆ†ã®å‘¨å›²ã«èŠ±å´—å²©ã®å£ã‚’ä½œã‚‹ã€‚", "Creates granite walls in all adjacent squares.");
 
 		{
 			if (cast)
@@ -420,8 +420,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 23:
-		if (name) return _("•…H–h~", "Protect from Corrosion");
-		if (desc) return _("ƒAƒCƒeƒ€‚ğ_‚Å‚Â‚©‚È‚¢‚æ‚¤‰ÁH‚·‚éB", "Makes an equipment acid-proof.");
+		if (name) return _("è…é£Ÿé˜²æ­¢", "Protect from Corrosion");
+		if (desc) return _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’é…¸ã§å‚·ã¤ã‹ãªã„ã‚ˆã†åŠ å·¥ã™ã‚‹ã€‚", "Makes an equipment acid-proof.");
 
 		{
 			if (cast)
@@ -432,8 +432,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 24:
-		if (name) return _("’nk", "Earthquake");
-		if (desc) return _("üˆÍ‚Ìƒ_ƒ“ƒWƒ‡ƒ“‚ğ—h‚ç‚µA•Ç‚Æ°‚ğƒ‰ƒ“ƒ_ƒ€‚É“ü‚ê•Ï‚¦‚éB",
+		if (name) return _("åœ°éœ‡", "Earthquake");
+		if (desc) return _("å‘¨å›²ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’æºã‚‰ã—ã€å£ã¨åºŠã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«å…¥ã‚Œå¤‰ãˆã‚‹ã€‚",
 			"Shakes dungeon structure, and results in random swapping of floors and walls.");
 
 		{
@@ -449,8 +449,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("ƒJƒ}ƒCƒ^ƒ`", "Cyclone");
-		if (desc) return _("‘S•ûŒü‚ÉŒü‚©‚Á‚ÄUŒ‚‚·‚éB", "Attacks all adjacent monsters.");
+		if (name) return _("ã‚«ãƒã‚¤ã‚¿ãƒ", "Cyclone");
+		if (desc) return _("å…¨æ–¹å‘ã«å‘ã‹ã£ã¦æ”»æ’ƒã™ã‚‹ã€‚", "Attacks all adjacent monsters.");
 
 		{
 			if (cast)
@@ -477,8 +477,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 26:
-		if (name) return _("ƒuƒŠƒU[ƒh", "Blizzard");
-		if (desc) return _("‹‘å‚È—â‹C‚Ì‹…‚ğ•ú‚ÂB", "Fires a huge ball of cold.");
+		if (name) return _("ãƒ–ãƒªã‚¶ãƒ¼ãƒ‰", "Blizzard");
+		if (desc) return _("å·¨å¤§ãªå†·æ°—ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a huge ball of cold.");
 
 		{
 			HIT_POINT dam = 70 + plev * 3 / 2;
@@ -496,8 +496,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 27:
-		if (name) return _("ˆîÈ—’", "Lightning Storm");
-		if (desc) return _("‹‘å‚È“dŒ‚‚Ì‹…‚ğ•ú‚ÂB", "Fires a huge electric ball.");
+		if (name) return _("ç¨²å¦»åµ", "Lightning Storm");
+		if (desc) return _("å·¨å¤§ãªé›»æ’ƒã®çƒã‚’æ”¾ã¤ã€‚", "Fires a huge electric ball.");
 
 		{
 			HIT_POINT dam = 90 + plev * 3 / 2;
@@ -515,8 +515,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 28:
-		if (name) return _("‰Q’ª", "Whirlpool");
-		if (desc) return _("‹‘å‚È…‚Ì‹…‚ğ•ú‚ÂB", "Fires a huge ball of water.");
+		if (name) return _("æ¸¦æ½®", "Whirlpool");
+		if (desc) return _("å·¨å¤§ãªæ°´ã®çƒã‚’æ”¾ã¤ã€‚", "Fires a huge ball of water.");
 
 		{
 			HIT_POINT dam = 100 + plev * 3 / 2;
@@ -533,8 +533,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 29:
-		if (name) return _("—zŒõ¢Š«", "Call Sunlight");
-		if (desc) return _("©•ª‚ğ’†S‚Æ‚µ‚½Œõ‚Ì‹…‚ğ”­¶‚³‚¹‚éB‚³‚ç‚ÉA‚»‚ÌŠK‘S‘Ì‚ğ‰i‹v‚ÉÆ‚ç‚µAƒ_ƒ“ƒWƒ‡ƒ““à‚·‚×‚Ä‚ÌƒAƒCƒeƒ€‚ğŠ´’m‚·‚éB",
+		if (name) return _("é™½å…‰å¬å–š", "Call Sunlight");
+		if (desc) return _("è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸå…‰ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚ã•ã‚‰ã«ã€ãã®éšå…¨ä½“ã‚’æ°¸ä¹…ã«ç…§ã‚‰ã—ã€ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å†…ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ„ŸçŸ¥ã™ã‚‹ã€‚",
 			"Generates ball of light centered on you. Maps and lights whole dungeon level. Knows all objects location.");
 
 		{
@@ -552,16 +552,16 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				if ((prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
 				{
-					msg_print(_("“úŒõ‚ª‚ ‚È‚½‚Ì“÷‘Ì‚ğÅ‚ª‚µ‚½I", "The sunlight scorches your flesh!"));
-					take_hit(DAMAGE_NOESCAPE, 50, _("“úŒõ", "sunlight"), -1);
+					msg_print(_("æ—¥å…‰ãŒã‚ãªãŸã®è‚‰ä½“ã‚’ç„¦ãŒã—ãŸï¼", "The sunlight scorches your flesh!"));
+					take_hit(DAMAGE_NOESCAPE, 50, _("æ—¥å…‰", "sunlight"), -1);
 				}
 			}
 		}
 		break;
 
 	case 30:
-		if (name) return _("¸—ì‚Ìn", "Elemental Branding");
-		if (desc) return _("•Ší‚É‰Š‚©—â‹C‚Ì‘®«‚ğ‚Â‚¯‚éB", "Makes current weapon fire or frost branded.");
+		if (name) return _("ç²¾éœŠã®åˆƒ", "Elemental Branding");
+		if (desc) return _("æ­¦å™¨ã«ç‚ã‹å†·æ°—ã®å±æ€§ã‚’ã¤ã‘ã‚‹ã€‚", "Makes current weapon fire or frost branded.");
 
 		{
 			if (cast)
@@ -572,8 +572,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 31:
-		if (name) return _("©‘R‚Ì‹ºˆĞ", "Nature's Wrath");
-		if (desc) return _("‹ß‚­‚Ì‘S‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚Éƒ_ƒ[ƒW‚ğ—^‚¦A’nk‚ğ‹N‚±‚µA©•ª‚ğ’†S‚Æ‚µ‚½•ª‰ğ‚Ì‹…‚ğ”­¶‚³‚¹‚éB",
+		if (name) return _("è‡ªç„¶ã®è„…å¨", "Nature's Wrath");
+		if (desc) return _("è¿‘ãã®å…¨ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã€åœ°éœ‡ã‚’èµ·ã“ã—ã€è‡ªåˆ†ã‚’ä¸­å¿ƒã¨ã—ãŸåˆ†è§£ã®çƒã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚",
 			"Damages all monsters in sight. Makes quake. Generates disintegration ball centered on you.");
 
 		{

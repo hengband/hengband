@@ -1,4 +1,4 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "grid.h"
 #include "generate.h"
 #include "rooms.h"
@@ -7,12 +7,12 @@
 
 
 
-#define NUM_NEST_MON_TYPE 64 /*!<nest‚ÌŽí•Ê” */
+#define NUM_NEST_MON_TYPE 64 /*!<nestã®ç¨®åˆ¥æ•° */
 
-/*! pit/nestŒ^î•ñ‚Ìtypedef */
+/*! pit/neståž‹æƒ…å ±ã®typedef */
 typedef struct vault_aux_type vault_aux_type;
 
-/*! pit/nestŒ^î•ñ‚Ì\‘¢‘Ì’è‹` */
+/*! pit/neståž‹æƒ…å ±ã®æ§‹é€ ä½“å®šç¾© */
 struct vault_aux_type
 {
 	cptr name;
@@ -22,7 +22,7 @@ struct vault_aux_type
 	int chance;
 };
 
-/*! nest‚ÌID’è‹` /  Nest types code */
+/*! nestã®IDå®šç¾© /  Nest types code */
 #define NEST_TYPE_CLONE        0
 #define NEST_TYPE_JELLY        1
 #define NEST_TYPE_SYMBOL_GOOD  2
@@ -34,7 +34,7 @@ struct vault_aux_type
 #define NEST_TYPE_CHAPEL       8
 #define NEST_TYPE_UNDEAD       9
 
-/*! pit‚ÌID’è‹` / Pit types code */
+/*! pitã®IDå®šç¾© / Pit types code */
 #define PIT_TYPE_ORC           0
 #define PIT_TYPE_TROLL         1
 #define PIT_TYPE_GIANT         2
@@ -51,21 +51,21 @@ struct vault_aux_type
 
 
 
-/*! ’Êípit¶¬Žž‚Ìƒ‚ƒ“ƒXƒ^[‚Ì\¬ðŒID / Race index for "monster pit (clone)" */
+/*! é€šå¸¸pitç”Ÿæˆæ™‚ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ§‹æˆæ¡ä»¶ID / Race index for "monster pit (clone)" */
 static int vault_aux_race;
 
-/*! ’PˆêƒVƒ“ƒ{ƒ‹pit¶¬Žž‚ÌŽw’èƒVƒ“ƒ{ƒ‹ / Race index for "monster pit (symbol clone)" */
+/*! å˜ä¸€ã‚·ãƒ³ãƒœãƒ«pitç”Ÿæˆæ™‚ã®æŒ‡å®šã‚·ãƒ³ãƒœãƒ« / Race index for "monster pit (symbol clone)" */
 static char vault_aux_char;
 
-/*! ƒuƒŒƒX‘®«‚ÉŠî‚Ã‚­ƒhƒ‰ƒSƒ“pit¶¬ŽžðŒƒ}ƒXƒN / Breath mask for "monster pit (dragon)" */
+/*! ãƒ–ãƒ¬ã‚¹å±žæ€§ã«åŸºã¥ããƒ‰ãƒ©ã‚´ãƒ³pitç”Ÿæˆæ™‚æ¡ä»¶ãƒžã‚¹ã‚¯ / Breath mask for "monster pit (dragon)" */
 static u32b vault_aux_dragon_mask4;
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªVault¶¬‚ÌÅ’á•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒVaultç”Ÿæˆã®æœ€ä½Žå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper monster selection function
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return Vault¶¬‚ÌÅ’á•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return Vaultç”Ÿæˆã®æœ€ä½Žå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_simple(MONRACE_IDX r_idx)
 {
@@ -75,10 +75,10 @@ static bool vault_aux_simple(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªƒ[ƒŠ[nest‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒã‚¼ãƒªãƒ¼nestã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster nest (jelly)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_jelly(MONRACE_IDX r_idx)
 {
@@ -100,10 +100,10 @@ static bool vault_aux_jelly(MONRACE_IDX r_idx)
 }
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ª“®•¨nest‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå‹•ç‰©nestã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster nest (animal)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_animal(MONRACE_IDX r_idx)
 {
@@ -121,10 +121,10 @@ static bool vault_aux_animal(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªƒAƒ“ƒfƒbƒhnest‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰nestã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster nest (undead)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_undead(MONRACE_IDX r_idx)
 {
@@ -141,10 +141,10 @@ static bool vault_aux_undead(MONRACE_IDX r_idx)
 }
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ª¹“°nest‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒè–å ‚nestã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster nest (chapel)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_chapel_g(MONRACE_IDX r_idx)
 {
@@ -175,10 +175,10 @@ static bool vault_aux_chapel_g(MONRACE_IDX r_idx)
 }
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªŒ¢¬‰®nest‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒçŠ¬å°å±‹nestã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster nest (kennel)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_kennel(MONRACE_IDX r_idx)
 {
@@ -195,10 +195,10 @@ static bool vault_aux_kennel(MONRACE_IDX r_idx)
 }
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªƒ~ƒ~ƒbƒNnest‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒŸãƒŸãƒƒã‚¯nestã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster nest (mimic)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_mimic(MONRACE_IDX r_idx)
 {
@@ -215,10 +215,10 @@ static bool vault_aux_mimic(MONRACE_IDX r_idx)
 }
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ª’PˆêƒNƒ[ƒ“nest‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå˜ä¸€ã‚¯ãƒ­ãƒ¼ãƒ³nestã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster nest (clone)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_clone(MONRACE_IDX r_idx)
 {
@@ -230,10 +230,10 @@ static bool vault_aux_clone(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªŽ×ˆ«‘®«ƒVƒ“ƒ{ƒ‹ƒNƒ[ƒ“nest‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé‚ªæ‚ªå±žæ€§ã‚·ãƒ³ãƒœãƒ«ã‚¯ãƒ­ãƒ¼ãƒ³nestã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster nest (symbol clone)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_symbol_e(MONRACE_IDX r_idx)
 {
@@ -255,10 +255,10 @@ static bool vault_aux_symbol_e(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ª‘P—Ç‘®«ƒVƒ“ƒ{ƒ‹ƒNƒ[ƒ“nest‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå–„è‰¯å±žæ€§ã‚·ãƒ³ãƒœãƒ«ã‚¯ãƒ­ãƒ¼ãƒ³nestã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster nest (symbol clone)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_symbol_g(MONRACE_IDX r_idx)
 {
@@ -280,10 +280,10 @@ static bool vault_aux_symbol_g(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªƒI[ƒNpit‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒã‚ªãƒ¼ã‚¯pitã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster pit (orc)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_orc(MONRACE_IDX r_idx)
 {
@@ -304,10 +304,10 @@ static bool vault_aux_orc(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªƒgƒƒ‹pit‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒˆãƒ­ãƒ«pitã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster pit (troll)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_troll(MONRACE_IDX r_idx)
 {
@@ -328,10 +328,10 @@ static bool vault_aux_troll(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ª‹lpit‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒå·¨äººpitã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster pit (giant)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_giant(MONRACE_IDX r_idx)
 {
@@ -354,10 +354,10 @@ static bool vault_aux_giant(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªƒhƒ‰ƒSƒ“pit‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒ‰ãƒ©ã‚´ãƒ³pitã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster pit (dragon)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_dragon(MONRACE_IDX r_idx)
 {
@@ -381,10 +381,10 @@ static bool vault_aux_dragon(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªˆ«–‚pit‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ‚ªé­”pitã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster pit (demon)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_demon(MONRACE_IDX r_idx)
 {
@@ -404,10 +404,10 @@ static bool vault_aux_demon(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ª‹¶‹Cpit‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒç‹‚æ°—pitã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster pit (lovecraftian)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_cthulhu(MONRACE_IDX r_idx)
 {
@@ -427,8 +427,8 @@ static bool vault_aux_cthulhu(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief pit/nest‚ÌŠî€‚Æ‚È‚é’PŽíƒ‚ƒ“ƒXƒ^[‚ðŒˆ‚ß‚é /
-* @return ‚È‚µ
+* @brief pit/nestã®åŸºæº–ã¨ãªã‚‹å˜ç¨®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ±ºã‚ã‚‹ /
+* @return ãªã—
 */
 static void vault_prep_clone(void)
 {
@@ -444,8 +444,8 @@ static void vault_prep_clone(void)
 
 
 /*!
-* @brief pit/nest‚ÌŠî€‚Æ‚È‚éƒ‚ƒ“ƒXƒ^[ƒVƒ“ƒ{ƒ‹‚ðŒˆ‚ß‚é /
-* @return ‚È‚µ
+* @brief pit/nestã®åŸºæº–ã¨ãªã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚·ãƒ³ãƒœãƒ«ã‚’æ±ºã‚ã‚‹ /
+* @return ãªã—
 */
 static void vault_prep_symbol(void)
 {
@@ -465,8 +465,8 @@ static void vault_prep_symbol(void)
 }
 
 /*!
-* @brief pit/nest‚ÌŠî€‚Æ‚È‚éƒhƒ‰ƒSƒ“‚ÌŽí—Þ‚ðŒˆ‚ß‚é /
-* @return ‚È‚µ
+* @brief pit/nestã®åŸºæº–ã¨ãªã‚‹ãƒ‰ãƒ©ã‚´ãƒ³ã®ç¨®é¡žã‚’æ±ºã‚ã‚‹ /
+* @return ãªã—
 */
 static void vault_prep_dragon(void)
 {
@@ -539,10 +539,10 @@ static void vault_prep_dragon(void)
 
 
 /*!
-* @brief ƒ‚ƒ“ƒXƒ^[‚ªƒ_[ƒNƒGƒ‹ƒtpit‚Ì¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚©‚ð•Ô‚· /
+* @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒãƒ€ãƒ¼ã‚¯ã‚¨ãƒ«ãƒ•pitã®ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‹ã‚’è¿”ã™ /
 * Helper function for "monster pit (dark elf)"
-* @param r_idx Šm”F‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[Ží‘°ID
-* @return ¶¬•K—vðŒ‚ð–ž‚½‚µ‚Ä‚¢‚é‚È‚çTRUE‚ð•Ô‚·B
+* @param r_idx ç¢ºèªã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—ID
+* @return ç”Ÿæˆå¿…è¦æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
 */
 static bool vault_aux_dark_elf(MONRACE_IDX r_idx)
 {
@@ -567,10 +567,10 @@ static bool vault_aux_dark_elf(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ_ƒ“ƒWƒ‡ƒ“–ˆ‚ÉŽw’è‚³‚ê‚½ƒsƒbƒg”z—ñ‚ðŠî€‚Éƒ‰ƒ“ƒ_ƒ€‚Èpit/nestƒ^ƒCƒv‚ðŒˆ‚ß‚é
-* @param l_ptr ‘I‘ð‚³‚ê‚½pit/nestî•ñ‚ð•Ô‚·ŽQÆƒ|ƒCƒ“ƒ^
-* @param allow_flag_mask ¶¬‚ª‹–‚³‚ê‚épit/nest‚Ìƒrƒbƒg”z—ñ
-* @return ‘I‘ð‚³‚ê‚½pit/nest‚ÌIDA‘I‘ðŽ¸”s‚µ‚½ê‡-1‚ð•Ô‚·B
+* @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³æ¯Žã«æŒ‡å®šã•ã‚ŒãŸãƒ”ãƒƒãƒˆé…åˆ—ã‚’åŸºæº–ã«ãƒ©ãƒ³ãƒ€ãƒ ãªpit/nestã‚¿ã‚¤ãƒ—ã‚’æ±ºã‚ã‚‹
+* @param l_ptr é¸æŠžã•ã‚ŒãŸpit/nestæƒ…å ±ã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @param allow_flag_mask ç”ŸæˆãŒè¨±ã•ã‚Œã‚‹pit/nestã®ãƒ“ãƒƒãƒˆé…åˆ—
+* @return é¸æŠžã•ã‚ŒãŸpit/nestã®IDã€é¸æŠžå¤±æ•—ã—ãŸå ´åˆ-1ã‚’è¿”ã™ã€‚
 */
 static int pick_vault_type(vault_aux_type *l_ptr, s16b allow_flag_mask)
 {
@@ -620,10 +620,10 @@ static int pick_vault_type(vault_aux_type *l_ptr, s16b allow_flag_mask)
 }
 
 /*!
-* @brief ƒfƒoƒbƒOŽž‚É¶¬‚³‚ê‚½pit/nest‚ÌŒ^‚ðo—Í‚·‚éˆ—
-* @param type pit/nest‚ÌŒ^ID
-* @param nest TRUE‚È‚ç‚ÎnestAFALSE‚È‚ç‚Îpit
-* @return ƒfƒoƒbƒO•\Ž¦•¶Žš—ñ‚ÌŽQÆƒ|ƒCƒ“ƒ^
+* @brief ãƒ‡ãƒãƒƒã‚°æ™‚ã«ç”Ÿæˆã•ã‚ŒãŸpit/nestã®åž‹ã‚’å‡ºåŠ›ã™ã‚‹å‡¦ç†
+* @param type pit/nestã®åž‹ID
+* @param nest TRUEãªã‚‰ã°nestã€FALSEãªã‚‰ã°pit
+* @return ãƒ‡ãƒãƒƒã‚°è¡¨ç¤ºæ–‡å­—åˆ—ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
 * @details
 * Hack -- Get the string describing subtype of pit/nest
 * Determined in prepare function (some pit/nest only)
@@ -659,14 +659,14 @@ static cptr pit_subtype_string(int type, bool nest)
 			switch (vault_aux_dragon_mask4)
 			{
 #ifdef JP
-			case RF4_BR_ACID: strcpy(inner_buf, "(Ž_)");   break;
-			case RF4_BR_ELEC: strcpy(inner_buf, "(ˆîÈ)"); break;
-			case RF4_BR_FIRE: strcpy(inner_buf, "(‰Î‰Š)"); break;
-			case RF4_BR_COLD: strcpy(inner_buf, "(—â‹C)"); break;
-			case RF4_BR_POIS: strcpy(inner_buf, "(“Å)");   break;
+			case RF4_BR_ACID: strcpy(inner_buf, "(é…¸)");   break;
+			case RF4_BR_ELEC: strcpy(inner_buf, "(ç¨²å¦»)"); break;
+			case RF4_BR_FIRE: strcpy(inner_buf, "(ç«ç‚Ž)"); break;
+			case RF4_BR_COLD: strcpy(inner_buf, "(å†·æ°—)"); break;
+			case RF4_BR_POIS: strcpy(inner_buf, "(æ¯’)");   break;
 			case (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS) :
-				strcpy(inner_buf, "(–œF)"); break;
-			default: strcpy(inner_buf, "(–¢’è‹`)"); break;
+				strcpy(inner_buf, "(ä¸‡è‰²)"); break;
+			default: strcpy(inner_buf, "(æœªå®šç¾©)"); break;
 #else
 			case RF4_BR_ACID: strcpy(inner_buf, "(acid)");      break;
 			case RF4_BR_ELEC: strcpy(inner_buf, "(lightning)"); break;
@@ -690,12 +690,12 @@ static cptr pit_subtype_string(int type, bool nest)
 
 
 /*
-*! @brief nest‚Ìƒ‚ƒ“ƒXƒ^[ƒŠƒXƒg‚ðƒ\[ƒg‚·‚é‚½‚ß‚ÌŠÖ” /
+*! @brief nestã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãƒªã‚¹ãƒˆã‚’ã‚½ãƒ¼ãƒˆã™ã‚‹ãŸã‚ã®é–¢æ•° /
 *  Comp function for sorting nest monster information
-*  @param u ƒ\[ƒgˆ—‘ÎÛ”z—ñƒ|ƒCƒ“ƒ^
-*  @param v –¢Žg—p
-*  @param a ”äŠr‘ÎÛŽQÆID1
-*  @param b ”äŠr‘ÎÛŽQÆID2
+*  @param u ã‚½ãƒ¼ãƒˆå‡¦ç†å¯¾è±¡é…åˆ—ãƒã‚¤ãƒ³ã‚¿
+*  @param v æœªä½¿ç”¨
+*  @param a æ¯”è¼ƒå¯¾è±¡å‚ç…§ID1
+*  @param b æ¯”è¼ƒå¯¾è±¡å‚ç…§ID2
 */
 static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 {
@@ -730,12 +730,12 @@ static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 }
 
 /*!
-* @brief nest‚Ìƒ‚ƒ“ƒXƒ^[ƒŠƒXƒg‚ðƒXƒƒbƒv‚·‚é‚½‚ß‚ÌŠÖ” /
+* @brief nestã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãƒªã‚¹ãƒˆã‚’ã‚¹ãƒ¯ãƒƒãƒ—ã™ã‚‹ãŸã‚ã®é–¢æ•° /
 * Swap function for sorting nest monster information
-* @param u ƒXƒƒbƒvˆ—‘ÎÛ”z—ñƒ|ƒCƒ“ƒ^
-* @param v –¢Žg—p
-* @param a ƒXƒƒbƒv‘ÎÛŽQÆID1
-* @param b ƒXƒƒbƒv‘ÎÛŽQÆID2
+* @param u ã‚¹ãƒ¯ãƒƒãƒ—å‡¦ç†å¯¾è±¡é…åˆ—ãƒã‚¤ãƒ³ã‚¿
+* @param v æœªä½¿ç”¨
+* @param a ã‚¹ãƒ¯ãƒƒãƒ—å¯¾è±¡å‚ç…§ID1
+* @param b ã‚¹ãƒ¯ãƒƒãƒ—å¯¾è±¡å‚ç…§ID2
 */
 static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
 {
@@ -753,20 +753,20 @@ static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
 
 
 
-/*!nestî•ñƒe[ƒuƒ‹*/
+/*!nestæƒ…å ±ãƒ†ãƒ¼ãƒ–ãƒ«*/
 static vault_aux_type nest_types[] =
 {
 #ifdef JP
-{ "ƒNƒ[ƒ“",     vault_aux_clone,    vault_prep_clone,   5, 3 },
-{ "ƒ[ƒŠ[",       vault_aux_jelly,    NULL,               5, 6 },
-{ "ƒVƒ“ƒ{ƒ‹(‘P)", vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
-{ "ƒVƒ“ƒ{ƒ‹(ˆ«)", vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
-{ "ƒ~ƒ~ƒbƒN",     vault_aux_mimic,    NULL,              30, 4 },
-{ "‹¶‹C",         vault_aux_cthulhu,  NULL,              70, 2 },
-{ "Œ¢¬‰®",       vault_aux_kennel,   NULL,              45, 4 },
-{ "“®•¨‰€",       vault_aux_animal,   NULL,              35, 5 },
-{ "‹³‰ï",         vault_aux_chapel_g, NULL,              75, 4 },
-{ "ƒAƒ“ƒfƒbƒh",   vault_aux_undead,   NULL,              75, 5 },
+{ "ã‚¯ãƒ­ãƒ¼ãƒ³",     vault_aux_clone,    vault_prep_clone,   5, 3 },
+{ "ã‚¼ãƒªãƒ¼",       vault_aux_jelly,    NULL,               5, 6 },
+{ "ã‚·ãƒ³ãƒœãƒ«(å–„)", vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
+{ "ã‚·ãƒ³ãƒœãƒ«(æ‚ª)", vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
+{ "ãƒŸãƒŸãƒƒã‚¯",     vault_aux_mimic,    NULL,              30, 4 },
+{ "ç‹‚æ°—",         vault_aux_cthulhu,  NULL,              70, 2 },
+{ "çŠ¬å°å±‹",       vault_aux_kennel,   NULL,              45, 4 },
+{ "å‹•ç‰©åœ’",       vault_aux_animal,   NULL,              35, 5 },
+{ "æ•™ä¼š",         vault_aux_chapel_g, NULL,              75, 4 },
+{ "ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰",   vault_aux_undead,   NULL,              75, 5 },
 { NULL,           NULL,               NULL,               0, 0 },
 #else
 { "clone",        vault_aux_clone,    vault_prep_clone,   5, 3 },
@@ -783,20 +783,20 @@ static vault_aux_type nest_types[] =
 #endif
 };
 
-/*!pitî•ñƒe[ƒuƒ‹*/
+/*!pitæƒ…å ±ãƒ†ãƒ¼ãƒ–ãƒ«*/
 static vault_aux_type pit_types[] =
 {
 #ifdef JP
-{ "ƒI[ƒN",       vault_aux_orc,      NULL,               5, 6 },
-{ "ƒgƒƒ‹",       vault_aux_troll,    NULL,              20, 6 },
-{ "ƒWƒƒƒCƒAƒ“ƒg", vault_aux_giant,    NULL,              50, 6 },
-{ "‹¶‹C",         vault_aux_cthulhu,  NULL,              80, 2 },
-{ "ƒVƒ“ƒ{ƒ‹(‘P)", vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
-{ "ƒVƒ“ƒ{ƒ‹(ˆ«)", vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
-{ "‹³‰ï",         vault_aux_chapel_g, NULL,              65, 2 },
-{ "ƒhƒ‰ƒSƒ“",     vault_aux_dragon,   vault_prep_dragon, 70, 6 },
-{ "ƒf[ƒ‚ƒ“",     vault_aux_demon,    NULL,              80, 6 },
-{ "ƒ_[ƒNƒGƒ‹ƒt", vault_aux_dark_elf, NULL,              45, 4 },
+{ "ã‚ªãƒ¼ã‚¯",       vault_aux_orc,      NULL,               5, 6 },
+{ "ãƒˆãƒ­ãƒ«",       vault_aux_troll,    NULL,              20, 6 },
+{ "ã‚¸ãƒ£ã‚¤ã‚¢ãƒ³ãƒˆ", vault_aux_giant,    NULL,              50, 6 },
+{ "ç‹‚æ°—",         vault_aux_cthulhu,  NULL,              80, 2 },
+{ "ã‚·ãƒ³ãƒœãƒ«(å–„)", vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
+{ "ã‚·ãƒ³ãƒœãƒ«(æ‚ª)", vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
+{ "æ•™ä¼š",         vault_aux_chapel_g, NULL,              65, 2 },
+{ "ãƒ‰ãƒ©ã‚´ãƒ³",     vault_aux_dragon,   vault_prep_dragon, 70, 6 },
+{ "ãƒ‡ãƒ¼ãƒ¢ãƒ³",     vault_aux_demon,    NULL,              80, 6 },
+{ "ãƒ€ãƒ¼ã‚¯ã‚¨ãƒ«ãƒ•", vault_aux_dark_elf, NULL,              45, 4 },
 { NULL,           NULL,               NULL,               0, 0 },
 #else
 { "orc",          vault_aux_orc,      NULL,               5, 6 },
@@ -817,8 +817,8 @@ static vault_aux_type pit_types[] =
 
 
 /*!
-* @brief ƒ^ƒCƒv5‚Ì•”‰®cnest‚ð¶¬‚·‚é / Type 5 -- Monster nests
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—5ã®éƒ¨å±‹â€¦nestã‚’ç”Ÿæˆã™ã‚‹ / Type 5 -- Monster nests
+* @return ãªã—
 * @details
 * A monster nest is a "big" room, with an "inner" room, containing\n
 * a "collection" of monsters of a given type strewn about the room.\n
@@ -969,7 +969,7 @@ bool build_type5(void)
 	case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("ƒ‚ƒ“ƒXƒ^[•”‰®(nest)(%s%s)‚ð¶¬‚µ‚Ü‚·B", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
+	msg_format_wizard(CHEAT_DUNGEON, _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼éƒ¨å±‹(nest)(%s%s)ã‚’ç”Ÿæˆã—ã¾ã™ã€‚", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
 
 	/* Place some monsters */
 	for (y = yval - 2; y <= yval + 2; y++)
@@ -1003,7 +1003,7 @@ bool build_type5(void)
 				if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx) break;
 				if (!nest_mon_info[i + 1].used) break;
 			}
-			msg_format_wizard(CHEAT_DUNGEON, "Nest\¬ƒ‚ƒ“ƒXƒ^[No.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
+			msg_format_wizard(CHEAT_DUNGEON, "Nestæ§‹æˆãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼No.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
 		}
 	}
 
@@ -1012,8 +1012,8 @@ bool build_type5(void)
 
 
 /*!
-* @brief ƒ^ƒCƒv6‚Ì•”‰®cpit‚ð¶¬‚·‚é / Type 6 -- Monster pits
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—6ã®éƒ¨å±‹â€¦pitã‚’ç”Ÿæˆã™ã‚‹ / Type 6 -- Monster pits
+* @return ãªã—
 * @details
 * A monster pit is a "big" room, with an "inner" room, containing\n
 * a "collection" of monsters of a given type organized in the room.\n
@@ -1201,14 +1201,14 @@ bool build_type6(void)
 		}
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("ƒ‚ƒ“ƒXƒ^[•”‰®(pit)(%s%s)‚ð¶¬‚µ‚Ü‚·B", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
+	msg_format_wizard(CHEAT_DUNGEON, _("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼éƒ¨å±‹(pit)(%s%s)ã‚’ç”Ÿæˆã—ã¾ã™ã€‚", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 
 	/* Select the entries */
 	for (i = 0; i < 8; i++)
 	{
 		/* Every other entry */
 		what[i] = what[i * 2];
-		msg_format_wizard(CHEAT_DUNGEON, _("Nest\¬ƒ‚ƒ“ƒXƒ^[‘I‘ðNo.%d:%s", "Nest Monster Select No.%d:%s"), i, r_name + r_info[what[i]].name);
+		msg_format_wizard(CHEAT_DUNGEON, _("Nestæ§‹æˆãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é¸æŠžNo.%d:%s", "Nest Monster Select No.%d:%s"), i, r_name + r_info[what[i]].name);
 	}
 
 	/* Top and bottom rows */
@@ -1284,8 +1284,8 @@ static bool vault_aux_trapped_pit(MONRACE_IDX r_idx)
 
 
 /*!
-* @brief ƒ^ƒCƒv13‚Ì•”‰®cƒgƒ‰ƒbƒvpit‚Ì¶¬ / Type 13 -- Trapped monster pits
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—13ã®éƒ¨å±‹â€¦ãƒˆãƒ©ãƒƒãƒ—pitã®ç”Ÿæˆ / Type 13 -- Trapped monster pits
+* @return ãªã—
 * @details
 * A trapped monster pit is a "big" room with a straight corridor in\n
 * which wall opening traps are placed, and with two "inner" rooms\n
@@ -1542,7 +1542,7 @@ bool build_type13(void)
 		}
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("%s%s‚Ìã©ƒsƒbƒg‚ª¶¬‚³‚ê‚Ü‚µ‚½B", "Trapped monster pit (%s%s)"),
+	msg_format_wizard(CHEAT_DUNGEON, _("%s%sã®ç½ ãƒ”ãƒƒãƒˆãŒç”Ÿæˆã•ã‚Œã¾ã—ãŸã€‚", "Trapped monster pit (%s%s)"),
 		n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 
 	/* Select the entries */

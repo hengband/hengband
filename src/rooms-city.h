@@ -1,4 +1,4 @@
-extern bool build_type16(void);
+﻿extern bool build_type16(void);
 
 /* Minimum & maximum town size */
 #define MIN_TOWN_WID ((MAX_WID / 3) / 2)

@@ -1,5 +1,5 @@
-
-/*! ƒfƒoƒbƒO‚Énest‚Ìƒ‚ƒ“ƒXƒ^[î•ñ‚ğŠm”F‚·‚é‚½‚ß‚Ì\‘¢‘Ì / A struct for nest monster information with cheat_hear */
+ï»¿
+/*! ãƒ‡ãƒãƒƒã‚°æ™‚ã«nestã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æƒ…å ±ã‚’ç¢ºèªã™ã‚‹ãŸã‚ã®æ§‹é€ ä½“ / A struct for nest monster information with cheat_hear */
 typedef struct
 {
 	s16b r_idx;

@@ -1,4 +1,4 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "grid.h"
 #include "generate.h"
 #include "rooms.h"
@@ -51,8 +51,8 @@ static bool kind_is_potion(KIND_OBJECT_IDX k_idx)
 }
 
 /*!
-* @brief ƒ^ƒCƒv15‚Ì•”‰®cƒKƒ‰ƒX•”‰®‚Ì¶¬ / Type 15 -- glass rooms
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—15ã®éƒ¨å±‹â€¦ã‚¬ãƒ©ã‚¹éƒ¨å±‹ã®ç”Ÿæˆ / Type 15 -- glass rooms
+* @return ãªã—
 */
 bool build_type15(void)
 {
@@ -285,7 +285,7 @@ bool build_type15(void)
 	break;
 	}
 
-	msg_print_wizard(CHEAT_DUNGEON, _("ƒKƒ‰ƒX‚Ì•”‰®‚ª¶¬‚³‚ê‚Ü‚µ‚½B", "Glass room was generated."));
+	msg_print_wizard(CHEAT_DUNGEON, _("ã‚¬ãƒ©ã‚¹ã®éƒ¨å±‹ãŒç”Ÿæˆã•ã‚Œã¾ã—ãŸã€‚", "Glass room was generated."));
 
 	return TRUE;
 }

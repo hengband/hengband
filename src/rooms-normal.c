@@ -1,10 +1,10 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "grid.h"
 #include "rooms.h"
 
 /*!
-* @brief ƒ^ƒCƒv1‚Ì•”‰®c’Êí‰Â•Ï’·•ûŒ`‚Ì•”‰®‚ğ¶¬‚·‚é / Type 1 -- normal rectangular rooms
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—1ã®éƒ¨å±‹â€¦é€šå¸¸å¯å¤‰é•·æ–¹å½¢ã®éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹ / Type 1 -- normal rectangular rooms
+* @return ãªã—
 */
 bool build_type1(void)
 {
@@ -198,8 +198,8 @@ bool build_type1(void)
 }
 
 /*!
-* @brief ƒ^ƒCƒv2‚Ì•”‰®c“ñd’·•ûŒ`‚Ì•”‰®‚ğ¶¬‚·‚é / Type 2 -- Overlapping rectangular rooms
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—2ã®éƒ¨å±‹â€¦äºŒé‡é•·æ–¹å½¢ã®éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹ / Type 2 -- Overlapping rectangular rooms
+* @return ãªã—
 */
 bool build_type2(void)
 {
@@ -311,8 +311,8 @@ bool build_type2(void)
 }
 
 /*!
-* @brief ƒ^ƒCƒv3‚Ì•”‰®c\šŒ^‚Ì•”‰®‚ğ¶¬‚·‚é / Type 3 -- Cross shaped rooms
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—3ã®éƒ¨å±‹â€¦åå­—å‹ã®éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹ / Type 3 -- Cross shaped rooms
+* @return ãªã—
 * @details
 * Builds a room at a row, column coordinate\n
 *\n
@@ -570,8 +570,8 @@ bool build_type3(void)
 }
 
 /*!
-* @brief ƒ^ƒCƒv4‚Ì•”‰®cŒÅ’èƒTƒCƒY‚Ì“ñd\‘¢•”‰®‚ğ¶¬‚·‚é / Type 4 -- Large room with inner features
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—4ã®éƒ¨å±‹â€¦å›ºå®šã‚µã‚¤ã‚ºã®äºŒé‡æ§‹é€ éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹ / Type 4 -- Large room with inner features
+* @return ãªã—
 * @details
 * Possible sub-types:\n
 *	1 - Just an inner room with one door\n
@@ -899,8 +899,8 @@ bool build_type4(void)
 
 
 /*!
-* @brief ƒ^ƒCƒv11‚Ì•”‰®c‰~Œ`•”‰®‚Ì¶¬ / Type 11 -- Build an vertical oval room.
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—11ã®éƒ¨å±‹â€¦å††å½¢éƒ¨å±‹ã®ç”Ÿæˆ / Type 11 -- Build an vertical oval room.
+* @return ãªã—
 * @details
 * For every grid in the possible square, check the distance.\n
 * If it's less than the radius, make it a room square.\n
@@ -946,8 +946,8 @@ bool build_type11(void)
 
 
 /*!
-* @brief ƒ^ƒCƒv12‚Ì•”‰®cƒh[ƒ€Œ^•”‰®‚Ì¶¬ / Type 12 -- Build crypt room.
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—12ã®éƒ¨å±‹â€¦ãƒ‰ãƒ¼ãƒ å‹éƒ¨å±‹ã®ç”Ÿæˆ / Type 12 -- Build crypt room.
+* @return ãªã—
 * @details
 * For every grid in the possible square, check the (fake) distance.\n
 * If it's less than the radius, make it a room square.\n

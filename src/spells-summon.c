@@ -1,15 +1,15 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 
 /*!
-* @brief ƒgƒ‰ƒ“ƒv–‚–@“Æ©‚Ì¢Š«ˆ—‚ğs‚¤ / Handle summoning and failure of trump spells
-* @param num summon_specific()ŠÖ”‚ğŒÄ‚Ño‚·‰ñ”
-* @param pet ƒyƒbƒg‰»‚Æ‚µ‚Ä¢Š«‚³‚ê‚é‚©”Û‚©
-* @param y ¢Š«ˆÊ’u‚ÌyÀ•W
-* @param x ¢Š«ˆÊ’u‚ÌxÀ•W
-* @param lev ¢Š«ƒŒƒxƒ‹
-* @param type ¢Š«ğŒID
-* @param mode ƒ‚ƒ“ƒXƒ^[¶¬ğŒƒtƒ‰ƒO
-* @return ƒ‚ƒ“ƒXƒ^[‚ªi“G‘Î‚àŠÜ‚ß‚Äj¢ŠÒ‚³‚ê‚½‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+* @brief ãƒˆãƒ©ãƒ³ãƒ—é­”æ³•ç‹¬è‡ªã®å¬å–šå‡¦ç†ã‚’è¡Œã† / Handle summoning and failure of trump spells
+* @param num summon_specific()é–¢æ•°ã‚’å‘¼ã³å‡ºã™å›æ•°
+* @param pet ãƒšãƒƒãƒˆåŒ–ã¨ã—ã¦å¬å–šã•ã‚Œã‚‹ã‹å¦ã‹
+* @param y å¬å–šä½ç½®ã®yåº§æ¨™
+* @param x å¬å–šä½ç½®ã®xåº§æ¨™
+* @param lev å¬å–šãƒ¬ãƒ™ãƒ«
+* @param type å¬å–šæ¡ä»¶ID
+* @param mode ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç”Ÿæˆæ¡ä»¶ãƒ•ãƒ©ã‚°
+* @return ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒï¼ˆæ•µå¯¾ã‚‚å«ã‚ã¦ï¼‰å¬é‚„ã•ã‚ŒãŸãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
 */
 bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode)
 {
@@ -55,7 +55,7 @@ bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int t
 
 	if (!success)
 	{
-		msg_print(_("’N‚à‚ ‚È‚½‚ÌƒJ[ƒh‚ÌŒÄ‚Ñº‚É“š‚¦‚È‚¢B", "Nobody answers to your Trump call."));
+		msg_print(_("èª°ã‚‚ã‚ãªãŸã®ã‚«ãƒ¼ãƒ‰ã®å‘¼ã³å£°ã«ç­”ãˆãªã„ã€‚", "Nobody answers to your Trump call."));
 	}
 
 	return success;
@@ -64,9 +64,9 @@ bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int t
 
 
 /*!
-* @brief ˆ«–‚—Ìˆæ‚ÌƒOƒŒ[ƒ^[ƒf[ƒ‚ƒ“¢Š«‚É—˜—p‰Â”\‚È€‘Ì‚©‚Ç‚¤‚©‚ğ•Ô‚·B / An "item_tester_hook" for offer
-* @param o_ptr ƒIƒuƒWƒFƒNƒg\‘¢‘Ì‚ÌQÆƒ|ƒCƒ“ƒ^
-* @return ¶æÑ‚Ég—p‰Â”\‚È€‘Ì‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+* @brief æ‚ªé­”é ˜åŸŸã®ã‚°ãƒ¬ãƒ¼ã‚¿ãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³å¬å–šã«åˆ©ç”¨å¯èƒ½ãªæ­»ä½“ã‹ã©ã†ã‹ã‚’è¿”ã™ã€‚ / An "item_tester_hook" for offer
+* @param o_ptr ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+* @return ç”Ÿè´„ã«ä½¿ç”¨å¯èƒ½ãªæ­»ä½“ãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
 */
 bool item_tester_offer(object_type *o_ptr)
 {
@@ -81,8 +81,8 @@ bool item_tester_offer(object_type *o_ptr)
 }
 
 /*!
-* @brief ˆ«–‚—Ìˆæ‚ÌƒOƒŒ[ƒ^[ƒf[ƒ‚ƒ“¢Š«‚ğˆ—‚·‚é / Daemon spell Summon Greater Demon
-* @return ˆ—‚ğÀs‚µ‚½‚È‚ç‚ÎTRUE‚ğ•Ô‚·B
+* @brief æ‚ªé­”é ˜åŸŸã®ã‚°ãƒ¬ãƒ¼ã‚¿ãƒ¼ãƒ‡ãƒ¼ãƒ¢ãƒ³å¬å–šã‚’å‡¦ç†ã™ã‚‹ / Daemon spell Summon Greater Demon
+* @return å‡¦ç†ã‚’å®Ÿè¡Œã—ãŸãªã‚‰ã°TRUEã‚’è¿”ã™ã€‚
 */
 bool cast_summon_greater_demon(void)
 {
@@ -93,8 +93,8 @@ bool cast_summon_greater_demon(void)
 	object_type *o_ptr;
 
 	item_tester_hook = item_tester_offer;
-	q = _("‚Ç‚Ì€‘Ì‚ğ•ù‚°‚Ü‚·‚©? ", "Sacrifice which corpse? ");
-	s = _("•ù‚°‚ç‚ê‚é€‘Ì‚ğ‚Á‚Ä‚¢‚È‚¢B", "You have nothing to scrifice.");
+	q = _("ã©ã®æ­»ä½“ã‚’æ§ã’ã¾ã™ã‹? ", "Sacrifice which corpse? ");
+	s = _("æ§ã’ã‚‰ã‚Œã‚‹æ­»ä½“ã‚’æŒã£ã¦ã„ãªã„ã€‚", "You have nothing to scrifice.");
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return FALSE;
 
 	/* Get the item (in the pack) */
@@ -113,8 +113,8 @@ bool cast_summon_greater_demon(void)
 
 	if (summon_specific(-1, p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 	{
-		msg_print(_("—°‰©‚Ìˆ«L‚ª[–‚µ‚½B", "The area fills with a stench of sulphur and brimstone."));
-		msg_print(_("u‚²—p‚Å‚²‚´‚¢‚Ü‚·‚©A‚²ål—lv", "'What is thy bidding... Master?'"));
+		msg_print(_("ç¡«é»„ã®æ‚ªè‡­ãŒå……æº€ã—ãŸã€‚", "The area fills with a stench of sulphur and brimstone."));
+		msg_print(_("ã€Œã”ç”¨ã§ã”ã–ã„ã¾ã™ã‹ã€ã”ä¸»äººæ§˜ã€", "'What is thy bidding... Master?'"));
 
 		/* Decrease the item (from the pack) */
 		if (item >= 0)
@@ -134,7 +134,7 @@ bool cast_summon_greater_demon(void)
 	}
 	else
 	{
-		msg_print(_("ˆ«–‚‚ÍŒ»‚ê‚È‚©‚Á‚½B", "No Greater Demon arrive."));
+		msg_print(_("æ‚ªé­”ã¯ç¾ã‚Œãªã‹ã£ãŸã€‚", "No Greater Demon arrive."));
 	}
 
 	return TRUE;

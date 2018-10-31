@@ -1,4 +1,4 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "grid.h"
 #include "generate.h"
 #include "rooms.h"
@@ -87,12 +87,12 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
 
 
 /*!
-* @brief ƒ^ƒCƒv16‚Ì•”‰®c’n‰º“ss¶¬‚ÌƒTƒuƒ‹[ƒ`ƒ“ / Actually create buildings
-* @return ‚È‚µ
-* @param ltcy ¶¬Šî€YÀ•W
-* @param ltcx ¶¬Šî€XÀ•W
-* @param stotes[] ¶¬‚·‚é“X•Ü‚ÌƒŠƒXƒg
-* @param n ¶¬‚·‚é“X•Ü‚Ì”
+* @brief ã‚¿ã‚¤ãƒ—16ã®éƒ¨å±‹â€¦åœ°ä¸‹éƒ½å¸‚ç”Ÿæˆã®ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ / Actually create buildings
+* @return ãªã—
+* @param ltcy ç”ŸæˆåŸºæº–Yåº§æ¨™
+* @param ltcx ç”ŸæˆåŸºæº–Xåº§æ¨™
+* @param stotes[] ç”Ÿæˆã™ã‚‹åº—èˆ—ã®ãƒªã‚¹ãƒˆ
+* @param n ç”Ÿæˆã™ã‚‹åº—èˆ—ã®æ•°
 * @note
 * Note: ltcy and ltcx indicate "left top corner".
 */
@@ -171,8 +171,8 @@ static void build_stores(int ltcy, int ltcx, int stores[], int n)
 
 
 /*!
-* @brief ƒ^ƒCƒv16‚Ì•”‰®c’n‰º“ss‚Ì¶¬ / Type 16 -- Underground Arcade
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—16ã®éƒ¨å±‹â€¦åœ°ä¸‹éƒ½å¸‚ã®ç”Ÿæˆ / Type 16 -- Underground Arcade
+* @return ãªã—
 * @details
 * Town logic flow for generation of new town\n
 * Originally from Vanilla 3.0.3\n
@@ -246,7 +246,7 @@ bool build_type16(void)
 	/* Build stores */
 	build_stores(y1, x1, stores, n);
 
-	msg_print_wizard(CHEAT_DUNGEON, _("’n‰ºŠX‚ğ¶¬‚µ‚Ü‚µ‚½", "Underground arcade was generated."));
+	msg_print_wizard(CHEAT_DUNGEON, _("åœ°ä¸‹è¡—ã‚’ç”Ÿæˆã—ã¾ã—ãŸ", "Underground arcade was generated."));
 
 	/* Free buildings array */
 	C_KILL(ugbldg, n, ugbldg_type);

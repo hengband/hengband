@@ -1,12 +1,12 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "grid.h"
 #include "generate.h"
 #include "rooms.h"
 
 
 /*!
-* @brief ƒ^ƒCƒv14‚Ì•”‰®c“Áêƒgƒ‰ƒbƒv•”‰®‚Ì¶¬ / Type 14 -- trapped rooms
-* @return ‚È‚µ
+* @brief ã‚¿ã‚¤ãƒ—14ã®éƒ¨å±‹â€¦ç‰¹æ®Šãƒˆãƒ©ãƒƒãƒ—éƒ¨å±‹ã®ç”Ÿæˆ / Type 14 -- trapped rooms
+* @return ãªã—
 * @details
 * A special trap is placed at center of the room
 */
@@ -81,7 +81,7 @@ bool build_type14(void)
 	c_ptr->mimic = c_ptr->feat;
 	c_ptr->feat = trap;
 
-	msg_format_wizard(CHEAT_DUNGEON, _("%s‚Ì•”‰®‚ª¶¬‚³‚ê‚Ü‚µ‚½B", "Room of %s was generated."), f_name + f_info[trap].name);
+	msg_format_wizard(CHEAT_DUNGEON, _("%sã®éƒ¨å±‹ãŒç”Ÿæˆã•ã‚Œã¾ã—ãŸã€‚", "Room of %s was generated."), f_name + f_info[trap].name);
 
 	return TRUE;
 }

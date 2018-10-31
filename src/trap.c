@@ -1,12 +1,12 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "trap.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 
 
 /*!
-* @brief ƒ^ƒO‚É]‚Á‚ÄAŠî–{ƒgƒ‰ƒbƒvƒe[ƒuƒ‹‚ğ‰Šú‰»‚·‚é / Initialize arrays for normal traps
-* @return ‚È‚µ
+* @brief ã‚¿ã‚°ã«å¾“ã£ã¦ã€åŸºæœ¬ãƒˆãƒ©ãƒƒãƒ—ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’åˆæœŸåŒ–ã™ã‚‹ / Initialize arrays for normal traps
+* @return ãªã—
 */
 void init_normal_traps(void)
 {
@@ -33,9 +33,9 @@ void init_normal_traps(void)
 }
 
 /*!
-* @brief Šî–{ƒgƒ‰ƒbƒv‚ğƒ‰ƒ“ƒ_ƒ€‚É‘I‘ğ‚·‚é /
+* @brief åŸºæœ¬ãƒˆãƒ©ãƒƒãƒ—ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«é¸æŠã™ã‚‹ /
 * Get random trap
-* @return ‘I‘ğ‚µ‚½ƒgƒ‰ƒbƒv‚ÌID
+* @return é¸æŠã—ãŸãƒˆãƒ©ãƒƒãƒ—ã®ID
 * @details
 * XXX XXX XXX This routine should be redone to reflect trap "level".\n
 * That is, it does not make sense to have spiked pits at 50 feet.\n
@@ -68,11 +68,11 @@ s16b choose_random_trap(void)
 }
 
 /*!
-* @brief ƒ}ƒX‚É‘¶İ‚·‚éƒgƒ‰ƒbƒv‚ğ”é“½‚·‚é /
+* @brief ãƒã‚¹ã«å­˜åœ¨ã™ã‚‹ãƒˆãƒ©ãƒƒãƒ—ã‚’ç§˜åŒ¿ã™ã‚‹ /
 * Disclose an invisible trap
-* @param y ”é“½‚µ‚½‚¢ƒ}ƒX‚ÌYÀ•W
-* @param x ”é“½‚µ‚½‚¢ƒ}ƒX‚ÌXÀ•W
-* @return ‚È‚µ
+* @param y ç§˜åŒ¿ã—ãŸã„ãƒã‚¹ã®Yåº§æ¨™
+* @param x ç§˜åŒ¿ã—ãŸã„ãƒã‚¹ã®Xåº§æ¨™
+* @return ãªã—
 */
 void disclose_grid(POSITION y, POSITION x)
 {
@@ -97,10 +97,10 @@ void disclose_grid(POSITION y, POSITION x)
 }
 
 /*!
-* @brief ƒ}ƒX‚ğƒgƒ‰ƒbƒv‚ğ”z’u‚·‚é /
+* @brief ãƒã‚¹ã‚’ãƒˆãƒ©ãƒƒãƒ—ã‚’é…ç½®ã™ã‚‹ /
 * The location must be a legal, naked, floor grid.
-* @param y ”z’u‚µ‚½‚¢ƒ}ƒX‚ÌYÀ•W
-* @param x ”z’u‚µ‚½‚¢ƒ}ƒX‚ÌXÀ•W
+* @param y é…ç½®ã—ãŸã„ãƒã‚¹ã®Yåº§æ¨™
+* @param x é…ç½®ã—ãŸã„ãƒã‚¹ã®Xåº§æ¨™
 * @return
 * Note that all traps start out as "invisible" and "untyped", and then\n
 * when they are "discovered" (by detecting them or setting them off),\n
@@ -124,10 +124,10 @@ void place_trap(POSITION y, POSITION x)
 
 
 /*!
-* @brief ƒvƒŒƒCƒ„[‚Ö‚Ìƒgƒ‰ƒbƒv–½’†”»’è /
+* @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®ãƒˆãƒ©ãƒƒãƒ—å‘½ä¸­åˆ¤å®š /
 * Determine if a trap affects the player.
-* @param power Šî–{‰ñ”ğ“ï“x
-* @return ƒgƒ‰ƒbƒv‚ª–½’†‚µ‚½ê‡TRUE‚ğ•Ô‚·B
+* @param power åŸºæœ¬å›é¿é›£åº¦
+* @return ãƒˆãƒ©ãƒƒãƒ—ãŒå‘½ä¸­ã—ãŸå ´åˆTRUEã‚’è¿”ã™ã€‚
 * @details
 * Always miss 5% of the time, Always hit 5% of the time.
 * Otherwise, match trap power against player armor.
@@ -160,9 +160,9 @@ static int check_hit(int power)
 
 
 /*!
-* @brief —‚Æ‚µŒŠŒnƒgƒ‰ƒbƒv‚Ì”»’è‚ÆƒvƒŒƒCƒ„[‚Ì”íŠQˆ—
-* @param trap_feat_type ƒgƒ‰ƒbƒv‚Ìí•ÊID
-* @return ‚È‚µ
+* @brief è½ã¨ã—ç©´ç³»ãƒˆãƒ©ãƒƒãƒ—ã®åˆ¤å®šã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¢«å®³å‡¦ç†
+* @param trap_feat_type ãƒˆãƒ©ãƒƒãƒ—ã®ç¨®åˆ¥ID
+* @return ãªã—
 */
 static void hit_trap_pit(int trap_feat_type)
 {
@@ -173,15 +173,15 @@ static void hit_trap_pit(int trap_feat_type)
 	switch (trap_feat_type)
 	{
 	case TRAP_PIT:
-		trap_name = _("—‚Æ‚µŒŠ", "a pit trap");
+		trap_name = _("è½ã¨ã—ç©´", "a pit trap");
 		break;
 	case TRAP_SPIKED_PIT:
-		trap_name = _("ƒXƒpƒCƒN‚ª•~‚©‚ê‚½—‚Æ‚µŒŠ", "a spiked pit");
-		spike_name = _("ƒXƒpƒCƒN", "spikes");
+		trap_name = _("ã‚¹ãƒ‘ã‚¤ã‚¯ãŒæ•·ã‹ã‚ŒãŸè½ã¨ã—ç©´", "a spiked pit");
+		spike_name = _("ã‚¹ãƒ‘ã‚¤ã‚¯", "spikes");
 		break;
 	case TRAP_POISON_PIT:
-		trap_name = _("ƒXƒpƒCƒN‚ª•~‚©‚ê‚½—‚Æ‚µŒŠ", "a spiked pit");
-		spike_name = _("“Å‚ğ“h‚ç‚ê‚½ƒXƒpƒCƒN", "poisonous spikes");
+		trap_name = _("ã‚¹ãƒ‘ã‚¤ã‚¯ãŒæ•·ã‹ã‚ŒãŸè½ã¨ã—ç©´", "a spiked pit");
+		spike_name = _("æ¯’ã‚’å¡—ã‚‰ã‚ŒãŸã‚¹ãƒ‘ã‚¤ã‚¯", "poisonous spikes");
 		break;
 	default:
 		return;
@@ -189,11 +189,11 @@ static void hit_trap_pit(int trap_feat_type)
 
 	if (p_ptr->levitation)
 	{
-		msg_format(_("%s‚ğ”ò‚Ñ‰z‚¦‚½B", "You fly over %s."), trap_name);
+		msg_format(_("%sã‚’é£›ã³è¶ŠãˆãŸã€‚", "You fly over %s."), trap_name);
 		return;
 	}
 
-	msg_format(_("%s‚É—‚¿‚Ä‚µ‚Ü‚Á‚½I", "You have fallen into %s!"), trap_name);
+	msg_format(_("%sã«è½ã¡ã¦ã—ã¾ã£ãŸï¼", "You have fallen into %s!"), trap_name);
 
 	/* Base damage */
 	dam = damroll(2, 6);
@@ -202,7 +202,7 @@ static void hit_trap_pit(int trap_feat_type)
 	if ((trap_feat_type == TRAP_SPIKED_PIT || trap_feat_type == TRAP_POISON_PIT) &&
 		one_in_(2))
 	{
-		msg_format(_("%s‚ªh‚³‚Á‚½I", "You are impaled on %s!"), spike_name);
+		msg_format(_("%sãŒåˆºã•ã£ãŸï¼", "You are impaled on %s!"), spike_name);
 
 		dam = dam * 2;
 		(void)set_cut(p_ptr->cut + randint1(dam));
@@ -210,7 +210,7 @@ static void hit_trap_pit(int trap_feat_type)
 		if (trap_feat_type == TRAP_POISON_PIT) {
 			if (p_ptr->resist_pois || IS_OPPOSE_POIS())
 			{
-				msg_print(_("‚µ‚©‚µ“Å‚Ì‰e‹¿‚Í‚È‚©‚Á‚½I", "The poison does not affect you!"));
+				msg_print(_("ã—ã‹ã—æ¯’ã®å½±éŸ¿ã¯ãªã‹ã£ãŸï¼", "The poison does not affect you!"));
 			}
 			else
 			{
@@ -225,8 +225,8 @@ static void hit_trap_pit(int trap_feat_type)
 }
 
 /*!
-* @brief ƒ_[ƒcŒnƒgƒ‰ƒbƒvi’Êíƒ_ƒ[ƒWj‚Ì”»’è‚ÆƒvƒŒƒCƒ„[‚Ì”íŠQˆ—
-* @return ƒ_[ƒc‚ª–½’†‚µ‚½ê‡TRUE‚ğ•Ô‚·
+* @brief ãƒ€ãƒ¼ãƒ„ç³»ãƒˆãƒ©ãƒƒãƒ—ï¼ˆé€šå¸¸ãƒ€ãƒ¡ãƒ¼ã‚¸ï¼‰ã®åˆ¤å®šã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¢«å®³å‡¦ç†
+* @return ãƒ€ãƒ¼ãƒ„ãŒå‘½ä¸­ã—ãŸå ´åˆTRUEã‚’è¿”ã™
 */
 static bool hit_trap_dart(void)
 {
@@ -234,22 +234,22 @@ static bool hit_trap_dart(void)
 
 	if (check_hit(125))
 	{
-		msg_print(_("¬‚³‚Èƒ_[ƒc‚ª”ò‚ñ‚Å‚«‚Äh‚³‚Á‚½I", "A small dart hits you!"));
-		take_hit(DAMAGE_ATTACK, damroll(1, 4), _("ƒ_[ƒc‚Ìã©", "a dart trap"), -1);
+		msg_print(_("å°ã•ãªãƒ€ãƒ¼ãƒ„ãŒé£›ã‚“ã§ãã¦åˆºã•ã£ãŸï¼", "A small dart hits you!"));
+		take_hit(DAMAGE_ATTACK, damroll(1, 4), _("ãƒ€ãƒ¼ãƒ„ã®ç½ ", "a dart trap"), -1);
 		if (!CHECK_MULTISHADOW()) hit = TRUE;
 	}
 	else
 	{
-		msg_print(_("¬‚³‚Èƒ_[ƒc‚ª”ò‚ñ‚Å‚«‚½I‚ªA‰^—Ç‚­“–‚½‚ç‚È‚©‚Á‚½B", "A small dart barely misses you."));
+		msg_print(_("å°ã•ãªãƒ€ãƒ¼ãƒ„ãŒé£›ã‚“ã§ããŸï¼ãŒã€é‹è‰¯ãå½“ãŸã‚‰ãªã‹ã£ãŸã€‚", "A small dart barely misses you."));
 	}
 
 	return hit;
 }
 
 /*!
-* @brief ƒ_[ƒcŒnƒgƒ‰ƒbƒvi’Êíƒ_ƒ[ƒW{”\—Í’lŒ¸­j‚Ì”»’è‚ÆƒvƒŒƒCƒ„[‚Ì”íŠQˆ—
-* @param stat ’á‰º‚·‚é”\—Í’lID
-* @return ‚È‚µ
+* @brief ãƒ€ãƒ¼ãƒ„ç³»ãƒˆãƒ©ãƒƒãƒ—ï¼ˆé€šå¸¸ãƒ€ãƒ¡ãƒ¼ã‚¸ï¼‹èƒ½åŠ›å€¤æ¸›å°‘ï¼‰ã®åˆ¤å®šã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¢«å®³å‡¦ç†
+* @param stat ä½ä¸‹ã™ã‚‹èƒ½åŠ›å€¤ID
+* @return ãªã—
 */
 static void hit_trap_lose_stat(int stat)
 {
@@ -260,8 +260,8 @@ static void hit_trap_lose_stat(int stat)
 }
 
 /*!
-* @brief ƒ_[ƒcŒnƒgƒ‰ƒbƒvi’Êíƒ_ƒ[ƒW{Œ¸‘¬j‚Ì”»’è‚ÆƒvƒŒƒCƒ„[‚Ì”íŠQˆ—
-* @return ‚È‚µ
+* @brief ãƒ€ãƒ¼ãƒ„ç³»ãƒˆãƒ©ãƒƒãƒ—ï¼ˆé€šå¸¸ãƒ€ãƒ¡ãƒ¼ã‚¸ï¼‹æ¸›é€Ÿï¼‰ã®åˆ¤å®šã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¢«å®³å‡¦ç†
+* @return ãªã—
 */
 static void hit_trap_slow(void)
 {
@@ -272,12 +272,12 @@ static void hit_trap_slow(void)
 }
 
 /*!
-* @brief ƒ_[ƒcŒnƒgƒ‰ƒbƒvi’Êíƒ_ƒ[ƒW{ó‘ÔˆÙíj‚Ì”»’è‚ÆƒvƒŒƒCƒ„[‚Ì”íŠQˆ—
-* @param trap_message ƒƒbƒZ[ƒW‚Ì•âŠ®•¶š—ñ
-* @param resist ó‘ÔˆÙí‚É’ïR‚·‚é”»’è‚ªo‚½‚È‚çTRUE
-* @param set_status ó‘ÔˆÙí‚ğw’è‚·‚éŠÖ”ƒ|ƒCƒ“ƒ^
-* @param turn ó‘ÔˆÙí‚Ì’Ç‰Áƒ^[ƒ“—Ê
-* @return ‚È‚µ
+* @brief ãƒ€ãƒ¼ãƒ„ç³»ãƒˆãƒ©ãƒƒãƒ—ï¼ˆé€šå¸¸ãƒ€ãƒ¡ãƒ¼ã‚¸ï¼‹çŠ¶æ…‹ç•°å¸¸ï¼‰ã®åˆ¤å®šã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¢«å®³å‡¦ç†
+* @param trap_message ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è£œå®Œæ–‡å­—åˆ—
+* @param resist çŠ¶æ…‹ç•°å¸¸ã«æŠµæŠ—ã™ã‚‹åˆ¤å®šãŒå‡ºãŸãªã‚‰TRUE
+* @param set_status çŠ¶æ…‹ç•°å¸¸ã‚’æŒ‡å®šã™ã‚‹é–¢æ•°ãƒã‚¤ãƒ³ã‚¿
+* @param turn çŠ¶æ…‹ç•°å¸¸ã®è¿½åŠ ã‚¿ãƒ¼ãƒ³é‡
+* @return ãªã—
 */
 static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool(*set_status)(IDX), IDX turn_aux)
 {
@@ -289,10 +289,10 @@ static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool(*s
 }
 
 /*!
-* @brief ƒvƒŒƒCƒ„[‚Ö‚Ìƒgƒ‰ƒbƒvì“®ˆ—ƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+* @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®ãƒˆãƒ©ãƒƒãƒ—ä½œå‹•å‡¦ç†ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
 * Handle player hitting a real trap
-* @param break_trap ì“®Œã‚Ìƒgƒ‰ƒbƒv”j‰ó‚ªŠm’è‚µ‚Ä‚¢‚é‚È‚ç‚ÎTRUE
-* @return ‚È‚µ
+* @param break_trap ä½œå‹•å¾Œã®ãƒˆãƒ©ãƒƒãƒ—ç ´å£ŠãŒç¢ºå®šã—ã¦ã„ã‚‹ãªã‚‰ã°TRUE
+* @return ãªã—
 */
 void hit_trap(bool break_trap)
 {
@@ -303,7 +303,7 @@ void hit_trap(bool break_trap)
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
-	cptr name = _("ƒgƒ‰ƒbƒv", "a trap");
+	cptr name = _("ãƒˆãƒ©ãƒƒãƒ—", "a trap");
 
 	/* Disturb the player */
 	disturb(0, 1);
@@ -317,17 +317,17 @@ void hit_trap(bool break_trap)
 	{
 		if (p_ptr->levitation)
 		{
-			msg_print(_("—‚Æ‚µŒË‚ğ”ò‚Ñ‰z‚¦‚½B", "You fly over a trap door."));
+			msg_print(_("è½ã¨ã—æˆ¸ã‚’é£›ã³è¶ŠãˆãŸã€‚", "You fly over a trap door."));
 		}
 		else
 		{
-			msg_print(_("—‚Æ‚µŒË‚É—‚¿‚½I", "You have fallen through a trap door!"));
+			msg_print(_("è½ã¨ã—æˆ¸ã«è½ã¡ãŸï¼", "You have fallen through a trap door!"));
 			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-				msg_print(_("‚­‚Á‚»`I", ""));
+				msg_print(_("ãã£ãï½ï¼", ""));
 
 			sound(SOUND_FALL);
 			dam = damroll(2, 8);
-			name = _("—‚Æ‚µŒË", "a trap door");
+			name = _("è½ã¨ã—æˆ¸", "a trap door");
 
 			take_hit(DAMAGE_NOESCAPE, dam, name, -1);
 
@@ -335,7 +335,7 @@ void hit_trap(bool break_trap)
 			if (autosave_l && (p_ptr->chp >= 0))
 				do_cmd_save_game(TRUE);
 
-			do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("—‚Æ‚µŒË‚É—‚¿‚½", "You have fallen through a trap door!"));
+			do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("è½ã¨ã—æˆ¸ã«è½ã¡ãŸ", "You have fallen through a trap door!"));
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 			/* Leaving */
@@ -354,7 +354,7 @@ void hit_trap(bool break_trap)
 
 	case TRAP_TY_CURSE:
 	{
-		msg_print(_("‰½‚©‚ªƒsƒJƒb‚ÆŒõ‚Á‚½I", "There is a flash of shimmering light!"));
+		msg_print(_("ä½•ã‹ãŒãƒ”ã‚«ãƒƒã¨å…‰ã£ãŸï¼", "There is a flash of shimmering light!"));
 		num = 2 + randint1(3);
 		for (i = 0; i < num; i++)
 		{
@@ -376,24 +376,24 @@ void hit_trap(bool break_trap)
 
 	case TRAP_TELEPORT:
 	{
-		msg_print(_("ƒeƒŒƒ|[ƒgEƒgƒ‰ƒbƒv‚É‚Ğ‚Á‚©‚©‚Á‚½I", "You hit a teleport trap!"));
+		msg_print(_("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆãƒ»ãƒˆãƒ©ãƒƒãƒ—ã«ã²ã£ã‹ã‹ã£ãŸï¼", "You hit a teleport trap!"));
 		teleport_player(100, TELEPORT_PASSIVE);
 		break;
 	}
 
 	case TRAP_FIRE:
 	{
-		msg_print(_("‰Š‚É•ï‚Ü‚ê‚½I", "You are enveloped in flames!"));
+		msg_print(_("ç‚ã«åŒ…ã¾ã‚ŒãŸï¼", "You are enveloped in flames!"));
 		dam = damroll(4, 6);
-		(void)fire_dam(dam, _("‰Š‚Ìƒgƒ‰ƒbƒv", "a fire trap"), -1, FALSE);
+		(void)fire_dam(dam, _("ç‚ã®ãƒˆãƒ©ãƒƒãƒ—", "a fire trap"), -1, FALSE);
 		break;
 	}
 
 	case TRAP_ACID:
 	{
-		msg_print(_("_‚ª‚«‚©‚¯‚ç‚ê‚½I", "You are splashed with acid!"));
+		msg_print(_("é…¸ãŒå¹ãã‹ã‘ã‚‰ã‚ŒãŸï¼", "You are splashed with acid!"));
 		dam = damroll(4, 6);
-		(void)acid_dam(dam, _("_‚Ìƒgƒ‰ƒbƒv", "an acid trap"), -1, FALSE);
+		(void)acid_dam(dam, _("é…¸ã®ãƒˆãƒ©ãƒƒãƒ—", "an acid trap"), -1, FALSE);
 		break;
 	}
 
@@ -424,7 +424,7 @@ void hit_trap(bool break_trap)
 	case TRAP_BLIND:
 	{
 		hit_trap_set_abnormal_status(
-			_("•‚¢ƒKƒX‚É•ï‚İ‚Ü‚ê‚½I", "A black gas surrounds you!"),
+			_("é»’ã„ã‚¬ã‚¹ã«åŒ…ã¿è¾¼ã¾ã‚ŒãŸï¼", "A black gas surrounds you!"),
 			p_ptr->resist_blind,
 			set_blind, p_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
 		break;
@@ -433,7 +433,7 @@ void hit_trap(bool break_trap)
 	case TRAP_CONFUSE:
 	{
 		hit_trap_set_abnormal_status(
-			_("‚«‚ç‚ß‚­ƒKƒX‚É•ï‚İ‚Ü‚ê‚½I", "A gas of scintillating colors surrounds you!"),
+			_("ãã‚‰ã‚ãã‚¬ã‚¹ã«åŒ…ã¿è¾¼ã¾ã‚ŒãŸï¼", "A gas of scintillating colors surrounds you!"),
 			p_ptr->resist_conf,
 			set_confused, p_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
 		break;
@@ -442,7 +442,7 @@ void hit_trap(bool break_trap)
 	case TRAP_POISON:
 	{
 		hit_trap_set_abnormal_status(
-			_("hŒƒ“I‚È—ÎF‚ÌƒKƒX‚É•ï‚İ‚Ü‚ê‚½I", "A pungent green gas surrounds you!"),
+			_("åˆºæ¿€çš„ãªç·‘è‰²ã®ã‚¬ã‚¹ã«åŒ…ã¿è¾¼ã¾ã‚ŒãŸï¼", "A pungent green gas surrounds you!"),
 			p_ptr->resist_pois || IS_OPPOSE_POIS(),
 			set_poisoned, p_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
 		break;
@@ -450,14 +450,14 @@ void hit_trap(bool break_trap)
 
 	case TRAP_SLEEP:
 	{
-		msg_print(_("Šï–­‚È”’‚¢–¶‚É•ï‚Ü‚ê‚½I", "A strange white mist surrounds you!"));
+		msg_print(_("å¥‡å¦™ãªç™½ã„éœ§ã«åŒ…ã¾ã‚ŒãŸï¼", "A strange white mist surrounds you!"));
 		if (!p_ptr->free_act)
 		{
-			msg_print(_("‚ ‚È‚½‚Í–°‚è‚ÉA‚¢‚½B", "You fall asleep."));
+			msg_print(_("ã‚ãªãŸã¯çœ ã‚Šã«å°±ã„ãŸã€‚", "You fall asleep."));
 
 			if (ironman_nightmare)
 			{
-				msg_print(_("g‚Ì–Ñ‚à‚æ‚¾‚ÂŒõŒi‚ª“ª‚É•‚‚©‚ñ‚¾B", "A horrible vision enters your mind."));
+				msg_print(_("èº«ã®æ¯›ã‚‚ã‚ˆã ã¤å…‰æ™¯ãŒé ­ã«æµ®ã‹ã‚“ã ã€‚", "A horrible vision enters your mind."));
 
 				/* Have some nightmares */
 				sanity_blast(NULL, FALSE);
@@ -470,7 +470,7 @@ void hit_trap(bool break_trap)
 
 	case TRAP_TRAPS:
 	{
-		msg_print(_("‚Ü‚Î‚ä‚¢‘MŒõ‚ª‘–‚Á‚½I", "There is a bright flash of light!"));
+		msg_print(_("ã¾ã°ã‚†ã„é–ƒå…‰ãŒèµ°ã£ãŸï¼", "There is a bright flash of light!"));
 		/* Make some new traps */
 		project(0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID, -1);
 
@@ -479,7 +479,7 @@ void hit_trap(bool break_trap)
 
 	case TRAP_ALARM:
 	{
-		msg_print(_("‚¯‚½‚½‚Ü‚µ‚¢‰¹‚ª–Â‚è‹¿‚¢‚½I", "An alarm sounds!"));
+		msg_print(_("ã‘ãŸãŸã¾ã—ã„éŸ³ãŒé³´ã‚ŠéŸ¿ã„ãŸï¼", "An alarm sounds!"));
 
 		aggravate_monsters(0);
 
@@ -488,7 +488,7 @@ void hit_trap(bool break_trap)
 
 	case TRAP_OPEN:
 	{
-		msg_print(_("‘å‰¹‹¿‚Æ‹¤‚É‚Ü‚í‚è‚Ì•Ç‚ª•ö‚ê‚½I", "Suddenly, surrounding walls are opened!"));
+		msg_print(_("å¤§éŸ³éŸ¿ã¨å…±ã«ã¾ã‚ã‚Šã®å£ãŒå´©ã‚ŒãŸï¼", "Suddenly, surrounding walls are opened!"));
 		(void)project(0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
 		(void)project(0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
 		(void)project(0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
@@ -503,7 +503,7 @@ void hit_trap(bool break_trap)
 		int evil_idx = 0, good_idx = 0;
 
 		int lev;
-		msg_print(_("“Ë‘R“VŠE‚Ìí‘ˆ‚ÉŠª‚«‚Ü‚ê‚½I", "Suddenly, you are surrounded by immotal beings!"));
+		msg_print(_("çªç„¶å¤©ç•Œã®æˆ¦äº‰ã«å·»ãè¾¼ã¾ã‚ŒãŸï¼", "Suddenly, you are surrounded by immotal beings!"));
 
 		/* Summon Demons and Angels */
 		for (lev = dun_level; lev >= 20; lev -= 1 + lev / 16)
@@ -545,7 +545,7 @@ void hit_trap(bool break_trap)
 
 	case TRAP_PIRANHA:
 	{
-		msg_print(_("“Ë‘R•Ç‚©‚ç…‚ªˆì‚êo‚µ‚½Iƒsƒ‰ƒjƒA‚ª‚¢‚éI", "Suddenly, the room is filled with water with piranhas!"));
+		msg_print(_("çªç„¶å£ã‹ã‚‰æ°´ãŒæº¢ã‚Œå‡ºã—ãŸï¼ãƒ”ãƒ©ãƒ‹ã‚¢ãŒã„ã‚‹ï¼", "Suddenly, the room is filled with water with piranhas!"));
 
 		/* Water fills room */
 		fire_ball_hide(GF_WATER_FLOW, 0, 1, 10);
@@ -563,6 +563,6 @@ void hit_trap(bool break_trap)
 	if (break_trap && is_trap(c_ptr->feat))
 	{
 		cave_alter_feat(y, x, FF_DISARM);
-		msg_print(_("ƒgƒ‰ƒbƒv‚ğ•²Ó‚µ‚½B", "You destroyed the trap."));
+		msg_print(_("ãƒˆãƒ©ãƒƒãƒ—ã‚’ç²‰ç •ã—ãŸã€‚", "You destroyed the trap."));
 	}
 }

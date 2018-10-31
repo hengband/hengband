@@ -1,4 +1,4 @@
-
+﻿
 extern cptr info_string_dice(cptr str, int dice, int sides, int base);
 extern cptr info_damage(int dice, int sides, int base);
 extern cptr info_duration(int base, int sides);
