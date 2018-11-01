@@ -11,7 +11,8 @@ hengband_SOURCES = \
 	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
 	cmd-zapwand.h defines.h dungeon.c effects.c externs.h files.c flavor.c \
-	floor-generate.c floor-save.c gameoption.c gameoption.h gamevalue.h \
+	floor-generate.c floor-save.c floor-streams.c floor-streams.h \
+	gameoption.c gameoption.h gamevalue.h \
 	generate.h grid.c grid.h h-basic.h h-config.h h-define.h hissatsu.c \
 	history.h history.c \
 	h-system.h h-type.h inet.c init1.c init2.c init.h japanese.c load.c \
@@ -31,7 +32,7 @@ hengband_SOURCES = \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
 	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h shoot.c snipe.c \
 	spells1.c spells2.c spells3.c spells-summon.c spells-summon.h \
-	store.c streams.c streams.h tables.c trap.c trap.h types.h util.c \
+	store.c tables.c trap.c trap.h types.h util.c \
 	variable.c wild.c wizard1.c wizard2.c xtra1.c xtra2.c z-config.h \
 	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
 	z-virt.c z-virt.h 
