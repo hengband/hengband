@@ -46,6 +46,7 @@
 #include "gamevalue.h"
 #include "types.h"
 #include "externs.h"
+#include "gameoption.h"
 
 /***** Some copyright messages follow below *****/
 
