@@ -5121,3 +5121,36 @@ void glow_deep_lava_and_bldg(void)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 }
+
+/*!
+* @brief 指定されたマスがモンスターのテレポート可能先かどうかを判定する。
+* @param m_idx モンスターID
+* @param y 移動先Y座標
+* @param x 移動先X座標
+* @param mode オプション
+* @return テレポート先として妥当ならばtrue
+*/
+bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	cave_type    *c_ptr = &cave[y][x];
+	feature_type *f_ptr = &f_info[c_ptr->feat];
+
+	/* Require "teleportable" space */
+	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
+
+	if (c_ptr->m_idx && (c_ptr->m_idx != m_idx)) return FALSE;
+	if (player_bold(y, x)) return FALSE;
+
+	/* Hack -- no teleport onto glyph of warding */
+	if (is_glyph_grid(c_ptr)) return FALSE;
+	if (is_explosive_rune_grid(c_ptr)) return FALSE;
+
+	if (!(mode & TELEPORT_PASSIVE))
+	{
+		if (!monster_can_cross_terrain(c_ptr->feat, &r_info[m_ptr->r_idx], 0)) return FALSE;
+	}
+
+	return TRUE;
+}
+

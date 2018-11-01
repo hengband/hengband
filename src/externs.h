@@ -519,6 +519,7 @@ extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(IDX k_idx);
 extern void disturb(int stop_search, int flush_output);
 extern void glow_deep_lava_and_bldg(void);
+extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
 
 /* cmd1.c */
 extern bool test_hit_norm(int chance, int ac, int vis);
