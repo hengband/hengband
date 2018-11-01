@@ -520,6 +520,7 @@ extern void object_kind_track(IDX k_idx);
 extern void disturb(int stop_search, int flush_output);
 extern void glow_deep_lava_and_bldg(void);
 extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
+extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);
 
 /* cmd1.c */
 extern bool test_hit_norm(int chance, int ac, int vis);
@@ -1013,7 +1014,6 @@ extern bool psychometry(void);
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);
 extern void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode);
-extern bool cave_player_teleportable_bold(int y, int x, BIT_FLAGS mode);
 extern bool teleport_player_aux(int dis, BIT_FLAGS mode);
 extern void teleport_player(int dis, BIT_FLAGS mode);
 extern void teleport_player_away(MONSTER_IDX m_idx, int dis);

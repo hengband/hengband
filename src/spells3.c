@@ -238,53 +238,6 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 }
 
 /*!
- * @brief 指定されたマスにプレイヤーがテレポート可能かどうかを判定する。
- * @param y 移動先Y座標
- * @param x 移動先X座標
- * @param mode オプション
- * @return テレポート先として妥当ならばtrue
- */
-bool cave_player_teleportable_bold(int y, int x, BIT_FLAGS mode)
-{
-	cave_type    *c_ptr = &cave[y][x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
-
-	/* Require "teleportable" space */
-	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
-
-	/* No magical teleporting into vaults and such */
-	if (!(mode & TELEPORT_NONMAGICAL) && (c_ptr->info & CAVE_ICKY)) return FALSE;
-
-	if (c_ptr->m_idx && (c_ptr->m_idx != p_ptr->riding)) return FALSE;
-
-	/* don't teleport on a trap. */
-	if (have_flag(f_ptr->flags, FF_HIT_TRAP)) return FALSE;
-
-	if (!(mode & TELEPORT_PASSIVE))
-	{
-		if (!player_can_enter(c_ptr->feat, 0)) return FALSE;
-
-		if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
-		{
-			if (!p_ptr->levitation && !p_ptr->can_swim) return FALSE;
-		}
-
-		if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN())
-		{
-			/* Always forbid deep lava */
-			if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;
-
-			/* Forbid shallow lava when the player don't have levitation */
-			if (!p_ptr->levitation) return FALSE;
-		}
-
-	}
-
-	return TRUE;
-}
-
-
-/*!
  * @brief プレイヤーのテレポート先選定と移動処理 /
  * Teleport the player to a location up to "dis" grids away.
  * @param dis 基本移動距離
