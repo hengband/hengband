@@ -673,6 +673,9 @@ extern void precalc_cur_num_of_pet(void);
 extern void leave_floor(void);
 extern void change_floor(void);
 extern void stair_creation(void);
+extern bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2);
+extern bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff);
+
 
 
 /* init1.c */
