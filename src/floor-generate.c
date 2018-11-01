@@ -100,7 +100,7 @@
 #include "generate.h"
 #include "grid.h"
 #include "rooms.h"
-#include "streams.h"
+#include "floor-streams.h"
 #include "trap.h"
 
 int dun_tun_rnd; 

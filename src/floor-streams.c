@@ -17,7 +17,7 @@
 
 #include "angband.h"
 #include "generate.h"
-#include "streams.h"
+#include "floor-streams.h"
 #include "grid.h"
 
 

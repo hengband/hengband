@@ -160,9 +160,6 @@
     <ClCompile Include="..\..\src\tables.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\streams.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\store.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -319,6 +316,9 @@
     <ClCompile Include="..\..\src\monster-process.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor-streams.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -364,9 +364,6 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rooms.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\streams.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\types.h">
@@ -511,6 +508,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-status.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor-streams.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

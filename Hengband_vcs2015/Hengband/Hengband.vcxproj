@@ -231,7 +231,7 @@
     <ClCompile Include="..\..\src\spells2.c" />
     <ClCompile Include="..\..\src\spells3.c" />
     <ClCompile Include="..\..\src\store.c" />
-    <ClCompile Include="..\..\src\streams.c" />
+    <ClCompile Include="..\..\src\floor-streams.c" />
     <ClCompile Include="..\..\src\tables.c" />
     <ClCompile Include="..\..\src\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
@@ -296,7 +296,7 @@
     <ClInclude Include="..\..\src\rooms.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\spells-summon.h" />
-    <ClInclude Include="..\..\src\streams.h" />
+    <ClInclude Include="..\..\src\floor-streams.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\types.h" />
     <ClInclude Include="..\..\src\z-config.h" />
