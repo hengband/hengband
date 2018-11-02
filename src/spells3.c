@@ -2745,7 +2745,7 @@ bool identify_fully(bool only_equip)
 bool recharge(int power)
 {
 	OBJECT_IDX item;
-	int lev;
+	DEPTH lev;
 	int recharge_strength;
 	TIME_EFFECT recharge_amount;
 
@@ -2790,7 +2790,7 @@ bool recharge(int power)
 	if (o_ptr->tval == TV_ROD)
 	{
 		/* Extract a recharge strength by comparing object level to power. */
-		recharge_strength = ((power > lev/2) ? (power - lev/2) : 0) / 5;
+		recharge_strength = ((power > lev / 2) ? (power - lev / 2) : 0) / 5;
 
 
 		/* Back-fire */
@@ -2822,12 +2822,10 @@ bool recharge(int power)
 		 * Divide up a stack of wands' charges to calculate charge penalty.
 		 */
 		if ((o_ptr->tval == TV_WAND) && (o_ptr->number > 1))
-			recharge_strength = (100 + power - lev -
-			(8 * o_ptr->pval / o_ptr->number)) / 15;
+			recharge_strength = (100 + power - lev - (8 * o_ptr->pval / o_ptr->number)) / 15;
 
 		/* All staffs, unstacked wands. */
-		else recharge_strength = (100 + power - lev -
-			(8 * o_ptr->pval)) / 15;
+		else recharge_strength = (100 + power - lev - (8 * o_ptr->pval)) / 15;
 
 		/* Paranoia */
 		if (recharge_strength < 0) recharge_strength = 0;

@@ -4679,7 +4679,7 @@ static cptr find_quest[] =
  * @brief クエストの導入メッセージを表示する / Discover quest
  * @param q_idx 開始されたクエストのID
  */
-void quest_discovery(int q_idx)
+void quest_discovery(QUEST_IDX q_idx)
 {
 	quest_type      *q_ptr = &quest[q_idx];
 	monster_race    *r_ptr = &r_info[q_ptr->r_idx];
@@ -4732,9 +4732,9 @@ void quest_discovery(int q_idx)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-IDX quest_number(DEPTH level)
+QUEST_IDX quest_number(DEPTH level)
 {
-	IDX i;
+	QUEST_IDX i;
 
 	/* Check quests */
 	if (p_ptr->inside_quest)
@@ -4760,9 +4760,9 @@ IDX quest_number(DEPTH level)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-IDX random_quest_number(DEPTH level)
+QUEST_IDX random_quest_number(DEPTH level)
 {
-	IDX i;
+	QUEST_IDX i;
 
 	if (dungeon_type != DUNGEON_ANGBAND) return 0;
 
