@@ -696,7 +696,7 @@ void carry(bool pickup)
  * @param n_x プレイヤーの移動先X座標
  * @return 移動処理が可能である場合（可能な場合に選択した場合）TRUEを返す。
  */
-bool pattern_seq(int c_y, int c_x, int n_y, int n_x)
+bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 {
 	feature_type *cur_f_ptr = &f_info[cave[c_y][c_x].feat];
 	feature_type *new_f_ptr = &f_info[cave[n_y][n_x].feat];
@@ -2136,7 +2136,7 @@ static bool run_test(void)
  * @param dir 移動を試みる方向ID
  * @return なし
  */
-void run_step(int dir)
+void run_step(DIRECTION dir)
 {
 	/* Start running */
 	if (dir)

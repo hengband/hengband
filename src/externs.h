@@ -506,7 +506,7 @@ extern void wiz_dark(void);
 extern void cave_set_feat(POSITION y, POSITION x, IDX feat);
 extern IDX conv_dungeon_feat(IDX newfeat);
 extern IDX feat_state(IDX feat, int action);
-extern void cave_alter_feat(int y, int x, int action);
+extern void cave_alter_feat(POSITION y, POSITION x, int action);
 extern void remove_mirror(POSITION y, POSITION x);
 extern bool is_mirror_grid(cave_type *c_ptr);
 extern bool is_glyph_grid(cave_type *c_ptr);
@@ -529,12 +529,12 @@ extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_F
 extern void search(void);
 extern void py_pickup_aux(OBJECT_IDX o_idx);
 extern void carry(bool pickup);
-extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
+extern bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
 extern bool move_player_effect(POSITION ny, POSITION nx, u32b mpe_mode);
 extern bool trap_can_be_ignored(int feat);
 extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
-extern void run_step(int dir);
+extern void run_step(DIRECTION dir);
 #ifdef TRAVEL
 extern void travel_step(void);
 #endif
@@ -1012,7 +1012,7 @@ extern bool panic_hit(void);
 extern bool psychometry(void);
 
 /* spells3.c */
-extern bool teleport_away(MONSTER_IDX m_idx, int dis, BIT_FLAGS mode);
+extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
 extern void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode);
 extern bool teleport_player_aux(int dis, BIT_FLAGS mode);
 extern void teleport_player(int dis, BIT_FLAGS mode);

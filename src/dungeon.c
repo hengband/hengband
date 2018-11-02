@@ -108,8 +108,8 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 	if (slot >= INVEN_RARM)
 	{
 #ifdef JP
-msg_format("%s%s(%c)は%sという感じがする...",
-describe_use(slot),o_name, index_to_label(slot),game_inscriptions[feel]);
+		msg_format("%s%s(%c)は%sという感じがする...",
+			describe_use(slot),o_name, index_to_label(slot),game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) you are %s %s %s...",
 			   o_name, index_to_label(slot), describe_use(slot),
@@ -123,8 +123,8 @@ describe_use(slot),o_name, index_to_label(slot),game_inscriptions[feel]);
 	else
 	{
 #ifdef JP
-msg_format("ザックの中の%s(%c)は%sという感じがする...",
-o_name, index_to_label(slot),game_inscriptions[feel]);
+		msg_format("ザックの中の%s(%c)は%sという感じがする...",
+			o_name, index_to_label(slot),game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) in your pack %s %s...",
 			   o_name, index_to_label(slot),

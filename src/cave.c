@@ -4714,7 +4714,7 @@ IDX feat_state(IDX feat, int action)
  * Takes a location and action and changes the feature at that 
  * location through applying the given action.
  */
-void cave_alter_feat(int y, int x, int action)
+void cave_alter_feat(POSITION y, POSITION x, int action)
 {
 	/* Set old feature */
 	IDX oldfeat = cave[y][x].feat;
