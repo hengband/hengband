@@ -749,7 +749,7 @@ extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dic
 extern cptr horror_desc[MAX_SAN_HORROR];
 extern cptr funny_desc[MAX_SAN_FUNNY];
 extern cptr funny_comments[MAX_SAN_COMMENT];
-extern void set_target(monster_type *m_ptr, int y, int x);
+extern void set_target(monster_type *m_ptr, POSITION y, POSITION x);
 extern void reset_target(monster_type *m_ptr);
 extern monster_race *real_r_ptr(monster_type *m_ptr);
 extern void delete_monster_idx(MONSTER_IDX i);
@@ -806,7 +806,7 @@ extern bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode);
 /* object2.c */
 extern void excise_object_idx(int o_idx);
 extern void delete_object_idx(int o_idx);
-extern void delete_object(int y, int x);
+extern void delete_object(POSITION y, POSITION x);
 extern void compact_objects(int size);
 extern void wipe_o_list(void);
 extern IDX o_pop(void);

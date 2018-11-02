@@ -226,16 +226,13 @@ void delete_object_idx(int o_idx)
  * @param x 削除したフロアマスのX座標
  * @return なし
  */
-void delete_object(int y, int x)
+void delete_object(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
-
-	s16b this_o_idx, next_o_idx = 0;
-
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Refuse "illegal" locations */
 	if (!in_bounds(y, x)) return;
-
 
 	/* Grid */
 	c_ptr = &cave[y][x];

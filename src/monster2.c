@@ -172,7 +172,7 @@ cptr funny_comments[MAX_SAN_COMMENT] =
  * @param x 目標x座標
  * @return なし
  */
-void set_target(monster_type *m_ptr, int y, int x)
+void set_target(monster_type *m_ptr, POSITION y, POSITION x)
 {
 	m_ptr->target_y = y;
 	m_ptr->target_x = x;

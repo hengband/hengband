@@ -311,20 +311,14 @@ void build_streamer(IDX feat, int chance)
 						{
 							char o_name[MAX_NLEN];
 							object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
-#ifdef JP
-							msg_format("伝説のアイテム (%s) はストリーマーにより削除された。", o_name);
-#else
-							msg_format("Artifact (%s) was deleted by streamer.", o_name);
-#endif
+							msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。",
+								"Artifact (%s) was deleted by streamer."), o_name);
 						}
 					}
 					else if (cheat_peek && o_ptr->art_name)
 					{
-#ifdef JP
-						msg_print("ランダム・アーティファクトの1つはストリーマーにより削除された。");
-#else
-						msg_print("One of the random artifacts was deleted by streamer.");
-#endif
+						msg_print(_("ランダム・アーティファクトの1つはストリーマーにより削除された。",
+							"One of the random artifacts was deleted by streamer."));
 					}
 				}
 
