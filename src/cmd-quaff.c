@@ -77,7 +77,6 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 		floor_item_optimize(0 - item);
 	}
 
-	/* Sound */
 	sound(SOUND_QUAFF);
 
 

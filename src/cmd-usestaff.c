@@ -403,7 +403,6 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 	}
 
 
-	/* Sound */
 	sound(SOUND_ZAP);
 
 	ident = staff_effect(o_ptr->sval, &use_charge, FALSE, FALSE, object_is_aware(o_ptr));

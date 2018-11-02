@@ -570,7 +570,6 @@ static void purchase_analyze(s32b price, s32b value, s32b guess)
 		chg_virtue(V_HONOUR, -1);
 		chg_virtue(V_JUSTICE, -1);
 
-		/* Sound */
 		sound(SOUND_STORE1);
 	}
 
@@ -584,7 +583,6 @@ static void purchase_analyze(s32b price, s32b value, s32b guess)
 		if (one_in_(4))
 			chg_virtue(V_HONOUR, -1);
 
-		/* Sound */
 		sound(SOUND_STORE2);
 	}
 
@@ -599,7 +597,6 @@ static void purchase_analyze(s32b price, s32b value, s32b guess)
 		else if (one_in_(4))
 			chg_virtue(V_HONOUR, 1);
 
-		/* Sound */
 		sound(SOUND_STORE3);
 	}
 
@@ -617,7 +614,6 @@ static void purchase_analyze(s32b price, s32b value, s32b guess)
 		if (10 * price < value)
 			chg_virtue(V_SACRIFICE, 1);
 
-		/* Sound */
 		sound(SOUND_STORE4);
 	}
 }

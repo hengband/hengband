@@ -721,7 +721,6 @@ static bool do_cmd_open_aux(int y, int x)
 			/* Open the door */
 			cave_alter_feat(y, x, FF_OPEN);
 
-			/* Sound */
 			sound(SOUND_OPENDOOR);
 
 			/* Experience */
@@ -748,7 +747,6 @@ static bool do_cmd_open_aux(int y, int x)
 		/* Open the door */
 		cave_alter_feat(y, x, FF_OPEN);
 
-		/* Sound */
 		sound(SOUND_OPENDOOR);
 	}
 
@@ -921,7 +919,6 @@ static bool do_cmd_close_aux(int y, int x)
 			}
 			else
 			{
-				/* Sound */
 				sound(SOUND_SHUTDOOR);
 			}
 		}
@@ -1098,7 +1095,6 @@ static bool do_cmd_tunnel_aux(int y, int x)
 
 	name = f_name + mimic_f_ptr->name;
 
-	/* Sound */
 	sound(SOUND_DIG);
 
 	if (have_flag(f_ptr->flags, FF_PERMANENT))
@@ -1154,7 +1150,6 @@ static bool do_cmd_tunnel_aux(int y, int x)
 				p_ptr->update |= (PU_FLOW);
 			}
 			
-			/* Sound */
 			if (have_flag(f_ptr->flags, FF_GLASS)) sound(SOUND_GLASS);
 
 			/* Remove the feature */
@@ -1354,7 +1349,6 @@ bool easy_open_door(int y, int x)
 			/* Open the door */
 			cave_alter_feat(y, x, FF_OPEN);
 
-			/* Sound */
 			sound(SOUND_OPENDOOR);
 
 			/* Experience */
@@ -1379,7 +1373,6 @@ bool easy_open_door(int y, int x)
 		/* Open the door */
 		cave_alter_feat(y, x, FF_OPEN);
 
-		/* Sound */
 		sound(SOUND_OPENDOOR);
 	}
 
@@ -1759,7 +1752,6 @@ static bool do_cmd_bash_aux(int y, int x, int dir)
 		/* Message */
 		msg_format(_("%sを壊した！", "The %s crashes open!"), name);
 
-		/* Sound */
 		sound(have_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
 
 		/* Break down the door */
@@ -2995,7 +2987,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 		floor_item_optimize(0 - item);
 	}
 
-	/* Sound */
 	sound(SOUND_SHOOT);
 
 	/* Hack -- Handle stuff */
@@ -3279,7 +3270,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 					{
 						char m_name[80];
 
-						/* Sound */
 						sound(SOUND_FLEE);
 
 						/* Get the monster name (or "it") */
@@ -3874,7 +3864,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					{
 						char m_name[80];
 
-						/* Sound */
 						sound(SOUND_FLEE);
 
 						/* Get the monster name (or "it") */

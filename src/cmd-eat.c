@@ -35,7 +35,6 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 		o_ptr = &o_list[0 - item];
 	}
 
-	/* Sound */
 	sound(SOUND_EAT);
 
 	/* Take a turn */

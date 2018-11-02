@@ -2952,7 +2952,6 @@ static void process_world_aux_movement(void)
 				}
 			}
 
-			/* Sound */
 			sound(SOUND_TPLEVEL);
 		}
 	}
@@ -2994,7 +2993,6 @@ static void process_world_aux_movement(void)
 				msg_print(_("世界が少しの間変化したようだ。", "The world seems to change for a moment!"));
 			}
 
-			/* Sound */
 			sound(SOUND_TPLEVEL);
 		}
 	}

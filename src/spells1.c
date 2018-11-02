@@ -4964,7 +4964,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Take note */
 			if ((fear || do_fear) && seen)
 			{
-				/* Sound */
 				sound(SOUND_FLEE);
 
 				/* Message */

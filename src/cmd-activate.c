@@ -159,7 +159,6 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	/* Activate the artifact */
 	msg_print(_("始動させた...", "You activate it..."));
 
-	/* Sound */
 	sound(SOUND_ZAP);
 
 	/* Activate object */

@@ -363,7 +363,6 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 	/* Test for hit */
 	if ((!(r_ptr->flags2 & RF2_QUANTUM) || !randint0(2)) && test_hit_norm(chance, r_ptr->ac, m_ptr->ml))
 	{
-		/* Sound */
 		sound(SOUND_HIT);
 		msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name, atk_desc);
 
@@ -415,7 +414,6 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 	/* Player misses */
 	else
 	{
-		/* Sound */
 		sound(SOUND_MISS);
 
 		/* Message */
@@ -603,7 +601,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, BIT
 		{
 			int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;
 
-			/* Sound */
 			sound(SOUND_HIT);
 
 			/* Message */
@@ -1199,7 +1196,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, BIT
 			{
 				u32b flgs_aux[TR_FLAG_SIZE];
 
-				/* Sound */
 				sound(SOUND_HIT);
 
 				/* Message */
@@ -1296,7 +1292,6 @@ static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, BIT
 			}
 			else
 			{
-				/* Sound */
 				sound(SOUND_MISS);
 
 				/* Message */
@@ -1512,7 +1507,6 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	/* Hack -- delay fear messages */
 	if (fear && m_ptr->ml && !mdeath)
 	{
-		/* Sound */
 		sound(SOUND_FLEE);
 
 		/* Message */

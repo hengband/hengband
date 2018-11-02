@@ -100,7 +100,6 @@ void check_experience(void)
 			do_cmd_write_nikki(NIKKI_LEVELUP, p_ptr->lev, NULL);
 		}
 
-		/* Sound */
 		sound(SOUND_LEVEL);
 
 		/* Message */

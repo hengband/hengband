@@ -359,7 +359,6 @@ void do_cmd_zap_rod_aux(INVENTORY_IDX item)
 		return;
 	}
 
-	/* Sound */
 	sound(SOUND_ZAP);
 
 	ident = rod_effect(o_ptr->sval, dir, &use_charge, FALSE, FALSE);

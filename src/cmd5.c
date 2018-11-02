@@ -897,7 +897,6 @@ void do_cmd_study(void)
 		break;
 	}
 
-	/* Sound */
 	sound(SOUND_STUDY);
 
 	/* One less spell available */

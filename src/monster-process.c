@@ -3107,7 +3107,6 @@ void process_monster(MONSTER_IDX m_idx)
 			}
 			else
 			{
-				/* Sound */
 				/* sound(SOUND_WALK); */
 
 				/* Move the player */

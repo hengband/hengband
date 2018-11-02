@@ -5466,7 +5466,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	/* Draw the spot */
 	lite_spot(by, bx);
 
-	/* Sound */
 	sound(SOUND_DROP);
 
 	/* Mega-Hack -- no message if "dropped" by player */

@@ -4499,7 +4499,6 @@ int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 			if(!save_player()) msg_print("セーブ失敗！");
 #endif
 
-		/* Sound */
 		sound(SOUND_DEATH);
 
 		chg_virtue(V_SACRIFICE, 10);

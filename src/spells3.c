@@ -102,7 +102,6 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 		if (tries > MAX_TRIES) return (FALSE);
 	}
 
-	/* Sound */
 	sound(SOUND_TPOTHER);
 
 	/* Update the old location */
@@ -211,7 +210,6 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 
 	if (attempts < 1) return;
 
-	/* Sound */
 	sound(SOUND_TPOTHER);
 
 	/* Update the old location */
@@ -357,7 +355,6 @@ bool teleport_player_aux(int dis, BIT_FLAGS mode)
 
 	if (player_bold(y, x)) return FALSE;
 
-	/* Sound */
 	sound(SOUND_TELEPORT);
 
 #ifdef JP
@@ -508,7 +505,6 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 		}
 	}
 
-	/* Sound */
 	sound(SOUND_TELEPORT);
 
 	/* Move the player */
@@ -743,7 +739,6 @@ void teleport_level(MONSTER_IDX m_idx)
 		delete_monster_idx(m_idx);
 	}
 
-	/* Sound */
 	sound(SOUND_TPLEVEL);
 }
 
