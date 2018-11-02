@@ -537,7 +537,7 @@ void do_cmd_wield(void)
  * @param item 持ち替えを行いたい装備部位ID
  * @return なし
  */
-void kamaenaoshi(int item)
+void kamaenaoshi(INVENTORY_IDX item)
 {
 	object_type *o_ptr, *new_o_ptr;
 	char o_name[MAX_NLEN];

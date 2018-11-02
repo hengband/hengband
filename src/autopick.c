@@ -1608,7 +1608,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 /*
  *  Auto-destroy marked item
  */
-static void autopick_delayed_alter_aux(int item)
+static void autopick_delayed_alter_aux(INVENTORY_IDX item)
 {
 	object_type *o_ptr;
 
@@ -1649,7 +1649,7 @@ static void autopick_delayed_alter_aux(int item)
  */
 void autopick_delayed_alter(void)
 {
-	int item;
+	INVENTORY_IDX item;
 
 	/* 
 	 * Scan inventry in reverse order to prevent
@@ -1662,7 +1662,7 @@ void autopick_delayed_alter(void)
 	item = cave[p_ptr->y][p_ptr->x].o_idx;
 	while (item)
 	{
-		int next = o_list[item].next_o_idx;
+		OBJECT_IDX next = o_list[item].next_o_idx;
 		autopick_delayed_alter_aux(-item);
 		item = next;
 	}
@@ -1675,7 +1675,7 @@ void autopick_delayed_alter(void)
  * Auto-destroyer works only on inventory or on floor stack only when
  * requested.
  */
-void autopick_alter_item(int item, bool destroy)
+void autopick_alter_item(INVENTORY_IDX item, bool destroy)
 {
 	object_type *o_ptr;
 	int idx;

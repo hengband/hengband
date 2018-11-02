@@ -58,7 +58,7 @@ static void one_sustain(object_type *o_ptr)
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
  * @return なし
  */
-void excise_object_idx(int o_idx)
+void excise_object_idx(OBJECT_IDX o_idx)
 {
 	object_type *j_ptr;
 
@@ -188,7 +188,7 @@ void excise_object_idx(int o_idx)
  * @details
  * Handle "stacks" of objects correctly.
  */
-void delete_object_idx(int o_idx)
+void delete_object_idx(OBJECT_IDX o_idx)
 {
 	object_type *j_ptr;
 
@@ -5659,7 +5659,7 @@ void amusement(POSITION y1, POSITION x1, int num, bool known)
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  * @return なし
  */
-void inven_item_charges(int item)
+void inven_item_charges(INVENTORY_IDX item)
 {
 	object_type *o_ptr = &inventory[item];
 
@@ -5702,7 +5702,7 @@ void inven_item_charges(int item)
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  * @return なし
  */
-void inven_item_describe(int item)
+void inven_item_describe(INVENTORY_IDX item)
 {
 	object_type *o_ptr = &inventory[item];
 	char        o_name[MAX_NLEN];
@@ -5736,7 +5736,7 @@ void inven_item_describe(int item)
  * @param num 増やしたい量
  * @return なし
  */
-void inven_item_increase(int item, int num)
+void inven_item_increase(INVENTORY_IDX item, int num)
 {
 	object_type *o_ptr = &inventory[item];
 
@@ -5792,7 +5792,7 @@ void inven_item_increase(int item, int num)
  * @param item 消去したいプレイヤーのアイテム所持スロット
  * @return なし
  */
-void inven_item_optimize(int item)
+void inven_item_optimize(INVENTORY_IDX item)
 {
 	object_type *o_ptr = &inventory[item];
 
@@ -5856,7 +5856,7 @@ void inven_item_optimize(int item)
  * @param item メッセージの対象にしたいアイテム所持スロット
  * @return なし
  */
-void floor_item_charges(int item)
+void floor_item_charges(INVENTORY_IDX item)
 {
 	object_type *o_ptr = &o_list[item];
 
@@ -5899,7 +5899,7 @@ void floor_item_charges(int item)
  * @param item メッセージの対象にしたいアイテム所持スロット
  * @return なし
  */
-void floor_item_describe(int item)
+void floor_item_describe(INVENTORY_IDX item)
 {
 	object_type *o_ptr = &o_list[item];
 	char        o_name[MAX_NLEN];
@@ -5932,7 +5932,7 @@ void floor_item_describe(int item)
  * @param num 増やしたいアイテムの数
  * @return なし
  */
-void floor_item_increase(int item, int num)
+void floor_item_increase(INVENTORY_IDX item, int num)
 {
 	object_type *o_ptr = &o_list[item];
 
@@ -5957,7 +5957,7 @@ void floor_item_increase(int item, int num)
  * @param item 消去したいアイテムの所持スロット
  * @return なし
  */
-void floor_item_optimize(int item)
+void floor_item_optimize(INVENTORY_IDX item)
 {
 	object_type *o_ptr = &o_list[item];
 

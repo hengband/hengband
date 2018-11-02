@@ -1820,7 +1820,7 @@ bool explosive_rune(void)
  */
 void identify_pack(void)
 {
-	int i;
+	INVENTORY_IDX i;
 
 	/* Simply identify and know every item */
 	for (i = 0; i < INVEN_TOTAL; i++)
@@ -4361,9 +4361,10 @@ int set_cold_destroy(object_type *o_ptr)
  */
 int inven_damage(inven_func typ, int perc)
 {
-	int         i, j, k, amt;
+	INVENTORY_IDX i;
+	int j, k, amt;
 	object_type *o_ptr;
-	char        o_name[MAX_NLEN];
+	char o_name[MAX_NLEN];
 
 	if (CHECK_MULTISHADOW()) return 0;
 

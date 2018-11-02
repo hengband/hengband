@@ -31,7 +31,7 @@ static int wild_regen = 20; /*!<広域マップ移動時の自然回復処理カ
  * @param heavy 重度の擬似鑑定を行うならばTRUE
  * @return なし
  */
-static void sense_inventory_aux(int slot, bool heavy)
+static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 {
 	byte        feel;
 	object_type *o_ptr = &inventory[slot];
@@ -167,9 +167,9 @@ o_name, index_to_label(slot),game_inscriptions[feel]);
  */
 static void sense_inventory1(void)
 {
-	int         i;
-	int         plev = p_ptr->lev;
-	bool        heavy = FALSE;
+	INVENTORY_IDX i;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	bool heavy = FALSE;
 	object_type *o_ptr;
 
 
@@ -405,8 +405,8 @@ static void sense_inventory1(void)
  */
 static void sense_inventory2(void)
 {
-	int         i;
-	int         plev = p_ptr->lev;
+	INVENTORY_IDX i;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	object_type *o_ptr;
 
 

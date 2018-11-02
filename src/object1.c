@@ -2543,7 +2543,7 @@ void toggle_inven_equip(void)
  * @return 確認がYesならTRUEを返す。
  * @details The item can be negative to mean "item on floor".
  */
-static bool verify(cptr prompt, int item)
+static bool verify(cptr prompt, INVENTORY_IDX item)
 {
 	char        o_name[MAX_NLEN];
 	char        out_val[MAX_NLEN+20];
@@ -2580,7 +2580,7 @@ static bool verify(cptr prompt, int item)
  * @details The item can be negative to mean "item on floor".
  * Hack -- allow user to "prevent" certain choices
  */
-static bool get_item_allow(int item)
+static bool get_item_allow(INVENTORY_IDX item)
 {
 	cptr s;
 
@@ -5032,12 +5032,13 @@ static bool py_pickup_floor_aux(void)
  */
 void py_pickup_floor(bool pickup)
 {
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	char o_name[MAX_NLEN];
 	object_type *o_ptr;
 
-	int floor_num = 0, floor_o_idx = 0;
+	int floor_num = 0;
+	OBJECT_IDX floor_o_idx = 0;
 
 	int can_pickup = 0;
 

@@ -253,7 +253,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerf
 * pvals are defined for each rod in k_info. -LM-
 * </pre>
 */
-void do_cmd_zap_rod_aux(int item)
+void do_cmd_zap_rod_aux(INVENTORY_IDX item)
 {
 	int ident, chance, lev, fail;
 	int dir = 0;

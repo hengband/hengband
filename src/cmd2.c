@@ -2020,9 +2020,9 @@ void do_cmd_alter(void)
  * XXX XXX XXX Let user choose a pile of spikes, perhaps?
  * </pre>
  */
-static bool get_spike(int *ip)
+static bool get_spike(INVENTORY_IDX *ip)
 {
-	int i;
+	INVENTORY_IDX i;
 
 	/* Check every item in the pack */
 	for (i = 0; i < INVEN_PACK; i++)
@@ -2069,7 +2069,8 @@ void do_cmd_spike(void)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir,FALSE))
 	{
-		int y, x, item;
+		POSITION y, x;
+		INVENTORY_IDX item;
 		cave_type *c_ptr;
 		s16b feat;
 
@@ -2834,7 +2835,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
  * Note that Bows of "Extra Shots" give an extra shot.
  * </pre>
  */
-void do_cmd_fire_aux(int item, object_type *j_ptr)
+void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 {
 	DIRECTION dir;
 	int i;

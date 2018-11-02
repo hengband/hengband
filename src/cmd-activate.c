@@ -63,7 +63,7 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
  * the user hits "escape" at the "direction" prompt.
  * </pre>
  */
-void do_cmd_activate_aux(int item)
+void do_cmd_activate_aux(INVENTORY_IDX item)
 {
 	int         dir, lev, chance, fail;
 	object_type *o_ptr;
@@ -1594,7 +1594,8 @@ bool activate_artifact(object_type *o_ptr)
 	/* Unique activation */
 	case ACT_CAST_OFF:
 	{
-		int inv, t;
+		INVENTORY_IDX inv;
+		int t;
 		OBJECT_IDX o_idx;
 		char o_name[MAX_NLEN];
 		object_type forge;

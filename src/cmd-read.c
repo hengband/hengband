@@ -22,7 +22,7 @@
  * cancelled before use.  XXX Reading them still takes a turn, though.
  * </pre>
  */
-void do_cmd_read_scroll_aux(int item, bool known)
+void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 {
 	int         k, used_up, ident, lev;
 	object_type *o_ptr;

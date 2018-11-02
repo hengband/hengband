@@ -15,7 +15,7 @@
  * @param item 食べるオブジェクトの所持品ID
  * @return なし
  */
-void do_cmd_eat_food_aux(int item)
+void do_cmd_eat_food_aux(INVENTORY_IDX item)
 {
 	int ident, lev;
 	object_type *o_ptr;

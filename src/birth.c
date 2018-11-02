@@ -2004,7 +2004,7 @@ static void wield_all(void)
 	object_type object_type_body; 
  
 	int slot; 
-	int item; 
+	INVENTORY_IDX item; 
  
 	/* Scan through the slots backwards */ 
 	for (item = INVEN_PACK - 1; item >= 0; item--) 

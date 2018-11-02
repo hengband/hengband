@@ -1821,7 +1821,8 @@ static struct {
  */
 static bool kankin(void)
 {
-	int i, j;
+	INVENTORY_IDX i;
+	int j;
 	bool change = FALSE;
 	char o_name[MAX_NLEN];
 	object_type *o_ptr;
@@ -1948,7 +1949,8 @@ static bool kankin(void)
 			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->pval == kubi_r_idx[j]))
 			{
 				char buf[MAX_NLEN+20];
-				int num, k, item_new;
+				int num, k;
+				INVENTORY_IDX item_new;
 				object_type forge;
 
 				object_desc(o_name, o_ptr, 0);
@@ -3741,12 +3743,12 @@ if (get_check(format("そのロッドを＄%d で再充填しますか？",
  */
 static void building_recharge_all(void)
 {
-	int         i;
-	int         lev;
+	INVENTORY_IDX i;
+	int lev;
 	object_type *o_ptr;
 	object_kind *k_ptr;
-	int         price = 0;
-	int         total_cost = 0;
+	int price = 0;
+	int total_cost = 0;
 
 
 	/* Display some info */

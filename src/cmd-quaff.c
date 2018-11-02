@@ -16,7 +16,7 @@
  * @param item 飲む薬オブジェクトの所持品ID
  * @return なし
  */
-void do_cmd_quaff_potion_aux(int item)
+void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 {
 	int ident, lev;
 	object_type *o_ptr;

@@ -1540,7 +1540,8 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 	int ap_cnt;
 
-	int i, k, tmp, ac, rlev;
+	INVENTORY_IDX i;
+	int k, tmp, ac, rlev;
 	int do_cut, do_stun;
 
 	s32b gold;
@@ -2073,7 +2074,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					for (k = 0; k < 10; k++)
 					{
 						/* Pick an item */
-						i = randint0(INVEN_PACK);
+						i = (INVENTORY_IDX)randint0(INVEN_PACK);
 
 						/* Obtain the item */
 						o_ptr = &inventory[i];
@@ -2221,7 +2222,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						s16b o_idx;
 
 						/* Pick an item */
-						i = randint0(INVEN_PACK);
+						i = (INVENTORY_IDX)randint0(INVEN_PACK);
 
 						/* Obtain the item */
 						o_ptr = &inventory[i];
@@ -2317,7 +2318,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					for (k = 0; k < 10; k++)
 					{
 						/* Pick an item from the pack */
-						i = randint0(INVEN_PACK);
+						i = (INVENTORY_IDX)randint0(INVEN_PACK);
 
 						/* Get the item */
 						o_ptr = &inventory[i];

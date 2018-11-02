@@ -1935,7 +1935,7 @@ static int store_carry(object_type *o_ptr)
  * </pre>
  * @todo numは本来ITEM_NUMBER型にしたい。
  */
-static void store_item_increase(int item, int num)
+static void store_item_increase(INVENTORY_IDX item, int num)
 {
 	int 		cnt;
 	object_type *o_ptr;
@@ -1960,7 +1960,7 @@ static void store_item_increase(int item, int num)
  * @param item 削除したいアイテムのID
  * @return なし
  */
-static void store_item_optimize(int item)
+static void store_item_optimize(INVENTORY_IDX item)
 {
 	int 		j;
 	object_type *o_ptr;
@@ -2042,10 +2042,11 @@ static bool black_market_crap(object_type *o_ptr)
  */
 static void store_delete(void)
 {
-	int what, num;
+	INVENTORY_IDX what;
+	int num;
 
 	/* Pick a random slot */
-	what = randint0(st_ptr->stock_num);
+	what = (INVENTORY_IDX)randint0(st_ptr->stock_num);
 
 	/* Determine how many items are here */
 	num = st_ptr->stock[what].number;
@@ -5130,7 +5131,7 @@ void do_cmd_store(void)
 		/* XXX XXX XXX Pack Overflow */
 		if (inventory[INVEN_PACK].k_idx)
 		{
-			int item = INVEN_PACK;
+			INVENTORY_IDX item = INVEN_PACK;
 
 			object_type *o_ptr = &inventory[item];
 
@@ -5362,7 +5363,7 @@ void store_shuffle(int which)
  */
 void store_maint(int town_num, int store_num)
 {
-	int 		j;
+	INVENTORY_IDX j;
 
 	cur_store_num = store_num;
 

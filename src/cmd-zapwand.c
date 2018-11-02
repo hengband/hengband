@@ -313,7 +313,7 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
 * as the basic "ball" rods.
 * </pre>
 */
-void do_cmd_aim_wand_aux(int item)
+void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 {
 	int         lev, ident, chance, dir;
 	object_type *o_ptr;

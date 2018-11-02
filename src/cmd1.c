@@ -462,9 +462,9 @@ void search(void)
  * Add the given dungeon object to the character's inventory.\n
  * Delete the object afterwards.\n
  */
-void py_pickup_aux(int o_idx)
+void py_pickup_aux(OBJECT_IDX o_idx)
 {
-	int slot;
+	INVENTORY_IDX slot;
 
 #ifdef JP
 	char o_name[MAX_NLEN];
