@@ -1671,7 +1671,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_FISHING:
 	{
-		int x, y;
+		POSITION x, y;
 
 		if (!get_rep_dir2(&dir)) return FALSE;
 		y = p_ptr->y + ddy[dir];

@@ -1577,9 +1577,9 @@ static bool ignore_avoid_run;
  * @param x 移動元のX座標
  * @return 移動先が既知の壁ならばTRUE
  */
-static int see_wall(int dir, int y, int x)
+static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 {
-	cave_type   *c_ptr;
+	cave_type *c_ptr;
 
 	/* Get the new location */
 	y += ddy[dir];
@@ -1622,7 +1622,7 @@ static int see_wall(int dir, int y, int x)
  * @param x 移動元のX座標
  * @return 移動先が未知の地形ならばTRUE
  */
-static int see_nothing(int dir, int y, int x)
+static bool see_nothing(DIRECTION dir, POSITION y, POSITION x)
 {
 	/* Get the new location */
 	y += ddy[dir];

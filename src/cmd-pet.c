@@ -304,7 +304,8 @@ void do_cmd_pet_dismiss(void)
 */
 bool do_riding(bool force)
 {
-	int x, y, dir = 0;
+	POSITION x, y;
+	DIRECTION dir = 0;
 	cave_type *c_ptr;
 	monster_type *m_ptr;
 
