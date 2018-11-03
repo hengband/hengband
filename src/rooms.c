@@ -499,7 +499,7 @@ static fill_data_type fill_data;
 
 /* Store routine for the fractal cave generator */
 /* this routine probably should be an inline function or a macro. */
-static void store_height(int x, int y, int val)
+static void store_height(POSITION x, POSITION y, int val)
 {
 	/* if on boundary set val > cutoff so walls are not as square */
 	if (((x == fill_data.xmin) || (y == fill_data.ymin) ||
@@ -765,7 +765,7 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 }
 
 
-static bool hack_isnt_wall(int y, int x, int c1, int c2, int c3, int feat1, int feat2, int feat3, int info1, int info2, int info3)
+static bool hack_isnt_wall(POSITION y, POSITION x, int c1, int c2, int c3, int feat1, int feat2, int feat3, int info1, int info2, int info3)
 {
 	/*
 	 * function used to convert from height-map back to the
@@ -1149,10 +1149,11 @@ void build_cavern(void)
 	}
 }
 
-bool generate_lake(int y0, int x0, int xsize, int ysize, int c1, int c2, int c3, int type)
+bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type)
 {
-	int x, y, i, xhsize, yhsize;
-	int feat1, feat2, feat3;
+	POSITION x, y, xhsize, yhsize;
+	int i;
+	FEAT_IDX feat1, feat2, feat3;
 
 	/* offsets to middle from corner */
 	xhsize = xsize / 2;
@@ -1351,9 +1352,9 @@ void build_lake(int type)
 /*
  * Routine that fills the empty areas of a room with treasure and monsters.
  */
-void fill_treasure(int x1, int x2, int y1, int y2, int difficulty)
+void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty)
 {
-	int x, y, cx, cy, size;
+	POSITION x, y, cx, cy, size;
 	s32b value;
 
 	/* center of room:*/
@@ -1490,9 +1491,10 @@ void fill_treasure(int x1, int x2, int y1, int y2, int difficulty)
  * The area inside the walls is not touched:
  * only granite is removed- normal walls stay
  */
-void build_room(int x1, int x2, int y1, int y2)
+void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 {
-	int x, y, i, xsize, ysize, temp;
+	POSITION x, y, xsize, ysize;
+	int i, temp;
 
 	/* Check if rectangle has no width */
 	if ((x1 == x2) || (y1 == y2)) return;
@@ -1732,10 +1734,10 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
  * The power variable is a measure of how well defended a region is.
  * This alters the possible choices.
  */
-void build_recursive_room(int x1, int y1, int x2, int y2, int power)
+void build_recursive_room(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int power)
 {
-	int xsize, ysize;
-	int x, y;
+	POSITION xsize, ysize;
+	POSITION x, y;
 	int choice;
 
 	/* Temp variables */
@@ -1936,7 +1938,7 @@ void build_recursive_room(int x1, int y1, int x2, int y2, int power)
  * Note: no range checking is done so must be inside dungeon
  * This routine also stomps on doors
  */
-void add_outer_wall(int x, int y, int light, int x1, int y1, int x2, int y2)
+void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
 	cave_type *c_ptr;
 	feature_type *f_ptr;
