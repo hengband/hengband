@@ -400,11 +400,11 @@ void do_cmd_search(void)
  * @param trapped TRUEならばトラップが存在する箱のみ、FALSEならば空でない箱全てを対象にする
  * @return 箱が存在する場合そのオブジェクトID、存在しない場合0を返す。
  */
-static s16b chest_check(int y, int x, bool trapped)
+static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 {
 	cave_type *c_ptr = &cave[y][x];
 
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 
 	/* Scan all objects in the grid */
@@ -444,7 +444,7 @@ static s16b chest_check(int y, int x, bool trapped)
  * @details
  * Assume there is no monster blocking the destination
  */
-static bool do_cmd_open_chest(int y, int x, s16b o_idx)
+static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, j;
 
@@ -669,7 +669,7 @@ static DIRECTION coords_to_dir(POSITION y, POSITION x)
  * Assume there is no monster blocking the destination
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_open_aux(int y, int x)
+static bool do_cmd_open_aux(POSITION y, POSITION x)
 {
 	int i, j;
 
@@ -882,12 +882,12 @@ void do_cmd_open(void)
  * Assume there is no monster blocking the destination
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_close_aux(int y, int x)
+static bool do_cmd_close_aux(POSITION y, POSITION x)
 {
 	/* Get grid and contents */
 	cave_type *c_ptr = &cave[y][x];
-	s16b      old_feat = c_ptr->feat;
-	bool      more = FALSE;
+	FEAT_IDX old_feat = c_ptr->feat;
+	bool more = FALSE;
 
 	/* Take a turn */
 	p_ptr->energy_use = 100;
@@ -1031,7 +1031,7 @@ void do_cmd_close(void)
  * @param x 対象を行うマスのX座標
  * @return 
  */
-static bool do_cmd_tunnel_test(int y, int x)
+static bool do_cmd_tunnel_test(POSITION y, POSITION x)
 {
 	cave_type *c_ptr = &cave[y][x];
 
@@ -1071,7 +1071,7 @@ static bool do_cmd_tunnel_test(int y, int x)
  * Do not use twall anymore
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_tunnel_aux(int y, int x)
+static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
 	feature_type *f_ptr, *mimic_f_ptr;
@@ -1299,7 +1299,7 @@ void do_cmd_tunnel(void)
  *	do_cmd_open_test() and do_cmd_open_aux().
  * </pre>
  */
-bool easy_open_door(int y, int x)
+bool easy_open_door(POSITION y, POSITION x)
 {
 	int i, j;
 
@@ -1397,7 +1397,7 @@ bool easy_open_door(int y, int x)
  * Returns TRUE if repeated commands may continue
  * </pre>
  */
-static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
+static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, j;
 
@@ -1487,11 +1487,11 @@ static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
  */
 #ifdef ALLOW_EASY_DISARM /* TNB */
 
-bool do_cmd_disarm_aux(int y, int x, int dir)
+bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 
 #else /* ALLOW_EASY_DISARM -- TNB */
 
-static bool do_cmd_disarm_aux(int y, int x, int dir)
+static bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 
 #endif /* ALLOW_EASY_DISARM -- TNB */
 {
@@ -1713,7 +1713,7 @@ void do_cmd_disarm(void)
  * Returns TRUE if repeated commands may continue
  * </pre>
  */
-static bool do_cmd_bash_aux(int y, int x, int dir)
+static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 {
 	/* Get grid */
 	cave_type	*c_ptr = &cave[y][x];
@@ -4066,7 +4066,7 @@ static POSITION temp2_y[MAX_SHORT];
  */
 void forget_travel_flow(void)
 {
-	int x, y;
+	POSITION x, y;
 
 	/* Check the entire dungeon */
 	for (y = 0; y < cur_hgt; y++)
@@ -4087,7 +4087,7 @@ void forget_travel_flow(void)
  * @param x 該当地点のX座標
  * @return コスト値
  */
-static int travel_flow_cost(int y, int x)
+static int travel_flow_cost(POSITION y, POSITION x)
 {
 	feature_type *f_ptr = &f_info[cave[y][x].feat];
 	int cost = 1;
@@ -4187,9 +4187,9 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
  * @param tx 目標地点のX座標
  * @return なし
  */
-static void travel_flow(int ty, int tx)
+static void travel_flow(POSITION ty, POSITION tx)
 {
-	int x, y, d;
+	POSITION x, y, d;
 	bool wall = FALSE;
 	feature_type *f_ptr = &f_info[cave[p_ptr->y][p_ptr->x].feat];
 

@@ -1459,7 +1459,7 @@ extern void repeat_check(void);
 extern bool easy_open;
 
 /* cmd2.c */
-extern bool easy_open_door(int y, int x);
+extern bool easy_open_door(POSITION y, POSITION x);
 
 #endif /* ALLOW_EASY_OPEN -- TNB */
 
@@ -1469,7 +1469,7 @@ extern bool easy_open_door(int y, int x);
 extern bool easy_disarm;
 
 /* cmd2.c */
-extern bool do_cmd_disarm_aux(int y, int x, int dir);
+extern bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir);
 
 #endif /* ALLOW_EASY_DISARM -- TNB */
 
