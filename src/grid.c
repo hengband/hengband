@@ -444,7 +444,7 @@ static int next_to_corr(int y1, int x1)
 * XXX XXX XXX\n
 * Assumes "in_bounds(y, x)"\n
 */
-static bool possible_doorway(int y, int x)
+static bool possible_doorway(POSITION y, POSITION x)
 {
 	/* Count the adjacent corridors */
 	if (next_to_corr(y, x) >= 2)
@@ -505,7 +505,7 @@ void try_door(POSITION y, POSITION x)
  */
 void place_floor(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
 {
-	int x, y;
+	POSITION x, y;
 
 	/* Place a full floor under the room */
 	for (y = y1 - 1; y <= y2 + 1; y++)
@@ -766,7 +766,7 @@ void rand_dir(int *rdir, int *cdir)
  * @param y チェックするマスのY座標
  * @return 床系地形ならばTRUE
  */
-bool get_is_floor(int x, int y)
+bool get_is_floor(POSITION x, POSITION y)
 {
 	if (!in_bounds(y, x))
 	{
@@ -786,7 +786,7 @@ bool get_is_floor(int x, int y)
  * @param y 地形を変えたいマスのY座標
  * @return なし
  */
-void set_floor(int x, int y)
+void set_floor(POSITION x, POSITION y)
 {
 	if (!in_bounds(y, x))
 	{

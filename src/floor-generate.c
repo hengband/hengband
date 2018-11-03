@@ -124,7 +124,7 @@ dun_data *dun;
  * @note Assumes "in_bounds(y, x)"
  * @details We count only granite walls and permanent walls.
  */
-static int next_to_walls(int y, int x)
+static int next_to_walls(POSITION y, POSITION x)
 {
 	int k = 0;
 
@@ -143,7 +143,7 @@ static int next_to_walls(int y, int x)
  * @param walls 最低減隣接させたい外壁の数
  * @return 階段を生成して問題がないならばTRUEを返す。
  */
-static bool alloc_stairs_aux(int y, int x, int walls)
+static bool alloc_stairs_aux(POSITION y, POSITION x, int walls)
 {
 	/* Access the grid */
 	cave_type *c_ptr = &cave[y][x];
@@ -415,7 +415,7 @@ bool place_quest_monsters(void)
 
 			for (k = 0; k < SAFE_MAX_ATTEMPTS; k++)
 			{
-				int x = 0, y = 0;
+				POSITION x = 0, y = 0;
 				int l;
 
 				/* Find an empty grid */
@@ -1205,7 +1205,7 @@ static void battle_gen(void)
  */
 static void quest_gen(void)
 {
-	int x, y;
+	POSITION x, y;
 
 
 	/* Start with perm walls */
@@ -1310,7 +1310,7 @@ static bool level_gen(cptr *why)
  */
 void wipe_generate_cave_flags(void)
 {
-	int x, y;
+	POSITION x, y;
 
 	for (y = 0; y < cur_hgt; y++)
 	{
@@ -1340,7 +1340,8 @@ void wipe_generate_cave_flags(void)
  */
 void clear_cave(void)
 {
-	int x, y, i;
+	POSITION x, y;
+	int i;
 
 	/* Very simplified version of wipe_o_list() */
 	(void)C_WIPE(o_list, o_max, object_type);

@@ -316,7 +316,7 @@ void prepare_change_floor_mode(BIT_FLAGS mode)
  */
 static void build_dead_end(void)
 {
-	int x,y;
+	POSITION x, y;
 
 	/* Clear and empty the cave */
 	clear_cave();
@@ -756,9 +756,9 @@ static void get_out_monster(void)
  */
 static void locate_connected_stairs(saved_floor_type *sf_ptr)
 {
-	int x, y, sx = 0, sy = 0;
-	int x_table[20];
-	int y_table[20];
+	POSITION x, y, sx = 0, sy = 0;
+	POSITION x_table[20];
+	POSITION y_table[20];
 	int num = 0;
 	int i;
 
@@ -1485,7 +1485,7 @@ void stair_creation(void)
 	/* Search old stairs leading to the destination */
 	if (dest_floor_id)
 	{
-		int x, y;
+		POSITION x, y;
 
 		for (y = 0; y < cur_hgt; y++)
 		{
