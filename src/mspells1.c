@@ -396,10 +396,10 @@ bool summon_possible(int y1, int x1)
  */
 bool raise_possible(monster_type *m_ptr)
 {
-	int xx, yy;
-	int y = m_ptr->fy;
-	int x = m_ptr->fx;
-	s16b this_o_idx, next_o_idx = 0;
+	POSITION xx, yy;
+	POSITION y = m_ptr->fy;
+	POSITION x = m_ptr->fx;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	cave_type *c_ptr;
 
 	for (xx = x - 5; xx <= x + 5; xx++)
@@ -509,7 +509,7 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
+void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, int typ, int dam_hp, int monspell, int target_type)
   {
     BIT_FLAGS flg = 0;
     bool learnable = spell_learnable(m_idx);
@@ -540,7 +540,7 @@ void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, in
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void beam(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type)
+void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, int typ, int dam_hp, int monspell, int target_type)
 {
     BIT_FLAGS flg = 0;
     bool learnable = spell_learnable(m_idx);

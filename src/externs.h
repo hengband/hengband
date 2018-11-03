@@ -1361,8 +1361,8 @@ extern bool raise_possible(monster_type *m_ptr);
 extern bool dispel_check(MONSTER_IDX m_idx);
 extern bool spell_is_inate(SPELL_IDX spell);
 extern bool make_attack_spell(MONSTER_IDX m_idx);
-extern void beam(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type);
-extern void bolt(MONSTER_IDX m_idx, int y, int x, int typ, int dam_hp, int monspell, int target_type);
+extern void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, int typ, int dam_hp, int monspell, int target_type);
+extern void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, int typ, int dam_hp, int monspell, int target_type);
 extern void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, int typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type);
 
 /* mspells2.c */
