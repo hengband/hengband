@@ -52,7 +52,8 @@
  * computers, and to check for "keypresses" from the user.  The major
  * concerns were thus portability and efficiency, so Angband could be
  * easily ported to many different systems, with minimal effort, and
- * yet would run quickly on each of these systems, no matter what kind
+ * yet would run quickly on each of these sys
+ tems, no matter what kind
  * of underlying hardware/software support was being used.
  *
  * It is important to understand the differences between the older

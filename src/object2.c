@@ -128,8 +128,8 @@ void excise_object_idx(OBJECT_IDX o_idx)
 	{
 		cave_type *c_ptr;
 
-		int y = j_ptr->iy;
-		int x = j_ptr->ix;
+		POSITION y = j_ptr->iy;
+		POSITION x = j_ptr->ix;
 
 		/* Grid */
 		c_ptr = &cave[y][x];
@@ -521,8 +521,8 @@ void wipe_o_list(void)
 			cave_type *c_ptr;
 
 			/* Access location */
-			int y = o_ptr->iy;
-			int x = o_ptr->ix;
+			POSITION y = o_ptr->iy;
+			POSITION x = o_ptr->ix;
 
 			/* Access grid */
 			c_ptr = &cave[y][x];

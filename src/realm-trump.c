@@ -179,7 +179,7 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast || fail)
 			{
-				int x, y;
+				POSITION x, y;
 				int type;
 
 				if (cast)

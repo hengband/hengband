@@ -58,17 +58,13 @@ bool stop_hex_spell(void)
 	char choice;
 	char out_val[160];
 	bool flag = FALSE;
-	int y = 1;
-	int x = 20;
+	TERM_POSITION y = 1;
+	TERM_POSITION x = 20;
 	int sp[MAX_KEEP];
 
 	if (!hex_spelling_any())
 	{
-#ifdef JP
-		msg_print("呪文を詠唱していません。");
-#else
-		msg_print("You are casting no spell.");
-#endif
+		msg_print(_("呪文を詠唱していません。", "You are casting no spell."));
 		return FALSE;
 	}
 

@@ -147,9 +147,10 @@ static void build_bubble_vault(int x0, int y0, int xsize, int ysize)
 }
 
 /* Create a random vault that looks like a collection of overlapping rooms */
-static void build_room_vault(int x0, int y0, int xsize, int ysize)
+static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
-	int i, x1, x2, y1, y2, xhsize, yhsize;
+	POSITION x1, x2, y1, y2, xhsize, yhsize;
+	int i;
 
 	/* get offset from center */
 	xhsize = xsize / 2;
@@ -160,11 +161,11 @@ static void build_room_vault(int x0, int y0, int xsize, int ysize)
 	/* fill area so don't get problems with arena levels */
 	for (x1 = 0; x1 < xsize; x1++)
 	{
-		int x = x0 - xhsize + x1;
+		POSITION x = x0 - xhsize + x1;
 
 		for (y1 = 0; y1 < ysize; y1++)
 		{
-			int y = y0 - yhsize + y1;
+			POSITION y = y0 - yhsize + y1;
 
 			place_extra_bold(y, x);
 			cave[y][x].info &= (~CAVE_ICKY);

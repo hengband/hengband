@@ -224,19 +224,14 @@ monster_race *real_r_ptr(monster_type *m_ptr)
  */
 void delete_monster_idx(MONSTER_IDX i)
 {
-	int x, y;
-
+	POSITION x, y;
 	monster_type *m_ptr = &m_list[i];
-
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-	s16b this_o_idx, next_o_idx = 0;
-
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Get location */
 	y = m_ptr->fy;
 	x = m_ptr->fx;
-
 
 	/* Hack -- Reduce the racial counter */
 	real_r_ptr(m_ptr)->cur_num--;

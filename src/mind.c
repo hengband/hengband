@@ -1377,16 +1377,16 @@ static bool cast_force_spell(int spell)
  * @brief 現在フロアに存在している鏡の数を数える / calculate mirrors
  * @return 鏡の枚数
  */
-static int number_of_mirrors( void )
+static int number_of_mirrors(void)
 {
-  int x,y;
-  int val=0;
-  for( x=0 ; x < cur_wid ; x++ ){
-    for( y=0 ; y < cur_hgt ; y++ ){
-      if (is_mirror_grid(&cave[y][x])) val++;
-    }
-  }
-  return val;
+	POSITION x, y;
+	int val = 0;
+	for (x = 0; x < cur_wid; x++) {
+		for (y = 0; y < cur_hgt; y++) {
+			if (is_mirror_grid(&cave[y][x])) val++;
+		}
+	}
+	return val;
 }
 
 /*!

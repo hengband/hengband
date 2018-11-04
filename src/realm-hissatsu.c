@@ -808,7 +808,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		if (cast)
 		{
-			int x, y;
+			POSITION x, y;
 
 			if (!get_rep_dir(&dir, FALSE)) return NULL;
 

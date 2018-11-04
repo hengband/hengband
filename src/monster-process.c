@@ -27,7 +27,7 @@
 static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 {
 	int i;
-	int x = 0, y = 0;
+	POSITION x = 0, y = 0;
 	IDX t_idx;
 	int start;
 	int plus = 1;
