@@ -144,7 +144,7 @@ typedef byte FEAT_SUBTYPE;	/*!< 地形情報の副値 (トラップ種別/パタ
  * @details 
  * HIT_POINTはプレイヤー及びモンスターのHPの各値とその増減量の型である。
  */
-typedef s32b HIT_POINT;			
+typedef s32b HIT_POINT;
 
 /*!
  * @var typedef s32b MANA_POINT
