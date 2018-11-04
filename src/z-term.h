@@ -209,17 +209,17 @@ struct term
 
 	errr (*xtra_hook)(int n, int v);
 
-	errr (*curs_hook)(int x, int y);
+	errr (*curs_hook)(TERM_POSITION x, TERM_POSITION y);
 
-	errr (*bigcurs_hook)(int x, int y);
+	errr (*bigcurs_hook)(TERM_POSITION x, TERM_POSITION y);
 
-	errr (*wipe_hook)(int x, int y, int n);
+	errr (*wipe_hook)(TERM_POSITION x, TERM_POSITION y, int n);
 
-	errr (*text_hook)(int x, int y, int n, byte a, cptr s);
+	errr (*text_hook)(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s);
 
 	void (*resize_hook)(void);
 
-	errr (*pict_hook)(int x, int y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp);
+	errr (*pict_hook)(TERM_POSITION x, TERM_POSITION y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp);
 };
 
 
@@ -277,26 +277,26 @@ extern term *Term;
 extern errr Term_user(int n);
 extern errr Term_xtra(int n, int v);
 
-extern void Term_queue_char(int x, int y, byte a, char c, byte ta, char tc);
-extern void Term_queue_bigchar(int x, int y, byte a, char c, byte ta, char tc);
+extern void Term_queue_char(TERM_POSITION x, TERM_POSITION y, byte a, char c, byte ta, char tc);
+extern void Term_queue_bigchar(TERM_POSITION x, TERM_POSITION y, byte a, char c, byte ta, char tc);
 
-extern void Term_queue_line(int x, int y, int n, byte *a, char *c, byte *ta, char *tc);
+extern void Term_queue_line(TERM_POSITION x, TERM_POSITION y, int n, byte *a, char *c, byte *ta, char *tc);
 
-extern void Term_queue_chars(int x, int y, int n, byte a, cptr s);
+extern void Term_queue_chars(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s);
 
 extern errr Term_fresh(void);
 extern errr Term_set_cursor(int v);
-extern errr Term_gotoxy(int x, int y);
-extern errr Term_draw(int x, int y, byte a, char c);
+extern errr Term_gotoxy(TERM_POSITION x, TERM_POSITION y);
+extern errr Term_draw(TERM_POSITION x, TERM_POSITION y, byte a, char c);
 extern errr Term_addch(byte a, char c);
 extern errr Term_add_bigch(byte a, char c);
 extern errr Term_addstr(int n, byte a, cptr s);
-extern errr Term_putch(int x, int y, byte a, char c);
-extern errr Term_putstr(int x, int y, int n, byte a, cptr s);
+extern errr Term_putch(TERM_POSITION x, TERM_POSITION y, byte a, char c);
+extern errr Term_putstr(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s);
 #ifdef JP
-extern errr Term_putstr_v(int x, int y, int n, byte a, cptr s);
+extern errr Term_putstr_v(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s);
 #endif
-extern errr Term_erase(int x, int y, int n);
+extern errr Term_erase(TERM_POSITION x, TERM_POSITION y, int n);
 extern errr Term_clear(void);
 extern errr Term_redraw(void);
 extern errr Term_redraw_section(int x1, int y1, int x2, int y2);
@@ -304,7 +304,7 @@ extern errr Term_redraw_section(int x1, int y1, int x2, int y2);
 extern errr Term_get_cursor(int *v);
 extern errr Term_get_size(int *w, int *h);
 extern errr Term_locate(int *x, int *y);
-extern errr Term_what(int x, int y, byte *a, char *c);
+extern errr Term_what(TERM_POSITION x, TERM_POSITION y, byte *a, char *c);
 
 extern errr Term_flush(void);
 extern errr Term_keypress(int k);
