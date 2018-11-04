@@ -871,7 +871,7 @@ extern void remove_loc(void);
 extern bool save_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
 /* spells1.c */
-extern int beam_chance(void);
+extern PERCENTAGE beam_chance(void);
 extern bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int typ);
 extern int take_hit(int damage_type, HIT_POINT damage, cptr kb_str, int monspell);

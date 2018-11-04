@@ -87,14 +87,14 @@ static bool_hack common_saving_throw_control(player_type *player_ptr, HIT_POINT 
 * ハードコーティングによる実装が行われている。
 * メイジは(レベル)%、ハイメイジ、スペルマスターは(レベル)%、それ以外の職業は(レベル/2)%
 */
-int beam_chance(void)
+PERCENTAGE beam_chance(void)
 {
 	if (p_ptr->pclass == CLASS_MAGE)
-		return p_ptr->lev;
+		return (PERCENTAGE)(p_ptr->lev);
 	if (p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER)
-		return p_ptr->lev + 10;
+		return (PERCENTAGE)(p_ptr->lev + 10);
 
-	return p_ptr->lev / 2;
+	return (PERCENTAGE)(p_ptr->lev / 2);
 }
 
 

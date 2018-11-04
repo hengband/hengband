@@ -1929,7 +1929,7 @@ static byte likert_color = TERM_WHITE;
  * @brief 技能ランクの表示基準を定める
  * Returns a "rating" of x depending on y
  * @param x 技能値
- * @param y  技能値に対するランク基準比
+ * @param y 技能値に対するランク基準比
  * @return なし
  */
 static cptr likert(int x, int y)
@@ -2798,7 +2798,7 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
  * @param mode オプション
  * @return なし
  */
-static void display_player_equippy(int y, int x, u16b mode)
+static void display_player_equippy(TERM_POSITION y, TERM_POSITION x, u16b mode)
 {
 	int i, max_i;
 
@@ -4069,10 +4069,10 @@ void display_player(BIT_FLAGS mode)
  */
 static void dump_aux_display_player(FILE *fff)
 {
-	int x, y;
+	TERM_POSITION x, y;
 	byte a;
 	char c;
-	char		buf[1024];
+	char buf[1024];
 
 	/* Display player */
 	display_player(0);
@@ -4924,7 +4924,7 @@ static void dump_aux_home_museum(FILE *fff)
 	if (st_ptr->stock_num)
 	{
 		int i;
-		int x = 1;
+		TERM_POSITION x = 1;
 
 		fprintf(fff, _("  [我が家のアイテム]\n", "  [Home Inventory]\n"));
 
@@ -4949,7 +4949,7 @@ static void dump_aux_home_museum(FILE *fff)
 	if (st_ptr->stock_num)
 	{
 		int i;
-		int x = 1;
+		TERM_POSITION x = 1;
 
 		fprintf(fff, _("  [博物館のアイテム]\n", "  [Museum]\n"));
 
