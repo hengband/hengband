@@ -386,11 +386,11 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
  * @param x x座標
  * @return 指定された座標に照明がかかっているならTRUEを返す。。
  */
-static bool check_local_illumination(int y, int x)
+static bool check_local_illumination(POSITION y, POSITION x)
 {
 	/* Hack -- move towards player */
-	int yy = (y < p_ptr->y) ? (y + 1) : (y > p_ptr->y) ? (y - 1) : y;
-	int xx = (x < p_ptr->x) ? (x + 1) : (x > p_ptr->x) ? (x - 1) : x;
+	POSITION yy = (y < p_ptr->y) ? (y + 1) : (y > p_ptr->y) ? (y - 1) : y;
+	POSITION xx = (x < p_ptr->x) ? (x + 1) : (x > p_ptr->x) ? (x - 1) : x;
 
 	/* Check for "local" illumination */
 
@@ -3335,8 +3335,8 @@ void forget_view(void)
 	/* Clear them all */
 	for (i = 0; i < view_n; i++)
 	{
-		int y = view_y[i];
-		int x = view_x[i];
+		POSITION y = view_y[i];
+		POSITION x = view_x[i];
 
 		/* Access the grid */
 		c_ptr = &cave[y][x];
@@ -3390,7 +3390,7 @@ void forget_view(void)
  *
  * This function now returns "TRUE" if vision is "blocked" by grid (y,x).
  */
-static bool update_view_aux(int y, int x, int y1, int x1, int y2, int x2)
+static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	bool f1, f2, v1, v2, z1, z2, wall;
 
@@ -4078,7 +4078,7 @@ void delayed_visual_update(void)
  */
 void forget_flow(void)
 {
-	int x, y;
+	POSITION x, y;
 
 	/* Check the entire dungeon */
 	for (y = 0; y < cur_hgt; y++)
