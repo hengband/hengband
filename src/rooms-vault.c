@@ -15,20 +15,21 @@
 * Note: If two centers are on the same point then this algorithm will create a
 *       blank bubble filled with walls. - This is prevented from happening.
 */
-static void build_bubble_vault(int x0, int y0, int xsize, int ysize)
+static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 #define BUBBLENUM 10		/* number of bubbles */
 
 	/* array of center points of bubbles */
 	coord center[BUBBLENUM];
 
-	int i, j, x, y;
+	int i, j;
+	POSITION x, y;
 	u16b min1, min2, temp;
 	bool done;
 
 	/* Offset from center to top left hand corner */
-	int xhsize = xsize / 2;
-	int yhsize = ysize / 2;
+	POSITION xhsize = xsize / 2;
+	POSITION yhsize = ysize / 2;
 
 	msg_print_wizard(CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Room Vault."));
 

@@ -471,10 +471,10 @@ typedef struct fill_data_type fill_data_type;
 struct fill_data_type
 {
 	/* area size */
-	int xmin;
-	int ymin;
-	int xmax;
-	int ymax;
+	POSITION xmin;
+	POSITION ymin;
+	POSITION xmax;
+	POSITION ymax;
 
 	/* cutoffs */
 	int c1;
@@ -482,9 +482,9 @@ struct fill_data_type
 	int c3;
 
 	/* features to fill with */
-	int feat1;
-	int feat2;
-	int feat3;
+	FEAT_IDX feat1;
+	FEAT_IDX feat2;
+	FEAT_IDX feat3;
 
 	int info1;
 	int info2;
@@ -1579,7 +1579,7 @@ void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2)
  * is the randint0(3) below; it governs the relative density of
  * twists and turns in the labyrinth: smaller number, more twists.
  */
-void r_visit(int y1, int x1, int y2, int x2, int node, int dir, int *visited)
+void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited)
 {
 	int i, j, m, n, temp, x, y, adj[4];
 
