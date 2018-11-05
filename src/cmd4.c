@@ -1810,8 +1810,8 @@ void do_cmd_options_aux(int page, cptr info)
 static void do_cmd_options_win(void)
 {
 	int i, j, d;
-	int y = 0;
-	int x = 0;
+	TERM_POSITION y = 0;
+	TERM_POSITION x = 0;
 	char ch;
 	bool go = TRUE;
 	u32b old_flag[8];
@@ -5387,7 +5387,8 @@ static void do_cmd_knowledge_artifacts(void)
 {
 	IDX i;
 	IDX k;
-	int x, y, n = 0;
+	POSITION x, y;
+	int n = 0;
 	IDX z;
 	u16b why = 3;
 	IDX *who;
@@ -6402,8 +6403,8 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 		{
 			byte a;
 			char c;
-			int x = col + j;
-			int y = row + i;
+			TERM_POSITION x = col + j;
+			TERM_POSITION y = row + i;
 			int ia, ic;
 
 			/* Bigtile mode uses double width */

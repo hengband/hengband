@@ -594,7 +594,7 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under
 static int count_chests(POSITION *y, POSITION *x, bool trapped)
 {
 	int d, count;
-	IDX o_idx;
+	OBJECT_IDX o_idx;
 
 	object_type *o_ptr;
 
@@ -605,8 +605,8 @@ static int count_chests(POSITION *y, POSITION *x, bool trapped)
 	for (d = 0; d < 9; d++)
 	{
 		/* Extract adjacent (legal) location */
-		int yy = p_ptr->y + ddy_ddd[d];
-		int xx = p_ptr->x + ddx_ddd[d];
+		POSITION yy = p_ptr->y + ddy_ddd[d];
+		POSITION xx = p_ptr->x + ddx_ddd[d];
 
 		/* No (visible) chest is there */
 		if ((o_idx = chest_check(yy, xx, FALSE)) == 0) continue;

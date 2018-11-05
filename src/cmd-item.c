@@ -1810,31 +1810,31 @@ void do_cmd_query_symbol(void)
 		/* XTRA HACK WHATSEARCH */
 		if (temp[0])
 		{
-		  int xx;
-		  char temp2[80];
-  
-		  for (xx=0; temp[xx] && xx<80; xx++)
-		  {
+			TERM_POSITION xx;
+			char temp2[80];
+
+			for (xx = 0; temp[xx] && xx < 80; xx++)
+			{
 #ifdef JP
-		    if (iskanji( temp[xx])) { xx++; continue; }
+				if (iskanji(temp[xx])) { xx++; continue; }
 #endif
-		    if (isupper(temp[xx])) temp[xx] = (char)tolower(temp[xx]);
-		  }
-  
+				if (isupper(temp[xx])) temp[xx] = (char)tolower(temp[xx]);
+			}
+
 #ifdef JP
-		  strcpy(temp2, r_name+r_ptr->E_name);
+			strcpy(temp2, r_name + r_ptr->E_name);
 #else
-		  strcpy(temp2, r_name+r_ptr->name);
+			strcpy(temp2, r_name + r_ptr->name);
 #endif
-		  for (xx=0; temp2[xx] && xx<80; xx++)
-		    if (isupper(temp2[xx])) temp2[xx] = (char)tolower(temp2[xx]);
-  
+			for (xx = 0; temp2[xx] && xx < 80; xx++)
+				if (isupper(temp2[xx])) temp2[xx] = (char)tolower(temp2[xx]);
+
 #ifdef JP
-		  if (my_strstr(temp2, temp) || my_strstr(r_name + r_ptr->name, temp) )
+			if (my_strstr(temp2, temp) || my_strstr(r_name + r_ptr->name, temp))
 #else
-		  if (my_strstr(temp2, temp))
+			if (my_strstr(temp2, temp))
 #endif
-			  who[n++] = i;
+				who[n++] = i;
 		}
 
 		/* Collect "appropriate" monsters */
