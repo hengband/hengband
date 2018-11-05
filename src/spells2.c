@@ -2387,8 +2387,8 @@ static void cave_temp_room_lite(void)
 	/* Clear them all */
 	for (i = 0; i < temp_n; i++)
 	{
-		int y = temp_y[i];
-		int x = temp_x[i];
+		POSITION y = temp_y[i];
+		POSITION x = temp_x[i];
 
 		cave_type *c_ptr = &cave[y][x];
 
@@ -2473,8 +2473,8 @@ static void cave_temp_room_unlite(void)
 	/* Clear them all */
 	for (i = 0; i < temp_n; i++)
 	{
-		int y = temp_y[i];
-		int x = temp_x[i];
+		POSITION y = temp_y[i];
+		POSITION x = temp_x[i];
 		int j;
 
 		cave_type *c_ptr = &cave[y][x];
@@ -2546,11 +2546,11 @@ static void cave_temp_room_unlite(void)
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_open(int cy, int cx, bool (*pass_bold)(int, int))
+static int next_to_open(POSITION cy, POSITION cx, bool (*pass_bold)(POSITION, POSITION))
 {
 	int i;
 
-	int y, x;
+	POSITION y, x;
 
 	int len = 0;
 	int blen = 0;
@@ -2587,12 +2587,10 @@ static int next_to_open(int cy, int cx, bool (*pass_bold)(int, int))
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_walls_adj(int cy, int cx, bool (*pass_bold)(int, int))
+static int next_to_walls_adj(POSITION cy, POSITION cx, bool (*pass_bold)(POSITION, POSITION))
 {
-	int i;
-
-	int y, x;
-
+	DIRECTION i;
+	POSITION y, x;
 	int c = 0;
 
 	for (i = 0; i < 8; i++)
@@ -2615,7 +2613,7 @@ static int next_to_walls_adj(int cy, int cx, bool (*pass_bold)(int, int))
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static void cave_temp_room_aux(int y, int x, bool only_room, bool (*pass_bold)(int, int))
+static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pass_bold)(POSITION, POSITION))
 {
 	cave_type *c_ptr;
 
@@ -2667,7 +2665,7 @@ static void cave_temp_room_aux(int y, int x, bool only_room, bool (*pass_bold)(i
  * @param x 指定X座標
  * @return 光を通すならばtrueを返す。
  */
-static bool cave_pass_lite_bold(int y, int x)
+static bool cave_pass_lite_bold(POSITION y, POSITION x)
 {
 	return cave_los_bold(y, x);
 }
@@ -2678,7 +2676,7 @@ static bool cave_pass_lite_bold(int y, int x)
  * @param x 指定X座標
  * @return なし
  */
-static void cave_temp_lite_room_aux(int y, int x)
+static void cave_temp_lite_room_aux(POSITION y, POSITION x)
 {
 	cave_temp_room_aux(y, x, FALSE, cave_pass_lite_bold);
 }
@@ -2689,7 +2687,7 @@ static void cave_temp_lite_room_aux(int y, int x)
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
-static bool cave_pass_dark_bold(int y, int x)
+static bool cave_pass_dark_bold(POSITION y, POSITION x)
 {
 	return cave_have_flag_bold(y, x, FF_PROJECT);
 }
@@ -2701,7 +2699,7 @@ static bool cave_pass_dark_bold(int y, int x)
  * @param x 指定X座標
  * @return なし
  */
-static void cave_temp_unlite_room_aux(int y, int x)
+static void cave_temp_unlite_room_aux(POSITION y, POSITION x)
 {
 	cave_temp_room_aux(y, x, TRUE, cave_pass_dark_bold);
 }
@@ -2713,9 +2711,10 @@ static void cave_temp_unlite_room_aux(int y, int x)
  * @param x1 指定X座標
  * @return なし
  */
-void lite_room(int y1, int x1)
+void lite_room(POSITION y1, POSITION x1)
 {
-	int i, x, y;
+	int i;
+	POSITION x, y;
 
 	/* Add the initial grid */
 	cave_temp_lite_room_aux(y1, x1);
@@ -3479,7 +3478,7 @@ bool door_creation(void)
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool trap_creation(int y, int x)
+bool trap_creation(POSITION y, POSITION x)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 	return (project(0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
@@ -4240,7 +4239,7 @@ bool rush_attack(bool *mdeath)
  */
 void remove_all_mirrors(bool explode)
 {
-	int x, y;
+	POSITION x, y;
 
 	for (x = 0; x < cur_wid; x++)
 	{
@@ -5131,7 +5130,8 @@ void stop_mouth(void)
 bool_hack vampirism(void)
 {
 	DIRECTION dir;
-	int x, y, dummy;
+	POSITION x, y;
+	int dummy;
 	cave_type *c_ptr;
 
 	if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)

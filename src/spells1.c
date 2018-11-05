@@ -7984,22 +7984,22 @@ bool binding_field(HIT_POINT dam)
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-void seal_of_mirror( HIT_POINT dam )
+void seal_of_mirror(HIT_POINT dam)
 {
-	int x,y;
+	POSITION x, y;
 
-	for( x = 0 ; x < cur_wid ; x++ )
+	for (x = 0; x < cur_wid; x++)
 	{
-		for( y = 0 ; y < cur_hgt ; y++ )
+		for (y = 0; y < cur_hgt; y++)
 		{
-			if( is_mirror_grid(&cave[y][x]))
+			if (is_mirror_grid(&cave[y][x]))
 			{
-				if(project_m(0,0,y,x,dam,GF_GENOCIDE,
-							 (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP),TRUE))
+				if (project_m(0, 0, y, x, dam, GF_GENOCIDE,
+					(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
 				{
-					if( !cave[y][x].m_idx )
+					if (!cave[y][x].m_idx)
 					{
-						remove_mirror(y,x);
+						remove_mirror(y, x);
 					}
 				}
 			}
