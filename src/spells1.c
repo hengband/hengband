@@ -110,7 +110,7 @@ static void next_mirror(int* next_y, int* next_x, int cury, int curx)
 {
 	int mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
 	int mirror_num = 0;			  /* 鏡の数 */
-	int x, y;
+	POSITION x, y;
 	int num;
 
 	for (x = 0; x < cur_wid; x++)
@@ -704,10 +704,10 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  * XXX XXX XXX Perhaps we should affect doors?
  * </pre>
  */
-static bool project_f(int who, int r, int y, int x, HIT_POINT dam, int typ)
+static bool project_f(int who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, int typ)
 {
-	cave_type	   *c_ptr = &cave[y][x];
-	feature_type	*f_ptr = &f_info[c_ptr->feat];
+	cave_type *c_ptr = &cave[y][x];
+	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	bool obvious = FALSE;
 	bool known = player_has_los_bold(y, x);
@@ -6546,13 +6546,13 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
 
 	while (bdis <= mdis)
 	{
-		int x, y;
+		POSITION x, y;
 
 		if ((0 < dist) && (path_n < dist))
 		{
-			int ny = GRID_Y(path_g[path_n]);
-			int nx = GRID_X(path_g[path_n]);
-			int nd = distance(ny, nx, y1, x1);
+			POSITION ny = GRID_Y(path_g[path_n]);
+			POSITION nx = GRID_X(path_g[path_n]);
+			POSITION nd = distance(ny, nx, y1, x1);
 
 			/* Get next base point */
 			if (bdis >= nd)
@@ -7836,63 +7836,62 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-bool binding_field( HIT_POINT dam )
+bool binding_field(HIT_POINT dam)
 {
-	int mirror_x[10],mirror_y[10]; /* 鏡はもっと少ない */
-	int mirror_num=0;			  /* 鏡の数 */
-	int x,y;
-	int centersign;
-	int x1,x2,y1,y2;
+	POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
+	int mirror_num = 0;			  /* 鏡の数 */
+	POSITION x, y;
+	POSITION centersign;
+	POSITION x1, x2, y1, y2;
 	u16b p;
-	int msec= delay_factor*delay_factor*delay_factor;
+	int msec = delay_factor*delay_factor*delay_factor;
 
 	/* 三角形の頂点 */
-	int point_x[3];
-	int point_y[3];
+	POSITION point_x[3];
+	POSITION point_y[3];
 
 	/* Default target of monsterspell is player */
-	monster_target_y=p_ptr->y;
-	monster_target_x=p_ptr->x;
+	monster_target_y = p_ptr->y;
+	monster_target_x = p_ptr->x;
 
-	for( x=0 ; x < cur_wid ; x++ )
+	for (x = 0; x < cur_wid; x++)
 	{
-		for( y=0 ; y < cur_hgt ; y++ )
+		for (y = 0; y < cur_hgt; y++)
 		{
-			if( is_mirror_grid(&cave[y][x]) &&
-				distance(p_ptr->y,p_ptr->x,y,x) <= MAX_RANGE &&
-				distance(p_ptr->y,p_ptr->x,y,x) != 0 &&
-				player_has_los_bold(y,x) &&
+			if (is_mirror_grid(&cave[y][x]) &&
+				distance(p_ptr->y, p_ptr->x, y, x) <= MAX_RANGE &&
+				distance(p_ptr->y, p_ptr->x, y, x) != 0 &&
+				player_has_los_bold(y, x) &&
 				projectable(p_ptr->y, p_ptr->x, y, x)
-				){
-				mirror_y[mirror_num]=y;
-				mirror_x[mirror_num]=x;
+				) {
+				mirror_y[mirror_num] = y;
+				mirror_x[mirror_num] = x;
 				mirror_num++;
 			}
 		}
 	}
 
-	if( mirror_num < 2 )return FALSE;
+	if (mirror_num < 2)return FALSE;
 
-	point_x[0] = randint0( mirror_num );
+	point_x[0] = randint0(mirror_num);
 	do {
-	  point_x[1] = randint0( mirror_num );
-	}
-	while( point_x[0] == point_x[1] );
+		point_x[1] = randint0(mirror_num);
+	} while (point_x[0] == point_x[1]);
 
-	point_y[0]=mirror_y[point_x[0]];
-	point_x[0]=mirror_x[point_x[0]];
-	point_y[1]=mirror_y[point_x[1]];
-	point_x[1]=mirror_x[point_x[1]];
-	point_y[2]=p_ptr->y;
-	point_x[2]=p_ptr->x;
+	point_y[0] = mirror_y[point_x[0]];
+	point_x[0] = mirror_x[point_x[0]];
+	point_y[1] = mirror_y[point_x[1]];
+	point_x[1] = mirror_x[point_x[1]];
+	point_y[2] = p_ptr->y;
+	point_x[2] = p_ptr->x;
 
-	x=point_x[0]+point_x[1]+point_x[2];
-	y=point_y[0]+point_y[1]+point_y[2];
+	x = point_x[0] + point_x[1] + point_x[2];
+	y = point_y[0] + point_y[1] + point_y[2];
 
-	centersign = (point_x[0]*3-x)*(point_y[1]*3-y)
-		- (point_y[0]*3-y)*(point_x[1]*3-x);
-	if( centersign == 0 )return FALSE;
-				
+	centersign = (point_x[0] * 3 - x)*(point_y[1] * 3 - y)
+		- (point_y[0] * 3 - y)*(point_x[1] * 3 - x);
+	if (centersign == 0)return FALSE;
+
 	x1 = point_x[0] < point_x[1] ? point_x[0] : point_x[1];
 	x1 = x1 < point_x[2] ? x1 : point_x[2];
 	y1 = point_y[0] < point_y[1] ? point_y[0] : point_y[1];
@@ -7903,78 +7902,78 @@ bool binding_field( HIT_POINT dam )
 	y2 = point_y[0] > point_y[1] ? point_y[0] : point_y[1];
 	y2 = y2 > point_y[2] ? y2 : point_y[2];
 
-	for( y=y1 ; y <=y2 ; y++ ){
-		for( x=x1 ; x <=x2 ; x++ ){
-			if( centersign*( (point_x[0]-x)*(point_y[1]-y)
-					 -(point_y[0]-y)*(point_x[1]-x)) >=0 &&
-				centersign*( (point_x[1]-x)*(point_y[2]-y)
-					 -(point_y[1]-y)*(point_x[2]-x)) >=0 &&
-				centersign*( (point_x[2]-x)*(point_y[0]-y)
-					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
+	for (y = y1; y <= y2; y++) {
+		for (x = x1; x <= x2; x++) {
+			if (centersign*((point_x[0] - x)*(point_y[1] - y)
+				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
+				centersign*((point_x[1] - x)*(point_y[2] - y)
+					- (point_y[1] - y)*(point_x[2] - x)) >= 0 &&
+				centersign*((point_x[2] - x)*(point_y[0] - y)
+					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
 				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
 					/* Visual effects */
-					if(!(p_ptr->blind)
-					   && panel_contains(y,x)){
-					  p = bolt_pict(y,x,y,x, GF_MANA );
-					  print_rel(PICT_C(p), PICT_A(p),y,x);
-					  move_cursor_relative(y, x);
-					  /*if (fresh_before)*/ Term_fresh();
-					  Term_xtra(TERM_XTRA_DELAY, msec);
+					if (!(p_ptr->blind)
+						&& panel_contains(y, x)) {
+						p = bolt_pict(y, x, y, x, GF_MANA);
+						print_rel(PICT_C(p), PICT_A(p), y, x);
+						move_cursor_relative(y, x);
+						/*if (fresh_before)*/ Term_fresh();
+						Term_xtra(TERM_XTRA_DELAY, msec);
 					}
 				}
 			}
 		}
 	}
-	for( y=y1 ; y <=y2 ; y++ ){
-		for( x=x1 ; x <=x2 ; x++ ){
-			if( centersign*( (point_x[0]-x)*(point_y[1]-y)
-					 -(point_y[0]-y)*(point_x[1]-x)) >=0 &&
-				centersign*( (point_x[1]-x)*(point_y[2]-y)
-					 -(point_y[1]-y)*(point_x[2]-x)) >=0 &&
-				centersign*( (point_x[2]-x)*(point_y[0]-y)
-					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
+	for (y = y1; y <= y2; y++) {
+		for (x = x1; x <= x2; x++) {
+			if (centersign*((point_x[0] - x)*(point_y[1] - y)
+				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
+				centersign*((point_x[1] - x)*(point_y[2] - y)
+					- (point_y[1] - y)*(point_x[2] - x)) >= 0 &&
+				centersign*((point_x[2] - x)*(point_y[0] - y)
+					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
 				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
-					(void)project_f(0,0,y,x,dam,GF_MANA); 
+					(void)project_f(0, 0, y, x, dam, GF_MANA);
 				}
 			}
 		}
 	}
-	for( y=y1 ; y <=y2 ; y++ ){
-		for( x=x1 ; x <=x2 ; x++ ){
-			if( centersign*( (point_x[0]-x)*(point_y[1]-y)
-					 -(point_y[0]-y)*(point_x[1]-x)) >=0 &&
-				centersign*( (point_x[1]-x)*(point_y[2]-y)
-					 -(point_y[1]-y)*(point_x[2]-x)) >=0 &&
-				centersign*( (point_x[2]-x)*(point_y[0]-y)
-					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
+	for (y = y1; y <= y2; y++) {
+		for (x = x1; x <= x2; x++) {
+			if (centersign*((point_x[0] - x)*(point_y[1] - y)
+				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
+				centersign*((point_x[1] - x)*(point_y[2] - y)
+					- (point_y[1] - y)*(point_x[2] - x)) >= 0 &&
+				centersign*((point_x[2] - x)*(point_y[0] - y)
+					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
 				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
-					(void)project_o(0,0,y,x,dam,GF_MANA); 
+					(void)project_o(0, 0, y, x, dam, GF_MANA);
 				}
 			}
 		}
 	}
-	for( y=y1 ; y <=y2 ; y++ ){
-		for( x=x1 ; x <=x2 ; x++ ){
-			if( centersign*( (point_x[0]-x)*(point_y[1]-y)
-					 -(point_y[0]-y)*(point_x[1]-x)) >=0 &&
-				centersign*( (point_x[1]-x)*(point_y[2]-y)
-					 -(point_y[1]-y)*(point_x[2]-x)) >=0 &&
-				centersign*( (point_x[2]-x)*(point_y[0]-y)
-					 -(point_y[2]-y)*(point_x[0]-x)) >=0 )
+	for (y = y1; y <= y2; y++) {
+		for (x = x1; x <= x2; x++) {
+			if (centersign*((point_x[0] - x)*(point_y[1] - y)
+				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
+				centersign*((point_x[1] - x)*(point_y[2] - y)
+					- (point_y[1] - y)*(point_x[2] - x)) >= 0 &&
+				centersign*((point_x[2] - x)*(point_y[0] - y)
+					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
 				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
-					(void)project_m(0,0,y,x,dam,GF_MANA,
-					  (PROJECT_GRID|PROJECT_ITEM|PROJECT_KILL|PROJECT_JUMP),TRUE);
+					(void)project_m(0, 0, y, x, dam, GF_MANA,
+						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
 				}
 			}
 		}
 	}
-	if( one_in_(7) ){
+	if (one_in_(7)) {
 		msg_print(_("鏡が結界に耐えきれず、壊れてしまった。", "The field broke a mirror"));
-		remove_mirror(point_y[0],point_x[0]);
+		remove_mirror(point_y[0], point_x[0]);
 	}
 
 	return TRUE;

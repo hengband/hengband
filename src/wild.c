@@ -315,9 +315,9 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
  * If corner is set then only the corners of the area are needed.
  * </pre>
  */
-static void generate_area(int y, int x, bool border, bool corner)
+static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 {
-	int x1, y1;
+	POSITION x1, y1;
 
 	/* Number of the town (if any) */
 	p_ptr->town_num = (s16b)wilderness[y][x].town;
@@ -916,7 +916,7 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
  */
 void seed_wilderness(void)
 {
-	int x, y;
+	POSITION x, y;
 
 	/* Init wilderness seeds */
 	for (x = 0; x < max_wild_x; x++)

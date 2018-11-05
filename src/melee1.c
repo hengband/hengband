@@ -434,9 +434,9 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 * @details
 * If no "weapon" is available, then "punch" the monster one time.
 */
-static void py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, BIT_FLAGS mode)
+static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, BIT_FLAGS mode)
 {
-	int		num = 0, bonus, chance, vir;
+	int num = 0, bonus, chance, vir;
 	HIT_POINT k;
 
 	cave_type       *c_ptr = &cave[y][x];

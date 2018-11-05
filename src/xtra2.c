@@ -425,10 +425,10 @@ void complete_quest(int quest_num)
  * @brief 現在フロアに残っている敵モンスターの数を返す /
  * @return 現在の敵モンスターの数
  */
-static int count_all_hostile_monsters(void)
+static MONSTER_NUMBER count_all_hostile_monsters(void)
 {
-	int x, y;
-	int number_mon = 0;
+	POSITION x, y;
+	MONSTER_NUMBER number_mon = 0;
 
 	for (x = 0; x < cur_wid; ++ x)
 	{
@@ -438,7 +438,7 @@ static int count_all_hostile_monsters(void)
 
 			if (m_idx > 0 && is_hostile(&m_list[m_idx]))
 			{
-				++ number_mon;
+				++number_mon;
 			}
 		}
 	}
@@ -2224,8 +2224,8 @@ bool change_panel_xy(int y, int x)
  */
 void verify_panel(void)
 {
-	int y = p_ptr->y;
-	int x = p_ptr->x;
+	POSITION y = p_ptr->y;
+	POSITION x = p_ptr->x;
 	int wid, hgt;
 
 	int prow_min;
@@ -2764,8 +2764,7 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 static bool target_set_accept(int y, int x)
 {
 	cave_type *c_ptr;
-
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Bounds */
 	if (!(in_bounds(y, x))) return (FALSE);
@@ -2773,10 +2772,8 @@ static bool target_set_accept(int y, int x)
 	/* Player grid is always interesting */
 	if (player_bold(y, x)) return (TRUE);
 
-
 	/* Handle hallucination */
 	if (p_ptr->image) return (FALSE);
-
 
 	/* Examine the grid */
 	c_ptr = &cave[y][x];

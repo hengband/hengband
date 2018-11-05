@@ -6434,13 +6434,13 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 /*
  * Place the cursor at the collect position for visual mode
  */
-static void place_visual_list_cursor(int col, int row, byte a, byte c, byte attr_top, byte char_left)
+static void place_visual_list_cursor(TERM_POSITION col, TERM_POSITION row, byte a, byte c, byte attr_top, byte char_left)
 {
 	int i = (a & 0x7f) - attr_top;
 	int j = c - char_left;
 
-	int x = col + j;
-	int y = row + i;
+	TERM_POSITION x = col + j;
+	TERM_POSITION y = row + i;
 
 	/* Bigtile mode uses double width */
 	if (use_bigtile) x += j;
@@ -8361,7 +8361,7 @@ static void do_cmd_knowledge_home(void)
 		if (st_ptr->stock_num)
 		{
 #ifdef JP
-			int x = 1;
+			TERM_POSITION x = 1;
 #endif
 			/* Header with name of the town */
 			fprintf(fff, _("  [ 我が家のアイテム ]\n", "  [Home Inventory]\n"));
