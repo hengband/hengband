@@ -2194,10 +2194,10 @@ bool change_panel(int dy, int dx)
  * Also used in do_cmd_locate
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-bool change_panel_xy(int y, int x)
+static bool change_panel_xy(POSITION y, POSITION x)
 {
-	int dy = 0, dx = 0;
-	int wid, hgt;
+	POSITION dy = 0, dx = 0;
+	TERM_POSITION wid, hgt;
 
 	/* Get size */
 	get_screen_size(&wid, &hgt);
