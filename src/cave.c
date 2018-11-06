@@ -4417,8 +4417,8 @@ void wiz_lite(bool ninja)
 				/* Scan all neighbors */
 				for (i = 0; i < 9; i++)
 				{
-					int yy = y + ddy_ddd[i];
-					int xx = x + ddx_ddd[i];
+					POSITION yy = y + ddy_ddd[i];
+					POSITION xx = x + ddx_ddd[i];
 
 					/* Get the grid */
 					c_ptr = &cave[yy][xx];

@@ -400,9 +400,10 @@ void add_door(POSITION x, POSITION y)
 * grids which are not in rooms.  We might want to also count stairs,\n
 * open doors, closed doors, etc.
 */
-static int next_to_corr(int y1, int x1)
+static int next_to_corr(POSITION y1, POSITION x1)
 {
-	int i, y, x, k = 0;
+	int i, k = 0;
+	POSITION y, x;
 
 	cave_type *c_ptr;
 
@@ -728,7 +729,7 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
  * @param x2 終点X座標
  * @return なし
  */
-void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2)
+void correct_dir(int *rdir, int *cdir, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	/* Extract vertical and horizontal directions */
 	*rdir = (y1 == y2) ? 0 : (y1 < y2) ? 1 : -1;

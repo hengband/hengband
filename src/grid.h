@@ -279,7 +279,7 @@ extern void vault_objects(POSITION y, POSITION x, int num);
 extern void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd);
 extern void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
 
-extern void correct_dir(int *rdir, int *cdir, int y1, int x1, int y2, int x2);
+extern void correct_dir(int *rdir, int *cdir, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 
 extern void rand_dir(int *rdir, int *cdir);
 

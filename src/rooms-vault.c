@@ -197,10 +197,11 @@ static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION 
 
 
 /* Create a random vault out of a fractal cave */
-static void build_cave_vault(int x0, int y0, int xsiz, int ysiz)
+static void build_cave_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
-	int grd, roug, cutoff, xhsize, yhsize, xsize, ysize, x, y;
+	int grd, roug, cutoff;
 	bool done, light, room;
+	POSITION xhsize, yhsize, xsize, ysize, x, y;
 
 	/* round to make sizes even */
 	xhsize = xsiz / 2;
@@ -667,7 +668,7 @@ bool build_type8(void)
 	POSITION xval, yval;
 	POSITION x, y;
 	int transno;
-	int xoffset, yoffset;
+	POSITION xoffset, yoffset;
 
 	/* Pick a greater vault */
 	for (dummy = 0; dummy < SAFE_MAX_ATTEMPTS; dummy++)
@@ -748,12 +749,12 @@ bool build_type8(void)
 * This is made by two concentric "crypts" with perpendicular
 * walls creating the cross-hairs.
 */
-static void build_target_vault(int x0, int y0, int xsize, int ysize)
+static void build_target_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
-	int rad, x, y;
+	POSITION rad, x, y;
 
 	/* Make a random metric */
-	int h1, h2, h3, h4;
+	POSITION h1, h2, h3, h4;
 	h1 = randint1(32) - 16;
 	h2 = randint1(16);
 	h3 = randint1(32);
