@@ -3079,10 +3079,10 @@ bool fire_blast(EFFECT_ID typ, DIRECTION dir, int dd, int ds, int num, int dev)
  */
 bool teleport_swap(DIRECTION dir)
 {
-	int tx, ty;
-	cave_type * c_ptr;
-	monster_type * m_ptr;
-	monster_race * r_ptr;
+	POSITION tx, ty;
+	cave_type* c_ptr;
+	monster_type* m_ptr;
+	monster_race* r_ptr;
 
 	if ((dir == 5) && target_okay())
 	{
@@ -3226,7 +3226,7 @@ bool fire_beam(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(int prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt_or_beam(PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
 {
 	if (randint0(100) < prob)
 	{

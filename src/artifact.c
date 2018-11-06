@@ -1677,7 +1677,7 @@ static void give_activation_power(object_type *o_ptr)
  */
 static void get_random_name(object_type *o_ptr, char *return_name, bool armour, int power)
 {
-	int prob = randint1(100);
+	PERCENTAGE prob = randint1(100);
 
 	if (prob <= SINDARIN_NAME)
 	{

@@ -4846,7 +4846,8 @@ static bool kind_is_good(KIND_OBJECT_IDX k_idx)
  */
 bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 {
-	int prob, base;
+	PERCENTAGE prob;
+	DEPTH base;
 
 
 	/* Chance of "special object" */
@@ -5536,7 +5537,7 @@ typedef struct
 {
 	OBJECT_TYPE_VALUE tval;
 	OBJECT_SUBTYPE_VALUE sval;
-	int prob;
+	PERCENTAGE prob;
 	byte flag;
 } amuse_type;
 

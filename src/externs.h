@@ -935,7 +935,7 @@ extern bool fire_bolt(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool fire_blast(EFFECT_ID typ, DIRECTION dir, int dd, int ds, int num, int dev);
 extern void call_chaos(void);
 extern bool fire_beam(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
-extern bool fire_bolt_or_beam(int prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
+extern bool fire_bolt_or_beam(PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool lite_line(DIRECTION dir, HIT_POINT dam);
 extern bool hypodynamic_bolt(DIRECTION dir, HIT_POINT dam);
 extern bool death_ray(DIRECTION dir, int plev);

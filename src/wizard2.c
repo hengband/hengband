@@ -59,7 +59,7 @@ void do_cmd_rerate_aux(void)
  */
 void do_cmd_rerate(bool display)
 {
-	int percent;
+	PERCENTAGE percent;
 
 	/* Rerate */
 	do_cmd_rerate_aux();
@@ -259,7 +259,7 @@ static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_PO
 		int total_frac = 0;
 		for (j = 0; j < alloc_kind_size; j++)
 		{
-			int prob = 0;
+			PERCENTAGE prob = 0;
 
 			if (table[j].level <= i)
 			{

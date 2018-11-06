@@ -48,7 +48,7 @@
  * @param prob 基本確率(%)
  * @return 適した選択を取るならばTRUEを返す。
  */
-static bool int_outof(monster_race *r_ptr, int prob)
+static bool int_outof(monster_race *r_ptr, PERCENTAGE prob)
 {
 	/* Non-Smart monsters are half as "smart" */
 	if (!(r_ptr->flags2 & RF2_SMART)) prob = prob / 2;
