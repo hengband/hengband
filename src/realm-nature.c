@@ -28,7 +28,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの全ての見えるモンスターを感知する。", "Detects all monsters in your vicinity unless invisible.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -66,7 +66,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの全ての罠と扉を感知する。", "Detects traps, doors, and stairs in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -105,7 +105,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 2;
 			int sides = plev / 2;
-			int rad = (plev / 10) + 1;
+			POSITION rad = (plev / 10) + 1;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -437,7 +437,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Shakes dungeon structure, and results in random swapping of floors and walls.");
 
 		{
-			int rad = 10;
+			POSITION rad = 10;
 
 			if (info) return info_radius(rad);
 
@@ -482,7 +482,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 70 + plev * 3 / 2;
-			int rad = plev / 12 + 1;
+			POSITION rad = plev / 12 + 1;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -501,7 +501,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 90 + plev * 3 / 2;
-			int rad = plev / 12 + 1;
+			POSITION rad = plev / 12 + 1;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -520,7 +520,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 100 + plev * 3 / 2;
-			int rad = plev / 12 + 1;
+			POSITION rad = plev / 12 + 1;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -539,7 +539,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 150;
-			int rad = 8;
+			POSITION rad = 8;
 
 			if (info) return info_damage(0, 0, dam / 2);
 

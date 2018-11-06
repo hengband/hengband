@@ -46,7 +46,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("隣接する罠と扉を破壊する。", "Destroys all traps in adjacent squares.");
 
 		{
-			int rad = 1;
+			POSITION rad = 1;
 
 			if (info) return info_radius(rad);
 
@@ -64,7 +64,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 2;
 			int sides = plev / 2;
-			int rad = (plev / 10) + 1;
+			POSITION rad = (plev / 10) + 1;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -99,7 +99,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 3;
 			int sides = 5;
-			int rad = (plev < 30) ? 2 : 3;
+			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
 			if (IS_WIZARD_CLASS())
@@ -221,7 +221,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 60 + plev;
-			int rad = plev / 10 + 2;
+			POSITION rad = plev / 10 + 2;
 
 			if (info) return info_damage(0, 0, dam / 2);
 
@@ -258,7 +258,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev + 55;
-			int rad = 2;
+			POSITION rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -310,7 +310,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev * 2 + 99;
-			int rad = plev / 5;
+			POSITION rad = plev / 5;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -380,7 +380,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev + 70;
-			int rad = 3 + plev / 40;
+			POSITION rad = 3 + plev / 40;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -416,7 +416,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 120 + plev * 2;
-			int rad = 2;
+			POSITION rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -497,7 +497,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev * 2;
-			int rad = 2;
+			POSITION rad = 2;
 
 			if (info) return info_multi_damage(dam);
 
@@ -514,7 +514,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 300 + 3 * plev;
-			int rad = 8;
+			POSITION rad = 8;
 
 			if (info) return info_damage(0, 0, dam / 2);
 
@@ -558,7 +558,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 300 + plev * 4;
-			int rad = 4;
+			POSITION rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -576,7 +576,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = p_ptr->chp;
-			int rad = 2;
+			POSITION rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
 

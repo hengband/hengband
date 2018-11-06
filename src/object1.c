@@ -520,7 +520,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 	cptr            info[128];
 	char o_name[MAX_NLEN];
 	int wid, hgt;
-	int rad;
+	POSITION rad;
 	char desc[256];
 
 	int trivial_info = 0;
@@ -627,12 +627,12 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 		
 	if (have_flag(flgs, TR_LITE_FUEL) && o_ptr->name2 != EGO_LITE_DARKNESS)
 	{
-		if(rad > 0) sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), rad);	
+		if(rad > 0) sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);	
 	}
 	else
 	{
-		if(rad > 0) sprintf(desc, _("それは永遠なる明かり(半径 %d)を授ける。", "It provides light (radius %d) forever."), rad);	
-		if(rad < 0) sprintf(desc, _("それは明かりの半径を狭める(半径に-%d)。", "It decreases radius of light source by %d."), -rad);
+		if(rad > 0) sprintf(desc, _("それは永遠なる明かり(半径 %d)を授ける。", "It provides light (radius %d) forever."), (int)rad);
+		if(rad < 0) sprintf(desc, _("それは明かりの半径を狭める(半径に-%d)。", "It decreases radius of light source by %d."), (int)-rad);
 	}
 	
 	if(rad != 0) info[i++] = desc;

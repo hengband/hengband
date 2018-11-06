@@ -25,7 +25,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの全ての見えるモンスターを感知する。", "Detects all monsters in your vicinity unless invisible.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -57,7 +57,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの全ての扉と罠を感知する。", "Detects traps, doors, and stairs in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -77,7 +77,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 2;
 			int sides = plev / 2;
-			int rad = plev / 10 + 1;
+			POSITION rad = plev / 10 + 1;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -161,7 +161,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("周辺の地形を感知する。", "Maps nearby area.");
 
 		{
-			int rad = DETECT_RAD_MAP;
+			POSITION rad = DETECT_RAD_MAP;
 
 			if (info) return info_radius(rad);
 
@@ -259,7 +259,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -287,7 +287,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの全てのアイテムと財宝を感知する。", "Detects all treasures and items in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 

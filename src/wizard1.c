@@ -1252,7 +1252,7 @@ static void analyze_sustains(object_type *o_ptr, cptr *sustain_list)
 static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 {
 	u32b flgs[TR_FLAG_SIZE];
-	int rad;
+	POSITION rad;
 	char desc[256];
 
 	object_flags(o_ptr, flgs);
@@ -1278,12 +1278,12 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 
 	if (have_flag(flgs, TR_LITE_FUEL))
 	{
-		if(rad > 0) sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), rad);	
+		if(rad > 0) sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);	
 	}
 	else
 	{
-		if(rad > 0) sprintf(desc, _("永久光源(半径 %d)", "Permanent Light(radius %d)"), rad);	
-		if(rad < 0) sprintf(desc, _("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), -rad);
+		if(rad > 0) sprintf(desc, _("永久光源(半径 %d)", "Permanent Light(radius %d)"), (int)rad);	
+		if(rad < 0) sprintf(desc, _("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), (int)-rad);
 	}
 
 	if(rad != 0) *misc_list++ = quark_str(quark_add(desc));

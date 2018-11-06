@@ -158,7 +158,7 @@ cptr info_power_dice(int dice, int sides)
  * @param rad 効果半径
  * @return フォーマットに従い整形された文字列
  */
-cptr info_radius(int rad)
+cptr info_radius(POSITION rad)
 {
 	return format(_("半径:%d", "rad %d"), rad);
 }

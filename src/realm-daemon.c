@@ -46,7 +46,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの生命のないモンスターを感知する。", "Detects all nonliving monsters in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -151,7 +151,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 3;
 			int sides = 6;
-			int rad = (plev < 30) ? 2 : 3;
+			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
 			if (IS_WIZARD_CLASS())
@@ -194,7 +194,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("周辺の地形を感知する。", "Maps nearby area.");
 
 		{
-			int rad = DETECT_RAD_MAP;
+			POSITION rad = DETECT_RAD_MAP;
 
 			if (info) return info_radius(rad);
 
@@ -246,7 +246,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev + 55;
-			int rad = 2;
+			POSITION rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -277,7 +277,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev * 3 / 2 + 100;
-			int rad = plev / 20 + 2;
+			POSITION rad = plev / 20 + 2;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -374,7 +374,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = (55 + plev) * 2;
-			int rad = 3;
+			POSITION rad = 3;
 
 			if (info) return info_damage(0, 0, dam / 2);
 
@@ -392,7 +392,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev * 3 / 2 + 80;
-			int rad = 2 + plev / 40;
+			POSITION rad = 2 + plev / 40;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -447,7 +447,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 100 + plev * 2;
-			int rad = 4;
+			POSITION rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -511,7 +511,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			HIT_POINT dam = 50 + plev;
 			int power = 20 + plev;
-			int rad = 3 + plev / 20;
+			POSITION rad = 3 + plev / 20;
 
 			if (info) return format("%s%d+%d", s_dam, dam / 2, dam / 2);
 
@@ -555,7 +555,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev * 15;
-			int rad = plev / 5;
+			POSITION rad = plev / 5;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -575,7 +575,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 600;
-			int rad = 0;
+			POSITION rad = 0;
 
 			if (info) return info_damage(0, 0, dam);
 

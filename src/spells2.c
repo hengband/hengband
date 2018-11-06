@@ -2797,7 +2797,7 @@ void unlite_room(POSITION y1, POSITION x1)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_area(HIT_POINT dam, int rad)
+bool lite_area(HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
@@ -2830,7 +2830,7 @@ bool lite_area(HIT_POINT dam, int rad)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool unlite_area(HIT_POINT dam, int rad)
+bool unlite_area(HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
@@ -2866,7 +2866,7 @@ bool unlite_area(HIT_POINT dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(int typ, DIRECTION dir, HIT_POINT dam, int rad)
+bool fire_ball(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	int tx, ty;
 
@@ -2903,7 +2903,7 @@ bool fire_ball(int typ, DIRECTION dir, HIT_POINT dam, int rad)
 * Affect grids, objects, and monsters
 * </pre>
 */
-bool fire_breath(int typ, DIRECTION dir, HIT_POINT dam, int rad)
+bool fire_breath(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	return fire_ball(typ, dir, dam, -rad);
 }
@@ -2923,7 +2923,7 @@ bool fire_breath(int typ, DIRECTION dir, HIT_POINT dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(int typ, DIRECTION dir, HIT_POINT dam, int rad)
+bool fire_rocket(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	int tx, ty;
 
@@ -2959,7 +2959,7 @@ bool fire_rocket(int typ, DIRECTION dir, HIT_POINT dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(int typ, DIRECTION dir, HIT_POINT dam, int rad)
+bool fire_ball_hide(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	int tx, ty;
 
@@ -4437,7 +4437,7 @@ void wild_magic(int spell)
 * @param rad 効力の半径
 * @return なし
 */
-void cast_meteor(HIT_POINT dam, int rad)
+void cast_meteor(HIT_POINT dam, POSITION rad)
 {
 	int i;
 	int b = 10 + randint1(10);
@@ -4482,7 +4482,7 @@ void cast_meteor(HIT_POINT dam, int rad)
 * @param rad 効力の半径
 * @return ターゲットを指定し、実行したならばTRUEを返す。
 */
-bool cast_wrath_of_the_god(HIT_POINT dam, int rad)
+bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
 {
 	POSITION x, y, tx, ty;
 	POSITION nx, ny;

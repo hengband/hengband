@@ -29,7 +29,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの生命のないモンスターを感知する。", "Detects all nonliving monsters in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -48,7 +48,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 3 + (plev - 1) / 5;
 			int sides = 4;
-			int rad = 0;
+			POSITION rad = 0;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -89,7 +89,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの邪悪なモンスターを感知する。", "Detects all evil monsters in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -106,7 +106,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 10 + plev / 2;
-			int rad = 2;
+			POSITION rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -198,7 +198,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 3;
 			int sides = 6;
-			int rad = (plev < 30) ? 2 : 3;
+			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
 			if (IS_WIZARD_CLASS())
@@ -243,7 +243,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = (30 + plev) * 2;
-			int rad = plev / 10 + 2;
+			POSITION rad = plev / 10 + 2;
 
 			if (info) return info_damage(0, 0, dam / 2);
 
@@ -491,7 +491,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 100 + plev * 2;
-			int rad = 4;
+			POSITION rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -633,7 +633,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 666;
-			int rad = 3;
+			POSITION rad = 3;
 
 			if (info) return info_damage(0, 0, dam);
 

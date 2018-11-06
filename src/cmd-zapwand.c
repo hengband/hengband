@@ -13,7 +13,7 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool ma
 {
 	int ident = FALSE;
 	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
-	int rad = powerful ? 3 : 2;
+	POSITION rad = powerful ? 3 : 2;
 
 	/* XXX Hack -- Wand of wonder can do anything before it */
 	if (sval == SV_WAND_WONDER)

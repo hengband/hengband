@@ -218,7 +218,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 2;
 			int sides = plev / 2;
-			int rad = plev / 10 + 1;
+			POSITION rad = plev / 10 + 1;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -305,7 +305,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -390,7 +390,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int rad = 1;
+			POSITION rad = 1;
 
 			if (info) return info_radius(rad);
 
@@ -623,7 +623,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くのモンスターをテレポートさせる。抵抗されると無効。", "Teleports all nearby monsters away unless resisted.");
 
 		{
-			int rad = plev / 15 + 1;
+			POSITION rad = plev / 15 + 1;
 			int power = plev * 3 + 1;
 
 			if (info) return info_radius(rad);
@@ -752,7 +752,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int rad = 10;
+			POSITION rad = 10;
 
 			if (info) return info_radius(rad);
 
@@ -910,7 +910,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 50 + plev;
 			int sides = 10;
-			int rad = 0;
+			POSITION rad = 0;
 
 			if (info) return info_damage(dice, sides, 0);
 

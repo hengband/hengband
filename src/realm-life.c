@@ -68,7 +68,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 2;
 			int sides = plev / 2;
-			int rad = plev / 10 + 1;
+			POSITION rad = plev / 10 + 1;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -83,7 +83,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("罠 & 隠し扉感知", "Detect Doors & Traps");
 		if (desc) return _("近くの全ての罠と扉と階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -196,7 +196,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("周辺の地形を感知する。", "Maps nearby area.");
 
 		{
-			int rad = DETECT_RAD_MAP;
+			POSITION rad = DETECT_RAD_MAP;
 
 			if (info) return info_radius(rad);
 
@@ -360,7 +360,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("自分のいる床と周囲8マスの床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。", "Creates glyphs in all adjacent squares and under you.");
 
 		{
-			int rad = 1;
+			POSITION rad = 1;
 
 			if (info) return info_radius(rad);
 
@@ -389,7 +389,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。", "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 

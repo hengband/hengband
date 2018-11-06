@@ -45,7 +45,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの邪悪なモンスターを感知する。", "Detects all evil monsters in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -175,7 +175,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 3;
 			int sides = 6;
-			int rad = (plev < 30) ? 2 : 3;
+			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
 			if (p_ptr->pclass == CLASS_PRIEST ||
@@ -403,7 +403,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 100 + plev * 2;
-			int rad = 4;
+			POSITION rad = 4;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -534,7 +534,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev * 3 + 25;
-			int rad = 2;
+			POSITION rad = 2;
 
 			if (info) return info_multi_damage(dam);
 

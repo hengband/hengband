@@ -57,7 +57,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの透明なモンスターを感知する。", "Detects all invisible monsters in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -73,7 +73,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの全ての見えるモンスターを感知する。", "Detects all monsters in your vicinity unless invisible.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -107,7 +107,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 2;
 			int sides = plev / 2;
-			int rad = plev / 10 + 1;
+			POSITION rad = plev / 10 + 1;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -150,7 +150,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの全ての罠と扉と階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -180,7 +180,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの財宝を感知する。", "Detects all treasures in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -197,7 +197,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの魔法がかかったアイテムを感知する。", "Detects all magical items in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -213,7 +213,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("近くの全てのアイテムを感知する。", "Detects all items in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -464,7 +464,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = 75 + plev;
-			int rad = 2;
+			POSITION rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
 
@@ -493,7 +493,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 

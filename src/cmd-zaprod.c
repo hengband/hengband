@@ -14,7 +14,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 	int ident = FALSE;
 	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
 	int detect_rad = powerful ? DETECT_RAD_DEFAULT * 3 / 2 : DETECT_RAD_DEFAULT;
-	int rad = powerful ? 3 : 2;
+	POSITION rad = powerful ? 3 : 2;
 
 	/* Unused */
 	(void)magic;

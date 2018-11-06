@@ -489,7 +489,7 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
 
 		{
-			int rad = DETECT_RAD_DEFAULT;
+			POSITION rad = DETECT_RAD_DEFAULT;
 
 			if (info) return info_radius(rad);
 
@@ -566,7 +566,7 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			HIT_POINT dam = plev * 2;
-			int rad = 2;
+			POSITION rad = 2;
 
 			if (info) return info_multi_damage(dam);
 

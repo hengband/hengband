@@ -528,7 +528,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 			    (f6 & RF6_BREATH_MASK))
 			{
 				/* Expected breath radius */
-				int rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
+				POSITION rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
 
 				if (!breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, 0, TRUE))
 				{
