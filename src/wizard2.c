@@ -203,8 +203,8 @@ static void do_cmd_summon_horde(void)
  */
 static void prt_binary(u32b flags, int row, int col)
 {
-	int        	i;
-	u32b        bitmask;
+	int i;
+	u32b bitmask;
 
 	/* Scan the flags */
 	for (i = bitmask = 1; i <= 32; i++, bitmask *= 2)

@@ -704,7 +704,7 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  * XXX XXX XXX Perhaps we should affect doors?
  * </pre>
  */
-static bool project_f(int who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
+static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -5161,7 +5161,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
  */
-static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
+static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
 {
 	int k = 0;
 	int rlev = 0;

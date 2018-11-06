@@ -593,7 +593,7 @@ typedef struct monster_type monster_type;
 struct monster_type
 {
 	MONRACE_IDX r_idx;		/* Monster race index */
-	IDX ap_r_idx;		/* Monster race appearance index */
+	MONRACE_IDX ap_r_idx;	/* Monster race appearance index */
 	byte sub_align;		/* Sub-alignment for a neutral monster */
 
 	POSITION fy;		/* Y location on map */
@@ -602,7 +602,7 @@ struct monster_type
 	HIT_POINT hp;		/* Current Hit points */
 	HIT_POINT maxhp;		/* Max Hit points */
 	HIT_POINT max_maxhp;		/* Max Max Hit points */
-	u32b dealt_damage;		/* Sum of damages dealt by player */
+	HIT_POINT dealt_damage;		/* Sum of damages dealt by player */
 
 	TIME_EFFECT mtimed[MAX_MTIMED];	/* Timed status counter */
 

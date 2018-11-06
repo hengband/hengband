@@ -678,7 +678,7 @@ void dispel_monster_status(MONSTER_IDX m_idx)
 * @param vs_player TRUEならば時間停止開始処理を行う
 * @return 時間停止が行われている状態ならばTRUEを返す
 */
-bool process_the_world(int num, int who, bool vs_player)
+bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 {
 	monster_type *m_ptr = &m_list[hack_m_idx];  /* the world monster */
 
@@ -811,9 +811,8 @@ void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
 		}
 		if (ironman_nightmare)
 		{
-			u32b hp = m_ptr->max_maxhp * 2L;
-
-			m_ptr->max_maxhp = (s16b)MIN(30000, hp);
+			HIT_POINT hp = m_ptr->max_maxhp * 2L;
+			m_ptr->max_maxhp = MIN(30000, hp);
 		}
 		m_ptr->maxhp = m_ptr->max_maxhp;
 		m_ptr->hp = old_hp * m_ptr->maxhp / old_maxhp;

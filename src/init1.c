@@ -3674,7 +3674,7 @@ static errr parse_line_feature(char *buf)
 		{
 			/* Special */
 			case 9:
-				letter[index].special = atoi(zz[8]);
+				letter[index].special = (s16b)atoi(zz[8]);
 				/* Fall through */
 			/* Trap */
 			case 8:

@@ -1942,7 +1942,7 @@ void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 HIT_POINT spell_RF6_WORLD(MONSTER_IDX m_idx)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
-	int who = 0;
+	MONSTER_IDX who = 0;
 	char m_name[80];
 	monster_name(m_idx, m_name);
 

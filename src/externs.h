@@ -720,7 +720,7 @@ extern void dispel_monster_status(MONSTER_IDX m_idx);
 extern u32b get_curse(int power, object_type *o_ptr);
 extern void curse_equipment(int chance, int heavy_chance);
 extern void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, IDX who);
-extern bool process_the_world(int num, int who, bool vs_player);
+extern bool process_the_world(int num, MONSTER_IDX who, bool vs_player);
 extern void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx);
 
 /* monster1.c */

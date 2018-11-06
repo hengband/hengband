@@ -869,7 +869,7 @@ static void rd_monster_old(monster_type *m_ptr)
 	}
 	else
 	{
-		rd_u32b(&m_ptr->dealt_damage); 
+		rd_s32b(&m_ptr->dealt_damage); 
 	}
 	
 	rd_s16b(&m_ptr->mtimed[MTIMED_CSLEEP]);
@@ -1014,7 +1014,7 @@ static void rd_monster(monster_type *m_ptr)
 	}
 	else
 	{
-		rd_u32b(&m_ptr->dealt_damage); 
+		rd_s32b(&m_ptr->dealt_damage); 
 	}
 
 	/* Monster race index of its appearance */
