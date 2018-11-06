@@ -1990,9 +1990,9 @@ void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1,
  * Hacked distance formula - gives the 'wrong' answer.
  * Used to build crypts
  */
-int dist2(int x1, int y1, int x2, int y2, int h1, int h2, int h3, int h4)
+POSITION dist2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION h1, POSITION h2, POSITION h3, POSITION h4)
 {
-	int dx, dy;
+	POSITION dx, dy;
 	dx = abs(x2 - x1);
 	dy = abs(y2 - y1);
 
@@ -2015,9 +2015,9 @@ int dist2(int x1, int y1, int x2, int y2, int h1, int h2, int h3, int h4)
 
 
 /* Create a new floor room with optional light */
-void generate_room_floor(int y1, int x1, int y2, int x2, int light)
+void generate_room_floor(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
 {
-	int y, x;
+	POSITION y, x;
 	
 	cave_type *c_ptr;
 
@@ -2034,9 +2034,9 @@ void generate_room_floor(int y1, int x1, int y2, int x2, int light)
 	}
 }
 
-void generate_fill_perm_bold(int y1, int x1, int y2, int x2)
+void generate_fill_perm_bold(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	int y, x;
+	POSITION y, x;
 
 	for (y = y1; y <= y2; y++)
 	{

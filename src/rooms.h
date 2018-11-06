@@ -85,9 +85,9 @@ extern void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION 
 extern bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width);
 extern void build_small_room(POSITION x0, POSITION y0);
 extern void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2);
-extern int dist2(int x1, int y1, int x2, int y2, int h1, int h2, int h3, int h4);
-extern void generate_room_floor(int y1, int x1, int y2, int x2, int light);
-extern void generate_fill_perm_bold(int y1, int x1, int y2, int x2);
+extern POSITION dist2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION h1, POSITION h2, POSITION h3, POSITION h4);
+extern void generate_room_floor(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light);
+extern void generate_fill_perm_bold(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff);
 extern bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int cutoff, bool light, bool room);
 extern void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty);
