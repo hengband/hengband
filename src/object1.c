@@ -512,7 +512,7 @@ cptr item_activation(object_type *o_ptr)
  */
 bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 {
-	int                     i = 0, j, k;
+	int i = 0, j, k;
 
 	u32b flgs[TR_FLAG_SIZE];
 

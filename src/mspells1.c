@@ -509,7 +509,7 @@ bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, int typ, int dam_hp, int monspell, int target_type)
+void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type)
   {
     BIT_FLAGS flg = 0;
     bool learnable = spell_learnable(m_idx);
@@ -540,7 +540,7 @@ void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, int typ, int dam_hp, int mo
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, int typ, int dam_hp, int monspell, int target_type)
+void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type)
 {
     BIT_FLAGS flg = 0;
     bool learnable = spell_learnable(m_idx);
@@ -574,7 +574,7 @@ void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, int typ, int dam_hp, int mo
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, int typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type)
+void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type)
 {
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

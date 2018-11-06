@@ -2055,7 +2055,7 @@ void generate_fill_perm_bold(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
  * @note that we restrict the number of "crowded" rooms to reduce the chance of overflowing the monster list during level creation.
  * @return 部屋の精製に成功した場合 TRUE を返す。
  */
-static bool room_build(int typ)
+static bool room_build(EFFECT_ID typ)
 {
 	/* Build a room */
 	switch (typ)

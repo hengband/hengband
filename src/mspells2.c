@@ -73,7 +73,7 @@ static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
  * @param is_friend TRUEならば、プレイヤーを巻き込む時にブレスの判定をFALSEにする。
  * @return ブレスを直接当てられるならばTRUEを返す
  */
-static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, int typ, bool is_friend)
+static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
 {
 	/* Must be the same as projectable() */
 

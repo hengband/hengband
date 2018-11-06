@@ -1305,7 +1305,7 @@ errr parse_v_info(char *buf, header *head)
 	/* Process 'X' for "Extra info" (one line only) */
 	else if (buf[0] == 'X')
 	{
-		int typ, rat, hgt, wid;
+		EFFECT_ID typ, rat, hgt, wid;
 
 		/* Scan for the values */
 		if (4 != sscanf(buf+2, "%d:%d:%d:%d",

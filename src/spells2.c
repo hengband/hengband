@@ -906,7 +906,7 @@ bool detect_all(POSITION range)
  * this is done in two passes. -- JDL
  * </pre>
  */
-bool project_hack(int typ, HIT_POINT dam)
+bool project_hack(EFFECT_ID typ, HIT_POINT dam)
 {
 	int     i, x, y;
 	int     flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
@@ -2866,9 +2866,9 @@ bool unlite_area(HIT_POINT dam, POSITION rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
-	int tx, ty;
+	POSITION tx, ty;
 
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
@@ -2903,7 +2903,7 @@ bool fire_ball(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 * Affect grids, objects, and monsters
 * </pre>
 */
-bool fire_breath(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_breath(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	return fire_ball(typ, dir, dam, -rad);
 }
@@ -2923,7 +2923,7 @@ bool fire_breath(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_rocket(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	int tx, ty;
 
@@ -2959,7 +2959,7 @@ bool fire_rocket(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(int typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball_hide(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	int tx, ty;
 
@@ -3019,7 +3019,7 @@ bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POI
  * @param dev 回数分散
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fire_blast(int typ, DIRECTION dir, int dd, int ds, int num, int dev)
+bool fire_blast(EFFECT_ID typ, DIRECTION dir, int dd, int ds, int num, int dev)
 {
 	int ly, lx, ld;
 	int ty, tx, y, x;
@@ -3151,7 +3151,7 @@ bool teleport_swap(DIRECTION dir)
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(int typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
+bool project_hook(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
 {
 	int tx, ty;
 
@@ -3186,7 +3186,7 @@ bool project_hook(int typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(int typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
@@ -3206,7 +3206,7 @@ bool fire_bolt(int typ, DIRECTION dir, HIT_POINT dam)
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(int typ, DIRECTION dir, HIT_POINT dam)
+bool fire_beam(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(typ, dir, dam, flg));
@@ -3226,7 +3226,7 @@ bool fire_beam(int typ, DIRECTION dir, HIT_POINT dam)
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(int prob, int typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt_or_beam(int prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
 {
 	if (randint0(100) < prob)
 	{

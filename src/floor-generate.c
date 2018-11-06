@@ -286,7 +286,7 @@ static bool alloc_stairs(IDX feat, int num, int walls)
  * @param num 配置したい数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-static void alloc_object(int set, int typ, int num)
+static void alloc_object(int set, EFFECT_ID typ, int num)
 {
 	int y = 0, x = 0, k;
 	int dummy = 0;

@@ -1829,7 +1829,7 @@ static bool cast_ninja_spell(int spell)
 
 		for (k = 0; k < num; k++)
 		{
-			int typ = one_in_(2) ? GF_FIRE : one_in_(3) ? GF_NETHER : GF_PLASMA;
+			EFFECT_ID typ = one_in_(2) ? GF_FIRE : one_in_(3) ? GF_NETHER : GF_PLASMA;
 			int attempts = 1000;
 
 			while (attempts--)

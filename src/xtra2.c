@@ -788,7 +788,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		if (r_ptr->blow[i].method == RBM_EXPLODE)
 		{
 			BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-			int typ = mbe_info[r_ptr->blow[i].effect].explode_type;
+			EFFECT_ID typ = mbe_info[r_ptr->blow[i].effect].explode_type;
 			DICE_NUMBER d_dice = r_ptr->blow[i].d_dice;
 			DICE_SID d_side = r_ptr->blow[i].d_side;
 			HIT_POINT damage = damroll(d_dice, d_side);

@@ -284,7 +284,7 @@ static byte spell_color(int type)
  * If the distance is not "one", we (may) return "*".
  * </pre>
  */
-u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, int typ)
+u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ)
 {
 	int base;
 
@@ -704,7 +704,7 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  * XXX XXX XXX Perhaps we should affect doors?
  * </pre>
  */
-static bool project_f(int who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, int typ)
+static bool project_f(int who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -1274,7 +1274,7 @@ static bool project_f(int who, POSITION r, POSITION y, POSITION x, HIT_POINT dam
  * We return "TRUE" if the effect of the projection is "obvious".
  * </pre>
  */
-static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, int typ)
+static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
 	cave_type *c_ptr = &cave[y][x];
 
@@ -1661,7 +1661,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * "flg" was added.
  * </pre>
  */
-static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, int typ, BIT_FLAGS flg, bool see_s_msg)
+static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, bool see_s_msg)
 {
 	int tmp;
 
@@ -5161,7 +5161,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
  */
-static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, int typ, BIT_FLAGS flg, int monspell)
+static bool project_p(int who, cptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
 {
 	int k = 0;
 	int rlev = 0;
@@ -6533,7 +6533,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 /*
  * breath shape
  */
-void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int typ)
+void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, EFFECT_ID typ)
 {
 	POSITION by = y1;
 	POSITION bx = x1;
@@ -6762,7 +6762,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
  * and "update_view()" and "update_monsters()" need to be called.
  * </pre>
  */
-bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, int typ, BIT_FLAGS flg, int monspell)
+bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
 {
 	int i, t, dist;
 

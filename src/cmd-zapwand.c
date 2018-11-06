@@ -226,7 +226,7 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool ma
 	case SV_WAND_DRAGON_BREATH:
 	{
 		HIT_POINT dam;
-		int typ;
+		EFFECT_ID typ;
 
 		switch (randint1(5))
 		{
