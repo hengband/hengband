@@ -1401,7 +1401,7 @@ static void do_cmd_options_cheat(cptr info)
 	/* Interact with the player */
 	while (TRUE)
 	{
-		int dir;
+		DIRECTION dir;
 
 		/* Prompt XXX XXX XXX */
 		sprintf(buf, _("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info);
@@ -1685,7 +1685,7 @@ void do_cmd_options_aux(int page, cptr info)
 	/* Interact with the player */
 	while (TRUE)
 	{
-		int dir;
+		DIRECTION dir;
 
 		/* Prompt XXX XXX XXX */
 		sprintf(buf, _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "),

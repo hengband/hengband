@@ -5615,7 +5615,7 @@ void massacre(void)
 	POSITION x, y;
 	cave_type       *c_ptr;
 	monster_type    *m_ptr;
-	int dir;
+	DIRECTION dir;
 
 	for (dir = 0; dir < 8; dir++)
 	{

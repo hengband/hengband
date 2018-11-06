@@ -2051,7 +2051,7 @@ static bool get_spike(INVENTORY_IDX *ip)
  */
 void do_cmd_spike(void)
 {
-	int dir;
+	DIRECTION dir;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -2131,7 +2131,7 @@ void do_cmd_spike(void)
  */
 void do_cmd_walk(bool pickup)
 {
-	int dir;
+	DIRECTION dir;
 
 	bool more = FALSE;
 
@@ -2207,7 +2207,7 @@ void do_cmd_walk(bool pickup)
  */
 void do_cmd_run(void)
 {
-	int dir;
+	DIRECTION dir;
 
 	/* Hack -- no running when confused */
 	if (p_ptr->confused)

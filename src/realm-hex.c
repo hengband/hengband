@@ -1098,7 +1098,7 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (HEX_REVENGE_TURN(p_ptr) <= 0)
 			{
-				int dir;
+				DIRECTION dir;
 
 				if (power)
 				{

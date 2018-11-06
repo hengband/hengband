@@ -17,7 +17,7 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
 	static const char s_random[] = _("ランダム", "random");
 
-	int dir;
+	DIRECTION dir;
 	int plev = p_ptr->lev;
 
 	switch (spell)

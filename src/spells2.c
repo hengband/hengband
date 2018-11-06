@@ -2866,7 +2866,7 @@ bool unlite_area(HIT_POINT dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(int typ, int dir, HIT_POINT dam, int rad)
+bool fire_ball(int typ, DIRECTION dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
@@ -2903,7 +2903,7 @@ bool fire_ball(int typ, int dir, HIT_POINT dam, int rad)
 * Affect grids, objects, and monsters
 * </pre>
 */
-bool fire_breath(int typ, int dir, HIT_POINT dam, int rad)
+bool fire_breath(int typ, DIRECTION dir, HIT_POINT dam, int rad)
 {
 	return fire_ball(typ, dir, dam, -rad);
 }
@@ -2923,7 +2923,7 @@ bool fire_breath(int typ, int dir, HIT_POINT dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(int typ, int dir, HIT_POINT dam, int rad)
+bool fire_rocket(int typ, DIRECTION dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
@@ -2959,7 +2959,7 @@ bool fire_rocket(int typ, int dir, HIT_POINT dam, int rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(int typ, int dir, HIT_POINT dam, int rad)
+bool fire_ball_hide(int typ, DIRECTION dir, HIT_POINT dam, int rad)
 {
 	int tx, ty;
 
@@ -3019,7 +3019,7 @@ bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POI
  * @param dev 回数分散
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
+bool fire_blast(int typ, DIRECTION dir, int dd, int ds, int num, int dev)
 {
 	int ly, lx, ld;
 	int ty, tx, y, x;
@@ -3077,7 +3077,7 @@ bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool teleport_swap(int dir)
+bool teleport_swap(DIRECTION dir)
 {
 	int tx, ty;
 	cave_type * c_ptr;
@@ -3151,7 +3151,7 @@ bool teleport_swap(int dir)
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(int typ, int dir, HIT_POINT dam, BIT_FLAGS flg)
+bool project_hook(int typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
 {
 	int tx, ty;
 
@@ -3186,7 +3186,7 @@ bool project_hook(int typ, int dir, HIT_POINT dam, BIT_FLAGS flg)
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(int typ, int dir, HIT_POINT dam)
+bool fire_bolt(int typ, DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
@@ -3206,7 +3206,7 @@ bool fire_bolt(int typ, int dir, HIT_POINT dam)
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(int typ, int dir, HIT_POINT dam)
+bool fire_beam(int typ, DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(typ, dir, dam, flg));
@@ -3226,7 +3226,7 @@ bool fire_beam(int typ, int dir, HIT_POINT dam)
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(int prob, int typ, int dir, HIT_POINT dam)
+bool fire_bolt_or_beam(int prob, int typ, DIRECTION dir, HIT_POINT dam)
 {
 	if (randint0(100) < prob)
 	{
@@ -3244,7 +3244,7 @@ bool fire_bolt_or_beam(int prob, int typ, int dir, HIT_POINT dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_line(int dir, HIT_POINT dam)
+bool lite_line(DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
 	return (project_hook(GF_LITE_WEAK, dir, dam, flg));
@@ -3256,7 +3256,7 @@ bool lite_line(int dir, HIT_POINT dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool hypodynamic_bolt(int dir, HIT_POINT dam)
+bool hypodynamic_bolt(DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_HYPODYNAMIA, dir, dam, flg));
@@ -3268,7 +3268,7 @@ bool hypodynamic_bolt(int dir, HIT_POINT dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool wall_to_mud(int dir, HIT_POINT dam)
+bool wall_to_mud(DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project_hook(GF_KILL_WALL, dir, dam, flg));
@@ -3279,7 +3279,7 @@ bool wall_to_mud(int dir, HIT_POINT dam)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool wizard_lock(int dir)
+bool wizard_lock(DIRECTION dir)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project_hook(GF_JAM_DOOR, dir, 20 + randint1(30), flg));
@@ -3290,7 +3290,7 @@ bool wizard_lock(int dir)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool destroy_door(int dir)
+bool destroy_door(DIRECTION dir)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(GF_KILL_DOOR, dir, 0, flg));
@@ -3301,7 +3301,7 @@ bool destroy_door(int dir)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool disarm_trap(int dir)
+bool disarm_trap(DIRECTION dir)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
 	return (project_hook(GF_KILL_TRAP, dir, 0, flg));
@@ -3313,7 +3313,7 @@ bool disarm_trap(int dir)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool heal_monster(int dir, HIT_POINT dam)
+bool heal_monster(DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_HEAL, dir, dam, flg));
@@ -3325,7 +3325,7 @@ bool heal_monster(int dir, HIT_POINT dam)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool speed_monster(int dir, int power)
+bool speed_monster(DIRECTION dir, int power)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SPEED, dir, power, flg));
@@ -3337,7 +3337,7 @@ bool speed_monster(int dir, int power)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool slow_monster(int dir, int power)
+bool slow_monster(DIRECTION dir, int power)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SLOW, dir, power, flg));
@@ -3349,7 +3349,7 @@ bool slow_monster(int dir, int power)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool sleep_monster(int dir, int power)
+bool sleep_monster(DIRECTION dir, int power)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_SLEEP, dir, power, flg));
@@ -3361,7 +3361,7 @@ bool sleep_monster(int dir, int power)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_monster(int dir)
+bool stasis_monster(DIRECTION dir)
 {
 	return (fire_ball_hide(GF_STASIS, dir, p_ptr->lev*2, 0));
 }
@@ -3372,7 +3372,7 @@ bool stasis_monster(int dir)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_evil(int dir)
+bool stasis_evil(DIRECTION dir)
 {
 	return (fire_ball_hide(GF_STASIS_EVIL, dir, p_ptr->lev*2, 0));
 }
@@ -3383,7 +3383,7 @@ bool stasis_evil(int dir)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool confuse_monster(int dir, int plev)
+bool confuse_monster(DIRECTION dir, int plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_CONF, dir, plev, flg));
@@ -3395,7 +3395,7 @@ bool confuse_monster(int dir, int plev)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stun_monster(int dir, int plev)
+bool stun_monster(DIRECTION dir, int plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_STUN, dir, plev, flg));
@@ -3407,7 +3407,7 @@ bool stun_monster(int dir, int plev)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool poly_monster(int dir, int power)
+bool poly_monster(DIRECTION dir, int power)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	bool tester = (project_hook(GF_OLD_POLY, dir, power, flg));
@@ -3421,7 +3421,7 @@ bool poly_monster(int dir, int power)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool clone_monster(int dir)
+bool clone_monster(DIRECTION dir)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_CLONE, dir, 0, flg));
@@ -3433,7 +3433,7 @@ bool clone_monster(int dir)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fear_monster(int dir, int plev)
+bool fear_monster(DIRECTION dir, int plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_TURN_ALL, dir, plev, flg));
@@ -3445,7 +3445,7 @@ bool fear_monster(int dir, int plev)
  * @param plev プレイヤーレベル(効力はplev*200)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool death_ray(int dir, int plev)
+bool death_ray(DIRECTION dir, int plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_DEATH_RAY, dir, plev * 200, flg));
@@ -3457,7 +3457,7 @@ bool death_ray(int dir, int plev)
  * @param distance 移動距離
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool teleport_monster(int dir, int distance)
+bool teleport_monster(DIRECTION dir, int distance)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL;
 	return (project_hook(GF_AWAY_ALL, dir, distance, flg));
@@ -4020,7 +4020,7 @@ bool deathray_monsters(void)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_monster(int dir, int plev)
+bool charm_monster(DIRECTION dir, int plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CHARM, dir, plev, flg));
@@ -4032,7 +4032,7 @@ bool charm_monster(int dir, int plev)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool control_one_undead(int dir, int plev)
+bool control_one_undead(DIRECTION dir, int plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_UNDEAD, dir, plev, flg));
@@ -4044,7 +4044,7 @@ bool control_one_undead(int dir, int plev)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool control_one_demon(int dir, int plev)
+bool control_one_demon(DIRECTION dir, int plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_DEMON, dir, plev, flg));
@@ -4056,7 +4056,7 @@ bool control_one_demon(int dir, int plev)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_animal(int dir, int plev)
+bool charm_animal(DIRECTION dir, int plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_ANIMAL, dir, plev, flg));
@@ -4123,7 +4123,7 @@ bool kawarimi(bool success)
  */
 bool rush_attack(bool *mdeath)
 {
-	int dir;
+	DIRECTION dir;
 	int tx, ty;
 	int tm_idx = 0;
 	u16b path_g[32];
@@ -4263,7 +4263,7 @@ void remove_all_mirrors(bool explode)
  * @param dir 発動の方向ID
  * @return なし
  */
-void ring_of_power(int dir)
+void ring_of_power(DIRECTION dir)
 {
 	/* Pick a random effect */
 	switch (randint1(10))
@@ -4576,7 +4576,7 @@ bool cast_wrath_of_the_god(HIT_POINT dam, int rad)
 * while keeping the results quite random.  It also allows some potent\n
 * effects only at high level.
 */
-void cast_wonder(int dir)
+void cast_wonder(DIRECTION dir)
 {
 	int plev = p_ptr->lev;
 	int die = randint1(100) + plev / 5;
@@ -4658,7 +4658,7 @@ void cast_wonder(int dir)
 * @param dir 方向ID
 * @return なし
 */
-void cast_invoke_spirits(int dir)
+void cast_invoke_spirits(DIRECTION dir)
 {
 	int plev = p_ptr->lev;
 	int die = randint1(100) + plev / 5;
@@ -4809,7 +4809,7 @@ void cast_invoke_spirits(int dir)
 void cast_shuffle(void)
 {
 	int plev = p_ptr->lev;
-	int dir;
+	DIRECTION dir;
 	int die;
 	int vir = virtue_number(V_CHANCE);
 	int i;

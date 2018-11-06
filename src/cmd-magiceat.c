@@ -572,7 +572,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	}
 	else
 	{
-		int dir = 0;
+		DIRECTION dir = 0;
 
 		if (tval == TV_ROD)
 		{

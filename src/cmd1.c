@@ -1697,7 +1697,7 @@ static bool find_breakleft;
  *       \#x\#                  \@x\#\n
  *       \@\@p.                  p\n
  */
-static void run_init(int dir)
+static void run_init(DIRECTION dir)
 {
 	int             row, col, deepleft, deepright;
 	int             i, shortleft, shortright;
@@ -2253,7 +2253,7 @@ static int travel_test(int prev_dir)
 	for (i = -max; i <= max; i++)
 	{
 		/* New direction */
-		int dir = cycle[chome[prev_dir] + i];
+		DIRECTION dir = cycle[chome[prev_dir] + i];
 
 		/* New location */
 		int row = p_ptr->y + ddy[dir];

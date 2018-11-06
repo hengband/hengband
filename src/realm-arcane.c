@@ -14,7 +14,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-	int dir;
+	DIRECTION dir;
 	int plev = p_ptr->lev;
 
 	switch (spell)

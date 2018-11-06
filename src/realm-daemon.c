@@ -17,7 +17,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 	static const char s_dam[] = _("損傷:", "dam ");
 
-	int dir;
+	DIRECTION dir;
 	int plev = p_ptr->lev;
 
 	switch (spell)

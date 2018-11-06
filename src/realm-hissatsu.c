@@ -13,7 +13,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-	int dir;
+	DIRECTION dir;
 	int plev = p_ptr->lev;
 
 	switch (spell)

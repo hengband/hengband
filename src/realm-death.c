@@ -19,7 +19,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	static const char s_dam[] = _("損傷:", "dam ");
 	static const char s_random[] = _("ランダム", "random");
 
-	int dir;
+	DIRECTION dir;
 	int plev = p_ptr->lev;
 
 	switch (spell)

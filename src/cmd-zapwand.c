@@ -9,7 +9,7 @@
 * @param magic 魔道具術上の処理ならばTRUE
 * @return 発動により効果内容が確定したならばTRUEを返す
 */
-int wand_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool powerful, bool magic)
+int wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
 {
 	int ident = FALSE;
 	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;

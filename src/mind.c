@@ -1624,7 +1624,7 @@ static bool cast_berserk_spell(int spell)
 static bool cast_ninja_spell(int spell)
 {
 	POSITION x, y;
-	int dir;
+	DIRECTION dir;
 	int plev = p_ptr->lev;
 
 	/* spell code */

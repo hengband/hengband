@@ -9,7 +9,7 @@
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerful, bool magic)
+int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool powerful, bool magic)
 {
 	int ident = FALSE;
 	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
@@ -256,7 +256,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, int dir, bool *use_charge, bool powerf
 void do_cmd_zap_rod_aux(INVENTORY_IDX item)
 {
 	int ident, chance, lev, fail;
-	int dir = 0;
+	DIRECTION dir = 0;
 	object_type *o_ptr;
 	bool success;
 
