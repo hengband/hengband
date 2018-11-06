@@ -648,8 +648,8 @@ void Term_queue_line(TERM_POSITION x, TERM_POSITION y, int n, byte *a, char *c, 
 {
 	term_win *scrn = Term->scr;
 
-	int x1 = -1;
-	int x2 = -1;
+	TERM_POSITION x1 = -1;
+	TERM_POSITION x2 = -1;
 
 	byte *scr_aa = &scrn->a[y][x];
 	char *scr_cc = &scrn->c[y][x];
@@ -717,7 +717,7 @@ void Term_queue_line(TERM_POSITION x, TERM_POSITION y, int n, byte *a, char *c, 
  */
 void Term_queue_chars(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s)
 {
-	int x1 = -1, x2 = -1;
+	TERM_POSITION x1 = -1, x2 = -1;
 
 	byte *scr_aa = Term->scr->a[y];
 #ifdef JP
@@ -1665,8 +1665,8 @@ errr Term_fresh(void)
 		/* Scan the "modified" rows */
 		for (y = y1; y <= y2; ++y)
 		{
-			int x1 = Term->x1[y];
-			int x2 = Term->x2[y];
+			TERM_POSITION x1 = Term->x1[y];
+			TERM_POSITION x2 = Term->x2[y];
 
 			/* Flush each "modified" row */
 			if (x1 <= x2)
@@ -2061,11 +2061,11 @@ errr Term_erase(TERM_POSITION x, TERM_POSITION y, int n)
 {
 	int i;
 
-	int w = Term->wid;
+	TERM_POSITION w = Term->wid;
 	/* int h = Term->hgt; */
 
-	int x1 = -1;
-	int x2 = -1;
+	TERM_POSITION x1 = -1;
+	TERM_POSITION x2 = -1;
 
 	int na = Term->attr_blank;
 	int nc = Term->char_blank;
@@ -2232,9 +2232,9 @@ errr Term_redraw(void)
 
 
 /*
- * Redraw part of a widow.
+ * Redraw part of a window.
  */
-errr Term_redraw_section(int x1, int y1, int x2, int y2)
+errr Term_redraw_section(TERM_POSITION x1, TERM_POSITION y1, TERM_POSITION x2, TERM_POSITION y2)
 {
 	int i, j;
 

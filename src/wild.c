@@ -154,12 +154,11 @@ static void perturb_point_end(int x1, int x2, int x3,
  * need to be converted to features.
  * </pre>
  */
-static void plasma_recursive(int x1, int y1, int x2, int y2,
-			     int depth_max, int rough)
+static void plasma_recursive(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION depth_max, POSITION rough)
 {
 	/* Find middle */
-	int xmid = (x2 - x1) / 2 + x1;
-	int ymid = (y2 - y1) / 2 + y1;
+	POSITION xmid = (x2 - x1) / 2 + x1;
+	POSITION ymid = (y2 - y1) / 2 + y1;
 
 	/* Are we done? */
 	if (x1 + 1 == x2) return;
@@ -205,7 +204,7 @@ static s16b terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
  */
 static void generate_wilderness_area(int terrain, u32b seed, bool border, bool corner)
 {
-	int x1, y1;
+	POSITION x1, y1;
 	int table_size = sizeof(terrain_table[0]) / sizeof(s16b);
 	int roughness = 1; /* The roughness of the level. */
 	u32b state_backup[4];

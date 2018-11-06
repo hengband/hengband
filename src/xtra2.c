@@ -2761,7 +2761,7 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 /*
  * Hack -- determine if a given location is "interesting"
  */
-static bool target_set_accept(int y, int x)
+static bool target_set_accept(POSITION y, POSITION x)
 {
 	cave_type *c_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
@@ -3774,8 +3774,8 @@ bool target_set(BIT_FLAGS mode)
 			if (d)
 			{
 				/* Modified to scroll to monster */
-				int y2 = panel_row_min;
-				int x2 = panel_col_min;
+				POSITION y2 = panel_row_min;
+				POSITION x2 = panel_col_min;
 
 				/* Find a new monster */
 				i = target_pick(temp_y[m], temp_x[m], ddy[d], ddx[d]);
