@@ -2756,9 +2756,10 @@ void lite_room(POSITION y1, POSITION x1)
  * @param x1 指定X座標
  * @return なし
  */
-void unlite_room(int y1, int x1)
+void unlite_room(POSITION y1, POSITION x1)
 {
-	int i, x, y;
+	int i;
+	POSITION x, y;
 
 	/* Add the initial grid */
 	cave_temp_unlite_room_aux(y1, x1);

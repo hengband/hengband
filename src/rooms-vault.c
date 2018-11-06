@@ -873,12 +873,13 @@ static void build_target_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 *
 * Miniture rooms are then scattered across the vault.
 */
-static void build_elemental_vault(int x0, int y0, int xsiz, int ysiz)
+static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
 	int grd, roug;
 	int c1, c2, c3;
 	bool done = FALSE;
-	int xsize, ysize, xhsize, yhsize, x, y, i;
+	POSITION xsize, ysize, xhsize, yhsize, x, y;
+	int i;
 	int type;
 
 	msg_print_wizard(CHEAT_DUNGEON, _("精霊界ランダムVaultを生成しました。", "Elemental Vault"));
@@ -965,10 +966,10 @@ static void build_elemental_vault(int x0, int y0, int xsiz, int ysiz)
 * The vault has two entrances on opposite sides to guarantee
 * a way to get in even if the vault abuts a side of the dungeon.
 */
-static void build_mini_c_vault(int x0, int y0, int xsize, int ysize)
+static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
-	int dy, dx;
-	int y1, x1, y2, x2, y, x, total;
+	POSITION dy, dx;
+	POSITION y1, x1, y2, x2, y, x, total;
 	int m, n, num_vertices;
 	int *visited;
 

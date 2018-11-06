@@ -923,7 +923,7 @@ extern bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 extern bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx);
 extern bool earthquake(POSITION cy, POSITION cx, POSITION r);
 extern void lite_room(POSITION y1, POSITION x1);
-extern void unlite_room(int y1, int x1);
+extern void unlite_room(POSITION y1, POSITION x1);
 extern bool lite_area(HIT_POINT dam, int rad);
 extern bool unlite_area(HIT_POINT dam, int rad);
 extern bool fire_ball(int typ, int dir, HIT_POINT dam, int rad);

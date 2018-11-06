@@ -502,7 +502,7 @@ void hit_trap(bool break_trap)
 		static int levs[10] = { 0, 0, 20, 10, 5, 3, 2, 1, 1, 1 };
 		int evil_idx = 0, good_idx = 0;
 
-		int lev;
+		DEPTH lev;
 		msg_print(_("突然天界の戦争に巻き込まれた！", "Suddenly, you are surrounded by immotal beings!"));
 
 		/* Summon Demons and Angels */
@@ -511,8 +511,8 @@ void hit_trap(bool break_trap)
 			num = levs[MIN(lev / 10, 9)];
 			for (i = 0; i < num; i++)
 			{
-				int x1 = rand_spread(x, 7);
-				int y1 = rand_spread(y, 5);
+				POSITION x1 = rand_spread(x, 7);
+				POSITION y1 = rand_spread(y, 5);
 
 				/* Skip illegal grids */
 				if (!in_bounds(y1, x1)) continue;

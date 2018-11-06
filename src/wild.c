@@ -74,8 +74,7 @@ void set_floor_and_wall(DUNGEON_IDX type)
  * @param depth_max 深みの最大値
  * @return なし
  */
-static void perturb_point_mid(int x1, int x2, int x3, int x4,
-			  int xmid, int ymid, int rough, int depth_max)
+static void perturb_point_mid(POSITION x1, POSITION x2, POSITION x3, POSITION x4, POSITION xmid, POSITION ymid, POSITION rough, POSITION depth_max)
 {
 	/*
 	 * Average the four corners & perturb it a bit.
