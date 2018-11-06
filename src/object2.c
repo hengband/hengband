@@ -551,10 +551,9 @@ void wipe_o_list(void)
  * This routine should almost never fail, but in case it does,
  * we must be sure to handle "failure" of this routine.
  */
-IDX o_pop(void)
+OBJECT_IDX o_pop(void)
 {
-	IDX i;
-
+	OBJECT_IDX i;
 
 	/* Initial allocation */
 	if (o_max < max_o_idx)
@@ -654,11 +653,11 @@ static errr get_obj_num_prep(void)
  * Note that if no objects are "appropriate", then this function will\n
  * fail, and return zero, but this should *almost* never happen.\n
  */
-s16b get_obj_num(int level)
+OBJECT_IDX get_obj_num(DEPTH level)
 {
-	int             i, j, p;
-	int             k_idx;
-	long            value, total;
+	int i, j, p;
+	int k_idx;
+	long value, total;
 	object_kind     *k_ptr;
 	alloc_entry     *table = alloc_kind_table;
 
@@ -1225,12 +1224,10 @@ s32b flag_cost(object_type *o_ptr, int plusses)
  *\n
  * Every wearable item with a "pval" bonus is worth extra (see below).\n
  */
-s32b object_value_real(object_type *o_ptr)
+PRICE object_value_real(object_type *o_ptr)
 {
-	s32b value;
-
-	u32b flgs[TR_FLAG_SIZE];
-
+	PRICE value;
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
 
@@ -1487,10 +1484,9 @@ s32b object_value_real(object_type *o_ptr)
  * Note that discounted items stay discounted forever, even if\n
  * the discount is "forgotten" by the player via memory loss.\n
  */
-s32b object_value(object_type *o_ptr)
+PRICE object_value(object_type *o_ptr)
 {
-	s32b value;
-
+	PRICE value;
 
 	/* Unknown items -- acquire a base value */
 	if (object_is_known(o_ptr))

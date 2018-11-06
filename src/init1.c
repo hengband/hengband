@@ -3952,13 +3952,13 @@ static errr parse_line_building(char *buf)
  * @param x 配置先X座標
  * @return エラーコード
  */
-static void drop_here(object_type *j_ptr, int y, int x)
+static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 {
 	cave_type *c_ptr = &cave[y][x];
 	object_type *o_ptr;
 
 	/* Get new object */
-	s16b o_idx = o_pop();
+	OBJECT_IDX o_idx = o_pop();
 
 	/* Access new object */
 	o_ptr = &o_list[o_idx];
