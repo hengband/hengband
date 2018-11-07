@@ -4141,7 +4141,7 @@ HIT_POINT monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE)
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-HIT_POINT monspell_bluemage_damage(int SPELL_NUM, int plev, int TYPE)
+HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int TYPE)
 {
 	int hp = p_ptr->chp;
 	int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;

@@ -16,7 +16,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 	DIRECTION dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	switch (spell)
 	{
@@ -93,7 +93,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("モンスター1体を混乱させる。抵抗されると無効。", "Attempts to confuse a monster.");
 
 		{
-			int power = (plev * 3) / 2;
+			PLAYER_LEVEL power = (plev * 3) / 2;
 
 			if (info) return info_power(power);
 
@@ -313,7 +313,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				charm_monster(dir, power);
+				charm_monster(dir, plev);
 			}
 		}
 		break;

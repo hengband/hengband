@@ -18,7 +18,7 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	static const char s_random[] = _("ランダム", "random");
 
 	DIRECTION dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	switch (spell)
 	{

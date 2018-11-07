@@ -20,7 +20,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	static const char s_random[] = _("ランダム", "random");
 
 	DIRECTION dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	switch (spell)
 	{
@@ -167,8 +167,8 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fear_monster(dir, power);
-				stun_monster(dir, power);
+				fear_monster(dir, plev);
+				stun_monster(dir, plev);
 			}
 		}
 		break;
@@ -186,7 +186,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				control_one_undead(dir, power);
+				control_one_undead(dir, plev);
 			}
 		}
 		break;

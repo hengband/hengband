@@ -938,7 +938,7 @@ extern bool fire_beam(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool fire_bolt_or_beam(PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool lite_line(DIRECTION dir, HIT_POINT dam);
 extern bool hypodynamic_bolt(DIRECTION dir, HIT_POINT dam);
-extern bool death_ray(DIRECTION dir, int plev);
+extern bool death_ray(DIRECTION dir, PLAYER_LEVEL plev);
 extern bool wall_to_mud(DIRECTION dir, HIT_POINT dam);
 extern bool destroy_door(DIRECTION dir);
 extern bool disarm_trap(DIRECTION dir);
@@ -949,9 +949,9 @@ extern bool slow_monster(DIRECTION dir, int power);
 extern bool sleep_monster(DIRECTION dir, int power);
 extern bool stasis_monster(DIRECTION dir);    /* Like sleep, affects undead as well */
 extern bool stasis_evil(DIRECTION dir);    /* Like sleep, affects undead as well */
-extern bool confuse_monster(DIRECTION dir, int plev);
-extern bool stun_monster(DIRECTION dir, int plev);
-extern bool fear_monster(DIRECTION dir, int plev);
+extern bool confuse_monster(DIRECTION dir, PLAYER_LEVEL plev);
+extern bool stun_monster(DIRECTION dir, PLAYER_LEVEL plev);
+extern bool fear_monster(DIRECTION dir, PLAYER_LEVEL plev);
 extern bool poly_monster(DIRECTION dir, int power);
 extern bool clone_monster(DIRECTION dir);
 extern bool teleport_monster(DIRECTION dir, int distance);
@@ -976,10 +976,10 @@ extern bool banish_monsters(int dist);
 extern bool turn_monsters(HIT_POINT dam);
 extern bool turn_evil(HIT_POINT dam);
 extern bool deathray_monsters(void);
-extern bool charm_monster(DIRECTION dir, int plev);
-extern bool control_one_undead(DIRECTION dir, int plev);
-extern bool control_one_demon(DIRECTION dir, int plev);
-extern bool charm_animal(DIRECTION dir, int plev);
+extern bool charm_monster(DIRECTION dir, PLAYER_LEVEL plev);
+extern bool control_one_undead(DIRECTION dir, PLAYER_LEVEL plev);
+extern bool control_one_demon(DIRECTION dir, PLAYER_LEVEL plev);
+extern bool charm_animal(DIRECTION dir, PLAYER_LEVEL plev);
 extern bool mindblast_monsters(HIT_POINT dam);
 extern s32b flag_cost(object_type *o_ptr, int plusses);
 extern bool teleport_swap(DIRECTION dir);
@@ -1380,7 +1380,7 @@ extern HIT_POINT monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, MONST
 extern HIT_POINT monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx);
 extern HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE);
 extern HIT_POINT monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE);
-extern HIT_POINT monspell_bluemage_damage(int SPELL_NUM, int plev, int TYPE);
+extern HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int TYPE);
 
 /* hissatsu.c */
 extern void do_cmd_hissatsu(void);

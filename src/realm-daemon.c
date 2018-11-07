@@ -18,7 +18,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	static const char s_dam[] = _("損傷:", "dam ");
 
 	DIRECTION dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	switch (spell)
 	{
@@ -95,7 +95,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("モンスター1体を恐怖させ、朦朧させる。抵抗されると無効。", "Attempts to scare and stun a monster.");
 
 		{
-			int power = plev;
+			PLAYER_LEVEL power = plev;
 
 			if (info) return info_power(power);
 
@@ -184,7 +184,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				control_one_demon(dir, power);
+				control_one_demon(dir, plev);
 			}
 		}
 		break;

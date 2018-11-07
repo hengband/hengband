@@ -19,7 +19,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	static const char s_rng[] = _("射程", "rng ");
 
 	DIRECTION dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	switch (spell)
 	{
@@ -135,7 +135,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				charm_animal(dir, power);
+				charm_animal(dir, plev);
 			}
 		}
 		break;

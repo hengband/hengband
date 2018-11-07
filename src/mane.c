@@ -23,7 +23,7 @@ static int damage;
  */
 static void mane_info(char *p, int power, HIT_POINT dam)
 {
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	cptr s_dam = _("損傷:", "dam ");
 	cptr s_dur = _("期間:", "dur ");
 	cptr s_range = _("範囲:", "range ");

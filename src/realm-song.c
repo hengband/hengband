@@ -80,7 +80,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	static const char s_dam[] = _("損傷:", "dam ");
 
 	DIRECTION dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	switch (spell)
 	{

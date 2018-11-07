@@ -17,7 +17,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 	DIRECTION dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	switch (spell)
 	{
@@ -73,7 +73,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("モンスター1体を恐怖させる。抵抗されると無効。", "Attempts to scare a monster.");
 
 		{
-			int power = plev;
+			PLAYER_LEVEL power = plev;
 
 			if (info) return info_power(power);
 
@@ -91,7 +91,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("隣接した全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to sleep monsters in the adjacent squares.");
 
 		{
-			int power = plev;
+			PLAYER_LEVEL power = plev;
 
 			if (info) return info_power(power);
 

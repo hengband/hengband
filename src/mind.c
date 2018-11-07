@@ -545,7 +545,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 	cptr s_dur = "dur ";
 	cptr s_range = "range ";
 #endif
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	strcpy(p, "");
 
@@ -1218,7 +1218,7 @@ static bool cast_mindcrafter_spell(int spell)
 static bool cast_force_spell(int spell)
 {
 	DIRECTION dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	int boost = P_PTR_KI;
 
 	if (heavy_armor()) boost /= 2;
@@ -1625,7 +1625,7 @@ static bool cast_ninja_spell(int spell)
 {
 	POSITION x, y;
 	DIRECTION dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	/* spell code */
 	switch (spell)

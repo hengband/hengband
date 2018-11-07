@@ -51,7 +51,7 @@ void self_knowledge(void)
 
 	cptr info[220];
 
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 
 	int percent;
 

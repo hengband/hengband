@@ -3383,7 +3383,7 @@ bool stasis_evil(DIRECTION dir)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool confuse_monster(DIRECTION dir, int plev)
+bool confuse_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_OLD_CONF, dir, plev, flg));
@@ -3395,7 +3395,7 @@ bool confuse_monster(DIRECTION dir, int plev)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stun_monster(DIRECTION dir, int plev)
+bool stun_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_STUN, dir, plev, flg));
@@ -3433,7 +3433,7 @@ bool clone_monster(DIRECTION dir)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fear_monster(DIRECTION dir, int plev)
+bool fear_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_TURN_ALL, dir, plev, flg));
@@ -3445,7 +3445,7 @@ bool fear_monster(DIRECTION dir, int plev)
  * @param plev プレイヤーレベル(効力はplev*200)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool death_ray(DIRECTION dir, int plev)
+bool death_ray(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_DEATH_RAY, dir, plev * 200, flg));
@@ -3575,7 +3575,7 @@ bool animate_dead(MONSTER_IDX who, POSITION y, POSITION x)
 void call_chaos(void)
 {
 	int Chaos_type, dummy, dir;
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	bool line_chaos = FALSE;
 
 	int hurt_types[31] =
@@ -4020,7 +4020,7 @@ bool deathray_monsters(void)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_monster(DIRECTION dir, int plev)
+bool charm_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CHARM, dir, plev, flg));
@@ -4032,7 +4032,7 @@ bool charm_monster(DIRECTION dir, int plev)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool control_one_undead(DIRECTION dir, int plev)
+bool control_one_undead(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_UNDEAD, dir, plev, flg));
@@ -4044,7 +4044,7 @@ bool control_one_undead(DIRECTION dir, int plev)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool control_one_demon(DIRECTION dir, int plev)
+bool control_one_demon(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_DEMON, dir, plev, flg));
@@ -4056,7 +4056,7 @@ bool control_one_demon(DIRECTION dir, int plev)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_animal(DIRECTION dir, int plev)
+bool charm_animal(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
 	return (project_hook(GF_CONTROL_ANIMAL, dir, plev, flg));
@@ -4578,7 +4578,7 @@ bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
 */
 void cast_wonder(DIRECTION dir)
 {
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	int die = randint1(100) + plev / 5;
 	int vir = virtue_number(V_CHANCE);
 
@@ -4660,7 +4660,7 @@ void cast_wonder(DIRECTION dir)
 */
 void cast_invoke_spirits(DIRECTION dir)
 {
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	int die = randint1(100) + plev / 5;
 	int vir = virtue_number(V_CHANCE);
 
@@ -4808,7 +4808,7 @@ void cast_invoke_spirits(DIRECTION dir)
 */
 void cast_shuffle(void)
 {
-	int plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	DIRECTION dir;
 	int die;
 	int vir = virtue_number(V_CHANCE);

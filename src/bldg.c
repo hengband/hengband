@@ -3040,12 +3040,7 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 	for (t = buf; t[0]; t += strlen(t) + 1)
 		put_str(t, (row++) + 4, 4);
 
-#ifdef JP
-	prt("現在のあなたの装備からすると、あなたの防御力は"
-		   "これくらいです:", 0, 0);
-#else
-	prt("Defense abilities from your current Armor Class are evaluated below.", 0, 0);
-#endif
+	prt(_("現在のあなたの装備からすると、あなたの防御力はこれくらいです:", "Defense abilities from your current Armor Class are evaluated below."), 0, 0);
   
 	flush();
 	(void)inkey();
@@ -3067,8 +3062,8 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 {
 	int i, n = 0;
 	int cand[TR_FLAG_MAX];
-	u32b to_flgs[TR_FLAG_SIZE];
-	u32b from_flgs[TR_FLAG_SIZE];
+	BIT_FLAGS to_flgs[TR_FLAG_SIZE];
+	BIT_FLAGS from_flgs[TR_FLAG_SIZE];
 
 	object_flags(to_ptr, to_flgs);
 	object_flags(from_ptr, from_flgs);
@@ -3115,12 +3110,12 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 
 /*!
  * @brief アイテム修復処理のメインルーチン / Repair broken weapon
- * @param bcost 基本鑑定費用
+ * @param bcost 基本修復費用
  * @return 実際にかかった費用
  */
-static int repair_broken_weapon_aux(int bcost)
+static PRICE repair_broken_weapon_aux(PRICE bcost)
 {
-	s32b cost;
+	PRICE cost;
 	OBJECT_IDX item, mater;
 	object_type *o_ptr, *mo_ptr; /* broken weapon and material weapon */
 	object_kind *k_ptr;
@@ -3197,8 +3192,7 @@ static int repair_broken_weapon_aux(int bcost)
 	if (p_ptr->au < cost)
 	{
 		object_desc(basenm, o_ptr, OD_NAME_ONLY);
-		msg_format(_("%sを修復するだけのゴールドがありません！",
-			"You do not have the gold to repair %s!"), basenm);
+		msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
 		msg_print(NULL);
 		return (0);
 	}
@@ -3392,7 +3386,7 @@ static int repair_broken_weapon(PRICE bcost)
  * @param to_ac ＡＣをアップさせる量
  * @return 実際に行ったらTRUE
  */
-static bool enchant_item(PRICE cost, int to_hit, int to_dam, int to_ac)
+static bool enchant_item(PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_CLASS to_ac)
 {
 	int         i;
 	OBJECT_IDX  item;
