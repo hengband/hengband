@@ -2960,7 +2960,7 @@ static PRICE compare_weapons(PRICE bcost)
  * @param iAC プレイヤーのAC。
  * @return 常にTRUEを返す。
  */
-static bool eval_ac(int iAC)
+static bool eval_ac(ARMOUR_CLASS iAC)
 {
 #ifdef JP
 	const char memo[] =
@@ -2987,8 +2987,8 @@ static bool eval_ac(int iAC)
 #endif
 
 	int protection;
-	int col, row = 2;
-	int lvl;
+	TERM_POSITION col, row = 2;
+	DEPTH lvl;
 	char buf[80*20], *t;
 
 	/* AC lower than zero has no effect */
@@ -3514,11 +3514,11 @@ static bool enchant_item(PRICE cost, int to_hit, int to_dam, int to_ac)
 static void building_recharge(void)
 {
 	OBJECT_IDX  item;
-	int         lev;
+	DEPTH       lev;
 	object_type *o_ptr;
 	object_kind *k_ptr;
 	cptr        q, s;
-	int         price;
+	PRICE       price;
 	PARAMETER_VALUE charges;
 	int         max_charges;
 	char        tmp_str[MAX_NLEN];
@@ -3898,14 +3898,14 @@ bool tele_town(void)
 	screen_save();
 	clear_bldg(4, 10);
 
-	for (i=1;i<max_towns;i++)
+	for (i = 1; i < max_towns; i++)
 	{
 		char buf[80];
 
-		if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == p_ptr->town_num) || !(p_ptr->visit & (1L << (i-1)))) continue;
+		if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == p_ptr->town_num) || !(p_ptr->visit & (1L << (i - 1)))) continue;
 
-		sprintf(buf,"%c) %-20s", I2A(i-1), town[i].name);
-		prt(buf, 5+i, 5);
+		sprintf(buf, "%c) %-20s", I2A(i - 1), town[i].name);
+		prt(buf, 5 + i, 5);
 		num++;
 	}
 
@@ -3963,14 +3963,10 @@ static bool research_mon(void)
 	MONRACE_IDX r_idx;
 	char sym, query;
 	char buf[128];
-
 	bool notpicked;
-
 	bool recall = FALSE;
-
 	u16b why = 0;
-
-	IDX *who;
+	MONSTER_IDX *who;
 
 	/* XTRA HACK WHATSEARCH */
 	bool    all = FALSE;
@@ -4322,16 +4318,9 @@ static void bldg_process_command(building_type *bldg, int i)
 		building_recharge_all();
 		break;
 	case BACT_IDENTS: /* needs work */
-#ifdef JP
-		if (!get_check("持ち物を全て鑑定してよろしいですか？")) break;
+		if (!get_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay for identify all your possession? "))) break;
 		identify_pack();
-		msg_print(" 持ち物全てが鑑定されました。");
-#else
-		if (!get_check("Do you pay for identify all your possession? ")) break;
-		identify_pack();
-		msg_print("Your possessions have been identified.");
-#endif
-
+		msg_print(_(" 持ち物全てが鑑定されました。", "Your possessions have been identified."));
 		paid = TRUE;
 		break;
 	case BACT_IDENT_ONE: /* needs work */
