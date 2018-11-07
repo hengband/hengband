@@ -2207,9 +2207,9 @@ void run_step(DIRECTION dir)
  * @brief トラベル機能の判定処理 /
  * Test for traveling
  * @param prev_dir 前回移動を行った元の方角ID
- * @return なし
+ * @return 次の方向
  */
-static int travel_test(int prev_dir)
+static DIRECTION travel_test(DIRECTION prev_dir)
 {
 	int new_dir = 0;
 	int i, max;

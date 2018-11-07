@@ -2823,7 +2823,7 @@ static void list_weapon(object_type *o_ptr, TERM_POSITION row, TERM_POSITION col
  * @param bcost 基本鑑定費用
  * @return 最終的にかかった費用
  */
-static int compare_weapons(int bcost)
+static PRICE compare_weapons(PRICE bcost)
 {
 	int i, n;
 	OBJECT_IDX item, item2;
@@ -2831,12 +2831,12 @@ static int compare_weapons(int bcost)
 	object_type orig_weapon;
 	object_type *i_ptr;
 	cptr q, s;
-	int row = 2;
-	int wid = 38, mgn = 2;
+	TERM_POSITION row = 2;
+	TERM_POSITION wid = 38, mgn = 2;
 	bool old_character_xtra = character_xtra;
 	char ch;
-	int total = 0;
-	int cost = 0; /* First time no price */
+	PRICE total = 0;
+	PRICE cost = 0; /* First time no price */
 
 	/* Save the screen */
 	screen_save();
@@ -3374,10 +3374,9 @@ static int repair_broken_weapon_aux(int bcost)
  * @param bcost 基本鑑定費用
  * @return 実際にかかった費用
  */
-static int repair_broken_weapon(int bcost)
+static int repair_broken_weapon(PRICE bcost)
 {
-	int cost;
-
+	PRICE cost;
 	screen_save();
 	cost = repair_broken_weapon_aux(bcost);
 	screen_load();
@@ -3391,9 +3390,9 @@ static int repair_broken_weapon(int bcost)
  * @param to_hit 命中をアップさせる量
  * @param to_dam ダメージをアップさせる量
  * @param to_ac ＡＣをアップさせる量
- * @return 実際にかかった費用
+ * @return 実際に行ったらTRUE
  */
-static bool enchant_item(int cost, int to_hit, int to_dam, int to_ac)
+static bool enchant_item(PRICE cost, int to_hit, int to_dam, int to_ac)
 {
 	int         i;
 	OBJECT_IDX  item;

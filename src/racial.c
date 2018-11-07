@@ -593,8 +593,8 @@ typedef struct power_desc_type power_desc_type;
  */
 struct power_desc_type
 {
-	char name[80];
-	PLAYER_LEVEL level;
+	char name[80];      //!<レイシャル名
+	PLAYER_LEVEL level;	//!<体得レベル
 	int cost;
 	int stat;
 	int fail;
@@ -607,10 +607,10 @@ struct power_desc_type
  * @param pd_ptr 発動したいレイシャル・パワー情報の構造体参照ポインタ
  * @return 成功率(%)を返す
  */
-static int racial_chance(power_desc_type *pd_ptr)
+static PERCENTAGE racial_chance(power_desc_type *pd_ptr)
 {
 	PLAYER_LEVEL min_level  = pd_ptr->level;
-	int  difficulty = pd_ptr->fail;
+	int difficulty = pd_ptr->fail;
 
 	int i;
 	int val;
