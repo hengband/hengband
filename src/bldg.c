@@ -2743,11 +2743,11 @@ static void compare_weapon_aux(object_type *o_ptr, int col, int r)
  * @brief モンスターへの命中率の計算
  * @param to_h 命中値
  * @param ac 敵AC
- * @return なし
+ * @return 命中確率
  */
-static int hit_chance(int to_h, int ac)
+static PERCENTAGE hit_chance(HIT_PROB to_h, ARMOUR_CLASS ac)
 {
-	int chance = 0;
+	PERCENTAGE chance = 0;
 	int meichuu = p_ptr->skill_thn + (p_ptr->to_h[0] + to_h) * BTH_PLUS_ADJ;
 
 	if (meichuu <= 0) return 5;
@@ -2773,14 +2773,14 @@ static int hit_chance(int to_h, int ac)
  * various info about the player's +to_dam and number of blows.
  * @return なし
  */
-static void list_weapon(object_type *o_ptr, int row, int col)
+static void list_weapon(object_type *o_ptr, TERM_POSITION row, TERM_POSITION col)
 {
 	char o_name[MAX_NLEN];
 	char tmp_str[80];
 
 	/* Effective dices */
-	int eff_dd = o_ptr->dd + p_ptr->to_dd[0];
-	int eff_ds = o_ptr->ds + p_ptr->to_ds[0];
+	DICE_NUMBER eff_dd = o_ptr->dd + p_ptr->to_dd[0];
+	DICE_SID eff_ds = o_ptr->ds + p_ptr->to_ds[0];
 
 	/* Print the weapon name */
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
@@ -3744,11 +3744,11 @@ if (get_check(format("そのロッドを＄%d で再充填しますか？",
 static void building_recharge_all(void)
 {
 	INVENTORY_IDX i;
-	int lev;
+	DEPTH lev;
 	object_type *o_ptr;
 	object_kind *k_ptr;
-	int price = 0;
-	int total_cost = 0;
+	PRICE price = 0;
+	PRICE total_cost = 0;
 
 
 	/* Display some info */

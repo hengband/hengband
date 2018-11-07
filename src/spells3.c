@@ -5216,9 +5216,9 @@ bool mirror_tunnel(void)
  */
 bool eat_magic(int power)
 {
-	object_type * o_ptr;
+	object_type *o_ptr;
 	object_kind *k_ptr;
-	int lev;
+	DEPTH lev;
 	OBJECT_IDX item;
 	int recharge_strength = 0;
 

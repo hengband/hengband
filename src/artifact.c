@@ -1743,7 +1743,7 @@ static void get_random_name(object_type *o_ptr, char *return_name, bool armour, 
 bool create_artifact(object_type *o_ptr, bool a_scroll)
 {
 	char    new_name[1024];
-	int     has_pval = 0;
+	PARAMETER_VALUE has_pval = 0;
 	int     powers = randint1(5) + 1;
 	int     max_powers;
 	int     max_type = (object_is_weapon_ammo(o_ptr) ? 7 : 5);
@@ -2403,8 +2403,8 @@ static int weakening_artifact(object_type *o_ptr)
 
 	 if ((k_ptr->dd < o_ptr->dd) || (k_ptr->ds < o_ptr->ds))
 	 {
-		int pre_dd = o_ptr->dd;
-		int pre_ds = o_ptr->ds;
+		DICE_NUMBER pre_dd = o_ptr->dd;
+		DICE_SID pre_ds = o_ptr->ds;
 
 		if (o_ptr->dd > o_ptr->ds)
 		{
@@ -2423,7 +2423,7 @@ static int weakening_artifact(object_type *o_ptr)
 	
 	if (o_ptr->to_d > 10)
 	{
-		int pre_damage = o_ptr->to_d;
+		HIT_POINT pre_damage = o_ptr->to_d;
 
 		o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
 		if (o_ptr->to_d < 10)

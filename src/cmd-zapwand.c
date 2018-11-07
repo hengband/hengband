@@ -12,7 +12,7 @@
 int wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
 {
 	int ident = FALSE;
-	int lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
+	PLAYER_LEVEL lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
 	POSITION rad = powerful ? 3 : 2;
 
 	/* XXX Hack -- Wand of wonder can do anything before it */
