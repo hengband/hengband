@@ -966,7 +966,7 @@ static s32b object_value_base(object_type *o_ptr)
 		/* Figurines, relative to monster level */
 		case TV_FIGURINE:
 		{
-			int level = r_info[o_ptr->pval].level;
+			DEPTH level = r_info[o_ptr->pval].level;
 			if (level < 20) return level*50L;
 			else if (level < 30) return 1000+(level-20)*150L;
 			else if (level < 40) return 2500+(level-30)*350L;
@@ -1439,7 +1439,7 @@ PRICE object_value_real(object_type *o_ptr)
 		/* Figurines, relative to monster level */
 		case TV_FIGURINE:
 		{
-			int level = r_info[o_ptr->pval].level;
+			DEPTH level = r_info[o_ptr->pval].level;
 			if (level < 20) value = level*50L;
 			else if (level < 30) value = 1000+(level-20)*150L;
 			else if (level < 40) value = 2500+(level-30)*350L;
@@ -2757,7 +2757,7 @@ static void add_esp_weak(object_type *o_ptr, bool extra)
  * Hack -- note special processing for crown/helm\n
  * Hack -- note special processing for robe of permanence\n
  */
-static void a_m_aux_2(object_type *o_ptr, int level, int power)
+static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 {
 	ARMOUR_CLASS toac1 = (ARMOUR_CLASS)randint1(5) + m_bonus(5, level);
 	ARMOUR_CLASS toac2 = (ARMOUR_CLASS)m_bonus(10, level);
@@ -3225,7 +3225,7 @@ static void a_m_aux_2(object_type *o_ptr, int level, int power)
  * Hack -- note special "pval boost" code for ring of speed\n
  * Hack -- note that some items must be cursed (or blessed)\n
  */
-static void a_m_aux_3(object_type *o_ptr, int level, int power)
+static void a_m_aux_3(object_type *o_ptr, DEPTH level, int power)
 {
 	/* Apply magic (good or bad) according to type */
 	switch (o_ptr->tval)
@@ -4036,7 +4036,7 @@ static bool item_monster_okay(MONRACE_IDX r_idx)
  * @details
  * Hack -- note the special code for various items
  */
-static void a_m_aux_4(object_type *o_ptr, int level, int power)
+static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 {
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -5275,8 +5275,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 #ifdef JP
 		msg_format("%sは消えた。", o_name);
 #else
-		msg_format("The %s disappear%s.",
-			   o_name, (plural ? "" : "s"));
+		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
 

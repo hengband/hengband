@@ -2090,7 +2090,7 @@ static void display_player_various(void)
 		damage[i] = p_ptr->dis_to_d[i] * 100;
 		if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(TRUE) & EMPTY_HAND_RARM))
 		{
-			int level = p_ptr->lev;
+			PLAYER_LEVEL level = p_ptr->lev;
 			if (i)
 			{
 				damage[i] = 0;

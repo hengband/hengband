@@ -2808,7 +2808,7 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 
 	if (!r_idx)
 	{
-		int level;
+		DEPTH level;
 
 		chameleon_change_m_idx = m_idx;
 		if (old_unique)

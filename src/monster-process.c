@@ -1406,7 +1406,7 @@ static bool get_moves(MONSTER_IDX m_idx, int *mm)
  * @param stun 攻撃側モンスターが朦朧状態ならTRUEを返す
  * @return 命中ならばTRUEを返す
  */
-static int check_hit2(int power, int level, int ac, int stun)
+static int check_hit2(int power, DEPTH level, ARMOUR_CLASS ac, int stun)
 {
 	int i, k;
 
@@ -1449,8 +1449,10 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, IDX t_idx)
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
 
-	int             ap_cnt;
-	int             ac, rlev, pt;
+	ARMOUR_CLASS ap_cnt;
+	ARMOUR_CLASS ac;
+	DEPTH rlev;
+	int pt;
 	char            m_name[80], t_name[80];
 	char            temp[MAX_NLEN];
 	bool            blinked;
