@@ -1909,6 +1909,10 @@ static int remove_curse_aux(int all)
 		cnt++;
 	}
 
+	if (cnt)
+	{
+		msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
+	}
 	/* Return "something uncursed" */
 	return (cnt);
 }

@@ -1467,10 +1467,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_DISP_CURSE_XTRA:
 	{
 		msg_format(_("%sが真実を照らし出す...", "The %s exhibits the truth..."), name);
-		if (remove_all_curse())
-		{
-			msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
-		}
+		(void)remove_all_curse();
 		(void)probing();
 		break;
 	}

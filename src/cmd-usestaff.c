@@ -80,15 +80,6 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 		bool result = powerful ? remove_all_curse() : remove_curse();
 		if (result)
 		{
-			if (magic)
-			{
-				msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
-			}
-			else if (!p_ptr->blind)
-			{
-				msg_print(_("杖は一瞬ブルーに輝いた...", "The staff glows blue for a moment..."));
-
-			}
 			ident = TRUE;
 		}
 		break;

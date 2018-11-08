@@ -170,13 +170,7 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
 
 		{
-			if (cast)
-			{
-				if (remove_curse())
-				{
-					msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
-				}
-			}
+			if (cast) (void)remove_curse();
 		}
 		break;
 
@@ -425,13 +419,7 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curse from equipped items.");
 
 		{
-			if (cast)
-			{
-				if (remove_all_curse())
-				{
-					msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
-				}
-			}
+			if (cast) (void)remove_all_curse();
 		}
 		break;
 

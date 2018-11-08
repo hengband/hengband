@@ -208,7 +208,6 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 		{
 			if (remove_curse())
 			{
-				msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 				ident = TRUE;
 			}
 			break;
@@ -218,9 +217,8 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 		{
 			if (remove_all_curse())
 			{
-				msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
+				ident = TRUE;
 			}
-			ident = TRUE;
 			break;
 		}
 
