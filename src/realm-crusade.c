@@ -25,17 +25,13 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 0:
 		if (name) return _("懲罰", "Punishment");
 		if (desc) return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
-
 		{
 			int dice = 3 + (plev - 1) / 5;
 			int sides = 4;
-
 			if (info) return info_damage(dice, sides, 0);
-
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-
 				fire_bolt_or_beam(beam_chance() - 10, GF_ELEC, dir, damroll(dice, sides));
 			}
 		}
@@ -44,12 +40,9 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 1:
 		if (name) return _("邪悪存在感知", "Detect Evil");
 		if (desc) return _("近くの邪悪なモンスターを感知する。", "Detects all evil monsters in your vicinity.");
-
 		{
 			POSITION rad = DETECT_RAD_DEFAULT;
-
 			if (info) return info_radius(rad);
-
 			if (cast)
 			{
 				detect_monsters_evil(rad);
@@ -60,12 +53,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 2:
 		if (name) return _("恐怖除去", "Remove Fear");
 		if (desc) return _("恐怖を取り除く。", "Removes fear.");
-
 		{
-			if (cast)
-			{
-				set_afraid(0);
-			}
+			if (cast) set_afraid(0);
 		}
 		break;
 
@@ -75,13 +64,10 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			PLAYER_LEVEL power = plev;
-
 			if (info) return info_power(power);
-
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-
 				fear_monster(dir, power);
 			}
 		}
@@ -90,16 +76,10 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 4:
 		if (name) return _("聖域", "Sanctuary");
 		if (desc) return _("隣接した全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to sleep monsters in the adjacent squares.");
-
 		{
 			PLAYER_LEVEL power = plev;
-
 			if (info) return info_power(power);
-
-			if (cast)
-			{
-				sleep_monsters_touch();
-			}
+			if (cast) sleep_monsters_touch();
 		}
 		break;
 
@@ -109,13 +89,8 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			POSITION range = 25 + plev / 2;
-
 			if (info) return info_range(range);
-
-			if (cast)
-			{
-				teleport_player(range, 0L);
-			}
+			if (cast) teleport_player(range, 0L);
 		}
 		break;
 
@@ -126,9 +101,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int dice = 3 + (plev - 1) / 9;
 			int sides = 2;
-
 			if (info) return info_multi_damage_dice(dice, sides);
-
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
@@ -140,7 +113,6 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 7:
 		if (name) return _("身体浄化", "Purify");
 		if (desc) return _("傷、毒、朦朧から全快する。", "Heals all cut, stun and poison status.");
-
 		{
 			if (cast)
 			{
@@ -157,9 +129,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int power = MAX_SIGHT * 5;
-
 			if (info) return info_power(power);
-
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
@@ -174,11 +144,10 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Fires a ball with holy power. Hurts evil monsters greatly, but don't effect good monsters.");
 
 		{
-			int dice = 3;
-			int sides = 6;
+			DICE_NUMBER dice = 3;
+			DICE_SID sides = 6;
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
-
 			if (p_ptr->pclass == CLASS_PRIEST ||
 				p_ptr->pclass == CLASS_HIGH_MAGE ||
 				p_ptr->pclass == CLASS_SORCERER)
@@ -202,13 +171,10 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("悪魔払い", "Exorcism");
 		if (desc) return _("視界内の全てのアンデッド及び悪魔にダメージを与え、邪悪なモンスターを恐怖させる。",
 			"Damages all undead and demons in sight, and scares all evil monsters in sight.");
-
 		{
 			int sides = plev;
 			int power = plev;
-
 			if (info) return info_damage(1, sides, 0);
-
 			if (cast)
 			{
 				dispel_undead(randint1(sides));
@@ -221,7 +187,6 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 11:
 		if (name) return _("解呪", "Remove Curse");
 		if (desc) return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
-
 		{
 			if (cast)
 			{
