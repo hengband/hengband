@@ -62,6 +62,31 @@ bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int t
 }
 
 
+bool cast_summon_demon(int power)
+{
+	u32b flg = 0L;
+	bool pet = !one_in_(3);
+
+	if (pet) flg |= PM_FORCE_PET;
+	else flg |= PM_NO_PET;
+	if (!(pet && (p_ptr->lev < 50))) flg |= PM_ALLOW_GROUP;
+
+	if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, power, SUMMON_DEMON, flg))
+	{
+		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
+		if (pet)
+		{
+			msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
+		}
+		else
+		{
+			msg_print(_("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」",
+				"'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
+		}
+	}
+	return TRUE;
+}
+
 
 /*!
 * @brief 悪魔領域のグレーターデーモン召喚に利用可能な死体かどうかを返す。 / An "item_tester_hook" for offer

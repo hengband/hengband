@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
+#include "spells-summon.h"
 
 /*!
 * @brief カオス領域魔法の各処理を行う
@@ -449,26 +450,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				u32b flg = 0L;
-				bool pet = !one_in_(3);
-
-				if (pet) flg |= PM_FORCE_PET;
-				else flg |= PM_NO_PET;
-				if (!(pet && (plev < 50))) flg |= PM_ALLOW_GROUP;
-
-				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_DEMON, flg))
-				{
-					msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
-					if (pet)
-					{
-						msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
-					}
-					else
-					{
-						msg_print(_("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」",
-							"'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
-					}
-				}
+				cast_summon_demon((plev * 3) / 2);
 			}
 		}
 		break;

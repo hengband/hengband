@@ -9,6 +9,7 @@
 #include "angband.h"
 #include "cmd-activate.h"
 #include "object-hook.h"
+#include "spells-summon.h"
 
 /*!
 * @brief ペット入りモンスターボールをソートするための比較関数
@@ -986,22 +987,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_SUMMON_DEMON:
 	{
-		bool pet = one_in_(3);
-		BIT_FLAGS mode = 0L;
-
-		if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
-		if (pet) mode |= PM_FORCE_PET;
-		else mode |= PM_NO_PET;
-
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((plev * 3) / 2), SUMMON_DEMON, mode))
-		{
-			msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
-			if (pet)
-				msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
-			else
-				msg_print(_("「NON SERVIAM! Wretch! お前の魂を頂くぞ！」", "'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
-		}
-
+		cast_summon_demon((plev * 3) / 2);
 		break;
 	}
 
