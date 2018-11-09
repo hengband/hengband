@@ -5635,3 +5635,64 @@ void massacre(void)
 			py_attack(y, x, 0);
 	}
 }
+
+bool eat_lock(void)
+{
+	POSITION x, y;
+	cave_type *c_ptr;
+	feature_type *f_ptr, *mimic_f_ptr;
+	DIRECTION dir;
+
+	if (!get_rep_dir2(&dir)) return FALSE;
+	y = p_ptr->y + ddy[dir];
+	x = p_ptr->x + ddx[dir];
+	c_ptr = &cave[y][x];
+	f_ptr = &f_info[c_ptr->feat];
+	mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
+
+	stop_mouth();
+
+	if (!have_flag(mimic_f_ptr->flags, FF_HURT_ROCK))
+	{
+		msg_print(_("この地形は食べられない。", "You cannot eat this feature."));
+	}
+	else if (have_flag(f_ptr->flags, FF_PERMANENT))
+	{
+		msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), f_name + mimic_f_ptr->name);
+	}
+	else if (c_ptr->m_idx)
+	{
+		monster_type *m_ptr = &m_list[c_ptr->m_idx];
+		msg_print(_("何かが邪魔しています！", "There's something in the way!"));
+
+		if (!m_ptr->ml || !is_pet(m_ptr)) py_attack(y, x, 0);
+	}
+	else if (have_flag(f_ptr->flags, FF_TREE))
+	{
+		msg_print(_("木の味は好きじゃない！", "You don't like the woody taste!"));
+	}
+	else if (have_flag(f_ptr->flags, FF_GLASS))
+	{
+		msg_print(_("ガラスの味は好きじゃない！", "You don't like the glassy taste!"));
+	}
+	else if (have_flag(f_ptr->flags, FF_DOOR) || have_flag(f_ptr->flags, FF_CAN_DIG))
+	{
+		(void)set_food(p_ptr->food + 3000);
+	}
+	else if (have_flag(f_ptr->flags, FF_MAY_HAVE_GOLD) || have_flag(f_ptr->flags, FF_HAS_GOLD))
+	{
+		(void)set_food(p_ptr->food + 5000);
+	}
+	else
+	{
+		msg_format(_("この%sはとてもおいしい！", "This %s is very filling!"), f_name + mimic_f_ptr->name);
+		(void)set_food(p_ptr->food + 10000);
+	}
+
+	/* Destroy the wall */
+	cave_alter_feat(y, x, FF_HURT_ROCK);
+
+	/* Move the player */
+	(void)move_player_effect(y, x, MPE_DONT_PICKUP);
+	return TRUE;
+}
