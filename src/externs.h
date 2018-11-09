@@ -1388,7 +1388,6 @@ extern void do_cmd_gain_hissatsu(void);
 extern MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_FLAGS mode);
 
 /* mutation.c */
-extern int count_bits(BIT_FLAGS x);
 extern bool gain_random_mutation(int choose_mut);
 extern bool lose_mutation(int choose_mut);
 extern void lose_all_mutations(void);

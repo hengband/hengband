@@ -266,3 +266,19 @@ void s64b_mod(s32b *A1, u32b *A2, s32b B1, u32b B2)
 	s64b_sub(A1, A2, tmp1, tmp2);
 }
 
+/*!
+* @brief 符号なし32ビット整数のビット数を返す。
+* @param x ビット数を調べたい変数
+* @return ビット数
+*/
+int count_bits(BIT_FLAGS x)
+{
+	int n = 0;
+
+	if (x) do
+	{
+		n++;
+	} while (0 != (x = x&(x - 1)));
+
+	return (n);
+}

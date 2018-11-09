@@ -2019,23 +2019,6 @@ void do_cmd_knowledge_mutations(void)
 	fd_kill(file_name);
 }
 
-/*!
- * @brief 符号なし32ビット整数のビット数を返す。
- * @param x ビット数を調べたい変数
- * @return ビット数
- */
-int count_bits(BIT_FLAGS x)
-{
-	int n = 0;
-
-	if (x) do
-	{
-		n++;
-	}
-	while (0 != (x = x&(x-1)));
-
-	return (n);
-}
 
 /*!
  * @brief 現在プレイヤー得ている突然変異の数を返す。
