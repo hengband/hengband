@@ -104,7 +104,7 @@ static errr (*old_xtra_hook)(int n, int v);
 static errr (*old_curs_hook)(int x, int y);
 static errr (*old_bigcurs_hook)(int x, int y);
 static errr (*old_wipe_hook)(int x, int y, int n);
-static errr (*old_text_hook)(int x, int y, int n, byte a, cptr s);
+static errr (*old_text_hook)(int x, int y, int n, TERM_COLOR a, cptr s);
 
 static void disable_chuukei_server(void)
 {
@@ -933,7 +933,7 @@ static bool flush_ringbuf_client(void)
 	{
 		char id;
 		int x, y, len;
-		SYMBOL_COLOR col;
+		TERM_COLOR col;
 		int i;
 		unsigned char tmp1, tmp2, tmp3, tmp4;
 		char *mesg;

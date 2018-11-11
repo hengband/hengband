@@ -2828,7 +2828,7 @@ static errr Term_wipe_win(int x, int y, int n)
  * what color it should be using to draw with, but perhaps simply changing
  * it every time is not too inefficient.  XXX XXX XXX
  */
-static errr Term_text_win(int x, int y, int n, byte a, const char *s)
+static errr Term_text_win(int x, int y, int n, TERM_COLOR a, const char *s)
 {
 	term_data *td = (term_data*)(Term->data);
 	RECT rc;
@@ -3021,16 +3021,16 @@ static errr Term_text_win(int x, int y, int n, byte a, const char *s)
  *
  * If "graphics" is not available, we simply "wipe" the given grids.
  */
-static errr Term_pict_win(int x, int y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp)
+static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp)
 {
 	term_data *td = (term_data*)(Term->data);
 
 #ifdef USE_GRAPHICS
 
 	int i;
-	int x1, y1, w1, h1, tw1, th1;
-	int x2, y2, w2, h2, tw2 = 0;
-	int x3, y3;
+	TERM_LEN x1, y1, w1, h1, tw1, th1;
+	TERM_LEN x2, y2, w2, h2, tw2 = 0;
+	TERM_LEN x3, y3;
 
 	HDC hdcMask = NULL;
 

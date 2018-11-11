@@ -795,9 +795,9 @@ static byte lighting_colours[16][2] =
  * @brief 調査中
  * @todo コメントを付加すること
  */
-void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
+void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX])
 {
-	byte s_attr = f_attr[F_LIT_STANDARD];
+	TERM_COLOR s_attr = f_attr[F_LIT_STANDARD];
 	byte s_char = f_char[F_LIT_STANDARD];
 	int i;
 

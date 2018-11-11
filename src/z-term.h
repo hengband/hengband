@@ -37,16 +37,16 @@ struct term_win
 	bool cu, cv;
 	byte cx, cy;
 
-	SYMBOL_COLOR **a;
+	TERM_COLOR **a;
 	char **c;
 
-	byte *va;
+	TERM_COLOR *va;
 	char *vc;
 
-	byte **ta;
+	TERM_COLOR **ta;
 	char **tc;
 
-	byte *vta;
+	TERM_COLOR *vta;
 	char *vtc;
 };
 
@@ -109,9 +109,9 @@ struct term
 	errr (*curs_hook)(TERM_LEN x, TERM_LEN y); //!< Hook for placing the cursor
 	errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y);
 	errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n); //!< Hook for drawing some blank spaces
-	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s); //!< Hook for drawing a string of chars using an attr
+	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s); //!< Hook for drawing a string of chars using an attr
 	void (*resize_hook)(void);
-	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp); //!< Hook for drawing a sequence of special attr / char pairs
+	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp); //!< Hook for drawing a sequence of special attr / char pairs
 };
 
 
@@ -169,22 +169,22 @@ extern term *Term;
 extern errr Term_user(int n);
 extern errr Term_xtra(int n, int v);
 
-extern void Term_queue_char(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc);
-extern void Term_queue_bigchar(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc);
+extern void Term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
+extern void Term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
 
-extern void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, byte *a, char *c, byte *ta, char *tc);
+extern void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
 
-extern void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s);
+extern void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s);
 
 extern errr Term_fresh(void);
 extern errr Term_set_cursor(int v);
 extern errr Term_gotoxy(TERM_LEN x, TERM_LEN y);
-extern errr Term_draw(TERM_LEN x, TERM_LEN y, byte a, char c);
-extern errr Term_addch(byte a, char c);
-extern errr Term_add_bigch(byte a, char c);
-extern errr Term_addstr(int n, byte a, cptr s);
-extern errr Term_putch(TERM_LEN x, TERM_LEN y, byte a, char c);
-extern errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s);
+extern errr Term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
+extern errr Term_addch(TERM_COLOR a, char c);
+extern errr Term_add_bigch(TERM_COLOR a, char c);
+extern errr Term_addstr(int n, TERM_COLOR a, cptr s);
+extern errr Term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
+extern errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s);
 #ifdef JP
 extern errr Term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s);
 #endif

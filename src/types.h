@@ -86,10 +86,10 @@ struct feature_type
 	FEAT_SUBTYPE subtype;  /*!< 副特性値 */
 	FEAT_POWER power;    /*!< 地形強度 */
 
-	SYMBOL_COLOR d_attr[F_LIT_MAX];   /*!< デフォルトの地形シンボルカラー / Default feature attribute */
+	TERM_COLOR d_attr[F_LIT_MAX];   /*!< デフォルトの地形シンボルカラー / Default feature attribute */
 	SYMBOL_CODE d_char[F_LIT_MAX];   /*!< デフォルトの地形シンボルアルファベット / Default feature character */
 
-	SYMBOL_COLOR x_attr[F_LIT_MAX];   /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
+	TERM_COLOR x_attr[F_LIT_MAX];   /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
 	SYMBOL_CODE x_char[F_LIT_MAX];   /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
 };
 
@@ -138,10 +138,10 @@ struct object_kind
 	DEPTH level;			/*!< ベースアイテムの基本生成階 / Level */
 	BIT_FLAGS8 extra;			/*!< その他色々のビットフラグ配列 / Something */
 
-	SYMBOL_COLOR d_attr;		/*!< デフォルトのアイテムシンボルカラー / Default object attribute */
+	TERM_COLOR d_attr;		/*!< デフォルトのアイテムシンボルカラー / Default object attribute */
 	SYMBOL_CODE d_char;		/*!< デフォルトのアイテムシンボルアルファベット / Default object character */
 
-	SYMBOL_COLOR x_attr;		/*!< 設定変更後のアイテムシンボルカラー /  Desired object attribute */
+	TERM_COLOR x_attr;		/*!< 設定変更後のアイテムシンボルカラー /  Desired object attribute */
 	SYMBOL_CODE x_char;		/*!< 設定変更後のアイテムシンボルアルファベット /  Desired object character */
 
 	IDX flavor;		/*!< 調査中(TODO) / Special object flavor (or zero) */
@@ -346,12 +346,10 @@ struct monster_race
 	DEPTH level;			/* Level of creature */
 	RARITY rarity;			/* Rarity of creature */
 
-
-	SYMBOL_COLOR d_attr;		/* Default monster attribute */
+	TERM_COLOR d_attr;		/* Default monster attribute */
 	SYMBOL_CODE d_char;			/* Default monster character */
 
-
-	SYMBOL_COLOR x_attr;		/* Desired monster attribute */
+	TERM_COLOR x_attr;		/* Desired monster attribute */
 	SYMBOL_CODE x_char;			/* Desired monster character */
 
 

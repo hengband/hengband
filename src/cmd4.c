@@ -3422,9 +3422,9 @@ void do_cmd_visuals(void)
 				int c;
 				IDX t;
 
-				SYMBOL_COLOR da = k_ptr->d_attr;
+				TERM_COLOR da = k_ptr->d_attr;
 				SYMBOL_CODE dc = k_ptr->d_char;
-				SYMBOL_COLOR ca = k_ptr->x_attr;
+				TERM_COLOR ca = k_ptr->x_attr;
 				SYMBOL_CODE cc = k_ptr->x_char;
 
 				/* Label the object */
@@ -3516,9 +3516,9 @@ void do_cmd_visuals(void)
 				int c;
 				IDX t;
 
-				byte da = f_ptr->d_attr[lighting_level];
+				TERM_COLOR da = f_ptr->d_attr[lighting_level];
 				byte dc = f_ptr->d_char[lighting_level];
-				byte ca = f_ptr->x_attr[lighting_level];
+				TERM_COLOR ca = f_ptr->x_attr[lighting_level];
 				byte cc = f_ptr->x_char[lighting_level];
 
 				/* Label the object */

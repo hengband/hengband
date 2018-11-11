@@ -369,16 +369,16 @@ static errr term_win_copy(term_win *s, term_win *f, int w, int h)
 	/* Copy contents */
 	for (y = 0; y < h; y++)
 	{
-		byte *f_aa = f->a[y];
+		TERM_COLOR *f_aa = f->a[y];
 		char *f_cc = f->c[y];
 
-		byte *s_aa = s->a[y];
+		TERM_COLOR *s_aa = s->a[y];
 		char *s_cc = s->c[y];
 
-		byte *f_taa = f->ta[y];
+		TERM_COLOR *f_taa = f->ta[y];
 		char *f_tcc = f->tc[y];
 
-		byte *s_taa = s->ta[y];
+		TERM_COLOR *s_taa = s->ta[y];
 		char *s_tcc = s->tc[y];
 
 		for (x = 0; x < w; x++)
@@ -473,7 +473,7 @@ static errr Term_wipe_hack(TERM_LEN x, TERM_LEN y, int n)
 /*
  * Hack -- fake hook for "Term_text()" (see above)
  */
-static errr Term_text_hack(TERM_LEN x, TERM_LEN y, int n, byte a, cptr cp)
+static errr Term_text_hack(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr cp)
 {
 	/* Unused */
 	(void)x;
@@ -489,7 +489,7 @@ static errr Term_text_hack(TERM_LEN x, TERM_LEN y, int n, byte a, cptr cp)
 /*
  * Hack -- fake hook for "Term_pict()" (see above)
  */
-static errr Term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const byte *ap, cptr cp, const byte *tap, cptr tcp)
+static errr Term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, cptr cp, const TERM_COLOR *tap, cptr tcp)
 {
 	/* Unused */
 	(void)x;
@@ -511,17 +511,16 @@ static errr Term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const byte *ap, cptr c
 
 /*
  * Mentally draw an attr/char at a given location
- *
  * Assumes given location and values are valid.
  */
-void Term_queue_char(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc)
+void Term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
 {
 	term_win *scrn = Term->scr; 
 	
-	byte *scr_aa = &scrn->a[y][x];
+	TERM_COLOR *scr_aa = &scrn->a[y][x];
 	char *scr_cc = &scrn->c[y][x];
 
-	byte *scr_taa = &scrn->ta[y][x];
+	TERM_COLOR *scr_taa = &scrn->ta[y][x];
 	char *scr_tcc = &scrn->tc[y][x];
 
 	/* Hack -- Ignore non-changes */
@@ -555,14 +554,11 @@ void Term_queue_char(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc)
 
 /*
  * Bigtile version of Term_queue_char().
- *
  * If use_bigtile is FALSE, simply call Term_queue_char().
- *
  * Otherwise, mentally draw a pair of attr/char at a given location.
- *
  * Assumes given location and values are valid.
  */
-void Term_queue_bigchar(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc)
+void Term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
 {
 
 #ifdef JP
@@ -644,17 +640,17 @@ void Term_queue_bigchar(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc
  * This function is designed to be fast, with no consistancy checking.
  * It is used to update the map in the game.
  */
-void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, byte *a, char *c, byte *ta, char *tc)
+void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc)
 {
 	term_win *scrn = Term->scr;
 
 	TERM_LEN x1 = -1;
 	TERM_LEN x2 = -1;
 
-	byte *scr_aa = &scrn->a[y][x];
+	TERM_COLOR *scr_aa = &scrn->a[y][x];
 	char *scr_cc = &scrn->c[y][x];
 
-	byte *scr_taa = &scrn->ta[y][x];
+	TERM_COLOR *scr_taa = &scrn->ta[y][x];
 	char *scr_tcc = &scrn->tc[y][x];
 
 	while (n--)
@@ -715,20 +711,20 @@ void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, byte *a, char *c, byte *ta, 
  * a valid location, so the first "n" characters of "s" can all be added
  * starting at (x,y) without causing any illegal operations.
  */
-void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s)
+void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s)
 {
 	TERM_LEN x1 = -1, x2 = -1;
 
-	byte *scr_aa = Term->scr->a[y];
+	TERM_COLOR *scr_aa = Term->scr->a[y];
 #ifdef JP
 	char *scr_cc = Term->scr->c[y];
 
-	byte *scr_taa = Term->scr->ta[y];
+	TERM_COLOR *scr_taa = Term->scr->ta[y];
 	char *scr_tcc = Term->scr->tc[y];
 #else
 	char *scr_cc = Term->scr->c[y];
 
-	byte *scr_taa = Term->scr->ta[y];
+	TERM_COLOR *scr_taa = Term->scr->ta[y];
 	char *scr_tcc = Term->scr->tc[y];
 #endif
 
@@ -848,39 +844,39 @@ void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s)
  *
  * Display text using "Term_pict()"
  */
-static void Term_fresh_row_pict(TERM_LEN y, int x1, int x2)
+static void Term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 {
 	TERM_LEN x;
 
-	byte *old_aa = Term->old->a[y];
+	TERM_COLOR *old_aa = Term->old->a[y];
 	char *old_cc = Term->old->c[y];
 
-	byte *scr_aa = Term->scr->a[y];
+	TERM_COLOR *scr_aa = Term->scr->a[y];
 	char *scr_cc = Term->scr->c[y];
 
-	byte *old_taa = Term->old->ta[y];
+	TERM_COLOR *old_taa = Term->old->ta[y];
 	char *old_tcc = Term->old->tc[y];
 
-	byte *scr_taa = Term->scr->ta[y];
+	TERM_COLOR *scr_taa = Term->scr->ta[y];
 	char *scr_tcc = Term->scr->tc[y];
 
-	byte ota;
+	TERM_COLOR ota;
 	char otc;
 
-	byte nta;
+	TERM_COLOR nta;
 	char ntc;
 
 
 	/* Pending length */
-	int fn = 0;
+	TERM_LEN fn = 0;
 
 	/* Pending start */
-	int fx = 0;
+	TERM_LEN fx = 0;
 
-	byte oa;
+	TERM_COLOR oa;
 	char oc;
 
-	byte na;
+	TERM_COLOR na;
 	char nc;
 
 #ifdef JP
@@ -936,7 +932,7 @@ static void Term_fresh_row_pict(TERM_LEN y, int x1, int x2)
 			{
 				/* Draw pending attr/char pairs */
 				(void)((*Term->pict_hook)(fx, y, fn,
-				       &scr_aa[fx], &scr_cc[fx],&scr_taa[fx], &scr_tcc[fx]));
+				       &scr_aa[fx], &scr_cc[fx], &scr_taa[fx], &scr_tcc[fx]));
 
 				/* Forget */
 				fn = 0;
@@ -986,20 +982,20 @@ static void Term_fresh_row_both(TERM_LEN y, int x1, int x2)
 {
 	TERM_LEN x;
 
-	byte *old_aa = Term->old->a[y];
+	TERM_COLOR *old_aa = Term->old->a[y];
 	char *old_cc = Term->old->c[y];
 
-	byte *scr_aa = Term->scr->a[y];
+	TERM_COLOR *scr_aa = Term->scr->a[y];
 	char *scr_cc = Term->scr->c[y];
 
-	byte *old_taa = Term->old->ta[y];
+	TERM_COLOR *old_taa = Term->old->ta[y];
 	char *old_tcc = Term->old->tc[y];
-	byte *scr_taa = Term->scr->ta[y];
+	TERM_COLOR *scr_taa = Term->scr->ta[y];
 	char *scr_tcc = Term->scr->tc[y];
 
-	byte ota;
+	TERM_COLOR ota;
 	char otc;
-	byte nta;
+	TERM_COLOR nta;
 	char ntc;
 
 	/* The "always_text" flag */
@@ -1014,10 +1010,10 @@ static void Term_fresh_row_both(TERM_LEN y, int x1, int x2)
 	/* Pending attr */
 	byte fa = Term->attr_blank;
 
-	byte oa;
+	TERM_COLOR oa;
 	char oc;
 
-	byte na;
+	TERM_COLOR na;
 	char nc;
 
 #ifdef JP
@@ -1582,16 +1578,16 @@ errr Term_fresh(void)
 		if (!old->cu && old->cv)
 		{
 			int csize = 1;
-			int tx = old->cx;
-			int ty = old->cy;
+			TERM_LEN tx = old->cx;
+			TERM_LEN ty = old->cy;
 
-			byte *old_aa = old->a[ty];
+			TERM_COLOR *old_aa = old->a[ty];
 			char *old_cc = old->c[ty];
 
-			byte *old_taa = old->ta[ty];
+			TERM_COLOR *old_taa = old->ta[ty];
 			char *old_tcc = old->tc[ty];
 
-			byte ota = old_taa[tx];
+			TERM_COLOR ota = old_taa[tx];
 			char otc = old_tcc[tx];
 
 #ifdef JP
@@ -1835,7 +1831,7 @@ errr Term_gotoxy(TERM_LEN x, TERM_LEN y)
  * Do not change the cursor position
  * No visual changes until "Term_fresh()".
  */
-errr Term_draw(TERM_LEN x, TERM_LEN y, byte a, char c)
+errr Term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 {
 	int w = Term->wid;
 	int h = Term->hgt;
@@ -1871,9 +1867,9 @@ errr Term_draw(TERM_LEN x, TERM_LEN y, byte a, char c)
  * positive value, future calls to either function will
  * return negative ones.
  */
-errr Term_addch(byte a, char c)
+errr Term_addch(TERM_COLOR a, char c)
 {
-	int w = Term->wid;
+	TERM_LEN w = Term->wid;
 
 	/* Handle "unusable" cursor */
 	if (Term->scr->cu) return (-1);
@@ -1906,7 +1902,7 @@ errr Term_addch(byte a, char c)
  * Otherwise, queue a pair of attr/char for display at the current
  * cursor location, and advance the cursor to the right by two.
  */
-errr Term_add_bigch(byte a, char c)
+errr Term_add_bigch(TERM_COLOR a, char c)
 {
 	if (!use_bigtile) return Term_addch(a, c);
 
@@ -1952,12 +1948,10 @@ errr Term_add_bigch(byte a, char c)
  * positive value, future calls to either function will
  * return negative ones.
  */
-errr Term_addstr(int n, byte a, cptr s)
+errr Term_addstr(int n, TERM_COLOR a, cptr s)
 {
 	int k;
-
-	int w = Term->wid;
-
+	TERM_LEN w = Term->wid;
 	errr res = 0;
 
 	/* Handle "unusable" cursor */
@@ -1989,7 +1983,7 @@ errr Term_addstr(int n, byte a, cptr s)
 /*
  * Move to a location and, using an attr, add a char
  */
-errr Term_putch(TERM_LEN x, TERM_LEN y, byte a, char c)
+errr Term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 {
 	errr res;
 
@@ -2007,7 +2001,7 @@ errr Term_putch(TERM_LEN x, TERM_LEN y, byte a, char c)
 /*
  * Move to a location and, using an attr, add a string
  */
-errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s)
+errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s)
 {
 	errr res;
 
