@@ -4651,36 +4651,12 @@ static bool player_birth_aux(void)
 			/* Prepare a prompt (must squeeze everything in) */
 			Term_gotoxy(2, 23);
 			Term_addch(TERM_WHITE, b1);
-#ifdef JP
-			Term_addstr(-1, TERM_WHITE, "'r' 次の数値");
-#else
-			Term_addstr(-1, TERM_WHITE, "'r'eroll");
-#endif
+			Term_addstr(-1, TERM_WHITE, _("'r' 次の数値", "'r'eroll"));
 
-#ifdef JP
-			if (prev) Term_addstr(-1, TERM_WHITE, ", 'p' 前の数値");
-#else
-			if (prev) Term_addstr(-1, TERM_WHITE, ", 'p'previous");
-#endif
-
-#ifdef JP
-			if (mode) Term_addstr(-1, TERM_WHITE, ", 'h' その他の情報");
-#else
-			if (mode) Term_addstr(-1, TERM_WHITE, ", 'h' Misc.");
-#endif
-
-#ifdef JP
-			else Term_addstr(-1, TERM_WHITE, ", 'h' 生い立ちを表示");
-#else
-			else Term_addstr(-1, TERM_WHITE, ", 'h'istory");
-#endif
-
-#ifdef JP
-			Term_addstr(-1, TERM_WHITE, ", Enter この数値に決定");
-#else
-			Term_addstr(-1, TERM_WHITE, ", or Enter to accept");
-#endif
-
+			if (prev) Term_addstr(-1, TERM_WHITE, _(", 'p' 前の数値", "'p'previous"));
+			if (mode) Term_addstr(-1, TERM_WHITE, _(", 'h' その他の情報", ", 'h' Misc."));
+			else Term_addstr(-1, TERM_WHITE, _(", 'h' 生い立ちを表示", ", 'h'istory"));
+			Term_addstr(-1, TERM_WHITE, _(", Enter この数値に決定", ", or Enter to accept"));
 			Term_addch(TERM_WHITE, b2);
 
 			/* Prompt and get a command */
@@ -4725,23 +4701,13 @@ static bool player_birth_aux(void)
 			else if (c == '=')
 			{
 				screen_save();
-#ifdef JP
-				do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
-#else
-				do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
-#endif
-
+				do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
 				screen_load();
 				continue;
 			}
 
 			/* Warning */
-#ifdef JP
 			bell();
-#else
-			bell();
-#endif
-
 		}
 
 		/* Are we done? */
@@ -4827,11 +4793,7 @@ static bool ask_quick_start(void)
 	{
 		char c;
 
-#ifdef JP
-		put_str("クイック・スタートを使いますか？[y/N]", 14, 10);
-#else
-		put_str("Use quick start? [y/N]", 14, 10);
-#endif
+		put_str(_("クイック・スタートを使いますか？[y/N]", "Use quick start? [y/N]"), 14, 10);
 		c = inkey();
 
 		if (c == 'Q') quit(NULL);
