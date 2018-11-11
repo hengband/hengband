@@ -105,7 +105,7 @@ DIRECTION command_dir;		/*!< 各種コマンドの汎用的な方向値処理と
 s16b command_see;		/* See "object1.c" */
 s16b command_wrk;		/* See "object1.c" */
 
-TERM_POSITION command_gap = 999;         /* See "object1.c" */
+TERM_LEN command_gap = 999;         /* See "object1.c" */
 
 s16b command_new;		/* Command chaining from inven/equip view */
 

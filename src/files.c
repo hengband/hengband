@@ -2798,7 +2798,7 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
  * @param mode オプション
  * @return なし
  */
-static void display_player_equippy(TERM_POSITION y, TERM_POSITION x, u16b mode)
+static void display_player_equippy(TERM_LEN y, TERM_LEN x, u16b mode)
 {
 	int i, max_i;
 
@@ -4069,7 +4069,7 @@ void display_player(BIT_FLAGS mode)
  */
 static void dump_aux_display_player(FILE *fff)
 {
-	TERM_POSITION x, y;
+	TERM_LEN x, y;
 	byte a;
 	char c;
 	char buf[1024];
@@ -4924,7 +4924,7 @@ static void dump_aux_home_museum(FILE *fff)
 	if (st_ptr->stock_num)
 	{
 		int i;
-		TERM_POSITION x = 1;
+		TERM_LEN x = 1;
 
 		fprintf(fff, _("  [我が家のアイテム]\n", "  [Home Inventory]\n"));
 
@@ -4949,7 +4949,7 @@ static void dump_aux_home_museum(FILE *fff)
 	if (st_ptr->stock_num)
 	{
 		int i;
-		TERM_POSITION x = 1;
+		TERM_LEN x = 1;
 
 		fprintf(fff, _("  [博物館のアイテム]\n", "  [Museum]\n"));
 

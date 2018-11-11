@@ -86,8 +86,8 @@ struct term
 	u16b key_xtra;
 	u16b key_size;
 
-	TERM_POSITION wid; //!< Window Width(max 255)
-	TERM_POSITION hgt; //!< Window Height(max 255)
+	TERM_LEN wid; //!< Window Width(max 255)
+	TERM_LEN hgt; //!< Window Height(max 255)
 
 	byte y1; //!< Minimum modified row
 	byte y2; //!< Maximum modified row
@@ -106,12 +106,12 @@ struct term
 
 	errr (*user_hook)(int n); //!< ユーザ設定項目実装部 / Hook for user actions
 	errr (*xtra_hook)(int n, int v); //!< Hook for extra actions
-	errr (*curs_hook)(TERM_POSITION x, TERM_POSITION y); //!< Hook for placing the cursor
-	errr (*bigcurs_hook)(TERM_POSITION x, TERM_POSITION y);
-	errr (*wipe_hook)(TERM_POSITION x, TERM_POSITION y, int n); //!< Hook for drawing some blank spaces
-	errr (*text_hook)(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s); //!< Hook for drawing a string of chars using an attr
+	errr (*curs_hook)(TERM_LEN x, TERM_LEN y); //!< Hook for placing the cursor
+	errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y);
+	errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n); //!< Hook for drawing some blank spaces
+	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s); //!< Hook for drawing a string of chars using an attr
 	void (*resize_hook)(void);
-	errr (*pict_hook)(TERM_POSITION x, TERM_POSITION y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp); //!< Hook for drawing a sequence of special attr / char pairs
+	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp); //!< Hook for drawing a sequence of special attr / char pairs
 };
 
 
@@ -169,34 +169,34 @@ extern term *Term;
 extern errr Term_user(int n);
 extern errr Term_xtra(int n, int v);
 
-extern void Term_queue_char(TERM_POSITION x, TERM_POSITION y, byte a, char c, byte ta, char tc);
-extern void Term_queue_bigchar(TERM_POSITION x, TERM_POSITION y, byte a, char c, byte ta, char tc);
+extern void Term_queue_char(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc);
+extern void Term_queue_bigchar(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc);
 
-extern void Term_queue_line(TERM_POSITION x, TERM_POSITION y, int n, byte *a, char *c, byte *ta, char *tc);
+extern void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, byte *a, char *c, byte *ta, char *tc);
 
-extern void Term_queue_chars(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s);
+extern void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s);
 
 extern errr Term_fresh(void);
 extern errr Term_set_cursor(int v);
-extern errr Term_gotoxy(TERM_POSITION x, TERM_POSITION y);
-extern errr Term_draw(TERM_POSITION x, TERM_POSITION y, byte a, char c);
+extern errr Term_gotoxy(TERM_LEN x, TERM_LEN y);
+extern errr Term_draw(TERM_LEN x, TERM_LEN y, byte a, char c);
 extern errr Term_addch(byte a, char c);
 extern errr Term_add_bigch(byte a, char c);
 extern errr Term_addstr(int n, byte a, cptr s);
-extern errr Term_putch(TERM_POSITION x, TERM_POSITION y, byte a, char c);
-extern errr Term_putstr(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s);
+extern errr Term_putch(TERM_LEN x, TERM_LEN y, byte a, char c);
+extern errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s);
 #ifdef JP
-extern errr Term_putstr_v(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s);
+extern errr Term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s);
 #endif
-extern errr Term_erase(TERM_POSITION x, TERM_POSITION y, int n);
+extern errr Term_erase(TERM_LEN x, TERM_LEN y, int n);
 extern errr Term_clear(void);
 extern errr Term_redraw(void);
-extern errr Term_redraw_section(TERM_POSITION x1, TERM_POSITION y1, TERM_POSITION x2, TERM_POSITION y2);
+extern errr Term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
 
 extern errr Term_get_cursor(int *v);
-extern errr Term_get_size(TERM_POSITION *w, TERM_POSITION *h);
+extern errr Term_get_size(TERM_LEN *w, TERM_LEN *h);
 extern errr Term_locate(int *x, int *y);
-extern errr Term_what(TERM_POSITION x, TERM_POSITION y, byte *a, char *c);
+extern errr Term_what(TERM_LEN x, TERM_LEN y, byte *a, char *c);
 
 extern errr Term_flush(void);
 extern errr Term_keypress(int k);

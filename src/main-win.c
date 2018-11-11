@@ -398,8 +398,8 @@ struct _term_data
 	DWORD dwExStyle;
 
 	uint keys;
-	TERM_POSITION rows;	/* int -> uint */
-	TERM_POSITION cols;
+	TERM_LEN rows;	/* int -> uint */
+	TERM_LEN cols;
 
 	uint pos_x; //!< タームの左上X座標
 	uint pos_y; //!< タームの左上Y座標
@@ -602,8 +602,8 @@ static bool Term_no_press = FALSE;
  */
 static bool mouse_down = FALSE;
 static bool paint_rect = FALSE;
-static TERM_POSITION mousex = 0, mousey = 0;
-static TERM_POSITION oldx, oldy;
+static TERM_LEN mousex = 0, mousey = 0;
+static TERM_LEN oldx, oldy;
 
 
 /*!
@@ -1054,7 +1054,7 @@ static void validate_dir(cptr s, bool vital)
 static void term_getsize(term_data *td)
 {
 	RECT rc;
-	TERM_POSITION wid, hgt;
+	TERM_LEN wid, hgt;
 
 	/* Paranoia */
 	if (td->cols < 1) td->cols = 1;
@@ -4733,10 +4733,10 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 			HGLOBAL hGlobal;
 			LPSTR lpStr;
 			int j, sz;
-			TERM_POSITION dx = abs(oldx - mousex) + 1;
-			TERM_POSITION dy = abs(oldy - mousey) + 1;
-			TERM_POSITION ox = (oldx > mousex) ? mousex : oldx;
-			TERM_POSITION oy = (oldy > mousey) ? mousey : oldy;
+			TERM_LEN dx = abs(oldx - mousex) + 1;
+			TERM_LEN dy = abs(oldy - mousey) + 1;
+			TERM_LEN ox = (oldx > mousex) ? mousex : oldx;
+			TERM_LEN oy = (oldy > mousey) ? mousey : oldy;
 
 			mouse_down = FALSE;
 			paint_rect = FALSE;
@@ -4941,8 +4941,8 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 
 				case SIZE_RESTORED:
 				{
-					TERM_POSITION cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
-					TERM_POSITION rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
+					TERM_LEN cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
+					TERM_LEN rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
 
 					/* New size */
 					if ((td->cols != cols) || (td->rows != rows))
@@ -5119,8 +5119,8 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 		case WM_SIZE:
 		{
-			TERM_POSITION cols;
-			TERM_POSITION rows;
+			TERM_LEN cols;
+			TERM_LEN rows;
 			
 			/* this message was sent before WM_NCCREATE */
 			if (!td) return 1;

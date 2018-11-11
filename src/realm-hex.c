@@ -58,8 +58,8 @@ bool stop_hex_spell(void)
 	char choice;
 	char out_val[160];
 	bool flag = FALSE;
-	TERM_POSITION y = 1;
-	TERM_POSITION x = 20;
+	TERM_LEN y = 1;
+	TERM_LEN x = 20;
 	int sp[MAX_KEEP];
 
 	if (!hex_spelling_any())

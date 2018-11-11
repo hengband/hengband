@@ -2773,7 +2773,7 @@ static PERCENTAGE hit_chance(HIT_PROB to_h, ARMOUR_CLASS ac)
  * various info about the player's +to_dam and number of blows.
  * @return なし
  */
-static void list_weapon(object_type *o_ptr, TERM_POSITION row, TERM_POSITION col)
+static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 {
 	char o_name[MAX_NLEN];
 	char tmp_str[80];
@@ -2831,8 +2831,8 @@ static PRICE compare_weapons(PRICE bcost)
 	object_type orig_weapon;
 	object_type *i_ptr;
 	cptr q, s;
-	TERM_POSITION row = 2;
-	TERM_POSITION wid = 38, mgn = 2;
+	TERM_LEN row = 2;
+	TERM_LEN wid = 38, mgn = 2;
 	bool old_character_xtra = character_xtra;
 	char ch;
 	PRICE total = 0;
@@ -2987,7 +2987,7 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 #endif
 
 	int protection;
-	TERM_POSITION col, row = 2;
+	TERM_LEN col, row = 2;
 	DEPTH lvl;
 	char buf[80*20], *t;
 

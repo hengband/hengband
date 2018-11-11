@@ -3949,7 +3949,7 @@ bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
  * @param use_realm 魔法領域ID
  * @return なし
  */
-void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_POSITION y, TERM_POSITION x, REALM_IDX use_realm)
+void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX use_realm)
 {
 	int             i, spell, exp_level, increment = 64;
 	const magic_type *s_ptr;

@@ -2197,7 +2197,7 @@ bool change_panel(int dy, int dx)
 static bool change_panel_xy(POSITION y, POSITION x)
 {
 	POSITION dy = 0, dx = 0;
-	TERM_POSITION wid, hgt;
+	TERM_LEN wid, hgt;
 
 	/* Get size */
 	get_screen_size(&wid, &hgt);

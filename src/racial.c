@@ -2640,7 +2640,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 				int ctr = 0;
 				char dummy[80];
 				char letter;
-				TERM_POSITION x1, y1;
+				TERM_LEN x1, y1;
 
 				strcpy(dummy, "");
 

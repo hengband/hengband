@@ -2154,7 +2154,7 @@ COMMAND_CODE show_inven(int target_item)
 	byte            out_color[23];
 	char            out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
-	TERM_POSITION wid, hgt;
+	TERM_LEN wid, hgt;
 	char            inven_label[52 + 1];
 
 	/* Starting column */
@@ -2321,7 +2321,7 @@ COMMAND_CODE show_equip(int target_item)
 	byte            out_color[23];
 	char            out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
-	TERM_POSITION wid, hgt;
+	TERM_LEN wid, hgt;
 	char            equip_label[52 + 1];
 
 	/* Starting column */
@@ -3631,7 +3631,7 @@ ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode
  * @return 選択したアイテムの添え字
  * @details
  */
-COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *min_width)
+COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_width)
 {
 	COMMAND_CODE i, m;
 	int j, k, l;
@@ -3649,7 +3649,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *
 
 	OBJECT_IDX floor_list[23];
 	ITEM_NUMBER floor_num;
-	TERM_POSITION wid, hgt;
+	TERM_LEN wid, hgt;
 	char floor_label[52 + 1];
 
 	bool dont_need_to_show_weights = TRUE;
@@ -3798,7 +3798,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	ITEM_NUMBER floor_num;
 	OBJECT_IDX floor_list[23];
 	int floor_top = 0;
-	TERM_POSITION min_width = 0;
+	TERM_LEN min_width = 0;
 
 	extern bool select_the_force;
 

@@ -325,7 +325,7 @@ static errr term_win_nuke(term_win *s, int w, int h)
  */
 static errr term_win_init(term_win *s, int w, int h)
 {
-	TERM_POSITION y;
+	TERM_LEN y;
 
 	/* Make the window access arrays */
 	C_MAKE(s->a, h, byte*);
@@ -364,7 +364,7 @@ static errr term_win_init(term_win *s, int w, int h)
  */
 static errr term_win_copy(term_win *s, term_win *f, int w, int h)
 {
-	TERM_POSITION x, y;
+	TERM_LEN x, y;
 
 	/* Copy contents */
 	for (y = 0; y < h; y++)
@@ -438,7 +438,7 @@ errr Term_xtra(int n, int v)
 /*
  * Hack -- fake hook for "Term_curs()" (see above)
  */
-static errr Term_curs_hack(TERM_POSITION x, TERM_POSITION y)
+static errr Term_curs_hack(TERM_LEN x, TERM_LEN y)
 {
 	/* Unused */
 	(void)x;
@@ -451,7 +451,7 @@ static errr Term_curs_hack(TERM_POSITION x, TERM_POSITION y)
 /*
  * Hack -- fake hook for "Term_bigcurs()" (see above)
  */
-static errr Term_bigcurs_hack(TERM_POSITION x, TERM_POSITION y)
+static errr Term_bigcurs_hack(TERM_LEN x, TERM_LEN y)
 {
 	return (*Term->curs_hook)(x, y);
 }
@@ -459,7 +459,7 @@ static errr Term_bigcurs_hack(TERM_POSITION x, TERM_POSITION y)
 /*
  * Hack -- fake hook for "Term_wipe()" (see above)
  */
-static errr Term_wipe_hack(TERM_POSITION x, TERM_POSITION y, int n)
+static errr Term_wipe_hack(TERM_LEN x, TERM_LEN y, int n)
 {
 	/* Unused */
 	(void)x;
@@ -473,7 +473,7 @@ static errr Term_wipe_hack(TERM_POSITION x, TERM_POSITION y, int n)
 /*
  * Hack -- fake hook for "Term_text()" (see above)
  */
-static errr Term_text_hack(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr cp)
+static errr Term_text_hack(TERM_LEN x, TERM_LEN y, int n, byte a, cptr cp)
 {
 	/* Unused */
 	(void)x;
@@ -489,7 +489,7 @@ static errr Term_text_hack(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr
 /*
  * Hack -- fake hook for "Term_pict()" (see above)
  */
-static errr Term_pict_hack(TERM_POSITION x, TERM_POSITION y, int n, const byte *ap, cptr cp, const byte *tap, cptr tcp)
+static errr Term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const byte *ap, cptr cp, const byte *tap, cptr tcp)
 {
 	/* Unused */
 	(void)x;
@@ -514,7 +514,7 @@ static errr Term_pict_hack(TERM_POSITION x, TERM_POSITION y, int n, const byte *
  *
  * Assumes given location and values are valid.
  */
-void Term_queue_char(TERM_POSITION x, TERM_POSITION y, byte a, char c, byte ta, char tc)
+void Term_queue_char(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc)
 {
 	term_win *scrn = Term->scr; 
 	
@@ -562,7 +562,7 @@ void Term_queue_char(TERM_POSITION x, TERM_POSITION y, byte a, char c, byte ta, 
  *
  * Assumes given location and values are valid.
  */
-void Term_queue_bigchar(TERM_POSITION x, TERM_POSITION y, byte a, char c, byte ta, char tc)
+void Term_queue_bigchar(TERM_LEN x, TERM_LEN y, byte a, char c, byte ta, char tc)
 {
 
 #ifdef JP
@@ -644,12 +644,12 @@ void Term_queue_bigchar(TERM_POSITION x, TERM_POSITION y, byte a, char c, byte t
  * This function is designed to be fast, with no consistancy checking.
  * It is used to update the map in the game.
  */
-void Term_queue_line(TERM_POSITION x, TERM_POSITION y, int n, byte *a, char *c, byte *ta, char *tc)
+void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, byte *a, char *c, byte *ta, char *tc)
 {
 	term_win *scrn = Term->scr;
 
-	TERM_POSITION x1 = -1;
-	TERM_POSITION x2 = -1;
+	TERM_LEN x1 = -1;
+	TERM_LEN x2 = -1;
 
 	byte *scr_aa = &scrn->a[y][x];
 	char *scr_cc = &scrn->c[y][x];
@@ -715,9 +715,9 @@ void Term_queue_line(TERM_POSITION x, TERM_POSITION y, int n, byte *a, char *c, 
  * a valid location, so the first "n" characters of "s" can all be added
  * starting at (x,y) without causing any illegal operations.
  */
-void Term_queue_chars(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s)
+void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s)
 {
-	TERM_POSITION x1 = -1, x2 = -1;
+	TERM_LEN x1 = -1, x2 = -1;
 
 	byte *scr_aa = Term->scr->a[y];
 #ifdef JP
@@ -848,9 +848,9 @@ void Term_queue_chars(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s)
  *
  * Display text using "Term_pict()"
  */
-static void Term_fresh_row_pict(TERM_POSITION y, int x1, int x2)
+static void Term_fresh_row_pict(TERM_LEN y, int x1, int x2)
 {
-	TERM_POSITION x;
+	TERM_LEN x;
 
 	byte *old_aa = Term->old->a[y];
 	char *old_cc = Term->old->c[y];
@@ -982,9 +982,9 @@ static void Term_fresh_row_pict(TERM_POSITION y, int x1, int x2)
  * Display text using "Term_text()" and "Term_wipe()",
  * but use "Term_pict()" for high-bit attr/char pairs
  */
-static void Term_fresh_row_both(TERM_POSITION y, int x1, int x2)
+static void Term_fresh_row_both(TERM_LEN y, int x1, int x2)
 {
-	TERM_POSITION x;
+	TERM_LEN x;
 
 	byte *old_aa = Term->old->a[y];
 	char *old_cc = Term->old->c[y];
@@ -1203,9 +1203,9 @@ static void Term_fresh_row_both(TERM_POSITION y, int x1, int x2)
  *
  * Display text using "Term_text()" and "Term_wipe()"
  */
-static void Term_fresh_row_text(TERM_POSITION y, int x1, int x2)
+static void Term_fresh_row_text(TERM_LEN y, int x1, int x2)
 {
-	TERM_POSITION x;
+	TERM_LEN x;
 
 	byte *old_aa = Term->old->a[y];
 	char *old_cc = Term->old->c[y];
@@ -1494,7 +1494,7 @@ static void Term_fresh_row_text(TERM_POSITION y, int x1, int x2)
  */
 errr Term_fresh(void)
 {
-	TERM_POSITION x, y;
+	TERM_LEN x, y;
 
 	int w = Term->wid;
 	int h = Term->hgt;
@@ -1665,8 +1665,8 @@ errr Term_fresh(void)
 		/* Scan the "modified" rows */
 		for (y = y1; y <= y2; ++y)
 		{
-			TERM_POSITION x1 = Term->x1[y];
-			TERM_POSITION x2 = Term->x2[y];
+			TERM_LEN x1 = Term->x1[y];
+			TERM_LEN x2 = Term->x2[y];
 
 			/* Flush each "modified" row */
 			if (x1 <= x2)
@@ -1809,7 +1809,7 @@ errr Term_set_cursor(int v)
  *
  * Note -- "illegal" requests do not move the cursor.
  */
-errr Term_gotoxy(TERM_POSITION x, TERM_POSITION y)
+errr Term_gotoxy(TERM_LEN x, TERM_LEN y)
 {
 	int w = Term->wid;
 	int h = Term->hgt;
@@ -1835,7 +1835,7 @@ errr Term_gotoxy(TERM_POSITION x, TERM_POSITION y)
  * Do not change the cursor position
  * No visual changes until "Term_fresh()".
  */
-errr Term_draw(TERM_POSITION x, TERM_POSITION y, byte a, char c)
+errr Term_draw(TERM_LEN x, TERM_LEN y, byte a, char c)
 {
 	int w = Term->wid;
 	int h = Term->hgt;
@@ -1989,7 +1989,7 @@ errr Term_addstr(int n, byte a, cptr s)
 /*
  * Move to a location and, using an attr, add a char
  */
-errr Term_putch(TERM_POSITION x, TERM_POSITION y, byte a, char c)
+errr Term_putch(TERM_LEN x, TERM_LEN y, byte a, char c)
 {
 	errr res;
 
@@ -2007,7 +2007,7 @@ errr Term_putch(TERM_POSITION x, TERM_POSITION y, byte a, char c)
 /*
  * Move to a location and, using an attr, add a string
  */
-errr Term_putstr(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s)
+errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s)
 {
 	errr res;
 
@@ -2025,7 +2025,7 @@ errr Term_putstr(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s)
 /*
  * Move to a location and, using an attr, add a string vertically
  */
-errr Term_putstr_v(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s)
+errr Term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s)
 {
 	errr res;
 	int i;
@@ -2057,15 +2057,15 @@ errr Term_putstr_v(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s)
 /*
  * Place cursor at (x,y), and clear the next "n" chars
  */
-errr Term_erase(TERM_POSITION x, TERM_POSITION y, int n)
+errr Term_erase(TERM_LEN x, TERM_LEN y, int n)
 {
 	int i;
 
-	TERM_POSITION w = Term->wid;
+	TERM_LEN w = Term->wid;
 	/* int h = Term->hgt; */
 
-	TERM_POSITION x1 = -1;
-	TERM_POSITION x2 = -1;
+	TERM_LEN x1 = -1;
+	TERM_LEN x2 = -1;
 
 	int na = Term->attr_blank;
 	int nc = Term->char_blank;
@@ -2162,7 +2162,7 @@ errr Term_erase(TERM_POSITION x, TERM_POSITION y, int n)
  */
 errr Term_clear(void)
 {
-	TERM_POSITION x, y;
+	TERM_LEN x, y;
 
 	int w = Term->wid;
 	int h = Term->hgt;
@@ -2234,7 +2234,7 @@ errr Term_redraw(void)
 /*
  * Redraw part of a window.
  */
-errr Term_redraw_section(TERM_POSITION x1, TERM_POSITION y1, TERM_POSITION x2, TERM_POSITION y2)
+errr Term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 {
 	int i, j;
 
@@ -2321,7 +2321,7 @@ errr Term_get_cursor(int *v)
 /*
  * Extract the current window size
  */
-errr Term_get_size(TERM_POSITION *w, TERM_POSITION *h)
+errr Term_get_size(TERM_LEN *w, TERM_LEN *h)
 {
 	/* Access the cursor */
 	(*w) = Term->wid;
@@ -2354,7 +2354,7 @@ errr Term_locate(int *x, int *y)
  * Note that this refers to what will be on the window after the
  * next call to "Term_fresh()".  It may or may not already be there.
  */
-errr Term_what(TERM_POSITION x, TERM_POSITION y, byte *a, char *c)
+errr Term_what(TERM_LEN x, TERM_LEN y, byte *a, char *c)
 {
 	int w = Term->wid;
 	int h = Term->hgt;
@@ -2551,7 +2551,7 @@ errr Term_save(void)
  */
 errr Term_load(void)
 {
-	TERM_POSITION y;
+	TERM_LEN y;
 
 	int w = Term->wid;
 	int h = Term->hgt;
@@ -2591,7 +2591,7 @@ errr Term_load(void)
  */
 errr Term_exchange(void)
 {
-	TERM_POSITION y;
+	TERM_LEN y;
 
 	int w = Term->wid;
 	int h = Term->hgt;
@@ -2930,7 +2930,7 @@ errr term_nuke(term *t)
  */
 errr term_init(term *t, int w, int h, int k)
 {
-	TERM_POSITION y;
+	TERM_LEN y;
 
 
 	/* Wipe it */

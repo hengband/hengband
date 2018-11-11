@@ -156,7 +156,7 @@ extern COMMAND_ARG command_arg;
 extern s16b command_rep;
 extern DIRECTION command_dir;
 extern s16b command_see;
-extern TERM_POSITION command_gap;
+extern TERM_LEN command_gap;
 extern s16b command_wrk;
 extern s16b command_new;
 extern bool msg_flag;
@@ -482,7 +482,7 @@ extern bool no_lite(void);
 extern void apply_default_feat_lighting(byte f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX]);
 extern void map_info(POSITION y, POSITION x, byte *ap, char *cp, byte *tap, char *tcp);
 extern void move_cursor_relative(int row, int col);
-extern void print_rel(char c, byte a, TERM_POSITION y, TERM_POSITION x);
+extern void print_rel(char c, byte a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(POSITION y, POSITION x);
 extern void display_dungeon(void);
 extern void lite_spot(POSITION y, POSITION x);
@@ -1057,7 +1057,7 @@ extern PERCENTAGE mod_spell_chance_1(PERCENTAGE chance);
 extern PERCENTAGE mod_spell_chance_2(PERCENTAGE chance);
 extern PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX realm);
 extern bool spell_okay(int spell, bool learned, bool study_pray, int realm);
-extern void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_POSITION y, TERM_POSITION x, REALM_IDX realm);
+extern void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX realm);
 extern bool hates_acid(object_type *o_ptr);
 extern bool hates_elec(object_type *o_ptr);
 extern bool hates_fire(object_type *o_ptr);
@@ -1206,7 +1206,7 @@ extern void window_stuff(void);
 extern void handle_stuff(void);
 extern s16b empty_hands(bool riding_control);
 extern bool heavy_armor(void);
-extern void print_monster_list(TERM_POSITION x, TERM_POSITION y, TERM_POSITION max_lines);
+extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 extern void update_playtime(void);
 
 
@@ -1478,7 +1478,7 @@ extern bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir);
 
 /* object1.c */
 extern ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode);
-extern COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_POSITION *min_width);
+extern COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_width);
 extern bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode);
 extern void py_pickup_floor(bool pickup);
 

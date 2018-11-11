@@ -1404,7 +1404,7 @@ void move_cursor_relative(int row, int col)
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */
-void print_rel(char c, byte a, TERM_POSITION y, TERM_POSITION x)
+void print_rel(char c, byte a, TERM_LEN y, TERM_LEN x)
 {
 	/* Only do "legal" locations */
 	if (panel_contains(y, x))
@@ -1562,7 +1562,7 @@ void note_spot(POSITION y, POSITION x)
 
 void display_dungeon(void)
 {
-	TERM_POSITION x, y;
+	TERM_LEN x, y;
 	byte a;
 	char c;
 

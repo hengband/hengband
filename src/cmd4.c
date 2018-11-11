@@ -1810,8 +1810,8 @@ void do_cmd_options_aux(int page, cptr info)
 static void do_cmd_options_win(void)
 {
 	int i, j, d;
-	TERM_POSITION y = 0;
-	TERM_POSITION x = 0;
+	TERM_LEN y = 0;
+	TERM_LEN x = 0;
 	char ch;
 	bool go = TRUE;
 	u32b old_flag[8];
@@ -6403,8 +6403,8 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 		{
 			byte a;
 			char c;
-			TERM_POSITION x = col + j;
-			TERM_POSITION y = row + i;
+			TERM_LEN x = col + j;
+			TERM_LEN y = row + i;
 			int ia, ic;
 
 			/* Bigtile mode uses double width */
@@ -6434,13 +6434,13 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 /*
  * Place the cursor at the collect position for visual mode
  */
-static void place_visual_list_cursor(TERM_POSITION col, TERM_POSITION row, byte a, byte c, byte attr_top, byte char_left)
+static void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, byte a, byte c, byte attr_top, byte char_left)
 {
 	int i = (a & 0x7f) - attr_top;
 	int j = c - char_left;
 
-	TERM_POSITION x = col + j;
-	TERM_POSITION y = row + i;
+	TERM_LEN x = col + j;
+	TERM_LEN y = row + i;
 
 	/* Bigtile mode uses double width */
 	if (use_bigtile) x += j;
@@ -6674,7 +6674,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 	byte attr_top = 0, char_left = 0;
 
 	int browser_rows;
-	TERM_POSITION wid, hgt;
+	TERM_LEN wid, hgt;
 
 	BIT_FLAGS8 mode;
 
@@ -8361,7 +8361,7 @@ static void do_cmd_knowledge_home(void)
 		if (st_ptr->stock_num)
 		{
 #ifdef JP
-			TERM_POSITION x = 1;
+			TERM_LEN x = 1;
 #endif
 			/* Header with name of the town */
 			fprintf(fff, _("  [ 我が家のアイテム ]\n", "  [Home Inventory]\n"));

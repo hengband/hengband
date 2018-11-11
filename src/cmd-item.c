@@ -1810,7 +1810,7 @@ void do_cmd_query_symbol(void)
 		/* XTRA HACK WHATSEARCH */
 		if (temp[0])
 		{
-			TERM_POSITION xx;
+			TERM_LEN xx;
 			char temp2[80];
 
 			for (xx = 0; temp[xx] && xx < 80; xx++)

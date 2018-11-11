@@ -1733,7 +1733,7 @@ static void fix_inven(void)
  * @return なし
  * </pre>
  */
-static void print_monster_line(TERM_POSITION x, TERM_POSITION y, monster_type* m_ptr, int n_same){
+static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type* m_ptr, int n_same){
 	char buf[256];
 	int i;
 	MONRACE_IDX r_idx = m_ptr->ap_r_idx;
@@ -1780,8 +1780,8 @@ static void print_monster_line(TERM_POSITION x, TERM_POSITION y, monster_type* m
  * @param y 表示行
  * @param max_lines 最大何行描画するか
  */
-void print_monster_list(TERM_POSITION x, TERM_POSITION y, TERM_POSITION max_lines){
-	TERM_POSITION line = y;
+void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines){
+	TERM_LEN line = y;
 	monster_type* last_mons = NULL;
 	monster_type* m_ptr = NULL;
 	int n_same = 0;
@@ -1992,8 +1992,8 @@ static void fix_player(void)
 static void fix_message(void)
 {
 	int j, i;
-	TERM_POSITION w, h;
-	TERM_POSITION x, y;
+	TERM_LEN w, h;
+	TERM_LEN x, y;
 
 	/* Scan windows */
 	for (j = 0; j < 8; j++)
