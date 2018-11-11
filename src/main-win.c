@@ -432,11 +432,6 @@ struct _term_data
 
 	bool posfix;
 
-/* bg */
-#if 0
-	char *bgfile;
-	int use_bg;
-#endif
 };
 
 #define MAX_TERM_DATA 8	//!< Maximum number of windows XXX XXX XXX
@@ -1060,7 +1055,7 @@ static void term_getsize(term_data *td)
 {
 	RECT rc;
 
-	int wid, hgt;
+	TERM_POSITION wid, hgt;
 
 	/* Paranoia */
 	if (td->cols < 1) td->cols = 1;
@@ -5627,6 +5622,9 @@ static void init_stuff(void)
 	/* validate_dir(ANGBAND_DIR_XTRA_HELP); */
 }
 
+/*!
+ * @brief (Windows固有)変愚蛮怒が起動済かどうかのチェック
+ */
 static bool is_already_running(void)
 {
 	bool result = FALSE;
@@ -5641,6 +5639,9 @@ static bool is_already_running(void)
 }
 
 
+/*!
+ * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
+ */
 int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		       LPSTR lpCmdLine, int nCmdShow)
 {
