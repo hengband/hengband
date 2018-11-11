@@ -52,174 +52,66 @@ struct term_win
 
 
 
-/*
- * An actual "term" structure
- *
- *	- Extra "user" info (used by application)
- *
- *	- Extra "data" info (used by implementation)
- *
- *
- *	- Flag "user_flag"
- *	  An extra "user" flag (used by application)
- *
- *
- *	- Flag "data_flag"
- *	  An extra "data" flag (used by implementation)
- *
- *
- *	- Flag "active_flag"
- *	  This "term" is "active"
- *
- *	- Flag "mapped_flag"
- *	  This "term" is "mapped"
- *
- *	- Flag "total_erase"
- *	  This "term" should be fully erased
- *
- *	- Flag "fixed_shape"
- *	  This "term" is not allowed to resize
- *
- *	- Flag "icky_corner"
- *	  This "term" has an "icky" corner grid
- *
- *	- Flag "soft_cursor"
- *	  This "term" uses a "software" cursor
- *
- *	- Flag "always_pict"
- *	  Use the "Term_pict()" routine for all text
- *
- *	- Flag "higher_pict"
- *	  Use the "Term_pict()" routine for special text
- *
- *	- Flag "always_text"
- *	  Use the "Term_text()" routine for invisible text
- *
- *	- Flag "unused_flag"
- *	  Reserved for future use
- *
- *	- Flag "never_bored"
- *	  Never call the "TERM_XTRA_BORED" action
- *
- *	- Flag "never_frosh"
- *	  Never call the "TERM_XTRA_FROSH" action
- *
- *
- *	- Value "attr_blank"
- *	  Use this "attr" value for "blank" grids
- *
- *	- Value "char_blank"
- *	  Use this "char" value for "blank" grids
- *
- *
- *	- Ignore this pointer
- *
- *	- Keypress Queue -- various data
- *
- *	- Keypress Queue -- pending keys
- *
- *
- *	- Window Width (max 255)
- *	- Window Height (max 255)
- *
- *	- Minimum modified row
- *	- Maximum modified row
- *
- *	- Minimum modified column (per row)
- *	- Maximum modified column (per row)
- *
- *
- *	- Displayed screen image
- *	- Requested screen image
- *
- *	- Temporary screen image
- *	- Memorized screen image
- *
- *
- *	- Hook for init-ing the term
- *	- Hook for nuke-ing the term
- *
- *	- Hook for user actions
- *
- *	- Hook for extra actions
- *
- *	- Hook for placing the cursor
- *
- *	- Hook for drawing some blank spaces
- *
- *	- Hook for drawing a string of chars using an attr
- *
- *	- Hook for drawing a sequence of special attr/char pairs
+/*!
+ * @brief term実装構造体 / An actual "term" structure
  */
-
 typedef struct term term;
-
 struct term
 {
-	vptr user;
+	vptr user; //!< Extra "user" info (used by application)
+	vptr data; //!< Extra "data" info (used by implementation)
 
-	vptr data;
+	bool user_flag; //!< Flag "user_flag" An extra "user" flag (used by application)
+	bool data_flag; //!< Flag "data_flag" An extra "data" flag(used by implementation)
 
-	bool user_flag;
+	bool active_flag; //!< Flag "active_flag" This "term" is "active"
+	bool mapped_flag; //!< Flag "mapped_flag" This "term" is "mapped"
+	bool total_erase; //!< Flag "total_erase" This "term" should be fully erased
+	bool fixed_shape; //!< Flag "fixed_shape" This "term" is not allowed to resize
+	bool icky_corner; //!< Flag "icky_corner" This "term" has an "icky" corner grid
+	bool soft_cursor; //!< Flag "soft_cursor" This "term" uses a "software" cursor
+	bool always_pict; //!< Flag "always_pict" Use the "Term_pict()" routine for all text
+	bool higher_pict; //!< Flag "higher_pict" Use the "Term_pict()" routine for special text
+	bool always_text; //!< Flag "always_text" Use the "Term_text()" routine for invisible text
+	bool unused_flag; //!< Flag "unused_flag" Reserved for future use
+	bool never_bored; //!< Flag "never_bored" Never call the "TERM_XTRA_BORED" action
+	bool never_frosh; //!< Flag "never_frosh" Never call the "TERM_XTRA_FROSH" action
 
-	bool data_flag;
+	byte attr_blank; //!< Value "attr_blank" Use this "attr" value for "blank" grids
+	char char_blank; //!< Value "char_blank" Use this "char" value for "blank" grids
 
-	bool active_flag;
-	bool mapped_flag;
-	bool total_erase;
-	bool fixed_shape;
-	bool icky_corner;
-	bool soft_cursor;
-	bool always_pict;
-	bool higher_pict;
-	bool always_text;
-	bool unused_flag;
-	bool never_bored;
-	bool never_frosh;
-
-	byte attr_blank;
-	char char_blank;
-
-	char *key_queue;
-
+	char *key_queue; //!< Keypress Queue -- various data / Keypress Queue -- pending keys
 	u16b key_head;
 	u16b key_tail;
 	u16b key_xtra;
 	u16b key_size;
 
-	TERM_POSITION wid;
-	TERM_POSITION hgt;
+	TERM_POSITION wid; //!< Window Width(max 255)
+	TERM_POSITION hgt; //!< Window Height(max 255)
 
-	byte y1;
-	byte y2;
+	byte y1; //!< Minimum modified row
+	byte y2; //!< Maximum modified row
 
-	byte *x1;
-	byte *x2;
+	byte *x1; //!< Minimum modified column(per row)
+	byte *x2; //!< Maximum modified column(per row)
 
-	term_win *old;
-	term_win *scr;
+	term_win *old; //!< Displayed screen image
+	term_win *scr; //!< Requested screen image
 
-	term_win *tmp;
-	term_win *mem;
+	term_win *tmp; //!< Temporary screen image
+	term_win *mem; //!< Memorized screen image
 
-	void (*init_hook)(term *t);
-	void (*nuke_hook)(term *t);
+	void (*init_hook)(term *t); //!< Hook for init - ing the term
+	void (*nuke_hook)(term *t); //!< Hook for nuke - ing the term
 
-	errr (*user_hook)(int n);
-
-	errr (*xtra_hook)(int n, int v);
-
-	errr (*curs_hook)(TERM_POSITION x, TERM_POSITION y);
-
+	errr (*user_hook)(int n); //!< ユーザ設定項目実装部 / Hook for user actions
+	errr (*xtra_hook)(int n, int v); //!< Hook for extra actions
+	errr (*curs_hook)(TERM_POSITION x, TERM_POSITION y); //!< Hook for placing the cursor
 	errr (*bigcurs_hook)(TERM_POSITION x, TERM_POSITION y);
-
-	errr (*wipe_hook)(TERM_POSITION x, TERM_POSITION y, int n);
-
-	errr (*text_hook)(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s);
-
+	errr (*wipe_hook)(TERM_POSITION x, TERM_POSITION y, int n); //!< Hook for drawing some blank spaces
+	errr (*text_hook)(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr s); //!< Hook for drawing a string of chars using an attr
 	void (*resize_hook)(void);
-
-	errr (*pict_hook)(TERM_POSITION x, TERM_POSITION y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp);
+	errr (*pict_hook)(TERM_POSITION x, TERM_POSITION y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp); //!< Hook for drawing a sequence of special attr / char pairs
 };
 
 

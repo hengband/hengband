@@ -1048,13 +1048,12 @@ static void validate_dir(cptr s, bool vital)
 }
 
 
-/*
- * Get the "size" for a window
+/*!
+ * @brief (Windows版固有実装)Get the "size" for a window
  */
 static void term_getsize(term_data *td)
 {
 	RECT rc;
-
 	TERM_POSITION wid, hgt;
 
 	/* Paranoia */
@@ -1198,7 +1197,6 @@ static void save_prefs_aux(int i)
 
 /*
  * Write the "prefs"
- *
  * We assume that the windows have all been initialized
  */
 static void save_prefs(void)
@@ -2158,8 +2156,8 @@ static void Term_nuke_win(term *t)
 #endif
 
 
-/*
- * Interact with the User
+/*!
+ * @brief //!< Windows版ユーザ設定項目実装部(実装必須) /Interact with the User
  */
 static errr Term_user_win(int n)
 {
@@ -2177,7 +2175,6 @@ static errr Term_user_win(int n)
 static errr Term_xtra_win_react(void)
 {
 	int i;
-
 
 	/* Simple color */
 	if (colors16)
