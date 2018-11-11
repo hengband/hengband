@@ -191,10 +191,10 @@ extern errr Term_putstr_v(TERM_POSITION x, TERM_POSITION y, int n, byte a, cptr 
 extern errr Term_erase(TERM_POSITION x, TERM_POSITION y, int n);
 extern errr Term_clear(void);
 extern errr Term_redraw(void);
-extern errr Term_redraw_section(int x1, int y1, int x2, int y2);
+extern errr Term_redraw_section(TERM_POSITION x1, TERM_POSITION y1, TERM_POSITION x2, TERM_POSITION y2);
 
 extern errr Term_get_cursor(int *v);
-extern errr Term_get_size(int *w, int *h);
+extern errr Term_get_size(TERM_POSITION *w, TERM_POSITION *h);
 extern errr Term_locate(int *x, int *y);
 extern errr Term_what(TERM_POSITION x, TERM_POSITION y, byte *a, char *c);
 
