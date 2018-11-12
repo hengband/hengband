@@ -3191,12 +3191,12 @@ static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 static void windows_map(void)
 {
 	term_data *td = &data[0];
-	byte a;
+	TERM_COLOR a;
 	char c;
-	int x, min_x, max_x;
-	int y, min_y, max_y;
+	TERM_LEN x, min_x, max_x;
+	TERM_LEN y, min_y, max_y;
 
-	byte ta;
+	TERM_COLOR ta;
 	char tc;
 
 	/* Only in graphics mode */

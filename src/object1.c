@@ -2150,8 +2150,8 @@ COMMAND_CODE show_inven(int target_item)
 	object_type     *o_ptr;
 	char            o_name[MAX_NLEN];
 	char            tmp_val[80];
-	COMMAND_CODE out_index[23];
-	byte            out_color[23];
+	COMMAND_CODE    out_index[23];
+	TERM_COLOR      out_color[23];
 	char            out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
 	TERM_LEN wid, hgt;
@@ -2317,8 +2317,8 @@ COMMAND_CODE show_equip(int target_item)
 	object_type     *o_ptr;
 	char            tmp_val[80];
 	char            o_name[MAX_NLEN];
-	COMMAND_CODE out_index[23];
-	byte            out_color[23];
+	COMMAND_CODE    out_index[23];
+	TERM_COLOR      out_color[23];
 	char            out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
 	TERM_LEN wid, hgt;
@@ -2349,11 +2349,7 @@ COMMAND_CODE show_equip(int target_item)
 
 		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
 		{
-#ifdef JP
-			(void)strcpy(out_desc[k],"(武器を両手持ち)");
-#else
-			(void)strcpy(out_desc[k],"(wielding with two-hands)");
-#endif
+			(void)strcpy(out_desc[k],_("(武器を両手持ち)", "(wielding with two-hands)"));
 			out_color[k] = TERM_WHITE;
 		}
 		else

@@ -689,7 +689,7 @@ static void image_monster(byte *ap, char *cp)
  * @param cp 本来のシンボル
  * @return なし
  */
-static void image_object(byte *ap, char *cp)
+static void image_object(TERM_COLOR *ap, char *cp)
 {
 	if (use_graphics)
 	{
@@ -1563,10 +1563,10 @@ void note_spot(POSITION y, POSITION x)
 void display_dungeon(void)
 {
 	TERM_LEN x, y;
-	byte a;
+	TERM_COLOR a;
 	char c;
 
-	byte ta = 0;
+	TERM_COLOR ta = 0;
 	char tc = '\0';
 
 	for (x = p_ptr->x - Term->wid / 2 + 1; x <= p_ptr->x + Term->wid / 2; x++)
@@ -1703,10 +1703,10 @@ void prt_map(void)
 		/* Scan the columns of row "y" */
 		for (x = xmin; x <= xmax; x++)
 		{
-			byte a;
+			TERM_COLOR a;
 			char c;
 
-			byte ta;
+			TERM_COLOR ta;
 			char tc;
 
 			/* Determine what is there */
@@ -1908,7 +1908,7 @@ void display_map(int *cy, int *cx)
 {
 	int i, j, x, y;
 
-	byte ta;
+	TERM_COLOR ta;
 	char tc;
 
 	byte tp;
