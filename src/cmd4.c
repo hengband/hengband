@@ -6382,7 +6382,7 @@ static void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt,
 /*
  * Display visuals.
  */
-static void display_visual_list(int col, int row, int height, int width, byte attr_top, byte char_left)
+static void display_visual_list(int col, int row, int height, int width, TERM_COLOR attr_top, byte char_left)
 {
 	int i, j;
 
@@ -6465,7 +6465,7 @@ static byte char_idx_feat[F_LIT_MAX];
  */
 static bool visual_mode_command(char ch, bool *visual_list_ptr,
 				int height, int width,
-				byte *attr_top_ptr, byte *char_left_ptr,
+				TERM_COLOR *attr_top_ptr, byte *char_left_ptr,
 				TERM_COLOR *cur_attr_ptr, byte *cur_char_ptr, bool *need_redraw)
 {
 	static TERM_COLOR attr_old = 0;
@@ -6672,7 +6672,8 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 	bool redraw;
 
 	bool visual_list = FALSE;
-	byte attr_top = 0, char_left = 0;
+	TERM_COLOR attr_top = 0;
+	byte char_left = 0;
 
 	int browser_rows;
 	TERM_LEN wid, hgt;
@@ -7052,7 +7053,8 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 	bool redraw;
 
 	bool visual_list = FALSE;
-	byte attr_top = 0, char_left = 0;
+	TERM_COLOR attr_top = 0;
+	byte char_left = 0;
 
 	int browser_rows;
 	int wid, hgt;
@@ -7421,7 +7423,8 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 
 	TERM_COLOR attr_old[F_LIT_MAX];
 	byte char_old[F_LIT_MAX];
-	byte *cur_attr_ptr, *cur_char_ptr;
+	TERM_COLOR *cur_attr_ptr;
+	byte *cur_char_ptr;
 
 	(void)C_WIPE(attr_old, F_LIT_MAX, byte);
 	(void)C_WIPE(char_old, F_LIT_MAX, byte);

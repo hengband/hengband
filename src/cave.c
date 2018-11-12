@@ -716,7 +716,7 @@ static void image_object(TERM_COLOR *ap, char *cp)
  * @param cp 本来のシンボル
  * @return なし
  */
-static void image_random(byte *ap, char *cp)
+static void image_random(TERM_COLOR *ap, char *cp)
 {
 	/* Normally, assume monsters */
 	if (randint0(100) < 75)

@@ -2064,10 +2064,10 @@ errr Term_erase(TERM_LEN x, TERM_LEN y, int n)
 	int na = Term->attr_blank;
 	int nc = Term->char_blank;
 
-	byte *scr_aa;
+	TERM_COLOR *scr_aa;
 	char *scr_cc;
 
-	byte *scr_taa;
+	TERM_COLOR *scr_taa;
 	char *scr_tcc;
 
 	/* Place cursor */
