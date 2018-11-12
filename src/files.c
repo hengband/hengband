@@ -1652,7 +1652,7 @@ static struct
  * @param attr 項目表示の色
  * @return なし
  */
-static void display_player_one_line(int entry, cptr val, byte attr)
+static void display_player_one_line(int entry, cptr val, TERM_COLOR attr)
 {
 	char buf[40];
 
@@ -1691,8 +1691,8 @@ static void display_player_one_line(int entry, cptr val, byte attr)
 static void display_player_melee_bonus(int hand, int hand_entry)
 {
 	char buf[160];
-	int show_tohit = p_ptr->dis_to_h[hand];
-	int show_todam = p_ptr->dis_to_d[hand];
+	HIT_PROB show_tohit = p_ptr->dis_to_h[hand];
+	HIT_POINT show_todam = p_ptr->dis_to_d[hand];
 	object_type *o_ptr = &inventory[INVEN_RARM + hand];
 
 	/* Hack -- add in weapon info if known */
@@ -1702,7 +1702,7 @@ static void display_player_melee_bonus(int hand, int hand_entry)
 	show_tohit += p_ptr->skill_thn / BTH_PLUS_ADJ;
 	
 	/* Melee attacks */
-	sprintf(buf, "(%+d,%+d)", show_tohit, show_todam);
+	sprintf(buf, "(%+d,%+d)", (int)show_tohit, (int)show_todam);
 
 	/* Dump the bonuses to hit/dam */
 	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
@@ -1724,8 +1724,8 @@ static void display_player_middle(void)
 	char buf[160];
 
 	/* Base skill */
-	int show_tohit = p_ptr->dis_to_h_b;
-	int show_todam = 0;
+	HIT_PROB show_tohit = p_ptr->dis_to_h_b;
+	HIT_POINT show_todam = 0;
 
 	/* Range weapon */
 	object_type *o_ptr = &inventory[INVEN_BOW];
@@ -1791,7 +1791,7 @@ static void display_player_middle(void)
 	/* Dump speed */
 	{
 		int tmp_speed = 0;
-		byte attr;
+		TERM_COLOR attr;
 		int i;
 
 		i = p_ptr->pspeed-110;
@@ -1922,7 +1922,7 @@ static void display_player_middle(void)
 /*
  * Hack -- pass color info around this file
  */
-static byte likert_color = TERM_WHITE;
+static TERM_COLOR likert_color = TERM_WHITE;
 
 
 /*!
