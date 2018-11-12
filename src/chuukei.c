@@ -522,7 +522,7 @@ static bool string_is_repeat(char *str, int len)
 	return (TRUE);
 }
 
-static errr send_text_to_chuukei_server(int x, int y, int len, byte col, cptr str)
+static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, cptr str)
 {
 	char buf[1024];
 	char buf2[1024];

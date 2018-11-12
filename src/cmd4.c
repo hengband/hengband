@@ -3330,9 +3330,9 @@ void do_cmd_visuals(void)
 				int c;
 				IDX t;
 
-				byte da = r_ptr->d_attr;
+				TERM_COLOR da = r_ptr->d_attr;
 				byte dc = r_ptr->d_char;
-				byte ca = r_ptr->x_attr;
+				TERM_COLOR ca = r_ptr->x_attr;
 				byte cc = r_ptr->x_char;
 
 				/* Label the object */
@@ -6434,7 +6434,7 @@ static void display_visual_list(int col, int row, int height, int width, byte at
 /*
  * Place the cursor at the collect position for visual mode
  */
-static void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, byte a, byte c, byte attr_top, byte char_left)
+static void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, byte c, byte attr_top, byte char_left)
 {
 	int i = (a & 0x7f) - attr_top;
 	int j = c - char_left;
@@ -6466,7 +6466,7 @@ static byte char_idx_feat[F_LIT_MAX];
 static bool visual_mode_command(char ch, bool *visual_list_ptr,
 				int height, int width,
 				byte *attr_top_ptr, byte *char_left_ptr,
-				byte *cur_attr_ptr, byte *cur_char_ptr, bool *need_redraw)
+				TERM_COLOR *cur_attr_ptr, byte *cur_char_ptr, bool *need_redraw)
 {
 	static byte attr_old = 0, char_old = 0;
 

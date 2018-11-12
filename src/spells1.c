@@ -290,7 +290,7 @@ u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ)
 
 	byte k;
 
-	byte a;
+	TERM_COLOR a;
 	char c;
 
 	/* No motion (*) */

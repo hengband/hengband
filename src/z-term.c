@@ -778,10 +778,10 @@ void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s)
 		else
 		{
 #endif
-		byte oa = scr_aa[x];
+		TERM_COLOR oa = scr_aa[x];
 		char oc = scr_cc[x];
 
-		byte ota = scr_taa[x];
+		TERM_COLOR ota = scr_taa[x];
 		char otc = scr_tcc[x];
 
 		/* Hack -- Ignore non-changes */
@@ -1199,14 +1199,14 @@ static void Term_fresh_row_both(TERM_LEN y, int x1, int x2)
  *
  * Display text using "Term_text()" and "Term_wipe()"
  */
-static void Term_fresh_row_text(TERM_LEN y, int x1, int x2)
+static void Term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 {
 	TERM_LEN x;
 
-	byte *old_aa = Term->old->a[y];
+	TERM_COLOR *old_aa = Term->old->a[y];
 	char *old_cc = Term->old->c[y];
 
-	byte *scr_aa = Term->scr->a[y];
+	TERM_COLOR *scr_aa = Term->scr->a[y];
 	char *scr_cc = Term->scr->c[y];
 
 	/* The "always_text" flag */
@@ -1221,10 +1221,10 @@ static void Term_fresh_row_text(TERM_LEN y, int x1, int x2)
 	/* Pending attr */
 	byte fa = Term->attr_blank;
 
-	byte oa;
+	TERM_COLOR oa;
 	char oc;
 
-	byte na;
+	TERM_COLOR na;
 	char nc;
 
 #ifdef JP
@@ -1536,10 +1536,10 @@ errr Term_fresh(void)
 		/* Wipe each row */
 		for (y = 0; y < h; y++)
 		{
-			byte *aa = old->a[y];
+			TERM_COLOR *aa = old->a[y];
 			char *cc = old->c[y];
 
-			byte *taa = old->ta[y];
+			TERM_COLOR *taa = old->ta[y];
 			char *tcc = old->tc[y];
 
 

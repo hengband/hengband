@@ -576,7 +576,7 @@ alloc_entry *alloc_race_table;
  * Specify attr/char pairs for visual special effects
  * Be sure to use "index & 0x7F" to avoid illegal access
  */
-byte misc_to_attr[256];
+TERM_COLOR misc_to_attr[256];
 char misc_to_char[256];
 
 
@@ -584,7 +584,7 @@ char misc_to_char[256];
  * Specify attr/char pairs for inventory items (by tval)
  * Be sure to use "index & 0x7F" to avoid illegal access
  */
-byte tval_to_attr[128];
+TERM_COLOR tval_to_attr[128];
 char tval_to_char[128];
 
 
