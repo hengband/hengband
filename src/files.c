@@ -1952,68 +1952,70 @@ static cptr likert(int x, int y)
 		likert_color = TERM_L_DARK;
 		strcat(dummy, _("最低", "Very Bad"));
 	}
-
-	/* Analyze the value */
-	switch ((x / y))
+	else
 	{
-	case 0:
-	case 1:
-		likert_color = TERM_RED;
-		strcat(dummy, _("悪い", "Bad"));
-		break;
-	case 2:
-		likert_color = TERM_L_RED;
-		strcat(dummy, _("劣る", "Poor"));
-		break;
 
-	case 3:
-	case 4:
-		likert_color = TERM_ORANGE;
-		strcat(dummy, _("普通", "Fair"));
-		break;
+		/* Analyze the value */
+		switch ((x / y))
+		{
+		case 0:
+		case 1:
+			likert_color = TERM_RED;
+			strcat(dummy, _("悪い", "Bad"));
+			break;
+		case 2:
+			likert_color = TERM_L_RED;
+			strcat(dummy, _("劣る", "Poor"));
+			break;
 
-	case 5:
-		likert_color = TERM_YELLOW;
-		strcat(dummy, _("良い", "Good"));
-		break;
+		case 3:
+		case 4:
+			likert_color = TERM_ORANGE;
+			strcat(dummy, _("普通", "Fair"));
+			break;
 
-	case 6:
-		likert_color = TERM_YELLOW;
-		strcat(dummy, _("大変良い", "Very Good"));
-		break;
+		case 5:
+			likert_color = TERM_YELLOW;
+			strcat(dummy, _("良い", "Good"));
+			break;
 
-	case 7:
-	case 8:
-		likert_color = TERM_L_GREEN;
-		strcat(dummy, _("卓越", "Excellent"));
-		break;
+		case 6:
+			likert_color = TERM_YELLOW;
+			strcat(dummy, _("大変良い", "Very Good"));
+			break;
 
-	case 9:
-	case 10:
-	case 11:
-	case 12:
-	case 13:
-		likert_color = TERM_GREEN;
-		strcat(dummy, _("超越", "Superb"));
-		break;
+		case 7:
+		case 8:
+			likert_color = TERM_L_GREEN;
+			strcat(dummy, _("卓越", "Excellent"));
+			break;
 
-	case 14:
-	case 15:
-	case 16:
-	case 17:
-		likert_color = TERM_BLUE;
-		strcat(dummy, _("英雄的", "Heroic"));
-		break;
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+			likert_color = TERM_GREEN;
+			strcat(dummy, _("超越", "Superb"));
+			break;
 
-	default:
-		likert_color = TERM_VIOLET;
-		sprintf(dummy2, _("伝説的[%d]", "Legendary[%d]"),
-			(int)((((x / y) - 17) * 5) / 2));
-		strcat(dummy, dummy2);
+		case 14:
+		case 15:
+		case 16:
+		case 17:
+			likert_color = TERM_BLUE;
+			strcat(dummy, _("英雄的", "Heroic"));
+			break;
 
-		break;
+		default:
+			likert_color = TERM_VIOLET;
+			sprintf(dummy2, _("伝説的[%d]", "Legendary[%d]"),
+				(int)((((x / y) - 17) * 5) / 2));
+			strcat(dummy, dummy2);
+
+			break;
+		}
 	}
-
 	return dummy;
 
 }
