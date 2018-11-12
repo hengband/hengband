@@ -4070,7 +4070,7 @@ void display_player(BIT_FLAGS mode)
 static void dump_aux_display_player(FILE *fff)
 {
 	TERM_LEN x, y;
-	byte a;
+	TERM_COLOR a;
 	char c;
 	char buf[1024];
 

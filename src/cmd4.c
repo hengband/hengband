@@ -4668,7 +4668,7 @@ void do_cmd_load_screen(void)
 {
 	int i, y, x;
 
-	byte a = 0;
+	TERM_COLOR a = 0;
 	char c = ' ';
 
 	bool okay = TRUE;
@@ -4960,7 +4960,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 {
 	int y, x, i;
 
-	byte a = 0, old_a = 0;
+	TERM_COLOR a = 0, old_a = 0;
 	char c = ' ';
 
 	FILE *fff, *tmpfff;
@@ -5195,7 +5195,7 @@ void do_cmd_save_screen(void)
 	{
 		int y, x;
 
-		byte a = 0;
+		TERM_COLOR a = 0;
 		char c = ' ';
 
 		FILE *fff;
@@ -6434,7 +6434,7 @@ static void display_visual_list(int col, int row, int height, int width, TERM_CO
 /*
  * Place the cursor at the collect position for visual mode
  */
-static void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, byte c, byte attr_top, byte char_left)
+static void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, byte c, TERM_COLOR attr_top, byte char_left)
 {
 	int i = (a & 0x7f) - attr_top;
 	int j = c - char_left;
@@ -7645,7 +7645,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 
 		else if ((ch == 'D') || (ch == 'd'))
 		{
-			byte prev_x_attr = f_ptr->x_attr[*lighting_level];
+			TERM_COLOR prev_x_attr = f_ptr->x_attr[*lighting_level];
 			byte prev_x_char = f_ptr->x_char[*lighting_level];
 
 			apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);

@@ -1754,7 +1754,7 @@ void display_equip(void)
 {
 	register        int i, n;
 	object_type     *o_ptr;
-	byte            attr = TERM_WHITE;
+	TERM_COLOR      attr = TERM_WHITE;
 	char            tmp_val[80];
 	char            o_name[MAX_NLEN];
 	int             wid, hgt;
@@ -3639,7 +3639,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 	char tmp_val[80];
 
 	COMMAND_CODE out_index[23];
-	byte out_color[23];
+	TERM_COLOR out_color[23];
 	char out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
 

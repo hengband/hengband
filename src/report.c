@@ -319,7 +319,7 @@ cptr make_screen_dump(void)
 	int y, x, i;
 	cptr ret;
 
-	byte a = 0, old_a = 0;
+	TERM_COLOR a = 0, old_a = 0;
 	char c = ' ';
 
 	static cptr html_head[] = {

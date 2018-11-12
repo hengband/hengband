@@ -218,7 +218,7 @@ typedef s16b COMMAND_ARG;	 /*!< コマンド引数の型定義 */
 typedef s16b COMMAND_NUM;	 /*!< コマンド数の型定義 */
 
 typedef int TERM_LEN;     /*!< コンソール表示座標の型定義 */
-typedef byte TERM_COLOR;  /*!< テキスト表示色の型定義 */
+typedef s16b TERM_COLOR;  /*!< テキスト表示色の型定義 */
 typedef byte SYMBOL_CODE; /*!< キャラの文字の型定義 */
 
 typedef s32b MAGIC_NUM1;   /*!< プレイヤーの汎用魔法情報配列1の型定義*/

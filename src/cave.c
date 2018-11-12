@@ -1766,10 +1766,10 @@ void prt_path(POSITION y, POSITION x)
 
 		if (panel_contains(ny, nx))
 		{
-			byte a = default_color;
+			TERM_COLOR a = default_color;
 			char c;
 
-			byte ta;
+			TERM_COLOR ta;
 			char tc;
 
 			if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)

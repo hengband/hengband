@@ -3087,7 +3087,7 @@ static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 	/* Draw attr/char pairs */
 	for (i = 0; i < n; i++, x2 += w2)
 	{
-		byte a = ap[i];
+		TERM_COLOR a = ap[i];
 		char c = cp[i];
 
 

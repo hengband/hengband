@@ -3210,7 +3210,7 @@ void c_roff(byte a, cptr str)
 		{
 			int i, n = 0;
 
-			byte av[256];
+			TERM_COLOR av[256];
 			char cv[256];
 
 			/* Wrap word */

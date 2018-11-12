@@ -196,7 +196,7 @@ extern errr Term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN 
 extern errr Term_get_cursor(int *v);
 extern errr Term_get_size(TERM_LEN *w, TERM_LEN *h);
 extern errr Term_locate(int *x, int *y);
-extern errr Term_what(TERM_LEN x, TERM_LEN y, byte *a, char *c);
+extern errr Term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
 
 extern errr Term_flush(void);
 extern errr Term_keypress(int k);
