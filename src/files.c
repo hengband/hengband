@@ -2800,11 +2800,11 @@ static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
  * @param mode オプション
  * @return なし
  */
-static void display_player_equippy(TERM_LEN y, TERM_LEN x, u16b mode)
+static void display_player_equippy(TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
 	int i, max_i;
 
-	byte a;
+	TERM_COLOR a;
 	char c;
 
 	object_type *o_ptr;
@@ -2969,12 +2969,12 @@ static void player_vuln_flags(u32b flgs[TR_FLAG_SIZE])
  * A struct for storing misc. flags
  */
 typedef struct {
-	u32b player_flags[TR_FLAG_SIZE];
-	u32b tim_player_flags[TR_FLAG_SIZE];
-	u32b player_imm[TR_FLAG_SIZE];
-	u32b tim_player_imm[TR_FLAG_SIZE];
-	u32b player_vuln[TR_FLAG_SIZE];
-	u32b known_obj_imm[TR_FLAG_SIZE];
+	BIT_FLAGS player_flags[TR_FLAG_SIZE];
+	BIT_FLAGS tim_player_flags[TR_FLAG_SIZE];
+	BIT_FLAGS player_imm[TR_FLAG_SIZE];
+	BIT_FLAGS tim_player_imm[TR_FLAG_SIZE];
+	BIT_FLAGS player_vuln[TR_FLAG_SIZE];
+	BIT_FLAGS known_obj_imm[TR_FLAG_SIZE];
 } all_player_flags;
 
 
@@ -3014,7 +3014,7 @@ static void display_flag_aux(int row, int col, cptr header,
 	/* Check equipment */
 	for (i = INVEN_RARM; i < max_i; i++)
 	{
-		u32b flgs[TR_FLAG_SIZE];
+		BIT_FLAGS flgs[TR_FLAG_SIZE];
 		object_type *o_ptr;
 
 		/* Object */
@@ -3150,20 +3150,20 @@ static void display_player_flag_info(void)
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+8);
 
 #ifdef JP
-display_flag_aux(row+0, col, "耐酸  :", TR_RES_ACID, &f, 0);
-display_flag_aux(row+0, col, "耐酸  :", TR_IM_ACID, &f, DP_IMM);
-display_flag_aux(row+1, col, "耐電撃:", TR_RES_ELEC, &f, 0);
-display_flag_aux(row+1, col, "耐電撃:", TR_IM_ELEC, &f, DP_IMM);
-display_flag_aux(row+2, col, "耐火炎:", TR_RES_FIRE, &f, 0);
-display_flag_aux(row+2, col, "耐火炎:", TR_IM_FIRE, &f, DP_IMM);
-display_flag_aux(row+3, col, "耐冷気:", TR_RES_COLD, &f, 0);
-display_flag_aux(row+3, col, "耐冷気:", TR_IM_COLD, &f, DP_IMM);
-display_flag_aux(row+4, col, "耐毒  :", TR_RES_POIS, &f, 0);
-display_flag_aux(row+5, col, "耐閃光:", TR_RES_LITE, &f, 0);
-display_flag_aux(row+6, col, "耐暗黒:", TR_RES_DARK, &f, 0);
-display_flag_aux(row+7, col, "耐破片:", TR_RES_SHARDS, &f, 0);
-display_flag_aux(row+8, col, "耐盲目:", TR_RES_BLIND, &f, 0);
-display_flag_aux(row+9, col, "耐混乱:", TR_RES_CONF, &f, 0);
+	display_flag_aux(row+0, col, "耐酸  :", TR_RES_ACID, &f, 0);
+	display_flag_aux(row+0, col, "耐酸  :", TR_IM_ACID, &f, DP_IMM);
+	display_flag_aux(row+1, col, "耐電撃:", TR_RES_ELEC, &f, 0);
+	display_flag_aux(row+1, col, "耐電撃:", TR_IM_ELEC, &f, DP_IMM);
+	display_flag_aux(row+2, col, "耐火炎:", TR_RES_FIRE, &f, 0);
+	display_flag_aux(row+2, col, "耐火炎:", TR_IM_FIRE, &f, DP_IMM);
+	display_flag_aux(row+3, col, "耐冷気:", TR_RES_COLD, &f, 0);
+	display_flag_aux(row+3, col, "耐冷気:", TR_IM_COLD, &f, DP_IMM);
+	display_flag_aux(row+4, col, "耐毒  :", TR_RES_POIS, &f, 0);
+	display_flag_aux(row+5, col, "耐閃光:", TR_RES_LITE, &f, 0);
+	display_flag_aux(row+6, col, "耐暗黒:", TR_RES_DARK, &f, 0);
+	display_flag_aux(row+7, col, "耐破片:", TR_RES_SHARDS, &f, 0);
+	display_flag_aux(row+8, col, "耐盲目:", TR_RES_BLIND, &f, 0);
+	display_flag_aux(row+9, col, "耐混乱:", TR_RES_CONF, &f, 0);
 #else
 	display_flag_aux(row+0, col, "Acid  :", TR_RES_ACID, &f, 0);
 	display_flag_aux(row+0, col, "Acid  :", TR_IM_ACID, &f, DP_IMM);
@@ -3192,16 +3192,16 @@ display_flag_aux(row+9, col, "耐混乱:", TR_RES_CONF, &f, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+8);
 
 #ifdef JP
-display_flag_aux(row+0, col, "耐轟音:", TR_RES_SOUND, &f, 0);
-display_flag_aux(row+1, col, "耐地獄:", TR_RES_NETHER, &f, 0);
-display_flag_aux(row+2, col, "耐因混:", TR_RES_NEXUS, &f, 0);
-display_flag_aux(row+3, col, "耐カオ:", TR_RES_CHAOS, &f, 0);
-display_flag_aux(row+4, col, "耐劣化:", TR_RES_DISEN, &f, 0);
-display_flag_aux(row+5, col, "耐恐怖:", TR_RES_FEAR, &f, 0);
-display_flag_aux(row+6, col, "反射  :", TR_REFLECT, &f, 0);
-display_flag_aux(row+7, col, "火炎オ:", TR_SH_FIRE, &f, 0);
-display_flag_aux(row+8, col, "電気オ:", TR_SH_ELEC, &f, 0);
-display_flag_aux(row+9, col, "冷気オ:", TR_SH_COLD, &f, 0);
+	display_flag_aux(row+0, col, "耐轟音:", TR_RES_SOUND, &f, 0);
+	display_flag_aux(row+1, col, "耐地獄:", TR_RES_NETHER, &f, 0);
+	display_flag_aux(row+2, col, "耐因混:", TR_RES_NEXUS, &f, 0);
+	display_flag_aux(row+3, col, "耐カオ:", TR_RES_CHAOS, &f, 0);
+	display_flag_aux(row+4, col, "耐劣化:", TR_RES_DISEN, &f, 0);
+	display_flag_aux(row+5, col, "耐恐怖:", TR_RES_FEAR, &f, 0);
+	display_flag_aux(row+6, col, "反射  :", TR_REFLECT, &f, 0);
+	display_flag_aux(row+7, col, "火炎オ:", TR_SH_FIRE, &f, 0);
+	display_flag_aux(row+8, col, "電気オ:", TR_SH_ELEC, &f, 0);
+	display_flag_aux(row+9, col, "冷気オ:", TR_SH_COLD, &f, 0);
 #else
 	display_flag_aux(row+0, col, "Sound :", TR_RES_SOUND, &f, 0);
 	display_flag_aux(row+1, col, "Nether:", TR_RES_NETHER, &f, 0);
@@ -3226,16 +3226,16 @@ display_flag_aux(row+9, col, "冷気オ:", TR_SH_COLD, &f, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+12);
 
 #ifdef JP
-display_flag_aux(row+0, col, "加速      :", TR_SPEED, &f, 0);
-display_flag_aux(row+1, col, "耐麻痺    :", TR_FREE_ACT, &f, 0);
-display_flag_aux(row+2, col, "透明体視認:", TR_SEE_INVIS, &f, 0);
-display_flag_aux(row+3, col, "経験値保持:", TR_HOLD_EXP, &f, 0);
-display_flag_aux(row+4, col, "警告      :", TR_WARNING, &f, 0);
-display_flag_aux(row+5, col, "遅消化    :", TR_SLOW_DIGEST, &f, 0);
-display_flag_aux(row+6, col, "急回復    :", TR_REGEN, &f, 0);
-display_flag_aux(row+7, col, "浮遊      :", TR_LEVITATION, &f, 0);
-display_flag_aux(row+8, col, "永遠光源  :", TR_LITE_1, &f, 0);
-display_flag_aux(row+9, col, "呪い      :", 0, &f, DP_CURSE);
+	display_flag_aux(row+0, col, "加速      :", TR_SPEED, &f, 0);
+	display_flag_aux(row+1, col, "耐麻痺    :", TR_FREE_ACT, &f, 0);
+	display_flag_aux(row+2, col, "透明体視認:", TR_SEE_INVIS, &f, 0);
+	display_flag_aux(row+3, col, "経験値保持:", TR_HOLD_EXP, &f, 0);
+	display_flag_aux(row+4, col, "警告      :", TR_WARNING, &f, 0);
+	display_flag_aux(row+5, col, "遅消化    :", TR_SLOW_DIGEST, &f, 0);
+	display_flag_aux(row+6, col, "急回復    :", TR_REGEN, &f, 0);
+	display_flag_aux(row+7, col, "浮遊      :", TR_LEVITATION, &f, 0);
+	display_flag_aux(row+8, col, "永遠光源  :", TR_LITE_1, &f, 0);
+	display_flag_aux(row+9, col, "呪い      :", 0, &f, DP_CURSE);
 #else
 	display_flag_aux(row+0, col, "Speed     :", TR_SPEED, &f, 0);
 	display_flag_aux(row+1, col, "FreeAction:", TR_FREE_ACT, &f, 0);
