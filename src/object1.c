@@ -1658,7 +1658,7 @@ void display_inven(void)
 {
 	register        int i, n, z = 0;
 	object_type     *o_ptr;
-	byte            attr = TERM_WHITE;
+	TERM_COLOR      attr = TERM_WHITE;
 	char            tmp_val[80];
 	char            o_name[MAX_NLEN];
 	int             wid, hgt;

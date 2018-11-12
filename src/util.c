@@ -3095,7 +3095,7 @@ void msg_format_wizard(int cheat_type, cptr fmt, ...)
  * At the given location, using the given attribute, if allowed,
  * add the given string.  Do not clear the line.
  */
-void c_put_str(byte attr, cptr str, int row, int col)
+void c_put_str(TERM_COLOR attr, cptr str, int row, int col)
 {
 	/* Position cursor, Dump the attr/text */
 	Term_putstr(col, row, -1, attr, str);

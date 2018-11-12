@@ -323,24 +323,24 @@ static errr term_win_nuke(term_win *s, int w, int h)
 /*
  * Initialize a "term_win" (using the given window size)
  */
-static errr term_win_init(term_win *s, int w, int h)
+static errr term_win_init(term_win *s, TERM_LEN w, TERM_LEN h)
 {
 	TERM_LEN y;
 
 	/* Make the window access arrays */
-	C_MAKE(s->a, h, byte*);
+	C_MAKE(s->a, h, TERM_COLOR*);
 	C_MAKE(s->c, h, char*);
 
 	/* Make the window content arrays */
-	C_MAKE(s->va, h * w, byte);
+	C_MAKE(s->va, h * w, TERM_COLOR);
 	C_MAKE(s->vc, h * w, char);
 
 	/* Make the terrain access arrays */
-	C_MAKE(s->ta, h, byte*);
+	C_MAKE(s->ta, h, TERM_COLOR*);
 	C_MAKE(s->tc, h, char*);
 
 	/* Make the terrain content arrays */
-	C_MAKE(s->vta, h * w, byte);
+	C_MAKE(s->vta, h * w, TERM_COLOR);
 	C_MAKE(s->vtc, h * w, char);
 
 
@@ -362,7 +362,7 @@ static errr term_win_init(term_win *s, int w, int h)
 /*
  * Copy a "term_win" from another
  */
-static errr term_win_copy(term_win *s, term_win *f, int w, int h)
+static errr term_win_copy(term_win *s, term_win *f, TERM_LEN w, TERM_LEN h)
 {
 	TERM_LEN x, y;
 
@@ -2158,10 +2158,10 @@ errr Term_clear(void)
 {
 	TERM_LEN x, y;
 
-	int w = Term->wid;
-	int h = Term->hgt;
+	TERM_LEN w = Term->wid;
+	TERM_LEN h = Term->hgt;
 
-	byte na = Term->attr_blank;
+	TERM_COLOR na = Term->attr_blank;
 	char nc = Term->char_blank;
 
 	/* Cursor usable */
@@ -2173,10 +2173,10 @@ errr Term_clear(void)
 	/* Wipe each row */
 	for (y = 0; y < h; y++)
 	{
-		byte *scr_aa = Term->scr->a[y];
+		TERM_COLOR *scr_aa = Term->scr->a[y];
 		char *scr_cc = Term->scr->c[y];
 
-		byte *scr_taa = Term->scr->ta[y];
+		TERM_COLOR *scr_taa = Term->scr->ta[y];
 		char *scr_tcc = Term->scr->tc[y];
 
 		/* Wipe each column */
@@ -2348,10 +2348,10 @@ errr Term_locate(int *x, int *y)
  * Note that this refers to what will be on the window after the
  * next call to "Term_fresh()".  It may or may not already be there.
  */
-errr Term_what(TERM_LEN x, TERM_LEN y, byte *a, char *c)
+errr Term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
 {
-	int w = Term->wid;
-	int h = Term->hgt;
+	TERM_LEN w = Term->wid;
+	TERM_LEN h = Term->hgt;
 
 	/* Verify location */
 	if ((x < 0) || (x >= w)) return (-1);
@@ -2547,8 +2547,8 @@ errr Term_load(void)
 {
 	TERM_LEN y;
 
-	int w = Term->wid;
-	int h = Term->hgt;
+	TERM_LEN w = Term->wid;
+	TERM_LEN h = Term->hgt;
 
 	/* Create */
 	if (!Term->mem)

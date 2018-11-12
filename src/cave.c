@@ -942,20 +942,20 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], byte f_char[F_LIT
  * "x_ptr->xxx", is quicker than "x_info[x].xxx", if this is incorrect\n
  * then a whole lot of code should be changed...  XXX XXX\n
  */
-void map_info(POSITION y, POSITION x, byte *ap, char *cp, byte *tap, char *tcp)
+void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, char *tcp)
 {
 	/* Get the cave */
 	cave_type *c_ptr = &cave[y][x];
 
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Feature code (applying "mimic" field) */
-	s16b feat = get_feat_mimic(c_ptr);
+	FEAT_IDX feat = get_feat_mimic(c_ptr);
 
 	/* Access floor */
 	feature_type *f_ptr = &f_info[feat];
 
-	byte a;
+	TERM_COLOR a;
 	byte c;
 
 	/* Boring grids (floors, etc) */
@@ -1621,10 +1621,10 @@ void lite_spot(POSITION y, POSITION x)
 	/* Redraw if on screen */
 	if (panel_contains(y, x) && in_bounds2(y, x))
 	{
-		byte a;
+		TERM_COLOR a;
 		char c;
 
-		byte ta;
+		TERM_COLOR ta;
 		char tc;
 
 		/* Examine the grid */

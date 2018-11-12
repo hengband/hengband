@@ -480,7 +480,7 @@ extern bool player_can_see_bold(POSITION y, POSITION x);
 extern bool cave_valid_bold(POSITION y, POSITION x);
 extern bool no_lite(void);
 extern void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX]);
-extern void map_info(POSITION y, POSITION x, byte *ap, char *cp, byte *tap, char *tcp);
+extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, char *tcp);
 extern void move_cursor_relative(int row, int col);
 extern void print_rel(char c, byte a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(POSITION y, POSITION x);
@@ -1148,7 +1148,7 @@ extern void msg_format_wizard(int cheat_type, cptr fmt, ...);
 #endif /* SWIG */
 extern void screen_save(void);
 extern void screen_load(void);
-extern void c_put_str(byte attr, cptr str, int row, int col);
+extern void c_put_str(TERM_COLOR attr, cptr str, int row, int col);
 extern void put_str(cptr str, int row, int col);
 extern void c_prt(byte attr, cptr str, int row, int col);
 extern void prt(cptr str, int row, int col);

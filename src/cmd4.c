@@ -6453,11 +6453,11 @@ static void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, b
 /*
  *  Clipboard variables for copy&paste in visual mode
  */
-static byte attr_idx = 0;
+static TERM_COLOR attr_idx = 0;
 static byte char_idx = 0;
 
 /* Hack -- for feature lighting */
-static byte attr_idx_feat[F_LIT_MAX];
+static TERM_COLOR attr_idx_feat[F_LIT_MAX];
 static byte char_idx_feat[F_LIT_MAX];
 
 /*
@@ -6468,7 +6468,8 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 				byte *attr_top_ptr, byte *char_left_ptr,
 				TERM_COLOR *cur_attr_ptr, byte *cur_char_ptr, bool *need_redraw)
 {
-	static byte attr_old = 0, char_old = 0;
+	static TERM_COLOR attr_old = 0;
+	static byte char_old = 0;
 
 	switch (ch)
 	{
@@ -7411,12 +7412,13 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 	bool redraw;
 
 	bool visual_list = FALSE;
-	byte attr_top = 0, char_left = 0;
+	TERM_COLOR attr_top = 0;
+	byte char_left = 0;
 
 	int browser_rows;
 	int wid, hgt;
 
-	byte attr_old[F_LIT_MAX];
+	TERM_COLOR attr_old[F_LIT_MAX];
 	byte char_old[F_LIT_MAX];
 	byte *cur_attr_ptr, *cur_char_ptr;
 
