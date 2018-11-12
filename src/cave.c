@@ -661,7 +661,7 @@ static char image_object_hack[] = "?/|\\\"!$()_-=[]{},~";
  * @param cp 本来のシンボル
  * @return なし
  */
-static void image_monster(byte *ap, char *cp)
+static void image_monster(TERM_COLOR *ap, char *cp)
 {
 	/* Random symbol from set above */
 	if (use_graphics)
@@ -1837,7 +1837,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 	char buf[MAX_NLEN];
 	char *c = buf;
 	int len = 0;
-	byte attr;
+	TERM_COLOR attr;
 
 	object_desc(buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
 	attr = tval_to_attr[o_ptr->tval % 128];
@@ -1913,11 +1913,11 @@ void display_map(int *cy, int *cx)
 
 	byte tp;
 
-	byte **bigma;
+	TERM_COLOR **bigma;
 	char **bigmc;
 	byte **bigmp;
 
-	byte **ma;
+	TERM_COLOR **ma;
 	char **mc;
 	byte **mp;
 
@@ -1944,7 +1944,7 @@ void display_map(int *cy, int *cx)
 	view_granite_lite = FALSE;
 
 	/* Allocate the maps */
-	C_MAKE(ma, (hgt + 2), byte_ptr);
+	C_MAKE(ma, (hgt + 2), TERM_COLOR *);
 	C_MAKE(mc, (hgt + 2), char_ptr);
 	C_MAKE(mp, (hgt + 2), byte_ptr);
 	C_MAKE(match_autopick_yx, (hgt + 2), sint_ptr);
@@ -1954,7 +1954,7 @@ void display_map(int *cy, int *cx)
 	for (y = 0; y < (hgt + 2); y++)
 	{
 		/* Allocate one row each array */
-		C_MAKE(ma[y], (wid + 2), byte);
+		C_MAKE(ma[y], (wid + 2), TERM_COLOR);
 		C_MAKE(mc[y], (wid + 2), char);
 		C_MAKE(mp[y], (wid + 2), byte);
 		C_MAKE(match_autopick_yx[y], (wid + 2), int);
@@ -1975,7 +1975,7 @@ void display_map(int *cy, int *cx)
 	}
 
 	/* Allocate the maps */
-	C_MAKE(bigma, (cur_hgt + 2), byte_ptr);
+	C_MAKE(bigma, (cur_hgt + 2), TERM_COLOR *);
 	C_MAKE(bigmc, (cur_hgt + 2), char_ptr);
 	C_MAKE(bigmp, (cur_hgt + 2), byte_ptr);
 
@@ -1983,7 +1983,7 @@ void display_map(int *cy, int *cx)
 	for (y = 0; y < (cur_hgt + 2); y++)
 	{
 		/* Allocate one row each array */
-		C_MAKE(bigma[y], (cur_wid + 2), byte);
+		C_MAKE(bigma[y], (cur_wid + 2), TERM_COLOR);
 		C_MAKE(bigmc[y], (cur_wid + 2), char);
 		C_MAKE(bigmp[y], (cur_wid + 2), byte);
 
@@ -2157,7 +2157,7 @@ void display_map(int *cy, int *cx)
 	for (y = 0; y < (hgt + 2); y++)
 	{
 		/* Free one row each array */
-		C_KILL(ma[y], (wid + 2), byte);
+		C_KILL(ma[y], (wid + 2), TERM_COLOR);
 		C_KILL(mc[y], (wid + 2), char);
 		C_KILL(mp[y], (wid + 2), byte);
 		C_KILL(match_autopick_yx[y], (wid + 2), int);
@@ -2165,7 +2165,7 @@ void display_map(int *cy, int *cx)
 	}
 
 	/* Free each line map */
-	C_KILL(ma, (hgt + 2), byte_ptr);
+	C_KILL(ma, (hgt + 2), TERM_COLOR *);
 	C_KILL(mc, (hgt + 2), char_ptr);
 	C_KILL(mp, (hgt + 2), byte_ptr);
 	C_KILL(match_autopick_yx, (hgt + 2), sint_ptr);
@@ -2175,13 +2175,13 @@ void display_map(int *cy, int *cx)
 	for (y = 0; y < (cur_hgt + 2); y++)
 	{
 		/* Free one row each array */
-		C_KILL(bigma[y], (cur_wid + 2), byte);
+		C_KILL(bigma[y], (cur_wid + 2), TERM_COLOR);
 		C_KILL(bigmc[y], (cur_wid + 2), char);
 		C_KILL(bigmp[y], (cur_wid + 2), byte);
 	}
 
 	/* Free each line map */
-	C_KILL(bigma, (cur_hgt + 2), byte_ptr);
+	C_KILL(bigma, (cur_hgt + 2), TERM_COLOR *);
 	C_KILL(bigmc, (cur_hgt + 2), char_ptr);
 	C_KILL(bigmp, (cur_hgt + 2), byte_ptr);
 }

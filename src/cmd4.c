@@ -6927,7 +6927,8 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 	for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++)
 	{
 		char o_name[80];
-		byte a, c;
+		TERM_COLOR a;
+		byte c;
 		object_kind *flavor_k_ptr;
 
 		/* Get the object index */

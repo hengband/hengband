@@ -2002,7 +2002,7 @@ void roff_top(MONRACE_IDX r_idx)
 {
 	monster_race	*r_ptr = &r_info[r_idx];
 
-	byte		a1, a2;
+	TERM_COLOR	a1, a2;
 	char		c1, c2;
 
 

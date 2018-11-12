@@ -297,22 +297,22 @@ term *Term = NULL;
 /*
  * Nuke a term_win (see below)
  */
-static errr term_win_nuke(term_win *s, int w, int h)
+static errr term_win_nuke(term_win *s, TERM_LEN w, TERM_LEN h)
 {
 	/* Free the window access arrays */
-	C_KILL(s->a, h, byte*);
+	C_KILL(s->a, h, TERM_COLOR*);
 	C_KILL(s->c, h, char*);
 
 	/* Free the window content arrays */
-	C_KILL(s->va, h * w, byte);
+	C_KILL(s->va, h * w, TERM_COLOR);
 	C_KILL(s->vc, h * w, char);
 
 	/* Free the terrain access arrays */
-	C_KILL(s->ta, h, byte*);
+	C_KILL(s->ta, h, TERM_COLOR*);
 	C_KILL(s->tc, h, char*);
 
 	/* Free the terrain content arrays */
-	C_KILL(s->vta, h * w, byte);
+	C_KILL(s->vta, h * w, TERM_COLOR);
 	C_KILL(s->vtc, h * w, char);
 
 	/* Success */
