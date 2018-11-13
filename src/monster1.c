@@ -2283,7 +2283,7 @@ void anger_monster(monster_type *m_ptr)
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode)
+bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, u16b mode)
 {
 	feature_type *f_ptr = &f_info[feat];
 

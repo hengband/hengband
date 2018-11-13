@@ -2850,7 +2850,7 @@ static errr rd_dungeon_old(void)
 	/* Read the dungeon items */
 	for (i = 1; i < limit; i++)
 	{
-		IDX o_idx;
+		OBJECT_IDX o_idx;
 
 		object_type *o_ptr;
 
@@ -3177,7 +3177,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	/* Read the dungeon items */
 	for (i = 1; i < limit; i++)
 	{
-		IDX o_idx;
+		OBJECT_IDX o_idx;
 		object_type *o_ptr;
 
 

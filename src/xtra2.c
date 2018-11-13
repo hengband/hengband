@@ -2990,7 +2990,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 	s16b this_o_idx, next_o_idx = 0;
 	cptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
-	s16b feat;
+	FEAT_IDX feat;
 	feature_type *f_ptr;
 	char query = '\001';
 	char out_val[MAX_NLEN+80];
@@ -3274,7 +3274,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 			while (1)
 			{
 				int i;
-				IDX o_idx;
+				OBJECT_IDX o_idx;
 
 				/* Save screen */
 				screen_save();

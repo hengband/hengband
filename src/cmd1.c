@@ -1423,7 +1423,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	else if (!p_can_enter && !p_can_kill_walls)
 	{
 		/* Feature code (applying "mimic" field) */
-		s16b feat = get_feat_mimic(c_ptr);
+		FEAT_IDX feat = get_feat_mimic(c_ptr);
 		feature_type *mimic_f_ptr = &f_info[feat];
 		cptr name = f_name + mimic_f_ptr->name;
 

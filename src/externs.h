@@ -736,7 +736,7 @@ extern void set_friendly(monster_type *m_ptr);
 extern void set_pet(monster_type *m_ptr);
 extern void set_hostile(monster_type *m_ptr);
 extern void anger_monster(monster_type *m_ptr);
-extern bool monster_can_cross_terrain(s16b feat, monster_race *r_ptr, u16b mode);
+extern bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, u16b mode);
 extern bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, u16b mode);
 extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);

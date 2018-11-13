@@ -4537,7 +4537,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			case '+':
 			{
 				int i;
-				IDX o_idx;
+				OBJECT_IDX o_idx;
 				cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 				if (command_wrk != (USE_FLOOR)) break;

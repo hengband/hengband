@@ -139,7 +139,7 @@ void place_random_stairs(POSITION y, POSITION x)
 void place_random_door(POSITION y, POSITION x, bool room)
 {
 	int tmp, type;
-	s16b feat = feat_none;
+	FEAT_IDX feat = feat_none;
 	cave_type *c_ptr = &cave[y][x];
 
 	/* Initialize mimic info */
@@ -223,7 +223,7 @@ void place_random_door(POSITION y, POSITION x, bool room)
 void place_closed_door(POSITION y, POSITION x, int type)
 {
 	int tmp;
-	s16b feat = feat_none;
+	FEAT_IDX feat = feat_none;
 
 	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
 	{

@@ -44,7 +44,7 @@ void init_normal_traps(void)
 */
 s16b choose_random_trap(void)
 {
-	s16b feat;
+	FEAT_IDX feat;
 
 	/* Pick a trap */
 	while (1)

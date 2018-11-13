@@ -1601,7 +1601,7 @@ static bool feat_tag_is_not_found = FALSE;
  */
 s16b f_tag_to_index_in_init(cptr str)
 {
-	s16b feat = f_tag_to_index(str);
+	FEAT_IDX feat = f_tag_to_index(str);
 
 	if (feat < 0) feat_tag_is_not_found = TRUE;
 

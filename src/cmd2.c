@@ -547,7 +547,7 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under
 	for (d = 0; d < 9; d++)
 	{
 		cave_type *c_ptr;
-		s16b feat;
+		FEAT_IDX feat;
 
 		/* if not searching under player continue */
 		if ((d == 8) && !under) continue;
@@ -765,7 +765,7 @@ void do_cmd_open(void)
 {
 	POSITION y, x;
 	DIRECTION dir;
-	IDX o_idx;
+	OBJECT_IDX o_idx;
 
 	bool more = FALSE;
 
@@ -814,7 +814,7 @@ void do_cmd_open(void)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir, TRUE))
 	{
-		s16b feat;
+		FEAT_IDX feat;
 		cave_type *c_ptr;
 
 		/* Get requested location */
@@ -979,7 +979,7 @@ void do_cmd_close(void)
 	if (get_rep_dir(&dir,FALSE))
 	{
 		cave_type *c_ptr;
-		s16b feat;
+		FEAT_IDX feat;
 
 		/* Get requested location */
 		y = p_ptr->y + ddy[dir];
@@ -1208,7 +1208,7 @@ void do_cmd_tunnel(void)
 	int			y, x, dir;
 
 	cave_type	*c_ptr;
-	s16b feat;
+	FEAT_IDX feat;
 
 	bool		more = FALSE;
 
@@ -1647,7 +1647,7 @@ void do_cmd_disarm(void)
 	if (get_rep_dir(&dir,TRUE))
 	{
 		cave_type *c_ptr;
-		s16b feat;
+		FEAT_IDX feat;
 
 		/* Get location */
 		y = p_ptr->y + ddy[dir];
@@ -1844,7 +1844,7 @@ void do_cmd_bash(void)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir,FALSE))
 	{
-		s16b feat;
+		FEAT_IDX feat;
 
 		/* Bash location */
 		y = p_ptr->y + ddy[dir];
@@ -1934,7 +1934,7 @@ void do_cmd_alter(void)
 	/* Get a direction */
 	if (get_rep_dir(&dir,TRUE))
 	{
-		s16b feat;
+		FEAT_IDX feat;
 		feature_type *f_ptr;
 
 		/* Get location */
@@ -2064,7 +2064,7 @@ void do_cmd_spike(void)
 		POSITION y, x;
 		INVENTORY_IDX item;
 		cave_type *c_ptr;
-		s16b feat;
+		FEAT_IDX feat;
 
 		/* Get location */
 		y = p_ptr->y + ddy[dir];
@@ -3350,7 +3350,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 	{
 		MONSTER_IDX m_idx = cave[y][x].m_idx;
 		monster_type *m_ptr = &m_list[m_idx];
-		IDX o_idx = o_pop();
+		OBJECT_IDX o_idx = o_pop();
 
 		if (!o_idx)
 		{

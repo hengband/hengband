@@ -4925,7 +4925,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
  */
 void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	IDX o_idx;
+	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
 	cave_type *c_ptr = &cave[y][x];

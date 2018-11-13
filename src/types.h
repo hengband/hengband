@@ -1693,7 +1693,7 @@ typedef struct
 typedef struct
 {
 	BIT_FLAGS info;
-	s16b feat;
+	FEAT_IDX feat;
 	s16b mimic;
 	s16b special;
 	u16b occurrence;

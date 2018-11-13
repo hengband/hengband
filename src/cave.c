@@ -4378,7 +4378,7 @@ void map_area(POSITION range)
 void wiz_lite(bool ninja)
 {
 	int i, y, x;
-	s16b feat;
+	FEAT_IDX feat;
 	feature_type *f_ptr;
 
 	/* Memorize objects */
