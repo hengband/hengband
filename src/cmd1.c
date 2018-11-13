@@ -853,7 +853,7 @@ bool player_can_enter(s16b feature, u16b mode)
  * @param mpe_mode 移動オプションフラグ
  * @return プレイヤーが死亡やフロア離脱を行わず、実際に移動が可能ならばTRUEを返す。
  */
-bool move_player_effect(POSITION ny, POSITION nx, u32b mpe_mode)
+bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 {
 	cave_type *c_ptr = &cave[ny][nx];
 	feature_type *f_ptr = &f_info[c_ptr->feat];

@@ -503,7 +503,7 @@ extern void update_smell(void);
 extern void map_area(POSITION range);
 extern void wiz_lite(bool ninja);
 extern void wiz_dark(void);
-extern void cave_set_feat(POSITION y, POSITION x, IDX feat);
+extern void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat);
 extern IDX conv_dungeon_feat(IDX newfeat);
 extern IDX feat_state(IDX feat, int action);
 extern void cave_alter_feat(POSITION y, POSITION x, int action);
@@ -523,7 +523,7 @@ extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITI
 extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);
 
 /* cmd1.c */
-extern bool test_hit_norm(int chance, int ac, int vis);
+extern bool test_hit_norm(int chance, ARMOUR_CLASS ac, int vis);
 extern HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam);
 extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown);
 extern void search(void);
@@ -531,7 +531,7 @@ extern void py_pickup_aux(OBJECT_IDX o_idx);
 extern void carry(bool pickup);
 extern bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
-extern bool move_player_effect(POSITION ny, POSITION nx, u32b mpe_mode);
+extern bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
 extern bool trap_can_be_ignored(int feat);
 extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
 extern void run_step(DIRECTION dir);

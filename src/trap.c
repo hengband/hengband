@@ -42,7 +42,7 @@ void init_normal_traps(void)
 * Actually, it is not this routine, but the "trap instantiation"\n
 * code, which should also check for "trap doors" on quest levels.\n
 */
-s16b choose_random_trap(void)
+FEAT_IDX choose_random_trap(void)
 {
 	FEAT_IDX feat;
 

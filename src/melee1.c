@@ -25,7 +25,7 @@
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_norm(int chance, int ac, int vis)
+bool test_hit_norm(int chance, ARMOUR_CLASS ac, int vis)
 {
 	int k;
 

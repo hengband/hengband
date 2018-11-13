@@ -4546,7 +4546,7 @@ void wiz_dark(void)
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
-void cave_set_feat(POSITION y, POSITION x, IDX feat)
+void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 {
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[feat];

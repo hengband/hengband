@@ -4524,7 +4524,7 @@ void calc_bonuses(void)
 		}
 		for (i = INVEN_RARM; i <= INVEN_FEET; i++)
 		{
-			int ac = 0;
+			ARMOUR_CLASS ac = 0;
 			o_ptr = &inventory[i];
 			if (!o_ptr->k_idx) continue;
 			if (!object_is_armour(o_ptr)) continue;

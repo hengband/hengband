@@ -6954,7 +6954,7 @@ static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 
 	if (blow_ptr->method != RBM_EXPLODE)
 	{
-		int ac = p_ptr->ac + p_ptr->to_a;
+		ARMOUR_CLASS ac = p_ptr->ac + p_ptr->to_a;
 
 		switch (blow_ptr->effect)
 		{
