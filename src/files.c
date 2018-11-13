@@ -4366,7 +4366,7 @@ static void dump_aux_class_special(FILE *fff)
 		char s[EATER_EXT][MAX_NLEN];
 		OBJECT_TYPE_VALUE tval;
 		int ext;
-		IDX k_idx;
+		KIND_OBJECT_IDX k_idx;
 		OBJECT_SUBTYPE_VALUE i;
 		int magic_num;
 

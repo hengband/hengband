@@ -2190,7 +2190,7 @@ static void object_mention(object_type *o_ptr)
 static bool make_artifact_special(object_type *o_ptr)
 {
 	IDX i;
-	IDX k_idx = 0;
+	KIND_OBJECT_IDX k_idx = 0;
 
 	/*! @note 地上ではキャンセルする / No artifacts in the town */
 	if (!dun_level) return (FALSE);
@@ -4856,7 +4856,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 	/* Generate a special object, or a normal object */
 	if (!one_in_(prob) || !make_artifact_special(j_ptr))
 	{
-		IDX k_idx;
+		KIND_OBJECT_IDX k_idx;
 
 		/* Good objects */
 		if ((mode & AM_GOOD) && !get_obj_num_hook)
@@ -5578,7 +5578,8 @@ void amusement(POSITION y1, POSITION x1, int num, bool known)
 	while (num)
 	{
 		int i;
-		IDX k_idx, a_idx = 0;
+		KIND_OBJECT_IDX k_idx;
+		ARTIFACT_IDX a_idx = 0;
 		int r = randint0(t);
 		bool insta_art, fixed_art;
 
@@ -6573,7 +6574,7 @@ void reorder_pack(void)
  * @details
  * Include list of usable spells for readible books
  */
-void display_koff(IDX k_idx)
+void display_koff(KIND_OBJECT_IDX k_idx)
 {
 	int y;
 

@@ -5001,7 +5001,7 @@ void monster_race_track(MONRACE_IDX r_idx)
 /*
  * Hack -- track the given object kind
  */
-void object_kind_track(IDX k_idx)
+void object_kind_track(KIND_OBJECT_IDX k_idx)
 {
 	/* Save this monster ID */
 	p_ptr->object_kind_idx = k_idx;

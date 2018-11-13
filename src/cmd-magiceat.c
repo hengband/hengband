@@ -213,10 +213,10 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 			byte y, x = 0;
 			OBJECT_SUBTYPE_VALUE ctr;
 			PERCENTAGE chance;
-			IDX k_idx;
+			KIND_OBJECT_IDX k_idx;
 			char dummy[80];
 			POSITION x1, y1;
-			int level;
+			DEPTH level;
 			byte col;
 
 			strcpy(dummy, "");
@@ -517,7 +517,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	OBJECT_SUBTYPE_VALUE item;
 	PERCENTAGE chance;
 	DEPTH level;
-	IDX k_idx;
+	KIND_OBJECT_IDX k_idx;
 	OBJECT_TYPE_VALUE tval;
 	OBJECT_SUBTYPE_VALUE sval;
 	bool use_charge = TRUE;

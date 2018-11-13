@@ -1273,7 +1273,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
 		{
-			IDX k_idx = d_info[dungeon_type].final_object ? d_info[dungeon_type].final_object
+			KIND_OBJECT_IDX k_idx = d_info[dungeon_type].final_object ? d_info[dungeon_type].final_object
 				: lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
 
 			if (d_info[dungeon_type].final_artifact)

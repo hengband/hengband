@@ -3120,7 +3120,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	object_type *o_ptr, *mo_ptr; /* broken weapon and material weapon */
 	object_kind *k_ptr;
 	int i, dd_bonus, ds_bonus;
-	IDX k_idx;
+	KIND_OBJECT_IDX k_idx;
 	char basenm[MAX_NLEN];
 	cptr q, s; /* For get_item prompt */
 	int row = 7;

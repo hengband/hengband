@@ -3194,7 +3194,7 @@ void do_cmd_visuals(void)
 		case '2':
 		{
 			static cptr mark = "Object attr/chars";
-			IDX k_idx;
+			KIND_OBJECT_IDX k_idx;
 
 			/* Prompt */
 			prt(_("コマンド: アイテムの[色/文字]をファイルに書き出します", "Command: Dump object attr/chars"), 15, 0);
@@ -6999,7 +6999,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 /*
  * Describe fake object
  */
-static void desc_obj_fake(IDX k_idx)
+static void desc_obj_fake(KIND_OBJECT_IDX k_idx)
 {
 	object_type *o_ptr;
 	object_type object_type_body;
@@ -8018,7 +8018,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 							artifact_type *a_ptr = &a_info[quest[i].k_idx];
 							object_type forge;
 							object_type *q_ptr = &forge;
-							IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+							KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
 							object_prep(q_ptr, k_idx);
 							q_ptr->name1 = quest[i].k_idx;
 							q_ptr->ident = IDENT_STORE;
