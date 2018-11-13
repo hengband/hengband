@@ -28,7 +28,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
 
 		{
-			int dice = 3 + ((plev - 1) / 5);
+			DICE_NUMBER dice = 3 + ((plev - 1) / 5);
 			int sides = 4;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -63,7 +63,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
 
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = plev / 2;
 			POSITION rad = (plev / 10) + 1;
 
@@ -98,7 +98,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("魔法の球を放つ。", "Fires a ball of magic.");
 
 		{
-			int dice = 3;
+			DICE_NUMBER dice = 3;
 			int sides = 5;
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
@@ -131,7 +131,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("炎のボルトもしくはビームを放つ。", "Fires a bolt or beam of fire.");
 
 		{
-			int dice = 8 + (plev - 5) / 4;
+			DICE_NUMBER dice = 8 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -150,7 +150,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("ごく小さな分解の球を放つ。", "Fires a tiny ball of disintegration.");
 
 		{
-			int dice = 8 + ((plev - 5) / 4);
+			DICE_NUMBER dice = 8 + ((plev - 5) / 4);
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -202,7 +202,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("カオスのボルトもしくはビームを放つ。", "Fires a bolt or ball of chaos.");
 
 		{
-			int dice = 10 + (plev - 5) / 4;
+			DICE_NUMBER dice = 10 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -239,7 +239,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("純粋な魔力のビームを放つ。", "Fires a beam of pure mana.");
 
 		{
-			int dice = 11 + (plev - 5) / 4;
+			DICE_NUMBER dice = 11 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -347,7 +347,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("全方向に対して電撃のビームを放つ。", "Fires lightning beams in all directions.");
 
 		{
-			int dice = 5 + plev / 10;
+			DICE_NUMBER dice = 5 + plev / 10;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -460,7 +460,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("重力のビームを放つ。", "Fires a beam of gravity.");
 
 		{
-			int dice = 9 + (plev - 5) / 4;
+			DICE_NUMBER dice = 9 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);

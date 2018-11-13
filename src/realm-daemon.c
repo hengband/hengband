@@ -27,7 +27,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
 
 		{
-			int dice = 3 + (plev - 1) / 5;
+			DICE_NUMBER dice = 3 + (plev - 1) / 5;
 			int sides = 4;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -114,7 +114,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("地獄のボルトもしくはビームを放つ。", "Fires a bolt or beam of nether.");
 
 		{
-			int dice = 6 + (plev - 5) / 4;
+			DICE_NUMBER dice = 6 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -149,7 +149,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Fires a ball of evil power. Hurts good monsters greatly.");
 
 		{
-			int dice = 3;
+			DICE_NUMBER dice = 3;
 			int sides = 6;
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
@@ -226,7 +226,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("プラズマのボルトもしくはビームを放つ。", "Fires a bolt or beam of plasma.");
 
 		{
-			int dice = 11 + (plev - 5) / 4;
+			DICE_NUMBER dice = 11 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);

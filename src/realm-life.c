@@ -23,7 +23,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("軽傷の治癒", "Cure Light Wounds");
 		if (desc) return _("怪我と体力を少し回復させる。", "Heals cut and HP a little.");
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = 10;
 			if (info) return info_heal(dice, sides, 0);
 			if (cast) (void)cure_light_wounds(dice, sides);			
@@ -49,7 +49,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("軽傷", "Cause Light Wounds");
 		if (desc) return _("1体のモンスターに小ダメージを与える。抵抗されると無効。", "Wounds a monster a little unless resisted.");
 		{
-			int dice = 3 + (plev - 1) / 5;
+			DICE_NUMBER dice = 3 + (plev - 1) / 5;
 			int sides = 4;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -66,7 +66,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("光の召喚", "Call Light");
 		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = plev / 2;
 			POSITION rad = plev / 10 + 1;
 
@@ -100,7 +100,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("重傷の治癒", "Cure Medium Wounds");
 		if (desc) return _("怪我と体力を中程度回復させる。", "Heals cut and HP more.");
 		{
-			int dice = 4;
+			DICE_NUMBER dice = 4;
 			int sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
@@ -143,7 +143,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("1体のモンスターに中ダメージを与える。抵抗されると無効。", "Wounds a monster unless resisted.");
 		{
 			int sides = 8 + (plev - 5) / 4;
-			int dice = 8;
+			DICE_NUMBER dice = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -159,7 +159,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("致命傷の治癒", "Cure Critical Wounds");
 		if (desc) return _("体力を大幅に回復させ、負傷と朦朧状態も全快する。", "Heals cut, stun and HP greatly.");
 		{
-			int dice = 8;
+			DICE_NUMBER dice = 8;
 			int sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
@@ -262,7 +262,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのアンデッドにダメージを与える。", "Damages all undead monsters in sight.");
 
 		{
-			int dice = 1;
+			DICE_NUMBER dice = 1;
 			int sides = plev * 5;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -295,7 +295,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("1体のモンスターに大ダメージを与える。抵抗されると無効。", "Wounds a monster critically unless resisted.");
 
 		{
-			int dice = 5 + (plev - 5) / 3;
+			DICE_NUMBER dice = 5 + (plev - 5) / 3;
 			int sides = 15;
 
 			if (info) return info_damage(dice, sides, 0);

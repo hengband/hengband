@@ -1747,7 +1747,7 @@ typedef struct {
 	s32b value;
 	struct {
 		int constant;
-		int dice;
+		DICE_NUMBER dice;
 	} timeout;
 	cptr desc;
 } activation_type;

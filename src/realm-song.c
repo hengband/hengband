@@ -140,7 +140,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast || fail) stop_singing();
 
 		{
-			int dice = 4 + (plev - 1) / 5;
+			DICE_NUMBER dice = 4 + (plev - 1) / 5;
 			int sides = 4;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -168,7 +168,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int dice = plev / 10;
+			DICE_NUMBER dice = plev / 10;
 			int sides = 2;
 
 			if (info) return info_power_dice(dice, sides);
@@ -195,7 +195,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = 6;
 
 			if (info) return info_heal(dice, sides, 0);
@@ -216,7 +216,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast || fail) stop_singing();
 
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = plev / 2;
 			POSITION rad = plev / 10 + 1;
 
@@ -363,7 +363,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int dice = 1;
+			DICE_NUMBER dice = 1;
 			int sides = plev * 3 / 2;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -469,7 +469,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int dice = 10 + plev / 5;
+			DICE_NUMBER dice = 10 + plev / 5;
 			int sides = 7;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -512,7 +512,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int dice = 10 + plev / 15;
+			DICE_NUMBER dice = 10 + plev / 15;
 			int sides = 6;
 
 			if (info) return info_power_dice(dice, sides);
@@ -699,7 +699,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("轟音のビームを放つ。", "Fires a beam of sound.");
 
 		{
-			int dice = 15 + (plev - 1) / 2;
+			DICE_NUMBER dice = 15 + (plev - 1) / 2;
 			int sides = 10;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -844,7 +844,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int dice = 1;
+			DICE_NUMBER dice = 1;
 			int sides = plev * 3;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -870,7 +870,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int dice = 15;
+			DICE_NUMBER dice = 15;
 			int sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
@@ -908,7 +908,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("非常に強力でごく小さい轟音の球を放つ。", "Fires an extremely powerful tiny ball of sound.");
 
 		{
-			int dice = 50 + plev;
+			DICE_NUMBER dice = 50 + plev;
 			int sides = 10;
 			POSITION rad = 0;
 

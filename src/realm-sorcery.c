@@ -75,7 +75,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
 
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = plev / 2;
 			POSITION rad = plev / 10 + 1;
 
@@ -427,7 +427,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Sets a glyph under you. The glyph will explode when a monster moves on it.");
 
 		{
-			int dice = 7;
+			DICE_NUMBER dice = 7;
 			int sides = 7;
 			int base = plev;
 

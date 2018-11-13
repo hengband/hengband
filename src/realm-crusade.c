@@ -26,7 +26,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("懲罰", "Punishment");
 		if (desc) return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
 		{
-			int dice = 3 + (plev - 1) / 5;
+			DICE_NUMBER dice = 3 + (plev - 1) / 5;
 			int sides = 4;
 			if (info) return info_damage(dice, sides, 0);
 			if (cast)
@@ -99,7 +99,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("ターゲット付近に閃光のボルトを連射する。", "Fires many bolts of light near the target.");
 
 		{
-			int dice = 3 + (plev - 1) / 9;
+			DICE_NUMBER dice = 3 + (plev - 1) / 9;
 			int sides = 2;
 			if (info) return info_multi_damage_dice(dice, sides);
 			if (cast)

@@ -44,7 +44,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("電撃の短いビームを放つ。", "Fires a short beam of lightning.");
 
 		{
-			int dice = 3 + (plev - 1) / 5;
+			DICE_NUMBER dice = 3 + (plev - 1) / 5;
 			int sides = 4;
 			POSITION range = plev / 6 + 2;
 
@@ -103,7 +103,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
 
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = plev / 2;
 			POSITION rad = (plev / 10) + 1;
 
@@ -164,7 +164,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("怪我を全快させ、毒を体から完全に取り除き、体力を少し回復させる。", "Heals all cut and poison status. Heals HP a little.");
 
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
@@ -183,7 +183,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("壁を溶かして床にする。", "Turns one rock square to mud.");
 
 		{
-			int dice = 1;
+			DICE_NUMBER dice = 1;
 			int sides = 30;
 			int base = 20;
 
@@ -203,7 +203,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("冷気のボルトもしくはビームを放つ。", "Fires a bolt or beam of cold.");
 
 		{
-			int dice = 3 + (plev - 5) / 4;
+			DICE_NUMBER dice = 3 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -243,7 +243,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("火炎のボルトもしくはビームを放つ。", "Fires a bolt or beam of fire.");
 
 		{
-			int dice = 5 + (plev - 5) / 4;
+			DICE_NUMBER dice = 5 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -261,7 +261,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("光線を放つ。光りを嫌うモンスターに効果がある。", "Fires a beam of light which damages to light-sensitive monsters.");
 
 		{
-			int dice = 6;
+			DICE_NUMBER dice = 6;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -278,16 +278,10 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 13:
 		if (name) return _("足かせ", "Entangle");
 		if (desc) return _("視界内の全てのモンスターを減速させる。抵抗されると無効。", "Attempts to slow all monsters in sight.");
-
 		{
 			int power = plev;
-
 			if (info) return info_power(power);
-
-			if (cast)
-			{
-				slow_monsters(plev);
-			}
+			if (cast) slow_monsters(plev);
 		}
 		break;
 
@@ -385,13 +379,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int power = plev * 2;
-
 			if (info) return info_power(power);
-
-			if (cast)
-			{
-				charm_animals(power);
-			}
+			if (cast) charm_animals(power);
 		}
 		break;
 
@@ -449,31 +438,9 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 25:
-		if (name) return _("カマイタチ", "Cyclone");
+		if (name) return _("カマイタチ", "Whirlwind");
 		if (desc) return _("全方向に向かって攻撃する。", "Attacks all adjacent monsters.");
-
-		{
-			if (cast)
-			{
-				int y = 0, x = 0;
-				cave_type       *c_ptr;
-				monster_type    *m_ptr;
-
-				for (dir = 0; dir < 8; dir++)
-				{
-					y = p_ptr->y + ddy_ddd[dir];
-					x = p_ptr->x + ddx_ddd[dir];
-					c_ptr = &cave[y][x];
-
-					/* Get the monster */
-					m_ptr = &m_list[c_ptr->m_idx];
-
-					/* Hack -- attack monsters */
-					if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
-						py_attack(y, x, 0);
-				}
-			}
-		}
+		if (cast) massacre();
 		break;
 
 	case 26:

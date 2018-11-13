@@ -46,7 +46,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Fires a tiny ball of evil power which hurts good monsters greatly.");
 
 		{
-			int dice = 3 + (plev - 1) / 5;
+			DICE_NUMBER dice = 3 + (plev - 1) / 5;
 			int sides = 4;
 			POSITION rad = 0;
 
@@ -196,7 +196,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("生命のある者のHPと最大HP双方にダメージを与える効果のある球を放つ。", "Fires a ball which damages to both HP and MaxHP of living monsters.");
 
 		{
-			int dice = 3;
+			DICE_NUMBER dice = 3;
 			int sides = 6;
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
@@ -223,7 +223,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("地獄のボルトもしくはビームを放つ。", "Fires a bolt or beam of nether.");
 
 		{
-			int dice = 8 + (plev - 5) / 4;
+			DICE_NUMBER dice = 8 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -290,7 +290,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Absorbs some HP from a monster and gives them to you by bolt. You will also gain nutritional sustenance from this.");
 
 		{
-			int dice = 1;
+			DICE_NUMBER dice = 1;
 			int sides = plev * 2;
 			int base = plev * 2;
 
@@ -396,7 +396,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("暗黒のボルトもしくはビームを放つ。", "Fires a bolt or beam of darkness.");
 
 		{
-			int dice = 4 + (plev - 5) / 4;
+			DICE_NUMBER dice = 4 + (plev - 5) / 4;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);

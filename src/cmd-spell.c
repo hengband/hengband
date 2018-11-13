@@ -32,7 +32,7 @@
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-cptr info_string_dice(cptr str, int dice, int sides, int base)
+cptr info_string_dice(cptr str, DICE_NUMBER dice, int sides, int base)
 {
 	/* Fix value */
 	if (!dice)
@@ -55,7 +55,7 @@ cptr info_string_dice(cptr str, int dice, int sides, int base)
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-cptr info_damage(int dice, int sides, int base)
+cptr info_damage(DICE_NUMBER dice, int sides, int base)
 {
 	return info_string_dice(_("損傷:", "dam "), dice, sides, base);
 }
@@ -88,7 +88,7 @@ cptr info_range(POSITION range)
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-cptr info_heal(int dice, int sides, int base)
+cptr info_heal(DICE_NUMBER dice, int sides, int base)
 {
 	return info_string_dice(_("回復:", "heal "), dice, sides, base);
 }
@@ -122,7 +122,7 @@ cptr info_multi_damage(HIT_POINT dam)
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-cptr info_multi_damage_dice(int dice, int sides)
+cptr info_multi_damage_dice(DICE_NUMBER dice, int sides)
 {
 	return format(_("損傷:各%dd%d", "dam %dd%d each"), dice, sides);
 }
@@ -147,7 +147,7 @@ cptr info_power(int power)
 /*
  * Generate power info string such as "power 1d100"
  */
-cptr info_power_dice(int dice, int sides)
+cptr info_power_dice(DICE_NUMBER dice, int sides)
 {
 	return format(_("効力:%dd%d", "power %dd%d"), dice, sides);
 }

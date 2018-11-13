@@ -24,7 +24,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
 
 		{
-			int dice = 3 + (plev - 1) / 5;
+			DICE_NUMBER dice = 3 + (plev - 1) / 5;
 			int sides = 3;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -105,7 +105,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
 
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = plev / 2;
 			POSITION rad = plev / 10 + 1;
 
@@ -137,7 +137,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("怪我と体力を少し回復させる。", "Heals cut and HP a little.");
 
 		{
-			int dice = 2;
+			DICE_NUMBER dice = 2;
 			int sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
@@ -308,7 +308,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("怪我と体力を中程度回復させる。", "Heals cut and HP more.");
 
 		{
-			int dice = 4;
+			DICE_NUMBER dice = 4;
 			int sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
@@ -349,7 +349,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("壁を溶かして床にする。", "Turns one rock square to mud.");
 
 		{
-			int dice = 1;
+			DICE_NUMBER dice = 1;
 			int sides = 30;
 			int base = 20;
 
@@ -369,7 +369,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("光線を放つ。光りを嫌うモンスターに効果がある。", "Fires a beam of light which damages to light-sensitive monsters.");
 
 		{
-			int dice = 6;
+			DICE_NUMBER dice = 6;
 			int sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
