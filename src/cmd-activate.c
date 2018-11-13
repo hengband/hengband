@@ -66,7 +66,9 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
  */
 void do_cmd_activate_aux(INVENTORY_IDX item)
 {
-	int         dir, lev, chance, fail;
+	DIRECTION dir;
+	DEPTH lev;
+	int chance, fail;
 	object_type *o_ptr;
 	bool success;
 
@@ -180,14 +182,6 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		if (music_singing_any()) stop_singing();
 		if (hex_spelling_any()) stop_hex_spell_all();
 
-#if 0
-		if (object_is_cursed(o_ptr))
-		{
-			msg_print(_("カン高い音が響き渡った。", "You produce a shrill whistling sound."));
-			aggravate_monsters(0);
-		}
-		else
-#endif
 		{
 			IDX pet_ctr, i;
 			IDX *who;
@@ -220,7 +214,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 			/* Free the "who" array */
 			C_KILL(who, max_m_idx, IDX);
 		}
-		o_ptr->timeout = 100+randint1(100);
+		o_ptr->timeout = 100 + randint1(100);
 		return;
 	}
 	else if (o_ptr->tval == TV_CAPTURE)
@@ -404,7 +398,8 @@ static bool activate_dragon_breath(object_type *o_ptr)
 	BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
 	int type[20];
 	cptr name[20];
-	int i, dir, t, n = 0;
+	int i, t, n = 0;
+	DIRECTION dir;
 
 	if (!get_aim_dir(&dir)) return FALSE;
 
@@ -638,25 +633,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_WHIRLWIND:
 	{
-		{
-			int y = 0, x = 0;
-			cave_type       *c_ptr;
-			monster_type    *m_ptr;
-
-			for (dir = 0; dir <= 9; dir++)
-			{
-				y = p_ptr->y + ddy[dir];
-				x = p_ptr->x + ddx[dir];
-				c_ptr = &cave[y][x];
-
-				/* Get the monster */
-				m_ptr = &m_list[c_ptr->m_idx];
-
-				/* Hack -- attack monsters */
-				if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
-					py_attack(y, x, 0);
-			}
-		}
+		massacre();
 		break;
 	}
 
