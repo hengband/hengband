@@ -1032,7 +1032,7 @@ static void spoiler_underline(cptr str)
  * The possibly updated description pointer is returned.
  * </pre>
  */
-static cptr *spoiler_flag_aux(const u32b art_flags[TR_FLAG_SIZE],
+static cptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE],
 			      const flag_desc *flag_ptr,
 			      cptr *desc_ptr, const int n_elmnts)
 {
@@ -1384,13 +1384,11 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 {
 	artifact_type *a_ptr = &a_info[o_ptr->name1];
 
-#ifdef JP
-	sprintf(misc_desc, "レベル %d, 希少度 %u, %d.%d kg, ＄%ld",
+	sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"),
 		(int)a_ptr->level, a_ptr->rarity,
+#ifdef JP
 		lbtokg1(a_ptr->weight), lbtokg2(a_ptr->weight), (long int)a_ptr->cost);
 #else
-	sprintf(misc_desc, "Level %d, Rarity %u, %d.%d lbs, %ld Gold",
-		(int)a_ptr->level, a_ptr->rarity,
 		a_ptr->weight / 10, a_ptr->weight % 10, a_ptr->cost);
 #endif
 }

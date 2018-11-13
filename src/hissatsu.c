@@ -36,18 +36,18 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 {
 	SPELL_IDX i;
 	int j = 0;
-	int             num = 0;
-	int             y = 1;
-	int             x = 15;
-	int             plev = p_ptr->lev;
-	int             ask = TRUE;
-	char            choice;
-	char            out_val[160];
+	int num = 0;
+	int y = 1;
+	int x = 15;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	int ask = TRUE;
+	char choice;
+	char out_val[160];
 	SPELL_IDX sentaku[32];
-	cptr            p = _("必殺剣", "special attack");
+	cptr p = _("必殺剣", "special attack");
 	COMMAND_CODE code;
 	magic_type spell;
-	bool            flag, redraw;
+	bool flag, redraw;
 	int menu_line = (use_menu ? 1 : 0);
 
 	/* Assume cancelled */
@@ -328,7 +328,6 @@ void do_cmd_hissatsu(void)
 {
 	SPELL_IDX       n = 0;
 	magic_type      spell;
-
 
 	/* not if confused */
 	if (p_ptr->confused)

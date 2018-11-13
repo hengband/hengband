@@ -18,7 +18,8 @@
  */
 void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 {
-	int ident, lev;
+	bool ident;
+	DEPTH lev;
 	object_type *o_ptr;
 	object_type forge;
 	object_type *q_ptr;
