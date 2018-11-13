@@ -12,7 +12,8 @@
 */
 bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 {
-	int k, ac;
+	int k;
+	ARMOUR_CLASS ac;
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Percentile dice */
@@ -73,7 +74,7 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 * @param dam 現在算出中のダメージ値
 * @return クリティカル修正が入ったダメージ値
 */
-HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+HIT_POINT critical_shot(WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
 	int i, k;
 	object_type *j_ptr = &inventory[INVEN_BOW];

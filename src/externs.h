@@ -524,7 +524,7 @@ extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode
 
 /* cmd1.c */
 extern bool test_hit_norm(int chance, ARMOUR_CLASS ac, int vis);
-extern HIT_POINT critical_shot(int weight, int plus_ammo, int plus_bow, HIT_POINT dam);
+extern HIT_POINT critical_shot(WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam);
 extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown);
 extern void search(void);
 extern void py_pickup_aux(OBJECT_IDX o_idx);
@@ -701,7 +701,7 @@ extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 /* melee1.c */
 /* monster-process.c */
 extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
-extern HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
+extern HIT_POINT critical_norm(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
 extern bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool make_attack_normal(MONSTER_IDX m_idx);
 extern void process_monsters(void);
@@ -1101,8 +1101,8 @@ extern QUEST_IDX quest_number(DEPTH level);
 extern QUEST_IDX random_quest_number(DEPTH level);
 extern bool tele_town(void);
 extern HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow);
-extern HIT_POINT calc_expect_crit_shot(int weight, int plus_ammo,int plus_bow, HIT_POINT dam);
-extern HIT_POINT calc_expect_crit(int weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari);
+extern HIT_POINT calc_expect_crit_shot(WEIGHT weight, int plus_ammo,int plus_bow, HIT_POINT dam);
+extern HIT_POINT calc_expect_crit(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari);
 
 /* util.c */
 extern errr path_parse(char *buf, int max, cptr file);

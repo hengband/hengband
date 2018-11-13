@@ -2358,7 +2358,7 @@ HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow)
  * @param dam 基本ダメージ量
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  HIT_POINT dam)
+HIT_POINT calc_expect_crit_shot(WEIGHT weight, int plus_ammo, int plus_bow,  HIT_POINT dam)
 {
 	u32b num;
 	int i, k, crit;
@@ -2400,7 +2400,7 @@ HIT_POINT calc_expect_crit_shot(int weight, int plus_ammo, int plus_bow,  HIT_PO
  * @param dokubari 毒針処理か否か
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(int weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari)
+HIT_POINT calc_expect_crit(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari)
 {
 	u32b k, num;
 	int i;
@@ -2479,7 +2479,7 @@ static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
  * @param vorpal_div 切れ味倍率（割り算部分）
  * @return ダメージ期待値
  */
-static u32b calc_expect_dice(u32b dam, int mult, int div, bool force, int weight, int plus, s16b meichuu, bool dokubari, int vorpal_mult, int vorpal_div)
+static u32b calc_expect_dice(u32b dam, int mult, int div, bool force, WEIGHT weight, int plus, s16b meichuu, bool dokubari, int vorpal_mult, int vorpal_div)
 {
 	dam = calc_slaydam(dam, mult, div, force);
 	dam = calc_expect_crit(weight, plus, dam, meichuu, dokubari);

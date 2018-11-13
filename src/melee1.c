@@ -62,7 +62,7 @@ bool test_hit_norm(int chance, ARMOUR_CLASS ac, int vis)
 * @param mode オプションフラグ
 * @return クリティカル修正が入ったダメージ値
 */
-HIT_POINT critical_norm(int weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode)
+HIT_POINT critical_norm(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode)
 {
 	int i, k;
 
@@ -667,7 +667,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 				int min_level = 1;
 				const martial_arts *ma_ptr = &ma_blows[0], *old_ptr = &ma_blows[0];
 				int resist_stun = 0;
-				int weight = 8;
+				WEIGHT weight = 8;
 
 				if (r_ptr->flags1 & RF1_UNIQUE) resist_stun += 88;
 				if (r_ptr->flags3 & RF3_NO_STUN) resist_stun += 66;

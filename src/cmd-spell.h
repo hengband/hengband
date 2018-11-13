@@ -10,4 +10,4 @@ extern cptr info_multi_damage_dice(int dice, int sides);
 extern cptr info_power(int power);
 extern cptr info_power_dice(int dice, int sides);
 extern cptr info_radius(POSITION rad);
-extern cptr info_weight(int weight);
+extern cptr info_weight(WEIGHT weight);

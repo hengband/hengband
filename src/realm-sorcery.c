@@ -445,7 +445,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("アイテムを自分の足元へ移動させる。", "Pulls a distant item close to you.");
 
 		{
-			int weight = plev * 15;
+			WEIGHT weight = plev * 15;
 
 			if (info) return info_weight(weight);
 

@@ -169,7 +169,7 @@ cptr info_radius(POSITION rad)
  * @param weight 最大重量
  * @return フォーマットに従い整形された文字列
  */
-cptr info_weight(int weight)
+cptr info_weight(WEIGHT weight)
 {
 #ifdef JP
 	return format("最大重量:%d.%dkg", lbtokg1(weight), lbtokg2(weight));

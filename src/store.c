@@ -343,7 +343,7 @@ static void say_comment_1(void)
  * @param annoyed 店主のいらつき度
  * @return なし
  */
-static void say_comment_2(s32b value, int annoyed)
+static void say_comment_2(PRICE value, int annoyed)
 {
 	char	tmp_val[80];
 
@@ -384,7 +384,7 @@ static void say_comment_2(s32b value, int annoyed)
  * @param annoyed 店主のいらつき度
  * @return なし
  */
-static void say_comment_3(s32b value, int annoyed)
+static void say_comment_3(PRICE value, int annoyed)
 {
 	char	tmp_val[80];
 
@@ -559,7 +559,7 @@ static cptr comment_7d[MAX_COMMENT_7D] =
  * @details 
  * We paid "price", it was worth "value", and we thought it was worth "guess"
  */
-static void purchase_analyze(s32b price, s32b value, s32b guess)
+static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 {
 	/* Item was worthless, but we bought it */
 	if ((value <= 0) && (price > value))
@@ -2188,7 +2188,7 @@ static void store_create(void)
  * @param minprice アイテムの最低販売価格
  * @return 割引を禁止するならTRUEを返す。
  */
-static bool noneedtobargain(s32b minprice)
+static bool noneedtobargain(PRICE minprice)
 {
 	s32b good = st_ptr->good_buy;
 	s32b bad = st_ptr->bad_buy;
@@ -2215,7 +2215,7 @@ static bool noneedtobargain(s32b minprice)
  * @param num 売買数 
  * @return なし
  */
-static void updatebargain(s32b price, s32b minprice, int num)
+static void updatebargain(PRICE price, PRICE minprice, int num)
 {
 	/* Hack -- auto-haggle */
 	if (!manual_haggle) return;
@@ -2780,7 +2780,7 @@ static s32b last_inc = 0L;
  * @param final 最終確定価格ならばTRUE
  * @return プレイヤーを締め出す場合TRUEを返す
  */
-static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
+static int get_haggle(cptr pmt, s32b *poffer, PRICE price, int final)
 {
 	s32b		i;
 
@@ -2941,7 +2941,7 @@ static int get_haggle(cptr pmt, s32b *poffer, s32b price, int final)
  */
 static bool receive_offer(cptr pmt, s32b *poffer,
 			  s32b last_offer, int factor,
-			  s32b price, int final)
+			  PRICE price, int final)
 {
 	/* Haggle till done */
 	while (TRUE)
@@ -3437,7 +3437,7 @@ static void store_purchase(void)
 
 	ITEM_NUMBER amt;
 
-	s32b price, best;
+	PRICE price, best;
 
 	object_type forge;
 	object_type *j_ptr;
@@ -3891,7 +3891,7 @@ static void store_sell(void)
 	int item_pos;
 	int amt;
 
-	s32b price, value, dummy;
+	PRICE price, value, dummy;
 
 	object_type forge;
 	object_type *q_ptr;
