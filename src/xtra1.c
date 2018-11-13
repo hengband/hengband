@@ -2606,7 +2606,7 @@ static void calc_mana(void)
 	/* Only mages are affected */
 	if (mp_ptr->spell_xtra & MAGIC_GLOVE_REDUCE_MANA)
 	{
-		u32b flgs[TR_FLAG_SIZE];
+		BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 		/* Assume player is not encumbered by gloves */
 		p_ptr->cumber_glove = FALSE;
@@ -2952,7 +2952,7 @@ static void calc_torch(void)
 {
 	int i, rad;
 	object_type *o_ptr;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Assume no light */
 	p_ptr->cur_lite = 0;
@@ -3112,7 +3112,7 @@ s16b calc_num_fire(object_type *o_ptr)
 	int num = 0;
 	OBJECT_TYPE_VALUE tval_ammo = bow_tval_ammo(o_ptr);
 	object_type *q_ptr;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	
 	/* Scan the usable inventory */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
@@ -3213,7 +3213,7 @@ void calc_bonuses(void)
 	int             empty_hands_status = empty_hands(TRUE);
 	int             extra_blows[2];
 	object_type     *o_ptr;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	bool            omoi = FALSE;
 	bool            yoiyami = FALSE;
 	bool            down_saving = FALSE;

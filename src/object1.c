@@ -107,7 +107,7 @@ void reset_visuals(void)
  * @param flgs フラグ情報を受け取る配列
  * @return なし
  */
-void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
+void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 	int i;
@@ -216,7 +216,7 @@ void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
  * @param flgs フラグ情報を受け取る配列
  * @return なし
  */
-void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
+void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	bool spoil = FALSE;
 	int i;
@@ -344,7 +344,7 @@ void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE])
 static cptr item_activation_dragon_breath(object_type *o_ptr)
 {
 	static char desc[256];
-	u32b flgs[TR_FLAG_SIZE]; /* for resistance flags */
+	BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
 	int i, n = 0;
 
 	object_flags(o_ptr, flgs);
@@ -473,7 +473,7 @@ static cptr item_activation_aux(object_type *o_ptr)
  */
 cptr item_activation(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
@@ -514,7 +514,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 {
 	int i = 0, j, k;
 
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	char temp[70 * 20];
 	cptr            info[128];

@@ -1315,7 +1315,7 @@ static int store_check_num(object_type *o_ptr)
  */
 static bool is_blessed(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
 	if (have_flag(flgs, TR_BLESSED)) return (TRUE);
 	else return (FALSE);

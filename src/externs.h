@@ -783,8 +783,8 @@ extern void monster_drop_carried_objects(monster_type *m_ptr);
 extern int m_bonus(int max, DEPTH level);
 
 extern void reset_visuals(void);
-extern void object_flags(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
-extern void object_flags_known(object_type *o_ptr, u32b flgs[TR_FLAG_SIZE]);
+extern void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
+extern void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 extern cptr item_activation(object_type *o_ptr);
 extern bool screen_object(object_type *o_ptr, BIT_FLAGS mode);
 extern char index_to_label(int i);

@@ -966,7 +966,7 @@ static flag_insc_table flag_insc_sust[] =
  * sprintf(t, "%+d", n), and return a pointer to the terminator.
  * Note that we always print a sign, either "+" or "-".
  */
-static char *inscribe_flags_aux(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE], bool kanji, char *ptr)
+static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE], bool kanji, char *ptr)
 {
 #ifndef JP
 	(void)kanji;
@@ -994,7 +994,7 @@ static char *inscribe_flags_aux(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE]
  * @param flgs 対応するオブジェクトのフラグ文字列
  * @return 1つでも該当の特性があったらTRUEを返す。
  */
-static bool have_flag_of(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE])
+static bool have_flag_of(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	while (fi_ptr->english)
 	{
@@ -1018,7 +1018,7 @@ static bool have_flag_of(flag_insc_table *fi_ptr, u32b flgs[TR_FLAG_SIZE])
 static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji, bool all)
 {
 	char *prev_ptr = ptr;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
@@ -1348,7 +1348,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 	char            tmp_val2[MAX_NLEN+10];
 	char            fake_insc_buf[30];
 
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	object_type *bow_ptr;
 

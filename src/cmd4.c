@@ -4801,7 +4801,7 @@ cptr inven_res_label = _("                               酸電火冷毒光闇�
 static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, byte tval, char *where)
 {
 	char o_name[MAX_NLEN];
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	if (!o_ptr->k_idx) return;
 	if (o_ptr->tval != tval) return;

@@ -2311,7 +2311,7 @@ bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 /*対邪平均ダメージの計算処理*/
 int calc_arm_avgdamage(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
 
 	HIT_POINT dam, base, s_evil, forced, vorpal;
@@ -2352,7 +2352,7 @@ int calc_arm_avgdamage(object_type *o_ptr)
 static int suppression_evil_dam(object_type *o_ptr)
 {
 	int num = FALSE;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
 
 	if (have_flag(flgs, TR_VAMPIRIC))

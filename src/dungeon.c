@@ -1296,7 +1296,7 @@ static object_type *choose_cursed_obj_name(u32b flag)
 					(flag == TRC_SLOW_REGEN) )
 		{
 			u32b cf;
-			u32b flgs[TR_FLAG_SIZE];
+			BIT_FLAGS flgs[TR_FLAG_SIZE];
 			object_flags(o_ptr, flgs);
 			switch (flag)
 			{
@@ -2491,7 +2491,7 @@ static void process_world_aux_curse(void)
 			/* Scan the equipment with random teleport ability */
 			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 			{
-				u32b flgs[TR_FLAG_SIZE];
+				BIT_FLAGS flgs[TR_FLAG_SIZE];
 				o_ptr = &inventory[i];
 
 				/* Skip non-objects */

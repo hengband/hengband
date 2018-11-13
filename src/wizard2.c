@@ -566,7 +566,7 @@ static void do_cmd_wiz_change(void)
 static void wiz_display_item(object_type *o_ptr)
 {
 	int i, j = 13;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	char buf[256];
 
 	/* Extract the flags */

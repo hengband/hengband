@@ -570,7 +570,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			int total_damage = 0, basedam, i;
-			u32b flgs[TR_FLAG_SIZE];
+			BIT_FLAGS flgs[TR_FLAG_SIZE];
 			object_type *o_ptr;
 			if (!get_aim_dir(&dir)) return NULL;
 			msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
@@ -840,7 +840,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int total_damage = 0, basedam, i;
 			int y, x;
-			u32b flgs[TR_FLAG_SIZE];
+			BIT_FLAGS flgs[TR_FLAG_SIZE];
 			object_type *o_ptr;
 
 			if (!get_rep_dir2(&dir)) return NULL;

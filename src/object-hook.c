@@ -173,7 +173,7 @@ bool item_tester_hook_mochikae(object_type *o_ptr)
 */
 bool item_tester_hook_activate(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Not known */
 	if (!object_is_known(o_ptr)) return (FALSE);
@@ -214,7 +214,7 @@ bool item_tester_hook_wear(object_type *o_ptr)
 */
 bool item_tester_hook_use(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Ammo */
 	if (o_ptr->tval == p_ptr->tval_ammo)

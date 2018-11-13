@@ -70,7 +70,7 @@ bool object_is_favorite(object_type *o_ptr)
 	{
 	case CLASS_PRIEST:
 	{
-		u32b flgs[TR_FLAG_SIZE];
+		BIT_FLAGS flgs[TR_FLAG_SIZE];
 		object_flags_known(o_ptr, flgs);
 
 		if (!have_flag(flgs, TR_BLESSED) && 
@@ -89,7 +89,7 @@ bool object_is_favorite(object_type *o_ptr)
 	case CLASS_BEASTMASTER:
 	case CLASS_CAVALRY:
 	{
-		u32b flgs[TR_FLAG_SIZE];
+		BIT_FLAGS flgs[TR_FLAG_SIZE];
 		object_flags_known(o_ptr, flgs);
 
 		/* Is it known to be suitable to using while riding? */

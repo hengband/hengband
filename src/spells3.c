@@ -529,7 +529,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 		if ((p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR)) follow = TRUE;
 		else
 		{
-			u32b flgs[TR_FLAG_SIZE];
+			BIT_FLAGS flgs[TR_FLAG_SIZE];
 			object_type *o_ptr;
 			int i;
 
@@ -3222,7 +3222,7 @@ bool pulish_shield(void)
 {
 	OBJECT_IDX item;
 	object_type     *o_ptr;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
 
@@ -4285,7 +4285,7 @@ bool hates_cold(object_type *o_ptr)
  */
 int set_acid_destroy(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	if (!hates_acid(o_ptr)) return (FALSE);
 	object_flags(o_ptr, flgs);
 	if (have_flag(flgs, TR_IGNORE_ACID)) return (FALSE);
@@ -4302,7 +4302,7 @@ int set_acid_destroy(object_type *o_ptr)
  */
 int set_elec_destroy(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	if (!hates_elec(o_ptr)) return (FALSE);
 	object_flags(o_ptr, flgs);
 	if (have_flag(flgs, TR_IGNORE_ELEC)) return (FALSE);
@@ -4319,7 +4319,7 @@ int set_elec_destroy(object_type *o_ptr)
  */
 int set_fire_destroy(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	if (!hates_fire(o_ptr)) return (FALSE);
 	object_flags(o_ptr, flgs);
 	if (have_flag(flgs, TR_IGNORE_FIRE)) return (FALSE);
@@ -4336,7 +4336,7 @@ int set_fire_destroy(object_type *o_ptr)
  */
 int set_cold_destroy(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	if (!hates_cold(o_ptr)) return (FALSE);
 	object_flags(o_ptr, flgs);
 	if (have_flag(flgs, TR_IGNORE_COLD)) return (FALSE);
@@ -4452,7 +4452,7 @@ o_name, index_to_label(i),
 static int minus_ac(void)
 {
 	object_type *o_ptr = NULL;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	char        o_name[MAX_NLEN];
 
 

@@ -401,7 +401,7 @@ void do_cmd_activate(void)
 */
 static bool activate_dragon_breath(object_type *o_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE]; /* for resistance flags */
+	BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
 	int type[20];
 	cptr name[20];
 	int i, dir, t, n = 0;

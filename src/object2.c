@@ -994,7 +994,7 @@ static s32b object_value_base(object_type *o_ptr)
 s32b flag_cost(object_type *o_ptr, int plusses)
 {
 	s32b total = 0;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	s32b tmp_cost;
 	int count;
 	int i;
@@ -6663,7 +6663,7 @@ object_type *choose_warning_item(void)
 	/* Search Inventory */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		u32b flgs[TR_FLAG_SIZE];
+		BIT_FLAGS flgs[TR_FLAG_SIZE];
 		object_type *o_ptr = &inventory[i];
 
 		object_flags(o_ptr, flgs);

@@ -3136,7 +3136,7 @@ void process_monster(MONSTER_IDX m_idx)
 				/* Scan all objects in the grid */
 				for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
-					u32b flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
+					BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
 					char m_name[80], o_name[MAX_NLEN];
 
 					/* Acquire object */

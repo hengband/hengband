@@ -42,7 +42,7 @@ void self_knowledge(void)
 	char v_string [8] [128];
 	char s_string [6] [128];
 
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	object_type *o_ptr;
 

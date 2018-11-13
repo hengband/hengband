@@ -2432,7 +2432,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Extract the flags */
 	object_flags(o_ptr, flgs);
@@ -3514,7 +3514,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	int msec = delay_factor * delay_factor * delay_factor;
 
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	cptr q, s;
 	bool come_back = FALSE;
 	bool do_drop = TRUE;

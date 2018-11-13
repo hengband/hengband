@@ -2539,7 +2539,7 @@ static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, i
  */
 static void compare_weapon_aux(object_type *o_ptr, int col, int r)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	int blow = p_ptr->num_blow[0];
 	bool force = FALSE;
 	bool dokubari = FALSE;

@@ -2036,7 +2036,7 @@ static void display_player_various(void)
 	int			xdig;
 	cptr		desc;
 	int         muta_att = 0;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	int		shots, shot_frac;
 	bool dokubari;
 
@@ -2222,7 +2222,7 @@ static void display_player_various(void)
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void player_flags(u32b flgs[TR_FLAG_SIZE])
+static void player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 
@@ -2669,7 +2669,7 @@ static void player_flags(u32b flgs[TR_FLAG_SIZE])
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void tim_player_flags(u32b flgs[TR_FLAG_SIZE])
+static void tim_player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 
@@ -2851,7 +2851,7 @@ void print_equippy(void)
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void known_obj_immunity(u32b flgs[TR_FLAG_SIZE])
+static void known_obj_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 
@@ -2888,7 +2888,7 @@ static void known_obj_immunity(u32b flgs[TR_FLAG_SIZE])
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void player_immunity(u32b flgs[TR_FLAG_SIZE])
+static void player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 
@@ -2913,7 +2913,7 @@ static void player_immunity(u32b flgs[TR_FLAG_SIZE])
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void tim_player_immunity(u32b flgs[TR_FLAG_SIZE])
+static void tim_player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 
@@ -2940,7 +2940,7 @@ static void tim_player_immunity(u32b flgs[TR_FLAG_SIZE])
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void player_vuln_flags(u32b flgs[TR_FLAG_SIZE])
+static void player_vuln_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 
@@ -2989,7 +2989,7 @@ typedef struct {
  * @param mode 表示オプション
  * @return なし
  */
-static void display_flag_aux(int row, int col, cptr header,
+static void display_flag_aux(TERM_LEN row, TERM_LEN col, cptr header,
 				    int flag1, all_player_flags *f, u16b mode)
 {
 	int     i;
@@ -3128,8 +3128,8 @@ static void display_flag_aux(int row, int col, cptr header,
  */
 static void display_player_flag_info(void)
 {
-	int row;
-	int col;
+	TERM_LEN row;
+	TERM_LEN col;
 
 	all_player_flags f;
 
@@ -3259,8 +3259,8 @@ static void display_player_flag_info(void)
  */
 static void display_player_other_flag_info(void)
 {
-	int row;
-	int col;
+	TERM_LEN row;
+	TERM_LEN col;
 
 	all_player_flags f;
 
@@ -3525,7 +3525,7 @@ static void display_player_stat_info(void)
 	int row, col;
 
 	object_type *o_ptr;
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	byte a;
 	char c;

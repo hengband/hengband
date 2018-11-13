@@ -754,7 +754,7 @@ static void rd_item(object_type *o_ptr)
 	
 	if(h_older_than(2,1,2,4))
 	{
-		u32b flgs[TR_FLAG_SIZE];
+		BIT_FLAGS flgs[TR_FLAG_SIZE];
 		object_flags(o_ptr, flgs);
 		
 		if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT))

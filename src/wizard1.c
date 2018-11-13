@@ -1074,7 +1074,7 @@ static void analyze_general(object_type *o_ptr, char *desc_ptr)
  */
 static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	cptr *affects_list;
 
@@ -1130,7 +1130,7 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
  */
 static void analyze_slay(object_type *o_ptr, cptr *slay_list)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	object_flags(o_ptr, flgs);
 
@@ -1151,7 +1151,7 @@ static void analyze_slay(object_type *o_ptr, cptr *slay_list)
  */
 static void analyze_brand(object_type *o_ptr, cptr *brand_list)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	object_flags(o_ptr, flgs);
 
@@ -1172,7 +1172,7 @@ static void analyze_brand(object_type *o_ptr, cptr *brand_list)
  */
 static void analyze_resist(object_type *o_ptr, cptr *resist_list)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	object_flags(o_ptr, flgs);
 
@@ -1193,7 +1193,7 @@ static void analyze_resist(object_type *o_ptr, cptr *resist_list)
  */
 static void analyze_immune(object_type *o_ptr, cptr *immune_list)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	object_flags(o_ptr, flgs);
 
@@ -1214,7 +1214,7 @@ static void analyze_immune(object_type *o_ptr, cptr *immune_list)
  */
 static void analyze_sustains(object_type *o_ptr, cptr *sustain_list)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	object_flags(o_ptr, flgs);
 
@@ -1251,7 +1251,7 @@ static void analyze_sustains(object_type *o_ptr, cptr *sustain_list)
  */
 static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 {
-	u32b flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	POSITION rad;
 	char desc[256];
 
