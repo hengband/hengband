@@ -141,7 +141,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 4 + (plev - 1) / 5;
-			int sides = 4;
+			DICE_SID sides = 4;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -169,7 +169,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = plev / 10;
-			int sides = 2;
+			DICE_SID sides = 2;
 
 			if (info) return info_power_dice(dice, sides);
 
@@ -196,7 +196,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 2;
-			int sides = 6;
+			DICE_SID sides = 6;
 
 			if (info) return info_heal(dice, sides, 0);
 
@@ -217,7 +217,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 2;
-			int sides = plev / 2;
+			DICE_SID sides = plev / 2;
 			POSITION rad = plev / 10 + 1;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -364,7 +364,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 1;
-			int sides = plev * 3 / 2;
+			DICE_SID sides = plev * 3 / 2;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -470,7 +470,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 10 + plev / 5;
-			int sides = 7;
+			DICE_SID sides = 7;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -513,7 +513,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 10 + plev / 15;
-			int sides = 6;
+			DICE_SID sides = 6;
 
 			if (info) return info_power_dice(dice, sides);
 
@@ -700,7 +700,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 15 + (plev - 1) / 2;
-			int sides = 10;
+			DICE_SID sides = 10;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -722,7 +722,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 15;
-			int sides = 20;
+			DICE_SID sides = 20;
 
 			if (info) return info_delay(base, sides);
 
@@ -845,7 +845,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 1;
-			int sides = plev * 3;
+			DICE_SID sides = plev * 3;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -871,7 +871,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 15;
-			int sides = 10;
+			DICE_SID sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
 
@@ -909,7 +909,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 50 + plev;
-			int sides = 10;
+			DICE_SID sides = 10;
 			POSITION rad = 0;
 
 			if (info) return info_damage(dice, sides, 0);

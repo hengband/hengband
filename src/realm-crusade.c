@@ -27,7 +27,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
 		{
 			DICE_NUMBER dice = 3 + (plev - 1) / 5;
-			int sides = 4;
+			DICE_SID sides = 4;
 			if (info) return info_damage(dice, sides, 0);
 			if (cast)
 			{
@@ -100,7 +100,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3 + (plev - 1) / 9;
-			int sides = 2;
+			DICE_SID sides = 2;
 			if (info) return info_multi_damage_dice(dice, sides);
 			if (cast)
 			{
@@ -172,7 +172,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのアンデッド及び悪魔にダメージを与え、邪悪なモンスターを恐怖させる。",
 			"Damages all undead and demons in sight, and scares all evil monsters in sight.");
 		{
-			int sides = plev;
+			DICE_SID sides = plev;
 			int power = plev;
 			if (info) return info_damage(1, sides, 0);
 			if (cast)
@@ -214,7 +214,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 25;
-			int sides = 3 * plev;
+			DICE_SID sides = 3 * plev;
 
 			if (info) return info_duration(base, sides);
 
@@ -317,7 +317,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのアンデッド及び悪魔にダメージを与える。", "Damages all undead and demons in sight.");
 
 		{
-			int sides = plev * 4;
+			DICE_SID sides = plev * 4;
 
 			if (info) return info_damage(1, sides, 0);
 
@@ -334,7 +334,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全ての邪悪なモンスターにダメージを与える。", "Damages all evil monsters in sight.");
 
 		{
-			int sides = plev * 4;
+			DICE_SID sides = plev * 4;
 
 			if (info) return info_damage(1, sides, 0);
 
@@ -456,7 +456,7 @@ cptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 12;
-			int sides = 4;
+			DICE_SID sides = 4;
 
 			if (cast)
 			{

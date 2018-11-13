@@ -24,7 +24,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("怪我と体力を少し回復させる。", "Heals cut and HP a little.");
 		{
 			DICE_NUMBER dice = 2;
-			int sides = 10;
+			DICE_SID sides = 10;
 			if (info) return info_heal(dice, sides, 0);
 			if (cast) (void)cure_light_wounds(dice, sides);			
 		}
@@ -50,7 +50,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("1体のモンスターに小ダメージを与える。抵抗されると無効。", "Wounds a monster a little unless resisted.");
 		{
 			DICE_NUMBER dice = 3 + (plev - 1) / 5;
-			int sides = 4;
+			DICE_SID sides = 4;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -67,7 +67,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
 		{
 			DICE_NUMBER dice = 2;
-			int sides = plev / 2;
+			DICE_SID sides = plev / 2;
 			POSITION rad = plev / 10 + 1;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -101,7 +101,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("怪我と体力を中程度回復させる。", "Heals cut and HP more.");
 		{
 			DICE_NUMBER dice = 4;
-			int sides = 10;
+			DICE_SID sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
 			if (cast) (void)cure_serious_wounds(dice, sides);
@@ -142,7 +142,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("重傷", "Cause Medium Wounds");
 		if (desc) return _("1体のモンスターに中ダメージを与える。抵抗されると無効。", "Wounds a monster unless resisted.");
 		{
-			int sides = 8 + (plev - 5) / 4;
+			DICE_SID sides = 8 + (plev - 5) / 4;
 			DICE_NUMBER dice = 8;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -160,7 +160,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("体力を大幅に回復させ、負傷と朦朧状態も全快する。", "Heals cut, stun and HP greatly.");
 		{
 			DICE_NUMBER dice = 8;
-			int sides = 10;
+			DICE_SID sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
 			if (cast) (void)cure_critical_wounds(damroll(dice, sides));
@@ -263,7 +263,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 1;
-			int sides = plev * 5;
+			DICE_SID sides = plev * 5;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -296,7 +296,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 5 + (plev - 5) / 3;
-			int sides = 15;
+			DICE_SID sides = 15;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -314,7 +314,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 15;
-			int sides = 20;
+			DICE_SID sides = 20;
 
 			if (info) return info_delay(base, sides);
 
@@ -331,7 +331,7 @@ cptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 15;
-			int sides = 20;
+			DICE_SID sides = 20;
 
 			if (info) return info_delay(base, sides);
 

@@ -47,7 +47,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3 + (plev - 1) / 5;
-			int sides = 4;
+			DICE_SID sides = 4;
 			POSITION rad = 0;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -197,7 +197,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3;
-			int sides = 6;
+			DICE_SID sides = 6;
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
@@ -224,7 +224,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 8 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -291,7 +291,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 1;
-			int sides = plev * 2;
+			DICE_SID sides = plev * 2;
 			int base = plev * 2;
 
 			if (info) return info_damage(dice, sides, base);
@@ -397,7 +397,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 4 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -474,7 +474,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の生命のあるモンスターにダメージを与える。", "Damages all living monsters in sight.");
 
 		{
-			int sides = plev * 3;
+			DICE_SID sides = plev * 3;
 
 			if (info) return info_damage(1, sides, 0);
 

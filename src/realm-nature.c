@@ -45,7 +45,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3 + (plev - 1) / 5;
-			int sides = 4;
+			DICE_SID sides = 4;
 			POSITION range = plev / 6 + 2;
 
 			if (info) return format("%s%dd%d %s%d", s_dam, dice, sides, s_rng, range);
@@ -104,7 +104,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 2;
-			int sides = plev / 2;
+			DICE_SID sides = plev / 2;
 			POSITION rad = (plev / 10) + 1;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -165,7 +165,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 2;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
 
@@ -184,7 +184,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 1;
-			int sides = 30;
+			DICE_SID sides = 30;
 			int base = 20;
 
 			if (info) return info_damage(dice, sides, base);
@@ -204,7 +204,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -244,7 +244,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 5 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -262,7 +262,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 6;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -329,7 +329,7 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 20;
-			int sides = 30;
+			DICE_SID sides = 30;
 
 			if (info) return info_duration(base, sides);
 

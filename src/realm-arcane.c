@@ -25,7 +25,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3 + (plev - 1) / 5;
-			int sides = 3;
+			DICE_SID sides = 3;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -106,7 +106,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 2;
-			int sides = plev / 2;
+			DICE_SID sides = plev / 2;
 			POSITION rad = plev / 10 + 1;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -138,7 +138,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 2;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
 			if (cast) (void)cure_light_wounds(dice, sides);
@@ -309,7 +309,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
 			if (cast) (void)cure_serious_wounds(4, 8);
@@ -350,7 +350,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 1;
-			int sides = 30;
+			DICE_SID sides = 30;
 			int base = 20;
 
 			if (info) return info_damage(dice, sides, base);
@@ -370,7 +370,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 6;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -511,7 +511,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 15;
-			int sides = 20;
+			DICE_SID sides = 20;
 
 			if (info) return info_delay(base, sides);
 
@@ -529,7 +529,7 @@ cptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 25;
-			int sides = 30;
+			DICE_SID sides = 30;
 
 			if (info) return info_duration(base, sides);
 

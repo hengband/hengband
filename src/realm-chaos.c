@@ -29,7 +29,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3 + ((plev - 1) / 5);
-			int sides = 4;
+			DICE_SID sides = 4;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -64,7 +64,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 2;
-			int sides = plev / 2;
+			DICE_SID sides = plev / 2;
 			POSITION rad = (plev / 10) + 1;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -99,7 +99,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3;
-			int sides = 5;
+			DICE_SID sides = 5;
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
@@ -132,7 +132,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 8 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -151,7 +151,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 8 + ((plev - 5) / 4);
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -203,7 +203,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 10 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -240,7 +240,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 11 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -296,7 +296,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 12;
-			int sides = 4;
+			DICE_SID sides = 4;
 
 			if (cast)
 			{
@@ -348,7 +348,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 5 + plev / 10;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -400,7 +400,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 15;
-			int sides = 20;
+			DICE_SID sides = 20;
 
 			if (info) return info_delay(base, sides);
 
@@ -461,7 +461,7 @@ cptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 9 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 

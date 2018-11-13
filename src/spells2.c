@@ -5022,7 +5022,7 @@ bool_hack berserk(int base)
 	return ident;
 }
 
-bool_hack cure_light_wounds(DICE_NUMBER dice, int sides)
+bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides)
 {
 	bool_hack ident = FALSE;
 	if (hp_player(damroll(dice, sides))) ident = TRUE;
@@ -5032,7 +5032,7 @@ bool_hack cure_light_wounds(DICE_NUMBER dice, int sides)
 	return ident;
 }
 
-bool_hack cure_serious_wounds(DICE_NUMBER dice, int sides)
+bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides)
 {
 	bool_hack ident = FALSE;
 	if (hp_player(damroll(dice, sides))) ident = TRUE;

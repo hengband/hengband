@@ -28,7 +28,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3 + (plev - 1) / 5;
-			int sides = 4;
+			DICE_SID sides = 4;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -115,7 +115,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 6 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -150,7 +150,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 3;
-			int sides = 6;
+			DICE_SID sides = 6;
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
@@ -227,7 +227,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 11 + (plev - 5) / 4;
-			int sides = 8;
+			DICE_SID sides = 8;
 
 			if (info) return info_damage(dice, sides, 0);
 
@@ -308,7 +308,7 @@ cptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 30;
-			int sides = 25;
+			DICE_SID sides = 25;
 
 			if (info) return info_duration(base, sides);
 

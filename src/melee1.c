@@ -116,7 +116,7 @@ HIT_POINT critical_norm(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, BI
  * and which also do at least 20 damage, or, sometimes, N damage.
  * This is used only to determine "cuts" and "stuns".
  */
-static int monster_critical(DICE_NUMBER dice, int sides, HIT_POINT dam)
+static int monster_critical(DICE_NUMBER dice, DICE_SID sides, HIT_POINT dam)
 {
 	int max = 0;
 	int total = dice * sides;

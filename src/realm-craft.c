@@ -226,7 +226,7 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 3 * plev;
-			int sides = 25;
+			DICE_SID sides = 25;
 
 			if (info) return info_duration(base, sides);
 
@@ -272,7 +272,7 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 25;
-			int sides = 30;
+			DICE_SID sides = 30;
 
 			if (info) return info_duration(base, sides);
 
@@ -289,7 +289,7 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 30;
-			int sides = 20;
+			DICE_SID sides = 20;
 
 			if (info) return info_duration(base, sides);
 
@@ -327,7 +327,7 @@ cptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = plev;
-			int sides = 20 + plev;
+			DICE_SID sides = 20 + plev;
 
 			if (info) return info_duration(base, sides);
 

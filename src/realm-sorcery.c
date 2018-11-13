@@ -76,7 +76,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 2;
-			int sides = plev / 2;
+			DICE_SID sides = plev / 2;
 			POSITION rad = plev / 10 + 1;
 
 			if (info) return info_damage(dice, sides, 0);
@@ -242,7 +242,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = plev;
-			int sides = 20 + plev;
+			DICE_SID sides = 20 + plev;
 
 			if (info) return info_duration(base, sides);
 
@@ -324,7 +324,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 25;
-			int sides = 30;
+			DICE_SID sides = 30;
 
 			if (info) return info_duration(base, sides);
 
@@ -380,7 +380,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 15;
-			int sides = 20;
+			DICE_SID sides = 20;
 
 			if (info) return info_delay(base, sides);
 
@@ -428,7 +428,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			DICE_NUMBER dice = 7;
-			int sides = 7;
+			DICE_SID sides = 7;
 			int base = plev;
 
 			if (info) return info_damage(dice, sides, base);
@@ -465,7 +465,7 @@ cptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			int base = 25;
-			int sides = 30;
+			DICE_SID sides = 30;
 
 			if (info) return info_duration(base, sides);
 
