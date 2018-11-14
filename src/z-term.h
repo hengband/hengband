@@ -62,7 +62,7 @@ struct term
 	vptr data; //!< Extra "data" info (used by implementation)
 
 	bool user_flag; //!< Flag "user_flag" An extra "user" flag (used by application)
-	bool data_flag; //!< Flag "data_flag" An extra "data" flag(used by implementation)
+	bool data_flag; //!< Flag "data_flag" An extra "data" flag (used by implementation)
 
 	bool active_flag; //!< Flag "active_flag" This "term" is "active"
 	bool mapped_flag; //!< Flag "mapped_flag" This "term" is "mapped"
@@ -89,11 +89,11 @@ struct term
 	TERM_LEN wid; //!< Window Width(max 255)
 	TERM_LEN hgt; //!< Window Height(max 255)
 
-	byte y1; //!< Minimum modified row
-	byte y2; //!< Maximum modified row
+	TERM_LEN y1; //!< Minimum modified row
+	TERM_LEN y2; //!< Maximum modified row
 
-	byte *x1; //!< Minimum modified column(per row)
-	byte *x2; //!< Maximum modified column(per row)
+	TERM_LEN *x1; //!< Minimum modified column(per row)
+	TERM_LEN *x2; //!< Maximum modified column(per row)
 
 	term_win *old; //!< Displayed screen image
 	term_win *scr; //!< Requested screen image
@@ -105,13 +105,13 @@ struct term
 	void (*nuke_hook)(term *t); //!< Hook for nuke - ing the term
 
 	errr (*user_hook)(int n); //!< ユーザ設定項目実装部 / Hook for user actions
-	errr (*xtra_hook)(int n, int v); //!< Hook for extra actions
-	errr (*curs_hook)(TERM_LEN x, TERM_LEN y); //!< Hook for placing the cursor
-	errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y);
-	errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n); //!< Hook for drawing some blank spaces
-	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s); //!< Hook for drawing a string of chars using an attr
-	void (*resize_hook)(void);
-	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp); //!< Hook for drawing a sequence of special attr / char pairs
+	errr (*xtra_hook)(int n, int v); //!< 拡張機能実装部 / Hook for extra actions
+	errr (*curs_hook)(TERM_LEN x, TERM_LEN y); //!< カーソル描画実装部 / Hook for placing the cursor
+	errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y); //!< 大型タイル時カーソル描画実装部 / Hook for placing the cursor on bigtile mode
+	errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n); //!< 指定座標テキスト消去実装部 / Hook for drawing some blank spaces
+	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s); //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
+	void (*resize_hook)(void); //!< 画面リサイズ実装部
+	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
 };
 
 
