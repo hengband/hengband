@@ -2303,8 +2303,9 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 	char buf[1024];
 	char *list[1000];
 	co_ord max, min;
-	int x,y,l,n;
-	byte a;
+	TERM_LEN x,y;
+	int l,n;
+	TERM_COLOR a;
 	char c;
 
 	/* Too old, or incorrect call. */
@@ -3095,7 +3096,7 @@ static errr Term_wipe_x11(int x, int y, int n)
 /*
  * Draw some textual characters.
  */
-static errr Term_text_x11(int x, int y, int n, byte a, cptr s)
+static errr Term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s)
 {
 	/* Draw the text */
 	Infoclr_set(clr[a]);
@@ -3116,14 +3117,14 @@ static errr Term_text_x11(int x, int y, int n, byte a, cptr s)
 /*
  * Draw some graphical characters.
  */
-static errr Term_pict_x11(int x, int y, int n, const byte *ap, const char *cp, const byte *tap, const char *tcp)
+static errr Term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp)
 {
 	int i, x1, y1;
 
-	byte a;
+	TERM_COLOR a;
 	char c;
 
-	byte ta;
+	TERM_COLOR ta;
 	char tc;
 
 	int x2, y2;
