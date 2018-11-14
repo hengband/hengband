@@ -2629,14 +2629,14 @@ errr Term_exchange(void)
 /*
  * React to a new physical window size.
  */
-errr Term_resize(int w, int h)
+errr Term_resize(TERM_LEN w, TERM_LEN h)
 {
 	int i;
 
-	int wid, hgt;
+	TERM_LEN wid, hgt;
 
-	byte *hold_x1;
-	byte *hold_x2;
+	TERM_LEN *hold_x1;
+	TERM_LEN *hold_x2;
 
 	term_win *hold_old;
 	term_win *hold_scr;
@@ -2677,8 +2677,8 @@ errr Term_resize(int w, int h)
 	hold_tmp = Term->tmp;
 
 	/* Create new scanners */
-	C_MAKE(Term->x1, h, byte);
-	C_MAKE(Term->x2, h, byte);
+	C_MAKE(Term->x1, h, TERM_LEN);
+	C_MAKE(Term->x2, h, TERM_LEN);
 
 	/* Create new window */
 	MAKE(Term->old, term_win);
@@ -2725,8 +2725,8 @@ errr Term_resize(int w, int h)
 	}
 
 	/* Free some arrays */
-	C_KILL(hold_x1, Term->hgt, byte);
-	C_KILL(hold_x2, Term->hgt, byte);
+	C_KILL(hold_x1, Term->hgt, TERM_LEN);
+	C_KILL(hold_x2, Term->hgt, TERM_LEN);
 
 	/* Nuke */
 	term_win_nuke(hold_old, Term->wid, Term->hgt);
@@ -2905,8 +2905,8 @@ errr term_nuke(term *t)
 	}
 
 	/* Free some arrays */
-	C_KILL(t->x1, h, byte);
-	C_KILL(t->x2, h, byte);
+	C_KILL(t->x1, h, TERM_LEN);
+	C_KILL(t->x2, h, TERM_LEN);
 
 	/* Free the input queue */
 	C_KILL(t->key_queue, t->key_size, char);
@@ -2946,8 +2946,8 @@ errr term_init(term *t, int w, int h, int k)
 	t->hgt = (byte_hack)h;
 
 	/* Allocate change arrays */
-	C_MAKE(t->x1, h, byte);
-	C_MAKE(t->x2, h, byte);
+	C_MAKE(t->x1, h, TERM_LEN);
+	C_MAKE(t->x2, h, TERM_LEN);
 
 
 	/* Allocate "displayed" */

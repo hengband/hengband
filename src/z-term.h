@@ -13,41 +13,26 @@
 
 #include "h-basic.h"
 
-
-/*
- * A term_win is a "window" for a Term
- *
- *	- Cursor Useless/Visible codes
- *	- Cursor Location (see "Useless")
- *
- *	- Array[h] -- Access to the attribute array
- *	- Array[h] -- Access to the character array
- *
- *	- Array[h*w] -- Attribute array
- *	- Array[h*w] -- Character array
- *
- * Note that the attr/char pair at (x,y) is a[y][x]/c[y][x]
- * and that the row of attr/chars at (0,y) is a[y]/c[y]
- */
-
 typedef struct term_win term_win;
-
-struct term_win
+ /*!
+ * @brief A term_win is a "window" for a Term
+ */
+ struct term_win
 {
-	bool cu, cv;
-	byte cx, cy;
+	bool cu, cv; //!< Cursor Useless / Visible codes
+	byte cx, cy; //!< Cursor Location (see "Useless")
 
-	TERM_COLOR **a;
-	char **c;
+	TERM_COLOR **a; //!< Array[h*w] -- Attribute array 
+	char **c; //!< Array[h*w] -- Character array
 
-	TERM_COLOR *va;
-	char *vc;
+	TERM_COLOR *va; //!< Array[h] -- Access to the attribute array
+	char *vc; //!< Array[h] -- Access to the character array
 
-	TERM_COLOR **ta;
-	char **tc;
+	TERM_COLOR **ta; //!< Note that the attr pair at(x, y) is a[y][x]
+	char **tc; //!< Note that the char pair at(x, y) is c[y][x]
 
-	TERM_COLOR *vta;
-	char *vtc;
+	TERM_COLOR *vta; //!< Note that the row of attr at(0, y) is a[y]
+	char *vtc;  //!< Note that the row of chars at(0, y) is c[y]
 };
 
 
