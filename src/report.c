@@ -1,11 +1,11 @@
-/*!
+ï»¿/*!
  * @file report.c
- * @brief ¥¹¥³¥¢¥µ¡¼¥ĞÅ¾Á÷µ¡Ç½¤Î¼ÂÁõ
+ * @brief ã‚¹ã‚³ã‚¢ã‚µãƒ¼ãƒè»¢é€æ©Ÿèƒ½ã®å®Ÿè£…
  * @date 2014/07/14
  * @author Hengband Team
  */
 
-#define _GNU_SOURCE /*!< Ì¤»ÈÍÑ*/
+#define _GNU_SOURCE /*!< æœªä½¿ç”¨*/
 #include "angband.h"
 
 #ifdef WORLD_SCORE
@@ -34,21 +34,21 @@
 /*
  * internet resource value
  */
-#define HTTP_PROXY ""                   /*!< ¥Ç¥Õ¥©¥ë¥È¤Î¥×¥í¥­¥·URL / Default proxy url */
-#define HTTP_PROXY_PORT 0               /*!< ¥Ç¥Õ¥©¥ë¥È¤Î¥×¥í¥­¥·¥İ¡¼¥È / Default proxy port */
-#define HTTP_TIMEOUT    20              /*!< ¥Ç¥Õ¥©¥ë¥È¤Î¥¿¥¤¥à¥¢¥¦¥È»ş´Ö(ÉÃ) / Timeout length (second) */
-#define SCORE_SERVER "hengband.osdn.jp" /*!< ¥Ç¥Õ¥©¥ë¥È¤Î¥¹¥³¥¢¥µ¡¼¥ĞURL / Default score server url */
-#define SCORE_PORT 80                   /*!< ¥Ç¥Õ¥©¥ë¥È¤Î¥¹¥³¥¢¥µ¡¼¥Ğ¥İ¡¼¥È / Default score server port */
+#define HTTP_PROXY ""                   /*!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ—ãƒ­ã‚­ã‚·URL / Default proxy url */
+#define HTTP_PROXY_PORT 0               /*!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ—ãƒ­ã‚­ã‚·ãƒãƒ¼ãƒˆ / Default proxy port */
+#define HTTP_TIMEOUT    20              /*!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆæ™‚é–“(ç§’) / Timeout length (second) */
+#define SCORE_SERVER "hengband.osdn.jp" /*!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¹ã‚³ã‚¢ã‚µãƒ¼ãƒURL / Default score server url */
+#define SCORE_PORT 80                   /*!< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¹ã‚³ã‚¢ã‚µãƒ¼ãƒãƒãƒ¼ãƒˆ / Default score server port */
 
 #ifdef JP
-#define SCORE_PATH "http://hengband.osdn.jp/score/register_score.php" /*!< ¥¹¥³¥¢³«¼¨URL */
+#define SCORE_PATH "http://hengband.osdn.jp/score/register_score.php" /*!< ã‚¹ã‚³ã‚¢é–‹ç¤ºURL */
 #else
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< ¥¹¥³¥¢³«¼¨URL */
+#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< ã‚¹ã‚³ã‚¢é–‹ç¤ºURL */
 #endif
 
 /* for debug */
 #if 0
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/scoretest/score.cgi" /*!< ¥¹¥³¥¢³«¼¨URL */
+#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/scoretest/score.cgi" /*!< ã‚¹ã‚³ã‚¢é–‹ç¤ºURL */
 #endif
 
 /*
@@ -60,11 +60,11 @@ typedef struct {
 	char *data;
 } BUF;
 
-#define	BUFSIZE	(65536) /*!< ¥¹¥³¥¢¥µ¡¼¥ĞÅ¾Á÷¥Ğ¥Ã¥Õ¥¡¥µ¥¤¥º */
+#define	BUFSIZE	(65536) /*!< ã‚¹ã‚³ã‚¢ã‚µãƒ¼ãƒè»¢é€ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º */
 
 /*!
- * @brief Å¾Á÷ÍÑ¥Ğ¥Ã¥Õ¥¡¤Î³ÎÊİ
- * @return ³ÎÊİ¤·¤¿¥Ğ¥Ã¥Õ¥¡¤Î»²¾È¥İ¥¤¥ó¥¿
+ * @brief è»¢é€ç”¨ãƒãƒƒãƒ•ã‚¡ã®ç¢ºä¿
+ * @return ç¢ºä¿ã—ãŸãƒãƒƒãƒ•ã‚¡ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
  */
 static BUF* buf_new(void)
 {
@@ -84,8 +84,8 @@ static BUF* buf_new(void)
 }
 
 /*!
- * @brief Å¾Á÷ÍÑ¥Ğ¥Ã¥Õ¥¡¤Î²òÊü
- * @param b ²òÊü¤¹¤ë¥Ğ¥Ã¥Õ¥¡¤Î»²¾È¥İ¥¤¥ó¥¿
+ * @brief è»¢é€ç”¨ãƒãƒƒãƒ•ã‚¡ã®è§£æ”¾
+ * @param b è§£æ”¾ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
  */
 static void buf_delete(BUF *b)
 {
@@ -94,11 +94,11 @@ static void buf_delete(BUF *b)
 }
 
 /*!
- * @brief Å¾Á÷ÍÑ¥Ğ¥Ã¥Õ¥¡¤Ë¥Ç¡¼¥¿¤òÄÉ²Ã¤¹¤ë
- * @param buf ÄÉ²ÃÀè¥Ğ¥Ã¥Õ¥¡¤Î»²¾È¥İ¥¤¥ó¥¿
- * @param data ÄÉ²Ã¸µ¥Ç¡¼¥¿
- * @param size ÄÉ²Ã¥µ¥¤¥º
- * @return ÄÉ²Ã¸å¤Î¥Ğ¥Ã¥Õ¥¡ÍÆÎÌ
+ * @brief è»¢é€ç”¨ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿ã‚’è¿½åŠ ã™ã‚‹
+ * @param buf è¿½åŠ å…ˆãƒãƒƒãƒ•ã‚¡ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param data è¿½åŠ å…ƒãƒ‡ãƒ¼ã‚¿
+ * @param size è¿½åŠ ã‚µã‚¤ã‚º
+ * @return è¿½åŠ å¾Œã®ãƒãƒƒãƒ•ã‚¡å®¹é‡
  */
 static int buf_append(BUF *buf, const char *data, size_t size)
 {
@@ -121,10 +121,10 @@ static int buf_append(BUF *buf, const char *data, size_t size)
 }
 
 /*!
- * @brief Å¾Á÷ÍÑ¥Ğ¥Ã¥Õ¥¡¤Ë¥Õ¥©¡¼¥Ş¥Ã¥È»ØÄê¤·¤¿Ê¸»úÎó¥Ç¡¼¥¿¤òÄÉ²Ã¤¹¤ë
- * @param buf ÄÉ²ÃÀè¥Ğ¥Ã¥Õ¥¡¤Î»²¾È¥İ¥¤¥ó¥¿
- * @param fmt Ê¸»úÎó¥Õ¥©¡¼¥Ş¥Ã¥È
- * @return ÄÉ²Ã¸å¤Î¥Ğ¥Ã¥Õ¥¡ÍÆÎÌ
+ * @brief è»¢é€ç”¨ãƒãƒƒãƒ•ã‚¡ã«ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆæŒ‡å®šã—ãŸæ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ã‚’è¿½åŠ ã™ã‚‹
+ * @param buf è¿½åŠ å…ˆãƒãƒƒãƒ•ã‚¡ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param fmt æ–‡å­—åˆ—ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+ * @return è¿½åŠ å¾Œã®ãƒãƒƒãƒ•ã‚¡å®¹é‡
  */
 static int buf_sprintf(BUF *buf, const char *fmt, ...)
 {
@@ -222,11 +222,11 @@ static BUF * buf_subbuf(BUF *buf, int pos1, size_t sz)
 #endif
 
 /*!
- * @brief HTTP¤Ë¤è¤ë¥À¥ó¥×ÆâÍÆÅÁÁ÷
- * @param sd ¥½¥±¥Ã¥ÈID
- * @param url ÅÁÁ÷ÀèURL
- * @param buf ÅÁÁ÷ÆâÍÆ¥Ğ¥Ã¥Õ¥¡
- * @return ¤Ê¤·
+ * @brief HTTPã«ã‚ˆã‚‹ãƒ€ãƒ³ãƒ—å†…å®¹ä¼é€
+ * @param sd ã‚½ã‚±ãƒƒãƒˆID
+ * @param url ä¼é€å…ˆURL
+ * @param buf ä¼é€å†…å®¹ãƒãƒƒãƒ•ã‚¡
+ * @return ãªã—
  */
 static bool http_post(int sd, cptr url, BUF *buf)
 {
@@ -262,9 +262,9 @@ static bool http_post(int sd, cptr url, BUF *buf)
 }
 
 /*!
- * @brief ¥­¥ã¥é¥¯¥¿¥À¥ó¥×¤òºî¤Ã¤Æ BUF¤ËÊİÂ¸
- * @param dumpbuf ÅÁÁ÷ÆâÍÆ¥Ğ¥Ã¥Õ¥¡
- * @return ¥¨¥é¡¼¥³¡¼¥É
+ * @brief ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ€ãƒ³ãƒ—ã‚’ä½œã£ã¦ BUFã«ä¿å­˜
+ * @param dumpbuf ä¼é€å†…å®¹ãƒãƒƒãƒ•ã‚¡
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 static errr make_dump(BUF* dumpbuf)
 {
@@ -277,7 +277,7 @@ static errr make_dump(BUF* dumpbuf)
 	if (!fff)
 	{
 #ifdef JP
-		msg_format("°ì»ş¥Õ¥¡¥¤¥ë %s ¤òºîÀ®¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿¡£", file_name);
+		msg_format("ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ« %s ã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", file_name);
 #else
 		msg_format("Failed to create temporary file %s.", file_name);
 #endif
@@ -285,7 +285,7 @@ static errr make_dump(BUF* dumpbuf)
 		return 1;
 	}
 
-	/* °ìÃ¶°ì»ş¥Õ¥¡¥¤¥ë¤òºî¤ë¡£ÄÌ¾ï¤Î¥À¥ó¥×½ĞÎÏ¤È¶¦ÄÌ²½¤¹¤ë¤¿¤á¡£ */
+	/* ä¸€æ—¦ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œã‚‹ã€‚é€šå¸¸ã®ãƒ€ãƒ³ãƒ—å‡ºåŠ›ã¨å…±é€šåŒ–ã™ã‚‹ãŸã‚ã€‚ */
 	(void)make_character_dump(fff);
 
 	/* Close the file */
@@ -310,8 +310,8 @@ static errr make_dump(BUF* dumpbuf)
 }
 
 /*!
- * @brief ¥¹¥¯¥ê¡¼¥ó¥À¥ó¥×¤òºîÀ®¤¹¤ë/ Make screen dump to buffer
- * @return ºîÀ®¤·¤¿¥¹¥¯¥ê¡¼¥ó¥À¥ó¥×¤Î»²¾È¥İ¥¤¥ó¥¿
+ * @brief ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒ€ãƒ³ãƒ—ã‚’ä½œæˆã™ã‚‹/ Make screen dump to buffer
+ * @return ä½œæˆã—ãŸã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒ€ãƒ³ãƒ—ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
  */
 cptr make_screen_dump(void)
 {
@@ -441,8 +441,8 @@ cptr make_screen_dump(void)
 }
 
 /*!
- * @brief ¥¹¥³¥¢Å¾Á÷½èÍı¤Î¥á¥¤¥ó¥ë¡¼¥Á¥ó
- * @return ¥¨¥é¡¼¥³¡¼¥É
+ * @brief ã‚¹ã‚³ã‚¢è»¢é€å‡¦ç†ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr report_score(void)
 {
@@ -464,14 +464,14 @@ errr report_score(void)
 	score = buf_new();
 
 #ifdef JP
-	sprintf(seikakutmp, "%s%s", ap_ptr->title, (ap_ptr->no ? "¤Î" : ""));
+	sprintf(seikakutmp, "%s%s", ap_ptr->title, (ap_ptr->no ? "ã®" : ""));
 #else
 	sprintf(seikakutmp, "%s ", ap_ptr->title);
 #endif
 
 	buf_sprintf(score, "name: %s\n", p_ptr->name);
 #ifdef JP
-	buf_sprintf(score, "version: ÊÑ¶òÈÚÅÜ %d.%d.%d\n",
+	buf_sprintf(score, "version: å¤‰æ„šè›®æ€’ %d.%d.%d\n",
 		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #else
 	buf_sprintf(score, "version: Hengband %d.%d.%d\n",
@@ -528,13 +528,13 @@ errr report_score(void)
 	{
 		char buff[160];
 #ifdef JP
-		prt("ÀÜÂ³Ãæ...", 0, 0);
+		prt("æ¥ç¶šä¸­...", 0, 0);
 #else
 		prt("connecting...", 0, 0);
 #endif
 		Term_fresh();
 		
-		/* ¥×¥í¥­¥·¤òÀßÄê¤¹¤ë */
+		/* ãƒ—ãƒ­ã‚­ã‚·ã‚’è¨­å®šã™ã‚‹ */
 		set_proxy(HTTP_PROXY, HTTP_PROXY_PORT);
 
 		/* Connect to the score server */
@@ -543,7 +543,7 @@ errr report_score(void)
 
 		if (sd < 0) {
 #ifdef JP
-			sprintf(buff, "¥¹¥³¥¢¡¦¥µ¡¼¥Ğ¤Ø¤ÎÀÜÂ³¤Ë¼ºÇÔ¤·¤Ş¤·¤¿¡£(%s)", soc_err());
+			sprintf(buff, "ã‚¹ã‚³ã‚¢ãƒ»ã‚µãƒ¼ãƒã¸ã®æ¥ç¶šã«å¤±æ•—ã—ã¾ã—ãŸã€‚(%s)", soc_err());
 #else
 			sprintf(buff, "Failed to connect to the score server.(%s)", soc_err());
 #endif
@@ -551,7 +551,7 @@ errr report_score(void)
 			(void)inkey();
 
 #ifdef JP
-			if (!get_check_strict("¤â¤¦°ìÅÙÀÜÂ³¤ò»î¤ß¤Ş¤¹¤«? ", CHECK_NO_HISTORY))
+			if (!get_check_strict("ã‚‚ã†ä¸€åº¦æ¥ç¶šã‚’è©¦ã¿ã¾ã™ã‹? ", CHECK_NO_HISTORY))
 #else
 			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
 #endif
@@ -564,7 +564,7 @@ errr report_score(void)
 		}
 
 #ifdef JP
-		prt("¥¹¥³¥¢Á÷¿®Ãæ...", 0, 0);
+		prt("ã‚¹ã‚³ã‚¢é€ä¿¡ä¸­...", 0, 0);
 #else
 		prt("Sending the score...", 0, 0);
 #endif
@@ -573,7 +573,7 @@ errr report_score(void)
 		if (!http_post(sd, SCORE_PATH, score)) {
 			disconnect_server(sd);
 #ifdef JP
-			sprintf(buff, "¥¹¥³¥¢¡¦¥µ¡¼¥Ğ¤Ø¤ÎÁ÷¿®¤Ë¼ºÇÔ¤·¤Ş¤·¤¿¡£");
+			sprintf(buff, "ã‚¹ã‚³ã‚¢ãƒ»ã‚µãƒ¼ãƒã¸ã®é€ä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 #else
 			sprintf(buff, "Failed to send to the score server.");
 #endif
@@ -581,7 +581,7 @@ errr report_score(void)
 			(void)inkey();
 
 #ifdef JP
-			if (!get_check_strict("¤â¤¦°ìÅÙÀÜÂ³¤ò»î¤ß¤Ş¤¹¤«? ", CHECK_NO_HISTORY))
+			if (!get_check_strict("ã‚‚ã†ä¸€åº¦æ¥ç¶šã‚’è©¦ã¿ã¾ã™ã‹? ", CHECK_NO_HISTORY))
 #else
 			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
 #endif
