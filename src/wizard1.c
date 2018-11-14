@@ -2116,7 +2116,7 @@ static void spoil_mon_info(cptr fname)
 {
 	char buf[1024];
 	int i, l, n = 0;
-	u32b flags1;
+	BIT_FLAGS flags1;
 
 	u16b why = 2;
 	s16b *who;

@@ -610,7 +610,7 @@ static void rd_item_old(object_type *o_ptr)
 static void rd_item(object_type *o_ptr)
 {
 	object_kind *k_ptr;
-	u32b flags;
+	BIT_FLAGS flags;
 	char buf[128];
 	byte_hack tmp8u;
 	s16b tmp16s;
@@ -975,7 +975,7 @@ static void rd_monster_old(monster_type *m_ptr)
  */
 static void rd_monster(monster_type *m_ptr)
 {
-	u32b flags;
+	BIT_FLAGS flags;
 	char buf[128];
 	byte tmp8u;
 	s16b tmp16s;
@@ -1480,8 +1480,8 @@ static void rd_options(void)
 
 	u16b c;
 
-	u32b flag[8];
-	u32b mask[8];
+	BIT_FLAGS flag[8];
+	BIT_FLAGS mask[8];
 
 
 	/*** Oops ***/

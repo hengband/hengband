@@ -1665,7 +1665,7 @@ struct dungeon_info_type {
 typedef struct {
 	cptr name;          /*!< 自動拾い/破壊定義の名称一致基準 / Items which have 'name' as part of its name match */
 	cptr insc;          /*!< 対象となったアイテムに自動で刻む内容 / Items will be auto-inscribed as 'insc' */
-	u32b flag[2];       /*!< キーワードに関する汎用的な条件フラグ / Misc. keyword to be matched */
+	BIT_FLAGS flag[2];       /*!< キーワードに関する汎用的な条件フラグ / Misc. keyword to be matched */
 	byte action;        /*!< 対象のアイテムを拾う/破壊/放置するかの指定フラグ / Auto-pickup or Destroy or Leave items */
 	byte dice;          /*!< 武器のダイス値基準値 / Weapons which have more than 'dice' dice match */
 	byte bonus;         /*!< アイテムのボーナス基準値 / Items which have more than 'bonus' magical bonus match */
@@ -1734,7 +1734,7 @@ typedef struct
 typedef struct {
 	int run; /* Remaining grid number */
 	int cost[MAX_HGT][MAX_WID];
-	int x; /* Target X */
+	POSITION x; /* Target X */
 	int y; /* Target Y */
 	DIRECTION dir; /* Running direction */
 } travel_type;

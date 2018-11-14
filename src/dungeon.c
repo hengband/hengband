@@ -1261,7 +1261,7 @@ static void check_music(void)
  * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
  * 呪いがない場合NULLを返す。
  */
-static object_type *choose_cursed_obj_name(u32b flag)
+static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 {
 	int i;
 	int choices[INVEN_TOTAL-INVEN_RARM];

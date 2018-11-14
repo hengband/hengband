@@ -201,7 +201,7 @@ static void do_cmd_summon_horde(void)
  * @brief 32ビット変数のビット配列を並べて描画する / Output a long int in binary format.
  * @return なし
  */
-static void prt_binary(u32b flags, int row, int col)
+static void prt_binary(BIT_FLAGS flags, int row, int col)
 {
 	int i;
 	u32b bitmask;

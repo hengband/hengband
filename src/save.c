@@ -126,7 +126,7 @@ static void wr_string(cptr str)
  */
 static void wr_item(object_type *o_ptr)
 {
-	u32b flags = 0x00000000;
+	BIT_FLAGS flags = 0x00000000;
 
 	if (o_ptr->pval) flags |= SAVE_ITEM_PVAL;
 	if (o_ptr->discount) flags |= SAVE_ITEM_DISCOUNT;
@@ -223,7 +223,7 @@ static void wr_item(object_type *o_ptr)
  */
 static void wr_monster(monster_type *m_ptr)
 {
-	u32b flags = 0x00000000;
+	BIT_FLAGS flags = 0x00000000;
 	byte tmp8u;
 
 	if (!is_original_ap(m_ptr)) flags |= SAVE_MON_AP_R_IDX;
