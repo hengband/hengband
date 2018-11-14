@@ -222,7 +222,7 @@ void get_project_point(int sy, int sx, int *ty, int *tx, BIT_FLAGS flg)
  * @param t_idx 目標のモンスターID
  * @return 魔力消去を使うべきならばTRUEを変えす。
  */
-static bool dispel_check_monster(MONSTER_IDX m_idx, IDX t_idx)
+static bool dispel_check_monster(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
 	monster_type *t_ptr = &m_list[t_idx];
 
@@ -257,7 +257,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 {
 	POSITION y = 0, x = 0;
 	int i, k;
-	MONSTER_IDX t_idx = 0;
+	MONSTER_IDX target_idx = 0;
 	int thrown_spell;
 	HIT_POINT dam = 0;
 	int start;
@@ -300,30 +300,30 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	/* Target is given for pet? */
 	if (pet_t_m_idx && pet)
 	{
-		t_idx = pet_t_m_idx;
-		t_ptr = &m_list[t_idx];
+		target_idx = pet_t_m_idx;
+		t_ptr = &m_list[target_idx];
 
 		/* Cancel if not projectable (for now) */
-		if ((m_idx == t_idx) || !projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+		if ((m_idx == target_idx) || !projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 		{
-			t_idx = 0;
+			target_idx = 0;
 		}
 	}
 
 	/* Is there counter attack target? */
-	if (!t_idx && m_ptr->target_y)
+	if (!target_idx && m_ptr->target_y)
 	{
-		t_idx = cave[m_ptr->target_y][m_ptr->target_x].m_idx;
+		target_idx = cave[m_ptr->target_y][m_ptr->target_x].m_idx;
 
-		if (t_idx)
+		if (target_idx)
 		{
-			t_ptr = &m_list[t_idx];
+			t_ptr = &m_list[target_idx];
 
 			/* Cancel if neither enemy nor a given target */
-			if ((m_idx == t_idx) ||
-			    ((t_idx != pet_t_m_idx) && !are_enemies(m_ptr, t_ptr)))
+			if ((m_idx == target_idx) ||
+			    ((target_idx != pet_t_m_idx) && !are_enemies(m_ptr, t_ptr)))
 			{
-				t_idx = 0;
+				target_idx = 0;
 			}
 
 			/* Allow only summoning etc.. if not projectable */
@@ -337,7 +337,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	}
 
 	/* Look for enemies normally */
-	if (!t_idx)
+	if (!target_idx)
 	{
 		bool success = FALSE;
 
@@ -354,14 +354,14 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 			MONSTER_IDX dummy = (i % m_max);
 			if (!dummy) continue;
 
-			t_idx = dummy;
-			t_ptr = &m_list[t_idx];
+			target_idx = dummy;
+			t_ptr = &m_list[target_idx];
 
 			/* Skip dead monsters */
 			if (!t_ptr->r_idx) continue;
 
 			/* Monster must be 'an enemy' */
-			if ((m_idx == t_idx) || !are_enemies(m_ptr, t_ptr)) continue;
+			if ((m_idx == target_idx) || !are_enemies(m_ptr, t_ptr)) continue;
 
 			/* Monster must be projectable */
 			if (!projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
@@ -594,7 +594,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		}
 
 		/* Dispel magic */
-		if ((f4 & RF4_DISPEL) && !dispel_check_monster(m_idx, t_idx))
+		if ((f4 & RF4_DISPEL) && !dispel_check_monster(m_idx, target_idx))
 		{
 			/* Remove dispel spell */
 			f4 &= ~(RF4_DISPEL);
@@ -630,7 +630,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		}
 
 		/* Hack -- decline "teleport level" in some case */
-		if ((f6 & RF6_TELE_LEVEL) && TELE_LEVEL_IS_INEFF((t_idx == p_ptr->riding) ? 0 : t_idx))
+		if ((f6 & RF6_TELE_LEVEL) && TELE_LEVEL_IS_INEFF((target_idx == p_ptr->riding) ? 0 : target_idx))
 		{
 			f6 &= ~(RF6_TELE_LEVEL);
 		}
@@ -703,7 +703,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 	can_remember = is_original_ap_and_seen(m_ptr);
 
-	dam = monspell_to_monster(thrown_spell, y, x, m_idx, t_idx);
+	dam = monspell_to_monster(thrown_spell, y, x, m_idx, target_idx);
 	if (dam < 0) return FALSE;
 
 	if (m_ptr->ml && maneable && !world_monster && !p_ptr->blind && (p_ptr->pclass == CLASS_IMITATOR))

@@ -1441,7 +1441,7 @@ static int check_hit2(int power, DEPTH level, ARMOUR_CLASS ac, int stun)
  * @param t_idx 目標側モンスターの参照ID
  * @return 実際に打撃処理が行われた場合TRUEを返す
  */
-static bool monst_attack_monst(MONSTER_IDX m_idx, IDX t_idx)
+static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_type    *t_ptr = &m_list[t_idx];

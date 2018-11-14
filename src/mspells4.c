@@ -25,7 +25,7 @@ void monster_name(MONSTER_IDX m_idx, char* m_name)
 * @param t_idx モンスターID二体目
 * @return モンスター2体のどちらかがプレイヤーの近くに居ればTRUE、どちらも遠ければFALSEを返す。
 */
-bool monster_near_player(MONSTER_IDX m_idx, IDX t_idx)
+bool monster_near_player(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	monster_type	*t_ptr = &m_list[t_idx];
@@ -102,7 +102,7 @@ u32b monster_u_mode(MONSTER_IDX m_idx)
 * @brief モンスターを起こす /
 * @param t_idx モンスターID
 */
-void monster_wakeup(IDX t_idx)
+void monster_wakeup(MONSTER_IDX t_idx)
 {
 	(void)set_monster_csleep(t_idx, 0);
 }
@@ -118,7 +118,7 @@ void monster_wakeup(IDX t_idx)
  * @param msg_flag_aux メッセージを分岐するためのフラグ
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-static void monspell_message_base(MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2, cptr msg3, cptr msg4, bool msg_flag_aux, int TARGET_TYPE)
+static void monspell_message_base(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, cptr msg3, cptr msg4, bool msg_flag_aux, int TARGET_TYPE)
 {
 	bool known = monster_near_player(m_idx, t_idx);
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
@@ -163,7 +163,7 @@ static void monspell_message_base(MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr 
 * @param msg3 プレイヤーが盲目でなく、モンスター対象とする場合のメッセージ
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void monspell_message(MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2, cptr msg3, int TARGET_TYPE)
+void monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, cptr msg3, int TARGET_TYPE)
 {
 	monspell_message_base(m_idx, t_idx, msg1, msg1, msg2, msg3, p_ptr->blind > 0, TARGET_TYPE);
 }
@@ -176,7 +176,7 @@ void monspell_message(MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2, cptr m
 * @param msg2 モンスター対象とする場合のメッセージ
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void simple_monspell_message(MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2, int TARGET_TYPE)
+void simple_monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, int TARGET_TYPE)
 {
 	monspell_message_base(m_idx, t_idx, msg1, msg2, msg1, msg2, p_ptr->blind > 0, TARGET_TYPE);
 }
@@ -187,7 +187,7 @@ void simple_monspell_message(MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2,
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF4_SHRIEK(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF4_SHRIEK(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	simple_monspell_message(m_idx, t_idx,
 		_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."),
@@ -210,7 +210,7 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF4_DISPEL(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF4_DISPEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	char m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
@@ -248,7 +248,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF4_ROCKET(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_ROCKET(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -274,7 +274,7 @@ HIT_POINT spell_RF4_ROCKET(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx,
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF4_SHOOT(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx,int TARGET_TYPE)
+HIT_POINT spell_RF4_SHOOT(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx,int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -301,7 +301,7 @@ HIT_POINT spell_RF4_SHOOT(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx,i
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, ms_type, drs_type = 0;
 	cptr type_s;
@@ -507,7 +507,7 @@ HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_id
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF4_BA_NUKE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_BA_NUKE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -534,7 +534,7 @@ HIT_POINT spell_RF4_BA_NUKE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF4_BA_CHAO(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_BA_CHAO(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -561,7 +561,7 @@ HIT_POINT spell_RF4_BA_CHAO(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
 
@@ -590,7 +590,7 @@ HIT_POINT spell_RF5_BA_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
 
@@ -619,7 +619,7 @@ HIT_POINT spell_RF5_BA_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
 	monster_type	*m_ptr = &m_list[m_idx];
@@ -659,7 +659,7 @@ HIT_POINT spell_RF5_BA_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
 
@@ -688,7 +688,7 @@ HIT_POINT spell_RF5_BA_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_POIS(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_POIS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -715,7 +715,7 @@ HIT_POINT spell_RF5_BA_POIS(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -742,7 +742,7 @@ HIT_POINT spell_RF5_BA_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 	bool known = monster_near_player(m_idx, t_idx);
@@ -782,7 +782,7 @@ HIT_POINT spell_RF5_BA_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -806,7 +806,7 @@ HIT_POINT spell_RF5_BA_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_DARK(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_DARK(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -833,7 +833,7 @@ HIT_POINT spell_RF5_BA_DARK(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 	char m_name[80], t_name[80];
@@ -868,7 +868,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
@@ -905,7 +905,7 @@ HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
@@ -948,7 +948,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2, cptr msg3, int MS_TYPE, int TARGET_TYPE)
+void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, cptr msg3, int MS_TYPE, int TARGET_TYPE)
 {
 	char m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
@@ -985,7 +985,7 @@ void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_CAUSE_1(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_CAUSE_1(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	cptr msg1, msg2, msg3;
 	HIT_POINT dam;
@@ -1008,7 +1008,7 @@ HIT_POINT spell_RF5_CAUSE_1(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_CAUSE_2(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_CAUSE_2(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	cptr msg1, msg2, msg3;
 	HIT_POINT dam;
@@ -1031,7 +1031,7 @@ HIT_POINT spell_RF5_CAUSE_2(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_CAUSE_3(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_CAUSE_3(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	cptr msg1, msg2, msg3;
 	HIT_POINT dam;
@@ -1054,7 +1054,7 @@ HIT_POINT spell_RF5_CAUSE_3(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_CAUSE_4(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_CAUSE_4(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	cptr msg1, msg2, msg3;
 	HIT_POINT dam;
@@ -1077,7 +1077,7 @@ HIT_POINT spell_RF5_CAUSE_4(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BO_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1106,7 +1106,7 @@ HIT_POINT spell_RF5_BO_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BO_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1135,7 +1135,7 @@ HIT_POINT spell_RF5_BO_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BO_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1164,7 +1164,7 @@ HIT_POINT spell_RF5_BO_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BO_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1193,7 +1193,7 @@ HIT_POINT spell_RF5_BO_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_LITE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_LITE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1220,7 +1220,7 @@ HIT_POINT spell_RF5_BA_LITE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BO_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1249,7 +1249,7 @@ HIT_POINT spell_RF5_BO_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BO_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1277,7 +1277,7 @@ HIT_POINT spell_RF5_BO_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BO_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1305,7 +1305,7 @@ HIT_POINT spell_RF5_BO_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BO_PLAS(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_PLAS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1333,7 +1333,7 @@ HIT_POINT spell_RF5_BO_PLAS(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BO_ICEE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_ICEE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1362,7 +1362,7 @@ HIT_POINT spell_RF5_BO_ICEE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_MISSILE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_MISSILE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1393,7 +1393,7 @@ HIT_POINT spell_RF5_MISSILE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param saving_throw 抵抗に成功したか判別するフラグ
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_badstatus_message(MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2, cptr msg3, cptr msg4, bool resist, bool saving_throw, int TARGET_TYPE)
+void spell_badstatus_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, cptr msg3, cptr msg4, bool resist, bool saving_throw, int TARGET_TYPE)
 {
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
 	bool see_t = see_monster(t_idx);
@@ -1455,7 +1455,7 @@ void spell_badstatus_message(MONSTER_IDX m_idx, IDX t_idx, cptr msg1, cptr msg2,
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_SCARE(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF5_SCARE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
@@ -1505,7 +1505,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_BLIND(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF5_BLIND(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
@@ -1568,7 +1568,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_CONF(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF5_CONF(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
@@ -1618,7 +1618,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_SLOW(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF5_SLOW(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
@@ -1681,7 +1681,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_HOLD(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF5_HOLD(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
@@ -1731,7 +1731,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_HASTE(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_HASTE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	bool see_m = see_monster(m_idx);
 	monster_type	*m_ptr = &m_list[m_idx];
@@ -1763,7 +1763,7 @@ void spell_RF6_HASTE(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF6_HAND_DOOM(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF6_HAND_DOOM(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam = 0;
 
@@ -1791,7 +1791,7 @@ HIT_POINT spell_RF6_HAND_DOOM(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_i
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_HEAL(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	int rlev = monster_level_idx(m_idx);
@@ -1861,7 +1861,7 @@ void spell_RF6_HEAL(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_INVULNER(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_INVULNER(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
@@ -2027,7 +2027,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF6_SPECIAL_ROLENTO(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF6_SPECIAL_ROLENTO(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int num = 1 + randint1(3);
@@ -2059,7 +2059,7 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(POSITION y, POSITION x, MONSTER_IDX m_idx, I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam = -1;
 	monster_type	*m_ptr = &m_list[m_idx];
@@ -2156,7 +2156,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_i
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF6_SPECIAL(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF6_SPECIAL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
@@ -2196,7 +2196,7 @@ HIT_POINT spell_RF6_SPECIAL(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-void spell_RF6_TELE_TO(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	monster_type	*t_ptr = &m_list[t_idx];
@@ -2258,7 +2258,7 @@ void spell_RF6_TELE_TO(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
@@ -2322,7 +2322,7 @@ void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
@@ -2376,7 +2376,7 @@ void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF6_PSY_SPEAR(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF6_PSY_SPEAR(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -2399,7 +2399,7 @@ HIT_POINT spell_RF6_PSY_SPEAR(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_i
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_DARKNESS(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_DARKNESS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	monster_type	*t_ptr = &m_list[t_idx];
@@ -2529,7 +2529,7 @@ void spell_RF6_FORGET(MONSTER_IDX m_idx)
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_RAISE_DEAD(MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_RAISE_DEAD(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -2592,7 +2592,7 @@ MONSTER_NUMBER summon_IE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
-MONSTER_NUMBER summon_Guardian(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+MONSTER_NUMBER summon_Guardian(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int k, count = 0;	
 	int num = 2 + randint1(3);
@@ -2690,7 +2690,7 @@ MONSTER_NUMBER summon_Kin(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	bool known = monster_near_player(m_idx, t_idx);
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
@@ -2783,7 +2783,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int T
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_CYBER(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_CYBER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0;
 	monster_type	*m_ptr = &m_list[m_idx];
@@ -2822,7 +2822,7 @@ void spell_RF6_S_CYBER(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_MONSTER(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_MONSTER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -2860,7 +2860,7 @@ void spell_RF6_S_MONSTER(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, i
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_MONSTERS(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_MONSTERS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -2898,7 +2898,7 @@ void spell_RF6_S_MONSTERS(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, 
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_ANT(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_ANT(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -2932,7 +2932,7 @@ void spell_RF6_S_ANT(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int T
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_SPIDER(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_SPIDER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
@@ -2966,7 +2966,7 @@ void spell_RF6_S_SPIDER(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, in
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_HOUND(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_HOUND(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -3000,7 +3000,7 @@ void spell_RF6_S_HOUND(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_HYDRA(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_HYDRA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -3034,7 +3034,7 @@ void spell_RF6_S_HYDRA(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_ANGEL(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_ANGEL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int num = 1;
@@ -3083,7 +3083,7 @@ void spell_RF6_S_ANGEL(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_DEMON(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_DEMON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -3116,7 +3116,7 @@ void spell_RF6_S_DEMON(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -3149,7 +3149,7 @@ void spell_RF6_S_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, in
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -3240,7 +3240,7 @@ MONSTER_NUMBER summon_NAZGUL(POSITION y, POSITION x, MONSTER_IDX m_idx)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -3293,7 +3293,7 @@ void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx,
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_HI_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_HI_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -3333,7 +3333,7 @@ void spell_RF6_S_HI_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx,
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_AMBERITES(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_AMBERITES(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	int rlev = monster_level_idx(m_idx);
@@ -3369,7 +3369,7 @@ void spell_RF6_S_AMBERITES(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx,
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_UNIQUE(POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_UNIQUE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
 	monster_type	*m_ptr = &m_list[m_idx];
@@ -3535,7 +3535,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX 
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
 */
-HIT_POINT monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, IDX t_idx)
+HIT_POINT monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
 	switch (SPELL_NUM)
 	{
