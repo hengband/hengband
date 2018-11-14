@@ -330,18 +330,14 @@ void delete_monster(POSITION y, POSITION x)
  */
 static void compact_monsters_aux(IDX i1, IDX i2)
 {
-	int y, x, i;
-
+	POSITION y, x;
+	int i;
 	cave_type *c_ptr;
-
 	monster_type *m_ptr;
-
 	s16b this_o_idx, next_o_idx = 0;
-
 
 	/* Do nothing */
 	if (i1 == i2) return;
-
 
 	/* Old monster */
 	m_ptr = &m_list[i1];

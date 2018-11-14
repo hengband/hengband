@@ -20,7 +20,7 @@ typedef struct term_win term_win;
  struct term_win
 {
 	bool cu, cv; //!< Cursor Useless / Visible codes
-	byte cx, cy; //!< Cursor Location (see "Useless")
+	TERM_LEN cx, cy; //!< Cursor Location (see "Useless")
 
 	TERM_COLOR **a; //!< Array[h*w] -- Attribute array 
 	char **c; //!< Array[h*w] -- Character array

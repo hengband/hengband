@@ -165,7 +165,7 @@ extern GAME_TURN resting;
 extern POSITION cur_hgt;
 extern POSITION cur_wid;
 extern DEPTH dun_level;
-extern s16b num_repro;
+extern MONSTER_NUMBER num_repro;
 extern DEPTH object_level;
 extern DEPTH monster_level;
 extern DEPTH base_level;

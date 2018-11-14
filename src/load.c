@@ -2578,7 +2578,8 @@ static errr rd_dungeon_old(void)
 	rd_s16b(&tmp16s);
 	base_level = (DEPTH)tmp16s;
 
-	rd_s16b(&num_repro);
+	rd_s16b(&tmp16s);
+	num_repro = (MONSTER_NUMBER)tmp16s;
 	rd_s16b(&tmp16s);
 	p_ptr->y = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
@@ -3038,7 +3039,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 	rd_s16b(&tmp16s);
 	base_level = (DEPTH)tmp16s;
-	rd_s16b(&num_repro);
+	rd_s16b(&tmp16s);
+	num_repro = (MONSTER_NUMBER)tmp16s;
 
 	rd_u16b(&tmp16u);
 	p_ptr->y = (POSITION)tmp16u;

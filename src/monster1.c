@@ -52,10 +52,8 @@ static cptr wd_his[3] =
 static bool know_armour(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	s32b level = r_ptr->level;
-
-	s32b kills = r_ptr->r_tkills;
+	DEPTH level = r_ptr->level;
+	MONSTER_NUMBER kills = r_ptr->r_tkills;
 
     bool known = (r_ptr->r_cast_spell == MAX_UCHAR)? TRUE: FALSE;
 
@@ -210,11 +208,8 @@ void set_damage(MONRACE_IDX r_idx, int SPELL_NUM, char* msg, char* tmp)
 static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	monster_race    *r_ptr = &r_info[r_idx];
-
 	bool            old = FALSE;
-
 	int             m, n, r;
-
 	cptr            p, q;
 
 #ifdef JP
