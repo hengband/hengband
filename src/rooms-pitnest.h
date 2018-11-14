@@ -2,7 +2,7 @@
 /*! デバッグ時にnestのモンスター情報を確認するための構造体 / A struct for nest monster information with cheat_hear */
 typedef struct
 {
-	s16b r_idx;
+	MONRACE_IDX r_idx;
 	bool used;
 }
 nest_mon_info_type;

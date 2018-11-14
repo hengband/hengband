@@ -95,7 +95,7 @@ static cptr attr_to_text(monster_race *r_ptr)
  */
 typedef struct
 {
-	byte tval;
+	OBJECT_TYPE_VALUE tval;
 	cptr name;
 } grouper;
 

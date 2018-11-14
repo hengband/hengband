@@ -4798,7 +4798,7 @@ cptr inven_res_label = _("                               酸電火冷毒光闇�
 
 
 /* XTRA HACK RESLIST */
-static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, byte tval, char *where)
+static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, OBJECT_TYPE_VALUE tval, char *where)
 {
 	char o_name[MAX_NLEN];
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -4902,7 +4902,7 @@ static void do_cmd_knowledge_inven(void)
 
 	store_type  *st_ptr;
 
-	byte tval;
+	OBJECT_TYPE_VALUE tval;
 	int i = 0;
 	int j = 0;
 

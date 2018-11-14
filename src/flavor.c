@@ -199,7 +199,7 @@ void get_table_sindarin(char *out_string)
  * @return なし
  * @details 巻物、各種魔道具などに利用される。
  */
-static void shuffle_flavors(byte tval)
+static void shuffle_flavors(OBJECT_TYPE_VALUE tval)
 {
 	IDX *k_idx_list;
 	IDX k_idx_list_num = 0;
