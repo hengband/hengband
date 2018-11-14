@@ -2329,7 +2329,7 @@ errr Term_get_size(TERM_LEN *w, TERM_LEN *h)
 /*
  * Extract the current cursor location
  */
-errr Term_locate(int *x, int *y)
+errr Term_locate(TERM_LEN *x, TERM_LEN *y)
 {
 	/* Access the cursor */
 	(*x) = Term->scr->cx;
@@ -2431,11 +2431,6 @@ errr Term_key_push(int k)
 	/* Success (unless overflow) */
 	if (Term->key_head != Term->key_tail) return (0);
 
-#if 0
-	/* Hack -- Forget the oldest key */
-	if (++Term->key_tail == Term->key_size) Term->key_tail = 0;
-#endif
-
 	/* Problem */
 	return (1);
 }
@@ -2517,8 +2512,8 @@ errr Term_inkey(char *ch, bool wait, bool take)
  */
 errr Term_save(void)
 {
-	int w = Term->wid;
-	int h = Term->hgt;
+	TERM_LEN w = Term->wid;
+	TERM_LEN h = Term->hgt;
 
 	/* Create */
 	if (!Term->mem)
@@ -2587,8 +2582,8 @@ errr Term_exchange(void)
 {
 	TERM_LEN y;
 
-	int w = Term->wid;
-	int h = Term->hgt;
+	TERM_LEN w = Term->wid;
+	TERM_LEN h = Term->hgt;
 
 	term_win *exchanger;
 
@@ -2777,8 +2772,8 @@ errr Term_resize(TERM_LEN w, TERM_LEN h)
 	}
 
 	/* Save new size */
-	Term->wid = (byte_hack)w;
-	Term->hgt = (byte_hack)h;
+	Term->wid = w;
+	Term->hgt = h;
 
 	/* Force "total erase" */
 	Term->total_erase = TRUE;
@@ -2854,8 +2849,8 @@ errr Term_activate(term *t)
  */
 errr term_nuke(term *t)
 {
-	int w = t->wid;
-	int h = t->hgt;
+	TERM_LEN w = t->wid;
+	TERM_LEN h = t->hgt;
 
 
 	/* Hack -- Call the special "nuke" hook */
@@ -2922,7 +2917,7 @@ errr term_nuke(term *t)
  * By default, the cursor starts out "invisible"
  * By default, we "erase" using "black spaces"
  */
-errr term_init(term *t, int w, int h, int k)
+errr term_init(term *t, TERM_LEN w, TERM_LEN h, int k)
 {
 	TERM_LEN y;
 
@@ -2942,8 +2937,8 @@ errr term_init(term *t, int w, int h, int k)
 
 
 	/* Save the size */
-	t->wid = (byte_hack)w;
-	t->hgt = (byte_hack)h;
+	t->wid = w;
+	t->hgt = h;
 
 	/* Allocate change arrays */
 	C_MAKE(t->x1, h, TERM_LEN);
