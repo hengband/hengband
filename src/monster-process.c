@@ -3130,7 +3130,7 @@ void process_monster(MONSTER_IDX m_idx)
 			if (c_ptr->o_idx && (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) &&
 			    (!is_pet(m_ptr) || ((p_ptr->pet_extra_flags & PF_PICKUP_ITEMS) && (r_ptr->flags2 & RF2_TAKE_ITEM))))
 			{
-				s16b this_o_idx, next_o_idx;
+				OBJECT_IDX this_o_idx, next_o_idx;
 				bool do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) ? TRUE : FALSE;
 
 				/* Scan all objects in the grid */

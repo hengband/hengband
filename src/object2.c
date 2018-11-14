@@ -62,7 +62,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 {
 	object_type *j_ptr;
 
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	s16b prev_o_idx = 0;
 

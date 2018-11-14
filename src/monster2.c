@@ -334,7 +334,7 @@ static void compact_monsters_aux(IDX i1, IDX i2)
 	int i;
 	cave_type *c_ptr;
 	monster_type *m_ptr;
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Do nothing */
 	if (i1 == i2) return;
@@ -4582,7 +4582,7 @@ bool player_place(POSITION y, POSITION x)
  */
 void monster_drop_carried_objects(monster_type *m_ptr)
 {
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	object_type forge;
 	object_type *o_ptr;
 	object_type *q_ptr;

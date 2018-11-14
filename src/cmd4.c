@@ -5441,7 +5441,7 @@ static void do_cmd_knowledge_artifacts(void)
 		{
 			cave_type *c_ptr = &cave[y][x];
 
-			s16b this_o_idx, next_o_idx = 0;
+			OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 			/* Scan all objects in the grid */
 			for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)

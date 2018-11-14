@@ -5070,7 +5070,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 	{
 		BIT_FLAGS mode = 0L;
 		bool preserve_hold_objects = back_m.hold_o_idx ? TRUE : FALSE;
-		s16b this_o_idx, next_o_idx = 0;
+		OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 		/* Get the monsters attitude */
 		if (is_friendly(m_ptr)) mode |= PM_FORCE_FRIENDLY;

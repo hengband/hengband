@@ -3223,7 +3223,7 @@ void calc_bonuses(void)
 	bool            have_sw = FALSE, have_kabe = FALSE;
 	bool            easy_2weapon = FALSE;
 	bool            riding_levitation = FALSE;
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	const player_race *tmp_rp_ptr;
 
 	/* Save the old vision stuff */

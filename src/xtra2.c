@@ -2987,7 +2987,7 @@ bool show_gold_on_floor = FALSE;
 static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 {
 	cave_type *c_ptr = &cave[y][x];
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	cptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
 	FEAT_IDX feat;

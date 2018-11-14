@@ -557,7 +557,7 @@ void carry(bool pickup)
 {
 	cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	char	o_name[MAX_NLEN];
 
@@ -1840,7 +1840,7 @@ static bool run_test(void)
 	/* Look at every newly adjacent square. */
 	for (i = -max; i <= max; i++)
 	{
-		s16b this_o_idx, next_o_idx = 0;
+		OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 		/* New direction */
 		new_dir = cycle[chome[prev_dir] + i];

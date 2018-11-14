@@ -290,7 +290,7 @@ void build_streamer(IDX feat, int chance)
 
 			if (c_ptr->o_idx && !have_flag(streamer_ptr->flags, FF_DROP))
 			{
-				s16b this_o_idx, next_o_idx = 0;
+				OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 				/* Scan all objects in the grid */
 				for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)

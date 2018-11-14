@@ -1703,7 +1703,7 @@ void autopick_alter_item(INVENTORY_IDX item, bool destroy)
  */
 void autopick_pickup_items(cave_type *c_ptr)
 {
-	s16b this_o_idx, next_o_idx = 0;
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	
 	/* Scan the pile of objects */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
