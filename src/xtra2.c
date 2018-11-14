@@ -5700,9 +5700,9 @@ void display_rumor(bool ex)
 					r_ptr->r_sights++;
 				}
 			}
-			else if  (strcmp(zz[0], "DUNGEON") == 0)
+			else if (strcmp(zz[0], "DUNGEON") == 0)
 			{
-				int d_idx;
+				DUNGEON_IDX d_idx;
 				dungeon_info_type *d_ptr;
 
 				while (1)
