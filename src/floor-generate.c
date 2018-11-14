@@ -184,7 +184,7 @@ static bool alloc_stairs(IDX feat, int num, int walls)
 	}
 	else if (have_flag(f_ptr->flags, FF_MORE))
 	{
-		int q_idx = quest_number(dun_level);
+		QUEST_IDX q_idx = quest_number(dun_level);
 
 		/* No downstairs on quest levels */
 		if (dun_level > 1 && q_idx)

@@ -4520,7 +4520,7 @@ int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 		}
 		else
 		{
-			int q_idx = quest_number(dun_level);
+			QUEST_IDX q_idx = quest_number(dun_level);
 			bool seppuku = streq(hit_from, "Seppuku");
 			bool winning_seppuku = p_ptr->total_winner && seppuku;
 

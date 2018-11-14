@@ -656,7 +656,7 @@ static errr get_obj_num_prep(void)
 OBJECT_IDX get_obj_num(DEPTH level)
 {
 	int i, j, p;
-	int k_idx;
+	KIND_OBJECT_IDX k_idx;
 	long value, total;
 	object_kind     *k_ptr;
 	alloc_entry     *table = alloc_kind_table;

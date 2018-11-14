@@ -369,7 +369,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 	cptr note_level = "";
 	bool do_level = TRUE;
 	char note_level_buf[40];
-	int q_idx;
+	QUEST_IDX q_idx;
 
 	static bool disable_nikki = FALSE;
 

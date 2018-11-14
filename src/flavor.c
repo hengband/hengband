@@ -1249,7 +1249,7 @@ bool object_is_quest_target(object_type *o_ptr)
 {
 	if (p_ptr->inside_quest)
 	{
-		int a_idx = quest[p_ptr->inside_quest].k_idx;
+		ARTIFACT_IDX a_idx = quest[p_ptr->inside_quest].k_idx;
 		if (a_idx)
 		{
 			artifact_type *a_ptr = &a_info[a_idx];
