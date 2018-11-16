@@ -689,8 +689,8 @@ static cptr pit_subtype_string(int type, bool nest)
 static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 {
 	nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
-	int w1 = nest_mon_info[a].r_idx;
-	int w2 = nest_mon_info[b].r_idx;
+	MONSTER_IDX w1 = nest_mon_info[a].r_idx;
+	MONSTER_IDX w2 = nest_mon_info[b].r_idx;
 	monster_race *r1_ptr = &r_info[w1];
 	monster_race *r2_ptr = &r_info[w2];
 	int z1, z2;
@@ -745,61 +745,33 @@ static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
 /*!nest情報テーブル*/
 static vault_aux_type nest_types[] =
 {
-#ifdef JP
-{ "クローン",     vault_aux_clone,    vault_prep_clone,   5, 3 },
-{ "ゼリー",       vault_aux_jelly,    NULL,               5, 6 },
-{ "シンボル(善)", vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
-{ "シンボル(悪)", vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
-{ "ミミック",     vault_aux_mimic,    NULL,              30, 4 },
-{ "狂気",         vault_aux_cthulhu,  NULL,              70, 2 },
-{ "犬小屋",       vault_aux_kennel,   NULL,              45, 4 },
-{ "動物園",       vault_aux_animal,   NULL,              35, 5 },
-{ "教会",         vault_aux_chapel_g, NULL,              75, 4 },
-{ "アンデッド",   vault_aux_undead,   NULL,              75, 5 },
-{ NULL,           NULL,               NULL,               0, 0 },
-#else
-{ "clone",        vault_aux_clone,    vault_prep_clone,   5, 3 },
-{ "jelly",        vault_aux_jelly,    NULL,               5, 6 },
-{ "symbol good",  vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
-{ "symbol evil",  vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
-{ "mimic",        vault_aux_mimic,    NULL,              30, 4 },
-{ "lovecraftian", vault_aux_cthulhu,  NULL,              70, 2 },
-{ "kennel",       vault_aux_kennel,   NULL,              45, 4 },
-{ "animal",       vault_aux_animal,   NULL,              35, 5 },
-{ "chapel",       vault_aux_chapel_g, NULL,              75, 4 },
-{ "undead",       vault_aux_undead,   NULL,              75, 5 },
-{ NULL,           NULL,               NULL,               0, 0 },
-#endif
+	{ _("クローン", "clone"),      vault_aux_clone,    vault_prep_clone,   5, 3 },
+	{ _("ゼリー", "jelly"),        vault_aux_jelly,    NULL,               5, 6 },
+	{ _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
+	{ _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
+	{ _("ミミック", "mimic"),      vault_aux_mimic,    NULL,              30, 4 },
+	{ _("狂気", "lovecraftian"),   vault_aux_cthulhu,  NULL,              70, 2 },
+	{ _("犬小屋", "kennel"),       vault_aux_kennel,   NULL,              45, 4 },
+	{ _("動物園", "animal"),       vault_aux_animal,   NULL,              35, 5 },
+	{ _("教会", "chapel"),         vault_aux_chapel_g, NULL,              75, 4 },
+	{ _("アンデッド", "undead"),   vault_aux_undead,   NULL,              75, 5 },
+	{ NULL,           NULL,               NULL,               0, 0 },
 };
 
 /*!pit情報テーブル*/
 static vault_aux_type pit_types[] =
 {
-#ifdef JP
-{ "オーク",       vault_aux_orc,      NULL,               5, 6 },
-{ "トロル",       vault_aux_troll,    NULL,              20, 6 },
-{ "ジャイアント", vault_aux_giant,    NULL,              50, 6 },
-{ "狂気",         vault_aux_cthulhu,  NULL,              80, 2 },
-{ "シンボル(善)", vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
-{ "シンボル(悪)", vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
-{ "教会",         vault_aux_chapel_g, NULL,              65, 2 },
-{ "ドラゴン",     vault_aux_dragon,   vault_prep_dragon, 70, 6 },
-{ "デーモン",     vault_aux_demon,    NULL,              80, 6 },
-{ "ダークエルフ", vault_aux_dark_elf, NULL,              45, 4 },
-{ NULL,           NULL,               NULL,               0, 0 },
-#else
-{ "orc",          vault_aux_orc,      NULL,               5, 6 },
-{ "troll",        vault_aux_troll,    NULL,              20, 6 },
-{ "giant",        vault_aux_giant,    NULL,              50, 6 },
-{ "lovecraftian", vault_aux_cthulhu,  NULL,              80, 2 },
-{ "symbol good",  vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
-{ "symbol evil",  vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
-{ "chapel",       vault_aux_chapel_g, NULL,              65, 2 },
-{ "dragon",       vault_aux_dragon,   vault_prep_dragon, 70, 6 },
-{ "demon",        vault_aux_demon,    NULL,              80, 6 },
-{ "dark elf",     vault_aux_dark_elf, NULL,              45, 4 },
-{ NULL,           NULL,               NULL,               0, 0 },
-#endif
+	{ _("オーク", "orc"),            vault_aux_orc,      NULL,               5, 6 },
+	{ _("トロル", "troll"),          vault_aux_troll,    NULL,              20, 6 },
+	{ _("ジャイアント", "giant"),    vault_aux_giant,    NULL,              50, 6 },
+	{ _("狂気", "lovecraftian"),     vault_aux_cthulhu,  NULL,              80, 2 },
+	{ _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
+	{ _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
+	{ _("教会", "chapel"),           vault_aux_chapel_g, NULL,              65, 2 },
+	{ _("ドラゴン", "dragon"),       vault_aux_dragon,   vault_prep_dragon, 70, 6 },
+	{ _("デーモン", "demon"),        vault_aux_demon,    NULL,              80, 6 },
+	{ _("ダークエルフ", "dark elf"), vault_aux_dark_elf, NULL,              45, 4 },
+	{ NULL,           NULL,               NULL,               0, 0 },
 };
 
 
