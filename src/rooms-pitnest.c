@@ -572,7 +572,7 @@ static bool vault_aux_dark_elf(MONRACE_IDX r_idx)
 * @param allow_flag_mask 生成が許されるpit/nestのビット配列
 * @return 選択されたpit/nestのID、選択失敗した場合-1を返す。
 */
-static int pick_vault_type(vault_aux_type *l_ptr, s16b allow_flag_mask)
+static int pick_vault_type(vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
 {
 	int tmp, total, count;
 
@@ -658,25 +658,14 @@ static cptr pit_subtype_string(int type, bool nest)
 		case PIT_TYPE_DRAGON:
 			switch (vault_aux_dragon_mask4)
 			{
-#ifdef JP
-			case RF4_BR_ACID: strcpy(inner_buf, "(酸)");   break;
-			case RF4_BR_ELEC: strcpy(inner_buf, "(稲妻)"); break;
-			case RF4_BR_FIRE: strcpy(inner_buf, "(火炎)"); break;
-			case RF4_BR_COLD: strcpy(inner_buf, "(冷気)"); break;
-			case RF4_BR_POIS: strcpy(inner_buf, "(毒)");   break;
-			case (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS) :
-				strcpy(inner_buf, "(万色)"); break;
-			default: strcpy(inner_buf, "(未定義)"); break;
-#else
-			case RF4_BR_ACID: strcpy(inner_buf, "(acid)");      break;
-			case RF4_BR_ELEC: strcpy(inner_buf, "(lightning)"); break;
-			case RF4_BR_FIRE: strcpy(inner_buf, "(fire)");      break;
-			case RF4_BR_COLD: strcpy(inner_buf, "(frost)");     break;
-			case RF4_BR_POIS: strcpy(inner_buf, "(poison)");    break;
-			case (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS) :
-				strcpy(inner_buf, "(multi-hued)"); break;
-			default: strcpy(inner_buf, "(undefined)"); break;
-#endif
+				case RF4_BR_ACID: strcpy(inner_buf, _("(酸)", "(acid)"));   break;
+				case RF4_BR_ELEC: strcpy(inner_buf, _("(稲妻)", "(lightning)")); break;
+				case RF4_BR_FIRE: strcpy(inner_buf, _("(火炎)", "(fire)")); break;
+				case RF4_BR_COLD: strcpy(inner_buf, _("(冷気)", "(frost)")); break;
+				case RF4_BR_POIS: strcpy(inner_buf, _("(毒)", "(poison)"));   break;
+				case (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS) :
+					strcpy(inner_buf, _("(万色)", "(multi-hued)")); break;
+				default: strcpy(inner_buf, _("(未定義)", "(undefined)")); break;
 			}
 			break;
 		}
