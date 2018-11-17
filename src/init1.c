@@ -5111,7 +5111,6 @@ void write_r_info_txt(void)
 		fprintf(fff, "\n");
 	}
 
-	/* Done */
 	fclose(fff);
 }
 

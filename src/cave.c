@@ -1236,7 +1236,6 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 			/* Hack -- hallucination */
 			if (p_ptr->image) image_object(ap, cp);
 
-			/* Done */
 			break;
 		}
 	}

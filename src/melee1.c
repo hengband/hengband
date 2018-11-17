@@ -1423,7 +1423,6 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 		/* Disturb the monster */
 		(void)set_monster_csleep(c_ptr->m_idx, 0);
 
-		/* Done */
 		return FALSE;
 	}
 
@@ -2101,7 +2100,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							/* Window stuff */
 							p_ptr->window |= (PW_INVEN);
 
-							/* Done */
 							break;
 						}
 					}
@@ -2196,7 +2194,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Obvious */
 						obvious = TRUE;
 
-						/* Done */
 						break;
 					}
 
@@ -2283,7 +2280,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Blink away */
 						blinked = TRUE;
 
-						/* Done */
 						break;
 					}
 
@@ -2333,7 +2329,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Obvious */
 						obvious = TRUE;
 
-						/* Done */
 						break;
 					}
 

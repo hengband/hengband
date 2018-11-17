@@ -3836,7 +3836,6 @@ bool dec_stat(int stat, int amount, int permanent)
 		p_ptr->update |= (PU_BONUS);
 	}
 
-	/* Done */
 	return (res);
 }
 

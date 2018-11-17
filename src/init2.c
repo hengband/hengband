@@ -2475,7 +2475,6 @@ void init_angband(void)
 	/* Process that file */
 	process_pref_file(buf);
 
-	/* Done */
 	note(_("[初期化終了]", "[Initialization complete]"));
 }
 

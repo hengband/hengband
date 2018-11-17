@@ -2146,7 +2146,6 @@ void run_step(DIRECTION dir)
 			/* Disturb */
 			disturb(0, 0);
 
-			/* Done */
 			return;
 		}
 
@@ -2163,7 +2162,6 @@ void run_step(DIRECTION dir)
 			/* Disturb */
 			disturb(0, 0);
 
-			/* Done */
 			return;
 		}
 	}

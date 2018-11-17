@@ -468,7 +468,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				/* Format the argument */
 				sprintf(tmp, "%c", arg);
 
-				/* Done */
 				break;
 			}
 
@@ -496,7 +495,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 					sprintf(tmp, aux, arg);
 				}
 
-				/* Done */
 				break;
 			}
 
@@ -522,7 +520,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 
 				}
 
-				/* Done */
 				break;
 			}
 
@@ -539,7 +536,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				/* Format the argument */
 				sprintf(tmp, aux, arg);
 
-				/* Done */
 				break;
 			}
 
@@ -554,7 +550,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				/* Format the argument */
 				sprintf(tmp, aux, arg);
 
-				/* Done */
 				break;
 			}
 
@@ -577,7 +572,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				/* Format the argument */
 				sprintf(tmp, aux, arg);
 
-				/* Done */
 				break;
 			}
 
@@ -593,7 +587,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 				/* Format the "user data" */
 				sprintf(tmp, aux, arg);
 
-				/* Done */
 				break;
 			}
 
@@ -626,7 +619,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 					if (islower(tmp[q]))
 						tmp[q] = (char)toupper(tmp[q]);
 
-					/* Done */
 					break;
 				}
 			}

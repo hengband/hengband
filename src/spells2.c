@@ -1510,7 +1510,6 @@ bool probing(void)
 	Term->scr->cv = cv;
 	Term_fresh();
 
-	/* Done */
 	if (probe)
 	{
 		chg_virtue(V_KNOWLEDGE, 1);

@@ -918,7 +918,6 @@ void do_cmd_nikki(void)
 		/* Prompt */
 		i = inkey();
 
-		/* Done */
 		if (i == ESCAPE) break;
 
 		switch (i)
@@ -1309,7 +1308,6 @@ void do_cmd_messages(int num_now)
 						/* New location */
 						i = z;
 
-						/* Done */
 						break;
 					}
 				}
@@ -3112,7 +3110,6 @@ void do_cmd_visuals(void)
 		/* Prompt */
 		i = inkey();
 
-		/* Done */
 		if (i == ESCAPE) break;
 
 		switch (i)
@@ -3699,7 +3696,6 @@ void do_cmd_colors(void)
 		/* Prompt */
 		i = inkey();
 
-		/* Done */
 		if (i == ESCAPE) break;
 
 		/* Load a 'pref' file */
@@ -8579,7 +8575,6 @@ void do_cmd_knowledge(void)
 		/* Prompt */
 		i = inkey();
 
-		/* Done */
 		if (i == ESCAPE) break;
 		switch (i)
 		{

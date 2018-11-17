@@ -479,7 +479,6 @@ static void vault_prep_dragon(void)
 		/* Restrict dragon breath type */
 		vault_aux_dragon_mask4 = RF4_BR_ACID;
 
-		/* Done */
 		break;
 	}
 
@@ -489,7 +488,6 @@ static void vault_prep_dragon(void)
 		/* Restrict dragon breath type */
 		vault_aux_dragon_mask4 = RF4_BR_ELEC;
 
-		/* Done */
 		break;
 	}
 
@@ -499,7 +497,6 @@ static void vault_prep_dragon(void)
 		/* Restrict dragon breath type */
 		vault_aux_dragon_mask4 = RF4_BR_FIRE;
 
-		/* Done */
 		break;
 	}
 
@@ -509,7 +506,6 @@ static void vault_prep_dragon(void)
 		/* Restrict dragon breath type */
 		vault_aux_dragon_mask4 = RF4_BR_COLD;
 
-		/* Done */
 		break;
 	}
 
@@ -519,7 +515,6 @@ static void vault_prep_dragon(void)
 		/* Restrict dragon breath type */
 		vault_aux_dragon_mask4 = RF4_BR_POIS;
 
-		/* Done */
 		break;
 	}
 
@@ -531,7 +526,6 @@ static void vault_prep_dragon(void)
 			RF4_BR_FIRE | RF4_BR_COLD |
 			RF4_BR_POIS);
 
-		/* Done */
 		break;
 	}
 	}

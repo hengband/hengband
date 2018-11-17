@@ -2206,7 +2206,6 @@ char inkey(void)
 				/* Wait for (and remove) a pending key */
 				if (0 == Term_inkey(&ch, TRUE, TRUE))
 				{
-					/* Done */
 					break;
 				}
 
@@ -2220,7 +2219,6 @@ char inkey(void)
 				/* Check for (and remove) a pending key */
 				if (0 == Term_inkey(&ch, FALSE, TRUE))
 				{
-					/* Done */
 					break;
 				}
 
@@ -2238,7 +2236,6 @@ char inkey(void)
 				}
 			}
 
-			/* Done */
 			break;
 		}
 
@@ -2594,7 +2591,6 @@ void message_add(cptr str)
 			now_message++;
 		}
 
-		/* Done */
 		break;
 	}
 
@@ -4617,7 +4613,6 @@ void request_command(int shopping)
 		/* Use command */
 		command_cmd = (byte)cmd;
 
-		/* Done */
 		break;
 	}
 

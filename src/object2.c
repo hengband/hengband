@@ -89,7 +89,6 @@ void excise_object_idx(OBJECT_IDX o_idx)
 			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
 
-			/* Done */
 			if (this_o_idx == o_idx)
 			{
 				/* No previous */
@@ -114,7 +113,6 @@ void excise_object_idx(OBJECT_IDX o_idx)
 				/* Forget next pointer */
 				o_ptr->next_o_idx = 0;
 
-				/* Done */
 				break;
 			}
 
@@ -145,7 +143,6 @@ void excise_object_idx(OBJECT_IDX o_idx)
 			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
 
-			/* Done */
 			if (this_o_idx == o_idx)
 			{
 				/* No previous */
@@ -170,7 +167,6 @@ void excise_object_idx(OBJECT_IDX o_idx)
 				/* Forget next pointer */
 				o_ptr->next_o_idx = 0;
 
-				/* Done */
 				break;
 			}
 
@@ -1347,7 +1343,6 @@ PRICE object_value_real(object_type *o_ptr)
 			 */
 			value += (value * o_ptr->pval / o_ptr->number / (k_ptr->pval * 2));
 
-			/* Done */
 			break;
 		}
 		case TV_STAFF:
@@ -1357,7 +1352,6 @@ PRICE object_value_real(object_type *o_ptr)
 			 */
 			value += (value * o_ptr->pval / (k_ptr->pval * 2));
 
-			/* Done */
 			break;
 		}
 
@@ -1371,7 +1365,6 @@ PRICE object_value_real(object_type *o_ptr)
 			/* Give credit for bonuses */
 			value += ((o_ptr->to_h + o_ptr->to_d + o_ptr->to_a) * 200L);
 
-			/* Done */
 			break;
 		}
 
@@ -1392,7 +1385,6 @@ PRICE object_value_real(object_type *o_ptr)
 			/* Give credit for bonuses */
 			value += (((o_ptr->to_h - k_ptr->to_h) + (o_ptr->to_d - k_ptr->to_d)) * 200L + (o_ptr->to_a) * 100L);
 
-			/* Done */
 			break;
 		}
 
@@ -1413,7 +1405,6 @@ PRICE object_value_real(object_type *o_ptr)
 			value += (o_ptr->dd - k_ptr->dd) * o_ptr->ds * 250L;
 			value += (o_ptr->ds - k_ptr->ds) * o_ptr->dd * 250L;
 
-			/* Done */
 			break;
 		}
 
@@ -1432,7 +1423,6 @@ PRICE object_value_real(object_type *o_ptr)
 			value += (o_ptr->dd - k_ptr->dd) * o_ptr->ds * 5L;
 			value += (o_ptr->ds - k_ptr->ds) * o_ptr->dd * 5L;
 
-			/* Done */
 			break;
 		}
 
@@ -1556,7 +1546,6 @@ bool can_player_destroy_object(object_type *o_ptr)
 		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
-		/* Done */
 		return FALSE;
 	}
 
@@ -4481,7 +4470,6 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 		if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1)) o_ptr->curse_flags |= get_curse(1, o_ptr);
 		if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2)) o_ptr->curse_flags |= get_curse(2, o_ptr);
 
-		/* Done */
 		return;
 	}
 
@@ -4718,7 +4706,6 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 				o_ptr->pval = 2;
 		}
 		
-		/* Done */
 		return;
 	}
 
@@ -5394,7 +5381,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			/* Success */
 			done = TRUE;
 
-			/* Done */
 			break;
 		}
 	}
@@ -6480,7 +6466,6 @@ void combine_pack(void)
 					/* Take note */
 					combined = TRUE;
 
-					/* Done */
 					break;
 				}
 			}

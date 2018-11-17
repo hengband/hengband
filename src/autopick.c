@@ -1589,7 +1589,6 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 
 		msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), o_name);
 
-		/* Done */
 		return;
 	}
 
@@ -1936,7 +1935,6 @@ bool autopick_autoregister(object_type *o_ptr)
 
 		msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), o_name);
 
-		/* Done */
 		return FALSE;
 	}
 

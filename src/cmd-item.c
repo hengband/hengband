@@ -903,7 +903,6 @@ void do_cmd_destroy(void)
 		p_ptr->energy_use = 0;
 
 		msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), o_name);
-		/* Done */
 		return;
 	}
 

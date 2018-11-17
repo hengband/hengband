@@ -64,7 +64,6 @@ bool new_player_spot(void)
 		/* Refuse to start on anti-teleport grids */
 		if (c_ptr->info & (CAVE_ICKY)) continue;
 
-		/* Done */
 		break;
 	}
 
@@ -654,7 +653,6 @@ void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 		/* Place the trap */
 		place_trap(y1, x1);
 
-		/* Done */
 		break;
 	}
 }

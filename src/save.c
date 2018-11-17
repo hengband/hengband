@@ -1979,7 +1979,6 @@ bool load_player(void)
 				/* A character was loaded */
 				character_loaded = TRUE;
 
-				/* Done */
 				return (TRUE);
 			}
 
@@ -1989,7 +1988,6 @@ bool load_player(void)
 			/* Count lives */
 			sf_lives++;
 
-			/* Done */
 			return (TRUE);
 		}
 

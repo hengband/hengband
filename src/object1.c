@@ -2934,7 +2934,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		/* Oops */
 		oops = TRUE;
 
-		/* Done */
 		done = TRUE;
 
 		if (select_the_force) {
@@ -3984,7 +3983,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		/* Oops */
 		oops = TRUE;
 
-		/* Done */
 		done = TRUE;
 
 		if (select_the_force) {
@@ -5136,7 +5134,6 @@ void py_pickup_floor(bool pickup)
 			msg_format(_("%d 個のアイテムの山がある。", "You see a pile of %d items."), floor_num);
 		}
 
-		/* Done */
 		return;
 	}
 
@@ -5173,7 +5170,6 @@ void py_pickup_floor(bool pickup)
 
 		}
 
-		/* Done */
 		return;
 	}
 
@@ -5208,7 +5204,6 @@ void py_pickup_floor(bool pickup)
 			/* Ask the user to confirm */
 			if (!get_check(out_val))
 			{
-				/* Done */
 				return;
 			}
 		}

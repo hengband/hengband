@@ -2010,7 +2010,6 @@ bool alchemy(void)
 	{
 		msg_format(_("%sを金に変えることに失敗した。", "You fail to turn %s to gold!"), o_name);
 
-		/* Done */
 		return FALSE;
 	}
 
@@ -5020,7 +5019,6 @@ static IDX poly_r_idx(MONRACE_IDX r_idx)
 		/* Use that index */
 		r_idx = r;
 
-		/* Done */
 		break;
 	}
 

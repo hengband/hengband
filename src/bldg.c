@@ -2947,7 +2947,6 @@ static PRICE compare_weapons(PRICE bcost)
 	/* Restore the screen */
 	screen_load();
 
-	/* Done */
 	return (total);
 }
 
@@ -3046,7 +3045,6 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 	(void)inkey();
 	screen_load();
 
-	/* Done */
 	return (TRUE);
 }
 

@@ -1181,7 +1181,6 @@ static bool get_moves(MONSTER_IDX m_idx, int *mm)
 			y = m_ptr->fy - y2;
 			x = m_ptr->fx - x2;
 
-			/* Done */
 			done = TRUE;
 		}
 	}

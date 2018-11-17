@@ -193,7 +193,6 @@ static void sense_inventory1(void)
 			/* Heavy sensing */
 			heavy = TRUE;
 
-			/* Done */
 			break;
 		}
 
@@ -205,7 +204,6 @@ static void sense_inventory1(void)
 			/* Heavy sensing */
 			heavy = TRUE;
 
-			/* Done */
 			break;
 		}
 
@@ -217,7 +215,6 @@ static void sense_inventory1(void)
 			/* Very bad (light) sensing */
 			if (0 != randint0(240000L / (plev + 5))) return;
 
-			/* Done */
 			break;
 		}
 
@@ -227,7 +224,6 @@ static void sense_inventory1(void)
 			/* Good (light) sensing */
 			if (0 != randint0(10000L / (plev * plev + 40))) return;
 
-			/* Done */
 			break;
 		}
 
@@ -240,7 +236,6 @@ static void sense_inventory1(void)
 			/* Heavy sensing */
 			heavy = TRUE;
 
-			/* Done */
 			break;
 		}
 
@@ -252,7 +247,6 @@ static void sense_inventory1(void)
 			/* Changed! */
 			heavy = TRUE;
 
-			/* Done */
 			break;
 		}
 
@@ -265,7 +259,6 @@ static void sense_inventory1(void)
 			/* Heavy sensing */
 			heavy = TRUE;
 
-			/* Done */
 			break;
 		}
 
@@ -275,7 +268,6 @@ static void sense_inventory1(void)
 			/* Bad sensing */
 			if (0 != randint0(75000L / (plev * plev + 40))) return;
 
-			/* Done */
 			break;
 		}
 
@@ -287,7 +279,6 @@ static void sense_inventory1(void)
 			/* Bad sensing */
 			if (0 != randint0(55000L / (plev * plev + 40))) return;
 
-			/* Done */
 			break;
 		}
 
@@ -299,7 +290,6 @@ static void sense_inventory1(void)
 			/* Changed! */
 			heavy = TRUE;
 
-			/* Done */
 			break;
 		}
 
@@ -309,7 +299,6 @@ static void sense_inventory1(void)
 			/* Okay sensing */
 			if (0 != randint0(20000L / (plev * plev + 40))) return;
 
-			/* Done */
 			break;
 		}
 
@@ -321,7 +310,6 @@ static void sense_inventory1(void)
 			/* Heavy sensing */
 			heavy = TRUE;
 
-			/* Done */
 			break;
 		}
 
@@ -330,7 +318,6 @@ static void sense_inventory1(void)
 			/* Bad sensing */
 			if (0 != randint0(65000L / (plev * plev + 40))) return;
 
-			/* Done */
 			break;
 		}
 		case CLASS_BERSERKER:
@@ -338,7 +325,6 @@ static void sense_inventory1(void)
 			/* Heavy sensing */
 			heavy = TRUE;
 
-			/* Done */
 			break;
 		}
 	}
@@ -439,7 +425,6 @@ static void sense_inventory2(void)
 			/* Very bad (light) sensing */
 			if (0 != randint0(240000L / (plev + 5))) return;
 
-			/* Done */
 			break;
 		}
 
@@ -451,7 +436,6 @@ static void sense_inventory2(void)
 			/* Bad sensing */
 			if (0 != randint0(95000L / (plev * plev + 40))) return;
 
-			/* Done */
 			break;
 		}
 
@@ -464,7 +448,6 @@ static void sense_inventory2(void)
 			/* Good sensing */
 			if (0 != randint0(20000L / (plev * plev + 40))) return;
 
-			/* Done */
 			break;
 		}
 
@@ -478,7 +461,6 @@ static void sense_inventory2(void)
 			/* Good sensing */
 			if (0 != randint0(9000L / (plev * plev + 40))) return;
 
-			/* Done */
 			break;
 		}
 
@@ -487,7 +469,6 @@ static void sense_inventory2(void)
 			/* Good sensing */
 			if (0 != randint0(20000L / ((plev+50)*(plev+50)))) return;
 
-			/* Done */
 			break;
 		}
 	}
