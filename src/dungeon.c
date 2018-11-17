@@ -1328,6 +1328,72 @@ static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 	return (&inventory[choices[randint0(number)]]);
 }
 
+static void process_world_aux_digestion(void)
+{
+	if (!p_ptr->inside_battle)
+	{
+		/* Digest quickly when gorged */
+		if (p_ptr->food >= PY_FOOD_MAX)
+		{
+			/* Digest a lot of food */
+			(void)set_food(p_ptr->food - 100);
+		}
+
+		/* Digest normally -- Every 50 game turns */
+		else if (!(turn % (TURNS_PER_TICK * 5)))
+		{
+			/* Basic digestion rate based on speed */
+			int digestion = SPEED_TO_ENERGY(p_ptr->pspeed);
+
+			/* Regeneration takes more food */
+			if (p_ptr->regenerate)
+				digestion += 20;
+			if (p_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
+				digestion += 20;
+			if (p_ptr->cursed & TRC_FAST_DIGEST)
+				digestion += 30;
+
+			/* Slow digestion takes less food */
+			if (p_ptr->slow_digest)
+				digestion -= 5;
+
+			/* Minimal digestion */
+			if (digestion < 1) digestion = 1;
+			/* Maximal digestion */
+			if (digestion > 100) digestion = 100;
+
+			/* Digest some food */
+			(void)set_food(p_ptr->food - digestion);
+		}
+
+
+		/* Getting Faint */
+		if ((p_ptr->food < PY_FOOD_FAINT))
+		{
+			/* Faint occasionally */
+			if (!p_ptr->paralyzed && (randint0(100) < 10))
+			{
+				/* Message */
+				msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
+				disturb(1, 1);
+
+				/* Hack -- faint (bypass free action) */
+				(void)set_paralyzed(p_ptr->paralyzed + 1 + randint0(5));
+			}
+
+			/* Starve to death (slowly) */
+			if (p_ptr->food < PY_FOOD_STARVE)
+			{
+				/* Calculate damage */
+				HIT_POINT dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
+
+				/* Take damage */
+				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
+			}
+		}
+	}
+}
+
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
  *  / Handle timed damage and regeneration every 10 game turns
@@ -3632,72 +3698,9 @@ static void process_world(void)
 	}
 
 
-	/*** Check the Food, and Regenerate ***/
 
-	if (!p_ptr->inside_battle)
-	{
-		/* Digest quickly when gorged */
-		if (p_ptr->food >= PY_FOOD_MAX)
-		{
-			/* Digest a lot of food */
-			(void)set_food(p_ptr->food - 100);
-		}
-
-		/* Digest normally -- Every 50 game turns */
-		else if (!(turn % (TURNS_PER_TICK*5)))
-		{
-			/* Basic digestion rate based on speed */
-			int digestion = SPEED_TO_ENERGY(p_ptr->pspeed);
-
-			/* Regeneration takes more food */
-			if (p_ptr->regenerate)
-				digestion += 20;
-			if (p_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
-				digestion += 20;
-			if (p_ptr->cursed & TRC_FAST_DIGEST)
-				digestion += 30;
-
-			/* Slow digestion takes less food */
-			if (p_ptr->slow_digest)
-				digestion -= 5;
-
-			/* Minimal digestion */
-			if (digestion < 1) digestion = 1;
-			/* Maximal digestion */
-			if (digestion > 100) digestion = 100;
-
-			/* Digest some food */
-			(void)set_food(p_ptr->food - digestion);
-		}
-
-
-		/* Getting Faint */
-		if ((p_ptr->food < PY_FOOD_FAINT))
-		{
-			/* Faint occasionally */
-			if (!p_ptr->paralyzed && (randint0(100) < 10))
-			{
-				/* Message */
-				msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
-				disturb(1, 1);
-
-				/* Hack -- faint (bypass free action) */
-				(void)set_paralyzed(p_ptr->paralyzed + 1 + randint0(5));
-			}
-
-			/* Starve to death (slowly) */
-			if (p_ptr->food < PY_FOOD_STARVE)
-			{
-				/* Calculate damage */
-				HIT_POINT dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
-
-				/* Take damage */
-				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
-			}
-		}
-	}
-
-
+	/* Check the Food */
+	process_world_aux_digestion();
 
 	/* Process timed damage and regeneration */
 	process_world_aux_hp_and_sp();
