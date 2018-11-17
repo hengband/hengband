@@ -144,6 +144,7 @@
     <ClCompile Include="..\..\src\cmd-pet.c" />
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
+    <ClCompile Include="..\..\src\floor-events.c" />
     <ClCompile Include="..\..\src\floor-generate.c" />
     <ClCompile Include="..\..\src\floor-save.c" />
     <ClCompile Include="..\..\src\history.c" />
@@ -256,6 +257,7 @@
     <ClInclude Include="..\..\src\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\defines.h" />
     <ClInclude Include="..\..\src\externs.h" />
+    <ClInclude Include="..\..\src\floor-events.h" />
     <ClInclude Include="..\..\src\gameoption.h" />
     <ClInclude Include="..\..\src\gamevalue.h" />
     <ClInclude Include="..\..\src\generate.h" />

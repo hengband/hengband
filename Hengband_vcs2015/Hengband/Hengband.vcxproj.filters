@@ -319,6 +319,9 @@
     <ClCompile Include="..\..\src\floor-streams.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor-events.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h">
@@ -511,6 +514,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor-streams.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor-events.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
