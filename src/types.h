@@ -200,7 +200,7 @@ struct artifact_type
 	byte cur_num;		/*! 現在の生成数 / Number created (0 or 1) */
 	byte max_num;		/*! (未使用)最大生成数 / Unused (should be "1") */
 
-	s16b floor_id;      /*! アイテムを落としたフロアのID / Leaved on this location last time */
+	FLOOR_IDX floor_id;      /*! アイテムを落としたフロアのID / Leaved on this location last time */
 
 	byte act_idx;		/*! 発動能力ID / Activative ability index */
 };
@@ -1151,7 +1151,7 @@ struct player_type
 	s16b today_mon;           /* Wanted monster */
 
 	bool dtrap;               /* Whether you are on trap-safe grids */
-	s16b floor_id;            /* Current floor location */ 
+	FLOOR_IDX floor_id;            /* Current floor location */ 
 
 	bool autopick_autoregister; /* auto register is in-use or not */
 
@@ -1677,7 +1677,7 @@ typedef struct {
  */
 typedef struct 
 {
-	s16b floor_id;        /* No recycle until 65536 IDs are all used */
+	FLOOR_IDX floor_id;        /* No recycle until 65536 IDs are all used */
 	s16b savefile_id;     /* ID for savefile (from 0 to MAX_SAVED_FLOOR) */
 	DEPTH dun_level;
 	s32b last_visit;      /* Time count of last visit. 0 for new floor. */

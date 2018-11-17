@@ -169,7 +169,7 @@ void clear_saved_floor_files(void)
  * @param floor_id 保存フロアID
  * @return IDに対応する保存フロアのポインタ、ない場合はNULLを返す。
  */
-saved_floor_type *get_sf_ptr(s16b floor_id)
+saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
 {
 	int i;
 
