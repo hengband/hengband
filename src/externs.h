@@ -1283,17 +1283,17 @@ extern bool set_superstealth(bool set);
 
 /* xtra2.c */
 extern void check_experience(void);
-extern void complete_quest(int quest_num);
+extern void complete_quest(QUEST_IDX quest_num);
 extern void check_quest_completion(monster_type *m_ptr);
 extern void check_find_art_quest_completion(object_type *o_ptr);
 extern cptr extract_note_dies(monster_race *r_ptr);
 extern void monster_death(MONSTER_IDX m_idx, bool drop_item);
 extern bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note);
-extern void get_screen_size(int *wid_p, int *hgt_p);
+extern void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);
 extern void panel_bounds_center(void);
 extern void resize_map(void);
 extern void redraw_window(void);
-extern bool change_panel(int dy, int dx);
+extern bool change_panel(POSITION dy, POSITION dx);
 extern void verify_panel(void);
 extern cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
 extern void ang_sort_aux(vptr u, vptr v, int p, int q);

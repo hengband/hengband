@@ -3398,7 +3398,7 @@ static void process_world(void)
 			/* Day breaks */
 			if (dawn)
 			{
-				int y, x;
+				POSITION y, x;
 
 				/* Message */
 				msg_print(_("夜が明けた。", "The sun has risen."));
@@ -3429,7 +3429,7 @@ static void process_world(void)
 			/* Night falls */
 			else
 			{
-				int y, x;
+				POSITION y, x;
 
 				/* Message */
 				msg_print(_("日が沈んだ。", "The sun has fallen."));
@@ -3497,7 +3497,8 @@ static void process_world(void)
 			/* Sometimes, shuffle the shop-keepers */
 			if (one_in_(STORE_SHUFFLE))
 			{
-				int n, i;
+				int n;
+				FEAT_IDX i;
 
 				/* Pick a random shop (except home and museum) */
 				do
@@ -3546,8 +3547,8 @@ static void process_world(void)
 	}
 
 	/* Hack -- Check for creature regeneration */
-	if (!(turn % (TURNS_PER_TICK*10)) && !p_ptr->inside_battle) regen_monsters();
-	if (!(turn % (TURNS_PER_TICK*3))) regen_captured_monsters();
+	if (!(turn % (TURNS_PER_TICK * 10)) && !p_ptr->inside_battle) regen_monsters();
+	if (!(turn % (TURNS_PER_TICK * 3))) regen_captured_monsters();
 
 	if (!p_ptr->leaving)
 	{

@@ -394,7 +394,7 @@ static bool kind_is_hafted(KIND_OBJECT_IDX k_idx)
  * @param quest_num 達成状態にしたいクエストのID
  * @return なし
  */
-void complete_quest(int quest_num)
+void complete_quest(QUEST_IDX quest_num)
 {
 	quest_type* const q_ptr = &quest[quest_num];
 
@@ -455,8 +455,7 @@ static MONSTER_NUMBER count_all_hostile_monsters(void)
 void check_quest_completion(monster_type *m_ptr)
 {
 	POSITION y, x;
-
-	int quest_num;
+	QUEST_IDX quest_num;
 
 	bool create_stairs = FALSE;
 	bool reward = FALSE;
@@ -469,12 +468,12 @@ void check_quest_completion(monster_type *m_ptr)
 	x = m_ptr->fx;
 
 	/* Inside a quest */
-	quest_num = p_ptr->inside_quest;		
+	quest_num = p_ptr->inside_quest;
 
 	/* Search for an active quest on this dungeon level */
 	if (!quest_num)
 	{
-		int i;
+		QUEST_IDX i;
 
 		for (i = max_q_idx - 1; i > 0; i--)
 		{
@@ -673,13 +672,13 @@ void check_quest_completion(monster_type *m_ptr)
  */
 void check_find_art_quest_completion(object_type *o_ptr)
 {
-	int i;
+	QUEST_IDX i;
 	/* Check if completed a quest */
 	for (i = 0; i < max_q_idx; i++)
 	{
-		if ((quest[i].type == QUEST_TYPE_FIND_ARTIFACT) &&
-		    (quest[i].status == QUEST_STATUS_TAKEN) &&
-			   (quest[i].k_idx == o_ptr->name1))
+		if((quest[i].type == QUEST_TYPE_FIND_ARTIFACT) &&
+			(quest[i].status == QUEST_STATUS_TAKEN) &&
+			(quest[i].k_idx == o_ptr->name1))
 		{
 			complete_quest(i);
 		}
@@ -2025,7 +2024,7 @@ msg_format("%sを葬り去った。", m_name);
  * @param hgt_p コンソールの表示行数を返す
  * @return なし
  */
-void get_screen_size(int *wid_p, int *hgt_p)
+void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
 {
 	Term_get_size(wid_p, hgt_p);
 	*hgt_p -= ROW_MAP + 2;
@@ -2137,10 +2136,10 @@ void redraw_window(void)
  * Also used in do_cmd_locate
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-bool change_panel(int dy, int dx)
+bool change_panel(POSITION dy, POSITION dx)
 {
-	int y, x;
-	int wid, hgt;
+	POSITION y, x;
+	TERM_LEN wid, hgt;
 
 	/* Get size */
 	get_screen_size(&wid, &hgt);

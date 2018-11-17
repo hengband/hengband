@@ -2043,8 +2043,8 @@ option_fields[OPT_NUM] =
 void do_cmd_options(void)
 {
 	char k;
-	int i, d, skey;
-	int y = 0;
+	int d, skey;
+	TERM_LEN i, y = 0;
 
 	/* Save the screen */
 	screen_save();
