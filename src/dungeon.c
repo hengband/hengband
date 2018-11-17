@@ -2294,8 +2294,7 @@ static void process_world_aux_mutation(void)
 		unlite_area(50, 10);
 	}
 
-	if ((p_ptr->muta2 & MUT2_ATT_ANIMAL) &&
-	    !p_ptr->anti_magic && one_in_(7000))
+	if ((p_ptr->muta2 & MUT2_ATT_ANIMAL) && !p_ptr->anti_magic && one_in_(7000))
 	{
 		bool pet = one_in_(3);
 		BIT_FLAGS mode = PM_ALLOW_GROUP;
@@ -2310,8 +2309,7 @@ static void process_world_aux_mutation(void)
 		}
 	}
 
-	if ((p_ptr->muta2 & MUT2_RAW_CHAOS) &&
-	    !p_ptr->anti_magic && one_in_(8000))
+	if ((p_ptr->muta2 & MUT2_RAW_CHAOS) && !p_ptr->anti_magic && one_in_(8000))
 	{
 		disturb(0, 1);
 		msg_print(_("周りの空間が歪んでいる気がする！", "You feel the world warping around you!"));
@@ -2374,8 +2372,7 @@ static void process_world_aux_mutation(void)
 			(void)dec_stat(which_stat, randint1(6) + 6, one_in_(3));
 		}
 	}
-	if ((p_ptr->muta2 & MUT2_ATT_DRAGON) &&
-	    !p_ptr->anti_magic && one_in_(3000))
+	if ((p_ptr->muta2 & MUT2_ATT_DRAGON) && !p_ptr->anti_magic && one_in_(3000))
 	{
 		bool pet = one_in_(5);
 		BIT_FLAGS mode = PM_ALLOW_GROUP;
@@ -2389,8 +2386,7 @@ static void process_world_aux_mutation(void)
 			disturb(0, 1);
 		}
 	}
-	if ((p_ptr->muta2 & MUT2_WEIRD_MIND) && !p_ptr->anti_magic &&
-	    one_in_(3000))
+	if ((p_ptr->muta2 & MUT2_WEIRD_MIND) && !p_ptr->anti_magic && one_in_(3000))
 	{
 		if (p_ptr->tim_esp > 0)
 		{
@@ -2403,8 +2399,7 @@ static void process_world_aux_mutation(void)
 			set_tim_esp(p_ptr->lev, FALSE);
 		}
 	}
-	if ((p_ptr->muta2 & MUT2_NAUSEA) && !p_ptr->slow_digest &&
-	    one_in_(9000))
+	if ((p_ptr->muta2 & MUT2_NAUSEA) && !p_ptr->slow_digest && one_in_(9000))
 	{
 		disturb(0, 1);
 		msg_print(_("胃が痙攣し、食事を失った！", "Your stomach roils, and you lose your lunch!"));
@@ -2414,8 +2409,7 @@ static void process_world_aux_mutation(void)
 		if (hex_spelling_any()) stop_hex_spell_all();
 	}
 
-	if ((p_ptr->muta2 & MUT2_WALK_SHAD) &&
-	    !p_ptr->anti_magic && one_in_(12000) && !p_ptr->inside_arena)
+	if ((p_ptr->muta2 & MUT2_WALK_SHAD) && !p_ptr->anti_magic && one_in_(12000) && !p_ptr->inside_arena)
 	{
 		alter_reality();
 	}
@@ -2423,12 +2417,12 @@ static void process_world_aux_mutation(void)
 	if ((p_ptr->muta2 & MUT2_WARNING) && one_in_(1000))
 	{
 		int danger_amount = 0;
-		int monster;
+		MONSTER_IDX monster;
 
 		for (monster = 0; monster < m_max; monster++)
 		{
-			monster_type    *m_ptr = &m_list[monster];
-			monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+			monster_type *m_ptr = &m_list[monster];
+			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Paranoia -- Skip dead monsters */
 			if (!m_ptr->r_idx) continue;
@@ -2452,55 +2446,45 @@ static void process_world_aux_mutation(void)
 		else
 			msg_print(_("寂しい気がする。", "You feel lonely."));
 	}
-	if ((p_ptr->muta2 & MUT2_INVULN) && !p_ptr->anti_magic &&
-	    one_in_(5000))
+
+	if ((p_ptr->muta2 & MUT2_INVULN) && !p_ptr->anti_magic && one_in_(5000))
 	{
 		disturb(0, 1);
 		msg_print(_("無敵な気がする！", "You feel invincible!"));
 		msg_print(NULL);
 		(void)set_invuln(randint1(8) + 8, FALSE);
 	}
+
 	if ((p_ptr->muta2 & MUT2_SP_TO_HP) && one_in_(2000))
 	{
-		int wounds = p_ptr->mhp - p_ptr->chp;
+		MANA_POINT wounds = (MANA_POINT)(p_ptr->mhp - p_ptr->chp);
 
 		if (wounds > 0)
 		{
-			int healing = p_ptr->csp;
-
-			if (healing > wounds)
-			{
-				healing = wounds;
-			}
+			HIT_POINT healing = p_ptr->csp;
+			if (healing > wounds) healing = wounds;
 
 			hp_player(healing);
 			p_ptr->csp -= healing;
-
-			/* Redraw mana */
-			p_ptr->redraw |= (PR_MANA);
+			p_ptr->redraw |= (PR_HP | PR_MANA);
 		}
 	}
-	if ((p_ptr->muta2 & MUT2_HP_TO_SP) && !p_ptr->anti_magic &&
-	    one_in_(4000))
+
+	if ((p_ptr->muta2 & MUT2_HP_TO_SP) && !p_ptr->anti_magic && one_in_(4000))
 	{
-		int wounds = p_ptr->msp - p_ptr->csp;
+		HIT_POINT wounds = (HIT_POINT)(p_ptr->msp - p_ptr->csp);
 
 		if (wounds > 0)
 		{
-			int healing = p_ptr->chp;
-
-			if (healing > wounds)
-			{
-				healing = wounds;
-			}
+			HIT_POINT healing = p_ptr->chp;
+			if (healing > wounds) healing = wounds;
 
 			p_ptr->csp += healing;
-
-			/* Redraw mana */
-			p_ptr->redraw |= (PR_MANA);
+			p_ptr->redraw |= (PR_HP | PR_MANA);
 			take_hit(DAMAGE_LOSELIFE, healing, _("頭に昇った血", "blood rushing to the head"), -1);
 		}
 	}
+
 	if ((p_ptr->muta2 & MUT2_DISARM) && one_in_(10000))
 	{
 		INVENTORY_IDX slot = 0;
@@ -2527,13 +2511,13 @@ static void process_world_aux_mutation(void)
 			o_ptr = &inventory[INVEN_LARM];
 			slot = INVEN_LARM;
 		}
-
 		if (slot && !object_is_cursed(o_ptr))
 		{
 			msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
 			inven_drop(slot, 1);
 		}
 	}
+
 }
 
 /*!
